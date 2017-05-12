@@ -1,0 +1,23 @@
+// Place your settings in this file to overwrite default and user settings.
+{
+  "files.trimTrailingWhitespace": true,
+  "editor.rulers": [
+    100
+  ],
+  "editor.tabSize": 2,
+  "files.exclude": {
+    "**/.git": true,
+    "**/.DS_Store": true,
+    ".awcache/**": true
+  },
+  "search.exclude": {
+    "**/node_modules": true,
+    "coverage/**": true,
+    ".awcache/**": true
+  },
+  "tslint.autoFixOnSave": true,
+  "search.useIgnoreFilesByDefault": true,
+  "stylelint.enable": true,
+  "typescript.tsdk": "./node_modules/typescript/lib",
+  "typescript.check.tscVersion": false
+}

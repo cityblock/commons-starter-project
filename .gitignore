@@ -1,0 +1,21 @@
+# OSX
+.DS_Store
+
+# node.js
+node_modules/
+
+# logs
+*.log
+npm-debug.log*
+
+# dotenv file for local development
+.env
+
+# Coverage directory used by tools like istanbul
+coverage
+
+# build
+public
+
+# awesome-typescript-loader cache
+.awcache

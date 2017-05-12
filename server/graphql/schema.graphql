@@ -1,0 +1,68 @@
+scalar GraphQLEmail
+scalar GraphQLPassword
+scalar GraphQLDateTime
+
+enum UserRole {
+  physician
+  nurseCareManager
+  healthCoach
+  familyMember
+  anonymousUser
+}
+
+type User implements uniqueUserId {
+  id: ID!
+  firstName: String
+  lastName: String
+  email: String
+  userRole: UserRole
+  createdAt: GraphQLDateTime!
+  slackId: String
+}
+
+# The user account with an optional auth token
+type UserWithAuthToken {
+  user: User!
+  # The auth token to allow for quick login. JWT passed back in via headers for further requests
+  authToken: String
+}
+
+# An object with a Globally Unique ID
+interface uniqueUserId {
+  # The ID of the object.
+  id: ID!
+}
+
+input CreateUserInputType {
+  email: GraphQLEmail!
+  password: GraphQLPassword!
+}
+
+input LoginUserInputType {
+  email: String!
+  password: String!
+}
+
+type RootMutationType {
+  # Create a new user
+  createUser(input: CreateUserInputType): UserWithAuthToken
+
+  # Login user
+  login(input: LoginUserInputType): UserWithAuthToken
+}
+
+type RootQueryType {
+  # A single User
+  user(
+    # The id of the User
+    userId: String!
+  ): User
+
+  currentUser: User
+}
+
+schema {
+  query: RootQueryType
+  mutation: RootMutationType
+}
+

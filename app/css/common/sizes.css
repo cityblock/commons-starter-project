@@ -1,0 +1,54 @@
+@custom-media --small-viewport (max-width: 900px);
+@custom-media --large-viewport (min-width: 900px);
+:root {
+  --site-border-size: 10px;
+  --gutter: 95px;
+  --mobile: 500;
+  --tablet: 700;
+  --maxWidth: 1600px;
+  --color-black: #000;
+  --color-white: #fff;
+  --color-yellow: #FFF5AD;
+  --color-gray: #F6F6F6;
+  --color-med-gray: #656565;
+  --color-dark-gray: #333333;
+  --border-color: #B2B2B2;
+  --blue: steelblue;
+  --border-color: #BED0D0;
+  --gray: lightgrey;
+  --dark-gray: #333;
+  --light-gray: #aaa;
+  --very-light-gray: #f1f1f1f1;
+  --default-font-color: rgba(0, 0, 0, 0.8);
+  --large-font: 24px;
+}
+
+:root {
+  --input {
+    border: 1px solid var(--light-gray);
+    -webkit-style: none;
+    background-color: transparent;
+    font-size: 16px;
+    border-radius: 0px;
+    padding: 10px;
+    outline: none;
+  }
+  --button {
+    margin: 16px 0px;
+    padding: 18px 37px;
+    width: 100%;
+    border: 2px solid var(--color-dark-gray);
+    cursor: pointer;
+    font-size: 22px;
+    color: var(--color-dark-gray);
+    letter-spacing: 1.5px;
+    transition: background-color 0.3s;
+    outline: none;
+    background-color: white;
+    border-radius: 0px;
+    -webkit-appearance: none;
+  }
+  --title {
+    font-size: var(--large-font);
+  }
+}

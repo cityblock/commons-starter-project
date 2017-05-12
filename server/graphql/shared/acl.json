@@ -1,0 +1,62 @@
+[
+  {
+    "roles": [
+      "familyMember"
+    ],
+    "allows": []
+  },
+  {
+    "roles": [
+      "healthCoach"
+    ],
+    "allows": [
+      {
+        "resources": [
+          "patient",
+          "patientEvents",
+          "user"
+        ],
+        "permissions": [
+          "edit",
+          "view",
+          "delete"
+        ]
+      },
+      {
+        "resources": [
+          "notes"
+        ],
+        "permissions": [
+          "edit",
+          "view",
+          "delete",
+          "create"
+        ]
+      }
+    ]
+  },
+  {
+    "roles": [
+      "physician",
+      "nurseCareManager"
+    ],
+    "allows": [
+      {
+        "resources": [
+          "patient",
+          "note",
+          "patientEvents",
+          "user",
+          "encounter"
+        ],
+        "permissions": [
+          "edit",
+          "view",
+          "delete",
+          "create"
+        ]
+      }
+    ]
+  }
+]
+

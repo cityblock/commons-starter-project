@@ -1,0 +1,7 @@
+fragment FullUser on User {
+  id
+  firstName
+  lastName
+  userRole
+  email
+}

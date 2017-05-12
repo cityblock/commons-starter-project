@@ -1,0 +1,40 @@
+@import '../common/sizes';
+
+.container {
+  flex: 1;
+  justify-content: center;
+  align-items: center;
+  display: flex;
+  height: calc(100vh - 100px);
+}
+
+.title {
+  @apply --title;
+}
+
+.error {
+  color: red;
+  font-weight: bold;
+  font-size: 24px;
+}
+
+.form {
+  flex-wrap: nowrap;
+  justify-content: center;
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+}
+
+.input {
+  @apply --input;
+}
+
+.button {
+  @apply --button;
+}
+
+.inputContainer {
+  display: block;
+  margin-top: 10px;
+}

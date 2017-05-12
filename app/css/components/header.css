@@ -1,0 +1,9 @@
+.header {
+  border-bottom: 1px solid #333;
+  text-align: center;
+}
+
+.link {
+  border: 0px solid;
+  text-decoration: none;
+}

@@ -1,0 +1,95 @@
+{
+  "extends": [
+    "tslint:recommended"
+  ],
+  "rules": {
+    // Rules where we disagree with tslint:recommended
+    "curly": false,
+    "quotemark": [
+      true,
+      "single",
+      "jsx-single",
+      "avoid-escape"
+    ],
+    "indent": [
+      true,
+      "spaces"
+    ],
+    "check-is-allowed": true, // our custom rule to check if we run isAllowed in GraphQL resolvers
+    "triple-equals": true,
+    "max-line-length": [
+      true,
+      100
+    ],
+    "ordered-imports": [
+      true,
+      {
+        "named-imports-order": "lowercase-first" // aka Nehabetical
+      }
+    ],
+    "variable-name": [
+      "check-format",
+      "allow-leading-underscore",
+      "allow-pascal-case"
+    ],
+    "interface-name": [
+      false // be agnostic about IInterface vs. Interface.
+    ],
+    "object-literal-sort-keys": false,
+    "member-access": false,
+    // no parens required around one param lambdas.
+    "arrow-parens": [
+      true,
+      "ban-single-arg-parens"
+    ],
+    "only-arrow-functions": [
+      true,
+      "allow-named-functions"
+    ],
+    "arrow-return-shorthand": [
+      true,
+      "multiline"
+    ],
+    // New rules that we add beyond tslint:recommended
+    "no-angle-bracket-type-assertion": true,
+    "interface-over-type-literal": true,
+    "space-before-function-paren": [
+      true,
+      {
+        "anonymous": "never",
+        "asyncArrow": "always",
+        "constructor": "never",
+        "method": "never",
+        "named": "never"
+      }
+    ],
+    "import-spacing": true,
+    "no-string-throw": true,
+    "prefer-const": true,
+    "no-for-in-array": true,
+    // disabled: we have been unable to change the code in such a way that makes this rule happy.
+    //           it's responsible for the "put it on its own line" linting error.
+    "no-void-expression": false,
+    "no-inferred-empty-object-type": true,
+    "promise-function-async": true,
+    // Prefer T[] to Array<T>, but allow Array<{complex type}>.
+    "array-type": [
+      true,
+      "array-simple"
+    ],
+    "no-console": [
+      true,
+      "log"
+    ],
+    "object-literal-shorthand": true,
+    "no-unnecessary-callback-wrapper": true,
+    "radix": true,
+    "no-invalid-template-strings": true
+  },
+  "rulesDirectory": [
+    "rules"
+  ],
+  "linterOptions": {
+    "typeCheck": true
+  }
+}

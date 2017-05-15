@@ -88,6 +88,7 @@ Getting up to speed:
     ```
     brew install postgres  # if necessary
     createdb commons
+    createdb commons_test
     ```
 
 ### Development

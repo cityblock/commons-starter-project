@@ -223,7 +223,7 @@ The settings are as follows:
 [Aptible toolbelt]: https://www.aptible.com/support/toolbelt/
 [staging]: https://app-5428.on-aptible.com
 [yarn]: https://yarnpkg.com/lang/en/docs/install/
-[.env]: https://drive.google.com/open?id=0B0zLbhxd96u9azRUSVBXTXk1MTQ
+[.env]: https://drive.google.com/open?id=0B0zLbhxd96u9Z3RBRmdrV09uMzA
 [PRD]: https://docs.google.com/document/d/1yfcbwghOUcJ2PlK_J5JxBIUcXaYuArZuR6VN8-NcZ6g/edit?usp=sharing
 [modheader]: https://chrome.google.com/webstore/detail/modheader/idgpnmonknjnojddfkpgkljpfnnfcklj
 [apollo tools]: https://github.com/apollographql/graphql-tools

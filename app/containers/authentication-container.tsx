@@ -1,32 +1,28 @@
 import * as React from 'react';
+import { graphql } from 'react-apollo';
 import { connect, Dispatch } from 'react-redux';
 import { push } from 'react-router-redux';
-import { Action } from '../actions';
-import { getCurrentUser } from '../actions/user';
-import { State as AppState } from '../reducers';
+import { getQuery } from '../graphql/helpers';
+import { FullUserFragment } from '../graphql/types';
 
 export interface Props {
-  authenticated: boolean;
-  fetched: boolean;
-  getCurrentUser: () => any;
+  loading: boolean;
+  currentUser?: FullUserFragment;
   redirectToLogin: () => any;
+  children: any;
 }
 
 class Authentication extends React.Component<Props, {}> {
 
-  componentDidMount() {
-    this.props.getCurrentUser();
-  }
-
   componentWillReceiveProps(newProps: Props) {
-    if (newProps.fetched && !newProps.authenticated) {
+    if (!newProps.loading && this.props.loading && !newProps.currentUser) {
       // TODO: set redirect url to go back ie: dispatch(setRedirectUrl(currentURL))
       this.props.redirectToLogin();
     }
   }
 
   render() {
-    if (this.props.authenticated) {
+    if (this.props.currentUser) {
       return (
         <div>
           {this.props.children}
@@ -36,20 +32,20 @@ class Authentication extends React.Component<Props, {}> {
   }
 }
 
-function mapStateToProps(state: AppState) {
+function mapDispatchToProps(dispatch: Dispatch<() => void>): Partial<Props> {
   return {
-    authenticated: !!state.user.currentUser,
-    fetched: state.user.currentUserFetched,
+    redirectToLogin: async () => dispatch(push('/')),
   };
 }
 
-function mapDispatchToProps(dispatch: Dispatch<Action>): Partial<Props> {
-  return {
-    getCurrentUser: () => dispatch(getCurrentUser()),
-      redirectToLogin: async () => dispatch(push('/')),
-  };
-}
+const currentUserQuery = getQuery('app/graphql/queries/get-current-user.graphql');
 
-const AuthenticationContainer = connect(mapStateToProps, mapDispatchToProps)(Authentication);
+const AuthenticationWithGraphQL = graphql(currentUserQuery, {
+  props: ({ data: { loading, error, currentUser } }) => ({
+    loading,
+    error,
+    currentUser,
+  }),
+})(Authentication);
 
-export default AuthenticationContainer;
+export default connect(undefined, mapDispatchToProps)(AuthenticationWithGraphQL);

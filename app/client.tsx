@@ -1,33 +1,72 @@
 import createHistory from 'history/createBrowserHistory';
 import * as React from 'react';
+import {
+  createBatchingNetworkInterface,
+  ApolloClient,
+  ApolloProvider,
+} from 'react-apollo';
 import { render } from 'react-dom';
-import { Provider } from 'react-redux';
 import { Route } from 'react-router-dom';
+import { routerReducer } from 'react-router-redux';
 import { routerMiddleware, ConnectedRouter } from 'react-router-redux';
 import { applyMiddleware, compose, createStore } from 'redux';
+import { combineReducers } from 'redux';
 import { createLogger } from 'redux-logger';
 import promiseMiddleware from 'redux-promise-middleware';
+import { API_URL } from './config';
+
 import LogIn from './containers/login-container';
 import Main from './containers/main';
-import { reducers } from './reducers/index';
 
 const history = createHistory();
+
+const networkInterface = createBatchingNetworkInterface({
+  uri: process.env.NODE_ENV === 'test' ? `https://localhost:3000${API_URL}` : API_URL,
+  batchInterval: 10,
+});
+networkInterface.use([
+  {
+    async applyBatchMiddleware(req, next) {
+      if (!req.options.headers) {
+        req.options.headers = {}; // Create the header object if needed.
+      }
+      // This returns null if authToken is not in store.
+      const authToken = await localStorage.getItem('authToken');
+      if (authToken) {
+        req.options.headers.auth_token = authToken;
+      }
+      next();
+    },
+  },
+]);
+
+const client = new ApolloClient({ networkInterface });
 
 const middleware = [
   promiseMiddleware(),
   createLogger(),
   routerMiddleware(history),
+  client.middleware(),
 ];
+
+export interface State {
+  routing: any;
+}
+
+const reducers = combineReducers<State>({
+  routing: routerReducer,
+  apollo: client.reducer(),
+});
 
 const store = createStore(reducers, compose(applyMiddleware(...middleware)));
 
 render(
-  <Provider store={store}>
+  <ApolloProvider store={store} client={client}>
     <ConnectedRouter history={history}>
       <Main>
         <Route exact path='/' component={(LogIn as any)} />
       </Main>
     </ConnectedRouter>
-  </Provider>,
+  </ApolloProvider>,
   document.getElementById('app'),
 );

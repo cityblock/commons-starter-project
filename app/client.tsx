@@ -12,7 +12,6 @@ import { routerMiddleware, ConnectedRouter } from 'react-router-redux';
 import { applyMiddleware, compose, createStore } from 'redux';
 import { combineReducers } from 'redux';
 import { createLogger } from 'redux-logger';
-import promiseMiddleware from 'redux-promise-middleware';
 import { API_URL } from './config';
 
 import LogIn from './containers/login-container';
@@ -43,7 +42,6 @@ networkInterface.use([
 const client = new ApolloClient({ networkInterface });
 
 const middleware = [
-  promiseMiddleware(),
   createLogger(),
   routerMiddleware(history),
   client.middleware(),

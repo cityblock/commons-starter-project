@@ -6,10 +6,11 @@ export default function app(req: express.Request, res: express.Response) {
     <html>
       <head>
         <title>Commons</title>
-        <meta charset='utf-8' />
-        <meta http-equiv='X-UA-Compatible' content='IE=edge' />
-        <meta name='viewport' content='width=device-width, initial-scale=1' />
-        <link rel='stylesheet' href='/assets/styles/main.css' />
+        <meta charset='utf-8'>
+        <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+        <meta name='viewport' content='width=device-width, initial-scale=1'>
+        <meta name='robots' content='noindex, nofollow'>
+        <link rel='stylesheet' href='/assets/styles/main.css'>
       </head>
       <body>
         <div id='app'></div>

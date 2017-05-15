@@ -1,5 +1,6 @@
-# TODO: Change to v6.10.x
-FROM kkarczmarczyk/node-yarn:6.9
+FROM node:boron
+
+RUN apt-get update && apt-get install -y curl apt-transport-https
 
 # Install dependencies (but not devDependencies)
 # So long as no dependencies have changed, this step will be cached.

@@ -26,7 +26,12 @@
     "cron": "NODE_ENV=production nodemon --exec ts-node ./server/config/cron.ts",
     "low-priority-dev": "NODE_ENV=development nodemon --exec ts-node ./server/rabbitmq/workers/low-priority-worker.ts",
     "high-priority-dev": "NODE_ENV=development nodemon --exec ts-node ./server/rabbitmq/workers/high-priority-worker.ts",
-    "cron-dev": "NODE_ENV=development nodemon --exec ts-node ./server/config/cron.ts"
+    "cron-dev": "NODE_ENV=development nodemon --exec ts-node ./server/config/cron.ts",
+    "docker-prod:start": "docker-compose stop 2>/dev/null; docker-compose up",
+    "docker-prod:restart": "docker-compose stop 2>/dev/null; docker-compose build && docker-compose up",
+    "docker-prod:stop": "docker-compose stop",
+    "docker-prod:migrate": "docker-compose exec web yarn migrate -- --env=production",
+    "docker-prod:ts-node": "docker-compose exec web yarn ts-node"
   },
   "author": "Brennan Moore",
   "jest": {

@@ -227,8 +227,8 @@ We are able to run the application locally using Docker and Docker Compose. For 
 2. In a separate terminal window, run: `yarn run docker-prod:migrate`.
 3. To set up an initial user, run: `yarn run docker-prod:ts-node` and follow the usual steps.
 4. Visit `localhost:3000` in your browser.
-5. After making changes to the application, you'll need to rebuild the Docker image and restart the app.
-6. If you make changes to the application and wish to see them, the application container will need to be rebuilt and restarted. To do this, in another terminal window, run `yarn run docker-prod:restart`.
+5. If you make changes to the application and wish to see them, the application container will need to be rebuilt and restarted. To do this, in another terminal window, run `yarn run docker-prod:restart`.
+6. To stop the application, run: `yarn run doker-prod:stop`.
 
 [Aptible]: https://aptible.com
 [Aptible toolbelt]: https://www.aptible.com/support/toolbelt/

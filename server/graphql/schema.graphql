@@ -33,6 +33,7 @@ interface uniqueUserId {
   id: ID!
 }
 
+# Patient contact
 type Contact {
   email: String
   lastEmail: String
@@ -44,12 +45,14 @@ type Contact {
   consentToText: Boolean
 }
 
+# Patient poverty level response
 type PovertyLevel {
   povertyLevelIncomeDeclined: Boolean
   povertyLevelIncomeRangeDeclined: Boolean
   povertyLevelFamilySizeDeclined: Boolean
 }
 
+# Patient address
 type Address {
   city: String
   address1: String
@@ -59,6 +62,7 @@ type Address {
   zip: String
 }
 
+# Patient employer
 type Employer {
   id: String
   phone: String
@@ -69,6 +73,7 @@ type Employer {
   zip: String
 }
 
+# Patient Garantor Address (for payment)
 type GarantorAddress {
   addressSameAsPatient: Boolean
   address1: String
@@ -79,6 +84,7 @@ type GarantorAddress {
   countryCode3166: String
 }
 
+# Patient Garantor (for payment)
 type Garantor {
   firstName: String
   lastName: String
@@ -92,6 +98,7 @@ type Garantor {
   address: GarantorAddress
 }
 
+# Patient combining data in athena and our database
 type Patient implements uniqueUserId {
   id: ID!
   athenaPatientId: Int!
@@ -154,7 +161,7 @@ type RootQueryType {
 
   # A single Patient
   patient(
-    patiendId: String!
+    patientId: String!
   ): Patient
 }
 

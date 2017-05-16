@@ -1,86 +1,117 @@
 import * as nock from 'nock';
-import {
-  IPatientInfoAthena,
- } from './apis/athena/types';
+import { IPatientInfoAthena } from './apis/athena/types';
 import config from './config';
 
 export function createMockAthenaPatient(
   athenaId: number,
   firstName: string,
   lastName: string = 'foo',
-) {
+): IPatientInfoAthena {
   return {
-    resourceType: 'Patient',
-    id: `Patient-${config.ATHENA_PRACTICE_ID}.1.${athenaId}`,
-    name: [{
-      given: [firstName],
-      use: 'official',
-      family: [lastName],
-    }],
-    birthDate: '1990-01-01',
-    identifier: [{
-      system: `urn:oid:2.16.840.1.113883.3.564.${config.ATHENA_PRACTICE_ID}`,
-      use: 'official',
-      value: '1',
-    }],
-    address: [{
-      country: 'UNITED STATES',
-      city: 'New York',
-      state: 'New York',
-      use: 'home',
-      postalCode: '10001',
-      line: ['1 Road Place Drive'],
-    }],
-    communication: [{
-      language: {
-        text: 'English',
-        coding: [{
-          system: 'http://tools.ietf.org/html/bcp47',
-          display: 'English',
-          code: 'en',
-        }],
-      },
-    }],
-    telecom: [{
-      use: 'home',
-      system: 'phone',
-      value: '617-594-1000',
+    preferredname: 'IV',
+    racename: 'Patient Declined',
+    email: 'email@internet.com',
+    suffix: 'IV',
+    departmentid: '1',
+    homephone: '6175941000',
+    guarantorstate: 'MA',
+    portalaccessgiven: true,
+    driverslicense: true,
+    referralsourceid: '2',
+    contactpreference_appointment_email: false,
+    homebound: false,
+    contactpreference_appointment_sms: true,
+    contactpreference_billing_phone: false,
+    ethnicitycode: 'declined',
+    contactpreference_announcement_phone: false,
+    contactpreference: 'MOBILEPHONE',
+    lastemail: 'lukasz.jachym@gmail.com',
+    contactrelationship: 'Spouse',
+    employerid: '1',
+    contacthomephone: '8885551241',
+    guarantorssn: '*****4150',
+    contactpreference_lab_sms: true,
+    guarantordob: '01/01/1990',
+    zip: '75287',
+    guarantoraddresssameaspatient: false,
+    employerphone: '8885559371',
+    portaltermsonfile: true,
+    status: 'active',
+    lastname: 'Blanton',
+    guarantorfirstname: 'Alan',
+    city: 'DALLAS',
+    ssn: '*****4150',
+    lastappointment: '03/31/2017 09:00',
+    employercity: 'test',
+    povertylevelincomedeclined: false,
+    guarantoremail: 'lukasz.jachym@gmail.com',
+    guarantorcity: 'SOUTHBRIDGE',
+    guarantorzip: '01550',
+    sex: 'F',
+    privacyinformationverified: true,
+    primarydepartmentid: '148',
+    contactpreference_lab_email: true,
+    balances: [{
+      balance: '-492.7',
+      departmentlist: '1,21,102,145,148,150,157,162',
+      providergroupid: 1,
+      cleanbalance: true,
     }, {
-      use: 'mobile',
-      system: 'phone',
-      value: '800-555-1234',
+      balance: 0,
+      departmentlist: '62,142,164',
+      providergroupid: 2,
+      cleanbalance: true,
     }, {
-      system: 'email',
-      value: 'email@example.com',
+      balance: 0,
+      departmentlist: '82',
+      providergroupid: 22,
+      cleanbalance: true,
     }],
-    gender: 'female',
-    extension: [{
-      valueCodeableConcept: {
-        coding: [{
-          system: 'http://hl7.org/fhir/v3/Race',
-          display: 'Patient Declined',
-        }],
-      },
-      url: 'http://hl7.org/fhir/StructureDefinition/us-core-race',
-    }, {
-      valueCodeableConcept: {
-        coding: [{
-          system: 'http://hl7.org/fhir/v3/Ethnicity',
-          display: 'Patient Declined',
-        }],
-      },
-      url: 'http://hl7.org/fhir/StructureDefinition/us-core-ethnicity',
-    }, {
-      valueCodeableConcept: {
-        text: 'Female',
-        coding: [{
-          system: 'http://hl7.org/fhir/v3/AdministrativeGender',
-          display: 'Female',
-          code: 'F',
-        }],
-      },
-      url: 'http://hl7.org/fhir/StructureDefinition/us-core-birth-sex',
-    }],
+    contactpreference_announcement_sms: true,
+    emailexists: true,
+    race: ['declined'],
+    employerstate: 'MA',
+    firstappointment: '08/20/2010 10:30',
+    language6392code: 'eng',
+    primaryproviderid: '103',
+    patientphoto: true,
+    consenttocall: true,
+    defaultpharmacyncpdpid: '0125547',
+    povertylevelincomerangedeclined: false,
+    contactpreference_billing_email: false,
+    employerzip: '01089',
+    patientphotourl: '/preview1/195900/patients/1/photo',
+    mobilephone: '8005551234',
+    contactpreference_announcement_email: false,
+    hasmobile: true,
+    registrationdate: '10/08/2008',
+    guarantorsuffix: 'IV',
+    caresummarydeliverypreference: 'PORTAL',
+    guarantorlastname: 'Knarr',
+    firstname: 'Constance',
+    guarantorcountrycode: 'USA',
+    state: 'TN',
+    contactpreference_appointment_phone: false,
+    patientid: '1',
+    dob: '01/01/1990',
+    guarantorrelationshiptopatient: '1',
+    address1: 'Times Sq.',
+    guarantoremployerid: '1',
+    contactpreference_billing_sms: true,
+    guarantorphone: '1111111111',
+    povertylevelfamilysizedeclined: false,
+    employername: 'TEST',
+    driverslicenseurl: '/preview1/195900/patients/1/driverslicense',
+    employeraddress: 'test',
+    maritalstatus: 'M',
+    countrycode: 'USA',
+    guarantoraddress1: '8762 Stoneridge Ct',
+    maritalstatusname: 'MARRIED',
+    consenttotext: true,
+    countrycode3166: 'US',
+    onlinestatementonly: true,
+    contactpreference_lab_phone: false,
+    guarantorcountrycode3166: 'US',
   };
 }
 
@@ -118,9 +149,11 @@ export function mockAthenaPut(path: string, body: any) {
     .reply(200, body);
 }
 
-type MockAthenaPatient = Pick<IPatientInfoAthena, 'id'> & Partial<IPatientInfoAthena>;
+type MockAthenaPatient = Pick<IPatientInfoAthena, 'patientid'> & Partial<IPatientInfoAthena>;
 
-export function mockAthenaGetPatient(athenaPatientId: number, body: MockAthenaPatient, times = 1) {
+export function mockAthenaGetPatient(
+  athenaPatientId: number, body: MockAthenaPatient, times = 1,
+) {
   mockAthenaGet(
     `/${config.ATHENA_PRACTICE_ID}/patients/${athenaPatientId}`,
     body,

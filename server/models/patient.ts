@@ -4,6 +4,8 @@ import { IPageOptions } from '../db';
 
 interface ICreatePatient {
   athenaPatientId: number;
+  firstName: string;
+  lastName: string;
 }
 
 type GetByOptions = 'athenaPatientId';
@@ -40,8 +42,7 @@ export default class Patient extends Model {
   static async get(patientId: string): Promise<Patient> {
     const patient = await this
       .query()
-      .findById(patientId)
-      .eager('careTeam');
+      .findById(patientId);
 
     if (!patient) {
       return Promise.reject(`No such patient: ${patientId}`);
@@ -74,7 +75,7 @@ export default class Patient extends Model {
     return patient;
   }
 
-  static async create(patient: ICreatePatient, userId: string): Promise<Patient> {
+  static async create(patient: ICreatePatient): Promise<Patient> {
     return await this.query().insertAndFetch(patient);
   }
 

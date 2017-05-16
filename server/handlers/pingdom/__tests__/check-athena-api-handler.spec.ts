@@ -18,7 +18,7 @@ describe('appointments', () => {
     restoreAthenaFetch();
   });
 
-  it('returns 200 with a patient', async () => {
+  xit('returns 200 with a patient', async () => {
     const request = httpMocks.createRequest();
     const response = httpMocks.createResponse();
     expect(response.sendStatus).toBeCalledWith(200);

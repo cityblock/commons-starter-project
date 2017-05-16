@@ -3,14 +3,13 @@
 // Only types which appear in Athena should go here!
 
 export interface IPatientBalanceAthena {
-  balance: number;
+  balance: number | string;
   departmentlist: string;
   providergroupid: number;
   cleanbalance: boolean;
 }
 
 export interface IPatientInfoAthena {
-  id: number;
   preferredname: string;
   racename: string;
   email: string;

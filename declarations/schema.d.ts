@@ -55,7 +55,7 @@ declare module 'schema' {
   type IUserRoleEnum = 'physician' | 'nurseCareManager' | 'healthCoach' | 'familyMember' | 'anonymousUser';
 
   /*
-    description: 
+    description: Patient combining data in athena and our database
   */
   interface IPatient {
     id: string;
@@ -85,7 +85,7 @@ declare module 'schema' {
   }
 
   /*
-    description: 
+    description: Patient contact
   */
   interface IContact {
     email: string | null;
@@ -99,7 +99,7 @@ declare module 'schema' {
   }
 
   /*
-    description: 
+    description: Patient Garantor (for payment)
   */
   interface IGarantor {
     firstName: string | null;
@@ -115,7 +115,7 @@ declare module 'schema' {
   }
 
   /*
-    description: 
+    description: Patient Garantor Address (for payment)
   */
   interface IGarantorAddress {
     addressSameAsPatient: boolean | null;
@@ -128,7 +128,7 @@ declare module 'schema' {
   }
 
   /*
-    description: 
+    description: Patient employer
   */
   interface IEmployer {
     id: string | null;
@@ -141,7 +141,7 @@ declare module 'schema' {
   }
 
   /*
-    description: 
+    description: Patient address
   */
   interface IAddress {
     city: string | null;
@@ -153,7 +153,7 @@ declare module 'schema' {
   }
 
   /*
-    description: 
+    description: Patient poverty level response
   */
   interface IPovertyLevel {
     povertyLevelIncomeDeclined: boolean | null;

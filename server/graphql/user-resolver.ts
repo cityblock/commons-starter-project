@@ -1,7 +1,7 @@
 import { compare } from 'bcrypt';
 import User from '../models/user';
 import accessControls from './shared/access-controls';
-import { signJwt, Context } from './shared/utils';
+import { signJwt, IContext } from './shared/utils';
 
 interface ICreateUserArgs {
   input: {
@@ -21,7 +21,7 @@ interface IUserLoginOptions {
   };
 }
 
-export async function createUser(root: any, { input }: ICreateUserArgs, context: Context) {
+export async function createUser(root: any, { input }: ICreateUserArgs, context: IContext) {
   const { userRole } = context;
   const { email, password } = input;
   await accessControls.isAllowed(userRole, 'create', 'user');
@@ -48,7 +48,7 @@ export async function createUser(root: any, { input }: ICreateUserArgs, context:
 }
 
 export async function resolveUser(
-  source: any, args: IResolveUserOptions, { db, userRole }: Context,
+  source: any, args: IResolveUserOptions, { db, userRole }: IContext,
 ) {
   await accessControls.isAllowed(userRole, 'view', 'user');
 
@@ -61,7 +61,7 @@ export async function resolveUser(
 }
 
 export async function resolveCurrentUser(
-  source: any, args: any, { db, userId, userRole }: Context,
+  source: any, args: any, { db, userId, userRole }: IContext,
 ) {
   await accessControls.isAllowed(userRole, 'view', 'user');
 
@@ -79,7 +79,7 @@ export async function resolveCurrentUser(
 
 // disabling isAllowed check for login endpoint so users can log in
 /* tslint:disable check-is-allowed */
-export async function login(root: any, { input }: IUserLoginOptions, { db }: Context) {
+export async function login(root: any, { input }: IUserLoginOptions, { db }: IContext) {
   const { email, password } = input;
 
   const user = await User.getBy('email', email);

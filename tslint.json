@@ -32,9 +32,6 @@
       "allow-leading-underscore",
       "allow-pascal-case"
     ],
-    "interface-name": [
-      false // be agnostic about IInterface vs. Interface.
-    ],
     "object-literal-sort-keys": false,
     "member-access": false,
     // no parens required around one param lambdas.

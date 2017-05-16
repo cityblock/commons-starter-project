@@ -47,11 +47,11 @@ const middleware = [
   client.middleware(),
 ];
 
-export interface State {
+export interface IState {
   routing: any;
 }
 
-const reducers = combineReducers<State>({
+const reducers = combineReducers<IState>({
   routing: routerReducer,
   apollo: client.reducer(),
 });

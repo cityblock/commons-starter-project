@@ -3,6 +3,7 @@ import { GraphQLDateTime, GraphQLEmail, GraphQLPassword } from 'graphql-custom-t
 import { makeExecutableSchema } from 'graphql-tools';
 import * as path from 'path';
 import config from '../config';
+import { resolvePatient } from './patient-resolver';
 import { createUser, login, resolveCurrentUser, resolveUser } from './user-resolver';
 
 const schemaGql = fs.readFileSync(path.join(__dirname, 'schema.graphql'), 'utf-8');
@@ -13,6 +14,7 @@ const resolveFunctions = {
   GraphQLPassword: new GraphQLPassword(6, 60),
   RootQueryType: {
     user: resolveUser,
+    patient: resolvePatient,
     currentUser: resolveCurrentUser,
   },
   RootMutationType: {

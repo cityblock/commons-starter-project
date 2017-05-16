@@ -33,6 +33,97 @@ interface uniqueUserId {
   id: ID!
 }
 
+type Contact {
+  email: String
+  lastEmail: String
+  emailExists: Boolean
+  homePhone: String
+  mobilePhone: String
+  hasMobile: Boolean
+  consentToCall: Boolean
+  consentToText: Boolean
+}
+
+type PovertyLevel {
+  povertyLevelIncomeDeclined: Boolean
+  povertyLevelIncomeRangeDeclined: Boolean
+  povertyLevelFamilySizeDeclined: Boolean
+}
+
+type Address {
+  city: String
+  address1: String
+  countryCode: String
+  countryCode3166: String
+  state: String
+  zip: String
+}
+
+type Employer {
+  id: String
+  phone: String
+  city: String
+  state: String
+  name: String
+  address: String
+  zip: String
+}
+
+type GarantorAddress {
+  addressSameAsPatient: Boolean
+  address1: String
+  city: String
+  zip: String
+  state: String
+  countryCode: String
+  countryCode3166: String
+}
+
+type Garantor {
+  firstName: String
+  lastName: String
+  suffix: String
+  SSN: String
+  DOB: String
+  phone: String
+  email: String
+  relationshipToPatient: String
+  employerId: String
+  address: GarantorAddress
+}
+
+type Patient implements uniqueUserId {
+  id: ID!
+  athenaPatientId: Int!
+  firstName: String
+  lastName: String
+  suffix: String
+  preferredName: String
+  raceName: String
+  dob: String
+  sex: String
+  race: [String]
+  ethnicityCode: String
+  status: String
+  ssn: String
+  homebound: Boolean
+  language6392code: String
+  maritalStatus: String
+  maritalStatusName: String
+  patientPhoto: Boolean
+  patientPhotoUrl: String
+  contact: Contact
+  guarantor: Garantor
+  employer: Employer
+  address: Address
+  povertyLevel: PovertyLevel
+}
+
+#
+# BEGIN INPUT FIELDS
+#
+
+# Create a user input
 input CreateUserInputType {
   email: GraphQLEmail!
   password: GraphQLPassword!
@@ -58,11 +149,16 @@ type RootQueryType {
     userId: String!
   ): User
 
+  # The current User
   currentUser: User
+
+  # A single Patient
+  patient(
+    patiendId: String!
+  ): Patient
 }
 
 schema {
   query: RootQueryType
   mutation: RootMutationType
 }
-

@@ -7,6 +7,8 @@ RUN apt-get --purge -y autoremove libxml2 libxml2-dev libmagickwand-dev imagemag
   libmagickwand-6.q16-dev libmagickcore-6-headers libmagickcore-6.q16-dev \
   libmagickcore-dev libmagickwand-6.q16-2 libmagickwand-6-headers libmagickcore-6.q16-2-extra
 
+RUN apt-get update && apt-get -y upgrade
+
 # Install dependencies (but not devDependencies)
 # So long as no dependencies have changed, this step will be cached.
 ADD package.json /app/

@@ -14,7 +14,7 @@ describe('patient model', () => {
   });
 
   it('should create and retrieve a patient', async () => {
-    const patient = await Patient.create({ athenaPatientId: 123, firstName: 'a' lastName: 'b' });
+    const patient = await Patient.create({ athenaPatientId: 123, firstName: 'a', lastName: 'b' });
     expect(patient).toMatchObject({
       id: patient.id,
       athenaPatientId: 123,

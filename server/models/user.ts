@@ -1,19 +1,22 @@
 import { hash } from 'bcrypt';
-import { Model, ValidationError } from 'objection';
+import { Model, RelationMappings, ValidationError } from 'objection';
 import * as uuid from 'uuid';
 import { isEmail } from 'validator';
 import config from '../config';
+import Clinic from './clinic';
 
 export type UserRole =
   'physician' |
   'nurseCareManager' |
   'healthCoach' |
   'familyMember' |
-  'anonymousUser';
+  'anonymousUser' |
+  'admin';
 
 export interface ICreateUser {
   email: string;
   password: string;
+  homeClinicId: string;
   firstName?: string;
   lastName?: string;
   userRole?: UserRole;
@@ -32,6 +35,8 @@ export default class User extends Model {
   email: string;
   userRole: UserRole;
   hashedPassword: string;
+  homeClinicId: string;
+  homeClinic: Clinic;
 
   static tableName = 'user';
 
@@ -39,7 +44,7 @@ export default class User extends Model {
 
   static jsonSchema = {
     type: 'object',
-    required: ['email', 'userRole'],
+    required: ['email', 'userRole', 'homeClinicId'],
     properties: {
       id: { type: 'string' },
       lastLoginAt: { type: 'string' },
@@ -51,6 +56,18 @@ export default class User extends Model {
         enum: ['familyMember', 'healthCoach', 'physician', 'nurseCareManager'],
       },
       hashedPassword: { type: 'string' },
+      homeClinicId: { type: 'string' },
+    },
+  };
+
+  static relationMappings: RelationMappings = {
+    homeClinic: {
+      relation: Model.BelongsToOneRelation,
+      modelClass: 'clinic',
+      join: {
+        from: 'user.homeClinicId',
+        to: 'clinic.id',
+      },
     },
   };
 
@@ -102,12 +119,12 @@ export default class User extends Model {
       .insertAndFetch(userWithHashedPassword);
   }
 
-  static async get(userId: string): Promise<User | null> {
+  static async get(userId: string): Promise<User> {
     const user = await this
       .query()
       .findById(userId);
     if (!user) {
-      return null;
+      return Promise.reject(`No such user: ${userId}`);
     }
     return user;
   }

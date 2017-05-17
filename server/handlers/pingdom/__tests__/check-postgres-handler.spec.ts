@@ -31,6 +31,7 @@ describe('postgres pingdom test', () => {
       firstName: 'Bertrand',
       lastName: 'Russell',
       userRole,
+      homeClinicId: '1',
     });
 
     await checkPostgresHandler(request, response);

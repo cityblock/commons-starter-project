@@ -1,11 +1,13 @@
-import { Model } from 'objection';
+import { Model, RelationMappings } from 'objection';
 import * as uuid from 'uuid';
 import { IPageOptions } from '../db';
+import Clinic from './clinic';
 
 interface ICreatePatient {
   athenaPatientId: number;
   firstName: string;
   lastName: string;
+  homeClinicId: string;
 }
 
 type GetByOptions = 'athenaPatientId';
@@ -16,8 +18,33 @@ export default class Patient extends Model {
   createdAt: string;
   updatedAt: string;
   athenaPatientId: number;
+  homeClinicId: string;
+  homeClinic: Clinic;
 
   static tableName = 'patient';
+
+  static modelPaths = [__dirname];
+
+  static jsonSchema = {
+    type: 'object',
+    required: ['athenaPatientId', 'homeClinicId'],
+    properties: {
+      id: { type: 'string' },
+      athenaPatientId: { type: 'number' },
+      homeClinicId: { type: 'string' },
+    },
+  };
+
+  static relationMappings: RelationMappings = {
+    homeClinic: {
+      relation: Model.BelongsToOneRelation,
+      modelClass: 'clinic',
+      join: {
+        from: 'patient.homeClinicId',
+        to: 'clinic.id',
+      },
+    },
+  };
 
   $beforeInsert() {
     this.id = uuid.v4();
@@ -27,17 +54,6 @@ export default class Patient extends Model {
   $beforeUpdate() {
     this.updatedAt = new Date().toISOString();
   }
-
-  static jsonSchema = {
-    type: 'object',
-    required: ['athenaPatientId'],
-    properties: {
-      id: { type: 'string' },
-      athenaPatientId: { type: 'number' },
-    },
-  };
-
-  static modelPaths = [__dirname];
 
   static async get(patientId: string): Promise<Patient> {
     const patient = await this
@@ -76,7 +92,9 @@ export default class Patient extends Model {
   }
 
   static async create(patient: ICreatePatient): Promise<Patient> {
-    return await this.query().insertAndFetch(patient);
+    return await this
+      .query()
+      .insertAndFetch(patient);
   }
 
 }

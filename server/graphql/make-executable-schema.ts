@@ -3,6 +3,7 @@ import { GraphQLDateTime, GraphQLEmail, GraphQLPassword } from 'graphql-custom-t
 import { makeExecutableSchema } from 'graphql-tools';
 import * as path from 'path';
 import config from '../config';
+import { createClinic, resolveClinic } from './clinic-resolver';
 import { resolvePatient } from './patient-resolver';
 import { createUser, login, resolveCurrentUser, resolveUser } from './user-resolver';
 
@@ -13,11 +14,13 @@ const resolveFunctions = {
   GraphQLEmail,
   GraphQLPassword: new GraphQLPassword(6, 60),
   RootQueryType: {
-    user: resolveUser,
-    patient: resolvePatient,
+    clinic: resolveClinic,
     currentUser: resolveCurrentUser,
+    patient: resolvePatient,
+    user: resolveUser,
   },
   RootMutationType: {
+    createClinic,
     createUser,
     login,
   },

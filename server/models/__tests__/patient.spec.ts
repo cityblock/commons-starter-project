@@ -13,23 +13,40 @@ describe('patient model', () => {
     await Db.release();
   });
 
-  it('should create and retrieve a patient', async () => {
-    const patient = await Patient.create({ athenaPatientId: 123, firstName: 'a', lastName: 'b' });
-    expect(patient).toMatchObject({
-      id: patient.id,
-      athenaPatientId: 123,
-    });
-    const patientById = await Patient.get(patient.id);
-    expect(patientById).toMatchObject({
-      id: patient.id,
-      athenaPatientId: 123,
+  describe('patient', () => {
+    it('should create and retrieve a patient', async () => {
+      const patient = await Patient.create({
+        athenaPatientId: 123,
+        firstName: 'a',
+        lastName: 'b',
+        homeClinicId: '1',
+      });
+      expect(patient).toMatchObject({
+        id: patient.id,
+        athenaPatientId: 123,
+      });
+      const patientById = await Patient.get(patient.id);
+      expect(patientById).toMatchObject({
+        id: patient.id,
+        athenaPatientId: 123,
+      });
     });
   });
 
   describe('patients', () => {
     beforeEach(async () => {
-      await Patient.create({ athenaPatientId: 123, firstName: 'a', lastName: 'b' });
-      await Patient.create({ athenaPatientId: 234, firstName: 'c', lastName: 'd' });
+      await Patient.create({
+        athenaPatientId: 123,
+        firstName: 'a',
+        lastName: 'b',
+        homeClinicId: '1',
+      });
+      await Patient.create({
+        athenaPatientId: 234,
+        firstName: 'c',
+        lastName: 'd',
+        homeClinicId: '1',
+      });
     });
 
     it('should fetch patients', async () => {

@@ -1,5 +1,15 @@
 export default {
   rabbot: {
+    test: {
+      api: {
+        protocol: 'http',
+        url: 'localhost',
+        endpoint: '/api/queues',
+        port: 15672,
+        user: 'guest',
+        pass: 'guest',
+      },
+    },
     development: {
       api: {
         protocol: 'http',

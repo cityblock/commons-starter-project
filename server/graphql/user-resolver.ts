@@ -7,6 +7,7 @@ interface ICreateUserArgs {
   input: {
     email: string;
     password: string;
+    homeClinicId: string;
   };
 }
 
@@ -23,7 +24,7 @@ interface IUserLoginOptions {
 
 export async function createUser(root: any, { input }: ICreateUserArgs, context: IContext) {
   const { userRole } = context;
-  const { email, password } = input;
+  const { email, password, homeClinicId } = input;
   await accessControls.isAllowed(userRole, 'create', 'user');
 
   const user = await User.getBy('email', email);
@@ -35,6 +36,7 @@ export async function createUser(root: any, { input }: ICreateUserArgs, context:
       email,
       userRole: 'healthCoach',
       password,
+      homeClinicId,
     });
 
     const authToken = signJwt({
@@ -48,7 +50,7 @@ export async function createUser(root: any, { input }: ICreateUserArgs, context:
 }
 
 export async function resolveUser(
-  source: any, args: IResolveUserOptions, { db, userRole }: IContext,
+  root: any, args: IResolveUserOptions, { db, userRole }: IContext,
 ) {
   await accessControls.isAllowed(userRole, 'view', 'user');
 
@@ -61,7 +63,7 @@ export async function resolveUser(
 }
 
 export async function resolveCurrentUser(
-  source: any, args: any, { db, userId, userRole }: IContext,
+  root: any, args: any, { db, userId, userRole }: IContext,
 ) {
   await accessControls.isAllowed(userRole, 'view', 'user');
 

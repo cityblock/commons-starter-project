@@ -8,17 +8,18 @@ enum UserRole {
   healthCoach
   familyMember
   anonymousUser
+  admin
 }
 
 # User account model
-type User implements uniqueUserId {
+type User implements uniqueId {
   id: ID!
   firstName: String
   lastName: String
   email: String
   userRole: UserRole
   createdAt: GraphQLDateTime!
-  slackId: String
+  homeClinicId: String
 }
 
 # The user account with an optional auth token
@@ -29,7 +30,7 @@ type UserWithAuthToken {
 }
 
 # An object with a Globally Unique ID
-interface uniqueUserId {
+interface uniqueId {
   # The ID of the object.
   id: ID!
 }
@@ -100,7 +101,7 @@ type Garantor {
 }
 
 # Patient combining data in athena and our database
-type Patient implements uniqueUserId {
+type Patient implements uniqueId {
   id: ID!
   athenaPatientId: Int!
   firstName: String
@@ -125,6 +126,16 @@ type Patient implements uniqueUserId {
   employer: Employer
   address: Address
   povertyLevel: PovertyLevel
+  homeClinicId: String
+}
+
+# Clinic
+type Clinic implements uniqueId {
+  id: ID!
+  name: String!
+  departmentId: Int!
+  createdAt: GraphQLDateTime!
+  updatedAt: GraphQLDateTime!
 }
 
 #
@@ -135,6 +146,7 @@ type Patient implements uniqueUserId {
 input CreateUserInputType {
   email: GraphQLEmail!
   password: GraphQLPassword!
+  homeClinicId: String!
 }
 
 # params for logging in a user
@@ -143,12 +155,21 @@ input LoginUserInputType {
   password: String!
 }
 
+# params for creating a clinic
+input CreateClinicInputType {
+  departmentId: Int!
+  name: String!
+}
+
 type RootMutationType {
   # Create a new user
   createUser(input: CreateUserInputType): UserWithAuthToken
 
   # Login user
   login(input: LoginUserInputType): UserWithAuthToken
+
+  # Create a new clinic
+  createClinic(input: CreateClinicInputType): Clinic
 }
 
 type RootQueryType {
@@ -165,6 +186,11 @@ type RootQueryType {
   patient(
     patientId: String!
   ): Patient
+
+  # A single clinic
+  clinic(
+    clinicId: String!
+  ): Clinic
 }
 
 schema {

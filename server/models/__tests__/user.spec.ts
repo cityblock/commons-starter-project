@@ -22,6 +22,7 @@ describe('user model', () => {
       firstName: 'Dan',
       lastName: 'Plant',
       userRole,
+      homeClinicId: '1',
     });
     expect(user).toMatchObject({
       id: user.id,
@@ -46,6 +47,7 @@ describe('user model', () => {
         email: 'nonEmail',
         password: 'password1',
         userRole,
+        homeClinicId: '1',
       });
     } catch (err) {
       errors = err;
@@ -64,6 +66,7 @@ describe('user model', () => {
       firstName: 'Dan',
       lastName: 'Plant',
       userRole,
+      homeClinicId: '1',
     });
     const lastLoginAt = new Date().toISOString();
 
@@ -80,6 +83,7 @@ describe('user model', () => {
       firstName: 'Dan',
       lastName: 'Plant',
       userRole,
+      homeClinicId: '1',
     });
     expect(user).toMatchObject({
       id: user.id,

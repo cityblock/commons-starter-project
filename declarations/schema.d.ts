@@ -22,10 +22,11 @@ declare module 'schema' {
     user: IUser | null;
     currentUser: IUser | null;
     patient: IPatient | null;
+    clinic: IClinic | null;
   }
 
   /*
-    description: 
+    description: User account model
   */
   interface IUser {
     id: string;
@@ -34,25 +35,25 @@ declare module 'schema' {
     email: string | null;
     userRole: IUserRoleEnum | null;
     createdAt: any;
-    slackId: string | null;
+    homeClinicId: string | null;
   }
 
   /*
     description: An object with a Globally Unique ID
   */
-  type uniqueUserId = IUser | IPatient;
+  type uniqueId = IUser | IPatient | IClinic;
 
   /*
     description: An object with a Globally Unique ID
   */
-  interface IUniqueUserId {
+  interface IUniqueId {
     id: string;
   }
 
   /*
     description: 
   */
-  type IUserRoleEnum = 'physician' | 'nurseCareManager' | 'healthCoach' | 'familyMember' | 'anonymousUser';
+  type IUserRoleEnum = 'physician' | 'nurseCareManager' | 'healthCoach' | 'familyMember' | 'anonymousUser' | 'admin';
 
   /*
     description: Patient combining data in athena and our database
@@ -82,6 +83,7 @@ declare module 'schema' {
     employer: IEmployer | null;
     address: IAddress | null;
     povertyLevel: IPovertyLevel | null;
+    homeClinicId: string | null;
   }
 
   /*
@@ -162,19 +164,32 @@ declare module 'schema' {
   }
 
   /*
+    description: Clinic
+  */
+  interface IClinic {
+    id: string;
+    name: string;
+    departmentId: number;
+    createdAt: any;
+    updatedAt: any;
+  }
+
+  /*
     description: 
   */
   interface IRootMutationType {
     createUser: IUserWithAuthToken | null;
     login: IUserWithAuthToken | null;
+    createClinic: IClinic | null;
   }
 
   /*
-    description: Create a user input
+    description: params for creating a user
   */
   interface ICreateUserInputType {
     email: any;
     password: any;
+    homeClinicId: string;
   }
 
   /*
@@ -186,10 +201,18 @@ declare module 'schema' {
   }
 
   /*
-    description: 
+    description: params for logging in a user
   */
   interface ILoginUserInputType {
     email: string;
     password: string;
+  }
+
+  /*
+    description: params for creating a clinic
+  */
+  interface ICreateClinicInputType {
+    departmentId: number;
+    name: string;
   }
 }

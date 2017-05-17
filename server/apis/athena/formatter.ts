@@ -11,6 +11,7 @@ export const formatPatient = (p: IPatientInfoAthena, patient: Patient): IPatient
   athenaPatientId: Number(p.patientid),
   firstName: p.firstname,
   lastName: p.lastname,
+  homeClinicId: patient.homeClinicId,
   suffix: p.suffix,
   preferredName: p.preferredname,
   raceName: p.racename,

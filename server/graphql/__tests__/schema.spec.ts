@@ -45,6 +45,7 @@ describe('util tests', () => {
       email: 'a@b.com',
       userRole: 'physician',
       password: '1234',
+      homeClinicId: '1',
     });
     user.updateLoginAt(new Date().toUTCString());
 

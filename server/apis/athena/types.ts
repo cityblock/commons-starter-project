@@ -2,6 +2,13 @@
 // They're based on https://developer.athenahealth.com/io-docs
 // Only types which appear in Athena should go here!
 
+export interface ITokenResponse {
+  access_token: string;
+  expires_in: number; // in seconds
+  refresh_token: string;
+  token_type: string;
+}
+
 export interface IPatientBalanceAthena {
   balance: number | string;
   departmentlist: string;
@@ -101,9 +108,54 @@ export interface IPatientInfoAthena {
   race: string[];
 }
 
-export interface ITokenResponse {
-  access_token: string;
-  expires_in: number; // in seconds
-  refresh_token: string;
-  token_type: string;
+export interface IPatientMedicationStructuredSig {
+  doseageaction: string;
+  dosagequantityvalue: number;
+  dosagequantityunit: string;
+  dosagefrequencyvalue: number;
+  dosagefrequencyunit: string;
+  dosagefrequencydescription: string;
+  dosageroute: string;
+  dosageadditionalinstructions: string;
+  dosagedurationvalue: number;
+  dosagedurationunit: string;
+
+}
+
+export interface IPatientMedicationEvent {
+  type: 'START' | 'END' | 'ORDER' | 'ENTER' | 'FILL' | 'HIDE';
+  eventdate: string;
+}
+
+export interface IPatientMedicationResource {
+  medicationentryid: string;
+  medicationid: number;
+  medication: string;
+  isstructuredsig: boolean;
+  unstructuredsig: string;
+  source: string;
+  encounterid: number;
+  createdby: string;
+  approvedby: string;
+  orderingmode: string;
+  quantity: number;
+  quantityunit: string;
+  refillsallowed: number;
+  issafetorenew: boolean;
+  stopreason: string;
+  providernote: string;
+  patientnote: string;
+  pharmacyncpdpid: string;
+  route: string;
+  events: IPatientMedicationEvent[];
+  structuredsig?: IPatientMedicationStructuredSig;
+}
+
+export type PatientMedicationResource = IPatientMedicationResource[];
+
+export interface IPatientMedicationsResponse {
+  lastupdated: string;
+  medications: PatientMedicationResource[];
+  nomedicationsreported: boolean;
+  sectionnote: string;
 }

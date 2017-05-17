@@ -65,6 +65,16 @@ export default class AthenaApi {
     );
   }
 
+  public async getPatientMedications(
+    athenaPatientId: number,
+    athenaDepartmentId: number,
+  ): Promise<IPatientMedicationsResponse> {
+    return await this.fetch<IPatientMedicationsResponse>(
+      `/${config.ATHENA_PRACTICE_ID}/chart/${athenaPatientId}/medications`, {
+        departmentid: athenaDepartmentId,
+      });
+  }
+
   /**
    * Supports GET and POST by handling params differently
    */

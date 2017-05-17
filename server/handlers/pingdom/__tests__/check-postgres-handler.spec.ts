@@ -1,26 +1,22 @@
 import * as httpMocks from 'node-mocks-http';
-import AthenaApi from '../../../apis/athena';
-import {
-  createMockAthenaPatient,
-  mockAthenaGetPatient,
-  mockAthenaTokenFetch,
-  restoreAthenaFetch,
-} from '../../../spec-helpers';
-import { checkAthenaApiHandler } from '../check-athena-api-handler';
+import Db from '../../../db';
+import User from '../../../models/user';
+import { checkPostgresHandler } from '../check-postgres-handler';
 
-describe('athena api handler pingdom test', () => {
-  let athenaApi: AthenaApi = null as any;
+describe('postgres pingdom test', () => {
+  let db: Db = null as any;
   let error: any;
+  const userRole = 'physician';
 
   beforeEach(async () => {
-    athenaApi = await AthenaApi.get();
-    mockAthenaTokenFetch();
+    db = await Db.get();
+    await Db.clear();
     error = console.error;
     console.error = jest.fn();
   });
 
   afterEach(async () => {
-    restoreAthenaFetch();
+    await Db.release();
     console.error = error;
   });
 
@@ -28,9 +24,16 @@ describe('athena api handler pingdom test', () => {
     const request = httpMocks.createRequest();
     const response = httpMocks.createResponse();
     response.sendStatus = jest.fn();
-    mockAthenaGetPatient(1, createMockAthenaPatient(1, 'Constance', 'Blanton'));
 
-    await checkAthenaApiHandler(request, response);
+    await User.create({
+      email: 'brennan@sidewalklabs.com',
+      password: 'password1',
+      firstName: 'Bertrand',
+      lastName: 'Russell',
+      userRole,
+    });
+
+    await checkPostgresHandler(request, response);
 
     expect(response.sendStatus).toBeCalledWith(200);
   });
@@ -39,9 +42,13 @@ describe('athena api handler pingdom test', () => {
     const request = httpMocks.createRequest();
     const response = httpMocks.createResponse();
     response.status = jest.fn();
+    Db.get = async () => {
+      throw new Error('omg db is borked');
+    };
+
     (response.status as any).mockReturnValueOnce({ send: jest.fn() });
 
-    await checkAthenaApiHandler(request, response);
+    await checkPostgresHandler(request, response);
 
     expect(response.status).toBeCalledWith(500);
   });

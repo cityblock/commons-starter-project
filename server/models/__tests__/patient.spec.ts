@@ -52,5 +52,8 @@ describe('patient model', () => {
       ]);
     });
 
+    it('should fetch by athenaPatientId', async () => {
+      expect(await Patient.getBy('athenaPatientId', '123')).toMatchObject({ athenaPatientId: 123 });
+    });
   });
 });

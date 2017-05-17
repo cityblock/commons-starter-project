@@ -10,6 +10,7 @@ enum UserRole {
   anonymousUser
 }
 
+# User account model
 type User implements uniqueUserId {
   id: ID!
   firstName: String
@@ -130,12 +131,13 @@ type Patient implements uniqueUserId {
 # BEGIN INPUT FIELDS
 #
 
-# Create a user input
+# params for creating a user
 input CreateUserInputType {
   email: GraphQLEmail!
   password: GraphQLPassword!
 }
 
+# params for logging in a user
 input LoginUserInputType {
   email: String!
   password: String!

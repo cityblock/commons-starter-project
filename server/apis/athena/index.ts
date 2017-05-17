@@ -12,18 +12,6 @@ interface IAuth {
   accessToken: string;
 }
 
-interface ICreatePatientOptions {
-  firstName: string;
-  lastName: string;
-  gender: 'M' | 'F';
-  zip: number;
-  dateOfBirth: string; // mm/dd/yy
-}
-
-interface IPatientCreateResponse {
-  athenaPatientId: number;
-}
-
 /**
  * Wrapper around the Athena API.
  *
@@ -75,30 +63,6 @@ export default class AthenaApi {
     return await this.fetch<IPatientInfoAthena>(
       `/${config.ATHENA_PRACTICE_ID}/patients/${athenaPatientId}`,
     );
-  }
-
-  /**
-   * Creates a patient in athena
-   * Note: this endpoint is extremely slow on the Athena side (5+s)
-   */
-  public async createPatient(
-    { firstName, lastName, gender, zip, dateOfBirth }: ICreatePatientOptions,
-  ): Promise<IPatientCreateResponse> {
-    const formattedPatientOptions = {
-      firstname: firstName,
-      lastname: lastName,
-      sex: String(gender),
-      zip: String(zip),
-      departmentid: String(1),
-      dob: dateOfBirth,
-    };
-    const response = await this.fetch(
-      `/${config.ATHENA_PRACTICE_ID}/patients`, formattedPatientOptions, 'POST',
-    );
-    return {
-      // athena's create user endpoint returns an array
-      athenaPatientId: Number(response[0].patientid),
-    };
   }
 
   /**

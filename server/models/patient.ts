@@ -7,6 +7,7 @@ interface ICreatePatient {
   athenaPatientId: number;
   firstName: string;
   lastName: string;
+  homeClinicId: string;
 }
 
 type GetByOptions = 'athenaPatientId';
@@ -26,7 +27,7 @@ export default class Patient extends Model {
 
   static jsonSchema = {
     type: 'object',
-    required: ['athenaPatientId'],
+    required: ['athenaPatientId', 'homeClinicId'],
     properties: {
       id: { type: 'string' },
       athenaPatientId: { type: 'number' },
@@ -57,6 +58,7 @@ export default class Patient extends Model {
   static async get(patientId: string): Promise<Patient> {
     const patient = await this
       .query()
+      .eager('[homeClinic]')
       .findById(patientId);
 
     if (!patient) {
@@ -91,7 +93,9 @@ export default class Patient extends Model {
   }
 
   static async create(patient: ICreatePatient): Promise<Patient> {
-    return await this.query().insertAndFetch(patient);
+    return await this
+      .query()
+      .insertAndFetch(patient);
   }
 
 }

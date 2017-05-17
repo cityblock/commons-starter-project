@@ -25,7 +25,7 @@ declare module 'schema' {
   }
 
   /*
-    description: 
+    description: User account model
   */
   interface IUser {
     id: string;
@@ -170,7 +170,7 @@ declare module 'schema' {
   }
 
   /*
-    description: Create a user input
+    description: params for creating a user
   */
   interface ICreateUserInputType {
     email: any;
@@ -186,7 +186,7 @@ declare module 'schema' {
   }
 
   /*
-    description: 
+    description: params for logging in a user
   */
   interface ILoginUserInputType {
     email: string;

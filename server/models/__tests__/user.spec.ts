@@ -1,5 +1,6 @@
 import Db from '../../db';
 import User from '../user';
+import Clinic from '../clinic';
 
 const userRole = 'physician';
 
@@ -22,6 +23,7 @@ describe('user model', () => {
       firstName: 'Dan',
       lastName: 'Plant',
       userRole,
+      homeClinicId: '1',
     });
     expect(user).toMatchObject({
       id: user.id,
@@ -37,6 +39,21 @@ describe('user model', () => {
     });
   });
 
+  it('should return a homeClinic', async () => {
+    const clinic = await Clinic.create({ departmentId: 1, name: 'Center Zero' });
+    const user = await User.create({
+      email: 'a@b.com',
+      password: 'password',
+      firstName: 'Dan',
+      lastName: 'Plant',
+      userRole,
+      homeClinicId: clinic.id,
+    });
+
+    const userById = await User.get(user.id);
+    expect(userById.homeClinic).toMatchObject(clinic);
+  });
+
   it('should not create a user when given an invalid email address', async () => {
     // once jest 20.0.0 ships, this should be updated to use the .rejects method
     let errors;
@@ -46,6 +63,7 @@ describe('user model', () => {
         email: 'nonEmail',
         password: 'password1',
         userRole,
+        homeClinicId: '1',
       });
     } catch (err) {
       errors = err;
@@ -64,6 +82,7 @@ describe('user model', () => {
       firstName: 'Dan',
       lastName: 'Plant',
       userRole,
+      homeClinicId: '1',
     });
     const lastLoginAt = new Date().toISOString();
 
@@ -80,6 +99,7 @@ describe('user model', () => {
       firstName: 'Dan',
       lastName: 'Plant',
       userRole,
+      homeClinicId: '1',
     });
     expect(user).toMatchObject({
       id: user.id,

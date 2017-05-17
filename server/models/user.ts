@@ -15,6 +15,7 @@ export type UserRole =
 export interface ICreateUser {
   email: string;
   password: string;
+  homeClinicId: string;
   firstName?: string;
   lastName?: string;
   userRole?: UserRole;
@@ -117,12 +118,13 @@ export default class User extends Model {
       .insertAndFetch(userWithHashedPassword);
   }
 
-  static async get(userId: string): Promise<User | null> {
+  static async get(userId: string): Promise<User> {
     const user = await this
       .query()
+      .eager('[homeClinic]')
       .findById(userId);
     if (!user) {
-      return null;
+      return Promise.reject(`No such user: ${userId}`);
     }
     return user;
   }

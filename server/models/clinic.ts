@@ -1,6 +1,7 @@
 import { Model, ValidationError, RelationMappings } from 'objection';
 import * as uuid from 'uuid';
 import User from './user';
+import Patient from './patient';
 
 export interface ICreateClinic {
   name: string;
@@ -16,6 +17,7 @@ export default class Clinic extends Model {
   name: string;
   departmentId: number;
   users: User[];
+  patients: Patient[];
 
   static tableName = 'clinic';
 
@@ -38,6 +40,14 @@ export default class Clinic extends Model {
       join: {
         from: 'clinic.id',
         to: 'user.homeClinicId',
+      },
+    },
+    patients: {
+      relation: Model.HasManyRelation,
+      modelClass: 'patient',
+      join: {
+        from: 'clinic.id',
+        to: 'patient.homeClinicId',
       },
     },
   };

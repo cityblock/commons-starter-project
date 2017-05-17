@@ -6,7 +6,8 @@ export type UserRole =
   "nurseCareManager" |
   "healthCoach" |
   "familyMember" |
-  "anonymousUser";
+  "anonymousUser" |
+  "admin";
 
 
 export interface GetCurrentUserQuery {

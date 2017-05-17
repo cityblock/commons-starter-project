@@ -6,7 +6,7 @@ import schema from '../make-executable-schema';
 
 describe('clinic resolver', () => {
   let db: Db = null as any;
-  const userRole = 'physician';
+  const userRole = 'admin';
 
   beforeEach(async () => {
     db = await Db.get();

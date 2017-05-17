@@ -53,7 +53,7 @@ declare module 'schema' {
   /*
     description: 
   */
-  type IUserRoleEnum = 'physician' | 'nurseCareManager' | 'healthCoach' | 'familyMember' | 'anonymousUser';
+  type IUserRoleEnum = 'physician' | 'nurseCareManager' | 'healthCoach' | 'familyMember' | 'anonymousUser' | 'admin';
 
   /*
     description: Patient combining data in athena and our database

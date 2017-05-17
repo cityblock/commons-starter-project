@@ -13,24 +13,12 @@
       {
         "resources": [
           "patient",
-          "patientEvents",
           "user"
         ],
         "permissions": [
           "edit",
           "view",
           "delete"
-        ]
-      },
-      {
-        "resources": [
-          "notes"
-        ],
-        "permissions": [
-          "edit",
-          "view",
-          "delete",
-          "create"
         ]
       }
     ]
@@ -44,10 +32,26 @@
       {
         "resources": [
           "patient",
-          "note",
-          "patientEvents",
+          "user"
+        ],
+        "permissions": [
+          "edit",
+          "view",
+          "delete",
+          "create"
+        ]
+      }
+    ]
+  },
+  {
+    "roles": [
+      "admin"
+    ],
+    "allows": [
+      {
+        "resources": [
+          "patient",
           "user",
-          "encounter",
           "clinic"
         ],
         "permissions": [

@@ -8,6 +8,7 @@ enum UserRole {
   healthCoach
   familyMember
   anonymousUser
+  admin
 }
 
 # User account model

@@ -20,6 +20,7 @@ describe('patient', () => {
   let patient = null as any;
   let user = null as any;
   const userRole = 'physician';
+  const homeClinicId = '1';
 
   beforeEach(async () => {
     athenaApi = await AthenaApi.get();
@@ -31,11 +32,13 @@ describe('patient', () => {
       email: 'a@b.com',
       password: 'password1',
       userRole,
+      homeClinicId,
     });
     patient = await Patient.create({
       athenaPatientId: 1,
       firstName: 'Constance',
       lastName: 'Blanton',
+      homeClinicId,
     });
   });
 

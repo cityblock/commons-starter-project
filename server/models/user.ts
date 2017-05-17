@@ -1,8 +1,9 @@
 import { hash } from 'bcrypt';
-import { Model, ValidationError } from 'objection';
+import { Model, ValidationError, RelationMappings } from 'objection';
 import * as uuid from 'uuid';
 import { isEmail } from 'validator';
 import config from '../config';
+import Clinic from './clinic';
 
 export type UserRole =
   'physician' |
@@ -32,6 +33,8 @@ export default class User extends Model {
   email: string;
   userRole: UserRole;
   hashedPassword: string;
+  homeClinicId: string;
+  homeClinic: Clinic;
 
   static tableName = 'user';
 
@@ -51,6 +54,18 @@ export default class User extends Model {
         enum: ['familyMember', 'healthCoach', 'physician', 'nurseCareManager'],
       },
       hashedPassword: { type: 'string' },
+      homeClinicId: { type: 'string' },
+    },
+  };
+
+  static relationMappings: RelationMappings = {
+    homeClinic: {
+      relation: Model.BelongsToOneRelation,
+      modelClass: 'clinic',
+      join: {
+        from: 'user.homeClinicId',
+        to: 'clinic.id',
+      },
     },
   };
 

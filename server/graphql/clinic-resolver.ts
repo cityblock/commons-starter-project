@@ -31,11 +31,5 @@ export async function resolveClinic(
 ) {
   await accessControls.isAllowed(userRole, 'view', 'clinic');
 
-  const clinic = await Clinic.get(clinicId);
-
-  if (!clinic) {
-    throw new Error(`Clinic not found for ${clinicId}`);
-  }
-
-  return clinic;
+  return await Clinic.get(clinicId);
 }

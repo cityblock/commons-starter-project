@@ -9,6 +9,7 @@ describe('user tests', () => {
 
   let db: Db = null as any;
   const userRole = 'physician';
+  const homeClinicId = '1';
 
   beforeEach(async () => {
     db = await Db.get();
@@ -27,6 +28,7 @@ describe('user tests', () => {
         firstName: 'Bertrand',
         lastName: 'Russell',
         userRole,
+        homeClinicId,
       });
       const query = `{ user(userId: "${user.id}") { email, firstName, lastName } }`;
       const result = await graphql(schema, query, null, { db, userRole });
@@ -42,6 +44,7 @@ describe('user tests', () => {
         email: 'brennan@sidewalklabs.com',
         password: 'Pa33word1',
         userRole,
+        homeClinicId,
       });
       const user = await User.get(dbUser.id);
       expect(compare('Pa33word1', user!.hashedPassword)).toBeTruthy();
@@ -61,6 +64,7 @@ describe('user tests', () => {
         firstName: 'Bertrand',
         lastName: 'Russell',
         userRole,
+        homeClinicId,
       });
       const query = `{ currentUser { email, firstName, lastName } }`;
       const result = await graphql(schema, query, null, { db, userId: user.id, userRole });
@@ -80,6 +84,7 @@ describe('user tests', () => {
         firstName: 'Bertrand',
         lastName: 'Russell',
         userRole,
+        homeClinicId,
       });
       expect(user.lastLoginAt).toBeNull();
       const mutation = `mutation {
@@ -102,6 +107,7 @@ describe('user tests', () => {
         email: 'a@b.com',
         password: 'password1',
         userRole,
+        homeClinicId,
       });
       expect(user.lastLoginAt).toBeNull();
       const mutation = `mutation {
@@ -135,6 +141,7 @@ describe('user tests', () => {
         firstName: 'Bertrand',
         lastName: 'Russell',
         userRole,
+        homeClinicId,
       });
       const mutation = `mutation {
         login(input: { email: "a@b.com", password: "incorrect!" }) {
@@ -178,6 +185,7 @@ describe('user tests', () => {
         email: 'a@b.com',
         password: 'password1',
         userRole,
+        homeClinicId,
       });
       const mutation = `mutation {
         createUser(input: { email: "a@b.com", password: "c0000lp3rd!" }) {

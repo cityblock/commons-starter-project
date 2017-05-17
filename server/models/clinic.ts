@@ -75,13 +75,13 @@ export default class Clinic extends Model {
       .insertAndFetch(clinic);
   }
 
-  static async get(clinicId: string): Promise<Clinic | null> {
+  static async get(clinicId: string): Promise<Clinic> {
     const clinic = await this
       .query()
       .findById(clinicId);
 
       if (!clinic) {
-        return null;
+        return Promise.reject(`No such clinic for clinicId: ${clinicId}`);
       }
 
       return clinic;

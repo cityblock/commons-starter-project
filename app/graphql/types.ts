@@ -10,6 +10,7 @@ export type UserRole =
 
 
 export interface GetCurrentUserQuery {
+  // The current User
   currentUser: FullUserFragment;
 }
 

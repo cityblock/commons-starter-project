@@ -5,7 +5,8 @@ import User from '../../models/user';
 export async function checkPostgresHandler(req: express.Request, res: express.Response) {
   try {
     await Db.get();
-    await User.getBy('email', 'brennan@sidewalklabs.com');
+    // NOTE: This test succeeds if the email is incorrect
+    await User.getBy('email', 'fake@does-not-exist.com');
     res.sendStatus(200);
   } catch (err) {
     console.error('PostgreSQL check failed!');

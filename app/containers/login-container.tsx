@@ -6,7 +6,7 @@ import * as styles from '../css/components/login-scene.css';
 import { getQuery } from '../graphql/helpers';
 import { FullUserFragment, LogInUserMutationVariables } from '../graphql/types';
 
-export interface Props {
+export interface IProps {
   logIn: (options: { variables: LogInUserMutationVariables }) => any;
   onSuccess: () => any;
   currentUser?: FullUserFragment;
@@ -14,14 +14,14 @@ export interface Props {
   error?: string;
 }
 
-interface State {
+interface IState {
   email?: string;
   password?: string;
 }
 
-export class LoginContainer extends React.Component<Props, State> {
+export class LoginContainer extends React.Component<IProps, IState> {
 
-  constructor(props: Props) {
+  constructor(props: IProps) {
     super(props);
     this.onChangeEmail = this.onChangeEmail.bind(this);
     this.onChangePassword = this.onChangePassword.bind(this);
@@ -32,7 +32,7 @@ export class LoginContainer extends React.Component<Props, State> {
     };
   }
 
-  componentWillReceiveProps(newProps: Props) {
+  componentWillReceiveProps(newProps: IProps) {
     if (newProps.currentUser) {
       // Log in succeeded. Navigate to the patients list scene.
       this.props.onSuccess();
@@ -95,7 +95,7 @@ export class LoginContainer extends React.Component<Props, State> {
   }
 }
 
-function mapDispatchToProps(dispatch: Dispatch<() => void>): Partial<Props> {
+function mapDispatchToProps(dispatch: Dispatch<() => void>): Partial<IProps> {
   return {
     onSuccess: async () => dispatch(push('/patients')),
   };

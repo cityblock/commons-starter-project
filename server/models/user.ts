@@ -12,7 +12,7 @@ export type UserRole =
   'familyMember' |
   'anonymousUser';
 
-export interface CreateUser {
+export interface ICreateUser {
   email: string;
   password: string;
   firstName?: string;
@@ -108,7 +108,7 @@ export default class User extends Model {
     return user ? user.lastLoginAt : undefined;
   }
 
-  static async create(user: CreateUser): Promise<User> {
+  static async create(user: ICreateUser): Promise<User> {
     const hashedPassword = await hash(user.password, config.SALT_ROUNDS);
     const userWithHashedPassword = { ...user, hashedPassword };
 

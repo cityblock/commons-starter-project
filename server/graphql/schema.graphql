@@ -10,6 +10,7 @@ enum UserRole {
   anonymousUser
 }
 
+# User account model
 type User implements uniqueUserId {
   id: ID!
   firstName: String
@@ -33,11 +34,110 @@ interface uniqueUserId {
   id: ID!
 }
 
+# Patient contact
+type Contact {
+  email: String
+  lastEmail: String
+  emailExists: Boolean
+  homePhone: String
+  mobilePhone: String
+  hasMobile: Boolean
+  consentToCall: Boolean
+  consentToText: Boolean
+}
+
+# Patient poverty level response
+type PovertyLevel {
+  povertyLevelIncomeDeclined: Boolean
+  povertyLevelIncomeRangeDeclined: Boolean
+  povertyLevelFamilySizeDeclined: Boolean
+}
+
+# Patient address
+type Address {
+  city: String
+  address1: String
+  countryCode: String
+  countryCode3166: String
+  state: String
+  zip: String
+}
+
+# Patient employer
+type Employer {
+  id: String
+  phone: String
+  city: String
+  state: String
+  name: String
+  address: String
+  zip: String
+}
+
+# Patient Garantor Address (for payment)
+type GarantorAddress {
+  addressSameAsPatient: Boolean
+  address1: String
+  city: String
+  zip: String
+  state: String
+  countryCode: String
+  countryCode3166: String
+}
+
+# Patient Garantor (for payment)
+type Garantor {
+  firstName: String
+  lastName: String
+  suffix: String
+  SSN: String
+  DOB: String
+  phone: String
+  email: String
+  relationshipToPatient: String
+  employerId: String
+  address: GarantorAddress
+}
+
+# Patient combining data in athena and our database
+type Patient implements uniqueUserId {
+  id: ID!
+  athenaPatientId: Int!
+  firstName: String
+  lastName: String
+  suffix: String
+  preferredName: String
+  raceName: String
+  dob: String
+  sex: String
+  race: [String]
+  ethnicityCode: String
+  status: String
+  ssn: String
+  homebound: Boolean
+  language6392code: String
+  maritalStatus: String
+  maritalStatusName: String
+  patientPhoto: Boolean
+  patientPhotoUrl: String
+  contact: Contact
+  guarantor: Garantor
+  employer: Employer
+  address: Address
+  povertyLevel: PovertyLevel
+}
+
+#
+# BEGIN INPUT FIELDS
+#
+
+# params for creating a user
 input CreateUserInputType {
   email: GraphQLEmail!
   password: GraphQLPassword!
 }
 
+# params for logging in a user
 input LoginUserInputType {
   email: String!
   password: String!
@@ -58,11 +158,16 @@ type RootQueryType {
     userId: String!
   ): User
 
+  # The current User
   currentUser: User
+
+  # A single Patient
+  patient(
+    patientId: String!
+  ): Patient
 }
 
 schema {
   query: RootQueryType
   mutation: RootMutationType
 }
-

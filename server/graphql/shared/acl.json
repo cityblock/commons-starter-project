@@ -47,7 +47,8 @@
           "note",
           "patientEvents",
           "user",
-          "encounter"
+          "encounter",
+          "clinic"
         ],
         "permissions": [
           "edit",

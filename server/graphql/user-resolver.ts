@@ -50,7 +50,7 @@ export async function createUser(root: any, { input }: ICreateUserArgs, context:
 }
 
 export async function resolveUser(
-  source: any, args: IResolveUserOptions, { db, userRole }: IContext,
+  root: any, args: IResolveUserOptions, { db, userRole }: IContext,
 ) {
   await accessControls.isAllowed(userRole, 'view', 'user');
 
@@ -63,7 +63,7 @@ export async function resolveUser(
 }
 
 export async function resolveCurrentUser(
-  source: any, args: any, { db, userId, userRole }: IContext,
+  root: any, args: any, { db, userId, userRole }: IContext,
 ) {
   await accessControls.isAllowed(userRole, 'view', 'user');
 

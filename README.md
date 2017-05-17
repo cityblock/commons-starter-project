@@ -1,6 +1,6 @@
 # Commons
 
-[![Coverage Status](https://coveralls.io/repos/github/sidewalklabs/commons/badge.svg?t=Mrcm01)](https://coveralls.io/github/sidewalklabs/commons) [![CircleCI](https://circleci.com/gh/sidewalklabs/commons.svg?style=svg&circle-token=ff9336cd2c27998733f1abe9a3c3bcbba62a045f)](https://circleci.com/gh/sidewalklabs/commons)
+[![Coverage Status](https://coveralls.io/repos/github/sidewalklabs/commons/badge.svg?branch=master&t=Mrcm01)](https://coveralls.io/github/sidewalklabs/commons?branch=master) [![CircleCI](https://circleci.com/gh/sidewalklabs/commons.svg?style=svg&circle-token=ff9336cd2c27998733f1abe9a3c3bcbba62a045f)](https://circleci.com/gh/sidewalklabs/commons)
 
 Care MVP. For a more detailed spec, see the [PRD][].
 

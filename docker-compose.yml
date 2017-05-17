@@ -1,0 +1,17 @@
+version: '2.0'
+services:
+  web:
+    build: .
+    ports:
+     - '3000:3000'
+    environment:
+     - NODE_ENV=production
+     - DB_PORT=5432
+     - DB_HOST=postgres
+     - DB_USER=postgres
+     - LOGENTRIES_TOKEN=fb9d5b25-f335-4863-84f6-1bafb3412d37
+    command: yarn run start
+  postgres:
+    build: ./docker/postgres/9.6
+    environment:
+     - POSTGRES_DB=db

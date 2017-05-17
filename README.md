@@ -219,6 +219,17 @@ The settings are as follows:
 5. `log_min_duration_statement = -1`
 6. `log_min_messages = 'DEBUG2'`
 
+### Running in Production Mode Locally Using Docker
+
+We are able to run the application locally using Docker and Docker Compose. For now, this means running the web application with a postgres database, but no RabbitMQ. To get started, download and install [Docker][]. After you have Docker installed and running, follow these steps:
+
+1. Start the application and database by running `yarn run docker-prod:start`. The first time you do this, you will have to wait a little while.
+2. In a separate terminal window, run: `yarn run docker-prod:migrate`.
+3. To set up an initial user, run: `yarn run docker-prod:ts-node` and follow the usual steps.
+4. Visit `localhost:3000` in your browser.
+5. If you make changes to the application and wish to see them, the application container will need to be rebuilt and restarted. To do this, in another terminal window, run `yarn run docker-prod:restart`.
+6. To stop the application, run: `yarn run doker-prod:stop`.
+
 [Aptible]: https://aptible.com
 [Aptible toolbelt]: https://www.aptible.com/support/toolbelt/
 [staging]: https://app-5428.on-aptible.com
@@ -230,3 +241,4 @@ The settings are as follows:
 [Objection.js]: https://github.com/Vincit/objection.js
 [knex]: http://knexjs.org/
 [PostgreSQL Documentation]: https://www.postgresql.org/docs/9.6/static/runtime-config-logging.html
+[Docker]: https://docs.docker.com/engine/installation/

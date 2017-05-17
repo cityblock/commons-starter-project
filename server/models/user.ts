@@ -1,5 +1,5 @@
 import { hash } from 'bcrypt';
-import { Model, ValidationError, RelationMappings } from 'objection';
+import { Model, RelationMappings, ValidationError } from 'objection';
 import * as uuid from 'uuid';
 import { isEmail } from 'validator';
 import config from '../config';
@@ -43,7 +43,7 @@ export default class User extends Model {
 
   static jsonSchema = {
     type: 'object',
-    required: ['email', 'userRole'],
+    required: ['email', 'userRole', 'homeClinicId'],
     properties: {
       id: { type: 'string' },
       lastLoginAt: { type: 'string' },

@@ -1,7 +1,7 @@
-import { Model, ValidationError, RelationMappings } from 'objection';
+import { Model, RelationMappings, ValidationError } from 'objection';
 import * as uuid from 'uuid';
-import User from './user';
 import Patient from './patient';
+import User from './user';
 
 export interface ICreateClinic {
   name: string;
@@ -10,6 +10,7 @@ export interface ICreateClinic {
 
 export type GetByOptions = 'name' | 'departmentId';
 
+/* tslint:disable:member-ordering */
 export default class Clinic extends Model {
   id: string;
   createdAt: string;
@@ -80,11 +81,11 @@ export default class Clinic extends Model {
       .query()
       .findById(clinicId);
 
-      if (!clinic) {
+    if (!clinic) {
         return Promise.reject(`No such clinic for clinicId: ${clinicId}`);
       }
 
-      return clinic;
+    return clinic;
   }
 
   static async getBy(fieldName: GetByOptions, field?: string | number): Promise<Clinic | null> {
@@ -104,3 +105,4 @@ export default class Clinic extends Model {
     return clinic;
   }
 }
+/* tslint:disable:member-ordering */

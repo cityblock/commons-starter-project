@@ -28,4 +28,4 @@ describe('clinic model', () => {
     expect(clinicByDepartmentId).toMatchObject(clinic);
     expect(clinicByName).toMatchObject(clinic);
   });
-})
+});

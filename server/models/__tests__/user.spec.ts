@@ -1,6 +1,6 @@
 import Db from '../../db';
-import User from '../user';
 import Clinic from '../clinic';
+import User from '../user';
 
 const userRole = 'physician';
 

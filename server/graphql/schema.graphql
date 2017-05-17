@@ -18,7 +18,7 @@ type User implements uniqueId {
   email: String
   userRole: UserRole
   createdAt: GraphQLDateTime!
-  slackId: String
+  homeClinicId: String
 }
 
 # The user account with an optional auth token
@@ -125,6 +125,7 @@ type Patient implements uniqueId {
   employer: Employer
   address: Address
   povertyLevel: PovertyLevel
+  homeClinicId: String
 }
 
 # Clinic
@@ -144,6 +145,7 @@ type Clinic implements uniqueId {
 input CreateUserInputType {
   email: GraphQLEmail!
   password: GraphQLPassword!
+  homeClinicId: String!
 }
 
 # params for logging in a user

@@ -18,7 +18,7 @@ export default class Patient extends Model {
   createdAt: string;
   updatedAt: string;
   athenaPatientId: number;
-  homeClinicId: number;
+  homeClinicId: string;
   homeClinic: Clinic;
 
   static tableName = 'patient';

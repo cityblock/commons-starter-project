@@ -35,7 +35,7 @@ declare module 'schema' {
     email: string | null;
     userRole: IUserRoleEnum | null;
     createdAt: any;
-    slackId: string | null;
+    homeClinicId: string | null;
   }
 
   /*
@@ -83,6 +83,7 @@ declare module 'schema' {
     employer: IEmployer | null;
     address: IAddress | null;
     povertyLevel: IPovertyLevel | null;
+    homeClinicId: string | null;
   }
 
   /*
@@ -188,6 +189,7 @@ declare module 'schema' {
   interface ICreateUserInputType {
     email: any;
     password: any;
+    homeClinicId: string;
   }
 
   /*

@@ -1,8 +1,8 @@
-import * as httpMocks from 'node-mocks-http';
+import 'fetch-everywhere';
 import * as nock from 'nock';
+import * as httpMocks from 'node-mocks-http';
 import config from '../../../config';
 import { checkRabbitHandler } from '../check-rabbit-handler';
-import 'fetch-everywhere';
 
 describe('rabbit handler pingdom test', () => {
   let error: any;
@@ -69,4 +69,3 @@ describe('rabbit handler pingdom test', () => {
     });
   });
 });
-

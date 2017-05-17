@@ -13,7 +13,11 @@ interface IResolveClinicOptions {
   clinicId: string;
 }
 
-export async function createClinic(root: any, { input }: ICreateClinicArgs, { userRole }: IContext) {
+export async function createClinic(
+  root: any,
+  { input }: ICreateClinicArgs,
+  { userRole }: IContext,
+) {
   const { departmentId } = input;
   await accessControls.isAllowed(userRole, 'create', 'clinic');
 
@@ -27,7 +31,7 @@ export async function createClinic(root: any, { input }: ICreateClinicArgs, { us
 }
 
 export async function resolveClinic(
-  root: any, { clinicId }: IResolveClinicOptions, { userRole }: IContext
+  root: any, { clinicId }: IResolveClinicOptions, { userRole }: IContext,
 ) {
   await accessControls.isAllowed(userRole, 'view', 'clinic');
 

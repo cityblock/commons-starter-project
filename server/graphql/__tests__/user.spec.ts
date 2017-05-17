@@ -157,7 +157,7 @@ describe('user tests', () => {
   describe('create user', () => {
     it('creates a new user', async () => {
       const mutation = `mutation {
-        createUser(input: { email: "a@b.com", password: "c0000lp3rd!" }) {
+        createUser(input: { email: "a@b.com", password: "c0000lp3rd!", homeClinicId: "1" }) {
           authToken
           user { email }
         }
@@ -170,7 +170,7 @@ describe('user tests', () => {
 
     it('errors if password to short', async () => {
       const mutation = `mutation {
-        createUser(input: { email: "a@b.com", password: "c" }) {
+        createUser(input: { email: "a@b.com", password: "c", homeClinicId: "1" }) {
         authToken
         user { email }
       } }`;
@@ -188,7 +188,7 @@ describe('user tests', () => {
         homeClinicId,
       });
       const mutation = `mutation {
-        createUser(input: { email: "a@b.com", password: "c0000lp3rd!" }) {
+        createUser(input: { email: "a@b.com", password: "c0000lp3rd!", homeClinicId: "1" }) {
         authToken
         user { email }
       } }`;

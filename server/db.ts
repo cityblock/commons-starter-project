@@ -5,7 +5,7 @@ import { Model } from 'objection';
 const knexConfig = require('./models/knexfile');
 /* tslint:enable no-var-requires */
 
-export interface PageOptions {
+export interface IPageOptions {
   limit?: number;
   offset?: number;
 }

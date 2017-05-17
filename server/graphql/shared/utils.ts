@@ -12,7 +12,7 @@ import config from '../../config';
 import Db from '../../db';
 import User, { UserRole } from '../../models/user';
 
-export interface Context {
+export interface IContext {
   db: Db;
   athenaApi: AthenaApi;
   userRole: UserRole;
@@ -27,13 +27,13 @@ export function formatRelayEdge(node: any, id: string) {
   };
 }
 
-interface JWTData {
+interface IJWTData {
   userId: string;
   userRole: UserRole;
   lastLoginAt: string;
 }
 
-export const signJwt = (jwtData: JWTData) => (
+export const signJwt = (jwtData: IJWTData) => (
   sign(jwtData, config.JWT_SECRET, { expiresIn: config.JWT_EXPIRY })
 );
 
@@ -52,7 +52,7 @@ export async function parseAndVerifyJwt(jwt: string) {
   return decoded;
 }
 
-export async function getGraphQLContext(request: express.Request): Promise<Context> {
+export async function getGraphQLContext(request: express.Request): Promise<IContext> {
   const authToken = request.headers.auth_token;
   const [db, athenaApi] = await Promise.all([
     Db.get(),

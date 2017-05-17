@@ -1,6 +1,6 @@
-import Db from '../db';
-import User from '../models/user';
-import { getGraphQLContext, parseAndVerifyJwt, signJwt } from './shared/utils';
+import Db from '../../db';
+import User from '../../models/user';
+import { getGraphQLContext, parseAndVerifyJwt, signJwt } from './../shared/utils';
 
 describe('util tests', () => {
   let db: Db = null as any;

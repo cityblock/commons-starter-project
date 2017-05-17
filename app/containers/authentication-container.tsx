@@ -5,16 +5,16 @@ import { push } from 'react-router-redux';
 import { getQuery } from '../graphql/helpers';
 import { FullUserFragment } from '../graphql/types';
 
-export interface Props {
+export interface IProps {
   loading: boolean;
   currentUser?: FullUserFragment;
   redirectToLogin: () => any;
   children: any;
 }
 
-class Authentication extends React.Component<Props, {}> {
+class Authentication extends React.Component<IProps, {}> {
 
-  componentWillReceiveProps(newProps: Props) {
+  componentWillReceiveProps(newProps: IProps) {
     if (!newProps.loading && this.props.loading && !newProps.currentUser) {
       // TODO: set redirect url to go back ie: dispatch(setRedirectUrl(currentURL))
       this.props.redirectToLogin();
@@ -32,7 +32,7 @@ class Authentication extends React.Component<Props, {}> {
   }
 }
 
-function mapDispatchToProps(dispatch: Dispatch<() => void>): Partial<Props> {
+function mapDispatchToProps(dispatch: Dispatch<() => void>): Partial<IProps> {
   return {
     redirectToLogin: async () => dispatch(push('/')),
   };

@@ -7,7 +7,7 @@ import { IPatientInfoAthena, ITokenResponse } from './types';
 
 let singleton: AthenaApi;
 
-interface Auth {
+interface IAuth {
   expiresAtMillis: number;
   accessToken: string;
 }
@@ -50,7 +50,7 @@ export default class AthenaApi {
     };
   }
 
-  auth: Auth;
+  auth: IAuth;
 
   private constructor() {
     this.auth = {
@@ -61,7 +61,7 @@ export default class AthenaApi {
 
   public async getPatient(athenaPatientId: number): Promise<IPatientInfoAthena> {
     return await this.fetch<IPatientInfoAthena>(
-      `/${config.ATHENA_PRACTICE_ID}/1/fhir/dstu2/Patient/${athenaPatientId}`,
+      `/${config.ATHENA_PRACTICE_ID}/patients/${athenaPatientId}`,
     );
   }
 

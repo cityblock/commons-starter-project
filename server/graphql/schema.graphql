@@ -228,6 +228,11 @@ type RootQueryType {
   clinic(
     clinicId: String!
   ): Clinic
+
+  # Patient medications
+  patientMedications(
+    patientId: String!
+  ): PatientMedications
 }
 
 schema {

@@ -22,6 +22,7 @@ declare module 'schema' {
     user: IUser | null;
     currentUser: IUser | null;
     patient: IPatient | null;
+    clinic: IClinic | null;
   }
 
   /*
@@ -40,12 +41,12 @@ declare module 'schema' {
   /*
     description: An object with a Globally Unique ID
   */
-  type uniqueUserId = IUser | IPatient;
+  type uniqueId = IUser | IPatient | IClinic;
 
   /*
     description: An object with a Globally Unique ID
   */
-  interface IUniqueUserId {
+  interface IUniqueId {
     id: string;
   }
 
@@ -162,11 +163,23 @@ declare module 'schema' {
   }
 
   /*
+    description: Clinic
+  */
+  interface IClinic {
+    id: string;
+    name: string;
+    departmentId: number;
+    createdAt: any;
+    updatedAt: any;
+  }
+
+  /*
     description: 
   */
   interface IRootMutationType {
     createUser: IUserWithAuthToken | null;
     login: IUserWithAuthToken | null;
+    createClinic: IClinic | null;
   }
 
   /*
@@ -191,5 +204,13 @@ declare module 'schema' {
   interface ILoginUserInputType {
     email: string;
     password: string;
+  }
+
+  /*
+    description: params for creating a clinic
+  */
+  interface ICreateClinicInputType {
+    departmentId: number;
+    name: string;
   }
 }

@@ -11,7 +11,7 @@ enum UserRole {
 }
 
 # User account model
-type User implements uniqueUserId {
+type User implements uniqueId {
   id: ID!
   firstName: String
   lastName: String
@@ -29,7 +29,7 @@ type UserWithAuthToken {
 }
 
 # An object with a Globally Unique ID
-interface uniqueUserId {
+interface uniqueId {
   # The ID of the object.
   id: ID!
 }
@@ -100,7 +100,7 @@ type Garantor {
 }
 
 # Patient combining data in athena and our database
-type Patient implements uniqueUserId {
+type Patient implements uniqueId {
   id: ID!
   athenaPatientId: Int!
   firstName: String
@@ -127,6 +127,15 @@ type Patient implements uniqueUserId {
   povertyLevel: PovertyLevel
 }
 
+# Clinic
+type Clinic implements uniqueId {
+  id: ID!
+  name: String!
+  departmentId: Int!
+  createdAt: GraphQLDateTime!
+  updatedAt: GraphQLDateTime!
+}
+
 #
 # BEGIN INPUT FIELDS
 #
@@ -143,12 +152,21 @@ input LoginUserInputType {
   password: String!
 }
 
+# params for creating a clinic
+input CreateClinicInputType {
+  departmentId: Int!
+  name: String!
+}
+
 type RootMutationType {
   # Create a new user
   createUser(input: CreateUserInputType): UserWithAuthToken
 
   # Login user
   login(input: LoginUserInputType): UserWithAuthToken
+
+  # Create a new clinic
+  createClinic(input: CreateClinicInputType): Clinic
 }
 
 type RootQueryType {
@@ -165,6 +183,11 @@ type RootQueryType {
   patient(
     patientId: String!
   ): Patient
+
+  # A single clinic
+  clinic(
+    clinicId: String!
+  ): Clinic
 }
 
 schema {

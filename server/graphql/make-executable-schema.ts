@@ -5,6 +5,7 @@ import * as path from 'path';
 import config from '../config';
 import { resolvePatient } from './patient-resolver';
 import { createUser, login, resolveCurrentUser, resolveUser } from './user-resolver';
+import { createClinic, resolveClinic } from './clinic-resolver';
 
 const schemaGql = fs.readFileSync(path.join(__dirname, 'schema.graphql'), 'utf-8');
 
@@ -13,11 +14,13 @@ const resolveFunctions = {
   GraphQLEmail,
   GraphQLPassword: new GraphQLPassword(6, 60),
   RootQueryType: {
-    user: resolveUser,
-    patient: resolvePatient,
+    clinic: resolveClinic,
     currentUser: resolveCurrentUser,
+    patient: resolvePatient,
+    user: resolveUser,
   },
   RootMutationType: {
+    createClinic,
     createUser,
     login,
   },

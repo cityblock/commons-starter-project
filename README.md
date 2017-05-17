@@ -1,6 +1,6 @@
 # Commons
 
-[![Coverage Status](https://coveralls.io/repos/github/sidewalklabs/commons/badge.svg?t=Mrcm01)](https://coveralls.io/github/sidewalklabs/commons) [![CircleCI](https://circleci.com/gh/sidewalklabs/commons.svg?style=svg&circle-token=ff9336cd2c27998733f1abe9a3c3bcbba62a045f)](https://circleci.com/gh/sidewalklabs/commons)
+[![Coverage Status](https://coveralls.io/repos/github/sidewalklabs/commons/badge.svg?branch=master&t=Mrcm01)](https://coveralls.io/github/sidewalklabs/commons?branch=master) [![CircleCI](https://circleci.com/gh/sidewalklabs/commons.svg?style=svg&circle-token=ff9336cd2c27998733f1abe9a3c3bcbba62a045f)](https://circleci.com/gh/sidewalklabs/commons)
 
 Care MVP. For a more detailed spec, see the [PRD][].
 
@@ -14,8 +14,10 @@ Tech wise, this app is an Express server running GraphQL, PostgreSQL (Objection.
 * __CI:__ [CircleCi](https://circleci.com/gh/sidewalklabs/commons); merged PRs to `sidewalklabs/commons#master` are automatically deployed
 * __Point People:__ @zamiang, @loganhasson
 * __Pingdom:__ http://stats.pingdom.com/8uqm3ndqqgmh
-* __Trace:__ https://trace.risingstack.com/app/#/infrastructure/5915e849e665183589dd7506
+* __Trace:__ https://trace.risingstack.com/app/#/infrastructure/5915e849e665183589dd7506/dashboard
 * __Optics:__ https://optics.apollodata.com/service/sidewalklabs-Commons-Production?range=lastHour
+* __AppCanary:__ https://appcanary.com/monitors/2283
+* __Logentries:__ https://logentries.com/app/87be99c5#/sets
 
 ## Getting started
 

@@ -82,8 +82,8 @@ export default class Clinic extends Model {
       .findById(clinicId);
 
     if (!clinic) {
-        return Promise.reject(`No such clinic for clinicId: ${clinicId}`);
-      }
+      return Promise.reject(`No such clinic for clinicId: ${clinicId}`);
+    }
 
     return clinic;
   }

@@ -1,5 +1,4 @@
 import Db from '../../db';
-import Clinic from '../clinic';
 import Patient from '../patient';
 
 describe('patient model', () => {
@@ -31,19 +30,6 @@ describe('patient model', () => {
         id: patient.id,
         athenaPatientId: 123,
       });
-    });
-
-    it('should have a homeClinic', async () => {
-      const clinic = await Clinic.create({ departmentId: 1, name: 'Center Zero' });
-      const patient = await Patient.create({
-        athenaPatientId: 123,
-        firstName: 'a',
-        lastName: 'b',
-        homeClinicId: clinic.id,
-      });
-
-      const patientById = await Patient.get(patient.id);
-      expect(patientById.homeClinic).toMatchObject(clinic);
     });
   });
 

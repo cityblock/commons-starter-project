@@ -121,7 +121,6 @@ export default class User extends Model {
   static async get(userId: string): Promise<User> {
     const user = await this
       .query()
-      .eager('[homeClinic]')
       .findById(userId);
     if (!user) {
       return Promise.reject(`No such user: ${userId}`);

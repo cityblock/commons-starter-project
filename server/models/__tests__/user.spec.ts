@@ -1,5 +1,4 @@
 import Db from '../../db';
-import Clinic from '../clinic';
 import User from '../user';
 
 const userRole = 'physician';
@@ -37,21 +36,6 @@ describe('user model', () => {
       firstName: 'Dan',
       lastName: 'Plant',
     });
-  });
-
-  it('should return a homeClinic', async () => {
-    const clinic = await Clinic.create({ departmentId: 1, name: 'Center Zero' });
-    const user = await User.create({
-      email: 'a@b.com',
-      password: 'password',
-      firstName: 'Dan',
-      lastName: 'Plant',
-      userRole,
-      homeClinicId: clinic.id,
-    });
-
-    const userById = await User.get(user.id);
-    expect(userById.homeClinic).toMatchObject(clinic);
   });
 
   it('should not create a user when given an invalid email address', async () => {

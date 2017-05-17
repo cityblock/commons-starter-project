@@ -58,7 +58,6 @@ export default class Patient extends Model {
   static async get(patientId: string): Promise<Patient> {
     const patient = await this
       .query()
-      .eager('[homeClinic]')
       .findById(patientId);
 
     if (!patient) {

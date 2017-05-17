@@ -3,7 +3,7 @@ import 'fetch-everywhere';
 import { stringify } from 'querystring';
 import config from '../../config';
 import { AthenaResponseError } from '../../lib/errors';
-import { IPatientInfoAthena, ITokenResponse } from './types';
+import { IPatientInfoAthena, IPatientMedicationsResponse, ITokenResponse } from './types';
 
 let singleton: AthenaApi;
 

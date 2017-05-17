@@ -215,4 +215,51 @@ declare module 'schema' {
     departmentId: number;
     name: string;
   }
+
+  /*
+    description: PatientMedicationHistoryEvent
+  */
+  interface IPatientMedicationHistoryEvent {
+    index: number;
+    date: string;
+    event: string;
+  }
+
+  /*
+    description: PatientMedicationHistory
+  */
+  interface IPatientMedicationHistory {
+    events: Array<IPatientMedicationHistoryEvent>;
+  }
+
+  /*
+    description: PatientMedication
+  */
+  interface IPatientMedication {
+    name: string;
+    medicationId: number;
+    quantity: number;
+    refillsAllowed: number;
+    renewable: boolean;
+    dosageInstructions: string;
+    source: string;
+    status: string;
+    lastUpdated: string;
+    history: IPatientMedicationHistory;
+  }
+
+  /*
+    description: PatientMedicationsDetails
+  */
+  interface IPatientMedicationsDetails {
+    active: Array<IPatientMedication>;
+    inactive: Array<IPatientMedication>;
+  }
+
+  /*
+    description: PatientMedications
+  */
+  interface IPatientMedications {
+    medications: IPatientMedicationsDetails;
+  }
 }

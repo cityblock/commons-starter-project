@@ -1,9 +1,9 @@
 /**
  * This module maps from Athena's property naming to consistent camelCase.
  */
-import { IPatient } from 'schema';
+import { IPatient, IPatientMedications } from 'schema';
 import Patient from '../../models/patient';
-import { IPatientInfoAthena } from './types';
+import { IPatientInfoAthena, IPatientMedicationsResponse } from './types';
 
 // Note: This drops some fields
 export const formatPatient = (p: IPatientInfoAthena, patient: Patient): IPatient => ({
@@ -118,3 +118,23 @@ export const formatPatient = (p: IPatientInfoAthena, patient: Patient): IPatient
   },
   */
 });
+
+export function formatPatientMedications(
+  medicationsResponse: IPatientMedicationsResponse,
+): IPatientMedications {
+  if (medicationsResponse.nomedicationsreported) {
+    return {
+      medications: {
+        active: [],
+        inactive: [],
+      },
+    };
+  } else {
+    return {
+      medications: {
+        active: [],
+        inactive: [],
+      },
+    };
+  }
+}

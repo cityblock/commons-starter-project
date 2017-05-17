@@ -138,6 +138,43 @@ type Clinic implements uniqueId {
   updatedAt: GraphQLDateTime!
 }
 
+# PatientMedicationHistoryEvent
+type PatientMedicationHistoryEvent {
+  index: Int!
+  date: String!
+  event: String!
+}
+
+# PatientMedicationHistory
+type PatientMedicationHistory {
+  events: [PatientMedicationHistoryEvent]!
+}
+
+# PatientMedication
+type PatientMedication {
+  name: String!
+  medicationId: Int!
+  quantity: Int!
+  refillsAllowed: Int!
+  renewable: Boolean!
+  dosageInstructions: String!
+  source: String!
+  status: String!
+  lastUpdated: String!
+  history: PatientMedicationHistory!
+}
+
+# PatientMedicationsDetails
+type PatientMedicationsDetails {
+  active: [PatientMedication]!
+  inactive: [PatientMedication]!
+}
+
+# PatientMedications
+type PatientMedications {
+  medications: PatientMedicationsDetails!
+}
+
 #
 # BEGIN INPUT FIELDS
 #

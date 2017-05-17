@@ -14,7 +14,7 @@ Tech wise, this app is an Express server running GraphQL, PostgreSQL (Objection.
 * __CI:__ [CircleCi](https://circleci.com/gh/sidewalklabs/commons); merged PRs to `sidewalklabs/commons#master` are automatically deployed
 * __Point People:__ @zamiang, @loganhasson
 * __Pingdom:__ http://stats.pingdom.com/8uqm3ndqqgmh
-* __Trace:__ https://trace.risingstack.com/app/#/infrastructure/5915e849e665183589dd7506
+* __Trace:__ https://trace.risingstack.com/app/#/infrastructure/5915e849e665183589dd7506/dashboard
 * __Optics:__ https://optics.apollodata.com/service/sidewalklabs-Commons-Production?range=lastHour
 
 ## Getting started

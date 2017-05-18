@@ -102,6 +102,17 @@ describe('patient medications', () => {
               event: 'ENTER',
             }],
           },
+        }, {
+          name: 'Crestor 40 mg tablet',
+          status: 'ENTER',
+          lastUpdated: '01/09/2016',
+          historical: true,
+          history: {
+            events: [{
+              date: '01/09/2016',
+              event: 'ENTER',
+            }],
+          },
         }],
         inactive: [{
           name: 'Coumadin 2 mg tablet',

@@ -1,4 +1,4 @@
-import * httpMocks from 'node-mocks-http';
+import * as httpMocks from 'node-mocks-http';
 import AthenaApi from '../../../apis/athena';
 import {
   createMockAthenaPatient,

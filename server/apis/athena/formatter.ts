@@ -1,14 +1,22 @@
 /**
  * This module maps from Athena's property naming to consistent camelCase.
  */
-import { IPatient } from 'schema';
+import { IPatient, IUser } from 'schema';
+import { convertUser } from '../../graphql/shared/converter';
 import Patient from '../../models/patient';
+import User from '../../models/user';
 import { IPatientInfoAthena } from './types';
+
+function convertedCareTeam(careTeam: User[]): IUser[] {
+  if (!careTeam) return [];
+  return careTeam.map(convertUser);
+}
 
 // Note: This drops some fields
 export const formatPatient = (p: IPatientInfoAthena, patient: Patient): IPatient => ({
   id: patient.id,
   athenaPatientId: Number(p.patientid),
+  careTeam: convertedCareTeam(patient.careTeam),
   firstName: p.firstname,
   lastName: p.lastname,
   homeClinicId: patient.homeClinicId,

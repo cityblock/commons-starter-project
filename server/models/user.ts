@@ -69,6 +69,19 @@ export default class User extends Model {
         to: 'clinic.id',
       },
     },
+    patients: {
+      relation: Model.ManyToManyRelation,
+      modelClass: 'patient',
+      join: {
+        from: 'user.id',
+        // ManyToMany relation needs the `through` object to describe the join table.
+        through: {
+          from: 'care_team.userId',
+          to: 'care_team.patientId',
+        },
+        to: 'patient.id',
+      },
+    },
   };
 
   async $beforeSave(inserting: boolean) {

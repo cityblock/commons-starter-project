@@ -39,7 +39,7 @@ describe('patient', () => {
       firstName: 'Constance',
       lastName: 'Blanton',
       homeClinicId,
-    });
+    }, user.id);
   });
 
   afterEach(async () => {

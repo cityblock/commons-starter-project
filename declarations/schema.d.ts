@@ -61,6 +61,7 @@ declare module 'schema' {
   interface IPatient {
     id: string;
     athenaPatientId: number;
+    careTeam: Array<IUser> | null;
     firstName: string | null;
     lastName: string | null;
     suffix: string | null;

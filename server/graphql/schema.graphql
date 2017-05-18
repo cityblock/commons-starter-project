@@ -104,6 +104,7 @@ type Garantor {
 type Patient implements uniqueId {
   id: ID!
   athenaPatientId: Int!
+  careTeam: [User]
   firstName: String
   lastName: String
   suffix: String

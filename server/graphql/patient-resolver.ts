@@ -25,3 +25,30 @@ export async function resolvePatient(
   const patient = await Patient.get(patientId);
   return await getFullPatient(patient, athenaApi);
 }
+
+interface ICareTeamOptions {
+  input: {
+    userId: string;
+    patientId: string;
+  };
+}
+
+export async function addUserToCareTeam(
+  source: any, { input }: ICareTeamOptions, context: IContext,
+) {
+  const { userRole } = context;
+  const { userId, patientId } = input;
+  await accessControls.isAllowed(userRole, 'edit', 'patient');
+
+  return await Patient.addUserToCareTeam(userId, patientId);
+}
+
+export async function removeUserFromCareTeam(
+  source: any, { input }: ICareTeamOptions, context: IContext,
+) {
+  const { userRole } = context;
+  const { userId, patientId } = input;
+  await accessControls.isAllowed(userRole, 'edit', 'patient');
+
+  return await Patient.removeUserFromCareTeam(userId, patientId);
+}

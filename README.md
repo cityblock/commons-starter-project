@@ -2,7 +2,7 @@
 
 [![Coverage Status](https://coveralls.io/repos/github/sidewalklabs/commons/badge.svg?branch=master&t=Mrcm01)](https://coveralls.io/github/sidewalklabs/commons?branch=master) [![CircleCI](https://circleci.com/gh/sidewalklabs/commons.svg?style=svg&circle-token=ff9336cd2c27998733f1abe9a3c3bcbba62a045f)](https://circleci.com/gh/sidewalklabs/commons)
 
-Care MVP. For a more detailed spec, see the [PRD][].
+Care MVP. For a more detailed spec, see the [PRD][] and [Tech Design Doc][]
 
 Tech wise, this app is an Express server running GraphQL, PostgreSQL (Objection.js) and GraphiQL written in TypeScript. Tested using Jest. Hosted on [Aptible][].
 
@@ -244,3 +244,4 @@ We are able to run the application locally using Docker and Docker Compose. For 
 [knex]: http://knexjs.org/
 [PostgreSQL Documentation]: https://www.postgresql.org/docs/9.6/static/runtime-config-logging.html
 [Docker]: https://docs.docker.com/engine/installation/
+[Tech Design Doc]: https://docs.google.com/document/d/1KlSX20FgUv1BllA6n8jJdg6beQ55ikrpaOOE8RnfQkE

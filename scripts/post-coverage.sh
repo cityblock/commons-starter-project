@@ -5,4 +5,4 @@
 COVERALLS_SERVICE_NAME=circleci \
 COVERALLS_SERVICE_JOB_ID=$CIRCLE_BUILD_NUM \
 COVERALLS_GIT_COMMIT=$CIRCLE_SHA1 \
-node_modules/.bin/coveralls < coverage/remapped/lcov.info
+node_modules/.bin/coveralls < coverage/lcov.info

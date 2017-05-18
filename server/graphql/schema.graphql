@@ -140,7 +140,6 @@ type Clinic implements uniqueId {
 
 # PatientMedicationHistoryEvent
 type PatientMedicationHistoryEvent {
-  index: Int!
   date: String!
   event: String!
 }
@@ -154,10 +153,11 @@ type PatientMedicationHistory {
 type PatientMedication {
   name: String!
   medicationId: Int!
-  quantity: Int!
-  refillsAllowed: Int!
+  quantity: Int
+  quantityUnit: String!
+  refillsAllowed: Int
   renewable: Boolean!
-  dosageInstructions: String!
+  dosageInstructions: String
   source: String!
   status: String!
   lastUpdated: String!

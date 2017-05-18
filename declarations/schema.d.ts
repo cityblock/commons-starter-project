@@ -196,10 +196,11 @@ declare module 'schema' {
   interface IPatientMedication {
     name: string;
     medicationId: number;
-    quantity: number;
-    refillsAllowed: number;
+    quantity: number | null;
+    quantityUnit: string;
+    refillsAllowed: number | null;
     renewable: boolean;
-    dosageInstructions: string;
+    dosageInstructions: string | null;
     source: string;
     status: string;
     lastUpdated: string;
@@ -217,7 +218,6 @@ declare module 'schema' {
     description: PatientMedicationHistoryEvent
   */
   interface IPatientMedicationHistoryEvent {
-    index: number;
     date: string;
     event: string;
   }

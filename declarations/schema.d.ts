@@ -182,6 +182,8 @@ declare module 'schema' {
     createUser: IUserWithAuthToken | null;
     login: IUserWithAuthToken | null;
     createClinic: IClinic | null;
+    addUserToCareTeam: IPatient | null;
+    removeUserFromCareTeam: IPatient | null;
   }
 
   /*
@@ -215,5 +217,13 @@ declare module 'schema' {
   interface ICreateClinicInputType {
     departmentId: number;
     name: string;
+  }
+
+  /*
+    description: params for adding or removing patient from care team
+  */
+  interface ICareTeamInput {
+    userId: string;
+    patientId: string;
   }
 }

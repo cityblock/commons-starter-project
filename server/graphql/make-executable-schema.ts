@@ -4,7 +4,7 @@ import { makeExecutableSchema } from 'graphql-tools';
 import * as path from 'path';
 import config from '../config';
 import { createClinic, resolveClinic } from './clinic-resolver';
-import { resolvePatient } from './patient-resolver';
+import { addUserToCareTeam, removeUserFromCareTeam, resolvePatient } from './patient-resolver';
 import { createUser, login, resolveCurrentUser, resolveUser } from './user-resolver';
 
 const schemaGql = fs.readFileSync(path.join(__dirname, 'schema.graphql'), 'utf-8');
@@ -20,6 +20,8 @@ const resolveFunctions = {
     user: resolveUser,
   },
   RootMutationType: {
+    addUserToCareTeam,
+    removeUserFromCareTeam,
     createClinic,
     createUser,
     login,

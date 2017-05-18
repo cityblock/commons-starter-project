@@ -83,4 +83,41 @@ describe('patient', () => {
     });
 
   });
+
+  describe('care team', () => {
+    it('adds user to care team', async () => {
+      const user2 = await User.create({
+        email: 'b@c.com',
+        password: 'password1',
+        userRole,
+        homeClinicId,
+      });
+      const mutation = `mutation {
+        addUserToCareTeam(input: { userId: "${user2.id}", patientId: "${patient.id}" }) {
+          careTeam { id }
+        }
+      }`;
+      mockAthenaGetPatient(123, createMockAthenaPatient(123, 'foo'));
+      const result = await graphql(schema, mutation, null, { db, userRole, athenaApi });
+      const careTeamUserIds = cloneDeep(result.data!.addUserToCareTeam)
+        .careTeam.map((u: any) => u.id);
+
+      expect(careTeamUserIds).toContain(user.id);
+      expect(careTeamUserIds).toContain(user2.id);
+    });
+
+    it('remove user from care team', async () => {
+      const mutation = `mutation {
+        removeUserFromCareTeam(input: { userId: "${user.id}", patientId: "${patient.id}" }) {
+          careTeam { id }
+        }
+      }`;
+      mockAthenaGetPatient(123, createMockAthenaPatient(123, 'foo'));
+      const result = await graphql(schema, mutation, null, { db, userRole, athenaApi });
+      const careTeamUserIds = cloneDeep(result.data!.removeUserFromCareTeam)
+        .careTeam.map((u: any) => u.id);
+
+      expect(careTeamUserIds).not.toContain(user.id);
+    });
+  });
 });

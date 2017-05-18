@@ -1,6 +1,6 @@
 import { IPatient } from 'schema';
 import AthenaApi from '../apis/athena';
-import { formatPatient } from '../apis/athena/formatter';
+import { formatPatient } from '../apis/athena/formatters';
 import Patient from '../models/patient';
 import accessControls from './shared/access-controls';
 import { IContext } from './shared/utils';

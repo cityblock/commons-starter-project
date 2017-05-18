@@ -1,5 +1,5 @@
 import { IPatientMedications } from 'schema';
-import { formatPatientMedications } from '../apis/athena/formatter';
+import { formatPatientMedications } from '../apis/athena/formatters';
 import Clinic from '../models/clinic';
 import Patient from '../models/patient';
 import accessControls from './shared/access-controls';

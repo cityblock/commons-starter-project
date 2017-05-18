@@ -41,8 +41,7 @@
     "moduleNameMapper": {
       "\\.(css)$": "<rootDir>/node_modules/jest-css-modules"
     },
-    "testResultsProcessor": "<rootDir>/node_modules/ts-jest/coverageprocessor.js",
-    "testEnvironment": "node",
+    "mapCoverage": true,
     "testMatch": [
       "<rootDir>/app/**/?(*.)(spec|test).ts?(x)",
       "<rootDir>/server/**/?(*.)(spec|test).ts?(x)"
@@ -56,7 +55,12 @@
     ],
     "setupFiles": [
       "./browser-mocks.js"
-    ]
+    ],
+    "globals": {
+      "ts-jest": {
+        "skipBabel": true
+      }
+    }
   },
   "devDependencies": {
     "@types/jest": "^19.2.3",
@@ -70,12 +74,12 @@
     "graphql-document-collector": "^0.1.3",
     "husky": "^0.13.3",
     "identity-obj-proxy": "^3.0.0",
-    "jest": "^19.0.2",
+    "jest": "^20.0.3",
     "jest-css-modules": "^1.1.0",
     "nock": "^9.0.13",
     "node-mocks-http": "^1.6.2",
     "react-test-renderer": "^15.4.2",
-    "ts-jest": "19.0.10",
+    "ts-jest": "^20.0.4",
     "tslint": "^5.2.0",
     "webpack-dev-server": "^2.4.5"
   },

@@ -54,85 +54,138 @@ describe('patient medications', () => {
     await Db.release();
   });
 
-  it('returns patient medications', async () => {
-    const query = `{
-      patientMedications(patientId: "${patient.id}") {
-        medications {
-          active {
-            name
-            status
-            lastUpdated
-            historical
-            history {
-              events {
-                date
-                event
+  describe('when a patient has no medications', () => {
+    it('returns an empty response', async () => {
+      const query = `{
+        patientMedications(patientId: "${patient.id}") {
+          medications {
+            active {
+              name
+              status
+              lastUpdated
+              historical
+              history {
+                events {
+                  date
+                  event
+                }
               }
             }
-          }
-          inactive {
-            name
-            status
-            lastUpdated
-            historical
-            history {
-              events {
-                date
-                event
+            inactive {
+              name
+              status
+              lastUpdated
+              historical
+              history {
+                events {
+                  date
+                  event
+                }
               }
             }
           }
         }
-      }
-    }`;
+      }`;
 
-    mockAthenaGetPatientMedications(createMockAthenaPatientMedications());
+      mockAthenaGetPatientMedications({nomedicationsreported: true});
 
-    const result = await graphql(schema, query, null, { athenaApi, db, userRole });
-    expect(cloneDeep(result.data!.patientMedications)).toMatchObject({
-      medications: {
-        active: [{
-          name: 'Crestor 10 mg tablet',
-          status: 'ENTER',
-          lastUpdated: '01/09/2016',
-          historical: false,
-          history: {
-            events: [{
-              date: '01/09/2016',
-              event: 'ENTER',
-            }],
-          },
-        }, {
-          name: 'Crestor 40 mg tablet',
-          status: 'ENTER',
-          lastUpdated: '01/09/2016',
-          historical: true,
-          history: {
-            events: [{
-              date: '01/09/2016',
-              event: 'ENTER',
-            }],
-          },
-        }],
-        inactive: [{
-          name: 'Coumadin 2 mg tablet',
-          status: 'HIDE',
-          lastUpdated: '06/11/2013',
-          historical: true,
-          history: {
-            events: [{
-              date: '06/11/2013',
-              event: 'HIDE',
-            }, {
-              date: '05/10/2011',
-              event: 'ENTER',
-            }, {
-              date: '04/20/2011',
-              event: 'START',
-            }],
-          },
-        }],
-      },
+      const result = await graphql(schema, query, null, { athenaApi, db, userRole });
+      expect(cloneDeep(result.data!.patientMedications)).toMatchObject({
+        medications: {
+          active: [],
+          inactive: [],
+        },
+      });
+    });
+  });
+
+  describe('when a patient has medications', () => {
+    it('returns patient medications', async () => {
+      const query = `{
+        patientMedications(patientId: "${patient.id}") {
+          medications {
+            active {
+              name
+              status
+              lastUpdated
+              historical
+              history {
+                events {
+                  date
+                  event
+                }
+              }
+            }
+            inactive {
+              name
+              status
+              lastUpdated
+              historical
+              history {
+                events {
+                  date
+                  event
+                }
+              }
+            }
+          }
+        }
+      }`;
+
+      mockAthenaGetPatientMedications(createMockAthenaPatientMedications());
+
+      const result = await graphql(schema, query, null, { athenaApi, db, userRole });
+      expect(cloneDeep(result.data!.patientMedications)).toMatchObject({
+        medications: {
+          active: [{
+            name: 'Crestor 10 mg tablet',
+            status: 'ENTER',
+            lastUpdated: '01/09/2016',
+            historical: false,
+            history: {
+              events: [{
+                date: '01/09/2016',
+                event: 'ENTER',
+              }],
+            },
+          }, {
+            name: 'Crestor 40 mg tablet',
+            status: 'ENTER',
+            lastUpdated: '01/09/2016',
+            historical: true,
+            history: {
+              events: [{
+                date: '01/09/2016',
+                event: 'ENTER',
+              }],
+            },
+          }],
+          inactive: [{
+            name: 'Coumadin 2 mg tablet',
+            status: 'HIDE',
+            lastUpdated: '06/11/2013',
+            historical: true,
+            history: {
+              events: [{
+                date: '06/11/2013',
+                event: 'HIDE',
+              }, {
+                date: '05/10/2011',
+                event: 'ENTER',
+              }, {
+                date: '04/20/2011',
+                event: 'FILL',
+              }, {
+                date: '04/20/2011',
+                event: 'START',
+              }, {
+                date: '04/20/2011',
+                event: 'ORDER',
+              }],
+            },
+          }],
+        },
+      });
     });
   });
 });

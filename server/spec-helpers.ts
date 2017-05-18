@@ -157,6 +157,12 @@ export function createMockAthenaPatientMedications(): IPatientMedicationsRespons
         }, {
           eventdate: '05/10/2011',
           type: 'ENTER',
+        }, {
+          eventdate: '04/20/2011',
+          type: 'ORDER',
+        }, {
+          eventdate: '04/20/2011',
+          type: 'FILL',
         }],
         medication: 'Coumadin 2 mg tablet',
         unstructuredsig: 'Take 1 tablet every day by oral route before meals.',

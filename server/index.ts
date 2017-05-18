@@ -40,6 +40,7 @@ export async function main(options: IMainOptions) {
   return app.listen(app.get('port'));
 }
 
+/* istanbul ignore if  */
 if (require.main === module) {
   try {
     main({ env: process.env.NODE_ENV });

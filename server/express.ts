@@ -46,6 +46,7 @@ export default async (app: express.Application) => {
   if (config.NODE_ENV === 'development') {
     app.use(morgan('dev'));
   } else if (config.NODE_ENV === 'production') {
+    /* istanbul ignore next  */
     app.use(morgan('combined'));
   }
 

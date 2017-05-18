@@ -1,8 +1,8 @@
 import { get as httpGet, IncomingMessage } from 'http';
-import Db from './db';
+import Db from '../db';
 
-import config from './config';
-import { main } from './index';
+import config from '../config';
+import { main } from '../index';
 
 config.PORT = 3001;  // Use a different route for testing than serving.
 

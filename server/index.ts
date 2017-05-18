@@ -7,6 +7,7 @@ import * as express from 'express';
 import * as webpack from 'webpack';
 import expressConfig from './express';
 
+/* istanbul ignore if  */
 if (process.env.NODE_ENV === 'production') {
   /* tslint:disable no-var-requires */
   const CaptureOutput = require('./lib/capture-output').default;
@@ -23,6 +24,7 @@ interface IMainOptions {
 }
 
 export async function main(options: IMainOptions) {
+  /* istanbul ignore if  */
   if (options.env === 'development') {
     // enable webpack dev middleware
     const webpackDevMiddleware = require('webpack-dev-middleware');
@@ -38,6 +40,7 @@ export async function main(options: IMainOptions) {
   return app.listen(app.get('port'));
 }
 
+/* istanbul ignore if  */
 if (require.main === module) {
   try {
     main({ env: process.env.NODE_ENV });

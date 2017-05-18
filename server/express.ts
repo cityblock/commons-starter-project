@@ -20,18 +20,19 @@ const checkAuth = (
   req: express.Request,
   res: express.Response,
   next: express.NextFunction,
-) => {
-  const user = basicAuth(req);
+  ) => {
+    const user = basicAuth(req);
 
-  if (!user || user.name !== username || user.pass !== password) {
-    res.set('WWW-Authenticate', 'Basic realm=Authorization Required');
-    return res.sendStatus(401);
-  }
+    if (!user || user.name !== username || user.pass !== password) {
+      res.set('WWW-Authenticate', 'Basic realm=Authorization Required');
+      return res.sendStatus(401);
+    }
 
-  next();
-};
+    next();
+  };
 
 export default async (app: express.Application) => {
+  /* istanbul ignore if  */
   if (config.NODE_ENV === 'development') {
     /* tslint:disable no-console */
     console.log('Environment:');
@@ -41,9 +42,11 @@ export default async (app: express.Application) => {
   }
 
   // This adds request logging using some decent defaults.
+  /* istanbul ignore if  */
   if (config.NODE_ENV === 'development') {
     app.use(morgan('dev'));
   } else if (config.NODE_ENV === 'production') {
+    /* istanbul ignore next  */
     app.use(morgan('combined'));
   }
 
@@ -57,6 +60,7 @@ export default async (app: express.Application) => {
 
   app.use('/assets', express.static(path.join(__dirname, '..', 'public')));
 
+  /* istanbul ignore if  */
   if (config.NODE_ENV === 'production') {
     OpticsAgent.instrumentSchema(schema);
     app.use(OpticsAgent.middleware());
@@ -88,6 +92,7 @@ export default async (app: express.Application) => {
 
   app.get('*', renderApp);
 
+  /* istanbul ignore if  */
   if (config.NODE_ENV !== 'test') {
     /* tslint:disable no-console */
     console.log('--------------------------');

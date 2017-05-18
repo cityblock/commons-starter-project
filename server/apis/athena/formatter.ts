@@ -149,6 +149,7 @@ export function formatPatientMedications(
       const medication = {
         name: currentResource.medication,
         medicationId: currentResource.medicationid,
+        medicationEntryId: currentResource.medicationentryid,
         quantity: currentResource.quantity,
         quantityUnit: currentResource.quantityunit,
         refillsAllowed: currentResource.refillsallowed,
@@ -157,6 +158,7 @@ export function formatPatientMedications(
         source: currentResource.source,
         status: sortedEvents[0].event,
         lastUpdated: sortedEvents[0].date,
+        historical: currentResource.medicationentryid.startsWith('H'),
         history: {
           events: sortedEvents,
         },

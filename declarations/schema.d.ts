@@ -196,6 +196,7 @@ declare module 'schema' {
   interface IPatientMedication {
     name: string;
     medicationId: number;
+    medicationEntryId: string;
     quantity: number | null;
     quantityUnit: string;
     refillsAllowed: number | null;
@@ -203,6 +204,7 @@ declare module 'schema' {
     dosageInstructions: string | null;
     source: string;
     status: string;
+    historical: boolean;
     lastUpdated: string;
     history: IPatientMedicationHistory;
   }

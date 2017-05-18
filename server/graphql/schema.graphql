@@ -153,6 +153,7 @@ type PatientMedicationHistory {
 type PatientMedication {
   name: String!
   medicationId: Int!
+  medicationEntryId: String!
   quantity: Int
   quantityUnit: String!
   refillsAllowed: Int
@@ -160,6 +161,7 @@ type PatientMedication {
   dosageInstructions: String
   source: String!
   status: String!
+  historical: Boolean!
   lastUpdated: String!
   history: PatientMedicationHistory!
 }

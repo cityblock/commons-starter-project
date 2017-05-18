@@ -109,7 +109,7 @@ export interface IPatientInfoAthena {
 }
 
 export interface IPatientMedicationStructuredSig {
-  doseageaction: string;
+  dosageaction: string;
   dosagequantityvalue: number;
   dosagequantityunit: string;
   dosagefrequencyvalue: number;

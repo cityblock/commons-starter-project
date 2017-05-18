@@ -159,6 +159,7 @@ type PatientMedication {
   refillsAllowed: Int
   renewable: Boolean!
   dosageInstructions: String
+  stopReason: String
   source: String!
   status: String!
   historical: Boolean!

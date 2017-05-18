@@ -202,6 +202,7 @@ declare module 'schema' {
     refillsAllowed: number | null;
     renewable: boolean;
     dosageInstructions: string | null;
+    stopReason: string | null;
     source: string;
     status: string;
     historical: boolean;

@@ -40,6 +40,7 @@ export function formatPatientMedications(
         status: sortedEvents[0].event,
         lastUpdated: sortedEvents[0].date,
         historical: currentResource.medicationentryid.startsWith('H'),
+        stopReason: currentResource.stopreason,
         history: {
           events: sortedEvents,
         },

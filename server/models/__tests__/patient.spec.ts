@@ -1,5 +1,8 @@
 import Db from '../../db';
 import Patient from '../patient';
+import User from '../user';
+
+const userRole = 'physician';
 
 describe('patient model', () => {
   let db: Db = null as any;
@@ -15,12 +18,18 @@ describe('patient model', () => {
 
   describe('patient', () => {
     it('should create and retrieve a patient', async () => {
+      const user = await User.create({
+        email: 'care@care.com',
+        password: 'password1',
+        userRole,
+        homeClinicId: '1',
+      });
       const patient = await Patient.create({
         athenaPatientId: 123,
         firstName: 'a',
         lastName: 'b',
         homeClinicId: '1',
-      });
+      }, user.id);
       expect(patient).toMatchObject({
         id: patient.id,
         athenaPatientId: 123,
@@ -31,22 +40,29 @@ describe('patient model', () => {
         athenaPatientId: 123,
       });
     });
+
   });
 
   describe('patients', () => {
     beforeEach(async () => {
+      const user = await User.create({
+        email: 'care@care.com',
+        password: 'password1',
+        userRole,
+        homeClinicId: '1',
+      });
       await Patient.create({
         athenaPatientId: 123,
         firstName: 'a',
         lastName: 'b',
         homeClinicId: '1',
-      });
+      }, user.id);
       await Patient.create({
         athenaPatientId: 234,
         firstName: 'c',
         lastName: 'd',
         homeClinicId: '1',
-      });
+      }, user.id);
     });
 
     it('should fetch patients', async () => {

@@ -23,6 +23,7 @@ declare module 'schema' {
     users: IUserEdges | null;
     currentUser: IUser | null;
     patient: IPatient | null;
+    patientCareTeam: Array<IUser> | null;
     clinic: IClinic | null;
     patientMedications: IPatientMedications | null;
   }
@@ -257,6 +258,8 @@ declare module 'schema' {
     createUser: IUserWithAuthToken | null;
     login: IUserWithAuthToken | null;
     createClinic: IClinic | null;
+    addUserToCareTeam: Array<IUser> | null;
+    removeUserFromCareTeam: Array<IUser> | null;
   }
 
   /*
@@ -290,5 +293,13 @@ declare module 'schema' {
   interface ICreateClinicInputType {
     departmentId: number;
     name: string;
+  }
+
+  /*
+    description: params for adding or removing patient from care team
+  */
+  interface ICareTeamInput {
+    userId: string;
+    patientId: string;
   }
 }

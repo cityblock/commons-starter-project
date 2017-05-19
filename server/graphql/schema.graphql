@@ -29,10 +29,28 @@ type UserWithAuthToken {
   authToken: String
 }
 
+# User node
+type UserNode {
+  node: User
+  cursor: String!
+}
+
+# User edges
+type UserEdges {
+  edges: [UserNode]
+  pageInfo: PageInfo!
+}
+
 # An object with a Globally Unique ID
 interface uniqueId {
   # The ID of the object.
   id: ID!
+}
+
+# Page info for paginated responses
+type PageInfo {
+  hasNextPage: Boolean!
+  hasPreviousPage: Boolean!
 }
 
 # Patient contact
@@ -218,6 +236,12 @@ type RootQueryType {
     # The id of the User
     userId: String!
   ): User
+
+  # All Users (admin only)
+  users(
+    first: Int,
+    after: String
+  ): UserEdges
 
   # The current User
   currentUser: User

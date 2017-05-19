@@ -6,7 +6,7 @@ import config from '../config';
 import { createClinic, resolveClinic } from './clinic-resolver';
 import { resolvePatientMedications } from './patient-medications-resolver';
 import { resolvePatient } from './patient-resolver';
-import { createUser, login, resolveCurrentUser, resolveUser } from './user-resolver';
+import { createUser, login, resolveCurrentUser, resolveUser, resolveUsers } from './user-resolver';
 
 const schemaGql = fs.readFileSync(path.join(__dirname, 'schema.graphql'), 'utf-8');
 
@@ -20,6 +20,7 @@ const resolveFunctions = {
     patient: resolvePatient,
     patientMedications: resolvePatientMedications,
     user: resolveUser,
+    users: resolveUsers,
   },
   RootMutationType: {
     createClinic,

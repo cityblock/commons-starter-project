@@ -3,6 +3,7 @@ import { Model, RelationMappings, ValidationError } from 'objection';
 import * as uuid from 'uuid';
 import { isEmail } from 'validator';
 import config from '../config';
+import { IPageOptions } from '../db';
 import Clinic from './clinic';
 
 export type UserRole =
@@ -143,6 +144,15 @@ export default class User extends Model {
     }
 
     return user;
+  }
+
+  static async getAll({ limit, offset }: IPageOptions): Promise<User[]> {
+    const users = await this
+      .query()
+      .limit(limit || 0)
+      .offset(offset || 0);
+
+    return users;
   }
 }
 /* tslint:enable:member-ordering */

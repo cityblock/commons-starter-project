@@ -1,6 +1,7 @@
 import { Model, RelationMappings } from 'objection';
 import * as uuid from 'uuid';
 import { IPageOptions } from '../db';
+import CareTeam from './care-team';
 import Clinic from './clinic';
 
 interface ICreatePatient {
@@ -44,6 +45,20 @@ export default class Patient extends Model {
         to: 'clinic.id',
       },
     },
+
+    careTeam: {
+      relation: Model.ManyToManyRelation,
+      modelClass: 'user',
+      join: {
+        from: 'patient.id',
+        through: {
+          from: 'care_team.patientId',
+          to: 'care_team.userId',
+        },
+        to: 'user.id',
+      },
+    },
+
   };
 
   $beforeInsert() {
@@ -91,10 +106,10 @@ export default class Patient extends Model {
     return patient;
   }
 
-  static async create(patient: ICreatePatient): Promise<Patient> {
-    return await this
-      .query()
-      .insertAndFetch(patient);
+  static async create(patient: ICreatePatient, userId: string): Promise<Patient> {
+    const instance = await this.query().insertAndFetch(patient);
+    await CareTeam.addUserToCareTeam({ userId, patientId: instance.id });
+    return instance;
   }
 
 }

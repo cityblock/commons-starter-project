@@ -201,6 +201,12 @@ input CreateClinicInputType {
   name: String!
 }
 
+# params for adding or removing patient from care team
+input CareTeamInput {
+  userId: String!
+  patientId: String!
+}
+
 type RootMutationType {
   # Create a new user
   createUser(input: CreateUserInputType): UserWithAuthToken
@@ -210,6 +216,12 @@ type RootMutationType {
 
   # Create a new clinic
   createClinic(input: CreateClinicInputType): Clinic
+
+  # Add user to care careTeam
+  addUserToCareTeam(input: CareTeamInput): [User]
+
+  # Remove user from careTeam
+  removeUserFromCareTeam(input: CareTeamInput): [User]
 }
 
 type RootQueryType {
@@ -226,6 +238,11 @@ type RootQueryType {
   patient(
     patientId: String!
   ): Patient
+
+  # Users on a care team
+  patientCareTeam(
+    patientId: String!
+  ): [User]
 
   # A single clinic
   clinic(

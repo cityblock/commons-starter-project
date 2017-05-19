@@ -43,7 +43,7 @@ describe('patient medications', () => {
       firstName: 'Constance',
       lastName: 'Blanton',
       homeClinicId: clinic.id,
-    });
+    }, user.id);
   });
 
   afterEach(async () => {

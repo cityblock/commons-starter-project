@@ -24,6 +24,7 @@ declare module 'schema' {
     patient: IPatient | null;
     patientCareTeam: Array<IUser> | null;
     clinic: IClinic | null;
+    patientMedications: IPatientMedications | null;
   }
 
   /*
@@ -173,6 +174,56 @@ declare module 'schema' {
     departmentId: number;
     createdAt: any;
     updatedAt: any;
+  }
+
+  /*
+    description: PatientMedications
+  */
+  interface IPatientMedications {
+    medications: IPatientMedicationsDetails;
+  }
+
+  /*
+    description: PatientMedicationsDetails
+  */
+  interface IPatientMedicationsDetails {
+    active: Array<IPatientMedication>;
+    inactive: Array<IPatientMedication>;
+  }
+
+  /*
+    description: PatientMedication
+  */
+  interface IPatientMedication {
+    name: string;
+    medicationId: number;
+    medicationEntryId: string;
+    quantity: number | null;
+    quantityUnit: string;
+    refillsAllowed: number | null;
+    renewable: boolean;
+    dosageInstructions: string | null;
+    stopReason: string | null;
+    source: string;
+    status: string;
+    historical: boolean;
+    lastUpdated: string;
+    history: IPatientMedicationHistory;
+  }
+
+  /*
+    description: PatientMedicationHistory
+  */
+  interface IPatientMedicationHistory {
+    events: Array<IPatientMedicationHistoryEvent>;
+  }
+
+  /*
+    description: PatientMedicationHistoryEvent
+  */
+  interface IPatientMedicationHistoryEvent {
+    date: string;
+    event: string;
   }
 
   /*

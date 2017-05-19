@@ -1,5 +1,5 @@
 import * as nock from 'nock';
-import { IPatientInfoAthena } from './apis/athena/types';
+import { IPatientInfoAthena, IPatientMedicationsResponse } from './apis/athena/types';
 import config from './config';
 
 export function createMockAthenaPatient(
@@ -115,6 +115,176 @@ export function createMockAthenaPatient(
   };
 }
 
+export function createMockAthenaPatientMedications(): IPatientMedicationsResponse {
+  return {
+    lastupdated: '01/09/2016',
+    nomedicationsreported: false,
+    sectionnote: 'hi',
+    medications: [
+      [{
+        source: 'jdoe',
+        createdby: 'jdoe',
+        encounterid: 1,
+        approvedby: 'bob',
+        isstructuredsig: true,
+        route: 'FAX',
+        pharmacyncpdpid: '7',
+        orderingmode: 'internet',
+        quantityunit: 'tablet(s)',
+        medicationid: 244875,
+        issafetorenew: true,
+        refillsallowed: 0,
+        quantity: 1,
+        medicationentryid: 'H462',
+        structuredsig: {
+          dosagefrequencyvalue: 1,
+          dosageroute: 'oral',
+          dosageaction: 'Take',
+          dosageadditionalinstructions: 'before meals',
+          dosagefrequencyunit: 'per day',
+          dosagequantityunit: 'tablet(s)',
+          dosagequantityvalue: 1,
+          dosagefrequencydescription: 'every day',
+          dosagedurationunit: 'day',
+          dosagedurationvalue: 1,
+        },
+        events: [{
+          eventdate: '04/20/2011',
+          type: 'START',
+        }, {
+          eventdate: '06/11/2013',
+          type: 'HIDE',
+        }, {
+          eventdate: '05/10/2011',
+          type: 'ENTER',
+        }, {
+          eventdate: '04/20/2011',
+          type: 'ORDER',
+        }, {
+          eventdate: '04/20/2011',
+          type: 'ORDER',
+        }, {
+          eventdate: '04/20/2011',
+          type: 'FILL',
+        }],
+        medication: 'Coumadin 2 mg tablet',
+        unstructuredsig: 'Take 1 tablet every day by oral route before meals.',
+        stopreason: 'complication',
+        providernote: 'hello',
+        patientnote: 'hello',
+      }], [{
+        source: 'ikinkel0',
+        quantity: 1,
+        quantityunit: 'tablet(s)',
+        orderingmode: 'PRESCRIBE',
+        encounterid: 1,
+        approvedby: 'bob',
+        pharmacyncpdpid: '7',
+        createdby: 'jdoe',
+        isstructuredsig: true,
+        medicationid: 281259,
+        refillsallowed: 0,
+        route: 'FAX',
+        issafetorenew: true,
+        stopreason: 'complication',
+        medicationentryid: 'C114422',
+        structuredsig: {
+          dosagefrequencyvalue: 1,
+          dosageroute: 'oral',
+          dosageaction: 'Take',
+          dosagefrequencyunit: 'per day',
+          dosagequantityunit: 'tablet(s)',
+          dosagequantityvalue: 1,
+          dosagefrequencydescription: 'every day',
+          dosagedurationunit: 'day',
+          dosagedurationvalue: 1,
+          dosageadditionalinstructions: 'take it',
+        },
+        events: [{
+          eventdate: '01/09/2016',
+          type: 'ENTER',
+        }],
+        medication: 'Crestor 10 mg tablet',
+        unstructuredsig: 'Take 1 tablet every day by oral route.',
+        providernote: 'hello',
+        patientnote: 'hello',
+      }], [{
+        source: 'jdoe',
+        createdby: 'jdoe',
+        quantityunit: 'tablet(s)',
+        isstructuredsig: true,
+        encounterid: 1,
+        quantity: 1,
+        pharmacyncpdpid: '7',
+        orderingmode: 'internet',
+        refillsallowed: 0,
+        stopreason: 'complication',
+        approvedby: 'bob',
+        route: 'FAX',
+        medicationid: 281261,
+        issafetorenew: true,
+        medicationentryid: 'H5642',
+        structuredsig: {
+          dosagefrequencyvalue: 1,
+          dosageroute: 'oral',
+          dosageaction: 'Take',
+          dosagefrequencyunit: 'per day',
+          dosagequantityunit: 'tablet(s)',
+          dosagequantityvalue: 1,
+          dosagefrequencydescription: 'every day',
+          dosagedurationunit: 'day',
+          dosagedurationvalue: 1,
+          dosageadditionalinstructions: 'take it',
+        },
+        events: [{
+          eventdate: '01/09/2016',
+          type: 'ENTER',
+        }],
+        medication: 'Crestor 40 mg tablet',
+        unstructuredsig: 'Take 1 tablet every day by oral route.',
+        providernote: 'hello',
+        patientnote: 'hello',
+      }, {
+        source: 'ikinkel0',
+        quantityunit: 'tablet(s)',
+        orderingmode: 'PRESCRIBE',
+        approvedby: 'bob',
+        createdby: 'jdoe',
+        pharmacyncpdpid: '7',
+        stopreason: 'complication',
+        quantity: 1,
+        providernote: 'hello',
+        patientnote: 'hello',
+        isstructuredsig: true,
+        medicationid: 281261,
+        refillsallowed: 0,
+        route: 'FAX',
+        encounterid: 33433,
+        issafetorenew: true,
+        medicationentryid: 'C114424',
+        structuredsig: {
+          dosagefrequencyvalue: 1,
+          dosageroute: 'oral',
+          dosageaction: 'Take',
+          dosagefrequencyunit: 'per day',
+          dosagequantityunit: 'tablet(s)',
+          dosagequantityvalue: 1,
+          dosagefrequencydescription: 'every day',
+          dosagedurationunit: 'day',
+          dosagedurationvalue: 1,
+          dosageadditionalinstructions: 'take it',
+        },
+        events: [{
+          eventdate: '01/09/2016',
+          type: 'ENTER',
+        }],
+        medication: 'Crestor 40 mg tablet',
+        unstructuredsig: 'Take 1 tablet every day by oral route.',
+      }],
+    ],
+  };
+}
+
 // Athena
 export function restoreAthenaFetch() {
   nock.cleanAll();
@@ -150,6 +320,7 @@ export function mockAthenaPut(path: string, body: any) {
 }
 
 type MockAthenaPatient = Pick<IPatientInfoAthena, 'patientid'> & Partial<IPatientInfoAthena>;
+type MockAthenaPatientMedications = Partial<IPatientMedicationsResponse>;
 
 export function mockAthenaGetPatient(
   athenaPatientId: number, body: MockAthenaPatient, times = 1,
@@ -159,4 +330,8 @@ export function mockAthenaGetPatient(
     body,
     times,
   );
+}
+
+export function mockAthenaGetPatientMedications(body: MockAthenaPatientMedications) {
+  mockAthenaGet(`/${config.ATHENA_PRACTICE_ID}/chart/1/medications`, body);
 }

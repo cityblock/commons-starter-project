@@ -142,6 +142,46 @@ type Clinic implements uniqueId {
   updatedAt: GraphQLDateTime!
 }
 
+# PatientMedicationHistoryEvent
+type PatientMedicationHistoryEvent {
+  date: String!
+  event: String!
+}
+
+# PatientMedicationHistory
+type PatientMedicationHistory {
+  events: [PatientMedicationHistoryEvent]!
+}
+
+# PatientMedication
+type PatientMedication {
+  name: String!
+  medicationId: Int!
+  medicationEntryId: String!
+  quantity: Int
+  quantityUnit: String!
+  refillsAllowed: Int
+  renewable: Boolean!
+  dosageInstructions: String
+  stopReason: String
+  source: String!
+  status: String!
+  historical: Boolean!
+  lastUpdated: String!
+  history: PatientMedicationHistory!
+}
+
+# PatientMedicationsDetails
+type PatientMedicationsDetails {
+  active: [PatientMedication]!
+  inactive: [PatientMedication]!
+}
+
+# PatientMedications
+type PatientMedications {
+  medications: PatientMedicationsDetails!
+}
+
 #
 # BEGIN INPUT FIELDS
 #
@@ -212,6 +252,11 @@ type RootQueryType {
   clinic(
     clinicId: String!
   ): Clinic
+
+  # Patient medications
+  patientMedications(
+    patientId: String!
+  ): PatientMedications
 }
 
 schema {

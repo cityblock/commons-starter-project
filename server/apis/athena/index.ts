@@ -3,7 +3,7 @@ import 'fetch-everywhere';
 import { stringify } from 'querystring';
 import config from '../../config';
 import { AthenaResponseError } from '../../lib/errors';
-import { IPatientInfoAthena, ITokenResponse } from './types';
+import { IPatientInfoAthena, IPatientMedicationsResponse, ITokenResponse } from './types';
 
 let singleton: AthenaApi;
 
@@ -63,6 +63,16 @@ export default class AthenaApi {
     return await this.fetch<IPatientInfoAthena>(
       `/${config.ATHENA_PRACTICE_ID}/patients/${athenaPatientId}`,
     );
+  }
+
+  public async getPatientMedications(
+    athenaPatientId: number,
+    athenaDepartmentId: number,
+  ): Promise<IPatientMedicationsResponse> {
+    return await this.fetch<IPatientMedicationsResponse>(
+      `/${config.ATHENA_PRACTICE_ID}/chart/${athenaPatientId}/medications`, {
+        departmentid: athenaDepartmentId,
+      });
   }
 
   /**

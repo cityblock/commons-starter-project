@@ -277,11 +277,4 @@ declare module 'schema' {
     userId: string;
     patientId: string;
   }
-
-  /*
-    description: 
-  */
-  interface IPatientCareTeam {
-    users: Array<IUser> | null;
-  }
 }

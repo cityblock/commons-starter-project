@@ -129,10 +129,6 @@ type Patient implements uniqueId {
   homeClinicId: String
 }
 
-type PatientCareTeam {
-  users: [User]
-}
-
 # Clinic
 type Clinic implements uniqueId {
   id: ID!

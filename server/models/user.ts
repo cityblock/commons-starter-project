@@ -3,7 +3,7 @@ import { Model, RelationMappings, ValidationError } from 'objection';
 import * as uuid from 'uuid';
 import { isEmail } from 'validator';
 import config from '../config';
-import { IPageOptions } from '../db';
+import { IPaginatedResults, IPaginationOptions } from '../db';
 import Clinic from './clinic';
 
 export type UserRole =
@@ -146,13 +146,17 @@ export default class User extends Model {
     return user;
   }
 
-  static async getAll({ limit, offset }: IPageOptions): Promise<User[]> {
-    const users = await this
+  static async getAll(
+    { pageNumber, pageSize }: IPaginationOptions,
+  ): Promise<IPaginatedResults<User>> {
+    const usersResult = await this
       .query()
-      .limit(limit || 0)
-      .offset(offset || 0);
+      .page(pageNumber, pageSize) as any;
 
-    return users;
+    return {
+      results: usersResult.results,
+      total: usersResult.total,
+    };
   }
 }
 /* tslint:enable:member-ordering */

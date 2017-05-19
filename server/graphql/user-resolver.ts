@@ -1,4 +1,3 @@
-import * as base64 from 'base-64';
 import { compare } from 'bcrypt';
 import { IUserEdges, IUserNode } from 'schema';
 import User from '../models/user';
@@ -25,8 +24,8 @@ interface IUserLoginOptions {
 }
 
 interface IUsersFilterOptions {
-  first: number;
-  after: string;
+  pageNumber: number;
+  pageSize: number;
 }
 
 export async function createUser(root: any, { input }: ICreateUserArgs, context: IContext) {
@@ -91,14 +90,14 @@ export async function resolveUsers(
 ): Promise<IUserEdges> {
   await accessControls.isAllowed(userRole, 'view', 'allUsers');
 
-  const offset = args.after ? Number(base64.decode(args.after)) : 0;
-  const limit = args.first || 10;
+  const pageNumber = args.pageNumber || 0;
+  const pageSize = args.pageSize || 10;
 
-  const users = await User.getAll({ limit, offset });
-  const userEdges = users.map((user, i) => formatRelayEdge(user, user.id) as IUserNode);
+  const users = await User.getAll({ pageNumber, pageSize });
+  const userEdges = users.results.map((user, i) => formatRelayEdge(user, user.id) as IUserNode);
 
-  const hasPreviousPage = !!offset;
-  const hasNextPage = true; // TODO: calculate this;
+  const hasPreviousPage = pageNumber !== 0;
+  const hasNextPage = ((pageNumber + 1) * pageSize) < users.total;
 
   return {
     edges: userEdges,

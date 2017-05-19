@@ -239,8 +239,8 @@ type RootQueryType {
 
   # All Users (admin only)
   users(
-    first: Int,
-    after: String
+    pageNumber: Int,
+    pageSize: Int
   ): UserEdges
 
   # The current User

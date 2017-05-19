@@ -98,4 +98,46 @@ describe('user model', () => {
       lastName: 'Plant',
     });
   });
+
+  it('should fetch all users', async () => {
+    await User.create({ email: 'a@b.com', password: 'password', userRole, homeClinicId: '1' });
+    await User.create({ email: 'b@c.com', password: 'password', userRole, homeClinicId: '1' });
+
+    expect(await User.getAll({ pageNumber: 0, pageSize: 10 })).toMatchObject(
+      {
+        results: [{
+          email: 'a@b.com',
+          userRole,
+        }, {
+          email: 'b@c.com',
+          userRole,
+        }],
+        total: 2,
+      },
+    );
+  });
+
+  it('should fetch a limited set of users', async () => {
+    await User.create({ email: 'a@b.com', password: 'password', userRole, homeClinicId: '1' });
+    await User.create({ email: 'b@c.com', password: 'password', userRole, homeClinicId: '1' });
+
+    expect(await User.getAll({ pageNumber: 0, pageSize: 1 })).toMatchObject(
+      {
+        results: [{
+          email: 'a@b.com',
+          userRole,
+        }],
+        total: 2,
+      },
+    );
+    expect(await User.getAll({ pageNumber: 1, pageSize: 1 })).toMatchObject(
+      {
+        results: [{
+          email: 'b@c.com',
+          userRole,
+        }],
+        total: 2,
+      },
+    );
+  });
 });

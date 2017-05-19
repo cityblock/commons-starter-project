@@ -1,9 +1,6 @@
-/**
- * This module maps from Athena's property naming to consistent camelCase.
- */
 import { IPatient } from 'schema';
-import Patient from '../../models/patient';
-import { IPatientInfoAthena } from './types';
+import Patient from '../../../models/patient';
+import { IPatientInfoAthena } from '../types';
 
 // Note: This drops some fields
 export const formatPatient = (p: IPatientInfoAthena, patient: Patient): IPatient => ({
@@ -79,42 +76,4 @@ export const formatPatient = (p: IPatientInfoAthena, patient: Patient): IPatient
     povertyLevelIncomeRangeDeclined: p.povertylevelincomerangedeclined,
     povertyLevelFamilySizeDeclined: p.povertylevelfamilysizedeclined,
   },
-  /*
-  // unused contact preferences
-  contactPreferences: {
-    contactHomePhone: p.contacthomephone,
-    contactRelationship: p.contactrelationship,
-
-    appointmentEmail: p.contactpreference_appointment_email,
-    appointmentSms: p.contactpreference_appointment_sms,
-    billingPhone: p.contactpreference_billing_phone,
-    announcementPhone: p.contactpreference_appointment_phone,
-    contactPreference: p.contactpreference,
-    labEmail: p.contactpreference_lab_email,
-    announcementSms: p.contactpreference_announcement_sms,
-    billingEmail: p.contactpreference_billing_email,
-    announcementEmail: p.contactpreference_announcement_email,
-    labPhone: p.contactpreference_lab_phone,
-    labSms: p.contactpreference_lab_sms,
-    appointmentPhone: p.contactpreference_appointment_phone,
-    billingSms: p.contactpreference_billing_sms,
-  },
-
-  // unused athena preferences. not 100% sure this is the right place for all of these fields
-  athena: {
-    firstAppointment: p.firstappointment,
-    lastAppointment: p.lastappointment,
-    primaryProviderId: p.primaryproviderid,
-    primaryDepartmentId: p.primarydepartmentid,
-    departmentId: p.departmentid,
-    referralSourceId: p.referralsourceid,
-    registrationDate: p.registrationdate,
-    careSummaryDeliveryPreference: p.caresummarydeliverypreference,
-    onlineStatementOnly: p.onlinestatementonly,
-    portalTermsOnFile: p.portaltermsonfile,
-    portalAccessGiven: p.portalaccessgiven,
-    defaultPharmacyNcpdpid: p.defaultpharmacyncpdpid,
-    privacyInformationVerified: p.privacyinformationverified,
-  },
-  */
 });

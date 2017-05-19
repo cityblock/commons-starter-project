@@ -119,7 +119,6 @@ export interface IPatientMedicationStructuredSig {
   dosageadditionalinstructions: string;
   dosagedurationvalue: number;
   dosagedurationunit: string;
-
 }
 
 export interface IPatientMedicationEvent {

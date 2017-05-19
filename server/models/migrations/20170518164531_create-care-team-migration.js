@@ -6,6 +6,7 @@ exports.up = function (knex, Promise) {
     table.unique(['userId', 'patientId']);
 
     // timestamps
+    table.timestamp('deletedAt');
     table.timestamp('createdAt').defaultTo(knex.raw('now()'));
     table.timestamp('updatedAt').defaultTo(knex.raw('now()'));
   })

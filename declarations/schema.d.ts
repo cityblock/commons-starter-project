@@ -22,6 +22,7 @@ declare module 'schema' {
     user: IUser | null;
     currentUser: IUser | null;
     patient: IPatient | null;
+    patientCareTeam: Array<IUser> | null;
     clinic: IClinic | null;
   }
 
@@ -61,7 +62,6 @@ declare module 'schema' {
   interface IPatient {
     id: string;
     athenaPatientId: number;
-    careTeam: Array<IUser> | null;
     firstName: string | null;
     lastName: string | null;
     suffix: string | null;
@@ -182,8 +182,8 @@ declare module 'schema' {
     createUser: IUserWithAuthToken | null;
     login: IUserWithAuthToken | null;
     createClinic: IClinic | null;
-    addUserToCareTeam: IPatient | null;
-    removeUserFromCareTeam: IPatient | null;
+    addUserToCareTeam: Array<IUser> | null;
+    removeUserFromCareTeam: Array<IUser> | null;
   }
 
   /*
@@ -225,5 +225,12 @@ declare module 'schema' {
   interface ICareTeamInput {
     userId: string;
     patientId: string;
+  }
+
+  /*
+    description: 
+  */
+  interface IPatientCareTeam {
+    users: Array<IUser> | null;
   }
 }

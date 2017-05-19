@@ -41,56 +41,6 @@ describe('patient model', () => {
       });
     });
 
-    it('should associate multiple users with a patient', async () => {
-      const user1 = await User.create({
-        email: 'care@care.com',
-        password: 'password1',
-        userRole,
-        homeClinicId: '1',
-      });
-      const user2 = await User.create({
-        email: 'b@c.com',
-        password: 'password1',
-        userRole,
-        homeClinicId: '1',
-      });
-      // auto-adds user1
-      const patient1 = await Patient.create({
-        athenaPatientId: 123,
-        firstName: 'first',
-        lastName: 'last',
-        homeClinicId: '1',
-      }, user1.id);
-
-      // Add 2nd user to patient 1 care team
-      const patient2 = await Patient.addUserToCareTeam(user2.id, patient1.id);
-      const careTeam = patient2.careTeam.map((u: any) => u.id);
-      expect(careTeam).toContain(user1.id);
-      expect(careTeam).toContain(user2.id);
-    });
-
-    it('can remove a user from a care team', async () => {
-      const user = await User.create({
-        email: 'care@care.com',
-        password: 'password1',
-        userRole,
-        homeClinicId: '1',
-      });
-      const patient1 = await Patient.create({
-        athenaPatientId: 123,
-        firstName: 'first',
-        lastName: 'last',
-        homeClinicId: '1',
-      }, user.id);
-
-      const careTeamResponse = await Patient.removeUserFromCareTeam(user.id, patient1.id);
-      expect(careTeamResponse).toMatchObject({
-        id: patient1.id,
-        athenaPatientId: 123,
-        careTeam: [],
-      });
-    });
-
   });
 
   describe('patients', () => {

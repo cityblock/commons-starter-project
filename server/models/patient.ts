@@ -1,8 +1,8 @@
-import { transaction, Model, RelationMappings } from 'objection';
+import { Model, RelationMappings } from 'objection';
 import * as uuid from 'uuid';
 import { IPageOptions } from '../db';
+import CareTeam from './care-team';
 import Clinic from './clinic';
-import User from './user';
 
 interface ICreatePatient {
   athenaPatientId: number;
@@ -21,7 +21,6 @@ export default class Patient extends Model {
   athenaPatientId: number;
   homeClinicId: string;
   homeClinic: Clinic;
-  careTeam: User[];
 
   static tableName = 'patient';
 
@@ -74,8 +73,7 @@ export default class Patient extends Model {
   static async get(patientId: string): Promise<Patient> {
     const patient = await this
       .query()
-      .findById(patientId)
-      .eager('careTeam');
+      .findById(patientId);
 
     if (!patient) {
       return Promise.reject(`No such patient: ${patientId}`);
@@ -100,7 +98,6 @@ export default class Patient extends Model {
     const patient = await this
       .query()
       .where(fieldName, field)
-      .eager('careTeam')
       .first();
 
     if (!patient) {
@@ -111,47 +108,8 @@ export default class Patient extends Model {
 
   static async create(patient: ICreatePatient, userId: string): Promise<Patient> {
     const instance = await this.query().insertAndFetch(patient);
-    await this.addUserToCareTeam(userId, instance.id);
+    await CareTeam.addUserToCareTeam({ userId, patientId: instance.id });
     return instance;
-  }
-
-  static async addUserToCareTeam(userId: string, patientId: string): Promise<Patient> {
-    // TODO: use postgres UPCERT here to add relation if it doesn't exist instead of a transaction
-    await transaction(User, async UserWithTransaction => {
-      const user = await UserWithTransaction
-        .query()
-        .findById(userId);
-      if (!user) {
-        throw new Error('user not found');
-      } else {
-        const relations = await user
-          .$relatedQuery('patients')
-          .where('patientId', patientId);
-        if (relations.length < 1) {
-          await user
-            .$relatedQuery('patients')
-            .relate(patientId);
-        }
-      }
-    });
-    return await this.get(patientId);
-  }
-
-  static async removeUserFromCareTeam(userId: string, patientId: string): Promise<Patient> {
-    await transaction(User, async UserWithTransaction => {
-      const user = await UserWithTransaction
-        .query()
-        .findById(userId);
-      if (!user) {
-        throw new Error('user not found');
-      } else {
-        await user
-          .$relatedQuery('patients')
-          .where('patientId', patientId)
-          .unrelate();
-      }
-    });
-    return await this.get(patientId);
   }
 
 }

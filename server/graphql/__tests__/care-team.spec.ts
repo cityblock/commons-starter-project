@@ -35,7 +35,7 @@ describe('patient', () => {
     await Db.release();
   });
 
-  describe('care team', () => {
+  describe('patient care team', () => {
     it('adds user to care team', async () => {
       const user2 = await User.create({
         email: 'b@c.com',
@@ -68,5 +68,64 @@ describe('patient', () => {
 
       expect(careTeamUserIds).not.toContain(user.id);
     });
+
+  });
+
+  describe('user patient panel', () => {
+    it('works if user has no patients', async () => {
+      const user2 = await User.create({
+        email: 'b@c.com',
+        password: 'password1',
+        userRole,
+        homeClinicId,
+      });
+      const query = `{
+        userPatientPanel(userId: "${user2.id}", pageNumber: 0, pageSize: 10) {
+          edges { node { id, firstName } }
+        }
+      }`;
+      const result = await graphql(schema, query, null, { db, userRole, userId: user.id });
+      expect(cloneDeep(result.data!.userPatientPanel)).toMatchObject({
+        edges: [],
+      });
+    });
+
+    it('works if user has patients', async () => {
+      const patient1 = await Patient.create({
+        athenaPatientId: 123,
+        firstName: 'first',
+        lastName: 'last',
+        homeClinicId: '1',
+      }, user.id);
+      const patient2 = await Patient.create({
+        athenaPatientId: 321,
+        firstName: 'first',
+        lastName: 'last',
+        homeClinicId: '1',
+      }, user.id);
+
+      const query = `{
+        userPatientPanel(userId: "${user.id}", pageNumber: 0, pageSize: 10) {
+          edges { node { id, firstName } }
+        }
+      }`;
+      const result = await graphql(schema, query, null, { db, userRole, userId: user.id });
+      expect(cloneDeep(result.data!.userPatientPanel)).toMatchObject({
+        edges: [{
+          node: {
+            id: patient.id,
+          },
+        }, {
+          node: {
+            id: patient1.id,
+          },
+        }, {
+          node: {
+            id: patient2.id,
+          },
+        }],
+      });
+    });
+
   });
 });

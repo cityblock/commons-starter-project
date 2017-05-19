@@ -7,6 +7,7 @@ import {
   addUserToCareTeam,
   removeUserFromCareTeam,
   resolvePatientCareTeam,
+  resolveUserPatientPanel,
 } from './care-team-resolver';
 import { createClinic, resolveClinic } from './clinic-resolver';
 import { resolvePatientMedications } from './patient-medications-resolver';
@@ -27,6 +28,7 @@ const resolveFunctions = {
     patientMedications: resolvePatientMedications,
     user: resolveUser,
     users: resolveUsers,
+    userPatientPanel: resolveUserPatientPanel,
   },
   RootMutationType: {
     addUserToCareTeam,

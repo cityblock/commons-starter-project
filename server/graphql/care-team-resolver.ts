@@ -1,7 +1,9 @@
+import { IPatientEdges, IPatientNode } from 'schema';
+import { IPaginationOptions } from '../db';
 import { convertUser } from '../graphql/shared/converter';
 import CareTeam from '../models/care-team';
 import accessControls from './shared/access-controls';
-import { IContext } from './shared/utils';
+import { formatRelayEdge, IContext } from './shared/utils';
 
 interface IQuery {
   patientId: string;
@@ -12,6 +14,10 @@ interface ICareTeamOptions {
     userId: string;
     patientId: string;
   };
+}
+
+interface IUserPatientPanelOptions extends IPaginationOptions {
+  userId: string;
 }
 
 export async function addUserToCareTeam(
@@ -43,4 +49,29 @@ export async function resolvePatientCareTeam(
 
   const users = await CareTeam.getForPatient(patientId);
   return users.map(convertUser);
+}
+
+export async function resolveUserPatientPanel(
+  root: any,
+  { userId, pageNumber, pageSize }: IUserPatientPanelOptions,
+  { userRole, userId: currentUserId }: IContext,
+): Promise<IPatientEdges> {
+  await accessControls.isAllowedForUser(userRole, 'view', 'user', userId, currentUserId);
+
+  const patients = await CareTeam.getForUser(userId, { pageNumber, pageSize });
+
+  const patientEdges = patients.results.map(
+    (patient, i) => formatRelayEdge(patient, patient.id) as IPatientNode,
+  );
+
+  const hasPreviousPage = pageNumber !== 0;
+  const hasNextPage = ((pageNumber + 1) * pageSize) < patients.total;
+
+  return {
+    edges: patientEdges,
+    pageInfo: {
+      hasPreviousPage,
+      hasNextPage,
+    },
+  };
 }

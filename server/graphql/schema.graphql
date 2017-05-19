@@ -147,6 +147,18 @@ type Patient implements uniqueId {
   homeClinicId: String
 }
 
+# Patient node
+type PatientNode {
+  node: Patient
+  cursor: String!
+}
+
+# Patient edges
+type PatientEdges {
+  edges: [PatientNode]
+  pageInfo: PageInfo!
+}
+
 # Clinic
 type Clinic implements uniqueId {
   id: ID!
@@ -254,6 +266,13 @@ type RootQueryType {
     pageNumber: Int,
     pageSize: Int
   ): UserEdges
+
+  # List of patients the user is on the care team for (their 'patient panel')
+  userPatientPanel(
+    pageNumber: Int,
+    pageSize: Int,
+    userId: String!
+  ): PatientEdges
 
   # The current User
   currentUser: User

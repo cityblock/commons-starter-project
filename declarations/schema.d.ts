@@ -21,6 +21,7 @@ declare module 'schema' {
   interface IRootQueryType {
     user: IUser | null;
     users: IUserEdges | null;
+    userPatientPanel: IPatientEdges | null;
     currentUser: IUser | null;
     patient: IPatient | null;
     patientCareTeam: Array<IUser> | null;
@@ -80,6 +81,22 @@ declare module 'schema' {
   interface IPageInfo {
     hasNextPage: boolean;
     hasPreviousPage: boolean;
+  }
+
+  /*
+    description: Patient edges
+  */
+  interface IPatientEdges {
+    edges: Array<IPatientNode> | null;
+    pageInfo: IPageInfo;
+  }
+
+  /*
+    description: Patient node
+  */
+  interface IPatientNode {
+    node: IPatient | null;
+    cursor: string;
   }
 
   /*

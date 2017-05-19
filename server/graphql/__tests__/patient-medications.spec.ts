@@ -181,6 +181,9 @@ describe('patient medications', () => {
               }, {
                 date: '04/20/2011',
                 event: 'ORDER',
+              }, {
+                date: '04/20/2011',
+                event: 'ORDER',
               }],
             },
           }],

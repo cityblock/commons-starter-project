@@ -92,13 +92,15 @@ describe('care model', () => {
         homeClinicId: '1',
       }, user.id);
 
-      expect(await CareTeam.getForUser(user.id, { limit: 1, offset: 1 })).toMatchObject([
-        { athenaPatientId: 321 },
-      ]);
+      expect(await CareTeam.getForUser(user.id, { pageNumber: 1, pageSize: 1 })).toMatchObject({
+        results: [{ athenaPatientId: 321 }],
+        total: 2,
+      });
 
-      expect(await CareTeam.getForUser(user.id, { limit: 1, offset: 0 })).toMatchObject([
-        { athenaPatientId: 123 },
-      ]);
+      expect(await CareTeam.getForUser(user.id, { pageSize: 1, pageNumber: 0 })).toMatchObject({
+        results: [{ athenaPatientId: 123 }],
+        total: 2,
+      });
     });
   });
 

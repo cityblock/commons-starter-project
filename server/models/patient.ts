@@ -1,6 +1,6 @@
 import { Model, RelationMappings } from 'objection';
 import * as uuid from 'uuid';
-import { IPageOptions } from '../db';
+import { IPaginatedResults, IPaginationOptions } from '../db';
 import CareTeam from './care-team';
 import Clinic from './clinic';
 
@@ -81,13 +81,17 @@ export default class Patient extends Model {
     return patient;
   }
 
-  static async getAll({ limit, offset }: IPageOptions): Promise<Patient[]> {
-    const patients = await this
+  static async getAll(
+    { pageNumber, pageSize }: IPaginationOptions,
+  ): Promise<IPaginatedResults<Patient>> {
+    const patientsResult = await this
       .query()
-      .limit(limit || 0)
-      .offset(offset || 0);
+      .page(pageNumber, pageSize) as any;
 
-    return patients;
+    return {
+      results: patientsResult.results,
+      total:  patientsResult.total,
+    };
   }
 
   static async getBy(fieldName: GetByOptions, field?: string): Promise<Patient | null> {

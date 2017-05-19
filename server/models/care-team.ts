@@ -1,6 +1,6 @@
 import { transaction, Model, RelationMappings } from 'objection';
 import * as uuid from 'uuid';
-import { IPageOptions } from '../db';
+import { IPaginatedResults, IPaginationOptions } from '../db';
 import Patient from './patient';
 import User from './user';
 
@@ -67,15 +67,20 @@ export default class CareTeam extends Model {
     return careTeam.map((ct: CareTeam) => ct.user);
   }
 
-  static async getForUser(userId: string, { limit, offset }: IPageOptions): Promise<Patient[]> {
+  static async getForUser(
+    userId: string, { pageNumber, pageSize }: IPaginationOptions,
+  ): Promise<IPaginatedResults<Patient>> {
     const careTeam = await CareTeam
       .query()
       .where('userId', userId)
       .andWhere('deletedAt', null)
-      .limit(limit || 0)
-      .offset(offset || 0)
-      .eager('patient');
-    return careTeam.map((ct: CareTeam) => ct.patient);
+      .orderBy('createdAt')
+      .page(pageNumber, pageSize)
+      .eager('patient') as any;
+    return {
+      results: careTeam.results.map((ct: CareTeam) => ct.patient),
+      total: careTeam.total,
+    };
   }
 
   static async addUserToCareTeam({ userId, patientId }: ICareTeamOptions): Promise<User[]> {

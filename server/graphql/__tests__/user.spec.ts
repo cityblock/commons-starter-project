@@ -56,6 +56,112 @@ describe('user tests', () => {
     });
   });
 
+  describe('resolve all users', () => {
+    it('resolves all users', async () => {
+      const user = await User.create({
+        email: 'a@b.com',
+        password: 'password1',
+        firstName: 'Bertrand',
+        lastName: 'Russell',
+        userRole,
+        homeClinicId,
+      });
+
+      const query = `{ users { edges { node { id, firstName } } } }`;
+      const result = await graphql(schema, query, null, { db, userRole: 'admin' });
+
+      expect(cloneDeep(result.data!.users)).toMatchObject({
+        edges: [{
+          node: {
+            id: user.id,
+            firstName: 'Bertrand',
+          },
+        }],
+      });
+    });
+
+    it('does not resolve all users for non-admins', async () => {
+      await User.create({
+        email: 'a@b.com',
+        password: 'password1',
+        firstName: 'Bertrand',
+        lastName: 'Russell',
+        userRole,
+        homeClinicId,
+      });
+
+      const query = `{ users { edges { node { id, firstName } } } }`;
+      const result = await graphql(schema, query, null, { db, userRole });
+
+      expect(cloneDeep(result.errors![0].message)).toMatch(
+        'physician not able to view allUsers',
+      );
+    });
+
+    it('returns correct page information', async () => {
+      const user1 = await User.create({
+        email: 'a@b.com', password: 'password', userRole, homeClinicId,
+      });
+      const user2 = await User.create({
+        email: 'b@c.com', password: 'password', userRole, homeClinicId,
+      });
+      const user3 = await User.create({
+        email: 'c@d.com', password: 'password', userRole: 'healthCoach', homeClinicId,
+      });
+      const user4 = await User.create({
+        email: 'd@e.com', password: 'password', userRole: 'familyMember', homeClinicId,
+      });
+      await User.create({
+        email: 'e@f.com', password: 'password', userRole: 'nurseCareManager', homeClinicId,
+      });
+
+      const query = `{
+        users(pageNumber: 0, pageSize: 4) {
+          edges {
+            node {
+              email
+              userRole
+            }
+          }
+          pageInfo {
+            hasNextPage
+            hasPreviousPage
+          }
+        }
+      }`;
+
+      const result = await graphql(schema, query, null, { db, userRole: 'admin' });
+
+      expect(cloneDeep(result.data!.users)).toMatchObject({
+        edges: [{
+          node: {
+            email: user1.email,
+            userRole: user1.userRole,
+          },
+        }, {
+          node: {
+            email: user2.email,
+            userRole: user2.userRole,
+          },
+        }, {
+          node: {
+            email: user3.email,
+            userRole: user3.userRole,
+          },
+        }, {
+          node: {
+            email: user4.email,
+            userRole: user4.userRole,
+          },
+        }],
+        pageInfo: {
+          hasNextPage: true,
+          hasPreviousPage: false,
+        },
+      });
+    });
+  });
+
   describe('resolve current user', () => {
     it('can fetch current user', async () => {
       const user = await User.create({

@@ -66,23 +66,35 @@ describe('patient model', () => {
     });
 
     it('should fetch patients', async () => {
-      expect(await Patient.getAll({ limit: 100 })).toMatchObject([
+      expect(await Patient.getAll({ pageNumber: 0, pageSize: 10 })).toMatchObject(
         {
-          athenaPatientId: 123,
+          results: [{
+            athenaPatientId: 123,
+          }, {
+            athenaPatientId: 234,
+          }],
+          total: 2,
         },
-        {
-          athenaPatientId: 234,
-        },
-      ]);
+      );
     });
 
     it('should fetch a limited set of patients', async () => {
-      expect(await Patient.getAll({ limit: 1 })).toMatchObject([
-        { athenaPatientId: 123 },
-      ]);
-      expect(await Patient.getAll({ limit: 1, offset: 1 })).toMatchObject([
-        { athenaPatientId: 234 },
-      ]);
+      expect(await Patient.getAll({ pageNumber: 0, pageSize: 1 })).toMatchObject(
+        {
+          results: [{
+            athenaPatientId: 123,
+          }],
+          total: 2,
+        },
+      );
+      expect(await Patient.getAll({ pageNumber: 1, pageSize: 1 })).toMatchObject(
+        {
+          results: [{
+            athenaPatientId: 234,
+          }],
+          total: 2,
+        },
+      );
     });
 
     it('should fetch by athenaPatientId', async () => {

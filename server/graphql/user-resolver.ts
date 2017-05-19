@@ -1,7 +1,8 @@
 import { compare } from 'bcrypt';
+import { IUserEdges, IUserNode } from 'schema';
 import User from '../models/user';
 import accessControls from './shared/access-controls';
-import { signJwt, IContext } from './shared/utils';
+import { formatRelayEdge, signJwt, IContext } from './shared/utils';
 
 interface ICreateUserArgs {
   input: {
@@ -20,6 +21,11 @@ interface IUserLoginOptions {
     email: string;
     password: string;
   };
+}
+
+interface IUsersFilterOptions {
+  pageNumber: number;
+  pageSize: number;
 }
 
 export async function createUser(root: any, { input }: ICreateUserArgs, context: IContext) {
@@ -77,6 +83,29 @@ export async function resolveCurrentUser(
   }
 
   return user;
+}
+
+export async function resolveUsers(
+  root: any, args: Partial<IUsersFilterOptions>, { db, userRole }: IContext,
+): Promise<IUserEdges> {
+  await accessControls.isAllowed(userRole, 'view', 'allUsers');
+
+  const pageNumber = args.pageNumber || 0;
+  const pageSize = args.pageSize || 10;
+
+  const users = await User.getAll({ pageNumber, pageSize });
+  const userEdges = users.results.map((user, i) => formatRelayEdge(user, user.id) as IUserNode);
+
+  const hasPreviousPage = pageNumber !== 0;
+  const hasNextPage = ((pageNumber + 1) * pageSize) < users.total;
+
+  return {
+    edges: userEdges,
+    pageInfo: {
+      hasPreviousPage,
+      hasNextPage,
+    },
+  };
 }
 
 // disabling isAllowed check for login endpoint so users can log in

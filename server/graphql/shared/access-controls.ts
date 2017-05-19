@@ -5,7 +5,7 @@ const aclJson = require('./acl.json');
 /* tslint:enable:no-var-requires */
 
 type Action = 'view' | 'edit' | 'delete' | 'create';
-type Resource = 'patient' | 'note' | 'patientEvents' | 'user' | 'encounter' | 'clinic';
+type Resource = 'patient' | 'note' | 'patientEvents' | 'user' | 'allUsers' | 'encounter' | 'clinic';
 
 /*
 ACL SPEC:

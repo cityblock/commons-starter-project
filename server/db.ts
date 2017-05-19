@@ -5,9 +5,14 @@ import { Model } from 'objection';
 const knexConfig = require('./models/knexfile');
 /* tslint:enable no-var-requires */
 
-export interface IPageOptions {
-  limit?: number;
-  offset?: number;
+export interface IPaginationOptions {
+  pageNumber: number;
+  pageSize: number;
+}
+
+export interface IPaginatedResults<T> {
+  results: T[];
+  total: number;
 }
 
 let singleton: Promise<Db> | null = null;

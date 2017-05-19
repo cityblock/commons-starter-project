@@ -3,6 +3,7 @@ import { Model, RelationMappings, ValidationError } from 'objection';
 import * as uuid from 'uuid';
 import { isEmail } from 'validator';
 import config from '../config';
+import { IPaginatedResults, IPaginationOptions } from '../db';
 import Clinic from './clinic';
 
 export type UserRole =
@@ -157,6 +158,19 @@ export default class User extends Model {
     }
 
     return user;
+  }
+
+  static async getAll(
+    { pageNumber, pageSize }: IPaginationOptions,
+  ): Promise<IPaginatedResults<User>> {
+    const usersResult = await this
+      .query()
+      .page(pageNumber, pageSize) as any;
+
+    return {
+      results: usersResult.results,
+      total: usersResult.total,
+    };
   }
 }
 /* tslint:enable:member-ordering */

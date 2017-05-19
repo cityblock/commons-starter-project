@@ -20,6 +20,7 @@ declare module 'schema' {
   */
   interface IRootQueryType {
     user: IUser | null;
+    users: IUserEdges | null;
     currentUser: IUser | null;
     patient: IPatient | null;
     patientCareTeam: Array<IUser> | null;
@@ -56,6 +57,30 @@ declare module 'schema' {
     description: 
   */
   type IUserRoleEnum = 'physician' | 'nurseCareManager' | 'healthCoach' | 'familyMember' | 'anonymousUser' | 'admin';
+
+  /*
+    description: User edges
+  */
+  interface IUserEdges {
+    edges: Array<IUserNode> | null;
+    pageInfo: IPageInfo;
+  }
+
+  /*
+    description: User node
+  */
+  interface IUserNode {
+    node: IUser | null;
+    cursor: string;
+  }
+
+  /*
+    description: Page info for paginated responses
+  */
+  interface IPageInfo {
+    hasNextPage: boolean;
+    hasPreviousPage: boolean;
+  }
 
   /*
     description: Patient combining data in athena and our database

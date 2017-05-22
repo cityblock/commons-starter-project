@@ -11,7 +11,6 @@ import {
   restoreAthenaFetch,
 } from '../../spec-helpers';
 import schema from '../make-executable-schema';
-import { getFullPatient } from '../patient-resolver';
 
 describe('patient', () => {
 
@@ -50,7 +49,7 @@ describe('patient', () => {
     await Db.release();
   });
 
-  describe('individual patient', () => {
+  describe('resolvePatient', () => {
 
     it('returns patient', async () => {
       const query = `{
@@ -59,9 +58,7 @@ describe('patient', () => {
         }
       }`;
 
-      mockAthenaGetPatient(1, createMockAthenaPatient(1, 'Constance', 'Blanton'));
-
-      const result = await graphql(schema, query, null, { athenaApi, db, userRole });
+      const result = await graphql(schema, query, null, { db, userRole });
       expect(cloneDeep(result.data!.patient)).toMatchObject({
         id: patient.id,
         firstName: 'Constance',
@@ -70,18 +67,27 @@ describe('patient', () => {
       });
     });
 
-    it('returns a full patient', async () => {
-      mockAthenaGetPatient(1, createMockAthenaPatient(1, 'Constance', 'Blanton'));
-      const fullPatient = await getFullPatient(patient, athenaApi);
+  });
 
-      expect(fullPatient).toMatchObject({
-        athenaPatientId: 1,
+  describe('resolvePatientHealthRecord', () => {
+
+    it('returns patientHealthRecord', async () => {
+      const query = `{
+        patientHealthRecord(patientId: "${patient.id}") {
+          id, firstName, lastName, athenaPatientId
+        }
+      }`;
+
+      mockAthenaGetPatient(1, createMockAthenaPatient(1, 'Constance', 'Blanton'));
+
+      const result = await graphql(schema, query, null, { athenaApi, db, userRole });
+      expect(cloneDeep(result.data!.patientHealthRecord)).toMatchObject({
         id: patient.id,
         firstName: 'Constance',
         lastName: 'Blanton',
+        athenaPatientId: 1,
       });
     });
 
   });
-
 });

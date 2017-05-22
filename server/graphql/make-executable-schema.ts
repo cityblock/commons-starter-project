@@ -11,7 +11,10 @@ import {
 } from './care-team-resolver';
 import { createClinic, resolveClinic } from './clinic-resolver';
 import { resolvePatientMedications } from './patient-medications-resolver';
-import { resolvePatient } from './patient-resolver';
+import {
+  resolvePatient,
+  resolvePatientHealthRecord,
+} from './patient-resolver';
 import { createUser, login, resolveCurrentUser, resolveUser, resolveUsers } from './user-resolver';
 
 const schemaGql = fs.readFileSync(path.join(__dirname, 'schema.graphql'), 'utf-8');
@@ -24,6 +27,7 @@ const resolveFunctions = {
     clinic: resolveClinic,
     currentUser: resolveCurrentUser,
     patient: resolvePatient,
+    patientHealthRecord: resolvePatientHealthRecord,
     patientCareTeam: resolvePatientCareTeam,
     patientMedications: resolvePatientMedications,
     user: resolveUser,

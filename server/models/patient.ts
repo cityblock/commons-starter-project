@@ -9,6 +9,8 @@ interface ICreatePatient {
   firstName: string;
   lastName: string;
   homeClinicId: string;
+  dob?: string;
+  sex?: 'M' | 'F';
 }
 
 type GetByOptions = 'athenaPatientId';
@@ -16,6 +18,10 @@ type GetByOptions = 'athenaPatientId';
 /* tslint:disable:member-ordering */
 export default class Patient extends Model {
   id: string;
+  firstName: string;
+  lastName: string;
+  dob: string;
+  sex: 'M' | 'F';
   createdAt: string;
   updatedAt: string;
   athenaPatientId: number;
@@ -33,6 +39,10 @@ export default class Patient extends Model {
       id: { type: 'string' },
       athenaPatientId: { type: 'number' },
       homeClinicId: { type: 'string' },
+      firstName: { type: 'string' },
+      lastName: { type: 'string' },
+      dob: { type: 'string' },
+      sex: { type: 'string' },
     },
   };
 
@@ -81,6 +91,12 @@ export default class Patient extends Model {
     return patient;
   }
 
+  static async getAthenaPatientId(patientId: string): Promise<number> {
+    // TODO: query and just return the athenaPatientId column
+    const patient = await this.get(patientId);
+    return patient.athenaPatientId;
+  }
+
   static async getAll(
     { pageNumber, pageSize }: IPaginationOptions,
   ): Promise<IPaginatedResults<Patient>> {
@@ -90,7 +106,7 @@ export default class Patient extends Model {
 
     return {
       results: patientsResult.results,
-      total:  patientsResult.total,
+      total: patientsResult.total,
     };
   }
 

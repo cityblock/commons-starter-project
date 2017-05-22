@@ -1,7 +1,7 @@
-import { formatPatient } from './patient-formatter';
+import { formatPatientHealthRecord } from './patient-formatter';
 import { formatPatientMedications } from './patient-medications-formatter';
 
 export {
-  formatPatient,
+  formatPatientHealthRecord,
   formatPatientMedications,
 };

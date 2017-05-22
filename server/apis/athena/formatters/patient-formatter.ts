@@ -1,14 +1,14 @@
-import { IPatient } from 'schema';
-import Patient from '../../../models/patient';
+import { IPatientHealthRecord } from 'schema';
 import { IPatientInfoAthena } from '../types';
 
-// Note: This drops some fields
-export const formatPatient = (p: IPatientInfoAthena, patient: Patient): IPatient => ({
-  id: patient.id,
+// Note: This drops some fields returned by athena
+export const formatPatientHealthRecord = (
+  p: IPatientInfoAthena, patientId: string,
+): IPatientHealthRecord => ({
+  id: patientId,
   athenaPatientId: Number(p.patientid),
   firstName: p.firstname,
   lastName: p.lastname,
-  homeClinicId: patient.homeClinicId,
   suffix: p.suffix,
   preferredName: p.preferredname,
   raceName: p.racename,

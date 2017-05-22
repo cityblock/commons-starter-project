@@ -24,6 +24,7 @@ declare module 'schema' {
     userPatientPanel: IPatientEdges | null;
     currentUser: IUser | null;
     patient: IPatient | null;
+    patientHealthRecord: IPatientHealthRecord | null;
     patientCareTeam: Array<IUser> | null;
     clinic: IClinic | null;
     patientMedications: IPatientMedications | null;
@@ -107,11 +108,25 @@ declare module 'schema' {
     athenaPatientId: number;
     firstName: string | null;
     lastName: string | null;
+    dob: string | null;
+    sex: string | null;
+    homeClinicId: string | null;
+    createdAt: string | null;
+  }
+
+  /*
+    description: Patient Athena health record
+  */
+  interface IPatientHealthRecord {
+    id: string;
+    athenaPatientId: number;
+    firstName: string | null;
+    lastName: string | null;
+    dob: string | null;
+    sex: string | null;
     suffix: string | null;
     preferredName: string | null;
     raceName: string | null;
-    dob: string | null;
-    sex: string | null;
     race: Array<string> | null;
     ethnicityCode: string | null;
     status: string | null;
@@ -127,7 +142,6 @@ declare module 'schema' {
     employer: IEmployer | null;
     address: IAddress | null;
     povertyLevel: IPovertyLevel | null;
-    homeClinicId: string | null;
   }
 
   /*

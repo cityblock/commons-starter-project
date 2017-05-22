@@ -1,5 +1,9 @@
 import * as nock from 'nock';
-import { IPatientInfoAthena, IPatientMedicationsResponse } from './apis/athena/types';
+import {
+  IPatientEncountersResponse,
+  IPatientInfoAthena,
+  IPatientMedicationsResponse,
+} from './apis/athena/types';
 import config from './config';
 
 export function createMockAthenaPatient(
@@ -285,6 +289,45 @@ export function createMockAthenaPatientMedications(): IPatientMedicationsRespons
   };
 }
 
+interface IMockEncountersOpts {
+  hasPreviousPage?: boolean;
+  hasNextPage?: boolean;
+}
+
+export function createMockAthenaPatientEncounters(
+  { hasPreviousPage, hasNextPage }: IMockEncountersOpts,
+): IPatientEncountersResponse {
+  return {
+    previous: hasPreviousPage ? 'http://link.com' : undefined,
+    next: hasNextPage ? 'http://link.com' : undefined,
+    encounters: [{
+      encountertype: 'VISIT',
+      patientstatusid: 1,
+      stage: 'INTAKE',
+      status: 'OPEN',
+      appointmentid: 499874,
+      patientlocationid: 21,
+      providerid: 71,
+      encounterdate: '01/25/2015',
+      encountervisitname: 'Any 15',
+      patientlocation: 'Waiting Room',
+      providerlastname: 'Bricker',
+      encounterid: 26576,
+      lastupdated: '02/21/2015',
+      providerfirstname: 'Adam',
+      providerphone: '(207) 555-5555',
+      patientstatus: 'Ready For Staff',
+      diagnoses: [{
+        diagnosisid: 1,
+        icdcodes: [],
+        snomedcode: 12345,
+        description: 'A diagnosis',
+      }],
+    }],
+    totalcount: 1,
+  };
+}
+
 // Athena
 export function restoreAthenaFetch() {
   nock.cleanAll();
@@ -321,6 +364,7 @@ export function mockAthenaPut(path: string, body: any) {
 
 type MockAthenaPatient = Pick<IPatientInfoAthena, 'patientid'> & Partial<IPatientInfoAthena>;
 type MockAthenaPatientMedications = Partial<IPatientMedicationsResponse>;
+type MockAthenaPatientEncounters = Partial<IPatientEncountersResponse>;
 
 export function mockAthenaGetPatient(
   athenaPatientId: number, body: MockAthenaPatient, times = 1,
@@ -334,4 +378,8 @@ export function mockAthenaGetPatient(
 
 export function mockAthenaGetPatientMedications(body: MockAthenaPatientMedications) {
   mockAthenaGet(`/${config.ATHENA_PRACTICE_ID}/chart/1/medications`, body);
+}
+
+export function mockAthenaGetPatientEncounters(body: MockAthenaPatientEncounters) {
+  mockAthenaGet(`/${config.ATHENA_PRACTICE_ID}/chart/1/encounters`, body);
 }

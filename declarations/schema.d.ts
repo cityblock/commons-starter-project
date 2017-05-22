@@ -27,6 +27,7 @@ declare module 'schema' {
     patientHealthRecord: IPatientHealthRecord | null;
     patientCareTeam: Array<IUser> | null;
     clinic: IClinic | null;
+    patientEncounters: IPatientEncounterEdges | null;
     patientMedications: IPatientMedications | null;
   }
 
@@ -230,6 +231,55 @@ declare module 'schema' {
     departmentId: number;
     createdAt: any;
     updatedAt: any;
+  }
+
+  /*
+    description: PatientEnounterEdges
+  */
+  interface IPatientEncounterEdges {
+    edges: Array<IPatientEncounterNode> | null;
+    pageInfo: IPageInfo;
+  }
+
+  /*
+    description: PatientEncounter node
+  */
+  interface IPatientEncounterNode {
+    node: IPatientEncounter | null;
+    cursor: string;
+  }
+
+  /*
+    description: PatientEncounter
+  */
+  interface IPatientEncounter {
+    encounterType: string;
+    encounterId: number;
+    status: string;
+    patientStatusId: number | null;
+    appointmentId: number;
+    stage: string | null;
+    patientLocationId: number | null;
+    providerId: number | null;
+    encounterDate: string;
+    encounterVisitName: string;
+    patientLocation: string | null;
+    diagnoses: Array<IPatientDiagnosis> | null;
+    patientStatus: string | null;
+    providerPhone: string | null;
+    providerFirstName: string | null;
+    providerLastName: string | null;
+    lastUpdated: string;
+  }
+
+  /*
+    description: PatientDiagnosis
+  */
+  interface IPatientDiagnosis {
+    diagnosisId: number;
+    icdCodes: Array<string>;
+    snomedCode: number;
+    description: string;
   }
 
   /*

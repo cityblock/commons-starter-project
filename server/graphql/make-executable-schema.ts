@@ -10,6 +10,7 @@ import {
   resolveUserPatientPanel,
 } from './care-team-resolver';
 import { createClinic, resolveClinic } from './clinic-resolver';
+import { resolvePatientEncounters } from './patient-encounters-resolver';
 import { resolvePatientMedications } from './patient-medications-resolver';
 import {
   resolvePatient,
@@ -29,6 +30,7 @@ const resolveFunctions = {
     patient: resolvePatient,
     patientHealthRecord: resolvePatientHealthRecord,
     patientCareTeam: resolvePatientCareTeam,
+    patientEncounters: resolvePatientEncounters,
     patientMedications: resolvePatientMedications,
     user: resolveUser,
     users: resolveUsers,

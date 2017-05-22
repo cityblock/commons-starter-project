@@ -158,3 +158,37 @@ export interface IPatientMedicationsResponse {
   nomedicationsreported: boolean;
   sectionnote: string;
 }
+
+export interface IPatientEncounterDiagnosis {
+  diagnosisid: number;
+  icdcodes: string[];
+  snomedcode: number;
+  description: string;
+}
+
+export interface IPatientEncounterResource {
+  encountertype: string;
+  patientstatusid: number;
+  stage: string;
+  status: string;
+  appointmentid: number;
+  patientlocationid: number;
+  providerid: number;
+  encounterdate: string;
+  encountervisitname: string;
+  patientlocation: string;
+  providerlastname: string;
+  encounterid: number;
+  lastupdated: string;
+  providerfirstname: string;
+  providerphone: string;
+  patientstatus: string;
+  diagnoses: IPatientEncounterDiagnosis[];
+}
+
+export interface IPatientEncountersResponse {
+  previous?: string;
+  next?: string;
+  encounters: IPatientEncounterResource[];
+  totalcount: number;
+}

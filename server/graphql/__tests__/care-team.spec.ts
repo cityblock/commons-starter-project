@@ -20,6 +20,8 @@ describe('patient', () => {
     user = await User.create({
       email: 'a@b.com',
       password: 'password1',
+      firstName: 'Dan',
+      lastName: 'Plant',
       userRole,
       homeClinicId,
     });
@@ -69,6 +71,19 @@ describe('patient', () => {
       expect(careTeamUserIds).not.toContain(user.id);
     });
 
+    it('resolves a patient care team', async () => {
+      const query = `{
+        patientCareTeam(patientId: "${patient.id}") {
+          id
+        }
+      }`;
+
+      const result = await graphql(schema, query, null, { db, userRole });
+      const careTeamUserIds = cloneDeep(result.data!.patientCareTeam)
+        .map((u: any) => u.id);
+
+      expect(careTeamUserIds).toContain(user.id);
+    });
   });
 
   describe('user patient panel', () => {

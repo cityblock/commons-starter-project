@@ -3,7 +3,12 @@ import 'fetch-everywhere';
 import { stringify } from 'querystring';
 import config from '../../config';
 import { AthenaResponseError } from '../../lib/errors';
-import { IPatientInfoAthena, IPatientMedicationsResponse, ITokenResponse } from './types';
+import {
+  IPatientEncountersResponse,
+  IPatientInfoAthena,
+  IPatientMedicationsResponse,
+  ITokenResponse,
+} from './types';
 
 let singleton: AthenaApi;
 
@@ -72,6 +77,22 @@ export default class AthenaApi {
     return await this.fetch<IPatientMedicationsResponse>(
       `/${config.ATHENA_PRACTICE_ID}/chart/${athenaPatientId}/medications`, {
         departmentid: athenaDepartmentId,
+      });
+  }
+
+  public async getPatientEncounters(
+    athenaPatientId: number,
+    athenaDepartmentId: number,
+    limit: number,
+    offset: number,
+  ): Promise<IPatientEncountersResponse> {
+    // Optinally, we could also send in 'showallstatuses' and 'showalltypes' params
+    return await this.fetch<IPatientEncountersResponse>(
+      `/${config.ATHENA_PRACTICE_ID}/chart/${athenaPatientId}/encounters`, {
+        departmentid: athenaDepartmentId,
+        showdiagnoses: 'true',
+        limit,
+        offset,
       });
   }
 

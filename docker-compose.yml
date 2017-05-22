@@ -15,3 +15,5 @@ services:
     build: ./docker/postgres/9.6
     environment:
      - POSTGRES_DB=db
+  rabbit:
+    image: 'rabbitmq'

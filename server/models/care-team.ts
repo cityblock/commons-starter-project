@@ -22,6 +22,8 @@ export default class CareTeam extends Model {
 
   static modelPaths = [__dirname];
 
+  static pickJsonSchemaProperties = true;
+
   static jsonSchema = {
     type: 'object',
     properties: {

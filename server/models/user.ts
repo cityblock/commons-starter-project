@@ -43,6 +43,8 @@ export default class User extends Model {
 
   static modelPaths = [__dirname];
 
+  static pickJsonSchemaProperties = true;
+
   static jsonSchema = {
     type: 'object',
     required: ['email', 'userRole', 'homeClinicId'],

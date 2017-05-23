@@ -42,6 +42,8 @@ export default class Patient extends Model {
 
   static modelPaths = [__dirname];
 
+  static pickJsonSchemaProperties = true;
+
   static jsonSchema = {
     type: 'object',
     properties: {

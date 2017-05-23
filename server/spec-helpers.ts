@@ -5,6 +5,31 @@ import {
   IPatientMedicationsResponse,
 } from './apis/athena/types';
 import config from './config';
+import CareTeam from './models/care-team';
+import Patient, { ISetupPatient } from './models/patient';
+
+interface ICreatePatient extends ISetupPatient {
+  athenaPatientId: number;
+  homeClinicId: string;
+}
+
+export async function createPatient(patient: ICreatePatient, userId: string): Promise<Patient> {
+  const instance = await Patient.query().insertAndFetch(patient);
+  await CareTeam.addUserToCareTeam({ userId, patientId: instance.id });
+  return instance;
+}
+
+export function createMockPatient(athenaPatientId = 1, homeClinicId = '1') {
+  return {
+    athenaPatientId,
+    firstName: 'dan',
+    lastName: 'plant',
+    homeClinicId,
+    zip: 11238,
+    gender: 'M',
+    dateOfBirth: '01/01/1900',
+  };
+}
 
 export function createMockAthenaPatient(
   athenaId: number,
@@ -374,6 +399,16 @@ export function mockAthenaGetPatient(
     body,
     times,
   );
+}
+
+export function mockAthenaCreatePatient(athenaPatientId: number) {
+  mockAthenaPost(`/${config.ATHENA_PRACTICE_ID}/patients`, [{ patientid: athenaPatientId }]);
+}
+
+export function mockAthenaCreatePatientError() {
+  nock(config.ATHENA_API_BASE)
+    .post(`/${config.ATHENA_PRACTICE_ID}/patients`)
+    .reply(500, { error: 'error!' });
 }
 
 export function mockAthenaGetPatientMedications(body: MockAthenaPatientMedications) {

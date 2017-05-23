@@ -110,7 +110,7 @@ type Garantor {
   lastName: String
   suffix: String
   SSN: String
-  DOB: String
+  dateOfBirth: String
   phone: String
   email: String
   relationshipToPatient: String
@@ -121,11 +121,11 @@ type Garantor {
 # Patient combining data in athena and our database
 type Patient implements uniqueId {
   id: ID!
-  athenaPatientId: Int!
   firstName: String
   lastName: String
-  dob: String
-  sex: String
+  dateOfBirth: String
+  gender: String
+  zip: Int
   homeClinicId: String
   createdAt: String
 }
@@ -133,10 +133,9 @@ type Patient implements uniqueId {
 # Patient Athena health record
 type PatientHealthRecord {
   id: ID!
-  athenaPatientId: Int!
   firstName: String
   lastName: String
-  dob: String
+  dateOfBirth: String
   sex: String
   suffix: String
   preferredName: String
@@ -301,6 +300,25 @@ input CareTeamInput {
   patientId: String!
 }
 
+# params for editing a patient in the db
+input PatientEditInput {
+  patientId: String!
+  firstName: String
+  lastName: String
+  dob: String
+  gender: String
+}
+
+# params for creating a patient in the db and in athena
+input PatientSetupInput {
+  firstName: String!
+  lastName: String!
+  dateOfBirth: String!
+  gender: String!
+  zip: Int!
+  homeClinicId: String!
+}
+
 type RootMutationType {
   # Create a new user
   createUser(input: CreateUserInputType): UserWithAuthToken
@@ -316,6 +334,12 @@ type RootMutationType {
 
   # Remove user from careTeam
   removeUserFromCareTeam(input: CareTeamInput): [User]
+
+  # Edit fields on patient stored in the db
+  patientEdit(input: PatientEditInput): Patient
+
+  # Setup patient creates the patient in the db AND in athena
+  patientSetup(input: PatientSetupInput): Patient
 }
 
 type RootQueryType {

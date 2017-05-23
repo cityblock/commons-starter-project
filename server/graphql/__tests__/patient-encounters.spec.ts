@@ -7,6 +7,8 @@ import Patient from '../../models/patient';
 import User from '../../models/user';
 import {
   createMockAthenaPatientEncounters,
+  createMockPatient,
+  createPatient,
   mockAthenaGetPatientEncounters,
   mockAthenaTokenFetch,
   restoreAthenaFetch,
@@ -38,12 +40,7 @@ describe('patient encounters', () => {
       userRole,
       homeClinicId: clinic.id,
     });
-    patient = await Patient.create({
-      athenaPatientId: 1,
-      firstName: 'Constance',
-      lastName: 'Blanton',
-      homeClinicId: clinic.id,
-    }, user.id);
+    patient = await createPatient(createMockPatient(1, clinic.id), user.id);
   });
 
   afterEach(async () => {

@@ -13,8 +13,10 @@ import { createClinic, resolveClinic } from './clinic-resolver';
 import { resolvePatientEncounters } from './patient-encounters-resolver';
 import { resolvePatientMedications } from './patient-medications-resolver';
 import {
+  editPatient,
   resolvePatient,
   resolvePatientHealthRecord,
+  setupPatient,
 } from './patient-resolver';
 import { createUser, login, resolveCurrentUser, resolveUser, resolveUsers } from './user-resolver';
 
@@ -37,6 +39,8 @@ const resolveFunctions = {
     userPatientPanel: resolveUserPatientPanel,
   },
   RootMutationType: {
+    patientEdit: editPatient,
+    patientSetup: setupPatient,
     addUserToCareTeam,
     removeUserFromCareTeam,
     createClinic,

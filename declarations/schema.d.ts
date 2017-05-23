@@ -106,11 +106,11 @@ declare module 'schema' {
   */
   interface IPatient {
     id: string;
-    athenaPatientId: number;
     firstName: string | null;
     lastName: string | null;
-    dob: string | null;
-    sex: string | null;
+    dateOfBirth: string | null;
+    gender: string | null;
+    zip: number | null;
     homeClinicId: string | null;
     createdAt: string | null;
   }
@@ -120,10 +120,9 @@ declare module 'schema' {
   */
   interface IPatientHealthRecord {
     id: string;
-    athenaPatientId: number;
     firstName: string | null;
     lastName: string | null;
-    dob: string | null;
+    dateOfBirth: string | null;
     sex: string | null;
     suffix: string | null;
     preferredName: string | null;
@@ -167,7 +166,7 @@ declare module 'schema' {
     lastName: string | null;
     suffix: string | null;
     SSN: string | null;
-    DOB: string | null;
+    dateOfBirth: string | null;
     phone: string | null;
     email: string | null;
     relationshipToPatient: string | null;
@@ -341,6 +340,8 @@ declare module 'schema' {
     createClinic: IClinic | null;
     addUserToCareTeam: Array<IUser> | null;
     removeUserFromCareTeam: Array<IUser> | null;
+    patientEdit: IPatient | null;
+    patientSetup: IPatient | null;
   }
 
   /*
@@ -382,5 +383,28 @@ declare module 'schema' {
   interface ICareTeamInput {
     userId: string;
     patientId: string;
+  }
+
+  /*
+    description: params for editing a patient in the db
+  */
+  interface IPatientEditInput {
+    patientId: string;
+    firstName?: string | null;
+    lastName?: string | null;
+    dob?: string | null;
+    gender?: string | null;
+  }
+
+  /*
+    description: params for creating a patient in the db and in athena
+  */
+  interface IPatientSetupInput {
+    firstName: string;
+    lastName: string;
+    dateOfBirth: string;
+    gender: string;
+    zip: number;
+    homeClinicId: string;
   }
 }

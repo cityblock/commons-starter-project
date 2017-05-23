@@ -2,10 +2,15 @@ import { graphql } from 'graphql';
 import { cloneDeep } from 'lodash';
 import AthenaApi from '../../apis/athena';
 import Db from '../../db';
+import HomeClinic from '../../models/clinic';
 import Patient from '../../models/patient';
 import User from '../../models/user';
 import {
   createMockAthenaPatient,
+  createMockPatient,
+  createPatient,
+  mockAthenaCreatePatient,
+  mockAthenaCreatePatientError,
   mockAthenaGetPatient,
   mockAthenaTokenFetch,
   restoreAthenaFetch,
@@ -18,8 +23,8 @@ describe('patient', () => {
   let db: Db = null as any;
   let patient = null as any;
   let user = null as any;
+  let homeClinicId = null as any;
   const userRole = 'physician';
-  const homeClinicId = '1';
 
   beforeEach(async () => {
     athenaApi = await AthenaApi.get();
@@ -27,18 +32,15 @@ describe('patient', () => {
     await Db.clear();
     mockAthenaTokenFetch();
 
+    const homeClinic = await HomeClinic.create({ name: 'cool clinic', departmentId: 1 });
+    homeClinicId = homeClinic.id;
     user = await User.create({
       email: 'a@b.com',
       password: 'password1',
       userRole,
       homeClinicId,
     });
-    patient = await Patient.create({
-      athenaPatientId: 1,
-      firstName: 'Constance',
-      lastName: 'Blanton',
-      homeClinicId,
-    }, user.id);
+    patient = await createPatient(createMockPatient(1, homeClinicId), user.id);
   });
 
   afterEach(async () => {
@@ -50,23 +52,92 @@ describe('patient', () => {
   });
 
   describe('resolvePatient', () => {
-
     it('returns patient', async () => {
       const query = `{
         patient(patientId: "${patient.id}") {
-          id, firstName, lastName, athenaPatientId
+          id, firstName, lastName
         }
       }`;
 
       const result = await graphql(schema, query, null, { db, userRole });
       expect(cloneDeep(result.data!.patient)).toMatchObject({
         id: patient.id,
-        firstName: 'Constance',
-        lastName: 'Blanton',
-        athenaPatientId: 1,
+        firstName: 'dan',
+        lastName: 'plant',
+      });
+    });
+  });
+
+  describe('editPatient', () => {
+    it('edits patient', async () => {
+      const query = `mutation {
+        patientEdit(input: { patientId: "${patient.id}", firstName: "first" }) {
+          id, firstName
+        }
+      }`;
+
+      const result = await graphql(schema, query, null, { db, userRole });
+      expect(cloneDeep(result.data!.patientEdit)).toMatchObject({
+        id: patient.id,
+        firstName: 'first',
+      });
+    });
+  });
+
+  describe('setupPatient', () => {
+    it('sets up patient', async () => {
+      const query = `mutation {
+        patientSetup(input: {
+          firstName: "first",
+          lastName: "last",
+          gender: "F",
+          zip: 12345,
+          homeClinicId: "${homeClinicId}",
+          dateOfBirth: "02/02/1902",
+        }) {
+          id, firstName, lastName, gender, zip, dateOfBirth
+        }
+      }`;
+
+      mockAthenaCreatePatient(1);
+
+      const result = await graphql(
+        schema, query, null, { athenaApi, db, userRole, userId: user.id },
+      );
+      expect(cloneDeep(result.data!.patientSetup)).toMatchObject({
+        firstName: 'first',
+        lastName: 'last',
+        gender: 'F',
+        zip: 12345,
+        dateOfBirth: '02/02/1902',
       });
     });
 
+    it('errors and does not create patient when Athena fails', async () => {
+      const patientCount = await Patient.query().count();
+
+      const query = `mutation {
+        patientSetup(input: {
+          firstName: "first",
+          lastName: "last",
+          gender: "F",
+          zip: 12345,
+          homeClinicId: "${homeClinicId}",
+          dateOfBirth: "02/02/1902",
+        }) {
+          id, firstName, lastName, gender, zip, dateOfBirth
+        }
+      }`;
+
+      mockAthenaCreatePatientError();
+
+      const result = await graphql(
+        schema, query, null, { athenaApi, db, userRole, userId: user.id },
+      );
+
+      expect(result.errors![0].message).toContain('error!');
+      expect(await Patient.query().count()).toEqual(patientCount);
+    });
   });
 
   describe('resolvePatientHealthRecord', () => {
@@ -74,7 +145,7 @@ describe('patient', () => {
     it('returns patientHealthRecord', async () => {
       const query = `{
         patientHealthRecord(patientId: "${patient.id}") {
-          id, firstName, lastName, athenaPatientId
+          id, firstName, lastName
         }
       }`;
 
@@ -85,7 +156,6 @@ describe('patient', () => {
         id: patient.id,
         firstName: 'Constance',
         lastName: 'Blanton',
-        athenaPatientId: 1,
       });
     });
 

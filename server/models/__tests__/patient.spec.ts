@@ -1,4 +1,11 @@
+import AthenaApi from '../../apis/athena';
 import Db from '../../db';
+import {
+  createMockPatient,
+  createPatient,
+  mockAthenaTokenFetch,
+  restoreAthenaFetch,
+} from '../../spec-helpers';
 import Patient from '../patient';
 import User from '../user';
 
@@ -16,7 +23,7 @@ describe('patient model', () => {
     await Db.release();
   });
 
-  describe('patient', () => {
+  describe('get', () => {
     it('should create and retrieve a patient', async () => {
       const user = await User.create({
         email: 'care@care.com',
@@ -24,12 +31,7 @@ describe('patient model', () => {
         userRole,
         homeClinicId: '1',
       });
-      const patient = await Patient.create({
-        athenaPatientId: 123,
-        firstName: 'a',
-        lastName: 'b',
-        homeClinicId: '1',
-      }, user.id);
+      const patient = await createPatient(createMockPatient(123), user.id);
       expect(patient).toMatchObject({
         id: patient.id,
         athenaPatientId: 123,
@@ -43,6 +45,68 @@ describe('patient model', () => {
 
   });
 
+  describe('edit', () => {
+    it('should edit patient', async () => {
+      const user = await User.create({
+        email: 'care@care.com',
+        password: 'password1',
+        userRole,
+        homeClinicId: '1',
+      });
+      const patient = await createPatient(createMockPatient(123), user.id);
+      expect(patient).toMatchObject({
+        id: patient.id,
+        athenaPatientId: 123,
+      });
+      const patientEdit = await Patient.edit({
+        firstName: 'first',
+        lastName: 'last',
+        dateOfBirth: '02/02/1902',
+        zip: 12345,
+        gender: 'F',
+      }, patient.id);
+      expect(patientEdit).toMatchObject({
+        id: patient.id,
+        firstName: 'first',
+        lastName: 'last',
+        dateOfBirth: '02/02/1902',
+        zip: 12345,
+        gender: 'F',
+      });
+    });
+  });
+
+  describe('setup', () => {
+    let athenaApi: AthenaApi = null as any;
+
+    beforeEach(async () => {
+      athenaApi = await AthenaApi.get();
+      mockAthenaTokenFetch();
+    });
+
+    afterEach(async () => {
+      restoreAthenaFetch();
+    });
+
+    it('should setup patient', async () => {
+      const patient = await Patient.setup({
+        firstName: 'first',
+        lastName: 'last',
+        dateOfBirth: '02/02/1902',
+        zip: 12345,
+        gender: 'F',
+        homeClinicId: '1',
+      });
+      expect(patient).toMatchObject({
+        firstName: 'first',
+        lastName: 'last',
+        dateOfBirth: '02/02/1902',
+        zip: 12345,
+        gender: 'F',
+      });
+    });
+  });
+
   describe('patients', () => {
     beforeEach(async () => {
       const user = await User.create({
@@ -51,18 +115,8 @@ describe('patient model', () => {
         userRole,
         homeClinicId: '1',
       });
-      await Patient.create({
-        athenaPatientId: 123,
-        firstName: 'a',
-        lastName: 'b',
-        homeClinicId: '1',
-      }, user.id);
-      await Patient.create({
-        athenaPatientId: 234,
-        firstName: 'c',
-        lastName: 'd',
-        homeClinicId: '1',
-      }, user.id);
+      await createPatient(createMockPatient(123), user.id);
+      await createPatient(createMockPatient(234), user.id);
     });
 
     it('should fetch patients', async () => {

@@ -1,6 +1,6 @@
 import Db from '../../db';
+import { createMockPatient, createPatient } from '../../spec-helpers';
 import CareTeam from '../care-team';
-import Patient from '../patient';
 import User from '../user';
 
 const userRole = 'physician';
@@ -32,12 +32,7 @@ describe('care model', () => {
         homeClinicId: '1',
       });
       // auto-adds user1
-      const patient1 = await Patient.create({
-        athenaPatientId: 123,
-        firstName: 'first',
-        lastName: 'last',
-        homeClinicId: '1',
-      }, user1.id);
+      const patient1 = await createPatient(createMockPatient(123), user1.id);
 
       // Add 2nd user to patient 1 care team
       const careTeam = await CareTeam.addUserToCareTeam({
@@ -55,12 +50,7 @@ describe('care model', () => {
         userRole,
         homeClinicId: '1',
       });
-      const patient1 = await Patient.create({
-        athenaPatientId: 123,
-        firstName: 'first',
-        lastName: 'last',
-        homeClinicId: '1',
-      }, user.id);
+      const patient1 = await createPatient(createMockPatient(123), user.id);
 
       const careTeamResponse = await CareTeam.removeUserFromCareTeam({
         userId: user.id,
@@ -79,18 +69,8 @@ describe('care model', () => {
         userRole,
         homeClinicId: '1',
       });
-      await Patient.create({
-        athenaPatientId: 123,
-        firstName: 'first',
-        lastName: 'last',
-        homeClinicId: '1',
-      }, user.id);
-      await Patient.create({
-        athenaPatientId: 321,
-        firstName: 'first',
-        lastName: 'last',
-        homeClinicId: '1',
-      }, user.id);
+      await createPatient(createMockPatient(123), user.id);
+      await createPatient(createMockPatient(321), user.id);
 
       expect(await CareTeam.getForUser(user.id, { pageNumber: 1, pageSize: 1 })).toMatchObject({
         results: [{ athenaPatientId: 321 }],
@@ -112,12 +92,7 @@ describe('care model', () => {
         userRole,
         homeClinicId: '1',
       });
-      const patient = await Patient.create({
-        athenaPatientId: 123,
-        firstName: 'first',
-        lastName: 'last',
-        homeClinicId: '1',
-      }, user.id);
+      const patient = await createPatient(createMockPatient(123), user.id);
 
       expect(await CareTeam.getForPatient(patient.id)).toMatchObject([
         { id: user.id },

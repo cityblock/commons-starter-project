@@ -1,8 +1,8 @@
 import { graphql } from 'graphql';
 import { cloneDeep } from 'lodash';
 import Db from '../../db';
-import Patient from '../../models/patient';
 import User from '../../models/user';
+import { createMockPatient, createPatient } from '../../spec-helpers';
 import schema from '../make-executable-schema';
 
 describe('patient', () => {
@@ -25,12 +25,7 @@ describe('patient', () => {
       userRole,
       homeClinicId,
     });
-    patient = await Patient.create({
-      athenaPatientId: 1,
-      firstName: 'Constance',
-      lastName: 'Blanton',
-      homeClinicId,
-    }, user.id);
+    patient = await createPatient(createMockPatient(), user.id);
   });
 
   afterAll(async () => {
@@ -106,18 +101,8 @@ describe('patient', () => {
     });
 
     it('works if user has patients', async () => {
-      const patient1 = await Patient.create({
-        athenaPatientId: 123,
-        firstName: 'first',
-        lastName: 'last',
-        homeClinicId: '1',
-      }, user.id);
-      const patient2 = await Patient.create({
-        athenaPatientId: 321,
-        firstName: 'first',
-        lastName: 'last',
-        homeClinicId: '1',
-      }, user.id);
+      const patient1 = await createPatient(createMockPatient(123), user.id);
+      const patient2 = await createPatient(createMockPatient(321), user.id);
 
       const query = `{
         userPatientPanel(userId: "${user.id}", pageNumber: 0, pageSize: 10) {

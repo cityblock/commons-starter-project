@@ -1,16 +1,25 @@
-import { Model, RelationMappings } from 'objection';
+import { transaction, Model, RelationMappings } from 'objection';
 import * as uuid from 'uuid';
 import { IPaginatedResults, IPaginationOptions } from '../db';
-import CareTeam from './care-team';
 import Clinic from './clinic';
 
-interface ICreatePatient {
-  athenaPatientId: number;
+interface IEditPatient {
+  firstName?: string;
+  lastName?: string;
+  homeClinicId?: string;
+  dateOfBirth?: string;
+  zip?: number;
+  gender?: string;
+  athenaPatientId?: number;
+}
+
+export interface ISetupPatient {
   firstName: string;
   lastName: string;
+  gender: string;
+  zip: number;
   homeClinicId: string;
-  dob?: string;
-  sex?: 'M' | 'F';
+  dateOfBirth: string; // mm/dd/yy
 }
 
 type GetByOptions = 'athenaPatientId';
@@ -20,8 +29,9 @@ export default class Patient extends Model {
   id: string;
   firstName: string;
   lastName: string;
-  dob: string;
-  sex: 'M' | 'F';
+  dateOfBirth: string;
+  gender: string;
+  zip: number;
   createdAt: string;
   updatedAt: string;
   athenaPatientId: number;
@@ -34,15 +44,15 @@ export default class Patient extends Model {
 
   static jsonSchema = {
     type: 'object',
-    required: ['athenaPatientId', 'homeClinicId'],
     properties: {
       id: { type: 'string' },
       athenaPatientId: { type: 'number' },
       homeClinicId: { type: 'string' },
       firstName: { type: 'string' },
       lastName: { type: 'string' },
-      dob: { type: 'string' },
-      sex: { type: 'string' },
+      gender: { type: 'string' },
+      dateOfBirth: { type: 'string' },
+      zip: { type: 'number' },
     },
   };
 
@@ -126,10 +136,25 @@ export default class Patient extends Model {
     return patient;
   }
 
-  static async create(patient: ICreatePatient, userId: string): Promise<Patient> {
-    const instance = await this.query().insertAndFetch(patient);
-    await CareTeam.addUserToCareTeam({ userId, patientId: instance.id });
-    return instance;
+  static async setup(input: ISetupPatient) {
+    return this.query().insertAndFetch(input);
+  }
+
+  static async edit(patient: IEditPatient, patientId: string): Promise<Patient> {
+    return await this.query().updateAndFetchById(patientId, patient);
+  }
+
+  // limit accidentally editing the athenaPatientId by only allowing it explicitly here
+  static async addAthenaPatientId(athenaPatientId: number, patientId: string): Promise<Patient> {
+    return this
+      .query()
+      .updateAndFetchById(patientId, { athenaPatientId });
+  }
+
+  static async execWithTransaction(
+    callback: (boundModelClass: typeof Patient) => Promise<Patient>,
+  ) {
+    return await transaction(this, callback);
   }
 
 }

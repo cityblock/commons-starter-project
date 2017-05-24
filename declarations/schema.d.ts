@@ -39,9 +39,9 @@ declare module 'schema' {
     firstName: string | null;
     lastName: string | null;
     email: string | null;
-    userRole: IUserRoleEnum | null;
+    userRole: IUserRoleEnum;
     createdAt: any;
-    homeClinicId: string | null;
+    homeClinicId: string;
   }
 
   /*
@@ -340,6 +340,8 @@ declare module 'schema' {
     createClinic: IClinic | null;
     addUserToCareTeam: Array<IUser> | null;
     removeUserFromCareTeam: Array<IUser> | null;
+    appointmentStart: IAppointment | null;
+    appointmentEnd: IAppointmentEndResult | null;
     patientEdit: IPatient | null;
     patientSetup: IPatient | null;
   }
@@ -383,6 +385,53 @@ declare module 'schema' {
   interface ICareTeamInput {
     userId: string;
     patientId: string;
+  }
+
+  /*
+    description: params for starting an appointment
+  */
+  interface IAppointmentStartInput {
+    patientId: string;
+    appointmentTypeId?: number | null;
+  }
+
+  /*
+    description: Appointment
+  */
+  interface IAppointment {
+    athenaAppointmentId: string;
+    dateTime: string;
+    athenaDepartmentId: number;
+    status: IAppointmentStatusEnum;
+    athenaPatientId: number;
+    duration: number;
+    appointmentTypeId: number;
+    appointmentType: string;
+    athenaProviderId: number;
+    userId: string;
+    patientId: string;
+    clinicId: string;
+  }
+
+  /*
+    description: 
+  */
+  type IAppointmentStatusEnum = 'cancelled' | 'future' | 'open' | 'checkedIn' | 'checkedOut' | 'chargeEntered';
+
+  /*
+    description: params for ending an appointment
+  */
+  interface IAppointmentEndInput {
+    patientId: string;
+    appointmentId: string;
+    appointmentNote?: string | null;
+  }
+
+  /*
+    description: Appointment End Result
+  */
+  interface IAppointmentEndResult {
+    success: boolean;
   }
 
   /*

@@ -11,15 +11,24 @@ enum UserRole {
   admin
 }
 
+enum AppointmentStatus {
+  cancelled
+  future
+  open
+  checkedIn
+  checkedOut
+  chargeEntered
+}
+
 # User account model
 type User implements uniqueId {
   id: ID!
   firstName: String
   lastName: String
   email: String
-  userRole: UserRole
+  userRole: UserRole!
   createdAt: GraphQLDateTime!
-  homeClinicId: String
+  homeClinicId: String!
 }
 
 # The user account with an optional auth token
@@ -271,6 +280,27 @@ type PatientEncounterEdges {
   pageInfo: PageInfo!
 }
 
+# Appointment
+type Appointment {
+  athenaAppointmentId: String!
+  dateTime: String!
+  athenaDepartmentId: Int!
+  status: AppointmentStatus!
+  athenaPatientId: Int!
+  duration: Int!
+  appointmentTypeId: Int!
+  appointmentType: String!
+  athenaProviderId: Int!
+  userId: String!
+  patientId: String!
+  clinicId: String!
+}
+
+# Appointment End Result
+type AppointmentEndResult {
+  success: Boolean!
+}
+
 #
 # BEGIN INPUT FIELDS
 #
@@ -298,6 +328,19 @@ input CreateClinicInputType {
 input CareTeamInput {
   userId: String!
   patientId: String!
+}
+
+# params for starting an appointment
+input AppointmentStartInput {
+  patientId: String!
+  appointmentTypeId: Int
+}
+
+# params for ending an appointment
+input AppointmentEndInput {
+  patientId: String!
+  appointmentId: String!
+  appointmentNote: String
 }
 
 # params for editing a patient in the db
@@ -334,6 +377,12 @@ type RootMutationType {
 
   # Remove user from careTeam
   removeUserFromCareTeam(input: CareTeamInput): [User]
+
+  # Start an appointment
+  appointmentStart(input: AppointmentStartInput): Appointment
+
+  # End an appointment
+  appointmentEnd(input: AppointmentEndInput): AppointmentEndResult
 
   # Edit fields on patient stored in the db
   patientEdit(input: PatientEditInput): Patient

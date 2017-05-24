@@ -38,6 +38,30 @@ describe('user model', () => {
     });
   });
 
+  it('throws an error when getting an invalid id', async () => {
+    let error;
+
+    try {
+      await User.get('fakeId');
+    } catch (err) {
+      error = err;
+    }
+
+    expect(error).toMatch('No such user');
+  });
+
+  it('returns null if getBy is called without a search parameter', async () => {
+    const result = await User.getBy('email');
+
+    expect(result).toBeNull();
+  });
+
+  it('returns null if getBy does not return a user', async () => {
+    const result = await User.getBy('email', 'fake@email.nowhere');
+
+    expect(result).toBeNull();
+  });
+
   it('should not create a user when given an invalid email address', async () => {
     // once jest 20.0.0 ships, this should be updated to use the .rejects method
     let errors;

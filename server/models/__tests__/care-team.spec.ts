@@ -43,6 +43,29 @@ describe('care model', () => {
       expect(careTeam[1].id).toEqual(user2.id);
     });
 
+    it('throws an error if adding a non-existant user to a care team', async () => {
+      const user = await User.create({
+        email: 'care@care.com',
+        password: 'password1',
+        userRole,
+        homeClinicId: '1',
+      });
+      const patient = await createPatient(createMockPatient(123), user.id);
+
+      let error;
+
+      try {
+        await CareTeam.addUserToCareTeam({
+          userId: 'fakeUserId',
+          patientId: patient.id,
+        });
+      } catch (err) {
+        error = err.message;
+      }
+
+      expect(error).toMatch('user not found');
+    });
+
     it('can remove a user from a care team', async () => {
       const user = await User.create({
         email: 'care@care.com',

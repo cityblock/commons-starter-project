@@ -45,5 +45,21 @@ describe('clinic resolver', () => {
         departmentId: 1,
       });
     });
+
+    it('returns an error if a clinic with the same departmentId already exists', async () => {
+      await Clinic.create({ departmentId: 1, name: 'Center Zero' });
+      const mutation = `mutation {
+        createClinic(input: { departmentId: 1, name: "Center One" }) {
+          name
+          departmentId
+        }
+      }`;
+
+      const result = await graphql(schema, mutation, null, { userRole });
+
+      expect(cloneDeep(result.errors![0].message)).toMatch(
+        'Cannot create clinic: departmentId already exists for 1',
+      );
+    });
   });
 });

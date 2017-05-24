@@ -3,6 +3,7 @@ import { GraphQLDateTime, GraphQLEmail, GraphQLPassword } from 'graphql-custom-t
 import { makeExecutableSchema } from 'graphql-tools';
 import * as path from 'path';
 import config from '../config';
+import { appointmentEnd, appointmentStart } from './appointments-resolver';
 import {
   addUserToCareTeam,
   removeUserFromCareTeam,
@@ -42,6 +43,8 @@ const resolveFunctions = {
     patientEdit: editPatient,
     patientSetup: setupPatient,
     addUserToCareTeam,
+    appointmentStart,
+    appointmentEnd,
     removeUserFromCareTeam,
     createClinic,
     createUser,

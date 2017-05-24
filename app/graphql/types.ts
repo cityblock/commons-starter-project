@@ -33,7 +33,7 @@ export interface FullUserFragment {
   id: string;
   firstName: string | null;
   lastName: string | null;
-  userRole: UserRole | null;
+  userRole: UserRole;
   email: string | null;
 }
 /* tslint:enable */

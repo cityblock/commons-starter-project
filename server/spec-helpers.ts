@@ -1,5 +1,10 @@
 import * as nock from 'nock';
 import {
+  IAddNoteToAppointmentResponse,
+  IBookAppointmentResponse,
+  ICheckinAppointmentResponse,
+  ICheckoutAppointmentResponse,
+  IOpenAppointmentResponse,
   IPatientEncountersResponse,
   IPatientInfoAthena,
   IPatientMedicationsResponse,
@@ -381,15 +386,32 @@ export function mockAthenaPost(path: string, body: any) {
     .reply(200, body);
 }
 
+export function mockAthenaPostError(path: string, body: any, status: number) {
+  nock(config.ATHENA_API_BASE)
+    .post(path)
+    .reply(status, body);
+}
+
 export function mockAthenaPut(path: string, body: any) {
   nock(config.ATHENA_API_BASE)
     .put(path)
     .reply(200, body);
 }
 
+export function mockAthenaPutError(path: string, body: any, status: number) {
+  nock(config.ATHENA_API_BASE)
+    .put(path)
+    .reply(status, body);
+}
+
 type MockAthenaPatient = Pick<IPatientInfoAthena, 'patientid'> & Partial<IPatientInfoAthena>;
 type MockAthenaPatientMedications = Partial<IPatientMedicationsResponse>;
 type MockAthenaPatientEncounters = Partial<IPatientEncountersResponse>;
+type MockAthenaOpenAppointment = Partial<IOpenAppointmentResponse>;
+type MockAthenaBookAppointment = Partial<IBookAppointmentResponse>;
+type MockAthenaCheckinAppointment = Partial<ICheckinAppointmentResponse>;
+type MockAthenaCheckoutAppointment = Partial<ICheckoutAppointmentResponse>;
+type MockAthenaAddNoteToAppointment = Partial<IAddNoteToAppointmentResponse>;
 
 export function mockAthenaGetPatient(
   athenaPatientId: number, body: MockAthenaPatient, times = 1,
@@ -406,9 +428,10 @@ export function mockAthenaCreatePatient(athenaPatientId: number) {
 }
 
 export function mockAthenaCreatePatientError() {
-  nock(config.ATHENA_API_BASE)
-    .post(`/${config.ATHENA_PRACTICE_ID}/patients`)
-    .reply(500, { error: 'error!' });
+  mockAthenaPostError(
+    `/${config.ATHENA_PRACTICE_ID}/patients`,
+    { error: 'error!' },
+    500);
 }
 
 export function mockAthenaGetPatientMedications(body: MockAthenaPatientMedications) {
@@ -417,4 +440,70 @@ export function mockAthenaGetPatientMedications(body: MockAthenaPatientMedicatio
 
 export function mockAthenaGetPatientEncounters(body: MockAthenaPatientEncounters) {
   mockAthenaGet(`/${config.ATHENA_PRACTICE_ID}/chart/1/encounters`, body);
+}
+
+export function mockAthenaOpenAppointment(body: MockAthenaOpenAppointment) {
+  mockAthenaPost(`/${config.ATHENA_PRACTICE_ID}/appointments/open`, body);
+}
+
+export function mockAthenaOpenAppointmentError() {
+  mockAthenaPostError(
+    `/${config.ATHENA_PRACTICE_ID}/appointments/open`,
+    { detailedmessage: 'Appointment type ID is invalid.', error: 'The data provided is invalid.'},
+    400);
+}
+
+export function mockAthenaBookAppointment(appointmentId: string, body: MockAthenaBookAppointment) {
+  mockAthenaPut(`/${config.ATHENA_PRACTICE_ID}/appointments/${appointmentId}`, body);
+}
+
+export function mockAthenaBookAppointmentError(appointmentId: string) {
+  mockAthenaPutError(
+    `/${config.ATHENA_PRACTICE_ID}/appointments/${appointmentId}`,
+    {
+      detailedmessage: 'The appointment ID is already booked or is not marked as available.',
+      error: 'That appointment time was already booked or is not available for booking.',
+    }, 409);
+}
+
+export function mockAthenaCheckinAppointment(
+  appointmentId: string,
+  body: MockAthenaCheckinAppointment,
+) {
+  mockAthenaPost(`/${config.ATHENA_PRACTICE_ID}/appointments/${appointmentId}/checkin`, body);
+}
+
+export function mockAthenaCheckinAppointmentError(appointmentId: string) {
+  mockAthenaPostError(
+    `/${config.ATHENA_PRACTICE_ID}/appointments/${appointmentId}/checkin`,
+    {
+      detailedmessage: 'The appointment is either already canceled or checked in',
+      error: 'This appointment has already been checked in',
+    }, 404);
+}
+
+export function mockAthenaCheckoutAppointment(
+  appointmentId: string,
+  body: MockAthenaCheckoutAppointment,
+) {
+  mockAthenaPost(`/${config.ATHENA_PRACTICE_ID}/appointments/${appointmentId}/checkout`, body);
+}
+
+export function mockAthenaCheckoutAppointmentError(appointmentId: string) {
+  mockAthenaPostError(
+    `/${config.ATHENA_PRACTICE_ID}/appointments/${appointmentId}/checkout`,
+    { error: 'The appointment has already been checked-out' }, 400);
+}
+
+export function mockAthenaAddNoteToAppointment(
+  appointmentId: string,
+  body: MockAthenaAddNoteToAppointment,
+) {
+  mockAthenaPost(`/${config.ATHENA_PRACTICE_ID}/appointments/${appointmentId}/notes`, body);
+}
+
+export function mockAthenaAddNoteToAppointmentError(appointmentId: string) {
+  mockAthenaPostError(
+    `/${config.ATHENA_PRACTICE_ID}/appointments/${appointmentId}/notes`,
+    { error: 'The appointment is not available.' }, 404);
 }

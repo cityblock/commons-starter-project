@@ -2,6 +2,8 @@
 // They're based on https://developer.athenahealth.com/io-docs
 // Only types which appear in Athena should go here!
 
+export type AthenaAppointmentStatus = 'x' | 'f' | 'o' | '2' | '3' | '4';
+
 export interface ITokenResponse {
   access_token: string;
   expires_in: number; // in seconds
@@ -191,4 +193,48 @@ export interface IPatientEncountersResponse {
   next?: string;
   encounters: IPatientEncounterResource[];
   totalcount: number;
+}
+
+export interface IOpenAppointmentResponse {
+  appointmentids: {
+    [id: string]: string;
+  };
+  detailedmessage: string;
+  error: string;
+}
+
+export interface IBookAppointmentErrorResponse {
+  detailedmessage: string;
+  error: string;
+}
+
+export interface IBookAppointmentResponse {
+  date: string;
+  appointmentid: string;
+  starttime: string;
+  departmentid: string;
+  appointmentstatus: AthenaAppointmentStatus;
+  patientid: string;
+  duration: number;
+  appointmenttypeid: string;
+  appointmenttype: string;
+  providerid: string;
+  chargeentrynotrequired: boolean;
+  patientappointmenttypename: string;
+}
+
+export interface ICheckinAppointmentResponse {
+  success: string;
+  detailedmessage: string;
+  error: string;
+}
+
+export interface ICheckoutAppointmentResponse {
+  success: string;
+  error: string;
+}
+
+export interface IAddNoteToAppointmentResponse {
+  success: string;
+  error: string;
 }

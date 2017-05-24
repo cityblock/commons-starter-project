@@ -24,7 +24,7 @@ export async function createClinic(
   const clinic = await Clinic.getBy('departmentId', departmentId);
 
   if (clinic) {
-    throw new Error(`Cannot creat clinic: departmentId already exists for ${departmentId}`);
+    throw new Error(`Cannot create clinic: departmentId already exists for ${departmentId}`);
   } else {
     return await Clinic.create(input);
   }

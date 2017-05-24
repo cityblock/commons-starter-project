@@ -54,6 +54,15 @@ describe('user tests', () => {
         'Cannot query field "hashedPassword" on type "User".',
       );
     });
+
+    it('errors if a user cannot be found', async () => {
+      const query = `{ user(userId: "fakeId") { firstName } }`;
+      const result = await graphql(schema, query, null, { db, userRole});
+
+      expect(result.errors![0].message).toMatch(
+        'No such user: fakeId',
+      );
+    });
   });
 
   describe('resolve all users', () => {
@@ -179,6 +188,24 @@ describe('user tests', () => {
         firstName: 'Bertrand',
         lastName: 'Russell',
       });
+    });
+
+    it('errors if there is no logged in user', async () => {
+      const query = `{ currentUser { email, firstName, lastName } }`;
+      const result = await graphql(schema, query, null, { db, userRole });
+
+      expect(cloneDeep(result.errors![0].message)).toMatch(
+        'User not logged in',
+      );
+    });
+
+    it('errors if the logged in user does not exist', async () => {
+      const query = `{ currentUser { email, firstName, lastName } }`;
+      const result = await graphql(schema, query, null, { db, userId: 'fakeId', userRole });
+
+      expect(cloneDeep(result.errors![0].message)).toMatch(
+        'No such user: fakeId',
+      );
     });
   });
 

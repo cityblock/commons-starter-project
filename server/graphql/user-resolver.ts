@@ -60,12 +60,7 @@ export async function resolveUser(
 ) {
   await accessControls.isAllowed(userRole, 'view', 'user');
 
-  const user = await User.get(args.userId);
-  if (!user) {
-    throw new Error(`User not found for ${args.userId}`);
-  }
-
-  return user;
+  return await User.get(args.userId);
 }
 
 export async function resolveCurrentUser(
@@ -77,12 +72,7 @@ export async function resolveCurrentUser(
     throw new Error('User not logged in');
   }
 
-  const user = await User.get(userId);
-  if (!user) {
-    throw new Error(`User not found for ${userId}`);
-  }
-
-  return user;
+  return await User.get(userId);
 }
 
 export async function resolveUsers(

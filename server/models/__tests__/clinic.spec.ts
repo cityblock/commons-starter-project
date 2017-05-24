@@ -28,4 +28,22 @@ describe('clinic model', () => {
     expect(clinicByDepartmentId).toMatchObject(clinic);
     expect(clinicByName).toMatchObject(clinic);
   });
+
+  it('returns null if calling getBy without a comparison parameter', async () => {
+    const result = await Clinic.getBy('name');
+
+    expect(result).toBeNull();
+  });
+
+  it('throws an error when getting a clinic by an invalid id', async () => {
+    let error;
+
+    try {
+      await Clinic.get('fakeId');
+    } catch (err) {
+      error = err;
+    }
+
+    expect(error).toMatch('No such clinic');
+  });
 });

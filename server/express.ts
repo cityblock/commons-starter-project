@@ -13,7 +13,7 @@ import { checkAthenaApiHandler } from './handlers/pingdom/check-athena-api-handl
 import { checkPostgresHandler } from './handlers/pingdom/check-postgres-handler';
 import { checkRabbitHandler } from './handlers/pingdom/check-rabbit-handler';
 
-const checkAuth = (
+export const checkAuth = (
   username: string,
   password: string,
 ) => (

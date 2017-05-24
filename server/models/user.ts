@@ -21,6 +21,7 @@ export interface ICreateUser {
   firstName?: string;
   lastName?: string;
   userRole?: UserRole;
+  athenaProviderId?: number;
 }
 
 export type GetByOptions = 'email';
@@ -38,6 +39,7 @@ export default class User extends Model {
   hashedPassword: string;
   homeClinicId: string;
   homeClinic: Clinic;
+  athenaProviderId: number;
 
   static tableName = 'user';
 
@@ -60,6 +62,7 @@ export default class User extends Model {
       },
       hashedPassword: { type: 'string' },
       homeClinicId: { type: 'string' },
+      athenaProviderId: { type: 'number' },
     },
   };
 

@@ -4,6 +4,12 @@ import { stringify } from 'querystring';
 import config from '../../config';
 import { AthenaResponseError } from '../../lib/errors';
 import {
+  IAddNoteToAppointmentResponse,
+  IBookAppointmentErrorResponse,
+  IBookAppointmentResponse,
+  ICheckinAppointmentResponse,
+  ICheckoutAppointmentResponse,
+  IOpenAppointmentResponse,
   IPatientEncountersResponse,
   IPatientInfoAthena,
   IPatientMedicationsResponse,
@@ -130,6 +136,61 @@ export default class AthenaApi {
         limit,
         offset,
       });
+  }
+
+  public async openAppointment(
+    athenaDepartmentId: number,
+    athenaAppointmentTypeId: number,
+    athenaProviderId: number,
+    appointmentTime: string,
+    appointmentDate: string,
+  ): Promise<IOpenAppointmentResponse> {
+    return await this.fetch<IOpenAppointmentResponse>(
+      `/${config.ATHENA_PRACTICE_ID}/appointments/open`, {
+        departmentid: athenaDepartmentId,
+        appointmenttypeid: athenaAppointmentTypeId,
+        providerid: athenaProviderId,
+        appointmenttime: appointmentTime,
+        appointmentdate: appointmentDate,
+      }, 'POST');
+  }
+
+  public async bookAppointment(
+    athenaAppointmentId: string,
+    athenaPatientId: number,
+    athenaAppointmentTypeId: number,
+  ): Promise<IBookAppointmentResponse[] | IBookAppointmentErrorResponse> {
+    return await this.fetch<IBookAppointmentResponse[] | IBookAppointmentErrorResponse>(
+      `/${config.ATHENA_PRACTICE_ID}/appointments/${athenaAppointmentId}`, {
+        appointmenttypeid: athenaAppointmentTypeId,
+        ignoreschedulablepermission: 'true',
+        patientid: athenaPatientId,
+      }, 'PUT');
+  }
+
+  public async checkinAppointment(
+    athenaAppointmentId: string,
+  ): Promise<ICheckinAppointmentResponse> {
+    return await this.fetch<ICheckinAppointmentResponse>(
+      `/${config.ATHENA_PRACTICE_ID}/appointments/${athenaAppointmentId}/checkin`, {}, 'POST');
+  }
+
+  public async checkoutAppointment(
+    athenaAppointmentId: string,
+  ): Promise<ICheckoutAppointmentResponse> {
+    return await this.fetch<ICheckoutAppointmentResponse>(
+      `/${config.ATHENA_PRACTICE_ID}/appointments/${athenaAppointmentId}/checkout`, {}, 'POST');
+  }
+
+  public async addNoteToAppointment(
+    athenaAppointmentId: string,
+    noteText: string,
+  ): Promise<IAddNoteToAppointmentResponse> {
+    // Optionally, we can also pass in the displayonschedule=true param
+    return await this.fetch<IAddNoteToAppointmentResponse>(
+      `/${config.ATHENA_PRACTICE_ID}/appointments/${athenaAppointmentId}/notes`, {
+        notetext: noteText,
+      }, 'POST');
   }
 
   /**

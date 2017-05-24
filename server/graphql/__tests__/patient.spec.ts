@@ -99,7 +99,7 @@ describe('patient', () => {
         }
       }`;
 
-      mockAthenaCreatePatient(1);
+      mockAthenaCreatePatient(2);
 
       const result = await graphql(
         schema, query, null, { athenaApi, db, userRole, userId: user.id },

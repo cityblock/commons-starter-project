@@ -65,7 +65,8 @@ export default class CareTeam extends Model {
       .query()
       .where('patientId', patientId)
       .andWhere('deletedAt', null)
-      .eager('user');
+      .eager('user')
+      .orderBy('createdAt', 'asc');
     return careTeam.map((ct: CareTeam) => ct.user);
   }
 

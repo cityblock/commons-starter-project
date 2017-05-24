@@ -25,7 +25,7 @@ interface IPatientEditOptions {
   input: IPatientEditInput;
 }
 
-export async function editPatient(
+export async function patientEdit(
   source: any,
   { input }: IPatientEditOptions,
   { userRole, userId }: IContext,
@@ -40,7 +40,7 @@ interface IPatientSetupOptions {
   input: IPatientSetupInput;
 }
 
-export async function setupPatient(
+export async function patientSetup(
   source: any,
   { input }: IPatientSetupOptions,
   { athenaApi, userRole, userId }: IContext,

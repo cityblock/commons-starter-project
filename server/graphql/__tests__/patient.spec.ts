@@ -68,7 +68,7 @@ describe('patient', () => {
     });
   });
 
-  describe('editPatient', () => {
+  describe('patientEdit', () => {
     it('edits patient', async () => {
       const query = `mutation {
         patientEdit(input: { patientId: "${patient.id}", firstName: "first" }) {
@@ -84,7 +84,7 @@ describe('patient', () => {
     });
   });
 
-  describe('setupPatient', () => {
+  describe('patientSetup', () => {
     it('sets up patient', async () => {
       const query = `mutation {
         patientSetup(input: {
@@ -141,7 +141,6 @@ describe('patient', () => {
   });
 
   describe('resolvePatientHealthRecord', () => {
-
     it('returns patientHealthRecord', async () => {
       const query = `{
         patientHealthRecord(patientId: "${patient.id}") {
@@ -158,6 +157,5 @@ describe('patient', () => {
         lastName: 'Blanton',
       });
     });
-
   });
 });

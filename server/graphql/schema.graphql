@@ -301,6 +301,12 @@ type AppointmentEndResult {
   success: Boolean!
 }
 
+# Appointment Add Note Result
+type AppointmentAddNoteResult {
+  success: Boolean!
+  appointmentNote: String!
+}
+
 #
 # BEGIN INPUT FIELDS
 #
@@ -343,6 +349,13 @@ input AppointmentEndInput {
   appointmentNote: String
 }
 
+# params for adding a note to an appointment
+input AppointmentAddNoteInput {
+  patientId: String!
+  appointmentId: String!
+  appointmentNote: String!
+}
+
 # params for editing a patient in the db
 input PatientEditInput {
   patientId: String!
@@ -377,6 +390,9 @@ type RootMutationType {
 
   # Remove user from careTeam
   careTeamRemoveUser(input: CareTeamInput): [User]
+
+  # Add a note to an appointment
+  appointmentAddNote(input: AppointmentAddNoteInput): AppointmentAddNoteResult
 
   # Start an appointment
   appointmentStart(input: AppointmentStartInput): Appointment

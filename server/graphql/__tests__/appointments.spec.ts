@@ -310,4 +310,56 @@ describe('patient encounters', () => {
       });
     });
   });
+
+  describe('adding a note to an appointment', () => {
+    describe('when the note is successfully added', () => {
+      it('returns a successful response', async () => {
+        const appointmentId = '12345';
+
+        const mutation = `mutation {
+          appointmentAddNote(input: {
+            patientId: "${patient.id}", appointmentId: "${appointmentId}", appointmentNote: "note"
+          }) {
+            success
+            appointmentNote
+          }
+        }`;
+
+        mockAthenaAddNoteToAppointment(appointmentId, { success: 'true' });
+
+        const result = await graphql(schema, mutation, null, {
+          athenaApi, db, userRole, userId: user.id,
+        });
+
+        expect(cloneDeep(result.data!.appointmentAddNote)).toMatchObject({
+          success: true,
+          appointmentNote: 'note',
+        });
+      });
+    });
+
+    describe('when the note is not successfully added', () => {
+      it('returns an error response', async () => {
+        const appointmentId = '12345';
+
+        const mutation = `mutation {
+          appointmentAddNote(input: {
+            patientId: "${patient.id}", appointmentId: "${appointmentId}", appointmentNote: "note"
+          }) {
+            success
+          }
+        }`;
+
+        mockAthenaAddNoteToAppointmentError(appointmentId);
+
+        const result = await graphql(schema, mutation, null, {
+          athenaApi, db, userRole, userId: user.id,
+        });
+
+        expect(cloneDeep(result.errors![0].message)).toMatch(
+          'The appointment is not available.',
+        );
+      });
+    });
+  });
 });

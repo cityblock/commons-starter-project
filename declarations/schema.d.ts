@@ -340,6 +340,7 @@ declare module 'schema' {
     clinicCreate: IClinic | null;
     careTeamAddUser: Array<IUser> | null;
     careTeamRemoveUser: Array<IUser> | null;
+    appointmentAddNote: IAppointmentAddNoteResult | null;
     appointmentStart: IAppointment | null;
     appointmentEnd: IAppointmentEndResult | null;
     patientEdit: IPatient | null;
@@ -385,6 +386,23 @@ declare module 'schema' {
   interface ICareTeamInput {
     userId: string;
     patientId: string;
+  }
+
+  /*
+    description: params for adding a note to an appointment
+  */
+  interface IAppointmentAddNoteInput {
+    patientId: string;
+    appointmentId: string;
+    appointmentNote: string;
+  }
+
+  /*
+    description: Appointment Add Note Result
+  */
+  interface IAppointmentAddNoteResult {
+    success: boolean;
+    appointmentNote: string;
   }
 
   /*

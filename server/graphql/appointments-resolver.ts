@@ -1,6 +1,8 @@
 import * as moment from 'moment';
 import {
   IAppointment,
+  IAppointmentAddNoteInput,
+  IAppointmentAddNoteResult,
   IAppointmentEndInput,
   IAppointmentEndResult,
   IAppointmentStartInput,
@@ -19,6 +21,10 @@ interface IAppointmentStartArgs {
 
 interface IAppointmentEndArgs {
   input: IAppointmentEndInput;
+}
+
+interface IAppointmentAddNoteArgs {
+  input: IAppointmentAddNoteInput;
 }
 
 export async function appointmentStart(
@@ -73,18 +79,35 @@ export async function appointmentStart(
 export async function appointmentEnd(
   root: any,
   { input }: IAppointmentEndArgs,
-  { userRole, athenaApi, userId }: IContext,
+  context: IContext,
 ): Promise<IAppointmentEndResult> {
+  const { userRole, athenaApi, userId } = context;
   const { patientId, appointmentId, appointmentNote } = input;
   await accessControls.isAllowedForUser(userRole, 'edit', 'appointment', patientId, userId);
 
   if (appointmentNote) {
-    await athenaApi.addNoteToAppointment(appointmentId, appointmentNote);
+    await appointmentAddNote(root, { input: input as IAppointmentAddNoteInput }, context);
   }
 
   const checkoutAppointmentResponse = await athenaApi.checkoutAppointment(appointmentId);
 
   return {
     success: !!checkoutAppointmentResponse.success,
+  };
+}
+
+export async function appointmentAddNote(
+  root: any,
+  { input }: IAppointmentAddNoteArgs,
+  { userRole, athenaApi, userId }: IContext,
+): Promise<IAppointmentAddNoteResult> {
+  const { patientId, appointmentId, appointmentNote } = input;
+  await accessControls.isAllowedForUser(userRole, 'edit', 'appointment', patientId, userId);
+
+  const result = await athenaApi.addNoteToAppointment(appointmentId, appointmentNote);
+
+  return {
+    success: !!result.success,
+    appointmentNote,
   };
 }

@@ -3,7 +3,7 @@ import { GraphQLDateTime, GraphQLEmail, GraphQLPassword } from 'graphql-custom-t
 import { makeExecutableSchema } from 'graphql-tools';
 import * as path from 'path';
 import config from '../config';
-import { appointmentEnd, appointmentStart } from './appointments-resolver';
+import { appointmentAddNote, appointmentEnd, appointmentStart } from './appointments-resolver';
 import {
   careTeamAddUser,
   careTeamRemoveUser,
@@ -14,10 +14,10 @@ import { clinicCreate, resolveClinic } from './clinic-resolver';
 import { resolvePatientEncounters } from './patient-encounters-resolver';
 import { resolvePatientMedications } from './patient-medications-resolver';
 import {
-  editPatient,
+  patientEdit,
+  patientSetup,
   resolvePatient,
   resolvePatientHealthRecord,
-  setupPatient,
 } from './patient-resolver';
 import {
   resolveCurrentUser,
@@ -46,13 +46,14 @@ const resolveFunctions = {
     userPatientPanel: resolveUserPatientPanel,
   },
   RootMutationType: {
-    patientEdit: editPatient,
-    patientSetup: setupPatient,
-    careTeamAddUser,
-    careTeamRemoveUser,
+    appointmentAddNote,
     appointmentStart,
     appointmentEnd,
+    careTeamAddUser,
+    careTeamRemoveUser,
     clinicCreate,
+    patientEdit,
+    patientSetup,
     userCreate,
     userLogin,
   },

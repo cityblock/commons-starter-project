@@ -1,21 +1,19 @@
+import { IClinicCreateInput } from 'schema';
 import Clinic from '../models/clinic';
 import accessControls from './shared/access-controls';
 import { IContext } from './shared/utils';
 
-interface ICreateClinicArgs {
-  input: {
-    departmentId: number;
-    name: string;
-  };
+interface IClinicCreateArgs {
+  input: IClinicCreateInput;
 }
 
 interface IResolveClinicOptions {
   clinicId: string;
 }
 
-export async function createClinic(
+export async function clinicCreate(
   root: any,
-  { input }: ICreateClinicArgs,
+  { input }: IClinicCreateArgs,
   { userRole }: IContext,
 ) {
   const { departmentId } = input;

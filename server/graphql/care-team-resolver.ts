@@ -1,4 +1,4 @@
-import { IPatientEdges, IPatientNode } from 'schema';
+import { ICareTeamInput, IPatientEdges, IPatientNode } from 'schema';
 import { IPaginationOptions } from '../db';
 import { convertUser } from '../graphql/shared/converter';
 import CareTeam from '../models/care-team';
@@ -10,17 +10,14 @@ interface IQuery {
 }
 
 interface ICareTeamOptions {
-  input: {
-    userId: string;
-    patientId: string;
-  };
+  input: ICareTeamInput;
 }
 
 interface IUserPatientPanelOptions extends IPaginationOptions {
   userId: string;
 }
 
-export async function addUserToCareTeam(
+export async function careTeamAddUser(
   source: any, { input }: ICareTeamOptions, context: IContext,
 ) {
   const { userRole } = context;
@@ -30,7 +27,7 @@ export async function addUserToCareTeam(
   return await CareTeam.addUserToCareTeam({ userId, patientId });
 }
 
-export async function removeUserFromCareTeam(
+export async function careTeamRemoveUser(
   source: any, { input }: ICareTeamOptions, context: IContext,
 ) {
   const { userRole } = context;

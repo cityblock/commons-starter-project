@@ -306,20 +306,20 @@ type AppointmentEndResult {
 #
 
 # params for creating a user
-input CreateUserInputType {
+input UserCreateInput {
   email: GraphQLEmail!
   password: GraphQLPassword!
   homeClinicId: String!
 }
 
 # params for logging in a user
-input LoginUserInputType {
+input UserLoginInput {
   email: String!
   password: String!
 }
 
 # params for creating a clinic
-input CreateClinicInputType {
+input ClinicCreateInput {
   departmentId: Int!
   name: String!
 }
@@ -364,19 +364,19 @@ input PatientSetupInput {
 
 type RootMutationType {
   # Create a new user
-  createUser(input: CreateUserInputType): UserWithAuthToken
+  userCreate(input: UserCreateInput): UserWithAuthToken
 
   # Login user
-  login(input: LoginUserInputType): UserWithAuthToken
+  userLogin(input: UserLoginInput): UserWithAuthToken
 
   # Create a new clinic
-  createClinic(input: CreateClinicInputType): Clinic
+  clinicCreate(input: ClinicCreateInput): Clinic
 
   # Add user to care careTeam
-  addUserToCareTeam(input: CareTeamInput): [User]
+  careTeamAddUser(input: CareTeamInput): [User]
 
   # Remove user from careTeam
-  removeUserFromCareTeam(input: CareTeamInput): [User]
+  careTeamRemoveUser(input: CareTeamInput): [User]
 
   # Start an appointment
   appointmentStart(input: AppointmentStartInput): Appointment

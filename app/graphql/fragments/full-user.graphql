@@ -4,4 +4,5 @@ fragment FullUser on User {
   lastName
   userRole
   email
+  homeClinicId
 }

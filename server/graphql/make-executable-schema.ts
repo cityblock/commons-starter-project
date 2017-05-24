@@ -5,12 +5,12 @@ import * as path from 'path';
 import config from '../config';
 import { appointmentEnd, appointmentStart } from './appointments-resolver';
 import {
-  addUserToCareTeam,
-  removeUserFromCareTeam,
+  careTeamAddUser,
+  careTeamRemoveUser,
   resolvePatientCareTeam,
   resolveUserPatientPanel,
 } from './care-team-resolver';
-import { createClinic, resolveClinic } from './clinic-resolver';
+import { clinicCreate, resolveClinic } from './clinic-resolver';
 import { resolvePatientEncounters } from './patient-encounters-resolver';
 import { resolvePatientMedications } from './patient-medications-resolver';
 import {
@@ -19,7 +19,13 @@ import {
   resolvePatientHealthRecord,
   setupPatient,
 } from './patient-resolver';
-import { createUser, login, resolveCurrentUser, resolveUser, resolveUsers } from './user-resolver';
+import {
+  resolveCurrentUser,
+  resolveUser,
+  resolveUsers,
+  userCreate,
+  userLogin,
+} from './user-resolver';
 
 const schemaGql = fs.readFileSync(path.join(__dirname, 'schema.graphql'), 'utf-8');
 
@@ -42,13 +48,13 @@ const resolveFunctions = {
   RootMutationType: {
     patientEdit: editPatient,
     patientSetup: setupPatient,
-    addUserToCareTeam,
+    careTeamAddUser,
+    careTeamRemoveUser,
     appointmentStart,
     appointmentEnd,
-    removeUserFromCareTeam,
-    createClinic,
-    createUser,
-    login,
+    clinicCreate,
+    userCreate,
+    userLogin,
   },
 };
 

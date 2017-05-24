@@ -41,12 +41,12 @@ describe('patient', () => {
         homeClinicId,
       });
       const mutation = `mutation {
-        addUserToCareTeam(input: { userId: "${user2.id}", patientId: "${patient.id}" }) {
+        careTeamAddUser(input: { userId: "${user2.id}", patientId: "${patient.id}" }) {
           id
         }
       }`;
       const result = await graphql(schema, mutation, null, { db, userRole });
-      const careTeamUserIds = cloneDeep(result.data!.addUserToCareTeam)
+      const careTeamUserIds = cloneDeep(result.data!.careTeamAddUser)
         .map((u: any) => u.id);
 
       expect(careTeamUserIds).toContain(user.id);
@@ -55,12 +55,12 @@ describe('patient', () => {
 
     it('remove user from care team', async () => {
       const mutation = `mutation {
-        removeUserFromCareTeam(input: { userId: "${user.id}", patientId: "${patient.id}" }) {
+        careTeamRemoveUser(input: { userId: "${user.id}", patientId: "${patient.id}" }) {
           id
         }
       }`;
       const result = await graphql(schema, mutation, null, { db, userRole });
-      const careTeamUserIds = cloneDeep(result.data!.removeUserFromCareTeam)
+      const careTeamUserIds = cloneDeep(result.data!.careTeamRemoveUser)
         .map((u: any) => u.id);
 
       expect(careTeamUserIds).not.toContain(user.id);
@@ -126,6 +126,5 @@ describe('patient', () => {
         }],
       });
     });
-
   });
 });

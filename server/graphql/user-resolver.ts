@@ -1,15 +1,11 @@
 import { compare } from 'bcrypt';
-import { IUserEdges, IUserNode } from 'schema';
+import { IUserCreateInput, IUserEdges, IUserLoginInput, IUserNode } from 'schema';
 import User from '../models/user';
 import accessControls from './shared/access-controls';
 import { formatRelayEdge, signJwt, IContext } from './shared/utils';
 
-interface ICreateUserArgs {
-  input: {
-    email: string;
-    password: string;
-    homeClinicId: string;
-  };
+interface IUserCreateArgs {
+  input: IUserCreateInput;
 }
 
 interface IResolveUserOptions {
@@ -17,10 +13,7 @@ interface IResolveUserOptions {
 }
 
 interface IUserLoginOptions {
-  input: {
-    email: string;
-    password: string;
-  };
+  input: IUserLoginInput;
 }
 
 interface IUsersFilterOptions {
@@ -28,7 +21,7 @@ interface IUsersFilterOptions {
   pageSize: number;
 }
 
-export async function createUser(root: any, { input }: ICreateUserArgs, context: IContext) {
+export async function userCreate(root: any, { input }: IUserCreateArgs, context: IContext) {
   const { userRole } = context;
   const { email, password, homeClinicId } = input;
   await accessControls.isAllowed(userRole, 'create', 'user');
@@ -100,7 +93,7 @@ export async function resolveUsers(
 
 // disabling isAllowed check for login endpoint so users can log in
 /* tslint:disable check-is-allowed */
-export async function login(root: any, { input }: IUserLoginOptions, { db }: IContext) {
+export async function userLogin(root: any, { input }: IUserLoginOptions, { db }: IContext) {
   const { email, password } = input;
 
   const user = await User.getBy('email', email);

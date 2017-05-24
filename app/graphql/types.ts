@@ -22,7 +22,7 @@ export interface LogInUserMutationVariables {
 
 export interface LogInUserMutation {
   // Login user
-  login: {
+  userLogin: {
     // The auth token to allow for quick login. JWT passed back in via headers for further requests
     authToken: string | null,
     user: FullUserFragment,
@@ -35,5 +35,6 @@ export interface FullUserFragment {
   lastName: string | null;
   userRole: UserRole;
   email: string | null;
+  homeClinicId: string;
 }
 /* tslint:enable */

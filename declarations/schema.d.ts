@@ -335,11 +335,11 @@ declare module 'schema' {
     description: 
   */
   interface IRootMutationType {
-    createUser: IUserWithAuthToken | null;
-    login: IUserWithAuthToken | null;
-    createClinic: IClinic | null;
-    addUserToCareTeam: Array<IUser> | null;
-    removeUserFromCareTeam: Array<IUser> | null;
+    userCreate: IUserWithAuthToken | null;
+    userLogin: IUserWithAuthToken | null;
+    clinicCreate: IClinic | null;
+    careTeamAddUser: Array<IUser> | null;
+    careTeamRemoveUser: Array<IUser> | null;
     appointmentStart: IAppointment | null;
     appointmentEnd: IAppointmentEndResult | null;
     patientEdit: IPatient | null;
@@ -349,7 +349,7 @@ declare module 'schema' {
   /*
     description: params for creating a user
   */
-  interface ICreateUserInputType {
+  interface IUserCreateInput {
     email: any;
     password: any;
     homeClinicId: string;
@@ -366,7 +366,7 @@ declare module 'schema' {
   /*
     description: params for logging in a user
   */
-  interface ILoginUserInputType {
+  interface IUserLoginInput {
     email: string;
     password: string;
   }
@@ -374,7 +374,7 @@ declare module 'schema' {
   /*
     description: params for creating a clinic
   */
-  interface ICreateClinicInputType {
+  interface IClinicCreateInput {
     departmentId: number;
     name: string;
   }

@@ -209,7 +209,7 @@ describe('user tests', () => {
     });
   });
 
-  describe('login user', () => {
+  describe('userLogin', () => {
     it('logs in user and returns user with token', async () => {
       const user = await User.create({
         email: 'a@b.com',
@@ -221,13 +221,13 @@ describe('user tests', () => {
       });
       expect(user.lastLoginAt).toBeNull();
       const mutation = `mutation {
-        login(input: { email: "a@b.com", password: "password1" }) {
+        userLogin(input: { email: "a@b.com", password: "password1" }) {
           authToken
           user { firstName, lastName }
         }
       }`;
       const result = await graphql(schema, mutation, null, { db, userRole });
-      expect(cloneDeep(result.data!.login.user)).toMatchObject({
+      expect(cloneDeep(result.data!.userLogin.user)).toMatchObject({
         firstName: 'Bertrand',
         lastName: 'Russell',
       });
@@ -244,7 +244,7 @@ describe('user tests', () => {
       });
       expect(user.lastLoginAt).toBeNull();
       const mutation = `mutation {
-        login(input: { email: "a@b.com", password: "password1" }) {
+        userLogin(input: { email: "a@b.com", password: "password1" }) {
           authToken
         }
       }`;
@@ -256,7 +256,7 @@ describe('user tests', () => {
 
     it('errors if no user', async () => {
       const mutation = `mutation {
-        login(input: { email: "not-a-user@foo.com", password: "password1" }) {
+        userLogin(input: { email: "not-a-user@foo.com", password: "password1" }) {
           authToken
           user { firstName, lastName }
         }
@@ -277,7 +277,7 @@ describe('user tests', () => {
         homeClinicId,
       });
       const mutation = `mutation {
-        login(input: { email: "a@b.com", password: "incorrect!" }) {
+        userLogin(input: { email: "a@b.com", password: "incorrect!" }) {
           authToken
           user { firstName, lastName }
         }
@@ -287,23 +287,23 @@ describe('user tests', () => {
     });
   });
 
-  describe('create user', () => {
+  describe('userCreate', () => {
     it('creates a new user', async () => {
       const mutation = `mutation {
-        createUser(input: { email: "a@b.com", password: "c0000lp3rd!", homeClinicId: "1" }) {
+        userCreate(input: { email: "a@b.com", password: "c0000lp3rd!", homeClinicId: "1" }) {
           authToken
           user { email }
         }
       }`;
       const result = await graphql(schema, mutation, null, { db, userRole });
-      expect(cloneDeep(result.data!.createUser.user)).toMatchObject({
+      expect(cloneDeep(result.data!.userCreate.user)).toMatchObject({
         email: 'a@b.com',
       });
     });
 
     it('errors if password to short', async () => {
       const mutation = `mutation {
-        createUser(input: { email: "a@b.com", password: "c", homeClinicId: "1" }) {
+        userCreate(input: { email: "a@b.com", password: "c", homeClinicId: "1" }) {
         authToken
         user { email }
       } }`;
@@ -321,7 +321,7 @@ describe('user tests', () => {
         homeClinicId,
       });
       const mutation = `mutation {
-        createUser(input: { email: "a@b.com", password: "c0000lp3rd!", homeClinicId: "1" }) {
+        userCreate(input: { email: "a@b.com", password: "c0000lp3rd!", homeClinicId: "1" }) {
         authToken
         user { email }
       } }`;

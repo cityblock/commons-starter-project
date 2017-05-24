@@ -30,17 +30,17 @@ describe('clinic resolver', () => {
     });
   });
 
-  describe('create clinic', () => {
+  describe('clinicCreate', () => {
     it('creates a clinic', async () => {
       const mutation = `mutation {
-        createClinic(input: { departmentId: 1, name: "Center Zero" }) {
+        clinicCreate(input: { departmentId: 1, name: "Center Zero" }) {
           name
           departmentId
         }
       }`;
       const result = await graphql(schema, mutation, null, { userRole });
 
-      expect(cloneDeep(result.data!.createClinic)).toMatchObject({
+      expect(cloneDeep(result.data!.clinicCreate)).toMatchObject({
         name: 'Center Zero',
         departmentId: 1,
       });
@@ -49,7 +49,7 @@ describe('clinic resolver', () => {
     it('returns an error if a clinic with the same departmentId already exists', async () => {
       await Clinic.create({ departmentId: 1, name: 'Center Zero' });
       const mutation = `mutation {
-        createClinic(input: { departmentId: 1, name: "Center One" }) {
+        clinicCreate(input: { departmentId: 1, name: "Center One" }) {
           name
           departmentId
         }

@@ -15,6 +15,7 @@ import { resolvePatientEncounters } from './patient-encounters-resolver';
 import { resolvePatientMedications } from './patient-medications-resolver';
 import {
   patientEdit,
+  patientHealthRecordEdit,
   patientSetup,
   resolvePatient,
   resolvePatientHealthRecord,
@@ -46,6 +47,7 @@ const resolveFunctions = {
     userPatientPanel: resolveUserPatientPanel,
   },
   RootMutationType: {
+    patientHealthRecordEdit,
     appointmentAddNote,
     appointmentStart,
     appointmentEnd,

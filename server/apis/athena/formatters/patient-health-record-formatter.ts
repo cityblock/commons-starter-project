@@ -1,4 +1,5 @@
 import { IPatientHealthRecord } from 'schema';
+import { IAthenaEditPatient } from '../index';
 import { IPatientInfoAthena } from '../types';
 
 // Note: This drops some fields returned by athena
@@ -12,7 +13,7 @@ export const formatPatientHealthRecord = (
   preferredName: p.preferredname,
   raceName: p.racename,
   dateOfBirth: p.dob,
-  sex: p.sex,
+  gender: p.sex,
   race: p.race,
   ethnicityCode: p.ethnicitycode,
   status: p.status,
@@ -75,4 +76,42 @@ export const formatPatientHealthRecord = (
     povertyLevelIncomeRangeDeclined: p.povertylevelincomerangedeclined,
     povertyLevelFamilySizeDeclined: p.povertylevelfamilysizedeclined,
   },
+});
+
+export const formatEditPatientHealthRecordOptions = (
+  options: IAthenaEditPatient,
+): Partial<IPatientInfoAthena> => ({
+  firstname: options.firstName,
+  lastname: options.lastName,
+  sex: options.gender,
+  zip: String(options.zip),
+  dob: options.dateOfBirth,
+
+  suffix: options.suffix,
+  preferredname: options.preferredName,
+  racename: options.racename,
+  race: options.race,
+  ethnicitycode: options.ethnicityCode,
+  status: options.status,
+  ssn: options.ssn,
+  homebound: options.homebound,
+  language6392code: options.language6392code,
+  maritalstatus: options.maritalStatus,
+  maritalstatusname: options.maritalStatusName,
+
+  email: options.email,
+  homephone: options.homePhone,
+  mobilephone: options.mobilePhone,
+  consenttocall: options.consentToCall,
+  consenttotext: options.consentToText,
+
+  city: options.city,
+  address1: options.address1,
+  countrycode: options.countryCode,
+  countrycode3166: options.countryCode3166,
+  state: options.state,
+
+  povertylevelincomedeclined: options.povertyLevelIncomeDeclined,
+  povertylevelincomerangedeclined: options.povertyLevelIncomerangeDeclined,
+  povertylevelfamilysizedeclined: options.povertyLevelFamilySizeDeclined,
 });

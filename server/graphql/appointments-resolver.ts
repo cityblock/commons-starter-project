@@ -49,7 +49,7 @@ export async function appointmentStart(
   const appointmentTime = now.format('HH:mm');
 
   // create appointment slot
-  const openAppointmentResponse = await athenaApi.openAppointment(
+  const openAppointmentResponse = await athenaApi.appointmentsGetOpen(
     clinic.departmentId,
     appointmentTypeId || 2, // TODO: update this default
     user.athenaProviderId || 1, // TODO: blow up if there is no providerId for a user
@@ -60,14 +60,14 @@ export async function appointmentStart(
   const appointmentId = getAppointmentId(openAppointmentResponse);
 
   // book appointment for patient
-  const bookAppointmentResponse = await athenaApi.bookAppointment(
+  const bookAppointmentResponse = await athenaApi.appointmentBook(
     appointmentId,
     patient.athenaPatientId,
     appointmentTypeId || 2, // TODO: update this default
   );
 
   // checkin patient for appointment
-  await athenaApi.checkinAppointment(appointmentId);
+  await athenaApi.appointmentCheckin(appointmentId);
 
   return formatAppointment(
     (bookAppointmentResponse as IBookAppointmentResponse[])[0],
@@ -89,7 +89,7 @@ export async function appointmentEnd(
     await appointmentAddNote(root, { input: input as IAppointmentAddNoteInput }, context);
   }
 
-  const checkoutAppointmentResponse = await athenaApi.checkoutAppointment(appointmentId);
+  const checkoutAppointmentResponse = await athenaApi.appointmentCheckout(appointmentId);
 
   return {
     success: !!checkoutAppointmentResponse.success,
@@ -104,7 +104,7 @@ export async function appointmentAddNote(
   const { patientId, appointmentId, appointmentNote } = input;
   await accessControls.isAllowedForUser(userRole, 'edit', 'appointment', patientId, userId);
 
-  const result = await athenaApi.addNoteToAppointment(appointmentId, appointmentNote);
+  const result = await athenaApi.appointmentAddNote(appointmentId, appointmentNote);
 
   return {
     success: !!result.success,

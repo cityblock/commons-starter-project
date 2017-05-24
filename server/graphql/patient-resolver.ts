@@ -1,5 +1,6 @@
 import { isNil, omitBy } from 'lodash';
 import { IPatient, IPatientEditInput, IPatientHealthRecord, IPatientSetupInput } from 'schema';
+import { IAthenaEditPatient } from '../apis/athena';
 import { formatPatientHealthRecord } from '../apis/athena/formatters';
 import CareTeam from '../models/care-team';
 import HomeClinic from '../models/clinic';
@@ -53,7 +54,7 @@ export async function patientSetup(
   const result = await Patient.execWithTransaction(async patientWithTransaction => {
     const patient = await patientWithTransaction.setup(input);
     const department = await HomeClinic.get(input.homeClinicId);
-    const athenaPatient = await athenaApi.createPatient({
+    const athenaPatient = await athenaApi.patientCreate({
       firstName: input.firstName,
       lastName: input.lastName,
       gender: input.gender,
@@ -83,4 +84,27 @@ export async function resolvePatientHealthRecord(
   const athenaPatient = await athenaApi.getPatient(athenaPatientId);
 
   return await formatPatientHealthRecord(athenaPatient, patientId);
+}
+
+interface IEditPatientRequiredFields {
+  patientId: string;
+}
+
+interface IPatientHealthRecordEditOptions {
+  input: Pick<IEditPatientRequiredFields, 'patientId'> & IAthenaEditPatient;
+}
+
+export async function patientHealthRecordEdit(
+  root: any,
+  { input }: IPatientHealthRecordEditOptions,
+  { athenaApi, userRole, userId }: IContext,
+): Promise<IPatientHealthRecord> {
+  await accessControls.isAllowedForUser(userRole, 'edit', 'patient', input.patientId, userId);
+
+  const athenaPatientId = await Patient.getAthenaPatientId(input.patientId);
+
+  await athenaApi.patientEdit(input, athenaPatientId);
+  const patient = await athenaApi.getPatient(athenaPatientId);
+
+  return formatPatientHealthRecord(patient, input.patientId);
 }

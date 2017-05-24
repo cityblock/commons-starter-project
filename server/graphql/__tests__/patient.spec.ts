@@ -11,6 +11,7 @@ import {
   createPatient,
   mockAthenaCreatePatient,
   mockAthenaCreatePatientError,
+  mockAthenaEditPatient,
   mockAthenaGetPatient,
   mockAthenaTokenFetch,
   restoreAthenaFetch,
@@ -157,5 +158,39 @@ describe('patient', () => {
         lastName: 'Blanton',
       });
     });
+  });
+
+  describe('editPatientHealthRecord', () => {
+
+    it('edits patientHealthRecord', async () => {
+      const query = `mutation {
+        patientHealthRecordEdit(input: {
+          firstName: "first",
+          lastName: "last",
+          gender: "F",
+          preferredName: "cool name",
+          patientId: "${patient.id}",
+        }) {
+          id, firstName, lastName, gender, preferredName,
+        }
+      }`;
+
+      const mockPatient = createMockAthenaPatient(1, 'first', 'last');
+      mockPatient.preferredname = 'cool name';
+      mockAthenaEditPatient(1);
+      mockAthenaGetPatient(1, mockPatient);
+
+      const result = await graphql(
+        schema, query, null, { athenaApi, db, userRole, userId: user.id },
+      );
+      expect(cloneDeep(result.data!.patientHealthRecordEdit)).toMatchObject({
+        id: patient.id,
+        firstName: 'first',
+        lastName: 'last',
+        gender: 'F',
+        preferredName: 'cool name',
+      });
+    });
+
   });
 });

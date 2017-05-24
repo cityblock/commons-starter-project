@@ -27,7 +27,7 @@ export async function resolvePatientEncounters(
     offset = (pageNumber - 1) * limit;
   }
 
-  const encountersResponse = await athenaApi.getPatientEncounters(
+  const encountersResponse = await athenaApi.patientEncountersGet(
     patient.athenaPatientId, clinic.departmentId, limit, offset,
   );
 

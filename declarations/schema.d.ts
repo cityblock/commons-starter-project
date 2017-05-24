@@ -123,7 +123,7 @@ declare module 'schema' {
     firstName: string | null;
     lastName: string | null;
     dateOfBirth: string | null;
-    sex: string | null;
+    gender: string | null;
     suffix: string | null;
     preferredName: string | null;
     raceName: string | null;
@@ -344,6 +344,7 @@ declare module 'schema' {
     appointmentStart: IAppointment | null;
     appointmentEnd: IAppointmentEndResult | null;
     patientEdit: IPatient | null;
+    patientHealthRecordEdit: IPatientHealthRecord | null;
     patientSetup: IPatient | null;
   }
 
@@ -464,6 +465,42 @@ declare module 'schema' {
   }
 
   /*
+    description: params for editing a patient health record in athena
+  */
+  interface IPatientHealthRecordEditInput {
+    patientId: string;
+    firstName?: string | null;
+    lastName?: string | null;
+    gender?: string | null;
+    zip?: number | null;
+    dateOfBirth?: string | null;
+    suffix?: string | null;
+    preferredName?: string | null;
+    racename?: string | null;
+    race?: Array<string> | null;
+    ethnicityCode?: string | null;
+    status?: string | null;
+    ssn?: string | null;
+    homebound?: boolean | null;
+    language6392code?: string | null;
+    maritalStatus?: string | null;
+    maritalStatusName?: string | null;
+    email?: string | null;
+    homePhone?: string | null;
+    mobilePhone?: string | null;
+    consentToCall?: boolean | null;
+    consentToText?: boolean | null;
+    city?: string | null;
+    address1?: string | null;
+    countryCode?: string | null;
+    countryCode3166?: string | null;
+    state?: string | null;
+    povertyLevelIncomeDeclined?: boolean | null;
+    povertyLevelIncomerangeDeclined?: boolean | null;
+    povertyLevelFamilySizeDeclined?: boolean | null;
+  }
+
+  /*
     description: params for creating a patient in the db and in athena
   */
   interface IPatientSetupInput {
@@ -473,5 +510,29 @@ declare module 'schema' {
     gender: string;
     zip: number;
     homeClinicId: string;
+    suffix?: string | null;
+    preferredName?: string | null;
+    racename?: string | null;
+    race?: Array<string> | null;
+    ethnicityCode?: string | null;
+    status?: string | null;
+    ssn?: string | null;
+    homebound?: boolean | null;
+    language6392code?: string | null;
+    maritalStatus?: string | null;
+    maritalStatusName?: string | null;
+    email?: string | null;
+    homePhone?: string | null;
+    mobilePhone?: string | null;
+    consentToCall?: boolean | null;
+    consentToText?: boolean | null;
+    city?: string | null;
+    address1?: string | null;
+    countryCode?: string | null;
+    countryCode3166?: string | null;
+    state?: string | null;
+    povertyLevelIncomeDeclined?: boolean | null;
+    povertyLevelIncomerangeDeclined?: boolean | null;
+    povertyLevelFamilySizeDeclined?: boolean | null;
   }
 }

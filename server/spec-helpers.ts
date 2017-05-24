@@ -38,8 +38,8 @@ export function createMockPatient(athenaPatientId = 1, homeClinicId = '1') {
 
 export function createMockAthenaPatient(
   athenaId: number,
-  firstName: string,
-  lastName: string = 'foo',
+  firstName: string = 'Constance',
+  lastName: string = 'Blanton',
 ): IPatientInfoAthena {
   return {
     preferredname: 'IV',
@@ -71,7 +71,7 @@ export function createMockAthenaPatient(
     employerphone: '8885559371',
     portaltermsonfile: true,
     status: 'active',
-    lastname: 'Blanton',
+    lastname: lastName,
     guarantorfirstname: 'Alan',
     city: 'DALLAS',
     ssn: '*****4150',
@@ -122,7 +122,7 @@ export function createMockAthenaPatient(
     guarantorsuffix: 'IV',
     caresummarydeliverypreference: 'PORTAL',
     guarantorlastname: 'Knarr',
-    firstname: 'Constance',
+    firstname: firstName,
     guarantorcountrycode: 'USA',
     state: 'TN',
     contactpreference_appointment_phone: false,
@@ -420,6 +420,15 @@ export function mockAthenaGetPatient(
     `/${config.ATHENA_PRACTICE_ID}/patients/${athenaPatientId}`,
     body,
     times,
+  );
+}
+
+export function mockAthenaEditPatient(
+  athenaPatientId: number, times = 1,
+) {
+  mockAthenaPut(
+    `/${config.ATHENA_PRACTICE_ID}/patients/${athenaPatientId}`,
+    [{ athenaPatientId }],
   );
 }
 

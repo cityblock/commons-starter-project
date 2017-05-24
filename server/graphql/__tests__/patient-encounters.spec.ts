@@ -84,10 +84,10 @@ describe('patient encounters', () => {
     describe('pagination', () => {
       it('correctly calculates the limit and offset params', async () => {
         const fakeAthenaApi = {
-          getPatientEncounters: jest.fn(),
+          patientEncountersGet: jest.fn(),
         };
 
-        fakeAthenaApi.getPatientEncounters.mockReturnValueOnce({encounters: []});
+        fakeAthenaApi.patientEncountersGet.mockReturnValueOnce({encounters: []});
 
         const query = `{
           patientEncounters(patientId: "${patient.id}", pageSize: 2, pageNumber: 2) {
@@ -100,7 +100,7 @@ describe('patient encounters', () => {
         }`;
 
         await graphql(schema, query, null, { athenaApi: fakeAthenaApi, db, userRole });
-        expect(fakeAthenaApi.getPatientEncounters).toBeCalledWith(
+        expect(fakeAthenaApi.patientEncountersGet).toBeCalledWith(
           patient.athenaPatientId,
           clinic.departmentId,
           2,

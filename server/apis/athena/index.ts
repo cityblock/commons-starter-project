@@ -1,8 +1,10 @@
 import * as Base64 from 'base-64';
 import 'fetch-everywhere';
+import { isNil, omitBy } from 'lodash';
 import { stringify } from 'querystring';
 import config from '../../config';
 import { AthenaResponseError } from '../../lib/errors';
+import { formatEditPatientHealthRecordOptions } from './formatters';
 import {
   IAddNoteToAppointmentResponse,
   IBookAppointmentErrorResponse,
@@ -23,18 +25,57 @@ interface IAuth {
   accessToken: string;
 }
 
-export interface IPatientCreateResponse {
+export interface IPatientResponse {
   athenaPatientId: number;
 }
 
-interface ISetupPatient {
- firstName: string;
- lastName: string;
- gender: string;
- zip: number;
- dateOfBirth: string;
- departmentId: number;
+interface IPatientEditableFields {
+  firstName: string;
+  lastName: string;
+  gender: string;
+  zip: number;
+  dateOfBirth: string;
+  departmentId: number;
+  suffix: string;
+  preferredName: string;
+  racename: string;
+  race: string[];
+  ethnicityCode: string;
+  status: string;
+  ssn: string;
+  homebound: boolean;
+  language6392code: string;
+  maritalStatus: string;
+  maritalStatusName: string;
+
+  email: string;
+  homePhone: string;
+  mobilePhone: string;
+  consentToCall: boolean;
+  consentToText: boolean;
+
+  city: string;
+  address1: string;
+  countryCode: string;
+  countryCode3166: string;
+  state: string;
+
+  povertyLevelIncomeDeclined: boolean;
+  povertyLevelIncomerangeDeclined: boolean;
+  povertyLevelFamilySizeDeclined: boolean;
 }
+
+export type IAthenaCreatePatient =
+  Pick<IPatientEditableFields, 'firstName'> &
+  Pick<IPatientEditableFields, 'lastName'> &
+  Pick<IPatientEditableFields, 'gender'> &
+  Pick<IPatientEditableFields, 'zip'> &
+  Pick<IPatientEditableFields, 'dateOfBirth'> &
+  Pick<IPatientEditableFields, 'departmentId'> &
+  Partial<IPatientEditableFields>;
+
+export type IAthenaEditPatient = Partial<IPatientEditableFields>;
+
 /**
  * Wrapper around the Athena API.
  *
@@ -92,9 +133,9 @@ export default class AthenaApi {
    * creates a patient in athena
    * Note: this endpoint is extremely slow on the athena side
    */
-  public async createPatient(
-    { firstName, lastName, gender, zip, dateOfBirth, departmentId }: ISetupPatient,
-  ): Promise<IPatientCreateResponse> {
+  public async patientCreate(
+    { firstName, lastName, gender, zip, dateOfBirth, departmentId }: IAthenaCreatePatient,
+  ): Promise<IPatientResponse> {
     const formattedPatientOptions = {
       firstname: firstName,
       lastname: lastName,
@@ -107,12 +148,24 @@ export default class AthenaApi {
       `/${config.ATHENA_PRACTICE_ID}/patients`, formattedPatientOptions, 'POST',
     );
     return {
-      // Athena's create user endpoint returns an array
       athenaPatientId: Number(response[0].patientid),
     };
   }
 
-  public async getPatientMedications(
+  public async patientEdit(
+    options: IAthenaEditPatient, athenaPatientId: number,
+  ): Promise<IPatientResponse> {
+    const formattedPatientOptions = formatEditPatientHealthRecordOptions(options);
+    const filtered = omitBy<{}, Partial<IPatientInfoAthena>>(formattedPatientOptions, isNil);
+    const response = await this.fetch(
+      `/${config.ATHENA_PRACTICE_ID}/patients/${athenaPatientId}`, filtered, 'PUT',
+    );
+    return {
+      athenaPatientId: Number(response[0].patientid),
+    };
+  }
+
+  public async patientMedicationsGet(
     athenaPatientId: number,
     athenaDepartmentId: number,
   ): Promise<IPatientMedicationsResponse> {
@@ -122,7 +175,7 @@ export default class AthenaApi {
       });
   }
 
-  public async getPatientEncounters(
+  public async patientEncountersGet(
     athenaPatientId: number,
     athenaDepartmentId: number,
     limit: number,
@@ -138,7 +191,7 @@ export default class AthenaApi {
       });
   }
 
-  public async openAppointment(
+  public async appointmentsGetOpen(
     athenaDepartmentId: number,
     athenaAppointmentTypeId: number,
     athenaProviderId: number,
@@ -155,7 +208,7 @@ export default class AthenaApi {
       }, 'POST');
   }
 
-  public async bookAppointment(
+  public async appointmentBook(
     athenaAppointmentId: string,
     athenaPatientId: number,
     athenaAppointmentTypeId: number,
@@ -168,21 +221,21 @@ export default class AthenaApi {
       }, 'PUT');
   }
 
-  public async checkinAppointment(
+  public async appointmentCheckin(
     athenaAppointmentId: string,
   ): Promise<ICheckinAppointmentResponse> {
     return await this.fetch<ICheckinAppointmentResponse>(
       `/${config.ATHENA_PRACTICE_ID}/appointments/${athenaAppointmentId}/checkin`, {}, 'POST');
   }
 
-  public async checkoutAppointment(
+  public async appointmentCheckout(
     athenaAppointmentId: string,
   ): Promise<ICheckoutAppointmentResponse> {
     return await this.fetch<ICheckoutAppointmentResponse>(
       `/${config.ATHENA_PRACTICE_ID}/appointments/${athenaAppointmentId}/checkout`, {}, 'POST');
   }
 
-  public async addNoteToAppointment(
+  public async appointmentAddNote(
     athenaAppointmentId: string,
     noteText: string,
   ): Promise<IAddNoteToAppointmentResponse> {

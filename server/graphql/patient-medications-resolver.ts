@@ -19,7 +19,7 @@ export async function resolvePatientMedications(
   const patient = await Patient.get(patientId);
   const clinic = await Clinic.get(patient.homeClinicId);
 
-  const medicationsResponse = await athenaApi.getPatientMedications(
+  const medicationsResponse = await athenaApi.patientMedicationsGet(
     patient.athenaPatientId,
     clinic.departmentId,
   );

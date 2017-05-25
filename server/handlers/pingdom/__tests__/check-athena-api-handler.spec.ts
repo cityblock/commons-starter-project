@@ -45,5 +45,4 @@ describe('athena api handler pingdom test', () => {
 
     expect(response.status).toBeCalledWith(500);
   });
-
 });

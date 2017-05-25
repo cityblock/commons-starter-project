@@ -39,15 +39,10 @@ describe('user model', () => {
   });
 
   it('throws an error when getting an invalid id', async () => {
-    let error;
-
-    try {
-      await User.get('fakeId');
-    } catch (err) {
-      error = err;
-    }
-
-    expect(error).toMatch('No such user');
+    const fakeId = 'fakeId';
+    await expect(User.get(fakeId))
+      .rejects
+      .toMatch('No such user: fakeId');
   });
 
   it('returns null if getBy is called without a search parameter', async () => {
@@ -63,24 +58,15 @@ describe('user model', () => {
   });
 
   it('should not create a user when given an invalid email address', async () => {
-    // once jest 20.0.0 ships, this should be updated to use the .rejects method
-    let errors;
+    const email = 'nonEmail';
+    const password = 'password1';
+    const message = 'email is not valid';
 
-    try {
-      await User.create({
-        email: 'nonEmail',
-        password: 'password1',
-        userRole,
-        homeClinicId: '1',
-      });
-    } catch (err) {
-      errors = err;
-    }
-    expect(JSON.parse(errors.message)).toMatchObject({
-      email: [{
-        message: 'email is not valid',
-      }],
-    });
+    await expect(User.create({ email, password, userRole, homeClinicId: '1' }))
+      .rejects
+      .toMatchObject(
+        new Error(JSON.stringify({ email: [{ message }] })),
+      );
   });
 
   it('gets last login', async () => {

@@ -191,6 +191,5 @@ describe('patient', () => {
         preferredName: 'cool name',
       });
     });
-
   });
 });

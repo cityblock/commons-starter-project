@@ -53,5 +53,4 @@ describe('postgres pingdom test', () => {
 
     expect(response.status).toBeCalledWith(500);
   });
-
 });

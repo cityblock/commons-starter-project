@@ -52,18 +52,11 @@ describe('care model', () => {
       });
       const patient = await createPatient(createMockPatient(123), user.id);
 
-      let error;
-
-      try {
-        await CareTeam.addUserToCareTeam({
-          userId: 'fakeUserId',
-          patientId: patient.id,
+      await expect(CareTeam.addUserToCareTeam({ userId: 'fakeUserId', patientId: patient.id }))
+        .rejects
+        .toMatchObject({
+          message: 'user not found',
         });
-      } catch (err) {
-        error = err.message;
-      }
-
-      expect(error).toMatch('user not found');
     });
 
     it('can remove a user from a care team', async () => {

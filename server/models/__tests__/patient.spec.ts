@@ -44,15 +44,10 @@ describe('patient model', () => {
     });
 
     it('should throw an error if a patient does not exist for the id', async () => {
-      let error;
-
-      try {
-        await Patient.get('fakeId');
-      } catch (err) {
-        error = err;
-      }
-
-      expect(error).toMatch('No such patient');
+      const fakeId = 'fakeId';
+      await expect(Patient.get(fakeId))
+        .rejects
+        .toMatch('No such patient: fakeId');
     });
   });
 

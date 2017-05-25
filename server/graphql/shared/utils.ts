@@ -12,6 +12,8 @@ import config from '../../config';
 import Db from '../../db';
 import User, { UserRole } from '../../models/user';
 
+export const TWENTY_FOUR_HOURS_IN_MILLISECONDS = 86400000;
+
 export interface IContext {
   db: Db;
   athenaApi: AthenaApi;
@@ -46,11 +48,21 @@ export async function parseAndVerifyJwt(jwt: string) {
   // goal: allow user to be logged into exactly 1 device at a time
   // solution: invalidate token if user has logged in on a different device since token was issued
   const lastLoginAt = await User.getLastLoggedIn(decoded.userId);
-  if (new Date(decoded.lastLoginAt).valueOf() + 1000 < new Date(lastLoginAt || 0).valueOf()) {
+  if (isInvalidLogin(decoded.lastLoginAt, lastLoginAt)) {
     throw new Error('token invalid: login too old');
   }
   return decoded;
 }
+
+const isInvalidLogin = (tokenLastLoginAt: string, userLastLoginAt: string | undefined): boolean => {
+  const tokenLoginDateTime = new Date(tokenLastLoginAt).valueOf() + 1000;
+  const currentLoginDateTime = new Date(userLastLoginAt || 0).valueOf();
+
+  const newerLoginExists = tokenLoginDateTime < currentLoginDateTime;
+  const loginTooOld = tokenLoginDateTime + TWENTY_FOUR_HOURS_IN_MILLISECONDS < new Date().valueOf();
+
+  return newerLoginExists || loginTooOld;
+};
 
 export async function getGraphQLContext(request: express.Request): Promise<IContext> {
   const authToken = request.headers.auth_token;

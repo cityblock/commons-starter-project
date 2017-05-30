@@ -11,6 +11,7 @@ export default function app(req: express.Request, res: express.Response) {
         <meta name='viewport' content='width=device-width, initial-scale=1'>
         <meta name='robots' content='noindex, nofollow'>
         <link rel='stylesheet' href='/assets/styles/main.css'>
+        <link href="https://fonts.googleapis.com/css?family=Roboto:400,500" rel="stylesheet">
       </head>
       <body>
         <div id='app'></div>

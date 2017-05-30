@@ -53,7 +53,7 @@ export class LoginContainer extends React.Component<IProps, { error?: string }> 
     return (
       <div className={styles.container}>
         <div className={styles.form}>
-          <div className={styles.title}>Log In</div>
+          <div className={styles.title}>Commons</div>
           <div className={styles.error}>{error}</div>
           <GoogleLogin
             clientId={process.env.GOOGLE_OAUTH_TOKEN}
@@ -62,7 +62,11 @@ export class LoginContainer extends React.Component<IProps, { error?: string }> 
             scope={SCOPE}
             onSuccess={this.onSuccess}
             onFailure={this.onError}
-          />
+            className={styles.button}
+          >
+            <span className={styles.googleIcon} />
+            <span className={styles.buttonText}>Sign in with Google</span>
+          </GoogleLogin>
         </div>
       </div>
     );

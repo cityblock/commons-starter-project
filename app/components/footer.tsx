@@ -3,7 +3,7 @@ import * as styles from '../css/components/footer.css';
 
 const Footer = () => (
   <div className={styles.footer}>
-    by Care Lab
+    A Sidewalk Labs urban health initiative
   </div>
 );
 

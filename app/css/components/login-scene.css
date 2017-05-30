@@ -1,24 +1,36 @@
 @import '../common/sizes';
-
 .container {
   flex: 1;
   justify-content: center;
   align-items: center;
   display: flex;
-  height: calc(100vh - 100px);
+  height: 100vh;
+  background: linear-gradient(135deg, var(--teal-color) 0%, var(--blue-color) 100%);
 }
 
 .title {
-  @apply --title;
+  color: var(--blue-color);
+  font-family: Basetica;
+  font-size: 24px;
+  font-weight: 500;
+  letter-spacing: 1px;
+  line-height: 29px;
+  text-align: center;
+  text-transform: uppercase;
+  margin-bottom: 30px;
 }
 
 .error {
   color: red;
   font-weight: bold;
-  font-size: 24px;
 }
 
 .form {
+  border: 1px solid #FFFFFF;
+  border-radius: 6px;
+  background-color: #FFFFFF;
+  box-shadow: 0 12px 20px 0 rgba(0, 0, 0, 0.15), 0 10px 20px 0 rgba(0, 0, 0, 0.1);
+  padding: 85px;
   flex-wrap: nowrap;
   justify-content: center;
   align-items: center;
@@ -26,15 +38,30 @@
   flex-direction: column;
 }
 
-.input {
-  @apply --input;
-}
-
 .button {
-  @apply --button;
+  border: 1px solid #CCCCCC;
+  border-radius: 2px;
+  background-color: #FFFFFF;
+  padding: 12px 24px;
 }
 
-.inputContainer {
-  display: block;
-  margin-top: 10px;
+.googleIcon {
+  background-image: url('../../assets/google-logo.png');
+  background-size: cover;
+  height: 18px;
+  width: 18px;
+  background-repeat: no-repeat;
+  display: inline-block;
+  vertical-align: top;
+  margin-right: 20px;
+}
+
+.buttonText {
+  color: rgba(0, 0, 0, 0.54);
+  font-family: 'Roboto', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 16px;
+  display: inline-block;
+  vertical-align: text-top;
 }

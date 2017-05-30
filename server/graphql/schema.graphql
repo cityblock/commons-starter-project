@@ -488,7 +488,7 @@ type RootQueryType {
   userPatientPanel(
     pageNumber: Int,
     pageSize: Int,
-    userId: String!
+    userId: String
   ): PatientEdges
 
   # The current User

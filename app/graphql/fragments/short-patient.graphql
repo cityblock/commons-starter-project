@@ -1,0 +1,8 @@
+fragment ShortPatient on Patient {
+  id
+  firstName
+  lastName
+  dateOfBirth
+  zip
+  createdAt
+}

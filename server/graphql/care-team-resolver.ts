@@ -1,7 +1,8 @@
 import { ICareTeamInput, IPatientEdges, IPatientNode } from 'schema';
-import { IPaginationOptions } from '../db';
+import { IPaginatedResults, IPaginationOptions } from '../db';
 import { convertUser } from '../graphql/shared/converter';
 import CareTeam from '../models/care-team';
+import Patient from '../models/patient';
 import accessControls from './shared/access-controls';
 import { formatRelayEdge, IContext } from './shared/utils';
 
@@ -53,9 +54,18 @@ export async function resolveUserPatientPanel(
   { userId, pageNumber, pageSize }: IUserPatientPanelOptions,
   { userRole, userId: currentUserId }: IContext,
 ): Promise<IPatientEdges> {
-  await accessControls.isAllowedForUser(userRole, 'view', 'user', userId, currentUserId);
+  let patients: IPaginatedResults<Patient>;
 
-  const patients = await CareTeam.getForUser(userId, { pageNumber, pageSize });
+  if (userId) {
+    // If a userId was passed in, fetch patient panel for that user
+    await accessControls.isAllowedForUser(userRole, 'view', 'user', userId, currentUserId);
+    patients = await CareTeam.getForUser(userId, { pageNumber, pageSize });
+  } else if (currentUserId) {
+    // Otherwise, fetch patient panel for the current user
+    patients = await CareTeam.getForUser(currentUserId, { pageNumber, pageSize });
+  } else {
+    throw new Error(`Could not get userPatientPanel. User not logged in.`);
+  }
 
   const patientEdges = patients.results.map(
     (patient, i) => formatRelayEdge(patient, patient.id) as IPatientNode,

@@ -80,47 +80,107 @@ describe('patient', () => {
   });
 
   describe('user patient panel', () => {
-    it('works if user has no patients', async () => {
-      const user2 = await User.create({
-        email: 'b@c.com',
-        userRole,
-        homeClinicId,
+    describe('getting a patient panel for a different user', () => {
+      it('works if user has no patients', async () => {
+        const user2 = await User.create({
+          email: 'b@c.com',
+          userRole,
+          homeClinicId,
+        });
+        const query = `{
+          userPatientPanel(userId: "${user2.id}", pageNumber: 0, pageSize: 10) {
+            edges { node { id, firstName } }
+          }
+        }`;
+        const result = await graphql(schema, query, null, { db, userRole, userId: user.id });
+        expect(cloneDeep(result.data!.userPatientPanel)).toMatchObject({
+          edges: [],
+        });
       });
-      const query = `{
-        userPatientPanel(userId: "${user2.id}", pageNumber: 0, pageSize: 10) {
-          edges { node { id, firstName } }
-        }
-      }`;
-      const result = await graphql(schema, query, null, { db, userRole, userId: user.id });
-      expect(cloneDeep(result.data!.userPatientPanel)).toMatchObject({
-        edges: [],
+
+      it('works if user has patients', async () => {
+        const patient1 = await createPatient(createMockPatient(123), user.id);
+        const patient2 = await createPatient(createMockPatient(321), user.id);
+
+        const query = `{
+          userPatientPanel(userId: "${user.id}", pageNumber: 0, pageSize: 10) {
+            edges { node { id, firstName } }
+          }
+        }`;
+        const result = await graphql(schema, query, null, { db, userRole, userId: user.id });
+        expect(cloneDeep(result.data!.userPatientPanel)).toMatchObject({
+          edges: [{
+            node: {
+              id: patient.id,
+            },
+          }, {
+            node: {
+              id: patient1.id,
+            },
+          }, {
+            node: {
+              id: patient2.id,
+            },
+          }],
+        });
       });
     });
 
-    it('works if user has patients', async () => {
-      const patient1 = await createPatient(createMockPatient(123), user.id);
-      const patient2 = await createPatient(createMockPatient(321), user.id);
+    describe('getting a patient panel for the current user', () => {
+      it('works if user has no patients', async () => {
+        const user2 = await User.create({
+          email: 'b@c.com',
+          userRole,
+          homeClinicId,
+        });
+        const query = `{
+          userPatientPanel(pageNumber: 0, pageSize: 10) {
+            edges { node { id, firstName } }
+          }
+        }`;
+        const result = await graphql(schema, query, null, { db, userRole, userId: user2.id });
+        expect(cloneDeep(result.data!.userPatientPanel)).toMatchObject({
+          edges: [],
+        });
+      });
 
-      const query = `{
-        userPatientPanel(userId: "${user.id}", pageNumber: 0, pageSize: 10) {
-          edges { node { id, firstName } }
-        }
-      }`;
-      const result = await graphql(schema, query, null, { db, userRole, userId: user.id });
-      expect(cloneDeep(result.data!.userPatientPanel)).toMatchObject({
-        edges: [{
-          node: {
-            id: patient.id,
-          },
-        }, {
-          node: {
-            id: patient1.id,
-          },
-        }, {
-          node: {
-            id: patient2.id,
-          },
-        }],
+      it('works if user has patients', async () => {
+        const patient1 = await createPatient(createMockPatient(123), user.id);
+        const patient2 = await createPatient(createMockPatient(321), user.id);
+
+        const query = `{
+          userPatientPanel(pageNumber: 0, pageSize: 10) {
+            edges { node { id, firstName } }
+          }
+        }`;
+        const result = await graphql(schema, query, null, { db, userRole, userId: user.id });
+        expect(cloneDeep(result.data!.userPatientPanel)).toMatchObject({
+          edges: [{
+            node: {
+              id: patient.id,
+            },
+          }, {
+            node: {
+              id: patient1.id,
+            },
+          }, {
+            node: {
+              id: patient2.id,
+            },
+          }],
+        });
+      });
+
+      it('returns an error if there is no logged in user', async () => {
+        const query = `{
+          userPatientPanel(pageNumber: 0, pageSize: 10) {
+            edges { node { id, firstName } }
+          }
+        }`;
+        const result = await graphql(schema, query, null, { db, userRole });
+        expect(cloneDeep(result.errors![0].message)).toMatch(
+          'Could not get userPatientPanel. User not logged in.',
+        );
       });
     });
   });

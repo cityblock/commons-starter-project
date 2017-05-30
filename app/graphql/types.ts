@@ -15,6 +15,20 @@ export interface GetCurrentUserQuery {
   currentUser: FullUserFragment;
 }
 
+export interface GetPatientPanelQueryVariables {
+  pageNumber: number | null;
+  pageSize: number | null;
+}
+
+export interface GetPatientPanelQuery {
+  // List of patients the user is on the care team for (their 'patient panel')
+  userPatientPanel: {
+    edges: Array< {
+      node: ShortPatientFragment,
+    } > | null,
+  } | null;
+}
+
 export interface LogInUserMutationVariables {
   googleAuthCode: string;
 }
@@ -36,5 +50,14 @@ export interface FullUserFragment {
   email: string | null;
   homeClinicId: string;
   googleProfileImageUrl: string | null;
+}
+
+export interface ShortPatientFragment {
+  id: string;
+  firstName: string | null;
+  lastName: string | null;
+  dateOfBirth: string | null;
+  zip: number | null;
+  createdAt: string | null;
 }
 /* tslint:enable */

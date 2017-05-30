@@ -1,0 +1,9 @@
+query getPatientPanel($pageNumber: Int, $pageSize: Int) {
+  userPatientPanel(pageNumber: $pageNumber, pageSize: $pageSize) {
+    edges {
+      node {
+        ...ShortPatient
+      }
+    }
+  }
+}

@@ -42,6 +42,7 @@ declare module 'schema' {
     userRole: IUserRoleEnum;
     createdAt: any;
     homeClinicId: string;
+    googleProfileImageUrl: string | null;
   }
 
   /*
@@ -353,7 +354,6 @@ declare module 'schema' {
   */
   interface IUserCreateInput {
     email: any;
-    password: any;
     homeClinicId: string;
   }
 
@@ -369,8 +369,7 @@ declare module 'schema' {
     description: params for logging in a user
   */
   interface IUserLoginInput {
-    email: string;
-    password: string;
+    googleAuthCode: string;
   }
 
   /*

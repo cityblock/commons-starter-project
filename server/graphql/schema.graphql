@@ -1,5 +1,4 @@
 scalar GraphQLEmail
-scalar GraphQLPassword
 scalar GraphQLDateTime
 
 enum UserRole {
@@ -29,6 +28,7 @@ type User implements uniqueId {
   userRole: UserRole!
   createdAt: GraphQLDateTime!
   homeClinicId: String!
+  googleProfileImageUrl: String
 }
 
 # The user account with an optional auth token
@@ -314,14 +314,12 @@ type AppointmentAddNoteResult {
 # params for creating a user
 input UserCreateInput {
   email: GraphQLEmail!
-  password: GraphQLPassword!
   homeClinicId: String!
 }
 
 # params for logging in a user
 input UserLoginInput {
-  email: String!
-  password: String!
+  googleAuthCode: String!
 }
 
 # params for creating a clinic

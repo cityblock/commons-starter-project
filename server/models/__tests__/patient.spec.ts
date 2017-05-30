@@ -27,7 +27,6 @@ describe('patient model', () => {
     it('should create and retrieve a patient', async () => {
       const user = await User.create({
         email: 'care@care.com',
-        password: 'password1',
         userRole,
         homeClinicId: '1',
       });
@@ -55,7 +54,6 @@ describe('patient model', () => {
     it('should edit patient', async () => {
       const user = await User.create({
         email: 'care@care.com',
-        password: 'password1',
         userRole,
         homeClinicId: '1',
       });
@@ -117,7 +115,6 @@ describe('patient model', () => {
     beforeEach(async () => {
       const user = await User.create({
         email: 'care@care.com',
-        password: 'password1',
         userRole,
         homeClinicId: '1',
       });

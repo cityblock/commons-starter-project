@@ -1,5 +1,5 @@
 import * as fs from 'fs';
-import { GraphQLDateTime, GraphQLEmail, GraphQLPassword } from 'graphql-custom-types';
+import { GraphQLDateTime, GraphQLEmail } from 'graphql-custom-types';
 import { makeExecutableSchema } from 'graphql-tools';
 import * as path from 'path';
 import config from '../config';
@@ -33,7 +33,6 @@ const schemaGql = fs.readFileSync(path.join(__dirname, 'schema.graphql'), 'utf-8
 const resolveFunctions = {
   GraphQLDateTime,
   GraphQLEmail,
-  GraphQLPassword: new GraphQLPassword(6, 60),
   RootQueryType: {
     clinic: resolveClinic,
     currentUser: resolveCurrentUser,

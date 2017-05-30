@@ -1,5 +1,7 @@
-import { compare } from 'bcrypt';
 import { IUserCreateInput, IUserEdges, IUserLoginInput, IUserNode } from 'schema';
+import { parseIdToken, OauthAuthorize } from '../apis/google/oauth-authorize';
+import config from '../config';
+import GoogleAuth from '../models/google-auth';
 import User from '../models/user';
 import accessControls from './shared/access-controls';
 import { formatRelayEdge, signJwt, IContext } from './shared/utils';
@@ -23,7 +25,7 @@ interface IUsersFilterOptions {
 
 export async function userCreate(root: any, { input }: IUserCreateArgs, context: IContext) {
   const { userRole } = context;
-  const { email, password, homeClinicId } = input;
+  const { email, homeClinicId } = input;
   await accessControls.isAllowed(userRole, 'create', 'user');
 
   const user = await User.getBy('email', email);
@@ -34,7 +36,6 @@ export async function userCreate(root: any, { input }: IUserCreateArgs, context:
     const newUser = await User.create({
       email,
       userRole: 'healthCoach',
-      password,
       homeClinicId,
     });
 
@@ -94,31 +95,40 @@ export async function resolveUsers(
 // disabling isAllowed check for login endpoint so users can log in
 /* tslint:disable check-is-allowed */
 export async function userLogin(root: any, { input }: IUserLoginOptions, { db }: IContext) {
-  const { email, password } = input;
+  const { googleAuthCode } = input;
 
-  const user = await User.getBy('email', email);
+  const oauth = await OauthAuthorize(googleAuthCode);
+  if (!oauth || !oauth.access_token) {
+    throw new Error(`Google auth rejected`);
+  }
+
+  const googleResult = parseIdToken(oauth.id_token);
+  if (googleResult.email.indexOf(config.GOOGLE_OAUTH_VALID_EMAIL_DOMAIN) < 0) {
+    throw new Error(`Email must have a ${config.GOOGLE_OAUTH_VALID_EMAIL_DOMAIN} domain`);
+  }
+
+  const user = await User.getBy('email', googleResult.email);
   if (!user) {
-    throw new Error(`User not found for ${email}`);
+    throw new Error(`User not found for ${googleResult.email}`);
   }
 
-  const hashedPassword = user.hashedPassword;
-  if (!hashedPassword) {
-    throw new Error('Hashed password error');
-  }
+  const lastLoginAt = new Date().toUTCString();
+  const googleAuth = await GoogleAuth.updateOrCreate({
+    accessToken: oauth.access_token,
+    expiresAt: new Date(new Date().valueOf() + oauth.expires_in).toISOString(),
+    userId: user.id,
+  });
+  const updatedUser = await User.update(user.id, {
+    lastLoginAt,
+    googleProfileImageUrl: googleResult.picture,
+    googleAuthId: googleAuth.id,
+  });
 
-  const isCorrectPassword = await compare(password, hashedPassword);
-  if (isCorrectPassword) {
-    const lastLoginAt = new Date().toUTCString();
-    const authToken = signJwt({
-      userId: user.id,
-      userRole: user.userRole,
-      lastLoginAt,
-    });
-
-    await user.updateLoginAt(lastLoginAt);
-
-    return { authToken, user };
-  }
-  throw new Error('Login failed: password');
+  const authToken = signJwt({
+    userId: user.id,
+    userRole: user.userRole,
+    lastLoginAt,
+  });
+  return { authToken, user: updatedUser };
 }
 /* tslint:enable check-is-allowed */

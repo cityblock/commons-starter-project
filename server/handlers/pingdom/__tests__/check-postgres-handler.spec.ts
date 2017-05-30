@@ -27,7 +27,6 @@ describe('postgres pingdom test', () => {
 
     await User.create({
       email: 'brennan@sidewalklabs.com',
-      password: 'password1',
       firstName: 'Bertrand',
       lastName: 'Russell',
       userRole,

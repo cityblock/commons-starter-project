@@ -16,8 +16,7 @@ export interface GetCurrentUserQuery {
 }
 
 export interface LogInUserMutationVariables {
-  email: string;
-  password: string;
+  googleAuthCode: string;
 }
 
 export interface LogInUserMutation {
@@ -36,5 +35,6 @@ export interface FullUserFragment {
   userRole: UserRole;
   email: string | null;
   homeClinicId: string;
+  googleProfileImageUrl: string | null;
 }
 /* tslint:enable */

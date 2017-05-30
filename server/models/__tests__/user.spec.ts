@@ -1,4 +1,5 @@
 import Db from '../../db';
+import GoogleAuth from '../google-auth';
 import User from '../user';
 
 const userRole = 'physician';
@@ -18,7 +19,6 @@ describe('user model', () => {
   it('should create and retrieve a user', async () => {
     const user = await User.create({
       email: 'care@care.com',
-      password: 'password1',
       firstName: 'Dan',
       lastName: 'Plant',
       userRole,
@@ -59,10 +59,9 @@ describe('user model', () => {
 
   it('should not create a user when given an invalid email address', async () => {
     const email = 'nonEmail';
-    const password = 'password1';
     const message = 'email is not valid';
 
-    await expect(User.create({ email, password, userRole, homeClinicId: '1' }))
+    await expect(User.create({ email, userRole, homeClinicId: '1' }))
       .rejects
       .toMatchObject(
         new Error(JSON.stringify({ email: [{ message }] })),
@@ -72,7 +71,6 @@ describe('user model', () => {
   it('gets last login', async () => {
     const user = await User.create({
       email: 'care@care.com',
-      password: 'password1',
       firstName: 'Dan',
       lastName: 'Plant',
       userRole,
@@ -89,7 +87,6 @@ describe('user model', () => {
   it('retrieve user by email', async () => {
     const user = await User.create({
       email: 'danplant@b.com',
-      password: 'password1',
       firstName: 'Dan',
       lastName: 'Plant',
       userRole,
@@ -109,9 +106,32 @@ describe('user model', () => {
     });
   });
 
+  it('should update user', async () => {
+    const user = await User.create({ email: 'a@b.com', userRole, homeClinicId: '1' });
+    const googleAuth = await GoogleAuth.updateOrCreate({
+      accessToken: 'accessToken',
+      expiresAt: 'expires!',
+      userId: user.id,
+    });
+    expect(await User.update(user.id, {
+      firstName: 'first',
+      lastName: 'last',
+      googleProfileImageUrl: 'http://google.com',
+      homeClinicId: '2',
+      googleAuthId: googleAuth.id,
+    })).toMatchObject({
+      email: 'a@b.com',
+      firstName: 'first',
+      lastName: 'last',
+      googleProfileImageUrl: 'http://google.com',
+      homeClinicId: '2',
+      googleAuthId: googleAuth.id,
+    });
+  });
+
   it('should fetch all users', async () => {
-    await User.create({ email: 'a@b.com', password: 'password', userRole, homeClinicId: '1' });
-    await User.create({ email: 'b@c.com', password: 'password', userRole, homeClinicId: '1' });
+    await User.create({ email: 'a@b.com', userRole, homeClinicId: '1' });
+    await User.create({ email: 'b@c.com', userRole, homeClinicId: '1' });
 
     expect(await User.getAll({ pageNumber: 0, pageSize: 10 })).toMatchObject(
       {
@@ -128,8 +148,8 @@ describe('user model', () => {
   });
 
   it('should fetch a limited set of users', async () => {
-    await User.create({ email: 'a@b.com', password: 'password', userRole, homeClinicId: '1' });
-    await User.create({ email: 'b@c.com', password: 'password', userRole, homeClinicId: '1' });
+    await User.create({ email: 'a@b.com', userRole, homeClinicId: '1' });
+    await User.create({ email: 'b@c.com', userRole, homeClinicId: '1' });
 
     expect(await User.getAll({ pageNumber: 0, pageSize: 1 })).toMatchObject(
       {

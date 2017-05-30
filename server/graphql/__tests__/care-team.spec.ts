@@ -19,7 +19,6 @@ describe('patient', () => {
 
     user = await User.create({
       email: 'a@b.com',
-      password: 'password1',
       firstName: 'Dan',
       lastName: 'Plant',
       userRole,
@@ -36,7 +35,6 @@ describe('patient', () => {
     it('adds user to care team', async () => {
       const user2 = await User.create({
         email: 'b@c.com',
-        password: 'password1',
         userRole,
         homeClinicId,
       });
@@ -85,7 +83,6 @@ describe('patient', () => {
     it('works if user has no patients', async () => {
       const user2 = await User.create({
         email: 'b@c.com',
-        password: 'password1',
         userRole,
         homeClinicId,
       });

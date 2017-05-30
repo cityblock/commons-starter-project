@@ -53,10 +53,9 @@ describe('util tests', () => {
       const user = await User.create({
         email: 'a@b.com',
         userRole: 'physician',
-        password: '1234',
         homeClinicId: '1',
       });
-      await user.updateLoginAt(now.toUTCString());
+      await User.update(user.id, { lastLoginAt: now.toUTCString() });
 
       const authToken = signJwt({
         userId: user.id,

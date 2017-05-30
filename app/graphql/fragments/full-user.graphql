@@ -5,4 +5,5 @@ fragment FullUser on User {
   userRole
   email
   homeClinicId
+  googleProfileImageUrl
 }

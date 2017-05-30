@@ -1,8 +1,8 @@
-import { compare } from 'bcrypt';
 import { graphql } from 'graphql';
 import { cloneDeep } from 'lodash';
 import Db from '../../db';
 import User from '../../models/user';
+import { mockGoogleOauthAuthorize } from '../../spec-helpers';
 import schema from '../make-executable-schema';
 
 describe('user tests', () => {
@@ -24,7 +24,6 @@ describe('user tests', () => {
     it('can fetch user', async () => {
       const user = await User.create({
         email: 'a@b.com',
-        password: 'password1',
         firstName: 'Bertrand',
         lastName: 'Russell',
         userRole,
@@ -39,25 +38,9 @@ describe('user tests', () => {
       });
     });
 
-    it('errors if hashedPassword is queried', async () => {
-      const dbUser = await User.create({
-        email: 'brennan@sidewalklabs.com',
-        password: 'Pa33word1',
-        userRole,
-        homeClinicId,
-      });
-      const user = await User.get(dbUser.id);
-      expect(compare('Pa33word1', user!.hashedPassword)).toBeTruthy();
-      const query = `{ user(userId: "${dbUser.id}") { hashedPassword } }`;
-      const result = await graphql(schema, query, null, { db, userRole });
-      expect(result.errors![0].message).toMatch(
-        'Cannot query field "hashedPassword" on type "User".',
-      );
-    });
-
     it('errors if a user cannot be found', async () => {
       const query = `{ user(userId: "fakeId") { firstName } }`;
-      const result = await graphql(schema, query, null, { db, userRole});
+      const result = await graphql(schema, query, null, { db, userRole });
 
       expect(result.errors![0].message).toMatch(
         'No such user: fakeId',
@@ -69,7 +52,6 @@ describe('user tests', () => {
     it('resolves all users', async () => {
       const user = await User.create({
         email: 'a@b.com',
-        password: 'password1',
         firstName: 'Bertrand',
         lastName: 'Russell',
         userRole,
@@ -92,7 +74,6 @@ describe('user tests', () => {
     it('does not resolve all users for non-admins', async () => {
       await User.create({
         email: 'a@b.com',
-        password: 'password1',
         firstName: 'Bertrand',
         lastName: 'Russell',
         userRole,
@@ -109,19 +90,19 @@ describe('user tests', () => {
 
     it('returns correct page information', async () => {
       const user1 = await User.create({
-        email: 'a@b.com', password: 'password', userRole, homeClinicId,
+        email: 'a@b.com', userRole, homeClinicId,
       });
       const user2 = await User.create({
-        email: 'b@c.com', password: 'password', userRole, homeClinicId,
+        email: 'b@c.com', userRole, homeClinicId,
       });
       const user3 = await User.create({
-        email: 'c@d.com', password: 'password', userRole: 'healthCoach', homeClinicId,
+        email: 'c@d.com', userRole: 'healthCoach', homeClinicId,
       });
       const user4 = await User.create({
-        email: 'd@e.com', password: 'password', userRole: 'familyMember', homeClinicId,
+        email: 'd@e.com', userRole: 'familyMember', homeClinicId,
       });
       await User.create({
-        email: 'e@f.com', password: 'password', userRole: 'nurseCareManager', homeClinicId,
+        email: 'e@f.com', userRole: 'nurseCareManager', homeClinicId,
       });
 
       const query = `{
@@ -175,7 +156,6 @@ describe('user tests', () => {
     it('can fetch current user', async () => {
       const user = await User.create({
         email: 'a@b.com',
-        password: 'password1',
         firstName: 'Bertrand',
         lastName: 'Russell',
         userRole,
@@ -210,18 +190,22 @@ describe('user tests', () => {
   });
 
   describe('userLogin', () => {
+    /* tslint:disable:max-line-length */
+    const sidewalklabsToken = `eyJhbGciOiJSUzI1NiIsImtpZCI6ImM5YjM5YzI0ZWQ1NGEyYjFhZWYzZTU3MmQ0ZTQxMWZlNWNjZjY5N2YifQ.eyJhenAiOiI0NTMwMTk2ODQwMjItN2hwdDB2Zms5YmpqYzUzcG0ycmw5ZjF2Z211amtsNjguYXBwcy5nb29nbGV1c2VyY29udGVudC5jb20iLCJhdWQiOiI0NTMwMTk2ODQwMjItN2hwdDB2Zms5YmpqYzUzcG0ycmw5ZjF2Z211amtsNjguYXBwcy5nb29nbGV1c2VyY29udGVudC5jb20iLCJzdWIiOiIxMTU0MjI2MDA5NjQ3MTYyMTcxMjkiLCJoZCI6InNpZGV3YWxrbGFicy5jb20iLCJlbWFpbCI6ImJyZW5uYW5Ac2lkZXdhbGtsYWJzLmNvbSIsImVtYWlsX3ZlcmlmaWVkIjp0cnVlLCJhdF9oYXNoIjoid1JnaXNHQk01b1JGY0lxZ01FYlhydyIsImlzcyI6Imh0dHBzOi8vYWNjb3VudHMuZ29vZ2xlLmNvbSIsImlhdCI6MTQ5NjA4NjcxMSwiZXhwIjoxNDk2MDkwMzExLCJuYW1lIjoiQnJlbm5hbiBNb29yZSIsInBpY3R1cmUiOiJodHRwczovL2xoNC5nb29nbGV1c2VyY29udGVudC5jb20vLWZndkRtYjFEX0F3L0FBQUFBQUFBQUFJL0FBQUFBQUFBQUFzL01PS2ZJTzdHcmRZL3M5Ni1jL3Bob3RvLmpwZyIsImdpdmVuX25hbWUiOiJCcmVubmFuIiwiZmFtaWx5X25hbWUiOiJNb29yZSIsImxvY2FsZSI6ImVuIn0.okbx05mv7Csc4dgCpdRgU6Zuc-Ol7Dw_A1lLDtiYPG63IZ-OpOVbC2FGcYSZB52W4oC7XAS1AprfassDRwPtNVAkB6_DRMNycvQpKyFJpZXH7QqFEJb_trIpmOKfOKxRYxOStFct_A50Z-tbyccJunWnBcm8nyV8LnIneeqBHS0tjoZYTxVDJDykFpmc2qyjTczr8ARO_iC05LEKKWrKH2goKMZUlf0aXYEEzJ8NnL-H-Ewk72QoNjz6QWyKHlcSg3uCype1BW3wEUDy5-veNoMLlCbX-i_yaA5ehPyXPIIzKjTHCokoPi3p6YCQ7Ff1xUIO4L_oexbyJj1iANbyHQ`;
+    const gmailToken = `eyJhbGciOiJSUzI1NiIsImtpZCI6ImM5YjM5YzI0ZWQ1NGEyYjFhZWYzZTU3MmQ0ZTQxMWZlNWNjZjY5N2YifQ.eyJhenAiOiI0NTMwMTk2ODQwMjItN2hwdDB2Zms5YmpqYzUzcG0ycmw5ZjF2Z211amtsNjguYXBwcy5nb29nbGV1c2VyY29udGVudC5jb20iLCJhdWQiOiI0NTMwMTk2ODQwMjItN2hwdDB2Zms5YmpqYzUzcG0ycmw5ZjF2Z211amtsNjguYXBwcy5nb29nbGV1c2VyY29udGVudC5jb20iLCJzdWIiOiIxMDA4ODQ0MzA4MDIzNDY2OTgwNjYiLCJlbWFpbCI6ImJyZW5uYW5tb29yZUBnbWFpbC5jb20iLCJlbWFpbF92ZXJpZmllZCI6dHJ1ZSwiYXRfaGFzaCI6IjhjUlVHOUY4Qi1USXFfNGx4Zk5LUnciLCJpc3MiOiJodHRwczovL2FjY291bnRzLmdvb2dsZS5jb20iLCJpYXQiOjE0OTYwODY4MzksImV4cCI6MTQ5NjA5MDQzOSwibmFtZSI6IkJyZW5uYW4gTW9vcmUiLCJwaWN0dXJlIjoiaHR0cHM6Ly9saDYuZ29vZ2xldXNlcmNvbnRlbnQuY29tLy1KNnZaejJNRTBYby9BQUFBQUFBQUFBSS9BQUFBQUFBQUJmSS9TemFjN2RONklOdy9zOTYtYy9waG90by5qcGciLCJnaXZlbl9uYW1lIjoiQnJlbm5hbiIsImZhbWlseV9uYW1lIjoiTW9vcmUiLCJsb2NhbGUiOiJlbiJ9.BMsqORq3GDnE5lpJE25NL2MY-lrt-3Djr_IAlc8biHVo3axe77X1SBF6NBlmmYQ5pxKk4IKrm09ytEEBb0zctLSthnYhlJlLwu-PBCaXvFqdmgRSFbeQAaQ_VyK9SwXHpm1M96ae9RNhNt5VTPD2-Quwj10LZ8ClkqMKB0qYz5F2fub0J4sorplUzow3p0sAeTGWMCkNwzWrAcfcqGL9Z2ROYvy0kdWmDKphGZEsyIjz31WC30Mz2KY3t37-M2FlMZyTxDjo0_jxUmYPmw6ewVsC1Jc5q_SOV8de7btd2NpzpQMI7GocH22IeLHch9Z1lvVvMXPdei_baYVB43lmAA`;
+    /* tslint:enable:max-line-length */
     it('logs in user and returns user with token', async () => {
       const user = await User.create({
-        email: 'a@b.com',
-        password: 'password1',
+        email: 'brennan@sidewalklabs.com',
         firstName: 'Bertrand',
         lastName: 'Russell',
         userRole,
         homeClinicId,
       });
       expect(user.lastLoginAt).toBeNull();
+      mockGoogleOauthAuthorize(sidewalklabsToken);
       const mutation = `mutation {
-        userLogin(input: { email: "a@b.com", password: "password1" }) {
+        userLogin(input: { googleAuthCode: "google-auth-code" }) {
           authToken
           user { firstName, lastName }
         }
@@ -237,14 +221,15 @@ describe('user tests', () => {
 
     it('updates lastLoginAt', async () => {
       const user = await User.create({
-        email: 'a@b.com',
-        password: 'password1',
+        email: 'brennan@sidewalklabs.com',
         userRole,
         homeClinicId,
       });
+      mockGoogleOauthAuthorize(sidewalklabsToken);
+
       expect(user.lastLoginAt).toBeNull();
       const mutation = `mutation {
-        userLogin(input: { email: "a@b.com", password: "password1" }) {
+        userLogin(input: { googleAuthCode: "google-auth-code" }) {
           authToken
         }
       }`;
@@ -255,42 +240,52 @@ describe('user tests', () => {
     });
 
     it('errors if no user', async () => {
+      mockGoogleOauthAuthorize(sidewalklabsToken);
       const mutation = `mutation {
-        userLogin(input: { email: "not-a-user@foo.com", password: "password1" }) {
+        userLogin(input: { googleAuthCode: "google-auth-code" }) {
           authToken
           user { firstName, lastName }
         }
       }`;
       const result = await graphql(schema, mutation, null, { db, userRole });
       expect(result.errors![0].message).toMatch(
-        'User not found for not-a-user@foo.com',
+        'User not found for brennan@sidewalklabs.com',
       );
     });
 
-    it('errors if incorrect password', async () => {
-      await User.create({
-        email: 'a@b.com',
-        password: 'password1',
-        firstName: 'Bertrand',
-        lastName: 'Russell',
-        userRole,
-        homeClinicId,
-      });
+    it('errors if token is invalid', async () => {
+      mockGoogleOauthAuthorize('invalid');
       const mutation = `mutation {
-        userLogin(input: { email: "a@b.com", password: "incorrect!" }) {
+        userLogin(input: { googleAuthCode: "google-auth-code" }) {
           authToken
           user { firstName, lastName }
         }
       }`;
       const result = await graphql(schema, mutation, null, { db, userRole });
-      expect(result.errors![0].message).toMatch('Login failed: password');
+      expect(result.errors![0].message).toMatch(
+        'Auth failed: Email not verified',
+      );
+    });
+
+    it('errors email is not @sidewalklabs.com', async () => {
+      mockGoogleOauthAuthorize(gmailToken);
+      const mutation = `mutation {
+        userLogin(input: { googleAuthCode: "google-auth-code" }) {
+          authToken
+          user { firstName, lastName }
+        }
+      }`;
+      const result = await graphql(schema, mutation, null, { db, userRole });
+      expect(result.errors![0].message).toMatch(
+        'Email must have a @sidewalklabs.com domain',
+      );
     });
   });
 
   describe('userCreate', () => {
     it('creates a new user', async () => {
       const mutation = `mutation {
-        userCreate(input: { email: "a@b.com", password: "c0000lp3rd!", homeClinicId: "1" }) {
+        userCreate(input: { email: "a@b.com", homeClinicId: "1" }) {
           authToken
           user { email }
         }
@@ -301,27 +296,14 @@ describe('user tests', () => {
       });
     });
 
-    it('errors if password to short', async () => {
-      const mutation = `mutation {
-        userCreate(input: { email: "a@b.com", password: "c", homeClinicId: "1" }) {
-        authToken
-        user { email }
-      } }`;
-      const result = await graphql(schema, mutation, null, { db, userRole });
-      expect(cloneDeep(result.errors![0].message)).toMatch(
-        'Query error: String not long enough',
-      );
-    });
-
     it('errors if email already exists', async () => {
       await User.create({
         email: 'a@b.com',
-        password: 'password1',
         userRole,
         homeClinicId,
       });
       const mutation = `mutation {
-        userCreate(input: { email: "a@b.com", password: "c0000lp3rd!", homeClinicId: "1" }) {
+        userCreate(input: { email: "a@b.com", homeClinicId: "1" }) {
         authToken
         user { email }
       } }`;

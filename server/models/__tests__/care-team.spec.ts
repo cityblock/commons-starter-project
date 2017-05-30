@@ -21,13 +21,11 @@ describe('care model', () => {
     it('should associate multiple users with a patient', async () => {
       const user1 = await User.create({
         email: 'care@care.com',
-        password: 'password1',
         userRole,
         homeClinicId: '1',
       });
       const user2 = await User.create({
         email: 'b@c.com',
-        password: 'password1',
         userRole,
         homeClinicId: '1',
       });
@@ -46,7 +44,6 @@ describe('care model', () => {
     it('throws an error if adding a non-existant user to a care team', async () => {
       const user = await User.create({
         email: 'care@care.com',
-        password: 'password1',
         userRole,
         homeClinicId: '1',
       });
@@ -62,7 +59,6 @@ describe('care model', () => {
     it('can remove a user from a care team', async () => {
       const user = await User.create({
         email: 'care@care.com',
-        password: 'password1',
         userRole,
         homeClinicId: '1',
       });
@@ -81,7 +77,6 @@ describe('care model', () => {
     it('should fetch limited set of patients', async () => {
       const user = await User.create({
         email: 'care@care.com',
-        password: 'password1',
         userRole,
         homeClinicId: '1',
       });
@@ -104,7 +99,6 @@ describe('care model', () => {
     it('should fetch care team', async () => {
       const user = await User.create({
         email: 'care@care.com',
-        password: 'password1',
         userRole,
         homeClinicId: '1',
       });

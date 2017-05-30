@@ -1,10 +1,9 @@
-import { hash } from 'bcrypt';
 import { Model, RelationMappings, ValidationError } from 'objection';
 import * as uuid from 'uuid';
 import { isEmail } from 'validator';
-import config from '../config';
 import { IPaginatedResults, IPaginationOptions } from '../db';
 import Clinic from './clinic';
+import GoogleAuth from './google-auth';
 
 export type UserRole =
   'physician' |
@@ -16,12 +15,20 @@ export type UserRole =
 
 export interface ICreateUser {
   email: string;
-  password: string;
   homeClinicId: string;
   firstName?: string;
   lastName?: string;
   userRole?: UserRole;
   athenaProviderId?: number;
+}
+
+export interface IUpdateUser {
+  googleProfileImageUrl: string;
+  googleAuthId: string;
+  homeClinicId: string;
+  firstName: string;
+  lastName: string;
+  lastLoginAt: string;
 }
 
 export type GetByOptions = 'email';
@@ -36,10 +43,12 @@ export default class User extends Model {
   lastName: string;
   email: string;
   userRole: UserRole;
-  hashedPassword: string;
   homeClinicId: string;
   homeClinic: Clinic;
+  googleAuthId: string;
+  googleAuth: GoogleAuth;
   athenaProviderId: number;
+  googleProfileImageUrl: string;
 
   static tableName = 'user';
 
@@ -49,7 +58,6 @@ export default class User extends Model {
 
   static jsonSchema = {
     type: 'object',
-    required: ['email', 'userRole', 'homeClinicId'],
     properties: {
       id: { type: 'string' },
       lastLoginAt: { type: 'string' },
@@ -60,13 +68,22 @@ export default class User extends Model {
         type: 'string',
         enum: ['familyMember', 'healthCoach', 'physician', 'nurseCareManager'],
       },
-      hashedPassword: { type: 'string' },
       homeClinicId: { type: 'string' },
       athenaProviderId: { type: 'number' },
+      googleAuthId: { type: 'string' },
+      googleProfileImageUrl: { type: 'string' },
     },
   };
 
   static relationMappings: RelationMappings = {
+    googleAuth: {
+      relation: Model.BelongsToOneRelation,
+      modelClass: 'google-auth',
+      join: {
+        from: 'user.googleAuthId',
+        to: 'google_auth.id',
+      },
+    },
     homeClinic: {
       relation: Model.BelongsToOneRelation,
       modelClass: 'clinic',
@@ -120,10 +137,6 @@ export default class User extends Model {
     this.updatedAt = new Date().toISOString();
   }
 
-  async updateLoginAt(lastLoginAt: string) {
-    return await this.$query().patch({ lastLoginAt } as this); // Typings are weird here
-  }
-
   static async getLastLoggedIn(userId: string): Promise<string | undefined> {
     // TODO: Figure out how to return select fields via knex
     const user = await this.query().findById(userId);
@@ -131,12 +144,15 @@ export default class User extends Model {
   }
 
   static async create(user: ICreateUser): Promise<User> {
-    const hashedPassword = await hash(user.password, config.SALT_ROUNDS);
-    const userWithHashedPassword = { ...user, hashedPassword };
-
     return await this
       .query()
-      .insertAndFetch(userWithHashedPassword);
+      .insertAndFetch(user);
+  }
+
+  static async update(userId: string, user: Partial<IUpdateUser>): Promise<User> {
+    return await this
+      .query()
+      .updateAndFetchById(userId, user);
   }
 
   static async get(userId: string): Promise<User> {

@@ -37,7 +37,6 @@ describe('patient', () => {
     homeClinicId = homeClinic.id;
     user = await User.create({
       email: 'a@b.com',
-      password: 'password1',
       userRole,
       homeClinicId,
     });

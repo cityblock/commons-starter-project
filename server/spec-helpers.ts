@@ -358,6 +358,18 @@ export function createMockAthenaPatientEncounters(
   };
 }
 
+// Google Auth
+export function mockGoogleOauthAuthorize(idToken: string) {
+  nock('https://www.googleapis.com/oauth2/v4/token')
+    .post('')
+    .reply(200, {
+      id_token: idToken,
+      expires_in: 3600,
+      access_token: 'stub',
+      token_type: 'Bearer',
+    });
+}
+
 // Athena
 export function restoreAthenaFetch() {
   nock.cleanAll();
@@ -458,7 +470,7 @@ export function mockAthenaOpenAppointment(body: MockAthenaOpenAppointment) {
 export function mockAthenaOpenAppointmentError() {
   mockAthenaPostError(
     `/${config.ATHENA_PRACTICE_ID}/appointments/open`,
-    { detailedmessage: 'Appointment type ID is invalid.', error: 'The data provided is invalid.'},
+    { detailedmessage: 'Appointment type ID is invalid.', error: 'The data provided is invalid.' },
     400);
 }
 

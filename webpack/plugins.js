@@ -6,7 +6,7 @@ module.exports = ({ production = false } = {}) => {
   if (!production) {
     return [
       new CheckerPlugin(),
-      new webpack.EnvironmentPlugin(["NODE_ENV"]),
+      new webpack.EnvironmentPlugin(["NODE_ENV", "GOOGLE_OAUTH_TOKEN"]),
       new webpack.NoEmitOnErrorsPlugin(),
       new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/), // https://github.com/jmblog/how-to-optimize-momentjs-with-webpack
     ];
@@ -14,7 +14,7 @@ module.exports = ({ production = false } = {}) => {
   if (production) {
     return [
       new CheckerPlugin(),
-      new webpack.EnvironmentPlugin(["NODE_ENV"]),
+      new webpack.EnvironmentPlugin(["NODE_ENV", "GOOGLE_OAUTH_TOKEN"]),
       new webpack.optimize.OccurrenceOrderPlugin(),
       new ExtractTextPlugin({
         filename: "styles/main.css",

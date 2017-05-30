@@ -1,5 +1,5 @@
-mutation logInUser($email: String!, $password: String!) {
-  userLogin(input: { email: $email, password: $password }) {
+mutation logInUser($googleAuthCode: String!) {
+  userLogin(input: { googleAuthCode: $googleAuthCode }) {
     authToken
     user {
       ...FullUser

@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { compose, graphql } from 'react-apollo';
+import GoogleLogin, { GoogleLoginResponseOffline } from 'react-google-login';
 import { connect, Dispatch } from 'react-redux';
 import { push } from 'react-router-redux';
 import * as styles from '../css/components/login-scene.css';
@@ -14,81 +15,54 @@ export interface IProps {
   error?: string;
 }
 
-interface IState {
-  email?: string;
-  password?: string;
+interface IGoogleLoginError {
+  error: string;
+  details: string;
 }
 
-export class LoginContainer extends React.Component<IProps, IState> {
+const SCOPE = 'https://www.googleapis.com/auth/calendar';
+
+export class LoginContainer extends React.Component<IProps, { error?: string }> {
 
   constructor(props: IProps) {
     super(props);
-    this.onChangeEmail = this.onChangeEmail.bind(this);
-    this.onChangePassword = this.onChangePassword.bind(this);
-    this.onButtonSubmit = this.onButtonSubmit.bind(this);
+    this.onSuccess = this.onSuccess.bind(this);
+    this.onError = this.onError.bind(this);
     this.state = {
-      email: '',
-      password: '',
+      error: undefined,
     };
   }
 
-  componentWillReceiveProps(newProps: IProps) {
-    if (newProps.currentUser) {
-      // Log in succeeded. Navigate to the patients list scene.
+  async onSuccess(response: GoogleLoginResponseOffline) {
+    try {
+      const res = await this.props.logIn({ variables: { googleAuthCode: response.code } });
+      await localStorage.setItem('authToken', res.data.userLogin.authToken);
       this.props.onSuccess();
+    } catch (e) {
+      await localStorage.removeItem('authToken');
+      this.setState({ error: e.message });
     }
   }
 
-  onChangeEmail(event: React.ChangeEvent<HTMLInputElement>) {
-    this.setState({ email: event.target.value });
-  }
-
-  onChangePassword(event: React.ChangeEvent<HTMLInputElement>) {
-    this.setState({ password: event.target.value });
-  }
-
-  async onButtonSubmit() {
-    const { email, password } = this.state;
-    if (email && password) {
-      // TODO: loading state
-      try {
-        const response = await this.props.logIn({ variables: { email, password } });
-        const token = response.data.login.authToken;
-        await localStorage.setItem('authToken', token);
-        this.props.onSuccess();
-      } catch (error) {
-        await localStorage.removeItem('authToken');
-      }
-    }
-    return false;
+  async onError(error: IGoogleLoginError) {
+    this.setState({ error: error.details });
   }
 
   render() {
+    const { error } = this.state;
     return (
       <div className={styles.container}>
         <div className={styles.form}>
           <div className={styles.title}>Log In</div>
-          <div className={styles.inputContainer}>
-            <input
-              type='text'
-              placeholder='Your Email'
-              className={styles.input}
-              value={this.state.email}
-              onChange={this.onChangeEmail}
-            />
-          </div>
-          <div className={styles.inputContainer}>
-            <input
-              type='password'
-              placeholder='Password'
-              value={this.state.password}
-              className={styles.input}
-              onChange={this.onChangePassword}
-            />
-          </div>
-          <button className={styles.button} onClick={this.onButtonSubmit}>
-            Log In
-          </button>
+          <div className={styles.error}>{error}</div>
+          <GoogleLogin
+            clientId={process.env.GOOGLE_OAUTH_TOKEN}
+            buttonText='Login'
+            offline
+            scope={SCOPE}
+            onSuccess={this.onSuccess}
+            onFailure={this.onError}
+          />
         </div>
       </div>
     );

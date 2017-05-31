@@ -49,9 +49,8 @@
 .center a {
   color: white;
   text-align: center;
-  font-family: Basetica;
+  font-family: var(--basetica-medium);
   font-size: 18px;
-  font-weight: 500;
   letter-spacing: 1px;
   line-height: 23px;
   text-transform: uppercase;
@@ -64,7 +63,7 @@
 }
 
 .userInfo {
-  font-family: 'Roboto', sans-serif;
+  font-family: var(--roboto);
   display: inline-block;
   vertical-align: top;
   margin-right: 10px;

@@ -2,6 +2,28 @@
 @lost gutter 30px;
 @lost flexbox flex;
 
+
+@font-face {
+  font-family: 'BaseticaBlackItalic';
+  src: url('../assets/fonts/basetica-black-italic.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'BaseticaBlack';
+  src: url('../assets/fonts/basetica-black.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'BaseticaMediumItalic';
+  src: url('../assets/fonts/basetica-medium-italic.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'BaseticaMedium';
+  src: url('../assets/fonts/basetica-medium.woff2') format('woff2');
+}
+
+
 /*
  * Add any global styles here
  */
@@ -34,7 +56,7 @@ html body {
   overflow-x: hidden;
   font-weight: normal;
   font-style: normal;
-  font-family: 'Roboto', sans-serif;;
+  font-family: var(--roboto);;
   font-size: var(--default-font-size);
   line-height: var(--default-line-height);
 }

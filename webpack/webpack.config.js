@@ -13,7 +13,6 @@ const plugins = require("./plugins");
 const externals = require("./externals");
 const resolve = require("./resolve");
 
-
 module.exports = (env = "") => {
   dotenv.config();
 

@@ -1,6 +1,7 @@
 const webpack = require("webpack");
 const ExtractTextPlugin = require("extract-text-webpack-plugin");
 const { CheckerPlugin } = require("awesome-typescript-loader")
+const CopyWebpackPlugin = require("copy-webpack-plugin");
 
 module.exports = ({ production = false } = {}) => {
   if (!production) {
@@ -20,6 +21,9 @@ module.exports = ({ production = false } = {}) => {
         filename: "styles/main.css",
         allChunks: true
       }),
+      new CopyWebpackPlugin([
+        { from: 'assets' },
+      ]),
       new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/), // https://github.com/jmblog/how-to-optimize-momentjs-with-webpack
       new webpack.optimize.UglifyJsPlugin({
         compress: { warnings: false },

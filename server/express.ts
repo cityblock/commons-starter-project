@@ -58,7 +58,9 @@ export default async (app: express.Application) => {
   app.set('views', path.join(__dirname, '..', 'views'));
   app.set('view cache', false);
 
-  app.use('/assets', express.static(path.join(__dirname, '..', 'public')));
+  app.use('/assets', express.static(path.join(__dirname, '..', 'public'), {
+    maxAge: '24h',
+  }));
 
   /* istanbul ignore if  */
   if (config.NODE_ENV === 'production') {

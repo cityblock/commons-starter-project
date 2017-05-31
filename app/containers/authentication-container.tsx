@@ -2,6 +2,7 @@ import * as React from 'react';
 import { graphql } from 'react-apollo';
 import { connect, Dispatch } from 'react-redux';
 import { push } from 'react-router-redux';
+import { Header } from '../components/header';
 import { getQuery } from '../graphql/helpers';
 import { FullUserFragment } from '../graphql/types';
 
@@ -25,6 +26,7 @@ class Authentication extends React.Component<IProps, {}> {
     if (this.props.currentUser) {
       return (
         <div>
+          <Header currentUser={this.props.currentUser} />
           {this.props.children}
         </div>);
     }

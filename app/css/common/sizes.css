@@ -12,6 +12,8 @@
   --default-font-color: #333333;
   --default-font-size: 14px;
   --default-line-height: 16px;
+  --small-font-size: 12px;
+  --small-font-line-height: 14px;
   --large-font-size: 24px;
   --large-font-line-height: 29px;
 }

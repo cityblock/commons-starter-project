@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { graphql } from 'react-apollo';
+import { LoadingErrorHeading } from '../components/loading-error-heading';
 import { getQuery } from '../graphql/helpers';
 import { ShortPatientFragment } from '../graphql/types';
 
@@ -14,15 +15,21 @@ export interface IState {
   pageNumber?: number;
 }
 
-export class PatientPanelContainer extends React.Component<IProps, IState> {
+class PatientPanelContainer extends React.Component<IProps, IState> {
   constructor(props: IProps) {
     super(props);
     this.state = {};
   }
 
   render() {
+    const { error, loading } = this.props;
     return (
-      <div></div>
+      <div>
+        <LoadingErrorHeading
+          error={error}
+          isLoading={loading}
+        />
+      </div>
     );
   }
 }

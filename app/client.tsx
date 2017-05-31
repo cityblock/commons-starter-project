@@ -17,7 +17,7 @@ import { API_URL } from './config';
 import Authentication from './containers/authentication-container';
 import LogIn from './containers/login-container';
 import Main from './containers/main';
-import { PatientPanelContainer } from './containers/patient-panel-container';
+import PatientPanelContainer from './containers/patient-panel-container';
 
 const history = createHistory();
 
@@ -43,6 +43,8 @@ networkInterface.use([
 
 const client = new ApolloClient({ networkInterface });
 
+const composeEnhancers = (window as any).__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+
 const middleware = [
   createLogger(),
   routerMiddleware(history),
@@ -58,7 +60,7 @@ const reducers = combineReducers<IState>({
   apollo: client.reducer(),
 });
 
-const store = createStore(reducers, compose(applyMiddleware(...middleware)));
+const store = createStore(reducers, composeEnhancers(applyMiddleware(...middleware)));
 
 render(
   <ApolloProvider store={store} client={client}>

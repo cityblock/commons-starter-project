@@ -5,13 +5,13 @@ export default function app(req: express.Request, res: express.Response) {
     <!doctype html>
     <html>
       <head>
-        <title>Commons</title>
+        <title>Commons | A Sidewalk Labs Urban Health Initiative</title>
         <meta charset='utf-8'>
         <meta http-equiv='X-UA-Compatible' content='IE=edge'>
         <meta name='viewport' content='width=device-width, initial-scale=1'>
         <meta name='robots' content='noindex, nofollow'>
         <link rel='stylesheet' href='/assets/styles/main.css'>
-        <link href="https://fonts.googleapis.com/css?family=Roboto:400,500" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css?family=Roboto:400,500,600" rel="stylesheet">
       </head>
       <body>
         <div id='app'></div>

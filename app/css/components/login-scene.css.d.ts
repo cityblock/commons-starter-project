@@ -1,3 +1,4 @@
+export const background: string;
 export const container: string;
 export const title: string;
 export const error: string;

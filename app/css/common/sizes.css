@@ -6,14 +6,17 @@
   --tablet: 700;
   --max-width: 1600px;
   --border-color: #cccccc;
+  --gray-background-color: #F2F2F2;
   --blue-color: #2962FF;
   --teal-color: #66C5DD;
+  --gray-font-color: #666666;
   --white-font-color: #F2F2F2;
   --default-font-color: #333333;
   --default-font-size: 14px;
   --default-line-height: 16px;
   --small-font-size: 12px;
   --small-font-line-height: 14px;
+  --medium-font-line-height: 18px;
   --large-font-size: 24px;
   --large-font-line-height: 29px;
   --basetica-black-italic: "BaseticaBlackItalic", Helvetica, sans-serif;
@@ -50,7 +53,35 @@
     -webkit-appearance: none;
   }
   --title {
+    font-family: var(--basetica-black);
     font-size: var(--large-font-size);
     line-height: var(--large-font-line-height);
+  }
+  --label {
+    font-family: var(--basetica-medium);
+    font-size: var(--default-font-size);
+    line-height: var(--medium-font-line-height);
+  }
+  --input {
+    border: 1px solid var(--border-color);
+    background-color: #FFFFFF;
+    outline: none;
+    padding: 16px 20px;
+    font-family: var(--roboto);
+    font-size: 16px;
+    line-height: 19px;
+  }
+  --select {
+    -webkit-appearance: none;
+    border-radius: 0px;
+    width: 100%;
+    outline: none;
+    border: 1px solid var(--border-color);
+    background-color: #FFFFFF;
+    outline: none;
+    padding: 16px 20px;
+    font-family: var(--roboto);
+    font-size: 16px;
+    line-height: 19px;
   }
 }

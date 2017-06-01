@@ -373,7 +373,7 @@ input PatientHealthRecordEditInput {
   dateOfBirth: String
   suffix: String
   preferredName: String
-  racename: String
+  raceName: String
   race: [String]
   ethnicityCode: String
   status: String
@@ -410,7 +410,7 @@ input PatientSetupInput {
   homeClinicId: String!
   suffix: String
   preferredName: String
-  racename: String
+  raceName: String
   race: [String]
   ethnicityCode: String
   status: String
@@ -465,6 +465,7 @@ type RootMutationType {
   # Edit fields on patient stored in the db
   patientEdit(input: PatientEditInput): Patient
 
+  # Edit a patient's health record
   patientHealthRecordEdit(input: PatientHealthRecordEditInput): PatientHealthRecord
 
   # Setup patient creates the patient in the db AND in athena

@@ -1,0 +1,118 @@
+@import '../common/sizes';
+.container {}
+
+.formContainer {
+  max-width: var(--max-width);
+  margin: 0px auto;
+  lost-flex-container: row;
+}
+
+.leftNav {
+  background: var(--gray-background-color);
+  padding: 50px 55px 0px var(--gutter);
+  lost-column: 2/12;
+}
+
+.leftNavLink {
+  color: var(--gray-font-color);
+  font-family: var(--basetica-medium);
+  font-size: var(--default-font-size);
+  line-height: var(--medium-font-line-height);
+  margin-bottom: 30px;
+  cursor: pointer;
+}
+
+.form {
+  lost-column: 10/12;
+}
+
+.formRow {
+  max-width: var(--max-width);
+  margin: 0px auto;
+  lost-flex-container: row;
+}
+
+.formSection {
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: var(--gutter);
+  margin-bottom: var(--gutter);
+}
+
+.formSection:last-child {
+  margin-bottom: 100px;
+  border-bottom: 0px solid;
+}
+
+.formHeading {
+  @apply --title;
+  margin: 50px 0px;
+}
+
+.formColumn {
+  lost-column: 3/10;
+  margin-bottom: 30px;
+}
+
+.input {
+  @apply --input;
+  width: 100%;
+}
+
+.label {
+  @apply --label;
+  margin-bottom: 10px;
+}
+
+.select {
+  @apply --select;
+}
+
+.optionalLabel {
+  color: var(--border-color);
+  font-family: var(--basetica-medium);
+  font-size: var(--small-font-size);
+  line-height: var(--small-font-line-height);
+  display: inline-block;
+  margin-left: 5px;
+}
+
+.formBottom {
+  position: fixed;
+  bottom: 0px;
+  left: 0px;
+  background: white;
+  padding: 15px 0px;
+  width: 100%;
+}
+
+.formBottomContent {
+  width: 100%;
+  max-width: var(--max-width);
+  margin: 0px auto;
+  padding: 0px var(--gutter);
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.cancelButton, .submitButton {
+  padding: 12px 65px;
+  background: white;
+  border: 0px solid;
+  border-radius: 2px;
+  outline: none;
+  font-family: var(--basetica-medium);
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 18px;
+}
+
+.cancelButton {
+  color: var(--blue-color);
+  border: 1px solid var(--blue-color);
+}
+
+.submitButton {
+  color: white;
+  background: var(--blue-color);
+}

@@ -1,0 +1,66 @@
+mutation patientSetup(
+  $firstName: String!
+  $lastName: String!
+  $dateOfBirth: String!
+  $gender: String!
+  $zip: Int!
+  $homeClinicId: String!
+  $suffix: String
+  $preferredName: String
+  $raceName: String
+  $race: [String]
+  $ethnicityCode: String
+  $status: String
+  $ssn: String
+  $homebound: Boolean
+  $language6392code: String
+  $maritalStatus: String
+  $maritalStatusName: String
+
+  $email: String
+  $homePhone: String
+  $mobilePhone: String
+  $consentToCall: Boolean
+  $consentToText: Boolean
+
+  $city: String
+  $address1: String
+  $countryCode: String
+  $countryCode3166: String
+  $state: String
+) {
+  patientSetup(input: {
+    firstName: $firstName,
+    lastName: $lastName,
+    dateOfBirth: $dateOfBirth,
+    gender: $gender,
+    zip: $zip,
+    homeClinicId: $homeClinicId,
+    suffix: $suffix,
+    preferredName: $preferredName,
+    raceName: $raceName,
+    race: $race,
+    ethnicityCode: $ethnicityCode,
+    status: $status,
+    ssn: $ssn,
+    homebound: $homebound,
+    language6392code: $language6392code,
+    maritalStatus: $maritalStatus,
+    maritalStatusName: $maritalStatusName,
+
+    email: $email,
+    homePhone: $homePhone,
+    mobilePhone: $mobilePhone,
+    consentToCall: $consentToCall,
+    consentToText: $consentToText,
+
+    city: $city,
+    address1: $address1,
+    countryCode: $countryCode,
+    countryCode3166: $countryCode3166,
+    state: $state,
+   }) {
+    ...ShortPatient
+  }
+}
+

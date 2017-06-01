@@ -1,0 +1,5 @@
+query patientHealthRecord($patientId: String!) {
+  patientHealthRecord(patientId: $patientId) {
+    ...FullPatientHealthRecord
+  }
+}

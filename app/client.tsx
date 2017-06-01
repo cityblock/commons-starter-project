@@ -17,6 +17,7 @@ import { API_URL } from './config';
 import Authentication from './containers/authentication-container';
 import LogIn from './containers/login-container';
 import Main from './containers/main';
+import PatientEnrollmentContainer from './containers/patient-enrollment';
 import PatientPanelContainer from './containers/patient-panel-container';
 
 const history = createHistory();
@@ -69,6 +70,7 @@ render(
         <Route exact path='/' component={(LogIn as any)} />
         <Route path={'/patient*'} render={() => (
           <Authentication>
+            <Route exact path='/patients/new' component={(PatientEnrollmentContainer as any)} />
             <Route exact path='/patients' component={(PatientPanelContainer as any)} />
           </Authentication>
         )} />

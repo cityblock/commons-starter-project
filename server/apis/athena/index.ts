@@ -38,7 +38,7 @@ interface IPatientEditableFields {
   departmentId: number;
   suffix: string;
   preferredName: string;
-  racename: string;
+  raceName: string;
   race: string[];
   ethnicityCode: string;
   status: string;

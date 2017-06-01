@@ -89,7 +89,7 @@ export const formatEditPatientHealthRecordOptions = (
 
   suffix: options.suffix,
   preferredname: options.preferredName,
-  racename: options.racename,
+  racename: options.raceName,
   race: options.race,
   ethnicitycode: options.ethnicityCode,
   status: options.status,

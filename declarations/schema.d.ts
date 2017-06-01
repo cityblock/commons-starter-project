@@ -16,7 +16,7 @@ declare module 'schema' {
   }
 
   /*
-    description: 
+    description:
   */
   interface IRootQueryType {
     user: IUser | null;
@@ -58,7 +58,7 @@ declare module 'schema' {
   }
 
   /*
-    description: 
+    description:
   */
   type IUserRoleEnum = 'physician' | 'nurseCareManager' | 'healthCoach' | 'familyMember' | 'anonymousUser' | 'admin';
 
@@ -333,7 +333,7 @@ declare module 'schema' {
   }
 
   /*
-    description: 
+    description:
   */
   interface IRootMutationType {
     userCreate: IUserWithAuthToken | null;
@@ -432,7 +432,7 @@ declare module 'schema' {
   }
 
   /*
-    description: 
+    description:
   */
   type IAppointmentStatusEnum = 'cancelled' | 'future' | 'open' | 'checkedIn' | 'checkedOut' | 'chargeEntered';
 
@@ -475,7 +475,7 @@ declare module 'schema' {
     dateOfBirth?: string | null;
     suffix?: string | null;
     preferredName?: string | null;
-    racename?: string | null;
+    raceName?: string | null;
     race?: Array<string> | null;
     ethnicityCode?: string | null;
     status?: string | null;
@@ -511,7 +511,7 @@ declare module 'schema' {
     homeClinicId: string;
     suffix?: string | null;
     preferredName?: string | null;
-    racename?: string | null;
+    raceName?: string | null;
     race?: Array<string> | null;
     ethnicityCode?: string | null;
     status?: string | null;

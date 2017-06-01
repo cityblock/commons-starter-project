@@ -33,6 +33,13 @@ class LoginContainer extends React.Component<IProps, { error?: string }> {
     };
   }
 
+  componentWillReceiveProps(newProps: IProps) {
+    if (newProps.currentUser) {
+      // Log in succeeded. Navigate to the patients list scene.
+      this.props.onSuccess();
+    }
+  }
+
   async onSuccess(response: GoogleLoginResponseOffline) {
     try {
       const res = await this.props.logIn({ variables: { googleAuthCode: response.code } });

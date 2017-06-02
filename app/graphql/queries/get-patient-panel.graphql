@@ -5,5 +5,9 @@ query getPatientPanel($pageNumber: Int, $pageSize: Int) {
         ...ShortPatient
       }
     }
+    pageInfo {
+      hasPreviousPage
+      hasNextPage
+    }
   }
 }

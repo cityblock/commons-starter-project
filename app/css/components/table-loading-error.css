@@ -1,0 +1,57 @@
+@import '../common/sizes';
+.errorRow, .loadingRow {
+  padding: 150px var(--gutter);
+  justify-content: center;
+  align-items: center;
+  lost-flex-container: column;
+}
+
+.errorIcon {
+  height: 26px;
+  width: 30px;
+  margin-bottom: 20px;
+  background-position: center center;
+  background-image: url('../../assets/alert-triangle.svg');
+}
+
+.errorHeading {
+  font-family: var(--basetica-black);
+  font-size: var(--medium-font-size);
+  color: var(--default-font-color);
+  margin-bottom: 10px;
+}
+
+.errorMessage {
+  font-family: var(--roboto);
+  font-size: var(--default-font-size);
+  color: var(--light-font-color);
+  margin-bottom: 30px;
+}
+
+.errorButton {
+  @apply --inverted-button;
+  padding: 10px 20px 8px;
+  font-size: var(--small-font-size);
+}
+
+/* Spinner animation from http://tobiasahlin.com/spinkit/ */
+.loadingSpinner {
+  width: 38px;
+  height: 38px;
+  background-color: var(--blue-color);
+  animation: skRotateplane 1.2s infinite ease-in-out;
+}
+
+.loadingText {
+  margin-top: 20px;
+  letter-spacing: 1px;
+  font-family: var(--basetica-medium);
+  font-size: var(--default-font-size);
+  color: var(--border-color);
+}
+
+@keyframes skRotateplane {
+  0%   { transform: perspective(60px) rotateX(0deg) rotateY(0deg) }
+  50%  { transform: perspective(60px) rotateX(-180.1deg) rotateY(0deg) }
+  100% { transform: perspective(60px) rotateX(-180deg) rotateY(-179.9deg) }
+}

@@ -1,7 +1,8 @@
 @custom-media --small-viewport (max-width: 900px);
 @custom-media --large-viewport (min-width: 900px);
 :root {
-  --gutter: 30px;
+  --gutter: 40px;
+  --small-gutter: 20px;
   --mobile: 500;
   --tablet: 700;
   --max-width: 1600px;
@@ -12,10 +13,13 @@
   --gray-font-color: #666666;
   --white-font-color: #F2F2F2;
   --default-font-color: #333333;
+  --light-font-color: #666666;
+  --highlight-background-color: #fafafa;
   --default-font-size: 14px;
   --default-line-height: 16px;
   --small-font-size: 12px;
   --small-font-line-height: 14px;
+  --medium-font-size: 16px;
   --medium-font-line-height: 18px;
   --large-font-size: 24px;
   --large-font-line-height: 29px;
@@ -37,7 +41,7 @@
     outline: none;
   }
   --button {
-    padding: 12px 64px;
+    padding: 14px 64px 11px;
     border: 0px solid;
     cursor: pointer;
     transition: background-color 0.3s;
@@ -49,8 +53,26 @@
     font-weight: 500;
     line-height: 18px;
     text-align: center;
-    border-radius: 0px;
+    border-radius: 2px;
     -webkit-appearance: none;
+    user-select: none;
+  }
+  --inverted-button {
+    padding: 14px 64px 11px;
+    border: 1px solid var(--blue-color);
+    cursor: pointer;
+    transition: background-color 0.3s;
+    outline: none;
+    background-color: white;
+    color: var(--blue-color);
+    font-family: var(--basetica-medium);
+    font-size: var(--default-font-size);
+    font-weight: 500;
+    line-height: 18px;
+    text-align: center;
+    border-radius: 2px;
+    -webkit-appearance: none;
+    user-select: none;
   }
   --title {
     font-family: var(--basetica-black);

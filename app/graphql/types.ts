@@ -26,6 +26,10 @@ export interface GetPatientPanelQuery {
     edges: Array< {
       node: ShortPatientFragment,
     } > | null,
+    pageInfo: {
+      hasPreviousPage: boolean,
+      hasNextPage: boolean,
+    },
   } | null;
 }
 

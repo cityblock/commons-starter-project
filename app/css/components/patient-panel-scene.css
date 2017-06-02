@@ -1,0 +1,29 @@
+@import '../common/sizes';
+.container {
+  flex: 1;
+  justify-content: center;
+  lost-center: var(--max-width);
+}
+
+.header {
+  width: 100%;
+}
+
+.headerRow {
+  padding: 50px var(--gutter);
+  justify-content: space-between;
+  align-items: center;
+  lost-flex-container: row;
+}
+
+.headerText{
+  font-family: var(--basetica-black);
+  font-size: var(--large-font-size);
+  color: var(--default-font-color);
+  padding-top: 4px;
+  user-select: none;
+}
+
+.button {
+  @apply --button;
+}

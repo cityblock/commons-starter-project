@@ -1,3 +1,4 @@
+import * as langs from 'langs';
 import * as React from 'react';
 import { compose, graphql } from 'react-apollo';
 import { connect, Dispatch } from 'react-redux';
@@ -8,6 +9,8 @@ import {
   PatientHealthRecordEditMutationVariables,
   PatientSetupMutationVariables,
 } from '../graphql/types';
+import ethnicities from '../util/ethnicity-codes';
+import races from '../util/race-codes';
 
 export interface IProps {
   editPatientHealthRecord: (
@@ -20,6 +23,7 @@ export interface IProps {
 export interface IState {
   firstName: string;
   middleName: string;
+  lastName: string;
   dateOfBirth: string;
   gender: string;
   maritalStatus: string;
@@ -52,11 +56,27 @@ class PatientEnrolementContainer extends React.Component<IProps, Partial<IState>
     this.setState({ firstName: event.target.value });
   }
 
+  updateMiddletName(event: React.ChangeEvent<HTMLInputElement>) {
+    this.setState({ middleName: event.target.value });
+  }
+
+  updateLastName(event: React.ChangeEvent<HTMLInputElement>) {
+    this.setState({ lastName: event.target.value });
+  }
   updateDateOfBirth(event: React.ChangeEvent<HTMLInputElement>) {
     this.setState({ dateOfBirth: event.target.value });
   }
 
   render() {
+    const languagesHtml = langs.all().map((language: langs.Language) => (
+      <option key={language['2']} value={language['2']}>{language.name}</option>
+    ));
+    const ethnicitiesHtml = Object.keys(ethnicities).map(key => (
+      <option key={key} value={key}>{ethnicities[key]}</option>
+    ));
+    const racesHtml = races.map((race: any)  => (
+      <option key={race.code} value={race.code}>{race.display}</option>
+    ));
     return (
       <div className={styles.container}>
         <div className={styles.formContainer}>
@@ -79,11 +99,11 @@ class PatientEnrolementContainer extends React.Component<IProps, Partial<IState>
                     Middle name
                     <span className={styles.optionalLabel}>optional</span>
                   </div>
-                  <input className={styles.input} />
+                  <input className={styles.input} onChange={this.updateFirstName.bind(this)} />
                 </div>
                 <div className={styles.formColumn}>
                   <div className={styles.label}>Middle name</div>
-                  <input className={styles.input} />
+                  <input className={styles.input} onChange={this.updateFirstName.bind(this)} />
                 </div>
               </div>
               <div className={styles.formRow}>
@@ -99,15 +119,40 @@ class PatientEnrolementContainer extends React.Component<IProps, Partial<IState>
                     Gender
                   </div>
                   <select className={styles.select}>
-                    <option>M</option>
-                    <option>F</option>
+                    <option value='M'>Male</option>
+                    <option value='F'>Female</option>
                   </select>
                 </div>
                 <div className={styles.formColumn}>
                   <div className={styles.label}>Marital status</div>
                   <select className={styles.select}>
-                    <option>M</option>
-                    <option>F</option>
+                    <option value='D'>Divorced</option>
+                    <option value='M'>Married</option>
+                    <option value='S'>Single</option>
+                    <option value='U'>Unknown</option>
+                    <option value='W'>Widowed</option>
+                    <option value='S'>Separated</option>
+                    <option value='P'>Partner</option>
+                  </select>
+                </div>
+              </div>
+              <div className={styles.formRow}>
+                <div className={styles.formColumn}>
+                  <div className={styles.label}>Preferred language</div>
+                  <select className={styles.select}>
+                    {languagesHtml}
+                  </select>
+                </div>
+                <div className={styles.formColumn}>
+                  <div className={styles.label}>Race</div>
+                  <select className={styles.select}>
+                    {racesHtml}
+                  </select>
+                </div>
+                <div className={styles.formColumn}>
+                  <div className={styles.label}>Ethnicity</div>
+                  <select className={styles.select}>
+                    {ethnicitiesHtml}
                   </select>
                 </div>
               </div>

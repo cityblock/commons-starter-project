@@ -43,7 +43,7 @@
 }
 
 .loadingText {
-  margin-top: 20px;
+  margin-top: 25px;
   letter-spacing: 1px;
   font-family: var(--basetica-medium);
   font-size: var(--default-font-size);
@@ -51,7 +51,7 @@
 }
 
 @keyframes skRotateplane {
-  0%   { transform: perspective(60px) rotateX(0deg) rotateY(0deg) }
-  50%  { transform: perspective(60px) rotateX(-180.1deg) rotateY(0deg) }
-  100% { transform: perspective(60px) rotateX(-180deg) rotateY(-179.9deg) }
+  0%   { transform: perspective(40px) rotateX(0deg) rotateY(0deg) }
+  50%  { transform: perspective(40px) rotateX(-180.1deg) rotateY(0deg) }
+  100% { transform: perspective(40px) rotateX(-180deg) rotateY(-179.9deg) }
 }

@@ -1,6 +1,6 @@
 exports.up = function (knex, Promise) {
   return knex.schema.createTableIfNotExists('care_team', function (table) {
-    table.increments('id').primary();
+    table.string('id').primary();
     table.string('userId').references('id').inTable('user');
     table.string('patientId').references('id').inTable('patient');
     table.unique(['userId', 'patientId']);

@@ -16,7 +16,9 @@ export default class CareTeam extends Model {
   updatedAt: string;
   deletedAt: string;
   patient: Patient;
+  patientId: string;
   user: User;
+  userId: string;
 
   static tableName = 'care_team';
 
@@ -28,6 +30,8 @@ export default class CareTeam extends Model {
     type: 'object',
     properties: {
       id: { type: 'string' },
+      patientId: { type: 'string' },
+      userId: { type: 'string' },
       deletedAt: { type: 'string' },
     },
   };
@@ -88,24 +92,20 @@ export default class CareTeam extends Model {
 
   static async addUserToCareTeam({ userId, patientId }: ICareTeamOptions): Promise<User[]> {
     // TODO: use postgres UPCERT here to add relation if it doesn't exist instead of a transaction
-    await transaction(User, async UserWithTransaction => {
-      const user = await UserWithTransaction
+    await transaction(CareTeam, async CareTeamWithTransaction => {
+      const relations = await CareTeamWithTransaction
         .query()
-        .findById(userId);
-      if (!user) {
-        throw new Error('user not found');
-      } else {
-        const relations = await user
-          .$relatedQuery('patients')
-          .where('patientId', patientId)
-          .andWhere('deletedAt', null);
-        if (relations.length < 1) {
-          await user
-            .$relatedQuery('patients')
-            .relate(patientId);
-        }
+        .where('patientId', patientId)
+        .andWhere('userId', userId)
+        .andWhere('deletedAt', null);
+
+      if (relations.length < 1) {
+        await CareTeamWithTransaction
+          .query()
+          .insert({ patientId, userId });
       }
     });
+
     return await this.getForPatient(patientId);
   }
 

@@ -48,11 +48,14 @@ describe('care model', () => {
         homeClinicId: '1',
       });
       const patient = await createPatient(createMockPatient(123), user.id);
+      const error = 'insert into "care_team" ("id", "patientId", "userId") values ($1, $2, $3) ' +
+        'returning "id" - insert or update on table "care_team" violates foreign key constraint ' +
+        '"care_team_userid_foreign"';
 
       await expect(CareTeam.addUserToCareTeam({ userId: 'fakeUserId', patientId: patient.id }))
         .rejects
         .toMatchObject({
-          message: 'user not found',
+          message: error,
         });
     });
 

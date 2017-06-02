@@ -31,7 +31,8 @@
     "docker-prod:restart": "docker-compose stop 2>/dev/null; docker-compose build && docker-compose up",
     "docker-prod:stop": "docker-compose stop",
     "docker-prod:migrate": "docker-compose exec web yarn migrate -- --env=production",
-    "docker-prod:ts-node": "docker-compose exec web yarn ts-node"
+    "docker-prod:ts-node": "docker-compose exec web yarn ts-node",
+    "seed": "knex seed:run --knexfile=server/models/knexfile.js"
   },
   "author": "Brennan Moore",
   "jest": {

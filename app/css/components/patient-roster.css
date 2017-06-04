@@ -41,7 +41,8 @@
     border: 1px solid var(--gray-background-color);
     border-radius: 4px;
     background-color: var(--highlight-background-color);
-    box-shadow: 0 4px 4px rgba(0,0,0,0.2);
+    box-shadow: 0 6px 8px rgba(0,0,0,0.15);
+    transition: box-shadow 0.3s ease-in-out;
     cursor: pointer;
   }
 }

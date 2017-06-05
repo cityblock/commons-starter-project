@@ -2619,7 +2619,7 @@ graphql@^0.10.0, graphql@^0.10.1:
   dependencies:
     iterall "^1.1.0"
 
-graphql@^0.9.5, graphql@^0.9.6:
+graphql@^0.9.5:
   version "0.9.6"
   resolved "https://registry.yarnpkg.com/graphql/-/graphql-0.9.6.tgz#514421e9d225c29dfc8fd305459abae58815ef2c"
   dependencies:

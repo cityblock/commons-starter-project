@@ -178,15 +178,15 @@ type PatientEdges {
   pageInfo: PageInfo!
 }
 
-# Patient node
-type PatientNode {
-  node: Patient
+# Clinic node
+type ClinicNode {
+  node: Clinic
   cursor: String!
 }
 
-# Patient edges
-type PatientEdges {
-  edges: [PatientNode]
+# Clinic edges
+type ClinicEdges {
+  edges: [ClinicNode]
   pageInfo: PageInfo!
 }
 
@@ -514,6 +514,12 @@ type RootQueryType {
   clinic(
     clinicId: String!
   ): Clinic
+
+  # Clinics
+  clinics(
+    pageNumber: Int,
+    pageSize: Int
+  ): ClinicEdges
 
   # Patient encounters
   patientEncounters(

@@ -10,6 +10,20 @@ export type UserRole =
   "admin";
 
 
+export interface GetClinicsQueryVariables {
+  pageNumber: number | null;
+  pageSize: number | null;
+}
+
+export interface GetClinicsQuery {
+  // Clinics
+  clinics: {
+    edges: Array< {
+      node: FullClinicFragment,
+    } > | null,
+  } | null;
+}
+
 export interface GetCurrentUserQuery {
   // The current User
   currentUser: FullUserFragment;
@@ -53,7 +67,6 @@ export interface PatientHealthRecordEditMutationVariables {
   dateOfBirth: string | null;
   gender: string | null;
   zip: number | null;
-  suffix: string | null;
   preferredName: string | null;
   raceName: string | null;
   race: Array< string | null > | null;
@@ -97,32 +110,26 @@ export interface PatientSetupMutationVariables {
   gender: string;
   zip: number;
   homeClinicId: string;
-  suffix: string | null;
-  preferredName: string | null;
-  raceName: string | null;
   race: Array< string | null > | null;
   ethnicityCode: string | null;
-  status: string | null;
   ssn: string | null;
-  homebound: boolean | null;
   language6392code: string | null;
   maritalStatus: string | null;
-  maritalStatusName: string | null;
   email: string | null;
   homePhone: string | null;
   mobilePhone: string | null;
   consentToCall: boolean | null;
   consentToText: boolean | null;
-  city: string | null;
-  address1: string | null;
-  countryCode: string | null;
-  countryCode3166: string | null;
-  state: string | null;
 }
 
 export interface PatientSetupMutation {
   // Setup patient creates the patient in the db AND in athena
   patientSetup: ShortPatientFragment;
+}
+
+export interface FullClinicFragment {
+  id: string;
+  name: string;
 }
 
 export interface FullPatientHealthRecordFragment {

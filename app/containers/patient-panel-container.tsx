@@ -43,6 +43,7 @@ export interface IState extends IPageParams {
 }
 
 class PatientPanelContainer extends React.Component<IProps, IState> {
+
   constructor(props: IProps) {
     super(props);
 
@@ -160,8 +161,11 @@ export default compose(
     options: (props: IProps) => ({
       variables: getPageParams(),
     }),
-    props: ({ data: { refetch, loading, error, userPatientPanel } }) => ({
-      refetchPatientPanel: refetch, loading, error, patientPanel: userPatientPanel,
+    props: ({ data }) => ({
+      refetchPatientPanel: (data ? data.refetch : null),
+      loading: (data ? data.loading : false),
+      error: (data ? data.error : null),
+      patientPanel: (data ? (data as any).userPatientPanel : null),
     }),
   }),
 )(PatientPanelContainer);

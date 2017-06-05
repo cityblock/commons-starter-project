@@ -41,5 +41,21 @@ describe('clinic model', () => {
         .rejects
         .toMatch('No such clinic for clinicId: fakeId');
     });
+
+    it('fetches all clinics', async () => {
+      await Clinic.create({ departmentId: 1, name: 'Center Zero' });
+      await Clinic.create({ departmentId: 2, name: 'Center One' });
+
+      expect(await Clinic.getAll({ pageNumber: 0, pageSize: 10 })).toMatchObject(
+        {
+          results: [{
+            name: 'Center Zero',
+          }, {
+            name: 'Center One',
+          }],
+          total: 2,
+        },
+      );
+    });
   });
 });

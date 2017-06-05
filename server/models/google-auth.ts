@@ -1,5 +1,5 @@
 import { Model, RelationMappings, ValidationError } from 'objection';
-import * as uuid from 'uuid';
+import * as uuid from 'uuid/v4';
 
 export interface ICreateGoogleAuth {
   accessToken: string;
@@ -52,7 +52,7 @@ export default class GoogleAuth extends Model {
       });
     }
 
-    this.id = uuid.v4();
+    this.id = uuid();
     this.createdAt = new Date().toISOString();
   }
 

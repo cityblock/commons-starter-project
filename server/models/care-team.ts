@@ -1,5 +1,5 @@
 import { transaction, Model, RelationMappings } from 'objection';
-import * as uuid from 'uuid';
+import * as uuid from 'uuid/v4';
 import { IPaginatedResults, IPaginationOptions } from '../db';
 import Patient from './patient';
 import User from './user';
@@ -56,7 +56,7 @@ export default class CareTeam extends Model {
   };
 
   $beforeInsert() {
-    this.id = uuid.v4();
+    this.id = uuid();
     this.createdAt = new Date().toISOString();
   }
 

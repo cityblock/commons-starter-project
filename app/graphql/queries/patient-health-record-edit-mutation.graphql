@@ -5,7 +5,6 @@ mutation patientHealthRecordEdit(
   $dateOfBirth: String
   $gender: String
   $zip: Int
-  $suffix: String
   $preferredName: String
   $raceName: String
   $race: [String]
@@ -36,7 +35,6 @@ mutation patientHealthRecordEdit(
     dateOfBirth: $dateOfBirth,
     gender: $gender,
     zip: $zip,
-    suffix: $suffix,
     preferredName: $preferredName,
     raceName: $raceName,
     race: $race,

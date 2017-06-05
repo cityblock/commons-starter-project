@@ -1,5 +1,6 @@
 import { Model, RelationMappings, ValidationError } from 'objection';
-import * as uuid from 'uuid';
+import * as uuid from 'uuid/v4';
+import { IPaginatedResults, IPaginationOptions } from '../db';
 import Patient from './patient';
 import User from './user';
 
@@ -64,7 +65,7 @@ export default class Clinic extends Model {
       });
     }
 
-    this.id = uuid.v4();
+    this.id = uuid();
     this.createdAt = new Date().toISOString();
   }
 
@@ -88,6 +89,16 @@ export default class Clinic extends Model {
     }
 
     return clinic;
+  }
+
+  static async getAll(
+    { pageNumber, pageSize }: IPaginationOptions,
+  ): Promise<IPaginatedResults<Clinic>> {
+    const clinics = await this
+      .query()
+      .page(pageNumber, pageSize) as any;
+
+    return clinics;
   }
 
   static async getBy(fieldName: GetByOptions, field?: string | number): Promise<Clinic | null> {

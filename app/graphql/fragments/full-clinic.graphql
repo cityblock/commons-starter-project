@@ -1,0 +1,4 @@
+fragment FullClinic on Clinic {
+  id
+  name
+}

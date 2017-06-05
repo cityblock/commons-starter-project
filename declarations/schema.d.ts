@@ -16,7 +16,7 @@ declare module 'schema' {
   }
 
   /*
-    description:
+    description: 
   */
   interface IRootQueryType {
     user: IUser | null;
@@ -27,6 +27,7 @@ declare module 'schema' {
     patientHealthRecord: IPatientHealthRecord | null;
     patientCareTeam: Array<IUser> | null;
     clinic: IClinic | null;
+    clinics: IClinicEdges | null;
     patientEncounters: IPatientEncounterEdges | null;
     patientMedications: IPatientMedications | null;
   }
@@ -58,7 +59,7 @@ declare module 'schema' {
   }
 
   /*
-    description:
+    description: 
   */
   type IUserRoleEnum = 'physician' | 'nurseCareManager' | 'healthCoach' | 'familyMember' | 'anonymousUser' | 'admin';
 
@@ -234,6 +235,22 @@ declare module 'schema' {
   }
 
   /*
+    description: Clinic edges
+  */
+  interface IClinicEdges {
+    edges: Array<IClinicNode> | null;
+    pageInfo: IPageInfo;
+  }
+
+  /*
+    description: Clinic node
+  */
+  interface IClinicNode {
+    node: IClinic | null;
+    cursor: string;
+  }
+
+  /*
     description: PatientEnounterEdges
   */
   interface IPatientEncounterEdges {
@@ -333,7 +350,7 @@ declare module 'schema' {
   }
 
   /*
-    description:
+    description: 
   */
   interface IRootMutationType {
     userCreate: IUserWithAuthToken | null;
@@ -432,7 +449,7 @@ declare module 'schema' {
   }
 
   /*
-    description:
+    description: 
   */
   type IAppointmentStatusEnum = 'cancelled' | 'future' | 'open' | 'checkedIn' | 'checkedOut' | 'chargeEntered';
 

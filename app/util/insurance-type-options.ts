@@ -1,0 +1,27 @@
+const insuranceTypeOptions: any = {
+  1: 'HMO',
+  4: 'INDEMNITY',
+  5: 'OTHER',
+  3: 'POS',
+  2: 'PPO',
+  8: 'Behavioral health',
+  19: 'Contracts',
+  6: 'EPO',
+  20: 'Legal',
+  18: 'MVA',
+  12: 'Medicaid CHIP',
+  10: 'Medicaid HMO',
+  11: 'Medicaid PCCM',
+  13: 'Medicaid-Traditional',
+  21: 'Medicare B-Traditional',
+  14: 'Medicare HMO',
+  23: 'Medicare POS',
+  15: 'Medicare PPO',
+  22: 'Medicare Private FFS',
+  16: 'Medicare Supplemental Plan',
+  9: 'Radiology',
+  7: 'Vision',
+  17: 'Workers Comp',
+};
+
+export default insuranceTypeOptions;

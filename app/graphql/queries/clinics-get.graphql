@@ -1,0 +1,9 @@
+query getClinics($pageNumber: Int, $pageSize: Int) {
+  clinics(pageNumber: $pageNumber, pageSize: $pageSize) {
+    edges {
+      node {
+        ...FullClinic
+      }
+    }
+  }
+}

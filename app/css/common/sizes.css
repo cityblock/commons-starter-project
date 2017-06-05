@@ -101,6 +101,9 @@
     border: 1px solid var(--border-color);
     background-color: #FFFFFF;
     outline: none;
+    background-image: url('../../assets/down-arrow.svg');
+    background-repeat: no-repeat;
+    background-position: 95% 50%;
     padding: 16px 20px;
     font-family: var(--roboto);
     font-size: 16px;

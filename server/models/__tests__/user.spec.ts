@@ -129,7 +129,7 @@ describe('user model', () => {
     });
   });
 
-  it('should fetch all users', async () => {
+  it('fetches all users', async () => {
     await User.create({ email: 'a@b.com', userRole, homeClinicId: '1' });
     await User.create({ email: 'b@c.com', userRole, homeClinicId: '1' });
 
@@ -147,7 +147,7 @@ describe('user model', () => {
     );
   });
 
-  it('should fetch a limited set of users', async () => {
+  it('fetches a limited set of users', async () => {
     await User.create({ email: 'a@b.com', userRole, homeClinicId: '1' });
     await User.create({ email: 'b@c.com', userRole, homeClinicId: '1' });
 

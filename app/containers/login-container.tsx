@@ -90,13 +90,13 @@ function mapDispatchToProps(dispatch: Dispatch<() => void>): Partial<IProps> {
 const currentUserQuery = getQuery('app/graphql/queries/get-current-user.graphql');
 const loginMutation = getQuery('app/graphql/queries/log-in-user-mutation.graphql');
 
-export default compose(
+export default (compose as any)(
   connect(undefined, mapDispatchToProps),
   graphql(currentUserQuery, {
-    props: ({ data: { loading, error, currentUser } }) => ({
-      loading,
-      error,
-      currentUser,
+    props: ({ data }) => ({
+      loading: (data ? data.loading : false),
+      error: (data ? data.error : null),
+      currentUser: (data ? (data as any).currentUser : null),
     }),
   }),
   graphql(loginMutation, { name: 'logIn' }),

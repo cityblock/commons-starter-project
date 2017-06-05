@@ -62,4 +62,52 @@ describe('clinic resolver', () => {
       );
     });
   });
+  describe('clinics', () => {
+    it('returns correct page information', async () => {
+      const clinic1 = await Clinic.create({ departmentId: 1, name: 'Center Zero' });
+      const clinic2 = await Clinic.create({ departmentId: 2, name: 'Center One' });
+      const clinic3 = await Clinic.create({ departmentId: 3, name: 'Center Two' });
+      const clinic4 = await Clinic.create({ departmentId: 4, name: 'Center Three' });
+      await Clinic.create({ departmentId: 5, name: 'Center Four' });
+
+      const query = `{
+        clinics(pageNumber: 0, pageSize: 4) {
+          edges {
+            node {
+              name
+            }
+          }
+          pageInfo {
+            hasNextPage
+            hasPreviousPage
+          }
+        }
+      }`;
+
+      const result = await graphql(schema, query, null, { db, userRole: 'admin' });
+      expect(cloneDeep(result.data!.clinics)).toMatchObject({
+        edges: [{
+          node: {
+            name: clinic1.name,
+          },
+        }, {
+          node: {
+            name: clinic2.name,
+          },
+        }, {
+          node: {
+            name: clinic3.name,
+          },
+        }, {
+          node: {
+            name: clinic4.name,
+          },
+        }],
+        pageInfo: {
+          hasNextPage: true,
+          hasPreviousPage: false,
+        },
+      });
+    });
+  });
 });

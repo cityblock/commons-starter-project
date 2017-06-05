@@ -10,7 +10,7 @@ import {
   resolvePatientCareTeam,
   resolveUserPatientPanel,
 } from './care-team-resolver';
-import { clinicCreate, resolveClinic } from './clinic-resolver';
+import { clinicCreate, resolveClinic, resolveClinics } from './clinic-resolver';
 import { resolvePatientEncounters } from './patient-encounters-resolver';
 import { resolvePatientMedications } from './patient-medications-resolver';
 import {
@@ -35,6 +35,7 @@ const resolveFunctions = {
   GraphQLEmail,
   RootQueryType: {
     clinic: resolveClinic,
+    clinics: resolveClinics,
     currentUser: resolveCurrentUser,
     patient: resolvePatient,
     patientHealthRecord: resolvePatientHealthRecord,

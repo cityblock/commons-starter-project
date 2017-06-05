@@ -33,7 +33,7 @@
 }
 
 .formSection {
-  border-bottom: 1px solid var(--border-color);
+  border-bottom: 1px solid var(--gray-background-color);
   padding-bottom: var(--gutter);
   margin-bottom: var(--gutter);
 }
@@ -65,6 +65,10 @@
 
 .select {
   @apply --select;
+  color: var(--border-color);
+  &:valid {
+    color: black;
+  }
 }
 
 .optionalLabel {
@@ -95,24 +99,10 @@
   justify-content: space-between;
 }
 
-.cancelButton, .submitButton {
-  padding: 12px 65px;
-  background: white;
-  border: 0px solid;
-  border-radius: 2px;
-  outline: none;
-  font-family: var(--basetica-medium);
-  font-size: 14px;
-  font-weight: 500;
-  line-height: 18px;
-}
-
 .cancelButton {
-  color: var(--blue-color);
-  border: 1px solid var(--blue-color);
+  @apply --inverted-button;
 }
 
 .submitButton {
-  color: white;
-  background: var(--blue-color);
+  @apply --button;
 }

@@ -1,7 +1,8 @@
-import { IClinicCreateInput } from 'schema';
+import { IClinicCreateInput, IClinicNode} from 'schema';
+import { IPaginationOptions } from '../db';
 import Clinic from '../models/clinic';
 import accessControls from './shared/access-controls';
-import { IContext } from './shared/utils';
+import { formatRelayEdge, IContext } from './shared/utils';
 
 interface IClinicCreateArgs {
   input: IClinicCreateInput;
@@ -34,4 +35,27 @@ export async function resolveClinic(
   await accessControls.isAllowed(userRole, 'view', 'clinic');
 
   return await Clinic.get(clinicId);
+}
+
+export async function resolveClinics(
+  root: any,
+  { pageNumber, pageSize }: IPaginationOptions,
+  { userRole }: IContext) {
+  await accessControls.isAllowed(userRole, 'view', 'clinic');
+
+  const clinics = await Clinic.getAll({ pageNumber, pageSize });
+  const clinicEdges = clinics.results.map(
+    (clinic, i) => formatRelayEdge(clinic, clinic.id) as IClinicNode,
+  );
+
+  const hasPreviousPage = pageNumber !== 0;
+  const hasNextPage = ((pageNumber + 1) * pageSize) < clinics.total;
+
+  return {
+    edges: clinicEdges,
+    pageInfo: {
+      hasPreviousPage,
+      hasNextPage,
+    },
+  };
 }

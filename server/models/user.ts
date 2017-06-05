@@ -1,5 +1,5 @@
 import { Model, RelationMappings, ValidationError } from 'objection';
-import * as uuid from 'uuid';
+import * as uuid from 'uuid/v4';
 import { isEmail } from 'validator';
 import { IPaginatedResults, IPaginationOptions } from '../db';
 import Clinic from './clinic';
@@ -128,7 +128,7 @@ export default class User extends Model {
     }
 
     await this.$beforeSave(true);
-    this.id = uuid.v4();
+    this.id = uuid();
     this.createdAt = new Date().toISOString();
   }
 

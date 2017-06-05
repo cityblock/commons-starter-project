@@ -43,7 +43,7 @@ export async function parseAndVerifyJwt(jwt: string) {
   // verify throws an error if jwt is not valid and if expiry passed
   await verify(jwt, config.JWT_SECRET);
 
-  const decoded = decode(jwt);
+  const decoded = decode(jwt) as IJWTData;
 
   // goal: allow user to be logged into exactly 1 device at a time
   // solution: invalidate token if user has logged in on a different device since token was issued
@@ -72,7 +72,7 @@ export async function getGraphQLContext(request: express.Request): Promise<ICont
   ]);
 
   let userRole: UserRole = 'anonymousUser';
-  let userId = null;
+  let userId;
   let opticsContext;
 
   if (authToken) {

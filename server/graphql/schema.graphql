@@ -216,7 +216,7 @@ type PatientMedication {
   medicationId: Int!
   medicationEntryId: String!
   quantity: Int
-  quantityUnit: String!
+  quantityUnit: String
   refillsAllowed: Int
   renewable: Boolean!
   dosageInstructions: String

@@ -29,6 +29,19 @@ export interface GetCurrentUserQuery {
   currentUser: FullUserFragment;
 }
 
+export interface GetPatientMedicationsQueryVariables {
+  patientId: string;
+}
+
+export interface GetPatientMedicationsQuery {
+  // Patient medications
+  patientMedications: {
+    medications: {
+      active: Array<FullPatientMedicationFragment>,
+    },
+  } | null;
+}
+
 export interface GetPatientPanelQueryVariables {
   pageNumber: number | null;
   pageSize: number | null;
@@ -160,6 +173,17 @@ export interface FullPatientHealthRecordFragment {
   maritalStatusName: string | null;
   patientPhoto: boolean | null;
   patientPhotoUrl: string | null;
+}
+
+export interface FullPatientMedicationFragment {
+  medicationId: number;
+  name: string;
+  quantity: number | null;
+  quantityUnit: string | null;
+  dosageInstructions: string | null;
+  renewable: boolean;
+  refillsAllowed: number | null;
+  status: string;
 }
 
 export interface FullUserFragment {

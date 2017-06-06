@@ -3,6 +3,7 @@ import * as React from 'react';
 import { compose, graphql } from 'react-apollo';
 import { connect } from 'react-redux';
 import { IState as IAppState } from '../client';
+import PatientMedications from '../components/patient-medications';
 import * as styles from '../css/components/patient-profile-scene.css';
 import { getQuery } from '../graphql/helpers';
 import { ShortPatientFragment } from '../graphql/types';
@@ -17,8 +18,6 @@ export interface IProps {
       patientId: string;
     };
   };
-  // patientMedications?:  ;
-  // patientEncounters?:  ;
 }
 
 class PatientProfileContainer extends React.Component<IProps, {}> {
@@ -80,30 +79,7 @@ class PatientProfileContainer extends React.Component<IProps, {}> {
               </textarea>
             </div>
           </div>
-          <div className={styles.patientMedications}>
-            <div className={styles.medicationsHeader}>
-              <div className={styles.medicationsTitle}>Active medications</div>
-              <div className={styles.medicationsHamburger}></div>
-            </div>
-            <div className={styles.medicationsList}>
-              <div className={styles.medicationRow}>
-                <div className={styles.medicationRowTitle}>Aspirin</div>
-                <div className={styles.medicationRowDosage}>81 mg</div>
-              </div>
-              <div className={styles.medicationRow}>
-                <div className={styles.medicationRowTitle}>Metmorfin</div>
-                <div className={styles.medicationRowDosage}>500 mg</div>
-              </div>
-              <div className={styles.medicationRow}>
-                <div className={styles.medicationRowTitle}>Apidra</div>
-                <div className={styles.medicationRowDosage}>3 mL</div>
-              </div>
-              <div className={styles.medicationRow}>
-                <div className={styles.medicationRowTitle}>GlucaGen</div>
-                <div className={styles.medicationRowDosage}>1 mL</div>
-              </div>
-            </div>
-          </div>
+          <PatientMedications patientId={this.props.patientId} />
         </div>
         <div className={styles.mainBody}>
           <div className={styles.tabs}>

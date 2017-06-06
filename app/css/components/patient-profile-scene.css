@@ -7,8 +7,10 @@
 }
 
 .leftPane {
-  background-color: white;
-  border: 1px solid var(--gray-background-color);
+  background-color: var(--white-color);
+  border-top: 1px solid var(--gray-background-color);
+  border-left: 1px solid var(--gray-background-color);
+  border-right: 1px solid var(--border-color);
   flex-basis: 25%
 }
 
@@ -137,60 +139,6 @@
   padding: 20px;
   resize: none;
 }
-
-.patientMedications {
-  padding: 25px var(--gutter) 0;
-  lost-flex-container: column;
-}
-
-.medicationsHeader {
-  justify-content: space-between;
-  padding-bottom: 20px;
-  border-bottom: 1px solid var(--border-color);
-  lost-flex-container: row;
-}
-
-.medicationsTitle {
-  font-family: var(--basetica-medium);
-  font-size: var(--medium-large-font-size);
-  line-height: var(--medium-large-font-line-height);
-  color: var(--black-color);
-}
-
-.medicationsHamburger {
-  height: 22px;
-  width: 4px;
-  padding-right: 10px;
-  background-position: center center;
-  background-repeat: no-repeat;
-  background-size: cover;
-  background-image: url('../../assets/dot-hamburger-black.svg');
-
-  &:hover {
-    cursor: pointer;
-  }
-}
-
-.medicationsList {
-  padding: 25px 0;
-  lost-flex-container: column;
-}
-
-.medicationRow {
-  justify-content: space-between;
-  font-family: var(--roboto);
-  font-size: var(--default-font-size);
-  padding: 11px 0;
-  border-bottom: 1px solid var(--gray-background-color);
-  lost-flex-container: row;
-}
-
-.medicationRowTitle {
-  font-weight: var(--roboto-medium-weight);
-  color: var(--black-color);
-}
-
-.medicationRowDosage {}
 
 .tabs {
   padding: var(--medium-gutter) var(--medium-gutter) 0;
@@ -360,7 +308,6 @@
 }
 
 .encounterHamburger {
-  /* TODO: this can just be the same class as medicationsHamburger */
   height: 22px;
   width: 4px;
   padding-right: var(--small-gutter);

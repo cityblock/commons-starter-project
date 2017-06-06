@@ -1,0 +1,41 @@
+@import '../common/sizes';
+.patientMedications {
+  padding: 25px 0 0;
+}
+
+.medicationsHeader {
+  justify-content: space-between;
+  margin: 0 var(--gutter);
+  padding-bottom: var(--small-gutter);
+  border-bottom: 1px solid var(--border-color);
+  lost-flex-container: row;
+}
+
+.medicationsTitle {
+  font-family: var(--basetica-medium);
+  font-size: var(--medium-large-font-size);
+  line-height: var(--medium-large-font-line-height);
+  color: var(--black-color);
+}
+
+.medicationsHamburger {
+  height: 22px;
+  width: 4px;
+  padding-right: 10px;
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-image: url('../../assets/dot-hamburger-black.svg');
+
+  &:hover {
+    cursor: pointer;
+  }
+}
+
+.medicationsList {
+  padding: 15px 0;
+
+  &:hover {
+    cursor: pointer;
+  }
+}

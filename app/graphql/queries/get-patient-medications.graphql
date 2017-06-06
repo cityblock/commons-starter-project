@@ -1,0 +1,9 @@
+query getPatientMedications($patientId: String!) {
+  patientMedications(patientId: $patientId) {
+    medications {
+      active {
+        ...FullPatientMedication
+      }
+    }
+  }
+}

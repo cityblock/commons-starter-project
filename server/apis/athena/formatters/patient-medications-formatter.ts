@@ -70,8 +70,10 @@ export function formatPatientMedications(
         name: currentResource.medication,
         medicationId: currentResource.medicationid,
         medicationEntryId: currentResource.medicationentryid,
-        quantity: currentResource.quantity,
-        quantityUnit: currentResource.quantityunit,
+        quantity: currentResource.isstructuredsig && currentResource.structuredsig ?
+          currentResource.structuredsig.dosagequantityvalue : null,
+        quantityUnit: currentResource.isstructuredsig && currentResource.structuredsig ?
+          currentResource.structuredsig.dosagequantityunit : null,
         refillsAllowed: currentResource.refillsallowed,
         renewable: currentResource.issafetorenew,
         dosageInstructions: currentResource.unstructuredsig,

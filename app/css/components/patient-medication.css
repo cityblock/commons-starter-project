@@ -1,0 +1,72 @@
+@import '../common/sizes';
+.medication {
+  padding: 0 var(--gutter);
+  background-color: var(--white-color);
+}
+
+.medication.selected {
+  background-color: var(--gray-background-color);
+}
+
+.medication.selected .medicationRow {
+  padding-bottom: 0;
+  border-bottom: none;
+}
+
+.medication.selected .medicationDetails {
+  height: 195px;
+  background-color: var(--gray-background-color);
+  padding-bottom: 10px;
+}
+
+.medicationRow {
+  align-items: center;
+  justify-content: space-between;
+  font-family: var(--roboto);
+  font-size: var(--default-font-size);
+  line-height: var(--medium-font-line-height);
+  padding: 11px 0;
+  border-bottom: 1px solid var(--gray-background-color);
+  user-select: none;
+  lost-flex-container: row;
+
+  &:hover {
+    cursor: pointer;
+  }
+}
+
+.medicationRowTitle {
+  max-width: 180px;
+  font-weight: var(--roboto-medium-weight);
+  color: var(--black-color);
+}
+
+.medicationRowDosage {}
+
+.medicationDetails {
+  transition: height 0.25s ease-out;
+  height: 0;
+  overflow: hidden;
+}
+
+.medicationDetailsRow {
+  justify-content: space-between;
+  align-items: center;
+  font-family: var(--roboto);
+  font-size: var(--default-font-size);
+  line-height: var(--default-line-height);
+  padding: 5px 0;
+  lost-flex-container: row;
+}
+
+.medicationInstructions {
+  padding: 15px 0 10px;
+}
+
+.medicationDetailsTitle {
+  color: var(--default-font-color);
+}
+
+.medicationDetailsInfo {
+  color: var(--black-color);
+}

@@ -322,7 +322,7 @@ declare module 'schema' {
     medicationId: number;
     medicationEntryId: string;
     quantity: number | null;
-    quantityUnit: string;
+    quantityUnit: string | null;
     refillsAllowed: number | null;
     renewable: boolean;
     dosageInstructions: string | null;

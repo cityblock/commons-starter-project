@@ -5,6 +5,7 @@ import { compose, graphql } from 'react-apollo';
 import { connect, Dispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { push } from 'react-router-redux';
+import { PatientPhotoUpload } from '../components/patient-photo-upload';
 import * as styles from '../css/components/patient-enrollment.css';
 import { getQuery } from '../graphql/helpers';
 import { FullClinicFragment, PatientSetupMutationVariables } from '../graphql/types';
@@ -109,6 +110,14 @@ class PatientEnrolementContainer extends React.Component<IProps, IState> {
     if (newProps.clinic) {
       this.setState({ homeClinicId: newProps.clinic.id });
     }
+  }
+
+  onUploadPhotoClick() {
+    alert('TODO');
+  }
+
+  onTakePhotoClick() {
+    alert('TODO');
   }
 
   updateFirstName(event: React.ChangeEvent<HTMLInputElement>) {
@@ -442,9 +451,9 @@ class PatientEnrolementContainer extends React.Component<IProps, IState> {
             <div className={styles.formSection}>
               <div className={styles.formHeading}>Patient photo</div>
               <div className={styles.formRow}>
-                <div className={styles.formColumn}>
-                  <div className={styles.label}>TODO</div>
-                </div>
+                <PatientPhotoUpload
+                  onUploadPhotoClick={this.onUploadPhotoClick}
+                  onTakePhotoClick={this.onTakePhotoClick} />
               </div>
             </div>
           </div>

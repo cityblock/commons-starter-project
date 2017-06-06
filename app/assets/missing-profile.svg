@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="75px" height="75px" viewBox="0 0 75 75" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 44.1 (41455) - http://www.bohemiancoding.com/sketch -->
+    <title>Oval 2 + Oval 2 Copy Mask</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <rect id="path-1" x="0" y="0" width="73" height="73"></rect>
+    </defs>
+    <g id="Add-a-patient" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Commons_PatientRoster_v1-newpatient-poweruser-contact" transform="translate(-244.000000, -1983.000000)">
+            <g id="Group-28" transform="translate(245.000000, 1980.000000)">
+                <g id="Oval-2-+-Oval-2-Copy-Mask" transform="translate(0.000000, 4.000000)">
+                    <mask id="mask-2" fill="white">
+                        <use xlink:href="#path-1"></use>
+                    </mask>
+                    <g id="Mask">
+                        <use fill="#F2F2F2" fill-rule="evenodd" xlink:href="#path-1"></use>
+                        <rect stroke="#CCCCCC" stroke-width="1" x="-0.5" y="-0.5" width="74" height="74"></rect>
+                    </g>
+                    <circle id="Oval-2" fill="#FFFFFF" mask="url(#mask-2)" cx="37" cy="24" r="15"></circle>
+                    <circle id="Oval-2-Copy" fill="#FFFFFF" mask="url(#mask-2)" cx="37" cy="73" r="30"></circle>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

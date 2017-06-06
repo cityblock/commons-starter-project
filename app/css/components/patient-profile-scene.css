@@ -1,0 +1,405 @@
+@import '../common/sizes';
+.container {
+  flex: 1;
+  justify-content: center;
+  height: 100vh;
+  lost-center: var(--max-width);
+}
+
+.leftPane {
+  background-color: white;
+  border: 1px solid var(--gray-background-color);
+  flex-basis: 25%
+}
+
+.mainBody {
+  flex-basis: 75%;
+}
+
+.patientMain {
+  padding: 0 var(--gutter);
+  border-bottom: 1px solid var(--gray-background-color);
+}
+
+.patientRisk {
+  height: 30px;
+  background-color: var(--yellow-color);
+  color: var(--gray-font-color);
+  font-size: var(--small-font-size);
+  font-weight: var(--roboto-medium-weight);
+  text-transform: uppercase;
+  align-items: center;
+  justify-content: center;
+  lost-flex-container: row;
+}
+
+.patientHeader {
+  padding: 31px 0;
+  lost-flex-container: row;
+}
+
+.patientPhoto {
+  height: 80px;
+  lost-column: 1/3;
+}
+
+.patientTitle {
+  lost-flex-container: column;
+  lost-column: 2/3;
+}
+
+.patientName {
+  font-family: var(--basetica-black);
+  font-size: var(--large-font-size);
+  line-height: var(--large-font-line-height);
+  color: var(--black-color);
+}
+
+.patientSubheading {
+  font-family: var(--roboto);
+  font-size: var(--default-font-size);
+  font-weight: var(--roboto-medium-weight);
+  color: var(--black-color);
+}
+
+.patientBasicInfo {
+  padding: 0 0 20px;
+  lost-flex-container: column;
+}
+
+.patientBasicInfoRow {
+  justify-content: space-between;
+  font-family: var(--roboto);
+  font-size: var(--default-font-size);
+  padding-bottom: 10px;
+  lost-flex-container: row;
+}
+
+.patientBasicInfoRowTitle {}
+
+.patientBasicInfoRowData {
+  font-weight: var(--roboto-medium-weight);
+  color: var(--black-color);
+}
+
+.patientCommunication {
+  padding-bottom: 30px;
+  justify-content: space-between;
+  lost-flex-container: row;
+}
+
+.patientCommItem {
+  width: 58px;
+  height: 58px;
+  border: 1px solid var(--gray-background-color);
+  background-position: center center;
+  background-repeat: no-repeat;
+  cursor: pointer;
+
+  &:hover {
+    background-color: var(--gray-background-color);
+  }
+}
+
+.patientCommPhone {
+  background-image: url('../../assets/phone-black.svg');
+  background-size: 25px;
+}
+
+.patientCommText {
+  background-image: url('../../assets/sms-black.svg');
+  background-size: 26px;
+}
+
+.patientCommEmail {
+  background-image: url('../../assets/email-black.svg');
+  background-size: 28px;
+}
+
+.patientCommVideo {
+  background-image: url('../../assets/videocam-black.svg');
+  background-size: 30px;
+}
+
+.patientScratchPad {
+  padding-bottom: 30px;
+  lost-flex-container: row;
+}
+
+.patientScratchPad .textArea {
+  font-family: var(--roboto);
+  font-size: var(--default-font-size);
+  color: var(--black-color);
+  width: 100%;
+  height: 140px;
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  padding: 20px;
+  resize: none;
+}
+
+.patientMedications {
+  padding: 25px var(--gutter) 0;
+  lost-flex-container: column;
+}
+
+.medicationsHeader {
+  justify-content: space-between;
+  padding-bottom: 20px;
+  border-bottom: 1px solid var(--border-color);
+  lost-flex-container: row;
+}
+
+.medicationsTitle {
+  font-family: var(--basetica-medium);
+  font-size: var(--medium-large-font-size);
+  line-height: var(--medium-large-font-line-height);
+  color: var(--black-color);
+}
+
+.medicationsHamburger {
+  height: 22px;
+  width: 4px;
+  padding-right: 10px;
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-image: url('../../assets/dot-hamburger-black.svg');
+
+  &:hover {
+    cursor: pointer;
+  }
+}
+
+.medicationsList {
+  padding: 25px 0;
+  lost-flex-container: column;
+}
+
+.medicationRow {
+  justify-content: space-between;
+  font-family: var(--roboto);
+  font-size: var(--default-font-size);
+  padding: 11px 0;
+  border-bottom: 1px solid var(--gray-background-color);
+  lost-flex-container: row;
+}
+
+.medicationRowTitle {
+  font-weight: var(--roboto-medium-weight);
+  color: var(--black-color);
+}
+
+.medicationRowDosage {}
+
+.tabs {
+  padding: var(--medium-gutter) var(--medium-gutter) 0;
+  border-bottom: 1px solid var(--border-color);
+  height: 67px;
+  background-color: var(--white-color);
+  justify-content: flex-start;
+  lost-flex-container: row;
+}
+
+.tab {
+  font-family: var(--basetica-medium);
+  font-size: var(--default-font-size);
+  line-height: var(--small-font-line-height);
+  color: var(--gray-font-color);
+  margin-right: var(--medium-gutter);
+  padding-right: 5px;
+
+  &.selectedTab {
+    color: var(--blue-color);
+    border-bottom: 4px solid var(--blue-color);
+  }
+
+  &:hover {
+    cursor: pointer;
+  }
+}
+
+.sortSearchBar {
+  padding: 0 var(--medium-gutter);
+  height: 50px;
+  background-color: var(--dark-gray-background-color);
+  align-items: center;
+  justify-content: space-between;
+  lost-flex-container: row;
+}
+
+.sort {
+  justify-content: space-between;
+  padding: 10px 0;
+  align-items: center;
+  lost-flex-container: row;
+}
+
+.sortLabel {
+  color: var(--gray-font-color);
+  font-family: var(--roboto);
+  font-size: var(--default-font-size);
+  line-height: var(--default-line-height);
+  padding-right: 10px;
+}
+
+.sortDropdown {
+  color: var(--black-color);
+  font-family: var(--roboto);
+}
+
+.sortDropdown select {
+  @apply --select;
+  font-size: var(--small-font-size);
+  border-radius: 2px;
+  height: 32px;
+  width: 173px;
+  padding: 0 0 0 20px;
+  background-position: 87% 50%;
+}
+
+.search {
+  color: var(--black-color);
+  font-family: var(--roboto);
+}
+
+.search input[type=text] {
+  width: 273px;
+  height: 32px;
+  border: 1px solid var(--border-color);
+  border-radius: 2px;
+  padding-left: 20px;
+
+  &::placeholder {
+    color: var(--light-gray-font-color);
+  }
+}
+
+.encountersPanel {
+  height: 100vh;
+  background-color: var(--gray-background-color);
+  padding: 20px var(--medium-gutter);
+}
+
+.newEncounter {}
+
+.newEncounterButton {
+  @apply --inverted-button;
+  border-radius: 4px;
+  height: 42px;
+}
+
+.encounters {
+  padding-top: var(--small-gutter);
+}
+
+.encounter {
+  background-color: var(--white-color);
+  border: 1px solid var(--gray-background-color);
+  border-radius: 4px;
+  padding: 10px var(--small-gutter) 0;
+  margin-bottom: var(--small-gutter);
+}
+
+.encounterTitle {
+  border-bottom: 1px solid var(--gray-background-color);
+  align-items: center;
+  justify-content: space-between;
+  lost-flex-container: row;
+}
+
+.providerInfo {
+  font-family: var(--roboto);
+  font-size: var(--small-font-size);
+  line-height: var(--small-font-line-height);
+  padding-bottom: 10px;
+  lost-flex-container: row;
+}
+
+.providerName {
+  font-weight: var(--roboto-medium-weight);
+  color: var(--black-color);
+}
+
+.providerRole {
+  color: var(--light-gray-font-color);
+  padding-left: var(--small-gutter);
+}
+
+.encounterDateTime {
+  font-family: var(--roboto);
+  font-size: var(--small-font-size);
+  line-height: var(--small-font-line-height);
+  color: var(--black-color);
+  padding-bottom: 10px;
+  lost-flex-container: row;
+}
+
+.encounterTime {}
+
+.encounterDate {
+  padding-left: 10px;
+}
+
+.encounterBody {
+  padding: var(--small-gutter) 0;
+}
+
+.encounterHeader {
+  align-items: center;
+  justify-content: space-between;
+  color: var(--black-color);
+  padding-bottom: 10px;
+  lost-flex-container: row;
+}
+
+.encounterSummary {
+  font-family: var(--basetica-medium);
+  font-size: var(--medium-large-font-size);
+  line-height: var(--medium-large-font-line-height);
+}
+
+.encounterHamburger {
+  /* TODO: this can just be the same class as medicationsHamburger */
+  height: 22px;
+  width: 4px;
+  padding-right: var(--small-gutter);
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-image: url('../../assets/dot-hamburger-black.svg');
+
+  &:hover {
+    cursor: pointer;
+  }
+}
+
+.encounterMain {
+  font-family: var(--roboto);
+  font-size: var(--default-font-size);
+  line-height: var(--medium-font-line-height);
+  padding-bottom: var(--small-gutter);
+}
+
+.encounterFooter {
+  font-family: var(--roboto);
+  font-size: var(--small-font-size);
+  line-height: var(--small-font-line-height);
+}
+
+.encounterLocation {
+  color: var(--light-gray-font-color);
+}
+
+.encounterAttachments {
+  align-items: center;
+  justify-content: flex-start;
+  padding-top: var(--small-gutter);
+  lost-flex-container: row;
+}
+
+.encounterAttachmentPhoto {
+  margin-right: var(--small-gutter);
+  width: 40px;
+  height: 40px;
+}

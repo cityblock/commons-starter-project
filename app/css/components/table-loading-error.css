@@ -24,7 +24,7 @@
 .errorMessage {
   font-family: var(--roboto);
   font-size: var(--default-font-size);
-  color: var(--light-font-color);
+  color: var(--gray-font-color);
   margin-bottom: 30px;
 }
 

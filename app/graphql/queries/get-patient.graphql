@@ -1,0 +1,5 @@
+query getPatient($patientId: String!) {
+  patient(patientId: $patientId) {
+    ...ShortPatient
+  }
+}

@@ -19,6 +19,7 @@ import LogIn from './containers/login-container';
 import Main from './containers/main';
 import PatientEnrollmentContainer from './containers/patient-enrollment';
 import PatientPanelContainer from './containers/patient-panel-container';
+import PatientProfileContainer from './containers/patient-profile';
 
 const history = createHistory();
 
@@ -72,6 +73,7 @@ render(
           <Authentication>
             <Route exact path='/patients/new' component={(PatientEnrollmentContainer as any)} />
             <Route exact path='/patients' component={(PatientPanelContainer as any)} />
+            <Route exact path='/patients/:patientId' component={(PatientProfileContainer as any)} />
           </Authentication>
         )} />
       </Main>

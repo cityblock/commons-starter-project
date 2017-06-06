@@ -2,18 +2,23 @@
 @custom-media --large-viewport (min-width: 900px);
 :root {
   --gutter: 40px;
+  --medium-gutter: 30px;
   --small-gutter: 20px;
   --mobile: 500;
   --tablet: 700;
   --max-width: 1600px;
   --border-color: #cccccc;
   --gray-background-color: #F2F2F2;
+  --dark-gray-background-color: #e6e6e6;
+  --white-color: #ffffff;
+  --black-color: #000000;
   --blue-color: #2962FF;
   --teal-color: #66C5DD;
+  --yellow-color: #ffd900;
   --gray-font-color: #666666;
+  --light-gray-font-color: #cccccc;
   --white-font-color: #F2F2F2;
   --default-font-color: #333333;
-  --light-font-color: #666666;
   --highlight-background-color: #fafafa;
   --default-font-size: 14px;
   --default-line-height: 16px;
@@ -21,6 +26,8 @@
   --small-font-line-height: 14px;
   --medium-font-size: 16px;
   --medium-font-line-height: 18px;
+  --medium-large-font-size: 18px;
+  --medium-large-font-line-height: 24px;
   --large-font-size: 24px;
   --large-font-line-height: 29px;
   --basetica-black-italic: "BaseticaBlackItalic", Helvetica, sans-serif;
@@ -28,6 +35,7 @@
   --basetica-medium-italic: "BaseticaMediumItalic", Helvetica, sans-serif;
   --basetica-medium: "BaseticaMedium", Helvetica, sans-serif;
   --roboto: 'Roboto', Helvetica, sans-serif;
+  --roboto-medium-weight: 500;
 }
 
 :root {

@@ -47,6 +47,15 @@ export interface GetPatientPanelQuery {
   } | null;
 }
 
+export interface GetPatientQueryVariables {
+  patientId: string;
+}
+
+export interface GetPatientQuery {
+  // A single Patient
+  patient: ShortPatientFragment;
+}
+
 export interface LogInUserMutationVariables {
   googleAuthCode: string;
 }

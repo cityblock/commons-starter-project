@@ -1,0 +1,21 @@
+@import '../common/sizes';
+
+.content {
+  background: var(--white-color);
+}
+
+.heading {
+  font-family: var(--basetica-medium);
+  font-size: var(--medium-large-font-size);
+  line-height: var(--medium-large-font-line-height);
+}
+
+.paragraph {
+  line-height: 20px;
+  margin-top: 20px;
+}
+
+.button {
+  @apply --button;
+  margin-top: 40px;
+}

@@ -67,14 +67,15 @@ html body {
 }
 
 a {
-  color: var(--default-font-color);
-  border-bottom: 2px solid var(--border-color);
-  transition: border-color 0.3s;
+  color: var(--light-blue-color);
+  transition: color 0.6s;
+  cursor: pointer;
   text-decoration: none;
 }
 
 a:hover {
-  border-color: var(--blue-color);
+  color: var(--blue-color);
+  transition: color 0.3s;
   text-decoration: none;
 }
 

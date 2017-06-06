@@ -36,12 +36,12 @@
   border-left: 1px solid transparent;
   border-right: 1px solid transparent;
   border-top: 1px solid transparent;
-
+  color: black;
   &:hover {
     border: 1px solid var(--gray-background-color);
     border-radius: 4px;
     background-color: var(--highlight-background-color);
-    box-shadow: 0 6px 8px rgba(0,0,0,0.15);
+    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
     transition: box-shadow 0.3s ease-in-out;
     cursor: pointer;
   }

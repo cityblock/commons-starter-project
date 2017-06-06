@@ -71,7 +71,7 @@ render(
         <Route exact path='/' component={(LogIn as any)} />
         <Route path={'/patient*'} render={() => (
           <Authentication>
-            <Route exact path='/patients/new' component={(PatientEnrollmentContainer as any)} />
+            <Route exact path='/patient/new' component={(PatientEnrollmentContainer as any)} />
             <Route exact path='/patients' component={(PatientPanelContainer as any)} />
             <Route exact path='/patients/:patientId' component={(PatientProfileContainer as any)} />
           </Authentication>

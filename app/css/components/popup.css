@@ -1,0 +1,21 @@
+.background {
+  position: fixed;
+  width: 100vw;
+  height: 100vh;
+  z-index: 10;
+  top: 0px;
+  left: 0px;
+  background: rgba(255, 255, 255, 0.8);
+  align-items: center;
+  display: flex;
+}
+
+.content {
+  flex: 1;
+  max-width: 600px;
+  margin: 0px auto;
+  border: 1px solid #CCCCCC;
+  box-shadow: 0 10px 10px 0 rgba(0, 0, 0, 0.2);
+  background: white;
+  padding: 40px;
+}

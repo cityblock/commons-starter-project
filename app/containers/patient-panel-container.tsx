@@ -113,7 +113,7 @@ class PatientPanelContainer extends React.Component<IProps, IState> {
         <div className={styles.header}>
           <div className={styles.headerRow}>
             <div className={styles.headerText}>Patient roster</div>
-            <Link to='/patients/new' className={styles.button}>Add Patient</Link>
+            <Link to='/patient/new' className={styles.button}>Add Patient</Link>
           </div>
         </div>
         <PatientRoster

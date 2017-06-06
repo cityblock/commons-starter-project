@@ -6,6 +6,7 @@ import { connect, Dispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { push } from 'react-router-redux';
 import { PatientPhotoUpload } from '../components/patient-photo-upload';
+import PopupConsent from '../components/popup-consent';
 import * as styles from '../css/components/patient-enrollment.css';
 import { getQuery } from '../graphql/helpers';
 import { FullClinicFragment, PatientSetupMutationVariables } from '../graphql/types';
@@ -23,30 +24,35 @@ export interface IProps {
 }
 
 export interface IState {
-  homeClinicId: string;
-  firstName: string;
-  middleName: string;
-  lastName: string;
-  dateOfBirth: string;
-  gender: string;
-  maritalStatus: string;
-  race: string[];
-  zip: number;
-  ssn: string;
-  language6392code: string;
-  email: string;
-  homePhone: string;
-  mobilePhone: string;
-  ethnicityCode: string;
-  consentToText: boolean;
-  consentToCall: boolean;
-  preferredContactMethod: string;
-  insuranceType: string;
-  patientRelationshipToPolicyHolder: string;
-  memberId: string;
-  policyGroupNumber: string;
-  issueDate: string;
-  expirationDate: string;
+  displayConsentToPhoneTextPopup: boolean;
+  patient: {
+    homeClinicId: string;
+    firstName: string;
+    middleName: string;
+    lastName: string;
+    dateOfBirth: string;
+    gender: string;
+    maritalStatus: string;
+    race: string;
+    zip: string;
+    ssn: string;
+    language6392code: string;
+    email: string;
+    homePhone: string;
+    mobilePhone: string;
+    ethnicityCode: string;
+    consentToText: boolean;
+    consentToCall: boolean;
+    preferredContactMethod: string;
+  };
+  insurance: {
+    insuranceType: string;
+    patientRelationshipToPolicyHolder: string;
+    memberId: string;
+    policyGroupNumber: string;
+    issueDate: string;
+    expirationDate: string;
+  };
 }
 
 function formatDate(date: string) {
@@ -58,57 +64,48 @@ class PatientEnrolementContainer extends React.Component<IProps, IState> {
   constructor(props: IProps) {
     super(props);
     this.onSaveClick = this.onSaveClick.bind(this);
-    this.updateFirstName = this.updateFirstName.bind(this);
-    this.updateLastName = this.updateLastName.bind(this);
-    this.updateMiddleName = this.updateMiddleName.bind(this);
-    this.updateDateOfBirth = this.updateDateOfBirth.bind(this);
-    this.updateGender = this.updateGender.bind(this);
-    this.updateLanguage = this.updateLanguage.bind(this);
-    this.updateMaritalStatus = this.updateMaritalStatus.bind(this);
-    this.updateEthnicity = this.updateEthnicity.bind(this);
-    this.updateSSN = this.updateSSN.bind(this);
-    this.updateZip = this.updateZip.bind(this);
-    this.updateRace = this.updateRace.bind(this);
-    this.updateEmail = this.updateEmail.bind(this);
-    this.updateHomePhoneNumber = this.updateHomePhoneNumber.bind(this);
-    this.updateMobilePhoneNumber = this.updateMobilePhoneNumber.bind(this);
-    this.updateInsuranceType = this.updateInsuranceType.bind(this);
-    this.updatePatientRelationship = this.updatePatientRelationship.bind(this);
-    this.updateMemberId = this.updateMemberId.bind(this);
-    this.updatePolicyGroupNumber = this.updatePolicyGroupNumber.bind(this);
-    this.updateIssueDate = this.updateIssueDate.bind(this);
-    this.updateExpirationDate = this.updateExpirationDate.bind(this);
+    this.updatePatient = this.updatePatient.bind(this);
+    this.updateInsurance = this.updateInsurance.bind(this);
+    this.showPhoneConsent = this.showPhoneConsent.bind(this);
+    this.hidePhoneConsent = this.hidePhoneConsent.bind(this);
     this.state = {
-      homeClinicId: '',
-      firstName: '',
-      middleName: '',
-      lastName: '',
-      dateOfBirth: '',
-      gender: '',
-      maritalStatus: '',
-      race: [],
-      ssn: '',
-      zip: 11238,
-      language6392code: '',
-      email: '',
-      homePhone: '',
-      mobilePhone: '',
-      ethnicityCode: '',
-      consentToText: false,
-      consentToCall: false,
-      preferredContactMethod: 'Cell',
-      insuranceType: '',
-      patientRelationshipToPolicyHolder: '',
-      memberId: '',
-      policyGroupNumber: '',
-      issueDate: '',
-      expirationDate: '',
+      displayConsentToPhoneTextPopup: false,
+      patient: {
+        homeClinicId: '',
+        firstName: '',
+        middleName: '',
+        lastName: '',
+        dateOfBirth: '',
+        gender: '',
+        maritalStatus: '',
+        race: '',
+        ssn: '',
+        zip: '',
+        language6392code: '',
+        email: '',
+        homePhone: '',
+        mobilePhone: '',
+        ethnicityCode: '',
+        consentToText: false,
+        consentToCall: false,
+        preferredContactMethod: 'Cell',
+      },
+      insurance: {
+        insuranceType: '',
+        patientRelationshipToPolicyHolder: '',
+        memberId: '',
+        policyGroupNumber: '',
+        issueDate: '',
+        expirationDate: '',
+      },
     };
   }
 
   componentWillReceiveProps(newProps: IProps) {
     if (newProps.clinic) {
-      this.setState({ homeClinicId: newProps.clinic.id });
+      const patient = this.state.patient;
+      patient.homeClinicId = newProps.clinic.id;
+      this.setState({ patient });
     }
   }
 
@@ -120,98 +117,44 @@ class PatientEnrolementContainer extends React.Component<IProps, IState> {
     alert('TODO');
   }
 
-  updateFirstName(event: React.ChangeEvent<HTMLInputElement>) {
-    this.setState({ firstName: event.target.value });
+  updatePatient(event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) {
+    const property = event.target.name;
+    const patient = this.state.patient;
+    (patient as any)[property] = event.target.value;
+    this.setState({ patient });
   }
 
-  updateMiddleName(event: React.ChangeEvent<HTMLInputElement>) {
-    this.setState({ middleName: event.target.value });
+  updateInsurance(event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) {
+    const property = event.target.name;
+    const insurance = this.state.insurance;
+    (insurance as any)[property] = event.target.value;
+    this.setState({ insurance });
   }
 
-  updateLastName(event: React.ChangeEvent<HTMLInputElement>) {
-    this.setState({ lastName: event.target.value });
+  showPhoneConsent() {
+    this.setState({ displayConsentToPhoneTextPopup: true });
   }
 
-  updateDateOfBirth(event: React.ChangeEvent<HTMLInputElement>) {
-    this.setState({ dateOfBirth: event.target.value });
-  }
-
-  updateGender(event: React.ChangeEvent<HTMLSelectElement>) {
-    this.setState({ gender: event.target.value });
-  }
-
-  updateMaritalStatus(event: React.ChangeEvent<HTMLSelectElement>) {
-    this.setState({ maritalStatus: event.target.value });
-  }
-
-  updateLanguage(event: React.ChangeEvent<HTMLSelectElement>) {
-    this.setState({ language6392code: event.target.value });
-  }
-
-  updateEthnicity(event: React.ChangeEvent<HTMLSelectElement>) {
-    this.setState({ ethnicityCode: event.target.value });
-  }
-
-  updateRace(event: React.ChangeEvent<HTMLSelectElement>) {
-    this.setState({ race: [event.target.value] });
-  }
-
-  updateSSN(event: React.ChangeEvent<HTMLInputElement>) {
-    this.setState({ ssn: event.target.value });
-  }
-
-  updateZip(event: React.ChangeEvent<HTMLInputElement>) {
-    this.setState({ zip: Number(event.target.value) });
-  }
-
-  updateEmail(event: React.ChangeEvent<HTMLInputElement>) {
-    this.setState({ email: event.target.value });
-  }
-
-  updateHomePhoneNumber(event: React.ChangeEvent<HTMLInputElement>) {
-    this.setState({ homePhone: event.target.value });
-  }
-
-  updateMobilePhoneNumber(event: React.ChangeEvent<HTMLInputElement>) {
-    this.setState({ mobilePhone: event.target.value });
-  }
-
-  updateInsuranceType(event: React.ChangeEvent<HTMLSelectElement>) {
-    this.setState({ insuranceType: event.target.value });
-  }
-
-  updatePatientRelationship(event: React.ChangeEvent<HTMLSelectElement>) {
-    this.setState({ patientRelationshipToPolicyHolder: event.target.value });
-  }
-
-  updateMemberId(event: React.ChangeEvent<HTMLInputElement>) {
-    this.setState({ memberId: event.target.value });
-  }
-
-  updatePolicyGroupNumber(event: React.ChangeEvent<HTMLInputElement>) {
-    this.setState({ policyGroupNumber: event.target.value });
-  }
-
-  updateIssueDate(event: React.ChangeEvent<HTMLInputElement>) {
-    this.setState({ issueDate: event.target.value });
-  }
-
-  updateExpirationDate(event: React.ChangeEvent<HTMLInputElement>) {
-    this.setState({ expirationDate: event.target.value });
+  hidePhoneConsent() {
+    this.setState({ displayConsentToPhoneTextPopup: false });
   }
 
   async onSaveClick() {
     await this.props.createPatient({
       variables: {
-        ...this.state,
-        issueDate: formatDate(this.state.issueDate),
-        expirationDate: formatDate(this.state.expirationDate),
-        dateOfBirth: formatDate(this.state.dateOfBirth),
+        ...this.state.patient,
+        ...this.state.insurance,
+        race: [this.state.patient.race],
+        zip: Number(this.state.patient.zip),
+        issueDate: formatDate(this.state.insurance.issueDate),
+        expirationDate: formatDate(this.state.insurance.expirationDate),
+        dateOfBirth: formatDate(this.state.patient.dateOfBirth),
       },
     });
   }
 
   render() {
+    const { insurance, patient } = this.state;
     const languagesHtml = langs.all().map((language: langs.Language) => (
       <option key={language['2']} value={language['2']}>{language.name}</option>
     ));
@@ -232,6 +175,9 @@ class PatientEnrolementContainer extends React.Component<IProps, IState> {
 
     return (
       <div className={styles.container}>
+        <PopupConsent
+          onClose={this.hidePhoneConsent}
+          visible={this.state.displayConsentToPhoneTextPopup} />
         <div className={styles.formContainer}>
           <div className={styles.leftNav}>
             <div className={styles.leftNavLink}>Demographic info</div>
@@ -246,9 +192,10 @@ class PatientEnrolementContainer extends React.Component<IProps, IState> {
                 <div className={styles.formColumn}>
                   <div className={styles.label}>First name</div>
                   <input required
-                    value={this.state.firstName}
+                    name='firstName'
+                    value={patient.firstName}
                     className={styles.input}
-                    onChange={this.updateFirstName} />
+                    onChange={this.updatePatient} />
                 </div>
                 <div className={styles.formColumn}>
                   <div className={styles.label}>
@@ -256,35 +203,38 @@ class PatientEnrolementContainer extends React.Component<IProps, IState> {
                     <span className={styles.optionalLabel}>optional</span>
                   </div>
                   <input
-                    value={this.state.middleName}
+                    name='middleName'
+                    value={patient.middleName}
                     className={styles.input}
-                    onChange={this.updateMiddleName} />
+                    onChange={this.updatePatient} />
                 </div>
                 <div className={styles.formColumn}>
                   <div className={styles.label}>Last name</div>
                   <input required
-                    value={this.state.lastName}
+                    name='lastName'
+                    value={patient.lastName}
                     className={styles.input}
-                    onChange={this.updateLastName} />
+                    onChange={this.updatePatient} />
                 </div>
               </div>
               <div className={styles.formRow}>
                 <div className={styles.formColumn}>
                   <div className={styles.label}>Date of birth</div>
-                  <input
-                    required
+                  <input required
+                    name='dateOfBirth'
                     className={styles.input}
-                    value={this.state.dateOfBirth}
+                    value={patient.dateOfBirth}
                     type='date'
-                    onChange={this.updateDateOfBirth} />
+                    onChange={this.updatePatient} />
                 </div>
                 <div className={styles.formColumn}>
                   <div className={styles.label}>
                     Gender
                   </div>
                   <select required
-                    value={this.state.gender}
-                    onChange={this.updateGender}
+                    name='gender'
+                    value={patient.gender}
+                    onChange={this.updatePatient}
                     className={styles.select}>
                     <option value='' disabled hidden>Select gender</option>
                     <option value='M'>Male</option>
@@ -294,8 +244,9 @@ class PatientEnrolementContainer extends React.Component<IProps, IState> {
                 <div className={styles.formColumn}>
                   <div className={styles.label}>Marital status</div>
                   <select required
-                    value={this.state.maritalStatus}
-                    onChange={this.updateMaritalStatus}
+                    name='maritalStatus'
+                    value={patient.maritalStatus}
+                    onChange={this.updatePatient}
                     className={styles.select}>
                     <option value='' disabled hidden>Select status</option>
                     <option value='U'>Unknown</option>
@@ -312,8 +263,9 @@ class PatientEnrolementContainer extends React.Component<IProps, IState> {
                 <div className={styles.formColumn}>
                   <div className={styles.label}>Preferred language</div>
                   <select required
-                    value={this.state.language6392code}
-                    onChange={this.updateLanguage}
+                    name='language6392code'
+                    value={patient.language6392code}
+                    onChange={this.updatePatient}
                     className={styles.select}>
                     <option value='' disabled hidden>Select language</option>
                     <option value='declined'>Declined</option>
@@ -323,8 +275,9 @@ class PatientEnrolementContainer extends React.Component<IProps, IState> {
                 <div className={styles.formColumn}>
                   <div className={styles.label}>Race</div>
                   <select required
-                    value={this.state.race[0]}
-                    onChange={this.updateRace}
+                    name='race'
+                    value={patient.race}
+                    onChange={this.updatePatient}
                     className={styles.select}>
                     <option value='' disabled hidden>Select race</option>
                     <option value='declined'>Declined</option>
@@ -334,8 +287,9 @@ class PatientEnrolementContainer extends React.Component<IProps, IState> {
                 <div className={styles.formColumn}>
                   <div className={styles.label}>Ethnicity</div>
                   <select required
-                    value={this.state.ethnicityCode}
-                    onChange={this.updateEthnicity}
+                    name='ethnicityCode'
+                    value={patient.ethnicityCode}
+                    onChange={this.updatePatient}
                     className={styles.select}>
                     <option value='' disabled hidden>Select ethnicity</option>
                     <option value='declined'>Declined</option>
@@ -347,16 +301,19 @@ class PatientEnrolementContainer extends React.Component<IProps, IState> {
                 <div className={styles.formColumn}>
                   <div className={styles.label}>Social Security Number</div>
                   <input required
-                    value={this.state.ssn}
-                    onChange={this.updateSSN}
+                    name='ssn'
+                    type='number'
+                    value={patient.ssn}
+                    onChange={this.updatePatient}
                     className={styles.input} />
                 </div>
                 <div className={styles.formColumn}>
                   <div className={styles.label}>Zip code</div>
                   <input required
                     type='number'
-                    value={this.state.zip}
-                    onChange={this.updateZip}
+                    name='zip'
+                    value={patient.zip}
+                    onChange={this.updatePatient}
                     className={styles.input} />
                 </div>
               </div>
@@ -370,23 +327,104 @@ class PatientEnrolementContainer extends React.Component<IProps, IState> {
                     <span className={styles.optionalLabel}>optional</span>
                   </div>
                   <input
-                    value={this.state.email}
-                    onChange={this.updateEmail}
+                    name='email'
+                    value={patient.email}
+                    onChange={this.updatePatient}
                     className={styles.input} />
                 </div>
                 <div className={styles.formColumn}>
                   <div className={styles.label}>Home Phone Number</div>
                   <input
-                    value={this.state.homePhone}
+                    name='homePhone'
+                    value={patient.homePhone}
                     className={styles.input}
-                    onChange={this.updateHomePhoneNumber} />
+                    onChange={this.updatePatient} />
                 </div>
                 <div className={styles.formColumn}>
                   <div className={styles.label}>Mobile Phone Number</div>
                   <input
-                    value={this.state.mobilePhone}
-                    onChange={this.updateMobilePhoneNumber}
+                    name='mobilePhone'
+                    value={patient.mobilePhone}
+                    onChange={this.updatePatient}
                     className={styles.input} />
+                </div>
+              </div>
+              <div className={styles.formRow}>
+                <div className={styles.radioRow}>
+                  <div className={styles.radioRowLeft}>
+                    <div className={styles.label}>
+                      Does the patient consent to being contacted via text?
+                    </div>
+                    <div className={styles.smallText}>
+                      <span>Read consent statement to patient: </span>
+                      <a onClick={this.showPhoneConsent}>click here</a>
+                    </div>
+                  </div>
+                  <div className={styles.radioRowRight}>
+                    <div className={styles.radioItem}>
+                      <div className={styles.radioContainer}>
+                        <input
+                          className={styles.radio}
+                          type='radio'
+                          name='contactViaText'
+                          onChange={this.updatePatient}
+                          value='false' />
+                        <label />
+                      </div>
+                      <span className={styles.radioLabel}>Yes</span>
+                    </div>
+                    <div className={styles.radioItem}>
+                      <div className={styles.radioContainer}>
+                        <input
+                          className={styles.radio}
+                          type='radio'
+                          name='contactViaText'
+                          onChange={this.updatePatient}
+                          value='true' />
+                        <label />
+                      </div>
+                      <span className={styles.radioLabel}>No</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className={styles.formRow}>
+                <div className={styles.radioRow}>
+                  <div className={styles.radioRowLeft}>
+                    <div className={styles.label}>
+                      Does the patient consent to being contacted via phone?
+                    </div>
+                    <div className={styles.smallText}>
+                      <span>Read consent statement to patient: </span>
+                      <a onClick={this.showPhoneConsent}>click here</a>
+                    </div>
+                  </div>
+                  <div className={styles.radioRowRight}>
+                    <div className={styles.radioItem}>
+                      <div className={styles.radioContainer}>
+                        <input
+                          className={styles.radio}
+                          type='radio'
+                          name='contactViaPhone'
+                          onChange={this.updatePatient}
+                          value='false' />
+                        <label />
+                      </div>
+                      <span className={styles.radioLabel}>Yes</span>
+                    </div>
+                    <div className={styles.radioItem}>
+                      <div className={styles.radioContainer}>
+                        <input
+                          className={styles.radio}
+                          type='radio'
+                          name='contactViaPhone'
+                          onChange={this.updatePatient}
+                          value='true' />
+                        <label />
+                      </div>
+                      <span className={styles.radioLabel}>No</span>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -396,8 +434,9 @@ class PatientEnrolementContainer extends React.Component<IProps, IState> {
                 <div className={styles.formColumn}>
                   <div className={styles.label}>Insurance Type</div>
                   <select required
-                    value={this.state.insuranceType}
-                    onChange={this.updateInsuranceType}
+                    name='insuranceType'
+                    value={insurance.insuranceType}
+                    onChange={this.updateInsurance}
                     className={styles.select}>
                     <option value='' disabled hidden>Select insurance type</option>
                     {insuranceTypeOptionsHtml}
@@ -406,8 +445,9 @@ class PatientEnrolementContainer extends React.Component<IProps, IState> {
                 <div className={styles.formColumn}>
                   <div className={styles.label}>Patient relationship to policy holder</div>
                   <select required
-                    value={this.state.patientRelationshipToPolicyHolder}
-                    onChange={this.updatePatientRelationship}
+                    name='patientRelationshipToPolicyHolder'
+                    value={insurance.patientRelationshipToPolicyHolder}
+                    onChange={this.updateInsurance}
                     className={styles.select}>
                     <option value='' disabled hidden>Select relationship</option>
                     {relationshipToPatientHtml}
@@ -416,8 +456,9 @@ class PatientEnrolementContainer extends React.Component<IProps, IState> {
                 <div className={styles.formColumn}>
                   <div className={styles.label}>Member ID</div>
                   <input
-                    value={this.state.memberId}
-                    onChange={this.updateMemberId}
+                    name='memberId'
+                    value={insurance.memberId}
+                    onChange={this.updateInsurance}
                     className={styles.input} />
                 </div>
               </div>
@@ -426,23 +467,26 @@ class PatientEnrolementContainer extends React.Component<IProps, IState> {
                   <div className={styles.label}>Policy group number</div>
                   <input
                     type='number'
-                    value={this.state.policyGroupNumber}
-                    onChange={this.updatePolicyGroupNumber}
+                    name='policyGroupNumber'
+                    value={insurance.policyGroupNumber}
+                    onChange={this.updateInsurance}
                     className={styles.input} />
                 </div>
                 <div className={styles.formColumn}>
                   <div className={styles.label}>Issue date</div>
                   <input
-                    value={this.state.issueDate}
-                    onChange={this.updateIssueDate}
+                    name='issueDate'
+                    value={this.state.insurance.issueDate}
+                    onChange={this.updateInsurance}
                     type='date'
                     className={styles.input} />
                 </div>
                 <div className={styles.formColumn}>
                   <div className={styles.label}>Expiration date</div>
                   <input
-                    value={this.state.expirationDate}
-                    onChange={this.updateExpirationDate}
+                    name='exipirationDate'
+                    value={this.state.insurance.expirationDate}
+                    onChange={this.updateInsurance}
                     type='date'
                     className={styles.input} />
                 </div>

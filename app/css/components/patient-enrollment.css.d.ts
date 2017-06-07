@@ -23,3 +23,6 @@ export const radioRowLeft: string;
 export const smallText: string;
 export const radioRowRight: string;
 export const radioLabel: string;
+export const loading: string;
+export const loadingHidden: string;
+export const loadingContainer: string;

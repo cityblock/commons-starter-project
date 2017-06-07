@@ -7,16 +7,24 @@ import { Link } from 'react-router-dom';
 import { push } from 'react-router-redux';
 import { PatientPhotoUpload } from '../components/patient-photo-upload';
 import PopupConsent from '../components/popup-consent';
+import PopupPatientCreated from '../components/popup-patient-created';
 import * as styles from '../css/components/patient-enrollment.css';
+import * as loadingStyles from '../css/shared/loading-spinner.css';
 import { getQuery } from '../graphql/helpers';
-import { FullClinicFragment, PatientSetupMutationVariables } from '../graphql/types';
+import {
+  FullClinicFragment,
+  PatientSetupMutationVariables,
+  ShortPatientFragment,
+} from '../graphql/types';
 import ethnicities from '../util/ethnicity-codes';
 import insuranceTypeOptions from '../util/insurance-type-options';
 import races from '../util/race-codes';
 import relationshipToPatientOptions from '../util/relationship-to-patient-options';
 
 export interface IProps {
-  createPatient: (options: { variables: PatientSetupMutationVariables }) => any;
+  createPatient: (
+    options: { variables: PatientSetupMutationVariables },
+  ) => { data: { patientSetup: ShortPatientFragment } };
   onSuccess: (patientId: string) => any;
   clinic: FullClinicFragment;
   clinicsLoading: boolean;
@@ -25,6 +33,9 @@ export interface IProps {
 
 export interface IState {
   displayConsentToPhoneTextPopup: boolean;
+  loading: boolean;
+  error?: string;
+  createdPatient?: ShortPatientFragment;
   patient: {
     homeClinicId: string;
     firstName: string;
@@ -63,13 +74,14 @@ class PatientEnrolementContainer extends React.Component<IProps, IState> {
 
   constructor(props: IProps) {
     super(props);
-    this.onSaveClick = this.onSaveClick.bind(this);
+    this.onSubmit = this.onSubmit.bind(this);
     this.updatePatient = this.updatePatient.bind(this);
     this.updateInsurance = this.updateInsurance.bind(this);
     this.showPhoneConsent = this.showPhoneConsent.bind(this);
     this.hidePhoneConsent = this.hidePhoneConsent.bind(this);
     this.state = {
       displayConsentToPhoneTextPopup: false,
+      loading: false,
       patient: {
         homeClinicId: '',
         firstName: '',
@@ -139,18 +151,27 @@ class PatientEnrolementContainer extends React.Component<IProps, IState> {
     this.setState({ displayConsentToPhoneTextPopup: false });
   }
 
-  async onSaveClick() {
-    await this.props.createPatient({
-      variables: {
-        ...this.state.patient,
-        ...this.state.insurance,
-        race: [this.state.patient.race],
-        zip: Number(this.state.patient.zip),
-        issueDate: formatDate(this.state.insurance.issueDate),
-        expirationDate: formatDate(this.state.insurance.expirationDate),
-        dateOfBirth: formatDate(this.state.patient.dateOfBirth),
-      },
-    });
+  async onSubmit(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    try {
+      this.setState({ loading: true });
+      const patient = await this.props.createPatient({
+        variables: {
+          ...this.state.patient,
+          ...this.state.insurance,
+          race: [this.state.patient.race],
+          zip: Number(this.state.patient.zip),
+          issueDate: formatDate(this.state.insurance.issueDate),
+          expirationDate: formatDate(this.state.insurance.expirationDate),
+          dateOfBirth: formatDate(this.state.patient.dateOfBirth),
+        },
+      });
+      this.setState({ createdPatient: patient.data.patientSetup, loading: false });
+    } catch (e) {
+      this.setState({ error: e, loading: false });
+      alert(JSON.stringify(e));
+    }
+    return false;
   }
 
   render() {
@@ -172,12 +193,18 @@ class PatientEnrolementContainer extends React.Component<IProps, IState> {
     const insuranceTypeOptionsHtml = Object.keys(insuranceTypeOptions).map((key: string) => (
       <option key={key} value={key}>{insuranceTypeOptions[key]}</option>
     ));
-
+    const loadingClass = this.state.loading ? styles.loading : styles.loadingHidden;
     return (
-      <div className={styles.container}>
+      <form onSubmit={this.onSubmit} className={styles.container}>
         <PopupConsent
           onClose={this.hidePhoneConsent}
           visible={this.state.displayConsentToPhoneTextPopup} />
+        <PopupPatientCreated patient={this.state.createdPatient} />
+        <div className={loadingClass}>
+          <div className={styles.loadingContainer}>
+            <div className={loadingStyles.loadingSpinner}></div>
+          </div>
+        </div>
         <div className={styles.formContainer}>
           <div className={styles.leftNav}>
             <div className={styles.leftNavLink}>Demographic info</div>
@@ -336,6 +363,7 @@ class PatientEnrolementContainer extends React.Component<IProps, IState> {
                   <div className={styles.label}>Home Phone Number</div>
                   <input
                     name='homePhone'
+                    type='tel'
                     value={patient.homePhone}
                     className={styles.input}
                     onChange={this.updatePatient} />
@@ -344,6 +372,7 @@ class PatientEnrolementContainer extends React.Component<IProps, IState> {
                   <div className={styles.label}>Mobile Phone Number</div>
                   <input
                     name='mobilePhone'
+                    type='tel'
                     value={patient.mobilePhone}
                     onChange={this.updatePatient}
                     className={styles.input} />
@@ -484,7 +513,7 @@ class PatientEnrolementContainer extends React.Component<IProps, IState> {
                 <div className={styles.formColumn}>
                   <div className={styles.label}>Expiration date</div>
                   <input
-                    name='exipirationDate'
+                    name='expirationDate'
                     value={this.state.insurance.expirationDate}
                     onChange={this.updateInsurance}
                     type='date'
@@ -505,10 +534,13 @@ class PatientEnrolementContainer extends React.Component<IProps, IState> {
         <div className={styles.formBottom}>
           <div className={styles.formBottomContent}>
             <Link to={'/patients'} className={styles.cancelButton}>Cancel</Link>
-            <button onClick={this.onSaveClick} className={styles.submitButton}>Save</button>
+            <input
+              type='submit'
+              className={styles.submitButton}
+              value='Submit' />
           </div>
         </div>
-      </div>
+      </form >
     );
   }
 }

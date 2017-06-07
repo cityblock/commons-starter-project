@@ -58,6 +58,11 @@
   width: 100%;
 }
 
+.input[type='date'] {
+  padding-top: 14px;
+  padding-bottom: 13px;
+}
+
 .label {
   @apply --label;
   margin-bottom: 10px;
@@ -180,4 +185,26 @@
 .radioLabel {
   display: inline-block;
   margin-top: 2px;
+}
+
+.loading {
+  position: fixed;
+  width: 100vw;
+  height: 100vh;
+  z-index: 10;
+  top: 0px;
+  left: 0px;
+  background: rgba(255, 255, 255, 0.8);
+  align-items: center;
+  display: flex;
+}
+
+.loadingHidden {
+  display: none;
+}
+
+.loadingContainer {
+  width: 100%;
+  justify-content: center;
+  display: flex;
 }

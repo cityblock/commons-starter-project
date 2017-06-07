@@ -1,6 +1,7 @@
 // import * as classNames from 'classnames';
 import * as React from 'react';
 import * as styles from '../css/components/table-loading-error.css';
+import * as loadingStyles from '../css/shared/loading-spinner.css';
 
 interface IProps {
   error?: string;
@@ -25,8 +26,8 @@ export const TableLoadingError: React.StatelessComponent<IProps> = props => {
   } else if (isLoading) {
     return (
       <div className={styles.loadingRow}>
-        <div className={styles.loadingSpinner}></div>
-        <div className={styles.loadingText}>Loading</div>
+        <div className={loadingStyles.loadingSpinner}></div>
+        <div className={loadingStyles.loadingText}>Loading</div>
       </div>
     );
   }

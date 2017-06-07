@@ -4,6 +4,3 @@ export const errorIcon: string;
 export const errorHeading: string;
 export const errorMessage: string;
 export const errorButton: string;
-export const loadingSpinner: string;
-export const skRotateplane: string;
-export const loadingText: string;

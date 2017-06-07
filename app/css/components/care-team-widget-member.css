@@ -14,8 +14,8 @@
 
 .careTeamMemberPhoto {
   margin-top: 2px;
-  width: 25px;
-  height: 25px;
+  width: 30px;
+  height: 30px;
   border: 1px solid var(--light-blue-color);
   border-radius: 50%;
 }

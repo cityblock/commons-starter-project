@@ -1,0 +1,110 @@
+@import '../common/sizes';
+.encounter {
+  background-color: var(--white-color);
+  border: 1px solid var(--gray-background-color);
+  border-radius: 4px;
+  padding: 10px var(--small-gutter) 0;
+  margin-bottom: var(--small-gutter);
+}
+
+.encounterTitle {
+  border-bottom: 1px solid var(--gray-background-color);
+  align-items: center;
+  justify-content: space-between;
+  lost-flex-container: row;
+}
+
+.providerInfo {
+  font-family: var(--roboto);
+  font-size: var(--small-font-size);
+  line-height: var(--small-font-line-height);
+  padding-bottom: 10px;
+  lost-flex-container: row;
+}
+
+.providerName {
+  font-weight: var(--roboto-medium-weight);
+  color: var(--black-color);
+}
+
+.providerRole {
+  color: var(--light-gray-font-color);
+  padding-left: var(--small-gutter);
+}
+
+.encounterDateTime {
+  font-family: var(--roboto);
+  font-size: var(--small-font-size);
+  line-height: var(--small-font-line-height);
+  color: var(--black-color);
+  padding-bottom: 10px;
+  lost-flex-container: row;
+}
+
+.encounterTime {}
+
+.encounterDate {
+  padding-left: 10px;
+}
+
+.encounterBody {
+  padding: var(--small-gutter) 0;
+}
+
+.encounterHeader {
+  align-items: center;
+  justify-content: space-between;
+  color: var(--black-color);
+  padding-bottom: 10px;
+  lost-flex-container: row;
+}
+
+.encounterSummary {
+  font-family: var(--basetica-medium);
+  font-size: var(--medium-large-font-size);
+  line-height: var(--medium-large-font-line-height);
+}
+
+.encounterHamburger {
+  height: 22px;
+  width: 4px;
+  padding-right: var(--small-gutter);
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-image: url('../../assets/dot-hamburger-black.svg');
+
+  &:hover {
+    cursor: pointer;
+  }
+}
+
+.encounterMain {
+  font-family: var(--roboto);
+  font-size: var(--default-font-size);
+  line-height: var(--medium-font-line-height);
+  padding-bottom: var(--small-gutter);
+}
+
+.encounterFooter {
+  font-family: var(--roboto);
+  font-size: var(--small-font-size);
+  line-height: var(--small-font-line-height);
+}
+
+.encounterLocation {
+  color: var(--light-gray-font-color);
+}
+
+.encounterAttachments {
+  align-items: center;
+  justify-content: flex-start;
+  padding-top: var(--small-gutter);
+  lost-flex-container: row;
+}
+
+.encounterAttachmentPhoto {
+  margin-right: var(--small-gutter);
+  width: 40px;
+  height: 40px;
+}

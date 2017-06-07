@@ -38,6 +38,25 @@ export interface GetPatientCareTeamQuery {
   patientCareTeam: Array<FullUserFragment>;
 }
 
+export interface GetPatientEncountersQueryVariables {
+  patientId: string;
+  pageNumber: number | null;
+  pageSize: number | null;
+}
+
+export interface GetPatientEncountersQuery {
+  // Patient encounters
+  patientEncounters: {
+    edges: Array< {
+      node: FullPatientEncounterFragment,
+    } > | null,
+    pageInfo: {
+      hasPreviousPage: boolean,
+      hasNextPage: boolean,
+    },
+  } | null;
+}
+
 export interface GetPatientMedicationsQueryVariables {
   patientId: string;
 }
@@ -161,6 +180,31 @@ export interface PatientSetupMutation {
 export interface FullClinicFragment {
   id: string;
   name: string;
+}
+
+export interface FullPatientEncounterFragment {
+  encounterType: string;
+  encounterId: number;
+  status: string;
+  patientStatusId: number | null;
+  appointmentId: number;
+  stage: string | null;
+  patientLocationId: number | null;
+  providerId: number | null;
+  encounterDate: string;
+  encounterVisitName: string;
+  patientLocation: string | null;
+  diagnoses: Array< {
+    diagnosisId: number,
+    icdCodes: Array< string | null >,
+    snomedCode: number,
+    description: string,
+  } > | null;
+  patientStatus: string | null;
+  providerPhone: string | null;
+  providerFirstName: string | null;
+  providerLastName: string | null;
+  lastUpdated: string;
 }
 
 export interface FullPatientHealthRecordFragment {

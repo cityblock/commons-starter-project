@@ -1,0 +1,23 @@
+@import '../common/sizes';
+.encountersPanel {
+  background-color: var(--gray-background-color);
+  padding: 20px var(--medium-gutter);
+}
+
+::-webkit-scrollbar {
+  display: none;
+}
+
+.newEncounter {}
+
+.newEncounterButton {
+  @apply --inverted-button;
+  border-radius: 4px;
+  height: 42px;
+}
+
+.encounters {
+  margin-top: var(--small-gutter);
+  height: calc(100vh - 219px);
+  overflow: scroll;
+}

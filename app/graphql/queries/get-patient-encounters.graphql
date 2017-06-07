@@ -1,0 +1,13 @@
+query getPatientEncounters($patientId: String!, $pageNumber: Int, $pageSize: Int) {
+  patientEncounters(patientId: $patientId, pageNumber: $pageNumber, pageSize: $pageSize) {
+    edges {
+      node {
+        ...FullPatientEncounter
+      }
+    }
+    pageInfo {
+      hasPreviousPage
+      hasNextPage
+    }
+  }
+}

@@ -1,0 +1,91 @@
+@import '../common/sizes';
+.careTeamWidget {
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  width: 247px;
+  box-shadow: -8px -1px 10px 0 rgba(0,0,0,0.15);
+}
+
+.careTeamWidgetRow {
+  width: 100%;
+  max-width: var(--max-width);
+  margin: 0px auto;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+}
+
+.careTeamWidgetContent {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+
+.button {
+  width: 247px;
+  height: 67px;
+  color: var(--white-color);
+  background-color: var(--black-color);
+  cursor: pointer;
+  justify-content: space-between;
+  align-items: center;
+  padding: 22px 31px 18px;
+  lost-flex-container: row;
+}
+
+.drawer {
+  height: 0px;
+  width: 247px;
+  background-color: var(--white-color);
+  transition: height .3s ease-in-out;
+}
+
+.drawer.open {
+  height: calc(100vh - 137px);
+}
+
+.buttonLabel, .buttonChatLabel {
+  align-items: center;
+  justify-content: space-between;
+  lost-flex-container: row;
+}
+
+.buttonTitle {
+  font-family: var(--basetica-medium);
+  font-size: var(--medium-large-font-size);
+  line-height: var(--medium-large-font-line-height);
+}
+
+.chatLabel {
+  font-family: var(--basetica-medium);
+  font-size: var(--small-font-size);
+  line-height: var(--small-font-line-height);
+  padding-left: 3px;
+}
+
+.buttonArrow {
+  height: 12px;
+  width: 12px;
+  padding-left: 28px;
+  margin-bottom: 1px;
+  transform: rotateX(180deg);
+  background-position: center bottom;
+  background-repeat: no-repeat;
+  background-image: url('../../assets/down-arrow-white.svg');
+}
+
+.openButton {}
+
+.button.openButton .buttonArrow {
+  transform: rotateX(0deg);
+  background-position: center top;
+}
+
+.chatLogo {
+  height: 18px;
+  width: 18px;
+  background-position: center top;
+  background-repeat: no-repeat;
+  background-image: url('../../assets/slack-white.svg');
+}

@@ -1,0 +1,107 @@
+import * as classNames from 'classnames';
+import * as React from 'react';
+import { graphql } from 'react-apollo';
+import * as styles from '../css/components/care-team-widget.css';
+import { getQuery } from '../graphql/helpers';
+import { FullUserFragment } from '../graphql/types';
+import CareTeamWidgetMember from './care-team-widget-member';
+
+interface IProps {
+  patientId: string;
+  loading?: boolean;
+  error?: string;
+  careTeam?: FullUserFragment[];
+}
+
+interface IState {
+  open: boolean;
+  selectedCareTeamMemberId: string | null;
+}
+
+class CareTeamWidget extends React.Component<IProps, IState> {
+  constructor(props: any) {
+    super(props);
+
+    this.onClick = this.onClick.bind(this);
+    this.onCareTeamMemberClick = this.onCareTeamMemberClick.bind(this);
+    this.renderCareTeamMember = this.renderCareTeamMember.bind(this);
+
+    this.state = {
+      open: false,
+      selectedCareTeamMemberId: null,
+    };
+  }
+
+  renderCareTeamMember(careTeamMember: FullUserFragment) {
+    const selected = careTeamMember.id === this.state.selectedCareTeamMemberId;
+
+    return (
+      <CareTeamWidgetMember
+        key={careTeamMember.id}
+        careTeamMember={careTeamMember}
+        onClick={this.onCareTeamMemberClick}
+        selected={selected}
+      />
+    );
+  }
+
+  onCareTeamMemberClick(careTeamMemberId: string) {
+    this.setState((prevState: IState) => {
+      const { selectedCareTeamMemberId } = prevState;
+
+      if (careTeamMemberId === selectedCareTeamMemberId) {
+        return { selectedCareTeamMemberId: null };
+      } else {
+        return { selectedCareTeamMemberId: careTeamMemberId };
+      }
+    });
+  }
+
+  onClick() {
+    this.setState((prevState: IState) => ({ open: !prevState.open }));
+  }
+
+  render() {
+    const { careTeam } = this.props;
+
+    const buttonClasses = classNames(styles.button, { [styles.openButton]: this.state.open });
+    const drawerClasses = classNames(styles.drawer, { [styles.open]: this.state.open });
+
+    const renderedCareTeamMembers = (careTeam || []).map(this.renderCareTeamMember);
+
+    return (
+      <div className={styles.careTeamWidget}>
+        <div className={styles.careTeamWidgetRow}>
+          <div className={styles.careTeamWidgetContent}>
+            <div className={buttonClasses} onClick={this.onClick}>
+              <div className={styles.buttonLabel}>
+                <div className={styles.buttonTitle}>Team</div>
+                <div className={styles.buttonArrow}></div>
+              </div>
+              <div className={styles.buttonChatLabel}>
+                <div className={styles.chatLogo}></div>
+                <div className={styles.chatLabel}>Chat</div>
+              </div>
+            </div>
+            <div className={drawerClasses}>{renderedCareTeamMembers}</div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+}
+
+const careTeamQuery = getQuery('app/graphql/queries/get-patient-care-team.graphql');
+
+export default graphql(careTeamQuery, {
+  options: (props: IProps) => ({
+    variables: {
+      patientId: props.patientId,
+    },
+  }),
+  props: ({ data }) => ({
+    loading: (data ? data.loading : false),
+    error: (data ? data.error : null),
+    careTeam: (data ? (data as any).patientCareTeam : null),
+  }),
+})(CareTeamWidget);

@@ -40,7 +40,7 @@ export default class PatientMedication extends React.Component<IProps, {}> {
           </div>
           <div className={styles.medicationDetailsRow}>
             <div className={styles.medicationDetailsTitle}>Prescribed by</div>
-            <div className={styles.medicationDetailsInfo}>TBD</div>
+            <div className={styles.medicationDetailsInfo}>{medication.source}</div>
           </div>
           <div className={styles.medicationDetailsRow}>
             <div className={styles.medicationDetailsTitle}>Prescribed on</div>

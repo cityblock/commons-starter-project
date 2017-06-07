@@ -3,6 +3,7 @@ import * as React from 'react';
 import { compose, graphql } from 'react-apollo';
 import { connect } from 'react-redux';
 import { IState as IAppState } from '../client';
+import CareTeamWidget from '../components/care-team-widget';
 import PatientMedications from '../components/patient-medications';
 import * as styles from '../css/components/patient-profile-scene.css';
 import { getQuery } from '../graphql/helpers';
@@ -210,6 +211,7 @@ class PatientProfileContainer extends React.Component<IProps, {}> {
             </div>
           </div>
         </div>
+        <CareTeamWidget patientId={this.props.patientId} />
       </div>
     );
   }

@@ -1,0 +1,5 @@
+query getPatientCareTeam($patientId: String!) {
+  patientCareTeam(patientId: $patientId) {
+    ...FullUser
+  }
+}

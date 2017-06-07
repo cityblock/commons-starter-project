@@ -29,6 +29,15 @@ export interface GetCurrentUserQuery {
   currentUser: FullUserFragment;
 }
 
+export interface GetPatientCareTeamQueryVariables {
+  patientId: string;
+}
+
+export interface GetPatientCareTeamQuery {
+  // Users on a care team
+  patientCareTeam: Array<FullUserFragment>;
+}
+
 export interface GetPatientMedicationsQueryVariables {
   patientId: string;
 }
@@ -178,6 +187,7 @@ export interface FullPatientHealthRecordFragment {
 export interface FullPatientMedicationFragment {
   medicationId: number;
   name: string;
+  source: string;
   quantity: number | null;
   quantityUnit: string | null;
   dosageInstructions: string | null;

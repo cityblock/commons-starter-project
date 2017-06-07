@@ -1,6 +1,7 @@
 fragment FullPatientMedication on PatientMedication {
   medicationId
   name
+  source
   quantity
   quantityUnit
   dosageInstructions

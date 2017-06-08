@@ -39,3 +39,88 @@
     cursor: pointer;
   }
 }
+
+.medicationsList.emptyMedicationsList {
+  &:hover {
+    cursor: default;
+  }
+}
+
+.emptyMedicationsMessage {
+  border: 1px dashed var(--border-color);
+  border-radius: 4px;
+  padding: 24px 40px 21px;
+  margin: 5px var(--gutter) 0;
+}
+
+.emptyMedicationsLogo {
+  background-image: url('../../assets/generic-health-icon-grey.svg');
+  background-position: center center;
+  background-repeat: no-repeat;
+  height: 18px;
+  width: 18px;
+  margin: 0 auto 13px;
+}
+
+.emptyMedicationsLabel {
+  margin: 0 auto;
+  text-align: center;
+  color: var(--light-gray-font-color);
+  font-family: var(--basetica-medium);
+  font-size: var(--medium-font-size);
+  line-height: var(--medium-font-line-height);
+}
+
+.medicationsLoading {
+  margin: 0 auto;
+  text-align: center;
+  color: var(--light-gray-font-color);
+  font-family: var(--basetica-medium);
+  font-size: var(--medium-font-size);
+  line-height: var(--medium-font-line-height);
+  padding-top: var(--medium-gutter);
+}
+
+.medicationsError {
+  margin: 50px var(--gutter) 0;
+}
+
+.medicationsErrorIcon {
+  background-image: url('../../assets/error-circle.svg');
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-size: contain;
+  height: 20px;
+  width: 20px;
+  margin: 0 auto 13px;
+}
+
+.medicationsErrorLabel {
+  color: var(--default-font-color);
+  font-family: var(--basetica-black);
+  font-size: var(--small-font-size);
+  line-height: var(--small-font-line-height);
+  text-align: center;
+  margin: 0 auto 10px;
+}
+
+.medicationsErrorSubheading {
+  color: var(--gray-font-color);
+  font-family: var(--roboto);
+  font-size: var(--small-font-size);
+  line-height: var(--small-font-line-height);
+  text-align: center;
+  margin: 0 auto var(--medium-gutter);
+  padding: 0 var(--small-gutter);
+}
+
+.medicationsErrorButton {
+  @apply --inverted-button;
+  width: 94px;
+  height: 32px;
+  margin: 0 auto;
+  padding: 9px 0 0 0;
+  text-align: center;
+  font-size: var(--small-font-size);
+  line-height: var(--small-font-line-height);
+}

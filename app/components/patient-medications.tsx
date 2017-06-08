@@ -1,8 +1,10 @@
+import * as classNames from 'classnames';
 import * as React from 'react';
 import { graphql } from 'react-apollo';
 import * as styles from '../css/components/patient-medications.css';
 import { getQuery } from '../graphql/helpers';
 import { FullPatientMedicationFragment } from '../graphql/types';
+import { MedicationsLoadingError } from './medications-loading-error';
 import PatientMedication from './patient-medication';
 
 interface IProps {
@@ -10,6 +12,7 @@ interface IProps {
   loading?: boolean;
   error?: string;
   patientMedications?: FullPatientMedicationFragment[];
+  refetchPatientMedications?: (variables: { patientId: string }) => any;
 }
 
 interface IState {
@@ -21,7 +24,9 @@ class PatientMedications extends React.Component<IProps, IState> {
     super(props);
 
     this.onClickMedication = this.onClickMedication.bind(this);
+    this.renderPatientMedications = this.renderPatientMedications.bind(this);
     this.renderPatientMedication = this.renderPatientMedication.bind(this);
+    this.reloadPatientMedications = this.reloadPatientMedications.bind(this);
 
     this.state = {
       selectedMedicationId: null,
@@ -40,6 +45,29 @@ class PatientMedications extends React.Component<IProps, IState> {
     });
   }
 
+  renderPatientMedications(medications: FullPatientMedicationFragment[]) {
+    const { loading, error } = this.props;
+
+    if (medications.length) {
+      return medications.map(this.renderPatientMedication);
+    } else if (!loading && !error) {
+      return (
+        <div className={styles.emptyMedicationsMessage}>
+          <div className={styles.emptyMedicationsLogo}></div>
+          <div className={styles.emptyMedicationsLabel}>No active medications</div>
+        </div>
+      );
+    } else {
+      return (
+        <MedicationsLoadingError
+          error={error}
+          loading={loading}
+          onRetryClick={this.reloadPatientMedications}
+        />
+      );
+    }
+  }
+
   renderPatientMedication(medication: FullPatientMedicationFragment) {
     const selected = medication.medicationId === this.state.selectedMedicationId;
 
@@ -53,8 +81,21 @@ class PatientMedications extends React.Component<IProps, IState> {
     );
   }
 
+  reloadPatientMedications() {
+    const { patientId, refetchPatientMedications } = this.props;
+
+    if (refetchPatientMedications) {
+      refetchPatientMedications({ patientId });
+    }
+  }
+
   render() {
     const { patientMedications } = this.props;
+    const medicationsList = patientMedications || [];
+
+    const medicationsListStyles = classNames(styles.medicationsList, {
+      [styles.emptyMedicationsList]: !medicationsList.length,
+    });
 
     return (
       <div className={styles.patientMedications}>
@@ -62,8 +103,8 @@ class PatientMedications extends React.Component<IProps, IState> {
           <div className={styles.medicationsTitle}>Active medications</div>
           <div className={styles.medicationsHamburger}></div>
         </div>
-        <div className={styles.medicationsList}>
-          {(patientMedications || []).map(this.renderPatientMedication)}
+        <div className={medicationsListStyles}>
+          {this.renderPatientMedications(medicationsList)}
         </div>
       </div>
     );
@@ -98,5 +139,6 @@ export default graphql(patientMedicationsQuery, {
     loading: (data ? data.loading : false),
     error: (data ? data.error : null),
     patientMedications: (data ? formatPatientMedications((data as any).patientMedications) : null),
+    refetchPatientMedications: (data ? data.refetch : null),
   }),
 })(PatientMedications);

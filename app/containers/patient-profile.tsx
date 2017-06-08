@@ -29,6 +29,8 @@ class PatientProfileContainer extends React.Component<IProps, {}> {
   }
 
   render() {
+    const { patientId } = this.props;
+
     return (
       <div className={styles.container}>
         <div className={styles.leftPane}>
@@ -81,7 +83,7 @@ class PatientProfileContainer extends React.Component<IProps, {}> {
               </textarea>
             </div>
           </div>
-          <PatientMedications patientId={this.props.patientId} />
+          <PatientMedications patientId={patientId} />
         </div>
         <div className={styles.mainBody}>
           <div className={styles.tabs}>
@@ -101,9 +103,9 @@ class PatientProfileContainer extends React.Component<IProps, {}> {
               <input required type='text' placeholder='Search by user or keywords' />
             </div>
           </div>
-          <PatientEncounters patientId={this.props.patientId} />
+          <PatientEncounters patientId={patientId} />
         </div>
-        <CareTeamWidget patientId={this.props.patientId} />
+        <CareTeamWidget patientId={patientId} />
       </div>
     );
   }

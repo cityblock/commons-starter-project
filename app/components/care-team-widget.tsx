@@ -58,7 +58,16 @@ class CareTeamWidget extends React.Component<IProps, IState> {
   }
 
   onClick() {
-    this.setState((prevState: IState) => ({ open: !prevState.open }));
+    this.setState((prevState: IState) => {
+      if (prevState.open) {
+        return {
+          open: false,
+          selectedCareTeamMemberId: null,
+        };
+      } else {
+        return { open: !prevState.open };
+      }
+    });
   }
 
   render() {

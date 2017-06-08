@@ -6,15 +6,13 @@ mutation patientHealthRecordEdit(
   $gender: String
   $zip: Int
   $preferredName: String
-  $raceName: String
-  $race: [String]
+  $race: String
   $ethnicityCode: String
   $status: String
   $ssn: String
   $homebound: Boolean
   $language6392code: String
   $maritalStatus: String
-  $maritalStatusName: String
 
   $email: String
   $homePhone: String
@@ -36,7 +34,6 @@ mutation patientHealthRecordEdit(
     gender: $gender,
     zip: $zip,
     preferredName: $preferredName,
-    raceName: $raceName,
     race: $race,
     ethnicityCode: $ethnicityCode,
     status: $status,
@@ -44,7 +41,6 @@ mutation patientHealthRecordEdit(
     homebound: $homebound,
     language6392code: $language6392code,
     maritalStatus: $maritalStatus,
-    maritalStatusName: $maritalStatusName,
 
     email: $email,
     homePhone: $homePhone,

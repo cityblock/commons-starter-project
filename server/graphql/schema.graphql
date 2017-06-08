@@ -74,13 +74,6 @@ type Contact {
   consentToText: Boolean
 }
 
-# Patient poverty level response
-type PovertyLevel {
-  povertyLevelIncomeDeclined: Boolean
-  povertyLevelIncomeRangeDeclined: Boolean
-  povertyLevelFamilySizeDeclined: Boolean
-}
-
 # Patient address
 type Address {
   city: String
@@ -143,13 +136,14 @@ type Patient implements uniqueId {
 type PatientHealthRecord {
   id: ID!
   firstName: String
+  middleName: String
   lastName: String
   dateOfBirth: String
   gender: String
   suffix: String
   preferredName: String
   raceName: String
-  race: [String]
+  race: String
   ethnicityCode: String
   status: String
   ssn: String
@@ -163,7 +157,6 @@ type PatientHealthRecord {
   guarantor: Garantor
   employer: Employer
   address: Address
-  povertyLevel: PovertyLevel
 }
 
 # Patient node
@@ -367,21 +360,20 @@ input PatientEditInput {
 input PatientHealthRecordEditInput {
   patientId: String!
   firstName: String
+  middleName: String
   lastName: String
   gender: String
   zip: Int
   dateOfBirth: String
   suffix: String
   preferredName: String
-  raceName: String
-  race: [String]
+  race: String
   ethnicityCode: String
   status: String
   ssn: String
   homebound: Boolean
   language6392code: String
   maritalStatus: String
-  maritalStatusName: String
 
   email: String
   homePhone: String
@@ -394,15 +386,12 @@ input PatientHealthRecordEditInput {
   countryCode: String
   countryCode3166: String
   state: String
-
-  povertyLevelIncomeDeclined: Boolean
-  povertyLevelIncomerangeDeclined: Boolean
-  povertyLevelFamilySizeDeclined: Boolean
 }
 
 # params for creating a patient in the db and in athena
 input PatientSetupInput {
   firstName: String!
+  middleName: String
   lastName: String!
   dateOfBirth: String!
   gender: String!
@@ -410,15 +399,13 @@ input PatientSetupInput {
   homeClinicId: String!
   suffix: String
   preferredName: String
-  raceName: String
-  race: [String]
+  race: String
   ethnicityCode: String
   status: String
   ssn: String
   homebound: Boolean
   language6392code: String
   maritalStatus: String
-  maritalStatusName: String
 
   email: String
   homePhone: String
@@ -431,10 +418,6 @@ input PatientSetupInput {
   countryCode: String
   countryCode3166: String
   state: String
-
-  povertyLevelIncomeDeclined: Boolean
-  povertyLevelIncomerangeDeclined: Boolean
-  povertyLevelFamilySizeDeclined: Boolean
 }
 
 type RootMutationType {

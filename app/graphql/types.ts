@@ -118,15 +118,13 @@ export interface PatientHealthRecordEditMutationVariables {
   gender: string | null;
   zip: number | null;
   preferredName: string | null;
-  raceName: string | null;
-  race: Array< string | null > | null;
+  race: string | null;
   ethnicityCode: string | null;
   status: string | null;
   ssn: string | null;
   homebound: boolean | null;
   language6392code: string | null;
   maritalStatus: string | null;
-  maritalStatusName: string | null;
   email: string | null;
   homePhone: string | null;
   mobilePhone: string | null;
@@ -154,20 +152,21 @@ export interface PatientHealthRecordQuery {
 }
 
 export interface PatientSetupMutationVariables {
+  homeClinicId: string;
   firstName: string;
+  middleName: string | null;
   lastName: string;
   dateOfBirth: string;
   gender: string;
+  maritalStatus: string | null;
+  race: string | null;
   zip: number;
-  homeClinicId: string;
-  race: Array< string | null > | null;
-  ethnicityCode: string | null;
   ssn: string | null;
   language6392code: string | null;
-  maritalStatus: string | null;
   email: string | null;
   homePhone: string | null;
   mobilePhone: string | null;
+  ethnicityCode: string | null;
   consentToCall: boolean | null;
   consentToText: boolean | null;
 }
@@ -216,7 +215,7 @@ export interface FullPatientHealthRecordFragment {
   suffix: string | null;
   preferredName: string | null;
   raceName: string | null;
-  race: Array< string | null > | null;
+  race: string | null;
   ethnicityCode: string | null;
   status: string | null;
   ssn: string | null;

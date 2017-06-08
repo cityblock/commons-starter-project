@@ -123,13 +123,14 @@ declare module 'schema' {
   interface IPatientHealthRecord {
     id: string;
     firstName: string | null;
+    middleName: string | null;
     lastName: string | null;
     dateOfBirth: string | null;
     gender: string | null;
     suffix: string | null;
     preferredName: string | null;
     raceName: string | null;
-    race: Array<string> | null;
+    race: string | null;
     ethnicityCode: string | null;
     status: string | null;
     ssn: string | null;
@@ -143,7 +144,6 @@ declare module 'schema' {
     guarantor: IGarantor | null;
     employer: IEmployer | null;
     address: IAddress | null;
-    povertyLevel: IPovertyLevel | null;
   }
 
   /*
@@ -212,15 +212,6 @@ declare module 'schema' {
     countryCode3166: string | null;
     state: string | null;
     zip: string | null;
-  }
-
-  /*
-    description: Patient poverty level response
-  */
-  interface IPovertyLevel {
-    povertyLevelIncomeDeclined: boolean | null;
-    povertyLevelIncomeRangeDeclined: boolean | null;
-    povertyLevelFamilySizeDeclined: boolean | null;
   }
 
   /*
@@ -486,21 +477,20 @@ declare module 'schema' {
   interface IPatientHealthRecordEditInput {
     patientId: string;
     firstName?: string | null;
+    middleName?: string | null;
     lastName?: string | null;
     gender?: string | null;
     zip?: number | null;
     dateOfBirth?: string | null;
     suffix?: string | null;
     preferredName?: string | null;
-    raceName?: string | null;
-    race?: Array<string> | null;
+    race?: string | null;
     ethnicityCode?: string | null;
     status?: string | null;
     ssn?: string | null;
     homebound?: boolean | null;
     language6392code?: string | null;
     maritalStatus?: string | null;
-    maritalStatusName?: string | null;
     email?: string | null;
     homePhone?: string | null;
     mobilePhone?: string | null;
@@ -511,9 +501,6 @@ declare module 'schema' {
     countryCode?: string | null;
     countryCode3166?: string | null;
     state?: string | null;
-    povertyLevelIncomeDeclined?: boolean | null;
-    povertyLevelIncomerangeDeclined?: boolean | null;
-    povertyLevelFamilySizeDeclined?: boolean | null;
   }
 
   /*
@@ -521,6 +508,7 @@ declare module 'schema' {
   */
   interface IPatientSetupInput {
     firstName: string;
+    middleName?: string | null;
     lastName: string;
     dateOfBirth: string;
     gender: string;
@@ -528,15 +516,13 @@ declare module 'schema' {
     homeClinicId: string;
     suffix?: string | null;
     preferredName?: string | null;
-    raceName?: string | null;
-    race?: Array<string> | null;
+    race?: string | null;
     ethnicityCode?: string | null;
     status?: string | null;
     ssn?: string | null;
     homebound?: boolean | null;
     language6392code?: string | null;
     maritalStatus?: string | null;
-    maritalStatusName?: string | null;
     email?: string | null;
     homePhone?: string | null;
     mobilePhone?: string | null;
@@ -547,8 +533,5 @@ declare module 'schema' {
     countryCode?: string | null;
     countryCode3166?: string | null;
     state?: string | null;
-    povertyLevelIncomeDeclined?: boolean | null;
-    povertyLevelIncomerangeDeclined?: boolean | null;
-    povertyLevelFamilySizeDeclined?: boolean | null;
   }
 }

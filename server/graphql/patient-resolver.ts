@@ -55,12 +55,23 @@ export async function patientSetup(
     const patient = await patientWithTransaction.setup(input);
     const department = await HomeClinic.get(input.homeClinicId);
     const athenaPatient = await athenaApi.patientCreate({
+      departmentId: department.departmentId,
       firstName: input.firstName,
+      middleName: input.middleName ? input.middleName : undefined,
       lastName: input.lastName,
       gender: input.gender,
       zip: input.zip,
       dateOfBirth: input.dateOfBirth,
-      departmentId: department.departmentId,
+      maritalStatus: input.maritalStatus ? input.maritalStatus : undefined,
+      race: input.race ? input.race : undefined,
+      ssn: input.ssn ? input.ssn : undefined,
+      language6392code: input.language6392code ? input.language6392code : undefined,
+      email: input.email ? input.email : undefined,
+      homePhone: input.homePhone ? input.homePhone : undefined,
+      mobilePhone: input.mobilePhone ? input.mobilePhone : undefined,
+      ethnicityCode: input.ethnicityCode ? input.ethnicityCode : undefined,
+      consentToCall: input.consentToCall ? input.consentToCall : undefined,
+      consentToText: input.consentToText ? input.consentToText : undefined,
     });
 
     return await patientWithTransaction.addAthenaPatientId(

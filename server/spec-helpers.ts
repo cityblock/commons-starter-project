@@ -60,6 +60,7 @@ export function createMockAthenaPatient(
     contactpreference_announcement_phone: false,
     contactpreference: 'MOBILEPHONE',
     lastemail: 'lukasz.jachym@gmail.com',
+    middlename: 'middlename',
     contactrelationship: 'Spouse',
     employerid: '1',
     contacthomephone: '8885551241',

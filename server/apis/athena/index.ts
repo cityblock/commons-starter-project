@@ -7,11 +7,13 @@ import { AthenaResponseError } from '../../lib/errors';
 import { formatEditPatientHealthRecordOptions } from './formatters';
 import {
   IAddNoteToAppointmentResponse,
+  IAthenaPatientEditableFields,
   IBookAppointmentErrorResponse,
   IBookAppointmentResponse,
   ICheckinAppointmentResponse,
   ICheckoutAppointmentResponse,
   IOpenAppointmentResponse,
+  IPatientEditableFields,
   IPatientEncountersResponse,
   IPatientInfoAthena,
   IPatientMedicationsResponse,
@@ -27,42 +29,6 @@ interface IAuth {
 
 export interface IPatientResponse {
   athenaPatientId: number;
-}
-
-interface IPatientEditableFields {
-  firstName: string;
-  lastName: string;
-  gender: string;
-  zip: number;
-  dateOfBirth: string;
-  departmentId: number;
-  suffix: string;
-  preferredName: string;
-  raceName: string;
-  race: string[];
-  ethnicityCode: string;
-  status: string;
-  ssn: string;
-  homebound: boolean;
-  language6392code: string;
-  maritalStatus: string;
-  maritalStatusName: string;
-
-  email: string;
-  homePhone: string;
-  mobilePhone: string;
-  consentToCall: boolean;
-  consentToText: boolean;
-
-  city: string;
-  address1: string;
-  countryCode: string;
-  countryCode3166: string;
-  state: string;
-
-  povertyLevelIncomeDeclined: boolean;
-  povertyLevelIncomerangeDeclined: boolean;
-  povertyLevelFamilySizeDeclined: boolean;
 }
 
 export type IAthenaCreatePatient =
@@ -134,18 +100,17 @@ export default class AthenaApi {
    * Note: this endpoint is extremely slow on the athena side
    */
   public async patientCreate(
-    { firstName, lastName, gender, zip, dateOfBirth, departmentId }: IAthenaCreatePatient,
+    options: IAthenaCreatePatient,
   ): Promise<IPatientResponse> {
-    const formattedPatientOptions = {
-      firstname: firstName,
-      lastname: lastName,
-      sex: gender,
-      zip: String(zip),
-      departmentid: departmentId,
-      dob: dateOfBirth,
-    };
+    const formattedPatientOptions = formatEditPatientHealthRecordOptions(options);
+
+    const filtered = omitBy<{}, Partial<IAthenaPatientEditableFields>>(
+      formattedPatientOptions, isNil,
+    );
+    // Add department ID back
+    (filtered as any).departmentId = options.departmentId;
     const response = await this.fetch(
-      `/${config.ATHENA_PRACTICE_ID}/patients`, formattedPatientOptions, 'POST',
+      `/${config.ATHENA_PRACTICE_ID}/patients`, filtered, 'POST',
     );
     return {
       athenaPatientId: Number(response[0].patientid),
@@ -156,7 +121,9 @@ export default class AthenaApi {
     options: IAthenaEditPatient, athenaPatientId: number,
   ): Promise<IPatientResponse> {
     const formattedPatientOptions = formatEditPatientHealthRecordOptions(options);
-    const filtered = omitBy<{}, Partial<IPatientInfoAthena>>(formattedPatientOptions, isNil);
+    const filtered = omitBy<{}, Partial<IAthenaPatientEditableFields>>(
+      formattedPatientOptions, isNil,
+    );
     const response = await this.fetch(
       `/${config.ATHENA_PRACTICE_ID}/patients/${athenaPatientId}`, filtered, 'PUT',
     );

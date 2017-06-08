@@ -1,24 +1,25 @@
 mutation patientSetup(
+  $homeClinicId: String!
   $firstName: String!
+  $middleName: String
   $lastName: String!
   $dateOfBirth: String!
   $gender: String!
+  $maritalStatus: String
+  $race: String
   $zip: Int!
-  $homeClinicId: String!
-  $race: [String]
-  $ethnicityCode: String
   $ssn: String
   $language6392code: String
-  $maritalStatus: String
-
   $email: String
   $homePhone: String
   $mobilePhone: String
+  $ethnicityCode: String
   $consentToCall: Boolean
   $consentToText: Boolean
 ) {
   patientSetup(input: {
     firstName: $firstName,
+    middleName: $middleName,
     lastName: $lastName,
     dateOfBirth: $dateOfBirth,
     gender: $gender,
@@ -29,7 +30,6 @@ mutation patientSetup(
     ssn: $ssn,
     language6392code: $language6392code,
     maritalStatus: $maritalStatus,
-
     email: $email,
     homePhone: $homePhone,
     mobilePhone: $mobilePhone,
@@ -39,4 +39,3 @@ mutation patientSetup(
     ...ShortPatient
   }
 }
-

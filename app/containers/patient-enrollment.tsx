@@ -52,8 +52,8 @@ export interface IState {
     homePhone: string;
     mobilePhone: string;
     ethnicityCode: string;
-    consentToText: boolean;
-    consentToCall: boolean;
+    consentToText: string;
+    consentToCall: string;
     preferredContactMethod: string;
   };
   insurance: {
@@ -98,8 +98,8 @@ class PatientEnrolementContainer extends React.Component<IProps, IState> {
         homePhone: '',
         mobilePhone: '',
         ethnicityCode: '',
-        consentToText: false,
-        consentToCall: false,
+        consentToText: 'false',
+        consentToCall: 'false',
         preferredContactMethod: 'Cell',
       },
       insurance: {
@@ -159,7 +159,9 @@ class PatientEnrolementContainer extends React.Component<IProps, IState> {
         variables: {
           ...this.state.patient,
           ...this.state.insurance,
-          race: [this.state.patient.race],
+          consentToCall: this.state.patient.consentToCall === 'true' ? true : false,
+          consentToText: this.state.patient.consentToText === 'true' ? true : false,
+          race: this.state.patient.race,
           zip: Number(this.state.patient.zip),
           issueDate: formatDate(this.state.insurance.issueDate),
           expirationDate: formatDate(this.state.insurance.expirationDate),
@@ -395,9 +397,9 @@ class PatientEnrolementContainer extends React.Component<IProps, IState> {
                         <input
                           className={styles.radio}
                           type='radio'
-                          name='contactViaText'
+                          name='consentToText'
                           onChange={this.updatePatient}
-                          value='false' />
+                          value='true' />
                         <label />
                       </div>
                       <span className={styles.radioLabel}>Yes</span>
@@ -407,9 +409,9 @@ class PatientEnrolementContainer extends React.Component<IProps, IState> {
                         <input
                           className={styles.radio}
                           type='radio'
-                          name='contactViaText'
+                          name='consentToText'
                           onChange={this.updatePatient}
-                          value='true' />
+                          value='false' />
                         <label />
                       </div>
                       <span className={styles.radioLabel}>No</span>
@@ -434,9 +436,9 @@ class PatientEnrolementContainer extends React.Component<IProps, IState> {
                         <input
                           className={styles.radio}
                           type='radio'
-                          name='contactViaPhone'
+                          name='consentToCall'
                           onChange={this.updatePatient}
-                          value='false' />
+                          value='true' />
                         <label />
                       </div>
                       <span className={styles.radioLabel}>Yes</span>
@@ -446,9 +448,9 @@ class PatientEnrolementContainer extends React.Component<IProps, IState> {
                         <input
                           className={styles.radio}
                           type='radio'
-                          name='contactViaPhone'
+                          name='consentToCall'
                           onChange={this.updatePatient}
-                          value='true' />
+                          value='false' />
                         <label />
                       </div>
                       <span className={styles.radioLabel}>No</span>

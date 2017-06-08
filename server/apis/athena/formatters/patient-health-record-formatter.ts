@@ -1,6 +1,6 @@
 import { IPatientHealthRecord } from 'schema';
 import { IAthenaEditPatient } from '../index';
-import { IPatientInfoAthena } from '../types';
+import { IAthenaPatientEditableFields, IPatientInfoAthena } from '../types';
 
 // Note: This drops some fields returned by athena
 export const formatPatientHealthRecord = (
@@ -8,13 +8,14 @@ export const formatPatientHealthRecord = (
 ): IPatientHealthRecord => ({
   id: patientId,
   firstName: p.firstname,
+  middleName: p.middlename,
   lastName: p.lastname,
   suffix: p.suffix,
   preferredName: p.preferredname,
   raceName: p.racename,
   dateOfBirth: p.dob,
   gender: p.sex,
-  race: p.race,
+  race: p.race[0],
   ethnicityCode: p.ethnicitycode,
   status: p.status,
   ssn: p.ssn,
@@ -71,47 +72,37 @@ export const formatPatientHealthRecord = (
     state: p.state,
     zip: p.zip,
   },
-  povertyLevel: {
-    povertyLevelIncomeDeclined: p.povertylevelincomedeclined,
-    povertyLevelIncomeRangeDeclined: p.povertylevelincomerangedeclined,
-    povertyLevelFamilySizeDeclined: p.povertylevelfamilysizedeclined,
-  },
 });
 
 export const formatEditPatientHealthRecordOptions = (
   options: IAthenaEditPatient,
-): Partial<IPatientInfoAthena> => ({
+): Partial<IAthenaPatientEditableFields> => ({
   firstname: options.firstName,
   lastname: options.lastName,
+  middlename: options.middleName,
   sex: options.gender,
   zip: String(options.zip),
   dob: options.dateOfBirth,
 
   suffix: options.suffix,
   preferredname: options.preferredName,
-  racename: options.raceName,
   race: options.race,
   ethnicitycode: options.ethnicityCode,
   status: options.status,
   ssn: options.ssn,
-  homebound: options.homebound,
+  homebound: options.homebound ? 'T' : 'F',
   language6392code: options.language6392code,
   maritalstatus: options.maritalStatus,
-  maritalstatusname: options.maritalStatusName,
 
   email: options.email,
   homephone: options.homePhone,
   mobilephone: options.mobilePhone,
-  consenttocall: options.consentToCall,
-  consenttotext: options.consentToText,
+  consenttocall: options.consentToCall ? 'T' : 'F',
+  consenttotext: options.consentToText ? 'T' : 'F',
 
   city: options.city,
   address1: options.address1,
   countrycode: options.countryCode,
   countrycode3166: options.countryCode3166,
   state: options.state,
-
-  povertylevelincomedeclined: options.povertyLevelIncomeDeclined,
-  povertylevelincomerangedeclined: options.povertyLevelIncomerangeDeclined,
-  povertylevelfamilysizedeclined: options.povertyLevelFamilySizeDeclined,
 });

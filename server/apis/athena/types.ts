@@ -83,6 +83,7 @@ export interface IPatientInfoAthena {
   caresummarydeliverypreference: string;
   guarantorlastname: string;
   firstname: string;
+  middlename: string;
   guarantorcountrycode: string;
   state: string;
   contactpreference_appointment_phone: boolean;
@@ -108,6 +109,71 @@ export interface IPatientInfoAthena {
   guarantorcountrycode3166: string;
   balances: IPatientBalanceAthena[];
   race: string[];
+}
+
+export interface IPatientEditableFields {
+  firstName: string;
+  middleName: string;
+  lastName: string;
+  gender: string;
+  zip: number;
+  dateOfBirth: string;
+  departmentId: number;
+  suffix: string;
+  preferredName: string;
+  raceName: string;
+  race: string;
+  ethnicityCode: string;
+  status: string;
+  ssn: string;
+  homebound: boolean;
+  language6392code: string;
+  maritalStatus: string;
+  maritalStatusName: string;
+
+  email: string;
+  homePhone: string;
+  mobilePhone: string;
+  consentToCall: boolean;
+  consentToText: boolean;
+
+  city: string;
+  address1: string;
+  countryCode: string;
+  countryCode3166: string;
+  state: string;
+}
+
+// Oddly, inputs are not the same as outputs
+// ie: we post strings to some endpoints but get back booleans
+export interface IAthenaPatientEditableFields {
+  firstname: string;
+  middlename: string;
+  lastname: string;
+  sex: string;
+  zip: string;
+  dob: string;
+  suffix: string;
+  preferredname: string;
+  race: string;
+  ethnicitycode: string;
+  status: string;
+  ssn: string;
+  homebound: 'T' | 'F';
+  language6392code: string;
+  maritalstatus: string;
+
+  email: string;
+  homephone: string;
+  mobilephone: string;
+  consenttocall: 'T' | 'F';
+  consenttotext: 'T' | 'F';
+
+  city: string;
+  address1: string;
+  countrycode: string;
+  countrycode3166: string;
+  state: string;
 }
 
 export interface IPatientMedicationStructuredSig {

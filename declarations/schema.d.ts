@@ -115,6 +115,7 @@ declare module 'schema' {
     zip: number | null;
     homeClinicId: string | null;
     createdAt: string | null;
+    scratchPad: string | null;
   }
 
   /*

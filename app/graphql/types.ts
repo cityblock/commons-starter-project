@@ -256,5 +256,6 @@ export interface ShortPatientFragment {
   dateOfBirth: string | null;
   zip: number | null;
   createdAt: string | null;
+  scratchPad: string | null;
 }
 /* tslint:enable */

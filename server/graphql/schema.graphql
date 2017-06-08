@@ -130,6 +130,7 @@ type Patient implements uniqueId {
   zip: Int
   homeClinicId: String
   createdAt: String
+  scratchPad: String
 }
 
 # Patient Athena health record

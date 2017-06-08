@@ -37,6 +37,7 @@ export default class Patient extends Model {
   athenaPatientId: number;
   homeClinicId: string;
   homeClinic: Clinic;
+  scratchPad: string;
 
   static tableName = 'patient';
 
@@ -55,6 +56,7 @@ export default class Patient extends Model {
       gender: { type: 'string' },
       dateOfBirth: { type: 'string' },
       zip: { type: 'number' },
+      scratchPad: { type: 'text' },
     },
   };
 
@@ -80,7 +82,6 @@ export default class Patient extends Model {
         to: 'user.id',
       },
     },
-
   };
 
   $beforeInsert() {

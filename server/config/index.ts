@@ -17,6 +17,7 @@ export default {
   TIME_ZONE: '-04:00',
   JWT_SECRET: 'topsecret',
   JWT_EXPIRT: '1d',
+  REDOX_TOKEN_URL: 'https://api.redoxengine.com/auth/authenticate',
   ...process.env,
   ...rabbot,
 };

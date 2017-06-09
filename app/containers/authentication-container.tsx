@@ -15,9 +15,10 @@ export interface IProps {
 
 class Authentication extends React.Component<IProps, {}> {
 
-  componentWillReceiveProps(newProps: IProps) {
+  async componentWillReceiveProps(newProps: IProps) {
     if (!newProps.loading && this.props.loading && !newProps.currentUser) {
       // TODO: set redirect url to go back ie: dispatch(setRedirectUrl(currentURL))
+      await localStorage.removeItem('authToken');
       this.props.redirectToLogin();
     }
   }

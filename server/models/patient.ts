@@ -11,6 +11,7 @@ interface IEditPatient {
   zip?: number;
   gender?: string;
   athenaPatientId?: number;
+  scratchPad?: string;
 }
 
 export interface ISetupPatient {

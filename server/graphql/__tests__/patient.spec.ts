@@ -160,7 +160,6 @@ describe('patient', () => {
   });
 
   describe('editPatientHealthRecord', () => {
-
     it('edits patientHealthRecord', async () => {
       const query = `mutation {
         patientHealthRecordEdit(input: {
@@ -188,6 +187,43 @@ describe('patient', () => {
         lastName: 'last',
         gender: 'F',
         preferredName: 'cool name',
+      });
+    });
+  });
+
+  describe('resolvePatientScratchPad', () => {
+    it('resolves a patient scratchPad', async () => {
+      await Patient.edit({ scratchPad: 'Test Scratch Pad' }, patient.id);
+
+      const query = `{
+        patientScratchPad(patientId: "${patient.id}") {
+          text
+        }
+      }`;
+
+      const result = await graphql(
+        schema, query, null, { db, userRole, userId: user.id },
+      );
+
+      expect(cloneDeep(result.data!.patientScratchPad)).toMatchObject({
+        text: 'Test Scratch Pad',
+      });
+    });
+  });
+
+  describe('patientScratchPadEdit', () => {
+    it('saves a patient scratchPad', async () => {
+      await Patient.edit({ scratchPad: 'Unedited Scratch Pad' }, patient.id);
+
+      const query = `mutation {
+        patientScratchPadEdit(input: { patientId: "${patient.id}", text: "Edited Scratch Pad" }) {
+          text
+        }
+      }`;
+
+      const result = await graphql(schema, query, null, { db, userRole, userId: user.id });
+      expect(cloneDeep(result.data!.patientScratchPadEdit)).toMatchObject({
+        text: 'Edited Scratch Pad',
       });
     });
   });

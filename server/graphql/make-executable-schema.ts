@@ -16,9 +16,11 @@ import { resolvePatientMedications } from './patient-medications-resolver';
 import {
   patientEdit,
   patientHealthRecordEdit,
+  patientScratchPadEdit,
   patientSetup,
   resolvePatient,
   resolvePatientHealthRecord,
+  resolvePatientScratchPad,
 } from './patient-resolver';
 import {
   resolveCurrentUser,
@@ -42,6 +44,7 @@ const resolveFunctions = {
     patientCareTeam: resolvePatientCareTeam,
     patientEncounters: resolvePatientEncounters,
     patientMedications: resolvePatientMedications,
+    patientScratchPad: resolvePatientScratchPad,
     user: resolveUser,
     users: resolveUsers,
     userPatientPanel: resolveUserPatientPanel,
@@ -56,6 +59,7 @@ const resolveFunctions = {
     clinicCreate,
     patientEdit,
     patientSetup,
+    patientScratchPadEdit,
     userCreate,
     userLogin,
   },

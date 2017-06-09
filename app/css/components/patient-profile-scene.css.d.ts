@@ -19,8 +19,6 @@ export const patientCommPhone: string;
 export const patientCommText: string;
 export const patientCommEmail: string;
 export const patientCommVideo: string;
-export const patientScratchPad: string;
-export const textArea: string;
 export const tabs: string;
 export const selectedTab: string;
 export const sortSearchBar: string;

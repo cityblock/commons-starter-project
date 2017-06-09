@@ -1,0 +1,5 @@
+mutation patientScratchPadEdit($patientId: String!, $text: String!) {
+  patientScratchPadEdit(input: { patientId: $patientId, text: $text }) {
+    ...FullPatientScratchPad
+  }
+}

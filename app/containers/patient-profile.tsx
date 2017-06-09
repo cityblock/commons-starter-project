@@ -6,6 +6,7 @@ import { IState as IAppState } from '../client';
 import CareTeamWidget from '../components/care-team-widget';
 import PatientEncounters from '../components/patient-encounters';
 import PatientMedications from '../components/patient-medications';
+import PatientScratchPad from '../components/patient-scratch-pad';
 import * as styles from '../css/components/patient-profile-scene.css';
 import { getQuery } from '../graphql/helpers';
 import { ShortPatientFragment } from '../graphql/types';
@@ -76,12 +77,7 @@ class PatientProfileContainer extends React.Component<IProps, {}> {
               <div className={classNames(styles.patientCommItem, styles.patientCommEmail)}></div>
               <div className={classNames(styles.patientCommItem, styles.patientCommVideo)}></div>
             </div>
-            <div className={styles.patientScratchPad}>
-              <textarea className={styles.textArea}>
-                {"Please be aware that there's a dog in Thomas' apartment that has a history of " +
-                "biting. Please be mindful when arriving at his home. The dog's name is Rex."}
-              </textarea>
-            </div>
+            <PatientScratchPad patientId={patientId} />
           </div>
           <PatientMedications patientId={patientId} />
         </div>

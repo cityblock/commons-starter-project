@@ -5,5 +5,4 @@ fragment ShortPatient on Patient {
   dateOfBirth
   zip
   createdAt
-  scratchPad
 }

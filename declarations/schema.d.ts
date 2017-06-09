@@ -26,6 +26,7 @@ declare module 'schema' {
     patient: IPatient | null;
     patientHealthRecord: IPatientHealthRecord | null;
     patientCareTeam: Array<IUser> | null;
+    patientScratchPad: IPatientScratchPad | null;
     clinic: IClinic | null;
     clinics: IClinicEdges | null;
     patientEncounters: IPatientEncounterEdges | null;
@@ -216,6 +217,13 @@ declare module 'schema' {
   }
 
   /*
+    description: Patient Scratch Pad
+  */
+  interface IPatientScratchPad {
+    text: string | null;
+  }
+
+  /*
     description: Clinic
   */
   interface IClinic {
@@ -356,6 +364,7 @@ declare module 'schema' {
     patientEdit: IPatient | null;
     patientHealthRecordEdit: IPatientHealthRecord | null;
     patientSetup: IPatient | null;
+    patientScratchPadEdit: IPatientScratchPad | null;
   }
 
   /*
@@ -534,5 +543,13 @@ declare module 'schema' {
     countryCode?: string | null;
     countryCode3166?: string | null;
     state?: string | null;
+  }
+
+  /*
+    description: params for editing a patient scratch pad
+  */
+  interface IPatientScratchPadEditInput {
+    patientId: string;
+    text: string;
   }
 }

@@ -125,23 +125,6 @@
   background-size: 30px;
 }
 
-.patientScratchPad {
-  padding-bottom: 30px;
-  lost-flex-container: row;
-}
-
-.patientScratchPad .textArea {
-  font-family: var(--roboto);
-  font-size: var(--default-font-size);
-  color: var(--black-color);
-  width: 100%;
-  height: 140px;
-  border: 1px solid var(--border-color);
-  border-radius: 4px;
-  padding: 20px;
-  resize: none;
-}
-
 .tabs {
   padding: var(--medium-gutter) var(--medium-gutter) 0;
   border-bottom: 1px solid var(--border-color);

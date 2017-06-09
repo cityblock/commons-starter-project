@@ -1,5 +1,11 @@
 import { isNil, omitBy } from 'lodash';
-import { IPatient, IPatientEditInput, IPatientHealthRecord, IPatientSetupInput } from 'schema';
+import {
+  IPatient,
+  IPatientEditInput,
+  IPatientHealthRecord,
+  IPatientScratchPad,
+  IPatientSetupInput,
+} from 'schema';
 import { IAthenaEditPatient } from '../apis/athena';
 import { formatPatientHealthRecord } from '../apis/athena/formatters';
 import CareTeam from '../models/care-team';
@@ -118,4 +124,36 @@ export async function patientHealthRecordEdit(
   const patient = await athenaApi.getPatient(athenaPatientId);
 
   return formatPatientHealthRecord(patient, input.patientId);
+}
+
+export async function resolvePatientScratchPad(
+  root: any,
+  { patientId }: IQuery,
+  { userRole, userId }: IContext,
+): Promise<IPatientScratchPad> {
+  await accessControls.isAllowedForUser(userRole, 'view', 'patient', patientId, userId);
+
+  const patient = await Patient.get(patientId);
+
+  return { text: patient.scratchPad };
+}
+
+interface IPatientScratchPadEditOptions {
+  input: {
+    patientId: string;
+    text: string;
+  };
+}
+
+export async function patientScratchPadEdit(
+  root: any,
+  { input }: IPatientScratchPadEditOptions,
+  { userRole, userId }: IContext,
+): Promise<IPatientScratchPad> {
+  const { patientId, text } = input;
+  await accessControls.isAllowedForUser(userRole, 'edit', 'patient', patientId, userId);
+
+  const patient = await Patient.edit({ scratchPad: text }, patientId);
+
+  return { text: patient.scratchPad };
 }

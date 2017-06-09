@@ -1,0 +1,5 @@
+query getPatientScratchPad($patientId: String!) {
+  patientScratchPad(patientId: $patientId) {
+    ...FullPatientScratchPad
+  }
+}

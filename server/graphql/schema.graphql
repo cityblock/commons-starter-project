@@ -301,6 +301,11 @@ type AppointmentAddNoteResult {
   appointmentNote: String!
 }
 
+# Patient Scratch Pad
+type PatientScratchPad {
+  text: String
+}
+
 #
 # BEGIN INPUT FIELDS
 #
@@ -421,6 +426,12 @@ input PatientSetupInput {
   state: String
 }
 
+# params for editing a patient scratch pad
+input PatientScratchPadEditInput {
+  patientId: String!
+  text: String!
+}
+
 type RootMutationType {
   # Create a new user
   userCreate(input: UserCreateInput): UserWithAuthToken
@@ -454,6 +465,9 @@ type RootMutationType {
 
   # Setup patient creates the patient in the db AND in athena
   patientSetup(input: PatientSetupInput): Patient
+
+  # Edit a patient scratch pad
+  patientScratchPadEdit(input: PatientScratchPadEditInput): PatientScratchPad
 }
 
 type RootQueryType {
@@ -493,6 +507,11 @@ type RootQueryType {
   patientCareTeam(
     patientId: String!
   ): [User]
+
+  # Patient scratch pad
+  patientScratchPad(
+    patientId: String!
+  ): PatientScratchPad
 
   # A single clinic
   clinic(

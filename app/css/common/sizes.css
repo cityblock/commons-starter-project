@@ -14,6 +14,7 @@
   --black-color: #000000;
   --blue-color: #2962FF;
   --light-blue-color: #8FADFF;
+  --red-color: #ff715b;
   --green-color: #85D578;
   --teal-color: #66C5DD;
   --yellow-color: #ffd900;
@@ -24,6 +25,8 @@
   --highlight-background-color: #fafafa;
   --default-font-size: 14px;
   --default-line-height: 16px;
+  --extra-small-font-size: 10px;
+  --extra-small-font-line-height: 11px;
   --small-font-size: 12px;
   --small-font-line-height: 14px;
   --medium-font-size: 16px;

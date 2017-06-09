@@ -88,6 +88,15 @@ export interface GetPatientPanelQuery {
   } | null;
 }
 
+export interface GetPatientScratchPadQueryVariables {
+  patientId: string;
+}
+
+export interface GetPatientScratchPadQuery {
+  // Patient scratch pad
+  patientScratchPad: FullPatientScratchPadFragment;
+}
+
 export interface GetPatientQueryVariables {
   patientId: string;
 }
@@ -149,6 +158,16 @@ export interface PatientHealthRecordQueryVariables {
 export interface PatientHealthRecordQuery {
   // Patient's Athena health record
   patientHealthRecord: FullPatientHealthRecordFragment;
+}
+
+export interface PatientScratchPadEditMutationVariables {
+  patientId: string;
+  text: string;
+}
+
+export interface PatientScratchPadEditMutation {
+  // Edit a patient scratch pad
+  patientScratchPadEdit: FullPatientScratchPadFragment;
 }
 
 export interface PatientSetupMutationVariables {
@@ -239,6 +258,10 @@ export interface FullPatientMedicationFragment {
   status: string;
 }
 
+export interface FullPatientScratchPadFragment {
+  text: string | null;
+}
+
 export interface FullUserFragment {
   id: string;
   firstName: string | null;
@@ -256,6 +279,5 @@ export interface ShortPatientFragment {
   dateOfBirth: string | null;
   zip: number | null;
   createdAt: string | null;
-  scratchPad: string | null;
 }
 /* tslint:enable */

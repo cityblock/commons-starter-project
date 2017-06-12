@@ -13,7 +13,7 @@ export default {
   GOOGLE_OAUTH_TOKEN: null,
   GOOGLE_OAUTH_SECRET: null,
   GOOGLE_OAUTH_REDIRECT_URI: 'http://localhost:3000',
-  GOOGLE_OAUTH_VALID_EMAIL_DOMAIN: '@sidewalklabs.com',
+  GOOGLE_OAUTH_VALID_EMAIL_DOMAIN: '@cityblock.com',
   TIME_ZONE: '-04:00',
   JWT_SECRET: 'topsecret',
   JWT_EXPIRT: '1d',

@@ -26,7 +26,7 @@ describe('postgres pingdom test', () => {
     response.sendStatus = jest.fn();
 
     await User.create({
-      email: 'brennan@sidewalklabs.com',
+      email: 'brennan@cityblock.com',
       firstName: 'Bertrand',
       lastName: 'Russell',
       userRole,

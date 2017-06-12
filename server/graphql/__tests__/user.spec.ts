@@ -191,19 +191,19 @@ describe('user tests', () => {
 
   describe('userLogin', () => {
     /* tslint:disable:max-line-length */
-    const sidewalklabsToken = `eyJhbGciOiJSUzI1NiIsImtpZCI6ImM5YjM5YzI0ZWQ1NGEyYjFhZWYzZTU3MmQ0ZTQxMWZlNWNjZjY5N2YifQ.eyJhenAiOiI0NTMwMTk2ODQwMjItN2hwdDB2Zms5YmpqYzUzcG0ycmw5ZjF2Z211amtsNjguYXBwcy5nb29nbGV1c2VyY29udGVudC5jb20iLCJhdWQiOiI0NTMwMTk2ODQwMjItN2hwdDB2Zms5YmpqYzUzcG0ycmw5ZjF2Z211amtsNjguYXBwcy5nb29nbGV1c2VyY29udGVudC5jb20iLCJzdWIiOiIxMTU0MjI2MDA5NjQ3MTYyMTcxMjkiLCJoZCI6InNpZGV3YWxrbGFicy5jb20iLCJlbWFpbCI6ImJyZW5uYW5Ac2lkZXdhbGtsYWJzLmNvbSIsImVtYWlsX3ZlcmlmaWVkIjp0cnVlLCJhdF9oYXNoIjoid1JnaXNHQk01b1JGY0lxZ01FYlhydyIsImlzcyI6Imh0dHBzOi8vYWNjb3VudHMuZ29vZ2xlLmNvbSIsImlhdCI6MTQ5NjA4NjcxMSwiZXhwIjoxNDk2MDkwMzExLCJuYW1lIjoiQnJlbm5hbiBNb29yZSIsInBpY3R1cmUiOiJodHRwczovL2xoNC5nb29nbGV1c2VyY29udGVudC5jb20vLWZndkRtYjFEX0F3L0FBQUFBQUFBQUFJL0FBQUFBQUFBQUFzL01PS2ZJTzdHcmRZL3M5Ni1jL3Bob3RvLmpwZyIsImdpdmVuX25hbWUiOiJCcmVubmFuIiwiZmFtaWx5X25hbWUiOiJNb29yZSIsImxvY2FsZSI6ImVuIn0.okbx05mv7Csc4dgCpdRgU6Zuc-Ol7Dw_A1lLDtiYPG63IZ-OpOVbC2FGcYSZB52W4oC7XAS1AprfassDRwPtNVAkB6_DRMNycvQpKyFJpZXH7QqFEJb_trIpmOKfOKxRYxOStFct_A50Z-tbyccJunWnBcm8nyV8LnIneeqBHS0tjoZYTxVDJDykFpmc2qyjTczr8ARO_iC05LEKKWrKH2goKMZUlf0aXYEEzJ8NnL-H-Ewk72QoNjz6QWyKHlcSg3uCype1BW3wEUDy5-veNoMLlCbX-i_yaA5ehPyXPIIzKjTHCokoPi3p6YCQ7Ff1xUIO4L_oexbyJj1iANbyHQ`;
+    const cityblockToken = `eyJhbGciOiJSUzI1NiIsImtpZCI6ImY3MDI4OTBmY2RkODU4Yzg5ZDlhMzFmNTAyYjQxOWNhYTg2MWE0NzkifQ.eyJhenAiOiI0NTMwMTk2ODQwMjItN2hwdDB2Zms5YmpqYzUzcG0ycmw5ZjF2Z211amtsNjguYXBwcy5nb29nbGV1c2VyY29udGVudC5jb20iLCJhdWQiOiI0NTMwMTk2ODQwMjItN2hwdDB2Zms5YmpqYzUzcG0ycmw5ZjF2Z211amtsNjguYXBwcy5nb29nbGV1c2VyY29udGVudC5jb20iLCJzdWIiOiIxMDAxNTU4MjI3Mzk3MzY1Mzk4NjkiLCJoZCI6ImNpdHlibG9jay5jb20iLCJlbWFpbCI6ImxvZ2FuQGNpdHlibG9jay5jb20iLCJlbWFpbF92ZXJpZmllZCI6dHJ1ZSwiYXRfaGFzaCI6InE3ZVVNVzhYV0Y5eHc0NUNxTXJqZlEiLCJpc3MiOiJodHRwczovL2FjY291bnRzLmdvb2dsZS5jb20iLCJpYXQiOjE0OTcyNzk4MDAsImV4cCI6MTQ5NzI4MzQwMCwibmFtZSI6IkxvZ2FuIEhhc3NvbiIsInBpY3R1cmUiOiJodHRwczovL2xoMy5nb29nbGV1c2VyY29udGVudC5jb20vLVBBZElibFBfWkowL0FBQUFBQUFBQUFJL0FBQUFBQUFBQUFBL0FBeVlCRjc0V2FfZUxJSGRMYzItODhBVDdmZ1Y4NlpDSWcvczk2LWMvcGhvdG8uanBnIiwiZ2l2ZW5fbmFtZSI6IkxvZ2FuIiwiZmFtaWx5X25hbWUiOiJIYXNzb24iLCJsb2NhbGUiOiJlbiJ9.AlKDr4beAw7nTTuebFHCS-Mi6VCBPCn3fERief9Itl4gtxY8j5rZgvyjSprplbFbwDCOF_YW4YJB4BcHmKCEbw0TXvGPjPla84U7GJZvKxKSAh2oyYW6aJGGKK_CY5AH5GLAmgzg_3TuuF026YAHzpEYTQSPRG28LCJxGhNiMKPEdQi7D7r85aCE0CbhGOvFClaoyrLRMeEgvbkskVcl1xRvhzdxee974k92T10kjScRPQRPdjs98i3EFXO4IYwh5c0k7eg-0LkJgddJARM5FN4UN8Cu1VsKZhjsoh2WNLpQ8CLHtiC7ov24WOb2dSZNOCqX1NB2A2cmMDrWvKRMiw`;
     const gmailToken = `eyJhbGciOiJSUzI1NiIsImtpZCI6ImM5YjM5YzI0ZWQ1NGEyYjFhZWYzZTU3MmQ0ZTQxMWZlNWNjZjY5N2YifQ.eyJhenAiOiI0NTMwMTk2ODQwMjItN2hwdDB2Zms5YmpqYzUzcG0ycmw5ZjF2Z211amtsNjguYXBwcy5nb29nbGV1c2VyY29udGVudC5jb20iLCJhdWQiOiI0NTMwMTk2ODQwMjItN2hwdDB2Zms5YmpqYzUzcG0ycmw5ZjF2Z211amtsNjguYXBwcy5nb29nbGV1c2VyY29udGVudC5jb20iLCJzdWIiOiIxMDA4ODQ0MzA4MDIzNDY2OTgwNjYiLCJlbWFpbCI6ImJyZW5uYW5tb29yZUBnbWFpbC5jb20iLCJlbWFpbF92ZXJpZmllZCI6dHJ1ZSwiYXRfaGFzaCI6IjhjUlVHOUY4Qi1USXFfNGx4Zk5LUnciLCJpc3MiOiJodHRwczovL2FjY291bnRzLmdvb2dsZS5jb20iLCJpYXQiOjE0OTYwODY4MzksImV4cCI6MTQ5NjA5MDQzOSwibmFtZSI6IkJyZW5uYW4gTW9vcmUiLCJwaWN0dXJlIjoiaHR0cHM6Ly9saDYuZ29vZ2xldXNlcmNvbnRlbnQuY29tLy1KNnZaejJNRTBYby9BQUFBQUFBQUFBSS9BQUFBQUFBQUJmSS9TemFjN2RONklOdy9zOTYtYy9waG90by5qcGciLCJnaXZlbl9uYW1lIjoiQnJlbm5hbiIsImZhbWlseV9uYW1lIjoiTW9vcmUiLCJsb2NhbGUiOiJlbiJ9.BMsqORq3GDnE5lpJE25NL2MY-lrt-3Djr_IAlc8biHVo3axe77X1SBF6NBlmmYQ5pxKk4IKrm09ytEEBb0zctLSthnYhlJlLwu-PBCaXvFqdmgRSFbeQAaQ_VyK9SwXHpm1M96ae9RNhNt5VTPD2-Quwj10LZ8ClkqMKB0qYz5F2fub0J4sorplUzow3p0sAeTGWMCkNwzWrAcfcqGL9Z2ROYvy0kdWmDKphGZEsyIjz31WC30Mz2KY3t37-M2FlMZyTxDjo0_jxUmYPmw6ewVsC1Jc5q_SOV8de7btd2NpzpQMI7GocH22IeLHch9Z1lvVvMXPdei_baYVB43lmAA`;
     /* tslint:enable:max-line-length */
     it('logs in user and returns user with token', async () => {
       const user = await User.create({
-        email: 'brennan@sidewalklabs.com',
+        email: 'logan@cityblock.com',
         firstName: 'Bertrand',
         lastName: 'Russell',
         userRole,
         homeClinicId,
       });
       expect(user.lastLoginAt).toBeNull();
-      mockGoogleOauthAuthorize(sidewalklabsToken);
+      mockGoogleOauthAuthorize(cityblockToken);
       const mutation = `mutation {
         userLogin(input: { googleAuthCode: "google-auth-code" }) {
           authToken
@@ -221,11 +221,11 @@ describe('user tests', () => {
 
     it('updates lastLoginAt', async () => {
       const user = await User.create({
-        email: 'brennan@sidewalklabs.com',
+        email: 'logan@cityblock.com',
         userRole,
         homeClinicId,
       });
-      mockGoogleOauthAuthorize(sidewalklabsToken);
+      mockGoogleOauthAuthorize(cityblockToken);
 
       expect(user.lastLoginAt).toBeNull();
       const mutation = `mutation {
@@ -240,7 +240,7 @@ describe('user tests', () => {
     });
 
     it('errors if no user', async () => {
-      mockGoogleOauthAuthorize(sidewalklabsToken);
+      mockGoogleOauthAuthorize(cityblockToken);
       const mutation = `mutation {
         userLogin(input: { googleAuthCode: "google-auth-code" }) {
           authToken
@@ -249,7 +249,7 @@ describe('user tests', () => {
       }`;
       const result = await graphql(schema, mutation, null, { db, userRole });
       expect(result.errors![0].message).toMatch(
-        'User not found for brennan@sidewalklabs.com',
+        'User not found for logan@cityblock.com',
       );
     });
 
@@ -267,7 +267,7 @@ describe('user tests', () => {
       );
     });
 
-    it('errors email is not @sidewalklabs.com', async () => {
+    it('errors email is not @cityblock.com', async () => {
       mockGoogleOauthAuthorize(gmailToken);
       const mutation = `mutation {
         userLogin(input: { googleAuthCode: "google-auth-code" }) {
@@ -277,7 +277,7 @@ describe('user tests', () => {
       }`;
       const result = await graphql(schema, mutation, null, { db, userRole });
       expect(result.errors![0].message).toMatch(
-        'Email must have a @sidewalklabs.com domain',
+        'Email must have a @cityblock.com domain',
       );
     });
   });

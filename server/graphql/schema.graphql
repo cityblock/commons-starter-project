@@ -374,11 +374,10 @@ input PatientHealthRecordEditInput {
   suffix: String
   preferredName: String
   race: String
-  ethnicityCode: String
   status: String
   ssn: String
   homebound: Boolean
-  language6392code: String
+  language: String
   maritalStatus: String
 
   email: String
@@ -389,8 +388,8 @@ input PatientHealthRecordEditInput {
 
   city: String
   address1: String
-  countryCode: String
-  countryCode3166: String
+  county: String
+  country: String
   state: String
 }
 
@@ -405,24 +404,21 @@ input PatientSetupInput {
   homeClinicId: String!
   suffix: String
   preferredName: String
-  race: String
-  ethnicityCode: String
-  status: String
-  ssn: String
-  homebound: Boolean
-  language6392code: String
-  maritalStatus: String
+  race: String!
+  ssn: String!
+  language: String!
+  maritalStatus: String!
 
   email: String
   homePhone: String
   mobilePhone: String
-  consentToCall: Boolean
-  consentToText: Boolean
+  consentToCall: Boolean!
+  consentToText: Boolean!
 
   city: String
   address1: String
-  countryCode: String
-  countryCode3166: String
+  county: String
+  country: String
   state: String
 
   insuranceType: String

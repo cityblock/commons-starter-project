@@ -495,11 +495,10 @@ declare module 'schema' {
     suffix?: string | null;
     preferredName?: string | null;
     race?: string | null;
-    ethnicityCode?: string | null;
     status?: string | null;
     ssn?: string | null;
     homebound?: boolean | null;
-    language6392code?: string | null;
+    language?: string | null;
     maritalStatus?: string | null;
     email?: string | null;
     homePhone?: string | null;
@@ -508,8 +507,8 @@ declare module 'schema' {
     consentToText?: boolean | null;
     city?: string | null;
     address1?: string | null;
-    countryCode?: string | null;
-    countryCode3166?: string | null;
+    county?: string | null;
+    country?: string | null;
     state?: string | null;
   }
 
@@ -526,22 +525,19 @@ declare module 'schema' {
     homeClinicId: string;
     suffix?: string | null;
     preferredName?: string | null;
-    race?: string | null;
-    ethnicityCode?: string | null;
-    status?: string | null;
-    ssn?: string | null;
-    homebound?: boolean | null;
-    language6392code?: string | null;
-    maritalStatus?: string | null;
+    race: string;
+    ssn: string;
+    language: string;
+    maritalStatus: string;
     email?: string | null;
     homePhone?: string | null;
     mobilePhone?: string | null;
-    consentToCall?: boolean | null;
-    consentToText?: boolean | null;
+    consentToCall: boolean;
+    consentToText: boolean;
     city?: string | null;
     address1?: string | null;
-    countryCode?: string | null;
-    countryCode3166?: string | null;
+    county?: string | null;
+    country?: string | null;
     state?: string | null;
     insuranceType?: string | null;
     patientRelationshipToPolicyHolder?: string | null;

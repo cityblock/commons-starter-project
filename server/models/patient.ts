@@ -3,24 +3,22 @@ import * as uuid from 'uuid/v4';
 import { IPaginatedResults, IPaginationOptions } from '../db';
 import Clinic from './clinic';
 
-interface IEditPatient {
-  firstName?: string;
-  lastName?: string;
-  homeClinicId?: string;
-  dateOfBirth?: string;
-  zip?: number;
-  gender?: string;
-  athenaPatientId?: number;
-  scratchPad?: string;
-}
-
-export interface ISetupPatient {
+export interface IPatientEditableFields {
   firstName: string;
+  middleName?: string | undefined | null;
   lastName: string;
   gender: string;
   zip: number;
   homeClinicId: string;
   dateOfBirth: string; // mm/dd/yy
+  consentToCall: boolean;
+  consentToText: boolean;
+  language: string;
+}
+
+interface IEditPatient extends Partial<IPatientEditableFields> {
+  athenaPatientId?: number;
+  scratchPad?: string;
 }
 
 type GetByOptions = 'athenaPatientId';
@@ -39,6 +37,9 @@ export default class Patient extends Model {
   homeClinicId: string;
   homeClinic: Clinic;
   scratchPad: string;
+  consentToCall: boolean;
+  consentToText: boolean;
+  language: string;
 
   static tableName = 'patient';
 
@@ -53,11 +54,15 @@ export default class Patient extends Model {
       athenaPatientId: { type: 'number' },
       homeClinicId: { type: 'string' },
       firstName: { type: 'string' },
+      middleName: {type: 'string' },
       lastName: { type: 'string' },
+      language: { type: 'string' },
       gender: { type: 'string' },
       dateOfBirth: { type: 'string' },
       zip: { type: 'number' },
       scratchPad: { type: 'text' },
+      consentToCall: { type: 'boolean' },
+      consentToText: { type: 'boolean' },
     },
   };
 
@@ -140,7 +145,7 @@ export default class Patient extends Model {
     return patient;
   }
 
-  static async setup(input: ISetupPatient) {
+  static async setup(input: IPatientEditableFields) {
     return this.query().insertAndFetch(input);
   }
 

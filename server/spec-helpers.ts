@@ -12,11 +12,10 @@ import {
 import { IRedoxPatientCreateResponse } from './apis/redox/types';
 import config from './config';
 import CareTeam from './models/care-team';
-import Patient, { ISetupPatient } from './models/patient';
+import Patient, { IPatientEditableFields } from './models/patient';
 
-interface ICreatePatient extends ISetupPatient {
+interface ICreatePatient extends IPatientEditableFields {
   athenaPatientId: number;
-  homeClinicId: string;
 }
 
 export async function createPatient(patient: ICreatePatient, userId: string): Promise<Patient> {
@@ -34,6 +33,9 @@ export function createMockPatient(athenaPatientId = 1, homeClinicId = '1') {
     zip: 11238,
     gender: 'M',
     dateOfBirth: '01/01/1900',
+    consentToCall: false,
+    consentToText: false,
+    language: 'en',
   };
 }
 

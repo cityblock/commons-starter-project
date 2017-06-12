@@ -99,6 +99,12 @@ describe('patient', () => {
           zip: 12345,
           homeClinicId: "${homeClinicId}",
           dateOfBirth: "02/02/1902",
+          consentToText: true,
+          consentToCall: true,
+          maritalStatus: "Unknown",
+          race: "Other Race",
+          ssn: "123456789",
+          language: "en",
         }) {
           id, firstName, lastName, gender, zip, dateOfBirth
         }
@@ -129,6 +135,12 @@ describe('patient', () => {
           zip: 12345,
           homeClinicId: "${homeClinicId}",
           dateOfBirth: "02/02/1902",
+          consentToText: true,
+          consentToCall: true,
+          maritalStatus: "Unknown",
+          race: "Other Race",
+          ssn: "123456789",
+          language: "en",
         }) {
           id, firstName, lastName, gender, zip, dateOfBirth
         }

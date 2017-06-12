@@ -8,7 +8,6 @@ fragment FullPatientHealthRecord on PatientHealthRecord {
   preferredName,
   raceName,
   race,
-  ethnicityCode,
   status,
   ssn,
   homebound,

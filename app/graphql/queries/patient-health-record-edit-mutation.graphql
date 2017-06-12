@@ -7,11 +7,10 @@ mutation patientHealthRecordEdit(
   $zip: Int
   $preferredName: String
   $race: String
-  $ethnicityCode: String
   $status: String
   $ssn: String
   $homebound: Boolean
-  $language6392code: String
+  $language: String
   $maritalStatus: String
 
   $email: String
@@ -22,8 +21,8 @@ mutation patientHealthRecordEdit(
 
   $city: String
   $address1: String
-  $countryCode: String
-  $countryCode3166: String
+  $county: String
+  $country: String
   $state: String
 ) {
   patientHealthRecordEdit(input: {
@@ -35,11 +34,10 @@ mutation patientHealthRecordEdit(
     zip: $zip,
     preferredName: $preferredName,
     race: $race,
-    ethnicityCode: $ethnicityCode,
     status: $status,
     ssn: $ssn,
     homebound: $homebound,
-    language6392code: $language6392code,
+    language: $language,
     maritalStatus: $maritalStatus,
 
     email: $email,
@@ -50,8 +48,8 @@ mutation patientHealthRecordEdit(
 
     city: $city,
     address1: $address1,
-    countryCode: $countryCode,
-    countryCode3166: $countryCode3166,
+    county: $county,
+    country: $country,
     state: $state,
    }) {
     ...FullPatientHealthRecord

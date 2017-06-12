@@ -95,18 +95,26 @@ describe('patient model', () => {
     it('should setup patient', async () => {
       const patient = await Patient.setup({
         firstName: 'first',
+        middleName: 'middle',
         lastName: 'last',
         dateOfBirth: '02/02/1902',
         zip: 12345,
         gender: 'F',
         homeClinicId: '1',
+        consentToCall: false,
+        consentToText: false,
+        language: 'en',
       });
       expect(patient).toMatchObject({
         firstName: 'first',
+        middleName: 'middle',
         lastName: 'last',
         dateOfBirth: '02/02/1902',
         zip: 12345,
         gender: 'F',
+        consentToCall: false,
+        consentToText: false,
+        language: 'en',
       });
     });
   });

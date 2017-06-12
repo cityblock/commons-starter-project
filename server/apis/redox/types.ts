@@ -7,7 +7,6 @@ interface IRedoxMeta {
   DataModel: DataModels;
   EventType: EventTypes;
   EventDateTime: string;
-  Test: boolean;
   Source: {
     ID: string;
     Name: string;
@@ -74,11 +73,11 @@ export interface IRedoxPatientCreateOptions {
       Roles: string[];
     }>;
     PCP?: {
-      NPI: string; // '4356789876',
-      FirstName: string;
-      LastName: string;
-      Credentials: string[];
-      Address: {
+      NPI?: string; // '4356789876',
+      FirstName?: string;
+      LastName?: string;
+      Credentials?: string[];
+      Address?: {
         StreetAddress?: string;
         City?: string;
         State?: string;
@@ -86,13 +85,13 @@ export interface IRedoxPatientCreateOptions {
         County?: string;
         Country?: string;
       },
-      Location: {
+      Location?: {
         Type?: string,
         Facility?: string,
         Department?: string,
         Room?: string,
       },
-      PhoneNumber: {
+      PhoneNumber?: {
         Office?: string; // '6085551234',
       },
     },

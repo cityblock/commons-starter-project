@@ -128,11 +128,10 @@ export interface PatientHealthRecordEditMutationVariables {
   zip: number | null;
   preferredName: string | null;
   race: string | null;
-  ethnicityCode: string | null;
   status: string | null;
   ssn: string | null;
   homebound: boolean | null;
-  language6392code: string | null;
+  language: string | null;
   maritalStatus: string | null;
   email: string | null;
   homePhone: string | null;
@@ -141,8 +140,8 @@ export interface PatientHealthRecordEditMutationVariables {
   consentToText: boolean | null;
   city: string | null;
   address1: string | null;
-  countryCode: string | null;
-  countryCode3166: string | null;
+  county: string | null;
+  country: string | null;
   state: string | null;
 }
 
@@ -177,17 +176,16 @@ export interface PatientSetupMutationVariables {
   lastName: string;
   dateOfBirth: string;
   gender: string;
-  maritalStatus: string | null;
-  race: string | null;
+  maritalStatus: string;
+  race: string;
   zip: number;
-  ssn: string | null;
-  language6392code: string | null;
+  ssn: string;
+  language: string;
   email: string | null;
   homePhone: string | null;
   mobilePhone: string | null;
-  ethnicityCode: string | null;
-  consentToCall: boolean | null;
-  consentToText: boolean | null;
+  consentToCall: boolean;
+  consentToText: boolean;
 }
 
 export interface PatientSetupMutation {
@@ -235,7 +233,6 @@ export interface FullPatientHealthRecordFragment {
   preferredName: string | null;
   raceName: string | null;
   race: string | null;
-  ethnicityCode: string | null;
   status: string | null;
   ssn: string | null;
   homebound: boolean | null;

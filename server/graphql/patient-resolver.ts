@@ -63,26 +63,31 @@ export async function patientSetup(
     const department = await HomeClinic.get(input.homeClinicId);
     const redoxPatient = await redoxApi.patientCreate({
       id: patient.id,
-      homeClinicId: String(department.departmentId),
       firstName: input.firstName,
-      middleName: input.middleName ? input.middleName : undefined,
+      homeClinicId: String(department.departmentId),
+      middleName: input.middleName || undefined,
       lastName: input.lastName,
       gender: input.gender,
       zip: input.zip,
       dateOfBirth: input.dateOfBirth,
-      maritalStatus: input.maritalStatus ? input.maritalStatus : undefined,
-      race: input.race ? input.race : undefined,
-      ssn: input.ssn ? input.ssn : undefined,
-      language6392code: input.language6392code ? input.language6392code : undefined,
-      email: input.email ? input.email : undefined,
-      homePhone: input.homePhone ? input.homePhone : undefined,
-      mobilePhone: input.mobilePhone ? input.mobilePhone : undefined,
-      ethnicityCode: input.ethnicityCode ? input.ethnicityCode : undefined,
-      consentToCall: input.consentToCall ? input.consentToCall : undefined,
-      consentToText: input.consentToText ? input.consentToText : undefined,
+      maritalStatus: input.maritalStatus,
+      race: input.race,
+      ssn: input.ssn,
+      language: input.language,
+      email: input.email || undefined,
+      homePhone: input.homePhone || undefined,
+      mobilePhone: input.mobilePhone ||  undefined,
+      consentToCall: input.consentToCall,
+      consentToText: input.consentToText,
+      insuranceType: input.insuranceType || undefined,
+      patientRelationshipToPolicyHolder: input.patientRelationshipToPolicyHolder || undefined,
+      memberId: input.memberId || undefined,
+      policyGroupNumber: input.policyGroupNumber || undefined,
+      issueDate: input.issueDate || undefined,
+      expirationDate: input.expirationDate || undefined,
     });
     const athenaPatientId = getAthenaPatientIdFromCreate(redoxPatient);
-    if (!athenaPatientId)  {
+    if (!athenaPatientId) {
       throw new Error('Athena patient was not correctly created');
     }
     return await patientWithTransaction.addAthenaPatientId(

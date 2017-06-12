@@ -5,7 +5,6 @@ export function formatRequestMeta(dataModel: DataModels, eventType: EventTypes) 
     DataModel: dataModel,
     EventType: eventType,
     EventDateTime: new Date().toISOString(), // '2017-05-26T08:34:07.251Z',
-    Test: false,
     Source: {
       ID: '87c226a2-9e53-481e-a9e9-68b5fbdb6471',
       Name: 'Athena Sandbox',

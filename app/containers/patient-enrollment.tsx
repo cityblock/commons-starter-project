@@ -16,8 +16,8 @@ import {
   PatientSetupMutationVariables,
   ShortPatientFragment,
 } from '../graphql/types';
-import ethnicities from '../util/ethnicity-codes';
 import insuranceTypeOptions from '../util/insurance-type-options';
+import maritalStatusCodes from '../util/marital-status-codes';
 import races from '../util/race-codes';
 import relationshipToPatientOptions from '../util/relationship-to-patient-options';
 
@@ -47,11 +47,10 @@ export interface IState {
     race: string;
     zip: string;
     ssn: string;
-    language6392code: string;
+    language: string;
     email: string;
     homePhone: string;
     mobilePhone: string;
-    ethnicityCode: string;
     consentToText: string;
     consentToCall: string;
     preferredContactMethod: string;
@@ -93,11 +92,10 @@ class PatientEnrolementContainer extends React.Component<IProps, IState> {
         race: '',
         ssn: '',
         zip: '',
-        language6392code: '',
+        language: '',
         email: '',
         homePhone: '',
         mobilePhone: '',
-        ethnicityCode: '',
         consentToText: 'false',
         consentToCall: 'false',
         preferredContactMethod: 'Cell',
@@ -179,21 +177,27 @@ class PatientEnrolementContainer extends React.Component<IProps, IState> {
   render() {
     const { insurance, patient } = this.state;
     const languagesHtml = langs.all().map((language: langs.Language) => (
-      <option key={language['2']} value={language['2']}>{language.name}</option>
-    ));
-    const ethnicitiesHtml = Object.keys(ethnicities).map(key => (
-      <option key={key} value={key}>{ethnicities[key]}</option>
+      <option key={language['1']} value={language['1']}>{language.name}</option>
     ));
     const racesHtml = races.map((race: any) => (
-      <option key={race.code} value={race.code}>{race.display}</option>
+      <option key={race['Concept Code']} value={race['Preferred Concept Name']}>
+        {race['Preferred Concept Name']}
+      </option>
     ));
     const relationshipToPatientHtml = Object.keys(
       relationshipToPatientOptions,
     ).map((key: string) => (
-      <option key={key} value={key}>{relationshipToPatientOptions[key]}</option>
+      <option key={key} value={relationshipToPatientOptions[key]}>
+        {relationshipToPatientOptions[key]}
+      </option>
     ));
     const insuranceTypeOptionsHtml = Object.keys(insuranceTypeOptions).map((key: string) => (
-      <option key={key} value={key}>{insuranceTypeOptions[key]}</option>
+      <option key={key} value={insuranceTypeOptions[key]}>{insuranceTypeOptions[key]}</option>
+    ));
+    const maritalStatusCodesHtml = maritalStatusCodes.map((maritalStatus: any) => (
+      <option key={maritalStatus.code} value={maritalStatus.description}>
+        {maritalStatus.description}
+      </option>
     ));
     const loadingClass = this.state.loading ? styles.loading : styles.loadingHidden;
     return (
@@ -278,13 +282,7 @@ class PatientEnrolementContainer extends React.Component<IProps, IState> {
                     onChange={this.updatePatient}
                     className={styles.select}>
                     <option value='' disabled hidden>Select status</option>
-                    <option value='U'>Unknown</option>
-                    <option value='D'>Divorced</option>
-                    <option value='M'>Married</option>
-                    <option value='S'>Single</option>
-                    <option value='W'>Widowed</option>
-                    <option value='S'>Separated</option>
-                    <option value='P'>Partner</option>
+                    {maritalStatusCodesHtml}
                   </select>
                 </div>
               </div>
@@ -292,8 +290,8 @@ class PatientEnrolementContainer extends React.Component<IProps, IState> {
                 <div className={styles.formColumn}>
                   <div className={styles.label}>Preferred language</div>
                   <select required
-                    name='language6392code'
-                    value={patient.language6392code}
+                    name='language'
+                    value={patient.language}
                     onChange={this.updatePatient}
                     className={styles.select}>
                     <option value='' disabled hidden>Select language</option>
@@ -313,25 +311,14 @@ class PatientEnrolementContainer extends React.Component<IProps, IState> {
                     {racesHtml}
                   </select>
                 </div>
-                <div className={styles.formColumn}>
-                  <div className={styles.label}>Ethnicity</div>
-                  <select required
-                    name='ethnicityCode'
-                    value={patient.ethnicityCode}
-                    onChange={this.updatePatient}
-                    className={styles.select}>
-                    <option value='' disabled hidden>Select ethnicity</option>
-                    <option value='declined'>Declined</option>
-                    {ethnicitiesHtml}
-                  </select>
-                </div>
               </div>
               <div className={styles.formRow}>
                 <div className={styles.formColumn}>
                   <div className={styles.label}>Social Security Number</div>
                   <input required
                     name='ssn'
-                    type='number'
+                    type='text'
+                    pattern='[0-9]{9}'
                     value={patient.ssn}
                     onChange={this.updatePatient}
                     className={styles.input} />
@@ -339,7 +326,8 @@ class PatientEnrolementContainer extends React.Component<IProps, IState> {
                 <div className={styles.formColumn}>
                   <div className={styles.label}>Zip code</div>
                   <input required
-                    type='number'
+                    type='text'
+                    pattern='[0-9]{5}'
                     name='zip'
                     value={patient.zip}
                     onChange={this.updatePatient}
@@ -365,7 +353,8 @@ class PatientEnrolementContainer extends React.Component<IProps, IState> {
                   <div className={styles.label}>Home Phone Number</div>
                   <input
                     name='homePhone'
-                    type='tel'
+                    type='text'
+                    pattern='[0-9]{10}'
                     value={patient.homePhone}
                     className={styles.input}
                     onChange={this.updatePatient} />
@@ -374,7 +363,8 @@ class PatientEnrolementContainer extends React.Component<IProps, IState> {
                   <div className={styles.label}>Mobile Phone Number</div>
                   <input
                     name='mobilePhone'
-                    type='tel'
+                    type='text'
+                    pattern='[0-9]{10}'
                     value={patient.mobilePhone}
                     onChange={this.updatePatient}
                     className={styles.input} />

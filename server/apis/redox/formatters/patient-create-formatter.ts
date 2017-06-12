@@ -28,13 +28,18 @@ export function formatPatientCreateOptions(
           Mobile: patient.mobilePhone || undefined,
         },
         EmailAddresses: patient.email ? [patient.email] : undefined,
-        Language: patient.language6392code || undefined,
+        Language: patient.language || undefined,
         Address: {
           StreetAddress: patient.address1 || undefined,
           City: patient.city || undefined,
           State: patient.state || undefined,
           ZIP: String(patient.zip),
-          Country: patient.countryCode || undefined,
+          Country: patient.country || undefined,
+        },
+      },
+      PCP: {
+        Location: {
+          Department: patient.homeClinicId,
         },
       },
       // Notes: [],
@@ -42,11 +47,9 @@ export function formatPatientCreateOptions(
         {
           Plan: {
             ID: patient.insuranceType || undefined,
-            // IDType: 'Payor ID',
-            // Name: 'HMO Deductable Plan',
+            IDType: 'Payer ID',
           },
           GroupNumber: patient.policyGroupNumber || undefined,
-          // GroupName: 'Accelerator Labs',
           EffectiveDate: patient.issueDate || undefined,
           ExpirationDate: patient.expirationDate || undefined,
           PolicyNumber: patient.memberId || undefined,

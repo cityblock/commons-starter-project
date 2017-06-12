@@ -543,6 +543,12 @@ declare module 'schema' {
     countryCode?: string | null;
     countryCode3166?: string | null;
     state?: string | null;
+    insuranceType?: string | null;
+    patientRelationshipToPolicyHolder?: string | null;
+    memberId?: string | null;
+    policyGroupNumber?: string | null;
+    issueDate?: string | null;
+    expirationDate?: string | null;
   }
 
   /*

@@ -8,6 +8,7 @@ import {
 } from 'schema';
 import { IAthenaEditPatient } from '../apis/athena';
 import { formatPatientHealthRecord } from '../apis/athena/formatters';
+import { getAthenaPatientIdFromCreate } from '../apis/redox/formatters';
 import CareTeam from '../models/care-team';
 import HomeClinic from '../models/clinic';
 import Patient from '../models/patient';
@@ -50,7 +51,7 @@ interface IPatientSetupOptions {
 export async function patientSetup(
   source: any,
   { input }: IPatientSetupOptions,
-  { athenaApi, userRole, userId }: IContext,
+  { redoxApi, userRole, userId }: IContext,
 ): Promise<IPatient> {
   await accessControls.isAllowedForUser(userRole, 'create', 'patient');
   if (!userId) {
@@ -60,8 +61,9 @@ export async function patientSetup(
   const result = await Patient.execWithTransaction(async patientWithTransaction => {
     const patient = await patientWithTransaction.setup(input);
     const department = await HomeClinic.get(input.homeClinicId);
-    const athenaPatient = await athenaApi.patientCreate({
-      departmentId: department.departmentId,
+    const redoxPatient = await redoxApi.patientCreate({
+      id: patient.id,
+      homeClinicId: String(department.departmentId),
       firstName: input.firstName,
       middleName: input.middleName ? input.middleName : undefined,
       lastName: input.lastName,
@@ -79,9 +81,12 @@ export async function patientSetup(
       consentToCall: input.consentToCall ? input.consentToCall : undefined,
       consentToText: input.consentToText ? input.consentToText : undefined,
     });
-
+    const athenaPatientId = getAthenaPatientIdFromCreate(redoxPatient);
+    if (!athenaPatientId)  {
+      throw new Error('Athena patient was not correctly created');
+    }
     return await patientWithTransaction.addAthenaPatientId(
-      athenaPatient.athenaPatientId,
+      athenaPatientId,
       patient.id,
     );
   });

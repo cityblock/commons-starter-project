@@ -18,6 +18,7 @@ export default {
   JWT_SECRET: 'topsecret',
   JWT_EXPIRT: '1d',
   REDOX_TOKEN_URL: 'https://api.redoxengine.com/auth/authenticate',
+  REDOX_API_URL: 'https://api.redoxengine.com/endpoint',
   ...process.env,
   ...rabbot,
 };

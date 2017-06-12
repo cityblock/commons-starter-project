@@ -8,6 +8,7 @@ import {
 import { decode, sign, verify } from 'jsonwebtoken';
 import OpticsAgent from 'optics-agent';
 import AthenaApi from '../../apis/athena';
+import RedoxApi from '../../apis/redox';
 import config from '../../config';
 import Db from '../../db';
 import User, { UserRole } from '../../models/user';
@@ -17,6 +18,7 @@ export const TWENTY_FOUR_HOURS_IN_MILLISECONDS = 86400000;
 export interface IContext {
   db: Db;
   athenaApi: AthenaApi;
+  redoxApi: RedoxApi;
   userRole: UserRole;
   userId?: string;
   opticsContext: any;
@@ -66,9 +68,10 @@ const isInvalidLogin = (tokenLastLoginAt: string, userLastLoginAt: string | unde
 
 export async function getGraphQLContext(request: express.Request): Promise<IContext> {
   const authToken = request.headers.auth_token;
-  const [db, athenaApi] = await Promise.all([
+  const [db, athenaApi, redoxApi] = await Promise.all([
     Db.get(),
     AthenaApi.get(),
+    RedoxApi.get(),
   ]);
 
   let userRole: UserRole = 'anonymousUser';
@@ -89,6 +92,7 @@ export async function getGraphQLContext(request: express.Request): Promise<ICont
     userRole,
     db,
     athenaApi,
+    redoxApi,
     opticsContext,
   };
 }

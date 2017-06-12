@@ -1,6 +1,9 @@
 import 'fetch-everywhere';
 import { stringify } from 'querystring';
+import { IPatientSetupInput } from 'schema';
 import config from '../../config';
+import { formatPatientCreateOptions } from './formatters';
+import { IRedoxError, IRedoxPatientCreateResponse } from './types';
 
 let singleton: RedoxApi;
 
@@ -53,23 +56,29 @@ export default class RedoxApi {
     };
   }
 
+  async patientCreate(patient: IPatientSetupInput & { id: string }) {
+    const formattedPatientOptions = formatPatientCreateOptions(patient);
+    const result = await this.fetch<IRedoxPatientCreateResponse>(
+      config.REDOX_API_URL, formattedPatientOptions);
+    return result;
+  }
+
   /**
    * Supports GET and POST by handling params differently
    */
   private async fetch<T>(
     endpoint: string,
-    params: { [key: string]: string | number } = {},
+    params: any,
     refreshed: boolean = false,
   ): Promise<any> {
     let response;
     let tokenValid = new Date(this.auth.expires) > new Date();
-    const url = `${config.Redox_API_BASE}${endpoint}`;
 
     // Only fetch if we know the token works
     if (tokenValid) {
-      response = await fetch(url, {
+      response = await fetch(endpoint, {
         method: 'POST',
-        body: params,
+        body: JSON.stringify(params),
         headers: {
           'Authorization': `Bearer ${this.auth.accessToken}`,
           'Content-Type': 'application/json',
@@ -77,9 +86,12 @@ export default class RedoxApi {
       });
 
       if (!response.ok) {
-        const errorResponse = await response.json();
-        // TODO: Handle error
-        throw new Error(`${errorResponse.error}, ${endpoint}, ${response.status}`);
+        // the type T should also have error information
+        const errorResponse = await response.json() as T;
+        const errors = (
+          (errorResponse as any).Meta.Errors || []
+        ).map((error: IRedoxError) => error.Text).join(' ');
+        throw new Error(`${errors}, ${endpoint}, ${response.status}`);
       }
 
       // Set the token to invalid if we failed to auth

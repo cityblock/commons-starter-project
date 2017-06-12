@@ -1,6 +1,7 @@
 import { graphql } from 'graphql';
 import { cloneDeep } from 'lodash';
 import AthenaApi from '../../apis/athena';
+import RedoxApi from '../../apis/redox';
 import Db from '../../db';
 import HomeClinic from '../../models/clinic';
 import Patient from '../../models/patient';
@@ -9,11 +10,12 @@ import {
   createMockAthenaPatient,
   createMockPatient,
   createPatient,
-  mockAthenaCreatePatient,
-  mockAthenaCreatePatientError,
   mockAthenaEditPatient,
   mockAthenaGetPatient,
   mockAthenaTokenFetch,
+  mockRedoxCreatePatient,
+  mockRedoxCreatePatientError,
+  mockRedoxTokenFetch,
   restoreAthenaFetch,
 } from '../../spec-helpers';
 import schema from '../make-executable-schema';
@@ -21,6 +23,7 @@ import schema from '../make-executable-schema';
 describe('patient', () => {
 
   let athenaApi: AthenaApi = null as any;
+  let redoxApi: RedoxApi = null as any;
   let db: Db = null as any;
   let patient = null as any;
   let user = null as any;
@@ -29,9 +32,11 @@ describe('patient', () => {
 
   beforeEach(async () => {
     athenaApi = await AthenaApi.get();
+    redoxApi = await RedoxApi.get();
     db = await Db.get();
     await Db.clear();
     mockAthenaTokenFetch();
+    mockRedoxTokenFetch();
 
     const homeClinic = await HomeClinic.create({ name: 'cool clinic', departmentId: 1 });
     homeClinicId = homeClinic.id;
@@ -99,10 +104,10 @@ describe('patient', () => {
         }
       }`;
 
-      mockAthenaCreatePatient(2);
+      mockRedoxCreatePatient(123);
 
       const result = await graphql(
-        schema, query, null, { athenaApi, db, userRole, userId: user.id },
+        schema, query, null, { redoxApi, db, userRole, userId: user.id },
       );
       expect(cloneDeep(result.data!.patientSetup)).toMatchObject({
         firstName: 'first',
@@ -129,13 +134,14 @@ describe('patient', () => {
         }
       }`;
 
-      mockAthenaCreatePatientError();
+      mockRedoxCreatePatientError();
 
       const result = await graphql(
-        schema, query, null, { athenaApi, db, userRole, userId: user.id },
+        schema, query, null, { redoxApi, db, userRole, userId: user.id },
       );
-
-      expect(result.errors![0].message).toContain('error!');
+      expect(
+        result.errors![0].message,
+      ).toContain('Post received a 400 response, https://api.redoxengine.com/endpoint, 400');
       expect(await Patient.query().count()).toEqual(patientCount);
     });
   });

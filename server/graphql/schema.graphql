@@ -424,6 +424,13 @@ input PatientSetupInput {
   countryCode: String
   countryCode3166: String
   state: String
+
+  insuranceType: String
+  patientRelationshipToPolicyHolder: String
+  memberId: String
+  policyGroupNumber: String
+  issueDate: String
+  expirationDate: String
 }
 
 # params for editing a patient scratch pad

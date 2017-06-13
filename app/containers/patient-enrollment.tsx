@@ -7,6 +7,7 @@ import { Link } from 'react-router-dom';
 import { push } from 'react-router-redux';
 import { PatientPhotoUpload } from '../components/patient-photo-upload';
 import PopupConsent from '../components/popup-consent';
+import PopupEnrollmentError from '../components/popup-enrollment-error';
 import PopupPatientCreated from '../components/popup-patient-created';
 import * as styles from '../css/components/patient-enrollment.css';
 import * as loadingStyles from '../css/shared/loading-spinner.css';
@@ -33,6 +34,7 @@ export interface IProps {
 
 export interface IState {
   displayConsentToPhoneTextPopup: boolean;
+  displayErrorPopup: boolean;
   loading: boolean;
   error?: string;
   createdPatient?: ShortPatientFragment;
@@ -78,8 +80,11 @@ class PatientEnrolementContainer extends React.Component<IProps, IState> {
     this.updateInsurance = this.updateInsurance.bind(this);
     this.showPhoneConsent = this.showPhoneConsent.bind(this);
     this.hidePhoneConsent = this.hidePhoneConsent.bind(this);
+    this.showErrorPopup = this.showErrorPopup.bind(this);
+    this.hideErrorPopup = this.hideErrorPopup.bind(this);
     this.state = {
       displayConsentToPhoneTextPopup: false,
+      displayErrorPopup: false,
       loading: false,
       patient: {
         homeClinicId: '',
@@ -149,6 +154,14 @@ class PatientEnrolementContainer extends React.Component<IProps, IState> {
     this.setState({ displayConsentToPhoneTextPopup: false });
   }
 
+  showErrorPopup() {
+    this.setState({ displayErrorPopup: true });
+  }
+
+  hideErrorPopup() {
+    this.setState({ displayErrorPopup: false });
+  }
+
   async onSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     try {
@@ -168,8 +181,8 @@ class PatientEnrolementContainer extends React.Component<IProps, IState> {
       });
       this.setState({ createdPatient: patient.data.patientSetup, loading: false });
     } catch (e) {
-      this.setState({ error: e, loading: false });
-      alert(JSON.stringify(e));
+      this.setState({ error: e.message, loading: false });
+      this.showErrorPopup();
     }
     return false;
   }
@@ -206,6 +219,10 @@ class PatientEnrolementContainer extends React.Component<IProps, IState> {
           onClose={this.hidePhoneConsent}
           visible={this.state.displayConsentToPhoneTextPopup} />
         <PopupPatientCreated patient={this.state.createdPatient} />
+        <PopupEnrollmentError
+          onClose={this.hideErrorPopup}
+          visible={this.state.displayErrorPopup}
+          error={this.state.error} />
         <div className={loadingClass}>
           <div className={styles.loadingContainer}>
             <div className={loadingStyles.loadingSpinner}></div>

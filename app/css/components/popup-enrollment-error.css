@@ -1,0 +1,35 @@
+@import '../common/sizes';
+.close {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background: url('../../assets/close.svg');
+  height: 18px;
+  width: 18px;
+  background-position: 50% 14%;
+  background-repeat: no-repeat;
+  cursor: pointer;
+}
+
+.error {
+  background: url('../../assets/error-circle.svg');
+  height: 36px;
+  width: 36px;
+  margin: 0px auto 13px;
+}
+
+.content {
+  background: var(--white-color);
+  text-align: center;
+}
+
+.heading {
+  font-family: var(--basetica-black);
+  font-size: var(--medium-large-font-size);
+  line-height: var(--medium-large-font-line-height);
+}
+
+.paragraph {
+  line-height: 20px;
+  margin-top: 11px;
+}

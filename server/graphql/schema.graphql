@@ -124,6 +124,8 @@ type Garantor {
 type Patient implements uniqueId {
   id: ID!
   firstName: String
+  middleName: String
+  language: String
   lastName: String
   dateOfBirth: String
   gender: String

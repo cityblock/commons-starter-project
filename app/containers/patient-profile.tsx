@@ -1,4 +1,6 @@
 import * as classNames from 'classnames';
+import * as langs from 'langs';
+import * as moment from 'moment';
 import * as React from 'react';
 import { compose, graphql } from 'react-apollo';
 import { connect } from 'react-redux';
@@ -7,6 +9,7 @@ import CareTeamWidget from '../components/care-team-widget';
 import PatientEncounters from '../components/patient-encounters';
 import PatientMedications from '../components/patient-medications';
 import PatientScratchPad from '../components/patient-scratch-pad';
+import { DATETIME_FORMAT } from '../config';
 import * as styles from '../css/components/patient-profile-scene.css';
 import { getQuery } from '../graphql/helpers';
 import { ShortPatientFragment } from '../graphql/types';
@@ -23,6 +26,8 @@ export interface IProps {
   };
 }
 
+const GENDER: any = { F: 'Female', M: 'Male' };
+
 class PatientProfileContainer extends React.Component<IProps, {}> {
   constructor(props: IProps) {
     super(props);
@@ -30,8 +35,22 @@ class PatientProfileContainer extends React.Component<IProps, {}> {
   }
 
   render() {
-    const { patientId } = this.props;
-
+    const { patientId, patient } = this.props;
+    const name = patient ?
+      [patient.firstName, patient.middleName, patient.lastName].filter(Boolean).join(' ') :
+      null;
+    const patientAge = patient && patient.dateOfBirth ?
+      moment(patient.dateOfBirth, DATETIME_FORMAT).fromNow(true) :
+      'Unknown';
+    const dateOfBirth = patient && patient.dateOfBirth ?
+      moment(patient.dateOfBirth, DATETIME_FORMAT).format('LL') :
+      'Unknown';
+    const patientJoined = patient && patient.createdAt ?
+      `${moment(patient.createdAt, DATETIME_FORMAT).fromNow(true)} ago` :
+      'Unknown';
+    const gender = patient && patient.gender ? GENDER[patient.gender] : null;
+    const zip = patient && patient.zip ? patient.zip : null;
+    const language = patient && patient.language ? langs.where('1', patient.language).name : null;
     return (
       <div className={styles.container}>
         <div className={styles.leftPane}>
@@ -45,26 +64,26 @@ class PatientProfileContainer extends React.Component<IProps, {}> {
                 />
               </div>
               <div className={styles.patientTitle}>
-                <div className={styles.patientName}>Thomas L. Jordan</div>
-                <div className={styles.patientSubheading}>67 years old • Male</div>
+                <div className={styles.patientName}>{name}</div>
+                <div className={styles.patientSubheading}>{patientAge} years old • {gender}</div>
               </div>
             </div>
             <div className={styles.patientBasicInfo}>
               <div className={styles.patientBasicInfoRow}>
                 <div className={styles.patientBasicInfoRowTitle}>Date of birth:</div>
-                <div className={styles.patientBasicInfoRowData}>Oct 12, 1947</div>
+                <div className={styles.patientBasicInfoRowData}>{dateOfBirth}</div>
               </div>
               <div className={styles.patientBasicInfoRow}>
                 <div className={styles.patientBasicInfoRowTitle}>Preferred language:</div>
-                <div className={styles.patientBasicInfoRowData}>English</div>
+                <div className={styles.patientBasicInfoRowData}>{language}</div>
               </div>
               <div className={styles.patientBasicInfoRow}>
                 <div className={styles.patientBasicInfoRowTitle}>Location:</div>
-                <div className={styles.patientBasicInfoRowData}>Brooklyn, NY</div>
+                <div className={styles.patientBasicInfoRowData}>{zip}</div>
               </div>
               <div className={styles.patientBasicInfoRow}>
                 <div className={styles.patientBasicInfoRowTitle}>Patient since:</div>
-                <div className={styles.patientBasicInfoRowData}>4 days ago</div>
+                <div className={styles.patientBasicInfoRowData}>{patientJoined}</div>
               </div>
               <div className={styles.patientBasicInfoRow}>
                 <div className={styles.patientBasicInfoRowTitle}>Medicare ID:</div>

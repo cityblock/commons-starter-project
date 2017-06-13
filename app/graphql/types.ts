@@ -272,7 +272,10 @@ export interface FullUserFragment {
 export interface ShortPatientFragment {
   id: string;
   firstName: string | null;
+  middleName: string | null;
   lastName: string | null;
+  language: string | null;
+  gender: string | null;
   dateOfBirth: string | null;
   zip: number | null;
   createdAt: string | null;

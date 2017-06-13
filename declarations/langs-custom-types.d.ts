@@ -10,4 +10,5 @@ declare module 'langs' {
   }
 
   const all: () => Language[];
+  const where: (a: string, b: string) => Language;
 }

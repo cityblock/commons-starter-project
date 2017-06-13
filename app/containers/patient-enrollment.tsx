@@ -188,7 +188,15 @@ class PatientEnrolementContainer extends React.Component<IProps, IState> {
   }
 
   render() {
-    const { insurance, patient } = this.state;
+    const {
+      insurance,
+      patient,
+      loading,
+      displayConsentToPhoneTextPopup,
+      createdPatient,
+      displayErrorPopup,
+      error,
+    } = this.state;
     const languagesHtml = langs.all().map((language: langs.Language) => (
       <option key={language['1']} value={language['1']}>{language.name}</option>
     ));
@@ -212,17 +220,17 @@ class PatientEnrolementContainer extends React.Component<IProps, IState> {
         {maritalStatus.description}
       </option>
     ));
-    const loadingClass = this.state.loading ? styles.loading : styles.loadingHidden;
+    const loadingClass = loading ? styles.loading : styles.loadingHidden;
     return (
       <form onSubmit={this.onSubmit} className={styles.container}>
         <PopupConsent
           onClose={this.hidePhoneConsent}
-          visible={this.state.displayConsentToPhoneTextPopup} />
-        <PopupPatientCreated patient={this.state.createdPatient} />
+          visible={displayConsentToPhoneTextPopup} />
+        <PopupPatientCreated patient={createdPatient} />
         <PopupEnrollmentError
           onClose={this.hideErrorPopup}
-          visible={this.state.displayErrorPopup}
-          error={this.state.error} />
+          visible={displayErrorPopup}
+          error={error} />
         <div className={loadingClass}>
           <div className={styles.loadingContainer}>
             <div className={loadingStyles.loadingSpinner}></div>

@@ -57,23 +57,33 @@ class LoginContainer extends React.Component<IProps, { error?: string }> {
 
   render() {
     const { error } = this.state;
+    let errorHtml = null;
+    if (error) {
+      errorHtml = (
+        <div className={styles.error}>
+          <div className={styles.errorIcon} />
+          <div className={styles.errorText}>{error}</div>
+        </div>);
+    }
     return (
       <div className={styles.background}>
         <div className={styles.container}>
-          <div className={styles.form}>
-            <div className={styles.title}>Commons</div>
-            <div className={styles.error}>{error}</div>
-            <GoogleLogin
-              clientId={process.env.GOOGLE_OAUTH_TOKEN}
-              buttonText='Login'
-              offline
-              scope={SCOPE}
-              onSuccess={this.onSuccess}
-              onFailure={this.onError}
-              className={styles.button}>
-              <span className={styles.googleIcon} />
-              <span className={styles.buttonText}>Sign in with Google</span>
-            </GoogleLogin>
+          <div className={styles.formErrorContainer}>
+            <div className={styles.form}>
+              <div className={styles.title}>Commons</div>
+              <GoogleLogin
+                clientId={process.env.GOOGLE_OAUTH_TOKEN}
+                buttonText='Login'
+                offline
+                scope={SCOPE}
+                onSuccess={this.onSuccess}
+                onFailure={this.onError}
+                className={styles.button}>
+                <span className={styles.googleIcon} />
+                <span className={styles.buttonText}>Sign in with Google</span>
+              </GoogleLogin>
+            </div>
+            {errorHtml}
           </div>
         </div>
       </div>

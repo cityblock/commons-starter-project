@@ -124,6 +124,10 @@ class PatientEnrolementContainer extends React.Component<IProps, IState> {
     }
   }
 
+  componentDidMount() {
+    document.title = 'Add Patient | Commons';
+  }
+
   onUploadPhotoClick() {
     alert('TODO');
   }

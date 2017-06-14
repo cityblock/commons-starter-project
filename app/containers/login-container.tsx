@@ -40,6 +40,10 @@ class LoginContainer extends React.Component<IProps, { error?: string }> {
     }
   }
 
+  componentDidMount() {
+    document.title = 'Log in | Commons';
+  }
+
   async onSuccess(response: GoogleLoginResponseOffline) {
     try {
       const res = await this.props.logIn({ variables: { googleAuthCode: response.code } });

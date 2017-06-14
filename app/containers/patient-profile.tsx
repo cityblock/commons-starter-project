@@ -27,6 +27,9 @@ export interface IProps {
 }
 
 const GENDER: any = { F: 'Female', M: 'Male' };
+const getPatientName = (patient: ShortPatientFragment) => (
+  [patient.firstName, patient.middleName, patient.lastName].filter(Boolean).join(' ')
+);
 
 class PatientProfileContainer extends React.Component<IProps, {}> {
   constructor(props: IProps) {
@@ -34,10 +37,16 @@ class PatientProfileContainer extends React.Component<IProps, {}> {
     this.state = {};
   }
 
+  componentWillReceiveProps(newProps: IProps) {
+    if (newProps.patient) {
+      document.title = `${getPatientName(newProps.patient)} | Commons`;
+    }
+  }
+
   render() {
     const { patientId, patient } = this.props;
     const name = patient ?
-      [patient.firstName, patient.middleName, patient.lastName].filter(Boolean).join(' ') :
+      getPatientName(patient) :
       null;
     const patientAge = patient && patient.dateOfBirth ?
       moment(patient.dateOfBirth, DATETIME_FORMAT).fromNow(true) :

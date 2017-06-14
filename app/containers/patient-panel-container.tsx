@@ -44,6 +44,8 @@ export interface IState extends IPageParams {
 
 class PatientPanelContainer extends React.Component<IProps, IState> {
 
+  title = 'Patient roster';
+
   constructor(props: IProps) {
     super(props);
 
@@ -106,13 +108,17 @@ class PatientPanelContainer extends React.Component<IProps, IState> {
     }
   }
 
+  componentDidMount() {
+    document.title = `${this.title} | Commons`;
+  }
+
   render() {
     const { error, loading } = this.props;
     return (
       <div className={styles.container}>
         <div className={styles.header}>
           <div className={styles.headerRow}>
-            <div className={styles.headerText}>Patient roster</div>
+            <div className={styles.headerText}>{this.title}</div>
             <Link to='/patient/new' className={styles.button}>Add Patient</Link>
           </div>
         </div>
@@ -136,7 +142,7 @@ class PatientPanelContainer extends React.Component<IProps, IState> {
 const getPageParams = (): IPageParams => {
   const pageParams = querystring.parse(window.location.search.substring(1));
 
-  return  {
+  return {
     pageNumber: pageParams.pageNumber || 0,
     pageSize: pageParams.pageSize || 10,
   };

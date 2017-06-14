@@ -1,0 +1,5 @@
+mutation appointmentStart($patientId: String!) {
+  appointmentStart(input: { patientId: $patientId }) {
+    ...FullAppointment
+  }
+}

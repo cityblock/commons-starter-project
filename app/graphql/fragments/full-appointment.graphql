@@ -1,0 +1,14 @@
+fragment FullAppointment on Appointment {
+  athenaAppointmentId
+  dateTime
+  athenaDepartmentId
+  status
+  athenaPatientId
+  duration
+  appointmentTypeId
+  appointmentType
+  athenaProviderId
+  userId
+  patientId
+  clinicId
+}

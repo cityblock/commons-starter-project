@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="9px" height="18px" viewBox="0 0 9 18" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 44.1 (41455) - http://www.bohemiancoding.com/sketch -->
+    <title>ic_attach_file_black_18px</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Patient-Profile" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Commons_PatientProfile_V2-newencounter" transform="translate(-395.000000, -582.000000)">
+            <g id="Group-5" transform="translate(340.000000, 70.000000)">
+                <g id="Group-33" transform="translate(30.000000, 135.000000)">
+                    <g id="Group-39" transform="translate(20.000000, 20.000000)">
+                        <g id="Group-38" transform="translate(0.000000, 196.000000)">
+                            <g id="Group-42" transform="translate(0.000000, 148.000000)">
+                                <g id="Group-41" transform="translate(0.000000, 13.000000)">
+                                    <g id="ic_attach_file_black_18px">
+                                        <path d="M12.375,4.5 L12.375,13.125 C12.375,14.7825 11.0325,16.125 9.375,16.125 C7.7175,16.125 6.375,14.7825 6.375,13.125 L6.375,3.75 C6.375,2.715 7.215,1.875 8.25,1.875 C9.285,1.875 10.125,2.715 10.125,3.75 L10.125,11.625 C10.125,12.0375 9.7875,12.375 9.375,12.375 C8.9625,12.375 8.625,12.0375 8.625,11.625 L8.625,4.5 L7.5,4.5 L7.5,11.625 C7.5,12.66 8.34,13.5 9.375,13.5 C10.41,13.5 11.25,12.66 11.25,11.625 L11.25,3.75 C11.25,2.0925 9.9075,0.75 8.25,0.75 C6.5925,0.75 5.25,2.0925 5.25,3.75 L5.25,13.125 C5.25,15.405 7.095,17.25 9.375,17.25 C11.655,17.25 13.5,15.405 13.5,13.125 L13.5,4.5 L12.375,4.5 Z" id="Shape" fill="#2962FF" fill-rule="nonzero"></path>
+                                        <polygon id="Shape" points="0 0 18 0 18 18 0 18"></polygon>
+                                    </g>
+                                </g>
+                            </g>
+                        </g>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

@@ -1,5 +1,4 @@
 import { formatAppointment, getAppointmentId } from './appointments-formatter';
-import { formatPatientEncounters } from './patient-encounters-formatter';
 import {
   formatEditPatientHealthRecordOptions,
   formatPatientHealthRecord,
@@ -9,7 +8,6 @@ import { formatPatientMedications } from './patient-medications-formatter';
 export {
   formatAppointment,
   getAppointmentId,
-  formatPatientEncounters,
   formatPatientHealthRecord,
   formatPatientMedications,
   formatEditPatientHealthRecordOptions,

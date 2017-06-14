@@ -2,8 +2,12 @@ import 'fetch-everywhere';
 import { stringify } from 'querystring';
 import { IPatientSetupInput } from 'schema';
 import config from '../../config';
-import { formatPatientCreateOptions } from './formatters';
-import { IRedoxError, IRedoxPatientCreateResponse } from './types';
+import { formatClinicalSummaryQueryOptions, formatPatientCreateOptions } from './formatters';
+import {
+  IRedoxClinicalSummaryQueryResponse,
+  IRedoxError,
+  IRedoxPatientCreateResponse,
+} from './types';
 
 let singleton: RedoxApi;
 
@@ -60,6 +64,16 @@ export default class RedoxApi {
     const formattedPatientOptions = formatPatientCreateOptions(patient);
     const result = await this.fetch<IRedoxPatientCreateResponse>(
       config.REDOX_API_URL, formattedPatientOptions);
+    return result;
+  }
+
+  async patientEncountersGet(patientId: string): Promise<IRedoxClinicalSummaryQueryResponse> {
+    const formattedClinicalSummaryQueryOptions = formatClinicalSummaryQueryOptions(
+      patientId, 'AthenaNet Enterprise ID',
+    );
+
+    const result = await this.fetch<IRedoxClinicalSummaryQueryResponse>(
+      config.REDOX_API_URL, formattedClinicalSummaryQueryOptions);
     return result;
   }
 

@@ -1,22 +1,20 @@
 import { graphql } from 'graphql';
 import { cloneDeep } from 'lodash';
-import AthenaApi from '../../apis/athena';
+import RedoxApi from '../../apis/redox';
 import Db from '../../db';
 import Clinic from '../../models/clinic';
 import Patient from '../../models/patient';
 import User from '../../models/user';
 import {
-  createMockAthenaPatientEncounters,
   createMockPatient,
   createPatient,
-  mockAthenaGetPatientEncounters,
-  mockAthenaTokenFetch,
-  restoreAthenaFetch,
+  mockRedoxGetPatientEncounters,
+  mockRedoxTokenFetch,
 } from '../../spec-helpers';
 import schema from '../make-executable-schema';
 
 describe('patient encounters', () => {
-  let athenaApi: AthenaApi = null as any;
+  let redoxApi: RedoxApi = null as any;
   let db: Db = null as any;
   let patient: Patient = null as any;
   let user: User = null as any;
@@ -25,10 +23,10 @@ describe('patient encounters', () => {
   const userRole = 'physician';
 
   beforeEach(async () => {
-    athenaApi = await AthenaApi.get();
+    redoxApi = await RedoxApi.get();
     db = await Db.get();
     await Db.clear();
-    mockAthenaTokenFetch();
+    mockRedoxTokenFetch();
 
     clinic = await Clinic.create({
       departmentId: 1,
@@ -42,10 +40,6 @@ describe('patient encounters', () => {
     patient = await createPatient(createMockPatient(1, clinic.id), user.id);
   });
 
-  afterEach(async () => {
-    restoreAthenaFetch();
-  });
-
   afterAll(async () => {
     await Db.release();
   });
@@ -54,130 +48,43 @@ describe('patient encounters', () => {
     it('returns an empty response', async () => {
       const query = `{
         patientEncounters(patientId: "${patient.id}") {
-          edges {
-            node {
-              encounterType
-            }
-          }
-          pageInfo {
-            hasNextPage
-            hasPreviousPage
-          }
+          encounterType
+          providerName
         }
       }`;
 
-      mockAthenaGetPatientEncounters({encounters: []});
+      mockRedoxGetPatientEncounters([]);
 
-      const result = await graphql(schema, query, null, { athenaApi, db, userRole });
-      expect(cloneDeep(result.data!.patientEncounters)).toMatchObject({
-        edges: [],
-        pageInfo: {
-          hasNextPage: false,
-          hasPreviousPage: false,
-        },
-      });
+      const result = await graphql(schema, query, null, { redoxApi, db, userRole });
+      expect(cloneDeep(result.data!.patientEncounters)).toMatchObject([]);
     });
   });
 
   describe('when a patient has encounters', () => {
-    describe('pagination', () => {
-      it('correctly calculates the limit and offset params', async () => {
-        const fakeAthenaApi = {
-          patientEncountersGet: jest.fn(),
-        };
+    it('returns patient encounters', async () => {
+      const query = `{
+        patientEncounters(patientId: "${patient.id}") {
+          encounterType
+        }
+      }`;
 
-        fakeAthenaApi.patientEncountersGet.mockReturnValueOnce({encounters: []});
+      mockRedoxGetPatientEncounters([{
+        Type: {
+          Code: '99222',
+          CodeSystem: '2.16.840.1.113883.6.12',
+          CodeSystemName: 'CPT',
+          Name: 'InPatient Admission',
+        },
+        Providers: [],
+        Locations: [],
+        ReasonForVisit: [],
+        Diagnosis: [],
+      }]);
 
-        const query = `{
-          patientEncounters(patientId: "${patient.id}", pageSize: 2, pageNumber: 2) {
-            edges {
-              node {
-                encounterType
-              }
-            }
-          }
-        }`;
-
-        await graphql(schema, query, null, { athenaApi: fakeAthenaApi, db, userRole });
-        expect(fakeAthenaApi.patientEncountersGet).toBeCalledWith(
-          patient.athenaPatientId,
-          clinic.departmentId,
-          2,
-          2,
-        );
-      });
-
-      describe('when there are more results', () => {
-        it('returns patient encounters with previous and next fields', async () => {
-          const query = `{
-            patientEncounters(patientId: "${patient.id}") {
-              edges {
-                node {
-                  encounterType
-                }
-              }
-              pageInfo {
-                hasNextPage
-                hasPreviousPage
-              }
-            }
-          }`;
-
-          mockAthenaGetPatientEncounters(createMockAthenaPatientEncounters({
-            hasPreviousPage: true,
-            hasNextPage: true,
-          }));
-
-          const result = await graphql(schema, query, null, { athenaApi, db, userRole });
-          expect(cloneDeep(result.data!.patientEncounters)).toMatchObject({
-            edges: [{
-              node: {
-                encounterType: 'VISIT',
-              },
-            }],
-            pageInfo: {
-              hasPreviousPage: true,
-              hasNextPage: true,
-            },
-          });
-        });
-      });
-
-      describe('when there are no more results', () => {
-        it('returns patient encounters without previous and next fields', async () => {
-          const query = `{
-            patientEncounters(patientId: "${patient.id}") {
-              edges {
-                node {
-                  encounterType
-                }
-              }
-              pageInfo {
-                hasNextPage
-                hasPreviousPage
-              }
-            }
-          }`;
-
-          mockAthenaGetPatientEncounters(createMockAthenaPatientEncounters({
-            hasPreviousPage: false,
-            hasNextPage: false,
-          }));
-
-          const result = await graphql(schema, query, null, { athenaApi, db, userRole });
-          expect(cloneDeep(result.data!.patientEncounters)).toMatchObject({
-            edges: [{
-              node: {
-                encounterType: 'VISIT',
-              },
-            }],
-            pageInfo: {
-              hasPreviousPage: false,
-              hasNextPage: false,
-            },
-          });
-        });
-      });
+      const result = await graphql(schema, query, null, { redoxApi, db, userRole });
+      expect(cloneDeep(result.data!.patientEncounters)).toMatchObject([{
+        encounterType: 'InPatient Admission',
+      }]);
     });
   });
 });

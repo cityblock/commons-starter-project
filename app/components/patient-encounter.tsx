@@ -33,27 +33,27 @@ export default class PatientEncounter extends React.Component<IProps, {}> {
 
   render() {
     const { encounter } = this.props;
-    const providerName = `${encounter.providerFirstName} ${encounter.providerLastName}`;
-    const formattedEncounterDate = moment(
-      encounter.encounterDate,
-      'MM/DD/YYYY',
-      ).format('MMMM D, YYYY');
+    const providerName = encounter.providerName;
+    const encounterMoment = moment(encounter.dateTime);
+    const formattedEncounterDate = encounterMoment.format('MMMM D, YYYY');
+    const formattedEncounterTime = encounterMoment.format('H:mma');
+    const encounterLocation = encounter.location || 'Unknown Location';
 
     return (
       <div className={styles.encounter}>
         <div className={styles.encounterTitle}>
           <div className={styles.providerInfo}>
             <div className={styles.providerName}>{providerName}</div>
-            <div className={styles.providerRole}>Role TBD</div>
+            <div className={styles.providerRole}>{encounter.providerRole}</div>
           </div>
           <div className={styles.encounterDateTime}>
-            <div className={styles.encounterTime}>Encounter Time TBD</div>
+            <div className={styles.encounterTime}>{formattedEncounterTime}</div>
             <div className={styles.encounterDate}>{formattedEncounterDate}</div>
           </div>
         </div>
         <div className={styles.encounterBody}>
           <div className={styles.encounterHeader}>
-            <div className={styles.encounterSummary}>{encounter.encounterVisitName}</div>
+            <div className={styles.encounterSummary}>{encounter.encounterType}</div>
             <div className={styles.encounterHamburger}></div>
           </div>
           <div className={styles.encounterMain}>
@@ -70,7 +70,7 @@ export default class PatientEncounter extends React.Component<IProps, {}> {
             }
           </div>
           <div className={styles.encounterFooter}>
-            <div className={styles.encounterLocation}>{`TBD: ${encounter.patientLocation}`}</div>
+            <div className={styles.encounterLocation}>{encounterLocation}</div>
             {this.renderEncounterAttachments(encounter)}
           </div>
         </div>

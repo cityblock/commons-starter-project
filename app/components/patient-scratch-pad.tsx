@@ -28,7 +28,7 @@ interface IState {
   saveError: boolean;
 }
 
-const SAVE_TIMEOUT_MILLISECONDS = 2000;
+const SAVE_TIMEOUT_MILLISECONDS = 500;
 const SAVE_SUCCESS_TIMEOUT_MILLISECONDS = 2000;
 
 class PatientScratchPad extends React.Component<IProps, IState> {

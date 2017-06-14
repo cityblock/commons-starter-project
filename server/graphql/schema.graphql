@@ -237,43 +237,20 @@ type PatientMedications {
 
 # PatientDiagnosis
 type PatientDiagnosis {
-  diagnosisId: Int!
-  icdCodes: [String]!
-  snomedCode: Int!
+  code: String!
+  codeSystem: String!
   description: String!
 }
 
 # PatientEncounter
 type PatientEncounter {
   encounterType: String!
-  encounterId: Int!
-  status: String!
-  patientStatusId: Int
-  appointmentId: Int!
-  stage: String
-  patientLocationId: Int
-  providerId: Int
-  encounterDate: String!
-  encounterVisitName: String!
-  patientLocation: String
-  diagnoses: [PatientDiagnosis]
-  patientStatus: String
-  providerPhone: String
-  providerFirstName: String
-  providerLastName: String
-  lastUpdated: String!
-}
-
-# PatientEncounter node
-type PatientEncounterNode {
-  node: PatientEncounter
-  cursor: String!
-}
-
-# PatientEnounterEdges
-type PatientEncounterEdges {
-  edges: [PatientEncounterNode]
-  pageInfo: PageInfo!
+  providerName: String!
+  providerRole: String!
+  location: String!
+  diagnoses: [PatientDiagnosis]!
+  reasons: [String]!
+  dateTime: String!
 }
 
 # Appointment
@@ -532,9 +509,7 @@ type RootQueryType {
   # Patient encounters
   patientEncounters(
     patientId: String!,
-    pageNumber: Int,
-    pageSize: Int
-  ): PatientEncounterEdges
+  ): [PatientEncounter]
 
   # Patient medications
   patientMedications(

@@ -52,7 +52,7 @@ export async function appointmentStart(
   const openAppointmentResponse = await athenaApi.appointmentsGetOpen(
     clinic.departmentId,
     appointmentTypeId || 2, // TODO: update this default
-    user.athenaProviderId || 1, // TODO: blow up if there is no providerId for a user
+    1, // TODO: use user.athenaProviderId and blow up if there is no providerId for a user
     appointmentTime,
     appointmentDate,
   );

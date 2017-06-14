@@ -1,24 +1,13 @@
 fragment FullPatientEncounter on PatientEncounter {
   encounterType
-  encounterId
-  status
-  patientStatusId
-  appointmentId
-  stage
-  patientLocationId
-  providerId
-  encounterDate
-  encounterVisitName
-  patientLocation
+  providerName
+  providerRole
+  location
   diagnoses {
-    diagnosisId
-    icdCodes
-    snomedCode
+    code
+    codeSystem
     description
   }
-  patientStatus
-  providerPhone
-  providerFirstName
-  providerLastName
-  lastUpdated
+  reasons
+  dateTime
 }

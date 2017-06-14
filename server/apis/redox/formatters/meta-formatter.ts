@@ -1,6 +1,8 @@
 import { DataModels, EventTypes } from '../types';
 
 export function formatRequestMeta(dataModel: DataModels, eventType: EventTypes) {
+  const destinationId = dataModel === 'Clinical Summary' ?
+    '2b165ef9-95f1-48d5-962a-82f5f35ba683' : 'aed98aae-5e94-404f-912d-9ca0b6ebe869';
   return {
     DataModel: dataModel,
     EventType: eventType,
@@ -11,7 +13,7 @@ export function formatRequestMeta(dataModel: DataModels, eventType: EventTypes) 
     },
     Destinations: [
       {
-        ID: 'aed98aae-5e94-404f-912d-9ca0b6ebe869',
+        ID: destinationId, // TODO: go back to single ID once Redox fixes the ClinicalSummary model
         Name: 'athenahealth sandbox',
       },
     ],

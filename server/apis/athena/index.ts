@@ -14,7 +14,6 @@ import {
   ICheckoutAppointmentResponse,
   IOpenAppointmentResponse,
   IPatientEditableFields,
-  IPatientEncountersResponse,
   IPatientInfoAthena,
   IPatientMedicationsResponse,
   ITokenResponse,
@@ -139,22 +138,6 @@ export default class AthenaApi {
     return await this.fetch<IPatientMedicationsResponse>(
       `/${config.ATHENA_PRACTICE_ID}/chart/${athenaPatientId}/medications`, {
         departmentid: athenaDepartmentId,
-      });
-  }
-
-  public async patientEncountersGet(
-    athenaPatientId: number,
-    athenaDepartmentId: number,
-    limit: number,
-    offset: number,
-  ): Promise<IPatientEncountersResponse> {
-    // Optinally, we could also send in 'showallstatuses' and 'showalltypes' params
-    return await this.fetch<IPatientEncountersResponse>(
-      `/${config.ATHENA_PRACTICE_ID}/chart/${athenaPatientId}/encounters`, {
-        departmentid: athenaDepartmentId,
-        showdiagnoses: 'true',
-        limit,
-        offset,
       });
   }
 

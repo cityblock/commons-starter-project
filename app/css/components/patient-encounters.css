@@ -3,6 +3,10 @@
   @apply --inverted-button;
 }
 
+.button {
+  @apply --button;
+}
+
 .encountersPanel {
   background-color: var(--gray-background-color);
   padding: 20px var(--medium-gutter);
@@ -10,13 +14,6 @@
 
 ::-webkit-scrollbar {
   display: none;
-}
-
-.newEncounter {}
-
-.newEncounterButton {
-  border-radius: 4px;
-  height: 42px;
 }
 
 .encounters {

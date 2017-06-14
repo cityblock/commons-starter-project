@@ -29,7 +29,7 @@ declare module 'schema' {
     patientScratchPad: IPatientScratchPad | null;
     clinic: IClinic | null;
     clinics: IClinicEdges | null;
-    patientEncounters: IPatientEncounterEdges | null;
+    patientEncounters: Array<IPatientEncounter> | null;
     patientMedications: IPatientMedications | null;
   }
 
@@ -110,6 +110,8 @@ declare module 'schema' {
   interface IPatient {
     id: string;
     firstName: string | null;
+    middleName: string | null;
+    language: string | null;
     lastName: string | null;
     dateOfBirth: string | null;
     gender: string | null;
@@ -251,51 +253,24 @@ declare module 'schema' {
   }
 
   /*
-    description: PatientEnounterEdges
-  */
-  interface IPatientEncounterEdges {
-    edges: Array<IPatientEncounterNode> | null;
-    pageInfo: IPageInfo;
-  }
-
-  /*
-    description: PatientEncounter node
-  */
-  interface IPatientEncounterNode {
-    node: IPatientEncounter | null;
-    cursor: string;
-  }
-
-  /*
     description: PatientEncounter
   */
   interface IPatientEncounter {
     encounterType: string;
-    encounterId: number;
-    status: string;
-    patientStatusId: number | null;
-    appointmentId: number;
-    stage: string | null;
-    patientLocationId: number | null;
-    providerId: number | null;
-    encounterDate: string;
-    encounterVisitName: string;
-    patientLocation: string | null;
-    diagnoses: Array<IPatientDiagnosis> | null;
-    patientStatus: string | null;
-    providerPhone: string | null;
-    providerFirstName: string | null;
-    providerLastName: string | null;
-    lastUpdated: string;
+    providerName: string;
+    providerRole: string;
+    location: string;
+    diagnoses: Array<IPatientDiagnosis>;
+    reasons: Array<string>;
+    dateTime: string;
   }
 
   /*
     description: PatientDiagnosis
   */
   interface IPatientDiagnosis {
-    diagnosisId: number;
-    icdCodes: Array<string>;
-    snomedCode: number;
+    code: string;
+    codeSystem: string;
     description: string;
   }
 

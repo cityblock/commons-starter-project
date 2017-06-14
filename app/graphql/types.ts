@@ -1,6 +1,15 @@
 //  This file was automatically generated and should not be edited.
 /* tslint:disable */
 
+export type AppointmentStatus =
+  "cancelled" |
+  "future" |
+  "open" |
+  "checkedIn" |
+  "checkedOut" |
+  "chargeEntered";
+
+
 export type UserRole =
   "physician" |
   "nurseCareManager" |
@@ -9,6 +18,28 @@ export type UserRole =
   "anonymousUser" |
   "admin";
 
+
+export interface AppointmentEndMutationVariables {
+  patientId: string;
+  appointmentId: string;
+  appointmentNote: string;
+}
+
+export interface AppointmentEndMutation {
+  // End an appointment
+  appointmentEnd: {
+    success: boolean,
+  } | null;
+}
+
+export interface AppointmentStartMutationVariables {
+  patientId: string;
+}
+
+export interface AppointmentStartMutation {
+  // Start an appointment
+  appointmentStart: FullAppointmentFragment;
+}
 
 export interface GetClinicsQueryVariables {
   pageNumber: number | null;
@@ -40,21 +71,11 @@ export interface GetPatientCareTeamQuery {
 
 export interface GetPatientEncountersQueryVariables {
   patientId: string;
-  pageNumber: number | null;
-  pageSize: number | null;
 }
 
 export interface GetPatientEncountersQuery {
   // Patient encounters
-  patientEncounters: {
-    edges: Array< {
-      node: FullPatientEncounterFragment,
-    } > | null,
-    pageInfo: {
-      hasPreviousPage: boolean,
-      hasNextPage: boolean,
-    },
-  } | null;
+  patientEncounters: Array<FullPatientEncounterFragment>;
 }
 
 export interface GetPatientMedicationsQueryVariables {
@@ -199,6 +220,21 @@ export interface PatientSetupMutation {
   patientSetup: ShortPatientFragment;
 }
 
+export interface FullAppointmentFragment {
+  athenaAppointmentId: string;
+  dateTime: string;
+  athenaDepartmentId: number;
+  status: AppointmentStatus;
+  athenaPatientId: number;
+  duration: number;
+  appointmentTypeId: number;
+  appointmentType: string;
+  athenaProviderId: number;
+  userId: string;
+  patientId: string;
+  clinicId: string;
+}
+
 export interface FullClinicFragment {
   id: string;
   name: string;
@@ -206,27 +242,16 @@ export interface FullClinicFragment {
 
 export interface FullPatientEncounterFragment {
   encounterType: string;
-  encounterId: number;
-  status: string;
-  patientStatusId: number | null;
-  appointmentId: number;
-  stage: string | null;
-  patientLocationId: number | null;
-  providerId: number | null;
-  encounterDate: string;
-  encounterVisitName: string;
-  patientLocation: string | null;
+  providerName: string;
+  providerRole: string;
+  location: string;
   diagnoses: Array< {
-    diagnosisId: number,
-    icdCodes: Array< string | null >,
-    snomedCode: number,
+    code: string,
+    codeSystem: string,
     description: string,
-  } > | null;
-  patientStatus: string | null;
-  providerPhone: string | null;
-  providerFirstName: string | null;
-  providerLastName: string | null;
-  lastUpdated: string;
+  } >;
+  reasons: Array< string | null >;
+  dateTime: string;
 }
 
 export interface FullPatientHealthRecordFragment {

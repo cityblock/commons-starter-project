@@ -28,6 +28,7 @@ export default class Patient extends Model {
   id: string;
   firstName: string;
   lastName: string;
+  middleName: string | null;
   dateOfBirth: string;
   gender: string;
   zip: number;

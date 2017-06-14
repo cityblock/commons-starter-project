@@ -55,7 +55,6 @@ export interface IState {
     mobilePhone: string;
     consentToText: string;
     consentToCall: string;
-    preferredContactMethod: string;
   };
   insurance: {
     insuranceType: string;
@@ -71,7 +70,7 @@ function formatDate(date: string) {
   return moment(date, 'YYYY-MM-DD').format('MM/DD/YYYY');
 }
 
-class PatientEnrolementContainer extends React.Component<IProps, IState> {
+class PatientEnrollmentContainer extends React.Component<IProps, IState> {
 
   constructor(props: IProps) {
     super(props);
@@ -103,7 +102,6 @@ class PatientEnrolementContainer extends React.Component<IProps, IState> {
         mobilePhone: '',
         consentToText: 'false',
         consentToCall: 'false',
-        preferredContactMethod: 'Cell',
       },
       insurance: {
         insuranceType: '',
@@ -599,4 +597,4 @@ export default (compose as any)(
       clinic: (data ? formatClinic((data as any).clinics) : null),
     }),
   }),
-)(PatientEnrolementContainer);
+)(PatientEnrollmentContainer);

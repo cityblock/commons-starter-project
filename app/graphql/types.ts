@@ -186,6 +186,12 @@ export interface PatientSetupMutationVariables {
   mobilePhone: string | null;
   consentToCall: boolean;
   consentToText: boolean;
+  issueDate: string | null;
+  expirationDate: string | null;
+  insuranceType: string | null;
+  patientRelationshipToPolicyHolder: string | null;
+  memberId: string | null;
+  policyGroupNumber: string | null;
 }
 
 export interface PatientSetupMutation {

@@ -15,6 +15,12 @@ mutation patientSetup(
   $mobilePhone: String
   $consentToCall: Boolean!
   $consentToText: Boolean!
+  $issueDate: String
+  $expirationDate: String
+  $insuranceType: String
+  $patientRelationshipToPolicyHolder: String
+  $memberId: String
+  $policyGroupNumber: String
 ) {
   patientSetup(input: {
     firstName: $firstName,
@@ -33,6 +39,12 @@ mutation patientSetup(
     mobilePhone: $mobilePhone,
     consentToCall: $consentToCall,
     consentToText: $consentToText,
+    issueDate: $issueDate,
+    expirationDate: $expirationDate,
+    insuranceType: $insuranceType,
+    patientRelationshipToPolicyHolder: $patientRelationshipToPolicyHolder,
+    memberId: $memberId,
+    policyGroupNumber: $policyGroupNumber,
    }) {
     ...ShortPatient
   }

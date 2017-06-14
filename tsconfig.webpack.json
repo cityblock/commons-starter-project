@@ -1,8 +1,6 @@
 {
   "extends": "./tsconfig",
   "compilerOptions": {
-    "target": "es5",
-    "jsx": "react",
     "lib": [
       "es6",
       "dom"
@@ -10,10 +8,10 @@
   },
   "exclude": [
     "node_modules",
-    "server",
     "rules",
     "coverage",
     "scripts",
+    "server",
     "**/spec.helpers.ts",
     "**/*.spec.ts",
     "**/*.spec.tsx"

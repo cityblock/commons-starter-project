@@ -25,12 +25,16 @@ module.exports = ({ production = false } = {}) => {
         { from: 'assets' },
       ]),
       new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/), // https://github.com/jmblog/how-to-optimize-momentjs-with-webpack
-      new webpack.optimize.UglifyJsPlugin({
-        compress: { warnings: false },
-        output: { comments: false },
-        sourceMap: true,
-      }),
     ];
   }
   return [];
 };
+
+/**
+ * weirdly not working with es6
+ * new webpack.optimize.UglifyJsPlugin({
+        compress: { warnings: false },
+        output: { comments: false },
+        sourceMap: true,
+      }),
+ */

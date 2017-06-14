@@ -9,6 +9,7 @@ const CURRENT_WORKING_DIR = process.cwd();
 
 module.exports = {
   app: path.resolve(CURRENT_WORKING_DIR, "app"),
+  server: path.resolve(CURRENT_WORKING_DIR, "server"),
   assets: path.resolve(CURRENT_WORKING_DIR, "public"),
   public: "/assets/", // use absolute path for css-loader?
   modules: path.resolve(CURRENT_WORKING_DIR, "node_modules")

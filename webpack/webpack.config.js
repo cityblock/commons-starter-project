@@ -17,29 +17,11 @@ module.exports = (env = "") => {
   dotenv.config();
 
   const isProduction = process.env.NODE_ENV === "production";
-  const isBrowser = (env.indexOf("browser") >= 0);
   console.log(`Running webpack in ${process.env.NODE_ENV} mode`);
 
   const node = { __dirname: true, __filename: true };
 
-  const prodRender = {
-    devtool: 'source-map',
-    context: PATHS.app,
-    entry: {
-      app: ["./client"]
-    },
-    node,
-    output: {
-      path: PATHS.assets,
-      filename: "[name].js",
-      publicPath: PATHS.public,
-    },
-    module: { rules: rules({ production: true }) },
-    resolve,
-    plugins: plugins({ production: true })
-  };
-
-  const devRender = {
+  const clientRender = {
     devtool: 'source-map',
     context: PATHS.app,
     entry: { app: ["./client"] },
@@ -49,10 +31,25 @@ module.exports = (env = "") => {
       filename: "[name].js",
       publicPath: PATHS.public,
     },
-    module: { rules: rules({ production: false }) },
+    module: { rules: rules({ production: isProduction }) },
     resolve,
-    plugins: plugins({ production: false })
+    plugins: plugins({ production: isProduction })
   };
 
-  return isProduction ? [prodRender] : [devRender];
+  const serverRender = {
+    devtool: 'source-map',
+    context: PATHS.server,
+    entry: { app: ["./index"] },
+    node,
+    output: {
+      path: PATHS.assets,
+      filename: "[name].js",
+      publicPath: PATHS.public,
+    },
+    module: { rules: rules({ production: isProduction }) },
+    resolve,
+    plugins: plugins({ production: isProduction })
+  };
+
+  return [clientRender];
 };

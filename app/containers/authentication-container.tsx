@@ -49,6 +49,6 @@ const AuthenticationWithGraphQL = graphql(currentUserQuery, {
     error: (data ? data.error : null),
     currentUser: (data ? (data as any).currentUser : null),
   }),
-})(Authentication);
+})(Authentication as any);
 
 export default connect(undefined, mapDispatchToProps)(AuthenticationWithGraphQL);

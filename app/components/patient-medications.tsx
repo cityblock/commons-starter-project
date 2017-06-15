@@ -16,7 +16,7 @@ interface IProps {
 }
 
 interface IState {
-  selectedMedicationId: number | null;
+  selectedMedicationId: string | null;
 }
 
 class PatientMedications extends React.Component<IProps, IState> {
@@ -33,7 +33,7 @@ class PatientMedications extends React.Component<IProps, IState> {
     };
   }
 
-  onClickMedication(medicationId: number) {
+  onClickMedication(medicationId: string) {
     this.setState((prevState: IState) => {
       const { selectedMedicationId } = prevState;
 
@@ -69,11 +69,11 @@ class PatientMedications extends React.Component<IProps, IState> {
   }
 
   renderPatientMedication(medication: FullPatientMedicationFragment) {
-    const selected = medication.medicationId === this.state.selectedMedicationId;
+    const selected = medication.name === this.state.selectedMedicationId;
 
     return (
       <PatientMedication
-        key={medication.medicationId}
+        key={medication.name}
         medication={medication}
         selected={selected}
         onClick={this.onClickMedication}

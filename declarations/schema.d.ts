@@ -294,34 +294,11 @@ declare module 'schema' {
   */
   interface IPatientMedication {
     name: string;
-    medicationId: number;
-    medicationEntryId: string;
-    quantity: number | null;
+    medicationId: string;
+    quantity: string | null;
     quantityUnit: string | null;
-    refillsAllowed: number | null;
-    renewable: boolean;
     dosageInstructions: string | null;
-    stopReason: string | null;
-    source: string;
-    status: string;
-    historical: boolean;
-    lastUpdated: string;
-    history: IPatientMedicationHistory;
-  }
-
-  /*
-    description: PatientMedicationHistory
-  */
-  interface IPatientMedicationHistory {
-    events: Array<IPatientMedicationHistoryEvent>;
-  }
-
-  /*
-    description: PatientMedicationHistoryEvent
-  */
-  interface IPatientMedicationHistoryEvent {
-    date: string;
-    event: string;
+    startDate: string | null;
   }
 
   /*

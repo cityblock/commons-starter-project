@@ -6,7 +6,7 @@ import { FullPatientMedicationFragment } from '../graphql/types';
 interface IProps {
   medication: FullPatientMedicationFragment;
   selected: boolean;
-  onClick: (medicationId: number) => any;
+  onClick: (medicationId: string) => any;
 }
 
 export default class PatientMedication extends React.Component<IProps, {}> {
@@ -29,7 +29,7 @@ export default class PatientMedication extends React.Component<IProps, {}> {
     return (
       <div
         className={medicationClass}
-        onClick={() => (this.props.onClick(medication.medicationId))}>
+        onClick={() => (this.props.onClick(medication.name))}>
         <div className={styles.medicationRow}>
           <div className={styles.medicationRowTitle}>{medication.name}</div>
           <div className={styles.medicationRowDosage}>{dosage}</div>
@@ -40,25 +40,23 @@ export default class PatientMedication extends React.Component<IProps, {}> {
           </div>
           <div className={styles.medicationDetailsRow}>
             <div className={styles.medicationDetailsTitle}>Prescribed by</div>
-            <div className={styles.medicationDetailsInfo}>{medication.source}</div>
-          </div>
-          <div className={styles.medicationDetailsRow}>
-            <div className={styles.medicationDetailsTitle}>Prescribed on</div>
             <div className={styles.medicationDetailsInfo}>TBD</div>
           </div>
           <div className={styles.medicationDetailsRow}>
+            <div className={styles.medicationDetailsTitle}>Prescribed on</div>
+            <div className={styles.medicationDetailsInfo}>{medication.startDate}</div>
+          </div>
+          <div className={styles.medicationDetailsRow}>
             <div className={styles.medicationDetailsTitle}>Refills allowed</div>
-            <div className={styles.medicationDetailsInfo}>{medication.refillsAllowed}</div>
+            <div className={styles.medicationDetailsInfo}>TBD</div>
           </div>
           <div className={styles.medicationDetailsRow}>
             <div className={styles.medicationDetailsTitle}>Renewable</div>
-            <div className={styles.medicationDetailsInfo}>
-              {medication.renewable ? 'Yes' : 'No'}
-            </div>
+            <div className={styles.medicationDetailsInfo}>TBD</div>
           </div>
           <div className={styles.medicationDetailsRow}>
             <div className={styles.medicationDetailsTitle}>Status</div>
-            <div className={styles.medicationDetailsInfo}>{medication.status}</div>
+            <div className={styles.medicationDetailsInfo}>TBD</div>
           </div>
         </div>
       </div>

@@ -1,11 +1,8 @@
 fragment FullPatientMedication on PatientMedication {
   medicationId
   name
-  source
   quantity
   quantityUnit
   dosageInstructions
-  renewable
-  refillsAllowed
-  status
+  startDate
 }

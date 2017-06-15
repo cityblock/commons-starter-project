@@ -431,36 +431,7 @@ export interface IRedoxClinicalSummaryQueryResponse {
     }
   }>;
   MedicationsText: string;
-  Medications: Array<{
-    Prescription: boolean;
-    FreeTextSig?: string;
-    Dose: {
-      Quantity: string;
-      Units: string;
-    };
-    Rate: {
-      Quantity?: string;
-      Units?: string;
-    };
-    Route: {
-      Code: string;
-      CodeSystem: string;
-      CodeSystemName: string;
-      Name: string;
-    };
-    StartDate: string; // 2013-11-11T05:00:00.000Z
-    EndDate?: string; // 2013-11-11T05:00:00.000Z
-    Frequency: {
-      Period: string;
-      Unit: string;
-    };
-    Product: {
-      Code: string;
-      CodeSystem: string;
-      CodeSystemName: string;
-      Name: string;
-    };
-  }>;
+  Medications: IRedoxClinicalSummaryMedication[];
   PlanOfCareText: string;
   PlanOfCare: {
     Orders: Array<{
@@ -725,4 +696,35 @@ export interface IRedoxClinicalSummaryEncounter {
     CodeSystemName: string;
     Name: string;
   }>;
+}
+
+export interface IRedoxClinicalSummaryMedication {
+  Prescription: boolean;
+  FreeTextSig?: string;
+  Dose: {
+    Quantity: string;
+    Units: string;
+  };
+  Rate: {
+    Quantity?: string;
+    Units?: string;
+  };
+  Route: {
+    Code: string;
+    CodeSystem: string;
+    CodeSystemName: string;
+    Name: string;
+  };
+  StartDate: string; // 2013-11-11T05:00:00.000Z
+  EndDate?: string; // 2013-11-11T05:00:00.000Z
+  Frequency: {
+    Period: string;
+    Unit: string;
+  };
+  Product: {
+    Code: string;
+    CodeSystem: string;
+    CodeSystemName: string;
+    Name: string;
+  };
 }

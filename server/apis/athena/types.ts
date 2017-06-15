@@ -176,57 +176,6 @@ export interface IAthenaPatientEditableFields {
   state: string;
 }
 
-export interface IPatientMedicationStructuredSig {
-  dosageaction: string;
-  dosagequantityvalue: number;
-  dosagequantityunit: string;
-  dosagefrequencyvalue: number;
-  dosagefrequencyunit: string;
-  dosagefrequencydescription: string;
-  dosageroute: string;
-  dosageadditionalinstructions: string;
-  dosagedurationvalue: number;
-  dosagedurationunit: string;
-}
-
-export interface IPatientMedicationEvent {
-  type: 'START' | 'END' | 'ORDER' | 'ENTER' | 'FILL' | 'HIDE';
-  eventdate: string;
-}
-
-export interface IPatientMedicationResource {
-  medicationentryid: string;
-  medicationid: number;
-  medication: string;
-  isstructuredsig: boolean;
-  unstructuredsig: string;
-  source: string;
-  encounterid: number;
-  createdby: string;
-  approvedby: string;
-  orderingmode: string;
-  quantity: number;
-  quantityunit: string;
-  refillsallowed: number;
-  issafetorenew: boolean;
-  stopreason: string;
-  providernote: string;
-  patientnote: string;
-  pharmacyncpdpid: string;
-  route: string;
-  events: IPatientMedicationEvent[];
-  structuredsig?: IPatientMedicationStructuredSig;
-}
-
-export type PatientMedicationResource = IPatientMedicationResource[];
-
-export interface IPatientMedicationsResponse {
-  lastupdated: string;
-  medications: PatientMedicationResource[];
-  nomedicationsreported: boolean;
-  sectionnote: string;
-}
-
 export interface IOpenAppointmentResponse {
   appointmentids: {
     [id: string]: string;

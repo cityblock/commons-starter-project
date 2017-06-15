@@ -68,6 +68,14 @@ export default class RedoxApi {
   }
 
   async patientEncountersGet(patientId: string): Promise<IRedoxClinicalSummaryQueryResponse> {
+    return this.patientClinicalSummaryGet(patientId);
+  }
+
+  async patientMedicationsGet(patientId: string): Promise<IRedoxClinicalSummaryQueryResponse> {
+    return this.patientClinicalSummaryGet(patientId);
+  }
+
+  async patientClinicalSummaryGet(patientId: string): Promise<IRedoxClinicalSummaryQueryResponse> {
     const formattedClinicalSummaryQueryOptions = formatClinicalSummaryQueryOptions(
       patientId, 'AthenaNet Enterprise ID',
     );

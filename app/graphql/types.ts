@@ -275,15 +275,12 @@ export interface FullPatientHealthRecordFragment {
 }
 
 export interface FullPatientMedicationFragment {
-  medicationId: number;
+  medicationId: string;
   name: string;
-  source: string;
-  quantity: number | null;
+  quantity: string | null;
   quantityUnit: string | null;
   dosageInstructions: string | null;
-  renewable: boolean;
-  refillsAllowed: number | null;
-  status: string;
+  startDate: string | null;
 }
 
 export interface FullPatientScratchPadFragment {

@@ -15,7 +15,6 @@ import {
   IOpenAppointmentResponse,
   IPatientEditableFields,
   IPatientInfoAthena,
-  IPatientMedicationsResponse,
   ITokenResponse,
 } from './types';
 
@@ -129,16 +128,6 @@ export default class AthenaApi {
     return {
       athenaPatientId: Number(response[0].patientid),
     };
-  }
-
-  public async patientMedicationsGet(
-    athenaPatientId: number,
-    athenaDepartmentId: number,
-  ): Promise<IPatientMedicationsResponse> {
-    return await this.fetch<IPatientMedicationsResponse>(
-      `/${config.ATHENA_PRACTICE_ID}/chart/${athenaPatientId}/medications`, {
-        departmentid: athenaDepartmentId,
-      });
   }
 
   public async appointmentsGetOpen(

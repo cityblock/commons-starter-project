@@ -1,10 +1,13 @@
-module.exports = ({ production = false } = {}) => {
+module.exports = () => {
   return {
-    loader: "awesome-typescript-loader",
-    options: {
-      configFileName: "tsconfig.webpack.json",
-      logInfoToStdOut: true,
-    },
     test: /\.tsx?$/,
+    use: [
+      {
+        loader: 'babel-loader'
+      },
+      {
+        loader: 'ts-loader?configFileName=tsconfig.webpack.json'
+      }
+    ]
   };
 };

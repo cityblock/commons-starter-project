@@ -1,11 +1,5 @@
 {
   "extends": "./tsconfig",
-  "compilerOptions": {
-    "lib": [
-      "es6",
-      "dom"
-    ]
-  },
   "exclude": [
     "node_modules",
     "rules",
@@ -16,7 +10,7 @@
     "**/*.spec.ts",
     "**/*.spec.tsx"
   ],
-  "awesomeTypescriptLoaderOptions": {
-    "useCache": false
+  "compilerOptions": {
+    "module": "es2015"
   }
 }

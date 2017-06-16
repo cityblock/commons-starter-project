@@ -19,6 +19,3 @@ coverage
 
 # build
 public
-
-# awesome-typescript-loader cache
-.awcache

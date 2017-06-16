@@ -17,8 +17,8 @@ export const checkAuth = (
   username: string,
   password: string,
 ) => (
-  req: express.Request,
-  res: express.Response,
+  req: any,
+  res: any,
   next: express.NextFunction,
   ) => {
     const user = basicAuth(req);

@@ -6,14 +6,14 @@ import { getQuery } from '../graphql/helpers';
 import { FullUserFragment } from '../graphql/types';
 import CareTeamWidgetMember from './care-team-widget-member';
 
-interface IProps {
+export interface IProps {
   patientId: string;
   loading?: boolean;
   error?: string;
   careTeam?: FullUserFragment[];
 }
 
-interface IState {
+export interface IState {
   open: boolean;
   selectedCareTeamMemberId: string | null;
 }

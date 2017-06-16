@@ -1,6 +1,5 @@
 import * as Knex from 'knex';
 import { Model } from 'objection';
-
 /* tslint:disable no-var-requires */
 const knexConfig = require('./models/knexfile');
 /* tslint:enable no-var-requires */

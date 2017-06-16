@@ -1,22 +1,23 @@
 {
   "extends": "./tsconfig",
   "compilerOptions": {
-    "lib": [
-      "es6",
-      "dom"
-    ]
+    "outDir": "./server-compiled"
   },
+  "include": [
+    "./declarations/*"
+  ],
+  "files": [
+    "./server/index",
+    "./server/lib/capture-output"
+  ],
   "exclude": [
+    "app",
     "node_modules",
     "rules",
     "coverage",
     "scripts",
-    "server",
     "**/spec.helpers.ts",
     "**/*.spec.ts",
     "**/*.spec.tsx"
-  ],
-  "awesomeTypescriptLoaderOptions": {
-    "useCache": false
-  }
+  ]
 }

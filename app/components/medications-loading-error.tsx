@@ -1,7 +1,7 @@
 import * as React from 'react';
 import * as styles from '../css/components/patient-medications.css';
 
-interface IProps {
+export interface IProps {
   onRetryClick: () => any;
   loading?: boolean;
   error?: string;

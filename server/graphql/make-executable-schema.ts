@@ -1,5 +1,4 @@
 import * as fs from 'fs';
-import { GraphQLDateTime, GraphQLEmail } from 'graphql-custom-types';
 import { makeExecutableSchema } from 'graphql-tools';
 import * as path from 'path';
 import config from '../config';
@@ -15,7 +14,6 @@ import { resolvePatientEncounters } from './patient-encounters-resolver';
 import { resolvePatientMedications } from './patient-medications-resolver';
 import {
   patientEdit,
-  patientHealthRecordEdit,
   patientScratchPadEdit,
   patientSetup,
   resolvePatient,
@@ -33,8 +31,6 @@ import {
 const schemaGql = fs.readFileSync(path.join(__dirname, 'schema.graphql'), 'utf-8');
 
 const resolveFunctions = {
-  GraphQLDateTime,
-  GraphQLEmail,
   RootQueryType: {
     clinic: resolveClinic,
     clinics: resolveClinics,
@@ -50,7 +46,6 @@ const resolveFunctions = {
     userPatientPanel: resolveUserPatientPanel,
   },
   RootMutationType: {
-    patientHealthRecordEdit,
     appointmentAddNote,
     appointmentStart,
     appointmentEnd,
@@ -76,7 +71,7 @@ const logger = {
   },
 };
 
-const schema = makeExecutableSchema({
+const schema = (makeExecutableSchema as any)({
   typeDefs: schemaGql,
   resolvers: resolveFunctions,
   logger,

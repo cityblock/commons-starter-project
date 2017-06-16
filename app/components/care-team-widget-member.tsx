@@ -3,7 +3,7 @@ import * as React from 'react';
 import * as styles from '../css/components/care-team-widget-member.css';
 import { FullUserFragment } from '../graphql/types';
 
-interface IProps {
+export interface IProps {
   careTeamMember: FullUserFragment;
   selected: boolean;
   onClick: (careTeamMemberId: string) => any;

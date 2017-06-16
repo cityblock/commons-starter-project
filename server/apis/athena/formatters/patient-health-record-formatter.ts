@@ -1,6 +1,6 @@
 import { IPatientHealthRecord } from 'schema';
 import { IAthenaEditPatient } from '../index';
-import { IAthenaPatientEditableFields, IPatientInfoAthena } from '../types';
+import { IPatientInfoAthena } from '../types';
 
 // Note: This drops some fields returned by athena
 export const formatPatientHealthRecord = (
@@ -74,35 +74,35 @@ export const formatPatientHealthRecord = (
   },
 });
 
-export const formatEditPatientHealthRecordOptions = (
-  options: IAthenaEditPatient,
-): Partial<IAthenaPatientEditableFields> => ({
-  firstname: options.firstName,
-  lastname: options.lastName,
-  middlename: options.middleName,
-  sex: options.gender,
-  zip: String(options.zip),
-  dob: options.dateOfBirth,
+export function formatEditPatientHealthRecordOptions(options: IAthenaEditPatient) {
+  return {
+    firstname: options.firstName,
+    lastname: options.lastName,
+    middlename: options.middleName,
+    sex: options.gender,
+    zip: String(options.zip),
+    dob: options.dateOfBirth,
 
-  suffix: options.suffix,
-  preferredname: options.preferredName,
-  race: options.race,
-  ethnicitycode: options.ethnicityCode,
-  status: options.status,
-  ssn: options.ssn,
-  homebound: options.homebound ? 'T' : 'F',
-  language6392code: options.language6392code,
-  maritalstatus: options.maritalStatus,
+    suffix: options.suffix,
+    preferredname: options.preferredName,
+    race: options.race,
+    ethnicitycode: options.ethnicityCode,
+    status: options.status,
+    ssn: options.ssn,
+    homebound: options.homebound ? 'T' : 'F',
+    language6392code: options.language6392code,
+    maritalstatus: options.maritalStatus,
 
-  email: options.email,
-  homephone: options.homePhone,
-  mobilephone: options.mobilePhone,
-  consenttocall: options.consentToCall ? 'T' : 'F',
-  consenttotext: options.consentToText ? 'T' : 'F',
+    email: options.email,
+    homephone: options.homePhone,
+    mobilephone: options.mobilePhone,
+    consenttocall: options.consentToCall ? 'T' : 'F',
+    consenttotext: options.consentToText ? 'T' : 'F',
 
-  city: options.city,
-  address1: options.address1,
-  countrycode: options.countryCode,
-  countrycode3166: options.countryCode3166,
-  state: options.state,
-});
+    city: options.city,
+    address1: options.address1,
+    countrycode: options.countryCode,
+    countrycode3166: options.countryCode3166,
+    state: options.state,
+  };
+}

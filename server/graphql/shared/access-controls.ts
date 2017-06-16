@@ -1,18 +1,16 @@
 import * as acl from 'acl';
 import { UserRole } from '../../models/user';
-/* tslint:disable:no-var-requires */
-const aclJson = require('./acl.json');
-/* tslint:enable:no-var-requires */
+import aclJson from './acl';
 
-type Action = 'view' | 'edit' | 'delete' | 'create';
-type Resource = 'patient'       |
-                'note'          |
-                'patientEvents' |
-                'user'          |
-                'allUsers'      |
-                'encounter'     |
-                'clinic'        |
-                'appointment';
+export type Action = 'view' | 'edit' | 'delete' | 'create';
+export type Resource = 'patient' |
+  'note' |
+  'patientEvents' |
+  'user' |
+  'allUsers' |
+  'encounter' |
+  'clinic' |
+  'appointment';
 
 /*
 ACL SPEC:
@@ -32,9 +30,9 @@ Data write: none
 TODO: restrict data read to only non-clinical data for patient
 */
 
-const aclInstance = new acl(new acl.memoryBackend());
+export const aclInstance: any = new acl(new acl.memoryBackend());
 // the type for instance of acl is not exported from the typescript def so we make our own
-type Acl = typeof aclInstance;
+export type Acl = typeof aclInstance;
 
 export class AccessControls {
 

@@ -1,13 +1,10 @@
 import * as Base64 from 'base-64';
 import 'fetch-everywhere';
-import { isNil, omitBy } from 'lodash';
 import { stringify } from 'querystring';
 import config from '../../config';
 import { AthenaResponseError } from '../../lib/errors';
-import { formatEditPatientHealthRecordOptions } from './formatters';
 import {
   IAddNoteToAppointmentResponse,
-  IAthenaPatientEditableFields,
   IBookAppointmentErrorResponse,
   IBookAppointmentResponse,
   ICheckinAppointmentResponse,
@@ -20,7 +17,7 @@ import {
 
 let singleton: AthenaApi;
 
-interface IAuth {
+export interface IAuth {
   expiresAtMillis: number;
   accessToken: string;
 }
@@ -91,43 +88,6 @@ export default class AthenaApi {
     return await this.fetch<IPatientInfoAthena>(
       `/${config.ATHENA_PRACTICE_ID}/patients/${athenaPatientId}`,
     );
-  }
-
-  /**
-   * creates a patient in athena
-   * Note: this endpoint is extremely slow on the athena side
-   */
-  public async patientCreate(
-    options: IAthenaCreatePatient,
-  ): Promise<IPatientResponse> {
-    const formattedPatientOptions = formatEditPatientHealthRecordOptions(options);
-
-    const filtered = omitBy<{}, Partial<IAthenaPatientEditableFields>>(
-      formattedPatientOptions, isNil,
-    );
-    // Add department ID back
-    (filtered as any).departmentId = options.departmentId;
-    const response = await this.fetch(
-      `/${config.ATHENA_PRACTICE_ID}/patients`, filtered, 'POST',
-    );
-    return {
-      athenaPatientId: Number(response[0].patientid),
-    };
-  }
-
-  public async patientEdit(
-    options: IAthenaEditPatient, athenaPatientId: number,
-  ): Promise<IPatientResponse> {
-    const formattedPatientOptions = formatEditPatientHealthRecordOptions(options);
-    const filtered = omitBy<{}, Partial<IAthenaPatientEditableFields>>(
-      formattedPatientOptions, isNil,
-    );
-    const response = await this.fetch(
-      `/${config.ATHENA_PRACTICE_ID}/patients/${athenaPatientId}`, filtered, 'PUT',
-    );
-    return {
-      athenaPatientId: Number(response[0].patientid),
-    };
   }
 
   public async appointmentsGetOpen(

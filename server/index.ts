@@ -1,8 +1,5 @@
 import * as dotenv from 'dotenv';
 dotenv.config();
-/* tslint:disable no-var-requires */
-require('@risingstack/trace');
-/* tslint:enable no-var-requires */
 import * as express from 'express';
 import * as webpack from 'webpack';
 import expressConfig from './express';
@@ -19,7 +16,7 @@ if (process.env.NODE_ENV === 'production') {
 
 const app = express();
 
-interface IMainOptions {
+export interface IMainOptions {
   env: 'development' | 'production' | 'test';
 }
 
@@ -37,7 +34,7 @@ export async function main(options: IMainOptions) {
   }
 
   await expressConfig(app);
-  return app.listen(app.get('port'));
+  return (app as any).listen(app.get('port'));
 }
 
 /* istanbul ignore if  */

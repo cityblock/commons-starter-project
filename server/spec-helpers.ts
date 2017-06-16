@@ -15,7 +15,7 @@ import config from './config';
 import CareTeam from './models/care-team';
 import Patient, { IPatientEditableFields } from './models/patient';
 
-interface ICreatePatient extends IPatientEditableFields {
+export interface ICreatePatient extends IPatientEditableFields {
   athenaPatientId: number;
 }
 
@@ -245,8 +245,8 @@ export function mockRedoxCreatePatientError() {
   });
 }
 
-type MockRedoxClinicalSummaryEncounter = Partial<IRedoxClinicalSummaryEncounter>;
-type MockRedoxClinicalSummaryMedication = Partial<IRedoxClinicalSummaryMedication>;
+export type MockRedoxClinicalSummaryEncounter = Partial<IRedoxClinicalSummaryEncounter>;
+export type MockRedoxClinicalSummaryMedication = Partial<IRedoxClinicalSummaryMedication>;
 
 export function mockRedoxGetPatientEncounters(encountersBody: MockRedoxClinicalSummaryEncounter[]) {
   const fullResponseBody = {
@@ -320,12 +320,12 @@ export function mockAthenaPutError(path: string, body: any, status: number) {
     .reply(status, body);
 }
 
-type MockAthenaPatient = Pick<IPatientInfoAthena, 'patientid'> & Partial<IPatientInfoAthena>;
-type MockAthenaOpenAppointment = Partial<IOpenAppointmentResponse>;
-type MockAthenaBookAppointment = Partial<IBookAppointmentResponse>;
-type MockAthenaCheckinAppointment = Partial<ICheckinAppointmentResponse>;
-type MockAthenaCheckoutAppointment = Partial<ICheckoutAppointmentResponse>;
-type MockAthenaAddNoteToAppointment = Partial<IAddNoteToAppointmentResponse>;
+export type MockAthenaPatient = Pick<IPatientInfoAthena, 'patientid'> & Partial<IPatientInfoAthena>;
+export type MockAthenaOpenAppointment = Partial<IOpenAppointmentResponse>;
+export type MockAthenaBookAppointment = Partial<IBookAppointmentResponse>;
+export type MockAthenaCheckinAppointment = Partial<ICheckinAppointmentResponse>;
+export type MockAthenaCheckoutAppointment = Partial<ICheckoutAppointmentResponse>;
+export type MockAthenaAddNoteToAppointment = Partial<IAddNoteToAppointmentResponse>;
 
 export function mockAthenaGetPatient(
   athenaPatientId: number, body: MockAthenaPatient, times = 1,

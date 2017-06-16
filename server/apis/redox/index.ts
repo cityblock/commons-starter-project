@@ -11,7 +11,7 @@ import {
 
 let singleton: RedoxApi;
 
-interface IAuth {
+export interface IAuth {
   expires: string;
   accessToken: string;
   refreshToken: string;

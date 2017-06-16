@@ -2,7 +2,7 @@ import * as React from 'react';
 import { ErrorMessage } from './error-message';
 import { LoadingMessage } from './loading-message';
 
-interface IProps {
+export interface IProps {
   error?: string;
   isLoading: boolean;
 }

@@ -1,7 +1,7 @@
 import * as React from 'react';
 import * as styles from '../css/components/patient-photo-upload.css';
 
-interface IProps {
+export interface IProps {
   onUploadPhotoClick: () => void;
   onTakePhotoClick: () => void;
 }

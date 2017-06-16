@@ -1,7 +1,7 @@
 import * as React from 'react';
 import * as styles from '../css/components/error-message.css';
 
-interface IProps {
+export interface IProps {
   text: string;
 }
 

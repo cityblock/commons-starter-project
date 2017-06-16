@@ -1,38 +1,37 @@
 // Config file for Knex
 module.exports = {
   development: {
-    client: 'pg',
+    client: "pg",
     connection: {
-      host: '127.0.0.1',
-      database: 'commons',
+      database: "commons",
+      host: "127.0.0.1",
     },
     migrations: {
-      directory: __dirname + '/migrations',
-    },
-  },
-  test: {
-    client: 'pg',
-    connection: {
-      host: '127.0.0.1',
-      database: 'commons_test',
-    },
-    migrations: {
-      directory: __dirname + '/migrations',
+      directory: __dirname + "/migrations",
     },
   },
   production: {
-    client: 'pg',
+    client: "pg",
     connection: {
-      port: process.env.DB_PORT,
+      database: "db",
       host: process.env.DB_HOST,
-      user: process.env.DB_USER,
       password: process.env.DB_PASSWORD,
-      database: 'db',
+      port: process.env.DB_PORT,
       ssl: true,
+      user: process.env.DB_USER,
     },
     migrations: {
-      directory: __dirname + '/migrations',
+      directory: __dirname + "/migrations",
     },
   },
-}
-
+  test: {
+    client: "pg",
+    connection: {
+      database: "commons_test",
+      host: "127.0.0.1",
+    },
+    migrations: {
+      directory: __dirname + "/migrations",
+    },
+  },
+};

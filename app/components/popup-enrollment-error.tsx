@@ -2,7 +2,7 @@ import * as React from 'react';
 import * as styles from '../css/components/popup-enrollment-error.css';
 import Popup from './popup';
 
-interface IProps {
+export interface IProps {
   visible: boolean;
   error?: string;
   onClose: () => void;

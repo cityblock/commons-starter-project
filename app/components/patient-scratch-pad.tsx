@@ -9,7 +9,7 @@ import {
 } from '../graphql/types';
 import { PatientScratchPadStatus } from './patient-scratch-pad-status';
 
-interface IProps {
+export interface IProps {
   patientId: string;
   scratchPad?: {
     text: string;
@@ -22,7 +22,7 @@ interface IProps {
   refetchScratchPad: (variables: { patientId: string }) => any;
 }
 
-interface IState {
+export interface IState {
   scratchPad?: string;
   saveSuccess: boolean;
   saveError: boolean;

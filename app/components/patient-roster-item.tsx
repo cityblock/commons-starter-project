@@ -6,7 +6,7 @@ import * as styles from '../css/components/patient-roster.css';
 
 import { ShortPatientFragment } from '../graphql/types';
 
-interface IProps {
+export interface IProps {
   patient: ShortPatientFragment;
 }
 

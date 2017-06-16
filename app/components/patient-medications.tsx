@@ -7,7 +7,7 @@ import { FullPatientMedicationFragment } from '../graphql/types';
 import { MedicationsLoadingError } from './medications-loading-error';
 import PatientMedication from './patient-medication';
 
-interface IProps {
+export interface IProps {
   patientId: string;
   loading?: boolean;
   error?: string;
@@ -15,7 +15,7 @@ interface IProps {
   refetchPatientMedications?: (variables: { patientId: string }) => any;
 }
 
-interface IState {
+export /**/interface IState {
   selectedMedicationId: string | null;
 }
 

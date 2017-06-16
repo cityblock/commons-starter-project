@@ -1,9 +1,8 @@
-// import * as classNames from 'classnames';
 import * as React from 'react';
 import * as styles from '../css/components/table-loading-error.css';
 import * as loadingStyles from '../css/shared/loading-spinner.css';
 
-interface IProps {
+export interface IProps {
   error?: string;
   isLoading: boolean;
   onRetryClick: () => any;

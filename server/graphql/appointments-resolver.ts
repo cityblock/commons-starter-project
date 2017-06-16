@@ -15,15 +15,15 @@ import User from '../models/user';
 import accessControls from './shared/access-controls';
 import { IContext } from './shared/utils';
 
-interface IAppointmentStartArgs {
+export interface IAppointmentStartArgs {
   input: IAppointmentStartInput;
 }
 
-interface IAppointmentEndArgs {
+export interface IAppointmentEndArgs {
   input: IAppointmentEndInput;
 }
 
-interface IAppointmentAddNoteArgs {
+export interface IAppointmentAddNoteArgs {
   input: IAppointmentAddNoteInput;
 }
 

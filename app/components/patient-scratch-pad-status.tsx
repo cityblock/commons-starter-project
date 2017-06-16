@@ -2,7 +2,7 @@ import * as classNames from 'classnames';
 import * as React from 'react';
 import * as styles from '../css/components/patient-scratch-pad.css';
 
-interface IProps {
+export interface IProps {
   saveSuccess: boolean;
   saveError: boolean;
   loadingError?: string;

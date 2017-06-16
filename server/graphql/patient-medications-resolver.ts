@@ -4,7 +4,7 @@ import Patient from '../models/patient';
 import accessControls from './shared/access-controls';
 import { IContext } from './shared/utils';
 
-interface IResolvePatientMedicationsOptions {
+export interface IResolvePatientMedicationsOptions {
   patientId: string;
 }
 

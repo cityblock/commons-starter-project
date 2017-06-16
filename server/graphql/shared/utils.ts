@@ -31,7 +31,7 @@ export function formatRelayEdge(node: any, id: string) {
   };
 }
 
-interface IJWTData {
+export interface IJWTData {
   userId: string;
   userRole: UserRole;
   lastLoginAt: string;
@@ -58,7 +58,7 @@ export async function parseAndVerifyJwt(jwt: string) {
 
 const isInvalidLogin = (tokenLastLoginAt: string, userLastLoginAt: string | undefined): boolean => {
   const tokenLoginDateTime = new Date(tokenLastLoginAt).valueOf() + 1000;
-  const currentLoginDateTime = new Date(userLastLoginAt || 0).valueOf();
+  const currentLoginDateTime = new Date(userLastLoginAt || '0').valueOf();
 
   const newerLoginExists = tokenLoginDateTime < currentLoginDateTime;
   const loginTooOld = tokenLoginDateTime + TWENTY_FOUR_HOURS_IN_MILLISECONDS < new Date().valueOf();
@@ -68,11 +68,9 @@ const isInvalidLogin = (tokenLastLoginAt: string, userLastLoginAt: string | unde
 
 export async function getGraphQLContext(request: express.Request): Promise<IContext> {
   const authToken = request.headers.auth_token;
-  const [db, athenaApi, redoxApi] = await Promise.all([
-    Db.get(),
-    AthenaApi.get(),
-    RedoxApi.get(),
-  ]);
+  const db = await Db.get();
+  const athenaApi = await AthenaApi.get();
+  const redoxApi = await RedoxApi.get();
 
   let userRole: UserRole = 'anonymousUser';
   let userId;

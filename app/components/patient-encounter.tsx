@@ -3,7 +3,7 @@ import * as React from 'react';
 import * as styles from '../css/components/patient-encounter.css';
 import { FullPatientEncounterFragment } from '../graphql/types';
 
-interface IProps {
+export interface IProps {
   encounter: FullPatientEncounterFragment;
 }
 

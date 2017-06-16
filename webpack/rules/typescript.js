@@ -1,12 +1,10 @@
-const PATHS = require("../paths");
-
 module.exports = ({ production = false } = {}) => {
   return {
-    test: /\.tsx?$/,
     loader: "awesome-typescript-loader",
     options: {
+      configFileName: "tsconfig.webpack.json",
       logInfoToStdOut: true,
-      configFileName: "tsconfig.webpack.json"
-    }
+    },
+    test: /\.tsx?$/,
   };
 };

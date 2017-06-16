@@ -4,11 +4,11 @@ import Clinic from '../models/clinic';
 import accessControls from './shared/access-controls';
 import { formatRelayEdge, IContext } from './shared/utils';
 
-interface IClinicCreateArgs {
+export interface IClinicCreateArgs {
   input: IClinicCreateInput;
 }
 
-interface IResolveClinicOptions {
+export interface IResolveClinicOptions {
   clinicId: string;
 }
 

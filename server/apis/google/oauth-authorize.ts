@@ -3,7 +3,7 @@ import { decode } from 'jsonwebtoken';
 import { stringify } from 'qs';
 import config from '../../config';
 
-interface IAuthToken {
+export interface IAuthToken {
   access_token: string;
   token_type: 'Bearer';
   expires_in: number;

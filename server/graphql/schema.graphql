@@ -1,6 +1,3 @@
-scalar GraphQLEmail
-scalar GraphQLDateTime
-
 enum UserRole {
   physician
   nurseCareManager
@@ -26,7 +23,7 @@ type User implements uniqueId {
   lastName: String
   email: String
   userRole: UserRole!
-  createdAt: GraphQLDateTime!
+  createdAt: String!
   homeClinicId: String!
   googleProfileImageUrl: String
 }
@@ -191,8 +188,8 @@ type Clinic implements uniqueId {
   id: ID!
   name: String!
   departmentId: Int!
-  createdAt: GraphQLDateTime!
-  updatedAt: GraphQLDateTime!
+  createdAt: String!
+  updatedAt: String!
 }
 
 # PatientMedication
@@ -272,7 +269,7 @@ type PatientScratchPad {
 
 # params for creating a user
 input UserCreateInput {
-  email: GraphQLEmail!
+  email: String!
   homeClinicId: String!
 }
 
@@ -320,37 +317,6 @@ input PatientEditInput {
   lastName: String
   dob: String
   gender: String
-}
-
-# params for editing a patient health record in athena
-input PatientHealthRecordEditInput {
-  patientId: String!
-  firstName: String
-  middleName: String
-  lastName: String
-  gender: String
-  zip: Int
-  dateOfBirth: String
-  suffix: String
-  preferredName: String
-  race: String
-  status: String
-  ssn: String
-  homebound: Boolean
-  language: String
-  maritalStatus: String
-
-  email: String
-  homePhone: String
-  mobilePhone: String
-  consentToCall: Boolean
-  consentToText: Boolean
-
-  city: String
-  address1: String
-  county: String
-  country: String
-  state: String
 }
 
 # params for creating a patient in the db and in athena
@@ -422,9 +388,6 @@ type RootMutationType {
 
   # Edit fields on patient stored in the db
   patientEdit(input: PatientEditInput): Patient
-
-  # Edit a patient's health record
-  patientHealthRecordEdit(input: PatientHealthRecordEditInput): PatientHealthRecord
 
   # Setup patient creates the patient in the db AND in athena
   patientSetup(input: PatientSetupInput): Patient

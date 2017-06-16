@@ -42,7 +42,7 @@ declare module 'schema' {
     lastName: string | null;
     email: string | null;
     userRole: IUserRoleEnum;
-    createdAt: any;
+    createdAt: string;
     homeClinicId: string;
     googleProfileImageUrl: string | null;
   }
@@ -232,8 +232,8 @@ declare module 'schema' {
     id: string;
     name: string;
     departmentId: number;
-    createdAt: any;
-    updatedAt: any;
+    createdAt: string;
+    updatedAt: string;
   }
 
   /*
@@ -314,7 +314,6 @@ declare module 'schema' {
     appointmentStart: IAppointment | null;
     appointmentEnd: IAppointmentEndResult | null;
     patientEdit: IPatient | null;
-    patientHealthRecordEdit: IPatientHealthRecord | null;
     patientSetup: IPatient | null;
     patientScratchPadEdit: IPatientScratchPad | null;
   }
@@ -323,7 +322,7 @@ declare module 'schema' {
     description: params for creating a user
   */
   interface IUserCreateInput {
-    email: any;
+    email: string;
     homeClinicId: string;
   }
 
@@ -431,37 +430,6 @@ declare module 'schema' {
     lastName?: string | null;
     dob?: string | null;
     gender?: string | null;
-  }
-
-  /*
-    description: params for editing a patient health record in athena
-  */
-  interface IPatientHealthRecordEditInput {
-    patientId: string;
-    firstName?: string | null;
-    middleName?: string | null;
-    lastName?: string | null;
-    gender?: string | null;
-    zip?: number | null;
-    dateOfBirth?: string | null;
-    suffix?: string | null;
-    preferredName?: string | null;
-    race?: string | null;
-    status?: string | null;
-    ssn?: string | null;
-    homebound?: boolean | null;
-    language?: string | null;
-    maritalStatus?: string | null;
-    email?: string | null;
-    homePhone?: string | null;
-    mobilePhone?: string | null;
-    consentToCall?: boolean | null;
-    consentToText?: boolean | null;
-    city?: string | null;
-    address1?: string | null;
-    county?: string | null;
-    country?: string | null;
-    state?: string | null;
   }
 
   /*

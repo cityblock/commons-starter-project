@@ -5,7 +5,7 @@ import Patient from '../models/patient';
 import accessControls from './shared/access-controls';
 import { IContext } from './shared/utils';
 
-interface IResolvePatientEncountersOptions extends IPaginationOptions {
+export interface IResolvePatientEncountersOptions extends IPaginationOptions {
   patientId: string;
 }
 

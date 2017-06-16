@@ -1,6 +1,4 @@
-import express from 'express';
-
-export default function app(req: express.Request, res: express.Response) {
+export default function app(req: any, res: any) {
   const html = `
     <!doctype html>
     <html>

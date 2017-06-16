@@ -1,9 +1,8 @@
 // These interfaces define the request and return types for the Redox API.
-
 export type DataModels = 'PatientAdmin' | 'Clinical Summary';
 export type EventTypes = 'NewPatient' | 'PatientQuery';
 
-interface IRedoxMeta {
+export interface IRedoxMeta {
   DataModel: DataModels;
   EventType: EventTypes;
   EventDateTime: string;

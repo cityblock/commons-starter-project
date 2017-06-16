@@ -8,7 +8,7 @@ import { EncountersLoadingError } from './encounters-loading-error';
 import NewPatientEncounter from './new-patient-encounter';
 import PatientEncounter from './patient-encounter';
 
-interface IProps {
+export interface IProps {
   patientId: string;
   loading?: boolean;
   error?: string;

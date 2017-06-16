@@ -6,7 +6,6 @@ import {
   IPatientScratchPad,
   IPatientSetupInput,
 } from 'schema';
-import { IAthenaEditPatient } from '../apis/athena';
 import { formatPatientHealthRecord } from '../apis/athena/formatters';
 import { getAthenaPatientIdFromCreate } from '../apis/redox/formatters';
 import CareTeam from '../models/care-team';
@@ -15,7 +14,7 @@ import Patient from '../models/patient';
 import accessControls from './shared/access-controls';
 import { IContext } from './shared/utils';
 
-interface IQuery {
+export interface IQuery {
   patientId: string;
 }
 
@@ -29,7 +28,7 @@ export async function resolvePatient(
   return await Patient.get(patientId);
 }
 
-interface IPatientEditOptions {
+export interface IPatientEditOptions {
   input: IPatientEditInput;
 }
 
@@ -44,7 +43,7 @@ export async function patientEdit(
   return await Patient.edit(filtered, input.patientId);
 }
 
-interface IPatientSetupOptions {
+export interface IPatientSetupOptions {
   input: IPatientSetupInput;
 }
 
@@ -113,27 +112,8 @@ export async function resolvePatientHealthRecord(
   return await formatPatientHealthRecord(athenaPatient, patientId);
 }
 
-interface IEditPatientRequiredFields {
+export interface IEditPatientRequiredFields {
   patientId: string;
-}
-
-interface IPatientHealthRecordEditOptions {
-  input: Pick<IEditPatientRequiredFields, 'patientId'> & IAthenaEditPatient;
-}
-
-export async function patientHealthRecordEdit(
-  root: any,
-  { input }: IPatientHealthRecordEditOptions,
-  { athenaApi, userRole, userId }: IContext,
-): Promise<IPatientHealthRecord> {
-  await accessControls.isAllowedForUser(userRole, 'edit', 'patient', input.patientId, userId);
-
-  const athenaPatientId = await Patient.getAthenaPatientId(input.patientId);
-
-  await athenaApi.patientEdit(input, athenaPatientId);
-  const patient = await athenaApi.getPatient(athenaPatientId);
-
-  return formatPatientHealthRecord(patient, input.patientId);
 }
 
 export async function resolvePatientScratchPad(
@@ -148,7 +128,7 @@ export async function resolvePatientScratchPad(
   return { text: patient.scratchPad };
 }
 
-interface IPatientScratchPadEditOptions {
+export interface IPatientScratchPadEditOptions {
   input: {
     patientId: string;
     text: string;

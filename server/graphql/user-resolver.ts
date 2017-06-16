@@ -6,19 +6,19 @@ import User from '../models/user';
 import accessControls from './shared/access-controls';
 import { formatRelayEdge, signJwt, IContext } from './shared/utils';
 
-interface IUserCreateArgs {
+export interface IUserCreateArgs {
   input: IUserCreateInput;
 }
 
-interface IResolveUserOptions {
+export interface IResolveUserOptions {
   userId: string;
 }
 
-interface IUserLoginOptions {
+export interface IUserLoginOptions {
   input: IUserLoginInput;
 }
 
-interface IUsersFilterOptions {
+export interface IUsersFilterOptions {
   pageNumber: number;
   pageSize: number;
 }

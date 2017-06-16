@@ -1,26 +1,27 @@
-import { ICareTeamInput, IPatientEdges, IPatientNode } from 'schema';
+import { ICareTeamInput, IPatientEdges, IPatientNode, IUser } from 'schema';
 import { IPaginatedResults, IPaginationOptions } from '../db';
 import { convertUser } from '../graphql/shared/converter';
 import CareTeam from '../models/care-team';
 import Patient from '../models/patient';
+import User from '../models/user';
 import accessControls from './shared/access-controls';
 import { formatRelayEdge, IContext } from './shared/utils';
 
-interface IQuery {
+export interface IQuery {
   patientId: string;
 }
 
-interface ICareTeamOptions {
+export interface ICareTeamOptions {
   input: ICareTeamInput;
 }
 
-interface IUserPatientPanelOptions extends IPaginationOptions {
+export interface IUserPatientPanelOptions extends IPaginationOptions {
   userId: string;
 }
 
 export async function careTeamAddUser(
   source: any, { input }: ICareTeamOptions, context: IContext,
-) {
+): Promise<User[]> {
   const { userRole } = context;
   const { userId, patientId } = input;
   await accessControls.isAllowed(userRole, 'edit', 'patient');
@@ -42,7 +43,7 @@ export async function resolvePatientCareTeam(
   root: any,
   { patientId }: IQuery,
   { userRole, userId }: IContext,
-) {
+): Promise<IUser[]> {
   await accessControls.isAllowedForUser(userRole, 'view', 'patient', patientId, userId);
 
   const users = await CareTeam.getForPatient(patientId);

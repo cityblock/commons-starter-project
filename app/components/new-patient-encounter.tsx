@@ -11,7 +11,7 @@ import {
 } from '../graphql/types';
 import NewPatientEncounterLoadingError from './new-patient-encounter-loading-error';
 
-interface IProps {
+export interface IProps {
   patientId: string;
   startAppointment: (
     options: { variables: AppointmentStartMutationVariables },
@@ -21,7 +21,7 @@ interface IProps {
   ) => { data: { appointmentEnd: { success: boolean } } };
 }
 
-interface IState {
+export interface IState {
   open: boolean;
   encounterReason: string;
   encounterLocation: string;

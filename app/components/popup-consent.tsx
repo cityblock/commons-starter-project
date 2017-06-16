@@ -2,12 +2,12 @@ import * as React from 'react';
 import * as styles from '../css/components/popup-consent.css';
 import Popup from './popup';
 
-interface IProps {
+export interface IProps {
   visible: boolean;
   onClose: () => void;
 }
 
-class PopupConsent extends React.Component<IProps, {}> {
+export default class PopupConsent extends React.Component<IProps, {}> {
 
   render() {
     return (
@@ -33,5 +33,3 @@ class PopupConsent extends React.Component<IProps, {}> {
       </Popup>);
   }
 }
-
-export default PopupConsent;

@@ -16,12 +16,12 @@ export interface IPatientEditableFields {
   language: string;
 }
 
-interface IEditPatient extends Partial<IPatientEditableFields> {
+export interface IEditPatient extends Partial<IPatientEditableFields> {
   athenaPatientId?: number;
   scratchPad?: string;
 }
 
-type GetByOptions = 'athenaPatientId';
+export type GetByOptions = 'athenaPatientId';
 
 /* tslint:disable:member-ordering */
 export default class Patient extends Model {

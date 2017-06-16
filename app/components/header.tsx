@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import * as styles from '../css/components/header.css';
 import { FullUserFragment } from '../graphql/types';
 
-interface IProps {
+export interface IProps {
   currentUser: FullUserFragment;
 }
 

@@ -6,7 +6,7 @@ export interface IProps {
   children: any;
 }
 
-class Popup extends React.Component<IProps, {}> {
+export default class Popup extends React.Component<IProps, {}> {
 
   render() {
     // Eventually there will be a transition here...
@@ -18,8 +18,6 @@ class Popup extends React.Component<IProps, {}> {
           </div>
         </div>);
     }
-    return null;
+    return <div />;
   }
 }
-
-export default Popup;

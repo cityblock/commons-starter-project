@@ -10,17 +10,17 @@ import * as styles from '../css/components/patient-panel-scene.css';
 import { getQuery } from '../graphql/helpers';
 import { ShortPatientFragment } from '../graphql/types';
 
-interface IPageParams {
+export interface IPageParams {
   pageNumber: number;
   pageSize: number;
 }
 
-interface IPatientPanelPageInfo {
+export interface IPatientPanelPageInfo {
   hasNextPage: boolean;
   hasPreviousPage: boolean;
 }
 
-interface IPatientPanelNode {
+export interface IPatientPanelNode {
   node: ShortPatientFragment;
 }
 

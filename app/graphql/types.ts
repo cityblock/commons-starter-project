@@ -140,37 +140,6 @@ export interface LogInUserMutation {
   } | null;
 }
 
-export interface PatientHealthRecordEditMutationVariables {
-  patientId: string;
-  firstName: string | null;
-  lastName: string | null;
-  dateOfBirth: string | null;
-  gender: string | null;
-  zip: number | null;
-  preferredName: string | null;
-  race: string | null;
-  status: string | null;
-  ssn: string | null;
-  homebound: boolean | null;
-  language: string | null;
-  maritalStatus: string | null;
-  email: string | null;
-  homePhone: string | null;
-  mobilePhone: string | null;
-  consentToCall: boolean | null;
-  consentToText: boolean | null;
-  city: string | null;
-  address1: string | null;
-  county: string | null;
-  country: string | null;
-  state: string | null;
-}
-
-export interface PatientHealthRecordEditMutation {
-  // Edit a patient's health record
-  patientHealthRecordEdit: FullPatientHealthRecordFragment;
-}
-
 export interface PatientHealthRecordQueryVariables {
   patientId: string;
 }

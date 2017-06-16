@@ -4,6 +4,9 @@
 # node.js
 node_modules/
 
+# compiled ts
+server-compiled
+
 # logs
 *.log
 npm-debug.log*

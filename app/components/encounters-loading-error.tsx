@@ -2,7 +2,7 @@ import * as classNames from 'classnames';
 import * as React from 'react';
 import * as styles from '../css/components/patient-encounters.css';
 
-interface IProps {
+export interface IProps {
   onRetryClick: () => any;
   loading?: boolean;
   error?: string;

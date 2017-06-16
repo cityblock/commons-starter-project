@@ -4,7 +4,7 @@ const css = require("./css");
 
 module.exports = ({ production = false } = {}) => (
   [
-    typescript({ production }),
+    typescript(),
     css({ production }),
     image(),
   ]

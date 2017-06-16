@@ -121,6 +121,7 @@
     "acl": "^0.4.10",
     "apollo-client": "^1.4.2",
     "babel-loader": "^7.0.0",
+    "babel-polyfill": "^6.23.0",
     "babel-preset-env": "^1.5.2",
     "base-64": "^0.1.0",
     "basic-auth": "^1.1.0",

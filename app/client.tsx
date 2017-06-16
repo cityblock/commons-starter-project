@@ -1,3 +1,4 @@
+import 'babel-polyfill';
 import createHistory from 'history/createBrowserHistory';
 import * as React from 'react';
 import {

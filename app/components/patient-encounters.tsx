@@ -81,10 +81,25 @@ class PatientEncounters extends React.Component<IProps, {}> {
     });
 
     return (
-      <div className={styles.encountersPanel}>
-        <NewPatientEncounter patientId={ patientId } />
-        <div className={encountersListStyles}>
-          {this.renderPatientEncounters(encountersList)}
+      <div>
+        <div className={styles.sortSearchBar}>
+          <div className={styles.sort}>
+            <div className={styles.sortLabel}>Sort by:</div>
+            <div className={styles.sortDropdown}>
+              <select value='Newest first'>
+                <option value='Newest first'>Newest first</option>
+              </select>
+            </div>
+          </div>
+          <div className={styles.search}>
+            <input required type='text' placeholder='Search by user or keywords' />
+          </div>
+        </div>
+        <div className={styles.encountersPanel}>
+          <NewPatientEncounter patientId={ patientId } />
+          <div className={encountersListStyles}>
+            {this.renderPatientEncounters(encountersList)}
+          </div>
         </div>
       </div>
     );

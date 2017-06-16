@@ -1,4 +1,8 @@
 @import '../common/sizes';
+::-webkit-scrollbar {
+  display: none;
+}
+
 .invertedButton {
   @apply --inverted-button;
 }
@@ -7,7 +11,11 @@
   @apply --button;
 }
 
-.sortSearchBar {
+.select {
+  @apply --select;
+}
+
+.navSaveBar {
   padding: 0 var(--medium-gutter);
   height: 50px;
   background-color: var(--dark-gray-background-color);
@@ -16,14 +24,14 @@
   lost-flex-container: row;
 }
 
-.sort {
+.nav {
   justify-content: space-between;
   padding: 10px 0;
   align-items: center;
   lost-flex-container: row;
 }
 
-.sortLabel {
+.navLabel {
   color: var(--gray-font-color);
   font-family: var(--roboto);
   font-size: var(--default-font-size);
@@ -31,13 +39,12 @@
   padding-right: 10px;
 }
 
-.sortDropdown {
+.navDropdown {
   color: var(--black-color);
   font-family: var(--roboto);
 }
 
-.sortDropdown select {
-  @apply --select;
+.navDropdown select.select {
   font-size: var(--small-font-size);
   border-radius: 2px;
   height: 32px;
@@ -46,73 +53,131 @@
   background-position: 87% 50%;
 }
 
-.search {
-  color: var(--black-color);
-  font-family: var(--roboto);
-}
-
-.search input[type=text] {
-  width: 273px;
+.saveButton {
+  width: 173px;
   height: 32px;
-  border: 1px solid var(--border-color);
-  border-radius: 2px;
-  padding-left: 20px;
-
-  &::placeholder {
-    color: var(--light-gray-font-color);
-  }
+  padding: 9px 0 11px;
 }
 
-.encountersPanel {
+.infoPanel {
   background-color: var(--gray-background-color);
   padding: 20px var(--medium-gutter);
 }
 
-::-webkit-scrollbar {
-  display: none;
-}
-
-.encounters {
+.info {
   margin-top: var(--small-gutter);
   height: calc(100vh - 219px);
   overflow: scroll;
 }
 
-.encounters.emptyEncountersList {}
-
-.emptyEncountersMessage {
-  border: 1px dashed var(--border-color);
-  border-radius: 4px;
-  padding: 50px 0;
+.section {
+  padding: 51px 0 51px;
+  border-bottom: 1px solid var(--border-color);
 }
 
-.emptyEncountersLogo {
-  background-image: url('../../assets/calendar-event-grey.svg');
-  background-position: center center;
-  height: 30px;
-  width: 30px;
-  margin: 0 auto 25px;
+.section:first-child {
+  padding-top: 0;
 }
 
-.emptyEncountersLabel {
-  margin: 0 auto 10px;
-  text-align: center;
-  color: var(--light-gray-font-color);
+.section:last-child {
+  border-bottom: none;
+}
+
+.sectionTitle {
+  color: var(--black-color);
   font-family: var(--basetica-medium);
+  font-size: var(--medium-large-font-size);
+  line-height: var(--medium-large-font-line-height);
+  margin-bottom: var(--medium-gutter);
+}
+
+.radioRow {
+  margin-bottom: var(--medium-gutter);
+  lost-flex-container: row;
+}
+
+.radioRow {
+  justify-content: flex-start;
+  align-items: middle;
+}
+
+.radioLabel {
+  color: var(--black-color);
+  font-family: var(--basetica-medium);
+  font-size: var(--default-font-size);
+  line-height: 21px;
+  padding-right: 72px;
+}
+
+.radioRow input[type=radio] {
+  &:checked + label:after {
+    opacity: 1;
+  }
+}
+
+.radioContainer {
+  width: 20px;
+  height: 20px;
+  position: relative;
+  margin: 0px;
+  background: white;
+  border: 1px solid var(--border-color);
+  display: inline-block;
+  vertical-align: top;
+  margin-right: 10px;
+}
+
+.radioButtons {}
+
+.radioButton {
+  lost-column: 4/10 2 0px;
+  display: inline-block;
+  vertical-align: top;
+  min-width: 55px;
+}
+
+.radioContainer label {
+  width: 16px;
+  height: 16px;
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  background: white;
+  pointer-events: none;
+}
+
+.radioContainer label:after {
+  content: '';
+  width: 12px;
+  height: 12px;
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  background: var(--blue-color);
+  transition: opacity 0.3s;
+  opacity: 0;
+}
+
+.radioContainer label:hover::after {
+  opacity: 0.3;
+}
+
+.radioButtonLabel {
+  display: inline-block;
+  margin-top: 2px;
+}
+
+.multiInputRow select.select {
   font-size: var(--medium-font-size);
   line-height: var(--medium-font-line-height);
+  color: var(--black-color);
+  height: 50px;
+  width: 100%;
+  padding: 16px var(--small-gutter);
+  background-position: 87% 50%;
 }
 
-.emptyEncountersSubtext {
-  margin: 0 auto;
-  text-align: center;
-  color: var(--light-gray-font-color);
-  font-family: var(--roboto);
-  font-size: var(--default-font-size);
-  line-height: var(--default-line-height);
-}
-
-.encountersLoading {
+.patientInfoLoading {
   margin: 0 auto;
   text-align: center;
   color: var(--light-gray-font-color);
@@ -122,11 +187,11 @@
   padding-top: 50px;
 }
 
-.encountersError {
+.patientInfoError {
   margin: var(--gutter) var(--gutter) 0;
 }
 
-.encountersErrorIcon {
+.patientInfoErrorIcon {
   background-image: url('../../assets/error-circle.svg');
   background-position: center center;
   background-repeat: no-repeat;
@@ -136,7 +201,7 @@
   margin: 0 auto var(--small-gutter);
 }
 
-.encountersErrorLabel {
+.patientInfoErrorLabel {
   color: var(--default-font-color);
   font-family: var(--basetica-black);
   font-size: var(--medium-font-size);
@@ -145,7 +210,7 @@
   margin: 0 auto 10px;
 }
 
-.encountersErrorSubheading {
+.patientInfoErrorSubheading {
   color: var(--gray-font-color);
   font-family: var(--roboto);
   font-size: var(--default-font-size);
@@ -155,7 +220,7 @@
   padding: 0 var(--small-gutter);
 }
 
-.encountersErrorButton {
+.patientInfoErrorButton {
   width: 94px;
   height: 32px;
   margin: 0 auto;

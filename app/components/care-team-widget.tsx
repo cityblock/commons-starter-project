@@ -1,8 +1,9 @@
 import * as classNames from 'classnames';
 import * as React from 'react';
-import { graphql } from 'react-apollo';
+import { gql, graphql } from 'react-apollo';
 import * as styles from '../css/components/care-team-widget.css';
-import { getQuery } from '../graphql/helpers';
+import fullUserFragment from '../graphql/fragments/full-user.graphql';
+import careTeamQuery from '../graphql/queries/get-patient-care-team.graphql';
 import { FullUserFragment } from '../graphql/types';
 import CareTeamWidgetMember from './care-team-widget-member';
 
@@ -19,6 +20,7 @@ export interface IState {
 }
 
 class CareTeamWidget extends React.Component<IProps, IState> {
+
   constructor(props: any) {
     super(props);
 
@@ -100,9 +102,7 @@ class CareTeamWidget extends React.Component<IProps, IState> {
   }
 }
 
-const careTeamQuery = getQuery('app/graphql/queries/get-patient-care-team.graphql');
-
-export default graphql(careTeamQuery, {
+export default graphql(gql(careTeamQuery + fullUserFragment), {
   options: (props: IProps) => ({
     variables: {
       patientId: props.patientId,

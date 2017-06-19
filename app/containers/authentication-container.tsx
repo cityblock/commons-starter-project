@@ -1,9 +1,10 @@
 import * as React from 'react';
-import { graphql } from 'react-apollo';
+import { gql, graphql } from 'react-apollo';
 import { connect, Dispatch } from 'react-redux';
 import { push } from 'react-router-redux';
 import { Header } from '../components/header';
-import { getQuery } from '../graphql/helpers';
+import fullUserFragment from '../graphql/fragments/full-user.graphql';
+import currentUserQuery from '../graphql/queries/get-current-user.graphql';
 import { FullUserFragment } from '../graphql/types';
 
 export interface IProps {
@@ -41,9 +42,7 @@ function mapDispatchToProps(dispatch: Dispatch<() => void>): Partial<IProps> {
   };
 }
 
-const currentUserQuery = getQuery('app/graphql/queries/get-current-user.graphql');
-
-const AuthenticationWithGraphQL = graphql(currentUserQuery, {
+const AuthenticationWithGraphQL = graphql(gql(currentUserQuery + fullUserFragment), {
   props: ({ data }) => ({
     loading: (data ? data.loading : false),
     error: (data ? data.error : null),

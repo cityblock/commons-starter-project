@@ -7,5 +7,6 @@ module.exports = ({ production = false } = {}) => (
     typescript(),
     css({ production }),
     image(),
+    { test: /\.graphql$/, loader: 'raw-loader' },
   ]
 );

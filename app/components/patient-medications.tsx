@@ -1,8 +1,9 @@
 import * as classNames from 'classnames';
 import * as React from 'react';
-import { graphql } from 'react-apollo';
+import { gql, graphql } from 'react-apollo';
 import * as styles from '../css/components/patient-medications.css';
-import { getQuery } from '../graphql/helpers';
+import fullPatientMedicationsFragment from '../graphql/fragments/full-patient-medication.graphql';
+import patientMedicationsQuery from '../graphql/queries/get-patient-medications.graphql';
 import { FullPatientMedicationFragment } from '../graphql/types';
 import { MedicationsLoadingError } from './medications-loading-error';
 import PatientMedication from './patient-medication';
@@ -92,7 +93,6 @@ class PatientMedications extends React.Component<IProps, IState> {
   render() {
     const { patientMedications } = this.props;
     const medicationsList = patientMedications || [];
-
     const medicationsListStyles = classNames(styles.medicationsList, {
       [styles.emptyMedicationsList]: !medicationsList.length,
     });
@@ -127,9 +127,7 @@ const formatPatientMedications = (
   }
 };
 
-const patientMedicationsQuery = getQuery('app/graphql/queries/get-patient-medications.graphql');
-
-export default graphql(patientMedicationsQuery, {
+export default graphql(gql(patientMedicationsQuery + fullPatientMedicationsFragment), {
   options: (props: IProps) => ({
     variables: {
       patientId: props.patientId,

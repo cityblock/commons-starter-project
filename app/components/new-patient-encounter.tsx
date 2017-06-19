@@ -1,14 +1,17 @@
 import * as classNames from 'classnames';
 import * as moment from 'moment';
 import * as React from 'react';
-import { compose, graphql } from 'react-apollo';
+import { compose, gql, graphql } from 'react-apollo';
 import * as styles from '../css/components/new-patient-encounter.css';
-import { getQuery } from '../graphql/helpers';
+import fullAppointmentFragment from '../graphql/fragments/full-appointment.graphql';
+import appointmentEndMutation from '../graphql/queries/appointment-end-mutation.graphql';
+import appointmentStartMutation from '../graphql/queries/appointment-start-mutation.graphql';
 import {
   AppointmentEndMutationVariables,
   AppointmentStartMutationVariables,
   FullAppointmentFragment,
 } from '../graphql/types';
+
 import NewPatientEncounterLoadingError from './new-patient-encounter-loading-error';
 
 export interface IProps {
@@ -215,10 +218,7 @@ class NewPatientEncounter extends React.Component<IProps, IState> {
   }
 }
 
-const appointmentStartMutation = getQuery('app/graphql/queries/appointment-start-mutation.graphql');
-const appointmentEndMutation = getQuery('app/graphql/queries/appointment-end-mutation.graphql');
-
 export default (compose as any)(
-  graphql(appointmentStartMutation, { name: 'startAppointment' }),
-  graphql(appointmentEndMutation, { name: 'endAppointment' }),
+  graphql(gql(appointmentStartMutation + fullAppointmentFragment), { name: 'startAppointment' }),
+  graphql(gql(appointmentEndMutation), { name: 'endAppointment' }),
 )(NewPatientEncounter);

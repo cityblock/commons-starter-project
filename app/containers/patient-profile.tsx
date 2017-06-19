@@ -3,7 +3,7 @@ import * as langs from 'langs';
 import * as moment from 'moment';
 import * as querystring from 'querystring';
 import * as React from 'react';
-import { compose, graphql } from 'react-apollo';
+import { compose, gql, graphql } from 'react-apollo';
 import { connect, Dispatch } from 'react-redux';
 import { push } from 'react-router-redux';
 import { IState as IAppState } from '../client';
@@ -14,7 +14,8 @@ import PatientMedications from '../components/patient-medications';
 import PatientScratchPad from '../components/patient-scratch-pad';
 import { DATETIME_FORMAT } from '../config';
 import * as styles from '../css/components/patient-profile-scene.css';
-import { getQuery } from '../graphql/helpers';
+import shortPatientFragment from '../graphql/fragments/short-patient.graphql';
+import patientQuery from '../graphql/queries/get-patient.graphql';
 import { ShortPatientFragment } from '../graphql/types';
 
 export interface IProps {
@@ -175,8 +176,6 @@ class PatientProfileContainer extends React.Component<IProps, IState> {
   }
 }
 
-const patientQuery = getQuery('app/graphql/queries/get-patient.graphql');
-
 function mapDispatchToProps(dispatch: Dispatch<() => void>): Partial<IProps> {
   return {
     updatePageParams: (tab: string) => {
@@ -194,7 +193,7 @@ function mapStateToProps(state: IAppState, ownProps: IProps): Partial<IProps> {
 export default compose(
   connect(undefined, mapDispatchToProps),
   connect(mapStateToProps),
-  graphql(patientQuery, {
+  graphql(gql(patientQuery + shortPatientFragment), {
     options: (props: IProps) => ({
       variables: {
         patientId: props.patientId,

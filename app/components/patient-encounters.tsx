@@ -1,8 +1,9 @@
 import * as classNames from 'classnames';
 import * as React from 'react';
-import { graphql } from 'react-apollo';
+import { gql, graphql } from 'react-apollo';
 import * as styles from '../css/components/patient-encounters.css';
-import { getQuery } from '../graphql/helpers';
+import fullPatientEncounterFragment from '../graphql/fragments/full-patient-encounter.graphql';
+import patientEncountersQuery from '../graphql/queries/get-patient-encounters.graphql';
 import { FullPatientEncounterFragment } from '../graphql/types';
 import { EncountersLoadingError } from './encounters-loading-error';
 import NewPatientEncounter from './new-patient-encounter';
@@ -106,9 +107,7 @@ class PatientEncounters extends React.Component<IProps, {}> {
   }
 }
 
-const patientEncountersQuery = getQuery('app/graphql/queries/get-patient-encounters.graphql');
-
-export default graphql(patientEncountersQuery, {
+export default graphql(gql(patientEncountersQuery + fullPatientEncounterFragment), {
   options: (props: IProps) => ({
     variables: {
       patientId: props.patientId,

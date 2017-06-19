@@ -1,10 +1,12 @@
 import * as React from 'react';
-import { compose, graphql } from 'react-apollo';
+import { compose, gql, graphql } from 'react-apollo';
 import GoogleLogin, { GoogleLoginResponseOffline } from 'react-google-login';
 import { connect, Dispatch } from 'react-redux';
 import { push } from 'react-router-redux';
 import * as styles from '../css/components/login-scene.css';
-import { getQuery } from '../graphql/helpers';
+import fullUserFragment from '../graphql/fragments/full-user.graphql';
+import currentUserQuery from '../graphql/queries/get-current-user.graphql';
+import loginMutation from '../graphql/queries/log-in-user-mutation.graphql';
 import { FullUserFragment, LogInUserMutationVariables } from '../graphql/types';
 
 export interface IProps {
@@ -101,17 +103,14 @@ function mapDispatchToProps(dispatch: Dispatch<() => void>): Partial<IProps> {
   };
 }
 
-const currentUserQuery = getQuery('app/graphql/queries/get-current-user.graphql');
-const loginMutation = getQuery('app/graphql/queries/log-in-user-mutation.graphql');
-
 export default (compose as any)(
   connect(undefined, mapDispatchToProps),
-  graphql(currentUserQuery, {
+  graphql(gql(currentUserQuery + fullUserFragment), {
     props: ({ data }) => ({
       loading: (data ? data.loading : false),
       error: (data ? data.error : null),
       currentUser: (data ? (data as any).currentUser : null),
     }),
   }),
-  graphql(loginMutation, { name: 'logIn' }),
+  graphql(gql(loginMutation + fullUserFragment), { name: 'logIn' }),
 )(LoginContainer);

@@ -1,7 +1,7 @@
 import * as langs from 'langs';
 import * as moment from 'moment';
 import * as React from 'react';
-import { compose, graphql } from 'react-apollo';
+import { compose, gql, graphql } from 'react-apollo';
 import { connect, Dispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { push } from 'react-router-redux';
@@ -11,7 +11,10 @@ import PopupEnrollmentError from '../components/popup-enrollment-error';
 import PopupPatientCreated from '../components/popup-patient-created';
 import * as styles from '../css/components/patient-enrollment.css';
 import * as loadingStyles from '../css/shared/loading-spinner.css';
-import { getQuery } from '../graphql/helpers';
+import fullClinicFragment from '../graphql/fragments/full-clinic.graphql';
+import shortPatientFragment from '../graphql/fragments/short-patient.graphql';
+import getClinicsQuery from '../graphql/queries/clinics-get.graphql';
+import setupPatientMutation from '../graphql/queries/patient-setup-mutation.graphql';
 import {
   FullClinicFragment,
   PatientSetupMutationVariables,
@@ -564,9 +567,6 @@ class PatientEnrollmentContainer extends React.Component<IProps, IState> {
   }
 }
 
-const setupPatientMutation = getQuery('app/graphql/queries/patient-setup-mutation.graphql');
-const getClinicsQuery = getQuery('app/graphql/queries/clinics-get.graphql');
-
 function mapDispatchToProps(dispatch: Dispatch<() => void>): Partial<IProps> {
   return {
     onSuccess: (patientId: string) => {
@@ -583,8 +583,8 @@ function formatClinic(clinics: any) {
 
 export default (compose as any)(
   connect(undefined, mapDispatchToProps),
-  graphql(setupPatientMutation, { name: 'createPatient' }),
-  graphql(getClinicsQuery, {
+  graphql(gql(setupPatientMutation + shortPatientFragment), { name: 'createPatient' }),
+  graphql(gql(getClinicsQuery + fullClinicFragment), {
     options: {
       variables: {
         pageNumber: 0,

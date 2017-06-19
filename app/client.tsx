@@ -14,7 +14,6 @@ import { applyMiddleware, compose, createStore } from 'redux';
 import { combineReducers } from 'redux';
 import { createLogger } from 'redux-logger';
 import { API_URL } from './config';
-
 import Authentication from './containers/authentication-container';
 import LogIn from './containers/login-container';
 import Main from './containers/main';
@@ -79,6 +78,8 @@ render(
         )} />
       </Main>
     </ConnectedRouter>
-  </ApolloProvider>,
-  document.getElementById('app'),
-);
+  </ApolloProvider>, document.getElementById('app'));
+
+if ((module as any).hot) {
+  (module as any).hot.accept();
+}

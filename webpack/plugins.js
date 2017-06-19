@@ -5,8 +5,11 @@ const CopyWebpackPlugin = require("copy-webpack-plugin");
 module.exports = ({ production = false } = {}) => {
   if (!production) {
     return [
-      new webpack.EnvironmentPlugin(["NODE_ENV", "GOOGLE_OAUTH_TOKEN"]),
+      new webpack.optimize.OccurrenceOrderPlugin(),
+      new webpack.NamedModulesPlugin(),
       new webpack.NoEmitOnErrorsPlugin(),
+      new webpack.EnvironmentPlugin(["NODE_ENV", "GOOGLE_OAUTH_TOKEN"]),
+      new webpack.HotModuleReplacementPlugin(),
       new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
     ];
   }

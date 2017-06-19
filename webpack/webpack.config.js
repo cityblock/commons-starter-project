@@ -26,8 +26,14 @@ module.exports = (env = "") => {
 
   const clientRender = {
     context: PATHS.app,
-    devtool: "source-map",
-    entry: { app: ["./client"] },
+    devtool: 'cheap-module-eval-source-map',
+    entry: {
+      app: [
+        "webpack/hot/only-dev-server",
+        "webpack-hot-middleware/client",
+        "./client"
+      ]
+    },
     module: { rules: rules({ production: isProduction }) },
     node,
     output: {

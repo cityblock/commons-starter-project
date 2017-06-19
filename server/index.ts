@@ -31,6 +31,8 @@ export async function main(options: IMainOptions) {
     app.use(webpackDevMiddleware(
       compiler, { noInfo: true, publicPath: devConfig.output.publicPath }),
     );
+    app.use(require('webpack-hot-middleware')(compiler));
+
   }
 
   await expressConfig(app);

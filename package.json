@@ -71,6 +71,9 @@
     "@types/nock": "^8.2.1",
     "@types/react-test-renderer": "^15.5.0",
     "apollo-codegen": "^0.10.13",
+    "babel-loader": "^7.0.0",
+    "babel-polyfill": "^6.23.0",
+    "babel-preset-env": "^1.5.2",
     "coveralls": "^2.13.1",
     "expect": "^1.20.2",
     "foreman": "^2.0.0",
@@ -82,9 +85,11 @@
     "jest-css-modules": "^1.1.0",
     "nock": "^9.0.13",
     "node-mocks-http": "^1.6.2",
+    "react-hot-loader": "^1.3.1",
     "react-test-renderer": "^15.4.2",
     "ts-jest": "^20.0.6",
     "tslint": "^5.4.3",
+    "webpack": "^2.2.0",
     "webpack-dev-server": "^2.4.5"
   },
   "engines": {
@@ -120,9 +125,6 @@
     "@types/webpack": "^2.2.14",
     "acl": "^0.4.10",
     "apollo-client": "^1.4.2",
-    "babel-loader": "^7.0.0",
-    "babel-polyfill": "^6.23.0",
-    "babel-preset-env": "^1.5.2",
     "base-64": "^0.1.0",
     "basic-auth": "^1.1.0",
     "body-parser": "^1.17.2",
@@ -176,6 +178,6 @@
     "url-loader": "^0.5.9",
     "uuid": "^3.0.1",
     "validator": "^7.0.0",
-    "webpack": "^2.6.1"
+    "webpack-hot-middleware": "^2.18.0"
   }
 }

@@ -75,7 +75,7 @@ export async function patientSetup(
       language: input.language,
       email: input.email || undefined,
       homePhone: input.homePhone || undefined,
-      mobilePhone: input.mobilePhone ||  undefined,
+      mobilePhone: input.mobilePhone || undefined,
       consentToCall: input.consentToCall,
       consentToText: input.consentToText,
       insuranceType: input.insuranceType || undefined,

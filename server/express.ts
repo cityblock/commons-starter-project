@@ -14,33 +14,19 @@ import { checkPostgresHandler } from './handlers/pingdom/check-postgres-handler'
 import { checkRabbitHandler } from './handlers/pingdom/check-rabbit-handler';
 
 export const checkAuth = (
-  username: string,
-  password: string,
-) => (
-  req: any,
-  res: any,
-  next: express.NextFunction,
-  ) => {
-    const user = basicAuth(req);
+  username: string, password: string,
+) => (req: any, res: any, next: express.NextFunction) => {
+  const user = basicAuth(req);
 
-    if (!user || user.name !== username || user.pass !== password) {
-      res.set('WWW-Authenticate', 'Basic realm=Authorization Required');
-      return res.sendStatus(401);
-    }
-
-    next();
-  };
-
-export default async (app: express.Application) => {
-  /* istanbul ignore if  */
-  if (config.NODE_ENV === 'development') {
-    /* tslint:disable no-console */
-    console.log('Environment:');
-    console.log(config);
-    console.log('----');
-    /* tslint:enable no-console */
+  if (!user || user.name !== username || user.pass !== password) {
+    res.set('WWW-Authenticate', 'Basic realm=Authorization Required');
+    return res.sendStatus(401);
   }
 
+  next();
+};
+
+export default async (app: express.Application) => {
   // This adds request logging using some decent defaults.
   /* istanbul ignore if  */
   if (config.NODE_ENV === 'development') {
@@ -100,6 +86,7 @@ export default async (app: express.Application) => {
     console.log('--------------------------');
     console.log(`  Starting server on port: ${app.get('port')}`);
     console.log(`  Environment: ${config.NODE_ENV}`);
+    console.log('--------------------------');
     /* tslint:enable no-console */
   }
 };

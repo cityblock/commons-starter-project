@@ -1,4 +1,4 @@
-import { debounce } from 'lodash';
+import debounce from 'lodash.debounce';
 import * as React from 'react';
 import { compose, gql, graphql } from 'react-apollo';
 import * as styles from '../css/components/patient-scratch-pad.css';

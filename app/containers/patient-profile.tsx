@@ -41,13 +41,17 @@ const getPatientName = (patient: ShortPatientFragment) => (
   [patient.firstName, patient.middleName, patient.lastName].filter(Boolean).join(' ')
 );
 
+function getPageParams() {
+  return querystring.parse(window.location.search.substring(1));
+}
+
 class PatientProfileContainer extends React.Component<IProps, IState> {
   constructor(props: IProps) {
     super(props);
 
     this.onTabClick = this.onTabClick.bind(this);
 
-    const { tab } = querystring.parse(window.location.search.substring(1));
+    const { tab } = getPageParams();
 
     this.state = {
       selectedTab: tab || 'encounters',
@@ -55,6 +59,9 @@ class PatientProfileContainer extends React.Component<IProps, IState> {
   }
 
   componentWillReceiveProps(newProps: IProps) {
+    const { tab } = getPageParams();
+    this.setState(() => ({ selectedTab: tab || 'encounters' }));
+
     if (newProps.patient) {
       document.title = `${getPatientName(newProps.patient)} | Commons`;
     }

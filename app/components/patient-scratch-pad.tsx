@@ -47,14 +47,17 @@ class PatientScratchPad extends React.Component<IProps, IState> {
     this.reloadPatientScratchPad = this.reloadPatientScratchPad.bind(this);
 
     this.state = {
-      scratchPad: this.getScratchPadTextFromProps(props),
       saveSuccess: false,
       saveError: false,
     };
   }
 
   componentWillReceiveProps(nextProps: IProps) {
-    this.setState(() => ({ scratchPad: this.getScratchPadTextFromProps(nextProps) }));
+    const { scratchPad } = this.state;
+
+    if (!scratchPad) {
+      this.setState(() => ({ scratchPad: this.getScratchPadTextFromProps(nextProps) }));
+    }
   }
 
   getScratchPadTextFromProps(props: IProps) {

@@ -53,7 +53,8 @@
       "!app/assets/**",
       "!app/css/**",
       "!app/graphql/**",
-      "!server/lib/capture-output.ts"
+      "!server/lib/capture-output.ts",
+      "!server/apis/**/types.ts"
     ],
     "mapCoverage": true,
     "testMatch": [

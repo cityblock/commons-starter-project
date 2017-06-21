@@ -3,7 +3,7 @@ import * as langs from 'langs';
 import * as moment from 'moment';
 import * as querystring from 'querystring';
 import * as React from 'react';
-import { compose, gql, graphql } from 'react-apollo';
+import { compose, graphql } from 'react-apollo';
 import { connect, Dispatch } from 'react-redux';
 import { push } from 'react-router-redux';
 import { IState as IAppState } from '../client';
@@ -14,8 +14,7 @@ import PatientMedications from '../components/patient-medications';
 import PatientScratchPad from '../components/patient-scratch-pad';
 import { DATETIME_FORMAT } from '../config';
 import * as styles from '../css/components/patient-profile-scene.css';
-import shortPatientFragment from '../graphql/fragments/short-patient.graphql';
-import patientQuery from '../graphql/queries/get-patient.graphql';
+import * as patientQuery from '../graphql/queries/get-patient.graphql';
 import { ShortPatientFragment } from '../graphql/types';
 
 export interface IProps {
@@ -193,7 +192,7 @@ function mapStateToProps(state: IAppState, ownProps: IProps): Partial<IProps> {
 export default compose(
   connect(undefined, mapDispatchToProps),
   connect(mapStateToProps),
-  graphql(gql(patientQuery + shortPatientFragment), {
+  graphql(patientQuery as any, {
     options: (props: IProps) => ({
       variables: {
         patientId: props.patientId,

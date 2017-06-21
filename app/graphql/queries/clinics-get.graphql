@@ -1,3 +1,5 @@
+#import "../fragments/full-clinic.graphql"
+
 query getClinics($pageNumber: Int, $pageSize: Int) {
   clinics(pageNumber: $pageNumber, pageSize: $pageSize) {
     edges {

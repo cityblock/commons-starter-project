@@ -1,3 +1,5 @@
+#import "../fragments/short-patient.graphql"
+
 query getPatient($patientId: String!) {
   patient(patientId: $patientId) {
     ...ShortPatient

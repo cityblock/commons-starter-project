@@ -1,11 +1,10 @@
 import * as classNames from 'classnames';
 import * as moment from 'moment';
 import * as React from 'react';
-import { compose, gql, graphql } from 'react-apollo';
+import { compose, graphql } from 'react-apollo';
 import * as styles from '../css/components/new-patient-encounter.css';
-import fullAppointmentFragment from '../graphql/fragments/full-appointment.graphql';
-import appointmentEndMutation from '../graphql/queries/appointment-end-mutation.graphql';
-import appointmentStartMutation from '../graphql/queries/appointment-start-mutation.graphql';
+import * as appointmentEndMutation from '../graphql/queries/appointment-end-mutation.graphql';
+import * as appointmentStartMutation from '../graphql/queries/appointment-start-mutation.graphql';
 import {
   AppointmentEndMutationVariables,
   AppointmentStartMutationVariables,
@@ -219,6 +218,6 @@ class NewPatientEncounter extends React.Component<IProps, IState> {
 }
 
 export default (compose as any)(
-  graphql(gql(appointmentStartMutation + fullAppointmentFragment), { name: 'startAppointment' }),
-  graphql(gql(appointmentEndMutation), { name: 'endAppointment' }),
+  graphql(appointmentStartMutation as any, { name: 'startAppointment' }),
+  graphql(appointmentEndMutation as any, { name: 'endAppointment' }),
 )(NewPatientEncounter);

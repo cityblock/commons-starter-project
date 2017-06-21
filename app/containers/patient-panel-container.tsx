@@ -1,14 +1,13 @@
 import * as querystring from 'querystring';
 import * as React from 'react';
-import { compose, gql, graphql } from 'react-apollo';
+import { compose, graphql } from 'react-apollo';
 import { connect, Dispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { push } from 'react-router-redux';
 import { PatientRoster } from '../components/patient-roster';
 import { PatientRosterPagination } from '../components/patient-roster-pagination';
 import * as styles from '../css/components/patient-panel-scene.css';
-import shortPatientFragment from '../graphql/fragments/short-patient.graphql';
-import patientPanelQuery from '../graphql/queries/get-patient-panel.graphql';
+import * as patientPanelQuery from '../graphql/queries/get-patient-panel.graphql';
 import { ShortPatientFragment } from '../graphql/types';
 
 export interface IPageParams {
@@ -162,7 +161,7 @@ function mapDispatchToProps(dispatch: Dispatch<() => void>): Partial<IProps> {
 
 export default compose(
   connect(undefined, mapDispatchToProps),
-  graphql(gql(patientPanelQuery + shortPatientFragment), {
+  graphql(patientPanelQuery as any, {
     options: (props: IProps) => ({
       variables: getPageParams(),
     }),

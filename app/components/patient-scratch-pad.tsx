@@ -1,11 +1,10 @@
-import debounce from 'lodash.debounce';
+import { debounce } from 'lodash';
 import * as React from 'react';
-import { compose, gql, graphql } from 'react-apollo';
+import { compose, graphql } from 'react-apollo';
 import * as styles from '../css/components/patient-scratch-pad.css';
-import fullPatientScratchPadFragment from '../graphql/fragments/full-patient-scratch-pad.graphql';
-import patientScratchPadQuery from '../graphql/queries/get-patient-scratch-pad.graphql';
+import * as patientScratchPadQuery from '../graphql/queries/get-patient-scratch-pad.graphql';
 /* tslint:disable:max-line-length */
-import savePatientScratchPadMutation from '../graphql/queries/patient-scratch-pad-edit-mutation.graphql';
+import * as savePatientScratchPadMutation from '../graphql/queries/patient-scratch-pad-edit-mutation.graphql';
 /* tslint:enable:max-line-length */
 import {
   FullPatientScratchPadFragment,
@@ -130,9 +129,9 @@ class PatientScratchPad extends React.Component<IProps, IState> {
 }
 
 export default (compose as any)(
-  graphql(gql(savePatientScratchPadMutation + fullPatientScratchPadFragment),
+  graphql(savePatientScratchPadMutation as any,
    { name: 'saveScratchPad' }),
-  graphql(gql(patientScratchPadQuery + fullPatientScratchPadFragment), {
+  graphql(patientScratchPadQuery as any, {
     options: (props: IProps) => ({
       variables: {
         patientId: props.patientId,

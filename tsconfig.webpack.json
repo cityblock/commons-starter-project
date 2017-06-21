@@ -9,8 +9,5 @@
     "**/spec.helpers.ts",
     "**/*.spec.ts",
     "**/*.spec.tsx"
-  ],
-  "compilerOptions": {
-    "module": "es2015"
-  }
+  ]
 }

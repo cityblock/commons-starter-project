@@ -1,9 +1,8 @@
 import * as classNames from 'classnames';
 import * as React from 'react';
-import { gql, graphql } from 'react-apollo';
+import { graphql } from 'react-apollo';
 import * as styles from '../css/components/patient-medications.css';
-import fullPatientMedicationsFragment from '../graphql/fragments/full-patient-medication.graphql';
-import patientMedicationsQuery from '../graphql/queries/get-patient-medications.graphql';
+import * as patientMedicationsQuery from '../graphql/queries/get-patient-medications.graphql';
 import { FullPatientMedicationFragment } from '../graphql/types';
 import { MedicationsLoadingError } from './medications-loading-error';
 import PatientMedication from './patient-medication';
@@ -127,7 +126,7 @@ const formatPatientMedications = (
   }
 };
 
-export default graphql(gql(patientMedicationsQuery + fullPatientMedicationsFragment), {
+export default graphql(patientMedicationsQuery as any, {
   options: (props: IProps) => ({
     variables: {
       patientId: props.patientId,

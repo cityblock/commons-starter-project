@@ -46,6 +46,13 @@
     "moduleNameMapper": {
       "\\.(css)$": "<rootDir>/node_modules/jest-css-modules"
     },
+    "collectCoverageFrom": [
+      "app/**/*.{ts,tsx}",
+      "server/**/*.{ts,tsx}",
+      "!app/assets/**",
+      "!app/css/**",
+      "!app/graphql/**"
+    ],
     "mapCoverage": true,
     "testMatch": [
       "<rootDir>/app/**/?(*.)(spec|test).ts?(x)",

@@ -49,9 +49,11 @@
     "collectCoverageFrom": [
       "app/**/*.{ts,tsx}",
       "server/**/*.{ts,tsx}",
+      "!app/spec.helpers.ts",
       "!app/assets/**",
       "!app/css/**",
-      "!app/graphql/**"
+      "!app/graphql/**",
+      "!server/lib/capture-output.ts"
     ],
     "mapCoverage": true,
     "testMatch": [

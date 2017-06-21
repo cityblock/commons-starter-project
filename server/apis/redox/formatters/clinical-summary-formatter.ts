@@ -54,7 +54,10 @@ export function formatPatientEncounters(
 export function formatPatientMedications(
   medications: IRedoxClinicalSummaryMedication[],
 ): IPatientMedications {
-  if (!medications.length) {
+  const emptyMeds = !medications.length;
+  const noMedsMessage = medications.length && medications[0].Product.Name === 'None recorded.';
+
+  if (emptyMeds || noMedsMessage) {
     return { medications: { active: [], inactive: [] } };
   } else {
     const now = new Date();

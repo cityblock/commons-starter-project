@@ -1,18 +1,78 @@
 import * as classNames from 'classnames';
+import * as langs from 'langs';
+import * as moment from 'moment';
 import * as React from 'react';
 import * as styles from '../css/components/patient-info.css';
 import * as inputStyles from '../css/shared/inputs.css';
+import { ShortPatientFragment } from '../graphql/types';
 
 export interface IProps {
-  patientId: string;
+  patient?: ShortPatientFragment;
 }
 
-export default class PatientInfo extends React.Component<IProps, {}> {
+export interface IState {
+  firstName?: string;
+  middleName?: string;
+  lastName?: string;
+  dateOfBirth?: string;
+  gender?: string;
+  language?: string;
+}
+
+const DOB_FORMAT = 'MM/DD/YYYY';
+
+const languagesHtml = langs.all().map((language: langs.Language) => (
+  <option key={language['1']} value={language['1']}>{language.name}</option>
+));
+
+export default class PatientInfo extends React.Component<IProps, IState> {
   constructor(props: IProps) {
     super(props);
+
+    this.state = {
+      firstName: '',
+      middleName: '',
+      lastName: '',
+      gender: '',
+      language: '',
+    };
+
+    this.onChange = this.onChange.bind(this);
+  }
+
+  componentWillReceiveProps(nextProps: IProps) {
+    const { patient } = nextProps;
+
+    if (patient) {
+      const { dateOfBirth } = patient;
+
+      this.setState(() => ({
+        firstName: patient.firstName || '',
+        middleName: patient.middleName || '',
+        lastName: patient.lastName || '',
+        dateOfBirth: dateOfBirth ? moment(dateOfBirth || '0', DOB_FORMAT).format('YYYY-MM-DD') : '',
+        gender: patient.gender || '',
+        language: patient.language || '',
+      }));
+    }
+  }
+
+  onChange(event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) {
+    const property = event.target.name;
+
+    this.setState({ [property]: event.target.value });
   }
 
   render() {
+    const {
+      firstName,
+      middleName,
+      lastName,
+      dateOfBirth,
+      gender,
+      language,
+    } = this.state;
+
     return (
       <div>
         <div className={styles.navSaveBar}>
@@ -33,29 +93,37 @@ export default class PatientInfo extends React.Component<IProps, {}> {
               <div className={inputStyles.multiInputFormRow}>
                 <div className={inputStyles.inputGroup}>
                   <div className={inputStyles.inputLabel}>First name</div>
-                  <input type='text' />
+                  <input name='firstName' type='text' value={firstName} onChange={this.onChange} />
                 </div>
                 <div className={inputStyles.inputGroup}>
                   <div className={inputStyles.inputLabel}>
                     Middle name <span className={inputStyles.optionalLabel}>optional</span>
                   </div>
-                  <input type='text' />
+                  <input
+                    name='middleName'
+                    type='text'
+                    value={middleName}
+                    onChange={this.onChange} />
                 </div>
                 <div className={inputStyles.inputGroup}>
                   <div className={inputStyles.inputLabel}>Last name</div>
-                  <input type='text' />
+                  <input name='lastName' type='text' value={lastName} onChange={this.onChange} />
                 </div>
               </div>
               <div className={inputStyles.multiInputFormRow}>
                 <div className={inputStyles.inputGroup}>
                   <div className={inputStyles.inputLabel}>Date of birth</div>
-                  <input type='date' />
+                  <input
+                    name='dateOfBirth'
+                    type='date'
+                    value={dateOfBirth}
+                    onChange={this.onChange} />
                 </div>
                 <div className={inputStyles.inputGroup}>
                   <div className={inputStyles.inputLabel}>Gender</div>
-                  <select className={styles.select} value='Male'>
-                    <option value='Male'>Male</option>
-                    <option value='Female'>Female</option>
+                  <select className={styles.select} value={gender}>
+                    <option value='M'>Male</option>
+                    <option value='F'>Female</option>
                   </select>
                 </div>
                 <div className={inputStyles.inputGroup}>
@@ -70,11 +138,12 @@ export default class PatientInfo extends React.Component<IProps, {}> {
               <div className={inputStyles.multiInputFormRow}>
                 <div className={inputStyles.inputGroup}>
                   <div className={inputStyles.inputLabel}>Preferred language</div>
-                  <select className={styles.select} value='English'>
-                    <option value='English'>English</option>
-                    <option value='Spanish'>Spanish</option>
-                    <option value='Chinese'>Chinese</option>
-                    <option value='French'>French</option>
+                  <select
+                    name='language'
+                    className={styles.select}
+                    value={language}
+                    onChange={this.onChange}>
+                    {languagesHtml}
                   </select>
                 </div>
                 <div className={inputStyles.inputGroup}>

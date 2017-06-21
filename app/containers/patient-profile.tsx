@@ -167,7 +167,7 @@ class PatientProfileContainer extends React.Component<IProps, IState> {
             <PatientEncounters patientId={patientId} />
           </div>
           <div className={patientInfoPaneStyles}>
-            <PatientInfo patientId={patientId} />
+            <PatientInfo patient={patient} />
           </div>
         </div>
         <CareTeamWidget patientId={patientId} />

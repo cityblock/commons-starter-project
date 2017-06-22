@@ -26,6 +26,8 @@ export interface IProps {
 }
 
 export interface IState {
+  loading?: boolean;
+  error?: string;
   scratchPad?: string;
   saveSuccess: boolean;
   saveError: boolean;
@@ -38,6 +40,8 @@ class PatientScratchPad extends React.Component<IProps, IState> {
   constructor(props: IProps) {
     super(props);
 
+    const { loading, error } = props;
+
     this.onChange = this.onChange.bind(this);
     this.saveScratchPad = debounce(
       this.saveScratchPad.bind(this),
@@ -49,14 +53,21 @@ class PatientScratchPad extends React.Component<IProps, IState> {
     this.state = {
       saveSuccess: false,
       saveError: false,
+      loading,
+      error,
     };
   }
 
   componentWillReceiveProps(nextProps: IProps) {
     const { scratchPad } = this.state;
+    const { loading, error } = nextProps;
 
     if (!scratchPad) {
-      this.setState(() => ({ scratchPad: this.getScratchPadTextFromProps(nextProps) }));
+      this.setState(() => ({
+        loading,
+        error,
+        scratchPad: this.getScratchPadTextFromProps(nextProps),
+      }));
     }
   }
 
@@ -82,6 +93,8 @@ class PatientScratchPad extends React.Component<IProps, IState> {
 
     // TODO: you can't actually delete the scratch pad completely
     if (scratchPad) {
+      this.setState(() => ({ saveError: false, saveSuccess: false }));
+
       try {
         await saveScratchPad({ variables: { patientId, text: scratchPad } });
         this.setState(() => ({ saveSuccess: true, saveError: false }));
@@ -98,22 +111,29 @@ class PatientScratchPad extends React.Component<IProps, IState> {
     this.saveScratchPad();
   }
 
-  reloadPatientScratchPad() {
+  async reloadPatientScratchPad() {
     const { refetchScratchPad, patientId } = this.props;
 
-    refetchScratchPad({ patientId });
+    try {
+      this.setState(() => ({ loading: true, error: undefined }));
+      await refetchScratchPad({ patientId });
+    } catch (err) {
+      this.setState(() => ({ loading: false, error: err.message }));
+    }
   }
 
   render() {
-    const { loading, error } = this.props;
+    const { loading, error } = this.state;
     const placeholderText = loading ? 'Loading...' : '';
 
     const { saveSuccess, saveError } = this.state;
 
+    const disabled = loading || !!error || saveError;
+
     return (
       <div className={styles.patientScratchPad}>
         <textarea
-          disabled={loading}
+          disabled={disabled}
           className={styles.textArea}
           value={this.state.scratchPad}
           placeholder={placeholderText}

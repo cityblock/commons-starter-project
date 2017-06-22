@@ -15,22 +15,30 @@ export interface IProps {
   refetchPatientMedications?: (variables: { patientId: string }) => any;
 }
 
-export /**/interface IState {
+export interface IState {
   selectedMedicationId: string | null;
+  loading?: boolean;
+  error?: string;
 }
 
 class PatientMedications extends React.Component<IProps, IState> {
   constructor(props: IProps) {
     super(props);
 
+    const { loading, error } = props;
+
     this.onClickMedication = this.onClickMedication.bind(this);
     this.renderPatientMedications = this.renderPatientMedications.bind(this);
     this.renderPatientMedication = this.renderPatientMedication.bind(this);
     this.reloadPatientMedications = this.reloadPatientMedications.bind(this);
 
-    this.state = {
-      selectedMedicationId: null,
-    };
+    this.state = { selectedMedicationId: null, loading, error };
+  }
+
+  componentWillReceiveProps(nextProps: IProps) {
+    const { loading, error } = nextProps;
+
+    this.setState(() => ({ loading, error }));
   }
 
   onClickMedication(medicationId: string) {
@@ -46,7 +54,7 @@ class PatientMedications extends React.Component<IProps, IState> {
   }
 
   renderPatientMedications(medications: FullPatientMedicationFragment[]) {
-    const { loading, error } = this.props;
+    const { loading, error } = this.state;
 
     if (medications.length) {
       return medications.map(this.renderPatientMedication);
@@ -81,11 +89,17 @@ class PatientMedications extends React.Component<IProps, IState> {
     );
   }
 
-  reloadPatientMedications() {
+  async reloadPatientMedications() {
     const { patientId, refetchPatientMedications } = this.props;
 
     if (refetchPatientMedications) {
-      refetchPatientMedications({ patientId });
+      try {
+        this.setState(() => ({ loading: true, error: undefined }));
+        await refetchPatientMedications({ patientId });
+      } catch (err) {
+        // TODO: This is redundant. Props will get set by the result of the refetch.
+        this.setState(() => ({ loading: false, error: err.message }));
+      }
     }
   }
 

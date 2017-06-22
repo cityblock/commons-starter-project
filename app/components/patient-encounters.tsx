@@ -16,21 +16,32 @@ export interface IProps {
   refetchPatientEncounters?: (variables: { patientId: string }) => any;
 }
 
-class PatientEncounters extends React.Component<IProps, {}> {
+export interface IState {
+  loading?: boolean;
+  error?: string;
+}
+
+class PatientEncounters extends React.Component<IProps, IState> {
   constructor(props: IProps) {
     super(props);
+
+    const { loading, error } = props;
 
     this.renderPatientEncounters = this.renderPatientEncounters.bind(this);
     this.renderPatientEncounter = this.renderPatientEncounter.bind(this);
     this.reloadPatientEncounters = this.reloadPatientEncounters.bind(this);
 
-    this.state = {
-      selectedMedicationId: null,
-    };
+    this.state = { loading, error };
+  }
+
+  componentWillReceiveProps(nextProps: IProps) {
+    const { loading, error } = nextProps;
+
+    this.setState(() => ({ loading, error }));
   }
 
   renderPatientEncounters(encounters: FullPatientEncounterFragment[]) {
-    const { loading, error } = this.props;
+    const { loading, error } = this.state;
 
     if (encounters.length) {
       return encounters.map(this.renderPatientEncounter);
@@ -64,11 +75,17 @@ class PatientEncounters extends React.Component<IProps, {}> {
     );
   }
 
-  reloadPatientEncounters() {
+  async reloadPatientEncounters() {
     const { patientId, refetchPatientEncounters } = this.props;
 
     if (refetchPatientEncounters) {
-      refetchPatientEncounters({ patientId });
+      try {
+        this.setState(() => ({ loading: true, error: undefined }));
+        await refetchPatientEncounters({ patientId });
+      } catch (err) {
+        // TODO: This is redundant. Props will get set by the result of the refetch.
+        this.setState(() => ({ loading: false, error: err.message }));
+      }
     }
   }
 

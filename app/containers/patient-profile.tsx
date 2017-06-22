@@ -6,7 +6,6 @@ import * as React from 'react';
 import { compose, graphql } from 'react-apollo';
 import { connect, Dispatch } from 'react-redux';
 import { push } from 'react-router-redux';
-import { IState as IAppState } from '../client';
 import CareTeamWidget from '../components/care-team-widget';
 import PatientEncounters from '../components/patient-encounters';
 import PatientInfo from '../components/patient-info';
@@ -16,6 +15,7 @@ import { DATETIME_FORMAT } from '../config';
 import * as styles from '../css/components/patient-profile-scene.css';
 import * as patientQuery from '../graphql/queries/get-patient.graphql';
 import { ShortPatientFragment } from '../graphql/types';
+import { IState as IAppState } from '../store';
 
 export interface IProps {
   patientId: string;

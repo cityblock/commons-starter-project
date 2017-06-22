@@ -70,6 +70,8 @@ class LoginContainer extends React.Component<IProps, { error?: string }> {
           <div className={styles.errorText}>{error}</div>
         </div>);
     }
+
+    const clientId = process.env.GOOGLE_OAUTH_TOKEN || 'fake-token';
     return (
       <div className={styles.background}>
         <div className={styles.container}>
@@ -77,7 +79,7 @@ class LoginContainer extends React.Component<IProps, { error?: string }> {
             <div className={styles.form}>
               <div className={styles.title}>Commons</div>
               <GoogleLogin
-                clientId={process.env.GOOGLE_OAUTH_TOKEN}
+                clientId={clientId}
                 buttonText='Login'
                 offline
                 scope={SCOPE}

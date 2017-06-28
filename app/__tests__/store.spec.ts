@@ -5,17 +5,21 @@ import createStore from '../store';
 it('creates redux store', () => {
   const history = createMemoryHistory();
   const store = createStore(new ApolloClient(), history);
-
-  expect(store.getState()).toEqual({
-    apollo: {
-      data: {},
-      mutations: {},
-      optimistic: [],
-      queries: {},
-      reducerError: null,
+  const state = store.getState();
+  expect(state.locale).toEqual({
+    lang: 'en',
+    messages: {
+      'login.logInGoogle': 'Sign in with Google',
     },
-    routing: {
-      location: null,
-    },
+  });
+  expect(state.routing).toEqual({
+    location: null,
+  });
+  expect(state.apollo).toEqual({
+    data: {},
+    mutations: {},
+    optimistic: [],
+    queries: {},
+    reducerError: null,
   });
 });

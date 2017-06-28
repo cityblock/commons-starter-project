@@ -5,6 +5,7 @@ import { ApolloClient, ApolloProvider } from 'react-apollo';
 import { render } from 'react-dom';
 import { ConnectedRouter } from 'react-router-redux';
 import createNetworkInterface from './network-interface';
+import ReduxConnectedIntlProvider from './redux-connected-intl-provider';
 import Routes from './routes';
 import createStore from './store';
 
@@ -14,9 +15,11 @@ const store = createStore(client, history);
 
 render(
   <ApolloProvider store={store} client={client}>
-    <ConnectedRouter history={history}>
-      {Routes}
-    </ConnectedRouter>
+    <ReduxConnectedIntlProvider>
+      <ConnectedRouter history={history}>
+        {Routes}
+      </ConnectedRouter>
+    </ReduxConnectedIntlProvider>
   </ApolloProvider>, document.getElementById('app'));
 
 if ((module as any).hot) {

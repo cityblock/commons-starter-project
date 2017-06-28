@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { compose, graphql } from 'react-apollo';
 import GoogleLogin, { GoogleLoginResponseOffline } from 'react-google-login';
+import { FormattedMessage } from 'react-intl';
 import { connect, Dispatch } from 'react-redux';
 import { push } from 'react-router-redux';
 import Footer from '../components/footer';
@@ -71,7 +72,6 @@ class LoginContainer extends React.Component<IProps, { error?: string }> {
           <div className={styles.errorText}>{error}</div>
         </div>);
     }
-
     const clientId = process.env.GOOGLE_OAUTH_TOKEN || 'fake-token';
     return (
       <div>
@@ -89,7 +89,9 @@ class LoginContainer extends React.Component<IProps, { error?: string }> {
                   onFailure={this.onError}
                   className={styles.button}>
                   <span className={styles.googleIcon} />
-                  <span className={styles.buttonText}>Sign in with Google</span>
+                  <FormattedMessage id='login.logInGoogle'>
+                    {(message: string) => <span className={styles.buttonText}>{message}</span>}
+                  </FormattedMessage>
                 </GoogleLogin>
               </div>
               {errorHtml}

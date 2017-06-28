@@ -24,7 +24,7 @@ module.exports = (env = "") => {
     __filename: true,
   };
 
-  const devtool = isProduction ? "source-map" : "cheap-module-eval-source-map",
+  const devtool = isProduction ? "source-map" : "cheap-module-eval-source-map";
   const app = isProduction ? ["./client"] : [
     "webpack/hot/only-dev-server",
     "webpack-hot-middleware/client",

@@ -34,6 +34,8 @@ export interface IState {
 }
 
 class NewPatientEncounter extends React.Component<IProps, IState> {
+  encounterReasonInput: HTMLInputElement | null;
+
   constructor(props: IProps) {
     super(props);
 
@@ -41,6 +43,8 @@ class NewPatientEncounter extends React.Component<IProps, IState> {
     this.onCancelClick = this.onCancelClick.bind(this);
     this.onSubmitClick = this.onSubmitClick.bind(this);
     this.onChange = this.onChange.bind(this);
+    this.focusEncounterReasonInput = this.focusEncounterReasonInput.bind(this);
+    this.encounterReasonInput = null;
 
     this.state = {
       open: false,
@@ -50,6 +54,12 @@ class NewPatientEncounter extends React.Component<IProps, IState> {
       encounterSummary: '',
       loading: false,
     };
+  }
+
+  focusEncounterReasonInput() {
+    if (this.encounterReasonInput) {
+      this.encounterReasonInput.focus();
+    }
   }
 
   onClick(event: React.MouseEvent<HTMLDivElement> | React.TouchEvent<HTMLDivElement>) {
@@ -65,6 +75,8 @@ class NewPatientEncounter extends React.Component<IProps, IState> {
 
         return newState;
       });
+
+      setTimeout(this.focusEncounterReasonInput, 300);
     }
   }
 
@@ -151,11 +163,12 @@ class NewPatientEncounter extends React.Component<IProps, IState> {
           error={error}
           onClick={this.onSubmitClick}
         />
-        <span className={styles.newEncounterLabel}>Record new encounter</span>
+        <div className={styles.newEncounterLabel}>Record new encounter</div>
         <div className={styles.newEncounterForm}>
           <div className={styles.newEncounterFormLabel}>Encounter reason:</div>
           <div className={styles.newEncounterFormTextInput}>
             <input
+              ref={input => { this.encounterReasonInput = input; }}
               required
               name='encounterReason'
               type='text'

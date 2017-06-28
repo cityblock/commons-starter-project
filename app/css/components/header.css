@@ -1,6 +1,7 @@
 @import '../common/sizes';
 .header {
   z-index: 0;
+  height: 70px;
   flex: 0 70px;
   display: flex;
   background-color: #8FADFF;

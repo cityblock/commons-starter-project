@@ -61,9 +61,22 @@ html body {
   line-height: var(--default-line-height);
 }
 
+html, body {
+  margin: 0;
+  height: 100%;
+  min-height: 100%;
+}
+
+body {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+}
+
 .body {
   width: 100%;
-  min-height: 100vh;
+  height: 100%;
+  min-height: 100%;
 }
 
 a {
@@ -85,4 +98,13 @@ p, ul, ol, table, pre, dl {
 
 img {
   max-width: 100%;
+}
+
+#app {
+  height: 100%;
+}
+
+.app {
+  flex: 1;
+  display: flex;
 }

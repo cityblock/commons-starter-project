@@ -1,5 +1,9 @@
 @import '../common/sizes';
-.container {}
+.container {
+  width: 100%;
+  height: calc(100vh - 70px);
+  overflow: scroll;
+}
 
 .formContainer {
   max-width: var(--max-width);

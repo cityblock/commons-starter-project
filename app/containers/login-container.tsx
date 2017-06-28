@@ -3,6 +3,7 @@ import { compose, graphql } from 'react-apollo';
 import GoogleLogin, { GoogleLoginResponseOffline } from 'react-google-login';
 import { connect, Dispatch } from 'react-redux';
 import { push } from 'react-router-redux';
+import Footer from '../components/footer';
 import * as styles from '../css/components/login-scene.css';
 import * as currentUserQuery from '../graphql/queries/get-current-user.graphql';
 import * as loginMutation from '../graphql/queries/log-in-user-mutation.graphql';
@@ -73,26 +74,29 @@ class LoginContainer extends React.Component<IProps, { error?: string }> {
 
     const clientId = process.env.GOOGLE_OAUTH_TOKEN || 'fake-token';
     return (
-      <div className={styles.background}>
-        <div className={styles.container}>
-          <div className={styles.formErrorContainer}>
-            <div className={styles.form}>
-              <div className={styles.title}>Commons</div>
-              <GoogleLogin
-                clientId={clientId}
-                buttonText='Login'
-                offline
-                scope={SCOPE}
-                onSuccess={this.onSuccess}
-                onFailure={this.onError}
-                className={styles.button}>
-                <span className={styles.googleIcon} />
-                <span className={styles.buttonText}>Sign in with Google</span>
-              </GoogleLogin>
+      <div>
+        <div className={styles.background}>
+          <div className={styles.container}>
+            <div className={styles.formErrorContainer}>
+              <div className={styles.form}>
+                <div className={styles.title}>Commons</div>
+                <GoogleLogin
+                  clientId={clientId}
+                  buttonText='Login'
+                  offline
+                  scope={SCOPE}
+                  onSuccess={this.onSuccess}
+                  onFailure={this.onError}
+                  className={styles.button}>
+                  <span className={styles.googleIcon} />
+                  <span className={styles.buttonText}>Sign in with Google</span>
+                </GoogleLogin>
+              </div>
+              {errorHtml}
             </div>
-            {errorHtml}
           </div>
         </div>
+        <Footer />
       </div>
     );
   }

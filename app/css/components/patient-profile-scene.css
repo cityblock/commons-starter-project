@@ -1,8 +1,10 @@
 @import '../common/sizes';
 .container {
   flex: 1;
+  order: 0;
+  overflow: auto;
   justify-content: center;
-  height: 100vh;
+  height: 100%;
   lost-center: var(--max-width);
 }
 
@@ -12,7 +14,7 @@
   border-left: 1px solid var(--gray-background-color);
   border-right: 1px solid var(--border-color);
   flex-basis: 25%;
-  height: 100vh;
+  height: calc(100vh - 70px);
   overflow: scroll;
 }
 

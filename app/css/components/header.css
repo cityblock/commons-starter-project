@@ -1,11 +1,14 @@
 @import '../common/sizes';
 .header {
-  height: 70px;
+  z-index: 0;
+  flex: 0 70px;
+  display: flex;
   background-color: #8FADFF;
   background: linear-gradient(135deg, #66C5DD 0%, #2962FF 100%);
 }
 
 .container {
+  width: 100%;
   padding: 0px var(--gutter);
   lost-center: var(--max-width);
 }

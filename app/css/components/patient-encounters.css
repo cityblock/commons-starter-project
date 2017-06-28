@@ -74,7 +74,7 @@
 
 .encounters {
   margin-top: var(--small-gutter);
-  height: calc(100vh - 219px);
+  height: calc(100vh - 289px);
   overflow: scroll;
 }
 

@@ -36,32 +36,52 @@ exports[`renders patient enrollment container correctly 1`] = `
         <div
           className={undefined}
         >
-          First name
+          <div
+            className={undefined}
+          >
+            First name
+          </div>
+          <div
+            className={undefined}
+          >
+            Last name
+          </div>
+          <div
+            className={undefined}
+          >
+            Age
+          </div>
+          <div
+            className={undefined}
+          >
+            Location
+          </div>
+          <div
+            className={undefined}
+          >
+            Patient joined
+          </div>
+          <div
+            className={undefined}
+          >
+            Last engagement
+          </div>
         </div>
+      </div>
+      <div
+        className={undefined}
+      >
         <div
           className={undefined}
         >
-          Last name
-        </div>
-        <div
-          className={undefined}
-        >
-          Age
-        </div>
-        <div
-          className={undefined}
-        >
-          Location
-        </div>
-        <div
-          className={undefined}
-        >
-          Patient joined
-        </div>
-        <div
-          className={undefined}
-        >
-          Last engagement
+          <div
+            className={undefined}
+          />
+          <div
+            className={undefined}
+          >
+            Loading
+          </div>
         </div>
       </div>
     </div>
@@ -72,30 +92,14 @@ exports[`renders patient enrollment container correctly 1`] = `
         className={undefined}
       >
         <div
-          className={undefined}
+          className="undefined"
+          onClick={[Function]}
         />
         <div
-          className={undefined}
-        >
-          Loading
-        </div>
+          className="undefined"
+          onClick={[Function]}
+        />
       </div>
-    </div>
-  </div>
-  <div
-    className={undefined}
-  >
-    <div
-      className={undefined}
-    >
-      <div
-        className="undefined"
-        onClick={[Function]}
-      />
-      <div
-        className="undefined"
-        onClick={[Function]}
-      />
     </div>
   </div>
 </div>

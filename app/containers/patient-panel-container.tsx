@@ -122,18 +122,20 @@ class PatientPanelContainer extends React.Component<IProps, IState> {
             <Link to='/patient/new' className={styles.button}>Add Patient</Link>
           </div>
         </div>
-        <PatientRoster
-          isLoading={loading}
-          error={error}
-          patients={this.formattedPatients()}
-          onRetryClick={this.reloadCurrentPage}
-        />
-        <PatientRosterPagination
-          hasNextPage={this.state.hasNextPage}
-          hasPreviousPage={this.state.hasPreviousPage}
-          onNextClick={this.getNextPage}
-          onPreviousClick={this.getPreviousPage}
-        />
+        <div className={styles.patientPanelBody}>
+          <PatientRoster
+            isLoading={loading}
+            error={error}
+            patients={this.formattedPatients()}
+            onRetryClick={this.reloadCurrentPage}
+          />
+          <PatientRosterPagination
+            hasNextPage={this.state.hasNextPage}
+            hasPreviousPage={this.state.hasPreviousPage}
+            onNextClick={this.getNextPage}
+            onPreviousClick={this.getPreviousPage}
+          />
+        </div>
       </div>
     );
   }

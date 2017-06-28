@@ -5,10 +5,5 @@ exports[`renders main container correctly 1`] = `
   <div
     className={undefined}
   />
-  <div
-    className={undefined}
-  >
-    A Sidewalk Labs urban health initiative
-  </div>
 </div>
 `;

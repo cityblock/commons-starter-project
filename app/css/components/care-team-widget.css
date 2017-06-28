@@ -43,6 +43,7 @@
 
 .drawer.open {
   height: calc(100vh - 137px);
+  overflow-y: auto;
 }
 
 .buttonLabel, .buttonChatLabel {

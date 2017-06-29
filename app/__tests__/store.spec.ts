@@ -6,12 +6,8 @@ it('creates redux store', () => {
   const history = createMemoryHistory();
   const store = createStore(new ApolloClient(), history);
   const state = store.getState();
-  expect(state.locale).toEqual({
-    lang: 'en',
-    messages: {
-      'login.logInGoogle': 'Sign in with Google',
-    },
-  });
+  expect(state.locale.lang).toEqual('en');
+  expect(state.locale.messages).not.toBeNull();
   expect(state.routing).toEqual({
     location: null,
   });

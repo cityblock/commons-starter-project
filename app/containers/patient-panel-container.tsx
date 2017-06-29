@@ -1,6 +1,7 @@
 import * as querystring from 'querystring';
 import * as React from 'react';
 import { compose, graphql } from 'react-apollo';
+import { FormattedMessage } from 'react-intl';
 import { connect, Dispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { push } from 'react-router-redux';
@@ -118,8 +119,13 @@ class PatientPanelContainer extends React.Component<IProps, IState> {
       <div className={styles.container}>
         <div className={styles.header}>
           <div className={styles.headerRow}>
-            <div className={styles.headerText}>{this.title}</div>
-            <Link to='/patient/new' className={styles.button}>Add Patient</Link>
+            <FormattedMessage id='patientPanel.header'>
+              {(message: string) => <div className={styles.headerText}>{message}</div>}
+            </FormattedMessage>
+            <FormattedMessage id='patientPanel.addPatient'>
+              {(message: string) =>
+                <Link to='/patient/new' className={styles.button}>{message}</Link>}
+            </FormattedMessage>
           </div>
         </div>
         <div className={styles.patientPanelBody}>

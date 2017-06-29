@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { FormattedMessage } from 'react-intl';
 import { PatientRosterItem } from '../components/patient-roster-item';
 import { TableLoadingError } from '../components/table-loading-error';
 import * as styles from '../css/components/patient-roster.css';
@@ -20,11 +21,12 @@ export const PatientRoster: React.StatelessComponent<IProps> = props => {
   let tableBody: any;
 
   if (props.error || props.isLoading) {
-    tableBody = <TableLoadingError
-                  error={props.error}
-                  isLoading={props.isLoading}
-                  onRetryClick={props.onRetryClick}
-                />;
+    tableBody = (
+      <TableLoadingError
+        error={props.error}
+        isLoading={props.isLoading}
+        onRetryClick={props.onRetryClick}
+      />);
   } else {
     tableBody = patients.map(renderPatient);
   }
@@ -33,12 +35,24 @@ export const PatientRoster: React.StatelessComponent<IProps> = props => {
     <div className={styles.table}>
       <div className={styles.tableHead}>
         <div className={styles.tableRow}>
-          <div className={styles.tableColumn}>First name</div>
-          <div className={styles.tableColumn}>Last name</div>
-          <div className={styles.tableColumn}>Age</div>
-          <div className={styles.tableColumn}>Location</div>
-          <div className={styles.tableColumn}>Patient joined</div>
-          <div className={styles.tableColumn}>Last engagement</div>
+          <FormattedMessage id='patientPanel.firstName'>
+            {(message: string) => <div className={styles.tableColumn}>{message}</div>}
+          </FormattedMessage>
+          <FormattedMessage id='patientPanel.lastName'>
+            {(message: string) => <div className={styles.tableColumn}>{message}</div>}
+          </FormattedMessage>
+          <FormattedMessage id='patientPanel.age'>
+            {(message: string) => <div className={styles.tableColumn}>{message}</div>}
+          </FormattedMessage>
+          <FormattedMessage id='patientPanel.location'>
+            {(message: string) => <div className={styles.tableColumn}>{message}</div>}
+          </FormattedMessage>
+          <FormattedMessage id='patientPanel.joinedAt'>
+            {(message: string) => <div className={styles.tableColumn}>{message}</div>}
+          </FormattedMessage>
+          <FormattedMessage id='patientPanel.engagedAt'>
+            {(message: string) => <div className={styles.tableColumn}>{message}</div>}
+          </FormattedMessage>
         </div>
       </div>
       <div className={styles.tableBody}>

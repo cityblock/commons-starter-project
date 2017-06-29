@@ -4,6 +4,7 @@ import * as moment from 'moment';
 import * as querystring from 'querystring';
 import * as React from 'react';
 import { compose, graphql } from 'react-apollo';
+import { injectIntl, FormattedMessage, InjectedIntl } from 'react-intl';
 import { connect, Dispatch } from 'react-redux';
 import { push } from 'react-router-redux';
 import CareTeamWidget from '../components/care-team-widget';
@@ -18,6 +19,7 @@ import { ShortPatientFragment } from '../graphql/types';
 import { IState as IAppState } from '../store';
 
 export interface IProps {
+  intl: InjectedIntl;
   patientId: string;
   loading: boolean;
   error?: string;
@@ -75,20 +77,18 @@ class PatientProfileContainer extends React.Component<IProps, IState> {
   }
 
   render() {
-    const { patientId, patient } = this.props;
+    const { patientId, patient, intl } = this.props;
     const { selectedTab } = this.state;
 
-    const name = patient ?
-      getPatientName(patient) :
-      null;
+    const name = patient ? getPatientName(patient) : null;
     const patientAge = patient && patient.dateOfBirth ?
-      moment(patient.dateOfBirth, DATETIME_FORMAT).fromNow(true) :
+      moment(patient.dateOfBirth, DATETIME_FORMAT).fromNow(true).replace('years', '') :
       'Unknown';
     const dateOfBirth = patient && patient.dateOfBirth ?
-      moment(patient.dateOfBirth, DATETIME_FORMAT).format('LL') :
+      intl.formatDate(patient.dateOfBirth) :
       'Unknown';
     const patientJoined = patient && patient.createdAt ?
-      `${moment(patient.createdAt, DATETIME_FORMAT).fromNow(true)} ago` :
+      intl.formatRelative(patient.createdAt) :
       'Unknown';
     const gender = patient && patient.gender ? GENDER[patient.gender] : null;
     const zip = patient && patient.zip ? patient.zip : null;
@@ -121,28 +121,43 @@ class PatientProfileContainer extends React.Component<IProps, IState> {
               </div>
               <div className={styles.patientTitle}>
                 <div className={styles.patientName}>{name}</div>
-                <div className={styles.patientSubheading}>{patientAge} years old • {gender}</div>
+                <div className={styles.patientSubheading}>{patientAge} • {gender}</div>
               </div>
             </div>
             <div className={styles.patientBasicInfo}>
               <div className={styles.patientBasicInfoRow}>
-                <div className={styles.patientBasicInfoRowTitle}>Date of birth:</div>
+                <FormattedMessage id='patient.dateOfBirth'>
+                  {(message: string) =>
+                    <div className={styles.patientBasicInfoRowTitle}>{message}:</div>}
+                </FormattedMessage>
                 <div className={styles.patientBasicInfoRowData}>{dateOfBirth}</div>
               </div>
               <div className={styles.patientBasicInfoRow}>
-                <div className={styles.patientBasicInfoRowTitle}>Preferred language:</div>
+                <FormattedMessage id='patient.language'>
+                  {(message: string) =>
+                    <div className={styles.patientBasicInfoRowTitle}>{message}:</div>}
+                </FormattedMessage>
                 <div className={styles.patientBasicInfoRowData}>{language}</div>
               </div>
               <div className={styles.patientBasicInfoRow}>
-                <div className={styles.patientBasicInfoRowTitle}>Location:</div>
+                <FormattedMessage id='patient.location'>
+                  {(message: string) =>
+                    <div className={styles.patientBasicInfoRowTitle}>{message}:</div>}
+                </FormattedMessage>
                 <div className={styles.patientBasicInfoRowData}>{zip}</div>
               </div>
               <div className={styles.patientBasicInfoRow}>
-                <div className={styles.patientBasicInfoRowTitle}>Patient since:</div>
+                <FormattedMessage id='patient.joinedAt'>
+                  {(message: string) =>
+                    <div className={styles.patientBasicInfoRowTitle}>{message}:</div>}
+                </FormattedMessage>
                 <div className={styles.patientBasicInfoRowData}>{patientJoined}</div>
               </div>
               <div className={styles.patientBasicInfoRow}>
-                <div className={styles.patientBasicInfoRowTitle}>Medicare ID:</div>
+                <FormattedMessage id='patient.medicareId'>
+                  {(message: string) =>
+                    <div className={styles.patientBasicInfoRowTitle}>{message}:</div>}
+                </FormattedMessage>
                 <div className={styles.patientBasicInfoRowData}>123456789</div>
               </div>
             </div>
@@ -158,16 +173,22 @@ class PatientProfileContainer extends React.Component<IProps, IState> {
         </div>
         <div className={styles.mainBody}>
           <div className={styles.tabs}>
-            <div
-              className={encountersTabStyles}
-              onClick={() => this.onTabClick('encounters')}>
-              Encounters
-            </div>
-            <div
-              className={patientInfoTabStyles}
-              onClick={() => this.onTabClick('patientInfo')}>
-              Patient info
-            </div>
+            <FormattedMessage id='patient.encounters'>
+              {(message: string) =>
+                <div
+                  className={encountersTabStyles}
+                  onClick={() => this.onTabClick('encounters')}>
+                  {message}
+                </div>}
+            </FormattedMessage>
+            <FormattedMessage id='patient.patientInfo'>
+              {(message: string) =>
+                <div
+                  className={patientInfoTabStyles}
+                  onClick={() => this.onTabClick('patientInfo')}>
+                  {message}
+                </div>}
+            </FormattedMessage>
           </div>
           <div className={encountersPaneStyles}>
             <PatientEncounters patientId={patientId} />
@@ -197,6 +218,7 @@ function mapStateToProps(state: IAppState, ownProps: IProps): Partial<IProps> {
 }
 
 export default compose(
+  injectIntl,
   connect(undefined, mapDispatchToProps),
   connect(mapStateToProps),
   graphql(patientQuery as any, {

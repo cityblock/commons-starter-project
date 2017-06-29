@@ -35,7 +35,7 @@ exports[`renders patient enrollment container correctly 1`] = `
             className={undefined}
           >
             Unknown
-             years old • 
+             • 
           </div>
         </div>
       </div>
@@ -48,7 +48,8 @@ exports[`renders patient enrollment container correctly 1`] = `
           <div
             className={undefined}
           >
-            Date of birth:
+            Date of birth
+            :
           </div>
           <div
             className={undefined}
@@ -62,7 +63,8 @@ exports[`renders patient enrollment container correctly 1`] = `
           <div
             className={undefined}
           >
-            Preferred language:
+            Preferred language
+            :
           </div>
           <div
             className={undefined}
@@ -74,7 +76,8 @@ exports[`renders patient enrollment container correctly 1`] = `
           <div
             className={undefined}
           >
-            Location:
+            Location
+            :
           </div>
           <div
             className={undefined}
@@ -86,7 +89,8 @@ exports[`renders patient enrollment container correctly 1`] = `
           <div
             className={undefined}
           >
-            Patient since:
+            Patient since
+            :
           </div>
           <div
             className={undefined}
@@ -100,7 +104,8 @@ exports[`renders patient enrollment container correctly 1`] = `
           <div
             className={undefined}
           >
-            Medicare ID:
+            Medicare ID
+            :
           </div>
           <div
             className={undefined}
@@ -182,7 +187,7 @@ exports[`renders patient enrollment container correctly 1`] = `
         className=""
         onClick={[Function]}
       >
-        Patient info
+        Patient Info
       </div>
     </div>
     <div

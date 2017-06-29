@@ -1,0 +1,49 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders popup 1`] = `
+<div
+  className={undefined}
+>
+  <div
+    className={undefined}
+  >
+    <div
+      className={undefined}
+    >
+      <div
+        className={undefined}
+      >
+        first last
+        <span
+          className={undefined}
+        >
+          successfully enrolled
+        </span>
+      </div>
+      <div
+        className={undefined}
+      >
+        successfully enrolled
+      </div>
+      <div
+        className={undefined}
+      >
+        <a
+          className={undefined}
+          href="/patients"
+          onClick={[Function]}
+        >
+          Patient Roster
+        </a>
+        <a
+          className={undefined}
+          href="/patients/unique-id"
+          onClick={[Function]}
+        >
+          Go to profile
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+`;

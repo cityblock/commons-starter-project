@@ -110,7 +110,7 @@ function mapDispatchToProps(dispatch: Dispatch<() => void>): Partial<IProps> {
   };
 }
 
-export default (compose as any)(
+export default (compose)(
   connect(undefined, mapDispatchToProps),
   graphql(currentUserQuery as any, {
     props: ({ data }) => ({

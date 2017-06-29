@@ -1,23 +1,23 @@
-import * as moment from 'moment';
 import * as React from 'react';
+import { injectIntl, InjectedIntlProps } from 'react-intl';
 import { Link } from 'react-router-dom';
-import { DATETIME_FORMAT } from '../config';
 import * as styles from '../css/components/patient-roster.css';
-
 import { ShortPatientFragment } from '../graphql/types';
 
 export interface IProps {
   patient: ShortPatientFragment;
 }
 
-export const PatientRosterItem: React.StatelessComponent<IProps> = props => {
-  const { patient } = props;
+type Props = IProps & InjectedIntlProps;
+
+const PatientRosterItem: React.StatelessComponent<IProps> = (props: Props) => {
+  const { patient, intl } = props;
 
   const patientAge = patient.dateOfBirth ?
-    moment(patient.dateOfBirth, DATETIME_FORMAT).fromNow(true) :
+    intl.formatRelative(patient.dateOfBirth) :
     'Unknown';
   const patientJoined = patient.createdAt ?
-    moment(patient.createdAt, DATETIME_FORMAT).fromNow(true) :
+    intl.formatRelative(patient.createdAt) :
     'Unknown';
 
   return (
@@ -31,3 +31,5 @@ export const PatientRosterItem: React.StatelessComponent<IProps> = props => {
     </Link>
   );
 };
+
+export default injectIntl<IProps>(PatientRosterItem);

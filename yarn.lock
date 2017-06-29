@@ -532,9 +532,24 @@ ap@~0.2.0:
   version "0.2.0"
   resolved "https://registry.yarnpkg.com/ap/-/ap-0.2.0.tgz#ae0942600b29912f0d2b14ec60c45e8f330b6110"
 
-apollo-client@^1.4.0, apollo-client@^1.6.0:
+apollo-client@^1.4.0:
   version "1.6.0"
   resolved "https://registry.yarnpkg.com/apollo-client/-/apollo-client-1.6.0.tgz#d2b831fd8e6e6c045ce91dc8b86a920d44fd77a9"
+  dependencies:
+    graphql "^0.10.0"
+    graphql-anywhere "^3.0.1"
+    graphql-tag "^2.0.0"
+    redux "^3.4.0"
+    symbol-observable "^1.0.2"
+    whatwg-fetch "^2.0.0"
+  optionalDependencies:
+    "@types/async" "^2.0.31"
+    "@types/graphql" "^0.9.0"
+    "@types/isomorphic-fetch" "0.0.34"
+
+apollo-client@^1.6.1:
+  version "1.6.1"
+  resolved "https://registry.yarnpkg.com/apollo-client/-/apollo-client-1.6.1.tgz#1b82e02ae5082c5e43b09daffdeced5a56e7128f"
   dependencies:
     graphql "^0.10.0"
     graphql-anywhere "^3.0.1"
@@ -3145,25 +3160,25 @@ graphql-document-collector@^0.1.3:
     graphql-tag "^0.1.14"
     typed-graphql "^1.0.2"
 
-graphql-server-core@^0.9.0:
-  version "0.9.0"
-  resolved "https://registry.yarnpkg.com/graphql-server-core/-/graphql-server-core-0.9.0.tgz#34dac2d90e0b9c5f2c4c666f08dab74c15b8a327"
+graphql-server-core@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/graphql-server-core/-/graphql-server-core-1.0.0.tgz#25d92b6279a81263f0714136636a54910c1fafe0"
   optionalDependencies:
     "@types/graphql" "^0.9.0"
 
-graphql-server-express@^0.9.0:
-  version "0.9.0"
-  resolved "https://registry.yarnpkg.com/graphql-server-express/-/graphql-server-express-0.9.0.tgz#00d39aa8136da205359882933849945dd19b80f0"
+graphql-server-express@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/graphql-server-express/-/graphql-server-express-1.0.0.tgz#038b73552255f6180c51a73bee8d7f9d68c5e201"
   dependencies:
-    graphql-server-core "^0.9.0"
-    graphql-server-module-graphiql "^0.9.0"
+    graphql-server-core "^1.0.0"
+    graphql-server-module-graphiql "^1.0.0"
   optionalDependencies:
     "@types/express" "^4.0.35"
     "@types/graphql" "^0.9.1"
 
-graphql-server-module-graphiql@^0.9.0:
-  version "0.9.0"
-  resolved "https://registry.yarnpkg.com/graphql-server-module-graphiql/-/graphql-server-module-graphiql-0.9.0.tgz#dfe877066052f94a3ff57ff4790b3023e9ef2b4a"
+graphql-server-module-graphiql@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/graphql-server-module-graphiql/-/graphql-server-module-graphiql-1.0.0.tgz#1b302481423f83b3c0f43cb30bfdc30bfe3d0a82"
 
 graphql-tag@^0.1.14:
   version "0.1.17"
@@ -3173,9 +3188,19 @@ graphql-tag@^2.0.0, graphql-tag@^2.4.2:
   version "2.4.2"
   resolved "https://registry.yarnpkg.com/graphql-tag/-/graphql-tag-2.4.2.tgz#6a63297d8522d03a2b72d26f1b239aab343840cd"
 
-graphql-tools@^1, graphql-tools@^1.0.0:
+graphql-tools@^1:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/graphql-tools/-/graphql-tools-1.0.0.tgz#76b25e1dce0521b31d5566aac281b2f134bc49c8"
+  dependencies:
+    deprecated-decorator "^0.1.6"
+    lodash "^4.3.0"
+    uuid "^3.0.1"
+  optionalDependencies:
+    "@types/graphql" "^0.9.0"
+
+graphql-tools@^1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/graphql-tools/-/graphql-tools-1.1.0.tgz#8d86ea6997b0dea3089b62dc655e47146a663ebb"
   dependencies:
     deprecated-decorator "^0.1.6"
     lodash "^4.3.0"
@@ -7366,9 +7391,9 @@ ts-jest@^20.0.6:
     tsconfig "^6.0.0"
     yargs "^8.0.1"
 
-ts-loader@^2.2.0:
-  version "2.2.0"
-  resolved "https://registry.yarnpkg.com/ts-loader/-/ts-loader-2.2.0.tgz#e5fd8f29b967c4fb42abc76396aa8127a1e49924"
+ts-loader@^2.2.1:
+  version "2.2.1"
+  resolved "https://registry.yarnpkg.com/ts-loader/-/ts-loader-2.2.1.tgz#2ed6d2e1296335259562e3cb190a53832f7ec5a3"
   dependencies:
     colors "^1.0.3"
     enhanced-resolve "^3.0.0"
@@ -7626,9 +7651,9 @@ validate-npm-package-license@^3.0.1:
     spdx-correct "~1.0.0"
     spdx-expression-parse "~1.0.0"
 
-validator@^7.1.0:
-  version "7.1.0"
-  resolved "https://registry.yarnpkg.com/validator/-/validator-7.1.0.tgz#331695afc7e6d72f980bddd68aa296d6b3d6c8b6"
+validator@^7.2.0:
+  version "7.2.0"
+  resolved "https://registry.yarnpkg.com/validator/-/validator-7.2.0.tgz#a63dcbaba51d4350bf8df20988e0d5a54d711791"
 
 value-equal@^0.2.0:
   version "0.2.1"

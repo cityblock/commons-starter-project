@@ -286,7 +286,8 @@ exports[`renders patient enrollment container correctly 1`] = `
               <div
                 className={undefined}
               >
-                Encounter reason:
+                Encounter reason
+                :
               </div>
               <div
                 className={undefined}
@@ -308,7 +309,8 @@ exports[`renders patient enrollment container correctly 1`] = `
                   <div
                     className={undefined}
                   >
-                    Location of encounter:
+                    Location of encounter
+                    :
                   </div>
                   <div
                     className={undefined}
@@ -328,7 +330,8 @@ exports[`renders patient enrollment container correctly 1`] = `
                   <div
                     className={undefined}
                   >
-                    Start time:
+                    Start time
+                    :
                   </div>
                   <div
                     className={undefined}
@@ -346,7 +349,8 @@ exports[`renders patient enrollment container correctly 1`] = `
               <div
                 className={undefined}
               >
-                Encounter summary:
+                Encounter summary
+                :
               </div>
               <div
                 className={undefined}

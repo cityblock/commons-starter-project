@@ -2,6 +2,7 @@ import * as classNames from 'classnames';
 import * as moment from 'moment';
 import * as React from 'react';
 import { compose, graphql } from 'react-apollo';
+import { FormattedMessage } from 'react-intl';
 import * as styles from '../css/components/new-patient-encounter.css';
 import * as appointmentEndMutation from '../graphql/queries/appointment-end-mutation.graphql';
 import * as appointmentStartMutation from '../graphql/queries/appointment-start-mutation.graphql';
@@ -163,9 +164,15 @@ class NewPatientEncounter extends React.Component<IProps, IState> {
           error={error}
           onClick={this.onSubmitClick}
         />
-        <div className={styles.newEncounterLabel}>Record new encounter</div>
+        <FormattedMessage id='encounter.new'>
+          {(message: string) =>
+            <div className={styles.newEncounterLabel}>{message}</div>}
+        </FormattedMessage>
         <div className={styles.newEncounterForm}>
-          <div className={styles.newEncounterFormLabel}>Encounter reason:</div>
+          <FormattedMessage id='encounter.newReason'>
+            {(message: string) =>
+              <div className={styles.newEncounterFormLabel}>{message}:</div>}
+          </FormattedMessage>
           <div className={styles.newEncounterFormTextInput}>
             <input
               ref={input => { this.encounterReasonInput = input; }}
@@ -177,7 +184,10 @@ class NewPatientEncounter extends React.Component<IProps, IState> {
           </div>
           <div className={styles.newEncounterFormMultiInputRow}>
             <div className={styles.newEncounterInputLargeFormGroup}>
-              <div className={styles.newEncounterFormLabel}>Location of encounter:</div>
+              <FormattedMessage id='encounter.newLocation'>
+                {(message: string) =>
+                  <div className={styles.newEncounterFormLabel}>{message}:</div>}
+              </FormattedMessage>
               <div className={styles.newEncounterFormTextInput}>
                 <input
                   required
@@ -188,7 +198,10 @@ class NewPatientEncounter extends React.Component<IProps, IState> {
               </div>
             </div>
             <div className={styles.newEncounterInputSmallFormGroup}>
-              <div className={styles.newEncounterFormLabel}>Start time:</div>
+              <FormattedMessage id='encounter.newStartTime'>
+                {(message: string) =>
+                  <div className={styles.newEncounterFormLabel}>{message}:</div>}
+              </FormattedMessage>
               <div className={styles.newEncounterFormTextInput}>
                 <input
                   required
@@ -199,7 +212,10 @@ class NewPatientEncounter extends React.Component<IProps, IState> {
               </div>
             </div>
           </div>
-          <div className={styles.newEncounterFormLabel}>Encounter summary:</div>
+          <FormattedMessage id='encounter.newSummary'>
+            {(message: string) =>
+              <div className={styles.newEncounterFormLabel}>{message}:</div>}
+          </FormattedMessage>
           <div className={styles.newEncounterFormTextArea}>
             <textarea
               required
@@ -210,19 +226,27 @@ class NewPatientEncounter extends React.Component<IProps, IState> {
           <div className={styles.newEncounterFormAddAttachmentRow}>
             <div className={styles.newEncounterFormAddAttachment}>
               <div className={styles.newEncounterFormAddAttachmentIcon}></div>
-              <div className={styles.newEncounterFormAddAttachmentLabel}>Add attachment</div>
+              <FormattedMessage id='encounter.newAttachment'>
+                {(message: string) =>
+                  <div className={styles.newEncounterFormAddAttachmentLabel}>{message}</div>}
+              </FormattedMessage>
             </div>
           </div>
           <div className={styles.newEncounterFormButtonRow}>
-            <div
-              className={newEncounterCancelButtonStyles}
-              onClick={this.onCancelClick}>
-              Cancel
-            </div>
-            <div
-              className={newEncounterSubmitButtonStyles}
-              onClick={this.onSubmitClick}>
-              Submit</div>
+            <FormattedMessage id='encounter.newCancel'>
+              {(message: string) =>
+                <div
+                  className={newEncounterCancelButtonStyles}
+                  onClick={this.onCancelClick}>{message}
+                </div>}
+            </FormattedMessage>
+            <FormattedMessage id='encounter.newSubmit'>
+              {(message: string) =>
+                <div
+                  className={newEncounterSubmitButtonStyles}
+                  onClick={this.onSubmitClick}>{message}
+                </div>}
+            </FormattedMessage>
           </div>
         </div>
       </div>

@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { FormattedMessage } from 'react-intl';
 import * as styles from '../css/components/table-loading-error.css';
 import * as loadingStyles from '../css/shared/loading-spinner.css';
 
@@ -15,18 +16,28 @@ export const TableLoadingError: React.StatelessComponent<IProps> = props => {
     return (
       <div className={styles.errorRow}>
         <div className={styles.errorIcon}></div>
-        <div className={styles.errorHeading}>Unable to load your roster</div>
-        <div className={styles.errorMessage}>
-          Sorry, something went wrong. Please try reloading the page again.
-        </div>
-        <div className={styles.errorButton} onClick={props.onRetryClick}>Try again</div>
+        <FormattedMessage id='error.tableLoadingHeading'>
+          {(message: string) =>
+            <div className={styles.errorHeading}>{message}</div>}
+        </FormattedMessage>3
+        <FormattedMessage id='error.tableLoadingMessage'>
+          {(message: string) =>
+            <div className={styles.errorMessage}>{message}</div>}
+        </FormattedMessage>
+        <FormattedMessage id='error.tableLoadingButton'>
+          {(message: string) =>
+            <div className={styles.errorButton} onClick={props.onRetryClick}>{message}</div>}
+        </FormattedMessage>
       </div>
     );
   } else if (isLoading) {
     return (
       <div className={styles.loadingRow}>
         <div className={loadingStyles.loadingSpinner}></div>
-        <div className={loadingStyles.loadingText}>Loading</div>
+        <FormattedMessage id='error.tableLoading'>
+          {(message: string) =>
+            <div className={loadingStyles.loadingText}>{message}</div>}
+        </FormattedMessage>
       </div>
     );
   }

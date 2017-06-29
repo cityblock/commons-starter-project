@@ -1,0 +1,106 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders empty div 1`] = `
+<div
+  className=""
+  onClick={[Function]}
+>
+  <div
+    className={undefined}
+  >
+    <div
+      className={undefined}
+    >
+      name
+    </div>
+    <div
+      className={undefined}
+    >
+      1 10m
+    </div>
+  </div>
+  <div
+    className={undefined}
+  >
+    <div
+      className={undefined}
+    >
+      <div
+        className={undefined}
+      >
+        once daily
+      </div>
+    </div>
+    <div
+      className={undefined}
+    >
+      <div
+        className={undefined}
+      >
+        Prescribed by
+      </div>
+      <div
+        className={undefined}
+      >
+        TBD
+      </div>
+    </div>
+    <div
+      className={undefined}
+    >
+      <div
+        className={undefined}
+      >
+        Prescribed on
+      </div>
+      <div
+        className={undefined}
+      >
+        10/10/2010
+      </div>
+    </div>
+    <div
+      className={undefined}
+    >
+      <div
+        className={undefined}
+      >
+        Refills allowed
+      </div>
+      <div
+        className={undefined}
+      >
+        TBD
+      </div>
+    </div>
+    <div
+      className={undefined}
+    >
+      <div
+        className={undefined}
+      >
+        Renewable
+      </div>
+      <div
+        className={undefined}
+      >
+        TBD
+      </div>
+    </div>
+    <div
+      className={undefined}
+    >
+      <div
+        className={undefined}
+      >
+        Status
+      </div>
+      <div
+        className={undefined}
+      >
+        TBD
+      </div>
+    </div>
+  </div>
+</div>
+`;

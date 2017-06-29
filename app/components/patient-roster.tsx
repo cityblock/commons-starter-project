@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
-import { PatientRosterItem } from '../components/patient-roster-item';
+import PatientRosterItem from '../components/patient-roster-item';
 import { TableLoadingError } from '../components/table-loading-error';
 import * as styles from '../css/components/patient-roster.css';
 import { ShortPatientFragment } from '../graphql/types';

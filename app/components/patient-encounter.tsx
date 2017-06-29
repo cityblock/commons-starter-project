@@ -1,5 +1,5 @@
-import * as moment from 'moment';
 import * as React from 'react';
+import { injectIntl, InjectedIntlProps } from 'react-intl';
 import * as styles from '../css/components/patient-encounter.css';
 import { FullPatientEncounterFragment } from '../graphql/types';
 
@@ -7,10 +7,12 @@ export interface IProps {
   encounter: FullPatientEncounterFragment;
 }
 
-export default class PatientEncounter extends React.Component<IProps, {}> {
-  constructor(props: IProps) {
-    super(props);
+type Props = IProps & InjectedIntlProps;
 
+class PatientEncounter extends React.Component<Props> {
+
+  constructor(props: Props) {
+    super(props);
     this.renderEncounterAttachments = this.renderEncounterAttachments.bind(this);
   }
 
@@ -32,11 +34,10 @@ export default class PatientEncounter extends React.Component<IProps, {}> {
   }
 
   render() {
-    const { encounter } = this.props;
+    const { encounter, intl } = this.props;
     const providerName = encounter.providerName;
-    const encounterMoment = moment(encounter.dateTime);
-    const formattedEncounterDate = encounterMoment.format('MMMM D, YYYY');
-    const formattedEncounterTime = encounterMoment.format('H:mma');
+    const formattedEncounterDate = intl.formatDate(encounter.dateTime);
+    const formattedEncounterTime = intl.formatTime(encounter.dateTime);
     const encounterLocation = encounter.location || 'Unknown Location';
 
     return (
@@ -78,3 +79,5 @@ export default class PatientEncounter extends React.Component<IProps, {}> {
     );
   }
 }
+
+export default injectIntl<IProps>(PatientEncounter);

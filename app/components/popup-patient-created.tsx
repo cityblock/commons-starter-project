@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { FormattedMessage } from 'react-intl';
 import { Link } from 'react-router-dom';
 import * as styles from '../css/components/popup-patient-created.css';
 import { ShortPatientFragment } from '../graphql/types';
@@ -19,14 +20,23 @@ class PopupPatientCreated extends React.Component<IProps, {}> {
       <Popup visible={visible}>
         <div className={styles.content}>
           <div className={styles.heading}>
-            {name} <span className={styles.highlight}>successfully</span> enrolled
+            {name}
+            <FormattedMessage id='patient.createdPopupHeading'>
+              {(message: string) => <span className={styles.highlight}>{message}</span>}
+            </FormattedMessage>
           </div>
-          <div className={styles.paragraph}>
-            Continue to their patient profile or go back to your patient roster.
-          </div>
+          <FormattedMessage id='patient.createdPopupHeading'>
+            {(message: string) => <div className={styles.paragraph}>{message}</div>}
+          </FormattedMessage>
           <div className={styles.buttonContainer}>
-            <Link className={styles.invertedButton} to={'/patients'}>Patient Roster</Link>
-            <Link className={styles.button} to={patientLink}>Go to profile</Link>
+            <FormattedMessage id='patient.createdPopupRoster'>
+              {(message: string) =>
+                <Link className={styles.invertedButton} to={'/patients'}>{message}</Link>}
+            </FormattedMessage>
+            <FormattedMessage id='patient.createdPopupProfile'>
+              {(message: string) =>
+                <Link className={styles.button} to={patientLink}>{message}</Link>}
+            </FormattedMessage>
           </div>
         </div>
       </Popup>);

@@ -1,0 +1,45 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders empty div 1`] = `<div />`;
+
+exports[`renders error 1`] = `
+<div
+  className={undefined}
+>
+  <div
+    className={undefined}
+  />
+  <div
+    className={undefined}
+  >
+    Unable to load your roster
+  </div>
+  3
+  <div
+    className={undefined}
+  >
+    Sorry, something went wrong. Please try reloading the page again.
+  </div>
+  <div
+    className={undefined}
+    onClick={[Function]}
+  >
+    Try Again
+  </div>
+</div>
+`;
+
+exports[`renders loading 1`] = `
+<div
+  className={undefined}
+>
+  <div
+    className={undefined}
+  />
+  <div
+    className={undefined}
+  >
+    Loading
+  </div>
+</div>
+`;

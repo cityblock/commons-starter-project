@@ -1,0 +1,168 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders encounter creation 1`] = `
+<div
+  className=""
+  onClick={[Function]}
+>
+  <div
+    className=""
+  >
+    <div
+      className={undefined}
+    >
+      <div
+        className=""
+      />
+      <div
+        className={undefined}
+      >
+        Saving
+      </div>
+    </div>
+    <div
+      className={undefined}
+    >
+      <div
+        className={undefined}
+      />
+      <div
+        className={undefined}
+      >
+        Unable to save encounter
+      </div>
+      <div
+        className={undefined}
+      >
+        Sorry, something went wrong. Please try saving this encounter again.
+      </div>
+      <div
+        className=""
+        onClick={[Function]}
+      >
+        Try again
+      </div>
+    </div>
+  </div>
+  <div
+    className={undefined}
+  >
+    Record new encounter
+  </div>
+  <div
+    className={undefined}
+  >
+    <div
+      className={undefined}
+    >
+      Encounter reason
+      :
+    </div>
+    <div
+      className={undefined}
+    >
+      <input
+        name="encounterReason"
+        onChange={[Function]}
+        required={true}
+        type="text"
+        value=""
+      />
+    </div>
+    <div
+      className={undefined}
+    >
+      <div
+        className={undefined}
+      >
+        <div
+          className={undefined}
+        >
+          Location of encounter
+          :
+        </div>
+        <div
+          className={undefined}
+        >
+          <input
+            name="encounterLocation"
+            onChange={[Function]}
+            required={true}
+            type="text"
+            value=""
+          />
+        </div>
+      </div>
+      <div
+        className={undefined}
+      >
+        <div
+          className={undefined}
+        >
+          Start time
+          :
+        </div>
+        <div
+          className={undefined}
+        >
+          <input
+            name="encounterStartTime"
+            onChange={[Function]}
+            required={true}
+            type="time"
+            value=""
+          />
+        </div>
+      </div>
+    </div>
+    <div
+      className={undefined}
+    >
+      Encounter summary
+      :
+    </div>
+    <div
+      className={undefined}
+    >
+      <textarea
+        name="encounterSummary"
+        onChange={[Function]}
+        required={true}
+        value=""
+      />
+    </div>
+    <div
+      className={undefined}
+    >
+      <div
+        className={undefined}
+      >
+        <div
+          className={undefined}
+        />
+        <div
+          className={undefined}
+        >
+          Add attachment
+        </div>
+      </div>
+    </div>
+    <div
+      className={undefined}
+    >
+      <div
+        className=""
+        onClick={[Function]}
+      >
+        Cancel
+      </div>
+      <div
+        className=""
+        onClick={[Function]}
+      >
+        Submit
+      </div>
+    </div>
+  </div>
+</div>
+`;

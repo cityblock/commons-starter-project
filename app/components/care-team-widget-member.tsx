@@ -1,5 +1,6 @@
 import * as classNames from 'classnames';
 import * as React from 'react';
+import { FormattedMessage } from 'react-intl';
 import * as styles from '../css/components/care-team-widget-member.css';
 import { FullUserFragment } from '../graphql/types';
 
@@ -13,10 +14,10 @@ const generateIconStyles = (iconStyle: string): string => (
   classNames(styles.careTeamContactIcon, iconStyle)
 );
 
-const slackIconStyles   = generateIconStyles(styles.careTeamSlackIcon);
-const phoneIconStyles   = generateIconStyles(styles.careTeamPhoneIcon);
-const smsIconStyles     = generateIconStyles(styles.careTeamSmsIcon);
-const emailIconStyles   = generateIconStyles(styles.careTeamEmailIcon);
+const slackIconStyles = generateIconStyles(styles.careTeamSlackIcon);
+const phoneIconStyles = generateIconStyles(styles.careTeamPhoneIcon);
+const smsIconStyles = generateIconStyles(styles.careTeamSmsIcon);
+const emailIconStyles = generateIconStyles(styles.careTeamEmailIcon);
 const profileIconStyles = generateIconStyles(styles.careTeamProfileIcon);
 
 export default class CareTeamWidgetMember extends React.Component<IProps, {}> {
@@ -56,23 +57,38 @@ export default class CareTeamWidgetMember extends React.Component<IProps, {}> {
         <div className={contactStyles}>
           <div className={styles.careTeamMemberContactRow}>
             <div className={slackIconStyles}></div>
-            <div className={styles.careTeamContactLabel}>Message on Slack</div>
+            <FormattedMessage id='careTeam.slack'>
+              {(message: string) =>
+                <div className={styles.careTeamContactLabel}>{message}</div>}
+            </FormattedMessage>
           </div>
           <div className={styles.careTeamMemberContactRow}>
             <div className={phoneIconStyles}></div>
-            <div className={styles.careTeamContactLabel}>Call on phone</div>
+            <FormattedMessage id='careTeam.call'>
+              {(message: string) =>
+                <div className={styles.careTeamContactLabel}>{message}</div>}
+            </FormattedMessage>
           </div>
           <div className={styles.careTeamMemberContactRow}>
             <div className={smsIconStyles}></div>
-            <div className={styles.careTeamContactLabel}>Send text message</div>
+            <FormattedMessage id='careTeam.text'>
+              {(message: string) =>
+                <div className={styles.careTeamContactLabel}>{message}</div>}
+            </FormattedMessage>
           </div>
           <div className={styles.careTeamMemberContactRow}>
             <div className={emailIconStyles}></div>
-            <div className={styles.careTeamContactLabel}>Send an email</div>
+            <FormattedMessage id='careTeam.email'>
+              {(message: string) =>
+                <div className={styles.careTeamContactLabel}>{message}</div>}
+            </FormattedMessage>
           </div>
           <div className={styles.careTeamMemberContactRow}>
             <div className={profileIconStyles}></div>
-            <div className={styles.careTeamContactLabel}>Go to profile</div>
+            <FormattedMessage id='careTeam.profile'>
+              {(message: string) =>
+                <div className={styles.careTeamContactLabel}>{message}</div>}
+            </FormattedMessage>
           </div>
         </div>
       </div>

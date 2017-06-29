@@ -15,13 +15,13 @@ export default class PatientMedication extends React.Component<IProps, {}> {
   }
 
   render() {
-    const { medication } = this.props;
+    const { medication, selected } = this.props;
     const dosage = medication.quantity && medication.quantityUnit ?
       `${medication.quantity} ${medication.quantityUnit}` : 'Not specified';
 
     const medicationClass = classNames(
       styles.medication,
-      { [styles.selected]: this.props.selected },
+      { [styles.selected]: selected },
     );
 
     const dosageInstructions = medication.dosageInstructions || 'No instructions provided.';

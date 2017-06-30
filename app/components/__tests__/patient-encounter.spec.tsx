@@ -23,10 +23,13 @@ it('renders encounter', () => {
     reasons: ['reason'],
     dateTime: '10/10/2010',
   };
+
+  const onClickAttachment = () => (true);
+
   const tree = create(
     <MockedProvider mocks={[]} store={mockStore({ locale })}>
       <ReduxConnectedIntlProvider>
-        <PatientEncounter encounter={encounter} />
+        <PatientEncounter encounter={encounter} onClickAttachment={onClickAttachment} />
       </ReduxConnectedIntlProvider>
     </MockedProvider>,
   ).toJSON();

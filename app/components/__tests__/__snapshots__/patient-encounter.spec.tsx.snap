@@ -64,6 +64,34 @@ exports[`renders encounter 1`] = `
       >
         location
       </div>
+      <div
+        className={undefined}
+      >
+        <div
+          className={undefined}
+          onClick={[Function]}
+        >
+          <img
+            src="http://bit.ly/2u33i9R"
+          />
+        </div>
+        <div
+          className={undefined}
+          onClick={[Function]}
+        >
+          <img
+            src="http://bit.ly/2sqLuUh"
+          />
+        </div>
+        <div
+          className={undefined}
+          onClick={[Function]}
+        >
+          <img
+            src="http://bit.ly/2ttumSW"
+          />
+        </div>
+      </div>
     </div>
   </div>
 </div>

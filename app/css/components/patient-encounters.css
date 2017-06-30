@@ -57,6 +57,8 @@
   border: 1px solid var(--border-color);
   border-radius: 2px;
   padding-left: 20px;
+  font-size: var(--small-font-size);
+  line-height: var(--small-font-line-height);
 
   &::placeholder {
     color: var(--light-gray-font-color);

@@ -3,6 +3,9 @@ import { Lang } from '../locale-reducer';
 export const ENGLISH_TRANSLATION = {
   lang: 'en' as Lang,
   messages: {
+    'lightbox.of': 'of',
+    'lightbox.image': 'image',
+    'lightbox.images': 'images',
     'login.logInGoogle': 'Sign in with Google',
     'patientPanel.header': 'Patient Panel',
     'patientPanel.addPatient': 'Add Patient',

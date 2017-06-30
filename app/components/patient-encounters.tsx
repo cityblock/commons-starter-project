@@ -5,6 +5,7 @@ import * as styles from '../css/components/patient-encounters.css';
 import * as patientEncountersQuery from '../graphql/queries/get-patient-encounters.graphql';
 import { FullPatientEncounterFragment } from '../graphql/types';
 import { EncountersLoadingError } from './encounters-loading-error';
+import Lightbox from './lightbox';
 import NewPatientEncounter from './new-patient-encounter';
 import PatientEncounter from './patient-encounter';
 
@@ -19,6 +20,9 @@ export interface IProps {
 export interface IState {
   loading?: boolean;
   error?: string;
+  clickedAttachment?: string;
+  lightboxAttachments: string[];
+  lightboxIsOpen: boolean;
 }
 
 class PatientEncounters extends React.Component<IProps, IState> {
@@ -30,14 +34,28 @@ class PatientEncounters extends React.Component<IProps, IState> {
     this.renderPatientEncounters = this.renderPatientEncounters.bind(this);
     this.renderPatientEncounter = this.renderPatientEncounter.bind(this);
     this.reloadPatientEncounters = this.reloadPatientEncounters.bind(this);
+    this.onClickAttachment = this.onClickAttachment.bind(this);
+    this.onLightboxDismiss = this.onLightboxDismiss.bind(this);
 
-    this.state = { loading, error };
+    this.state = { loading, error, lightboxIsOpen: false, lightboxAttachments: [] };
   }
 
   componentWillReceiveProps(nextProps: IProps) {
     const { loading, error } = nextProps;
 
     this.setState(() => ({ loading, error }));
+  }
+
+  onClickAttachment(clickedAttachment: string, allAttachments: string[]) {
+    this.setState(() => ({
+      lightboxIsOpen: true,
+      clickedAttachment,
+      lightboxAttachments: allAttachments,
+    }));
+  }
+
+  onLightboxDismiss() {
+    this.setState(() => ({ lightboxIsOpen: false }));
   }
 
   renderPatientEncounters(encounters: FullPatientEncounterFragment[]) {
@@ -71,6 +89,7 @@ class PatientEncounters extends React.Component<IProps, IState> {
       <PatientEncounter
         key={index}
         encounter={encounter}
+        onClickAttachment={this.onClickAttachment}
       />
     );
   }
@@ -90,6 +109,7 @@ class PatientEncounters extends React.Component<IProps, IState> {
   }
 
   render() {
+    const { lightboxAttachments, clickedAttachment, lightboxIsOpen } = this.state;
     const { patientEncounters, patientId } = this.props;
     const encountersList = patientEncounters || [];
 
@@ -118,6 +138,12 @@ class PatientEncounters extends React.Component<IProps, IState> {
             {this.renderPatientEncounters(encountersList)}
           </div>
         </div>
+        <Lightbox
+          images={lightboxAttachments}
+          isOpen={lightboxIsOpen}
+          openingImage={clickedAttachment}
+          onDismiss={this.onLightboxDismiss}
+        />
       </div>
     );
   }

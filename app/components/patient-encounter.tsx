@@ -5,6 +5,7 @@ import { FullPatientEncounterFragment } from '../graphql/types';
 
 export interface IProps {
   encounter: FullPatientEncounterFragment;
+  onClickAttachment: (attachment: string, attachmentList: string[]) => any;
 }
 
 type Props = IProps & InjectedIntlProps;
@@ -14,23 +15,36 @@ class PatientEncounter extends React.Component<Props> {
   constructor(props: Props) {
     super(props);
     this.renderEncounterAttachments = this.renderEncounterAttachments.bind(this);
+    this.onDismissAttachments = this.onDismissAttachments.bind(this);
   }
 
   renderEncounterAttachments(encounter: FullPatientEncounterFragment) {
     // TODO: Don't stub this out...update encounters to return attachments as well
+    const { onClickAttachment } = this.props;
 
-    if ((encounter as any).attachments) {
-      return (
-        <div className={styles.encounterAttachments}>
-          <div className={styles.encounterAttachmentPhoto}>
-            <img src='' />
-          </div>
-          <div className={styles.encounterAttachmentPhoto}>
-            <img src='' />
-          </div>
+    const attachments: string[] = [
+      'http://bit.ly/2u33i9R',
+      'http://bit.ly/2sqLuUh',
+      'http://bit.ly/2ttumSW',
+    ];
+
+    if (attachments) {
+      const attachmentsHtml = attachments.map((attachment, index) => (
+        <div
+          key={`${attachment}=${index}`}
+          className={styles.encounterAttachmentPhoto}
+          onClick={() => onClickAttachment(attachment, attachments)}>
+          <img src={attachment} />
         </div>
+      ));
+      return (
+        <div className={styles.encounterAttachments}>{attachmentsHtml}</div>
       );
     }
+  }
+
+  onDismissAttachments() {
+    this.setState(() => ({ selectedAttachment: undefined, attachmentsOpen: false }));
   }
 
   render() {

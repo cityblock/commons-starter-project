@@ -406,6 +406,70 @@ exports[`renders patient enrollment container correctly 1`] = `
             </div>
           </div>
         </div>
+        <div
+          className="undefined"
+        >
+          <div
+            className={undefined}
+            onClick={[Function]}
+          />
+          <div
+            className={undefined}
+          >
+            <div
+              className={undefined}
+              style={
+                Object {
+                  "backgroundImage": "none",
+                }
+              }
+            >
+              <div
+                className={undefined}
+              >
+                <div
+                  className={undefined}
+                >
+                  <div
+                    className={undefined}
+                  >
+                    <div
+                      className={undefined}
+                    />
+                    <div
+                      className={undefined}
+                    >
+                      1 
+                      <span>
+                        of
+                      </span>
+                       0 
+                      <span>
+                        images
+                      </span>
+                    </div>
+                  </div>
+                  <div
+                    className={undefined}
+                    onClick={[Function]}
+                  />
+                </div>
+                <div
+                  className={undefined}
+                >
+                  <div
+                    className="undefined"
+                    onClick={[Function]}
+                  />
+                  <div
+                    className=""
+                    onClick={[Function]}
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
     <div

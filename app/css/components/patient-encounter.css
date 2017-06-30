@@ -104,7 +104,14 @@
 }
 
 .encounterAttachmentPhoto {
+  display: flex;
+  align-items: center;
   margin-right: var(--small-gutter);
   width: 40px;
   height: 40px;
+
+  &:hover {
+    cursor: pointer;
+    opacity: 0.5;
+  }
 }

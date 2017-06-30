@@ -1,0 +1,68 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders a lightbox correctly 1`] = `
+<div
+  className=""
+>
+  <div
+    className={undefined}
+    onClick={[Function]}
+  />
+  <div
+    className={undefined}
+  >
+    <div
+      className={undefined}
+      style={
+        Object {
+          "backgroundImage": "url('http://bit.ly/2ttumSW')",
+        }
+      }
+    >
+      <div
+        className={undefined}
+      >
+        <div
+          className={undefined}
+        >
+          <div
+            className={undefined}
+          >
+            <div
+              className={undefined}
+            />
+            <div
+              className={undefined}
+            >
+              2 
+              <span>
+                of
+              </span>
+               2 
+              <span>
+                images
+              </span>
+            </div>
+          </div>
+          <div
+            className={undefined}
+            onClick={[Function]}
+          />
+        </div>
+        <div
+          className={undefined}
+        >
+          <div
+            className=""
+            onClick={[Function]}
+          />
+          <div
+            className="undefined"
+            onClick={[Function]}
+          />
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;

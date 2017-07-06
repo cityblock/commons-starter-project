@@ -19,6 +19,7 @@ enum AppointmentStatus {
 # User account model
 type User implements uniqueId {
   id: ID!
+  locale: String
   firstName: String
   lastName: String
   email: String
@@ -368,12 +369,22 @@ input PatientScratchPadEditInput {
   text: String!
 }
 
+# params for editing a current user
+input CurrentUserEditInput {
+  locale: String
+  firstName: String
+  lastName: String
+}
+
 type RootMutationType {
   # Create a new user
   userCreate(input: UserCreateInput): UserWithAuthToken
 
   # Login user
   userLogin(input: UserLoginInput): UserWithAuthToken
+
+  # Edit current user
+  currentUserEdit(input: CurrentUserEditInput): User
 
   # Create a new clinic
   clinicCreate(input: ClinicCreateInput): Clinic

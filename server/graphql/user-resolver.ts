@@ -23,6 +23,16 @@ export interface IUsersFilterOptions {
   pageSize: number;
 }
 
+export interface IEditCurrentUserInput {
+  firstName: string;
+  lastName: string;
+  locale: 'en' | 'es';
+}
+
+export interface IEditCurrentUserOptions {
+  input: IEditCurrentUserInput;
+}
+
 export async function userCreate(root: any, { input }: IUserCreateArgs, context: IContext) {
   const { userRole } = context;
   const { email, homeClinicId } = input;
@@ -67,6 +77,18 @@ export async function resolveCurrentUser(
   }
 
   return await User.get(userId);
+}
+
+export async function currentUserEdit(
+  root: any, args: IEditCurrentUserOptions, { db, userId, userRole }: IContext,
+) {
+  await accessControls.isAllowedForUser(userRole, 'edit', 'user', userId, userId);
+
+  if (!userId) {
+    throw new Error('User not logged in');
+  }
+
+  return await User.update(userId, args.input);
 }
 
 export async function resolveUsers(

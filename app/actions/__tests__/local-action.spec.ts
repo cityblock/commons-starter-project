@@ -1,8 +1,8 @@
-import { selectedLocale } from '../locale-action';
+import { selectLocale } from '../locale-action';
 
 describe('locale action', () => {
   it('correctly changes locale', () => {
 
-    expect(selectedLocale('en').locale).toEqual('en');
+    expect(selectLocale('en').locale).toEqual('en');
   });
 });

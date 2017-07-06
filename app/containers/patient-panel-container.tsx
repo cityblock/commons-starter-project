@@ -124,7 +124,7 @@ class PatientPanelContainer extends React.Component<IProps, IState> {
             </FormattedMessage>
             <FormattedMessage id='patientPanel.addPatient'>
               {(message: string) =>
-                <Link to='/patient/new' className={styles.button}>{message}</Link>}
+                <Link to='/patients/new' className={styles.button}>{message}</Link>}
             </FormattedMessage>
           </div>
         </div>

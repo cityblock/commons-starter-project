@@ -45,5 +45,8 @@ export const ENGLISH_TRANSLATION = {
     'careTeam.text': 'Send text message',
     'careTeam.email': 'Send an email',
     'careTeam.profile': 'Go to profile',
+    'header.settings': 'Settings',
+    'header.logOut': 'Logout',
+    'settings.heading': 'Settings',
   },
 };

@@ -63,7 +63,7 @@ export default class PatientContactForm extends React.Component<IProps, IState> 
     this.setState({ displayConsentToPhoneTextPopup: false });
   }
 
-  onChange(event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) {
+  onChange(event: React.ChangeEvent<HTMLInputElement>) {
     const { onFieldUpdate } = this.props;
 
     const fieldName = event.target.name;

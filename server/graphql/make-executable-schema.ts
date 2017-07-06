@@ -21,6 +21,7 @@ import {
   resolvePatientScratchPad,
 } from './patient-resolver';
 import {
+  currentUserEdit,
   resolveCurrentUser,
   resolveUser,
   resolveUsers,
@@ -55,6 +56,7 @@ const resolveFunctions = {
     patientEdit,
     patientSetup,
     patientScratchPadEdit,
+    currentUserEdit,
     userCreate,
     userLogin,
   },

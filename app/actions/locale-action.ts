@@ -5,7 +5,7 @@ export interface ILocaleSelected {
   locale: Lang;
 }
 
-export function selectedLocale(locale: Lang): ILocaleSelected {
+export function selectLocale(locale: Lang): ILocaleSelected {
   return {
     type: 'LOCALE_SELECTED',
     locale,

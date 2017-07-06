@@ -45,5 +45,8 @@ export const SPANISH_TRANSLATION = {
     'careTeam.text': 'Envía un mensaje de texto',
     'careTeam.email': 'Enviar un correo electrónico',
     'careTeam.profile': 'Ir al perfil',
+    'header.settings': 'Ajustes',
+    'header.logOut': 'Cerrar sesión',
+    'settings.heading': 'Ajustes',
   },
 };

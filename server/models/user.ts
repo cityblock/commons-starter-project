@@ -23,6 +23,7 @@ export interface ICreateUser {
 }
 
 export interface IUpdateUser {
+  locale: 'en' | 'es';
   googleProfileImageUrl: string;
   googleAuthId: string;
   homeClinicId: string;
@@ -47,6 +48,7 @@ export default class User extends Model {
   homeClinic: Clinic;
   googleAuthId: string;
   googleAuth: GoogleAuth;
+  locale: 'en' | 'es';
   athenaProviderId: number;
   googleProfileImageUrl: string;
 
@@ -64,6 +66,7 @@ export default class User extends Model {
       firstName: { type: 'string' },
       lastName: { type: 'string' },
       email: { type: 'string' },
+      locale: { locale: 'string' },
       userRole: {
         type: 'string',
         enum: ['familyMember', 'healthCoach', 'physician', 'nurseCareManager'],

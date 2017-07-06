@@ -55,6 +55,17 @@ export interface GetClinicsQuery {
   } | null;
 }
 
+export interface CurrentUserEditMutationVariables {
+  firstName: string | null;
+  lastName: string | null;
+  locale: string | null;
+}
+
+export interface CurrentUserEditMutation {
+  // Edit current user
+  currentUserEdit: FullUserFragment;
+}
+
 export interface GetCurrentUserQuery {
   // The current User
   currentUser: FullUserFragment;
@@ -276,6 +287,7 @@ export interface FullPatientScratchPadFragment {
 
 export interface FullUserFragment {
   id: string;
+  locale: string | null;
   firstName: string | null;
   lastName: string | null;
   userRole: UserRole;

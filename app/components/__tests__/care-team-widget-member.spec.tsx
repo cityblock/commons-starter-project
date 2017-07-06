@@ -12,6 +12,7 @@ const mockStore = configureMockStore([]);
 it('renders care team widge', () => {
   const careTeamMember = {
     id: 'id',
+    locale: 'en',
     firstName: 'first',
     lastName: 'last',
     userRole: 'physician' as any,

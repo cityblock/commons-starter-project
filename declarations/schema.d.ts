@@ -38,6 +38,7 @@ declare module 'schema' {
   */
   interface IUser {
     id: string;
+    locale: string | null;
     firstName: string | null;
     lastName: string | null;
     email: string | null;
@@ -309,6 +310,7 @@ declare module 'schema' {
   interface IRootMutationType {
     userCreate: IUserWithAuthToken | null;
     userLogin: IUserWithAuthToken | null;
+    currentUserEdit: IUser | null;
     clinicCreate: IClinic | null;
     careTeamAddUser: Array<IUser> | null;
     careTeamRemoveUser: Array<IUser> | null;
@@ -341,6 +343,15 @@ declare module 'schema' {
   */
   interface IUserLoginInput {
     googleAuthCode: string;
+  }
+
+  /*
+    description: params for editing a current user
+  */
+  interface ICurrentUserEditInput {
+    locale?: string | null;
+    firstName?: string | null;
+    lastName?: string | null;
   }
 
   /*

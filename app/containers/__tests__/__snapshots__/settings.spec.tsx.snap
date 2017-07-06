@@ -1,0 +1,949 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders settings form correctly 1`] = `
+initialize {
+  "0": Object {
+    "attribs": Object {},
+    "children": Array [
+      Object {
+        "attribs": Object {},
+        "children": Array [
+          Object {
+            "attribs": Object {},
+            "children": Array [
+              Object {
+                "attribs": Object {},
+                "children": Array [
+                  Object {
+                    "data": "Settings",
+                    "next": null,
+                    "parent": [Circular],
+                    "prev": null,
+                    "type": "text",
+                  },
+                ],
+                "name": "div",
+                "next": Object {
+                  "attribs": Object {},
+                  "children": Array [
+                    Object {
+                      "attribs": Object {},
+                      "children": Array [
+                        Object {
+                          "attribs": Object {},
+                          "children": Array [
+                            Object {
+                              "attribs": Object {},
+                              "children": Array [
+                                Object {
+                                  "data": "Locale",
+                                  "next": null,
+                                  "parent": [Circular],
+                                  "prev": null,
+                                  "type": "text",
+                                },
+                              ],
+                              "name": "div",
+                              "next": Object {
+                                "attribs": Object {
+                                  "name": "locale",
+                                  "required": "",
+                                },
+                                "children": Array [
+                                  Object {
+                                    "attribs": Object {
+                                      "disabled": "",
+                                      "hidden": "",
+                                      "value": "",
+                                    },
+                                    "children": Array [
+                                      Object {
+                                        "data": "Select Locale",
+                                        "next": null,
+                                        "parent": [Circular],
+                                        "prev": null,
+                                        "type": "text",
+                                      },
+                                    ],
+                                    "name": "option",
+                                    "next": Object {
+                                      "attribs": Object {
+                                        "selected": "",
+                                        "value": "en",
+                                      },
+                                      "children": Array [
+                                        Object {
+                                          "data": "English",
+                                          "next": null,
+                                          "parent": [Circular],
+                                          "prev": null,
+                                          "type": "text",
+                                        },
+                                      ],
+                                      "name": "option",
+                                      "next": Object {
+                                        "attribs": Object {
+                                          "value": "es",
+                                        },
+                                        "children": Array [
+                                          Object {
+                                            "data": "Spanish",
+                                            "next": null,
+                                            "parent": [Circular],
+                                            "prev": null,
+                                            "type": "text",
+                                          },
+                                        ],
+                                        "name": "option",
+                                        "next": null,
+                                        "parent": [Circular],
+                                        "prev": [Circular],
+                                        "type": "tag",
+                                      },
+                                      "parent": [Circular],
+                                      "prev": [Circular],
+                                      "type": "tag",
+                                    },
+                                    "parent": [Circular],
+                                    "prev": null,
+                                    "type": "tag",
+                                  },
+                                  Object {
+                                    "attribs": Object {
+                                      "selected": "",
+                                      "value": "en",
+                                    },
+                                    "children": Array [
+                                      Object {
+                                        "data": "English",
+                                        "next": null,
+                                        "parent": [Circular],
+                                        "prev": null,
+                                        "type": "text",
+                                      },
+                                    ],
+                                    "name": "option",
+                                    "next": Object {
+                                      "attribs": Object {
+                                        "value": "es",
+                                      },
+                                      "children": Array [
+                                        Object {
+                                          "data": "Spanish",
+                                          "next": null,
+                                          "parent": [Circular],
+                                          "prev": null,
+                                          "type": "text",
+                                        },
+                                      ],
+                                      "name": "option",
+                                      "next": null,
+                                      "parent": [Circular],
+                                      "prev": [Circular],
+                                      "type": "tag",
+                                    },
+                                    "parent": [Circular],
+                                    "prev": Object {
+                                      "attribs": Object {
+                                        "disabled": "",
+                                        "hidden": "",
+                                        "value": "",
+                                      },
+                                      "children": Array [
+                                        Object {
+                                          "data": "Select Locale",
+                                          "next": null,
+                                          "parent": [Circular],
+                                          "prev": null,
+                                          "type": "text",
+                                        },
+                                      ],
+                                      "name": "option",
+                                      "next": [Circular],
+                                      "parent": [Circular],
+                                      "prev": null,
+                                      "type": "tag",
+                                    },
+                                    "type": "tag",
+                                  },
+                                  Object {
+                                    "attribs": Object {
+                                      "value": "es",
+                                    },
+                                    "children": Array [
+                                      Object {
+                                        "data": "Spanish",
+                                        "next": null,
+                                        "parent": [Circular],
+                                        "prev": null,
+                                        "type": "text",
+                                      },
+                                    ],
+                                    "name": "option",
+                                    "next": null,
+                                    "parent": [Circular],
+                                    "prev": Object {
+                                      "attribs": Object {
+                                        "selected": "",
+                                        "value": "en",
+                                      },
+                                      "children": Array [
+                                        Object {
+                                          "data": "English",
+                                          "next": null,
+                                          "parent": [Circular],
+                                          "prev": null,
+                                          "type": "text",
+                                        },
+                                      ],
+                                      "name": "option",
+                                      "next": [Circular],
+                                      "parent": [Circular],
+                                      "prev": Object {
+                                        "attribs": Object {
+                                          "disabled": "",
+                                          "hidden": "",
+                                          "value": "",
+                                        },
+                                        "children": Array [
+                                          Object {
+                                            "data": "Select Locale",
+                                            "next": null,
+                                            "parent": [Circular],
+                                            "prev": null,
+                                            "type": "text",
+                                          },
+                                        ],
+                                        "name": "option",
+                                        "next": [Circular],
+                                        "parent": [Circular],
+                                        "prev": null,
+                                        "type": "tag",
+                                      },
+                                      "type": "tag",
+                                    },
+                                    "type": "tag",
+                                  },
+                                ],
+                                "name": "select",
+                                "next": null,
+                                "parent": [Circular],
+                                "prev": [Circular],
+                                "type": "tag",
+                              },
+                              "parent": [Circular],
+                              "prev": null,
+                              "type": "tag",
+                            },
+                            Object {
+                              "attribs": Object {
+                                "name": "locale",
+                                "required": "",
+                              },
+                              "children": Array [
+                                Object {
+                                  "attribs": Object {
+                                    "disabled": "",
+                                    "hidden": "",
+                                    "value": "",
+                                  },
+                                  "children": Array [
+                                    Object {
+                                      "data": "Select Locale",
+                                      "next": null,
+                                      "parent": [Circular],
+                                      "prev": null,
+                                      "type": "text",
+                                    },
+                                  ],
+                                  "name": "option",
+                                  "next": Object {
+                                    "attribs": Object {
+                                      "selected": "",
+                                      "value": "en",
+                                    },
+                                    "children": Array [
+                                      Object {
+                                        "data": "English",
+                                        "next": null,
+                                        "parent": [Circular],
+                                        "prev": null,
+                                        "type": "text",
+                                      },
+                                    ],
+                                    "name": "option",
+                                    "next": Object {
+                                      "attribs": Object {
+                                        "value": "es",
+                                      },
+                                      "children": Array [
+                                        Object {
+                                          "data": "Spanish",
+                                          "next": null,
+                                          "parent": [Circular],
+                                          "prev": null,
+                                          "type": "text",
+                                        },
+                                      ],
+                                      "name": "option",
+                                      "next": null,
+                                      "parent": [Circular],
+                                      "prev": [Circular],
+                                      "type": "tag",
+                                    },
+                                    "parent": [Circular],
+                                    "prev": [Circular],
+                                    "type": "tag",
+                                  },
+                                  "parent": [Circular],
+                                  "prev": null,
+                                  "type": "tag",
+                                },
+                                Object {
+                                  "attribs": Object {
+                                    "selected": "",
+                                    "value": "en",
+                                  },
+                                  "children": Array [
+                                    Object {
+                                      "data": "English",
+                                      "next": null,
+                                      "parent": [Circular],
+                                      "prev": null,
+                                      "type": "text",
+                                    },
+                                  ],
+                                  "name": "option",
+                                  "next": Object {
+                                    "attribs": Object {
+                                      "value": "es",
+                                    },
+                                    "children": Array [
+                                      Object {
+                                        "data": "Spanish",
+                                        "next": null,
+                                        "parent": [Circular],
+                                        "prev": null,
+                                        "type": "text",
+                                      },
+                                    ],
+                                    "name": "option",
+                                    "next": null,
+                                    "parent": [Circular],
+                                    "prev": [Circular],
+                                    "type": "tag",
+                                  },
+                                  "parent": [Circular],
+                                  "prev": Object {
+                                    "attribs": Object {
+                                      "disabled": "",
+                                      "hidden": "",
+                                      "value": "",
+                                    },
+                                    "children": Array [
+                                      Object {
+                                        "data": "Select Locale",
+                                        "next": null,
+                                        "parent": [Circular],
+                                        "prev": null,
+                                        "type": "text",
+                                      },
+                                    ],
+                                    "name": "option",
+                                    "next": [Circular],
+                                    "parent": [Circular],
+                                    "prev": null,
+                                    "type": "tag",
+                                  },
+                                  "type": "tag",
+                                },
+                                Object {
+                                  "attribs": Object {
+                                    "value": "es",
+                                  },
+                                  "children": Array [
+                                    Object {
+                                      "data": "Spanish",
+                                      "next": null,
+                                      "parent": [Circular],
+                                      "prev": null,
+                                      "type": "text",
+                                    },
+                                  ],
+                                  "name": "option",
+                                  "next": null,
+                                  "parent": [Circular],
+                                  "prev": Object {
+                                    "attribs": Object {
+                                      "selected": "",
+                                      "value": "en",
+                                    },
+                                    "children": Array [
+                                      Object {
+                                        "data": "English",
+                                        "next": null,
+                                        "parent": [Circular],
+                                        "prev": null,
+                                        "type": "text",
+                                      },
+                                    ],
+                                    "name": "option",
+                                    "next": [Circular],
+                                    "parent": [Circular],
+                                    "prev": Object {
+                                      "attribs": Object {
+                                        "disabled": "",
+                                        "hidden": "",
+                                        "value": "",
+                                      },
+                                      "children": Array [
+                                        Object {
+                                          "data": "Select Locale",
+                                          "next": null,
+                                          "parent": [Circular],
+                                          "prev": null,
+                                          "type": "text",
+                                        },
+                                      ],
+                                      "name": "option",
+                                      "next": [Circular],
+                                      "parent": [Circular],
+                                      "prev": null,
+                                      "type": "tag",
+                                    },
+                                    "type": "tag",
+                                  },
+                                  "type": "tag",
+                                },
+                              ],
+                              "name": "select",
+                              "next": null,
+                              "parent": [Circular],
+                              "prev": Object {
+                                "attribs": Object {},
+                                "children": Array [
+                                  Object {
+                                    "data": "Locale",
+                                    "next": null,
+                                    "parent": [Circular],
+                                    "prev": null,
+                                    "type": "text",
+                                  },
+                                ],
+                                "name": "div",
+                                "next": [Circular],
+                                "parent": [Circular],
+                                "prev": null,
+                                "type": "tag",
+                              },
+                              "type": "tag",
+                            },
+                          ],
+                          "name": "div",
+                          "next": null,
+                          "parent": [Circular],
+                          "prev": null,
+                          "type": "tag",
+                        },
+                      ],
+                      "name": "div",
+                      "next": null,
+                      "parent": [Circular],
+                      "prev": null,
+                      "type": "tag",
+                    },
+                  ],
+                  "name": "div",
+                  "next": null,
+                  "parent": [Circular],
+                  "prev": [Circular],
+                  "type": "tag",
+                },
+                "parent": [Circular],
+                "prev": null,
+                "type": "tag",
+              },
+              Object {
+                "attribs": Object {},
+                "children": Array [
+                  Object {
+                    "attribs": Object {},
+                    "children": Array [
+                      Object {
+                        "attribs": Object {},
+                        "children": Array [
+                          Object {
+                            "attribs": Object {},
+                            "children": Array [
+                              Object {
+                                "data": "Locale",
+                                "next": null,
+                                "parent": [Circular],
+                                "prev": null,
+                                "type": "text",
+                              },
+                            ],
+                            "name": "div",
+                            "next": Object {
+                              "attribs": Object {
+                                "name": "locale",
+                                "required": "",
+                              },
+                              "children": Array [
+                                Object {
+                                  "attribs": Object {
+                                    "disabled": "",
+                                    "hidden": "",
+                                    "value": "",
+                                  },
+                                  "children": Array [
+                                    Object {
+                                      "data": "Select Locale",
+                                      "next": null,
+                                      "parent": [Circular],
+                                      "prev": null,
+                                      "type": "text",
+                                    },
+                                  ],
+                                  "name": "option",
+                                  "next": Object {
+                                    "attribs": Object {
+                                      "selected": "",
+                                      "value": "en",
+                                    },
+                                    "children": Array [
+                                      Object {
+                                        "data": "English",
+                                        "next": null,
+                                        "parent": [Circular],
+                                        "prev": null,
+                                        "type": "text",
+                                      },
+                                    ],
+                                    "name": "option",
+                                    "next": Object {
+                                      "attribs": Object {
+                                        "value": "es",
+                                      },
+                                      "children": Array [
+                                        Object {
+                                          "data": "Spanish",
+                                          "next": null,
+                                          "parent": [Circular],
+                                          "prev": null,
+                                          "type": "text",
+                                        },
+                                      ],
+                                      "name": "option",
+                                      "next": null,
+                                      "parent": [Circular],
+                                      "prev": [Circular],
+                                      "type": "tag",
+                                    },
+                                    "parent": [Circular],
+                                    "prev": [Circular],
+                                    "type": "tag",
+                                  },
+                                  "parent": [Circular],
+                                  "prev": null,
+                                  "type": "tag",
+                                },
+                                Object {
+                                  "attribs": Object {
+                                    "selected": "",
+                                    "value": "en",
+                                  },
+                                  "children": Array [
+                                    Object {
+                                      "data": "English",
+                                      "next": null,
+                                      "parent": [Circular],
+                                      "prev": null,
+                                      "type": "text",
+                                    },
+                                  ],
+                                  "name": "option",
+                                  "next": Object {
+                                    "attribs": Object {
+                                      "value": "es",
+                                    },
+                                    "children": Array [
+                                      Object {
+                                        "data": "Spanish",
+                                        "next": null,
+                                        "parent": [Circular],
+                                        "prev": null,
+                                        "type": "text",
+                                      },
+                                    ],
+                                    "name": "option",
+                                    "next": null,
+                                    "parent": [Circular],
+                                    "prev": [Circular],
+                                    "type": "tag",
+                                  },
+                                  "parent": [Circular],
+                                  "prev": Object {
+                                    "attribs": Object {
+                                      "disabled": "",
+                                      "hidden": "",
+                                      "value": "",
+                                    },
+                                    "children": Array [
+                                      Object {
+                                        "data": "Select Locale",
+                                        "next": null,
+                                        "parent": [Circular],
+                                        "prev": null,
+                                        "type": "text",
+                                      },
+                                    ],
+                                    "name": "option",
+                                    "next": [Circular],
+                                    "parent": [Circular],
+                                    "prev": null,
+                                    "type": "tag",
+                                  },
+                                  "type": "tag",
+                                },
+                                Object {
+                                  "attribs": Object {
+                                    "value": "es",
+                                  },
+                                  "children": Array [
+                                    Object {
+                                      "data": "Spanish",
+                                      "next": null,
+                                      "parent": [Circular],
+                                      "prev": null,
+                                      "type": "text",
+                                    },
+                                  ],
+                                  "name": "option",
+                                  "next": null,
+                                  "parent": [Circular],
+                                  "prev": Object {
+                                    "attribs": Object {
+                                      "selected": "",
+                                      "value": "en",
+                                    },
+                                    "children": Array [
+                                      Object {
+                                        "data": "English",
+                                        "next": null,
+                                        "parent": [Circular],
+                                        "prev": null,
+                                        "type": "text",
+                                      },
+                                    ],
+                                    "name": "option",
+                                    "next": [Circular],
+                                    "parent": [Circular],
+                                    "prev": Object {
+                                      "attribs": Object {
+                                        "disabled": "",
+                                        "hidden": "",
+                                        "value": "",
+                                      },
+                                      "children": Array [
+                                        Object {
+                                          "data": "Select Locale",
+                                          "next": null,
+                                          "parent": [Circular],
+                                          "prev": null,
+                                          "type": "text",
+                                        },
+                                      ],
+                                      "name": "option",
+                                      "next": [Circular],
+                                      "parent": [Circular],
+                                      "prev": null,
+                                      "type": "tag",
+                                    },
+                                    "type": "tag",
+                                  },
+                                  "type": "tag",
+                                },
+                              ],
+                              "name": "select",
+                              "next": null,
+                              "parent": [Circular],
+                              "prev": [Circular],
+                              "type": "tag",
+                            },
+                            "parent": [Circular],
+                            "prev": null,
+                            "type": "tag",
+                          },
+                          Object {
+                            "attribs": Object {
+                              "name": "locale",
+                              "required": "",
+                            },
+                            "children": Array [
+                              Object {
+                                "attribs": Object {
+                                  "disabled": "",
+                                  "hidden": "",
+                                  "value": "",
+                                },
+                                "children": Array [
+                                  Object {
+                                    "data": "Select Locale",
+                                    "next": null,
+                                    "parent": [Circular],
+                                    "prev": null,
+                                    "type": "text",
+                                  },
+                                ],
+                                "name": "option",
+                                "next": Object {
+                                  "attribs": Object {
+                                    "selected": "",
+                                    "value": "en",
+                                  },
+                                  "children": Array [
+                                    Object {
+                                      "data": "English",
+                                      "next": null,
+                                      "parent": [Circular],
+                                      "prev": null,
+                                      "type": "text",
+                                    },
+                                  ],
+                                  "name": "option",
+                                  "next": Object {
+                                    "attribs": Object {
+                                      "value": "es",
+                                    },
+                                    "children": Array [
+                                      Object {
+                                        "data": "Spanish",
+                                        "next": null,
+                                        "parent": [Circular],
+                                        "prev": null,
+                                        "type": "text",
+                                      },
+                                    ],
+                                    "name": "option",
+                                    "next": null,
+                                    "parent": [Circular],
+                                    "prev": [Circular],
+                                    "type": "tag",
+                                  },
+                                  "parent": [Circular],
+                                  "prev": [Circular],
+                                  "type": "tag",
+                                },
+                                "parent": [Circular],
+                                "prev": null,
+                                "type": "tag",
+                              },
+                              Object {
+                                "attribs": Object {
+                                  "selected": "",
+                                  "value": "en",
+                                },
+                                "children": Array [
+                                  Object {
+                                    "data": "English",
+                                    "next": null,
+                                    "parent": [Circular],
+                                    "prev": null,
+                                    "type": "text",
+                                  },
+                                ],
+                                "name": "option",
+                                "next": Object {
+                                  "attribs": Object {
+                                    "value": "es",
+                                  },
+                                  "children": Array [
+                                    Object {
+                                      "data": "Spanish",
+                                      "next": null,
+                                      "parent": [Circular],
+                                      "prev": null,
+                                      "type": "text",
+                                    },
+                                  ],
+                                  "name": "option",
+                                  "next": null,
+                                  "parent": [Circular],
+                                  "prev": [Circular],
+                                  "type": "tag",
+                                },
+                                "parent": [Circular],
+                                "prev": Object {
+                                  "attribs": Object {
+                                    "disabled": "",
+                                    "hidden": "",
+                                    "value": "",
+                                  },
+                                  "children": Array [
+                                    Object {
+                                      "data": "Select Locale",
+                                      "next": null,
+                                      "parent": [Circular],
+                                      "prev": null,
+                                      "type": "text",
+                                    },
+                                  ],
+                                  "name": "option",
+                                  "next": [Circular],
+                                  "parent": [Circular],
+                                  "prev": null,
+                                  "type": "tag",
+                                },
+                                "type": "tag",
+                              },
+                              Object {
+                                "attribs": Object {
+                                  "value": "es",
+                                },
+                                "children": Array [
+                                  Object {
+                                    "data": "Spanish",
+                                    "next": null,
+                                    "parent": [Circular],
+                                    "prev": null,
+                                    "type": "text",
+                                  },
+                                ],
+                                "name": "option",
+                                "next": null,
+                                "parent": [Circular],
+                                "prev": Object {
+                                  "attribs": Object {
+                                    "selected": "",
+                                    "value": "en",
+                                  },
+                                  "children": Array [
+                                    Object {
+                                      "data": "English",
+                                      "next": null,
+                                      "parent": [Circular],
+                                      "prev": null,
+                                      "type": "text",
+                                    },
+                                  ],
+                                  "name": "option",
+                                  "next": [Circular],
+                                  "parent": [Circular],
+                                  "prev": Object {
+                                    "attribs": Object {
+                                      "disabled": "",
+                                      "hidden": "",
+                                      "value": "",
+                                    },
+                                    "children": Array [
+                                      Object {
+                                        "data": "Select Locale",
+                                        "next": null,
+                                        "parent": [Circular],
+                                        "prev": null,
+                                        "type": "text",
+                                      },
+                                    ],
+                                    "name": "option",
+                                    "next": [Circular],
+                                    "parent": [Circular],
+                                    "prev": null,
+                                    "type": "tag",
+                                  },
+                                  "type": "tag",
+                                },
+                                "type": "tag",
+                              },
+                            ],
+                            "name": "select",
+                            "next": null,
+                            "parent": [Circular],
+                            "prev": Object {
+                              "attribs": Object {},
+                              "children": Array [
+                                Object {
+                                  "data": "Locale",
+                                  "next": null,
+                                  "parent": [Circular],
+                                  "prev": null,
+                                  "type": "text",
+                                },
+                              ],
+                              "name": "div",
+                              "next": [Circular],
+                              "parent": [Circular],
+                              "prev": null,
+                              "type": "tag",
+                            },
+                            "type": "tag",
+                          },
+                        ],
+                        "name": "div",
+                        "next": null,
+                        "parent": [Circular],
+                        "prev": null,
+                        "type": "tag",
+                      },
+                    ],
+                    "name": "div",
+                    "next": null,
+                    "parent": [Circular],
+                    "prev": null,
+                    "type": "tag",
+                  },
+                ],
+                "name": "div",
+                "next": null,
+                "parent": [Circular],
+                "prev": Object {
+                  "attribs": Object {},
+                  "children": Array [
+                    Object {
+                      "data": "Settings",
+                      "next": null,
+                      "parent": [Circular],
+                      "prev": null,
+                      "type": "text",
+                    },
+                  ],
+                  "name": "div",
+                  "next": [Circular],
+                  "parent": [Circular],
+                  "prev": null,
+                  "type": "tag",
+                },
+                "type": "tag",
+              },
+            ],
+            "name": "div",
+            "next": null,
+            "parent": [Circular],
+            "prev": null,
+            "type": "tag",
+          },
+        ],
+        "name": "div",
+        "next": null,
+        "parent": null,
+        "prev": null,
+        "root": [Circular],
+        "type": "tag",
+      },
+    ],
+    "name": "root",
+    "next": null,
+    "parent": null,
+    "prev": null,
+    "type": "root",
+  },
+  "_root": [Circular],
+  "length": 1,
+  "options": Object {
+    "decodeEntities": true,
+    "normalizeWhitespace": false,
+    "withDomLvl1": true,
+    "xmlMode": false,
+  },
+}
+`;

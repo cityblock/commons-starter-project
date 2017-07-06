@@ -30,7 +30,6 @@ export function convertUser(user: User): IUser {
     homeClinicId: user.homeClinicId,
     locale: user.locale,
     googleProfileImageUrl: user.googleProfileImageUrl,
-    locale: user.locale,
     ...convertGenerated(user),
   };
 }

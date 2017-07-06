@@ -66,7 +66,7 @@ export default class User extends Model {
       firstName: { type: 'string' },
       lastName: { type: 'string' },
       email: { type: 'string' },
-      locale: { locale: 'string' },
+      locale: { type: 'string' },
       userRole: {
         type: 'string',
         enum: ['familyMember', 'healthCoach', 'physician', 'nurseCareManager'],

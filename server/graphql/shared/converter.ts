@@ -28,6 +28,7 @@ export function convertUser(user: User): IUser {
     userRole: user.userRole,
     createdAt: user.createdAt,
     homeClinicId: user.homeClinicId,
+    locale: user.locale,
     googleProfileImageUrl: user.googleProfileImageUrl,
     ...convertGenerated(user),
   };

@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { FormattedMessage } from 'react-intl';
 import * as formStyles from '../css/shared/forms.css';
 import insuranceTypeOptions from '../util/insurance-type-options';
 import relationshipToPatientOptions from '../util/relationship-to-patient-options';
@@ -92,29 +93,39 @@ export default class PatientInsuranceForm extends React.Component<IProps, IState
       <div>
         <div className={formStyles.multiInputFormRow}>
           <div className={formStyles.inputGroup}>
-            <div className={formStyles.inputLabel}>Insurance type</div>
+            <FormattedMessage id='insuranceForm.insuranceType'>
+              {(message: string) => <div className={formStyles.inputLabel}>{message}</div>}
+            </FormattedMessage>
             <select required
               name='insuranceType'
               value={insuranceType}
               onChange={this.onChange}
               className={formStyles.select}>
-              <option value='' disabled hidden>Select insurance type</option>
+              <FormattedMessage id='insuranceForm.insuranceTypePlaceholder'>
+                {(message: string) => <option value='' disabled hidden>{message}</option>}
+              </FormattedMessage>
               {insuranceTypeOptionsHtml}
             </select>
           </div>
           <div className={formStyles.inputGroup}>
-            <div className={formStyles.inputLabel}>Patient relationship to policy holder</div>
+            <FormattedMessage id='insuranceForm.policyHolderRelationship'>
+              {(message: string) => <div className={formStyles.inputLabel}>{message}</div>}
+            </FormattedMessage>
             <select required
               name='patientRelationshipToPolicyHolder'
               value={patientRelationshipToPolicyHolder}
               onChange={this.onChange}
               className={formStyles.select}>
-              <option value='' disabled hidden>Select relationship</option>
+              <FormattedMessage id='insuranceForm.policyHolderRelationshipPlaceholder'>
+                {(message: string) => <option value='' disabled hidden>{message}</option>}
+              </FormattedMessage>
               {relationshipToPatientHtml}
             </select>
           </div>
           <div className={formStyles.inputGroup}>
-            <div className={formStyles.inputLabel}>Member ID</div>
+            <FormattedMessage id='insuranceForm.memberId'>
+              {(message: string) => <div className={formStyles.inputLabel}>{message}</div>}
+            </FormattedMessage>
             <input
               name='memberId'
               value={memberId}
@@ -124,7 +135,9 @@ export default class PatientInsuranceForm extends React.Component<IProps, IState
         </div>
         <div className={formStyles.multiInputFormRow}>
           <div className={formStyles.inputGroup}>
-            <div className={formStyles.inputLabel}>Policy group number</div>
+            <FormattedMessage id='insuranceForm.policyGroupNumber'>
+              {(message: string) => <div className={formStyles.inputLabel}>{message}</div>}
+            </FormattedMessage>
             <input
               type='number'
               name='policyGroupNumber'
@@ -133,7 +146,9 @@ export default class PatientInsuranceForm extends React.Component<IProps, IState
               className={formStyles.input} />
           </div>
           <div className={formStyles.inputGroup}>
-            <div className={formStyles.inputLabel}>Issue date</div>
+            <FormattedMessage id='insuranceForm.issueDate'>
+              {(message: string) => <div className={formStyles.inputLabel}>{message}</div>}
+            </FormattedMessage>
             <input
               name='issueDate'
               value={issueDate}
@@ -142,7 +157,9 @@ export default class PatientInsuranceForm extends React.Component<IProps, IState
               className={formStyles.input} />
           </div>
           <div className={formStyles.inputGroup}>
-            <div className={formStyles.inputLabel}>Expiration date</div>
+            <FormattedMessage id='insuranceForm.expirationDate'>
+              {(message: string) => <div className={formStyles.inputLabel}>{message}</div>}
+            </FormattedMessage>
             <input
               name='expirationDate'
               value={expirationDate}

@@ -1,5 +1,6 @@
 import * as langs from 'langs';
 import * as React from 'react';
+import { FormattedMessage } from 'react-intl';
 import * as formStyles from '../css/shared/forms.css';
 import maritalStatusCodes from '../util/marital-status-codes';
 import races from '../util/race-codes';
@@ -113,7 +114,9 @@ export default class PatientDemographicsForm extends React.Component<IProps, ISt
       <div>
         <div className={formStyles.multiInputFormRow}>
           <div className={formStyles.inputGroup}>
-            <div className={formStyles.inputLabel}>First name</div>
+            <FormattedMessage id='demographicsForm.firstName'>
+              {(message: string) => <div className={formStyles.inputLabel}>{message}</div>}
+            </FormattedMessage>
             <input required
               name='firstName'
               value={firstName}
@@ -122,8 +125,12 @@ export default class PatientDemographicsForm extends React.Component<IProps, ISt
           </div>
           <div className={formStyles.inputGroup}>
             <div className={formStyles.inputLabel}>
-              Middle name
-              <span className={formStyles.optionalLabel}>optional</span>
+              <FormattedMessage id='demographicsForm.middleName'>
+                {(message: string) => <span>{message}</span>}
+              </FormattedMessage>
+              <FormattedMessage id='forms.optional'>
+                {(message: string) => <span className={formStyles.optionalLabel}>{message}</span>}
+              </FormattedMessage>
             </div>
             <input
               name='middleName'
@@ -132,7 +139,9 @@ export default class PatientDemographicsForm extends React.Component<IProps, ISt
               onChange={this.onChange} />
           </div>
           <div className={formStyles.inputGroup}>
-            <div className={formStyles.inputLabel}>Last name</div>
+            <FormattedMessage id='demographicsForm.lastName'>
+              {(message: string) => <div className={formStyles.inputLabel}>{message}</div>}
+            </FormattedMessage>
             <input required
               name='lastName'
               value={lastName}
@@ -142,7 +151,9 @@ export default class PatientDemographicsForm extends React.Component<IProps, ISt
         </div>
         <div className={formStyles.multiInputFormRow}>
           <div className={formStyles.inputGroup}>
-            <div className={formStyles.inputLabel}>Date of birth</div>
+            <FormattedMessage id='demographicsForm.dateOfBirth'>
+              {(message: string) => <div className={formStyles.inputLabel}>{message}</div>}
+            </FormattedMessage>
             <input required
               name='dateOfBirth'
               className={formStyles.input}
@@ -151,60 +162,80 @@ export default class PatientDemographicsForm extends React.Component<IProps, ISt
               onChange={this.onChange} />
           </div>
           <div className={formStyles.inputGroup}>
-            <div className={formStyles.inputLabel}>
-              Gender
-            </div>
+            <FormattedMessage id='demographicsForm.gender'>
+              {(message: string) => <div className={formStyles.inputLabel}>{message}</div>}
+            </FormattedMessage>
             <select required
               name='gender'
               value={gender}
               onChange={this.onChange}
               className={formStyles.select}>
-              <option value='' disabled hidden>Select gender</option>
+              <FormattedMessage id='demographicsForm.genderPlaceholder'>
+                {(message: string) => <option value='' disabled hidden>{message}</option>}
+              </FormattedMessage>
               <option value='M'>Male</option>
               <option value='F'>Female</option>
             </select>
           </div>
           <div className={formStyles.inputGroup}>
-            <div className={formStyles.inputLabel}>Marital status</div>
+            <FormattedMessage id='demographicsForm.maritalStatus'>
+              {(message: string) => <div className={formStyles.inputLabel}>{message}</div>}
+            </FormattedMessage>
             <select required
               name='maritalStatus'
               value={maritalStatus}
               onChange={this.onChange}
               className={formStyles.select}>
-              <option value='' disabled hidden>Select status</option>
+              <FormattedMessage id='demographicsForm.maritalStatusPlaceholder'>
+                {(message: string) => <option value='' disabled hidden>{message}</option>}
+              </FormattedMessage>
               {maritalStatusCodesHtml}
             </select>
           </div>
         </div>
         <div className={formStyles.multiInputFormRow}>
           <div className={formStyles.inputGroup}>
-            <div className={formStyles.inputLabel}>Preferred language</div>
+            <FormattedMessage id='demographicsForm.language'>
+              {(message: string) => <div className={formStyles.inputLabel}>{message}</div>}
+            </FormattedMessage>
             <select required
               name='language'
               value={language}
               onChange={this.onChange}
               className={formStyles.select}>
-              <option value='' disabled hidden>Select language</option>
-              <option value='declined'>Declined</option>
+              <FormattedMessage id='demographicsForm.languagePlaceholder'>
+                {(message: string) => <option value='' disabled hidden>{message}</option>}
+              </FormattedMessage>
+              <FormattedMessage id='forms.declined'>
+                {(message: string) => <option value='declined'>{message}</option>}
+              </FormattedMessage>
               {languagesHtml}
             </select>
           </div>
           <div className={formStyles.inputGroup}>
-            <div className={formStyles.inputLabel}>Race</div>
+            <FormattedMessage id='demographicsForm.race'>
+              {(message: string) => <div className={formStyles.inputLabel}>{message}</div>}
+            </FormattedMessage>
             <select required
               name='race'
               value={race}
               onChange={this.onChange}
               className={formStyles.select}>
-              <option value='' disabled hidden>Select race</option>
-              <option value='declined'>Declined</option>
+              <FormattedMessage id='demographicsForm.racePlaceholder'>
+                {(message: string) => <option value='' disabled hidden>{message}</option>}
+              </FormattedMessage>
+              <FormattedMessage id='forms.declined'>
+                {(message: string) => <option value='declined'>{message}</option>}
+              </FormattedMessage>
               {racesHtml}
             </select>
           </div>
         </div>
         <div className={formStyles.multiInputFormRow}>
           <div className={formStyles.inputGroup}>
-            <div className={formStyles.inputLabel}>Social Security Number</div>
+            <FormattedMessage id='demographicsForm.ssn'>
+              {(message: string) => <div className={formStyles.inputLabel}>{message}</div>}
+            </FormattedMessage>
             <input required
               name='ssn'
               type='text'
@@ -214,7 +245,9 @@ export default class PatientDemographicsForm extends React.Component<IProps, ISt
               className={formStyles.input} />
           </div>
           <div className={formStyles.inputGroup}>
-            <div className={formStyles.inputLabel}>Zip code</div>
+            <FormattedMessage id='demographicsForm.zip'>
+              {(message: string) => <div className={formStyles.inputLabel}>{message}</div>}
+            </FormattedMessage>
             <input required
               type='text'
               pattern='[0-9]{5}'

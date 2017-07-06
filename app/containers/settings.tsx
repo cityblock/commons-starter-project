@@ -81,8 +81,11 @@ class SettingsContainer extends React.Component<IProps, { error?: string }> {
   }
 }
 
-export default (compose)(
+export default compose(
   graphql(currentUserQuery as any, {
+    options: (props: IProps) => ({
+      variables: {},
+    }),
     props: ({ data }) => ({
       loading: (data ? data.loading : false),
       error: (data ? data.error : null),

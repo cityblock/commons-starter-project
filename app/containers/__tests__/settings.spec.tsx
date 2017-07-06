@@ -9,10 +9,12 @@ import Settings from '../settings';
 it('renders settings form correctly', () => {
   const mockStore = configureMockStore([]);
   const locale = { messages: ENGLISH_TRANSLATION.messages  };
+  const updateUser = (options: any) => (true);
+
   const tree = render(
     <MockedProvider mocks={[]} store={mockStore({ locale })}>
       <ReduxConnectedIntlProvider>
-        <Settings />
+        <Settings updateUser={updateUser} loading={false} />
       </ReduxConnectedIntlProvider>
     </MockedProvider>,
   );

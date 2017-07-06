@@ -82,7 +82,9 @@ exports[`renders patient enrollment container correctly 1`] = `
               <div
                 className={undefined}
               >
-                Middle name
+                <span>
+                  Middle name
+                </span>
                 <span
                   className={undefined}
                 >
@@ -5863,7 +5865,7 @@ exports[`renders patient enrollment container correctly 1`] = `
               <div
                 className={undefined}
               >
-                Social Security Number
+                Social security number
               </div>
               <input
                 className={undefined}
@@ -5915,7 +5917,9 @@ exports[`renders patient enrollment container correctly 1`] = `
               <div
                 className={undefined}
               >
-                Email Address
+                <span>
+                  Email address
+                </span>
                 <span
                   className={undefined}
                 >
@@ -5935,7 +5939,7 @@ exports[`renders patient enrollment container correctly 1`] = `
               <div
                 className={undefined}
               >
-                Home Phone Number
+                Home phone number
               </div>
               <input
                 className={undefined}
@@ -5952,7 +5956,7 @@ exports[`renders patient enrollment container correctly 1`] = `
               <div
                 className={undefined}
               >
-                Mobile Phone Number
+                Mobile phone number
               </div>
               <input
                 className={undefined}
@@ -5982,7 +5986,8 @@ exports[`renders patient enrollment container correctly 1`] = `
                   className={undefined}
                 >
                   <span>
-                    Read consent statement to patient: 
+                    Read consent statement to patient:
+                     
                   </span>
                   <a
                     onClick={[Function]}
@@ -6059,7 +6064,8 @@ exports[`renders patient enrollment container correctly 1`] = `
                   className={undefined}
                 >
                   <span>
-                    Read consent statement to patient: 
+                    Read consent statement to patient:
+                     
                   </span>
                   <a
                     onClick={[Function]}
@@ -6277,7 +6283,7 @@ exports[`renders patient enrollment container correctly 1`] = `
               <div
                 className={undefined}
               >
-                Patient relationship to policy holder
+                Patient relationship to policyholder
               </div>
               <select
                 className={undefined}

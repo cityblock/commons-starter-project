@@ -2,6 +2,7 @@ import * as classNames from 'classnames';
 import * as moment from 'moment';
 import * as React from 'react';
 import { compose, graphql } from 'react-apollo';
+import { FormattedMessage } from 'react-intl';
 import { DOB_FORMAT } from '../config';
 import * as styles from '../css/components/patient-info.css';
 import * as editPatientMutation from '../graphql/queries/patient-edit-mutation.graphql';
@@ -205,7 +206,9 @@ export class PatientInfo extends React.Component<IProps, IState> {
       <div>
         <div className={styles.navSaveBar}>
           <div className={styles.nav}>
-            <div className={styles.navLabel}>Jump to:</div>
+            <FormattedMessage id='patientInfo.jumpTo'>
+              {(message: string) => <div className={styles.navLabel}>{message}</div>}
+            </FormattedMessage>
             <div className={styles.navDropdown}>
               <select className={styles.select} value='Demographic info'>
                 <option value='Demographic info'>Demographic info</option>
@@ -223,14 +226,18 @@ export class PatientInfo extends React.Component<IProps, IState> {
             <div
               className={saveButtonStyles}
               onClick={this.onClickSave}>
-              Save changes
+              <FormattedMessage id='patientInfo.saveChanges'>
+                {(message: string) => <span>{message}</span>}
+              </FormattedMessage>
             </div>
           </div>
         </div>
         <div className={styles.infoPanel}>
           <div className={styles.info}>
             <div className={styles.section}>
-              <div className={styles.sectionTitle}>Demographic information</div>
+              <FormattedMessage id='patientInfo.demographicInfo'>
+                {(message: string) => <div className={styles.sectionTitle}>{message}</div>}
+              </FormattedMessage>
               <PatientDemographicsForm
                 fields={{
                   firstName,
@@ -245,14 +252,18 @@ export class PatientInfo extends React.Component<IProps, IState> {
               />
             </div>
             <div className={styles.section}>
-              <div className={styles.sectionTitle}>Contact information</div>
+              <FormattedMessage id='patientInfo.contactInfo'>
+                {(message: string) => <div className={styles.sectionTitle}>{message}</div>}
+              </FormattedMessage>
               <PatientContactForm
                 fields={{ email, homePhone, mobilePhone, consentToCall, consentToText }}
                 onFieldUpdate={this.onFieldUpdate}
               />
             </div>
             <div className={styles.section}>
-              <div className={styles.sectionTitle}>Insurance information</div>
+              <FormattedMessage id='patientInfo.insuranceInfo'>
+                {(message: string) => <div className={styles.sectionTitle}>{message}</div>}
+              </FormattedMessage>
               <PatientInsuranceForm
                 fields={{
                   insuranceType,

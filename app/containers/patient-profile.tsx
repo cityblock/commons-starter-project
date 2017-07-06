@@ -12,7 +12,7 @@ import PatientEncounters from '../components/patient-encounters';
 import PatientInfo from '../components/patient-info';
 import PatientMedications from '../components/patient-medications';
 import PatientScratchPad from '../components/patient-scratch-pad';
-import { DATETIME_FORMAT } from '../config';
+import { DOB_FORMAT } from '../config';
 import * as styles from '../css/components/patient-profile-scene.css';
 import * as patientQuery from '../graphql/queries/get-patient.graphql';
 import { ShortPatientFragment } from '../graphql/types';
@@ -77,12 +77,12 @@ class PatientProfileContainer extends React.Component<IProps, IState> {
   }
 
   render() {
-    const { patientId, patient, intl } = this.props;
+    const { patientId, patient, loading, error, intl } = this.props;
     const { selectedTab } = this.state;
 
     const name = patient ? getPatientName(patient) : null;
     const patientAge = patient && patient.dateOfBirth ?
-      moment(patient.dateOfBirth, DATETIME_FORMAT).fromNow(true).replace('years', '') :
+      moment(patient.dateOfBirth, DOB_FORMAT).fromNow(true).replace('years', '') :
       'Unknown';
     const dateOfBirth = patient && patient.dateOfBirth ?
       intl.formatDate(patient.dateOfBirth) :
@@ -194,7 +194,7 @@ class PatientProfileContainer extends React.Component<IProps, IState> {
             <PatientEncounters patientId={patientId} />
           </div>
           <div className={patientInfoPaneStyles}>
-            <PatientInfo patient={patient} />
+            <PatientInfo patientId={patientId} patient={patient} loading={loading} error={error}/>
           </div>
         </div>
         <CareTeamWidget patientId={patientId} />

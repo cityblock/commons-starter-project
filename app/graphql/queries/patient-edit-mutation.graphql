@@ -1,0 +1,29 @@
+#import "../fragments/short-patient.graphql"
+
+mutation patientEdit(
+  $patientId: String!
+  $firstName: String
+  $middleName: String
+  $lastName: String
+  $dateOfBirth: String
+  $gender: String
+  $zip: Int
+  $language: String
+  $consentToCall: Boolean
+  $consentToText: Boolean
+) {
+  patientEdit(input: {
+    patientId: $patientId,
+    firstName: $firstName,
+    middleName: $middleName,
+    lastName: $lastName,
+    dateOfBirth: $dateOfBirth,
+    gender: $gender,
+    zip: $zip,
+    language: $language,
+    consentToCall: $consentToCall,
+    consentToText: $consentToText,
+   }) {
+    ...ShortPatient
+  }
+}

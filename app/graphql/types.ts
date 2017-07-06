@@ -140,6 +140,24 @@ export interface LogInUserMutation {
   } | null;
 }
 
+export interface PatientEditMutationVariables {
+  patientId: string;
+  firstName: string | null;
+  middleName: string | null;
+  lastName: string | null;
+  dateOfBirth: string | null;
+  gender: string | null;
+  zip: number | null;
+  language: string | null;
+  consentToCall: boolean | null;
+  consentToText: boolean | null;
+}
+
+export interface PatientEditMutation {
+  // Edit fields on patient stored in the db
+  patientEdit: ShortPatientFragment;
+}
+
 export interface PatientHealthRecordQueryVariables {
   patientId: string;
 }
@@ -276,5 +294,7 @@ export interface ShortPatientFragment {
   dateOfBirth: string | null;
   zip: number | null;
   createdAt: string | null;
+  consentToText: boolean | null;
+  consentToCall: boolean | null;
 }
 /* tslint:enable */

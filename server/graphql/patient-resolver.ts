@@ -40,6 +40,7 @@ export async function patientEdit(
   await accessControls.isAllowedForUser(userRole, 'edit', 'patient', input.patientId, userId);
 
   const filtered = omitBy<{}, IPatientEditInput>(input, isNil);
+
   return await Patient.edit(filtered, input.patientId);
 }
 

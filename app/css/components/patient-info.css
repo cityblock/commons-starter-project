@@ -53,10 +53,64 @@
   background-position: 87% 50%;
 }
 
+.saveButtonGroup {
+  justify-content: space-between;
+  align-items: center;
+  lost-flex-container: row;
+}
+
 .saveButton {
   width: 173px;
   height: 32px;
   padding: 9px 0 11px;
+}
+
+.saveButtonError {
+  margin-right: 20px;
+  font-size: var(--small-font-size);
+  line-height: var(--small-font-line-height);
+  font-family: var(--roboto);
+  color: var(--gray-font-color);
+}
+
+.saveButtonError span.saveButtonErrorRedText {
+  color: var(--red-color);
+}
+
+.saveButtonSuccess {
+  margin-right: 20px;
+  justify-content: flex-end;
+  align-items: center;
+  lost-flex-container: row;
+}
+
+.saveButtonSuccess .saveButtonSuccessLabel {
+  font-size: var(--small-font-size);
+  line-height: var(--small-font-line-height);
+  font-family: var(--roboto);
+  color: var(--gray-font-color);
+}
+
+.saveButtonSuccess .saveButtonSuccessIcon {
+  background-image: url('../../assets/blue-check-mark-circle.svg');
+  background-size: contain;
+  background-position: center center;
+  background-repeat: no-repeat;
+  height: 10px;
+  width: 10px;
+  margin-left: 6px;
+}
+
+.hidden {
+  display: none;
+}
+
+.inactiveButton {
+  opacity: 0.3;
+
+  &:hover {
+    cursor: default;
+  }
 }
 
 .infoPanel {
@@ -71,7 +125,7 @@
 }
 
 .section {
-  padding: 51px 0 51px;
+  padding: 50px 0;
   border-bottom: 1px solid var(--border-color);
 }
 

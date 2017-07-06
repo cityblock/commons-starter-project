@@ -28,17 +28,12 @@
 
 .form {
   lost-column: 10/12;
-}
-
-.formRow {
-  max-width: var(--max-width);
-  margin: 0px auto;
-  lost-flex-container: row;
+  padding-right: 130px;
 }
 
 .formSection {
   border-bottom: 1px solid var(--gray-background-color);
-  padding-bottom: var(--gutter);
+  padding-bottom: 50px;
   margin-bottom: var(--gutter);
 }
 
@@ -50,43 +45,6 @@
 .formHeading {
   @apply --title;
   margin: 50px 0px;
-}
-
-.formColumn {
-  lost-column: 3/10;
-  margin-bottom: 30px;
-}
-
-.input {
-  @apply --input;
-  width: 100%;
-}
-
-.input[type='date'] {
-  padding-top: 14px;
-  padding-bottom: 13px;
-}
-
-.label {
-  @apply --label;
-  margin-bottom: 10px;
-}
-
-.select {
-  @apply --select;
-  color: var(--border-color);
-  &:valid {
-    color: black;
-  }
-}
-
-.optionalLabel {
-  color: var(--border-color);
-  font-family: var(--basetica-medium);
-  font-size: var(--small-font-size);
-  line-height: var(--small-font-line-height);
-  display: inline-block;
-  margin-left: 5px;
 }
 
 .formBottom {
@@ -116,81 +74,6 @@
   @apply --button;
 }
 
-.radio {
-  &:checked + label:after {
-    opacity: 1;
-  }
-}
-
-.radioContainer {
-  width: 20px;
-  height: 20px;
-  position: relative;
-  margin: 0px;
-  background: white;
-  border: 1px solid var(--border-color);
-  display: inline-block;
-  vertical-align: top;
-  margin-right: 10px;
-}
-
-.radioItem {
-  lost-column: 4/10 2 0px;
-  display: inline-block;
-  vertical-align: top;
-  min-width: 55px;
-}
-
-.radioContainer label {
-  width: 16px;
-  height: 16px;
-  position: absolute;
-  top: 0px;
-  left: 0px;
-  background: white;
-  pointer-events: none;
-}
-
-.radioContainer label:after {
-  content: '';
-  width: 12px;
-  height: 12px;
-  position: absolute;
-  top: 3px;
-  left: 3px;
-  background: var(--blue-color);
-  transition: opacity 0.3s;
-  opacity: 0;
-}
-
-.radioContainer label:hover::after {
-  opacity: 0.3;
-}
-
-.radioRow {
-  display: flex;
-  margin-bottom: 40px;
-  width: 100%;
-}
-
-.radioRowLeft {
-  lost-column: 5/12;
-}
-
-.smallText {
-  color: var(--gray-font-color);
-}
-
-.radioRowRight {
-  lost-column: 4/12;
-  font-weight: 300;
-}
-
-.radioLabel {
-  display: inline-block;
-  margin-top: 2px;
-}
-
 .loading {
   position: fixed;
   width: 100vw;
@@ -211,4 +94,10 @@
   width: 100%;
   justify-content: center;
   display: flex;
+}
+
+.formRow {
+  max-width: var(--max-width);
+  margin: 0px auto;
+  lost-flex-container: row;
 }

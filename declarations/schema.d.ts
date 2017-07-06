@@ -119,6 +119,8 @@ declare module 'schema' {
     homeClinicId: string | null;
     createdAt: string | null;
     scratchPad: string | null;
+    consentToCall: boolean | null;
+    consentToText: boolean | null;
   }
 
   /*
@@ -427,9 +429,14 @@ declare module 'schema' {
   interface IPatientEditInput {
     patientId: string;
     firstName?: string | null;
+    middleName?: string | null;
     lastName?: string | null;
-    dob?: string | null;
+    dateOfBirth?: string | null;
     gender?: string | null;
+    zip?: number | null;
+    language?: string | null;
+    consentToCall?: boolean | null;
+    consentToText?: boolean | null;
   }
 
   /*

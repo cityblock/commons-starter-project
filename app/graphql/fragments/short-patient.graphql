@@ -8,4 +8,6 @@ fragment ShortPatient on Patient {
   dateOfBirth
   zip
   createdAt
+  consentToText
+  consentToCall
 }

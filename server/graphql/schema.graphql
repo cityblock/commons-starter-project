@@ -130,6 +130,8 @@ type Patient implements uniqueId {
   homeClinicId: String
   createdAt: String
   scratchPad: String
+  consentToCall: Boolean
+  consentToText: Boolean
 }
 
 # Patient Athena health record
@@ -314,9 +316,14 @@ input AppointmentAddNoteInput {
 input PatientEditInput {
   patientId: String!
   firstName: String
+  middleName: String
   lastName: String
-  dob: String
+  dateOfBirth: String
   gender: String
+  zip: Int
+  language: String
+  consentToCall: Boolean
+  consentToText: Boolean
 }
 
 # params for creating a patient in the db and in athena

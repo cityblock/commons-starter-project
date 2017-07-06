@@ -22,6 +22,8 @@ it('renders popup', () => {
     dateOfBirth: null,
     zip: null,
     createdAt: null,
+    consentToText: false,
+    consentToCall: false,
   };
   const history = createMemoryHistory();
   const tree = create(

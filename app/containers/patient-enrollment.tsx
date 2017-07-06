@@ -1,12 +1,13 @@
-import * as langs from 'langs';
 import * as moment from 'moment';
 import * as React from 'react';
 import { compose, graphql } from 'react-apollo';
 import { connect, Dispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { push } from 'react-router-redux';
+import PatientContactForm from '../components/patient-contact-form';
+import PatientDemographicsForm, { IUpdatedField } from '../components/patient-demographics-form';
+import PatientInsuranceForm from '../components/patient-insurance-form';
 import { PatientPhotoUpload } from '../components/patient-photo-upload';
-import PopupConsent from '../components/popup-consent';
 import PopupEnrollmentError from '../components/popup-enrollment-error';
 import PopupPatientCreated from '../components/popup-patient-created';
 import * as styles from '../css/components/patient-enrollment.css';
@@ -18,10 +19,6 @@ import {
   PatientSetupMutationVariables,
   ShortPatientFragment,
 } from '../graphql/types';
-import insuranceTypeOptions from '../util/insurance-type-options';
-import maritalStatusCodes from '../util/marital-status-codes';
-import races from '../util/race-codes';
-import relationshipToPatientOptions from '../util/relationship-to-patient-options';
 
 export interface IProps {
   createPatient: (
@@ -34,7 +31,6 @@ export interface IProps {
 }
 
 export interface IState {
-  displayConsentToPhoneTextPopup: boolean;
   displayErrorPopup: boolean;
   loading: boolean;
   error?: string;
@@ -76,14 +72,11 @@ class PatientEnrollmentContainer extends React.Component<IProps, IState> {
   constructor(props: IProps) {
     super(props);
     this.onSubmit = this.onSubmit.bind(this);
-    this.updatePatient = this.updatePatient.bind(this);
-    this.updateInsurance = this.updateInsurance.bind(this);
-    this.showPhoneConsent = this.showPhoneConsent.bind(this);
-    this.hidePhoneConsent = this.hidePhoneConsent.bind(this);
+    this.onFieldUpdate = this.onFieldUpdate.bind(this);
+    this.onInsuranceFieldUpdate = this.onInsuranceFieldUpdate.bind(this);
     this.showErrorPopup = this.showErrorPopup.bind(this);
     this.hideErrorPopup = this.hideErrorPopup.bind(this);
     this.state = {
-      displayConsentToPhoneTextPopup: false,
       displayErrorPopup: false,
       loading: false,
       patient: {
@@ -135,26 +128,22 @@ class PatientEnrollmentContainer extends React.Component<IProps, IState> {
     alert('TODO');
   }
 
-  updatePatient(event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) {
-    const property = event.target.name;
-    const patient = this.state.patient;
-    (patient as any)[property] = event.target.value;
-    this.setState({ patient });
+  onFieldUpdate(updatedField: IUpdatedField) {
+    const { patient } = this.state;
+    const { fieldName, fieldValue } = updatedField;
+
+    (patient as any)[fieldName] = fieldValue;
+
+    this.setState(() => ({ patient }));
   }
 
-  updateInsurance(event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) {
-    const property = event.target.name;
-    const insurance = this.state.insurance;
-    (insurance as any)[property] = event.target.value;
-    this.setState({ insurance });
-  }
+  onInsuranceFieldUpdate(updatedField: IUpdatedField) {
+    const { insurance } = this.state;
+    const { fieldName, fieldValue } = updatedField;
 
-  showPhoneConsent() {
-    this.setState({ displayConsentToPhoneTextPopup: true });
-  }
+    (insurance as any)[fieldName] = fieldValue;
 
-  hidePhoneConsent() {
-    this.setState({ displayConsentToPhoneTextPopup: false });
+    this.setState(() => ({ insurance }));
   }
 
   showErrorPopup() {
@@ -195,40 +184,13 @@ class PatientEnrollmentContainer extends React.Component<IProps, IState> {
       insurance,
       patient,
       loading,
-      displayConsentToPhoneTextPopup,
       createdPatient,
       displayErrorPopup,
       error,
     } = this.state;
-    const languagesHtml = langs.all().map((language: langs.Language) => (
-      <option key={language['1']} value={language['1']}>{language.name}</option>
-    ));
-    const racesHtml = races.map((race: any) => (
-      <option key={race['Concept Code']} value={race['Preferred Concept Name']}>
-        {race['Preferred Concept Name']}
-      </option>
-    ));
-    const relationshipToPatientHtml = Object.keys(
-      relationshipToPatientOptions,
-    ).map((key: string) => (
-      <option key={key} value={relationshipToPatientOptions[key]}>
-        {relationshipToPatientOptions[key]}
-      </option>
-    ));
-    const insuranceTypeOptionsHtml = Object.keys(insuranceTypeOptions).map((key: string) => (
-      <option key={key} value={insuranceTypeOptions[key]}>{insuranceTypeOptions[key]}</option>
-    ));
-    const maritalStatusCodesHtml = maritalStatusCodes.map((maritalStatus: any) => (
-      <option key={maritalStatus.code} value={maritalStatus.description}>
-        {maritalStatus.description}
-      </option>
-    ));
     const loadingClass = loading ? styles.loading : styles.loadingHidden;
     return (
       <form onSubmit={this.onSubmit} className={styles.container}>
-        <PopupConsent
-          onClose={this.hidePhoneConsent}
-          visible={displayConsentToPhoneTextPopup} />
         <PopupPatientCreated patient={createdPatient} />
         <PopupEnrollmentError
           onClose={this.hideErrorPopup}
@@ -249,297 +211,48 @@ class PatientEnrollmentContainer extends React.Component<IProps, IState> {
           <div className={styles.form}>
             <div className={styles.formSection}>
               <div className={styles.formHeading}>Tell us about this patient</div>
-              <div className={styles.formRow}>
-                <div className={styles.formColumn}>
-                  <div className={styles.label}>First name</div>
-                  <input required
-                    name='firstName'
-                    value={patient.firstName}
-                    className={styles.input}
-                    onChange={this.updatePatient} />
-                </div>
-                <div className={styles.formColumn}>
-                  <div className={styles.label}>
-                    Middle name
-                    <span className={styles.optionalLabel}>optional</span>
-                  </div>
-                  <input
-                    name='middleName'
-                    value={patient.middleName}
-                    className={styles.input}
-                    onChange={this.updatePatient} />
-                </div>
-                <div className={styles.formColumn}>
-                  <div className={styles.label}>Last name</div>
-                  <input required
-                    name='lastName'
-                    value={patient.lastName}
-                    className={styles.input}
-                    onChange={this.updatePatient} />
-                </div>
-              </div>
-              <div className={styles.formRow}>
-                <div className={styles.formColumn}>
-                  <div className={styles.label}>Date of birth</div>
-                  <input required
-                    name='dateOfBirth'
-                    className={styles.input}
-                    value={patient.dateOfBirth}
-                    type='date'
-                    onChange={this.updatePatient} />
-                </div>
-                <div className={styles.formColumn}>
-                  <div className={styles.label}>
-                    Gender
-                  </div>
-                  <select required
-                    name='gender'
-                    value={patient.gender}
-                    onChange={this.updatePatient}
-                    className={styles.select}>
-                    <option value='' disabled hidden>Select gender</option>
-                    <option value='M'>Male</option>
-                    <option value='F'>Female</option>
-                  </select>
-                </div>
-                <div className={styles.formColumn}>
-                  <div className={styles.label}>Marital status</div>
-                  <select required
-                    name='maritalStatus'
-                    value={patient.maritalStatus}
-                    onChange={this.updatePatient}
-                    className={styles.select}>
-                    <option value='' disabled hidden>Select status</option>
-                    {maritalStatusCodesHtml}
-                  </select>
-                </div>
-              </div>
-              <div className={styles.formRow}>
-                <div className={styles.formColumn}>
-                  <div className={styles.label}>Preferred language</div>
-                  <select required
-                    name='language'
-                    value={patient.language}
-                    onChange={this.updatePatient}
-                    className={styles.select}>
-                    <option value='' disabled hidden>Select language</option>
-                    <option value='declined'>Declined</option>
-                    {languagesHtml}
-                  </select>
-                </div>
-                <div className={styles.formColumn}>
-                  <div className={styles.label}>Race</div>
-                  <select required
-                    name='race'
-                    value={patient.race}
-                    onChange={this.updatePatient}
-                    className={styles.select}>
-                    <option value='' disabled hidden>Select race</option>
-                    <option value='declined'>Declined</option>
-                    {racesHtml}
-                  </select>
-                </div>
-              </div>
-              <div className={styles.formRow}>
-                <div className={styles.formColumn}>
-                  <div className={styles.label}>Social Security Number</div>
-                  <input required
-                    name='ssn'
-                    type='text'
-                    pattern='[0-9]{9}'
-                    value={patient.ssn}
-                    onChange={this.updatePatient}
-                    className={styles.input} />
-                </div>
-                <div className={styles.formColumn}>
-                  <div className={styles.label}>Zip code</div>
-                  <input required
-                    type='text'
-                    pattern='[0-9]{5}'
-                    name='zip'
-                    value={patient.zip}
-                    onChange={this.updatePatient}
-                    className={styles.input} />
-                </div>
-              </div>
+              <PatientDemographicsForm
+                fields={{
+                  firstName: patient.firstName,
+                  middleName: patient.middleName,
+                  lastName: patient.lastName,
+                  dateOfBirth: patient.dateOfBirth,
+                  gender: patient.gender,
+                  maritalStatus: patient.maritalStatus,
+                  language: patient.language,
+                  race: patient.race,
+                  ssn: patient.ssn,
+                  zip: patient.zip,
+                }}
+                onFieldUpdate={this.onFieldUpdate}
+              />
             </div>
             <div className={styles.formSection}>
               <div className={styles.formHeading}>Patient contact information</div>
-              <div className={styles.formRow}>
-                <div className={styles.formColumn}>
-                  <div className={styles.label}>
-                    Email Address
-                    <span className={styles.optionalLabel}>optional</span>
-                  </div>
-                  <input
-                    name='email'
-                    value={patient.email}
-                    onChange={this.updatePatient}
-                    className={styles.input} />
-                </div>
-                <div className={styles.formColumn}>
-                  <div className={styles.label}>Home Phone Number</div>
-                  <input
-                    name='homePhone'
-                    type='text'
-                    pattern='[0-9]{10}'
-                    value={patient.homePhone}
-                    className={styles.input}
-                    onChange={this.updatePatient} />
-                </div>
-                <div className={styles.formColumn}>
-                  <div className={styles.label}>Mobile Phone Number</div>
-                  <input
-                    name='mobilePhone'
-                    type='text'
-                    pattern='[0-9]{10}'
-                    value={patient.mobilePhone}
-                    onChange={this.updatePatient}
-                    className={styles.input} />
-                </div>
-              </div>
-              <div className={styles.formRow}>
-                <div className={styles.radioRow}>
-                  <div className={styles.radioRowLeft}>
-                    <div className={styles.label}>
-                      Does the patient consent to being contacted via text?
-                    </div>
-                    <div className={styles.smallText}>
-                      <span>Read consent statement to patient: </span>
-                      <a onClick={this.showPhoneConsent}>click here</a>
-                    </div>
-                  </div>
-                  <div className={styles.radioRowRight}>
-                    <div className={styles.radioItem}>
-                      <div className={styles.radioContainer}>
-                        <input
-                          className={styles.radio}
-                          type='radio'
-                          name='consentToText'
-                          onChange={this.updatePatient}
-                          value='true' />
-                        <label />
-                      </div>
-                      <span className={styles.radioLabel}>Yes</span>
-                    </div>
-                    <div className={styles.radioItem}>
-                      <div className={styles.radioContainer}>
-                        <input
-                          className={styles.radio}
-                          type='radio'
-                          name='consentToText'
-                          onChange={this.updatePatient}
-                          value='false' />
-                        <label />
-                      </div>
-                      <span className={styles.radioLabel}>No</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div className={styles.formRow}>
-                <div className={styles.radioRow}>
-                  <div className={styles.radioRowLeft}>
-                    <div className={styles.label}>
-                      Does the patient consent to being contacted via phone?
-                    </div>
-                    <div className={styles.smallText}>
-                      <span>Read consent statement to patient: </span>
-                      <a onClick={this.showPhoneConsent}>click here</a>
-                    </div>
-                  </div>
-                  <div className={styles.radioRowRight}>
-                    <div className={styles.radioItem}>
-                      <div className={styles.radioContainer}>
-                        <input
-                          className={styles.radio}
-                          type='radio'
-                          name='consentToCall'
-                          onChange={this.updatePatient}
-                          value='true' />
-                        <label />
-                      </div>
-                      <span className={styles.radioLabel}>Yes</span>
-                    </div>
-                    <div className={styles.radioItem}>
-                      <div className={styles.radioContainer}>
-                        <input
-                          className={styles.radio}
-                          type='radio'
-                          name='consentToCall'
-                          onChange={this.updatePatient}
-                          value='false' />
-                        <label />
-                      </div>
-                      <span className={styles.radioLabel}>No</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
+              <PatientContactForm
+                fields={{
+                  email: patient.email,
+                  homePhone: patient.homePhone,
+                  mobilePhone: patient.mobilePhone,
+                  consentToCall: patient.consentToCall,
+                  consentToText: patient.consentToText,
+                }}
+                onFieldUpdate={this.onFieldUpdate}
+              />
             </div>
             <div className={styles.formSection}>
               <div className={styles.formHeading}>Patient insurance information</div>
-              <div className={styles.formRow}>
-                <div className={styles.formColumn}>
-                  <div className={styles.label}>Insurance Type</div>
-                  <select required
-                    name='insuranceType'
-                    value={insurance.insuranceType}
-                    onChange={this.updateInsurance}
-                    className={styles.select}>
-                    <option value='' disabled hidden>Select insurance type</option>
-                    {insuranceTypeOptionsHtml}
-                  </select>
-                </div>
-                <div className={styles.formColumn}>
-                  <div className={styles.label}>Patient relationship to policy holder</div>
-                  <select required
-                    name='patientRelationshipToPolicyHolder'
-                    value={insurance.patientRelationshipToPolicyHolder}
-                    onChange={this.updateInsurance}
-                    className={styles.select}>
-                    <option value='' disabled hidden>Select relationship</option>
-                    {relationshipToPatientHtml}
-                  </select>
-                </div>
-                <div className={styles.formColumn}>
-                  <div className={styles.label}>Member ID</div>
-                  <input
-                    name='memberId'
-                    value={insurance.memberId}
-                    onChange={this.updateInsurance}
-                    className={styles.input} />
-                </div>
-              </div>
-              <div className={styles.formRow}>
-                <div className={styles.formColumn}>
-                  <div className={styles.label}>Policy group number</div>
-                  <input
-                    type='number'
-                    name='policyGroupNumber'
-                    value={insurance.policyGroupNumber}
-                    onChange={this.updateInsurance}
-                    className={styles.input} />
-                </div>
-                <div className={styles.formColumn}>
-                  <div className={styles.label}>Issue date</div>
-                  <input
-                    name='issueDate'
-                    value={this.state.insurance.issueDate}
-                    onChange={this.updateInsurance}
-                    type='date'
-                    className={styles.input} />
-                </div>
-                <div className={styles.formColumn}>
-                  <div className={styles.label}>Expiration date</div>
-                  <input
-                    name='expirationDate'
-                    value={this.state.insurance.expirationDate}
-                    onChange={this.updateInsurance}
-                    type='date'
-                    className={styles.input} />
-                </div>
-              </div>
+              <PatientInsuranceForm
+                fields={{
+                  insuranceType: insurance.insuranceType,
+                  patientRelationshipToPolicyHolder: insurance.patientRelationshipToPolicyHolder,
+                  memberId: insurance.memberId,
+                  policyGroupNumber: insurance.policyGroupNumber,
+                  issueDate: insurance.issueDate,
+                  expirationDate: insurance.expirationDate,
+                }}
+                onFieldUpdate={this.onInsuranceFieldUpdate}
+              />
             </div>
             <div className={styles.formSection}>
               <div className={styles.formHeading}>Patient photo</div>
@@ -557,7 +270,7 @@ class PatientEnrollmentContainer extends React.Component<IProps, IState> {
             <input
               type='submit'
               className={styles.submitButton}
-              value='Submit' />
+              value='submit' />
           </div>
         </div>
       </form >

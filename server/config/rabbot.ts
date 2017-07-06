@@ -42,7 +42,7 @@ export default {
       api: {
         protocol: 'https',
         url: process.env.RABBIT_SERVER,
-        endpoint: process.env.RABBIT_API_ENDPOINT,
+        endpoint: process.env.RABBIT_API_ENDPOINT || 'fake',
         port: process.env.RABBIT_API_PORT,
         user: process.env.RABBIT_USER,
         pass: process.env.RABBIT_PASSWORD,

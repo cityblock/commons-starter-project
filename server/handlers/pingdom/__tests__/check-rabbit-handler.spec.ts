@@ -2,11 +2,15 @@ import 'fetch-everywhere';
 import * as nock from 'nock';
 import * as httpMocks from 'node-mocks-http';
 import config from '../../../config';
+import { Env } from '../../../index';
 import { checkRabbitHandler } from '../check-rabbit-handler';
 
 describe('rabbit handler pingdom test', () => {
   let error: any;
-  const { protocol, endpoint, port, user, pass, url } = config.rabbot[config.NODE_ENV].api;
+  const {
+    protocol, endpoint, port, user, pass, url,
+   } = config.rabbot[(config.NODE_ENV || 'test') as Env].api;
+
   const rabbitResponse = [{ name: 'low-priority', messages_ready: 1 }];
   const bigQueueRabbitResponse = [{ name: 'low-priority', messages_ready: 301 }];
 
@@ -22,17 +26,17 @@ describe('rabbit handler pingdom test', () => {
 
   describe('with connection issues', () => {
     it('returns a 500 with an appropriate message', async () => {
-        const req = httpMocks.createRequest();
-        const resp = httpMocks.createResponse();
+      const req = httpMocks.createRequest();
+      const resp = httpMocks.createResponse();
 
-        resp.status = jest.fn();
-        (resp.status as any).mockReturnValueOnce({ send: jest.fn() });
-        nock(`${protocol}://${user}:${pass}@${url}:${port}`)
-          .get(endpoint)
-          .reply(500);
+      resp.status = jest.fn();
+      (resp.status as any).mockReturnValueOnce({ send: jest.fn() });
+      nock(`${protocol}://${user}:${pass}@${url}:${port}`)
+        .get(endpoint)
+        .reply(500);
 
-        await checkRabbitHandler(req, resp);
-        expect(resp.status).toBeCalledWith(500);
+      await checkRabbitHandler(req, resp);
+      expect(resp.status).toBeCalledWith(500);
     });
   });
 

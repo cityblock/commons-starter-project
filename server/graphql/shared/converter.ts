@@ -22,7 +22,13 @@ function convertGenerated(fields: IGeneratedFields): IGraphQLGenerated {
 
 export function convertUser(user: User): IUser {
   return {
-    ...user,
+    firstName: user.firstName,
+    lastName: user.lastName,
+    email: user.email,
+    userRole: user.userRole,
+    createdAt: user.createdAt,
+    homeClinicId: user.homeClinicId,
+    googleProfileImageUrl: user.googleProfileImageUrl,
     ...convertGenerated(user),
   };
 }

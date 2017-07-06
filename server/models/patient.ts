@@ -164,7 +164,7 @@ export default class Patient extends Model {
   static async execWithTransaction(
     callback: (boundModelClass: typeof Patient) => Promise<Patient>,
   ) {
-    return await transaction(this, callback);
+    return await transaction(this as any, callback);
   }
 
 }

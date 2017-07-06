@@ -4,7 +4,7 @@ import Db from '../db';
 import config from '../config';
 import { main } from '../index';
 
-config.PORT = 3001;  // Use a different route for testing than serving.
+config.PORT = '3001';  // Use a different route for testing than serving.
 
 const GRAPHQL_ROUTE = '/graphql';
 

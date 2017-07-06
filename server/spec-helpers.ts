@@ -10,7 +10,8 @@ import {
 import {
   IRedoxClinicalSummaryEncounter,
   IRedoxClinicalSummaryMedication,
-  IRedoxPatientCreateResponse } from './apis/redox/types';
+  IRedoxPatientCreateResponse,
+} from './apis/redox/types';
 import config from './config';
 import CareTeam from './models/care-team';
 import Patient, { IPatientEditableFields } from './models/patient';
@@ -361,7 +362,9 @@ export function mockAthenaOpenAppointmentError() {
     400);
 }
 
-export function mockAthenaBookAppointment(appointmentId: string, body: MockAthenaBookAppointment) {
+export function mockAthenaBookAppointment(
+  appointmentId: string, body: MockAthenaBookAppointment[],
+) {
   mockAthenaPut(`/${config.ATHENA_PRACTICE_ID}/appointments/${appointmentId}`, body);
 }
 

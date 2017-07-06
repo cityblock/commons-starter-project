@@ -16,8 +16,10 @@ if (process.env.NODE_ENV === 'production') {
 
 const app = express();
 
+export type Env = 'production' | 'development' | 'test';
+
 export interface IMainOptions {
-  env: 'development' | 'production' | 'test';
+  env: Env;
 }
 
 export async function main(options: IMainOptions) {
@@ -41,7 +43,7 @@ export async function main(options: IMainOptions) {
 /* istanbul ignore if  */
 if (require.main === module) {
   try {
-    main({ env: process.env.NODE_ENV });
+    main({ env: process.env.NODE_ENV as Env });
   } catch (err) {
     console.error(err);
   }

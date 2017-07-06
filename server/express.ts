@@ -64,17 +64,17 @@ export default async (app: express.Application) => {
   // Pingdom check endpoints
   app.get(
     '/ping/athena-api',
-    checkAuth('pingdom', process.env.PINGDOM_CHECK_PASSWORD),
+    checkAuth('pingdom', process.env.PINGDOM_CHECK_PASSWORD || 'fake'),
     checkAthenaApiHandler,
   );
   app.get(
     '/ping/postgres',
-    checkAuth('pingdom', process.env.PINGDOM_CHECK_PASSWORD),
+    checkAuth('pingdom', process.env.PINGDOM_CHECK_PASSWORD || 'fake'),
     checkPostgresHandler,
   );
   app.get(
     '/ping/rabbit',
-    checkAuth('pingdom', process.env.PINGDOM_CHECK_PASSWORD),
+    checkAuth('pingdom', process.env.PINGDOM_CHECK_PASSWORD || 'fake'),
     checkRabbitHandler,
   );
 

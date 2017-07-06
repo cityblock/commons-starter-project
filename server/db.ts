@@ -22,7 +22,7 @@ let knex: Knex | null = null;
  */
 export default class Db {
   static async connect(): Promise<Db> {
-    knex = Knex(knexConfig[process.env.NODE_ENV]);
+    knex = Knex(knexConfig[process.env.NODE_ENV || 'development']);
     Model.knex(knex);
     return new Db();
   }

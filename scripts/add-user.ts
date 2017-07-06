@@ -2,12 +2,12 @@ import Db from '../server/db';
 import CareTeam from '../server/models/care-team';
 import Clinic from '../server/models/clinic';
 import Patient from '../server/models/patient';
-import User from '../server/models/user';
+import User, { UserRole } from '../server/models/user';
 
-const email = process.env.EMAIL;
+const email = process.env.EMAIL || 'brennan@sidewalklabs.com';
 const firstName = process.env.FIRST_NAME;
 const lastName = process.env.LAST_NAME;
-const userRole = process.env.USER_ROLE || 'physician';
+const userRole = (process.env.USER_ROLE || 'physician') as UserRole;
 const athenaProviderId = process.env.PROVIDER_ID;
 
 async function createUser() {

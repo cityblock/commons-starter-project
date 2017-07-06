@@ -16,9 +16,11 @@ export default {
   GOOGLE_OAUTH_VALID_EMAIL_DOMAIN: '@cityblock.com',
   TIME_ZONE: '-04:00',
   JWT_SECRET: 'topsecret',
-  JWT_EXPIRT: '1d',
+  JWT_EXPIRY: '1d',
   REDOX_TOKEN_URL: 'https://api.redoxengine.com/auth/authenticate',
   REDOX_API_URL: 'https://api.redoxengine.com/endpoint',
+  REDOX_KEY: null,
+  REDOX_SECRET: null,
   ...process.env,
   ...rabbot,
 };

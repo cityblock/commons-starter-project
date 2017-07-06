@@ -1,4 +1,3 @@
-export const tab: string;
 export const container: string;
 export const leftPane: string;
 export const mainBody: string;
@@ -20,6 +19,7 @@ export const patientCommText: string;
 export const patientCommEmail: string;
 export const patientCommVideo: string;
 export const tabs: string;
+export const tab: string;
 export const selectedTab: string;
 export const pane: string;
 export const selectedPane: string;

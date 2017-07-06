@@ -1,8 +1,11 @@
 import * as express from 'express';
 import config from '../../config';
+import { Env } from '../../index';
 
 export async function checkRabbitHandler(req: express.Request, res: express.Response) {
-  const { protocol, endpoint, port, user, pass, url } = config.rabbot[config.NODE_ENV].api;
+  const {
+    protocol, endpoint, port, user, pass, url,
+   } = config.rabbot[(config.NODE_ENV || 'test') as Env].api;
 
   try {
     /**

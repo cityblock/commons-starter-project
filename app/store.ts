@@ -24,10 +24,11 @@ export default (client: ApolloClient, history: History) => {
     client.middleware(),
   ];
 
+  // `as any` are temporary fixes for ts 2.4 issues with redux typings
   const reducers = combineReducers<IState>({
-    routing: routerReducer,
-    locale: localeReducer,
-    apollo: client.reducer(),
+    routing: routerReducer as any,
+    locale: localeReducer as any,
+    apollo: client.reducer() as any,
   });
 
   return createStore(reducers, composeEnhancers(applyMiddleware(...middleware)));

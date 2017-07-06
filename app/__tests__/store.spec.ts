@@ -5,7 +5,7 @@ import createStore from '../store';
 it('creates redux store', () => {
   const history = createMemoryHistory();
   const store = createStore(new ApolloClient(), history);
-  const state = store.getState();
+  const state = store.getState() as any;
   expect(state.locale.lang).toEqual('en');
   expect(state.locale.messages).not.toBeNull();
   expect(state.routing).toEqual({

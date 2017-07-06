@@ -67,7 +67,7 @@ const isInvalidLogin = (tokenLastLoginAt: string, userLastLoginAt: string | unde
 };
 
 export async function getGraphQLContext(request: express.Request): Promise<IContext> {
-  const authToken = request.headers.auth_token;
+  const authToken = request.headers.auth_token as string;
   const db = await Db.get();
   const athenaApi = await AthenaApi.get();
   const redoxApi = await RedoxApi.get();

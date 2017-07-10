@@ -266,6 +266,33 @@ type PatientScratchPad {
   text: String
 }
 
+# Task
+type Task implements uniqueId {
+  id: ID!
+  title: String!
+  description: String
+  patient: Patient
+  dueAt: String
+  createdBy: User
+  createdAt: String
+  completedBy: User
+  completedAt: String
+  assignedTo: User
+}
+
+# Task node
+type TaskNode {
+  node: Task
+  cursor: String!
+}
+
+# Task edges
+type TaskEdges {
+  edges: [TaskNode]
+  pageInfo: PageInfo!
+}
+
+
 #
 # BEGIN INPUT FIELDS
 #
@@ -376,6 +403,35 @@ input CurrentUserEditInput {
   lastName: String
 }
 
+# params for creating a task
+input TaskCreateInput {
+  title: String!
+  description: String
+  dueAt: String
+  patientId: String!
+  assignedToId: String
+}
+
+# params for creating a task
+input TaskEditInput {
+  taskId: String!
+  title: String!
+  description: String
+  dueAt: String
+  assignedToId: String
+}
+
+# params for completing a task
+input TaskCompleteInput {
+  taskId: String!
+}
+
+# params for adding user to a task's followers
+input TaskFollowInput {
+  userId: String!
+  taskId: String!
+}
+
 type RootMutationType {
   # Create a new user
   userCreate(input: UserCreateInput): UserWithAuthToken
@@ -389,7 +445,7 @@ type RootMutationType {
   # Create a new clinic
   clinicCreate(input: ClinicCreateInput): Clinic
 
-  # Add user to care careTeam
+  # Add user to careTeam
   careTeamAddUser(input: CareTeamInput): [User]
 
   # Remove user from careTeam
@@ -412,6 +468,21 @@ type RootMutationType {
 
   # Edit a patient scratch pad
   patientScratchPadEdit(input: PatientScratchPadEditInput): PatientScratchPad
+
+  # Create a task
+  taskCreate(input: TaskCreateInput): Task
+
+  # Edit a task
+  taskEdit(input: TaskEditInput): Task
+
+  # Complete a task
+  taskComplete(input: TaskCompleteInput): Task
+
+  # Add user to task followers
+  taskUserFollow(input: TaskFollowInput): [User]
+
+  # Remove user from task followers
+  taskUserUnfollow(input: TaskFollowInput): [User]
 }
 
 type RootQueryType {
@@ -477,6 +548,20 @@ type RootQueryType {
   patientMedications(
     patientId: String!
   ): PatientMedications
+
+  # Task
+  task(
+    taskId: String!
+  ): Task
+
+  # Patient Tasks
+  patientTasks(
+    patientId: String!
+    pageNumber: Int
+    pageSize: Int
+  ): TaskEdges
+
+  taskFollowers(taskId: String!): [User]
 }
 
 schema {

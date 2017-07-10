@@ -10,6 +10,7 @@ export type Resource = 'patient' |
   'allUsers' |
   'encounter' |
   'clinic' |
+  'task' |
   'appointment';
 
 /*

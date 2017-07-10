@@ -21,6 +21,16 @@ import {
   resolvePatientScratchPad,
 } from './patient-resolver';
 import {
+  resolveTaskFollowers, taskUserFollow, taskUserUnfollow,
+} from './task-follower-resolver';
+import {
+  resolvePatientTasks,
+  resolveTask,
+  taskComplete,
+  taskCreate,
+  taskEdit,
+} from './task-resolver';
+import {
   currentUserEdit,
   resolveCurrentUser,
   resolveUser,
@@ -45,6 +55,9 @@ const resolveFunctions = {
     user: resolveUser,
     users: resolveUsers,
     userPatientPanel: resolveUserPatientPanel,
+    task: resolveTask,
+    patientTasks: resolvePatientTasks,
+    taskFollowers: resolveTaskFollowers,
   },
   RootMutationType: {
     appointmentAddNote,
@@ -59,6 +72,11 @@ const resolveFunctions = {
     currentUserEdit,
     userCreate,
     userLogin,
+    taskCreate,
+    taskEdit,
+    taskComplete,
+    taskUserFollow,
+    taskUserUnfollow,
   },
 };
 

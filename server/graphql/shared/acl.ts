@@ -15,6 +15,7 @@ export default [
           'patient',
           'user',
           'clinic',
+          'task',
           'appointment',
         ],
         permissions: [
@@ -36,6 +37,7 @@ export default [
           'patient',
           'user',
           'clinic',
+          'task',
           'appointment',
         ],
         permissions: [
@@ -58,6 +60,7 @@ export default [
           'user',
           'allUsers',
           'clinic',
+          'task',
           'appointment',
         ],
         permissions: [

@@ -22,7 +22,7 @@ import {
 } from '../../spec-helpers';
 import schema from '../make-executable-schema';
 
-describe('patient encounters', () => {
+describe('appointments', () => {
   let athenaApi: AthenaApi = null as any;
   let db: Db = null as any;
   let patient: Patient = null as any;

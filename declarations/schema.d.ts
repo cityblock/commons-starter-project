@@ -31,6 +31,9 @@ declare module 'schema' {
     clinics: IClinicEdges | null;
     patientEncounters: Array<IPatientEncounter> | null;
     patientMedications: IPatientMedications | null;
+    task: ITask | null;
+    patientTasks: ITaskEdges | null;
+    taskFollowers: Array<IUser> | null;
   }
 
   /*
@@ -51,7 +54,7 @@ declare module 'schema' {
   /*
     description: An object with a Globally Unique ID
   */
-  type uniqueId = IUser | IPatient | IClinic;
+  type uniqueId = IUser | IPatient | IClinic | ITask;
 
   /*
     description: An object with a Globally Unique ID
@@ -305,6 +308,38 @@ declare module 'schema' {
   }
 
   /*
+    description: Task
+  */
+  interface ITask {
+    id: string;
+    title: string;
+    description: string | null;
+    patient: IPatient | null;
+    dueAt: string | null;
+    createdBy: IUser | null;
+    createdAt: string | null;
+    completedBy: IUser | null;
+    completedAt: string | null;
+    assignedTo: IUser | null;
+  }
+
+  /*
+    description: Task edges
+  */
+  interface ITaskEdges {
+    edges: Array<ITaskNode> | null;
+    pageInfo: IPageInfo;
+  }
+
+  /*
+    description: Task node
+  */
+  interface ITaskNode {
+    node: ITask | null;
+    cursor: string;
+  }
+
+  /*
     description: 
   */
   interface IRootMutationType {
@@ -320,6 +355,11 @@ declare module 'schema' {
     patientEdit: IPatient | null;
     patientSetup: IPatient | null;
     patientScratchPadEdit: IPatientScratchPad | null;
+    taskCreate: ITask | null;
+    taskEdit: ITask | null;
+    taskComplete: ITask | null;
+    taskUserFollow: Array<IUser> | null;
+    taskUserUnfollow: Array<IUser> | null;
   }
 
   /*
@@ -491,5 +531,42 @@ declare module 'schema' {
   interface IPatientScratchPadEditInput {
     patientId: string;
     text: string;
+  }
+
+  /*
+    description: params for creating a task
+  */
+  interface ITaskCreateInput {
+    title: string;
+    description?: string | null;
+    dueAt?: string | null;
+    patientId: string;
+    assignedToId?: string | null;
+  }
+
+  /*
+    description: params for creating a task
+  */
+  interface ITaskEditInput {
+    taskId: string;
+    title: string;
+    description?: string | null;
+    dueAt?: string | null;
+    assignedToId?: string | null;
+  }
+
+  /*
+    description: params for completing a task
+  */
+  interface ITaskCompleteInput {
+    taskId: string;
+  }
+
+  /*
+    description: params for adding user to a task's followers
+  */
+  interface ITaskFollowInput {
+    userId: string;
+    taskId: string;
   }
 }

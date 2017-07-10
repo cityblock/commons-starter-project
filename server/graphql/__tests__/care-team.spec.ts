@@ -5,7 +5,7 @@ import User from '../../models/user';
 import { createMockPatient, createPatient } from '../../spec-helpers';
 import schema from '../make-executable-schema';
 
-describe('patient', () => {
+describe('care team', () => {
 
   let db: Db = null as any;
   let patient = null as any;

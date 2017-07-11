@@ -40,11 +40,12 @@ describe('task followers', () => {
       });
 
       // Add 2nd user to task 1 followers
-      const taskFollower = await TaskFollower.followTask({
+      const fetchedTask = await TaskFollower.followTask({
         userId: user2.id,
         taskId: task1.id,
       });
-      expect(taskFollower[0].id).toEqual(user2.id);
+      expect(fetchedTask.createdById).toEqual(user1.id);
+      expect(fetchedTask.followers[0].id).toEqual(user2.id);
     });
 
     it('throws an error if adding a non-existant user to a task', async () => {
@@ -88,92 +89,19 @@ describe('task followers', () => {
         assignedToId: user.id,
       });
 
-      const followedTasks = await TaskFollower.followTask({
+      const followedTask = await TaskFollower.followTask({
         userId: user.id,
         taskId: task.id,
       });
-      expect(followedTasks[0].id).toEqual(user.id);
+      expect(followedTask.followers[0].id).toEqual(user.id);
 
       const unfollowedTasks = await TaskFollower.unfollowTask({
         userId: user.id,
         taskId: task.id,
       });
-      expect(unfollowedTasks).toEqual([]);
+      expect(unfollowedTasks.followers).toEqual([]);
     });
 
   });
 
-  describe('get tasks for user', () => {
-    it('should fetch limited set of users', async () => {
-      const user = await User.create({
-        email: 'care@care.com',
-        userRole,
-        homeClinicId: '1',
-      });
-      const patient = await createPatient(createMockPatient(123), user.id);
-      const task1 = await Task.create({
-        title: 'title',
-        description: 'description',
-        patientId: patient.id,
-        createdById: user.id,
-        assignedToId: user.id,
-      });
-
-      const task2 = await Task.create({
-        title: 'title',
-        description: 'description',
-        patientId: patient.id,
-        createdById: user.id,
-        assignedToId: user.id,
-      });
-
-      await TaskFollower.followTask({
-        userId: user.id,
-        taskId: task1.id,
-      });
-
-      await TaskFollower.followTask({
-        userId: user.id,
-        taskId: task2.id,
-      });
-
-      const results1 = await TaskFollower.getForUser(user.id, { pageSize: 1, pageNumber: 0 });
-      const results2 = await TaskFollower.getForUser(user.id, { pageSize: 1, pageNumber: 1 });
-      expect(results1).toMatchObject({
-        results: [{ id: task1.id }],
-        total: 2,
-      });
-      expect(results2).toMatchObject({
-        results: [{ id: task2.id }],
-        total: 2,
-      });
-    });
-  });
-
-  describe('get users for task', () => {
-    it('fetches user following task', async () => {
-      const user = await User.create({
-        email: 'care@care.com',
-        userRole,
-        homeClinicId: '1',
-      });
-      const patient = await createPatient(createMockPatient(123), user.id);
-      const task = await Task.create({
-        title: 'title',
-        description: 'description',
-        patientId: patient.id,
-        createdById: user.id,
-        assignedToId: user.id,
-      });
-
-      await TaskFollower.followTask({
-        userId: user.id,
-        taskId: task.id,
-      });
-
-      expect(await TaskFollower.getForTask(task.id)).toMatchObject([
-        { id: user.id },
-      ]);
-    });
-  });
 });

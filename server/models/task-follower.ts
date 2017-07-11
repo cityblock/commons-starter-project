@@ -1,6 +1,5 @@
 import { transaction, Model, RelationMappings } from 'objection';
 import * as uuid from 'uuid/v4';
-import { IPaginatedResults, IPaginationOptions } from '../db';
 import Task from './task';
 import User from './user';
 
@@ -65,35 +64,9 @@ export default class TaskFollower extends Model {
     this.updatedAt = new Date().toISOString();
   }
 
-  static async getForTask(taskId: string): Promise<User[]> {
-    const taskFollower = await TaskFollower
-      .query()
-      .where('taskId', taskId)
-      .andWhere('deletedAt', null)
-      .eager('user')
-      .orderBy('createdAt', 'asc');
-    return taskFollower.map((ct: TaskFollower) => ct.user);
-  }
-
-  static async getForUser(
-    userId: string, { pageNumber, pageSize }: IPaginationOptions,
-  ): Promise<IPaginatedResults<Task>> {
-    const taskFollower = await TaskFollower
-      .query()
-      .where('userId', userId)
-      .andWhere('deletedAt', null)
-      .orderBy('createdAt')
-      .page(pageNumber, pageSize)
-      .eager('task') as any;
-    return {
-      results: taskFollower.results.map((ct: TaskFollower) => ct.task),
-      total: taskFollower.total,
-    };
-  }
-
   static async followTask(
     { userId, taskId }: ITaskFollowerOptions,
-  ): Promise<User[]> {
+  ): Promise<Task> {
     // TODO: use postgres UPCERT here to add relation if it doesn't exist instead of a transaction
     await transaction(TaskFollower as any, async TaskFollowerWithTransaction => {
       const relations = await TaskFollowerWithTransaction
@@ -109,18 +82,18 @@ export default class TaskFollower extends Model {
       }
     });
 
-    return await this.getForTask(taskId);
+    return await Task.get(taskId);
   }
 
   static async unfollowTask(
     { userId, taskId }: ITaskFollowerOptions,
-  ): Promise<User[]> {
+  ): Promise<Task> {
     await this.query()
       .where('userId', userId)
       .andWhere('taskId', taskId)
       .andWhere('deletedAt', null)
       .update({ deletedAt: new Date().toISOString() });
-    return await this.getForTask(taskId);
+    return await Task.get(taskId);
   }
 
 }

@@ -78,7 +78,7 @@ describe('task tests', () => {
       });
 
       const query = `{
-        patientTasks(patientId: "${patient.id}", pageNumber: 0, pageSize: 1) {
+        tasksForPatient(patientId: "${patient.id}", pageNumber: 0, pageSize: 1) {
           edges {
             node {
               id, title
@@ -88,7 +88,7 @@ describe('task tests', () => {
       }`;
       const result = await graphql(schema, query, null, { db, userRole });
 
-      expect(cloneDeep(result.data!.patientTasks)).toMatchObject({
+      expect(cloneDeep(result.data!.tasksForPatient)).toMatchObject({
         edges: [{
           node: {
             id: task.id,
@@ -120,7 +120,7 @@ describe('task tests', () => {
       });
 
       const query = `{
-        patientTasks(patientId: "${patient.id}", pageNumber: 0, pageSize: 1) {
+        tasksForPatient(patientId: "${patient.id}", pageNumber: 0, pageSize: 1) {
           edges {
             node {
               id
@@ -136,7 +136,7 @@ describe('task tests', () => {
 
       const result = await graphql(schema, query, null, { db, userRole });
 
-      expect(cloneDeep(result.data!.patientTasks)).toMatchObject({
+      expect(cloneDeep(result.data!.tasksForPatient)).toMatchObject({
         edges: [{
           node: {
             id: task2.id,

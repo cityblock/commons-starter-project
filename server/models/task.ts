@@ -2,6 +2,7 @@ import { Model, RelationMappings } from 'objection';
 import * as uuid from 'uuid/v4';
 import { IPaginatedResults, IPaginationOptions } from '../db';
 import Patient from './patient';
+import TaskFollower from './task-follower';
 import User from './user';
 
 export interface ITaskEditableFields {
@@ -15,7 +16,7 @@ export interface ITaskEditableFields {
 }
 
 // TODO: Only fetch needed eager models
-const EAGER_QUERY = '[createdBy, assignedTo, patient, completedBy]';
+const EAGER_QUERY = '[createdBy, assignedTo, patient, completedBy, followers]';
 
 /* tslint:disable:member-ordering */
 export default class Task extends Model {
@@ -34,6 +35,7 @@ export default class Task extends Model {
   updatedAt: string;
   dueAt: string;
   completedAt: string;
+  followers: User[];
 
   static tableName = 'task';
 
@@ -120,6 +122,7 @@ export default class Task extends Model {
     const task = await this
       .query()
       .eager(EAGER_QUERY)
+      .modifyEager('followers', builder => builder.where('deletedAt', null))
       .findById(taskId);
 
     if (!task) {
@@ -136,6 +139,7 @@ export default class Task extends Model {
       .query()
       .where({ patientId })
       .eager(EAGER_QUERY)
+      .modifyEager('followers', builder => builder.where('deletedAt', null))
       .page(pageNumber, pageSize) as any;
 
     return {
@@ -144,10 +148,34 @@ export default class Task extends Model {
     };
   }
 
+  static async getUserTasks(
+    userId: string,
+    { pageNumber, pageSize }: IPaginationOptions,
+  ): Promise<IPaginatedResults<Task>> {
+    const subquery = TaskFollower.query()
+      .select('taskId')
+      .where({ userId, deletedAt: null });
+    const userTasks = await this
+      .query()
+      .where('id', 'in', subquery)
+      .orWhere({ createdById: userId })
+      .eager(EAGER_QUERY)
+      .modifyEager('followers', builder => builder.where('deletedAt', null))
+      .orderBy('createdAt')
+      .page(pageNumber, pageSize) as any;
+
+    return {
+      results: userTasks.results,
+      total: userTasks.total,
+    };
+  }
+
   static async create(input: ITaskEditableFields) {
-    return this
+    return await this
       .query()
       .eager(EAGER_QUERY)
+      .modifyEager('followers', builder => builder.where('deletedAt', null))
+
       .insertAndFetch(input);
   }
 
@@ -155,6 +183,9 @@ export default class Task extends Model {
     return await this
       .query()
       .eager(EAGER_QUERY)
+      .modifyEager('followers', builder => {
+        builder.where('deletedAt', null);
+      })
       .updateAndFetchById(taskId, task);
   }
 
@@ -162,6 +193,7 @@ export default class Task extends Model {
     return this
       .query()
       .eager(EAGER_QUERY)
+      .modifyEager('followers', builder => builder.where('deletedAt', null))
       .updateAndFetchById(taskId, {
         completedAt: new Date().toUTCString(),
         completedById: userId,

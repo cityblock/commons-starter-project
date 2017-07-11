@@ -275,9 +275,11 @@ type Task implements uniqueId {
   dueAt: String
   createdBy: User
   createdAt: String
+  updatedAt: String
   completedBy: User
   completedAt: String
   assignedTo: User
+  followers: [User]
 }
 
 # Task node
@@ -479,10 +481,10 @@ type RootMutationType {
   taskComplete(input: TaskCompleteInput): Task
 
   # Add user to task followers
-  taskUserFollow(input: TaskFollowInput): [User]
+  taskUserFollow(input: TaskFollowInput): Task
 
   # Remove user from task followers
-  taskUserUnfollow(input: TaskFollowInput): [User]
+  taskUserUnfollow(input: TaskFollowInput): Task
 }
 
 type RootQueryType {
@@ -554,14 +556,18 @@ type RootQueryType {
     taskId: String!
   ): Task
 
-  # Patient Tasks
-  patientTasks(
+  # Patient's Tasks
+  tasksForPatient(
     patientId: String!
     pageNumber: Int
     pageSize: Int
   ): TaskEdges
 
-  taskFollowers(taskId: String!): [User]
+  # Current user's Tasks
+  tasksForCurrentUser(
+    pageNumber: Int
+    pageSize: Int
+  ): TaskEdges
 }
 
 schema {

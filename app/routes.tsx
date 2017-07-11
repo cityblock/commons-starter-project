@@ -7,6 +7,7 @@ import PatientEnrollmentContainer from './containers/patient-enrollment';
 import PatientPanelContainer from './containers/patient-panel-container';
 import PatientProfileContainer from './containers/patient-profile';
 import SettingsContainer from './containers/settings';
+import TasksContainer from './containers/tasks-container';
 
 /**
  * What is <Switch>?
@@ -18,6 +19,8 @@ export default (
     <Switch>
       <Route exact path='/' component={(LogIn as any)} />
       <Authentication>
+        <Route exact path='/tasks/:taskId' component={(TasksContainer as any)} />
+        <Route exact path='/tasks' component={(TasksContainer as any)} />
         <Route exact path='/settings' component={(SettingsContainer as any)} />
         <Route exact path='/patients/new' component={(PatientEnrollmentContainer as any)} />
         <Route exact path='/patients/:patientId' component={(PatientProfileContainer as any)} />

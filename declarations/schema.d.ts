@@ -32,8 +32,8 @@ declare module 'schema' {
     patientEncounters: Array<IPatientEncounter> | null;
     patientMedications: IPatientMedications | null;
     task: ITask | null;
-    patientTasks: ITaskEdges | null;
-    taskFollowers: Array<IUser> | null;
+    tasksForPatient: ITaskEdges | null;
+    tasksForCurrentUser: ITaskEdges | null;
   }
 
   /*
@@ -318,9 +318,11 @@ declare module 'schema' {
     dueAt: string | null;
     createdBy: IUser | null;
     createdAt: string | null;
+    updatedAt: string | null;
     completedBy: IUser | null;
     completedAt: string | null;
     assignedTo: IUser | null;
+    followers: Array<IUser> | null;
   }
 
   /*

@@ -1,0 +1,38 @@
+fragment FullTask on Task {
+  id
+  title
+  description
+  createdAt
+  updatedAt
+  dueAt
+  patient {
+    id
+    firstName
+    middleName
+    lastName
+  }
+  assignedTo {
+    id
+    firstName
+    lastName
+    googleProfileImageUrl
+  }
+  createdBy {
+    id
+    firstName
+    lastName
+    googleProfileImageUrl
+  }
+  followers {
+    id
+    firstName
+    lastName
+    googleProfileImageUrl
+  }
+  createdBy {
+    id
+    firstName
+    lastName
+    googleProfileImageUrl
+  }
+}

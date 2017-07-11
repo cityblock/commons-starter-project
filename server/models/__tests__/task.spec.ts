@@ -1,6 +1,7 @@
 import Db from '../../db';
 import { createMockPatient, createPatient } from '../../spec-helpers';
 import Task from '../task';
+import TaskFollower from '../task-follower';
 import User from '../user';
 
 const userRole = 'physician';
@@ -150,6 +151,42 @@ describe('task model', () => {
         results: [{
           title: 'title',
           description: 'description',
+        }],
+        total: 2,
+      },
+    );
+  });
+
+  it('fetches a user tasks tasks', async () => {
+    const user = await User.create({ email: 'a@b.com', userRole, homeClinicId: '1' });
+    const user2 = await User.create({ email: 'b@a.com', userRole, homeClinicId: '1' });
+    const patient = await createPatient(createMockPatient(123), user.id);
+    const dueAt = new Date().toUTCString();
+    await Task.create({
+      title: 'title',
+      description: 'description',
+      dueAt,
+      patientId: patient.id,
+      createdById: user.id,
+      assignedToId: user.id,
+    });
+    const task2 = await Task.create({
+      title: 'title 2',
+      description: 'description 2',
+      dueAt,
+      patientId: patient.id,
+      createdById: user2.id,
+      assignedToId: user.id,
+    });
+    await TaskFollower.followTask({ userId: user.id, taskId: task2.id });
+    expect(await Task.getUserTasks(user.id, { pageNumber: 0, pageSize: 2 })).toMatchObject(
+      {
+        results: [{
+          title: 'title',
+          description: 'description',
+        }, {
+          title: 'title 2',
+          description: 'description 2',
         }],
         total: 2,
       },

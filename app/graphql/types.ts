@@ -226,6 +226,46 @@ export type GetPatientQuery = {
   } | null,
 };
 
+export type GetTaskQueryVariables = {
+  taskId: string,
+};
+
+export type GetTaskQuery = {
+  // Task
+  task:  {
+    id: string,
+    title: string,
+    description: string | null,
+    createdAt: string | null,
+    updatedAt: string | null,
+    dueAt: string | null,
+    patient:  {
+      id: string,
+      firstName: string | null,
+      middleName: string | null,
+      lastName: string | null,
+    } | null,
+    assignedTo:  {
+      id: string,
+      firstName: string | null,
+      lastName: string | null,
+      googleProfileImageUrl: string | null,
+    } | null,
+    createdBy:  {
+      id: string,
+      firstName: string | null,
+      lastName: string | null,
+      googleProfileImageUrl: string | null,
+    } | null,
+    followers:  Array< {
+      id: string,
+      firstName: string | null,
+      lastName: string | null,
+      googleProfileImageUrl: string | null,
+    } > | null,
+  } | null,
+};
+
 export type LogInUserMutationVariables = {
   googleAuthCode: string,
 };
@@ -359,6 +399,48 @@ export type PatientSetupMutation = {
   } | null,
 };
 
+export type GetTasksForCurrentUserQueryVariables = {
+  pageNumber?: number | null,
+  pageSize?: number | null,
+};
+
+export type GetTasksForCurrentUserQuery = {
+  // Current user's Tasks
+  tasksForCurrentUser:  {
+    edges:  Array< {
+      node:  {
+        id: string,
+        title: string,
+        description: string | null,
+        createdAt: string | null,
+        dueAt: string | null,
+        patient:  {
+          id: string,
+          firstName: string | null,
+          middleName: string | null,
+          lastName: string | null,
+        } | null,
+        assignedTo:  {
+          id: string,
+          firstName: string | null,
+          lastName: string | null,
+          googleProfileImageUrl: string | null,
+        } | null,
+        followers:  Array< {
+          id: string,
+          firstName: string | null,
+          lastName: string | null,
+          googleProfileImageUrl: string | null,
+        } > | null,
+      } | null,
+    } > | null,
+    pageInfo:  {
+      hasPreviousPage: boolean,
+      hasNextPage: boolean,
+    },
+  } | null,
+};
+
 export type FullAppointmentFragment = {
   athenaAppointmentId: string,
   dateTime: string,
@@ -426,6 +508,39 @@ export type FullPatientScratchPadFragment = {
   text: string | null,
 };
 
+export type FullTaskFragment = {
+  id: string,
+  title: string,
+  description: string | null,
+  createdAt: string | null,
+  updatedAt: string | null,
+  dueAt: string | null,
+  patient:  {
+    id: string,
+    firstName: string | null,
+    middleName: string | null,
+    lastName: string | null,
+  } | null,
+  assignedTo:  {
+    id: string,
+    firstName: string | null,
+    lastName: string | null,
+    googleProfileImageUrl: string | null,
+  } | null,
+  createdBy:  {
+    id: string,
+    firstName: string | null,
+    lastName: string | null,
+    googleProfileImageUrl: string | null,
+  } | null,
+  followers:  Array< {
+    id: string,
+    firstName: string | null,
+    lastName: string | null,
+    googleProfileImageUrl: string | null,
+  } > | null,
+};
+
 export type FullUserFragment = {
   id: string,
   locale: string | null,
@@ -449,5 +564,31 @@ export type ShortPatientFragment = {
   createdAt: string | null,
   consentToText: boolean | null,
   consentToCall: boolean | null,
+};
+
+export type ShortTaskFragment = {
+  id: string,
+  title: string,
+  description: string | null,
+  createdAt: string | null,
+  dueAt: string | null,
+  patient:  {
+    id: string,
+    firstName: string | null,
+    middleName: string | null,
+    lastName: string | null,
+  } | null,
+  assignedTo:  {
+    id: string,
+    firstName: string | null,
+    lastName: string | null,
+    googleProfileImageUrl: string | null,
+  } | null,
+  followers:  Array< {
+    id: string,
+    firstName: string | null,
+    lastName: string | null,
+    googleProfileImageUrl: string | null,
+  } > | null,
 };
 /* tslint:enable */

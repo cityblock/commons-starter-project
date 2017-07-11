@@ -77,18 +77,13 @@ export async function taskComplete(
 }
 
 export async function resolvePatientTasks(
-  root: any, args: Partial<IPatientTasksFilterOptions>, { db, userRole }: IContext,
+  root: any, args: IPatientTasksFilterOptions, { db, userRole }: IContext,
 ): Promise<ITaskEdges> {
   // TODO: Improve task access controls
   await accessControls.isAllowed(userRole, 'view', 'task');
 
   const pageNumber = args.pageNumber || 0;
   const pageSize = args.pageSize || 10;
-
-  // TODO: Why is this not required earlier?
-  if (!args.patientId) {
-    throw new Error('patientId required');
-  }
 
   const tasks = await Task.getPatientTasks(args.patientId, { pageNumber, pageSize });
   const taskEdges = tasks.results.map((task: Task) => formatRelayEdge(task, task.id) as ITaskNode);

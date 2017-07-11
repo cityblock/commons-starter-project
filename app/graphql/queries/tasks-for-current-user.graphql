@@ -1,0 +1,15 @@
+#import "../fragments/short-task.graphql"
+
+query getTasksForCurrentUser($pageNumber: Int, $pageSize: Int) {
+  tasksForCurrentUser(pageNumber: $pageNumber, pageSize: $pageSize) {
+    edges {
+      node {
+        ...ShortTask
+      }
+    }
+    pageInfo {
+      hasPreviousPage
+      hasNextPage
+    }
+  }
+}

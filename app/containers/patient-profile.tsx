@@ -219,8 +219,7 @@ function mapStateToProps(state: IAppState, ownProps: IProps): Partial<IProps> {
 
 export default compose(
   injectIntl,
-  connect(undefined, mapDispatchToProps),
-  connect(mapStateToProps),
+  connect(mapStateToProps, mapDispatchToProps),
   graphql(patientQuery as any, {
     options: (props: IProps) => ({
       variables: {

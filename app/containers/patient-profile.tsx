@@ -170,6 +170,7 @@ class PatientProfileContainer extends React.Component<IProps, IState> {
             <PatientScratchPad patientId={patientId} />
           </div>
           <PatientMedications patientId={patientId} />
+          <CareTeamWidget patientId={patientId} />
         </div>
         <div className={styles.mainBody}>
           <div className={styles.tabs}>
@@ -197,7 +198,6 @@ class PatientProfileContainer extends React.Component<IProps, IState> {
             <PatientInfo patientId={patientId} patient={patient} loading={loading} error={error}/>
           </div>
         </div>
-        <CareTeamWidget patientId={patientId} />
       </div>
     );
   }

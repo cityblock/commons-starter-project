@@ -1,6 +1,7 @@
 import * as classNames from 'classnames';
 import * as React from 'react';
 import { graphql } from 'react-apollo';
+import * as careTeamMemberStyles from '../css/components/care-team-widget-member.css';
 import * as styles from '../css/components/care-team-widget.css';
 import * as careTeamQuery from '../graphql/queries/get-patient-care-team.graphql';
 import { FullUserFragment } from '../graphql/types';
@@ -77,7 +78,24 @@ class CareTeamWidget extends React.Component<IProps, IState> {
     const buttonClasses = classNames(styles.button, { [styles.openButton]: this.state.open });
     const drawerClasses = classNames(styles.drawer, { [styles.open]: this.state.open });
 
+    const slackContact = (
+      <div key='slackContact'>
+        <div className={careTeamMemberStyles.careTeamMemberRow}>
+          <div className={careTeamMemberStyles.careTeamMemberDetails}>
+            <div className={styles.chatLogo}></div>
+            <div className={careTeamMemberStyles.careTeamMemberLabel}>
+              <div className={careTeamMemberStyles.careTeamMemberName}>Chat with team</div>
+              <div className={careTeamMemberStyles.careTeamMemberRole}>Patient slack channel</div>
+            </div>
+          </div>
+        </div>
+        <div className={careTeamMemberStyles.careTeamMemberContact}></div>
+      </div>
+    );
+
     const renderedCareTeamMembers = (careTeam || []).map(this.renderCareTeamMember);
+
+    renderedCareTeamMembers.unshift(slackContact);
 
     return (
       <div className={styles.careTeamWidget}>
@@ -85,13 +103,10 @@ class CareTeamWidget extends React.Component<IProps, IState> {
           <div className={styles.careTeamWidgetContent}>
             <div className={buttonClasses} onClick={this.onClick}>
               <div className={styles.buttonLabel}>
-                <div className={styles.buttonTitle}>Team</div>
-                <div className={styles.buttonArrow}></div>
+                <div className={styles.buttonIcon}></div>
+                <div className={styles.buttonTitle}>Care Team</div>
               </div>
-              <div className={styles.buttonChatLabel}>
-                <div className={styles.chatLogo}></div>
-                <div className={styles.chatLabel}>Chat</div>
-              </div>
+              <div className={styles.buttonArrow}></div>
             </div>
             <div className={drawerClasses}>{renderedCareTeamMembers}</div>
           </div>

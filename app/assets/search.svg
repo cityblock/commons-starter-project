@@ -1,32 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg width="30px" height="30px" viewBox="0 0 30 30" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-    <!-- Generator: Sketch 44.1 (41455) - http://www.bohemiancoding.com/sketch -->
-    <title>Group 10</title>
+<svg width="18px" height="18px" viewBox="0 0 18 18" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 45.1 (43504) - http://www.bohemiancoding.com/sketch -->
+    <title>ic_search_white_24px (1)</title>
     <desc>Created with Sketch.</desc>
-    <defs>
-        <filter x="-0.8%" y="-8.6%" width="101.6%" height="128.6%" filterUnits="objectBoundingBox" id="filter-1">
-            <feOffset dx="0" dy="2" in="SourceAlpha" result="shadowOffsetOuter1"></feOffset>
-            <feGaussianBlur stdDeviation="2" in="shadowOffsetOuter1" result="shadowBlurOuter1"></feGaussianBlur>
-            <feColorMatrix values="0 0 0 0 0   0 0 0 0 0   0 0 0 0 0  0 0 0 0.1 0" type="matrix" in="shadowBlurOuter1" result="shadowMatrixOuter1"></feColorMatrix>
-            <feMerge>
-                <feMergeNode in="shadowMatrixOuter1"></feMergeNode>
-                <feMergeNode in="SourceGraphic"></feMergeNode>
-            </feMerge>
-        </filter>
-        <rect id="path-2" x="0" y="0" width="24" height="24"></rect>
-    </defs>
+    <defs></defs>
     <g id="Symbols" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-        <g id="Header" transform="translate(-81.000000, -22.000000)">
-            <g id="Group-8" filter="url(#filter-1)">
-                <g id="Group-10" transform="translate(84.000000, 23.000000)">
-                    <mask id="mask-3" fill="white">
-                        <use xlink:href="#path-2"></use>
-                    </mask>
-                    <g id="Mask"></g>
-                    <g mask="url(#mask-3)" fill-rule="nonzero" fill="#FFFFFF">
-                        <g transform="translate(13.060660, 13.060660) rotate(-45.000000) translate(-13.060660, -13.060660) translate(4.060660, -0.439340)">
-                            <polygon id="Path-2" points="10 27 10 16 8 16 8 27"></polygon>
-                            <path d="M9,16 C12.8659932,16 16,12.8659932 16,9 C16,5.13400675 12.8659932,2 9,2 C5.13400675,2 2,5.13400675 2,9 C2,12.8659932 5.13400675,16 9,16 Z M9,18 C4.02943725,18 0,13.9705627 0,9 C0,4.02943725 4.02943725,0 9,0 C13.9705627,0 18,4.02943725 18,9 C18,13.9705627 13.9705627,18 9,18 Z" id="Oval-3"></path>
+        <g id="Header---Tasks" transform="translate(-96.000000, -25.000000)">
+            <g id="Group-19" transform="translate(0.000000, -1.000000)">
+                <g id="Header" transform="translate(70.000000, 0.000000)">
+                    <g id="Group-8">
+                        <g id="ic_search_white_24px-(1)" transform="translate(23.000000, 24.000000)">
+                            <path d="M15.5,13.6 L14.71,13.6 L14.43,13.3377143 C15.41,12.2302857 16,10.7925714 16,9.22857143 C16,5.74114286 13.09,2.91428571 9.5,2.91428571 C5.91,2.91428571 3,5.74114286 3,9.22857143 C3,12.716 5.91,15.5428571 9.5,15.5428571 C11.11,15.5428571 12.59,14.9697143 13.73,14.0177143 L14,14.2897143 L14,15.0571429 L19,19.9045714 L20.49,18.4571429 L15.5,13.6 Z M9.5,13.6 C7.01,13.6 5,11.6474286 5,9.22857143 C5,6.80971429 7.01,4.85714286 9.5,4.85714286 C11.99,4.85714286 14,6.80971429 14,9.22857143 C14,11.6474286 11.99,13.6 9.5,13.6 Z" id="Shape" fill="#FFFFFF" fill-rule="nonzero"></path>
+                            <polygon id="Shape" points="0 0 24 0 24 23.3142857 0 23.3142857"></polygon>
                         </g>
                     </g>
                 </g>

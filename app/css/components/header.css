@@ -20,24 +20,52 @@
 }
 
 .hamburger {
-  margin-top: 23px;
-  height: 26px;
-  width: 26px;
+  height: 69px;
+  width: 70px;
+  background-position: center center;
   background-repeat: no-repeat;
   display: inline-block;
   vertical-align: top;
-  margin-right: 17px;
-  background-image: url('../../assets/hamburger.svg');
+  background-image: url('../../assets/mark.svg');
+  border-right: 1px solid rgba(242, 242, 242, 0.15);
+}
+
+.navItem {
+  display: inline-block;
+  color: white;
+  text-align: center;
+  font-family: var(--basetica-medium);
+  padding: 20px 23px;
+  line-height: 29px;
+  background-color: transparent;
+  transition: background-color 0.3s;
+}
+
+.navItem:hover {
+  color: white;
+  background-color: var(--blue-color);
+}
+
+.searchIcon, .patientsIcon, .tasksIcon {
+  height: 24px;
+  width: 24px;
+  background-repeat: no-repeat;
+  display: inline-block;
+  vertical-align: top;
+  background-position: center center;
+  margin-right: 10px;
 }
 
 .searchIcon {
-  margin-top: 23px;
-  height: 26px;
-  width: 26px;
-  background-repeat: no-repeat;
-  display: inline-block;
-  vertical-align: top;
   background-image: url('../../assets/search.svg');
+}
+
+.patientsIcon {
+  background-image: url('../../assets/patients.svg');
+}
+
+.tasksIcon {
+  background-image: url('../../assets/tasks.svg');
 }
 
 .left {

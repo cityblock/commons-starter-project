@@ -22,7 +22,18 @@ const Header: React.StatelessComponent<IProps> = props => {
       <div className={styles.container}>
         <div className={styles.left}>
           <div className={styles.hamburger} />
-          <div className={styles.searchIcon} />
+          <div className={styles.navItem}>
+            <div className={styles.searchIcon} />
+            <FormattedMessage id='header.search' />
+          </div>
+          <Link to={'/patients'} className={styles.navItem}>
+            <div className={styles.patientsIcon} />
+            <FormattedMessage id='header.patients' />
+          </Link>
+          <Link to={'/tasks'} className={styles.navItem}>
+            <div className={styles.tasksIcon} />
+            <FormattedMessage id='header.tasks' />
+          </Link>
         </div>
         <div className={styles.center}>
           <Link className={styles.link} to='/'>Commons</Link>

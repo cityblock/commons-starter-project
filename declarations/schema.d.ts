@@ -360,8 +360,8 @@ declare module 'schema' {
     taskCreate: ITask | null;
     taskEdit: ITask | null;
     taskComplete: ITask | null;
-    taskUserFollow: Array<IUser> | null;
-    taskUserUnfollow: Array<IUser> | null;
+    taskUserFollow: ITask | null;
+    taskUserUnfollow: ITask | null;
   }
 
   /*

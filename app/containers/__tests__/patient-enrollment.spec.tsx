@@ -12,7 +12,6 @@ it('renders patient enrollment container correctly', () => {
   const mockStore = configureMockStore([]);
   const history = createMemoryHistory();
   const locale = { messages: ENGLISH_TRANSLATION.messages };
-
   const tree = create(
     <MockedProvider mocks={[]} store={mockStore({ locale })}>
       <ReduxConnectedIntlProvider>

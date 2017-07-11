@@ -1,58 +1,29 @@
 @import '../common/sizes';
-.patientMedications {
-  padding: 25px 0 0;
-  margin-bottom: 65px;
-}
+.container {}
 
-.medicationsHeader {
-  justify-content: space-between;
-  margin: 0 var(--gutter);
-  padding-bottom: var(--small-gutter);
-  border-bottom: 1px solid var(--border-color);
-  lost-flex-container: row;
-}
+.header {}
 
-.medicationsTitle {
-  font-family: var(--basetica-medium);
-  font-size: var(--medium-large-font-size);
-  line-height: var(--medium-large-font-line-height);
-  color: var(--black-color);
-}
-
-.medicationsHamburger {
-  height: 22px;
-  width: 4px;
-  padding-right: 10px;
-  background-position: center center;
-  background-repeat: no-repeat;
-  background-size: cover;
-  background-image: url('../../assets/dot-hamburger-black.svg');
-  &:hover {
-    cursor: pointer;
-  }
-}
-
-.medicationsList {
+.tasksList {
   padding: 15px 0;
   &:hover {
     cursor: pointer;
   }
 }
 
-.medicationsList.emptyMedicationsList {
+.tasksList.emptyTasksList {
   &:hover {
     cursor: default;
   }
 }
 
-.emptyMedicationsMessage {
+.emptyTasksMessage {
   border: 1px dashed var(--border-color);
   border-radius: 4px;
   padding: 24px 40px 21px;
   margin: 5px var(--gutter) 0;
 }
 
-.emptyMedicationsLogo {
+.emptyTasksLogo {
   background-image: url('../../assets/generic-health-icon-grey.svg');
   background-position: center center;
   background-repeat: no-repeat;
@@ -61,7 +32,7 @@
   margin: 0 auto 13px;
 }
 
-.emptyMedicationsLabel {
+.emptyTasksLabel {
   margin: 0 auto;
   text-align: center;
   color: var(--light-gray-font-color);
@@ -70,21 +41,11 @@
   line-height: var(--medium-font-line-height);
 }
 
-.medicationsLoading {
-  margin: 0 auto;
-  text-align: center;
-  color: var(--light-gray-font-color);
-  font-family: var(--basetica-medium);
-  font-size: var(--medium-font-size);
-  line-height: var(--medium-font-line-height);
-  padding-top: var(--medium-gutter);
-}
-
-.medicationsError {
+.tasksError {
   margin: 50px var(--gutter) 0;
 }
 
-.medicationsErrorIcon {
+.tasksErrorIcon {
   background-image: url('../../assets/error-circle.svg');
   background-position: center center;
   background-repeat: no-repeat;
@@ -94,7 +55,7 @@
   margin: 0 auto 13px;
 }
 
-.medicationsErrorLabel {
+.tasksErrorLabel {
   color: var(--default-font-color);
   font-family: var(--basetica-black);
   font-size: var(--small-font-size);
@@ -103,7 +64,7 @@
   margin: 0 auto 10px;
 }
 
-.medicationsErrorSubheading {
+.tasksErrorSubheading {
   color: var(--gray-font-color);
   font-family: var(--roboto);
   font-size: var(--small-font-size);
@@ -113,7 +74,7 @@
   padding: 0 var(--small-gutter);
 }
 
-.medicationsErrorButton {
+.tasksErrorButton {
   @apply --inverted-button;
   width: 94px;
   height: 32px;
@@ -122,4 +83,14 @@
   text-align: center;
   font-size: var(--small-font-size);
   line-height: var(--small-font-line-height);
+}
+
+.tasksLoading {
+  margin: 0 auto;
+  text-align: center;
+  color: var(--light-gray-font-color);
+  font-family: var(--basetica-medium);
+  font-size: var(--medium-font-size);
+  line-height: var(--medium-font-line-height);
+  padding-top: var(--medium-gutter);
 }

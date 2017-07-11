@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`renders patient enrollment container correctly 1`] = `
+exports[`renders patient profile container correctly 1`] = `
 <div
   className={undefined}
 >
@@ -254,6 +254,12 @@ exports[`renders patient enrollment container correctly 1`] = `
         onClick={[Function]}
       >
         Patient Info
+      </div>
+      <div
+        className=""
+        onClick={[Function]}
+      >
+        Tasks
       </div>
     </div>
     <div
@@ -557,7 +563,6 @@ exports[`renders patient enrollment container correctly 1`] = `
               className={undefined}
             >
               <select
-                className={undefined}
                 value="Demographic info"
               >
                 <option
@@ -7082,6 +7087,74 @@ exports[`renders patient enrollment container correctly 1`] = `
                 </div>
               </div>
             </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div
+      className=""
+    >
+      <div
+        className={undefined}
+      >
+        <div
+          className={undefined}
+        >
+          <div
+            className={undefined}
+          >
+            <div
+              className={undefined}
+            >
+              Sort by:
+            </div>
+            <div
+              className={undefined}
+            >
+              <select
+                value="Newest first"
+              >
+                <option
+                  value="Newest first"
+                >
+                  Newest first
+                </option>
+              </select>
+            </div>
+          </div>
+          <div
+            className={undefined}
+          >
+            <input
+              placeholder="Search by user or keywords"
+              required={true}
+              type="text"
+            />
+          </div>
+        </div>
+        <div
+          className="undefined"
+        >
+          <div
+            className={undefined}
+          >
+            Loading...
+          </div>
+        </div>
+        <div
+          className={undefined}
+        >
+          <div
+            className={undefined}
+          >
+            <div
+              className="undefined"
+              onClick={[Function]}
+            />
+            <div
+              className="undefined"
+              onClick={[Function]}
+            />
           </div>
         </div>
       </div>

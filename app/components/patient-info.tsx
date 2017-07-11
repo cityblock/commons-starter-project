@@ -5,6 +5,7 @@ import { compose, graphql } from 'react-apollo';
 import { FormattedMessage } from 'react-intl';
 import { DOB_FORMAT } from '../config';
 import * as styles from '../css/components/patient-info.css';
+import * as sortSearchStyles from '../css/shared/sort-search.css';
 import * as editPatientMutation from '../graphql/queries/patient-edit-mutation.graphql';
 import { ShortPatientFragment } from '../graphql/types';
 import {
@@ -116,10 +117,12 @@ export class PatientInfo extends React.Component<IProps, IState> {
       clearTimeout(clearSaveSuccessTimeout);
     }
 
-    this.setState(() => ({ clearSaveSuccessTimeout: setTimeout(
-      resetSaveSuccess,
-      SAVE_SUCCESS_TIMEOUT_MILLISECONDS,
-    ) }));
+    this.setState(() => ({
+      clearSaveSuccessTimeout: setTimeout(
+        resetSaveSuccess,
+        SAVE_SUCCESS_TIMEOUT_MILLISECONDS,
+      ),
+    }));
   }
 
   async onClickSave() {
@@ -141,18 +144,20 @@ export class PatientInfo extends React.Component<IProps, IState> {
       this.setState(() => ({ saveSuccess: false, saveLoading: true, saveError: undefined }));
       try {
         // TODO: Make this less annoying
-        await updatePatientInfo({ variables: {
-          patientId,
-          firstName: firstName ? firstName : null,
-          middleName: middleName ? middleName : null,
-          lastName: lastName ? lastName : null,
-          gender: gender ? gender : null,
-          dateOfBirth: moment(dateOfBirth, 'YYYY-MM-DD').format(DOB_FORMAT),
-          zip: zip ? Number(zip) : null,
-          language: language ? language : null,
-          consentToCall: consentToCall === 'true',
-          consentToText: consentToText === 'true',
-        }});
+        await updatePatientInfo({
+          variables: {
+            patientId,
+            firstName: firstName ? firstName : null,
+            middleName: middleName ? middleName : null,
+            lastName: lastName ? lastName : null,
+            gender: gender ? gender : null,
+            dateOfBirth: moment(dateOfBirth, 'YYYY-MM-DD').format(DOB_FORMAT),
+            zip: zip ? Number(zip) : null,
+            language: language ? language : null,
+            consentToCall: consentToCall === 'true',
+            consentToText: consentToText === 'true',
+          },
+        });
         this.setState(() => ({ saveSuccess: true }));
         this.clearSaveSuccess();
       } catch (err) {
@@ -204,13 +209,13 @@ export class PatientInfo extends React.Component<IProps, IState> {
 
     return (
       <div>
-        <div className={styles.navSaveBar}>
-          <div className={styles.nav}>
+        <div className={sortSearchStyles.sortSearchBar}>
+          <div className={sortSearchStyles.sort}>
             <FormattedMessage id='patientInfo.jumpTo'>
-              {(message: string) => <div className={styles.navLabel}>{message}</div>}
+              {(message: string) => <div className={sortSearchStyles.sortLabel}>{message}</div>}
             </FormattedMessage>
-            <div className={styles.navDropdown}>
-              <select className={styles.select} value='Demographic info'>
+            <div className={sortSearchStyles.sortDropdown}>
+              <select value='Demographic info'>
                 <option value='Demographic info'>Demographic info</option>
               </select>
             </div>

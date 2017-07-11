@@ -7,9 +7,9 @@ import { create } from 'react-test-renderer';
 import configureMockStore from 'redux-mock-store';
 import { ENGLISH_TRANSLATION } from '../../reducers/messages/en';
 import ReduxConnectedIntlProvider from '../../redux-connected-intl-provider';
-import PatientProfile from '../patient-profile';
+import TasksContainer from '../tasks-container';
 
-it('renders patient profile container correctly', () => {
+it('renders tasks container', () => {
   const mockStore = configureMockStore([]);
   const history = createMemoryHistory();
   const locale = { messages: ENGLISH_TRANSLATION.messages  };
@@ -17,7 +17,7 @@ it('renders patient profile container correctly', () => {
     <MockedProvider mocks={[]} store={mockStore({ locale })}>
       <ReduxConnectedIntlProvider>
         <ConnectedRouter history={history}>
-          <Route component={PatientProfile as any} />
+          <Route component={TasksContainer as any} />
         </ConnectedRouter>
       </ReduxConnectedIntlProvider>
     </MockedProvider>,

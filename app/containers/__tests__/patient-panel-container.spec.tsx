@@ -8,7 +8,7 @@ import { ENGLISH_TRANSLATION } from '../../reducers/messages/en';
 import ReduxConnectedIntlProvider from '../../redux-connected-intl-provider';
 import PatientPanelContainer from '../patient-panel-container';
 
-it('renders patient enrollment container correctly', () => {
+it('renders patient panel container correctly', () => {
   const mockStore = configureMockStore([]);
   const history = createMemoryHistory();
   const locale = { messages: ENGLISH_TRANSLATION.messages };

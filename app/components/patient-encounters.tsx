@@ -2,6 +2,7 @@ import * as classNames from 'classnames';
 import * as React from 'react';
 import { graphql } from 'react-apollo';
 import * as styles from '../css/components/patient-encounters.css';
+import * as sortSearchStyles from '../css/shared/sort-search.css';
 import * as patientEncountersQuery from '../graphql/queries/get-patient-encounters.graphql';
 import { FullPatientEncounterFragment } from '../graphql/types';
 import { EncountersLoadingError } from './encounters-loading-error';
@@ -119,16 +120,16 @@ class PatientEncounters extends React.Component<IProps, IState> {
 
     return (
       <div>
-        <div className={styles.sortSearchBar}>
-          <div className={styles.sort}>
-            <div className={styles.sortLabel}>Sort by:</div>
-            <div className={styles.sortDropdown}>
+        <div className={sortSearchStyles.sortSearchBar}>
+          <div className={sortSearchStyles.sort}>
+            <div className={sortSearchStyles.sortLabel}>Sort by:</div>
+            <div className={sortSearchStyles.sortDropdown}>
               <select value='Newest first'>
                 <option value='Newest first'>Newest first</option>
               </select>
             </div>
           </div>
-          <div className={styles.search}>
+          <div className={sortSearchStyles.search}>
             <input required type='text' placeholder='Search by user or keywords' />
           </div>
         </div>

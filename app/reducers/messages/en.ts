@@ -19,6 +19,7 @@ export const ENGLISH_TRANSLATION = {
     'patient.language': 'Preferred language',
     'patient.location': 'Location',
     'patient.joinedAt': 'Patient since',
+    'patient.tasks': 'Tasks',
     'patient.medicareId': 'Medicare ID',
     'patient.encounters': 'Encounters',
     'patient.patientInfo': 'Patient Info',
@@ -89,5 +90,9 @@ export const ENGLISH_TRANSLATION = {
     'header.tasks': 'Tasks',
     'header.logOut': 'Logout',
     'settings.heading': 'Settings',
+    'tasks.tasksList': 'My tasks lists',
+    'tasks.listView': 'Tasks',
+    'tasks.calendar': 'Calendar',
+    'tasks.noTasks': 'No Tasks',
   },
 };

@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`renders patient enrollment container correctly 1`] = `
+exports[`renders patient panel container correctly 1`] = `
 <div
   className={undefined}
 >

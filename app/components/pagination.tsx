@@ -1,6 +1,6 @@
 import * as classNames from 'classnames';
 import * as React from 'react';
-import * as styles from '../css/components/patient-roster-pagination.css';
+import * as styles from '../css/components/pagination.css';
 
 export interface IProps {
   hasNextPage?: boolean;
@@ -9,7 +9,7 @@ export interface IProps {
   onPreviousClick: () => any;
 }
 
-export const PatientRosterPagination: React.StatelessComponent<IProps> = props => {
+export const Pagination: React.StatelessComponent<IProps> = props => {
   const prevButtonStyle = classNames(
     styles.paginationButton,
     styles.previousButton,

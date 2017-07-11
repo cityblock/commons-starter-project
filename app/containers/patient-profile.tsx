@@ -12,11 +12,14 @@ import PatientEncounters from '../components/patient-encounters';
 import PatientInfo from '../components/patient-info';
 import PatientMedications from '../components/patient-medications';
 import PatientScratchPad from '../components/patient-scratch-pad';
+import PatientTasks from '../components/patient-tasks';
 import { DOB_FORMAT } from '../config';
 import * as styles from '../css/components/patient-profile-scene.css';
+import * as tabStyles from '../css/shared/tabs.css';
 import * as patientQuery from '../graphql/queries/get-patient.graphql';
 import { ShortPatientFragment } from '../graphql/types';
 import { IState as IAppState } from '../store';
+import { getPageParams } from '../util/page-params';
 
 export interface IProps {
   intl: InjectedIntl;
@@ -32,7 +35,7 @@ export interface IProps {
   updatePageParams: (tab: string) => any;
 }
 
-type SelectableTabs = 'encounters' | 'patientInfo';
+type SelectableTabs = 'encounters' | 'patientInfo' | 'tasks';
 
 export interface IState {
   selectedTab: SelectableTabs;
@@ -42,10 +45,6 @@ const GENDER: any = { F: 'Female', M: 'Male' };
 const getPatientName = (patient: ShortPatientFragment) => (
   [patient.firstName, patient.middleName, patient.lastName].filter(Boolean).join(' ')
 );
-
-function getPageParams() {
-  return querystring.parse(window.location.search.substring(1));
-}
 
 class PatientProfileContainer extends React.Component<IProps, IState> {
   constructor(props: IProps) {
@@ -94,19 +93,24 @@ class PatientProfileContainer extends React.Component<IProps, IState> {
     const zip = patient && patient.zip ? patient.zip : null;
     const language = patient && patient.language ? langs.where('1', patient.language).name : null;
 
-    const encountersTabStyles = classNames(styles.tab, {
-      [styles.selectedTab]: selectedTab === 'encounters',
+    const encountersTabStyles = classNames(tabStyles.tab, {
+      [tabStyles.selectedTab]: selectedTab === 'encounters',
     });
-    const encountersPaneStyles = classNames(styles.pane, {
-      [styles.selectedPane]: selectedTab === 'encounters',
+    const encountersPaneStyles = classNames(tabStyles.pane, {
+      [tabStyles.selectedPane]: selectedTab === 'encounters',
     });
-    const patientInfoTabStyles = classNames(styles.tab, {
-      [styles.selectedTab]: selectedTab === 'patientInfo',
+    const patientInfoTabStyles = classNames(tabStyles.tab, {
+      [tabStyles.selectedTab]: selectedTab === 'patientInfo',
     });
-    const patientInfoPaneStyles = classNames(styles.pane, {
-      [styles.selectedPane]: selectedTab === 'patientInfo',
+    const patientInfoPaneStyles = classNames(tabStyles.pane, {
+      [tabStyles.selectedPane]: selectedTab === 'patientInfo',
     });
-
+    const tasksTabStyles = classNames(tabStyles.tab, {
+      [tabStyles.selectedTab]: selectedTab === 'tasks',
+    });
+    const tasksPaneStyles = classNames(tabStyles.pane, {
+      [tabStyles.selectedPane]: selectedTab === 'tasks',
+    });
     return (
       <div className={styles.container}>
         <div className={styles.leftPane}>
@@ -173,7 +177,7 @@ class PatientProfileContainer extends React.Component<IProps, IState> {
           <CareTeamWidget patientId={patientId} />
         </div>
         <div className={styles.mainBody}>
-          <div className={styles.tabs}>
+          <div className={tabStyles.tabs}>
             <FormattedMessage id='patient.encounters'>
               {(message: string) =>
                 <div
@@ -190,12 +194,23 @@ class PatientProfileContainer extends React.Component<IProps, IState> {
                   {message}
                 </div>}
             </FormattedMessage>
+            <FormattedMessage id='patient.tasks'>
+              {(message: string) =>
+                <div
+                  className={tasksTabStyles}
+                  onClick={() => this.onTabClick('tasks')}>
+                  {message}
+                </div>}
+            </FormattedMessage>
           </div>
           <div className={encountersPaneStyles}>
             <PatientEncounters patientId={patientId} />
           </div>
           <div className={patientInfoPaneStyles}>
-            <PatientInfo patientId={patientId} patient={patient} loading={loading} error={error}/>
+            <PatientInfo patientId={patientId} patient={patient} loading={loading} error={error} />
+          </div>
+          <div className={tasksPaneStyles}>
+            <PatientTasks patientId={patientId} />
           </div>
         </div>
       </div>

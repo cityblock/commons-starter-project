@@ -5,8 +5,8 @@ import { FormattedMessage } from 'react-intl';
 import { connect, Dispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { push } from 'react-router-redux';
+import { Pagination } from '../components/pagination';
 import { PatientRoster } from '../components/patient-roster';
-import { PatientRosterPagination } from '../components/patient-roster-pagination';
 import * as styles from '../css/components/patient-panel-scene.css';
 import * as patientPanelQuery from '../graphql/queries/get-patient-panel.graphql';
 import { ShortPatientFragment } from '../graphql/types';
@@ -135,7 +135,7 @@ class PatientPanelContainer extends React.Component<IProps, IState> {
             patients={this.formattedPatients()}
             onRetryClick={this.reloadCurrentPage}
           />
-          <PatientRosterPagination
+          <Pagination
             hasNextPage={this.state.hasNextPage}
             hasPreviousPage={this.state.hasPreviousPage}
             onNextClick={this.getNextPage}

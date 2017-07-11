@@ -1,0 +1,15 @@
+#import "../fragments/short-task.graphql"
+
+query getPatientTasks($patientId: String!, $pageNumber: Int, $pageSize: Int) {
+  tasksForPatient(patientId: $patientId, pageNumber: $pageNumber, pageSize: $pageSize) {
+    edges {
+      node {
+        ...ShortTask
+      }
+    }
+    pageInfo {
+      hasPreviousPage
+      hasNextPage
+    }
+  }
+}

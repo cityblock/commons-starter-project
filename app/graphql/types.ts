@@ -205,6 +205,49 @@ export type GetPatientScratchPadQuery = {
   } | null,
 };
 
+export type GetPatientTasksQueryVariables = {
+  patientId: string,
+  pageNumber?: number | null,
+  pageSize?: number | null,
+};
+
+export type GetPatientTasksQuery = {
+  // Patient's Tasks
+  tasksForPatient:  {
+    edges:  Array< {
+      node:  {
+        id: string,
+        title: string,
+        description: string | null,
+        createdAt: string | null,
+        dueAt: string | null,
+        patient:  {
+          id: string,
+          firstName: string | null,
+          middleName: string | null,
+          lastName: string | null,
+        } | null,
+        assignedTo:  {
+          id: string,
+          firstName: string | null,
+          lastName: string | null,
+          googleProfileImageUrl: string | null,
+        } | null,
+        followers:  Array< {
+          id: string,
+          firstName: string | null,
+          lastName: string | null,
+          googleProfileImageUrl: string | null,
+        } > | null,
+      } | null,
+    } > | null,
+    pageInfo:  {
+      hasPreviousPage: boolean,
+      hasNextPage: boolean,
+    },
+  } | null,
+};
+
 export type GetPatientQueryVariables = {
   patientId: string,
 };

@@ -1,75 +1,152 @@
+import * as classNames from 'classnames';
+import * as querystring from 'querystring';
 import * as React from 'react';
 import { compose, graphql } from 'react-apollo';
-import { injectIntl, InjectedIntl } from 'react-intl';
-import { connect } from 'react-redux';
+import { injectIntl, FormattedMessage, InjectedIntl } from 'react-intl';
+import { connect, Dispatch } from 'react-redux';
+import { push } from 'react-router-redux';
+import Tasks from '../components/tasks';
 import * as styles from '../css/components/tasks-container.css';
-import * as taskQuery from '../graphql/queries/get-task.graphql';
+import * as tabStyles from '../css/shared/tabs.css';
 import * as tasksQuery from '../graphql/queries/tasks-for-current-user.graphql';
-import { FullTaskFragment, ShortTaskFragment } from '../graphql/types';
-import { IState as IAppState } from '../store';
+import { ShortTaskFragment } from '../graphql/types';
+import { getPageParams } from '../util/page-params';
 
 export interface IProps {
   intl: InjectedIntl;
-  loading: boolean;
-  error?: string;
-  taskId?: string;
-  task?: FullTaskFragment;
+  tasksLoading: boolean;
+  tasksError?: string;
   tasks: ShortTaskFragment[];
-  match: {
-    params: {
-      taskId: string;
-    };
-  };
+  refetchTasks: () => any;
+  updatePageParamsPage: (pageNumber: number) => any;
   updatePageParams: (tab: string) => any;
 }
 
-class TasksContainer extends React.Component<IProps, {}> {
+type SelectableTabs = 'tasks' | 'calendar';
+
+export interface IState {
+  selectedTab: SelectableTabs;
+}
+
+class TasksContainer extends React.Component<IProps, IState> {
+
+  constructor(props: IProps) {
+    super(props);
+
+    this.onTabClick = this.onTabClick.bind(this);
+
+    const { tab } = getPageParams();
+
+    this.state = {
+      selectedTab: tab || 'tasks',
+    };
+  }
 
   componentWillReceiveProps(newProps: IProps) {
-    if (newProps.task) {
-      document.title = `${newProps.task.title} | Commons`;
-    } else {
-      document.title = `My Tasks | Commons`;
-    }
+    const { tab } = getPageParams();
+    this.setState(() => ({ selectedTab: tab || 'tasks' }));
+
+    document.title = `My Tasks | Commons`;
+  }
+
+  onTabClick(selectedTab: SelectableTabs) {
+    const { updatePageParams } = this.props;
+
+    updatePageParams(selectedTab);
+    this.setState(() => ({ selectedTab }));
   }
 
   render() {
+    const { selectedTab } = this.state;
+
+    const tasksTabStyles = classNames(tabStyles.tab, {
+      [tabStyles.selectedTab]: selectedTab === 'tasks',
+    });
+    const tasksPaneStyles = classNames(tabStyles.pane, {
+      [tabStyles.selectedPane]: selectedTab === 'tasks',
+    });
+    const calendarTabStyles = classNames(tabStyles.tab, {
+      [tabStyles.selectedTab]: selectedTab === 'calendar',
+    });
+    const calendarPaneStyles = classNames(tabStyles.pane, {
+      [tabStyles.selectedPane]: selectedTab === 'calendar',
+    });
     return (
       <div className={styles.container}>
+        <div className={styles.leftPane}>
+          <FormattedMessage id='tasks.tasksList'>
+            {(message: string) =>
+              <div className={styles.leftHeading}>{message}</div>}
+          </FormattedMessage>
+        </div>
+        <div className={styles.mainBody}>
+          <div className={tabStyles.tabs}>
+            <FormattedMessage id='tasks.listView'>
+              {(message: string) =>
+                <div
+                  className={tasksTabStyles}
+                  onClick={() => this.onTabClick('tasks')}>
+                  {message}
+                </div>}
+            </FormattedMessage>
+            <FormattedMessage id='tasks.calendar'>
+              {(message: string) =>
+                <div
+                  className={calendarTabStyles}
+                  onClick={() => this.onTabClick('calendar')}>
+                  {message}
+                </div>}
+            </FormattedMessage>
+          </div>
+          <div className={tasksPaneStyles}>
+            <Tasks
+              updatePageParams={this.props.updatePageParamsPage}
+              refetchTasks={this.props.refetchTasks}
+              loading={this.props.tasksLoading}
+              error={this.props.tasksError}
+              tasks={this.props.tasks} />
+          </div>
+          <div className={calendarPaneStyles}>
+            calendar!
+          </div>
+        </div>
       </div>
     );
   }
 }
 
-function mapStateToProps(state: IAppState, ownProps: IProps): Partial<IProps> {
+function mapDispatchToProps(dispatch: Dispatch<() => void>): Partial<IProps> {
   return {
-    taskId: ownProps.match.params.taskId,
+    updatePageParams: (tab: string) => {
+      dispatch(push({ search: querystring.stringify({ tab }) }));
+    },
+    updatePageParamsPage: (pageNumber: number) => {
+      const pageParams = getPageParamsPagination();
+      pageParams.variables.pageNumber = pageNumber;
+      dispatch(push({ search: querystring.stringify(pageParams) }));
+    },
   };
 }
 
+const getPageParamsPagination = () => {
+  const pageParams = querystring.parse(window.location.search.substring(1));
+  return {
+    variables: {
+      pageNumber: pageParams.pageNumber || 0,
+      pageSize: pageParams.pageSize || 10,
+    },
+  };
+};
 export default compose(
   injectIntl,
-  connect(mapStateToProps),
+  connect(undefined, mapDispatchToProps),
   graphql(tasksQuery as any, {
-    options: (props: IProps) => ({
-      variables: {},
-    }),
+    options: getPageParamsPagination,
     props: ({ data }) => ({
-      loading: (data ? data.loading : false),
-      error: (data ? data.error : null),
+      refetchTasks: (data ? data.refetch : null),
+      tasksLoading: (data ? data.loading : false),
+      tasksError: (data ? data.error : null),
       tasks: (data ? (data as any).tasksUserFollowing : null),
-    }),
-  }),
-  graphql(taskQuery as any, {
-    options: (props: IProps) => ({
-      variables: {
-        tasktId: props.taskId,
-      },
-    }),
-    props: ({ data }) => ({
-      loading: (data ? data.loading : false),
-      error: (data ? data.error : null),
-      task: (data ? (data as any).task : null),
     }),
   }),
 )(TasksContainer);

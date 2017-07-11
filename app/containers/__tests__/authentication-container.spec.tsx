@@ -4,7 +4,7 @@ import { create } from 'react-test-renderer';
 import configureMockStore from 'redux-mock-store';
 import AuthenticationContainer from '../authentication-container';
 
-it('renders authenticationc container correctly', () => {
+it('renders authentication container correctly', () => {
   const mockStore = configureMockStore([]);
   const tree = create(
     <MockedProvider mocks={[]} store={mockStore()}>

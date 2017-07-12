@@ -82,7 +82,7 @@
 
 .info {
   margin-top: var(--small-gutter);
-  height: calc(100vh - 247px);
+  height: calc(100vh - 220px);
   overflow: scroll;
 }
 

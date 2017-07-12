@@ -1,8 +1,8 @@
 @import '../common/sizes';
 .tabs {
-  padding: var(--medium-gutter) var(--medium-gutter) 0;
+  padding: var(--small-gutter) var(--medium-gutter) 0;
   border-bottom: 1px solid var(--border-color);
-  height: 67px;
+  height: 50px;
   background-color: var(--white-color);
   justify-content: flex-start;
   lost-flex-container: row;
@@ -15,10 +15,12 @@
   color: var(--gray-font-color);
   margin-right: var(--medium-gutter);
   padding-right: 5px;
+
   &.selectedTab {
     color: var(--blue-color);
     border-bottom: 4px solid var(--blue-color);
   }
+
   &:hover {
     cursor: pointer;
   }
@@ -26,6 +28,7 @@
 
 .pane {
   display: none;
+
   &.selectedPane {
     display: block;
   }

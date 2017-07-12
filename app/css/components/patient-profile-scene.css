@@ -14,7 +14,7 @@
   border-left: 1px solid var(--gray-background-color);
   border-right: 1px solid var(--border-color);
   flex-basis: 25%;
-  height: calc(100vh - 70px);
+  height: calc(100vh - 60px);
   overflow: scroll;
 }
 

@@ -21,18 +21,24 @@ const Header: React.StatelessComponent<IProps> = props => {
     <div className={styles.header}>
       <div className={styles.container}>
         <div className={styles.left}>
-          <div className={styles.hamburger} />
+          <div className={styles.mark} />
           <div className={styles.navItem}>
             <div className={styles.searchIcon} />
-            <FormattedMessage id='header.search' />
+            <FormattedMessage id='header.search'>
+              {(message: string) => <div className={styles.navText}>{message}</div>}
+            </FormattedMessage>
           </div>
           <Link to={'/patients'} className={styles.navItem}>
             <div className={styles.patientsIcon} />
-            <FormattedMessage id='header.patients' />
+            <FormattedMessage id='header.patients'>
+              {(message: string) => <div className={styles.navText}>{message}</div>}
+            </FormattedMessage>
           </Link>
           <Link to={'/tasks'} className={styles.navItem}>
             <div className={styles.tasksIcon} />
-            <FormattedMessage id='header.tasks' />
+            <FormattedMessage id='header.tasks'>
+              {(message: string) => <div className={styles.navText}>{message}</div>}
+            </FormattedMessage>
           </Link>
         </div>
         <div className={styles.center}>

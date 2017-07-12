@@ -25,3 +25,9 @@ class LocalStorageMock {
 }
 
 global.localStorage = new LocalStorageMock();
+
+/**
+ * jsdom doesn't implement matchMedia, so just mock it here
+ */
+global.window = window || {};
+window.matchMedia = jest.fn().mockImplementation(() => true);

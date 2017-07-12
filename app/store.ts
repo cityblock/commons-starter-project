@@ -5,6 +5,7 @@ import { routerReducer } from 'react-router-redux';
 import { applyMiddleware, compose, createStore } from 'redux';
 import { combineReducers } from 'redux';
 import { createLogger } from 'redux-logger';
+import { browserReducer, Size } from './reducers/browser-reducer';
 import { localeReducer, Lang } from './reducers/locale-reducer';
 
 export interface IState {
@@ -12,6 +13,9 @@ export interface IState {
   locale: {
     lang: Lang;
     messages: any;
+  };
+  browser: {
+    size: Size,
   };
 }
 
@@ -26,9 +30,10 @@ export default (client: ApolloClient, history: History) => {
 
   // `as any` are temporary fixes for ts 2.4 issues with redux typings
   const reducers = combineReducers<IState>({
-    routing: routerReducer as any,
-    locale: localeReducer as any,
     apollo: client.reducer() as any,
+    browser: browserReducer as any,
+    locale: localeReducer as any,
+    routing: routerReducer as any,
   });
 
   return createStore(reducers, composeEnhancers(applyMiddleware(...middleware)));

@@ -111,6 +111,7 @@ class PatientProfileContainer extends React.Component<IProps, IState> {
     const tasksPaneStyles = classNames(tabStyles.pane, {
       [tabStyles.selectedPane]: selectedTab === 'tasks',
     });
+
     return (
       <div className={styles.container}>
         <div className={styles.leftPane}>

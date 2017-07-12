@@ -5,6 +5,7 @@ import * as React from 'react';
 import { compose, graphql } from 'react-apollo';
 import { injectIntl, FormattedMessage, InjectedIntl } from 'react-intl';
 import { connect } from 'react-redux';
+import { Route } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import CareTeamWidget from '../components/care-team-widget';
 import PatientEncounters from '../components/patient-encounters';
@@ -33,7 +34,6 @@ export interface IProps {
     params: {
       patientId: string;
       tabId?: SelectableTabs;
-      taskId?: string;
     };
   };
 }
@@ -71,20 +71,11 @@ class PatientProfileContainer extends React.Component<IProps, {}> {
     const encountersTabStyles = classNames(tabStyles.tab, {
       [tabStyles.selectedTab]: tabId === 'encounters',
     });
-    const encountersPaneStyles = classNames(tabStyles.pane, {
-      [tabStyles.selectedPane]: tabId === 'encounters',
-    });
     const patientInfoTabStyles = classNames(tabStyles.tab, {
       [tabStyles.selectedTab]: tabId === 'patientInfo',
     });
-    const patientInfoPaneStyles = classNames(tabStyles.pane, {
-      [tabStyles.selectedPane]: tabId === 'patientInfo',
-    });
     const tasksTabStyles = classNames(tabStyles.tab, {
       [tabStyles.selectedTab]: tabId === 'tasks',
-    });
-    const tasksPaneStyles = classNames(tabStyles.pane, {
-      [tabStyles.selectedPane]: tabId === 'tasks',
     });
 
     return (
@@ -176,15 +167,15 @@ class PatientProfileContainer extends React.Component<IProps, {}> {
                 </Link>}
             </FormattedMessage>
           </div>
-          <div className={encountersPaneStyles}>
+          <Route path={`/patients/${patientId}/encounters`} component={() => (
             <PatientEncounters patientId={patientId} />
-          </div>
-          <div className={patientInfoPaneStyles}>
+          )} />
+          <Route path={`/patients/${patientId}/patientInfo`} component={() => (
             <PatientInfo patientId={patientId} patient={patient} loading={loading} error={error} />
-          </div>
-          <div className={tasksPaneStyles}>
+          )} />
+          <Route path={`/patients/${patientId}/tasks`} component={() => (
             <PatientTasks patientId={patientId} taskId={taskId} />
-          </div>
+          )} />
         </div>
       </div>
     );
@@ -195,7 +186,6 @@ function mapStateToProps(state: IAppState, ownProps: IProps): Partial<IProps> {
   return {
     patientId: ownProps.match.params.patientId,
     tabId: ownProps.match.params.tabId || 'encounters',
-    taskId: ownProps.match.params.taskId,
   };
 }
 

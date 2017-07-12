@@ -10,7 +10,6 @@ import { ShortTaskFragment } from '../graphql/types';
 
 export interface IProps {
   patientId: string;
-  taskId?: string;
   tasksLoading: boolean;
   tasksError?: string;
   tasksResponse?: {
@@ -23,15 +22,13 @@ export interface IProps {
     };
   };
   refetchTasks: () => any;
-  updatePageParams: (pageNumber: number, taskId?: string) => any;
+  updatePageParams: (pageNumber: number) => any;
 }
 
 class PatientTasks extends React.Component<IProps, {}> {
 
   render() {
-    const {
-      refetchTasks, updatePageParams, tasksLoading, tasksError, tasksResponse, taskId,
-    } = this.props;
+    const { refetchTasks, updatePageParams, tasksLoading, tasksError, tasksResponse } = this.props;
 
     const tasks = tasksResponse ? tasksResponse.edges.map((edge: any) => edge.node) : [];
     const hasNextPage = tasksResponse ? tasksResponse.pageInfo.hasNextPage : false;
@@ -46,7 +43,6 @@ class PatientTasks extends React.Component<IProps, {}> {
         hasNextPage={hasNextPage}
         hasPreviousPage={hasPreviousPage}
         routeBase={`/patients/${this.props.patientId}/tasks`}
-        taskId={taskId}
         tasks={tasks} />
     );
   }

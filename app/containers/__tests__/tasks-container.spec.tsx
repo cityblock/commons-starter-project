@@ -12,9 +12,10 @@ import TasksContainer from '../tasks-container';
 it('renders tasks container', () => {
   const mockStore = configureMockStore([]);
   const history = createMemoryHistory();
-  const locale = { messages: ENGLISH_TRANSLATION.messages  };
+  const locale = { messages: ENGLISH_TRANSLATION.messages};
+  const task = { taskId: 'foo' };
   const tree = create(
-    <MockedProvider mocks={[]} store={mockStore({ locale })}>
+    <MockedProvider mocks={[]} store={mockStore({ locale, task })}>
       <ReduxConnectedIntlProvider>
         <ConnectedRouter history={history}>
           <Route component={TasksContainer as any} />

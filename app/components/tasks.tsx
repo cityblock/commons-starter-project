@@ -1,13 +1,15 @@
 import * as classNames from 'classnames';
 import * as querystring from 'querystring';
 import * as React from 'react';
-import { compose, graphql } from 'react-apollo';
-import { injectIntl, FormattedMessage, InjectedIntl } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
+import { connect } from 'react-redux';
+import { Route } from 'react-router-dom';
 import * as styles from '../css/components/tasks.css';
 import * as sortSearchStyles from '../css/shared/sort-search.css';
-import * as taskQuery from '../graphql/queries/get-task.graphql';
-import { FullTaskFragment, ShortTaskFragment } from '../graphql/types';
+import { ShortTaskFragment } from '../graphql/types';
+import { IState as IAppState } from '../store';
 import { Pagination } from './pagination';
+import Task from './task';
 import { TaskRow } from './task-row';
 import { TasksLoadingError } from './tasks-loading-error';
 
@@ -22,16 +24,12 @@ export interface ITaskPageInfo {
 }
 
 export interface IProps {
-  intl: InjectedIntl;
+  taskId?: string;
   routeBase: string;
   tasks?: ShortTaskFragment[];
   refetchTasks: (variables: { pageNumber: number, pageSize: number }) => any;
   loading?: boolean;
   error?: string;
-  taskId?: string;
-  task?: FullTaskFragment;
-  taskLoading?: boolean;
-  taskError?: string;
   updatePageParams: (pageNumber: number) => any;
   hasNextPage?: boolean;
   hasPreviousPage?: boolean;
@@ -162,12 +160,14 @@ class Tasks extends React.Component<IProps, IState> {
   }
 
   render() {
-    const { tasks } = this.props;
+    const { tasks, routeBase, taskId } = this.props;
     const tasksList = tasks || [];
     const taskListStyles = classNames(styles.tasksList, {
       [styles.emptyTasksList]: !tasksList.length,
     });
-
+    const taskContainerStyles = classNames(styles.taskContainer, {
+      [styles.taskContainerVisible]: !!taskId,
+    });
     return (
       <div className={styles.container}>
         <div className={sortSearchStyles.sortSearchBar}>
@@ -183,28 +183,30 @@ class Tasks extends React.Component<IProps, IState> {
             <input required type='text' placeholder='Search by user or keywords' />
           </div>
         </div>
-        <div className={taskListStyles}>
-          {this.renderTasks(tasksList)}
+        <div className={styles.bottomContainer}>
+          <div className={styles.taskListContainer}>
+            <div className={taskListStyles}>
+              {this.renderTasks(tasksList)}
+            </div>
+            <Pagination
+              hasNextPage={this.props.hasNextPage}
+              hasPreviousPage={this.props.hasPreviousPage}
+              onNextClick={this.getNextPage}
+              onPreviousClick={this.getPreviousPage} />
+          </div>
+          <div className={taskContainerStyles}>
+            <Route path={`${routeBase}/:taskId`} component={Task as any} />
+          </div>
         </div>
-        <Pagination
-          hasNextPage={this.props.hasNextPage}
-          hasPreviousPage={this.props.hasPreviousPage}
-          onNextClick={this.getNextPage}
-          onPreviousClick={this.getPreviousPage} />
       </div>
     );
   }
 }
 
-export default compose(
-  injectIntl,
-  graphql(taskQuery as any, {
-    skip: (props: IProps) => !props.taskId,
-    options: (props: IProps) => ({ variables: { taskId: props.taskId } }),
-    props: ({ data }) => ({
-      taskLoading: (data ? data.loading : false),
-      taskError: (data ? data.error : null),
-      task: (data ? (data as any).task : null),
-    }),
-  }),
-)(Tasks);
+function mapStateToProps(state: IAppState): Partial<IProps> {
+  return {
+    taskId: state.task.taskId,
+  };
+}
+
+export default connect(mapStateToProps)(Tasks as any) as any;

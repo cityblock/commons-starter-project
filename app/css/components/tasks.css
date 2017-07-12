@@ -6,6 +6,7 @@
 
 .tasksList {
   padding: 15px 0;
+  flex: 1;
   &:hover {
     cursor: pointer;
   }
@@ -15,6 +16,33 @@
   &:hover {
     cursor: default;
   }
+}
+
+.taskListContainer {
+  flex-grow: 1;
+  flex-shrink: 1;
+  transition: all 0.3s;
+}
+
+.bottomContainer {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: stretch;
+  flex-wrap: nowrap;
+}
+
+.taskContainer {
+  overflow: hidden;
+  flex-grow: 0;
+  flex-shrink: 0;
+  flex-basis: 0px;
+  transition: all 0.3s;
+}
+
+.taskContainerVisible {
+  overflow: visible;
+  flex-grow: 1;
 }
 
 .emptyTasksMessage {

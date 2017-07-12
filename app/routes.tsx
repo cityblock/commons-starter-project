@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Route, Switch } from 'react-router-dom';
+import { Redirect, Route, Switch } from 'react-router-dom';
 import Authentication from './containers/authentication-container';
 import LogIn from './containers/login-container';
 import Main from './containers/main';
@@ -8,6 +8,10 @@ import PatientPanelContainer from './containers/patient-panel-container';
 import PatientProfileContainer from './containers/patient-profile';
 import SettingsContainer from './containers/settings';
 import TasksContainer from './containers/tasks-container';
+
+const PatientRedirect = (options: any) => (
+<Redirect to={`/patients/${options.match.params.patientId}/encounters`} />
+);
 
 /**
  * What is <Switch>?
@@ -23,12 +27,9 @@ export default (
         <Route exact path='/tasks' component={(TasksContainer as any)} />
         <Route exact path='/settings' component={(SettingsContainer as any)} />
         <Route exact path='/patient-intake' component={(PatientEnrollmentContainer as any)} />
-        <Route exact
-          path='/patients/:patientId/:tabId/:taskId' component={(PatientProfileContainer as any)} />
-        <Route exact
-          path='/patients/:patientId/:tabId' component={(PatientProfileContainer as any)} />
-        <Route exact path='/patients/:patientId' component={(PatientProfileContainer as any)} />
         <Route exact path='/patients' component={(PatientPanelContainer as any)} />
+        <Route exact path='/patients/:patientId' component={(PatientRedirect as any)} />
+        <Route path='/patients/:patientId/:tabId' component={(PatientProfileContainer as any)} />
       </Authentication>
     </Switch>
   </Main>

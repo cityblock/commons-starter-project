@@ -7,6 +7,7 @@ import { combineReducers } from 'redux';
 import { createLogger } from 'redux-logger';
 import { browserReducer, Size } from './reducers/browser-reducer';
 import { localeReducer, Lang } from './reducers/locale-reducer';
+import { taskReducer } from './reducers/task-reducer';
 
 export interface IState {
   routing: any;
@@ -16,6 +17,9 @@ export interface IState {
   };
   browser: {
     size: Size,
+  };
+  task: {
+    taskId?: string;
   };
 }
 
@@ -34,6 +38,7 @@ export default (client: ApolloClient, history: History) => {
     browser: browserReducer as any,
     locale: localeReducer as any,
     routing: routerReducer as any,
+    task: taskReducer as any,
   });
 
   return createStore(reducers, composeEnhancers(applyMiddleware(...middleware)));

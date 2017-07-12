@@ -11,13 +11,11 @@ import * as styles from '../css/components/tasks-container.css';
 import * as tabStyles from '../css/shared/tabs.css';
 import * as tasksQuery from '../graphql/queries/tasks-for-current-user.graphql';
 import { ShortTaskFragment } from '../graphql/types';
-import { IState as IAppState } from '../store';
 
 export interface IProps {
   intl: InjectedIntl;
   tasksLoading: boolean;
   tasksError?: string;
-  taskId: string;
   tasksResponse?: {
     edges: Array<{
       node: ShortTaskFragment;
@@ -28,13 +26,7 @@ export interface IProps {
     };
   };
   refetchTasks: () => any;
-  updatePageParamsPage: (pageNumber: number) => any;
-  updatePageParams: (tab: string) => any;
-  match: {
-    params: {
-      taskId?: string;
-    };
-  };
+  updatePageParams: (pageNumber: number) => any;
 }
 
 class TasksContainer extends React.Component<IProps> {
@@ -44,7 +36,7 @@ class TasksContainer extends React.Component<IProps> {
   }
 
   render() {
-    const { tasksResponse, taskId } = this.props;
+    const { tasksResponse } = this.props;
 
     const tasks = tasksResponse ? tasksResponse.edges.map((edge: any) => edge.node) : [];
     const hasNextPage = tasksResponse ? tasksResponse.pageInfo.hasNextPage : false;
@@ -84,14 +76,13 @@ class TasksContainer extends React.Component<IProps> {
           </div>
           <div className={tasksPaneStyles}>
             <Tasks
-              updatePageParams={this.props.updatePageParamsPage}
+              updatePageParams={this.props.updatePageParams}
               refetchTasks={this.props.refetchTasks}
               loading={this.props.tasksLoading}
               error={this.props.tasksError}
               hasNextPage={hasNextPage}
               hasPreviousPage={hasPreviousPage}
               routeBase={`/tasks`}
-              taskId={taskId}
               tasks={tasks} />
           </div>
           <div className={calendarPaneStyles}>
@@ -103,18 +94,9 @@ class TasksContainer extends React.Component<IProps> {
   }
 }
 
-function mapStateToProps(state: IAppState, ownProps: IProps): Partial<IProps> {
-  return {
-    taskId: ownProps.match.params.taskId,
-  };
-}
-
 function mapDispatchToProps(dispatch: Dispatch<() => void>): Partial<IProps> {
   return {
-    updatePageParams: (tab: string) => {
-      dispatch(push({ search: querystring.stringify({ tab }) }));
-    },
-    updatePageParamsPage: (pageNumber: number) => {
+    updatePageParams: (pageNumber: number) => {
       const pageParams = getPageParamsPagination();
       pageParams.variables.pageNumber = pageNumber;
       dispatch(push({ search: querystring.stringify(pageParams) }));
@@ -133,7 +115,7 @@ const getPageParamsPagination = () => {
 };
 export default compose(
   injectIntl,
-  connect(mapStateToProps, mapDispatchToProps),
+  connect(undefined, mapDispatchToProps),
   graphql(tasksQuery as any, {
     options: getPageParamsPagination,
     props: ({ data }) => ({

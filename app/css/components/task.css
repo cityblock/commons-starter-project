@@ -1,0 +1,8 @@
+@import '../common/sizes';
+.container {
+  background: white;
+  border: 1px solid var(--border-color);
+  box-shadow: var(--login-drop-shadow);
+  border-radius: 5px;
+  margin: 25px var(--medium-gutter) 25px 0px;
+}

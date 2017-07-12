@@ -1,7 +1,7 @@
 @import '../common/sizes';
 .container {
   background: white;
-  margin: 10px 30px;
+  margin: 10px var(--medium-gutter);
   padding: 12px 15px;
   display: flex;
   justify-content: space-between;
@@ -19,6 +19,7 @@
 .selected {
   border: 1px solid var(--border-color);
   box-shadow: var(--login-drop-shadow);
+  margin-right: var(--small-gutter);
 }
 
 .title {
@@ -28,7 +29,6 @@
 
 .followers {
   flex: 1;
-  margin-right: 22px;
 }
 
 .follower {
@@ -46,7 +46,8 @@
 }
 
 .dateSection {
-  flex: 1
+  flex: 1;
+  margin-left: 22px;
 }
 
 .dateLabel {

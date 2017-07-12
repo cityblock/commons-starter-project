@@ -76,15 +76,6 @@ exports[`renders tasks container 1`] = `
           </div>
         </div>
         <div
-          className="undefined"
-        >
-          <div
-            className={undefined}
-          >
-            Loading...
-          </div>
-        </div>
-        <div
           className={undefined}
         >
           <div
@@ -92,13 +83,33 @@ exports[`renders tasks container 1`] = `
           >
             <div
               className="undefined"
-              onClick={[Function]}
-            />
+            >
+              <div
+                className={undefined}
+              >
+                Loading...
+              </div>
+            </div>
             <div
-              className="undefined"
-              onClick={[Function]}
-            />
+              className={undefined}
+            >
+              <div
+                className={undefined}
+              >
+                <div
+                  className="undefined"
+                  onClick={[Function]}
+                />
+                <div
+                  className="undefined"
+                  onClick={[Function]}
+                />
+              </div>
+            </div>
           </div>
+          <div
+            className={undefined}
+          />
         </div>
       </div>
     </div>

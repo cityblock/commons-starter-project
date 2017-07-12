@@ -17,7 +17,7 @@ exports[`renders patient panel container correctly 1`] = `
       </div>
       <a
         className={undefined}
-        href="/patients/new"
+        href="/patient-intake"
         onClick={[Function]}
       >
         Add Patient

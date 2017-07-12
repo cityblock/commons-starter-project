@@ -1,12 +1,11 @@
 import * as classNames from 'classnames';
 import * as langs from 'langs';
 import * as moment from 'moment';
-import * as querystring from 'querystring';
 import * as React from 'react';
 import { compose, graphql } from 'react-apollo';
 import { injectIntl, FormattedMessage, InjectedIntl } from 'react-intl';
-import { connect, Dispatch } from 'react-redux';
-import { push } from 'react-router-redux';
+import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
 import CareTeamWidget from '../components/care-team-widget';
 import PatientEncounters from '../components/patient-encounters';
 import PatientInfo from '../components/patient-info';
@@ -19,26 +18,24 @@ import * as tabStyles from '../css/shared/tabs.css';
 import * as patientQuery from '../graphql/queries/get-patient.graphql';
 import { ShortPatientFragment } from '../graphql/types';
 import { IState as IAppState } from '../store';
-import { getPageParams } from '../util/page-params';
+
+type SelectableTabs = 'encounters' | 'patientInfo' | 'tasks';
 
 export interface IProps {
   intl: InjectedIntl;
   patientId: string;
+  taskId?: string;
+  tabId: SelectableTabs;
   loading: boolean;
   error?: string;
   patient?: ShortPatientFragment;
   match: {
     params: {
       patientId: string;
+      tabId?: SelectableTabs;
+      taskId?: string;
     };
   };
-  updatePageParams: (tab: string) => any;
-}
-
-type SelectableTabs = 'encounters' | 'patientInfo' | 'tasks';
-
-export interface IState {
-  selectedTab: SelectableTabs;
 }
 
 const GENDER: any = { F: 'Female', M: 'Male' };
@@ -46,38 +43,16 @@ const getPatientName = (patient: ShortPatientFragment) => (
   [patient.firstName, patient.middleName, patient.lastName].filter(Boolean).join(' ')
 );
 
-class PatientProfileContainer extends React.Component<IProps, IState> {
-  constructor(props: IProps) {
-    super(props);
-
-    this.onTabClick = this.onTabClick.bind(this);
-
-    const { tab } = getPageParams();
-
-    this.state = {
-      selectedTab: tab || 'encounters',
-    };
-  }
+class PatientProfileContainer extends React.Component<IProps, {}> {
 
   componentWillReceiveProps(newProps: IProps) {
-    const { tab } = getPageParams();
-    this.setState(() => ({ selectedTab: tab || 'encounters' }));
-
     if (newProps.patient) {
       document.title = `${getPatientName(newProps.patient)} | Commons`;
     }
   }
 
-  onTabClick(selectedTab: SelectableTabs) {
-    const { updatePageParams } = this.props;
-
-    updatePageParams(selectedTab);
-    this.setState(() => ({ selectedTab }));
-  }
-
   render() {
-    const { patientId, patient, loading, error, intl } = this.props;
-    const { selectedTab } = this.state;
+    const { patientId, patient, loading, error, intl, tabId, taskId } = this.props;
 
     const name = patient ? getPatientName(patient) : null;
     const patientAge = patient && patient.dateOfBirth ?
@@ -94,22 +69,22 @@ class PatientProfileContainer extends React.Component<IProps, IState> {
     const language = patient && patient.language ? langs.where('1', patient.language).name : null;
 
     const encountersTabStyles = classNames(tabStyles.tab, {
-      [tabStyles.selectedTab]: selectedTab === 'encounters',
+      [tabStyles.selectedTab]: tabId === 'encounters',
     });
     const encountersPaneStyles = classNames(tabStyles.pane, {
-      [tabStyles.selectedPane]: selectedTab === 'encounters',
+      [tabStyles.selectedPane]: tabId === 'encounters',
     });
     const patientInfoTabStyles = classNames(tabStyles.tab, {
-      [tabStyles.selectedTab]: selectedTab === 'patientInfo',
+      [tabStyles.selectedTab]: tabId === 'patientInfo',
     });
     const patientInfoPaneStyles = classNames(tabStyles.pane, {
-      [tabStyles.selectedPane]: selectedTab === 'patientInfo',
+      [tabStyles.selectedPane]: tabId === 'patientInfo',
     });
     const tasksTabStyles = classNames(tabStyles.tab, {
-      [tabStyles.selectedTab]: selectedTab === 'tasks',
+      [tabStyles.selectedTab]: tabId === 'tasks',
     });
     const tasksPaneStyles = classNames(tabStyles.pane, {
-      [tabStyles.selectedPane]: selectedTab === 'tasks',
+      [tabStyles.selectedPane]: tabId === 'tasks',
     });
 
     return (
@@ -181,27 +156,24 @@ class PatientProfileContainer extends React.Component<IProps, IState> {
           <div className={tabStyles.tabs}>
             <FormattedMessage id='patient.encounters'>
               {(message: string) =>
-                <div
-                  className={encountersTabStyles}
-                  onClick={() => this.onTabClick('encounters')}>
+                <Link to={`/patients/${patientId}/encounters`}
+                  className={encountersTabStyles}>
                   {message}
-                </div>}
+                </Link>}
             </FormattedMessage>
             <FormattedMessage id='patient.patientInfo'>
               {(message: string) =>
-                <div
-                  className={patientInfoTabStyles}
-                  onClick={() => this.onTabClick('patientInfo')}>
+                <Link to={`/patients/${patientId}/patientInfo`}
+                  className={patientInfoTabStyles}>
                   {message}
-                </div>}
+                </Link>}
             </FormattedMessage>
             <FormattedMessage id='patient.tasks'>
               {(message: string) =>
-                <div
-                  className={tasksTabStyles}
-                  onClick={() => this.onTabClick('tasks')}>
+                <Link to={`/patients/${patientId}/tasks`}
+                  className={tasksTabStyles}>
                   {message}
-                </div>}
+                </Link>}
             </FormattedMessage>
           </div>
           <div className={encountersPaneStyles}>
@@ -211,7 +183,7 @@ class PatientProfileContainer extends React.Component<IProps, IState> {
             <PatientInfo patientId={patientId} patient={patient} loading={loading} error={error} />
           </div>
           <div className={tasksPaneStyles}>
-            <PatientTasks patientId={patientId} />
+            <PatientTasks patientId={patientId} taskId={taskId} />
           </div>
         </div>
       </div>
@@ -219,23 +191,17 @@ class PatientProfileContainer extends React.Component<IProps, IState> {
   }
 }
 
-function mapDispatchToProps(dispatch: Dispatch<() => void>): Partial<IProps> {
-  return {
-    updatePageParams: (tab: string) => {
-      dispatch(push({ search: querystring.stringify({ tab }) }));
-    },
-  };
-}
-
 function mapStateToProps(state: IAppState, ownProps: IProps): Partial<IProps> {
   return {
     patientId: ownProps.match.params.patientId,
+    tabId: ownProps.match.params.tabId || 'encounters',
+    taskId: ownProps.match.params.taskId,
   };
 }
 
 export default compose(
   injectIntl,
-  connect(mapStateToProps, mapDispatchToProps),
+  connect(mapStateToProps),
   graphql(patientQuery as any, {
     options: (props: IProps) => ({
       variables: {

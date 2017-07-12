@@ -94,5 +94,7 @@ export const ENGLISH_TRANSLATION = {
     'tasks.listView': 'Tasks',
     'tasks.calendar': 'Calendar',
     'tasks.noTasks': 'No Tasks',
+    'task.due': 'Due',
+    'task.opened': 'Opened',
   },
 };

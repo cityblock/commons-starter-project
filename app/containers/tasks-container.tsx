@@ -4,73 +4,57 @@ import * as React from 'react';
 import { compose, graphql } from 'react-apollo';
 import { injectIntl, FormattedMessage, InjectedIntl } from 'react-intl';
 import { connect, Dispatch } from 'react-redux';
+import { Link } from 'react-router-dom';
 import { push } from 'react-router-redux';
 import Tasks from '../components/tasks';
 import * as styles from '../css/components/tasks-container.css';
 import * as tabStyles from '../css/shared/tabs.css';
 import * as tasksQuery from '../graphql/queries/tasks-for-current-user.graphql';
 import { ShortTaskFragment } from '../graphql/types';
-import { getPageParams } from '../util/page-params';
+import { IState as IAppState } from '../store';
 
 export interface IProps {
   intl: InjectedIntl;
   tasksLoading: boolean;
   tasksError?: string;
-  tasks: ShortTaskFragment[];
+  taskId: string;
+  tasksResponse?: {
+    edges: Array<{
+      node: ShortTaskFragment;
+    }>;
+    pageInfo: {
+      hasNextPage: boolean;
+      hasPreviousPage: boolean;
+    };
+  };
   refetchTasks: () => any;
   updatePageParamsPage: (pageNumber: number) => any;
   updatePageParams: (tab: string) => any;
-}
-
-type SelectableTabs = 'tasks' | 'calendar';
-
-export interface IState {
-  selectedTab: SelectableTabs;
-}
-
-class TasksContainer extends React.Component<IProps, IState> {
-
-  constructor(props: IProps) {
-    super(props);
-
-    this.onTabClick = this.onTabClick.bind(this);
-
-    const { tab } = getPageParams();
-
-    this.state = {
-      selectedTab: tab || 'tasks',
+  match: {
+    params: {
+      taskId?: string;
     };
-  }
+  };
+}
+
+class TasksContainer extends React.Component<IProps> {
 
   componentWillReceiveProps(newProps: IProps) {
-    const { tab } = getPageParams();
-    this.setState(() => ({ selectedTab: tab || 'tasks' }));
-
     document.title = `My Tasks | Commons`;
   }
 
-  onTabClick(selectedTab: SelectableTabs) {
-    const { updatePageParams } = this.props;
-
-    updatePageParams(selectedTab);
-    this.setState(() => ({ selectedTab }));
-  }
-
   render() {
-    const { selectedTab } = this.state;
+    const { tasksResponse, taskId } = this.props;
 
-    const tasksTabStyles = classNames(tabStyles.tab, {
-      [tabStyles.selectedTab]: selectedTab === 'tasks',
-    });
-    const tasksPaneStyles = classNames(tabStyles.pane, {
-      [tabStyles.selectedPane]: selectedTab === 'tasks',
-    });
-    const calendarTabStyles = classNames(tabStyles.tab, {
-      [tabStyles.selectedTab]: selectedTab === 'calendar',
-    });
-    const calendarPaneStyles = classNames(tabStyles.pane, {
-      [tabStyles.selectedPane]: selectedTab === 'calendar',
-    });
+    const tasks = tasksResponse ? tasksResponse.edges.map((edge: any) => edge.node) : [];
+    const hasNextPage = tasksResponse ? tasksResponse.pageInfo.hasNextPage : false;
+    const hasPreviousPage = tasksResponse ? tasksResponse.pageInfo.hasPreviousPage : false;
+
+    const tasksTabStyles = classNames(tabStyles.tab, tabStyles.selectedTab);
+    const tasksPaneStyles = classNames(tabStyles.pane, tabStyles.selectedPane);
+
+    const calendarTabStyles = tabStyles.tab;
+    const calendarPaneStyles = tabStyles.pane;
     return (
       <div className={styles.container}>
         <div className={styles.leftPane}>
@@ -83,19 +67,19 @@ class TasksContainer extends React.Component<IProps, IState> {
           <div className={tabStyles.tabs}>
             <FormattedMessage id='tasks.listView'>
               {(message: string) =>
-                <div
+                <Link
                   className={tasksTabStyles}
-                  onClick={() => this.onTabClick('tasks')}>
+                  to={`/tasks`}>
                   {message}
-                </div>}
+                </Link>}
             </FormattedMessage>
             <FormattedMessage id='tasks.calendar'>
               {(message: string) =>
-                <div
+                <Link
                   className={calendarTabStyles}
-                  onClick={() => this.onTabClick('calendar')}>
+                  to={`/calendar`}>
                   {message}
-                </div>}
+                </Link>}
             </FormattedMessage>
           </div>
           <div className={tasksPaneStyles}>
@@ -104,7 +88,11 @@ class TasksContainer extends React.Component<IProps, IState> {
               refetchTasks={this.props.refetchTasks}
               loading={this.props.tasksLoading}
               error={this.props.tasksError}
-              tasks={this.props.tasks} />
+              hasNextPage={hasNextPage}
+              hasPreviousPage={hasPreviousPage}
+              routeBase={`/tasks`}
+              taskId={taskId}
+              tasks={tasks} />
           </div>
           <div className={calendarPaneStyles}>
             calendar!
@@ -113,6 +101,12 @@ class TasksContainer extends React.Component<IProps, IState> {
       </div>
     );
   }
+}
+
+function mapStateToProps(state: IAppState, ownProps: IProps): Partial<IProps> {
+  return {
+    taskId: ownProps.match.params.taskId,
+  };
 }
 
 function mapDispatchToProps(dispatch: Dispatch<() => void>): Partial<IProps> {
@@ -139,14 +133,14 @@ const getPageParamsPagination = () => {
 };
 export default compose(
   injectIntl,
-  connect(undefined, mapDispatchToProps),
+  connect(mapStateToProps, mapDispatchToProps),
   graphql(tasksQuery as any, {
     options: getPageParamsPagination,
     props: ({ data }) => ({
       refetchTasks: (data ? data.refetch : null),
       tasksLoading: (data ? data.loading : false),
       tasksError: (data ? data.error : null),
-      tasks: (data ? (data as any).tasksUserFollowing : null),
+      tasksResponse: (data ? (data as any).tasksForCurrentUser : null),
     }),
   }),
 )(TasksContainer);

@@ -1,5 +1,4 @@
 export const container: string;
-export const header: string;
 export const tasksList: string;
 export const emptyTasksList: string;
 export const emptyTasksMessage: string;

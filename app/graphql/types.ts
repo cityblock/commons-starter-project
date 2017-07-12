@@ -634,4 +634,11 @@ export type ShortTaskFragment = {
     googleProfileImageUrl: string | null,
   } > | null,
 };
+
+export type ShortUserFragment = {
+  id: string,
+  firstName: string | null,
+  lastName: string | null,
+  googleProfileImageUrl: string | null,
+};
 /* tslint:enable */

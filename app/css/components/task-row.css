@@ -1,13 +1,65 @@
 @import '../common/sizes';
-
 .container {
-
+  background: white;
+  margin: 10px 30px;
+  padding: 12px 15px;
+  display: flex;
+  justify-content: space-between;
+  flex-direction: row;
+  align-items: center;
+  border-radius: 5px;
+  border: 1px solid #fff;
+  color: var(--black-color)
 }
 
-.task {
-
+.container:hover {
+  color: var(--black-color)
 }
 
 .selected {
+  border: 1px solid var(--border-color);
+  box-shadow: var(--login-drop-shadow);
+}
 
+.title {
+  font-weight: var(--roboto-medium-weight);
+  flex: 5
+}
+
+.followers {
+  flex: 1;
+  margin-right: 22px;
+}
+
+.follower {
+  text-align: center;
+  margin-left: auto;
+  border-radius: 50%;
+  height: 20px;
+  width: 20px;
+  font-family: var(--roboto);
+  border: 1px solid var(--border-color);
+  background: var(--light-gray-font-color);
+  color: white;
+  font-size: var(--extra-small-font-size);
+  padding-top: 2px;
+}
+
+.dateSection {
+  flex: 1
+}
+
+.dateLabel {
+  font-family: var(--roboto);
+  font-size: var(--extra-small-font-size);
+  line-height: var(--extra-small-font-line-height);
+  color: var(--light-gray-font-color);
+  margin-right: 5px;
+}
+
+.dateValue {
+  font-family: var(--roboto);
+  font-size: var(--extra-small-font-size);
+  line-height: var(--extra-small-font-line-height);
+  color: var(--black-color)
 }

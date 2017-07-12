@@ -23,6 +23,10 @@ export default (
         <Route exact path='/tasks' component={(TasksContainer as any)} />
         <Route exact path='/settings' component={(SettingsContainer as any)} />
         <Route exact path='/patients/new' component={(PatientEnrollmentContainer as any)} />
+        <Route exact
+          path='/patients/:patientId/:tabId/:taskId' component={(PatientProfileContainer as any)} />
+        <Route exact
+          path='/patients/:patientId/:tabId' component={(PatientProfileContainer as any)} />
         <Route exact path='/patients/:patientId' component={(PatientProfileContainer as any)} />
         <Route exact path='/patients' component={(PatientPanelContainer as any)} />
       </Authentication>

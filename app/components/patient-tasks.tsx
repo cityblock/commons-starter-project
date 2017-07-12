@@ -10,59 +10,79 @@ import { ShortTaskFragment } from '../graphql/types';
 
 export interface IProps {
   patientId: string;
+  taskId?: string;
   tasksLoading: boolean;
   tasksError?: string;
-  tasks: ShortTaskFragment[];
+  tasksResponse?: {
+    edges: Array<{
+      node: ShortTaskFragment;
+    }>;
+    pageInfo: {
+      hasNextPage: boolean;
+      hasPreviousPage: boolean;
+    };
+  };
   refetchTasks: () => any;
-  updatePageParams: (pageNumber: number) => any;
+  updatePageParams: (pageNumber: number, taskId?: string) => any;
 }
 
 class PatientTasks extends React.Component<IProps, {}> {
 
   render() {
-    const { refetchTasks, updatePageParams, tasksLoading, tasksError, tasks } = this.props;
+    const {
+      refetchTasks, updatePageParams, tasksLoading, tasksError, tasksResponse, taskId,
+    } = this.props;
+
+    const tasks = tasksResponse ? tasksResponse.edges.map((edge: any) => edge.node) : [];
+    const hasNextPage = tasksResponse ? tasksResponse.pageInfo.hasNextPage : false;
+    const hasPreviousPage = tasksResponse ? tasksResponse.pageInfo.hasPreviousPage : false;
+
     return (
       <Tasks
         refetchTasks={refetchTasks}
         loading={tasksLoading}
         error={tasksError}
         updatePageParams={updatePageParams}
+        hasNextPage={hasNextPage}
+        hasPreviousPage={hasPreviousPage}
+        routeBase={`/patients/${this.props.patientId}/tasks`}
+        taskId={taskId}
         tasks={tasks} />
     );
   }
 }
 
+const getPageParams = (props: IProps) => {
+  const pageParams = querystring.parse(window.location.search.substring(1));
+  return {
+    pageNumber: pageParams.pageNumber || 0,
+    pageSize: pageParams.pageSize || 10,
+    patientId: props.patientId,
+  } as any;
+};
+
 function mapDispatchToProps(dispatch: Dispatch<() => void>, ownProps: IProps): Partial<IProps> {
   return {
-    updatePageParams: (pageNumber: number) => {
-      const pageParams = getPageParams(ownProps);
-      pageParams.variables.pageNumber = pageNumber;
+    updatePageParams: (pageNumber: number, taskId?: string) => {
+      // Some code smell here, perhaps state here shoudl go through redux
+      const pageParams: any = {
+        pageNumber,
+      };
       dispatch(push({ search: querystring.stringify(pageParams) }));
     },
   };
 }
 
-const getPageParams = (props: IProps) => {
-  const pageParams = querystring.parse(window.location.search.substring(1));
-  return {
-    variables: {
-      pageNumber: pageParams.pageNumber || 0,
-      pageSize: pageParams.pageSize || 10,
-      patientId: props.patientId,
-    },
-  };
-};
-
 export default compose(
   injectIntl,
   connect(undefined, mapDispatchToProps),
   graphql(patientTasksQuery as any, {
-    options: getPageParams,
+    options: (props: IProps) => ({ variables: getPageParams(props) }),
     props: ({ data }) => ({
       refetchTasks: (data ? data.refetch : null),
       tasksLoading: (data ? data.loading : false),
       tasksError: (data ? data.error : null),
-      tasks: (data ? (data as any).tasksForPatient : null),
+      tasksResponse: (data ? (data as any).tasksForPatient : null),
     }),
   }),
 )(PatientTasks);

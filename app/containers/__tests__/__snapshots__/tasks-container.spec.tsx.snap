@@ -19,21 +19,23 @@ exports[`renders tasks container 1`] = `
     <div
       className={undefined}
     >
-      <div
-        className="undefined"
+      <a
+        className=""
+        href="/tasks"
         onClick={[Function]}
       >
         Tasks
-      </div>
-      <div
-        className=""
+      </a>
+      <a
+        className={undefined}
+        href="/calendar"
         onClick={[Function]}
       >
         Calendar
-      </div>
+      </a>
     </div>
     <div
-      className="undefined"
+      className=""
     >
       <div
         className={undefined}
@@ -101,7 +103,7 @@ exports[`renders tasks container 1`] = `
       </div>
     </div>
     <div
-      className=""
+      className={undefined}
     >
       calendar!
     </div>

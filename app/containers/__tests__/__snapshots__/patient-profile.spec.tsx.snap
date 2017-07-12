@@ -243,24 +243,27 @@ exports[`renders patient profile container correctly 1`] = `
     <div
       className={undefined}
     >
-      <div
+      <a
         className="undefined"
+        href="/patients/undefined/encounters"
         onClick={[Function]}
       >
         Encounters
-      </div>
-      <div
+      </a>
+      <a
         className=""
+        href="/patients/undefined/patientInfo"
         onClick={[Function]}
       >
         Patient Info
-      </div>
-      <div
+      </a>
+      <a
         className=""
+        href="/patients/undefined/tasks"
         onClick={[Function]}
       >
         Tasks
-      </div>
+      </a>
     </div>
     <div
       className="undefined"

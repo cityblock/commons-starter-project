@@ -1,7 +1,8 @@
 @import '../common/sizes';
-.container {}
-
-.header {}
+.container {
+  background: var(--white-font-color);
+  height: calc(100vh - 138px);
+}
 
 .tasksList {
   padding: 15px 0;

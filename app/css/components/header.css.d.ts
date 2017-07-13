@@ -8,7 +8,6 @@ export const searchIcon: string;
 export const patientsIcon: string;
 export const tasksIcon: string;
 export const left: string;
-export const center: string;
 export const right: string;
 export const userInfo: string;
 export const userName: string;

@@ -21,7 +21,9 @@ const Header: React.StatelessComponent<IProps> = props => {
     <div className={styles.header}>
       <div className={styles.container}>
         <div className={styles.left}>
-          <div className={styles.mark} />
+          <Link className={styles.link} to='/'>
+            <div className={styles.mark} />
+          </Link>
           <div className={styles.navItem}>
             <div className={styles.searchIcon} />
             <FormattedMessage id='header.search'>
@@ -40,9 +42,6 @@ const Header: React.StatelessComponent<IProps> = props => {
               {(message: string) => <div className={styles.navText}>{message}</div>}
             </FormattedMessage>
           </Link>
-        </div>
-        <div className={styles.center}>
-          <Link className={styles.link} to='/'>Commons</Link>
         </div>
         <div className={styles.right}>
           <div className={styles.userInfo}>

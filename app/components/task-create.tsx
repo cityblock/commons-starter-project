@@ -123,10 +123,12 @@ class TaskCreate extends React.Component<IProps, IState> {
             <input
               name='title'
               value={task.title}
+              placeholder={'Enter task title'}
               className={formStyles.input}
               onChange={this.onChange} />
             <input
               name='description'
+              placeholder={'Enter task description …'}
               value={task.description}
               className={formStyles.input}
               onChange={this.onChange} />
@@ -137,7 +139,7 @@ class TaskCreate extends React.Component<IProps, IState> {
               <input
                 type='submit'
                 className={styles.submitButton}
-                value='Submit' />
+                value='Add task' />
             </div>
           </div>
         </form>

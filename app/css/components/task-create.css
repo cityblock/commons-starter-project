@@ -47,10 +47,12 @@
 
 .submitButton {
   @apply --button;
+  @apply --small-button;
 }
 
 .cancelButton {
   @apply --inverted-button;
+  @apply --small-button;
   margin-right: 20px;
 }
 
@@ -64,15 +66,15 @@
   width: 20px;
   border-radius: 50%;
   border: 1px solid var(--border-color);
+  background-size: cover;
 }
 
 .smallPatientName {
   padding: 10px 6px;
   font-family: var(--roboto);
-  font-size: var(--extra-small-font-size);
-  line-height: var(--extra-small-font-line-height);
-  text-align: center;
-  border-bottom: 1px solid var(--gray-background-color);
+  font-size: var(--small-font-size);
+  line-height: var(--small-font-line-height);
+  font-weight: var(--roboto-medium-weight);
 }
 
 .close {
@@ -86,5 +88,5 @@
 }
 
 .formCenter {
-
+  padding: 20px;
 }

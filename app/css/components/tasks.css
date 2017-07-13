@@ -134,5 +134,5 @@
 
 .createButton {
   @apply --button;
-  padding: 7px 64px 6px;
+  @apply --small-button;
 }

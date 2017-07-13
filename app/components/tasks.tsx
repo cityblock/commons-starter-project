@@ -88,6 +88,10 @@ class Tasks extends React.Component<IProps, IState> {
 
   hideCreateTask() {
     this.setState(() => ({ showCreateTask: false }));
+    this.props.refetchTasks({
+      pageNumber: this.state.pageNumber,
+      pageSize: this.state.pageSize,
+    });
   }
 
   renderTasks(tasks: ShortTaskFragment[]) {
@@ -193,6 +197,8 @@ class Tasks extends React.Component<IProps, IState> {
     const createTaskHtml = this.props.patient && this.state.showCreateTask ? (
       <TaskCreate patient={this.props.patient} onClose={this.hideCreateTask} />
     ) : null;
+    const taskHtml = this.state.showCreateTask ?
+      null : (<Route path={`${routeBase}/:taskId`} component={Task} />);
     return (
       <div className={styles.container}>
         <div className={sortSearchStyles.sortSearchBar}>
@@ -221,7 +227,7 @@ class Tasks extends React.Component<IProps, IState> {
               onPreviousClick={this.getPreviousPage} />
           </div>
           <div className={taskContainerStyles}>
-            <Route path={`${routeBase}/:taskId`} component={Task as any} />
+            {taskHtml}
             {createTaskHtml}
           </div>
         </div>

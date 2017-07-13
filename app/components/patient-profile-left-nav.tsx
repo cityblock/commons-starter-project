@@ -22,6 +22,9 @@ export interface IState {
 type SelectableItem = 'profile' | 'medications' | 'chat';
 
 export default class PatientProfileLeftNav extends React.Component<IProps, IState> {
+
+  props: IProps;
+
   constructor(props: IProps) {
     super(props);
 

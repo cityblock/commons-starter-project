@@ -26,6 +26,9 @@ const getPatientFirstAndMiddleName = (patient: ShortPatientFragment) => {
 };
 
 export default class PatientLeftNavInfo extends React.Component<IProps, {}> {
+
+  props: IProps;
+
   constructor(props: IProps) {
     super(props);
 

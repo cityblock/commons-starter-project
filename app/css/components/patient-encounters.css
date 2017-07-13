@@ -20,7 +20,7 @@
   margin-top: var(--small-gutter);
   height: calc(100vh - 262px);
   overflow: scroll;
-  -webkit-oversflow-scrolling: touch;
+  -webkit-overflow-scrolling: touch;
 }
 
 .encounters.emptyEncountersList {}

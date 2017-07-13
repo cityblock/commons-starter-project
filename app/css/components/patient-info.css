@@ -84,6 +84,7 @@
   margin-top: var(--small-gutter);
   height: calc(100vh - 220px);
   overflow: scroll;
+  -webkit-overflow-scrolling: touch;
 }
 
 .section {

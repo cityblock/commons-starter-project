@@ -108,7 +108,7 @@ exports[`renders tasks container 1`] = `
             </div>
           </div>
           <div
-            className={undefined}
+            className="undefined"
           />
         </div>
       </div>

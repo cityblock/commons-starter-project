@@ -1,6 +1,6 @@
 @import '../common/sizes';
 .patientScratchPad {
-  padding-bottom: 30px;
+  padding-bottom: 20px;
   lost-flex-container: row;
 }
 

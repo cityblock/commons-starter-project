@@ -1,6 +1,6 @@
 @import '../common/sizes';
 .medication {
-  padding: 0 var(--gutter);
+  padding: 0 var(--medium-gutter);
   background-color: var(--white-color);
 }
 

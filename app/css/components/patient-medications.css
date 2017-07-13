@@ -6,7 +6,7 @@
 
 .medicationsHeader {
   justify-content: space-between;
-  margin: 0 var(--gutter);
+  margin: 0 var(--medium-gutter);
   padding-bottom: var(--small-gutter);
   border-bottom: 1px solid var(--border-color);
   lost-flex-container: row;
@@ -49,7 +49,7 @@
   border: 1px dashed var(--border-color);
   border-radius: 4px;
   padding: 24px 40px 21px;
-  margin: 5px var(--gutter) 0;
+  margin: 5px var(--medium-gutter) 0;
 }
 
 .emptyMedicationsLogo {
@@ -81,7 +81,7 @@
 }
 
 .medicationsError {
-  margin: 50px var(--gutter) 0;
+  margin: 50px var(--medium-gutter) 0;
 }
 
 .medicationsErrorIcon {

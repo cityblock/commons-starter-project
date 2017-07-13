@@ -7,38 +7,10 @@ exports[`renders patient profile container correctly 1`] = `
   <div
     className={undefined}
   >
-    <div
-      className={undefined}
-    >
-      Medium Risk Patient
-    </div>
-    <div
-      className={undefined}
-    >
+    <div>
       <div
         className={undefined}
-      >
-        <div
-          className={undefined}
-        >
-          <img
-            src="https://lh4.googleusercontent.com/-fgvDmb1D_Aw/AAAAAAAAAAI/AAAAAAAAAAs/MOKfIO7GrdY/s96-c/photo.jpg"
-          />
-        </div>
-        <div
-          className={undefined}
-        >
-          <div
-            className={undefined}
-          />
-          <div
-            className={undefined}
-          >
-            Unknown
-             • 
-          </div>
-        </div>
-      </div>
+      />
       <div
         className={undefined}
       >
@@ -47,14 +19,40 @@ exports[`renders patient profile container correctly 1`] = `
         >
           <div
             className={undefined}
-          >
-            Date of birth
-            :
-          </div>
+            style={
+              Object {
+                "backgroundImage": "url('http://bit.ly/2u9bJDA')",
+              }
+            }
+          />
           <div
             className={undefined}
           >
-            Unknown
+            <div
+              className={undefined}
+            >
+              High Risk Patient
+            </div>
+            <div
+              className={undefined}
+            >
+              <div
+                className={undefined}
+              >
+                Unknown
+              </div>
+              <div
+                className={undefined}
+              >
+                Unknown
+              </div>
+            </div>
+            <div
+              className={undefined}
+            >
+              Unknown
+               • 
+            </div>
           </div>
         </div>
         <div
@@ -63,86 +61,105 @@ exports[`renders patient profile container correctly 1`] = `
           <div
             className={undefined}
           >
-            Preferred language
-            :
+            <div
+              className={undefined}
+            >
+              Date of birth
+              :
+            </div>
+            <div
+              className={undefined}
+            >
+              Unknown
+            </div>
           </div>
           <div
             className={undefined}
+          >
+            <div
+              className={undefined}
+            >
+              Preferred language
+              :
+            </div>
+            <div
+              className={undefined}
+            />
+          </div>
+          <div
+            className={undefined}
+          >
+            <div
+              className={undefined}
+            >
+              Location
+              :
+            </div>
+            <div
+              className={undefined}
+            />
+          </div>
+          <div
+            className={undefined}
+          >
+            <div
+              className={undefined}
+            >
+              Patient since
+              :
+            </div>
+            <div
+              className={undefined}
+            >
+              Unknown
+            </div>
+          </div>
+          <div
+            className={undefined}
+          >
+            <div
+              className={undefined}
+            >
+              Medicare ID
+              :
+            </div>
+            <div
+              className={undefined}
+            >
+              123456789
+            </div>
+          </div>
+        </div>
+        <div
+          className={undefined}
+        >
+          <div
+            className=""
+          />
+          <div
+            className=""
+          />
+          <div
+            className=""
+          />
+          <div
+            className=""
           />
         </div>
         <div
           className={undefined}
         >
-          <div
+          <textarea
             className={undefined}
-          >
-            Location
-            :
-          </div>
+            disabled={true}
+            onChange={[Function]}
+            placeholder="Loading..."
+            value={undefined}
+          />
           <div
             className={undefined}
           />
         </div>
-        <div
-          className={undefined}
-        >
-          <div
-            className={undefined}
-          >
-            Patient since
-            :
-          </div>
-          <div
-            className={undefined}
-          >
-            Unknown
-          </div>
-        </div>
-        <div
-          className={undefined}
-        >
-          <div
-            className={undefined}
-          >
-            Medicare ID
-            :
-          </div>
-          <div
-            className={undefined}
-          >
-            123456789
-          </div>
-        </div>
-      </div>
-      <div
-        className={undefined}
-      >
-        <div
-          className=""
-        />
-        <div
-          className=""
-        />
-        <div
-          className=""
-        />
-        <div
-          className=""
-        />
-      </div>
-      <div
-        className={undefined}
-      >
-        <textarea
-          className={undefined}
-          disabled={true}
-          onChange={[Function]}
-          placeholder="Loading..."
-          value={undefined}
-        />
-        <div
-          className={undefined}
-        />
       </div>
     </div>
     <div
@@ -238,7 +255,7 @@ exports[`renders patient profile container correctly 1`] = `
     </div>
   </div>
   <div
-    className={undefined}
+    className=""
   >
     <div
       className={undefined}

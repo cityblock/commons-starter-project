@@ -18,14 +18,14 @@ import PatientDemographicsForm, {
 } from './patient-demographics-form';
 import PatientInsuranceForm, { IState as IPatientInsuranceState } from './patient-insurance-form';
 
+export interface IOptions { variables: PatientEditMutationVariables; }
+
 export interface IProps {
   loading?: boolean;
   error?: string;
   patientId: string;
   patient?: ShortPatientFragment;
-  updatePatientInfo: (
-    options: { variables: PatientEditMutationVariables },
-  ) => { data: { patientEdit: ShortPatientFragment } };
+  updatePatientInfo: (options: IOptions) => { data: { patientEdit: ShortPatientFragment } };
 }
 
 export type IState = IPatientDemographicsState & IPatientContactState & IPatientInsuranceState & {

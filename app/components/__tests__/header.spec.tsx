@@ -1,16 +1,18 @@
+import { createMemoryHistory } from 'history';
 import * as React from 'react';
 import { MockedProvider } from 'react-apollo/lib/test-utils';
+import { ConnectedRouter } from 'react-router-redux';
 import { create } from 'react-test-renderer';
 import configureMockStore from 'redux-mock-store';
 import { ENGLISH_TRANSLATION } from '../../reducers/messages/en';
 import ReduxConnectedIntlProvider from '../../redux-connected-intl-provider';
-import CareTeamWidgetMember from '../care-team-widget-member';
+import Header from '../header';
 
 const locale = { messages: ENGLISH_TRANSLATION.messages };
 const mockStore = configureMockStore([]);
 
-it('renders care team widget', () => {
-  const careTeamMember = {
+it('renders header', () => {
+  const currentUser = {
     id: 'id',
     locale: 'en',
     firstName: 'first',
@@ -20,14 +22,13 @@ it('renders care team widget', () => {
     homeClinicId: '1',
     googleProfileImageUrl: null,
   };
+  const history = createMemoryHistory();
   const tree = create(
     <MockedProvider mocks={[]} store={mockStore({ locale })}>
       <ReduxConnectedIntlProvider>
-        <CareTeamWidgetMember
-          careTeamMember={careTeamMember}
-          selected={false}
-          onClick={() => false}
-        />
+        <ConnectedRouter history={history}>
+          <Header currentUser={currentUser} />
+        </ConnectedRouter>
       </ReduxConnectedIntlProvider>
     </MockedProvider>,
   ).toJSON();

@@ -1,0 +1,116 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders header 1`] = `
+<div
+  className={undefined}
+>
+  <div
+    className={undefined}
+  >
+    <div
+      className={undefined}
+    >
+      <a
+        className={undefined}
+        href="/"
+        onClick={[Function]}
+      >
+        <div
+          className={undefined}
+        />
+      </a>
+      <div
+        className={undefined}
+      >
+        <div
+          className={undefined}
+        />
+        <div
+          className={undefined}
+        >
+          Search
+        </div>
+      </div>
+      <a
+        className={undefined}
+        href="/patients"
+        onClick={[Function]}
+      >
+        <div
+          className={undefined}
+        />
+        <div
+          className={undefined}
+        >
+          Patients
+        </div>
+      </a>
+      <a
+        className={undefined}
+        href="/tasks"
+        onClick={[Function]}
+      >
+        <div
+          className={undefined}
+        />
+        <div
+          className={undefined}
+        >
+          Tasks
+        </div>
+      </a>
+    </div>
+    <div
+      className={undefined}
+    >
+      <div
+        className={undefined}
+      >
+        <div
+          className={undefined}
+        >
+          first last
+        </div>
+        <div
+          className={undefined}
+        >
+          physician
+        </div>
+      </div>
+      <div
+        className={undefined}
+        style={
+          Object {
+            "backgroundImage": "url('null')",
+          }
+        }
+      />
+      <div
+        className={undefined}
+      >
+        <a
+          href="/settings"
+          onClick={[Function]}
+        >
+          <div
+            className={undefined}
+          />
+          <span>
+            Settings
+          </span>
+        </a>
+        <a
+          onClick={[Function]}
+        >
+          <div
+            className={undefined}
+          />
+          <span>
+            Logout
+          </span>
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+`;

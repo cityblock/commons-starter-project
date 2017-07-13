@@ -1,0 +1,35 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders encounter error 1`] = `
+<div
+  className={undefined}
+>
+  <div
+    className={undefined}
+  />
+  <div
+    className={undefined}
+  >
+    Unable to load encounter history
+  </div>
+  <div
+    className={undefined}
+  >
+    Sorry, something went wrong. Please try reloading this section again.
+  </div>
+  <div
+    className=""
+    onClick={[Function]}
+  >
+    Try again
+  </div>
+</div>
+`;
+
+exports[`renders encounter loading 1`] = `
+<div
+  className={undefined}
+>
+  Loading...
+</div>
+`;

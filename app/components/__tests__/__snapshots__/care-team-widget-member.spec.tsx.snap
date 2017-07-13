@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`renders care team widge 1`] = `
+exports[`renders care team widget 1`] = `
 <div
   className={undefined}
 >

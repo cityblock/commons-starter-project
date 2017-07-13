@@ -17,7 +17,6 @@
 .input {
   @apply --input;
   width: 100%;
-
   &:focus {
     border: 1px solid var(--light-blue-color);
   }
@@ -28,16 +27,38 @@
   padding-bottom: 13px;
 }
 
+.input.inputSmall {
+  font-size: var(--small-font-size);
+  line-height: var(--small-font-line-height);
+  padding: 5px 20px;
+  border-radius: 2px;
+}
+
+.textarea {
+  @apply --input;
+  font-size: var(--small-font-size);
+  line-height: var(--small-font-line-height);
+  padding: 5px 20px;
+  width: 100%;
+  height: 120px;
+}
+
 .select {
   @apply --select;
   color: var(--border-color);
   &:valid {
     color: black;
   }
-
   &:focus {
     border: 1px solid var(--light-blue-color);
   }
+}
+
+.select.inputSmall {
+  padding: 5px 20px;
+  font-size: var(--small-font-size);
+  line-height: var(--small-font-line-height);
+  border-radius: 2px;
 }
 
 .multiInputFormRow, .radioInputFormRow {

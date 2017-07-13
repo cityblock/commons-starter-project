@@ -1,3 +1,4 @@
+import * as classNames from 'classnames';
 import * as moment from 'moment';
 import * as React from 'react';
 import { compose, graphql } from 'react-apollo';
@@ -122,34 +123,40 @@ class TaskCreate extends React.Component<IProps, IState> {
                 <div className={loadingStyles.loadingSpinner}></div>
               </div>
             </div>
-            <input required
-              name='dueAt'
-              className={formStyles.input}
-              value={task.dueAt}
-              type='date'
-              onChange={this.onChange} />
-            <select required
-              name='assignedToId'
-              value={task.assignedToId || ''}
-              onChange={this.onChange}
-              className={formStyles.select}>
-              <FormattedMessage id='tasks.assignedToPlaceholder'>
-                {(message: string) => <option value='' disabled hidden>{message}</option>}
-              </FormattedMessage>
-              {careTeamHtml}
-            </select>
-            <input
-              name='title'
-              value={task.title}
-              placeholder={'Enter task title'}
-              className={formStyles.input}
-              onChange={this.onChange} />
-            <textarea
-              name='description'
-              placeholder={'Enter task description …'}
-              value={task.description}
-              className={formStyles.input}
-              onChange={this.onChange} />
+            <div className={styles.flexInputGroup}>
+              <input required
+                name='dueAt'
+                className={
+                  classNames(formStyles.input, formStyles.inputSmall, styles.flexInputItem)}
+                value={task.dueAt}
+                type='date'
+                onChange={this.onChange} />
+              <select required
+                name='assignedToId'
+                value={task.assignedToId || ''}
+                onChange={this.onChange}
+                className={
+                  classNames(formStyles.select, formStyles.inputSmall, styles.flexInputItem)}>
+                <FormattedMessage id='tasks.assignedToPlaceholder'>
+                  {(message: string) => <option value='' disabled hidden>{message}</option>}
+                </FormattedMessage>
+                {careTeamHtml}
+              </select>
+            </div>
+            <div className={styles.inputGroup}>
+              <input
+                name='title'
+                value={task.title}
+                placeholder={'Enter task title'}
+                className={formStyles.input}
+                onChange={this.onChange} />
+              <textarea
+                name='description'
+                placeholder={'Enter task description …'}
+                value={task.description}
+                className={formStyles.textarea}
+                onChange={this.onChange} />
+            </div>
           </div>
           <div className={styles.formBottom}>
             <div className={styles.formBottomContent}>

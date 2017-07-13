@@ -24,14 +24,11 @@
 }
 
 .formBottom {
-  padding: 15px 0px;
-  border-top: 1px solid var(--border-color);
+  margin: 20px;
 }
 
 .formBottomContent {
   width: 100%;
-  margin: 0px auto;
-  padding: 0px 20px;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
@@ -39,10 +36,30 @@
 
 .formTop {
   display: flex;
-  border-bottom: 1px solid var(--border-color);
+  border-bottom: 1px solid var(--white-font-color);
   justify-content: space-between;
   align-items: center;
-  padding: 0px 20px;
+  margin: 0px 20px;
+}
+
+.inputGroup {
+  border-bottom: 1px solid var(--white-font-color);
+}
+
+.inputGroup input, .inputGroup textarea {
+  margin-bottom: 10px;
+}
+
+.flexInputGroup {
+  border-bottom: 1px solid var(--white-font-color);
+  padding: 0px 0px 10px;
+  margin-bottom: 10px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.flexInputItem {
+  lost-column: 1/2 2 20px;
 }
 
 .submitButton {
@@ -88,5 +105,5 @@
 }
 
 .formCenter {
-  padding: 20px;
+  padding: 10px 20px 0px;
 }

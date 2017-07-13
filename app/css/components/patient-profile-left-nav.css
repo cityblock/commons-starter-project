@@ -12,12 +12,18 @@
   flex-direction: column;
   background-color: var(--white-color);
   border: 1px solid var(--gray-background-color);
+  border-bottom: none;
   border-top: none;
   border-left: none;
   width: 80px;
   flex-basis: 7.8%;
   height: calc(100vh - 60px);
   overflow: scroll;
+}
+
+.smallLeftPaneMain {
+  z-index: 3;
+  background-color: var(--white-color);
 }
 
 .smallLeftPaneTop {
@@ -97,6 +103,10 @@
 .patientMain {
   padding: 0 var(--medium-gutter);
   border-bottom: 1px solid var(--gray-background-color);
+}
+
+.patientMain.noBorder {
+  border-bottom: none;
 }
 
 .patientRisk {
@@ -212,4 +222,54 @@
 .patientCommVideo {
   background-image: url('../../assets/videocam-black.svg');
   background-size: 30px;
+}
+
+.smallDisplayPane, .chatDisplayPane {
+  z-index: 2;
+  min-height: calc(100vh - 60px);
+  position: absolute;
+  left: 80px;
+  top: 60px;
+  background-color: white;
+  border-right: 1px solid var(--border-color);
+  box-shadow: 10px 0 12px 0 rgba(0,0,0,0.1);
+  transition: left 0.3s cubic-bezier(0.25, 0.1, 0.25, 1);
+}
+
+.smallDisplayPane {
+  width: 340px;
+}
+
+.chatDisplayPane {
+  width: 245px;
+}
+
+.chatDisplayPane.hidden, .smallDisplayPane.hidden {
+  z-index: 1;
+}
+
+.chatDisplayPane.hidden {
+  left: -265px;
+}
+
+.smallDisplayPane.hidden {
+  left: -360px;
+}
+
+.touchArea {
+  position: absolute;
+  left: 420px;
+  top: 60px;
+  min-height: calc(100vh - 60px);
+  z-index: 2;
+  width: calc(100vw - 420px);
+}
+
+.touchArea.wide {
+  left: 325px;
+  width: calc(100vw - 325px);
+}
+
+.touchArea.hidden {
+  display: none;
 }

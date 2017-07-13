@@ -8,6 +8,11 @@
   max-width: 400px;
 }
 
+.careTeamWidget.skinny {
+  width: 24%;
+  box-shadow: none;
+}
+
 .careTeamWidgetRow {
   width: calc(100% - 1px);
   display: flex;
@@ -32,6 +37,11 @@
   lost-flex-container: row;
 }
 
+.button.condensed {
+  height: 40px;
+  padding: 10px 30px 6px;
+}
+
 .drawer {
   height: 0px;
   background-color: var(--white-color);
@@ -40,7 +50,12 @@
 
 .drawer.open {
   height: calc(100vh - 125px);
-  overflow-y: auto;
+  overflow-y: scroll;
+  -webkit-overflow-scrolling: touch;
+}
+
+.drawer.open.tall {
+  height: calc(100vh - 100px);
 }
 
 .buttonLabel, .buttonChatLabel {
@@ -89,4 +104,8 @@
   background-position: center center;
   background-repeat: no-repeat;
   background-image: url('../../assets/slack-mark.svg');
+}
+
+.hidden {
+  display: none;
 }

@@ -12,7 +12,7 @@ exports[`renders patient profile container correctly 1`] = `
         className={undefined}
       />
       <div
-        className={undefined}
+        className=""
       >
         <div
           className={undefined}
@@ -188,7 +188,7 @@ exports[`renders patient profile container correctly 1`] = `
       </div>
     </div>
     <div
-      className={undefined}
+      className=""
     >
       <div
         className={undefined}
@@ -204,7 +204,7 @@ exports[`renders patient profile container correctly 1`] = `
               className={undefined}
             >
               <div
-                className={undefined}
+                className=""
               />
               <div
                 className={undefined}
@@ -213,7 +213,7 @@ exports[`renders patient profile container correctly 1`] = `
               </div>
             </div>
             <div
-              className={undefined}
+              className=""
             />
           </div>
           <div

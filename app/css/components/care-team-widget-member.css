@@ -45,7 +45,7 @@
 
 .careTeamMemberContact {
   margin: 0 var(--medium-gutter);
-  padding-top: 10px;
+  padding-top: 0;
   border-top: 1px solid var(--gray-background-color);
   height: 0;
   transition: height 0.25s ease-out;

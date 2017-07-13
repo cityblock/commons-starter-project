@@ -12,6 +12,7 @@ export interface IProps {
   loading?: boolean;
   error?: string;
   careTeam?: FullUserFragment[];
+  condensedWidget?: boolean;
 }
 
 export interface IState {
@@ -24,12 +25,14 @@ class CareTeamWidget extends React.Component<IProps, IState> {
   constructor(props: any) {
     super(props);
 
+    const { condensedWidget } = props;
+
     this.onClick = this.onClick.bind(this);
     this.onCareTeamMemberClick = this.onCareTeamMemberClick.bind(this);
     this.renderCareTeamMember = this.renderCareTeamMember.bind(this);
 
     this.state = {
-      open: false,
+      open: condensedWidget ? true : false,
       selectedCareTeamMemberId: null,
     };
   }
@@ -60,23 +63,42 @@ class CareTeamWidget extends React.Component<IProps, IState> {
   }
 
   onClick() {
-    this.setState((prevState: IState) => {
-      if (prevState.open) {
-        return {
-          open: false,
-          selectedCareTeamMemberId: null,
-        };
-      } else {
-        return { open: !prevState.open };
-      }
-    });
+    const { condensedWidget } = this.props;
+
+    if (!condensedWidget) {
+      this.setState((prevState: IState) => {
+        if (prevState.open) {
+          return {
+            open: false,
+            selectedCareTeamMemberId: null,
+          };
+        } else {
+          return { open: !prevState.open };
+        }
+      });
+    }
   }
 
   render() {
-    const { careTeam } = this.props;
+    const { careTeam, condensedWidget } = this.props;
 
-    const buttonClasses = classNames(styles.button, { [styles.openButton]: this.state.open });
-    const drawerClasses = classNames(styles.drawer, { [styles.open]: this.state.open });
+    const careTeamWidgetClasses = classNames(styles.careTeamWidget, {
+      [styles.skinny]: condensedWidget,
+    });
+    const buttonClasses = classNames(styles.button, {
+      [styles.openButton]: this.state.open,
+      [styles.condensed]: condensedWidget,
+    });
+    const drawerClasses = classNames(styles.drawer, {
+      [styles.open]: this.state.open,
+      [styles.tall]: condensedWidget,
+    });
+    const buttonIconClasses = classNames(styles.buttonIcon, {
+      [styles.hidden]: condensedWidget,
+    });
+    const buttonArrowClasses = classNames(styles.buttonArrow, {
+      [styles.hidden]: condensedWidget,
+    });
 
     const slackContact = (
       <div key='slackContact'>
@@ -98,15 +120,15 @@ class CareTeamWidget extends React.Component<IProps, IState> {
     renderedCareTeamMembers.unshift(slackContact);
 
     return (
-      <div className={styles.careTeamWidget}>
+      <div className={careTeamWidgetClasses}>
         <div className={styles.careTeamWidgetRow}>
           <div className={styles.careTeamWidgetContent}>
             <div className={buttonClasses} onClick={this.onClick}>
               <div className={styles.buttonLabel}>
-                <div className={styles.buttonIcon}></div>
+                <div className={buttonIconClasses}></div>
                 <div className={styles.buttonTitle}>Care Team</div>
               </div>
-              <div className={styles.buttonArrow}></div>
+              <div className={buttonArrowClasses}></div>
             </div>
             <div className={drawerClasses}>{renderedCareTeamMembers}</div>
           </div>

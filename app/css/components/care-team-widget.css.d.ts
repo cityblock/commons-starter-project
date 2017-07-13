@@ -1,9 +1,12 @@
 export const careTeamWidget: string;
+export const skinny: string;
 export const careTeamWidgetRow: string;
 export const careTeamWidgetContent: string;
 export const button: string;
+export const condensed: string;
 export const drawer: string;
 export const open: string;
+export const tall: string;
 export const buttonLabel: string;
 export const buttonChatLabel: string;
 export const buttonIcon: string;
@@ -11,3 +14,4 @@ export const buttonTitle: string;
 export const buttonArrow: string;
 export const openButton: string;
 export const chatLogo: string;
+export const hidden: string;

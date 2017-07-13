@@ -12,7 +12,7 @@ export interface IProps {
   intl: InjectedIntl;
   patientId: string;
   patient?: ShortPatientFragment;
-  hidePatientPhoto?: boolean;
+  condensedPatientInfo?: boolean;
 }
 
 const GENDER: any = { F: 'Female', M: 'Male' };
@@ -36,7 +36,7 @@ export default class PatientLeftNavInfo extends React.Component<IProps, {}> {
   }
 
   renderPatientHeader() {
-    const { patient, hidePatientPhoto } = this.props;
+    const { patient, condensedPatientInfo } = this.props;
     const firstName = patient ? getPatientFirstAndMiddleName(patient) : 'Unknown';
     const lastName = patient ? patient.lastName : 'Unknown';
     const patientAge = patient && patient.dateOfBirth ?
@@ -44,7 +44,7 @@ export default class PatientLeftNavInfo extends React.Component<IProps, {}> {
       'Unknown';
     const gender = patient && patient.gender ? GENDER[patient.gender] : null;
 
-    if (hidePatientPhoto) {
+    if (condensedPatientInfo) {
       return (
         <div className={styles.patientHeader}>
           <div className={styles.patientTitle}>
@@ -75,7 +75,7 @@ export default class PatientLeftNavInfo extends React.Component<IProps, {}> {
   }
 
   render() {
-    const { patient, patientId, intl } = this.props;
+    const { patient, patientId, intl, condensedPatientInfo } = this.props;
 
     const dateOfBirth = patient && patient.dateOfBirth ?
       intl.formatDate(patient.dateOfBirth) :
@@ -86,10 +86,14 @@ export default class PatientLeftNavInfo extends React.Component<IProps, {}> {
     const zip = patient && patient.zip ? patient.zip : null;
     const language = patient && patient.language ? langs.where('1', patient.language).name : null;
 
+    const patientMainClasses = classNames(styles.patientMain, {
+      [styles.noBorder]: condensedPatientInfo,
+    });
+
     return (
       <div>
         <div className={styles.patientRisk}></div>
-        <div className={styles.patientMain}>
+        <div className={patientMainClasses}>
           {this.renderPatientHeader()}
           <div className={styles.patientBasicInfo}>
             <div className={styles.patientBasicInfoRow}>

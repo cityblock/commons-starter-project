@@ -30,12 +30,9 @@ export default class CareTeamWidgetMember extends React.Component<IProps, {}> {
   }
 
   render() {
-    const { careTeamMember, onClick } = this.props;
+    const { careTeamMember, onClick, selected } = this.props;
 
-    const contactStyles = classNames(
-      styles.careTeamMemberContact,
-      { [styles.open]: this.props.selected },
-    );
+    const contactStyles = classNames(styles.careTeamMemberContact, { [styles.open]: selected });
 
     const careTeamMemberPhotoUrl = careTeamMember.googleProfileImageUrl || '';
     const careTeamMemberFullName = `${careTeamMember.firstName} ${careTeamMember.lastName}`;

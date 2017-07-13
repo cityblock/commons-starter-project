@@ -90,6 +90,7 @@ export const ENGLISH_TRANSLATION = {
     'header.tasks': 'Tasks',
     'header.logOut': 'Logout',
     'settings.heading': 'Settings',
+    'tasks.assignedToPlaceholder': 'Assign to',
     'tasks.tasksList': 'My tasks lists',
     'tasks.listView': 'Tasks',
     'tasks.createTask': 'Create a new task',

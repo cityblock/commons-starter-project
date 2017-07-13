@@ -2,6 +2,8 @@
 .container {
   background: var(--white-font-color);
   height: calc(100vh - 110px);
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
 }
 
 .tasksList {

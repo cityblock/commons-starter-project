@@ -29,11 +29,13 @@
 
 .followers {
   flex: 1;
+  display: flex;
+  justify-content: flex-end;
 }
 
 .follower {
   text-align: center;
-  margin-left: auto;
+  margin-left: 5px;
   border-radius: 50%;
   height: 20px;
   width: 20px;
@@ -43,6 +45,16 @@
   color: white;
   font-size: var(--extra-small-font-size);
   padding-top: 2px;
+}
+
+.assignedTo {
+  background-position: center center;
+  background-size: cover;
+  border-radius: 50%;
+  height: 20px;
+  width: 20px;
+  padding-top: 2px;
+  border: 1px solid var(--border-color);
 }
 
 .dateSection {

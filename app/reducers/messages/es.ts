@@ -90,6 +90,7 @@ export const SPANISH_TRANSLATION = {
     'header.tasks': 'Tareas',
     'header.logOut': 'Cerrar sesión',
     'settings.heading': 'Ajustes',
+    'tasks.assignedToPlaceholder': 'Assign to',
     'tasks.tasksList': 'My tasks lists',
     'tasks.listView': 'Tasks',
     'tasks.calendar': 'Calendar',

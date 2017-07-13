@@ -11,14 +11,22 @@ export interface IProps {
   routeBase: string;
 }
 
-function formatInitials(user: ShortUserFragment) {
+function formatInitials(user: ShortUserFragment, photo?: boolean) {
   return (user.firstName ? user.firstName[0] : '') + (user.lastName ? user.lastName[0] : '');
 }
 
-function renderFollowers(followers: ShortUserFragment[]) {
+function renderFollowers(followers: ShortUserFragment[], photo?: boolean) {
   return followers.map(user => (
     <div key={user.id} className={styles.follower}>{formatInitials(user)}</div>
   ));
+}
+
+function renderAssignedTo(user: ShortUserFragment) {
+  return (
+    <div
+      className={styles.assignedTo}
+      style={{ backgroundImage: `url(${user.googleProfileImageUrl})` }} />
+  );
 }
 
 export const TaskRow: React.StatelessComponent<IProps> = props => {
@@ -28,12 +36,16 @@ export const TaskRow: React.StatelessComponent<IProps> = props => {
     { [styles.selected]: selected },
   );
   const followers = renderFollowers(task.followers || []);
+  const assignedTo = task.assignedTo ? renderAssignedTo(task.assignedTo) : null;
   return (
     <Link
       className={taskClass}
       to={`${routeBase}/${task.id}`}>
       <div className={styles.title}>{task.title}</div>
-      <div className={styles.followers}>{followers}</div>
+      <div className={styles.followers}>
+        {assignedTo}
+        {followers}
+      </div>
       <div className={styles.dateSection}>
         <FormattedMessage id='task.opened'>
           {(message: string) => <span className={styles.dateLabel}>{message}:</span>}

@@ -123,6 +123,7 @@
 .patientPhoto {
   background-repeat: no-repeat;
   background-size: cover;
+  background-position: center center;
   height: 130px;
   min-width: 112px;
   margin-right: 15px;

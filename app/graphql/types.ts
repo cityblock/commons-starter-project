@@ -442,6 +442,43 @@ export type PatientSetupMutation = {
   } | null,
 };
 
+export type TaskCreateMutationVariables = {
+  title: string,
+  description: string,
+  dueAt: string,
+  patientId: string,
+  assignedToId?: string | null,
+};
+
+export type TaskCreateMutation = {
+  // Create a task
+  taskCreate:  {
+    id: string,
+    title: string,
+    description: string | null,
+    createdAt: string | null,
+    dueAt: string | null,
+    patient:  {
+      id: string,
+      firstName: string | null,
+      middleName: string | null,
+      lastName: string | null,
+    } | null,
+    assignedTo:  {
+      id: string,
+      firstName: string | null,
+      lastName: string | null,
+      googleProfileImageUrl: string | null,
+    } | null,
+    followers:  Array< {
+      id: string,
+      firstName: string | null,
+      lastName: string | null,
+      googleProfileImageUrl: string | null,
+    } > | null,
+  } | null,
+};
+
 export type GetTasksForCurrentUserQueryVariables = {
   pageNumber?: number | null,
   pageSize?: number | null,

@@ -1,0 +1,90 @@
+@import '../common/sizes';
+.container {}
+
+.loading {
+  position: fixed;
+  width: 100vw;
+  height: 100vh;
+  z-index: 10;
+  top: 0px;
+  left: 0px;
+  background: rgba(255, 255, 255, 0.8);
+  align-items: center;
+  display: flex;
+}
+
+.loadingHidden {
+  display: none;
+}
+
+.loadingContainer {
+  width: 100%;
+  justify-content: center;
+  display: flex;
+}
+
+.formBottom {
+  padding: 15px 0px;
+  border-top: 1px solid var(--border-color);
+}
+
+.formBottomContent {
+  width: 100%;
+  margin: 0px auto;
+  padding: 0px 20px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.formTop {
+  display: flex;
+  border-bottom: 1px solid var(--border-color);
+  justify-content: space-between;
+  align-items: center;
+  padding: 0px 20px;
+}
+
+.submitButton {
+  @apply --button;
+}
+
+.cancelButton {
+  @apply --inverted-button;
+  margin-right: 20px;
+}
+
+.smallPatientSection {
+  display: flex;
+  align-items: center;
+}
+
+.smallPatientPhoto {
+  height: 20px;
+  width: 20px;
+  border-radius: 50%;
+  border: 1px solid var(--border-color);
+}
+
+.smallPatientName {
+  padding: 10px 6px;
+  font-family: var(--roboto);
+  font-size: var(--extra-small-font-size);
+  line-height: var(--extra-small-font-line-height);
+  text-align: center;
+  border-bottom: 1px solid var(--gray-background-color);
+}
+
+.close {
+  background: url('../../assets/close.svg');
+  height: 18px;
+  width: 18px;
+  background-position: top center;
+  background-repeat: no-repeat;
+  cursor: pointer;
+  margin-top: 6px;
+}
+
+.formCenter {
+
+}

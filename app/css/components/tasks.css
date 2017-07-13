@@ -1,7 +1,7 @@
 @import '../common/sizes';
 .container {
   background: var(--white-font-color);
-  height: calc(100vh - 138px);
+  height: calc(100vh - 110px);
 }
 
 .tasksList {
@@ -122,4 +122,17 @@
   font-size: var(--medium-font-size);
   line-height: var(--medium-font-line-height);
   padding-top: var(--medium-gutter);
+}
+
+.search {
+  margin-left: 10px;
+}
+
+.createContainer {
+  align-self: center;
+}
+
+.createButton {
+  @apply --button;
+  padding: 7px 64px 6px;
 }

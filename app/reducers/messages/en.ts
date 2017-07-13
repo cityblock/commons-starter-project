@@ -92,6 +92,7 @@ export const ENGLISH_TRANSLATION = {
     'settings.heading': 'Settings',
     'tasks.tasksList': 'My tasks lists',
     'tasks.listView': 'Tasks',
+    'tasks.createTask': 'Create a new task',
     'tasks.calendar': 'Calendar',
     'tasks.noTasks': 'No Tasks',
     'task.due': 'Due',

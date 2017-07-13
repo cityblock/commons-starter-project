@@ -93,6 +93,7 @@ export const SPANISH_TRANSLATION = {
     'tasks.tasksList': 'My tasks lists',
     'tasks.listView': 'Tasks',
     'tasks.calendar': 'Calendar',
+    'tasks.createTask': 'Create Task',
     'tasks.noTasks': 'No Tasks',
     'task.due': 'Due',
     'task.opened': 'Opened',

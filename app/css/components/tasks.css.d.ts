@@ -14,3 +14,6 @@ export const tasksErrorLabel: string;
 export const tasksErrorSubheading: string;
 export const tasksErrorButton: string;
 export const tasksLoading: string;
+export const search: string;
+export const createContainer: string;
+export const createButton: string;

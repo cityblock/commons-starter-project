@@ -6,9 +6,10 @@ import { connect, Dispatch } from 'react-redux';
 import { push } from 'react-router-redux';
 import Tasks from '../components/tasks';
 import * as patientTasksQuery from '../graphql/queries/get-patient-tasks.graphql';
-import { ShortTaskFragment } from '../graphql/types';
+import { ShortPatientFragment, ShortTaskFragment } from '../graphql/types';
 
 export interface IProps {
+  patient?: ShortPatientFragment;
   patientId: string;
   tasksLoading: boolean;
   tasksError?: string;
@@ -28,7 +29,15 @@ export interface IProps {
 class PatientTasks extends React.Component<IProps, {}> {
 
   render() {
-    const { refetchTasks, updatePageParams, tasksLoading, tasksError, tasksResponse } = this.props;
+    const {
+      refetchTasks,
+      updatePageParams,
+      tasksLoading,
+      tasksError,
+      tasksResponse,
+      patient,
+      patientId,
+    } = this.props;
 
     const tasks = tasksResponse ? tasksResponse.edges.map((edge: any) => edge.node) : [];
     const hasNextPage = tasksResponse ? tasksResponse.pageInfo.hasNextPage : false;
@@ -36,13 +45,14 @@ class PatientTasks extends React.Component<IProps, {}> {
 
     return (
       <Tasks
+        patient={patient}
         refetchTasks={refetchTasks}
         loading={tasksLoading}
         error={tasksError}
         updatePageParams={updatePageParams}
         hasNextPage={hasNextPage}
         hasPreviousPage={hasPreviousPage}
-        routeBase={`/patients/${this.props.patientId}/tasks`}
+        routeBase={`/patients/${patientId}/tasks`}
         tasks={tasks} />
     );
   }

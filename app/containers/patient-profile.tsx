@@ -103,7 +103,7 @@ class PatientProfileContainer extends React.Component<IProps, {}> {
             <PatientInfo patientId={patientId} patient={patient} loading={loading} error={error} />
           )} />
           <Route path={`/patients/${patientId}/tasks`} component={() => (
-            <PatientTasks patientId={patientId} taskId={taskId} />
+            <PatientTasks patient={patient} taskId={taskId} patientId={patientId} />
           )} />
         </div>
       </div>

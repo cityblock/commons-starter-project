@@ -7,10 +7,7 @@ import { DOB_FORMAT } from '../config';
 import * as styles from '../css/components/patient-info.css';
 import * as sortSearchStyles from '../css/shared/sort-search.css';
 import * as editPatientMutation from '../graphql/queries/patient-edit-mutation.graphql';
-import { ShortPatientFragment } from '../graphql/types';
-import {
-  PatientEditMutationVariables,
-} from '../graphql/types';
+import { PatientEditMutationVariables, ShortPatientFragment } from '../graphql/types';
 import PatientContactForm, { IState as IPatientContactState } from './patient-contact-form';
 import PatientDemographicsForm, {
   IState as IPatientDemographicsState,

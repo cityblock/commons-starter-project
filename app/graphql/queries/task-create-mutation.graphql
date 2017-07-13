@@ -1,0 +1,19 @@
+#import "../fragments/short-task.graphql"
+
+mutation taskCreate(
+  $title: String!
+  $description: String!
+  $dueAt: String!
+  $patientId: String!
+  $assignedToId: String
+) {
+  taskCreate(input: {
+    title: $title,
+    description: $description,
+    dueAt: $dueAt,
+    patientId: $patientId,
+    assignedToId: $assignedToId,
+   }) {
+    ...ShortTask
+  }
+}

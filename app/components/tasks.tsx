@@ -6,10 +6,11 @@ import { connect } from 'react-redux';
 import { Route } from 'react-router-dom';
 import * as styles from '../css/components/tasks.css';
 import * as sortSearchStyles from '../css/shared/sort-search.css';
-import { ShortTaskFragment } from '../graphql/types';
+import { ShortPatientFragment, ShortTaskFragment } from '../graphql/types';
 import { IState as IAppState } from '../store';
 import { Pagination } from './pagination';
 import Task from './task';
+import TaskCreate from './task-create';
 import { TaskRow } from './task-row';
 import { TasksLoadingError } from './tasks-loading-error';
 
@@ -26,6 +27,7 @@ export interface ITaskPageInfo {
 export interface IProps {
   taskId?: string;
   routeBase: string;
+  patient?: ShortPatientFragment;
   tasks?: ShortTaskFragment[];
   refetchTasks: (variables: { pageNumber: number, pageSize: number }) => any;
   loading?: boolean;
@@ -38,6 +40,7 @@ export interface IProps {
 export interface IState extends IPageParams {
   loading?: boolean;
   error?: string;
+  showCreateTask?: boolean;
 }
 
 const getPageParams = (): IPageParams => {
@@ -60,6 +63,8 @@ class Tasks extends React.Component<IProps, IState> {
     this.reloadTasks = this.reloadTasks.bind(this);
     this.getNextPage = this.getNextPage.bind(this);
     this.getPreviousPage = this.getPreviousPage.bind(this);
+    this.showCreateTask = this.showCreateTask.bind(this);
+    this.hideCreateTask = this.hideCreateTask.bind(this);
 
     const pageParams = getPageParams();
 
@@ -75,6 +80,14 @@ class Tasks extends React.Component<IProps, IState> {
     const { loading, error } = nextProps;
 
     this.setState(() => ({ loading, error }));
+  }
+
+  showCreateTask() {
+    this.setState(() => ({ showCreateTask: true }));
+  }
+
+  hideCreateTask() {
+    this.setState(() => ({ showCreateTask: false }));
   }
 
   renderTasks(tasks: ShortTaskFragment[]) {
@@ -166,8 +179,20 @@ class Tasks extends React.Component<IProps, IState> {
       [styles.emptyTasksList]: !tasksList.length,
     });
     const taskContainerStyles = classNames(styles.taskContainer, {
-      [styles.taskContainerVisible]: !!taskId,
+      [styles.taskContainerVisible]: !!taskId || this.state.showCreateTask,
     });
+    const createTaskButton = this.props.patient ? (
+      <div className={styles.createContainer}>
+        <FormattedMessage id='tasks.createTask'>
+          {(message: string) => <div
+            onClick={this.showCreateTask}
+            className={styles.createButton}>{message}</div>}
+        </FormattedMessage>
+      </div>
+    ) : null;
+    const createTaskHtml = this.props.patient && this.state.showCreateTask ? (
+      <TaskCreate patient={this.props.patient} onClose={this.hideCreateTask} />
+    ) : null;
     return (
       <div className={styles.container}>
         <div className={sortSearchStyles.sortSearchBar}>
@@ -178,10 +203,11 @@ class Tasks extends React.Component<IProps, IState> {
                 <option value='Newest first'>Newest first</option>
               </select>
             </div>
+            <div className={classNames(sortSearchStyles.search, styles.search)}>
+              <input required type='text' placeholder='Search by user or keywords' />
+            </div>
           </div>
-          <div className={sortSearchStyles.search}>
-            <input required type='text' placeholder='Search by user or keywords' />
-          </div>
+          {createTaskButton}
         </div>
         <div className={styles.bottomContainer}>
           <div className={styles.taskListContainer}>
@@ -196,6 +222,7 @@ class Tasks extends React.Component<IProps, IState> {
           </div>
           <div className={taskContainerStyles}>
             <Route path={`${routeBase}/:taskId`} component={Task as any} />
+            {createTaskHtml}
           </div>
         </div>
       </div>

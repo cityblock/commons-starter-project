@@ -1,7 +1,10 @@
+import * as classNames from 'classnames';
+import * as moment from 'moment';
 import * as React from 'react';
 import { compose, graphql } from 'react-apollo';
 import { connect, Dispatch } from 'react-redux';
 import { selectTask } from '../actions/task-action';
+import { DATETIME_FORMAT } from '../config';
 import * as styles from '../css/components/task.css';
 import * as taskQuery from '../graphql/queries/get-task.graphql';
 import { FullTaskFragment } from '../graphql/types';
@@ -20,8 +23,15 @@ export interface IProps {
   };
 }
 
-class Task extends React.Component<IProps, {}> {
+export interface IAssigneeInfo {
+  avatar: string;
+  name: string;
+  role: string;
+}
 
+export const DEFAULT_AVATAR_URL = 'http://bit.ly/2u9bJDA';
+
+class Task extends React.Component<IProps, {}> {
   componentWillMount() {
     if (this.props.taskId) {
       this.props.selectTask(this.props.taskId);
@@ -38,11 +48,188 @@ class Task extends React.Component<IProps, {}> {
     }
   }
 
+  getPatientName(task?: FullTaskFragment) {
+    if (task) {
+      const { patient } = task;
+
+      return `${patient ? patient.firstName : 'Unknown'} ${patient ? patient.lastName : 'Unknown'}`;
+    } else {
+      return 'No Patient';
+    }
+  }
+
+  getAssigneeInfo(task?: FullTaskFragment): IAssigneeInfo {
+    if (task && task.assignedTo) {
+      return {
+        avatar: task.assignedTo.googleProfileImageUrl || DEFAULT_AVATAR_URL,
+        name: `${task.assignedTo.firstName} ${task.assignedTo.lastName}`,
+        role: 'Nurse practicioner',
+      };
+    } else {
+      return {
+        avatar: DEFAULT_AVATAR_URL,
+        name: 'Unknown Assignee',
+        role: 'Unknown Role',
+      };
+    }
+  }
+
+  getTaskDueDate(task?: FullTaskFragment) {
+    if (task && task.dueAt) {
+      return moment(task.dueAt, DATETIME_FORMAT).format('MMM D, YYYY');
+    } else {
+      return 'Unknown Due Date';
+    }
+  }
+
   render() {
-    return (
-      <div className={styles.container}>
-        task
-      </div>);
+    const { task } = this.props;
+    const patientName = this.getPatientName(task);
+    const assigneeInfo = this.getAssigneeInfo(task);
+    const dueDate = this.getTaskDueDate(task);
+
+    if (task) {
+      return (
+        <div className={styles.container}>
+          <div className={styles.taskHeader}>
+            <div className={styles.infoRow}>
+              <div className={styles.patientInfo}>
+                <div
+                  className={styles.avatar}
+                  style={{ backgroundImage: `url('${DEFAULT_AVATAR_URL}')`}}>
+                </div>
+                <div className={styles.name}>{patientName}</div>
+              </div>
+              <div className={styles.controls}>
+                <div className={styles.hamburger}></div>
+                <div className={styles.close}></div>
+              </div>
+            </div>
+            <div className={styles.infoRow}>
+              <div className={styles.dueDate}>
+                <div className={styles.dueDateIcon}></div>
+                <div className={styles.dueDateText}>{dueDate}</div>
+              </div>
+              <div className={styles.markCompletion}>
+                <div className={styles.markCompletionText}>Mark complete</div>
+                <div className={styles.markCompletionIcon}></div>
+              </div>
+            </div>
+            <div className={styles.infoRowLeft}>
+              <div className={styles.assignee}>
+                <div
+                  className={styles.avatar}
+                  style={{ backgroundImage: `url('${assigneeInfo.avatar}')` }}>
+                </div>
+                <div className={styles.name}>{assigneeInfo.name}</div>
+                <div className={styles.smallText}>{assigneeInfo.role}</div>
+              </div>
+            </div>
+          </div>
+          <div className={styles.taskBody}>
+            <div className={styles.largeText}>{task.title}</div>
+            <div className={styles.okrInfo}>
+              <div className={styles.okrRow}>
+                <div className={styles.smallText}>Objective:</div>
+                <div className={styles.darkSmallText}>Decrease hemoglobin A1C to below 8%</div>
+              </div>
+              <div className={styles.okrRow}>
+                <div className={styles.smallText}>Key result:</div>
+                <div className={styles.darkSmallText}>
+                  Get patient new prescription for Metformin
+                </div>
+              </div>
+            </div>
+            <div className={styles.bodyText}>{task.description}</div>
+            <div className={styles.attachments}>
+              <div className={styles.attachment}>Carelab-deck.pdf</div>
+            </div>
+            <div className={classNames(styles.infoRow, styles.borderTop)}>
+              <div className={styles.priorityInfo}>
+                <div className={styles.priorityIcon}></div>
+                <div className={styles.priorityText}>High priority</div>
+              </div>
+              <div className={styles.typeInfo}>
+                <div className={styles.typeIcon}></div>
+                <div className={styles.typeText}>Prescription</div>
+              </div>
+            </div>
+          </div>
+          <div className={styles.taskFollowers}>
+            <div className={styles.smallText}>Followers</div>
+            <div className={styles.followersList}>
+              <div
+                className={styles.avatar}
+                style={{ backgroundImage: `url('${DEFAULT_AVATAR_URL}')` }}>
+              </div>
+              <div
+                className={styles.avatar}
+                style={{ backgroundImage: `url('${DEFAULT_AVATAR_URL}')` }}>
+              </div>
+              <div className={styles.addFollower}></div>
+            </div>
+          </div>
+          <div className={styles.taskComments}>
+            <div className={styles.addComment}>
+              <textarea placeholder={'Add a comment...'} />
+            </div>
+            <div className={styles.smallText}>Activity and comments (2)</div>
+            <div className={styles.commentsList}>
+              <div className={styles.comment}>
+                <div className={styles.commentHeader}>
+                  <div className={styles.author}>
+                    <div
+                      className={styles.avatar}
+                      style={{ backgroundImage: `url('${DEFAULT_AVATAR_URL}')` }}>
+                    </div>
+                    <div className={styles.name}>Lucielle Mendoza</div>
+                    <div className={styles.smallText}>Nurse case manager</div>
+                  </div>
+                  <div className={styles.commentDate}>
+                    <div className={styles.smallText}>Jun 18, 2017</div>
+                  </div>
+                </div>
+                <div className={styles.commentBody}>
+                  {
+                    'Donnec ullamcorper nulla non metus auctor fringilla. Lorem ipsum dolor sit ' +
+                    'amet, consectetur adipiscing elit. Vivamus sagittis Iacus vel augue Iaoreet ' +
+                    'rutrum faucibus dolor auctor.'
+                  }
+                </div>
+              </div>
+              <div className={styles.comment}>
+                <div className={styles.commentHeader}>
+                  <div className={styles.author}>
+                    <div
+                      className={styles.avatar}
+                      style={{ backgroundImage: `url('${DEFAULT_AVATAR_URL}')` }}>
+                    </div>
+                    <div className={styles.name}>George Perkins</div>
+                    <div className={styles.smallText}>Community care worker</div>
+                  </div>
+                  <div className={styles.commentDate}>
+                    <div className={styles.smallText}>June 16, 2017</div>
+                  </div>
+                </div>
+                <div className={styles.commentBody}>
+                  {
+                    'Donnec ullamcorper nulla non metus auctor fringilla. Lorem ipsum dolor sit ' +
+                    'amet, consectetur adipiscing elit. Vivamus sagittis Iacus vel augue Iaoreet ' +
+                    'rutrum faucibus dolor auctor.'
+                  }
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      );
+    } else {
+      return (
+        <div className={styles.container}>
+          loading...
+        </div>
+      );
+    }
   }
 }
 

@@ -11,7 +11,7 @@ export interface ITaskCommentOptions {
 }
 
 // TODO: Only fetch needed eager models
-const EAGER_QUERY = '[user, task]';
+const EAGER_QUERY = '[user]';
 
 /* tslint:disable:member-ordering */
 export default class TaskComment extends Model {
@@ -103,7 +103,7 @@ export default class TaskComment extends Model {
   static async getTaskComments(
     taskId: string,
     { pageNumber, pageSize }: IPaginationOptions,
-  ): Promise<IPaginatedResults<Task>> {
+  ): Promise<IPaginatedResults<TaskComment>> {
     const patientsResult = await this
       .query()
       .where({ taskId, deletedAt: null })

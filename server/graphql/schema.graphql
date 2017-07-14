@@ -295,6 +295,28 @@ type TaskEdges {
   pageInfo: PageInfo!
 }
 
+# Task comment
+type TaskComment implements uniqueId {
+  id: ID!
+  body: String!
+  user: User!
+  taskId: String!
+  createdAt: String
+  updatedAt: String
+}
+
+# Task comment node
+type TaskCommentNode {
+  node: TaskComment
+  cursor: String!
+}
+
+# Task comment edges
+type TaskCommentEdges {
+  edges: [TaskCommentNode]
+  pageInfo: PageInfo!
+}
+
 
 #
 # BEGIN INPUT FIELDS
@@ -435,6 +457,23 @@ input TaskFollowInput {
   taskId: String!
 }
 
+# params for creating a task comment
+input TaskCommentCreateInput {
+  taskId: String!
+  body: String!
+}
+
+# params for editing a task comment
+input TaskCommentEditInput {
+  taskCommentId: String!
+  body: String!
+}
+
+# params for deleting a task comment
+input TaskCommentDeleteInput {
+  taskCommentId: String!
+}
+
 type RootMutationType {
   # Create a new user
   userCreate(input: UserCreateInput): UserWithAuthToken
@@ -486,6 +525,15 @@ type RootMutationType {
 
   # Remove user from task followers
   taskUserUnfollow(input: TaskFollowInput): Task
+
+  # Create a task
+  taskCommentCreate(input: TaskCommentCreateInput): TaskComment
+
+  # Edit a task
+  taskCommentEdit(input: TaskCommentEditInput): TaskComment
+
+  # Delete a task
+  taskCommentDelete(input: TaskCommentDeleteInput): TaskComment
 }
 
 type RootQueryType {
@@ -569,6 +617,13 @@ type RootQueryType {
     pageNumber: Int
     pageSize: Int
   ): TaskEdges
+
+  # List of task comments
+  taskComments(
+    pageNumber: Int,
+    pageSize: Int,
+    taskId: String!
+  ): TaskCommentEdges
 }
 
 schema {

@@ -16,7 +16,6 @@ export async function resolvePatientMedications(
   await accessControls.isAllowedForUser(userRole, 'view', 'patient', patientId, userId);
 
   const patient = await Patient.get(patientId);
-
   const id = String(patient.athenaPatientId);
   const medicationsResponse = await redoxApi.patientMedicationsGet(id);
 

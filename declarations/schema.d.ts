@@ -34,6 +34,7 @@ declare module 'schema' {
     task: ITask | null;
     tasksForPatient: ITaskEdges | null;
     tasksForCurrentUser: ITaskEdges | null;
+    taskComments: ITaskCommentEdges | null;
   }
 
   /*
@@ -54,7 +55,7 @@ declare module 'schema' {
   /*
     description: An object with a Globally Unique ID
   */
-  type uniqueId = IUser | IPatient | IClinic | ITask;
+  type uniqueId = IUser | IPatient | IClinic | ITask | ITaskComment;
 
   /*
     description: An object with a Globally Unique ID
@@ -343,6 +344,34 @@ declare module 'schema' {
   }
 
   /*
+    description: Task comment edges
+  */
+  interface ITaskCommentEdges {
+    edges: Array<ITaskCommentNode> | null;
+    pageInfo: IPageInfo;
+  }
+
+  /*
+    description: Task comment node
+  */
+  interface ITaskCommentNode {
+    node: ITaskComment | null;
+    cursor: string;
+  }
+
+  /*
+    description: Task comment
+  */
+  interface ITaskComment {
+    id: string;
+    body: string;
+    user: IUser;
+    taskId: string;
+    createdAt: string | null;
+    updatedAt: string | null;
+  }
+
+  /*
     description: 
   */
   interface IRootMutationType {
@@ -363,6 +392,9 @@ declare module 'schema' {
     taskComplete: ITask | null;
     taskUserFollow: ITask | null;
     taskUserUnfollow: ITask | null;
+    taskCommentCreate: ITaskComment | null;
+    taskCommentEdit: ITaskComment | null;
+    taskCommentDelete: ITaskComment | null;
   }
 
   /*
@@ -571,5 +603,28 @@ declare module 'schema' {
   interface ITaskFollowInput {
     userId: string;
     taskId: string;
+  }
+
+  /*
+    description: params for creating a task comment
+  */
+  interface ITaskCommentCreateInput {
+    taskId: string;
+    body: string;
+  }
+
+  /*
+    description: params for editing a task comment
+  */
+  interface ITaskCommentEditInput {
+    taskCommentId: string;
+    body: string;
+  }
+
+  /*
+    description: params for deleting a task comment
+  */
+  interface ITaskCommentDeleteInput {
+    taskCommentId: string;
   }
 }

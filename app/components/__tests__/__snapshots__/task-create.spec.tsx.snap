@@ -1,0 +1,117 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders task create 1`] = `
+<div
+  className={undefined}
+>
+  <form
+    className={undefined}
+    onSubmit={[Function]}
+  >
+    <div
+      className={undefined}
+    >
+      <div
+        className={undefined}
+      >
+        <div
+          className={undefined}
+          style={
+            Object {
+              "backgroundImage": "url('http://bit.ly/2u9bJDA')",
+            }
+          }
+        />
+        <div
+          className={undefined}
+        >
+          first last
+        </div>
+      </div>
+      <div
+        className={undefined}
+        onClick={[Function]}
+      />
+    </div>
+    <div
+      className={undefined}
+    >
+      <div
+        className={undefined}
+      >
+        <div
+          className={undefined}
+        >
+          <div
+            className={undefined}
+          />
+        </div>
+      </div>
+      <div
+        className={undefined}
+      >
+        <input
+          className=""
+          name="dueAt"
+          onChange={[Function]}
+          required={true}
+          type="date"
+          value=""
+        />
+        <select
+          className=""
+          name="assignedToId"
+          onChange={[Function]}
+          required={true}
+          value=""
+        >
+          <option
+            disabled={true}
+            hidden={true}
+            value=""
+          >
+            Assign to
+          </option>
+        </select>
+      </div>
+      <div
+        className={undefined}
+      >
+        <input
+          className={undefined}
+          name="title"
+          onChange={[Function]}
+          placeholder="Enter task title"
+          value=""
+        />
+        <textarea
+          className={undefined}
+          name="description"
+          onChange={[Function]}
+          placeholder="Enter task description …"
+          value=""
+        />
+      </div>
+    </div>
+    <div
+      className={undefined}
+    >
+      <div
+        className={undefined}
+      >
+        <div
+          className={undefined}
+          onClick={[Function]}
+        >
+          Cancel
+        </div>
+        <input
+          className={undefined}
+          type="submit"
+          value="Add task"
+        />
+      </div>
+    </div>
+  </form>
+</div>
+`;

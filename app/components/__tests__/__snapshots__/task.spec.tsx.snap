@@ -1,0 +1,320 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders task 1`] = `
+<div
+  className={undefined}
+>
+  <div
+    className={undefined}
+  >
+    <div
+      className={undefined}
+    >
+      <div
+        className={undefined}
+      >
+        <div
+          className={undefined}
+          style={
+            Object {
+              "backgroundImage": "url('http://bit.ly/2u9bJDA')",
+            }
+          }
+        />
+        <div
+          className={undefined}
+        >
+          first last
+        </div>
+      </div>
+      <div
+        className={undefined}
+      >
+        <div
+          className={undefined}
+        />
+        <div
+          className={undefined}
+        />
+      </div>
+    </div>
+    <div
+      className={undefined}
+    >
+      <div
+        className={undefined}
+      >
+        <div
+          className={undefined}
+        />
+        <div
+          className={undefined}
+        >
+          Jul 13, 2017
+        </div>
+      </div>
+      <div
+        className={undefined}
+      >
+        <div
+          className={undefined}
+        >
+          Mark complete
+        </div>
+        <div
+          className={undefined}
+        />
+      </div>
+    </div>
+    <div
+      className={undefined}
+    >
+      <div
+        className={undefined}
+      >
+        <div
+          className={undefined}
+          style={
+            Object {
+              "backgroundImage": "url('http://bit.ly/2u9bJDA')",
+            }
+          }
+        />
+        <div
+          className={undefined}
+        >
+          first last
+        </div>
+        <div
+          className={undefined}
+        >
+          Nurse practicioner
+        </div>
+      </div>
+    </div>
+  </div>
+  <div
+    className={undefined}
+  >
+    <div
+      className={undefined}
+    >
+      title
+    </div>
+    <div
+      className={undefined}
+    >
+      <div
+        className={undefined}
+      >
+        <div
+          className={undefined}
+        >
+          Objective:
+        </div>
+        <div
+          className={undefined}
+        >
+          Decrease hemoglobin A1C to below 8%
+        </div>
+      </div>
+      <div
+        className={undefined}
+      >
+        <div
+          className={undefined}
+        >
+          Key result:
+        </div>
+        <div
+          className={undefined}
+        >
+          Get patient new prescription for Metformin
+        </div>
+      </div>
+    </div>
+    <div
+      className={undefined}
+    >
+      description
+    </div>
+    <div
+      className={undefined}
+    >
+      <div
+        className={undefined}
+      >
+        Carelab-deck.pdf
+      </div>
+    </div>
+    <div
+      className=""
+    >
+      <div
+        className={undefined}
+      >
+        <div
+          className={undefined}
+        />
+        <div
+          className={undefined}
+        >
+          High priority
+        </div>
+      </div>
+      <div
+        className={undefined}
+      >
+        <div
+          className={undefined}
+        />
+        <div
+          className={undefined}
+        >
+          Prescription
+        </div>
+      </div>
+    </div>
+  </div>
+  <div
+    className={undefined}
+  >
+    <div
+      className={undefined}
+    >
+      Followers
+    </div>
+    <div
+      className={undefined}
+    >
+      <div
+        className={undefined}
+        style={
+          Object {
+            "backgroundImage": "url('http://bit.ly/2u9bJDA')",
+          }
+        }
+      />
+      <div
+        className={undefined}
+        style={
+          Object {
+            "backgroundImage": "url('http://bit.ly/2u9bJDA')",
+          }
+        }
+      />
+      <div
+        className={undefined}
+      />
+    </div>
+  </div>
+  <div
+    className={undefined}
+  >
+    <div
+      className={undefined}
+    >
+      <textarea
+        placeholder="Add a comment..."
+      />
+    </div>
+    <div
+      className={undefined}
+    >
+      Activity and comments (2)
+    </div>
+    <div
+      className={undefined}
+    >
+      <div
+        className={undefined}
+      >
+        <div
+          className={undefined}
+        >
+          <div
+            className={undefined}
+          >
+            <div
+              className={undefined}
+              style={
+                Object {
+                  "backgroundImage": "url('http://bit.ly/2u9bJDA')",
+                }
+              }
+            />
+            <div
+              className={undefined}
+            >
+              Lucielle Mendoza
+            </div>
+            <div
+              className={undefined}
+            >
+              Nurse case manager
+            </div>
+          </div>
+          <div
+            className={undefined}
+          >
+            <div
+              className={undefined}
+            >
+              Jun 18, 2017
+            </div>
+          </div>
+        </div>
+        <div
+          className={undefined}
+        >
+          Donnec ullamcorper nulla non metus auctor fringilla. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus sagittis Iacus vel augue Iaoreet rutrum faucibus dolor auctor.
+        </div>
+      </div>
+      <div
+        className={undefined}
+      >
+        <div
+          className={undefined}
+        >
+          <div
+            className={undefined}
+          >
+            <div
+              className={undefined}
+              style={
+                Object {
+                  "backgroundImage": "url('http://bit.ly/2u9bJDA')",
+                }
+              }
+            />
+            <div
+              className={undefined}
+            >
+              George Perkins
+            </div>
+            <div
+              className={undefined}
+            >
+              Community care worker
+            </div>
+          </div>
+          <div
+            className={undefined}
+          >
+            <div
+              className={undefined}
+            >
+              June 16, 2017
+            </div>
+          </div>
+        </div>
+        <div
+          className={undefined}
+        >
+          Donnec ullamcorper nulla non metus auctor fringilla. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus sagittis Iacus vel augue Iaoreet rutrum faucibus dolor auctor.
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;

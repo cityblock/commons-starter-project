@@ -16,9 +16,28 @@ function formatInitials(user: ShortUserFragment, photo?: boolean) {
 }
 
 function renderFollowers(followers: ShortUserFragment[], photo?: boolean) {
-  return followers.map(user => (
-    <div key={user.id} className={styles.follower}>{formatInitials(user)}</div>
-  ));
+  const followerCount = followers.length;
+  const followersHtmlMap = [];
+
+  if (followerCount) {
+    const featuredFollower = followers[0];
+
+    followersHtmlMap.push((
+      <div key={featuredFollower.id} className={styles.follower}>
+        {formatInitials(featuredFollower)}
+      </div>
+    ));
+
+    if (followerCount > 1) {
+      followersHtmlMap.push((
+        <div key={'moreFollowers'} className={styles.follower}>
+          {`+${followerCount - 1}`}
+        </div>
+      ));
+    }
+
+    return followersHtmlMap;
+  }
 }
 
 function renderAssignedTo(user: ShortUserFragment) {

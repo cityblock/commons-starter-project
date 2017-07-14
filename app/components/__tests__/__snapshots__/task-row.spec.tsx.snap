@@ -60,3 +60,69 @@ exports[`renders task row 1`] = `
   </div>
 </a>
 `;
+
+exports[`renders task row with multiple followers 1`] = `
+<a
+  className="undefined"
+  href="/foo/bar/cool-task-id"
+  onClick={[Function]}
+>
+  <div
+    className={undefined}
+  >
+    title
+  </div>
+  <div
+    className={undefined}
+  >
+    <div
+      className={undefined}
+      style={
+        Object {
+          "backgroundImage": "url(null)",
+        }
+      }
+    />
+    <div
+      className={undefined}
+    >
+      fl
+    </div>
+    <div
+      className={undefined}
+    >
+      +1
+    </div>
+  </div>
+  <div
+    className={undefined}
+  >
+    <span
+      className={undefined}
+    >
+      Opened
+      :
+    </span>
+    <span
+      className={undefined}
+    >
+      Thu Jul 13 2017 16:52:56 GMT-0400 (EDT)
+    </span>
+  </div>
+  <div
+    className={undefined}
+  >
+    <span
+      className={undefined}
+    >
+      Due
+      :
+    </span>
+    <span
+      className={undefined}
+    >
+      Thu Jul 13 2017 16:52:56 GMT-0400 (EDT)
+    </span>
+  </div>
+</a>
+`;

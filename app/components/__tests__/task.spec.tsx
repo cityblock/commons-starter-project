@@ -43,6 +43,7 @@ it('renders task', () => {
     title: 'title',
     description: 'description',
     patient,
+    patientId: patient.id,
     assignedTo: user,
     createdBy: user,
     followers: [user],

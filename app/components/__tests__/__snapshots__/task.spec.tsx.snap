@@ -88,7 +88,7 @@ exports[`renders task 1`] = `
         <div
           className={undefined}
         >
-          Nurse practicioner
+          physician
         </div>
       </div>
     </div>
@@ -140,13 +140,7 @@ exports[`renders task 1`] = `
     </div>
     <div
       className={undefined}
-    >
-      <div
-        className={undefined}
-      >
-        Carelab-deck.pdf
-      </div>
-    </div>
+    />
     <div
       className=""
     >
@@ -197,15 +191,15 @@ exports[`renders task 1`] = `
       />
       <div
         className={undefined}
-        style={
-          Object {
-            "backgroundImage": "url('http://bit.ly/2u9bJDA')",
-          }
-        }
-      />
-      <div
-        className={undefined}
-      />
+      >
+        <div
+          className="undefined"
+        />
+        <div
+          className={undefined}
+          onClick={[Function]}
+        />
+      </div>
     </div>
   </div>
   <div
@@ -216,6 +210,9 @@ exports[`renders task 1`] = `
     >
       <textarea
         placeholder="Add a comment..."
+      />
+      <div
+        className={undefined}
       />
     </div>
     <div

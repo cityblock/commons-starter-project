@@ -315,6 +315,7 @@ declare module 'schema' {
     title: string;
     description: string | null;
     patient: IPatient | null;
+    patientId: string | null;
     dueAt: string | null;
     createdBy: IUser | null;
     createdAt: string | null;

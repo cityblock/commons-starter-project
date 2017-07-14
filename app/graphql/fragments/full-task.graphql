@@ -5,6 +5,7 @@ fragment FullTask on Task {
   createdAt
   updatedAt
   dueAt
+  patientId
   patient {
     id
     firstName
@@ -16,6 +17,7 @@ fragment FullTask on Task {
     firstName
     lastName
     googleProfileImageUrl
+    userRole
   }
   createdBy {
     id
@@ -28,11 +30,13 @@ fragment FullTask on Task {
     firstName
     lastName
     googleProfileImageUrl
+    userRole
   }
   createdBy {
     id
     firstName
     lastName
     googleProfileImageUrl
+    userRole
   }
 }

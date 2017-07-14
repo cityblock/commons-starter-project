@@ -9,6 +9,7 @@ import * as styles from '../css/components/task.css';
 import * as taskQuery from '../graphql/queries/get-task.graphql';
 import { FullTaskFragment } from '../graphql/types';
 import { IState as IAppState } from '../store';
+import AddTaskFollower from './add-task-follower';
 
 export interface IProps {
   task?: FullTaskFragment;
@@ -63,7 +64,7 @@ class Task extends React.Component<IProps, {}> {
       return {
         avatar: task.assignedTo.googleProfileImageUrl || DEFAULT_AVATAR_URL,
         name: `${task.assignedTo.firstName} ${task.assignedTo.lastName}`,
-        role: 'Nurse practicioner',
+        role: task.assignedTo.userRole || 'Unknown Role',
       };
     } else {
       return {
@@ -79,6 +80,51 @@ class Task extends React.Component<IProps, {}> {
       return moment(task.dueAt, DATETIME_FORMAT).format('MMM D, YYYY');
     } else {
       return 'Unknown Due Date';
+    }
+  }
+
+  renderAttachments(task?: FullTaskFragment) {
+    // TODO: update this once attachments are a thing
+    if (task && (task as any).attachments) {
+      const attachmentsHtml = ((task as any).attachments || []).map((attachment: any) => (
+        <div className={styles.attachment}>{attachment.title}</div>
+      ));
+      return (
+        <div className={styles.attachments}>
+          {attachmentsHtml}
+        </div>
+      );
+    } else {
+      return (
+        <div className={styles.emptyAttachments}></div>
+      );
+    }
+  }
+
+  renderFollowers(task?: FullTaskFragment) {
+    if (task) {
+      const followersHtml = (task.followers || []).map(follower => (
+        <div
+          key={follower.id}
+          className={styles.avatar}
+          style={{
+            backgroundImage: `url('${follower.googleProfileImageUrl || DEFAULT_AVATAR_URL}')`,
+          }}>
+        </div>
+      ));
+
+      return (
+        <div className={styles.taskFollowers}>
+          <div className={styles.smallText}>Followers</div>
+          <div className={styles.followersList}>
+            {followersHtml}
+            <AddTaskFollower
+              taskId={task.id}
+              followers={task.followers}
+              patientId={task.patientId} />
+          </div>
+        </div>
+      );
     }
   }
 
@@ -141,9 +187,7 @@ class Task extends React.Component<IProps, {}> {
               </div>
             </div>
             <div className={styles.bodyText}>{task.description}</div>
-            <div className={styles.attachments}>
-              <div className={styles.attachment}>Carelab-deck.pdf</div>
-            </div>
+            {this.renderAttachments(task)}
             <div className={classNames(styles.infoRow, styles.borderTop)}>
               <div className={styles.priorityInfo}>
                 <div className={styles.priorityIcon}></div>
@@ -155,23 +199,11 @@ class Task extends React.Component<IProps, {}> {
               </div>
             </div>
           </div>
-          <div className={styles.taskFollowers}>
-            <div className={styles.smallText}>Followers</div>
-            <div className={styles.followersList}>
-              <div
-                className={styles.avatar}
-                style={{ backgroundImage: `url('${DEFAULT_AVATAR_URL}')` }}>
-              </div>
-              <div
-                className={styles.avatar}
-                style={{ backgroundImage: `url('${DEFAULT_AVATAR_URL}')` }}>
-              </div>
-              <div className={styles.addFollower}></div>
-            </div>
-          </div>
+          {this.renderFollowers(task)}
           <div className={styles.taskComments}>
             <div className={styles.addComment}>
               <textarea placeholder={'Add a comment...'} />
+              <div className={styles.uploadAttachment}></div>
             </div>
             <div className={styles.smallText}>Activity and comments (2)</div>
             <div className={styles.commentsList}>

@@ -1,0 +1,133 @@
+import * as classNames from 'classnames';
+import * as React from 'react';
+import { compose, graphql } from 'react-apollo';
+import * as styles from '../css/components/add-task-follower.css';
+import * as careTeamQuery from '../graphql/queries/get-patient-care-team.graphql';
+import * as taskUserFollowMutation from '../graphql/queries/task-user-follow-mutation.graphql';
+import {
+  FullTaskFragment,
+  FullUserFragment,
+  TaskUserFollowMutationVariables,
+} from '../graphql/types';
+import { DEFAULT_AVATAR_URL } from './task';
+
+export interface IProps {
+  patientId: string;
+  taskId: string;
+  followers: FullUserFragment[];
+  loading?: boolean;
+  error?: string;
+  careTeam?: FullUserFragment[];
+  addTaskFollower: (
+    options: { variables: TaskUserFollowMutationVariables },
+  ) => { data: { taskUserFollow: FullTaskFragment } };
+}
+
+export interface IState {
+  open: boolean;
+  loading: boolean;
+  error?: string;
+}
+
+class AddTaskFollower extends React.Component<IProps, IState> {
+  constructor(props: any) {
+    super(props);
+
+    this.onClick = this.onClick.bind(this);
+    this.onCareTeamMemberClick = this.onCareTeamMemberClick.bind(this);
+    this.renderCareTeamMember = this.renderCareTeamMember.bind(this);
+    this.renderCareTeamMembers = this.renderCareTeamMembers.bind(this);
+
+    this.state = { open: false, loading: false, error: undefined };
+  }
+
+  renderCareTeamMember(careTeamMember: FullUserFragment) {
+    const avatar = careTeamMember.googleProfileImageUrl || DEFAULT_AVATAR_URL;
+    const fullName = `${careTeamMember.firstName} ${careTeamMember.lastName}`;
+    const role = careTeamMember.userRole;
+
+    return (
+      <div
+        key={careTeamMember.id}
+        onClick={async () => this.onCareTeamMemberClick(careTeamMember.id)}
+        className={styles.careTeamMemberDetails}>
+        <div
+          className={styles.careTeamAvatar}
+          style={{
+            backgroundImage: `url('${avatar}')`,
+          }}>
+        </div>
+        <div className={styles.careTeamMemberLabel}>
+          <div className={styles.careTeamMemberName}>{fullName}</div>
+          <div className={styles.careTeamMemberRole}>{role}</div>
+        </div>
+      </div>
+    );
+  }
+
+  renderCareTeamMembers() {
+    const { careTeam, followers } = this.props;
+    const validNewFollowers = (careTeam || []).filter(careTeamMember => (
+      !followers.some(follower => (follower.id === careTeamMember.id))
+    ));
+
+    return validNewFollowers.map(this.renderCareTeamMember);
+  }
+
+  async onCareTeamMemberClick(careTeamMemberId: string) {
+    const { taskId, addTaskFollower } = this.props;
+    const { loading, error } = this.state;
+
+    if (!loading && !error) {
+      this.setState(() => ({ loading: true, error: undefined }));
+
+      try {
+        await addTaskFollower({
+          variables: {
+            userId: careTeamMemberId,
+            taskId,
+          },
+        });
+
+        this.setState(() => ({ open: false, loading: false, error: undefined }));
+      } catch (err) {
+        this.setState(() => ({ loading: false, error: err.message }));
+      }
+    }
+  }
+
+  onClick() {
+    this.setState((prevState: IState) => ({ open: !prevState.open }));
+  }
+
+  render() {
+    const { open } = this.state;
+
+    const careTeamContainerStyles = classNames(styles.careTeam, {
+      [styles.hidden]: !open,
+    });
+
+    return (
+      <div className={styles.container}>
+        <div className={careTeamContainerStyles}>{this.renderCareTeamMembers()}</div>
+        <div className={styles.addFollower} onClick={this.onClick}></div>
+      </div>
+    );
+  }
+}
+
+export default (compose as any)(
+  graphql(taskUserFollowMutation as any, { name: 'addTaskFollower' }),
+  graphql(careTeamQuery as any, {
+    options: (props: IProps) => ({
+      variables: {
+        patientId: props.patientId,
+      },
+    }),
+    props: ({ data }) => ({
+      loading: (data ? data.loading : false),
+      error: (data ? data.error : null),
+      careTeam: (data ? (data as any).patientCareTeam : null),
+    }),
+  }),
+)(AddTaskFollower);

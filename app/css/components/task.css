@@ -44,7 +44,7 @@
   line-height: var(--small-font-line-height);
 }
 
-.avatar, .addFollower {
+.avatar {
   width: 20px;
   height: 20px;
   border: 1px solid var(--border-color);
@@ -213,6 +213,10 @@
   flex-wrap: wrap;
 }
 
+.emptyAttachments {
+  height: 16px;
+}
+
 .attachment {
   color: var(--light-blue-color);
   font-family: var(--roboto);
@@ -271,7 +275,7 @@
 .taskFollowers {
   display: flex;
   flex-direction: column;
-  margin: 0 var(--small-gutter) var(--small-gutter);
+  margin: 0 var(--small-gutter) 10px;
 }
 
 .followersList {
@@ -279,12 +283,11 @@
   flex-direction: row;
   flex-wrap: wrap;
   margin-top: 10px;
+  width: 50%;
 }
 
-.addFollower {
-  background-image: url('../../assets/add-follower-circle-grey.svg');
-  margin-right: 0;
-  border: none;
+.followersList .avatar {
+  margin-bottom: 10px;
 }
 
 .taskComments {
@@ -295,6 +298,7 @@
 
 .addComment {
   margin-bottom: var(--small-gutter);
+  position: relative;
 }
 
 .addComment textarea {
@@ -305,7 +309,7 @@
   color: var(--black-color);
   font-size: var(--small-font-size);
   line-height: var(--body-copy-line-height);
-  padding: var(--small-gutter);
+  padding: var(--small-gutter) var(--medium-gutter) var(--small-gutter) var(--small-gutter);
   border: 1px solid var(--border-color);
   border-radius: 4px;
   outline: none;
@@ -316,6 +320,20 @@
 
   &:focus {
     border: 1px solid var(--light-blue-color);
+  }
+}
+
+.uploadAttachment {
+  width: 12px;
+  height: 12px;
+  background-image: url('../../assets/add-attachment-icon-grey.svg');
+  background-size: contain;
+  position: absolute;
+  right: 12px;
+  bottom: 15px;
+
+  &:hover {
+    cursor: pointer;
   }
 }
 

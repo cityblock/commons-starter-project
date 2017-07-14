@@ -282,6 +282,7 @@ export type GetTaskQuery = {
     createdAt: string | null,
     updatedAt: string | null,
     dueAt: string | null,
+    patientId: string | null,
     patient:  {
       id: string,
       firstName: string | null,
@@ -293,18 +294,21 @@ export type GetTaskQuery = {
       firstName: string | null,
       lastName: string | null,
       googleProfileImageUrl: string | null,
+      userRole: UserRole,
     } | null,
     createdBy:  {
       id: string,
       firstName: string | null,
       lastName: string | null,
       googleProfileImageUrl: string | null,
+      userRole: UserRole,
     } | null,
     followers:  Array< {
       id: string,
       firstName: string | null,
       lastName: string | null,
       googleProfileImageUrl: string | null,
+      userRole: UserRole,
     } > | null,
   } | null,
 };
@@ -479,6 +483,51 @@ export type TaskCreateMutation = {
   } | null,
 };
 
+export type TaskUserFollowMutationVariables = {
+  taskId: string,
+  userId: string,
+};
+
+export type TaskUserFollowMutation = {
+  // Add user to task followers
+  taskUserFollow:  {
+    id: string,
+    title: string,
+    description: string | null,
+    createdAt: string | null,
+    updatedAt: string | null,
+    dueAt: string | null,
+    patientId: string | null,
+    patient:  {
+      id: string,
+      firstName: string | null,
+      middleName: string | null,
+      lastName: string | null,
+    } | null,
+    assignedTo:  {
+      id: string,
+      firstName: string | null,
+      lastName: string | null,
+      googleProfileImageUrl: string | null,
+      userRole: UserRole,
+    } | null,
+    createdBy:  {
+      id: string,
+      firstName: string | null,
+      lastName: string | null,
+      googleProfileImageUrl: string | null,
+      userRole: UserRole,
+    } | null,
+    followers:  Array< {
+      id: string,
+      firstName: string | null,
+      lastName: string | null,
+      googleProfileImageUrl: string | null,
+      userRole: UserRole,
+    } > | null,
+  } | null,
+};
+
 export type GetTasksForCurrentUserQueryVariables = {
   pageNumber?: number | null,
   pageSize?: number | null,
@@ -595,6 +644,7 @@ export type FullTaskFragment = {
   createdAt: string | null,
   updatedAt: string | null,
   dueAt: string | null,
+  patientId: string | null,
   patient:  {
     id: string,
     firstName: string | null,
@@ -606,18 +656,21 @@ export type FullTaskFragment = {
     firstName: string | null,
     lastName: string | null,
     googleProfileImageUrl: string | null,
+    userRole: UserRole,
   } | null,
   createdBy:  {
     id: string,
     firstName: string | null,
     lastName: string | null,
     googleProfileImageUrl: string | null,
+    userRole: UserRole,
   } | null,
   followers:  Array< {
     id: string,
     firstName: string | null,
     lastName: string | null,
     googleProfileImageUrl: string | null,
+    userRole: UserRole,
   } > | null,
 };
 

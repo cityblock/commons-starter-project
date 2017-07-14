@@ -272,6 +272,7 @@ type Task implements uniqueId {
   title: String!
   description: String
   patient: Patient
+  patientId: String
   dueAt: String
   createdBy: User
   createdAt: String

@@ -13,7 +13,10 @@ export interface ITaskEditableFields {
   createdById: string;
   completedById?: string;
   assignedToId?: string;
+  priority?: Priority;
 }
+
+export type Priority = 'low' | 'medium' | 'high';
 
 // TODO: Only fetch needed eager models
 const EAGER_QUERY = '[createdBy, assignedTo, patient, completedBy, followers]';
@@ -35,7 +38,9 @@ export default class Task extends Model {
   updatedAt: string;
   dueAt: string;
   completedAt: string;
+  deletedAt?: string;
   followers: User[];
+  priority: Priority;
 
   static tableName = 'task';
 
@@ -55,6 +60,8 @@ export default class Task extends Model {
       createdById: { type: 'string' },
       patientId: { type: 'string' },
       dueAt: { type: 'string' },
+      priority: { type: 'string' },
+      deletedAt: { type: 'string' },
     },
   };
 
@@ -107,6 +114,15 @@ export default class Task extends Model {
         to: 'user.id',
       },
     },
+
+    comments: {
+      relation: Model.HasManyRelation,
+      modelClass: 'task-comment',
+      join: {
+        from: 'task.id',
+        to: 'task_comment.id',
+      },
+    },
   };
 
   $beforeInsert() {
@@ -137,9 +153,10 @@ export default class Task extends Model {
   ): Promise<IPaginatedResults<Task>> {
     const patientsResult = await this
       .query()
-      .where({ patientId })
+      .where({ patientId, deletedAt: null })
       .eager(EAGER_QUERY)
       .modifyEager('followers', builder => builder.where('deletedAt', null))
+      .orderBy('createdAt')
       .page(pageNumber, pageSize) as any;
 
     return {
@@ -158,7 +175,7 @@ export default class Task extends Model {
     const userTasks = await this
       .query()
       .where('id', 'in', subquery)
-      .orWhere({ createdById: userId })
+      .orWhere({ createdById: userId, deletedAt: null })
       .eager(EAGER_QUERY)
       .modifyEager('followers', builder => builder.where('deletedAt', null))
       .orderBy('createdAt')
@@ -175,7 +192,6 @@ export default class Task extends Model {
       .query()
       .eager(EAGER_QUERY)
       .modifyEager('followers', builder => builder.where('deletedAt', null))
-
       .insertAndFetch(input);
   }
 
@@ -187,6 +203,13 @@ export default class Task extends Model {
         builder.where('deletedAt', null);
       })
       .updateAndFetchById(taskId, task);
+  }
+
+  static async delete(taskId: string): Promise<Task> {
+    return await this.query()
+      .updateAndFetchById(taskId, {
+        deletedAt: new Date().toISOString(),
+      });
   }
 
   static async complete(taskId: string, userId: string): Promise<Task> {

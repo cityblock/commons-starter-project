@@ -80,7 +80,7 @@ describe('task model', () => {
     });
   });
 
-  it('fetches all tasks', async () => {
+  it('fetches all not deleted tasks', async () => {
     const user = await User.create({ email: 'a@b.com', userRole, homeClinicId: '1' });
     const patient = await createPatient(createMockPatient(123), user.id);
     const dueAt = new Date().toUTCString();
@@ -102,14 +102,25 @@ describe('task model', () => {
       assignedToId: user.id,
     });
 
+    // should not include the deleted comment
+    const deletedTask = await Task.create({
+      title: 'deleted',
+      description: 'deleted',
+      dueAt,
+      patientId: patient.id,
+      createdById: user.id,
+      assignedToId: user.id,
+    });
+    await Task.delete(deletedTask.id);
+
     expect(await Task.getPatientTasks(patient.id, { pageNumber: 0, pageSize: 10 })).toMatchObject(
       {
         results: [{
-          title: 'title 2',
-          description: 'description 2',
-        }, {
           title: 'title',
           description: 'description',
+        }, {
+          title: 'title 2',
+          description: 'description 2',
         }],
         total: 2,
       },
@@ -140,8 +151,8 @@ describe('task model', () => {
     expect(await Task.getPatientTasks(patient.id, { pageNumber: 0, pageSize: 1 })).toMatchObject(
       {
         results: [{
-          title: 'title 2',
-          description: 'description 2',
+          title: 'title',
+          description: 'description',
         }],
         total: 2,
       },
@@ -149,8 +160,8 @@ describe('task model', () => {
     expect(await Task.getPatientTasks(patient.id, { pageNumber: 1, pageSize: 1 })).toMatchObject(
       {
         results: [{
-          title: 'title',
-          description: 'description',
+          title: 'title 2',
+          description: 'description 2',
         }],
         total: 2,
       },
@@ -169,6 +180,7 @@ describe('task model', () => {
       patientId: patient.id,
       createdById: user.id,
       assignedToId: user.id,
+      priority: 'low',
     });
     const task2 = await Task.create({
       title: 'title 2',
@@ -177,6 +189,7 @@ describe('task model', () => {
       patientId: patient.id,
       createdById: user2.id,
       assignedToId: user.id,
+      priority: 'high',
     });
     await TaskFollower.followTask({ userId: user.id, taskId: task2.id });
     expect(await Task.getUserTasks(user.id, { pageNumber: 0, pageSize: 2 })).toMatchObject(
@@ -184,9 +197,11 @@ describe('task model', () => {
         results: [{
           title: 'title',
           description: 'description',
+          priority: 'low',
         }, {
           title: 'title 2',
           description: 'description 2',
+          priority: 'high',
         }],
         total: 2,
       },

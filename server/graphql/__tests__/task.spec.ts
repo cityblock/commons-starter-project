@@ -102,7 +102,7 @@ describe('task tests', () => {
       const user = await User.create({ email: 'a@b.com', userRole, homeClinicId: '1' });
       const patient = await createPatient(createMockPatient(123), user.id);
       const dueAt = new Date().toUTCString();
-      await Task.create({
+      const task1 = await Task.create({
         title: 'title',
         description: 'description',
         dueAt,
@@ -110,7 +110,7 @@ describe('task tests', () => {
         createdById: user.id,
         assignedToId: user.id,
       });
-      const task2 = await Task.create({
+      await Task.create({
         title: 'title',
         description: 'description',
         dueAt,
@@ -139,8 +139,8 @@ describe('task tests', () => {
       expect(cloneDeep(result.data!.tasksForPatient)).toMatchObject({
         edges: [{
           node: {
-            id: task2.id,
-            title: task2.title,
+            id: task1.id,
+            title: task1.title,
           },
         }],
         pageInfo: {

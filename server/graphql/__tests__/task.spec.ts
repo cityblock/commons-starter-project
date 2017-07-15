@@ -200,6 +200,31 @@ describe('task tests', () => {
     });
   });
 
+  describe('taskUncomplete', () => {
+    it('uncompletes a task', async () => {
+      const user = await User.create({ email: 'a@b.com', userRole, homeClinicId: '1' });
+      const patient = await createPatient(createMockPatient(123), user.id);
+      const dueAt = new Date().toUTCString();
+      const task = await Task.create({
+        title: 'title',
+        description: 'description',
+        dueAt,
+        patientId: patient.id,
+        createdById: user.id,
+        assignedToId: user.id,
+      });
+      await Task.complete(task.id, user.id);
+
+      const query = `mutation {
+        taskUncomplete(input: { taskId: "${task.id}" }) {
+          completedAt
+        }
+      }`;
+      const result = await graphql(schema, query, null, { db, userRole, userId: user.id });
+      expect(result.data!.taskUncomplete.completedAt).toBeNull();
+    });
+  });
+
   describe('taskCreate', () => {
     it('creates a new task', async () => {
       const user = await User.create({ email: 'a@b.com', userRole, homeClinicId: '1' });

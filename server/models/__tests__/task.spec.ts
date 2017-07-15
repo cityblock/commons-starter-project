@@ -225,4 +225,26 @@ describe('task model', () => {
       completedById: user.id,
     });
   });
+
+  it('uncompletes a task', async () => {
+    const user = await User.create({ email: 'a@b.com', userRole, homeClinicId: '1' });
+    const patient = await createPatient(createMockPatient(123), user.id);
+    const dueAt = new Date().toUTCString();
+    const task = await Task.create({
+      title: 'title',
+      description: 'description',
+      dueAt,
+      patientId: patient.id,
+      createdById: user.id,
+      assignedToId: user.id,
+    });
+
+    await Task.complete(task.id, user.id);
+    const fetchedTask = await Task.get(task.id);
+    expect(fetchedTask.completedAt).not.toBeNull();
+
+    expect(await Task.uncomplete(task.id, user.id)).toMatchObject({
+      completedAt: null,
+    });
+  });
 });

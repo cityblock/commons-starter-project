@@ -54,7 +54,8 @@ exports[`renders task 1`] = `
         </div>
       </div>
       <div
-        className={undefined}
+        className=""
+        onClick={[Function]}
       >
         <div
           className={undefined}

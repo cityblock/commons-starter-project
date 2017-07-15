@@ -520,6 +520,9 @@ type RootMutationType {
   # Complete a task
   taskComplete(input: TaskCompleteInput): Task
 
+  # Uncomplete a task
+  taskUncomplete(input: TaskCompleteInput): Task
+
   # Add user to task followers
   taskUserFollow(input: TaskFollowInput): Task
 

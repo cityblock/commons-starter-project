@@ -7,7 +7,13 @@ import { selectTask } from '../actions/task-action';
 import { DATETIME_FORMAT } from '../config';
 import * as styles from '../css/components/task.css';
 import * as taskQuery from '../graphql/queries/get-task.graphql';
-import { FullTaskFragment } from '../graphql/types';
+import * as taskCompleteMutation from '../graphql/queries/task-complete.graphql';
+import * as taskUncompleteMutation from '../graphql/queries/task-uncomplete.graphql';
+import {
+  FullTaskFragment,
+  TaskCompleteMutationVariables,
+  TaskUncompleteMutationVariables,
+} from '../graphql/types';
 import { IState as IAppState } from '../store';
 import AddTaskFollower from './add-task-follower';
 
@@ -22,6 +28,12 @@ export interface IProps {
       taskId?: string;
     };
   };
+  completeTask: (
+    options: { variables: TaskCompleteMutationVariables },
+  ) => { data: { taskComplete: FullTaskFragment } };
+  uncompleteTask: (
+    options: { variables: TaskUncompleteMutationVariables },
+  ) => { data: { taskComplete: FullTaskFragment } };
 }
 
 export interface IAssigneeInfo {
@@ -33,6 +45,18 @@ export interface IAssigneeInfo {
 export const DEFAULT_AVATAR_URL = 'http://bit.ly/2u9bJDA';
 
 class Task extends React.Component<IProps, {}> {
+  constructor(props: IProps) {
+    super(props);
+
+    this.getPatientName = this.getPatientName.bind(this);
+    this.getAssigneeInfo = this.getAssigneeInfo.bind(this);
+    this.getTaskDueDate = this.getTaskDueDate.bind(this);
+    this.renderAttachments = this.renderAttachments.bind(this);
+    this.renderFollowers = this.renderFollowers.bind(this);
+    this.renderTaskCompletionToggle = this.renderTaskCompletionToggle.bind(this);
+    this.onClickToggleCompletion = this.onClickToggleCompletion.bind(this);
+  }
+
   componentWillMount() {
     if (this.props.taskId) {
       this.props.selectTask(this.props.taskId);
@@ -49,7 +73,19 @@ class Task extends React.Component<IProps, {}> {
     }
   }
 
-  getPatientName(task?: FullTaskFragment) {
+  onClickToggleCompletion() {
+    const { task, completeTask, uncompleteTask } = this.props;
+
+    if (task && !!task.completedAt) {
+      uncompleteTask({ variables: { taskId: task.id } });
+    } else if (task) {
+      completeTask({ variables: { taskId: task.id } });
+    }
+  }
+
+  getPatientName() {
+    const { task } = this.props;
+
     if (task) {
       const { patient } = task;
 
@@ -59,7 +95,9 @@ class Task extends React.Component<IProps, {}> {
     }
   }
 
-  getAssigneeInfo(task?: FullTaskFragment): IAssigneeInfo {
+  getAssigneeInfo(): IAssigneeInfo {
+    const { task } = this.props;
+
     if (task && task.assignedTo) {
       return {
         avatar: task.assignedTo.googleProfileImageUrl || DEFAULT_AVATAR_URL,
@@ -75,7 +113,9 @@ class Task extends React.Component<IProps, {}> {
     }
   }
 
-  getTaskDueDate(task?: FullTaskFragment) {
+  getTaskDueDate() {
+    const { task } = this.props;
+
     if (task && task.dueAt) {
       return moment(task.dueAt, DATETIME_FORMAT).format('MMM D, YYYY');
     } else {
@@ -83,7 +123,9 @@ class Task extends React.Component<IProps, {}> {
     }
   }
 
-  renderAttachments(task?: FullTaskFragment) {
+  renderAttachments() {
+    const { task } = this.props;
+
     // TODO: update this once attachments are a thing
     if (task && (task as any).attachments) {
       const attachmentsHtml = ((task as any).attachments || []).map((attachment: any) => (
@@ -101,7 +143,9 @@ class Task extends React.Component<IProps, {}> {
     }
   }
 
-  renderFollowers(task?: FullTaskFragment) {
+  renderFollowers() {
+    const { task } = this.props;
+
     if (task) {
       const followersHtml = (task.followers || []).map(follower => (
         <div
@@ -128,11 +172,33 @@ class Task extends React.Component<IProps, {}> {
     }
   }
 
+  renderTaskCompletionToggle() {
+    const { task } = this.props;
+    let displayText: string = '';
+
+    if (task) {
+      displayText = !!task.completedAt ? 'Complete' : 'Mark complete';
+    } else {
+      displayText = 'Mark complete';
+    }
+
+    const completionStyles = classNames(styles.markCompletion, {
+      [styles.completedIcon]: task && !!task.completedAt,
+    });
+
+    return (
+      <div className={completionStyles} onClick={this.onClickToggleCompletion}>
+        <div className={styles.markCompletionText}>{displayText}</div>
+        <div className={styles.markCompletionIcon}></div>
+      </div>
+    );
+  }
+
   render() {
     const { task } = this.props;
-    const patientName = this.getPatientName(task);
-    const assigneeInfo = this.getAssigneeInfo(task);
-    const dueDate = this.getTaskDueDate(task);
+    const patientName = this.getPatientName();
+    const assigneeInfo = this.getAssigneeInfo();
+    const dueDate = this.getTaskDueDate();
 
     if (task) {
       return (
@@ -156,10 +222,7 @@ class Task extends React.Component<IProps, {}> {
                 <div className={styles.dueDateIcon}></div>
                 <div className={styles.dueDateText}>{dueDate}</div>
               </div>
-              <div className={styles.markCompletion}>
-                <div className={styles.markCompletionText}>Mark complete</div>
-                <div className={styles.markCompletionIcon}></div>
-              </div>
+              {this.renderTaskCompletionToggle()}
             </div>
             <div className={styles.infoRowLeft}>
               <div className={styles.assignee}>
@@ -187,7 +250,7 @@ class Task extends React.Component<IProps, {}> {
               </div>
             </div>
             <div className={styles.bodyText}>{task.description}</div>
-            {this.renderAttachments(task)}
+            {this.renderAttachments()}
             <div className={classNames(styles.infoRow, styles.borderTop)}>
               <div className={styles.priorityInfo}>
                 <div className={styles.priorityIcon}></div>
@@ -199,7 +262,7 @@ class Task extends React.Component<IProps, {}> {
               </div>
             </div>
           </div>
-          {this.renderFollowers(task)}
+          {this.renderFollowers()}
           <div className={styles.taskComments}>
             <div className={styles.addComment}>
               <textarea placeholder={'Add a comment...'} />
@@ -277,8 +340,10 @@ function mapDispatchToProps(dispatch: Dispatch<() => void>): Partial<IProps> {
   };
 }
 
-export default compose(
+export default (compose as any)(
   connect(mapStateToProps, mapDispatchToProps),
+  graphql(taskCompleteMutation as any, { name: 'completeTask' }),
+  graphql(taskUncompleteMutation as any, { name: 'uncompleteTask' }),
   graphql(taskQuery as any, {
     skip: (props: IProps) => !props.taskId,
     options: (props: IProps) => ({ variables: { taskId: props.taskId } }),

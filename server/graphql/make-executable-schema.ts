@@ -35,6 +35,7 @@ import {
   taskComplete,
   taskCreate,
   taskEdit,
+  taskUncomplete,
 } from './task-resolver';
 import {
   currentUserEdit,
@@ -82,6 +83,7 @@ const resolveFunctions = {
     taskCreate,
     taskEdit,
     taskComplete,
+    taskUncomplete,
     taskUserFollow,
     taskUserUnfollow,
     taskCommentCreate,

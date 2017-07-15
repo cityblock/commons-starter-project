@@ -76,6 +76,18 @@ export async function taskComplete(
   return await Task.complete(args.input.taskId, userId);
 }
 
+export async function taskUncomplete(
+  root: any, args: IEditTaskOptions, { db, userId, userRole }: IContext,
+) {
+  await accessControls.isAllowedForUser(userRole, 'edit', 'task', args.input.taskId, userId);
+
+  if (!userId) {
+    throw new Error('please log in');
+  }
+
+  return await Task.uncomplete(args.input.taskId, userId);
+}
+
 export async function resolvePatientTasks(
   root: any, args: IPatientTasksFilterOptions, { db, userRole }: IContext,
 ): Promise<ITaskEdges> {

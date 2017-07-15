@@ -281,6 +281,7 @@ export type GetTaskQuery = {
     description: string | null,
     createdAt: string | null,
     updatedAt: string | null,
+    completedAt: string | null,
     dueAt: string | null,
     patientId: string | null,
     patient:  {
@@ -446,6 +447,51 @@ export type PatientSetupMutation = {
   } | null,
 };
 
+export type TaskCompleteMutationVariables = {
+  taskId: string,
+};
+
+export type TaskCompleteMutation = {
+  // Complete a task
+  taskComplete:  {
+    id: string,
+    title: string,
+    description: string | null,
+    createdAt: string | null,
+    updatedAt: string | null,
+    completedAt: string | null,
+    dueAt: string | null,
+    patientId: string | null,
+    patient:  {
+      id: string,
+      firstName: string | null,
+      middleName: string | null,
+      lastName: string | null,
+    } | null,
+    assignedTo:  {
+      id: string,
+      firstName: string | null,
+      lastName: string | null,
+      googleProfileImageUrl: string | null,
+      userRole: UserRole,
+    } | null,
+    createdBy:  {
+      id: string,
+      firstName: string | null,
+      lastName: string | null,
+      googleProfileImageUrl: string | null,
+      userRole: UserRole,
+    } | null,
+    followers:  Array< {
+      id: string,
+      firstName: string | null,
+      lastName: string | null,
+      googleProfileImageUrl: string | null,
+      userRole: UserRole,
+    } > | null,
+  } | null,
+};
+
 export type TaskCreateMutationVariables = {
   title: string,
   description: string,
@@ -483,6 +529,51 @@ export type TaskCreateMutation = {
   } | null,
 };
 
+export type TaskUncompleteMutationVariables = {
+  taskId: string,
+};
+
+export type TaskUncompleteMutation = {
+  // Uncomplete a task
+  taskUncomplete:  {
+    id: string,
+    title: string,
+    description: string | null,
+    createdAt: string | null,
+    updatedAt: string | null,
+    completedAt: string | null,
+    dueAt: string | null,
+    patientId: string | null,
+    patient:  {
+      id: string,
+      firstName: string | null,
+      middleName: string | null,
+      lastName: string | null,
+    } | null,
+    assignedTo:  {
+      id: string,
+      firstName: string | null,
+      lastName: string | null,
+      googleProfileImageUrl: string | null,
+      userRole: UserRole,
+    } | null,
+    createdBy:  {
+      id: string,
+      firstName: string | null,
+      lastName: string | null,
+      googleProfileImageUrl: string | null,
+      userRole: UserRole,
+    } | null,
+    followers:  Array< {
+      id: string,
+      firstName: string | null,
+      lastName: string | null,
+      googleProfileImageUrl: string | null,
+      userRole: UserRole,
+    } > | null,
+  } | null,
+};
+
 export type TaskUserFollowMutationVariables = {
   taskId: string,
   userId: string,
@@ -496,6 +587,7 @@ export type TaskUserFollowMutation = {
     description: string | null,
     createdAt: string | null,
     updatedAt: string | null,
+    completedAt: string | null,
     dueAt: string | null,
     patientId: string | null,
     patient:  {
@@ -643,6 +735,7 @@ export type FullTaskFragment = {
   description: string | null,
   createdAt: string | null,
   updatedAt: string | null,
+  completedAt: string | null,
   dueAt: string | null,
   patientId: string | null,
   patient:  {

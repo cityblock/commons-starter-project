@@ -33,11 +33,11 @@ export default class Task extends Model {
   assignedTo: User;
   assignedToId: string;
   completedBy: User;
-  completedById: string;
+  completedById: string | null;
   createdAt: string;
   updatedAt: string;
   dueAt: string;
-  completedAt: string;
+  completedAt: string | null;
   deletedAt?: string;
   followers: User[];
   priority: Priority;
@@ -54,8 +54,8 @@ export default class Task extends Model {
       id: { type: 'string' },
       title: { type: 'string' },
       description: { type: 'string' },
-      completedAt: { type: 'string' },
-      completedById: { type: 'string' },
+      completedAt: { type: ['string', 'null'] },
+      completedById: { type: ['string', 'null'] },
       assignedToId: { type: 'string' },
       createdById: { type: 'string' },
       patientId: { type: 'string' },
@@ -220,6 +220,17 @@ export default class Task extends Model {
       .updateAndFetchById(taskId, {
         completedAt: new Date().toUTCString(),
         completedById: userId,
+      });
+  }
+
+  static async uncomplete(taskId: string, userId: string): Promise<Task> {
+    return this
+      .query()
+      .eager(EAGER_QUERY)
+      .modifyEager('followers', builder => builder.where('deletedAt', null))
+      .updateAndFetchById(taskId, {
+        completedAt: null,
+        completedById: null,
       });
   }
 }

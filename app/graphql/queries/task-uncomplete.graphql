@@ -1,0 +1,11 @@
+#import "../fragments/full-task.graphql"
+
+mutation taskUncomplete(
+  $taskId: String!
+) {
+  taskUncomplete(input: {
+    taskId: $taskId,
+   }) {
+    ...FullTask
+  }
+}

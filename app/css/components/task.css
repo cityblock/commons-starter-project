@@ -144,7 +144,16 @@
   }
 }
 
+.markCompletion:hover .markCompletionIcon {
+  background-image: url('../../assets/blue-check-mark-circle.svg');
+}
+
+.markCompletion.completedIcon:hover .markCompletionIcon {
+  background-image: url('../../assets/grey-check-mark-circle.svg');
+}
+
 .markCompletionText {
+  user-select: none;
   color: var(--blue-color);
   font-family: var(--basetica-medium);
   font-size: var(--small-font-size);
@@ -152,13 +161,17 @@
   margin-right: 10px;
 }
 
-.markCompletionIcon {
+.markCompletion .markCompletionIcon {
   width: 15px;
   height: 15px;
   background-position: center center;
   background-size: contain;
   background-repeat: no-repeat;
   background-image: url('../../assets/grey-check-mark-circle.svg');
+}
+
+.markCompletion.completedIcon .markCompletionIcon {
+  background-image: url('../../assets/blue-check-mark-circle.svg');
 }
 
 .taskBody {
@@ -214,7 +227,7 @@
 }
 
 .emptyAttachments {
-  height: 16px;
+  height: 10px;
 }
 
 .attachment {

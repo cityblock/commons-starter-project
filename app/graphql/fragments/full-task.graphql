@@ -4,6 +4,7 @@ fragment FullTask on Task {
   description
   createdAt
   updatedAt
+  completedAt
   dueAt
   patientId
   patient {

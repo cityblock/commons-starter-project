@@ -390,6 +390,7 @@ declare module 'schema' {
     taskCreate: ITask | null;
     taskEdit: ITask | null;
     taskComplete: ITask | null;
+    taskUncomplete: ITask | null;
     taskUserFollow: ITask | null;
     taskUserUnfollow: ITask | null;
     taskCommentCreate: ITaskComment | null;

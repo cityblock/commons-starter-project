@@ -34,6 +34,8 @@ export const priorityIcon: string;
 export const typeIcon: string;
 export const priorityText: string;
 export const typeText: string;
+export const mediumPriorityIcon: string;
+export const highPriorityIcon: string;
 export const taskFollowers: string;
 export const followersList: string;
 export const taskComments: string;

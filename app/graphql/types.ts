@@ -319,6 +319,7 @@ export type GetTaskQuery = {
     completedAt: string | null,
     dueAt: string | null,
     patientId: string | null,
+    priority: string | null,
     patient:  {
       id: string,
       firstName: string | null,
@@ -523,6 +524,7 @@ export type TaskCompleteMutation = {
     completedAt: string | null,
     dueAt: string | null,
     patientId: string | null,
+    priority: string | null,
     patient:  {
       id: string,
       firstName: string | null,
@@ -605,6 +607,7 @@ export type TaskUncompleteMutation = {
     completedAt: string | null,
     dueAt: string | null,
     patientId: string | null,
+    priority: string | null,
     patient:  {
       id: string,
       firstName: string | null,
@@ -651,6 +654,7 @@ export type TaskUserFollowMutation = {
     completedAt: string | null,
     dueAt: string | null,
     patientId: string | null,
+    priority: string | null,
     patient:  {
       id: string,
       firstName: string | null,
@@ -817,6 +821,7 @@ export type FullTaskFragment = {
   completedAt: string | null,
   dueAt: string | null,
   patientId: string | null,
+  priority: string | null,
   patient:  {
     id: string,
     firstName: string | null,

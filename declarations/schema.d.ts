@@ -318,6 +318,7 @@ declare module 'schema' {
     patient: IPatient | null;
     patientId: string | null;
     dueAt: string | null;
+    priority: string | null;
     createdBy: IUser | null;
     createdAt: string | null;
     updatedAt: string | null;

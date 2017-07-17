@@ -283,6 +283,7 @@ type Task implements uniqueId {
   patient: Patient
   patientId: String
   dueAt: String
+  priority: String
   createdBy: User
   createdAt: String
   updatedAt: String

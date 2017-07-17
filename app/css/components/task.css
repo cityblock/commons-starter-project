@@ -264,6 +264,7 @@
 }
 
 .priorityText, .typeText {
+  color: var(--black-color);
   font-family: var(--roboto);
   font-size: var(--default-font-size);
   line-height: var(--default-line-height);
@@ -272,21 +273,21 @@
 .priorityIcon {
   width: 15px;
   height: 15px;
-  background-image: url('../../assets/error-circle-black.svg');
+  background-image: url('../../assets/priority-icon-grey.svg');
 }
 
-.priorityText {
-  color: var(--red-color);
+.priorityIcon.mediumPriorityIcon {
+   background-image: url('../../assets/priority-icon-yellow.svg');
+}
+
+.priorityIcon.highPriorityIcon {
+   background-image: url('../../assets/priority-icon-red.svg');
 }
 
 .typeIcon {
   width: 15px;
   height: 10px;
   background-image: url('../../assets/type-icon-black.svg');
-}
-
-.typeText {
-  color: var(--black-color);
 }
 
 .taskFollowers {

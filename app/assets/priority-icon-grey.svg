@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="16px" height="16px" viewBox="0 0 16 16" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 45.2 (43514) - http://www.bohemiancoding.com/sketch -->
+    <title>ic_error_outline_black_24px</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="iPad-Sizing" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Artboard" transform="translate(-185.000000, -313.000000)">
+            <g id="Group-20-Copy-2" transform="translate(184.000000, 311.000000)">
+                <g id="ic_error_outline_black_24px" transform="translate(0.000000, 1.000000)">
+                    <polygon id="Shape" points="0 0 18 0 18 18 0 18"></polygon>
+                    <path d="M8.25,11.25 L9.75,11.25 L9.75,12.75 L8.25,12.75 L8.25,11.25 Z M8.25,5.25 L9.75,5.25 L9.75,9.75 L8.25,9.75 L8.25,5.25 Z M8.9925,1.5 C4.8525,1.5 1.5,4.86 1.5,9 C1.5,13.14 4.8525,16.5 8.9925,16.5 C13.14,16.5 16.5,13.14 16.5,9 C16.5,4.86 13.14,1.5 8.9925,1.5 Z M9,15 C5.685,15 3,12.315 3,9 C3,5.685 5.685,3 9,3 C12.315,3 15,5.685 15,9 C15,12.315 12.315,15 9,15 Z" id="Shape" fill="#CCCCCC" fill-rule="nonzero"></path>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

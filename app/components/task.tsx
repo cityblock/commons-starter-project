@@ -86,6 +86,7 @@ class Task extends React.Component<IProps, IState> {
     this.reloadComments = this.reloadComments.bind(this);
     this.onCommentBodyChange = this.onCommentBodyChange.bind(this);
     this.onCommentBodyKeyDown = this.onCommentBodyKeyDown.bind(this);
+    this.getTaskPriorityText = this.getTaskPriorityText.bind(this);
 
     this.state = { commentBody: '', createCommentError: undefined };
   }
@@ -346,6 +347,16 @@ class Task extends React.Component<IProps, IState> {
     }
   }
 
+  getTaskPriorityText() {
+    const { task } = this.props;
+
+    if (task && task.priority) {
+      return task.priority.charAt(0).toUpperCase() + task.priority.slice(1);
+    } else {
+      return 'Low';
+    }
+  }
+
   render() {
     const { task } = this.props;
     const { commentBody, createCommentError } = this.state;
@@ -355,6 +366,10 @@ class Task extends React.Component<IProps, IState> {
     const dueDate = this.getTaskDueDate();
     const addCommentErrorStyles = classNames(styles.addCommentError, {
       [styles.hiddenError]: !createCommentError,
+    });
+    const priorityIconStyles = classNames(styles.priorityIcon, {
+      [styles.mediumPriorityIcon]: (task && task.priority === 'medium'),
+      [styles.highPriorityIcon]: (task && task.priority === 'high'),
     });
 
     if (task) {
@@ -410,8 +425,8 @@ class Task extends React.Component<IProps, IState> {
             {this.renderAttachments()}
             <div className={classNames(styles.infoRow, styles.borderTop)}>
               <div className={styles.priorityInfo}>
-                <div className={styles.priorityIcon}></div>
-                <div className={styles.priorityText}>High priority</div>
+                <div className={priorityIconStyles}></div>
+                <div className={styles.priorityText}>{this.getTaskPriorityText()} priority</div>
               </div>
               <div className={styles.typeInfo}>
                 <div className={styles.typeIcon}></div>

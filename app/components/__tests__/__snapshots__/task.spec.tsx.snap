@@ -149,12 +149,13 @@ exports[`renders task 1`] = `
         className={undefined}
       >
         <div
-          className={undefined}
+          className=""
         />
         <div
           className={undefined}
         >
-          High priority
+          Low
+           priority
         </div>
       </div>
       <div

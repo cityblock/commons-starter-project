@@ -111,3 +111,28 @@ export const PageInfo = new GraphQLObjectType({
     },
   },
 });
+
+export interface IOrderOptions<T> {
+  orderBy: T;
+  order: 'asc' | 'desc';
+}
+
+export function formatOrderOptions<T>(
+  orderBy: string | undefined, def: any,
+): IOrderOptions<T> {
+  if (!orderBy) {
+    return def;
+  }
+  if (orderBy.indexOf('Asc') > -1) {
+    return {
+      order: 'asc',
+      orderBy: orderBy.replace('Asc', '') as any,
+    };
+  } else if (orderBy.indexOf('Desc') > -1) {
+    return {
+      order: 'desc',
+      orderBy: orderBy.replace('Desc', '') as any,
+    };
+  }
+  throw new Error('orderby should contain Asc or Desc');
+}

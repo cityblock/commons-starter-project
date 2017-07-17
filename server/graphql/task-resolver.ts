@@ -1,8 +1,8 @@
 import { ITaskCreateInput, ITaskEdges, ITaskNode } from 'schema';
 import { IPaginationOptions } from '../db';
-import Task from '../models/task';
+import Task, { TaskOrderOptions } from '../models/task';
 import accessControls from './shared/access-controls';
-import { formatRelayEdge, IContext } from './shared/utils';
+import { formatOrderOptions, formatRelayEdge, IContext } from './shared/utils';
 
 export interface ITaskCreateArgs {
   input: ITaskCreateInput;
@@ -24,6 +24,7 @@ export interface IEditTaskOptions {
 
 export interface IPatientTasksFilterOptions extends IPaginationOptions {
   patientId: string;
+  orderBy: string;
 }
 
 export interface IUserTasksFilterOptions extends IPaginationOptions {
@@ -96,8 +97,14 @@ export async function resolvePatientTasks(
 
   const pageNumber = args.pageNumber || 0;
   const pageSize = args.pageSize || 10;
+  const { order, orderBy } = formatOrderOptions<TaskOrderOptions>(
+    args.orderBy, { order: 'asc', orderBy: 'dueAt' },
+  );
 
-  const tasks = await Task.getPatientTasks(args.patientId, { pageNumber, pageSize });
+  const tasks = await Task.getPatientTasks(
+    args.patientId,
+    { pageNumber, pageSize, order, orderBy },
+  );
   const taskEdges = tasks.results.map((task: Task) => formatRelayEdge(task, task.id) as ITaskNode);
 
   const hasPreviousPage = pageNumber !== 0;

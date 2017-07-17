@@ -5,6 +5,10 @@ import TaskFollower from '../task-follower';
 import User from '../user';
 
 const userRole = 'physician';
+const order = 'asc';
+const orderBy = 'createdAt';
+const pageNumber = 0;
+const pageSize = 10;
 
 describe('task model', () => {
   let db: Db = null as any;
@@ -113,7 +117,9 @@ describe('task model', () => {
     });
     await Task.delete(deletedTask.id);
 
-    expect(await Task.getPatientTasks(patient.id, { pageNumber: 0, pageSize: 10 })).toMatchObject(
+    expect(await Task.getPatientTasks(patient.id, {
+      pageNumber, pageSize, order, orderBy,
+    })).toMatchObject(
       {
         results: [{
           title: 'title',
@@ -148,7 +154,9 @@ describe('task model', () => {
       createdById: user.id,
       assignedToId: user.id,
     });
-    expect(await Task.getPatientTasks(patient.id, { pageNumber: 0, pageSize: 1 })).toMatchObject(
+    expect(
+      await Task.getPatientTasks(patient.id, { pageNumber: 0, pageSize: 1, order, orderBy }),
+    ).toMatchObject(
       {
         results: [{
           title: 'title',
@@ -157,7 +165,9 @@ describe('task model', () => {
         total: 2,
       },
     );
-    expect(await Task.getPatientTasks(patient.id, { pageNumber: 1, pageSize: 1 })).toMatchObject(
+    expect(
+      await Task.getPatientTasks(patient.id, { pageNumber: 1, pageSize: 1, order, orderBy }),
+    ).toMatchObject(
       {
         results: [{
           title: 'title 2',
@@ -192,7 +202,9 @@ describe('task model', () => {
       priority: 'high',
     });
     await TaskFollower.followTask({ userId: user.id, taskId: task2.id });
-    expect(await Task.getUserTasks(user.id, { pageNumber: 0, pageSize: 2 })).toMatchObject(
+    expect(
+      await Task.getUserTasks(user.id, { pageNumber: 0, pageSize: 2, order, orderBy }),
+    ).toMatchObject(
       {
         results: [{
           title: 'title',

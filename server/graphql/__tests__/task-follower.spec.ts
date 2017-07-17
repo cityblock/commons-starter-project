@@ -11,6 +11,7 @@ describe('task follower', () => {
   let db: Db = null as any;
   let task = null as any;
   let user = null as any;
+  let patient = null as any;
   const userRole = 'physician';
   const homeClinicId = '1';
 
@@ -25,7 +26,7 @@ describe('task follower', () => {
       userRole,
       homeClinicId,
     });
-    const patient = await createPatient(createMockPatient(), user.id);
+    patient = await createPatient(createMockPatient(), user.id);
     const dueAt = new Date().toUTCString();
     task = await Task.create({
       title: 'title',
@@ -93,13 +94,13 @@ describe('task follower', () => {
     });
 
     it('returns correct page information', async () => {
-      const patient = await createPatient(createMockPatient(123), user.id);
+      const patient2 = await createPatient(createMockPatient(123), user.id);
       const dueAt = new Date().toUTCString();
       await Task.create({
         title: 'title',
         description: 'description',
         dueAt,
-        patientId: patient.id,
+        patientId: patient2.id,
         createdById: user.id,
         assignedToId: user.id,
       });
@@ -125,6 +126,44 @@ describe('task follower', () => {
           node: {
             id: task.id,
             title: task.title,
+          },
+        }],
+        pageInfo: {
+          hasNextPage: true,
+          hasPreviousPage: false,
+        },
+      });
+    });
+
+    it('can alter sort order', async () => {
+      const task2 = await Task.create({
+        title: 'title',
+        description: 'description',
+        patientId: patient.id,
+        createdById: user.id,
+        assignedToId: user.id,
+      });
+      const query = `{
+        tasksForCurrentUser(pageNumber: 0, pageSize: 1, orderBy: createdAtDesc) {
+          edges {
+            node {
+              id
+              title
+            }
+          }
+          pageInfo {
+            hasNextPage
+            hasPreviousPage
+          }
+        }
+      }`;
+
+      const result = await graphql(schema, query, null, { db, userRole, userId: user.id });
+      expect(cloneDeep(result.data!.tasksForCurrentUser)).toMatchObject({
+        edges: [{
+          node: {
+            id: task2.id,
+            title: task2.title,
           },
         }],
         pageInfo: {

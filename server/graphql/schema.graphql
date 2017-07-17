@@ -16,6 +16,15 @@ enum AppointmentStatus {
   chargeEntered
 }
 
+enum TaskOrderOptions {
+  createdAtDesc
+  createdAtAsc
+  dueAtDesc
+  dueAtAsc
+  updatedAtDesc
+  updatedAtAsc
+}
+
 # User account model
 type User implements uniqueId {
   id: ID!
@@ -613,12 +622,14 @@ type RootQueryType {
     patientId: String!
     pageNumber: Int
     pageSize: Int
+    orderBy: TaskOrderOptions
   ): TaskEdges
 
   # Current user's Tasks
   tasksForCurrentUser(
     pageNumber: Int
     pageSize: Int
+    orderBy: TaskOrderOptions
   ): TaskEdges
 
   # List of task comments

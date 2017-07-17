@@ -328,6 +328,11 @@ declare module 'schema' {
   }
 
   /*
+    description: 
+  */
+  type ITaskOrderOptionsEnum = 'createdAtDesc' | 'createdAtAsc' | 'dueAtDesc' | 'dueAtAsc' | 'updatedAtDesc' | 'updatedAtAsc';
+
+  /*
     description: Task edges
   */
   interface ITaskEdges {

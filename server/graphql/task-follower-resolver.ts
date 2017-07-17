@@ -1,9 +1,9 @@
 import { ITaskEdges, ITaskFollowInput, ITaskNode } from 'schema';
 import { IPaginationOptions } from '../db';
-import Task from '../models/task';
+import Task, { TaskOrderOptions } from '../models/task';
 import TaskFollower from '../models/task-follower';
 import accessControls from './shared/access-controls';
-import { formatRelayEdge, IContext } from './shared/utils';
+import { formatOrderOptions, formatRelayEdge, IContext } from './shared/utils';
 
 export interface IQuery {
   taskId: string;
@@ -35,8 +35,13 @@ export async function taskUserUnfollow(
   return await TaskFollower.unfollowTask({ userId, taskId });
 }
 
+export interface ICurrentUserTasksFilterOptions extends IPaginationOptions {
+  userId: string;
+  orderBy: string;
+}
+
 export async function resolveCurrentUserTasks(
-  root: any, args: IPaginationOptions, { db, userRole, userId }: IContext,
+  root: any, args: ICurrentUserTasksFilterOptions, { db, userRole, userId }: IContext,
 ): Promise<ITaskEdges> {
   // TODO: Improve task access controls
   await accessControls.isAllowed(userRole, 'view', 'task');
@@ -46,8 +51,11 @@ export async function resolveCurrentUserTasks(
 
   const pageNumber = args.pageNumber || 0;
   const pageSize = args.pageSize || 10;
+  const { order, orderBy } = formatOrderOptions<TaskOrderOptions>(
+    args.orderBy, { order: 'asc', orderBy: 'dueAt' },
+  );
 
-  const tasks = await Task.getUserTasks(userId, { pageNumber, pageSize });
+  const tasks = await Task.getUserTasks(userId, { pageNumber, pageSize, order, orderBy });
   const taskEdges = tasks.results.map((task: Task) => formatRelayEdge(task, task.id) as ITaskNode);
 
   const hasPreviousPage = pageNumber !== 0;

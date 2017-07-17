@@ -10,10 +10,34 @@ describe('task tests', () => {
 
   let db: Db = null as any;
   const userRole = 'physician';
+  let task1: Task = null as any;
+  let task2: Task = null as any;
+  let user: User = null as any;
+  let patient = null as any;
 
   beforeEach(async () => {
     db = await Db.get();
     await Db.clear();
+
+    user = await User.create({ email: 'a@b.com', userRole, homeClinicId: '1' });
+    patient = await createPatient(createMockPatient(123), user.id);
+    const dueAt = new Date().toUTCString();
+    task1 = await Task.create({
+      title: 'title',
+      description: 'description',
+      dueAt,
+      patientId: patient.id,
+      createdById: user.id,
+      assignedToId: user.id,
+    });
+    task2 = await Task.create({
+      title: 'title',
+      description: 'description',
+      dueAt,
+      patientId: patient.id,
+      createdById: user.id,
+      assignedToId: user.id,
+    });
   });
 
   afterAll(async () => {
@@ -22,19 +46,8 @@ describe('task tests', () => {
 
   describe('resolve task', () => {
     it('can fetch task', async () => {
-      const user = await User.create({ email: 'a@b.com', userRole, homeClinicId: '1' });
-      const patient = await createPatient(createMockPatient(123), user.id);
-      const dueAt = new Date().toUTCString();
-      const task = await Task.create({
-        title: 'title',
-        description: 'description',
-        dueAt,
-        patientId: patient.id,
-        createdById: user.id,
-        assignedToId: user.id,
-      });
       const query = `{
-        task(taskId: "${task.id}") {
+        task(taskId: "${task1.id}") {
           id
           title
           description
@@ -45,7 +58,7 @@ describe('task tests', () => {
       }`;
       const result = await graphql(schema, query, null, { db, userRole });
       expect(cloneDeep(result.data!.task)).toMatchObject({
-        id: task.id,
+        id: task1.id,
         title: 'title',
         description: 'description',
         createdBy: { id: user.id },
@@ -65,18 +78,6 @@ describe('task tests', () => {
 
   describe('resolve patient tasks', () => {
     it('resolves patient tasks', async () => {
-      const user = await User.create({ email: 'a@b.com', userRole, homeClinicId: '1' });
-      const patient = await createPatient(createMockPatient(123), user.id);
-      const dueAt = new Date().toUTCString();
-      const task = await Task.create({
-        title: 'title',
-        description: 'description',
-        dueAt,
-        patientId: patient.id,
-        createdById: user.id,
-        assignedToId: user.id,
-      });
-
       const query = `{
         tasksForPatient(patientId: "${patient.id}", pageNumber: 0, pageSize: 1) {
           edges {
@@ -91,36 +92,18 @@ describe('task tests', () => {
       expect(cloneDeep(result.data!.tasksForPatient)).toMatchObject({
         edges: [{
           node: {
-            id: task.id,
-            title: 'title',
+            id: task2.id,
+            title: task2.title,
           },
         }],
       });
     });
 
     it('returns correct page information', async () => {
-      const user = await User.create({ email: 'a@b.com', userRole, homeClinicId: '1' });
-      const patient = await createPatient(createMockPatient(123), user.id);
-      const dueAt = new Date().toUTCString();
-      const task1 = await Task.create({
-        title: 'title',
-        description: 'description',
-        dueAt,
-        patientId: patient.id,
-        createdById: user.id,
-        assignedToId: user.id,
-      });
-      await Task.create({
-        title: 'title',
-        description: 'description',
-        dueAt,
-        patientId: patient.id,
-        createdById: user.id,
-        assignedToId: user.id,
-      });
-
       const query = `{
-        tasksForPatient(patientId: "${patient.id}", pageNumber: 0, pageSize: 1) {
+        tasksForPatient(
+          patientId: "${patient.id}", pageNumber: 0, pageSize: 1, orderBy: createdAtAsc
+        ) {
           edges {
             node {
               id
@@ -149,23 +132,46 @@ describe('task tests', () => {
         },
       });
     });
+
+    it('can alter sort order', async () => {
+      const query = `{
+        tasksForPatient(
+          patientId: "${patient.id}", pageNumber: 0, pageSize: 1, orderBy: createdAtDesc
+        ) {
+          edges {
+            node {
+              id
+              title
+            }
+          }
+          pageInfo {
+            hasNextPage
+            hasPreviousPage
+          }
+        }
+      }`;
+
+      const result = await graphql(schema, query, null, { db, userRole });
+      expect(cloneDeep(result.data!.tasksForPatient)).toMatchObject({
+        edges: [{
+          node: {
+            id: task2.id,
+            title: task2.title,
+          },
+        }],
+        pageInfo: {
+          hasNextPage: true,
+          hasPreviousPage: false,
+        },
+      });
+    });
   });
 
   describe('taskEdit', () => {
     it('edits task', async () => {
-      const user = await User.create({ email: 'a@b.com', userRole, homeClinicId: '1' });
-      const patient = await createPatient(createMockPatient(123), user.id);
-      const dueAt = new Date().toUTCString();
-      const task = await Task.create({
-        title: 'title',
-        description: 'description',
-        dueAt,
-        patientId: patient.id,
-        createdById: user.id,
-        assignedToId: user.id,
-      });
+
       const query = `mutation {
-        taskEdit(input: { title: "new title", taskId: "${task.id}" }) {
+        taskEdit(input: { title: "new title", taskId: "${task1.id}" }) {
           title
         }
       }`;
@@ -178,20 +184,9 @@ describe('task tests', () => {
 
   describe('taskComplete', () => {
     it('completes a task', async () => {
-      const user = await User.create({ email: 'a@b.com', userRole, homeClinicId: '1' });
-      const patient = await createPatient(createMockPatient(123), user.id);
-      const dueAt = new Date().toUTCString();
-      const task = await Task.create({
-        title: 'title',
-        description: 'description',
-        dueAt,
-        patientId: patient.id,
-        createdById: user.id,
-        assignedToId: user.id,
-      });
-      expect(task.completedAt).toBeNull();
+      expect(task1.completedAt).toBeNull();
       const query = `mutation {
-        taskComplete(input: { taskId: "${task.id}" }) {
+        taskComplete(input: { taskId: "${task1.id}" }) {
           completedAt
         }
       }`;
@@ -202,21 +197,10 @@ describe('task tests', () => {
 
   describe('taskUncomplete', () => {
     it('uncompletes a task', async () => {
-      const user = await User.create({ email: 'a@b.com', userRole, homeClinicId: '1' });
-      const patient = await createPatient(createMockPatient(123), user.id);
-      const dueAt = new Date().toUTCString();
-      const task = await Task.create({
-        title: 'title',
-        description: 'description',
-        dueAt,
-        patientId: patient.id,
-        createdById: user.id,
-        assignedToId: user.id,
-      });
-      await Task.complete(task.id, user.id);
+      await Task.complete(task1.id, user.id);
 
       const query = `mutation {
-        taskUncomplete(input: { taskId: "${task.id}" }) {
+        taskUncomplete(input: { taskId: "${task1.id}" }) {
           completedAt
         }
       }`;
@@ -227,8 +211,6 @@ describe('task tests', () => {
 
   describe('taskCreate', () => {
     it('creates a new task', async () => {
-      const user = await User.create({ email: 'a@b.com', userRole, homeClinicId: '1' });
-      const patient = await createPatient(createMockPatient(123), user.id);
       const mutation = `mutation {
         taskCreate(input: { patientId: "${patient.id}", title: "title" }) {
           title,

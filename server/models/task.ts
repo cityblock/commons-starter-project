@@ -16,6 +16,13 @@ export interface ITaskEditableFields {
   priority?: Priority;
 }
 
+export type TaskOrderOptions = 'createdAt' | 'dueAt' | 'updatedAt';
+
+export interface ITaskPaginationOptions extends IPaginationOptions {
+  orderBy: TaskOrderOptions;
+  order: 'asc' | 'desc';
+}
+
 export type Priority = 'low' | 'medium' | 'high';
 
 // TODO: Only fetch needed eager models
@@ -149,14 +156,14 @@ export default class Task extends Model {
 
   static async getPatientTasks(
     patientId: string,
-    { pageNumber, pageSize }: IPaginationOptions,
+    { pageNumber, pageSize, orderBy, order }: ITaskPaginationOptions,
   ): Promise<IPaginatedResults<Task>> {
     const patientsResult = await this
       .query()
       .where({ patientId, deletedAt: null })
       .eager(EAGER_QUERY)
       .modifyEager('followers', builder => builder.where('deletedAt', null))
-      .orderBy('createdAt')
+      .orderBy(orderBy, order)
       .page(pageNumber, pageSize) as any;
 
     return {
@@ -167,7 +174,7 @@ export default class Task extends Model {
 
   static async getUserTasks(
     userId: string,
-    { pageNumber, pageSize }: IPaginationOptions,
+    { pageNumber, pageSize, orderBy, order }: ITaskPaginationOptions,
   ): Promise<IPaginatedResults<Task>> {
     const subquery = TaskFollower.query()
       .select('taskId')
@@ -178,7 +185,7 @@ export default class Task extends Model {
       .orWhere({ createdById: userId, deletedAt: null })
       .eager(EAGER_QUERY)
       .modifyEager('followers', builder => builder.where('deletedAt', null))
-      .orderBy('createdAt')
+      .orderBy(orderBy, order)
       .page(pageNumber, pageSize) as any;
 
     return {

@@ -210,108 +210,38 @@ exports[`renders task 1`] = `
       className={undefined}
     >
       <textarea
+        onChange={[Function]}
+        onKeyDown={[Function]}
         placeholder="Add a comment..."
+        value=""
       />
       <div
         className={undefined}
       />
+      <div
+        className="undefined"
+      >
+        <div
+          className=""
+        >
+          Error adding comment.
+        </div>
+        <div
+          className={undefined}
+        >
+          Please try again.
+        </div>
+      </div>
     </div>
-    <div
-      className={undefined}
-    >
-      Activity and comments (2)
-    </div>
-    <div
-      className={undefined}
-    >
+    <div>
       <div
         className={undefined}
       >
-        <div
-          className={undefined}
-        >
-          <div
-            className={undefined}
-          >
-            <div
-              className={undefined}
-              style={
-                Object {
-                  "backgroundImage": "url('http://bit.ly/2u9bJDA')",
-                }
-              }
-            />
-            <div
-              className={undefined}
-            >
-              Lucielle Mendoza
-            </div>
-            <div
-              className={undefined}
-            >
-              Nurse case manager
-            </div>
-          </div>
-          <div
-            className={undefined}
-          >
-            <div
-              className={undefined}
-            >
-              Jun 18, 2017
-            </div>
-          </div>
-        </div>
-        <div
-          className={undefined}
-        >
-          Donnec ullamcorper nulla non metus auctor fringilla. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus sagittis Iacus vel augue Iaoreet rutrum faucibus dolor auctor.
-        </div>
+        Loading comments...
       </div>
       <div
         className={undefined}
-      >
-        <div
-          className={undefined}
-        >
-          <div
-            className={undefined}
-          >
-            <div
-              className={undefined}
-              style={
-                Object {
-                  "backgroundImage": "url('http://bit.ly/2u9bJDA')",
-                }
-              }
-            />
-            <div
-              className={undefined}
-            >
-              George Perkins
-            </div>
-            <div
-              className={undefined}
-            >
-              Community care worker
-            </div>
-          </div>
-          <div
-            className={undefined}
-          >
-            <div
-              className={undefined}
-            >
-              June 16, 2017
-            </div>
-          </div>
-        </div>
-        <div
-          className={undefined}
-        >
-          Donnec ullamcorper nulla non metus auctor fringilla. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus sagittis Iacus vel augue Iaoreet rutrum faucibus dolor auctor.
-        </div>
-      </div>
+      />
     </div>
   </div>
 </div>

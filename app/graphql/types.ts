@@ -269,6 +269,41 @@ export type GetPatientQuery = {
   } | null,
 };
 
+export type GetTaskCommentsQueryVariables = {
+  taskId: string,
+  pageNumber?: number | null,
+  pageSize?: number | null,
+};
+
+export type GetTaskCommentsQuery = {
+  // List of task comments
+  taskComments:  {
+    edges:  Array< {
+      node:  {
+        id: string,
+        body: string,
+        user:  {
+          id: string,
+          locale: string | null,
+          firstName: string | null,
+          lastName: string | null,
+          userRole: UserRole,
+          email: string | null,
+          homeClinicId: string,
+          googleProfileImageUrl: string | null,
+        },
+        taskId: string,
+        createdAt: string | null,
+        updatedAt: string | null,
+      } | null,
+    } > | null,
+    pageInfo:  {
+      hasPreviousPage: boolean,
+      hasNextPage: boolean,
+    },
+  } | null,
+};
+
 export type GetTaskQueryVariables = {
   taskId: string,
 };
@@ -444,6 +479,32 @@ export type PatientSetupMutation = {
     createdAt: string | null,
     consentToText: boolean | null,
     consentToCall: boolean | null,
+  } | null,
+};
+
+export type TaskCommentCreateMutationVariables = {
+  taskId: string,
+  body: string,
+};
+
+export type TaskCommentCreateMutation = {
+  // Create a task
+  taskCommentCreate:  {
+    id: string,
+    body: string,
+    user:  {
+      id: string,
+      locale: string | null,
+      firstName: string | null,
+      lastName: string | null,
+      userRole: UserRole,
+      email: string | null,
+      homeClinicId: string,
+      googleProfileImageUrl: string | null,
+    },
+    taskId: string,
+    createdAt: string | null,
+    updatedAt: string | null,
   } | null,
 };
 
@@ -727,6 +788,24 @@ export type FullPatientMedicationFragment = {
 
 export type FullPatientScratchPadFragment = {
   text: string | null,
+};
+
+export type FullTaskCommentFragment = {
+  id: string,
+  body: string,
+  user:  {
+    id: string,
+    locale: string | null,
+    firstName: string | null,
+    lastName: string | null,
+    userRole: UserRole,
+    email: string | null,
+    homeClinicId: string,
+    googleProfileImageUrl: string | null,
+  },
+  taskId: string,
+  createdAt: string | null,
+  updatedAt: string | null,
 };
 
 export type FullTaskFragment = {

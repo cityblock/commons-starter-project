@@ -1,19 +1,19 @@
 fragment FullPatientHealthRecord on PatientHealthRecord {
-  id,
-  firstName,
-  lastName,
-  dateOfBirth,
-  gender,
-  suffix,
-  preferredName,
-  raceName,
-  race,
-  status,
-  ssn,
-  homebound,
-  language6392code,
-  maritalStatus,
-  maritalStatusName,
-  patientPhoto,
-  patientPhotoUrl,
+  id
+  firstName
+  lastName
+  dateOfBirth
+  gender
+  suffix
+  preferredName
+  raceName
+  race
+  status
+  ssn
+  homebound
+  language6392code
+  maritalStatus
+  maritalStatusName
+  patientPhoto
+  patientPhotoUrl
 }

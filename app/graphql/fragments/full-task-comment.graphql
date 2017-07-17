@@ -1,0 +1,12 @@
+#import "./full-user.graphql"
+
+fragment FullTaskComment on TaskComment {
+  id
+  body
+  user {
+    ...FullUser
+  }
+  taskId
+  createdAt
+  updatedAt
+}

@@ -85,6 +85,7 @@ export default class TaskComment extends Model {
     { userId, taskId, body }: ITaskCommentOptions,
   ): Promise<TaskComment> {
     return await this.query()
+      .eager(EAGER_QUERY)
       .insert({ taskId, userId, body });
   }
 

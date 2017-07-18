@@ -34,6 +34,20 @@ exports[`correctly renders a comment as editable or not 1`] = `
       className={undefined}
     >
       <div
+        className="undefined"
+      >
+        <div
+          className={undefined}
+        >
+          Error saving.
+        </div>
+        <div
+          className={undefined}
+        >
+          Please try again
+        </div>
+      </div>
+      <div
         className={undefined}
       >
         Jul 14, 2017

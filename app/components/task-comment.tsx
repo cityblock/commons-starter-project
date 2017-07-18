@@ -21,6 +21,7 @@ export interface IState {
   editedCommentBody: string;
   editing: boolean;
   textHeight: string;
+  editError?: string;
 }
 
 export const DEFAULT_AVATAR_URL = 'http://bit.ly/2u9bJDA';
@@ -52,6 +53,7 @@ export class TaskComment extends React.Component<IProps, IState> {
       editedCommentBody: comment.body,
       editing: false,
       textHeight: '100%',
+      editError: undefined,
     };
   }
 
@@ -111,10 +113,13 @@ export class TaskComment extends React.Component<IProps, IState> {
       const { editedCommentBody } = this.state;
 
       try {
-        onEdit({ taskCommentId: comment.id, body: editedCommentBody});
-        this.setState(() => ({ editing: false }));
+        this.setState(() => ({ editError: undefined }));
+
+        await onEdit({ taskCommentId: comment.id, body: editedCommentBody});
+
+        this.setState(() => ({ editError: undefined, editing: false }));
       } catch (err) {
-        this.setState(() => ({ editing: false }));
+        this.setState(() => ({ editError: err.message }));
       }
     }
   }
@@ -135,6 +140,7 @@ export class TaskComment extends React.Component<IProps, IState> {
 
   render() {
     const { comment } = this.props;
+    const { editError } = this.state;
     const { user } = comment;
 
     const { editedCommentBody, editing, textHeight } = this.state;
@@ -146,6 +152,9 @@ export class TaskComment extends React.Component<IProps, IState> {
     const commentStyles = classNames(styles.comment, {
       [styles.editable]: this.isEditable(),
       [styles.editing]: editing,
+    });
+    const errorStyles = classNames(styles.error, {
+      [styles.hidden]: !editError,
     });
 
     return (
@@ -162,6 +171,10 @@ export class TaskComment extends React.Component<IProps, IState> {
             <div className={styles.smallText}>{user.userRole}</div>
           </div>
           <div className={styles.commentDate}>
+            <div className={errorStyles}>
+              <div className={styles.errorText}>Error saving.</div>
+              <div className={styles.smallText}>Please try again</div>
+            </div>
             <div className={styles.smallText}>{this.getCommentDate(comment)}</div>
           </div>
         </div>

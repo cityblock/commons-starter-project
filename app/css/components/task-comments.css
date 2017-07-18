@@ -10,11 +10,29 @@
   margin-right: 10px;
 }
 
-.smallText {
+.smallText, .errorText {
   font-family: var(--roboto);
   font-size: var(--extra-small-font-size);
   line-height: var(--extra-small-font-line-height);
   color: var(--gray-font-color);
+}
+
+.commentDate .error {
+  display: flex;
+  flex-direction: row;
+  margin-right: 5px;
+}
+
+.error.hidden {
+  visibility: hidden;
+}
+
+.errorText {
+  color: var(--red-color);
+}
+
+.commentDate .errorText {
+  margin-right: 3px;
 }
 
 .uploadAttachment {
@@ -162,6 +180,8 @@
 }
 
 .commentDate {
+  display: flex;
+  flex-direction: space-between;
   text-align: right;
 }
 

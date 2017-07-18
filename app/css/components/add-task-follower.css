@@ -19,6 +19,10 @@
   }
 }
 
+.addFollower.hidden {
+  visibility: hidden;
+}
+
 .careTeam {
   position: absolute;
   bottom: 40px;

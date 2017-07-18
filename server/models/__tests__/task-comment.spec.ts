@@ -115,28 +115,31 @@ describe('task comment model', () => {
     const deletedComment = await TaskComment.create({
       taskId: task.id,
       userId: user.id,
-      body: 'omg another comment',
+      body: 'omg a deleted comment',
     });
     await TaskComment.delete(deletedComment.id);
 
+    // Make sure deleted comment isn't returned
     expect(
       await TaskComment.getTaskComments(task.id, { pageNumber: 0, pageSize: 10 }),
     ).toMatchObject(
       {
         results: [{
-          body: 'omg a comment',
-        }, {
           body: 'omg another comment',
+        }, {
+          body: 'omg a comment',
         }],
         total: 2,
       },
     );
+
+    // Make sure pagination works correctly
     expect(
       await TaskComment.getTaskComments(task.id, { pageNumber: 0, pageSize: 1 }),
     ).toMatchObject(
       {
         results: [{
-          body: 'omg a comment',
+          body: 'omg another comment',
         }],
         total: 2,
       },
@@ -146,7 +149,7 @@ describe('task comment model', () => {
     ).toMatchObject(
       {
         results: [{
-          body: 'omg another comment',
+          body: 'omg a comment',
         }],
         total: 2,
       },

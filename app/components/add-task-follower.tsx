@@ -29,7 +29,7 @@ export interface IState {
   error?: string;
 }
 
-class AddTaskFollower extends React.Component<IProps, IState> {
+export class AddTaskFollower extends React.Component<IProps, IState> {
   constructor(props: any) {
     super(props);
 
@@ -37,6 +37,7 @@ class AddTaskFollower extends React.Component<IProps, IState> {
     this.onCareTeamMemberClick = this.onCareTeamMemberClick.bind(this);
     this.renderCareTeamMember = this.renderCareTeamMember.bind(this);
     this.renderCareTeamMembers = this.renderCareTeamMembers.bind(this);
+    this.getValidNewFollowers = this.getValidNewFollowers.bind(this);
 
     this.state = { open: false, loading: false, error: undefined };
   }
@@ -65,13 +66,16 @@ class AddTaskFollower extends React.Component<IProps, IState> {
     );
   }
 
-  renderCareTeamMembers() {
+  getValidNewFollowers() {
     const { careTeam, followers } = this.props;
-    const validNewFollowers = (careTeam || []).filter(careTeamMember => (
+
+    return (careTeam || []).filter(careTeamMember => (
       !followers.some(follower => (follower.id === careTeamMember.id))
     ));
+  }
 
-    return validNewFollowers.map(this.renderCareTeamMember);
+  renderCareTeamMembers(careTeamMembers: FullUserFragment[]) {
+    return careTeamMembers.map(this.renderCareTeamMember);
   }
 
   async onCareTeamMemberClick(careTeamMemberId: string) {
@@ -107,10 +111,18 @@ class AddTaskFollower extends React.Component<IProps, IState> {
       [styles.hidden]: !open,
     });
 
+    const validNewFollowers = this.getValidNewFollowers();
+
+    const addFollowerButtonStyles = classNames(styles.addFollower, {
+      [styles.hidden]: !validNewFollowers.length,
+    });
+
     return (
       <div className={styles.container}>
-        <div className={careTeamContainerStyles}>{this.renderCareTeamMembers()}</div>
-        <div className={styles.addFollower} onClick={this.onClick}></div>
+        <div className={careTeamContainerStyles}>
+          {this.renderCareTeamMembers(validNewFollowers)}
+        </div>
+        <div className={addFollowerButtonStyles} onClick={this.onClick}></div>
       </div>
     );
   }

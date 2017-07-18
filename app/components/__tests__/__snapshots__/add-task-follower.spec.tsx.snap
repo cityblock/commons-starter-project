@@ -1,0 +1,15 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`correctly renders/does not render the add task follower button 1`] = `
+<div
+  className={undefined}
+>
+  <div
+    className="undefined"
+  />
+  <div
+    className="undefined"
+    onClick={[Function]}
+  />
+</div>
+`;

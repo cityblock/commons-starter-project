@@ -279,6 +279,31 @@ export type GetPatientQuery = {
   } | null,
 };
 
+export type GetTaskCommentQueryVariables = {
+  taskCommentId: string,
+};
+
+export type GetTaskCommentQuery = {
+  // Single task comment
+  taskComment:  {
+    id: string,
+    body: string,
+    user:  {
+      id: string,
+      locale: string | null,
+      firstName: string | null,
+      lastName: string | null,
+      userRole: UserRole,
+      email: string | null,
+      homeClinicId: string,
+      googleProfileImageUrl: string | null,
+    },
+    taskId: string,
+    createdAt: string | null,
+    updatedAt: string | null,
+  } | null,
+};
+
 export type GetTaskCommentsQueryVariables = {
   taskId: string,
   pageNumber?: number | null,
@@ -501,6 +526,32 @@ export type TaskCommentCreateMutationVariables = {
 export type TaskCommentCreateMutation = {
   // Create a task
   taskCommentCreate:  {
+    id: string,
+    body: string,
+    user:  {
+      id: string,
+      locale: string | null,
+      firstName: string | null,
+      lastName: string | null,
+      userRole: UserRole,
+      email: string | null,
+      homeClinicId: string,
+      googleProfileImageUrl: string | null,
+    },
+    taskId: string,
+    createdAt: string | null,
+    updatedAt: string | null,
+  } | null,
+};
+
+export type TaskCommentEditMutationVariables = {
+  taskCommentId: string,
+  body: string,
+};
+
+export type TaskCommentEditMutation = {
+  // Edit a task
+  taskCommentEdit:  {
     id: string,
     body: string,
     user:  {

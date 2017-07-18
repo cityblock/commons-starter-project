@@ -35,6 +35,7 @@ declare module 'schema' {
     tasksForPatient: ITaskEdges | null;
     tasksForCurrentUser: ITaskEdges | null;
     taskComments: ITaskCommentEdges | null;
+    taskComment: ITaskComment | null;
   }
 
   /*

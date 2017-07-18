@@ -198,7 +198,7 @@ exports[`renders task 1`] = `
           className="undefined"
         />
         <div
-          className={undefined}
+          className="undefined"
           onClick={[Function]}
         />
       </div>

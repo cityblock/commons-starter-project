@@ -91,6 +91,7 @@ export default class TaskComment extends Model {
 
   static async update(taskCommentId: string, body: string): Promise<TaskComment> {
     return await this.query()
+      .eager(EAGER_QUERY)
       .updateAndFetchById(taskCommentId, { body });
   }
 
@@ -109,7 +110,7 @@ export default class TaskComment extends Model {
       .query()
       .where({ taskId, deletedAt: null })
       .eager(EAGER_QUERY)
-      .orderBy('createdAt')
+      .orderBy('createdAt', 'desc')
       .page(pageNumber, pageSize) as any;
 
     return {

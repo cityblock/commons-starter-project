@@ -2,6 +2,7 @@ import { graphql } from 'graphql';
 import { cloneDeep } from 'lodash';
 import Db from '../../db';
 import Task from '../../models/task';
+import TaskComment from '../../models/task-comment';
 import User from '../../models/user';
 import { createMockPatient, createPatient } from '../../spec-helpers';
 import schema from '../make-executable-schema';
@@ -141,6 +142,27 @@ describe('task comments', () => {
           hasPreviousPage: false,
         },
       });
+    });
+  });
+
+  it.only('resolves a single task comment', async () => {
+    const taskComment = await TaskComment.create({
+      userId: user.id,
+      taskId: task.id,
+      body: 'my comment',
+    });
+
+    const query = `{
+      taskComment(taskCommentId: "${taskComment.id}") {
+        id, body
+      }
+    }`;
+
+    const result = await graphql(schema, query, null, { db, userRole, userId: user.id });
+
+    expect(cloneDeep(result.data!.taskComment)).toMatchObject({
+      id: taskComment.id,
+      body: taskComment.body,
     });
   });
 });

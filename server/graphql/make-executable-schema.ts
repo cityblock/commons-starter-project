@@ -21,6 +21,7 @@ import {
   resolvePatientScratchPad,
 } from './patient-resolver';
 import {
+  resolveTaskComment,
   resolveTaskComments,
   taskCommentCreate,
   taskCommentDelete,
@@ -66,6 +67,7 @@ const resolveFunctions = {
     tasksForPatient: resolvePatientTasks,
     tasksForCurrentUser: resolveCurrentUserTasks,
     taskComments: resolveTaskComments,
+    taskComment: resolveTaskComment,
   },
   RootMutationType: {
     appointmentAddNote,

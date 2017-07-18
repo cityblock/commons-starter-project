@@ -639,6 +639,11 @@ type RootQueryType {
     pageSize: Int,
     taskId: String!
   ): TaskCommentEdges
+
+  # Single task comment
+  taskComment(
+    taskCommentId: String!
+  ): TaskComment
 }
 
 schema {

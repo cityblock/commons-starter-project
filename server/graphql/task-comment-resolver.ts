@@ -1,4 +1,5 @@
 import {
+  ITaskComment,
   ITaskCommentCreateInput,
   ITaskCommentDeleteInput,
   ITaskCommentEdges,
@@ -88,4 +89,15 @@ export async function resolveTaskComments(
       hasNextPage,
     },
   };
+}
+
+export async function resolveTaskComment(
+  rot: any, args: { taskCommentId: string }, { db, userRole, userId }: IContext,
+): Promise<ITaskComment> {
+  await accessControls.isAllowed(userRole, 'view', 'task');
+  if (!userId) {
+    throw new Error('not logged in!');
+  }
+
+  return await TaskComment.get(args.taskCommentId);
 }

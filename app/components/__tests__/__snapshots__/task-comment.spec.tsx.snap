@@ -1,0 +1,67 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`correctly renders a comment as editable or not 1`] = `
+<div
+  className=""
+  onClick={[Function]}
+>
+  <div
+    className={undefined}
+  >
+    <div
+      className={undefined}
+    >
+      <div
+        className={undefined}
+        style={
+          Object {
+            "backgroundImage": "url('http://bit.ly/2u9bJDA')",
+          }
+        }
+      />
+      <div
+        className={undefined}
+      >
+        first last
+      </div>
+      <div
+        className={undefined}
+      >
+        physician
+      </div>
+    </div>
+    <div
+      className={undefined}
+    >
+      <div
+        className={undefined}
+      >
+        Jul 14, 2017
+      </div>
+    </div>
+  </div>
+  <div
+    className={undefined}
+  >
+    <span>
+      body
+      <br />
+    </span>
+  </div>
+  <div
+    className={undefined}
+  >
+    <textarea
+      onBlur={[Function]}
+      onChange={[Function]}
+      onKeyDown={[Function]}
+      style={
+        Object {
+          "height": "100%",
+        }
+      }
+      value="body"
+    />
+  </div>
+</div>
+`;

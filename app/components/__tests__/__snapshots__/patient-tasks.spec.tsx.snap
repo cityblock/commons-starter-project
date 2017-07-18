@@ -19,12 +19,38 @@ exports[`renders patient tasks 1`] = `
         className={undefined}
       >
         <select
-          value="Newest first"
+          onChange={[Function]}
+          value="createdAtDesc"
         >
           <option
-            value="Newest first"
+            value="createdAtAsc"
           >
             Newest first
+          </option>
+          <option
+            value="createdAtDesc"
+          >
+            Oldest first
+          </option>
+          <option
+            value="dueAtAsc"
+          >
+            Due soonest
+          </option>
+          <option
+            value="dueAtDesc"
+          >
+            Due latest
+          </option>
+          <option
+            value="updatedAtAsc"
+          >
+            Last updated
+          </option>
+          <option
+            value="updatedAtDesc"
+          >
+            Last updated desc
           </option>
         </select>
       </div>

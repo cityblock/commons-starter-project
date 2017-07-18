@@ -1,4 +1,5 @@
 import * as classNames from 'classnames';
+import { pickBy } from 'lodash';
 import * as querystring from 'querystring';
 import * as React from 'react';
 import { compose, graphql } from 'react-apollo';
@@ -7,6 +8,7 @@ import { connect, Dispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { push } from 'react-router-redux';
 import Tasks from '../components/tasks';
+import { IPageParams } from '../components/tasks';
 import * as styles from '../css/components/tasks-container.css';
 import * as tabStyles from '../css/shared/tabs.css';
 import * as tasksQuery from '../graphql/queries/tasks-for-current-user.graphql';
@@ -26,7 +28,7 @@ export interface IProps {
     };
   };
   refetchTasks: () => any;
-  updatePageParams: (pageNumber: number) => any;
+  updatePageParams: (pageParams: IPageParams) => any;
 }
 
 class TasksContainer extends React.Component<IProps> {
@@ -96,28 +98,27 @@ class TasksContainer extends React.Component<IProps> {
 
 function mapDispatchToProps(dispatch: Dispatch<() => void>): Partial<IProps> {
   return {
-    updatePageParams: (pageNumber: number) => {
-      const pageParams = getPageParamsPagination();
-      pageParams.variables.pageNumber = pageNumber;
-      dispatch(push({ search: querystring.stringify(pageParams) }));
+    updatePageParams: (pageParams: IPageParams) => {
+      const cleanedPageParams = pickBy<IPageParams, {}>(pageParams);
+      dispatch(push({ search: querystring.stringify(cleanedPageParams) }));
     },
   };
 }
 
-const getPageParamsPagination = () => {
+const getPageParams = (props: IProps) => {
   const pageParams = querystring.parse(window.location.search.substring(1));
   return {
-    variables: {
-      pageNumber: pageParams.pageNumber || 0,
-      pageSize: pageParams.pageSize || 10,
-    },
+    pageNumber: pageParams.pageNumber || 0,
+    pageSize: 10,
+    orderBy: pageParams.orderBy || 'createdAtDesc',
   };
 };
+
 export default compose(
   injectIntl,
   connect(undefined, mapDispatchToProps),
   graphql(tasksQuery as any, {
-    options: getPageParamsPagination,
+    options: (props: IProps) => ({ variables: getPageParams(props) }),
     props: ({ data }) => ({
       refetchTasks: (data ? data.refetch : null),
       tasksLoading: (data ? data.loading : false),

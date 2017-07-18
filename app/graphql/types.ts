@@ -19,6 +19,15 @@ export type UserRole =
   "admin";
 
 
+export type TaskOrderOptions =
+  "createdAtDesc" |
+  "createdAtAsc" |
+  "dueAtDesc" |
+  "dueAtAsc" |
+  "updatedAtDesc" |
+  "updatedAtAsc";
+
+
 export type AppointmentEndMutationVariables = {
   patientId: string,
   appointmentId: string,
@@ -209,6 +218,7 @@ export type GetPatientTasksQueryVariables = {
   patientId: string,
   pageNumber?: number | null,
   pageSize?: number | null,
+  orderBy?: TaskOrderOptions | null,
 };
 
 export type GetPatientTasksQuery = {
@@ -688,6 +698,7 @@ export type TaskUserFollowMutation = {
 export type GetTasksForCurrentUserQueryVariables = {
   pageNumber?: number | null,
   pageSize?: number | null,
+  orderBy?: TaskOrderOptions | null,
 };
 
 export type GetTasksForCurrentUserQuery = {

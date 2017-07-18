@@ -14,9 +14,12 @@ import TaskCreate from './task-create';
 import { TaskRow } from './task-row';
 import { TasksLoadingError } from './tasks-loading-error';
 
+export type OrderByOptions = 'createdAtDesc' | 'createdAtAsc' | 'dueAtAsc' | 'updatedAtAsc';
+
 export interface IPageParams {
   pageNumber: number;
-  pageSize: number;
+  taskId?: string;
+  orderBy: OrderByOptions;
 }
 
 export interface ITaskPageInfo {
@@ -29,10 +32,10 @@ export interface IProps {
   routeBase: string;
   patient?: ShortPatientFragment;
   tasks?: ShortTaskFragment[];
-  refetchTasks: (variables: { pageNumber: number, pageSize: number }) => any;
+  refetchTasks: (variables: { pageNumber: number, orderBy: string }) => any;
   loading?: boolean;
   error?: string;
-  updatePageParams: (pageNumber: number) => any;
+  updatePageParams: (params: IPageParams) => any;
   hasNextPage?: boolean;
   hasPreviousPage?: boolean;
 }
@@ -41,14 +44,16 @@ export interface IState extends IPageParams {
   loading?: boolean;
   error?: string;
   showCreateTask?: boolean;
+  orderBy: OrderByOptions;
 }
 
-const getPageParams = (): IPageParams => {
+const getPageParams = () => {
   const pageParams = querystring.parse(window.location.search.substring(1));
 
   return {
     pageNumber: pageParams.pageNumber || 0,
-    pageSize: pageParams.pageSize || 10,
+    pageSize: 10,
+    orderBy: pageParams.orderBy || 'createdAtDesc',
   };
 };
 
@@ -65,6 +70,7 @@ class Tasks extends React.Component<IProps, IState> {
     this.getPreviousPage = this.getPreviousPage.bind(this);
     this.showCreateTask = this.showCreateTask.bind(this);
     this.hideCreateTask = this.hideCreateTask.bind(this);
+    this.onSortChange = this.onSortChange.bind(this);
 
     const pageParams = getPageParams();
 
@@ -72,7 +78,7 @@ class Tasks extends React.Component<IProps, IState> {
       loading,
       error,
       pageNumber: pageParams.pageNumber || 0,
-      pageSize: pageParams.pageSize || 10,
+      orderBy: (pageParams.orderBy as any) || 'createdAtDesc',
     };
   }
 
@@ -90,7 +96,7 @@ class Tasks extends React.Component<IProps, IState> {
     this.setState(() => ({ showCreateTask: false }));
     this.props.refetchTasks({
       pageNumber: this.state.pageNumber,
-      pageSize: this.state.pageSize,
+      orderBy: this.state.orderBy,
     });
   }
 
@@ -131,6 +137,15 @@ class Tasks extends React.Component<IProps, IState> {
     );
   }
 
+  onSortChange(event: React.ChangeEvent<HTMLSelectElement>) {
+    const value = event.target.value as OrderByOptions;
+    this.setState({
+      pageNumber: 0,
+      orderBy: value,
+    });
+    this.props.updatePageParams({ pageNumber: 0, orderBy: value });
+  }
+
   async reloadTasks() {
     const { refetchTasks } = this.props;
 
@@ -139,7 +154,7 @@ class Tasks extends React.Component<IProps, IState> {
         this.setState(() => ({ loading: true, error: undefined }));
         await refetchTasks({
           pageNumber: this.state.pageNumber,
-          pageSize: this.state.pageSize,
+          orderBy: this.state.orderBy,
         });
       } catch (err) {
         // TODO: This is redundant. Props will get set by the result of the refetch.
@@ -154,10 +169,10 @@ class Tasks extends React.Component<IProps, IState> {
 
       this.props.refetchTasks({
         pageNumber,
-        pageSize: this.state.pageSize,
+        orderBy: this.state.orderBy,
       });
 
-      this.props.updatePageParams(pageNumber);
+      this.props.updatePageParams({ pageNumber: 0, orderBy: this.state.orderBy });
       this.setState((state: IState) => ({ pageNumber }));
     }
   }
@@ -168,16 +183,17 @@ class Tasks extends React.Component<IProps, IState> {
 
       await this.props.refetchTasks({
         pageNumber,
-        pageSize: this.state.pageSize,
+        orderBy: this.state.orderBy,
       });
 
-      this.props.updatePageParams(pageNumber);
+      this.props.updatePageParams({ pageNumber: 0, orderBy: this.state.orderBy });
       this.setState((state: IState) => ({ pageNumber }));
     }
   }
 
   render() {
     const { tasks, routeBase, taskId } = this.props;
+    const { orderBy } = this.state;
     const tasksList = tasks || [];
     const taskListStyles = classNames(styles.tasksList, {
       [styles.emptyTasksList]: !tasksList.length,
@@ -205,8 +221,13 @@ class Tasks extends React.Component<IProps, IState> {
           <div className={sortSearchStyles.sort}>
             <div className={sortSearchStyles.sortLabel}>Sort by:</div>
             <div className={sortSearchStyles.sortDropdown}>
-              <select value='Newest first'>
-                <option value='Newest first'>Newest first</option>
+              <select value={orderBy} onChange={this.onSortChange}>
+                <option value='createdAtAsc'>Newest first</option>
+                <option value='createdAtDesc'>Oldest first</option>
+                <option value='dueAtAsc'>Due soonest</option>
+                <option value='dueAtDesc'>Due latest</option>
+                <option value='updatedAtAsc'>Last updated</option>
+                <option value='updatedAtDesc'>Last updated desc</option>
               </select>
             </div>
             <div className={classNames(sortSearchStyles.search, styles.search)}>

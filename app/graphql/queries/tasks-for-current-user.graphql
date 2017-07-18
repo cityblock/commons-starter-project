@@ -1,7 +1,7 @@
 #import "../fragments/short-task.graphql"
 
-query getTasksForCurrentUser($pageNumber: Int, $pageSize: Int) {
-  tasksForCurrentUser(pageNumber: $pageNumber, pageSize: $pageSize) {
+query getTasksForCurrentUser($pageNumber: Int, $pageSize: Int, $orderBy: TaskOrderOptions) {
+  tasksForCurrentUser(pageNumber: $pageNumber, pageSize: $pageSize, orderBy: $orderBy) {
     edges {
       node {
         ...ShortTask

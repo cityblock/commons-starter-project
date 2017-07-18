@@ -1,3 +1,4 @@
+import { pickBy } from 'lodash';
 import * as querystring from 'querystring';
 import * as React from 'react';
 import { compose, graphql } from 'react-apollo';
@@ -7,6 +8,7 @@ import { push } from 'react-router-redux';
 import Tasks from '../components/tasks';
 import * as patientTasksQuery from '../graphql/queries/get-patient-tasks.graphql';
 import { ShortPatientFragment, ShortTaskFragment } from '../graphql/types';
+import { IPageParams } from './tasks';
 
 export interface IProps {
   patient?: ShortPatientFragment;
@@ -22,8 +24,8 @@ export interface IProps {
       hasPreviousPage: boolean;
     };
   };
-  refetchTasks: () => any;
-  updatePageParams: (pageNumber: number) => any;
+  refetchTasks: (variables: { pageNumber: number, pageSize: number, orderBy: string }) => any;
+  updatePageParams: (params: IPageParams) => any;
 }
 
 class PatientTasks extends React.Component<IProps, {}> {
@@ -62,19 +64,17 @@ const getPageParams = (props: IProps) => {
   const pageParams = querystring.parse(window.location.search.substring(1));
   return {
     pageNumber: pageParams.pageNumber || 0,
-    pageSize: pageParams.pageSize || 10,
+    pageSize: 10,
+    orderBy: pageParams.orderBy || 'createdAtDesc',
     patientId: props.patientId,
-  } as any;
+  };
 };
 
 function mapDispatchToProps(dispatch: Dispatch<() => void>, ownProps: IProps): Partial<IProps> {
   return {
-    updatePageParams: (pageNumber: number, taskId?: string) => {
-      // Some code smell here, perhaps state here shoudl go through redux
-      const pageParams: any = {
-        pageNumber,
-      };
-      dispatch(push({ search: querystring.stringify(pageParams) }));
+    updatePageParams: (pageParams: IPageParams) => {
+      const cleanedPageParams = pickBy<IPageParams, {}>(pageParams);
+      dispatch(push({ search: querystring.stringify(cleanedPageParams) }));
     },
   };
 }

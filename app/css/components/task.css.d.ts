@@ -20,6 +20,8 @@ export const markCompletion: string;
 export const markCompletionIcon: string;
 export const completedIcon: string;
 export const markCompletionText: string;
+export const markCompletionError: string;
+export const hidden: string;
 export const taskBody: string;
 export const largeText: string;
 export const okrInfo: string;

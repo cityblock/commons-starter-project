@@ -178,6 +178,25 @@
   background-image: url('../../assets/blue-check-mark-circle.svg');
 }
 
+.markCompletionError {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin-right: 5px;
+}
+
+.markCompletionError.hidden {
+  visibility: hidden;
+}
+
+.markCompletionError .redText {
+  margin-right: 3px;
+}
+
+.markCompletionError .smallText {
+  line-height: 14px;
+}
+
 .taskBody {
   display: flex;
   flex-direction: column;

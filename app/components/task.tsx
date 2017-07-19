@@ -43,9 +43,13 @@ export interface IAssigneeInfo {
   role: string;
 }
 
+export interface IState {
+  toggleCompletionError?: string;
+}
+
 export const DEFAULT_AVATAR_URL = 'http://bit.ly/2u9bJDA';
 
-class Task extends React.Component<IProps, {}> {
+class Task extends React.Component<IProps, IState> {
   constructor(props: IProps) {
     super(props);
 
@@ -58,6 +62,8 @@ class Task extends React.Component<IProps, {}> {
     this.renderTaskCompletionToggle = this.renderTaskCompletionToggle.bind(this);
     this.onClickToggleCompletion = this.onClickToggleCompletion.bind(this);
     this.getTaskPriorityText = this.getTaskPriorityText.bind(this);
+
+    this.state = { toggleCompletionError: undefined };
   }
 
   componentWillMount() {
@@ -76,13 +82,18 @@ class Task extends React.Component<IProps, {}> {
     }
   }
 
-  onClickToggleCompletion() {
+  async onClickToggleCompletion() {
     const { task, completeTask, uncompleteTask } = this.props;
 
-    if (task && !!task.completedAt) {
-      uncompleteTask({ variables: { taskId: task.id } });
-    } else if (task) {
-      completeTask({ variables: { taskId: task.id } });
+    try {
+      this.setState(() => ({ toggleCompletionError: undefined }));
+      if (task && !!task.completedAt) {
+        await uncompleteTask({ variables: { taskId: task.id } });
+      } else if (task) {
+        await completeTask({ variables: { taskId: task.id } });
+      }
+    } catch (err) {
+      this.setState(() => ({ toggleCompletionError: err.message }));
     }
   }
 
@@ -181,6 +192,8 @@ class Task extends React.Component<IProps, {}> {
 
   renderTaskCompletionToggle() {
     const { task } = this.props;
+    const { toggleCompletionError } = this.state;
+
     let displayText: string = '';
 
     if (task) {
@@ -192,9 +205,16 @@ class Task extends React.Component<IProps, {}> {
     const completionStyles = classNames(styles.markCompletion, {
       [styles.completedIcon]: task && !!task.completedAt,
     });
+    const completionErrorStyles = classNames(styles.markCompletionError, {
+      [styles.hidden]: !toggleCompletionError,
+    });
 
     return (
       <div className={completionStyles} onClick={this.onClickToggleCompletion}>
+        <div className={completionErrorStyles}>
+          <div className={classNames(styles.smallText, styles.redText)}>Error updating.</div>
+          <div className={styles.smallText}>Please try again.</div>
+        </div>
         <div className={styles.markCompletionText}>{displayText}</div>
         <div className={styles.markCompletionIcon}></div>
       </div>

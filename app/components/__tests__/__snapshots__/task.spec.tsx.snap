@@ -58,6 +58,20 @@ exports[`renders task 1`] = `
         onClick={[Function]}
       >
         <div
+          className="undefined"
+        >
+          <div
+            className=""
+          >
+            Error updating.
+          </div>
+          <div
+            className={undefined}
+          >
+            Please try again.
+          </div>
+        </div>
+        <div
           className={undefined}
         >
           Mark complete

@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`renders task row 1`] = `
+exports[`task row renders task row 1`] = `
 <a
   className="undefined"
   href="/foo/bar/cool-task-id"
@@ -40,7 +40,7 @@ exports[`renders task row 1`] = `
     <span
       className={undefined}
     >
-      Thu Jul 13 2017 16:52:56 GMT-0400 (EDT)
+      6 days ago
     </span>
   </div>
   <div
@@ -55,13 +55,13 @@ exports[`renders task row 1`] = `
     <span
       className={undefined}
     >
-      Thu Jul 13 2017 16:52:56 GMT-0400 (EDT)
+      7/13/2017
     </span>
   </div>
 </a>
 `;
 
-exports[`renders task row with multiple followers 1`] = `
+exports[`task row renders task row with multiple followers 1`] = `
 <a
   className="undefined"
   href="/foo/bar/cool-task-id"
@@ -106,7 +106,7 @@ exports[`renders task row with multiple followers 1`] = `
     <span
       className={undefined}
     >
-      Thu Jul 13 2017 16:52:56 GMT-0400 (EDT)
+      6 days ago
     </span>
   </div>
   <div
@@ -121,7 +121,7 @@ exports[`renders task row with multiple followers 1`] = `
     <span
       className={undefined}
     >
-      Thu Jul 13 2017 16:52:56 GMT-0400 (EDT)
+      7/13/2017
     </span>
   </div>
 </a>

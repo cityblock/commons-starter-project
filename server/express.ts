@@ -55,11 +55,15 @@ export default async (app: express.Application) => {
   }
 
   app.get('/graphiql', graphiqlExpress({ endpointURL: '/graphql' }));
-  app.use('/graphql', bodyParser.json(), graphqlExpress(async (request: express.Request) => ({
-    schema: (schema as any),
-    context: await getGraphQLContext(request),
-    debug: false,
-  })));
+  app.use(
+    '/graphql',
+    bodyParser.json(),
+    graphqlExpress(async (request: express.Request) => ({
+      schema: (schema as any),
+      context: await getGraphQLContext(request),
+      debug: false,
+    })),
+  );
 
   // Pingdom check endpoints
   app.get(

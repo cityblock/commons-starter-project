@@ -76,15 +76,26 @@ export async function getGraphQLContext(request: express.Request): Promise<ICont
   let userId;
   let opticsContext;
 
-  if (authToken) {
-    const parsedToken = await parseAndVerifyJwt(authToken);
-    userId = parsedToken.userId;
-    userRole = parsedToken.userRole;
-  }
-
   if (config.NODE_ENV === 'production') {
     opticsContext = OpticsAgent.context(request);
   }
+
+  if (authToken) {
+    try {
+      const parsedToken = await parseAndVerifyJwt(authToken);
+      userId = parsedToken.userId;
+      userRole = parsedToken.userRole;
+    } catch (e) {
+      return {
+        db,
+        redoxApi,
+        athenaApi,
+        userRole: 'anonymousUser',
+        opticsContext,
+      };
+    }
+  }
+
   return {
     userId,
     userRole,

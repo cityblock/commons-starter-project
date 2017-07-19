@@ -37,6 +37,22 @@ describe('util tests', () => {
     });
   });
 
+  it('returns graphql context with anonymous user for invalid JWT', async () => {
+    const authToken = signJwt({
+      userId: '1',
+      userRole: 'physician',
+      lastLoginAt: new Date('01/01/2010').toUTCString(),
+    });
+    const context = await getGraphQLContext({
+      headers: {
+        auth_token: authToken,
+      },
+    } as any);
+    expect(context).toMatchObject({
+      userRole: 'anonymousUser',
+    });
+  });
+
   it('errors with invalid token', async () => {
     const authToken = 'fake';
     await expect(parseAndVerifyJwt(authToken))

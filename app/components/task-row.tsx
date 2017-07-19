@@ -1,6 +1,6 @@
 import * as classNames from 'classnames';
 import * as React from 'react';
-import { FormattedMessage } from 'react-intl';
+import { FormattedDate, FormattedMessage, FormattedRelative } from 'react-intl';
 import { Link } from 'react-router-dom';
 import * as styles from '../css/components/task-row.css';
 import { ShortTaskFragment, ShortUserFragment } from '../graphql/types';
@@ -56,10 +56,16 @@ export const TaskRow: React.StatelessComponent<IProps> = props => {
   );
   const followers = renderFollowers(task.followers || []);
   const assignedTo = task.assignedTo ? renderAssignedTo(task.assignedTo) : null;
+  const formattedCreatedAt = task.createdAt ?
+    (<FormattedRelative value={task.createdAt}>
+      {(date: string) => <span className={styles.dateValue}>{date}</span>}
+    </FormattedRelative>) : null;
+  const formattedDueAt = task.dueAt ?
+    (<FormattedDate value={task.dueAt}>
+      {(date: string) => <span className={styles.dateValue}>{date}</span>}
+    </FormattedDate>) : null;
   return (
-    <Link
-      className={taskClass}
-      to={`${routeBase}/${task.id}`}>
+    <Link className={taskClass} to={`${routeBase}/${task.id}`}>
       <div className={styles.title}>{task.title}</div>
       <div className={styles.followers}>
         {assignedTo}
@@ -69,13 +75,13 @@ export const TaskRow: React.StatelessComponent<IProps> = props => {
         <FormattedMessage id='task.opened'>
           {(message: string) => <span className={styles.dateLabel}>{message}:</span>}
         </FormattedMessage>
-        <span className={styles.dateValue}>{task.createdAt}</span>
+        {formattedCreatedAt}
       </div>
       <div className={styles.dateSection}>
         <FormattedMessage id='task.due'>
           {(message: string) => <span className={styles.dateLabel}>{message}:</span>}
         </FormattedMessage>
-        <span className={styles.dateValue}>{task.dueAt}</span>
+        {formattedDueAt}
       </div>
     </Link>
   );

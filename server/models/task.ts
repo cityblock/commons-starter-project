@@ -178,7 +178,7 @@ export default class Task extends Model {
   ): Promise<IPaginatedResults<Task>> {
     const subquery = TaskFollower.query()
       .select('taskId')
-      .where({ userId, deletedAt: null });
+      .where({ userId, deletedAt: null }) as any; // TODO: resolve typing issue
     const userTasks = await this
       .query()
       .where('id', 'in', subquery)

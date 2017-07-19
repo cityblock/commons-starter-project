@@ -26,7 +26,8 @@ export interface IProps {
 export interface IState {
   open: boolean;
   loading: boolean;
-  error?: string;
+  lastCareTeamMemberId?: string;
+  addFollowerError?: string;
 }
 
 export class AddTaskFollower extends React.Component<IProps, IState> {
@@ -39,13 +40,23 @@ export class AddTaskFollower extends React.Component<IProps, IState> {
     this.renderCareTeamMembers = this.renderCareTeamMembers.bind(this);
     this.getValidNewFollowers = this.getValidNewFollowers.bind(this);
 
-    this.state = { open: false, loading: false, error: undefined };
+    this.state = {
+      open: false,
+      loading: false,
+      addFollowerError: undefined,
+      lastCareTeamMemberId: undefined,
+    };
   }
 
   renderCareTeamMember(careTeamMember: FullUserFragment) {
+    const { addFollowerError, lastCareTeamMemberId } = this.state;
+
     const avatar = careTeamMember.googleProfileImageUrl || DEFAULT_AVATAR_URL;
     const fullName = `${careTeamMember.firstName} ${careTeamMember.lastName}`;
     const role = careTeamMember.userRole;
+    const errorStyles = classNames(styles.addError, {
+      [styles.visible]: !!addFollowerError && lastCareTeamMemberId === careTeamMember.id,
+    });
 
     return (
       <div
@@ -62,6 +73,7 @@ export class AddTaskFollower extends React.Component<IProps, IState> {
           <div className={styles.careTeamMemberName}>{fullName}</div>
           <div className={styles.careTeamMemberRole}>{role}</div>
         </div>
+        <div className={errorStyles}></div>
       </div>
     );
   }
@@ -80,10 +92,14 @@ export class AddTaskFollower extends React.Component<IProps, IState> {
 
   async onCareTeamMemberClick(careTeamMemberId: string) {
     const { taskId, addTaskFollower } = this.props;
-    const { loading, error } = this.state;
+    const { loading } = this.state;
 
-    if (!loading && !error) {
-      this.setState(() => ({ loading: true, error: undefined }));
+    if (!loading) {
+      this.setState(() => ({
+        loading: true,
+        addFollowerError: undefined,
+        lastCareTeamMemberId: undefined,
+      }));
 
       try {
         await addTaskFollower({
@@ -93,9 +109,18 @@ export class AddTaskFollower extends React.Component<IProps, IState> {
           },
         });
 
-        this.setState(() => ({ open: false, loading: false, error: undefined }));
+        this.setState(() => ({
+          open: false,
+          loading: false,
+          addFollowerError: undefined,
+          lastCareTeamMemberId: undefined,
+        }));
       } catch (err) {
-        this.setState(() => ({ loading: false, error: err.message }));
+        this.setState(() => ({
+          loading: false,
+          addFollowerError: err.message,
+          lastCareTeamMemberId: careTeamMemberId,
+        }));
       }
     }
   }

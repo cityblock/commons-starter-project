@@ -23,6 +23,21 @@
   visibility: hidden;
 }
 
+.addError {
+  position: absolute;
+  right: 12px;
+  background-image: url('../../assets/error-circle.svg');
+  background-size: contain;
+  background-repeat: no-repeat;
+  height: 14px;
+  width: 14px;
+  display: none;
+}
+
+.addError.visible {
+  display: block;
+}
+
 .careTeam {
   position: absolute;
   bottom: 40px;

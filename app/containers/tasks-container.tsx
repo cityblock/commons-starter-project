@@ -12,22 +12,15 @@ import { IPageParams } from '../components/tasks';
 import * as styles from '../css/components/tasks-container.css';
 import * as tabStyles from '../css/shared/tabs.css';
 import * as tasksQuery from '../graphql/queries/tasks-for-current-user.graphql';
-import { ShortTaskFragment } from '../graphql/types';
+import { GetTasksForCurrentUserQuery } from '../graphql/types';
+import { fetchMoreTasks } from '../util/fetch-more-tasks';
 
 export interface IProps {
   intl: InjectedIntl;
   tasksLoading: boolean;
   tasksError?: string;
-  tasksResponse?: {
-    edges: Array<{
-      node: ShortTaskFragment;
-    }>;
-    pageInfo: {
-      hasNextPage: boolean;
-      hasPreviousPage: boolean;
-    };
-  };
-  refetchTasks: () => any;
+  tasksResponse?: GetTasksForCurrentUserQuery['tasksForCurrentUser'];
+  fetchMoreTasks: () => any;
   updatePageParams: (pageParams: IPageParams) => any;
 }
 
@@ -40,7 +33,8 @@ class TasksContainer extends React.Component<IProps> {
   render() {
     const { tasksResponse } = this.props;
 
-    const tasks = tasksResponse ? tasksResponse.edges.map((edge: any) => edge.node) : [];
+    const tasks = tasksResponse && tasksResponse.edges
+      ? tasksResponse.edges.map((edge: any) => edge.node) : [];
     const hasNextPage = tasksResponse ? tasksResponse.pageInfo.hasNextPage : false;
     const hasPreviousPage = tasksResponse ? tasksResponse.pageInfo.hasPreviousPage : false;
 
@@ -78,8 +72,8 @@ class TasksContainer extends React.Component<IProps> {
           </div>
           <div className={tasksPaneStyles}>
             <Tasks
+              fetchMoreTasks={this.props.fetchMoreTasks}
               updatePageParams={this.props.updatePageParams}
-              refetchTasks={this.props.refetchTasks}
               loading={this.props.tasksLoading}
               error={this.props.tasksError}
               hasNextPage={hasNextPage}
@@ -108,7 +102,7 @@ function mapDispatchToProps(dispatch: Dispatch<() => void>): Partial<IProps> {
 const getPageParams = (props: IProps) => {
   const pageParams = querystring.parse(window.location.search.substring(1));
   return {
-    pageNumber: pageParams.pageNumber || 0,
+    pageNumber: 0,
     pageSize: 10,
     orderBy: pageParams.orderBy || 'createdAtDesc',
   };
@@ -119,8 +113,9 @@ export default compose(
   connect(undefined, mapDispatchToProps),
   graphql(tasksQuery as any, {
     options: (props: IProps) => ({ variables: getPageParams(props) }),
-    props: ({ data }) => ({
-      refetchTasks: (data ? data.refetch : null),
+    props: ({ data, ownProps }) => ({
+      fetchMoreTasks: () =>
+        fetchMoreTasks(data as any, getPageParams(ownProps), 'tasksForCurrentUser'),
       tasksLoading: (data ? data.loading : false),
       tasksError: (data ? data.error : null),
       tasksResponse: (data ? (data as any).tasksForCurrentUser : null),

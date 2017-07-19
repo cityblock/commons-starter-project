@@ -59,12 +59,12 @@ exports[`renders tasks container 1`] = `
                 value="createdAtDesc"
               >
                 <option
-                  value="createdAtAsc"
+                  value="createdAtDesc"
                 >
                   Newest first
                 </option>
                 <option
-                  value="createdAtDesc"
+                  value="createdAtAsc"
                 >
                   Oldest first
                 </option>
@@ -79,12 +79,12 @@ exports[`renders tasks container 1`] = `
                   Due latest
                 </option>
                 <option
-                  value="updatedAtAsc"
+                  value="updatedAtDesc"
                 >
                   Last updated
                 </option>
                 <option
-                  value="updatedAtDesc"
+                  value="updatedAtAsc"
                 >
                   Last updated desc
                 </option>
@@ -108,30 +108,17 @@ exports[`renders tasks container 1`] = `
             className={undefined}
           >
             <div
-              className="undefined"
-            >
-              <div
-                className={undefined}
-              >
-                Loading...
-              </div>
-            </div>
-            <div
               className={undefined}
             >
-              <div
-                className={undefined}
-              >
-                <div
-                  className="undefined"
-                  onClick={[Function]}
-                />
-                <div
-                  className="undefined"
-                  onClick={[Function]}
-                />
-              </div>
+              Loading...
             </div>
+            <span
+              style={
+                Object {
+                  "fontSize": 0,
+                }
+              }
+            />
           </div>
           <div
             className="undefined"

@@ -10,7 +10,8 @@ import { FullUserFragment } from '../graphql/types';
 import { Lang } from '../reducers/locale-reducer';
 
 export interface IProps {
-  loading: boolean;
+  error?: string;
+  loading?: boolean;
   currentUser?: FullUserFragment;
   redirectToLogin: () => any;
   selectLocale: (locale: Lang) => any;
@@ -60,4 +61,6 @@ const AuthenticationWithGraphQL = graphql(currentUserQuery as any, {
   }),
 })(Authentication as any);
 
-export default connect(undefined, mapDispatchToProps)(AuthenticationWithGraphQL);
+export default connect<any, any, Partial<IProps>>(
+  undefined, mapDispatchToProps)(AuthenticationWithGraphQL,
+);

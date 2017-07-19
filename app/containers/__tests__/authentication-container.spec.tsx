@@ -8,7 +8,12 @@ it('renders authentication container correctly', () => {
   const mockStore = configureMockStore([]);
   const tree = create(
     <MockedProvider mocks={[]} store={mockStore()}>
-      <AuthenticationContainer />
+      <AuthenticationContainer
+        selectLocale={() => false}
+        loading={false}
+        redirectToLogin={() => false}>
+        <div />
+      </AuthenticationContainer>
     </MockedProvider>,
   ).toJSON();
   expect(tree).toMatchSnapshot();

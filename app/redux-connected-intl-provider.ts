@@ -1,5 +1,5 @@
 import { addLocaleData, IntlProvider } from 'react-intl';
-import { connect } from 'react-redux';
+import { connect, Dispatch } from 'react-redux';
 import { IState } from './store';
 
 // NOTE: ReactIntlLocaleData is loaded in app.ts
@@ -8,7 +8,14 @@ if (window && (window as any).ReactIntlLocaleData) {
   addLocaleData((window as any).ReactIntlLocaleData.es);
 }
 
-function mapStateToProps(state: IState) {
+export interface IProps {
+  initialNow: number;
+  locale: string;
+  key: string;
+  messages: any;
+}
+
+function mapStateToProps(state: IState): Partial<IProps> {
   const { lang, messages } = state.locale;
   const language = lang || 'en';
   return {
@@ -18,4 +25,9 @@ function mapStateToProps(state: IState) {
     messages,
   };
 }
-export default connect(mapStateToProps)(IntlProvider as any);
+
+function mapDispatchToProps(dispatch: Dispatch<() => void>): Partial<IProps> {
+  return {};
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(IntlProvider);

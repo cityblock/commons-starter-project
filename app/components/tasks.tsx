@@ -2,13 +2,13 @@ import * as classNames from 'classnames';
 import * as querystring from 'querystring';
 import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
-import { connect } from 'react-redux';
+import { connect, Dispatch } from 'react-redux';
 import { Route } from 'react-router-dom';
+import * as Waypoint from 'react-waypoint';
 import * as styles from '../css/components/tasks.css';
 import * as sortSearchStyles from '../css/shared/sort-search.css';
 import { ShortPatientFragment, ShortTaskFragment } from '../graphql/types';
 import { IState as IAppState } from '../store';
-import { Pagination } from './pagination';
 import Task from './task';
 import TaskCreate from './task-create';
 import { TaskRow } from './task-row';
@@ -17,8 +17,6 @@ import { TasksLoadingError } from './tasks-loading-error';
 export type OrderByOptions = 'createdAtDesc' | 'createdAtAsc' | 'dueAtAsc' | 'updatedAtAsc';
 
 export interface IPageParams {
-  pageNumber: number;
-  taskId?: string;
   orderBy: OrderByOptions;
 }
 
@@ -32,19 +30,17 @@ export interface IProps {
   routeBase: string;
   patient?: ShortPatientFragment;
   tasks?: ShortTaskFragment[];
-  refetchTasks: (variables: { pageNumber: number, orderBy: string }) => any;
   loading?: boolean;
   error?: string;
   updatePageParams: (params: IPageParams) => any;
+  fetchMoreTasks: () => any;
   hasNextPage?: boolean;
   hasPreviousPage?: boolean;
 }
 
-export interface IState extends IPageParams {
-  loading?: boolean;
-  error?: string;
-  showCreateTask?: boolean;
+export interface IState {
   orderBy: OrderByOptions;
+  showCreateTask: false;
 }
 
 const getPageParams = () => {
@@ -61,13 +57,9 @@ class Tasks extends React.Component<IProps, IState> {
   constructor(props: IProps) {
     super(props);
 
-    const { loading, error } = props;
-
     this.renderTasks = this.renderTasks.bind(this);
     this.renderTask = this.renderTask.bind(this);
-    this.reloadTasks = this.reloadTasks.bind(this);
     this.getNextPage = this.getNextPage.bind(this);
-    this.getPreviousPage = this.getPreviousPage.bind(this);
     this.showCreateTask = this.showCreateTask.bind(this);
     this.hideCreateTask = this.hideCreateTask.bind(this);
     this.onSortChange = this.onSortChange.bind(this);
@@ -75,9 +67,7 @@ class Tasks extends React.Component<IProps, IState> {
     const pageParams = getPageParams();
 
     this.state = {
-      loading,
-      error,
-      pageNumber: pageParams.pageNumber || 0,
+      showCreateTask: false,
       orderBy: (pageParams.orderBy as any) || 'createdAtDesc',
     };
   }
@@ -94,14 +84,10 @@ class Tasks extends React.Component<IProps, IState> {
 
   hideCreateTask() {
     this.setState(() => ({ showCreateTask: false }));
-    this.props.refetchTasks({
-      pageNumber: this.state.pageNumber,
-      orderBy: this.state.orderBy,
-    });
   }
 
   renderTasks(tasks: ShortTaskFragment[]) {
-    const { loading, error } = this.state;
+    const { loading, error } = this.props;
     if (tasks.length) {
       return tasks.map(this.renderTask);
     } else if (!loading && !error) {
@@ -119,7 +105,7 @@ class Tasks extends React.Component<IProps, IState> {
         <TasksLoadingError
           error={error}
           loading={loading}
-          onRetryClick={this.reloadTasks}
+          onRetryClick={() => false}
         />
       );
     }
@@ -140,68 +126,26 @@ class Tasks extends React.Component<IProps, IState> {
   onSortChange(event: React.ChangeEvent<HTMLSelectElement>) {
     const value = event.target.value as OrderByOptions;
     this.setState({
-      pageNumber: 0,
       orderBy: value,
     });
-    this.props.updatePageParams({ pageNumber: 0, orderBy: value });
+    this.props.updatePageParams({ orderBy: value });
   }
 
-  async reloadTasks() {
-    const { refetchTasks } = this.props;
-
-    if (refetchTasks) {
-      try {
-        this.setState(() => ({ loading: true, error: undefined }));
-        await refetchTasks({
-          pageNumber: this.state.pageNumber,
-          orderBy: this.state.orderBy,
-        });
-      } catch (err) {
-        // TODO: This is redundant. Props will get set by the result of the refetch.
-        this.setState(() => ({ loading: false, error: err.message }));
-      }
+  getNextPage() {
+    if (this.props.loading || !this.props.hasNextPage || (this.props.tasks || []).length < 1) {
+      return;
     }
-  }
-
-  async getNextPage() {
-    if (this.props.hasNextPage) {
-      const pageNumber = this.state.pageNumber + 1;
-
-      this.props.refetchTasks({
-        pageNumber,
-        orderBy: this.state.orderBy,
-      });
-
-      this.props.updatePageParams({ pageNumber: 0, orderBy: this.state.orderBy });
-      this.setState((state: IState) => ({ pageNumber }));
-    }
-  }
-
-  async getPreviousPage() {
-    if (this.props.hasPreviousPage) {
-      const pageNumber = this.state.pageNumber - 1;
-
-      await this.props.refetchTasks({
-        pageNumber,
-        orderBy: this.state.orderBy,
-      });
-
-      this.props.updatePageParams({ pageNumber: 0, orderBy: this.state.orderBy });
-      this.setState((state: IState) => ({ pageNumber }));
-    }
+    this.props.fetchMoreTasks();
   }
 
   render() {
-    const { tasks, routeBase, taskId } = this.props;
-    const { orderBy } = this.state;
+    const { tasks, routeBase, taskId, patient } = this.props;
+    const { orderBy, showCreateTask } = this.state;
     const tasksList = tasks || [];
-    const taskListStyles = classNames(styles.tasksList, {
-      [styles.emptyTasksList]: !tasksList.length,
-    });
     const taskContainerStyles = classNames(styles.taskContainer, {
-      [styles.taskContainerVisible]: !!taskId || this.state.showCreateTask,
+      [styles.taskContainerVisible]: !!taskId || showCreateTask,
     });
-    const createTaskButton = this.props.patient ? (
+    const createTaskButton = patient ? (
       <div className={styles.createContainer}>
         <FormattedMessage id='tasks.createTask'>
           {(message: string) => <div
@@ -210,10 +154,10 @@ class Tasks extends React.Component<IProps, IState> {
         </FormattedMessage>
       </div>
     ) : null;
-    const createTaskHtml = this.props.patient && this.state.showCreateTask ? (
-      <TaskCreate patient={this.props.patient} onClose={this.hideCreateTask} />
+    const createTaskHtml = patient && showCreateTask ? (
+      <TaskCreate patient={patient} onClose={this.hideCreateTask} />
     ) : null;
-    const taskHtml = this.state.showCreateTask ?
+    const taskHtml = showCreateTask ?
       null : (<Route path={`${routeBase}/:taskId`} component={Task} />);
     return (
       <div className={styles.container}>
@@ -222,12 +166,12 @@ class Tasks extends React.Component<IProps, IState> {
             <div className={sortSearchStyles.sortLabel}>Sort by:</div>
             <div className={sortSearchStyles.sortDropdown}>
               <select value={orderBy} onChange={this.onSortChange}>
-                <option value='createdAtAsc'>Newest first</option>
-                <option value='createdAtDesc'>Oldest first</option>
+                <option value='createdAtDesc'>Newest first</option>
+                <option value='createdAtAsc'>Oldest first</option>
                 <option value='dueAtAsc'>Due soonest</option>
                 <option value='dueAtDesc'>Due latest</option>
-                <option value='updatedAtAsc'>Last updated</option>
-                <option value='updatedAtDesc'>Last updated desc</option>
+                <option value='updatedAtDesc'>Last updated</option>
+                <option value='updatedAtAsc'>Last updated desc</option>
               </select>
             </div>
             <div className={classNames(sortSearchStyles.search, styles.search)}>
@@ -237,15 +181,9 @@ class Tasks extends React.Component<IProps, IState> {
           {createTaskButton}
         </div>
         <div className={styles.bottomContainer}>
-          <div className={styles.taskListContainer}>
-            <div className={taskListStyles}>
-              {this.renderTasks(tasksList)}
-            </div>
-            <Pagination
-              hasNextPage={this.props.hasNextPage}
-              hasPreviousPage={this.props.hasPreviousPage}
-              onNextClick={this.getNextPage}
-              onPreviousClick={this.getPreviousPage} />
+          <div className={styles.tasksList}>
+            {this.renderTasks(tasksList)}
+            <Waypoint onEnter={this.getNextPage} />
           </div>
           <div className={taskContainerStyles}>
             {taskHtml}
@@ -263,4 +201,8 @@ function mapStateToProps(state: IAppState): Partial<IProps> {
   };
 }
 
-export default connect(mapStateToProps)(Tasks as any) as any;
+function mapDispatchToProps(dispatch: Dispatch<() => void>): Partial<IProps> {
+  return {};
+}
+
+export default connect<any, any, IProps>(mapStateToProps, mapDispatchToProps)(Tasks);

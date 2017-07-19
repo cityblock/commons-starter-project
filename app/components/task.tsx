@@ -24,6 +24,7 @@ export interface IProps {
   taskLoading?: boolean;
   taskError?: string;
   selectTask: (taskId?: string) => any;
+  refetchTask: () => any;
   match?: {
     params: {
       taskId?: string;
@@ -53,6 +54,7 @@ class Task extends React.Component<IProps, IState> {
   constructor(props: IProps) {
     super(props);
 
+    this.reloadTask = this.reloadTask.bind(this);
     this.getPatientName = this.getPatientName.bind(this);
     this.getAssigneeInfo = this.getAssigneeInfo.bind(this);
     this.formatDate = this.formatDate.bind(this);
@@ -79,6 +81,14 @@ class Task extends React.Component<IProps, IState> {
   componentWillReceiveProps(nextProps: IProps) {
     if (this.props.taskId !== nextProps.taskId) {
       this.props.selectTask(nextProps.taskId);
+    }
+  }
+
+  reloadTask() {
+    const { refetchTask } = this.props;
+
+    if (refetchTask) {
+      refetchTask();
     }
   }
 
@@ -310,11 +320,30 @@ class Task extends React.Component<IProps, IState> {
         </div>
       );
     } else {
-      return (
-        <div className={styles.container}>
-          loading...
-        </div>
-      );
+      const { taskLoading, taskError } = this.props;
+
+      if (taskLoading) {
+        return (
+          <div className={styles.container}>
+            <div className={styles.loading}>Loading...</div>
+          </div>
+        );
+      } else if (!!taskError) {
+        return (
+          <div className={styles.container}>
+            <div className={styles.loadingError}>
+              <div className={styles.loadingErrorIcon}></div>
+              <div className={styles.loadingErrorLabel}>Unable to load task</div>
+              <div className={styles.loadingErrorSubheading}>
+                Sorry, something went wrong. Please try again.
+              </div>
+              <div className={styles.loadingErrorButton} onClick={this.reloadTask}>Try again</div>
+            </div>
+          </div>
+        );
+      } else {
+        return <div className={styles.container}></div>;
+      }
     }
   }
 }
@@ -342,6 +371,7 @@ export default (compose as any)(
       taskLoading: (data ? data.loading : false),
       taskError: (data ? data.error : null),
       task: (data ? (data as any).task : null),
+      refetchTask: (data ? data.refetch : null),
     }),
   }),
 )(Task);

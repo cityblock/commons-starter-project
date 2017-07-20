@@ -3,7 +3,6 @@ import * as React from 'react';
 import { compose, graphql } from 'react-apollo';
 import { injectIntl, FormattedMessage, InjectedIntl } from 'react-intl';
 import { connect } from 'react-redux';
-import { Route } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import PatientEncounters from '../components/patient-encounters';
 import PatientInfo from '../components/patient-info';
@@ -64,7 +63,13 @@ class PatientProfileContainer extends React.Component<IProps, {}> {
       [styles.mainBody]: browserSize === 'large',
       [styles.mainBodySmall]: browserSize === 'small',
     });
-
+    const encounters = tabId === 'encounters' ? <PatientEncounters patientId={patientId} /> : null;
+    const patientInfo = tabId === 'patientInfo' ?
+      <PatientInfo patientId={patientId} patient={patient} loading={loading} error={error} /> :
+      null;
+    const tasks = tabId === 'tasks' ?
+      <PatientTasks patient={patient} taskId={taskId} patientId={patientId} /> :
+      null;
     return (
       <div className={styles.container}>
         <PatientProfileLeftNav
@@ -96,15 +101,9 @@ class PatientProfileContainer extends React.Component<IProps, {}> {
                 </Link>}
             </FormattedMessage>
           </div>
-          <Route path={`/patients/${patientId}/encounters`} component={() => (
-            <PatientEncounters patientId={patientId} />
-          )} />
-          <Route path={`/patients/${patientId}/patientInfo`} component={() => (
-            <PatientInfo patientId={patientId} patient={patient} loading={loading} error={error} />
-          )} />
-          <Route path={`/patients/${patientId}/tasks`} component={() => (
-            <PatientTasks patient={patient} taskId={taskId} patientId={patientId} />
-          )} />
+          {encounters}
+          {patientInfo}
+          {tasks}
         </div>
       </div>
     );

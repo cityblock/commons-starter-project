@@ -1,10 +1,10 @@
-#import "../fragments/short-task.graphql"
+#import "../fragments/full-task.graphql"
 
 query getTasksForCurrentUser($pageNumber: Int, $pageSize: Int, $orderBy: TaskOrderOptions) {
   tasksForCurrentUser(pageNumber: $pageNumber, pageSize: $pageSize, orderBy: $orderBy) {
     edges {
       node {
-        ...ShortTask
+        ...FullTask
       }
     }
     pageInfo {

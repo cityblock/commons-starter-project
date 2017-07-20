@@ -76,7 +76,10 @@ export default compose(
   injectIntl,
   connect(undefined, mapDispatchToProps),
   graphql(patientTasksQuery as any, {
-    options: (props: IProps) => ({ variables: getPageParams(props) }),
+    options: (props: IProps) => ({
+      variables: getPageParams(props),
+      fetchPolicy: 'cache-and-network',
+    }),
     props: ({ data, ownProps }) => ({
       fetchMoreTasks: () =>
         fetchMoreTasks(data as any, getPageParams(ownProps), 'tasksForPatient'),

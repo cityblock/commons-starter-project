@@ -13,7 +13,6 @@ import * as taskDeleteMutation from '../graphql/queries/task-delete-mutation.gra
 import {
   FullTaskFragment,
   ShortPatientFragment,
-  ShortTaskFragment,
   TaskDeleteMutationVariables,
 } from '../graphql/types';
 import { IState as IAppState } from '../store';
@@ -37,7 +36,7 @@ export interface IProps {
   taskId?: string;
   routeBase: string;
   patient?: ShortPatientFragment;
-  tasks?: ShortTaskFragment[];
+  tasks?: FullTaskFragment[];
   loading?: boolean;
   error?: string;
   updatePageParams: (params: IPageParams) => any;
@@ -95,11 +94,11 @@ class Tasks extends React.Component<IProps, IState> {
     this.setState(() => ({ showCreateTask: true }));
   }
 
-  hideCreateTask() {
+  hideCreateTask(task?: FullTaskFragment) {
     this.setState(() => ({ showCreateTask: false }));
   }
 
-  renderTasks(tasks: ShortTaskFragment[]) {
+  renderTasks(tasks: FullTaskFragment[]) {
     const { loading, error } = this.props;
     const validTasks = tasks.filter(task => !task.deletedAt);
 
@@ -126,7 +125,7 @@ class Tasks extends React.Component<IProps, IState> {
     }
   }
 
-  renderTask(task: ShortTaskFragment) {
+  renderTask(task: FullTaskFragment) {
     const selected = task.id === this.props.taskId;
     return (
       <TaskRow
@@ -156,7 +155,7 @@ class Tasks extends React.Component<IProps, IState> {
   async onDeleteTask(taskId: string) {
     const { redirectToTasks, deleteTask } = this.props;
 
-    await deleteTask({ variables: { taskId }});
+    await deleteTask({ variables: { taskId } });
 
     redirectToTasks();
   }
@@ -178,7 +177,10 @@ class Tasks extends React.Component<IProps, IState> {
       </div>
     ) : null;
     const createTaskHtml = patient && showCreateTask ? (
-      <TaskCreate patient={patient} onClose={this.hideCreateTask} />
+      <TaskCreate
+        patient={patient}
+        onClose={this.hideCreateTask}
+        routeBase={this.props.routeBase} />
     ) : null;
     const RenderedTask = (props: any) => (
       <Task routeBase={routeBase} onDelete={this.onDeleteTask} {...props} />

@@ -3,10 +3,10 @@ import * as React from 'react';
 import { FormattedDate, FormattedMessage, FormattedRelative } from 'react-intl';
 import { Link } from 'react-router-dom';
 import * as styles from '../css/components/task-row.css';
-import { ShortTaskFragment, ShortUserFragment } from '../graphql/types';
+import { FullTaskFragment, ShortUserFragment } from '../graphql/types';
 
 export interface IProps {
-  task: ShortTaskFragment;
+  task: FullTaskFragment;
   selected: boolean;
   routeBase: string;
 }

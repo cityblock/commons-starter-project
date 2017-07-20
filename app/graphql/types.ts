@@ -230,8 +230,12 @@ export type GetPatientTasksQuery = {
         title: string,
         description: string | null,
         createdAt: string | null,
+        updatedAt: string | null,
+        completedAt: string | null,
         deletedAt: string | null,
         dueAt: string | null,
+        patientId: string,
+        priority: string | null,
         patient:  {
           id: string,
           firstName: string | null,
@@ -243,12 +247,21 @@ export type GetPatientTasksQuery = {
           firstName: string | null,
           lastName: string | null,
           googleProfileImageUrl: string | null,
+          userRole: UserRole,
+        } | null,
+        createdBy:  {
+          id: string,
+          firstName: string | null,
+          lastName: string | null,
+          googleProfileImageUrl: string | null,
+          userRole: UserRole,
         } | null,
         followers:  Array< {
           id: string,
           firstName: string | null,
           lastName: string | null,
           googleProfileImageUrl: string | null,
+          userRole: UserRole,
         } > | null,
       } | null,
     } > | null,
@@ -827,8 +840,12 @@ export type GetTasksForCurrentUserQuery = {
         title: string,
         description: string | null,
         createdAt: string | null,
+        updatedAt: string | null,
+        completedAt: string | null,
         deletedAt: string | null,
         dueAt: string | null,
+        patientId: string,
+        priority: string | null,
         patient:  {
           id: string,
           firstName: string | null,
@@ -840,12 +857,21 @@ export type GetTasksForCurrentUserQuery = {
           firstName: string | null,
           lastName: string | null,
           googleProfileImageUrl: string | null,
+          userRole: UserRole,
+        } | null,
+        createdBy:  {
+          id: string,
+          firstName: string | null,
+          lastName: string | null,
+          googleProfileImageUrl: string | null,
+          userRole: UserRole,
         } | null,
         followers:  Array< {
           id: string,
           firstName: string | null,
           lastName: string | null,
           googleProfileImageUrl: string | null,
+          userRole: UserRole,
         } > | null,
       } | null,
     } > | null,
@@ -1004,33 +1030,6 @@ export type ShortPatientFragment = {
   createdAt: string | null,
   consentToText: boolean | null,
   consentToCall: boolean | null,
-};
-
-export type ShortTaskFragment = {
-  id: string,
-  title: string,
-  description: string | null,
-  createdAt: string | null,
-  deletedAt: string | null,
-  dueAt: string | null,
-  patient:  {
-    id: string,
-    firstName: string | null,
-    middleName: string | null,
-    lastName: string | null,
-  } | null,
-  assignedTo:  {
-    id: string,
-    firstName: string | null,
-    lastName: string | null,
-    googleProfileImageUrl: string | null,
-  } | null,
-  followers:  Array< {
-    id: string,
-    firstName: string | null,
-    lastName: string | null,
-    googleProfileImageUrl: string | null,
-  } > | null,
 };
 
 export type ShortUserFragment = {

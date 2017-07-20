@@ -3,6 +3,8 @@ import * as moment from 'moment';
 import * as React from 'react';
 import { compose, graphql } from 'react-apollo';
 import { FormattedMessage } from 'react-intl';
+import { connect, Dispatch } from 'react-redux';
+import { push } from 'react-router-redux';
 import * as styles from '../css/components/task-create.css';
 import * as taskStyles from '../css/components/task.css';
 import * as formStyles from '../css/shared/forms.css';
@@ -19,15 +21,16 @@ export interface IOptions { variables: TaskCreateMutationVariables; }
 export interface IProps {
   patient: ShortPatientFragment;
   careTeam?: FullUserFragment[];
+  routeBase: string;
   onClose: () => any;
   createTask: (options: IOptions) => { data: { taskCreate: FullTaskFragment } };
+  redirectToTask: (taskId: string) => any;
 }
 
 export interface IState {
   loading: boolean;
   error?: string;
   task: TaskCreateMutationVariables;
-  createdTask?: FullTaskFragment;
 }
 
 function formatDate(date: string) {
@@ -84,11 +87,11 @@ class TaskCreate extends React.Component<IProps, IState> {
           dueAt: formatDate(this.state.task.dueAt),
         },
       });
-      this.setState({ createdTask: task.data.taskCreate, loading: false });
+      this.setState({ loading: false });
       this.props.onClose();
+      this.props.redirectToTask(task.data.taskCreate.id);
     } catch (e) {
       this.setState({ error: e.message, loading: false });
-      // this.showErrorPopup();
     }
     return false;
   }
@@ -173,7 +176,16 @@ class TaskCreate extends React.Component<IProps, IState> {
   }
 }
 
+function mapDispatchToProps(dispatch: Dispatch<() => void>, ownProps: IProps): Partial<IProps> {
+  return {
+    redirectToTask: (taskId: string) => {
+      dispatch(push(`${ownProps.routeBase}/${taskId}`));
+    },
+  };
+}
+
 export default compose(
+  connect(undefined, mapDispatchToProps),
   graphql(careTeamQuery as any, {
     options: (props: IProps) => ({
       variables: {
@@ -186,5 +198,12 @@ export default compose(
       careTeam: (data ? (data as any).patientCareTeam : null),
     }),
   }),
-  graphql(createTaskMutation as any, { name: 'createTask' }),
+  graphql(createTaskMutation as any, {
+    name: 'createTask',
+    options: {
+      refetchQueries: [
+        'getPatientTasks',
+      ],
+    },
+  }),
 )(TaskCreate as any) as any;

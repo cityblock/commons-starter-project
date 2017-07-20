@@ -16,14 +16,15 @@ export default function app(req: any, res: any) {
         <meta http-equiv='X-UA-Compatible' content='IE=edge'>
         <meta name='viewport' content='width=device-width, initial-scale=1'>
         <meta name='robots' content='noindex, nofollow'>
-        <link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-icon-180x180.png">
-        <link rel="icon" type="image/png" sizes="96x96" href="/assets/favicon-32x32.png">
+        <meta name='apple-mobile-web-app-capable' content='yes'>
+        <link rel='apple-touch-icon' sizes='180x180' href='/assets/apple-icon-180x180.png'>
+        <link rel='icon' type='image/png' sizes='96x96' href='/assets/favicon-32x32.png'>
         ${stylesheet}
-        <link href="https://fonts.googleapis.com/css?family=Roboto:400,500,600" rel="stylesheet">
+        <link href='https://fonts.googleapis.com/css?family=Roboto:400,500,600' rel='stylesheet'>
       </head>
       <body>
         <div id='app'></div>
-        <script src="https://unpkg.com/react-intl@latest/locale-data/es.js"></script>
+        <script src='https://unpkg.com/react-intl@latest/locale-data/es.js'></script>
         <script type='text/javascript' charset='utf-8' src='/assets/app.js'></script>
       </body>
     </html>`;

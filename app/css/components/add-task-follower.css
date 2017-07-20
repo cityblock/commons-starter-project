@@ -52,6 +52,13 @@
   padding: var(--small-gutter) var(--small-gutter) 0;
 }
 
+.careTeam.assigneeCareTeam {
+  bottom: initial;
+  top: 40px;
+  left: 0;
+  z-index: 1;
+}
+
 .careTeam.hidden {
   display: none;
 }

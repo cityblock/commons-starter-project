@@ -1,0 +1,48 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders the task assignee component 1`] = `
+<div
+  className={undefined}
+>
+  <div
+    className=""
+    onClick={[Function]}
+  >
+    <div
+      className={undefined}
+      style={
+        Object {
+          "backgroundImage": "url('http://bit.ly/2u9bJDA')",
+        }
+      }
+    />
+    <div
+      className={undefined}
+    >
+      first last
+    </div>
+    <div
+      className={undefined}
+    >
+      physician
+    </div>
+  </div>
+  <div
+    className="undefined"
+  >
+    <div
+      className=""
+    >
+      Error changing assignee.
+    </div>
+    <div
+      className={undefined}
+    >
+      Please try again.
+    </div>
+  </div>
+  <div
+    className="undefined"
+  />
+</div>
+`;

@@ -456,7 +456,7 @@ input TaskDeleteInput {
 # params for creating a task
 input TaskEditInput {
   taskId: String!
-  title: String!
+  title: String
   description: String
   dueAt: String
   assignedToId: String

@@ -601,7 +601,7 @@ declare module 'schema' {
   */
   interface ITaskEditInput {
     taskId: string;
-    title: string;
+    title?: string | null;
     description?: string | null;
     dueAt?: string | null;
     assignedToId?: string | null;

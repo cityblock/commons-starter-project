@@ -18,6 +18,7 @@ import {
 } from '../graphql/types';
 import { IState as IAppState } from '../store';
 import AddTaskFollower from './add-task-follower';
+import TaskAssignee from './task-assignee';
 import TaskHamburgerMenu from './task-hamburger-menu';
 
 export interface IProps {
@@ -42,12 +43,6 @@ export interface IProps {
   onDelete: (taskId: string) => any;
 }
 
-export interface IAssigneeInfo {
-  avatar: string;
-  name: string;
-  role: string;
-}
-
 export interface IState {
   hamburgerMenuVisible: boolean;
   copySuccessVisible: boolean;
@@ -66,7 +61,6 @@ class Task extends React.Component<IProps, IState> {
 
     this.reloadTask = this.reloadTask.bind(this);
     this.getPatientName = this.getPatientName.bind(this);
-    this.getAssigneeInfo = this.getAssigneeInfo.bind(this);
     this.formatDate = this.formatDate.bind(this);
     this.getTaskDueDate = this.getTaskDueDate.bind(this);
     this.renderAttachments = this.renderAttachments.bind(this);
@@ -138,24 +132,6 @@ class Task extends React.Component<IProps, IState> {
       return `${patient ? patient.firstName : 'Unknown'} ${patient ? patient.lastName : 'Unknown'}`;
     } else {
       return 'No Patient';
-    }
-  }
-
-  getAssigneeInfo(): IAssigneeInfo {
-    const { task } = this.props;
-
-    if (task && task.assignedTo) {
-      return {
-        avatar: task.assignedTo.googleProfileImageUrl || DEFAULT_AVATAR_URL,
-        name: `${task.assignedTo.firstName} ${task.assignedTo.lastName}`,
-        role: task.assignedTo.userRole || 'Unknown Role',
-      };
-    } else {
-      return {
-        avatar: DEFAULT_AVATAR_URL,
-        name: 'Unknown Assignee',
-        role: 'Unknown Role',
-      };
     }
   }
 
@@ -314,7 +290,6 @@ class Task extends React.Component<IProps, IState> {
     } = this.state;
 
     const patientName = this.getPatientName();
-    const assigneeInfo = this.getAssigneeInfo();
     const dueDate = this.getTaskDueDate();
 
     const priorityIconStyles = classNames(styles.priorityIcon, {
@@ -402,16 +377,10 @@ class Task extends React.Component<IProps, IState> {
                 </div>
                 {this.renderTaskCompletionToggle()}
               </div>
-              <div className={styles.infoRowLeft}>
-                <div className={styles.assignee}>
-                  <div
-                    className={styles.avatar}
-                    style={{ backgroundImage: `url('${assigneeInfo.avatar}')` }}>
-                  </div>
-                  <div className={styles.name}>{assigneeInfo.name}</div>
-                  <div className={styles.smallText}>{assigneeInfo.role}</div>
-                </div>
-              </div>
+              <TaskAssignee
+                taskId={task.id}
+                patientId={task.patientId}
+                assignee={task.assignedTo} />
             </div>
             <div className={styles.taskBody}>
               <div className={styles.largeText}>{task.title}</div>

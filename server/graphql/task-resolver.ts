@@ -14,8 +14,9 @@ export interface IResolveTaskOptions {
 
 export interface IEditTaskInput {
   taskId: string;
-  title: string;
-  description: string;
+  title?: string;
+  description?: string;
+  assignedToId?: string;
 }
 
 export interface IDeleteTaskInput {

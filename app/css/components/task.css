@@ -91,6 +91,7 @@
 }
 
 .infoRow, .infoRowLeft {
+  position: relative;
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -105,6 +106,8 @@
 
 .infoRowLeft {
   justify-content: flex-start;
+  padding: 5px 0;
+  margin-left: 15px;
 }
 
 .taskHeader {}
@@ -168,6 +171,14 @@
   flex-direction: row;
   justify-content: flex-start;
   align-items: center;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  padding: 5px;
+  transition: border .2s linear;
+}
+
+.assignee.blueBorder {
+  border: 1px solid var(--blue-color);
 }
 
 .assignee .name {
@@ -234,6 +245,11 @@
 
   .markCompletion.completedIcon:hover .markCompletionIcon {
     background-image: url('../../assets/grey-check-mark-circle.svg');
+  }
+
+  .assignee:hover {
+    cursor: pointer;
+    border: 1px solid var(--blue-color);
   }
 }
 
@@ -568,4 +584,19 @@
 
 .deleteError.hidden {
   visibility: hidden;
+}
+
+.changeAssigneeError {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin-left: var(--small-gutter);
+}
+
+.changeAssigneeError.hidden {
+  display: none;
+}
+
+.changeAssigneeError .redText {
+  margin-right: 3px;
 }

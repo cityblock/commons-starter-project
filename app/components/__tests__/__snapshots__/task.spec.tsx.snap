@@ -188,7 +188,8 @@ exports[`renders task 1`] = `
         className={undefined}
       >
         <div
-          className={undefined}
+          className=""
+          onClick={[Function]}
         >
           <div
             className={undefined}
@@ -209,6 +210,23 @@ exports[`renders task 1`] = `
             physician
           </div>
         </div>
+        <div
+          className="undefined"
+        >
+          <div
+            className=""
+          >
+            Error changing assignee.
+          </div>
+          <div
+            className={undefined}
+          >
+            Please try again.
+          </div>
+        </div>
+        <div
+          className="undefined"
+        />
       </div>
     </div>
     <div

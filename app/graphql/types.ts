@@ -730,6 +730,56 @@ export type TaskDeleteMutation = {
   } | null,
 };
 
+export type TaskEditMutationVariables = {
+  taskId: string,
+  assignedToId?: string | null,
+  title?: string | null,
+  description?: string | null,
+};
+
+export type TaskEditMutation = {
+  // Edit a task
+  taskEdit:  {
+    id: string,
+    title: string,
+    description: string | null,
+    createdAt: string | null,
+    updatedAt: string | null,
+    completedAt: string | null,
+    deletedAt: string | null,
+    dueAt: string | null,
+    patientId: string,
+    priority: string | null,
+    patient:  {
+      id: string,
+      firstName: string | null,
+      middleName: string | null,
+      lastName: string | null,
+    } | null,
+    assignedTo:  {
+      id: string,
+      firstName: string | null,
+      lastName: string | null,
+      googleProfileImageUrl: string | null,
+      userRole: UserRole,
+    } | null,
+    createdBy:  {
+      id: string,
+      firstName: string | null,
+      lastName: string | null,
+      googleProfileImageUrl: string | null,
+      userRole: UserRole,
+    } | null,
+    followers:  Array< {
+      id: string,
+      firstName: string | null,
+      lastName: string | null,
+      googleProfileImageUrl: string | null,
+      userRole: UserRole,
+    } > | null,
+  } | null,
+};
+
 export type TaskUncompleteMutationVariables = {
   taskId: string,
 };

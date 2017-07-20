@@ -1,0 +1,7 @@
+#import "../fragments/full-task.graphql"
+
+mutation taskDelete($taskId: String!) {
+  taskDelete(input: { taskId: $taskId }) {
+    ...FullTask
+  }
+}

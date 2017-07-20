@@ -35,6 +35,7 @@ import {
   resolveTask,
   taskComplete,
   taskCreate,
+  taskDelete,
   taskEdit,
   taskUncomplete,
 } from './task-resolver';
@@ -83,6 +84,7 @@ const resolveFunctions = {
     userCreate,
     userLogin,
     taskCreate,
+    taskDelete,
     taskEdit,
     taskComplete,
     taskUncomplete,

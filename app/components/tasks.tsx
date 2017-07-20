@@ -1,13 +1,21 @@
 import * as classNames from 'classnames';
 import * as querystring from 'querystring';
 import * as React from 'react';
+import { compose, graphql } from 'react-apollo';
 import { FormattedMessage } from 'react-intl';
 import { connect, Dispatch } from 'react-redux';
 import { Route } from 'react-router-dom';
+import { push } from 'react-router-redux';
 import * as Waypoint from 'react-waypoint';
 import * as styles from '../css/components/tasks.css';
 import * as sortSearchStyles from '../css/shared/sort-search.css';
-import { ShortPatientFragment, ShortTaskFragment } from '../graphql/types';
+import * as taskDeleteMutation from '../graphql/queries/task-delete-mutation.graphql';
+import {
+  FullTaskFragment,
+  ShortPatientFragment,
+  ShortTaskFragment,
+  TaskDeleteMutationVariables,
+} from '../graphql/types';
 import { IState as IAppState } from '../store';
 import Task from './task';
 import TaskCreate from './task-create';
@@ -36,6 +44,10 @@ export interface IProps {
   fetchMoreTasks: () => any;
   hasNextPage?: boolean;
   hasPreviousPage?: boolean;
+  deleteTask: (
+    options: { variables: TaskDeleteMutationVariables },
+  ) => { data: { taskDelete: FullTaskFragment } };
+  redirectToTasks: () => any;
 }
 
 export interface IState {
@@ -63,6 +75,7 @@ class Tasks extends React.Component<IProps, IState> {
     this.showCreateTask = this.showCreateTask.bind(this);
     this.hideCreateTask = this.hideCreateTask.bind(this);
     this.onSortChange = this.onSortChange.bind(this);
+    this.onDeleteTask = this.onDeleteTask.bind(this);
 
     const pageParams = getPageParams();
 
@@ -88,8 +101,10 @@ class Tasks extends React.Component<IProps, IState> {
 
   renderTasks(tasks: ShortTaskFragment[]) {
     const { loading, error } = this.props;
-    if (tasks.length) {
-      return tasks.map(this.renderTask);
+    const validTasks = tasks.filter(task => !task.deletedAt);
+
+    if (validTasks.length) {
+      return validTasks.map(this.renderTask);
     } else if (!loading && !error) {
       return (
         <div className={styles.emptyTasksMessage}>
@@ -138,6 +153,14 @@ class Tasks extends React.Component<IProps, IState> {
     this.props.fetchMoreTasks();
   }
 
+  async onDeleteTask(taskId: string) {
+    const { redirectToTasks, deleteTask } = this.props;
+
+    await deleteTask({ variables: { taskId }});
+
+    redirectToTasks();
+  }
+
   render() {
     const { tasks, routeBase, taskId, patient } = this.props;
     const { orderBy, showCreateTask } = this.state;
@@ -157,8 +180,11 @@ class Tasks extends React.Component<IProps, IState> {
     const createTaskHtml = patient && showCreateTask ? (
       <TaskCreate patient={patient} onClose={this.hideCreateTask} />
     ) : null;
+    const RenderedTask = (props: any) => (
+      <Task routeBase={routeBase} onDelete={this.onDeleteTask} {...props} />
+    );
     const taskHtml = showCreateTask ?
-      null : (<Route path={`${routeBase}/:taskId`} component={Task} />);
+      null : (<Route path={`${routeBase}/:taskId`} render={RenderedTask} />);
     return (
       <div className={styles.container}>
         <div className={sortSearchStyles.sortSearchBar}>
@@ -201,8 +227,16 @@ function mapStateToProps(state: IAppState): Partial<IProps> {
   };
 }
 
-function mapDispatchToProps(dispatch: Dispatch<() => void>): Partial<IProps> {
-  return {};
+function mapDispatchToProps(dispatch: Dispatch<() => void>, ownProps: IProps): Partial<IProps> {
+  return {
+    redirectToTasks: () => {
+      const { routeBase } = ownProps;
+      dispatch(push(routeBase));
+    },
+  };
 }
 
-export default connect<any, any, IProps>(mapStateToProps, mapDispatchToProps)(Tasks);
+export default (compose as any)(
+  connect<any, any, IProps>(mapStateToProps, mapDispatchToProps),
+  graphql(taskDeleteMutation as any, { name: 'deleteTask' }),
+)(Tasks);

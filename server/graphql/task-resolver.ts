@@ -18,8 +18,16 @@ export interface IEditTaskInput {
   description: string;
 }
 
+export interface IDeleteTaskInput {
+  taskId: string;
+}
+
 export interface IEditTaskOptions {
   input: IEditTaskInput;
+}
+
+export interface IDeleteTaskOptions {
+  input: IDeleteTaskInput;
 }
 
 export interface IPatientTasksFilterOptions extends IPaginationOptions {
@@ -63,6 +71,14 @@ export async function taskEdit(
   await accessControls.isAllowedForUser(userRole, 'edit', 'task', args.input.taskId, userId);
 
   return await Task.update(args.input.taskId, args.input);
+}
+
+export async function taskDelete(
+  root: any, args: IDeleteTaskOptions, { db, userId, userRole }: IContext,
+) {
+  await accessControls.isAllowedForUser(userRole, 'edit', 'task', args.input.taskId, userId);
+
+  return await Task.delete(args.input.taskId);
 }
 
 export async function taskComplete(

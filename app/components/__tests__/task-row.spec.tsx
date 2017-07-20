@@ -45,6 +45,7 @@ describe('task row', () => {
       id: 'cool-task-id',
       createdAt: 'Thu Jul 13 2017 16:52:56 GMT-0400 (EDT)',
       dueAt: 'Thu Jul 13 2017 16:52:56 GMT-0400 (EDT)',
+      deletedAt: null,
       title: 'title',
       description: 'description',
       patient,
@@ -109,6 +110,7 @@ describe('task row', () => {
       id: 'cool-task-id',
       createdAt: 'Thu Jul 13 2017 16:52:56 GMT-0400 (EDT)',
       dueAt: 'Thu Jul 13 2017 16:52:56 GMT-0400 (EDT)',
+      deletedAt: null,
       title: 'title',
       description: 'description',
       patient,
@@ -134,5 +136,4 @@ describe('task row', () => {
     ).toJSON();
     expect(tree).toMatchSnapshot();
   });
-
 });

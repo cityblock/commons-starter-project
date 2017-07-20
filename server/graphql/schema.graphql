@@ -281,12 +281,13 @@ type Task implements uniqueId {
   title: String!
   description: String
   patient: Patient
-  patientId: String
+  patientId: String!
   dueAt: String
   priority: String
   createdBy: User
   createdAt: String
   updatedAt: String
+  deletedAt: String
   completedBy: User
   completedAt: String
   assignedTo: User
@@ -447,6 +448,11 @@ input TaskCreateInput {
   assignedToId: String
 }
 
+# params for deleting a task
+input TaskDeleteInput {
+  taskId: String!
+}
+
 # params for creating a task
 input TaskEditInput {
   taskId: String!
@@ -523,6 +529,9 @@ type RootMutationType {
 
   # Create a task
   taskCreate(input: TaskCreateInput): Task
+
+  # Delete a task
+  taskDelete(input: TaskDeleteInput): Task
 
   # Edit a task
   taskEdit(input: TaskEditInput): Task

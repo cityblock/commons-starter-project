@@ -5,6 +5,7 @@ fragment FullTask on Task {
   createdAt
   updatedAt
   completedAt
+  deletedAt
   dueAt
   patientId
   priority

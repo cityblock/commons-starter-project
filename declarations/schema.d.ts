@@ -317,12 +317,13 @@ declare module 'schema' {
     title: string;
     description: string | null;
     patient: IPatient | null;
-    patientId: string | null;
+    patientId: string;
     dueAt: string | null;
     priority: string | null;
     createdBy: IUser | null;
     createdAt: string | null;
     updatedAt: string | null;
+    deletedAt: string | null;
     completedBy: IUser | null;
     completedAt: string | null;
     assignedTo: IUser | null;
@@ -395,6 +396,7 @@ declare module 'schema' {
     patientSetup: IPatient | null;
     patientScratchPadEdit: IPatientScratchPad | null;
     taskCreate: ITask | null;
+    taskDelete: ITask | null;
     taskEdit: ITask | null;
     taskComplete: ITask | null;
     taskUncomplete: ITask | null;
@@ -585,6 +587,13 @@ declare module 'schema' {
     dueAt?: string | null;
     patientId: string;
     assignedToId?: string | null;
+  }
+
+  /*
+    description: params for deleting a task
+  */
+  interface ITaskDeleteInput {
+    taskId: string;
   }
 
   /*

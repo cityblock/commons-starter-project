@@ -82,7 +82,7 @@ export class AddTaskFollower extends React.Component<IProps, IState> {
     const { careTeam, followers } = this.props;
 
     return (careTeam || []).filter(careTeamMember => (
-      !followers.some(follower => (follower.id === careTeamMember.id))
+      !(followers || []).some(follower => (follower.id === careTeamMember.id))
     ));
   }
 

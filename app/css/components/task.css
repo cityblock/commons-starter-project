@@ -8,6 +8,16 @@
   min-height: 568px;
 }
 
+.container.deleteConfirmationContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.taskContainer.hidden {
+  display: none;
+}
+
 .loading {
   margin: 0 auto;
   text-align: center;
@@ -24,14 +34,23 @@
   margin: 50px var(--medium-gutter) 0;
 }
 
-.loadingErrorIcon {
+.loadingErrorIcon, .deleteConfirmationIcon {
   background-image: url('../../assets/error-circle.svg');
   background-position: center center;
   background-repeat: no-repeat;
   background-size: contain;
+}
+
+.loadingErrorIcon {
   height: 20px;
   width: 20px;
   margin: 0 auto 13px;
+}
+
+.deleteConfirmationIcon {
+  height: 30px;
+  width: 30px;
+  margin-bottom: var(--small-gutter);
 }
 
 .loadingErrorLabel {
@@ -53,8 +72,11 @@
   padding: 0 var(--small-gutter);
 }
 
-.loadingErrorButton {
+.invertedButton {
   @apply --inverted-button;
+}
+
+.loadingErrorButton {
   width: 94px;
   height: 32px;
   margin: 0 auto;
@@ -117,11 +139,12 @@
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
+  position: relative;
 }
 
 .hamburger, .close {
-  width: 10px;
-  height: 10px;
+  width: 12px;
+  height: 12px;
   background-position: center center;
   background-size: contain;
   background-repeat: no-repeat;
@@ -132,7 +155,6 @@
 }
 
 .hamburger {
-  height: 12px;
   margin-right: var(--medium-gutter);
   background-image: url('../../assets/dot-hamburger-grey.svg');
 }
@@ -205,12 +227,14 @@
   }
 }
 
-.markCompletion:hover .markCompletionIcon {
-  background-image: url('../../assets/blue-check-mark-circle.svg');
-}
+@media only screen and (min-width:1025px) {
+  .markCompletion:hover .markCompletionIcon {
+    background-image: url('../../assets/green-check-mark-circle.svg');
+  }
 
-.markCompletion.completedIcon:hover .markCompletionIcon {
-  background-image: url('../../assets/grey-check-mark-circle.svg');
+  .markCompletion.completedIcon:hover .markCompletionIcon {
+    background-image: url('../../assets/grey-check-mark-circle.svg');
+  }
 }
 
 .markCompletionText {
@@ -220,6 +244,10 @@
   font-size: var(--small-font-size);
   line-height: var(--default-line-height);
   margin-right: 10px;
+}
+
+.markCompletion.completedIcon .markCompletionText {
+  color: var(--green-color);
 }
 
 .markCompletion .markCompletionIcon {
@@ -232,7 +260,7 @@
 }
 
 .markCompletion.completedIcon .markCompletionIcon {
-  background-image: url('../../assets/blue-check-mark-circle.svg');
+  background-image: url('../../assets/green-check-mark-circle.svg');
 }
 
 .markCompletionError {
@@ -382,4 +410,162 @@
 
 .followersList .avatar {
   margin-bottom: 10px;
+}
+
+.hamburgerMenu {
+  display: none;
+  position: absolute;
+  top: 0;
+  left: -64px;
+  width: 175px;
+  margin-top: 25px;
+  padding: 20px;
+  background-color: var(--highlight-background-color);
+  box-shadow: 0 6px 8px 0 rgba(0,0,0,0.15);
+  border: 1px solid var(--gray-background-color);
+  border-radius: 2px;
+  user-select: none;
+}
+
+.hamburgerMenu.visible {
+  display: flex;
+  flex-direction: column;
+}
+
+.hamburgerMenu .menuRow {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  border-bottom: 1px solid var(--gray-background-color);
+  padding: 20px 0;
+
+  &:hover {
+    cursor: pointer;
+  }
+}
+
+.hamburgerMenu .menuRow:first-child {
+  padding-top: 0;
+}
+
+.hamburgerMenu .menuRow:last-child {
+  padding-bottom: 0;
+  border-bottom: none;
+}
+
+.hamburgerMenu .menuLabel {
+  font-family: var(--roboto);
+  font-weight: var(--roboto-medium-weight);
+  font-size: var(--small-font-size);
+  line-height: var(--small-font-line-height);
+  color: var(--default-font-color);
+}
+
+.shareIcon, .paperclipIcon, .trashIcon {
+  background-size: contain;
+  background-position: center center;
+  background-repeat: no-repeat;
+  margin-right: 10px;
+  width: 14px;
+}
+
+.shareIcon {
+  height: 15px;
+  background-image: url('../../assets/share-icon-grey.svg');
+}
+
+.paperclipIcon {
+  height: 17px;
+  background-image: url('../../assets/paperclip-icon-grey.svg');
+}
+
+.trashIcon {
+  height: 14px;
+  background-image: url('../../assets/trash-icon-grey.svg');
+}
+
+.copySuccess {
+  visibility: hidden;
+  font-family: var(--roboto);
+  font-size: var(--extra-small-font-size);
+  line-height: var(--extra-small-font-line-height);
+  color: var(--blue-color);
+  margin-right: 10px;
+}
+
+.copySuccess.visible {
+  visibility: visible;
+}
+
+.deleteConfirmation {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.deleteConfirmation.hidden {
+  display: none;
+}
+
+.deleteConfirmationText {
+  color: var(--default-font-color);
+  font-family: var(--basetica-medium);
+  font-size: var(--medium-font-line-height);
+  line-height: var(--medium-font-line-height);
+  margin-bottom: 10px;
+}
+
+.deleteConfirmationSubtext {
+  color: var(--gray-font-color);
+  font-family: var(--roboto);
+  font-size: var(--default-font-size);
+  line-height: var(--default-line-height);
+  margin: 0 80px var(--medium-gutter);
+}
+
+.deleteConfirmationButtons {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+
+.deleteCancelButton, .deleteConfirmButton {
+  height:32px;
+  width: 94px;
+  padding: 9px;
+  font-size: var(--small-font-size);
+  line-height: var(--small-font-line-height);
+}
+
+.deleteConfirmButton {
+  @apply --red-button;
+  padding: 9px;
+  font-size: var(--small-font-size);
+  line-height: var(--small-font-line-height);
+}
+
+.deleteCancelButton {
+  margin-right: var(--small-gutter);
+}
+
+.deleteError {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin-top: var(--medium-gutter);
+}
+
+.deleteError .redText {
+  margin-right: 3px;
+}
+
+.deleteError .smallText {
+  font-size: var(--small-font-size);
+  line-height: var(--small-font-line-height);
+}
+
+.deleteError.hidden {
+  visibility: hidden;
 }

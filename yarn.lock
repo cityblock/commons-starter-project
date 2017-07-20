@@ -299,6 +299,12 @@
   version "6.5.0"
   resolved "https://registry.yarnpkg.com/@types/qs/-/qs-6.5.0.tgz#14514e8ee24a4d0672c0c0da5e01a4f11da60d71"
 
+"@types/react-copy-to-clipboard@^4.2.3":
+  version "4.2.3"
+  resolved "https://registry.yarnpkg.com/@types/react-copy-to-clipboard/-/react-copy-to-clipboard-4.2.3.tgz#9da09521fc0f7768f9ad9781d9768f1cde81e5bd"
+  dependencies:
+    "@types/react" "*"
+
 "@types/react-dom@^15.5.1":
   version "15.5.1"
   resolved "https://registry.yarnpkg.com/@types/react-dom/-/react-dom-15.5.1.tgz#f3c3e14c682785923c7d64583537df319442dec1"
@@ -1958,6 +1964,12 @@ cookie-signature@1.0.6:
 cookie@0.3.1:
   version "0.3.1"
   resolved "https://registry.yarnpkg.com/cookie/-/cookie-0.3.1.tgz#e7e0a1f9ef43b4c8ba925c5c5a96e806d16873bb"
+
+copy-to-clipboard@^3:
+  version "3.0.6"
+  resolved "https://registry.yarnpkg.com/copy-to-clipboard/-/copy-to-clipboard-3.0.6.tgz#13c09bfea0408a5dc5bb987fee3b3986518c9d69"
+  dependencies:
+    toggle-selection "^1.0.3"
 
 copy-webpack-plugin@^4.0.1:
   version "4.0.1"
@@ -6402,6 +6414,13 @@ react-apollo@^1.4.4:
     object-assign "^4.0.1"
     prop-types "^15.5.8"
 
+react-copy-to-clipboard@^5.0.0:
+  version "5.0.0"
+  resolved "https://registry.yarnpkg.com/react-copy-to-clipboard/-/react-copy-to-clipboard-5.0.0.tgz#23ccdd7c4d9ec2cc763839e2a55b1220aeb4f33d"
+  dependencies:
+    copy-to-clipboard "^3"
+    prop-types "^15.5.8"
+
 react-dom@15.6.1:
   version "15.6.1"
   resolved "https://registry.yarnpkg.com/react-dom/-/react-dom-15.6.1.tgz#2cb0ed4191038e53c209eb3a79a23e2a4cf99470"
@@ -7438,6 +7457,10 @@ to-arraybuffer@^1.0.0:
 to-fast-properties@^1.0.1:
   version "1.0.3"
   resolved "https://registry.yarnpkg.com/to-fast-properties/-/to-fast-properties-1.0.3.tgz#b83571fa4d8c25b82e231b06e3a3055de4ca1a47"
+
+toggle-selection@^1.0.3:
+  version "1.0.5"
+  resolved "https://registry.yarnpkg.com/toggle-selection/-/toggle-selection-1.0.5.tgz#726c703de607193a73c32c7df49cd24950fc574f"
 
 topo@1.x.x:
   version "1.1.0"

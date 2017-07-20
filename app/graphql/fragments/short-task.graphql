@@ -5,6 +5,7 @@ fragment ShortTask on Task {
   title
   description
   createdAt
+  deletedAt
   dueAt
   patient {
     id

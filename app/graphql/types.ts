@@ -230,6 +230,7 @@ export type GetPatientTasksQuery = {
         title: string,
         description: string | null,
         createdAt: string | null,
+        deletedAt: string | null,
         dueAt: string | null,
         patient:  {
           id: string,
@@ -352,8 +353,9 @@ export type GetTaskQuery = {
     createdAt: string | null,
     updatedAt: string | null,
     completedAt: string | null,
+    deletedAt: string | null,
     dueAt: string | null,
-    patientId: string | null,
+    patientId: string,
     priority: string | null,
     patient:  {
       id: string,
@@ -583,8 +585,9 @@ export type TaskCompleteMutation = {
     createdAt: string | null,
     updatedAt: string | null,
     completedAt: string | null,
+    deletedAt: string | null,
     dueAt: string | null,
-    patientId: string | null,
+    patientId: string,
     priority: string | null,
     patient:  {
       id: string,
@@ -631,7 +634,12 @@ export type TaskCreateMutation = {
     title: string,
     description: string | null,
     createdAt: string | null,
+    updatedAt: string | null,
+    completedAt: string | null,
+    deletedAt: string | null,
     dueAt: string | null,
+    patientId: string,
+    priority: string | null,
     patient:  {
       id: string,
       firstName: string | null,
@@ -643,12 +651,68 @@ export type TaskCreateMutation = {
       firstName: string | null,
       lastName: string | null,
       googleProfileImageUrl: string | null,
+      userRole: UserRole,
+    } | null,
+    createdBy:  {
+      id: string,
+      firstName: string | null,
+      lastName: string | null,
+      googleProfileImageUrl: string | null,
+      userRole: UserRole,
     } | null,
     followers:  Array< {
       id: string,
       firstName: string | null,
       lastName: string | null,
       googleProfileImageUrl: string | null,
+      userRole: UserRole,
+    } > | null,
+  } | null,
+};
+
+export type TaskDeleteMutationVariables = {
+  taskId: string,
+};
+
+export type TaskDeleteMutation = {
+  // Delete a task
+  taskDelete:  {
+    id: string,
+    title: string,
+    description: string | null,
+    createdAt: string | null,
+    updatedAt: string | null,
+    completedAt: string | null,
+    deletedAt: string | null,
+    dueAt: string | null,
+    patientId: string,
+    priority: string | null,
+    patient:  {
+      id: string,
+      firstName: string | null,
+      middleName: string | null,
+      lastName: string | null,
+    } | null,
+    assignedTo:  {
+      id: string,
+      firstName: string | null,
+      lastName: string | null,
+      googleProfileImageUrl: string | null,
+      userRole: UserRole,
+    } | null,
+    createdBy:  {
+      id: string,
+      firstName: string | null,
+      lastName: string | null,
+      googleProfileImageUrl: string | null,
+      userRole: UserRole,
+    } | null,
+    followers:  Array< {
+      id: string,
+      firstName: string | null,
+      lastName: string | null,
+      googleProfileImageUrl: string | null,
+      userRole: UserRole,
     } > | null,
   } | null,
 };
@@ -666,8 +730,9 @@ export type TaskUncompleteMutation = {
     createdAt: string | null,
     updatedAt: string | null,
     completedAt: string | null,
+    deletedAt: string | null,
     dueAt: string | null,
-    patientId: string | null,
+    patientId: string,
     priority: string | null,
     patient:  {
       id: string,
@@ -713,8 +778,9 @@ export type TaskUserFollowMutation = {
     createdAt: string | null,
     updatedAt: string | null,
     completedAt: string | null,
+    deletedAt: string | null,
     dueAt: string | null,
-    patientId: string | null,
+    patientId: string,
     priority: string | null,
     patient:  {
       id: string,
@@ -761,6 +827,7 @@ export type GetTasksForCurrentUserQuery = {
         title: string,
         description: string | null,
         createdAt: string | null,
+        deletedAt: string | null,
         dueAt: string | null,
         patient:  {
           id: string,
@@ -881,8 +948,9 @@ export type FullTaskFragment = {
   createdAt: string | null,
   updatedAt: string | null,
   completedAt: string | null,
+  deletedAt: string | null,
   dueAt: string | null,
-  patientId: string | null,
+  patientId: string,
   priority: string | null,
   patient:  {
     id: string,
@@ -943,6 +1011,7 @@ export type ShortTaskFragment = {
   title: string,
   description: string | null,
   createdAt: string | null,
+  deletedAt: string | null,
   dueAt: string | null,
   patient:  {
     id: string,

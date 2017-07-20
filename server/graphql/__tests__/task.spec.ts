@@ -222,4 +222,36 @@ describe('task tests', () => {
       });
     });
   });
+
+  describe('taskDelete', () => {
+    it('marks a task as deleted', async () => {
+      const beforeDeletePatientTasks = await Task.getPatientTasks(patient.id, {
+        pageNumber: 0,
+        pageSize: 10,
+        orderBy: 'createdAt',
+        order: 'desc',
+      });
+
+      expect(beforeDeletePatientTasks.results.map(task => (task.id))).toContain(task1.id);
+
+      const mutation = `mutation {
+        taskDelete(input: { taskId: "${task1.id}" }) {
+          id,
+        }
+      }`;
+      const result = await graphql(schema, mutation, null, { db, userRole, userId: user.id });
+      expect(cloneDeep(result.data!.taskDelete)).toMatchObject({
+        id: task1.id,
+      });
+
+      const afterDeletePatientTasks = await Task.getPatientTasks(patient.id, {
+        pageNumber: 0,
+        pageSize: 10,
+        orderBy: 'createdAt',
+        order: 'desc',
+      });
+
+      expect(afterDeletePatientTasks.results.map(task => (task.id))).not.toContain(task1.id);
+    });
+  });
 });

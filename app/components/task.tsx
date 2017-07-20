@@ -3,6 +3,7 @@ import * as moment from 'moment';
 import * as React from 'react';
 import { compose, graphql } from 'react-apollo';
 import { connect, Dispatch } from 'react-redux';
+import { Link } from 'react-router-dom';
 import { selectTask } from '../actions/task-action';
 import TaskComments from '../components/task-comments';
 import { DATETIME_FORMAT } from '../config';
@@ -17,12 +18,14 @@ import {
 } from '../graphql/types';
 import { IState as IAppState } from '../store';
 import AddTaskFollower from './add-task-follower';
+import TaskHamburgerMenu from './task-hamburger-menu';
 
 export interface IProps {
   task?: FullTaskFragment;
   taskId?: string;
   taskLoading?: boolean;
   taskError?: string;
+  routeBase: string;
   selectTask: (taskId?: string) => any;
   refetchTask: () => any;
   match?: {
@@ -36,6 +39,7 @@ export interface IProps {
   uncompleteTask: (
     options: { variables: TaskUncompleteMutationVariables },
   ) => { data: { taskComplete: FullTaskFragment } };
+  onDelete: (taskId: string) => any;
 }
 
 export interface IAssigneeInfo {
@@ -45,10 +49,16 @@ export interface IAssigneeInfo {
 }
 
 export interface IState {
+  hamburgerMenuVisible: boolean;
+  copySuccessVisible: boolean;
   toggleCompletionError?: string;
+  deleteConfirmationInProgress: boolean;
+  deleteError?: string;
 }
 
 export const DEFAULT_AVATAR_URL = 'http://bit.ly/2u9bJDA';
+
+const COPY_SUCCESS_TIMEOUT_MILLISECONDS = 2000;
 
 class Task extends React.Component<IProps, IState> {
   constructor(props: IProps) {
@@ -64,8 +74,20 @@ class Task extends React.Component<IProps, IState> {
     this.renderTaskCompletionToggle = this.renderTaskCompletionToggle.bind(this);
     this.onClickToggleCompletion = this.onClickToggleCompletion.bind(this);
     this.getTaskPriorityText = this.getTaskPriorityText.bind(this);
+    this.onToggleHamburgerMenu = this.onToggleHamburgerMenu.bind(this);
+    this.onCopyShareLinkClick = this.onCopyShareLinkClick.bind(this);
+    this.clearCopySuccess = this.clearCopySuccess.bind(this);
+    this.onClickDelete = this.onClickDelete.bind(this);
+    this.onConfirmDelete = this.onConfirmDelete.bind(this);
+    this.onCancelDelete = this.onCancelDelete.bind(this);
 
-    this.state = { toggleCompletionError: undefined };
+    this.state = {
+      toggleCompletionError: undefined,
+      hamburgerMenuVisible: false,
+      copySuccessVisible: false,
+      deleteConfirmationInProgress: false,
+      deleteError: undefined,
+    };
   }
 
   componentWillMount() {
@@ -207,7 +229,7 @@ class Task extends React.Component<IProps, IState> {
     let displayText: string = '';
 
     if (task) {
-      displayText = !!task.completedAt ? 'Complete' : 'Mark complete';
+      displayText = !!task.completedAt ? 'Task complete' : 'Mark complete';
     } else {
       displayText = 'Mark complete';
     }
@@ -241,8 +263,55 @@ class Task extends React.Component<IProps, IState> {
     }
   }
 
+  onToggleHamburgerMenu() {
+    const { hamburgerMenuVisible } = this.state;
+
+    this.setState(() => ({ hamburgerMenuVisible: !hamburgerMenuVisible }));
+  }
+
+  onCopyShareLinkClick() {
+    this.setState(() => ({ hamburgerMenuVisible: false, copySuccessVisible: true }));
+    setTimeout(this.clearCopySuccess, COPY_SUCCESS_TIMEOUT_MILLISECONDS);
+  }
+
+  clearCopySuccess() {
+    this.setState(() => ({ copySuccessVisible: false }));
+  }
+
+  onClickDelete() {
+    const { taskId } = this.props;
+
+    if (taskId) {
+      this.setState(() => ({ hamburgerMenuVisible: false, deleteConfirmationInProgress: true }));
+    }
+  }
+
+  async onConfirmDelete() {
+    const { onDelete, taskId } = this.props;
+
+    if (taskId) {
+      try {
+        this.setState(() => ({ deleteError: undefined }));
+        await onDelete(taskId);
+        this.setState(() => ({ deleteConfirmationInProgress: false }));
+      } catch (err) {
+        this.setState(() => ({ deleteError: err.message }));
+      }
+    }
+  }
+
+  onCancelDelete() {
+    this.setState(() => ({ deleteError: undefined, deleteConfirmationInProgress: false }));
+  }
+
   render() {
-    const { task } = this.props;
+    const { task, routeBase } = this.props;
+    const {
+      hamburgerMenuVisible,
+      copySuccessVisible,
+      deleteConfirmationInProgress,
+      deleteError,
+    } = this.state;
 
     const patientName = this.getPatientName();
     const assigneeInfo = this.getAssigneeInfo();
@@ -253,70 +322,127 @@ class Task extends React.Component<IProps, IState> {
       [styles.highPriorityIcon]: (task && task.priority === 'high'),
     });
 
+    const copySuccessStyles = classNames(styles.copySuccess, {
+      [styles.visible]: copySuccessVisible,
+    });
+    const outerContainerStyles = classNames(styles.container, {
+      [styles.deleteConfirmationContainer]: deleteConfirmationInProgress,
+    });
+    const taskContainerStyles = classNames(styles.taskContainer, {
+      [styles.hidden]: deleteConfirmationInProgress,
+    });
+    const deleteConfirmationStyles = classNames(styles.deleteConfirmation, {
+      [styles.hidden]: !deleteConfirmationInProgress,
+    });
+    const deleteErrorStyles = classNames(styles.deleteError, {
+      [styles.hidden]: !deleteConfirmationInProgress || !deleteError,
+    });
+
+    const closeRoute = routeBase || '/patients';
+
     if (task) {
       return (
-        <div className={styles.container}>
-          <div className={styles.taskHeader}>
-            <div className={styles.infoRow}>
-              <div className={styles.patientInfo}>
-                <div
-                  className={styles.avatar}
-                  style={{ backgroundImage: `url('${DEFAULT_AVATAR_URL}')`}}>
-                </div>
-                <div className={styles.name}>{patientName}</div>
+        <div className={outerContainerStyles}>
+          <div className={deleteConfirmationStyles}>
+            <div className={styles.deleteConfirmationIcon}></div>
+            <div className={styles.deleteConfirmationText}>
+              Are you ure you want to delete this task?
+            </div>
+            <div className={styles.deleteConfirmationSubtext}>
+              Deleting this task will completely remove it from this patient's record.
+            </div>
+            <div className={styles.deleteConfirmationButtons}>
+              <div
+                className={classNames(styles.deleteCancelButton, styles.invertedButton)}
+                onClick={this.onCancelDelete}>
+                Cancel
               </div>
-              <div className={styles.controls}>
-                <div className={styles.hamburger}></div>
-                <div className={styles.close}></div>
+              <div
+                className={styles.deleteConfirmButton}
+                onClick={this.onConfirmDelete}>
+                Yes, delete
               </div>
             </div>
-            <div className={styles.infoRow}>
-              <div className={styles.dueDate}>
-                <div className={styles.dueDateIcon}></div>
-                <div className={styles.dueDateText}>{dueDate}</div>
+            <div className={deleteErrorStyles}>
+              <div className={classNames(styles.redText, styles.smallText)}>
+                Error deleting task.
               </div>
-              {this.renderTaskCompletionToggle()}
-            </div>
-            <div className={styles.infoRowLeft}>
-              <div className={styles.assignee}>
-                <div
-                  className={styles.avatar}
-                  style={{ backgroundImage: `url('${assigneeInfo.avatar}')` }}>
-                </div>
-                <div className={styles.name}>{assigneeInfo.name}</div>
-                <div className={styles.smallText}>{assigneeInfo.role}</div>
-              </div>
+              <div className={styles.smallText}>Please try again.</div>
             </div>
           </div>
-          <div className={styles.taskBody}>
-            <div className={styles.largeText}>{task.title}</div>
-            <div className={styles.okrInfo}>
-              <div className={styles.okrRow}>
-                <div className={styles.smallText}>Objective:</div>
-                <div className={styles.darkSmallText}>Decrease hemoglobin A1C to below 8%</div>
+          <div className={taskContainerStyles}>
+            <div className={styles.taskHeader}>
+              <div className={styles.infoRow}>
+                <div className={styles.patientInfo}>
+                  <div
+                    className={styles.avatar}
+                    style={{ backgroundImage: `url('${DEFAULT_AVATAR_URL}')`}}>
+                  </div>
+                  <Link to={`/patients/${task.patientId}`} className={styles.name}>
+                    {patientName}
+                  </Link>
+                </div>
+                <div className={styles.controls}>
+                  <div className={copySuccessStyles}>Copied to clipboard</div>
+                  <div className={styles.hamburger} onClick={this.onToggleHamburgerMenu}></div>
+                  <TaskHamburgerMenu
+                    visible={hamburgerMenuVisible}
+                    onClickAddAttachment={() => (false)}
+                    onClickDelete={this.onClickDelete}
+                    onCopy={this.onCopyShareLinkClick}
+                    taskId={task.id}
+                    patientId={task.patientId} />
+                  <Link to={closeRoute} className={styles.close} />
+                </div>
               </div>
-              <div className={styles.okrRow}>
-                <div className={styles.smallText}>Key result:</div>
-                <div className={styles.darkSmallText}>
-                  Get patient new prescription for Metformin
+              <div className={styles.infoRow}>
+                <div className={styles.dueDate}>
+                  <div className={styles.dueDateIcon}></div>
+                  <div className={styles.dueDateText}>{dueDate}</div>
+                </div>
+                {this.renderTaskCompletionToggle()}
+              </div>
+              <div className={styles.infoRowLeft}>
+                <div className={styles.assignee}>
+                  <div
+                    className={styles.avatar}
+                    style={{ backgroundImage: `url('${assigneeInfo.avatar}')` }}>
+                  </div>
+                  <div className={styles.name}>{assigneeInfo.name}</div>
+                  <div className={styles.smallText}>{assigneeInfo.role}</div>
                 </div>
               </div>
             </div>
-            <div className={styles.bodyText}>{task.description}</div>
-            {this.renderAttachments()}
-            <div className={classNames(styles.infoRow, styles.borderTop)}>
-              <div className={styles.priorityInfo}>
-                <div className={priorityIconStyles}></div>
-                <div className={styles.priorityText}>{this.getTaskPriorityText()} priority</div>
+            <div className={styles.taskBody}>
+              <div className={styles.largeText}>{task.title}</div>
+              <div className={styles.okrInfo}>
+                <div className={styles.okrRow}>
+                  <div className={styles.smallText}>Objective:</div>
+                  <div className={styles.darkSmallText}>Decrease hemoglobin A1C to below 8%</div>
+                </div>
+                <div className={styles.okrRow}>
+                  <div className={styles.smallText}>Key result:</div>
+                  <div className={styles.darkSmallText}>
+                    Get patient new prescription for Metformin
+                  </div>
+                </div>
               </div>
-              <div className={styles.typeInfo}>
-                <div className={styles.typeIcon}></div>
-                <div className={styles.typeText}>Prescription</div>
+              <div className={styles.bodyText}>{task.description}</div>
+              {this.renderAttachments()}
+              <div className={classNames(styles.infoRow, styles.borderTop)}>
+                <div className={styles.priorityInfo}>
+                  <div className={priorityIconStyles}></div>
+                  <div className={styles.priorityText}>{this.getTaskPriorityText()} priority</div>
+                </div>
+                <div className={styles.typeInfo}>
+                  <div className={styles.typeIcon}></div>
+                  <div className={styles.typeText}>Prescription</div>
+                </div>
               </div>
             </div>
+            {this.renderFollowers()}
+            <TaskComments taskId={task.id} />
           </div>
-          {this.renderFollowers()}
-          <TaskComments taskId={task.id} />
         </div>
       );
     } else {
@@ -337,7 +463,11 @@ class Task extends React.Component<IProps, IState> {
               <div className={styles.loadingErrorSubheading}>
                 Sorry, something went wrong. Please try again.
               </div>
-              <div className={styles.loadingErrorButton} onClick={this.reloadTask}>Try again</div>
+              <div
+                className={classNames(styles.loadingErrorButton, styles.invertedButton)}
+                onClick={this.reloadTask}>
+                Try again
+              </div>
             </div>
           </div>
         );

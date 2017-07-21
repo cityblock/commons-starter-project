@@ -55,6 +55,7 @@ export interface IState {
   deleteConfirmationInProgress: boolean;
   deleteError?: string;
   changePriorityError?: string;
+  changeDueDateError?: string;
 }
 
 export const DEFAULT_AVATAR_URL = 'http://bit.ly/2u9bJDA';
@@ -80,6 +81,9 @@ class Task extends React.Component<IProps, IState> {
     this.onConfirmDelete = this.onConfirmDelete.bind(this);
     this.onCancelDelete = this.onCancelDelete.bind(this);
     this.onPriorityChange = this.onPriorityChange.bind(this);
+    this.formatDateForInput = this.formatDateForInput.bind(this);
+    this.getTaskDueDateForInput = this.getTaskDueDateForInput.bind(this);
+    this.onDueDateChange = this.onDueDateChange.bind(this);
 
     this.state = {
       toggleCompletionError: undefined,
@@ -88,6 +92,7 @@ class Task extends React.Component<IProps, IState> {
       deleteConfirmationInProgress: false,
       deleteError: undefined,
       changePriorityError: undefined,
+      changeDueDateError: undefined,
     };
   }
 
@@ -146,6 +151,10 @@ class Task extends React.Component<IProps, IState> {
     return moment(date, DATETIME_FORMAT).format('MMM D, YYYY');
   }
 
+  formatDateForInput(date: string) {
+    return moment(date, DATETIME_FORMAT).format('YYYY-MM-DD');
+  }
+
   getTaskDueDate() {
     const { task } = this.props;
 
@@ -153,6 +162,16 @@ class Task extends React.Component<IProps, IState> {
       return this.formatDate(task.dueAt);
     } else {
       return 'Unknown Due Date';
+    }
+  }
+
+  getTaskDueDateForInput() {
+    const { task } = this.props;
+
+    if (task && task.dueAt) {
+      return this.formatDateForInput(task.dueAt);
+    } else {
+      return '1970-01-01';
     }
   }
 
@@ -290,6 +309,19 @@ class Task extends React.Component<IProps, IState> {
     }
   }
 
+  async onDueDateChange(event: React.ChangeEvent<HTMLInputElement>) {
+    const { taskId, editTask } = this.props;
+
+    if (taskId) {
+      try {
+        this.setState(() => ({ changeDueDateError: undefined }));
+        await editTask({ variables: { taskId, dueAt: event.target.value }});
+      } catch (err) {
+        this.setState(() => ({ changeDueDateError: err.message }));
+      }
+    }
+  }
+
   render() {
     const { task, routeBase } = this.props;
     const {
@@ -301,6 +333,7 @@ class Task extends React.Component<IProps, IState> {
 
     const patientName = this.getPatientName();
     const dueDate = this.getTaskDueDate();
+    const inputDueDate = this.getTaskDueDateForInput();
 
     const priorityIconStyles = classNames(styles.priorityIcon, {
       [styles.mediumPriorityIcon]: (task && task.priority === 'medium'),
@@ -380,10 +413,14 @@ class Task extends React.Component<IProps, IState> {
                   <Link to={closeRoute} className={styles.close} />
                 </div>
               </div>
-              <div className={styles.infoRow}>
+              <div className={classNames(styles.infoRow, styles.dueDateRow)}>
                 <div className={styles.dueDate}>
                   <div className={styles.dueDateIcon}></div>
-                  <div className={styles.dueDateText}>{dueDate}</div>
+                  <input
+                    type='date'
+                    data-date={dueDate}
+                    value={inputDueDate}
+                    onChange={this.onDueDateChange} />
                 </div>
                 {this.renderTaskCompletionToggle()}
               </div>

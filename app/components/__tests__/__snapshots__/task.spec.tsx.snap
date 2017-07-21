@@ -142,7 +142,7 @@ exports[`renders task 1`] = `
         </div>
       </div>
       <div
-        className={undefined}
+        className=""
       >
         <div
           className={undefined}
@@ -150,11 +150,12 @@ exports[`renders task 1`] = `
           <div
             className={undefined}
           />
-          <div
-            className={undefined}
-          >
-            Jul 13, 2017
-          </div>
+          <input
+            data-date="Jul 13, 2017"
+            onChange={[Function]}
+            type="date"
+            value="2017-07-13"
+          />
         </div>
         <div
           className=""

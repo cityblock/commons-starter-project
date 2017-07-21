@@ -114,6 +114,10 @@
   padding: 6px 0;
 }
 
+.dueDateRow {
+  padding: 5px 0;
+}
+
 .taskHeader {}
 
 .patientInfo {
@@ -214,6 +218,41 @@
   align-items: center;
 }
 
+input[type='date'] {
+  width: 100px;
+  height: 30px;
+  position: relative;
+  outline: none;
+  border: 1px solid transparent;
+  color: var(--black-color);
+  font-family: var(--roboto);
+  font-weight: var(--roboto-medium-weight);
+  font-size: var(--extra-small-font-size);
+  line-height: 13px;
+  border-radius: 4px;
+  transition: border 0.2s linear;
+}
+
+input[type='date']:before {
+  content: attr(data-date);
+  display: inline-block;
+  color: var(--black-color);
+  padding-left: 4px;
+}
+
+input[type='date']::-webkit-datetime-edit,
+input[type='date']::-webkit-inner-spin-button,
+input[type='date']::-webkit-clear-button {
+  display: none;
+}
+
+input::-webkit-calendar-picker-indicator {
+  position: absolute;
+  top: 9px;
+  right: 2px;
+  color: var(--black-color);
+}
+
 .dueDateIcon {
   width: 16px;
   height: 16px;
@@ -221,15 +260,7 @@
   background-size: contain;
   background-repeat: no-repeat;
   background-image: url('../../assets/calendar-dark-grey.svg');
-  margin: 0 12px 0 2px;
-}
-
-.dueDateText {
-  color: var(--black-color);
-  font-family: var(--roboto);
-  font-weight: var(--roboto-medium-weight);
-  font-size: var(--extra-small-font-size);
-  line-height: var(--extra-small-font-line-height);
+  margin: 0 7px 0 2px;
 }
 
 .markCompletion {
@@ -259,6 +290,19 @@
   .prioritySelect:hover {
     cursor: pointer;
     border: 1px solid var(--blue-color);
+  }
+
+  input[type='date']:hover {
+    cursor: pointer;
+    border: 1px solid var(--blue-color);
+  }
+
+  input[type='date']:hover input::-webkit-calendar-picker-indicator {
+    opacity: 1;
+  }
+
+  input::-webkit-calendar-picker-indicator:hover {
+    background-color: var(--white-color);
   }
 }
 
@@ -625,3 +669,4 @@
   transition: border .2s linear;
   padding: 4px;
 }
+

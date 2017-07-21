@@ -17,6 +17,7 @@ export interface IEditTaskInput {
   title?: string;
   description?: string;
   assignedToId?: string;
+  dueAt?: string;
 }
 
 export interface IDeleteTaskInput {

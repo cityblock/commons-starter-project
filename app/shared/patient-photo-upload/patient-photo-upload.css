@@ -1,0 +1,40 @@
+@import '../css/sizes';
+.container {
+  margin: 0px;
+  width: 100%;
+}
+
+.patientPhoto {
+  width: 73px;
+  height: 73px;
+  background-image: url('../../assets/missing-profile.svg');
+  background-repeat: no-repeat;
+  background-size: cover;
+  display: inline-block;
+  vertical-align: top;
+}
+
+.centerText {
+  display: inline-block;
+  vertical-align: top;
+  max-width: 280px;
+  margin: 0px 30px;
+  line-height: 20px;
+}
+
+.rightButtonContainer {
+  display: inline-block;
+  vertical-align: top;
+}
+
+.button {
+  @apply --inverted-button;
+  display: block;
+  width: 180px;
+  padding: 7px 0px 3px;
+  margin-bottom: 10px;
+}
+
+.smallText {
+  font-size: var(--small-font-size);
+}

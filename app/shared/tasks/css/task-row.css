@@ -1,0 +1,78 @@
+@import '../../css/sizes';
+.container {
+  background: white;
+  margin: 10px var(--medium-gutter);
+  padding: 12px 15px;
+  display: flex;
+  justify-content: space-between;
+  flex-direction: row;
+  align-items: center;
+  border-radius: 5px;
+  border: 1px solid #fff;
+  color: var(--black-color)
+}
+
+.container:hover {
+  color: var(--black-color)
+}
+
+.selected {
+  border: 1px solid var(--border-color);
+  box-shadow: var(--login-drop-shadow);
+  margin-right: var(--small-gutter);
+}
+
+.title {
+  font-weight: var(--roboto-medium-weight);
+  flex: 5
+}
+
+.followers {
+  flex: 1;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.follower {
+  text-align: center;
+  margin-left: 5px;
+  border-radius: 50%;
+  height: 20px;
+  width: 20px;
+  font-family: var(--roboto);
+  border: 1px solid var(--border-color);
+  background: var(--light-gray-font-color);
+  color: white;
+  font-size: var(--extra-small-font-size);
+  padding-top: 2px;
+}
+
+.assignedTo {
+  background-position: center center;
+  background-size: cover;
+  border-radius: 50%;
+  height: 20px;
+  width: 20px;
+  padding-top: 2px;
+  border: 1px solid var(--border-color);
+}
+
+.dateSection {
+  flex: 1;
+  margin-left: 22px;
+}
+
+.dateLabel {
+  font-family: var(--roboto);
+  font-size: var(--extra-small-font-size);
+  line-height: var(--extra-small-font-line-height);
+  color: var(--light-gray-font-color);
+  margin-right: 5px;
+}
+
+.dateValue {
+  font-family: var(--roboto);
+  font-size: var(--extra-small-font-size);
+  line-height: var(--extra-small-font-line-height);
+  color: var(--black-color)
+}

@@ -1,0 +1,17 @@
+@import '../../shared/css/sizes';
+.container {
+  flex: 1;
+  order: 0;
+  overflow: auto;
+  justify-content: center;
+  height: 100%;
+  lost-center: var(--max-width);
+}
+
+.mainBody {
+  flex-basis: 75%;
+}
+
+.mainBodySmall {
+  flex-basis: 92.2%;
+}

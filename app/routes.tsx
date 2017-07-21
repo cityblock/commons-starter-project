@@ -1,16 +1,18 @@
 import * as React from 'react';
 import { Redirect, Route, Switch } from 'react-router-dom';
-import Authentication from './containers/authentication-container';
-import LogIn from './containers/login-container';
-import Main from './containers/main';
-import PatientEnrollmentContainer from './containers/patient-enrollment';
-import PatientPanelContainer from './containers/patient-panel-container';
-import PatientProfileContainer from './containers/patient-profile';
-import SettingsContainer from './containers/settings';
-import TasksContainer from './containers/tasks-container';
+import Authentication from './authentication-container/authentication-container';
+import LogIn from './login-container/login-container';
+import Main from './main-container/main-container';
+/* tslint:disable:max-line-length */
+import PatientEnrollmentContainer from './patient-enrollment-container/patient-enrollment-container';
+/* tslint:enable:max-line-length */
+import PatientPanelContainer from './patient-panel-container/patient-panel-container';
+import PatientProfileContainer from './patient-profile-container/patient-profile-container';
+import SettingsContainer from './settings-container/settings-container';
+import TasksContainer from './tasks-container/tasks-container';
 
 const PatientRedirect = (options: any) => (
-<Redirect to={`/patients/${options.match.params.patientId}/encounters`} />
+  <Redirect to={`/patients/${options.match.params.patientId}/encounters`} />
 );
 
 /**

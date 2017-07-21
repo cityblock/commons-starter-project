@@ -1,0 +1,103 @@
+@import '../../shared/css/sizes';
+.container {
+  width: 100%;
+  height: calc(100vh - 70px);
+  overflow: scroll;
+}
+
+.formContainer {
+  max-width: var(--max-width);
+  margin: 0px auto;
+  lost-flex-container: row;
+}
+
+.leftNav {
+  background: var(--gray-background-color);
+  padding: 50px 55px 0px var(--gutter);
+  lost-column: 2/12;
+}
+
+.leftNavLink {
+  color: var(--gray-font-color);
+  font-family: var(--basetica-medium);
+  font-size: var(--default-font-size);
+  line-height: var(--medium-font-line-height);
+  margin-bottom: 30px;
+  cursor: pointer;
+}
+
+.form {
+  lost-column: 10/12;
+  padding-right: 130px;
+}
+
+.formSection {
+  border-bottom: 1px solid var(--gray-background-color);
+  padding-bottom: 50px;
+  margin-bottom: var(--gutter);
+}
+
+.formSection:last-child {
+  margin-bottom: 100px;
+  border-bottom: 0px solid;
+}
+
+.formHeading {
+  @apply --title;
+  margin: 50px 0px;
+}
+
+.formBottom {
+  position: fixed;
+  bottom: 0px;
+  left: 0px;
+  background: white;
+  padding: 15px 0px;
+  width: 100%;
+}
+
+.formBottomContent {
+  width: 100%;
+  max-width: var(--max-width);
+  margin: 0px auto;
+  padding: 0px var(--gutter);
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.cancelButton {
+  @apply --inverted-button;
+}
+
+.submitButton {
+  @apply --button;
+}
+
+.loading {
+  position: fixed;
+  width: 100vw;
+  height: 100vh;
+  z-index: 10;
+  top: 0px;
+  left: 0px;
+  background: rgba(255, 255, 255, 0.8);
+  align-items: center;
+  display: flex;
+}
+
+.loadingHidden {
+  display: none;
+}
+
+.loadingContainer {
+  width: 100%;
+  justify-content: center;
+  display: flex;
+}
+
+.formRow {
+  max-width: var(--max-width);
+  margin: 0px auto;
+  lost-flex-container: row;
+}

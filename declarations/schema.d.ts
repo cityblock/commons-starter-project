@@ -605,6 +605,7 @@ declare module 'schema' {
     description?: string | null;
     dueAt?: string | null;
     assignedToId?: string | null;
+    priority?: string | null;
   }
 
   /*

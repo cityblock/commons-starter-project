@@ -10,10 +10,12 @@ import { DATETIME_FORMAT } from '../config';
 import * as styles from '../css/components/task.css';
 import * as taskQuery from '../graphql/queries/get-task.graphql';
 import * as taskCompleteMutation from '../graphql/queries/task-complete-mutation.graphql';
+import * as taskEditMutation from '../graphql/queries/task-edit-mutation.graphql';
 import * as taskUncompleteMutation from '../graphql/queries/task-uncomplete-mutation.graphql';
 import {
   FullTaskFragment,
   TaskCompleteMutationVariables,
+  TaskEditMutationVariables,
   TaskUncompleteMutationVariables,
 } from '../graphql/types';
 import { IState as IAppState } from '../store';
@@ -40,6 +42,9 @@ export interface IProps {
   uncompleteTask: (
     options: { variables: TaskUncompleteMutationVariables },
   ) => { data: { taskComplete: FullTaskFragment } };
+  editTask: (
+    options: { variables: TaskEditMutationVariables },
+  ) => { data: { taskComplete: FullTaskFragment } };
   onDelete: (taskId: string) => any;
 }
 
@@ -49,6 +54,7 @@ export interface IState {
   toggleCompletionError?: string;
   deleteConfirmationInProgress: boolean;
   deleteError?: string;
+  changePriorityError?: string;
 }
 
 export const DEFAULT_AVATAR_URL = 'http://bit.ly/2u9bJDA';
@@ -67,13 +73,13 @@ class Task extends React.Component<IProps, IState> {
     this.renderFollowers = this.renderFollowers.bind(this);
     this.renderTaskCompletionToggle = this.renderTaskCompletionToggle.bind(this);
     this.onClickToggleCompletion = this.onClickToggleCompletion.bind(this);
-    this.getTaskPriorityText = this.getTaskPriorityText.bind(this);
     this.onToggleHamburgerMenu = this.onToggleHamburgerMenu.bind(this);
     this.onCopyShareLinkClick = this.onCopyShareLinkClick.bind(this);
     this.clearCopySuccess = this.clearCopySuccess.bind(this);
     this.onClickDelete = this.onClickDelete.bind(this);
     this.onConfirmDelete = this.onConfirmDelete.bind(this);
     this.onCancelDelete = this.onCancelDelete.bind(this);
+    this.onPriorityChange = this.onPriorityChange.bind(this);
 
     this.state = {
       toggleCompletionError: undefined,
@@ -81,6 +87,7 @@ class Task extends React.Component<IProps, IState> {
       copySuccessVisible: false,
       deleteConfirmationInProgress: false,
       deleteError: undefined,
+      changePriorityError: undefined,
     };
   }
 
@@ -229,16 +236,6 @@ class Task extends React.Component<IProps, IState> {
     );
   }
 
-  getTaskPriorityText() {
-    const { task } = this.props;
-
-    if (task && task.priority) {
-      return task.priority.charAt(0).toUpperCase() + task.priority.slice(1);
-    } else {
-      return 'Low';
-    }
-  }
-
   onToggleHamburgerMenu() {
     const { hamburgerMenuVisible } = this.state;
 
@@ -278,6 +275,19 @@ class Task extends React.Component<IProps, IState> {
 
   onCancelDelete() {
     this.setState(() => ({ deleteError: undefined, deleteConfirmationInProgress: false }));
+  }
+
+  async onPriorityChange(event: React.ChangeEvent<HTMLSelectElement>) {
+    const { taskId, editTask } = this.props;
+
+    if (taskId) {
+      try {
+        this.setState(() => ({ changePriorityError: undefined }));
+        await editTask({ variables: { taskId, priority: event.target.value }});
+      } catch (err) {
+        this.setState(() => ({ changePriorityError: err.message }));
+      }
+    }
   }
 
   render() {
@@ -398,10 +408,23 @@ class Task extends React.Component<IProps, IState> {
               </div>
               <div className={styles.bodyText}>{task.description}</div>
               {this.renderAttachments()}
-              <div className={classNames(styles.infoRow, styles.borderTop)}>
+              <div className={classNames(styles.infoRow, styles.borderTop, styles.priorityRow)}>
                 <div className={styles.priorityInfo}>
                   <div className={priorityIconStyles}></div>
-                  <div className={styles.priorityText}>{this.getTaskPriorityText()} priority</div>
+                  <select
+                    value={task.priority || 'low'}
+                    className={styles.prioritySelect}
+                    onChange={this.onPriorityChange}>
+                    <option value='low'>
+                      Low priority
+                    </option>
+                    <option value='medium'>
+                      Medium priority
+                    </option>
+                    <option value='high'>
+                      High priority
+                    </option>
+                  </select>
                 </div>
                 <div className={styles.typeInfo}>
                   <div className={styles.typeIcon}></div>
@@ -463,6 +486,7 @@ export default (compose as any)(
   connect(mapStateToProps, mapDispatchToProps),
   graphql(taskCompleteMutation as any, { name: 'completeTask' }),
   graphql(taskUncompleteMutation as any, { name: 'uncompleteTask' }),
+  graphql(taskEditMutation as any, { name: 'editTask' }),
   graphql(taskQuery as any, {
     skip: (props: IProps) => !props.taskId,
     options: (props: IProps) => ({ variables: { taskId: props.taskId } }),

@@ -5,12 +5,14 @@ mutation taskEdit(
   $assignedToId: String
   $title: String
   $description: String
+  $priority: String
 ) {
   taskEdit(input: {
     taskId: $taskId,
     assignedToId: $assignedToId,
     title: $title,
     description: $description,
+    priority: $priority,
   }) {
     ...FullTask
   }

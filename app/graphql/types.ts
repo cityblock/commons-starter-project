@@ -735,6 +735,7 @@ export type TaskEditMutationVariables = {
   assignedToId?: string | null,
   title?: string | null,
   description?: string | null,
+  priority?: string | null,
 };
 
 export type TaskEditMutation = {

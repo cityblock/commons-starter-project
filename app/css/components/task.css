@@ -110,6 +110,10 @@
   margin-left: 15px;
 }
 
+.priorityRow {
+  padding: 6px 0;
+}
+
 .taskHeader {}
 
 .patientInfo {
@@ -251,6 +255,11 @@
     cursor: pointer;
     border: 1px solid var(--blue-color);
   }
+
+  .prioritySelect:hover {
+    cursor: pointer;
+    border: 1px solid var(--blue-color);
+  }
 }
 
 .markCompletionText {
@@ -380,10 +389,13 @@
   background-size: contain;
   background-position: center center;
   background-repeat: no-repeat;
+}
+
+.typeIcon {
   margin-right: 10px;
 }
 
-.priorityText, .typeText {
+.typeText {
   color: var(--black-color);
   font-family: var(--roboto);
   font-size: var(--default-font-size);
@@ -393,6 +405,7 @@
 .priorityIcon {
   width: 15px;
   height: 15px;
+  margin-right: 6px;
   background-image: url('../../assets/priority-icon-grey.svg');
 }
 
@@ -599,4 +612,16 @@
 
 .changeAssigneeError .redText {
   margin-right: 3px;
+}
+
+.prioritySelect {
+  outline: none;
+  border: 1px solid transparent;
+  background: transparent;
+  -webkit-appearance: none;
+  font-family: var(--roboto);
+  font-size: var(--default-font-size);
+  line-height: var(--default-line-height);
+  transition: border .2s linear;
+  padding: 4px;
 }

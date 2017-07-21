@@ -460,6 +460,7 @@ input TaskEditInput {
   description: String
   dueAt: String
   assignedToId: String
+  priority: String
 }
 
 # params for completing a task

@@ -6,6 +6,7 @@ import * as commentCreateMutation from '../../graphql/queries/task-comment-creat
 import * as commentEditMutation from '../../graphql/queries/task-comment-edit-mutation.graphql';
 import {
   FullTaskCommentFragment,
+  GetTaskCommentsQuery,
   GetTaskCommentsQueryVariables,
   TaskCommentCreateMutationVariables,
   TaskCommentEditMutationVariables,
@@ -13,15 +14,7 @@ import {
 import * as styles from './css/task-comments.css';
 import TaskComment from './task-comment';
 
-export interface ITaskCommentsResponse {
-  edges: Array<{
-    node: FullTaskCommentFragment;
-  }>;
-  pageInfo: {
-    hasNextPage: boolean;
-    hasPreviousPage: boolean;
-  };
-}
+export type ITaskCommentsResponse = GetTaskCommentsQuery['taskComments'];
 
 export interface IProps {
   taskId: string;
@@ -34,9 +27,9 @@ export interface IProps {
   refetchTaskComments: () => any;
   updateTaskComments: (
     updateFunction: (
-      previousResult: { taskComments: ITaskCommentsResponse },
+      previousResult: GetTaskCommentsQuery,
       args?: { variables: GetTaskCommentsQueryVariables },
-    ) => { taskComments: ITaskCommentsResponse } ) => { taskComments: ITaskCommentsResponse };
+    ) => any) => { taskComments: ITaskCommentsResponse };
   editComment: (
     options: { variables: TaskCommentEditMutationVariables },
   ) => { data: { taskCommentEdit: FullTaskCommentFragment } };
@@ -50,7 +43,7 @@ export interface IState {
 
 export const DEFAULT_AVATAR_URL = 'http://bit.ly/2u9bJDA';
 
-class TaskComments extends React.Component<IProps, IState> {
+export class TaskComments extends React.Component<IProps, IState> {
   constructor(props: IProps) {
     super(props);
 
@@ -68,8 +61,9 @@ class TaskComments extends React.Component<IProps, IState> {
     const { taskCommentsResponse } = nextProps;
 
     if (taskCommentsResponse && taskCommentsResponse.edges) {
+      const edges = taskCommentsResponse.edges;
       this.setState(() => ({
-        comments: taskCommentsResponse.edges.map((edge: any) => edge.node),
+        comments: edges.map((edge: any) => edge.node),
       }));
     }
   }
@@ -86,12 +80,13 @@ class TaskComments extends React.Component<IProps, IState> {
 
     try {
       await editComment({ variables: { taskCommentId, body } });
-
-      updateTaskComments((previousResult: { taskComments: ITaskCommentsResponse }) => {
-        const newNodes = previousResult.taskComments.edges.map((edge: any) => {
+      updateTaskComments((previousResult: GetTaskCommentsQuery) => {
+        const edges = previousResult.taskComments && previousResult.taskComments.edges ?
+          previousResult.taskComments.edges : [];
+        const newNodes = edges.map((edge: { node: FullTaskCommentFragment }) => {
           const { node } = edge;
 
-          if (node.id === taskCommentId ) {
+          if (node.id === taskCommentId) {
             return { ...edge, node: { ...node, body } };
           } else {
             return { ...edge, node };
@@ -125,7 +120,7 @@ class TaskComments extends React.Component<IProps, IState> {
       if (taskId && commentBody) {
         try {
           this.setState(() => ({ createCommentError: undefined }));
-          await createComment({ variables: { taskId, body: commentBody }});
+          await createComment({ variables: { taskId, body: commentBody } });
           this.setState(() => ({ commentBody: '' }));
 
           refetchTaskComments();
@@ -219,13 +214,15 @@ class TaskComments extends React.Component<IProps, IState> {
 
 export default (compose as any)(
   graphql(commentCreateMutation as any, { name: 'createComment' }),
-  graphql(commentEditMutation as any, { name: 'editComment'}),
+  graphql(commentEditMutation as any, { name: 'editComment' }),
   graphql(taskCommentsQuery as any, {
-    options: (props: IProps) => ({ variables: {
-      taskId: props.taskId,
-      pageNumber: 0,
-      pageSize: 10,
-    } }),
+    options: (props: IProps) => ({
+      variables: {
+        taskId: props.taskId,
+        pageNumber: 0,
+        pageSize: 10,
+      },
+    }),
     props: ({ data }) => ({
       refetchTaskComments: (data ? data.refetch : null),
       taskCommentsLoading: (data ? data.loading : false),

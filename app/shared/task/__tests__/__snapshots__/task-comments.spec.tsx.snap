@@ -1,0 +1,83 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`correctly renders comments component 1`] = `
+<div
+  className={undefined}
+>
+  <div
+    className={undefined}
+  >
+    <textarea
+      onChange={[Function]}
+      onKeyDown={[Function]}
+      placeholder="Add a comment..."
+      value=""
+    />
+    <div
+      className={undefined}
+    />
+    <div
+      className="undefined"
+    >
+      <div
+        className=""
+      >
+        Error adding comment.
+      </div>
+      <div
+        className={undefined}
+      >
+        Please try again.
+      </div>
+    </div>
+  </div>
+  <div>
+    <div
+      className={undefined}
+    >
+      Loading comments...
+    </div>
+    <div
+      className={undefined}
+    />
+  </div>
+</div>
+`;
+
+exports[`renders comments 1`] = `
+<div>
+  <div
+    className={undefined}
+  >
+    Activity and comments (
+    1
+    )
+  </div>
+  <div
+    className={undefined}
+  >
+    <Apollo(TaskComment)
+      comment={
+        Object {
+          "body": "body",
+          "createdAt": "Thu Jul 14 2017 16:52:56 GMT-0400 (EDT)",
+          "id": "comment-id",
+          "taskId": "cool-task-id",
+          "updatedAt": "Thu Jul 14 2017 16:52:56 GMT-0400 (EDT)",
+          "user": Object {
+            "email": "a@b.com",
+            "firstName": "first",
+            "googleProfileImageUrl": null,
+            "homeClinicId": "1",
+            "id": "id1",
+            "lastName": "last",
+            "locale": "en",
+            "userRole": "physician",
+          },
+        }
+      }
+      onEdit={[Function]}
+    />
+  </div>
+</div>
+`;

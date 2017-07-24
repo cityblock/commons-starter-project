@@ -13,3 +13,68 @@ exports[`correctly renders/does not render the add task follower button 1`] = `
   />
 </div>
 `;
+
+exports[`renders care team 1`] = `
+Array [
+  <div
+    className={undefined}
+    onClick={[Function]}
+>
+    <div
+        className={undefined}
+        style={
+            Object {
+                "backgroundImage": "url('http://bit.ly/2u9bJDA')",
+              }
+        }
+    />
+    <div
+        className={undefined}
+    >
+        <div
+            className={undefined}
+        >
+            first last
+        </div>
+        <div
+            className={undefined}
+        >
+            physician
+        </div>
+    </div>
+    <div
+        className=""
+    />
+</div>,
+  <div
+    className={undefined}
+    onClick={[Function]}
+>
+    <div
+        className={undefined}
+        style={
+            Object {
+                "backgroundImage": "url('http://bit.ly/2u9bJDA')",
+              }
+        }
+    />
+    <div
+        className={undefined}
+    >
+        <div
+            className={undefined}
+        >
+            first last
+        </div>
+        <div
+            className={undefined}
+        >
+            physician
+        </div>
+    </div>
+    <div
+        className=""
+    />
+</div>,
+]
+`;

@@ -56,13 +56,28 @@ export interface IState {
   deleteError?: string;
   changePriorityError?: string;
   changeDueDateError?: string;
+  editedTitle: string;
+  editingTitle: boolean;
+  editTitleError?: string;
+  editedDescription: string;
+  editDescriptionError?: string;
+  editingDescription: boolean;
+  titleHeight: string;
+  descriptionHeight: string;
 }
 
 export const DEFAULT_AVATAR_URL = 'http://bit.ly/2u9bJDA';
 
 const COPY_SUCCESS_TIMEOUT_MILLISECONDS = 2000;
 
+const BASE_TEXT_HEIGHT = '2px';
+
 class Task extends React.Component<IProps, IState> {
+  editTitleTextArea: HTMLTextAreaElement | null;
+  editDescriptionTextArea: HTMLTextAreaElement | null;
+  titleBody: HTMLDivElement | null;
+  descriptionBody: HTMLDivElement | null;
+
   constructor(props: IProps) {
     super(props);
 
@@ -84,6 +99,18 @@ class Task extends React.Component<IProps, IState> {
     this.formatDateForInput = this.formatDateForInput.bind(this);
     this.getTaskDueDateForInput = this.getTaskDueDateForInput.bind(this);
     this.onDueDateChange = this.onDueDateChange.bind(this);
+    this.onChange = this.onChange.bind(this);
+    this.onKeyDown = this.onKeyDown.bind(this);
+    this.onBlur = this.onBlur.bind(this);
+    this.onClickToEditTitle = this.onClickToEditTitle.bind(this);
+    this.onClickToEditDescription = this.onClickToEditDescription.bind(this);
+    this.focusInput = this.focusInput.bind(this);
+    this.getTextHeights = this.getTextHeights.bind(this);
+
+    this.editTitleTextArea = null;
+    this.editDescriptionTextArea = null;
+    this.titleBody = null;
+    this.descriptionBody = null;
 
     this.state = {
       toggleCompletionError: undefined,
@@ -93,6 +120,12 @@ class Task extends React.Component<IProps, IState> {
       deleteError: undefined,
       changePriorityError: undefined,
       changeDueDateError: undefined,
+      editedTitle: '',
+      editingTitle: false,
+      editedDescription: '',
+      editingDescription: false,
+      titleHeight: '100%',
+      descriptionHeight: '100%',
     };
   }
 
@@ -102,13 +135,46 @@ class Task extends React.Component<IProps, IState> {
     }
   }
 
+  componentDidMount() {
+    const { title, description } = this.getTextHeights();
+    this.setState(() => ({ titleHeight: title, descriptionHeight: description }));
+  }
+
+  componentDidUpdate() {
+    const { title, description } = this.getTextHeights();
+
+    if (this.editTitleTextArea && title !== BASE_TEXT_HEIGHT) {
+      this.editTitleTextArea.style.height = title;
+    }
+
+    if (this.editDescriptionTextArea && description !== BASE_TEXT_HEIGHT) {
+      this.editDescriptionTextArea.style.height = description;
+    }
+  }
+
   componentWillUnmount() {
     this.props.selectTask(undefined);
   }
 
   componentWillReceiveProps(nextProps: IProps) {
+    const { task } = nextProps;
+
     if (this.props.taskId !== nextProps.taskId) {
       this.props.selectTask(nextProps.taskId);
+    }
+
+    if (task) {
+      if (!this.props.task) {
+        this.setState(() => ({
+          editedTitle: task.title,
+          editedDescription: task.description,
+        }));
+      } else if (this.props.task.id !== task.id) {
+        this.setState(() => ({
+          editedTitle: task.title,
+          editedDescription: task.description,
+        }));
+      }
     }
   }
 
@@ -322,6 +388,85 @@ class Task extends React.Component<IProps, IState> {
     }
   }
 
+  onChange(event: React.ChangeEvent<HTMLTextAreaElement>) {
+    const value = event.currentTarget.value;
+    const name = event.currentTarget.name;
+
+    this.setState(() => ({ [name]: value || '' }));
+  }
+
+  async onKeyDown(event: React.KeyboardEvent<HTMLTextAreaElement>) {
+    const { taskId, editTask } = this.props;
+    const { editedTitle, editedDescription } = this.state;
+    const enterPressed = event.keyCode === 13;
+    const name = event.currentTarget.name;
+
+    if (enterPressed && taskId) {
+      event.preventDefault();
+
+      if (name === 'editedTitle') {
+        try {
+          this.setState(() => ({ editTitleError: undefined }));
+          await editTask({ variables: { taskId, title: editedTitle }});
+          this.setState(() => ({ editTitleError: undefined, editingTitle: false }));
+        } catch (err) {
+          this.setState(() => ({ editTitleError: err.message }));
+        }
+      } else if (name === 'editedDescription') {
+        try {
+          this.setState(() => ({ editDescriptionError: undefined }));
+          await editTask({ variables: { taskId, description: editedDescription }});
+          this.setState(() => ({ editDescriptionError: undefined, editingDescription: false }));
+        } catch (err) {
+          this.setState(() => ({ editDescriptionError: err.message }));
+        }
+      }
+    }
+  }
+
+  onBlur(event: React.FocusEvent<HTMLTextAreaElement>) {
+    const name = event.currentTarget.name;
+
+    if (name === 'editedTitle') {
+      this.setState(() => ({ editingTitle: false }));
+    } else if (name === 'editedDescription') {
+      this.setState(() => ({ editingDescription: false }));
+    }
+  }
+
+  onClickToEditTitle() {
+    this.setState(() => ({ editingTitle: true }));
+    setTimeout(() => (this.focusInput(this.editTitleTextArea), 100));
+  }
+
+  onClickToEditDescription() {
+    this.setState(() => ({ editingDescription: true }));
+    setTimeout(() => (this.focusInput(this.editDescriptionTextArea), 100));
+  }
+
+  focusInput(input: HTMLTextAreaElement | HTMLInputElement | null) {
+    if (input) {
+      input.focus();
+    }
+  }
+
+  getTextHeights() {
+    const heights = {
+      title: '100%',
+      description: '100%',
+    };
+
+    if (this.titleBody) {
+      heights.title = `${this.titleBody.clientHeight + 2}px`;
+    }
+
+    if (this.descriptionBody) {
+      heights.description = `${this.descriptionBody.clientHeight + 2}px`;
+    }
+
+    return heights;
+  }
+
   render() {
     const { task, routeBase } = this.props;
     const {
@@ -329,6 +474,14 @@ class Task extends React.Component<IProps, IState> {
       copySuccessVisible,
       deleteConfirmationInProgress,
       deleteError,
+      editedTitle,
+      titleHeight,
+      editingTitle,
+      editTitleError,
+      editedDescription,
+      descriptionHeight,
+      editingDescription,
+      editDescriptionError,
     } = this.state;
 
     const patientName = this.getPatientName();
@@ -339,7 +492,6 @@ class Task extends React.Component<IProps, IState> {
       [styles.mediumPriorityIcon]: (task && task.priority === 'medium'),
       [styles.highPriorityIcon]: (task && task.priority === 'high'),
     });
-
     const copySuccessStyles = classNames(styles.copySuccess, {
       [styles.visible]: copySuccessVisible,
     });
@@ -354,6 +506,20 @@ class Task extends React.Component<IProps, IState> {
     });
     const deleteErrorStyles = classNames(styles.deleteError, {
       [styles.hidden]: !deleteConfirmationInProgress || !deleteError,
+    });
+    const titleTextStyles = classNames(styles.largeText, styles.title, {
+      [styles.hidden]: editingTitle,
+    });
+    const titleEditStyles = classNames(styles.largeTextEditor, {
+      [styles.hidden]: !editingTitle,
+      [styles.error]: !!editTitleError,
+    });
+    const descriptionTextStyles = classNames(styles.bodyText, {
+      [styles.hidden]: editingDescription,
+    });
+    const descriptionEditStyles = classNames(styles.descriptionTextEditor, {
+      [styles.hidden]: !editingDescription,
+      [styles.error]: !!editDescriptionError,
     });
 
     const closeRoute = routeBase || '/patients';
@@ -418,6 +584,7 @@ class Task extends React.Component<IProps, IState> {
                   <div className={styles.dueDateIcon}></div>
                   <input
                     type='date'
+                    className={styles.dueDateInput}
                     data-date={dueDate}
                     value={inputDueDate}
                     onChange={this.onDueDateChange} />
@@ -430,7 +597,22 @@ class Task extends React.Component<IProps, IState> {
                 assignee={task.assignedTo} />
             </div>
             <div className={styles.taskBody}>
-              <div className={styles.largeText}>{task.title}</div>
+              <div
+                ref={div => { this.titleBody = div; }}
+                className={titleTextStyles}
+                onClick={this.onClickToEditTitle}>
+                {task.title}
+              </div>
+              <div className={titleEditStyles}>
+                <textarea
+                  style={{ height: titleHeight }}
+                  name='editedTitle'
+                  ref={area => { this.editTitleTextArea = area; }}
+                  value={editedTitle}
+                  onChange={this.onChange}
+                  onKeyDown={this.onKeyDown}
+                  onBlur={this.onBlur} />
+              </div>
               <div className={styles.okrInfo}>
                 <div className={styles.okrRow}>
                   <div className={styles.smallText}>Objective:</div>
@@ -443,7 +625,22 @@ class Task extends React.Component<IProps, IState> {
                   </div>
                 </div>
               </div>
-              <div className={styles.bodyText}>{task.description}</div>
+              <div
+                ref={div => { this.descriptionBody = div; }}
+                onClick={this.onClickToEditDescription}
+                className={descriptionTextStyles}>
+                {task.description}
+              </div>
+              <div className={descriptionEditStyles}>
+                <textarea
+                  style={{ height: descriptionHeight }}
+                  name='editedDescription'
+                  ref={area => { this.editDescriptionTextArea = area; }}
+                  value={editedDescription}
+                  onChange={this.onChange}
+                  onKeyDown={this.onKeyDown}
+                  onBlur={this.onBlur} />
+              </div>
               {this.renderAttachments()}
               <div className={classNames(styles.infoRow, styles.borderTop, styles.priorityRow)}>
                 <div className={styles.priorityInfo}>

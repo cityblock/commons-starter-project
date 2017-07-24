@@ -151,6 +151,7 @@ exports[`renders task 1`] = `
             className={undefined}
           />
           <input
+            className={undefined}
             data-date="Jul 13, 2017"
             onChange={[Function]}
             type="date"
@@ -234,9 +235,26 @@ exports[`renders task 1`] = `
       className={undefined}
     >
       <div
-        className={undefined}
+        className=""
+        onClick={[Function]}
       >
         title
+      </div>
+      <div
+        className=""
+      >
+        <textarea
+          name="editedTitle"
+          onBlur={[Function]}
+          onChange={[Function]}
+          onKeyDown={[Function]}
+          style={
+            Object {
+              "height": "100%",
+            }
+          }
+          value=""
+        />
       </div>
       <div
         className={undefined}
@@ -271,9 +289,26 @@ exports[`renders task 1`] = `
         </div>
       </div>
       <div
-        className={undefined}
+        className=""
+        onClick={[Function]}
       >
         description
+      </div>
+      <div
+        className=""
+      >
+        <textarea
+          name="editedDescription"
+          onBlur={[Function]}
+          onChange={[Function]}
+          onKeyDown={[Function]}
+          style={
+            Object {
+              "height": "100%",
+            }
+          }
+          value=""
+        />
       </div>
       <div
         className={undefined}

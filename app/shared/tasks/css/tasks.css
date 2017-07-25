@@ -5,11 +5,13 @@
 
 .bottomContainer {
   padding: var(--medium-gutter) var(--small-gutter);
+  height: calc(100vh - 160px);
+  overflow-y: hidden;
 }
 
 .tasksList {
   display: inline-block;
-  height: calc(100vh - 161px);
+  height: calc(100vh - 223px);
   overflow-y: scroll;
   -webkit-overflow-scrolling: touch;
   width: 100%;
@@ -44,13 +46,16 @@
   width: 0%;
   overflow: hidden;
   display: inline-block;
-  height: calc(100vh - 161px);
-  padding: 0 10px;
+  height: calc(100vh - 223px);
+  vertical-align: top;
   transition: width 0.3s ease-out;
 }
 
 .taskContainer.visible {
   width: 50%;
+  padding: 0 10px;
+  overflow-y: scroll;
+  -webkit-overflow-scrolling: touch;
 }
 
 .emptyTasksMessage {

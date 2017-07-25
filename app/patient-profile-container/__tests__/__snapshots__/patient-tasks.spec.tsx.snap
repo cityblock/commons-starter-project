@@ -69,7 +69,7 @@ exports[`renders patient tasks 1`] = `
     className={undefined}
   >
     <div
-      className={undefined}
+      className=""
     >
       <div
         className={undefined}

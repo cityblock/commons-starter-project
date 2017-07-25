@@ -165,7 +165,10 @@ class Tasks extends React.Component<IProps, IState> {
     const { orderBy, showCreateTask } = this.state;
     const tasksList = tasks || [];
     const taskContainerStyles = classNames(styles.taskContainer, {
-      [styles.taskContainerVisible]: !!taskId || showCreateTask,
+      [styles.visible]: !!taskId || showCreateTask,
+    });
+    const tasksListStyles = classNames(styles.tasksList, {
+      [styles.compressed]: !!taskId || showCreateTask,
     });
     const createTaskButton = patient ? (
       <div className={styles.createContainer}>
@@ -209,7 +212,7 @@ class Tasks extends React.Component<IProps, IState> {
           {createTaskButton}
         </div>
         <div className={styles.bottomContainer}>
-          <div className={styles.tasksList}>
+          <div className={tasksListStyles}>
             {this.renderTasks(tasksList)}
             <Waypoint onEnter={this.getNextPage} />
           </div>

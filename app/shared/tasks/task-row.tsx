@@ -4,6 +4,7 @@ import { FormattedDate, FormattedMessage, FormattedRelative } from 'react-intl';
 import { Link } from 'react-router-dom';
 import { FullTaskFragment, ShortUserFragment } from '../../graphql/types';
 import * as styles from './css/task-row.css';
+import * as tasksStyles from './css/tasks.css';
 
 export interface IProps {
   task: FullTaskFragment;
@@ -11,33 +12,19 @@ export interface IProps {
   routeBase: string;
 }
 
-function formatInitials(user: ShortUserFragment, photo?: boolean) {
-  return (user.firstName ? user.firstName[0] : '') + (user.lastName ? user.lastName[0] : '');
-}
-
 function renderFollowers(followers: ShortUserFragment[], photo?: boolean) {
   const followerCount = followers.length;
   const followersHtmlMap = [];
 
   if (followerCount) {
-    const featuredFollower = followers[0];
-
     followersHtmlMap.push((
-      <div key={featuredFollower.id} className={styles.follower}>
-        {formatInitials(featuredFollower)}
+      <div key={'moreFollowers'} className={styles.follower}>
+        {`+${followerCount}`}
       </div>
     ));
-
-    if (followerCount > 1) {
-      followersHtmlMap.push((
-        <div key={'moreFollowers'} className={styles.follower}>
-          {`+${followerCount - 1}`}
-        </div>
-      ));
-    }
-
-    return followersHtmlMap;
   }
+
+  return followersHtmlMap;
 }
 
 function renderAssignedTo(user: ShortUserFragment) {
@@ -50,10 +37,12 @@ function renderAssignedTo(user: ShortUserFragment) {
 
 export const TaskRow: React.StatelessComponent<IProps> = props => {
   const { task, selected, routeBase } = props;
-  const taskClass = classNames(
-    styles.container,
-    { [styles.selected]: selected },
-  );
+  const taskClass = classNames(styles.container, {
+    [styles.selected]: selected,
+    [styles.highPriority]: task.priority === 'high',
+    [styles.mediumPriority]: task.priority === 'medium',
+    [styles.lowPriority]: task.priority === 'low' || task.priority === null,
+  });
   const followers = renderFollowers(task.followers || []);
   const assignedTo = task.assignedTo ? renderAssignedTo(task.assignedTo) : null;
   const formattedCreatedAt = task.createdAt ?
@@ -61,27 +50,29 @@ export const TaskRow: React.StatelessComponent<IProps> = props => {
       {(date: string) => <span className={styles.dateValue}>{date}</span>}
     </FormattedRelative>) : null;
   const formattedDueAt = task.dueAt ?
-    (<FormattedDate value={task.dueAt}>
+    (<FormattedDate value={task.dueAt} year='numeric' month='short' day='numeric'>
       {(date: string) => <span className={styles.dateValue}>{date}</span>}
     </FormattedDate>) : null;
   return (
     <Link className={taskClass} to={`${routeBase}/${task.id}`}>
       <div className={styles.title}>{task.title}</div>
-      <div className={styles.followers}>
-        {assignedTo}
-        {followers}
-      </div>
-      <div className={styles.dateSection}>
-        <FormattedMessage id='task.opened'>
-          {(message: string) => <span className={styles.dateLabel}>{message}:</span>}
-        </FormattedMessage>
-        {formattedCreatedAt}
-      </div>
-      <div className={styles.dateSection}>
-        <FormattedMessage id='task.due'>
-          {(message: string) => <span className={styles.dateLabel}>{message}:</span>}
-        </FormattedMessage>
-        {formattedDueAt}
+      <div className={styles.meta}>
+        <div className={styles.followers}>
+          {assignedTo}
+          {followers}
+        </div>
+        <div className={classNames(tasksStyles.dateSection, tasksStyles.openedAt)}>
+          <FormattedMessage id='task.opened'>
+            {(message: string) => <span className={styles.dateLabel}>{message}:</span>}
+          </FormattedMessage>
+          {formattedCreatedAt}
+        </div>
+        <div className={classNames(styles.dateSection, styles.dueAtSection)}>
+          <FormattedMessage id='task.due'>
+            {(message: string) => <span className={styles.dateLabel}>{message}:</span>}
+          </FormattedMessage>
+          {formattedDueAt}
+        </div>
       </div>
     </Link>
   );

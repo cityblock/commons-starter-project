@@ -1,7 +1,6 @@
 @import '../../css/sizes';
 .container {
   background: white;
-  margin: 10px var(--medium-gutter);
   padding: 12px 15px;
   display: flex;
   justify-content: space-between;
@@ -9,7 +8,24 @@
   align-items: center;
   border-radius: 5px;
   border: 1px solid #fff;
-  color: var(--black-color)
+  color: var(--black-color);
+  margin: 0 10px 10px 10px;
+}
+
+.container.highPriority {
+  border-left: 4px solid var(--red-color);
+}
+
+.container.mediumPriority {
+  border-left: 4px solid var(--yellow-color);
+}
+
+.container.lowPriority {
+  border-left: 4px solid var(--border-color);
+}
+
+.container:last-child {
+  margin-bottom: 0px;
 }
 
 .container:hover {
@@ -18,19 +34,23 @@
 
 .selected {
   border: 1px solid var(--border-color);
-  box-shadow: var(--login-drop-shadow);
-  margin-right: var(--small-gutter);
+  box-shadow: 0 6px 8px 0 rgba(0,0,0,0.1);
 }
 
 .title {
   font-weight: var(--roboto-medium-weight);
-  flex: 5
+}
+
+.meta {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
 }
 
 .followers {
-  flex: 1;
   display: flex;
   justify-content: flex-end;
+  padding-right: 15px;
 }
 
 .follower {
@@ -58,8 +78,17 @@
 }
 
 .dateSection {
-  flex: 1;
-  margin-left: 22px;
+  padding: 0 15px;
+  border-left: 1px solid var(--gray-background-color);
+}
+
+.dueAtSection {
+  min-width: 97px;
+  text-align: right;
+}
+
+.dateSection:last-child {
+  padding-right: 0;
 }
 
 .dateLabel {

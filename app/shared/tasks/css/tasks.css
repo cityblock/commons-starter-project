@@ -3,49 +3,54 @@
   background: var(--white-font-color);
 }
 
+.bottomContainer {
+  padding: var(--medium-gutter) var(--small-gutter);
+}
+
 .tasksList {
-  padding: 15px 0;
-  flex: 1;
+  display: inline-block;
   height: calc(100vh - 161px);
-  overflow-x: auto;
+  overflow-y: scroll;
   -webkit-overflow-scrolling: touch;
+  width: 100%;
+  transition: width 0.3s ease-out;
+
   &:hover {
     cursor: pointer;
   }
 }
 
+.tasksList.compressed {
+  width: 50%;
+}
+
+.tasksList.compressed .dateSection {
+  padding: 0 15px;
+  border-left: 1px solid var(--gray-background-color);
+}
+
+.tasksList.compressed .dateSection.openedAt {
+  display: none;
+}
+
 .tasksList.emptyTasksList {
+  width: 100%;
   &:hover {
     cursor: default;
   }
 }
 
-.taskListContainer {
-  flex-grow: 1;
-  flex-shrink: 1;
-  transition: all 0.3s;
-}
-
-.bottomContainer {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: stretch;
-  flex-wrap: nowrap;
-}
-
 .taskContainer {
+  width: 0%;
   overflow: hidden;
-  flex-grow: 0;
-  flex-shrink: 0;
-  flex-basis: 0px;
-  transition: all 0.3s;
-  min-width: 50%;
+  display: inline-block;
+  height: calc(100vh - 161px);
+  padding: 0 10px;
+  transition: width 0.3s ease-out;
 }
 
-.taskContainerVisible {
-  overflow: visible;
-  flex-grow: 1;
+.taskContainer.visible {
+  width: 50%;
 }
 
 .emptyTasksMessage {

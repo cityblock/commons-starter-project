@@ -16,47 +16,51 @@ exports[`task row renders task row 1`] = `
   >
     <div
       className={undefined}
-      style={
-        Object {
-          "backgroundImage": "url(null)",
+    >
+      <div
+        className={undefined}
+        style={
+          Object {
+            "backgroundImage": "url(null)",
+          }
         }
-      }
-    />
-    <div
-      className={undefined}
-    >
-      fl
+      />
+      <div
+        className={undefined}
+      >
+        +1
+      </div>
     </div>
-  </div>
-  <div
-    className={undefined}
-  >
-    <span
-      className={undefined}
+    <div
+      className=""
     >
-      Opened
-      :
-    </span>
-    <span
-      className={undefined}
+      <span
+        className={undefined}
+      >
+        Opened
+        :
+      </span>
+      <span
+        className={undefined}
+      >
+        6 days ago
+      </span>
+    </div>
+    <div
+      className=""
     >
-      6 days ago
-    </span>
-  </div>
-  <div
-    className={undefined}
-  >
-    <span
-      className={undefined}
-    >
-      Due
-      :
-    </span>
-    <span
-      className={undefined}
-    >
-      7/13/2017
-    </span>
+      <span
+        className={undefined}
+      >
+        Due
+        :
+      </span>
+      <span
+        className={undefined}
+      >
+        Jul 13, 2017
+      </span>
+    </div>
   </div>
 </a>
 `;
@@ -77,52 +81,51 @@ exports[`task row renders task row with multiple followers 1`] = `
   >
     <div
       className={undefined}
-      style={
-        Object {
-          "backgroundImage": "url(null)",
+    >
+      <div
+        className={undefined}
+        style={
+          Object {
+            "backgroundImage": "url(null)",
+          }
         }
-      }
-    />
-    <div
-      className={undefined}
-    >
-      fl
+      />
+      <div
+        className={undefined}
+      >
+        +2
+      </div>
     </div>
     <div
-      className={undefined}
+      className=""
     >
-      +1
+      <span
+        className={undefined}
+      >
+        Opened
+        :
+      </span>
+      <span
+        className={undefined}
+      >
+        6 days ago
+      </span>
     </div>
-  </div>
-  <div
-    className={undefined}
-  >
-    <span
-      className={undefined}
+    <div
+      className=""
     >
-      Opened
-      :
-    </span>
-    <span
-      className={undefined}
-    >
-      6 days ago
-    </span>
-  </div>
-  <div
-    className={undefined}
-  >
-    <span
-      className={undefined}
-    >
-      Due
-      :
-    </span>
-    <span
-      className={undefined}
-    >
-      7/13/2017
-    </span>
+      <span
+        className={undefined}
+      >
+        Due
+        :
+      </span>
+      <span
+        className={undefined}
+      >
+        Jul 13, 2017
+      </span>
+    </div>
   </div>
 </a>
 `;

@@ -2,9 +2,8 @@
 .container {
   background: white;
   border: 1px solid var(--gray-background-color);
-  box-shadow: var(--login-drop-shadow);
+  box-shadow: 0 6px 8px 0 rgba(0,0,0,0.1);
   border-radius: 5px;
-  margin: 25px var(--medium-gutter) 25px 0px;
   min-height: 568px;
 }
 

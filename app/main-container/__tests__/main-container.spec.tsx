@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { MockedProvider } from 'react-apollo/lib/test-utils';
+import { MockedProvider } from 'react-apollo/test-utils';
 import { create } from 'react-test-renderer';
 import configureMockStore from 'redux-mock-store';
 import MainContainer from '../main-container';

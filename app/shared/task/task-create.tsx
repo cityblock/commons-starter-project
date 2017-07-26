@@ -8,7 +8,7 @@ import { push } from 'react-router-redux';
 import * as careTeamQuery from '../../graphql/queries/get-patient-care-team.graphql';
 import * as createTaskMutation from '../../graphql/queries/task-create-mutation.graphql';
 import {
-  FullTaskFragment, FullUserFragment, ShortPatientFragment, TaskCreateMutationVariables,
+  taskCreateMutationVariables, FullTaskFragment, FullUserFragment, ShortPatientFragment,
 } from '../../graphql/types';
 import * as formStyles from '../css/forms.css';
 import * as loadingStyles from '../css/loading-spinner.css';
@@ -16,7 +16,7 @@ import { IUpdatedField } from '../patient-demographics-form';
 import * as styles from './css/task-create.css';
 import * as taskStyles from './css/task.css';
 
-export interface IOptions { variables: TaskCreateMutationVariables; }
+export interface IOptions { variables: taskCreateMutationVariables; }
 
 export interface IProps {
   patient: ShortPatientFragment;
@@ -30,7 +30,7 @@ export interface IProps {
 export interface IState {
   loading: boolean;
   error?: string;
-  task: TaskCreateMutationVariables;
+  task: taskCreateMutationVariables;
 }
 
 function formatDate(date: string) {

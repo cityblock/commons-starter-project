@@ -4,9 +4,9 @@ import { compose, graphql } from 'react-apollo';
 import * as careTeamQuery from '../../graphql/queries/get-patient-care-team.graphql';
 import * as taskUserFollowMutation from '../../graphql/queries/task-user-follow-mutation.graphql';
 import {
+  taskUserFollowMutationVariables,
   FullTaskFragment,
   FullUserFragment,
-  TaskUserFollowMutationVariables,
 } from '../../graphql/types';
 import * as styles from './css/add-task-follower.css';
 import { DEFAULT_AVATAR_URL } from './index';
@@ -19,7 +19,7 @@ export interface IProps {
   error?: string;
   careTeam?: FullUserFragment[];
   addTaskFollower: (
-    options: { variables: TaskUserFollowMutationVariables },
+    options: { variables: taskUserFollowMutationVariables },
   ) => { data: { taskUserFollow: FullTaskFragment } };
 }
 

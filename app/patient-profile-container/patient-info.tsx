@@ -5,7 +5,7 @@ import { compose, graphql } from 'react-apollo';
 import { FormattedMessage } from 'react-intl';
 import { DOB_FORMAT } from '../config';
 import * as editPatientMutation from '../graphql/queries/patient-edit-mutation.graphql';
-import { PatientEditMutationVariables, ShortPatientFragment } from '../graphql/types';
+import { patientEditMutationVariables, ShortPatientFragment } from '../graphql/types';
 import * as sortSearchStyles from '../shared/css/sort-search.css';
 import PatientContactForm, { IState as IPatientContactState } from '../shared/patient-contact-form';
 import PatientDemographicsForm, {
@@ -17,7 +17,7 @@ import PatientInsuranceForm, {
 } from '../shared/patient-insurance-form';
 import * as styles from './css/patient-info.css';
 
-export interface IOptions { variables: PatientEditMutationVariables; }
+export interface IOptions { variables: patientEditMutationVariables; }
 
 export interface IProps {
   loading?: boolean;

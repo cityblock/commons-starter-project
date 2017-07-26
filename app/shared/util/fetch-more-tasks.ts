@@ -1,6 +1,6 @@
-import { GetPatientTasksQuery, GetTasksForCurrentUserQuery } from '../../graphql/types';
+import { getPatientTasksQuery, getTasksForCurrentUserQuery } from '../../graphql/types';
 
-export type TasksResponse = GetPatientTasksQuery & GetTasksForCurrentUserQuery & { fetchMore: any };
+export type TasksResponse = getPatientTasksQuery & getTasksForCurrentUserQuery & { fetchMore: any };
 export type Key = 'tasksForPatient' | 'tasksForCurrentUser';
 
 function updateQuery(previousResponse: TasksResponse, fetchMoreResponse: TasksResponse, key: Key) {

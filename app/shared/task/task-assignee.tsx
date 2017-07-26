@@ -4,9 +4,9 @@ import { compose, graphql } from 'react-apollo';
 import * as careTeamQuery from '../../graphql/queries/get-patient-care-team.graphql';
 import * as editTaskMutation from '../../graphql/queries/task-edit-mutation.graphql';
 import {
+  taskEditMutationVariables,
   FullTaskFragment,
   FullUserFragment,
-  TaskEditMutationVariables,
 } from '../../graphql/types';
 import * as styles from './css/add-task-follower.css';
 import * as taskStyles from './css/task.css';
@@ -20,7 +20,7 @@ export interface IProps {
   error?: string;
   careTeam?: FullUserFragment[];
   changeAssignee: (
-    options: { variables: TaskEditMutationVariables },
+    options: { variables: taskEditMutationVariables },
   ) => { data: { taskEdit: FullTaskFragment } };
 }
 

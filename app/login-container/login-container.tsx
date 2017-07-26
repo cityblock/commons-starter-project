@@ -6,12 +6,12 @@ import { connect, Dispatch } from 'react-redux';
 import { push } from 'react-router-redux';
 import * as currentUserQuery from '../graphql/queries/get-current-user.graphql';
 import * as loginMutation from '../graphql/queries/log-in-user-mutation.graphql';
-import { FullUserFragment, LogInUserMutationVariables } from '../graphql/types';
+import { logInUserMutationVariables, FullUserFragment } from '../graphql/types';
 import * as styles from './css/login.css';
 import Footer from './footer';
 
 export interface IProps {
-  logIn: (options: { variables: LogInUserMutationVariables }) => any;
+  logIn: (options: { variables: logInUserMutationVariables }) => any;
   onSuccess: () => any;
   currentUser?: FullUserFragment;
   loading: boolean;

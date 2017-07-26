@@ -11,10 +11,10 @@ import * as taskQuery from '../../graphql/queries/get-task.graphql';
 import * as taskCompleteMutation from '../../graphql/queries/task-complete-mutation.graphql';
 import * as taskUncompleteMutation from '../../graphql/queries/task-uncomplete-mutation.graphql';
 import {
+  taskCompleteMutationVariables,
+  taskEditMutationVariables,
+  taskUncompleteMutationVariables,
   FullTaskFragment,
-  TaskCompleteMutationVariables,
-  TaskEditMutationVariables,
-  TaskUncompleteMutationVariables,
 } from '../../graphql/types';
 import { IState as IAppState } from '../../store';
 import AddTaskFollower from './add-task-follower';
@@ -37,13 +37,13 @@ export interface IProps {
     };
   };
   completeTask: (
-    options: { variables: TaskCompleteMutationVariables },
+    options: { variables: taskCompleteMutationVariables },
   ) => { data: { taskComplete: FullTaskFragment } };
   uncompleteTask: (
-    options: { variables: TaskUncompleteMutationVariables },
+    options: { variables: taskUncompleteMutationVariables },
   ) => { data: { taskComplete: FullTaskFragment } };
   editTask: (
-    options: { variables: TaskEditMutationVariables },
+    options: { variables: taskEditMutationVariables },
   ) => { data: { taskComplete: FullTaskFragment } };
   onDelete: (taskId: string) => any;
 }

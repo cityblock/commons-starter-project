@@ -145,7 +145,7 @@ describe('task comments', () => {
     });
   });
 
-  it.only('resolves a single task comment', async () => {
+  it('resolves a single task comment', async () => {
     const taskComment = await TaskComment.create({
       userId: user.id,
       taskId: task.id,

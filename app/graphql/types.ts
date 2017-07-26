@@ -28,24 +28,24 @@ export type TaskOrderOptions =
   "updatedAtAsc";
 
 
-export type AppointmentEndMutationVariables = {
+export type appointmentEndMutationVariables = {
   patientId: string,
   appointmentId: string,
   appointmentNote: string,
 };
 
-export type AppointmentEndMutation = {
+export type appointmentEndMutation = {
   // End an appointment
   appointmentEnd:  {
     success: boolean,
   } | null,
 };
 
-export type AppointmentStartMutationVariables = {
+export type appointmentStartMutationVariables = {
   patientId: string,
 };
 
-export type AppointmentStartMutation = {
+export type appointmentStartMutation = {
   // Start an appointment
   appointmentStart:  {
     athenaAppointmentId: string,
@@ -63,12 +63,12 @@ export type AppointmentStartMutation = {
   } | null,
 };
 
-export type GetClinicsQueryVariables = {
+export type getClinicsQueryVariables = {
   pageNumber?: number | null,
   pageSize?: number | null,
 };
 
-export type GetClinicsQuery = {
+export type getClinicsQuery = {
   // Clinics
   clinics:  {
     edges:  Array< {
@@ -76,17 +76,17 @@ export type GetClinicsQuery = {
         id: string,
         name: string,
       } | null,
-    } > | null,
+    } | null > | null,
   } | null,
 };
 
-export type CurrentUserEditMutationVariables = {
+export type currentUserEditMutationVariables = {
   firstName?: string | null,
   lastName?: string | null,
   locale?: string | null,
 };
 
-export type CurrentUserEditMutation = {
+export type currentUserEditMutation = {
   // Edit current user
   currentUserEdit:  {
     id: string,
@@ -100,7 +100,7 @@ export type CurrentUserEditMutation = {
   } | null,
 };
 
-export type GetCurrentUserQuery = {
+export type getCurrentUserQuery = {
   // The current User
   currentUser:  {
     id: string,
@@ -114,11 +114,11 @@ export type GetCurrentUserQuery = {
   } | null,
 };
 
-export type GetPatientCareTeamQueryVariables = {
+export type getPatientCareTeamQueryVariables = {
   patientId: string,
 };
 
-export type GetPatientCareTeamQuery = {
+export type getPatientCareTeamQuery = {
   // Users on a care team
   patientCareTeam:  Array< {
     id: string,
@@ -129,14 +129,14 @@ export type GetPatientCareTeamQuery = {
     email: string | null,
     homeClinicId: string,
     googleProfileImageUrl: string | null,
-  } > | null,
+  } | null > | null,
 };
 
-export type GetPatientEncountersQueryVariables = {
+export type getPatientEncountersQueryVariables = {
   patientId: string,
 };
 
-export type GetPatientEncountersQuery = {
+export type getPatientEncountersQuery = {
   // Patient encounters
   patientEncounters:  Array< {
     encounterType: string,
@@ -147,17 +147,17 @@ export type GetPatientEncountersQuery = {
       code: string,
       codeSystem: string,
       description: string,
-    } >,
+    } | null >,
     reasons: Array< string | null >,
     dateTime: string,
-  } > | null,
+  } | null > | null,
 };
 
-export type GetPatientMedicationsQueryVariables = {
+export type getPatientMedicationsQueryVariables = {
   patientId: string,
 };
 
-export type GetPatientMedicationsQuery = {
+export type getPatientMedicationsQuery = {
   // Patient medications
   patientMedications:  {
     medications:  {
@@ -168,17 +168,17 @@ export type GetPatientMedicationsQuery = {
         quantityUnit: string | null,
         dosageInstructions: string | null,
         startDate: string | null,
-      } >,
+      } | null >,
     },
   } | null,
 };
 
-export type GetPatientPanelQueryVariables = {
+export type getPatientPanelQueryVariables = {
   pageNumber?: number | null,
   pageSize?: number | null,
 };
 
-export type GetPatientPanelQuery = {
+export type getPatientPanelQuery = {
   // List of patients the user is on the care team for (their 'patient panel')
   userPatientPanel:  {
     edges:  Array< {
@@ -195,7 +195,7 @@ export type GetPatientPanelQuery = {
         consentToText: boolean | null,
         consentToCall: boolean | null,
       } | null,
-    } > | null,
+    } | null > | null,
     pageInfo:  {
       hasPreviousPage: boolean,
       hasNextPage: boolean,
@@ -203,25 +203,25 @@ export type GetPatientPanelQuery = {
   } | null,
 };
 
-export type GetPatientScratchPadQueryVariables = {
+export type getPatientScratchPadQueryVariables = {
   patientId: string,
 };
 
-export type GetPatientScratchPadQuery = {
+export type getPatientScratchPadQuery = {
   // Patient scratch pad
   patientScratchPad:  {
     text: string | null,
   } | null,
 };
 
-export type GetPatientTasksQueryVariables = {
+export type getPatientTasksQueryVariables = {
   patientId: string,
   pageNumber?: number | null,
   pageSize?: number | null,
   orderBy?: TaskOrderOptions | null,
 };
 
-export type GetPatientTasksQuery = {
+export type getPatientTasksQuery = {
   // Patient's Tasks
   tasksForPatient:  {
     edges:  Array< {
@@ -264,7 +264,7 @@ export type GetPatientTasksQuery = {
           userRole: UserRole,
         } > | null,
       } | null,
-    } > | null,
+    } | null > | null,
     pageInfo:  {
       hasPreviousPage: boolean,
       hasNextPage: boolean,
@@ -272,11 +272,11 @@ export type GetPatientTasksQuery = {
   } | null,
 };
 
-export type GetPatientQueryVariables = {
+export type getPatientQueryVariables = {
   patientId: string,
 };
 
-export type GetPatientQuery = {
+export type getPatientQuery = {
   // A single Patient
   patient:  {
     id: string,
@@ -293,11 +293,11 @@ export type GetPatientQuery = {
   } | null,
 };
 
-export type GetTaskCommentQueryVariables = {
+export type getTaskCommentQueryVariables = {
   taskCommentId: string,
 };
 
-export type GetTaskCommentQuery = {
+export type getTaskCommentQuery = {
   // Single task comment
   taskComment:  {
     id: string,
@@ -318,13 +318,13 @@ export type GetTaskCommentQuery = {
   } | null,
 };
 
-export type GetTaskCommentsQueryVariables = {
+export type getTaskCommentsQueryVariables = {
   taskId: string,
   pageNumber?: number | null,
   pageSize?: number | null,
 };
 
-export type GetTaskCommentsQuery = {
+export type getTaskCommentsQuery = {
   // List of task comments
   taskComments:  {
     edges:  Array< {
@@ -345,7 +345,7 @@ export type GetTaskCommentsQuery = {
         createdAt: string | null,
         updatedAt: string | null,
       } | null,
-    } > | null,
+    } | null > | null,
     pageInfo:  {
       hasPreviousPage: boolean,
       hasNextPage: boolean,
@@ -353,11 +353,11 @@ export type GetTaskCommentsQuery = {
   } | null,
 };
 
-export type GetTaskQueryVariables = {
+export type getTaskQueryVariables = {
   taskId: string,
 };
 
-export type GetTaskQuery = {
+export type getTaskQuery = {
   // Task
   task:  {
     id: string,
@@ -400,11 +400,11 @@ export type GetTaskQuery = {
   } | null,
 };
 
-export type LogInUserMutationVariables = {
+export type logInUserMutationVariables = {
   googleAuthCode: string,
 };
 
-export type LogInUserMutation = {
+export type logInUserMutation = {
   // Login user
   userLogin:  {
     // The auth token to allow for quick login. JWT passed back in via headers for further requests
@@ -422,7 +422,7 @@ export type LogInUserMutation = {
   } | null,
 };
 
-export type PatientEditMutationVariables = {
+export type patientEditMutationVariables = {
   patientId: string,
   firstName?: string | null,
   middleName?: string | null,
@@ -435,7 +435,7 @@ export type PatientEditMutationVariables = {
   consentToText?: boolean | null,
 };
 
-export type PatientEditMutation = {
+export type patientEditMutation = {
   // Edit fields on patient stored in the db
   patientEdit:  {
     id: string,
@@ -452,11 +452,11 @@ export type PatientEditMutation = {
   } | null,
 };
 
-export type PatientHealthRecordQueryVariables = {
+export type patientHealthRecordQueryVariables = {
   patientId: string,
 };
 
-export type PatientHealthRecordQuery = {
+export type patientHealthRecordQuery = {
   // Patient's Athena health record
   patientHealthRecord:  {
     id: string,
@@ -479,19 +479,19 @@ export type PatientHealthRecordQuery = {
   } | null,
 };
 
-export type PatientScratchPadEditMutationVariables = {
+export type patientScratchPadEditMutationVariables = {
   patientId: string,
   text: string,
 };
 
-export type PatientScratchPadEditMutation = {
+export type patientScratchPadEditMutation = {
   // Edit a patient scratch pad
   patientScratchPadEdit:  {
     text: string | null,
   } | null,
 };
 
-export type PatientSetupMutationVariables = {
+export type patientSetupMutationVariables = {
   homeClinicId: string,
   firstName: string,
   middleName?: string | null,
@@ -516,7 +516,7 @@ export type PatientSetupMutationVariables = {
   policyGroupNumber?: string | null,
 };
 
-export type PatientSetupMutation = {
+export type patientSetupMutation = {
   // Setup patient creates the patient in the db AND in athena
   patientSetup:  {
     id: string,
@@ -533,12 +533,12 @@ export type PatientSetupMutation = {
   } | null,
 };
 
-export type TaskCommentCreateMutationVariables = {
+export type taskCommentCreateMutationVariables = {
   taskId: string,
   body: string,
 };
 
-export type TaskCommentCreateMutation = {
+export type taskCommentCreateMutation = {
   // Create a task
   taskCommentCreate:  {
     id: string,
@@ -559,12 +559,12 @@ export type TaskCommentCreateMutation = {
   } | null,
 };
 
-export type TaskCommentEditMutationVariables = {
+export type taskCommentEditMutationVariables = {
   taskCommentId: string,
   body: string,
 };
 
-export type TaskCommentEditMutation = {
+export type taskCommentEditMutation = {
   // Edit a task
   taskCommentEdit:  {
     id: string,
@@ -585,11 +585,11 @@ export type TaskCommentEditMutation = {
   } | null,
 };
 
-export type TaskCompleteMutationVariables = {
+export type taskCompleteMutationVariables = {
   taskId: string,
 };
 
-export type TaskCompleteMutation = {
+export type taskCompleteMutation = {
   // Complete a task
   taskComplete:  {
     id: string,
@@ -632,7 +632,7 @@ export type TaskCompleteMutation = {
   } | null,
 };
 
-export type TaskCreateMutationVariables = {
+export type taskCreateMutationVariables = {
   title: string,
   description: string,
   dueAt: string,
@@ -640,7 +640,7 @@ export type TaskCreateMutationVariables = {
   assignedToId?: string | null,
 };
 
-export type TaskCreateMutation = {
+export type taskCreateMutation = {
   // Create a task
   taskCreate:  {
     id: string,
@@ -683,11 +683,11 @@ export type TaskCreateMutation = {
   } | null,
 };
 
-export type TaskDeleteMutationVariables = {
+export type taskDeleteMutationVariables = {
   taskId: string,
 };
 
-export type TaskDeleteMutation = {
+export type taskDeleteMutation = {
   // Delete a task
   taskDelete:  {
     id: string,
@@ -730,7 +730,7 @@ export type TaskDeleteMutation = {
   } | null,
 };
 
-export type TaskEditMutationVariables = {
+export type taskEditMutationVariables = {
   taskId: string,
   assignedToId?: string | null,
   title?: string | null,
@@ -739,7 +739,7 @@ export type TaskEditMutationVariables = {
   dueAt?: string | null,
 };
 
-export type TaskEditMutation = {
+export type taskEditMutation = {
   // Edit a task
   taskEdit:  {
     id: string,
@@ -782,11 +782,11 @@ export type TaskEditMutation = {
   } | null,
 };
 
-export type TaskUncompleteMutationVariables = {
+export type taskUncompleteMutationVariables = {
   taskId: string,
 };
 
-export type TaskUncompleteMutation = {
+export type taskUncompleteMutation = {
   // Uncomplete a task
   taskUncomplete:  {
     id: string,
@@ -829,12 +829,12 @@ export type TaskUncompleteMutation = {
   } | null,
 };
 
-export type TaskUserFollowMutationVariables = {
+export type taskUserFollowMutationVariables = {
   taskId: string,
   userId: string,
 };
 
-export type TaskUserFollowMutation = {
+export type taskUserFollowMutation = {
   // Add user to task followers
   taskUserFollow:  {
     id: string,
@@ -877,13 +877,13 @@ export type TaskUserFollowMutation = {
   } | null,
 };
 
-export type GetTasksForCurrentUserQueryVariables = {
+export type getTasksForCurrentUserQueryVariables = {
   pageNumber?: number | null,
   pageSize?: number | null,
   orderBy?: TaskOrderOptions | null,
 };
 
-export type GetTasksForCurrentUserQuery = {
+export type getTasksForCurrentUserQuery = {
   // Current user's Tasks
   tasksForCurrentUser:  {
     edges:  Array< {
@@ -926,7 +926,7 @@ export type GetTasksForCurrentUserQuery = {
           userRole: UserRole,
         } > | null,
       } | null,
-    } > | null,
+    } | null > | null,
     pageInfo:  {
       hasPreviousPage: boolean,
       hasNextPage: boolean,
@@ -963,7 +963,7 @@ export type FullPatientEncounterFragment = {
     code: string,
     codeSystem: string,
     description: string,
-  } >,
+  } | null >,
   reasons: Array< string | null >,
   dateTime: string,
 };

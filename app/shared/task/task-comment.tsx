@@ -5,16 +5,16 @@ import { compose, graphql } from 'react-apollo';
 import { DATETIME_FORMAT } from '../../config';
 import * as currentUserQuery from '../../graphql/queries/get-current-user.graphql';
 import {
+  taskCommentEditMutationVariables,
   FullTaskCommentFragment,
   FullUserFragment,
-  TaskCommentEditMutationVariables,
 } from '../../graphql/types';
 import * as styles from './css/task-comments.css';
 
 export interface IProps {
   comment: FullTaskCommentFragment;
   currentUser?: FullUserFragment;
-  onEdit: (editedComment: TaskCommentEditMutationVariables) => any;
+  onEdit: (editedComment: taskCommentEditMutationVariables) => any;
 }
 
 export interface IState {

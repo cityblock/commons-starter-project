@@ -327,7 +327,7 @@ declare module 'schema' {
     completedBy: IUser | null;
     completedAt: string | null;
     assignedTo: IUser | null;
-    followers: Array<IUser> | null;
+    followers: Array<IUser>;
   }
 
   /*

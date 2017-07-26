@@ -8,7 +8,7 @@ import { connect, Dispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { push } from 'react-router-redux';
 import * as tasksQuery from '../graphql/queries/tasks-for-current-user.graphql';
-import { GetTasksForCurrentUserQuery } from '../graphql/types';
+import { getTasksForCurrentUserQuery } from '../graphql/types';
 import * as tabStyles from '../shared/css/tabs.css';
 import Tasks, { IPageParams } from '../shared/tasks';
 import { fetchMoreTasks } from '../shared/util/fetch-more-tasks';
@@ -18,7 +18,7 @@ export interface IProps {
   intl: InjectedIntl;
   tasksLoading: boolean;
   tasksError?: string;
-  tasksResponse?: GetTasksForCurrentUserQuery['tasksForCurrentUser'];
+  tasksResponse?: getTasksForCurrentUserQuery['tasksForCurrentUser'];
   fetchMoreTasks: () => any;
   updatePageParams: (pageParams: IPageParams) => any;
 }

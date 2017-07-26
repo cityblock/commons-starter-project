@@ -3,12 +3,12 @@ import { compose, graphql } from 'react-apollo';
 import { FormattedMessage } from 'react-intl';
 import * as userMutation from '../graphql/queries/current-user-edit-mutation.graphql';
 import * as currentUserQuery from '../graphql/queries/get-current-user.graphql';
-import { CurrentUserEditMutationVariables, FullUserFragment } from '../graphql/types';
+import { currentUserEditMutationVariables, FullUserFragment } from '../graphql/types';
 import * as formStyles from '../shared/css/forms.css';
 import * as styles from './css/settings.css';
 
 export interface IProps {
-  updateUser: (options: { variables: CurrentUserEditMutationVariables }) => any;
+  updateUser: (options: { variables: currentUserEditMutationVariables }) => any;
   currentUser?: FullUserFragment;
   loading: boolean;
   error?: string;

@@ -6,7 +6,7 @@ import { injectIntl } from 'react-intl';
 import { connect, Dispatch } from 'react-redux';
 import { push } from 'react-router-redux';
 import * as patientTasksQuery from '../graphql/queries/get-patient-tasks.graphql';
-import { GetPatientTasksQuery, ShortPatientFragment } from '../graphql/types';
+import { getPatientTasksQuery, ShortPatientFragment } from '../graphql/types';
 import Tasks, { IPageParams } from '../shared/tasks';
 import { fetchMoreTasks } from '../shared/util/fetch-more-tasks';
 
@@ -15,7 +15,7 @@ export interface IProps {
   patientId: string;
   tasksLoading: boolean;
   tasksError?: string;
-  tasksResponse?: GetPatientTasksQuery['tasksForPatient'];
+  tasksResponse?: getPatientTasksQuery['tasksForPatient'];
   fetchMoreTasks: () => any;
   updatePageParams: (params: IPageParams) => any;
 }

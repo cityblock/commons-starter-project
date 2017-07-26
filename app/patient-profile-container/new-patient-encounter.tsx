@@ -6,8 +6,8 @@ import { FormattedMessage } from 'react-intl';
 import * as appointmentEndMutation from '../graphql/queries/appointment-end-mutation.graphql';
 import * as appointmentStartMutation from '../graphql/queries/appointment-start-mutation.graphql';
 import {
-  AppointmentEndMutationVariables,
-  AppointmentStartMutationVariables,
+  appointmentEndMutationVariables,
+  appointmentStartMutationVariables,
   FullAppointmentFragment,
 } from '../graphql/types';
 import * as styles from './css/new-patient-encounter.css';
@@ -17,10 +17,10 @@ import NewPatientEncounterLoadingError from './new-patient-encounter-loading-err
 export interface IProps {
   patientId: string;
   startAppointment: (
-    options: { variables: AppointmentStartMutationVariables },
+    options: { variables: appointmentStartMutationVariables },
   ) => { data: { appointmentStart: FullAppointmentFragment } };
   endAppointment: (
-    options: { variables: AppointmentEndMutationVariables },
+    options: { variables: appointmentEndMutationVariables },
   ) => { data: { appointmentEnd: { success: boolean } } };
 }
 

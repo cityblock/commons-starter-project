@@ -7,8 +7,8 @@ import { push } from 'react-router-redux';
 import * as getClinicsQuery from '../graphql/queries/clinics-get.graphql';
 import * as setupPatientMutation from '../graphql/queries/patient-setup-mutation.graphql';
 import {
+  patientSetupMutationVariables,
   FullClinicFragment,
-  PatientSetupMutationVariables,
   ShortPatientFragment,
 } from '../graphql/types';
 import * as loadingStyles from '../shared/css/loading-spinner.css';
@@ -22,7 +22,7 @@ import PopupPatientCreated from './popup-patient-created';
 
 export interface IProps {
   createPatient: (
-    options: { variables: PatientSetupMutationVariables },
+    options: { variables: patientSetupMutationVariables },
   ) => { data: { patientSetup: ShortPatientFragment } };
   onSuccess: (patientId: string) => any;
   clinic: FullClinicFragment;

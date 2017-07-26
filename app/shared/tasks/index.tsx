@@ -9,9 +9,9 @@ import { push } from 'react-router-redux';
 import * as Waypoint from 'react-waypoint';
 import * as taskDeleteMutation from '../../graphql/queries/task-delete-mutation.graphql';
 import {
+  taskDeleteMutationVariables,
   FullTaskFragment,
   ShortPatientFragment,
-  TaskDeleteMutationVariables,
 } from '../../graphql/types';
 import { IState as IAppState } from '../../store';
 import * as sortSearchStyles from '../css/sort-search.css';
@@ -44,7 +44,7 @@ export interface IProps {
   hasNextPage?: boolean;
   hasPreviousPage?: boolean;
   deleteTask: (
-    options: { variables: TaskDeleteMutationVariables },
+    options: { variables: taskDeleteMutationVariables },
   ) => { data: { taskDelete: FullTaskFragment } };
   redirectToTasks: () => any;
 }

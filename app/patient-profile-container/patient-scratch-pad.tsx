@@ -6,8 +6,8 @@ import * as patientScratchPadQuery from '../graphql/queries/get-patient-scratch-
 import * as savePatientScratchPadMutation from '../graphql/queries/patient-scratch-pad-edit-mutation.graphql';
 /* tslint:enable:max-line-length */
 import {
+  patientScratchPadEditMutationVariables,
   FullPatientScratchPadFragment,
-  PatientScratchPadEditMutationVariables,
 } from '../graphql/types';
 import * as styles from './css/patient-scratch-pad.css';
 import { PatientScratchPadStatus } from './patient-scratch-pad-status';
@@ -20,7 +20,7 @@ export interface IProps {
   loading?: boolean;
   error?: string;
   saveScratchPad: (
-    options: { variables: PatientScratchPadEditMutationVariables },
+    options: { variables: patientScratchPadEditMutationVariables },
   ) => { data: { patientScratchPad: FullPatientScratchPadFragment } };
   refetchScratchPad: (variables: { patientId: string }) => any;
 }

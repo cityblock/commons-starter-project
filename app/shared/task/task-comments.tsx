@@ -5,21 +5,21 @@ import * as taskCommentsQuery from '../../graphql/queries/get-task-comments.grap
 import * as commentCreateMutation from '../../graphql/queries/task-comment-create-mutation.graphql';
 import * as commentEditMutation from '../../graphql/queries/task-comment-edit-mutation.graphql';
 import {
+  getTaskCommentsQuery,
+  getTaskCommentsQueryVariables,
+  taskCommentCreateMutationVariables,
+  taskCommentEditMutationVariables,
   FullTaskCommentFragment,
-  GetTaskCommentsQuery,
-  GetTaskCommentsQueryVariables,
-  TaskCommentCreateMutationVariables,
-  TaskCommentEditMutationVariables,
 } from '../../graphql/types';
 import * as styles from './css/task-comments.css';
 import TaskComment from './task-comment';
 
-export type ITaskCommentsResponse = GetTaskCommentsQuery['taskComments'];
+export type ITaskCommentsResponse = getTaskCommentsQuery['taskComments'];
 
 export interface IProps {
   taskId: string;
   createComment: (
-    options: { variables: TaskCommentCreateMutationVariables },
+    options: { variables: taskCommentCreateMutationVariables },
   ) => { data: { taskCommentCreate: FullTaskCommentFragment } };
   taskCommentsLoading: boolean;
   taskCommentsError?: string;
@@ -27,11 +27,11 @@ export interface IProps {
   refetchTaskComments: () => any;
   updateTaskComments: (
     updateFunction: (
-      previousResult: GetTaskCommentsQuery,
-      args?: { variables: GetTaskCommentsQueryVariables },
+      previousResult: getTaskCommentsQuery,
+      args?: { variables: getTaskCommentsQueryVariables },
     ) => any) => { taskComments: ITaskCommentsResponse };
   editComment: (
-    options: { variables: TaskCommentEditMutationVariables },
+    options: { variables: taskCommentEditMutationVariables },
   ) => { data: { taskCommentEdit: FullTaskCommentFragment } };
 }
 
@@ -74,13 +74,13 @@ export class TaskComments extends React.Component<IProps, IState> {
     this.setState(() => ({ commentBody: value || '' }));
   }
 
-  async onCommentEdit(editedComment: TaskCommentEditMutationVariables) {
+  async onCommentEdit(editedComment: taskCommentEditMutationVariables) {
     const { editComment, updateTaskComments } = this.props;
     const { taskCommentId, body } = editedComment;
 
     try {
       await editComment({ variables: { taskCommentId, body } });
-      updateTaskComments((previousResult: GetTaskCommentsQuery) => {
+      updateTaskComments((previousResult: getTaskCommentsQuery) => {
         const edges = previousResult.taskComments && previousResult.taskComments.edges ?
           previousResult.taskComments.edges : [];
         const newNodes = edges.map((edge: { node: FullTaskCommentFragment }) => {

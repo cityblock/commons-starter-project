@@ -291,7 +291,7 @@ type Task implements uniqueId {
   completedBy: User
   completedAt: String
   assignedTo: User
-  followers: [User]
+  followers: [User!]
 }
 
 # Task node

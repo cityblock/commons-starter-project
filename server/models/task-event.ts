@@ -1,4 +1,4 @@
-import { Model, RelationMappings } from 'objection';
+import { Model, RelationMappings, Transaction } from 'objection';
 import * as uuid from 'uuid/v4';
 import { IPaginatedResults, IPaginationOptions } from '../db';
 import Task from './task';
@@ -25,7 +25,9 @@ export type EventTypes =
   'delete_comment' |
   'edit_priority' |
   'edit_due_date' |
-  'edit_assignee';
+  'edit_assignee' |
+  'edit_title' |
+  'edit_description';
 
 const EAGER_QUERY = '[task, user, eventComment, eventUser]';
 
@@ -123,8 +125,9 @@ export default class TaskEvent extends Model {
 
   static async create(
     { taskId, userId, eventType, eventCommentId, eventUserId }: ITaskEventOptions,
+    txn?: Transaction<any>,
   ): Promise<TaskEvent> {
-    return await this.query()
+    return await this.query(txn)
       .eager(EAGER_QUERY)
       .insert({ taskId, userId, eventType, eventCommentId, eventUserId });
   }

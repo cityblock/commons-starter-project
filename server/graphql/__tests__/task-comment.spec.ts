@@ -3,6 +3,7 @@ import { cloneDeep } from 'lodash';
 import Db from '../../db';
 import Task from '../../models/task';
 import TaskComment from '../../models/task-comment';
+import TaskEvent from '../../models/task-event';
 import User from '../../models/user';
 import { createMockPatient, createPatient } from '../../spec-helpers';
 import schema from '../make-executable-schema';
@@ -54,6 +55,9 @@ describe('task comments', () => {
       }`;
       const result = await graphql(schema, mutation, null, { db, userRole, userId: user.id });
       expect(cloneDeep(result.data!.taskCommentCreate.body)).toEqual('my comment');
+      const taskEvents1 = await TaskEvent.getTaskEvents(task.id, { pageNumber: 0, pageSize: 10 });
+      expect(taskEvents1.total).toEqual(1);
+      expect(taskEvents1.results[0].eventType).toEqual('add_comment');
 
       // delete comment
       const deleteMutation = `mutation {
@@ -62,6 +66,9 @@ describe('task comments', () => {
         }
       }`;
       await graphql(schema, deleteMutation, null, { db, userRole, userId: user.id });
+      const taskEvents2 = await TaskEvent.getTaskEvents(task.id, { pageNumber: 0, pageSize: 10 });
+      expect(taskEvents2.total).toEqual(2);
+      expect(taskEvents2.results[0].eventType).toEqual('delete_comment');
 
       // get comments
       const getComments = `{ taskComments(taskId: "${task.id}") {
@@ -103,6 +110,9 @@ describe('task comments', () => {
         await graphql(schema, editMutation, null, { db, userRole, userId: user.id });
 
       expect(cloneDeep(editedComment.data!.taskCommentEdit.body)).toEqual('cool new comment');
+      const taskEvents = await TaskEvent.getTaskEvents(task.id, { pageNumber: 0, pageSize: 10 });
+      expect(taskEvents.total).toEqual(2);
+      expect(taskEvents.results[0].eventType).toEqual('edit_comment');
     });
 
     it('resolves task comments', async () => {

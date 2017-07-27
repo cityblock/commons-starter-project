@@ -1,4 +1,4 @@
-import { Model, RelationMappings } from 'objection';
+import { transaction, Model, RelationMappings, Transaction } from 'objection';
 import * as uuid from 'uuid/v4';
 import { IPaginatedResults, IPaginationOptions } from '../db';
 import Patient from './patient';
@@ -194,17 +194,19 @@ export default class Task extends Model {
     };
   }
 
-  static async create(input: ITaskEditableFields) {
+  static async create(input: ITaskEditableFields, txn?: Transaction<any>) {
     return await this
-      .query()
+      .query(txn)
       .eager(EAGER_QUERY)
       .modifyEager('followers', builder => builder.where('deletedAt', null))
       .insertAndFetch(input);
   }
 
-  static async update(taskId: string, task: Partial<ITaskEditableFields>): Promise<Task> {
+  static async update(
+    taskId: string, task: Partial<ITaskEditableFields>, txn?: Transaction<any>,
+  ): Promise<Task> {
     return await this
-      .query()
+      .query(txn)
       .eager(EAGER_QUERY)
       .modifyEager('followers', builder => {
         builder.where('deletedAt', null);
@@ -212,16 +214,16 @@ export default class Task extends Model {
       .updateAndFetchById(taskId, task);
   }
 
-  static async delete(taskId: string): Promise<Task> {
-    return await this.query()
+  static async delete(taskId: string, txn?: Transaction<any>): Promise<Task> {
+    return await this.query(txn)
       .updateAndFetchById(taskId, {
         deletedAt: new Date().toISOString(),
       });
   }
 
-  static async complete(taskId: string, userId: string): Promise<Task> {
+  static async complete(taskId: string, userId: string, txn?: Transaction<any>): Promise<Task> {
     return this
-      .query()
+      .query(txn)
       .eager(EAGER_QUERY)
       .modifyEager('followers', builder => builder.where('deletedAt', null))
       .updateAndFetchById(taskId, {
@@ -230,15 +232,21 @@ export default class Task extends Model {
       });
   }
 
-  static async uncomplete(taskId: string, userId: string): Promise<Task> {
+  static async uncomplete(taskId: string, userId: string, txn?: Transaction<any>): Promise<Task> {
     return this
-      .query()
+      .query(txn)
       .eager(EAGER_QUERY)
       .modifyEager('followers', builder => builder.where('deletedAt', null))
       .updateAndFetchById(taskId, {
         completedAt: null,
         completedById: null,
       });
+  }
+
+  static async execWithTransaction(
+    callback: (boundModelClass: typeof Task) => Promise<Task>,
+  ) {
+    return await transaction(this as any, callback);
   }
 }
 /* tslint:disable:member-ordering */

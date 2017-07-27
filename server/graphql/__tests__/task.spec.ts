@@ -2,6 +2,7 @@ import { graphql } from 'graphql';
 import { cloneDeep } from 'lodash';
 import Db from '../../db';
 import Task from '../../models/task';
+import TaskEvent from '../../models/task-event';
 import User from '../../models/user';
 import { createMockPatient, createPatient } from '../../spec-helpers';
 import schema from '../make-executable-schema';
@@ -13,6 +14,7 @@ describe('task tests', () => {
   let task1: Task = null as any;
   let task2: Task = null as any;
   let user: User = null as any;
+  let user2: User = null as any;
   let patient = null as any;
 
   beforeEach(async () => {
@@ -20,6 +22,7 @@ describe('task tests', () => {
     await Db.clear();
 
     user = await User.create({ email: 'a@b.com', userRole, homeClinicId: '1' });
+    user2 = await User.create({ email: 'b@c.com', userRole, homeClinicId: '1' });
     patient = await createPatient(createMockPatient(123), user.id);
     const dueAt = new Date().toUTCString();
     task1 = await Task.create({
@@ -29,6 +32,7 @@ describe('task tests', () => {
       patientId: patient.id,
       createdById: user.id,
       assignedToId: user.id,
+      priority: 'low',
     });
     task2 = await Task.create({
       title: 'title',
@@ -169,7 +173,6 @@ describe('task tests', () => {
 
   describe('taskEdit', () => {
     it('edits task', async () => {
-
       const query = `mutation {
         taskEdit(input: { title: "new title", taskId: "${task1.id}" }) {
           title
@@ -179,6 +182,107 @@ describe('task tests', () => {
       expect(cloneDeep(result.data!.taskEdit)).toMatchObject({
         title: 'new title',
       });
+    });
+
+    it('creates the relevant TaskEvent records', async () => {
+      // Editing one field at a time
+      const query = `mutation {
+        taskEdit(input: { priority: "high", taskId: "${task1.id}" }) {
+          id
+          priority
+        }
+      }`;
+      const result = await graphql(schema, query, null, { db, userRole, userId: user.id });
+      const task = cloneDeep(result.data!.taskEdit);
+      const taskEvents = await TaskEvent.getTaskEvents(task.id, { pageNumber: 0, pageSize: 10 });
+      expect(taskEvents.total).toEqual(1);
+      expect(taskEvents.results[0].eventType).toEqual('edit_priority');
+
+      const query2 = `mutation {
+        taskEdit(input: { assignedToId: "${user2.id}", taskId: "${task1.id}" }) {
+          id
+          assignedTo {
+            id
+          }
+        }
+      }`;
+      const result2 = await graphql(schema, query2, null, { db, userRole, userId: user.id });
+      const secondTask = cloneDeep(result2.data!.taskEdit);
+      const taskEvents2 = await TaskEvent.getTaskEvents(secondTask.id, {
+        pageNumber: 0, pageSize: 10,
+      });
+      expect(taskEvents2.total).toEqual(2);
+      expect(taskEvents2.results[0].eventType).toEqual('edit_assignee');
+
+      const newDueAt = new Date().toUTCString();
+      const query3 = `mutation {
+        taskEdit(input: { dueAt: "${newDueAt}", taskId: "${task1.id}" }) {
+          id
+          dueAt
+        }
+      }`;
+      const result3 = await graphql(schema, query3, null, { db, userRole, userId: user.id });
+      const thirdTask = cloneDeep(result3.data!.taskEdit);
+      const taskEvents3 = await TaskEvent.getTaskEvents(thirdTask.id, {
+        pageNumber: 0, pageSize: 10,
+      });
+      expect(taskEvents3.total).toEqual(3);
+      expect(taskEvents3.results[0].eventType).toEqual('edit_due_date');
+
+      const query4 = `mutation {
+        taskEdit(input: { title: "edited title", taskId: "${task1.id}" }) {
+          id
+          title
+        }
+      }`;
+      const result4 = await graphql(schema, query4, null, { db, userRole, userId: user.id });
+      const fourthTask = cloneDeep(result4.data!.taskEdit);
+      const taskEvents4 = await TaskEvent.getTaskEvents(fourthTask.id, {
+        pageNumber: 0, pageSize: 10,
+      });
+      expect(taskEvents4.total).toEqual(4);
+      expect(taskEvents4.results[0].eventType).toEqual('edit_title');
+
+      const query5 = `mutation {
+        taskEdit(input: { description: "edited description", taskId: "${task1.id}" }) {
+          id
+          description
+        }
+      }`;
+      const result5 = await graphql(schema, query5, null, { db, userRole, userId: user.id });
+      const fifthTask = cloneDeep(result5.data!.taskEdit);
+      const taskEvents5 = await TaskEvent.getTaskEvents(fifthTask.id, {
+        pageNumber: 0, pageSize: 10,
+      });
+      expect(taskEvents5.total).toEqual(5);
+      expect(taskEvents5.results[0].eventType).toEqual('edit_description');
+
+      // Editing multiple fields at the same time
+      const query6 = `mutation {
+        taskEdit(input: {
+          dueAt: "${newDueAt}"
+          assignedToId: "${user.id}"
+          priority: "medium"
+          taskId: "${task1.id}"
+          title: "brand new title"
+          description: "fancy new description"
+        }) {
+          id
+          dueAt
+          priority
+          assignedTo {
+            id
+          }
+          title
+          description
+        }
+      }`;
+      const result6 = await graphql(schema, query6, null, { db, userRole, userId: user.id });
+      const sixthTask = cloneDeep(result6.data!.taskEdit);
+      const taskEvents6 = await TaskEvent.getTaskEvents(sixthTask.id, {
+        pageNumber: 0, pageSize: 10,
+      });
+      expect(taskEvents6.total).toEqual(10);
     });
   });
 
@@ -192,6 +296,18 @@ describe('task tests', () => {
       }`;
       const result = await graphql(schema, query, null, { db, userRole, userId: user.id });
       expect(result.data!.taskComplete.completedAt).not.toBeNull();
+    });
+
+    it('creates the relevant TaskEvent model', async () => {
+      const query = `mutation {
+        taskComplete(input: { taskId: "${task1.id}" }) {
+          completedAt
+        }
+      }`;
+      await graphql(schema, query, null, { db, userRole, userId: user.id });
+      const taskEvents = await TaskEvent.getTaskEvents(task1.id, { pageNumber: 0, pageSize: 10 });
+      expect(taskEvents.total).toEqual(1);
+      expect(taskEvents.results[0].eventType).toEqual('complete_task');
     });
   });
 
@@ -207,6 +323,18 @@ describe('task tests', () => {
       const result = await graphql(schema, query, null, { db, userRole, userId: user.id });
       expect(result.data!.taskUncomplete.completedAt).toBeNull();
     });
+
+    it('creates the relevant TaskEvent model', async () => {
+      const query = `mutation {
+        taskUncomplete(input: { taskId: "${task1.id}" }) {
+          completedAt
+        }
+      }`;
+      await graphql(schema, query, null, { db, userRole, userId: user.id });
+      const taskEvents = await TaskEvent.getTaskEvents(task1.id, { pageNumber: 0, pageSize: 10 });
+      expect(taskEvents.total).toEqual(1);
+      expect(taskEvents.results[0].eventType).toEqual('uncomplete_task');
+    });
   });
 
   describe('taskCreate', () => {
@@ -220,6 +348,29 @@ describe('task tests', () => {
       expect(cloneDeep(result.data!.taskCreate)).toMatchObject({
         title: 'title',
       });
+    });
+
+    it('creates the relevant TaskEvent records', async () => {
+      const mutation = `mutation {
+        taskCreate(input: {
+          patientId: "${patient.id}"
+          title: "title"
+          assignedToId: "${user.id}"
+        }) {
+          id,
+          title,
+        }
+      }`;
+      const result = await graphql(schema, mutation, null, { db, userRole, userId: user.id });
+      const task = cloneDeep(result.data!.taskCreate);
+      expect(task).toMatchObject({
+        title: 'title',
+      });
+
+      const taskEvents = await TaskEvent.getTaskEvents(task.id, { pageNumber: 0, pageSize: 10 });
+      expect(taskEvents.total).toEqual(2);
+      expect(taskEvents.results[0].eventType).toEqual('edit_assignee');
+      expect(taskEvents.results[1].eventType).toEqual('create_task');
     });
   });
 
@@ -252,6 +403,21 @@ describe('task tests', () => {
       });
 
       expect(afterDeletePatientTasks.results.map(task => (task.id))).not.toContain(task1.id);
+    });
+
+    it('creates the relevant TaskEvent records', async () => {
+      const mutation = `mutation {
+        taskDelete(input: { taskId: "${task1.id}" }) {
+          id,
+        }
+      }`;
+      const result = await graphql(schema, mutation, null, { db, userRole, userId: user.id });
+      const task = cloneDeep(result.data!.taskDelete);
+      expect(task).toMatchObject({ id: task1.id });
+
+      const taskEvents = await TaskEvent.getTaskEvents(task.id, { pageNumber: 0, pageSize: 10 });
+      expect(taskEvents.total).toEqual(1);
+      expect(taskEvents.results[0].eventType).toEqual('delete_task');
     });
   });
 });

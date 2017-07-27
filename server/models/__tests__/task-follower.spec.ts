@@ -40,10 +40,12 @@ describe('task followers', () => {
       });
 
       // Add 2nd user to task 1 followers
-      const fetchedTask = await TaskFollower.followTask({
+      await TaskFollower.followTask({
         userId: user2.id,
         taskId: task1.id,
       });
+
+      const fetchedTask = await Task.get(task1.id);
       expect(fetchedTask.createdById).toEqual(user1.id);
       expect(fetchedTask.followers[0].id).toEqual(user2.id);
     });
@@ -89,19 +91,19 @@ describe('task followers', () => {
         assignedToId: user.id,
       });
 
-      const followedTask = await TaskFollower.followTask({
+      await TaskFollower.followTask({
         userId: user.id,
         taskId: task.id,
       });
+      const followedTask = await Task.get(task.id);
       expect(followedTask.followers[0].id).toEqual(user.id);
 
-      const unfollowedTasks = await TaskFollower.unfollowTask({
+      await TaskFollower.unfollowTask({
         userId: user.id,
         taskId: task.id,
       });
-      expect(unfollowedTasks.followers).toEqual([]);
+      const unfollowedTask = await Task.get(task.id);
+      expect(unfollowedTask.followers).toEqual([]);
     });
-
   });
-
 });

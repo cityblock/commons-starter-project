@@ -1,4 +1,4 @@
-import { transaction, Model, RelationMappings } from 'objection';
+import { Model, RelationMappings, Transaction } from 'objection';
 import * as uuid from 'uuid/v4';
 import Task from './task';
 import User from './user';
@@ -65,36 +65,31 @@ export default class TaskFollower extends Model {
   }
 
   static async followTask(
-    { userId, taskId }: ITaskFollowerOptions,
-  ): Promise<Task> {
-    // TODO: use postgres UPCERT here to add relation if it doesn't exist instead of a transaction
-    await transaction(TaskFollower as any, async TaskFollowerWithTransaction => {
-      const relations = await TaskFollowerWithTransaction
+    { userId, taskId }: ITaskFollowerOptions, txn?: Transaction<any>,
+  ): Promise<TaskFollower> {
+    const relations = await TaskFollower
+      .query()
+      .where('taskId', taskId)
+      .andWhere('userId', userId)
+      .andWhere('deletedAt', null);
+
+    if (relations.length < 1) {
+      return await TaskFollower
         .query()
-        .where('taskId', taskId)
-        .andWhere('userId', userId)
-        .andWhere('deletedAt', null);
-
-      if (relations.length < 1) {
-        await TaskFollowerWithTransaction
-          .query()
-          .insert({ taskId, userId });
-      }
-    });
-
-    return await Task.get(taskId);
+        .insert({ taskId, userId });
+    } else {
+      return relations[0];
+    }
   }
 
   static async unfollowTask(
-    { userId, taskId }: ITaskFollowerOptions,
-  ): Promise<Task> {
-    await this.query()
+    { userId, taskId }: ITaskFollowerOptions, txn?: Transaction<any>,
+  ): Promise<number> {
+    return await this.query()
       .where('userId', userId)
       .andWhere('taskId', taskId)
       .andWhere('deletedAt', null)
       .update({ deletedAt: new Date().toISOString() });
-    return await Task.get(taskId);
   }
-
 }
 /* tslint:disable:member-ordering */

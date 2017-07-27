@@ -1,6 +1,8 @@
+import { transaction } from 'objection';
 import { ITaskEdges, ITaskFollowInput, ITaskNode } from 'schema';
 import { IPaginationOptions } from '../db';
 import Task, { TaskOrderOptions } from '../models/task';
+import TaskEvent from '../models/task-event';
 import TaskFollower from '../models/task-follower';
 import accessControls from './shared/access-controls';
 import { formatOrderOptions, formatRelayEdge, IContext } from './shared/utils';
@@ -16,23 +18,58 @@ export interface ITaskFollowersOptions {
 export async function taskUserFollow(
   source: any, { input }: ITaskFollowersOptions, context: IContext,
 ): Promise<Task> {
-  const { userRole } = context;
-  const { userId, taskId } = input;
+  const { userRole, userId } = context;
+  const { taskId } = input;
   // TODO: Improve access controls here. Requirements unclear ATM
   await accessControls.isAllowed(userRole, 'edit', 'task');
+  if (!userId) {
+    throw new Error('not logged in');
+  }
 
-  return await TaskFollower.followTask({ userId, taskId });
+  await transaction(TaskFollower.knex(), async txn => {
+    const follower = await TaskFollower.followTask({ userId: input.userId, taskId }, txn);
+
+    await TaskEvent.create({
+      taskId,
+      userId,
+      eventType: 'add_follower',
+      eventUserId: input.userId,
+    }, txn);
+
+    return follower;
+  });
+
+  return await Task.get(taskId);
 }
 
 export async function taskUserUnfollow(
   source: any, { input }: ITaskFollowersOptions, context: IContext,
 ): Promise<Task> {
-  const { userRole } = context;
-  const { userId, taskId } = input;
+  const { userRole, userId } = context;
+  const { taskId } = input;
   // TODO: Improve access controls here. Requirements unclear ATM
   await accessControls.isAllowed(userRole, 'edit', 'task');
+  if (!userId) {
+    throw new Error('not logged in');
+  }
 
-  return await TaskFollower.unfollowTask({ userId, taskId });
+  await transaction(TaskFollower.knex(), async txn => {
+    const follower = await TaskFollower.unfollowTask({
+      userId: input.userId,
+      taskId,
+    }, txn);
+
+    await TaskEvent.create({
+      taskId,
+      userId,
+      eventType: 'remove_follower',
+      eventUserId: input.userId,
+    }, txn);
+
+    return follower;
+  });
+
+  return await Task.get(taskId);
 }
 
 export interface ICurrentUserTasksFilterOptions extends IPaginationOptions {

@@ -1,4 +1,4 @@
-import { Model, RelationMappings } from 'objection';
+import { transaction, Model, RelationMappings, Transaction } from 'objection';
 import * as uuid from 'uuid/v4';
 import { IPaginatedResults, IPaginationOptions } from '../db';
 import Task from './task';
@@ -83,20 +83,23 @@ export default class TaskComment extends Model {
 
   static async create(
     { userId, taskId, body }: ITaskCommentOptions,
+    txn?: Transaction<any>,
   ): Promise<TaskComment> {
-    return await this.query()
+    return await this.query(txn)
       .eager(EAGER_QUERY)
       .insert({ taskId, userId, body });
   }
 
-  static async update(taskCommentId: string, body: string): Promise<TaskComment> {
-    return await this.query()
+  static async update(
+    taskCommentId: string, body: string, txn?: Transaction<any>,
+  ): Promise<TaskComment> {
+    return await this.query(txn)
       .eager(EAGER_QUERY)
       .updateAndFetchById(taskCommentId, { body });
   }
 
-  static async delete(taskCommentId: string): Promise<TaskComment> {
-    return await this.query()
+  static async delete(taskCommentId: string, txn?: Transaction<any>): Promise<TaskComment> {
+    return await this.query(txn)
       .updateAndFetchById(taskCommentId, {
         deletedAt: new Date().toISOString(),
       });
@@ -117,6 +120,12 @@ export default class TaskComment extends Model {
       results: patientsResult.results,
       total: patientsResult.total,
     };
+  }
+
+  static async execWithTransaction(
+    callback: (boundModelClass: typeof TaskComment) => Promise<TaskComment>,
+  ) {
+    return await transaction(this as any, callback);
   }
 }
 /* tslint:disable:member-ordering */

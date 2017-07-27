@@ -2,6 +2,7 @@ import { graphql } from 'graphql';
 import { cloneDeep } from 'lodash';
 import Db from '../../db';
 import Task from '../../models/task';
+import TaskEvent from '../../models/task-event';
 import User from '../../models/user';
 import { createMockPatient, createPatient } from '../../spec-helpers';
 import schema from '../make-executable-schema';
@@ -43,16 +44,19 @@ describe('task follower', () => {
   });
 
   describe('task followers', () => {
-    it('adds and removes user to from task followers', async () => {
+    it('adds and removes user to from task followers and creates TaskEvent models', async () => {
       const mutation = `mutation {
         taskUserFollow(input: { userId: "${user.id}", taskId: "${task.id}" }) {
           id
           followers { id }
         }
       }`;
-      const result = await graphql(schema, mutation, null, { db, userRole });
+      const result = await graphql(schema, mutation, null, { db, userRole, userId: user.id });
       const taskFollowers = cloneDeep(result.data!.taskUserFollow.followers).map((u: any) => u.id);
       expect(taskFollowers).toContain(user.id);
+      const taskEvents1 = await TaskEvent.getTaskEvents(task.id, { pageNumber: 0, pageSize: 10 });
+      expect(taskEvents1.total).toEqual(1);
+      expect(taskEvents1.results[0].eventType).toEqual('add_follower');
 
       // unfollow
       const unfollowMutation = `mutation {
@@ -61,11 +65,16 @@ describe('task follower', () => {
           followers { id }
         }
       }`;
-      const unfollowResult = await graphql(schema, unfollowMutation, null, { db, userRole });
+      const unfollowResult = await graphql(schema, unfollowMutation, null, {
+        db, userRole, userId: user.id,
+      });
       const taskFollowersUnfollowed = cloneDeep(
         unfollowResult.data!.taskUserUnfollow.followers,
       ).map((u: any) => u.id);
       expect(taskFollowersUnfollowed).not.toContain(user.id);
+      const taskEvents2 = await TaskEvent.getTaskEvents(task.id, { pageNumber: 0, pageSize: 10 });
+      expect(taskEvents2.total).toEqual(2);
+      expect(taskEvents2.results[0].eventType).toEqual('remove_follower');
     });
 
   });

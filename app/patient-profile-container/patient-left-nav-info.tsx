@@ -81,7 +81,7 @@ export default class PatientLeftNavInfo extends React.Component<IProps, {}> {
     // TODO: This is a bad fallback
     const dateOfBirth = patient && patient.dateOfBirth ?
       intl.formatDate(patient.dateOfBirth) :
-      '1/1/1978';
+      '2/16/1977';
     const patientJoined = patient && patient.createdAt ?
       intl.formatRelative(patient.createdAt) :
       'Unknown';

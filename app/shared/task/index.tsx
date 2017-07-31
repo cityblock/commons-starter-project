@@ -662,7 +662,7 @@ class Task extends React.Component<IProps, IState> {
                 </div>
                 <div className={styles.typeInfo}>
                   <div className={styles.typeIcon}></div>
-                  <div className={styles.typeText}>Prescription</div>
+                  <div className={styles.typeText}>Generic</div>
                 </div>
               </div>
             </div>

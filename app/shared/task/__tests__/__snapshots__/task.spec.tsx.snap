@@ -353,7 +353,7 @@ exports[`renders task 1`] = `
           <div
             className={undefined}
           >
-            Prescription
+            Generic
           </div>
         </div>
       </div>

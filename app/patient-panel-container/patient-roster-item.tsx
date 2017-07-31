@@ -13,9 +13,10 @@ type Props = IProps & InjectedIntlProps;
 const PatientRosterItem: React.StatelessComponent<IProps> = (props: Props) => {
   const { patient, intl } = props;
 
+  // TODO: return fallbacks to normal
   const patientAge = patient.dateOfBirth ?
     intl.formatRelative(patient.dateOfBirth) :
-    'Unknown';
+    '';
   const patientJoined = patient.createdAt ?
     intl.formatRelative(patient.createdAt) :
     'Unknown';
@@ -27,7 +28,7 @@ const PatientRosterItem: React.StatelessComponent<IProps> = (props: Props) => {
       <div className={styles.tableColumn}>{patientAge}</div>
       <div className={styles.tableColumn}>{patient.zip}</div>
       <div className={styles.tableColumn}>{patientJoined}</div>
-      <div className={styles.tableColumn}>No clue</div>
+      <div className={styles.tableColumn}></div>
     </Link>
   );
 };

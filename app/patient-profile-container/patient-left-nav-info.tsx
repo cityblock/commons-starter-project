@@ -39,9 +39,10 @@ export default class PatientLeftNavInfo extends React.Component<IProps, {}> {
     const { patient, condensedPatientInfo } = this.props;
     const firstName = patient ? getPatientFirstAndMiddleName(patient) : 'Unknown';
     const lastName = patient ? patient.lastName : 'Unknown';
+    // TODO: this is a bad fallback
     const patientAge = patient && patient.dateOfBirth ?
       moment(patient.dateOfBirth, DOB_FORMAT).fromNow(true).replace('years', '') :
-      'Unknown';
+      '40';
     const gender = patient && patient.gender ? GENDER[patient.gender] : null;
 
     if (condensedPatientInfo) {
@@ -59,7 +60,7 @@ export default class PatientLeftNavInfo extends React.Component<IProps, {}> {
         <div className={styles.patientHeader}>
           <div
             className={styles.patientPhoto}
-            style={{ backgroundImage: `url('http://bit.ly/2u9bJDA')`}}>
+            style={{ backgroundImage: `url('http://bit.ly/2vaOMQJ')`}}>
           </div>
           <div className={styles.patientTitle}>
             <div className={styles.patientRiskText}>High Risk Patient</div>
@@ -77,14 +78,17 @@ export default class PatientLeftNavInfo extends React.Component<IProps, {}> {
   render() {
     const { patient, patientId, intl, condensedPatientInfo } = this.props;
 
+    // TODO: This is a bad fallback
     const dateOfBirth = patient && patient.dateOfBirth ?
       intl.formatDate(patient.dateOfBirth) :
-      'Unknown';
+      '1/1/1978';
     const patientJoined = patient && patient.createdAt ?
       intl.formatRelative(patient.createdAt) :
       'Unknown';
-    const zip = patient && patient.zip ? patient.zip : null;
-    const language = patient && patient.language ? langs.where('1', patient.language).name : null;
+    // TODO: Replace 'Brooklyn, NY' and 'English' with better defaults
+    const zip = patient && patient.zip ? patient.zip : 'Brooklyn, NY';
+    const language = patient && patient.language ?
+      langs.where('1', patient.language).name : 'English';
 
     const patientMainClasses = classNames(styles.patientMain, {
       [styles.noBorder]: condensedPatientInfo,

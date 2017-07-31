@@ -79,7 +79,7 @@ export default class PatientProfileIpadNav extends React.Component<IProps, IStat
             <div className={styles.smallPatientRiskColor}></div>
             <div
               className={styles.smallPatientPhoto}
-              style={{ backgroundImage: `url('http://bit.ly/2u9bJDA')`}}>
+              style={{ backgroundImage: `url('http://bit.ly/2vaOMQJ')`}}>
             </div>
             <div className={styles.smallPatientName}>{shortName}</div>
             <div

@@ -21,7 +21,7 @@ exports[`renders patient profile container correctly 1`] = `
             className={undefined}
             style={
               Object {
-                "backgroundImage": "url('http://bit.ly/2u9bJDA')",
+                "backgroundImage": "url('http://bit.ly/2vaOMQJ')",
               }
             }
           />
@@ -50,7 +50,7 @@ exports[`renders patient profile container correctly 1`] = `
             <div
               className={undefined}
             >
-              Unknown
+              40
                • 
             </div>
           </div>
@@ -70,7 +70,7 @@ exports[`renders patient profile container correctly 1`] = `
             <div
               className={undefined}
             >
-              Unknown
+              1/1/1978
             </div>
           </div>
           <div
@@ -84,7 +84,9 @@ exports[`renders patient profile container correctly 1`] = `
             </div>
             <div
               className={undefined}
-            />
+            >
+              English
+            </div>
           </div>
           <div
             className={undefined}
@@ -97,7 +99,9 @@ exports[`renders patient profile container correctly 1`] = `
             </div>
             <div
               className={undefined}
-            />
+            >
+              Brooklyn, NY
+            </div>
           </div>
           <div
             className={undefined}
@@ -584,7 +588,7 @@ exports[`renders patient profile for ipad 1`] = `
           className={undefined}
           style={
             Object {
-              "backgroundImage": "url('http://bit.ly/2u9bJDA')",
+              "backgroundImage": "url('http://bit.ly/2vaOMQJ')",
             }
           }
         />
@@ -640,7 +644,7 @@ exports[`renders patient profile for ipad 1`] = `
               <div
                 className={undefined}
               >
-                Unknown
+                40
                  • 
               </div>
             </div>
@@ -660,7 +664,7 @@ exports[`renders patient profile for ipad 1`] = `
               <div
                 className={undefined}
               >
-                Unknown
+                1/1/1978
               </div>
             </div>
             <div
@@ -674,7 +678,9 @@ exports[`renders patient profile for ipad 1`] = `
               </div>
               <div
                 className={undefined}
-              />
+              >
+                English
+              </div>
             </div>
             <div
               className={undefined}
@@ -687,7 +693,9 @@ exports[`renders patient profile for ipad 1`] = `
               </div>
               <div
                 className={undefined}
-              />
+              >
+                Brooklyn, NY
+              </div>
             </div>
             <div
               className={undefined}

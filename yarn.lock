@@ -215,9 +215,9 @@
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/@types/keygrip/-/keygrip-1.0.1.tgz#ff540462d2fb4d0a88441ceaf27d287b01c3d878"
 
-"@types/knex@^0.0.56":
-  version "0.0.56"
-  resolved "https://registry.yarnpkg.com/@types/knex/-/knex-0.0.56.tgz#9dc7819334a365c6633f5484c8bfcfd8310feb9d"
+"@types/knex@^0.0.57":
+  version "0.0.57"
+  resolved "https://registry.yarnpkg.com/@types/knex/-/knex-0.0.57.tgz#fb4440494c585109e44507606724f16289480fa2"
   dependencies:
     "@types/bluebird" "*"
     "@types/node" "*"
@@ -577,9 +577,9 @@ apollo-client@^1.9.0-1:
     "@types/graphql" "^0.9.0"
     "@types/isomorphic-fetch" "0.0.34"
 
-apollo-codegen@^0.16.0:
-  version "0.16.0"
-  resolved "https://registry.yarnpkg.com/apollo-codegen/-/apollo-codegen-0.16.0.tgz#1c9a386a516625e69464fe56cd26108157f6744e"
+apollo-codegen@^0.16.2:
+  version "0.16.2"
+  resolved "https://registry.yarnpkg.com/apollo-codegen/-/apollo-codegen-0.16.2.tgz#c93632dd5a2ddffe63c80db4e26c90b9a95a3552"
   dependencies:
     change-case "^3.0.0"
     core-js "^2.4.1"
@@ -4718,7 +4718,7 @@ lodash@3.x:
   version "3.10.1"
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-3.10.1.tgz#5bf45e8e49ba4189e17d482789dfd15bd140b7b6"
 
-lodash@4.x, lodash@^4.1.0, lodash@^4.12.0, lodash@^4.14.0, lodash@^4.15.0, lodash@^4.17.2, lodash@^4.17.3, lodash@^4.17.4, lodash@^4.2.0, lodash@^4.2.1, lodash@^4.3.0, lodash@^4.6.0, lodash@~4.17.2:
+lodash@4.x, lodash@^4.12.0, lodash@^4.14.0, lodash@^4.15.0, lodash@^4.17.2, lodash@^4.17.3, lodash@^4.17.4, lodash@^4.2.0, lodash@^4.2.1, lodash@^4.3.0, lodash@^4.6.0, lodash@~4.17.2:
   version "4.17.4"
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.4.tgz#78203a4d1c328ae1d86dca6460e369b57f4055ae"
 
@@ -4730,11 +4730,11 @@ log-driver@1.2.5:
   version "1.2.5"
   resolved "https://registry.yarnpkg.com/log-driver/-/log-driver-1.2.5.tgz#7ae4ec257302fd790d557cb10c97100d857b0056"
 
-log-symbols@^1.0.2:
-  version "1.0.2"
-  resolved "https://registry.yarnpkg.com/log-symbols/-/log-symbols-1.0.2.tgz#376ff7b58ea3086a0f09facc74617eca501e1a18"
+log-symbols@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/log-symbols/-/log-symbols-2.0.0.tgz#595e63be4d5c8cbf294a9e09e0d5629f5913fc0c"
   dependencies:
-    chalk "^1.0.0"
+    chalk "^2.0.1"
 
 loglevel@^1.4.1:
   version "1.4.1"
@@ -6119,13 +6119,14 @@ postcss-replace-overflow-wrap@^2.0.0:
   dependencies:
     postcss "^6.0.1"
 
-postcss-reporter@^4.0.0:
-  version "4.0.0"
-  resolved "https://registry.yarnpkg.com/postcss-reporter/-/postcss-reporter-4.0.0.tgz#13356c365c36783adde88e28e09dbba6ec6c6501"
+postcss-reporter@^5.0.0:
+  version "5.0.0"
+  resolved "https://registry.yarnpkg.com/postcss-reporter/-/postcss-reporter-5.0.0.tgz#a14177fd1342829d291653f2786efd67110332c3"
   dependencies:
-    chalk "^1.0.0"
-    lodash "^4.1.0"
-    log-symbols "^1.0.2"
+    chalk "^2.0.1"
+    lodash "^4.17.4"
+    log-symbols "^2.0.0"
+    postcss "^6.0.8"
 
 postcss-selector-matches@^3.0.0, postcss-selector-matches@^3.0.1:
   version "3.0.1"
@@ -6187,7 +6188,7 @@ postcss@^5.0.10, postcss@^5.0.11, postcss@^5.0.12, postcss@^5.0.13, postcss@^5.0
     source-map "^0.5.6"
     supports-color "^3.2.3"
 
-postcss@^6.0.0, postcss@^6.0.1, postcss@^6.0.2, postcss@^6.0.3, postcss@^6.0.5, postcss@^6.0.6:
+postcss@^6.0.0, postcss@^6.0.1, postcss@^6.0.2, postcss@^6.0.3, postcss@^6.0.5, postcss@^6.0.6, postcss@^6.0.8:
   version "6.0.8"
   resolved "https://registry.yarnpkg.com/postcss/-/postcss-6.0.8.tgz#89067a9ce8b11f8a84cbc5117efc30419a0857b3"
   dependencies:
@@ -6433,7 +6434,7 @@ react-dom@15.6.1:
     object-assign "^4.1.0"
     prop-types "^15.5.10"
 
-react-google-login@^2.9.2:
+react-google-login@2.9.2:
   version "2.9.2"
   resolved "https://registry.yarnpkg.com/react-google-login/-/react-google-login-2.9.2.tgz#4c7726f0aa488bf4d1b728567a37f3e600810ec4"
   dependencies:
@@ -7511,9 +7512,9 @@ ts-jest@^20.0.7:
     source-map-support "^0.4.4"
     yargs "^8.0.1"
 
-ts-loader@^2.3.1:
-  version "2.3.1"
-  resolved "https://registry.yarnpkg.com/ts-loader/-/ts-loader-2.3.1.tgz#6edc603393c2775c40ad84e3420007f1c097eab0"
+ts-loader@^2.3.2:
+  version "2.3.2"
+  resolved "https://registry.yarnpkg.com/ts-loader/-/ts-loader-2.3.2.tgz#b71b9f0d0062c791a654d462140718f9f7817665"
   dependencies:
     chalk "^2.0.1"
     enhanced-resolve "^3.0.0"

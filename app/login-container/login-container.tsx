@@ -83,8 +83,8 @@ class LoginContainer extends React.Component<IProps, { error?: string }> {
                 <GoogleLogin
                   clientId={clientId}
                   buttonText='Login'
-                  offline
                   scope={SCOPE}
+                  offline
                   onSuccess={this.onSuccess}
                   onFailure={this.onError}
                   className={styles.button}>

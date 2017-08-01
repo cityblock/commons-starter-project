@@ -51,6 +51,26 @@ export default [
   },
   {
     roles: [
+      'healthCoach',
+      'physician',
+      'nurseCareManager',
+    ],
+    allows: [
+      {
+        resources: [
+          'answer',
+          'riskArea',
+          'questionCondition',
+          'question',
+        ],
+        permissions: [
+          'view',
+        ],
+      },
+    ],
+  },
+  {
+    roles: [
       'admin',
     ],
     allows: [
@@ -62,6 +82,10 @@ export default [
           'clinic',
           'task',
           'appointment',
+          'answer',
+          'riskArea',
+          'questionCondition',
+          'question',
         ],
         permissions: [
           'edit',

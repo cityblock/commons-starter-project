@@ -25,6 +25,28 @@ enum TaskOrderOptions {
   updatedAtAsc
 }
 
+enum AnswerValueTypeOptions {
+  string
+  boolean
+  number
+}
+
+enum RiskAdjustmentTypeOptions {
+  increment
+  forceHighRisk
+}
+
+enum AnswerTypeOptions {
+  dropdown
+  radio
+  freetext
+  multiselect
+}
+
+enum QuestionConditionTypeOptions {
+  allTrue
+  oneTrue
+}
 # User account model
 type User implements uniqueId {
   id: ID!
@@ -328,6 +350,53 @@ type TaskCommentEdges {
   pageInfo: PageInfo!
 }
 
+# Answer
+type Answer implements uniqueId {
+  id: ID!
+  createdAt: String!
+  updatedAt: String!
+  displayValue: String!
+  value: String!
+  valueType: AnswerValueTypeOptions!
+  riskAdjustmentType: RiskAdjustmentTypeOptions
+  inSummary: Boolean
+  summaryText: String
+  questionId: String!
+  order: Int!
+}
+
+# Question
+type Question implements uniqueId {
+  id: ID!
+  createdAt: String!
+  updatedAt: String!
+  title: String!
+  validatedSource: String
+  answers: [Answer]!
+  answerType: AnswerTypeOptions!
+  riskAreaId: String!
+  applicableIfQuestionConditions: [QuestionCondition]!
+  applicableIfType: QuestionConditionTypeOptions
+  order: Int!
+}
+
+# QuestionCondition
+type QuestionCondition implements uniqueId {
+  id: ID!
+  createdAt: String!
+  updatedAt: String!
+  answer: Answer!
+  question: Question!
+}
+
+# Risk Area
+type RiskArea implements uniqueId {
+  id: ID!
+  createdAt: String!
+  updatedAt: String!
+  title: String!
+}
+
 
 #
 # BEGIN INPUT FIELDS
@@ -491,6 +560,85 @@ input TaskCommentDeleteInput {
   taskCommentId: String!
 }
 
+input RiskAreaCreateInput {
+  title: String!
+  order: Int!
+}
+
+input RiskAreaEditInput {
+  riskAreaId: String!
+  title: String
+  order: Int
+}
+
+input RiskAreaDeleteInput {
+  riskAreaId: String!
+}
+
+input QuestionCreateInput {
+  title: String!
+  answerType: AnswerTypeOptions!
+  validatedSource: String
+  riskAreaId: String!
+  order: Int!
+}
+
+input QuestionEditInput {
+  questionId: String!
+  title: String
+  answerType: AnswerTypeOptions
+  validatedSource: String
+  riskAreaId: String
+  order: Int
+}
+
+input QuestionDeleteInput {
+  questionId: String!
+}
+
+input AnswerCreateInput {
+  displayValue: String!
+  value: String!
+  valueType: AnswerValueTypeOptions!
+  riskAdjustmentType: RiskAdjustmentTypeOptions
+  inSummary: Boolean
+  summaryText: String
+  questionId: String!
+  order: Int!
+}
+
+input AnswerEditInput {
+  displayValue: String
+  value: String
+  valueType: AnswerValueTypeOptions
+  riskAdjustmentType: RiskAdjustmentTypeOptions
+  inSummary: Boolean
+  summaryText: String
+  questionId: String
+  order: Int
+  answerId: String!
+}
+
+input AnswerDeleteInput {
+  answerId: String!
+}
+
+input QuestionConditionCreateInput {
+  questionId: String!
+  answerId: String!
+}
+
+# QuestionCondition edit input - for validation, need to edit question and answer at the same time
+input QuestionConditionEditInput {
+  questionConditionId: String!
+  questionId: String!
+  answerId: String!
+}
+
+input QuestionConditionDeleteInput {
+  questionConditionId: String!
+}
+
 type RootMutationType {
   # Create a new user
   userCreate(input: UserCreateInput): UserWithAuthToken
@@ -557,6 +705,42 @@ type RootMutationType {
 
   # Delete a task
   taskCommentDelete(input: TaskCommentDeleteInput): TaskComment
+
+  # Create a RiskArea
+  riskAreaCreate(input: RiskAreaCreateInput): RiskArea
+
+  # Edit a RiskArea
+  riskAreaEdit(input: RiskAreaEditInput): RiskArea
+
+  # Deletes a RiskArea
+  riskAreaDelete(input: RiskAreaDeleteInput): RiskArea
+
+  # Create a Question
+  questionCreate(input: QuestionCreateInput): Question
+
+  # Edit a Question
+  questionEdit(input: QuestionEditInput): Question
+
+  # Delete a question
+  questionDelete(input: QuestionDeleteInput): Question
+
+  # Create an Answer
+  answerCreate(input: AnswerCreateInput): Answer
+
+  # Edit an Answer
+  answerEdit(input: AnswerEditInput): Answer
+
+  # Deletes an Answer
+  answerDelete(input: AnswerDeleteInput): Answer
+
+  # Create a QuestionCondition
+  questionConditionCreate(input: QuestionConditionCreateInput): QuestionCondition
+
+  # Edit a QuestionCondition
+  questionConditionEdit(input: QuestionConditionEditInput): QuestionCondition
+
+  # Deletes a QuestionCondition
+  questionConditionDelete(input: QuestionConditionDeleteInput): QuestionCondition
 }
 
 type RootQueryType {
@@ -583,29 +767,19 @@ type RootQueryType {
   currentUser: User
 
   # A single Patient
-  patient(
-    patientId: String!
-  ): Patient
+  patient(patientId: String!): Patient
 
   # Patient's Athena health record
-  patientHealthRecord(
-    patientId: String!
-  ): PatientHealthRecord
+  patientHealthRecord(patientId: String!): PatientHealthRecord
 
   # Users on a care team
-  patientCareTeam(
-    patientId: String!
-  ): [User]
+  patientCareTeam(patientId: String!): [User]
 
   # Patient scratch pad
-  patientScratchPad(
-    patientId: String!
-  ): PatientScratchPad
+  patientScratchPad(patientId: String!): PatientScratchPad
 
   # A single clinic
-  clinic(
-    clinicId: String!
-  ): Clinic
+  clinic(clinicId: String!): Clinic
 
   # Clinics
   clinics(
@@ -614,9 +788,7 @@ type RootQueryType {
   ): ClinicEdges
 
   # Patient encounters
-  patientEncounters(
-    patientId: String!,
-  ): [PatientEncounter]
+  patientEncounters(patientId: String!): [PatientEncounter]
 
   # Patient medications
   patientMedications(
@@ -624,9 +796,7 @@ type RootQueryType {
   ): PatientMedications
 
   # Task
-  task(
-    taskId: String!
-  ): Task
+  task(taskId: String!): Task
 
   # Patient's Tasks
   tasksForPatient(
@@ -651,9 +821,28 @@ type RootQueryType {
   ): TaskCommentEdges
 
   # Single task comment
-  taskComment(
-    taskCommentId: String!
-  ): TaskComment
+  taskComment(taskCommentId: String!): TaskComment
+
+  # RiskArea
+  riskArea(riskAreaId: String!): RiskArea
+
+  # RiskAreas
+  riskAreas: [RiskArea]
+
+  # Question
+  question(questionId: String!): Question
+
+  # Questions
+  questionsForRiskArea(riskAreaId: String!): [Question]!
+
+  # Answer
+  answer(answerId: String!): Answer
+
+  # Answers
+  answersForQuestion(questionId: String!): [Answer]!
+
+  # QuestionCondition
+  questionCondition(questionConditionId: String!): QuestionCondition
 }
 
 schema {

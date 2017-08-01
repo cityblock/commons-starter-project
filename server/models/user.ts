@@ -69,7 +69,7 @@ export default class User extends Model {
       locale: { type: 'string' },
       userRole: {
         type: 'string',
-        enum: ['familyMember', 'healthCoach', 'physician', 'nurseCareManager'],
+        enum: ['familyMember', 'healthCoach', 'physician', 'nurseCareManager', 'admin'],
       },
       homeClinicId: { type: 'string' },
       athenaProviderId: { type: 'number' },

@@ -11,7 +11,11 @@ export type Resource = 'patient' |
   'encounter' |
   'clinic' |
   'task' |
-  'appointment';
+  'appointment' |
+  'answer' |
+  'questionCondition' |
+  'riskArea' |
+  'question' ;
 
 /*
 ACL SPEC:

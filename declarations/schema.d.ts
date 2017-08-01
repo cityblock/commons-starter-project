@@ -36,6 +36,13 @@ declare module 'schema' {
     tasksForCurrentUser: ITaskEdges | null;
     taskComments: ITaskCommentEdges | null;
     taskComment: ITaskComment | null;
+    riskArea: IRiskArea | null;
+    riskAreas: Array<IRiskArea> | null;
+    question: IQuestion | null;
+    questionsForRiskArea: Array<IQuestion>;
+    answer: IAnswer | null;
+    answersForQuestion: Array<IAnswer>;
+    questionCondition: IQuestionCondition | null;
   }
 
   /*
@@ -56,7 +63,7 @@ declare module 'schema' {
   /*
     description: An object with a Globally Unique ID
   */
-  type uniqueId = IUser | IPatient | IClinic | ITask | ITaskComment;
+  type uniqueId = IUser | IPatient | IClinic | ITask | ITaskComment | IRiskArea | IQuestion | IAnswer | IQuestionCondition;
 
   /*
     description: An object with a Globally Unique ID
@@ -380,6 +387,81 @@ declare module 'schema' {
   }
 
   /*
+    description: Risk Area
+  */
+  interface IRiskArea {
+    id: string;
+    createdAt: string;
+    updatedAt: string;
+    title: string;
+  }
+
+  /*
+    description: Question
+  */
+  interface IQuestion {
+    id: string;
+    createdAt: string;
+    updatedAt: string;
+    title: string;
+    validatedSource: string | null;
+    answers: Array<IAnswer>;
+    answerType: IAnswerTypeOptionsEnum;
+    riskAreaId: string;
+    applicableIfQuestionConditions: Array<IQuestionCondition>;
+    applicableIfType: IQuestionConditionTypeOptionsEnum | null;
+    order: number;
+  }
+
+  /*
+    description: Answer
+  */
+  interface IAnswer {
+    id: string;
+    createdAt: string;
+    updatedAt: string;
+    displayValue: string;
+    value: string;
+    valueType: IAnswerValueTypeOptionsEnum;
+    riskAdjustmentType: IRiskAdjustmentTypeOptionsEnum | null;
+    inSummary: boolean | null;
+    summaryText: string | null;
+    questionId: string;
+    order: number;
+  }
+
+  /*
+    description: 
+  */
+  type IAnswerValueTypeOptionsEnum = 'string' | 'boolean' | 'number';
+
+  /*
+    description: 
+  */
+  type IRiskAdjustmentTypeOptionsEnum = 'increment' | 'forceHighRisk';
+
+  /*
+    description: 
+  */
+  type IAnswerTypeOptionsEnum = 'dropdown' | 'radio' | 'freetext' | 'multiselect';
+
+  /*
+    description: QuestionCondition
+  */
+  interface IQuestionCondition {
+    id: string;
+    createdAt: string;
+    updatedAt: string;
+    answer: IAnswer;
+    question: IQuestion;
+  }
+
+  /*
+    description: 
+  */
+  type IQuestionConditionTypeOptionsEnum = 'allTrue' | 'oneTrue';
+
+  /*
     description: 
   */
   interface IRootMutationType {
@@ -405,6 +487,18 @@ declare module 'schema' {
     taskCommentCreate: ITaskComment | null;
     taskCommentEdit: ITaskComment | null;
     taskCommentDelete: ITaskComment | null;
+    riskAreaCreate: IRiskArea | null;
+    riskAreaEdit: IRiskArea | null;
+    riskAreaDelete: IRiskArea | null;
+    questionCreate: IQuestion | null;
+    questionEdit: IQuestion | null;
+    questionDelete: IQuestion | null;
+    answerCreate: IAnswer | null;
+    answerEdit: IAnswer | null;
+    answerDelete: IAnswer | null;
+    questionConditionCreate: IQuestionCondition | null;
+    questionConditionEdit: IQuestionCondition | null;
+    questionConditionDelete: IQuestionCondition | null;
   }
 
   /*
@@ -644,5 +738,119 @@ declare module 'schema' {
   */
   interface ITaskCommentDeleteInput {
     taskCommentId: string;
+  }
+
+  /*
+    description: 
+  */
+  interface IRiskAreaCreateInput {
+    title: string;
+    order: number;
+  }
+
+  /*
+    description: 
+  */
+  interface IRiskAreaEditInput {
+    riskAreaId: string;
+    title?: string | null;
+    order?: number | null;
+  }
+
+  /*
+    description: 
+  */
+  interface IRiskAreaDeleteInput {
+    riskAreaId: string;
+  }
+
+  /*
+    description: 
+  */
+  interface IQuestionCreateInput {
+    title: string;
+    answerType: IAnswerTypeOptionsEnum;
+    validatedSource?: string | null;
+    riskAreaId: string;
+    order: number;
+  }
+
+  /*
+    description: 
+  */
+  interface IQuestionEditInput {
+    questionId: string;
+    title?: string | null;
+    answerType?: IAnswerTypeOptionsEnum | null;
+    validatedSource?: string | null;
+    riskAreaId?: string | null;
+    order?: number | null;
+  }
+
+  /*
+    description: 
+  */
+  interface IQuestionDeleteInput {
+    questionId: string;
+  }
+
+  /*
+    description: 
+  */
+  interface IAnswerCreateInput {
+    displayValue: string;
+    value: string;
+    valueType: IAnswerValueTypeOptionsEnum;
+    riskAdjustmentType?: IRiskAdjustmentTypeOptionsEnum | null;
+    inSummary?: boolean | null;
+    summaryText?: string | null;
+    questionId: string;
+    order: number;
+  }
+
+  /*
+    description: 
+  */
+  interface IAnswerEditInput {
+    displayValue?: string | null;
+    value?: string | null;
+    valueType?: IAnswerValueTypeOptionsEnum | null;
+    riskAdjustmentType?: IRiskAdjustmentTypeOptionsEnum | null;
+    inSummary?: boolean | null;
+    summaryText?: string | null;
+    questionId?: string | null;
+    order?: number | null;
+    answerId: string;
+  }
+
+  /*
+    description: 
+  */
+  interface IAnswerDeleteInput {
+    answerId: string;
+  }
+
+  /*
+    description: 
+  */
+  interface IQuestionConditionCreateInput {
+    questionId: string;
+    answerId: string;
+  }
+
+  /*
+    description: QuestionCondition edit input - for validation, need to edit question and answer at the same time
+  */
+  interface IQuestionConditionEditInput {
+    questionConditionId: string;
+    questionId: string;
+    answerId: string;
+  }
+
+  /*
+    description: 
+  */
+  interface IQuestionConditionDeleteInput {
+    questionConditionId: string;
   }
 }

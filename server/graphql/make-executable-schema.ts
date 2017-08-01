@@ -2,6 +2,13 @@ import * as fs from 'fs';
 import { makeExecutableSchema } from 'graphql-tools';
 import * as path from 'path';
 import config from '../config';
+import {
+  answerCreate,
+  answerDelete,
+  answerEdit,
+  resolveAnswer,
+  resolveAnswersForQuestion,
+} from './answer-resolver';
 import { appointmentAddNote, appointmentEnd, appointmentStart } from './appointments-resolver';
 import {
   careTeamAddUser,
@@ -20,6 +27,26 @@ import {
   resolvePatientHealthRecord,
   resolvePatientScratchPad,
 } from './patient-resolver';
+import {
+  questionConditionCreate,
+  questionConditionDelete,
+  questionConditionEdit,
+  resolveQuestionCondition,
+} from './question-condition-resolver';
+import {
+  questionCreate,
+  questionDelete,
+  questionEdit,
+  resolveQuestion,
+  resolveQuestionsForRiskArea,
+} from './question-resolver';
+import {
+  resolveRiskArea,
+  resolveRiskAreas,
+  riskAreaCreate,
+  riskAreaDelete,
+  riskAreaEdit,
+} from './risk-area-resolver';
 import {
   resolveTaskComment,
   resolveTaskComments,
@@ -69,6 +96,13 @@ const resolveFunctions = {
     tasksForCurrentUser: resolveCurrentUserTasks,
     taskComments: resolveTaskComments,
     taskComment: resolveTaskComment,
+    riskArea: resolveRiskArea,
+    riskAreas: resolveRiskAreas,
+    question: resolveQuestion,
+    questionsForRiskArea: resolveQuestionsForRiskArea,
+    answer: resolveAnswer,
+    answersForQuestion: resolveAnswersForQuestion,
+    questionCondition: resolveQuestionCondition,
   },
   RootMutationType: {
     appointmentAddNote,
@@ -93,6 +127,18 @@ const resolveFunctions = {
     taskCommentCreate,
     taskCommentEdit,
     taskCommentDelete,
+    questionEdit,
+    questionCreate,
+    questionDelete,
+    answerEdit,
+    answerCreate,
+    answerDelete,
+    questionConditionEdit,
+    questionConditionCreate,
+    questionConditionDelete,
+    riskAreaEdit,
+    riskAreaCreate,
+    riskAreaDelete,
   },
 };
 

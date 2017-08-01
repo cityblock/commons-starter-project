@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { Redirect, Route, Switch } from 'react-router-dom';
+import AdminContainer from './admin-container/admin-container';
 import Authentication from './authentication-container/authentication-container';
 import LogIn from './login-container/login-container';
 import Main from './main-container/main-container';
@@ -32,6 +33,9 @@ export default (
         <Route exact path='/patients' component={(PatientPanelContainer as any)} />
         <Route exact path='/patients/:patientId' component={(PatientRedirect as any)} />
         <Route path='/patients/:patientId/:tabId' component={(PatientProfileContainer as any)} />
+        <Route exact path='/admin/:tabId/:itemId' component={(AdminContainer as any)} />
+        <Route exact path='/admin/:tabId' component={(AdminContainer as any)} />
+        <Route exact path='/admin' component={(AdminContainer as any)} />
       </Authentication>
     </Switch>
   </Main>

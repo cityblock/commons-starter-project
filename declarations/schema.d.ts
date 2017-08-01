@@ -395,6 +395,7 @@ declare module 'schema' {
     id: string;
     createdAt: string;
     updatedAt: string;
+    deletedAt: string | null;
     title: string;
   }
 
@@ -405,6 +406,7 @@ declare module 'schema' {
     id: string;
     createdAt: string;
     updatedAt: string;
+    deletedAt: string | null;
     title: string;
     validatedSource: string | null;
     answers: Array<IAnswer>;
@@ -422,6 +424,7 @@ declare module 'schema' {
     id: string;
     createdAt: string;
     updatedAt: string;
+    deletedAt: string | null;
     displayValue: string;
     value: string;
     valueType: IAnswerValueTypeOptionsEnum;
@@ -454,6 +457,7 @@ declare module 'schema' {
     id: string;
     createdAt: string;
     updatedAt: string;
+    deletedAt: string | null;
     answer: IAnswer;
     question: IQuestion;
   }

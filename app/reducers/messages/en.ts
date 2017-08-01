@@ -89,6 +89,7 @@ export const ENGLISH_TRANSLATION = {
     'header.patients': 'Patients',
     'header.tasks': 'Tasks',
     'header.logOut': 'Logout',
+    'header.admin': 'Admin',
     'settings.heading': 'Settings',
     'tasks.assignedToPlaceholder': 'Assign to',
     'tasks.tasksList': 'My tasks lists',

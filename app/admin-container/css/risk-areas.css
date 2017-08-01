@@ -1,0 +1,119 @@
+@import '../../shared/css/sizes';
+.container {
+  background: var(--white-font-color);
+}
+
+.bottomContainer {
+  padding: var(--medium-gutter) var(--small-gutter);
+  height: calc(100vh - 160px);
+  overflow-y: hidden;
+}
+
+.sortSearchBar {
+  padding: 0 var(--medium-gutter);
+  height: 50px;
+  background-color: var(--dark-gray-background-color);
+  align-items: center;
+  justify-content: space-between;
+  lost-flex-container: row;
+}
+
+.riskAreasList {
+  display: inline-block;
+  height: calc(100vh - 223px);
+  overflow-y: scroll;
+  -webkit-overflow-scrolling: touch;
+  width: 100%;
+  transition: width 0.3s ease-out;
+  &:hover {
+    cursor: pointer;
+  }
+}
+
+.riskAreasList.compressed {
+  width: 50%;
+}
+
+.riskAreasList.compressed .dateSection {
+  padding: 0 15px;
+  border-left: 1px solid var(--gray-background-color);
+}
+
+.riskAreasList.compressed .dateSection.openedAt {
+  display: none;
+}
+
+.riskAreasList.emptyRiskAreasList {
+  width: 100%;
+  &:hover {
+    cursor: default;
+  }
+}
+
+.riskAreaContainer {
+  width: 0%;
+  overflow: hidden;
+  display: inline-block;
+  height: calc(100vh - 223px);
+  vertical-align: top;
+  transition: width 0.3s ease-out;
+}
+
+.riskAreaContainer.visible {
+  width: 50%;
+  padding: 0 10px;
+  overflow-y: scroll;
+  -webkit-overflow-scrolling: touch;
+}
+
+.emptyRiskAreasMessage {
+  border: 1px dashed var(--border-color);
+  border-radius: 4px;
+  padding: 24px 40px 21px;
+  margin: 5px var(--gutter) 0;
+}
+
+.emptyRiskAreasLogo {
+  background-image: url('../../assets/generic-health-icon-grey.svg');
+  background-position: center center;
+  background-repeat: no-repeat;
+  height: 18px;
+  width: 18px;
+  margin: 0 auto 13px;
+}
+
+.emptyRiskAreasLabel {
+  margin: 0 auto;
+  text-align: center;
+  color: var(--light-gray-font-color);
+  font-family: var(--basetica-medium);
+  font-size: var(--medium-font-size);
+  line-height: var(--medium-font-line-height);
+}
+
+.riskAreasError {
+  margin: 50px var(--gutter) 0;
+}
+
+.riskAreasLoading {
+  margin: 0 auto;
+  text-align: center;
+  color: var(--light-gray-font-color);
+  font-family: var(--basetica-medium);
+  font-size: var(--medium-font-size);
+  line-height: var(--medium-font-line-height);
+  padding-top: var(--medium-gutter);
+}
+
+.search {
+  margin-left: 10px;
+}
+
+.createContainer {
+  align-self: center;
+}
+
+.createButton {
+  @apply --button;
+  @apply --small-button;
+}

@@ -1,0 +1,7 @@
+#import "../fragments/full-risk-area.graphql"
+
+query getRiskAreas {
+  riskAreas {
+    ...FullRiskArea
+  }
+}

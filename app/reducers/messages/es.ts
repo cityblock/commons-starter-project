@@ -89,6 +89,7 @@ export const SPANISH_TRANSLATION = {
     'header.patients': 'Pacientes',
     'header.tasks': 'Tareas',
     'header.logOut': 'Cerrar sesión',
+    'header.admin': 'Admin',
     'settings.heading': 'Ajustes',
     'tasks.assignedToPlaceholder': 'Asignar a',
     'tasks.tasksList': 'Mis listas de tareas',

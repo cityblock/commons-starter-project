@@ -27,10 +27,13 @@ export default (client: ApolloClient, history: History) => {
   const composeEnhancers = (window as any).__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
   const middleware = [
-    createLogger(),
     routerMiddleware(history),
     client.middleware(),
   ];
+
+  if (process.env.NODE_ENV === 'development') {
+    middleware.push(createLogger());
+  }
 
   // `as any` are temporary fixes for ts 2.4 issues with redux typings
   const reducers = combineReducers<IState>({

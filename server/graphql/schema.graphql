@@ -373,6 +373,7 @@ type Answer implements uniqueId {
   id: ID!
   createdAt: String!
   updatedAt: String!
+  deletedAt: String
   displayValue: String!
   value: String!
   valueType: AnswerValueTypeOptions!
@@ -388,6 +389,7 @@ type Question implements uniqueId {
   id: ID!
   createdAt: String!
   updatedAt: String!
+  deletedAt: String
   title: String!
   validatedSource: String
   answers: [Answer]!
@@ -403,6 +405,7 @@ type QuestionCondition implements uniqueId {
   id: ID!
   createdAt: String!
   updatedAt: String!
+  deletedAt: String
   answer: Answer!
   question: Question!
 }
@@ -412,7 +415,9 @@ type RiskArea implements uniqueId {
   id: ID!
   createdAt: String!
   updatedAt: String!
+  deletedAt: String
   title: String!
+  order: Int!
 }
 
 # Task Event

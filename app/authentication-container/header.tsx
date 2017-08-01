@@ -17,6 +17,16 @@ const Header: React.StatelessComponent<IProps> = props => {
   const { currentUser } = props;
   const name = currentUser.firstName && currentUser.lastName ?
     `${currentUser.firstName} ${currentUser.lastName}` : null;
+  let adminLink = null;
+  if (currentUser.userRole === 'admin') {
+    adminLink = (
+      <Link to={'/admin'} className={styles.navItem}>
+        <div className={styles.tasksIcon} />
+        <FormattedMessage id='header.admin'>
+          {(message: string) => <div className={styles.navText}>{message}</div>}
+        </FormattedMessage>
+      </Link>);
+  }
   return (
     <div className={styles.header}>
       <div className={styles.container}>
@@ -42,6 +52,7 @@ const Header: React.StatelessComponent<IProps> = props => {
               {(message: string) => <div className={styles.navText}>{message}</div>}
             </FormattedMessage>
           </Link>
+          {adminLink}
         </div>
         <div className={styles.right}>
           <div className={styles.userInfo}>

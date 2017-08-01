@@ -1,0 +1,76 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders admin container 1`] = `
+<div
+  className={undefined}
+>
+  <div
+    className={undefined}
+  >
+    left nav
+  </div>
+  <div
+    className={undefined}
+  >
+    <div
+      className={undefined}
+    >
+      <a
+        className="undefined"
+        href="/admin/domains"
+        onClick={[Function]}
+      >
+        Domains
+      </a>
+      <a
+        className=""
+        href="/admin/questions"
+        onClick={[Function]}
+      >
+        Quesitons
+      </a>
+    </div>
+    <div
+      className={undefined}
+    >
+      <div
+        className={undefined}
+      >
+        <div
+          className={undefined}
+        >
+          <div
+            className={undefined}
+            onClick={[Function]}
+          >
+            Create Domain
+          </div>
+        </div>
+      </div>
+      <div
+        className={undefined}
+      >
+        <div
+          className=""
+        >
+          <div
+            className={undefined}
+          >
+            <div
+              className={undefined}
+            />
+            <div
+              className={undefined}
+            >
+              No RiskAreas
+            </div>
+          </div>
+        </div>
+        <div
+          className=""
+        />
+      </div>
+    </div>
+  </div>
+</div>
+`;

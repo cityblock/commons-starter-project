@@ -1,0 +1,15 @@
+#import "../fragments/full-risk-area.graphql"
+
+mutation riskAreaEdit(
+  $riskAreaId: String!
+  $title: String
+  $order: Int
+) {
+  riskAreaEdit(input: {
+    riskAreaId: $riskAreaId,
+    title: $title,
+    order: $order,
+  }) {
+    ...FullRiskArea
+  }
+}

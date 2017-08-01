@@ -293,6 +293,34 @@ export type getPatientQuery = {
   } | null,
 };
 
+export type getRiskAreaQueryVariables = {
+  riskAreaId: string,
+};
+
+export type getRiskAreaQuery = {
+  // RiskArea
+  riskArea:  {
+    id: string,
+    createdAt: string,
+    updatedAt: string,
+    deletedAt: string | null,
+    title: string,
+    order: number,
+  } | null,
+};
+
+export type getRiskAreasQuery = {
+  // RiskAreas
+  riskAreas:  Array< {
+    id: string,
+    createdAt: string,
+    updatedAt: string,
+    deletedAt: string | null,
+    title: string,
+    order: number,
+  } | null > | null,
+};
+
 export type getTaskCommentQueryVariables = {
   taskCommentId: string,
 };
@@ -530,6 +558,57 @@ export type patientSetupMutation = {
     createdAt: string | null,
     consentToText: boolean | null,
     consentToCall: boolean | null,
+  } | null,
+};
+
+export type riskAreaCreateMutationVariables = {
+  title: string,
+  order: number,
+};
+
+export type riskAreaCreateMutation = {
+  // Create a RiskArea
+  riskAreaCreate:  {
+    id: string,
+    createdAt: string,
+    updatedAt: string,
+    deletedAt: string | null,
+    title: string,
+    order: number,
+  } | null,
+};
+
+export type riskAreaDeleteMutationVariables = {
+  riskAreaId: string,
+};
+
+export type riskAreaDeleteMutation = {
+  // Deletes a RiskArea
+  riskAreaDelete:  {
+    id: string,
+    createdAt: string,
+    updatedAt: string,
+    deletedAt: string | null,
+    title: string,
+    order: number,
+  } | null,
+};
+
+export type riskAreaEditMutationVariables = {
+  riskAreaId: string,
+  title?: string | null,
+  order?: number | null,
+};
+
+export type riskAreaEditMutation = {
+  // Edit a RiskArea
+  riskAreaEdit:  {
+    id: string,
+    createdAt: string,
+    updatedAt: string,
+    deletedAt: string | null,
+    title: string,
+    order: number,
   } | null,
 };
 
@@ -999,6 +1078,15 @@ export type FullPatientMedicationFragment = {
 
 export type FullPatientScratchPadFragment = {
   text: string | null,
+};
+
+export type FullRiskAreaFragment = {
+  id: string,
+  createdAt: string,
+  updatedAt: string,
+  deletedAt: string | null,
+  title: string,
+  order: number,
 };
 
 export type FullTaskCommentFragment = {

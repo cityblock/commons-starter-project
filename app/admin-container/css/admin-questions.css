@@ -1,0 +1,8 @@
+@import '../../shared/css/sizes';
+.container {
+  background: white;
+  box-shadow: 0 6px 8px 0 rgba(0, 0, 0, 0.1);
+  border-radius: 5px;
+  min-height: 535px;
+  margin-bottom: 10px;
+}

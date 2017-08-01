@@ -47,6 +47,24 @@ enum QuestionConditionTypeOptions {
   allTrue
   oneTrue
 }
+
+enum TaskEventTypes {
+  create_task
+  add_follower
+  remove_follower
+  complete_task
+  uncomplete_task
+  delete_task
+  add_comment
+  edit_comment
+  delete_comment
+  edit_priority
+  edit_due_date
+  edit_assignee
+  edit_title
+  edit_description
+}
+
 # User account model
 type User implements uniqueId {
   id: ID!
@@ -397,6 +415,50 @@ type RiskArea implements uniqueId {
   title: String!
 }
 
+# Task Event
+type TaskEvent implements uniqueId {
+  id: ID!
+  taskId: String!
+  task: Task!
+  userId: String!
+  user: User!
+  eventType: TaskEventTypes
+  eventCommentId: String
+  eventComment: TaskComment
+  eventUserId: String
+  eventUser: User
+  createdAt: String!
+  updatedAt: String!
+  deletedAt: String
+}
+
+# Event Notification
+type EventNotification implements uniqueId {
+  id: ID!
+  userId: String!
+  user: User!
+  taskEventId: String
+  taskEvent: TaskEvent
+  task: Task
+  seenAt: String
+  emailSentAt: String
+  deliveredAt: String
+  createdAt: String!
+  updatedAt: String!
+  deletedAt: String
+}
+
+# Event Notification node
+type EventNotificationNode {
+  node: EventNotification
+  cursor: String!
+}
+
+# Event Notification edges
+type EventNotificationEdges {
+  edges: [EventNotificationNode]
+  pageInfo: PageInfo!
+}
 
 #
 # BEGIN INPUT FIELDS
@@ -843,6 +905,21 @@ type RootQueryType {
 
   # QuestionCondition
   questionCondition(questionConditionId: String!): QuestionCondition
+
+  # Event notifications for a user
+  eventNotificationsForUser(
+    userId: String!,
+    pageNumber: Int,
+    pageSize: Int,
+    taskEventNotificationsOnly: Boolean
+  ): EventNotificationEdges
+
+  # Event notifications for a task
+  eventNotificationsForTask(
+    taskId: String!,
+    pageNumber: Int,
+    pageSize: Int,
+  ): EventNotificationEdges
 }
 
 schema {

@@ -4,6 +4,7 @@ import EventNotification from '../event-notification';
 import Patient from '../patient';
 import Task from '../task';
 import TaskEvent from '../task-event';
+import TaskFollower from '../task-follower';
 import User from '../user';
 
 const userRole = 'physician';
@@ -14,7 +15,6 @@ describe('task event model', () => {
   let user2: User = null as any;
   let patient: Patient = null as any;
   let task: Task = null as any;
-  let taskEvent: TaskEvent = null as any;
 
   beforeEach(async () => {
     db = await Db.get();
@@ -43,11 +43,6 @@ describe('task event model', () => {
       createdById: user.id,
       assignedToId: user.id,
     });
-    taskEvent = await TaskEvent.create({
-      taskId: task.id,
-      userId: user.id,
-      eventType: 'edit_assignee',
-    });
   });
 
   afterAll(async () => {
@@ -55,6 +50,11 @@ describe('task event model', () => {
   });
 
   it('fetches by id', async () => {
+    const taskEvent = await TaskEvent.create({
+      taskId: task.id,
+      userId: user.id,
+      eventType: 'edit_assignee',
+    });
     const eventNotification = await EventNotification.create({
       taskEventId: taskEvent.id,
       userId: user.id,
@@ -73,6 +73,11 @@ describe('task event model', () => {
   });
 
   it('sets up the correct associations when created', async () => {
+    const taskEvent = await TaskEvent.create({
+      taskId: task.id,
+      userId: user.id,
+      eventType: 'edit_assignee',
+    });
     const eventNotification1 = await EventNotification.create({
       taskEventId: taskEvent.id,
       userId: user.id,
@@ -92,6 +97,11 @@ describe('task event model', () => {
   });
 
   it('fetches for a given user', async () => {
+    const taskEvent = await TaskEvent.create({
+      taskId: task.id,
+      userId: user.id,
+      eventType: 'edit_assignee',
+    });
     const eventNotification1 = await EventNotification.create({
       taskEventId: taskEvent.id,
       userId: user.id,
@@ -117,6 +127,11 @@ describe('task event model', () => {
   });
 
   it('fetches only task notifications for a given user', async () => {
+    const taskEvent = await TaskEvent.create({
+      taskId: task.id,
+      userId: user.id,
+      eventType: 'edit_assignee',
+    });
     const taskNotification = await EventNotification.create({
       taskEventId: taskEvent.id,
       userId: user.id,
@@ -141,6 +156,11 @@ describe('task event model', () => {
   });
 
   it('fetches for a given task', async () => {
+    const taskEvent = await TaskEvent.create({
+      taskId: task.id,
+      userId: user.id,
+      eventType: 'edit_assignee',
+    });
     const taskNotification = await EventNotification.create({
       taskEventId: taskEvent.id,
       userId: user.id,
@@ -159,7 +179,60 @@ describe('task event model', () => {
     expect(fetchedIds).not.toContain(nonTaskNotification);
   });
 
+  it('creates notifications for all necessary users for a task', async () => {
+    const user3 = await User.create({
+      email: 'care@care3.com',
+      firstName: 'Dan3',
+      lastName: 'Plant3',
+      userRole,
+      homeClinicId: '1',
+    });
+    const user4 = await User.create({
+      email: 'care@care4.com',
+      firstName: 'Dan4',
+      lastName: 'Plant4',
+      userRole,
+      homeClinicId: '1',
+    });
+    await TaskFollower.followTask({ userId: user2.id, taskId: task.id });
+    await TaskFollower.followTask({ userId: user3.id, taskId: task.id });
+    const taskEvent = await TaskEvent.create({
+      taskId: task.id,
+      userId: user2.id,
+      eventType: 'add_follower',
+      skipNotifsCreate: true,
+    });
+    await EventNotification.createTaskNotifications({
+      initiatingUserId: user2.id,
+      taskEventId: taskEvent.id,
+      taskId: task.id,
+    });
+
+    const userNotifs = await EventNotification.getUserTaskEventNotifications(user.id, {
+      pageNumber: 0, pageSize: 10,
+    });
+    const user2Notifs = await EventNotification.getUserTaskEventNotifications(user2.id, {
+      pageNumber: 0, pageSize: 10,
+    });
+    const user3Notifs = await EventNotification.getUserTaskEventNotifications(user3.id, {
+      pageNumber: 0, pageSize: 10,
+    });
+    const user4Notifs = await EventNotification.getUserTaskEventNotifications(user4.id, {
+      pageNumber: 0, pageSize: 10,
+    });
+
+    expect(userNotifs.total).toEqual(1);
+    expect(user2Notifs.total).toEqual(0);
+    expect(user3Notifs.total).toEqual(1);
+    expect(user4Notifs.total).toEqual(0);
+  });
+
   it('marks as deleted', async () => {
+    const taskEvent = await TaskEvent.create({
+      taskId: task.id,
+      userId: user.id,
+      eventType: 'edit_assignee',
+    });
     const eventNotification = await EventNotification.create({
       taskEventId: taskEvent.id,
       userId: user.id,

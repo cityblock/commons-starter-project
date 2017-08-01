@@ -43,6 +43,8 @@ declare module 'schema' {
     answer: IAnswer | null;
     answersForQuestion: Array<IAnswer>;
     questionCondition: IQuestionCondition | null;
+    eventNotificationsForUser: IEventNotificationEdges | null;
+    eventNotificationsForTask: IEventNotificationEdges | null;
   }
 
   /*
@@ -63,7 +65,7 @@ declare module 'schema' {
   /*
     description: An object with a Globally Unique ID
   */
-  type uniqueId = IUser | IPatient | IClinic | ITask | ITaskComment | IRiskArea | IQuestion | IAnswer | IQuestionCondition;
+  type uniqueId = IUser | IPatient | IClinic | ITask | ITaskComment | IRiskArea | IQuestion | IAnswer | IQuestionCondition | IEventNotification | ITaskEvent;
 
   /*
     description: An object with a Globally Unique ID
@@ -460,6 +462,64 @@ declare module 'schema' {
     description: 
   */
   type IQuestionConditionTypeOptionsEnum = 'allTrue' | 'oneTrue';
+
+  /*
+    description: Event Notification edges
+  */
+  interface IEventNotificationEdges {
+    edges: Array<IEventNotificationNode> | null;
+    pageInfo: IPageInfo;
+  }
+
+  /*
+    description: Event Notification node
+  */
+  interface IEventNotificationNode {
+    node: IEventNotification | null;
+    cursor: string;
+  }
+
+  /*
+    description: Event Notification
+  */
+  interface IEventNotification {
+    id: string;
+    userId: string;
+    user: IUser;
+    taskEventId: string | null;
+    taskEvent: ITaskEvent | null;
+    task: ITask | null;
+    seenAt: string | null;
+    emailSentAt: string | null;
+    deliveredAt: string | null;
+    createdAt: string;
+    updatedAt: string;
+    deletedAt: string | null;
+  }
+
+  /*
+    description: Task Event
+  */
+  interface ITaskEvent {
+    id: string;
+    taskId: string;
+    task: ITask;
+    userId: string;
+    user: IUser;
+    eventType: ITaskEventTypesEnum | null;
+    eventCommentId: string | null;
+    eventComment: ITaskComment | null;
+    eventUserId: string | null;
+    eventUser: IUser | null;
+    createdAt: string;
+    updatedAt: string;
+    deletedAt: string | null;
+  }
+
+  /*
+    description: 
+  */
+  type ITaskEventTypesEnum = 'create_task' | 'add_follower' | 'remove_follower' | 'complete_task' | 'uncomplete_task' | 'delete_task' | 'add_comment' | 'edit_comment' | 'delete_comment' | 'edit_priority' | 'edit_due_date' | 'edit_assignee' | 'edit_title' | 'edit_description';
 
   /*
     description: 

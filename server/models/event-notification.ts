@@ -1,3 +1,4 @@
+import { uniq } from 'lodash';
 import { Model, RelationMappings, Transaction } from 'objection';
 import * as uuid from 'uuid/v4';
 import { IPaginatedResults, IPaginationOptions } from '../db';
@@ -8,6 +9,12 @@ import User from './user';
 export interface IEventNotificationOptions {
   userId: string;
   taskEventId?: string;
+}
+
+export interface ICreateTaskNotificationsOptions {
+  initiatingUserId: string;
+  taskEventId: string;
+  taskId: string;
 }
 
 const EAGER_QUERY = '[task, taskEvent, user]';
@@ -107,6 +114,25 @@ export default class EventNotification extends Model {
     return await this.query(txn)
       .eager(EAGER_QUERY)
       .insert({ taskEventId, userId });
+  }
+
+  static async createTaskNotifications(
+    { initiatingUserId, taskEventId, taskId }: ICreateTaskNotificationsOptions,
+    txn?: Transaction<any>,
+  ) {
+    const task = await Task.get(taskId, txn);
+
+    const interestedUserIds = task.followers.map((follower: User) => follower.id);
+    if (task.assignedToId) {
+      interestedUserIds.push(task.assignedToId);
+    }
+    const userIdsToNotify = uniq(interestedUserIds).filter(userId => userId !== initiatingUserId);
+
+    await Promise.all(userIdsToNotify.map(async userId => EventNotification.create({
+      taskEventId, userId,
+    }, txn)));
+
+    return userIdsToNotify.length;
   }
 
   static async delete(eventNotificationId: string): Promise<EventNotification> {

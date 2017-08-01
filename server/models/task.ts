@@ -141,9 +141,9 @@ export default class Task extends Model {
     this.updatedAt = new Date().toISOString();
   }
 
-  static async get(taskId: string): Promise<Task> {
+  static async get(taskId: string, txn?: Transaction<any>): Promise<Task> {
     const task = await this
-      .query()
+      .query(txn)
       .eager(EAGER_QUERY)
       .modifyEager('followers', builder => builder.where('deletedAt', null))
       .findById(taskId);

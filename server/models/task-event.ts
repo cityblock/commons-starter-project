@@ -1,6 +1,7 @@
 import { Model, RelationMappings, Transaction } from 'objection';
 import * as uuid from 'uuid/v4';
 import { IPaginatedResults, IPaginationOptions } from '../db';
+import EventNotification from './event-notification';
 import Task from './task';
 import TaskComment from './task-comment';
 import User from './user';
@@ -11,6 +12,7 @@ export interface ITaskEventOptions {
   eventType: EventTypes;
   eventCommentId?: string;
   eventUserId?: string;
+  skipNotifsCreate?: boolean;
 }
 
 export type EventTypes =
@@ -124,12 +126,23 @@ export default class TaskEvent extends Model {
   }
 
   static async create(
-    { taskId, userId, eventType, eventCommentId, eventUserId }: ITaskEventOptions,
+    { taskId, userId, eventType, eventCommentId, eventUserId, skipNotifsCreate }: ITaskEventOptions,
     txn?: Transaction<any>,
   ): Promise<TaskEvent> {
-    return await this.query(txn)
+    const taskEvent = await this
+      .query(txn)
       .eager(EAGER_QUERY)
       .insert({ taskId, userId, eventType, eventCommentId, eventUserId });
+
+    if (!skipNotifsCreate) {
+      await EventNotification.createTaskNotifications({
+        initiatingUserId: userId,
+        taskEventId: taskEvent.id,
+        taskId,
+      }, txn);
+    }
+
+    return taskEvent;
   }
 
   static async delete(taskEventId: string): Promise<TaskEvent> {

@@ -62,7 +62,7 @@ class AdminContainer extends React.Component<IProps, {}> {
             <Link to={`/admin/domains`} className={riskAreaTabStyles}>Domains</Link>
             <Link
               to={`/admin/domains/${selectedRiskAreaId}/questions`}
-              className={questionTabStyles}>Quesitons</Link>
+              className={questionTabStyles}>Questions</Link>
           </div>
           {questions}
           {riskAreasHtml}

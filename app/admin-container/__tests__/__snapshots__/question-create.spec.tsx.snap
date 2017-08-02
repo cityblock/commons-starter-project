@@ -37,14 +37,14 @@ exports[`renders question 1`] = `
           className={undefined}
           name="title"
           onChange={[Function]}
-          placeholder="Enter domain title"
+          placeholder="Enter question title"
           value=""
         />
         <input
           className={undefined}
           name="order"
           onChange={[Function]}
-          placeholder="Enter domain order"
+          placeholder="Enter question order"
           type="number"
           value={1}
         />

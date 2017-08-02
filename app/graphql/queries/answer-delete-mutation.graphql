@@ -1,0 +1,11 @@
+#import "../fragments/full-answer.graphql"
+
+mutation answerDelete(
+  $answerId: String!
+) {
+  answerDelete(input: {
+    answerId: $answerId
+  }) {
+    ...FullAnswer
+  }
+}

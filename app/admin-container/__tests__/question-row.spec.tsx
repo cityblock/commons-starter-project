@@ -22,6 +22,17 @@ const question = {
   order: 1,
   validatedSource: 'validated source',
   answerType: 'radio' as any,
+  answers: [{
+    id: 'answer-id',
+    displayValue: 'answer value',
+    value: 'true',
+    valueType: 'boolean' as any,
+    riskAdjustmentType: 'increment' as any,
+    inSummary: true,
+    summaryText: 'summary text',
+    questionId: 'cool-task-id',
+    order: 1,
+  }],
   riskAreaId: 'risk-area-id',
   applicableIfType: 'allTrue' as any,
 };

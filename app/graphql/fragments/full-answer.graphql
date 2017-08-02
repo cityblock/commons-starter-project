@@ -1,0 +1,11 @@
+fragment FullAnswer on Answer {
+  id
+  displayValue
+  value
+  valueType
+  riskAdjustmentType
+  inSummary
+  summaryText
+  questionId
+  order
+}

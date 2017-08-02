@@ -107,13 +107,13 @@ class QuestionCreate extends React.Component<IProps, IState> {
               <input
                 name='title'
                 value={question.title}
-                placeholder={'Enter domain title'}
+                placeholder={'Enter question title'}
                 className={formStyles.input}
                 onChange={this.onChange} />
               <input
                 type='number'
                 name='order'
-                placeholder={'Enter domain order'}
+                placeholder={'Enter question order'}
                 value={question.order}
                 className={formStyles.input}
                 onChange={this.onChange} />

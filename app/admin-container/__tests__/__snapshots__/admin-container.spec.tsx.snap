@@ -27,7 +27,7 @@ exports[`renders admin container 1`] = `
         href="/admin/domains/undefined/questions"
         onClick={[Function]}
       >
-        Quesitons
+        Questions
       </a>
     </div>
     <div

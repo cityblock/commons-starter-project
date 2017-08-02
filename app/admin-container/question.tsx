@@ -11,6 +11,7 @@ import {
 } from '../graphql/types';
 import * as formStyles from '../shared/css/forms.css';
 import { IState as IAppState } from '../store';
+import AnswerCreateEdit from './answer-create-edit';
 import * as styles from './css/two-panel-right.css';
 
 export interface IProps {
@@ -147,8 +148,7 @@ class Question extends React.Component<IProps, IState> {
 
     const value = event.currentTarget.value;
     const name = event.currentTarget.name;
-    const variables: any = { questionId };
-    variables[name] = value;
+    const variables = { questionId, [name]: value };
 
     this.setState(() => ({ [name]: value || '' }));
 
@@ -210,6 +210,15 @@ class Question extends React.Component<IProps, IState> {
     }
   }
 
+  renderAnswers() {
+    const { question } = this.props;
+    if (question && question.answers) {
+      return question.answers.map(answer => (
+        <AnswerCreateEdit key={answer ? answer.id : ''} answer={answer} questionId={question.id} />
+      ));
+    }
+  }
+
   render() {
     const { question, routeBase } = this.props;
     const {
@@ -250,6 +259,7 @@ class Question extends React.Component<IProps, IState> {
       [styles.error]: !!editOrderError,
     });
 
+    const answers = this.renderAnswers();
     const closeRoute = routeBase || '/admin/questions';
 
     if (question) {
@@ -343,6 +353,13 @@ class Question extends React.Component<IProps, IState> {
                 <option value='freetext'>freetext</option>
                 <option value='multiselect'>multiselect</option>
               </select>
+            </div>
+            <div className={styles.itemBody}>
+              Answers
+              <div>
+                {answers}
+              </div>
+              <AnswerCreateEdit questionId={question.id} />
             </div>
           </div>
         </div>

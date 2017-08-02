@@ -3,7 +3,7 @@
 mutation questionDelete(
   $questionId: String!
 ) {
-  questionEdit(input: {
+  questionDelete(input: {
     questionId: $questionId
   }) {
     ...FullQuestion

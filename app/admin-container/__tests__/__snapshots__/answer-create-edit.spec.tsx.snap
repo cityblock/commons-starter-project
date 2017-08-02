@@ -1,0 +1,183 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders answer create-edit 1`] = `
+<div
+  className={undefined}
+>
+  <form
+    className={undefined}
+    onSubmit={[Function]}
+  >
+    <div
+      className={undefined}
+    >
+      <div
+        className={undefined}
+      >
+        <div
+          className={undefined}
+        >
+          <div
+            className={undefined}
+          />
+        </div>
+      </div>
+      <div
+        className={undefined}
+      >
+        <input
+          className={undefined}
+          name="displayValue"
+          onChange={[Function]}
+          placeholder="Enter answer display value"
+          value="answer value"
+        />
+        <input
+          className={undefined}
+          name="value"
+          onChange={[Function]}
+          placeholder="Enter answer value"
+          value="true"
+        />
+        <input
+          className={undefined}
+          name="order"
+          onChange={[Function]}
+          placeholder="Enter answer order"
+          type="number"
+          value={1}
+        />
+        <input
+          className={undefined}
+          name="summaryText"
+          onChange={[Function]}
+          placeholder="Enter summary text"
+          value="summary text"
+        />
+      </div>
+    </div>
+    <div
+      className={undefined}
+    >
+      <div
+        className={undefined}
+      >
+        <div
+          className={undefined}
+        >
+          <div
+            className={undefined}
+          >
+            in summary?
+          </div>
+        </div>
+        <div
+          className={undefined}
+        >
+          <div
+            className={undefined}
+          >
+            <div
+              className={undefined}
+            >
+              <input
+                checked={true}
+                className={undefined}
+                name="inSummary"
+                onChange={[Function]}
+                type="radio"
+                value="true"
+              />
+              <label />
+            </div>
+            <span
+              className={undefined}
+            >
+              In summary
+            </span>
+          </div>
+          <div
+            className={undefined}
+          >
+            <div
+              className={undefined}
+            >
+              <input
+                checked={false}
+                className={undefined}
+                name="inSummary"
+                onChange={[Function]}
+                type="radio"
+                value="false"
+              />
+              <label />
+            </div>
+            <span
+              className={undefined}
+            >
+              not in summary
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div
+      className={undefined}
+    >
+      <select
+        className=""
+        name="valueType"
+        onChange={[Function]}
+        value="boolean"
+      >
+        <option
+          value="string"
+        >
+          text
+        </option>
+        <option
+          value="boolean"
+        >
+          true / false
+        </option>
+        <option
+          value="number"
+        >
+          number
+        </option>
+      </select>
+      <select
+        className=""
+        name="riskAdjustmentType"
+        onChange={[Function]}
+        required={true}
+        value="increment"
+      >
+        <option
+          value="increment"
+        >
+          increment
+        </option>
+        <option
+          value="forceHighRisk"
+        >
+          forceHighRisk
+        </option>
+      </select>
+    </div>
+    <div
+      className={undefined}
+    >
+      <div
+        className={undefined}
+      >
+        <input
+          className={undefined}
+          type="submit"
+          value="Save"
+        />
+      </div>
+    </div>
+  </form>
+</div>
+`;

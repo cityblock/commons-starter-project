@@ -1,6 +1,17 @@
 /* tslint:disable */
 //  This file was automatically generated and should not be edited.
 
+export type AnswerValueTypeOptions =
+  "string" |
+  "boolean" |
+  "number";
+
+
+export type RiskAdjustmentTypeOptions =
+  "increment" |
+  "forceHighRisk";
+
+
 export type AppointmentStatus =
   "cancelled" |
   "future" |
@@ -39,6 +50,78 @@ export type QuestionConditionTypeOptions =
   "allTrue" |
   "oneTrue";
 
+
+export type answerCreateMutationVariables = {
+  displayValue: string,
+  value: string,
+  valueType: AnswerValueTypeOptions,
+  riskAdjustmentType?: RiskAdjustmentTypeOptions | null,
+  inSummary?: boolean | null,
+  summaryText?: string | null,
+  questionId: string,
+  order: number,
+};
+
+export type answerCreateMutation = {
+  // Create an Answer
+  answerCreate:  {
+    id: string,
+    displayValue: string,
+    value: string,
+    valueType: AnswerValueTypeOptions,
+    riskAdjustmentType: RiskAdjustmentTypeOptions | null,
+    inSummary: boolean | null,
+    summaryText: string | null,
+    questionId: string,
+    order: number,
+  } | null,
+};
+
+export type answerDeleteMutationVariables = {
+  answerId: string,
+};
+
+export type answerDeleteMutation = {
+  // Deletes an Answer
+  answerDelete:  {
+    id: string,
+    displayValue: string,
+    value: string,
+    valueType: AnswerValueTypeOptions,
+    riskAdjustmentType: RiskAdjustmentTypeOptions | null,
+    inSummary: boolean | null,
+    summaryText: string | null,
+    questionId: string,
+    order: number,
+  } | null,
+};
+
+export type answerEditMutationVariables = {
+  answerId: string,
+  displayValue?: string | null,
+  value?: string | null,
+  valueType?: AnswerValueTypeOptions | null,
+  riskAdjustmentType?: RiskAdjustmentTypeOptions | null,
+  inSummary?: boolean | null,
+  summaryText?: string | null,
+  questionId?: string | null,
+  order?: number | null,
+};
+
+export type answerEditMutation = {
+  // Edit an Answer
+  answerEdit:  {
+    id: string,
+    displayValue: string,
+    value: string,
+    valueType: AnswerValueTypeOptions,
+    riskAdjustmentType: RiskAdjustmentTypeOptions | null,
+    inSummary: boolean | null,
+    summaryText: string | null,
+    questionId: string,
+    order: number,
+  } | null,
+};
 
 export type appointmentEndMutationVariables = {
   patientId: string,
@@ -109,6 +192,25 @@ export type currentUserEditMutation = {
     email: string | null,
     homeClinicId: string,
     googleProfileImageUrl: string | null,
+  } | null,
+};
+
+export type getAnswerQueryVariables = {
+  answerId: string,
+};
+
+export type getAnswerQuery = {
+  // Answer
+  answer:  {
+    id: string,
+    displayValue: string,
+    value: string,
+    valueType: AnswerValueTypeOptions,
+    riskAdjustmentType: RiskAdjustmentTypeOptions | null,
+    inSummary: boolean | null,
+    summaryText: string | null,
+    questionId: string,
+    order: number,
   } | null,
 };
 
@@ -305,6 +407,25 @@ export type getPatientQuery = {
   } | null,
 };
 
+export type getQuestionAnswersQueryVariables = {
+  questionId: string,
+};
+
+export type getQuestionAnswersQuery = {
+  // Answers
+  answersForQuestion:  Array< {
+    id: string,
+    displayValue: string,
+    value: string,
+    valueType: AnswerValueTypeOptions,
+    riskAdjustmentType: RiskAdjustmentTypeOptions | null,
+    inSummary: boolean | null,
+    summaryText: string | null,
+    questionId: string,
+    order: number,
+  } | null >,
+};
+
 export type getQuestionQueryVariables = {
   questionId: string,
 };
@@ -321,6 +442,17 @@ export type getQuestionQuery = {
     riskAreaId: string,
     order: number,
     applicableIfType: QuestionConditionTypeOptions | null,
+    answers:  Array< {
+      id: string,
+      displayValue: string,
+      value: string,
+      valueType: AnswerValueTypeOptions,
+      riskAdjustmentType: RiskAdjustmentTypeOptions | null,
+      inSummary: boolean | null,
+      summaryText: string | null,
+      questionId: string,
+      order: number,
+    } | null >,
   } | null,
 };
 
@@ -340,6 +472,17 @@ export type getQuestionsForRiskAreaQuery = {
     riskAreaId: string,
     order: number,
     applicableIfType: QuestionConditionTypeOptions | null,
+    answers:  Array< {
+      id: string,
+      displayValue: string,
+      value: string,
+      valueType: AnswerValueTypeOptions,
+      riskAdjustmentType: RiskAdjustmentTypeOptions | null,
+      inSummary: boolean | null,
+      summaryText: string | null,
+      questionId: string,
+      order: number,
+    } | null >,
   } | null >,
 };
 
@@ -632,6 +775,17 @@ export type questionCreateMutation = {
     riskAreaId: string,
     order: number,
     applicableIfType: QuestionConditionTypeOptions | null,
+    answers:  Array< {
+      id: string,
+      displayValue: string,
+      value: string,
+      valueType: AnswerValueTypeOptions,
+      riskAdjustmentType: RiskAdjustmentTypeOptions | null,
+      inSummary: boolean | null,
+      summaryText: string | null,
+      questionId: string,
+      order: number,
+    } | null >,
   } | null,
 };
 
@@ -640,8 +794,8 @@ export type questionDeleteMutationVariables = {
 };
 
 export type questionDeleteMutation = {
-  // Edit a Question
-  questionEdit:  {
+  // Delete a question
+  questionDelete:  {
     id: string,
     createdAt: string,
     deletedAt: string | null,
@@ -651,6 +805,17 @@ export type questionDeleteMutation = {
     riskAreaId: string,
     order: number,
     applicableIfType: QuestionConditionTypeOptions | null,
+    answers:  Array< {
+      id: string,
+      displayValue: string,
+      value: string,
+      valueType: AnswerValueTypeOptions,
+      riskAdjustmentType: RiskAdjustmentTypeOptions | null,
+      inSummary: boolean | null,
+      summaryText: string | null,
+      questionId: string,
+      order: number,
+    } | null >,
   } | null,
 };
 
@@ -676,6 +841,17 @@ export type questionEditMutation = {
     riskAreaId: string,
     order: number,
     applicableIfType: QuestionConditionTypeOptions | null,
+    answers:  Array< {
+      id: string,
+      displayValue: string,
+      value: string,
+      valueType: AnswerValueTypeOptions,
+      riskAdjustmentType: RiskAdjustmentTypeOptions | null,
+      inSummary: boolean | null,
+      summaryText: string | null,
+      questionId: string,
+      order: number,
+    } | null >,
   } | null,
 };
 
@@ -1131,6 +1307,18 @@ export type getTasksForCurrentUserQuery = {
   } | null,
 };
 
+export type FullAnswerFragment = {
+  id: string,
+  displayValue: string,
+  value: string,
+  valueType: AnswerValueTypeOptions,
+  riskAdjustmentType: RiskAdjustmentTypeOptions | null,
+  inSummary: boolean | null,
+  summaryText: string | null,
+  questionId: string,
+  order: number,
+};
+
 export type FullAppointmentFragment = {
   athenaAppointmentId: string,
   dateTime: string,
@@ -1208,6 +1396,17 @@ export type FullQuestionFragment = {
   riskAreaId: string,
   order: number,
   applicableIfType: QuestionConditionTypeOptions | null,
+  answers:  Array< {
+    id: string,
+    displayValue: string,
+    value: string,
+    valueType: AnswerValueTypeOptions,
+    riskAdjustmentType: RiskAdjustmentTypeOptions | null,
+    inSummary: boolean | null,
+    summaryText: string | null,
+    questionId: string,
+    order: number,
+  } | null >,
 };
 
 export type FullRiskAreaFragment = {

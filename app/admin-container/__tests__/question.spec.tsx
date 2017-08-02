@@ -23,6 +23,17 @@ it('renders question', () => {
     validatedSource: 'validated source',
     answerType: 'radio' as any,
     riskAreaId: 'risk-area-id',
+    answers: [{
+      id: 'answer-id',
+      displayValue: 'answer value',
+      value: 'true',
+      valueType: 'boolean' as any,
+      riskAdjustmentType: 'increment' as any,
+      inSummary: true,
+      summaryText: 'summary text',
+      questionId: 'cool-task-id',
+      order: 1,
+    }],
   };
   const history = createMemoryHistory();
   const tree = create(
@@ -31,10 +42,10 @@ it('renders question', () => {
         <ConnectedRouter history={history}>
           <Question
             routeBase='/route/base'
-            quesiton={question}
+            question={question}
             questionId={question.id}
-            quesitonLoading={false}
-            quesitonError={null} />
+            questionLoading={false}
+            questionError={null} />
         </ConnectedRouter>
       </ReduxConnectedIntlProvider>
     </MockedProvider>,
@@ -50,8 +61,8 @@ it('question error', () => {
         <ConnectedRouter history={history}>
           <Question
             routeBase='/route/base'
-            quesitonLoading={false}
-            quesitonError={'an error'} />
+            questionLoading={false}
+            questionError={'an error'} />
         </ConnectedRouter>
       </ReduxConnectedIntlProvider>
     </MockedProvider>,
@@ -67,8 +78,8 @@ it('risk area loading', () => {
         <ConnectedRouter history={history}>
           <Question
             routeBase='/route/base'
-            quesitonLoading={false}
-            quesitonError={'an error'} />
+            questionLoading={false}
+            questionError={'an error'} />
         </ConnectedRouter>
       </ReduxConnectedIntlProvider>
     </MockedProvider>,

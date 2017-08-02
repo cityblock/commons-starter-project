@@ -1,0 +1,27 @@
+#import "../fragments/full-answer.graphql"
+
+mutation answerEdit(
+  $answerId: String!
+  $displayValue: String
+  $value: String
+  $valueType: AnswerValueTypeOptions
+  $riskAdjustmentType: RiskAdjustmentTypeOptions
+  $inSummary: Boolean
+  $summaryText: String
+  $questionId: String
+  $order: Int
+) {
+  answerEdit(input: {
+    answerId: $answerId
+    displayValue: $displayValue
+    value: $value
+    valueType: $valueType
+    riskAdjustmentType: $riskAdjustmentType
+    inSummary: $inSummary
+    summaryText: $summaryText
+    questionId: $questionId
+    order: $order
+  }) {
+    ...FullAnswer
+  }
+}

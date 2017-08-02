@@ -67,7 +67,7 @@ export default class RiskArea extends Model {
   }
 
   static async getAll(): Promise<RiskArea[]> {
-    return this.query().orderBy('order');
+    return this.query().orderBy('order').where({ deletedAt: null });
   }
 
   static async create(input: IRiskAreaEditableFields) {

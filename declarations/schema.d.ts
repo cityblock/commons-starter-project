@@ -397,6 +397,7 @@ declare module 'schema' {
     updatedAt: string;
     deletedAt: string | null;
     title: string;
+    order: number;
   }
 
   /*
@@ -837,6 +838,7 @@ declare module 'schema' {
     validatedSource?: string | null;
     riskAreaId: string;
     order: number;
+    applicableIfType?: IQuestionConditionTypeOptionsEnum | null;
   }
 
   /*
@@ -849,6 +851,7 @@ declare module 'schema' {
     validatedSource?: string | null;
     riskAreaId?: string | null;
     order?: number | null;
+    applicableIfType?: IQuestionConditionTypeOptionsEnum | null;
   }
 
   /*

@@ -2,31 +2,31 @@
 # yarn lockfile v1
 
 
-"@gql2ts/from-query@^1.1.1":
-  version "1.1.1"
-  resolved "https://registry.yarnpkg.com/@gql2ts/from-query/-/from-query-1.1.1.tgz#212834daf146588a57f867abefd8b6722e9487fc"
+"@gql2ts/from-query@^1.1.2":
+  version "1.1.2"
+  resolved "https://registry.yarnpkg.com/@gql2ts/from-query/-/from-query-1.1.2.tgz#9f5ae0583af9a5e309451c1dd38b82b80bd1b912"
   dependencies:
-    "@gql2ts/language-typescript" "^1.1.1"
-    "@gql2ts/util" "^1.1.1"
+    "@gql2ts/language-typescript" "^1.1.2"
+    "@gql2ts/util" "^1.1.2"
 
-"@gql2ts/from-schema@^1.1.1":
-  version "1.1.1"
-  resolved "https://registry.yarnpkg.com/@gql2ts/from-schema/-/from-schema-1.1.1.tgz#dd6de560bf0f610b250af85faeac1203c9b177ba"
+"@gql2ts/from-schema@^1.1.2":
+  version "1.1.2"
+  resolved "https://registry.yarnpkg.com/@gql2ts/from-schema/-/from-schema-1.1.2.tgz#5305e4bb3c679deb1b26452ca551822769abede4"
   dependencies:
-    "@gql2ts/language-typescript" "^1.1.1"
-    "@gql2ts/util" "^1.1.1"
+    "@gql2ts/language-typescript" "^1.1.2"
+    "@gql2ts/util" "^1.1.2"
 
-"@gql2ts/language-typescript@^1.1.1":
-  version "1.1.1"
-  resolved "https://registry.yarnpkg.com/@gql2ts/language-typescript/-/language-typescript-1.1.1.tgz#5bd29e6c3c57067ca1f24e36153b3bc0259eb731"
+"@gql2ts/language-typescript@^1.1.2":
+  version "1.1.2"
+  resolved "https://registry.yarnpkg.com/@gql2ts/language-typescript/-/language-typescript-1.1.2.tgz#8d4ff46d1d9e252679f2a13298e4c1c9e2b5e785"
   dependencies:
-    "@gql2ts/util" "^1.1.1"
+    "@gql2ts/util" "^1.1.2"
     humps "^2.0.0"
     typescript "^2.2.2"
 
-"@gql2ts/util@^1.1.1":
-  version "1.1.1"
-  resolved "https://registry.yarnpkg.com/@gql2ts/util/-/util-1.1.1.tgz#fd58a0d023d77f148bbf22166c08690c9acd1b9f"
+"@gql2ts/util@^1.1.2":
+  version "1.1.2"
+  resolved "https://registry.yarnpkg.com/@gql2ts/util/-/util-1.1.2.tgz#487a3050a9b102cfa24e0189ab46bf0c21a0eddd"
   dependencies:
     graphql "^0.10.1"
 
@@ -165,9 +165,13 @@
     "@types/express-serve-static-core" "*"
     "@types/serve-static" "*"
 
-"@types/graphql@*", "@types/graphql@^0.10.1":
+"@types/graphql@*":
   version "0.10.1"
   resolved "https://registry.yarnpkg.com/@types/graphql/-/graphql-0.10.1.tgz#3944e528bb3232e09cddb5364d75aba6342d068c"
+
+"@types/graphql@^0.10.2":
+  version "0.10.2"
+  resolved "https://registry.yarnpkg.com/@types/graphql/-/graphql-0.10.2.tgz#d7c79acbaa17453b6681c80c34b38fcb10c4c08c"
 
 "@types/graphql@^0.9.0", "@types/graphql@^0.9.1", "@types/graphql@^0.9.4":
   version "0.9.4"
@@ -274,9 +278,13 @@
   dependencies:
     "@types/node" "*"
 
-"@types/node@*", "@types/node@^8.0.17":
+"@types/node@*":
   version "8.0.17"
   resolved "https://registry.yarnpkg.com/@types/node/-/node-8.0.17.tgz#677bc8c118cfb76013febb62ede1f31d2c7222a1"
+
+"@types/node@^8.0.19":
+  version "8.0.19"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-8.0.19.tgz#e46e2b0243de7d03f15b26b45c59ebb84f657a4e"
 
 "@types/optics-agent@^1.1.1":
   version "1.1.1"
@@ -617,19 +625,19 @@ apollo-server-core@^1.0.2:
   optionalDependencies:
     "@types/graphql" "^0.9.0"
 
-apollo-server-express@^1.0.4:
-  version "1.0.4"
-  resolved "https://registry.yarnpkg.com/apollo-server-express/-/apollo-server-express-1.0.4.tgz#fad6045493d818b09ad4610faa389768386a68b6"
+apollo-server-express@^1.0.5:
+  version "1.0.5"
+  resolved "https://registry.yarnpkg.com/apollo-server-express/-/apollo-server-express-1.0.5.tgz#4475684462a9f530f1d2630112ed45295e98dcf1"
   dependencies:
     apollo-server-core "^1.0.2"
-    apollo-server-module-graphiql "^1.0.4"
+    apollo-server-module-graphiql "^1.0.5"
   optionalDependencies:
     "@types/express" "^4.0.35"
     "@types/graphql" "^0.9.1"
 
-apollo-server-module-graphiql@^1.0.4:
-  version "1.0.4"
-  resolved "https://registry.yarnpkg.com/apollo-server-module-graphiql/-/apollo-server-module-graphiql-1.0.4.tgz#d6db21a8c60f052649124da5cde1d88dab702319"
+apollo-server-module-graphiql@^1.0.5:
+  version "1.0.5"
+  resolved "https://registry.yarnpkg.com/apollo-server-module-graphiql/-/apollo-server-module-graphiql-1.0.5.tgz#31639acb1dc4bd7e2edb334cf619f84ebff600a6"
 
 append-transform@^0.4.0:
   version "0.4.0"
@@ -2078,9 +2086,9 @@ cron@^1.2.1:
   dependencies:
     moment-timezone "^0.5.x"
 
-cross-env@^5.0.1:
-  version "5.0.1"
-  resolved "https://registry.yarnpkg.com/cross-env/-/cross-env-5.0.1.tgz#ff4e72ea43b47da2486b43a7f2043b2609e44913"
+cross-env@^5.0.2:
+  version "5.0.2"
+  resolved "https://registry.yarnpkg.com/cross-env/-/cross-env-5.0.2.tgz#d39fd2fa28c1b5cfb91e7058d1efe8b4fcb01334"
   dependencies:
     cross-spawn "^5.1.0"
     is-windows "^1.0.0"
@@ -3218,13 +3226,13 @@ got@^3.2.0:
     read-all-stream "^3.0.0"
     timed-out "^2.0.0"
 
-gql2ts@^1.1.1:
-  version "1.1.1"
-  resolved "https://registry.yarnpkg.com/gql2ts/-/gql2ts-1.1.1.tgz#bb83ea0591579703ac8f6fc9621c99d9de0f6cb2"
+gql2ts@^1.1.2:
+  version "1.1.2"
+  resolved "https://registry.yarnpkg.com/gql2ts/-/gql2ts-1.1.2.tgz#1e10b21c5ef9311d06ee47d6dd28f3585a2e9026"
   dependencies:
-    "@gql2ts/from-query" "^1.1.1"
-    "@gql2ts/from-schema" "^1.1.1"
-    "@gql2ts/util" "^1.1.1"
+    "@gql2ts/from-query" "^1.1.2"
+    "@gql2ts/from-schema" "^1.1.2"
+    "@gql2ts/util" "^1.1.2"
     commander "^2.9.0"
 
 graceful-fs@4.1.4:
@@ -3251,11 +3259,11 @@ graphql-document-collector@^0.1.3:
     graphql-tag "^0.1.14"
     typed-graphql "^1.0.2"
 
-graphql-server-express@^1.0.4:
-  version "1.0.4"
-  resolved "https://registry.yarnpkg.com/graphql-server-express/-/graphql-server-express-1.0.4.tgz#09acd722c8be2a240262d40b43bcb2675ba1bad5"
+graphql-server-express@^1.0.5:
+  version "1.0.5"
+  resolved "https://registry.yarnpkg.com/graphql-server-express/-/graphql-server-express-1.0.5.tgz#4714e85eecde986dcf38eb3cde6816b9ceba94c4"
   dependencies:
-    apollo-server-express "^1.0.4"
+    apollo-server-express "^1.0.5"
 
 graphql-tag@^0.1.14:
   version "0.1.17"
@@ -6402,9 +6410,9 @@ rc@^1.0.1, rc@^1.1.7:
     minimist "^1.2.0"
     strip-json-comments "~2.0.1"
 
-react-apollo@^1.4.8:
-  version "1.4.8"
-  resolved "https://registry.yarnpkg.com/react-apollo/-/react-apollo-1.4.8.tgz#b510f207b08ce4bd1e3adbd46a3ede68e3af27e7"
+react-apollo@^1.4.10:
+  version "1.4.10"
+  resolved "https://registry.yarnpkg.com/react-apollo/-/react-apollo-1.4.10.tgz#a3c77b120402245ea9d3a518118237c2a314a3a1"
   dependencies:
     apollo-client "^1.4.0"
     graphql-anywhere "^3.0.0"

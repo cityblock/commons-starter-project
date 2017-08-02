@@ -13,7 +13,7 @@
   justify-content: center;
 }
 
-.riskAreaContainer.hidden {
+.itemContainer.hidden {
   display: none;
 }
 
@@ -151,7 +151,7 @@
 }
 
 .smallText {
-  font-family: var(---0roboto);
+  font-family: var(--roboto);
   font-size: var(--extra-small-font-size);
   line-height: var(--extra-small-font-line-height);
 }
@@ -164,9 +164,9 @@
   color: var(--red-color);
 }
 
-.riskAreaHeader {}
+.itemHeader {}
 
-.riskAreaBody {
+.itemBody {
   display: flex;
   flex-direction: column;
   color: var(--black-color);

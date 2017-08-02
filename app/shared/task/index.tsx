@@ -4,11 +4,11 @@ import * as React from 'react';
 import { compose, graphql } from 'react-apollo';
 import { connect, Dispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
-import * as taskEditMutation from '../..//graphql/queries/task-edit-mutation.graphql';
 import { selectTask } from '../../actions/task-action';
 import { DATETIME_FORMAT } from '../../config';
 import * as taskQuery from '../../graphql/queries/get-task.graphql';
 import * as taskCompleteMutation from '../../graphql/queries/task-complete-mutation.graphql';
+import * as taskEditMutation from '../../graphql/queries/task-edit-mutation.graphql';
 import * as taskUncompleteMutation from '../../graphql/queries/task-uncomplete-mutation.graphql';
 import {
   taskCompleteMutationVariables,

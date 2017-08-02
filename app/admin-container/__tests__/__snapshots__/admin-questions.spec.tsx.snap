@@ -1,0 +1,77 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders admin questions 1`] = `
+<div
+  className={undefined}
+>
+  <div
+    className={undefined}
+  >
+    <div
+      className={undefined}
+    >
+      <div
+        className={undefined}
+      >
+        Questions for domain:
+      </div>
+      <div
+        className={undefined}
+      >
+        <select
+          onChange={[Function]}
+          value="risk-area-id"
+        >
+          <option
+            value="cool-task-id"
+          >
+            title
+          </option>
+        </select>
+      </div>
+      <div
+        className=""
+      >
+        <input
+          placeholder="Search by user or keywords"
+          required={true}
+          type="text"
+        />
+      </div>
+    </div>
+    <div
+      className={undefined}
+    >
+      <div
+        className={undefined}
+        onClick={[Function]}
+      >
+        Create Question
+      </div>
+    </div>
+  </div>
+  <div
+    className={undefined}
+  >
+    <div
+      className="undefined"
+    >
+      <div
+        className={undefined}
+      >
+        <div
+          className={undefined}
+        />
+        <div
+          className={undefined}
+        >
+          No Questions
+        </div>
+      </div>
+    </div>
+    <div
+      className="undefined"
+    />
+  </div>
+</div>
+`;

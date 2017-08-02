@@ -6,31 +6,35 @@ import { create } from 'react-test-renderer';
 import configureMockStore from 'redux-mock-store';
 import { ENGLISH_TRANSLATION } from '../../reducers/messages/en';
 import ReduxConnectedIntlProvider from '../../redux-connected-intl-provider';
-import RiskArea from '../risk-area';
+import Question from '../question';
 
 const locale = { messages: ENGLISH_TRANSLATION.messages };
 const mockStore = configureMockStore([]);
 
-it('renders risk area', () => {
-  const riskArea = {
-    id: 'cool-task-id',
+it('renders question', () => {
+  const question = {
+    id: 'cool-question-id',
     createdAt: 'Thu Jul 13 2017 16:52:56 GMT-0400 (EDT)',
     updatedAt: 'Thu Jul 13 2017 16:52:56 GMT-0400 (EDT)',
     dueAt: 'Thu Jul 13 2017 16:52:56 GMT-0400 (EDT)',
     deletedAt: null,
     title: 'title',
     order: 1,
+    validatedSource: 'validated source',
+    answerType: 'radio' as any,
+    riskAreaId: 'risk-area-id',
   };
   const history = createMemoryHistory();
   const tree = create(
-    <MockedProvider mocks={[]} store={mockStore({ locale, riskArea })}>
+    <MockedProvider mocks={[]} store={mockStore({ locale, question })}>
       <ReduxConnectedIntlProvider>
         <ConnectedRouter history={history}>
-          <RiskArea
-            riskArea={riskArea}
-            riskAreaId={riskArea.id}
-            riskAreaLoading={false}
-            riskAreaError={null} />
+          <Question
+            routeBase='/route/base'
+            quesiton={question}
+            questionId={question.id}
+            quesitonLoading={false}
+            quesitonError={null} />
         </ConnectedRouter>
       </ReduxConnectedIntlProvider>
     </MockedProvider>,
@@ -38,17 +42,16 @@ it('renders risk area', () => {
   expect(tree).toMatchSnapshot();
 });
 
-it('risk area error', () => {
+it('question error', () => {
   const history = createMemoryHistory();
   const tree = create(
     <MockedProvider mocks={[]} store={mockStore({ locale })}>
       <ReduxConnectedIntlProvider>
         <ConnectedRouter history={history}>
-          <RiskArea
-            riskArea={null}
-            riskAreaId={null}
-            riskAreaLoading={false}
-            riskAreaError={'error'} />
+          <Question
+            routeBase='/route/base'
+            quesitonLoading={false}
+            quesitonError={'an error'} />
         </ConnectedRouter>
       </ReduxConnectedIntlProvider>
     </MockedProvider>,
@@ -62,11 +65,10 @@ it('risk area loading', () => {
     <MockedProvider mocks={[]} store={mockStore({ locale })}>
       <ReduxConnectedIntlProvider>
         <ConnectedRouter history={history}>
-          <RiskArea
-            riskArea={null}
-            riskAreaId={null}
-            riskAreaLoading={true}
-            riskAreaError={null} />
+          <Question
+            routeBase='/route/base'
+            quesitonLoading={false}
+            quesitonError={'an error'} />
         </ConnectedRouter>
       </ReduxConnectedIntlProvider>
     </MockedProvider>,

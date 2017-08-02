@@ -28,6 +28,18 @@ export type TaskOrderOptions =
   "updatedAtAsc";
 
 
+export type AnswerTypeOptions =
+  "dropdown" |
+  "radio" |
+  "freetext" |
+  "multiselect";
+
+
+export type QuestionConditionTypeOptions =
+  "allTrue" |
+  "oneTrue";
+
+
 export type appointmentEndMutationVariables = {
   patientId: string,
   appointmentId: string,
@@ -291,6 +303,44 @@ export type getPatientQuery = {
     consentToText: boolean | null,
     consentToCall: boolean | null,
   } | null,
+};
+
+export type getQuestionQueryVariables = {
+  questionId: string,
+};
+
+export type getQuestionQuery = {
+  // Question
+  question:  {
+    id: string,
+    createdAt: string,
+    deletedAt: string | null,
+    title: string,
+    validatedSource: string | null,
+    answerType: AnswerTypeOptions,
+    riskAreaId: string,
+    order: number,
+    applicableIfType: QuestionConditionTypeOptions | null,
+  } | null,
+};
+
+export type getQuestionsForRiskAreaQueryVariables = {
+  riskAreaId: string,
+};
+
+export type getQuestionsForRiskAreaQuery = {
+  // Questions
+  questionsForRiskArea:  Array< {
+    id: string,
+    createdAt: string,
+    deletedAt: string | null,
+    title: string,
+    validatedSource: string | null,
+    answerType: AnswerTypeOptions,
+    riskAreaId: string,
+    order: number,
+    applicableIfType: QuestionConditionTypeOptions | null,
+  } | null >,
 };
 
 export type getRiskAreaQueryVariables = {
@@ -558,6 +608,74 @@ export type patientSetupMutation = {
     createdAt: string | null,
     consentToText: boolean | null,
     consentToCall: boolean | null,
+  } | null,
+};
+
+export type questionCreateMutationVariables = {
+  title: string,
+  answerType: AnswerTypeOptions,
+  validatedSource?: string | null,
+  riskAreaId: string,
+  order: number,
+  applicableIfType?: QuestionConditionTypeOptions | null,
+};
+
+export type questionCreateMutation = {
+  // Create a Question
+  questionCreate:  {
+    id: string,
+    createdAt: string,
+    deletedAt: string | null,
+    title: string,
+    validatedSource: string | null,
+    answerType: AnswerTypeOptions,
+    riskAreaId: string,
+    order: number,
+    applicableIfType: QuestionConditionTypeOptions | null,
+  } | null,
+};
+
+export type questionDeleteMutationVariables = {
+  questionId: string,
+};
+
+export type questionDeleteMutation = {
+  // Edit a Question
+  questionEdit:  {
+    id: string,
+    createdAt: string,
+    deletedAt: string | null,
+    title: string,
+    validatedSource: string | null,
+    answerType: AnswerTypeOptions,
+    riskAreaId: string,
+    order: number,
+    applicableIfType: QuestionConditionTypeOptions | null,
+  } | null,
+};
+
+export type questionEditMutationVariables = {
+  questionId: string,
+  title?: string | null,
+  answerType?: AnswerTypeOptions | null,
+  validatedSource?: string | null,
+  riskAreaId?: string | null,
+  order?: number | null,
+  applicableIfType?: QuestionConditionTypeOptions | null,
+};
+
+export type questionEditMutation = {
+  // Edit a Question
+  questionEdit:  {
+    id: string,
+    createdAt: string,
+    deletedAt: string | null,
+    title: string,
+    validatedSource: string | null,
+    answerType: AnswerTypeOptions,
+    riskAreaId: string,
+    order: number,
+    applicableIfType: QuestionConditionTypeOptions | null,
   } | null,
 };
 
@@ -1078,6 +1196,18 @@ export type FullPatientMedicationFragment = {
 
 export type FullPatientScratchPadFragment = {
   text: string | null,
+};
+
+export type FullQuestionFragment = {
+  id: string,
+  createdAt: string,
+  deletedAt: string | null,
+  title: string,
+  validatedSource: string | null,
+  answerType: AnswerTypeOptions,
+  riskAreaId: string,
+  order: number,
+  applicableIfType: QuestionConditionTypeOptions | null,
 };
 
 export type FullRiskAreaFragment = {

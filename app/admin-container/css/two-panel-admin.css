@@ -18,7 +18,7 @@
   lost-flex-container: row;
 }
 
-.riskAreasList {
+.itemsList {
   display: inline-block;
   height: calc(100vh - 223px);
   overflow-y: scroll;
@@ -30,27 +30,27 @@
   }
 }
 
-.riskAreasList.compressed {
+.itemsList.compressed {
   width: 50%;
 }
 
-.riskAreasList.compressed .dateSection {
+.itemsList.compressed .dateSection {
   padding: 0 15px;
   border-left: 1px solid var(--gray-background-color);
 }
 
-.riskAreasList.compressed .dateSection.openedAt {
+.itemsList.compressed .dateSection.openedAt {
   display: none;
 }
 
-.riskAreasList.emptyRiskAreasList {
+.itemsList.emptyList {
   width: 100%;
   &:hover {
     cursor: default;
   }
 }
 
-.riskAreaContainer {
+.itemContainer {
   width: 0%;
   overflow: hidden;
   display: inline-block;
@@ -59,21 +59,21 @@
   transition: width 0.3s ease-out;
 }
 
-.riskAreaContainer.visible {
+.itemContainer.visible {
   width: 50%;
   padding: 0 10px;
   overflow-y: scroll;
   -webkit-overflow-scrolling: touch;
 }
 
-.emptyRiskAreasMessage {
+.emptyMessage {
   border: 1px dashed var(--border-color);
   border-radius: 4px;
   padding: 24px 40px 21px;
   margin: 5px var(--gutter) 0;
 }
 
-.emptyRiskAreasLogo {
+.emptyLogo {
   background-image: url('../../assets/generic-health-icon-grey.svg');
   background-position: center center;
   background-repeat: no-repeat;
@@ -82,7 +82,7 @@
   margin: 0 auto 13px;
 }
 
-.emptyRiskAreasLabel {
+.emptyLabel {
   margin: 0 auto;
   text-align: center;
   color: var(--light-gray-font-color);
@@ -91,11 +91,11 @@
   line-height: var(--medium-font-line-height);
 }
 
-.riskAreasError {
+.itemsError {
   margin: 50px var(--gutter) 0;
 }
 
-.riskAreasLoading {
+.itemsLoading {
   margin: 0 auto;
   text-align: center;
   color: var(--light-gray-font-color);

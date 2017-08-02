@@ -1,0 +1,21 @@
+#import "../fragments/full-question.graphql"
+
+mutation questionCreate(
+  $title: String!
+  $answerType: AnswerTypeOptions!
+  $validatedSource: String
+  $riskAreaId: String!
+  $order: Int!
+  $applicableIfType: QuestionConditionTypeOptions
+) {
+  questionCreate(input: {
+    title: $title
+    answerType: $answerType
+    validatedSource: $validatedSource
+    riskAreaId: $riskAreaId
+    order: $order
+    applicableIfType: $applicableIfType
+  }) {
+    ...FullQuestion
+  }
+}

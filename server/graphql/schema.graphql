@@ -648,6 +648,7 @@ input QuestionCreateInput {
   validatedSource: String
   riskAreaId: String!
   order: Int!
+  applicableIfType: QuestionConditionTypeOptions
 }
 
 input QuestionEditInput {
@@ -657,6 +658,7 @@ input QuestionEditInput {
   validatedSource: String
   riskAreaId: String
   order: Int
+  applicableIfType: QuestionConditionTypeOptions
 }
 
 input QuestionDeleteInput {

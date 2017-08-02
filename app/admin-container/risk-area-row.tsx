@@ -4,7 +4,7 @@ import { FormattedRelative } from 'react-intl';
 import { Link } from 'react-router-dom';
 import { FullRiskAreaFragment } from '../graphql/types';
 import * as styles from './css/risk-area-row.css';
-import * as riskAreasStyles from './css/risk-areas.css';
+import * as riskAreasStyles from './css/two-panel-admin.css';
 
 export interface IProps {
   riskArea: FullRiskAreaFragment;

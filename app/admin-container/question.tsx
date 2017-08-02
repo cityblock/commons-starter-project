@@ -3,31 +3,32 @@ import * as React from 'react';
 import { compose, graphql } from 'react-apollo';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
-import * as riskAreaQuery from '../graphql/queries/get-risk-area.graphql';
-import * as riskAreaEditMutation from '../graphql/queries/risk-area-edit-mutation.graphql';
+import * as questionQuery from '../graphql/queries/get-question.graphql';
+import * as questionEditMutation from '../graphql/queries/question-edit-mutation.graphql';
 import {
-  riskAreaEditMutationVariables,
-  FullRiskAreaFragment,
+  questionEditMutationVariables,
+  FullQuestionFragment,
 } from '../graphql/types';
+import * as formStyles from '../shared/css/forms.css';
 import { IState as IAppState } from '../store';
 import * as styles from './css/two-panel-right.css';
 
 export interface IProps {
-  riskArea?: FullRiskAreaFragment;
-  riskAreaId?: string;
-  riskAreaLoading?: boolean;
-  riskAreaError?: string;
+  question?: FullQuestionFragment;
+  questionId?: string;
+  questionLoading?: boolean;
+  questionError?: string;
   routeBase: string;
-  refetchRiskArea: () => any;
+  refetchQuestion: () => any;
   match?: {
     params: {
-      riskAreaId?: string;
+      questionId?: string;
     };
   };
-  editRiskArea: (
-    options: { variables: riskAreaEditMutationVariables },
-  ) => { data: { riskAreaComplete: FullRiskAreaFragment } };
-  onDelete: (riskAreaId: string) => any;
+  editQuestion: (
+    options: { variables: questionEditMutationVariables },
+  ) => { data: { questionComplete: FullQuestionFragment } };
+  onDelete: (questionId: string) => any;
 }
 
 export interface IState {
@@ -41,7 +42,7 @@ export interface IState {
   editingOrder: boolean;
 }
 
-class RiskArea extends React.Component<IProps, IState> {
+class Question extends React.Component<IProps, IState> {
   editTitleInput: HTMLInputElement | null;
   editOrderInput: HTMLInputElement | null;
   titleBody: HTMLDivElement | null;
@@ -50,7 +51,7 @@ class RiskArea extends React.Component<IProps, IState> {
   constructor(props: IProps) {
     super(props);
 
-    this.reloadRiskArea = this.reloadRiskArea.bind(this);
+    this.reloadQuestion = this.reloadQuestion.bind(this);
     this.onClickDelete = this.onClickDelete.bind(this);
     this.onConfirmDelete = this.onConfirmDelete.bind(this);
     this.onCancelDelete = this.onCancelDelete.bind(this);
@@ -60,6 +61,7 @@ class RiskArea extends React.Component<IProps, IState> {
     this.onClickToEditTitle = this.onClickToEditTitle.bind(this);
     this.onClickToEditOrder = this.onClickToEditOrder.bind(this);
     this.focusInput = this.focusInput.bind(this);
+    this.onSelectChange = this.onSelectChange.bind(this);
 
     this.editTitleInput = null;
     this.editOrderInput = null;
@@ -77,46 +79,46 @@ class RiskArea extends React.Component<IProps, IState> {
   }
 
   componentWillReceiveProps(nextProps: IProps) {
-    const { riskArea } = nextProps;
+    const { question } = nextProps;
 
-    if (riskArea) {
-      if (!this.props.riskArea) {
+    if (question) {
+      if (!this.props.question) {
         this.setState(() => ({
-          editedTitle: riskArea.title,
-          editedOrder: riskArea.order,
+          editedTitle: question.title,
+          editedOrder: question.order,
         }));
-      } else if (this.props.riskArea.id !== riskArea.id) {
+      } else if (this.props.question.id !== question.id) {
         this.setState(() => ({
-          editedTitle: riskArea.title,
-          editedOrder: riskArea.order,
+          editedTitle: question.title,
+          editedOrder: question.order,
         }));
       }
     }
   }
 
-  reloadRiskArea() {
-    const { refetchRiskArea } = this.props;
+  reloadQuestion() {
+    const { refetchQuestion } = this.props;
 
-    if (refetchRiskArea) {
-      refetchRiskArea();
+    if (refetchQuestion) {
+      refetchQuestion();
     }
   }
 
   onClickDelete() {
-    const { riskAreaId } = this.props;
+    const { questionId } = this.props;
 
-    if (riskAreaId) {
+    if (questionId) {
       this.setState(() => ({ deleteConfirmationInProgress: true }));
     }
   }
 
   async onConfirmDelete() {
-    const { onDelete, riskAreaId } = this.props;
+    const { onDelete, questionId } = this.props;
 
-    if (riskAreaId) {
+    if (questionId) {
       try {
         this.setState(() => ({ deleteError: undefined }));
-        await onDelete(riskAreaId);
+        await onDelete(questionId);
         this.setState(() => ({ deleteConfirmationInProgress: false }));
       } catch (err) {
         this.setState(() => ({ deleteError: err.message }));
@@ -135,19 +137,37 @@ class RiskArea extends React.Component<IProps, IState> {
     this.setState(() => ({ [name]: value || '' }));
   }
 
+  async onSelectChange(event: React.ChangeEvent<HTMLSelectElement>) {
+    const { questionId, editQuestion } = this.props;
+
+    // edit if no question id
+    if (!questionId) {
+      return;
+    }
+
+    const value = event.currentTarget.value;
+    const name = event.currentTarget.name;
+    const variables: any = { questionId };
+    variables[name] = value;
+
+    this.setState(() => ({ [name]: value || '' }));
+
+    await editQuestion({ variables });
+  }
+
   async onKeyDown(event: React.KeyboardEvent<HTMLInputElement>) {
-    const { riskAreaId, editRiskArea } = this.props;
+    const { questionId, editQuestion } = this.props;
     const { editedTitle, editedOrder } = this.state;
     const enterPressed = event.keyCode === 13;
     const name = event.currentTarget.name;
 
-    if (enterPressed && riskAreaId) {
+    if (enterPressed && questionId) {
       event.preventDefault();
 
       if (name === 'editedTitle') {
         try {
           this.setState(() => ({ editTitleError: undefined }));
-          await editRiskArea({ variables: { riskAreaId, title: editedTitle } });
+          await editQuestion({ variables: { questionId, title: editedTitle } });
           this.setState(() => ({ editTitleError: undefined, editingTitle: false }));
         } catch (err) {
           this.setState(() => ({ editTitleError: err.message }));
@@ -155,7 +175,7 @@ class RiskArea extends React.Component<IProps, IState> {
       } else if (name === 'editedOrder') {
         try {
           this.setState(() => ({ editOrderError: undefined }));
-          await editRiskArea({ variables: { riskAreaId, order: editedOrder } });
+          await editQuestion({ variables: { questionId, order: editedOrder } });
           this.setState(() => ({ editOrderError: undefined, editingOrder: false }));
         } catch (err) {
           this.setState(() => ({ editOrderError: err.message }));
@@ -191,7 +211,7 @@ class RiskArea extends React.Component<IProps, IState> {
   }
 
   render() {
-    const { riskArea, routeBase } = this.props;
+    const { question, routeBase } = this.props;
     const {
       deleteConfirmationInProgress,
       deleteError,
@@ -206,7 +226,7 @@ class RiskArea extends React.Component<IProps, IState> {
     const outerContainerStyles = classNames(styles.container, {
       [styles.deleteConfirmationContainer]: deleteConfirmationInProgress,
     });
-    const riskAreaContainerStyles = classNames(styles.itemContainer, {
+    const questionContainerStyles = classNames(styles.itemContainer, {
       [styles.hidden]: deleteConfirmationInProgress,
     });
     const deleteConfirmationStyles = classNames(styles.deleteConfirmation, {
@@ -230,15 +250,15 @@ class RiskArea extends React.Component<IProps, IState> {
       [styles.error]: !!editOrderError,
     });
 
-    const closeRoute = routeBase || '/admin/riskAreas';
+    const closeRoute = routeBase || '/admin/questions';
 
-    if (riskArea) {
+    if (question) {
       return (
         <div className={outerContainerStyles}>
           <div className={deleteConfirmationStyles}>
             <div className={styles.deleteConfirmationIcon}></div>
             <div className={styles.deleteConfirmationText}>
-              Are you ure you want to delete this domain?
+              Are you ure you want to delete this question?
             </div>
             <div className={styles.deleteConfirmationButtons}>
               <div
@@ -254,19 +274,19 @@ class RiskArea extends React.Component<IProps, IState> {
             </div>
             <div className={deleteErrorStyles}>
               <div className={classNames(styles.redText, styles.smallText)}>
-                Error deleting domain.
+                Error deleting question.
               </div>
               <div className={styles.smallText}>Please try again.</div>
             </div>
           </div>
-          <div className={riskAreaContainerStyles}>
+          <div className={questionContainerStyles}>
             <div className={styles.itemHeader}>
               <div className={styles.infoRow}>
                 <div className={styles.controls}>
                   <Link to={closeRoute} className={styles.close}>Close</Link>
                   <div className={styles.menuItem} onClick={this.onClickDelete}>
                     <div className={styles.trashIcon}></div>
-                    <div className={styles.menuLabel}>Delete domain</div>
+                    <div className={styles.menuLabel}>Delete question</div>
                   </div>
                 </div>
               </div>
@@ -276,7 +296,7 @@ class RiskArea extends React.Component<IProps, IState> {
                 ref={div => { this.titleBody = div; }}
                 className={titleTextStyles}
                 onClick={this.onClickToEditTitle}>
-                {riskArea.title}
+                {question.title}
               </div>
               <div className={titleEditStyles}>
                 <input
@@ -291,7 +311,7 @@ class RiskArea extends React.Component<IProps, IState> {
                 ref={div => { this.orderBody = div; }}
                 onClick={this.onClickToEditOrder}
                 className={orderTextStyles}>
-                {riskArea.order}
+                {question.order}
               </div>
               <div className={orderEditStyles}>
                 <input
@@ -304,29 +324,49 @@ class RiskArea extends React.Component<IProps, IState> {
                   onBlur={this.onBlur} />
               </div>
             </div>
+            <div className={styles.itemBody}>
+              <select
+                name='applicableIfType'
+                value={question.applicableIfType || ''}
+                onChange={this.onSelectChange}
+                className={formStyles.select}>
+                <option value='allTrue'>all true</option>
+                <option value='oneTrue'>one true</option>
+              </select>
+              <select required
+                name='answerType'
+                value={question.answerType}
+                onChange={this.onSelectChange}
+                className={formStyles.select}>
+                <option value='dropdown'>dropdown</option>
+                <option value='radio'>radio</option>
+                <option value='freetext'>freetext</option>
+                <option value='multiselect'>multiselect</option>
+              </select>
+            </div>
           </div>
         </div>
       );
     } else {
-      const { riskAreaLoading, riskAreaError } = this.props;
-      if (riskAreaLoading) {
+      const { questionLoading, questionError } = this.props;
+      if (questionLoading) {
         return (
           <div className={styles.container}>
             <div className={styles.loading}>Loading...</div>
           </div>
         );
-      } else if (!!riskAreaError) {
+      } else if (!!questionError) {
         return (
           <div className={styles.container}>
             <div className={styles.loadingError}>
               <div className={styles.loadingErrorIcon}></div>
-              <div className={styles.loadingErrorLabel}>Unable to load domain</div>
+              <div className={styles.loadingErrorLabel}>Unable to load question</div>
               <div className={styles.loadingErrorSubheading}>
                 Sorry, something went wrong. Please try again.
               </div>
               <div
                 className={classNames(styles.loadingErrorButton, styles.invertedButton)}
-                onClick={this.reloadRiskArea}>
+                onClick={this.reloadQuestion}>
                 Try again
               </div>
             </div>
@@ -341,21 +381,21 @@ class RiskArea extends React.Component<IProps, IState> {
 
 function mapStateToProps(state: IAppState, ownProps: IProps): Partial<IProps> {
   return {
-    riskAreaId: ownProps.match ? ownProps.match.params.riskAreaId : undefined,
+    questionId: ownProps.match ? ownProps.match.params.questionId : undefined,
   };
 }
 
 export default (compose as any)(
   connect(mapStateToProps),
-  graphql(riskAreaEditMutation as any, { name: 'editRiskArea' }),
-  graphql(riskAreaQuery as any, {
-    skip: (props: IProps) => !props.riskAreaId,
-    options: (props: IProps) => ({ variables: { riskAreaId: props.riskAreaId } }),
+  graphql(questionEditMutation as any, { name: 'editQuestion' }),
+  graphql(questionQuery as any, {
+    skip: (props: IProps) => !props.questionId,
+    options: (props: IProps) => ({ variables: { questionId: props.questionId } }),
     props: ({ data }) => ({
-      riskAreaLoading: (data ? data.loading : false),
-      riskAreaError: (data ? data.error : null),
-      riskArea: (data ? (data as any).riskArea : null),
-      refetchRiskArea: (data ? data.refetch : null),
+      questionLoading: (data ? data.loading : false),
+      questionError: (data ? data.error : null),
+      question: (data ? (data as any).question : null),
+      refetchQuestion: (data ? data.refetch : null),
     }),
   }),
-)(RiskArea);
+)(Question);

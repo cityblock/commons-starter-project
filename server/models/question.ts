@@ -10,6 +10,7 @@ export interface IQuestionEditableFields {
   validatedSource?: string;
   riskAreaId: string;
   order: number;
+  applicableIfType?: QuestionConditionType;
 }
 
 export type AnswerType = 'dropdown' | 'radio' | 'freetext' | 'multiselect';

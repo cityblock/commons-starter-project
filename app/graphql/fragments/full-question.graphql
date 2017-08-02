@@ -1,0 +1,11 @@
+fragment FullQuestion on Question {
+  id
+  createdAt
+  deletedAt
+  title
+  validatedSource
+  answerType
+  riskAreaId
+  order
+  applicableIfType
+}

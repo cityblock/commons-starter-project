@@ -161,25 +161,7 @@ exports[`risk area loading 1`] = `
   <div
     className={undefined}
   >
-    <div
-      className={undefined}
-    />
-    <div
-      className={undefined}
-    >
-      Unable to load domain
-    </div>
-    <div
-      className={undefined}
-    >
-      Sorry, something went wrong. Please try again.
-    </div>
-    <div
-      className=""
-      onClick={[Function]}
-    >
-      Try again
-    </div>
+    Loading...
   </div>
 </div>
 `;

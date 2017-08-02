@@ -24,7 +24,7 @@ exports[`renders admin container 1`] = `
       </a>
       <a
         className=""
-        href="/admin/questions"
+        href="/admin/domains/undefined/questions"
         onClick={[Function]}
       >
         Quesitons

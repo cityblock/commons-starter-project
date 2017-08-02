@@ -12,18 +12,20 @@ import AdminQuestions from './admin-questions';
 import AdminRiskAreas from './admin-risk-areas';
 import * as styles from './css/admin.css';
 
-type SelectableTabs = 'domains' | 'questions';
-
 export interface IProps {
   riskAreas: FullRiskAreaFragment[];
-  tabId: SelectableTabs;
-  itemId?: string;
+  tabId: 'domains';
+  subTabId?: 'questions';
+  riskAreaId?: string;
+  questionId?: string;
   loading: boolean;
   error?: string;
   match: {
     params: {
-      itemId?: string;
-      tabId?: SelectableTabs;
+      tabId?: 'domains';
+      subTabId?: 'questions';
+      questionId?: string;
+      riskAreaId?: string;
     };
   };
 }
@@ -31,26 +33,36 @@ export interface IProps {
 class AdminContainer extends React.Component<IProps, {}> {
 
   render() {
-    const { itemId, tabId, riskAreas } = this.props;
+    const { riskAreaId, questionId, riskAreas, subTabId } = this.props;
+    const questionsTabSelected = subTabId === 'questions';
     const riskAreaTabStyles = classNames(tabStyles.tab, {
-      [tabStyles.selectedTab]: tabId === 'domains',
+      [tabStyles.selectedTab]: !questionsTabSelected,
     });
     const questionTabStyles = classNames(tabStyles.tab, {
-      [tabStyles.selectedTab]: tabId === 'questions',
+      [tabStyles.selectedTab]: questionsTabSelected,
     });
 
-    const questions = tabId === 'questions' ? <AdminQuestions /> : null;
-    const riskAreasHtml = tabId === 'domains' ? (
-      <AdminRiskAreas routeBase={'/admin/domains'} riskAreas={riskAreas} riskAreaId={itemId} />
+    const questions = questionsTabSelected ? (
+      <AdminQuestions
+        riskAreas={riskAreas}
+        riskAreaId={riskAreaId}
+        routeBase={`/admin/domains/${riskAreaId}/questions`}
+        questionId={questionId} />
     ) : null;
-
+    const riskAreasHtml = !questionsTabSelected ? (
+      <AdminRiskAreas routeBase={'/admin/domains'} riskAreas={riskAreas} riskAreaId={riskAreaId} />
+    ) : null;
+    const fallbackRiskAreaId = riskAreas && riskAreas[0] ? riskAreas[0].id : undefined;
+    const selectedRiskAreaId = riskAreaId ? riskAreaId : fallbackRiskAreaId;
     return (
       <div className={styles.container}>
         <AdminLeftNav />
         <div className={styles.mainBody}>
           <div className={tabStyles.tabs}>
             <Link to={`/admin/domains`} className={riskAreaTabStyles}>Domains</Link>
-            <Link to={`/admin/questions`} className={questionTabStyles}>Quesitons</Link>
+            <Link
+              to={`/admin/domains/${selectedRiskAreaId}/questions`}
+              className={questionTabStyles}>Quesitons</Link>
           </div>
           {questions}
           {riskAreasHtml}
@@ -63,7 +75,9 @@ class AdminContainer extends React.Component<IProps, {}> {
 function mapStateToProps(state: IAppState, ownProps: IProps): Partial<IProps> {
   return {
     tabId: ownProps.match.params.tabId || 'domains',
-    itemId: ownProps.match.params.itemId,
+    riskAreaId: ownProps.match.params.riskAreaId,
+    questionId: ownProps.match.params.questionId,
+    subTabId: ownProps.match.params.subTabId,
   };
 }
 

@@ -39,6 +39,23 @@ describe('risk area model', () => {
     expect(editedRiskArea.title).toEqual('Mental Health');
   });
 
+  it('get all risk areas', async () => {
+    const riskArea = await RiskArea.create({
+      title: 'Housing',
+      order: 1,
+    });
+    const riskArea2 = await RiskArea.create({
+      title: 'Housing 2',
+      order: 2,
+    });
+    expect(riskArea.deletedAt).toBeNull();
+    const deleted = await RiskArea.delete(riskArea.id);
+    expect(deleted.deletedAt).not.toBeNull();
+
+    expect(await RiskArea.getAll())
+      .toMatchObject([riskArea2]);
+  });
+
   it('deleted risk area', async () => {
     const riskArea = await RiskArea.create({
       title: 'Housing',

@@ -1,0 +1,33 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`question row renders question row 1`] = `
+<a
+  className="undefined"
+  href="/foo/bar/cool-task-id"
+  onClick={[Function]}
+>
+  <div
+    className={undefined}
+  >
+    title
+  </div>
+  <div
+    className={undefined}
+  >
+    <div
+      className=""
+    >
+      <span
+        className={undefined}
+      >
+        Created:
+      </span>
+      <span
+        className={undefined}
+      >
+        6 days ago
+      </span>
+    </div>
+  </div>
+</a>
+`;

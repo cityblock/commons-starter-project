@@ -9,7 +9,7 @@ import {
   riskAreaDeleteMutationVariables,
   FullRiskAreaFragment,
 } from '../graphql/types';
-import * as styles from './css/risk-areas.css';
+import * as styles from './css/two-panel-admin.css';
 import RiskArea from './risk-area';
 import RiskAreaCreate from './risk-area-create';
 import { RiskAreaRow } from './risk-area-row';
@@ -70,9 +70,9 @@ class AdminRiskAreas extends React.Component<IProps, IState> {
       return validRiskAreas.map(this.renderRiskArea);
     } else if (!loading && !error) {
       return (
-        <div className={styles.emptyRiskAreasMessage}>
-          <div className={styles.emptyRiskAreasLogo}></div>
-          <div className={styles.emptyRiskAreasLabel}>No RiskAreas</div>
+        <div className={styles.emptyMessage}>
+          <div className={styles.emptyLogo}></div>
+          <div className={styles.emptyLabel}>No RiskAreas</div>
         </div>
       );
     }
@@ -102,10 +102,10 @@ class AdminRiskAreas extends React.Component<IProps, IState> {
     const { riskAreas, routeBase, riskAreaId } = this.props;
     const { showCreateRiskArea } = this.state;
     const riskAreasList = riskAreas || [];
-    const riskAreaContainerStyles = classNames(styles.riskAreaContainer, {
+    const riskAreaContainerStyles = classNames(styles.itemContainer, {
       [styles.visible]: !!riskAreaId || showCreateRiskArea,
     });
-    const riskAreasListStyles = classNames(styles.riskAreasList, {
+    const riskAreasListStyles = classNames(styles.itemsList, {
       [styles.compressed]: !!riskAreaId || showCreateRiskArea,
     });
     const createRiskAreaButton = (

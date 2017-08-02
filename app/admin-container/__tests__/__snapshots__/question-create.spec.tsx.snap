@@ -1,0 +1,123 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders question 1`] = `
+<div
+  className={undefined}
+>
+  <form
+    className={undefined}
+    onSubmit={[Function]}
+  >
+    <div
+      className={undefined}
+    >
+      <div
+        className={undefined}
+        onClick={[Function]}
+      />
+    </div>
+    <div
+      className={undefined}
+    >
+      <div
+        className={undefined}
+      >
+        <div
+          className={undefined}
+        >
+          <div
+            className={undefined}
+          />
+        </div>
+      </div>
+      <div
+        className={undefined}
+      >
+        <input
+          className={undefined}
+          name="title"
+          onChange={[Function]}
+          placeholder="Enter domain title"
+          value=""
+        />
+        <input
+          className={undefined}
+          name="order"
+          onChange={[Function]}
+          placeholder="Enter domain order"
+          type="number"
+          value={1}
+        />
+      </div>
+    </div>
+    <div
+      className={undefined}
+    >
+      <select
+        className=""
+        name="applicableIfType"
+        onChange={[Function]}
+        value=""
+      >
+        <option
+          value="allTrue"
+        >
+          all true
+        </option>
+        <option
+          value="oneTrue"
+        >
+          one true
+        </option>
+      </select>
+      <select
+        className=""
+        name="answerType"
+        onChange={[Function]}
+        required={true}
+        value="dropdown"
+      >
+        <option
+          value="dropdown"
+        >
+          dropdown
+        </option>
+        <option
+          value="radio"
+        >
+          radio
+        </option>
+        <option
+          value="freetext"
+        >
+          freetext
+        </option>
+        <option
+          value="multiselect"
+        >
+          multiselect
+        </option>
+      </select>
+    </div>
+    <div
+      className={undefined}
+    >
+      <div
+        className={undefined}
+      >
+        <div
+          className={undefined}
+          onClick={[Function]}
+        >
+          Cancel
+        </div>
+        <input
+          className={undefined}
+          type="submit"
+          value="Add question"
+        />
+      </div>
+    </div>
+  </form>
+</div>
+`;

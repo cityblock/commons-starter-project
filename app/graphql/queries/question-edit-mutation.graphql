@@ -1,0 +1,23 @@
+#import "../fragments/full-question.graphql"
+
+mutation questionEdit(
+  $questionId: String!
+  $title: String
+  $answerType: AnswerTypeOptions
+  $validatedSource: String
+  $riskAreaId: String
+  $order: Int
+  $applicableIfType: QuestionConditionTypeOptions
+) {
+  questionEdit(input: {
+    questionId: $questionId
+    title: $title
+    answerType: $answerType
+    validatedSource: $validatedSource
+    riskAreaId: $riskAreaId
+    order: $order
+    applicableIfType: $applicableIfType
+  }) {
+    ...FullQuestion
+  }
+}

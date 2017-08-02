@@ -1,34 +1,36 @@
+import * as classNames from 'classnames';
 import * as React from 'react';
 import { compose, graphql } from 'react-apollo';
 import { connect, Dispatch } from 'react-redux';
 import { push } from 'react-router-redux';
-import * as riskAreaCreateMutation from '../graphql/queries/risk-area-create-mutation.graphql';
+import * as questionCreateMutation from '../graphql/queries/question-create-mutation.graphql';
 import {
-  riskAreaCreateMutationVariables,
-  FullRiskAreaFragment,
+  questionCreateMutationVariables,
+  FullQuestionFragment,
 } from '../graphql/types';
 import * as formStyles from '../shared/css/forms.css';
 import * as loadingStyles from '../shared/css/loading-spinner.css';
 import { IUpdatedField } from '../shared/patient-demographics-form';
 import * as styles from './css/risk-area-create.css';
-import * as riskAreaStyles from './css/two-panel-right.css';
+import * as questionStyles from './css/two-panel-right.css';
 
-export interface IOptions { variables: riskAreaCreateMutationVariables; }
+export interface IOptions { variables: questionCreateMutationVariables; }
 
 export interface IProps {
+  riskAreaId: string;
   routeBase: string;
   onClose: () => any;
-  createRiskArea: (options: IOptions) => { data: { riskAreaCreate: FullRiskAreaFragment } };
-  redirectToRiskArea: (riskAreaId: string) => any;
+  createQuestion: (options: IOptions) => { data: { questionCreate: FullQuestionFragment } };
+  redirectToQuestion: (questionId: string) => any;
 }
 
 export interface IState {
   loading: boolean;
   error?: string;
-  riskArea: riskAreaCreateMutationVariables;
+  question: questionCreateMutationVariables;
 }
 
-class RiskAreaCreate extends React.Component<IProps, IState> {
+class QuestionCreate extends React.Component<IProps, IState> {
 
   constructor(props: IProps) {
     super(props);
@@ -39,23 +41,26 @@ class RiskAreaCreate extends React.Component<IProps, IState> {
 
     this.state = {
       loading: false,
-      riskArea: {
+      question: {
         title: '',
         order: 1,
+        answerType: 'dropdown',
+        riskAreaId: props.riskAreaId,
+        applicableIfType: undefined,
       },
     };
   }
 
   onFieldUpdate(updatedField: IUpdatedField) {
-    const { riskArea } = this.state;
+    const { question } = this.state;
     const { fieldName, fieldValue } = updatedField;
 
-    (riskArea as any)[fieldName] = fieldValue;
+    (question as any)[fieldName] = fieldValue;
 
-    this.setState(() => ({ riskArea }));
+    this.setState(() => ({ question }));
   }
 
-  onChange(event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) {
+  onChange(event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) {
     const fieldName = event.target.name;
     const fieldValue = event.target.value;
 
@@ -68,14 +73,14 @@ class RiskAreaCreate extends React.Component<IProps, IState> {
     event.preventDefault();
     try {
       this.setState({ loading: true });
-      const riskArea = await this.props.createRiskArea({
+      const question = await this.props.createQuestion({
         variables: {
-          ...this.state.riskArea,
+          ...this.state.question,
         },
       });
       this.setState({ loading: false });
       this.props.onClose();
-      this.props.redirectToRiskArea(riskArea.data.riskAreaCreate.id);
+      this.props.redirectToQuestion(question.data.questionCreate.id);
     } catch (e) {
       this.setState({ error: e.message, loading: false });
     }
@@ -83,11 +88,11 @@ class RiskAreaCreate extends React.Component<IProps, IState> {
   }
 
   render() {
-    const { loading, riskArea } = this.state;
+    const { loading, question } = this.state;
     const loadingClass = loading ? styles.loading : styles.loadingHidden;
 
     return (
-      <div className={riskAreaStyles.container}>
+      <div className={questionStyles.container}>
         <form onSubmit={this.onSubmit} className={styles.container}>
           <div className={styles.formTop}>
             <div className={styles.close} onClick={this.props.onClose} />
@@ -101,7 +106,7 @@ class RiskAreaCreate extends React.Component<IProps, IState> {
             <div className={styles.inputGroup}>
               <input
                 name='title'
-                value={riskArea.title}
+                value={question.title}
                 placeholder={'Enter domain title'}
                 className={formStyles.input}
                 onChange={this.onChange} />
@@ -109,10 +114,32 @@ class RiskAreaCreate extends React.Component<IProps, IState> {
                 type='number'
                 name='order'
                 placeholder={'Enter domain order'}
-                value={riskArea.order}
+                value={question.order}
                 className={formStyles.input}
                 onChange={this.onChange} />
             </div>
+          </div>
+          <div className={styles.flexInputGroup}>
+            <select
+              name='applicableIfType'
+              value={question.applicableIfType || ''}
+              onChange={this.onChange}
+              className={
+                classNames(formStyles.select, formStyles.inputSmall, styles.flexInputItem)}>
+              <option value='allTrue'>all true</option>
+              <option value='oneTrue'>one true</option>
+            </select>
+            <select required
+              name='answerType'
+              value={question.answerType}
+              onChange={this.onChange}
+              className={
+                classNames(formStyles.select, formStyles.inputSmall, styles.flexInputItem)}>
+              <option value='dropdown'>dropdown</option>
+              <option value='radio'>radio</option>
+              <option value='freetext'>freetext</option>
+              <option value='multiselect'>multiselect</option>
+            </select>
           </div>
           <div className={styles.formBottom}>
             <div className={styles.formBottomContent}>
@@ -120,7 +147,7 @@ class RiskAreaCreate extends React.Component<IProps, IState> {
               <input
                 type='submit'
                 className={styles.submitButton}
-                value='Add domain' />
+                value='Add question' />
             </div>
           </div>
         </form>
@@ -131,20 +158,20 @@ class RiskAreaCreate extends React.Component<IProps, IState> {
 
 function mapDispatchToProps(dispatch: Dispatch<() => void>, ownProps: IProps): Partial<IProps> {
   return {
-    redirectToRiskArea: (riskAreaId: string) => {
-      dispatch(push(`${ownProps.routeBase}/${riskAreaId}`));
+    redirectToQuestion: (questionId: string) => {
+      dispatch(push(`${ownProps.routeBase}/${questionId}`));
     },
   };
 }
 
 export default compose(
   connect(undefined, mapDispatchToProps),
-  graphql(riskAreaCreateMutation as any, {
-    name: 'createRiskArea',
+  graphql(questionCreateMutation as any, {
+    name: 'createQuestion',
     options: {
       refetchQueries: [
-        'getRiskAreas',
+        'getQuestionsForRiskArea',
       ],
     },
   }),
-)(RiskAreaCreate as any) as any;
+)(QuestionCreate as any) as any;

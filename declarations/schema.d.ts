@@ -410,7 +410,7 @@ declare module 'schema' {
     deletedAt: string | null;
     title: string;
     validatedSource: string | null;
-    answers: Array<IAnswer>;
+    answers: Array<IAnswer> | null;
     answerType: IAnswerTypeOptionsEnum;
     riskAreaId: string;
     applicableIfQuestionConditions: Array<IQuestionCondition>;

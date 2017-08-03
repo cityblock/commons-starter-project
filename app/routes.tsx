@@ -26,8 +26,7 @@ export default (
     <Switch>
       <Route exact path='/' component={(LogIn as any)} />
       <Authentication>
-        <Route exact path='/tasks/:taskId' component={(TasksContainer as any)} />
-        <Route exact path='/tasks' component={(TasksContainer as any)} />
+        <Route exact path='/tasks/:taskId?' component={(TasksContainer as any)} />
         <Route exact path='/settings' component={(SettingsContainer as any)} />
         <Route exact path='/patient-intake' component={(PatientEnrollmentContainer as any)} />
         <Route exact path='/patients' component={(PatientPanelContainer as any)} />

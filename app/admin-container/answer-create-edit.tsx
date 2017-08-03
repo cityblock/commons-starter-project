@@ -1,4 +1,5 @@
 import * as classNames from 'classnames';
+import { isNil, omitBy } from 'lodash';
 import * as React from 'react';
 import { compose, graphql } from 'react-apollo';
 import * as answerCreateMutation from '../graphql/queries/answer-create-mutation.graphql';
@@ -58,6 +59,13 @@ class AnswerCreateEdit extends React.Component<IProps, IState> {
     const { answer } = this.state;
     const { fieldName, fieldValue } = updatedField;
 
+    // Don't do anything if field is null
+    if (fieldValue === '' || fieldValue === 'none') {
+      (answer as any)[fieldName] = undefined;
+    } else {
+      (answer as any)[fieldName] = fieldValue;
+    }
+
     (answer as any)[fieldName] = fieldValue;
 
     this.setState(() => ({ answer }));
@@ -82,17 +90,19 @@ class AnswerCreateEdit extends React.Component<IProps, IState> {
     event.preventDefault();
     try {
       this.setState({ loading: true });
+      const filtered = omitBy<answerCreateMutationVariables, {}>(this.state.answer, isNil);
+
       if (this.props.answer) {
         await this.props.editAnswer({
           variables: {
             answerId: this.props.answer.id,
-            ...this.state.answer,
+            ...filtered,
           },
         });
       } else {
         await this.props.createAnswer({
           variables: {
-            ...this.state.answer,
+            ...filtered,
           },
         });
       }
@@ -192,10 +202,11 @@ class AnswerCreateEdit extends React.Component<IProps, IState> {
             </select>
             <select required
               name='riskAdjustmentType'
-              value={answer.riskAdjustmentType || ''}
+              value={answer.riskAdjustmentType || 'none'}
               onChange={this.onChange}
               className={
                 classNames(formStyles.select, formStyles.inputSmall, styles.flexInputItem)}>
+              <option value='none'>none</option>
               <option value='increment'>increment</option>
               <option value='forceHighRisk'>forceHighRisk</option>
             </select>

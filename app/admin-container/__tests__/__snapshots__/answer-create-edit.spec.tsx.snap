@@ -154,6 +154,11 @@ exports[`renders answer create-edit 1`] = `
         value="increment"
       >
         <option
+          value="none"
+        >
+          none
+        </option>
+        <option
           value="increment"
         >
           increment

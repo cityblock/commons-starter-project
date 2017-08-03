@@ -452,7 +452,7 @@ export type getQuestionQuery = {
       summaryText: string | null,
       questionId: string,
       order: number,
-    } | null >,
+    } | null > | null,
   } | null,
 };
 
@@ -482,7 +482,7 @@ export type getQuestionsForRiskAreaQuery = {
       summaryText: string | null,
       questionId: string,
       order: number,
-    } | null >,
+    } | null > | null,
   } | null >,
 };
 
@@ -785,7 +785,7 @@ export type questionCreateMutation = {
       summaryText: string | null,
       questionId: string,
       order: number,
-    } | null >,
+    } | null > | null,
   } | null,
 };
 
@@ -815,7 +815,7 @@ export type questionDeleteMutation = {
       summaryText: string | null,
       questionId: string,
       order: number,
-    } | null >,
+    } | null > | null,
   } | null,
 };
 
@@ -851,7 +851,7 @@ export type questionEditMutation = {
       summaryText: string | null,
       questionId: string,
       order: number,
-    } | null >,
+    } | null > | null,
   } | null,
 };
 
@@ -1406,7 +1406,7 @@ export type FullQuestionFragment = {
     summaryText: string | null,
     questionId: string,
     order: number,
-  } | null >,
+  } | null > | null,
 };
 
 export type FullRiskAreaFragment = {

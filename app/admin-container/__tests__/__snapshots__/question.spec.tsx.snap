@@ -357,6 +357,11 @@ exports[`renders question 1`] = `
                 value="increment"
               >
                 <option
+                  value="none"
+                >
+                  none
+                </option>
+                <option
                   value="increment"
                 >
                   increment
@@ -534,8 +539,13 @@ exports[`renders question 1`] = `
               name="riskAdjustmentType"
               onChange={[Function]}
               required={true}
-              value=""
+              value="none"
             >
+              <option
+                value="none"
+              >
+                none
+              </option>
               <option
                 value="increment"
               >

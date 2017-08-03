@@ -13,7 +13,7 @@ const mockStore = configureMockStore([]);
 const oldDate = Date.now;
 
 const question = {
-  id: 'cool-task-id',
+  id: 'cool-question-id',
   createdAt: 'Thu Jul 13 2017 16:52:56 GMT-0400 (EDT)',
   updatedAt: 'Thu Jul 13 2017 16:52:56 GMT-0400 (EDT)',
   dueAt: 'Thu Jul 13 2017 16:52:56 GMT-0400 (EDT)',
@@ -35,6 +35,11 @@ const question = {
   }],
   riskAreaId: 'risk-area-id',
   applicableIfType: 'allTrue' as any,
+  applicableIfQuestionConditions: [{
+    id: 'question-condition',
+    questionId: 'cool-question-id',
+    answerId: 'answer-id',
+  }],
 };
 
 describe('question row', () => {

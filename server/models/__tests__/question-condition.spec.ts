@@ -51,8 +51,8 @@ describe('answer model', () => {
     expect(queriedQuestionCondition).toMatchObject({
       answerId: answer.id, questionId: question.id,
     });
-    expect(queriedQuestionCondition.question).toMatchObject(question);
-    expect(queriedQuestionCondition.answer).toMatchObject(answer);
+    expect(queriedQuestionCondition.questionId).toMatch(question.id);
+    expect(queriedQuestionCondition.answerId).toMatch(answer.id);
   });
 
   it('creates and gets questionCondition', async () => {

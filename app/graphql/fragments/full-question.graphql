@@ -1,4 +1,5 @@
 #import "./full-answer.graphql"
+#import "./full-question-condition.graphql"
 
 fragment FullQuestion on Question {
   id
@@ -12,5 +13,8 @@ fragment FullQuestion on Question {
   applicableIfType
   answers {
     ...FullAnswer
+  }
+  applicableIfQuestionConditions {
+    ...FullQuestionCondition
   }
 }

@@ -34,6 +34,11 @@ it('renders question', () => {
       questionId: 'cool-task-id',
       order: 1,
     }],
+    applicableIfQuestionConditions: [{
+      id: 'question-condition',
+      questionId: 'cool-question-id',
+      answerId: 'answer-id',
+    }],
   };
   const history = createMemoryHistory();
   const tree = create(

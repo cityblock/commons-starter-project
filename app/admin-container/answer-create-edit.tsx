@@ -68,7 +68,7 @@ class AnswerCreateEdit extends React.Component<IProps, IState> {
 
     (answer as any)[fieldName] = fieldValue;
 
-    this.setState(() => ({ answer }));
+    this.setState({ answer });
   }
 
   onChange(event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) {
@@ -80,8 +80,6 @@ class AnswerCreateEdit extends React.Component<IProps, IState> {
     } else if (fieldValue === 'false') {
       fieldValue = false;
     }
-
-    this.setState(() => ({ [fieldName]: fieldValue }));
 
     this.onFieldUpdate({ fieldName, fieldValue });
   }
@@ -101,9 +99,7 @@ class AnswerCreateEdit extends React.Component<IProps, IState> {
         });
       } else {
         await this.props.createAnswer({
-          variables: {
-            ...filtered,
-          },
+          variables: filtered,
         });
       }
       this.setState({ loading: false });
@@ -196,17 +192,18 @@ class AnswerCreateEdit extends React.Component<IProps, IState> {
               onChange={this.onChange}
               className={
                 classNames(formStyles.select, formStyles.inputSmall, styles.flexInputItem)}>
+              <option value='' disabled hidden>Select Answer value type</option>
               <option value='string'>text</option>
               <option value='boolean'>true / false</option>
               <option value='number'>number</option>
             </select>
             <select required
               name='riskAdjustmentType'
-              value={answer.riskAdjustmentType || 'none'}
+              value={answer.riskAdjustmentType || ''}
               onChange={this.onChange}
               className={
                 classNames(formStyles.select, formStyles.inputSmall, styles.flexInputItem)}>
-              <option value='none'>none</option>
+              <option value='' disabled hidden>Select risk adjustment type</option>
               <option value='increment'>increment</option>
               <option value='forceHighRisk'>forceHighRisk</option>
             </select>

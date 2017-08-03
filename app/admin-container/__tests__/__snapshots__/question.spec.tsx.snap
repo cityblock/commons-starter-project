@@ -153,6 +153,9 @@ exports[`renders question 1`] = `
     <div
       className={undefined}
     >
+      <div>
+        Applicable if type
+      </div>
       <select
         className={undefined}
         name="applicableIfType"
@@ -170,6 +173,9 @@ exports[`renders question 1`] = `
           one true
         </option>
       </select>
+      <div>
+        Answer type
+      </div>
       <select
         className={undefined}
         name="answerType"
@@ -334,6 +340,13 @@ exports[`renders question 1`] = `
                 value="boolean"
               >
                 <option
+                  disabled={true}
+                  hidden={true}
+                  value=""
+                >
+                  Select Answer value type
+                </option>
+                <option
                   value="string"
                 >
                   text
@@ -357,9 +370,11 @@ exports[`renders question 1`] = `
                 value="increment"
               >
                 <option
-                  value="none"
+                  disabled={true}
+                  hidden={true}
+                  value=""
                 >
-                  none
+                  Select risk adjustment type
                 </option>
                 <option
                   value="increment"
@@ -519,6 +534,13 @@ exports[`renders question 1`] = `
               value="boolean"
             >
               <option
+                disabled={true}
+                hidden={true}
+                value=""
+              >
+                Select Answer value type
+              </option>
+              <option
                 value="string"
               >
                 text
@@ -539,12 +561,14 @@ exports[`renders question 1`] = `
               name="riskAdjustmentType"
               onChange={[Function]}
               required={true}
-              value="none"
+              value=""
             >
               <option
-                value="none"
+                disabled={true}
+                hidden={true}
+                value=""
               >
-                none
+                Select risk adjustment type
               </option>
               <option
                 value="increment"
@@ -568,6 +592,95 @@ exports[`renders question 1`] = `
                 className={undefined}
                 type="submit"
                 value="Add answer"
+              />
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+    <div
+      className={undefined}
+    >
+      <div
+        className={undefined}
+      >
+        Applicable if conditions
+      </div>
+      <div
+        className={undefined}
+      >
+        <div
+          className={undefined}
+        >
+          answer-id
+        </div>
+        <div
+          onClick={[Function]}
+        >
+          delete
+        </div>
+      </div>
+      <div
+        className={undefined}
+      >
+        Create 
+        Applicable if conditions
+      </div>
+      <div
+        className={undefined}
+      >
+        <form
+          className={undefined}
+          onSubmit={[Function]}
+        >
+          <div
+            className={undefined}
+          >
+            <div
+              className={undefined}
+            >
+              <div
+                className={undefined}
+              >
+                <div
+                  className={undefined}
+                />
+              </div>
+            </div>
+            <div
+              className={undefined}
+            >
+              <select
+                className=""
+                name="answerId"
+                onChange={[Function]}
+                value="undefined"
+              >
+                <option
+                  disabled={true}
+                  hidden={true}
+                  value=""
+                >
+                  Select Answer
+                </option>
+                <option
+                  value="answer-id"
+                >
+                  answer value
+                </option>
+              </select>
+            </div>
+          </div>
+          <div
+            className={undefined}
+          >
+            <div
+              className={undefined}
+            >
+              <input
+                className={undefined}
+                type="submit"
+                value="Add question condition"
               />
             </div>
           </div>

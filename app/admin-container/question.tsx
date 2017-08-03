@@ -13,6 +13,7 @@ import * as formStyles from '../shared/css/forms.css';
 import { IState as IAppState } from '../store';
 import AnswerCreateEdit from './answer-create-edit';
 import * as styles from './css/two-panel-right.css';
+import QuestionConditions from './question-conditions';
 
 export interface IProps {
   question?: FullQuestionFragment;
@@ -335,6 +336,7 @@ class Question extends React.Component<IProps, IState> {
               </div>
             </div>
             <div className={styles.itemBody}>
+              <div>Applicable if type</div>
               <select
                 name='applicableIfType'
                 value={question.applicableIfType || ''}
@@ -343,6 +345,7 @@ class Question extends React.Component<IProps, IState> {
                 <option value='allTrue'>all true</option>
                 <option value='oneTrue'>one true</option>
               </select>
+              <div>Answer type</div>
               <select required
                 name='answerType'
                 value={question.answerType}
@@ -361,6 +364,11 @@ class Question extends React.Component<IProps, IState> {
               </div>
               <AnswerCreateEdit questionId={question.id} />
             </div>
+            <QuestionConditions
+              title={'Applicable if conditions'}
+              answers={question.answers}
+              questionConditions={question.applicableIfQuestionConditions}
+              questionId={question.id} />
           </div>
         </div>
       );

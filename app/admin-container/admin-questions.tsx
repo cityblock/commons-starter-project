@@ -154,9 +154,6 @@ class AdminQuestions extends React.Component<IProps, IState> {
                 {sortOptions}
               </select>
             </div>
-            <div className={classNames(sortSearchStyles.search, styles.search)}>
-              <input required type='text' placeholder='Search by user or keywords' />
-            </div>
           </div>
           {createQuestionButton}
         </div>

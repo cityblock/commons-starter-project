@@ -3,7 +3,7 @@
 exports[`question row renders question row 1`] = `
 <a
   className="undefined"
-  href="/foo/bar/cool-task-id"
+  href="/foo/bar/cool-question-id"
   onClick={[Function]}
 >
   <div

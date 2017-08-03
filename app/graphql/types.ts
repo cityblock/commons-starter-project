@@ -452,7 +452,12 @@ export type getQuestionQuery = {
       summaryText: string | null,
       questionId: string,
       order: number,
-    } | null > | null,
+    } > | null,
+    applicableIfQuestionConditions:  Array< {
+      id: string,
+      questionId: string,
+      answerId: string,
+    } > | null,
   } | null,
 };
 
@@ -482,7 +487,12 @@ export type getQuestionsForRiskAreaQuery = {
       summaryText: string | null,
       questionId: string,
       order: number,
-    } | null > | null,
+    } > | null,
+    applicableIfQuestionConditions:  Array< {
+      id: string,
+      questionId: string,
+      answerId: string,
+    } > | null,
   } | null >,
 };
 
@@ -754,6 +764,48 @@ export type patientSetupMutation = {
   } | null,
 };
 
+export type questionConditionDeleteMutationVariables = {
+  questionConditionId: string,
+};
+
+export type questionConditionDeleteMutation = {
+  // Deletes a QuestionCondition
+  questionConditionDelete:  {
+    id: string,
+    questionId: string,
+    answerId: string,
+  } | null,
+};
+
+export type questionConditionCreateMutationVariables = {
+  answerId: string,
+  questionId: string,
+};
+
+export type questionConditionCreateMutation = {
+  // Create a QuestionCondition
+  questionConditionCreate:  {
+    id: string,
+    questionId: string,
+    answerId: string,
+  } | null,
+};
+
+export type questionConditionEditMutationVariables = {
+  questionConditionId: string,
+  answerId: string,
+  questionId: string,
+};
+
+export type questionConditionEditMutation = {
+  // Edit a QuestionCondition
+  questionConditionEdit:  {
+    id: string,
+    questionId: string,
+    answerId: string,
+  } | null,
+};
+
 export type questionCreateMutationVariables = {
   title: string,
   answerType: AnswerTypeOptions,
@@ -785,7 +837,12 @@ export type questionCreateMutation = {
       summaryText: string | null,
       questionId: string,
       order: number,
-    } | null > | null,
+    } > | null,
+    applicableIfQuestionConditions:  Array< {
+      id: string,
+      questionId: string,
+      answerId: string,
+    } > | null,
   } | null,
 };
 
@@ -815,7 +872,12 @@ export type questionDeleteMutation = {
       summaryText: string | null,
       questionId: string,
       order: number,
-    } | null > | null,
+    } > | null,
+    applicableIfQuestionConditions:  Array< {
+      id: string,
+      questionId: string,
+      answerId: string,
+    } > | null,
   } | null,
 };
 
@@ -851,7 +913,12 @@ export type questionEditMutation = {
       summaryText: string | null,
       questionId: string,
       order: number,
-    } | null > | null,
+    } > | null,
+    applicableIfQuestionConditions:  Array< {
+      id: string,
+      questionId: string,
+      answerId: string,
+    } > | null,
   } | null,
 };
 
@@ -1386,6 +1453,12 @@ export type FullPatientScratchPadFragment = {
   text: string | null,
 };
 
+export type FullQuestionConditionFragment = {
+  id: string,
+  questionId: string,
+  answerId: string,
+};
+
 export type FullQuestionFragment = {
   id: string,
   createdAt: string,
@@ -1406,7 +1479,12 @@ export type FullQuestionFragment = {
     summaryText: string | null,
     questionId: string,
     order: number,
-  } | null > | null,
+  } > | null,
+  applicableIfQuestionConditions:  Array< {
+    id: string,
+    questionId: string,
+    answerId: string,
+  } > | null,
 };
 
 export type FullRiskAreaFragment = {

@@ -131,6 +131,13 @@ exports[`renders answer create-edit 1`] = `
         value="boolean"
       >
         <option
+          disabled={true}
+          hidden={true}
+          value=""
+        >
+          Select Answer value type
+        </option>
+        <option
           value="string"
         >
           text
@@ -154,9 +161,11 @@ exports[`renders answer create-edit 1`] = `
         value="increment"
       >
         <option
-          value="none"
+          disabled={true}
+          hidden={true}
+          value=""
         >
-          none
+          Select risk adjustment type
         </option>
         <option
           value="increment"

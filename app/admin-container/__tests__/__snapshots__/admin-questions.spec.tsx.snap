@@ -29,15 +29,6 @@ exports[`renders admin questions 1`] = `
           </option>
         </select>
       </div>
-      <div
-        className=""
-      >
-        <input
-          placeholder="Search by user or keywords"
-          required={true}
-          type="text"
-        />
-      </div>
     </div>
     <div
       className={undefined}

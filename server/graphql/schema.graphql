@@ -392,10 +392,10 @@ type Question implements uniqueId {
   deletedAt: String
   title: String!
   validatedSource: String
-  answers: [Answer]
+  answers: [Answer!]
   answerType: AnswerTypeOptions!
   riskAreaId: String!
-  applicableIfQuestionConditions: [QuestionCondition]!
+  applicableIfQuestionConditions: [QuestionCondition!]
   applicableIfType: QuestionConditionTypeOptions
   order: Int!
 }
@@ -406,8 +406,8 @@ type QuestionCondition implements uniqueId {
   createdAt: String!
   updatedAt: String!
   deletedAt: String
-  answer: Answer!
-  question: Question!
+  answerId: String!
+  questionId: String!
 }
 
 # Risk Area

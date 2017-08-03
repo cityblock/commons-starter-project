@@ -1,0 +1,13 @@
+#import "../fragments/full-question-condition.graphql"
+
+mutation questionConditionCreate(
+  $answerId: String!
+  $questionId: String!
+) {
+  questionConditionCreate(input: {
+    answerId: $answerId
+    questionId: $questionId
+  }) {
+    ...FullQuestionCondition
+  }
+}

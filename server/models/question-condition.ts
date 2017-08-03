@@ -1,21 +1,16 @@
 import { Model, RelationMappings } from 'objection';
 import * as uuid from 'uuid/v4';
 import Answer from './answer';
-import Question from './question';
 
 export interface IQuestionConditionEditableFields {
   answerId: string;
   questionId: string;
 }
 
-const EAGER_QUERY = '[question, answer]';
-
 /* tslint:disable:member-ordering */
 export default class QuestionCondition extends Model {
   id: string;
-  answer: Answer;
   answerId: string;
-  question: Question;
   questionId: string;
 
   createdAt: string;
@@ -70,7 +65,6 @@ export default class QuestionCondition extends Model {
   static async get(questionConditionId: string): Promise<QuestionCondition> {
     const questionCondition = await this
       .query()
-      .eager(EAGER_QUERY)
       .findById(questionConditionId);
 
     if (!questionCondition) {
@@ -82,8 +76,7 @@ export default class QuestionCondition extends Model {
   static async create(input: IQuestionConditionEditableFields) {
     await this.validate(input);
     return this.query()
-      .insertAndFetch(input)
-      .eager(EAGER_QUERY);
+      .insertAndFetch(input);
   }
 
   static async edit(
@@ -91,8 +84,7 @@ export default class QuestionCondition extends Model {
   ): Promise<QuestionCondition> {
     await this.validate(questionCondition);
     return await this.query()
-      .updateAndFetchById(questionConditionId, questionCondition)
-      .eager(EAGER_QUERY);
+      .updateAndFetchById(questionConditionId, questionCondition);
   }
 
   static async validate(input: IQuestionConditionEditableFields) {

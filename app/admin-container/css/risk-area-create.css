@@ -1,14 +1,6 @@
 @import '../../shared/css/sizes';
 .container {}
 
-.borderContainer {
-  border: 1px solid var(--light-gray-font-color);
-  padding: var(--small-gutter);
-  width: 100%;
-  border-radius: 5px;
-  margin: var(--small-gutter) 0px;
-}
-
 .loading {
   position: fixed;
   width: 100vw;

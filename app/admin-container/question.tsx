@@ -16,11 +16,12 @@ import * as styles from './css/two-panel-right.css';
 import QuestionConditions from './question-conditions';
 
 export interface IProps {
+  questions: FullQuestionFragment[];
   question?: FullQuestionFragment;
+  routeBase: string;
   questionId?: string;
   questionLoading?: boolean;
   questionError?: string;
-  routeBase: string;
   refetchQuestion: () => any;
   match?: {
     params: {
@@ -221,7 +222,7 @@ class Question extends React.Component<IProps, IState> {
   }
 
   render() {
-    const { question, routeBase } = this.props;
+    const { question, questions, routeBase } = this.props;
     const {
       deleteConfirmationInProgress,
       deleteError,
@@ -338,6 +339,7 @@ class Question extends React.Component<IProps, IState> {
               </div>
               <br />
               <div className={styles.borderTop}>
+                <br />
                 <div className={styles.smallText}>Answer display:</div>
               </div>
               <select required
@@ -358,6 +360,7 @@ class Question extends React.Component<IProps, IState> {
               <div className={styles.smallText}>Create answer:</div>
               <AnswerCreateEdit questionId={question.id} />
               <div className={styles.smallText}>Applicable if type:</div>
+              <br />
               <select
                 name='applicableIfType'
                 value={question.applicableIfType || ''}
@@ -366,9 +369,9 @@ class Question extends React.Component<IProps, IState> {
                 <option value='allTrue'>all true</option>
                 <option value='oneTrue'>one true</option>
               </select>
+              <br />
               <QuestionConditions
-                title={'Applicable if conditions'}
-                answers={question.answers}
+                questions={questions}
                 questionConditions={question.applicableIfQuestionConditions}
                 questionId={question.id} />
             </div>

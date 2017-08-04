@@ -214,6 +214,15 @@
   display: none;
 }
 
+.borderContainer {
+  border: 1px solid var(--light-gray-font-color);
+  padding: var(--small-gutter);
+  width: 100%;
+  border-radius: 5px;
+  margin: var(--small-gutter) 0px;
+}
+
+
 .bodyText {
   margin: 4px 10px 0 10px;
   color: var(--black-color);

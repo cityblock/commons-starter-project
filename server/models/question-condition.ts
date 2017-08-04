@@ -89,9 +89,9 @@ export default class QuestionCondition extends Model {
 
   static async validate(input: IQuestionConditionEditableFields) {
     const answer = await Answer.get(input.answerId);
-    if (answer.questionId !== input.questionId) {
+    if (answer.questionId === input.questionId) {
       return Promise
-        .reject(`Question ${input.questionId} is not associated with answer ${input.answerId}`);
+        .reject(`Error: Answer ${input.answerId} is an answer to question ${input.questionId}`);
     }
   }
 

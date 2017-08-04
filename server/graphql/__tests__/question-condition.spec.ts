@@ -10,12 +10,13 @@ import schema from '../make-executable-schema';
 
 describe('questionCondition tests', () => {
 
-  let db: Db = null as any;
+  let db: Db;
   const userRole = 'admin';
-  let riskArea: RiskArea = null as any;
-  let question: Question = null as any;
-  let answer: Answer = null as any;
-  let user: User = null as any;
+  let riskArea: RiskArea;
+  let question: Question;
+  let question2: Question;
+  let answer: Answer;
+  let user: User;
 
   beforeEach(async () => {
     db = await Db.get();
@@ -31,6 +32,12 @@ describe('questionCondition tests', () => {
       answerType: 'dropdown',
       riskAreaId: riskArea.id,
       order: 1,
+    });
+    question2 = await Question.create({
+      title: 'really like writing tests?',
+      answerType: 'dropdown',
+      riskAreaId: riskArea.id,
+      order: 2,
     });
     answer = await Answer.create({
       value: '3',
@@ -50,7 +57,7 @@ describe('questionCondition tests', () => {
   describe('resolve questionCondition', () => {
     it('can fetch questionCondition', async () => {
       const questionCondition = await QuestionCondition.create({
-        answerId: answer.id, questionId: question.id,
+        answerId: answer.id, questionId: question2.id,
       });
       const query = `{
         questionCondition(questionConditionId: "${questionCondition.id}") {
@@ -62,7 +69,7 @@ describe('questionCondition tests', () => {
       const result = await graphql(schema, query, null, { db, userRole });
       expect(cloneDeep(result.data!.questionCondition)).toMatchObject({
         id: questionCondition.id,
-        questionId: question.id,
+        questionId: question2.id,
         answerId: answer.id,
       });
     });
@@ -79,18 +86,13 @@ describe('questionCondition tests', () => {
   describe('questionCondition edit', () => {
     it('edits questionCondition with invalid q/a pair should error', async () => {
       const questionCondition = await QuestionCondition.create({
-        answerId: answer.id, questionId: question.id,
+        answerId: answer.id, questionId: question2.id,
       });
-      const question2 = await Question.create({
-        title: 'like writing tests?',
-        answerType: 'dropdown',
-        riskAreaId: riskArea.id,
-        order: 1,
-      });
+
       const query = `mutation {
         questionConditionEdit(input: {
           answerId: "${answer.id}"
-          questionId: "${question2.id}"
+          questionId: "${question.id}"
           questionConditionId: "${questionCondition.id}"
          }) {
           id
@@ -102,13 +104,13 @@ describe('questionCondition tests', () => {
       expect(
         cloneDeep(result.errors![0]),
       ).toMatchObject(
-        new Error(`Question ${question2.id} is not associated with answer ${answer.id}`),
+        new Error(`Error: Answer ${answer.id} is an answer to question ${question.id}`),
       );
     });
 
     it('edits questionCondition', async () => {
       const questionCondition = await QuestionCondition.create({
-        answerId: answer.id, questionId: question.id,
+        answerId: answer.id, questionId: question2.id,
       });
       const answer2 = await Answer.create({
         value: '2',
@@ -122,7 +124,7 @@ describe('questionCondition tests', () => {
       const query = `mutation {
         questionConditionEdit(input: {
           answerId: "${answer2.id}"
-          questionId: "${question.id}"
+          questionId: "${question2.id}"
           questionConditionId: "${questionCondition.id}"
          }) {
           id
@@ -133,7 +135,7 @@ describe('questionCondition tests', () => {
       const result = await graphql(schema, query, null, { db, userRole, userId: user.id });
       expect(cloneDeep(result.data!.questionConditionEdit)).toMatchObject({
         id: questionCondition.id,
-        questionId: question.id,
+        questionId: question2.id,
         answerId: answer2.id,
       });
     });
@@ -143,7 +145,7 @@ describe('questionCondition tests', () => {
     it('creates a new questionCondition', async () => {
       const mutation = `mutation {
         questionConditionCreate(input: {
-          questionId: "${question.id}"
+          questionId: "${question2.id}"
           answerId: "${answer.id}"
         }) {
           id
@@ -153,7 +155,7 @@ describe('questionCondition tests', () => {
       }`;
       const result = await graphql(schema, mutation, null, { db, userRole, userId: user.id });
       expect(cloneDeep(result.data!.questionConditionCreate)).toMatchObject({
-        questionId: question.id,
+        questionId: question2.id,
         answerId: answer.id,
       });
     });
@@ -163,7 +165,7 @@ describe('questionCondition tests', () => {
   describe('questionCondition delete', () => {
     it('marks an questionCondition as deleted', async () => {
       const questionCondition = await QuestionCondition.create({
-        answerId: answer.id, questionId: question.id,
+        answerId: answer.id, questionId: question2.id,
       });
       const mutation = `mutation {
         questionConditionDelete(input: { questionConditionId: "${questionCondition.id}" }) {

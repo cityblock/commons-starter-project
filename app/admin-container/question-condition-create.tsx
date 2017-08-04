@@ -13,6 +13,7 @@ import * as formStyles from '../shared/css/forms.css';
 import * as loadingStyles from '../shared/css/loading-spinner.css';
 import * as styles from './css/risk-area-create.css';
 import * as questionConditionStyles from './css/two-panel-right.css';
+import QuestionAnswerOption from './question-answer-option';
 
 export interface ICreateOptions { variables: questionConditionCreateMutationVariables; }
 
@@ -81,39 +82,36 @@ class QuestionConditionCreate extends React.Component<IProps, IState> {
     const { loading, questionCondition } = this.state;
     const loadingClass = loading ? styles.loading : styles.loadingHidden;
     const answerOptions = answers.map((answer: FullAnswerFragment) => (
-      <option key={answer.id} value={answer.id}>{answer.displayValue}</option>
+      <QuestionAnswerOption key={answer.id} answer={answer} />
     ));
+    const selectedAnswer = questionCondition.answerId || '';
     return (
-      <div className={questionConditionStyles.itemBody}>
-        <form onSubmit={this.onSubmit} className={styles.container}>
-          <div className={styles.formCenter}>
-            <div className={loadingClass}>
-              <div className={styles.loadingContainer}>
-                <div className={loadingStyles.loadingSpinner}></div>
-              </div>
-            </div>
-            <div className={styles.flexInputGroup}>
-              <select
-                name='answerId'
-                value={questionCondition.answerId || ''}
-                onChange={this.onAnswerChange}
-                className={
-                  classNames(formStyles.select, formStyles.inputSmall, styles.flexInputItem)}>
-                <option value='' disabled hidden>Select Answer</option>
-                {answerOptions}
-              </select>
-            </div>
+      <form onSubmit={this.onSubmit} className={questionConditionStyles.borderContainer}>
+        <div className={loadingClass}>
+          <div className={styles.loadingContainer}>
+            <div className={loadingStyles.loadingSpinner}></div>
           </div>
-          <div className={styles.formBottom}>
-            <div className={styles.formBottomContent}>
-              <input
-                type='submit'
-                className={styles.submitButton}
-                value={'Add question condition'} />
-            </div>
+        </div>
+        <div className={styles.flexInputGroup}>
+          <select
+            name='answerId'
+            value={selectedAnswer}
+            onChange={this.onAnswerChange}
+            className={
+              classNames(formStyles.select, formStyles.inputSmall, styles.flexInputItem)}>
+            <option value='' disabled hidden>Select Answer</option>
+            {answerOptions}
+          </select>
+        </div>
+        <div className={styles.formBottom}>
+          <div className={styles.formBottomContent}>
+            <input
+              type='submit'
+              className={styles.submitButton}
+              value={'Add question condition'} />
           </div>
-        </form>
-      </div>
+        </div>
+      </form>
     );
   }
 }

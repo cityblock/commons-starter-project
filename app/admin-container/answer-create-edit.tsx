@@ -55,6 +55,16 @@ class AnswerCreateEdit extends React.Component<IProps, IState> {
     };
   }
 
+  componentWillReceiveProps(nextProps: IProps) {
+    const { questionId } = nextProps;
+
+    if (questionId !== this.props.questionId) {
+      const { answer } = this.state;
+      answer.questionId = questionId;
+      this.setState({ answer });
+    }
+  }
+
   onFieldUpdate(updatedField: IUpdatedField) {
     const { answer } = this.state;
     const { fieldName, fieldValue } = updatedField;
@@ -117,7 +127,7 @@ class AnswerCreateEdit extends React.Component<IProps, IState> {
       (<div className={answerStyles.smallText}>Answer ID: {this.props.answer.id}</div>) :
       <div className={answerStyles.smallText}>New Answer!</div>;
     return (
-      <form onSubmit={this.onSubmit} className={styles.borderContainer}>
+      <form onSubmit={this.onSubmit} className={answerStyles.borderContainer}>
         <div className={loadingClass}>
           <div className={styles.loadingContainer}>
             <div className={loadingStyles.loadingSpinner}></div>

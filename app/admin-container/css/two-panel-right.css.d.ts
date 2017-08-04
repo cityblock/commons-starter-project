@@ -25,6 +25,7 @@ export const largeText: string;
 export const title: string;
 export const largeTextEditor: string;
 export const error: string;
+export const borderContainer: string;
 export const bodyText: string;
 export const deleteConfirmation: string;
 export const deleteConfirmationText: string;

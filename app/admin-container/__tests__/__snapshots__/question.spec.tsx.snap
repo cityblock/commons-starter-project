@@ -163,6 +163,7 @@ exports[`renders question 1`] = `
       <div
         className={undefined}
       >
+        <br />
         <div
           className={undefined}
         >
@@ -690,6 +691,7 @@ exports[`renders question 1`] = `
       >
         Applicable if type:
       </div>
+      <br />
       <select
         className=""
         name="applicableIfType"
@@ -707,21 +709,21 @@ exports[`renders question 1`] = `
           one true
         </option>
       </select>
-      <div
-        className={undefined}
-      >
+      <br />
+      <div>
         <div
           className={undefined}
         >
           Applicable if conditions
         </div>
+        <br />
         <div
           className={undefined}
         >
           <div
             className={undefined}
           >
-            answer-id
+            loading
           </div>
           <div
             onClick={[Function]}
@@ -729,72 +731,59 @@ exports[`renders question 1`] = `
             delete
           </div>
         </div>
+        <br />
         <div
           className={undefined}
         >
-          Create 
-          Applicable if conditions
+          Create applicable if conditions
         </div>
-        <div
+        <form
           className={undefined}
+          onSubmit={[Function]}
         >
-          <form
+          <div
             className={undefined}
-            onSubmit={[Function]}
           >
             <div
               className={undefined}
             >
               <div
                 className={undefined}
-              >
-                <div
-                  className={undefined}
-                >
-                  <div
-                    className={undefined}
-                  />
-                </div>
-              </div>
-              <div
-                className={undefined}
-              >
-                <select
-                  className=""
-                  name="answerId"
-                  onChange={[Function]}
-                  value="undefined"
-                >
-                  <option
-                    disabled={true}
-                    hidden={true}
-                    value=""
-                  >
-                    Select Answer
-                  </option>
-                  <option
-                    value="answer-id"
-                  >
-                    answer value
-                  </option>
-                </select>
-              </div>
+              />
             </div>
+          </div>
+          <div
+            className={undefined}
+          >
+            <select
+              className=""
+              name="answerId"
+              onChange={[Function]}
+              value="undefined"
+            >
+              <option
+                disabled={true}
+                hidden={true}
+                value=""
+              >
+                Select Answer
+              </option>
+            </select>
+          </div>
+          <div
+            className={undefined}
+          >
             <div
               className={undefined}
             >
-              <div
+              <input
                 className={undefined}
-              >
-                <input
-                  className={undefined}
-                  type="submit"
-                  value="Add question condition"
-                />
-              </div>
+                type="submit"
+                value="Add question condition"
+              />
             </div>
-          </form>
-        </div>
+          </div>
+        </form>
       </div>
     </div>
   </div>

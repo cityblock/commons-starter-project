@@ -137,7 +137,11 @@ class AdminQuestions extends React.Component<IProps, IState> {
         routeBase={this.props.routeBase} />
     ) : null;
     const renderedQuestion = (props: any) => (
-      <Question routeBase={routeBase} onDelete={this.onDeleteQuestion} {...props} />
+      <Question
+        questions={questions}
+        routeBase={routeBase}
+        onDelete={this.onDeleteQuestion}
+        {...props } />
     );
     const questionHtml = showCreateQuestion ?
       null : (<Route path={`${routeBase}/:questionId`} render={renderedQuestion} />);

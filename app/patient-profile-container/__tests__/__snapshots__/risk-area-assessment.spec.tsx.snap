@@ -1,0 +1,33 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders a risk area assessment 1`] = `
+<div>
+  <div
+    className=""
+  >
+    <div
+      className={undefined}
+    >
+      <div
+        className=""
+      >
+        Cancel
+      </div>
+      <div
+        className=""
+      >
+        Save updates
+      </div>
+    </div>
+  </div>
+  <div
+    className={undefined}
+  >
+    <div
+      className={undefined}
+    >
+      Loading...
+    </div>
+  </div>
+</div>
+`;

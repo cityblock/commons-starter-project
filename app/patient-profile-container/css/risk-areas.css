@@ -1,0 +1,137 @@
+@import '../../shared/css/sizes';
+.marginLeft {
+  margin-left: 10px;
+}
+
+.invertedButton {
+  @apply --inverted-button;
+}
+
+.button {
+  @apply --button;
+}
+
+.buttonBar {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+}
+
+.buttons {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.saveButton {
+  margin-left: 10px;
+}
+
+.cancelButton, .saveButton {
+  height: 32px;
+  width: 173px;
+  padding: 9px 30px;
+}
+
+.riskAreasPanel {
+  background-color: var(--gray-background-color);
+  padding: 20px var(--medium-gutter);
+}
+
+::-webkit-scrollbar {
+  display: none;
+}
+
+.riskAreas, .riskAssessment {
+  height: calc(100vh - 200px);
+  overflow-y: scroll;
+  -webkit-overflow-scrolling: touch;
+}
+
+.riskAreas.emptyRiskAreasList {}
+
+.emptyRiskAreasMessage {
+  border: 1px dashed var(--border-color);
+  border-radius: 4px;
+  padding: 50px 0;
+}
+
+.emptyRiskAreasLogo {
+  background-image: url('../../assets/calendar-event-grey.svg');
+  background-position: center center;
+  height: 30px;
+  width: 30px;
+  margin: 0 auto 25px;
+}
+
+.emptyRiskAreasLabel {
+  margin: 0 auto 10px;
+  text-align: center;
+  color: var(--light-gray-font-color);
+  font-family: var(--basetica-medium);
+  font-size: var(--medium-font-size);
+  line-height: var(--medium-font-line-height);
+}
+
+.emptyRiskAreasSubtext {
+  margin: 0 auto;
+  text-align: center;
+  color: var(--light-gray-font-color);
+  font-family: var(--roboto);
+  font-size: var(--default-font-size);
+  line-height: var(--default-line-height);
+}
+
+.riskAreasLoading {
+  margin: 0 auto;
+  text-align: center;
+  color: var(--light-gray-font-color);
+  font-family: var(--basetica-medium);
+  font-size: var(--medium-font-size);
+  line-height: var(--medium-font-line-height);
+  padding-top: 50px;
+}
+
+.riskAreasError {
+  margin: var(--gutter) var(--gutter) 0;
+}
+
+.riskAreasErrorIcon {
+  background-image: url('../../assets/error-circle.svg');
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-size: contain;
+  height: 30px;
+  width: 30px;
+  margin: 0 auto var(--small-gutter);
+}
+
+.riskAreasErrorLabel {
+  color: var(--default-font-color);
+  font-family: var(--basetica-black);
+  font-size: var(--medium-font-size);
+  line-height: var(--medium-font-line-height);
+  text-align: center;
+  margin: 0 auto 10px;
+}
+
+.riskAreasErrorSubheading {
+  color: var(--gray-font-color);
+  font-family: var(--roboto);
+  font-size: var(--default-font-size);
+  line-height: var(--default-line-height);
+  text-align: center;
+  margin: 0 auto var(--medium-gutter);
+  padding: 0 var(--small-gutter);
+}
+
+.riskAreasErrorButton {
+  width: 94px;
+  height: 32px;
+  margin: 0 auto;
+  padding: 9px 0 0 0;
+  text-align: center;
+  font-size: var(--small-font-size);
+  line-height: var(--small-font-line-height);
+}

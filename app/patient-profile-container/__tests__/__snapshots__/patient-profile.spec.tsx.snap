@@ -265,6 +265,13 @@ exports[`renders patient profile container correctly 1`] = `
       className={undefined}
     >
       <a
+        className=""
+        href="/patients/undefined/360"
+        onClick={[Function]}
+      >
+        360° View
+      </a>
+      <a
         className="undefined"
         href="/patients/undefined/encounters"
         onClick={[Function]}
@@ -871,6 +878,13 @@ exports[`renders patient profile for ipad 1`] = `
     <div
       className={undefined}
     >
+      <a
+        className=""
+        href="/patients/undefined/360"
+        onClick={[Function]}
+      >
+        360° View
+      </a>
       <a
         className="undefined"
         href="/patients/undefined/encounters"

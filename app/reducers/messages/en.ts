@@ -20,6 +20,7 @@ export const ENGLISH_TRANSLATION = {
     'patient.location': 'Location',
     'patient.joinedAt': 'Patient since',
     'patient.tasks': 'Tasks',
+    'patient.threeSixty': '360° View',
     'patient.medicareId': 'Medicare ID',
     'patient.encounters': 'Encounters',
     'patient.patientInfo': 'Patient Info',

@@ -14,8 +14,9 @@ import PatientEncounters from './patient-encounters';
 import PatientInfo from './patient-info';
 import PatientProfileLeftNav from './patient-profile-left-nav';
 import PatientTasks from './patient-tasks';
+import PatientThreeSixtyView from './patient-three-sixty-view';
 
-type SelectableTabs = 'encounters' | 'patientInfo' | 'tasks';
+type SelectableTabs = 'encounters' | 'patientInfo' | 'tasks' | '360';
 
 export interface IProps {
   intl: InjectedIntl;
@@ -30,6 +31,7 @@ export interface IProps {
     params: {
       patientId: string;
       tabId?: SelectableTabs;
+      riskAreaId?: string;
     };
   };
 }
@@ -47,8 +49,21 @@ class PatientProfileContainer extends React.Component<IProps, {}> {
   }
 
   render() {
-    const { patientId, patient, loading, error, intl, tabId, taskId, browserSize } = this.props;
+    const {
+      patientId,
+      patient,
+      loading,
+      error,
+      intl,
+      tabId,
+      taskId,
+      browserSize,
+      match,
+    } = this.props;
 
+    const threeSixtyViewTabStyles = classNames(tabStyles.tab, {
+      [tabStyles.selectedTab]: tabId === '360',
+    });
     const encountersTabStyles = classNames(tabStyles.tab, {
       [tabStyles.selectedTab]: tabId === 'encounters',
     });
@@ -70,6 +85,11 @@ class PatientProfileContainer extends React.Component<IProps, {}> {
     const tasks = tabId === 'tasks' ?
       <PatientTasks patient={patient} taskId={taskId} patientId={patientId} /> :
       null;
+    const threeSixty = tabId === '360' ?
+      <PatientThreeSixtyView
+        riskAreaId={match.params.riskAreaId}
+        patientId={patientId}
+        routeBase={`/patients/${patientId}/360`} /> : null;
     return (
       <div className={styles.container}>
         <PatientProfileLeftNav
@@ -79,23 +99,34 @@ class PatientProfileContainer extends React.Component<IProps, {}> {
           patient={patient} />
         <div className={mainBodyStyle}>
           <div className={tabStyles.tabs}>
+            <FormattedMessage id='patient.threeSixty'>
+              {(message: string) =>
+                <Link
+                  to ={`/patients/${patientId}/360`}
+                  className={threeSixtyViewTabStyles}>
+                  {message}
+                </Link>}
+            </FormattedMessage>
             <FormattedMessage id='patient.encounters'>
               {(message: string) =>
-                <Link to={`/patients/${patientId}/encounters`}
+                <Link
+                  to={`/patients/${patientId}/encounters`}
                   className={encountersTabStyles}>
                   {message}
                 </Link>}
             </FormattedMessage>
             <FormattedMessage id='patient.patientInfo'>
               {(message: string) =>
-                <Link to={`/patients/${patientId}/patientInfo`}
+                <Link
+                  to={`/patients/${patientId}/patientInfo`}
                   className={patientInfoTabStyles}>
                   {message}
                 </Link>}
             </FormattedMessage>
             <FormattedMessage id='patient.tasks'>
               {(message: string) =>
-                <Link to={`/patients/${patientId}/tasks`}
+                <Link
+                  to={`/patients/${patientId}/tasks`}
                   className={tasksTabStyles}>
                   {message}
                 </Link>}
@@ -104,6 +135,7 @@ class PatientProfileContainer extends React.Component<IProps, {}> {
           {encounters}
           {patientInfo}
           {tasks}
+          {threeSixty}
         </div>
       </div>
     );

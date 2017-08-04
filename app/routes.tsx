@@ -38,7 +38,10 @@ export default (
         <Route exact path='/patient-intake' component={(PatientEnrollmentContainer as any)} />
         <Route exact path='/patients' component={(PatientPanelContainer as any)} />
         <Route exact path='/patients/:patientId' component={(PatientRedirect as any)} />
-        <Route path='/patients/:patientId/:tabId' component={(PatientProfileContainer as any)} />
+        <Route
+          exact
+          path='/patients/:patientId/:tabId/:riskAreaId?'
+          component={(PatientProfileContainer as any)} />
         <Route exact path='/admin/:tabId?/:riskAreaId?/:subTabId?/:questionId?'
           component={(AdminContainer as any)} />
       </Authentication>

@@ -98,8 +98,7 @@ const tasksResponseAndFetchMoreRespopnse = {
   },
 };
 
-describe('fetch more teasks', () => {
-
+describe('fetch more tasks', () => {
   it('calls fetch more and combines tasks', () => {
     tasksResponse.fetchMore = (options: any) => {
       expect(options.variables).toEqual({ pageNumber: 0 });
@@ -110,5 +109,4 @@ describe('fetch more teasks', () => {
 
     fetchMoreTasks(tasksResponse, {}, 'tasksForPatient');
   });
-
 });

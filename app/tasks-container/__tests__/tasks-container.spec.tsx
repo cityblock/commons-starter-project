@@ -14,8 +14,9 @@ it('renders tasks container', () => {
   const history = createMemoryHistory();
   const locale = { messages: ENGLISH_TRANSLATION.messages};
   const task = { taskId: 'foo' };
+  const eventNotifications = { count: 0 };
   const tree = create(
-    <MockedProvider mocks={[]} store={mockStore({ locale, task })}>
+    <MockedProvider mocks={[]} store={mockStore({ locale, task, eventNotifications })}>
       <ReduxConnectedIntlProvider>
         <ConnectedRouter history={history}>
           <Route component={TasksContainer as any} />

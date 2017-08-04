@@ -440,6 +440,7 @@ type TaskEvent implements uniqueId {
 # Event Notification
 type EventNotification implements uniqueId {
   id: ID!
+  title: String
   userId: String!
   user: User!
   taskEventId: String
@@ -708,6 +709,11 @@ input QuestionConditionDeleteInput {
   questionConditionId: String!
 }
 
+# EventNotification edit input
+input EventNotificationEditInput {
+  eventNotificationId: String!
+}
+
 type RootMutationType {
   # Create a new user
   userCreate(input: UserCreateInput): UserWithAuthToken
@@ -810,6 +816,9 @@ type RootMutationType {
 
   # Deletes a QuestionCondition
   questionConditionDelete(input: QuestionConditionDeleteInput): QuestionCondition
+
+  # Dismisses (marks as seen) an EventNotification
+  eventNotificationDismiss(input: EventNotificationEditInput): EventNotification
 }
 
 type RootQueryType {
@@ -914,8 +923,7 @@ type RootQueryType {
   questionCondition(questionConditionId: String!): QuestionCondition
 
   # Event notifications for a user
-  eventNotificationsForUser(
-    userId: String!,
+  eventNotificationsForCurrentUser(
     pageNumber: Int,
     pageSize: Int,
     taskEventNotificationsOnly: Boolean

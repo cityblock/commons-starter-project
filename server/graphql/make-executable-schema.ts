@@ -18,7 +18,9 @@ import {
 } from './care-team-resolver';
 import { clinicCreate, resolveClinic, resolveClinics } from './clinic-resolver';
 import {
-  resolveEventNotificationsForTask, resolveEventNotificationsForUser,
+  eventNotificationDismiss,
+  resolveEventNotificationsForCurrentUser,
+  resolveEventNotificationsForTask,
 } from './event-notification-resolver';
 import { resolvePatientEncounters } from './patient-encounters-resolver';
 import { resolvePatientMedications } from './patient-medications-resolver';
@@ -106,7 +108,7 @@ const resolveFunctions = {
     answer: resolveAnswer,
     answersForQuestion: resolveAnswersForQuestion,
     questionCondition: resolveQuestionCondition,
-    eventNotificationsForUser: resolveEventNotificationsForUser,
+    eventNotificationsForCurrentUser: resolveEventNotificationsForCurrentUser,
     eventNotificationsForTask: resolveEventNotificationsForTask,
   },
   RootMutationType: {
@@ -144,6 +146,7 @@ const resolveFunctions = {
     riskAreaEdit,
     riskAreaCreate,
     riskAreaDelete,
+    eventNotificationDismiss,
   },
 };
 

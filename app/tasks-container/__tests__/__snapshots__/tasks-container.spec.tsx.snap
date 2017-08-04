@@ -33,6 +33,18 @@ exports[`renders tasks container 1`] = `
       >
         Calendar
       </a>
+      <a
+        className=""
+        href="/notifications/tasks"
+        onClick={[Function]}
+      >
+        <span>
+          Notifications
+        </span>
+        <div
+          className=""
+        />
+      </a>
     </div>
     <div
       className=""

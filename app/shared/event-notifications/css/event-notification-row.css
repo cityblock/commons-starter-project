@@ -1,0 +1,59 @@
+@import '../../css/sizes';
+.container {
+  background: white;
+  padding: 12px 15px;
+  display: flex;
+  justify-content: space-between;
+  flex-direction: row;
+  align-items: center;
+  border-radius: 5px;
+  border: 1px solid #fff;
+  color: var(--black-color);
+  margin: 0 10px 10px 10px;
+}
+
+.container:last-child {
+  margin-bottom: 0px;
+}
+
+.title {
+  font-weight: var(--roboto-medium-weight);
+}
+
+.titleLink, .titleLink:hover {
+  color: var(--black-color);
+}
+
+.meta {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.dateSection {
+  padding: 0 0 0 15px;
+}
+
+.dateValue {
+  font-family: var(--roboto);
+  font-size: var(--extra-small-font-size);
+  line-height: var(--extra-small-font-line-height);
+  color: var(--black-color)
+}
+
+.dismissButton {
+  height: 12px;
+  width: 12px;
+  margin-left: 10px;
+  margin-top: 3px;
+  background-image: url('../../../assets/close-grey.svg');
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center center;
+
+  &:hover {
+    opacity: 0.8;
+    cursor: pointer;
+  }
+}

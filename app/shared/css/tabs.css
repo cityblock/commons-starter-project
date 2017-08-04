@@ -26,10 +26,29 @@
   }
 }
 
+.relativeTab {
+  position: relative;
+}
+
 .pane {
   display: none;
 
   &.selectedPane {
     display: block;
   }
+}
+
+.notificationBadge {
+  display: none;
+  position: absolute;
+  top: -6px;
+  left: -8px;
+  height: 10px;
+  width: 10px;
+  border-radius: 50%;
+  background-color: var(--red-color);
+}
+
+.notificationBadge.visible {
+  display: block;
 }

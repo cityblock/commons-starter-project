@@ -1,0 +1,23 @@
+#import "../fragments/full-event-notification.graphql"
+
+query getEventNotificationsForCurrentUser(
+  $pageNumber: Int,
+  $pageSize: Int,
+  $taskEventNotificationsOnly: Boolean,
+) {
+  eventNotificationsForCurrentUser(
+    pageNumber: $pageNumber
+    pageSize: $pageSize
+    taskEventNotificationsOnly: $taskEventNotificationsOnly
+ ) {
+    edges {
+      node {
+        ...FullEventNotification
+      }
+    }
+    pageInfo {
+      hasPreviousPage
+      hasNextPage
+    }
+  }
+}

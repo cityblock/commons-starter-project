@@ -1,0 +1,25 @@
+#import "./full-user.graphql"
+#import "./full-task-event.graphql"
+#import "./full-task.graphql"
+
+fragment FullEventNotification on EventNotification {
+  id
+  title
+  userId
+  user {
+    ...FullUser
+  }
+  taskEventId
+  taskEvent {
+    ...FullTaskEvent
+  }
+  task {
+    ...FullTask
+  }
+  seenAt
+  emailSentAt
+  deliveredAt
+  createdAt
+  updatedAt
+  deletedAt
+}

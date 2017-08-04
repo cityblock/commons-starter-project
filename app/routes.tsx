@@ -2,6 +2,9 @@ import * as React from 'react';
 import { Redirect, Route, Switch } from 'react-router-dom';
 import AdminContainer from './admin-container/admin-container';
 import Authentication from './authentication-container/authentication-container';
+/* tslint:disable:max-line-length */
+import EventNotificationsContainer from './event-notifications-container/event-notifications-container';
+/* tslint:enable:max-line-length */
 import LogIn from './login-container/login-container';
 import Main from './main-container/main-container';
 /* tslint:disable:max-line-length */
@@ -26,6 +29,10 @@ export default (
     <Switch>
       <Route exact path='/' component={(LogIn as any)} />
       <Authentication>
+        <Route
+          exact
+          path='/notifications/:eventNotificationType?'
+          component={(EventNotificationsContainer as any)} />
         <Route exact path='/tasks/:taskId?' component={(TasksContainer as any)} />
         <Route exact path='/settings' component={(SettingsContainer as any)} />
         <Route exact path='/patient-intake' component={(PatientEnrollmentContainer as any)} />

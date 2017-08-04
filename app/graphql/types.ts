@@ -30,6 +30,23 @@ export type UserRole =
   "admin";
 
 
+export type TaskEventTypes =
+  "create_task" |
+  "add_follower" |
+  "remove_follower" |
+  "complete_task" |
+  "uncomplete_task" |
+  "delete_task" |
+  "add_comment" |
+  "edit_comment" |
+  "delete_comment" |
+  "edit_priority" |
+  "edit_due_date" |
+  "edit_assignee" |
+  "edit_title" |
+  "edit_description";
+
+
 export type TaskOrderOptions =
   "createdAtDesc" |
   "createdAtAsc" |
@@ -195,6 +212,162 @@ export type currentUserEditMutation = {
   } | null,
 };
 
+export type eventNotificationDismissMutationVariables = {
+  eventNotificationId: string,
+};
+
+export type eventNotificationDismissMutation = {
+  // Dismisses (marks as seen) an EventNotification
+  eventNotificationDismiss:  {
+    id: string,
+    title: string | null,
+    userId: string,
+    user:  {
+      id: string,
+      locale: string | null,
+      firstName: string | null,
+      lastName: string | null,
+      userRole: UserRole,
+      email: string | null,
+      homeClinicId: string,
+      googleProfileImageUrl: string | null,
+    },
+    taskEventId: string | null,
+    taskEvent:  {
+      id: string,
+      taskId: string,
+      task:  {
+        id: string,
+        title: string,
+        description: string | null,
+        createdAt: string | null,
+        updatedAt: string | null,
+        completedAt: string | null,
+        deletedAt: string | null,
+        dueAt: string | null,
+        patientId: string,
+        priority: string | null,
+        patient:  {
+          id: string,
+          firstName: string | null,
+          middleName: string | null,
+          lastName: string | null,
+        } | null,
+        assignedTo:  {
+          id: string,
+          firstName: string | null,
+          lastName: string | null,
+          googleProfileImageUrl: string | null,
+          userRole: UserRole,
+        } | null,
+        followers:  Array< {
+          id: string,
+          firstName: string | null,
+          lastName: string | null,
+          googleProfileImageUrl: string | null,
+          userRole: UserRole,
+        } > | null,
+        createdBy:  {
+          id: string,
+          firstName: string | null,
+          lastName: string | null,
+          googleProfileImageUrl: string | null,
+          userRole: UserRole,
+        } | null,
+      },
+      userId: string,
+      user:  {
+        id: string,
+        locale: string | null,
+        firstName: string | null,
+        lastName: string | null,
+        userRole: UserRole,
+        email: string | null,
+        homeClinicId: string,
+        googleProfileImageUrl: string | null,
+      },
+      eventType: TaskEventTypes | null,
+      eventCommentId: string | null,
+      eventComment:  {
+        id: string,
+        body: string,
+        user:  {
+          id: string,
+          locale: string | null,
+          firstName: string | null,
+          lastName: string | null,
+          userRole: UserRole,
+          email: string | null,
+          homeClinicId: string,
+          googleProfileImageUrl: string | null,
+        },
+        taskId: string,
+        createdAt: string | null,
+        updatedAt: string | null,
+      } | null,
+      eventUserId: string | null,
+      eventUser:  {
+        id: string,
+        locale: string | null,
+        firstName: string | null,
+        lastName: string | null,
+        userRole: UserRole,
+        email: string | null,
+        homeClinicId: string,
+        googleProfileImageUrl: string | null,
+      } | null,
+      createdAt: string,
+      updatedAt: string,
+      deletedAt: string | null,
+    } | null,
+    task:  {
+      id: string,
+      title: string,
+      description: string | null,
+      createdAt: string | null,
+      updatedAt: string | null,
+      completedAt: string | null,
+      deletedAt: string | null,
+      dueAt: string | null,
+      patientId: string,
+      priority: string | null,
+      patient:  {
+        id: string,
+        firstName: string | null,
+        middleName: string | null,
+        lastName: string | null,
+      } | null,
+      assignedTo:  {
+        id: string,
+        firstName: string | null,
+        lastName: string | null,
+        googleProfileImageUrl: string | null,
+        userRole: UserRole,
+      } | null,
+      followers:  Array< {
+        id: string,
+        firstName: string | null,
+        lastName: string | null,
+        googleProfileImageUrl: string | null,
+        userRole: UserRole,
+      } > | null,
+      createdBy:  {
+        id: string,
+        firstName: string | null,
+        lastName: string | null,
+        googleProfileImageUrl: string | null,
+        userRole: UserRole,
+      } | null,
+    } | null,
+    seenAt: string | null,
+    emailSentAt: string | null,
+    deliveredAt: string | null,
+    createdAt: string,
+    updatedAt: string,
+    deletedAt: string | null,
+  } | null,
+};
+
 export type getAnswerQueryVariables = {
   answerId: string,
 };
@@ -225,6 +398,172 @@ export type getCurrentUserQuery = {
     email: string | null,
     homeClinicId: string,
     googleProfileImageUrl: string | null,
+  } | null,
+};
+
+export type getEventNotificationsForCurrentUserQueryVariables = {
+  pageNumber?: number | null,
+  pageSize?: number | null,
+  taskEventNotificationsOnly?: boolean | null,
+};
+
+export type getEventNotificationsForCurrentUserQuery = {
+  // Event notifications for a user
+  eventNotificationsForCurrentUser:  {
+    edges:  Array< {
+      node:  {
+        id: string,
+        title: string | null,
+        userId: string,
+        user:  {
+          id: string,
+          locale: string | null,
+          firstName: string | null,
+          lastName: string | null,
+          userRole: UserRole,
+          email: string | null,
+          homeClinicId: string,
+          googleProfileImageUrl: string | null,
+        },
+        taskEventId: string | null,
+        taskEvent:  {
+          id: string,
+          taskId: string,
+          task:  {
+            id: string,
+            title: string,
+            description: string | null,
+            createdAt: string | null,
+            updatedAt: string | null,
+            completedAt: string | null,
+            deletedAt: string | null,
+            dueAt: string | null,
+            patientId: string,
+            priority: string | null,
+            patient:  {
+              id: string,
+              firstName: string | null,
+              middleName: string | null,
+              lastName: string | null,
+            } | null,
+            assignedTo:  {
+              id: string,
+              firstName: string | null,
+              lastName: string | null,
+              googleProfileImageUrl: string | null,
+              userRole: UserRole,
+            } | null,
+            followers:  Array< {
+              id: string,
+              firstName: string | null,
+              lastName: string | null,
+              googleProfileImageUrl: string | null,
+              userRole: UserRole,
+            } > | null,
+            createdBy:  {
+              id: string,
+              firstName: string | null,
+              lastName: string | null,
+              googleProfileImageUrl: string | null,
+              userRole: UserRole,
+            } | null,
+          },
+          userId: string,
+          user:  {
+            id: string,
+            locale: string | null,
+            firstName: string | null,
+            lastName: string | null,
+            userRole: UserRole,
+            email: string | null,
+            homeClinicId: string,
+            googleProfileImageUrl: string | null,
+          },
+          eventType: TaskEventTypes | null,
+          eventCommentId: string | null,
+          eventComment:  {
+            id: string,
+            body: string,
+            user:  {
+              id: string,
+              locale: string | null,
+              firstName: string | null,
+              lastName: string | null,
+              userRole: UserRole,
+              email: string | null,
+              homeClinicId: string,
+              googleProfileImageUrl: string | null,
+            },
+            taskId: string,
+            createdAt: string | null,
+            updatedAt: string | null,
+          } | null,
+          eventUserId: string | null,
+          eventUser:  {
+            id: string,
+            locale: string | null,
+            firstName: string | null,
+            lastName: string | null,
+            userRole: UserRole,
+            email: string | null,
+            homeClinicId: string,
+            googleProfileImageUrl: string | null,
+          } | null,
+          createdAt: string,
+          updatedAt: string,
+          deletedAt: string | null,
+        } | null,
+        task:  {
+          id: string,
+          title: string,
+          description: string | null,
+          createdAt: string | null,
+          updatedAt: string | null,
+          completedAt: string | null,
+          deletedAt: string | null,
+          dueAt: string | null,
+          patientId: string,
+          priority: string | null,
+          patient:  {
+            id: string,
+            firstName: string | null,
+            middleName: string | null,
+            lastName: string | null,
+          } | null,
+          assignedTo:  {
+            id: string,
+            firstName: string | null,
+            lastName: string | null,
+            googleProfileImageUrl: string | null,
+            userRole: UserRole,
+          } | null,
+          followers:  Array< {
+            id: string,
+            firstName: string | null,
+            lastName: string | null,
+            googleProfileImageUrl: string | null,
+            userRole: UserRole,
+          } > | null,
+          createdBy:  {
+            id: string,
+            firstName: string | null,
+            lastName: string | null,
+            googleProfileImageUrl: string | null,
+            userRole: UserRole,
+          } | null,
+        } | null,
+        seenAt: string | null,
+        emailSentAt: string | null,
+        deliveredAt: string | null,
+        createdAt: string,
+        updatedAt: string,
+        deletedAt: string | null,
+      } | null,
+    } | null > | null,
+    pageInfo:  {
+      hasPreviousPage: boolean,
+      hasNextPage: boolean,
+    },
   } | null,
 };
 
@@ -363,13 +702,6 @@ export type getPatientTasksQuery = {
           googleProfileImageUrl: string | null,
           userRole: UserRole,
         } | null,
-        createdBy:  {
-          id: string,
-          firstName: string | null,
-          lastName: string | null,
-          googleProfileImageUrl: string | null,
-          userRole: UserRole,
-        } | null,
         followers:  Array< {
           id: string,
           firstName: string | null,
@@ -377,6 +709,13 @@ export type getPatientTasksQuery = {
           googleProfileImageUrl: string | null,
           userRole: UserRole,
         } > | null,
+        createdBy:  {
+          id: string,
+          firstName: string | null,
+          lastName: string | null,
+          googleProfileImageUrl: string | null,
+          userRole: UserRole,
+        } | null,
       } | null,
     } | null > | null,
     pageInfo:  {
@@ -614,13 +953,6 @@ export type getTaskQuery = {
       googleProfileImageUrl: string | null,
       userRole: UserRole,
     } | null,
-    createdBy:  {
-      id: string,
-      firstName: string | null,
-      lastName: string | null,
-      googleProfileImageUrl: string | null,
-      userRole: UserRole,
-    } | null,
     followers:  Array< {
       id: string,
       firstName: string | null,
@@ -628,6 +960,13 @@ export type getTaskQuery = {
       googleProfileImageUrl: string | null,
       userRole: UserRole,
     } > | null,
+    createdBy:  {
+      id: string,
+      firstName: string | null,
+      lastName: string | null,
+      googleProfileImageUrl: string | null,
+      userRole: UserRole,
+    } | null,
   } | null,
 };
 
@@ -764,19 +1103,6 @@ export type patientSetupMutation = {
   } | null,
 };
 
-export type questionConditionDeleteMutationVariables = {
-  questionConditionId: string,
-};
-
-export type questionConditionDeleteMutation = {
-  // Deletes a QuestionCondition
-  questionConditionDelete:  {
-    id: string,
-    questionId: string,
-    answerId: string,
-  } | null,
-};
-
 export type questionConditionCreateMutationVariables = {
   answerId: string,
   questionId: string,
@@ -785,6 +1111,19 @@ export type questionConditionCreateMutationVariables = {
 export type questionConditionCreateMutation = {
   // Create a QuestionCondition
   questionConditionCreate:  {
+    id: string,
+    questionId: string,
+    answerId: string,
+  } | null,
+};
+
+export type questionConditionDeleteMutationVariables = {
+  questionConditionId: string,
+};
+
+export type questionConditionDeleteMutation = {
+  // Deletes a QuestionCondition
+  questionConditionDelete:  {
     id: string,
     questionId: string,
     answerId: string,
@@ -1055,13 +1394,6 @@ export type taskCompleteMutation = {
       googleProfileImageUrl: string | null,
       userRole: UserRole,
     } | null,
-    createdBy:  {
-      id: string,
-      firstName: string | null,
-      lastName: string | null,
-      googleProfileImageUrl: string | null,
-      userRole: UserRole,
-    } | null,
     followers:  Array< {
       id: string,
       firstName: string | null,
@@ -1069,6 +1401,13 @@ export type taskCompleteMutation = {
       googleProfileImageUrl: string | null,
       userRole: UserRole,
     } > | null,
+    createdBy:  {
+      id: string,
+      firstName: string | null,
+      lastName: string | null,
+      googleProfileImageUrl: string | null,
+      userRole: UserRole,
+    } | null,
   } | null,
 };
 
@@ -1106,13 +1445,6 @@ export type taskCreateMutation = {
       googleProfileImageUrl: string | null,
       userRole: UserRole,
     } | null,
-    createdBy:  {
-      id: string,
-      firstName: string | null,
-      lastName: string | null,
-      googleProfileImageUrl: string | null,
-      userRole: UserRole,
-    } | null,
     followers:  Array< {
       id: string,
       firstName: string | null,
@@ -1120,6 +1452,13 @@ export type taskCreateMutation = {
       googleProfileImageUrl: string | null,
       userRole: UserRole,
     } > | null,
+    createdBy:  {
+      id: string,
+      firstName: string | null,
+      lastName: string | null,
+      googleProfileImageUrl: string | null,
+      userRole: UserRole,
+    } | null,
   } | null,
 };
 
@@ -1153,13 +1492,6 @@ export type taskDeleteMutation = {
       googleProfileImageUrl: string | null,
       userRole: UserRole,
     } | null,
-    createdBy:  {
-      id: string,
-      firstName: string | null,
-      lastName: string | null,
-      googleProfileImageUrl: string | null,
-      userRole: UserRole,
-    } | null,
     followers:  Array< {
       id: string,
       firstName: string | null,
@@ -1167,6 +1499,13 @@ export type taskDeleteMutation = {
       googleProfileImageUrl: string | null,
       userRole: UserRole,
     } > | null,
+    createdBy:  {
+      id: string,
+      firstName: string | null,
+      lastName: string | null,
+      googleProfileImageUrl: string | null,
+      userRole: UserRole,
+    } | null,
   } | null,
 };
 
@@ -1205,13 +1544,6 @@ export type taskEditMutation = {
       googleProfileImageUrl: string | null,
       userRole: UserRole,
     } | null,
-    createdBy:  {
-      id: string,
-      firstName: string | null,
-      lastName: string | null,
-      googleProfileImageUrl: string | null,
-      userRole: UserRole,
-    } | null,
     followers:  Array< {
       id: string,
       firstName: string | null,
@@ -1219,6 +1551,13 @@ export type taskEditMutation = {
       googleProfileImageUrl: string | null,
       userRole: UserRole,
     } > | null,
+    createdBy:  {
+      id: string,
+      firstName: string | null,
+      lastName: string | null,
+      googleProfileImageUrl: string | null,
+      userRole: UserRole,
+    } | null,
   } | null,
 };
 
@@ -1252,13 +1591,6 @@ export type taskUncompleteMutation = {
       googleProfileImageUrl: string | null,
       userRole: UserRole,
     } | null,
-    createdBy:  {
-      id: string,
-      firstName: string | null,
-      lastName: string | null,
-      googleProfileImageUrl: string | null,
-      userRole: UserRole,
-    } | null,
     followers:  Array< {
       id: string,
       firstName: string | null,
@@ -1266,6 +1598,13 @@ export type taskUncompleteMutation = {
       googleProfileImageUrl: string | null,
       userRole: UserRole,
     } > | null,
+    createdBy:  {
+      id: string,
+      firstName: string | null,
+      lastName: string | null,
+      googleProfileImageUrl: string | null,
+      userRole: UserRole,
+    } | null,
   } | null,
 };
 
@@ -1300,13 +1639,6 @@ export type taskUserFollowMutation = {
       googleProfileImageUrl: string | null,
       userRole: UserRole,
     } | null,
-    createdBy:  {
-      id: string,
-      firstName: string | null,
-      lastName: string | null,
-      googleProfileImageUrl: string | null,
-      userRole: UserRole,
-    } | null,
     followers:  Array< {
       id: string,
       firstName: string | null,
@@ -1314,6 +1646,13 @@ export type taskUserFollowMutation = {
       googleProfileImageUrl: string | null,
       userRole: UserRole,
     } > | null,
+    createdBy:  {
+      id: string,
+      firstName: string | null,
+      lastName: string | null,
+      googleProfileImageUrl: string | null,
+      userRole: UserRole,
+    } | null,
   } | null,
 };
 
@@ -1351,13 +1690,6 @@ export type getTasksForCurrentUserQuery = {
           googleProfileImageUrl: string | null,
           userRole: UserRole,
         } | null,
-        createdBy:  {
-          id: string,
-          firstName: string | null,
-          lastName: string | null,
-          googleProfileImageUrl: string | null,
-          userRole: UserRole,
-        } | null,
         followers:  Array< {
           id: string,
           firstName: string | null,
@@ -1365,6 +1697,13 @@ export type getTasksForCurrentUserQuery = {
           googleProfileImageUrl: string | null,
           userRole: UserRole,
         } > | null,
+        createdBy:  {
+          id: string,
+          firstName: string | null,
+          lastName: string | null,
+          googleProfileImageUrl: string | null,
+          userRole: UserRole,
+        } | null,
       } | null,
     } | null > | null,
     pageInfo:  {
@@ -1404,6 +1743,155 @@ export type FullAppointmentFragment = {
 export type FullClinicFragment = {
   id: string,
   name: string,
+};
+
+export type FullEventNotificationFragment = {
+  id: string,
+  title: string | null,
+  userId: string,
+  user:  {
+    id: string,
+    locale: string | null,
+    firstName: string | null,
+    lastName: string | null,
+    userRole: UserRole,
+    email: string | null,
+    homeClinicId: string,
+    googleProfileImageUrl: string | null,
+  },
+  taskEventId: string | null,
+  taskEvent:  {
+    id: string,
+    taskId: string,
+    task:  {
+      id: string,
+      title: string,
+      description: string | null,
+      createdAt: string | null,
+      updatedAt: string | null,
+      completedAt: string | null,
+      deletedAt: string | null,
+      dueAt: string | null,
+      patientId: string,
+      priority: string | null,
+      patient:  {
+        id: string,
+        firstName: string | null,
+        middleName: string | null,
+        lastName: string | null,
+      } | null,
+      assignedTo:  {
+        id: string,
+        firstName: string | null,
+        lastName: string | null,
+        googleProfileImageUrl: string | null,
+        userRole: UserRole,
+      } | null,
+      followers:  Array< {
+        id: string,
+        firstName: string | null,
+        lastName: string | null,
+        googleProfileImageUrl: string | null,
+        userRole: UserRole,
+      } > | null,
+      createdBy:  {
+        id: string,
+        firstName: string | null,
+        lastName: string | null,
+        googleProfileImageUrl: string | null,
+        userRole: UserRole,
+      } | null,
+    },
+    userId: string,
+    user:  {
+      id: string,
+      locale: string | null,
+      firstName: string | null,
+      lastName: string | null,
+      userRole: UserRole,
+      email: string | null,
+      homeClinicId: string,
+      googleProfileImageUrl: string | null,
+    },
+    eventType: TaskEventTypes | null,
+    eventCommentId: string | null,
+    eventComment:  {
+      id: string,
+      body: string,
+      user:  {
+        id: string,
+        locale: string | null,
+        firstName: string | null,
+        lastName: string | null,
+        userRole: UserRole,
+        email: string | null,
+        homeClinicId: string,
+        googleProfileImageUrl: string | null,
+      },
+      taskId: string,
+      createdAt: string | null,
+      updatedAt: string | null,
+    } | null,
+    eventUserId: string | null,
+    eventUser:  {
+      id: string,
+      locale: string | null,
+      firstName: string | null,
+      lastName: string | null,
+      userRole: UserRole,
+      email: string | null,
+      homeClinicId: string,
+      googleProfileImageUrl: string | null,
+    } | null,
+    createdAt: string,
+    updatedAt: string,
+    deletedAt: string | null,
+  } | null,
+  task:  {
+    id: string,
+    title: string,
+    description: string | null,
+    createdAt: string | null,
+    updatedAt: string | null,
+    completedAt: string | null,
+    deletedAt: string | null,
+    dueAt: string | null,
+    patientId: string,
+    priority: string | null,
+    patient:  {
+      id: string,
+      firstName: string | null,
+      middleName: string | null,
+      lastName: string | null,
+    } | null,
+    assignedTo:  {
+      id: string,
+      firstName: string | null,
+      lastName: string | null,
+      googleProfileImageUrl: string | null,
+      userRole: UserRole,
+    } | null,
+    followers:  Array< {
+      id: string,
+      firstName: string | null,
+      lastName: string | null,
+      googleProfileImageUrl: string | null,
+      userRole: UserRole,
+    } > | null,
+    createdBy:  {
+      id: string,
+      firstName: string | null,
+      lastName: string | null,
+      googleProfileImageUrl: string | null,
+      userRole: UserRole,
+    } | null,
+  } | null,
+  seenAt: string | null,
+  emailSentAt: string | null,
+  deliveredAt: string | null,
+  createdAt: string,
+  updatedAt: string,
+  deletedAt: string | null,
 };
 
 export type FullPatientEncounterFragment = {
@@ -1514,6 +2002,94 @@ export type FullTaskCommentFragment = {
   updatedAt: string | null,
 };
 
+export type FullTaskEventFragment = {
+  id: string,
+  taskId: string,
+  task:  {
+    id: string,
+    title: string,
+    description: string | null,
+    createdAt: string | null,
+    updatedAt: string | null,
+    completedAt: string | null,
+    deletedAt: string | null,
+    dueAt: string | null,
+    patientId: string,
+    priority: string | null,
+    patient:  {
+      id: string,
+      firstName: string | null,
+      middleName: string | null,
+      lastName: string | null,
+    } | null,
+    assignedTo:  {
+      id: string,
+      firstName: string | null,
+      lastName: string | null,
+      googleProfileImageUrl: string | null,
+      userRole: UserRole,
+    } | null,
+    followers:  Array< {
+      id: string,
+      firstName: string | null,
+      lastName: string | null,
+      googleProfileImageUrl: string | null,
+      userRole: UserRole,
+    } > | null,
+    createdBy:  {
+      id: string,
+      firstName: string | null,
+      lastName: string | null,
+      googleProfileImageUrl: string | null,
+      userRole: UserRole,
+    } | null,
+  },
+  userId: string,
+  user:  {
+    id: string,
+    locale: string | null,
+    firstName: string | null,
+    lastName: string | null,
+    userRole: UserRole,
+    email: string | null,
+    homeClinicId: string,
+    googleProfileImageUrl: string | null,
+  },
+  eventType: TaskEventTypes | null,
+  eventCommentId: string | null,
+  eventComment:  {
+    id: string,
+    body: string,
+    user:  {
+      id: string,
+      locale: string | null,
+      firstName: string | null,
+      lastName: string | null,
+      userRole: UserRole,
+      email: string | null,
+      homeClinicId: string,
+      googleProfileImageUrl: string | null,
+    },
+    taskId: string,
+    createdAt: string | null,
+    updatedAt: string | null,
+  } | null,
+  eventUserId: string | null,
+  eventUser:  {
+    id: string,
+    locale: string | null,
+    firstName: string | null,
+    lastName: string | null,
+    userRole: UserRole,
+    email: string | null,
+    homeClinicId: string,
+    googleProfileImageUrl: string | null,
+  } | null,
+  createdAt: string,
+  updatedAt: string,
+  deletedAt: string | null,
+};
+
 export type FullTaskFragment = {
   id: string,
   title: string,
@@ -1538,13 +2114,6 @@ export type FullTaskFragment = {
     googleProfileImageUrl: string | null,
     userRole: UserRole,
   } | null,
-  createdBy:  {
-    id: string,
-    firstName: string | null,
-    lastName: string | null,
-    googleProfileImageUrl: string | null,
-    userRole: UserRole,
-  } | null,
   followers:  Array< {
     id: string,
     firstName: string | null,
@@ -1552,6 +2121,13 @@ export type FullTaskFragment = {
     googleProfileImageUrl: string | null,
     userRole: UserRole,
   } > | null,
+  createdBy:  {
+    id: string,
+    firstName: string | null,
+    lastName: string | null,
+    googleProfileImageUrl: string | null,
+    userRole: UserRole,
+  } | null,
 };
 
 export type FullUserFragment = {

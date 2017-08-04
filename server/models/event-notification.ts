@@ -6,6 +6,10 @@ import Task from './task';
 import TaskEvent from './task-event';
 import User from './user';
 
+export interface IEventNotificationEditableFields {
+  seenAt?: string;
+}
+
 export interface IEventNotificationOptions {
   userId: string;
   taskEventId?: string;
@@ -17,7 +21,11 @@ export interface ICreateTaskNotificationsOptions {
   taskId: string;
 }
 
-const EAGER_QUERY = '[task, taskEvent, user]';
+/* tslint:disable:max-line-length */
+// TODO: figure out why the [relation.^] style doesn't work to eager load the whole tree recursively
+const EAGER_QUERY =
+  '[task.[patient, assignedTo, createdBy, followers], taskEvent.[task, user, eventComment.[user], eventUser], user]';
+/* tslint:enable:max-line-length */
 
 /* tslint:disable:member-ordering */
 export default class EventNotification extends Model {
@@ -128,11 +136,13 @@ export default class EventNotification extends Model {
     }
     const userIdsToNotify = uniq(interestedUserIds).filter(userId => userId !== initiatingUserId);
 
-    await Promise.all(userIdsToNotify.map(async userId => EventNotification.create({
-      taskEventId, userId,
-    }, txn)));
+    const batchQueries = userIdsToNotify.map(userId => ({ taskEventId, userId }));
 
-    return userIdsToNotify.length;
+    const result = await this
+      .query(txn)
+      .insertGraph(batchQueries);
+
+    return result.length;
   }
 
   static async delete(eventNotificationId: string): Promise<EventNotification> {
@@ -142,6 +152,15 @@ export default class EventNotification extends Model {
       });
   }
 
+  static async update(
+    eventNotificationId: string, eventNotification: Partial<IEventNotificationEditableFields>,
+  ): Promise<EventNotification> {
+    return await this
+      .query()
+      .eager(EAGER_QUERY)
+      .updateAndFetchById(eventNotificationId, eventNotification);
+  }
+
   // Fetch all event notifications for a user
   static async getUserEventNotifications(
     userId: string,
@@ -149,7 +168,7 @@ export default class EventNotification extends Model {
   ): Promise<IPaginatedResults<EventNotification>> {
     const eventNotifications = await this
       .query()
-      .where({ userId, deletedAt: null })
+      .where({ userId, deletedAt: null, seenAt: null })
       .eager(EAGER_QUERY)
       .orderBy('createdAt', 'desc')
       .page(pageNumber, pageSize) as any;
@@ -168,7 +187,7 @@ export default class EventNotification extends Model {
     const eventNotifications = await this
       .query()
       .whereNot({ taskEventId: null })
-      .andWhere({ userId, deletedAt: null })
+      .andWhere({ userId, deletedAt: null, seenAt: null })
       .eager(EAGER_QUERY)
       .orderBy('createdAt', 'desc')
       .page(pageNumber, pageSize) as any;
@@ -187,6 +206,7 @@ export default class EventNotification extends Model {
       .query()
       .joinRelation('task')
       .where('event_notification.deletedAt', null)
+      .andWhere('event_notification.seenAt', null)
       .andWhere('task.id', taskId)
       .eager(EAGER_QUERY)
       .orderBy('event_notification.createdAt', 'desc')

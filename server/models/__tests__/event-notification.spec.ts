@@ -242,4 +242,16 @@ describe('task event model', () => {
     const deletedNotification = await EventNotification.delete(eventNotification.id);
     expect(deletedNotification.deletedAt).not.toBeNull();
   });
+
+  it('updates a notification', async () => {
+    const eventNotification = await EventNotification.create({ userId: user.id });
+
+    expect(eventNotification.seenAt).toBeUndefined();
+
+    await EventNotification.update(eventNotification.id, { seenAt: new Date().toISOString() });
+    const fetchedNotification = await EventNotification.get(eventNotification.id);
+
+    expect(fetchedNotification.seenAt).not.toBeUndefined();
+    expect(fetchedNotification.seenAt).not.toBeNull();
+  });
 });

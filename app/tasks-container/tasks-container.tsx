@@ -12,6 +12,7 @@ import { getTasksForCurrentUserQuery } from '../graphql/types';
 import * as tabStyles from '../shared/css/tabs.css';
 import Tasks, { IPageParams } from '../shared/tasks';
 import { fetchMoreTasks } from '../shared/util/fetch-more-tasks';
+import { IState as IAppState } from '../store';
 import * as styles from './css/tasks-container.css';
 
 export interface IProps {
@@ -21,6 +22,7 @@ export interface IProps {
   tasksResponse?: getTasksForCurrentUserQuery['tasksForCurrentUser'];
   fetchMoreTasks: () => any;
   updatePageParams: (pageParams: IPageParams) => any;
+  notificationsCount: number;
 }
 
 class TasksContainer extends React.Component<IProps> {
@@ -30,7 +32,7 @@ class TasksContainer extends React.Component<IProps> {
   }
 
   render() {
-    const { tasksResponse } = this.props;
+    const { tasksResponse, notificationsCount } = this.props;
 
     const tasks = tasksResponse && tasksResponse.edges
       ? tasksResponse.edges.map((edge: any) => edge.node) : [];
@@ -42,6 +44,11 @@ class TasksContainer extends React.Component<IProps> {
 
     const calendarTabStyles = tabStyles.tab;
     const calendarPaneStyles = tabStyles.pane;
+
+    const notificationsTabStyles = classNames(tabStyles.tab, tabStyles.relativeTab);
+    const notificationsBadgeStyles = classNames(tabStyles.notificationBadge, {
+      [tabStyles.visible]: notificationsCount > 0,
+    });
     return (
       <div className={styles.container}>
         <div className={styles.leftPane}>
@@ -56,7 +63,7 @@ class TasksContainer extends React.Component<IProps> {
               {(message: string) =>
                 <Link
                   className={tasksTabStyles}
-                  to={`/tasks`}>
+                  to={'/tasks'}>
                   {message}
                 </Link>}
             </FormattedMessage>
@@ -64,10 +71,16 @@ class TasksContainer extends React.Component<IProps> {
               {(message: string) =>
                 <Link
                   className={calendarTabStyles}
-                  to={`/calendar`}>
+                  to={'/calendar'}>
                   {message}
                 </Link>}
             </FormattedMessage>
+            <Link className={notificationsTabStyles} to={'/notifications/tasks'}>
+              <FormattedMessage id='tasks.notifications'>
+                {(message: string) => <span>{message}</span> }
+              </FormattedMessage>
+              <div className={notificationsBadgeStyles} />
+            </Link>
           </div>
           <div className={tasksPaneStyles}>
             <Tasks
@@ -87,6 +100,12 @@ class TasksContainer extends React.Component<IProps> {
       </div>
     );
   }
+}
+
+function mapStateToProps(state: IAppState, ownProps: IProps): Partial<IProps> {
+  return {
+    notificationsCount: state.eventNotifications.count,
+  };
 }
 
 function mapDispatchToProps(dispatch: Dispatch<() => void>): Partial<IProps> {
@@ -109,7 +128,7 @@ const getPageParams = (props: IProps) => {
 
 export default compose(
   injectIntl,
-  connect(undefined, mapDispatchToProps),
+  connect(mapStateToProps, mapDispatchToProps),
   graphql(tasksQuery as any, {
     options: (props: IProps) => ({ variables: getPageParams(props) }),
     props: ({ data, ownProps }) => ({

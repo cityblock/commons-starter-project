@@ -43,7 +43,7 @@ declare module 'schema' {
     answer: IAnswer | null;
     answersForQuestion: Array<IAnswer>;
     questionCondition: IQuestionCondition | null;
-    eventNotificationsForUser: IEventNotificationEdges | null;
+    eventNotificationsForCurrentUser: IEventNotificationEdges | null;
     eventNotificationsForTask: IEventNotificationEdges | null;
   }
 
@@ -489,6 +489,7 @@ declare module 'schema' {
   */
   interface IEventNotification {
     id: string;
+    title: string | null;
     userId: string;
     user: IUser;
     taskEventId: string | null;
@@ -564,6 +565,7 @@ declare module 'schema' {
     questionConditionCreate: IQuestionCondition | null;
     questionConditionEdit: IQuestionCondition | null;
     questionConditionDelete: IQuestionCondition | null;
+    eventNotificationDismiss: IEventNotification | null;
   }
 
   /*
@@ -919,5 +921,12 @@ declare module 'schema' {
   */
   interface IQuestionConditionDeleteInput {
     questionConditionId: string;
+  }
+
+  /*
+    description: EventNotification edit input
+  */
+  interface IEventNotificationEditInput {
+    eventNotificationId: string;
   }
 }

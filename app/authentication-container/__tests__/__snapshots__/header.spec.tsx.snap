@@ -46,7 +46,7 @@ exports[`renders header 1`] = `
         </div>
       </a>
       <a
-        className={undefined}
+        className=""
         href="/tasks"
         onClick={[Function]}
       >
@@ -58,6 +58,9 @@ exports[`renders header 1`] = `
         >
           Tasks
         </div>
+        <div
+          className=""
+        />
       </a>
     </div>
     <div

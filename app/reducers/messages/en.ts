@@ -96,8 +96,12 @@ export const ENGLISH_TRANSLATION = {
     'tasks.listView': 'Tasks',
     'tasks.createTask': 'Create a new task',
     'tasks.calendar': 'Calendar',
+    'tasks.notifications': 'Notifications',
     'tasks.noTasks': 'No Tasks',
     'task.due': 'Due',
     'task.opened': 'Opened',
+    'notifications.leftPane': 'Left Pane',
+    'notifications.noNotifications': 'No Notifications',
+    'notification.time': 'Time',
   },
 };

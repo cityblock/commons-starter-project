@@ -1,0 +1,105 @@
+@import '../../css/sizes';
+.container {
+  background: var(--white-font-color);
+}
+
+.bottomContainer {
+  padding: var(--medium-gutter) var(--small-gutter);
+  height: calc(100vh - 160px);
+  overflow-y: hidden;
+}
+
+.eventNotificationsList {
+  display: inline-block;
+  height: calc(100vh - 223px);
+  overflow-y: scroll;
+  -webkit-overflow-scrolling: touch;
+  width: 100%;
+  transition: width 0.3s ease-out;
+}
+
+.eventNotificationsList.emptyEventNotificationsList {
+  width: 100%;
+  &:hover {
+    cursor: default;
+  }
+}
+
+.emptyEventNotificationsMessage {
+  border: 1px dashed var(--border-color);
+  border-radius: 4px;
+  padding: 24px 40px 21px;
+  margin: 5px var(--gutter) 0;
+}
+
+.emptyEventNotificationsLogo {
+  background-image: url('../../../assets/generic-health-icon-grey.svg');
+  background-position: center center;
+  background-repeat: no-repeat;
+  height: 18px;
+  width: 18px;
+  margin: 0 auto 13px;
+}
+
+.emptyEventNotificationsLabel {
+  margin: 0 auto;
+  text-align: center;
+  color: var(--light-gray-font-color);
+  font-family: var(--basetica-medium);
+  font-size: var(--medium-font-size);
+  line-height: var(--medium-font-line-height);
+}
+
+.eventNotificationsError {
+  margin: 50px var(--gutter) 0;
+}
+
+.eventNotificationsErrorIcon {
+  background-image: url('../../../assets/error-circle.svg');
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-size: contain;
+  height: 20px;
+  width: 20px;
+  margin: 0 auto 13px;
+}
+
+.eventNotificationsErrorLabel {
+  color: var(--default-font-color);
+  font-family: var(--basetica-black);
+  font-size: var(--small-font-size);
+  line-height: var(--small-font-line-height);
+  text-align: center;
+  margin: 0 auto 10px;
+}
+
+.eventNotificationsErrorSubheading {
+  color: var(--gray-font-color);
+  font-family: var(--roboto);
+  font-size: var(--small-font-size);
+  line-height: var(--small-font-line-height);
+  text-align: center;
+  margin: 0 auto var(--medium-gutter);
+  padding: 0 var(--small-gutter);
+}
+
+.eventNotificationsErrorButton {
+  @apply --inverted-button;
+  width: 94px;
+  height: 32px;
+  margin: 0 auto;
+  padding: 9px 0 0 0;
+  text-align: center;
+  font-size: var(--small-font-size);
+  line-height: var(--small-font-line-height);
+}
+
+.eventNotificationsLoading {
+  margin: 0 auto;
+  text-align: center;
+  color: var(--light-gray-font-color);
+  font-family: var(--basetica-medium);
+  font-size: var(--medium-font-size);
+  line-height: var(--medium-font-line-height);
+  padding-top: var(--medium-gutter);
+}

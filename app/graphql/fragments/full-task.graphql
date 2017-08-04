@@ -22,12 +22,6 @@ fragment FullTask on Task {
     googleProfileImageUrl
     userRole
   }
-  createdBy {
-    id
-    firstName
-    lastName
-    googleProfileImageUrl
-  }
   followers {
     id
     firstName

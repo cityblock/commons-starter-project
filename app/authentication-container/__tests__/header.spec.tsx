@@ -9,6 +9,7 @@ import ReduxConnectedIntlProvider from '../../redux-connected-intl-provider';
 import Header from '../header';
 
 const locale = { messages: ENGLISH_TRANSLATION.messages };
+const eventNotifications = { count: 0 };
 const mockStore = configureMockStore([]);
 
 it('renders header', () => {
@@ -24,10 +25,13 @@ it('renders header', () => {
   };
   const history = createMemoryHistory();
   const tree = create(
-    <MockedProvider mocks={[]} store={mockStore({ locale })}>
+    <MockedProvider mocks={[]} store={mockStore({ locale, eventNotifications })}>
       <ReduxConnectedIntlProvider>
         <ConnectedRouter history={history}>
-          <Header currentUser={currentUser} />
+          <Header
+            currentUser={currentUser}
+            notificationsCount={0}
+            updateNotificationsCount={(count: any) => true} />
         </ConnectedRouter>
       </ReduxConnectedIntlProvider>
     </MockedProvider>,

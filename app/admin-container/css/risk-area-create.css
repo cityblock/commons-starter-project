@@ -1,6 +1,14 @@
 @import '../../shared/css/sizes';
 .container {}
 
+.borderContainer {
+  border: 1px solid var(--light-gray-font-color);
+  padding: var(--small-gutter);
+  width: 100%;
+  border-radius: 5px;
+  margin: var(--small-gutter) 0px;
+}
+
 .loading {
   position: fixed;
   width: 100vw;
@@ -24,7 +32,7 @@
 }
 
 .formBottom {
-  margin: 20px;
+  margin-top: 10px;
 }
 
 .formBottomContent {
@@ -42,11 +50,20 @@
   margin: 0px 20px;
 }
 
+.inlineInputGroup {
+  display: inline-block;
+  vertical-align: top;
+  width: 45%;
+  &:nth-child(odd) {
+    margin-right: 10%
+  }
+}
+
 .inputGroup {
   border-bottom: 1px solid var(--white-font-color);
 }
 
-.inputGroup input, .inputGroup textarea {
+.inputGroup input, .inputGroup textarea, .inputGroup select {
   margin-bottom: 10px;
 }
 
@@ -85,4 +102,10 @@
 
 .formCenter {
   padding: 10px 20px 0px;
+}
+
+.radioGroup {
+  max-width: 100%;
+  flex-basis: 53%;
+  margin-bottom: 20px;
 }

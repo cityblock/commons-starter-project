@@ -303,6 +303,7 @@ class Question extends React.Component<IProps, IState> {
               </div>
             </div>
             <div className={styles.itemBody}>
+              <div className={styles.smallText}>Title:</div>
               <div
                 ref={div => { this.titleBody = div; }}
                 className={titleTextStyles}
@@ -318,6 +319,7 @@ class Question extends React.Component<IProps, IState> {
                   onKeyDown={this.onKeyDown}
                   onBlur={this.onBlur} />
               </div>
+              <div className={styles.smallText}>Order:</div>
               <div
                 ref={div => { this.orderBody = div; }}
                 onClick={this.onClickToEditOrder}
@@ -334,41 +336,42 @@ class Question extends React.Component<IProps, IState> {
                   onKeyDown={this.onKeyDown}
                   onBlur={this.onBlur} />
               </div>
-            </div>
-            <div className={styles.itemBody}>
-              <div>Applicable if type</div>
-              <select
-                name='applicableIfType'
-                value={question.applicableIfType || ''}
-                onChange={this.onSelectChange}
-                className={formStyles.select}>
-                <option value='allTrue'>all true</option>
-                <option value='oneTrue'>one true</option>
-              </select>
-              <div>Answer type</div>
+              <br />
+              <div className={styles.borderTop}>
+                <div className={styles.smallText}>Answer display:</div>
+              </div>
               <select required
                 name='answerType'
                 value={question.answerType}
                 onChange={this.onSelectChange}
-                className={formStyles.select}>
+                className={classNames(formStyles.select, formStyles.inputSmall)}>
                 <option value='dropdown'>dropdown</option>
                 <option value='radio'>radio</option>
                 <option value='freetext'>freetext</option>
                 <option value='multiselect'>multiselect</option>
               </select>
-            </div>
-            <div className={styles.itemBody}>
-              Answers
+              <br />
+              <div className={styles.smallText}>Answers:</div>
               <div>
                 {answers}
               </div>
+              <div className={styles.smallText}>Create answer:</div>
               <AnswerCreateEdit questionId={question.id} />
+              <div className={styles.smallText}>Applicable if type:</div>
+              <select
+                name='applicableIfType'
+                value={question.applicableIfType || ''}
+                onChange={this.onSelectChange}
+                className={classNames(formStyles.select, formStyles.inputSmall)}>
+                <option value='allTrue'>all true</option>
+                <option value='oneTrue'>one true</option>
+              </select>
+              <QuestionConditions
+                title={'Applicable if conditions'}
+                answers={question.answers}
+                questionConditions={question.applicableIfQuestionConditions}
+                questionId={question.id} />
             </div>
-            <QuestionConditions
-              title={'Applicable if conditions'}
-              answers={question.answers}
-              questionConditions={question.applicableIfQuestionConditions}
-              questionId={question.id} />
           </div>
         </div>
       );

@@ -85,6 +85,11 @@ exports[`renders risk area 1`] = `
       className={undefined}
     >
       <div
+        className={undefined}
+      >
+        Title:
+      </div>
+      <div
         className=""
         onClick={[Function]}
       >
@@ -100,6 +105,11 @@ exports[`renders risk area 1`] = `
           onKeyDown={[Function]}
           value=""
         />
+      </div>
+      <div
+        className={undefined}
+      >
+        Order:
       </div>
       <div
         className=""

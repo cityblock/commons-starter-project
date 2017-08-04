@@ -20,6 +20,20 @@ exports[`risk area row renders risk area row 1`] = `
       <span
         className={undefined}
       >
+        Order:
+      </span>
+      <span
+        className={undefined}
+      >
+        1
+      </span>
+    </div>
+    <div
+      className=""
+    >
+      <span
+        className={undefined}
+      >
         Created:
       </span>
       <span

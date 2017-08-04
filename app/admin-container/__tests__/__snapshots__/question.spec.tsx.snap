@@ -115,6 +115,11 @@ exports[`renders question 1`] = `
       className={undefined}
     >
       <div
+        className={undefined}
+      >
+        Title:
+      </div>
+      <div
         className=""
         onClick={[Function]}
       >
@@ -130,6 +135,11 @@ exports[`renders question 1`] = `
           onKeyDown={[Function]}
           value=""
         />
+      </div>
+      <div
+        className={undefined}
+      >
+        Order:
       </div>
       <div
         className=""
@@ -149,35 +159,18 @@ exports[`renders question 1`] = `
           value={1}
         />
       </div>
-    </div>
-    <div
-      className={undefined}
-    >
-      <div>
-        Applicable if type
-      </div>
-      <select
+      <br />
+      <div
         className={undefined}
-        name="applicableIfType"
-        onChange={[Function]}
-        value=""
       >
-        <option
-          value="allTrue"
+        <div
+          className={undefined}
         >
-          all true
-        </option>
-        <option
-          value="oneTrue"
-        >
-          one true
-        </option>
-      </select>
-      <div>
-        Answer type
+          Answer display:
+        </div>
       </div>
       <select
-        className={undefined}
+        className=""
         name="answerType"
         onChange={[Function]}
         required={true}
@@ -204,66 +197,54 @@ exports[`renders question 1`] = `
           multiselect
         </option>
       </select>
-    </div>
-    <div
-      className={undefined}
-    >
-      Answers
+      <br />
+      <div
+        className={undefined}
+      >
+        Answers:
+      </div>
       <div>
-        <div
+        <form
           className={undefined}
+          onSubmit={[Function]}
         >
-          <form
+          <div
             className={undefined}
-            onSubmit={[Function]}
           >
             <div
               className={undefined}
             >
               <div
                 className={undefined}
-              >
-                <div
-                  className={undefined}
-                >
-                  <div
-                    className={undefined}
-                  />
-                </div>
-              </div>
+              />
+            </div>
+          </div>
+          <div
+            className={undefined}
+          >
+            <div
+              className={undefined}
+            >
+              Answer ID: 
+              answer-id
+            </div>
+            <br />
+            <div
+              className={undefined}
+            >
               <div
                 className={undefined}
               >
-                <input
-                  className={undefined}
-                  name="displayValue"
-                  onChange={[Function]}
-                  placeholder="Enter answer display value"
-                  value="answer value"
-                />
-                <input
-                  className={undefined}
-                  name="value"
-                  onChange={[Function]}
-                  placeholder="Enter answer value"
-                  value="true"
-                />
-                <input
-                  className={undefined}
-                  name="order"
-                  onChange={[Function]}
-                  placeholder="Enter answer order"
-                  type="number"
-                  value={1}
-                />
-                <input
-                  className={undefined}
-                  name="summaryText"
-                  onChange={[Function]}
-                  placeholder="Enter summary text"
-                  value="summary text"
-                />
+                Order:
               </div>
+              <input
+                className=""
+                name="order"
+                onChange={[Function]}
+                placeholder="Enter answer order"
+                type="number"
+                value={1}
+              />
             </div>
             <div
               className={undefined}
@@ -271,68 +252,40 @@ exports[`renders question 1`] = `
               <div
                 className={undefined}
               >
-                <div
-                  className={undefined}
-                >
-                  <div
-                    className={undefined}
-                  >
-                    in summary?
-                  </div>
-                </div>
-                <div
-                  className={undefined}
-                >
-                  <div
-                    className={undefined}
-                  >
-                    <div
-                      className={undefined}
-                    >
-                      <input
-                        checked={true}
-                        className={undefined}
-                        name="inSummary"
-                        onChange={[Function]}
-                        type="radio"
-                        value="true"
-                      />
-                      <label />
-                    </div>
-                    <span
-                      className={undefined}
-                    >
-                      In summary
-                    </span>
-                  </div>
-                  <div
-                    className={undefined}
-                  >
-                    <div
-                      className={undefined}
-                    >
-                      <input
-                        checked={false}
-                        className={undefined}
-                        name="inSummary"
-                        onChange={[Function]}
-                        type="radio"
-                        value="false"
-                      />
-                      <label />
-                    </div>
-                    <span
-                      className={undefined}
-                    >
-                      not in summary
-                    </span>
-                  </div>
-                </div>
+                Display Value:
               </div>
+              <input
+                className=""
+                name="displayValue"
+                onChange={[Function]}
+                placeholder="Enter answer display value"
+                value="answer value"
+              />
             </div>
             <div
               className={undefined}
             >
+              <div
+                className={undefined}
+              >
+                Backend Value:
+              </div>
+              <input
+                className=""
+                name="value"
+                onChange={[Function]}
+                placeholder="Enter answer value"
+                value="true"
+              />
+            </div>
+            <div
+              className={undefined}
+            >
+              <div
+                className={undefined}
+              >
+                Backend value type:
+              </div>
               <select
                 className=""
                 name="valueType"
@@ -362,6 +315,15 @@ exports[`renders question 1`] = `
                   number
                 </option>
               </select>
+            </div>
+            <div
+              className={undefined}
+            >
+              <div
+                className={undefined}
+              >
+                Risk adjustment type:
+              </div>
               <select
                 className=""
                 name="riskAdjustmentType"
@@ -394,74 +356,16 @@ exports[`renders question 1`] = `
               <div
                 className={undefined}
               >
-                <input
-                  className={undefined}
-                  type="submit"
-                  value="Save"
-                />
+                Summary Text:
               </div>
-            </div>
-          </form>
-        </div>
-      </div>
-      <div
-        className={undefined}
-      >
-        <form
-          className={undefined}
-          onSubmit={[Function]}
-        >
-          <div
-            className={undefined}
-          >
-            <div
-              className={undefined}
-            >
-              <div
-                className={undefined}
-              >
-                <div
-                  className={undefined}
-                />
-              </div>
-            </div>
-            <div
-              className={undefined}
-            >
               <input
-                className={undefined}
-                name="displayValue"
-                onChange={[Function]}
-                placeholder="Enter answer display value"
-                value="edit me!"
-              />
-              <input
-                className={undefined}
-                name="value"
-                onChange={[Function]}
-                placeholder="Enter answer value"
-                value="true"
-              />
-              <input
-                className={undefined}
-                name="order"
-                onChange={[Function]}
-                placeholder="Enter answer order"
-                type="number"
-                value={1}
-              />
-              <input
-                className={undefined}
+                className=""
                 name="summaryText"
                 onChange={[Function]}
                 placeholder="Enter summary text"
-                value=""
+                value="summary text"
               />
             </div>
-          </div>
-          <div
-            className={undefined}
-          >
             <div
               className={undefined}
             >
@@ -471,34 +375,12 @@ exports[`renders question 1`] = `
                 <div
                   className={undefined}
                 >
-                  in summary?
+                  Display in summary?
                 </div>
               </div>
               <div
-                className={undefined}
+                className=""
               >
-                <div
-                  className={undefined}
-                >
-                  <div
-                    className={undefined}
-                  >
-                    <input
-                      checked={false}
-                      className={undefined}
-                      name="inSummary"
-                      onChange={[Function]}
-                      type="radio"
-                      value="true"
-                    />
-                    <label />
-                  </div>
-                  <span
-                    className={undefined}
-                  >
-                    In summary
-                  </span>
-                </div>
                 <div
                   className={undefined}
                 >
@@ -511,6 +393,28 @@ exports[`renders question 1`] = `
                       name="inSummary"
                       onChange={[Function]}
                       type="radio"
+                      value="true"
+                    />
+                    <label />
+                  </div>
+                  <span
+                    className={undefined}
+                  >
+                    Yes
+                  </span>
+                </div>
+                <div
+                  className={undefined}
+                >
+                  <div
+                    className={undefined}
+                  >
+                    <input
+                      checked={false}
+                      className={undefined}
+                      name="inSummary"
+                      onChange={[Function]}
+                      type="radio"
                       value="false"
                     />
                     <label />
@@ -518,7 +422,7 @@ exports[`renders question 1`] = `
                   <span
                     className={undefined}
                   >
-                    not in summary
+                    No
                   </span>
                 </div>
               </div>
@@ -527,6 +431,104 @@ exports[`renders question 1`] = `
           <div
             className={undefined}
           >
+            <div
+              className={undefined}
+            >
+              <input
+                className={undefined}
+                type="submit"
+                value="Save"
+              />
+            </div>
+          </div>
+        </form>
+      </div>
+      <div
+        className={undefined}
+      >
+        Create answer:
+      </div>
+      <form
+        className={undefined}
+        onSubmit={[Function]}
+      >
+        <div
+          className={undefined}
+        >
+          <div
+            className={undefined}
+          >
+            <div
+              className={undefined}
+            />
+          </div>
+        </div>
+        <div
+          className={undefined}
+        >
+          <div
+            className={undefined}
+          >
+            New Answer!
+          </div>
+          <br />
+          <div
+            className={undefined}
+          >
+            <div
+              className={undefined}
+            >
+              Order:
+            </div>
+            <input
+              className=""
+              name="order"
+              onChange={[Function]}
+              placeholder="Enter answer order"
+              type="number"
+              value={1}
+            />
+          </div>
+          <div
+            className={undefined}
+          >
+            <div
+              className={undefined}
+            >
+              Display Value:
+            </div>
+            <input
+              className=""
+              name="displayValue"
+              onChange={[Function]}
+              placeholder="Enter answer display value"
+              value="edit me!"
+            />
+          </div>
+          <div
+            className={undefined}
+          >
+            <div
+              className={undefined}
+            >
+              Backend Value:
+            </div>
+            <input
+              className=""
+              name="value"
+              onChange={[Function]}
+              placeholder="Enter answer value"
+              value="true"
+            />
+          </div>
+          <div
+            className={undefined}
+          >
+            <div
+              className={undefined}
+            >
+              Backend value type:
+            </div>
             <select
               className=""
               name="valueType"
@@ -556,6 +558,15 @@ exports[`renders question 1`] = `
                 number
               </option>
             </select>
+          </div>
+          <div
+            className={undefined}
+          >
+            <div
+              className={undefined}
+            >
+              Risk adjustment type:
+            </div>
             <select
               className=""
               name="riskAdjustmentType"
@@ -588,51 +599,16 @@ exports[`renders question 1`] = `
             <div
               className={undefined}
             >
-              <input
-                className={undefined}
-                type="submit"
-                value="Add answer"
-              />
+              Summary Text:
             </div>
+            <input
+              className=""
+              name="summaryText"
+              onChange={[Function]}
+              placeholder="Enter summary text"
+              value=""
+            />
           </div>
-        </form>
-      </div>
-    </div>
-    <div
-      className={undefined}
-    >
-      <div
-        className={undefined}
-      >
-        Applicable if conditions
-      </div>
-      <div
-        className={undefined}
-      >
-        <div
-          className={undefined}
-        >
-          answer-id
-        </div>
-        <div
-          onClick={[Function]}
-        >
-          delete
-        </div>
-      </div>
-      <div
-        className={undefined}
-      >
-        Create 
-        Applicable if conditions
-      </div>
-      <div
-        className={undefined}
-      >
-        <form
-          className={undefined}
-          onSubmit={[Function]}
-        >
           <div
             className={undefined}
           >
@@ -642,49 +618,183 @@ exports[`renders question 1`] = `
               <div
                 className={undefined}
               >
+                Display in summary?
+              </div>
+            </div>
+            <div
+              className=""
+            >
+              <div
+                className={undefined}
+              >
                 <div
                   className={undefined}
-                />
+                >
+                  <input
+                    checked={false}
+                    className={undefined}
+                    name="inSummary"
+                    onChange={[Function]}
+                    type="radio"
+                    value="true"
+                  />
+                  <label />
+                </div>
+                <span
+                  className={undefined}
+                >
+                  Yes
+                </span>
+              </div>
+              <div
+                className={undefined}
+              >
+                <div
+                  className={undefined}
+                >
+                  <input
+                    checked={true}
+                    className={undefined}
+                    name="inSummary"
+                    onChange={[Function]}
+                    type="radio"
+                    value="false"
+                  />
+                  <label />
+                </div>
+                <span
+                  className={undefined}
+                >
+                  No
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div
+          className={undefined}
+        >
+          <div
+            className={undefined}
+          >
+            <input
+              className={undefined}
+              type="submit"
+              value="Add answer"
+            />
+          </div>
+        </div>
+      </form>
+      <div
+        className={undefined}
+      >
+        Applicable if type:
+      </div>
+      <select
+        className=""
+        name="applicableIfType"
+        onChange={[Function]}
+        value=""
+      >
+        <option
+          value="allTrue"
+        >
+          all true
+        </option>
+        <option
+          value="oneTrue"
+        >
+          one true
+        </option>
+      </select>
+      <div
+        className={undefined}
+      >
+        <div
+          className={undefined}
+        >
+          Applicable if conditions
+        </div>
+        <div
+          className={undefined}
+        >
+          <div
+            className={undefined}
+          >
+            answer-id
+          </div>
+          <div
+            onClick={[Function]}
+          >
+            delete
+          </div>
+        </div>
+        <div
+          className={undefined}
+        >
+          Create 
+          Applicable if conditions
+        </div>
+        <div
+          className={undefined}
+        >
+          <form
+            className={undefined}
+            onSubmit={[Function]}
+          >
+            <div
+              className={undefined}
+            >
+              <div
+                className={undefined}
+              >
+                <div
+                  className={undefined}
+                >
+                  <div
+                    className={undefined}
+                  />
+                </div>
+              </div>
+              <div
+                className={undefined}
+              >
+                <select
+                  className=""
+                  name="answerId"
+                  onChange={[Function]}
+                  value="undefined"
+                >
+                  <option
+                    disabled={true}
+                    hidden={true}
+                    value=""
+                  >
+                    Select Answer
+                  </option>
+                  <option
+                    value="answer-id"
+                  >
+                    answer value
+                  </option>
+                </select>
               </div>
             </div>
             <div
               className={undefined}
             >
-              <select
-                className=""
-                name="answerId"
-                onChange={[Function]}
-                value="undefined"
-              >
-                <option
-                  disabled={true}
-                  hidden={true}
-                  value=""
-                >
-                  Select Answer
-                </option>
-                <option
-                  value="answer-id"
-                >
-                  answer value
-                </option>
-              </select>
-            </div>
-          </div>
-          <div
-            className={undefined}
-          >
-            <div
-              className={undefined}
-            >
-              <input
+              <div
                 className={undefined}
-                type="submit"
-                value="Add question condition"
-              />
+              >
+                <input
+                  className={undefined}
+                  type="submit"
+                  value="Add question condition"
+                />
+              </div>
             </div>
-          </div>
-        </form>
+          </form>
+        </div>
       </div>
     </div>
   </div>

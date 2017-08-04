@@ -272,6 +272,7 @@ class RiskArea extends React.Component<IProps, IState> {
               </div>
             </div>
             <div className={styles.itemBody}>
+              <div className={styles.smallText}>Title:</div>
               <div
                 ref={div => { this.titleBody = div; }}
                 className={titleTextStyles}
@@ -287,6 +288,7 @@ class RiskArea extends React.Component<IProps, IState> {
                   onKeyDown={this.onKeyDown}
                   onBlur={this.onBlur} />
               </div>
+              <div className={styles.smallText}>Order:</div>
               <div
                 ref={div => { this.orderBody = div; }}
                 onClick={this.onClickToEditOrder}

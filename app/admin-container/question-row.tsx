@@ -25,7 +25,11 @@ export const QuestionRow: React.StatelessComponent<IProps> = props => {
     <Link className={questionClass} to={`${routeBase}/${question.id}`}>
       <div className={styles.title}>{question.title}</div>
       <div className={styles.meta}>
-        <div className={classNames(questionsStyles.dateSection, questionsStyles.openedAt)}>
+        <div className={classNames(questionsStyles.dateSection, questionsStyles.orderSection)}>
+          <span className={styles.dateLabel}>Order:</span>
+          <span className={styles.dateValue}>{question.order}</span>
+        </div>
+        <div className={classNames(questionsStyles.dateSection, questionsStyles.createdAtSection)}>
           <span className={styles.dateLabel}>Created:</span>
           {formattedCreatedAt}
         </div>

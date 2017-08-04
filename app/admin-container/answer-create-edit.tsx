@@ -113,111 +113,126 @@ class AnswerCreateEdit extends React.Component<IProps, IState> {
     const { loading, answer } = this.state;
     const loadingClass = loading ? styles.loading : styles.loadingHidden;
     const createEditText = this.props.answer ? 'Save' : 'Add answer';
+    const answerId = this.props.answer ?
+      (<div className={answerStyles.smallText}>Answer ID: {this.props.answer.id}</div>) :
+      <div className={answerStyles.smallText}>New Answer!</div>;
     return (
-      <div className={answerStyles.container}>
-        <form onSubmit={this.onSubmit} className={styles.container}>
-          <div className={styles.formCenter}>
-            <div className={loadingClass}>
-              <div className={styles.loadingContainer}>
-                <div className={loadingStyles.loadingSpinner}></div>
-              </div>
-            </div>
-            <div className={styles.inputGroup}>
-              <input
-                name='displayValue'
-                value={answer.displayValue}
-                placeholder={'Enter answer display value'}
-                className={formStyles.input}
-                onChange={this.onChange} />
-              <input
-                name='value'
-                value={answer.value}
-                placeholder={'Enter answer value'}
-                className={formStyles.input}
-                onChange={this.onChange} />
-              <input
-                type='number'
-                name='order'
-                placeholder={'Enter answer order'}
-                value={answer.order}
-                className={formStyles.input}
-                onChange={this.onChange} />
-              <input
-                name='summaryText'
-                placeholder={'Enter summary text'}
-                value={answer.summaryText || ''}
-                className={formStyles.input}
-                onChange={this.onChange} />
-            </div>
+      <form onSubmit={this.onSubmit} className={styles.borderContainer}>
+        <div className={loadingClass}>
+          <div className={styles.loadingContainer}>
+            <div className={loadingStyles.loadingSpinner}></div>
           </div>
-          <div className={formStyles.radioInputFormRow}>
-            <div className={formStyles.radioGroup}>
-              <div className={formStyles.radioGroupLabel}>
-                <div className={formStyles.inputLabel}>in summary?</div>
-              </div>
-              <div className={formStyles.radioGroupOptions}>
-                <div className={formStyles.radioGroupItem}>
-                  <div className={formStyles.radioGroupContainer}>
-                    <input
-                      className={formStyles.radio}
-                      type='radio'
-                      name='inSummary'
-                      onChange={this.onChange}
-                      checked={answer.inSummary ? answer.inSummary === true : false}
-                      value='true' />
-                    <label />
-                  </div>
-                  <span className={formStyles.radioLabel}>In summary</span>
-                </div>
-                <div className={formStyles.radioGroupItem}>
-                  <div className={formStyles.radioGroupContainer}>
-                    <input
-                      className={formStyles.radio}
-                      type='radio'
-                      name='inSummary'
-                      onChange={this.onChange}
-                      checked={answer.inSummary ? false : true}
-                      value='false' />
-                    <label />
-                  </div>
-                  <span className={formStyles.radioLabel}>not in summary</span>
-                </div>
-              </div>
-            </div>
+        </div>
+        <div className={styles.inputGroup}>
+          {answerId}
+          <br />
+          <div className={styles.inlineInputGroup}>
+            <div className={answerStyles.smallText}>Order:</div>
+            <input
+              type='number'
+              name='order'
+              placeholder={'Enter answer order'}
+              value={answer.order}
+              className={classNames(formStyles.input, formStyles.inputSmall)}
+              onChange={this.onChange} />
           </div>
-          <div className={styles.flexInputGroup}>
+          <div className={styles.inlineInputGroup}>
+            <div className={answerStyles.smallText}>Display Value:</div>
+            <input
+              name='displayValue'
+              value={answer.displayValue}
+              placeholder={'Enter answer display value'}
+              className={classNames(formStyles.input, formStyles.inputSmall)}
+              onChange={this.onChange} />
+          </div>
+          <div className={styles.inlineInputGroup}>
+            <div className={answerStyles.smallText}>Backend Value:</div>
+            <input
+              name='value'
+              value={answer.value}
+              placeholder={'Enter answer value'}
+              className={classNames(formStyles.input, formStyles.inputSmall)}
+              onChange={this.onChange} />
+          </div>
+          <div className={styles.inlineInputGroup}>
+            <div className={answerStyles.smallText}>Backend value type:</div>
             <select
               name='valueType'
               value={answer.valueType || ''}
               onChange={this.onChange}
               className={
-                classNames(formStyles.select, formStyles.inputSmall, styles.flexInputItem)}>
+                classNames(formStyles.select, formStyles.inputSmall)}>
               <option value='' disabled hidden>Select Answer value type</option>
               <option value='string'>text</option>
               <option value='boolean'>true / false</option>
               <option value='number'>number</option>
             </select>
+          </div>
+          <div className={styles.inlineInputGroup}>
+            <div className={answerStyles.smallText}>Risk adjustment type:</div>
             <select required
               name='riskAdjustmentType'
               value={answer.riskAdjustmentType || ''}
               onChange={this.onChange}
               className={
-                classNames(formStyles.select, formStyles.inputSmall, styles.flexInputItem)}>
+                classNames(formStyles.select, formStyles.inputSmall)}>
               <option value='' disabled hidden>Select risk adjustment type</option>
               <option value='increment'>increment</option>
               <option value='forceHighRisk'>forceHighRisk</option>
             </select>
           </div>
-          <div className={styles.formBottom}>
-            <div className={styles.formBottomContent}>
-              <input
-                type='submit'
-                className={styles.submitButton}
-                value={createEditText} />
+          <div className={styles.inlineInputGroup}>
+            <div className={answerStyles.smallText}>Summary Text:</div>
+            <input
+              name='summaryText'
+              placeholder={'Enter summary text'}
+              value={answer.summaryText || ''}
+              className={classNames(formStyles.input, formStyles.inputSmall)}
+              onChange={this.onChange} />
+          </div>
+          <div className={formStyles.radioGroup}>
+            <div className={formStyles.radioGroupLabel}>
+              <div className={answerStyles.smallText}>Display in summary?</div>
+            </div>
+            <div className={classNames(formStyles.radioGroupOptions, styles.radioGroup)}>
+              <div className={formStyles.radioGroupItem}>
+                <div className={formStyles.radioGroupContainer}>
+                  <input
+                    className={formStyles.radio}
+                    type='radio'
+                    name='inSummary'
+                    onChange={this.onChange}
+                    checked={answer.inSummary ? answer.inSummary === true : false}
+                    value='true' />
+                  <label />
+                </div>
+                <span className={formStyles.radioLabel}>Yes</span>
+              </div>
+              <div className={formStyles.radioGroupItem}>
+                <div className={formStyles.radioGroupContainer}>
+                  <input
+                    className={formStyles.radio}
+                    type='radio'
+                    name='inSummary'
+                    onChange={this.onChange}
+                    checked={answer.inSummary ? false : true}
+                    value='false' />
+                  <label />
+                </div>
+                <span className={formStyles.radioLabel}>No</span>
+              </div>
             </div>
           </div>
-        </form>
-      </div>
+        </div>
+        <div className={styles.formBottom}>
+          <div className={styles.formBottomContent}>
+            <input
+              type='submit'
+              className={styles.submitButton}
+              value={createEditText} />
+          </div>
+        </div>
+      </form>
     );
   }
 }

@@ -25,7 +25,11 @@ export const RiskAreaRow: React.StatelessComponent<IProps> = props => {
     <Link className={riskAreaClass} to={`${routeBase}/${riskArea.id}`}>
       <div className={styles.title}>{riskArea.title}</div>
       <div className={styles.meta}>
-        <div className={classNames(riskAreasStyles.dateSection, riskAreasStyles.openedAt)}>
+        <div className={classNames(riskAreasStyles.dateSection, riskAreasStyles.orderSection)}>
+          <span className={styles.dateLabel}>Order:</span>
+          <span className={styles.dateValue}>{riskArea.order}</span>
+        </div>
+        <div className={classNames(riskAreasStyles.dateSection, riskAreasStyles.createdAtSection)}>
           <span className={styles.dateLabel}>Created:</span>
           {formattedCreatedAt}
         </div>

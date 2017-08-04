@@ -24,7 +24,6 @@ export const itemBody: string;
 export const largeText: string;
 export const title: string;
 export const largeTextEditor: string;
-export const descriptionTextEditor: string;
 export const error: string;
 export const bodyText: string;
 export const deleteConfirmation: string;

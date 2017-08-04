@@ -20,6 +20,20 @@ exports[`question row renders question row 1`] = `
       <span
         className={undefined}
       >
+        Order:
+      </span>
+      <span
+        className={undefined}
+      >
+        1
+      </span>
+    </div>
+    <div
+      className=""
+    >
+      <span
+        className={undefined}
+      >
         Created:
       </span>
       <span

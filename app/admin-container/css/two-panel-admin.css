@@ -30,19 +30,6 @@
   }
 }
 
-.itemsList.compressed {
-  width: 50%;
-}
-
-.itemsList.compressed .dateSection {
-  padding: 0 15px;
-  border-left: 1px solid var(--gray-background-color);
-}
-
-.itemsList.compressed .dateSection.openedAt {
-  display: none;
-}
-
 .itemsList.emptyList {
   width: 100%;
   &:hover {
@@ -116,4 +103,27 @@
 .createButton {
   @apply --button;
   @apply --small-button;
+}
+
+.dateSection {
+  padding: 0 15px;
+  border-left: 1px solid var(--gray-background-color);
+}
+
+.orderSection, .createdAtSection {
+  min-width: 97px;
+  text-align: right;
+}
+
+.itemsList.compressed {
+  width: 50%;
+}
+
+.itemsList.compressed .dateSection {
+  padding: 0 15px;
+  border-left: 1px solid var(--gray-background-color);
+}
+
+.itemsList.compressed .dateSection.createdAtSection {
+  display: none;
 }

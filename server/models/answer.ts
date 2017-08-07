@@ -9,8 +9,11 @@ export interface IAnswerEditableFields {
   riskAdjustmentType?: RiskAdjustmentType;
   inSummary?: boolean;
   summaryText?: string;
-  questionId: string;
   order: number;
+}
+
+export interface IAnswerCreateFields extends IAnswerEditableFields {
+  questionId: string;
 }
 
 export type ValueTypeOptions = 'string' | 'boolean' | 'number';
@@ -93,7 +96,7 @@ export default class Answer extends Model {
       .orderBy('order');
   }
 
-  static async create(input: IAnswerEditableFields) {
+  static async create(input: IAnswerCreateFields) {
     return this.query().insertAndFetch(input);
   }
 

@@ -127,7 +127,7 @@ export default class TaskEvent extends Model {
 
   static async create(
     { taskId, userId, eventType, eventCommentId, eventUserId, skipNotifsCreate }: ITaskEventOptions,
-    txn?: Transaction<any>,
+    txn?: Transaction,
   ): Promise<TaskEvent> {
     const taskEvent = await this
       .query(txn)

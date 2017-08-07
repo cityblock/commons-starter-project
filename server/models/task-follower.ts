@@ -65,7 +65,7 @@ export default class TaskFollower extends Model {
   }
 
   static async followTask(
-    { userId, taskId }: ITaskFollowerOptions, txn?: Transaction<any>,
+    { userId, taskId }: ITaskFollowerOptions, txn?: Transaction,
   ): Promise<TaskFollower> {
     const relations = await TaskFollower
       .query()
@@ -83,7 +83,7 @@ export default class TaskFollower extends Model {
   }
 
   static async unfollowTask(
-    { userId, taskId }: ITaskFollowerOptions, txn?: Transaction<any>,
+    { userId, taskId }: ITaskFollowerOptions, txn?: Transaction,
   ): Promise<number> {
     return await this.query()
       .where('userId', userId)

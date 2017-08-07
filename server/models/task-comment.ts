@@ -83,7 +83,7 @@ export default class TaskComment extends Model {
 
   static async create(
     { userId, taskId, body }: ITaskCommentOptions,
-    txn?: Transaction<any>,
+    txn?: Transaction,
   ): Promise<TaskComment> {
     return await this.query(txn)
       .eager(EAGER_QUERY)
@@ -91,14 +91,14 @@ export default class TaskComment extends Model {
   }
 
   static async update(
-    taskCommentId: string, body: string, txn?: Transaction<any>,
+    taskCommentId: string, body: string, txn?: Transaction,
   ): Promise<TaskComment> {
     return await this.query(txn)
       .eager(EAGER_QUERY)
       .updateAndFetchById(taskCommentId, { body });
   }
 
-  static async delete(taskCommentId: string, txn?: Transaction<any>): Promise<TaskComment> {
+  static async delete(taskCommentId: string, txn?: Transaction): Promise<TaskComment> {
     return await this.query(txn)
       .updateAndFetchById(taskCommentId, {
         deletedAt: new Date().toISOString(),

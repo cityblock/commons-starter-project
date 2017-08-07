@@ -141,7 +141,7 @@ export default class Task extends Model {
     this.updatedAt = new Date().toISOString();
   }
 
-  static async get(taskId: string, txn?: Transaction<any>): Promise<Task> {
+  static async get(taskId: string, txn?: Transaction): Promise<Task> {
     const task = await this
       .query(txn)
       .eager(EAGER_QUERY)
@@ -194,7 +194,7 @@ export default class Task extends Model {
     };
   }
 
-  static async create(input: ITaskEditableFields, txn?: Transaction<any>) {
+  static async create(input: ITaskEditableFields, txn?: Transaction) {
     return await this
       .query(txn)
       .eager(EAGER_QUERY)
@@ -203,7 +203,7 @@ export default class Task extends Model {
   }
 
   static async update(
-    taskId: string, task: Partial<ITaskEditableFields>, txn?: Transaction<any>,
+    taskId: string, task: Partial<ITaskEditableFields>, txn?: Transaction,
   ): Promise<Task> {
     return await this
       .query(txn)
@@ -214,14 +214,14 @@ export default class Task extends Model {
       .updateAndFetchById(taskId, task);
   }
 
-  static async delete(taskId: string, txn?: Transaction<any>): Promise<Task> {
+  static async delete(taskId: string, txn?: Transaction): Promise<Task> {
     return await this.query(txn)
       .updateAndFetchById(taskId, {
         deletedAt: new Date().toISOString(),
       });
   }
 
-  static async complete(taskId: string, userId: string, txn?: Transaction<any>): Promise<Task> {
+  static async complete(taskId: string, userId: string, txn?: Transaction): Promise<Task> {
     return this
       .query(txn)
       .eager(EAGER_QUERY)
@@ -232,7 +232,7 @@ export default class Task extends Model {
       });
   }
 
-  static async uncomplete(taskId: string, userId: string, txn?: Transaction<any>): Promise<Task> {
+  static async uncomplete(taskId: string, userId: string, txn?: Transaction): Promise<Task> {
     return this
       .query(txn)
       .eager(EAGER_QUERY)

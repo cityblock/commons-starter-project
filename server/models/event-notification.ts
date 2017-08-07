@@ -117,7 +117,7 @@ export default class EventNotification extends Model {
 
   static async create(
     { taskEventId, userId }: IEventNotificationOptions,
-    txn?: Transaction<any>,
+    txn?: Transaction,
   ): Promise<EventNotification> {
     return await this.query(txn)
       .eager(EAGER_QUERY)
@@ -126,7 +126,7 @@ export default class EventNotification extends Model {
 
   static async createTaskNotifications(
     { initiatingUserId, taskEventId, taskId }: ICreateTaskNotificationsOptions,
-    txn?: Transaction<any>,
+    txn?: Transaction,
   ) {
     const task = await Task.get(taskId, txn);
 

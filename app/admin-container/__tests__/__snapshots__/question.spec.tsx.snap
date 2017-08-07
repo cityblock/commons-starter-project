@@ -722,9 +722,7 @@ exports[`renders question 1`] = `
         >
           <div
             className={undefined}
-          >
-            loading
-          </div>
+          />
           <div
             onClick={[Function]}
           >

@@ -30,7 +30,6 @@ export interface IState {
   loading: boolean;
   error?: string;
   questionCondition: {
-    questionId: string;
     answerId: string;
   };
 }
@@ -42,16 +41,13 @@ class QuestionConditionCreate extends React.Component<IProps, IState> {
 
     this.onSubmit = this.onSubmit.bind(this);
     this.onAnswerChange = this.onAnswerChange.bind(this);
+    const questionCondition = props.questionCondition ? {
+      answerId: props.questionCondition.answerId,
+    } : { answerId: 'undefined' };
 
     this.state = {
       loading: false,
-      questionCondition: props.questionCondition ? {
-        questionId: props.questionId,
-        answerId: props.questionCondition.answerId,
-      } : {
-          questionId: props.questionId,
-          answerId: 'undefined',
-        },
+      questionCondition,
     };
   }
 
@@ -68,7 +64,7 @@ class QuestionConditionCreate extends React.Component<IProps, IState> {
       this.setState({ loading: true });
       const questionCondition = this.state.questionCondition;
       await this.props.createQuestionCondition({
-        variables: questionCondition,
+        variables: { questionId: this.props.questionId, ...questionCondition },
       });
       this.setState({ loading: false });
     } catch (e) {

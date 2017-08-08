@@ -1,8 +1,8 @@
 fragment FullRiskArea on RiskArea {
-  id,
-  createdAt,
-  updatedAt,
-  deletedAt,
-  title,
-  order,
+  id
+  createdAt
+  updatedAt
+  deletedAt
+  title
+  order
 }

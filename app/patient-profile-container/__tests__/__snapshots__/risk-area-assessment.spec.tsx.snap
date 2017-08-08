@@ -6,18 +6,21 @@ exports[`renders a risk area assessment 1`] = `
     className=""
   >
     <div
-      className={undefined}
+      className="undefined"
+      onClick={[Function]}
     >
-      <div
-        className=""
-      >
-        Cancel
-      </div>
-      <div
-        className=""
-      >
-        Save updates
-      </div>
+      Cancel
+    </div>
+    <div
+      className="undefined"
+    >
+      Save updates
+    </div>
+    <div
+      className=""
+      onClick={[Function]}
+    >
+      Start assessment
     </div>
   </div>
   <div
@@ -26,7 +29,37 @@ exports[`renders a risk area assessment 1`] = `
     <div
       className={undefined}
     >
-      Loading...
+      <div
+        className=""
+      >
+        <div
+          className={undefined}
+        >
+          <div
+            className={undefined}
+          />
+          <div
+            className={undefined}
+          >
+            Loading...
+          </div>
+        </div>
+        <div
+          className={undefined}
+        >
+          <div
+            className={undefined}
+          >
+            Last updated:
+          </div>
+          <div
+            className={undefined}
+          >
+            1 week ago
+          </div>
+        </div>
+      </div>
+      <div />
     </div>
   </div>
 </div>

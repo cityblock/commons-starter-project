@@ -384,6 +384,18 @@ type Answer implements uniqueId {
   order: Int!
 }
 
+# PatientAnswer
+type PatientAnswer implements uniqueId {
+  id: ID!
+  createdAt: String!
+  updatedAt: String!
+  deletedAt: String
+  answerId: String!
+  answerValue: String!
+  patientId: String!
+  applicable: Boolean
+}
+
 # Question
 type Question implements uniqueId {
   id: ID!
@@ -684,13 +696,28 @@ input AnswerEditInput {
   riskAdjustmentType: RiskAdjustmentTypeOptions
   inSummary: Boolean
   summaryText: String
-  questionId: String
   order: Int
   answerId: String!
 }
 
 input AnswerDeleteInput {
   answerId: String!
+}
+
+input PatientAnswerCreateInput {
+  answerId: String!
+  answerValue: String!
+  patientId: String!
+  applicable: Boolean!
+}
+
+input PatientAnswerEditInput {
+  applicable: Boolean!
+  patientAnswerId: String!
+}
+
+input PatientAnswerDeleteInput {
+  patientAnswerId: String!
 }
 
 input QuestionConditionCreateInput {
@@ -808,6 +835,15 @@ type RootMutationType {
   # Deletes an Answer
   answerDelete(input: AnswerDeleteInput): Answer
 
+  # Create an Answer
+  patientAnswerCreate(input: PatientAnswerCreateInput): PatientAnswer
+
+  # Edit an Answer
+  patientAnswerEdit(input: PatientAnswerEditInput): PatientAnswer
+
+  # Deletes an Answer
+  patientAnswerDelete(input: PatientAnswerDeleteInput): PatientAnswer
+
   # Create a QuestionCondition
   questionConditionCreate(input: QuestionConditionCreateInput): QuestionCondition
 
@@ -918,6 +954,15 @@ type RootQueryType {
 
   # Answers
   answersForQuestion(questionId: String!): [Answer]!
+
+  # PatientAnswer
+  patientAnswer(patientAnswerId: String!): PatientAnswer
+
+  # PatientAnswersForQuestion
+  patientAnswersForQuestion(questionId: String!, patientId: String!): [PatientAnswer]
+
+  # PatientPreviousAnswersForQuestion
+  patientPreviousAnswersForQuestion(questionId: String!, patientId: String!): [PatientAnswer]
 
   # QuestionCondition
   questionCondition(questionConditionId: String!): QuestionCondition

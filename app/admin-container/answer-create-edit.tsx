@@ -1,5 +1,5 @@
 import * as classNames from 'classnames';
-import { isNil, omitBy } from 'lodash';
+import { isNil, omit, omitBy } from 'lodash';
 import * as React from 'react';
 import { compose, graphql } from 'react-apollo';
 import * as answerCreateMutation from '../graphql/queries/answer-create-mutation.graphql';
@@ -104,7 +104,7 @@ class AnswerCreateEdit extends React.Component<IProps, IState> {
         await this.props.editAnswer({
           variables: {
             answerId: this.props.answer.id,
-            ...filtered,
+            ...omit(filtered, ['questionId']),
           },
         });
       } else {

@@ -16,6 +16,7 @@ export default [
           'user',
           'clinic',
           'task',
+          'patientAnswer',
           'appointment',
         ],
         permissions: [
@@ -38,6 +39,7 @@ export default [
           'user',
           'clinic',
           'task',
+          'patientAnswer',
           'appointment',
         ],
         permissions: [
@@ -83,6 +85,7 @@ export default [
           'task',
           'appointment',
           'answer',
+          'patientAnswer',
           'riskArea',
           'questionCondition',
           'question',

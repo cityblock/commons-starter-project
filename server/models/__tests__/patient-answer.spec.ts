@@ -60,11 +60,68 @@ describe('anser model', () => {
       answerId: answer.id,
       answerValue: '3',
       patientId: patient.id,
+      userId: user.id,
       applicable: true,
     });
     expect(patientAnswer.answerValue).toEqual('3');
     expect(await PatientAnswer.get(patientAnswer.id)).toEqual(patientAnswer);
-    expect(await PatientAnswer.getForQuestion(question.id)).toEqual(patientAnswer);
+    expect(await PatientAnswer.getForQuestion(question.id, patient.id)).toEqual([patientAnswer]);
+  });
+
+  it('getForQuestion retursn most recent answer for non-multiselect question', async () => {
+    await PatientAnswer.create({
+      answerId: answer.id,
+      answerValue: '3',
+      patientId: patient.id,
+      userId: user.id,
+      applicable: true,
+    });
+    const patientAnswer = await PatientAnswer.create({
+      answerId: answer.id,
+      answerValue: '2',
+      patientId: patient.id,
+      userId: user.id,
+      applicable: true,
+    });
+    expect(patientAnswer.answerValue).toEqual('2');
+    expect(await PatientAnswer.getForQuestion(question.id, patient.id)).toEqual([patientAnswer]);
+  });
+
+  it('should creates and get an answer for multiselect', async () => {
+    question = await Question.create({
+      title: 'like writing tests?',
+      answerType: 'multiselect',
+      riskAreaId: riskArea.id,
+      order: 1,
+    });
+    answer = await Answer.create({
+      displayValue: 'loves writing tests!',
+      value: '3',
+      valueType: 'number',
+      riskAdjustmentType: 'forceHighRisk',
+      inSummary: false,
+      questionId: question.id,
+      order: 1,
+    });
+    const patientAnswer = await PatientAnswer.create({
+      answerId: answer.id,
+      answerValue: '3',
+      patientId: patient.id,
+      userId: user.id,
+      applicable: true,
+    });
+    const patientAnswer2 = await PatientAnswer.create({
+      answerId: answer.id,
+      answerValue: '2',
+      patientId: patient.id,
+      userId: user.id,
+      applicable: true,
+    });
+    expect(patientAnswer.answerValue).toEqual('3');
+    expect(await PatientAnswer.get(patientAnswer.id)).toEqual(patientAnswer);
+    expect(
+      await PatientAnswer.getForQuestion(question.id, patient.id),
+    ).toEqual([patientAnswer, patientAnswer2]);
   });
 
   it('should throw an error if an answer does not exist for the id', async () => {
@@ -80,6 +137,7 @@ describe('anser model', () => {
       answerValue: '3',
       patientId: patient.id,
       applicable: true,
+      userId: user.id,
     });
     expect(patientAnswer.answerValue).toEqual('3');
     const patientAnswer2 = await PatientAnswer.create({
@@ -87,12 +145,23 @@ describe('anser model', () => {
       answerValue: '2',
       patientId: patient.id,
       applicable: true,
+      userId: user.id,
     });
     expect(patientAnswer2.answerValue).toEqual('2');
 
+    // should not include answers for another patient
+    const otherPatient = await createPatient(createMockPatient(321), user.id);
+    await PatientAnswer.create({
+      answerId: answer.id,
+      answerValue: '2',
+      patientId: otherPatient.id,
+      applicable: true,
+      userId: user.id,
+    });
+
     const updatedOldAnswer = await PatientAnswer.get(patientAnswer.id);
 
-    expect(await PatientAnswer.getPreviousAnswersForQuestion(question.id))
+    expect(await PatientAnswer.getPreviousAnswersForQuestion(question.id, patient.id))
       .toEqual([updatedOldAnswer]);
   });
 
@@ -102,6 +171,7 @@ describe('anser model', () => {
       answerValue: '3',
       patientId: patient.id,
       applicable: true,
+      userId: user.id,
     });
     const patientAnswerUpdated = await PatientAnswer.editApplicable(false, patientAnswer.id);
     expect(patientAnswerUpdated.applicable).toBeFalsy();
@@ -113,6 +183,7 @@ describe('anser model', () => {
       answerValue: '3',
       patientId: patient.id,
       applicable: true,
+      userId: user.id,
     });
     const deletedPatientAnswer = await PatientAnswer.delete(patientAnswer.id);
     expect(deletedPatientAnswer).not.toBeNull();

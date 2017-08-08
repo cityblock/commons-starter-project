@@ -14,6 +14,7 @@ export type Resource = 'patient' |
   'appointment' |
   'answer' |
   'questionCondition' |
+  'patientAnswer' |
   'riskArea' |
   'question' ;
 

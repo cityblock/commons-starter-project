@@ -42,6 +42,9 @@ declare module 'schema' {
     questionsForRiskArea: Array<IQuestion>;
     answer: IAnswer | null;
     answersForQuestion: Array<IAnswer>;
+    patientAnswer: IPatientAnswer | null;
+    patientAnswersForQuestion: Array<IPatientAnswer> | null;
+    patientPreviousAnswersForQuestion: Array<IPatientAnswer> | null;
     questionCondition: IQuestionCondition | null;
     eventNotificationsForCurrentUser: IEventNotificationEdges | null;
     eventNotificationsForTask: IEventNotificationEdges | null;
@@ -65,7 +68,7 @@ declare module 'schema' {
   /*
     description: An object with a Globally Unique ID
   */
-  type uniqueId = IUser | IPatient | IClinic | ITask | ITaskComment | IRiskArea | IQuestion | IAnswer | IQuestionCondition | IEventNotification | ITaskEvent;
+  type uniqueId = IUser | IPatient | IClinic | ITask | ITaskComment | IRiskArea | IQuestion | IAnswer | IQuestionCondition | IPatientAnswer | IEventNotification | ITaskEvent;
 
   /*
     description: An object with a Globally Unique ID
@@ -469,6 +472,20 @@ declare module 'schema' {
   type IQuestionConditionTypeOptionsEnum = 'allTrue' | 'oneTrue';
 
   /*
+    description: PatientAnswer
+  */
+  interface IPatientAnswer {
+    id: string;
+    createdAt: string;
+    updatedAt: string;
+    deletedAt: string | null;
+    answerId: string;
+    answerValue: string;
+    patientId: string;
+    applicable: boolean | null;
+  }
+
+  /*
     description: Event Notification edges
   */
   interface IEventNotificationEdges {
@@ -562,6 +579,9 @@ declare module 'schema' {
     answerCreate: IAnswer | null;
     answerEdit: IAnswer | null;
     answerDelete: IAnswer | null;
+    patientAnswerCreate: IPatientAnswer | null;
+    patientAnswerEdit: IPatientAnswer | null;
+    patientAnswerDelete: IPatientAnswer | null;
     questionConditionCreate: IQuestionCondition | null;
     questionConditionEdit: IQuestionCondition | null;
     questionConditionDelete: IQuestionCondition | null;
@@ -887,7 +907,6 @@ declare module 'schema' {
     riskAdjustmentType?: IRiskAdjustmentTypeOptionsEnum | null;
     inSummary?: boolean | null;
     summaryText?: string | null;
-    questionId?: string | null;
     order?: number | null;
     answerId: string;
   }
@@ -897,6 +916,31 @@ declare module 'schema' {
   */
   interface IAnswerDeleteInput {
     answerId: string;
+  }
+
+  /*
+    description: 
+  */
+  interface IPatientAnswerCreateInput {
+    answerId: string;
+    answerValue: string;
+    patientId: string;
+    applicable: boolean;
+  }
+
+  /*
+    description: 
+  */
+  interface IPatientAnswerEditInput {
+    applicable: boolean;
+    patientAnswerId: string;
+  }
+
+  /*
+    description: 
+  */
+  interface IPatientAnswerDeleteInput {
+    patientAnswerId: string;
   }
 
   /*

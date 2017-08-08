@@ -121,7 +121,6 @@ export type answerEditMutationVariables = {
   riskAdjustmentType?: RiskAdjustmentTypeOptions | null,
   inSummary?: boolean | null,
   summaryText?: string | null,
-  questionId?: string | null,
   order?: number | null,
 };
 

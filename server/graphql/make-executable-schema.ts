@@ -22,6 +22,14 @@ import {
   resolveEventNotificationsForCurrentUser,
   resolveEventNotificationsForTask,
 } from './event-notification-resolver';
+import {
+  patientAnswerCreate,
+  patientAnswerDelete,
+  patientAnswerEdit,
+  resolvePatientAnswer,
+  resolvePatientAnswersForQuestion,
+  resolvePreviousPatientAnswersForQuestion,
+} from './patient-answer-resolver';
 import { resolvePatientEncounters } from './patient-encounters-resolver';
 import { resolvePatientMedications } from './patient-medications-resolver';
 import {
@@ -110,6 +118,9 @@ const resolveFunctions = {
     questionCondition: resolveQuestionCondition,
     eventNotificationsForCurrentUser: resolveEventNotificationsForCurrentUser,
     eventNotificationsForTask: resolveEventNotificationsForTask,
+    patientAnswer: resolvePatientAnswer,
+    patientAnswersForQuestion: resolvePatientAnswersForQuestion,
+    patientPreviousAnswersForQuestion: resolvePreviousPatientAnswersForQuestion,
   },
   RootMutationType: {
     appointmentAddNote,
@@ -147,6 +158,9 @@ const resolveFunctions = {
     riskAreaCreate,
     riskAreaDelete,
     eventNotificationDismiss,
+    patientAnswerCreate,
+    patientAnswerDelete,
+    patientAnswerEdit,
   },
 };
 

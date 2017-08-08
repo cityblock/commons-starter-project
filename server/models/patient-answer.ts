@@ -1,12 +1,15 @@
 import { transaction, Model, RelationMappings } from 'objection';
 import * as uuid from 'uuid/v4';
 import { IPaginatedResults } from '../db';
+import Answer from './answer';
+import Question from './question';
 
 export interface IPatientAnswerCreateFields {
   answerId: string;
   answerValue: string;
   patientId: string;
   applicable: boolean;
+  userId: string;
 }
 
 /* tslint:disable:member-ordering */
@@ -15,6 +18,7 @@ export default class PatientAnswer extends Model {
   answerId: string;
   answerValue: string;
   patientId: string;
+  userId: string;
   applicable: boolean;
 
   createdAt: string;
@@ -32,6 +36,7 @@ export default class PatientAnswer extends Model {
     properties: {
       id: { type: 'string' },
       patientId: { type: 'string' },
+      userId: { type: 'string' },
       answerId: { type: 'string' },
       answerValue: { type: 'string' },
       applicable: { type: 'boolean' },
@@ -46,6 +51,15 @@ export default class PatientAnswer extends Model {
       join: {
         from: 'patient_answer.answerId',
         to: 'answer.id',
+      },
+    },
+
+    user: {
+      relation: Model.HasOneRelation,
+      modelClass: 'user',
+      join: {
+        from: 'patient_answer.userId',
+        to: 'user.id',
       },
     },
 
@@ -79,26 +93,27 @@ export default class PatientAnswer extends Model {
     return patientAnswer;
   }
 
-  static async getForQuestion(questionId: string): Promise<PatientAnswer | null> {
-    const patientAnswer = await this
+  static async getForQuestion(
+    questionId: string, patientId: string,
+  ): Promise<PatientAnswer[] | null> {
+    const patientAnswers = await this
       .query()
       .joinRelation('answer')
       .where('patient_answer.deletedAt', null)
+      .andWhere('patientId', patientId)
       .andWhere('answer.questionId', questionId);
 
-    if (patientAnswer.length > 1) {
-      return Promise.reject(`ERROR: There is more than one answer for ${questionId}`);
-    }
-    return patientAnswer[0] as PatientAnswer;
+    return patientAnswers as PatientAnswer[];
   }
 
   static async getPreviousAnswersForQuestion(
-    questionId: string, limit = 5,
+    questionId: string, patientId: string, limit = 5,
   ): Promise<PatientAnswer[]> {
     const patientAnswers: IPaginatedResults<PatientAnswer> = await this
       .query()
       .joinRelation('answer')
       .where('answer.questionId', questionId)
+      .andWhere('patientId', patientId)
       .whereNotNull('patient_answer.deletedAt')
       .orderBy('patient_answer.createdAt')
       .page(0, limit) as any;
@@ -108,13 +123,21 @@ export default class PatientAnswer extends Model {
 
   static async create(input: IPatientAnswerCreateFields): Promise<PatientAnswer> {
     return await transaction(PatientAnswer, async PatientAnswerWithTrasaction => {
-      await PatientAnswerWithTrasaction
-        .query()
-        .where('deletedAt', null)
-        .andWhere('patientId', input.patientId)
-        .andWhere('answerId', input.answerId)
-        .patch({ deletedAt: new Date().toISOString() });
-
+      /**
+       * TODO: Improve performance
+       * Goal is to mark previous answers as deleted for answers that are part of non-multiselect
+       * question. For multiselect question, the api user needs to manually delete old answers.
+       */
+      const answer = await Answer.get(input.answerId);
+      const question = await Question.get(answer.questionId);
+      if (question.answerType !== 'multiselect') {
+        await PatientAnswerWithTrasaction
+          .query()
+          .where('deletedAt', null)
+          .andWhere('patientId', input.patientId)
+          .andWhere('answerId', input.answerId)
+          .patch({ deletedAt: new Date().toISOString() });
+      }
       return await PatientAnswerWithTrasaction.query().insertAndFetch(input);
     });
   }

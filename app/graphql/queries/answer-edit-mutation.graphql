@@ -8,7 +8,6 @@ mutation answerEdit(
   $riskAdjustmentType: RiskAdjustmentTypeOptions
   $inSummary: Boolean
   $summaryText: String
-  $questionId: String
   $order: Int
 ) {
   answerEdit(input: {
@@ -19,7 +18,6 @@ mutation answerEdit(
     riskAdjustmentType: $riskAdjustmentType
     inSummary: $inSummary
     summaryText: $summaryText
-    questionId: $questionId
     order: $order
   }) {
     ...FullAnswer

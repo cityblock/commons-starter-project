@@ -8,6 +8,7 @@ export type AnswerValueTypeOptions =
 
 
 export type RiskAdjustmentTypeOptions =
+  "inactive" |
   "increment" |
   "forceHighRisk";
 

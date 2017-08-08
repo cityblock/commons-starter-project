@@ -136,6 +136,11 @@ exports[`renders answer create-edit 1`] = `
           Select risk adjustment type
         </option>
         <option
+          value="inactive"
+        >
+          inactive
+        </option>
+        <option
           value="increment"
         >
           increment

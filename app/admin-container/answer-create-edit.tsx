@@ -1,5 +1,5 @@
 import * as classNames from 'classnames';
-import { isNil, omit, omitBy } from 'lodash';
+import { clone, isNil, omit, omitBy } from 'lodash';
 import * as React from 'react';
 import { compose, graphql } from 'react-apollo';
 import * as answerCreateMutation from '../graphql/queries/answer-create-mutation.graphql';
@@ -66,15 +66,8 @@ class AnswerCreateEdit extends React.Component<IProps, IState> {
   }
 
   onFieldUpdate(updatedField: IUpdatedField) {
-    const { answer } = this.state;
+    const answer = clone(this.state.answer);
     const { fieldName, fieldValue } = updatedField;
-
-    // Don't do anything if field is null
-    if (fieldValue === '' || fieldValue === 'none') {
-      (answer as any)[fieldName] = undefined;
-    } else {
-      (answer as any)[fieldName] = fieldValue;
-    }
 
     (answer as any)[fieldName] = fieldValue;
 
@@ -187,6 +180,7 @@ class AnswerCreateEdit extends React.Component<IProps, IState> {
               className={
                 classNames(formStyles.select, formStyles.inputSmall)}>
               <option value='' disabled hidden>Select risk adjustment type</option>
+              <option value='inactive'>inactive</option>
               <option value='increment'>increment</option>
               <option value='forceHighRisk'>forceHighRisk</option>
             </select>

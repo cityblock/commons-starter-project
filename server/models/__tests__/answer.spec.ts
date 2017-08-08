@@ -39,6 +39,28 @@ describe('anser model', () => {
     expect(await Answer.get(answer.id)).toEqual(answer);
   });
 
+  it('sets default riskAdjustmentType to inactive', async () => {
+    const riskArea = await RiskArea.create({
+      title: 'testing',
+      order: 1,
+    });
+    const question = await Question.create({
+      title: 'like writing tests?',
+      answerType: 'dropdown',
+      riskAreaId: riskArea.id,
+      order: 1,
+    });
+    const answer = await Answer.create({
+      displayValue: 'loves writing tests!',
+      value: '3',
+      valueType: 'number',
+      inSummary: false,
+      questionId: question.id,
+      order: 1,
+    });
+    expect(answer.riskAdjustmentType).toEqual('inactive');
+  });
+
   it('should throw an error if an answer does not exist for the id', async () => {
     const fakeId = 'fakeId';
     await expect(Answer.get(fakeId))

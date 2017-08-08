@@ -17,7 +17,7 @@ export interface IAnswerCreateFields extends IAnswerEditableFields {
 }
 
 export type ValueTypeOptions = 'string' | 'boolean' | 'number';
-export type RiskAdjustmentType = 'increment' | 'forceHighRisk';
+export type RiskAdjustmentType = 'inactive' | 'increment' | 'forceHighRisk';
 
 /* tslint:disable:member-ordering */
 export default class Answer extends Model {
@@ -25,7 +25,7 @@ export default class Answer extends Model {
   displayValue: string;
   value: string;
   valueType: ValueTypeOptions;
-  riskAdjustmentType: RiskAdjustmentType | null;
+  riskAdjustmentType: RiskAdjustmentType;
   inSummary: boolean;
   summaryText?: string;
   question: Question;

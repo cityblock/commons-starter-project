@@ -447,7 +447,7 @@ declare module 'schema' {
   /*
     description: 
   */
-  type IRiskAdjustmentTypeOptionsEnum = 'increment' | 'forceHighRisk';
+  type IRiskAdjustmentTypeOptionsEnum = 'inactive' | 'increment' | 'forceHighRisk';
 
   /*
     description: 

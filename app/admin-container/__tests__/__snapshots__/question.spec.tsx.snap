@@ -340,6 +340,11 @@ exports[`renders question 1`] = `
                   Select risk adjustment type
                 </option>
                 <option
+                  value="inactive"
+                >
+                  inactive
+                </option>
+                <option
                   value="increment"
                 >
                   increment
@@ -581,6 +586,11 @@ exports[`renders question 1`] = `
                 value=""
               >
                 Select risk adjustment type
+              </option>
+              <option
+                value="inactive"
+              >
+                inactive
               </option>
               <option
                 value="increment"

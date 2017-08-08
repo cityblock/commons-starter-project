@@ -6,7 +6,6 @@
   "main": "index.js",
   "scripts": {
     "lint": "tslint --type-check --project tsconfig.json",
-    "server": "",
     "clean": "rimraf public server-compiled",
     "prod-db": "./scripts/prod-psql.sh",
     "start": "NODE_ENV=production nodemon --exec node ./server-compiled/index.js",
@@ -107,6 +106,7 @@
     "node": "6.10.0"
   },
   "dependencies": {
+    "@risingstack/trace": "^3.16.0",
     "@types/acl": "^0.4.33",
     "@types/base-64": "^0.1.2",
     "@types/basic-auth": "^1.1.1",

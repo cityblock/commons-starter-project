@@ -1,5 +1,8 @@
 import * as dotenv from 'dotenv';
 dotenv.config();
+/* tslint:disable no-var-requires */
+require('@risingstack/trace');
+/* tslint:enable no-var-requires */
 import * as express from 'express';
 import * as webpack from 'webpack';
 import expressConfig from './express';

@@ -9,5 +9,9 @@ module.exports = ({ production = false } = {}) => (
     typescript(),
     css({ production }),
     image(),
+    {
+      test: /\.json$/,
+      loader: 'json-loader',
+    },
   ]
 );

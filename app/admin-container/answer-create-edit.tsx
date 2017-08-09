@@ -1,11 +1,13 @@
 import * as classNames from 'classnames';
-import { clone, isNil, omit, omitBy } from 'lodash';
+import { clone, isNil, omit, omitBy, range } from 'lodash';
 import * as React from 'react';
 import { compose, graphql } from 'react-apollo';
 import * as answerCreateMutation from '../graphql/queries/answer-create-mutation.graphql';
+import * as answerDeleteMutation from '../graphql/queries/answer-delete-mutation.graphql';
 import * as answerEditMutation from '../graphql/queries/answer-edit-mutation.graphql';
 import {
   answerCreateMutationVariables,
+  answerDeleteMutationVariables,
   answerEditMutationVariables,
   FullAnswerFragment,
 } from '../graphql/types';
@@ -17,12 +19,14 @@ import * as answerStyles from './css/two-panel-right.css';
 
 export interface ICreateOptions { variables: answerCreateMutationVariables; }
 export interface IEditOptions { variables: answerEditMutationVariables; }
+export interface IDeleteOptions { variables: answerDeleteMutationVariables; }
 
 export interface IProps {
   answer?: FullAnswerFragment;
   questionId: string;
   createAnswer: (options: ICreateOptions) => { data: { answerCreate: FullAnswerFragment } };
   editAnswer: (options: IEditOptions) => { data: { answerEdit: FullAnswerFragment } };
+  deleteAnswer: (options: IDeleteOptions) => { data: { answerDelete: FullAnswerFragment } };
 }
 
 export interface IState {
@@ -39,6 +43,7 @@ class AnswerCreateEdit extends React.Component<IProps, IState> {
     this.onSubmit = this.onSubmit.bind(this);
     this.onFieldUpdate = this.onFieldUpdate.bind(this);
     this.onChange = this.onChange.bind(this);
+    this.onDeleteClick = this.onDeleteClick.bind(this);
 
     this.state = {
       loading: false,
@@ -112,13 +117,27 @@ class AnswerCreateEdit extends React.Component<IProps, IState> {
     return false;
   }
 
+  async onDeleteClick() {
+    if (this.props.answer) {
+      await this.props.deleteAnswer({
+        variables: {
+          answerId: this.props.answer.id,
+        },
+      });
+    }
+  }
+
   render() {
     const { loading, answer } = this.state;
     const loadingClass = loading ? styles.loading : styles.loadingHidden;
     const createEditText = this.props.answer ? 'Save' : 'Add answer';
+    const deleteHtml = this.props.answer ? (<div onClick={this.onDeleteClick}>delete</div>) : null;
     const answerId = this.props.answer ?
       (<div className={answerStyles.smallText}>Answer ID: {this.props.answer.id}</div>) :
-      <div className={answerStyles.smallText}>New Answer!</div>;
+      (<div className={answerStyles.smallText}>New Answer!</div>);
+    const orders = range(1, 30).map(num => (
+      <option key={`${num}-select`} value={num}>{num}</option>
+    ));
     return (
       <form onSubmit={this.onSubmit} className={answerStyles.borderContainer}>
         <div className={loadingClass}>
@@ -131,13 +150,15 @@ class AnswerCreateEdit extends React.Component<IProps, IState> {
           <br />
           <div className={styles.inlineInputGroup}>
             <div className={answerStyles.smallText}>Order:</div>
-            <input
-              type='number'
+            <select
               name='order'
-              placeholder={'Enter answer order'}
-              value={answer.order}
-              className={classNames(formStyles.input, formStyles.inputSmall)}
-              onChange={this.onChange} />
+              value={answer.order || 1}
+              onChange={this.onChange}
+              className={
+                classNames(formStyles.select, formStyles.inputSmall)}>
+              <option value='' disabled hidden>Select Answer order</option>
+              {orders}
+            </select>
           </div>
           <div className={styles.inlineInputGroup}>
             <div className={answerStyles.smallText}>Display Value:</div>
@@ -234,6 +255,7 @@ class AnswerCreateEdit extends React.Component<IProps, IState> {
               type='submit'
               className={styles.submitButton}
               value={createEditText} />
+            {deleteHtml}
           </div>
         </div>
       </form>
@@ -252,5 +274,13 @@ export default compose(
   }),
   graphql(answerEditMutation as any, {
     name: 'editAnswer',
+  }),
+  graphql(answerDeleteMutation as any, {
+    name: 'deleteAnswer',
+    options: {
+      refetchQueries: [
+        'getQuestionsForRiskArea',
+      ],
+    },
   }),
 )(AnswerCreateEdit as any) as any;

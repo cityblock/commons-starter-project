@@ -79,7 +79,7 @@ describe('answer model', () => {
       .toMatchObject([question1, question2]);
   });
 
-  it('eager loads answers', async () => {
+  it('eager loads answers ordered by...order', async () => {
     const question = await Question.create({
       title: 'testing?',
       answerType: 'dropdown',
@@ -87,6 +87,15 @@ describe('answer model', () => {
       order: 1,
     });
     const answer = await Answer.create({
+      displayValue: 'loves writing tests!',
+      value: '3',
+      valueType: 'number',
+      riskAdjustmentType: 'forceHighRisk',
+      inSummary: false,
+      questionId: question.id,
+      order: 2,
+    });
+    const answer2 = await Answer.create({
       displayValue: 'loves writing tests!',
       value: '3',
       valueType: 'number',
@@ -106,7 +115,7 @@ describe('answer model', () => {
     });
     await Answer.delete(deletedAnswer.id);
     const fetched = await Question.get(question.id);
-    expect(fetched.answers).toMatchObject([answer]);
+    expect(fetched.answers).toMatchObject([answer2, answer]);
   });
 
   it('deletes question', async () => {

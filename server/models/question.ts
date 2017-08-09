@@ -16,7 +16,7 @@ export interface IQuestionEditableFields {
 export type AnswerType = 'dropdown' | 'radio' | 'freetext' | 'multiselect';
 export type QuestionConditionType = 'allTrue' | 'oneTrue';
 
-const EAGER_QUERY = '[applicableIfQuestionConditions, answers]';
+const EAGER_QUERY = '[applicableIfQuestionConditions, answers(orderByOrder)]';
 
 /* tslint:disable:member-ordering */
 export default class Question extends Model {
@@ -87,7 +87,11 @@ export default class Question extends Model {
   static async get(questionId: string): Promise<Question> {
     const question = await this
       .query()
-      .eager(EAGER_QUERY)
+      .eager(EAGER_QUERY, {
+        orderByOrder: (builder: any) => {
+          builder.orderBy('order');
+        },
+      })
       .modifyEager(EAGER_QUERY, builder => {
         builder.where('deletedAt', null);
       })
@@ -107,7 +111,11 @@ export default class Question extends Model {
     return this
       .query()
       .where({ riskAreaId, deletedAt: null })
-      .eager(EAGER_QUERY)
+      .eager(EAGER_QUERY, {
+        orderByOrder: (builder: any) => {
+          builder.orderBy('order');
+        },
+      })
       .modifyEager(EAGER_QUERY, builder => {
         builder.where('deletedAt', null);
       })
@@ -117,7 +125,13 @@ export default class Question extends Model {
   static async edit(
     patient: Partial<IQuestionEditableFields>, questionId: string,
   ): Promise<Question> {
-    return await this.query().updateAndFetchById(questionId, patient).eager(EAGER_QUERY);
+    return await this.query()
+      .updateAndFetchById(questionId, patient)
+      .eager(EAGER_QUERY, {
+        orderByOrder: (builder: any) => {
+          builder.orderBy('order');
+        },
+      });
   }
 
   static async delete(questionId: string): Promise<Question> {

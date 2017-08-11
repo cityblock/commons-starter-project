@@ -3,30 +3,81 @@ import * as React from 'react';
 import { FullAnswerFragment, FullQuestionFragment } from '../graphql/types';
 import * as formStyles from '../shared/css/forms.css';
 import * as styles from './css/risk-areas.css';
+import RiskAreaMultiSelectAnswer from './risk-area-multi-select-answer';
 
 export interface IProps {
+  onChange: (questionId: string, answerId: string, value: string | number) => any;
   question: FullQuestionFragment;
   editable: boolean;
+  answerData: {
+    answers: Array<{
+      id: string;
+      value: string;
+    }>;
+    oldAnswers: Array<{
+      id: string;
+      value: string;
+    }>;
+    changed: boolean;
+  };
 }
 
 export default class RiskAreaQuestion extends React.Component<IProps, {}> {
   constructor(props: IProps) {
     super(props);
 
+    this.onChange = this.onChange.bind(this);
+    this.onDropdownChange = this.onDropdownChange.bind(this);
+    this.onClickMultiSelect = this.onClickMultiSelect.bind(this);
+    this.updateValue = this.updateValue.bind(this);
     this.renderSelectOption = this.renderSelectOption.bind(this);
     this.renderRadioItem = this.renderRadioItem.bind(this);
-    this.renderCheckboxItem = this.renderCheckboxItem.bind(this);
+    this.renderMultiSelectItem = this.renderMultiSelectItem.bind(this);
     this.renderAnswers = this.renderAnswers.bind(this);
+  }
+
+  onChange(value: string | number, answerId: string | null) {
+    if (answerId) {
+      this.updateValue(value, answerId);
+    }
+  }
+
+  onDropdownChange(value: string | number) {
+    const { question } = this.props;
+
+    const chosenAnswer = (question.answers || []).find(answer => answer.value === value);
+
+    if (chosenAnswer) {
+      this.onChange(value, chosenAnswer.id);
+    }
+  }
+
+  onClickMultiSelect(value: string | number, answerId: string) {
+    this.updateValue(value, answerId);
+  }
+
+  updateValue(value: string | number, answerId: string) {
+    const { question, onChange, editable } = this.props;
+
+    if (editable) {
+      onChange(question.id, answerId, value);
+    }
   }
 
   renderSelectOption(answer: FullAnswerFragment, index: number) {
     return (
-      <option key={`${answer.id}-${index}`} value={answer.value}>{answer.displayValue}</option>
+      <option key={`${answer.id}-${index}`} data-answerId={answer.id} value={answer.value}>
+        {answer.displayValue}
+      </option>
     );
   }
 
   renderRadioItem(answer: FullAnswerFragment, index: number) {
-    const { editable } = this.props;
+    const { editable, answerData } = this.props;
+    const defaultAnswerData = { answers: [], oldAnswers: [], changed: true };
+    const currentAnswer = (answerData || defaultAnswerData).answers[0];
+
+    const labelStyles = classNames(formStyles.radioLabel, styles.radioLabel);
 
     return (
       <div key={`${answer.id}-${index}`} className={styles.radioGroupItem}>
@@ -35,35 +86,45 @@ export default class RiskAreaQuestion extends React.Component<IProps, {}> {
             disabled={!editable}
             className={formStyles.radio}
             type='radio'
-            onChange={() => true}
-            checked={false}
+            onClick={event => this.onChange(answer.value, answer.id)}
+            checked={!!currentAnswer && currentAnswer.id === answer.id}
             value={answer.value} />
           <label />
         </div>
-        <span className={formStyles.radioLabel}>{answer.displayValue}</span>
+        <span className={labelStyles} onClick={() => (this.onChange(answer.value, answer.id))}>
+          {answer.displayValue}
+        </span>
       </div>
     );
   }
 
-  renderCheckboxItem(answer: FullAnswerFragment, index: number) {
-    const { editable } = this.props;
+  renderMultiSelectItem(multiSelectAnswer: FullAnswerFragment, index: number) {
+    const { editable, answerData } = this.props;
+    const answers = (answerData || {}).answers || [];
+    const selected = !!answers.find(answer => answer.id === multiSelectAnswer.id);
 
     return (
-      <div key={`${answer.id}-${index}`}>
-        <input disabled={!editable} type='checkbox' value={answer.value} />
-        <label>{answer.displayValue}</label>
-      </div>
+      <RiskAreaMultiSelectAnswer
+        key={`${multiSelectAnswer.id}-${index}`}
+        answer={multiSelectAnswer}
+        onClick={this.onClickMultiSelect}
+        selected={selected}
+        editable={editable} />
     );
   }
 
   renderAnswers() {
-    const { question, editable } = this.props;
+    const { question, editable, answerData } = this.props;
     const answers = question.answers || [];
 
     const selectStyles = classNames(formStyles.select, styles.select);
     const questionBodyStyles = classNames(styles.riskAssessmentQuestionBody, {
-      [styles.noBottomPadding]: question.answerType === 'radio',
+      [styles.noBottomPadding]:
+        question.answerType === 'radio' || question.answerType === 'multiselect',
     });
+
+    const defaultAnswerData = { answers: [], oldAnswers: [], changed: true };
+    const currentAnswer = (answerData || defaultAnswerData).answers[0];
 
     switch (question.answerType) {
       case 'dropdown':
@@ -71,8 +132,8 @@ export default class RiskAreaQuestion extends React.Component<IProps, {}> {
           <div className={questionBodyStyles}>
             <select
               disabled={!editable}
-              value={''}
-              onChange={() => true}
+              value={currentAnswer ? currentAnswer.value : ''}
+              onChange={event => this.onDropdownChange(event.currentTarget.value)}
               className={selectStyles}>
               {answers.map(this.renderSelectOption)}
             </select>
@@ -89,17 +150,30 @@ export default class RiskAreaQuestion extends React.Component<IProps, {}> {
           </div>
         );
       case 'freetext':
-        return (
-          <div className={questionBodyStyles}>
-            <div className={styles.textArea}>
-              <textarea disabled={!editable} className={formStyles.textarea} />
+        // This is a weird answer type. Return nothing if there are no answers associated with it.
+        const answer = answers[0];
+
+        if (answers) {
+          const answerId = answer.id;
+
+          return (
+            <div className={questionBodyStyles}>
+              <div className={styles.textArea}>
+                <textarea
+                  value={currentAnswer ? currentAnswer.value : ''}
+                  onChange={event => this.onChange(event.target.value, answerId)}
+                  disabled={!editable}
+                  className={formStyles.textarea} />
+              </div>
             </div>
-          </div>
-        );
+          );
+        }
       case 'multiselect':
         return (
           <div className={questionBodyStyles}>
-            {answers.map(this.renderCheckboxItem)}
+            <div className={styles.multiSelectRow}>
+              {answers.map(this.renderMultiSelectItem)}
+            </div>
           </div>
         );
       default:
@@ -108,10 +182,14 @@ export default class RiskAreaQuestion extends React.Component<IProps, {}> {
   }
 
   render() {
-    const { question } = this.props;
+    const { question, editable } = this.props;
+
+    const questionStyles = classNames(styles.riskAssessmentQuestion, {
+      [styles.disabled]: !editable,
+    });
 
     return (
-      <div className={styles.riskAssessmentQuestion}>
+      <div className={questionStyles}>
         <div className={styles.riskAssessmentQuestionHeader}>
           <div className={styles.riskAssessmentQuestionTitle}>{question.id}</div>
           <div className={styles.riskAssessmentQuestionLastUpdated}>

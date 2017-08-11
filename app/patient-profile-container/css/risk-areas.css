@@ -306,6 +306,12 @@
 select.select {
   width: 50%;
   border-radius: 4px;
+  transition: color 0.2s linear;
+}
+
+.riskAssessmentQuestion.disabled select.select {
+  background-size: 12px;
+  background-image: url('../../assets/down-arrow-grey.svg');
 }
 
 .radioGroup {
@@ -321,6 +327,22 @@ select.select {
   min-width: 55px;
 }
 
+.radioLabel {
+  user-select: none;
+
+  &:hover {
+    cursor: pointer;
+  }
+}
+
+.riskAssessmentQuestion.disabled .radioLabel:hover {
+  cursor: default;
+}
+
+.riskAssessmentQuestion.disabled input[type='radio']:hover {
+  cursor: default;
+}
+
 .checkBoxItem { }
 
 .textArea {
@@ -333,4 +355,52 @@ select.select {
   border: 1px solid var(--border-color);
   border-radius: 4px;
   padding: var(--small-gutter);
+}
+
+input[type='radio']:hover {
+  cursor: pointer;
+}
+
+.multiSelectRow {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.multiSelectAnswer {
+  margin: 0 10px var(--small-gutter) 0;
+  display: flex;
+  align-items: center;
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  height: 50px;
+  padding: var(--small-gutter);
+  font-family: var(--roboto);
+  font-size: var(--default-font-size);
+  line-height: var(--default-line-height);
+  color: var(--black-color);
+  user-select: none;
+  transition: all 0.2s linear;
+
+  &:hover {
+    cursor: pointer;
+    color: var(--blue-color);
+    border-color: var(--blue-color);
+  }
+}
+
+.multiSelectAnswer.disabled {
+  color: var(--border-color);
+  border-color: var(--border-color);
+
+  &:hover {
+    cursor: default;
+  }
+}
+
+.multiSelectAnswer.selected {
+  color: var(--blue-color);
+  border: 1px solid var(--blue-color);
 }

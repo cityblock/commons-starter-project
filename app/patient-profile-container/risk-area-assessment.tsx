@@ -8,7 +8,7 @@ import * as riskAreaQuery from '../graphql/queries/get-risk-area.graphql';
 import { FullQuestionFragment, FullRiskAreaFragment } from '../graphql/types';
 import * as sortSearchStyles from '../shared/css/sort-search.css';
 import * as styles from './css/risk-areas.css';
-import RiskAreaQuestions from './risk-area-questions';
+import RiskAreaQuestion from './risk-area-question';
 
 export interface IProps {
   riskAreaId: string;
@@ -25,6 +25,19 @@ export interface IProps {
 
 export interface IState {
   inProgress: boolean;
+  questions: {
+    [questionId: string]: {
+      answers: Array<{
+        id: string;
+        value: string;
+      }>;
+      oldAnswers: Array<{
+        id: string;
+        value: string;
+      }>;
+      changed: boolean;
+    };
+  };
 }
 
 class RiskAreaAssessment extends React.Component<IProps, IState> {
@@ -33,8 +46,12 @@ class RiskAreaAssessment extends React.Component<IProps, IState> {
 
     this.onStart = this.onStart.bind(this);
     this.onCancel = this.onCancel.bind(this);
+    this.onSave = this.onSave.bind(this);
+    this.onChange = this.onChange.bind(this);
+    this.renderRiskAreaQuestion = this.renderRiskAreaQuestion.bind(this);
+    this.renderRiskAreaQuestions = this.renderRiskAreaQuestions.bind(this);
 
-    this.state = { inProgress: false };
+    this.state = { inProgress: false, questions: {} };
   }
 
   componentWillReceiveProps(nextProps: IProps) {
@@ -51,11 +68,72 @@ class RiskAreaAssessment extends React.Component<IProps, IState> {
   }
 
   onCancel() {
-    this.setState(() => ({ inProgress: false }));
+    const { questions } = this.state;
+
+    Object.keys(questions).forEach(questionId => {
+      if (questions[questionId].changed) {
+        questions[questionId].changed = false;
+        questions[questionId].answers = [];
+      }
+    });
+
+    this.setState(() => ({ inProgress: false, questions }));
+  }
+
+  onSave() {
+    // TODO: implement this
+    const { questions } = this.state;
+    return questions;
+  }
+
+  onChange(questionId: string, answerId: string, value: string | number) {
+    const { questions } = this.state;
+    const { riskAreaQuestions } = this.props;
+    const fetchedQuestion = (riskAreaQuestions || []).find(question => question.id === questionId);
+    const defaultQuestionData = { answers: [], oldAnswers: [], changed: true };
+
+    if (fetchedQuestion && fetchedQuestion.answerType === 'multiselect') {
+      const questionData = questions[questionId] || defaultQuestionData;
+      const questionIndex = (questionData as any).answers.findIndex((answer: any) =>
+        answer.id === answerId,
+      );
+
+      if (questionIndex > -1) {
+        questionData.answers.splice(questionIndex, 1);
+      } else {
+        (questionData as any).answers.push({ id: answerId, value });
+      }
+
+      this.setState(() => ({ questions: { ...questions, [questionId]: questionData } }));
+    } else if (fetchedQuestion) {
+      const questionData = questions[questionId] || defaultQuestionData;
+      (questionData as any).answers = [{ id: answerId, value }];
+
+      this.setState(() => ({ questions: { ...questions, [questionId]: questionData } }));
+    }
+  }
+
+  renderRiskAreaQuestion(question: FullQuestionFragment, index: number) {
+    const { questions, inProgress } = this.state;
+
+    return (
+      <RiskAreaQuestion
+        answerData={questions[question.id]}
+        onChange={this.onChange}
+        key={`${question.id}-${index}`}
+        question={question}
+        editable={inProgress} />
+    );
+  }
+
+  renderRiskAreaQuestions() {
+    const { riskAreaQuestions } = this.props;
+
+    return (riskAreaQuestions || []).map(this.renderRiskAreaQuestion);
   }
 
   render() {
-    const { riskArea, riskAreaQuestions, patientId, riskAreaId } = this.props;
+    const { riskArea } = this.props;
     const { inProgress } = this.state;
 
     const title = riskArea ? riskArea.title : 'Loading...';
@@ -79,7 +157,7 @@ class RiskAreaAssessment extends React.Component<IProps, IState> {
       <div>
         <div className={classNames(sortSearchStyles.sortSearchBar, styles.buttonBar)}>
           <div className={cancelButtonStyles} onClick={this.onCancel}>Cancel</div>
-          <div className={saveButtonStyles}>Save updates</div>
+          <div className={saveButtonStyles} onClick={this.onSave}>Save updates</div>
           <div className={startButtonStyles} onClick={this.onStart}>Start assessment</div>
         </div>
         <div className={styles.riskAreasPanel}>
@@ -94,11 +172,7 @@ class RiskAreaAssessment extends React.Component<IProps, IState> {
                 <div className={styles.lastUpdatedValue}>1 week ago</div>
               </div>
             </div>
-            <RiskAreaQuestions
-              riskAreaQuestions={riskAreaQuestions}
-              editing={inProgress}
-              patientId={patientId}
-              riskAreaId={riskAreaId} />
+            {this.renderRiskAreaQuestions()}
           </div>
         </div>
       </div>

@@ -2,7 +2,7 @@
 
 exports[`renders a risk area question 1`] = `
 <div
-  className={undefined}
+  className=""
 >
   <div
     className={undefined}
@@ -51,17 +51,17 @@ exports[`renders a risk area question 1`] = `
     Question
   </div>
   <div
-    className=""
+    className="undefined"
   >
-    <div>
-      <input
-        disabled={false}
-        type="checkbox"
-        value="answer"
-      />
-      <label>
+    <div
+      className={undefined}
+    >
+      <div
+        className=""
+        onClick={[Function]}
+      >
         Answer
-      </label>
+      </div>
     </div>
   </div>
   <div

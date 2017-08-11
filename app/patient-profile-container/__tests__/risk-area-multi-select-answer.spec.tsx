@@ -6,44 +6,33 @@ import { create } from 'react-test-renderer';
 import configureMockStore from 'redux-mock-store';
 import { ENGLISH_TRANSLATION } from '../../reducers/messages/en';
 import ReduxConnectedIntlProvider from '../../redux-connected-intl-provider';
-import RiskAreaQuestion from '../risk-area-question';
+import RiskAreaMultiSelectAnswer from '../risk-area-multi-select-answer';
 
 const locale = { messages: ENGLISH_TRANSLATION.messages };
 const mockStore = configureMockStore([]);
 
-it('renders a risk area question', () => {
+it('renders a multi-select answer', () => {
   const history = createMemoryHistory();
-  const question = {
-    id: '123',
-    createdAt: 'Wed Aug 02 2017 18:31:45 GMT-0400 (EDT)',
-    deletedAt: null,
-    title: 'Question',
-    answerType: 'multiselect' as any,
-    riskAreaId: '321',
+  const answer = {
+    id: '456',
+    displayValue: 'Answer',
+    value: 'answer',
+    valueType: 'string' as any,
+    questionId: '123',
     order: 1,
-    validatedSource: 'Duke Population Health',
-    answers: [{
-      id: '456',
-      displayValue: 'Answer',
-      value: 'answer',
-      valueType: 'string' as any,
-      questionId: '123',
-      order: 1,
-      riskAdjustmentType: null,
-      inSummary: false,
-      summaryText: null,
-    }],
-    applicableIfType: null,
-    applicableIfQuestionConditions: null,
+    riskAdjustmentType: null,
+    inSummary: false,
+    summaryText: null,
   };
+
   const tree = create(
     <MockedProvider mocks={[]} store={mockStore({ locale })}>
       <ReduxConnectedIntlProvider>
         <ConnectedRouter history={history}>
-          <RiskAreaQuestion
-            answerData={{ answers: [], oldAnswers: [], changed: false }}
-            onChange={() => true}
-            question={question}
+          <RiskAreaMultiSelectAnswer
+            onClick={() => true}
+            answer={answer}
+            selected={false}
             editable={true} />
         </ConnectedRouter>
       </ReduxConnectedIntlProvider>

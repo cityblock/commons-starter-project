@@ -13,6 +13,7 @@ exports[`renders a risk area assessment 1`] = `
     </div>
     <div
       className="undefined"
+      onClick={[Function]}
     >
       Save updates
     </div>
@@ -59,7 +60,6 @@ exports[`renders a risk area assessment 1`] = `
           </div>
         </div>
       </div>
-      <div />
     </div>
   </div>
 </div>

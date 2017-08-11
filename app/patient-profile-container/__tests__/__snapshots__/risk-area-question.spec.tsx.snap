@@ -10,11 +10,45 @@ exports[`renders a risk area question 1`] = `
     <div
       className={undefined}
     >
-      Question
+      123
     </div>
     <div
       className={undefined}
-    />
+    >
+      <div
+        className={undefined}
+      >
+        <div
+          className={undefined}
+        >
+          Last updated:
+        </div>
+        <div
+          className={undefined}
+        >
+          Jan 1, 2017
+        </div>
+      </div>
+      <div
+        className={undefined}
+      >
+        <div
+          className={undefined}
+        >
+          FirstName
+        </div>
+        <div
+          className={undefined}
+        >
+          LastName
+        </div>
+      </div>
+    </div>
+  </div>
+  <div
+    className={undefined}
+  >
+    Question
   </div>
   <div
     className="undefined"
@@ -28,6 +62,20 @@ exports[`renders a risk area question 1`] = `
       >
         Answer
       </div>
+    </div>
+  </div>
+  <div
+    className={undefined}
+  >
+    <div
+      className={undefined}
+    >
+      Previous answer:
+    </div>
+    <div
+      className={undefined}
+    >
+      Not applicable
     </div>
   </div>
 </div>

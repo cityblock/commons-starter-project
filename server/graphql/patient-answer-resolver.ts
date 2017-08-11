@@ -1,10 +1,13 @@
 import {
+  IPatientAnswersUpdateApplicableInput,
   IPatientAnswerCreateInput,
   IPatientAnswerDeleteInput,
   IPatientAnswerEditInput,
 } from 'schema';
 import PatientAnswer from '../models/patient-answer';
+import Question from '../models/question';
 import accessControls from './shared/access-controls';
+import { updatePatientAnswerApplicable } from './shared/answer-applicable';
 import { IContext } from './shared/utils';
 
 export interface IPatientAnswerCreateArgs {
@@ -21,6 +24,25 @@ export interface IEditPatientAnswerOptions {
 
 export interface IDeletePatientAnswerOptions {
   input: IPatientAnswerDeleteInput;
+}
+
+export interface IPatietnAnswserUpdateApplicableOptions {
+  input: IPatientAnswersUpdateApplicableInput;
+}
+
+export async function patientAnswersUpdateApplicable(
+  root: any,
+  { input }: IPatietnAnswserUpdateApplicableOptions,
+  { db, userRole }: IContext,
+) {
+  await accessControls.isAllowed(userRole, 'create', 'patientAnswer');
+  if (userRole !== 'admin') {
+    throw new Error('must be admin');
+  }
+  // TODO add transactions
+  const patientAnswers = await PatientAnswer.getForRiskArea(input.riskAreaId, input.patientId);
+  const questions = await Question.getAllForRiskArea(input.riskAreaId);
+  return await Promise.all(updatePatientAnswerApplicable(patientAnswers, questions));
 }
 
 export async function patientAnswerCreate(

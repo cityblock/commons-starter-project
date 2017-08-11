@@ -121,6 +121,17 @@ export default class PatientAnswer extends Model {
     return patientAnswers.results;
   }
 
+  static async getForRiskArea(riskAreaId: string, patientId: string): Promise<PatientAnswer[]> {
+    const patientAnswers = await this
+      .query()
+      .joinRelation('answer.question')
+      .where('patient_answer.deletedAt', null)
+      .andWhere('patientId', patientId)
+      .andWhere('answer:question.riskAreaId', riskAreaId);
+
+    return patientAnswers as PatientAnswer[];
+  }
+
   static async create(input: IPatientAnswerCreateFields): Promise<PatientAnswer> {
     return await transaction(PatientAnswer, async PatientAnswerWithTrasaction => {
       /**

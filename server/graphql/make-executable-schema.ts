@@ -23,6 +23,7 @@ import {
   resolveEventNotificationsForTask,
 } from './event-notification-resolver';
 import {
+  patientAnswersUpdateApplicable,
   patientAnswerCreate,
   patientAnswerDelete,
   patientAnswerEdit,
@@ -161,6 +162,7 @@ const resolveFunctions = {
     patientAnswerCreate,
     patientAnswerDelete,
     patientAnswerEdit,
+    patientAnswersUpdateApplicable,
   },
 };
 

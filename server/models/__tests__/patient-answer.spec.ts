@@ -188,4 +188,16 @@ describe('anser model', () => {
     const deletedPatientAnswer = await PatientAnswer.delete(patientAnswer.id);
     expect(deletedPatientAnswer).not.toBeNull();
   });
+
+  it('get all for risk area', async () => {
+    const patientAnswer = await PatientAnswer.create({
+      answerId: answer.id,
+      answerValue: '3',
+      patientId: patient.id,
+      applicable: true,
+      userId: user.id,
+    });
+    expect(await PatientAnswer.getForRiskArea(riskArea.id, patient.id))
+      .toEqual([patientAnswer]);
+  });
 });

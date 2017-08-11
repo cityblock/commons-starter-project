@@ -582,6 +582,7 @@ declare module 'schema' {
     patientAnswerCreate: IPatientAnswer | null;
     patientAnswerEdit: IPatientAnswer | null;
     patientAnswerDelete: IPatientAnswer | null;
+    patientAnswersUpdateApplicable: Array<IPatientAnswer> | null;
     questionConditionCreate: IQuestionCondition | null;
     questionConditionEdit: IQuestionCondition | null;
     questionConditionDelete: IQuestionCondition | null;
@@ -941,6 +942,14 @@ declare module 'schema' {
   */
   interface IPatientAnswerDeleteInput {
     patientAnswerId: string;
+  }
+
+  /*
+    description: 
+  */
+  interface IPatientAnswersUpdateApplicableInput {
+    patientId: string;
+    riskAreaId: string;
   }
 
   /*

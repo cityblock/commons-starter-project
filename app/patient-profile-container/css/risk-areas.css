@@ -145,10 +145,11 @@
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
-  padding: 10px var(--small-gutter);
+  padding: 10px var(--small-gutter) 10px 16px;
   border-radius: 4px;
   background-color: var(--white-color);
   margin-bottom: 10px;
+  border-left: 4px solid transparent;
 }
 
 .riskAssessmentTitle.lowRisk {
@@ -192,6 +193,7 @@
 .titleText {
   color: var(--black-color);
   font-family: var(--roboto);
+  font-weight: var(--roboto-medium-weight);
   font-size: var(--default-font-size);
   line-height: var(--default-line-height);
 }
@@ -216,10 +218,15 @@
   flex-direction: column;
   align-items: center;
   justify-content: space-between;
-  padding: 10px var(--small-gutter);
+  padding: var(--small-gutter) var(--small-gutter) 0 16px;
   border-radius: 4px;
   background-color: var(--white-color);
   margin-bottom: 10px;
+  border-left: 4px solid transparent;
+}
+
+.riskAssessmentQuestion.highRiskAnswer {
+  border-left: 4px solid var(--red-color);
 }
 
 .riskAssessmentQuestion:last-child {
@@ -235,42 +242,35 @@
 }
 
 .riskAssessmentQuestionHeader {
-  margin-bottom: 10px;
+  align-items: normal;
 }
 
 .riskAssessmentQuestionTitle {
   color: var(--black-color);
-  font-family: var(--roboto);
+  font-family: var(--basetica-medium);
   font-size: var(--default-font-size);
   line-height: var(--default-line-height);
-}
-
-.riskAssessmentQuestionLastUpdated {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: flex-end;
-}
-
-.riskAssessmentQuestionLastUpdatedDate {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: flex-end;
   margin-right: var(--gutter);
 }
 
-.riskAssessmentQuestionLastUpdater {
-  font-family: var(--roboto);
-  font-size: var(--extra-small-font-size);
-  line-height: var(--extra-small-font-line-height);
-  color: var(--black-color);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+.riskAssessmentQuestionHamburger {
+  background-image: url('../../assets/dot-hamburger-grey.svg');
+  background-size: contain;
+  background-position: center center;
+  background-repeat: no-repeat;
+  height: 12px;
+  width: 5px;
+
+  &:hover {
+    cursor: pointer;
+  }
 }
 
-.riskAssessmentQuestionLastUpdaterName { }
+.riskAssessmentQuestion.disabled .riskAssessmentQuestionHeader .riskAssessmentQuestionHamburger {
+  &:hover {
+    cursor: default;
+  }
+}
 
 .riskAssessmentQuestionBody {
   width: 100%;
@@ -346,15 +346,18 @@ select.select {
 .checkBoxItem { }
 
 .textArea {
-  width: 50%;
-  height: 120px;
+  height: 50px;
 }
 
 .textArea textarea {
   resize: none;
   border: 1px solid var(--border-color);
   border-radius: 4px;
-  padding: var(--small-gutter);
+  padding: 15px var(--small-gutter);
+  height: 50px;
+  font-family: var(--roboto);
+  font-size: var(--default-font-size);
+  line-height: var(--medium-font-line-height);
 }
 
 input[type='radio']:hover {

@@ -121,6 +121,13 @@ You should see the changes at our [staging][] endpoint.
 
 ## How-to
 
+## Revert a PR merge into master
+
+1. As quickly as possible, cancel the build of master on CircleCI so that there is no deploy to production.
+2. Click the 'Revert' button on GitHub that appears near the bottom of the page on the merged PR.
+3. GitHub will generate a revert PR on your behalf.
+4. Merge the generated PR.
+
 ### To automatically fix linter errors, run:
 
     yarn lint -- --fix

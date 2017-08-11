@@ -182,33 +182,33 @@ export default class RiskAreaQuestion extends React.Component<IProps, {}> {
   }
 
   render() {
-    const { question, editable } = this.props;
+    const { question, editable, answerData } = this.props;
+
+    let highRiskAnswer: boolean = false;
+
+    if (question.answers && answerData && answerData.answers) {
+      const answerIds = answerData.answers.map(answer => answer.id);
+      const riskTypes = question.answers
+        .filter(answer => answerIds.indexOf(answer.id) > -1)
+        .map(answer => answer.riskAdjustmentType);
+
+      if (riskTypes.some(riskType => riskType === 'forceHighRisk')) {
+        highRiskAnswer = true;
+      }
+    }
 
     const questionStyles = classNames(styles.riskAssessmentQuestion, {
       [styles.disabled]: !editable,
+      [styles.highRiskAnswer]: highRiskAnswer,
     });
 
     return (
       <div className={questionStyles}>
         <div className={styles.riskAssessmentQuestionHeader}>
-          <div className={styles.riskAssessmentQuestionTitle}>{question.id}</div>
-          <div className={styles.riskAssessmentQuestionLastUpdated}>
-            <div className={styles.riskAssessmentQuestionLastUpdatedDate}>
-              <div className={styles.lastUpdatedLabel}>Last updated:</div>
-              <div className={styles.lastUpdatedValue}>Jan 1, 2017</div>
-            </div>
-            <div className={styles.riskAssessmentQuestionLastUpdater}>
-              <div className={styles.riskAssessmentQuestionLastUpdaterName}>FirstName</div>
-              <div className={styles.riskAssessmentQuestionLastUpdaterName}>LastName</div>
-            </div>
-          </div>
+          <div className={styles.riskAssessmentQuestionTitle}>{question.title}</div>
+          <div className={styles.riskAssessmentQuestionHamburger}></div>
         </div>
-        <div className={styles.riskAssessmentQuestionTitle}>{question.title}</div>
         {this.renderAnswers()}
-        <div className={styles.riskAssessmentQuestionHistory}>
-          <div className={styles.riskAssessmentQuestionHistoryLabel}>Previous answer:</div>
-          <div className={styles.riskAssessmentQuestionHistoryText}>Not applicable</div>
-        </div>
       </div>
     );
   }

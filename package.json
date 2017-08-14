@@ -34,8 +34,7 @@
     "docker-prod:ts-node": "docker-compose exec web yarn ts-node",
     "seed": "knex seed:run --knexfile=server/models/knexfile.js",
     "user:add:dev": "NODE_ENV=development ts-node ./scripts/add-user.ts",
-    "user:add:production": "NODE_ENV=production ts-node ./scripts/add-user.ts",
-    "postinstall": "rm -rf node_modules/@types/async"
+    "user:add:production": "NODE_ENV=production ts-node ./scripts/add-user.ts"
   },
   "author": "Brennan Moore",
   "jest": {
@@ -132,7 +131,7 @@
     "@types/react-router-dom": "^4.0.7",
     "@types/react-router-redux": "^5.0.5",
     "@types/redux-logger": "^3.0.0",
-    "@types/redux-mock-store": "^0.0.9",
+    "@types/redux-mock-store": "^0.0.10",
     "@types/uuid": "^3.4.0",
     "@types/validator": "^6.2.1",
     "@types/webpack": "^3.0.6",
@@ -178,7 +177,7 @@
     "rabbot": "^1.1.0",
     "raw-loader": "^0.5.1",
     "react": "15.6.1",
-    "react-apollo": "^1.4.10",
+    "react-apollo": "^1.4.14",
     "react-copy-to-clipboard": "^5.0.0",
     "react-dom": "15.6.1",
     "react-google-login": "2.9.2",

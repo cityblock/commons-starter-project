@@ -17,6 +17,7 @@ export default class PatientAnswer extends Model {
   id: string;
   answerId: string;
   answerValue: string;
+  answer: Answer;
   patientId: string;
   userId: string;
   applicable: boolean;
@@ -121,10 +122,13 @@ export default class PatientAnswer extends Model {
     return patientAnswers.results;
   }
 
-  static async getForRiskArea(riskAreaId: string, patientId: string): Promise<PatientAnswer[]> {
+  static async getForRiskArea(
+    riskAreaId: string, patientId: string, eager = '',
+  ): Promise<PatientAnswer[]> {
     const patientAnswers = await this
       .query()
       .joinRelation('answer.question')
+      .eager(eager)
       .where('patient_answer.deletedAt', null)
       .andWhere('patientId', patientId)
       .andWhere('answer:question.riskAreaId', riskAreaId);

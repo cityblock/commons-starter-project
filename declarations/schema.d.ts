@@ -45,6 +45,8 @@ declare module 'schema' {
     patientAnswer: IPatientAnswer | null;
     patientAnswersForQuestion: Array<IPatientAnswer> | null;
     patientPreviousAnswersForQuestion: Array<IPatientAnswer> | null;
+    patientRiskAreaSummary: IRiskAreaSummary | null;
+    patientRiskAreaRiskScore: IRiskScore | null;
     questionCondition: IQuestionCondition | null;
     eventNotificationsForCurrentUser: IEventNotificationEdges | null;
     eventNotificationsForTask: IEventNotificationEdges | null;
@@ -483,6 +485,21 @@ declare module 'schema' {
     answerValue: string;
     patientId: string;
     applicable: boolean | null;
+  }
+
+  /*
+    description: 
+  */
+  interface IRiskAreaSummary {
+    summary: Array<string>;
+  }
+
+  /*
+    description: 
+  */
+  interface IRiskScore {
+    score: number;
+    forceHighRisk: boolean;
   }
 
   /*

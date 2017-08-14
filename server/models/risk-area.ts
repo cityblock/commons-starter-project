@@ -1,10 +1,16 @@
 import { Model, RelationMappings } from 'objection';
 import * as uuid from 'uuid/v4';
+import PatientAnswer from './patient-answer';
 import Question from './question';
 
 export interface IRiskAreaEditableFields {
   title: string;
   order: number;
+}
+
+export interface IRiskScore {
+  score: number;
+  forceHighRisk: boolean;
 }
 
 /* tslint:disable:member-ordering */
@@ -84,6 +90,41 @@ export default class RiskArea extends Model {
     return await this.query().updateAndFetchById(riskAreaId, {
       deletedAt: new Date().toISOString(),
     });
+  }
+
+  // TODO: Add cross-risk-score methods
+  static async getSummaryForPatient(riskAreaId: string, patientId: string): Promise<string[]> {
+    const patientAnswers = await PatientAnswer.getForRiskArea(riskAreaId, patientId, 'answer');
+    const summary: string[] = [];
+    patientAnswers.forEach(patientAnswer => {
+      if (patientAnswer.applicable) {
+        const answer = patientAnswer.answer;
+        if (answer.inSummary && answer.summaryText) {
+          summary.push(answer.summaryText);
+        }
+      }
+    });
+    return summary;
+  }
+
+  static async getRiskScoreForPatient(riskAreaId: string, patientId: string): Promise<IRiskScore> {
+    const patientAnswers = await PatientAnswer.getForRiskArea(riskAreaId, patientId, 'answer');
+    let score: number = 0;
+    let forceHighRisk: boolean = false;
+    patientAnswers.forEach(patientAnswer => {
+      if (patientAnswer.applicable) {
+        const answer = patientAnswer.answer;
+        if (answer.riskAdjustmentType === 'increment') {
+          score++;
+        } else if (answer.riskAdjustmentType === 'forceHighRisk') {
+          forceHighRisk = true;
+        }
+      }
+    });
+    return {
+      score,
+      forceHighRisk,
+    };
   }
 }
 /* tslint:disable:member-ordering */

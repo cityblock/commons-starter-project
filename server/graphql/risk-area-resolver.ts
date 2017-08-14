@@ -1,6 +1,6 @@
 import { pickBy } from 'lodash';
 import { IRiskAreaCreateInput, IRiskAreaDeleteInput, IRiskAreaEditInput } from 'schema';
-import RiskArea from '../models/risk-area';
+import RiskArea, { IRiskScore } from '../models/risk-area';
 import accessControls from './shared/access-controls';
 import { IContext } from './shared/utils';
 
@@ -56,7 +56,7 @@ export async function riskAreaEdit(
   }
   // TODO: fix typings here
   const cleanedParams = pickBy<IRiskAreaEditInput, {}>(args.input) as any;
-  return RiskArea.edit(cleanedParams, args.input.riskAreaId);
+  return await RiskArea.edit(cleanedParams, args.input.riskAreaId);
 }
 
 export async function riskAreaDelete(
@@ -66,5 +66,20 @@ export async function riskAreaDelete(
   if (!userId) {
     throw new Error('not logged in');
   }
-  return RiskArea.delete(args.input.riskAreaId);
+  return await RiskArea.delete(args.input.riskAreaId);
+}
+
+export async function resolvePatientRiskAreaSummary(
+  root: any, args: { riskAreaId: string, patientId: string }, { db, userRole }: IContext,
+): Promise<{ summary: string[] }> {
+  await accessControls.isAllowedForUser(userRole, 'view', 'riskArea');
+  const summary = await RiskArea.getSummaryForPatient(args.riskAreaId, args.patientId);
+  return { summary };
+}
+
+export async function resolvePatientRiskAreaRiskScore(
+  root: any, args: { riskAreaId: string, patientId: string }, { db, userRole }: IContext,
+): Promise<IRiskScore> {
+  await accessControls.isAllowedForUser(userRole, 'view', 'riskArea');
+  return await RiskArea.getRiskScoreForPatient(args.riskAreaId, args.patientId);
 }

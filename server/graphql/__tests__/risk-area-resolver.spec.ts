@@ -1,9 +1,16 @@
 import { graphql } from 'graphql';
 import { cloneDeep } from 'lodash';
 import Db from '../../db';
+import Answer from '../../models/answer';
+import Patient from '../../models/patient';
+import PatientAnswer from '../../models/patient-answer';
 import Question from '../../models/question';
 import RiskArea from '../../models/risk-area';
 import User from '../../models/user';
+import {
+  createMockPatient,
+  createPatient,
+} from '../../spec-helpers';
 import schema from '../make-executable-schema';
 
 describe('answer tests', () => {
@@ -115,6 +122,107 @@ describe('answer tests', () => {
       const result = await graphql(schema, mutation, null, { db, userRole, userId: user.id });
       expect(cloneDeep(result.data!.riskAreaDelete)).toMatchObject({
         id: riskArea.id,
+      });
+    });
+  });
+
+  describe('riskArea tests with patient answers', () => {
+    let patient: Patient;
+
+    beforeEach(async () => {
+      riskArea = await RiskArea.create({
+        title: 'testing',
+        order: 1,
+      });
+      question = await Question.create({
+        title: 'like writing tests?',
+        answerType: 'dropdown',
+        riskAreaId: riskArea.id,
+        order: 1,
+      });
+      patient = await createPatient(createMockPatient(123), user.id);
+    });
+
+    it('gets summary for patient', async () => {
+      const answer = await Answer.create({
+        displayValue: 'loves writing tests!',
+        value: '3',
+        valueType: 'number',
+        riskAdjustmentType: 'forceHighRisk',
+        inSummary: true,
+        summaryText: 'summary text!',
+        questionId: question.id,
+        order: 1,
+      });
+      await PatientAnswer.create({
+        answerId: answer.id,
+        answerValue: '3',
+        patientId: patient.id,
+        applicable: true,
+        userId: user.id,
+      });
+      const query = `{
+        patientRiskAreaSummary(
+          riskAreaId: "${riskArea.id}",
+          patientId: "${patient.id}",
+        ) {
+          summary
+        }
+      }`;
+      const result = await graphql(schema, query, null, { db, userRole });
+      expect(cloneDeep(result.data!.patientRiskAreaSummary)).toMatchObject({
+        summary: ['summary text!'],
+      });
+    });
+
+    it('gets increment and high risk score for patient', async () => {
+      const answer = await Answer.create({
+        displayValue: 'loves writing tests!',
+        value: '3',
+        valueType: 'number',
+        riskAdjustmentType: 'increment',
+        inSummary: true,
+        summaryText: 'summary text!',
+        questionId: question.id,
+        order: 1,
+      });
+      const highRiskAnswer = await Answer.create({
+        displayValue: 'loves writing tests!',
+        value: '4',
+        valueType: 'number',
+        riskAdjustmentType: 'forceHighRisk',
+        inSummary: true,
+        summaryText: 'summary text!',
+        questionId: question.id,
+        order: 1,
+      });
+      await PatientAnswer.create({
+        answerId: answer.id,
+        answerValue: '3',
+        patientId: patient.id,
+        applicable: true,
+        userId: user.id,
+      });
+      await PatientAnswer.create({
+        answerId: highRiskAnswer.id,
+        answerValue: '4',
+        patientId: patient.id,
+        applicable: true,
+        userId: user.id,
+      });
+      const query = `{
+        patientRiskAreaRiskScore(
+          riskAreaId: "${riskArea.id}",
+          patientId: "${patient.id}",
+        ) {
+          score,
+          forceHighRisk
+        }
+      }`;
+      const result = await graphql(schema, query, null, { db, userRole });
+      expect(cloneDeep(result.data!.patientRiskAreaRiskScore)).toMatchObject({
+        score: 1,
+        forceHighRisk: true,
       });
     });
   });

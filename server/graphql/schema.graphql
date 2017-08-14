@@ -433,6 +433,15 @@ type RiskArea implements uniqueId {
   order: Int!
 }
 
+type RiskScore {
+  score: Int!
+  forceHighRisk: Boolean!
+}
+
+type RiskAreaSummary {
+  summary: [String!]!
+}
+
 # Task Event
 type TaskEvent implements uniqueId {
   id: ID!
@@ -972,6 +981,12 @@ type RootQueryType {
 
   # PatientPreviousAnswersForQuestion
   patientPreviousAnswersForQuestion(questionId: String!, patientId: String!): [PatientAnswer]
+
+  # PatientRiskAreaSummary
+  patientRiskAreaSummary(riskAreaId: String!, patientId: String!): RiskAreaSummary
+
+  # PatientRiskAreaRiskScore
+  patientRiskAreaRiskScore(riskAreaId: String!, patientId: String!): RiskScore
 
   # QuestionCondition
   questionCondition(questionConditionId: String!): QuestionCondition

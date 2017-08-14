@@ -55,6 +55,8 @@ import {
   resolveQuestionsForRiskArea,
 } from './question-resolver';
 import {
+  resolvePatientRiskAreaRiskScore,
+  resolvePatientRiskAreaSummary,
   resolveRiskArea,
   resolveRiskAreas,
   riskAreaCreate,
@@ -112,6 +114,8 @@ const resolveFunctions = {
     taskComment: resolveTaskComment,
     riskArea: resolveRiskArea,
     riskAreas: resolveRiskAreas,
+    patientRiskAreaRiskScore: resolvePatientRiskAreaRiskScore,
+    patientRiskAreaSummary: resolvePatientRiskAreaSummary,
     question: resolveQuestion,
     questionsForRiskArea: resolveQuestionsForRiskArea,
     answer: resolveAnswer,

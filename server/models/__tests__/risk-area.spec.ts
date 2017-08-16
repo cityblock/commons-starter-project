@@ -109,11 +109,15 @@ describe('risk area model', () => {
         order: 1,
       });
       await PatientAnswer.create({
-        answerId: answer.id,
-        answerValue: '3',
         patientId: patient.id,
-        applicable: true,
-        userId: user.id,
+        answers: [{
+          questionId: answer.questionId,
+          answerId: answer.id,
+          answerValue: '3',
+          patientId: patient.id,
+          applicable: true,
+          userId: user.id,
+        }],
       });
       expect(await RiskArea.getSummaryForPatient(riskArea.id, patient.id)).toEqual([
         'summary text!',
@@ -131,6 +135,12 @@ describe('risk area model', () => {
         questionId: question.id,
         order: 1,
       });
+      const question2 = await Question.create({
+        title: 'hate writing tests?',
+        answerType: 'dropdown',
+        riskAreaId: riskArea.id,
+        order: 2,
+      });
       const highRiskAnswer = await Answer.create({
         displayValue: 'loves writing tests!',
         value: '4',
@@ -138,22 +148,30 @@ describe('risk area model', () => {
         riskAdjustmentType: 'forceHighRisk',
         inSummary: true,
         summaryText: 'summary text!',
-        questionId: question.id,
+        questionId: question2.id,
         order: 1,
       });
       await PatientAnswer.create({
-        answerId: answer.id,
-        answerValue: '3',
         patientId: patient.id,
-        applicable: true,
-        userId: user.id,
+        answers: [{
+          questionId: answer.questionId,
+          answerId: answer.id,
+          answerValue: '3',
+          patientId: patient.id,
+          applicable: true,
+          userId: user.id,
+        }],
       });
       await PatientAnswer.create({
-        answerId: highRiskAnswer.id,
-        answerValue: '4',
         patientId: patient.id,
-        applicable: true,
-        userId: user.id,
+        answers: [{
+          questionId: highRiskAnswer.questionId,
+          answerId: highRiskAnswer.id,
+          answerValue: '4',
+          patientId: patient.id,
+          applicable: true,
+          userId: user.id,
+        }],
       });
       expect(await RiskArea.getRiskScoreForPatient(riskArea.id, patient.id)).toEqual({
         score: 1,

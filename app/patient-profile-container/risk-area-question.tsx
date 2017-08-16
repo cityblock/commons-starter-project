@@ -7,6 +7,7 @@ import RiskAreaMultiSelectAnswer from './risk-area-multi-select-answer';
 
 export interface IProps {
   onChange: (questionId: string, answerId: string, value: string | number) => any;
+  visible: boolean;
   question: FullQuestionFragment;
   editable: boolean;
   answerData: {
@@ -89,7 +90,7 @@ export default class RiskAreaQuestion extends React.Component<IProps, {}> {
             onClick={event => this.onChange(answer.value, answer.id)}
             checked={!!currentAnswer && currentAnswer.id === answer.id}
             value={answer.value} />
-          <label />
+          <label className={styles.radioFill} />
         </div>
         <span className={labelStyles} onClick={() => (this.onChange(answer.value, answer.id))}>
           {answer.displayValue}
@@ -132,9 +133,10 @@ export default class RiskAreaQuestion extends React.Component<IProps, {}> {
           <div className={questionBodyStyles}>
             <select
               disabled={!editable}
-              value={currentAnswer ? currentAnswer.value : ''}
+              value={currentAnswer ? currentAnswer.value : 'Select one'}
               onChange={event => this.onDropdownChange(event.currentTarget.value)}
               className={selectStyles}>
+              <option value={'Select one'} disabled={true}>Select one</option>
               {answers.map(this.renderSelectOption)}
             </select>
           </div>
@@ -182,7 +184,7 @@ export default class RiskAreaQuestion extends React.Component<IProps, {}> {
   }
 
   render() {
-    const { question, editable, answerData } = this.props;
+    const { question, editable, answerData, visible } = this.props;
 
     let highRiskAnswer: boolean = false;
 
@@ -200,6 +202,7 @@ export default class RiskAreaQuestion extends React.Component<IProps, {}> {
     const questionStyles = classNames(styles.riskAssessmentQuestion, {
       [styles.disabled]: !editable,
       [styles.highRiskAnswer]: highRiskAnswer,
+      [styles.hidden]: !visible,
     });
 
     return (

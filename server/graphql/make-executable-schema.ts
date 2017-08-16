@@ -23,12 +23,13 @@ import {
   resolveEventNotificationsForTask,
 } from './event-notification-resolver';
 import {
+  patientAnswersCreate,
   patientAnswersUpdateApplicable,
-  patientAnswerCreate,
   patientAnswerDelete,
   patientAnswerEdit,
   resolvePatientAnswer,
   resolvePatientAnswersForQuestion,
+  resolvePatientAnswersForRiskArea,
   resolvePreviousPatientAnswersForQuestion,
 } from './patient-answer-resolver';
 import { resolvePatientEncounters } from './patient-encounters-resolver';
@@ -126,6 +127,7 @@ const resolveFunctions = {
     patientAnswer: resolvePatientAnswer,
     patientAnswersForQuestion: resolvePatientAnswersForQuestion,
     patientPreviousAnswersForQuestion: resolvePreviousPatientAnswersForQuestion,
+    patientAnswersForRiskArea: resolvePatientAnswersForRiskArea,
   },
   RootMutationType: {
     appointmentAddNote,
@@ -163,7 +165,7 @@ const resolveFunctions = {
     riskAreaCreate,
     riskAreaDelete,
     eventNotificationDismiss,
-    patientAnswerCreate,
+    patientAnswersCreate,
     patientAnswerDelete,
     patientAnswerEdit,
     patientAnswersUpdateApplicable,

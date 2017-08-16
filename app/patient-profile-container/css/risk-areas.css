@@ -28,10 +28,18 @@
   margin-left: 10px;
 }
 
+.saveButton.disabled {
+  opacity: 0.4;
+}
+
 .cancelButton, .saveButton, .startButton {
   height: 32px;
   width: 173px;
   padding: 9px 30px;
+}
+
+.cancelButton {
+  padding-top: 8px;
 }
 
 .hidden {
@@ -225,6 +233,10 @@
   border-left: 4px solid transparent;
 }
 
+.riskAssessmentQuestion.hidden {
+  display: none;
+}
+
 .riskAssessmentQuestion.highRiskAnswer {
   border-left: 4px solid var(--red-color);
 }
@@ -251,6 +263,10 @@
   font-size: var(--default-font-size);
   line-height: var(--default-line-height);
   margin-right: var(--gutter);
+}
+
+.riskAssessmentQuestion.disabled .riskAssessmentQuestionTitle {
+  color: var(--light-gray-font-color);
 }
 
 .riskAssessmentQuestionHamburger {
@@ -335,6 +351,14 @@ select.select {
   }
 }
 
+.riskAssessmentQuestion.disabled .radioFill:after {
+  background: var(--border-color);
+}
+
+.riskAssessmentQuestion.disabled .radioLabel {
+  color: var(--light-gray-font-color);
+}
+
 .riskAssessmentQuestion.disabled .radioLabel:hover {
   cursor: default;
 }
@@ -342,8 +366,6 @@ select.select {
 .riskAssessmentQuestion.disabled input[type='radio']:hover {
   cursor: default;
 }
-
-.checkBoxItem { }
 
 .textArea {
   height: 50px;
@@ -358,6 +380,10 @@ select.select {
   font-family: var(--roboto);
   font-size: var(--default-font-size);
   line-height: var(--medium-font-line-height);
+}
+
+.riskAssessmentQuestion.disabled .textArea textarea {
+  color: var(--light-gray-font-color);
 }
 
 input[type='radio']:hover {
@@ -395,8 +421,8 @@ input[type='radio']:hover {
 }
 
 .multiSelectAnswer.disabled {
-  color: var(--border-color);
-  border-color: var(--border-color);
+  color: var(--dark-gray-background-color);
+  border-color: var(--dark-gray-background-color);
 
   &:hover {
     cursor: default;
@@ -406,4 +432,10 @@ input[type='radio']:hover {
 .multiSelectAnswer.selected {
   color: var(--blue-color);
   border: 1px solid var(--blue-color);
+}
+
+.multiSelectAnswer.disabled.selected {
+  color: var(--border-color);
+  border-color: var(--border-color);
+  background-color: var(--gray-background-color);
 }

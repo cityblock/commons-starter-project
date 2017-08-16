@@ -1,0 +1,13 @@
+fragment FullPatientAnswer on PatientAnswer {
+  id
+  createdAt
+  updatedAt
+  deletedAt
+  answerId
+  answerValue
+  patientId
+  applicable
+  question {
+    id
+  }
+}

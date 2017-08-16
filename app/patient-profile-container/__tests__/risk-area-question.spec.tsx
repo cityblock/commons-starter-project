@@ -41,6 +41,7 @@ it('renders a risk area question', () => {
       <ReduxConnectedIntlProvider>
         <ConnectedRouter history={history}>
           <RiskAreaQuestion
+            visible={true}
             answerData={{ answers: [], oldAnswers: [], changed: false }}
             onChange={() => true}
             question={question}

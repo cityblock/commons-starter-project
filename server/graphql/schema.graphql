@@ -395,6 +395,7 @@ type PatientAnswer implements uniqueId {
   answerValue: String!
   patientId: String!
   applicable: Boolean
+  question: Question
 }
 
 # Question
@@ -714,11 +715,18 @@ input AnswerDeleteInput {
   answerId: String!
 }
 
-input PatientAnswerCreateInput {
+input PatientAnswerInput {
   answerId: String!
   answerValue: String!
   patientId: String!
   applicable: Boolean!
+  questionId: String!
+}
+
+input PatientAnswersCreateInput {
+  patientId: String!
+  patientAnswers: [PatientAnswerInput]!
+  questionIds: [String]!
 }
 
 input PatientAnswerEditInput {
@@ -851,7 +859,7 @@ type RootMutationType {
   answerDelete(input: AnswerDeleteInput): Answer
 
   # Create an Answer
-  patientAnswerCreate(input: PatientAnswerCreateInput): PatientAnswer
+  patientAnswersCreate(input: PatientAnswersCreateInput): [PatientAnswer]
 
   # Edit an Answer
   patientAnswerEdit(input: PatientAnswerEditInput): PatientAnswer
@@ -981,6 +989,9 @@ type RootQueryType {
 
   # PatientPreviousAnswersForQuestion
   patientPreviousAnswersForQuestion(questionId: String!, patientId: String!): [PatientAnswer]
+
+  # PatientAnswersForRiskArea
+  patientAnswersForRiskArea(riskAreaId: String!, patientId: String!): [PatientAnswer]
 
   # PatientRiskAreaSummary
   patientRiskAreaSummary(riskAreaId: String!, patientId: String!): RiskAreaSummary

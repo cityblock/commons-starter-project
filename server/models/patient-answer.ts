@@ -5,11 +5,16 @@ import Answer from './answer';
 import Question from './question';
 
 export interface IPatientAnswerCreateFields {
-  answerId: string;
-  answerValue: string;
   patientId: string;
-  applicable: boolean;
-  userId: string;
+  questionIds?: string[];
+  answers: Array<{
+    answerId: string;
+    questionId: string;
+    answerValue: string;
+    patientId: string;
+    applicable: boolean;
+    userId: string;
+  }>;
 }
 
 /* tslint:disable:member-ordering */
@@ -21,6 +26,7 @@ export default class PatientAnswer extends Model {
   patientId: string;
   userId: string;
   applicable: boolean;
+  question: Question;
 
   createdAt: string;
   updatedAt: string;
@@ -70,6 +76,21 @@ export default class PatientAnswer extends Model {
       join: {
         from: 'patient_answer.patientId',
         to: 'patient.id',
+      },
+    },
+
+    question: {
+      // TODO: remove once (if) https://github.com/Vincit/objection.js/pull/462 gets merged
+      relation: (Model as any).HasOneThroughRelation,
+      modelClass: 'question',
+      join: {
+        from: 'patient_answer.answerId',
+        through: {
+          modelClass: 'answer',
+          from: 'answer.id',
+          to: 'answer.questionId',
+        },
+        to: 'question.id',
       },
     },
   };
@@ -136,31 +157,42 @@ export default class PatientAnswer extends Model {
     return patientAnswers as PatientAnswer[];
   }
 
-  static async create(input: IPatientAnswerCreateFields): Promise<PatientAnswer> {
-    return await transaction(PatientAnswer, async PatientAnswerWithTrasaction => {
-      /**
-       * TODO: Improve performance
-       * Goal is to mark previous answers as deleted for answers that are part of non-multiselect
-       * question. For multiselect question, the api user needs to manually delete old answers.
-       */
-      const answer = await Answer.get(input.answerId);
-      const question = await Question.get(answer.questionId);
-      if (question.answerType !== 'multiselect') {
-        await PatientAnswerWithTrasaction
+  static async create(input: IPatientAnswerCreateFields): Promise<PatientAnswer[]> {
+    return await transaction(PatientAnswer, async PatientAnswerWithTransaction => {
+      const questionIds = input.questionIds || input.answers.map(answer => answer.questionId);
+
+      // NOTE: This needs to be done as a subquery as knex doesn't support FROM clauses for updates
+      const patientAnswerIdsToDeleteQuery = PatientAnswerWithTransaction
+        .query()
+        .joinRelation('answer')
+        .where('patient_answer.deletedAt', null)
+        .andWhere('patientId', input.patientId)
+        .where('answer.questionId', 'in', questionIds)
+        .select('patient_answer.id');
+
+      await PatientAnswerWithTransaction
+        .query()
+        .where('id', 'in', patientAnswerIdsToDeleteQuery)
+        .patch({ deletedAt: new Date().toISOString() });
+
+      let results: PatientAnswer[] = [];
+
+      if (input.answers.length) {
+        results = await PatientAnswerWithTransaction
           .query()
-          .where('deletedAt', null)
-          .andWhere('patientId', input.patientId)
-          .andWhere('answerId', input.answerId)
-          .patch({ deletedAt: new Date().toISOString() });
+          .insertGraphAndFetch(input.answers);
       }
-      return await PatientAnswerWithTrasaction.query().insertAndFetch(input);
+
+      return results;
     });
   }
 
   static async editApplicable(
     applicable: boolean, patientAnswerId: string,
   ): Promise<PatientAnswer> {
-    return await this.query()
+    return await this
+      .query()
+      .eager('question')
       .updateAndFetchById(patientAnswerId, { applicable });
   }
 

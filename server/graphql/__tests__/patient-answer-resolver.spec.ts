@@ -21,6 +21,7 @@ describe('patient answer tests', () => {
   let riskArea: RiskArea;
   let question: Question;
   let answer: Answer;
+  let answer2: Answer;
   let user: User;
   let patient: Patient;
 
@@ -48,6 +49,15 @@ describe('patient answer tests', () => {
       questionId: question.id,
       order: 1,
     });
+    answer2 = await Answer.create({
+      displayValue: 'hates writing tests!',
+      value: '4',
+      valueType: 'number',
+      riskAdjustmentType: 'forceHighRisk',
+      inSummary: false,
+      questionId: question.id,
+      order: 2,
+    });
     patient = await createPatient(createMockPatient(123), user.id);
   });
 
@@ -57,15 +67,19 @@ describe('patient answer tests', () => {
 
   describe('resolve patient answer', () => {
     it('can fetch patient answer', async () => {
-      const patientAnswer = await PatientAnswer.create({
-        answerId: answer.id,
-        answerValue: '3',
+      const patientAnswers = await PatientAnswer.create({
         patientId: patient.id,
-        applicable: true,
-        userId: user.id,
+        answers: [{
+          questionId: answer.questionId,
+          answerId: answer.id,
+          answerValue: '3',
+          patientId: patient.id,
+          applicable: true,
+          userId: user.id,
+        }],
       });
       const query = `{
-        patientAnswer(patientAnswerId: "${patientAnswer.id}") {
+        patientAnswer(patientAnswerId: "${patientAnswers[0].id}") {
           id
           answerId,
           answerValue,
@@ -75,7 +89,7 @@ describe('patient answer tests', () => {
       }`;
       const result = await graphql(schema, query, null, { db, userRole });
       expect(cloneDeep(result.data!.patientAnswer)).toMatchObject({
-        id: patientAnswer.id,
+        id: patientAnswers[0].id,
         answerId: answer.id,
         answerValue: '3',
         patientId: patient.id,
@@ -94,12 +108,16 @@ describe('patient answer tests', () => {
 
   describe('resolve patient answer for question', () => {
     it('resolves patient answer for question', async () => {
-      const patientAnswer = await PatientAnswer.create({
-        answerId: answer.id,
-        answerValue: '3',
+      const patientAnswers = await PatientAnswer.create({
         patientId: patient.id,
-        applicable: true,
-        userId: user.id,
+        answers: [{
+          questionId: answer.questionId,
+          answerId: answer.id,
+          answerValue: '3',
+          patientId: patient.id,
+          applicable: true,
+          userId: user.id,
+        }],
       });
       const query = `{
         patientAnswersForQuestion(questionId: "${question.id}", patientId: "${patient.id}") {
@@ -108,29 +126,36 @@ describe('patient answer tests', () => {
       }`;
       const result = await graphql(schema, query, null, { db, userRole });
       expect(cloneDeep(result.data!.patientAnswersForQuestion)).toMatchObject([{
-        id: patientAnswer.id,
-        answerValue: patientAnswer.answerValue,
+        id: patientAnswers[0].id,
+        answerValue: patientAnswers[0].answerValue,
       }]);
     });
   });
 
   describe('resolve previous patient answer for question', () => {
     it('resolves patient answer for question', async () => {
-      const patientAnswer = await PatientAnswer.create({
-        answerId: answer.id,
-        answerValue: '3',
+      const patientAnswers = await PatientAnswer.create({
         patientId: patient.id,
-        applicable: true,
-        userId: user.id,
+        answers: [{
+          questionId: answer.questionId,
+          answerId: answer.id,
+          answerValue: '3',
+          patientId: patient.id,
+          applicable: true,
+          userId: user.id,
+        }],
       });
 
       await PatientAnswer.create({
-        answerId: answer.id,
-        answerValue: '2',
         patientId: patient.id,
-        applicable: true,
-        userId: user.id,
-
+        answers: [{
+          questionId: answer.questionId,
+          answerId: answer.id,
+          answerValue: '2',
+          patientId: patient.id,
+          applicable: true,
+          userId: user.id,
+        }],
       });
       const query = `{
         patientPreviousAnswersForQuestion(
@@ -142,23 +167,100 @@ describe('patient answer tests', () => {
       const result = await graphql(schema, query, null, { db, userRole });
 
       expect(cloneDeep(result.data!.patientPreviousAnswersForQuestion)).toMatchObject([{
-        id: patientAnswer.id,
+        id: patientAnswers[0].id,
         answerValue: '3',
       }]);
     });
   });
 
+  describe('resolve patient answers for risk area', () => {
+    it('resolves patient answers for a risk area', async () => {
+      const riskArea2 = await RiskArea.create({
+        title: 'testing2',
+        order: 2,
+      });
+      const differentQuestion = await Question.create({
+        title: 'like writing tests again?',
+        answerType: 'dropdown',
+        riskAreaId: riskArea2.id,
+        order: 1,
+      });
+      const differentAnswer = await Answer.create({
+        displayValue: 'loves writing more tests!',
+        value: '3',
+        valueType: 'number',
+        riskAdjustmentType: 'forceHighRisk',
+        inSummary: false,
+        questionId: differentQuestion.id,
+        order: 1,
+      });
+      const patientAnswers1 = await PatientAnswer.create({
+        patientId: patient.id,
+        answers: [{
+          questionId: answer.questionId,
+          answerId: answer.id,
+          answerValue: '3',
+          patientId: patient.id,
+          applicable: true,
+          userId: user.id,
+        }],
+      });
+      const patientAnswers2 = await PatientAnswer.create({
+        patientId: patient.id,
+        answers: [{
+          questionId: differentAnswer.questionId,
+          answerId: differentAnswer.id,
+          answerValue: '3',
+          patientId: patient.id,
+          applicable: true,
+          userId: user.id,
+        }],
+      });
+
+      const query = `{
+        patientAnswersForRiskArea(
+          riskAreaId: "${riskArea.id}", patientId: "${patient.id}"
+        ) {
+          id
+          answerValue
+          question {
+            id
+          }
+        }
+      }`;
+      const result = await graphql(schema, query, null, { db, userRole });
+      const answers = cloneDeep(result.data!.patientAnswersForRiskArea);
+
+      expect(answers).toMatchObject([{
+        id: patientAnswers1[0].id,
+        answerValue: '3',
+        question: {
+          id: question.id,
+        },
+      }]);
+
+      expect(answers.map((ans: any) => ans.id)).not.toContain(patientAnswers2[0].id);
+    });
+  });
+
   describe('answer edit', () => {
     it('edits answer', async () => {
-      const patientAnswer = await PatientAnswer.create({
-        answerId: answer.id,
-        answerValue: '3',
+      const patientAnswers = await PatientAnswer.create({
         patientId: patient.id,
-        applicable: true,
-        userId: user.id,
+        answers: [{
+          questionId: answer.questionId,
+          answerId: answer.id,
+          answerValue: '3',
+          patientId: patient.id,
+          applicable: true,
+          userId: user.id,
+        }],
       });
       const query = `mutation {
-        patientAnswerEdit(input: { applicable: false, patientAnswerId: "${patientAnswer.id}" }) {
+        patientAnswerEdit(input: {
+          applicable: false,
+          patientAnswerId: "${patientAnswers[0].id}",
+        }) {
           applicable
         }
       }`;
@@ -169,14 +271,19 @@ describe('patient answer tests', () => {
     });
   });
 
-  describe('patient answer create', () => {
+  describe('patient answers create', () => {
     it('creates a new patient answer', async () => {
       const mutation = `mutation {
-        patientAnswerCreate(input: {
-          answerValue: "loves writing tests too!"
-          answerId: "${answer.id}",
+        patientAnswersCreate(input: {
           patientId: "${patient.id}",
-          applicable: false,
+          questionIds: ["${answer.questionId}"],
+          patientAnswers: [{
+            questionId: "${answer.questionId}"
+            answerValue: "loves writing tests too!"
+            answerId: "${answer.id}",
+            patientId: "${patient.id}",
+            applicable: false,
+          }]
         }) {
           answerId,
           answerValue,
@@ -185,7 +292,7 @@ describe('patient answer tests', () => {
         }
       }`;
       const result = await graphql(schema, mutation, null, { db, userRole, userId: user.id });
-      expect(cloneDeep(result.data!.patientAnswerCreate)).toMatchObject({
+      expect(cloneDeep(result.data!.patientAnswersCreate[0])).toMatchObject({
         answerValue: 'loves writing tests too!',
         answerId: answer.id,
         patientId: patient.id,
@@ -193,25 +300,103 @@ describe('patient answer tests', () => {
       });
     });
 
+    it('creates multiple new patient answers', async () => {
+      const mutation = `mutation {
+        patientAnswersCreate(input: {
+          patientId: "${patient.id}",
+          questionIds: ["${answer.questionId}", "${answer2.questionId}"],
+          patientAnswers: [{
+            questionId: "${answer.questionId}"
+            answerValue: "loves writing tests too!"
+            answerId: "${answer.id}",
+            patientId: "${patient.id}",
+            applicable: false,
+          }, {
+            questionId: "${answer2.questionId}"
+            answerValue: "hates writing tests too!"
+            answerId: "${answer2.id}",
+            patientId: "${patient.id}",
+            applicable: false,
+          }]
+        }) {
+          answerId,
+          answerValue,
+          patientId,
+          applicable,
+        }
+      }`;
+      const result = await graphql(schema, mutation, null, { db, userRole, userId: user.id });
+      const clonedResult = cloneDeep(result.data!.patientAnswersCreate);
+      expect(clonedResult[0]).toMatchObject({
+        answerValue: 'loves writing tests too!',
+        answerId: answer.id,
+        patientId: patient.id,
+        applicable: false,
+      });
+      expect(clonedResult[1]).toMatchObject({
+        answerValue: 'hates writing tests too!',
+        answerId: answer2.id,
+        patientId: patient.id,
+        applicable: false,
+      });
+    });
+
+    it('properly marks previous answers as deleted when only questionIds are given', async () => {
+      const createdAnswers = await PatientAnswer.create({
+        patientId: patient.id,
+        answers: [{
+          questionId: answer.questionId,
+          answerId: answer.id,
+          answerValue: '1',
+          userId: user.id,
+          patientId: patient.id,
+          applicable: true,
+        }],
+      });
+      const fetchedAnswers1 = await PatientAnswer.getForQuestion(answer.questionId, patient.id);
+      expect(fetchedAnswers1!.map(ans => ans.id)).toContain(createdAnswers[0].id);
+
+      // Running this mutation should mark previous answer as deleted
+      const mutation = `mutation {
+        patientAnswersCreate(input: {
+          patientId: "${patient.id}",
+          questionIds: ["${answer.questionId}"],
+          patientAnswers: []
+        }) {
+          answerId,
+          answerValue,
+          patientId,
+          applicable,
+        }
+      }`;
+      await graphql(schema, mutation, null, { db, userRole, userId: user.id });
+
+      const fetchedAnswers2 = await PatientAnswer.getForQuestion(answer.questionId, patient.id);
+      expect(fetchedAnswers2!.map(ans => ans.id)).not.toContain(createdAnswers[0].id);
+    });
   });
 
   describe('patient answer delete', () => {
     it('marks a patient answer as deleted', async () => {
-      const patientAnswer = await PatientAnswer.create({
-        answerId: answer.id,
-        answerValue: '3',
+      const patientAnswers = await PatientAnswer.create({
         patientId: patient.id,
-        applicable: true,
-        userId: user.id,
+        answers: [{
+          questionId: answer.questionId,
+          answerId: answer.id,
+          answerValue: '3',
+          patientId: patient.id,
+          applicable: true,
+          userId: user.id,
+        }],
       });
       const mutation = `mutation {
-        patientAnswerDelete(input: { patientAnswerId: "${patientAnswer.id}" }) {
+        patientAnswerDelete(input: { patientAnswerId: "${patientAnswers[0].id}" }) {
           id,
         }
       }`;
       const result = await graphql(schema, mutation, null, { db, userRole, userId: user.id });
       expect(cloneDeep(result.data!.patientAnswerDelete)).toMatchObject({
-        id: patientAnswer.id,
+        id: patientAnswers[0].id,
       });
     });
   });
@@ -236,7 +421,7 @@ describe('patient answer tests', () => {
         riskAreaId: riskArea.id,
         order: 1,
       });
-      const answer2 = await Answer.create({
+      const answer3 = await Answer.create({
         displayValue: 'loves writing tests!',
         value: '3',
         valueType: 'number',
@@ -247,15 +432,19 @@ describe('patient answer tests', () => {
       });
       await QuestionCondition.create({
         questionId: question.id,
-        answerId: answer2.id,
+        answerId: answer3.id,
       });
 
-      const patientAnswer = await PatientAnswer.create({
-        answerId: answer2.id,
-        answerValue: '3',
+      const patientAnswers = await PatientAnswer.create({
         patientId: patient.id,
-        applicable: false,
-        userId: user.id,
+        answers: [{
+          questionId: answer3.questionId,
+          answerId: answer3.id,
+          answerValue: '3',
+          patientId: patient.id,
+          applicable: false,
+          userId: user.id,
+        }],
       });
 
       const mutation = `mutation {
@@ -268,7 +457,7 @@ describe('patient answer tests', () => {
       const result = await graphql(schema, mutation, null, { db, userRole, userId: user.id });
       expect(
         cloneDeep(result.data!.patientAnswersUpdateApplicable),
-      ).toMatchObject([{ id: patientAnswer.id }]);
+      ).toMatchObject([{ id: patientAnswers[0].id }]);
     });
 
     it('works for answers if nothing changes', async () => {
@@ -278,7 +467,7 @@ describe('patient answer tests', () => {
         riskAreaId: riskArea.id,
         order: 1,
       });
-      const answer2 = await Answer.create({
+      const answer3 = await Answer.create({
         displayValue: 'loves writing tests!',
         value: '3',
         valueType: 'number',
@@ -289,15 +478,19 @@ describe('patient answer tests', () => {
       });
       await QuestionCondition.create({
         questionId: question.id,
-        answerId: answer2.id,
+        answerId: answer3.id,
       });
 
       await PatientAnswer.create({
-        answerId: answer2.id,
-        answerValue: '3',
         patientId: patient.id,
-        applicable: true, // << important part
-        userId: user.id,
+        answers: [{
+          questionId: answer3.questionId,
+          answerId: answer3.id,
+          answerValue: '3',
+          patientId: patient.id,
+          applicable: true, // << important part
+          userId: user.id,
+        }],
       });
 
       const mutation = `mutation {

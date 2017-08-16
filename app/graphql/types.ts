@@ -69,6 +69,14 @@ export type QuestionConditionTypeOptions =
   "oneTrue";
 
 
+export type PatientAnswerInput = {
+  answerId: string,
+  answerValue: string,
+  patientId: string,
+  applicable: boolean,
+  questionId: string,
+};
+
 export type answerCreateMutationVariables = {
   displayValue: string,
   value: string,
@@ -567,6 +575,28 @@ export type getEventNotificationsForCurrentUserQuery = {
   } | null,
 };
 
+export type getPatientAnswersForRiskAreaQueryVariables = {
+  riskAreaId: string,
+  patientId: string,
+};
+
+export type getPatientAnswersForRiskAreaQuery = {
+  // PatientAnswersForRiskArea
+  patientAnswersForRiskArea:  Array< {
+    id: string,
+    createdAt: string,
+    updatedAt: string,
+    deletedAt: string | null,
+    answerId: string,
+    answerValue: string,
+    patientId: string,
+    applicable: boolean | null,
+    question:  {
+      id: string,
+    } | null,
+  } | null > | null,
+};
+
 export type getPatientCareTeamQueryVariables = {
   patientId: string,
 };
@@ -990,6 +1020,51 @@ export type logInUserMutation = {
       googleProfileImageUrl: string | null,
     },
   } | null,
+};
+
+export type patientAnswersCreateMutationVariables = {
+  patientId: string,
+  patientAnswers: Array< PatientAnswerInput | null >,
+  questionIds: Array< string | null >,
+};
+
+export type patientAnswersCreateMutation = {
+  // Create an Answer
+  patientAnswersCreate:  Array< {
+    id: string,
+    createdAt: string,
+    updatedAt: string,
+    deletedAt: string | null,
+    answerId: string,
+    answerValue: string,
+    patientId: string,
+    applicable: boolean | null,
+    question:  {
+      id: string,
+    } | null,
+  } | null > | null,
+};
+
+export type patientAnswersUpdateApplicableMutationVariables = {
+  patientId: string,
+  riskAreaId: string,
+};
+
+export type patientAnswersUpdateApplicableMutation = {
+  // Updates applicable for Patient Answers in risk area
+  patientAnswersUpdateApplicable:  Array< {
+    id: string,
+    createdAt: string,
+    updatedAt: string,
+    deletedAt: string | null,
+    answerId: string,
+    answerValue: string,
+    patientId: string,
+    applicable: boolean | null,
+    question:  {
+      id: string,
+    } | null,
+  } | null > | null,
 };
 
 export type patientEditMutationVariables = {
@@ -2049,6 +2124,20 @@ export type FullEventNotificationFragment = {
   createdAt: string,
   updatedAt: string,
   deletedAt: string | null,
+};
+
+export type FullPatientAnswerFragment = {
+  id: string,
+  createdAt: string,
+  updatedAt: string,
+  deletedAt: string | null,
+  answerId: string,
+  answerValue: string,
+  patientId: string,
+  applicable: boolean | null,
+  question:  {
+    id: string,
+  } | null,
 };
 
 export type FullPatientEncounterFragment = {

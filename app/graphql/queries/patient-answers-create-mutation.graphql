@@ -1,0 +1,15 @@
+#import "../fragments/full-patient-answer.graphql"
+
+mutation patientAnswersCreate(
+  $patientId: String!
+  $patientAnswers: [PatientAnswerInput]!
+  $questionIds: [String]!
+) {
+  patientAnswersCreate(input: {
+    patientId: $patientId
+    patientAnswers: $patientAnswers
+    questionIds: $questionIds
+  }) {
+    ...FullPatientAnswer
+  }
+}

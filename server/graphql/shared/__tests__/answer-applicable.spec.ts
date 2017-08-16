@@ -90,19 +90,23 @@ describe('answer applicable tests', () => {
     });
 
     it('works if no applicable question conditions', async () => {
-      const patientAnswer = await PatientAnswer.create({
-        answerId: answer2.id,
-        answerValue: '3',
+      const patientAnswers = await PatientAnswer.create({
         patientId: patient.id,
-        applicable: false,
-        userId: user.id,
+        answers: [{
+          questionId: answer2.questionId,
+          answerId: answer2.id,
+          answerValue: '3',
+          patientId: patient.id,
+          applicable: false,
+          userId: user.id,
+        }],
       });
       question.answers = [answer];
       question2.answers = [answer2, answer3];
       question.applicableIfQuestionConditions = [];
       question.applicableIfType = 'oneTrue';
       const patientAnswersByQuestionId = getPatientAnswersByQuestionId(
-        [patientAnswer], [question, question2],
+        [patientAnswers[0]], [question, question2],
       );
       expect(isQuestionApplicable(question, patientAnswersByQuestionId)).toBeTruthy();
     });
@@ -112,12 +116,16 @@ describe('answer applicable tests', () => {
         questionId: question.id,
         answerId: answer2.id,
       });
-      const patientAnswer = await PatientAnswer.create({
-        answerId: answer2.id,
-        answerValue: '3',
+      const patientAnswers = await PatientAnswer.create({
         patientId: patient.id,
-        applicable: false,
-        userId: user.id,
+        answers: [{
+          questionId: answer2.questionId,
+          answerId: answer2.id,
+          answerValue: '3',
+          patientId: patient.id,
+          applicable: false,
+          userId: user.id,
+        }],
       });
 
       question.answers = [answer];
@@ -125,7 +133,7 @@ describe('answer applicable tests', () => {
       question.applicableIfQuestionConditions = [questionCondition];
       question.applicableIfType = 'oneTrue';
       const patientAnswersByQuestionId = getPatientAnswersByQuestionId(
-        [patientAnswer], [question, question2],
+        [patientAnswers[0]], [question, question2],
       );
       expect(isQuestionApplicable(question, patientAnswersByQuestionId)).toBeTruthy();
     });
@@ -135,12 +143,16 @@ describe('answer applicable tests', () => {
         questionId: question.id,
         answerId: answer2.id,
       });
-      const patientAnswer = await PatientAnswer.create({
-        answerId: answer2.id,
-        answerValue: '3',
+      const patientAnswers = await PatientAnswer.create({
         patientId: patient.id,
-        applicable: false,
-        userId: user.id,
+        answers: [{
+          questionId: answer2.questionId,
+          answerId: answer2.id,
+          answerValue: '3',
+          patientId: patient.id,
+          applicable: false,
+          userId: user.id,
+        }],
       });
 
       question.answers = [answer];
@@ -148,7 +160,7 @@ describe('answer applicable tests', () => {
       question.applicableIfQuestionConditions = [questionCondition];
       question.applicableIfType = 'allTrue';
       const patientAnswersByQuestionId = getPatientAnswersByQuestionId(
-        [patientAnswer], [question, question2],
+        [patientAnswers[0]], [question, question2],
       );
       expect(isQuestionApplicable(question, patientAnswersByQuestionId)).toBeTruthy();
 
@@ -164,26 +176,36 @@ describe('answer applicable tests', () => {
 
   describe('getPatientAnswersByQuestionId', () => {
     it('gets patient answers by question id', async () => {
-      const patientAnswer = await PatientAnswer.create({
-        answerId: answer.id,
-        answerValue: '3',
+      const patientAnswers = await PatientAnswer.create({
         patientId: patient.id,
-        applicable: false,
-        userId: user.id,
+        answers: [{
+          questionId: answer.questionId,
+          answerId: answer.id,
+          answerValue: '3',
+          patientId: patient.id,
+          applicable: false,
+          userId: user.id,
+        }],
       });
       question.answers = [answer];
       const questionIdHash: any = {};
-      questionIdHash[question.id] = [patientAnswer];
-      expect(getPatientAnswersByQuestionId([patientAnswer], [question])).toEqual(questionIdHash);
+      questionIdHash[question.id] = [patientAnswers[0]];
+      expect(getPatientAnswersByQuestionId(
+        [patientAnswers[0]], [question]),
+      ).toEqual(questionIdHash);
     });
 
     it('errors if patient answers do not match question', async () => {
-      const patientAnswer = await PatientAnswer.create({
-        answerId: answer.id,
-        answerValue: '3',
+      const patientAnswers = await PatientAnswer.create({
         patientId: patient.id,
-        applicable: false,
-        userId: user.id,
+        answers: [{
+          questionId: answer.questionId,
+          answerId: answer.id,
+          answerValue: '3',
+          patientId: patient.id,
+          applicable: false,
+          userId: user.id,
+        }],
       });
       const otherQuestion = await Question.create({
         title: 'like writing tests?',
@@ -201,7 +223,7 @@ describe('answer applicable tests', () => {
         order: 1,
       });
       otherQuestion.answers = [otherAnswer];
-      expect(() => getPatientAnswersByQuestionId([patientAnswer], [otherQuestion]))
+      expect(() => getPatientAnswersByQuestionId([patientAnswers[0]], [otherQuestion]))
         .toThrowError('Patient answers are not answers to the questions');
     });
   });
@@ -228,21 +250,25 @@ describe('answer applicable tests', () => {
         answerId: answer2.id,
       });
 
-      const patientAnswer = await PatientAnswer.create({
-        answerId: answer2.id,
-        answerValue: '3',
+      const patientAnswers = await PatientAnswer.create({
         patientId: patient.id,
-        applicable: false,
-        userId: user.id,
+        answers: [{
+          questionId: answer2.questionId,
+          answerId: answer2.id,
+          answerValue: '3',
+          patientId: patient.id,
+          applicable: false,
+          userId: user.id,
+        }],
       });
       question.answers = [answer];
       question2.answers = [answer2];
       const updatedPatientAnswers = await Promise.all(updatePatientAnswerApplicable(
-        [patientAnswer],
+        [patientAnswers[0]],
         [question, question2],
       ));
-      patientAnswer.applicable = true;
-      expect(updatedPatientAnswers).toEqual([patientAnswer]);
+      patientAnswers[0].applicable = true;
+      expect(updatedPatientAnswers).toMatchObject([patientAnswers[0]]);
     });
   });
 });

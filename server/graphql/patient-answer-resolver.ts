@@ -1,6 +1,6 @@
 import {
+  IPatientAnswersCreateInput,
   IPatientAnswersUpdateApplicableInput,
-  IPatientAnswerCreateInput,
   IPatientAnswerDeleteInput,
   IPatientAnswerEditInput,
 } from 'schema';
@@ -10,8 +10,8 @@ import accessControls from './shared/access-controls';
 import { updatePatientAnswerApplicable } from './shared/answer-applicable';
 import { IContext } from './shared/utils';
 
-export interface IPatientAnswerCreateArgs {
-  input: IPatientAnswerCreateInput;
+export interface IPatientAnswersCreateArgs {
+  input: IPatientAnswersCreateInput;
 }
 
 export interface IResolvePatientAnswerOptions {
@@ -36,17 +36,15 @@ export async function patientAnswersUpdateApplicable(
   { db, userRole }: IContext,
 ) {
   await accessControls.isAllowed(userRole, 'create', 'patientAnswer');
-  if (userRole !== 'admin') {
-    throw new Error('must be admin');
-  }
+
   // TODO add transactions
   const patientAnswers = await PatientAnswer.getForRiskArea(input.riskAreaId, input.patientId);
   const questions = await Question.getAllForRiskArea(input.riskAreaId);
   return await Promise.all(updatePatientAnswerApplicable(patientAnswers, questions));
 }
 
-export async function patientAnswerCreate(
-  root: any, { input }: IPatientAnswerCreateArgs, context: IContext,
+export async function patientAnswersCreate(
+  root: any, { input }: IPatientAnswersCreateArgs, context: IContext,
 ) {
   const { userRole, userId } = context;
   await accessControls.isAllowed(userRole, 'create', 'patientAnswer');
@@ -54,7 +52,13 @@ export async function patientAnswerCreate(
     throw new Error('not logged in');
   }
 
-  return await PatientAnswer.create({ userId, ...input });
+  const { patientAnswers, patientId, questionIds } = input;
+
+  return await PatientAnswer.create({
+    patientId,
+    questionIds,
+    answers: patientAnswers.map(patientAnswer => ({ ...patientAnswer, userId })),
+  });
 }
 
 export async function resolvePatientAnswersForQuestion(
@@ -71,6 +75,14 @@ export async function resolvePreviousPatientAnswersForQuestion(
   await accessControls.isAllowed(userRole, 'view', 'patientAnswer');
 
   return await PatientAnswer.getPreviousAnswersForQuestion(args.questionId, args.patientId);
+}
+
+export async function resolvePatientAnswersForRiskArea(
+  root: any, args: { riskAreaId: string, patientId: string }, { db, userRole }: IContext,
+) {
+  await accessControls.isAllowed(userRole, 'view', 'patientAnswer');
+
+  return await PatientAnswer.getForRiskArea(args.riskAreaId, args.patientId, 'question');
 }
 
 export async function resolvePatientAnswer(

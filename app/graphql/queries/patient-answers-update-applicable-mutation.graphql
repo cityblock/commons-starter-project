@@ -1,0 +1,13 @@
+#import "../fragments/full-patient-answer.graphql"
+
+mutation patientAnswersUpdateApplicable(
+  $patientId: String!
+  $riskAreaId: String!
+) {
+  patientAnswersUpdateApplicable(input: {
+    patientId: $patientId
+    riskAreaId: $riskAreaId
+  }) {
+    ...FullPatientAnswer
+  }
+}

@@ -155,11 +155,15 @@ describe('answer tests', () => {
         order: 1,
       });
       await PatientAnswer.create({
-        answerId: answer.id,
-        answerValue: '3',
         patientId: patient.id,
-        applicable: true,
-        userId: user.id,
+        answers: [{
+          questionId: answer.questionId,
+          answerId: answer.id,
+          answerValue: '3',
+          patientId: patient.id,
+          applicable: true,
+          userId: user.id,
+        }],
       });
       const query = `{
         patientRiskAreaSummary(
@@ -186,6 +190,12 @@ describe('answer tests', () => {
         questionId: question.id,
         order: 1,
       });
+      const question2 = await Question.create({
+        title: 'other question',
+        answerType: 'dropdown',
+        riskAreaId: riskArea.id,
+        order: 2,
+      });
       const highRiskAnswer = await Answer.create({
         displayValue: 'loves writing tests!',
         value: '4',
@@ -193,23 +203,32 @@ describe('answer tests', () => {
         riskAdjustmentType: 'forceHighRisk',
         inSummary: true,
         summaryText: 'summary text!',
-        questionId: question.id,
+        questionId: question2.id,
         order: 1,
       });
       await PatientAnswer.create({
-        answerId: answer.id,
-        answerValue: '3',
         patientId: patient.id,
-        applicable: true,
-        userId: user.id,
+        answers: [{
+          questionId: answer.questionId,
+          answerId: answer.id,
+          answerValue: '3',
+          patientId: patient.id,
+          applicable: true,
+          userId: user.id,
+        }],
       });
       await PatientAnswer.create({
-        answerId: highRiskAnswer.id,
-        answerValue: '4',
         patientId: patient.id,
-        applicable: true,
-        userId: user.id,
+        answers: [{
+          questionId: highRiskAnswer.questionId,
+          answerId: highRiskAnswer.id,
+          answerValue: '4',
+          patientId: patient.id,
+          applicable: true,
+          userId: user.id,
+        }],
       });
+
       const query = `{
         patientRiskAreaRiskScore(
           riskAreaId: "${riskArea.id}",

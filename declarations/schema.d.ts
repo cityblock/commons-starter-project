@@ -45,6 +45,7 @@ declare module 'schema' {
     patientAnswer: IPatientAnswer | null;
     patientAnswersForQuestion: Array<IPatientAnswer> | null;
     patientPreviousAnswersForQuestion: Array<IPatientAnswer> | null;
+    patientAnswersForRiskArea: Array<IPatientAnswer> | null;
     patientRiskAreaSummary: IRiskAreaSummary | null;
     patientRiskAreaRiskScore: IRiskScore | null;
     questionCondition: IQuestionCondition | null;
@@ -485,6 +486,7 @@ declare module 'schema' {
     answerValue: string;
     patientId: string;
     applicable: boolean | null;
+    question: IQuestion | null;
   }
 
   /*
@@ -596,7 +598,7 @@ declare module 'schema' {
     answerCreate: IAnswer | null;
     answerEdit: IAnswer | null;
     answerDelete: IAnswer | null;
-    patientAnswerCreate: IPatientAnswer | null;
+    patientAnswersCreate: Array<IPatientAnswer> | null;
     patientAnswerEdit: IPatientAnswer | null;
     patientAnswerDelete: IPatientAnswer | null;
     patientAnswersUpdateApplicable: Array<IPatientAnswer> | null;
@@ -939,11 +941,21 @@ declare module 'schema' {
   /*
     description: 
   */
-  interface IPatientAnswerCreateInput {
+  interface IPatientAnswersCreateInput {
+    patientId: string;
+    patientAnswers: Array<IPatientAnswerInput>;
+    questionIds: Array<string>;
+  }
+
+  /*
+    description: 
+  */
+  interface IPatientAnswerInput {
     answerId: string;
     answerValue: string;
     patientId: string;
     applicable: boolean;
+    questionId: string;
   }
 
   /*

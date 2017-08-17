@@ -152,7 +152,8 @@ export default class PatientAnswer extends Model {
       .eager(eager)
       .where('patient_answer.deletedAt', null)
       .andWhere('patientId', patientId)
-      .andWhere('answer:question.riskAreaId', riskAreaId);
+      .andWhere('answer:question.riskAreaId', riskAreaId)
+      .orderBy('patient_answer.updatedAt', 'asc');
 
     return patientAnswers as PatientAnswer[];
   }

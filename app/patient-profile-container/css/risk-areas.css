@@ -148,6 +148,101 @@
   line-height: var(--small-font-line-height);
 }
 
+.riskAreasList {
+  width: 50%;
+  overflow-y: scroll;
+  -webkit-overflow-scrolling: touch;
+}
+
+.riskAreaLink {
+  color: var(--black-color);
+
+  &:hover {
+    color: var(--black-color);
+  }
+}
+
+.riskArea {
+  background-color: var(--white-color);
+  border-radius: 4px;
+  border-left: 2px solid var(--green-color);
+  display: flex;
+  flex-direction: column;
+  padding: var(--small-gutter) var(--small-gutter) var(--small-gutter) 18px;
+  min-height: 86px;
+}
+
+.riskArea.highRisk {
+  border-left: 2px solid var(--red-color);
+}
+
+.riskArea.mediumRisk {
+  border-left: 2px solid var(--yellow-color);
+}
+
+.riskArea.unstarted {
+  border-left: 2px solid var(--border-color);
+}
+
+.riskAreaTitleRow {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.riskAreaTitle {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.riskAreaLastUpdated {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.riskAreaBody {
+  display: flex;
+}
+
+.riskAreaSummaryList {
+  margin: 10px 0 0 0;
+  padding-left: 25px;
+}
+
+.riskAreaSummaryList li {
+  font-family: var(--roboto);
+  font-size: var(--small-font-size);
+  line-height: var(--medium-font-line-height);
+  color: var(--black-color);
+  padding-left: 14px;
+}
+
+.riskAreaSummaryList .subSummaryList {
+  margin: 0;
+  padding-left: 10px;
+  list-style: none;
+}
+
+.riskAreaSummaryList .subSummaryList li {
+  padding-left: 0;
+}
+
+.riskAreaSummaryList .subSummaryList li:before {
+  content: '-';
+  padding-right: 22px;
+  font-family: var(--roboto);
+  font-weight: var(--roboto-medium-weight);
+  font-size: var(--small-font-size);
+  line-height: var(--medium-font-line-height);
+  color: var(--black-color);
+}
+
 .riskAssessmentTitle {
   display: flex;
   flex-direction: row;
@@ -161,7 +256,7 @@
 }
 
 .riskAssessmentTitle.lowRisk {
-  border-left: 4px solid var(--border-color);
+  border-left: 4px solid var(--green-color);
 }
 
 .riskAssessmentTitle.mediumRisk {

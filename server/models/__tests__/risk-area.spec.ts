@@ -119,9 +119,10 @@ describe('risk area model', () => {
           userId: user.id,
         }],
       });
-      expect(await RiskArea.getSummaryForPatient(riskArea.id, patient.id)).toEqual([
-        'summary text!',
-      ]);
+      expect(await RiskArea.getSummaryForPatient(riskArea.id, patient.id)).toMatchObject({
+        started: true,
+        summary: ['summary text!'],
+      });
     });
 
     it('gets increment and high risk score for patient', async () => {

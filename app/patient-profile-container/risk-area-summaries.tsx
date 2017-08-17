@@ -1,11 +1,11 @@
 import * as classNames from 'classnames';
 import * as React from 'react';
 import { graphql } from 'react-apollo';
-import { Link } from 'react-router-dom';
 import * as riskAreasQuery from '../graphql/queries/get-risk-areas.graphql';
 import { FullRiskAreaFragment } from '../graphql/types';
 import * as sortSearchStyles from '../shared/css/sort-search.css';
 import * as styles from './css/risk-areas.css';
+import RiskAreaSummary from './risk-area-summary';
 import { RiskAreasLoadingError } from './risk-areas-loading-error';
 
 export interface IProps {
@@ -25,12 +25,14 @@ class RiskAreas extends React.Component<IProps, {}> {
   }
 
   renderRiskAreaSummary(riskArea: FullRiskAreaFragment, index: number) {
-    const { routeBase } = this.props;
+    const { routeBase, patientId } = this.props;
 
     return (
-      <Link key={index} to={`${routeBase}/${riskArea.id}`}>
-        <div>{riskArea.title}</div>
-      </Link>
+      <RiskAreaSummary
+        key={index}
+        routeBase={routeBase}
+        riskArea={riskArea}
+        patientId={patientId} />
     );
   }
 
@@ -40,7 +42,11 @@ class RiskAreas extends React.Component<IProps, {}> {
     const riskAreasToRender = riskAreas || [];
 
     if (riskAreasToRender.length) {
-      return riskAreasToRender.map(this.renderRiskAreaSummary);
+      return (
+        <div className={styles.riskAreasList}>
+          {riskAreasToRender.map(this.renderRiskAreaSummary)}
+        </div>
+      );
     } else if (!loading && !error) {
       return (
         <div className={styles.emptyRiskAreasMessage}>

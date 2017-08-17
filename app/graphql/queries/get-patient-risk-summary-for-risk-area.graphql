@@ -1,0 +1,7 @@
+#import "../fragments/full-risk-area-summary.graphql"
+
+query getPatientRiskSummaryForRiskArea($riskAreaId: String!, $patientId: String!) {
+  patientRiskAreaSummary(riskAreaId: $riskAreaId, patientId: $patientId) {
+    ...FullRiskAreaSummary
+  }
+}

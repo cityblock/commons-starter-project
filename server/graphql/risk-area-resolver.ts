@@ -1,5 +1,10 @@
 import { pickBy } from 'lodash';
-import { IRiskAreaCreateInput, IRiskAreaDeleteInput, IRiskAreaEditInput } from 'schema';
+import {
+  IRiskAreaCreateInput,
+  IRiskAreaDeleteInput,
+  IRiskAreaEditInput,
+  IRiskAreaSummary,
+} from 'schema';
 import RiskArea, { IRiskScore } from '../models/risk-area';
 import accessControls from './shared/access-controls';
 import { IContext } from './shared/utils';
@@ -71,10 +76,15 @@ export async function riskAreaDelete(
 
 export async function resolvePatientRiskAreaSummary(
   root: any, args: { riskAreaId: string, patientId: string }, { db, userRole }: IContext,
-): Promise<{ summary: string[] }> {
+): Promise<IRiskAreaSummary> {
   await accessControls.isAllowedForUser(userRole, 'view', 'riskArea');
-  const summary = await RiskArea.getSummaryForPatient(args.riskAreaId, args.patientId);
-  return { summary };
+  const {
+    summary,
+    started,
+    lastUpdated,
+  } = await RiskArea.getSummaryForPatient(args.riskAreaId, args.patientId);
+
+  return { summary, started, lastUpdated };
 }
 
 export async function resolvePatientRiskAreaRiskScore(

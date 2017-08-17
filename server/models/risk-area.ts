@@ -1,4 +1,6 @@
+import { last } from 'lodash';
 import { Model, RelationMappings } from 'objection';
+import { IRiskAreaSummary } from 'schema';
 import * as uuid from 'uuid/v4';
 import PatientAnswer from './patient-answer';
 import Question from './question';
@@ -93,7 +95,9 @@ export default class RiskArea extends Model {
   }
 
   // TODO: Add cross-risk-score methods
-  static async getSummaryForPatient(riskAreaId: string, patientId: string): Promise<string[]> {
+  static async getSummaryForPatient(
+    riskAreaId: string, patientId: string,
+  ): Promise<IRiskAreaSummary> {
     const patientAnswers = await PatientAnswer.getForRiskArea(riskAreaId, patientId, 'answer');
     const summary: string[] = [];
     patientAnswers.forEach(patientAnswer => {
@@ -104,7 +108,11 @@ export default class RiskArea extends Model {
         }
       }
     });
-    return summary;
+
+    const lastUpdatedAnswer = last(patientAnswers);
+    const lastUpdated = lastUpdatedAnswer ? lastUpdatedAnswer.updatedAt : null;
+
+    return { summary, started: !!patientAnswers.length, lastUpdated };
   }
 
   static async getRiskScoreForPatient(riskAreaId: string, patientId: string): Promise<IRiskScore> {

@@ -686,6 +686,33 @@ export type getPatientPanelQuery = {
   } | null,
 };
 
+export type getPatientRiskScoreForRiskAreaQueryVariables = {
+  riskAreaId: string,
+  patientId: string,
+};
+
+export type getPatientRiskScoreForRiskAreaQuery = {
+  // PatientRiskAreaRiskScore
+  patientRiskAreaRiskScore:  {
+    score: number,
+    forceHighRisk: boolean,
+  } | null,
+};
+
+export type getPatientRiskSummaryForRiskAreaQueryVariables = {
+  riskAreaId: string,
+  patientId: string,
+};
+
+export type getPatientRiskSummaryForRiskAreaQuery = {
+  // PatientRiskAreaSummary
+  patientRiskAreaSummary:  {
+    summary: Array< string >,
+    started: boolean,
+    lastUpdated: string | null,
+  } | null,
+};
+
 export type getPatientScratchPadQueryVariables = {
   patientId: string,
 };
@@ -2175,6 +2202,17 @@ export type ShortPatientFragment = {
   createdAt: string | null,
   consentToText: boolean | null,
   consentToCall: boolean | null,
+};
+
+export type FullRiskScoreFragment = {
+  score: number,
+  forceHighRisk: boolean,
+};
+
+export type FullRiskAreaSummaryFragment = {
+  summary: Array< string >,
+  started: boolean,
+  lastUpdated: string | null,
 };
 
 export type FullPatientScratchPadFragment = {

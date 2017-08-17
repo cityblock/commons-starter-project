@@ -441,6 +441,8 @@ type RiskScore {
 
 type RiskAreaSummary {
   summary: [String!]!
+  started: Boolean!
+  lastUpdated: String
 }
 
 # Task Event

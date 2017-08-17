@@ -1,0 +1,4 @@
+fragment FullRiskScore on RiskScore {
+  score
+  forceHighRisk
+}

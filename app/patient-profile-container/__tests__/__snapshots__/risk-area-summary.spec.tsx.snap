@@ -1,0 +1,47 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders a risk area summary 1`] = `
+<a
+  className={undefined}
+  href="/patients/patient-1/360/risk-area-id"
+  onClick={[Function]}
+>
+  <div
+    className="undefined"
+  >
+    <div
+      className={undefined}
+    >
+      <div
+        className={undefined}
+      >
+        <div
+          className={undefined}
+        />
+        <div
+          className={undefined}
+        >
+          Risk Area Title
+        </div>
+      </div>
+      <div
+        className={undefined}
+      >
+        <div
+          className={undefined}
+        >
+          Updated:
+        </div>
+        <div
+          className={undefined}
+        >
+          Loading
+        </div>
+      </div>
+    </div>
+    <div
+      className={undefined}
+    />
+  </div>
+</a>
+`;

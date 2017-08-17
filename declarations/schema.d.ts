@@ -494,6 +494,8 @@ declare module 'schema' {
   */
   interface IRiskAreaSummary {
     summary: Array<string>;
+    started: boolean;
+    lastUpdated: string | null;
   }
 
   /*

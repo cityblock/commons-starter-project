@@ -20,6 +20,7 @@ export interface IProps {
   questionId?: string;
   loading: boolean;
   error?: string;
+  mutate: any;
   match: {
     params: {
       tabId?: 'domains';

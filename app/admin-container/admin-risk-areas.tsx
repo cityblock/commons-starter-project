@@ -23,6 +23,7 @@ export interface IComponentProps {
 export interface IProps extends IComponentProps {
   loading?: boolean;
   error?: string;
+  mutate: any;
   deleteRiskArea: (
     options: { variables: riskAreaDeleteMutationVariables },
   ) => { data: { riskAreaDelete: FullRiskAreaFragment } };

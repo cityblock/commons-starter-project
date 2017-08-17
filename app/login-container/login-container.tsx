@@ -14,6 +14,7 @@ export interface IProps {
   logIn: (options: { variables: logInUserMutationVariables }) => any;
   onSuccess: () => any;
   currentUser?: FullUserFragment;
+  mutate: any;
   loading: boolean;
   error?: string;
 }

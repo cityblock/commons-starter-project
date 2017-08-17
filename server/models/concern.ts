@@ -1,5 +1,6 @@
 import { Model, RelationMappings, Transaction } from 'objection';
 import * as uuid from 'uuid/v4';
+import ConcernSuggestion from './concern-suggestion';
 
 export interface IConcernEditableFields {
   title: string;
@@ -12,6 +13,7 @@ export default class Concern extends Model {
   createdAt: string;
   updatedAt: string;
   deletedAt?: string;
+  concernSuggestions: ConcernSuggestion[];
 
   static tableName = 'concern';
 
@@ -35,8 +37,8 @@ export default class Concern extends Model {
       join: {
         from: 'concern.id',
         through: {
-          from: 'concern_answer.concernId',
-          to: 'concern_answer.answerId',
+          from: 'concern_suggestion.concernId',
+          to: 'concern_suggestion.answerId',
         },
         to: 'answer.id',
       },

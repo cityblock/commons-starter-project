@@ -11,8 +11,7 @@ deployment:
   staging:
     branch: master
     commands:
-      # We do a force push in case someone manually pushed from their client.
-      - git push -f git@beta.aptible.com:sidewalk-labs/commons.git $CIRCLE_SHA1:master
+      - git push git@beta.aptible.com:sidewalk-labs/commons.git $CIRCLE_SHA1:master
 
 dependencies:
   pre:

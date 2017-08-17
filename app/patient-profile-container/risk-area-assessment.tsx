@@ -1,5 +1,5 @@
 import * as classNames from 'classnames';
-import { isEqual, keys, values } from 'lodash';
+import { clone, isEqual, keys, values } from 'lodash';
 import * as React from 'react';
 import { compose, graphql } from 'react-apollo';
 import { connect, Dispatch } from 'react-redux';
@@ -248,7 +248,7 @@ export class RiskAreaAssessment extends React.Component<IProps, IState> {
 
           resetQuestions[questionId] = {
             answers,
-            oldAnswers: answers,
+            oldAnswers: clone(answers),
             changed: false,
           };
         });

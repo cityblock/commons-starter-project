@@ -22,7 +22,7 @@ export interface ICreatePatient extends IPatientEditableFields {
 
 export async function createPatient(patient: ICreatePatient, userId: string): Promise<Patient> {
   const instance = await Patient.query().insertAndFetch(patient);
-  await CareTeam.addUserToCareTeam({ userId, patientId: instance.id });
+  await CareTeam.create({ userId, patientId: instance.id });
   return instance;
 }
 

@@ -2,6 +2,7 @@ import { transaction, Model, RelationMappings, Transaction } from 'objection';
 import * as uuid from 'uuid/v4';
 import { IPaginatedResults, IPaginationOptions } from '../db';
 import Patient from './patient';
+import PatientGoal from './patient-goal';
 import TaskFollower from './task-follower';
 import User from './user';
 
@@ -10,6 +11,7 @@ export interface ITaskEditableFields {
   description?: string;
   dueAt?: string;
   patientId: string;
+  patientGoalId?: string;
   createdById: string;
   completedById?: string;
   assignedToId?: string;
@@ -26,7 +28,7 @@ export interface ITaskPaginationOptions extends IPaginationOptions {
 export type Priority = 'low' | 'medium' | 'high';
 
 // TODO: Only fetch needed eager models
-const EAGER_QUERY = '[createdBy, assignedTo, patient, completedBy, followers]';
+const EAGER_QUERY = '[createdBy, assignedTo, patient, completedBy, followers, patientGoal]';
 
 /* tslint:disable:member-ordering */
 export default class Task extends Model {
@@ -41,6 +43,8 @@ export default class Task extends Model {
   assignedToId: string;
   completedBy: User;
   completedById: string | null;
+  patientGoalId: string;
+  patientGoal: PatientGoal;
   createdAt: string;
   updatedAt: string;
   dueAt: string;
@@ -66,6 +70,7 @@ export default class Task extends Model {
       assignedToId: { type: 'string' },
       createdById: { type: 'string' },
       patientId: { type: 'string' },
+      patientGoalId: { type: 'string' },
       dueAt: { type: 'string' },
       priority: { type: 'string' },
       deletedAt: { type: 'string' },
@@ -73,6 +78,15 @@ export default class Task extends Model {
   };
 
   static relationMappings: RelationMappings = {
+    patientGoal: {
+      relation: Model.HasOneRelation,
+      modelClass: 'patient-goal',
+      join: {
+        from: 'task.patientGoalId',
+        to: 'patient_goal.id',
+      },
+    },
+
     createdBy: {
       relation: Model.BelongsToOneRelation,
       modelClass: 'user',

@@ -4,7 +4,7 @@ import Question from '../question';
 import RiskArea from '../risk-area';
 
 describe('anser model', () => {
-  let db: Db = null as any;
+  let db: Db;
 
   beforeEach(async () => {
     db = await Db.get();

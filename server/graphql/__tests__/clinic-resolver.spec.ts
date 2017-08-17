@@ -5,7 +5,7 @@ import Clinic from '../../models/clinic';
 import schema from '../make-executable-schema';
 
 describe('clinic resolver', () => {
-  let db: Db = null as any;
+  let db: Db;
   const userRole = 'admin';
 
   beforeEach(async () => {

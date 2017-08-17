@@ -9,7 +9,7 @@ import {
 import { checkAthenaApiHandler } from '../check-athena-api-handler';
 
 describe('athena api handler pingdom test', () => {
-  let athenaApi: AthenaApi = null as any;
+  let athenaApi: AthenaApi;
   let error: any;
 
   beforeEach(async () => {

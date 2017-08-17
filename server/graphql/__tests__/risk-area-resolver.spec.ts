@@ -15,11 +15,11 @@ import schema from '../make-executable-schema';
 
 describe('answer tests', () => {
 
-  let db: Db = null as any;
+  let db: Db;
   const userRole = 'admin';
-  let riskArea: RiskArea = null as any;
-  let question: Question = null as any;
-  let user: User = null as any;
+  let riskArea: RiskArea;
+  let question: Question;
+  let user: User;
 
   beforeEach(async () => {
     db = await Db.get();

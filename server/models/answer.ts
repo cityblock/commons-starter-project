@@ -67,6 +67,18 @@ export default class Answer extends Model {
         to: 'question.id',
       },
     },
+    concerns: {
+      relation: Model.ManyToManyRelation,
+      modelClass: 'concern',
+      join: {
+        from: 'answer.id',
+        through: {
+          from: 'concern_answer.answerId',
+          to: 'concern_answer.concernId',
+        },
+        to: 'concern.id',
+      },
+    },
   };
 
   $beforeInsert() {

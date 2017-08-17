@@ -3,7 +3,7 @@ import GoogleAuth from '../google-auth';
 import User from '../user';
 
 describe('google auth model', () => {
-  let db: Db = null as any;
+  let db: Db;
 
   beforeEach(async () => {
     db = await Db.get();

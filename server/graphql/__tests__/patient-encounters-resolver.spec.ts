@@ -14,11 +14,11 @@ import {
 import schema from '../make-executable-schema';
 
 describe('patient encounters', () => {
-  let redoxApi: RedoxApi = null as any;
-  let db: Db = null as any;
-  let patient: Patient = null as any;
-  let user: User = null as any;
-  let clinic: Clinic = null as any;
+  let redoxApi: RedoxApi;
+  let db: Db;
+  let patient: Patient;
+  let user: User;
+  let clinic: Clinic;
 
   const userRole = 'physician';
 

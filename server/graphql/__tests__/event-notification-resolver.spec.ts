@@ -9,13 +9,13 @@ import { createMockPatient, createPatient } from '../../spec-helpers';
 import schema from '../make-executable-schema';
 
 describe('event notification tests', () => {
-  let db: Db = null as any;
+  let db: Db;
   const userRole = 'physician';
-  let task: Task = null as any;
-  let taskEvent: TaskEvent = null as any;
-  let user: User = null as any;
-  let user2: User = null as any;
-  let patient = null as any;
+  let task: Task;
+  let taskEvent: TaskEvent;
+  let user: User;
+  let user2: User;
+  let patient;
 
   beforeEach(async () => {
     db = await Db.get();

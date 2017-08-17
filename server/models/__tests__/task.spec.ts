@@ -1,5 +1,7 @@
 import Db from '../../db';
 import { createMockPatient, createPatient } from '../../spec-helpers';
+import Patient from '../patient';
+import PatientGoal from '../patient-goal';
 import Task from '../task';
 import TaskFollower from '../task-follower';
 import User from '../user';
@@ -11,11 +13,21 @@ const pageNumber = 0;
 const pageSize = 10;
 
 describe('task model', () => {
-  let db: Db = null as any;
+  let db: Db;
+  let patientGoal: PatientGoal;
+  let user: User;
+  let patient: Patient;
 
   beforeEach(async () => {
     db = await Db.get();
     await Db.clear();
+
+    user = await User.create({ email: 'a@b.com', userRole, homeClinicId: '1' });
+    patient = await createPatient(createMockPatient(123), user.id);
+    patientGoal = await PatientGoal.create({
+      title: 'patient goal',
+      patientId: patient.id,
+    });
   });
 
   afterAll(async () => {
@@ -23,14 +35,6 @@ describe('task model', () => {
   });
 
   it('should create and retrieve a task', async () => {
-    const user = await User.create({
-      email: 'care@care.com',
-      firstName: 'Dan',
-      lastName: 'Plant',
-      userRole,
-      homeClinicId: '1',
-    });
-    const patient = await createPatient(createMockPatient(123), user.id);
     const dueAt = new Date().toUTCString();
     const task = await Task.create({
       title: 'title',
@@ -39,6 +43,7 @@ describe('task model', () => {
       patientId: patient.id,
       createdById: user.id,
       assignedToId: user.id,
+      patientGoalId: patientGoal.id,
     });
     expect(task).toMatchObject({
       id: task.id,
@@ -61,8 +66,6 @@ describe('task model', () => {
   });
 
   it('should update task', async () => {
-    const user = await User.create({ email: 'a@b.com', userRole, homeClinicId: '1' });
-    const patient = await createPatient(createMockPatient(123), user.id);
     const dueAt = new Date().toUTCString();
     const task = await Task.create({
       title: 'title',
@@ -71,6 +74,7 @@ describe('task model', () => {
       patientId: patient.id,
       createdById: user.id,
       assignedToId: user.id,
+      patientGoalId: patientGoal.id,
     });
     expect(await Task.update(task.id, {
       completedById: user.id,
@@ -85,8 +89,6 @@ describe('task model', () => {
   });
 
   it('fetches all not deleted tasks', async () => {
-    const user = await User.create({ email: 'a@b.com', userRole, homeClinicId: '1' });
-    const patient = await createPatient(createMockPatient(123), user.id);
     const dueAt = new Date().toUTCString();
     await Task.create({
       title: 'title',
@@ -95,6 +97,7 @@ describe('task model', () => {
       patientId: patient.id,
       createdById: user.id,
       assignedToId: user.id,
+      patientGoalId: patientGoal.id,
     });
 
     await Task.create({
@@ -104,6 +107,7 @@ describe('task model', () => {
       patientId: patient.id,
       createdById: user.id,
       assignedToId: user.id,
+      patientGoalId: patientGoal.id,
     });
 
     // should not include the deleted comment
@@ -114,6 +118,7 @@ describe('task model', () => {
       patientId: patient.id,
       createdById: user.id,
       assignedToId: user.id,
+      patientGoalId: patientGoal.id,
     });
     await Task.delete(deletedTask.id);
 
@@ -134,8 +139,6 @@ describe('task model', () => {
   });
 
   it('fetches a limited set of tasks', async () => {
-    const user = await User.create({ email: 'a@b.com', userRole, homeClinicId: '1' });
-    const patient = await createPatient(createMockPatient(123), user.id);
     const dueAt = new Date().toUTCString();
     await Task.create({
       title: 'title',
@@ -144,6 +147,7 @@ describe('task model', () => {
       patientId: patient.id,
       createdById: user.id,
       assignedToId: user.id,
+      patientGoalId: patientGoal.id,
     });
 
     await Task.create({
@@ -153,6 +157,7 @@ describe('task model', () => {
       patientId: patient.id,
       createdById: user.id,
       assignedToId: user.id,
+      patientGoalId: patientGoal.id,
     });
     expect(
       await Task.getPatientTasks(patient.id, { pageNumber: 0, pageSize: 1, order, orderBy }),
@@ -179,9 +184,7 @@ describe('task model', () => {
   });
 
   it('fetches a user tasks tasks', async () => {
-    const user = await User.create({ email: 'a@b.com', userRole, homeClinicId: '1' });
     const user2 = await User.create({ email: 'b@a.com', userRole, homeClinicId: '1' });
-    const patient = await createPatient(createMockPatient(123), user.id);
     const dueAt = new Date().toUTCString();
     await Task.create({
       title: 'title',
@@ -191,6 +194,7 @@ describe('task model', () => {
       createdById: user.id,
       assignedToId: user.id,
       priority: 'low',
+      patientGoalId: patientGoal.id,
     });
     const task2 = await Task.create({
       title: 'title 2',
@@ -200,6 +204,7 @@ describe('task model', () => {
       createdById: user2.id,
       assignedToId: user.id,
       priority: 'high',
+      patientGoalId: patientGoal.id,
     });
     await TaskFollower.followTask({ userId: user.id, taskId: task2.id });
     expect(
@@ -221,8 +226,6 @@ describe('task model', () => {
   });
 
   it('completes a task', async () => {
-    const user = await User.create({ email: 'a@b.com', userRole, homeClinicId: '1' });
-    const patient = await createPatient(createMockPatient(123), user.id);
     const dueAt = new Date().toUTCString();
     const task = await Task.create({
       title: 'title',
@@ -231,6 +234,7 @@ describe('task model', () => {
       patientId: patient.id,
       createdById: user.id,
       assignedToId: user.id,
+      patientGoalId: patientGoal.id,
     });
 
     expect(await Task.complete(task.id, user.id)).toMatchObject({
@@ -239,8 +243,6 @@ describe('task model', () => {
   });
 
   it('uncompletes a task', async () => {
-    const user = await User.create({ email: 'a@b.com', userRole, homeClinicId: '1' });
-    const patient = await createPatient(createMockPatient(123), user.id);
     const dueAt = new Date().toUTCString();
     const task = await Task.create({
       title: 'title',
@@ -249,6 +251,7 @@ describe('task model', () => {
       patientId: patient.id,
       createdById: user.id,
       assignedToId: user.id,
+      patientGoalId: patientGoal.id,
     });
 
     await Task.complete(task.id, user.id);

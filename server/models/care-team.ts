@@ -90,7 +90,7 @@ export default class CareTeam extends Model {
     };
   }
 
-  static async addUserToCareTeam({ userId, patientId }: ICareTeamOptions): Promise<User[]> {
+  static async create({ userId, patientId }: ICareTeamOptions): Promise<User[]> {
     // TODO: use postgres UPCERT here to add relation if it doesn't exist instead of a transaction
     await transaction(CareTeam, async CareTeamWithTransaction => {
       const relations = await CareTeamWithTransaction
@@ -109,7 +109,7 @@ export default class CareTeam extends Model {
     return await this.getForPatient(patientId);
   }
 
-  static async removeUserFromCareTeam({ userId, patientId }: ICareTeamOptions): Promise<User[]> {
+  static async delete({ userId, patientId }: ICareTeamOptions): Promise<User[]> {
     await this.query()
       .where('userId', userId)
       .andWhere('patientId', patientId)

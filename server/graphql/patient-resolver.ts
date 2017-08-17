@@ -96,7 +96,7 @@ export async function patientSetup(
     );
   });
   // Need to wait until the transaction is complete to add relations like Care Team
-  await CareTeam.addUserToCareTeam({ userId, patientId: result.id });
+  await CareTeam.create({ userId, patientId: result.id });
   return result;
 }
 

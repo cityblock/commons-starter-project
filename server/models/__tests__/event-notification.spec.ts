@@ -10,11 +10,11 @@ import User from '../user';
 const userRole = 'physician';
 
 describe('task event model', () => {
-  let db: Db = null as any;
-  let user: User = null as any;
-  let user2: User = null as any;
-  let patient: Patient = null as any;
-  let task: Task = null as any;
+  let db: Db;
+  let user: User;
+  let user2: User;
+  let patient: Patient;
+  let task: Task;
 
   beforeEach(async () => {
     db = await Db.get();

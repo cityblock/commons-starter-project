@@ -4,7 +4,7 @@ import User from '../../../models/user';
 import { checkPostgresHandler } from '../check-postgres-handler';
 
 describe('postgres pingdom test', () => {
-  let db: Db = null as any;
+  let db: Db;
   let error: any;
   const userRole = 'physician';
 

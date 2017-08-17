@@ -8,7 +8,7 @@ import {
 } from './../shared/utils';
 
 describe('util tests', () => {
-  let db: Db = null as any;
+  let db: Db;
 
   beforeAll(async () => {
     db = await Db.get();

@@ -12,7 +12,7 @@ import User from '../user';
 
 const userRole = 'physician';
 
-describe('anser model', () => {
+describe('answer model', () => {
   let db: Db;
   let riskArea: RiskArea;
   let question: Question;

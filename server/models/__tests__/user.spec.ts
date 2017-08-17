@@ -5,7 +5,7 @@ import User from '../user';
 const userRole = 'physician';
 
 describe('user model', () => {
-  let db: Db = null as any;
+  let db: Db;
 
   beforeEach(async () => {
     db = await Db.get();

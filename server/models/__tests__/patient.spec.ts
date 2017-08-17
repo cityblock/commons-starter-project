@@ -12,7 +12,7 @@ import User from '../user';
 const userRole = 'physician';
 
 describe('patient model', () => {
-  let db: Db = null as any;
+  let db: Db;
 
   beforeEach(async () => {
     db = await Db.get();
@@ -81,7 +81,7 @@ describe('patient model', () => {
   });
 
   describe('setup', () => {
-    let athenaApi: AthenaApi = null as any;
+    let athenaApi: AthenaApi;
 
     beforeEach(async () => {
       athenaApi = await AthenaApi.get();

@@ -15,7 +15,7 @@ const getFromServer = async (uri: string, basicAuthString?: string) => (
 );
 
 describe('main', () => {
-  let db: Db = null as any;
+  let db: Db;
 
   beforeAll(async () => {
     db = await Db.get();

@@ -21,12 +21,12 @@ import schema from '../make-executable-schema';
 
 describe('patient', () => {
 
-  let athenaApi: AthenaApi = null as any;
-  let redoxApi: RedoxApi = null as any;
-  let db: Db = null as any;
-  let patient = null as any;
-  let user = null as any;
-  let homeClinicId = null as any;
+  let athenaApi: AthenaApi;
+  let redoxApi: RedoxApi;
+  let db: Db;
+  let patient: Patient;
+  let user: User;
+  let homeClinicId: string;
   const userRole = 'physician';
 
   beforeEach(async () => {

@@ -10,9 +10,9 @@ import schema from '../make-executable-schema';
 
 describe('task comments', () => {
 
-  let db: Db = null as any;
-  let task = null as any;
-  let user = null as any;
+  let db: Db;
+  let task: Task;
+  let user: User;
   const userRole = 'physician';
   const homeClinicId = '1';
 

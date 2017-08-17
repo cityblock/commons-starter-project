@@ -1,6 +1,7 @@
 import { graphql } from 'graphql';
 import { cloneDeep } from 'lodash';
 import Db from '../../db';
+import Patient from '../../models/patient';
 import Task from '../../models/task';
 import TaskEvent from '../../models/task-event';
 import User from '../../models/user';
@@ -9,13 +10,13 @@ import schema from '../make-executable-schema';
 
 describe('task tests', () => {
 
-  let db: Db = null as any;
+  let db: Db;
   const userRole = 'physician';
-  let task1: Task = null as any;
-  let task2: Task = null as any;
-  let user: User = null as any;
-  let user2: User = null as any;
-  let patient = null as any;
+  let task1: Task;
+  let task2: Task;
+  let user: User;
+  let user2: User;
+  let patient: Patient;
 
   beforeEach(async () => {
     db = await Db.get();

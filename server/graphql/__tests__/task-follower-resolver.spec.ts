@@ -1,6 +1,7 @@
 import { graphql } from 'graphql';
 import { cloneDeep } from 'lodash';
 import Db from '../../db';
+import Patient from '../../models/patient';
 import Task from '../../models/task';
 import TaskEvent from '../../models/task-event';
 import User from '../../models/user';
@@ -9,10 +10,10 @@ import schema from '../make-executable-schema';
 
 describe('task follower', () => {
 
-  let db: Db = null as any;
-  let task = null as any;
-  let user = null as any;
-  let patient = null as any;
+  let db: Db;
+  let task: Task;
+  let user: User;
+  let patient: Patient;
   const userRole = 'physician';
   const homeClinicId = '1';
 

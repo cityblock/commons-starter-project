@@ -7,7 +7,7 @@ import schema from '../make-executable-schema';
 
 describe('user tests', () => {
 
-  let db: Db = null as any;
+  let db: Db;
   const userRole = 'physician';
   const homeClinicId = '1';
 

@@ -6,7 +6,7 @@ import User from '../user';
 const userRole = 'physician';
 
 describe('care model', () => {
-  let db: Db = null as any;
+  let db: Db;
 
   beforeEach(async () => {
     db = await Db.get();
@@ -33,7 +33,7 @@ describe('care model', () => {
       const patient1 = await createPatient(createMockPatient(123), user1.id);
 
       // Add 2nd user to patient 1 care team
-      const careTeam = await CareTeam.addUserToCareTeam({
+      const careTeam = await CareTeam.create({
         userId: user2.id,
         patientId: patient1.id,
       });
@@ -52,7 +52,7 @@ describe('care model', () => {
         'returning "id" - insert or update on table "care_team" violates foreign key constraint ' +
         '"care_team_userid_foreign"';
 
-      await expect(CareTeam.addUserToCareTeam({ userId: 'fakeUserId', patientId: patient.id }))
+      await expect(CareTeam.create({ userId: 'fakeUserId', patientId: patient.id }))
         .rejects
         .toMatchObject({
           message: error,
@@ -67,7 +67,7 @@ describe('care model', () => {
       });
       const patient1 = await createPatient(createMockPatient(123), user.id);
 
-      const careTeamResponse = await CareTeam.removeUserFromCareTeam({
+      const careTeamResponse = await CareTeam.delete({
         userId: user.id,
         patientId: patient1.id,
       });

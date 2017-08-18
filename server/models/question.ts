@@ -73,6 +73,15 @@ export default class Question extends Model {
         to: 'question_condition.questionId',
       },
     },
+
+    riskArea: {
+      relation: Model.BelongsToOneRelation,
+      modelClass: 'risk-area',
+      join: {
+        from: 'question.riskAreaId',
+        to: 'risk_area.id',
+      },
+    },
   };
 
   $beforeInsert() {

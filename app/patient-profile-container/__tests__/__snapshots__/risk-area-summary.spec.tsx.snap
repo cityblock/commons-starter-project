@@ -2,7 +2,7 @@
 
 exports[`renders a risk area summary 1`] = `
 <a
-  className={undefined}
+  className="undefined"
   href="/patients/patient-1/360/risk-area-id"
   onClick={[Function]}
 >
@@ -41,7 +41,13 @@ exports[`renders a risk area summary 1`] = `
     </div>
     <div
       className={undefined}
-    />
+    >
+      <div
+        className={undefined}
+      >
+        Loading...
+      </div>
+    </div>
   </div>
 </a>
 `;

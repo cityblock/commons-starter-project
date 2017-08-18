@@ -1,6 +1,6 @@
-import { last } from 'lodash';
+import { last, values } from 'lodash';
 import { Model, RelationMappings } from 'objection';
-import { IRiskAreaSummary } from 'schema';
+import { IRiskAreaStatistic, IRiskAreaSummary, IThreeSixtySummary } from 'schema';
 import * as uuid from 'uuid/v4';
 import PatientAnswer from './patient-answer';
 import Question from './question';
@@ -133,6 +133,39 @@ export default class RiskArea extends Model {
       score,
       forceHighRisk,
     };
+  }
+
+  static async getThreeSixtySummaryForPatient(patientId: string): Promise<IThreeSixtySummary> {
+    const patientAnswers = await PatientAnswer.getAllForPatient(patientId);
+    const knownRiskAreas: { [riskAreaId: string]: IRiskAreaStatistic } = {};
+
+    patientAnswers.forEach(patientAnswer => {
+      if (patientAnswer.applicable) {
+        // TODO: update association here so that patientAnswer can just associate directly
+        const riskArea = patientAnswer.answer.question.riskArea;
+        const riskAreaStats = knownRiskAreas[riskArea.id] || {
+          riskArea,
+          summaryData: { summary: [], started: true, lastUpdated: null },
+          scoreData: { score: 0, forceHighRisk: false },
+        };
+
+        const answer = patientAnswer.answer;
+
+        if (answer.riskAdjustmentType === 'increment') {
+          riskAreaStats.scoreData.score++;
+        } else if (answer.riskAdjustmentType === 'forceHighRisk') {
+          riskAreaStats.scoreData.forceHighRisk = true;
+        }
+
+        if (answer.inSummary && answer.summaryText) {
+          riskAreaStats.summaryData.summary.push(answer.summaryText);
+        }
+
+        knownRiskAreas[riskArea.id] = riskAreaStats;
+      }
+    });
+
+    return { riskAreas: values(knownRiskAreas) };
   }
 }
 /* tslint:disable:member-ordering */

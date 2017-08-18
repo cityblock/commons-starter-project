@@ -445,6 +445,16 @@ type RiskAreaSummary {
   lastUpdated: String
 }
 
+type RiskAreaStatistic {
+  riskArea: RiskArea!
+  summaryData: RiskAreaSummary!
+  scoreData: RiskScore!
+}
+
+type ThreeSixtySummary {
+  riskAreas: [RiskAreaStatistic!]!
+}
+
 # Task Event
 type TaskEvent implements uniqueId {
   id: ID!

@@ -179,5 +179,93 @@ describe('risk area model', () => {
         forceHighRisk: true,
       });
     });
+
+    it('gets a full 360 degree summary for a patient', async () => {
+      const riskArea2 = await RiskArea.create({
+        title: 'risk area 2',
+        order: 2,
+      });
+      const question2 = await Question.create({
+        title: 'hate writing tests?',
+        answerType: 'dropdown',
+        riskAreaId: riskArea.id,
+        order: 2,
+      });
+      const question3 = await Question.create({
+        title: 'really hate writing tests?',
+        answerType: 'dropdown',
+        riskAreaId: riskArea2.id,
+        order: 1,
+      });
+      const answer1 = await Answer.create({
+        displayValue: 'loves writing tests!',
+        value: '3',
+        valueType: 'number',
+        riskAdjustmentType: 'increment',
+        inSummary: true,
+        summaryText: 'loves writing tests summary text!',
+        questionId: question.id,
+        order: 1,
+      });
+      const answer2 = await Answer.create({
+        displayValue: 'hates writing tests!',
+        value: '4',
+        valueType: 'number',
+        riskAdjustmentType: 'increment',
+        inSummary: true,
+        summaryText: 'hates writing tests summary text!',
+        questionId: question2.id,
+        order: 1,
+      });
+      const answer3 = await Answer.create({
+        displayValue: 'really hates writing tests!',
+        value: '5',
+        valueType: 'number',
+        riskAdjustmentType: 'forceHighRisk',
+        inSummary: true,
+        summaryText: 'really hates writing tests summary text!',
+        questionId: question3.id,
+        order: 1,
+      });
+      await PatientAnswer.create({
+        patientId: patient.id,
+        answers: [{
+          questionId: answer1.questionId,
+          answerId: answer1.id,
+          answerValue: '3',
+          patientId: patient.id,
+          applicable: true,
+          userId: user.id,
+        }, {
+          questionId: answer2.questionId,
+          answerId: answer2.id,
+          answerValue: '4',
+          patientId: patient.id,
+          applicable: false,
+          userId: user.id,
+        }, {
+          questionId: answer3.questionId,
+          answerId: answer3.id,
+          answerValue: '5',
+          patientId: patient.id,
+          applicable: true,
+          userId: user.id,
+        }],
+      });
+
+      const fullThreeSixtySummary = await RiskArea.getThreeSixtySummaryForPatient(patient.id);
+      expect(fullThreeSixtySummary.riskAreas.length).toEqual(2);
+      expect(fullThreeSixtySummary.riskAreas[0].riskArea.id).toEqual(riskArea.id);
+      expect(fullThreeSixtySummary.riskAreas[1].riskArea.id).toEqual(riskArea2.id);
+      expect(fullThreeSixtySummary.riskAreas[0].scoreData.forceHighRisk).toEqual(false);
+      expect(fullThreeSixtySummary.riskAreas[0].scoreData.score).toEqual(1);
+      expect(fullThreeSixtySummary.riskAreas[0].summaryData.summary)
+        .toContain('loves writing tests summary text!');
+      expect(fullThreeSixtySummary.riskAreas[0].summaryData.summary)
+        .not.toContain('hates writing tests summary text!');
+      expect(fullThreeSixtySummary.riskAreas[1].scoreData.forceHighRisk).toEqual(true);
+      expect(fullThreeSixtySummary.riskAreas[1].summaryData.summary)
+        .toContain('really hates writing tests summary text!');
+    });
   });
 });

@@ -162,6 +162,10 @@
   }
 }
 
+.riskAreaLink.inactive:hover {
+  cursor: default;
+}
+
 .riskArea {
   background-color: var(--white-color);
   border-radius: 4px;
@@ -169,7 +173,7 @@
   display: flex;
   flex-direction: column;
   padding: var(--small-gutter) var(--small-gutter) var(--small-gutter) 18px;
-  min-height: 86px;
+  min-height: 109px;
   margin-bottom: 10px;
 }
 
@@ -186,7 +190,7 @@
 }
 
 .riskArea.unstarted {
-  border-left: 2px solid var(--border-color);
+  border-left: 2px solid transparent;
 }
 
 .riskAreaTitleRow {
@@ -246,6 +250,56 @@
   font-size: var(--small-font-size);
   line-height: var(--medium-font-line-height);
   color: var(--black-color);
+}
+
+.emptySummary, .errorLoadingSummary {
+  font-family: var(--roboto);
+  color: var(--border-color);
+  font-size: var(--small-font-size);
+  line-height: var(--medium-font-line-height);
+}
+
+.emptySummary {
+  margin: var(--small-gutter) auto 0;
+}
+
+.errorLoadingSummary {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin: var(--small-gutter) auto 0;
+}
+
+.summaryErrorLabel {
+  margin-right: 5px;
+  color: var(--red-color);
+}
+
+.summaryErrorRetry {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  transition: opacity 0.2s linear;
+}
+
+.summaryErrorRetry:hover {
+  cursor: pointer;
+  opacity: 0.7;
+}
+
+.summaryErrorRetryText {
+  margin-right: 2px;
+  color: var(--border-color);
+}
+
+.summaryErrorIcon {
+  height: 12px;
+  width: 12px;
+  background-image: url('../../assets/refresh-icon-grey.svg');
+  background-size: contain;
+  background-position: center center;
+  background-repeat: no-repeat;
 }
 
 .riskAssessmentTitle {

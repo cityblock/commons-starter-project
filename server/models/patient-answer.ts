@@ -158,6 +158,18 @@ export default class PatientAnswer extends Model {
     return patientAnswers as PatientAnswer[];
   }
 
+  static async getAllForPatient(patientId: string): Promise<PatientAnswer[]> {
+    const patientAnswers = await this
+      .query()
+      .joinRelation('answer.question')
+      .eager('[answer.[question.[riskArea]]]')
+      .where('patient_answer.deletedAt', null)
+      .andWhere('patientId', patientId)
+      .orderBy('patient_answer.updatedAt', 'asc');
+
+    return patientAnswers as PatientAnswer[];
+  }
+
   static async create(input: IPatientAnswerCreateFields): Promise<PatientAnswer[]> {
     return await transaction(PatientAnswer, async PatientAnswerWithTransaction => {
       const questionIds = input.questionIds || input.answers.map(answer => answer.questionId);

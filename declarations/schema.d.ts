@@ -1013,4 +1013,20 @@ declare module 'schema' {
   interface IEventNotificationEditInput {
     eventNotificationId: string;
   }
+
+  /*
+    description: 
+  */
+  interface IRiskAreaStatistic {
+    riskArea: IRiskArea;
+    summaryData: IRiskAreaSummary;
+    scoreData: IRiskScore;
+  }
+
+  /*
+    description: 
+  */
+  interface IThreeSixtySummary {
+    riskAreas: Array<IRiskAreaStatistic>;
+  }
 }

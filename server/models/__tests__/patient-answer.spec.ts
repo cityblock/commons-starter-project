@@ -198,6 +198,24 @@ describe('answer model', () => {
       .toMatch('No such patientAnswer: fakeId');
   });
 
+  it('gets all patient answers for a given patient', async () => {
+    const patientAnswers = await PatientAnswer.create({
+      patientId: patient.id,
+      answers: [{
+        questionId: answer.questionId,
+        answerId: answer.id,
+        answerValue: '3',
+        patientId: patient.id,
+        applicable: true,
+        userId: user.id,
+      }],
+    });
+
+    const fetchedAnswers = await PatientAnswer.getAllForPatient(patient.id);
+
+    expect(fetchedAnswers[0].id).toEqual(patientAnswers[0].id);
+  });
+
   it('can get answer history', async () => {
     const patientAnswers = await PatientAnswer.create({
       patientId: patient.id,

@@ -22,9 +22,11 @@ export interface IProps {
   riskAreaScore?: FullRiskScoreFragment;
   scoreLoading?: boolean;
   scoreError?: string;
+  reloadScore?: (variables: { patientId: string, riskAreaId: string }) => any;
   riskAreaSummary?: FullRiskAreaSummaryFragment;
   summaryLoading?: boolean;
   summaryError?: string;
+  reloadSummary?: (variables: { patientId: string, riskAreaId: string }) => any;
 }
 
 class RiskAreaSummary extends React.Component<IProps, {}> {
@@ -32,10 +34,18 @@ class RiskAreaSummary extends React.Component<IProps, {}> {
     super(props);
 
     this.renderSummaryText = this.renderSummaryText.bind(this);
+    this.isLoading = this.isLoading.bind(this);
+    this.isError = this.isError.bind(this);
+    this.isLoadingOrError = this.isLoadingOrError.bind(this);
+    this.onClick = this.onClick.bind(this);
+    this.onRetryClick = this.onRetryClick.bind(this);
+    this.reloadScore = this.reloadScore.bind(this);
+    this.reloadSummary = this.reloadSummary.bind(this);
   }
 
   renderSummaryText() {
     const { riskAreaSummary } = this.props;
+    let summaryListHtml: any = <div className={styles.emptySummary}>No summary available</div>;
 
     /* For future reference, once we need to do nested lists, here is the structure:
      *
@@ -49,23 +59,30 @@ class RiskAreaSummary extends React.Component<IProps, {}> {
      *
      */
 
-    if (riskAreaSummary) {
+    if (riskAreaSummary && !this.isLoading() && !this.isError()) {
       const { summary, started } = riskAreaSummary;
 
-      let summaryListHtml: any = <li>No summary available</li>;
-
       if (!started) {
-        summaryListHtml = <li>Patient has not started this assessment</li>;
+        summaryListHtml = <div className={styles.emptySummary}>No assessment on record.</div>;
       } else if (summary.length) {
         summaryListHtml = summary.map((summaryText, index) => <li key={index}>{summaryText}</li>);
       }
 
-      return (
-        <ul className={styles.riskAreaSummaryList}>
-          {summaryListHtml}
-        </ul>
+    } else if (this.isLoading()) {
+      summaryListHtml = <div className={styles.emptySummary}>Loading...</div>;
+    } else if (this.isError()) {
+      summaryListHtml = (
+        <div className={styles.errorLoadingSummary}>
+          <div className={styles.summaryErrorLabel}>Error loading.</div>
+          <div className={styles.summaryErrorRetry} onClick={this.onRetryClick}>
+            <div className={styles.summaryErrorRetryText}>Try again.</div>
+            <div className={styles.summaryErrorIcon}></div>
+          </div>
+        </div>
       );
     }
+
+    return summaryListHtml;
   }
 
   getLastUpdated() {
@@ -79,8 +96,67 @@ class RiskAreaSummary extends React.Component<IProps, {}> {
       } else {
         return 'Never';
       }
+    } else if (this.isError()) {
+      return 'Error';
     } else {
       return 'Loading';
+    }
+  }
+
+  isLoading() {
+    const { scoreLoading, summaryLoading } = this.props;
+
+    return scoreLoading || summaryLoading;
+  }
+
+  isError() {
+    const { scoreError, summaryError } = this.props;
+
+    return !!scoreError || !!summaryError;
+  }
+
+  isLoadingOrError() {
+    return this.isLoading() || this.isError();
+  }
+
+  async reloadScore() {
+    const { scoreError, reloadScore, patientId, riskArea } = this.props;
+
+    if (!!scoreError && reloadScore) {
+      this.setState(() => ({ scoreLoading: true, scoreError: undefined }));
+
+      try {
+        await reloadScore({ patientId, riskAreaId: riskArea.id });
+        this.setState(() => ({ scoreLoading: false, scoreError: undefined }));
+      } catch (err) {
+        this.setState(() => ({ scoreLoading: false, scoreError: err.message }));
+      }
+    }
+  }
+
+  async reloadSummary() {
+    const { summaryError, reloadSummary, patientId, riskArea } = this.props;
+
+    if (!!summaryError && reloadSummary) {
+      this.setState(() => ({ summaryLoading: true, summaryError: undefined }));
+
+      try {
+        await reloadSummary({ patientId, riskAreaId: riskArea.id });
+        this.setState(() => ({ summaryLoading: false, summaryError: undefined }));
+      } catch (err) {
+        this.setState(() => ({ summaryLoading: false, summaryError: err.message }));
+      }
+    }
+  }
+
+  onRetryClick() {
+    this.reloadScore();
+    this.reloadSummary();
+  }
+
+  onClick(event: React.MouseEvent<HTMLAnchorElement>) {
+    if (this.isLoadingOrError()) {
+      event.preventDefault();
     }
   }
 
@@ -94,8 +170,15 @@ class RiskAreaSummary extends React.Component<IProps, {}> {
       [styles.unstarted]: riskAreaSummary ? !riskAreaSummary.started : true,
     });
 
+    const linkStyles = classNames(styles.riskAreaLink, {
+      [styles.inactive]: this.isLoadingOrError(),
+    });
+
     return (
-      <Link className={styles.riskAreaLink} to={`${routeBase}/${riskArea.id}`}>
+      <Link
+        className={linkStyles}
+        to={`${routeBase}/${riskArea.id}`}
+        onClick={this.onClick}>
         <div className={riskAreaStyles}>
           <div className={styles.riskAreaTitleRow}>
             <div className={styles.riskAreaTitle}>
@@ -128,6 +211,7 @@ export default compose(
       summaryLoading: (data ? data.loading : false),
       summaryError: (data ? data.error : null),
       riskAreaSummary: (data ? (data as any).patientRiskAreaSummary : null),
+      reloadSummary: (data ? (data as any).refetch : null),
     }),
   }),
   graphql(riskScoreQuery as any, {
@@ -141,6 +225,7 @@ export default compose(
       scoreLoading: (data ? data.loading : false),
       scoreError: (data ? data.error : null),
       riskAreaScore: (data ? (data as any).patientRiskAreaRiskScore : null),
+      reloadScore: (data ? (data as any).refetch : null),
     }),
   }),
 )(RiskAreaSummary);

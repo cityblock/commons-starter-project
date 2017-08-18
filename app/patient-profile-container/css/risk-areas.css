@@ -170,6 +170,11 @@
   flex-direction: column;
   padding: var(--small-gutter) var(--small-gutter) var(--small-gutter) 18px;
   min-height: 86px;
+  margin-bottom: 10px;
+}
+
+.riskAreaLink:last-child .riskArea {
+  margin-bottom: 0;
 }
 
 .riskArea.highRisk {

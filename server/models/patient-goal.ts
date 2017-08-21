@@ -6,6 +6,8 @@ import Task from './task';
 export interface IPatientGoalEditableFields {
   title: string;
   patientId: string;
+  goalSuggestionTemplateId?: string;
+  patientConcernId?: string;
 }
 
 /* tslint:disable:member-ordering */
@@ -14,6 +16,8 @@ export default class PatientGoal extends Model {
   title: string;
   patient: Patient;
   patientId: string;
+  goalSuggestionTemplateId?: string;
+  patientConcernId?: string;
   tasks: Task[];
   createdAt: string;
   updatedAt: string;
@@ -31,6 +35,8 @@ export default class PatientGoal extends Model {
       id: { type: 'string' },
       title: { type: 'string' },
       patientId: { type: 'string' },
+      goalSuggestionTemplateId: { type: 'string' },
+      patientConcernId: { type: 'string' },
       deletedAt: { type: 'string' },
     },
   };
@@ -50,6 +56,14 @@ export default class PatientGoal extends Model {
       join: {
         from: 'patient_goal.id',
         to: 'task.patientGoalId',
+      },
+    },
+    patientConcern: {
+      relation: Model.BelongsToOneRelation,
+      modelClass: 'patient-concern',
+      join: {
+        from: 'patient_goal.patientConcernId',
+        to: 'patient_concern.id',
       },
     },
   };
@@ -86,6 +100,13 @@ export default class PatientGoal extends Model {
     return await this
       .query()
       .updateAndFetchById(patientGoalId, patientGoal);
+  }
+
+  static async getForPatient(patientId: string): Promise<PatientGoal[]> {
+    return await this.query()
+      .where('deletedAt', null)
+      .andWhere('patientId', patientId)
+      .orderBy('createdAt', 'asc');
   }
 
   static async delete(patientGoalId: string): Promise<PatientGoal> {

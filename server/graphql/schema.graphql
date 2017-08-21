@@ -66,6 +66,20 @@ enum TaskEventTypes {
   edit_description
 }
 
+enum CompletedWithinInterval {
+   hour
+   day
+   week
+   month
+   year
+}
+
+enum Priority {
+  low
+  medium
+  high
+}
+
 # User account model
 type User implements uniqueId {
   id: ID!
@@ -324,7 +338,7 @@ type Task implements uniqueId {
   patient: Patient
   patientId: String!
   dueAt: String
-  priority: String
+  priority: Priority
   createdBy: User
   createdAt: String
   updatedAt: String
@@ -499,6 +513,61 @@ type EventNotificationNode {
 type EventNotificationEdges {
   edges: [EventNotificationNode]
   pageInfo: PageInfo!
+}
+
+# Concern
+type Concern implements uniqueId {
+  id: ID!
+  title: String!
+  createdAt: String!
+  updatedAt: String!
+  deletedAt: String
+}
+
+type PatientGoal implements uniqueId {
+  id: ID!
+  title: String!
+  patientId: String!
+  patientConcernId: String
+  goalSuggestionTemplateId: String
+  createdAt: String!
+  updatedAt: String!
+  deletedAt: String
+}
+
+type PatientConcern implements uniqueId {
+  id: ID!
+  order: Int!
+  concernId: String!
+  patientId: String!
+  startedAt: String
+  completedAt: String
+  createdAt: String!
+  updatedAt: String!
+  deletedAt: String
+}
+
+type GoalSuggestionTemplate implements uniqueId {
+  id: ID!
+  title: String!
+  taskTemplates: [TaskTemplate]
+  createdAt: String!
+  updatedAt: String!
+  deletedAt: String
+}
+
+type TaskTemplate implements uniqueId {
+  id: ID!
+  title: String!
+  completedWithinNumber: Int
+  completedWithinInterval: CompletedWithinInterval
+  repeating: Boolean
+  goalSuggestionTemplateId: String!
+  priority: Priority
+  careTeamAssigneeRole: UserRole
+  createdAt: String!
+  updatedAt: String!
+  deletedAt: String
 }
 
 #
@@ -776,6 +845,106 @@ input EventNotificationEditInput {
   eventNotificationId: String!
 }
 
+input ConcernCreateInput {
+  title: String!
+}
+
+input ConcernEditInput {
+  title: String!
+  concernId: String!
+}
+
+input ConcernDeleteInput {
+  concernId: String!
+}
+
+input ConcernSuggestInput {
+  concernId: String!
+  answerId: String!
+}
+
+input PatientConcernCreateInput {
+  order: Int!
+  concernId: String!
+  patientId: String!
+  startedAt: String
+  completedAt: String
+}
+
+input PatientConcernEditInput {
+  order: Int
+  concernId: String
+  patientId: String
+  startedAt: String
+  completedAt: String
+  patientConcernId: String!
+}
+
+input PatientConcernDeleteInput {
+  patientConcernId: String!
+}
+
+input GoalSuggestionTemplateCreateInput {
+  title: String!
+}
+
+input GoalSuggestionTemplateEditInput {
+  title: String!
+  goalSuggestionTemplateId: String!
+}
+
+input GoalSuggestionTemplateDeleteInput {
+  goalSuggestionTemplateId: String!
+}
+
+input GoalSuggestInput {
+  answerId: String!
+  goalSuggestionTemplateId: String!
+}
+
+input PatientGoalCreateInput {
+  title: String!
+  patientId: String!
+  patientConcernId: String
+  goalSuggestionTemplateId: String
+}
+
+input PatientGoalEditInput {
+  patientGoalId: String!
+  title: String!
+  patientConcernId: String
+  goalSuggestionTemplateId: String
+}
+
+input PatientGoalDeleteInput {
+  patientGoalId: String!
+}
+
+input TaskTemplateCreateInput {
+  title: String!
+  completedWithinNumber: Int
+  completedWithinInterval: String
+  repeating: Boolean
+  goalSuggestionTemplateId: String
+  priority: String
+  careTeamAssigneeRole: String
+}
+
+input TaskTemplateEditInput {
+  title: String!
+  completedWithinNumber: Int
+  completedWithinInterval: String
+  repeating: Boolean
+  goalSuggestionTemplateId: String
+  priority: String
+  careTeamAssigneeRole: String
+  taskTemplateId: String!
+}
+
+input TaskTemplateDeleteInput {
+  taskTemplateId: String!
+}
+
 type RootMutationType {
   # Create a new user
   userCreate(input: UserCreateInput): UserWithAuthToken
@@ -870,13 +1039,13 @@ type RootMutationType {
   # Deletes an Answer
   answerDelete(input: AnswerDeleteInput): Answer
 
-  # Create an Answer
+  # Create a patient answer
   patientAnswersCreate(input: PatientAnswersCreateInput): [PatientAnswer]
 
-  # Edit an Answer
+  # Edit a patient answer
   patientAnswerEdit(input: PatientAnswerEditInput): PatientAnswer
 
-  # Deletes an Answer
+  # Deletes a patient Answer
   patientAnswerDelete(input: PatientAnswerDeleteInput): PatientAnswer
 
   # Updates applicable for Patient Answers in risk area
@@ -893,6 +1062,63 @@ type RootMutationType {
 
   # Dismisses (marks as seen) an EventNotification
   eventNotificationDismiss(input: EventNotificationEditInput): EventNotification
+
+  # Create a concern
+  concernCreate(input: ConcernCreateInput): Concern
+
+  # Edit a concern
+  concernEdit(input: ConcernEditInput): Concern
+
+  # Deletes a concern
+  concernDelete(input: ConcernDeleteInput): Concern
+
+  # suggest a concern for an answer
+  concernSuggestionCreate(input: ConcernSuggestInput): [Concern]
+
+  # delete suggestion a concern for an answer
+  concernSuggestionDelete(input: ConcernSuggestInput): [Concern]
+
+  # goal suggestion template create
+  goalSuggestionTemplateCreate(input: GoalSuggestionTemplateCreateInput): GoalSuggestionTemplate
+
+  # Edit a goal suggestion template
+  goalSuggestionTemplateEdit(input: GoalSuggestionTemplateEditInput): GoalSuggestionTemplate
+
+  # Deletes a goal suggestion template
+  goalSuggestionTemplateDelete(input: GoalSuggestionTemplateDeleteInput): GoalSuggestionTemplate
+
+  # Suggest a goal suggestion template for an answer
+  goalSuggestionCreate(input: GoalSuggestInput): [GoalSuggestionTemplate]
+
+  # unsuggest a goal suggestion template for an answer
+  goalSuggestionDelete(input: GoalSuggestInput): [GoalSuggestionTemplate]
+
+  # task template create
+  taskTemplateCreate(input: TaskTemplateCreateInput): TaskTemplate
+
+  # Edit a task template
+  taskTemplateEdit(input: TaskTemplateEditInput): TaskTemplate
+
+  # Deletes a task template
+  taskTemplateDelete(input: TaskTemplateDeleteInput): TaskTemplate
+
+  # patient goal create
+  patientGoalCreate(input: PatientGoalCreateInput): PatientGoal
+
+  # patient goal edit
+  patientGoalEdit(input: PatientGoalEditInput): PatientGoal
+
+  # patient goal delete
+  patientGoalDelete(input: PatientGoalDeleteInput): PatientGoal
+
+  # patient concern create
+  patientConcernCreate(input: PatientConcernCreateInput): PatientConcern
+
+  # patient concern edit
+  patientConcernEdit(input: PatientConcernEditInput): PatientConcern
+
+  # patient concern delete
+  patientConcernDelete(input: PatientConcernDeleteInput): PatientConcern
 }
 
 type RootQueryType {
@@ -1027,7 +1253,47 @@ type RootQueryType {
     pageNumber: Int,
     pageSize: Int,
   ): EventNotificationEdges
+
+  # Task template
+  taskTemplate(taskTemplateId: String!): TaskTemplate
+
+  # Concern
+  concern(concernId: String!): Concern
+
+  # Concerns
+  concerns: [Concern]
+
+  # Concerns for answer
+  concernsForAnswer(answerId: String!): [Concern]
+
+  # patient concern
+  patientConcern(patientConcernId: String!): PatientConcern
+
+  # patient concerns for patient
+  patientConcerns(patientId: String!): [PatientConcern]
+
+  # Patient goal
+  patientGoal(patientGoalId: String!): PatientGoal
+
+  # Patient goals for patient
+  patientGoals(patientId: String!): [PatientGoal]
+
+  # Goal suggestion templates
+  goalSuggestionTemplate(goalSuggestionTemplateId: String!): GoalSuggestionTemplate
+
+  # Goal suggestion templates
+  goalSuggestionTemplates: [GoalSuggestionTemplate]
+
+  # goal suggestion for template
+  goalSuggestionTemplatesForAnswer(answerId: String!): [GoalSuggestionTemplate]
+
+  # Task template
+  taskTemplate(taskTemplateId: String!): TaskTemplate
+
+  # Task templates
+  taskTemplates: [TaskTemplate]
 }
+
 
 schema {
   query: RootQueryType

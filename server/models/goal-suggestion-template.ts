@@ -1,5 +1,6 @@
-import { Model, RelationMappings, Transaction } from 'objection';
+import { Model, RelationMappings } from 'objection';
 import * as uuid from 'uuid/v4';
+import TaskTemplate from './task-template';
 
 export interface IGoalSuggestionTemplateEditableFields {
   title: string;
@@ -12,6 +13,7 @@ export default class GoalSuggestionTemplate extends Model {
   createdAt: string;
   updatedAt: string;
   deletedAt?: string;
+  taskTemplates: TaskTemplate[];
 
   static tableName = 'goal_suggestion_template';
 
@@ -49,7 +51,9 @@ export default class GoalSuggestionTemplate extends Model {
   }
 
   static async get(goalSuggestionTemplateId: string): Promise<GoalSuggestionTemplate | undefined> {
-    const goalSuggestionTemplate = await this.query().findById(goalSuggestionTemplateId);
+    const goalSuggestionTemplate = await this.query()
+      .eager('taskTemplates')
+      .findById(goalSuggestionTemplateId);
 
     if (!goalSuggestionTemplate) {
       return Promise.reject(`No such goalSuggestionTemplate: ${goalSuggestionTemplateId}`);
@@ -57,9 +61,10 @@ export default class GoalSuggestionTemplate extends Model {
     return goalSuggestionTemplate;
   }
 
-  static async create(input: IGoalSuggestionTemplateEditableFields, txn?: Transaction) {
+  static async create(input: IGoalSuggestionTemplateEditableFields) {
     return await this
-      .query(txn)
+      .query()
+      .eager('taskTemplates')
       .insertAndFetch(input);
   }
 
@@ -69,12 +74,13 @@ export default class GoalSuggestionTemplate extends Model {
   ): Promise<GoalSuggestionTemplate> {
     return await this
       .query()
+      .eager('taskTemplates')
       .updateAndFetchById(goalSuggestionTemplateId, goalSuggestionTemplate);
   }
 
   // TODO: paginate?
   static async getAll(): Promise<GoalSuggestionTemplate[]> {
-    return await this.query().where('deletedAt', null);
+    return await this.query().where('deletedAt', null).eager('taskTemplates');
   }
 
   static async delete(goalSuggestionTemplateId: string): Promise<GoalSuggestionTemplate> {

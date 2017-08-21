@@ -18,10 +18,34 @@ import {
 } from './care-team-resolver';
 import { clinicCreate, resolveClinic, resolveClinics } from './clinic-resolver';
 import {
+  concernCreate,
+  concernDelete,
+  concernEdit,
+  resolveConcern,
+  resolveConcerns,
+} from './concern-resolver';
+import {
+  concernSuggestionCreate,
+  concernSuggestionDelete,
+  resolveConcernsForAnswer,
+} from './concern-suggestion-resolver';
+import {
   eventNotificationDismiss,
   resolveEventNotificationsForCurrentUser,
   resolveEventNotificationsForTask,
 } from './event-notification-resolver';
+import {
+  goalSuggestionCreate,
+  goalSuggestionDelete,
+  resolveGoalSuggestionTemplatesForAnswer,
+} from './goal-suggestion-resolver';
+import {
+  goalSuggestionTemplateCreate,
+  goalSuggestionTemplateDelete,
+  goalSuggestionTemplateEdit,
+  resolveGoalSuggestionTemplate,
+  resolveGoalSuggestionTemplates,
+} from './goal-suggestion-template-resolver';
 import {
   patientAnswersCreate,
   patientAnswersUpdateApplicable,
@@ -32,7 +56,21 @@ import {
   resolvePatientAnswersForRiskArea,
   resolvePreviousPatientAnswersForQuestion,
 } from './patient-answer-resolver';
+import {
+  patientConcernCreate,
+  patientConcernDelete,
+  patientConcernEdit,
+  resolvePatientConcern,
+  resolvePatientConcernsForPatient,
+} from './patient-concern-resolver';
 import { resolvePatientEncounters } from './patient-encounters-resolver';
+import {
+  patientGoalCreate,
+  patientGoalDelete,
+  patientGoalEdit,
+  resolvePatientGoal,
+  resolvePatientGoalsForPatient,
+} from './patient-goal-resolver';
 import { resolvePatientMedications } from './patient-medications-resolver';
 import {
   patientEdit,
@@ -84,6 +122,13 @@ import {
   taskUncomplete,
 } from './task-resolver';
 import {
+  resolveTaskTemplate,
+  resolveTaskTemplates,
+  taskTemplateCreate,
+  taskTemplateDelete,
+  taskTemplateEdit,
+} from './task-template-resolver';
+import {
   currentUserEdit,
   resolveCurrentUser,
   resolveUser,
@@ -128,6 +173,18 @@ const resolveFunctions = {
     patientAnswersForQuestion: resolvePatientAnswersForQuestion,
     patientPreviousAnswersForQuestion: resolvePreviousPatientAnswersForQuestion,
     patientAnswersForRiskArea: resolvePatientAnswersForRiskArea,
+    concern: resolveConcern,
+    concerns: resolveConcerns,
+    concernsForAnswer: resolveConcernsForAnswer,
+    patientConcern: resolvePatientConcern,
+    patientConcerns: resolvePatientConcernsForPatient,
+    patientGoal: resolvePatientGoal,
+    patientGoals: resolvePatientGoalsForPatient,
+    goalSuggestionTemplate: resolveGoalSuggestionTemplate,
+    goalSuggestionTemplates: resolveGoalSuggestionTemplates,
+    goalSuggestionTemplatesForAnswer: resolveGoalSuggestionTemplatesForAnswer,
+    taskTemplate: resolveTaskTemplate,
+    taskTemplates: resolveTaskTemplates,
   },
   RootMutationType: {
     appointmentAddNote,
@@ -169,6 +226,25 @@ const resolveFunctions = {
     patientAnswerDelete,
     patientAnswerEdit,
     patientAnswersUpdateApplicable,
+    concernSuggestionCreate,
+    concernSuggestionDelete,
+    concernCreate,
+    concernDelete,
+    concernEdit,
+    goalSuggestionTemplateCreate,
+    goalSuggestionTemplateEdit,
+    goalSuggestionTemplateDelete,
+    goalSuggestionCreate,
+    goalSuggestionDelete,
+    taskTemplateCreate,
+    taskTemplateEdit,
+    taskTemplateDelete,
+    patientConcernCreate,
+    patientConcernDelete,
+    patientConcernEdit,
+    patientGoalCreate,
+    patientGoalDelete,
+    patientGoalEdit,
   },
 };
 

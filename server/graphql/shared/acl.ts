@@ -64,6 +64,8 @@ export default [
           'riskArea',
           'questionCondition',
           'question',
+          'patientConcern',
+          'patientGoal',
         ],
         permissions: [
           'view',
@@ -89,6 +91,11 @@ export default [
           'riskArea',
           'questionCondition',
           'question',
+          'concern',
+          'patientConcern',
+          'taskTemplate',
+          'goalSuggestionTemplate',
+          'patientGoal',
         ],
         permissions: [
           'edit',

@@ -42,7 +42,7 @@ const task = {
   dueAt: 'Thu Jul 13 2017 16:52:56 GMT-0400 (EDT)',
   deletedAt: null,
   completedAt: null,
-  priority: 'low',
+  priority: 'low' as any,
   title: 'title',
   description: 'description',
   patient,

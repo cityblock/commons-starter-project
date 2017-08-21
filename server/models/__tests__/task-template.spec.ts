@@ -19,19 +19,19 @@ describe('task template model', () => {
 
   describe('task template methods', () => {
     it('creates and retrieves a task template', async () => {
-      const taskSuggestion = await TaskTemplate.create({
+      const taskTemplate = await TaskTemplate.create({
         title: 'Housing',
         repeating: false,
         goalSuggestionTemplateId: goalSuggestionTemplate.id,
         priority: 'low',
         careTeamAssigneeRole: 'physician',
       });
-      const taskSuggestionById = await TaskTemplate.get(taskSuggestion.id);
+      const taskTemplateById = await TaskTemplate.get(taskTemplate.id);
 
-      expect(taskSuggestionById).toMatchObject(taskSuggestion);
+      expect(taskTemplateById).toMatchObject(taskTemplate);
     });
 
-    it('throws an error when getting a taskSuggestion by an invalid id', async () => {
+    it('throws an error when getting a taskTemplate by an invalid id', async () => {
       const fakeId = 'fakeId';
       await expect(TaskTemplate.get(fakeId))
         .rejects
@@ -39,41 +39,41 @@ describe('task template model', () => {
     });
 
     it('edits task template', async () => {
-      const taskSuggestion = await TaskTemplate.create({
+      const taskTemplate = await TaskTemplate.create({
         title: 'Housing',
         repeating: false,
         goalSuggestionTemplateId: goalSuggestionTemplate.id,
         priority: 'low',
         careTeamAssigneeRole: 'physician',
       });
-      const taskSuggestionUpdated = await TaskTemplate.edit(taskSuggestion.id, {
+      const taskTemplateUpdated = await TaskTemplate.edit(taskTemplate.id, {
         title: 'Medical',
       });
-      expect(taskSuggestionUpdated.title).toEqual('Medical');
+      expect(taskTemplateUpdated.title).toEqual('Medical');
     });
 
     it('deletes task template', async () => {
-      const taskSuggestion = await TaskTemplate.create({
+      const taskTemplate = await TaskTemplate.create({
         title: 'Housing',
         repeating: false,
         goalSuggestionTemplateId: goalSuggestionTemplate.id,
         priority: 'low',
         careTeamAssigneeRole: 'physician',
       });
-      expect(taskSuggestion.deletedAt).toBeNull();
-      const deleted = await TaskTemplate.delete(taskSuggestion.id);
+      expect(taskTemplate.deletedAt).toBeNull();
+      const deleted = await TaskTemplate.delete(taskTemplate.id);
       expect(deleted.deletedAt).not.toBeNull();
     });
 
     it('fetches all task template', async () => {
-      const taskSuggestion1 = await TaskTemplate.create({
+      const taskTemplate1 = await TaskTemplate.create({
         title: 'Housing',
         repeating: false,
         goalSuggestionTemplateId: goalSuggestionTemplate.id,
         priority: 'low',
         careTeamAssigneeRole: 'physician',
       });
-      const taskSuggestion2 = await TaskTemplate.create({
+      const taskTemplate2 = await TaskTemplate.create({
         title: 'Housing',
         repeating: false,
         goalSuggestionTemplateId: goalSuggestionTemplate.id,
@@ -81,7 +81,7 @@ describe('task template model', () => {
         careTeamAssigneeRole: 'physician',
       });
 
-      expect(await TaskTemplate.getAll()).toMatchObject([taskSuggestion1, taskSuggestion2]);
+      expect(await TaskTemplate.getAll()).toMatchObject([taskTemplate1, taskTemplate2]);
     });
   });
 });

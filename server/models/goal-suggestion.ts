@@ -75,7 +75,7 @@ export default class GoalSuggestion extends Model {
     );
   }
 
-  static async getForAnswer(answerId: string): Promise<Answer[]> {
+  static async getForAnswer(answerId: string): Promise<GoalSuggestionTemplate[]> {
     const goalSuggestionAnswers = await GoalSuggestion
       .query()
       .where('answerId', answerId)
@@ -89,7 +89,7 @@ export default class GoalSuggestion extends Model {
 
   static async create(
     { goalSuggestionTemplateId, answerId }: IGoalSuggestionEditableFields,
-  ): Promise<Answer[]> {
+  ): Promise<GoalSuggestionTemplate[]> {
     // TODO: use postgres UPCERT here to add relation if it doesn't exist instead of a transaction
     await transaction(GoalSuggestion, async GoalSuggestionWithTransaction => {
       const relations = await GoalSuggestionWithTransaction
@@ -110,7 +110,7 @@ export default class GoalSuggestion extends Model {
 
   static async delete(
     { goalSuggestionTemplateId, answerId }: IGoalSuggestionEditableFields,
-  ): Promise<Answer[]> {
+  ): Promise<GoalSuggestionTemplate[]> {
     await this.query()
       .where('goalSuggestionTemplateId', goalSuggestionTemplateId)
       .andWhere('answerId', answerId)

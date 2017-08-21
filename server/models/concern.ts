@@ -1,6 +1,5 @@
 import { Model, RelationMappings, Transaction } from 'objection';
 import * as uuid from 'uuid/v4';
-import ConcernSuggestion from './concern-suggestion';
 
 export interface IConcernEditableFields {
   title: string;
@@ -13,7 +12,6 @@ export default class Concern extends Model {
   createdAt: string;
   updatedAt: string;
   deletedAt?: string;
-  concernSuggestions: ConcernSuggestion[];
 
   static tableName = 'concern';
 

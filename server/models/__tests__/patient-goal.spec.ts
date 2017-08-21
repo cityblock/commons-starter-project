@@ -3,7 +3,10 @@ import {
   createMockPatient,
   createPatient,
 } from '../../spec-helpers';
+import Concern from '../concern';
+import GoalSuggestionTemplate from '../goal-suggestion-template';
 import Patient from '../patient';
+import PatientConcern from '../patient-concern';
 import PatientGoal from '../patient-goal';
 import User from '../user';
 
@@ -36,6 +39,35 @@ describe('patient goal model', () => {
       patientId: patient.id,
     });
     expect(patientGoal.title).toEqual('title');
+    expect(await PatientGoal.get(patientGoal.id)).toEqual(patientGoal);
+  });
+
+  it('creates a patient goal and links to goal template', async () => {
+    const goalSuggestionTemplate = await GoalSuggestionTemplate.create({ title: 'Fix housing' });
+
+    const patientGoal = await PatientGoal.create({
+      title: 'title',
+      patientId: patient.id,
+      goalSuggestionTemplateId: goalSuggestionTemplate.id,
+    });
+    expect(patientGoal.goalSuggestionTemplateId).toEqual(goalSuggestionTemplate.id);
+    expect(await PatientGoal.get(patientGoal.id)).toEqual(patientGoal);
+  });
+
+  it('creates a patient goal and links to concern', async () => {
+    const concern = await Concern.create({ title: 'Housing' });
+    const patientConcern = await PatientConcern.create({
+      concernId: concern.id,
+      patientId: patient.id,
+      order: 1,
+    });
+
+    const patientGoal = await PatientGoal.create({
+      title: 'title',
+      patientId: patient.id,
+      patientConcernId: patientConcern.id,
+    });
+    expect(patientGoal.patientConcernId).toEqual(patientConcern.id);
     expect(await PatientGoal.get(patientGoal.id)).toEqual(patientGoal);
   });
 

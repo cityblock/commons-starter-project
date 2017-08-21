@@ -1,6 +1,5 @@
 import { Model, RelationMappings } from 'objection';
 import * as uuid from 'uuid/v4';
-import Concern from './concern';
 import Question from './question';
 
 export interface IAnswerEditableFields {
@@ -32,7 +31,6 @@ export default class Answer extends Model {
   question: Question;
   questionId: string;
   order: number;
-  concerns: Concern[];
 
   createdAt: string;
   updatedAt: string;

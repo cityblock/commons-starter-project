@@ -31,6 +31,12 @@ export type UserRole =
   "admin";
 
 
+export type Priority =
+  "low" |
+  "medium" |
+  "high";
+
+
 export type TaskEventTypes =
   "create_task" |
   "add_follower" |
@@ -254,7 +260,7 @@ export type eventNotificationDismissMutation = {
         deletedAt: string | null,
         dueAt: string | null,
         patientId: string,
-        priority: string | null,
+        priority: Priority | null,
         patient:  {
           id: string,
           firstName: string | null,
@@ -338,7 +344,7 @@ export type eventNotificationDismissMutation = {
       deletedAt: string | null,
       dueAt: string | null,
       patientId: string,
-      priority: string | null,
+      priority: Priority | null,
       patient:  {
         id: string,
         firstName: string | null,
@@ -447,7 +453,7 @@ export type getEventNotificationsForCurrentUserQuery = {
             deletedAt: string | null,
             dueAt: string | null,
             patientId: string,
-            priority: string | null,
+            priority: Priority | null,
             patient:  {
               id: string,
               firstName: string | null,
@@ -531,7 +537,7 @@ export type getEventNotificationsForCurrentUserQuery = {
           deletedAt: string | null,
           dueAt: string | null,
           patientId: string,
-          priority: string | null,
+          priority: Priority | null,
           patient:  {
             id: string,
             firstName: string | null,
@@ -745,7 +751,7 @@ export type getPatientTasksQuery = {
         deletedAt: string | null,
         dueAt: string | null,
         patientId: string,
-        priority: string | null,
+        priority: Priority | null,
         patient:  {
           id: string,
           firstName: string | null,
@@ -996,7 +1002,7 @@ export type getTaskQuery = {
     deletedAt: string | null,
     dueAt: string | null,
     patientId: string,
-    priority: string | null,
+    priority: Priority | null,
     patient:  {
       id: string,
       firstName: string | null,
@@ -1056,7 +1062,7 @@ export type patientAnswersCreateMutationVariables = {
 };
 
 export type patientAnswersCreateMutation = {
-  // Create an Answer
+  // Create a patient answer
   patientAnswersCreate:  Array< {
     id: string,
     createdAt: string,
@@ -1482,7 +1488,7 @@ export type taskCompleteMutation = {
     deletedAt: string | null,
     dueAt: string | null,
     patientId: string,
-    priority: string | null,
+    priority: Priority | null,
     patient:  {
       id: string,
       firstName: string | null,
@@ -1533,7 +1539,7 @@ export type taskCreateMutation = {
     deletedAt: string | null,
     dueAt: string | null,
     patientId: string,
-    priority: string | null,
+    priority: Priority | null,
     patient:  {
       id: string,
       firstName: string | null,
@@ -1580,7 +1586,7 @@ export type taskDeleteMutation = {
     deletedAt: string | null,
     dueAt: string | null,
     patientId: string,
-    priority: string | null,
+    priority: Priority | null,
     patient:  {
       id: string,
       firstName: string | null,
@@ -1632,7 +1638,7 @@ export type taskEditMutation = {
     deletedAt: string | null,
     dueAt: string | null,
     patientId: string,
-    priority: string | null,
+    priority: Priority | null,
     patient:  {
       id: string,
       firstName: string | null,
@@ -1679,7 +1685,7 @@ export type taskUncompleteMutation = {
     deletedAt: string | null,
     dueAt: string | null,
     patientId: string,
-    priority: string | null,
+    priority: Priority | null,
     patient:  {
       id: string,
       firstName: string | null,
@@ -1727,7 +1733,7 @@ export type taskUserFollowMutation = {
     deletedAt: string | null,
     dueAt: string | null,
     patientId: string,
-    priority: string | null,
+    priority: Priority | null,
     patient:  {
       id: string,
       firstName: string | null,
@@ -1778,7 +1784,7 @@ export type getTasksForCurrentUserQuery = {
         deletedAt: string | null,
         dueAt: string | null,
         patientId: string,
-        priority: string | null,
+        priority: Priority | null,
         patient:  {
           id: string,
           firstName: string | null,
@@ -1868,7 +1874,7 @@ export type FullTaskFragment = {
   deletedAt: string | null,
   dueAt: string | null,
   patientId: string,
-  priority: string | null,
+  priority: Priority | null,
   patient:  {
     id: string,
     firstName: string | null,
@@ -1929,7 +1935,7 @@ export type FullTaskEventFragment = {
     deletedAt: string | null,
     dueAt: string | null,
     patientId: string,
-    priority: string | null,
+    priority: Priority | null,
     patient:  {
       id: string,
       firstName: string | null,
@@ -2032,7 +2038,7 @@ export type FullEventNotificationFragment = {
       deletedAt: string | null,
       dueAt: string | null,
       patientId: string,
-      priority: string | null,
+      priority: Priority | null,
       patient:  {
         id: string,
         firstName: string | null,
@@ -2116,7 +2122,7 @@ export type FullEventNotificationFragment = {
     deletedAt: string | null,
     dueAt: string | null,
     patientId: string,
-    priority: string | null,
+    priority: Priority | null,
     patient:  {
       id: string,
       firstName: string | null,

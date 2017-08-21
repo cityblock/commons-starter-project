@@ -74,7 +74,7 @@ export default class ConcernSuggestion extends Model {
     );
   }
 
-  static async getForAnswer(answerId: string): Promise<Answer[]> {
+  static async getForAnswer(answerId: string): Promise<Concern[]> {
     const concernSuggestions = await this.query()
       .where('answerId', answerId)
       .andWhere('deletedAt', null)
@@ -87,7 +87,7 @@ export default class ConcernSuggestion extends Model {
 
   static async create(
     { concernId, answerId }: IConcernSuggestionEditableFields,
-  ): Promise<Answer[]> {
+  ): Promise<Concern[]> {
     // TODO: use postgres UPCERT here to add relation if it doesn't exist instead of a transaction
     await transaction(ConcernSuggestion, async ConcernSuggestionWithTransaction => {
       const relations = await ConcernSuggestionWithTransaction
@@ -108,7 +108,7 @@ export default class ConcernSuggestion extends Model {
 
   static async delete(
     { concernId, answerId }: IConcernSuggestionEditableFields,
-  ): Promise<Answer[]> {
+  ): Promise<Concern[]> {
     await this.query()
       .where('concernId', concernId)
       .andWhere('answerId', answerId)

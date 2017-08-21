@@ -61,6 +61,14 @@ export default class PatientConcern extends Model {
         to: 'concern.id',
       },
     },
+    patientGoals: {
+      relation: Model.HasManyRelation,
+      modelClass: 'patient-goal',
+      join: {
+        from: 'patient_concern.id',
+        to: 'patient_goal.patientConcernId',
+      },
+    },
   };
 
   $beforeInsert() {

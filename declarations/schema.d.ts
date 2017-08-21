@@ -51,6 +51,18 @@ declare module 'schema' {
     questionCondition: IQuestionCondition | null;
     eventNotificationsForCurrentUser: IEventNotificationEdges | null;
     eventNotificationsForTask: IEventNotificationEdges | null;
+    taskTemplate: ITaskTemplate | null;
+    concern: IConcern | null;
+    concerns: Array<IConcern> | null;
+    concernsForAnswer: Array<IConcern> | null;
+    patientConcern: IPatientConcern | null;
+    patientConcerns: Array<IPatientConcern> | null;
+    patientGoal: IPatientGoal | null;
+    patientGoals: Array<IPatientGoal> | null;
+    goalSuggestionTemplate: IGoalSuggestionTemplate | null;
+    goalSuggestionTemplates: Array<IGoalSuggestionTemplate> | null;
+    goalSuggestionTemplatesForAnswer: Array<IGoalSuggestionTemplate> | null;
+    taskTemplates: Array<ITaskTemplate> | null;
   }
 
   /*
@@ -71,7 +83,7 @@ declare module 'schema' {
   /*
     description: An object with a Globally Unique ID
   */
-  type uniqueId = IUser | IPatient | IClinic | ITask | ITaskComment | IRiskArea | IQuestion | IAnswer | IQuestionCondition | IPatientAnswer | IEventNotification | ITaskEvent;
+  type uniqueId = IUser | IPatient | IClinic | ITask | ITaskComment | IRiskArea | IQuestion | IAnswer | IQuestionCondition | IPatientAnswer | IEventNotification | ITaskEvent | ITaskTemplate | IConcern | IPatientConcern | IPatientGoal | IGoalSuggestionTemplate;
 
   /*
     description: An object with a Globally Unique ID
@@ -334,7 +346,7 @@ declare module 'schema' {
     patient: IPatient | null;
     patientId: string;
     dueAt: string | null;
-    priority: string | null;
+    priority: IPriorityEnum | null;
     createdBy: IUser | null;
     createdAt: string | null;
     updatedAt: string | null;
@@ -344,6 +356,11 @@ declare module 'schema' {
     assignedTo: IUser | null;
     followers: Array<IUser>;
   }
+
+  /*
+    description: 
+  */
+  type IPriorityEnum = 'low' | 'medium' | 'high';
 
   /*
     description: 
@@ -568,6 +585,79 @@ declare module 'schema' {
   /*
     description: 
   */
+  interface ITaskTemplate {
+    id: string;
+    title: string;
+    completedWithinNumber: number | null;
+    completedWithinInterval: ICompletedWithinIntervalEnum | null;
+    repeating: boolean | null;
+    goalSuggestionTemplateId: string;
+    priority: IPriorityEnum | null;
+    careTeamAssigneeRole: IUserRoleEnum | null;
+    createdAt: string;
+    updatedAt: string;
+    deletedAt: string | null;
+  }
+
+  /*
+    description: 
+  */
+  type ICompletedWithinIntervalEnum = 'hour' | 'day' | 'week' | 'month' | 'year';
+
+  /*
+    description: Concern
+  */
+  interface IConcern {
+    id: string;
+    title: string;
+    createdAt: string;
+    updatedAt: string;
+    deletedAt: string | null;
+  }
+
+  /*
+    description: 
+  */
+  interface IPatientConcern {
+    id: string;
+    order: number;
+    concernId: string;
+    patientId: string;
+    startedAt: string | null;
+    completedAt: string | null;
+    createdAt: string;
+    updatedAt: string;
+    deletedAt: string | null;
+  }
+
+  /*
+    description: 
+  */
+  interface IPatientGoal {
+    id: string;
+    title: string;
+    patientId: string;
+    patientConcernId: string | null;
+    createdAt: string;
+    updatedAt: string;
+    deletedAt: string | null;
+  }
+
+  /*
+    description: 
+  */
+  interface IGoalSuggestionTemplate {
+    id: string;
+    title: string;
+    taskTemplates: Array<ITaskTemplate> | null;
+    createdAt: string;
+    updatedAt: string;
+    deletedAt: string | null;
+  }
+
+  /*
+    description: 
+  */
   interface IRootMutationType {
     userCreate: IUserWithAuthToken | null;
     userLogin: IUserWithAuthToken | null;
@@ -608,6 +698,25 @@ declare module 'schema' {
     questionConditionEdit: IQuestionCondition | null;
     questionConditionDelete: IQuestionCondition | null;
     eventNotificationDismiss: IEventNotification | null;
+    concernCreate: IConcern | null;
+    concernEdit: IConcern | null;
+    concernDelete: IConcern | null;
+    concernSuggestionCreate: Array<IConcern> | null;
+    concernSuggestionDelete: Array<IConcern> | null;
+    goalSuggestionTemplateCreate: IGoalSuggestionTemplate | null;
+    goalSuggestionTemplateEdit: IGoalSuggestionTemplate | null;
+    goalSuggestionTemplateDelete: IGoalSuggestionTemplate | null;
+    goalSuggestionCreate: Array<IGoalSuggestionTemplate> | null;
+    goalSuggestionDelete: Array<IGoalSuggestionTemplate> | null;
+    taskTemplateCreate: ITaskTemplate | null;
+    taskTemplateEdit: ITaskTemplate | null;
+    taskTemplateDelete: ITaskTemplate | null;
+    patientGoalCreate: IPatientGoal | null;
+    patientGoalEdit: IPatientGoal | null;
+    patientGoalDelete: IPatientGoal | null;
+    patientConcernCreate: IPatientConcern | null;
+    patientConcernEdit: IPatientConcern | null;
+    patientConcernDelete: IPatientConcern | null;
   }
 
   /*
@@ -1012,6 +1121,155 @@ declare module 'schema' {
   */
   interface IEventNotificationEditInput {
     eventNotificationId: string;
+  }
+
+  /*
+    description: 
+  */
+  interface IConcernCreateInput {
+    title: string;
+  }
+
+  /*
+    description: 
+  */
+  interface IConcernEditInput {
+    title: string;
+    concernId: string;
+  }
+
+  /*
+    description: 
+  */
+  interface IConcernDeleteInput {
+    concernId: string;
+  }
+
+  /*
+    description: 
+  */
+  interface IConcernSuggestInput {
+    concernId: string;
+    answerId: string;
+  }
+
+  /*
+    description: 
+  */
+  interface IGoalSuggestionTemplateCreateInput {
+    title: string;
+  }
+
+  /*
+    description: 
+  */
+  interface IGoalSuggestionTemplateEditInput {
+    title: string;
+    goalSuggestionTemplateId: string;
+  }
+
+  /*
+    description: 
+  */
+  interface IGoalSuggestionTemplateDeleteInput {
+    goalSuggestionTemplateId: string;
+  }
+
+  /*
+    description: 
+  */
+  interface IGoalSuggestInput {
+    answerId: string;
+    goalSuggestionTemplateId: string;
+  }
+
+  /*
+    description: 
+  */
+  interface ITaskTemplateCreateInput {
+    title: string;
+    completedWithinNumber?: number | null;
+    completedWithinInterval?: string | null;
+    repeating?: boolean | null;
+    goalSuggestionTemplateId?: string | null;
+    priority?: string | null;
+    careTeamAssigneeRole?: string | null;
+  }
+
+  /*
+    description: 
+  */
+  interface ITaskTemplateEditInput {
+    title: string;
+    completedWithinNumber?: number | null;
+    completedWithinInterval?: string | null;
+    repeating?: boolean | null;
+    goalSuggestionTemplateId?: string | null;
+    priority?: string | null;
+    careTeamAssigneeRole?: string | null;
+    taskTemplateId: string;
+  }
+
+  /*
+    description: 
+  */
+  interface ITaskTemplateDeleteInput {
+    taskTemplateId: string;
+  }
+
+  /*
+    description: 
+  */
+  interface IPatientGoalCreateInput {
+    title: string;
+    patientId: string;
+    patientConcernId?: string | null;
+  }
+
+  /*
+    description: 
+  */
+  interface IPatientGoalEditInput {
+    patientGoalId: string;
+    title: string;
+    patientConcernId?: string | null;
+  }
+
+  /*
+    description: 
+  */
+  interface IPatientGoalDeleteInput {
+    patientGoalId: string;
+  }
+
+  /*
+    description: 
+  */
+  interface IPatientConcernCreateInput {
+    order: number;
+    concernId: string;
+    patientId: string;
+    startedAt?: string | null;
+    completedAt?: string | null;
+  }
+
+  /*
+    description: 
+  */
+  interface IPatientConcernEditInput {
+    order?: number | null;
+    concernId?: string | null;
+    patientId?: string | null;
+    startedAt?: string | null;
+    completedAt?: string | null;
+    patientConcernId: string;
+  }
+
+  /*
+    description: 
+  */
+  interface IPatientConcernDeleteInput {
+    patientConcernId: string;
   }
 
   /*

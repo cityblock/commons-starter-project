@@ -1,0 +1,11 @@
+#import "../fragments/full-concern.graphql"
+
+mutation concernCreate(
+  $title: String!
+) {
+  concernCreate(input: {
+    title: $title,
+  }) {
+    ...FullConcern
+  }
+}

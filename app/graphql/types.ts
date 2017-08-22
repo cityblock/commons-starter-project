@@ -54,6 +54,14 @@ export type TaskEventTypes =
   "edit_description";
 
 
+export type CompletedWithinInterval =
+  "hour" |
+  "day" |
+  "week" |
+  "month" |
+  "year";
+
+
 export type TaskOrderOptions =
   "createdAtDesc" |
   "createdAtAsc" |
@@ -203,6 +211,52 @@ export type getClinicsQuery = {
         name: string,
       } | null,
     } | null > | null,
+  } | null,
+};
+
+export type concernCreateMutationVariables = {
+  title: string,
+};
+
+export type concernCreateMutation = {
+  // Create a concern
+  concernCreate:  {
+    id: string,
+    title: string,
+    createdAt: string,
+    updatedAt: string,
+    deletedAt: string | null,
+  } | null,
+};
+
+export type concernDeleteMutationVariables = {
+  concernId: string,
+};
+
+export type concernDeleteMutation = {
+  // Deletes a concern
+  concernDelete:  {
+    id: string,
+    title: string,
+    createdAt: string,
+    updatedAt: string,
+    deletedAt: string | null,
+  } | null,
+};
+
+export type concernEditMutationVariables = {
+  concernId: string,
+  title: string,
+};
+
+export type concernEditMutation = {
+  // Edit a concern
+  concernEdit:  {
+    id: string,
+    title: string,
+    createdAt: string,
+    updatedAt: string,
+    deletedAt: string | null,
   } | null,
 };
 
@@ -401,6 +455,32 @@ export type getAnswerQuery = {
   } | null,
 };
 
+export type getConcernQueryVariables = {
+  concernId: string,
+};
+
+export type getConcernQuery = {
+  // Concern
+  concern:  {
+    id: string,
+    title: string,
+    createdAt: string,
+    updatedAt: string,
+    deletedAt: string | null,
+  } | null,
+};
+
+export type getConcernsQuery = {
+  // Concerns
+  concerns:  Array< {
+    id: string,
+    title: string,
+    createdAt: string,
+    updatedAt: string,
+    deletedAt: string | null,
+  } | null > | null,
+};
+
 export type getCurrentUserQuery = {
   // The current User
   currentUser:  {
@@ -579,6 +659,58 @@ export type getEventNotificationsForCurrentUserQuery = {
       hasNextPage: boolean,
     },
   } | null,
+};
+
+export type getGoalSuggestionTemplateQueryVariables = {
+  goalSuggestionTemplateId: string,
+};
+
+export type getGoalSuggestionTemplateQuery = {
+  // Goal suggestion templates
+  goalSuggestionTemplate:  {
+    id: string,
+    title: string,
+    taskTemplates:  Array< {
+      id: string,
+      title: string,
+      completedWithinNumber: number | null,
+      completedWithinInterval: CompletedWithinInterval | null,
+      repeating: boolean | null,
+      goalSuggestionTemplateId: string,
+      priority: Priority | null,
+      careTeamAssigneeRole: UserRole | null,
+      createdAt: string,
+      updatedAt: string,
+      deletedAt: string | null,
+    } | null > | null,
+    createdAt: string,
+    updatedAt: string,
+    deletedAt: string | null,
+  } | null,
+};
+
+export type getGoalSuggestionTemplatesQuery = {
+  // Goal suggestion templates
+  goalSuggestionTemplates:  Array< {
+    id: string,
+    title: string,
+    taskTemplates:  Array< {
+      id: string,
+      title: string,
+      completedWithinNumber: number | null,
+      completedWithinInterval: CompletedWithinInterval | null,
+      repeating: boolean | null,
+      goalSuggestionTemplateId: string,
+      priority: Priority | null,
+      careTeamAssigneeRole: UserRole | null,
+      createdAt: string,
+      updatedAt: string,
+      deletedAt: string | null,
+    } | null > | null,
+    createdAt: string,
+    updatedAt: string,
+    deletedAt: string | null,
+  } | null > | null,
 };
 
 export type getPatientAnswersForRiskAreaQueryVariables = {
@@ -1030,6 +1162,91 @@ export type getTaskQuery = {
       googleProfileImageUrl: string | null,
       userRole: UserRole,
     } | null,
+  } | null,
+};
+
+export type goalSuggestionTemplateCreateMutationVariables = {
+  title: string,
+};
+
+export type goalSuggestionTemplateCreateMutation = {
+  // goal suggestion template create
+  goalSuggestionTemplateCreate:  {
+    id: string,
+    title: string,
+    taskTemplates:  Array< {
+      id: string,
+      title: string,
+      completedWithinNumber: number | null,
+      completedWithinInterval: CompletedWithinInterval | null,
+      repeating: boolean | null,
+      goalSuggestionTemplateId: string,
+      priority: Priority | null,
+      careTeamAssigneeRole: UserRole | null,
+      createdAt: string,
+      updatedAt: string,
+      deletedAt: string | null,
+    } | null > | null,
+    createdAt: string,
+    updatedAt: string,
+    deletedAt: string | null,
+  } | null,
+};
+
+export type goalSuggestionTemplateDeleteMutationVariables = {
+  goalSuggestionTemplateId: string,
+};
+
+export type goalSuggestionTemplateDeleteMutation = {
+  // Deletes a goal suggestion template
+  goalSuggestionTemplateDelete:  {
+    id: string,
+    title: string,
+    taskTemplates:  Array< {
+      id: string,
+      title: string,
+      completedWithinNumber: number | null,
+      completedWithinInterval: CompletedWithinInterval | null,
+      repeating: boolean | null,
+      goalSuggestionTemplateId: string,
+      priority: Priority | null,
+      careTeamAssigneeRole: UserRole | null,
+      createdAt: string,
+      updatedAt: string,
+      deletedAt: string | null,
+    } | null > | null,
+    createdAt: string,
+    updatedAt: string,
+    deletedAt: string | null,
+  } | null,
+};
+
+export type goalSuggestionTemplateEditMutationVariables = {
+  goalSuggestionTemplateId: string,
+  title: string,
+};
+
+export type goalSuggestionTemplateEditMutation = {
+  // Edit a goal suggestion template
+  goalSuggestionTemplateEdit:  {
+    id: string,
+    title: string,
+    taskTemplates:  Array< {
+      id: string,
+      title: string,
+      completedWithinNumber: number | null,
+      completedWithinInterval: CompletedWithinInterval | null,
+      repeating: boolean | null,
+      goalSuggestionTemplateId: string,
+      priority: Priority | null,
+      careTeamAssigneeRole: UserRole | null,
+      createdAt: string,
+      updatedAt: string,
+      deletedAt: string | null,
+    } | null > | null,
+    createdAt: string,
+    updatedAt: string,
+    deletedAt: string | null,
   } | null,
 };
 
@@ -1669,6 +1886,82 @@ export type taskEditMutation = {
   } | null,
 };
 
+export type taskTemplateCreateMutationVariables = {
+  title: string,
+  goalSuggestionTemplateId: string,
+  completedWithinNumber?: number | null,
+  completedWithinInterval?: string | null,
+  repeating?: boolean | null,
+  priority?: string | null,
+  careTeamAssigneeRole?: string | null,
+};
+
+export type taskTemplateCreateMutation = {
+  // task template create
+  taskTemplateCreate:  {
+    id: string,
+    title: string,
+    completedWithinNumber: number | null,
+    completedWithinInterval: CompletedWithinInterval | null,
+    repeating: boolean | null,
+    goalSuggestionTemplateId: string,
+    priority: Priority | null,
+    careTeamAssigneeRole: UserRole | null,
+    createdAt: string,
+    updatedAt: string,
+    deletedAt: string | null,
+  } | null,
+};
+
+export type taskTemplateDeleteMutationVariables = {
+  taskTemplateId: string,
+};
+
+export type taskTemplateDeleteMutation = {
+  // Deletes a task template
+  taskTemplateDelete:  {
+    id: string,
+    title: string,
+    completedWithinNumber: number | null,
+    completedWithinInterval: CompletedWithinInterval | null,
+    repeating: boolean | null,
+    goalSuggestionTemplateId: string,
+    priority: Priority | null,
+    careTeamAssigneeRole: UserRole | null,
+    createdAt: string,
+    updatedAt: string,
+    deletedAt: string | null,
+  } | null,
+};
+
+export type taskTemplateEditMutationVariables = {
+  title: string,
+  taskTemplateId: string,
+  goalSuggestionTemplateId?: string | null,
+  completedWithinNumber?: number | null,
+  completedWithinInterval?: string | null,
+  repeating?: boolean | null,
+  priority?: string | null,
+  careTeamAssigneeRole?: string | null,
+};
+
+export type taskTemplateEditMutation = {
+  // Edit a task template
+  taskTemplateEdit:  {
+    id: string,
+    title: string,
+    completedWithinNumber: number | null,
+    completedWithinInterval: CompletedWithinInterval | null,
+    repeating: boolean | null,
+    goalSuggestionTemplateId: string,
+    priority: Priority | null,
+    careTeamAssigneeRole: UserRole | null,
+    createdAt: string,
+    updatedAt: string,
+    deletedAt: string | null,
+  } | null,
+};
+
 export type taskUncompleteMutationVariables = {
   taskId: string,
 };
@@ -1851,6 +2144,14 @@ export type FullAppointmentFragment = {
 export type FullClinicFragment = {
   id: string,
   name: string,
+};
+
+export type FullConcernFragment = {
+  id: string,
+  title: string,
+  createdAt: string,
+  updatedAt: string,
+  deletedAt: string | null,
 };
 
 export type FullUserFragment = {
@@ -2154,6 +2455,41 @@ export type FullEventNotificationFragment = {
   seenAt: string | null,
   emailSentAt: string | null,
   deliveredAt: string | null,
+  createdAt: string,
+  updatedAt: string,
+  deletedAt: string | null,
+};
+
+export type FullTaskTemplateFragment = {
+  id: string,
+  title: string,
+  completedWithinNumber: number | null,
+  completedWithinInterval: CompletedWithinInterval | null,
+  repeating: boolean | null,
+  goalSuggestionTemplateId: string,
+  priority: Priority | null,
+  careTeamAssigneeRole: UserRole | null,
+  createdAt: string,
+  updatedAt: string,
+  deletedAt: string | null,
+};
+
+export type FullGoalSuggestionTemplateFragment = {
+  id: string,
+  title: string,
+  taskTemplates:  Array< {
+    id: string,
+    title: string,
+    completedWithinNumber: number | null,
+    completedWithinInterval: CompletedWithinInterval | null,
+    repeating: boolean | null,
+    goalSuggestionTemplateId: string,
+    priority: Priority | null,
+    careTeamAssigneeRole: UserRole | null,
+    createdAt: string,
+    updatedAt: string,
+    deletedAt: string | null,
+  } | null > | null,
   createdAt: string,
   updatedAt: string,
   deletedAt: string | null,

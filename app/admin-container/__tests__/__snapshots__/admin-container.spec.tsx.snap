@@ -29,6 +29,20 @@ exports[`renders admin container 1`] = `
       >
         Questions
       </a>
+      <a
+        className=""
+        href="/admin/concerns"
+        onClick={[Function]}
+      >
+        Concerns
+      </a>
+      <a
+        className=""
+        href="/admin/goals"
+        onClick={[Function]}
+      >
+        Goals
+      </a>
     </div>
     <div
       className={undefined}

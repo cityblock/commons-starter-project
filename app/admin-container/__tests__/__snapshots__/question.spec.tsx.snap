@@ -43,7 +43,7 @@ exports[`renders question 1`] = `
     <div
       className={undefined}
     >
-      Are you ure you want to delete this question?
+      Are you sure you want to delete this question?
     </div>
     <div
       className={undefined}

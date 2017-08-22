@@ -1,0 +1,7 @@
+#import "../fragments/full-concern.graphql"
+
+query getConcern($concernId: String!) {
+  concern(concernId: $concernId) {
+    ...FullConcern
+  }
+}

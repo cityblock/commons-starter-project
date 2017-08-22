@@ -1,0 +1,11 @@
+#import "../fragments/full-task-template.graphql"
+
+mutation taskTemplateDelete(
+  $taskTemplateId: String!
+) {
+  taskTemplateDelete(input: {
+    taskTemplateId: $taskTemplateId
+  }) {
+    ...FullTaskTemplate
+  }
+}

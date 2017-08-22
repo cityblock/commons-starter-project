@@ -1,0 +1,13 @@
+fragment FullTaskTemplate on TaskTemplate {
+  id
+  title
+  completedWithinNumber
+  completedWithinInterval
+  repeating
+  goalSuggestionTemplateId
+  priority
+  careTeamAssigneeRole
+  createdAt
+  updatedAt
+  deletedAt
+}

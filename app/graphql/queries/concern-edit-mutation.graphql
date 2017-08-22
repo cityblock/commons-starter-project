@@ -1,0 +1,7 @@
+#import "../fragments/full-concern.graphql"
+
+mutation concernEdit($concernId: String!, $title: String!) {
+  concernEdit(input: { concernId: $concernId, title: $title }) {
+    ...FullConcern
+  }
+}

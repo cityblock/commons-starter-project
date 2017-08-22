@@ -1,0 +1,23 @@
+#import "../fragments/full-task-template.graphql"
+
+mutation taskTemplateCreate(
+  $title: String!
+  $goalSuggestionTemplateId: String!
+  $completedWithinNumber: Int
+  $completedWithinInterval: String
+  $repeating: Boolean
+  $priority: String
+  $careTeamAssigneeRole: String
+) {
+  taskTemplateCreate(input: {
+    title: $title
+    goalSuggestionTemplateId: $goalSuggestionTemplateId
+    completedWithinNumber: $completedWithinNumber
+    completedWithinInterval: $completedWithinInterval
+    repeating: $repeating
+    priority: $priority
+    careTeamAssigneeRole: $careTeamAssigneeRole
+  }) {
+    ...FullTaskTemplate
+  }
+}

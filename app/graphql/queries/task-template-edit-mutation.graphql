@@ -1,0 +1,25 @@
+#import "../fragments/full-task-template.graphql"
+
+mutation taskTemplateEdit(
+  $title: String!
+  $taskTemplateId: String!
+  $goalSuggestionTemplateId: String
+  $completedWithinNumber: Int
+  $completedWithinInterval: String
+  $repeating: Boolean
+  $priority: String
+  $careTeamAssigneeRole: String
+) {
+  taskTemplateEdit(input: {
+    taskTemplateId: $taskTemplateId
+    title: $title
+    goalSuggestionTemplateId: $goalSuggestionTemplateId
+    completedWithinNumber: $completedWithinNumber
+    completedWithinInterval: $completedWithinInterval
+    repeating: $repeating
+    priority: $priority
+    careTeamAssigneeRole: $careTeamAssigneeRole
+  }) {
+    ...FullTaskTemplate
+  }
+}

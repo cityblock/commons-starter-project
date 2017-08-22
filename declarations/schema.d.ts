@@ -638,6 +638,7 @@ declare module 'schema' {
     title: string;
     patientId: string;
     patientConcernId: string | null;
+    goalSuggestionTemplateId: string | null;
     createdAt: string;
     updatedAt: string;
     deletedAt: string | null;
@@ -1191,7 +1192,7 @@ declare module 'schema' {
     completedWithinNumber?: number | null;
     completedWithinInterval?: string | null;
     repeating?: boolean | null;
-    goalSuggestionTemplateId?: string | null;
+    goalSuggestionTemplateId: string;
     priority?: string | null;
     careTeamAssigneeRole?: string | null;
   }
@@ -1224,6 +1225,7 @@ declare module 'schema' {
     title: string;
     patientId: string;
     patientConcernId?: string | null;
+    goalSuggestionTemplateId?: string | null;
   }
 
   /*
@@ -1233,6 +1235,7 @@ declare module 'schema' {
     patientGoalId: string;
     title: string;
     patientConcernId?: string | null;
+    goalSuggestionTemplateId?: string | null;
   }
 
   /*

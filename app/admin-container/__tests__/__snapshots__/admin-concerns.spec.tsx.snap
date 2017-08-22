@@ -1,0 +1,62 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders admin concerns 1`] = `
+<div
+  className={undefined}
+>
+  <div
+    className={undefined}
+  >
+    <div
+      className={undefined}
+    >
+      <div
+        className={undefined}
+        onClick={[Function]}
+      >
+        Create Concern
+      </div>
+    </div>
+  </div>
+  <div
+    className={undefined}
+  >
+    <div
+      className="undefined"
+    >
+      <a
+        className="undefined"
+        href="/route/base/concern-id"
+        onClick={[Function]}
+      >
+        <div
+          className={undefined}
+        >
+          title
+        </div>
+        <div
+          className={undefined}
+        >
+          <div
+            className=""
+          >
+            <span
+              className={undefined}
+            >
+              Created:
+            </span>
+            <span
+              className={undefined}
+            >
+              last month
+            </span>
+          </div>
+        </div>
+      </a>
+    </div>
+    <div
+      className="undefined"
+    />
+  </div>
+</div>
+`;

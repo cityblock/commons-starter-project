@@ -1,0 +1,12 @@
+#import "./full-task-template.graphql"
+
+fragment FullGoalSuggestionTemplate on GoalSuggestionTemplate {
+  id
+  title
+  taskTemplates {
+    ...FullTaskTemplate
+  }
+  createdAt
+  updatedAt
+  deletedAt
+}

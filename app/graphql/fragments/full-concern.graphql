@@ -1,0 +1,7 @@
+fragment FullConcern on Concern {
+  id
+  title
+  createdAt
+  updatedAt
+  deletedAt
+}

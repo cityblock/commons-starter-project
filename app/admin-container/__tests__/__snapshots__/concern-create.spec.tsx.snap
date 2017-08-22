@@ -1,0 +1,66 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders concern create 1`] = `
+<div
+  className={undefined}
+>
+  <form
+    className={undefined}
+    onSubmit={[Function]}
+  >
+    <div
+      className={undefined}
+    >
+      <div
+        className={undefined}
+        onClick={[Function]}
+      />
+    </div>
+    <div
+      className={undefined}
+    >
+      <div
+        className={undefined}
+      >
+        <div
+          className={undefined}
+        >
+          <div
+            className={undefined}
+          />
+        </div>
+      </div>
+      <div
+        className={undefined}
+      >
+        <input
+          className={undefined}
+          name="title"
+          onChange={[Function]}
+          placeholder="Enter concern title"
+          value=""
+        />
+      </div>
+    </div>
+    <div
+      className={undefined}
+    >
+      <div
+        className={undefined}
+      >
+        <div
+          className={undefined}
+          onClick={[Function]}
+        >
+          Cancel
+        </div>
+        <input
+          className={undefined}
+          type="submit"
+          value="Add concern"
+        />
+      </div>
+    </div>
+  </form>
+</div>
+`;

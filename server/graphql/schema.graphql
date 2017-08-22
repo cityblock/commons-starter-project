@@ -925,7 +925,7 @@ input TaskTemplateCreateInput {
   completedWithinNumber: Int
   completedWithinInterval: String
   repeating: Boolean
-  goalSuggestionTemplateId: String
+  goalSuggestionTemplateId: String!
   priority: String
   careTeamAssigneeRole: String
 }

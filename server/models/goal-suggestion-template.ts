@@ -53,6 +53,7 @@ export default class GoalSuggestionTemplate extends Model {
   static async get(goalSuggestionTemplateId: string): Promise<GoalSuggestionTemplate | undefined> {
     const goalSuggestionTemplate = await this.query()
       .eager('taskTemplates')
+      .modifyEager('taskTemplates', builder => builder.where('deletedAt', null))
       .findById(goalSuggestionTemplateId);
 
     if (!goalSuggestionTemplate) {
@@ -65,6 +66,7 @@ export default class GoalSuggestionTemplate extends Model {
     return await this
       .query()
       .eager('taskTemplates')
+      .modifyEager('taskTemplates', builder => builder.where('deletedAt', null))
       .insertAndFetch(input);
   }
 
@@ -75,12 +77,17 @@ export default class GoalSuggestionTemplate extends Model {
     return await this
       .query()
       .eager('taskTemplates')
+      .modifyEager('taskTemplates', builder => builder.where('deletedAt', null))
       .updateAndFetchById(goalSuggestionTemplateId, goalSuggestionTemplate);
   }
 
   // TODO: paginate?
   static async getAll(): Promise<GoalSuggestionTemplate[]> {
-    return await this.query().where('deletedAt', null).eager('taskTemplates');
+    return await this
+      .query()
+      .where('deletedAt', null)
+      .eager('taskTemplates')
+      .modifyEager('taskTemplates', builder => builder.where('deletedAt', null));
   }
 
   static async delete(goalSuggestionTemplateId: string): Promise<GoalSuggestionTemplate> {

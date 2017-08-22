@@ -44,6 +44,9 @@ jobs:
     steps:
       - checkout
       - run:
+          name: known-hosts
+          command: ssh-keyscan -H beta.aptible.com >> ~/.ssh/known_hosts
+      - run:
           name: deploy
           command: git push git@beta.aptible.com:sidewalk-labs/commons.git $CIRCLE_SHA1:master
 

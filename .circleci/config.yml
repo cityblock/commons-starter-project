@@ -1,0 +1,60 @@
+version: 2
+jobs:
+  build:
+    working_directory: ~/repo
+    docker:
+      - image: circleci/node:6.10
+      - image: postgres:9.6
+        environment:
+          POSTGRES_DB: commons_test
+          POSTGRES_USER: test
+          POSTGRES_PASSWORD: ""
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - v1-dependencies-{{ checksum "package.json" }}
+            # fallback to using the latest cache if no exact match is found
+            - v1-dependencies-
+      - run: yarn install
+      - save_cache:
+          key: v1-dependencies-{{ checksum "package.json" }}
+          paths:
+            - ./node_modules
+      - run: yarn lint
+      - run:
+          name: check-schema
+          command: './scripts/check-schema-in-sync.sh'
+      - run:
+          name: Wait for DB
+          command: dockerize -wait tcp://localhost:5432 -timeout 1m
+      - run: yarn coverage
+      - run:
+          name: code-coverage
+          command: './scripts/post-coverage.sh || true'
+      - store_artifacts:
+          path: coverage
+          prefix: coverage
+      - run: yarn codegen
+
+  deploy:
+    working_directory: ~/repo
+    docker:
+      - image: circleci/node:6.10
+    steps:
+      - checkout
+      - run:
+          name: deploy
+          command: git push git@beta.aptible.com:sidewalk-labs/commons.git $CIRCLE_SHA1:master
+
+workflows:
+  version: 2
+  build_and_deploy:
+    jobs:
+      - build
+      - deploy:
+          requires:
+            - build
+          filters:
+            branches:
+              only: master

@@ -99,7 +99,7 @@ Getting up to speed:
 
 ### Testing
 
-Our test database uses postgres. Before running tests, ensure that postgres is running and create the database `commons_test` (`psql -c "create database commons_test;"`)
+Our test database uses postgres. Before running tests, ensure that postgres is running and create the database `commons_test` and role `root` (`psql -c "create database commons_test; psql -c "create role root with login"`)
 
 Next run:
 

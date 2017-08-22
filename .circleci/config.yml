@@ -46,6 +46,9 @@ jobs:
       - run:
           name: known-hosts
           command: ssh-keyscan -H beta.aptible.com >> ~/.ssh/known_hosts
+      - add_ssh_keys:
+          fingerprints:
+            - "41:eb:14:fe:32:9c:da:a5:fa:3c:3b:c4:69:18:a8:fd"
       - run:
           name: deploy
           command: git push git@beta.aptible.com:sidewalk-labs/commons.git $CIRCLE_SHA1:master

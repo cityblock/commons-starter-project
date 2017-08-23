@@ -585,6 +585,101 @@ exports[`renders question 1`] = `
               </div>
             </div>
           </div>
+          <div>
+            <br />
+            <div
+              className={undefined}
+            >
+              Care Plan Suggestions
+            </div>
+            <br />
+            <div>
+              <div
+                className=""
+              >
+                Concern Suggestions
+              </div>
+              <div
+                className=""
+              >
+                No concern suggestions
+              </div>
+              <br />
+              <div
+                className=""
+              >
+                Goal/Task Suggestions
+              </div>
+              <div
+                className=""
+              >
+                No goal/task suggestions
+              </div>
+            </div>
+            <br />
+            <div
+              className={undefined}
+            >
+              Add Care Plan Suggestion
+            </div>
+            <div
+              className={undefined}
+            >
+              <div
+                className={undefined}
+              >
+                <div
+                  className={undefined}
+                >
+                  <div
+                    className={undefined}
+                  />
+                </div>
+              </div>
+              <div
+                className={undefined}
+              >
+                <select
+                  className=""
+                  name="suggestionType"
+                  onChange={[Function]}
+                  value=""
+                >
+                  <option
+                    disabled={true}
+                    hidden={true}
+                    value=""
+                  >
+                    Select a type
+                  </option>
+                  <option
+                    value="concern"
+                  >
+                    Concern
+                  </option>
+                  <option
+                    value="goal"
+                  >
+                    Goal/Tasks
+                  </option>
+                </select>
+              </div>
+              <div
+                className={undefined}
+              >
+                <div
+                  className={undefined}
+                >
+                  <input
+                    className={undefined}
+                    onClick={[Function]}
+                    type="submit"
+                    value="Add care plan suggestion"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
           <div
             className={undefined}
           >

@@ -1,0 +1,61 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders care plan suggestion create component 1`] = `
+<div
+  className={undefined}
+>
+  <div
+    className={undefined}
+  >
+    <div
+      className={undefined}
+    >
+      <div
+        className={undefined}
+      />
+    </div>
+  </div>
+  <div
+    className={undefined}
+  >
+    <select
+      className=""
+      name="suggestionType"
+      onChange={[Function]}
+      value=""
+    >
+      <option
+        disabled={true}
+        hidden={true}
+        value=""
+      >
+        Select a type
+      </option>
+      <option
+        value="concern"
+      >
+        Concern
+      </option>
+      <option
+        value="goal"
+      >
+        Goal/Tasks
+      </option>
+    </select>
+  </div>
+  <div
+    className={undefined}
+  >
+    <div
+      className={undefined}
+    >
+      <input
+        className={undefined}
+        onClick={[Function]}
+        type="submit"
+        value="Add care plan suggestion"
+      />
+    </div>
+  </div>
+</div>
+`;

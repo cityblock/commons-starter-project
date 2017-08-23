@@ -311,3 +311,42 @@
 .deleteError.hidden {
   visibility: hidden;
 }
+
+ul.smallMarginPadding {
+  padding-left: 45px;
+  margin-bottom: 2px;
+}
+
+ul.extraSmallMarginPadding {
+  padding-left: 25px;
+  margin-bottom: 2px;
+}
+
+.smallMargin {
+  margin-bottom: 5px;
+}
+
+.indented {
+  margin-left: 15px;
+}
+
+.flexRow {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.deleteSuggestionButton {
+  height: 10px;
+  width: 10px;
+  margin-right: 10px;
+  background-image: url('../../assets/close-grey.svg');
+  background-position: center center;
+  background-size: contain;
+  background-repeat: no-repeat;
+
+  &:hover {
+    cursor: pointer;
+  }
+}

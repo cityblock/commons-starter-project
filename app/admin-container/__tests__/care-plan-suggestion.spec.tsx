@@ -6,36 +6,29 @@ import { create } from 'react-test-renderer';
 import configureMockStore from 'redux-mock-store';
 import { ENGLISH_TRANSLATION } from '../../reducers/messages/en';
 import ReduxConnectedIntlProvider from '../../redux-connected-intl-provider';
-import RiskAreaMultiSelectAnswer from '../risk-area-multi-select-answer';
+import CarePlanSuggestion from '../care-plan-suggestion';
 
 const locale = { messages: ENGLISH_TRANSLATION.messages };
 const mockStore = configureMockStore([]);
 
-it('renders a multi-select answer', () => {
-  const history = createMemoryHistory();
-  const answer = {
-    id: '456',
-    displayValue: 'Answer',
-    value: 'answer',
-    valueType: 'string' as any,
-    questionId: '123',
-    order: 1,
-    riskAdjustmentType: null,
-    inSummary: false,
-    summaryText: null,
-    concernSuggestions: [],
-    goalSuggestions: [],
-  };
+const concern = {
+  id: 'concern-id',
+  title: 'Concern Title',
+  createdAt: 'Thu Jul 13 2017 16:52:56 GMT-0400 (EDT)',
+  updatedAt: 'Thu Jul 13 2017 16:52:56 GMT-0400 (EDT)',
+  deletedAt: null,
+};
 
+it('renders a care plan suggestion', () => {
+  const history = createMemoryHistory();
   const tree = create(
     <MockedProvider mocks={[]} store={mockStore({ locale })}>
       <ReduxConnectedIntlProvider>
         <ConnectedRouter history={history}>
-          <RiskAreaMultiSelectAnswer
-            onClick={() => true}
-            answer={answer}
-            selected={false}
-            editable={true} />
+          <CarePlanSuggestion
+            answerId={'answer-id'}
+            suggestionType={'concern'}
+            suggestion={concern} />
         </ConnectedRouter>
       </ReduxConnectedIntlProvider>
     </MockedProvider>,

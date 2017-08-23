@@ -397,6 +397,8 @@ type Answer implements uniqueId {
   summaryText: String
   questionId: String!
   order: Int!
+  concernSuggestions: [Concern]
+  goalSuggestions: [GoalSuggestionTemplate]
 }
 
 # PatientAnswer

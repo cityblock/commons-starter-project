@@ -1,3 +1,6 @@
+#import "./full-concern.graphql"
+#import "./full-goal-suggestion-template.graphql"
+
 fragment FullAnswer on Answer {
   id
   displayValue
@@ -8,4 +11,10 @@ fragment FullAnswer on Answer {
   summaryText
   questionId
   order
+  concernSuggestions {
+    ...FullConcern
+  }
+  goalSuggestions {
+    ...FullGoalSuggestionTemplate
+  }
 }

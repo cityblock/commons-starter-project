@@ -83,7 +83,7 @@ declare module 'schema' {
   /*
     description: An object with a Globally Unique ID
   */
-  type uniqueId = IUser | IPatient | IClinic | ITask | ITaskComment | IRiskArea | IQuestion | IAnswer | IQuestionCondition | IPatientAnswer | IEventNotification | ITaskEvent | ITaskTemplate | IConcern | IPatientConcern | IPatientGoal | IGoalSuggestionTemplate;
+  type uniqueId = IUser | IPatient | IClinic | ITask | ITaskComment | IRiskArea | IQuestion | IAnswer | IConcern | IGoalSuggestionTemplate | ITaskTemplate | IQuestionCondition | IPatientAnswer | IEventNotification | ITaskEvent | IPatientConcern | IPatientGoal;
 
   /*
     description: An object with a Globally Unique ID
@@ -457,6 +457,8 @@ declare module 'schema' {
     summaryText: string | null;
     questionId: string;
     order: number;
+    concernSuggestions: Array<IConcern> | null;
+    goalSuggestions: Array<IGoalSuggestionTemplate> | null;
   }
 
   /*
@@ -468,6 +470,51 @@ declare module 'schema' {
     description: 
   */
   type IRiskAdjustmentTypeOptionsEnum = 'inactive' | 'increment' | 'forceHighRisk';
+
+  /*
+    description: Concern
+  */
+  interface IConcern {
+    id: string;
+    title: string;
+    createdAt: string;
+    updatedAt: string;
+    deletedAt: string | null;
+  }
+
+  /*
+    description: 
+  */
+  interface IGoalSuggestionTemplate {
+    id: string;
+    title: string;
+    taskTemplates: Array<ITaskTemplate> | null;
+    createdAt: string;
+    updatedAt: string;
+    deletedAt: string | null;
+  }
+
+  /*
+    description: 
+  */
+  interface ITaskTemplate {
+    id: string;
+    title: string;
+    completedWithinNumber: number | null;
+    completedWithinInterval: ICompletedWithinIntervalEnum | null;
+    repeating: boolean | null;
+    goalSuggestionTemplateId: string;
+    priority: IPriorityEnum | null;
+    careTeamAssigneeRole: IUserRoleEnum | null;
+    createdAt: string;
+    updatedAt: string;
+    deletedAt: string | null;
+  }
+
+  /*
+    description: 
+  */
+  type ICompletedWithinIntervalEnum = 'hour' | 'day' | 'week' | 'month' | 'year';
 
   /*
     description: 
@@ -585,39 +632,6 @@ declare module 'schema' {
   /*
     description: 
   */
-  interface ITaskTemplate {
-    id: string;
-    title: string;
-    completedWithinNumber: number | null;
-    completedWithinInterval: ICompletedWithinIntervalEnum | null;
-    repeating: boolean | null;
-    goalSuggestionTemplateId: string;
-    priority: IPriorityEnum | null;
-    careTeamAssigneeRole: IUserRoleEnum | null;
-    createdAt: string;
-    updatedAt: string;
-    deletedAt: string | null;
-  }
-
-  /*
-    description: 
-  */
-  type ICompletedWithinIntervalEnum = 'hour' | 'day' | 'week' | 'month' | 'year';
-
-  /*
-    description: Concern
-  */
-  interface IConcern {
-    id: string;
-    title: string;
-    createdAt: string;
-    updatedAt: string;
-    deletedAt: string | null;
-  }
-
-  /*
-    description: 
-  */
   interface IPatientConcern {
     id: string;
     order: number;
@@ -639,18 +653,6 @@ declare module 'schema' {
     patientId: string;
     patientConcernId: string | null;
     goalSuggestionTemplateId: string | null;
-    createdAt: string;
-    updatedAt: string;
-    deletedAt: string | null;
-  }
-
-  /*
-    description: 
-  */
-  interface IGoalSuggestionTemplate {
-    id: string;
-    title: string;
-    taskTemplates: Array<ITaskTemplate> | null;
     createdAt: string;
     updatedAt: string;
     deletedAt: string | null;

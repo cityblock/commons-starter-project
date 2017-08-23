@@ -47,7 +47,6 @@ export interface IProps {
 }
 
 class AdminContainer extends React.Component<IProps, {}> {
-
   render() {
     const {
       objectId,

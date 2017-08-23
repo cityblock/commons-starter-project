@@ -48,6 +48,8 @@ it('renders questions with correct visibility', () => {
           riskAdjustmentType: 'inactive',
           inSummary: false,
           summaryText: 'None',
+          concernSuggestions: [],
+          goalSuggestions: [],
         }],
         applicableIfQuestionConditions: null,
       }, {
@@ -70,6 +72,8 @@ it('renders questions with correct visibility', () => {
           riskAdjustmentType: 'increment',
           inSummary: false,
           summaryText: 'None',
+          concernSuggestions: [],
+          goalSuggestions: [],
         }],
         applicableIfQuestionConditions: [{
           id: 'condition-1',

@@ -1,0 +1,13 @@
+#import "../fragments/full-concern.graphql"
+
+mutation concernSuggestionCreate(
+  $answerId: String!
+  $concernId: String!
+) {
+  concernSuggestionCreate(input: {
+    answerId: $answerId
+    concernId: $concernId
+  }) {
+    ...FullConcern
+  }
+}

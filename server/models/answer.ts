@@ -19,6 +19,8 @@ export interface IAnswerCreateFields extends IAnswerEditableFields {
 export type ValueTypeOptions = 'string' | 'boolean' | 'number';
 export type RiskAdjustmentType = 'inactive' | 'increment' | 'forceHighRisk';
 
+const EAGER_QUERY = '[concernSuggestions, goalSuggestions]';
+
 /* tslint:disable:member-ordering */
 export default class Answer extends Model {
   id: string;
@@ -67,6 +69,30 @@ export default class Answer extends Model {
         to: 'question.id',
       },
     },
+    concernSuggestions: {
+      relation: Model.ManyToManyRelation,
+      modelClass: 'concern',
+      join: {
+        from: 'answer.id',
+        through: {
+          from: 'concern_suggestion.answerId',
+          to: 'concern_suggestion.concernId',
+        },
+        to: 'concern.id',
+      },
+    },
+    goalSuggestions: {
+      relation: Model.ManyToManyRelation,
+      modelClass: 'goal-suggestion-template',
+      join: {
+        from: 'answer.id',
+        through: {
+          from: 'goal_suggestion.answerId',
+          to: 'goal_suggestion.goalSuggestionTemplateId',
+        },
+        to: 'goal_suggestion_template.id',
+      },
+    },
     concerns: {
       relation: Model.ManyToManyRelation,
       modelClass: 'concern',
@@ -93,6 +119,13 @@ export default class Answer extends Model {
   static async get(answerId: string): Promise<Answer> {
     const answer = await this
       .query()
+      .eager(EAGER_QUERY)
+      .modifyEager('concernSuggestions', builder =>
+        builder.where('concern_suggestion.deletedAt', null),
+      )
+      .modifyEager('goalSuggestions', builder =>
+        builder.where('goal_suggestion.deletedAt', null),
+      )
       .findById(answerId);
 
     if (!answer) {
@@ -105,15 +138,40 @@ export default class Answer extends Model {
     return this
       .query()
       .where({ questionId, deletedAt: null })
+      .eager(EAGER_QUERY)
+      .modifyEager('concernSuggestions', builder =>
+        builder.where('concern_suggestion.deletedAt', null),
+      )
+      .modifyEager('goalSuggestions', builder =>
+        builder.where('goal_suggestion.deletedAt', null),
+      )
       .orderBy('order');
   }
 
   static async create(input: IAnswerCreateFields) {
-    return this.query().insertAndFetch(input);
+    return this
+      .query()
+      .eager(EAGER_QUERY)
+      .modifyEager('concernSuggestions', builder =>
+        builder.where('concern_suggestion.deletedAt', null),
+      )
+      .modifyEager('goalSuggestions', builder =>
+        builder.where('goal_suggestion.deletedAt', null),
+      )
+      .insertAndFetch(input);
   }
 
   static async edit(answer: Partial<IAnswerEditableFields>, answerId: string): Promise<Answer> {
-    return await this.query().updateAndFetchById(answerId, answer);
+    return await this
+      .query()
+      .eager('[concernSuggestions, goalSuggestions]')
+      .modifyEager('concernSuggestions', builder =>
+        builder.where('concern_suggestion.deletedAt', null),
+      )
+      .modifyEager('goalSuggestions', builder =>
+        builder.where('goal_suggestion.deletedAt', null),
+      )
+      .updateAndFetchById(answerId, answer);
   }
 
   static async delete(answerId: string): Promise<Answer> {

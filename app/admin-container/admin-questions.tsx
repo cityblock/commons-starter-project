@@ -114,7 +114,13 @@ class AdminQuestions extends React.Component<IProps, IState> {
   }
 
   render() {
-    const { questions, routeBase, questionId, riskAreas, riskAreaId } = this.props;
+    const {
+      questions,
+      routeBase,
+      questionId,
+      riskAreas,
+      riskAreaId,
+    } = this.props;
     const { showCreateQuestion } = this.state;
     const questionsList = questions || [];
     const questionContainerStyles = classNames(styles.itemContainer, {

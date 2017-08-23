@@ -1,0 +1,21 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders a care plan suggestion 1`] = `
+<div>
+  <div
+    className=""
+  >
+    <div
+      className={undefined}
+    >
+      <div
+        className={undefined}
+        onClick={[Function]}
+      />
+      <div>
+        Concern Title
+      </div>
+    </div>
+  </div>
+</div>
+`;

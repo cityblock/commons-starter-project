@@ -13,13 +13,18 @@ export type RiskAdjustmentTypeOptions =
   "forceHighRisk";
 
 
-export type AppointmentStatus =
-  "cancelled" |
-  "future" |
-  "open" |
-  "checkedIn" |
-  "checkedOut" |
-  "chargeEntered";
+export type CompletedWithinInterval =
+  "hour" |
+  "day" |
+  "week" |
+  "month" |
+  "year";
+
+
+export type Priority =
+  "low" |
+  "medium" |
+  "high";
 
 
 export type UserRole =
@@ -31,10 +36,13 @@ export type UserRole =
   "admin";
 
 
-export type Priority =
-  "low" |
-  "medium" |
-  "high";
+export type AppointmentStatus =
+  "cancelled" |
+  "future" |
+  "open" |
+  "checkedIn" |
+  "checkedOut" |
+  "chargeEntered";
 
 
 export type TaskEventTypes =
@@ -52,14 +60,6 @@ export type TaskEventTypes =
   "edit_assignee" |
   "edit_title" |
   "edit_description";
-
-
-export type CompletedWithinInterval =
-  "hour" |
-  "day" |
-  "week" |
-  "month" |
-  "year";
 
 
 export type TaskOrderOptions =
@@ -114,6 +114,33 @@ export type answerCreateMutation = {
     summaryText: string | null,
     questionId: string,
     order: number,
+    concernSuggestions:  Array< {
+      id: string,
+      title: string,
+      createdAt: string,
+      updatedAt: string,
+      deletedAt: string | null,
+    } | null > | null,
+    goalSuggestions:  Array< {
+      id: string,
+      title: string,
+      taskTemplates:  Array< {
+        id: string,
+        title: string,
+        completedWithinNumber: number | null,
+        completedWithinInterval: CompletedWithinInterval | null,
+        repeating: boolean | null,
+        goalSuggestionTemplateId: string,
+        priority: Priority | null,
+        careTeamAssigneeRole: UserRole | null,
+        createdAt: string,
+        updatedAt: string,
+        deletedAt: string | null,
+      } | null > | null,
+      createdAt: string,
+      updatedAt: string,
+      deletedAt: string | null,
+    } | null > | null,
   } | null,
 };
 
@@ -133,6 +160,33 @@ export type answerDeleteMutation = {
     summaryText: string | null,
     questionId: string,
     order: number,
+    concernSuggestions:  Array< {
+      id: string,
+      title: string,
+      createdAt: string,
+      updatedAt: string,
+      deletedAt: string | null,
+    } | null > | null,
+    goalSuggestions:  Array< {
+      id: string,
+      title: string,
+      taskTemplates:  Array< {
+        id: string,
+        title: string,
+        completedWithinNumber: number | null,
+        completedWithinInterval: CompletedWithinInterval | null,
+        repeating: boolean | null,
+        goalSuggestionTemplateId: string,
+        priority: Priority | null,
+        careTeamAssigneeRole: UserRole | null,
+        createdAt: string,
+        updatedAt: string,
+        deletedAt: string | null,
+      } | null > | null,
+      createdAt: string,
+      updatedAt: string,
+      deletedAt: string | null,
+    } | null > | null,
   } | null,
 };
 
@@ -159,6 +213,33 @@ export type answerEditMutation = {
     summaryText: string | null,
     questionId: string,
     order: number,
+    concernSuggestions:  Array< {
+      id: string,
+      title: string,
+      createdAt: string,
+      updatedAt: string,
+      deletedAt: string | null,
+    } | null > | null,
+    goalSuggestions:  Array< {
+      id: string,
+      title: string,
+      taskTemplates:  Array< {
+        id: string,
+        title: string,
+        completedWithinNumber: number | null,
+        completedWithinInterval: CompletedWithinInterval | null,
+        repeating: boolean | null,
+        goalSuggestionTemplateId: string,
+        priority: Priority | null,
+        careTeamAssigneeRole: UserRole | null,
+        createdAt: string,
+        updatedAt: string,
+        deletedAt: string | null,
+      } | null > | null,
+      createdAt: string,
+      updatedAt: string,
+      deletedAt: string | null,
+    } | null > | null,
   } | null,
 };
 
@@ -258,6 +339,38 @@ export type concernEditMutation = {
     updatedAt: string,
     deletedAt: string | null,
   } | null,
+};
+
+export type concernSuggestionCreateMutationVariables = {
+  answerId: string,
+  concernId: string,
+};
+
+export type concernSuggestionCreateMutation = {
+  // suggest a concern for an answer
+  concernSuggestionCreate:  Array< {
+    id: string,
+    title: string,
+    createdAt: string,
+    updatedAt: string,
+    deletedAt: string | null,
+  } | null > | null,
+};
+
+export type concernSuggestionDeleteMutationVariables = {
+  answerId: string,
+  concernId: string,
+};
+
+export type concernSuggestionDeleteMutation = {
+  // delete suggestion a concern for an answer
+  concernSuggestionDelete:  Array< {
+    id: string,
+    title: string,
+    createdAt: string,
+    updatedAt: string,
+    deletedAt: string | null,
+  } | null > | null,
 };
 
 export type currentUserEditMutationVariables = {
@@ -452,7 +565,49 @@ export type getAnswerQuery = {
     summaryText: string | null,
     questionId: string,
     order: number,
+    concernSuggestions:  Array< {
+      id: string,
+      title: string,
+      createdAt: string,
+      updatedAt: string,
+      deletedAt: string | null,
+    } | null > | null,
+    goalSuggestions:  Array< {
+      id: string,
+      title: string,
+      taskTemplates:  Array< {
+        id: string,
+        title: string,
+        completedWithinNumber: number | null,
+        completedWithinInterval: CompletedWithinInterval | null,
+        repeating: boolean | null,
+        goalSuggestionTemplateId: string,
+        priority: Priority | null,
+        careTeamAssigneeRole: UserRole | null,
+        createdAt: string,
+        updatedAt: string,
+        deletedAt: string | null,
+      } | null > | null,
+      createdAt: string,
+      updatedAt: string,
+      deletedAt: string | null,
+    } | null > | null,
   } | null,
+};
+
+export type getConcernSuggestionsForAnswerQueryVariables = {
+  answerId: string,
+};
+
+export type getConcernSuggestionsForAnswerQuery = {
+  // Concerns for answer
+  concernsForAnswer:  Array< {
+    id: string,
+    title: string,
+    createdAt: string,
+    updatedAt: string,
+    deletedAt: string | null,
+  } | null > | null,
 };
 
 export type getConcernQueryVariables = {
@@ -692,6 +847,34 @@ export type getGoalSuggestionTemplateQuery = {
 export type getGoalSuggestionTemplatesQuery = {
   // Goal suggestion templates
   goalSuggestionTemplates:  Array< {
+    id: string,
+    title: string,
+    taskTemplates:  Array< {
+      id: string,
+      title: string,
+      completedWithinNumber: number | null,
+      completedWithinInterval: CompletedWithinInterval | null,
+      repeating: boolean | null,
+      goalSuggestionTemplateId: string,
+      priority: Priority | null,
+      careTeamAssigneeRole: UserRole | null,
+      createdAt: string,
+      updatedAt: string,
+      deletedAt: string | null,
+    } | null > | null,
+    createdAt: string,
+    updatedAt: string,
+    deletedAt: string | null,
+  } | null > | null,
+};
+
+export type getGoalSuggestionsForAnswerQueryVariables = {
+  answerId: string,
+};
+
+export type getGoalSuggestionsForAnswerQuery = {
+  // goal suggestion for template
+  goalSuggestionTemplatesForAnswer:  Array< {
     id: string,
     title: string,
     taskTemplates:  Array< {
@@ -957,6 +1140,33 @@ export type getQuestionAnswersQuery = {
     summaryText: string | null,
     questionId: string,
     order: number,
+    concernSuggestions:  Array< {
+      id: string,
+      title: string,
+      createdAt: string,
+      updatedAt: string,
+      deletedAt: string | null,
+    } | null > | null,
+    goalSuggestions:  Array< {
+      id: string,
+      title: string,
+      taskTemplates:  Array< {
+        id: string,
+        title: string,
+        completedWithinNumber: number | null,
+        completedWithinInterval: CompletedWithinInterval | null,
+        repeating: boolean | null,
+        goalSuggestionTemplateId: string,
+        priority: Priority | null,
+        careTeamAssigneeRole: UserRole | null,
+        createdAt: string,
+        updatedAt: string,
+        deletedAt: string | null,
+      } | null > | null,
+      createdAt: string,
+      updatedAt: string,
+      deletedAt: string | null,
+    } | null > | null,
   } | null >,
 };
 
@@ -986,6 +1196,33 @@ export type getQuestionQuery = {
       summaryText: string | null,
       questionId: string,
       order: number,
+      concernSuggestions:  Array< {
+        id: string,
+        title: string,
+        createdAt: string,
+        updatedAt: string,
+        deletedAt: string | null,
+      } | null > | null,
+      goalSuggestions:  Array< {
+        id: string,
+        title: string,
+        taskTemplates:  Array< {
+          id: string,
+          title: string,
+          completedWithinNumber: number | null,
+          completedWithinInterval: CompletedWithinInterval | null,
+          repeating: boolean | null,
+          goalSuggestionTemplateId: string,
+          priority: Priority | null,
+          careTeamAssigneeRole: UserRole | null,
+          createdAt: string,
+          updatedAt: string,
+          deletedAt: string | null,
+        } | null > | null,
+        createdAt: string,
+        updatedAt: string,
+        deletedAt: string | null,
+      } | null > | null,
     } > | null,
     applicableIfQuestionConditions:  Array< {
       id: string,
@@ -1021,6 +1258,33 @@ export type getQuestionsForRiskAreaQuery = {
       summaryText: string | null,
       questionId: string,
       order: number,
+      concernSuggestions:  Array< {
+        id: string,
+        title: string,
+        createdAt: string,
+        updatedAt: string,
+        deletedAt: string | null,
+      } | null > | null,
+      goalSuggestions:  Array< {
+        id: string,
+        title: string,
+        taskTemplates:  Array< {
+          id: string,
+          title: string,
+          completedWithinNumber: number | null,
+          completedWithinInterval: CompletedWithinInterval | null,
+          repeating: boolean | null,
+          goalSuggestionTemplateId: string,
+          priority: Priority | null,
+          careTeamAssigneeRole: UserRole | null,
+          createdAt: string,
+          updatedAt: string,
+          deletedAt: string | null,
+        } | null > | null,
+        createdAt: string,
+        updatedAt: string,
+        deletedAt: string | null,
+      } | null > | null,
     } > | null,
     applicableIfQuestionConditions:  Array< {
       id: string,
@@ -1163,6 +1427,64 @@ export type getTaskQuery = {
       userRole: UserRole,
     } | null,
   } | null,
+};
+
+export type goalSuggestionCreateMutationVariables = {
+  answerId: string,
+  goalSuggestionTemplateId: string,
+};
+
+export type goalSuggestionCreateMutation = {
+  // Suggest a goal suggestion template for an answer
+  goalSuggestionCreate:  Array< {
+    id: string,
+    title: string,
+    taskTemplates:  Array< {
+      id: string,
+      title: string,
+      completedWithinNumber: number | null,
+      completedWithinInterval: CompletedWithinInterval | null,
+      repeating: boolean | null,
+      goalSuggestionTemplateId: string,
+      priority: Priority | null,
+      careTeamAssigneeRole: UserRole | null,
+      createdAt: string,
+      updatedAt: string,
+      deletedAt: string | null,
+    } | null > | null,
+    createdAt: string,
+    updatedAt: string,
+    deletedAt: string | null,
+  } | null > | null,
+};
+
+export type goalSuggestionDeleteMutationVariables = {
+  answerId: string,
+  goalSuggestionTemplateId: string,
+};
+
+export type goalSuggestionDeleteMutation = {
+  // unsuggest a goal suggestion template for an answer
+  goalSuggestionDelete:  Array< {
+    id: string,
+    title: string,
+    taskTemplates:  Array< {
+      id: string,
+      title: string,
+      completedWithinNumber: number | null,
+      completedWithinInterval: CompletedWithinInterval | null,
+      repeating: boolean | null,
+      goalSuggestionTemplateId: string,
+      priority: Priority | null,
+      careTeamAssigneeRole: UserRole | null,
+      createdAt: string,
+      updatedAt: string,
+      deletedAt: string | null,
+    } | null > | null,
+    createdAt: string,
+    updatedAt: string,
+    deletedAt: string | null,
+  } | null > | null,
 };
 
 export type goalSuggestionTemplateCreateMutationVariables = {
@@ -1501,6 +1823,33 @@ export type questionCreateMutation = {
       summaryText: string | null,
       questionId: string,
       order: number,
+      concernSuggestions:  Array< {
+        id: string,
+        title: string,
+        createdAt: string,
+        updatedAt: string,
+        deletedAt: string | null,
+      } | null > | null,
+      goalSuggestions:  Array< {
+        id: string,
+        title: string,
+        taskTemplates:  Array< {
+          id: string,
+          title: string,
+          completedWithinNumber: number | null,
+          completedWithinInterval: CompletedWithinInterval | null,
+          repeating: boolean | null,
+          goalSuggestionTemplateId: string,
+          priority: Priority | null,
+          careTeamAssigneeRole: UserRole | null,
+          createdAt: string,
+          updatedAt: string,
+          deletedAt: string | null,
+        } | null > | null,
+        createdAt: string,
+        updatedAt: string,
+        deletedAt: string | null,
+      } | null > | null,
     } > | null,
     applicableIfQuestionConditions:  Array< {
       id: string,
@@ -1536,6 +1885,33 @@ export type questionDeleteMutation = {
       summaryText: string | null,
       questionId: string,
       order: number,
+      concernSuggestions:  Array< {
+        id: string,
+        title: string,
+        createdAt: string,
+        updatedAt: string,
+        deletedAt: string | null,
+      } | null > | null,
+      goalSuggestions:  Array< {
+        id: string,
+        title: string,
+        taskTemplates:  Array< {
+          id: string,
+          title: string,
+          completedWithinNumber: number | null,
+          completedWithinInterval: CompletedWithinInterval | null,
+          repeating: boolean | null,
+          goalSuggestionTemplateId: string,
+          priority: Priority | null,
+          careTeamAssigneeRole: UserRole | null,
+          createdAt: string,
+          updatedAt: string,
+          deletedAt: string | null,
+        } | null > | null,
+        createdAt: string,
+        updatedAt: string,
+        deletedAt: string | null,
+      } | null > | null,
     } > | null,
     applicableIfQuestionConditions:  Array< {
       id: string,
@@ -1577,6 +1953,33 @@ export type questionEditMutation = {
       summaryText: string | null,
       questionId: string,
       order: number,
+      concernSuggestions:  Array< {
+        id: string,
+        title: string,
+        createdAt: string,
+        updatedAt: string,
+        deletedAt: string | null,
+      } | null > | null,
+      goalSuggestions:  Array< {
+        id: string,
+        title: string,
+        taskTemplates:  Array< {
+          id: string,
+          title: string,
+          completedWithinNumber: number | null,
+          completedWithinInterval: CompletedWithinInterval | null,
+          repeating: boolean | null,
+          goalSuggestionTemplateId: string,
+          priority: Priority | null,
+          careTeamAssigneeRole: UserRole | null,
+          createdAt: string,
+          updatedAt: string,
+          deletedAt: string | null,
+        } | null > | null,
+        createdAt: string,
+        updatedAt: string,
+        deletedAt: string | null,
+      } | null > | null,
     } > | null,
     applicableIfQuestionConditions:  Array< {
       id: string,
@@ -2114,6 +2517,49 @@ export type getTasksForCurrentUserQuery = {
   } | null,
 };
 
+export type FullConcernFragment = {
+  id: string,
+  title: string,
+  createdAt: string,
+  updatedAt: string,
+  deletedAt: string | null,
+};
+
+export type FullTaskTemplateFragment = {
+  id: string,
+  title: string,
+  completedWithinNumber: number | null,
+  completedWithinInterval: CompletedWithinInterval | null,
+  repeating: boolean | null,
+  goalSuggestionTemplateId: string,
+  priority: Priority | null,
+  careTeamAssigneeRole: UserRole | null,
+  createdAt: string,
+  updatedAt: string,
+  deletedAt: string | null,
+};
+
+export type FullGoalSuggestionTemplateFragment = {
+  id: string,
+  title: string,
+  taskTemplates:  Array< {
+    id: string,
+    title: string,
+    completedWithinNumber: number | null,
+    completedWithinInterval: CompletedWithinInterval | null,
+    repeating: boolean | null,
+    goalSuggestionTemplateId: string,
+    priority: Priority | null,
+    careTeamAssigneeRole: UserRole | null,
+    createdAt: string,
+    updatedAt: string,
+    deletedAt: string | null,
+  } | null > | null,
+  createdAt: string,
+  updatedAt: string,
+  deletedAt: string | null,
+};
+
 export type FullAnswerFragment = {
   id: string,
   displayValue: string,
@@ -2124,6 +2570,33 @@ export type FullAnswerFragment = {
   summaryText: string | null,
   questionId: string,
   order: number,
+  concernSuggestions:  Array< {
+    id: string,
+    title: string,
+    createdAt: string,
+    updatedAt: string,
+    deletedAt: string | null,
+  } | null > | null,
+  goalSuggestions:  Array< {
+    id: string,
+    title: string,
+    taskTemplates:  Array< {
+      id: string,
+      title: string,
+      completedWithinNumber: number | null,
+      completedWithinInterval: CompletedWithinInterval | null,
+      repeating: boolean | null,
+      goalSuggestionTemplateId: string,
+      priority: Priority | null,
+      careTeamAssigneeRole: UserRole | null,
+      createdAt: string,
+      updatedAt: string,
+      deletedAt: string | null,
+    } | null > | null,
+    createdAt: string,
+    updatedAt: string,
+    deletedAt: string | null,
+  } | null > | null,
 };
 
 export type FullAppointmentFragment = {
@@ -2144,14 +2617,6 @@ export type FullAppointmentFragment = {
 export type FullClinicFragment = {
   id: string,
   name: string,
-};
-
-export type FullConcernFragment = {
-  id: string,
-  title: string,
-  createdAt: string,
-  updatedAt: string,
-  deletedAt: string | null,
 };
 
 export type FullUserFragment = {
@@ -2460,41 +2925,6 @@ export type FullEventNotificationFragment = {
   deletedAt: string | null,
 };
 
-export type FullTaskTemplateFragment = {
-  id: string,
-  title: string,
-  completedWithinNumber: number | null,
-  completedWithinInterval: CompletedWithinInterval | null,
-  repeating: boolean | null,
-  goalSuggestionTemplateId: string,
-  priority: Priority | null,
-  careTeamAssigneeRole: UserRole | null,
-  createdAt: string,
-  updatedAt: string,
-  deletedAt: string | null,
-};
-
-export type FullGoalSuggestionTemplateFragment = {
-  id: string,
-  title: string,
-  taskTemplates:  Array< {
-    id: string,
-    title: string,
-    completedWithinNumber: number | null,
-    completedWithinInterval: CompletedWithinInterval | null,
-    repeating: boolean | null,
-    goalSuggestionTemplateId: string,
-    priority: Priority | null,
-    careTeamAssigneeRole: UserRole | null,
-    createdAt: string,
-    updatedAt: string,
-    deletedAt: string | null,
-  } | null > | null,
-  createdAt: string,
-  updatedAt: string,
-  deletedAt: string | null,
-};
-
 export type FullPatientAnswerFragment = {
   id: string,
   createdAt: string,
@@ -2587,6 +3017,33 @@ export type FullQuestionFragment = {
     summaryText: string | null,
     questionId: string,
     order: number,
+    concernSuggestions:  Array< {
+      id: string,
+      title: string,
+      createdAt: string,
+      updatedAt: string,
+      deletedAt: string | null,
+    } | null > | null,
+    goalSuggestions:  Array< {
+      id: string,
+      title: string,
+      taskTemplates:  Array< {
+        id: string,
+        title: string,
+        completedWithinNumber: number | null,
+        completedWithinInterval: CompletedWithinInterval | null,
+        repeating: boolean | null,
+        goalSuggestionTemplateId: string,
+        priority: Priority | null,
+        careTeamAssigneeRole: UserRole | null,
+        createdAt: string,
+        updatedAt: string,
+        deletedAt: string | null,
+      } | null > | null,
+      createdAt: string,
+      updatedAt: string,
+      deletedAt: string | null,
+    } | null > | null,
   } > | null,
   applicableIfQuestionConditions:  Array< {
     id: string,

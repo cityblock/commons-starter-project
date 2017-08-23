@@ -16,7 +16,10 @@ export interface IQuestionEditableFields {
 export type AnswerType = 'dropdown' | 'radio' | 'freetext' | 'multiselect';
 export type QuestionConditionType = 'allTrue' | 'oneTrue';
 
-const EAGER_QUERY = '[applicableIfQuestionConditions, answers(orderByOrder)]';
+/* tslint:disable:max-line-length */
+const EAGER_QUERY =
+  '[applicableIfQuestionConditions, answers(orderByOrder).[concernSuggestions, goalSuggestions.[taskTemplates]]]';
+/* tslint:enable:max-line-length */
 
 /* tslint:disable:member-ordering */
 export default class Question extends Model {
@@ -101,8 +104,20 @@ export default class Question extends Model {
           builder.orderBy('order');
         },
       })
-      .modifyEager(EAGER_QUERY, builder => {
-        builder.where('deletedAt', null);
+      .modifyEager('applicableIfQuestionConditions', builder => {
+        builder.where('question_condition.deletedAt', null);
+      })
+      .modifyEager('answers', builder => {
+        builder.where('answer.deletedAt', null);
+      })
+      .modifyEager('answers.concernSuggestions', builder => {
+        builder.where('concern_suggestion.deletedAt', null);
+      })
+      .modifyEager('answers.goalSuggestions', builder => {
+        builder.where('goal_suggestion.deletedAt', null);
+      })
+      .modifyEager('answers.goalSuggestions.taskTemplates', builder => {
+        builder.where('task_template.deletedAt', null);
       })
       .findById(questionId);
 
@@ -113,7 +128,29 @@ export default class Question extends Model {
   }
 
   static async create(input: IQuestionEditableFields) {
-    return this.query().insertAndFetch(input);
+    return this
+      .query()
+      .eager(EAGER_QUERY, {
+        orderByOrder: (builder: any) => {
+          builder.orderBy('order');
+        },
+      })
+      .modifyEager('applicableIfQuestionConditions', builder => {
+        builder.where('question_condition.deletedAt', null);
+      })
+      .modifyEager('answers', builder => {
+        builder.where('answer.deletedAt', null);
+      })
+      .modifyEager('answers.concernSuggestions', builder => {
+        builder.where('concern_suggestion.deletedAt', null);
+      })
+      .modifyEager('answers.goalSuggestions', builder => {
+        builder.where('goal_suggestion.deletedAt', null);
+      })
+      .modifyEager('answers.goalSuggestions.taskTemplates', builder => {
+        builder.where('task_template.deletedAt', null);
+      })
+      .insertAndFetch(input);
   }
 
   static async getAllForRiskArea(riskAreaId: string): Promise<Question[]> {
@@ -125,8 +162,20 @@ export default class Question extends Model {
           builder.orderBy('order');
         },
       })
-      .modifyEager(EAGER_QUERY, builder => {
-        builder.where('deletedAt', null);
+      .modifyEager('applicableIfQuestionConditions', builder => {
+        builder.where('question_condition.deletedAt', null);
+      })
+      .modifyEager('answers', builder => {
+        builder.where('answer.deletedAt', null);
+      })
+      .modifyEager('answers.concernSuggestions', builder => {
+        builder.where('concern_suggestion.deletedAt', null);
+      })
+      .modifyEager('answers.goalSuggestions', builder => {
+        builder.where('goal_suggestion.deletedAt', null);
+      })
+      .modifyEager('answers.goalSuggestions.taskTemplates', builder => {
+        builder.where('task_template.deletedAt', null);
       })
       .orderBy('order');
   }
@@ -134,13 +183,29 @@ export default class Question extends Model {
   static async edit(
     patient: Partial<IQuestionEditableFields>, questionId: string,
   ): Promise<Question> {
-    return await this.query()
-      .updateAndFetchById(questionId, patient)
+    return await this
+      .query()
       .eager(EAGER_QUERY, {
         orderByOrder: (builder: any) => {
           builder.orderBy('order');
         },
-      });
+      })
+      .modifyEager('applicableIfQuestionConditions', builder => {
+        builder.where('question_condition.deletedAt', null);
+      })
+      .modifyEager('answers', builder => {
+        builder.where('answer.deletedAt', null);
+      })
+      .modifyEager('answers.concernSuggestions', builder => {
+        builder.where('concern_suggestion.deletedAt', null);
+      })
+      .modifyEager('answers.goalSuggestions', builder => {
+        builder.where('goal_suggestion.deletedAt', null);
+      })
+      .modifyEager('answers.goalSuggestions.taskTemplates', builder => {
+        builder.where('task_template.deletedAt', null);
+      })
+      .updateAndFetchById(questionId, patient);
   }
 
   static async delete(questionId: string): Promise<Question> {

@@ -32,6 +32,8 @@ it('renders a risk area question', () => {
       riskAdjustmentType: null,
       inSummary: false,
       summaryText: null,
+      concernSuggestions: [],
+      goalSuggestions: [],
     }],
     applicableIfType: null,
     applicableIfQuestionConditions: null,

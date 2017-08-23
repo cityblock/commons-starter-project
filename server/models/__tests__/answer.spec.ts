@@ -15,7 +15,7 @@ describe('anser model', () => {
     await Db.release();
   });
 
-  it('should creates and get an answer', async () => {
+  it('should create and get an answer', async () => {
     const riskArea = await RiskArea.create({
       title: 'testing',
       order: 1,

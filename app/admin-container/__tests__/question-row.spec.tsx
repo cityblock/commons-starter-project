@@ -32,6 +32,8 @@ const question = {
     summaryText: 'summary text',
     questionId: 'cool-task-id',
     order: 1,
+    concernSuggestions: [],
+    goalSuggestions: [],
   }],
   riskAreaId: 'risk-area-id',
   applicableIfType: 'allTrue' as any,

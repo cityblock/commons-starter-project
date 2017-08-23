@@ -1,0 +1,7 @@
+#import "../fragments/full-goal-suggestion-template.graphql"
+
+query getGoalSuggestionsForAnswer($answerId: String!) {
+  goalSuggestionTemplatesForAnswer(answerId: $answerId) {
+    ...FullGoalSuggestionTemplate
+  }
+}

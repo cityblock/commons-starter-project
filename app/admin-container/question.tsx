@@ -216,7 +216,10 @@ class Question extends React.Component<IProps, IState> {
     const { question } = this.props;
     if (question && question.answers) {
       return question.answers.map(answer => (
-        <AnswerCreateEdit key={answer ? answer.id : ''} answer={answer} questionId={question.id} />
+        <AnswerCreateEdit
+          key={answer ? answer.id : ''}
+          answer={answer}
+          questionId={question.id} />
       ));
     }
   }

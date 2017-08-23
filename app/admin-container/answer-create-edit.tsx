@@ -14,6 +14,7 @@ import {
 import * as formStyles from '../shared/css/forms.css';
 import * as loadingStyles from '../shared/css/loading-spinner.css';
 import { IUpdatedField } from '../shared/patient-demographics-form';
+import CarePlanSuggestions from './care-plan-suggestions';
 import * as styles from './css/risk-area-create.css';
 import * as answerStyles from './css/two-panel-right.css';
 
@@ -138,6 +139,8 @@ class AnswerCreateEdit extends React.Component<IProps, IState> {
     const orders = range(1, 30).map(num => (
       <option key={`${num}-select`} value={num}>{num}</option>
     ));
+    const carePlanSuggestionsHtml = this.props.answer ?
+      (<CarePlanSuggestions answer={this.props.answer} />) : null;
     return (
       <form onSubmit={this.onSubmit} className={answerStyles.borderContainer}>
         <div className={loadingClass}>
@@ -249,6 +252,7 @@ class AnswerCreateEdit extends React.Component<IProps, IState> {
             </div>
           </div>
         </div>
+        {carePlanSuggestionsHtml}
         <div className={styles.formBottom}>
           <div className={styles.formBottomContent}>
             <input

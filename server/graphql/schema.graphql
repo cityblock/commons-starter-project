@@ -572,6 +572,11 @@ type TaskTemplate implements uniqueId {
   deletedAt: String
 }
 
+type CarePlanSuggestions {
+  goalSuggestions: [GoalSuggestionTemplate]!
+  concernSuggestions: [Concern]!
+}
+
 #
 # BEGIN INPUT FIELDS
 #
@@ -1294,6 +1299,9 @@ type RootQueryType {
 
   # Task templates
   taskTemplates: [TaskTemplate]
+
+  # Care Plan Suggestions
+  carePlanSuggestionsForPatient(patientId: String!, riskAreaId: String): CarePlanSuggestions
 }
 
 

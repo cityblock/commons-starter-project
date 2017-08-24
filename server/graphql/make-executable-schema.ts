@@ -10,6 +10,7 @@ import {
   resolveAnswersForQuestion,
 } from './answer-resolver';
 import { appointmentAddNote, appointmentEnd, appointmentStart } from './appointments-resolver';
+import { resolveCarePlanSuggestionsForPatient } from './care-plan-resolver';
 import {
   careTeamAddUser,
   careTeamRemoveUser,
@@ -185,6 +186,7 @@ const resolveFunctions = {
     goalSuggestionTemplatesForAnswer: resolveGoalSuggestionTemplatesForAnswer,
     taskTemplate: resolveTaskTemplate,
     taskTemplates: resolveTaskTemplates,
+    carePlanSuggestionsForPatient: resolveCarePlanSuggestionsForPatient,
   },
   RootMutationType: {
     appointmentAddNote,

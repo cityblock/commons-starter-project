@@ -63,6 +63,7 @@ declare module 'schema' {
     goalSuggestionTemplates: Array<IGoalSuggestionTemplate> | null;
     goalSuggestionTemplatesForAnswer: Array<IGoalSuggestionTemplate> | null;
     taskTemplates: Array<ITaskTemplate> | null;
+    carePlanSuggestionsForPatient: ICarePlanSuggestions | null;
   }
 
   /*
@@ -656,6 +657,14 @@ declare module 'schema' {
     createdAt: string;
     updatedAt: string;
     deletedAt: string | null;
+  }
+
+  /*
+    description: 
+  */
+  interface ICarePlanSuggestions {
+    goalSuggestions: Array<IGoalSuggestionTemplate>;
+    concernSuggestions: Array<IConcern>;
   }
 
   /*

@@ -87,6 +87,37 @@ export default class GoalSuggestion extends Model {
     );
   }
 
+  static async getForPatient(
+    patientId: string, riskAreaId?: string,
+  ): Promise<GoalSuggestionTemplate[]> {
+    let goalSuggestions;
+
+    if (riskAreaId) {
+      goalSuggestions = await this
+        .query()
+        .eager('goalSuggestionTemplate.[taskTemplates]')
+        .joinRelation('answer.question')
+        .join('patient_answer', 'answer.id', 'patient_answer.answerId')
+        .where('patient_answer.deletedAt', null)
+        .andWhere('patient_answer.patientId', patientId)
+        .andWhere('patient_answer.applicable', true)
+        .andWhere('answer:question.riskAreaId', riskAreaId);
+    } else {
+      goalSuggestions = await this
+        .query()
+        .eager('goalSuggestionTemplate.[taskTemplates]')
+        .joinRelation('answer')
+        .join('patient_answer', 'answer.id', 'patient_answer.answerId')
+        .where('patient_answer.deletedAt', null)
+        .andWhere('patient_answer.patientId', patientId)
+        .andWhere('patient_answer.applicable', true);
+    }
+
+    return goalSuggestions.map(
+      (goalSuggestion: GoalSuggestion) => goalSuggestion.goalSuggestionTemplate,
+    );
+  }
+
   static async create(
     { goalSuggestionTemplateId, answerId }: IGoalSuggestionEditableFields,
   ): Promise<GoalSuggestionTemplate[]> {

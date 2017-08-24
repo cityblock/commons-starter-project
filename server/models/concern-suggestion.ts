@@ -64,7 +64,8 @@ export default class ConcernSuggestion extends Model {
   }
 
   static async getForConcern(concernId: string): Promise<Answer[]> {
-    const concernSuggestions = await this.query()
+    const concernSuggestions = await this
+      .query()
       .where('concernId', concernId)
       .andWhere('deletedAt', null)
       .eager('answer')
@@ -75,7 +76,8 @@ export default class ConcernSuggestion extends Model {
   }
 
   static async getForAnswer(answerId: string): Promise<Concern[]> {
-    const concernSuggestions = await this.query()
+    const concernSuggestions = await this
+      .query()
       .where('answerId', answerId)
       .andWhere('deletedAt', null)
       .orderBy('createdAt')
@@ -83,6 +85,33 @@ export default class ConcernSuggestion extends Model {
     return concernSuggestions.map(
       (concernSuggestion: ConcernSuggestion) => concernSuggestion.concern,
     );
+  }
+
+  static async getForPatient(patientId: string, riskAreaId?: string): Promise<Concern[]> {
+    let concernSuggestions;
+
+    if (riskAreaId) {
+      concernSuggestions = await this
+        .query()
+        .eager('concern')
+        .joinRelation('answer.question')
+        .join('patient_answer', 'answer.id', 'patient_answer.answerId')
+        .where('patient_answer.deletedAt', null)
+        .andWhere('patient_answer.patientId', patientId)
+        .andWhere('patient_answer.applicable', true)
+        .andWhere('answer:question.riskAreaId', riskAreaId);
+    } else {
+      concernSuggestions = await this
+        .query()
+        .eager('concern')
+        .joinRelation('answer')
+        .join('patient_answer', 'answer.id', 'patient_answer.answerId')
+        .where('patient_answer.deletedAt', null)
+        .andWhere('patient_answer.patientId', patientId)
+        .andWhere('patient_answer.applicable', true);
+    }
+
+    return concernSuggestions.map((suggestion: ConcernSuggestion) => suggestion.concern);
   }
 
   static async create(

@@ -8,7 +8,7 @@ import PatientAnswer from '../models/patient-answer';
 import Question from '../models/question';
 import accessControls from './shared/access-controls';
 import { updatePatientAnswerApplicable } from './shared/answer-applicable';
-import { IContext } from './shared/utils';
+import { checkUserLoggedIn, IContext } from './shared/utils';
 
 export interface IPatientAnswersCreateArgs {
   input: IPatientAnswersCreateInput;
@@ -48,16 +48,14 @@ export async function patientAnswersCreate(
 ) {
   const { userRole, userId } = context;
   await accessControls.isAllowed(userRole, 'create', 'patientAnswer');
-  if (!userId) {
-    throw new Error('not logged in');
-  }
+  checkUserLoggedIn(userId);
 
   const { patientAnswers, patientId, questionIds } = input;
 
   return await PatientAnswer.create({
     patientId,
     questionIds,
-    answers: patientAnswers.map(patientAnswer => ({ ...patientAnswer, userId })),
+    answers: patientAnswers.map(patientAnswer => ({ ...patientAnswer, userId: userId! })),
   });
 }
 
@@ -97,9 +95,8 @@ export async function patientAnswerEdit(
   root: any, args: IEditPatientAnswerOptions, { db, userId, userRole }: IContext,
 ) {
   await accessControls.isAllowedForUser(userRole, 'edit', 'patientAnswer');
-  if (!userId) {
-    throw new Error('not logged in');
-  }
+  checkUserLoggedIn(userId);
+
   return PatientAnswer.editApplicable(args.input.applicable, args.input.patientAnswerId);
 }
 
@@ -107,8 +104,7 @@ export async function patientAnswerDelete(
   root: any, args: IDeletePatientAnswerOptions, { db, userId, userRole }: IContext,
 ) {
   await accessControls.isAllowedForUser(userRole, 'edit', 'patientAnswer');
-  if (!userId) {
-    throw new Error('not logged in');
-  }
+  checkUserLoggedIn(userId);
+
   return PatientAnswer.delete(args.input.patientAnswerId);
 }

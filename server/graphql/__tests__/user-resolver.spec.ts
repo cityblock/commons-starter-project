@@ -175,7 +175,7 @@ describe('user tests', () => {
       const result = await graphql(schema, query, null, { db, userRole });
 
       expect(cloneDeep(result.errors![0].message)).toMatch(
-        'User not logged in',
+        'not logged in',
       );
     });
 

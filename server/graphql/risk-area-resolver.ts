@@ -7,7 +7,7 @@ import {
 } from 'schema';
 import RiskArea, { IRiskScore } from '../models/risk-area';
 import accessControls from './shared/access-controls';
-import { IContext } from './shared/utils';
+import { checkUserLoggedIn, IContext } from './shared/utils';
 
 export interface IRiskAreaCreateArgs {
   input: IRiskAreaCreateInput;
@@ -28,9 +28,7 @@ export interface IDeleteRiskAreaOptions {
 export async function riskAreaCreate(root: any, { input }: IRiskAreaCreateArgs, context: IContext) {
   const { userRole, userId } = context;
   await accessControls.isAllowed(userRole, 'create', 'riskArea');
-  if (!userId) {
-    throw new Error('not logged in');
-  }
+  checkUserLoggedIn(userId);
 
   // TODO: fix typings here
   return await RiskArea.create(input as any);
@@ -56,9 +54,8 @@ export async function riskAreaEdit(
   root: any, args: IEditRiskAreaOptions, { db, userId, userRole }: IContext,
 ) {
   await accessControls.isAllowedForUser(userRole, 'edit', 'riskArea');
-  if (!userId) {
-    throw new Error('not logged in');
-  }
+  checkUserLoggedIn(userId);
+
   // TODO: fix typings here
   const cleanedParams = pickBy<IRiskAreaEditInput, {}>(args.input) as any;
   return await RiskArea.edit(cleanedParams, args.input.riskAreaId);
@@ -68,9 +65,8 @@ export async function riskAreaDelete(
   root: any, args: IDeleteRiskAreaOptions, { db, userId, userRole }: IContext,
 ) {
   await accessControls.isAllowedForUser(userRole, 'edit', 'riskArea');
-  if (!userId) {
-    throw new Error('not logged in');
-  }
+  checkUserLoggedIn(userId);
+
   return await RiskArea.delete(args.input.riskAreaId);
 }
 

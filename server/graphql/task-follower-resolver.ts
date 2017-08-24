@@ -5,7 +5,7 @@ import Task, { TaskOrderOptions } from '../models/task';
 import TaskEvent from '../models/task-event';
 import TaskFollower from '../models/task-follower';
 import accessControls from './shared/access-controls';
-import { formatOrderOptions, formatRelayEdge, IContext } from './shared/utils';
+import { checkUserLoggedIn, formatOrderOptions, formatRelayEdge, IContext } from './shared/utils';
 
 export interface IQuery {
   taskId: string;
@@ -22,16 +22,14 @@ export async function taskUserFollow(
   const { taskId } = input;
   // TODO: Improve access controls here. Requirements unclear ATM
   await accessControls.isAllowed(userRole, 'edit', 'task');
-  if (!userId) {
-    throw new Error('not logged in');
-  }
+  checkUserLoggedIn(userId);
 
   await transaction(TaskFollower.knex(), async txn => {
     const follower = await TaskFollower.followTask({ userId: input.userId, taskId }, txn);
 
     await TaskEvent.create({
       taskId,
-      userId,
+      userId: userId!,
       eventType: 'add_follower',
       eventUserId: input.userId,
     }, txn);
@@ -49,9 +47,7 @@ export async function taskUserUnfollow(
   const { taskId } = input;
   // TODO: Improve access controls here. Requirements unclear ATM
   await accessControls.isAllowed(userRole, 'edit', 'task');
-  if (!userId) {
-    throw new Error('not logged in');
-  }
+  checkUserLoggedIn(userId);
 
   await transaction(TaskFollower.knex(), async txn => {
     const follower = await TaskFollower.unfollowTask({
@@ -61,7 +57,7 @@ export async function taskUserUnfollow(
 
     await TaskEvent.create({
       taskId,
-      userId,
+      userId: userId!,
       eventType: 'remove_follower',
       eventUserId: input.userId,
     }, txn);
@@ -82,9 +78,7 @@ export async function resolveCurrentUserTasks(
 ): Promise<ITaskEdges> {
   // TODO: Improve task access controls
   await accessControls.isAllowed(userRole, 'view', 'task');
-  if (!userId) {
-    throw new Error('not logged in');
-  }
+  checkUserLoggedIn(userId);
 
   const pageNumber = args.pageNumber || 0;
   const pageSize = args.pageSize || 10;
@@ -92,7 +86,7 @@ export async function resolveCurrentUserTasks(
     args.orderBy, { order: 'asc', orderBy: 'dueAt' },
   );
 
-  const tasks = await Task.getUserTasks(userId, { pageNumber, pageSize, order, orderBy });
+  const tasks = await Task.getUserTasks(userId!, { pageNumber, pageSize, order, orderBy });
   const taskEdges = tasks.results.map((task: Task) => formatRelayEdge(task, task.id) as ITaskNode);
 
   const hasPreviousPage = pageNumber !== 0;

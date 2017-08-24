@@ -11,7 +11,7 @@ import { IPaginationOptions } from '../db';
 import TaskComment from '../models/task-comment';
 import TaskEvent from '../models/task-event';
 import accessControls from './shared/access-controls';
-import { formatRelayEdge, IContext } from './shared/utils';
+import { checkUserLoggedIn, formatRelayEdge, IContext } from './shared/utils';
 
 export interface IQuery {
   taskId: string;
@@ -25,19 +25,16 @@ export async function taskCommentCreate(
   source: any, { input }: ITaskCommentCreateOptions, { userId, userRole }: IContext,
 ): Promise<TaskComment> {
   const { taskId, body } = input;
-
-  if (!userId) {
-    throw new Error('not logged in');
-  }
   // TODO: Improve access controls here. Requirements unclear ATM
   await accessControls.isAllowed(userRole, 'edit', 'task');
+  checkUserLoggedIn(userId);
 
   return await transaction(TaskComment.knex() as any, async txn => {
-    const taskComment = await TaskComment.create({ userId, taskId, body }, txn);
+    const taskComment = await TaskComment.create({ userId: userId!, taskId, body }, txn);
 
     await TaskEvent.create({
       taskId,
-      userId,
+      userId: userId!,
       eventType: 'add_comment',
       eventCommentId: taskComment.id,
     }, txn);
@@ -57,16 +54,14 @@ export async function taskCommentEdit(
   const { taskCommentId, body } = input;
   // TODO: Improve access controls here. Requirements unclear ATM
   await accessControls.isAllowed(userRole, 'edit', 'task');
-  if (!userId) {
-    throw new Error('not logged in');
-  }
+  checkUserLoggedIn(userId);
 
   return await transaction(TaskComment.knex() as any, async txn => {
     const taskComment = await TaskComment.update(taskCommentId, body, txn);
 
     await TaskEvent.create({
       taskId: taskComment.taskId,
-      userId,
+      userId: userId!,
       eventType: 'edit_comment',
       eventCommentId: taskComment.id,
     }, txn);
@@ -86,16 +81,14 @@ export async function taskCommentDelete(
   const { taskCommentId } = input;
   // TODO: Improve access controls here. Requirements unclear ATM
   await accessControls.isAllowed(userRole, 'edit', 'task');
-  if (!userId) {
-    throw new Error('not logged in');
-  }
+  checkUserLoggedIn(userId);
 
   return await transaction(TaskComment.knex() as any, async txn => {
     const taskComment = await TaskComment.delete(taskCommentId, txn);
 
     await TaskEvent.create({
       taskId: taskComment.taskId,
-      userId,
+      userId: userId!,
       eventType: 'delete_comment',
       eventCommentId: taskComment.id,
     }, txn);
@@ -109,9 +102,7 @@ export async function resolveTaskComments(
 ): Promise<ITaskCommentEdges> {
   // TODO: Improve task access controls
   await accessControls.isAllowed(userRole, 'view', 'task');
-  if (!userId) {
-    throw new Error('not logged in');
-  }
+  checkUserLoggedIn(userId);
 
   const pageNumber = args.pageNumber || 0;
   const pageSize = args.pageSize || 10;
@@ -136,9 +127,7 @@ export async function resolveTaskComment(
   rot: any, args: { taskCommentId: string }, { db, userRole, userId }: IContext,
 ): Promise<ITaskComment> {
   await accessControls.isAllowed(userRole, 'view', 'task');
-  if (!userId) {
-    throw new Error('not logged in!');
-  }
+  checkUserLoggedIn(userId);
 
   return await TaskComment.get(args.taskCommentId);
 }

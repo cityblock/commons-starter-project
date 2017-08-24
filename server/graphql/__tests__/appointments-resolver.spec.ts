@@ -77,7 +77,7 @@ describe('appointments', () => {
         });
 
         expect(cloneDeep(result.errors![0].message)).toMatch(
-          'User must be logged in to start an appointment.',
+          'not logged in',
         );
       });
     });

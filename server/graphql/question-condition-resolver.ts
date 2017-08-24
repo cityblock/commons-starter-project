@@ -4,7 +4,7 @@ import {
 } from 'schema';
 import QuestionCondition from '../models/question-condition';
 import accessControls from './shared/access-controls';
-import { IContext } from './shared/utils';
+import { checkUserLoggedIn, IContext } from './shared/utils';
 
 export interface IQuestionConditionCreateArgs {
   input: IQuestionConditionCreateInput;
@@ -27,9 +27,7 @@ export async function questionConditionCreate(
 ) {
   const { userRole, userId } = context;
   await accessControls.isAllowed(userRole, 'create', 'questionCondition');
-  if (!userId) {
-    throw new Error('not logged in');
-  }
+  checkUserLoggedIn(userId);
 
   // TODO: fix typings here
   return await QuestionCondition.create(input as any);
@@ -47,9 +45,8 @@ export async function questionConditionEdit(
   root: any, args: IEditQuestionConditionOptions, { db, userId, userRole }: IContext,
 ) {
   await accessControls.isAllowedForUser(userRole, 'edit', 'questionCondition');
-  if (!userId) {
-    throw new Error('not logged in');
-  }
+  checkUserLoggedIn(userId);
+
   const cleanedParams = pickBy<IQuestionConditionEditInput, {}>(args.input) as any;
   return QuestionCondition.edit(cleanedParams, args.input.questionConditionId);
 }
@@ -58,8 +55,7 @@ export async function questionConditionDelete(
   root: any, args: IDeleteQuestionConditionOptions, { db, userId, userRole }: IContext,
 ) {
   await accessControls.isAllowedForUser(userRole, 'edit', 'questionCondition');
-  if (!userId) {
-    throw new Error('not logged in');
-  }
+  checkUserLoggedIn(userId);
+
   return QuestionCondition.delete(args.input.questionConditionId);
 }

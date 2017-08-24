@@ -13,7 +13,7 @@ import Clinic from '../models/clinic';
 import Patient from '../models/patient';
 import User from '../models/user';
 import accessControls from './shared/access-controls';
-import { IContext } from './shared/utils';
+import { checkUserLoggedIn, IContext } from './shared/utils';
 
 export interface IAppointmentStartArgs {
   input: IAppointmentStartInput;
@@ -32,11 +32,9 @@ export async function appointmentStart(
   { input }: IAppointmentStartArgs,
   { userRole, athenaApi, userId }: IContext,
 ): Promise<IAppointment> {
-  if (!userId) {
-    throw new Error(`User must be logged in to start an appointment.`);
-  }
+  checkUserLoggedIn(userId);
 
-  const user = await User.get(userId);
+  const user = await User.get(userId!);
 
   const { patientId, appointmentTypeId } = input;
   await accessControls.isAllowedForUser(userRole, 'edit', 'appointment', patientId, userId);

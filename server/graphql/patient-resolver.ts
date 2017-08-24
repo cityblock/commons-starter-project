@@ -12,7 +12,7 @@ import CareTeam from '../models/care-team';
 import HomeClinic from '../models/clinic';
 import Patient from '../models/patient';
 import accessControls from './shared/access-controls';
-import { IContext } from './shared/utils';
+import { checkUserLoggedIn, IContext } from './shared/utils';
 
 export interface IQuery {
   patientId: string;
@@ -54,9 +54,7 @@ export async function patientSetup(
   { redoxApi, userRole, userId }: IContext,
 ): Promise<IPatient> {
   await accessControls.isAllowedForUser(userRole, 'create', 'patient');
-  if (!userId) {
-    throw new Error('no userId: please log in again');
-  }
+  checkUserLoggedIn(userId);
 
   const result = await Patient.execWithTransaction(async patientWithTransaction => {
     const patient = await patientWithTransaction.setup(input);
@@ -96,7 +94,7 @@ export async function patientSetup(
     );
   });
   // Need to wait until the transaction is complete to add relations like Care Team
-  await CareTeam.create({ userId, patientId: result.id });
+  await CareTeam.create({ userId: userId!, patientId: result.id });
   return result;
 }
 

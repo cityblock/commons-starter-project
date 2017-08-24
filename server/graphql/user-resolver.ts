@@ -4,7 +4,7 @@ import config from '../config';
 import GoogleAuth from '../models/google-auth';
 import User from '../models/user';
 import accessControls from './shared/access-controls';
-import { formatRelayEdge, signJwt, IContext } from './shared/utils';
+import { checkUserLoggedIn, formatRelayEdge, signJwt, IContext } from './shared/utils';
 
 export interface IUserCreateArgs {
   input: IUserCreateInput;
@@ -71,24 +71,18 @@ export async function resolveCurrentUser(
   root: any, args: any, { db, userId, userRole }: IContext,
 ) {
   await accessControls.isAllowed(userRole, 'view', 'user');
+  checkUserLoggedIn(userId);
 
-  if (!userId) {
-    throw new Error('User not logged in');
-  }
-
-  return await User.get(userId);
+  return await User.get(userId!);
 }
 
 export async function currentUserEdit(
   root: any, args: IEditCurrentUserOptions, { db, userId, userRole }: IContext,
 ) {
   await accessControls.isAllowedForUser(userRole, 'edit', 'user', userId, userId);
+  checkUserLoggedIn(userId);
 
-  if (!userId) {
-    throw new Error('User not logged in');
-  }
-
-  return await User.update(userId, args.input);
+  return await User.update(userId!, args.input);
 }
 
 export async function resolveUsers(

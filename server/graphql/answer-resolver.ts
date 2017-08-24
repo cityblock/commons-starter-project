@@ -2,7 +2,7 @@ import { pickBy } from 'lodash';
 import { IAnswerCreateInput, IAnswerDeleteInput, IAnswerEditInput } from 'schema';
 import Answer from '../models/answer';
 import accessControls from './shared/access-controls';
-import { IContext } from './shared/utils';
+import { checkUserLoggedIn, IContext } from './shared/utils';
 
 export interface IAnswerCreateArgs {
   input: IAnswerCreateInput;
@@ -23,9 +23,7 @@ export interface IDeleteAnswerOptions {
 export async function answerCreate(root: any, { input }: IAnswerCreateArgs, context: IContext) {
   const { userRole, userId } = context;
   await accessControls.isAllowed(userRole, 'create', 'answer');
-  if (!userId) {
-    throw new Error('not logged in');
-  }
+  checkUserLoggedIn(userId);
 
   // TODO: fix typings here
   return await Answer.create(input as any);
@@ -51,9 +49,8 @@ export async function answerEdit(
   root: any, args: IEditAnswerOptions, { db, userId, userRole }: IContext,
 ) {
   await accessControls.isAllowedForUser(userRole, 'edit', 'answer');
-  if (!userId) {
-    throw new Error('not logged in');
-  }
+  checkUserLoggedIn(userId);
+
   // TODO: fix typings here
   const cleanedParams = pickBy<IAnswerEditInput, {}>(args.input) as any;
   return Answer.edit(cleanedParams, args.input.answerId);
@@ -63,8 +60,7 @@ export async function answerDelete(
   root: any, args: IDeleteAnswerOptions, { db, userId, userRole }: IContext,
 ) {
   await accessControls.isAllowedForUser(userRole, 'edit', 'answer');
-  if (!userId) {
-    throw new Error('not logged in');
-  }
+  checkUserLoggedIn(userId);
+
   return Answer.delete(args.input.answerId);
 }

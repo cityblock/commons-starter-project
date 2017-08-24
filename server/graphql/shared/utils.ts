@@ -147,3 +147,9 @@ export function formatOrderOptions<T>(
   }
   throw new Error('orderby should contain Asc or Desc');
 }
+
+export function checkUserLoggedIn(userId?: string) {
+  if (!userId) {
+    throw new Error('not logged in');
+  }
+}

@@ -4,7 +4,7 @@ import { IPaginationOptions } from '../db';
 import Task, { Priority, TaskOrderOptions } from '../models/task';
 import TaskEvent from '../models/task-event';
 import accessControls from './shared/access-controls';
-import { formatOrderOptions, formatRelayEdge, IContext } from './shared/utils';
+import { checkUserLoggedIn, formatOrderOptions, formatRelayEdge, IContext } from './shared/utils';
 
 export interface ITaskCreateArgs {
   input: ITaskCreateInput;
@@ -48,14 +48,12 @@ export async function taskCreate(root: any, { input }: ITaskCreateArgs, context:
   const { userRole, userId } = context;
   const { title, description, dueAt, patientId, assignedToId } = input;
   await accessControls.isAllowed(userRole, 'create', 'task');
-  if (!userId) {
-    throw new Error('not logged in');
-  }
+  checkUserLoggedIn(userId);
 
   // TODO: once we allow adding followers on create, create the associated TaskEvent records
   return await transaction(Task.knex(), async txn => {
     const task = await Task.create({
-      createdById: userId,
+      createdById: userId!,
       title,
       description: description || undefined,
       dueAt: dueAt || undefined,
@@ -65,14 +63,14 @@ export async function taskCreate(root: any, { input }: ITaskCreateArgs, context:
 
     await TaskEvent.create({
       taskId: task.id,
-      userId,
+      userId: userId!,
       eventType: 'create_task',
     }, txn);
 
     if (assignedToId) {
       await TaskEvent.create({
         taskId: task.id,
-        userId,
+        userId: userId!,
         eventType: 'edit_assignee',
         eventUserId: assignedToId,
       }, txn);
@@ -94,9 +92,7 @@ export async function taskEdit(
   root: any, args: IEditTaskOptions, { db, userId, userRole }: IContext,
 ) {
   await accessControls.isAllowedForUser(userRole, 'edit', 'task', args.input.taskId, userId);
-  if (!userId) {
-    throw new Error('not logged in');
-  }
+  checkUserLoggedIn(userId);
 
   const task = await Task.get(args.input.taskId);
 
@@ -108,7 +104,7 @@ export async function taskEdit(
     if (args.input.priority && args.input.priority !== priority) {
       await TaskEvent.create({
         taskId: args.input.taskId,
-        userId,
+        userId: userId!,
         eventType: 'edit_priority',
       }, txn);
     }
@@ -116,7 +112,7 @@ export async function taskEdit(
     if (args.input.dueAt && args.input.dueAt !== dueAt) {
       await TaskEvent.create({
         taskId: args.input.taskId,
-        userId,
+        userId: userId!,
         eventType: 'edit_due_date',
       }, txn);
     }
@@ -124,7 +120,7 @@ export async function taskEdit(
     if (args.input.assignedToId && args.input.assignedToId !== assignedToId) {
       await TaskEvent.create({
         taskId: args.input.taskId,
-        userId,
+        userId: userId!,
         eventType: 'edit_assignee',
         eventUserId: args.input.assignedToId,
       }, txn);
@@ -133,7 +129,7 @@ export async function taskEdit(
     if (args.input.title && args.input.title !== title) {
       await TaskEvent.create({
         taskId: args.input.taskId,
-        userId,
+        userId: userId!,
         eventType: 'edit_title',
       });
     }
@@ -141,7 +137,7 @@ export async function taskEdit(
     if (args.input.description && args.input.description !== description) {
       await TaskEvent.create({
         taskId: args.input.taskId,
-        userId,
+        userId: userId!,
         eventType: 'edit_description',
       });
     }
@@ -154,16 +150,14 @@ export async function taskDelete(
   root: any, args: IDeleteTaskOptions, { db, userId, userRole }: IContext,
 ) {
   await accessControls.isAllowedForUser(userRole, 'edit', 'task', args.input.taskId, userId);
-  if (!userId) {
-    throw new Error('not logged in');
-  }
+  checkUserLoggedIn(userId);
 
   return await transaction(Task.knex(), async txn => {
     const task = Task.delete(args.input.taskId, txn);
 
     await TaskEvent.create({
       taskId: args.input.taskId,
-      userId,
+      userId: userId!,
       eventType: 'delete_task',
     }, txn);
 
@@ -175,17 +169,14 @@ export async function taskComplete(
   root: any, args: IEditTaskOptions, { db, userId, userRole }: IContext,
 ) {
   await accessControls.isAllowedForUser(userRole, 'edit', 'task', args.input.taskId, userId);
-
-  if (!userId) {
-    throw new Error('please log in');
-  }
+  checkUserLoggedIn(userId);
 
   return await transaction(Task.knex(), async txn => {
-    const task = Task.complete(args.input.taskId, userId, txn);
+    const task = Task.complete(args.input.taskId, userId!, txn);
 
     await TaskEvent.create({
       taskId: args.input.taskId,
-      userId,
+      userId: userId!,
       eventType: 'complete_task',
     }, txn);
 
@@ -197,17 +188,14 @@ export async function taskUncomplete(
   root: any, args: IEditTaskOptions, { db, userId, userRole }: IContext,
 ) {
   await accessControls.isAllowedForUser(userRole, 'edit', 'task', args.input.taskId, userId);
-
-  if (!userId) {
-    throw new Error('please log in');
-  }
+  checkUserLoggedIn(userId);
 
   return await transaction(Task.knex(), async txn => {
-    const task = Task.uncomplete(args.input.taskId, userId, txn);
+    const task = Task.uncomplete(args.input.taskId, userId!, txn);
 
     await TaskEvent.create({
       taskId: args.input.taskId,
-      userId,
+      userId: userId!,
       eventType: 'uncomplete_task',
     }, txn);
 

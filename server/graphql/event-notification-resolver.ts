@@ -4,7 +4,7 @@ import { IEventNotificationEdges, IEventNotificationNode } from 'schema';
 import { IPaginatedResults, IPaginationOptions } from '../db';
 import EventNotification from '../models/event-notification';
 import accessControls from './shared/access-controls';
-import { formatRelayEdge, IContext } from './shared/utils';
+import { checkUserLoggedIn, formatRelayEdge, IContext } from './shared/utils';
 
 export interface IUserEventNotificationOptions extends IPaginationOptions {
   taskEventNotificationsOnly?: boolean;
@@ -146,9 +146,7 @@ export async function resolveEventNotificationsForCurrentUser(
   const { taskEventNotificationsOnly } = args;
 
   await accessControls.isAllowed(userRole, 'view', 'user');
-  if (!userId) {
-    throw new Error('not logged in');
-  }
+  checkUserLoggedIn(userId);
 
   const pageNumber = args.pageNumber || 0;
   const pageSize = args.pageSize || 0;
@@ -156,11 +154,11 @@ export async function resolveEventNotificationsForCurrentUser(
   let notifications: IPaginatedResults<EventNotification>;
 
   if (taskEventNotificationsOnly) {
-    notifications = await EventNotification.getUserTaskEventNotifications(userId, {
+    notifications = await EventNotification.getUserTaskEventNotifications(userId!, {
       pageNumber, pageSize,
     });
   } else {
-    notifications = await EventNotification.getUserEventNotifications(userId, {
+    notifications = await EventNotification.getUserEventNotifications(userId!, {
       pageNumber, pageSize,
     });
   }
@@ -188,9 +186,7 @@ export async function resolveEventNotificationsForTask(
   root: any, args: ITaskEventNotificationOptions, { db, userRole, userId }: IContext,
 ): Promise<IEventNotificationEdges> {
   await accessControls.isAllowed(userRole, 'view', 'task');
-  if (!userId) {
-    throw new Error('not logged in');
-  }
+  checkUserLoggedIn(userId);
 
   const pageNumber = args.pageNumber || 0;
   const pageSize = args.pageSize || 10;
@@ -222,10 +218,7 @@ export async function eventNotificationDismiss(
   root: any, { input }: IDismissEventNotificationOptions, { db, userId, userRole }: IContext,
 ) {
   await accessControls.isAllowedForUser(userRole, 'edit', 'user', userId, userId);
-
-  if (!userId) {
-    throw new Error('please log in');
-  }
+  checkUserLoggedIn(userId);
 
   return await EventNotification.update(input.eventNotificationId, {
     seenAt: new Date().toISOString(),

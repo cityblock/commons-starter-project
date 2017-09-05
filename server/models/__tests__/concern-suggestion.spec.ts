@@ -86,7 +86,7 @@ describe('concern suggestion model', () => {
           concernId: 'does-not-exist',
           answerId: answer.id,
         }),
-      ).rejects.toMatchObject({ message: error });
+      ).rejects.toMatchObject(new Error(error));
     });
 
     it('can remove an answer from a concern', async () => {

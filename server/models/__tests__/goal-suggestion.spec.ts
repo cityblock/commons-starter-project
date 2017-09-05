@@ -82,7 +82,7 @@ describe('goal suggestion model', () => {
           goalSuggestionTemplateId: 'does-not-exist',
           answerId: answer.id,
         }),
-      ).rejects.toMatchObject({ message: error });
+      ).rejects.toMatchObject(new Error(error));
     });
 
     it('can remove an answer from a goal suggestion', async () => {

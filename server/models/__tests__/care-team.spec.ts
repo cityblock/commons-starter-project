@@ -54,9 +54,7 @@ describe('care model', () => {
 
       await expect(CareTeam.create({ userId: 'fakeUserId', patientId: patient.id }))
         .rejects
-        .toMatchObject({
-          message: error,
-        });
+        .toMatchObject(new Error(error));
     });
 
     it('can remove a user from a care team', async () => {

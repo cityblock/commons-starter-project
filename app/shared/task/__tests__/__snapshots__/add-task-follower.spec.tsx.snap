@@ -19,62 +19,62 @@ Array [
   <div
     className={undefined}
     onClick={[Function]}
->
+  >
     <div
-        className={undefined}
-        style={
-            Object {
-                "backgroundImage": "url('http://bit.ly/2u9bJDA')",
-              }
+      className={undefined}
+      style={
+        Object {
+          "backgroundImage": "url('http://bit.ly/2u9bJDA')",
         }
+      }
     />
     <div
-        className={undefined}
+      className={undefined}
     >
-        <div
-            className={undefined}
-        >
-            first last
-        </div>
-        <div
-            className={undefined}
-        >
-            physician
-        </div>
+      <div
+        className={undefined}
+      >
+        first last
+      </div>
+      <div
+        className={undefined}
+      >
+        physician
+      </div>
     </div>
     <div
-        className=""
+      className=""
     />
-</div>,
+  </div>,
   <div
     className={undefined}
     onClick={[Function]}
->
+  >
     <div
-        className={undefined}
-        style={
-            Object {
-                "backgroundImage": "url('http://bit.ly/2u9bJDA')",
-              }
+      className={undefined}
+      style={
+        Object {
+          "backgroundImage": "url('http://bit.ly/2u9bJDA')",
         }
+      }
     />
     <div
-        className={undefined}
+      className={undefined}
     >
-        <div
-            className={undefined}
-        >
-            first last
-        </div>
-        <div
-            className={undefined}
-        >
-            physician
-        </div>
+      <div
+        className={undefined}
+      >
+        first last
+      </div>
+      <div
+        className={undefined}
+      >
+        physician
+      </div>
     </div>
     <div
-        className=""
+      className=""
     />
-</div>,
+  </div>,
 ]
 `;

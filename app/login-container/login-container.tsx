@@ -85,7 +85,6 @@ class LoginContainer extends React.Component<IProps, { error?: string }> {
                   clientId={clientId}
                   buttonText='Login'
                   scope={SCOPE}
-                  offline
                   onSuccess={this.onSuccess}
                   onFailure={this.onError}
                   className={styles.button}>

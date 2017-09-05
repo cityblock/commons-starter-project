@@ -57,9 +57,7 @@ describe('util tests', () => {
     const authToken = 'fake';
     await expect(parseAndVerifyJwt(authToken))
       .rejects
-      .toMatchObject({
-        message: 'jwt malformed',
-      });
+      .toMatchObject(new Error('jwt malformed'));
   });
 
   describe('old tokens', () => {
@@ -80,9 +78,7 @@ describe('util tests', () => {
       });
       await expect(parseAndVerifyJwt(authToken))
         .rejects
-        .toMatchObject({
-          message: 'token invalid: login too old',
-        });
+        .toMatchObject(new Error('token invalid: login too old'));
     });
 
     it('errors for token when the token is more than 24 hours old', async () => {
@@ -97,9 +93,7 @@ describe('util tests', () => {
       });
       await expect(parseAndVerifyJwt(authToken))
         .rejects
-        .toMatchObject({
-          message: 'token invalid: login too old',
-        });
+        .toMatchObject(new Error('token invalid: login too old'));
     });
   });
 });

@@ -69,91 +69,91 @@ exports[`renders questions with correct visibility 1`] = `
 Array [
   <RiskAreaQuestion
     answerData={
-        Object {
-            "answers": Array [],
-            "changed": false,
-            "oldAnswers": Array [],
-          }
+      Object {
+        "answers": Array [],
+        "changed": false,
+        "oldAnswers": Array [],
+      }
     }
     editable={false}
     onChange={[Function]}
     question={
-        Object {
-            "answerType": "radio",
-            "answers": Array [
-              Object {
-                "concernSuggestions": Array [],
-                "displayValue": "answer-1",
-                "goalSuggestions": Array [],
-                "id": "answer-1",
-                "inSummary": false,
-                "order": 1,
-                "questionId": "question-1",
-                "riskAdjustmentType": "inactive",
-                "summaryText": "None",
-                "value": "answer-1",
-                "valueType": "text",
-              },
-            ],
-            "applicableIfQuestionConditions": null,
-            "applicableIfType": null,
-            "createdAt": "2017-08-16T19:27:36.378Z",
-            "deletedAt": null,
-            "id": "question-1",
+      Object {
+        "answerType": "radio",
+        "answers": Array [
+          Object {
+            "concernSuggestions": Array [],
+            "displayValue": "answer-1",
+            "goalSuggestions": Array [],
+            "id": "answer-1",
+            "inSummary": false,
             "order": 1,
-            "riskAreaId": "risk-area-id",
-            "title": "Question 1",
-            "validatedSource": null,
-          }
+            "questionId": "question-1",
+            "riskAdjustmentType": "inactive",
+            "summaryText": "None",
+            "value": "answer-1",
+            "valueType": "text",
+          },
+        ],
+        "applicableIfQuestionConditions": null,
+        "applicableIfType": null,
+        "createdAt": "2017-08-16T19:27:36.378Z",
+        "deletedAt": null,
+        "id": "question-1",
+        "order": 1,
+        "riskAreaId": "risk-area-id",
+        "title": "Question 1",
+        "validatedSource": null,
+      }
     }
     visible={true}
-/>,
+  />,
   <RiskAreaQuestion
     answerData={
-        Object {
-            "answers": Array [],
-            "changed": false,
-            "oldAnswers": Array [],
-          }
+      Object {
+        "answers": Array [],
+        "changed": false,
+        "oldAnswers": Array [],
+      }
     }
     editable={false}
     onChange={[Function]}
     question={
-        Object {
-            "answerType": "radio",
-            "answers": Array [
-              Object {
-                "concernSuggestions": Array [],
-                "displayValue": "answer-1",
-                "goalSuggestions": Array [],
-                "id": "question-2-answer-1",
-                "inSummary": false,
-                "order": 1,
-                "questionId": "question-2",
-                "riskAdjustmentType": "increment",
-                "summaryText": "None",
-                "value": "answer-1",
-                "valueType": "text",
-              },
-            ],
-            "applicableIfQuestionConditions": Array [
-              Object {
-                "answerId": "answer-1",
-                "id": "condition-1",
-                "questionId": "question-1",
-              },
-            ],
-            "applicableIfType": "allTrue",
-            "createdAt": "2017-08-16T19:27:36.378Z",
-            "deletedAt": null,
-            "id": "question-2",
-            "order": 2,
-            "riskAreaId": "risk-area-id",
-            "title": "Question 2",
-            "validatedSource": null,
-          }
+      Object {
+        "answerType": "radio",
+        "answers": Array [
+          Object {
+            "concernSuggestions": Array [],
+            "displayValue": "answer-1",
+            "goalSuggestions": Array [],
+            "id": "question-2-answer-1",
+            "inSummary": false,
+            "order": 1,
+            "questionId": "question-2",
+            "riskAdjustmentType": "increment",
+            "summaryText": "None",
+            "value": "answer-1",
+            "valueType": "text",
+          },
+        ],
+        "applicableIfQuestionConditions": Array [
+          Object {
+            "answerId": "answer-1",
+            "id": "condition-1",
+            "questionId": "question-1",
+          },
+        ],
+        "applicableIfType": "allTrue",
+        "createdAt": "2017-08-16T19:27:36.378Z",
+        "deletedAt": null,
+        "id": "question-2",
+        "order": 2,
+        "riskAreaId": "risk-area-id",
+        "title": "Question 2",
+        "validatedSource": null,
+      }
     }
     visible={false}
-/>,
+  />,
 ]
 `;

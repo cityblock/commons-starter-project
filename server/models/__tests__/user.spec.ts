@@ -64,7 +64,7 @@ describe('user model', () => {
     await expect(User.create({ email, userRole, homeClinicId: '1' }))
       .rejects
       .toMatchObject(
-        new Error(JSON.stringify({ email: [{ message }] })),
+        new Error(JSON.stringify({ email: [{ message }] }, null, '  ')),
       );
   });
 

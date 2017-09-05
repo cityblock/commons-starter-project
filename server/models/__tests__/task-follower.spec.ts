@@ -71,9 +71,7 @@ describe('task followers', () => {
 
       await expect(TaskFollower.followTask({ userId: 'fakeUserId', taskId: task.id }))
         .rejects
-        .toMatchObject({
-          message: error,
-        });
+        .toMatchObject(new Error(error));
     });
 
     it('can remove a user from a followed tasks', async () => {

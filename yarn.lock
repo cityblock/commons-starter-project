@@ -6598,9 +6598,9 @@ react-dom@15.6.1:
     object-assign "^4.1.0"
     prop-types "^15.5.10"
 
-react-google-login@^2.9.3:
-  version "2.9.3"
-  resolved "https://registry.yarnpkg.com/react-google-login/-/react-google-login-2.9.3.tgz#3ae6c395a215e635bad9fa951583fef50acb75fc"
+react-google-login@2.9.2:
+  version "2.9.2"
+  resolved "https://registry.yarnpkg.com/react-google-login/-/react-google-login-2.9.2.tgz#4c7726f0aa488bf4d1b728567a37f3e600810ec4"
   dependencies:
     "@types/react" "*"
     prop-types "^15.5.0"

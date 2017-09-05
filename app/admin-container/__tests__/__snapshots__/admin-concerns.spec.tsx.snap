@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`renders admin concerns 1`] = `
+exports[`admin concerns renders admin concerns 1`] = `
 <div
   className={undefined}
 >
@@ -48,7 +48,7 @@ exports[`renders admin concerns 1`] = `
             <span
               className={undefined}
             >
-              last month
+              6 days ago
             </span>
           </div>
         </div>

@@ -126,8 +126,8 @@ class QuestionCreate extends React.Component<IProps, IState> {
               onChange={this.onChange}
               className={
                 classNames(formStyles.select, formStyles.inputSmall, styles.flexInputItem)}>
-              <option value='allTrue'>all true</option>
               <option value='oneTrue'>one true</option>
+              <option value='allTrue'>all true</option>
             </select>
             <select required
               name='answerType'

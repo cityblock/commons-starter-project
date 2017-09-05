@@ -60,14 +60,14 @@ exports[`renders question 1`] = `
         value=""
       >
         <option
-          value="allTrue"
-        >
-          all true
-        </option>
-        <option
           value="oneTrue"
         >
           one true
+        </option>
+        <option
+          value="allTrue"
+        >
+          all true
         </option>
       </select>
       <select

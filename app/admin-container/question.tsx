@@ -369,8 +369,8 @@ class Question extends React.Component<IProps, IState> {
                 value={question.applicableIfType || ''}
                 onChange={this.onSelectChange}
                 className={classNames(formStyles.select, formStyles.inputSmall)}>
-                <option value='allTrue'>all true</option>
                 <option value='oneTrue'>one true</option>
+                <option value='allTrue'>all true</option>
               </select>
               <br />
               <QuestionConditions

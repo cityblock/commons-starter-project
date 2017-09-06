@@ -47,9 +47,9 @@ export default class CaptureOutput {
     const old_write = stream.write;
 
     stream.write = (write =>
-      (string: string): boolean => {
-        write.apply(stream, [string]);
-        callback(string);
+      (s: string): boolean => {
+        write.apply(stream, [s]);
+        callback(s);
         return true;
       })(stream.write);
 

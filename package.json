@@ -79,7 +79,7 @@
     }
   },
   "devDependencies": {
-    "@types/enzyme": "^2.8.6",
+    "@types/enzyme": "^2.8.7",
     "@types/jest": "^20.0.8",
     "@types/nock": "^8.2.1",
     "@types/react-test-renderer": "^15.5.4",
@@ -102,6 +102,7 @@
     "react-test-renderer": "^15.4.2",
     "ts-jest": "^21.0.0",
     "tslint": "^5.7.0",
+    "tslint-microsoft-contrib": "^5.0.1",
     "webpack-dev-server": "^2.7.1"
   },
   "engines": {
@@ -130,12 +131,12 @@
     "@types/react-copy-to-clipboard": "^4.2.3",
     "@types/react-dom": "^15.5.4",
     "@types/react-intl": "^2.3.0",
-    "@types/react-redux": "^5.0.6",
+    "@types/react-redux": "^5.0.7",
     "@types/react-router-dom": "^4.0.7",
     "@types/react-router-redux": "^5.0.8",
     "@types/redux-logger": "^3.0.3",
     "@types/redux-mock-store": "^0.0.11",
-    "@types/uuid": "^3.4.1",
+    "@types/uuid": "^3.4.2",
     "@types/validator": "^6.2.3",
     "@types/webpack": "^3.0.10",
     "acl": "^0.4.10",
@@ -161,7 +162,7 @@
     "graphql-server-express": "^1.1.2",
     "graphql-tag": "^2.4.2",
     "graphql-tools": "^1.2.2",
-    "jsonwebtoken": "^7.4.3",
+    "jsonwebtoken": "^8.0.0",
     "knex": "^0.13.0",
     "langs": "^2.0.0",
     "le_node": "^1.7.0",
@@ -184,7 +185,7 @@
     "react-copy-to-clipboard": "^5.0.0",
     "react-dom": "15.6.1",
     "react-google-login": "2.9.2",
-    "react-intl": "^2.3.0",
+    "react-intl": "^2.4.0",
     "react-redux": "^5.0.6",
     "react-router-dom": "^4.2.2",
     "react-router-redux": "5.0.0-alpha.6",
@@ -194,14 +195,14 @@
     "redux-mock-store": "^1.2.2",
     "rimraf": "^2.6.1",
     "style-loader": "^0.18.2",
-    "ts-loader": "^2.3.4",
+    "ts-loader": "^2.3.5",
     "ts-node": "^3.3.0",
     "typescript": "^2.4.1",
     "typings-for-css-modules-loader": "^1.5.0",
     "url-loader": "^0.5.9",
     "uuid": "^3.0.1",
     "validator": "^8.1.0",
-    "webpack": "^3.5.5",
-    "webpack-hot-middleware": "^2.18.2"
+    "webpack": "^3.5.6",
+    "webpack-hot-middleware": "^2.19.0"
   }
 }

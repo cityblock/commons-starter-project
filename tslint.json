@@ -2,6 +2,10 @@
   "extends": [
     "tslint:recommended"
   ],
+  "rulesDirectory": [
+    "node_modules/tslint-microsoft-contrib",
+    "rules"
+  ],
   "rules": {
     // Rules where we disagree with tslint:recommended
     "curly": false,
@@ -82,11 +86,22 @@
     "object-literal-shorthand": true,
     "no-unnecessary-callback-wrapper": true,
     "radix": true,
-    "no-invalid-template-strings": true
+    "no-invalid-template-strings": true,
+    // Secuity rules from tslint-microsoft-contrib
+    "no-banned-terms": true,
+    "no-delete-expression": true,
+    "no-document-domain": true,
+    "no-disable-auto-sanitization": true,
+    "no-duplicate-parameter-names": true,
+    "no-exec-script": true,
+    "no-function-constructor-with-string-args": true,
+    "no-octal-literal": true,
+    "no-reserved-keywords": false, // incorrectly flags method names
+    "no-string-based-set-immediate": true,
+    "no-string-based-set-interval": true,
+    "no-string-based-set-timeout": true,
+    "no-eval": true
   },
-  "rulesDirectory": [
-    "rules"
-  ],
   "linterOptions": {
     "typeCheck": true
   }

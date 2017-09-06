@@ -1,6 +1,7 @@
 # Commons
 
 [![Coverage Status](https://coveralls.io/repos/github/sidewalklabs/commons/badge.svg?branch=master&t=Mrcm01)](https://coveralls.io/github/sidewalklabs/commons?branch=master) [![CircleCI](https://circleci.com/gh/sidewalklabs/commons.svg?style=svg&circle-token=ff9336cd2c27998733f1abe9a3c3bcbba62a045f)](https://circleci.com/gh/sidewalklabs/commons)
+[![NSP Status](https://nodesecurity.io/orgs/cityblock/projects/c275101e-c196-4c31-9b08-66b93e560fe8/badge)](https://nodesecurity.io/orgs/cityblock/projects/c275101e-c196-4c31-9b08-66b93e560fe8)
 
 Care MVP. For a more detailed spec, see the [PRD][] and [Tech Design Doc][]
 
@@ -176,6 +177,12 @@ Deploy manually via:
 
 You should see the changes at our [staging][] endpoint.
 
+## Security
+
+- In production, we scan production server packages using [AppCanary][]
+- Within the app, we use [NSP][] to scan external dependencies for vulnerabilities daily and check dependency changes for vulnerabilities
+- We follow the Microsoft [Secure Development Lifecycle][] through security focused ts-lint rules
+
 ## How-to
 
 ## Revert a PR merge into master
@@ -319,3 +326,6 @@ We are able to run the application locally using Docker and Docker Compose. For 
 [Tech Design Doc]: https://docs.google.com/document/d/1KlSX20FgUv1BllA6n8jJdg6beQ55ikrpaOOE8RnfQkE
 [Fog Creek code review]: https://blog.fogcreek.com/increase-defect-detection-with-our-code-review-checklist-example/]
 [revert functionality]: https://help.github.com/desktop/guides/contributing/reverting-a-commit/
+[AppCanary]: https://appcanary.com/monitors/2283
+[NSP]: https://nodesecurity.io
+[Secure Development Lifecycle]: https://github.com/Microsoft/tslint-microsoft-contrib/wiki/TSLint-and-the-Microsoft-Security-Development-Lifecycle

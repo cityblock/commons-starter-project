@@ -17,7 +17,9 @@ import PatientInsuranceForm, {
 } from '../shared/patient-insurance-form';
 import * as styles from './css/patient-info.css';
 
-export interface IOptions { variables: patientEditMutationVariables; }
+export interface IOptions {
+  variables: patientEditMutationVariables;
+}
 
 export interface IProps {
   loading?: boolean;
@@ -27,12 +29,14 @@ export interface IProps {
   updatePatientInfo: (options: IOptions) => { data: { patientEdit: ShortPatientFragment } };
 }
 
-export type IState = IPatientDemographicsState & IPatientContactState & IPatientInsuranceState & {
-  saveLoading?: boolean;
-  saveError?: boolean;
-  saveSuccess?: boolean;
-  clearSaveSuccessTimeout?: number;
-};
+export type IState = IPatientDemographicsState &
+  IPatientContactState &
+  IPatientInsuranceState & {
+    saveLoading?: boolean;
+    saveError?: boolean;
+    saveSuccess?: boolean;
+    clearSaveSuccessTimeout?: number;
+  };
 
 const SAVE_SUCCESS_TIMEOUT_MILLISECONDS = 2000;
 
@@ -108,19 +112,16 @@ export class PatientInfo extends React.Component<IProps, IState> {
   clearSaveSuccess() {
     const { clearSaveSuccessTimeout } = this.state;
 
-    const resetSaveSuccess = () => (
-      this.setState(() => ({ saveSuccess: false }))
-    );
+    const resetSaveSuccess = () => this.setState(() => ({ saveSuccess: false }));
 
     if (clearSaveSuccessTimeout) {
       clearTimeout(clearSaveSuccessTimeout);
     }
 
     this.setState(() => ({
-      clearSaveSuccessTimeout: setTimeout(
-        resetSaveSuccess,
-        SAVE_SUCCESS_TIMEOUT_MILLISECONDS,
-      ),
+      /* tslint:disable:no-string-based-set-timeout */
+      clearSaveSuccessTimeout: setTimeout(resetSaveSuccess, SAVE_SUCCESS_TIMEOUT_MILLISECONDS),
+      /* tslint:enable:no-string-based-set-timeout */
     }));
   }
 
@@ -225,11 +226,9 @@ export class PatientInfo extends React.Component<IProps, IState> {
             </div>
             <div className={saveButtonSuccessStyles}>
               <div className={styles.saveButtonSuccessLabel}>Changes saved.</div>
-              <div className={styles.saveButtonSuccessIcon}></div>
+              <div className={styles.saveButtonSuccessIcon} />
             </div>
-            <div
-              className={saveButtonStyles}
-              onClick={this.onClickSave}>
+            <div className={saveButtonStyles} onClick={this.onClickSave}>
               <FormattedMessage id='patientInfo.saveChanges'>
                 {(message: string) => <span>{message}</span>}
               </FormattedMessage>
@@ -287,6 +286,6 @@ export class PatientInfo extends React.Component<IProps, IState> {
   }
 }
 
-export default (compose as any)(
-  graphql(editPatientMutation as any, { name: 'updatePatientInfo' }),
-)(PatientInfo);
+export default (compose as any)(graphql(editPatientMutation as any, { name: 'updatePatientInfo' }))(
+  PatientInfo,
+);

@@ -97,7 +97,7 @@ Getting up to speed:
 
     yarn run dev
 
-### Testing
+### Testing locally
 
 Our test database uses postgres. Before running tests, ensure that postgres is running and create the database `commons_test` and role `root` (`psql -c "create database commons_test; psql -c "create role root with login"`)
 
@@ -106,6 +106,63 @@ Next run:
     NODE_ENV=test yarn migrate
 
 This will setup the test database and you should be good to go.
+
+### Making changes
+
+Important: Never commit directly to the master branch. Ensure changes are small and incremental.
+
+To make a change:
+- clone the repo locally
+- branch from master
+- make your changes
+- write and run tests for your code
+- push your branch to the remote
+- submit a pull request
+- assign another engineer on the team as a reviewer
+
+Before you can merge your code into master, the engineer you assigned must approve your code with a :+1: comment. It is your responsibility to merge your code to master (using 'merge and squash' in Github) and then to ensure your code is deployed without error.
+
+If you get a :+1: before the tests have finished in Circle CI, you must wait to merge until the tests have finished and passed. Your code will only deploy if the entire test suite passes in master anyway so better to catch it now.
+
+For reverting code in master, use Github's [revert functionality][].
+
+### Performing code review
+
+This is a handy checklist for when you are performing code review for others. Modified from [Fog Creek code review][] docs. You should respond within ~2 business hours to requests for code review.
+
+__General__
+
+- Does the code work? Does it perform its intended function, the logic is correct etc.
+- Is all the code easily understood?
+- Is the coding style consistent with our existing style? (linting should solve this)
+- Is there any commented out code?
+- Is there any redundant or duplicate code?
+- Is the code as modular as possible?
+- Can any of the code be replaced with library functions?
+- Can any logging or debugging code be removed?
+- Does the code explicitly return booleans? Perhaps could be written in a better way
+- Does the code wrap in a large if statement rather than early exit?
+
+__Security__
+
+- Are all data inputs checked and encoded? (GraphQl + Objection.js handle much of this for us)
+- Are access controls for data correctly checked at the API level?
+- Are invalid parameter values handled?
+
+__Documentation__
+
+- Do comments exist and describe the intent of the code if code is not easily understood?
+- Is any unusual behavior or edge-case handling described?
+- Is the use and function of third-party libraries documented?
+- Are data structures and units of measurement explained?
+- Is there any incomplete code? If so, should it be removed or flagged with a suitable marker like ‘TODO’?
+
+__Testing__
+
+- Is the code testable? i.e. don’t add too many or hide dependencies, unable to initialize objects, test frameworks can use methods etc.
+- Do tests exist and are they comprehensive?
+- Do unit tests actually test that the code is performing the intended functionality?
+- Could any test code be replaced with the use of an existing API?
 
 ### Production
 
@@ -260,3 +317,5 @@ We are able to run the application locally using Docker and Docker Compose. For 
 [PostgreSQL Documentation]: https://www.postgresql.org/docs/9.6/static/runtime-config-logging.html
 [Docker]: https://docs.docker.com/engine/installation/
 [Tech Design Doc]: https://docs.google.com/document/d/1KlSX20FgUv1BllA6n8jJdg6beQ55ikrpaOOE8RnfQkE
+[Fog Creek code review]: https://blog.fogcreek.com/increase-defect-detection-with-our-code-review-checklist-example/]
+[revert functionality]: https://help.github.com/desktop/guides/contributing/reverting-a-commit/

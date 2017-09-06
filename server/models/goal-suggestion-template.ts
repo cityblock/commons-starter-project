@@ -63,8 +63,7 @@ export default class GoalSuggestionTemplate extends Model {
   }
 
   static async create(input: IGoalSuggestionTemplateEditableFields) {
-    return await this
-      .query()
+    return await this.query()
       .eager('taskTemplates')
       .modifyEager('taskTemplates', builder => builder.where('deletedAt', null))
       .insertAndFetch(input);
@@ -74,8 +73,7 @@ export default class GoalSuggestionTemplate extends Model {
     goalSuggestionTemplateId: string,
     goalSuggestionTemplate: Partial<IGoalSuggestionTemplateEditableFields>,
   ): Promise<GoalSuggestionTemplate> {
-    return await this
-      .query()
+    return await this.query()
       .eager('taskTemplates')
       .modifyEager('taskTemplates', builder => builder.where('deletedAt', null))
       .updateAndFetchById(goalSuggestionTemplateId, goalSuggestionTemplate);
@@ -83,18 +81,16 @@ export default class GoalSuggestionTemplate extends Model {
 
   // TODO: paginate?
   static async getAll(): Promise<GoalSuggestionTemplate[]> {
-    return await this
-      .query()
+    return await this.query()
       .where('deletedAt', null)
       .eager('taskTemplates')
       .modifyEager('taskTemplates', builder => builder.where('deletedAt', null));
   }
 
   static async delete(goalSuggestionTemplateId: string): Promise<GoalSuggestionTemplate> {
-    return await this.query()
-      .updateAndFetchById(goalSuggestionTemplateId, {
-        deletedAt: new Date().toISOString(),
-      });
+    return await this.query().updateAndFetchById(goalSuggestionTemplateId, {
+      deletedAt: new Date().toISOString(),
+    });
   }
 }
 /* tslint:disable:member-ordering */

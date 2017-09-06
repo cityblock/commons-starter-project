@@ -60,9 +60,7 @@ describe('task model', () => {
 
   it('throws an error when getting an invalid id', async () => {
     const fakeId = 'fakeId';
-    await expect(Task.get(fakeId))
-      .rejects
-      .toMatch('No such task: fakeId');
+    await expect(Task.get(fakeId)).rejects.toMatch('No such task: fakeId');
   });
 
   it('should update task', async () => {
@@ -76,9 +74,11 @@ describe('task model', () => {
       assignedToId: user.id,
       patientGoalId: patientGoal.id,
     });
-    expect(await Task.update(task.id, {
-      completedById: user.id,
-    })).toMatchObject({
+    expect(
+      await Task.update(task.id, {
+        completedById: user.id,
+      }),
+    ).toMatchObject({
       title: 'title',
       description: 'description',
       patientId: patient.id,
@@ -122,20 +122,26 @@ describe('task model', () => {
     });
     await Task.delete(deletedTask.id);
 
-    expect(await Task.getPatientTasks(patient.id, {
-      pageNumber, pageSize, order, orderBy,
-    })).toMatchObject(
-      {
-        results: [{
+    expect(
+      await Task.getPatientTasks(patient.id, {
+        pageNumber,
+        pageSize,
+        order,
+        orderBy,
+      }),
+    ).toMatchObject({
+      results: [
+        {
           title: 'title',
           description: 'description',
-        }, {
+        },
+        {
           title: 'title 2',
           description: 'description 2',
-        }],
-        total: 2,
-      },
-    );
+        },
+      ],
+      total: 2,
+    });
   });
 
   it('fetches a limited set of tasks', async () => {
@@ -160,31 +166,45 @@ describe('task model', () => {
       patientGoalId: patientGoal.id,
     });
     expect(
-      await Task.getPatientTasks(patient.id, { pageNumber: 0, pageSize: 1, order, orderBy }),
-    ).toMatchObject(
-      {
-        results: [{
+      await Task.getPatientTasks(patient.id, {
+        pageNumber: 0,
+        pageSize: 1,
+        order,
+        orderBy,
+      }),
+    ).toMatchObject({
+      results: [
+        {
           title: 'title',
           description: 'description',
-        }],
-        total: 2,
-      },
-    );
+        },
+      ],
+      total: 2,
+    });
     expect(
-      await Task.getPatientTasks(patient.id, { pageNumber: 1, pageSize: 1, order, orderBy }),
-    ).toMatchObject(
-      {
-        results: [{
+      await Task.getPatientTasks(patient.id, {
+        pageNumber: 1,
+        pageSize: 1,
+        order,
+        orderBy,
+      }),
+    ).toMatchObject({
+      results: [
+        {
           title: 'title 2',
           description: 'description 2',
-        }],
-        total: 2,
-      },
-    );
+        },
+      ],
+      total: 2,
+    });
   });
 
   it('fetches a user tasks tasks', async () => {
-    const user2 = await User.create({ email: 'b@a.com', userRole, homeClinicId: '1' });
+    const user2 = await User.create({
+      email: 'b@a.com',
+      userRole,
+      homeClinicId: '1',
+    });
     const dueAt = new Date().toUTCString();
     await Task.create({
       title: 'title',
@@ -208,21 +228,27 @@ describe('task model', () => {
     });
     await TaskFollower.followTask({ userId: user.id, taskId: task2.id });
     expect(
-      await Task.getUserTasks(user.id, { pageNumber: 0, pageSize: 2, order, orderBy }),
-    ).toMatchObject(
-      {
-        results: [{
+      await Task.getUserTasks(user.id, {
+        pageNumber: 0,
+        pageSize: 2,
+        order,
+        orderBy,
+      }),
+    ).toMatchObject({
+      results: [
+        {
           title: 'title',
           description: 'description',
           priority: 'low',
-        }, {
+        },
+        {
           title: 'title 2',
           description: 'description 2',
           priority: 'high',
-        }],
-        total: 2,
-      },
-    );
+        },
+      ],
+      total: 2,
+    });
   });
 
   it('completes a task', async () => {

@@ -156,8 +156,7 @@ export default class Task extends Model {
   }
 
   static async get(taskId: string, txn?: Transaction): Promise<Task> {
-    const task = await this
-      .query(txn)
+    const task = await this.query(txn)
       .eager(EAGER_QUERY)
       .modifyEager('followers', builder => builder.where('deletedAt', null))
       .findById(taskId);
@@ -172,13 +171,12 @@ export default class Task extends Model {
     patientId: string,
     { pageNumber, pageSize, orderBy, order }: ITaskPaginationOptions,
   ): Promise<IPaginatedResults<Task>> {
-    const patientsResult = await this
-      .query()
+    const patientsResult = (await this.query()
       .where({ patientId, deletedAt: null })
       .eager(EAGER_QUERY)
       .modifyEager('followers', builder => builder.where('deletedAt', null))
       .orderBy(orderBy, order)
-      .page(pageNumber, pageSize) as any;
+      .page(pageNumber, pageSize)) as any;
 
     return {
       results: patientsResult.results,
@@ -193,14 +191,13 @@ export default class Task extends Model {
     const subquery = TaskFollower.query()
       .select('taskId')
       .where({ userId, deletedAt: null }) as any; // TODO: resolve typing issue
-    const userTasks = await this
-      .query()
+    const userTasks = (await this.query()
       .where('id', 'in', subquery)
       .orWhere({ createdById: userId, deletedAt: null })
       .eager(EAGER_QUERY)
       .modifyEager('followers', builder => builder.where('deletedAt', null))
       .orderBy(orderBy, order)
-      .page(pageNumber, pageSize) as any;
+      .page(pageNumber, pageSize)) as any;
 
     return {
       results: userTasks.results,
@@ -209,18 +206,18 @@ export default class Task extends Model {
   }
 
   static async create(input: ITaskEditableFields, txn?: Transaction) {
-    return await this
-      .query(txn)
+    return await this.query(txn)
       .eager(EAGER_QUERY)
       .modifyEager('followers', builder => builder.where('deletedAt', null))
       .insertAndFetch(input);
   }
 
   static async update(
-    taskId: string, task: Partial<ITaskEditableFields>, txn?: Transaction,
+    taskId: string,
+    task: Partial<ITaskEditableFields>,
+    txn?: Transaction,
   ): Promise<Task> {
-    return await this
-      .query(txn)
+    return await this.query(txn)
       .eager(EAGER_QUERY)
       .modifyEager('followers', builder => {
         builder.where('deletedAt', null);
@@ -229,15 +226,13 @@ export default class Task extends Model {
   }
 
   static async delete(taskId: string, txn?: Transaction): Promise<Task> {
-    return await this.query(txn)
-      .updateAndFetchById(taskId, {
-        deletedAt: new Date().toISOString(),
-      });
+    return await this.query(txn).updateAndFetchById(taskId, {
+      deletedAt: new Date().toISOString(),
+    });
   }
 
   static async complete(taskId: string, userId: string, txn?: Transaction): Promise<Task> {
-    return this
-      .query(txn)
+    return this.query(txn)
       .eager(EAGER_QUERY)
       .modifyEager('followers', builder => builder.where('deletedAt', null))
       .updateAndFetchById(taskId, {
@@ -247,8 +242,7 @@ export default class Task extends Model {
   }
 
   static async uncomplete(taskId: string, userId: string, txn?: Transaction): Promise<Task> {
-    return this
-      .query(txn)
+    return this.query(txn)
       .eager(EAGER_QUERY)
       .modifyEager('followers', builder => builder.where('deletedAt', null))
       .updateAndFetchById(taskId, {
@@ -257,9 +251,7 @@ export default class Task extends Model {
       });
   }
 
-  static async execWithTransaction(
-    callback: (boundModelClass: typeof Task) => Promise<Task>,
-  ) {
+  static async execWithTransaction(callback: (boundModelClass: typeof Task) => Promise<Task>) {
     return await transaction(this as any, callback);
   }
 }

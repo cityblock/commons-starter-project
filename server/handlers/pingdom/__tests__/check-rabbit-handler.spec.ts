@@ -7,9 +7,9 @@ import { checkRabbitHandler } from '../check-rabbit-handler';
 
 describe('rabbit handler pingdom test', () => {
   let error: any;
-  const {
-    protocol, endpoint, port, user, pass, url,
-   } = config.rabbot[(config.NODE_ENV || 'test') as Env].api;
+  const { protocol, endpoint, port, user, pass, url } = config.rabbot[
+    (config.NODE_ENV || 'test') as Env
+  ].api;
 
   const rabbitResponse = [{ name: 'low-priority', messages_ready: 1 }];
   const bigQueueRabbitResponse = [{ name: 'low-priority', messages_ready: 301 }];

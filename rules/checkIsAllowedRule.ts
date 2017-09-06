@@ -25,7 +25,9 @@ class CheckIsAllowed extends Lint.RuleWalker {
       // TODO: Check for root: specifically in the parameter list
       if (text.indexOf('root:') > -1) {
         if (text.indexOf('accessControls.isAllowed') < 0) {
-          this.addFailure(this.createFailure(node.getStart(), node.getWidth(), Rule.FAILURE_STRING));
+          this.addFailure(
+            this.createFailure(node.getStart(), node.getWidth(), Rule.FAILURE_STRING),
+          );
         }
       }
 

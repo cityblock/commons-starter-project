@@ -6,7 +6,6 @@ import { mockGoogleOauthAuthorize } from '../../spec-helpers';
 import schema from '../make-executable-schema';
 
 describe('user tests', () => {
-
   let db: Db;
   const userRole = 'physician';
   const homeClinicId = '1';
@@ -42,9 +41,7 @@ describe('user tests', () => {
       const query = `{ user(userId: "fakeId") { firstName } }`;
       const result = await graphql(schema, query, null, { db, userRole });
 
-      expect(result.errors![0].message).toMatch(
-        'No such user: fakeId',
-      );
+      expect(result.errors![0].message).toMatch('No such user: fakeId');
     });
   });
 
@@ -59,15 +56,20 @@ describe('user tests', () => {
       });
 
       const query = `{ users { edges { node { id, firstName } } } }`;
-      const result = await graphql(schema, query, null, { db, userRole: 'admin' });
+      const result = await graphql(schema, query, null, {
+        db,
+        userRole: 'admin',
+      });
 
       expect(cloneDeep(result.data!.users)).toMatchObject({
-        edges: [{
-          node: {
-            id: user.id,
-            firstName: 'Bertrand',
+        edges: [
+          {
+            node: {
+              id: user.id,
+              firstName: 'Bertrand',
+            },
           },
-        }],
+        ],
       });
     });
 
@@ -83,26 +85,34 @@ describe('user tests', () => {
       const query = `{ users { edges { node { id, firstName } } } }`;
       const result = await graphql(schema, query, null, { db, userRole });
 
-      expect(cloneDeep(result.errors![0].message)).toMatch(
-        'physician not able to view allUsers',
-      );
+      expect(cloneDeep(result.errors![0].message)).toMatch('physician not able to view allUsers');
     });
 
     it('returns correct page information', async () => {
       const user1 = await User.create({
-        email: 'a@b.com', userRole, homeClinicId,
+        email: 'a@b.com',
+        userRole,
+        homeClinicId,
       });
       const user2 = await User.create({
-        email: 'b@c.com', userRole, homeClinicId,
+        email: 'b@c.com',
+        userRole,
+        homeClinicId,
       });
       const user3 = await User.create({
-        email: 'c@d.com', userRole: 'healthCoach', homeClinicId,
+        email: 'c@d.com',
+        userRole: 'healthCoach',
+        homeClinicId,
       });
       const user4 = await User.create({
-        email: 'd@e.com', userRole: 'familyMember', homeClinicId,
+        email: 'd@e.com',
+        userRole: 'familyMember',
+        homeClinicId,
       });
       await User.create({
-        email: 'e@f.com', userRole: 'nurseCareManager', homeClinicId,
+        email: 'e@f.com',
+        userRole: 'nurseCareManager',
+        homeClinicId,
       });
 
       const query = `{
@@ -120,30 +130,38 @@ describe('user tests', () => {
         }
       }`;
 
-      const result = await graphql(schema, query, null, { db, userRole: 'admin' });
+      const result = await graphql(schema, query, null, {
+        db,
+        userRole: 'admin',
+      });
 
       expect(cloneDeep(result.data!.users)).toMatchObject({
-        edges: [{
-          node: {
-            email: user1.email,
-            userRole: user1.userRole,
+        edges: [
+          {
+            node: {
+              email: user1.email,
+              userRole: user1.userRole,
+            },
           },
-        }, {
-          node: {
-            email: user2.email,
-            userRole: user2.userRole,
+          {
+            node: {
+              email: user2.email,
+              userRole: user2.userRole,
+            },
           },
-        }, {
-          node: {
-            email: user3.email,
-            userRole: user3.userRole,
+          {
+            node: {
+              email: user3.email,
+              userRole: user3.userRole,
+            },
           },
-        }, {
-          node: {
-            email: user4.email,
-            userRole: user4.userRole,
+          {
+            node: {
+              email: user4.email,
+              userRole: user4.userRole,
+            },
           },
-        }],
+        ],
         pageInfo: {
           hasNextPage: true,
           hasPreviousPage: false,
@@ -162,7 +180,11 @@ describe('user tests', () => {
         homeClinicId,
       });
       const query = `{ currentUser { email, firstName, lastName } }`;
-      const result = await graphql(schema, query, null, { db, userId: user.id, userRole });
+      const result = await graphql(schema, query, null, {
+        db,
+        userId: user.id,
+        userRole,
+      });
       expect(cloneDeep(result.data!.currentUser)).toMatchObject({
         email: 'a@b.com',
         firstName: 'Bertrand',
@@ -174,18 +196,18 @@ describe('user tests', () => {
       const query = `{ currentUser { email, firstName, lastName } }`;
       const result = await graphql(schema, query, null, { db, userRole });
 
-      expect(cloneDeep(result.errors![0].message)).toMatch(
-        'not logged in',
-      );
+      expect(cloneDeep(result.errors![0].message)).toMatch('not logged in');
     });
 
     it('errors if the logged in user does not exist', async () => {
       const query = `{ currentUser { email, firstName, lastName } }`;
-      const result = await graphql(schema, query, null, { db, userId: 'fakeId', userRole });
+      const result = await graphql(schema, query, null, {
+        db,
+        userId: 'fakeId',
+        userRole,
+      });
 
-      expect(cloneDeep(result.errors![0].message)).toMatch(
-        'No such user: fakeId',
-      );
+      expect(cloneDeep(result.errors![0].message)).toMatch('No such user: fakeId');
     });
   });
 
@@ -203,7 +225,11 @@ describe('user tests', () => {
           locale, firstName
         }
       }`;
-      const result = await graphql(schema, query, null, { db, userRole, userId: user.id });
+      const result = await graphql(schema, query, null, {
+        db,
+        userRole,
+        userId: user.id,
+      });
       expect(cloneDeep(result.data!.currentUserEdit)).toMatchObject({
         locale: 'es',
         firstName: 'first',
@@ -270,9 +296,7 @@ describe('user tests', () => {
         }
       }`;
       const result = await graphql(schema, mutation, null, { db, userRole });
-      expect(result.errors![0].message).toMatch(
-        'User not found for logan@cityblock.com',
-      );
+      expect(result.errors![0].message).toMatch('User not found for logan@cityblock.com');
     });
 
     it('errors if token is invalid', async () => {
@@ -284,9 +308,7 @@ describe('user tests', () => {
         }
       }`;
       const result = await graphql(schema, mutation, null, { db, userRole });
-      expect(result.errors![0].message).toMatch(
-        'Auth failed: Email not verified',
-      );
+      expect(result.errors![0].message).toMatch('Auth failed: Email not verified');
     });
 
     it('errors email is not @cityblock.com', async () => {
@@ -298,9 +320,7 @@ describe('user tests', () => {
         }
       }`;
       const result = await graphql(schema, mutation, null, { db, userRole });
-      expect(result.errors![0].message).toMatch(
-        'Email must have a @cityblock.com domain',
-      );
+      expect(result.errors![0].message).toMatch('Email must have a @cityblock.com domain');
     });
   });
 

@@ -22,7 +22,9 @@ export interface ITaskCommentCreateOptions {
 }
 
 export async function taskCommentCreate(
-  source: any, { input }: ITaskCommentCreateOptions, { userId, userRole }: IContext,
+  source: any,
+  { input }: ITaskCommentCreateOptions,
+  { userId, userRole }: IContext,
 ): Promise<TaskComment> {
   const { taskId, body } = input;
   // TODO: Improve access controls here. Requirements unclear ATM
@@ -32,12 +34,15 @@ export async function taskCommentCreate(
   return await transaction(TaskComment.knex() as any, async txn => {
     const taskComment = await TaskComment.create({ userId: userId!, taskId, body }, txn);
 
-    await TaskEvent.create({
-      taskId,
-      userId: userId!,
-      eventType: 'add_comment',
-      eventCommentId: taskComment.id,
-    }, txn);
+    await TaskEvent.create(
+      {
+        taskId,
+        userId: userId!,
+        eventType: 'add_comment',
+        eventCommentId: taskComment.id,
+      },
+      txn,
+    );
 
     return taskComment;
   });
@@ -48,7 +53,9 @@ export interface ITaskCommentEditOptions {
 }
 
 export async function taskCommentEdit(
-  source: any, { input }: ITaskCommentEditOptions, context: IContext,
+  source: any,
+  { input }: ITaskCommentEditOptions,
+  context: IContext,
 ): Promise<TaskComment> {
   const { userRole, userId } = context;
   const { taskCommentId, body } = input;
@@ -59,12 +66,15 @@ export async function taskCommentEdit(
   return await transaction(TaskComment.knex() as any, async txn => {
     const taskComment = await TaskComment.update(taskCommentId, body, txn);
 
-    await TaskEvent.create({
-      taskId: taskComment.taskId,
-      userId: userId!,
-      eventType: 'edit_comment',
-      eventCommentId: taskComment.id,
-    }, txn);
+    await TaskEvent.create(
+      {
+        taskId: taskComment.taskId,
+        userId: userId!,
+        eventType: 'edit_comment',
+        eventCommentId: taskComment.id,
+      },
+      txn,
+    );
 
     return taskComment;
   });
@@ -75,7 +85,9 @@ export interface ITaskCommentDeleteOptions {
 }
 
 export async function taskCommentDelete(
-  source: any, { input }: ITaskCommentDeleteOptions, context: IContext,
+  source: any,
+  { input }: ITaskCommentDeleteOptions,
+  context: IContext,
 ): Promise<TaskComment> {
   const { userRole, userId } = context;
   const { taskCommentId } = input;
@@ -86,19 +98,24 @@ export async function taskCommentDelete(
   return await transaction(TaskComment.knex() as any, async txn => {
     const taskComment = await TaskComment.delete(taskCommentId, txn);
 
-    await TaskEvent.create({
-      taskId: taskComment.taskId,
-      userId: userId!,
-      eventType: 'delete_comment',
-      eventCommentId: taskComment.id,
-    }, txn);
+    await TaskEvent.create(
+      {
+        taskId: taskComment.taskId,
+        userId: userId!,
+        eventType: 'delete_comment',
+        eventCommentId: taskComment.id,
+      },
+      txn,
+    );
 
     return taskComment;
   });
 }
 
 export async function resolveTaskComments(
-  root: any, args: IPaginationOptions & { taskId: string }, { db, userRole, userId }: IContext,
+  root: any,
+  args: IPaginationOptions & { taskId: string },
+  { db, userRole, userId }: IContext,
 ): Promise<ITaskCommentEdges> {
   // TODO: Improve task access controls
   await accessControls.isAllowed(userRole, 'view', 'task');
@@ -107,12 +124,16 @@ export async function resolveTaskComments(
   const pageNumber = args.pageNumber || 0;
   const pageSize = args.pageSize || 10;
 
-  const taskComments = await TaskComment.getTaskComments(args.taskId, { pageNumber, pageSize });
+  const taskComments = await TaskComment.getTaskComments(args.taskId, {
+    pageNumber,
+    pageSize,
+  });
   const taskCommentEdges = taskComments.results.map(
-    (taskComment: TaskComment) => formatRelayEdge(taskComment, taskComment.id) as ITaskCommentNode);
+    (taskComment: TaskComment) => formatRelayEdge(taskComment, taskComment.id) as ITaskCommentNode,
+  );
 
   const hasPreviousPage = pageNumber !== 0;
-  const hasNextPage = ((pageNumber + 1) * pageSize) < taskComments.total;
+  const hasNextPage = (pageNumber + 1) * pageSize < taskComments.total;
 
   return {
     edges: taskCommentEdges,
@@ -124,7 +145,9 @@ export async function resolveTaskComments(
 }
 
 export async function resolveTaskComment(
-  rot: any, args: { taskCommentId: string }, { db, userRole, userId }: IContext,
+  rot: any,
+  args: { taskCommentId: string },
+  { db, userRole, userId }: IContext,
 ): Promise<ITaskComment> {
   await accessControls.isAllowed(userRole, 'view', 'task');
   checkUserLoggedIn(userId);

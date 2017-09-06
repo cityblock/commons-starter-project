@@ -1,62 +1,28 @@
 export default [
   {
-    roles: [
-      'familyMember',
-    ],
+    roles: ['familyMember'],
     allows: [],
   },
   {
-    roles: [
-      'healthCoach',
-    ],
+    roles: ['healthCoach'],
     allows: [
       {
-        resources: [
-          'patient',
-          'user',
-          'clinic',
-          'task',
-          'patientAnswer',
-          'appointment',
-        ],
-        permissions: [
-          'edit',
-          'view',
-          'delete',
-        ],
+        resources: ['patient', 'user', 'clinic', 'task', 'patientAnswer', 'appointment'],
+        permissions: ['edit', 'view', 'delete'],
       },
     ],
   },
   {
-    roles: [
-      'physician',
-      'nurseCareManager',
-    ],
+    roles: ['physician', 'nurseCareManager'],
     allows: [
       {
-        resources: [
-          'patient',
-          'user',
-          'clinic',
-          'task',
-          'patientAnswer',
-          'appointment',
-        ],
-        permissions: [
-          'edit',
-          'view',
-          'delete',
-          'create',
-        ],
+        resources: ['patient', 'user', 'clinic', 'task', 'patientAnswer', 'appointment'],
+        permissions: ['edit', 'view', 'delete', 'create'],
       },
     ],
   },
   {
-    roles: [
-      'healthCoach',
-      'physician',
-      'nurseCareManager',
-    ],
+    roles: ['healthCoach', 'physician', 'nurseCareManager'],
     allows: [
       {
         resources: [
@@ -67,16 +33,12 @@ export default [
           'patientConcern',
           'patientGoal',
         ],
-        permissions: [
-          'view',
-        ],
+        permissions: ['view'],
       },
     ],
   },
   {
-    roles: [
-      'admin',
-    ],
+    roles: ['admin'],
     allows: [
       {
         resources: [
@@ -97,12 +59,7 @@ export default [
           'goalSuggestionTemplate',
           'patientGoal',
         ],
-        permissions: [
-          'edit',
-          'view',
-          'delete',
-          'create',
-        ],
+        permissions: ['edit', 'view', 'delete', 'create'],
       },
     ],
   },

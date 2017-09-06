@@ -48,13 +48,14 @@ describe('care model', () => {
         homeClinicId: '1',
       });
       const patient = await createPatient(createMockPatient(123), user.id);
-      const error = 'insert into "care_team" ("id", "patientId", "userId") values ($1, $2, $3) ' +
+      const error =
+        'insert into "care_team" ("id", "patientId", "userId") values ($1, $2, $3) ' +
         'returning "id" - insert or update on table "care_team" violates foreign key constraint ' +
         '"care_team_userid_foreign"';
 
-      await expect(CareTeam.create({ userId: 'fakeUserId', patientId: patient.id }))
-        .rejects
-        .toMatchObject(new Error(error));
+      await expect(
+        CareTeam.create({ userId: 'fakeUserId', patientId: patient.id }),
+      ).rejects.toMatchObject(new Error(error));
     });
 
     it('can remove a user from a care team', async () => {
@@ -71,7 +72,6 @@ describe('care model', () => {
       });
       expect(careTeamResponse).toMatchObject([]);
     });
-
   });
 
   describe('get patients for user', () => {
@@ -105,9 +105,7 @@ describe('care model', () => {
       });
       const patient = await createPatient(createMockPatient(123), user.id);
 
-      expect(await CareTeam.getForPatient(patient.id)).toMatchObject([
-        { id: user.id },
-      ]);
+      expect(await CareTeam.getForPatient(patient.id)).toMatchObject([{ id: user.id }]);
     });
   });
 });

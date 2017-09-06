@@ -91,22 +91,26 @@ export function createMockAthenaPatient(
     privacyinformationverified: true,
     primarydepartmentid: '148',
     contactpreference_lab_email: true,
-    balances: [{
-      balance: '-492.7',
-      departmentlist: '1,21,102,145,148,150,157,162',
-      providergroupid: 1,
-      cleanbalance: true,
-    }, {
-      balance: 0,
-      departmentlist: '62,142,164',
-      providergroupid: 2,
-      cleanbalance: true,
-    }, {
-      balance: 0,
-      departmentlist: '82',
-      providergroupid: 22,
-      cleanbalance: true,
-    }],
+    balances: [
+      {
+        balance: '-492.7',
+        departmentlist: '1,21,102,145,148,150,157,162',
+        providergroupid: 1,
+        cleanbalance: true,
+      },
+      {
+        balance: 0,
+        departmentlist: '62,142,164',
+        providergroupid: 2,
+        cleanbalance: true,
+      },
+      {
+        balance: 0,
+        departmentlist: '82',
+        providergroupid: 22,
+        cleanbalance: true,
+      },
+    ],
     contactpreference_announcement_sms: true,
     emailexists: true,
     race: ['declined'],
@@ -193,10 +197,12 @@ export function mockRedoxTokenFetch() {
 export function mockRedoxCreatePatient(athenaPatientId: number) {
   const response: IRedoxPatientCreateResponse = {
     Patient: {
-      Identifiers: [{
-        IDType: 'AthenaNet Enterprise ID',
-        ID: String(athenaPatientId),
-      }],
+      Identifiers: [
+        {
+          IDType: 'AthenaNet Enterprise ID',
+          ID: String(athenaPatientId),
+        },
+      ],
     },
     Meta: {
       DataModel: 'PatientAdmin',
@@ -207,10 +213,12 @@ export function mockRedoxCreatePatient(athenaPatientId: number) {
       Source: {
         ID: 'source',
       },
-      Destinations: [{
-        ID: 'athena-sandbox-id',
-        Name: 'athenahealth sandbox',
-      }],
+      Destinations: [
+        {
+          ID: 'athena-sandbox-id',
+          Name: 'athenahealth sandbox',
+        },
+      ],
     },
   };
   mockRedoxPost(response);
@@ -328,23 +336,12 @@ export type MockAthenaCheckinAppointment = Partial<ICheckinAppointmentResponse>;
 export type MockAthenaCheckoutAppointment = Partial<ICheckoutAppointmentResponse>;
 export type MockAthenaAddNoteToAppointment = Partial<IAddNoteToAppointmentResponse>;
 
-export function mockAthenaGetPatient(
-  athenaPatientId: number, body: MockAthenaPatient, times = 1,
-) {
-  mockAthenaGet(
-    `/${config.ATHENA_PRACTICE_ID}/patients/${athenaPatientId}`,
-    body,
-    times,
-  );
+export function mockAthenaGetPatient(athenaPatientId: number, body: MockAthenaPatient, times = 1) {
+  mockAthenaGet(`/${config.ATHENA_PRACTICE_ID}/patients/${athenaPatientId}`, body, times);
 }
 
-export function mockAthenaEditPatient(
-  athenaPatientId: number, times = 1,
-) {
-  mockAthenaPut(
-    `/${config.ATHENA_PRACTICE_ID}/patients/${athenaPatientId}`,
-    [{ athenaPatientId }],
-  );
+export function mockAthenaEditPatient(athenaPatientId: number, times = 1) {
+  mockAthenaPut(`/${config.ATHENA_PRACTICE_ID}/patients/${athenaPatientId}`, [{ athenaPatientId }]);
 }
 
 export function mockAthenaCreatePatient(athenaPatientId: number) {
@@ -358,12 +355,17 @@ export function mockAthenaOpenAppointment(body: MockAthenaOpenAppointment) {
 export function mockAthenaOpenAppointmentError() {
   mockAthenaPostError(
     `/${config.ATHENA_PRACTICE_ID}/appointments/open`,
-    { detailedmessage: 'Appointment type ID is invalid.', error: 'The data provided is invalid.' },
-    400);
+    {
+      detailedmessage: 'Appointment type ID is invalid.',
+      error: 'The data provided is invalid.',
+    },
+    400,
+  );
 }
 
 export function mockAthenaBookAppointment(
-  appointmentId: string, body: MockAthenaBookAppointment[],
+  appointmentId: string,
+  body: MockAthenaBookAppointment[],
 ) {
   mockAthenaPut(`/${config.ATHENA_PRACTICE_ID}/appointments/${appointmentId}`, body);
 }
@@ -374,7 +376,9 @@ export function mockAthenaBookAppointmentError(appointmentId: string) {
     {
       detailedmessage: 'The appointment ID is already booked or is not marked as available.',
       error: 'That appointment time was already booked or is not available for booking.',
-    }, 409);
+    },
+    409,
+  );
 }
 
 export function mockAthenaCheckinAppointment(
@@ -390,7 +394,9 @@ export function mockAthenaCheckinAppointmentError(appointmentId: string) {
     {
       detailedmessage: 'The appointment is either already canceled or checked in',
       error: 'This appointment has already been checked in',
-    }, 404);
+    },
+    404,
+  );
 }
 
 export function mockAthenaCheckoutAppointment(
@@ -403,7 +409,9 @@ export function mockAthenaCheckoutAppointment(
 export function mockAthenaCheckoutAppointmentError(appointmentId: string) {
   mockAthenaPostError(
     `/${config.ATHENA_PRACTICE_ID}/appointments/${appointmentId}/checkout`,
-    { error: 'The appointment has already been checked-out' }, 400);
+    { error: 'The appointment has already been checked-out' },
+    400,
+  );
 }
 
 export function mockAthenaAddNoteToAppointment(
@@ -416,5 +424,7 @@ export function mockAthenaAddNoteToAppointment(
 export function mockAthenaAddNoteToAppointmentError(appointmentId: string) {
   mockAthenaPostError(
     `/${config.ATHENA_PRACTICE_ID}/appointments/${appointmentId}/notes`,
-    { error: 'The appointment is not available.' }, 404);
+    { error: 'The appointment is not available.' },
+    404,
+  );
 }

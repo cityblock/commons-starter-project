@@ -59,9 +59,11 @@ export default class Clinic extends Model {
   async $beforeInsert() {
     if (this.id) {
       throw new ValidationError({
-        id: [{
-          message: 'id should not be defined before insert',
-        }],
+        id: [
+          {
+            message: 'id should not be defined before insert',
+          },
+        ],
       });
     }
 
@@ -74,15 +76,11 @@ export default class Clinic extends Model {
   }
 
   static async create(clinic: ICreateClinic): Promise<Clinic> {
-    return await this
-      .query()
-      .insertAndFetch(clinic);
+    return await this.query().insertAndFetch(clinic);
   }
 
   static async get(clinicId: string): Promise<Clinic> {
-    const clinic = await this
-      .query()
-      .findById(clinicId);
+    const clinic = await this.query().findById(clinicId);
 
     if (!clinic) {
       return Promise.reject(`No such clinic for clinicId: ${clinicId}`);
@@ -91,12 +89,11 @@ export default class Clinic extends Model {
     return clinic;
   }
 
-  static async getAll(
-    { pageNumber, pageSize }: IPaginationOptions,
-  ): Promise<IPaginatedResults<Clinic>> {
-    const clinics = await this
-      .query()
-      .page(pageNumber, pageSize) as any;
+  static async getAll({
+    pageNumber,
+    pageSize,
+  }: IPaginationOptions): Promise<IPaginatedResults<Clinic>> {
+    const clinics = (await this.query().page(pageNumber, pageSize)) as any;
 
     return clinics;
   }
@@ -106,8 +103,7 @@ export default class Clinic extends Model {
       return null;
     }
 
-    const clinic = await this
-      .query()
+    const clinic = await this.query()
       .where(fieldName, field)
       .first();
 

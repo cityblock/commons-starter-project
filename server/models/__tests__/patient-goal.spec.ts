@@ -1,8 +1,5 @@
 import Db from '../../db';
-import {
-  createMockPatient,
-  createPatient,
-} from '../../spec-helpers';
+import { createMockPatient, createPatient } from '../../spec-helpers';
 import Concern from '../concern';
 import GoalSuggestionTemplate from '../goal-suggestion-template';
 import Patient from '../patient';
@@ -43,7 +40,9 @@ describe('patient goal model', () => {
   });
 
   it('creates a patient goal and links to goal template', async () => {
-    const goalSuggestionTemplate = await GoalSuggestionTemplate.create({ title: 'Fix housing' });
+    const goalSuggestionTemplate = await GoalSuggestionTemplate.create({
+      title: 'Fix housing',
+    });
 
     const patientGoal = await PatientGoal.create({
       title: 'title',
@@ -73,9 +72,7 @@ describe('patient goal model', () => {
 
   it('should throw an error if an patient goal does not exist for the id', async () => {
     const fakeId = 'fakeId';
-    await expect(PatientGoal.get(fakeId))
-      .rejects
-      .toMatch('No such patientGoal: fakeId');
+    await expect(PatientGoal.get(fakeId)).rejects.toMatch('No such patientGoal: fakeId');
   });
 
   it('edits patient goal title', async () => {
@@ -83,7 +80,9 @@ describe('patient goal model', () => {
       title: 'title',
       patientId: patient.id,
     });
-    const patientGoalUpdated = await PatientGoal.update(patientGoal.id, { title: 'new title' });
+    const patientGoalUpdated = await PatientGoal.update(patientGoal.id, {
+      title: 'new title',
+    });
     expect(patientGoalUpdated.title).toBe('new title');
   });
 

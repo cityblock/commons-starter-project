@@ -62,17 +62,11 @@ export default class Concern extends Model {
   }
 
   static async create(input: IConcernEditableFields, txn?: Transaction) {
-    return await this
-      .query(txn)
-      .insertAndFetch(input);
+    return await this.query(txn).insertAndFetch(input);
   }
 
-  static async edit(
-    concernId: string, concern: Partial<IConcernEditableFields>,
-  ): Promise<Concern> {
-    return await this
-      .query()
-      .updateAndFetchById(concernId, concern);
+  static async edit(concernId: string, concern: Partial<IConcernEditableFields>): Promise<Concern> {
+    return await this.query().updateAndFetchById(concernId, concern);
   }
 
   static async getAll(): Promise<Concern[]> {
@@ -80,10 +74,9 @@ export default class Concern extends Model {
   }
 
   static async delete(concernId: string): Promise<Concern> {
-    return await this.query()
-      .updateAndFetchById(concernId, {
-        deletedAt: new Date().toISOString(),
-      });
+    return await this.query().updateAndFetchById(concernId, {
+      deletedAt: new Date().toISOString(),
+    });
   }
 }
 /* tslint:disable:member-ordering */

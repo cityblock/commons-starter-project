@@ -55,7 +55,7 @@ export default class Patient extends Model {
       athenaPatientId: { type: 'number' },
       homeClinicId: { type: 'string' },
       firstName: { type: 'string' },
-      middleName: {type: 'string' },
+      middleName: { type: 'string' },
       lastName: { type: 'string' },
       language: { type: 'string' },
       gender: { type: 'string' },
@@ -101,9 +101,7 @@ export default class Patient extends Model {
   }
 
   static async get(patientId: string): Promise<Patient> {
-    const patient = await this
-      .query()
-      .findById(patientId);
+    const patient = await this.query().findById(patientId);
 
     if (!patient) {
       return Promise.reject(`No such patient: ${patientId}`);
@@ -117,12 +115,11 @@ export default class Patient extends Model {
     return patient.athenaPatientId;
   }
 
-  static async getAll(
-    { pageNumber, pageSize }: IPaginationOptions,
-  ): Promise<IPaginatedResults<Patient>> {
-    const patientsResult = await this
-      .query()
-      .page(pageNumber, pageSize) as any;
+  static async getAll({
+    pageNumber,
+    pageSize,
+  }: IPaginationOptions): Promise<IPaginatedResults<Patient>> {
+    const patientsResult = (await this.query().page(pageNumber, pageSize)) as any;
 
     return {
       results: patientsResult.results,
@@ -135,8 +132,7 @@ export default class Patient extends Model {
       return null;
     }
 
-    const patient = await this
-      .query()
+    const patient = await this.query()
       .where(fieldName, field)
       .first();
 
@@ -156,9 +152,7 @@ export default class Patient extends Model {
 
   // limit accidentally editing the athenaPatientId by only allowing it explicitly here
   static async addAthenaPatientId(athenaPatientId: number, patientId: string): Promise<Patient> {
-    return this
-      .query()
-      .updateAndFetchById(patientId, { athenaPatientId });
+    return this.query().updateAndFetchById(patientId, { athenaPatientId });
   }
 
   static async execWithTransaction(
@@ -166,6 +160,5 @@ export default class Patient extends Model {
   ) {
     return await transaction(this as any, callback);
   }
-
 }
 /* tslint:disable:member-ordering */

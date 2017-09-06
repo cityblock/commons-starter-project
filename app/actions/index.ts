@@ -4,8 +4,8 @@ import { ILocaleSelected } from './locale-action';
 import { ITaskSelected } from './task-action';
 
 export type Action =
-  ILocaleSelected |
-  IBrowserChanged |
-  ITaskSelected |
-  IEventNotificationsCountUpdated;
+  | ILocaleSelected
+  | IBrowserChanged
+  | ITaskSelected
+  | IEventNotificationsCountUpdated;
 export type ActionType = Action['type'];

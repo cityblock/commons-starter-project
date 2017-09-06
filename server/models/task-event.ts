@@ -16,20 +16,20 @@ export interface ITaskEventOptions {
 }
 
 export type EventTypes =
-  'create_task' |
-  'add_follower' |
-  'remove_follower' |
-  'complete_task' |
-  'uncomplete_task' |
-  'delete_task' |
-  'add_comment' |
-  'edit_comment' |
-  'delete_comment' |
-  'edit_priority' |
-  'edit_due_date' |
-  'edit_assignee' |
-  'edit_title' |
-  'edit_description';
+  | 'create_task'
+  | 'add_follower'
+  | 'remove_follower'
+  | 'complete_task'
+  | 'uncomplete_task'
+  | 'delete_task'
+  | 'add_comment'
+  | 'edit_comment'
+  | 'delete_comment'
+  | 'edit_priority'
+  | 'edit_due_date'
+  | 'edit_assignee'
+  | 'edit_title'
+  | 'edit_description';
 
 const EAGER_QUERY = '[task, user, eventComment, eventUser]';
 
@@ -129,39 +129,39 @@ export default class TaskEvent extends Model {
     { taskId, userId, eventType, eventCommentId, eventUserId, skipNotifsCreate }: ITaskEventOptions,
     txn?: Transaction,
   ): Promise<TaskEvent> {
-    const taskEvent = await this
-      .query(txn)
+    const taskEvent = await this.query(txn)
       .eager(EAGER_QUERY)
       .insert({ taskId, userId, eventType, eventCommentId, eventUserId });
 
     if (!skipNotifsCreate) {
-      await EventNotification.createTaskNotifications({
-        initiatingUserId: userId,
-        taskEventId: taskEvent.id,
-        taskId,
-      }, txn);
+      await EventNotification.createTaskNotifications(
+        {
+          initiatingUserId: userId,
+          taskEventId: taskEvent.id,
+          taskId,
+        },
+        txn,
+      );
     }
 
     return taskEvent;
   }
 
   static async delete(taskEventId: string): Promise<TaskEvent> {
-    return await this.query()
-      .updateAndFetchById(taskEventId, {
-        deletedAt: new Date().toISOString(),
-      });
+    return await this.query().updateAndFetchById(taskEventId, {
+      deletedAt: new Date().toISOString(),
+    });
   }
 
   static async getTaskEvents(
     taskId: string,
     { pageNumber, pageSize }: IPaginationOptions,
   ): Promise<IPaginatedResults<TaskEvent>> {
-    const taskEvents = await this
-      .query()
+    const taskEvents = (await this.query()
       .where({ taskId, deletedAt: null })
       .eager(EAGER_QUERY)
       .orderBy('createdAt', 'desc')
-      .page(pageNumber, pageSize) as any;
+      .page(pageNumber, pageSize)) as any;
 
     return {
       results: taskEvents.results,
@@ -173,12 +173,11 @@ export default class TaskEvent extends Model {
     userId: string,
     { pageNumber, pageSize }: IPaginationOptions,
   ): Promise<IPaginatedResults<TaskEvent>> {
-    const taskEvents = await this
-      .query()
+    const taskEvents = (await this.query()
       .where({ userId, deletedAt: null })
       .eager(EAGER_QUERY)
       .orderBy('createdAt', 'desc')
-      .page(pageNumber, pageSize) as any;
+      .page(pageNumber, pageSize)) as any;
 
     return {
       results: taskEvents.results,

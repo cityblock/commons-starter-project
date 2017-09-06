@@ -16,7 +16,9 @@ export interface ITaskFollowersOptions {
 }
 
 export async function taskUserFollow(
-  source: any, { input }: ITaskFollowersOptions, context: IContext,
+  source: any,
+  { input }: ITaskFollowersOptions,
+  context: IContext,
 ): Promise<Task> {
   const { userRole, userId } = context;
   const { taskId } = input;
@@ -27,12 +29,15 @@ export async function taskUserFollow(
   await transaction(TaskFollower.knex(), async txn => {
     const follower = await TaskFollower.followTask({ userId: input.userId, taskId }, txn);
 
-    await TaskEvent.create({
-      taskId,
-      userId: userId!,
-      eventType: 'add_follower',
-      eventUserId: input.userId,
-    }, txn);
+    await TaskEvent.create(
+      {
+        taskId,
+        userId: userId!,
+        eventType: 'add_follower',
+        eventUserId: input.userId,
+      },
+      txn,
+    );
 
     return follower;
   });
@@ -41,7 +46,9 @@ export async function taskUserFollow(
 }
 
 export async function taskUserUnfollow(
-  source: any, { input }: ITaskFollowersOptions, context: IContext,
+  source: any,
+  { input }: ITaskFollowersOptions,
+  context: IContext,
 ): Promise<Task> {
   const { userRole, userId } = context;
   const { taskId } = input;
@@ -50,17 +57,23 @@ export async function taskUserUnfollow(
   checkUserLoggedIn(userId);
 
   await transaction(TaskFollower.knex(), async txn => {
-    const follower = await TaskFollower.unfollowTask({
-      userId: input.userId,
-      taskId,
-    }, txn);
+    const follower = await TaskFollower.unfollowTask(
+      {
+        userId: input.userId,
+        taskId,
+      },
+      txn,
+    );
 
-    await TaskEvent.create({
-      taskId,
-      userId: userId!,
-      eventType: 'remove_follower',
-      eventUserId: input.userId,
-    }, txn);
+    await TaskEvent.create(
+      {
+        taskId,
+        userId: userId!,
+        eventType: 'remove_follower',
+        eventUserId: input.userId,
+      },
+      txn,
+    );
 
     return follower;
   });
@@ -74,7 +87,9 @@ export interface ICurrentUserTasksFilterOptions extends IPaginationOptions {
 }
 
 export async function resolveCurrentUserTasks(
-  root: any, args: ICurrentUserTasksFilterOptions, { db, userRole, userId }: IContext,
+  root: any,
+  args: ICurrentUserTasksFilterOptions,
+  { db, userRole, userId }: IContext,
 ): Promise<ITaskEdges> {
   // TODO: Improve task access controls
   await accessControls.isAllowed(userRole, 'view', 'task');
@@ -82,15 +97,21 @@ export async function resolveCurrentUserTasks(
 
   const pageNumber = args.pageNumber || 0;
   const pageSize = args.pageSize || 10;
-  const { order, orderBy } = formatOrderOptions<TaskOrderOptions>(
-    args.orderBy, { order: 'asc', orderBy: 'dueAt' },
-  );
+  const { order, orderBy } = formatOrderOptions<TaskOrderOptions>(args.orderBy, {
+    order: 'asc',
+    orderBy: 'dueAt',
+  });
 
-  const tasks = await Task.getUserTasks(userId!, { pageNumber, pageSize, order, orderBy });
+  const tasks = await Task.getUserTasks(userId!, {
+    pageNumber,
+    pageSize,
+    order,
+    orderBy,
+  });
   const taskEdges = tasks.results.map((task: Task) => formatRelayEdge(task, task.id) as ITaskNode);
 
   const hasPreviousPage = pageNumber !== 0;
-  const hasNextPage = ((pageNumber + 1) * pageSize) < tasks.total;
+  const hasNextPage = (pageNumber + 1) * pageSize < tasks.total;
 
   return {
     edges: taskEdges,

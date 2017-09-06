@@ -9,7 +9,6 @@ import { createMockPatient, createPatient } from '../../spec-helpers';
 import schema from '../make-executable-schema';
 
 describe('task comments', () => {
-
   let db: Db;
   let task: Task;
   let user: User;
@@ -55,9 +54,16 @@ describe('task comments', () => {
           id, body
         }
       }`;
-      const result = await graphql(schema, mutation, null, { db, userRole, userId: user.id });
+      const result = await graphql(schema, mutation, null, {
+        db,
+        userRole,
+        userId: user.id,
+      });
       expect(cloneDeep(result.data!.taskCommentCreate.body)).toEqual('my comment');
-      const taskEvents1 = await TaskEvent.getTaskEvents(task.id, { pageNumber: 0, pageSize: 10 });
+      const taskEvents1 = await TaskEvent.getTaskEvents(task.id, {
+        pageNumber: 0,
+        pageSize: 10,
+      });
       expect(taskEvents1.total).toEqual(1);
       expect(taskEvents1.results[0].eventType).toEqual('add_comment');
 
@@ -67,8 +73,15 @@ describe('task comments', () => {
           id
         }
       }`;
-      await graphql(schema, deleteMutation, null, { db, userRole, userId: user.id });
-      const taskEvents2 = await TaskEvent.getTaskEvents(task.id, { pageNumber: 0, pageSize: 10 });
+      await graphql(schema, deleteMutation, null, {
+        db,
+        userRole,
+        userId: user.id,
+      });
+      const taskEvents2 = await TaskEvent.getTaskEvents(task.id, {
+        pageNumber: 0,
+        pageSize: 10,
+      });
       expect(taskEvents2.total).toEqual(2);
       expect(taskEvents2.results[0].eventType).toEqual('delete_comment');
 
@@ -81,9 +94,11 @@ describe('task comments', () => {
           }
         }
       }`;
-      const taskComments = await graphql(
-        schema, getComments, null, { db, userRole, userId: user.id },
-      );
+      const taskComments = await graphql(schema, getComments, null, {
+        db,
+        userRole,
+        userId: user.id,
+      });
       expect(cloneDeep(taskComments.data!.taskComments.edges)).toHaveLength(0);
     });
 
@@ -96,7 +111,11 @@ describe('task comments', () => {
           id, body
         }
       }`;
-      const result = await graphql(schema, mutation, null, { db, userRole, userId: user.id });
+      const result = await graphql(schema, mutation, null, {
+        db,
+        userRole,
+        userId: user.id,
+      });
       expect(cloneDeep(result.data!.taskCommentCreate.body)).toEqual('my comment');
 
       // edit comment
@@ -108,11 +127,17 @@ describe('task comments', () => {
           id, body
         }
       }`;
-      const editedComment =
-        await graphql(schema, editMutation, null, { db, userRole, userId: user.id });
+      const editedComment = await graphql(schema, editMutation, null, {
+        db,
+        userRole,
+        userId: user.id,
+      });
 
       expect(cloneDeep(editedComment.data!.taskCommentEdit.body)).toEqual('cool new comment');
-      const taskEvents = await TaskEvent.getTaskEvents(task.id, { pageNumber: 0, pageSize: 10 });
+      const taskEvents = await TaskEvent.getTaskEvents(task.id, {
+        pageNumber: 0,
+        pageSize: 10,
+      });
       expect(taskEvents.total).toEqual(2);
       expect(taskEvents.results[0].eventType).toEqual('edit_comment');
     });
@@ -141,14 +166,20 @@ describe('task comments', () => {
           }
         }
       }`;
-      const result = await graphql(schema, query, null, { db, userRole, userId: user.id });
+      const result = await graphql(schema, query, null, {
+        db,
+        userRole,
+        userId: user.id,
+      });
 
       expect(cloneDeep(result.data!.taskComments)).toMatchObject({
-        edges: [{
-          node: {
-            body: 'my comment',
+        edges: [
+          {
+            node: {
+              body: 'my comment',
+            },
           },
-        }],
+        ],
         pageInfo: {
           hasNextPage: false,
           hasPreviousPage: false,
@@ -170,7 +201,11 @@ describe('task comments', () => {
       }
     }`;
 
-    const result = await graphql(schema, query, null, { db, userRole, userId: user.id });
+    const result = await graphql(schema, query, null, {
+      db,
+      userRole,
+      userId: user.id,
+    });
 
     expect(cloneDeep(result.data!.taskComment)).toMatchObject({
       id: taskComment.id,

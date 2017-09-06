@@ -13,9 +13,11 @@ import { checkAthenaApiHandler } from './handlers/pingdom/check-athena-api-handl
 import { checkPostgresHandler } from './handlers/pingdom/check-postgres-handler';
 import { checkRabbitHandler } from './handlers/pingdom/check-rabbit-handler';
 
-export const checkAuth = (
-  username: string, password: string,
-) => (req: any, res: any, next: express.NextFunction) => {
+export const checkAuth = (username: string, password: string) => (
+  req: any,
+  res: any,
+  next: express.NextFunction,
+) => {
   const user = basicAuth(req);
 
   if (!user || user.name !== username || user.pass !== password) {
@@ -44,9 +46,12 @@ export default async (app: express.Application) => {
   app.set('views', path.join(__dirname, '..', 'views'));
   app.set('view cache', false);
 
-  app.use('/assets', express.static(path.join(__dirname, '..', 'public'), {
-    maxAge: '24h',
-  }));
+  app.use(
+    '/assets',
+    express.static(path.join(__dirname, '..', 'public'), {
+      maxAge: '24h',
+    }),
+  );
 
   /* istanbul ignore if  */
   if (config.NODE_ENV === 'production') {
@@ -59,7 +64,7 @@ export default async (app: express.Application) => {
     '/graphql',
     bodyParser.json(),
     graphqlExpress(async (request: express.Request) => ({
-      schema: (schema as any),
+      schema: schema as any,
       context: await getGraphQLContext(request),
       debug: false,
     })),

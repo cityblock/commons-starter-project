@@ -7,6 +7,7 @@
     "carlosjs23.vscode-yarn-script",
     "kumar-harsh.graphql-for-vscode",
     "eg2.tslint",
-    "shinnn.stylelint"
+    "shinnn.stylelint",
+    "esbenp.prettier-vscode"
   ]
 }

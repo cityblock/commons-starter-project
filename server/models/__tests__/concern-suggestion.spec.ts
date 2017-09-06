@@ -1,8 +1,5 @@
 import Db from '../../db';
-import {
-  createMockPatient,
-  createPatient,
-} from '../../spec-helpers';
+import { createMockPatient, createPatient } from '../../spec-helpers';
 import Answer from '../answer';
 import Concern from '../concern';
 import ConcernSuggestion from '../concern-suggestion';
@@ -79,9 +76,10 @@ describe('concern suggestion model', () => {
     });
 
     it('throws an error if adding a non-existant concern to an answer', async () => {
-      const error = 'insert into "concern_suggestion" ("answerId", "concernId", "id") values ' +
-      '($1, $2, $3) returning "id" - insert or update on table "concern_suggestion" ' +
-      'violates foreign key constraint "concern_suggestion_concernid_foreign"';
+      const error =
+        'insert into "concern_suggestion" ("answerId", "concernId", "id") values ' +
+        '($1, $2, $3) returning "id" - insert or update on table "concern_suggestion" ' +
+        'violates foreign key constraint "concern_suggestion_concernid_foreign"';
 
       await expect(
         ConcernSuggestion.create({
@@ -144,14 +142,16 @@ describe('concern suggestion model', () => {
 
       await PatientAnswer.create({
         patientId: patient.id,
-        answers: [{
-          patientId: patient.id,
-          answerId: answer.id,
-          answerValue: answer.value,
-          applicable: true,
-          questionId: question.id,
-          userId: user.id,
-        }],
+        answers: [
+          {
+            patientId: patient.id,
+            answerId: answer.id,
+            answerValue: answer.value,
+            applicable: true,
+            questionId: question.id,
+            userId: user.id,
+          },
+        ],
       });
 
       // At this point, only first concern should be suggested
@@ -161,14 +161,16 @@ describe('concern suggestion model', () => {
 
       await PatientAnswer.create({
         patientId: patient.id,
-        answers: [{
-          patientId: patient.id,
-          answerId: answer2.id,
-          answerValue: answer2.value,
-          applicable: true,
-          questionId: question2.id,
-          userId: user.id,
-        }],
+        answers: [
+          {
+            patientId: patient.id,
+            answerId: answer2.id,
+            answerValue: answer2.value,
+            applicable: true,
+            questionId: question2.id,
+            userId: user.id,
+          },
+        ],
       });
 
       // Now both concerns should be suggested
@@ -215,21 +217,24 @@ describe('concern suggestion model', () => {
 
       await PatientAnswer.create({
         patientId: patient.id,
-        answers: [{
-          patientId: patient.id,
-          answerId: answer.id,
-          answerValue: answer.value,
-          applicable: true,
-          questionId: question.id,
-          userId: user.id,
-        }, {
-          patientId: patient.id,
-          answerId: answer2.id,
-          answerValue: answer2.value,
-          applicable: true,
-          questionId: question2.id,
-          userId: user.id,
-        }],
+        answers: [
+          {
+            patientId: patient.id,
+            answerId: answer.id,
+            answerValue: answer.value,
+            applicable: true,
+            questionId: question.id,
+            userId: user.id,
+          },
+          {
+            patientId: patient.id,
+            answerId: answer2.id,
+            answerValue: answer2.value,
+            applicable: true,
+            questionId: question2.id,
+            userId: user.id,
+          },
+        ],
       });
 
       // Should only contain the suggestion for risk area 2

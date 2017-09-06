@@ -9,7 +9,6 @@ import { createMockPatient, createPatient } from '../../spec-helpers';
 import schema from '../make-executable-schema';
 
 describe('task follower', () => {
-
   let db: Db;
   let task: Task;
   let user: User;
@@ -52,10 +51,17 @@ describe('task follower', () => {
           followers { id }
         }
       }`;
-      const result = await graphql(schema, mutation, null, { db, userRole, userId: user.id });
+      const result = await graphql(schema, mutation, null, {
+        db,
+        userRole,
+        userId: user.id,
+      });
       const taskFollowers = cloneDeep(result.data!.taskUserFollow.followers).map((u: any) => u.id);
       expect(taskFollowers).toContain(user.id);
-      const taskEvents1 = await TaskEvent.getTaskEvents(task.id, { pageNumber: 0, pageSize: 10 });
+      const taskEvents1 = await TaskEvent.getTaskEvents(task.id, {
+        pageNumber: 0,
+        pageSize: 10,
+      });
       expect(taskEvents1.total).toEqual(1);
       expect(taskEvents1.results[0].eventType).toEqual('add_follower');
 
@@ -67,17 +73,21 @@ describe('task follower', () => {
         }
       }`;
       const unfollowResult = await graphql(schema, unfollowMutation, null, {
-        db, userRole, userId: user.id,
+        db,
+        userRole,
+        userId: user.id,
       });
       const taskFollowersUnfollowed = cloneDeep(
         unfollowResult.data!.taskUserUnfollow.followers,
       ).map((u: any) => u.id);
       expect(taskFollowersUnfollowed).not.toContain(user.id);
-      const taskEvents2 = await TaskEvent.getTaskEvents(task.id, { pageNumber: 0, pageSize: 10 });
+      const taskEvents2 = await TaskEvent.getTaskEvents(task.id, {
+        pageNumber: 0,
+        pageSize: 10,
+      });
       expect(taskEvents2.total).toEqual(2);
       expect(taskEvents2.results[0].eventType).toEqual('remove_follower');
     });
-
   });
 
   describe('current user tasks', () => {
@@ -91,15 +101,21 @@ describe('task follower', () => {
           }
         }
       }`;
-      const result = await graphql(schema, query, null, { db, userRole, userId: user.id });
+      const result = await graphql(schema, query, null, {
+        db,
+        userRole,
+        userId: user.id,
+      });
 
       expect(cloneDeep(result.data!.tasksForCurrentUser)).toMatchObject({
-        edges: [{
-          node: {
-            id: task.id,
-            title: 'title',
+        edges: [
+          {
+            node: {
+              id: task.id,
+              title: 'title',
+            },
           },
-        }],
+        ],
       });
     });
 
@@ -130,14 +146,20 @@ describe('task follower', () => {
         }
       }`;
 
-      const result = await graphql(schema, query, null, { db, userRole, userId: user.id });
+      const result = await graphql(schema, query, null, {
+        db,
+        userRole,
+        userId: user.id,
+      });
       expect(cloneDeep(result.data!.tasksForCurrentUser)).toMatchObject({
-        edges: [{
-          node: {
-            id: task.id,
-            title: task.title,
+        edges: [
+          {
+            node: {
+              id: task.id,
+              title: task.title,
+            },
           },
-        }],
+        ],
         pageInfo: {
           hasNextPage: true,
           hasPreviousPage: false,
@@ -168,14 +190,20 @@ describe('task follower', () => {
         }
       }`;
 
-      const result = await graphql(schema, query, null, { db, userRole, userId: user.id });
+      const result = await graphql(schema, query, null, {
+        db,
+        userRole,
+        userId: user.id,
+      });
       expect(cloneDeep(result.data!.tasksForCurrentUser)).toMatchObject({
-        edges: [{
-          node: {
-            id: task2.id,
-            title: task2.title,
+        edges: [
+          {
+            node: {
+              id: task2.id,
+              title: task2.title,
+            },
           },
-        }],
+        ],
         pageInfo: {
           hasNextPage: true,
           hasPreviousPage: false,

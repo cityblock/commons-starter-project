@@ -8,7 +8,6 @@ import User from '../../models/user';
 import schema from '../make-executable-schema';
 
 describe('question tests', () => {
-
   let db: Db;
   const userRole = 'admin';
   let riskArea: RiskArea;
@@ -63,9 +62,7 @@ describe('question tests', () => {
     it('errors if an question cannot be found', async () => {
       const query = `{ question(questionId: "fakeId") { id } }`;
       const result = await graphql(schema, query, null, { db, userRole });
-      expect(result.errors![0].message).toMatch(
-        'No such question: fakeId',
-      );
+      expect(result.errors![0].message).toMatch('No such question: fakeId');
     });
   });
 
@@ -81,7 +78,11 @@ describe('question tests', () => {
           title, answerType, order
         }
       }`;
-      const result = await graphql(schema, query, null, { db, userRole, userId: user.id });
+      const result = await graphql(schema, query, null, {
+        db,
+        userRole,
+        userId: user.id,
+      });
       expect(cloneDeep(result.data!.questionEdit)).toMatchObject({
         title: 'new title',
         answerType: 'multiselect',
@@ -97,13 +98,19 @@ describe('question tests', () => {
           title, answerType, order, answers { id }
         }
       }`;
-      const result = await graphql(schema, query, null, { db, userRole, userId: user.id });
-      expect(cloneDeep(result.data!.questionsForRiskArea)).toMatchObject([{
-        title: 'like writing tests?',
-        answerType: 'dropdown',
-        order: 1,
-        answers: [{ id: answer.id }],
-      }]);
+      const result = await graphql(schema, query, null, {
+        db,
+        userRole,
+        userId: user.id,
+      });
+      expect(cloneDeep(result.data!.questionsForRiskArea)).toMatchObject([
+        {
+          title: 'like writing tests?',
+          answerType: 'dropdown',
+          order: 1,
+          answers: [{ id: answer.id }],
+        },
+      ]);
     });
   });
 
@@ -120,7 +127,11 @@ describe('question tests', () => {
           title, answerType, validatedSource, riskAreaId, order
         }
       }`;
-      const result = await graphql(schema, mutation, null, { db, userRole, userId: user.id });
+      const result = await graphql(schema, mutation, null, {
+        db,
+        userRole,
+        userId: user.id,
+      });
       expect(cloneDeep(result.data!.questionCreate)).toMatchObject({
         title: 'new title',
         answerType: 'radio',
@@ -129,7 +140,6 @@ describe('question tests', () => {
         order: 2,
       });
     });
-
   });
 
   describe('question delete', () => {
@@ -139,7 +149,11 @@ describe('question tests', () => {
           id
         }
       }`;
-      const result = await graphql(schema, mutation, null, { db, userRole, userId: user.id });
+      const result = await graphql(schema, mutation, null, {
+        db,
+        userRole,
+        userId: user.id,
+      });
       expect(cloneDeep(result.data!.questionDelete)).toMatchObject({
         id: question.id,
       });

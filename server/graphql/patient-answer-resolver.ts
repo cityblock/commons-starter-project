@@ -44,7 +44,9 @@ export async function patientAnswersUpdateApplicable(
 }
 
 export async function patientAnswersCreate(
-  root: any, { input }: IPatientAnswersCreateArgs, context: IContext,
+  root: any,
+  { input }: IPatientAnswersCreateArgs,
+  context: IContext,
 ) {
   const { userRole, userId } = context;
   await accessControls.isAllowed(userRole, 'create', 'patientAnswer');
@@ -55,12 +57,17 @@ export async function patientAnswersCreate(
   return await PatientAnswer.create({
     patientId,
     questionIds,
-    answers: patientAnswers.map(patientAnswer => ({ ...patientAnswer, userId: userId! })),
+    answers: patientAnswers.map(patientAnswer => ({
+      ...patientAnswer,
+      userId: userId!,
+    })),
   });
 }
 
 export async function resolvePatientAnswersForQuestion(
-  root: any, args: { questionId: string, patientId: string }, { db, userRole }: IContext,
+  root: any,
+  args: { questionId: string; patientId: string },
+  { db, userRole }: IContext,
 ) {
   await accessControls.isAllowed(userRole, 'view', 'patientAnswer');
 
@@ -68,7 +75,9 @@ export async function resolvePatientAnswersForQuestion(
 }
 
 export async function resolvePreviousPatientAnswersForQuestion(
-  root: any, args: { questionId: string, patientId: string }, { db, userRole, userId }: IContext,
+  root: any,
+  args: { questionId: string; patientId: string },
+  { db, userRole, userId }: IContext,
 ) {
   await accessControls.isAllowed(userRole, 'view', 'patientAnswer');
 
@@ -76,7 +85,9 @@ export async function resolvePreviousPatientAnswersForQuestion(
 }
 
 export async function resolvePatientAnswersForRiskArea(
-  root: any, args: { riskAreaId: string, patientId: string }, { db, userRole }: IContext,
+  root: any,
+  args: { riskAreaId: string; patientId: string },
+  { db, userRole }: IContext,
 ) {
   await accessControls.isAllowed(userRole, 'view', 'patientAnswer');
 
@@ -84,7 +95,9 @@ export async function resolvePatientAnswersForRiskArea(
 }
 
 export async function resolvePatientAnswer(
-  root: any, args: { patientAnswerId: string }, { db, userRole }: IContext,
+  root: any,
+  args: { patientAnswerId: string },
+  { db, userRole }: IContext,
 ) {
   await accessControls.isAllowed(userRole, 'view', 'patientAnswer');
 
@@ -92,7 +105,9 @@ export async function resolvePatientAnswer(
 }
 
 export async function patientAnswerEdit(
-  root: any, args: IEditPatientAnswerOptions, { db, userId, userRole }: IContext,
+  root: any,
+  args: IEditPatientAnswerOptions,
+  { db, userId, userRole }: IContext,
 ) {
   await accessControls.isAllowedForUser(userRole, 'edit', 'patientAnswer');
   checkUserLoggedIn(userId);
@@ -101,7 +116,9 @@ export async function patientAnswerEdit(
 }
 
 export async function patientAnswerDelete(
-  root: any, args: IDeletePatientAnswerOptions, { db, userId, userRole }: IContext,
+  root: any,
+  args: IDeletePatientAnswerOptions,
+  { db, userId, userRole }: IContext,
 ) {
   await accessControls.isAllowedForUser(userRole, 'edit', 'patientAnswer');
   checkUserLoggedIn(userId);

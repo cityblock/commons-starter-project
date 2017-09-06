@@ -34,16 +34,16 @@ export async function riskAreaCreate(root: any, { input }: IRiskAreaCreateArgs, 
   return await RiskArea.create(input as any);
 }
 
-export async function resolveRiskAreas(
-  root: any, args: any, { db, userRole }: IContext,
-) {
+export async function resolveRiskAreas(root: any, args: any, { db, userRole }: IContext) {
   await accessControls.isAllowed(userRole, 'view', 'riskArea');
 
   return await RiskArea.getAll();
 }
 
 export async function resolveRiskArea(
-  root: any, args: { riskAreaId: string }, { db, userRole }: IContext,
+  root: any,
+  args: { riskAreaId: string },
+  { db, userRole }: IContext,
 ) {
   await accessControls.isAllowed(userRole, 'view', 'riskArea');
 
@@ -51,7 +51,9 @@ export async function resolveRiskArea(
 }
 
 export async function riskAreaEdit(
-  root: any, args: IEditRiskAreaOptions, { db, userId, userRole }: IContext,
+  root: any,
+  args: IEditRiskAreaOptions,
+  { db, userId, userRole }: IContext,
 ) {
   await accessControls.isAllowedForUser(userRole, 'edit', 'riskArea');
   checkUserLoggedIn(userId);
@@ -62,7 +64,9 @@ export async function riskAreaEdit(
 }
 
 export async function riskAreaDelete(
-  root: any, args: IDeleteRiskAreaOptions, { db, userId, userRole }: IContext,
+  root: any,
+  args: IDeleteRiskAreaOptions,
+  { db, userId, userRole }: IContext,
 ) {
   await accessControls.isAllowedForUser(userRole, 'edit', 'riskArea');
   checkUserLoggedIn(userId);
@@ -71,20 +75,23 @@ export async function riskAreaDelete(
 }
 
 export async function resolvePatientRiskAreaSummary(
-  root: any, args: { riskAreaId: string, patientId: string }, { db, userRole }: IContext,
+  root: any,
+  args: { riskAreaId: string; patientId: string },
+  { db, userRole }: IContext,
 ): Promise<IRiskAreaSummary> {
   await accessControls.isAllowedForUser(userRole, 'view', 'riskArea');
-  const {
-    summary,
-    started,
-    lastUpdated,
-  } = await RiskArea.getSummaryForPatient(args.riskAreaId, args.patientId);
+  const { summary, started, lastUpdated } = await RiskArea.getSummaryForPatient(
+    args.riskAreaId,
+    args.patientId,
+  );
 
   return { summary, started, lastUpdated };
 }
 
 export async function resolvePatientRiskAreaRiskScore(
-  root: any, args: { riskAreaId: string, patientId: string }, { db, userRole }: IContext,
+  root: any,
+  args: { riskAreaId: string; patientId: string },
+  { db, userRole }: IContext,
 ): Promise<IRiskScore> {
   await accessControls.isAllowedForUser(userRole, 'view', 'riskArea');
   return await RiskArea.getRiskScoreForPatient(args.riskAreaId, args.patientId);

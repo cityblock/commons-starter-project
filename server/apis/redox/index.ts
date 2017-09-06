@@ -23,7 +23,6 @@ export interface IAuth {
  * This handles authentication and provides typed API calls.
  */
 export default class RedoxApi {
-
   static async get(): Promise<RedoxApi> {
     if (singleton) return singleton;
     singleton = new RedoxApi();
@@ -47,7 +46,7 @@ export default class RedoxApi {
       const error = await response.text();
       console.warn(error);
     }
-    return await response.json() as IAuth;
+    return (await response.json()) as IAuth;
   }
 
   auth: IAuth;
@@ -63,7 +62,9 @@ export default class RedoxApi {
   async patientCreate(patient: IPatientSetupInput & { id: string }) {
     const formattedPatientOptions = formatPatientCreateOptions(patient);
     const result = await this.fetch<IRedoxPatientCreateResponse>(
-      config.REDOX_API_URL, formattedPatientOptions);
+      config.REDOX_API_URL,
+      formattedPatientOptions,
+    );
     return result;
   }
 
@@ -77,22 +78,21 @@ export default class RedoxApi {
 
   async patientClinicalSummaryGet(patientId: string): Promise<IRedoxClinicalSummaryQueryResponse> {
     const formattedClinicalSummaryQueryOptions = formatClinicalSummaryQueryOptions(
-      patientId, 'AthenaNet Enterprise ID',
+      patientId,
+      'AthenaNet Enterprise ID',
     );
 
     const result = await this.fetch<IRedoxClinicalSummaryQueryResponse>(
-      config.REDOX_API_URL, formattedClinicalSummaryQueryOptions);
+      config.REDOX_API_URL,
+      formattedClinicalSummaryQueryOptions,
+    );
     return result;
   }
 
   /**
    * Supports GET and POST by handling params differently
    */
-  private async fetch<T>(
-    endpoint: string,
-    params: any,
-    refreshed: boolean = false,
-  ): Promise<any> {
+  private async fetch<T>(endpoint: string, params: any, refreshed: boolean = false): Promise<any> {
     let response;
     let tokenValid = new Date(this.auth.expires) > new Date();
 
@@ -102,17 +102,17 @@ export default class RedoxApi {
         method: 'POST',
         body: JSON.stringify(params),
         headers: {
-          'Authorization': `Bearer ${this.auth.accessToken}`,
+          Authorization: `Bearer ${this.auth.accessToken}`,
           'Content-Type': 'application/json',
         },
       });
 
       if (!response.ok) {
         // the type T should also have error information
-        const errorResponse = await response.json() as T;
-        const errors = (
-          (errorResponse as any).Meta.Errors || []
-        ).map((error: IRedoxError) => error.Text).join(' ');
+        const errorResponse = (await response.json()) as T;
+        const errors = ((errorResponse as any).Meta.Errors || [])
+          .map((error: IRedoxError) => error.Text)
+          .join(' ');
         throw new Error(`${errors}, ${endpoint}, ${response.status}`);
       }
 
@@ -127,7 +127,7 @@ export default class RedoxApi {
       await this.refreshToken();
       return this.fetch<T>(endpoint, params, true);
     } else if (response) {
-      return await response.json() as T;
+      return (await response.json()) as T;
     }
   }
 

@@ -27,6 +27,7 @@
         "named-imports-order": "lowercase-first" // aka Nehabetical
       }
     ],
+    "object-literal-key-quotes": [true, "as-needed"],
     "variable-name": [
       "check-format",
       "allow-leading-underscore",

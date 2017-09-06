@@ -26,7 +26,7 @@ export const SPANISH_TRANSLATION = {
     'patient.patientInfo': 'Información del Paciente',
     'patient.createdPopupHeading': 'Inscrito con éxito',
     'patient.createdPopupBody':
-    'Continúe con su perfil de paciente o vuelva a su lista de pacientes.',
+      'Continúe con su perfil de paciente o vuelva a su lista de pacientes.',
     'patient.createdPopupRoster': 'Lista de Pacientes',
     'patient.createdPopupProfile': 'Ir al perfil',
     'encounter.new': 'Registrar nuevo encuentro',
@@ -39,7 +39,7 @@ export const SPANISH_TRANSLATION = {
     'encounter.newSubmit': 'Enviar',
     'error.tableLoadingHeading': 'No se puede cargar tu lista',
     'error.tableLoadingMessage':
-    'Perdón, algo salió mal. Intente volver a cargar la página de nuevo.',
+      'Perdón, algo salió mal. Intente volver a cargar la página de nuevo.',
     'error.tableLoadingButton': 'Inténtalo de nuevo',
     'error.tableLoading': 'Cargando',
     'careTeam.slack': 'Mensaje de Slack',

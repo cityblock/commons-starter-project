@@ -1,6 +1,8 @@
 import { pickBy } from 'lodash';
 import {
-  IQuestionConditionCreateInput, IQuestionConditionDeleteInput, IQuestionConditionEditInput,
+  IQuestionConditionCreateInput,
+  IQuestionConditionDeleteInput,
+  IQuestionConditionEditInput,
 } from 'schema';
 import QuestionCondition from '../models/question-condition';
 import accessControls from './shared/access-controls';
@@ -23,7 +25,9 @@ export interface IDeleteQuestionConditionOptions {
 }
 
 export async function questionConditionCreate(
-  root: any, { input }: IQuestionConditionCreateArgs, context: IContext,
+  root: any,
+  { input }: IQuestionConditionCreateArgs,
+  context: IContext,
 ) {
   const { userRole, userId } = context;
   await accessControls.isAllowed(userRole, 'create', 'questionCondition');
@@ -34,7 +38,9 @@ export async function questionConditionCreate(
 }
 
 export async function resolveQuestionCondition(
-  root: any, args: { questionConditionId: string }, { db, userRole }: IContext,
+  root: any,
+  args: { questionConditionId: string },
+  { db, userRole }: IContext,
 ) {
   await accessControls.isAllowed(userRole, 'view', 'questionCondition');
 
@@ -42,7 +48,9 @@ export async function resolveQuestionCondition(
 }
 
 export async function questionConditionEdit(
-  root: any, args: IEditQuestionConditionOptions, { db, userId, userRole }: IContext,
+  root: any,
+  args: IEditQuestionConditionOptions,
+  { db, userId, userRole }: IContext,
 ) {
   await accessControls.isAllowedForUser(userRole, 'edit', 'questionCondition');
   checkUserLoggedIn(userId);
@@ -52,7 +60,9 @@ export async function questionConditionEdit(
 }
 
 export async function questionConditionDelete(
-  root: any, args: IDeleteQuestionConditionOptions, { db, userId, userRole }: IContext,
+  root: any,
+  args: IDeleteQuestionConditionOptions,
+  { db, userId, userRole }: IContext,
 ) {
   await accessControls.isAllowedForUser(userRole, 'edit', 'questionCondition');
   checkUserLoggedIn(userId);

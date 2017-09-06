@@ -7,7 +7,6 @@ import { createMockPatient, createPatient } from '../../spec-helpers';
 import schema from '../make-executable-schema';
 
 describe('care team', () => {
-
   let db: Db;
   let patient: Patient;
   let user: User;
@@ -45,8 +44,7 @@ describe('care team', () => {
         }
       }`;
       const result = await graphql(schema, mutation, null, { db, userRole });
-      const careTeamUserIds = cloneDeep(result.data!.careTeamAddUser)
-        .map((u: any) => u.id);
+      const careTeamUserIds = cloneDeep(result.data!.careTeamAddUser).map((u: any) => u.id);
 
       expect(careTeamUserIds).toContain(user.id);
       expect(careTeamUserIds).toContain(user2.id);
@@ -59,8 +57,7 @@ describe('care team', () => {
         }
       }`;
       const result = await graphql(schema, mutation, null, { db, userRole });
-      const careTeamUserIds = cloneDeep(result.data!.careTeamRemoveUser)
-        .map((u: any) => u.id);
+      const careTeamUserIds = cloneDeep(result.data!.careTeamRemoveUser).map((u: any) => u.id);
 
       expect(careTeamUserIds).not.toContain(user.id);
     });
@@ -73,8 +70,7 @@ describe('care team', () => {
       }`;
 
       const result = await graphql(schema, query, null, { db, userRole });
-      const careTeamUserIds = cloneDeep(result.data!.patientCareTeam)
-        .map((u: any) => u.id);
+      const careTeamUserIds = cloneDeep(result.data!.patientCareTeam).map((u: any) => u.id);
 
       expect(careTeamUserIds).toContain(user.id);
     });
@@ -93,7 +89,11 @@ describe('care team', () => {
             edges { node { id, firstName } }
           }
         }`;
-        const result = await graphql(schema, query, null, { db, userRole, userId: user.id });
+        const result = await graphql(schema, query, null, {
+          db,
+          userRole,
+          userId: user.id,
+        });
         expect(cloneDeep(result.data!.userPatientPanel)).toMatchObject({
           edges: [],
         });
@@ -108,21 +108,29 @@ describe('care team', () => {
             edges { node { id, firstName } }
           }
         }`;
-        const result = await graphql(schema, query, null, { db, userRole, userId: user.id });
+        const result = await graphql(schema, query, null, {
+          db,
+          userRole,
+          userId: user.id,
+        });
         expect(cloneDeep(result.data!.userPatientPanel)).toMatchObject({
-          edges: [{
-            node: {
-              id: patient.id,
+          edges: [
+            {
+              node: {
+                id: patient.id,
+              },
             },
-          }, {
-            node: {
-              id: patient1.id,
+            {
+              node: {
+                id: patient1.id,
+              },
             },
-          }, {
-            node: {
-              id: patient2.id,
+            {
+              node: {
+                id: patient2.id,
+              },
             },
-          }],
+          ],
         });
       });
     });
@@ -139,7 +147,11 @@ describe('care team', () => {
             edges { node { id, firstName } }
           }
         }`;
-        const result = await graphql(schema, query, null, { db, userRole, userId: user2.id });
+        const result = await graphql(schema, query, null, {
+          db,
+          userRole,
+          userId: user2.id,
+        });
         expect(cloneDeep(result.data!.userPatientPanel)).toMatchObject({
           edges: [],
         });
@@ -154,21 +166,29 @@ describe('care team', () => {
             edges { node { id, firstName } }
           }
         }`;
-        const result = await graphql(schema, query, null, { db, userRole, userId: user.id });
+        const result = await graphql(schema, query, null, {
+          db,
+          userRole,
+          userId: user.id,
+        });
         expect(cloneDeep(result.data!.userPatientPanel)).toMatchObject({
-          edges: [{
-            node: {
-              id: patient.id,
+          edges: [
+            {
+              node: {
+                id: patient.id,
+              },
             },
-          }, {
-            node: {
-              id: patient1.id,
+            {
+              node: {
+                id: patient1.id,
+              },
             },
-          }, {
-            node: {
-              id: patient2.id,
+            {
+              node: {
+                id: patient2.id,
+              },
             },
-          }],
+          ],
         });
       });
 

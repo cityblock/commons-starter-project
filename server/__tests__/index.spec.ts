@@ -4,15 +4,14 @@ import Db from '../db';
 import config from '../config';
 import { main } from '../index';
 
-config.PORT = '3001';  // Use a different route for testing than serving.
+config.PORT = '3001'; // Use a different route for testing than serving.
 
 const GRAPHQL_ROUTE = '/graphql';
 
-const getFromServer = async (uri: string, basicAuthString?: string) => (
+const getFromServer = async (uri: string, basicAuthString?: string) =>
   new Promise<IncomingMessage>((resolve, reject) => {
     httpGet(`http://localhost:${config.PORT}${uri}`, resolve).on('error', reject);
-  })
-);
+  });
 
 describe('main', () => {
   let db: Db;

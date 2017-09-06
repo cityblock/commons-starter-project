@@ -11,5 +11,9 @@ it('creates redux store', () => {
   expect(state.routing).toEqual({
     location: null,
   });
-  expect(state.apollo).toEqual({data: {}, optimistic: [], reducerError: null});
+  expect(state.apollo).toEqual({
+    data: {},
+    optimistic: [],
+    reducerError: null,
+  });
 });

@@ -105,9 +105,7 @@ export default class PatientAnswer extends Model {
   }
 
   static async get(patientAnswerId: string): Promise<PatientAnswer> {
-    const patientAnswer = await this
-      .query()
-      .findById(patientAnswerId);
+    const patientAnswer = await this.query().findById(patientAnswerId);
 
     if (!patientAnswer) {
       return Promise.reject(`No such patientAnswer: ${patientAnswerId}`);
@@ -116,10 +114,10 @@ export default class PatientAnswer extends Model {
   }
 
   static async getForQuestion(
-    questionId: string, patientId: string,
+    questionId: string,
+    patientId: string,
   ): Promise<PatientAnswer[] | null> {
-    const patientAnswers = await this
-      .query()
+    const patientAnswers = await this.query()
       .joinRelation('answer')
       .where('patient_answer.deletedAt', null)
       .andWhere('patientId', patientId)
@@ -129,25 +127,27 @@ export default class PatientAnswer extends Model {
   }
 
   static async getPreviousAnswersForQuestion(
-    questionId: string, patientId: string, limit = 5,
+    questionId: string,
+    patientId: string,
+    limit = 5,
   ): Promise<PatientAnswer[]> {
-    const patientAnswers: IPaginatedResults<PatientAnswer> = await this
-      .query()
+    const patientAnswers: IPaginatedResults<PatientAnswer> = (await this.query()
       .joinRelation('answer')
       .where('answer.questionId', questionId)
       .andWhere('patientId', patientId)
       .whereNotNull('patient_answer.deletedAt')
       .orderBy('patient_answer.createdAt')
-      .page(0, limit) as any;
+      .page(0, limit)) as any;
 
     return patientAnswers.results;
   }
 
   static async getForRiskArea(
-    riskAreaId: string, patientId: string, eager = '',
+    riskAreaId: string,
+    patientId: string,
+    eager = '',
   ): Promise<PatientAnswer[]> {
-    const patientAnswers = await this
-      .query()
+    const patientAnswers = await this.query()
       .joinRelation('answer.question')
       .eager(eager)
       .where('patient_answer.deletedAt', null)
@@ -159,8 +159,7 @@ export default class PatientAnswer extends Model {
   }
 
   static async getAllForPatient(patientId: string): Promise<PatientAnswer[]> {
-    const patientAnswers = await this
-      .query()
+    const patientAnswers = await this.query()
       .joinRelation('answer.question')
       .eager('[answer.[question.[riskArea]]]')
       .where('patient_answer.deletedAt', null)
@@ -175,25 +174,21 @@ export default class PatientAnswer extends Model {
       const questionIds = input.questionIds || input.answers.map(answer => answer.questionId);
 
       // NOTE: This needs to be done as a subquery as knex doesn't support FROM clauses for updates
-      const patientAnswerIdsToDeleteQuery = PatientAnswerWithTransaction
-        .query()
+      const patientAnswerIdsToDeleteQuery = PatientAnswerWithTransaction.query()
         .joinRelation('answer')
         .where('patient_answer.deletedAt', null)
         .andWhere('patientId', input.patientId)
         .where('answer.questionId', 'in', questionIds)
         .select('patient_answer.id');
 
-      await PatientAnswerWithTransaction
-        .query()
+      await PatientAnswerWithTransaction.query()
         .where('id', 'in', patientAnswerIdsToDeleteQuery)
         .patch({ deletedAt: new Date().toISOString() });
 
       let results: PatientAnswer[] = [];
 
       if (input.answers.length) {
-        results = await PatientAnswerWithTransaction
-          .query()
-          .insertGraphAndFetch(input.answers);
+        results = await PatientAnswerWithTransaction.query().insertGraphAndFetch(input.answers);
       }
 
       return results;
@@ -201,10 +196,10 @@ export default class PatientAnswer extends Model {
   }
 
   static async editApplicable(
-    applicable: boolean, patientAnswerId: string,
+    applicable: boolean,
+    patientAnswerId: string,
   ): Promise<PatientAnswer> {
-    return await this
-      .query()
+    return await this.query()
       .eager('question')
       .updateAndFetchById(patientAnswerId, { applicable });
   }

@@ -63,9 +63,7 @@ export default class QuestionCondition extends Model {
   }
 
   static async get(questionConditionId: string): Promise<QuestionCondition> {
-    const questionCondition = await this
-      .query()
-      .findById(questionConditionId);
+    const questionCondition = await this.query().findById(questionConditionId);
 
     if (!questionCondition) {
       return Promise.reject(`No such questionCondition: ${questionConditionId}`);
@@ -75,23 +73,23 @@ export default class QuestionCondition extends Model {
 
   static async create(input: IQuestionConditionEditableFields) {
     await this.validate(input);
-    return this.query()
-      .insertAndFetch(input);
+    return this.query().insertAndFetch(input);
   }
 
   static async edit(
-    questionCondition: IQuestionConditionEditableFields, questionConditionId: string,
+    questionCondition: IQuestionConditionEditableFields,
+    questionConditionId: string,
   ): Promise<QuestionCondition> {
     await this.validate(questionCondition);
-    return await this.query()
-      .updateAndFetchById(questionConditionId, questionCondition);
+    return await this.query().updateAndFetchById(questionConditionId, questionCondition);
   }
 
   static async validate(input: IQuestionConditionEditableFields) {
     const answer = await Answer.get(input.answerId);
     if (answer.questionId === input.questionId) {
-      return Promise
-        .reject(`Error: Answer ${input.answerId} is an answer to question ${input.questionId}`);
+      return Promise.reject(
+        `Error: Answer ${input.answerId} is an answer to question ${input.questionId}`,
+      );
     }
   }
 

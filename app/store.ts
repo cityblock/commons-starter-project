@@ -17,7 +17,7 @@ export interface IState {
     messages: any;
   };
   browser: {
-    size: Size,
+    size: Size;
   };
   task: {
     taskId?: string;
@@ -30,10 +30,7 @@ export interface IState {
 export default (client: ApolloClient, history: History) => {
   const composeEnhancers = (window as any).__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
-  const middleware = [
-    routerMiddleware(history),
-    client.middleware(),
-  ];
+  const middleware = [routerMiddleware(history), client.middleware()];
 
   if (process.env.NODE_ENV === 'development') {
     middleware.push(createLogger());

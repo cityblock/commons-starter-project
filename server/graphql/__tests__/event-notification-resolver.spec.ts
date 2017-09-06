@@ -22,7 +22,11 @@ describe('event notification tests', () => {
     await Db.clear();
 
     user = await User.create({ email: 'a@b.com', userRole, homeClinicId: '1' });
-    user2 = await User.create({ email: 'b@c.com', userRole, homeClinicId: '1' });
+    user2 = await User.create({
+      email: 'b@c.com',
+      userRole,
+      homeClinicId: '1',
+    });
     patient = await createPatient(createMockPatient(123), user.id);
     const dueAt = new Date().toUTCString();
     task = await Task.create({
@@ -52,7 +56,9 @@ describe('event notification tests', () => {
         taskEventId: taskEvent.id,
         userId: user.id,
       });
-      const notification3 = await EventNotification.create({ userId: user2.id });
+      const notification3 = await EventNotification.create({
+        userId: user2.id,
+      });
       const notification4 = await EventNotification.create({
         taskEventId: taskEvent.id,
         userId: user2.id,
@@ -67,10 +73,14 @@ describe('event notification tests', () => {
           }
         }
       }`;
-      const result = await graphql(schema, query, null, { db, userRole, userId: user.id });
+      const result = await graphql(schema, query, null, {
+        db,
+        userRole,
+        userId: user.id,
+      });
       const fetchedNotifResults = result.data!.eventNotificationsForCurrentUser;
-      const fetchedNotifs = fetchedNotifResults.edges.map((notif: IEventNotificationNode) =>
-        notif.node!.id,
+      const fetchedNotifs = fetchedNotifResults.edges.map(
+        (notif: IEventNotificationNode) => notif.node!.id,
       );
 
       expect(fetchedNotifs).toContain(notification1.id);
@@ -85,7 +95,9 @@ describe('event notification tests', () => {
         taskEventId: taskEvent.id,
         userId: user.id,
       });
-      const notification3 = await EventNotification.create({ userId: user2.id });
+      const notification3 = await EventNotification.create({
+        userId: user2.id,
+      });
       const notification4 = await EventNotification.create({
         taskEventId: taskEvent.id,
         userId: user2.id,
@@ -102,10 +114,14 @@ describe('event notification tests', () => {
           }
         }
       }`;
-      const result = await graphql(schema, query, null, { db, userRole, userId: user.id });
+      const result = await graphql(schema, query, null, {
+        db,
+        userRole,
+        userId: user.id,
+      });
       const fetchedNotifResults = result.data!.eventNotificationsForCurrentUser;
-      const fetchedNotifs = fetchedNotifResults.edges.map((notif: IEventNotificationNode) =>
-        notif.node!.id,
+      const fetchedNotifs = fetchedNotifResults.edges.map(
+        (notif: IEventNotificationNode) => notif.node!.id,
       );
 
       expect(fetchedNotifs).toContain(notification2.id);
@@ -126,8 +142,12 @@ describe('event notification tests', () => {
         userId: user.id,
       });
 
-      await EventNotification.update(notification1.id, { seenAt: new Date().toISOString() });
-      await EventNotification.update(notification2.id, { seenAt: new Date().toISOString() });
+      await EventNotification.update(notification1.id, {
+        seenAt: new Date().toISOString(),
+      });
+      await EventNotification.update(notification2.id, {
+        seenAt: new Date().toISOString(),
+      });
 
       const taskNotifsQuery = `{
         eventNotificationsForCurrentUser(
@@ -152,22 +172,24 @@ describe('event notification tests', () => {
         }
       }`;
       const taskNotifsResult = await graphql(schema, taskNotifsQuery, null, {
-        db, userRole, userId: user.id,
+        db,
+        userRole,
+        userId: user.id,
       });
       const allNotifsResult = await graphql(schema, allNotifsQuery, null, {
-        db, userRole, userId: user.id,
+        db,
+        userRole,
+        userId: user.id,
       });
 
       const fetchedTaskNotifResults = taskNotifsResult.data!.eventNotificationsForCurrentUser;
-      const fetchedTaskNotifs = fetchedTaskNotifResults
-        .edges
-        .map((notif: IEventNotificationNode) =>
-          notif.node!.id,
-        );
+      const fetchedTaskNotifs = fetchedTaskNotifResults.edges.map(
+        (notif: IEventNotificationNode) => notif.node!.id,
+      );
 
       const fetchedAllNotifsResults = allNotifsResult.data!.eventNotificationsForCurrentUser;
-      const fetchedAllNotifs = fetchedAllNotifsResults.edges.map((notif: IEventNotificationNode) =>
-        notif.node!.id,
+      const fetchedAllNotifs = fetchedAllNotifsResults.edges.map(
+        (notif: IEventNotificationNode) => notif.node!.id,
       );
 
       expect(fetchedTaskNotifs).toContain(notification4.id);
@@ -199,10 +221,14 @@ describe('event notification tests', () => {
           }
         }
       }`;
-      const result = await graphql(schema, query, null, { db, userRole, userId: user.id });
+      const result = await graphql(schema, query, null, {
+        db,
+        userRole,
+        userId: user.id,
+      });
       const fetchedNotifResults = result.data!.eventNotificationsForTask;
-      const fetchedNotifs = fetchedNotifResults.edges.map((notif: IEventNotificationNode) =>
-        notif.node!.id,
+      const fetchedNotifs = fetchedNotifResults.edges.map(
+        (notif: IEventNotificationNode) => notif.node!.id,
       );
 
       expect(fetchedNotifs).not.toContain(notification1.id);
@@ -220,7 +246,9 @@ describe('event notification tests', () => {
         userId: user.id,
       });
 
-      await EventNotification.update(notification2.id, { seenAt: new Date().toISOString() });
+      await EventNotification.update(notification2.id, {
+        seenAt: new Date().toISOString(),
+      });
 
       const query = `{
         eventNotificationsForTask(taskId: "${task.id}", pageNumber: 0, pageSize: 10) {
@@ -231,16 +259,19 @@ describe('event notification tests', () => {
           }
         }
       }`;
-      const result = await graphql(schema, query, null, { db, userRole, userId: user.id });
+      const result = await graphql(schema, query, null, {
+        db,
+        userRole,
+        userId: user.id,
+      });
       const fetchedNotifResults = result.data!.eventNotificationsForTask;
-      const fetchedNotifs = fetchedNotifResults.edges.map((notif: IEventNotificationNode) =>
-        notif.node!.id,
+      const fetchedNotifs = fetchedNotifResults.edges.map(
+        (notif: IEventNotificationNode) => notif.node!.id,
       );
 
       expect(fetchedNotifs).toContain(notification3.id);
       expect(fetchedNotifs).not.toContain(notification2.id);
       expect(fetchedNotifs).not.toContain(notification1.id);
-
     });
   });
 
@@ -254,7 +285,11 @@ describe('event notification tests', () => {
           seenAt
         }
       }`;
-      const result = await graphql(schema, mutation, null, { db, userRole, userId: user.id });
+      const result = await graphql(schema, mutation, null, {
+        db,
+        userRole,
+        userId: user.id,
+      });
       expect(result.data!.eventNotificationDismiss.seenAt).not.toBeNull();
       expect(result.data!.eventNotificationDismiss.seenAt).not.toBeUndefined();
     });

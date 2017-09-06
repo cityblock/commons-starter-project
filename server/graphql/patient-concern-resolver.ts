@@ -25,7 +25,9 @@ export interface IDeletePatientConcernOptions {
 }
 
 export async function patientConcernCreate(
-  root: any, { input }: IPatientConcernCreateArgs, context: IContext,
+  root: any,
+  { input }: IPatientConcernCreateArgs,
+  context: IContext,
 ) {
   const { userRole } = context;
   await accessControls.isAllowed(userRole, 'create', 'patientConcern');
@@ -34,7 +36,9 @@ export async function patientConcernCreate(
 }
 
 export async function resolvePatientConcern(
-  root: any, args: { patientConcernId: string }, { db, userRole }: IContext,
+  root: any,
+  args: { patientConcernId: string },
+  { db, userRole }: IContext,
 ) {
   await accessControls.isAllowed(userRole, 'view', 'patientConcern');
 
@@ -42,7 +46,9 @@ export async function resolvePatientConcern(
 }
 
 export async function resolvePatientConcernsForPatient(
-  root: any, args: { patientId: string }, { db, userRole }: IContext,
+  root: any,
+  args: { patientId: string },
+  { db, userRole }: IContext,
 ) {
   await accessControls.isAllowed(userRole, 'view', 'patientConcern');
 
@@ -50,7 +56,9 @@ export async function resolvePatientConcernsForPatient(
 }
 
 export async function patientConcernEdit(
-  root: any, args: IEditPatientConcernOptions, { db, userRole }: IContext,
+  root: any,
+  args: IEditPatientConcernOptions,
+  { db, userRole }: IContext,
 ) {
   await accessControls.isAllowedForUser(userRole, 'edit', 'patientConcern');
 
@@ -60,7 +68,9 @@ export async function patientConcernEdit(
 }
 
 export async function patientConcernDelete(
-  root: any, args: IDeletePatientConcernOptions, { db, userRole }: IContext,
+  root: any,
+  args: IDeletePatientConcernOptions,
+  { db, userRole }: IContext,
 ) {
   await accessControls.isAllowedForUser(userRole, 'edit', 'patientConcern');
 

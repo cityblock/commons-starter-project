@@ -23,9 +23,7 @@ describe('concern model', () => {
 
     it('throws an error when getting a concern by an invalid id', async () => {
       const fakeId = 'fakeId';
-      await expect(Concern.get(fakeId))
-        .rejects
-        .toMatch('No such concern: fakeId');
+      await expect(Concern.get(fakeId)).rejects.toMatch('No such concern: fakeId');
     });
 
     it('edits concern', async () => {

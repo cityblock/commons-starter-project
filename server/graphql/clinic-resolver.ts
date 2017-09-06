@@ -1,4 +1,4 @@
-import { IClinicCreateInput, IClinicNode} from 'schema';
+import { IClinicCreateInput, IClinicNode } from 'schema';
 import { IPaginationOptions } from '../db';
 import Clinic from '../models/clinic';
 import accessControls from './shared/access-controls';
@@ -30,7 +30,9 @@ export async function clinicCreate(
 }
 
 export async function resolveClinic(
-  root: any, { clinicId }: IResolveClinicOptions, { userRole }: IContext,
+  root: any,
+  { clinicId }: IResolveClinicOptions,
+  { userRole }: IContext,
 ) {
   await accessControls.isAllowed(userRole, 'view', 'clinic');
 
@@ -40,7 +42,8 @@ export async function resolveClinic(
 export async function resolveClinics(
   root: any,
   { pageNumber, pageSize }: IPaginationOptions,
-  { userRole }: IContext) {
+  { userRole }: IContext,
+) {
   await accessControls.isAllowed(userRole, 'view', 'clinic');
 
   const clinics = await Clinic.getAll({ pageNumber, pageSize });
@@ -49,7 +52,7 @@ export async function resolveClinics(
   );
 
   const hasPreviousPage = pageNumber !== 0;
-  const hasNextPage = ((pageNumber + 1) * pageSize) < clinics.total;
+  const hasNextPage = (pageNumber + 1) * pageSize < clinics.total;
 
   return {
     edges: clinicEdges,

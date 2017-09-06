@@ -24,7 +24,9 @@ export interface IDeleteGoalSuggestionTemplateOptions {
 }
 
 export async function goalSuggestionTemplateCreate(
-  root: any, { input }: IGoalSuggestionTemplatesCreateArgs, context: IContext,
+  root: any,
+  { input }: IGoalSuggestionTemplatesCreateArgs,
+  context: IContext,
 ) {
   const { userRole } = context;
   await accessControls.isAllowed(userRole, 'create', 'goalSuggestionTemplate');
@@ -33,7 +35,9 @@ export async function goalSuggestionTemplateCreate(
 }
 
 export async function resolveGoalSuggestionTemplates(
-  root: any, args: any, { db, userRole }: IContext,
+  root: any,
+  args: any,
+  { db, userRole }: IContext,
 ) {
   await accessControls.isAllowed(userRole, 'view', 'goalSuggestionTemplate');
 
@@ -41,7 +45,9 @@ export async function resolveGoalSuggestionTemplates(
 }
 
 export async function resolveGoalSuggestionTemplate(
-  root: any, args: { goalSuggestionTemplateId: string }, { db, userRole }: IContext,
+  root: any,
+  args: { goalSuggestionTemplateId: string },
+  { db, userRole }: IContext,
 ) {
   await accessControls.isAllowed(userRole, 'view', 'goalSuggestionTemplate');
 
@@ -49,7 +55,9 @@ export async function resolveGoalSuggestionTemplate(
 }
 
 export async function goalSuggestionTemplateEdit(
-  root: any, args: IEditGoalSuggestionTemplateOptions, { db, userRole }: IContext,
+  root: any,
+  args: IEditGoalSuggestionTemplateOptions,
+  { db, userRole }: IContext,
 ) {
   await accessControls.isAllowedForUser(userRole, 'edit', 'goalSuggestionTemplate');
 
@@ -57,7 +65,9 @@ export async function goalSuggestionTemplateEdit(
 }
 
 export async function goalSuggestionTemplateDelete(
-  root: any, args: IDeleteGoalSuggestionTemplateOptions, { db, userRole }: IContext,
+  root: any,
+  args: IDeleteGoalSuggestionTemplateOptions,
+  { db, userRole }: IContext,
 ) {
   await accessControls.isAllowedForUser(userRole, 'edit', 'goalSuggestionTemplate');
 

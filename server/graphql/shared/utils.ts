@@ -1,10 +1,6 @@
 import * as base64 from 'base-64';
 import * as express from 'express';
-import {
-  GraphQLBoolean,
-  GraphQLNonNull,
-  GraphQLObjectType,
-} from 'graphql';
+import { GraphQLBoolean, GraphQLNonNull, GraphQLObjectType } from 'graphql';
 import { decode, sign, verify } from 'jsonwebtoken';
 import OpticsAgent from 'optics-agent';
 import AthenaApi from '../../apis/athena';
@@ -37,9 +33,8 @@ export interface IJWTData {
   lastLoginAt: string;
 }
 
-export const signJwt = (jwtData: IJWTData) => (
-  sign(jwtData, config.JWT_SECRET, { expiresIn: config.JWT_EXPIRY })
-);
+export const signJwt = (jwtData: IJWTData) =>
+  sign(jwtData, config.JWT_SECRET, { expiresIn: config.JWT_EXPIRY });
 
 export async function parseAndVerifyJwt(jwt: string) {
   // verify throws an error if jwt is not valid and if expiry passed
@@ -128,9 +123,7 @@ export interface IOrderOptions<T> {
   order: 'asc' | 'desc';
 }
 
-export function formatOrderOptions<T>(
-  orderBy: string | undefined, def: any,
-): IOrderOptions<T> {
+export function formatOrderOptions<T>(orderBy: string | undefined, def: any): IOrderOptions<T> {
   if (!orderBy) {
     return def;
   }

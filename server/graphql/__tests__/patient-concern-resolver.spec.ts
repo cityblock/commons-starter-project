@@ -5,10 +5,7 @@ import Concern from '../../models/concern';
 import Patient from '../../models/patient';
 import PatientConcern from '../../models/patient-concern';
 import User from '../../models/user';
-import {
-  createMockPatient,
-  createPatient,
-} from '../../spec-helpers';
+import { createMockPatient, createPatient } from '../../spec-helpers';
 import schema from '../make-executable-schema';
 
 describe('patient concern resolver', () => {
@@ -121,13 +118,16 @@ describe('patient concern resolver', () => {
         patientConcerns(patientId: "${patient.id}") { concernId, order }
       }`;
 
-      const result = await graphql(schema, query, null, { db, userRole: 'admin' });
+      const result = await graphql(schema, query, null, {
+        db,
+        userRole: 'admin',
+      });
       expect(cloneDeep(result.data!.patientConcerns)).toMatchObject([
         {
           concernId: concern.id,
           order: 1,
-        }],
-      );
+        },
+      ]);
     });
   });
 });

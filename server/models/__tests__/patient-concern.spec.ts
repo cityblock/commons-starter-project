@@ -1,8 +1,5 @@
 import Db from '../../db';
-import {
-  createMockPatient,
-  createPatient,
-} from '../../spec-helpers';
+import { createMockPatient, createPatient } from '../../spec-helpers';
 import Concern from '../concern';
 import Patient from '../patient';
 import PatientConcern from '../patient-concern';
@@ -57,9 +54,7 @@ describe('patient concern model', () => {
 
   it('should throw an error if a patient concern does not exist for the id', async () => {
     const fakeId = 'fakeId';
-    await expect(PatientConcern.get(fakeId))
-      .rejects
-      .toMatch('No such patient concern: fakeId');
+    await expect(PatientConcern.get(fakeId)).rejects.toMatch('No such patient concern: fakeId');
   });
 
   it('edits patient concern', async () => {
@@ -84,5 +79,4 @@ describe('patient concern model', () => {
     const deletedPatientAnswer = await PatientConcern.delete(patientAnswer.id);
     expect(deletedPatientAnswer).not.toBeNull();
   });
-
 });

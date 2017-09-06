@@ -44,9 +44,7 @@ describe('patient model', () => {
 
     it('should throw an error if a patient does not exist for the id', async () => {
       const fakeId = 'fakeId';
-      await expect(Patient.get(fakeId))
-        .rejects
-        .toMatch('No such patient: fakeId');
+      await expect(Patient.get(fakeId)).rejects.toMatch('No such patient: fakeId');
     });
   });
 
@@ -62,13 +60,16 @@ describe('patient model', () => {
         id: patient.id,
         athenaPatientId: 123,
       });
-      const patientEdit = await Patient.edit({
-        firstName: 'first',
-        lastName: 'last',
-        dateOfBirth: '02/02/1902',
-        zip: 12345,
-        gender: 'F',
-      }, patient.id);
+      const patientEdit = await Patient.edit(
+        {
+          firstName: 'first',
+          lastName: 'last',
+          dateOfBirth: '02/02/1902',
+          zip: 12345,
+          gender: 'F',
+        },
+        patient.id,
+      );
       expect(patientEdit).toMatchObject({
         id: patient.id,
         firstName: 'first',
@@ -131,39 +132,42 @@ describe('patient model', () => {
     });
 
     it('should fetch patients', async () => {
-      expect(await Patient.getAll({ pageNumber: 0, pageSize: 10 })).toMatchObject(
-        {
-          results: [{
+      expect(await Patient.getAll({ pageNumber: 0, pageSize: 10 })).toMatchObject({
+        results: [
+          {
             athenaPatientId: 123,
-          }, {
+          },
+          {
             athenaPatientId: 234,
-          }],
-          total: 2,
-        },
-      );
+          },
+        ],
+        total: 2,
+      });
     });
 
     it('should fetch a limited set of patients', async () => {
-      expect(await Patient.getAll({ pageNumber: 0, pageSize: 1 })).toMatchObject(
-        {
-          results: [{
+      expect(await Patient.getAll({ pageNumber: 0, pageSize: 1 })).toMatchObject({
+        results: [
+          {
             athenaPatientId: 123,
-          }],
-          total: 2,
-        },
-      );
-      expect(await Patient.getAll({ pageNumber: 1, pageSize: 1 })).toMatchObject(
-        {
-          results: [{
+          },
+        ],
+        total: 2,
+      });
+      expect(await Patient.getAll({ pageNumber: 1, pageSize: 1 })).toMatchObject({
+        results: [
+          {
             athenaPatientId: 234,
-          }],
-          total: 2,
-        },
-      );
+          },
+        ],
+        total: 2,
+      });
     });
 
     it('should fetch by athenaPatientId', async () => {
-      expect(await Patient.getBy('athenaPatientId', '123')).toMatchObject({ athenaPatientId: 123 });
+      expect(await Patient.getBy('athenaPatientId', '123')).toMatchObject({
+        athenaPatientId: 123,
+      });
     });
 
     it('should return null if calling getBy without a matchable param', async () => {

@@ -55,9 +55,7 @@ describe('util tests', () => {
 
   it('errors with invalid token', async () => {
     const authToken = 'fake';
-    await expect(parseAndVerifyJwt(authToken))
-      .rejects
-      .toMatchObject(new Error('jwt malformed'));
+    await expect(parseAndVerifyJwt(authToken)).rejects.toMatchObject(new Error('jwt malformed'));
   });
 
   describe('old tokens', () => {
@@ -74,11 +72,11 @@ describe('util tests', () => {
       const authToken = signJwt({
         userId: user.id,
         userRole: 'physician',
-        lastLoginAt: (new Date(now.valueOf() - 10000)).toUTCString(),
+        lastLoginAt: new Date(now.valueOf() - 10000).toUTCString(),
       });
-      await expect(parseAndVerifyJwt(authToken))
-        .rejects
-        .toMatchObject(new Error('token invalid: login too old'));
+      await expect(parseAndVerifyJwt(authToken)).rejects.toMatchObject(
+        new Error('token invalid: login too old'),
+      );
     });
 
     it('errors for token when the token is more than 24 hours old', async () => {
@@ -86,14 +84,13 @@ describe('util tests', () => {
       const authToken = signJwt({
         userId: '1',
         userRole: 'physician',
-        lastLoginAt: (
-          new Date(
-            now.valueOf() - (TWENTY_FOUR_HOURS_IN_MILLISECONDS + 1000),
-          )).toUTCString(),
+        lastLoginAt: new Date(
+          now.valueOf() - (TWENTY_FOUR_HOURS_IN_MILLISECONDS + 1000),
+        ).toUTCString(),
       });
-      await expect(parseAndVerifyJwt(authToken))
-        .rejects
-        .toMatchObject(new Error('token invalid: login too old'));
+      await expect(parseAndVerifyJwt(authToken)).rejects.toMatchObject(
+        new Error('token invalid: login too old'),
+      );
     });
   });
 });

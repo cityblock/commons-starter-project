@@ -62,13 +62,15 @@ describe('task comment model', () => {
 
   it('throws an error when getting an invalid id', async () => {
     const fakeId = 'fakeId';
-    await expect(TaskComment.get(fakeId))
-      .rejects
-      .toMatch('No such taskComment: fakeId');
+    await expect(TaskComment.get(fakeId)).rejects.toMatch('No such taskComment: fakeId');
   });
 
   it('should update a comment', async () => {
-    const user = await User.create({ email: 'a@b.com', userRole, homeClinicId: '1' });
+    const user = await User.create({
+      email: 'a@b.com',
+      userRole,
+      homeClinicId: '1',
+    });
     const patient = await createPatient(createMockPatient(123), user.id);
     const dueAt = new Date().toUTCString();
     const task = await Task.create({
@@ -90,7 +92,11 @@ describe('task comment model', () => {
   });
 
   it('fetches all not deleted comments for a task', async () => {
-    const user = await User.create({ email: 'a@b.com', userRole, homeClinicId: '1' });
+    const user = await User.create({
+      email: 'a@b.com',
+      userRole,
+      homeClinicId: '1',
+    });
     const patient = await createPatient(createMockPatient(123), user.id);
     const dueAt = new Date().toUTCString();
     const task = await Task.create({
@@ -123,43 +129,57 @@ describe('task comment model', () => {
 
     // Make sure deleted comment isn't returned
     expect(
-      await TaskComment.getTaskComments(task.id, { pageNumber: 0, pageSize: 10 }),
-    ).toMatchObject(
-      {
-        results: [{
+      await TaskComment.getTaskComments(task.id, {
+        pageNumber: 0,
+        pageSize: 10,
+      }),
+    ).toMatchObject({
+      results: [
+        {
           body: 'omg another comment',
-        }, {
+        },
+        {
           body: 'omg a comment',
-        }],
-        total: 2,
-      },
-    );
+        },
+      ],
+      total: 2,
+    });
 
     // Make sure pagination works correctly
     expect(
-      await TaskComment.getTaskComments(task.id, { pageNumber: 0, pageSize: 1 }),
-    ).toMatchObject(
-      {
-        results: [{
+      await TaskComment.getTaskComments(task.id, {
+        pageNumber: 0,
+        pageSize: 1,
+      }),
+    ).toMatchObject({
+      results: [
+        {
           body: 'omg another comment',
-        }],
-        total: 2,
-      },
-    );
+        },
+      ],
+      total: 2,
+    });
     expect(
-      await TaskComment.getTaskComments(task.id, { pageNumber: 1, pageSize: 1 }),
-    ).toMatchObject(
-      {
-        results: [{
+      await TaskComment.getTaskComments(task.id, {
+        pageNumber: 1,
+        pageSize: 1,
+      }),
+    ).toMatchObject({
+      results: [
+        {
           body: 'omg a comment',
-        }],
-        total: 2,
-      },
-    );
+        },
+      ],
+      total: 2,
+    });
   });
 
   it('completes a task', async () => {
-    const user = await User.create({ email: 'a@b.com', userRole, homeClinicId: '1' });
+    const user = await User.create({
+      email: 'a@b.com',
+      userRole,
+      homeClinicId: '1',
+    });
     const patient = await createPatient(createMockPatient(123), user.id);
     const dueAt = new Date().toUTCString();
     const task = await Task.create({

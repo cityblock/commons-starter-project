@@ -15,7 +15,9 @@ describe('goal suggestion template model', () => {
 
   describe('goal suggestion template methods', () => {
     it('creates and retrieves a goal suggestion template', async () => {
-      const goalSuggestion = await GoalSuggestionTemplate.create({ title: 'fix Housing' });
+      const goalSuggestion = await GoalSuggestionTemplate.create({
+        title: 'fix Housing',
+      });
       const goalSuggestionById = await GoalSuggestionTemplate.get(goalSuggestion.id);
 
       expect(goalSuggestionById).toMatchObject(goalSuggestion);
@@ -23,9 +25,9 @@ describe('goal suggestion template model', () => {
 
     it('throws an error when getting a goal suggestion template by an invalid id', async () => {
       const fakeId = 'fakeId';
-      await expect(GoalSuggestionTemplate.get(fakeId))
-        .rejects
-        .toMatch('No such goalSuggestionTemplate: fakeId');
+      await expect(GoalSuggestionTemplate.get(fakeId)).rejects.toMatch(
+        'No such goalSuggestionTemplate: fakeId',
+      );
     });
 
     it('edits goal suggestion template', async () => {
@@ -48,12 +50,17 @@ describe('goal suggestion template model', () => {
     });
 
     it('fetches all goal suggestions templates', async () => {
-      const goalSuggestion1 = await GoalSuggestionTemplate.create({ title: 'fix Housing' });
-      const goalSuggestion2 = await GoalSuggestionTemplate.create({ title: 'fix Medical' });
+      const goalSuggestion1 = await GoalSuggestionTemplate.create({
+        title: 'fix Housing',
+      });
+      const goalSuggestion2 = await GoalSuggestionTemplate.create({
+        title: 'fix Medical',
+      });
 
-      expect(
-        await GoalSuggestionTemplate.getAll(),
-      ).toMatchObject([goalSuggestion1, goalSuggestion2]);
+      expect(await GoalSuggestionTemplate.getAll()).toMatchObject([
+        goalSuggestion1,
+        goalSuggestion2,
+      ]);
     });
   });
 });

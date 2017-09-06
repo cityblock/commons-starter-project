@@ -21,7 +21,9 @@ export interface IDeleteTaskTemplateOptions {
 }
 
 export async function taskTemplateCreate(
-  root: any, { input }: ITaskTemplateCreateArgs, { userRole }: IContext,
+  root: any,
+  { input }: ITaskTemplateCreateArgs,
+  { userRole }: IContext,
 ) {
   await accessControls.isAllowed(userRole, 'create', 'taskTemplate');
 
@@ -29,23 +31,25 @@ export async function taskTemplateCreate(
 }
 
 export async function resolveTaskTemplate(
-  root: any, args: { taskTemplateId: string }, { db, userRole }: IContext,
+  root: any,
+  args: { taskTemplateId: string },
+  { db, userRole }: IContext,
 ) {
   await accessControls.isAllowed(userRole, 'view', 'taskTemplate');
 
   return await TaskTemplate.get(args.taskTemplateId);
 }
 
-export async function resolveTaskTemplates(
-  root: any, args: any, { db, userRole }: IContext,
-) {
+export async function resolveTaskTemplates(root: any, args: any, { db, userRole }: IContext) {
   await accessControls.isAllowed(userRole, 'view', 'taskTemplate');
 
   return await TaskTemplate.getAll();
 }
 
 export async function taskTemplateEdit(
-  root: any, args: IEditTaskTemplateOptions, { db, userRole }: IContext,
+  root: any,
+  args: IEditTaskTemplateOptions,
+  { db, userRole }: IContext,
 ) {
   await accessControls.isAllowedForUser(userRole, 'edit', 'taskTemplate');
 
@@ -55,7 +59,9 @@ export async function taskTemplateEdit(
 }
 
 export async function taskTemplateDelete(
-  root: any, args: IDeleteTaskTemplateOptions, { db, userRole }: IContext,
+  root: any,
+  args: IDeleteTaskTemplateOptions,
+  { db, userRole }: IContext,
 ) {
   await accessControls.isAllowedForUser(userRole, 'edit', 'taskTemplate');
   return TaskTemplate.delete(args.input.taskTemplateId);

@@ -7,14 +7,10 @@ import PatientAnswer from '../../models/patient-answer';
 import Question from '../../models/question';
 import RiskArea from '../../models/risk-area';
 import User from '../../models/user';
-import {
-  createMockPatient,
-  createPatient,
-} from '../../spec-helpers';
+import { createMockPatient, createPatient } from '../../spec-helpers';
 import schema from '../make-executable-schema';
 
 describe('answer tests', () => {
-
   let db: Db;
   const userRole = 'admin';
   let riskArea: RiskArea;
@@ -60,9 +56,7 @@ describe('answer tests', () => {
     it('errors if an riskArea cannot be found', async () => {
       const query = `{ riskArea(riskAreaId: "fakeId") { id } }`;
       const result = await graphql(schema, query, null, { db, userRole });
-      expect(result.errors![0].message).toMatch(
-        'No such risk area: fakeId',
-      );
+      expect(result.errors![0].message).toMatch('No such risk area: fakeId');
     });
 
     it('gets all risk areas', async () => {
@@ -87,7 +81,11 @@ describe('answer tests', () => {
           title
         }
       }`;
-      const result = await graphql(schema, query, null, { db, userRole, userId: user.id });
+      const result = await graphql(schema, query, null, {
+        db,
+        userRole,
+        userId: user.id,
+      });
       expect(cloneDeep(result.data!.riskAreaEdit)).toMatchObject({
         title: 'new value',
       });
@@ -104,12 +102,15 @@ describe('answer tests', () => {
           title
         }
       }`;
-      const result = await graphql(schema, mutation, null, { db, userRole, userId: user.id });
+      const result = await graphql(schema, mutation, null, {
+        db,
+        userRole,
+        userId: user.id,
+      });
       expect(cloneDeep(result.data!.riskAreaCreate)).toMatchObject({
         title: 'new risk area',
       });
     });
-
   });
 
   describe('riskArea delete', () => {
@@ -119,7 +120,11 @@ describe('answer tests', () => {
           id,
         }
       }`;
-      const result = await graphql(schema, mutation, null, { db, userRole, userId: user.id });
+      const result = await graphql(schema, mutation, null, {
+        db,
+        userRole,
+        userId: user.id,
+      });
       expect(cloneDeep(result.data!.riskAreaDelete)).toMatchObject({
         id: riskArea.id,
       });
@@ -156,14 +161,16 @@ describe('answer tests', () => {
       });
       await PatientAnswer.create({
         patientId: patient.id,
-        answers: [{
-          questionId: answer.questionId,
-          answerId: answer.id,
-          answerValue: '3',
-          patientId: patient.id,
-          applicable: true,
-          userId: user.id,
-        }],
+        answers: [
+          {
+            questionId: answer.questionId,
+            answerId: answer.id,
+            answerValue: '3',
+            patientId: patient.id,
+            applicable: true,
+            userId: user.id,
+          },
+        ],
       });
       const query = `{
         patientRiskAreaSummary(
@@ -208,25 +215,29 @@ describe('answer tests', () => {
       });
       await PatientAnswer.create({
         patientId: patient.id,
-        answers: [{
-          questionId: answer.questionId,
-          answerId: answer.id,
-          answerValue: '3',
-          patientId: patient.id,
-          applicable: true,
-          userId: user.id,
-        }],
+        answers: [
+          {
+            questionId: answer.questionId,
+            answerId: answer.id,
+            answerValue: '3',
+            patientId: patient.id,
+            applicable: true,
+            userId: user.id,
+          },
+        ],
       });
       await PatientAnswer.create({
         patientId: patient.id,
-        answers: [{
-          questionId: highRiskAnswer.questionId,
-          answerId: highRiskAnswer.id,
-          answerValue: '4',
-          patientId: patient.id,
-          applicable: true,
-          userId: user.id,
-        }],
+        answers: [
+          {
+            questionId: highRiskAnswer.questionId,
+            answerId: highRiskAnswer.id,
+            answerValue: '4',
+            patientId: patient.id,
+            applicable: true,
+            userId: user.id,
+          },
+        ],
       });
 
       const query = `{

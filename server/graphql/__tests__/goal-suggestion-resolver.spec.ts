@@ -37,7 +37,9 @@ describe('goal suggestion resolver', () => {
       questionId: question.id,
       order: 1,
     });
-    goalSuggestionTemplate = await GoalSuggestionTemplate.create({ title: 'Fix housing' });
+    goalSuggestionTemplate = await GoalSuggestionTemplate.create({
+      title: 'Fix housing',
+    });
   });
 
   afterAll(async () => {
@@ -75,9 +77,11 @@ describe('goal suggestion resolver', () => {
         }
       }`;
       const result = await graphql(schema, mutation, null, { userRole });
-      expect(cloneDeep(result.data!.goalSuggestionCreate)).toMatchObject([{
-        title: 'Fix housing',
-      }]);
+      expect(cloneDeep(result.data!.goalSuggestionCreate)).toMatchObject([
+        {
+          title: 'Fix housing',
+        },
+      ]);
     });
   });
 

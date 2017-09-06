@@ -63,9 +63,7 @@ describe('anser model', () => {
 
   it('should throw an error if an answer does not exist for the id', async () => {
     const fakeId = 'fakeId';
-    await expect(Answer.get(fakeId))
-      .rejects
-      .toMatch('No such answer: fakeId');
+    await expect(Answer.get(fakeId)).rejects.toMatch('No such answer: fakeId');
   });
 
   it('edits answer', async () => {
@@ -133,7 +131,6 @@ describe('anser model', () => {
     });
     await Answer.delete(deletedAnswer.id);
 
-    expect(await Answer.getAllForQuestion(question.id))
-      .toMatchObject([answer1, answer2]);
+    expect(await Answer.getAllForQuestion(question.id)).toMatchObject([answer1, answer2]);
   });
 });

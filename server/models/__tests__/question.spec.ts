@@ -46,9 +46,7 @@ describe('answer model', () => {
 
   it('should throw an error if a question does not exist for the id', async () => {
     const fakeId = 'fakeId';
-    await expect(Question.get(fakeId))
-      .rejects
-      .toMatch('No such question: fakeId');
+    await expect(Question.get(fakeId)).rejects.toMatch('No such question: fakeId');
   });
 
   it('edits question', async () => {
@@ -58,10 +56,9 @@ describe('answer model', () => {
       riskAreaId: riskArea.id,
       order: 1,
     });
-    expect(await Question.edit({ title: 'Testing?' }, question.id))
-      .toMatchObject({
-        title: 'Testing?',
-      });
+    expect(await Question.edit({ title: 'Testing?' }, question.id)).toMatchObject({
+      title: 'Testing?',
+    });
   });
 
   it('gets questions for risk area', async () => {
@@ -77,8 +74,7 @@ describe('answer model', () => {
       riskAreaId: riskArea.id,
       order: 2,
     });
-    expect(await Question.getAllForRiskArea(riskArea.id))
-      .toMatchObject([question1, question2]);
+    expect(await Question.getAllForRiskArea(riskArea.id)).toMatchObject([question1, question2]);
   });
 
   it('eager loads answers ordered by...order', async () => {

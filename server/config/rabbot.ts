@@ -25,10 +25,7 @@ export default {
         server: 'localhost',
         port: 5672,
       },
-      queues: [
-        { name: 'low-priority' },
-        { name: 'high-priority' },
-      ],
+      queues: [{ name: 'low-priority' }, { name: 'high-priority' }],
       logging: {
         adapters: {
           stdOut: {
@@ -55,10 +52,7 @@ export default {
         vhost: process.env.RABBIT_VHOST,
         passphrase: process.env.RABBIT_PASSPHRASE,
       },
-      queues: [
-        { name: 'low-priority', limit: 1 },
-        { name: 'high-priority', limit: 3 },
-      ],
+      queues: [{ name: 'low-priority', limit: 1 }, { name: 'high-priority', limit: 3 }],
       logging: {
         adapters: {
           stdOut: {

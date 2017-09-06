@@ -10,7 +10,9 @@ describe('task template model', () => {
     db = await Db.get();
     await Db.clear();
 
-    goalSuggestionTemplate = await GoalSuggestionTemplate.create({ title: 'Housing' });
+    goalSuggestionTemplate = await GoalSuggestionTemplate.create({
+      title: 'Housing',
+    });
   });
 
   afterAll(async () => {
@@ -33,9 +35,7 @@ describe('task template model', () => {
 
     it('throws an error when getting a taskTemplate by an invalid id', async () => {
       const fakeId = 'fakeId';
-      await expect(TaskTemplate.get(fakeId))
-        .rejects
-        .toMatch('No such taskTemplate: fakeId');
+      await expect(TaskTemplate.get(fakeId)).rejects.toMatch('No such taskTemplate: fakeId');
     });
 
     it('edits task template', async () => {

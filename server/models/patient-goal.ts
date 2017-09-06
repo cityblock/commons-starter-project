@@ -78,9 +78,7 @@ export default class PatientGoal extends Model {
   }
 
   static async get(patientGoalId: string): Promise<PatientGoal | undefined> {
-    const patientGoal = await this
-      .query()
-      .findById(patientGoalId);
+    const patientGoal = await this.query().findById(patientGoalId);
 
     if (!patientGoal) {
       return Promise.reject(`No such patientGoal: ${patientGoalId}`);
@@ -89,17 +87,14 @@ export default class PatientGoal extends Model {
   }
 
   static async create(input: IPatientGoalEditableFields) {
-    return await this
-      .query()
-      .insertAndFetch(input);
+    return await this.query().insertAndFetch(input);
   }
 
   static async update(
-    patientGoalId: string, patientGoal: Partial<IPatientGoalEditableFields>,
+    patientGoalId: string,
+    patientGoal: Partial<IPatientGoalEditableFields>,
   ): Promise<PatientGoal> {
-    return await this
-      .query()
-      .updateAndFetchById(patientGoalId, patientGoal);
+    return await this.query().updateAndFetchById(patientGoalId, patientGoal);
   }
 
   static async getForPatient(patientId: string): Promise<PatientGoal[]> {
@@ -110,10 +105,9 @@ export default class PatientGoal extends Model {
   }
 
   static async delete(patientGoalId: string): Promise<PatientGoal> {
-    return await this.query()
-      .updateAndFetchById(patientGoalId, {
-        deletedAt: new Date().toISOString(),
-      });
+    return await this.query().updateAndFetchById(patientGoalId, {
+      deletedAt: new Date().toISOString(),
+    });
   }
 }
 /* tslint:disable:member-ordering */

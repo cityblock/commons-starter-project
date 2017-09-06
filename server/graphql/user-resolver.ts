@@ -60,16 +60,16 @@ export async function userCreate(root: any, { input }: IUserCreateArgs, context:
 }
 
 export async function resolveUser(
-  root: any, args: IResolveUserOptions, { db, userRole }: IContext,
+  root: any,
+  args: IResolveUserOptions,
+  { db, userRole }: IContext,
 ) {
   await accessControls.isAllowed(userRole, 'view', 'user');
 
   return await User.get(args.userId);
 }
 
-export async function resolveCurrentUser(
-  root: any, args: any, { db, userId, userRole }: IContext,
-) {
+export async function resolveCurrentUser(root: any, args: any, { db, userId, userRole }: IContext) {
   await accessControls.isAllowed(userRole, 'view', 'user');
   checkUserLoggedIn(userId);
 
@@ -77,7 +77,9 @@ export async function resolveCurrentUser(
 }
 
 export async function currentUserEdit(
-  root: any, args: IEditCurrentUserOptions, { db, userId, userRole }: IContext,
+  root: any,
+  args: IEditCurrentUserOptions,
+  { db, userId, userRole }: IContext,
 ) {
   await accessControls.isAllowedForUser(userRole, 'edit', 'user', userId, userId);
   checkUserLoggedIn(userId);
@@ -86,7 +88,9 @@ export async function currentUserEdit(
 }
 
 export async function resolveUsers(
-  root: any, args: Partial<IUsersFilterOptions>, { db, userRole }: IContext,
+  root: any,
+  args: Partial<IUsersFilterOptions>,
+  { db, userRole }: IContext,
 ): Promise<IUserEdges> {
   await accessControls.isAllowed(userRole, 'view', 'allUsers');
 
@@ -97,7 +101,7 @@ export async function resolveUsers(
   const userEdges = users.results.map((user, i) => formatRelayEdge(user, user.id) as IUserNode);
 
   const hasPreviousPage = pageNumber !== 0;
-  const hasNextPage = ((pageNumber + 1) * pageSize) < users.total;
+  const hasNextPage = (pageNumber + 1) * pageSize < users.total;
 
   return {
     edges: userEdges,

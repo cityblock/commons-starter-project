@@ -8,7 +8,6 @@ import User from '../../models/user';
 import schema from '../make-executable-schema';
 
 describe('answer tests', () => {
-
   let db: Db;
   const userRole = 'admin';
   let riskArea: RiskArea;
@@ -77,9 +76,7 @@ describe('answer tests', () => {
     it('errors if an answer cannot be found', async () => {
       const query = `{ answer(answerId: "fakeId") { id } }`;
       const result = await graphql(schema, query, null, { db, userRole });
-      expect(result.errors![0].message).toMatch(
-        'No such answer: fakeId',
-      );
+      expect(result.errors![0].message).toMatch('No such answer: fakeId');
     });
   });
 
@@ -92,10 +89,12 @@ describe('answer tests', () => {
       }`;
       const result = await graphql(schema, query, null, { db, userRole });
 
-      expect(cloneDeep(result.data!.answersForQuestion)).toMatchObject([{
-        id: answer.id,
-        displayValue: answer.displayValue,
-      }]);
+      expect(cloneDeep(result.data!.answersForQuestion)).toMatchObject([
+        {
+          id: answer.id,
+          displayValue: answer.displayValue,
+        },
+      ]);
     });
   });
 
@@ -106,7 +105,11 @@ describe('answer tests', () => {
           displayValue
         }
       }`;
-      const result = await graphql(schema, query, null, { db, userRole, userId: user.id });
+      const result = await graphql(schema, query, null, {
+        db,
+        userRole,
+        userId: user.id,
+      });
       expect(cloneDeep(result.data!.answerEdit)).toMatchObject({
         displayValue: 'new display value',
       });
@@ -128,12 +131,15 @@ describe('answer tests', () => {
           displayValue
         }
       }`;
-      const result = await graphql(schema, mutation, null, { db, userRole, userId: user.id });
+      const result = await graphql(schema, mutation, null, {
+        db,
+        userRole,
+        userId: user.id,
+      });
       expect(cloneDeep(result.data!.answerCreate)).toMatchObject({
         displayValue: 'loves writing tests too!',
       });
     });
-
   });
 
   describe('answer delete', () => {
@@ -143,7 +149,11 @@ describe('answer tests', () => {
           id,
         }
       }`;
-      const result = await graphql(schema, mutation, null, { db, userRole, userId: user.id });
+      const result = await graphql(schema, mutation, null, {
+        db,
+        userRole,
+        userId: user.id,
+      });
       expect(cloneDeep(result.data!.answerDelete)).toMatchObject({
         id: answer.id,
       });

@@ -10,7 +10,9 @@ export interface IResolveCarePlanSuggestionsOptions {
 }
 
 export async function resolveCarePlanSuggestionsForPatient(
-  root: any, args: IResolveCarePlanSuggestionsOptions, { db, userRole }: IContext,
+  root: any,
+  args: IResolveCarePlanSuggestionsOptions,
+  { db, userRole }: IContext,
 ): Promise<ICarePlanSuggestions> {
   await accessControls.isAllowed(userRole, 'view', 'patient');
 

@@ -3,25 +3,26 @@ import { UserRole } from '../../models/user';
 import aclJson from './acl';
 
 export type Action = 'view' | 'edit' | 'delete' | 'create';
-export type Resource = 'patient' |
-  'note' |
-  'patientEvents' |
-  'user' |
-  'allUsers' |
-  'encounter' |
-  'clinic' |
-  'task' |
-  'appointment' |
-  'answer' |
-  'questionCondition' |
-  'patientAnswer' |
-  'riskArea' |
-  'question' |
-  'concern' |
-  'patientConcern' |
-  'taskTemplate' |
-  'goalSuggestionTemplate' |
-  'patientGoal';
+export type Resource =
+  | 'patient'
+  | 'note'
+  | 'patientEvents'
+  | 'user'
+  | 'allUsers'
+  | 'encounter'
+  | 'clinic'
+  | 'task'
+  | 'appointment'
+  | 'answer'
+  | 'questionCondition'
+  | 'patientAnswer'
+  | 'riskArea'
+  | 'question'
+  | 'concern'
+  | 'patientConcern'
+  | 'taskTemplate'
+  | 'goalSuggestionTemplate'
+  | 'patientGoal';
 
 /*
 ACL SPEC:
@@ -46,7 +47,6 @@ export const aclInstance: any = new acl(new acl.memoryBackend());
 export type Acl = typeof aclInstance;
 
 export class AccessControls {
-
   constructor(private accessControls: Acl) {
     accessControls.allow(aclJson);
   }

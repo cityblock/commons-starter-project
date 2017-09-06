@@ -30,7 +30,9 @@ export async function answerCreate(root: any, { input }: IAnswerCreateArgs, cont
 }
 
 export async function resolveAnswersForQuestion(
-  root: any, args: { questionId: string }, { db, userRole }: IContext,
+  root: any,
+  args: { questionId: string },
+  { db, userRole }: IContext,
 ) {
   await accessControls.isAllowed(userRole, 'view', 'answer');
 
@@ -38,7 +40,9 @@ export async function resolveAnswersForQuestion(
 }
 
 export async function resolveAnswer(
-  root: any, args: { answerId: string }, { db, userRole }: IContext,
+  root: any,
+  args: { answerId: string },
+  { db, userRole }: IContext,
 ) {
   await accessControls.isAllowed(userRole, 'view', 'answer');
 
@@ -46,7 +50,9 @@ export async function resolveAnswer(
 }
 
 export async function answerEdit(
-  root: any, args: IEditAnswerOptions, { db, userId, userRole }: IContext,
+  root: any,
+  args: IEditAnswerOptions,
+  { db, userId, userRole }: IContext,
 ) {
   await accessControls.isAllowedForUser(userRole, 'edit', 'answer');
   checkUserLoggedIn(userId);
@@ -57,7 +63,9 @@ export async function answerEdit(
 }
 
 export async function answerDelete(
-  root: any, args: IDeleteAnswerOptions, { db, userId, userRole }: IContext,
+  root: any,
+  args: IDeleteAnswerOptions,
+  { db, userId, userRole }: IContext,
 ) {
   await accessControls.isAllowedForUser(userRole, 'edit', 'answer');
   checkUserLoggedIn(userId);

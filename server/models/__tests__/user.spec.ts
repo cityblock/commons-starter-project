@@ -40,9 +40,7 @@ describe('user model', () => {
 
   it('throws an error when getting an invalid id', async () => {
     const fakeId = 'fakeId';
-    await expect(User.get(fakeId))
-      .rejects
-      .toMatch('No such user: fakeId');
+    await expect(User.get(fakeId)).rejects.toMatch('No such user: fakeId');
   });
 
   it('returns null if getBy is called without a search parameter', async () => {
@@ -61,11 +59,9 @@ describe('user model', () => {
     const email = 'nonEmail';
     const message = 'email is not valid';
 
-    await expect(User.create({ email, userRole, homeClinicId: '1' }))
-      .rejects
-      .toMatchObject(
-        new Error(JSON.stringify({ email: [{ message }] }, null, '  ')),
-      );
+    await expect(User.create({ email, userRole, homeClinicId: '1' })).rejects.toMatchObject(
+      new Error(JSON.stringify({ email: [{ message }] }, null, '  ')),
+    );
   });
 
   it('gets last login', async () => {
@@ -107,19 +103,25 @@ describe('user model', () => {
   });
 
   it('should update user', async () => {
-    const user = await User.create({ email: 'a@b.com', userRole, homeClinicId: '1' });
+    const user = await User.create({
+      email: 'a@b.com',
+      userRole,
+      homeClinicId: '1',
+    });
     const googleAuth = await GoogleAuth.updateOrCreate({
       accessToken: 'accessToken',
       expiresAt: 'expires!',
       userId: user.id,
     });
-    expect(await User.update(user.id, {
-      firstName: 'first',
-      lastName: 'last',
-      googleProfileImageUrl: 'http://google.com',
-      homeClinicId: '2',
-      googleAuthId: googleAuth.id,
-    })).toMatchObject({
+    expect(
+      await User.update(user.id, {
+        firstName: 'first',
+        lastName: 'last',
+        googleProfileImageUrl: 'http://google.com',
+        homeClinicId: '2',
+        googleAuthId: googleAuth.id,
+      }),
+    ).toMatchObject({
       email: 'a@b.com',
       firstName: 'first',
       lastName: 'last',
@@ -133,41 +135,42 @@ describe('user model', () => {
     await User.create({ email: 'a@b.com', userRole, homeClinicId: '1' });
     await User.create({ email: 'b@c.com', userRole, homeClinicId: '1' });
 
-    expect(await User.getAll({ pageNumber: 0, pageSize: 10 })).toMatchObject(
-      {
-        results: [{
+    expect(await User.getAll({ pageNumber: 0, pageSize: 10 })).toMatchObject({
+      results: [
+        {
           email: 'a@b.com',
           userRole,
-        }, {
+        },
+        {
           email: 'b@c.com',
           userRole,
-        }],
-        total: 2,
-      },
-    );
+        },
+      ],
+      total: 2,
+    });
   });
 
   it('fetches a limited set of users', async () => {
     await User.create({ email: 'a@b.com', userRole, homeClinicId: '1' });
     await User.create({ email: 'b@c.com', userRole, homeClinicId: '1' });
 
-    expect(await User.getAll({ pageNumber: 0, pageSize: 1 })).toMatchObject(
-      {
-        results: [{
+    expect(await User.getAll({ pageNumber: 0, pageSize: 1 })).toMatchObject({
+      results: [
+        {
           email: 'a@b.com',
           userRole,
-        }],
-        total: 2,
-      },
-    );
-    expect(await User.getAll({ pageNumber: 1, pageSize: 1 })).toMatchObject(
-      {
-        results: [{
+        },
+      ],
+      total: 2,
+    });
+    expect(await User.getAll({ pageNumber: 1, pageSize: 1 })).toMatchObject({
+      results: [
+        {
           email: 'b@c.com',
           userRole,
-        }],
-        total: 2,
-      },
-    );
+        },
+      ],
+      total: 2,
+    });
   });
 });

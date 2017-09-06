@@ -97,8 +97,7 @@ export default class Question extends Model {
   }
 
   static async get(questionId: string): Promise<Question> {
-    const question = await this
-      .query()
+    const question = await this.query()
       .eager(EAGER_QUERY, {
         orderByOrder: (builder: any) => {
           builder.orderBy('order');
@@ -128,8 +127,7 @@ export default class Question extends Model {
   }
 
   static async create(input: IQuestionEditableFields) {
-    return this
-      .query()
+    return this.query()
       .eager(EAGER_QUERY, {
         orderByOrder: (builder: any) => {
           builder.orderBy('order');
@@ -154,8 +152,7 @@ export default class Question extends Model {
   }
 
   static async getAllForRiskArea(riskAreaId: string): Promise<Question[]> {
-    return this
-      .query()
+    return this.query()
       .where({ riskAreaId, deletedAt: null })
       .eager(EAGER_QUERY, {
         orderByOrder: (builder: any) => {
@@ -181,10 +178,10 @@ export default class Question extends Model {
   }
 
   static async edit(
-    patient: Partial<IQuestionEditableFields>, questionId: string,
+    patient: Partial<IQuestionEditableFields>,
+    questionId: string,
   ): Promise<Question> {
-    return await this
-      .query()
+    return await this.query()
       .eager(EAGER_QUERY, {
         orderByOrder: (builder: any) => {
           builder.orderBy('order');

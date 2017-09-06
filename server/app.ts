@@ -5,8 +5,10 @@ export default function app(req: any, res: any) {
    * upside: one stylesheet is loaded in dev so no out-of-sync stylesheets
    * downside: flash of unstyled html on pageload
    */
-  const stylesheet = process.env.NODE_ENV !== 'development' ?
-    `<link rel='stylesheet' href='/assets/styles/main.css'>` : '';
+  const stylesheet =
+    process.env.NODE_ENV !== 'development'
+      ? `<link rel='stylesheet' href='/assets/styles/main.css'>`
+      : '';
   const html = `
     <!doctype html>
     <html>

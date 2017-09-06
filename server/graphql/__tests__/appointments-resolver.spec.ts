@@ -68,17 +68,19 @@ describe('appointments', () => {
           }
         }`;
 
-        mockAthenaOpenAppointment({ appointmentids: { [appointmentId]: '12:20' } });
+        mockAthenaOpenAppointment({
+          appointmentids: { [appointmentId]: '12:20' },
+        });
         mockAthenaBookAppointment(appointmentId, [{ appointmentid: appointmentId }]);
         mockAthenaCheckinAppointment(appointmentId, { success: 'true' });
 
         const result = await graphql(schema, mutation, null, {
-          athenaApi, db, userRole,
+          athenaApi,
+          db,
+          userRole,
         });
 
-        expect(cloneDeep(result.errors![0].message)).toMatch(
-          'not logged in',
-        );
+        expect(cloneDeep(result.errors![0].message)).toMatch('not logged in');
       });
     });
 
@@ -92,12 +94,17 @@ describe('appointments', () => {
           }
         }`;
 
-        mockAthenaOpenAppointment({ appointmentids: { [appointmentId]: '12:20' } });
+        mockAthenaOpenAppointment({
+          appointmentids: { [appointmentId]: '12:20' },
+        });
         mockAthenaBookAppointment(appointmentId, [{ appointmentid: appointmentId }]);
         mockAthenaCheckinAppointment(appointmentId, { success: 'true' });
 
         const result = await graphql(schema, mutation, null, {
-          athenaApi, db, userRole, userId: user.id,
+          athenaApi,
+          db,
+          userRole,
+          userId: user.id,
         });
 
         expect(cloneDeep(result.data!.appointmentStart)).toMatchObject({
@@ -121,12 +128,13 @@ describe('appointments', () => {
         mockAthenaCheckinAppointment(appointmentId, { success: 'true' });
 
         const result = await graphql(schema, mutation, null, {
-          athenaApi, db, userRole, userId: user.id,
+          athenaApi,
+          db,
+          userRole,
+          userId: user.id,
         });
 
-        expect(cloneDeep(result.errors![0].message)).toMatch(
-          'The data provided is invalid',
-        );
+        expect(cloneDeep(result.errors![0].message)).toMatch('The data provided is invalid');
       });
     });
 
@@ -140,12 +148,17 @@ describe('appointments', () => {
           }
         }`;
 
-        mockAthenaOpenAppointment({ appointmentids: { [appointmentId]: '12:20' } });
+        mockAthenaOpenAppointment({
+          appointmentids: { [appointmentId]: '12:20' },
+        });
         mockAthenaBookAppointmentError(appointmentId);
         mockAthenaCheckinAppointment(appointmentId, { success: 'true' });
 
         const result = await graphql(schema, mutation, null, {
-          athenaApi, db, userRole, userId: user.id,
+          athenaApi,
+          db,
+          userRole,
+          userId: user.id,
         });
 
         expect(cloneDeep(result.errors![0].message)).toMatch(
@@ -164,12 +177,17 @@ describe('appointments', () => {
           }
         }`;
 
-        mockAthenaOpenAppointment({ appointmentids: { [appointmentId]: '12:20' } });
+        mockAthenaOpenAppointment({
+          appointmentids: { [appointmentId]: '12:20' },
+        });
         mockAthenaBookAppointment(appointmentId, [{ appointmentid: appointmentId }]);
         mockAthenaCheckinAppointmentError(appointmentId);
 
         const result = await graphql(schema, mutation, null, {
-          athenaApi, db, userRole, userId: user.id,
+          athenaApi,
+          db,
+          userRole,
+          userId: user.id,
         });
 
         expect(cloneDeep(result.errors![0].message)).toMatch(
@@ -198,7 +216,10 @@ describe('appointments', () => {
             mockAthenaCheckoutAppointment(appointmentId, { success: 'true' });
 
             const result = await graphql(schema, mutation, null, {
-              athenaApi, db, userRole, userId: user.id,
+              athenaApi,
+              db,
+              userRole,
+              userId: user.id,
             });
 
             expect(cloneDeep(result.data!.appointmentEnd)).toMatchObject({
@@ -223,7 +244,10 @@ describe('appointments', () => {
             mockAthenaCheckoutAppointmentError(appointmentId);
 
             const result = await graphql(schema, mutation, null, {
-              athenaApi, db, userRole, userId: user.id,
+              athenaApi,
+              db,
+              userRole,
+              userId: user.id,
             });
 
             expect(cloneDeep(result.errors![0].message)).toMatch(
@@ -249,12 +273,13 @@ describe('appointments', () => {
           mockAthenaCheckoutAppointment(appointmentId, { success: 'true' });
 
           const result = await graphql(schema, mutation, null, {
-            athenaApi, db, userRole, userId: user.id,
+            athenaApi,
+            db,
+            userRole,
+            userId: user.id,
           });
 
-          expect(cloneDeep(result.errors![0].message)).toMatch(
-            'The appointment is not available',
-          );
+          expect(cloneDeep(result.errors![0].message)).toMatch('The appointment is not available');
         });
       });
     });
@@ -275,7 +300,10 @@ describe('appointments', () => {
           mockAthenaCheckoutAppointment(appointmentId, { success: 'true' });
 
           const result = await graphql(schema, mutation, null, {
-            athenaApi, db, userRole, userId: user.id,
+            athenaApi,
+            db,
+            userRole,
+            userId: user.id,
           });
 
           expect(cloneDeep(result.data!.appointmentEnd)).toMatchObject({
@@ -299,7 +327,10 @@ describe('appointments', () => {
           mockAthenaCheckoutAppointmentError(appointmentId);
 
           const result = await graphql(schema, mutation, null, {
-            athenaApi, db, userRole, userId: user.id,
+            athenaApi,
+            db,
+            userRole,
+            userId: user.id,
           });
 
           expect(cloneDeep(result.errors![0].message)).toMatch(
@@ -327,7 +358,10 @@ describe('appointments', () => {
         mockAthenaAddNoteToAppointment(appointmentId, { success: 'true' });
 
         const result = await graphql(schema, mutation, null, {
-          athenaApi, db, userRole, userId: user.id,
+          athenaApi,
+          db,
+          userRole,
+          userId: user.id,
         });
 
         expect(cloneDeep(result.data!.appointmentAddNote)).toMatchObject({
@@ -352,12 +386,13 @@ describe('appointments', () => {
         mockAthenaAddNoteToAppointmentError(appointmentId);
 
         const result = await graphql(schema, mutation, null, {
-          athenaApi, db, userRole, userId: user.id,
+          athenaApi,
+          db,
+          userRole,
+          userId: user.id,
         });
 
-        expect(cloneDeep(result.errors![0].message)).toMatch(
-          'The appointment is not available.',
-        );
+        expect(cloneDeep(result.errors![0].message)).toMatch('The appointment is not available.');
       });
     });
   });

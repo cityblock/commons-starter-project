@@ -1,9 +1,5 @@
 import { pickBy } from 'lodash';
-import {
-  IPatientGoalCreateInput,
-  IPatientGoalDeleteInput,
-  IPatientGoalEditInput,
-} from 'schema';
+import { IPatientGoalCreateInput, IPatientGoalDeleteInput, IPatientGoalEditInput } from 'schema';
 import PatientGoal from '../models/patient-goal';
 import accessControls from './shared/access-controls';
 import { IContext } from './shared/utils';
@@ -25,7 +21,9 @@ export interface IDeletePatientGoalOptions {
 }
 
 export async function patientGoalCreate(
-  root: any, { input }: IPatientGoalCreateArgs, { userRole }: IContext,
+  root: any,
+  { input }: IPatientGoalCreateArgs,
+  { userRole }: IContext,
 ) {
   await accessControls.isAllowed(userRole, 'create', 'patientGoal');
 
@@ -33,7 +31,9 @@ export async function patientGoalCreate(
 }
 
 export async function resolvePatientGoal(
-  root: any, args: { patientGoalId: string }, { db, userRole }: IContext,
+  root: any,
+  args: { patientGoalId: string },
+  { db, userRole }: IContext,
 ) {
   await accessControls.isAllowed(userRole, 'view', 'patientGoal');
 
@@ -41,7 +41,9 @@ export async function resolvePatientGoal(
 }
 
 export async function resolvePatientGoalsForPatient(
-  root: any, args: { patientId: string }, { db, userRole }: IContext,
+  root: any,
+  args: { patientId: string },
+  { db, userRole }: IContext,
 ) {
   await accessControls.isAllowed(userRole, 'view', 'patientGoal');
 
@@ -49,7 +51,9 @@ export async function resolvePatientGoalsForPatient(
 }
 
 export async function patientGoalEdit(
-  root: any, args: IEditPatientGoalOptions, { db, userRole }: IContext,
+  root: any,
+  args: IEditPatientGoalOptions,
+  { db, userRole }: IContext,
 ) {
   await accessControls.isAllowedForUser(userRole, 'edit', 'patientGoal');
 
@@ -59,7 +63,9 @@ export async function patientGoalEdit(
 }
 
 export async function patientGoalDelete(
-  root: any, args: IDeletePatientGoalOptions, { db, userRole }: IContext,
+  root: any,
+  args: IDeletePatientGoalOptions,
+  { db, userRole }: IContext,
 ) {
   await accessControls.isAllowedForUser(userRole, 'edit', 'patientGoal');
 

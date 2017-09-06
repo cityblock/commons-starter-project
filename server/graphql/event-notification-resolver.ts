@@ -36,17 +36,14 @@ function getEventNotificationTitle(eventNotification: EventNotification) {
       case 'add_follower':
       case 'remove_follower': {
         const action = eventType === 'add_follower' ? 'added' : 'removed';
-        const longAction = eventType === 'add_follower' ?
-          'started following' : 'stopped following';
+        const longAction = eventType === 'add_follower' ? 'started following' : 'stopped following';
 
         if (eventUser && eventUser.id === eventNotification.userId) {
           // The user receiving the notification was added as a follower
           return `${userName} ${action} you as a follower to task: '${task.title}'`;
         } else if (eventUser) {
           // A different user was added as a follower
-          return (
-            `${eventUser.firstName} ${eventUser.lastName} ${longAction} task: '${task.title}'`
-          );
+          return `${eventUser.firstName} ${eventUser.lastName} ${longAction} task: '${task.title}'`;
         } else {
           // Something messed up
           return `Somebody ${longAction} task: '${task.title}'`;
@@ -90,9 +87,7 @@ function getEventNotificationTitle(eventNotification: EventNotification) {
         const { priority } = task;
         const formattedPriority = capitalize(priority || '');
 
-        return (
-          `${userName} changed the priority of task: '${task.title}' to '${formattedPriority}'`
-        );
+        return `${userName} changed the priority of task: '${task.title}' to ${formattedPriority}`;
       }
       case 'edit_due_date': {
         const { dueAt } = task;
@@ -100,9 +95,7 @@ function getEventNotificationTitle(eventNotification: EventNotification) {
         if (dueAt) {
           const formattedDueDate = moment(dueAt).format('MMM D, YYYY');
 
-          return (
-            `${userName} changed the due date of task: '${task.title}' to '${formattedDueDate}'`
-          );
+          return `${userName} changed the due date of task: '${task.title}' to ${formattedDueDate}`;
         } else {
           return `${userName} changed the due date of task: '${task.title}'`;
         }
@@ -124,7 +117,8 @@ function getEventNotificationTitle(eventNotification: EventNotification) {
         } else if (eventUser) {
           // A different user became the assignee
           return (
-            `${eventUser.firstName} ${eventUser.lastName} was assigned the task: '${task.title}'`
+            `${eventUser.firstName} ${eventUser.lastName} was assigned the ` +
+            `task: '${task.title}'`
           );
         } else {
           // Something messed up
@@ -141,7 +135,9 @@ function getEventNotificationTitle(eventNotification: EventNotification) {
 }
 
 export async function resolveEventNotificationsForCurrentUser(
-  root: any, args: IUserEventNotificationOptions, { db, userRole, userId }: IContext,
+  root: any,
+  args: IUserEventNotificationOptions,
+  { db, userRole, userId }: IContext,
 ): Promise<IEventNotificationEdges> {
   const { taskEventNotificationsOnly } = args;
 
@@ -155,23 +151,26 @@ export async function resolveEventNotificationsForCurrentUser(
 
   if (taskEventNotificationsOnly) {
     notifications = await EventNotification.getUserTaskEventNotifications(userId!, {
-      pageNumber, pageSize,
+      pageNumber,
+      pageSize,
     });
   } else {
     notifications = await EventNotification.getUserEventNotifications(userId!, {
-      pageNumber, pageSize,
+      pageNumber,
+      pageSize,
     });
   }
 
-  const notificationEdges = notifications.results.map((notification: EventNotification) =>
-    formatRelayEdge(
-      { title: getEventNotificationTitle(notification), ...notification },
-      notification.id,
-    ) as IEventNotificationNode,
+  const notificationEdges = notifications.results.map(
+    (notification: EventNotification) =>
+      formatRelayEdge(
+        { title: getEventNotificationTitle(notification), ...notification },
+        notification.id,
+      ) as IEventNotificationNode,
   );
 
   const hasPreviousPage = pageNumber !== 0;
-  const hasNextPage = ((pageNumber + 1) * pageSize) < notifications.total;
+  const hasNextPage = (pageNumber + 1) * pageSize < notifications.total;
 
   return {
     edges: notificationEdges,
@@ -183,7 +182,9 @@ export async function resolveEventNotificationsForCurrentUser(
 }
 
 export async function resolveEventNotificationsForTask(
-  root: any, args: ITaskEventNotificationOptions, { db, userRole, userId }: IContext,
+  root: any,
+  args: ITaskEventNotificationOptions,
+  { db, userRole, userId }: IContext,
 ): Promise<IEventNotificationEdges> {
   await accessControls.isAllowed(userRole, 'view', 'task');
   checkUserLoggedIn(userId);
@@ -192,18 +193,20 @@ export async function resolveEventNotificationsForTask(
   const pageSize = args.pageSize || 10;
 
   const notifications = await EventNotification.getTaskEventNotifications(args.taskId, {
-    pageNumber, pageSize,
+    pageNumber,
+    pageSize,
   });
 
-  const notificationEdges = notifications.results.map((notification: EventNotification) =>
-    formatRelayEdge(
-      { title: getEventNotificationTitle(notification), ...notification },
-      notification.id,
-    ) as IEventNotificationNode,
+  const notificationEdges = notifications.results.map(
+    (notification: EventNotification) =>
+      formatRelayEdge(
+        { title: getEventNotificationTitle(notification), ...notification },
+        notification.id,
+      ) as IEventNotificationNode,
   );
 
   const hasPreviousPage = pageNumber !== 0;
-  const hasNextPage = ((pageNumber + 1) * pageSize) < notifications.total;
+  const hasNextPage = (pageNumber + 1) * pageSize < notifications.total;
 
   return {
     edges: notificationEdges,
@@ -215,7 +218,9 @@ export async function resolveEventNotificationsForTask(
 }
 
 export async function eventNotificationDismiss(
-  root: any, { input }: IDismissEventNotificationOptions, { db, userId, userRole }: IContext,
+  root: any,
+  { input }: IDismissEventNotificationOptions,
+  { db, userId, userRole }: IContext,
 ) {
   await accessControls.isAllowedForUser(userRole, 'edit', 'user', userId, userId);
   checkUserLoggedIn(userId);

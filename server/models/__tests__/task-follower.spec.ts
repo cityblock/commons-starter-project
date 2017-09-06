@@ -65,13 +65,14 @@ describe('task followers', () => {
         assignedToId: user.id,
       });
 
-      const error = 'insert into "task_follower" ("id", "taskId", "userId") values ($1, $2, $3) '
-        + 'returning "id" - insert or update on table "task_follower" violates foreign key '
-        + 'constraint "task_follower_userid_foreign"';
+      const error =
+        'insert into "task_follower" ("id", "taskId", "userId") values ($1, $2, $3) ' +
+        'returning "id" - insert or update on table "task_follower" violates foreign key ' +
+        'constraint "task_follower_userid_foreign"';
 
-      await expect(TaskFollower.followTask({ userId: 'fakeUserId', taskId: task.id }))
-        .rejects
-        .toMatchObject(new Error(error));
+      await expect(
+        TaskFollower.followTask({ userId: 'fakeUserId', taskId: task.id }),
+      ).rejects.toMatchObject(new Error(error));
     });
 
     it('can remove a user from a followed tasks', async () => {

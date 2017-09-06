@@ -136,27 +136,27 @@ export default class EventNotification extends Model {
     }
     const userIdsToNotify = uniq(interestedUserIds).filter(userId => userId !== initiatingUserId);
 
-    const batchQueries = userIdsToNotify.map(userId => ({ taskEventId, userId }));
+    const batchQueries = userIdsToNotify.map(userId => ({
+      taskEventId,
+      userId,
+    }));
 
-    const result = await this
-      .query(txn)
-      .insertGraph(batchQueries);
+    const result = await this.query(txn).insertGraph(batchQueries);
 
     return result.length;
   }
 
   static async delete(eventNotificationId: string): Promise<EventNotification> {
-    return await this.query()
-      .updateAndFetchById(eventNotificationId, {
-        deletedAt: new Date().toISOString(),
-      });
+    return await this.query().updateAndFetchById(eventNotificationId, {
+      deletedAt: new Date().toISOString(),
+    });
   }
 
   static async update(
-    eventNotificationId: string, eventNotification: Partial<IEventNotificationEditableFields>,
+    eventNotificationId: string,
+    eventNotification: Partial<IEventNotificationEditableFields>,
   ): Promise<EventNotification> {
-    return await this
-      .query()
+    return await this.query()
       .eager(EAGER_QUERY)
       .updateAndFetchById(eventNotificationId, eventNotification);
   }
@@ -166,12 +166,11 @@ export default class EventNotification extends Model {
     userId: string,
     { pageNumber, pageSize }: IPaginationOptions,
   ): Promise<IPaginatedResults<EventNotification>> {
-    const eventNotifications = await this
-      .query()
+    const eventNotifications = (await this.query()
       .where({ userId, deletedAt: null, seenAt: null })
       .eager(EAGER_QUERY)
       .orderBy('createdAt', 'desc')
-      .page(pageNumber, pageSize) as any;
+      .page(pageNumber, pageSize)) as any;
 
     return {
       results: eventNotifications.results,
@@ -184,13 +183,12 @@ export default class EventNotification extends Model {
     userId: string,
     { pageNumber, pageSize }: IPaginationOptions,
   ): Promise<IPaginatedResults<EventNotification>> {
-    const eventNotifications = await this
-      .query()
+    const eventNotifications = (await this.query()
       .whereNot({ taskEventId: null })
       .andWhere({ userId, deletedAt: null, seenAt: null })
       .eager(EAGER_QUERY)
       .orderBy('createdAt', 'desc')
-      .page(pageNumber, pageSize) as any;
+      .page(pageNumber, pageSize)) as any;
 
     return {
       results: eventNotifications.results,
@@ -202,15 +200,14 @@ export default class EventNotification extends Model {
     taskId: string,
     { pageNumber, pageSize }: IPaginationOptions,
   ): Promise<IPaginatedResults<EventNotification>> {
-    const eventNotifications = await this
-      .query()
+    const eventNotifications = (await this.query()
       .joinRelation('task')
       .where('event_notification.deletedAt', null)
       .andWhere('event_notification.seenAt', null)
       .andWhere('task.id', taskId)
       .eager(EAGER_QUERY)
       .orderBy('event_notification.createdAt', 'desc')
-      .page(pageNumber, pageSize) as any;
+      .page(pageNumber, pageSize)) as any;
 
     return {
       results: eventNotifications.results,

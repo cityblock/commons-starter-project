@@ -3,7 +3,8 @@ import { IPatientInfoAthena } from '../types';
 
 // Note: This drops some fields returned by athena
 export const formatPatientHealthRecord = (
-  p: IPatientInfoAthena, patientId: string,
+  p: IPatientInfoAthena,
+  patientId: string,
 ): IPatientHealthRecord => ({
   id: patientId,
   firstName: p.firstname,

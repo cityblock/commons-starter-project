@@ -3,9 +3,9 @@ import config from '../../config';
 import { Env } from '../../index';
 
 export async function checkRabbitHandler(req: express.Request, res: express.Response) {
-  const {
-    protocol, endpoint, port, user, pass, url,
-   } = config.rabbot[(config.NODE_ENV || 'test') as Env].api;
+  const { protocol, endpoint, port, user, pass, url } = config.rabbot[
+    (config.NODE_ENV || 'test') as Env
+  ].api;
 
   try {
     /**
@@ -17,9 +17,9 @@ export async function checkRabbitHandler(req: express.Request, res: express.Resp
      */
     const response = await fetch(`${protocol}://${user}:${pass}@${url}:${port}${endpoint}`);
     const body = await response.json();
-    const queueLengths = body.filter((queue: any) =>
-      queue.name === 'low-priority' || queue.name === 'high-priority',
-    ).map((queue: any) => queue.messages_ready);
+    const queueLengths = body
+      .filter((queue: any) => queue.name === 'low-priority' || queue.name === 'high-priority')
+      .map((queue: any) => queue.messages_ready);
 
     if (queueLengths.some((length: any) => length > 300)) {
       console.error('RabbitMQ check failed!');

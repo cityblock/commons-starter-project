@@ -20,7 +20,9 @@ export interface IUserPatientPanelOptions extends IPaginationOptions {
 }
 
 export async function careTeamAddUser(
-  source: any, { input }: ICareTeamOptions, context: IContext,
+  source: any,
+  { input }: ICareTeamOptions,
+  context: IContext,
 ): Promise<User[]> {
   const { userRole } = context;
   const { userId, patientId } = input;
@@ -30,7 +32,9 @@ export async function careTeamAddUser(
 }
 
 export async function careTeamRemoveUser(
-  source: any, { input }: ICareTeamOptions, context: IContext,
+  source: any,
+  { input }: ICareTeamOptions,
+  context: IContext,
 ) {
   const { userRole } = context;
   const { userId, patientId } = input;
@@ -63,7 +67,10 @@ export async function resolveUserPatientPanel(
     patients = await CareTeam.getForUser(userId, { pageNumber, pageSize });
   } else if (currentUserId) {
     // Otherwise, fetch patient panel for the current user
-    patients = await CareTeam.getForUser(currentUserId, { pageNumber, pageSize });
+    patients = await CareTeam.getForUser(currentUserId, {
+      pageNumber,
+      pageSize,
+    });
   } else {
     throw new Error(`Could not get userPatientPanel. User not logged in.`);
   }
@@ -73,7 +80,7 @@ export async function resolveUserPatientPanel(
   );
 
   const hasPreviousPage = pageNumber !== 0;
-  const hasNextPage = ((pageNumber + 1) * pageSize) < patients.total;
+  const hasNextPage = (pageNumber + 1) * pageSize < patients.total;
 
   return {
     edges: patientEdges,

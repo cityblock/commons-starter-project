@@ -88,10 +88,7 @@ export async function patientSetup(
     if (!athenaPatientId) {
       throw new Error('Athena patient was not correctly created');
     }
-    return await patientWithTransaction.addAthenaPatientId(
-      athenaPatientId,
-      patient.id,
-    );
+    return await patientWithTransaction.addAthenaPatientId(athenaPatientId, patient.id);
   });
   // Need to wait until the transaction is complete to add relations like Care Team
   await CareTeam.create({ userId: userId!, patientId: result.id });

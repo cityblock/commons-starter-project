@@ -91,7 +91,9 @@ export default class TaskComment extends Model {
   }
 
   static async update(
-    taskCommentId: string, body: string, txn?: Transaction,
+    taskCommentId: string,
+    body: string,
+    txn?: Transaction,
   ): Promise<TaskComment> {
     return await this.query(txn)
       .eager(EAGER_QUERY)
@@ -99,22 +101,20 @@ export default class TaskComment extends Model {
   }
 
   static async delete(taskCommentId: string, txn?: Transaction): Promise<TaskComment> {
-    return await this.query(txn)
-      .updateAndFetchById(taskCommentId, {
-        deletedAt: new Date().toISOString(),
-      });
+    return await this.query(txn).updateAndFetchById(taskCommentId, {
+      deletedAt: new Date().toISOString(),
+    });
   }
 
   static async getTaskComments(
     taskId: string,
     { pageNumber, pageSize }: IPaginationOptions,
   ): Promise<IPaginatedResults<TaskComment>> {
-    const patientsResult = await this
-      .query()
+    const patientsResult = (await this.query()
       .where({ taskId, deletedAt: null })
       .eager(EAGER_QUERY)
       .orderBy('createdAt', 'desc')
-      .page(pageNumber, pageSize) as any;
+      .page(pageNumber, pageSize)) as any;
 
     return {
       results: patientsResult.results,

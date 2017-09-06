@@ -42,7 +42,7 @@ export async function OauthAuthorize(code: string): Promise<IAuthToken> {
       code,
     }),
   });
-  return await response.json() as IAuthToken;
+  return (await response.json()) as IAuthToken;
 }
 
 export function parseIdToken(idToken: string): IGoogleProfile {

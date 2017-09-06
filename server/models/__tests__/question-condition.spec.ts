@@ -48,7 +48,8 @@ describe('answer model', () => {
 
   it('creates and gets questionCondition', async () => {
     const questionCondition = await QuestionCondition.create({
-      answerId: answer.id, questionId: question2.id,
+      answerId: answer.id,
+      questionId: question2.id,
     });
     expect(questionCondition).toMatchObject({
       answerId: answer.id,
@@ -56,21 +57,25 @@ describe('answer model', () => {
     });
     const queriedQuestionCondition = await QuestionCondition.get(questionCondition.id);
     expect(queriedQuestionCondition).toMatchObject({
-      answerId: answer.id, questionId: question2.id,
+      answerId: answer.id,
+      questionId: question2.id,
     });
   });
 
   it('should throw an error if a patient does not exist for the id', async () => {
     const fakeId = 'fakeId';
-    await expect(QuestionCondition.get(fakeId))
-      .rejects
-      .toMatch('No such questionCondition: fakeId');
+    await expect(QuestionCondition.get(fakeId)).rejects.toMatch(
+      'No such questionCondition: fakeId',
+    );
   });
 
   it('cannot create questionCondition for answer that is on question', async () => {
-    await expect(QuestionCondition.create({ answerId: answer.id, questionId: question.id }))
-      .rejects
-      .toMatch(`Error: Answer ${answer.id} is an answer to question ${question.id}`);
+    await expect(
+      QuestionCondition.create({
+        answerId: answer.id,
+        questionId: question.id,
+      }),
+    ).rejects.toMatch(`Error: Answer ${answer.id} is an answer to question ${question.id}`);
   });
 
   it('edits questionCondition for answer', async () => {
@@ -84,22 +89,24 @@ describe('answer model', () => {
       order: 1,
     });
     const questionCondition = await QuestionCondition.create({
-      answerId: answer.id, questionId: question2.id,
+      answerId: answer.id,
+      questionId: question2.id,
     });
     expect(
       await QuestionCondition.edit(
         { answerId: answer2.id, questionId: question2.id },
-        questionCondition.id),
-    )
-      .toMatchObject({
-        answerId: answer2.id,
-        questionId: question2.id,
-      });
+        questionCondition.id,
+      ),
+    ).toMatchObject({
+      answerId: answer2.id,
+      questionId: question2.id,
+    });
   });
 
   it('deletes questionCondition', async () => {
     const questionCondition = await QuestionCondition.create({
-      answerId: answer.id, questionId: question2.id,
+      answerId: answer.id,
+      questionId: question2.id,
     });
     expect(questionCondition.deletedAt).toBeNull();
     const deleted = await QuestionCondition.delete(questionCondition.id);

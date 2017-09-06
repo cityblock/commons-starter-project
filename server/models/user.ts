@@ -6,12 +6,12 @@ import Clinic from './clinic';
 import GoogleAuth from './google-auth';
 
 export type UserRole =
-  'physician' |
-  'nurseCareManager' |
-  'healthCoach' |
-  'familyMember' |
-  'anonymousUser' |
-  'admin';
+  | 'physician'
+  | 'nurseCareManager'
+  | 'healthCoach'
+  | 'familyMember'
+  | 'anonymousUser'
+  | 'admin';
 
 export interface ICreateUser {
   email: string;
@@ -114,9 +114,11 @@ export default class User extends Model {
   async $beforeSave(inserting: boolean) {
     if (this.email && !isEmail(this.email)) {
       throw new ValidationError({
-        email: [{
-          message: 'email is not valid',
-        }],
+        email: [
+          {
+            message: 'email is not valid',
+          },
+        ],
       });
     }
   }
@@ -124,9 +126,11 @@ export default class User extends Model {
   async $beforeInsert() {
     if (this.id) {
       throw new ValidationError({
-        id: [{
-          message: 'id should not be defined before insert',
-        }],
+        id: [
+          {
+            message: 'id should not be defined before insert',
+          },
+        ],
       });
     }
 
@@ -147,21 +151,15 @@ export default class User extends Model {
   }
 
   static async create(user: ICreateUser): Promise<User> {
-    return await this
-      .query()
-      .insertAndFetch(user);
+    return await this.query().insertAndFetch(user);
   }
 
   static async update(userId: string, user: Partial<IUpdateUser>): Promise<User> {
-    return await this
-      .query()
-      .updateAndFetchById(userId, user);
+    return await this.query().updateAndFetchById(userId, user);
   }
 
   static async get(userId: string): Promise<User> {
-    const user = await this
-      .query()
-      .findById(userId);
+    const user = await this.query().findById(userId);
     if (!user) {
       return Promise.reject(`No such user: ${userId}`);
     }
@@ -173,8 +171,7 @@ export default class User extends Model {
       return null;
     }
 
-    const user = await this
-      .query()
+    const user = await this.query()
       .where(fieldName, field)
       .first();
     if (!user) {
@@ -184,12 +181,11 @@ export default class User extends Model {
     return user;
   }
 
-  static async getAll(
-    { pageNumber, pageSize }: IPaginationOptions,
-  ): Promise<IPaginatedResults<User>> {
-    const usersResult = await this
-      .query()
-      .page(pageNumber, pageSize) as any;
+  static async getAll({
+    pageNumber,
+    pageSize,
+  }: IPaginationOptions): Promise<IPaginatedResults<User>> {
+    const usersResult = (await this.query().page(pageNumber, pageSize)) as any;
 
     return {
       results: usersResult.results,

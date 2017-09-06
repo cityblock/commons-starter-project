@@ -111,7 +111,9 @@ import {
   taskCommentEdit,
 } from './task-comment-resolver';
 import {
-  resolveCurrentUserTasks, taskUserFollow, taskUserUnfollow,
+  resolveCurrentUserTasks,
+  taskUserFollow,
+  taskUserUnfollow,
 } from './task-follower-resolver';
 import {
   resolvePatientTasks,

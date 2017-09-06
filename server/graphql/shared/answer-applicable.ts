@@ -18,7 +18,7 @@ export function getPatientAnswersByQuestionId(
   const patientAnswersByQuestionId: { [s: string]: PatientAnswer[] } = {};
 
   // We eager load question -> answers but not answer -> question
-  const answerIdToQuestionIdHash: { [s: string]: string; } = {};
+  const answerIdToQuestionIdHash: { [s: string]: string } = {};
   questions.forEach(question => {
     question.answers.forEach(answer => {
       answerIdToQuestionIdHash[answer.id] = question.id;
@@ -55,7 +55,8 @@ export function getPatientAnswersByAnswerId(
  * Looks at all patient answers and checks if condition {questionId, answerId} hashes match up
  */
 export function isQuestionApplicable(
-  question: Question, patientAnswersByQuestionId: IPatientAnswersByQuestionId,
+  question: Question,
+  patientAnswersByQuestionId: IPatientAnswersByQuestionId,
 ): boolean {
   let allTrue = true;
   let oneTrue = false;

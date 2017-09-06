@@ -64,37 +64,33 @@ export default class GoalSuggestion extends Model {
   }
 
   static async getForGoalSuggestion(goalSuggestionTemplateId: string): Promise<Answer[]> {
-    const goalSuggestionAnswers = await GoalSuggestion
-      .query()
+    const goalSuggestionAnswers = await GoalSuggestion.query()
       .where('goalSuggestionTemplateId', goalSuggestionTemplateId)
       .andWhere('deletedAt', null)
       .eager('answer')
       .orderBy('createdAt', 'asc');
-    return goalSuggestionAnswers.map(
-      (goalSuggestion: GoalSuggestion) => goalSuggestion.answer,
-    );
+    return goalSuggestionAnswers.map((goalSuggestion: GoalSuggestion) => goalSuggestion.answer);
   }
 
   static async getForAnswer(answerId: string): Promise<GoalSuggestionTemplate[]> {
-    const goalSuggestionAnswers = await GoalSuggestion
-      .query()
+    const goalSuggestionAnswers = (await GoalSuggestion.query()
       .where('answerId', answerId)
       .andWhere('deletedAt', null)
       .orderBy('createdAt')
-      .eager('goalSuggestionTemplate') as any;
+      .eager('goalSuggestionTemplate')) as any;
     return goalSuggestionAnswers.map(
       (goalSuggestion: GoalSuggestion) => goalSuggestion.goalSuggestionTemplate,
     );
   }
 
   static async getForPatient(
-    patientId: string, riskAreaId?: string,
+    patientId: string,
+    riskAreaId?: string,
   ): Promise<GoalSuggestionTemplate[]> {
     let goalSuggestions;
 
     if (riskAreaId) {
-      goalSuggestions = await this
-        .query()
+      goalSuggestions = await this.query()
         .eager('goalSuggestionTemplate.[taskTemplates]')
         .joinRelation('answer.question')
         .join('patient_answer', 'answer.id', 'patient_answer.answerId')
@@ -103,8 +99,7 @@ export default class GoalSuggestion extends Model {
         .andWhere('patient_answer.applicable', true)
         .andWhere('answer:question.riskAreaId', riskAreaId);
     } else {
-      goalSuggestions = await this
-        .query()
+      goalSuggestions = await this.query()
         .eager('goalSuggestionTemplate.[taskTemplates]')
         .joinRelation('answer')
         .join('patient_answer', 'answer.id', 'patient_answer.answerId')
@@ -118,30 +113,32 @@ export default class GoalSuggestion extends Model {
     );
   }
 
-  static async create(
-    { goalSuggestionTemplateId, answerId }: IGoalSuggestionEditableFields,
-  ): Promise<GoalSuggestionTemplate[]> {
+  static async create({
+    goalSuggestionTemplateId,
+    answerId,
+  }: IGoalSuggestionEditableFields): Promise<GoalSuggestionTemplate[]> {
     // TODO: use postgres UPCERT here to add relation if it doesn't exist instead of a transaction
     await transaction(GoalSuggestion, async GoalSuggestionWithTransaction => {
-      const relations = await GoalSuggestionWithTransaction
-        .query()
+      const relations = await GoalSuggestionWithTransaction.query()
         .where('goalSuggestionTemplateId', goalSuggestionTemplateId)
         .andWhere('answerId', answerId)
         .andWhere('deletedAt', null);
 
       if (relations.length < 1) {
-        await GoalSuggestionWithTransaction
-          .query()
-          .insert({ goalSuggestionTemplateId, answerId });
+        await GoalSuggestionWithTransaction.query().insert({
+          goalSuggestionTemplateId,
+          answerId,
+        });
       }
     });
 
     return await this.getForAnswer(answerId);
   }
 
-  static async delete(
-    { goalSuggestionTemplateId, answerId }: IGoalSuggestionEditableFields,
-  ): Promise<GoalSuggestionTemplate[]> {
+  static async delete({
+    goalSuggestionTemplateId,
+    answerId,
+  }: IGoalSuggestionEditableFields): Promise<GoalSuggestionTemplate[]> {
     await this.query()
       .where('goalSuggestionTemplateId', goalSuggestionTemplateId)
       .andWhere('answerId', answerId)
@@ -149,6 +146,5 @@ export default class GoalSuggestion extends Model {
       .update({ deletedAt: new Date().toISOString() });
     return await this.getForAnswer(answerId);
   }
-
 }
 /* tslint:disable:member-ordering */

@@ -11,14 +11,10 @@ import PatientAnswer from '../../models/patient-answer';
 import Question from '../../models/question';
 import RiskArea from '../../models/risk-area';
 import User from '../../models/user';
-import {
-  createMockPatient,
-  createPatient,
-} from '../../spec-helpers';
+import { createMockPatient, createPatient } from '../../spec-helpers';
 import schema from '../make-executable-schema';
 
 describe('patient answer tests', () => {
-
   let db: Db;
   const userRole = 'admin';
   let riskArea: RiskArea;
@@ -83,32 +79,39 @@ describe('patient answer tests', () => {
   describe('resolve care plan suggestions', () => {
     it('can get care plan suggestions for a patient', async () => {
       const concern = await Concern.create({ title: 'Concern' });
-      const goalSuggestionTemplate = await GoalSuggestionTemplate.create({ title: 'Goal' });
+      const goalSuggestionTemplate = await GoalSuggestionTemplate.create({
+        title: 'Goal',
+      });
 
       await ConcernSuggestion.create({
-        concernId: concern.id, answerId: answer.id,
+        concernId: concern.id,
+        answerId: answer.id,
       });
       await GoalSuggestion.create({
-        goalSuggestionTemplateId: goalSuggestionTemplate.id, answerId: answer2.id,
+        goalSuggestionTemplateId: goalSuggestionTemplate.id,
+        answerId: answer2.id,
       });
 
       await PatientAnswer.create({
         patientId: patient.id,
-        answers: [{
-          questionId: answer.questionId,
-          answerId: answer.id,
-          answerValue: '3',
-          patientId: patient.id,
-          applicable: true,
-          userId: user.id,
-        }, {
-          questionId: answer2.questionId,
-          answerId: answer2.id,
-          answerValue: '3',
-          patientId: patient.id,
-          applicable: true,
-          userId: user.id,
-        }],
+        answers: [
+          {
+            questionId: answer.questionId,
+            answerId: answer.id,
+            answerValue: '3',
+            patientId: patient.id,
+            applicable: true,
+            userId: user.id,
+          },
+          {
+            questionId: answer2.questionId,
+            answerId: answer2.id,
+            answerValue: '3',
+            patientId: patient.id,
+            applicable: true,
+            userId: user.id,
+          },
+        ],
       });
 
       const query = `{
@@ -126,38 +129,50 @@ describe('patient answer tests', () => {
       const result = await graphql(schema, query, null, { db, userRole });
       expect(cloneDeep(result.data!.carePlanSuggestionsForPatient)).toMatchObject({
         concernSuggestions: [{ id: concern.id, title: concern.title }],
-        goalSuggestions: [{ id: goalSuggestionTemplate.id, title: goalSuggestionTemplate.title }],
+        goalSuggestions: [
+          {
+            id: goalSuggestionTemplate.id,
+            title: goalSuggestionTemplate.title,
+          },
+        ],
       });
     });
 
     it('gets care plan suggestions for a patient and risk area', async () => {
       const concern = await Concern.create({ title: 'Concern' });
-      const goalSuggestionTemplate = await GoalSuggestionTemplate.create({ title: 'Goal' });
+      const goalSuggestionTemplate = await GoalSuggestionTemplate.create({
+        title: 'Goal',
+      });
 
       await ConcernSuggestion.create({
-        concernId: concern.id, answerId: answer.id,
+        concernId: concern.id,
+        answerId: answer.id,
       });
       await GoalSuggestion.create({
-        goalSuggestionTemplateId: goalSuggestionTemplate.id, answerId: answer2.id,
+        goalSuggestionTemplateId: goalSuggestionTemplate.id,
+        answerId: answer2.id,
       });
 
       await PatientAnswer.create({
         patientId: patient.id,
-        answers: [{
-          questionId: answer.questionId,
-          answerId: answer.id,
-          answerValue: '3',
-          patientId: patient.id,
-          applicable: true,
-          userId: user.id,
-        }, {
-          questionId: answer2.questionId,
-          answerId: answer2.id,
-          answerValue: '3',
-          patientId: patient.id,
-          applicable: true,
-          userId: user.id,
-        }],
+        answers: [
+          {
+            questionId: answer.questionId,
+            answerId: answer.id,
+            answerValue: '3',
+            patientId: patient.id,
+            applicable: true,
+            userId: user.id,
+          },
+          {
+            questionId: answer2.questionId,
+            answerId: answer2.id,
+            answerValue: '3',
+            patientId: patient.id,
+            applicable: true,
+            userId: user.id,
+          },
+        ],
       });
 
       const query = `{
@@ -176,7 +191,12 @@ describe('patient answer tests', () => {
       const suggestions = cloneDeep(result.data!.carePlanSuggestionsForPatient);
       expect(suggestions).toMatchObject({
         concernSuggestions: [],
-        goalSuggestions: [{ id: goalSuggestionTemplate.id, title: goalSuggestionTemplate.title }],
+        goalSuggestions: [
+          {
+            id: goalSuggestionTemplate.id,
+            title: goalSuggestionTemplate.title,
+          },
+        ],
       });
       expect(suggestions.concernSuggestions).toEqual([]);
     });

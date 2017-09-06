@@ -1,8 +1,5 @@
 import Db from '../../db';
-import {
-  createMockPatient,
-  createPatient,
-} from '../../spec-helpers';
+import { createMockPatient, createPatient } from '../../spec-helpers';
 import Answer from '../answer';
 import GoalSuggestion from '../goal-suggestion';
 import GoalSuggestionTemplate from '../goal-suggestion-template';
@@ -41,7 +38,9 @@ describe('goal suggestion model', () => {
       questionId: question.id,
       order: 1,
     });
-    goalSuggestionTemplate = await GoalSuggestionTemplate.create({ title: 'Fix housing' });
+    goalSuggestionTemplate = await GoalSuggestionTemplate.create({
+      title: 'Fix housing',
+    });
   });
 
   afterAll(async () => {
@@ -50,7 +49,9 @@ describe('goal suggestion model', () => {
 
   describe('goal suggestion methods', () => {
     it('should associate multiple goal suggestions with an answer', async () => {
-      const goalSuggestionTemplate2 = await GoalSuggestionTemplate.create({ title: 'fix Medical' });
+      const goalSuggestionTemplate2 = await GoalSuggestionTemplate.create({
+        title: 'fix Medical',
+      });
 
       await GoalSuggestion.create({
         goalSuggestionTemplateId: goalSuggestionTemplate.id,
@@ -72,10 +73,11 @@ describe('goal suggestion model', () => {
     });
 
     it('throws an error if adding a non-existant goal suggestion to an answer', async () => {
-      const error = 'insert into \"goal_suggestion\" (\"answerId\", \"goalSuggestionTemplateId\",' +
-        ' \"id\") values ($1, $2, $3) returning \"id\" - insert or update on table ' +
-        '\"goal_suggestion\" violates foreign key constraint ' +
-        '\"goal_suggestion_goalsuggestiontemplateid_foreign\"';
+      const error =
+        'insert into "goal_suggestion" ("answerId", "goalSuggestionTemplateId",' +
+        ' "id") values ($1, $2, $3) returning "id" - insert or update on table ' +
+        '"goal_suggestion" violates foreign key constraint ' +
+        '"goal_suggestion_goalsuggestiontemplateid_foreign"';
 
       await expect(
         GoalSuggestion.create({
@@ -107,7 +109,9 @@ describe('goal suggestion model', () => {
         userRole: 'physician',
         homeClinicId: '1',
       });
-      const goalSuggestionTemplate2 = await GoalSuggestionTemplate.create({ title: 'Fix Food' });
+      const goalSuggestionTemplate2 = await GoalSuggestionTemplate.create({
+        title: 'Fix Food',
+      });
       const patient = await createPatient(createMockPatient(123), user.id);
 
       const question2 = await Question.create({
@@ -136,14 +140,16 @@ describe('goal suggestion model', () => {
 
       await PatientAnswer.create({
         patientId: patient.id,
-        answers: [{
-          patientId: patient.id,
-          answerId: answer.id,
-          answerValue: answer.value,
-          applicable: true,
-          questionId: question.id,
-          userId: user.id,
-        }],
+        answers: [
+          {
+            patientId: patient.id,
+            answerId: answer.id,
+            answerValue: answer.value,
+            applicable: true,
+            questionId: question.id,
+            userId: user.id,
+          },
+        ],
       });
 
       // At this point, only first goal should be suggested
@@ -153,14 +159,16 @@ describe('goal suggestion model', () => {
 
       await PatientAnswer.create({
         patientId: patient.id,
-        answers: [{
-          patientId: patient.id,
-          answerId: answer2.id,
-          answerValue: answer2.value,
-          applicable: true,
-          questionId: question2.id,
-          userId: user.id,
-        }],
+        answers: [
+          {
+            patientId: patient.id,
+            answerId: answer2.id,
+            answerValue: answer2.value,
+            applicable: true,
+            questionId: question2.id,
+            userId: user.id,
+          },
+        ],
       });
 
       // Now both goals should be suggested
@@ -176,7 +184,9 @@ describe('goal suggestion model', () => {
         userRole: 'physician',
         homeClinicId: '1',
       });
-      const goalSuggestionTemplate2 = await GoalSuggestionTemplate.create({ title: 'Fix Food' });
+      const goalSuggestionTemplate2 = await GoalSuggestionTemplate.create({
+        title: 'Fix Food',
+      });
       const patient = await createPatient(createMockPatient(123), user.id);
 
       const riskArea2 = await RiskArea.create({ title: 'testing2', order: 2 });
@@ -207,21 +217,24 @@ describe('goal suggestion model', () => {
 
       await PatientAnswer.create({
         patientId: patient.id,
-        answers: [{
-          patientId: patient.id,
-          answerId: answer.id,
-          answerValue: answer.value,
-          applicable: true,
-          questionId: question.id,
-          userId: user.id,
-        }, {
-          patientId: patient.id,
-          answerId: answer2.id,
-          answerValue: answer2.value,
-          applicable: true,
-          questionId: question2.id,
-          userId: user.id,
-        }],
+        answers: [
+          {
+            patientId: patient.id,
+            answerId: answer.id,
+            answerValue: answer.value,
+            applicable: true,
+            questionId: question.id,
+            userId: user.id,
+          },
+          {
+            patientId: patient.id,
+            answerId: answer2.id,
+            answerValue: answer2.value,
+            applicable: true,
+            questionId: question2.id,
+            userId: user.id,
+          },
+        ],
       });
 
       // Should only contain the suggestion for risk area 2

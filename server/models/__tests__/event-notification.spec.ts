@@ -69,9 +69,9 @@ describe('task event model', () => {
 
   it('throws an error when fetching by an invalid id', async () => {
     const fakeId = 'fakeId';
-    await expect(EventNotification.get(fakeId))
-      .rejects
-      .toMatch('No such eventNotification: fakeId');
+    await expect(EventNotification.get(fakeId)).rejects.toMatch(
+      'No such eventNotification: fakeId',
+    );
   });
 
   it('sets up the correct associations when created', async () => {
@@ -84,7 +84,9 @@ describe('task event model', () => {
       taskEventId: taskEvent.id,
       userId: user.id,
     });
-    const eventNotification2 = await EventNotification.create({ userId: user.id });
+    const eventNotification2 = await EventNotification.create({
+      userId: user.id,
+    });
 
     const fetchedEventNotification1 = await EventNotification.get(eventNotification1.id);
     const fetchedEventNotification2 = await EventNotification.get(eventNotification2.id);
@@ -118,7 +120,8 @@ describe('task event model', () => {
     });
 
     const fetchedNotifications = await EventNotification.getUserEventNotifications(user.id, {
-      pageNumber: 0, pageSize: 10,
+      pageNumber: 0,
+      pageSize: 10,
     });
     const fetchedIds = fetchedNotifications.results.map(result => result.id);
 
@@ -147,7 +150,8 @@ describe('task event model', () => {
     });
 
     const fetchedNotifications = await EventNotification.getUserTaskEventNotifications(user.id, {
-      pageNumber: 0, pageSize: 10,
+      pageNumber: 0,
+      pageSize: 10,
     });
     const fetchedIds = fetchedNotifications.results.map(result => result.id);
 
@@ -172,7 +176,8 @@ describe('task event model', () => {
     });
 
     const fetchedNotifications = await EventNotification.getTaskEventNotifications(task.id, {
-      pageNumber: 0, pageSize: 10,
+      pageNumber: 0,
+      pageSize: 10,
     });
     const fetchedIds = fetchedNotifications.results.map(result => result.id);
 
@@ -211,16 +216,20 @@ describe('task event model', () => {
     });
 
     const userNotifs = await EventNotification.getUserTaskEventNotifications(user.id, {
-      pageNumber: 0, pageSize: 10,
+      pageNumber: 0,
+      pageSize: 10,
     });
     const user2Notifs = await EventNotification.getUserTaskEventNotifications(user2.id, {
-      pageNumber: 0, pageSize: 10,
+      pageNumber: 0,
+      pageSize: 10,
     });
     const user3Notifs = await EventNotification.getUserTaskEventNotifications(user3.id, {
-      pageNumber: 0, pageSize: 10,
+      pageNumber: 0,
+      pageSize: 10,
     });
     const user4Notifs = await EventNotification.getUserTaskEventNotifications(user4.id, {
-      pageNumber: 0, pageSize: 10,
+      pageNumber: 0,
+      pageSize: 10,
     });
 
     expect(userNotifs.total).toEqual(1);
@@ -246,11 +255,15 @@ describe('task event model', () => {
   });
 
   it('updates a notification', async () => {
-    const eventNotification = await EventNotification.create({ userId: user.id });
+    const eventNotification = await EventNotification.create({
+      userId: user.id,
+    });
 
     expect(eventNotification.seenAt).toBeUndefined();
 
-    await EventNotification.update(eventNotification.id, { seenAt: new Date().toISOString() });
+    await EventNotification.update(eventNotification.id, {
+      seenAt: new Date().toISOString(),
+    });
     const fetchedNotification = await EventNotification.get(eventNotification.id);
 
     expect(fetchedNotification.seenAt).not.toBeUndefined();

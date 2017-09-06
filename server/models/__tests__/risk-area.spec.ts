@@ -5,10 +5,7 @@ import PatientAnswer from '../../models/patient-answer';
 import Question from '../../models/question';
 import RiskArea from '../../models/risk-area';
 import User from '../../models/user';
-import {
-  createMockPatient,
-  createPatient,
-} from '../../spec-helpers';
+import { createMockPatient, createPatient } from '../../spec-helpers';
 
 describe('risk area model', () => {
   let db: Db;
@@ -33,9 +30,7 @@ describe('risk area model', () => {
 
   it('should throw an error if a risk area does not exist for the id', async () => {
     const fakeId = 'fakeId';
-    await expect(RiskArea.get(fakeId))
-      .rejects
-      .toMatch('No such risk area: fakeId');
+    await expect(RiskArea.get(fakeId)).rejects.toMatch('No such risk area: fakeId');
   });
 
   it('edits risk area', async () => {
@@ -61,8 +56,7 @@ describe('risk area model', () => {
     const deleted = await RiskArea.delete(riskArea.id);
     expect(deleted.deletedAt).not.toBeNull();
 
-    expect(await RiskArea.getAll())
-      .toMatchObject([riskArea2]);
+    expect(await RiskArea.getAll()).toMatchObject([riskArea2]);
   });
 
   it('deleted risk area', async () => {
@@ -76,7 +70,6 @@ describe('risk area model', () => {
   });
 
   describe('questions with patient answers', () => {
-
     let question: Question;
     let patient: Patient;
     let riskArea: RiskArea;
@@ -93,7 +86,11 @@ describe('risk area model', () => {
         riskAreaId: riskArea.id,
         order: 1,
       });
-      user = await User.create({ email: 'a@b.com', userRole: 'admin', homeClinicId: '1' });
+      user = await User.create({
+        email: 'a@b.com',
+        userRole: 'admin',
+        homeClinicId: '1',
+      });
       patient = await createPatient(createMockPatient(123), user.id);
     });
 
@@ -110,14 +107,16 @@ describe('risk area model', () => {
       });
       await PatientAnswer.create({
         patientId: patient.id,
-        answers: [{
-          questionId: answer.questionId,
-          answerId: answer.id,
-          answerValue: '3',
-          patientId: patient.id,
-          applicable: true,
-          userId: user.id,
-        }],
+        answers: [
+          {
+            questionId: answer.questionId,
+            answerId: answer.id,
+            answerValue: '3',
+            patientId: patient.id,
+            applicable: true,
+            userId: user.id,
+          },
+        ],
       });
       expect(await RiskArea.getSummaryForPatient(riskArea.id, patient.id)).toMatchObject({
         started: true,
@@ -154,25 +153,29 @@ describe('risk area model', () => {
       });
       await PatientAnswer.create({
         patientId: patient.id,
-        answers: [{
-          questionId: answer.questionId,
-          answerId: answer.id,
-          answerValue: '3',
-          patientId: patient.id,
-          applicable: true,
-          userId: user.id,
-        }],
+        answers: [
+          {
+            questionId: answer.questionId,
+            answerId: answer.id,
+            answerValue: '3',
+            patientId: patient.id,
+            applicable: true,
+            userId: user.id,
+          },
+        ],
       });
       await PatientAnswer.create({
         patientId: patient.id,
-        answers: [{
-          questionId: highRiskAnswer.questionId,
-          answerId: highRiskAnswer.id,
-          answerValue: '4',
-          patientId: patient.id,
-          applicable: true,
-          userId: user.id,
-        }],
+        answers: [
+          {
+            questionId: highRiskAnswer.questionId,
+            answerId: highRiskAnswer.id,
+            answerValue: '4',
+            patientId: patient.id,
+            applicable: true,
+            userId: user.id,
+          },
+        ],
       });
       expect(await RiskArea.getRiskScoreForPatient(riskArea.id, patient.id)).toEqual({
         score: 1,
@@ -229,28 +232,32 @@ describe('risk area model', () => {
       });
       await PatientAnswer.create({
         patientId: patient.id,
-        answers: [{
-          questionId: answer1.questionId,
-          answerId: answer1.id,
-          answerValue: '3',
-          patientId: patient.id,
-          applicable: true,
-          userId: user.id,
-        }, {
-          questionId: answer2.questionId,
-          answerId: answer2.id,
-          answerValue: '4',
-          patientId: patient.id,
-          applicable: false,
-          userId: user.id,
-        }, {
-          questionId: answer3.questionId,
-          answerId: answer3.id,
-          answerValue: '5',
-          patientId: patient.id,
-          applicable: true,
-          userId: user.id,
-        }],
+        answers: [
+          {
+            questionId: answer1.questionId,
+            answerId: answer1.id,
+            answerValue: '3',
+            patientId: patient.id,
+            applicable: true,
+            userId: user.id,
+          },
+          {
+            questionId: answer2.questionId,
+            answerId: answer2.id,
+            answerValue: '4',
+            patientId: patient.id,
+            applicable: false,
+            userId: user.id,
+          },
+          {
+            questionId: answer3.questionId,
+            answerId: answer3.id,
+            answerValue: '5',
+            patientId: patient.id,
+            applicable: true,
+            userId: user.id,
+          },
+        ],
       });
 
       const fullThreeSixtySummary = await RiskArea.getThreeSixtySummaryForPatient(patient.id);
@@ -259,13 +266,16 @@ describe('risk area model', () => {
       expect(fullThreeSixtySummary.riskAreas[1].riskArea.id).toEqual(riskArea2.id);
       expect(fullThreeSixtySummary.riskAreas[0].scoreData.forceHighRisk).toEqual(false);
       expect(fullThreeSixtySummary.riskAreas[0].scoreData.score).toEqual(1);
-      expect(fullThreeSixtySummary.riskAreas[0].summaryData.summary)
-        .toContain('loves writing tests summary text!');
-      expect(fullThreeSixtySummary.riskAreas[0].summaryData.summary)
-        .not.toContain('hates writing tests summary text!');
+      expect(fullThreeSixtySummary.riskAreas[0].summaryData.summary).toContain(
+        'loves writing tests summary text!',
+      );
+      expect(fullThreeSixtySummary.riskAreas[0].summaryData.summary).not.toContain(
+        'hates writing tests summary text!',
+      );
       expect(fullThreeSixtySummary.riskAreas[1].scoreData.forceHighRisk).toEqual(true);
-      expect(fullThreeSixtySummary.riskAreas[1].summaryData.summary)
-        .toContain('really hates writing tests summary text!');
+      expect(fullThreeSixtySummary.riskAreas[1].summaryData.summary).toContain(
+        'really hates writing tests summary text!',
+      );
     });
   });
 });

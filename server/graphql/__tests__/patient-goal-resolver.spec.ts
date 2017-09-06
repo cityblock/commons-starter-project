@@ -4,10 +4,7 @@ import Db from '../../db';
 import Patient from '../../models/patient';
 import PatientGoal from '../../models/patient-goal';
 import User from '../../models/user';
-import {
-  createMockPatient,
-  createPatient,
-} from '../../spec-helpers';
+import { createMockPatient, createPatient } from '../../spec-helpers';
 import schema from '../make-executable-schema';
 
 describe('patient goal resolver', () => {
@@ -110,13 +107,16 @@ describe('patient goal resolver', () => {
         patientGoals(patientId: "${patient.id}") { patientId, title }
       }`;
 
-      const result = await graphql(schema, query, null, { db, userRole: 'admin' });
+      const result = await graphql(schema, query, null, {
+        db,
+        userRole: 'admin',
+      });
       expect(cloneDeep(result.data!.patientGoals)).toMatchObject([
         {
           patientId: patient.id,
           title: 'title',
-        }],
-      );
+        },
+      ]);
     });
   });
 });

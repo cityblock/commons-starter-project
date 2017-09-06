@@ -20,7 +20,6 @@ import {
 import schema from '../make-executable-schema';
 
 describe('patient', () => {
-
   let athenaApi: AthenaApi;
   let redoxApi: RedoxApi;
   let db: Db;
@@ -37,7 +36,10 @@ describe('patient', () => {
     mockAthenaTokenFetch();
     mockRedoxTokenFetch();
 
-    const homeClinic = await HomeClinic.create({ name: 'cool clinic', departmentId: 1 });
+    const homeClinic = await HomeClinic.create({
+      name: 'cool clinic',
+      departmentId: 1,
+    });
     homeClinicId = homeClinic.id;
     user = await User.create({
       email: 'a@b.com',
@@ -111,9 +113,12 @@ describe('patient', () => {
 
       mockRedoxCreatePatient(123);
 
-      const result = await graphql(
-        schema, query, null, { redoxApi, db, userRole, userId: user.id },
-      );
+      const result = await graphql(schema, query, null, {
+        redoxApi,
+        db,
+        userRole,
+        userId: user.id,
+      });
       expect(cloneDeep(result.data!.patientSetup)).toMatchObject({
         firstName: 'first',
         lastName: 'last',
@@ -147,12 +152,15 @@ describe('patient', () => {
 
       mockRedoxCreatePatientError();
 
-      const result = await graphql(
-        schema, query, null, { redoxApi, db, userRole, userId: user.id },
+      const result = await graphql(schema, query, null, {
+        redoxApi,
+        db,
+        userRole,
+        userId: user.id,
+      });
+      expect(result.errors![0].message).toContain(
+        'Post received a 400 response, https://api.redoxengine.com/endpoint, 400',
       );
-      expect(
-        result.errors![0].message,
-      ).toContain('Post received a 400 response, https://api.redoxengine.com/endpoint, 400');
       expect(await Patient.query().count()).toEqual(patientCount);
     });
   });
@@ -167,7 +175,11 @@ describe('patient', () => {
 
       mockAthenaGetPatient(1, createMockAthenaPatient(1, 'Constance', 'Blanton'));
 
-      const result = await graphql(schema, query, null, { athenaApi, db, userRole });
+      const result = await graphql(schema, query, null, {
+        athenaApi,
+        db,
+        userRole,
+      });
       expect(cloneDeep(result.data!.patientHealthRecord)).toMatchObject({
         id: patient.id,
         firstName: 'Constance',
@@ -186,9 +198,11 @@ describe('patient', () => {
         }
       }`;
 
-      const result = await graphql(
-        schema, query, null, { db, userRole, userId: user.id },
-      );
+      const result = await graphql(schema, query, null, {
+        db,
+        userRole,
+        userId: user.id,
+      });
 
       expect(cloneDeep(result.data!.patientScratchPad)).toMatchObject({
         text: 'Test Scratch Pad',
@@ -206,7 +220,11 @@ describe('patient', () => {
         }
       }`;
 
-      const result = await graphql(schema, query, null, { db, userRole, userId: user.id });
+      const result = await graphql(schema, query, null, {
+        db,
+        userRole,
+        userId: user.id,
+      });
       expect(cloneDeep(result.data!.patientScratchPadEdit)).toMatchObject({
         text: 'Edited Scratch Pad',
       });

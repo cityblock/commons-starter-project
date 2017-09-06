@@ -19,7 +19,10 @@ describe('clinic resolver', () => {
 
   describe('resolve clinic', () => {
     it('fetches a clinic', async () => {
-      const clinic = await Clinic.create({ departmentId: 1, name: 'Center Zero' });
+      const clinic = await Clinic.create({
+        departmentId: 1,
+        name: 'Center Zero',
+      });
       const query = `{ clinic(clinicId: "${clinic.id}") { name, departmentId } }`;
       const result = await graphql(schema, query, null, { userRole });
 
@@ -64,10 +67,22 @@ describe('clinic resolver', () => {
   });
   describe('clinics', () => {
     it('returns correct page information', async () => {
-      const clinic1 = await Clinic.create({ departmentId: 1, name: 'Center Zero' });
-      const clinic2 = await Clinic.create({ departmentId: 2, name: 'Center One' });
-      const clinic3 = await Clinic.create({ departmentId: 3, name: 'Center Two' });
-      const clinic4 = await Clinic.create({ departmentId: 4, name: 'Center Three' });
+      const clinic1 = await Clinic.create({
+        departmentId: 1,
+        name: 'Center Zero',
+      });
+      const clinic2 = await Clinic.create({
+        departmentId: 2,
+        name: 'Center One',
+      });
+      const clinic3 = await Clinic.create({
+        departmentId: 3,
+        name: 'Center Two',
+      });
+      const clinic4 = await Clinic.create({
+        departmentId: 4,
+        name: 'Center Three',
+      });
       await Clinic.create({ departmentId: 5, name: 'Center Four' });
 
       const query = `{
@@ -84,25 +99,33 @@ describe('clinic resolver', () => {
         }
       }`;
 
-      const result = await graphql(schema, query, null, { db, userRole: 'admin' });
+      const result = await graphql(schema, query, null, {
+        db,
+        userRole: 'admin',
+      });
       expect(cloneDeep(result.data!.clinics)).toMatchObject({
-        edges: [{
-          node: {
-            name: clinic1.name,
+        edges: [
+          {
+            node: {
+              name: clinic1.name,
+            },
           },
-        }, {
-          node: {
-            name: clinic2.name,
+          {
+            node: {
+              name: clinic2.name,
+            },
           },
-        }, {
-          node: {
-            name: clinic3.name,
+          {
+            node: {
+              name: clinic3.name,
+            },
           },
-        }, {
-          node: {
-            name: clinic4.name,
+          {
+            node: {
+              name: clinic4.name,
+            },
           },
-        }],
+        ],
         pageInfo: {
           hasNextPage: true,
           hasPreviousPage: false,

@@ -34,8 +34,7 @@ export function fetchMoreTasks(data: TasksResponse, variables: any, key: Key) {
 
   return data.fetchMore({
     variables,
-    updateQuery: (
-      previousResult: TasksResponse, d: any,
-    ) => updateQuery(previousResult, d.fetchMoreResult, key),
+    updateQuery: (previousResult: TasksResponse, d: any) =>
+      updateQuery(previousResult, d.fetchMoreResult, key),
   });
 }

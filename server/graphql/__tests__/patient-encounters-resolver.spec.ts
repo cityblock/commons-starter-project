@@ -55,7 +55,11 @@ describe('patient encounters', () => {
 
       mockRedoxGetPatientEncounters([]);
 
-      const result = await graphql(schema, query, null, { redoxApi, db, userRole });
+      const result = await graphql(schema, query, null, {
+        redoxApi,
+        db,
+        userRole,
+      });
       expect(cloneDeep(result.data!.patientEncounters)).toMatchObject([]);
     });
   });
@@ -68,23 +72,31 @@ describe('patient encounters', () => {
         }
       }`;
 
-      mockRedoxGetPatientEncounters([{
-        Type: {
-          Code: '99222',
-          CodeSystem: '2.16.840.1.113883.6.12',
-          CodeSystemName: 'CPT',
-          Name: 'InPatient Admission',
+      mockRedoxGetPatientEncounters([
+        {
+          Type: {
+            Code: '99222',
+            CodeSystem: '2.16.840.1.113883.6.12',
+            CodeSystemName: 'CPT',
+            Name: 'InPatient Admission',
+          },
+          Providers: [],
+          Locations: [],
+          ReasonForVisit: [],
+          Diagnosis: [],
         },
-        Providers: [],
-        Locations: [],
-        ReasonForVisit: [],
-        Diagnosis: [],
-      }]);
+      ]);
 
-      const result = await graphql(schema, query, null, { redoxApi, db, userRole });
-      expect(cloneDeep(result.data!.patientEncounters)).toMatchObject([{
-        encounterType: 'InPatient Admission',
-      }]);
+      const result = await graphql(schema, query, null, {
+        redoxApi,
+        db,
+        userRole,
+      });
+      expect(cloneDeep(result.data!.patientEncounters)).toMatchObject([
+        {
+          encounterType: 'InPatient Admission',
+        },
+      ]);
     });
   });
 });

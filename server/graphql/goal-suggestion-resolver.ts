@@ -9,7 +9,9 @@ export interface IGoalSuggestOptions {
 }
 
 export async function resolveGoalSuggestionTemplatesForAnswer(
-  root: any, args: { answerId: string }, { db, userRole }: IContext,
+  root: any,
+  args: { answerId: string },
+  { db, userRole }: IContext,
 ): Promise<GoalSuggestionTemplate[]> {
   await accessControls.isAllowed(userRole, 'view', 'goalSuggestionTemplate');
 
@@ -17,7 +19,9 @@ export async function resolveGoalSuggestionTemplatesForAnswer(
 }
 
 export async function goalSuggestionCreate(
-  root: any, args: IGoalSuggestOptions, { db, userRole }: IContext,
+  root: any,
+  args: IGoalSuggestOptions,
+  { db, userRole }: IContext,
 ): Promise<GoalSuggestionTemplate[]> {
   await accessControls.isAllowed(userRole, 'view', 'goalSuggestionTemplate');
 
@@ -28,7 +32,9 @@ export async function goalSuggestionCreate(
 }
 
 export async function goalSuggestionDelete(
-  root: any, args: IGoalSuggestOptions, { db, userRole }: IContext,
+  root: any,
+  args: IGoalSuggestOptions,
+  { db, userRole }: IContext,
 ): Promise<GoalSuggestionTemplate[]> {
   await accessControls.isAllowed(userRole, 'view', 'goalSuggestionTemplate');
 

@@ -1,7 +1,8 @@
 import { getEventNotificationsForCurrentUserQuery } from '../../graphql/types';
 
-export type EventNotificationsResponse =
-  getEventNotificationsForCurrentUserQuery & { fetchMore: any };
+export type EventNotificationsResponse = getEventNotificationsForCurrentUserQuery & {
+  fetchMore: any;
+};
 export type Key = 'eventNotificationsForCurrentUser';
 
 function updateQuery(
@@ -44,8 +45,7 @@ export function fetchMoreEventNotifications(
 
   return data.fetchMore({
     variables,
-    updateQuery: (
-      previousResult: EventNotificationsResponse, d: any,
-    ) => updateQuery(previousResult, d.fetchMoreResult, key),
+    updateQuery: (previousResult: EventNotificationsResponse, d: any) =>
+      updateQuery(previousResult, d.fetchMoreResult, key),
   });
 }

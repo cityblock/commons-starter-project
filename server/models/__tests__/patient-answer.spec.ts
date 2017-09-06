@@ -1,8 +1,5 @@
 import Db from '../../db';
-import {
-  createMockPatient,
-  createPatient,
-} from '../../spec-helpers';
+import { createMockPatient, createPatient } from '../../spec-helpers';
 import Answer from '../answer';
 import Patient from '../patient';
 import PatientAnswer from '../patient-answer';
@@ -58,33 +55,37 @@ describe('answer model', () => {
   it('should create and get an answer', async () => {
     const patientAnswers = await PatientAnswer.create({
       patientId: patient.id,
-      answers: [{
-        questionId: answer.questionId,
-        answerId: answer.id,
-        answerValue: '3',
-        patientId: patient.id,
-        userId: user.id,
-        applicable: true,
-      }],
+      answers: [
+        {
+          questionId: answer.questionId,
+          answerId: answer.id,
+          answerValue: '3',
+          patientId: patient.id,
+          userId: user.id,
+          applicable: true,
+        },
+      ],
     });
     expect(patientAnswers[0].answerValue).toEqual('3');
     expect(await PatientAnswer.get(patientAnswers[0].id)).toEqual(patientAnswers[0]);
-    expect(await PatientAnswer.getForQuestion(
-      question.id, patient.id,
-    )).toMatchObject([patientAnswers[0]]);
+    expect(await PatientAnswer.getForQuestion(question.id, patient.id)).toMatchObject([
+      patientAnswers[0],
+    ]);
   });
 
   it('should mark appropriate previous answers as deleted', async () => {
     const previousAnswers = await PatientAnswer.create({
       patientId: patient.id,
-      answers: [{
-        questionId: answer.questionId,
-        answerId: answer.id,
-        answerValue: '3',
-        patientId: patient.id,
-        userId: user.id,
-        applicable: true,
-      }],
+      answers: [
+        {
+          questionId: answer.questionId,
+          answerId: answer.id,
+          answerValue: '3',
+          patientId: patient.id,
+          userId: user.id,
+          applicable: true,
+        },
+      ],
     });
     const fetchedAnswers1 = await PatientAnswer.getForQuestion(answer.questionId, patient.id);
     expect(fetchedAnswers1!.map(ans => ans.id)).toContain(previousAnswers[0].id);
@@ -101,14 +102,16 @@ describe('answer model', () => {
 
     const newAnswers = await PatientAnswer.create({
       patientId: patient.id,
-      answers: [{
-        questionId: answer.questionId,
-        answerId: differentAnswer.id,
-        answerValue: '4',
-        patientId: patient.id,
-        userId: user.id,
-        applicable: true,
-      }],
+      answers: [
+        {
+          questionId: answer.questionId,
+          answerId: differentAnswer.id,
+          answerValue: '4',
+          patientId: patient.id,
+          userId: user.id,
+          applicable: true,
+        },
+      ],
     });
     const fetchedAnswers2 = await PatientAnswer.getForQuestion(answer.questionId, patient.id);
     const fetchedAnswers2Ids = fetchedAnswers2!.map(ans => ans.id);
@@ -120,30 +123,34 @@ describe('answer model', () => {
   it('getForQuestion returns most recent answer for non-multiselect question', async () => {
     await PatientAnswer.create({
       patientId: patient.id,
-      answers: [{
-        questionId: answer.questionId,
-        answerId: answer.id,
-        answerValue: '3',
-        patientId: patient.id,
-        userId: user.id,
-        applicable: true,
-      }],
+      answers: [
+        {
+          questionId: answer.questionId,
+          answerId: answer.id,
+          answerValue: '3',
+          patientId: patient.id,
+          userId: user.id,
+          applicable: true,
+        },
+      ],
     });
     const patientAnswers = await PatientAnswer.create({
       patientId: patient.id,
-      answers: [{
-        questionId: answer.questionId,
-        answerId: answer.id,
-        answerValue: '2',
-        patientId: patient.id,
-        userId: user.id,
-        applicable: true,
-      }],
+      answers: [
+        {
+          questionId: answer.questionId,
+          answerId: answer.id,
+          answerValue: '2',
+          patientId: patient.id,
+          userId: user.id,
+          applicable: true,
+        },
+      ],
     });
     expect(patientAnswers[0].answerValue).toEqual('2');
-    expect(await PatientAnswer.getForQuestion(
-      question.id, patient.id,
-    )).toEqual([patientAnswers[0]]);
+    expect(await PatientAnswer.getForQuestion(question.id, patient.id)).toEqual([
+      patientAnswers[0],
+    ]);
   });
 
   it('should create and get an answer for multiselect', async () => {
@@ -164,25 +171,29 @@ describe('answer model', () => {
     });
     const patientAnswers = await PatientAnswer.create({
       patientId: patient.id,
-      answers: [{
-        questionId: answer.questionId,
-        answerId: answer.id,
-        answerValue: '3',
-        patientId: patient.id,
-        userId: user.id,
-        applicable: true,
-      }],
+      answers: [
+        {
+          questionId: answer.questionId,
+          answerId: answer.id,
+          answerValue: '3',
+          patientId: patient.id,
+          userId: user.id,
+          applicable: true,
+        },
+      ],
     });
     const patientAnswers2 = await PatientAnswer.create({
       patientId: patient.id,
-      answers: [{
-        questionId: answer.questionId,
-        answerId: answer.id,
-        answerValue: '2',
-        patientId: patient.id,
-        userId: user.id,
-        applicable: true,
-      }],
+      answers: [
+        {
+          questionId: answer.questionId,
+          answerId: answer.id,
+          answerValue: '2',
+          patientId: patient.id,
+          userId: user.id,
+          applicable: true,
+        },
+      ],
     });
     expect(patientAnswers[0].answerValue).toEqual('3');
     expect((await PatientAnswer.get(patientAnswers[0].id))!.id).toEqual(patientAnswers[0].id);
@@ -193,22 +204,22 @@ describe('answer model', () => {
 
   it('should throw an error if an answer does not exist for the id', async () => {
     const fakeId = 'fakeId';
-    await expect(PatientAnswer.get(fakeId))
-      .rejects
-      .toMatch('No such patientAnswer: fakeId');
+    await expect(PatientAnswer.get(fakeId)).rejects.toMatch('No such patientAnswer: fakeId');
   });
 
   it('gets all patient answers for a given patient', async () => {
     const patientAnswers = await PatientAnswer.create({
       patientId: patient.id,
-      answers: [{
-        questionId: answer.questionId,
-        answerId: answer.id,
-        answerValue: '3',
-        patientId: patient.id,
-        applicable: true,
-        userId: user.id,
-      }],
+      answers: [
+        {
+          questionId: answer.questionId,
+          answerId: answer.id,
+          answerValue: '3',
+          patientId: patient.id,
+          applicable: true,
+          userId: user.id,
+        },
+      ],
     });
 
     const fetchedAnswers = await PatientAnswer.getAllForPatient(patient.id);
@@ -219,26 +230,30 @@ describe('answer model', () => {
   it('can get answer history', async () => {
     const patientAnswers = await PatientAnswer.create({
       patientId: patient.id,
-      answers: [{
-        questionId: answer.questionId,
-        answerId: answer.id,
-        answerValue: '3',
-        patientId: patient.id,
-        applicable: true,
-        userId: user.id,
-      }],
+      answers: [
+        {
+          questionId: answer.questionId,
+          answerId: answer.id,
+          answerValue: '3',
+          patientId: patient.id,
+          applicable: true,
+          userId: user.id,
+        },
+      ],
     });
     expect(patientAnswers[0].answerValue).toEqual('3');
     const patientAnswers2 = await PatientAnswer.create({
       patientId: patient.id,
-      answers: [{
-        questionId: answer.questionId,
-        answerId: answer.id,
-        answerValue: '2',
-        patientId: patient.id,
-        applicable: true,
-        userId: user.id,
-      }],
+      answers: [
+        {
+          questionId: answer.questionId,
+          answerId: answer.id,
+          answerValue: '2',
+          patientId: patient.id,
+          applicable: true,
+          userId: user.id,
+        },
+      ],
     });
     expect(patientAnswers2[0].answerValue).toEqual('2');
 
@@ -246,33 +261,38 @@ describe('answer model', () => {
     const otherPatient = await createPatient(createMockPatient(321), user.id);
     await PatientAnswer.create({
       patientId: otherPatient.id,
-      answers: [{
-        questionId: answer.questionId,
-        answerId: answer.id,
-        answerValue: '2',
-        patientId: otherPatient.id,
-        applicable: true,
-        userId: user.id,
-      }],
+      answers: [
+        {
+          questionId: answer.questionId,
+          answerId: answer.id,
+          answerValue: '2',
+          patientId: otherPatient.id,
+          applicable: true,
+          userId: user.id,
+        },
+      ],
     });
 
     const updatedOldAnswer = await PatientAnswer.get(patientAnswers[0].id);
 
-    expect(await PatientAnswer.getPreviousAnswersForQuestion(question.id, patient.id))
-      .toEqual([updatedOldAnswer]);
+    expect(await PatientAnswer.getPreviousAnswersForQuestion(question.id, patient.id)).toEqual([
+      updatedOldAnswer,
+    ]);
   });
 
   it('edits patient answer applicable', async () => {
     const patientAnswers = await PatientAnswer.create({
       patientId: patient.id,
-      answers: [{
-        questionId: answer.questionId,
-        answerId: answer.id,
-        answerValue: '3',
-        patientId: patient.id,
-        applicable: true,
-        userId: user.id,
-      }],
+      answers: [
+        {
+          questionId: answer.questionId,
+          answerId: answer.id,
+          answerValue: '3',
+          patientId: patient.id,
+          applicable: true,
+          userId: user.id,
+        },
+      ],
     });
     const patientAnswerUpdated = await PatientAnswer.editApplicable(false, patientAnswers[0].id);
     expect(patientAnswerUpdated.applicable).toBeFalsy();
@@ -281,14 +301,16 @@ describe('answer model', () => {
   it('deletes patient answer', async () => {
     const patientAnswers = await PatientAnswer.create({
       patientId: patient.id,
-      answers: [{
-        questionId: answer.questionId,
-        answerId: answer.id,
-        answerValue: '3',
-        patientId: patient.id,
-        applicable: true,
-        userId: user.id,
-      }],
+      answers: [
+        {
+          questionId: answer.questionId,
+          answerId: answer.id,
+          answerValue: '3',
+          patientId: patient.id,
+          applicable: true,
+          userId: user.id,
+        },
+      ],
     });
     const deletedPatientAnswer = await PatientAnswer.delete(patientAnswers[0].id);
     expect(deletedPatientAnswer).not.toBeNull();
@@ -297,16 +319,19 @@ describe('answer model', () => {
   it('get all for risk area', async () => {
     const patientAnswers = await PatientAnswer.create({
       patientId: patient.id,
-      answers: [{
-        questionId: answer.questionId,
-        answerId: answer.id,
-        answerValue: '3',
-        patientId: patient.id,
-        applicable: true,
-        userId: user.id,
-      }],
+      answers: [
+        {
+          questionId: answer.questionId,
+          answerId: answer.id,
+          answerValue: '3',
+          patientId: patient.id,
+          applicable: true,
+          userId: user.id,
+        },
+      ],
     });
-    expect(await PatientAnswer.getForRiskArea(riskArea.id, patient.id))
-      .toEqual([patientAnswers[0]]);
+    expect(await PatientAnswer.getForRiskArea(riskArea.id, patient.id)).toEqual([
+      patientAnswers[0],
+    ]);
   });
 });

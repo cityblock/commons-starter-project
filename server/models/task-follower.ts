@@ -65,25 +65,24 @@ export default class TaskFollower extends Model {
   }
 
   static async followTask(
-    { userId, taskId }: ITaskFollowerOptions, txn?: Transaction,
+    { userId, taskId }: ITaskFollowerOptions,
+    txn?: Transaction,
   ): Promise<TaskFollower> {
-    const relations = await TaskFollower
-      .query()
+    const relations = await TaskFollower.query()
       .where('taskId', taskId)
       .andWhere('userId', userId)
       .andWhere('deletedAt', null);
 
     if (relations.length < 1) {
-      return await TaskFollower
-        .query()
-        .insert({ taskId, userId });
+      return await TaskFollower.query().insert({ taskId, userId });
     } else {
       return relations[0];
     }
   }
 
   static async unfollowTask(
-    { userId, taskId }: ITaskFollowerOptions, txn?: Transaction,
+    { userId, taskId }: ITaskFollowerOptions,
+    txn?: Transaction,
   ): Promise<number> {
     return await this.query()
       .where('userId', userId)

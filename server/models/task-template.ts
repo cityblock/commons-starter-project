@@ -80,17 +80,14 @@ export default class TaskTemplate extends Model {
   }
 
   static async create(input: ITaskTemplateEditableFields) {
-    return await this
-      .query()
-      .insertAndFetch(input);
+    return await this.query().insertAndFetch(input);
   }
 
   static async edit(
-    taskTemplateId: string, taskTemplate: Partial<ITaskTemplateEditableFields>,
+    taskTemplateId: string,
+    taskTemplate: Partial<ITaskTemplateEditableFields>,
   ): Promise<TaskTemplate> {
-    return await this
-      .query()
-      .updateAndFetchById(taskTemplateId, taskTemplate);
+    return await this.query().updateAndFetchById(taskTemplateId, taskTemplate);
   }
 
   // TODO: paginate?
@@ -99,10 +96,9 @@ export default class TaskTemplate extends Model {
   }
 
   static async delete(taskTemplateId: string): Promise<TaskTemplate> {
-    return await this.query()
-      .updateAndFetchById(taskTemplateId, {
-        deletedAt: new Date().toISOString(),
-      });
+    return await this.query().updateAndFetchById(taskTemplateId, {
+      deletedAt: new Date().toISOString(),
+    });
   }
 }
 /* tslint:disable:member-ordering */

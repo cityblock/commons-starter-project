@@ -10,19 +10,19 @@ export interface IRedoxMeta {
     ID: string;
     Name: string;
   };
-  Destinations: Array<{ ID: string; Name: string; }>;
+  Destinations: Array<{ ID: string; Name: string }>;
   Message?: {
-    ID: number,
+    ID: number;
   };
   Transmission?: {
-    ID: number,
+    ID: number;
   };
 }
 
 export interface IRedoxPatientCreateOptions {
   Meta: IRedoxMeta;
   Patient: {
-    Identifiers: Array<{ ID: string; IDType: string; }>;
+    Identifiers: Array<{ ID: string; IDType: string }>;
     Demographics: {
       FirstName: string;
       MiddleName?: string;
@@ -39,7 +39,7 @@ export interface IRedoxPatientCreateOptions {
       };
       EmailAddresses?: string[];
       Language?: string; // 'en';
-      Citizenship?: string[],
+      Citizenship?: string[];
       Address: {
         StreetAddress?: string;
         City?: string;
@@ -47,9 +47,9 @@ export interface IRedoxPatientCreateOptions {
         ZIP: string; // '53566',
         County?: string;
         Country?: string;
-      },
-    },
-    Notes?: string[],
+      };
+    };
+    Notes?: string[];
     Contacts?: Array<{
       FirstName: string;
       MiddleName?: string;
@@ -61,7 +61,7 @@ export interface IRedoxPatientCreateOptions {
         ZIP: string; // '53566',
         County?: string;
         Country?: string;
-      },
+      };
       PhoneNumber: {
         Home?: string; // '8088675301',
         Office?: string; // '8088675301',
@@ -83,17 +83,17 @@ export interface IRedoxPatientCreateOptions {
         ZIP: string; // '53566',
         County?: string;
         Country?: string;
-      },
+      };
       Location?: {
-        Type?: string,
-        Facility?: string,
-        Department?: string,
-        Room?: string,
-      },
+        Type?: string;
+        Facility?: string;
+        Department?: string;
+        Room?: string;
+      };
       PhoneNumber?: {
         Office?: string; // '6085551234',
-      },
-    },
+      };
+    };
     Guarantor?: {
       Number: string; // '10001910',
       FirstName: string;
@@ -111,12 +111,12 @@ export interface IRedoxPatientCreateOptions {
         ZIP: string; // '53566',
         County?: string;
         Country?: string;
-      },
+      };
       PhoneNumber: {
-        Home?: string,
-        Business?: string,
-      },
-      Type?: string,
+        Home?: string;
+        Business?: string;
+      };
+      Type?: string;
       RelationToPatient: string;
       Employer: {
         Name?: string;
@@ -127,16 +127,16 @@ export interface IRedoxPatientCreateOptions {
           ZIP: string; // '53566',
           County?: string;
           Country?: string;
-        },
+        };
         PhoneNumber: string; // '8083451121',
-      },
-    },
+      };
+    };
     Insurances: Array<{
       Plan: {
         ID?: string; // '31572',
         IDType?: string; // 'Payor ID',
         Name?: string; // 'HMO Deductable Plan',
-      },
+      };
       Company?: {
         ID?: string; // '60054',
         IDType?: string;
@@ -148,21 +148,21 @@ export interface IRedoxPatientCreateOptions {
           ZIP: string; // '53566',
           County?: string;
           Country?: string;
-        },
-        PhoneNumber: '8089541123',
-      },
+        };
+        PhoneNumber: '8089541123';
+      };
       GroupNumber?: string;
       GroupName?: string;
       EffectiveDate?: string; // '2015-01-01',
       ExpirationDate?: string; // '2020-12-31',
       PolicyNumber?: string;
-      AgreementType?: string,
-      CoverageType?: string,
+      AgreementType?: string;
+      CoverageType?: string;
       Insured: {
-        LastName?: string,
-        FirstName?: string,
-        Relationship?: string,
-        DOB?: string,
+        LastName?: string;
+        FirstName?: string;
+        Relationship?: string;
+        DOB?: string;
         Address?: {
           StreetAddress?: string;
           City?: string;
@@ -170,15 +170,15 @@ export interface IRedoxPatientCreateOptions {
           ZIP: string; // '53566',
           County?: string;
           Country?: string;
-        },
-      },
-    }>
+        };
+      };
+    }>;
   };
 }
 
 export interface IRedoxClinicalSummaryQueryOptions {
   Meta: IRedoxMeta;
-  Patient: { Identifiers: Array<{ ID: string; IDType: string; }> };
+  Patient: { Identifiers: Array<{ ID: string; IDType: string }> };
 }
 
 export interface IRedoxError {
@@ -228,10 +228,10 @@ export interface IRedoxClinicalSummaryQueryResponse {
     }>;
     Message: {
       ID: number;
-    },
+    };
     Transmission: {
       ID: number;
-    }
+    };
   };
   Header: {
     Document: {
@@ -267,7 +267,7 @@ export interface IRedoxClinicalSummaryQueryResponse {
       Type: string;
     };
     Patient: {
-      Identifiers: Array<{ ID: string; IDType: string; Type: string; }>;
+      Identifiers: Array<{ ID: string; IDType: string; Type: string }>;
       Demographics: {
         FirstName: string;
         LastName: string;
@@ -286,7 +286,7 @@ export interface IRedoxClinicalSummaryQueryResponse {
           Home: string; // +18005551234
           Mobile?: string; // +18005551234
         };
-        EmailAddresses: Array<{ Address: string; }>;
+        EmailAddresses: Array<{ Address: string }>;
         Race: string;
         Ethnicity?: string;
         Religion?: string;
@@ -427,7 +427,7 @@ export interface IRedoxClinicalSummaryQueryResponse {
       CodeSystem: string;
       CodeSystemName: string;
       Name: string;
-    }
+    };
   }>;
   MedicationsText: string;
   Medications: IRedoxClinicalSummaryMedication[];

@@ -117,15 +117,12 @@ export default class Answer extends Model {
   }
 
   static async get(answerId: string): Promise<Answer> {
-    const answer = await this
-      .query()
+    const answer = await this.query()
       .eager(EAGER_QUERY)
       .modifyEager('concernSuggestions', builder =>
         builder.where('concern_suggestion.deletedAt', null),
       )
-      .modifyEager('goalSuggestions', builder =>
-        builder.where('goal_suggestion.deletedAt', null),
-      )
+      .modifyEager('goalSuggestions', builder => builder.where('goal_suggestion.deletedAt', null))
       .findById(answerId);
 
     if (!answer) {
@@ -135,42 +132,33 @@ export default class Answer extends Model {
   }
 
   static async getAllForQuestion(questionId: string): Promise<Answer[]> {
-    return this
-      .query()
+    return this.query()
       .where({ questionId, deletedAt: null })
       .eager(EAGER_QUERY)
       .modifyEager('concernSuggestions', builder =>
         builder.where('concern_suggestion.deletedAt', null),
       )
-      .modifyEager('goalSuggestions', builder =>
-        builder.where('goal_suggestion.deletedAt', null),
-      )
+      .modifyEager('goalSuggestions', builder => builder.where('goal_suggestion.deletedAt', null))
       .orderBy('order');
   }
 
   static async create(input: IAnswerCreateFields) {
-    return this
-      .query()
+    return this.query()
       .eager(EAGER_QUERY)
       .modifyEager('concernSuggestions', builder =>
         builder.where('concern_suggestion.deletedAt', null),
       )
-      .modifyEager('goalSuggestions', builder =>
-        builder.where('goal_suggestion.deletedAt', null),
-      )
+      .modifyEager('goalSuggestions', builder => builder.where('goal_suggestion.deletedAt', null))
       .insertAndFetch(input);
   }
 
   static async edit(answer: Partial<IAnswerEditableFields>, answerId: string): Promise<Answer> {
-    return await this
-      .query()
+    return await this.query()
       .eager('[concernSuggestions, goalSuggestions]')
       .modifyEager('concernSuggestions', builder =>
         builder.where('concern_suggestion.deletedAt', null),
       )
-      .modifyEager('goalSuggestions', builder =>
-        builder.where('goal_suggestion.deletedAt', null),
-      )
+      .modifyEager('goalSuggestions', builder => builder.where('goal_suggestion.deletedAt', null))
       .updateAndFetchById(answerId, answer);
   }
 

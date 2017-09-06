@@ -65,8 +65,7 @@ export default class CareTeam extends Model {
   }
 
   static async getForPatient(patientId: string): Promise<User[]> {
-    const careTeam = await CareTeam
-      .query()
+    const careTeam = await CareTeam.query()
       .where('patientId', patientId)
       .andWhere('deletedAt', null)
       .eager('user')
@@ -75,15 +74,15 @@ export default class CareTeam extends Model {
   }
 
   static async getForUser(
-    userId: string, { pageNumber, pageSize }: IPaginationOptions,
+    userId: string,
+    { pageNumber, pageSize }: IPaginationOptions,
   ): Promise<IPaginatedResults<Patient>> {
-    const careTeam = await CareTeam
-      .query()
+    const careTeam = (await CareTeam.query()
       .where('userId', userId)
       .andWhere('deletedAt', null)
       .orderBy('createdAt')
       .page(pageNumber, pageSize)
-      .eager('patient') as any;
+      .eager('patient')) as any;
     return {
       results: careTeam.results.map((ct: CareTeam) => ct.patient),
       total: careTeam.total,
@@ -93,16 +92,13 @@ export default class CareTeam extends Model {
   static async create({ userId, patientId }: ICareTeamOptions): Promise<User[]> {
     // TODO: use postgres UPCERT here to add relation if it doesn't exist instead of a transaction
     await transaction(CareTeam, async CareTeamWithTransaction => {
-      const relations = await CareTeamWithTransaction
-        .query()
+      const relations = await CareTeamWithTransaction.query()
         .where('patientId', patientId)
         .andWhere('userId', userId)
         .andWhere('deletedAt', null);
 
       if (relations.length < 1) {
-        await CareTeamWithTransaction
-          .query()
-          .insert({ patientId, userId });
+        await CareTeamWithTransaction.query().insert({ patientId, userId });
       }
     });
 
@@ -117,6 +113,5 @@ export default class CareTeam extends Model {
       .update({ deletedAt: new Date().toISOString() });
     return await this.getForPatient(patientId);
   }
-
 }
 /* tslint:disable:member-ordering */

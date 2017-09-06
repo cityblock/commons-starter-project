@@ -79,14 +79,18 @@ describe('concern resolver', () => {
         concerns { title }
       }`;
 
-      const result = await graphql(schema, query, null, { db, userRole: 'admin' });
+      const result = await graphql(schema, query, null, {
+        db,
+        userRole: 'admin',
+      });
       expect(cloneDeep(result.data!.concerns)).toMatchObject([
         {
           title: concern1.title,
-        }, {
+        },
+        {
           title: concern2.title,
-        }],
-      );
+        },
+      ]);
     });
   });
 });

@@ -9,7 +9,6 @@ import { createMockPatient, createPatient } from '../../spec-helpers';
 import schema from '../make-executable-schema';
 
 describe('task tests', () => {
-
   let db: Db;
   const userRole = 'physician';
   let task1: Task;
@@ -25,7 +24,11 @@ describe('task tests', () => {
     await Db.clear();
 
     user = await User.create({ email: 'a@b.com', userRole, homeClinicId: '1' });
-    user2 = await User.create({ email: 'b@c.com', userRole, homeClinicId: '1' });
+    user2 = await User.create({
+      email: 'b@c.com',
+      userRole,
+      homeClinicId: '1',
+    });
     patient = await createPatient(createMockPatient(123), user.id);
     const dueAt = new Date().toUTCString();
     task1 = await Task.create({
@@ -77,9 +80,7 @@ describe('task tests', () => {
     it('errors if a task cannot be found', async () => {
       const query = `{ task(taskId: "fakeId") { id } }`;
       const result = await graphql(schema, query, null, { db, userRole });
-      expect(result.errors![0].message).toMatch(
-        'No such task: fakeId',
-      );
+      expect(result.errors![0].message).toMatch('No such task: fakeId');
     });
   });
 
@@ -97,12 +98,14 @@ describe('task tests', () => {
       const result = await graphql(schema, query, null, { db, userRole });
 
       expect(cloneDeep(result.data!.tasksForPatient)).toMatchObject({
-        edges: [{
-          node: {
-            id: task2.id,
-            title: task2.title,
+        edges: [
+          {
+            node: {
+              id: task2.id,
+              title: task2.title,
+            },
           },
-        }],
+        ],
       });
     });
 
@@ -127,12 +130,14 @@ describe('task tests', () => {
       const result = await graphql(schema, query, null, { db, userRole });
 
       expect(cloneDeep(result.data!.tasksForPatient)).toMatchObject({
-        edges: [{
-          node: {
-            id: task1.id,
-            title: task1.title,
+        edges: [
+          {
+            node: {
+              id: task1.id,
+              title: task1.title,
+            },
           },
-        }],
+        ],
         pageInfo: {
           hasNextPage: true,
           hasPreviousPage: false,
@@ -160,12 +165,14 @@ describe('task tests', () => {
 
       const result = await graphql(schema, query, null, { db, userRole });
       expect(cloneDeep(result.data!.tasksForPatient)).toMatchObject({
-        edges: [{
-          node: {
-            id: task2.id,
-            title: task2.title,
+        edges: [
+          {
+            node: {
+              id: task2.id,
+              title: task2.title,
+            },
           },
-        }],
+        ],
         pageInfo: {
           hasNextPage: true,
           hasPreviousPage: false,
@@ -181,7 +188,11 @@ describe('task tests', () => {
           title
         }
       }`;
-      const result = await graphql(schema, query, null, { db, userRole, userId: user.id });
+      const result = await graphql(schema, query, null, {
+        db,
+        userRole,
+        userId: user.id,
+      });
       expect(cloneDeep(result.data!.taskEdit)).toMatchObject({
         title: 'new title',
       });
@@ -195,9 +206,16 @@ describe('task tests', () => {
           priority
         }
       }`;
-      const result = await graphql(schema, query, null, { db, userRole, userId: user.id });
+      const result = await graphql(schema, query, null, {
+        db,
+        userRole,
+        userId: user.id,
+      });
       const task = cloneDeep(result.data!.taskEdit);
-      const taskEvents = await TaskEvent.getTaskEvents(task.id, { pageNumber: 0, pageSize: 10 });
+      const taskEvents = await TaskEvent.getTaskEvents(task.id, {
+        pageNumber: 0,
+        pageSize: 10,
+      });
       expect(taskEvents.total).toEqual(1);
       expect(taskEvents.results[0].eventType).toEqual('edit_priority');
 
@@ -209,10 +227,15 @@ describe('task tests', () => {
           }
         }
       }`;
-      const result2 = await graphql(schema, query2, null, { db, userRole, userId: user.id });
+      const result2 = await graphql(schema, query2, null, {
+        db,
+        userRole,
+        userId: user.id,
+      });
       const secondTask = cloneDeep(result2.data!.taskEdit);
       const taskEvents2 = await TaskEvent.getTaskEvents(secondTask.id, {
-        pageNumber: 0, pageSize: 10,
+        pageNumber: 0,
+        pageSize: 10,
       });
       expect(taskEvents2.total).toEqual(2);
       expect(taskEvents2.results[0].eventType).toEqual('edit_assignee');
@@ -224,10 +247,15 @@ describe('task tests', () => {
           dueAt
         }
       }`;
-      const result3 = await graphql(schema, query3, null, { db, userRole, userId: user.id });
+      const result3 = await graphql(schema, query3, null, {
+        db,
+        userRole,
+        userId: user.id,
+      });
       const thirdTask = cloneDeep(result3.data!.taskEdit);
       const taskEvents3 = await TaskEvent.getTaskEvents(thirdTask.id, {
-        pageNumber: 0, pageSize: 10,
+        pageNumber: 0,
+        pageSize: 10,
       });
       expect(taskEvents3.total).toEqual(3);
       expect(taskEvents3.results[0].eventType).toEqual('edit_due_date');
@@ -238,10 +266,15 @@ describe('task tests', () => {
           title
         }
       }`;
-      const result4 = await graphql(schema, query4, null, { db, userRole, userId: user.id });
+      const result4 = await graphql(schema, query4, null, {
+        db,
+        userRole,
+        userId: user.id,
+      });
       const fourthTask = cloneDeep(result4.data!.taskEdit);
       const taskEvents4 = await TaskEvent.getTaskEvents(fourthTask.id, {
-        pageNumber: 0, pageSize: 10,
+        pageNumber: 0,
+        pageSize: 10,
       });
       expect(taskEvents4.total).toEqual(4);
       expect(taskEvents4.results[0].eventType).toEqual('edit_title');
@@ -252,10 +285,15 @@ describe('task tests', () => {
           description
         }
       }`;
-      const result5 = await graphql(schema, query5, null, { db, userRole, userId: user.id });
+      const result5 = await graphql(schema, query5, null, {
+        db,
+        userRole,
+        userId: user.id,
+      });
       const fifthTask = cloneDeep(result5.data!.taskEdit);
       const taskEvents5 = await TaskEvent.getTaskEvents(fifthTask.id, {
-        pageNumber: 0, pageSize: 10,
+        pageNumber: 0,
+        pageSize: 10,
       });
       expect(taskEvents5.total).toEqual(5);
       expect(taskEvents5.results[0].eventType).toEqual('edit_description');
@@ -280,10 +318,15 @@ describe('task tests', () => {
           description
         }
       }`;
-      const result6 = await graphql(schema, query6, null, { db, userRole, userId: user.id });
+      const result6 = await graphql(schema, query6, null, {
+        db,
+        userRole,
+        userId: user.id,
+      });
       const sixthTask = cloneDeep(result6.data!.taskEdit);
       const taskEvents6 = await TaskEvent.getTaskEvents(sixthTask.id, {
-        pageNumber: 0, pageSize: 10,
+        pageNumber: 0,
+        pageSize: 10,
       });
       expect(taskEvents6.total).toEqual(10);
     });
@@ -297,7 +340,11 @@ describe('task tests', () => {
           completedAt
         }
       }`;
-      const result = await graphql(schema, query, null, { db, userRole, userId: user.id });
+      const result = await graphql(schema, query, null, {
+        db,
+        userRole,
+        userId: user.id,
+      });
       expect(result.data!.taskComplete.completedAt).not.toBeNull();
     });
 
@@ -308,7 +355,10 @@ describe('task tests', () => {
         }
       }`;
       await graphql(schema, query, null, { db, userRole, userId: user.id });
-      const taskEvents = await TaskEvent.getTaskEvents(task1.id, { pageNumber: 0, pageSize: 10 });
+      const taskEvents = await TaskEvent.getTaskEvents(task1.id, {
+        pageNumber: 0,
+        pageSize: 10,
+      });
       expect(taskEvents.total).toEqual(1);
       expect(taskEvents.results[0].eventType).toEqual('complete_task');
     });
@@ -323,7 +373,11 @@ describe('task tests', () => {
           completedAt
         }
       }`;
-      const result = await graphql(schema, query, null, { db, userRole, userId: user.id });
+      const result = await graphql(schema, query, null, {
+        db,
+        userRole,
+        userId: user.id,
+      });
       expect(result.data!.taskUncomplete.completedAt).toBeNull();
     });
 
@@ -334,7 +388,10 @@ describe('task tests', () => {
         }
       }`;
       await graphql(schema, query, null, { db, userRole, userId: user.id });
-      const taskEvents = await TaskEvent.getTaskEvents(task1.id, { pageNumber: 0, pageSize: 10 });
+      const taskEvents = await TaskEvent.getTaskEvents(task1.id, {
+        pageNumber: 0,
+        pageSize: 10,
+      });
       expect(taskEvents.total).toEqual(1);
       expect(taskEvents.results[0].eventType).toEqual('uncomplete_task');
     });
@@ -347,7 +404,11 @@ describe('task tests', () => {
           title,
         }
       }`;
-      const result = await graphql(schema, mutation, null, { db, userRole, userId: user.id });
+      const result = await graphql(schema, mutation, null, {
+        db,
+        userRole,
+        userId: user.id,
+      });
       expect(cloneDeep(result.data!.taskCreate)).toMatchObject({
         title: 'title',
       });
@@ -364,13 +425,20 @@ describe('task tests', () => {
           title,
         }
       }`;
-      const result = await graphql(schema, mutation, null, { db, userRole, userId: user.id });
+      const result = await graphql(schema, mutation, null, {
+        db,
+        userRole,
+        userId: user.id,
+      });
       const task = cloneDeep(result.data!.taskCreate);
       expect(task).toMatchObject({
         title: 'title',
       });
 
-      const taskEvents = await TaskEvent.getTaskEvents(task.id, { pageNumber: 0, pageSize: 10 });
+      const taskEvents = await TaskEvent.getTaskEvents(task.id, {
+        pageNumber: 0,
+        pageSize: 10,
+      });
       expect(taskEvents.total).toEqual(2);
       expect(taskEvents.results[0].eventType).toEqual('edit_assignee');
       expect(taskEvents.results[1].eventType).toEqual('create_task');
@@ -386,14 +454,18 @@ describe('task tests', () => {
         order: 'desc',
       });
 
-      expect(beforeDeletePatientTasks.results.map(task => (task.id))).toContain(task1.id);
+      expect(beforeDeletePatientTasks.results.map(task => task.id)).toContain(task1.id);
 
       const mutation = `mutation {
         taskDelete(input: { taskId: "${task1.id}" }) {
           id,
         }
       }`;
-      const result = await graphql(schema, mutation, null, { db, userRole, userId: user.id });
+      const result = await graphql(schema, mutation, null, {
+        db,
+        userRole,
+        userId: user.id,
+      });
       expect(cloneDeep(result.data!.taskDelete)).toMatchObject({
         id: task1.id,
       });
@@ -405,7 +477,7 @@ describe('task tests', () => {
         order: 'desc',
       });
 
-      expect(afterDeletePatientTasks.results.map(task => (task.id))).not.toContain(task1.id);
+      expect(afterDeletePatientTasks.results.map(task => task.id)).not.toContain(task1.id);
     });
 
     it('creates the relevant TaskEvent records', async () => {
@@ -414,11 +486,18 @@ describe('task tests', () => {
           id,
         }
       }`;
-      const result = await graphql(schema, mutation, null, { db, userRole, userId: user.id });
+      const result = await graphql(schema, mutation, null, {
+        db,
+        userRole,
+        userId: user.id,
+      });
       const task = cloneDeep(result.data!.taskDelete);
       expect(task).toMatchObject({ id: task1.id });
 
-      const taskEvents = await TaskEvent.getTaskEvents(task.id, { pageNumber: 0, pageSize: 10 });
+      const taskEvents = await TaskEvent.getTaskEvents(task.id, {
+        pageNumber: 0,
+        pageSize: 10,
+      });
       expect(taskEvents.total).toEqual(1);
       expect(taskEvents.results[0].eventType).toEqual('delete_task');
     });

@@ -19,7 +19,9 @@ describe('goal suggestion template resolver', () => {
 
   describe('resolve goal suggestion template', () => {
     it('fetches a goal suggestion template', async () => {
-      const goalSuggestionTemplate = await GoalSuggestionTemplate.create({ title: 'Fix housing' });
+      const goalSuggestionTemplate = await GoalSuggestionTemplate.create({
+        title: 'Fix housing',
+      });
       const query = `{ goalSuggestionTemplate(
         goalSuggestionTemplateId: "${goalSuggestionTemplate.id}"
       ) { title } }`;
@@ -46,7 +48,9 @@ describe('goal suggestion template resolver', () => {
 
   describe('goal suggestion template edit', () => {
     it('edits a goal suggestion template', async () => {
-      const goalSuggestionTemplate = await GoalSuggestionTemplate.create({ title: 'Fix housing' });
+      const goalSuggestionTemplate = await GoalSuggestionTemplate.create({
+        title: 'Fix housing',
+      });
       const mutation = `mutation {
         goalSuggestionTemplateEdit(
           input: { title: "Medical", goalSuggestionTemplateId: "${goalSuggestionTemplate.id}" }
@@ -63,7 +67,9 @@ describe('goal suggestion template resolver', () => {
 
   describe('concernDelete', () => {
     it('deletes a goal suggestion template', async () => {
-      const goalSuggestionTemplate = await GoalSuggestionTemplate.create({ title: 'Fix housing' });
+      const goalSuggestionTemplate = await GoalSuggestionTemplate.create({
+        title: 'Fix housing',
+      });
       const mutation = `mutation {
         goalSuggestionTemplateDelete(
           input: { goalSuggestionTemplateId: "${goalSuggestionTemplate.id}" }
@@ -78,21 +84,29 @@ describe('goal suggestion template resolver', () => {
 
   describe('goal suggestion templates', () => {
     it('returns goal suggestion templates', async () => {
-      const goalSuggestion1 = await GoalSuggestionTemplate.create({ title: 'fix Housing' });
-      const goalSuggestion2 = await GoalSuggestionTemplate.create({ title: 'fix Medical' });
+      const goalSuggestion1 = await GoalSuggestionTemplate.create({
+        title: 'fix Housing',
+      });
+      const goalSuggestion2 = await GoalSuggestionTemplate.create({
+        title: 'fix Medical',
+      });
 
       const query = `{
         goalSuggestionTemplates { title }
       }`;
 
-      const result = await graphql(schema, query, null, { db, userRole: 'admin' });
+      const result = await graphql(schema, query, null, {
+        db,
+        userRole: 'admin',
+      });
       expect(cloneDeep(result.data!.goalSuggestionTemplates)).toMatchObject([
         {
           title: goalSuggestion1.title,
-        }, {
+        },
+        {
           title: goalSuggestion2.title,
-        }],
-      );
+        },
+      ]);
     });
   });
 });

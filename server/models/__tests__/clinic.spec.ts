@@ -15,14 +15,20 @@ describe('clinic model', () => {
 
   describe('clinic functions', () => {
     it('creates and retrieves a clinic', async () => {
-      const clinic = await Clinic.create({ departmentId: 1, name: 'Center Zero' });
+      const clinic = await Clinic.create({
+        departmentId: 1,
+        name: 'Center Zero',
+      });
       const clinicById = await Clinic.get(clinic.id);
 
       expect(clinicById).toMatchObject(clinic);
     });
 
     it('gets a clinic by a field', async () => {
-      const clinic = await Clinic.create({ departmentId: 1, name: 'Center Zero' });
+      const clinic = await Clinic.create({
+        departmentId: 1,
+        name: 'Center Zero',
+      });
       const clinicByDepartmentId = await Clinic.getBy('departmentId', 1);
       const clinicByName = await Clinic.getBy('name', 'Center Zero');
 
@@ -37,25 +43,24 @@ describe('clinic model', () => {
 
     it('throws an error when getting a clinic by an invalid id', async () => {
       const fakeId = 'fakeId';
-      await expect(Clinic.get(fakeId))
-        .rejects
-        .toMatch('No such clinic for clinicId: fakeId');
+      await expect(Clinic.get(fakeId)).rejects.toMatch('No such clinic for clinicId: fakeId');
     });
 
     it('fetches all clinics', async () => {
       await Clinic.create({ departmentId: 1, name: 'Center Zero' });
       await Clinic.create({ departmentId: 2, name: 'Center One' });
 
-      expect(await Clinic.getAll({ pageNumber: 0, pageSize: 10 })).toMatchObject(
-        {
-          results: [{
+      expect(await Clinic.getAll({ pageNumber: 0, pageSize: 10 })).toMatchObject({
+        results: [
+          {
             name: 'Center Zero',
-          }, {
+          },
+          {
             name: 'Center One',
-          }],
-          total: 2,
-        },
-      );
+          },
+        ],
+        total: 2,
+      });
     });
   });
 });

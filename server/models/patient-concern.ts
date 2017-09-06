@@ -90,17 +90,14 @@ export default class PatientConcern extends Model {
   }
 
   static async create(input: IPatientConcernEditableFields) {
-    return await this
-      .query()
-      .insertAndFetch(input);
+    return await this.query().insertAndFetch(input);
   }
 
   static async update(
-    patientConcernId: string, concern: Partial<IPatientConcernEditableFields>,
+    patientConcernId: string,
+    concern: Partial<IPatientConcernEditableFields>,
   ): Promise<PatientConcern> {
-    return await this
-      .query()
-      .updateAndFetchById(patientConcernId, concern);
+    return await this.query().updateAndFetchById(patientConcernId, concern);
   }
 
   static async getForPatient(patientId: string): Promise<PatientConcern[]> {
@@ -111,10 +108,9 @@ export default class PatientConcern extends Model {
   }
 
   static async delete(patientConcernId: string): Promise<PatientConcern> {
-    return await this.query()
-      .updateAndFetchById(patientConcernId, {
-        deletedAt: new Date().toISOString(),
-      });
+    return await this.query().updateAndFetchById(patientConcernId, {
+      deletedAt: new Date().toISOString(),
+    });
   }
 }
 /* tslint:disable:member-ordering */

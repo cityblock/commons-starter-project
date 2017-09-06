@@ -28,23 +28,25 @@ export async function concernCreate(root: any, { input }: IConcernCreateArgs, co
 }
 
 export async function resolveConcern(
-  root: any, args: { concernId: string }, { db, userRole }: IContext,
+  root: any,
+  args: { concernId: string },
+  { db, userRole }: IContext,
 ) {
   await accessControls.isAllowed(userRole, 'view', 'concern');
 
   return await Concern.get(args.concernId);
 }
 
-export async function resolveConcerns(
-  root: any, args: any, { db, userRole }: IContext,
-) {
+export async function resolveConcerns(root: any, args: any, { db, userRole }: IContext) {
   await accessControls.isAllowed(userRole, 'view', 'concern');
 
   return await Concern.getAll();
 }
 
 export async function concernEdit(
-  root: any, args: IEditConcernOptions, { db, userId, userRole }: IContext,
+  root: any,
+  args: IEditConcernOptions,
+  { db, userId, userRole }: IContext,
 ) {
   await accessControls.isAllowedForUser(userRole, 'edit', 'concern');
 
@@ -54,7 +56,9 @@ export async function concernEdit(
 }
 
 export async function concernDelete(
-  root: any, args: IDeleteConcernOptions, { db, userRole }: IContext,
+  root: any,
+  args: IDeleteConcernOptions,
+  { db, userRole }: IContext,
 ) {
   await accessControls.isAllowedForUser(userRole, 'edit', 'concern');
 

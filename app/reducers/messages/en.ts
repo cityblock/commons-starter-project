@@ -26,7 +26,7 @@ export const ENGLISH_TRANSLATION = {
     'patient.patientInfo': 'Patient Info',
     'patient.createdPopupHeading': 'successfully enrolled',
     'patient.createdPopupBody':
-    'Continue to their patient profile or go back to your patient roster.',
+      'Continue to their patient profile or go back to your patient roster.',
     'patient.createdPopupRoster': 'Patient Roster',
     'patient.createdPopupProfile': 'Go to profile',
     'encounter.new': 'Record new encounter',
@@ -39,7 +39,7 @@ export const ENGLISH_TRANSLATION = {
     'encounter.newSubmit': 'Submit',
     'error.tableLoadingHeading': 'Unable to load your roster',
     'error.tableLoadingMessage':
-    'Sorry, something went wrong. Please try reloading the page again.',
+      'Sorry, something went wrong. Please try reloading the page again.',
     'error.tableLoadingButton': 'Try Again',
     'error.tableLoading': 'Loading',
     'careTeam.slack': 'Message on Slack',

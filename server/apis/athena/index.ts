@@ -26,8 +26,7 @@ export interface IPatientResponse {
   athenaPatientId: number;
 }
 
-export type IAthenaCreatePatient =
-  Pick<IPatientEditableFields, 'firstName'> &
+export type IAthenaCreatePatient = Pick<IPatientEditableFields, 'firstName'> &
   Pick<IPatientEditableFields, 'lastName'> &
   Pick<IPatientEditableFields, 'gender'> &
   Pick<IPatientEditableFields, 'zip'> &
@@ -43,7 +42,6 @@ export type IAthenaEditPatient = Partial<IPatientEditableFields>;
  * This handles authentication and provides typed API calls.
  */
 export default class AthenaApi {
-
   static async get(): Promise<AthenaApi> {
     if (singleton) return singleton;
     singleton = new AthenaApi();
@@ -54,7 +52,7 @@ export default class AthenaApi {
     const auth64 = Base64.encode(`${config.ATHENA_CLIENT_KEY}:${config.ATHENA_CLIENT_SECRET}`);
     const response = await fetch(config.ATHENA_TOKEN_URL, {
       headers: {
-        'Authorization': `Basic ${auth64}`,
+        Authorization: `Basic ${auth64}`,
         'Content-Type': 'application/x-www-form-urlencoded',
       },
       body: 'grant_type=client_credentials',
@@ -67,7 +65,7 @@ export default class AthenaApi {
       // console.warn(error);
       throw new Error('Auth failed!');
     }
-    const json = await response.json() as ITokenResponse;
+    const json = (await response.json()) as ITokenResponse;
     const athenaExpiresInMilli = json.expires_in * 1000;
     return {
       expiresAtMillis: Date.now() + athenaExpiresInMilli,
@@ -98,13 +96,16 @@ export default class AthenaApi {
     appointmentDate: string,
   ): Promise<IOpenAppointmentResponse> {
     return await this.fetch<IOpenAppointmentResponse>(
-      `/${config.ATHENA_PRACTICE_ID}/appointments/open`, {
+      `/${config.ATHENA_PRACTICE_ID}/appointments/open`,
+      {
         departmentid: athenaDepartmentId,
         appointmenttypeid: athenaAppointmentTypeId,
         providerid: athenaProviderId,
         appointmenttime: appointmentTime,
         appointmentdate: appointmentDate,
-      }, 'POST');
+      },
+      'POST',
+    );
   }
 
   public async appointmentBook(
@@ -113,25 +114,34 @@ export default class AthenaApi {
     athenaAppointmentTypeId: number,
   ): Promise<IBookAppointmentResponse[] | IBookAppointmentErrorResponse> {
     return await this.fetch<IBookAppointmentResponse[] | IBookAppointmentErrorResponse>(
-      `/${config.ATHENA_PRACTICE_ID}/appointments/${athenaAppointmentId}`, {
+      `/${config.ATHENA_PRACTICE_ID}/appointments/${athenaAppointmentId}`,
+      {
         appointmenttypeid: athenaAppointmentTypeId,
         ignoreschedulablepermission: 'true',
         patientid: athenaPatientId,
-      }, 'PUT');
+      },
+      'PUT',
+    );
   }
 
   public async appointmentCheckin(
     athenaAppointmentId: string,
   ): Promise<ICheckinAppointmentResponse> {
     return await this.fetch<ICheckinAppointmentResponse>(
-      `/${config.ATHENA_PRACTICE_ID}/appointments/${athenaAppointmentId}/checkin`, {}, 'POST');
+      `/${config.ATHENA_PRACTICE_ID}/appointments/${athenaAppointmentId}/checkin`,
+      {},
+      'POST',
+    );
   }
 
   public async appointmentCheckout(
     athenaAppointmentId: string,
   ): Promise<ICheckoutAppointmentResponse> {
     return await this.fetch<ICheckoutAppointmentResponse>(
-      `/${config.ATHENA_PRACTICE_ID}/appointments/${athenaAppointmentId}/checkout`, {}, 'POST');
+      `/${config.ATHENA_PRACTICE_ID}/appointments/${athenaAppointmentId}/checkout`,
+      {},
+      'POST',
+    );
   }
 
   public async appointmentAddNote(
@@ -140,9 +150,12 @@ export default class AthenaApi {
   ): Promise<IAddNoteToAppointmentResponse> {
     // Optionally, we can also pass in the displayonschedule=true param
     return await this.fetch<IAddNoteToAppointmentResponse>(
-      `/${config.ATHENA_PRACTICE_ID}/appointments/${athenaAppointmentId}/notes`, {
+      `/${config.ATHENA_PRACTICE_ID}/appointments/${athenaAppointmentId}/notes`,
+      {
         notetext: noteText,
-      }, 'POST');
+      },
+      'POST',
+    );
   }
 
   /**
@@ -156,7 +169,7 @@ export default class AthenaApi {
   ): Promise<any> {
     let response;
     const tenSeconds = 6000;
-    let tokenValid = (this.auth.expiresAtMillis - tenSeconds) > Date.now();
+    let tokenValid = this.auth.expiresAtMillis - tenSeconds > Date.now();
 
     // handle adding params to search for GET and to body for POST
     let body = null;
@@ -181,7 +194,7 @@ export default class AthenaApi {
         method,
         body,
         headers: {
-          'Authorization': `Bearer ${this.auth.accessToken}`,
+          Authorization: `Bearer ${this.auth.accessToken}`,
           'Content-Type': 'application/x-www-form-urlencoded',
         },
         compress: false,
@@ -203,7 +216,7 @@ export default class AthenaApi {
       await this.refreshToken();
       return this.fetch<T>(endpoint, params, method, true);
     } else if (response) {
-      return await response.json() as T;
+      return (await response.json()) as T;
     }
   }
 

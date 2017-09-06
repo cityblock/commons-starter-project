@@ -61,7 +61,11 @@ describe('patient medications', () => {
 
       mockRedoxGetPatientMedications([]);
 
-      const result = await graphql(schema, query, null, { redoxApi, db, userRole });
+      const result = await graphql(schema, query, null, {
+        redoxApi,
+        db,
+        userRole,
+      });
       expect(cloneDeep(result.data!.patientMedications)).toMatchObject({
         medications: {
           active: [],
@@ -86,61 +90,69 @@ describe('patient medications', () => {
         }
       }`;
 
-      mockRedoxGetPatientMedications([{
-        Prescription: false,
-        Dose: {
-          Quantity: '4',
-          Units: 'mg',
+      mockRedoxGetPatientMedications([
+        {
+          Prescription: false,
+          Dose: {
+            Quantity: '4',
+            Units: 'mg',
+          },
+          StartDate: '2013-11-11T05:00:00.000Z',
+          Frequency: {
+            Period: '8',
+            Unit: 'h',
+          },
+          Product: {
+            Code: '104894',
+            CodeSystem: '2.16.840.1.113883.6.88',
+            CodeSystemName: 'RxNorm',
+            Name: 'Active Medication 1',
+          },
         },
-        StartDate: '2013-11-11T05:00:00.000Z',
-        Frequency: {
-          Period: '8',
-          Unit: 'h',
+        {
+          Prescription: false,
+          Dose: {
+            Quantity: '4',
+            Units: 'mg',
+          },
+          StartDate: '2013-11-11T05:00:00.000Z',
+          EndDate: '2012-11-11T05:00:00.000Z',
+          Frequency: {
+            Period: '8',
+            Unit: 'h',
+          },
+          Product: {
+            Code: '104894',
+            CodeSystem: '2.16.840.1.113883.6.88',
+            CodeSystemName: 'RxNorm',
+            Name: 'Inactive Medication 1',
+          },
         },
-        Product: {
-          Code: '104894',
-          CodeSystem: '2.16.840.1.113883.6.88',
-          CodeSystemName: 'RxNorm',
-          Name: 'Active Medication 1',
+        {
+          Prescription: false,
+          Dose: {
+            Quantity: '4',
+            Units: 'mg',
+          },
+          StartDate: '5000-11-11T05:00:00.000Z',
+          Frequency: {
+            Period: '8',
+            Unit: 'h',
+          },
+          Product: {
+            Code: '104894',
+            CodeSystem: '2.16.840.1.113883.6.88',
+            CodeSystemName: 'RxNorm',
+            Name: 'Active Medication 2',
+          },
         },
-      }, {
-        Prescription: false,
-        Dose: {
-          Quantity: '4',
-          Units: 'mg',
-        },
-        StartDate: '2013-11-11T05:00:00.000Z',
-        EndDate: '2012-11-11T05:00:00.000Z',
-        Frequency: {
-          Period: '8',
-          Unit: 'h',
-        },
-        Product: {
-          Code: '104894',
-          CodeSystem: '2.16.840.1.113883.6.88',
-          CodeSystemName: 'RxNorm',
-          Name: 'Inactive Medication 1',
-        },
-      }, {
-        Prescription: false,
-        Dose: {
-          Quantity: '4',
-          Units: 'mg',
-        },
-        StartDate: '5000-11-11T05:00:00.000Z',
-        Frequency: {
-          Period: '8',
-          Unit: 'h',
-        },
-        Product: {
-          Code: '104894',
-          CodeSystem: '2.16.840.1.113883.6.88',
-          CodeSystemName: 'RxNorm',
-          Name: 'Active Medication 2',
-        },
-      }]);
+      ]);
 
-      const result = await graphql(schema, query, null, { redoxApi, db, userRole });
+      const result = await graphql(schema, query, null, {
+        redoxApi,
+        db,
+        userRole,
+      });
       expect(cloneDeep(result.data!.patientMedications)).toMatchObject({
         medications: {
           active: [{ name: 'Active Medication 1' }, { name: 'Active Medication 2' }],

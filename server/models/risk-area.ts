@@ -64,9 +64,7 @@ export default class RiskArea extends Model {
   }
 
   static async get(riskAreaId: string): Promise<RiskArea> {
-    const riskArea = await this
-      .query()
-      .findById(riskAreaId);
+    const riskArea = await this.query().findById(riskAreaId);
 
     if (!riskArea) {
       return Promise.reject(`No such risk area: ${riskAreaId}`);
@@ -75,7 +73,9 @@ export default class RiskArea extends Model {
   }
 
   static async getAll(): Promise<RiskArea[]> {
-    return this.query().orderBy('order').where({ deletedAt: null });
+    return this.query()
+      .orderBy('order')
+      .where({ deletedAt: null });
   }
 
   static async create(input: IRiskAreaEditableFields) {
@@ -83,7 +83,8 @@ export default class RiskArea extends Model {
   }
 
   static async edit(
-    riskArea: Partial<IRiskAreaEditableFields>, riskAreaId: string,
+    riskArea: Partial<IRiskAreaEditableFields>,
+    riskAreaId: string,
   ): Promise<RiskArea> {
     return await this.query().updateAndFetchById(riskAreaId, riskArea);
   }
@@ -96,7 +97,8 @@ export default class RiskArea extends Model {
 
   // TODO: Add cross-risk-score methods
   static async getSummaryForPatient(
-    riskAreaId: string, patientId: string,
+    riskAreaId: string,
+    patientId: string,
   ): Promise<IRiskAreaSummary> {
     const patientAnswers = await PatientAnswer.getForRiskArea(riskAreaId, patientId, 'answer');
     const summary: string[] = [];

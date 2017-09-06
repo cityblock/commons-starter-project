@@ -9,7 +9,9 @@ export interface IConcernSuggestOptions {
 }
 
 export async function resolveConcernsForAnswer(
-  root: any, args: { answerId: string }, { db, userRole }: IContext,
+  root: any,
+  args: { answerId: string },
+  { db, userRole }: IContext,
 ) {
   await accessControls.isAllowed(userRole, 'view', 'concern');
 
@@ -17,7 +19,9 @@ export async function resolveConcernsForAnswer(
 }
 
 export async function concernSuggestionCreate(
-  root: any, args: IConcernSuggestOptions, { db, userRole }: IContext,
+  root: any,
+  args: IConcernSuggestOptions,
+  { db, userRole }: IContext,
 ): Promise<Concern[]> {
   await accessControls.isAllowed(userRole, 'view', 'concern');
 
@@ -28,7 +32,9 @@ export async function concernSuggestionCreate(
 }
 
 export async function concernSuggestionDelete(
-  root: any, args: IConcernSuggestOptions, { db, userRole }: IContext,
+  root: any,
+  args: IConcernSuggestOptions,
+  { db, userRole }: IContext,
 ): Promise<Concern[]> {
   await accessControls.isAllowed(userRole, 'view', 'concern');
 

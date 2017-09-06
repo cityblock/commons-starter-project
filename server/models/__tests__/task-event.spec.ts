@@ -60,13 +60,15 @@ describe('task event model', () => {
 
   it('throws an error when getting an invalid id', async () => {
     const fakeId = 'fakeId';
-    await expect(TaskEvent.get(fakeId))
-      .rejects
-      .toMatch('No such taskEvent: fakeId');
+    await expect(TaskEvent.get(fakeId)).rejects.toMatch('No such taskEvent: fakeId');
   });
 
   it('fetches all not deleted task events for a task', async () => {
-    const user = await User.create({ email: 'a@b.com', userRole, homeClinicId: '1' });
+    const user = await User.create({
+      email: 'a@b.com',
+      userRole,
+      homeClinicId: '1',
+    });
     const patient = await createPatient(createMockPatient(123), user.id);
     const dueAt = new Date().toUTCString();
     const task = await Task.create({
@@ -91,11 +93,14 @@ describe('task event model', () => {
 
     // Make sure all events are returned
     expect(await TaskEvent.getTaskEvents(task.id, { pageNumber: 0, pageSize: 10 })).toMatchObject({
-      results: [{
-        eventType: 'edit_comment',
-      }, {
-        eventType: 'add_comment',
-      }],
+      results: [
+        {
+          eventType: 'edit_comment',
+        },
+        {
+          eventType: 'add_comment',
+        },
+      ],
       total: 2,
     });
 
@@ -109,8 +114,16 @@ describe('task event model', () => {
   });
 
   it('fetches all not deleted task events for a user', async () => {
-    const user = await User.create({ email: 'a@b.com', userRole, homeClinicId: '1' });
-    const user2 = await User.create({ email: 'b@c.com', userRole, homeClinicId: '1' });
+    const user = await User.create({
+      email: 'a@b.com',
+      userRole,
+      homeClinicId: '1',
+    });
+    const user2 = await User.create({
+      email: 'b@c.com',
+      userRole,
+      homeClinicId: '1',
+    });
     const patient = await createPatient(createMockPatient(123), user.id);
     const dueAt = new Date().toUTCString();
     const task = await Task.create({
@@ -140,13 +153,19 @@ describe('task event model', () => {
 
     // Make sure all events are returned
     expect(
-      await TaskEvent.getUserTaskEvents(user.id, { pageNumber: 0, pageSize: 10 }),
+      await TaskEvent.getUserTaskEvents(user.id, {
+        pageNumber: 0,
+        pageSize: 10,
+      }),
     ).toMatchObject({
-      results: [{
-        eventType: 'edit_comment',
-      }, {
-        eventType: 'add_comment',
-      }],
+      results: [
+        {
+          eventType: 'edit_comment',
+        },
+        {
+          eventType: 'add_comment',
+        },
+      ],
       total: 2,
     });
 
@@ -154,7 +173,10 @@ describe('task event model', () => {
 
     // Make sure deleted event isn't returned
     expect(
-      await TaskEvent.getUserTaskEvents(user.id, { pageNumber: 0, pageSize: 10 }),
+      await TaskEvent.getUserTaskEvents(user.id, {
+        pageNumber: 0,
+        pageSize: 10,
+      }),
     ).toMatchObject({
       results: [{ eventType: 'add_comment' }],
       total: 1,
@@ -162,7 +184,11 @@ describe('task event model', () => {
   });
 
   it('deletes a task event', async () => {
-    const user = await User.create({ email: 'a@b.com', userRole, homeClinicId: '1' });
+    const user = await User.create({
+      email: 'a@b.com',
+      userRole,
+      homeClinicId: '1',
+    });
     const patient = await createPatient(createMockPatient(123), user.id);
     const dueAt = new Date().toUTCString();
     const task = await Task.create({

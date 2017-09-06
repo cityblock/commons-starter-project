@@ -57,9 +57,7 @@ describe('concern suggestion resolver', () => {
       });
       // one if suggested concern
       const result2 = await graphql(schema, query, null, { userRole });
-      expect(cloneDeep(result2.data!.concernsForAnswer)).toMatchObject([
-        { title: 'Housing' },
-      ]);
+      expect(cloneDeep(result2.data!.concernsForAnswer)).toMatchObject([{ title: 'Housing' }]);
     });
   });
 
@@ -74,9 +72,11 @@ describe('concern suggestion resolver', () => {
         }
       }`;
       const result = await graphql(schema, mutation, null, { userRole });
-      expect(cloneDeep(result.data!.concernSuggestionCreate)).toMatchObject([{
-        title: 'Housing',
-      }]);
+      expect(cloneDeep(result.data!.concernSuggestionCreate)).toMatchObject([
+        {
+          title: 'Housing',
+        },
+      ]);
     });
   });
 

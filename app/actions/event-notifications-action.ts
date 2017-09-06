@@ -3,9 +3,7 @@ export interface IEventNotificationsCountUpdated {
   count: number;
 }
 
-export function updateEventNotificationsCount(
-  count: number,
-): IEventNotificationsCountUpdated {
+export function updateEventNotificationsCount(count: number): IEventNotificationsCountUpdated {
   return {
     type: 'EVENT_NOTIFICATIONS_COUNT_UPDATED',
     count,

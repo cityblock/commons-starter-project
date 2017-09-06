@@ -46,9 +46,11 @@ export default class GoogleAuth extends Model {
   async $beforeInsert() {
     if (this.id) {
       throw new ValidationError({
-        id: [{
-          message: 'id should not be defined before insert',
-        }],
+        id: [
+          {
+            message: 'id should not be defined before insert',
+          },
+        ],
       });
     }
 
@@ -61,13 +63,13 @@ export default class GoogleAuth extends Model {
   }
 
   static async updateOrCreate(options: ICreateGoogleAuth): Promise<GoogleAuth> {
-    const existingGoogleAuth = await this.query().where({ userId: options.userId }).first();
+    const existingGoogleAuth = await this.query()
+      .where({ userId: options.userId })
+      .first();
     if (existingGoogleAuth) {
       return await this.query().updateAndFetchById(existingGoogleAuth.id, options);
     }
-    return await this
-      .query()
-      .insertAndFetch(options);
+    return await this.query().insertAndFetch(options);
   }
 }
 /* tslint:enable:member-ordering */

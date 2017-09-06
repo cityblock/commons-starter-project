@@ -32,11 +32,13 @@ describe('google auth model', () => {
       expiresAt: 'expires!',
       userId: user.id,
     });
-    expect(await GoogleAuth.updateOrCreate({
-      accessToken: 'accessToken',
-      expiresAt: 'expires!',
-      userId: user.id,
-    })).toMatchObject({
+    expect(
+      await GoogleAuth.updateOrCreate({
+        accessToken: 'accessToken',
+        expiresAt: 'expires!',
+        userId: user.id,
+      }),
+    ).toMatchObject({
       id: googleAuth.id,
       accessToken: 'accessToken',
       expiresAt: 'expires!',

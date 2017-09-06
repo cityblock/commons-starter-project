@@ -64,8 +64,7 @@ export default class ConcernSuggestion extends Model {
   }
 
   static async getForConcern(concernId: string): Promise<Answer[]> {
-    const concernSuggestions = await this
-      .query()
+    const concernSuggestions = await this.query()
       .where('concernId', concernId)
       .andWhere('deletedAt', null)
       .eager('answer')
@@ -76,12 +75,11 @@ export default class ConcernSuggestion extends Model {
   }
 
   static async getForAnswer(answerId: string): Promise<Concern[]> {
-    const concernSuggestions = await this
-      .query()
+    const concernSuggestions = (await this.query()
       .where('answerId', answerId)
       .andWhere('deletedAt', null)
       .orderBy('createdAt')
-      .eager('concern') as any;
+      .eager('concern')) as any;
     return concernSuggestions.map(
       (concernSuggestion: ConcernSuggestion) => concernSuggestion.concern,
     );
@@ -91,8 +89,7 @@ export default class ConcernSuggestion extends Model {
     let concernSuggestions;
 
     if (riskAreaId) {
-      concernSuggestions = await this
-        .query()
+      concernSuggestions = await this.query()
         .eager('concern')
         .joinRelation('answer.question')
         .join('patient_answer', 'answer.id', 'patient_answer.answerId')
@@ -101,8 +98,7 @@ export default class ConcernSuggestion extends Model {
         .andWhere('patient_answer.applicable', true)
         .andWhere('answer:question.riskAreaId', riskAreaId);
     } else {
-      concernSuggestions = await this
-        .query()
+      concernSuggestions = await this.query()
         .eager('concern')
         .joinRelation('answer')
         .join('patient_answer', 'answer.id', 'patient_answer.answerId')
@@ -114,30 +110,32 @@ export default class ConcernSuggestion extends Model {
     return concernSuggestions.map((suggestion: ConcernSuggestion) => suggestion.concern);
   }
 
-  static async create(
-    { concernId, answerId }: IConcernSuggestionEditableFields,
-  ): Promise<Concern[]> {
+  static async create({
+    concernId,
+    answerId,
+  }: IConcernSuggestionEditableFields): Promise<Concern[]> {
     // TODO: use postgres UPCERT here to add relation if it doesn't exist instead of a transaction
     await transaction(ConcernSuggestion, async ConcernSuggestionWithTransaction => {
-      const relations = await ConcernSuggestionWithTransaction
-        .query()
+      const relations = await ConcernSuggestionWithTransaction.query()
         .where('concernId', concernId)
         .andWhere('answerId', answerId)
         .andWhere('deletedAt', null);
 
       if (relations.length < 1) {
-        await ConcernSuggestionWithTransaction
-          .query()
-          .insert({ concernId, answerId });
+        await ConcernSuggestionWithTransaction.query().insert({
+          concernId,
+          answerId,
+        });
       }
     });
 
     return await this.getForAnswer(answerId);
   }
 
-  static async delete(
-    { concernId, answerId }: IConcernSuggestionEditableFields,
-  ): Promise<Concern[]> {
+  static async delete({
+    concernId,
+    answerId,
+  }: IConcernSuggestionEditableFields): Promise<Concern[]> {
     await this.query()
       .where('concernId', concernId)
       .andWhere('answerId', answerId)
@@ -145,6 +143,5 @@ export default class ConcernSuggestion extends Model {
       .update({ deletedAt: new Date().toISOString() });
     return await this.getForAnswer(answerId);
   }
-
 }
 /* tslint:disable:member-ordering */

@@ -80,6 +80,11 @@ enum Priority {
   high
 }
 
+enum CarePlanSuggestionType {
+  concern
+  goal
+}
+
 # User account model
 type User implements uniqueId {
   id: ID!
@@ -530,8 +535,11 @@ type PatientGoal implements uniqueId {
   id: ID!
   title: String!
   patientId: String!
+  patient: Patient!
   patientConcernId: String
   goalSuggestionTemplateId: String
+  goalSuggestionTemplate: GoalSuggestionTemplate
+  tasks: [Task]!
   createdAt: String!
   updatedAt: String!
   deletedAt: String
@@ -541,7 +549,10 @@ type PatientConcern implements uniqueId {
   id: ID!
   order: Int!
   concernId: String!
+  concern: Concern!
+  patientGoals: [PatientGoal!]
   patientId: String!
+  patient: Patient!
   startedAt: String
   completedAt: String
   createdAt: String!
@@ -572,9 +583,29 @@ type TaskTemplate implements uniqueId {
   deletedAt: String
 }
 
-type CarePlanSuggestions {
-  goalSuggestions: [GoalSuggestionTemplate]!
-  concernSuggestions: [Concern]!
+type CarePlanSuggestion implements uniqueId {
+  id: ID!
+  patientId: String!
+  patient: Patient!
+  suggestionType: CarePlanSuggestionType!
+  concernId: String
+  concern: Concern
+  goalSuggestionTemplateId: String
+  goalSuggestionTemplate: GoalSuggestionTemplate
+  acceptedById: String
+  acceptedBy: User
+  dismissedById: String
+  dismissedBy: User
+  dismissedReason: String
+  createdAt: String!
+  updatedAt: String!
+  dismissedAt: String
+  acceptedAt: String
+}
+
+type CarePlan {
+  goals: [PatientGoal]!
+  concerns: [PatientConcern]!
 }
 
 #
@@ -871,7 +902,6 @@ input ConcernSuggestInput {
 }
 
 input PatientConcernCreateInput {
-  order: Int!
   concernId: String!
   patientId: String!
   startedAt: String
@@ -914,6 +944,10 @@ input PatientGoalCreateInput {
   patientId: String!
   patientConcernId: String
   goalSuggestionTemplateId: String
+  taskTemplateIds: [String]
+  concernId: String
+  concernTitle: String
+  startedAt: String
 }
 
 input PatientGoalEditInput {
@@ -950,6 +984,20 @@ input TaskTemplateEditInput {
 
 input TaskTemplateDeleteInput {
   taskTemplateId: String!
+}
+
+input CarePlanSuggestionAcceptInput {
+  carePlanSuggestionId: String!
+  patientConcernId: String
+  concernId: String
+  concernTitle: String
+  startedAt: String
+  taskTemplateIds: [String]
+}
+
+input CarePlanSuggestionDismissInput {
+  carePlanSuggestionId: String!
+  dismissedReason: String!
 }
 
 type RootMutationType {
@@ -1126,6 +1174,12 @@ type RootMutationType {
 
   # patient concern delete
   patientConcernDelete(input: PatientConcernDeleteInput): PatientConcern
+
+  # care plan suggestion accept
+  carePlanSuggestionAccept(input: CarePlanSuggestionAcceptInput): CarePlanSuggestion
+
+  # care plan suggestion dismiss
+  carePlanSuggestionDismiss(input: CarePlanSuggestionDismissInput): CarePlanSuggestion
 }
 
 type RootQueryType {
@@ -1301,7 +1355,10 @@ type RootQueryType {
   taskTemplates: [TaskTemplate]
 
   # Care Plan Suggestions
-  carePlanSuggestionsForPatient(patientId: String!, riskAreaId: String): CarePlanSuggestions
+  carePlanSuggestionsForPatient(patientId: String!): [CarePlanSuggestion]
+
+  # Care Plan
+  carePlanForPatient(patientId: String!): CarePlan
 }
 
 

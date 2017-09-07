@@ -1,0 +1,13 @@
+#import "../fragments/full-patient-concern.graphql"
+#import "../fragments/full-patient-goal.graphql"
+
+query getPatientCarePlan($patientId: String!) {
+  carePlanForPatient(patientId: $patientId) {
+    concerns {
+      ...FullPatientConcern
+    }
+    goals {
+      ...FullPatientGoal
+    }
+  }
+}

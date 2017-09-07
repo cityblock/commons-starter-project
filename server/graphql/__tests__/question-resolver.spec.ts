@@ -98,11 +98,7 @@ describe('question tests', () => {
           title, answerType, order, answers { id }
         }
       }`;
-      const result = await graphql(schema, query, null, {
-        db,
-        userRole,
-        userId: user.id,
-      });
+      const result = await graphql(schema, query, null, { db, userRole, userId: user.id });
       expect(cloneDeep(result.data!.questionsForRiskArea)).toMatchObject([
         {
           title: 'like writing tests?',

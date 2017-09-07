@@ -1,0 +1,153 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders popup for concern suggestion 1`] = `
+<div
+  className={undefined}
+>
+  <div
+    className="undefined"
+  >
+    <div
+      className={undefined}
+    >
+      <div
+        className={undefined}
+      >
+        <div
+          className={undefined}
+          onClick={[Function]}
+        />
+      </div>
+      <div
+        className={undefined}
+      >
+        <div
+          className={undefined}
+        >
+          Add as active or inactive concern?
+        </div>
+        <div
+          className={undefined}
+        >
+          <select
+            className=""
+            name="concernType"
+            onChange={[Function]}
+            value=""
+          >
+            <option
+              disabled={true}
+              hidden={true}
+              value=""
+            >
+              Select a concern type
+            </option>
+            <option
+              value="active"
+            >
+              Active concern
+            </option>
+            <option
+              value="inactive"
+            >
+              Inactive concern
+            </option>
+          </select>
+        </div>
+        <div
+          className={undefined}
+        >
+          <div
+            className=""
+            onClick={[Function]}
+          >
+            Cancel
+          </div>
+          <div
+            className=""
+            onClick={[Function]}
+          >
+            Add to Care Plan
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`renders popup for goal suggestion 1`] = `
+<div
+  className={undefined}
+>
+  <div
+    className="undefined"
+  >
+    <div
+      className={undefined}
+    >
+      <div
+        className={undefined}
+      >
+        <div
+          className={undefined}
+          onClick={[Function]}
+        />
+      </div>
+      <div
+        className={undefined}
+      >
+        <div
+          className={undefined}
+        >
+          Add as active or inactive concern?
+        </div>
+        <div
+          className={undefined}
+        >
+          <select
+            className=""
+            name="concernType"
+            onChange={[Function]}
+            value=""
+          >
+            <option
+              disabled={true}
+              hidden={true}
+              value=""
+            >
+              Select a concern type
+            </option>
+            <option
+              value="active"
+            >
+              Active concern
+            </option>
+            <option
+              value="inactive"
+            >
+              Inactive concern
+            </option>
+          </select>
+        </div>
+        <div
+          className={undefined}
+        >
+          <div
+            className=""
+            onClick={[Function]}
+          >
+            Cancel
+          </div>
+          <div
+            className=""
+            onClick={[Function]}
+          >
+            Add to Care Plan
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;

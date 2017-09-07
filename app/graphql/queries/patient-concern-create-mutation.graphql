@@ -1,0 +1,15 @@
+#import "../fragments/full-patient-concern.graphql"
+
+mutation patientConcernCreate(
+  $patientId: String!
+  $concernId: String!
+  $startedAt: String
+) {
+  patientConcernCreate(input: {
+    patientId: $patientId,
+    concernId: $concernId,
+    startedAt: $startedAt,
+   }) {
+    ...FullPatientConcern
+  }
+}

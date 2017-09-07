@@ -10,13 +10,14 @@ import { Size } from '../reducers/browser-reducer';
 import * as tabStyles from '../shared/css/tabs.css';
 import { IState as IAppState } from '../store';
 import * as styles from './css/patient-profile.css';
+import PatientCarePlanView from './patient-care-plan-view';
 import PatientEncounters from './patient-encounters';
 import PatientInfo from './patient-info';
 import PatientProfileLeftNav from './patient-profile-left-nav';
 import PatientTasks from './patient-tasks';
 import PatientThreeSixtyView from './patient-three-sixty-view';
 
-type SelectableTabs = 'encounters' | 'patientInfo' | 'tasks' | '360';
+type SelectableTabs = 'encounters' | 'patientInfo' | 'tasks' | '360' | 'carePlan';
 
 export interface IProps {
   intl: InjectedIntl;
@@ -31,7 +32,7 @@ export interface IProps {
     params: {
       patientId: string;
       tabId?: SelectableTabs;
-      riskAreaId?: string;
+      riskAreaOrSubTabId?: string;
     };
   };
 }
@@ -64,6 +65,9 @@ class PatientProfileContainer extends React.Component<IProps, {}> {
     const threeSixtyViewTabStyles = classNames(tabStyles.tab, {
       [tabStyles.selectedTab]: tabId === '360',
     });
+    const carePlanTabStyles = classNames(tabStyles.tab, {
+      [tabStyles.selectedTab]: tabId === 'carePlan',
+    });
     const encountersTabStyles = classNames(tabStyles.tab, {
       [tabStyles.selectedTab]: tabId === 'encounters',
     });
@@ -87,9 +91,14 @@ class PatientProfileContainer extends React.Component<IProps, {}> {
       null;
     const threeSixty = tabId === '360' ?
       <PatientThreeSixtyView
-        riskAreaId={match.params.riskAreaId}
+        riskAreaId={match.params.riskAreaOrSubTabId}
         patientId={patientId}
         routeBase={`/patients/${patientId}/360`} /> : null;
+    const carePlan = tabId === 'carePlan' ?
+      <PatientCarePlanView
+        patientId={patientId}
+        routeBase={`/patients/${patientId}/carePlan`}
+        subTabId={match.params.riskAreaOrSubTabId as any} /> : null; // TODO: Fix typing
     return (
       <div className={styles.container}>
         <PatientProfileLeftNav
@@ -102,8 +111,16 @@ class PatientProfileContainer extends React.Component<IProps, {}> {
             <FormattedMessage id='patient.threeSixty'>
               {(message: string) =>
                 <Link
-                  to ={`/patients/${patientId}/360`}
+                  to={`/patients/${patientId}/360`}
                   className={threeSixtyViewTabStyles}>
+                  {message}
+                </Link>}
+            </FormattedMessage>
+            <FormattedMessage id='patient.carePlan'>
+              {(message: string) =>
+                <Link
+                  to={`/patients/${patientId}/carePlan`}
+                  className={carePlanTabStyles}>
                   {message}
                 </Link>}
             </FormattedMessage>
@@ -136,6 +153,7 @@ class PatientProfileContainer extends React.Component<IProps, {}> {
           {patientInfo}
           {tasks}
           {threeSixty}
+          {carePlan}
         </div>
       </div>
     );

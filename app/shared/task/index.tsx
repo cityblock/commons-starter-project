@@ -66,7 +66,7 @@ export interface IState {
   descriptionHeight: string;
 }
 
-export const DEFAULT_AVATAR_URL = 'http://bit.ly/2u9bJDA';
+export const DEFAULT_AVATAR_URL = 'http://bit.ly/2w8gHND';
 
 const COPY_SUCCESS_TIMEOUT_MILLISECONDS = 2000;
 

@@ -1,4 +1,4 @@
-import { Model, RelationMappings } from 'objection';
+import { Model, RelationMappings, Transaction } from 'objection';
 import * as uuid from 'uuid/v4';
 import TaskTemplate from './task-template';
 
@@ -50,8 +50,11 @@ export default class GoalSuggestionTemplate extends Model {
     this.updatedAt = new Date().toISOString();
   }
 
-  static async get(goalSuggestionTemplateId: string): Promise<GoalSuggestionTemplate | undefined> {
-    const goalSuggestionTemplate = await this.query()
+  static async get(
+    goalSuggestionTemplateId: string,
+    txn?: Transaction,
+  ): Promise<GoalSuggestionTemplate | undefined> {
+    const goalSuggestionTemplate = await this.query(txn)
       .eager('taskTemplates')
       .modifyEager('taskTemplates', builder => builder.where('deletedAt', null))
       .findById(goalSuggestionTemplateId);

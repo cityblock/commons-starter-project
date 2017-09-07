@@ -198,11 +198,7 @@ describe('patient', () => {
         }
       }`;
 
-      const result = await graphql(schema, query, null, {
-        db,
-        userRole,
-        userId: user.id,
-      });
+      const result = await graphql(schema, query, null, { db, userRole, userId: user.id });
 
       expect(cloneDeep(result.data!.patientScratchPad)).toMatchObject({
         text: 'Test Scratch Pad',

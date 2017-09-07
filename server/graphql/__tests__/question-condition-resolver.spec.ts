@@ -99,11 +99,7 @@ describe('questionCondition tests', () => {
           answerId
         }
       }`;
-      const result = await graphql(schema, query, null, {
-        db,
-        userRole,
-        userId: user.id,
-      });
+      const result = await graphql(schema, query, null, { db, userRole, userId: user.id });
       expect(cloneDeep(result.errors![0])).toMatchObject(
         new Error(`Error: Answer ${answer.id} is an answer to question ${question.id}`),
       );

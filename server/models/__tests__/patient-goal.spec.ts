@@ -1,10 +1,14 @@
 import Db from '../../db';
 import { createMockPatient, createPatient } from '../../spec-helpers';
+import CareTeam from '../care-team';
 import Concern from '../concern';
 import GoalSuggestionTemplate from '../goal-suggestion-template';
 import Patient from '../patient';
 import PatientConcern from '../patient-concern';
 import PatientGoal from '../patient-goal';
+import Task from '../task';
+import TaskEvent from '../task-event';
+import TaskTemplate from '../task-template';
 import User from '../user';
 
 const userRole = 'physician';
@@ -30,13 +34,14 @@ describe('patient goal model', () => {
     await Db.release();
   });
 
-  it('should creates and get patient goal', async () => {
+  it('creates and gets patient goal', async () => {
     const patientGoal = await PatientGoal.create({
       title: 'title',
       patientId: patient.id,
+      userId: user.id,
     });
     expect(patientGoal.title).toEqual('title');
-    expect(await PatientGoal.get(patientGoal.id)).toEqual(patientGoal);
+    expect(await PatientGoal.get(patientGoal.id)).toMatchObject(patientGoal);
   });
 
   it('creates a patient goal and links to goal template', async () => {
@@ -48,9 +53,187 @@ describe('patient goal model', () => {
       title: 'title',
       patientId: patient.id,
       goalSuggestionTemplateId: goalSuggestionTemplate.id,
+      userId: user.id,
     });
     expect(patientGoal.goalSuggestionTemplateId).toEqual(goalSuggestionTemplate.id);
-    expect(await PatientGoal.get(patientGoal.id)).toEqual(patientGoal);
+    expect(await PatientGoal.get(patientGoal.id)).toMatchObject(patientGoal);
+  });
+
+  it('creates tasks when taskTemplates are provided as input', async () => {
+    const goalSuggestionTemplate = await GoalSuggestionTemplate.create({ title: 'Fix housing' });
+
+    const taskTemplate = await TaskTemplate.create({
+      title: 'Task 1',
+      priority: 'high',
+      repeating: false,
+      completedWithinInterval: 'week',
+      completedWithinNumber: 1,
+      careTeamAssigneeRole: 'physician',
+      goalSuggestionTemplateId: goalSuggestionTemplate.id,
+    });
+
+    await PatientGoal.create({
+      title: 'Patient Goal',
+      patientId: patient.id,
+      goalSuggestionTemplateId: goalSuggestionTemplate.id,
+      userId: user.id,
+      taskTemplateIds: [taskTemplate.id],
+    });
+
+    const fetchedTasks = await Task.getPatientTasks(patient.id, {
+      pageNumber: 0,
+      pageSize: 10,
+      orderBy: 'createdAt',
+      order: 'asc',
+    });
+    const fetchedTaskEvents = await TaskEvent.getUserTaskEvents(user.id, {
+      pageNumber: 0,
+      pageSize: 10,
+    });
+
+    expect(fetchedTasks.total).toEqual(1);
+    expect(fetchedTasks.results[0].title).toEqual(taskTemplate.title);
+    expect(fetchedTaskEvents.total).toEqual(2);
+    expect(fetchedTaskEvents.results[0].eventType).toEqual('edit_assignee');
+    expect(fetchedTaskEvents.results[1].eventType).toEqual('create_task');
+  });
+
+  it('correctly assigns tasks when taskTemplates have an default assignee role', async () => {
+    const goalSuggestionTemplate = await GoalSuggestionTemplate.create({ title: 'Fix housing' });
+    const user2 = await User.create({
+      email: 'care2@care.com',
+      userRole: 'healthCoach',
+      homeClinicId: '1',
+    });
+
+    await CareTeam.create({ userId: user2.id, patientId: patient.id });
+
+    const taskTemplate = await TaskTemplate.create({
+      title: 'Task 1',
+      priority: 'high',
+      repeating: false,
+      careTeamAssigneeRole: 'healthCoach',
+      goalSuggestionTemplateId: goalSuggestionTemplate.id,
+    });
+
+    await PatientGoal.create({
+      title: 'Patient Goal',
+      patientId: patient.id,
+      goalSuggestionTemplateId: goalSuggestionTemplate.id,
+      userId: user.id,
+      taskTemplateIds: [taskTemplate.id],
+    });
+
+    const fetchedTasks = await Task.getPatientTasks(patient.id, {
+      pageNumber: 0,
+      pageSize: 10,
+      orderBy: 'createdAt',
+      order: 'asc',
+    });
+
+    expect(fetchedTasks.results[0].assignedTo).toMatchObject(user2);
+  });
+
+  it('does not assign tasks when there is no care team member for assigned role', async () => {
+    const goalSuggestionTemplate = await GoalSuggestionTemplate.create({ title: 'Fix housing' });
+
+    const taskTemplate = await TaskTemplate.create({
+      title: 'Task 1',
+      priority: 'high',
+      repeating: false,
+      careTeamAssigneeRole: 'healthCoach',
+      goalSuggestionTemplateId: goalSuggestionTemplate.id,
+    });
+
+    await PatientGoal.create({
+      title: 'Patient Goal',
+      patientId: patient.id,
+      goalSuggestionTemplateId: goalSuggestionTemplate.id,
+      userId: user.id,
+      taskTemplateIds: [taskTemplate.id],
+    });
+
+    const fetchedTasks = await Task.getPatientTasks(patient.id, {
+      pageNumber: 0,
+      pageSize: 10,
+      orderBy: 'createdAt',
+      order: 'asc',
+    });
+
+    expect(fetchedTasks.results[0].assignedTo).toBe(null);
+  });
+
+  it('correctly sets dueAt when taskTemplates have interval and number set', async () => {
+    const oldDate = Date.now;
+    Date.now = jest.fn(() => 1500494779252);
+    const twoWeeksFromNow = Date.now() + 12096e5;
+
+    const goalSuggestionTemplate = await GoalSuggestionTemplate.create({ title: 'Fix housing' });
+
+    const taskTemplate = await TaskTemplate.create({
+      title: 'Task 1',
+      priority: 'high',
+      repeating: false,
+      careTeamAssigneeRole: 'healthCoach',
+      completedWithinInterval: 'week',
+      completedWithinNumber: 2,
+      goalSuggestionTemplateId: goalSuggestionTemplate.id,
+    });
+
+    await PatientGoal.create({
+      title: 'Patient Goal',
+      patientId: patient.id,
+      goalSuggestionTemplateId: goalSuggestionTemplate.id,
+      userId: user.id,
+      taskTemplateIds: [taskTemplate.id],
+    });
+
+    const fetchedTasks = await Task.getPatientTasks(patient.id, {
+      pageNumber: 0,
+      pageSize: 10,
+      orderBy: 'createdAt',
+      order: 'asc',
+    });
+
+    expect(fetchedTasks.results[0].dueAt.valueOf()).toEqual(twoWeeksFromNow);
+
+    Date.now = oldDate;
+  });
+
+  it('does not create tasks for invalid taskTemplates that are provided as input', async () => {
+    const goalSuggestionTemplate = await GoalSuggestionTemplate.create({ title: 'Fix housing' });
+
+    const taskTemplate = await TaskTemplate.create({
+      title: 'Task 1',
+      priority: 'high',
+      repeating: false,
+      completedWithinInterval: 'week',
+      completedWithinNumber: 1,
+      careTeamAssigneeRole: 'physician',
+      goalSuggestionTemplateId: goalSuggestionTemplate.id,
+    });
+
+    await PatientGoal.create({
+      title: 'Patient Goal',
+      patientId: patient.id,
+      goalSuggestionTemplateId: goalSuggestionTemplate.id,
+      userId: user.id,
+      taskTemplateIds: [`${taskTemplate.id}-but-fake`],
+    });
+
+    const fetchedTasks = await Task.getPatientTasks(patient.id, {
+      pageNumber: 0,
+      pageSize: 10,
+      orderBy: 'createdAt',
+      order: 'asc',
+    });
+    const fetchedTaskEvents = await TaskEvent.getUserTaskEvents(user.id, {
+      pageNumber: 0,
+      pageSize: 10,
+    });
+
+    expect(fetchedTasks.total).toEqual(0);
+    expect(fetchedTaskEvents.total).toEqual(0);
   });
 
   it('creates a patient goal and links to concern', async () => {
@@ -65,9 +248,10 @@ describe('patient goal model', () => {
       title: 'title',
       patientId: patient.id,
       patientConcernId: patientConcern.id,
+      userId: user.id,
     });
     expect(patientGoal.patientConcernId).toEqual(patientConcern.id);
-    expect(await PatientGoal.get(patientGoal.id)).toEqual(patientGoal);
+    expect(await PatientGoal.get(patientGoal.id)).toMatchObject(patientGoal);
   });
 
   it('should throw an error if an patient goal does not exist for the id', async () => {
@@ -79,6 +263,7 @@ describe('patient goal model', () => {
     const patientGoal = await PatientGoal.create({
       title: 'title',
       patientId: patient.id,
+      userId: user.id,
     });
     const patientGoalUpdated = await PatientGoal.update(patientGoal.id, {
       title: 'new title',
@@ -90,6 +275,7 @@ describe('patient goal model', () => {
     const patientGoal = await PatientGoal.create({
       title: 'title',
       patientId: patient.id,
+      userId: user.id,
     });
     const deletedPatientGoal = await PatientGoal.delete(patientGoal.id);
     expect(deletedPatientGoal).not.toBeNull();

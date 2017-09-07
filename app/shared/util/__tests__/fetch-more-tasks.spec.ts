@@ -111,11 +111,9 @@ describe('fetch more tasks', () => {
   it('calls fetch more and combines tasks', () => {
     tasksResponse.fetchMore = (options: any) => {
       expect(options.variables).toEqual({ pageNumber: 0 });
-      expect(
-        options.updateQuery(tasksResponse, {
-          fetchMoreResult: fetchMoreResponse,
-        }),
-      ).toEqual(tasksResponseAndFetchMoreRespopnse);
+      expect(options.updateQuery(tasksResponse, { fetchMoreResult: fetchMoreResponse })).toEqual(
+        tasksResponseAndFetchMoreRespopnse,
+      );
     };
 
     fetchMoreTasks(tasksResponse, {}, 'tasksForPatient');

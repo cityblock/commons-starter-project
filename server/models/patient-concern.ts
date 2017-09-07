@@ -1,15 +1,19 @@
-import { Model, RelationMappings } from 'objection';
+import { keys } from 'lodash';
+import { Model, RelationMappings, Transaction } from 'objection';
 import * as uuid from 'uuid/v4';
 import Concern from './concern';
 import Patient from './patient';
+import PatientGoal from './patient-goal';
 
 export interface IPatientConcernEditableFields {
-  order: number;
+  order?: number;
   concernId: string;
   patientId: string;
   startedAt?: string;
   completedAt?: string;
 }
+
+export const EAGER_QUERY = '[patient, concern, patientGoals.[patient, tasks]]';
 
 /* tslint:disable:member-ordering */
 export default class PatientConcern extends Model {
@@ -18,8 +22,9 @@ export default class PatientConcern extends Model {
   concernId: string;
   concern: Concern;
   patientId: string;
+  patientGoals: PatientGoal[];
   patient: Patient;
-  startedAT: string;
+  startedAt: string;
   completedAt: string;
   createdAt: string;
   updatedAt: string;
@@ -81,7 +86,9 @@ export default class PatientConcern extends Model {
   }
 
   static async get(patientConcernId: string): Promise<PatientConcern | undefined> {
-    const patientConcern = await this.query().findById(patientConcernId);
+    const patientConcern = await this.query()
+      .eager(EAGER_QUERY)
+      .findById(patientConcernId);
 
     if (!patientConcern) {
       return Promise.reject(`No such patient concern: ${patientConcernId}`);
@@ -89,28 +96,44 @@ export default class PatientConcern extends Model {
     return patientConcern;
   }
 
-  static async create(input: IPatientConcernEditableFields) {
-    return await this.query().insertAndFetch(input);
+  static async create(input: IPatientConcernEditableFields, txn?: Transaction) {
+    const insertInput: any = {};
+
+    keys(input).forEach(inputKey => (insertInput[inputKey] = (input as any)[inputKey]));
+
+    insertInput.order = this.query(txn)
+      .where('patientId', input.patientId)
+      .andWhere('deletedAt', null)
+      .select(this.raw('coalesce(max("order"), 0) + 1'));
+
+    return await this.query(txn)
+      .eager(EAGER_QUERY)
+      .insertAndFetch(insertInput);
   }
 
   static async update(
     patientConcernId: string,
     concern: Partial<IPatientConcernEditableFields>,
   ): Promise<PatientConcern> {
-    return await this.query().updateAndFetchById(patientConcernId, concern);
+    return await this.query()
+      .eager(EAGER_QUERY)
+      .updateAndFetchById(patientConcernId, concern);
   }
 
   static async getForPatient(patientId: string): Promise<PatientConcern[]> {
     return await this.query()
+      .eager(EAGER_QUERY)
       .where('deletedAt', null)
       .andWhere('patientId', patientId)
       .orderBy('order');
   }
 
   static async delete(patientConcernId: string): Promise<PatientConcern> {
-    return await this.query().updateAndFetchById(patientConcernId, {
-      deletedAt: new Date().toISOString(),
-    });
+    return await this.query()
+      .eager(EAGER_QUERY)
+      .updateAndFetchById(patientConcernId, {
+        deletedAt: new Date().toISOString(),
+      });
   }
 }
 /* tslint:disable:member-ordering */

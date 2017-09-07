@@ -57,7 +57,7 @@ describe('patient concern resolver', () => {
     it('creates a patient concern', async () => {
       const mutation = `mutation {
         patientConcernCreate(
-          input: { patientId: "${patient.id}", concernId: "${concern.id}", order: 1 }
+          input: { patientId: "${patient.id}", concernId: "${concern.id}" }
         ) {
           patientId, concernId, order
         }

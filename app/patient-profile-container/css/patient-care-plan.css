@@ -1,0 +1,477 @@
+@import '../../shared/css/sizes';
+.marginLeft {
+  margin-left: 10px;
+}
+
+.invertedButton {
+  @apply --inverted-button;
+}
+
+.button {
+  @apply --button;
+}
+
+.hidden {
+  display: none;
+}
+
+.carePlanPanel {
+  background-color: var(--gray-background-color);
+  padding: 20px var(--medium-gutter);
+  min-height: calc(100vh - 160px);
+}
+
+::-webkit-scrollbar {
+  display: none;
+}
+
+.carePlanSuggestions, .carePlan {
+  height: calc(100vh - 200px);
+  overflow-y: scroll;
+  -webkit-overflow-scrolling: touch;
+}
+
+.section {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: var(--small-gutter);
+}
+
+.sectionHeading {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--small-gutter);
+}
+
+.sectionTitle {
+  font-family: var(--basetica-medium);
+  font-size: var(--default-font-size);
+  line-height: var(--medium-font-line-height);
+  color: var(--gray-font-color);
+}
+
+.sectionDivider {
+  height: 0;
+  border-top: 1px solid var(--border-color);
+  flex: 1;
+  margin-left: 10px;
+  margin-right: var(--small-gutter);
+}
+
+.sectionHamburger {
+  height: 12px;
+  width: 5px;
+  margin-right: 10px;
+  background-image: url('../../assets/dot-hamburger-grey.svg');
+  background-position: center center;
+  background-size: contain;
+  background-repeat: no-repeat;
+
+  &:hover {
+    cursor: pointer;
+  }
+}
+
+.section:last-child {
+  margin-bottom: 0;
+}
+
+.suggestionsBody { }
+
+.carePlanSuggestion {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  background-color: var(--white-color);
+  border: 1px dashed var(--gray-font-color);
+  border-radius: 4px;
+  padding-top: 10px;
+  margin-bottom: 10px;
+}
+
+.carePlanSuggestion:last-child {
+  margin-bottom: 0;
+}
+
+.carePlanSuggestionType {
+  font-family: var(--roboto);
+  font-weight: var(--roboto-medium-weight);
+  font-size: var(--small-font-size);
+  line-height: var(--small-font-line-height);
+  color: var(--light-blue-color);
+  padding: 0 var(--small-gutter);
+  text-transform: capitalize;
+}
+
+.carePlanSuggestionTitleRow {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  padding: 0 var(--small-gutter);
+}
+
+.carePlanSuggestionConcernTitle, .carePlanSuggestionGoalTitle {
+  font-family: var(--roboto);
+  font-weight: var(--roboto-medium-weight);
+  color: var(--black-color);
+}
+
+.carePlanSuggestionConcernTitle {
+  font-size: var(--medium-large-font-size);
+  line-height: var(--medium-large-font-line-height);
+}
+
+.carePlanSuggestionGoalTitle {
+  font-size: var(--default-font-size);
+  line-height: var(--default-line-height);
+}
+
+.carePlanSuggestionActionButtons {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.rejectButton, .acceptButton {
+  height: 20px;
+  width: 20px;
+  background-size: contain;
+  background-position: center center;
+  background-repeat: no-repeat;
+
+  &:hover {
+    cursor: pointer;
+  }
+}
+
+.rejectButton {
+  margin-right: 50px;
+  background-image: url('../../assets/red-x.svg');
+}
+
+.acceptButton {
+  background-image: url('../../assets/green-check-mark.svg');
+}
+
+.carePlanSuggestionMetaRow {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  margin-bottom: 10px;
+  padding: 0 var(--small-gutter);
+}
+
+.carePlanSuggestionMetaRow.largerMargin {
+  margin-bottom: 15px;
+}
+
+.carePlanSuggestionSmallLabel, .carePlanSuggestionSmallDate {
+  font-family: var(--roboto);
+  font-size: var(--extra-small-font-size);
+  line-height: var(--extra-small-font-line-height);
+}
+
+.carePlanSuggestionSmallLabel {
+  margin-right: 10px;
+  color: var(--light-gray-font-color);
+}
+
+.carePlanSuggestionSmallDate {
+  color: var(--black-color);
+}
+
+.taskTemplateRow {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--small-gutter);
+  padding: var(--small-gutter) var(--small-gutter) var(--small-gutter) 16px;
+  border-top: 1px dashed var(--gray-font-color);
+  border-left: 4px solid transparent;
+}
+
+.taskTemplateRow:last-child {
+  border-bottom-left-radius: 4px;
+}
+
+.taskTemplateRow.highPriority {
+  border-left: 4px solid var(--red-color);
+}
+
+.taskTemplateRow.mediumPriority {
+  border-left: 4px solid var(--yellow-color);
+}
+
+.taskTemplateRow.removedTask {
+  background-color: var(--gray-background-color);
+  opacity: 0.3;
+}
+
+.taskTemplateTitle {
+  max-width: 66%;
+  font-family: var(--roboto);
+  font-weight: var(--roboto-medium-weight);
+  color: var(--black-color);
+  font-size: var(--default-font-size);
+  line-height: var(--default-line-height);
+}
+
+.taskTemplateInfoControls {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.taskTemplateAssigneeAvatar {
+  height: 24px;
+  width: 24px;
+  border: 1px solid var(--border-color);
+  border-radius: 50%;
+  background-size: contain;
+  background-position: center center;
+  background-repeat: no-repeat;
+  margin-right: 10px;
+}
+
+.taskTemplateDueDate {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 10px;
+  border-left: 1px solid var(--gray-background-color);
+  border-right: 1px solid var(--gray-background-color);
+  font-size: var(--small-font-size);
+  line-height: var(--small-font-line-height);
+  font-family: var(--roboto);
+  margin-right: 10px;
+}
+
+.taskTemplateDueDateLabel {
+  color: var(--light-gray-font-color);
+  margin-right: 10px;
+}
+
+.taskTemplateDueDateText {
+  color: var(--black-color);
+}
+
+.taskTemplateRejectButton {
+  height: 20px;
+  width: 20px;
+  background-image: url('../../assets/circle-x-gray.svg');
+  background-position: center center;
+  background-size: contain;
+  background-repeat: no-repeat;
+
+  &:hover {
+    cursor: pointer;
+  }
+}
+
+.taskTemplateRow.removedTask .taskTemplateRejectButton {
+  background-image: url('../../assets/dark-circle-plus.svg');
+}
+
+.acceptModalContent {
+  display: flex;
+  flex-direction: column;
+}
+
+.acceptModalHeader {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.acceptModalDismissButton {
+  height: 16px;
+  width: 16px;
+  background-image: url('../../assets/close-grey.svg');
+  background-position: center center;
+  background-size: contain;
+  background-repeat: no-repeat;
+
+  &:hover {
+    cursor: pointer;
+  }
+}
+
+.acceptModalBody {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 10px;
+}
+
+.acceptModalTitle {
+  font-family: var(--basetica-black);
+  font-size: var(--medium-font-size);
+  line-height: var(--medium-font-line-height);
+  color: var(--default-font-color);
+  margin-bottom: var(--gutter);
+}
+
+.acceptModalTitle.noMargin {
+  margin-bottom: 0;
+}
+
+.acceptModalSubtitle {
+  font-family: var(--roboto);
+  font-size: var(--default-font-size);
+  line-height: var(--body-copy-line-height);
+  color: var(--gray-font-color);
+  margin-bottom: var(--gutter);
+}
+
+.acceptModalDropdown {
+  display: flex;
+  width: 90%;
+  margin-bottom: var(--gutter);
+}
+
+.acceptModalInput {
+  display: flex;
+  width: 90%;
+  margin-bottom: var(--gutter);
+  margin-top: -20px;
+}
+
+.acceptModalInput.hidden {
+  display: none;
+}
+
+.roundedInput {
+  border-radius: 4px;
+}
+
+.acceptModalButtons {
+  display: flex;
+  flex-direction: row;
+  margin: 0 auto var(--medium-gutter);
+}
+
+.rightSmallGutter {
+  margin-right: var(--small-gutter);
+}
+
+.smallButton {
+  height: 32px;
+  width: 148px;
+  font-size: var(--small-font-size);
+  line-height: var(--small-font-line-height);
+  padding: 10px var(--small-gutter);
+}
+
+.redButton {
+  background-color: var(--red-color);
+}
+
+.emptyCarePlanSuggestionsContainer {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  border: 1px dashed var(--border-color);
+  border-radius: 4px;
+  padding: 50px;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.emptyCarePlanSuggestionsLogo {
+  height: 30px;
+  width: 30px;
+  background-image: url('../../assets/calendar-event-grey.svg');
+  background-position: center center;
+  background-size: contain;
+  background-repeat: no-repeat;
+  margin-bottom: 30px;
+}
+
+.emptyCarePlanSuggestionsLabel {
+  font-family: var(--basetica-medium);
+  font-size: var(--medium-font-size);
+  line-height: var(--medium-font-line-height);
+  color: var(--light-gray-font-color);
+  margin-bottom: 10px;
+}
+
+.emptyCarePlanSuggestionsSubtext {
+  font-family: var(--roboto);
+  font-size: var(--default-font-size);
+  line-height: var(--default-line-height);
+  color: var(--light-gray-font-color);
+}
+
+.carePlanLoading, .carePlanSuggestionsLoading {
+  margin: 0 auto;
+  text-align: center;
+  color: var(--light-gray-font-color);
+  font-family: var(--basetica-medium);
+  font-size: var(--medium-font-size);
+  line-height: var(--medium-font-line-height);
+}
+
+.carePlanSuggestionsLoading {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  border: 1px dashed var(--border-color);
+  border-radius: 4px;
+  padding: 50px;
+  align-items: center;
+}
+
+.carePlanError {
+  margin: var(--gutter) var(--gutter) 0;
+}
+
+.carePlanErrorIcon {
+  background-image: url('../../assets/error-circle.svg');
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-size: contain;
+  height: 30px;
+  width: 30px;
+  margin: 0 auto var(--small-gutter);
+}
+
+.carePlanErrorLabel {
+  color: var(--default-font-color);
+  font-family: var(--basetica-black);
+  font-size: var(--medium-font-size);
+  line-height: var(--medium-font-line-height);
+  text-align: center;
+  margin: 0 auto 10px;
+}
+
+.carePlanErrorSubheading {
+  color: var(--gray-font-color);
+  font-family: var(--roboto);
+  font-size: var(--default-font-size);
+  line-height: var(--default-line-height);
+  text-align: center;
+  margin: 0 auto var(--medium-gutter);
+  padding: 0 var(--small-gutter);
+}
+
+.carePlanErrorButton {
+  width: 94px;
+  height: 32px;
+  margin: 0 auto;
+  padding: 9px 0 0 0;
+  text-align: center;
+  font-size: var(--small-font-size);
+  line-height: var(--small-font-line-height);
+}

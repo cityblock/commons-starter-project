@@ -1,6 +1,7 @@
-import { transaction, Model, RelationMappings } from 'objection';
+import { transaction, Model, RelationMappings, Transaction } from 'objection';
 import * as uuid from 'uuid/v4';
 import Answer from './answer';
+import CarePlanSuggestion from './care-plan-suggestion';
 import GoalSuggestionTemplate from './goal-suggestion-template';
 
 export interface IGoalSuggestionEditableFields {
@@ -83,30 +84,35 @@ export default class GoalSuggestion extends Model {
     );
   }
 
-  static async getForPatient(
+  static async getNewForPatient(
     patientId: string,
-    riskAreaId?: string,
+    txn?: Transaction,
   ): Promise<GoalSuggestionTemplate[]> {
-    let goalSuggestions;
+    const existingPatientCarePlanSuggestionsQuery = CarePlanSuggestion.query(txn)
+      .where('patientId', patientId)
+      .andWhere('dismissedAt', null)
+      .andWhere('acceptedAt', null)
+      .andWhere('suggestionType', 'goal')
+      .select('goalSuggestionTemplateId');
 
-    if (riskAreaId) {
-      goalSuggestions = await this.query()
-        .eager('goalSuggestionTemplate.[taskTemplates]')
-        .joinRelation('answer.question')
-        .join('patient_answer', 'answer.id', 'patient_answer.answerId')
-        .where('patient_answer.deletedAt', null)
-        .andWhere('patient_answer.patientId', patientId)
-        .andWhere('patient_answer.applicable', true)
-        .andWhere('answer:question.riskAreaId', riskAreaId);
-    } else {
-      goalSuggestions = await this.query()
-        .eager('goalSuggestionTemplate.[taskTemplates]')
-        .joinRelation('answer')
-        .join('patient_answer', 'answer.id', 'patient_answer.answerId')
-        .where('patient_answer.deletedAt', null)
-        .andWhere('patient_answer.patientId', patientId)
-        .andWhere('patient_answer.applicable', true);
-    }
+    const goalSuggestions = await this.query(txn)
+      .eager('goalSuggestionTemplate.[taskTemplates]')
+      .joinRelation('answer')
+      .join('patient_answer', 'answer.id', 'patient_answer.answerId')
+      .leftOuterJoin(
+        'patient_goal',
+        'goal_suggestion.goalSuggestionTemplateId',
+        'patient_goal.goalSuggestionTemplateId',
+      )
+      .where('patient_answer.deletedAt', null)
+      .andWhere(
+        'goal_suggestion.goalSuggestionTemplateId',
+        'not in',
+        existingPatientCarePlanSuggestionsQuery,
+      )
+      .andWhere('patient_answer.patientId', patientId)
+      .andWhere('patient_answer.applicable', true)
+      .andWhere('patient_goal.id', null);
 
     return goalSuggestions.map(
       (goalSuggestion: GoalSuggestion) => goalSuggestion.goalSuggestionTemplate,
@@ -125,10 +131,7 @@ export default class GoalSuggestion extends Model {
         .andWhere('deletedAt', null);
 
       if (relations.length < 1) {
-        await GoalSuggestionWithTransaction.query().insert({
-          goalSuggestionTemplateId,
-          answerId,
-        });
+        await GoalSuggestionWithTransaction.query().insert({ goalSuggestionTemplateId, answerId });
       }
     });
 

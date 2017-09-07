@@ -1,0 +1,85 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders a removed task template 1`] = `
+<div
+  className=""
+>
+  <div
+    className={undefined}
+  >
+    Task Title
+  </div>
+  <div
+    className={undefined}
+  >
+    <div
+      className={undefined}
+      style={
+        Object {
+          "backgroundImage": "url(http://bit.ly/2w8gHND)",
+        }
+      }
+    />
+    <div
+      className={undefined}
+    >
+      <div
+        className={undefined}
+      >
+        Due:
+      </div>
+      <div
+        className={undefined}
+      >
+        Sep 14, 2017
+      </div>
+    </div>
+    <div
+      className={undefined}
+      onClick={[Function]}
+    />
+  </div>
+</div>
+`;
+
+exports[`renders a selected task template 1`] = `
+<div
+  className=""
+>
+  <div
+    className={undefined}
+  >
+    Task Title
+  </div>
+  <div
+    className={undefined}
+  >
+    <div
+      className={undefined}
+      style={
+        Object {
+          "backgroundImage": "url(http://bit.ly/2w8gHND)",
+        }
+      }
+    />
+    <div
+      className={undefined}
+    >
+      <div
+        className={undefined}
+      >
+        Due:
+      </div>
+      <div
+        className={undefined}
+      >
+        Sep 14, 2017
+      </div>
+    </div>
+    <div
+      className={undefined}
+      onClick={[Function]}
+    />
+  </div>
+</div>
+`;

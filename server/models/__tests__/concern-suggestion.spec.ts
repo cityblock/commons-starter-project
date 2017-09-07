@@ -1,9 +1,11 @@
 import Db from '../../db';
 import { createMockPatient, createPatient } from '../../spec-helpers';
 import Answer from '../answer';
+import CarePlanSuggestion from '../care-plan-suggestion';
 import Concern from '../concern';
 import ConcernSuggestion from '../concern-suggestion';
 import PatientAnswer from '../patient-answer';
+import PatientConcern from '../patient-concern';
 import Question from '../question';
 import RiskArea from '../risk-area';
 import User from '../user';
@@ -155,7 +157,7 @@ describe('concern suggestion model', () => {
       });
 
       // At this point, only first concern should be suggested
-      const concernSuggestions = await ConcernSuggestion.getForPatient(patient.id);
+      const concernSuggestions = await ConcernSuggestion.getNewForPatient(patient.id);
       expect(concernSuggestions[0]).toMatchObject(concern1);
       expect(concernSuggestions.length).toEqual(1);
 
@@ -174,13 +176,13 @@ describe('concern suggestion model', () => {
       });
 
       // Now both concerns should be suggested
-      const secondConcernSuggestions = await ConcernSuggestion.getForPatient(patient.id);
+      const secondConcernSuggestions = await ConcernSuggestion.getNewForPatient(patient.id);
       expect(secondConcernSuggestions[0]).toMatchObject(concern1);
       expect(secondConcernSuggestions[1]).toMatchObject(concern2);
       expect(secondConcernSuggestions.length).toEqual(2);
     });
 
-    it('returns concern suggestions for a patient scoped to riskArea', async () => {
+    it('does not return concern suggestions where one already exists', async () => {
       const user = await User.create({
         email: 'care@care.com',
         userRole: 'physician',
@@ -189,11 +191,10 @@ describe('concern suggestion model', () => {
       const concern1 = await Concern.create({ title: 'Housing' });
       const concern2 = await Concern.create({ title: 'Food' });
       const patient = await createPatient(createMockPatient(123), user.id);
-      const riskArea2 = await RiskArea.create({ title: 'testing2', order: 2 });
       const question2 = await Question.create({
         title: 'hate writing tests?',
         answerType: 'dropdown',
-        riskAreaId: riskArea2.id,
+        riskAreaId: riskArea.id,
         order: 1,
       });
       const answer2 = await Answer.create({
@@ -237,10 +238,78 @@ describe('concern suggestion model', () => {
         ],
       });
 
-      // Should only contain the suggestion for risk area 2
-      const concernSuggestions = await ConcernSuggestion.getForPatient(patient.id, riskArea2.id);
-      expect(concernSuggestions[0]).toMatchObject(concern2);
+      await CarePlanSuggestion.create({
+        patientId: patient.id,
+        suggestionType: 'concern',
+        concernId: concern1.id,
+      });
+
+      const concernSuggestions = await ConcernSuggestion.getNewForPatient(patient.id);
       expect(concernSuggestions.length).toEqual(1);
+      expect(concernSuggestions[0]).toMatchObject(concern2);
+    });
+
+    it('does not return suggestions for concerns that are already in the care plan', async () => {
+      const user = await User.create({
+        email: 'care@care.com',
+        userRole: 'physician',
+        homeClinicId: '1',
+      });
+      const concern1 = await Concern.create({ title: 'Housing' });
+      const concern2 = await Concern.create({ title: 'Food' });
+      const patient = await createPatient(createMockPatient(123), user.id);
+      const question2 = await Question.create({
+        title: 'hate writing tests?',
+        answerType: 'dropdown',
+        riskAreaId: riskArea.id,
+        order: 1,
+      });
+      const answer2 = await Answer.create({
+        displayValue: 'hates writing tests!',
+        value: '3',
+        valueType: 'number',
+        riskAdjustmentType: 'forceHighRisk',
+        inSummary: false,
+        questionId: question2.id,
+        order: 1,
+      });
+
+      await ConcernSuggestion.create({
+        concernId: concern1.id,
+        answerId: answer.id,
+      });
+      await ConcernSuggestion.create({
+        concernId: concern2.id,
+        answerId: answer2.id,
+      });
+
+      await PatientAnswer.create({
+        patientId: patient.id,
+        answers: [
+          {
+            patientId: patient.id,
+            answerId: answer.id,
+            answerValue: answer.value,
+            applicable: true,
+            questionId: question.id,
+            userId: user.id,
+          },
+          {
+            patientId: patient.id,
+            answerId: answer2.id,
+            answerValue: answer2.value,
+            applicable: true,
+            questionId: question2.id,
+            userId: user.id,
+          },
+        ],
+      });
+
+      await PatientConcern.create({ order: 1, concernId: concern1.id, patientId: patient.id });
+
+      const secondConcernSuggestions = await ConcernSuggestion.getNewForPatient(patient.id);
+      expect(secondConcernSuggestions[0]).toMatchObject(concern2);
+      expect(secondConcernSuggestions.length).toEqual(1);
     });
   });
 });

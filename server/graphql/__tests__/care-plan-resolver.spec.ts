@@ -2,19 +2,19 @@ import { graphql } from 'graphql';
 import { cloneDeep } from 'lodash';
 import Db from '../../db';
 import Answer from '../../models/answer';
+import CarePlanSuggestion from '../../models/care-plan-suggestion';
 import Concern from '../../models/concern';
-import ConcernSuggestion from '../../models/concern-suggestion';
-import GoalSuggestion from '../../models/goal-suggestion';
 import GoalSuggestionTemplate from '../../models/goal-suggestion-template';
 import Patient from '../../models/patient';
-import PatientAnswer from '../../models/patient-answer';
+import PatientConcern from '../../models/patient-concern';
+import PatientGoal from '../../models/patient-goal';
 import Question from '../../models/question';
 import RiskArea from '../../models/risk-area';
 import User from '../../models/user';
 import { createMockPatient, createPatient } from '../../spec-helpers';
 import schema from '../make-executable-schema';
 
-describe('patient answer tests', () => {
+describe('care plan resolver tests', () => {
   let db: Db;
   const userRole = 'admin';
   let riskArea: RiskArea;
@@ -25,12 +25,16 @@ describe('patient answer tests', () => {
   let answer2: Answer;
   let user: User;
   let patient: Patient;
+  let concern: Concern;
+  let goalSuggestionTemplate: GoalSuggestionTemplate;
 
   beforeEach(async () => {
     db = await Db.get();
     await Db.clear();
     user = await User.create({ email: 'a@b.com', userRole, homeClinicId: '1' });
 
+    concern = await Concern.create({ title: 'Concern' });
+    goalSuggestionTemplate = await GoalSuggestionTemplate.create({ title: 'Goal' });
     riskArea = await RiskArea.create({
       title: 'testing',
       order: 1,
@@ -76,129 +80,249 @@ describe('patient answer tests', () => {
     await Db.release();
   });
 
+  describe('resolve care plan', () => {
+    it('resolves care plan for a patient', async () => {
+      const patientConcern = await PatientConcern.create({
+        patientId: patient.id,
+        concernId: concern.id,
+        startedAt: new Date().toISOString(),
+      });
+      const patientGoal = await PatientGoal.create({
+        patientId: patient.id,
+        title: 'Patient Goal',
+        goalSuggestionTemplateId: goalSuggestionTemplate.id,
+        userId: user.id,
+      });
+
+      const query = `{
+        carePlanForPatient(patientId: "${patient.id}") {
+          concerns {
+            id
+            concern {
+              title
+            }
+          }
+          goals {
+            id
+            title
+          }
+        }
+      }`;
+      const result = await graphql(schema, query, null, { db, userRole });
+      expect(cloneDeep(result.data!.carePlanForPatient)).toMatchObject({
+        concerns: [{ id: patientConcern.id, concern: { title: concern.title } }],
+        goals: [{ id: patientGoal.id, title: patientGoal.title }],
+      });
+    });
+  });
+
   describe('resolve care plan suggestions', () => {
     it('can get care plan suggestions for a patient', async () => {
-      const concern = await Concern.create({ title: 'Concern' });
-      const goalSuggestionTemplate = await GoalSuggestionTemplate.create({
-        title: 'Goal',
-      });
-
-      await ConcernSuggestion.create({
-        concernId: concern.id,
-        answerId: answer.id,
-      });
-      await GoalSuggestion.create({
-        goalSuggestionTemplateId: goalSuggestionTemplate.id,
-        answerId: answer2.id,
-      });
-
-      await PatientAnswer.create({
+      const suggestion1 = await CarePlanSuggestion.create({
         patientId: patient.id,
-        answers: [
-          {
-            questionId: answer.questionId,
-            answerId: answer.id,
-            answerValue: '3',
-            patientId: patient.id,
-            applicable: true,
-            userId: user.id,
-          },
-          {
-            questionId: answer2.questionId,
-            answerId: answer2.id,
-            answerValue: '3',
-            patientId: patient.id,
-            applicable: true,
-            userId: user.id,
-          },
-        ],
+        suggestionType: 'concern',
+        concernId: concern.id,
+      });
+      const suggestion2 = await CarePlanSuggestion.create({
+        patientId: patient.id,
+        suggestionType: 'goal',
+        goalSuggestionTemplateId: goalSuggestionTemplate.id,
       });
 
       const query = `{
         carePlanSuggestionsForPatient(patientId: "${patient.id}") {
-          concernSuggestions {
+          id
+          concern {
             id
-            title
           }
-          goalSuggestions {
+          goalSuggestionTemplate {
             id
-            title
           }
         }
       }`;
       const result = await graphql(schema, query, null, { db, userRole });
-      expect(cloneDeep(result.data!.carePlanSuggestionsForPatient)).toMatchObject({
-        concernSuggestions: [{ id: concern.id, title: concern.title }],
-        goalSuggestions: [
-          {
-            id: goalSuggestionTemplate.id,
-            title: goalSuggestionTemplate.title,
+      expect(cloneDeep(result.data!.carePlanSuggestionsForPatient)).toMatchObject([
+        {
+          id: suggestion1.id,
+          concern: {
+            id: concern.id,
           },
-        ],
+          goalSuggestionTemplate: null,
+        },
+        {
+          id: suggestion2.id,
+          concern: null,
+          goalSuggestionTemplate: {
+            id: goalSuggestionTemplate.id,
+          },
+        },
+      ]);
+    });
+  });
+
+  describe('carePlanSuggestionDismiss', () => {
+    it('dismisses a carePlanSuggestion', async () => {
+      const suggestion1 = await CarePlanSuggestion.create({
+        patientId: patient.id,
+        suggestionType: 'concern',
+        concernId: concern.id,
+      });
+
+      const mutation = `mutation {
+        carePlanSuggestionDismiss(
+          input: { carePlanSuggestionId: "${suggestion1.id}", dismissedReason: "Because" }
+        ) {
+          dismissedById
+          dismissedReason
+        }
+      }`;
+      const result = await graphql(schema, mutation, null, { db, userRole, userId: user.id });
+      expect(cloneDeep(result.data!.carePlanSuggestionDismiss)).toMatchObject({
+        dismissedById: user.id,
+        dismissedReason: 'Because',
       });
     });
+  });
 
-    it('gets care plan suggestions for a patient and risk area', async () => {
-      const concern = await Concern.create({ title: 'Concern' });
-      const goalSuggestionTemplate = await GoalSuggestionTemplate.create({
-        title: 'Goal',
-      });
-
-      await ConcernSuggestion.create({
-        concernId: concern.id,
-        answerId: answer.id,
-      });
-      await GoalSuggestion.create({
-        goalSuggestionTemplateId: goalSuggestionTemplate.id,
-        answerId: answer2.id,
-      });
-
-      await PatientAnswer.create({
+  describe('carePlanSuggestionAccept', () => {
+    it('accepts a concern suggestion and sets it as active or inactive', async () => {
+      const concern2 = await Concern.create({ title: 'Second concern' });
+      const suggestion1 = await CarePlanSuggestion.create({
         patientId: patient.id,
-        answers: [
-          {
-            questionId: answer.questionId,
-            answerId: answer.id,
-            answerValue: '3',
-            patientId: patient.id,
-            applicable: true,
-            userId: user.id,
-          },
-          {
-            questionId: answer2.questionId,
-            answerId: answer2.id,
-            answerValue: '3',
-            patientId: patient.id,
-            applicable: true,
-            userId: user.id,
-          },
-        ],
+        suggestionType: 'concern',
+        concernId: concern.id,
+      });
+      const suggestion2 = await CarePlanSuggestion.create({
+        patientId: patient.id,
+        suggestionType: 'concern',
+        concernId: concern2.id,
       });
 
-      const query = `{
-        carePlanSuggestionsForPatient(patientId: "${patient.id}", riskAreaId: "${riskArea2.id}") {
-          concernSuggestions {
-            id
-            title
-          }
-          goalSuggestions {
-            id
-            title
-          }
+      const mutation = `mutation {
+        carePlanSuggestionAccept(
+          input: { carePlanSuggestionId: "${suggestion1.id}" }
+        ) {
+          id
         }
       }`;
-      const result = await graphql(schema, query, null, { db, userRole });
-      const suggestions = cloneDeep(result.data!.carePlanSuggestionsForPatient);
-      expect(suggestions).toMatchObject({
-        concernSuggestions: [],
-        goalSuggestions: [
-          {
-            id: goalSuggestionTemplate.id,
-            title: goalSuggestionTemplate.title,
-          },
-        ],
+      await graphql(schema, mutation, null, { db, userRole, userId: user.id });
+
+      const mutation2 = `mutation {
+        carePlanSuggestionAccept(
+          input: {
+            carePlanSuggestionId: "${suggestion2.id}", startedAt: "${new Date().toISOString()}"
+          }
+        ) {
+          id
+        }
+      }`;
+      await graphql(schema, mutation2, null, { db, userRole, userId: user.id });
+
+      const patientConcerns = await PatientConcern.getForPatient(patient.id);
+      expect(patientConcerns[0].concernId).toEqual(concern.id);
+      expect(patientConcerns[0].startedAt).toBeNull();
+      expect(patientConcerns[1].concernId).toEqual(concern2.id);
+      expect(patientConcerns[1].startedAt).not.toBeNull();
+
+      const fetchedSuggestion1 = await CarePlanSuggestion.get(suggestion1.id);
+      const fetchedSuggestion2 = await CarePlanSuggestion.get(suggestion2.id);
+      expect(fetchedSuggestion1!.acceptedAt).not.toBeNull();
+      expect(fetchedSuggestion2!.acceptedAt).not.toBeNull();
+    });
+
+    it('accepts a goal suggestion and creates a new concern/patientConcern', async () => {
+      const suggestion = await CarePlanSuggestion.create({
+        patientId: patient.id,
+        suggestionType: 'goal',
+        goalSuggestionTemplateId: goalSuggestionTemplate.id,
       });
-      expect(suggestions.concernSuggestions).toEqual([]);
+
+      const mutation = `mutation {
+        carePlanSuggestionAccept(
+          input: { carePlanSuggestionId: "${suggestion.id}", concernTitle: "New Concern Yo" }
+        ) {
+          id
+        }
+      }`;
+      await graphql(schema, mutation, null, { db, userRole, userId: user.id });
+
+      const patientConcerns = await PatientConcern.getForPatient(patient.id);
+      const patientGoals = await PatientGoal.getForPatient(patient.id);
+      const concerns = await Concern.getAll();
+      expect(concerns.map(c => c.title)).toContain('New Concern Yo');
+      expect(patientConcerns[0].concern.title).toEqual('New Concern Yo');
+      expect(patientGoals[0].goalSuggestionTemplateId).toEqual(goalSuggestionTemplate.id);
+      expect(patientGoals[0].patientConcernId).toEqual(patientConcerns[0].id);
+
+      const fetchedSuggestion = await CarePlanSuggestion.get(suggestion.id);
+      expect(fetchedSuggestion!.acceptedAt).not.toBeNull();
+    });
+
+    it('accepts a goal suggestion and attaches to a newly concern suggestion', async () => {
+      const concernSuggestion = await CarePlanSuggestion.create({
+        patientId: patient.id,
+        suggestionType: 'concern',
+        concernId: concern.id,
+      });
+      const goalSuggestion = await CarePlanSuggestion.create({
+        patientId: patient.id,
+        suggestionType: 'goal',
+        goalSuggestionTemplateId: goalSuggestionTemplate.id,
+      });
+
+      const mutation = `mutation {
+        carePlanSuggestionAccept(
+          input: { carePlanSuggestionId: "${goalSuggestion.id}", concernId: "${concern.id}" }
+        ) {
+          id
+        }
+      }`;
+      await graphql(schema, mutation, null, { db, userRole, userId: user.id });
+
+      const patientConcerns = await PatientConcern.getForPatient(patient.id);
+      const patientGoals = await PatientGoal.getForPatient(patient.id);
+      expect(patientConcerns.map(c => c.concern.title)).toContain(concern.title);
+      expect(patientGoals.map(g => g.goalSuggestionTemplateId)).toContain(
+        goalSuggestionTemplate.id,
+      );
+
+      const fetchedConcernSuggestion = await CarePlanSuggestion.get(concernSuggestion.id);
+      const fetchedGoalSuggestion = await CarePlanSuggestion.get(goalSuggestion.id);
+      expect(fetchedConcernSuggestion!.acceptedAt).not.toBeNull();
+      expect(fetchedGoalSuggestion!.acceptedAt).not.toBeNull();
+    });
+
+    it('accepts a goal suggestion and attaches to an existing patientConcern', async () => {
+      const suggestion = await CarePlanSuggestion.create({
+        patientId: patient.id,
+        suggestionType: 'goal',
+        goalSuggestionTemplateId: goalSuggestionTemplate.id,
+      });
+      const patientConcern = await PatientConcern.create({
+        patientId: patient.id,
+        concernId: concern.id,
+      });
+
+      const mutation = `mutation {
+        carePlanSuggestionAccept(
+          input: {
+            carePlanSuggestionId: "${suggestion.id}",
+            patientConcernId: "${patientConcern.id}"
+          }
+        ) {
+          id
+        }
+      }`;
+      await graphql(schema, mutation, null, { db, userRole, userId: user.id });
+
+      const patientGoals = await PatientGoal.getForPatient(patient.id);
+      expect(patientGoals.map(g => g.goalSuggestionTemplateId)).toContain(
+        goalSuggestionTemplate.id,
+      );
+      expect(patientGoals[0].patientConcernId).toEqual(patientConcern.id);
+
+      const fetchedSuggestion = await CarePlanSuggestion.get(suggestion.id);
+      expect(fetchedSuggestion!.acceptedAt).not.toBeNull();
     });
   });
 });

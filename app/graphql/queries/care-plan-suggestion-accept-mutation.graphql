@@ -1,0 +1,21 @@
+#import "../fragments/full-care-plan-suggestion.graphql"
+
+mutation carePlanSuggestionAccept(
+  $carePlanSuggestionId: String!
+  $patientConcernId: String
+  $concernId: String
+  $concernTitle: String
+  $startedAt: String
+  $taskTemplateIds: [String]
+) {
+  carePlanSuggestionAccept(input: {
+    carePlanSuggestionId: $carePlanSuggestionId
+    patientConcernId: $patientConcernId
+    concernId: $concernId
+    concernTitle: $concernTitle
+    startedAt: $startedAt
+    taskTemplateIds: $taskTemplateIds
+  }) {
+    ...FullCarePlanSuggestion
+  }
+}

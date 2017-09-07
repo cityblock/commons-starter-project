@@ -63,7 +63,8 @@ declare module 'schema' {
     goalSuggestionTemplates: Array<IGoalSuggestionTemplate> | null;
     goalSuggestionTemplatesForAnswer: Array<IGoalSuggestionTemplate> | null;
     taskTemplates: Array<ITaskTemplate> | null;
-    carePlanSuggestionsForPatient: ICarePlanSuggestions | null;
+    carePlanSuggestionsForPatient: Array<ICarePlanSuggestion> | null;
+    carePlanForPatient: ICarePlan | null;
   }
 
   /*
@@ -84,7 +85,7 @@ declare module 'schema' {
   /*
     description: An object with a Globally Unique ID
   */
-  type uniqueId = IUser | IPatient | IClinic | ITask | ITaskComment | IRiskArea | IQuestion | IAnswer | IConcern | IGoalSuggestionTemplate | ITaskTemplate | IQuestionCondition | IPatientAnswer | IEventNotification | ITaskEvent | IPatientConcern | IPatientGoal;
+  type uniqueId = IUser | IPatient | IClinic | ITask | ITaskComment | IRiskArea | IQuestion | IAnswer | IConcern | IGoalSuggestionTemplate | ITaskTemplate | IQuestionCondition | IPatientAnswer | IEventNotification | ITaskEvent | IPatientConcern | IPatientGoal | ICarePlanSuggestion;
 
   /*
     description: An object with a Globally Unique ID
@@ -637,7 +638,10 @@ declare module 'schema' {
     id: string;
     order: number;
     concernId: string;
+    concern: IConcern;
+    patientGoals: Array<IPatientGoal>;
     patientId: string;
+    patient: IPatient;
     startedAt: string | null;
     completedAt: string | null;
     createdAt: string;
@@ -652,8 +656,11 @@ declare module 'schema' {
     id: string;
     title: string;
     patientId: string;
+    patient: IPatient;
     patientConcernId: string | null;
     goalSuggestionTemplateId: string | null;
+    goalSuggestionTemplate: IGoalSuggestionTemplate | null;
+    tasks: Array<ITask>;
     createdAt: string;
     updatedAt: string;
     deletedAt: string | null;
@@ -662,9 +669,37 @@ declare module 'schema' {
   /*
     description: 
   */
-  interface ICarePlanSuggestions {
-    goalSuggestions: Array<IGoalSuggestionTemplate>;
-    concernSuggestions: Array<IConcern>;
+  interface ICarePlanSuggestion {
+    id: string;
+    patientId: string;
+    patient: IPatient;
+    suggestionType: ICarePlanSuggestionTypeEnum;
+    concernId: string | null;
+    concern: IConcern | null;
+    goalSuggestionTemplateId: string | null;
+    goalSuggestionTemplate: IGoalSuggestionTemplate | null;
+    acceptedById: string | null;
+    acceptedBy: IUser | null;
+    dismissedById: string | null;
+    dismissedBy: IUser | null;
+    dismissedReason: string | null;
+    createdAt: string;
+    updatedAt: string;
+    dismissedAt: string | null;
+    acceptedAt: string | null;
+  }
+
+  /*
+    description: 
+  */
+  type ICarePlanSuggestionTypeEnum = 'concern' | 'goal';
+
+  /*
+    description: 
+  */
+  interface ICarePlan {
+    goals: Array<IPatientGoal>;
+    concerns: Array<IPatientConcern>;
   }
 
   /*
@@ -729,6 +764,8 @@ declare module 'schema' {
     patientConcernCreate: IPatientConcern | null;
     patientConcernEdit: IPatientConcern | null;
     patientConcernDelete: IPatientConcern | null;
+    carePlanSuggestionAccept: ICarePlanSuggestion | null;
+    carePlanSuggestionDismiss: ICarePlanSuggestion | null;
   }
 
   /*
@@ -1237,6 +1274,10 @@ declare module 'schema' {
     patientId: string;
     patientConcernId?: string | null;
     goalSuggestionTemplateId?: string | null;
+    taskTemplateIds?: Array<string> | null;
+    concernId?: string | null;
+    concernTitle?: string | null;
+    startedAt?: string | null;
   }
 
   /*
@@ -1260,7 +1301,6 @@ declare module 'schema' {
     description: 
   */
   interface IPatientConcernCreateInput {
-    order: number;
     concernId: string;
     patientId: string;
     startedAt?: string | null;
@@ -1284,6 +1324,26 @@ declare module 'schema' {
   */
   interface IPatientConcernDeleteInput {
     patientConcernId: string;
+  }
+
+  /*
+    description: 
+  */
+  interface ICarePlanSuggestionAcceptInput {
+    carePlanSuggestionId: string;
+    patientConcernId?: string | null;
+    concernId?: string | null;
+    concernTitle?: string | null;
+    startedAt?: string | null;
+    taskTemplateIds?: Array<string> | null;
+  }
+
+  /*
+    description: 
+  */
+  interface ICarePlanSuggestionDismissInput {
+    carePlanSuggestionId: string;
+    dismissedReason: string;
   }
 
   /*

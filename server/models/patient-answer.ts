@@ -1,4 +1,4 @@
-import { transaction, Model, RelationMappings } from 'objection';
+import { transaction, Model, RelationMappings, Transaction } from 'objection';
 import * as uuid from 'uuid/v4';
 import { IPaginatedResults } from '../db';
 import Answer from './answer';
@@ -169,26 +169,29 @@ export default class PatientAnswer extends Model {
     return patientAnswers as PatientAnswer[];
   }
 
-  static async create(input: IPatientAnswerCreateFields): Promise<PatientAnswer[]> {
-    return await transaction(PatientAnswer, async PatientAnswerWithTransaction => {
+  static async create(
+    input: IPatientAnswerCreateFields,
+    existingTxn?: Transaction,
+  ): Promise<PatientAnswer[]> {
+    return await transaction(PatientAnswer.knex(), async txn => {
       const questionIds = input.questionIds || input.answers.map(answer => answer.questionId);
 
       // NOTE: This needs to be done as a subquery as knex doesn't support FROM clauses for updates
-      const patientAnswerIdsToDeleteQuery = PatientAnswerWithTransaction.query()
+      const patientAnswerIdsToDeleteQuery = PatientAnswer.query(existingTxn || txn)
         .joinRelation('answer')
         .where('patient_answer.deletedAt', null)
         .andWhere('patientId', input.patientId)
         .where('answer.questionId', 'in', questionIds)
         .select('patient_answer.id');
 
-      await PatientAnswerWithTransaction.query()
-        .where('id', 'in', patientAnswerIdsToDeleteQuery)
+      await PatientAnswer.query(existingTxn || txn)
+        .where('id', 'in', patientAnswerIdsToDeleteQuery as any)
         .patch({ deletedAt: new Date().toISOString() });
 
       let results: PatientAnswer[] = [];
 
       if (input.answers.length) {
-        results = await PatientAnswerWithTransaction.query().insertGraphAndFetch(input.answers);
+        results = await PatientAnswer.query(existingTxn || txn).insertGraphAndFetch(input.answers);
       }
 
       return results;

@@ -1,6 +1,7 @@
-import { transaction, Model, RelationMappings } from 'objection';
+import { transaction, Model, RelationMappings, Transaction } from 'objection';
 import * as uuid from 'uuid/v4';
 import Answer from './answer';
+import CarePlanSuggestion from './care-plan-suggestion';
 import Concern from './concern';
 
 export interface IConcernSuggestionEditableFields {
@@ -85,27 +86,24 @@ export default class ConcernSuggestion extends Model {
     );
   }
 
-  static async getForPatient(patientId: string, riskAreaId?: string): Promise<Concern[]> {
-    let concernSuggestions;
+  static async getNewForPatient(patientId: string, txn?: Transaction): Promise<Concern[]> {
+    const existingPatientCarePlanSuggestionsQuery = CarePlanSuggestion.query(txn)
+      .where('patientId', patientId)
+      .andWhere('dismissedAt', null)
+      .andWhere('acceptedAt', null)
+      .andWhere('suggestionType', 'concern')
+      .select('concernId');
 
-    if (riskAreaId) {
-      concernSuggestions = await this.query()
-        .eager('concern')
-        .joinRelation('answer.question')
-        .join('patient_answer', 'answer.id', 'patient_answer.answerId')
-        .where('patient_answer.deletedAt', null)
-        .andWhere('patient_answer.patientId', patientId)
-        .andWhere('patient_answer.applicable', true)
-        .andWhere('answer:question.riskAreaId', riskAreaId);
-    } else {
-      concernSuggestions = await this.query()
-        .eager('concern')
-        .joinRelation('answer')
-        .join('patient_answer', 'answer.id', 'patient_answer.answerId')
-        .where('patient_answer.deletedAt', null)
-        .andWhere('patient_answer.patientId', patientId)
-        .andWhere('patient_answer.applicable', true);
-    }
+    const concernSuggestions = await this.query(txn)
+      .eager('concern')
+      .joinRelation('answer')
+      .join('patient_answer', 'answer.id', 'patient_answer.answerId')
+      .leftOuterJoin('patient_concern', 'concern_suggestion.concernId', 'patient_concern.concernId')
+      .where('patient_answer.deletedAt', null)
+      .andWhere('concern_suggestion.concernId', 'not in', existingPatientCarePlanSuggestionsQuery)
+      .andWhere('patient_answer.patientId', patientId)
+      .andWhere('patient_answer.applicable', true)
+      .andWhere('patient_concern.id', null);
 
     return concernSuggestions.map((suggestion: ConcernSuggestion) => suggestion.concern);
   }
@@ -122,10 +120,7 @@ export default class ConcernSuggestion extends Model {
         .andWhere('deletedAt', null);
 
       if (relations.length < 1) {
-        await ConcernSuggestionWithTransaction.query().insert({
-          concernId,
-          answerId,
-        });
+        await ConcernSuggestionWithTransaction.query().insert({ concernId, answerId });
       }
     });
 

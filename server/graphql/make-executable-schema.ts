@@ -10,7 +10,12 @@ import {
   resolveAnswersForQuestion,
 } from './answer-resolver';
 import { appointmentAddNote, appointmentEnd, appointmentStart } from './appointments-resolver';
-import { resolveCarePlanSuggestionsForPatient } from './care-plan-resolver';
+import {
+  carePlanSuggestionAccept,
+  carePlanSuggestionDismiss,
+  resolveCarePlanForPatient,
+  resolveCarePlanSuggestionsForPatient,
+} from './care-plan-resolver';
 import {
   careTeamAddUser,
   careTeamRemoveUser,
@@ -189,6 +194,7 @@ const resolveFunctions = {
     taskTemplate: resolveTaskTemplate,
     taskTemplates: resolveTaskTemplates,
     carePlanSuggestionsForPatient: resolveCarePlanSuggestionsForPatient,
+    carePlanForPatient: resolveCarePlanForPatient,
   },
   RootMutationType: {
     appointmentAddNote,
@@ -249,6 +255,8 @@ const resolveFunctions = {
     patientGoalCreate,
     patientGoalDelete,
     patientGoalEdit,
+    carePlanSuggestionAccept,
+    carePlanSuggestionDismiss,
   },
 };
 

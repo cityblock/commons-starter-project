@@ -1,0 +1,134 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders patient care plan suggestion (concern) 1`] = `
+<div
+  className={undefined}
+>
+  <div
+    className={undefined}
+  >
+    Suggested concern
+  </div>
+  <div
+    className={undefined}
+  >
+    <div
+      className=""
+    >
+      Concern Title
+    </div>
+    <div
+      className={undefined}
+    >
+      <div
+        className={undefined}
+        onClick={[Function]}
+      />
+      <div
+        className={undefined}
+        onClick={[Function]}
+      />
+    </div>
+  </div>
+  <div
+    className=""
+  >
+    <div
+      className={undefined}
+    >
+      Suggested:
+    </div>
+    <div
+      className={undefined}
+    >
+      Invalid date
+    </div>
+  </div>
+</div>
+`;
+
+exports[`renders patient care plan suggestion (goal) 1`] = `
+<div
+  className={undefined}
+>
+  <div
+    className={undefined}
+  >
+    Suggested concern
+  </div>
+  <div
+    className={undefined}
+  >
+    <div
+      className=""
+    >
+      Goal Title
+    </div>
+    <div
+      className={undefined}
+    >
+      <div
+        className={undefined}
+        onClick={[Function]}
+      />
+      <div
+        className={undefined}
+        onClick={[Function]}
+      />
+    </div>
+  </div>
+  <div
+    className="undefined"
+  >
+    <div
+      className={undefined}
+    >
+      Suggested:
+    </div>
+    <div
+      className={undefined}
+    >
+      Invalid date
+    </div>
+  </div>
+  <div
+    className=""
+  >
+    <div
+      className={undefined}
+    >
+      Task Title
+    </div>
+    <div
+      className={undefined}
+    >
+      <div
+        className={undefined}
+        style={
+          Object {
+            "backgroundImage": "url(http://bit.ly/2w8gHND)",
+          }
+        }
+      />
+      <div
+        className={undefined}
+      >
+        <div
+          className={undefined}
+        >
+          Due:
+        </div>
+        <div
+          className={undefined}
+        >
+          Sep 14, 2017
+        </div>
+      </div>
+      <div
+        className={undefined}
+        onClick={[Function]}
+      />
+    </div>
+  </div>
+</div>
+`;

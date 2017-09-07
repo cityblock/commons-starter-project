@@ -40,7 +40,7 @@ export default (
         <Route exact path='/patients/:patientId' component={(PatientRedirect as any)} />
         <Route
           exact
-          path='/patients/:patientId/:tabId/:riskAreaId?'
+          path='/patients/:patientId/:tabId/:riskAreaOrSubTabId?'
           component={(PatientProfileContainer as any)} />
         <Route exact path='/admin/:tabId?/:objectId?/:subTabId?/:questionId?'
           component={(AdminContainer as any)} />

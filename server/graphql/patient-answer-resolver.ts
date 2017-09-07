@@ -1,9 +1,13 @@
+import { transaction } from 'objection';
 import {
   IPatientAnswersCreateInput,
   IPatientAnswersUpdateApplicableInput,
   IPatientAnswerDeleteInput,
   IPatientAnswerEditInput,
 } from 'schema';
+import CarePlanSuggestion from '../models/care-plan-suggestion';
+import ConcernSuggestion from '../models/concern-suggestion';
+import GoalSuggestion from '../models/goal-suggestion';
 import PatientAnswer from '../models/patient-answer';
 import Question from '../models/question';
 import accessControls from './shared/access-controls';
@@ -54,13 +58,36 @@ export async function patientAnswersCreate(
 
   const { patientAnswers, patientId, questionIds } = input;
 
-  return await PatientAnswer.create({
-    patientId,
-    questionIds,
-    answers: patientAnswers.map(patientAnswer => ({
-      ...patientAnswer,
-      userId: userId!,
-    })),
+  return await transaction(PatientAnswer.knex(), async txn => {
+    const createdAnswers = await PatientAnswer.create(
+      {
+        patientId,
+        questionIds,
+        answers: patientAnswers.map(patientAnswer => ({ ...patientAnswer, userId: userId! })),
+      },
+      txn,
+    );
+
+    const newConcernSuggestions = await ConcernSuggestion.getNewForPatient(patientId, txn);
+    const newGoalSuggestions = await GoalSuggestion.getNewForPatient(patientId, txn);
+    const formattedConcernSuggestions = newConcernSuggestions.map(concernSuggestion => ({
+      patientId,
+      suggestionType: 'concern' as any,
+      concernId: concernSuggestion.id,
+    }));
+    const formattedGoalSuggestions = newGoalSuggestions.map(goalSuggestion => ({
+      patientId,
+      suggestionType: 'goal' as any,
+      goalSuggestionTemplateId: goalSuggestion.id,
+    }));
+
+    const suggestions = formattedConcernSuggestions.concat(formattedGoalSuggestions as any);
+
+    if (suggestions.length) {
+      await CarePlanSuggestion.createMultiple({ suggestions }, txn);
+    }
+
+    return createdAnswers;
   });
 }
 

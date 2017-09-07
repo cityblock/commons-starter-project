@@ -1,0 +1,23 @@
+#import "./short-patient.graphql"
+#import "./full-goal-suggestion-template.graphql"
+#import "./full-task.graphql"
+
+fragment FullPatientGoal on PatientGoal {
+  id
+  title
+  patientId
+  patient {
+    ...ShortPatient
+  }
+  patientConcernId
+  goalSuggestionTemplateId
+  goalSuggestionTemplate {
+    ...FullGoalSuggestionTemplate
+  }
+  tasks {
+    ...FullTask
+  }
+  createdAt
+  updatedAt
+  deletedAt
+}

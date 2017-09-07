@@ -87,11 +87,7 @@ describe('patient encounters', () => {
         },
       ]);
 
-      const result = await graphql(schema, query, null, {
-        redoxApi,
-        db,
-        userRole,
-      });
+      const result = await graphql(schema, query, null, { redoxApi, db, userRole });
       expect(cloneDeep(result.data!.patientEncounters)).toMatchObject([
         {
           encounterType: 'InPatient Admission',

@@ -21,3 +21,7 @@
   padding: 50px 100px;
   position: relative;
 }
+
+.content.smallContentPadding {
+  padding: var(--small-gutter);
+}

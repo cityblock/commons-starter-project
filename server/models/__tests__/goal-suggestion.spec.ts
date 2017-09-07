@@ -1,9 +1,11 @@
 import Db from '../../db';
 import { createMockPatient, createPatient } from '../../spec-helpers';
 import Answer from '../answer';
+import CarePlanSuggestion from '../care-plan-suggestion';
 import GoalSuggestion from '../goal-suggestion';
 import GoalSuggestionTemplate from '../goal-suggestion-template';
 import PatientAnswer from '../patient-answer';
+import PatientGoal from '../patient-goal';
 import Question from '../question';
 import RiskArea from '../risk-area';
 import User from '../user';
@@ -153,7 +155,7 @@ describe('goal suggestion model', () => {
       });
 
       // At this point, only first goal should be suggested
-      const goalSuggestions = await GoalSuggestion.getForPatient(patient.id);
+      const goalSuggestions = await GoalSuggestion.getNewForPatient(patient.id);
       expect(goalSuggestions[0]).toMatchObject(goalSuggestionTemplate);
       expect(goalSuggestions.length).toEqual(1);
 
@@ -172,13 +174,13 @@ describe('goal suggestion model', () => {
       });
 
       // Now both goals should be suggested
-      const secondGoalSuggestions = await GoalSuggestion.getForPatient(patient.id);
+      const secondGoalSuggestions = await GoalSuggestion.getNewForPatient(patient.id);
       expect(secondGoalSuggestions[0]).toMatchObject(goalSuggestionTemplate);
       expect(secondGoalSuggestions[1]).toMatchObject(goalSuggestionTemplate2);
       expect(secondGoalSuggestions.length).toEqual(2);
     });
 
-    it('returns goal suggestions for a patient scoped to riskArea', async () => {
+    it('does not return goal suggestions where one already exists', async () => {
       const user = await User.create({
         email: 'care@care.com',
         userRole: 'physician',
@@ -189,11 +191,10 @@ describe('goal suggestion model', () => {
       });
       const patient = await createPatient(createMockPatient(123), user.id);
 
-      const riskArea2 = await RiskArea.create({ title: 'testing2', order: 2 });
       const question2 = await Question.create({
         title: 'hate writing tests?',
         answerType: 'dropdown',
-        riskAreaId: riskArea2.id,
+        riskAreaId: riskArea.id,
         order: 1,
       });
       const answer2 = await Answer.create({
@@ -205,7 +206,6 @@ describe('goal suggestion model', () => {
         questionId: question2.id,
         order: 1,
       });
-
       await GoalSuggestion.create({
         goalSuggestionTemplateId: goalSuggestionTemplate.id,
         answerId: answer.id,
@@ -237,10 +237,84 @@ describe('goal suggestion model', () => {
         ],
       });
 
-      // Should only contain the suggestion for risk area 2
-      const goalSuggestions = await GoalSuggestion.getForPatient(patient.id, riskArea2.id);
+      await CarePlanSuggestion.create({
+        patientId: patient.id,
+        suggestionType: 'goal',
+        goalSuggestionTemplateId: goalSuggestionTemplate.id,
+      });
+
+      const goalSuggestions = await GoalSuggestion.getNewForPatient(patient.id);
+      expect(goalSuggestions.length).toEqual(1);
       expect(goalSuggestions[0]).toMatchObject(goalSuggestionTemplate2);
       expect(goalSuggestions.length).toEqual(1);
+    });
+
+    it('does not return goal suggestions that already exist on the care plan', async () => {
+      const user = await User.create({
+        email: 'care@care.com',
+        userRole: 'physician',
+        homeClinicId: '1',
+      });
+      const goalSuggestionTemplate2 = await GoalSuggestionTemplate.create({ title: 'Fix Food' });
+      const patient = await createPatient(createMockPatient(123), user.id);
+
+      const question2 = await Question.create({
+        title: 'hate writing tests?',
+        answerType: 'dropdown',
+        riskAreaId: riskArea.id,
+        order: 1,
+      });
+      const answer2 = await Answer.create({
+        displayValue: 'hates writing tests!',
+        value: '3',
+        valueType: 'number',
+        riskAdjustmentType: 'forceHighRisk',
+        inSummary: false,
+        questionId: question2.id,
+        order: 1,
+      });
+      await GoalSuggestion.create({
+        goalSuggestionTemplateId: goalSuggestionTemplate.id,
+        answerId: answer.id,
+      });
+      await GoalSuggestion.create({
+        goalSuggestionTemplateId: goalSuggestionTemplate2.id,
+        answerId: answer2.id,
+      });
+
+      await PatientAnswer.create({
+        patientId: patient.id,
+        answers: [
+          {
+            patientId: patient.id,
+            answerId: answer.id,
+            answerValue: answer.value,
+            applicable: true,
+            questionId: question.id,
+            userId: user.id,
+          },
+          {
+            patientId: patient.id,
+            answerId: answer2.id,
+            answerValue: answer2.value,
+            applicable: true,
+            questionId: question2.id,
+            userId: user.id,
+          },
+        ],
+      });
+
+      await PatientGoal.create({
+        title: 'Patient Goal',
+        patientId: patient.id,
+        goalSuggestionTemplateId: goalSuggestionTemplate.id,
+        userId: user.id,
+      });
+
+      // Now both goals should be suggested
+      const secondGoalSuggestions = await GoalSuggestion.getNewForPatient(patient.id);
+      expect(secondGoalSuggestions[0]).toMatchObject(goalSuggestionTemplate2);
+      expect(secondGoalSuggestions.length).toEqual(1);
     });
   });
 });

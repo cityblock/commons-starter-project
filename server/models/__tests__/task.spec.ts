@@ -27,6 +27,7 @@ describe('task model', () => {
     patientGoal = await PatientGoal.create({
       title: 'patient goal',
       patientId: patient.id,
+      userId: user.id,
     });
   });
 
@@ -166,12 +167,7 @@ describe('task model', () => {
       patientGoalId: patientGoal.id,
     });
     expect(
-      await Task.getPatientTasks(patient.id, {
-        pageNumber: 0,
-        pageSize: 1,
-        order,
-        orderBy,
-      }),
+      await Task.getPatientTasks(patient.id, { pageNumber: 0, pageSize: 1, order, orderBy }),
     ).toMatchObject({
       results: [
         {
@@ -182,12 +178,7 @@ describe('task model', () => {
       total: 2,
     });
     expect(
-      await Task.getPatientTasks(patient.id, {
-        pageNumber: 1,
-        pageSize: 1,
-        order,
-        orderBy,
-      }),
+      await Task.getPatientTasks(patient.id, { pageNumber: 1, pageSize: 1, order, orderBy }),
     ).toMatchObject({
       results: [
         {
@@ -228,12 +219,7 @@ describe('task model', () => {
     });
     await TaskFollower.followTask({ userId: user.id, taskId: task2.id });
     expect(
-      await Task.getUserTasks(user.id, {
-        pageNumber: 0,
-        pageSize: 2,
-        order,
-        orderBy,
-      }),
+      await Task.getUserTasks(user.id, { pageNumber: 0, pageSize: 2, order, orderBy }),
     ).toMatchObject({
       results: [
         {

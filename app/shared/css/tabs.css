@@ -8,6 +8,10 @@
   lost-flex-container: row;
 }
 
+.darkTabs {
+  background-color: var(--dark-gray-background-color);
+}
+
 .tab {
   font-family: var(--basetica-medium);
   font-size: var(--default-font-size);

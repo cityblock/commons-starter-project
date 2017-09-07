@@ -1,0 +1,40 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders patient care plan view 1`] = `
+<div>
+  <div
+    className=""
+  >
+    <a
+      className="undefined"
+      href="/patients/patient-1/carePlan/active"
+      onClick={[Function]}
+    >
+      Active
+    </a>
+    <a
+      className=""
+      href="/patients/patient-1/carePlan/inactive"
+      onClick={[Function]}
+    >
+      Inactive
+    </a>
+    <a
+      className=""
+      href="/patients/patient-1/carePlan/suggestions"
+      onClick={[Function]}
+    >
+      Suggestions
+    </a>
+  </div>
+  <div
+    className={undefined}
+  >
+    <div
+      className={undefined}
+    >
+      active care plan
+    </div>
+  </div>
+</div>
+`;

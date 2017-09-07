@@ -129,10 +129,7 @@ describe('task comment model', () => {
 
     // Make sure deleted comment isn't returned
     expect(
-      await TaskComment.getTaskComments(task.id, {
-        pageNumber: 0,
-        pageSize: 10,
-      }),
+      await TaskComment.getTaskComments(task.id, { pageNumber: 0, pageSize: 10 }),
     ).toMatchObject({
       results: [
         {
@@ -147,10 +144,7 @@ describe('task comment model', () => {
 
     // Make sure pagination works correctly
     expect(
-      await TaskComment.getTaskComments(task.id, {
-        pageNumber: 0,
-        pageSize: 1,
-      }),
+      await TaskComment.getTaskComments(task.id, { pageNumber: 0, pageSize: 1 }),
     ).toMatchObject({
       results: [
         {
@@ -160,10 +154,7 @@ describe('task comment model', () => {
       total: 2,
     });
     expect(
-      await TaskComment.getTaskComments(task.id, {
-        pageNumber: 1,
-        pageSize: 1,
-      }),
+      await TaskComment.getTaskComments(task.id, { pageNumber: 1, pageSize: 1 }),
     ).toMatchObject({
       results: [
         {

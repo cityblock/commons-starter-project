@@ -34,10 +34,7 @@ export async function main(options: IMainOptions) {
     const devConfig = webpackConfig()[0];
     const compiler = webpack(devConfig);
     app.use(
-      webpackDevMiddleware(compiler, {
-        noInfo: true,
-        publicPath: devConfig.output.publicPath,
-      }),
+      webpackDevMiddleware(compiler, { noInfo: true, publicPath: devConfig.output.publicPath }),
     );
     app.use(require('webpack-hot-middleware')(compiler));
   }

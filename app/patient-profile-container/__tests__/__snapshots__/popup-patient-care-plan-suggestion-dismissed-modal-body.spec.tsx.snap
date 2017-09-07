@@ -1,0 +1,133 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders popup modal body for concern suggestion 1`] = `
+<div
+  className={undefined}
+>
+  <div
+    className=""
+  >
+    Reason for dismissing this suggestion
+  </div>
+  <div
+    className={undefined}
+  >
+    Select from one of the available options
+  </div>
+  <div
+    className={undefined}
+  >
+    <select
+      className=""
+      name="dismissedReason"
+      onChange={[Function]}
+      value="Because"
+    >
+      <option
+        disabled={true}
+        hidden={true}
+        value=""
+      >
+        Select a reason
+      </option>
+      <option
+        value="not applicable"
+      >
+        Not applicable to this patient
+      </option>
+      <option
+        value="too much work"
+      >
+        This suggestion requires too much work
+      </option>
+      <option
+        value="dangerous"
+      >
+        Tackling this suggestion would be dangerous for the patient
+      </option>
+    </select>
+  </div>
+  <div
+    className={undefined}
+  >
+    <div
+      className=""
+      onClick={[Function]}
+    >
+      Cancel
+    </div>
+    <div
+      className=""
+      onClick={[Function]}
+    >
+      Dismiss concern
+    </div>
+  </div>
+</div>
+`;
+
+exports[`renders popup modal body for goal suggestion 1`] = `
+<div
+  className={undefined}
+>
+  <div
+    className=""
+  >
+    Reason for dismissing this suggestion
+  </div>
+  <div
+    className={undefined}
+  >
+    Select from one of the available options
+  </div>
+  <div
+    className={undefined}
+  >
+    <select
+      className=""
+      name="dismissedReason"
+      onChange={[Function]}
+      value="Because"
+    >
+      <option
+        disabled={true}
+        hidden={true}
+        value=""
+      >
+        Select a reason
+      </option>
+      <option
+        value="not applicable"
+      >
+        Not applicable to this patient
+      </option>
+      <option
+        value="too much work"
+      >
+        This suggestion requires too much work
+      </option>
+      <option
+        value="dangerous"
+      >
+        Tackling this suggestion would be dangerous for the patient
+      </option>
+    </select>
+  </div>
+  <div
+    className={undefined}
+  >
+    <div
+      className=""
+      onClick={[Function]}
+    >
+      Cancel
+    </div>
+    <div
+      className=""
+      onClick={[Function]}
+    >
+      Dismiss concern
+    </div>
+  </div>
+</div>
+`;

@@ -355,10 +355,7 @@ export function mockAthenaOpenAppointment(body: MockAthenaOpenAppointment) {
 export function mockAthenaOpenAppointmentError() {
   mockAthenaPostError(
     `/${config.ATHENA_PRACTICE_ID}/appointments/open`,
-    {
-      detailedmessage: 'Appointment type ID is invalid.',
-      error: 'The data provided is invalid.',
-    },
+    { detailedmessage: 'Appointment type ID is invalid.', error: 'The data provided is invalid.' },
     400,
   );
 }

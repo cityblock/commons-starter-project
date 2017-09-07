@@ -36,7 +36,6 @@ describe('patient concern model', () => {
     const patientConcern = await PatientConcern.create({
       concernId: concern.id,
       patientId: patient.id,
-      order: 1,
     });
     expect(patientConcern.order).toEqual(1);
     expect(await PatientConcern.get(patientConcern.id)).toEqual(patientConcern);
@@ -47,9 +46,37 @@ describe('patient concern model', () => {
     const patientConcern = await PatientConcern.create({
       concernId: concern.id,
       patientId: patient.id,
-      order: 1,
     });
     expect(await PatientConcern.getForPatient(patient.id)).toEqual([patientConcern]);
+  });
+
+  it('auto increments "order" on create', async () => {
+    const concern2 = await Concern.create({
+      title: 'Food',
+    });
+    const patient2 = await createPatient(createMockPatient(456), user.id);
+    await PatientConcern.create({
+      concernId: concern.id,
+      patientId: patient.id,
+    });
+    await PatientConcern.create({
+      concernId: concern2.id,
+      patientId: patient.id,
+    });
+    await PatientConcern.create({
+      concernId: concern.id,
+      patientId: patient2.id,
+    });
+
+    const patient1Concerns = await PatientConcern.getForPatient(patient.id);
+    const patient2Concerns = await PatientConcern.getForPatient(patient2.id);
+
+    expect(patient1Concerns.length).toEqual(2);
+    expect(patient1Concerns[0].order).toEqual(1);
+    expect(patient1Concerns[1].order).toEqual(2);
+
+    expect(patient2Concerns.length).toEqual(1);
+    expect(patient2Concerns[0].order).toEqual(1);
   });
 
   it('should throw an error if a patient concern does not exist for the id', async () => {
@@ -61,7 +88,6 @@ describe('patient concern model', () => {
     const patientAnswer = await PatientConcern.create({
       concernId: concern.id,
       patientId: patient.id,
-      order: 1,
     });
     const completedAt = new Date().toUTCString();
     const patientAnswerUpdated = await PatientConcern.update(patientAnswer.id, {
@@ -74,7 +100,6 @@ describe('patient concern model', () => {
     const patientAnswer = await PatientConcern.create({
       concernId: concern.id,
       patientId: patient.id,
-      order: 1,
     });
     const deletedPatientAnswer = await PatientConcern.delete(patientAnswer.id);
     expect(deletedPatientAnswer).not.toBeNull();

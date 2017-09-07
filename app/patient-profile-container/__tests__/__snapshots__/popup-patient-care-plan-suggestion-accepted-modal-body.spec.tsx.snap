@@ -1,0 +1,113 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders popup modal body for concern suggestion 1`] = `
+<div
+  className={undefined}
+>
+  <div
+    className={undefined}
+  >
+    Add as active or inactive concern?
+  </div>
+  <div
+    className={undefined}
+  >
+    <select
+      className=""
+      name="concernType"
+      onChange={[Function]}
+      value="active"
+    >
+      <option
+        disabled={true}
+        hidden={true}
+        value=""
+      >
+        Select a concern type
+      </option>
+      <option
+        value="active"
+      >
+        Active concern
+      </option>
+      <option
+        value="inactive"
+      >
+        Inactive concern
+      </option>
+    </select>
+  </div>
+  <div
+    className={undefined}
+  >
+    <div
+      className=""
+      onClick={[Function]}
+    >
+      Cancel
+    </div>
+    <div
+      className=""
+      onClick={[Function]}
+    >
+      Add to Care Plan
+    </div>
+  </div>
+</div>
+`;
+
+exports[`renders popup modal body for goal suggestion 1`] = `
+<div
+  className={undefined}
+>
+  <div
+    className={undefined}
+  >
+    Add as active or inactive concern?
+  </div>
+  <div
+    className={undefined}
+  >
+    <select
+      className=""
+      name="concernType"
+      onChange={[Function]}
+      value="active"
+    >
+      <option
+        disabled={true}
+        hidden={true}
+        value=""
+      >
+        Select a concern type
+      </option>
+      <option
+        value="active"
+      >
+        Active concern
+      </option>
+      <option
+        value="inactive"
+      >
+        Inactive concern
+      </option>
+    </select>
+  </div>
+  <div
+    className={undefined}
+  >
+    <div
+      className=""
+      onClick={[Function]}
+    >
+      Cancel
+    </div>
+    <div
+      className=""
+      onClick={[Function]}
+    >
+      Add to Care Plan
+    </div>
+  </div>
+</div>
+`;

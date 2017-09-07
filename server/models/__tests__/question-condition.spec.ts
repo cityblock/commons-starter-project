@@ -71,10 +71,7 @@ describe('answer model', () => {
 
   it('cannot create questionCondition for answer that is on question', async () => {
     await expect(
-      QuestionCondition.create({
-        answerId: answer.id,
-        questionId: question.id,
-      }),
+      QuestionCondition.create({ answerId: answer.id, questionId: question.id }),
     ).rejects.toMatch(`Error: Answer ${answer.id} is an answer to question ${question.id}`);
   });
 

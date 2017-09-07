@@ -1,0 +1,25 @@
+#import "../fragments/full-patient-goal.graphql"
+
+mutation patientGoalCreate(
+  $title: String!
+  $patientId: String!
+  $patientConcernId: String
+  $goalSuggestionTemplateId: String
+  $taskTemplateIds: [String]
+  $concernId: String
+  $concernTitle: String
+  $startedAt: String
+) {
+  patientGoalCreate(input: {
+    title: $title,
+    patientId: $patientId,
+    patientConcernId: $patientConcernId,
+    goalSuggestionTemplateId: $goalSuggestionTemplateId,
+    taskTemplateIds: $taskTemplateIds,
+    concernId: $concernId,
+    concernTitle: $concernTitle,
+    startedAt: $startedAt,
+   }) {
+    ...FullPatientGoal
+  }
+}

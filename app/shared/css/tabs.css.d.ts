@@ -1,4 +1,5 @@
 export const tabs: string;
+export const darkTabs: string;
 export const tab: string;
 export const selectedTab: string;
 export const relativeTab: string;

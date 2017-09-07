@@ -67,7 +67,7 @@ exports[`renders task 1`] = `
             className={undefined}
             style={
               Object {
-                "backgroundImage": "url('http://bit.ly/2u9bJDA')",
+                "backgroundImage": "url('http://bit.ly/2w8gHND')",
               }
             }
           />
@@ -197,7 +197,7 @@ exports[`renders task 1`] = `
             className={undefined}
             style={
               Object {
-                "backgroundImage": "url('http://bit.ly/2u9bJDA')",
+                "backgroundImage": "url('http://bit.ly/2w8gHND')",
               }
             }
           />
@@ -373,7 +373,7 @@ exports[`renders task 1`] = `
           className={undefined}
           style={
             Object {
-              "backgroundImage": "url('http://bit.ly/2u9bJDA')",
+              "backgroundImage": "url('http://bit.ly/2w8gHND')",
             }
           }
         />

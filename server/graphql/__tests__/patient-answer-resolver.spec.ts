@@ -496,11 +496,7 @@ describe('patient answer tests', () => {
           id
         }
       }`;
-      const result = await graphql(schema, mutation, null, {
-        db,
-        userRole,
-        userId: user.id,
-      });
+      const result = await graphql(schema, mutation, null, { db, userRole, userId: user.id });
       expect(cloneDeep(result.data!.patientAnswersUpdateApplicable)).toMatchObject([
         { id: patientAnswers[0].id },
       ]);
@@ -548,11 +544,7 @@ describe('patient answer tests', () => {
           id
         }
       }`;
-      const result = await graphql(schema, mutation, null, {
-        db,
-        userRole,
-        userId: user.id,
-      });
+      const result = await graphql(schema, mutation, null, { db, userRole, userId: user.id });
       expect(cloneDeep(result.data!.patientAnswersUpdateApplicable)).toMatchObject([]);
     });
   });

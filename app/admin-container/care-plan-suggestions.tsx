@@ -1,8 +1,6 @@
 import * as classNames from 'classnames';
 import * as React from 'react';
-import {
-  FullAnswerFragment,
-} from '../graphql/types';
+import { FullAnswerFragment } from '../graphql/types';
 import CarePlanSuggestion from './care-plan-suggestion';
 import CarePlanSuggestionCreate from './care-plan-suggestion-create';
 import * as styles from './css/two-panel-right.css';
@@ -30,7 +28,8 @@ class CarePlanSuggestions extends React.Component<IProps> {
           key={concernSuggestion ? concernSuggestion.id : index}
           answerId={answer.id}
           suggestionType='concern'
-          suggestion={concernSuggestion} />
+          suggestion={concernSuggestion}
+        />
       ));
 
       return <div className={styles.indented}>{concernSuggestionsHtml}</div>;
@@ -50,7 +49,8 @@ class CarePlanSuggestions extends React.Component<IProps> {
           key={goalSuggestion ? goalSuggestion.id : index}
           answerId={answer.id}
           suggestionType='goal'
-          suggestion={goalSuggestion} />
+          suggestion={goalSuggestion}
+        />
       ));
 
       return <div className={styles.indented}>{goalSuggestionsHtml}</div>;

@@ -3,7 +3,7 @@ jobs:
   build:
     working_directory: ~/repo
     docker:
-      - image: circleci/node:6.10
+      - image: circleci/node:8.4
       - image: postgres:9.6
         environment:
           POSTGRES_DB: commons_test
@@ -41,7 +41,7 @@ jobs:
   deploy:
     working_directory: ~/repo
     docker:
-      - image: circleci/node:6.10
+      - image: circleci/node:8.4
     steps:
       - checkout
       - run:

@@ -1,5 +1,6 @@
 import { createMemoryHistory } from 'history';
 import * as React from 'react';
+import { gql } from 'react-apollo';
 import { MockedProvider } from 'react-apollo/test-utils';
 import { ConnectedRouter } from 'react-router-redux';
 import { create } from 'react-test-renderer';
@@ -72,19 +73,21 @@ const carePlanSuggestionWithGoal = {
   goalSuggestionTemplate: {
     id: 'goal-suggestion-template-id',
     title: 'Goal Title',
-    taskTemplates: [{
-      id: 'task-template-1',
-      title: 'Task Title',
-      priority: 'high' as any,
-      completedWithinNumber: 1,
-      completedWithinInterval: 'week' as any,
-      repeating: false,
-      goalSuggestionTemplateId: 'goal-suggestion-template-1',
-      careTeamAssigneeRole: 'physician' as any,
-      createdAt: '2017-08-16T19:27:36.378Z',
-      updatedAt: '2017-08-16T19:27:36.378Z',
-      deletedAt: null,
-    }],
+    taskTemplates: [
+      {
+        id: 'task-template-1',
+        title: 'Task Title',
+        priority: 'high' as any,
+        completedWithinNumber: 1,
+        completedWithinInterval: 'week' as any,
+        repeating: false,
+        goalSuggestionTemplateId: 'goal-suggestion-template-1',
+        careTeamAssigneeRole: 'physician' as any,
+        createdAt: '2017-08-16T19:27:36.378Z',
+        updatedAt: '2017-08-16T19:27:36.378Z',
+        deletedAt: null,
+      },
+    ],
     createdAt: '2017-08-16T19:27:36.378Z',
     updatedAt: '2017-08-16T19:27:36.378Z',
     deletedAt: null,
@@ -102,16 +105,132 @@ const carePlanSuggestionWithGoal = {
 
 const carePlanSuggestions = [carePlanSuggestion, carePlanSuggestionWithGoal];
 
+const query = gql(`
+query getPatientCarePlanSuggestions($patientId: String!) {
+  carePlanSuggestionsForPatient(patientId: $patientId) {
+    ...FullCarePlanSuggestion
+    __typename
+  }
+}
+
+fragment FullCarePlanSuggestion on CarePlanSuggestion {
+  id
+  patientId
+  patient {
+    ...ShortPatient
+    __typename
+  }
+  suggestionType
+  concernId
+  concern {
+    ...FullConcern
+    __typename
+  }
+  goalSuggestionTemplateId
+  goalSuggestionTemplate {
+    ...FullGoalSuggestionTemplate
+    __typename
+  }
+  acceptedById
+  acceptedBy {
+    ...ShortUser
+    __typename
+  }
+  dismissedById
+  dismissedBy {
+    ...ShortUser
+    __typename
+  }
+  dismissedReason
+  createdAt
+  updatedAt
+  dismissedAt
+  acceptedAt
+  __typename
+}
+
+fragment FullConcern on Concern {
+  id
+  title
+  createdAt
+  updatedAt
+  deletedAt
+  __typename
+}
+
+fragment FullGoalSuggestionTemplate on GoalSuggestionTemplate {
+  id
+  title
+  taskTemplates {
+    ...FullTaskTemplate
+    __typename
+  }
+  createdAt
+  updatedAt
+  deletedAt
+  __typename
+}
+
+fragment FullTaskTemplate on TaskTemplate {
+  id
+  title
+  completedWithinNumber
+  completedWithinInterval
+  repeating
+  goalSuggestionTemplateId
+  priority
+  careTeamAssigneeRole
+  createdAt
+  updatedAt
+  deletedAt
+  __typename
+}
+
+fragment ShortPatient on Patient {
+  id
+  firstName
+  middleName
+  lastName
+  language
+  gender
+  dateOfBirth
+  zip
+  createdAt
+  consentToText
+  consentToCall
+  __typename
+}
+
+fragment ShortUser on User {
+  id
+  firstName
+  lastName
+  googleProfileImageUrl
+  __typename
+}`);
+
 it('renders patient care plan suggestions', () => {
   const history = createMemoryHistory();
   const tree = create(
-    <MockedProvider mocks={[]} store={mockStore({ locale })}>
+    <MockedProvider
+      mocks={[
+        {
+          request: {
+            query,
+            variables: { patientId: 'patient-1' },
+          },
+          result: { data: { carePlanSuggestionsForPatient: [] } },
+        },
+      ]}
+      store={mockStore({ locale })}
+    >
       <ReduxConnectedIntlProvider>
         <ConnectedRouter history={history}>
           <PatientCarePlanSuggestions
             patientId={'patient-1'}
             carePlanSuggestions={carePlanSuggestions}
-            routeBase={'/patients/patient-1/carePlan'} />
+            routeBase={'/patients/patient-1/carePlan'}
+          />
         </ConnectedRouter>
       </ReduxConnectedIntlProvider>
     </MockedProvider>,

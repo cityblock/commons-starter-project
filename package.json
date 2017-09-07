@@ -107,7 +107,7 @@
     "webpack-dev-server": "^2.7.1"
   },
   "engines": {
-    "node": "6.10.0"
+    "node": "8.4.0"
   },
   "dependencies": {
     "@risingstack/trace": "^3.16.0",

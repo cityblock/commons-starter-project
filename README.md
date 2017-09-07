@@ -121,9 +121,7 @@ To make a change:
 - submit a pull request
 - assign another engineer on the team as a reviewer
 
-Before you can merge your code into master, the engineer you assigned must approve your code with a :+1: comment. It is your responsibility to merge your code to master (using 'merge and squash' in Github) and then to ensure your code is deployed without error.
-
-If you get a :+1: before the tests have finished in Circle CI, you must wait to merge until the tests have finished and passed. Your code will only deploy if the entire test suite passes in master anyway so better to catch it now.
+Before you can merge your code into master, the engineer you assigned must approve your code via the GitHub approval UI. As the code's author, it is your responsibility to merge your code to master (using 'merge and squash' in Github) and then to ensure your code is deployed without error.
 
 For reverting code in master, use Github's [revert functionality][].
 
@@ -179,9 +177,13 @@ You should see the changes at our [staging][] endpoint.
 
 ## Security
 
-- In production, we scan production server packages using [AppCanary][]
-- Within the app, we use [NSP][] to scan external dependencies for vulnerabilities daily and check dependency changes for vulnerabilities
+- In production, we scan software installed on our servers using [AppCanary][]
+- In development, we use [NSP][] to scan external dependencies of our Node app for vulnerabilities daily and check dependency changes for vulnerabilities
 - We follow the Microsoft [Secure Development Lifecycle][] through security focused ts-lint rules
+- We maintain 80% test coverage to reduce the chance of unintended disclosure of PHI
+- We prefer standard or popular libraries with institutional backing
+- Commiting directly to master is disabled via Github 'Protected Branches'
+- All commits to master must be made through a pull request that is approved by another engineer
 
 ## How-to
 

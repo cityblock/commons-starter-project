@@ -18,8 +18,6 @@ describe('answer tests', () => {
   let user: User;
 
   beforeEach(async () => {
-    jasmine.DEFAULT_TIMEOUT_INTERVAL = 10000;
-
     db = await Db.get();
     await Db.clear();
     user = await User.create({ email: 'a@b.com', userRole, homeClinicId: '1' });

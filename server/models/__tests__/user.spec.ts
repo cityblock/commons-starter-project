@@ -8,8 +8,6 @@ describe('user model', () => {
   let db: Db;
 
   beforeEach(async () => {
-    jasmine.DEFAULT_TIMEOUT_INTERVAL = 10000;
-
     db = await Db.get();
     await Db.clear();
   });

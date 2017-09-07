@@ -23,7 +23,6 @@ describe('patient', () => {
   const userRole = 'physician';
 
   beforeEach(async () => {
-    jasmine.DEFAULT_TIMEOUT_INTERVAL = 10000;
     redoxApi = await RedoxApi.get();
     db = await Db.get();
     await Db.clear();

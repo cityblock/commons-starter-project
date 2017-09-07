@@ -36,6 +36,7 @@ jobs:
           path: coverage
           prefix: coverage
       - run: yarn codegen
+      - run: yarn prettier:check
 
   deploy:
     working_directory: ~/repo

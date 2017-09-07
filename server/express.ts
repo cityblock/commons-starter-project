@@ -9,9 +9,7 @@ import renderApp from './app';
 import config from './config';
 import schema from './graphql/make-executable-schema';
 import { getGraphQLContext } from './graphql/shared/utils';
-import { checkAthenaApiHandler } from './handlers/pingdom/check-athena-api-handler';
 import { checkPostgresHandler } from './handlers/pingdom/check-postgres-handler';
-import { checkRabbitHandler } from './handlers/pingdom/check-rabbit-handler';
 
 export const checkAuth = (username: string, password: string) => (
   req: any,
@@ -72,19 +70,9 @@ export default async (app: express.Application) => {
 
   // Pingdom check endpoints
   app.get(
-    '/ping/athena-api',
-    checkAuth('pingdom', process.env.PINGDOM_CHECK_PASSWORD || 'fake'),
-    checkAthenaApiHandler,
-  );
-  app.get(
     '/ping/postgres',
     checkAuth('pingdom', process.env.PINGDOM_CHECK_PASSWORD || 'fake'),
     checkPostgresHandler,
-  );
-  app.get(
-    '/ping/rabbit',
-    checkAuth('pingdom', process.env.PINGDOM_CHECK_PASSWORD || 'fake'),
-    checkRabbitHandler,
   );
 
   app.get('*', renderApp);

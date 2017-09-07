@@ -178,7 +178,6 @@
     "postcss-import": "^10.0.0",
     "postcss-loader": "^2.0.5",
     "postcss-reporter": "^5.0.0",
-    "rabbot": "^1.1.0",
     "raw-loader": "^0.5.1",
     "react": "15.6.1",
     "react-apollo": "^1.4.15",

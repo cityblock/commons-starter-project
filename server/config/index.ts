@@ -1,5 +1,3 @@
-import rabbot from './rabbot';
-
 // NOTE: Do not import this file on the client
 export default {
   HOSTNAME: 'localhost',
@@ -22,5 +20,4 @@ export default {
   REDOX_KEY: null,
   REDOX_SECRET: null,
   ...process.env,
-  ...rabbot,
 };

@@ -15,7 +15,7 @@ import { DEFAULT_AVATAR_URL } from './index';
 export interface IProps {
   patientId: string;
   taskId: string;
-  assignee: FullUserFragment;
+  assignee?: FullUserFragment;
   loading?: boolean;
   error?: string;
   careTeam?: FullUserFragment[];
@@ -54,11 +54,19 @@ export class TaskAssignee extends React.Component<IProps, IState> {
   getAssigneeInfo(): IAssigneeInfo {
     const { assignee } = this.props;
 
-    return {
-      avatar: assignee.googleProfileImageUrl || DEFAULT_AVATAR_URL,
-      name: `${assignee.firstName} ${assignee.lastName}`,
-      role: assignee.userRole || 'Unknown Role',
-    };
+    if (assignee) {
+      return {
+        avatar: assignee.googleProfileImageUrl || DEFAULT_AVATAR_URL,
+        name: `${assignee.firstName} ${assignee.lastName}`,
+        role: assignee.userRole || 'Unknown Role',
+      };
+    } else {
+      return {
+        avatar: DEFAULT_AVATAR_URL,
+        name: 'No Assignee',
+        role: 'Unknown Role',
+      };
+    }
   }
 
   renderCareTeamMember(careTeamMember: FullUserFragment) {
@@ -88,9 +96,13 @@ export class TaskAssignee extends React.Component<IProps, IState> {
   getValidAssignees() {
     const { careTeam, assignee } = this.props;
 
-    return (careTeam || []).filter(careTeamMember => (
-      careTeamMember.id !== assignee.id
-    ));
+    if (assignee) {
+      return (careTeam || []).filter(careTeamMember => (
+        careTeamMember.id !== assignee.id
+      ));
+    } else {
+      return careTeam || [];
+    }
   }
 
   renderCareTeamMembers(careTeamMembers: FullUserFragment[]) {

@@ -21,7 +21,7 @@ exports[`task row renders task row 1`] = `
         className={undefined}
         style={
           Object {
-            "backgroundImage": "url(null)",
+            "backgroundImage": "url(http://bit.ly/2w8gHND)",
           }
         }
       />
@@ -86,7 +86,7 @@ exports[`task row renders task row with multiple followers 1`] = `
         className={undefined}
         style={
           Object {
-            "backgroundImage": "url(null)",
+            "backgroundImage": "url(http://bit.ly/2w8gHND)",
           }
         }
       />

@@ -3,6 +3,7 @@ import * as React from 'react';
 import { FormattedDate, FormattedMessage, FormattedRelative } from 'react-intl';
 import { Link } from 'react-router-dom';
 import { FullTaskFragment, ShortUserFragment } from '../../graphql/types';
+import { DEFAULT_AVATAR_URL } from '../task/index';
 import * as styles from './css/task-row.css';
 import * as tasksStyles from './css/tasks.css';
 
@@ -31,7 +32,7 @@ function renderAssignedTo(user: ShortUserFragment) {
   return (
     <div
       className={styles.assignedTo}
-      style={{ backgroundImage: `url(${user.googleProfileImageUrl})` }} />
+      style={{ backgroundImage: `url(${user.googleProfileImageUrl || DEFAULT_AVATAR_URL})` }} />
   );
 }
 

@@ -167,12 +167,12 @@ class Task extends React.Component<IProps, IState> {
       if (!this.props.task) {
         this.setState(() => ({
           editedTitle: task.title,
-          editedDescription: task.description,
+          editedDescription: task.description || '',
         }));
       } else if (this.props.task.id !== task.id) {
         this.setState(() => ({
           editedTitle: task.title,
-          editedDescription: task.description,
+          editedDescription: task.description || '',
         }));
       }
     }

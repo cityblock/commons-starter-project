@@ -9,6 +9,8 @@ describe('postgres pingdom test', () => {
   const userRole = 'physician';
 
   beforeEach(async () => {
+    jasmine.DEFAULT_TIMEOUT_INTERVAL = 10000;
+
     db = await Db.get();
     await Db.clear();
     error = console.error;

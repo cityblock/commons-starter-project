@@ -99,7 +99,7 @@ function getEventNotificationTitle(eventNotification: EventNotification) {
 
           /* tslint:disable:max-line-length */
           return `${userName} changed the due date of task: '${task.title}' to '${formattedDueDate}'`;
-        /* tslint:enable:max-line-length */
+          /* tslint:enable:max-line-length */
         } else {
           return `${userName} changed the due date of task: '${task.title}'`;
         }

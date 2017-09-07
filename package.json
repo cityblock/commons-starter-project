@@ -194,7 +194,7 @@
     "redux-mock-store": "^1.2.2",
     "rimraf": "^2.6.1",
     "style-loader": "^0.18.2",
-    "ts-loader": "^2.3.5",
+    "ts-loader": "^2.3.6",
     "ts-node": "^3.3.0",
     "typescript": "^2.4.1",
     "typings-for-css-modules-loader": "^1.5.0",
@@ -202,6 +202,6 @@
     "uuid": "^3.0.1",
     "validator": "^8.1.0",
     "webpack": "^3.5.6",
-    "webpack-hot-middleware": "^2.19.0"
+    "webpack-hot-middleware": "^2.19.1"
   }
 }

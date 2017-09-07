@@ -1,8 +1,5 @@
 import Db from '../../db';
-import {
-  createMockPatient,
-  createPatient,
-} from '../../spec-helpers';
+import { createMockPatient, createPatient } from '../../spec-helpers';
 import Patient from '../patient';
 import User from '../user';
 

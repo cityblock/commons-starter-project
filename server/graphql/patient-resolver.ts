@@ -1,10 +1,5 @@
 import { isNil, omitBy } from 'lodash';
-import {
-  IPatient,
-  IPatientEditInput,
-  IPatientScratchPad,
-  IPatientSetupInput,
-} from 'schema';
+import { IPatient, IPatientEditInput, IPatientScratchPad, IPatientSetupInput } from 'schema';
 import { getAthenaPatientIdFromCreate } from '../apis/redox/formatters';
 import CareTeam from '../models/care-team';
 import HomeClinic from '../models/clinic';

@@ -129,64 +129,6 @@ type PageInfo {
   hasPreviousPage: Boolean!
 }
 
-# Patient contact
-type Contact {
-  email: String
-  lastEmail: String
-  emailExists: Boolean
-  homePhone: String
-  mobilePhone: String
-  hasMobile: Boolean
-  consentToCall: Boolean
-  consentToText: Boolean
-}
-
-# Patient address
-type Address {
-  city: String
-  address1: String
-  countryCode: String
-  countryCode3166: String
-  state: String
-  zip: String
-}
-
-# Patient employer
-type Employer {
-  id: String
-  phone: String
-  city: String
-  state: String
-  name: String
-  address: String
-  zip: String
-}
-
-# Patient Garantor Address (for payment)
-type GarantorAddress {
-  addressSameAsPatient: Boolean
-  address1: String
-  city: String
-  zip: String
-  state: String
-  countryCode: String
-  countryCode3166: String
-}
-
-# Patient Garantor (for payment)
-type Garantor {
-  firstName: String
-  lastName: String
-  suffix: String
-  SSN: String
-  dateOfBirth: String
-  phone: String
-  email: String
-  relationshipToPatient: String
-  employerId: String
-  address: GarantorAddress
-}
-
 # Patient combining data in athena and our database
 type Patient implements uniqueId {
   id: ID!
@@ -202,33 +144,6 @@ type Patient implements uniqueId {
   scratchPad: String
   consentToCall: Boolean
   consentToText: Boolean
-}
-
-# Patient Athena health record
-type PatientHealthRecord {
-  id: ID!
-  firstName: String
-  middleName: String
-  lastName: String
-  dateOfBirth: String
-  gender: String
-  suffix: String
-  preferredName: String
-  raceName: String
-  race: String
-  ethnicityCode: String
-  status: String
-  ssn: String
-  homebound: Boolean
-  language6392code: String
-  maritalStatus: String
-  maritalStatusName: String
-  patientPhoto: Boolean
-  patientPhotoUrl: String
-  contact: Contact
-  guarantor: Garantor
-  employer: Employer
-  address: Address
 }
 
 # Patient node
@@ -1207,9 +1122,6 @@ type RootQueryType {
 
   # A single Patient
   patient(patientId: String!): Patient
-
-  # Patient's Athena health record
-  patientHealthRecord(patientId: String!): PatientHealthRecord
 
   # Users on a care team
   patientCareTeam(patientId: String!): [User]

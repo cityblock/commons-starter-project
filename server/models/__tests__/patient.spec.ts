@@ -1,10 +1,7 @@
-import AthenaApi from '../../apis/athena';
 import Db from '../../db';
 import {
   createMockPatient,
   createPatient,
-  mockAthenaTokenFetch,
-  restoreAthenaFetch,
 } from '../../spec-helpers';
 import Patient from '../patient';
 import User from '../user';
@@ -82,17 +79,6 @@ describe('patient model', () => {
   });
 
   describe('setup', () => {
-    let athenaApi: AthenaApi;
-
-    beforeEach(async () => {
-      athenaApi = await AthenaApi.get();
-      mockAthenaTokenFetch();
-    });
-
-    afterEach(async () => {
-      restoreAthenaFetch();
-    });
-
     it('should setup patient', async () => {
       const patient = await Patient.setup({
         firstName: 'first',

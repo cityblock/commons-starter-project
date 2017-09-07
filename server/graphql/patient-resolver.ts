@@ -2,11 +2,9 @@ import { isNil, omitBy } from 'lodash';
 import {
   IPatient,
   IPatientEditInput,
-  IPatientHealthRecord,
   IPatientScratchPad,
   IPatientSetupInput,
 } from 'schema';
-import { formatPatientHealthRecord } from '../apis/athena/formatters';
 import { getAthenaPatientIdFromCreate } from '../apis/redox/formatters';
 import CareTeam from '../models/care-team';
 import HomeClinic from '../models/clinic';
@@ -93,19 +91,6 @@ export async function patientSetup(
   // Need to wait until the transaction is complete to add relations like Care Team
   await CareTeam.create({ userId: userId!, patientId: result.id });
   return result;
-}
-
-export async function resolvePatientHealthRecord(
-  root: any,
-  { patientId }: IQuery,
-  { athenaApi, userRole, userId }: IContext,
-): Promise<IPatientHealthRecord> {
-  await accessControls.isAllowedForUser(userRole, 'view', 'patient', patientId, userId);
-
-  const athenaPatientId = await Patient.getAthenaPatientId(patientId);
-  const athenaPatient = await athenaApi.getPatient(athenaPatientId);
-
-  return await formatPatientHealthRecord(athenaPatient, patientId);
 }
 
 export interface IEditPatientRequiredFields {

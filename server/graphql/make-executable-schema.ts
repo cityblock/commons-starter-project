@@ -9,7 +9,6 @@ import {
   resolveAnswer,
   resolveAnswersForQuestion,
 } from './answer-resolver';
-import { appointmentAddNote, appointmentEnd, appointmentStart } from './appointments-resolver';
 import {
   carePlanSuggestionAccept,
   carePlanSuggestionDismiss,
@@ -83,7 +82,6 @@ import {
   patientScratchPadEdit,
   patientSetup,
   resolvePatient,
-  resolvePatientHealthRecord,
   resolvePatientScratchPad,
 } from './patient-resolver';
 import {
@@ -153,7 +151,6 @@ const resolveFunctions = {
     clinics: resolveClinics,
     currentUser: resolveCurrentUser,
     patient: resolvePatient,
-    patientHealthRecord: resolvePatientHealthRecord,
     patientCareTeam: resolvePatientCareTeam,
     patientEncounters: resolvePatientEncounters,
     patientMedications: resolvePatientMedications,
@@ -197,9 +194,6 @@ const resolveFunctions = {
     carePlanForPatient: resolveCarePlanForPatient,
   },
   RootMutationType: {
-    appointmentAddNote,
-    appointmentStart,
-    appointmentEnd,
     careTeamAddUser,
     careTeamRemoveUser,
     clinicCreate,

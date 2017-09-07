@@ -1,7 +1,0 @@
-#import "../fragments/full-patient-health-record.graphql"
-
-query patientHealthRecord($patientId: String!) {
-  patientHealthRecord(patientId: $patientId) {
-    ...FullPatientHealthRecord
-  }
-}

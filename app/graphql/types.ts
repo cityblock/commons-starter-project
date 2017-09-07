@@ -2327,33 +2327,6 @@ export type patientGoalCreateMutation = {
   } | null,
 };
 
-export type patientHealthRecordQueryVariables = {
-  patientId: string,
-};
-
-export type patientHealthRecordQuery = {
-  // Patient's Athena health record
-  patientHealthRecord:  {
-    id: string,
-    firstName: string | null,
-    lastName: string | null,
-    dateOfBirth: string | null,
-    gender: string | null,
-    suffix: string | null,
-    preferredName: string | null,
-    raceName: string | null,
-    race: string | null,
-    status: string | null,
-    ssn: string | null,
-    homebound: boolean | null,
-    language6392code: string | null,
-    maritalStatus: string | null,
-    maritalStatusName: string | null,
-    patientPhoto: boolean | null,
-    patientPhotoUrl: string | null,
-  } | null,
-};
-
 export type patientScratchPadEditMutationVariables = {
   patientId: string,
   text: string,
@@ -3988,25 +3961,5 @@ export type FullRiskAreaFragment = {
   deletedAt: string | null,
   title: string,
   order: number,
-};
-
-export type FullPatientHealthRecordFragment = {
-  id: string,
-  firstName: string | null,
-  lastName: string | null,
-  dateOfBirth: string | null,
-  gender: string | null,
-  suffix: string | null,
-  preferredName: string | null,
-  raceName: string | null,
-  race: string | null,
-  status: string | null,
-  ssn: string | null,
-  homebound: boolean | null,
-  language6392code: string | null,
-  maritalStatus: string | null,
-  maritalStatusName: string | null,
-  patientPhoto: boolean | null,
-  patientPhotoUrl: string | null,
 };
 /* tslint:enable */

@@ -1,26 +1,20 @@
 import { graphql } from 'graphql';
 import { cloneDeep } from 'lodash';
-import AthenaApi from '../../apis/athena';
 import RedoxApi from '../../apis/redox';
 import Db from '../../db';
 import HomeClinic from '../../models/clinic';
 import Patient from '../../models/patient';
 import User from '../../models/user';
 import {
-  createMockAthenaPatient,
   createMockPatient,
   createPatient,
-  mockAthenaGetPatient,
-  mockAthenaTokenFetch,
   mockRedoxCreatePatient,
   mockRedoxCreatePatientError,
   mockRedoxTokenFetch,
-  restoreAthenaFetch,
 } from '../../spec-helpers';
 import schema from '../make-executable-schema';
 
 describe('patient', () => {
-  let athenaApi: AthenaApi;
   let redoxApi: RedoxApi;
   let db: Db;
   let patient: Patient;
@@ -29,11 +23,10 @@ describe('patient', () => {
   const userRole = 'physician';
 
   beforeEach(async () => {
-    athenaApi = await AthenaApi.get();
+    jasmine.DEFAULT_TIMEOUT_INTERVAL = 10000;
     redoxApi = await RedoxApi.get();
     db = await Db.get();
     await Db.clear();
-    mockAthenaTokenFetch();
     mockRedoxTokenFetch();
 
     const homeClinic = await HomeClinic.create({
@@ -47,10 +40,6 @@ describe('patient', () => {
       homeClinicId,
     });
     patient = await createPatient(createMockPatient(1, homeClinicId), user.id);
-  });
-
-  afterEach(async () => {
-    restoreAthenaFetch();
   });
 
   afterAll(async () => {
@@ -162,29 +151,6 @@ describe('patient', () => {
         'Post received a 400 response, https://api.redoxengine.com/endpoint, 400',
       );
       expect(await Patient.query().count()).toEqual(patientCount);
-    });
-  });
-
-  describe('resolvePatientHealthRecord', () => {
-    it('returns patientHealthRecord', async () => {
-      const query = `{
-        patientHealthRecord(patientId: "${patient.id}") {
-          id, firstName, lastName
-        }
-      }`;
-
-      mockAthenaGetPatient(1, createMockAthenaPatient(1, 'Constance', 'Blanton'));
-
-      const result = await graphql(schema, query, null, {
-        athenaApi,
-        db,
-        userRole,
-      });
-      expect(cloneDeep(result.data!.patientHealthRecord)).toMatchObject({
-        id: patient.id,
-        firstName: 'Constance',
-        lastName: 'Blanton',
-      });
     });
   });
 

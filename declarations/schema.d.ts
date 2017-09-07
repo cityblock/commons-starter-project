@@ -24,7 +24,6 @@ declare module 'schema' {
     userPatientPanel: IPatientEdges | null;
     currentUser: IUser | null;
     patient: IPatient | null;
-    patientHealthRecord: IPatientHealthRecord | null;
     patientCareTeam: Array<IUser> | null;
     patientScratchPad: IPatientScratchPad | null;
     clinic: IClinic | null;
@@ -156,103 +155,6 @@ declare module 'schema' {
     scratchPad: string | null;
     consentToCall: boolean | null;
     consentToText: boolean | null;
-  }
-
-  /*
-    description: Patient Athena health record
-  */
-  interface IPatientHealthRecord {
-    id: string;
-    firstName: string | null;
-    middleName: string | null;
-    lastName: string | null;
-    dateOfBirth: string | null;
-    gender: string | null;
-    suffix: string | null;
-    preferredName: string | null;
-    raceName: string | null;
-    race: string | null;
-    ethnicityCode: string | null;
-    status: string | null;
-    ssn: string | null;
-    homebound: boolean | null;
-    language6392code: string | null;
-    maritalStatus: string | null;
-    maritalStatusName: string | null;
-    patientPhoto: boolean | null;
-    patientPhotoUrl: string | null;
-    contact: IContact | null;
-    guarantor: IGarantor | null;
-    employer: IEmployer | null;
-    address: IAddress | null;
-  }
-
-  /*
-    description: Patient contact
-  */
-  interface IContact {
-    email: string | null;
-    lastEmail: string | null;
-    emailExists: boolean | null;
-    homePhone: string | null;
-    mobilePhone: string | null;
-    hasMobile: boolean | null;
-    consentToCall: boolean | null;
-    consentToText: boolean | null;
-  }
-
-  /*
-    description: Patient Garantor (for payment)
-  */
-  interface IGarantor {
-    firstName: string | null;
-    lastName: string | null;
-    suffix: string | null;
-    SSN: string | null;
-    dateOfBirth: string | null;
-    phone: string | null;
-    email: string | null;
-    relationshipToPatient: string | null;
-    employerId: string | null;
-    address: IGarantorAddress | null;
-  }
-
-  /*
-    description: Patient Garantor Address (for payment)
-  */
-  interface IGarantorAddress {
-    addressSameAsPatient: boolean | null;
-    address1: string | null;
-    city: string | null;
-    zip: string | null;
-    state: string | null;
-    countryCode: string | null;
-    countryCode3166: string | null;
-  }
-
-  /*
-    description: Patient employer
-  */
-  interface IEmployer {
-    id: string | null;
-    phone: string | null;
-    city: string | null;
-    state: string | null;
-    name: string | null;
-    address: string | null;
-    zip: string | null;
-  }
-
-  /*
-    description: Patient address
-  */
-  interface IAddress {
-    city: string | null;
-    address1: string | null;
-    countryCode: string | null;
-    countryCode3166: string | null;
-    state: string | null;
-    zip: string | null;
   }
 
   /*

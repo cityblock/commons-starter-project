@@ -3,7 +3,6 @@ import * as express from 'express';
 import { GraphQLBoolean, GraphQLNonNull, GraphQLObjectType } from 'graphql';
 import { decode, sign, verify } from 'jsonwebtoken';
 import OpticsAgent from 'optics-agent';
-import AthenaApi from '../../apis/athena';
 import RedoxApi from '../../apis/redox';
 import config from '../../config';
 import Db from '../../db';
@@ -13,7 +12,6 @@ export const TWENTY_FOUR_HOURS_IN_MILLISECONDS = 86400000;
 
 export interface IContext {
   db: Db;
-  athenaApi: AthenaApi;
   redoxApi: RedoxApi;
   userRole: UserRole;
   userId?: string;
@@ -64,7 +62,6 @@ const isInvalidLogin = (tokenLastLoginAt: string, userLastLoginAt: string | unde
 export async function getGraphQLContext(request: express.Request): Promise<IContext> {
   const authToken = request.headers.auth_token as string;
   const db = await Db.get();
-  const athenaApi = await AthenaApi.get();
   const redoxApi = await RedoxApi.get();
 
   let userRole: UserRole = 'anonymousUser';
@@ -84,7 +81,6 @@ export async function getGraphQLContext(request: express.Request): Promise<ICont
       return {
         db,
         redoxApi,
-        athenaApi,
         userRole: 'anonymousUser',
         opticsContext,
       };
@@ -95,7 +91,6 @@ export async function getGraphQLContext(request: express.Request): Promise<ICont
     userId,
     userRole,
     db,
-    athenaApi,
     redoxApi,
     opticsContext,
   };

@@ -475,3 +475,133 @@
   font-size: var(--small-font-size);
   line-height: var(--small-font-line-height);
 }
+
+.patientConcernGroup {
+  width: 100%;
+  margin-bottom: 10px;
+  display: flex;
+  flex-direction: column;
+}
+
+.patientConcernGroup:last-child {
+  margin-bottom: 0;
+}
+
+.patientConcern {
+  background-color: var(--white-color);
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  display: flex;
+  flex-direction: column;
+  padding: var(--small-gutter);
+
+  &:hover {
+    cursor: pointer;
+  }
+}
+
+.patientConcern.selected {
+  border: 1px solid var(--blue-color);
+  border-radius: 4px;
+  box-shadow: 0 6px 8px 0 rgba(0, 0, 0, 0.1);
+}
+
+.patientConcernTitleRow, .patientConcernMetaRow {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.patientConcernTitle {
+  color: var(--black-color);
+  font-family: var(--basetica-medium);
+  font-size: var(--medium-large-font-size);
+  line-height: var(--medium-large-font-line-height);
+}
+
+.patientConcernHamburger {
+  height: 20px;
+  width: 20px;
+  background-image: url('../../assets/dot-hamburger-black.svg');
+  background-position: center center;
+  background-size: contain;
+  background-repeat: no-repeat;
+
+  &:hover {
+    cursor: pointer;
+  }
+}
+
+.patientConcernMetaRow {
+  margin-bottom: 0;
+}
+
+.patientConcernStats {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.patientConcernStat {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  font-family: var(--roboto);
+  font-size: var(--small-font-size);
+  line-height: var(--small-font-line-height);
+  padding-right: 10px;
+  border-right: 1px solid var(--gray-background-color);
+}
+
+.patientConcernStat:last-child {
+  padding-right: 0;
+  border-right: none;
+  padding-left: 10px;
+}
+
+.patientConcernStatLabel {
+  color: var(--gray-font-color);
+  margin-right: 10px;
+}
+
+.patientConcernStatValue {
+  font-weight: var(--roboto-medium-weight);
+  color: var(--black-color);
+}
+
+.patientConcernDates {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.patientConcernDate {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  font-family: var(--roboto);
+  font-size: var(--extra-small-font-size);
+  padding-right: 10px;
+  border-right: 1px solid var(--gray-background-color);
+}
+
+.patientConcernDate:last-child {
+  padding-right: 0;
+  border-right: none;
+  padding-left: 10px;
+}
+
+.patientConcernDateLabel {
+  color: var(--gray-font-color);
+  margin-right: 10px;
+}
+
+.patientConcernDateValue {
+  color: var(--black-color);
+}

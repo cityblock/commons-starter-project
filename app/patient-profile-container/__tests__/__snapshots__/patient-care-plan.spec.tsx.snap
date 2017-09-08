@@ -3,7 +3,5 @@
 exports[`renders patient care plan 1`] = `
 <div
   className={undefined}
->
-  active care plan
-</div>
+/>
 `;

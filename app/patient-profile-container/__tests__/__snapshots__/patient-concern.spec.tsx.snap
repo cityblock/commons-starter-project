@@ -1,0 +1,93 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders patient concern 1`] = `
+<div
+  className={undefined}
+>
+  <div
+    className="undefined"
+    onClick={[Function]}
+  >
+    <div
+      className={undefined}
+    >
+      <div
+        className={undefined}
+      >
+        Concern Title
+      </div>
+      <div
+        className={undefined}
+      />
+    </div>
+    <div
+      className={undefined}
+    >
+      <div
+        className={undefined}
+      >
+        <div
+          className={undefined}
+        >
+          <div
+            className={undefined}
+          >
+            Goals:
+          </div>
+          <div
+            className={undefined}
+          >
+            1
+          </div>
+        </div>
+        <div
+          className={undefined}
+        >
+          <div
+            className={undefined}
+          >
+            Tasks:
+          </div>
+          <div
+            className={undefined}
+          >
+            1
+          </div>
+        </div>
+      </div>
+      <div
+        className={undefined}
+      >
+        <div
+          className={undefined}
+        >
+          <div
+            className={undefined}
+          >
+            Created:
+          </div>
+          <div
+            className={undefined}
+          >
+            Invalid date
+          </div>
+        </div>
+        <div
+          className={undefined}
+        >
+          <div
+            className={undefined}
+          >
+            Last update:
+          </div>
+          <div
+            className={undefined}
+          >
+            Invalid date
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;

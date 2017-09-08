@@ -151,7 +151,7 @@ declare module 'schema' {
     gender: string | null;
     zip: number | null;
     homeClinicId: string | null;
-    createdAt: string | null;
+    createdAt: string;
     scratchPad: string | null;
     consentToCall: boolean | null;
     consentToText: boolean | null;
@@ -252,8 +252,8 @@ declare module 'schema' {
     dueAt: string | null;
     priority: IPriorityEnum | null;
     createdBy: IUser | null;
-    createdAt: string | null;
-    updatedAt: string | null;
+    createdAt: string;
+    updatedAt: string;
     deletedAt: string | null;
     completedBy: IUser | null;
     completedAt: string | null;
@@ -311,7 +311,7 @@ declare module 'schema' {
     body: string;
     user: IUser;
     taskId: string;
-    createdAt: string | null;
+    createdAt: string;
     updatedAt: string | null;
   }
 

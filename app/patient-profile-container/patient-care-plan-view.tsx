@@ -23,13 +23,14 @@ export interface IProps {
 }
 
 const PatientCarePlanView = (props: IProps) => {
-  const { subTabId, routeBase, patientId, patientCarePlan } = props;
+  const { subTabId, routeBase, patientId, patientCarePlan, loading } = props;
 
   const carePlanSuggestions = subTabId === 'suggestions' ?
     <PatientCarePlanSuggestions routeBase={routeBase} patientId={patientId} /> : null;
 
   const carePlan = !subTabId || subTabId === 'inactive' || subTabId === 'active' ?
     (<PatientCarePlan
+        loading={loading}
         carePlan={patientCarePlan}
         routeBase={routeBase}
         displayType={subTabId}

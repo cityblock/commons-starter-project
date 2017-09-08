@@ -33,7 +33,9 @@ exports[`renders patient care plan view 1`] = `
     <div
       className={undefined}
     >
-      active care plan
+      <div>
+        Loading...
+      </div>
     </div>
   </div>
 </div>

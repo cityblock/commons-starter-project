@@ -21,7 +21,7 @@ it('renders popup', () => {
     gender: null,
     dateOfBirth: null,
     zip: null,
-    createdAt: null,
+    createdAt: '2017-09-07T13:45:14.532Z',
     consentToText: false,
     consentToCall: false,
   };

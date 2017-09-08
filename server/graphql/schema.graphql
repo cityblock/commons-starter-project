@@ -140,7 +140,7 @@ type Patient implements uniqueId {
   gender: String
   zip: Int
   homeClinicId: String
-  createdAt: String
+  createdAt: String!
   scratchPad: String
   consentToCall: Boolean
   consentToText: Boolean
@@ -260,8 +260,8 @@ type Task implements uniqueId {
   dueAt: String
   priority: Priority
   createdBy: User
-  createdAt: String
-  updatedAt: String
+  createdAt: String!
+  updatedAt: String!
   deletedAt: String
   completedBy: User
   completedAt: String
@@ -287,7 +287,7 @@ type TaskComment implements uniqueId {
   body: String!
   user: User!
   taskId: String!
-  createdAt: String
+  createdAt: String!
   updatedAt: String
 }
 
@@ -454,7 +454,7 @@ type PatientGoal implements uniqueId {
   patientConcernId: String
   goalSuggestionTemplateId: String
   goalSuggestionTemplate: GoalSuggestionTemplate
-  tasks: [Task]!
+  tasks: [Task!]!
   createdAt: String!
   updatedAt: String!
   deletedAt: String
@@ -519,8 +519,8 @@ type CarePlanSuggestion implements uniqueId {
 }
 
 type CarePlan {
-  goals: [PatientGoal]!
-  concerns: [PatientConcern]!
+  goals: [PatientGoal!]!
+  concerns: [PatientConcern!]!
 }
 
 #

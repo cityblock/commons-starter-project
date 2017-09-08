@@ -194,6 +194,7 @@ it('renders patient care plan view', () => {
           <PatientCarePlanView
             patientId={'patient-1'}
             subTabId={'active'}
+            loading={false}
             routeBase={'/patients/patient-1/carePlan'} />
         </ConnectedRouter>
       </ReduxConnectedIntlProvider>

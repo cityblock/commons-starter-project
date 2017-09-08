@@ -6,23 +6,18 @@ import { create } from 'react-test-renderer';
 import configureMockStore from 'redux-mock-store';
 import { ENGLISH_TRANSLATION } from '../../reducers/messages/en';
 import ReduxConnectedIntlProvider from '../../redux-connected-intl-provider';
-import PatientCarePlan from '../patient-care-plan';
+import PatientGoal from '../patient-goal';
 
 const locale = { messages: ENGLISH_TRANSLATION.messages };
 const mockStore = configureMockStore([]);
 
-it('renders patient care plan', () => {
+it('renders patient goal', () => {
   const history = createMemoryHistory();
   const tree = create(
     <MockedProvider mocks={[]} store={mockStore({ locale })}>
       <ReduxConnectedIntlProvider>
         <ConnectedRouter history={history}>
-          <PatientCarePlan
-            carePlan={{ concerns: [], goals: [] }}
-            patientId={'patient-1'}
-            displayType={'active'}
-            loading={false}
-            routeBase={'/patients/patient-1/carePlan'} />
+          <PatientGoal />
         </ConnectedRouter>
       </ReduxConnectedIntlProvider>
     </MockedProvider>,

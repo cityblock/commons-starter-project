@@ -128,6 +128,10 @@ export default class PatientGoal extends Model {
       // TODO: do a graph insert here or use the Task resolver. Also note: must use 'map' instead
       //       of 'forEach' as we need to wait for the loop to complete before committing the
       //       transaction below.
+      const patientGoal = await this.query(existingTxn || txn)
+        .eager(EAGER_QUERY)
+        .insertAndFetch(omit(input, ['userId', 'taskTemplates']));
+
       await Promise.all(
         validTaskTemplates.map(async taskTemplate => {
           const {
@@ -162,6 +166,7 @@ export default class PatientGoal extends Model {
               dueAt,
               patientId,
               assignedToId,
+              patientGoalId: patientGoal.id,
             },
             existingTxn || txn,
           );
@@ -189,9 +194,7 @@ export default class PatientGoal extends Model {
         }),
       );
 
-      return await this.query(existingTxn || txn)
-        .eager(EAGER_QUERY)
-        .insertAndFetch(omit(input, ['userId', 'taskTemplates']));
+      return patientGoal;
     });
   }
 

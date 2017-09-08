@@ -72,7 +72,7 @@ describe('patient goal model', () => {
       goalSuggestionTemplateId: goalSuggestionTemplate.id,
     });
 
-    await PatientGoal.create({
+    const createdPatientGoal = await PatientGoal.create({
       title: 'Patient Goal',
       patientId: patient.id,
       goalSuggestionTemplateId: goalSuggestionTemplate.id,
@@ -93,6 +93,7 @@ describe('patient goal model', () => {
 
     expect(fetchedTasks.total).toEqual(1);
     expect(fetchedTasks.results[0].title).toEqual(taskTemplate.title);
+    expect(fetchedTasks.results[0].patientGoalId).toEqual(createdPatientGoal.id);
     expect(fetchedTaskEvents.total).toEqual(2);
     expect(fetchedTaskEvents.results[0].eventType).toEqual('edit_assignee');
     expect(fetchedTaskEvents.results[1].eventType).toEqual('create_task');

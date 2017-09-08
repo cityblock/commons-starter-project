@@ -6,7 +6,7 @@ import {
   carePlanSuggestionDismissMutationVariables,
   FullCarePlanSuggestionFragment,
 } from '../graphql/types';
-import Popup from '../shared/popup';
+import { Popup } from '../shared/popup/popup';
 import * as styles from './css/patient-care-plan.css';
 import PopupPatientCarePlanSuggestionDismissedModalBody from './popup-patient-care-plan-suggestion-dismissed-modal-body';
 /* tslint:enable:max-line-length */

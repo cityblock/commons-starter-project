@@ -1,0 +1,32 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders idle popup 1`] = `
+<div
+  className={undefined}
+>
+  <div
+    className=""
+  >
+    <div
+      className={undefined}
+    >
+      <div
+        className={undefined}
+      >
+        Looks like you are idle
+      </div>
+      <div
+        className={undefined}
+      >
+        Please click below to prevent from being automatically logged out
+      </div>
+      <div
+        className={undefined}
+        onClick={[Function]}
+      >
+        Keep me logged in
+      </div>
+    </div>
+  </div>
+</div>
+`;

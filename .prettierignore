@@ -2,5 +2,3 @@
 ./declarations/schema.d.ts
 ./app/shared/util/marital-status-codes.ts
 ./app/shared/util/race-codes.ts
-# TODO: Figure out why prettier cannot parse this file
-./server/lib/capture-output.ts

@@ -1,0 +1,21 @@
+@import '../../shared/css/sizes';
+
+.idlePopup {
+
+}
+
+.idlePopupTitle {
+  font-family: var(--basetica-black);
+  font-size: var(--medium-large-font-size);
+  line-height: var(--medium-large-font-line-height);
+}
+
+.idleSubheading {
+  line-height: 20px;
+  margin-top: 11px;
+}
+
+.idleButton {
+  @apply --button;
+  margin-top: 40px;
+}

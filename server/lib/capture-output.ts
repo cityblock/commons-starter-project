@@ -46,12 +46,11 @@ export default class CaptureOutput {
   private hookStream(stream: NodeJS.Socket, callback: any) {
     const old_write = stream.write;
 
-    stream.write = (write =>
-      (s: string): boolean => {
-        write.apply(stream, [s]);
-        callback(s);
-        return true;
-      })(stream.write);
+    stream.write = ((write: any) => (s: string): boolean => {
+      write.apply(stream, [s]);
+      callback(s);
+      return true;
+    })(stream.write);
 
     return () => (stream.write = old_write);
   }

@@ -5,10 +5,8 @@ import { FormattedMessage } from 'react-intl';
 import { connect, Dispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { updateEventNotificationsCount } from '../actions/event-notifications-action';
-import {
-  formatEventNotifications,
-} from '../event-notifications-container/event-notifications-container';
 /* tslint:disable:max-line-length */
+import { formatEventNotifications } from '../event-notifications-container/event-notifications-container';
 import * as eventNotificationsQuery from '../graphql/queries/get-event-notifications-for-current-user.graphql';
 /* tslint:enable:max-line-length */
 import { getEventNotificationsForCurrentUserQuery, FullUserFragment } from '../graphql/types';
@@ -48,8 +46,10 @@ class Header extends React.Component<IProps> {
 
   render() {
     const { currentUser, notificationsCount } = this.props;
-    const name = currentUser.firstName && currentUser.lastName ?
-      `${currentUser.firstName} ${currentUser.lastName}` : null;
+    const name =
+      currentUser.firstName && currentUser.lastName
+        ? `${currentUser.firstName} ${currentUser.lastName}`
+        : null;
     let adminLink = null;
     if (currentUser.userRole === 'admin') {
       adminLink = (
@@ -58,7 +58,8 @@ class Header extends React.Component<IProps> {
           <FormattedMessage id='header.admin'>
             {(message: string) => <div className={styles.navText}>{message}</div>}
           </FormattedMessage>
-        </Link>);
+        </Link>
+      );
     }
     const tasksBadgeStyles = classNames(styles.notificationBadge, {
       [styles.visible]: !!notificationsCount && notificationsCount > 0,
@@ -97,9 +98,10 @@ class Header extends React.Component<IProps> {
               <div className={styles.userName}>{name}</div>
               <div className={styles.userRole}>{currentUser.userRole}</div>
             </div>
-            <div className={styles.userPhoto} style={
-              { backgroundImage: `url('${currentUser.googleProfileImageUrl}')` }
-            } />
+            <div
+              className={styles.userPhoto}
+              style={{ backgroundImage: `url('${currentUser.googleProfileImageUrl}')` }}
+            />
             <div className={styles.dropdown}>
               <Link to={'/settings'}>
                 <div className={styles.settingsIcon} />
@@ -125,8 +127,7 @@ function mapStateToProps(state: IAppState, ownProps: IProps): Partial<IProps> {
 
 function mapDispatchToProps(dispatch: Dispatch<() => void>): Partial<IProps> {
   return {
-    updateNotificationsCount: (count: number) =>
-      dispatch(updateEventNotificationsCount(count)),
+    updateNotificationsCount: (count: number) => dispatch(updateEventNotificationsCount(count)),
   };
 }
 
@@ -135,11 +136,10 @@ export default compose(
   graphql(eventNotificationsQuery as any, {
     options: (props: IProps) => {
       const variables: any = { pageNumber: 0, pageSize: 15 };
-
       return { variables };
     },
     props: ({ data, ownProps }) => ({
-      eventNotificationsResponse: (data ? (data as any).eventNotificationsForCurrentUser : null),
+      eventNotificationsResponse: data ? (data as any).eventNotificationsForCurrentUser : null,
     }),
   }),
 )(Header);

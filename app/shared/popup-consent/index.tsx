@@ -1,5 +1,5 @@
 import * as React from 'react';
-import Popup from '../popup';
+import { Popup } from '../popup/popup';
 import * as styles from './popup-consent.css';
 
 export interface IProps {

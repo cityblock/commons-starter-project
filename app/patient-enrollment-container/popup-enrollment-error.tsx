@@ -1,5 +1,5 @@
 import * as React from 'react';
-import Popup from '../shared/popup';
+import { Popup } from '../shared/popup/popup';
 import * as styles from './css/popup-enrollment-error.css';
 
 export interface IProps {

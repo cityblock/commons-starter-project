@@ -2,7 +2,7 @@ import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
 import { Link } from 'react-router-dom';
 import { ShortPatientFragment } from '../graphql/types';
-import Popup from '../shared/popup';
+import { Popup } from '../shared/popup/popup';
 import * as styles from './css/popup-patient-created.css';
 
 export interface IProps {

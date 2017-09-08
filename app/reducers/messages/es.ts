@@ -105,6 +105,7 @@ export const SPANISH_TRANSLATION = {
     'tasks.noTasks': 'Sin Tareas',
     'task.due': 'Debido',
     'task.opened': 'Abrió',
+    'task.noDueDate': 'Sin fecha',
     'notifications.leftPane': 'Panel izquierdo',
     'notifications.noNotifications': 'Sin Notificaciones',
     'notification.time': 'Hora',

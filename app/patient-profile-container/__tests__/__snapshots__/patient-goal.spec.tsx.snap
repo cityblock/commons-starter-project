@@ -1,3 +1,97 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`renders patient goal 1`] = `<div />`;
+exports[`renders patient goal 1`] = `
+<div
+  className={undefined}
+>
+  <div
+    className={undefined}
+  >
+    <div
+      className={undefined}
+    >
+      <div
+        className={undefined}
+      >
+        Goal 1
+      </div>
+      <div
+        className={undefined}
+      >
+        <div
+          className={undefined}
+        >
+          Last update:
+        </div>
+        <div
+          className={undefined}
+        >
+          Invalid date
+        </div>
+      </div>
+    </div>
+    <div
+      className={undefined}
+    >
+      Goal Title
+    </div>
+  </div>
+  <a
+    className="undefined"
+    href="/patients/patient-id/tasks/task-id"
+    onClick={[Function]}
+  >
+    <div
+      className={undefined}
+    >
+      Task Title
+    </div>
+    <div
+      className={undefined}
+    >
+      <div
+        className={undefined}
+      >
+        <div
+          className={undefined}
+          style={
+            Object {
+              "backgroundImage": "url(http://bit.ly/2w8gHND)",
+            }
+          }
+        />
+      </div>
+      <div
+        className=""
+      >
+        <span
+          className={undefined}
+        >
+          Opened
+          :
+        </span>
+        <span
+          className={undefined}
+        >
+          yesterday
+        </span>
+      </div>
+      <div
+        className={undefined}
+      >
+        <span
+          className={undefined}
+        >
+          Due
+          :
+        </span>
+        <span
+          className={undefined}
+        >
+          Sep 7, 2017
+        </span>
+      </div>
+    </div>
+  </a>
+</div>
+`;

@@ -105,6 +105,7 @@ export const ENGLISH_TRANSLATION = {
     'tasks.noTasks': 'No Tasks',
     'task.due': 'Due',
     'task.opened': 'Opened',
+    'task.noDueDate': 'No due date',
     'notifications.leftPane': 'Left Pane',
     'notifications.noNotifications': 'No Notifications',
     'notification.time': 'Time',

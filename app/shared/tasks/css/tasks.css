@@ -27,8 +27,8 @@
 }
 
 .tasksList.compressed .dateSection {
-  padding: 0 15px;
-  border-left: 1px solid var(--gray-background-color);
+  padding: 0;
+  border-left: none;
 }
 
 .tasksList.compressed .dateSection.openedAt {

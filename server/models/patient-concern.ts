@@ -13,7 +13,8 @@ export interface IPatientConcernEditableFields {
   completedAt?: string;
 }
 
-export const EAGER_QUERY = '[patient, concern, patientGoals.[patient, tasks]]';
+export const EAGER_QUERY =
+  '[patient, concern, patientGoals.[patient, tasks.[assignedTo, followers]]]';
 
 /* tslint:disable:member-ordering */
 export default class PatientConcern extends Model {

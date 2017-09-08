@@ -4,6 +4,7 @@ import * as React from 'react';
 import { DATETIME_FORMAT } from '../config';
 import { FullPatientConcernFragment } from '../graphql/types';
 import * as styles from './css/patient-care-plan.css';
+import PatientGoal from './patient-goal';
 
 export interface IProps {
   patientConcern: FullPatientConcernFragment;
@@ -22,6 +23,7 @@ export default class PatientConcern extends React.Component<IProps, {}> {
     super(props);
 
     this.getStats = this.getStats.bind(this);
+    this.renderGoals = this.renderGoals.bind(this);
   }
 
   getStats() {
@@ -67,11 +69,28 @@ export default class PatientConcern extends React.Component<IProps, {}> {
     return stats;
   }
 
+  renderGoals() {
+    const { patientConcern } = this.props;
+    const { patientGoals } = patientConcern;
+
+    if (!patientGoals) {
+      return null;
+    }
+
+    return patientGoals.map((patientGoal, index) =>
+      <PatientGoal key={patientGoal.id} patientGoal={patientGoal} goalNumber={index + 1} />,
+    );
+  }
+
   render() {
     const { onClick, patientConcern, selected } = this.props;
+    const { patientGoals } = patientConcern;
 
     const patientConcernStyles = classNames(styles.patientConcern, {
       [styles.selected]: selected,
+    });
+    const patientGoalsStyles = classNames(styles.patientGoals, {
+      [styles.hidden]: !selected || (!patientGoals || !patientGoals.length),
     });
 
     const patientConcernStats = this.getStats();
@@ -108,6 +127,9 @@ export default class PatientConcern extends React.Component<IProps, {}> {
               </div>
             </div>
           </div>
+        </div>
+        <div className={patientGoalsStyles}>
+          {this.renderGoals()}
         </div>
       </div>
     );

@@ -43,7 +43,11 @@ export default class PatientCarePlan extends React.Component<IProps, IState> {
     const { selectedPatientConcernId } = this.state;
 
     if (loading) {
-      return <div>Loading...</div>;
+      return (
+        <div className={styles.emptyCarePlanSuggestionsContainer}>
+          <div className={styles.loadingLabel}>Loading...</div>
+        </div>
+      );
     }
 
     if (!carePlan) {
@@ -52,10 +56,24 @@ export default class PatientCarePlan extends React.Component<IProps, IState> {
 
     let patientConcerns: FullPatientConcernFragment[] = [];
 
-    if (displayType === 'active') {
-      patientConcerns = carePlan.concerns.filter(patientConcern => !!patientConcern.startedAt);
-    } else {
+    if (displayType === 'inactive') {
       patientConcerns = carePlan.concerns.filter(patientConcern => !patientConcern.startedAt);
+    } else {
+      patientConcerns = carePlan.concerns.filter(patientConcern => !!patientConcern.startedAt);
+    }
+
+    if (!patientConcerns.length) {
+      return (
+        <div className={styles.emptyCarePlanSuggestionsContainer}>
+          <div className={styles.emptyCarePlanSuggestionsLogo}></div>
+          <div className={styles.emptyCarePlanSuggestionsLabel}>
+            {`No ${displayType} concerns or goals for this patient`}
+          </div>
+          <div className={styles.emptyCarePlanSuggestionsSubtext}>
+            New concerns and goals will be displayed here as they are added
+          </div>
+        </div>
+      );
     }
 
     return patientConcerns.map((patientConcern, index) => {

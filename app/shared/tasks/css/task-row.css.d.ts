@@ -1,4 +1,5 @@
 export const container: string;
+export const condensed: string;
 export const highPriority: string;
 export const mediumPriority: string;
 export const lowPriority: string;
@@ -12,3 +13,4 @@ export const dateSection: string;
 export const dueAtSection: string;
 export const dateLabel: string;
 export const dateValue: string;
+export const openedAtSection: string;

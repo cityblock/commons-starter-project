@@ -2,7 +2,7 @@
 
 exports[`task row renders task row 1`] = `
 <a
-  className="undefined"
+  className=""
   href="/foo/bar/cool-task-id"
   onClick={[Function]}
 >
@@ -47,7 +47,7 @@ exports[`task row renders task row 1`] = `
       </span>
     </div>
     <div
-      className=""
+      className={undefined}
     >
       <span
         className={undefined}
@@ -67,7 +67,7 @@ exports[`task row renders task row 1`] = `
 
 exports[`task row renders task row with multiple followers 1`] = `
 <a
-  className="undefined"
+  className=""
   href="/foo/bar/cool-task-id"
   onClick={[Function]}
 >
@@ -112,7 +112,7 @@ exports[`task row renders task row with multiple followers 1`] = `
       </span>
     </div>
     <div
-      className=""
+      className={undefined}
     >
       <span
         className={undefined}

@@ -3,5 +3,23 @@
 exports[`renders patient care plan 1`] = `
 <div
   className={undefined}
-/>
+>
+  <div
+    className={undefined}
+  >
+    <div
+      className={undefined}
+    />
+    <div
+      className={undefined}
+    >
+      No active concerns or goals for this patient
+    </div>
+    <div
+      className={undefined}
+    >
+      New concerns and goals will be displayed here as they are added
+    </div>
+  </div>
+</div>
 `;

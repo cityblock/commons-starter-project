@@ -11,6 +11,7 @@ export interface IProps {
   task: FullTaskFragment;
   selected: boolean;
   routeBase: string;
+  condensed?: boolean;
 }
 
 function renderFollowers(followers: ShortUserFragment[], photo?: boolean) {
@@ -28,24 +29,36 @@ function renderFollowers(followers: ShortUserFragment[], photo?: boolean) {
   return followersHtmlMap;
 }
 
-function renderAssignedTo(user: ShortUserFragment) {
+function renderAssignedTo(user: ShortUserFragment | null) {
+  let displayAvatarUrl: string = DEFAULT_AVATAR_URL;
+
+  if (user) {
+    displayAvatarUrl = user.googleProfileImageUrl || DEFAULT_AVATAR_URL;
+  }
+
   return (
     <div
       className={styles.assignedTo}
-      style={{ backgroundImage: `url(${user.googleProfileImageUrl || DEFAULT_AVATAR_URL})` }} />
+      style={{ backgroundImage: `url(${displayAvatarUrl})` }} />
   );
 }
 
 export const TaskRow: React.StatelessComponent<IProps> = props => {
-  const { task, selected, routeBase } = props;
+  const { task, selected, routeBase, condensed } = props;
   const taskClass = classNames(styles.container, {
     [styles.selected]: selected,
     [styles.highPriority]: task.priority === 'high',
     [styles.mediumPriority]: task.priority === 'medium',
     [styles.lowPriority]: task.priority === 'low' || task.priority === null,
+    [styles.condensed]: !!condensed,
   });
+  const openedAtStyles = classNames(
+    tasksStyles.dateSection,
+    tasksStyles.openedAt,
+    styles.openedAtSection,
+  );
   const followers = renderFollowers(task.followers || []);
-  const assignedTo = task.assignedTo ? renderAssignedTo(task.assignedTo) : null;
+  const assignedTo = renderAssignedTo(task.assignedTo);
   const formattedCreatedAt = task.createdAt ?
     (<FormattedRelative value={task.createdAt}>
       {(date: string) => <span className={styles.dateValue}>{date}</span>}
@@ -53,7 +66,10 @@ export const TaskRow: React.StatelessComponent<IProps> = props => {
   const formattedDueAt = task.dueAt ?
     (<FormattedDate value={task.dueAt} year='numeric' month='short' day='numeric'>
       {(date: string) => <span className={styles.dateValue}>{date}</span>}
-    </FormattedDate>) : null;
+    </FormattedDate>) :
+    (<FormattedMessage id='task.noDueDate'>
+      {(message: string) => <span className={styles.dateValue}>{message}</span>}
+    </FormattedMessage>);
   return (
     <Link className={taskClass} to={`${routeBase}/${task.id}`}>
       <div className={styles.title}>{task.title}</div>
@@ -62,13 +78,13 @@ export const TaskRow: React.StatelessComponent<IProps> = props => {
           {assignedTo}
           {followers}
         </div>
-        <div className={classNames(tasksStyles.dateSection, tasksStyles.openedAt)}>
+        <div className={openedAtStyles}>
           <FormattedMessage id='task.opened'>
             {(message: string) => <span className={styles.dateLabel}>{message}:</span>}
           </FormattedMessage>
           {formattedCreatedAt}
         </div>
-        <div className={classNames(styles.dateSection, styles.dueAtSection)}>
+        <div className={tasksStyles.dateSection}>
           <FormattedMessage id='task.due'>
             {(message: string) => <span className={styles.dateLabel}>{message}:</span>}
           </FormattedMessage>

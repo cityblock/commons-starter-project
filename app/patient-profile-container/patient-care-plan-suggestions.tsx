@@ -182,7 +182,9 @@ class PatientCarePlanSuggestions extends React.Component<IProps, IState> {
     const { loading } = this.props;
 
     const html = loading ?
-      <div className={styles.carePlanSuggestionsLoading}>Loading...</div> :
+      (<div className={styles.emptyCarePlanSuggestionsContainer}>
+        <div className={styles.loadingLabel}>Loading...</div>
+      </div>) :
       (<div className={styles.emptyCarePlanSuggestionsContainer}>
         <div className={styles.emptyCarePlanSuggestionsLogo}></div>
         <div className={styles.emptyCarePlanSuggestionsLabel}>

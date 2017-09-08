@@ -12,6 +12,14 @@
   margin: 0 10px 10px 10px;
 }
 
+.container.condensed {
+  margin: 1px 0;
+}
+
+.container.condensed:last-child {
+  margin-bottom: 0;
+}
+
 .container.highPriority {
   border-left: 4px solid var(--red-color);
 }
@@ -50,7 +58,9 @@
 .followers {
   display: flex;
   justify-content: flex-end;
-  padding-right: 15px;
+  padding-right: 10px;
+  margin-right: 10px;
+  border-right: 1px solid var(--gray-background-color);
 }
 
 .follower {
@@ -78,7 +88,6 @@
 }
 
 .dateSection {
-  padding: 0 15px;
   border-left: 1px solid var(--gray-background-color);
 }
 
@@ -96,7 +105,7 @@
   font-size: var(--extra-small-font-size);
   line-height: var(--extra-small-font-line-height);
   color: var(--light-gray-font-color);
-  margin-right: 5px;
+  margin-right: 10px;
 }
 
 .dateValue {
@@ -104,4 +113,10 @@
   font-size: var(--extra-small-font-size);
   line-height: var(--extra-small-font-line-height);
   color: var(--black-color)
+}
+
+.openedAtSection {
+  padding-right: 10px;
+  margin-right: 10px;
+  border-right: 1px solid var(--gray-background-color);
 }

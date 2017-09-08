@@ -407,6 +407,13 @@
   margin-bottom: 10px;
 }
 
+.loadingLabel {
+  font-family: var(--basetica-medium);
+  font-size: var(--medium-font-size);
+  line-height: var(--medium-font-line-height);
+  color: var(--light-gray-font-color);
+}
+
 .emptyCarePlanSuggestionsSubtext {
   font-family: var(--roboto);
   font-size: var(--default-font-size);
@@ -604,4 +611,72 @@
 
 .patientConcernDateValue {
   color: var(--black-color);
+}
+
+.patientGoals {
+  margin-top: 10px;
+  transition: height 0.5s ease-in-out;
+}
+
+.patientGoals.hidden {
+  height: 0;
+}
+
+.patientGoalTaskGroup {
+  margin-bottom: 10px;
+}
+
+.patientGoalTaskGroup:last-child {
+  margin-bottom: 0;
+}
+
+.patientGoal {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  border-radius: 4px;
+  background-color: var(--white-color);
+}
+
+.patientGoalHeaderRow {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  font-family: var(--roboto);
+  margin-bottom: 10px;
+}
+
+.patientGoalNumber {
+  color: var(--light-blue-color);
+  font-weight: var(--roboto-medium-weight);
+  font-size: var(--small-font-size);
+  line-height: var(--small-font-line-height);
+}
+
+.patientGoalUpdatedDetails {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-end;
+  font-size: var(--extra-small-font-size);
+  line-height: var(--extra-small-font-line-height);
+}
+
+.patientGoalUpdatedDetailsLabel {
+  color: var(--light-gray-font-color);
+  margin-right: 10px;
+}
+
+.patientGoalUpdatedDetailsDate {
+  color: var(--black-color);
+}
+
+.patientGoalTitle {
+  color: var(--black-color);
+  font-family: var(--roboto);
+  font-weight: var(--roboto-medium-weight);
+  font-size: var(--default-font-size);
+  line-height: var(--default-line-height);
 }

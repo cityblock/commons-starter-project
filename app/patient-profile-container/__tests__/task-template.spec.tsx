@@ -25,6 +25,11 @@ const taskTemplate = {
   deletedAt: null,
 };
 
+const oldDate = Date.now;
+
+beforeAll(() => { Date.now = jest.fn(() => 1500494779252); });
+afterAll(() => { Date.now = oldDate; });
+
 it('renders a selected task template', () => {
   const history = createMemoryHistory();
   const tree = create(

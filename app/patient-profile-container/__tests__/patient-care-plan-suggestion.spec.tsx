@@ -100,6 +100,11 @@ const carePlanSuggestionWithGoal = {
   updatedAt: '2017-08-16T19:27:36.378Z',
 };
 
+const oldDate = Date.now;
+
+beforeAll(() => { Date.now = jest.fn(() => 1500494779252); });
+afterAll(() => { Date.now = oldDate; });
+
 it('renders patient care plan suggestion (concern)', () => {
   const history = createMemoryHistory();
   const tree = create(

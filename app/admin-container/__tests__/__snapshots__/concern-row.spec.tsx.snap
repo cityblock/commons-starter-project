@@ -9,7 +9,7 @@ exports[`concern row renders concern row 1`] = `
   <div
     className={undefined}
   >
-    title
+    Concern Title
   </div>
   <div
     className={undefined}

@@ -6,20 +6,12 @@ import { create } from 'react-test-renderer';
 import configureMockStore from 'redux-mock-store';
 import { ENGLISH_TRANSLATION } from '../../reducers/messages/en';
 import ReduxConnectedIntlProvider from '../../redux-connected-intl-provider';
+import { concern } from '../../shared/util/test-data';
 import { ConcernRow } from '../concern-row';
 
 const locale = { messages: ENGLISH_TRANSLATION.messages };
 const mockStore = configureMockStore([]);
 const oldDate = Date.now;
-
-const concern = {
-  id: 'concern-id',
-  createdAt: 'Thu Jul 13 2017 16:52:56 GMT-0400 (EDT)',
-  updatedAt: 'Thu Jul 13 2017 16:52:56 GMT-0400 (EDT)',
-  dueAt: 'Thu Jul 13 2017 16:52:56 GMT-0400 (EDT)',
-  deletedAt: null,
-  title: 'title',
-};
 
 describe('concern row', () => {
   beforeAll(() => { Date.now = jest.fn(() => 1500494779252); });

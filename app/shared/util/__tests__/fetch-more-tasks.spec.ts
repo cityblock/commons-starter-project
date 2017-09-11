@@ -1,31 +1,11 @@
 import { fetchMoreTasks } from '../fetch-more-tasks';
-
+import { task } from '../test-data';
 const tasksResponse = {
   tasksForCurrentUser: null,
   tasksForPatient: {
     edges: [
       {
-        node: {
-          id: '123',
-          title: 'title',
-          description: 'description',
-          createdAt: new Date().toUTCString(),
-          updatedAt: new Date().toUTCString(),
-          completedAt: new Date().toUTCString(),
-          deletedAt: new Date().toUTCString(),
-          dueAt: new Date().toUTCString(),
-          patientId: '123',
-          priority: null,
-          patient: {
-            id: '123',
-            firstName: 'first',
-            middleName: 'middle',
-            lastName: 'last',
-          },
-          assignedTo: null,
-          createdBy: null,
-          followers: [],
-        },
+        node: task,
       },
     ],
     pageInfo: {

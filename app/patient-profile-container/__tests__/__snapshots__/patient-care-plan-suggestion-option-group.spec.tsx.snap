@@ -19,7 +19,7 @@ exports[`renders options for inactive concerns 1`] = `
   <option
     value="patient-concern-1"
   >
-    Concern 1
+    Concern Title
   </option>
 </optgroup>
 `;

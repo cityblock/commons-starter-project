@@ -123,7 +123,7 @@ exports[`renders question 1`] = `
         className=""
         onClick={[Function]}
       >
-        title
+        Question Title
       </div>
       <div
         className=""
@@ -1108,7 +1108,7 @@ exports[`renders question 1`] = `
         className=""
         name="applicableIfType"
         onChange={[Function]}
-        value=""
+        value="allTrue"
       >
         <option
           value="oneTrue"

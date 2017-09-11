@@ -6,25 +6,13 @@ import { create } from 'react-test-renderer';
 import configureMockStore from 'redux-mock-store';
 import { ENGLISH_TRANSLATION } from '../../../reducers/messages/en';
 import ReduxConnectedIntlProvider from '../../../redux-connected-intl-provider';
+import { patient } from '../../util/test-data';
 import { TaskRow } from '../task-row';
 
 const locale = { messages: ENGLISH_TRANSLATION.messages };
 const mockStore = configureMockStore([]);
 const oldDate = Date.now;
 
-const patient = {
-  id: 'unique-id',
-  firstName: 'first',
-  middleName: 'middle',
-  lastName: 'last',
-  language: null,
-  gender: null,
-  dateOfBirth: null,
-  zip: null,
-  createdAt: null,
-  consentToText: false,
-  consentToCall: false,
-};
 const user = {
   id: 'id',
   locale: 'en',
@@ -35,6 +23,7 @@ const user = {
   homeClinicId: '1',
   googleProfileImageUrl: null,
 };
+
 const task = {
   id: 'cool-task-id',
   createdAt: 'Thu Jul 13 2017 16:52:56 GMT-0400 (EDT)',

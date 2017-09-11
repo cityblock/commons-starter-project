@@ -25,7 +25,7 @@ exports[`renders admin questions 1`] = `
           <option
             value="cool-task-id"
           >
-            title
+            Risk Area Title
           </option>
         </select>
       </div>

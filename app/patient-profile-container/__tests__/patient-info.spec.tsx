@@ -6,25 +6,13 @@ import { create } from 'react-test-renderer';
 import configureMockStore from 'redux-mock-store';
 import { ENGLISH_TRANSLATION } from '../../reducers/messages/en';
 import ReduxConnectedIntlProvider from '../../redux-connected-intl-provider';
+import { patient } from '../../shared/util/test-data';
 import PatientInfo from '../patient-info';
 
 const locale = { messages: ENGLISH_TRANSLATION.messages };
 const mockStore = configureMockStore([]);
 
 it('renders patient info', () => {
-  const patient = {
-    id: 'unique-id',
-    firstName: 'first',
-    middleName: 'middle',
-    lastName: 'last',
-    language: null,
-    gender: null,
-    dateOfBirth: null,
-    zip: null,
-    createdAt: null,
-    consentToText: false,
-    consentToCall: false,
-  };
   const history = createMemoryHistory();
   const tree = create(
     <MockedProvider mocks={[]} store={mockStore({ locale })}>

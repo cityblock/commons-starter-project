@@ -6,6 +6,7 @@ import { create } from 'react-test-renderer';
 import configureMockStore from 'redux-mock-store';
 import { ENGLISH_TRANSLATION } from '../../reducers/messages/en';
 import ReduxConnectedIntlProvider from '../../redux-connected-intl-provider';
+import { answerMutiSelect } from '../../shared/util/test-data';
 import RiskAreaMultiSelectAnswer from '../risk-area-multi-select-answer';
 
 const locale = { messages: ENGLISH_TRANSLATION.messages };
@@ -13,19 +14,6 @@ const mockStore = configureMockStore([]);
 
 it('renders a multi-select answer', () => {
   const history = createMemoryHistory();
-  const answer = {
-    id: '456',
-    displayValue: 'Answer',
-    value: 'answer',
-    valueType: 'string' as any,
-    questionId: '123',
-    order: 1,
-    riskAdjustmentType: null,
-    inSummary: false,
-    summaryText: null,
-    concernSuggestions: [],
-    goalSuggestions: [],
-  };
 
   const tree = create(
     <MockedProvider mocks={[]} store={mockStore({ locale })}>
@@ -33,7 +21,7 @@ it('renders a multi-select answer', () => {
         <ConnectedRouter history={history}>
           <RiskAreaMultiSelectAnswer
             onClick={() => true}
-            answer={answer}
+            answer={answerMutiSelect}
             selected={false}
             editable={true} />
         </ConnectedRouter>

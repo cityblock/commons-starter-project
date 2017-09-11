@@ -6,6 +6,7 @@ import { create } from 'react-test-renderer';
 import configureMockStore from 'redux-mock-store';
 import { ENGLISH_TRANSLATION } from '../../reducers/messages/en';
 import ReduxConnectedIntlProvider from '../../redux-connected-intl-provider';
+import { currentUser } from '../../shared/util/test-data';
 import Header from '../header';
 
 const locale = { messages: ENGLISH_TRANSLATION.messages };
@@ -13,16 +14,6 @@ const eventNotifications = { count: 0 };
 const mockStore = configureMockStore([]);
 
 it('renders header', () => {
-  const currentUser = {
-    id: 'id',
-    locale: 'en',
-    firstName: 'first',
-    lastName: 'last',
-    userRole: 'physician' as any,
-    email: 'a@b.com',
-    homeClinicId: '1',
-    googleProfileImageUrl: null,
-  };
   const history = createMemoryHistory();
   const tree = create(
     <MockedProvider mocks={[]} store={mockStore({ locale, eventNotifications })}>

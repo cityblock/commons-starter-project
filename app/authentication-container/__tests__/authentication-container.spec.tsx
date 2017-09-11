@@ -2,18 +2,8 @@ import * as React from 'react';
 import { MockedProvider } from 'react-apollo/test-utils';
 import { create } from 'react-test-renderer';
 import configureMockStore from 'redux-mock-store';
+import { currentUser } from '../../shared/util/test-data';
 import AuthenticationContainer from '../authentication-container';
-
-const currentUser = {
-  id: 'id',
-  locale: 'en',
-  firstName: 'first',
-  lastName: 'last',
-  userRole: 'physician' as any,
-  email: 'a@b.com',
-  homeClinicId: '1',
-  googleProfileImageUrl: null,
-};
 
 it('renders authentication container correctly', () => {
   const mockStore = configureMockStore([]);

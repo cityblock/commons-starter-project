@@ -6,33 +6,12 @@ import { create } from 'react-test-renderer';
 import configureMockStore from 'redux-mock-store';
 import { ENGLISH_TRANSLATION } from '../../reducers/messages/en';
 import ReduxConnectedIntlProvider from '../../redux-connected-intl-provider';
+import { goal } from '../../shared/util/test-data';
 import { GoalRow } from '../goal-row';
 
 const locale = { messages: ENGLISH_TRANSLATION.messages };
 const mockStore = configureMockStore([]);
 const oldDate = Date.now;
-
-const taskTemplate = {
-  id: 'task-template-id',
-  title: 'task template value',
-  goalSuggestionTemplateId: 'goal-id',
-  priority: 'medium' as any,
-  repeating: true,
-  completedWithinNumber: 1,
-  completedWithinInterval: 'week' as any,
-  careTeamAssigneeRole: 'healthCoach' as any,
-  createdAt: 'Thu Jul 13 2017 16:52:56 GMT-0400 (EDT)',
-  updatedAt: 'Thu Jul 13 2017 16:52:56 GMT-0400 (EDT)',
-  deletedAt: null,
-};
-const goal = {
-  id: 'goal-id',
-  createdAt: 'Thu Jul 13 2017 16:52:56 GMT-0400 (EDT)',
-  updatedAt: 'Thu Jul 13 2017 16:52:56 GMT-0400 (EDT)',
-  deletedAt: null,
-  title: 'Goal Title',
-  taskTemplates: [taskTemplate],
-};
 
 describe('goal row', () => {
   beforeAll(() => { Date.now = jest.fn(() => 1500494779252); });

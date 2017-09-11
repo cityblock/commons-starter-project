@@ -68,13 +68,7 @@ exports[`renders a risk area assessment 1`] = `
 exports[`renders questions with correct visibility 1`] = `
 Array [
   <RiskAreaQuestion
-    answerData={
-      Object {
-        "answers": Array [],
-        "changed": false,
-        "oldAnswers": Array [],
-      }
-    }
+    answerData={undefined}
     editable={false}
     onChange={[Function]}
     question={
@@ -83,30 +77,41 @@ Array [
         "answers": Array [
           Object {
             "concernSuggestions": Array [],
-            "displayValue": "answer-1",
+            "createdAt": "Thu Jul 13 2017 16:52:56 GMT-0400 (EDT)",
+            "deletedAt": null,
+            "displayValue": "answer value",
             "goalSuggestions": Array [],
-            "id": "answer-1",
-            "inSummary": false,
+            "id": "answer-id",
+            "inSummary": true,
             "order": 1,
-            "questionId": "question-1",
-            "riskAdjustmentType": "inactive",
-            "summaryText": "None",
-            "value": "answer-1",
-            "valueType": "text",
+            "questionId": "cool-task-id",
+            "riskAdjustmentType": "increment",
+            "summaryText": "summary text",
+            "updatedAt": "Thu Jul 13 2017 16:52:56 GMT-0400 (EDT)",
+            "value": "true",
+            "valueType": "boolean",
           },
         ],
-        "applicableIfQuestionConditions": null,
-        "applicableIfType": null,
-        "createdAt": "2017-08-16T19:27:36.378Z",
+        "applicableIfQuestionConditions": Array [
+          Object {
+            "answerId": "answer-id",
+            "id": "question-condition",
+            "questionId": "cool-question-id",
+          },
+        ],
+        "applicableIfType": "allTrue",
+        "createdAt": "Thu Jul 13 2017 16:52:56 GMT-0400 (EDT)",
         "deletedAt": null,
-        "id": "question-1",
+        "dueAt": "Thu Jul 13 2017 16:52:56 GMT-0400 (EDT)",
+        "id": "cool-question-id",
         "order": 1,
         "riskAreaId": "risk-area-id",
-        "title": "Question 1",
-        "validatedSource": null,
+        "title": "Question Title",
+        "updatedAt": "Thu Jul 13 2017 16:52:56 GMT-0400 (EDT)",
+        "validatedSource": "validated source",
       }
     }
-    visible={true}
+    visible={false}
   />,
   <RiskAreaQuestion
     answerData={

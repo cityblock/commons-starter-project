@@ -9,7 +9,7 @@ exports[`risk area row renders risk area row 1`] = `
   <div
     className={undefined}
   >
-    title
+    Risk Area Title
   </div>
   <div
     className={undefined}

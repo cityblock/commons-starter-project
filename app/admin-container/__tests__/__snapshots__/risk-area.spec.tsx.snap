@@ -93,7 +93,7 @@ exports[`renders risk area 1`] = `
         className=""
         onClick={[Function]}
       >
-        title
+        Risk Area Title
       </div>
       <div
         className=""

@@ -39,7 +39,7 @@ exports[`renders task template create-edit 1`] = `
         name="title"
         onChange={[Function]}
         placeholder="Enter task title"
-        value="task template value"
+        value="Task Template Title"
       />
     </div>
     <div
@@ -54,7 +54,7 @@ exports[`renders task template create-edit 1`] = `
         className=""
         name="priority"
         onChange={[Function]}
-        value="medium"
+        value="high"
       >
         <option
           disabled={true}
@@ -93,7 +93,7 @@ exports[`renders task template create-edit 1`] = `
         name="repeating"
         onChange={[Function]}
         required={true}
-        value="true"
+        value="false"
       >
         <option
           value="true"
@@ -119,7 +119,7 @@ exports[`renders task template create-edit 1`] = `
         className=""
         name="completedWithinInterval"
         onChange={[Function]}
-        value="week"
+        value="hour"
       >
         <option
           disabled={true}
@@ -240,7 +240,7 @@ exports[`renders task template create-edit 1`] = `
         className=""
         name="careTeamAssigneeRole"
         onChange={[Function]}
-        value="healthCoach"
+        value="physician"
       >
         <option
           disabled={true}

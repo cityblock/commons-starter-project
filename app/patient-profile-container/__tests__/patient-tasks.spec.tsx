@@ -7,6 +7,7 @@ import { create } from 'react-test-renderer';
 import configureMockStore from 'redux-mock-store';
 import { ENGLISH_TRANSLATION } from '../../reducers/messages/en';
 import ReduxConnectedIntlProvider from '../../redux-connected-intl-provider';
+import { completedTask, patient } from '../../shared/util/test-data';
 import PatientTasks from '../patient-tasks';
 
 const locale = { messages: ENGLISH_TRANSLATION.messages };
@@ -80,39 +81,8 @@ fragment FullTask on Task {
 /* tslint:enable:max-line-length */
 
 it('renders patient tasks', () => {
-  const patient = {
-    id: 'unique-id',
-    firstName: 'first',
-    middleName: 'middle',
-    lastName: 'last',
-    language: null,
-    gender: null,
-    dateOfBirth: null,
-    zip: null,
-    createdAt: null,
-    consentToText: false,
-    consentToCall: false,
-  };
-  const user = {
-    id: 'id',
-    locale: 'en',
-    firstName: 'first',
-    lastName: 'last',
-    userRole: 'physician' as any,
-    email: 'a@b.com',
-    homeClinicId: '1',
-    googleProfileImageUrl: null,
-  };
-  const task = {
-    title: 'title',
-    description: 'description',
-    patientId: patient.id,
-    createdById: user.id,
-    assignedToId: user.id,
-    completedById: user.id,
-  };
   const tasksResponse = {
-    edges: [{ node: task }],
+    edges: [{ node: completedTask }],
     pageInfo: {
       hasNextPage: true,
       hasPreviousPage: true,
@@ -146,7 +116,7 @@ it('renders patient tasks', () => {
           },
         },
       ]}
-      store={mockStore({ locale, task })}
+      store={mockStore({ locale, task: completedTask })}
     >
       <ReduxConnectedIntlProvider>
         <ConnectedRouter history={history}>

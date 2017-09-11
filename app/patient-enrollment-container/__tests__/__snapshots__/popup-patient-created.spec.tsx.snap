@@ -13,7 +13,7 @@ exports[`renders popup 1`] = `
       <div
         className={undefined}
       >
-        first last
+        Bob Smith
         <span
           className={undefined}
         >
@@ -37,7 +37,7 @@ exports[`renders popup 1`] = `
         </a>
         <a
           className={undefined}
-          href="/patients/unique-id"
+          href="/patients/patient-id"
           onClick={[Function]}
         >
           Go to profile

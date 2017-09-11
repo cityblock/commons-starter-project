@@ -93,7 +93,7 @@ exports[`renders concern 1`] = `
         className=""
         onClick={[Function]}
       >
-        title
+        Concern Title
       </div>
       <div
         className=""

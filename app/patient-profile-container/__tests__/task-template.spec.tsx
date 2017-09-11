@@ -6,25 +6,11 @@ import { create } from 'react-test-renderer';
 import configureMockStore from 'redux-mock-store';
 import { ENGLISH_TRANSLATION } from '../../reducers/messages/en';
 import ReduxConnectedIntlProvider from '../../redux-connected-intl-provider';
+import { taskTemplate } from '../../shared/util/test-data';
 import TaskTemplate from '../task-template';
 
 const locale = { messages: ENGLISH_TRANSLATION.messages };
 const mockStore = configureMockStore([]);
-
-const taskTemplate = {
-  id: 'task-template-1',
-  title: 'Task Title',
-  priority: 'high' as any,
-  completedWithinNumber: 1,
-  completedWithinInterval: 'week' as any,
-  repeating: false,
-  goalSuggestionTemplateId: 'goal-suggestion-template-1',
-  careTeamAssigneeRole: 'physician' as any,
-  createdAt: '2017-08-16T19:27:36.378Z',
-  updatedAt: '2017-08-16T19:27:36.378Z',
-  deletedAt: null,
-};
-
 const oldDate = Date.now;
 
 beforeAll(() => { Date.now = jest.fn(() => 1500494779252); });

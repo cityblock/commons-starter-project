@@ -6,17 +6,8 @@ import { create } from 'react-test-renderer';
 import configureMockStore from 'redux-mock-store';
 import { ENGLISH_TRANSLATION } from '../../reducers/messages/en';
 import ReduxConnectedIntlProvider from '../../redux-connected-intl-provider';
+import { riskArea } from '../../shared/util/test-data';
 import AdminQuestions from '../admin-questions';
-
-const riskArea = {
-  id: 'cool-task-id',
-  createdAt: 'Thu Jul 13 2017 16:52:56 GMT-0400 (EDT)',
-  updatedAt: 'Thu Jul 13 2017 16:52:56 GMT-0400 (EDT)',
-  dueAt: 'Thu Jul 13 2017 16:52:56 GMT-0400 (EDT)',
-  deletedAt: null,
-  title: 'title',
-  order: 1,
-};
 
 it('renders admin questions', () => {
   const mockStore = configureMockStore([]);

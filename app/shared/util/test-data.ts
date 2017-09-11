@@ -276,3 +276,33 @@ export const medication = {
   dosageInstructions: 'once daily',
   startDate: '10/10/2010',
 };
+
+export const eventNotification = {
+  id: 'event-notificaiton-id',
+  title: 'event notification',
+  userId: currentUser.id,
+  user: currentUser,
+  taskEventId: 'task-event-id',
+  taskEvent: {
+    id: 'task-event-id',
+    taskId: task.id,
+    task,
+    userId: currentUser.id,
+    eventUserId: currentUser.id,
+    eventUser: currentUser,
+    user: currentUser,
+    eventType: 'create_task' as any,
+    eventCommentId: null,
+    eventComment: null,
+    createdAt: 'Thu Jul 13 2017 16:52:56 GMT-0400 (EDT)',
+    updatedAt: 'Thu Jul 13 2017 16:52:56 GMT-0400 (EDT)',
+    deletedAt: null,
+  },
+  task,
+  seenAt: null,
+  emailSentAt: null,
+  deliveredAt: null,
+  createdAt: 'Thu Jul 13 2017 16:52:56 GMT-0400 (EDT)',
+  updatedAt: 'Thu Jul 13 2017 16:52:56 GMT-0400 (EDT)',
+  deletedAt: null,
+};

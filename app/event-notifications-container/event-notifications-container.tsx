@@ -38,7 +38,7 @@ export interface IProps {
   };
 }
 
-class EventNotificationsContainer extends React.Component<IProps> {
+export class EventNotificationsContainer extends React.Component<IProps> {
   componentWillReceiveProps(nextProps: IProps) {
     document.title = `Notifications | Commons`;
 

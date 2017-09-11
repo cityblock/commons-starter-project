@@ -68,7 +68,7 @@ export async function getGraphQLContext(request: express.Request): Promise<ICont
   let userId;
   let opticsContext;
 
-  /* istanbul ignore if  */
+  /* istanbul ignore next */
   if (config.NODE_ENV === 'production') {
     opticsContext = OpticsAgent.context(request);
   }

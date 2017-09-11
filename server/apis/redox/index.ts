@@ -40,6 +40,7 @@ export default class RedoxApi {
       }),
       method: 'POST',
     });
+    /* istanbul ignore next */
     if (!response.ok) {
       // TODO: Improve error handling
       console.warn(response.statusText);

@@ -34,7 +34,7 @@ export interface IState {
   showCreateGoal: false;
 }
 
-class AdminGoals extends React.Component<IProps, IState> {
+export class AdminGoals extends React.Component<IProps, IState> {
   constructor(props: IProps) {
     super(props);
 

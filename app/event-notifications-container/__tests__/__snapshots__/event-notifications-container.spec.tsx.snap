@@ -1,0 +1,82 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders event notifications containers 1`] = `
+<div
+  className={undefined}
+>
+  <div
+    className={undefined}
+  >
+    <div
+      className={undefined}
+    >
+      Left Pane
+    </div>
+  </div>
+  <div
+    className={undefined}
+  >
+    <div
+      className={undefined}
+    >
+      <a
+        className={undefined}
+        href="/tasks"
+        onClick={[Function]}
+      >
+        Tasks
+      </a>
+      <a
+        className={undefined}
+        href="/calendar"
+        onClick={[Function]}
+      >
+        Calendar
+      </a>
+      <a
+        className=""
+        href="/notifications/tasks"
+        onClick={[Function]}
+      >
+        <span>
+          Notifications
+        </span>
+        <div
+          className="undefined"
+        />
+      </a>
+    </div>
+    <div
+      className=""
+    >
+      <div
+        className={undefined}
+      >
+        <div
+          className={undefined}
+        />
+        <div
+          className={undefined}
+        >
+          <div
+            className={undefined}
+          >
+            <div
+              className={undefined}
+            >
+              Loading...
+            </div>
+            <span
+              style={
+                Object {
+                  "fontSize": 0,
+                }
+              }
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;

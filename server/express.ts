@@ -28,11 +28,11 @@ export const checkAuth = (username: string, password: string) => (
 
 export default async (app: express.Application) => {
   // This adds request logging using some decent defaults.
-  /* istanbul ignore if  */
+  /* istanbul ignore next */
   if (config.NODE_ENV === 'development') {
     app.use(morgan('dev'));
   } else if (config.NODE_ENV === 'production') {
-    /* istanbul ignore next  */
+    /* istanbul ignore next */
     app.use(morgan('combined'));
   }
 
@@ -51,7 +51,7 @@ export default async (app: express.Application) => {
     }),
   );
 
-  /* istanbul ignore if  */
+  /* istanbul ignore next */
   if (config.NODE_ENV === 'production') {
     OpticsAgent.instrumentSchema(schema);
     app.use(OpticsAgent.middleware());
@@ -77,7 +77,7 @@ export default async (app: express.Application) => {
 
   app.get('*', renderApp);
 
-  /* istanbul ignore if  */
+  /* istanbul ignore next */
   if (config.NODE_ENV !== 'test') {
     /* tslint:disable no-console */
     console.log('--------------------------');

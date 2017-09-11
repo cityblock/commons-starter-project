@@ -256,7 +256,7 @@ const resolveFunctions = {
 
 const logger = {
   log: (e: any) => {
-    /* istanbul ignore if  */
+    /* istanbul ignore next */
     if (config.NODE_ENV !== 'test' && config.NODE_ENV !== 'production') {
       /* tslint:disable no-console */
       console.log(e);

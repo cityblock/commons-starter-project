@@ -1,4 +1,4 @@
-import { Model, RelationMappings, ValidationError } from 'objection';
+import { Model, RelationMappings } from 'objection';
 import * as uuid from 'uuid/v4';
 
 export interface ICreateGoogleAuth {
@@ -44,16 +44,6 @@ export default class GoogleAuth extends Model {
   };
 
   async $beforeInsert() {
-    if (this.id) {
-      throw new ValidationError({
-        id: [
-          {
-            message: 'id should not be defined before insert',
-          },
-        ],
-      });
-    }
-
     this.id = uuid();
     this.createdAt = new Date().toISOString();
   }

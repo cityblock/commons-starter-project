@@ -109,12 +109,6 @@ export default class Patient extends Model {
     return patient;
   }
 
-  static async getAthenaPatientId(patientId: string): Promise<number> {
-    // TODO: query and just return the athenaPatientId column
-    const patient = await this.get(patientId);
-    return patient.athenaPatientId;
-  }
-
   static async getAll({
     pageNumber,
     pageSize,

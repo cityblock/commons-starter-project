@@ -41,6 +41,13 @@ describe('care plan suggestion', () => {
       expect(fetchedCarePlanSuggestion!.concern).toMatchObject(concern);
     });
 
+    it('throws an error when getting an invalid id', async () => {
+      const fakeId = 'fakeId';
+      await expect(CarePlanSuggestion.get(fakeId)).rejects.toMatch(
+        'No such carePlanSuggestion: fakeId',
+      );
+    });
+
     it('finds a care plan suggestion for a given concern if it exists', async () => {
       const concern2 = await Concern.create({ title: 'Second Concern' });
       const carePlanSuggestion = await CarePlanSuggestion.create({

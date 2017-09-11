@@ -1,4 +1,4 @@
-import { transaction, Model, RelationMappings, Transaction } from 'objection';
+import { Model, RelationMappings, Transaction } from 'objection';
 import * as uuid from 'uuid/v4';
 import { IPaginatedResults, IPaginationOptions } from '../db';
 import Task from './task';
@@ -120,12 +120,6 @@ export default class TaskComment extends Model {
       results: patientsResult.results,
       total: patientsResult.total,
     };
-  }
-
-  static async execWithTransaction(
-    callback: (boundModelClass: typeof TaskComment) => Promise<TaskComment>,
-  ) {
-    return await transaction(this as any, callback);
   }
 }
 /* tslint:disable:member-ordering */

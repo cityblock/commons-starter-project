@@ -124,16 +124,6 @@ export default class User extends Model {
   }
 
   async $beforeInsert() {
-    if (this.id) {
-      throw new ValidationError({
-        id: [
-          {
-            message: 'id should not be defined before insert',
-          },
-        ],
-      });
-    }
-
     await this.$beforeSave(true);
     this.id = uuid();
     this.createdAt = new Date().toISOString();

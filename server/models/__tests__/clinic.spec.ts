@@ -36,6 +36,19 @@ describe('clinic model', () => {
       expect(clinicByName).toMatchObject(clinic);
     });
 
+    it('updates a clinic', async () => {
+      const clinic = await Clinic.create({
+        departmentId: 1,
+        name: 'Center Zero',
+      });
+      const updatedClinic = await Clinic.update(clinic.id, {
+        departmentId: 2,
+        name: 'Center One',
+      });
+      expect(updatedClinic.name).toBe('Center One');
+      expect(updatedClinic.departmentId).toBe(2);
+    });
+
     it('returns null if calling getBy without a comparison parameter', async () => {
       const result = await Clinic.getBy('name');
       expect(result).toBeNull();

@@ -1,10 +1,10 @@
-import { Model, RelationMappings, ValidationError } from 'objection';
+import { Model, RelationMappings } from 'objection';
 import * as uuid from 'uuid/v4';
 import { IPaginatedResults, IPaginationOptions } from '../db';
 import Patient from './patient';
 import User from './user';
 
-export interface ICreateClinic {
+export interface IClinicEditableFields {
   name: string;
   departmentId: number;
 }
@@ -57,16 +57,6 @@ export default class Clinic extends Model {
   };
 
   async $beforeInsert() {
-    if (this.id) {
-      throw new ValidationError({
-        id: [
-          {
-            message: 'id should not be defined before insert',
-          },
-        ],
-      });
-    }
-
     this.id = uuid();
     this.createdAt = new Date().toISOString();
   }
@@ -75,7 +65,7 @@ export default class Clinic extends Model {
     this.updatedAt = new Date().toISOString();
   }
 
-  static async create(clinic: ICreateClinic): Promise<Clinic> {
+  static async create(clinic: IClinicEditableFields): Promise<Clinic> {
     return await this.query().insertAndFetch(clinic);
   }
 
@@ -87,6 +77,10 @@ export default class Clinic extends Model {
     }
 
     return clinic;
+  }
+
+  static async update(clinicId: string, clinic: IClinicEditableFields): Promise<Clinic> {
+    return await this.query().updateAndFetchById(clinicId, clinic);
   }
 
   static async getAll({

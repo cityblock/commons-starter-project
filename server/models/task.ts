@@ -1,4 +1,4 @@
-import { transaction, Model, RelationMappings, Transaction } from 'objection';
+import { Model, RelationMappings, Transaction } from 'objection';
 import * as uuid from 'uuid/v4';
 import { IPaginatedResults, IPaginationOptions } from '../db';
 import Patient from './patient';
@@ -249,10 +249,6 @@ export default class Task extends Model {
         completedAt: null,
         completedById: null,
       });
-  }
-
-  static async execWithTransaction(callback: (boundModelClass: typeof Task) => Promise<Task>) {
-    return await transaction(this as any, callback);
   }
 }
 /* tslint:disable:member-ordering */

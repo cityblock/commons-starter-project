@@ -97,6 +97,14 @@ describe('task followers', () => {
       const followedTask = await Task.get(task.id);
       expect(followedTask.followers[0].id).toEqual(user.id);
 
+      // refollow the same task
+      await TaskFollower.followTask({
+        userId: user.id,
+        taskId: task.id,
+      });
+      const reFollowedTask = await Task.get(task.id);
+      expect(reFollowedTask.followers[0].id).toEqual(user.id);
+
       await TaskFollower.unfollowTask({
         userId: user.id,
         taskId: task.id,

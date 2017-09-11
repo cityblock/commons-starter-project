@@ -3,6 +3,8 @@ import { createMockPatient, createPatient } from '../../spec-helpers';
 import Concern from '../concern';
 import Patient from '../patient';
 import PatientConcern from '../patient-concern';
+import PatientGoal from '../patient-goal';
+import Task from '../task';
 import User from '../user';
 
 const userRole = 'physician';
@@ -42,12 +44,82 @@ describe('patient concern model', () => {
     expect(await PatientConcern.getForPatient(patient.id)).toEqual([patientConcern]);
   });
 
+  it('gets a concern and associated goals/tasks', async () => {
+    const patientConcern = await PatientConcern.create({
+      concernId: concern.id,
+      patientId: patient.id,
+    });
+    const patientGoal = await PatientGoal.create({
+      title: 'Goal Title',
+      patientConcernId: patientConcern.id,
+      patientId: patient.id,
+      userId: user.id,
+    });
+    const incompleteTask = await Task.create({
+      title: 'Incomplete Task',
+      patientId: patient.id,
+      patientGoalId: patientGoal.id,
+      createdById: user.id,
+    });
+    const completeTask = await Task.create({
+      title: 'Complete Task',
+      patientId: patient.id,
+      patientGoalId: patientGoal.id,
+      createdById: user.id,
+    });
+
+    await Task.complete(completeTask.id, user.id);
+
+    const fetchedConcern = await PatientConcern.get(patientConcern.id);
+    const fetchedPatientGoal = fetchedConcern!.patientGoals[0];
+    const { tasks } = fetchedPatientGoal;
+    const taskIds = tasks.map(task => task.id);
+    expect(fetchedPatientGoal.id).toEqual(patientGoal.id);
+    expect(taskIds).toContain(incompleteTask.id);
+    expect(taskIds).not.toContain(completeTask.id);
+  });
+
   it('gets concerns associated with a patient ', async () => {
     const patientConcern = await PatientConcern.create({
       concernId: concern.id,
       patientId: patient.id,
     });
     expect(await PatientConcern.getForPatient(patient.id)).toEqual([patientConcern]);
+  });
+
+  it('gets concerns associated with a patient and loads correct goals/tasks', async () => {
+    const patientConcern = await PatientConcern.create({
+      concernId: concern.id,
+      patientId: patient.id,
+    });
+    const patientGoal = await PatientGoal.create({
+      title: 'Goal Title',
+      patientConcernId: patientConcern.id,
+      patientId: patient.id,
+      userId: user.id,
+    });
+    const incompleteTask = await Task.create({
+      title: 'Incomplete Task',
+      patientId: patient.id,
+      patientGoalId: patientGoal.id,
+      createdById: user.id,
+    });
+    const completeTask = await Task.create({
+      title: 'Complete Task',
+      patientId: patient.id,
+      patientGoalId: patientGoal.id,
+      createdById: user.id,
+    });
+
+    await Task.complete(completeTask.id, user.id);
+
+    const fetchedConcerns = await PatientConcern.getForPatient(patient.id);
+    const fetchedPatientGoal = fetchedConcerns[0].patientGoals[0];
+    const { tasks } = fetchedPatientGoal;
+    const taskIds = tasks.map(task => task.id);
+    expect(fetchedPatientGoal.id).toEqual(patientGoal.id);
+    expect(taskIds).toContain(incompleteTask.id);
+    expect(taskIds).not.toContain(completeTask.id);
   });
 
   it('auto increments "order" on create', async () => {

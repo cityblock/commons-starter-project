@@ -98,6 +98,9 @@ export default class PatientGoal extends Model {
   static async get(patientGoalId: string): Promise<PatientGoal | undefined> {
     const patientGoal = await this.query()
       .eager(EAGER_QUERY)
+      .modifyEager('tasks', builder => {
+        builder.where('task.completedAt', null);
+      })
       .findById(patientGoalId);
 
     if (!patientGoal) {
@@ -210,6 +213,9 @@ export default class PatientGoal extends Model {
   static async getForPatient(patientId: string): Promise<PatientGoal[]> {
     return await this.query()
       .eager(EAGER_QUERY)
+      .modifyEager('tasks', builder => {
+        builder.where('task.completedAt', null);
+      })
       .where('deletedAt', null)
       .andWhere('patientId', patientId)
       .orderBy('createdAt', 'asc');

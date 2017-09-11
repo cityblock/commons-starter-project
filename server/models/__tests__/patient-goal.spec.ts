@@ -260,6 +260,79 @@ describe('patient goal model', () => {
     await expect(PatientGoal.get(fakeId)).rejects.toMatch('No such patientGoal: fakeId');
   });
 
+  it('gets a patient goal', async () => {
+    const concern = await Concern.create({ title: 'Housing' });
+    const patientConcern = await PatientConcern.create({
+      concernId: concern.id,
+      patientId: patient.id,
+      order: 1,
+    });
+    const patientGoal = await PatientGoal.create({
+      title: 'title',
+      patientId: patient.id,
+      patientConcernId: patientConcern.id,
+      userId: user.id,
+    });
+    const incompleteTask = await Task.create({
+      title: 'Incomplete Task',
+      patientId: patient.id,
+      patientGoalId: patientGoal.id,
+      createdById: user.id,
+    });
+    const completeTask = await Task.create({
+      title: 'Complete Task',
+      patientId: patient.id,
+      patientGoalId: patientGoal.id,
+      createdById: user.id,
+    });
+
+    await Task.complete(completeTask.id, user.id);
+
+    const fetchedPatientGoal = await PatientGoal.get(patientGoal.id);
+    const taskIds = fetchedPatientGoal!.tasks.map(task => task.id);
+
+    expect(fetchedPatientGoal!.id).toEqual(patientGoal.id);
+    expect(taskIds).toContain(incompleteTask.id);
+    expect(taskIds).not.toContain(completeTask.id);
+  });
+
+  it('get goals for a patient', async () => {
+    const concern = await Concern.create({ title: 'Housing' });
+    const patientConcern = await PatientConcern.create({
+      concernId: concern.id,
+      patientId: patient.id,
+      order: 1,
+    });
+    const patientGoal = await PatientGoal.create({
+      title: 'title',
+      patientId: patient.id,
+      patientConcernId: patientConcern.id,
+      userId: user.id,
+    });
+    const incompleteTask = await Task.create({
+      title: 'Incomplete Task',
+      patientId: patient.id,
+      patientGoalId: patientGoal.id,
+      createdById: user.id,
+    });
+    const completeTask = await Task.create({
+      title: 'Complete Task',
+      patientId: patient.id,
+      patientGoalId: patientGoal.id,
+      createdById: user.id,
+    });
+
+    await Task.complete(completeTask.id, user.id);
+
+    const patientGoals = await PatientGoal.getForPatient(patient.id);
+    const taskIds = patientGoals[0].tasks.map(task => task.id);
+
+    expect(patientGoals.length).toEqual(1);
+    expect(patientGoals[0].id).toEqual(patientGoal.id);
+    expect(taskIds).toContain(incompleteTask.id);
+    expect(taskIds).not.toContain(completeTask.id);
+  });
+
   it('edits patient goal title', async () => {
     const patientGoal = await PatientGoal.create({
       title: 'title',

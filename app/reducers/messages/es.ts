@@ -97,6 +97,7 @@ export const SPANISH_TRANSLATION = {
     'header.admin': 'Admin',
     'settings.heading': 'Ajustes',
     'tasks.assignedToPlaceholder': 'Asignar a',
+    'tasks.patientGoalPlaceholder': 'Objetivo del paciente',
     'tasks.tasksList': 'Mis listas de tareas',
     'tasks.listView': 'Tareas',
     'tasks.calendar': 'Calendario',

@@ -170,6 +170,11 @@ fragment FullTask on Task {
     userRole
     __typename
   }
+  patientGoal {
+    id
+    title
+    __typename
+  }
   __typename
 }`);
 

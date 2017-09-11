@@ -60,7 +60,7 @@ class Authentication extends React.Component<IProps & IStateProps & IDispatchPro
 
   async logout() {
     await localStorage.removeItem('authToken');
-    window.location.href = '/';
+    window.location.pathname = '/';
   }
 
   async checkIdle() {

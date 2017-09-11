@@ -67,7 +67,7 @@ exports[`renders task 1`] = `
             className={undefined}
             style={
               Object {
-                "backgroundImage": "url('http://bit.ly/2w8gHND')",
+                "backgroundImage": "url('https://bit.ly/2weRwJm')",
               }
             }
           />
@@ -197,7 +197,7 @@ exports[`renders task 1`] = `
             className={undefined}
             style={
               Object {
-                "backgroundImage": "url('http://bit.ly/2w8gHND')",
+                "backgroundImage": "url('https://bit.ly/2weRwJm')",
               }
             }
           />
@@ -265,27 +265,20 @@ exports[`renders task 1`] = `
           <div
             className={undefined}
           >
-            Objective:
+            Goal:
           </div>
-          <div
+          <select
             className={undefined}
+            onChange={[Function]}
+            value=""
           >
-            Decrease hemoglobin A1C to below 8%
-          </div>
-        </div>
-        <div
-          className={undefined}
-        >
-          <div
-            className={undefined}
-          >
-            Key result:
-          </div>
-          <div
-            className={undefined}
-          >
-            Get patient new prescription for Metformin
-          </div>
+            <option
+              disabled={true}
+              value=""
+            >
+              None
+            </option>
+          </select>
         </div>
       </div>
       <div
@@ -373,7 +366,7 @@ exports[`renders task 1`] = `
           className={undefined}
           style={
             Object {
-              "backgroundImage": "url('http://bit.ly/2w8gHND')",
+              "backgroundImage": "url('https://bit.ly/2weRwJm')",
             }
           }
         />

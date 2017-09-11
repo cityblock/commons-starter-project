@@ -212,6 +212,7 @@ export const task = {
   completedAt: null,
   assignedTo: null,
   followers: [],
+  patientGoal: null,
 };
 
 export const completedTask = {

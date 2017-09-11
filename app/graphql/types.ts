@@ -614,6 +614,10 @@ export type eventNotificationDismissMutation = {
           googleProfileImageUrl: string | null,
           userRole: UserRole,
         } | null,
+        patientGoal:  {
+          id: string,
+          title: string,
+        } | null,
       },
       userId: string,
       user:  {
@@ -697,6 +701,10 @@ export type eventNotificationDismissMutation = {
         lastName: string | null,
         googleProfileImageUrl: string | null,
         userRole: UserRole,
+      } | null,
+      patientGoal:  {
+        id: string,
+        title: string,
       } | null,
     } | null,
     seenAt: string | null,
@@ -875,6 +883,10 @@ export type getEventNotificationsForCurrentUserQuery = {
               googleProfileImageUrl: string | null,
               userRole: UserRole,
             } | null,
+            patientGoal:  {
+              id: string,
+              title: string,
+            } | null,
           },
           userId: string,
           user:  {
@@ -958,6 +970,10 @@ export type getEventNotificationsForCurrentUserQuery = {
             lastName: string | null,
             googleProfileImageUrl: string | null,
             userRole: UserRole,
+          } | null,
+          patientGoal:  {
+            id: string,
+            title: string,
           } | null,
         } | null,
         seenAt: string | null,
@@ -1260,6 +1276,10 @@ export type getPatientCarePlanQuery = {
             googleProfileImageUrl: string | null,
             userRole: UserRole,
           } | null,
+          patientGoal:  {
+            id: string,
+            title: string,
+          } | null,
         } >,
         createdAt: string,
         updatedAt: string,
@@ -1347,6 +1367,10 @@ export type getPatientCarePlanQuery = {
           lastName: string | null,
           googleProfileImageUrl: string | null,
           userRole: UserRole,
+        } | null,
+        patientGoal:  {
+          id: string,
+          title: string,
         } | null,
       } >,
       createdAt: string,
@@ -1531,6 +1555,10 @@ export type getPatientTasksQuery = {
           lastName: string | null,
           googleProfileImageUrl: string | null,
           userRole: UserRole,
+        } | null,
+        patientGoal:  {
+          id: string,
+          title: string,
         } | null,
       } | null,
     } | null > | null,
@@ -1864,6 +1892,10 @@ export type getTaskQuery = {
       googleProfileImageUrl: string | null,
       userRole: UserRole,
     } | null,
+    patientGoal:  {
+      id: string,
+      title: string,
+    } | null,
   } | null,
 };
 
@@ -2187,6 +2219,10 @@ export type patientConcernCreateMutation = {
           googleProfileImageUrl: string | null,
           userRole: UserRole,
         } | null,
+        patientGoal:  {
+          id: string,
+          title: string,
+        } | null,
       } >,
       createdAt: string,
       updatedAt: string,
@@ -2319,6 +2355,10 @@ export type patientGoalCreateMutation = {
         lastName: string | null,
         googleProfileImageUrl: string | null,
         userRole: UserRole,
+      } | null,
+      patientGoal:  {
+        id: string,
+        title: string,
       } | null,
     } >,
     createdAt: string,
@@ -2767,6 +2807,10 @@ export type taskCompleteMutation = {
       googleProfileImageUrl: string | null,
       userRole: UserRole,
     } | null,
+    patientGoal:  {
+      id: string,
+      title: string,
+    } | null,
   } | null,
 };
 
@@ -2776,6 +2820,7 @@ export type taskCreateMutationVariables = {
   dueAt: string,
   patientId: string,
   assignedToId?: string | null,
+  patientGoalId?: string | null,
 };
 
 export type taskCreateMutation = {
@@ -2817,6 +2862,10 @@ export type taskCreateMutation = {
       lastName: string | null,
       googleProfileImageUrl: string | null,
       userRole: UserRole,
+    } | null,
+    patientGoal:  {
+      id: string,
+      title: string,
     } | null,
   } | null,
 };
@@ -2865,6 +2914,10 @@ export type taskDeleteMutation = {
       googleProfileImageUrl: string | null,
       userRole: UserRole,
     } | null,
+    patientGoal:  {
+      id: string,
+      title: string,
+    } | null,
   } | null,
 };
 
@@ -2875,6 +2928,7 @@ export type taskEditMutationVariables = {
   description?: string | null,
   priority?: string | null,
   dueAt?: string | null,
+  patientGoalId?: string | null,
 };
 
 export type taskEditMutation = {
@@ -2916,6 +2970,10 @@ export type taskEditMutation = {
       lastName: string | null,
       googleProfileImageUrl: string | null,
       userRole: UserRole,
+    } | null,
+    patientGoal:  {
+      id: string,
+      title: string,
     } | null,
   } | null,
 };
@@ -3040,6 +3098,10 @@ export type taskUncompleteMutation = {
       googleProfileImageUrl: string | null,
       userRole: UserRole,
     } | null,
+    patientGoal:  {
+      id: string,
+      title: string,
+    } | null,
   } | null,
 };
 
@@ -3087,6 +3149,10 @@ export type taskUserFollowMutation = {
       lastName: string | null,
       googleProfileImageUrl: string | null,
       userRole: UserRole,
+    } | null,
+    patientGoal:  {
+      id: string,
+      title: string,
     } | null,
   } | null,
 };
@@ -3138,6 +3204,10 @@ export type getTasksForCurrentUserQuery = {
           lastName: string | null,
           googleProfileImageUrl: string | null,
           userRole: UserRole,
+        } | null,
+        patientGoal:  {
+          id: string,
+          title: string,
         } | null,
       } | null,
     } | null > | null,
@@ -3387,6 +3457,10 @@ export type FullTaskFragment = {
     googleProfileImageUrl: string | null,
     userRole: UserRole,
   } | null,
+  patientGoal:  {
+    id: string,
+    title: string,
+  } | null,
 };
 
 export type FullTaskCommentFragment = {
@@ -3447,6 +3521,10 @@ export type FullTaskEventFragment = {
       lastName: string | null,
       googleProfileImageUrl: string | null,
       userRole: UserRole,
+    } | null,
+    patientGoal:  {
+      id: string,
+      title: string,
     } | null,
   },
   userId: string,
@@ -3551,6 +3629,10 @@ export type FullEventNotificationFragment = {
         googleProfileImageUrl: string | null,
         userRole: UserRole,
       } | null,
+      patientGoal:  {
+        id: string,
+        title: string,
+      } | null,
     },
     userId: string,
     user:  {
@@ -3634,6 +3716,10 @@ export type FullEventNotificationFragment = {
       lastName: string | null,
       googleProfileImageUrl: string | null,
       userRole: UserRole,
+    } | null,
+    patientGoal:  {
+      id: string,
+      title: string,
     } | null,
   } | null,
   seenAt: string | null,
@@ -3734,6 +3820,10 @@ export type FullPatientGoalFragment = {
       lastName: string | null,
       googleProfileImageUrl: string | null,
       userRole: UserRole,
+    } | null,
+    patientGoal:  {
+      id: string,
+      title: string,
     } | null,
   } >,
   createdAt: string,
@@ -3842,6 +3932,10 @@ export type FullPatientConcernFragment = {
         lastName: string | null,
         googleProfileImageUrl: string | null,
         userRole: UserRole,
+      } | null,
+      patientGoal:  {
+        id: string,
+        title: string,
       } | null,
     } >,
     createdAt: string,

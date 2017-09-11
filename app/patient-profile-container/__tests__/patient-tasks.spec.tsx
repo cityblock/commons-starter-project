@@ -15,8 +15,7 @@ const mockStore = configureMockStore([]);
 
 /* tslint:disable:max-line-length */
 const query = gql(`
-query getPatientTasks($patientId: String!, $pageNumber: Int, $pageSize: Int, $orderBy: TaskOrderOptions)
-{
+query getPatientTasks($patientId: String!, $pageNumber: Int, $pageSize: Int, $orderBy: TaskOrderOptions) {
   tasksForPatient(patientId: $patientId, pageNumber: $pageNumber, pageSize: $pageSize, orderBy: $orderBy) {
     edges {
       node {
@@ -74,6 +73,11 @@ fragment FullTask on Task {
     lastName
     googleProfileImageUrl
     userRole
+    __typename
+  }
+  patientGoal {
+    id
+    title
     __typename
   }
   __typename

@@ -14,6 +14,7 @@ import {
   taskCompleteMutationVariables,
   taskEditMutationVariables,
   taskUncompleteMutationVariables,
+  FullPatientGoalFragment,
   FullTaskFragment,
 } from '../../graphql/types';
 import { IState as IAppState } from '../../store';
@@ -29,6 +30,7 @@ export interface IProps {
   taskLoading?: boolean;
   taskError?: string;
   routeBase: string;
+  patientGoals?: FullPatientGoalFragment[];
   selectTask: (taskId?: string) => any;
   refetchTask: () => any;
   match?: {
@@ -56,6 +58,7 @@ export interface IState {
   deleteError?: string;
   changePriorityError?: string;
   changeDueDateError?: string;
+  changePatientGoalError?: string;
   editedTitle: string;
   editingTitle: boolean;
   editTitleError?: string;
@@ -66,7 +69,7 @@ export interface IState {
   descriptionHeight: string;
 }
 
-export const DEFAULT_AVATAR_URL = 'http://bit.ly/2w8gHND';
+export const DEFAULT_AVATAR_URL = 'https://bit.ly/2weRwJm';
 
 const COPY_SUCCESS_TIMEOUT_MILLISECONDS = 2000;
 
@@ -96,6 +99,7 @@ class Task extends React.Component<IProps, IState> {
     this.onConfirmDelete = this.onConfirmDelete.bind(this);
     this.onCancelDelete = this.onCancelDelete.bind(this);
     this.onPriorityChange = this.onPriorityChange.bind(this);
+    this.onPatientGoalChange = this.onPatientGoalChange.bind(this);
     this.formatDateForInput = this.formatDateForInput.bind(this);
     this.getTaskDueDateForInput = this.getTaskDueDateForInput.bind(this);
     this.onDueDateChange = this.onDueDateChange.bind(this);
@@ -106,6 +110,7 @@ class Task extends React.Component<IProps, IState> {
     this.onClickToEditDescription = this.onClickToEditDescription.bind(this);
     this.focusInput = this.focusInput.bind(this);
     this.getTextHeights = this.getTextHeights.bind(this);
+    this.renderPatientGoalOptions = this.renderPatientGoalOptions.bind(this);
 
     this.editTitleTextArea = null;
     this.editDescriptionTextArea = null;
@@ -120,6 +125,7 @@ class Task extends React.Component<IProps, IState> {
       deleteError: undefined,
       changePriorityError: undefined,
       changeDueDateError: undefined,
+      changePatientGoalError: undefined,
       editedTitle: '',
       editingTitle: false,
       editedDescription: '',
@@ -321,6 +327,18 @@ class Task extends React.Component<IProps, IState> {
     );
   }
 
+  renderPatientGoalOptions() {
+    const { patientGoals } = this.props;
+
+    if (!patientGoals) {
+      return null;
+    }
+
+    return patientGoals.map(patientGoal =>
+      <option key={patientGoal.id} value={patientGoal.id}>{patientGoal.title}</option>,
+    );
+  }
+
   onToggleHamburgerMenu() {
     const { hamburgerMenuVisible } = this.state;
 
@@ -371,6 +389,19 @@ class Task extends React.Component<IProps, IState> {
         await editTask({ variables: { taskId, priority: event.target.value }});
       } catch (err) {
         this.setState(() => ({ changePriorityError: err.message }));
+      }
+    }
+  }
+
+  async onPatientGoalChange(event: React.ChangeEvent<HTMLSelectElement>) {
+    const { taskId, editTask } = this.props;
+
+    if (taskId) {
+      try {
+        this.setState(() => ({ changePatientGoalError: undefined }));
+        await editTask({ variables: { taskId, patientGoalId: event.target.value }});
+      } catch (err) {
+        this.setState(() => ({ changePatientGoalError: err.message }));
       }
     }
   }
@@ -615,21 +646,21 @@ class Task extends React.Component<IProps, IState> {
               </div>
               <div className={styles.okrInfo}>
                 <div className={styles.okrRow}>
-                  <div className={styles.smallText}>Objective:</div>
-                  <div className={styles.darkSmallText}>Decrease hemoglobin A1C to below 8%</div>
-                </div>
-                <div className={styles.okrRow}>
-                  <div className={styles.smallText}>Key result:</div>
-                  <div className={styles.darkSmallText}>
-                    Get patient new prescription for Metformin
-                  </div>
+                  <div className={styles.smallText}>Goal:</div>
+                  <select
+                    value={task.patientGoal ? task.patientGoal.id : ''}
+                    className={styles.prioritySelect}
+                    onChange={this.onPatientGoalChange}>
+                    <option disabled value=''>None</option>
+                    {this.renderPatientGoalOptions()}
+                  </select>
                 </div>
               </div>
               <div
                 ref={div => { this.descriptionBody = div; }}
                 onClick={this.onClickToEditDescription}
                 className={descriptionTextStyles}>
-                {task.description}
+                {task.description ? task.description : 'Enter a description...' }
               </div>
               <div className={descriptionEditStyles}>
                 <textarea

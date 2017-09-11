@@ -147,7 +147,7 @@ exports[`renders patient concern 1`] = `
               className={undefined}
               style={
                 Object {
-                  "backgroundImage": "url(http://bit.ly/2w8gHND)",
+                  "backgroundImage": "url(https://bit.ly/2weRwJm)",
                 }
               }
             />
@@ -164,7 +164,7 @@ exports[`renders patient concern 1`] = `
             <span
               className={undefined}
             >
-              yesterday
+              in 2 months
             </span>
           </div>
           <div

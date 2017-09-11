@@ -614,6 +614,7 @@
 }
 
 .patientGoals {
+  padding-left: var(--small-gutter);
   margin-top: 10px;
   transition: height 0.5s ease-in-out;
 }

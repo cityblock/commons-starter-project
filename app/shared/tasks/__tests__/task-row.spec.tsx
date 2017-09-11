@@ -6,7 +6,7 @@ import { create } from 'react-test-renderer';
 import configureMockStore from 'redux-mock-store';
 import { ENGLISH_TRANSLATION } from '../../../reducers/messages/en';
 import ReduxConnectedIntlProvider from '../../../redux-connected-intl-provider';
-import { patient } from '../../util/test-data';
+import { task } from '../../util/test-data';
 import { TaskRow } from '../task-row';
 
 const locale = { messages: ENGLISH_TRANSLATION.messages };
@@ -24,28 +24,7 @@ const user = {
   googleProfileImageUrl: null,
 };
 
-const task = {
-  id: 'cool-task-id',
-  createdAt: 'Thu Jul 13 2017 16:52:56 GMT-0400 (EDT)',
-  updatedAt: 'Thu Jul 13 2017 16:52:56 GMT-0400 (EDT)',
-  dueAt: 'Thu Jul 13 2017 16:52:56 GMT-0400 (EDT)',
-  deletedAt: null,
-  completedAt: null,
-  priority: 'low' as any,
-  title: 'title',
-  description: 'description',
-  patient,
-  assignedTo: user,
-  followers: [user],
-  patientId: patient.id,
-  createdById: user.id,
-  createdBy: user,
-  assignedToId: user.id,
-  completedById: user.id,
-};
-
 describe('task row', () => {
-
   beforeAll(() => { Date.now = jest.fn(() => 1500494779252); });
   afterAll(() => { Date.now = oldDate; });
 
@@ -77,7 +56,7 @@ describe('task row', () => {
       homeClinicId: '1',
       googleProfileImageUrl: null,
     };
-    task.followers = [user, user2];
+    (task as any).followers = [user, user2];
     const history = createMemoryHistory();
     const tree = create(
       <MockedProvider mocks={[]} store={mockStore({ locale, task })}>

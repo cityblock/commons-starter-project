@@ -21,6 +21,7 @@ export interface IEditTaskInput {
   assignedToId?: string;
   dueAt?: string;
   priority?: Priority;
+  patientGoalId?: string;
 }
 
 export interface IDeleteTaskInput {
@@ -46,7 +47,7 @@ export interface IUserTasksFilterOptions extends IPaginationOptions {
 
 export async function taskCreate(root: any, { input }: ITaskCreateArgs, context: IContext) {
   const { userRole, userId } = context;
-  const { title, description, dueAt, patientId, assignedToId } = input;
+  const { title, description, dueAt, patientId, assignedToId, patientGoalId } = input;
   await accessControls.isAllowed(userRole, 'create', 'task');
   checkUserLoggedIn(userId);
 
@@ -60,6 +61,7 @@ export async function taskCreate(root: any, { input }: ITaskCreateArgs, context:
         dueAt: dueAt || undefined,
         patientId,
         assignedToId: assignedToId || undefined,
+        patientGoalId: patientGoalId || undefined,
       },
       txn,
     );

@@ -46,7 +46,7 @@
   border-bottom: 1px solid var(--white-font-color);
 }
 
-.inputGroup input, .inputGroup textarea {
+.inputGroup input, .inputGroup textarea, .inputGroup select {
   margin-bottom: 10px;
 }
 

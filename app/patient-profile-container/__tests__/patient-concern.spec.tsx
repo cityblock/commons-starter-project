@@ -12,6 +12,11 @@ import PatientConcern from '../patient-concern';
 const locale = { messages: ENGLISH_TRANSLATION.messages };
 const mockStore = configureMockStore([]);
 
+const oldDate = Date.now;
+
+beforeAll(() => { Date.now = jest.fn(() => 1500494779252); });
+afterAll(() => { Date.now = oldDate; });
+
 it('renders patient concern', () => {
   const history = createMemoryHistory();
   const tree = create(

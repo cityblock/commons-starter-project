@@ -8,7 +8,11 @@ import { push } from 'react-router-redux';
 import * as careTeamQuery from '../../graphql/queries/get-patient-care-team.graphql';
 import * as createTaskMutation from '../../graphql/queries/task-create-mutation.graphql';
 import {
-  taskCreateMutationVariables, FullTaskFragment, FullUserFragment, ShortPatientFragment,
+  taskCreateMutationVariables,
+  FullPatientGoalFragment,
+  FullTaskFragment,
+  FullUserFragment,
+  ShortPatientFragment,
 } from '../../graphql/types';
 import * as formStyles from '../css/forms.css';
 import * as loadingStyles from '../css/loading-spinner.css';
@@ -21,6 +25,7 @@ export interface IOptions { variables: taskCreateMutationVariables; }
 export interface IProps {
   patient: ShortPatientFragment;
   careTeam?: FullUserFragment[];
+  patientGoals?: FullPatientGoalFragment[];
   routeBase: string;
   onClose: () => any;
   createTask: (options: IOptions) => { data: { taskCreate: FullTaskFragment } };
@@ -38,7 +43,6 @@ function formatDate(date: string) {
 }
 
 class TaskCreate extends React.Component<IProps, IState> {
-
   constructor(props: IProps) {
     super(props);
 
@@ -54,6 +58,7 @@ class TaskCreate extends React.Component<IProps, IState> {
         dueAt: '',
         patientId: props.patient.id,
         assignedToId: '',
+        patientGoalId: '',
       },
     };
   }
@@ -94,6 +99,33 @@ class TaskCreate extends React.Component<IProps, IState> {
       this.setState({ error: e.message, loading: false });
     }
     return false;
+  }
+
+  renderPatientGoalSelect() {
+    const { patientGoals } = this.props;
+    const { task } = this.state;
+
+    if (!patientGoals) {
+      return null;
+    }
+
+    const patientGoalOptions = patientGoals.map(patientGoal => (
+      <option value={patientGoal.id} key={patientGoal.id}>{patientGoal.title}</option>
+    ));
+
+    return (
+      <select
+        name='patientGoalId'
+        value={task.patientGoalId || ''}
+        onChange={this.onChange}
+        className={
+          classNames(formStyles.select, styles.flexInputItem)}>
+        <FormattedMessage id='tasks.patientGoalPlaceholder'>
+          {(message: string) => <option value='' disabled hidden>{message}</option>}
+        </FormattedMessage>
+        {patientGoalOptions}
+      </select>
+    );
   }
 
   render() {
@@ -159,6 +191,7 @@ class TaskCreate extends React.Component<IProps, IState> {
                 value={task.description}
                 className={formStyles.textarea}
                 onChange={this.onChange} />
+              {this.renderPatientGoalSelect()}
             </div>
           </div>
           <div className={styles.formBottom}>

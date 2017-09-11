@@ -267,6 +267,8 @@ type Task implements uniqueId {
   completedAt: String
   assignedTo: User
   followers: [User!]
+  patientGoalId: String
+  patientGoal: PatientGoal
 }
 
 # Task node
@@ -640,6 +642,7 @@ input TaskCreateInput {
   dueAt: String
   patientId: String!
   assignedToId: String
+  patientGoalId: String
 }
 
 # params for deleting a task
@@ -655,6 +658,7 @@ input TaskEditInput {
   dueAt: String
   assignedToId: String
   priority: String
+  patientGoalId: String
 }
 
 # params for completing a task

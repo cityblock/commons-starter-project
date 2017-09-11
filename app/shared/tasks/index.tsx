@@ -10,6 +10,7 @@ import * as Waypoint from 'react-waypoint';
 import * as taskDeleteMutation from '../../graphql/queries/task-delete-mutation.graphql';
 import {
   taskDeleteMutationVariables,
+  FullPatientGoalFragment,
   FullTaskFragment,
   ShortPatientFragment,
 } from '../../graphql/types';
@@ -36,6 +37,7 @@ export interface IProps {
   taskId?: string;
   routeBase: string;
   patient?: ShortPatientFragment;
+  patientGoals?: FullPatientGoalFragment;
   tasks?: FullTaskFragment[];
   loading?: boolean;
   error?: string;
@@ -161,7 +163,7 @@ class Tasks extends React.Component<IProps, IState> {
   }
 
   render() {
-    const { tasks, routeBase, taskId, patient } = this.props;
+    const { tasks, routeBase, taskId, patient, patientGoals } = this.props;
     const { orderBy, showCreateTask } = this.state;
     const tasksList = tasks || [];
     const taskContainerStyles = classNames(styles.taskContainer, {
@@ -182,11 +184,16 @@ class Tasks extends React.Component<IProps, IState> {
     const createTaskHtml = patient && showCreateTask ? (
       <TaskCreate
         patient={patient}
+        patientGoals={patientGoals}
         onClose={this.hideCreateTask}
         routeBase={this.props.routeBase} />
     ) : null;
     const RenderedTask = (props: any) => (
-      <Task routeBase={routeBase} onDelete={this.onDeleteTask} {...props} />
+      <Task
+        routeBase={routeBase}
+        onDelete={this.onDeleteTask}
+        patientGoals={patientGoals}
+        {...props} />
     );
     const taskHtml = showCreateTask ?
       null : (<Route path={`${routeBase}/:taskId`} render={RenderedTask} />);

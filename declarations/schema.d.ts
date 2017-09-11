@@ -84,7 +84,7 @@ declare module 'schema' {
   /*
     description: An object with a Globally Unique ID
   */
-  type uniqueId = IUser | IPatient | IClinic | ITask | ITaskComment | IRiskArea | IQuestion | IAnswer | IConcern | IGoalSuggestionTemplate | ITaskTemplate | IQuestionCondition | IPatientAnswer | IEventNotification | ITaskEvent | IPatientConcern | IPatientGoal | ICarePlanSuggestion;
+  type uniqueId = IUser | IPatient | IClinic | ITask | IPatientGoal | IGoalSuggestionTemplate | ITaskTemplate | ITaskComment | IRiskArea | IQuestion | IAnswer | IConcern | IQuestionCondition | IPatientAnswer | IEventNotification | ITaskEvent | IPatientConcern | ICarePlanSuggestion;
 
   /*
     description: An object with a Globally Unique ID
@@ -259,12 +259,65 @@ declare module 'schema' {
     completedAt: string | null;
     assignedTo: IUser | null;
     followers: Array<IUser>;
+    patientGoalId: string | null;
+    patientGoal: IPatientGoal | null;
   }
 
   /*
     description: 
   */
   type IPriorityEnum = 'low' | 'medium' | 'high';
+
+  /*
+    description: 
+  */
+  interface IPatientGoal {
+    id: string;
+    title: string;
+    patientId: string;
+    patient: IPatient;
+    patientConcernId: string | null;
+    goalSuggestionTemplateId: string | null;
+    goalSuggestionTemplate: IGoalSuggestionTemplate | null;
+    tasks: Array<ITask>;
+    createdAt: string;
+    updatedAt: string;
+    deletedAt: string | null;
+  }
+
+  /*
+    description: 
+  */
+  interface IGoalSuggestionTemplate {
+    id: string;
+    title: string;
+    taskTemplates: Array<ITaskTemplate> | null;
+    createdAt: string;
+    updatedAt: string;
+    deletedAt: string | null;
+  }
+
+  /*
+    description: 
+  */
+  interface ITaskTemplate {
+    id: string;
+    title: string;
+    completedWithinNumber: number | null;
+    completedWithinInterval: ICompletedWithinIntervalEnum | null;
+    repeating: boolean | null;
+    goalSuggestionTemplateId: string;
+    priority: IPriorityEnum | null;
+    careTeamAssigneeRole: IUserRoleEnum | null;
+    createdAt: string;
+    updatedAt: string;
+    deletedAt: string | null;
+  }
+
+  /*
+    description: 
+  */
+  type ICompletedWithinIntervalEnum = 'hour' | 'day' | 'week' | 'month' | 'year';
 
   /*
     description: 
@@ -385,40 +438,6 @@ declare module 'schema' {
     updatedAt: string;
     deletedAt: string | null;
   }
-
-  /*
-    description: 
-  */
-  interface IGoalSuggestionTemplate {
-    id: string;
-    title: string;
-    taskTemplates: Array<ITaskTemplate> | null;
-    createdAt: string;
-    updatedAt: string;
-    deletedAt: string | null;
-  }
-
-  /*
-    description: 
-  */
-  interface ITaskTemplate {
-    id: string;
-    title: string;
-    completedWithinNumber: number | null;
-    completedWithinInterval: ICompletedWithinIntervalEnum | null;
-    repeating: boolean | null;
-    goalSuggestionTemplateId: string;
-    priority: IPriorityEnum | null;
-    careTeamAssigneeRole: IUserRoleEnum | null;
-    createdAt: string;
-    updatedAt: string;
-    deletedAt: string | null;
-  }
-
-  /*
-    description: 
-  */
-  type ICompletedWithinIntervalEnum = 'hour' | 'day' | 'week' | 'month' | 'year';
 
   /*
     description: 
@@ -546,23 +565,6 @@ declare module 'schema' {
     patient: IPatient;
     startedAt: string | null;
     completedAt: string | null;
-    createdAt: string;
-    updatedAt: string;
-    deletedAt: string | null;
-  }
-
-  /*
-    description: 
-  */
-  interface IPatientGoal {
-    id: string;
-    title: string;
-    patientId: string;
-    patient: IPatient;
-    patientConcernId: string | null;
-    goalSuggestionTemplateId: string | null;
-    goalSuggestionTemplate: IGoalSuggestionTemplate | null;
-    tasks: Array<ITask>;
     createdAt: string;
     updatedAt: string;
     deletedAt: string | null;
@@ -850,6 +852,7 @@ declare module 'schema' {
     dueAt?: string | null;
     patientId: string;
     assignedToId?: string | null;
+    patientGoalId?: string | null;
   }
 
   /*
@@ -869,6 +872,7 @@ declare module 'schema' {
     dueAt?: string | null;
     assignedToId?: string | null;
     priority?: string | null;
+    patientGoalId?: string | null;
   }
 
   /*

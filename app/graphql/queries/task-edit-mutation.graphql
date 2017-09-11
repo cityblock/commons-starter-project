@@ -7,6 +7,7 @@ mutation taskEdit(
   $description: String
   $priority: String
   $dueAt: String
+  $patientGoalId: String
 ) {
   taskEdit(input: {
     taskId: $taskId,
@@ -15,6 +16,7 @@ mutation taskEdit(
     description: $description,
     priority: $priority,
     dueAt: $dueAt,
+    patientGoalId: $patientGoalId,
   }) {
     ...FullTask
   }

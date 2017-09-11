@@ -441,6 +441,7 @@ input[type='date'].dueDateInput::-webkit-calendar-picker-indicator {
 .okrRow {
   display: flex;
   flex-direction: row;
+  align-items: center;
 }
 
 .okrRow .smallText {

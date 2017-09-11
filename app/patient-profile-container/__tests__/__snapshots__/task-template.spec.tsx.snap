@@ -16,7 +16,7 @@ exports[`renders a removed task template 1`] = `
       className={undefined}
       style={
         Object {
-          "backgroundImage": "url(http://bit.ly/2w8gHND)",
+          "backgroundImage": "url(https://bit.ly/2weRwJm)",
         }
       }
     />
@@ -58,7 +58,7 @@ exports[`renders a selected task template 1`] = `
       className={undefined}
       style={
         Object {
-          "backgroundImage": "url(http://bit.ly/2w8gHND)",
+          "backgroundImage": "url(https://bit.ly/2weRwJm)",
         }
       }
     />

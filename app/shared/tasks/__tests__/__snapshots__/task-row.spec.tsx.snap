@@ -3,13 +3,13 @@
 exports[`task row renders task row 1`] = `
 <a
   className=""
-  href="/foo/bar/cool-task-id"
+  href="/foo/bar/task-id"
   onClick={[Function]}
 >
   <div
     className={undefined}
   >
-    title
+    Task Title
   </div>
   <div
     className={undefined}
@@ -21,15 +21,10 @@ exports[`task row renders task row 1`] = `
         className={undefined}
         style={
           Object {
-            "backgroundImage": "url(http://bit.ly/2w8gHND)",
+            "backgroundImage": "url(https://bit.ly/2weRwJm)",
           }
         }
       />
-      <div
-        className={undefined}
-      >
-        +1
-      </div>
     </div>
     <div
       className=""
@@ -43,7 +38,7 @@ exports[`task row renders task row 1`] = `
       <span
         className={undefined}
       >
-        6 days ago
+        in 2 months
       </span>
     </div>
     <div
@@ -58,7 +53,7 @@ exports[`task row renders task row 1`] = `
       <span
         className={undefined}
       >
-        Jul 13, 2017
+        Sep 7, 2017
       </span>
     </div>
   </div>
@@ -68,13 +63,13 @@ exports[`task row renders task row 1`] = `
 exports[`task row renders task row with multiple followers 1`] = `
 <a
   className=""
-  href="/foo/bar/cool-task-id"
+  href="/foo/bar/task-id"
   onClick={[Function]}
 >
   <div
     className={undefined}
   >
-    title
+    Task Title
   </div>
   <div
     className={undefined}
@@ -86,7 +81,7 @@ exports[`task row renders task row with multiple followers 1`] = `
         className={undefined}
         style={
           Object {
-            "backgroundImage": "url(http://bit.ly/2w8gHND)",
+            "backgroundImage": "url(https://bit.ly/2weRwJm)",
           }
         }
       />
@@ -108,7 +103,7 @@ exports[`task row renders task row with multiple followers 1`] = `
       <span
         className={undefined}
       >
-        6 days ago
+        in 2 months
       </span>
     </div>
     <div
@@ -123,7 +118,7 @@ exports[`task row renders task row with multiple followers 1`] = `
       <span
         className={undefined}
       >
-        Jul 13, 2017
+        Sep 7, 2017
       </span>
     </div>
   </div>

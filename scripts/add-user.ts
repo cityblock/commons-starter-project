@@ -31,9 +31,11 @@ async function createUser() {
 
   const patients = await Patient.getAll({ pageNumber: 0, pageSize: 100 });
 
-  patients.results.forEach(async patient => {
-    await CareTeam.create({ userId: user.id, patientId: patient.id });
-  });
+  const careTeamPromises = patients.results.map(async patient =>
+    CareTeam.create({ userId: user.id, patientId: patient.id }),
+  );
+
+  await Promise.all(careTeamPromises);
 }
 
 /* tslint:disable no-console */

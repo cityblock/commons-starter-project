@@ -138,11 +138,11 @@ describe('user model', () => {
     expect(await User.getAll({ pageNumber: 0, pageSize: 10 })).toMatchObject({
       results: [
         {
-          email: 'a@b.com',
+          email: 'b@c.com',
           userRole,
         },
         {
-          email: 'b@c.com',
+          email: 'a@b.com',
           userRole,
         },
       ],
@@ -157,7 +157,7 @@ describe('user model', () => {
     expect(await User.getAll({ pageNumber: 0, pageSize: 1 })).toMatchObject({
       results: [
         {
-          email: 'a@b.com',
+          email: 'b@c.com',
           userRole,
         },
       ],
@@ -166,11 +166,37 @@ describe('user model', () => {
     expect(await User.getAll({ pageNumber: 1, pageSize: 1 })).toMatchObject({
       results: [
         {
-          email: 'b@c.com',
+          email: 'a@b.com',
           userRole,
         },
       ],
       total: 2,
     });
+  });
+
+  it('marks a user as deleted', async () => {
+    const user1 = await User.create({
+      email: 'user@place.com',
+      userRole,
+      homeClinicId: '1',
+      athenaProviderId: 1,
+    });
+    const fetchedUser1 = await User.getBy('email', 'user@place.com');
+
+    // Just to make sure we're fetching the original user first
+    expect(fetchedUser1).toMatchObject(user1);
+
+    await User.delete(user1.id);
+
+    const user2 = await User.create({
+      email: 'user@place.com',
+      userRole,
+      homeClinicId: '2', // Different clinic ID to confirm we're actually fetching a new user
+      athenaProviderId: 1,
+    });
+    const fetchedUser2 = await User.getBy('email', 'user@place.com');
+
+    // We should have now fetched the re-created user
+    expect(fetchedUser2).toMatchObject(user2);
   });
 });

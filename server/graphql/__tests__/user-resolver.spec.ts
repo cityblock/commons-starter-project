@@ -89,7 +89,7 @@ describe('user tests', () => {
     });
 
     it('returns correct page information', async () => {
-      const user1 = await User.create({
+      await User.create({
         email: 'a@b.com',
         userRole,
         homeClinicId,
@@ -109,7 +109,7 @@ describe('user tests', () => {
         userRole: 'familyMember',
         homeClinicId,
       });
-      await User.create({
+      const user5 = await User.create({
         email: 'e@f.com',
         userRole: 'nurseCareManager',
         homeClinicId,
@@ -139,14 +139,14 @@ describe('user tests', () => {
         edges: [
           {
             node: {
-              email: user1.email,
-              userRole: user1.userRole,
+              email: user5.email,
+              userRole: user5.userRole,
             },
           },
           {
             node: {
-              email: user2.email,
-              userRole: user2.userRole,
+              email: user4.email,
+              userRole: user4.userRole,
             },
           },
           {
@@ -157,8 +157,8 @@ describe('user tests', () => {
           },
           {
             node: {
-              email: user4.email,
-              userRole: user4.userRole,
+              email: user2.email,
+              userRole: user2.userRole,
             },
           },
         ],

@@ -266,6 +266,14 @@ Before a new user can log in, they need to be added to the database. To do so, r
 
 When running on production, replace `user:add:dev` with `user:add:production`. You may also provide a `USER_ROLE` environment variable in front of the command if you would like the user to be anything other than a physician.
 
+### Remove a user
+
+To remove a user, run the following command:
+
+`EMAIL=email@email.com yarn user:remove:dev`
+
+When running on production, replace `user:remove:dev` with `user:remove:production`.
+
 ### Run RabbitMQ, Workers, and Cron
 
 We are using RabbitMQ as our message broker. It allows us to throw tasks into the background to be performed at a later time when workers have bandwidth. Currently, there are two ways to do this. You can either manually create publishers and consumers or just rely on the `low-priority` and `high-priority` queues by creating services that extend `BaseService`. (For now, everthing is just getting published to the default exchange which, in effect, creates the illusion of a publish-to-queue-and-consume-from-queue model.)

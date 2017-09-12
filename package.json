@@ -18,6 +18,7 @@
     "test": "jest --runInBand",
     "coverage": "jest --coverage --runInBand",
     "migrate": "knex migrate:latest --knexfile=server/models/knexfile.js",
+    "migrate:rollback": "knex-migrate down --knexfile=server/models/knexfile.js",
     "test:watch": "yarn test -- --watch",
     "test:notify": "yarn run test:watch -- --notify",
     "prepush": "yarn run lint",
@@ -36,7 +37,9 @@
     "docker-prod:ts-node": "docker-compose exec web yarn ts-node",
     "seed": "knex seed:run --knexfile=server/models/knexfile.js",
     "user:add:dev": "NODE_ENV=development ts-node ./scripts/add-user.ts",
-    "user:add:production": "NODE_ENV=production ts-node ./scripts/add-user.ts"
+    "user:add:production": "NODE_ENV=production ts-node ./scripts/add-user.ts",
+    "user:remove:dev": "NODE_ENV=development ts-node ./scripts/remove-user.ts",
+    "user:remove:production": "NODE_ENV=production ts-node ./scripts/remove-user.ts"
   },
   "author": "Brennan Moore",
   "jest": {
@@ -96,6 +99,7 @@
     "jest": "^21.0.1",
     "jest-css-modules": "^1.1.0",
     "jest-transform-graphql": "^2.1.0",
+    "knex-migrate": "^1.3.0",
     "nock": "^9.0.14",
     "node-mocks-http": "^1.6.4",
     "prettier": "^1.6.1",

@@ -39,6 +39,7 @@ export default class User extends Model {
   id: string;
   createdAt: string;
   updatedAt: string;
+  deletedAt: string;
   lastLoginAt: string;
   firstName: string;
   lastName: string;
@@ -75,6 +76,7 @@ export default class User extends Model {
       athenaProviderId: { type: 'number' },
       googleAuthId: { type: 'string' },
       googleProfileImageUrl: { type: 'string' },
+      deletedAt: { type: 'string' },
     },
   };
 
@@ -150,7 +152,7 @@ export default class User extends Model {
 
   static async get(userId: string): Promise<User> {
     const user = await this.query().findById(userId);
-    if (!user) {
+    if (!user || !!user.deletedAt) {
       return Promise.reject(`No such user: ${userId}`);
     }
     return user;
@@ -163,8 +165,9 @@ export default class User extends Model {
 
     const user = await this.query()
       .where(fieldName, field)
+      .andWhere('deletedAt', null)
       .first();
-    if (!user) {
+    if (!user || !!user.deletedAt) {
       return null;
     }
 
@@ -175,12 +178,22 @@ export default class User extends Model {
     pageNumber,
     pageSize,
   }: IPaginationOptions): Promise<IPaginatedResults<User>> {
-    const usersResult = (await this.query().page(pageNumber, pageSize)) as any;
+    const usersResult = (
+      await this.query().where('deletedAt', null).page(pageNumber, pageSize)
+    ) as any;
 
     return {
       results: usersResult.results,
       total: usersResult.total,
     };
+  }
+
+  static async delete(userId: string) {
+    return await this
+      .query()
+      .where('id', userId)
+      .where('deletedAt', null)
+      .update({ deletedAt: new Date().toISOString() });
   }
 }
 /* tslint:enable:member-ordering */

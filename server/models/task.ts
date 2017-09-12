@@ -158,7 +158,7 @@ export default class Task extends Model {
   static async get(taskId: string, txn?: Transaction): Promise<Task> {
     const task = await this.query(txn)
       .eager(EAGER_QUERY)
-      .modifyEager('followers', builder => builder.where('deletedAt', null))
+      .modifyEager('followers', builder => builder.where('task_follower.deletedAt', null))
       .findById(taskId);
 
     if (!task) {
@@ -174,7 +174,7 @@ export default class Task extends Model {
     const patientsResult = (await this.query()
       .where({ patientId, deletedAt: null })
       .eager(EAGER_QUERY)
-      .modifyEager('followers', builder => builder.where('deletedAt', null))
+      .modifyEager('followers', builder => builder.where('task_follower.deletedAt', null))
       .orderBy(orderBy, order)
       .page(pageNumber, pageSize)) as any;
 
@@ -195,7 +195,7 @@ export default class Task extends Model {
       .where('id', 'in', subquery)
       .orWhere({ createdById: userId, deletedAt: null })
       .eager(EAGER_QUERY)
-      .modifyEager('followers', builder => builder.where('deletedAt', null))
+      .modifyEager('followers', builder => builder.where('task_follower.deletedAt', null))
       .orderBy(orderBy, order)
       .page(pageNumber, pageSize)) as any;
 
@@ -208,7 +208,7 @@ export default class Task extends Model {
   static async create(input: ITaskEditableFields, txn?: Transaction) {
     return await this.query(txn)
       .eager(EAGER_QUERY)
-      .modifyEager('followers', builder => builder.where('deletedAt', null))
+      .modifyEager('followers', builder => builder.where('task_follower.deletedAt', null))
       .insertAndFetch(input);
   }
 
@@ -220,7 +220,7 @@ export default class Task extends Model {
     return await this.query(txn)
       .eager(EAGER_QUERY)
       .modifyEager('followers', builder => {
-        builder.where('deletedAt', null);
+        builder.where('task_follower.deletedAt', null);
       })
       .updateAndFetchById(taskId, task);
   }
@@ -234,7 +234,7 @@ export default class Task extends Model {
   static async complete(taskId: string, userId: string, txn?: Transaction): Promise<Task> {
     return this.query(txn)
       .eager(EAGER_QUERY)
-      .modifyEager('followers', builder => builder.where('deletedAt', null))
+      .modifyEager('followers', builder => builder.where('task_follower.deletedAt', null))
       .updateAndFetchById(taskId, {
         completedAt: new Date().toUTCString(),
         completedById: userId,
@@ -244,7 +244,7 @@ export default class Task extends Model {
   static async uncomplete(taskId: string, userId: string, txn?: Transaction): Promise<Task> {
     return this.query(txn)
       .eager(EAGER_QUERY)
-      .modifyEager('followers', builder => builder.where('deletedAt', null))
+      .modifyEager('followers', builder => builder.where('task_follower.deletedAt', null))
       .updateAndFetchById(taskId, {
         completedAt: null,
         completedById: null,

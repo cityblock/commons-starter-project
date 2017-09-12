@@ -22,7 +22,8 @@ import AddTaskFollower from './add-task-follower';
 import * as styles from './css/task.css';
 import TaskAssignee from './task-assignee';
 import TaskComments from './task-comments';
-import TaskHamburgerMenu from './task-hamburger-menu';
+import { TaskHamburgerMenu } from './task-hamburger-menu';
+import { TaskMissing } from './task-missing';
 
 export interface IProps {
   task?: FullTaskFragment;
@@ -43,10 +44,10 @@ export interface IProps {
   ) => { data: { taskComplete: FullTaskFragment } };
   uncompleteTask: (
     options: { variables: taskUncompleteMutationVariables },
-  ) => { data: { taskComplete: FullTaskFragment } };
+  ) => { data: { taskUncomplete: FullTaskFragment } };
   editTask: (
     options: { variables: taskEditMutationVariables },
-  ) => { data: { taskComplete: FullTaskFragment } };
+  ) => { data: { taskEdit: FullTaskFragment } };
   onDelete: (taskId: string) => any;
 }
 
@@ -75,7 +76,7 @@ const COPY_SUCCESS_TIMEOUT_MILLISECONDS = 2000;
 
 const BASE_TEXT_HEIGHT = '2px';
 
-class Task extends React.Component<IProps, IState> {
+export class Task extends React.Component<IProps, IState> {
   editTitleTextArea: HTMLTextAreaElement | null;
   editDescriptionTextArea: HTMLTextAreaElement | null;
   titleBody: HTMLDivElement | null;
@@ -252,18 +253,11 @@ class Task extends React.Component<IProps, IState> {
 
     // TODO: update this once attachments are a thing
     if (task && (task as any).attachments) {
-      const attachmentsHtml = ((task as any).attachments || []).map((attachment: any) => (
-        <div className={styles.attachment}>{attachment.title}</div>
-      ));
-      return (
-        <div className={styles.attachments}>
-          {attachmentsHtml}
-        </div>
-      );
+      const attachmentsHtml = ((task as any).attachments || [])
+        .map((attachment: any) => <div className={styles.attachment}>{attachment.title}</div>);
+      return <div className={styles.attachments}>{attachmentsHtml}</div>;
     } else {
-      return (
-        <div className={styles.emptyAttachments}></div>
-      );
+      return <div className={styles.emptyAttachments} />;
     }
   }
 
@@ -277,8 +271,8 @@ class Task extends React.Component<IProps, IState> {
           className={styles.avatar}
           style={{
             backgroundImage: `url('${follower.googleProfileImageUrl || DEFAULT_AVATAR_URL}')`,
-          }}>
-        </div>
+          }}
+        />
       ));
 
       return (
@@ -289,7 +283,8 @@ class Task extends React.Component<IProps, IState> {
             <AddTaskFollower
               taskId={task.id}
               followers={task.followers}
-              patientId={task.patientId} />
+              patientId={task.patientId}
+            />
           </div>
         </div>
       );
@@ -322,7 +317,7 @@ class Task extends React.Component<IProps, IState> {
           <div className={styles.smallText}>Please try again.</div>
         </div>
         <div className={styles.markCompletionText}>{displayText}</div>
-        <div className={styles.markCompletionIcon}></div>
+        <div className={styles.markCompletionIcon} />
       </div>
     );
   }
@@ -334,9 +329,11 @@ class Task extends React.Component<IProps, IState> {
       return null;
     }
 
-    return patientGoals.map(patientGoal =>
-      <option key={patientGoal.id} value={patientGoal.id}>{patientGoal.title}</option>,
-    );
+    return patientGoals.map(patientGoal => (
+      <option key={patientGoal.id} value={patientGoal.id}>
+        {patientGoal.title}
+      </option>
+    ));
   }
 
   onToggleHamburgerMenu() {
@@ -386,7 +383,7 @@ class Task extends React.Component<IProps, IState> {
     if (taskId) {
       try {
         this.setState(() => ({ changePriorityError: undefined }));
-        await editTask({ variables: { taskId, priority: event.target.value }});
+        await editTask({ variables: { taskId, priority: event.target.value } });
       } catch (err) {
         this.setState(() => ({ changePriorityError: err.message }));
       }
@@ -399,7 +396,7 @@ class Task extends React.Component<IProps, IState> {
     if (taskId) {
       try {
         this.setState(() => ({ changePatientGoalError: undefined }));
-        await editTask({ variables: { taskId, patientGoalId: event.target.value }});
+        await editTask({ variables: { taskId, patientGoalId: event.target.value } });
       } catch (err) {
         this.setState(() => ({ changePatientGoalError: err.message }));
       }
@@ -412,7 +409,7 @@ class Task extends React.Component<IProps, IState> {
     if (taskId) {
       try {
         this.setState(() => ({ changeDueDateError: undefined }));
-        await editTask({ variables: { taskId, dueAt: event.target.value }});
+        await editTask({ variables: { taskId, dueAt: event.target.value } });
       } catch (err) {
         this.setState(() => ({ changeDueDateError: err.message }));
       }
@@ -438,7 +435,7 @@ class Task extends React.Component<IProps, IState> {
       if (name === 'editedTitle') {
         try {
           this.setState(() => ({ editTitleError: undefined }));
-          await editTask({ variables: { taskId, title: editedTitle }});
+          await editTask({ variables: { taskId, title: editedTitle } });
           this.setState(() => ({ editTitleError: undefined, editingTitle: false }));
         } catch (err) {
           this.setState(() => ({ editTitleError: err.message }));
@@ -446,7 +443,7 @@ class Task extends React.Component<IProps, IState> {
       } else if (name === 'editedDescription') {
         try {
           this.setState(() => ({ editDescriptionError: undefined }));
-          await editTask({ variables: { taskId, description: editedDescription }});
+          await editTask({ variables: { taskId, description: editedDescription } });
           this.setState(() => ({ editDescriptionError: undefined, editingDescription: false }));
         } catch (err) {
           this.setState(() => ({ editDescriptionError: err.message }));
@@ -499,7 +496,7 @@ class Task extends React.Component<IProps, IState> {
   }
 
   render() {
-    const { task, routeBase } = this.props;
+    const { task, routeBase, taskLoading, taskError } = this.props;
     const {
       hamburgerMenuVisible,
       copySuccessVisible,
@@ -520,8 +517,8 @@ class Task extends React.Component<IProps, IState> {
     const inputDueDate = this.getTaskDueDateForInput();
 
     const priorityIconStyles = classNames(styles.priorityIcon, {
-      [styles.mediumPriorityIcon]: (task && task.priority === 'medium'),
-      [styles.highPriorityIcon]: (task && task.priority === 'high'),
+      [styles.mediumPriorityIcon]: task && task.priority === 'medium',
+      [styles.highPriorityIcon]: task && task.priority === 'high',
     });
     const copySuccessStyles = classNames(styles.copySuccess, {
       [styles.visible]: copySuccessVisible,
@@ -555,183 +552,163 @@ class Task extends React.Component<IProps, IState> {
 
     const closeRoute = routeBase || '/patients';
 
-    if (task) {
+    if (!task) {
       return (
-        <div className={outerContainerStyles}>
-          <div className={deleteConfirmationStyles}>
-            <div className={styles.deleteConfirmationIcon}></div>
-            <div className={styles.deleteConfirmationText}>
-              Are you ure you want to delete this task?
+        <TaskMissing taskLoading={taskLoading} taskError={taskError} reloadTask={this.reloadTask} />
+      );
+    }
+    return (
+      <div className={outerContainerStyles}>
+        <div className={deleteConfirmationStyles}>
+          <div className={styles.deleteConfirmationIcon} />
+          <div className={styles.deleteConfirmationText}>
+            Are you ure you want to delete this task?
+          </div>
+          <div className={styles.deleteConfirmationSubtext}>
+            Deleting this task will completely remove it from this patient's record.
+          </div>
+          <div className={styles.deleteConfirmationButtons}>
+            <div
+              className={classNames(styles.deleteCancelButton, styles.invertedButton)}
+              onClick={this.onCancelDelete}
+            >
+              Cancel
             </div>
-            <div className={styles.deleteConfirmationSubtext}>
-              Deleting this task will completely remove it from this patient's record.
-            </div>
-            <div className={styles.deleteConfirmationButtons}>
-              <div
-                className={classNames(styles.deleteCancelButton, styles.invertedButton)}
-                onClick={this.onCancelDelete}>
-                Cancel
-              </div>
-              <div
-                className={styles.deleteConfirmButton}
-                onClick={this.onConfirmDelete}>
-                Yes, delete
-              </div>
-            </div>
-            <div className={deleteErrorStyles}>
-              <div className={classNames(styles.redText, styles.smallText)}>
-                Error deleting task.
-              </div>
-              <div className={styles.smallText}>Please try again.</div>
+            <div className={styles.deleteConfirmButton} onClick={this.onConfirmDelete}>
+              Yes, delete
             </div>
           </div>
-          <div className={taskContainerStyles}>
-            <div className={styles.taskHeader}>
-              <div className={styles.infoRow}>
-                <div className={styles.patientInfo}>
-                  <div
-                    className={styles.avatar}
-                    style={{ backgroundImage: `url('${DEFAULT_AVATAR_URL}')`}}>
-                  </div>
-                  <Link to={`/patients/${task.patientId}`} className={styles.name}>
-                    {patientName}
-                  </Link>
-                </div>
-                <div className={styles.controls}>
-                  <div className={copySuccessStyles}>Copied to clipboard</div>
-                  <div className={styles.hamburger} onClick={this.onToggleHamburgerMenu}></div>
-                  <TaskHamburgerMenu
-                    visible={hamburgerMenuVisible}
-                    onClickAddAttachment={() => (false)}
-                    onClickDelete={this.onClickDelete}
-                    onCopy={this.onCopyShareLinkClick}
-                    taskId={task.id}
-                    patientId={task.patientId} />
-                  <Link to={closeRoute} className={styles.close} />
-                </div>
-              </div>
-              <div className={classNames(styles.infoRow, styles.dueDateRow)}>
-                <div className={styles.dueDate}>
-                  <div className={styles.dueDateIcon}></div>
-                  <input
-                    type='date'
-                    className={styles.dueDateInput}
-                    data-date={dueDate}
-                    value={inputDueDate}
-                    onChange={this.onDueDateChange} />
-                </div>
-                {this.renderTaskCompletionToggle()}
-              </div>
-              <TaskAssignee
-                taskId={task.id}
-                patientId={task.patientId}
-                assignee={task.assignedTo} />
-            </div>
-            <div className={styles.taskBody}>
-              <div
-                ref={div => { this.titleBody = div; }}
-                className={titleTextStyles}
-                onClick={this.onClickToEditTitle}>
-                {task.title}
-              </div>
-              <div className={titleEditStyles}>
-                <textarea
-                  style={{ height: titleHeight }}
-                  name='editedTitle'
-                  ref={area => { this.editTitleTextArea = area; }}
-                  value={editedTitle}
-                  onChange={this.onChange}
-                  onKeyDown={this.onKeyDown}
-                  onBlur={this.onBlur} />
-              </div>
-              <div className={styles.okrInfo}>
-                <div className={styles.okrRow}>
-                  <div className={styles.smallText}>Goal:</div>
-                  <select
-                    value={task.patientGoal ? task.patientGoal.id : ''}
-                    className={styles.prioritySelect}
-                    onChange={this.onPatientGoalChange}>
-                    <option disabled value=''>None</option>
-                    {this.renderPatientGoalOptions()}
-                  </select>
-                </div>
-              </div>
-              <div
-                ref={div => { this.descriptionBody = div; }}
-                onClick={this.onClickToEditDescription}
-                className={descriptionTextStyles}>
-                {task.description ? task.description : 'Enter a description...' }
-              </div>
-              <div className={descriptionEditStyles}>
-                <textarea
-                  style={{ height: descriptionHeight }}
-                  name='editedDescription'
-                  ref={area => { this.editDescriptionTextArea = area; }}
-                  value={editedDescription}
-                  onChange={this.onChange}
-                  onKeyDown={this.onKeyDown}
-                  onBlur={this.onBlur} />
-              </div>
-              {this.renderAttachments()}
-              <div className={classNames(styles.infoRow, styles.borderTop, styles.priorityRow)}>
-                <div className={styles.priorityInfo}>
-                  <div className={priorityIconStyles}></div>
-                  <select
-                    value={task.priority || 'low'}
-                    className={styles.prioritySelect}
-                    onChange={this.onPriorityChange}>
-                    <option value='low'>
-                      Low priority
-                    </option>
-                    <option value='medium'>
-                      Medium priority
-                    </option>
-                    <option value='high'>
-                      High priority
-                    </option>
-                  </select>
-                </div>
-                <div className={styles.typeInfo}>
-                  <div className={styles.typeIcon}></div>
-                  <div className={styles.typeText}>Generic</div>
-                </div>
-              </div>
-            </div>
-            {this.renderFollowers()}
-            <TaskComments taskId={task.id} />
+          <div className={deleteErrorStyles}>
+            <div className={classNames(styles.redText, styles.smallText)}>Error deleting task.</div>
+            <div className={styles.smallText}>Please try again.</div>
           </div>
         </div>
-      );
-    } else {
-      const { taskLoading, taskError } = this.props;
-
-      if (taskLoading) {
-        return (
-          <div className={styles.container}>
-            <div className={styles.loading}>Loading...</div>
-          </div>
-        );
-      } else if (!!taskError) {
-        return (
-          <div className={styles.container}>
-            <div className={styles.loadingError}>
-              <div className={styles.loadingErrorIcon}></div>
-              <div className={styles.loadingErrorLabel}>Unable to load task</div>
-              <div className={styles.loadingErrorSubheading}>
-                Sorry, something went wrong. Please try again.
+        <div className={taskContainerStyles}>
+          <div className={styles.taskHeader}>
+            <div className={styles.infoRow}>
+              <div className={styles.patientInfo}>
+                <div
+                  className={styles.avatar}
+                  style={{ backgroundImage: `url('${DEFAULT_AVATAR_URL}')` }}
+                />
+                <Link to={`/patients/${task.patientId}`} className={styles.name}>
+                  {patientName}
+                </Link>
               </div>
-              <div
-                className={classNames(styles.loadingErrorButton, styles.invertedButton)}
-                onClick={this.reloadTask}>
-                Try again
+              <div className={styles.controls}>
+                <div className={copySuccessStyles}>Copied to clipboard</div>
+                <div className={styles.hamburger} onClick={this.onToggleHamburgerMenu} />
+                <TaskHamburgerMenu
+                  visible={hamburgerMenuVisible}
+                  onClickAddAttachment={() => false}
+                  onClickDelete={this.onClickDelete}
+                  onCopy={this.onCopyShareLinkClick}
+                  taskId={task.id}
+                  patientId={task.patientId}
+                />
+                <Link to={closeRoute} className={styles.close} />
+              </div>
+            </div>
+            <div className={classNames(styles.infoRow, styles.dueDateRow)}>
+              <div className={styles.dueDate}>
+                <div className={styles.dueDateIcon} />
+                <input
+                  type='date'
+                  className={styles.dueDateInput}
+                  data-date={dueDate}
+                  value={inputDueDate}
+                  onChange={this.onDueDateChange}
+                />
+              </div>
+              {this.renderTaskCompletionToggle()}
+            </div>
+            <TaskAssignee taskId={task.id} patientId={task.patientId} assignee={task.assignedTo} />
+          </div>
+          <div className={styles.taskBody}>
+            <div
+              ref={div => {
+                this.titleBody = div;
+              }}
+              className={titleTextStyles}
+              onClick={this.onClickToEditTitle}
+            >
+              {task.title}
+            </div>
+            <div className={titleEditStyles}>
+              <textarea
+                style={{ height: titleHeight }}
+                name='editedTitle'
+                ref={area => {
+                  this.editTitleTextArea = area;
+                }}
+                value={editedTitle}
+                onChange={this.onChange}
+                onKeyDown={this.onKeyDown}
+                onBlur={this.onBlur}
+              />
+            </div>
+            <div className={styles.okrInfo}>
+              <div className={styles.okrRow}>
+                <div className={styles.smallText}>Goal:</div>
+                <select
+                  value={task.patientGoal ? task.patientGoal.id : ''}
+                  className={styles.prioritySelect}
+                  onChange={this.onPatientGoalChange}
+                >
+                  <option disabled value=''>
+                    None
+                  </option>
+                  {this.renderPatientGoalOptions()}
+                </select>
+              </div>
+            </div>
+            <div
+              ref={div => {
+                this.descriptionBody = div;
+              }}
+              onClick={this.onClickToEditDescription}
+              className={descriptionTextStyles}
+            >
+              {task.description ? task.description : 'Enter a description...'}
+            </div>
+            <div className={descriptionEditStyles}>
+              <textarea
+                style={{ height: descriptionHeight }}
+                name='editedDescription'
+                ref={area => {
+                  this.editDescriptionTextArea = area;
+                }}
+                value={editedDescription}
+                onChange={this.onChange}
+                onKeyDown={this.onKeyDown}
+                onBlur={this.onBlur}
+              />
+            </div>
+            {this.renderAttachments()}
+            <div className={classNames(styles.infoRow, styles.borderTop, styles.priorityRow)}>
+              <div className={styles.priorityInfo}>
+                <div className={priorityIconStyles} />
+                <select
+                  value={task.priority || 'low'}
+                  className={styles.prioritySelect}
+                  onChange={this.onPriorityChange}
+                >
+                  <option value='low'>Low priority</option>
+                  <option value='medium'>Medium priority</option>
+                  <option value='high'>High priority</option>
+                </select>
+              </div>
+              <div className={styles.typeInfo}>
+                <div className={styles.typeIcon} />
+                <div className={styles.typeText}>Generic</div>
               </div>
             </div>
           </div>
-        );
-      } else {
-        return <div className={styles.container}></div>;
-      }
-    }
+          {this.renderFollowers()}
+          <TaskComments taskId={task.id} />
+        </div>
+      </div>
+    );
   }
 }
 
@@ -756,10 +733,10 @@ export default (compose as any)(
     skip: (props: IProps) => !props.taskId,
     options: (props: IProps) => ({ variables: { taskId: props.taskId } }),
     props: ({ data }) => ({
-      taskLoading: (data ? data.loading : false),
-      taskError: (data ? data.error : null),
-      task: (data ? (data as any).task : null),
-      refetchTask: (data ? data.refetch : null),
+      taskLoading: data ? data.loading : false,
+      taskError: data ? data.error : null,
+      task: data ? (data as any).task : null,
+      refetchTask: data ? data.refetch : null,
     }),
   }),
 )(Task);

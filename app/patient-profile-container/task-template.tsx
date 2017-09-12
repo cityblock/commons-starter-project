@@ -2,7 +2,7 @@ import * as classNames from 'classnames';
 import * as moment from 'moment';
 import * as React from 'react';
 import { FullTaskTemplateFragment, FullUserFragment } from '../graphql/types';
-import { DEFAULT_AVATAR_URL } from '../shared/task/index';
+import { DEFAULT_AVATAR_URL } from '../shared/task/task';
 import * as styles from './css/patient-care-plan.css';
 
 export interface IProps {

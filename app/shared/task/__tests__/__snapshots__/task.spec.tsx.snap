@@ -1,5 +1,11 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`renders missing task 1`] = `
+<div
+  className={undefined}
+/>
+`;
+
 exports[`renders task 1`] = `
 <div
   className=""
@@ -73,10 +79,10 @@ exports[`renders task 1`] = `
           />
           <a
             className={undefined}
-            href="/patients/unique-id"
+            href="/patients/patient-id"
             onClick={[Function]}
           >
-            first last
+            Bob Smith
           </a>
         </div>
         <div
@@ -152,10 +158,10 @@ exports[`renders task 1`] = `
           />
           <input
             className={undefined}
-            data-date="Jul 13, 2017"
+            data-date="Invalid date"
             onChange={[Function]}
             type="date"
-            value="2017-07-13"
+            value="Invalid date"
           />
         </div>
         <div
@@ -238,7 +244,7 @@ exports[`renders task 1`] = `
         className=""
         onClick={[Function]}
       >
-        title
+        Task Title
       </div>
       <div
         className=""
@@ -285,7 +291,7 @@ exports[`renders task 1`] = `
         className=""
         onClick={[Function]}
       >
-        description
+        Enter a description...
       </div>
       <div
         className=""
@@ -313,12 +319,12 @@ exports[`renders task 1`] = `
           className={undefined}
         >
           <div
-            className=""
+            className="undefined"
           />
           <select
             className={undefined}
             onChange={[Function]}
-            value="low"
+            value="high"
           >
             <option
               value="low"

@@ -9,6 +9,17 @@ export const currentUser = {
   googleProfileImageUrl: null,
 };
 
+export const user = {
+  id: 'id2',
+  locale: 'en',
+  firstName: 'first',
+  lastName: 'last',
+  userRole: 'physician' as any,
+  email: 'b@c.com',
+  homeClinicId: '1',
+  googleProfileImageUrl: null,
+};
+
 export const patient = {
   id: 'patient-id',
   firstName: 'Bob',
@@ -213,6 +224,34 @@ export const task = {
   assignedTo: null,
   followers: [],
   patientGoal: null,
+};
+
+export const comment = {
+  id: 'comment-id',
+  body: 'body',
+  user: currentUser,
+  taskId: task.id,
+  createdAt: 'Thu Jul 14 2017 16:52:56 GMT-0400 (EDT)',
+  updatedAt: 'Thu Jul 14 2017 16:52:56 GMT-0400 (EDT)',
+};
+
+export const taskWithComment = {
+  ...task,
+  patient,
+  comments: [comment],
+  patientId: patient.id,
+  assignedTo: currentUser,
+  createdBy: currentUser,
+  followers: [currentUser],
+};
+
+export const assignedTask = {
+  ...task,
+  patient,
+  patientId: patient.id,
+  assignedTo: currentUser,
+  createdBy: currentUser,
+  followers: [currentUser],
 };
 
 export const completedTask = {

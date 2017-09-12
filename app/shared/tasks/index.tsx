@@ -16,7 +16,7 @@ import {
 } from '../../graphql/types';
 import { IState as IAppState } from '../../store';
 import * as sortSearchStyles from '../css/sort-search.css';
-import Task from '../task';
+import Task from '../task/task';
 import TaskCreate from '../task/task-create';
 import * as styles from './css/tasks.css';
 import { TaskRow } from './task-row';

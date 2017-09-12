@@ -10,7 +10,7 @@ import {
 } from '../../graphql/types';
 import * as styles from './css/add-task-follower.css';
 import * as taskStyles from './css/task.css';
-import { DEFAULT_AVATAR_URL } from './index';
+import { DEFAULT_AVATAR_URL } from './task';
 
 export interface IProps {
   patientId: string;

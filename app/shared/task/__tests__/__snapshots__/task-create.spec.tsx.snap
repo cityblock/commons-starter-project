@@ -25,7 +25,7 @@ exports[`renders task create 1`] = `
         <div
           className={undefined}
         >
-          first last
+          Bob Smith
         </div>
       </div>
       <div

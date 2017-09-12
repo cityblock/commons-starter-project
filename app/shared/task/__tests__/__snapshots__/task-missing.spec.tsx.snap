@@ -1,0 +1,45 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`task missing renders various task missing states 1`] = `
+<div>
+  <div
+    className={undefined}
+  >
+    <div
+      className={undefined}
+    >
+      Loading...
+    </div>
+  </div>
+  <div
+    className={undefined}
+  >
+    <div
+      className={undefined}
+    >
+      <div
+        className={undefined}
+      />
+      <div
+        className={undefined}
+      >
+        Unable to load task
+      </div>
+      <div
+        className={undefined}
+      >
+        Sorry, something went wrong. Please try again.
+      </div>
+      <div
+        className=""
+        onClick={[Function]}
+      >
+        Try again
+      </div>
+    </div>
+  </div>
+  <div
+    className={undefined}
+  />
+</div>
+`;

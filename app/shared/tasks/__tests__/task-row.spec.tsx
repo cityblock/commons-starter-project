@@ -6,27 +6,20 @@ import { create } from 'react-test-renderer';
 import configureMockStore from 'redux-mock-store';
 import { ENGLISH_TRANSLATION } from '../../../reducers/messages/en';
 import ReduxConnectedIntlProvider from '../../../redux-connected-intl-provider';
-import { task } from '../../util/test-data';
+import { task, user } from '../../util/test-data';
 import { TaskRow } from '../task-row';
 
 const locale = { messages: ENGLISH_TRANSLATION.messages };
 const mockStore = configureMockStore([]);
 const oldDate = Date.now;
 
-const user = {
-  id: 'id',
-  locale: 'en',
-  firstName: 'first',
-  lastName: 'last',
-  userRole: 'physician' as any,
-  email: 'a@b.com',
-  homeClinicId: '1',
-  googleProfileImageUrl: null,
-};
-
 describe('task row', () => {
-  beforeAll(() => { Date.now = jest.fn(() => 1500494779252); });
-  afterAll(() => { Date.now = oldDate; });
+  beforeAll(() => {
+    Date.now = jest.fn(() => 1500494779252);
+  });
+  afterAll(() => {
+    Date.now = oldDate;
+  });
 
   it('renders task row', () => {
     const history = createMemoryHistory();
@@ -34,10 +27,7 @@ describe('task row', () => {
       <MockedProvider mocks={[]} store={mockStore({ locale, task })}>
         <ReduxConnectedIntlProvider>
           <ConnectedRouter history={history}>
-            <TaskRow
-              task={task}
-              selected={true}
-              routeBase={'/foo/bar'} />
+            <TaskRow task={task} selected={true} routeBase={'/foo/bar'} />
           </ConnectedRouter>
         </ReduxConnectedIntlProvider>
       </MockedProvider>,
@@ -62,10 +52,7 @@ describe('task row', () => {
       <MockedProvider mocks={[]} store={mockStore({ locale, task })}>
         <ReduxConnectedIntlProvider>
           <ConnectedRouter history={history}>
-            <TaskRow
-              task={task}
-              selected={true}
-              routeBase={'/foo/bar'} />
+            <TaskRow task={task} selected={true} routeBase={'/foo/bar'} />
           </ConnectedRouter>
         </ReduxConnectedIntlProvider>
       </MockedProvider>,

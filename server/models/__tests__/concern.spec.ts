@@ -51,5 +51,14 @@ describe('concern model', () => {
 
       expect(await Concern.getAll()).toMatchObject([concern1, concern2]);
     });
+
+    it('finds or creates a concern by title', async () => {
+      const concern = await Concern.create({ title: 'housing' });
+      const foundOrCreatedConcern = await Concern.findOrCreateByTitle('Housing');
+      const fetchedConcerns = await Concern.getAll();
+
+      expect(fetchedConcerns.length).toEqual(1);
+      expect(foundOrCreatedConcern).toMatchObject(concern);
+    });
   });
 });

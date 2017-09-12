@@ -110,7 +110,8 @@ export async function carePlanSuggestionAccept(
         );
 
         if (concernTitle) {
-          const concern = await Concern.create({ title: concernTitle }, txn);
+          const concern = await Concern.findOrCreateByTitle(concernTitle, txn);
+
           const patientConcern = await PatientConcern.create(
             {
               concernId: concern.id,

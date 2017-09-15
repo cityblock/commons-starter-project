@@ -3,6 +3,7 @@
 [![Coverage Status](https://coveralls.io/repos/github/cityblock/commons/badge.svg?branch=master&t=WGaPTr)](https://coveralls.io/github/cityblock/commons?branch=master)
 [![CircleCI](https://circleci.com/gh/cityblock/commons.svg?style=svg&circle-token=ff9336cd2c27998733f1abe9a3c3bcbba62a045f)](https://circleci.com/gh/cityblock/commons)
 [![NSP Status](https://nodesecurity.io/orgs/cityblock/projects/c914cd48-0065-4791-8267-b5b15f6b7e80/badge)](https://nodesecurity.io/orgs/cityblock/projects/c914cd48-0065-4791-8267-b5b15f6b7e80)
+
 Care MVP. For a more detailed spec, see the [PRD][] and [Tech Design Doc][]
 
 Tech wise, this app is an Express server running GraphQL, PostgreSQL (Objection.js) and GraphiQL written in TypeScript. Tested using Jest. Hosted on [Aptible][].

@@ -87,8 +87,15 @@ export default class PatientLeftNavInfo extends React.Component<IProps, {}> {
       'Unknown';
     // TODO: Replace 'Brooklyn, NY' and 'English' with better defaults
     const zip = patient && patient.zip ? patient.zip : 'Brooklyn, NY';
-    const language = patient && patient.language ?
-      langs.where('1', patient.language).name : 'English';
+    let languageName = 'Declined';
+
+    if (patient && patient.language) {
+      const language = langs.where('1', patient.language);
+
+      if (language) {
+        languageName = language.name;
+      }
+    }
 
     const patientMainClasses = classNames(styles.patientMain, {
       [styles.noBorder]: condensedPatientInfo,
@@ -112,7 +119,7 @@ export default class PatientLeftNavInfo extends React.Component<IProps, {}> {
                 {(message: string) =>
                   <div className={styles.patientBasicInfoRowTitle}>{message}:</div>}
               </FormattedMessage>
-              <div className={styles.patientBasicInfoRowData}>{language}</div>
+              <div className={styles.patientBasicInfoRowData}>{languageName}</div>
             </div>
             <div className={styles.patientBasicInfoRow}>
               <FormattedMessage id='patient.location'>

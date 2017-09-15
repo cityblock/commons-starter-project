@@ -85,7 +85,7 @@ exports[`renders patient profile container correctly 1`] = `
             <div
               className={undefined}
             >
-              English
+              Declined
             </div>
           </div>
           <div
@@ -693,7 +693,7 @@ exports[`renders patient profile for ipad 1`] = `
               <div
                 className={undefined}
               >
-                English
+                Declined
               </div>
             </div>
             <div

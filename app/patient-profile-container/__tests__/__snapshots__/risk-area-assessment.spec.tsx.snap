@@ -1,71 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`renders a risk area assessment 1`] = `
-<div>
-  <div
-    className=""
-  >
-    <div
-      className="undefined"
-      onClick={[Function]}
-    >
-      Cancel
-    </div>
-    <div
-      className="undefined"
-      onClick={[Function]}
-    >
-      Save updates
-    </div>
-    <div
-      className=""
-      onClick={[Function]}
-    >
-      Start assessment
-    </div>
-  </div>
-  <div
-    className={undefined}
-  >
-    <div
-      className={undefined}
-    >
-      <div
-        className=""
-      >
-        <div
-          className={undefined}
-        >
-          <div
-            className={undefined}
-          />
-          <div
-            className={undefined}
-          >
-            Loading...
-          </div>
-        </div>
-        <div
-          className={undefined}
-        >
-          <div
-            className={undefined}
-          >
-            Last updated:
-          </div>
-          <div
-            className={undefined}
-          >
-            1 week ago
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-`;
-
-exports[`renders questions with correct visibility 1`] = `
+exports[`method tests renders questions with correct visibility 1`] = `
 Array [
   <RiskAreaQuestion
     answerData={undefined}
@@ -161,4 +96,69 @@ Array [
     visible={false}
   />,
 ]
+`;
+
+exports[`renders a risk area assessment 1`] = `
+<div>
+  <div
+    className=""
+  >
+    <div
+      className="undefined"
+      onClick={[Function]}
+    >
+      Cancel
+    </div>
+    <div
+      className="undefined"
+      onClick={[Function]}
+    >
+      Save updates
+    </div>
+    <div
+      className=""
+      onClick={[Function]}
+    >
+      Start assessment
+    </div>
+  </div>
+  <div
+    className={undefined}
+  >
+    <div
+      className={undefined}
+    >
+      <div
+        className=""
+      >
+        <div
+          className={undefined}
+        >
+          <div
+            className={undefined}
+          />
+          <div
+            className={undefined}
+          >
+            Loading...
+          </div>
+        </div>
+        <div
+          className={undefined}
+        >
+          <div
+            className={undefined}
+          >
+            Last updated:
+          </div>
+          <div
+            className={undefined}
+          >
+            1 week ago
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 `;

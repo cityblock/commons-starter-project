@@ -5,7 +5,7 @@ import { create } from 'react-test-renderer';
 import configureMockStore from 'redux-mock-store';
 import { ENGLISH_TRANSLATION } from '../../reducers/messages/en';
 import ReduxConnectedIntlProvider from '../../redux-connected-intl-provider';
-import { question } from '../../shared/util/test-data';
+import { patientAnswer, question } from '../../shared/util/test-data';
 import RiskAreaAssessment, { RiskAreaAssessment as Component } from '../risk-area-assessment';
 
 const locale = { messages: ENGLISH_TRANSLATION.messages };
@@ -63,21 +63,79 @@ it('renders a risk area assessment', async () => {
   expect(tree).toMatchSnapshot();
 });
 
-it('renders questions with correct visibility', () => {
-  const component = shallow(
-    <Component
-      riskAreaId={'risk-area-id'}
-      riskAreaQuestions={riskAreaQuestions}
-      patientId={'patient-id'}
-      routeBase={'/patients/patient-id/360'}
-    />,
-  );
-  const instance = component.instance() as Component;
-  instance.setState({
-    questions: {
-      'question-1': { answers: [], oldAnswers: [], changed: false },
-      'question-2': { answers: [], oldAnswers: [], changed: false },
-    },
+describe('method tests', () => {
+  it('renders questions with correct visibility', () => {
+    const component = shallow(
+      <Component
+        riskAreaId={'risk-area-id'}
+        riskAreaQuestions={riskAreaQuestions}
+        patientId={'patient-id'}
+        routeBase={'/patients/patient-id/360'}
+      />,
+    );
+    const instance = component.instance() as Component;
+
+    instance.setState({
+      questions: {
+        'question-1': { answers: [], oldAnswers: [], changed: false },
+        'question-2': { answers: [], oldAnswers: [], changed: false },
+      },
+    });
+    expect(instance.renderRiskAreaQuestions()).toMatchSnapshot();
   });
-  expect(instance.renderRiskAreaQuestions()).toMatchSnapshot();
+
+  it('sets state with new patient answers', () => {
+    const component = shallow(
+      <Component
+        riskAreaId={'risk-area-id'}
+        riskAreaQuestions={undefined}
+        patientId={'patient-id'}
+        routeBase={'/patients/patient-id/360'}
+      />,
+    );
+    const instance = component.instance() as Component;
+
+    instance.componentWillReceiveProps({
+      riskAreaId: 'risk-area-id',
+      patientId: 'patient-id',
+      routeBase: '/patients/patient-id/360',
+      riskAreaQuestions: undefined,
+      patientAnswers: [patientAnswer],
+    });
+    expect(instance.state.questions[question.id]).toEqual({
+      answers: [{
+        id: patientAnswer.answerId,
+        value: patientAnswer.answerValue,
+      }],
+      changed: false,
+      oldAnswers: [{
+        id: patientAnswer.answerId,
+        value: patientAnswer.answerValue,
+      }],
+    });
+  });
+
+  it('adds new risk area questions', () => {
+    const component = shallow(
+      <Component
+        riskAreaId={'risk-area-id'}
+        riskAreaQuestions={undefined}
+        patientId={'patient-id'}
+        routeBase={'/patients/patient-id/360'}
+      />,
+    );
+    const instance = component.instance() as Component;
+
+    instance.componentWillReceiveProps({
+      riskAreaId: 'risk-area-id',
+      patientId: 'patient-id',
+      routeBase: '/patients/patient-id/360',
+      riskAreaQuestions,
+    });
+    expect(instance.state.questions[question.id]).toEqual({
+      answers: [],
+      changed: false,
+      oldAnswers: [],
+    });
+  });
 });

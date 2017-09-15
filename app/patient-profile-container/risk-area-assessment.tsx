@@ -128,14 +128,20 @@ export class RiskAreaAssessment extends React.Component<IProps, IState> {
           const existingQuestionState = questions[question.id] || { answers: [], oldAnswers: [] };
 
           questions[question.id] = {
-            answers: [...existingQuestionState.answers, {
-              id: answerId,
-              value: answerValue,
-            }],
-            oldAnswers: [...existingQuestionState.oldAnswers, {
-              id: answerId,
-              value: answerValue,
-            }],
+            answers: [
+              ...existingQuestionState.answers,
+              {
+                id: answerId,
+                value: answerValue,
+              },
+            ],
+            oldAnswers: [
+              ...existingQuestionState.oldAnswers,
+              {
+                id: answerId,
+                value: answerValue,
+              },
+            ],
             changed: false,
           };
         }
@@ -162,16 +168,14 @@ export class RiskAreaAssessment extends React.Component<IProps, IState> {
     this.setState(() => ({ inProgress: false, questions }));
   }
 
-  updateVisibility(
-    updatedAnswersResponse: {
-      data: { patientAnswersUpdateApplicable: FullPatientAnswerFragment[] },
-    },
-  ) {
+  updateVisibility(updatedAnswersResponse: {
+    data: { patientAnswersUpdateApplicable: FullPatientAnswerFragment[] };
+  }) {
     const { data } = updatedAnswersResponse;
 
     // TODO: use the response here to verify the visibility of answers in the assessment
     if (data && data.patientAnswersUpdateApplicable.length) {
-      return (data);
+      return data;
     }
   }
 
@@ -185,7 +189,7 @@ export class RiskAreaAssessment extends React.Component<IProps, IState> {
           updateAnswersApplicabilityError: undefined,
         }));
 
-        const result = await updateAnswersApplicability({ variables: { patientId, riskAreaId }});
+        const result = await updateAnswersApplicability({ variables: { patientId, riskAreaId } });
 
         this.updateVisibility(result);
 
@@ -206,8 +210,9 @@ export class RiskAreaAssessment extends React.Component<IProps, IState> {
     const { questions } = this.state;
     const questionIds = keys(questions);
 
-    return questionIds
-      .filter(questionId => !!questions[questionId] && questions[questionId].changed);
+    return questionIds.filter(
+      questionId => !!questions[questionId] && questions[questionId].changed,
+    );
   }
 
   async onSave() {
@@ -237,7 +242,9 @@ export class RiskAreaAssessment extends React.Component<IProps, IState> {
       try {
         await createPatientAnswers({
           variables: {
-            patientId, patientAnswers: newPatientAnswers, questionIds: changedQuestionIds,
+            patientId,
+            patientAnswers: newPatientAnswers,
+            questionIds: changedQuestionIds,
           },
         });
 
@@ -271,9 +278,7 @@ export class RiskAreaAssessment extends React.Component<IProps, IState> {
     const { questions } = this.state;
     const questionData = questions[questionId];
 
-    const answerIndex = questionData.answers.findIndex((answer: any) =>
-      answer.id === answerId,
-    );
+    const answerIndex = questionData.answers.findIndex((answer: any) => answer.id === answerId);
 
     if (answerIndex > -1) {
       questionData.answers.splice(answerIndex, 1);
@@ -323,8 +328,9 @@ export class RiskAreaAssessment extends React.Component<IProps, IState> {
     };
 
     if (questionAnswers.length) {
-      const flattenedAnswers = questionAnswers
-        .reduce((answers1, answers2) => answers1.concat(answers2));
+      const flattenedAnswers = questionAnswers.reduce((answers1, answers2) =>
+        answers1.concat(answers2),
+      );
 
       questionConditions.forEach(condition => {
         if (flattenedAnswers.some(answer => answer.id === condition.answerId)) {
@@ -386,7 +392,8 @@ export class RiskAreaAssessment extends React.Component<IProps, IState> {
         onChange={this.onChange}
         key={`${question.id}-${index}`}
         question={question}
-        editable={inProgress} />
+        editable={inProgress}
+      />
     );
   }
 
@@ -421,15 +428,21 @@ export class RiskAreaAssessment extends React.Component<IProps, IState> {
     return (
       <div>
         <div className={classNames(sortSearchStyles.sortSearchBar, styles.buttonBar)}>
-          <div className={cancelButtonStyles} onClick={this.onCancel}>Cancel</div>
-          <div className={saveButtonStyles} onClick={this.onSave}>Save updates</div>
-          <div className={startButtonStyles} onClick={this.onStart}>Start assessment</div>
+          <div className={cancelButtonStyles} onClick={this.onCancel}>
+            Cancel
+          </div>
+          <div className={saveButtonStyles} onClick={this.onSave}>
+            Save updates
+          </div>
+          <div className={startButtonStyles} onClick={this.onStart}>
+            Start assessment
+          </div>
         </div>
         <div className={styles.riskAreasPanel}>
           <div className={styles.riskAssessment}>
             <div className={titleStyles}>
               <div className={styles.title}>
-                <div className={styles.titleIcon}></div>
+                <div className={styles.titleIcon} />
                 <div className={styles.titleText}>{title}</div>
               </div>
               <div className={styles.meta}>
@@ -462,9 +475,9 @@ export default compose(
       },
     }),
     props: ({ data }) => ({
-      loading: (data ? data.loading : false),
-      error: (data ? data.error : null),
-      riskArea: (data ? (data as any).riskArea : null),
+      loading: data ? data.loading : false,
+      error: data ? data.error : null,
+      riskArea: data ? (data as any).riskArea : null,
     }),
   }),
   graphql(riskAreaQuestionsQuery as any, {
@@ -474,9 +487,9 @@ export default compose(
       },
     }),
     props: ({ data }) => ({
-      riskAreaQuestionsLoading: (data ? data.loading : false),
-      riskAreaQuestionsError: (data ? data.error : null),
-      riskAreaQuestions: (data ? (data as any).questionsForRiskArea : null),
+      riskAreaQuestionsLoading: data ? data.loading : false,
+      riskAreaQuestionsError: data ? data.error : null,
+      riskAreaQuestions: data ? (data as any).questionsForRiskArea : null,
     }),
   }),
   graphql(patientAnswersQuery as any, {
@@ -487,9 +500,9 @@ export default compose(
       },
     }),
     props: ({ data }) => ({
-      patientAnswersLoading: (data ? data.loading : false),
-      patientAnswersError: (data ? data.error : null),
-      patientAnswers: (data ? (data as any).patientAnswersForRiskArea : null),
+      patientAnswersLoading: data ? data.loading : false,
+      patientAnswersError: data ? data.error : null,
+      patientAnswers: data ? (data as any).patientAnswersForRiskArea : null,
     }),
   }),
   graphql(patientAnswersCreate as any, { name: 'createPatientAnswers' }),

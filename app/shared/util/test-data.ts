@@ -291,6 +291,20 @@ export const patientConcern = {
   deletedAt: null,
 };
 
+export const patientAnswer = {
+  id: 'patient-answer',
+  createdAt: '2017-09-07T13:45:14.532Z',
+  updatedAt: '2017-09-07T13:45:14.532Z',
+  deletedAt: null,
+  answerId: answer.id,
+  answerValue: answer.value,
+  patientId: patient.id,
+  applicable: true,
+  question: {
+    id: question.id,
+  },
+};
+
 export const encounter = {
   encounterType: 'encounter type',
   providerName: 'provider name',

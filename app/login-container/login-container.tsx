@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { compose, graphql } from 'react-apollo';
-import GoogleLogin, { GoogleLoginResponseOffline } from 'react-google-login';
+import GoogleLogin from 'react-google-login';
 import { FormattedMessage } from 'react-intl';
 import { connect, Dispatch } from 'react-redux';
 import { push } from 'react-router-redux';
@@ -17,6 +17,10 @@ export interface IProps {
   mutate: any;
   loading: boolean;
   error?: string;
+}
+
+interface IGoogleLoginResponseOffline {
+  code: string;
 }
 
 interface IGoogleLoginError {
@@ -48,7 +52,7 @@ class LoginContainer extends React.Component<IProps, { error?: string }> {
     document.title = 'Log in | Commons';
   }
 
-  async onSuccess(response: GoogleLoginResponseOffline) {
+  async onSuccess(response: IGoogleLoginResponseOffline) {
     try {
       const res = await this.props.logIn({ variables: { googleAuthCode: response.code } });
       await localStorage.setItem('authToken', res.data.userLogin.authToken);
@@ -85,7 +89,7 @@ class LoginContainer extends React.Component<IProps, { error?: string }> {
                   clientId={clientId}
                   buttonText='Login'
                   scope={SCOPE}
-                  offline
+                  responseType='code'
                   onSuccess={this.onSuccess}
                   onFailure={this.onError}
                   className={styles.button}>

@@ -39,7 +39,8 @@
     "user:add:dev": "NODE_ENV=development ts-node ./scripts/add-user.ts",
     "user:add:production": "NODE_ENV=production ts-node ./scripts/add-user.ts",
     "user:remove:dev": "NODE_ENV=development ts-node ./scripts/remove-user.ts",
-    "user:remove:production": "NODE_ENV=production ts-node ./scripts/remove-user.ts"
+    "user:remove:production": "NODE_ENV=production ts-node ./scripts/remove-user.ts",
+    "postinstall": "rm node_modules/react-google-login/index.d.ts"
   },
   "author": "Brennan Moore",
   "jest": {
@@ -150,7 +151,7 @@
     "babel-polyfill": "^6.26.0",
     "babel-preset-env": "^1.6.0",
     "base-64": "^0.1.0",
-    "basic-auth": "^1.1.0",
+    "basic-auth": "^2.0.0",
     "body-parser": "^1.17.2",
     "classnames": "^2.2.5",
     "copy-webpack-plugin": "^4.0.1",
@@ -188,7 +189,7 @@
     "react-apollo": "^1.4.15",
     "react-copy-to-clipboard": "^5.0.0",
     "react-dom": "15.6.1",
-    "react-google-login": "2.9.2",
+    "react-google-login": "2.9.3",
     "react-intl": "^2.4.0",
     "react-redux": "^5.0.6",
     "react-router-dom": "^4.2.2",
@@ -201,7 +202,7 @@
     "style-loader": "^0.18.2",
     "ts-loader": "^2.3.6",
     "ts-node": "^3.3.0",
-    "typescript": "^2.4.1",
+    "typescript": "^2.5.2",
     "typings-for-css-modules-loader": "^1.5.0",
     "url-loader": "^0.5.9",
     "uuid": "^3.0.1",

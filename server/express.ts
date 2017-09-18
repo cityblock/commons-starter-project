@@ -26,7 +26,7 @@ export const checkAuth = (username: string, password: string) => (
   next();
 };
 
-export default async (app: express.Application) => {
+export default async (app: express.Application, logger: Console) => {
   // This adds request logging using some decent defaults.
   /* istanbul ignore next */
   if (config.NODE_ENV === 'development') {
@@ -63,7 +63,7 @@ export default async (app: express.Application) => {
     bodyParser.json(),
     graphqlExpress(async (request: express.Request) => ({
       schema: schema as any,
-      context: await getGraphQLContext(request),
+      context: await getGraphQLContext(request, logger),
       debug: false,
     })),
   );

@@ -9,6 +9,8 @@ describe('user tests', () => {
   let db: Db;
   const userRole = 'physician';
   const homeClinicId = '1';
+  const log = jest.fn();
+  const logger = { log };
 
   beforeEach(async () => {
     db = await Db.get();
@@ -258,13 +260,14 @@ describe('user tests', () => {
           user { firstName, lastName }
         }
       }`;
-      const result = await graphql(schema, mutation, null, { db, userRole });
+      const result = await graphql(schema, mutation, null, { db, userRole, logger });
       expect(cloneDeep(result.data!.userLogin.user)).toMatchObject({
         firstName: 'Bertrand',
         lastName: 'Russell',
       });
       const freshUser = await User.query().findById(user.id);
       expect(freshUser!.lastLoginAt).not.toBeNull();
+      expect(log).toBeCalled();
     });
 
     it('updates lastLoginAt', async () => {

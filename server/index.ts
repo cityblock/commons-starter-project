@@ -7,6 +7,8 @@ import * as express from 'express';
 import * as webpack from 'webpack';
 import expressConfig from './express';
 
+let logger = console;
+
 /* istanbul ignore next */
 if (process.env.NODE_ENV === 'production') {
   /* tslint:disable no-var-requires */
@@ -15,6 +17,7 @@ if (process.env.NODE_ENV === 'production') {
 
   const captureOutput = new CaptureOutput('web');
   captureOutput.capture();
+  logger = captureOutput.logger;
 }
 
 const app = express();
@@ -39,7 +42,7 @@ export async function main(options: IMainOptions) {
     app.use(require('webpack-hot-middleware')(compiler));
   }
 
-  await expressConfig(app);
+  await expressConfig(app, logger);
   return (app as any).listen(app.get('port'));
 }
 

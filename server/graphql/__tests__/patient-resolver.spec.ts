@@ -20,6 +20,8 @@ describe('patient', () => {
   let patient: Patient;
   let user: User;
   let homeClinicId: string;
+  const log = jest.fn();
+  const logger = { log };
   const userRole = 'physician';
 
   beforeEach(async () => {
@@ -53,12 +55,13 @@ describe('patient', () => {
         }
       }`;
 
-      const result = await graphql(schema, query, null, { db, userRole });
+      const result = await graphql(schema, query, null, { db, userId: user.id, userRole, logger });
       expect(cloneDeep(result.data!.patient)).toMatchObject({
         id: patient.id,
         firstName: 'dan',
         lastName: 'plant',
       });
+      expect(log).toBeCalled();
     });
   });
 
@@ -70,11 +73,12 @@ describe('patient', () => {
         }
       }`;
 
-      const result = await graphql(schema, query, null, { db, userRole });
+      const result = await graphql(schema, query, null, { db, userRole, logger });
       expect(cloneDeep(result.data!.patientEdit)).toMatchObject({
         id: patient.id,
         firstName: 'first',
       });
+      expect(log).toBeCalled();
     });
   });
 
@@ -106,6 +110,7 @@ describe('patient', () => {
         db,
         userRole,
         userId: user.id,
+        logger,
       });
       expect(cloneDeep(result.data!.patientSetup)).toMatchObject({
         firstName: 'first',
@@ -114,9 +119,10 @@ describe('patient', () => {
         zip: 12345,
         dateOfBirth: '02/02/1902',
       });
+      expect(log).toBeCalled();
     });
 
-    it('errors and does not create patient when Athena fails', async () => {
+    it('errors and does not create patient when redox fails', async () => {
       const patientCount = await Patient.query().count();
 
       const query = `mutation {
@@ -145,6 +151,7 @@ describe('patient', () => {
         db,
         userRole,
         userId: user.id,
+        logger,
       });
       expect(result.errors![0].message).toContain(
         'Post received a 400 response, https://api.redoxengine.com/endpoint, 400',
@@ -185,6 +192,7 @@ describe('patient', () => {
         db,
         userRole,
         userId: user.id,
+        logger,
       });
       expect(cloneDeep(result.data!.patientScratchPadEdit)).toMatchObject({
         text: 'Edited Scratch Pad',

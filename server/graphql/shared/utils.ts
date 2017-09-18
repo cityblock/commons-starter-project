@@ -10,12 +10,17 @@ import User, { UserRole } from '../../models/user';
 
 export const TWENTY_FOUR_HOURS_IN_MILLISECONDS = 86400000;
 
+export interface ILogger {
+  log: (text: string, logLevel: number) => void;
+}
+
 export interface IContext {
   db: Db;
   redoxApi: RedoxApi;
   userRole: UserRole;
   userId?: string;
   opticsContext: any;
+  logger: ILogger;
 }
 
 export function formatRelayEdge(node: any, id: string) {
@@ -59,7 +64,10 @@ const isInvalidLogin = (tokenLastLoginAt: string, userLastLoginAt: string | unde
   return newerLoginExists || loginTooOld;
 };
 
-export async function getGraphQLContext(request: express.Request): Promise<IContext> {
+export async function getGraphQLContext(
+  request: express.Request,
+  logger: ILogger,
+): Promise<IContext> {
   const authToken = request.headers.auth_token as string;
   const db = await Db.get();
   const redoxApi = await RedoxApi.get();
@@ -84,6 +92,7 @@ export async function getGraphQLContext(request: express.Request): Promise<ICont
         redoxApi,
         userRole: 'anonymousUser',
         opticsContext,
+        logger,
       };
     }
   }
@@ -94,6 +103,7 @@ export async function getGraphQLContext(request: express.Request): Promise<ICont
     db,
     redoxApi,
     opticsContext,
+    logger,
   };
 }
 

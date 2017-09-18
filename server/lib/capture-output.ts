@@ -28,6 +28,21 @@ export default class CaptureOutput {
     this.releaseStderr();
   }
 
+  /*
+  * default log levels
+  * 0 - debug
+  * 1 - info
+  * 2 - notice
+  * 3 - warning
+  * 4 - err
+  * 5 - crit
+  * 6 - alert
+  * 7 - emerg
+  */
+  log(text: string, logLevel: 2) {
+    this.logger.log(logLevel, text);
+  }
+
   private captureStream(stream: NodeJS.Socket, callback: (str: string) => any) {
     return this.hookStream(stream, (string: string) => {
       callback(`${this.tag}${string}`);

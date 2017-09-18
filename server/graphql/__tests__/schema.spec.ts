@@ -26,11 +26,14 @@ describe('util tests', () => {
       lastLoginAt: new Date().toUTCString(),
     });
     const { userId, userRole } = await parseAndVerifyJwt(authToken);
-    const context = await getGraphQLContext({
-      headers: {
-        auth_token: authToken,
-      },
-    } as any);
+    const context = await getGraphQLContext(
+      {
+        headers: {
+          auth_token: authToken,
+        },
+      } as any,
+      { log: jest.fn() },
+    );
     expect(context).toMatchObject({
       userId,
       userRole,
@@ -43,11 +46,14 @@ describe('util tests', () => {
       userRole: 'physician',
       lastLoginAt: new Date('01/01/2010').toUTCString(),
     });
-    const context = await getGraphQLContext({
-      headers: {
-        auth_token: authToken,
-      },
-    } as any);
+    const context = await getGraphQLContext(
+      {
+        headers: {
+          auth_token: authToken,
+        },
+      } as any,
+      { log: jest.fn() },
+    );
     expect(context).toMatchObject({
       userRole: 'anonymousUser',
     });

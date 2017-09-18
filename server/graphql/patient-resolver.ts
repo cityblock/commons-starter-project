@@ -14,10 +14,10 @@ export interface IQuery {
 export async function resolvePatient(
   root: any,
   { patientId }: IQuery,
-  { userRole, userId }: IContext,
+  { userRole, userId, logger }: IContext,
 ): Promise<IPatient> {
   await accessControls.isAllowedForUser(userRole, 'view', 'patient', patientId, userId);
-
+  logger.log(`GET patient ${patientId} by ${userId}`, 2);
   return await Patient.get(patientId);
 }
 
@@ -28,12 +28,12 @@ export interface IPatientEditOptions {
 export async function patientEdit(
   source: any,
   { input }: IPatientEditOptions,
-  { userRole, userId }: IContext,
+  { userRole, userId, logger }: IContext,
 ): Promise<IPatient> {
   await accessControls.isAllowedForUser(userRole, 'edit', 'patient', input.patientId, userId);
 
   const filtered = omitBy<{}, IPatientEditInput>(input, isNil);
-
+  logger.log(`EDIT patient ${input.patientId} by ${userId}`, 2);
   return await Patient.edit(filtered, input.patientId);
 }
 
@@ -44,7 +44,7 @@ export interface IPatientSetupOptions {
 export async function patientSetup(
   source: any,
   { input }: IPatientSetupOptions,
-  { redoxApi, userRole, userId }: IContext,
+  { redoxApi, userRole, userId, logger }: IContext,
 ): Promise<IPatient> {
   await accessControls.isAllowedForUser(userRole, 'create', 'patient');
   checkUserLoggedIn(userId);
@@ -85,6 +85,7 @@ export async function patientSetup(
   });
   // Need to wait until the transaction is complete to add relations like Care Team
   await CareTeam.create({ userId: userId!, patientId: result.id });
+  logger.log(`SETUP patient ${result.id} by ${userId}`, 2);
   return result;
 }
 

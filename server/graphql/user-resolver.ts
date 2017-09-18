@@ -114,7 +114,7 @@ export async function resolveUsers(
 
 // disabling isAllowed check for login endpoint so users can log in
 /* tslint:disable check-is-allowed */
-export async function userLogin(root: any, { input }: IUserLoginOptions, { db }: IContext) {
+export async function userLogin(root: any, { input }: IUserLoginOptions, { db, logger }: IContext) {
   const { googleAuthCode } = input;
 
   const oauth = await OauthAuthorize(googleAuthCode);
@@ -149,6 +149,8 @@ export async function userLogin(root: any, { input }: IUserLoginOptions, { db }:
     userRole: user.userRole,
     lastLoginAt,
   });
+
+  logger.log(`User login for ${user.id}`, 2);
   return { authToken, user: updatedUser };
 }
 /* tslint:enable check-is-allowed */

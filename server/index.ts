@@ -17,7 +17,7 @@ if (process.env.NODE_ENV === 'production') {
 
   const captureOutput = new CaptureOutput('web');
   captureOutput.capture();
-  logger = captureOutput.logger;
+  logger = captureOutput;
 }
 
 const app = express();

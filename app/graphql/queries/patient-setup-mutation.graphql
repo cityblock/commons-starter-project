@@ -9,7 +9,7 @@ mutation patientSetup(
   $gender: String!
   $maritalStatus: String!
   $race: String!
-  $zip: Int!
+  $zip: String!
   $ssn: String!
   $language: String!
   $email: String

@@ -33,7 +33,7 @@ export function formatPatientCreateOptions(
           StreetAddress: patient.address1 || undefined,
           City: patient.city || undefined,
           State: patient.state || undefined,
-          ZIP: String(patient.zip),
+          ZIP: patient.zip,
           Country: patient.country || undefined,
         },
       },

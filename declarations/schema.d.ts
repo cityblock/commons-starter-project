@@ -149,7 +149,7 @@ declare module 'schema' {
     lastName: string | null;
     dateOfBirth: string | null;
     gender: string | null;
-    zip: number | null;
+    zip: string | null;
     homeClinicId: string | null;
     createdAt: string;
     scratchPad: string | null;
@@ -794,7 +794,7 @@ declare module 'schema' {
     lastName?: string | null;
     dateOfBirth?: string | null;
     gender?: string | null;
-    zip?: number | null;
+    zip?: string | null;
     language?: string | null;
     consentToCall?: boolean | null;
     consentToText?: boolean | null;
@@ -809,7 +809,7 @@ declare module 'schema' {
     lastName: string;
     dateOfBirth: string;
     gender: string;
-    zip: number;
+    zip: string;
     homeClinicId: string;
     suffix?: string | null;
     preferredName?: string | null;

@@ -138,7 +138,7 @@ type Patient implements uniqueId {
   lastName: String
   dateOfBirth: String
   gender: String
-  zip: Int
+  zip: String
   homeClinicId: String
   createdAt: String!
   scratchPad: String
@@ -580,7 +580,7 @@ input PatientEditInput {
   lastName: String
   dateOfBirth: String
   gender: String
-  zip: Int
+  zip: String
   language: String
   consentToCall: Boolean
   consentToText: Boolean
@@ -593,7 +593,7 @@ input PatientSetupInput {
   lastName: String!
   dateOfBirth: String!
   gender: String!
-  zip: Int!
+  zip: String!
   homeClinicId: String!
   suffix: String
   preferredName: String

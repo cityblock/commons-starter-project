@@ -8,7 +8,7 @@ export interface IPatientEditableFields {
   middleName?: string | undefined | null;
   lastName: string;
   gender: string;
-  zip: number;
+  zip: string;
   homeClinicId: string;
   dateOfBirth: string; // mm/dd/yy
   consentToCall: boolean;
@@ -31,7 +31,7 @@ export default class Patient extends Model {
   middleName: string | null;
   dateOfBirth: string;
   gender: string;
-  zip: number;
+  zip: string;
   createdAt: string;
   updatedAt: string;
   athenaPatientId: number;
@@ -60,7 +60,7 @@ export default class Patient extends Model {
       language: { type: 'string' },
       gender: { type: 'string' },
       dateOfBirth: { type: 'string' },
-      zip: { type: 'number' },
+      zip: { type: 'string' },
       scratchPad: { type: 'text' },
       consentToCall: { type: 'boolean' },
       consentToText: { type: 'boolean' },

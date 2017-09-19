@@ -7,7 +7,7 @@ mutation patientEdit(
   $lastName: String
   $dateOfBirth: String
   $gender: String
-  $zip: Int
+  $zip: String
   $language: String
   $consentToCall: Boolean
   $consentToText: Boolean

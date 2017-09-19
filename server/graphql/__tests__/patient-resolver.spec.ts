@@ -89,7 +89,7 @@ describe('patient', () => {
           firstName: "first",
           lastName: "last",
           gender: "F",
-          zip: 12345,
+          zip: "02345",
           homeClinicId: "${homeClinicId}",
           dateOfBirth: "02/02/1902",
           consentToText: true,
@@ -116,7 +116,7 @@ describe('patient', () => {
         firstName: 'first',
         lastName: 'last',
         gender: 'F',
-        zip: 12345,
+        zip: '02345',
         dateOfBirth: '02/02/1902',
       });
       expect(log).toBeCalled();
@@ -130,7 +130,7 @@ describe('patient', () => {
           firstName: "first",
           lastName: "last",
           gender: "F",
-          zip: 12345,
+          zip: "02345",
           homeClinicId: "${homeClinicId}",
           dateOfBirth: "02/02/1902",
           consentToText: true,

@@ -152,7 +152,7 @@ export class PatientInfo extends React.Component<IProps, IState> {
             lastName: lastName ? lastName : null,
             gender: gender ? gender : null,
             dateOfBirth: dateOfBirth ? format(new Date(dateOfBirth), DOB_FORMAT) : null,
-            zip: zip ? Number(zip) : null,
+            zip: zip ? zip : null,
             language: language ? language : null,
             consentToCall: consentToCall === 'true',
             consentToText: consentToText === 'true',

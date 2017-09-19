@@ -165,7 +165,7 @@ class PatientEnrollmentContainer extends React.Component<IProps, IState> {
           consentToCall: this.state.patient.consentToCall === 'true' ? true : false,
           consentToText: this.state.patient.consentToText === 'true' ? true : false,
           race: this.state.patient.race,
-          zip: Number(this.state.patient.zip),
+          zip: this.state.patient.zip,
           issueDate: formatDate(this.state.insurance.issueDate),
           expirationDate: formatDate(this.state.insurance.expirationDate),
           dateOfBirth: formatDate(this.state.patient.dateOfBirth),

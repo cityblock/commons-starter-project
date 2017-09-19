@@ -28,7 +28,7 @@ export const patient = {
   language: 'en',
   dateOfBirth: '01/01/1999',
   gender: 'male',
-  zip: 10001,
+  zip: '05431',
   homeClinicId: 'clinic-id',
   createdAt: '2017-09-07T13:45:14.532Z',
   scratchPad: 'Note',

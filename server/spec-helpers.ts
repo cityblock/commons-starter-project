@@ -24,7 +24,7 @@ export function createMockPatient(athenaPatientId = 1, homeClinicId = '1') {
     firstName: 'dan',
     lastName: 'plant',
     homeClinicId,
-    zip: 11238,
+    zip: '11238',
     gender: 'M',
     dateOfBirth: '01/01/1900',
     consentToCall: false,

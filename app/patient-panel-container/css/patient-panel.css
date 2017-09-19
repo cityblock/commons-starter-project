@@ -32,4 +32,5 @@ a.button {
   width: 100%;
   height: calc(100vh - 213px);
   overflow: scroll;
+  position: relative;
 }

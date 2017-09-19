@@ -186,6 +186,44 @@ describe('answer tests', () => {
       });
     });
 
+    it('gets summary for patient with an embedded patient answer', async () => {
+      const answer = await Answer.create({
+        displayValue: 'loves writing tests!',
+        value: '3',
+        valueType: 'number',
+        riskAdjustmentType: 'forceHighRisk',
+        inSummary: true,
+        summaryText: 'the patient said: {answer}',
+        questionId: question.id,
+        order: 1,
+      });
+      await PatientAnswer.create({
+        patientId: patient.id,
+        answers: [
+          {
+            questionId: answer.questionId,
+            answerId: answer.id,
+            answerValue: 'patient wrote this',
+            patientId: patient.id,
+            applicable: true,
+            userId: user.id,
+          },
+        ],
+      });
+      const query = `{
+        patientRiskAreaSummary(
+          riskAreaId: "${riskArea.id}",
+          patientId: "${patient.id}",
+        ) {
+          summary
+        }
+      }`;
+      const result = await graphql(schema, query, null, { db, userRole });
+      expect(cloneDeep(result.data!.patientRiskAreaSummary)).toMatchObject({
+        summary: ['the patient said: patient wrote this'],
+      });
+    });
+
     it('gets increment and high risk score for patient', async () => {
       const answer = await Answer.create({
         displayValue: 'loves writing tests!',

@@ -8,7 +8,6 @@ import { push } from 'react-router-redux';
 import * as patientPanelQuery from '../graphql/queries/get-patient-panel.graphql';
 import { ShortPatientFragment } from '../graphql/types';
 import * as styles from './css/patient-panel.css';
-import { Pagination } from './pagination';
 import { PatientRoster } from './patient-roster';
 
 export interface IPageParams {
@@ -134,8 +133,6 @@ class PatientPanelContainer extends React.Component<IProps, IState> {
             error={error}
             patients={this.formattedPatients()}
             onRetryClick={this.reloadCurrentPage}
-          />
-          <Pagination
             hasNextPage={this.state.hasNextPage}
             hasPreviousPage={this.state.hasPreviousPage}
             onNextClick={this.getNextPage}

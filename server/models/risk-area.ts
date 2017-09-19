@@ -106,7 +106,17 @@ export default class RiskArea extends Model {
       if (patientAnswer.applicable) {
         const answer = patientAnswer.answer;
         if (answer.inSummary && answer.summaryText) {
-          summary.push(answer.summaryText);
+          const { summaryText } = answer;
+          const { answerValue } = patientAnswer;
+
+          const injectedAnswerRegex = /\{answer\}/;
+          const needsInjectedAnswer = injectedAnswerRegex.test(summaryText);
+
+          if (needsInjectedAnswer) {
+            summary.push(summaryText.replace(injectedAnswerRegex, answerValue));
+          } else {
+            summary.push(summaryText);
+          }
         }
       }
     });

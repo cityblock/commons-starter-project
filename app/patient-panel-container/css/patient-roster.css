@@ -6,6 +6,7 @@
   color: var(--default-font-color);
   text-align: left;
   padding: 0px var(--small-gutter);
+  position: relative;
 }
 
 .tableRow {
@@ -28,11 +29,17 @@
   width: calc(100vw - var(--gutter));
   max-width: calc(var(--max-width) - var(--gutter));
   max-height: 56px;
+  z-index: 2;
 }
 
 .tableBody {
   min-height: 300px;
   max-height: 660px;
+  position: absolute;
+  top: 56px;
+  z-index: 1;
+  max-width: calc(var(--max-width) - var(--gutter));
+  width: calc(100vw - var(--gutter));
 }
 
 .tableBody .tableRow {

@@ -2,11 +2,16 @@ import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
 import { ShortPatientFragment } from '../graphql/types';
 import * as styles from './css/patient-roster.css';
+import { Pagination } from './pagination';
 import PatientRosterItem from './patient-roster-item';
 import { TableLoadingError } from './table-loading-error';
 
 export interface IProps {
   patients: ShortPatientFragment[];
+  hasNextPage?: boolean;
+  hasPreviousPage?: boolean;
+  onNextClick: () => any;
+  onPreviousClick: () => any;
   isLoading: boolean;
   error?: string;
   onRetryClick: () => any;
@@ -17,7 +22,7 @@ function renderPatient(patient: ShortPatientFragment) {
 }
 
 export const PatientRoster: React.StatelessComponent<IProps> = props => {
-  const { patients } = props;
+  const { patients, hasNextPage, hasPreviousPage, onNextClick, onPreviousClick } = props;
   let tableBody: any;
 
   if (props.error || props.isLoading) {
@@ -57,6 +62,12 @@ export const PatientRoster: React.StatelessComponent<IProps> = props => {
       </div>
       <div className={styles.tableBody}>
         {tableBody}
+        <Pagination
+          hasNextPage={hasNextPage}
+          hasPreviousPage={hasPreviousPage}
+          onNextClick={onNextClick}
+          onPreviousClick={onPreviousClick}
+        />
       </div>
     </div>
   );

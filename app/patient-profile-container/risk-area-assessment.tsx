@@ -175,7 +175,7 @@ export class RiskAreaAssessment extends React.Component<IProps, IState> {
       return 'Never';
     }
 
-    const latestAnswer = patientAnswers.sort((answerA, answerB) => {
+    const latestAnswer = clone(patientAnswers).sort((answerA, answerB) => {
       const answerAUpdatedAt = new Date(answerA.updatedAt).valueOf();
       const answerBUpdatedAt = new Date(answerB.updatedAt).valueOf();
 

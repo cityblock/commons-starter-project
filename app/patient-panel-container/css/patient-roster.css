@@ -24,6 +24,10 @@
 .tableHead {
   font-weight: 500;
   background-color: var(--highlight-background-color);
+  position: fixed;
+  width: calc(100vw - var(--gutter));
+  max-width: calc(var(--max-width) - var(--gutter));
+  max-height: 56px;
 }
 
 .tableBody {

@@ -14,7 +14,7 @@ export const SPANISH_TRANSLATION = {
     'patientPanel.age': 'Años',
     'patientPanel.location': 'Ubicación',
     'patientPanel.joinedAt': 'Paciente Unido',
-    'patientPanel.engagedAt': 'Último compromiso',
+    'patientPanel.engagedAt': 'Última actualización',
     'patient.dateOfBirth': 'Fecha de nacimiento',
     'patient.language': 'Idioma',
     'patient.location': 'Ubicación',

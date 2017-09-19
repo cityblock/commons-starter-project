@@ -64,7 +64,7 @@ exports[`renders patient panel container correctly 1`] = `
           <div
             className={undefined}
           >
-            Last Engagement
+            Last Update
           </div>
         </div>
       </div>

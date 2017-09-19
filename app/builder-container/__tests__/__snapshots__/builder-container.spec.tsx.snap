@@ -1,0 +1,90 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders builder container 1`] = `
+<div
+  className={undefined}
+>
+  <div
+    className={undefined}
+  >
+    left nav
+  </div>
+  <div
+    className={undefined}
+  >
+    <div
+      className={undefined}
+    >
+      <a
+        className="undefined"
+        href="/builder/domains"
+        onClick={[Function]}
+      >
+        Domains
+      </a>
+      <a
+        className=""
+        href="/builder/domains/undefined/questions"
+        onClick={[Function]}
+      >
+        Questions
+      </a>
+      <a
+        className=""
+        href="/builder/concerns"
+        onClick={[Function]}
+      >
+        Concerns
+      </a>
+      <a
+        className=""
+        href="/builder/goals"
+        onClick={[Function]}
+      >
+        Goals
+      </a>
+    </div>
+    <div
+      className={undefined}
+    >
+      <div
+        className={undefined}
+      >
+        <div
+          className={undefined}
+        >
+          <div
+            className={undefined}
+            onClick={[Function]}
+          >
+            Create Domain
+          </div>
+        </div>
+      </div>
+      <div
+        className={undefined}
+      >
+        <div
+          className=""
+        >
+          <div
+            className={undefined}
+          >
+            <div
+              className={undefined}
+            />
+            <div
+              className={undefined}
+            >
+              No RiskAreas
+            </div>
+          </div>
+        </div>
+        <div
+          className=""
+        />
+      </div>
+    </div>
+  </div>
+</div>
+`;

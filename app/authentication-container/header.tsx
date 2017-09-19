@@ -50,12 +50,21 @@ class Header extends React.Component<IProps> {
       currentUser.firstName && currentUser.lastName
         ? `${currentUser.firstName} ${currentUser.lastName}`
         : null;
-    let adminLink = null;
+    let builderLink = null;
+    let managerLink = null;
     if (currentUser.userRole === 'admin') {
-      adminLink = (
-        <Link to={'/admin'} className={styles.navItem}>
+      builderLink = (
+        <Link to={'/builder'} className={styles.navItem}>
           <div className={styles.tasksIcon} />
-          <FormattedMessage id='header.admin'>
+          <FormattedMessage id='header.builder'>
+            {(message: string) => <div className={styles.navText}>{message}</div>}
+          </FormattedMessage>
+        </Link>
+      );
+      managerLink = (
+        <Link to={'/manager'} className={styles.navItem}>
+          <div className={styles.tasksIcon} />
+          <FormattedMessage id='header.manager'>
             {(message: string) => <div className={styles.navText}>{message}</div>}
           </FormattedMessage>
         </Link>
@@ -91,7 +100,8 @@ class Header extends React.Component<IProps> {
               </FormattedMessage>
               <div className={tasksBadgeStyles} />
             </Link>
-            {adminLink}
+            {builderLink}
+            {managerLink}
           </div>
           <div className={styles.right}>
             <div className={styles.userInfo}>

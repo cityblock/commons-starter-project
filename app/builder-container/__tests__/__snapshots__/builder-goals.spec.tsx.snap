@@ -1,0 +1,128 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders builder goals 1`] = `
+<div
+  className={undefined}
+>
+  <div
+    className={undefined}
+  >
+    <div
+      className={undefined}
+    >
+      <div
+        className={undefined}
+        onClick={[Function]}
+      >
+        Create Goal
+      </div>
+    </div>
+  </div>
+  <div
+    className={undefined}
+  >
+    <div
+      className=""
+    >
+      <a
+        className=""
+        href="/route/base/goal-id"
+        onClick={[Function]}
+      >
+        <div
+          className={undefined}
+        >
+          Goal Title
+        </div>
+        <div
+          className={undefined}
+        >
+          <div
+            className=""
+          >
+            <span
+              className={undefined}
+            >
+              Created:
+            </span>
+            <span
+              className={undefined}
+            >
+              2 months ago
+            </span>
+          </div>
+        </div>
+      </a>
+    </div>
+    <div
+      className=""
+    />
+  </div>
+</div>
+`;
+
+exports[`renders goal create 1`] = `
+<div
+  className={undefined}
+>
+  <div
+    className={undefined}
+  >
+    <div
+      className={undefined}
+    >
+      <div
+        className={undefined}
+        onClick={[Function]}
+      >
+        Create Goal
+      </div>
+    </div>
+  </div>
+  <div
+    className={undefined}
+  >
+    <div
+      className="undefined"
+    >
+      <Unknown
+        goal={
+          Object {
+            "createdAt": "Thu Jul 13 2017 16:52:56 GMT-0400 (EDT)",
+            "deletedAt": null,
+            "id": "goal-id",
+            "taskTemplates": Array [
+              Object {
+                "careTeamAssigneeRole": "physician",
+                "completedWithinInterval": "hour",
+                "completedWithinNumber": 1,
+                "createdAt": "Thu Jul 13 2017 16:52:56 GMT-0400 (EDT)",
+                "deletedAt": null,
+                "goalSuggestionTemplateId": "goal-suggestion-template-id",
+                "id": "task-template-id",
+                "priority": "high",
+                "repeating": false,
+                "title": "Task Template Title",
+                "updatedAt": "Thu Jul 13 2017 16:52:56 GMT-0400 (EDT)",
+              },
+            ],
+            "title": "Goal Title",
+            "updatedAt": "Thu Jul 13 2017 16:52:56 GMT-0400 (EDT)",
+          }
+        }
+        routeBase="/route/base"
+        selected={false}
+      />
+    </div>
+    <div
+      className="undefined"
+    >
+      <Connect(Apollo(GoalCreate))
+        goalId={undefined}
+        onClose={[Function]}
+        routeBase="/route/base"
+      />
+    </div>
+  </div>
+</div>
+`;

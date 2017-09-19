@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Redirect, Route, Switch } from 'react-router-dom';
-import AdminContainer from './admin-container/admin-container';
 import Authentication from './authentication-container/authentication-container';
+import BuilderContainer from './builder-container/builder-container';
 /* tslint:disable:max-line-length */
 import EventNotificationsContainer from './event-notifications-container/event-notifications-container';
 /* tslint:enable:max-line-length */
@@ -42,8 +42,8 @@ export default (
           exact
           path='/patients/:patientId/:tabId/:riskAreaOrSubTabId?'
           component={(PatientProfileContainer as any)} />
-        <Route exact path='/admin/:tabId?/:objectId?/:subTabId?/:questionId?'
-          component={(AdminContainer as any)} />
+        <Route exact path='/builder/:tabId?/:objectId?/:subTabId?/:questionId?'
+          component={(BuilderContainer as any)} />
       </Authentication>
     </Switch>
   </Main>

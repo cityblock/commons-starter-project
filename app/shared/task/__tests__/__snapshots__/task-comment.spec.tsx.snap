@@ -50,7 +50,9 @@ exports[`correctly renders a comment as editable or not 1`] = `
       <div
         className={undefined}
       >
-        Jul 14, 2017
+        <span>
+          Jul 14, 2017
+        </span>
       </div>
     </div>
   </div>

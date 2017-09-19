@@ -1,7 +1,6 @@
 import * as classNames from 'classnames';
-import * as moment from 'moment';
 import * as React from 'react';
-import { DATETIME_FORMAT } from '../config';
+import { FormattedDate } from 'react-intl';
 import { FullPatientConcernFragment } from '../graphql/types';
 import * as styles from './css/patient-care-plan.css';
 import PatientGoal from './patient-goal';
@@ -42,9 +41,9 @@ export default class PatientConcern extends React.Component<IProps, {}> {
       patientGoals.forEach(patientGoal => {
         const { tasks } = patientGoal;
 
-        const goalLastUpdated = moment(patientGoal.updatedAt, DATETIME_FORMAT);
-        const goalMoreRecentlyUpdated = goalLastUpdated
-          .isAfter(moment(stats.lastUpdated, DATETIME_FORMAT));
+        const goalLastUpdated = new Date(patientGoal.updatedAt);
+        const goalMoreRecentlyUpdated =
+          goalLastUpdated.valueOf() > new Date(stats.lastUpdated).valueOf();
 
         if (goalMoreRecentlyUpdated) {
           stats.lastUpdated = patientGoal.updatedAt;
@@ -54,9 +53,9 @@ export default class PatientConcern extends React.Component<IProps, {}> {
           stats.taskCount += tasks.length;
 
           tasks.forEach(task => {
-            const taskLastUpdated = moment(task.updatedAt, DATETIME_FORMAT);
-            const taskMoreRecentlyUpdated = taskLastUpdated
-              .isAfter(moment(stats.lastUpdated, DATETIME_FORMAT));
+            const taskLastUpdated = new Date(task.updatedAt);
+            const taskMoreRecentlyUpdated =
+              taskLastUpdated.valueOf() > new Date(stats.lastUpdated).valueOf();
 
             if (taskMoreRecentlyUpdated) {
               stats.lastUpdated = task.updatedAt;
@@ -77,9 +76,9 @@ export default class PatientConcern extends React.Component<IProps, {}> {
       return null;
     }
 
-    return patientGoals.map((patientGoal, index) =>
-      <PatientGoal key={patientGoal.id} patientGoal={patientGoal} goalNumber={index + 1} />,
-    );
+    return patientGoals.map((patientGoal, index) => (
+      <PatientGoal key={patientGoal.id} patientGoal={patientGoal} goalNumber={index + 1} />
+    ));
   }
 
   render() {
@@ -95,15 +94,12 @@ export default class PatientConcern extends React.Component<IProps, {}> {
 
     const patientConcernStats = this.getStats();
     const { goalCount, taskCount, lastUpdated } = patientConcernStats;
-    const createdAt = moment(patientConcern.createdAt, DATETIME_FORMAT).format('MMM D, YYYY');
-    const updatedAt = moment(lastUpdated, DATETIME_FORMAT).format('MMM D, YYYY');
-
     return (
       <div className={styles.patientConcernGroup}>
         <div className={patientConcernStyles} onClick={() => onClick(patientConcern.id)}>
           <div className={styles.patientConcernTitleRow}>
             <div className={styles.patientConcernTitle}>{patientConcern.concern.title}</div>
-            <div className={styles.patientConcernHamburger}></div>
+            <div className={styles.patientConcernHamburger} />
           </div>
           <div className={styles.patientConcernMetaRow}>
             <div className={styles.patientConcernStats}>
@@ -119,18 +115,25 @@ export default class PatientConcern extends React.Component<IProps, {}> {
             <div className={styles.patientConcernDates}>
               <div className={styles.patientConcernDate}>
                 <div className={styles.patientConcernDateLabel}>Created:</div>
-                <div className={styles.patientConcernDateValue}>{createdAt}</div>
+                <div className={styles.patientConcernDateValue}>
+                  <FormattedDate
+                    value={patientConcern.createdAt}
+                    year='numeric'
+                    month='short'
+                    day='numeric'
+                  />
+                </div>
               </div>
               <div className={styles.patientConcernDate}>
                 <div className={styles.patientConcernDateLabel}>Last update:</div>
-                <div className={styles.patientConcernDateValue}>{updatedAt}</div>
+                <div className={styles.patientConcernDateValue}>
+                  <FormattedDate value={lastUpdated} year='numeric' month='short' day='numeric' />
+                </div>
               </div>
             </div>
           </div>
         </div>
-        <div className={patientGoalsStyles}>
-          {this.renderGoals()}
-        </div>
+        <div className={patientGoalsStyles}>{this.renderGoals()}</div>
       </div>
     );
   }

@@ -1,12 +1,10 @@
 import * as classNames from 'classnames';
 import { clone, isEqual, keys, values } from 'lodash';
-import * as moment from 'moment';
 import * as React from 'react';
 import { compose, graphql } from 'react-apollo';
 import { FormattedRelative } from 'react-intl';
 import { connect, Dispatch } from 'react-redux';
 import { push } from 'react-router-redux';
-import { DATETIME_FORMAT } from '../config';
 import * as patientAnswersQuery from '../graphql/queries/get-patient-answers-for-risk-area.graphql';
 import * as riskAreaQuestionsQuery from '../graphql/queries/get-questions-for-risk-area.graphql';
 import * as riskAreaQuery from '../graphql/queries/get-risk-area.graphql';
@@ -178,12 +176,12 @@ export class RiskAreaAssessment extends React.Component<IProps, IState> {
     }
 
     const latestAnswer = patientAnswers.sort((answerA, answerB) => {
-      const answerAUpdatedAt = moment(answerA.updatedAt, DATETIME_FORMAT);
-      const answerBUpdatedAt = moment(answerB.updatedAt, DATETIME_FORMAT);
+      const answerAUpdatedAt = new Date(answerA.updatedAt).valueOf();
+      const answerBUpdatedAt = new Date(answerB.updatedAt).valueOf();
 
-      if (answerAUpdatedAt.isBefore(answerBUpdatedAt)) {
+      if (answerAUpdatedAt < answerBUpdatedAt) {
         return -1;
-      } else if (answerBUpdatedAt.isBefore(answerAUpdatedAt)) {
+      } else if (answerBUpdatedAt < answerAUpdatedAt) {
         return 1;
       } else {
         return 0;
@@ -508,46 +506,47 @@ export class RiskAreaAssessment extends React.Component<IProps, IState> {
       [styles.highRisk]: false,
     });
 
-    const assessmentHtml = this.isError() ?
-      (
-        <div className={styles.riskAssessmentError}>
-          <div className={styles.riskAssessmentErrorMessage}>
-            <div className={styles.riskAssessmentErrorIcon}></div>
-            <div className={styles.riskAssessmentErrorMessageText}>
-              <div className={styles.riskAssessmentErrorMessageLabel}>
-                Error loading assessment.
-              </div>
-              <div className={styles.riskAssessmentErrorMessageCta} onClick={this.onRetryLoad}>
-                <div className={styles.riskAssessmentErrorMessageLink}>
-                  Click here to retry.
-                </div>
-                <div className={styles.riskAssessmentErrorMessageIcon}></div>
-              </div>
+    const assessmentHtml = this.isError() ? (
+      <div className={styles.riskAssessmentError}>
+        <div className={styles.riskAssessmentErrorMessage}>
+          <div className={styles.riskAssessmentErrorIcon} />
+          <div className={styles.riskAssessmentErrorMessageText}>
+            <div className={styles.riskAssessmentErrorMessageLabel}>Error loading assessment.</div>
+            <div className={styles.riskAssessmentErrorMessageCta} onClick={this.onRetryLoad}>
+              <div className={styles.riskAssessmentErrorMessageLink}>Click here to retry.</div>
+              <div className={styles.riskAssessmentErrorMessageIcon} />
             </div>
           </div>
         </div>
-      ) : (
-        <div className={styles.riskAssessment}>
-          <div className={titleStyles}>
-            <div className={styles.title}>
-              <div className={styles.titleIcon} />
-              <div className={styles.titleText}>{title}</div>
-            </div>
-            <div className={styles.meta}>
-              <div className={styles.lastUpdatedLabel}>Last updated:</div>
-              <div className={styles.lastUpdatedValue}>{this.getLastUpdated()}</div>
-            </div>
+      </div>
+    ) : (
+      <div className={styles.riskAssessment}>
+        <div className={titleStyles}>
+          <div className={styles.title}>
+            <div className={styles.titleIcon} />
+            <div className={styles.titleText}>{title}</div>
           </div>
-          {this.renderRiskAreaQuestions()}
+          <div className={styles.meta}>
+            <div className={styles.lastUpdatedLabel}>Last updated:</div>
+            <div className={styles.lastUpdatedValue}>{this.getLastUpdated()}</div>
+          </div>
         </div>
-      );
+        {this.renderRiskAreaQuestions()}
+      </div>
+    );
 
     return (
       <div>
         <div className={classNames(sortSearchStyles.sortSearchBar, styles.buttonBar)}>
-          <div className={cancelButtonStyles} onClick={this.onCancel}>Cancel</div>
-          <div className={saveButtonStyles} onClick={this.onSave}>Save updates</div>
-          <div className={startButtonStyles} onClick={this.onStart}>Start assessment</div>
+          <div className={cancelButtonStyles} onClick={this.onCancel}>
+            Cancel
+          </div>
+          <div className={saveButtonStyles} onClick={this.onSave}>
+            Save updates
+          </div>
+          <div className={startButtonStyles} onClick={this.onStart}>
+            Start assessment
+          </div>
         </div>
         <div className={styles.riskAreasPanel}>{assessmentHtml}</div>
       </div>

@@ -1,5 +1,6 @@
 import * as classNames from 'classnames';
-import * as moment from 'moment';
+
+import { format } from 'date-fns';
 import * as React from 'react';
 import { compose, graphql } from 'react-apollo';
 import { FormattedMessage } from 'react-intl';
@@ -71,7 +72,7 @@ class NewPatientEncounter extends React.Component<IProps, IState> {
         const newState: Partial<IState> = { open: !open };
 
         if (!encounterStartTime) {
-          newState.encounterStartTime = moment().format('HH:mm');
+          newState.encounterStartTime = format(new Date(), 'HH:mm');
         }
 
         return newState;

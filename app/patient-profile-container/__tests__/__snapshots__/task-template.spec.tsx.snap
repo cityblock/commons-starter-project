@@ -31,7 +31,9 @@ exports[`renders a removed task template 1`] = `
       <div
         className={undefined}
       >
-        Jul 19, 2017
+        <span>
+          Jul 19, 2017
+        </span>
       </div>
     </div>
     <div
@@ -73,7 +75,9 @@ exports[`renders a selected task template 1`] = `
       <div
         className={undefined}
       >
-        Jul 19, 2017
+        <span>
+          Jul 19, 2017
+        </span>
       </div>
     </div>
     <div

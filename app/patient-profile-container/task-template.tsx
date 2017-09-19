@@ -1,6 +1,7 @@
 import * as classNames from 'classnames';
-import * as moment from 'moment';
 import * as React from 'react';
+import { FormattedDate } from 'react-intl';
+import { dateAdd } from '../../server/lib/date';
 import { FullTaskTemplateFragment, FullUserFragment } from '../graphql/types';
 import { DEFAULT_AVATAR_URL } from '../shared/task/task';
 import * as styles from './css/patient-care-plan.css';
@@ -25,9 +26,8 @@ export default class TaskTemplate extends React.Component<IProps, {}> {
     const { completedWithinInterval, completedWithinNumber } = taskTemplate;
 
     if (completedWithinInterval && completedWithinNumber) {
-      return moment()
-        .add(completedWithinNumber as any, `${completedWithinInterval}s`)
-        .format('MMM D, YYYY');
+      const date = dateAdd(new Date(Date.now()), completedWithinNumber, completedWithinInterval);
+      return <FormattedDate value={date} year='numeric' month='short' day='numeric' />;
     } else {
       return 'No due date set';
     }
@@ -38,8 +38,9 @@ export default class TaskTemplate extends React.Component<IProps, {}> {
     const { careTeamAssigneeRole } = taskTemplate;
 
     if (careTeamAssigneeRole && careTeam) {
-      const assignedCareTeamMember = careTeam
-        .find(careTeamMember => careTeamMember.userRole === careTeamAssigneeRole);
+      const assignedCareTeamMember = careTeam.find(
+        careTeamMember => careTeamMember.userRole === careTeamAssigneeRole,
+      );
 
       if (assignedCareTeamMember && assignedCareTeamMember.googleProfileImageUrl) {
         return assignedCareTeamMember.googleProfileImageUrl;
@@ -64,17 +65,16 @@ export default class TaskTemplate extends React.Component<IProps, {}> {
         <div className={styles.taskTemplateInfoControls}>
           <div
             className={styles.taskTemplateAssigneeAvatar}
-            style={{ backgroundImage: `url(${this.getAssigneeAvatarUrl()})` }}></div>
+            style={{ backgroundImage: `url(${this.getAssigneeAvatarUrl()})` }}
+          />
           <div className={styles.taskTemplateDueDate}>
             <div className={styles.taskTemplateDueDateLabel}>Due:</div>
-            <div className={styles.taskTemplateDueDateText}>
-              {this.getDueDate()}
-            </div>
+            <div className={styles.taskTemplateDueDateText}>{this.getDueDate()}</div>
           </div>
           <div
             className={styles.taskTemplateRejectButton}
-            onClick={() => onToggleRemoved(taskTemplate.id)}>
-          </div>
+            onClick={() => onToggleRemoved(taskTemplate.id)}
+          />
         </div>
       </div>
     );

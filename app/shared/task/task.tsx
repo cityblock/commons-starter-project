@@ -1,11 +1,10 @@
 import * as classNames from 'classnames';
-import * as moment from 'moment';
+import { format } from 'date-fns';
 import * as React from 'react';
 import { compose, graphql } from 'react-apollo';
 import { connect, Dispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { selectTask } from '../../actions/task-action';
-import { DATETIME_FORMAT } from '../../config';
 import * as taskQuery from '../../graphql/queries/get-task.graphql';
 import * as taskCompleteMutation from '../../graphql/queries/task-complete-mutation.graphql';
 import * as taskEditMutation from '../../graphql/queries/task-edit-mutation.graphql';
@@ -87,7 +86,6 @@ export class Task extends React.Component<IProps, IState> {
 
     this.reloadTask = this.reloadTask.bind(this);
     this.getPatientName = this.getPatientName.bind(this);
-    this.formatDate = this.formatDate.bind(this);
     this.getTaskDueDate = this.getTaskDueDate.bind(this);
     this.renderAttachments = this.renderAttachments.bind(this);
     this.renderFollowers = this.renderFollowers.bind(this);
@@ -101,7 +99,6 @@ export class Task extends React.Component<IProps, IState> {
     this.onCancelDelete = this.onCancelDelete.bind(this);
     this.onPriorityChange = this.onPriorityChange.bind(this);
     this.onPatientGoalChange = this.onPatientGoalChange.bind(this);
-    this.formatDateForInput = this.formatDateForInput.bind(this);
     this.getTaskDueDateForInput = this.getTaskDueDateForInput.bind(this);
     this.onDueDateChange = this.onDueDateChange.bind(this);
     this.onChange = this.onChange.bind(this);
@@ -220,19 +217,11 @@ export class Task extends React.Component<IProps, IState> {
     }
   }
 
-  formatDate(date: string) {
-    return moment(date, DATETIME_FORMAT).format('MMM D, YYYY');
-  }
-
-  formatDateForInput(date: string) {
-    return moment(date, DATETIME_FORMAT).format('YYYY-MM-DD');
-  }
-
   getTaskDueDate() {
     const { task } = this.props;
 
     if (task && task.dueAt) {
-      return this.formatDate(task.dueAt);
+      return format(new Date(task.dueAt), 'MMM D, YYYY');
     } else {
       return 'Unknown Due Date';
     }
@@ -242,7 +231,7 @@ export class Task extends React.Component<IProps, IState> {
     const { task } = this.props;
 
     if (task && task.dueAt) {
-      return this.formatDateForInput(task.dueAt);
+      return format(task.dueAt, 'YYYY-MM-DD');
     } else {
       return '1970-01-01';
     }

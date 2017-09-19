@@ -1,8 +1,7 @@
 import * as classNames from 'classnames';
-import * as moment from 'moment';
 import * as React from 'react';
 import { compose, graphql } from 'react-apollo';
-import { DATETIME_FORMAT } from '../../config';
+import { FormattedDate } from 'react-intl';
 import * as currentUserQuery from '../../graphql/queries/get-current-user.graphql';
 import {
   taskCommentEditMutationVariables,
@@ -132,7 +131,7 @@ export class TaskComment extends React.Component<IProps, IState> {
 
   getCommentDate(comment: FullTaskCommentFragment) {
     if (comment.createdAt) {
-      return moment(comment.createdAt, DATETIME_FORMAT).format('MMM D, YYYY');
+      return <FormattedDate value={comment.createdAt} year='numeric' month='short' day='numeric' />;
     } else {
       return 'Unknown Date';
     }

@@ -1,9 +1,8 @@
 import * as classNames from 'classnames';
-import * as moment from 'moment';
 import * as React from 'react';
 import { compose, graphql } from 'react-apollo';
+import { FormattedDate } from 'react-intl';
 import { Link } from 'react-router-dom';
-import { DATETIME_FORMAT } from '../config';
 import * as riskScoreQuery from '../graphql/queries/get-patient-risk-score-for-risk-area.graphql';
 /* tslint:disable:max-line-length */
 import * as riskSummaryQuery from '../graphql/queries/get-patient-risk-summary-for-risk-area.graphql';
@@ -92,7 +91,7 @@ class RiskAreaSummary extends React.Component<IProps, {}> {
       const { lastUpdated, started } = riskAreaSummary;
 
       if (started && lastUpdated) {
-        return moment(lastUpdated, DATETIME_FORMAT).format('MMM D, YYYY');
+        return <FormattedDate value={lastUpdated} year='numeric' month='short' day='numeric' />;
       } else {
         return 'Never';
       }

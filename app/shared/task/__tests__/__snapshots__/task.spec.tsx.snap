@@ -158,10 +158,10 @@ exports[`renders task 1`] = `
           />
           <input
             className={undefined}
-            data-date="Invalid date"
+            data-date="Sep 7, 2017"
             onChange={[Function]}
             type="date"
-            value="Invalid date"
+            value="2017-09-07"
           />
         </div>
         <div

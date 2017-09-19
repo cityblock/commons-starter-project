@@ -69,7 +69,9 @@ exports[`renders patient concern 1`] = `
           <div
             className={undefined}
           >
-            Invalid date
+            <span>
+              Sep 7, 2017
+            </span>
           </div>
         </div>
         <div
@@ -83,7 +85,9 @@ exports[`renders patient concern 1`] = `
           <div
             className={undefined}
           >
-            Invalid date
+            <span>
+              Sep 7, 2017
+            </span>
           </div>
         </div>
       </div>
@@ -117,7 +121,9 @@ exports[`renders patient concern 1`] = `
             <div
               className={undefined}
             >
-              Invalid date
+              <span>
+                Sep 7, 2017
+              </span>
             </div>
           </div>
         </div>

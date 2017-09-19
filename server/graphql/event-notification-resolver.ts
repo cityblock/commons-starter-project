@@ -1,5 +1,5 @@
+import { format } from 'date-fns';
 import { capitalize } from 'lodash';
-import * as moment from 'moment';
 import { IEventNotificationEdges, IEventNotificationNode } from 'schema';
 import { IPaginatedResults, IPaginationOptions } from '../db';
 import EventNotification from '../models/event-notification';
@@ -95,7 +95,7 @@ function getEventNotificationTitle(eventNotification: EventNotification) {
         const { dueAt } = task;
 
         if (dueAt) {
-          const formattedDueDate = moment(dueAt).format('MMM D, YYYY');
+          const formattedDueDate = format(dueAt, 'MMM D, YYYY');
 
           /* tslint:disable:max-line-length */
           return `${userName} changed the due date of task: '${task.title}' to '${formattedDueDate}'`;

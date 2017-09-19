@@ -1,5 +1,5 @@
 import * as classNames from 'classnames';
-import * as moment from 'moment';
+import { format } from 'date-fns';
 import * as React from 'react';
 import { compose, graphql } from 'react-apollo';
 import { FormattedMessage } from 'react-intl';
@@ -84,7 +84,7 @@ export class PatientInfo extends React.Component<IProps, IState> {
         firstName: patient.firstName || '',
         middleName: patient.middleName || '',
         lastName: patient.lastName || '',
-        dateOfBirth: dateOfBirth ? moment(dateOfBirth || '0', DOB_FORMAT).format('YYYY-MM-DD') : '',
+        dateOfBirth: dateOfBirth ? format(new Date(dateOfBirth), 'YYYY-MM-DD') : '',
         gender: patient.gender || '',
         language: patient.language || '',
         email: '',
@@ -151,7 +151,7 @@ export class PatientInfo extends React.Component<IProps, IState> {
             middleName: middleName ? middleName : null,
             lastName: lastName ? lastName : null,
             gender: gender ? gender : null,
-            dateOfBirth: moment(dateOfBirth, 'YYYY-MM-DD').format(DOB_FORMAT),
+            dateOfBirth: dateOfBirth ? format(new Date(dateOfBirth), DOB_FORMAT) : null,
             zip: zip ? Number(zip) : null,
             language: language ? language : null,
             consentToCall: consentToCall === 'true',

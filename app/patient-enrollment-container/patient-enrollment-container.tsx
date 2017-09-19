@@ -1,4 +1,4 @@
-import * as moment from 'moment';
+import { format } from 'date-fns';
 import * as React from 'react';
 import { compose, graphql } from 'react-apollo';
 import { connect, Dispatch } from 'react-redux';
@@ -64,7 +64,7 @@ export interface IState {
 }
 
 function formatDate(date: string) {
-  return moment(date, 'YYYY-MM-DD').format('MM/DD/YYYY');
+  return format(new Date(date.replace('-', '/')), 'MM/DD/YYYY');
 }
 
 class PatientEnrollmentContainer extends React.Component<IProps, IState> {

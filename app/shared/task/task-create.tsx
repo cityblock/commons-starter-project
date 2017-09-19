@@ -1,5 +1,5 @@
 import * as classNames from 'classnames';
-import * as moment from 'moment';
+import { format } from 'date-fns';
 import * as React from 'react';
 import { compose, graphql } from 'react-apollo';
 import { FormattedMessage } from 'react-intl';
@@ -39,7 +39,7 @@ export interface IState {
 }
 
 function formatDate(date: string) {
-  return moment(date, 'YYYY-MM-DD').format('MM/DD/YYYY');
+  return format(date, 'MM/DD/YYYY');
 }
 
 class TaskCreate extends React.Component<IProps, IState> {

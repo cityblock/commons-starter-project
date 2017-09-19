@@ -1,7 +1,7 @@
 import { omit } from 'lodash';
-import * as moment from 'moment';
 import { transaction, Model, RelationMappings, Transaction } from 'objection';
 import * as uuid from 'uuid/v4';
+import { dateAdd } from '../lib/date';
 import CareTeam from './care-team';
 import GoalSuggestionTemplate from './goal-suggestion-template';
 import Patient from './patient';
@@ -157,9 +157,11 @@ export default class PatientGoal extends Model {
           }
 
           if (completedWithinInterval && completedWithinNumber) {
-            dueAt = moment()
-              .add(completedWithinNumber, completedWithinInterval)
-              .toISOString();
+            dueAt = dateAdd(
+              new Date(Date.now()),
+              completedWithinNumber,
+              completedWithinInterval,
+            ).toISOString();
           }
 
           const task = await Task.create(

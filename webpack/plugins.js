@@ -9,7 +9,6 @@ module.exports = ({ production = false } = {}) => {
     return [
       new webpack.optimize.OccurrenceOrderPlugin(),
       new webpack.EnvironmentPlugin(["NODE_ENV", "GOOGLE_OAUTH_TOKEN"]),
-      new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
       new webpack.NamedModulesPlugin(),
       new ForkTsCheckerWebpackPlugin({ tsconfig: path.resolve('tsconfig.webpack.json') }),
       new webpack.NoEmitOnErrorsPlugin(),
@@ -21,8 +20,6 @@ module.exports = ({ production = false } = {}) => {
       new webpack.EnvironmentPlugin(["NODE_ENV", "GOOGLE_OAUTH_TOKEN"]),
       new webpack.optimize.OccurrenceOrderPlugin(),
       new webpack.optimize.ModuleConcatenationPlugin(),
-      // https://github.com/jmblog/how-to-optimize-momentjs-with-webpack
-      new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
       new ExtractTextPlugin({
         allChunks: true,
         filename: "styles/main.css",

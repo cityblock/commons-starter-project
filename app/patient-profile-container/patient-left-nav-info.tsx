@@ -1,9 +1,7 @@
 import * as classNames from 'classnames';
 import * as langs from 'langs';
-import * as moment from 'moment';
 import * as React from 'react';
 import { FormattedMessage, InjectedIntl } from 'react-intl';
-import { DOB_FORMAT } from '../config';
 import { ShortPatientFragment } from '../graphql/types';
 import * as styles from './css/patient-profile-left-nav.css';
 import PatientScratchPad from './patient-scratch-pad';
@@ -26,7 +24,6 @@ const getPatientFirstAndMiddleName = (patient: ShortPatientFragment) => {
 };
 
 export default class PatientLeftNavInfo extends React.Component<IProps, {}> {
-
   props: IProps;
 
   constructor(props: IProps) {
@@ -36,13 +33,14 @@ export default class PatientLeftNavInfo extends React.Component<IProps, {}> {
   }
 
   renderPatientHeader() {
-    const { patient, condensedPatientInfo } = this.props;
+    const { patient, condensedPatientInfo, intl } = this.props;
     const firstName = patient ? getPatientFirstAndMiddleName(patient) : 'Unknown';
     const lastName = patient ? patient.lastName : 'Unknown';
     // TODO: this is a bad fallback
-    const patientAge = patient && patient.dateOfBirth ?
-      moment(patient.dateOfBirth, DOB_FORMAT).fromNow(true).replace('years', '') :
-      '40';
+    const patientAge =
+      patient && patient.dateOfBirth
+        ? intl.formatRelative(patient.dateOfBirth).replace('years', '')
+        : '40';
     const gender = patient && patient.gender ? GENDER[patient.gender] : null;
 
     if (condensedPatientInfo) {
@@ -51,7 +49,9 @@ export default class PatientLeftNavInfo extends React.Component<IProps, {}> {
           <div className={styles.patientTitle}>
             <div className={styles.patientRiskText}>High Risk Patient</div>
             <div className={styles.patientSingleLineName}>{`${firstName} ${lastName}`}</div>
-            <div className={styles.patientSubheading}>{patientAge} • {gender}</div>
+            <div className={styles.patientSubheading}>
+              {patientAge} • {gender}
+            </div>
           </div>
         </div>
       );
@@ -60,15 +60,17 @@ export default class PatientLeftNavInfo extends React.Component<IProps, {}> {
         <div className={styles.patientHeader}>
           <div
             className={styles.patientPhoto}
-            style={{ backgroundImage: `url('http://bit.ly/2vaOMQJ')`}}>
-          </div>
+            style={{ backgroundImage: `url('http://bit.ly/2vaOMQJ')` }}
+          />
           <div className={styles.patientTitle}>
             <div className={styles.patientRiskText}>High Risk Patient</div>
             <div className={styles.patientName}>
               <div className={styles.patientFirstName}>{firstName}</div>
               <div className={styles.patientLastName}>{lastName}</div>
             </div>
-            <div className={styles.patientSubheading}>{patientAge} • {gender}</div>
+            <div className={styles.patientSubheading}>
+              {patientAge} • {gender}
+            </div>
           </div>
         </div>
       );
@@ -79,12 +81,10 @@ export default class PatientLeftNavInfo extends React.Component<IProps, {}> {
     const { patient, patientId, intl, condensedPatientInfo } = this.props;
 
     // TODO: This is a bad fallback
-    const dateOfBirth = patient && patient.dateOfBirth ?
-      intl.formatDate(patient.dateOfBirth) :
-      '2/16/1977';
-    const patientJoined = patient && patient.createdAt ?
-      intl.formatRelative(patient.createdAt) :
-      'Unknown';
+    const dateOfBirth =
+      patient && patient.dateOfBirth ? intl.formatDate(patient.dateOfBirth) : '2/16/1977';
+    const patientJoined =
+      patient && patient.createdAt ? intl.formatRelative(patient.createdAt) : 'Unknown';
     // TODO: Replace 'Brooklyn, NY' and 'English' with better defaults
     const zip = patient && patient.zip ? patient.zip : 'Brooklyn, NY';
     let languageName = 'Declined';
@@ -103,51 +103,56 @@ export default class PatientLeftNavInfo extends React.Component<IProps, {}> {
 
     return (
       <div>
-        <div className={styles.patientRisk}></div>
+        <div className={styles.patientRisk} />
         <div className={patientMainClasses}>
           {this.renderPatientHeader()}
           <div className={styles.patientBasicInfo}>
             <div className={styles.patientBasicInfoRow}>
               <FormattedMessage id='patient.dateOfBirth'>
-                {(message: string) =>
-                  <div className={styles.patientBasicInfoRowTitle}>{message}:</div>}
+                {(message: string) => (
+                  <div className={styles.patientBasicInfoRowTitle}>{message}:</div>
+                )}
               </FormattedMessage>
               <div className={styles.patientBasicInfoRowData}>{dateOfBirth}</div>
             </div>
             <div className={styles.patientBasicInfoRow}>
               <FormattedMessage id='patient.language'>
-                {(message: string) =>
-                  <div className={styles.patientBasicInfoRowTitle}>{message}:</div>}
+                {(message: string) => (
+                  <div className={styles.patientBasicInfoRowTitle}>{message}:</div>
+                )}
               </FormattedMessage>
               <div className={styles.patientBasicInfoRowData}>{languageName}</div>
             </div>
             <div className={styles.patientBasicInfoRow}>
               <FormattedMessage id='patient.location'>
-                {(message: string) =>
-                  <div className={styles.patientBasicInfoRowTitle}>{message}:</div>}
+                {(message: string) => (
+                  <div className={styles.patientBasicInfoRowTitle}>{message}:</div>
+                )}
               </FormattedMessage>
               <div className={styles.patientBasicInfoRowData}>{zip}</div>
             </div>
             <div className={styles.patientBasicInfoRow}>
               <FormattedMessage id='patient.joinedAt'>
-                {(message: string) =>
-                  <div className={styles.patientBasicInfoRowTitle}>{message}:</div>}
+                {(message: string) => (
+                  <div className={styles.patientBasicInfoRowTitle}>{message}:</div>
+                )}
               </FormattedMessage>
               <div className={styles.patientBasicInfoRowData}>{patientJoined}</div>
             </div>
             <div className={styles.patientBasicInfoRow}>
               <FormattedMessage id='patient.medicareId'>
-                {(message: string) =>
-                  <div className={styles.patientBasicInfoRowTitle}>{message}:</div>}
+                {(message: string) => (
+                  <div className={styles.patientBasicInfoRowTitle}>{message}:</div>
+                )}
               </FormattedMessage>
               <div className={styles.patientBasicInfoRowData}>123456789</div>
             </div>
           </div>
           <div className={styles.patientCommunication}>
-            <div className={classNames(styles.patientCommItem, styles.patientCommPhone)}></div>
-            <div className={classNames(styles.patientCommItem, styles.patientCommText)}></div>
-            <div className={classNames(styles.patientCommItem, styles.patientCommEmail)}></div>
-            <div className={classNames(styles.patientCommItem, styles.patientCommVideo)}></div>
+            <div className={classNames(styles.patientCommItem, styles.patientCommPhone)} />
+            <div className={classNames(styles.patientCommItem, styles.patientCommText)} />
+            <div className={classNames(styles.patientCommItem, styles.patientCommEmail)} />
+            <div className={classNames(styles.patientCommItem, styles.patientCommVideo)} />
           </div>
           <PatientScratchPad patientId={patientId} />
         </div>

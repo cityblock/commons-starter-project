@@ -116,7 +116,7 @@ exports[`renders a risk area assessment 1`] = `
       Save updates
     </div>
     <div
-      className=""
+      className="undefined"
       onClick={[Function]}
     >
       Start assessment
@@ -154,7 +154,7 @@ exports[`renders a risk area assessment 1`] = `
           <div
             className={undefined}
           >
-            1 week ago
+            Loading...
           </div>
         </div>
       </div>

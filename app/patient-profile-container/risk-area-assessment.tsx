@@ -1,9 +1,12 @@
 import * as classNames from 'classnames';
 import { clone, isEqual, keys, values } from 'lodash';
+import * as moment from 'moment';
 import * as React from 'react';
 import { compose, graphql } from 'react-apollo';
+import { FormattedRelative } from 'react-intl';
 import { connect, Dispatch } from 'react-redux';
 import { push } from 'react-router-redux';
+import { DATETIME_FORMAT } from '../config';
 import * as patientAnswersQuery from '../graphql/queries/get-patient-answers-for-risk-area.graphql';
 import * as riskAreaQuestionsQuery from '../graphql/queries/get-questions-for-risk-area.graphql';
 import * as riskAreaQuery from '../graphql/queries/get-risk-area.graphql';
@@ -42,6 +45,9 @@ export interface IProps {
   patientAnswers?: [FullPatientAnswerFragment];
   patientAnswersLoading?: boolean;
   patientAnswersError?: string;
+  refetchRiskArea?: () => any;
+  refetchRiskAreaQuestions?: () => any;
+  refetchPatientAnswers?: () => any;
 }
 
 export interface IQuestionsState {
@@ -90,6 +96,11 @@ export class RiskAreaAssessment extends React.Component<IProps, IState> {
     this.updateMultiSelectAnswer = this.updateMultiSelectAnswer.bind(this);
     this.updateAnswer = this.updateAnswer.bind(this);
     this.updateVisibility = this.updateVisibility.bind(this);
+    this.isLoading = this.isLoading.bind(this);
+    this.isError = this.isError.bind(this);
+    this.isLoadingOrError = this.isLoadingOrError.bind(this);
+    this.getLastUpdated = this.getLastUpdated.bind(this);
+    this.onRetryLoad = this.onRetryLoad.bind(this);
 
     this.state = {
       inProgress: false,
@@ -151,8 +162,61 @@ export class RiskAreaAssessment extends React.Component<IProps, IState> {
     }
   }
 
+  getLastUpdated() {
+    const { patientAnswers, patientAnswersLoading, patientAnswersError } = this.props;
+
+    if (patientAnswersLoading) {
+      return 'Loading...';
+    }
+
+    if (patientAnswersError) {
+      return 'Error';
+    }
+
+    if (!patientAnswers || !patientAnswers.length) {
+      return 'Never';
+    }
+
+    const latestAnswer = patientAnswers.sort((answerA, answerB) => {
+      const answerAUpdatedAt = moment(answerA.updatedAt, DATETIME_FORMAT);
+      const answerBUpdatedAt = moment(answerB.updatedAt, DATETIME_FORMAT);
+
+      if (answerAUpdatedAt.isBefore(answerBUpdatedAt)) {
+        return -1;
+      } else if (answerBUpdatedAt.isBefore(answerAUpdatedAt)) {
+        return 1;
+      } else {
+        return 0;
+      }
+    })[0];
+
+    return (
+      <FormattedRelative value={latestAnswer.updatedAt}>
+        {(date: string) => <span>{date}</span>}
+      </FormattedRelative>
+    );
+  }
+
+  isLoading() {
+    const { loading, riskAreaQuestionsLoading, patientAnswersLoading } = this.props;
+
+    return loading || riskAreaQuestionsLoading || patientAnswersLoading;
+  }
+
+  isError() {
+    const { error, riskAreaQuestionsError, patientAnswersError } = this.props;
+
+    return !!error || !!riskAreaQuestionsError || !!patientAnswersError;
+  }
+
+  isLoadingOrError() {
+    return this.isError() || this.isLoading();
+  }
+
   onStart() {
-    this.setState(() => ({ inProgress: true }));
+    if (!this.isLoadingOrError()) {
+      this.setState(() => ({ inProgress: true }));
+    }
   }
 
   onCancel() {
@@ -403,6 +467,24 @@ export class RiskAreaAssessment extends React.Component<IProps, IState> {
     return (riskAreaQuestions || []).map(this.renderRiskAreaQuestion);
   }
 
+  onRetryLoad() {
+    const { refetchRiskArea, refetchRiskAreaQuestions, refetchPatientAnswers } = this.props;
+
+    // TODO: What to do if there is a serious error and these fuctions don't exist?
+
+    if (refetchRiskArea) {
+      refetchRiskArea();
+    }
+
+    if (refetchRiskAreaQuestions) {
+      refetchRiskAreaQuestions();
+    }
+
+    if (refetchPatientAnswers) {
+      refetchPatientAnswers();
+    }
+  }
+
   render() {
     const { riskArea } = this.props;
     const { inProgress } = this.state;
@@ -418,6 +500,7 @@ export class RiskAreaAssessment extends React.Component<IProps, IState> {
     });
     const startButtonStyles = classNames(styles.button, styles.startButton, {
       [styles.hidden]: inProgress,
+      [styles.disabled]: this.isLoadingOrError(),
     });
     const titleStyles = classNames(styles.riskAssessmentTitle, {
       [styles.lowRisk]: false,
@@ -425,34 +508,48 @@ export class RiskAreaAssessment extends React.Component<IProps, IState> {
       [styles.highRisk]: false,
     });
 
+    const assessmentHtml = this.isError() ?
+      (
+        <div className={styles.riskAssessmentError}>
+          <div className={styles.riskAssessmentErrorMessage}>
+            <div className={styles.riskAssessmentErrorIcon}></div>
+            <div className={styles.riskAssessmentErrorMessageText}>
+              <div className={styles.riskAssessmentErrorMessageLabel}>
+                Error loading assessment.
+              </div>
+              <div className={styles.riskAssessmentErrorMessageCta} onClick={this.onRetryLoad}>
+                <div className={styles.riskAssessmentErrorMessageLink}>
+                  Click here to retry.
+                </div>
+                <div className={styles.riskAssessmentErrorMessageIcon}></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      ) : (
+        <div className={styles.riskAssessment}>
+          <div className={titleStyles}>
+            <div className={styles.title}>
+              <div className={styles.titleIcon} />
+              <div className={styles.titleText}>{title}</div>
+            </div>
+            <div className={styles.meta}>
+              <div className={styles.lastUpdatedLabel}>Last updated:</div>
+              <div className={styles.lastUpdatedValue}>{this.getLastUpdated()}</div>
+            </div>
+          </div>
+          {this.renderRiskAreaQuestions()}
+        </div>
+      );
+
     return (
       <div>
         <div className={classNames(sortSearchStyles.sortSearchBar, styles.buttonBar)}>
-          <div className={cancelButtonStyles} onClick={this.onCancel}>
-            Cancel
-          </div>
-          <div className={saveButtonStyles} onClick={this.onSave}>
-            Save updates
-          </div>
-          <div className={startButtonStyles} onClick={this.onStart}>
-            Start assessment
-          </div>
+          <div className={cancelButtonStyles} onClick={this.onCancel}>Cancel</div>
+          <div className={saveButtonStyles} onClick={this.onSave}>Save updates</div>
+          <div className={startButtonStyles} onClick={this.onStart}>Start assessment</div>
         </div>
-        <div className={styles.riskAreasPanel}>
-          <div className={styles.riskAssessment}>
-            <div className={titleStyles}>
-              <div className={styles.title}>
-                <div className={styles.titleIcon} />
-                <div className={styles.titleText}>{title}</div>
-              </div>
-              <div className={styles.meta}>
-                <div className={styles.lastUpdatedLabel}>Last updated:</div>
-                <div className={styles.lastUpdatedValue}>1 week ago</div>
-              </div>
-            </div>
-            {this.renderRiskAreaQuestions()}
-          </div>
-        </div>
+        <div className={styles.riskAreasPanel}>{assessmentHtml}</div>
       </div>
     );
   }
@@ -478,6 +575,7 @@ export default compose(
       loading: data ? data.loading : false,
       error: data ? data.error : null,
       riskArea: data ? (data as any).riskArea : null,
+      refetchRiskArea: data ? data.refetch : null,
     }),
   }),
   graphql(riskAreaQuestionsQuery as any, {
@@ -490,6 +588,7 @@ export default compose(
       riskAreaQuestionsLoading: data ? data.loading : false,
       riskAreaQuestionsError: data ? data.error : null,
       riskAreaQuestions: data ? (data as any).questionsForRiskArea : null,
+      refetchRiskAreaQuestions: data ? data.refetch : null,
     }),
   }),
   graphql(patientAnswersQuery as any, {
@@ -503,6 +602,7 @@ export default compose(
       patientAnswersLoading: data ? data.loading : false,
       patientAnswersError: data ? data.error : null,
       patientAnswers: data ? (data as any).patientAnswersForRiskArea : null,
+      refetchPatientAnswers: data ? data.refetch : null,
     }),
   }),
   graphql(patientAnswersCreate as any, { name: 'createPatientAnswers' }),

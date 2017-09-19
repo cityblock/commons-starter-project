@@ -11,6 +11,10 @@ import RiskAreaAssessment, { RiskAreaAssessment as Component } from '../risk-are
 const locale = { messages: ENGLISH_TRANSLATION.messages };
 const mockStore = configureMockStore([]);
 
+const oldDate = Date.now;
+beforeAll(() => { Date.now = jest.fn(() => 1500494779252); });
+afterAll(() => { Date.now = oldDate; });
+
 const riskAreaQuestions = [
   question,
   {
@@ -56,6 +60,9 @@ it('renders a risk area assessment', async () => {
           riskAreaId={'risk-area-1'}
           patientId={'patient-1'}
           routeBase={`/patients/patient-1/360`}
+          refetchRiskArea={() => true}
+          refetchRiskAreaQuestions={() => true}
+          refetchPatientAnswers={() => true}
         />
       </ReduxConnectedIntlProvider>
     </MockedProvider>,
@@ -71,6 +78,9 @@ describe('method tests', () => {
         riskAreaQuestions={riskAreaQuestions}
         patientId={'patient-id'}
         routeBase={'/patients/patient-id/360'}
+        refetchRiskArea={() => true}
+        refetchRiskAreaQuestions={() => true}
+        refetchPatientAnswers={() => true}
       />,
     );
     const instance = component.instance() as Component;
@@ -91,6 +101,9 @@ describe('method tests', () => {
         riskAreaQuestions={undefined}
         patientId={'patient-id'}
         routeBase={'/patients/patient-id/360'}
+        refetchRiskArea={() => true}
+        refetchRiskAreaQuestions={() => true}
+        refetchPatientAnswers={() => true}
       />,
     );
     const instance = component.instance() as Component;
@@ -101,6 +114,9 @@ describe('method tests', () => {
       routeBase: '/patients/patient-id/360',
       riskAreaQuestions: undefined,
       patientAnswers: [patientAnswer],
+      refetchRiskArea: () => true,
+      refetchRiskAreaQuestions: () => true,
+      refetchPatientAnswers: () => true,
     });
     expect(instance.state.questions[question.id]).toEqual({
       answers: [{
@@ -122,6 +138,9 @@ describe('method tests', () => {
         riskAreaQuestions={undefined}
         patientId={'patient-id'}
         routeBase={'/patients/patient-id/360'}
+        refetchRiskArea={() => true}
+        refetchRiskAreaQuestions={() => true}
+        refetchPatientAnswers={() => true}
       />,
     );
     const instance = component.instance() as Component;
@@ -131,6 +150,9 @@ describe('method tests', () => {
       patientId: 'patient-id',
       routeBase: '/patients/patient-id/360',
       riskAreaQuestions,
+      refetchRiskArea: () => true,
+      refetchRiskAreaQuestions: () => true,
+      refetchPatientAnswers: () => true,
     });
     expect(instance.state.questions[question.id]).toEqual({
       answers: [],

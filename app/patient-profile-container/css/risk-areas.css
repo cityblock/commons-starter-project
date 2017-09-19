@@ -28,8 +28,12 @@
   margin-left: 10px;
 }
 
-.saveButton.disabled {
+.saveButton.disabled, .startButton.disabled {
   opacity: 0.4;
+
+  &:hover {
+    cursor: not-allowed;
+  }
 }
 
 .cancelButton, .saveButton, .startButton {
@@ -55,7 +59,7 @@
   display: none;
 }
 
-.riskAreas, .riskAssessment {
+.riskAreas, .riskAssessment, .riskAssessmentError {
   height: calc(100vh - 200px);
   overflow-y: scroll;
   -webkit-overflow-scrolling: touch;
@@ -592,4 +596,62 @@ input[type='radio']:hover {
   color: var(--border-color);
   border-color: var(--border-color);
   background-color: var(--gray-background-color);
+}
+
+.riskAssessmentErrorMessage {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  border: 1px dashed var(--border-color);
+  border-radius: 4px;
+  padding: 50px;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.riskAssessmentErrorIcon {
+  width: 20px;
+  height: 20px;
+  background-image: url('../../assets/error-circle.svg');
+  background-position: center center;
+  background-size: contain;
+  background-repeat: no-repeat;
+  margin-bottom: 10px;
+}
+
+.riskAssessmentErrorMessageText {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+}
+
+.riskAssessmentErrorMessageLabel {
+  margin-right: 5px;
+}
+
+.riskAssessmentErrorMessageCta {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+
+  &:hover {
+    cursor: pointer;
+  }
+}
+
+.riskAssessmentErrorMessageLink {
+  color: var(--light-blue-color);
+  margin-right: 2px;
+}
+
+.riskAssessmentErrorMessageIcon {
+  width: 16px;
+  height: 16px;
+  background-image: url('../../assets/refresh-icon-grey.svg');
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-size: contain;
 }

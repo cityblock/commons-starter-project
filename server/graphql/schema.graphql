@@ -25,6 +25,15 @@ enum TaskOrderOptions {
   updatedAtAsc
 }
 
+enum UserOrderOptions {
+  createdAtDesc
+  createdAtAsc
+  lastLoginAtDesc
+  lastLoginAtAsc
+  updatedAtDesc
+  updatedAtAsc
+}
+
 enum AnswerValueTypeOptions {
   string
   boolean
@@ -1111,7 +1120,9 @@ type RootQueryType {
   # All Users (admin only)
   users(
     pageNumber: Int,
-    pageSize: Int
+    pageSize: Int,
+    hasLoggedIn: Boolean,
+    orderBy: UserOrderOptions
   ): UserEdges
 
   # List of patients the user is on the care team for (their 'patient panel')

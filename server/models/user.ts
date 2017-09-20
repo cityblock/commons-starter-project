@@ -34,6 +34,19 @@ export interface IUpdateUser {
 
 export type GetByOptions = 'email';
 
+export type UserOrderOptions =
+  | 'createdAt'
+  | 'createdAt'
+  | 'lastLoginAt'
+  | 'lastLoginAt'
+  | 'updatedAt'
+  | 'updatedAt';
+
+export interface IUserFilterOptions extends IPaginationOptions {
+  hasLoggedIn: boolean;
+  orderBy: UserOrderOptions;
+  order: 'asc' | 'desc';
+}
 /* tslint:disable:member-ordering */
 export default class User extends Model {
   id: string;
@@ -177,11 +190,19 @@ export default class User extends Model {
   static async getAll({
     pageNumber,
     pageSize,
-  }: IPaginationOptions): Promise<IPaginatedResults<User>> {
-    const usersResult = (
-      await this.query().where('deletedAt', null).page(pageNumber, pageSize)
-    ) as any;
+    hasLoggedIn,
+    orderBy,
+    order,
+  }: IUserFilterOptions): Promise<IPaginatedResults<User>> {
+    const query = this.query().where('deletedAt', null);
 
+    if (hasLoggedIn) {
+      query.whereNotNull('lastLoginAt');
+    } else {
+      query.whereNull('lastLoginAt');
+    }
+
+    const usersResult = (await query.page(pageNumber, pageSize).orderBy(orderBy, order)) as any;
     return {
       results: usersResult.results,
       total: usersResult.total,
@@ -189,8 +210,7 @@ export default class User extends Model {
   }
 
   static async delete(userId: string) {
-    return await this
-      .query()
+    return await this.query()
       .where('id', userId)
       .where('deletedAt', null)
       .update({ deletedAt: new Date().toISOString() });

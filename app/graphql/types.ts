@@ -88,6 +88,15 @@ export type QuestionConditionTypeOptions =
   "oneTrue";
 
 
+export type UserOrderOptions =
+  "createdAtDesc" |
+  "createdAtAsc" |
+  "lastLoginAtDesc" |
+  "lastLoginAtAsc" |
+  "updatedAtDesc" |
+  "updatedAtAsc";
+
+
 export type PatientAnswerInput = {
   answerId: string,
   answerValue: string,
@@ -1896,6 +1905,35 @@ export type getTaskQuery = {
       id: string,
       title: string,
     } | null,
+  } | null,
+};
+
+export type getUsersQueryVariables = {
+  pageNumber?: number | null,
+  pageSize?: number | null,
+  orderBy?: UserOrderOptions | null,
+  hasLoggedIn?: boolean | null,
+};
+
+export type getUsersQuery = {
+  // All Users (admin only)
+  users:  {
+    edges:  Array< {
+      node:  {
+        id: string,
+        locale: string | null,
+        firstName: string | null,
+        lastName: string | null,
+        userRole: UserRole,
+        email: string | null,
+        homeClinicId: string,
+        googleProfileImageUrl: string | null,
+      } | null,
+    } | null > | null,
+    pageInfo:  {
+      hasPreviousPage: boolean,
+      hasNextPage: boolean,
+    },
   } | null,
 };
 

@@ -99,6 +99,11 @@ declare module 'schema' {
   type IUserRoleEnum = 'physician' | 'nurseCareManager' | 'healthCoach' | 'familyMember' | 'anonymousUser' | 'admin';
 
   /*
+    description: 
+  */
+  type IUserOrderOptionsEnum = 'createdAtDesc' | 'createdAtAsc' | 'lastLoginAtDesc' | 'lastLoginAtAsc' | 'updatedAtDesc' | 'updatedAtAsc';
+
+  /*
     description: User edges
   */
   interface IUserEdges {

@@ -2,9 +2,15 @@ import { IUserCreateInput, IUserEdges, IUserLoginInput, IUserNode } from 'schema
 import { parseIdToken, OauthAuthorize } from '../apis/google/oauth-authorize';
 import config from '../config';
 import GoogleAuth from '../models/google-auth';
-import User from '../models/user';
+import User, { IUserFilterOptions, UserOrderOptions } from '../models/user';
 import accessControls from './shared/access-controls';
-import { checkUserLoggedIn, formatRelayEdge, signJwt, IContext } from './shared/utils';
+import {
+  checkUserLoggedIn,
+  formatOrderOptions,
+  formatRelayEdge,
+  signJwt,
+  IContext,
+} from './shared/utils';
 
 export interface IUserCreateArgs {
   input: IUserCreateInput;
@@ -16,11 +22,6 @@ export interface IResolveUserOptions {
 
 export interface IUserLoginOptions {
   input: IUserLoginInput;
-}
-
-export interface IUsersFilterOptions {
-  pageNumber: number;
-  pageSize: number;
 }
 
 export interface IEditCurrentUserInput {
@@ -89,7 +90,7 @@ export async function currentUserEdit(
 
 export async function resolveUsers(
   root: any,
-  args: Partial<IUsersFilterOptions>,
+  args: Partial<IUserFilterOptions>,
   { db, userRole }: IContext,
 ): Promise<IUserEdges> {
   await accessControls.isAllowed(userRole, 'view', 'allUsers');
@@ -97,7 +98,18 @@ export async function resolveUsers(
   const pageNumber = args.pageNumber || 0;
   const pageSize = args.pageSize || 10;
 
-  const users = await User.getAll({ pageNumber, pageSize });
+  const { order, orderBy } = formatOrderOptions<UserOrderOptions>(args.orderBy, {
+    order: 'desc',
+    orderBy: 'createdAt',
+  });
+
+  const users = await User.getAll({
+    pageNumber,
+    pageSize,
+    hasLoggedIn: !!args.hasLoggedIn,
+    orderBy,
+    order,
+  });
   const userEdges = users.results.map((user, i) => formatRelayEdge(user, user.id) as IUserNode);
 
   const hasPreviousPage = pageNumber !== 0;

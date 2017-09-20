@@ -135,7 +135,15 @@ describe('user model', () => {
     await User.create({ email: 'a@b.com', userRole, homeClinicId: '1' });
     await User.create({ email: 'b@c.com', userRole, homeClinicId: '1' });
 
-    expect(await User.getAll({ pageNumber: 0, pageSize: 10 })).toMatchObject({
+    expect(
+      await User.getAll({
+        pageNumber: 0,
+        pageSize: 10,
+        hasLoggedIn: false,
+        orderBy: 'createdAt',
+        order: 'desc',
+      }),
+    ).toMatchObject({
       results: [
         {
           email: 'b@c.com',
@@ -154,7 +162,15 @@ describe('user model', () => {
     await User.create({ email: 'a@b.com', userRole, homeClinicId: '1' });
     await User.create({ email: 'b@c.com', userRole, homeClinicId: '1' });
 
-    expect(await User.getAll({ pageNumber: 0, pageSize: 1 })).toMatchObject({
+    expect(
+      await User.getAll({
+        pageNumber: 0,
+        pageSize: 1,
+        hasLoggedIn: false,
+        orderBy: 'createdAt',
+        order: 'desc',
+      }),
+    ).toMatchObject({
       results: [
         {
           email: 'b@c.com',
@@ -163,7 +179,15 @@ describe('user model', () => {
       ],
       total: 2,
     });
-    expect(await User.getAll({ pageNumber: 1, pageSize: 1 })).toMatchObject({
+    expect(
+      await User.getAll({
+        pageNumber: 1,
+        pageSize: 1,
+        hasLoggedIn: false,
+        orderBy: 'createdAt',
+        order: 'desc',
+      }),
+    ).toMatchObject({
       results: [
         {
           email: 'a@b.com',
@@ -171,6 +195,40 @@ describe('user model', () => {
         },
       ],
       total: 2,
+    });
+  });
+
+  it('filter by logged in', async () => {
+    // not logged in user
+    await User.create({ email: 'b@c.com', userRole, homeClinicId: '1' });
+
+    // logged in user
+    const user = await User.create({
+      email: 'care@care.com',
+      firstName: 'Dan',
+      lastName: 'Plant',
+      userRole,
+      homeClinicId: '1',
+    });
+    const lastLoginAt = new Date().toISOString();
+    await user.$query().patch({ lastLoginAt });
+
+    expect(
+      await User.getAll({
+        pageNumber: 0,
+        pageSize: 2,
+        hasLoggedIn: true,
+        orderBy: 'createdAt',
+        order: 'desc',
+      }),
+    ).toMatchObject({
+      results: [
+        {
+          email: 'care@care.com',
+          userRole,
+        },
+      ],
+      total: 1,
     });
   });
 

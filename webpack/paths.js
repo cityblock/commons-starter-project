@@ -1,4 +1,4 @@
-const path = require("path");
+const path = require('path');
 
 /*
  * __dirname is changed after webpack-ed to another directory
@@ -8,9 +8,9 @@ const path = require("path");
 const CURRENT_WORKING_DIR = process.cwd();
 
 module.exports = {
-  app: path.resolve(CURRENT_WORKING_DIR, "app"),
-  assets: path.resolve(CURRENT_WORKING_DIR, "public"),
-  modules: path.resolve(CURRENT_WORKING_DIR, "node_modules"),
-  public: "/assets/", // use absolute path for css-loader?
-  server: path.resolve(CURRENT_WORKING_DIR, "server"),
+  app: path.resolve(CURRENT_WORKING_DIR, 'app'),
+  assets: path.resolve(CURRENT_WORKING_DIR, 'public'),
+  modules: path.resolve(CURRENT_WORKING_DIR, 'node_modules'),
+  public: '/assets/', // use absolute path for css-loader?
+  server: path.resolve(CURRENT_WORKING_DIR, 'server'),
 };

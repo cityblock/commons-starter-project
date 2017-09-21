@@ -1,4 +1,3 @@
-import 'babel-polyfill';
 import createHistory from 'history/createBrowserHistory';
 import * as React from 'react';
 import { ApolloClient, ApolloProvider } from 'react-apollo';

@@ -3,6 +3,7 @@ dotenv.config();
 /* tslint:disable no-var-requires */
 require('@risingstack/trace');
 /* tslint:enable no-var-requires */
+import compression from 'compression';
 import * as express from 'express';
 import * as webpack from 'webpack';
 import expressConfig from './express';
@@ -21,6 +22,12 @@ if (process.env.NODE_ENV === 'production') {
 }
 
 const app = express();
+
+/* istanbul ignore next */
+if (process.env.NODE_ENV === 'production') {
+  // compress all responses
+  app.use(compression());
+}
 
 export type Env = 'production' | 'development' | 'test';
 

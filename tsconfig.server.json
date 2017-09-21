@@ -11,8 +11,8 @@
     "./server/lib/capture-output"
   ],
   "exclude": [
-    "app",
     "node_modules",
+    "app",
     "rules",
     "coverage",
     "scripts",

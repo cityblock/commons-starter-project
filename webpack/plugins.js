@@ -11,11 +11,11 @@ module.exports = ({ production = false } = {}) => {
     new webpack.EnvironmentPlugin(['NODE_ENV', 'GOOGLE_OAUTH_TOKEN']),
     new webpack.NamedModulesPlugin(),
     new webpack.optimize.OccurrenceOrderPlugin(),
+    new webpack.NoEmitOnErrorsPlugin(),
   ];
   if (!production) {
     plugins.push(
       new ForkTsCheckerWebpackPlugin({ tsconfig: path.resolve('tsconfig.webpack.json') }),
-      new webpack.NoEmitOnErrorsPlugin(),
       new webpack.HotModuleReplacementPlugin(),
     );
   } else {
@@ -35,8 +35,19 @@ module.exports = ({ production = false } = {}) => {
         },
       ]),
       new UglifyJSPlugin({
+        exclude: /node_modules/,
         sourceMap: true,
-        uglifyOptions: { ecma: 6 },
+        parallel: true,
+        uglifyOptions: {
+          ie8: false,
+          ecma: 8,
+          warnings: false,
+          mangle: true,
+          compress: {
+            ecma: 8,
+            dead_code: true,
+          },
+        },
       }),
     );
   }

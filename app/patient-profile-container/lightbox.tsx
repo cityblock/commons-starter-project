@@ -119,7 +119,7 @@ export default class Lightbox extends React.Component<IProps, IState> {
               <div className={styles.header}>
                 <div className={styles.imageCount}>
                   <div className={styles.imageCountIcon}></div>
-                  <div className={styles.imageCountLabel}>
+                  <div>
                     {`${selectedImageIndex + 1} `}
                     <FormattedMessage id='lightbox.of'>
                       {(message: string) => <span>{message}</span>}

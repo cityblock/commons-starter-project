@@ -10,5 +10,4 @@ export const imageCountIcon: string;
 export const close: string;
 export const backArrow: string;
 export const nextArrow: string;
-export const imageCountLabel: string;
 export const hidden: string;

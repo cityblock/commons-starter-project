@@ -1,4 +1,3 @@
-export const container: string;
 export const loading: string;
 export const loadingHidden: string;
 export const loadingContainer: string;

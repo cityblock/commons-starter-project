@@ -41,8 +41,6 @@
   color: var(--black-color);
 }
 
-.medicationRowDosage {}
-
 .medicationDetails {
   transition: height 0.25s ease-out;
   height: 0;

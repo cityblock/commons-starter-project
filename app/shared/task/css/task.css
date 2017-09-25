@@ -117,8 +117,6 @@
   padding: 5px 0;
 }
 
-.taskHeader {}
-
 .patientInfo {
   display: flex;
   flex-direction: row;

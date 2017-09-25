@@ -93,7 +93,7 @@ class QuestionCreate extends React.Component<IProps, IState> {
 
     return (
       <div className={questionStyles.container}>
-        <form onSubmit={this.onSubmit} className={styles.container}>
+        <form onSubmit={this.onSubmit}>
           <div className={styles.formTop}>
             <div className={styles.close} onClick={this.props.onClose} />
           </div>

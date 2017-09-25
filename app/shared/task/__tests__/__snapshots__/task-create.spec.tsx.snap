@@ -5,7 +5,6 @@ exports[`renders task create 1`] = `
   className={undefined}
 >
   <form
-    className={undefined}
     onSubmit={[Function]}
   >
     <div

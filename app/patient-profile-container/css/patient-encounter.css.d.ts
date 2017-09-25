@@ -4,7 +4,6 @@ export const providerInfo: string;
 export const providerName: string;
 export const providerRole: string;
 export const encounterDateTime: string;
-export const encounterTime: string;
 export const encounterDate: string;
 export const encounterBody: string;
 export const encounterHeader: string;

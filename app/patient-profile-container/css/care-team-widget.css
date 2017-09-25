@@ -89,8 +89,6 @@
   background-image: url('../../assets/down-arrow-white.svg');
 }
 
-.openButton {}
-
 .button.openButton .buttonArrow {
   transform: rotateX(0deg);
   background-position: center top;

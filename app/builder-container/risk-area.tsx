@@ -260,7 +260,7 @@ class RiskArea extends React.Component<IProps, IState> {
             </div>
           </div>
           <div className={riskAreaContainerStyles}>
-            <div className={styles.itemHeader}>
+            <div>
               <div className={styles.infoRow}>
                 <div className={styles.controls}>
                   <Link to={closeRoute} className={styles.close}>Close</Link>

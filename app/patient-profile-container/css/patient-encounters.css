@@ -23,8 +23,6 @@
   -webkit-overflow-scrolling: touch;
 }
 
-.encounters.emptyEncountersList {}
-
 .emptyEncountersMessage {
   border: 1px dashed var(--border-color);
   border-radius: 4px;

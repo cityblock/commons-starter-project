@@ -17,7 +17,6 @@ export const sectionTitle: string;
 export const radioRow: string;
 export const radioLabel: string;
 export const radioContainer: string;
-export const radioButtons: string;
 export const radioButton: string;
 export const radioButtonLabel: string;
 export const multiInputRow: string;

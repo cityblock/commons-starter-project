@@ -1,9 +1,5 @@
 @import '../../shared/css/sizes';
 
-.idlePopup {
-
-}
-
 .idlePopupTitle {
   font-family: var(--basetica-black);
   font-size: var(--medium-large-font-size);

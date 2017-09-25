@@ -7,9 +7,7 @@ exports[`renders idle popup 1`] = `
   <div
     className=""
   >
-    <div
-      className={undefined}
-    >
+    <div>
       <div
         className={undefined}
       >

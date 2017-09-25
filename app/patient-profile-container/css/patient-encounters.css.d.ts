@@ -2,7 +2,6 @@ export const invertedButton: string;
 export const button: string;
 export const encountersPanel: string;
 export const encounters: string;
-export const emptyEncountersList: string;
 export const emptyEncountersMessage: string;
 export const emptyEncountersLogo: string;
 export const emptyEncountersLabel: string;

@@ -47,7 +47,7 @@ class SettingsContainer extends React.Component<IProps, { error?: string }> {
     const { currentUser } = this.props;
     let errorHtml = null;
     if (error) {
-      errorHtml = (<div className={styles.error}>{error}</div>);
+      errorHtml = (<div>{error}</div>);
     }
     const locale = currentUser && currentUser.locale ? currentUser.locale : 'en';
     return (

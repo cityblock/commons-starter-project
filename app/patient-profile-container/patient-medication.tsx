@@ -33,7 +33,7 @@ export default class PatientMedication extends React.Component<IProps, {}> {
         onClick={() => (this.props.onClick(medication.name))}>
         <div className={styles.medicationRow}>
           <div className={styles.medicationRowTitle}>{medication.name}</div>
-          <div className={styles.medicationRowDosage}>{dosage}</div>
+          <div>{dosage}</div>
         </div>
         <div className={styles.medicationDetails}>
           <div className={styles.medicationDetailsRow}>

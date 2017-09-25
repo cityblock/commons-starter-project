@@ -573,7 +573,7 @@ export class Task extends React.Component<IProps, IState> {
           </div>
         </div>
         <div className={taskContainerStyles}>
-          <div className={styles.taskHeader}>
+          <div>
             <div className={styles.infoRow}>
               <div className={styles.patientInfo}>
                 <div

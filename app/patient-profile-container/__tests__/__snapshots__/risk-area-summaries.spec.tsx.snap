@@ -41,7 +41,7 @@ exports[`renders risk area summaries 1`] = `
     className={undefined}
   >
     <div
-      className="undefined"
+      className={undefined}
     >
       <div
         className={undefined}

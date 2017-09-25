@@ -4,8 +4,6 @@
   margin: 50px auto;
 }
 
-.error {}
-
 .heading {
   @apply --title;
   margin: 50px 0px;

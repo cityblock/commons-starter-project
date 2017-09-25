@@ -65,8 +65,6 @@
   -webkit-overflow-scrolling: touch;
 }
 
-.riskAreas.emptyRiskAreasList {}
-
 .emptyRiskAreasMessage {
   border: 1px dashed var(--border-color);
   border-radius: 4px;

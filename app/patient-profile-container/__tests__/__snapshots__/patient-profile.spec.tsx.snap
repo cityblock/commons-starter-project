@@ -41,9 +41,7 @@ exports[`renders patient profile container correctly 1`] = `
               >
                 Unknown
               </div>
-              <div
-                className={undefined}
-              >
+              <div>
                 Unknown
               </div>
             </div>
@@ -61,9 +59,7 @@ exports[`renders patient profile container correctly 1`] = `
           <div
             className={undefined}
           >
-            <div
-              className={undefined}
-            >
+            <div>
               Date of birth
               :
             </div>
@@ -76,9 +72,7 @@ exports[`renders patient profile container correctly 1`] = `
           <div
             className={undefined}
           >
-            <div
-              className={undefined}
-            >
+            <div>
               Preferred language
               :
             </div>
@@ -91,9 +85,7 @@ exports[`renders patient profile container correctly 1`] = `
           <div
             className={undefined}
           >
-            <div
-              className={undefined}
-            >
+            <div>
               Location
               :
             </div>
@@ -106,9 +98,7 @@ exports[`renders patient profile container correctly 1`] = `
           <div
             className={undefined}
           >
-            <div
-              className={undefined}
-            >
+            <div>
               Patient since
               :
             </div>
@@ -121,9 +111,7 @@ exports[`renders patient profile container correctly 1`] = `
           <div
             className={undefined}
           >
-            <div
-              className={undefined}
-            >
+            <div>
               Medicare ID
               :
             </div>
@@ -504,7 +492,7 @@ exports[`renders patient profile container correctly 1`] = `
           </div>
         </div>
         <div
-          className="undefined"
+          className={undefined}
         >
           <div
             className={undefined}
@@ -543,9 +531,7 @@ exports[`renders patient profile container correctly 1`] = `
                   <div
                     className={undefined}
                   />
-                  <div
-                    className={undefined}
-                  >
+                  <div>
                     1 
                     <span>
                       of
@@ -669,9 +655,7 @@ exports[`renders patient profile for ipad 1`] = `
             <div
               className={undefined}
             >
-              <div
-                className={undefined}
-              >
+              <div>
                 Date of birth
                 :
               </div>
@@ -684,9 +668,7 @@ exports[`renders patient profile for ipad 1`] = `
             <div
               className={undefined}
             >
-              <div
-                className={undefined}
-              >
+              <div>
                 Preferred language
                 :
               </div>
@@ -699,9 +681,7 @@ exports[`renders patient profile for ipad 1`] = `
             <div
               className={undefined}
             >
-              <div
-                className={undefined}
-              >
+              <div>
                 Location
                 :
               </div>
@@ -714,9 +694,7 @@ exports[`renders patient profile for ipad 1`] = `
             <div
               className={undefined}
             >
-              <div
-                className={undefined}
-              >
+              <div>
                 Patient since
                 :
               </div>
@@ -729,9 +707,7 @@ exports[`renders patient profile for ipad 1`] = `
             <div
               className={undefined}
             >
-              <div
-                className={undefined}
-              >
+              <div>
                 Medicare ID
                 :
               </div>
@@ -1125,7 +1101,7 @@ exports[`renders patient profile for ipad 1`] = `
           </div>
         </div>
         <div
-          className="undefined"
+          className={undefined}
         >
           <div
             className={undefined}
@@ -1164,9 +1140,7 @@ exports[`renders patient profile for ipad 1`] = `
                   <div
                     className={undefined}
                   />
-                  <div
-                    className={undefined}
-                  >
+                  <div>
                     1 
                     <span>
                       of

@@ -1,4 +1,3 @@
-import * as classNames from 'classnames';
 import * as React from 'react';
 import { graphql } from 'react-apollo';
 import * as patientEncountersQuery from '../graphql/queries/get-patient-encounters.graphql';
@@ -114,10 +113,6 @@ class PatientEncounters extends React.Component<IProps, IState> {
     const { patientEncounters, patientId } = this.props;
     const encountersList = patientEncounters || [];
 
-    const encountersListStyles = classNames(styles.encounters, {
-      [styles.emptyEncountersList]: !encountersList.length,
-    });
-
     return (
       <div>
         <div className={sortSearchStyles.sortSearchBar}>
@@ -135,7 +130,7 @@ class PatientEncounters extends React.Component<IProps, IState> {
         </div>
         <div className={styles.encountersPanel}>
           <NewPatientEncounter patientId={ patientId } />
-          <div className={encountersListStyles}>
+          <div className={styles.encounters}>
             {this.renderPatientEncounters(encountersList)}
           </div>
         </div>

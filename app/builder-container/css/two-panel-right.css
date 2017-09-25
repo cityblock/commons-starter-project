@@ -164,8 +164,6 @@
   color: var(--red-color);
 }
 
-.itemHeader {}
-
 .itemBody {
   display: flex;
   flex-direction: column;

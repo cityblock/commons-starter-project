@@ -70,12 +70,6 @@ class RiskAreas extends React.Component<IProps, {}> {
   }
 
   render() {
-    const { riskAreas } = this.props;
-
-    const riskAreasListStyles = classNames(styles.riskAreas, {
-      [styles.emptyRiskAreasList]: (!riskAreas || !riskAreas.length),
-    });
-
     return (
       <div>
         <div className={sortSearchStyles.sortSearchBar}>
@@ -92,7 +86,7 @@ class RiskAreas extends React.Component<IProps, {}> {
           </div>
         </div>
         <div className={styles.riskAreasPanel}>
-          <div className={riskAreasListStyles}>{this.renderRiskAreaSummaries()}</div>
+          <div className={styles.riskAreas}>{this.renderRiskAreaSummaries()}</div>
         </div>
       </div>
     );

@@ -15,7 +15,6 @@ export const infoRow: string;
 export const infoRowLeft: string;
 export const priorityRow: string;
 export const dueDateRow: string;
-export const taskHeader: string;
 export const patientInfo: string;
 export const name: string;
 export const avatar: string;

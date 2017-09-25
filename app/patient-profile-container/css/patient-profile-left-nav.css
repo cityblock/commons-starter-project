@@ -160,7 +160,6 @@
 .patientFirstName {
   margin-bottom: 10px;
 }
-.patientLastName {}
 
 .patientSubheading {
   font-family: var(--roboto);
@@ -181,8 +180,6 @@
   padding-bottom: 12px;
   lost-flex-container: row;
 }
-
-.patientBasicInfoRowTitle {}
 
 .patientBasicInfoRowData {
   font-weight: var(--roboto-medium-weight);

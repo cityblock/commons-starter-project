@@ -12,7 +12,6 @@ export const riskAreasPanel: string;
 export const riskAreas: string;
 export const riskAssessment: string;
 export const riskAssessmentError: string;
-export const emptyRiskAreasList: string;
 export const emptyRiskAreasMessage: string;
 export const emptyRiskAreasLogo: string;
 export const emptyRiskAreasLabel: string;

@@ -149,7 +149,7 @@ class PatientCarePlanSuggestions extends React.Component<IProps, IState> {
             <div className={styles.sectionDivider}></div>
             <div className={styles.sectionHamburger}></div>
           </div>
-          <div className={styles.suggestionsBody}>
+          <div>
             {this.renderSuggestions('concern')}
           </div>
         </div>
@@ -159,7 +159,7 @@ class PatientCarePlanSuggestions extends React.Component<IProps, IState> {
             <div className={styles.sectionDivider}></div>
             <div className={styles.sectionHamburger}></div>
           </div>
-          <div className={styles.suggestionsBody}>
+          <div>
             {this.renderSuggestions('goal')}
           </div>
         </div>

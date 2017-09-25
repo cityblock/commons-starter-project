@@ -19,7 +19,6 @@ export const trashIcon: string;
 export const menuLabel: string;
 export const smallText: string;
 export const redText: string;
-export const itemHeader: string;
 export const itemBody: string;
 export const largeText: string;
 export const title: string;

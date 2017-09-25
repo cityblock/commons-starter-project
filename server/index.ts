@@ -3,7 +3,7 @@ dotenv.config();
 /* tslint:disable no-var-requires */
 require('@risingstack/trace');
 /* tslint:enable no-var-requires */
-import compression from 'compression';
+import * as compression from 'compression';
 import * as express from 'express';
 import * as webpack from 'webpack';
 import expressConfig from './express';

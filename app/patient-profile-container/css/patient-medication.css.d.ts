@@ -3,7 +3,6 @@ export const selected: string;
 export const medicationRow: string;
 export const medicationDetails: string;
 export const medicationRowTitle: string;
-export const medicationRowDosage: string;
 export const medicationDetailsRow: string;
 export const medicationInstructions: string;
 export const medicationDetailsTitle: string;

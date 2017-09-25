@@ -11,7 +11,7 @@ export const IdlePopup: React.StatelessComponent<IProps> = props => {
   const { idleEnd, isIdle } = props;
   return (
     <Popup visible={isIdle}>
-      <div className={styles.idlePopup}>
+      <div>
         <div className={styles.idlePopupTitle}>Looks like you are idle</div>
         <div className={styles.idleSubheading}>
           Please click below to prevent from being automatically logged out

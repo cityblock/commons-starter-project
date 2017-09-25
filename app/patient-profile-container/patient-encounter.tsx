@@ -113,7 +113,7 @@ class PatientEncounter extends React.Component<Props> {
             <div className={styles.providerRole}>{providerRole}</div>
           </div>
           <div className={styles.encounterDateTime}>
-            <div className={styles.encounterTime}>{formattedEncounterTime}</div>
+            <div>{formattedEncounterTime}</div>
             <div className={styles.encounterDate}>{formattedEncounterDate}</div>
           </div>
         </div>

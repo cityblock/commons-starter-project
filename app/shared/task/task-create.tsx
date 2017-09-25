@@ -141,7 +141,7 @@ class TaskCreate extends React.Component<IProps, IState> {
 
     return (
       <div className={taskStyles.container}>
-        <form onSubmit={this.onSubmit} className={styles.container}>
+        <form onSubmit={this.onSubmit}>
           <div className={styles.formTop}>
             <div className={styles.smallPatientSection}>
               <div

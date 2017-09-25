@@ -24,9 +24,7 @@ exports[`renders encounter 1`] = `
     <div
       className={undefined}
     >
-      <div
-        className={undefined}
-      >
+      <div>
         12:00 AM
       </div>
       <div

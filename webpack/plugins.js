@@ -7,7 +7,6 @@ const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
 
 module.exports = ({ production = false } = {}) => {
   const plugins = [
-    new webpack.optimize.OccurrenceOrderPlugin(),
     new webpack.EnvironmentPlugin(['NODE_ENV', 'GOOGLE_OAUTH_TOKEN']),
     new webpack.NamedModulesPlugin(),
     new webpack.optimize.OccurrenceOrderPlugin(),

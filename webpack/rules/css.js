@@ -27,9 +27,11 @@ module.exports = ({ production = false } = {}) => {
         plugins: [
           lost(),
           postcssImport({ path: path.resolve(PATHS.app, './css') }),
-          postcssCssnext({ browsers: ['last 2 Chrome versions'] }),
+          postcssCssnext({ browsers: ['last 2 versions'] }),
           // cssnano in prod and reporter (for errors) in dev
-          production ? require('cssnano')() : postcssReporter({ clearMessages: true }),
+          production
+            ? require('cssnano')({ discardUnused: { fontFace: false } })
+            : postcssReporter({ clearMessages: true }),
         ],
       },
     },

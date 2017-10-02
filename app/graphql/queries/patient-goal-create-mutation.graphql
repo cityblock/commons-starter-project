@@ -10,16 +10,18 @@ mutation patientGoalCreate(
   $concernTitle: String
   $startedAt: String
 ) {
-  patientGoalCreate(input: {
-    title: $title,
-    patientId: $patientId,
-    patientConcernId: $patientConcernId,
-    goalSuggestionTemplateId: $goalSuggestionTemplateId,
-    taskTemplateIds: $taskTemplateIds,
-    concernId: $concernId,
-    concernTitle: $concernTitle,
-    startedAt: $startedAt,
-   }) {
+  patientGoalCreate(
+    input: {
+      title: $title
+      patientId: $patientId
+      patientConcernId: $patientConcernId
+      goalSuggestionTemplateId: $goalSuggestionTemplateId
+      taskTemplateIds: $taskTemplateIds
+      concernId: $concernId
+      concernTitle: $concernTitle
+      startedAt: $startedAt
+    }
+  ) {
     ...FullPatientGoal
   }
 }

@@ -76,11 +76,11 @@ enum TaskEventTypes {
 }
 
 enum CompletedWithinInterval {
-   hour
-   day
-   week
-   month
-   year
+  hour
+  day
+  week
+  month
+  year
 }
 
 enum Priority {
@@ -621,19 +621,16 @@ input PatientSetupInput {
   ssn: String!
   language: String!
   maritalStatus: String!
-
   email: String
   homePhone: String
   mobilePhone: String
   consentToCall: Boolean!
   consentToText: Boolean!
-
   city: String
   address1: String
   county: String
   country: String
   state: String
-
   insuranceType: String
   patientRelationshipToPolicyHolder: String
   memberId: String
@@ -942,187 +939,126 @@ input CarePlanSuggestionDismissInput {
 type RootMutationType {
   # Create a new user
   userCreate(input: UserCreateInput): UserWithAuthToken
-
   # Login user
   userLogin(input: UserLoginInput): UserWithAuthToken
-
   # Edit user
   userEditRole(input: UserEditRoleInput): User
-
   # Delete user
   userDelete(input: UserDeleteInput): User
-
   # Edit current user
   currentUserEdit(input: CurrentUserEditInput): User
-
   # Create a new clinic
   clinicCreate(input: ClinicCreateInput): Clinic
-
   # Add user to careTeam
   careTeamAddUser(input: CareTeamInput): [User]
-
   # Remove user from careTeam
   careTeamRemoveUser(input: CareTeamInput): [User]
-
   # Add a note to an appointment
   appointmentAddNote(input: AppointmentAddNoteInput): AppointmentAddNoteResult
-
   # Start an appointment
   appointmentStart(input: AppointmentStartInput): Appointment
-
   # End an appointment
   appointmentEnd(input: AppointmentEndInput): AppointmentEndResult
-
   # Edit fields on patient stored in the db
   patientEdit(input: PatientEditInput): Patient
-
   # Setup patient creates the patient in the db AND in athena
   patientSetup(input: PatientSetupInput): Patient
-
   # Edit a patient scratch pad
   patientScratchPadEdit(input: PatientScratchPadEditInput): PatientScratchPad
-
   # Create a task
   taskCreate(input: TaskCreateInput): Task
-
   # Delete a task
   taskDelete(input: TaskDeleteInput): Task
-
   # Edit a task
   taskEdit(input: TaskEditInput): Task
-
   # Complete a task
   taskComplete(input: TaskCompleteInput): Task
-
   # Uncomplete a task
   taskUncomplete(input: TaskCompleteInput): Task
-
   # Add user to task followers
   taskUserFollow(input: TaskFollowInput): Task
-
   # Remove user from task followers
   taskUserUnfollow(input: TaskFollowInput): Task
-
   # Create a task
   taskCommentCreate(input: TaskCommentCreateInput): TaskComment
-
   # Edit a task
   taskCommentEdit(input: TaskCommentEditInput): TaskComment
-
   # Delete a task
   taskCommentDelete(input: TaskCommentDeleteInput): TaskComment
-
   # Create a RiskArea
   riskAreaCreate(input: RiskAreaCreateInput): RiskArea
-
   # Edit a RiskArea
   riskAreaEdit(input: RiskAreaEditInput): RiskArea
-
   # Deletes a RiskArea
   riskAreaDelete(input: RiskAreaDeleteInput): RiskArea
-
   # Create a Question
   questionCreate(input: QuestionCreateInput): Question
-
   # Edit a Question
   questionEdit(input: QuestionEditInput): Question
-
   # Delete a question
   questionDelete(input: QuestionDeleteInput): Question
-
   # Create an Answer
   answerCreate(input: AnswerCreateInput): Answer
-
   # Edit an Answer
   answerEdit(input: AnswerEditInput): Answer
-
   # Deletes an Answer
   answerDelete(input: AnswerDeleteInput): Answer
-
   # Create a patient answer
   patientAnswersCreate(input: PatientAnswersCreateInput): [PatientAnswer]
-
   # Edit a patient answer
   patientAnswerEdit(input: PatientAnswerEditInput): PatientAnswer
-
   # Deletes a patient Answer
   patientAnswerDelete(input: PatientAnswerDeleteInput): PatientAnswer
-
   # Updates applicable for Patient Answers in risk area
   patientAnswersUpdateApplicable(input: PatientAnswersUpdateApplicableInput): [PatientAnswer]
-
   # Create a QuestionCondition
   questionConditionCreate(input: QuestionConditionCreateInput): QuestionCondition
-
   # Edit a QuestionCondition
   questionConditionEdit(input: QuestionConditionEditInput): QuestionCondition
-
   # Deletes a QuestionCondition
   questionConditionDelete(input: QuestionConditionDeleteInput): QuestionCondition
-
   # Dismisses (marks as seen) an EventNotification
   eventNotificationDismiss(input: EventNotificationEditInput): EventNotification
-
   # Create a concern
   concernCreate(input: ConcernCreateInput): Concern
-
   # Edit a concern
   concernEdit(input: ConcernEditInput): Concern
-
   # Deletes a concern
   concernDelete(input: ConcernDeleteInput): Concern
-
   # suggest a concern for an answer
   concernSuggestionCreate(input: ConcernSuggestInput): [Concern]
-
   # delete suggestion a concern for an answer
   concernSuggestionDelete(input: ConcernSuggestInput): [Concern]
-
   # goal suggestion template create
   goalSuggestionTemplateCreate(input: GoalSuggestionTemplateCreateInput): GoalSuggestionTemplate
-
   # Edit a goal suggestion template
   goalSuggestionTemplateEdit(input: GoalSuggestionTemplateEditInput): GoalSuggestionTemplate
-
   # Deletes a goal suggestion template
   goalSuggestionTemplateDelete(input: GoalSuggestionTemplateDeleteInput): GoalSuggestionTemplate
-
   # Suggest a goal suggestion template for an answer
   goalSuggestionCreate(input: GoalSuggestInput): [GoalSuggestionTemplate]
-
   # unsuggest a goal suggestion template for an answer
   goalSuggestionDelete(input: GoalSuggestInput): [GoalSuggestionTemplate]
-
   # task template create
   taskTemplateCreate(input: TaskTemplateCreateInput): TaskTemplate
-
   # Edit a task template
   taskTemplateEdit(input: TaskTemplateEditInput): TaskTemplate
-
   # Deletes a task template
   taskTemplateDelete(input: TaskTemplateDeleteInput): TaskTemplate
-
   # patient goal create
   patientGoalCreate(input: PatientGoalCreateInput): PatientGoal
-
   # patient goal edit
   patientGoalEdit(input: PatientGoalEditInput): PatientGoal
-
   # patient goal delete
   patientGoalDelete(input: PatientGoalDeleteInput): PatientGoal
-
   # patient concern create
   patientConcernCreate(input: PatientConcernCreateInput): PatientConcern
-
   # patient concern edit
   patientConcernEdit(input: PatientConcernEditInput): PatientConcern
-
   # patient concern delete
   patientConcernDelete(input: PatientConcernDeleteInput): PatientConcern
-
   # care plan suggestion accept
   carePlanSuggestionAccept(input: CarePlanSuggestionAcceptInput): CarePlanSuggestion
-
   # care plan suggestion dismiss
   carePlanSuggestionDismiss(input: CarePlanSuggestionDismissInput): CarePlanSuggestion
 }
@@ -1133,54 +1069,28 @@ type RootQueryType {
     # The id of the User
     userId: String!
   ): User
-
   # All Users (admin only)
-  users(
-    pageNumber: Int,
-    pageSize: Int,
-    hasLoggedIn: Boolean,
-    orderBy: UserOrderOptions
-  ): UserEdges
-
+  users(pageNumber: Int, pageSize: Int, hasLoggedIn: Boolean, orderBy: UserOrderOptions): UserEdges
   # List of patients the user is on the care team for (their 'patient panel')
-  userPatientPanel(
-    pageNumber: Int,
-    pageSize: Int,
-    userId: String
-  ): PatientEdges
-
+  userPatientPanel(pageNumber: Int, pageSize: Int, userId: String): PatientEdges
   # The current User
   currentUser: User
-
   # A single Patient
   patient(patientId: String!): Patient
-
   # Users on a care team
   patientCareTeam(patientId: String!): [User]
-
   # Patient scratch pad
   patientScratchPad(patientId: String!): PatientScratchPad
-
   # A single clinic
   clinic(clinicId: String!): Clinic
-
   # Clinics
-  clinics(
-    pageNumber: Int,
-    pageSize: Int
-  ): ClinicEdges
-
+  clinics(pageNumber: Int, pageSize: Int): ClinicEdges
   # Patient encounters
   patientEncounters(patientId: String!): [PatientEncounter]
-
   # Patient medications
-  patientMedications(
-    patientId: String!
-  ): PatientMedications
-
+  patientMedications(patientId: String!): PatientMedications
   # Task
   task(taskId: String!): Task
-
   # Patient's Tasks
   tasksForPatient(
     patientId: String!
@@ -1188,123 +1098,77 @@ type RootQueryType {
     pageSize: Int
     orderBy: TaskOrderOptions
   ): TaskEdges
-
   # Current user's Tasks
-  tasksForCurrentUser(
-    pageNumber: Int
-    pageSize: Int
-    orderBy: TaskOrderOptions
-  ): TaskEdges
-
+  tasksForCurrentUser(pageNumber: Int, pageSize: Int, orderBy: TaskOrderOptions): TaskEdges
   # List of task comments
-  taskComments(
-    pageNumber: Int,
-    pageSize: Int,
-    taskId: String!
-  ): TaskCommentEdges
-
+  taskComments(pageNumber: Int, pageSize: Int, taskId: String!): TaskCommentEdges
   # Single task comment
   taskComment(taskCommentId: String!): TaskComment
-
   # RiskArea
   riskArea(riskAreaId: String!): RiskArea
-
   # RiskAreas
   riskAreas: [RiskArea]
-
   # Question
   question(questionId: String!): Question
-
   # Questions
   questionsForRiskArea(riskAreaId: String!): [Question]!
-
   # Answer
   answer(answerId: String!): Answer
-
   # Answers
   answersForQuestion(questionId: String!): [Answer]!
-
   # PatientAnswer
   patientAnswer(patientAnswerId: String!): PatientAnswer
-
   # PatientAnswersForQuestion
   patientAnswersForQuestion(questionId: String!, patientId: String!): [PatientAnswer]
-
   # PatientPreviousAnswersForQuestion
   patientPreviousAnswersForQuestion(questionId: String!, patientId: String!): [PatientAnswer]
-
   # PatientAnswersForRiskArea
   patientAnswersForRiskArea(riskAreaId: String!, patientId: String!): [PatientAnswer]
-
   # PatientRiskAreaSummary
   patientRiskAreaSummary(riskAreaId: String!, patientId: String!): RiskAreaSummary
-
   # PatientRiskAreaRiskScore
   patientRiskAreaRiskScore(riskAreaId: String!, patientId: String!): RiskScore
-
   # QuestionCondition
   questionCondition(questionConditionId: String!): QuestionCondition
-
   # Event notifications for a user
   eventNotificationsForCurrentUser(
-    pageNumber: Int,
-    pageSize: Int,
+    pageNumber: Int
+    pageSize: Int
     taskEventNotificationsOnly: Boolean
   ): EventNotificationEdges
-
   # Event notifications for a task
-  eventNotificationsForTask(
-    taskId: String!,
-    pageNumber: Int,
-    pageSize: Int,
-  ): EventNotificationEdges
-
+  eventNotificationsForTask(taskId: String!, pageNumber: Int, pageSize: Int): EventNotificationEdges
   # Task template
   taskTemplate(taskTemplateId: String!): TaskTemplate
-
   # Concern
   concern(concernId: String!): Concern
-
   # Concerns
   concerns: [Concern]
-
   # Concerns for answer
   concernsForAnswer(answerId: String!): [Concern]
-
   # patient concern
   patientConcern(patientConcernId: String!): PatientConcern
-
   # patient concerns for patient
   patientConcerns(patientId: String!): [PatientConcern]
-
   # Patient goal
   patientGoal(patientGoalId: String!): PatientGoal
-
   # Patient goals for patient
   patientGoals(patientId: String!): [PatientGoal]
-
   # Goal suggestion templates
   goalSuggestionTemplate(goalSuggestionTemplateId: String!): GoalSuggestionTemplate
-
   # Goal suggestion templates
   goalSuggestionTemplates: [GoalSuggestionTemplate]
-
   # goal suggestion for template
   goalSuggestionTemplatesForAnswer(answerId: String!): [GoalSuggestionTemplate]
-
   # Task template
   taskTemplate(taskTemplateId: String!): TaskTemplate
-
   # Task templates
   taskTemplates: [TaskTemplate]
-
   # Care Plan Suggestions
   carePlanSuggestionsForPatient(patientId: String!): [CarePlanSuggestion]
-
   # Care Plan
   carePlanForPatient(patientId: String!): CarePlan
 }
-
 
 schema {
   query: RootQueryType

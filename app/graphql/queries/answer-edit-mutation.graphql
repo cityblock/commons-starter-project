@@ -10,16 +10,18 @@ mutation answerEdit(
   $summaryText: String
   $order: Int
 ) {
-  answerEdit(input: {
-    answerId: $answerId
-    displayValue: $displayValue
-    value: $value
-    valueType: $valueType
-    riskAdjustmentType: $riskAdjustmentType
-    inSummary: $inSummary
-    summaryText: $summaryText
-    order: $order
-  }) {
+  answerEdit(
+    input: {
+      answerId: $answerId
+      displayValue: $displayValue
+      value: $value
+      valueType: $valueType
+      riskAdjustmentType: $riskAdjustmentType
+      inSummary: $inSummary
+      summaryText: $summaryText
+      order: $order
+    }
+  ) {
     ...FullAnswer
   }
 }

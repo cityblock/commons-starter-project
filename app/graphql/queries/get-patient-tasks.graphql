@@ -1,7 +1,17 @@
 #import "../fragments/full-task.graphql"
 
-query getPatientTasks($patientId: String!, $pageNumber: Int, $pageSize: Int, $orderBy: TaskOrderOptions) {
-  tasksForPatient(patientId: $patientId, pageNumber: $pageNumber, pageSize: $pageSize, orderBy: $orderBy) {
+query getPatientTasks(
+  $patientId: String!
+  $pageNumber: Int
+  $pageSize: Int
+  $orderBy: TaskOrderOptions
+) {
+  tasksForPatient(
+    patientId: $patientId
+    pageNumber: $pageNumber
+    pageSize: $pageSize
+    orderBy: $orderBy
+  ) {
     edges {
       node {
         ...FullTask

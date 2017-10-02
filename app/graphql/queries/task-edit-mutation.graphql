@@ -9,15 +9,17 @@ mutation taskEdit(
   $dueAt: String
   $patientGoalId: String
 ) {
-  taskEdit(input: {
-    taskId: $taskId,
-    assignedToId: $assignedToId,
-    title: $title,
-    description: $description,
-    priority: $priority,
-    dueAt: $dueAt,
-    patientGoalId: $patientGoalId,
-  }) {
+  taskEdit(
+    input: {
+      taskId: $taskId
+      assignedToId: $assignedToId
+      title: $title
+      description: $description
+      priority: $priority
+      dueAt: $dueAt
+      patientGoalId: $patientGoalId
+    }
+  ) {
     ...FullTask
   }
 }

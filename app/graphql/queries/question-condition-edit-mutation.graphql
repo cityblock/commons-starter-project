@@ -5,11 +5,13 @@ mutation questionConditionEdit(
   $answerId: String!
   $questionId: String!
 ) {
-  questionConditionEdit(input: {
-    questionConditionId: $questionConditionId
-    answerId: $answerId
-    questionId: $questionId
-  }) {
+  questionConditionEdit(
+    input: {
+      questionConditionId: $questionConditionId
+      answerId: $answerId
+      questionId: $questionId
+    }
+  ) {
     ...FullQuestionCondition
   }
 }

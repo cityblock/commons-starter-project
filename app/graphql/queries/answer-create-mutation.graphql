@@ -10,16 +10,18 @@ mutation answerCreate(
   $questionId: String!
   $order: Int!
 ) {
-  answerCreate(input: {
-    displayValue: $displayValue
-    value: $value
-    valueType: $valueType
-    riskAdjustmentType: $riskAdjustmentType
-    inSummary: $inSummary
-    summaryText: $summaryText
-    questionId: $questionId
-    order: $order
-  }) {
+  answerCreate(
+    input: {
+      displayValue: $displayValue
+      value: $value
+      valueType: $valueType
+      riskAdjustmentType: $riskAdjustmentType
+      inSummary: $inSummary
+      summaryText: $summaryText
+      questionId: $questionId
+      order: $order
+    }
+  ) {
     ...FullAnswer
   }
 }

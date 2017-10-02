@@ -9,15 +9,17 @@ mutation taskTemplateCreate(
   $priority: String
   $careTeamAssigneeRole: String
 ) {
-  taskTemplateCreate(input: {
-    title: $title
-    goalSuggestionTemplateId: $goalSuggestionTemplateId
-    completedWithinNumber: $completedWithinNumber
-    completedWithinInterval: $completedWithinInterval
-    repeating: $repeating
-    priority: $priority
-    careTeamAssigneeRole: $careTeamAssigneeRole
-  }) {
+  taskTemplateCreate(
+    input: {
+      title: $title
+      goalSuggestionTemplateId: $goalSuggestionTemplateId
+      completedWithinNumber: $completedWithinNumber
+      completedWithinInterval: $completedWithinInterval
+      repeating: $repeating
+      priority: $priority
+      careTeamAssigneeRole: $careTeamAssigneeRole
+    }
+  ) {
     ...FullTaskTemplate
   }
 }

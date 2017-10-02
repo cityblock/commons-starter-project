@@ -24,30 +24,32 @@ mutation patientSetup(
   $memberId: String
   $policyGroupNumber: String
 ) {
-  patientSetup(input: {
-    firstName: $firstName,
-    middleName: $middleName,
-    lastName: $lastName,
-    dateOfBirth: $dateOfBirth,
-    gender: $gender,
-    zip: $zip,
-    homeClinicId: $homeClinicId,
-    race: $race,
-    ssn: $ssn,
-    language: $language,
-    maritalStatus: $maritalStatus,
-    email: $email,
-    homePhone: $homePhone,
-    mobilePhone: $mobilePhone,
-    consentToCall: $consentToCall,
-    consentToText: $consentToText,
-    issueDate: $issueDate,
-    expirationDate: $expirationDate,
-    insuranceType: $insuranceType,
-    patientRelationshipToPolicyHolder: $patientRelationshipToPolicyHolder,
-    memberId: $memberId,
-    policyGroupNumber: $policyGroupNumber,
-   }) {
+  patientSetup(
+    input: {
+      firstName: $firstName
+      middleName: $middleName
+      lastName: $lastName
+      dateOfBirth: $dateOfBirth
+      gender: $gender
+      zip: $zip
+      homeClinicId: $homeClinicId
+      race: $race
+      ssn: $ssn
+      language: $language
+      maritalStatus: $maritalStatus
+      email: $email
+      homePhone: $homePhone
+      mobilePhone: $mobilePhone
+      consentToCall: $consentToCall
+      consentToText: $consentToText
+      issueDate: $issueDate
+      expirationDate: $expirationDate
+      insuranceType: $insuranceType
+      patientRelationshipToPolicyHolder: $patientRelationshipToPolicyHolder
+      memberId: $memberId
+      policyGroupNumber: $policyGroupNumber
+    }
+  ) {
     ...ShortPatient
   }
 }

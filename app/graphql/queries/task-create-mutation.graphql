@@ -8,14 +8,16 @@ mutation taskCreate(
   $assignedToId: String
   $patientGoalId: String
 ) {
-  taskCreate(input: {
-    title: $title,
-    description: $description,
-    dueAt: $dueAt,
-    patientId: $patientId,
-    assignedToId: $assignedToId,
-    patientGoalId: $patientGoalId,
-   }) {
+  taskCreate(
+    input: {
+      title: $title
+      description: $description
+      dueAt: $dueAt
+      patientId: $patientId
+      assignedToId: $assignedToId
+      patientGoalId: $patientGoalId
+    }
+  ) {
     ...FullTask
   }
 }

@@ -1,11 +1,7 @@
 #import "../fragments/full-goal-suggestion-template.graphql"
 
-mutation goalSuggestionTemplateCreate(
-  $title: String!
-) {
-  goalSuggestionTemplateCreate(input: {
-    title: $title,
-  }) {
+mutation goalSuggestionTemplateCreate($title: String!) {
+  goalSuggestionTemplateCreate(input: { title: $title }) {
     ...FullGoalSuggestionTemplate
   }
 }

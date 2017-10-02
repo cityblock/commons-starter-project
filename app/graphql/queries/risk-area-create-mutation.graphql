@@ -1,13 +1,7 @@
 #import "../fragments/full-risk-area.graphql"
 
-mutation riskAreaCreate(
-  $title: String!
-  $order: Int!
-) {
-  riskAreaCreate(input: {
-    title: $title,
-    order: $order,
-  }) {
+mutation riskAreaCreate($title: String!, $order: Int!) {
+  riskAreaCreate(input: { title: $title, order: $order }) {
     ...FullRiskArea
   }
 }

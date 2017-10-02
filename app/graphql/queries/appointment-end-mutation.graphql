@@ -1,9 +1,11 @@
 mutation appointmentEnd($patientId: String!, $appointmentId: String!, $appointmentNote: String!) {
-  appointmentEnd(input: {
-    patientId: $patientId,
-    appointmentId: $appointmentId,
-    appointmentNote: $appointmentNote,
-  }) {
+  appointmentEnd(
+    input: {
+      patientId: $patientId
+      appointmentId: $appointmentId
+      appointmentNote: $appointmentNote
+    }
+  ) {
     success
   }
 }

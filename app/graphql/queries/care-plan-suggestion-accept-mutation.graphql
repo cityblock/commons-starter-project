@@ -8,14 +8,16 @@ mutation carePlanSuggestionAccept(
   $startedAt: String
   $taskTemplateIds: [String]
 ) {
-  carePlanSuggestionAccept(input: {
-    carePlanSuggestionId: $carePlanSuggestionId
-    patientConcernId: $patientConcernId
-    concernId: $concernId
-    concernTitle: $concernTitle
-    startedAt: $startedAt
-    taskTemplateIds: $taskTemplateIds
-  }) {
+  carePlanSuggestionAccept(
+    input: {
+      carePlanSuggestionId: $carePlanSuggestionId
+      patientConcernId: $patientConcernId
+      concernId: $concernId
+      concernTitle: $concernTitle
+      startedAt: $startedAt
+      taskTemplateIds: $taskTemplateIds
+    }
+  ) {
     ...FullCarePlanSuggestion
   }
 }

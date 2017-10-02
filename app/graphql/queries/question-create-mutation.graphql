@@ -8,14 +8,16 @@ mutation questionCreate(
   $order: Int!
   $applicableIfType: QuestionConditionTypeOptions
 ) {
-  questionCreate(input: {
-    title: $title
-    answerType: $answerType
-    validatedSource: $validatedSource
-    riskAreaId: $riskAreaId
-    order: $order
-    applicableIfType: $applicableIfType
-  }) {
+  questionCreate(
+    input: {
+      title: $title
+      answerType: $answerType
+      validatedSource: $validatedSource
+      riskAreaId: $riskAreaId
+      order: $order
+      applicableIfType: $applicableIfType
+    }
+  ) {
     ...FullQuestion
   }
 }

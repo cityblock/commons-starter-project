@@ -5,11 +5,9 @@ mutation patientAnswersCreate(
   $patientAnswers: [PatientAnswerInput]!
   $questionIds: [String]!
 ) {
-  patientAnswersCreate(input: {
-    patientId: $patientId
-    patientAnswers: $patientAnswers
-    questionIds: $questionIds
-  }) {
+  patientAnswersCreate(
+    input: { patientId: $patientId, patientAnswers: $patientAnswers, questionIds: $questionIds }
+  ) {
     ...FullPatientAnswer
   }
 }

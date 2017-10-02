@@ -1,11 +1,7 @@
 #import "../fragments/full-goal-suggestion-template.graphql"
 
-mutation goalSuggestionTemplateDelete(
-  $goalSuggestionTemplateId: String!
-) {
-  goalSuggestionTemplateDelete(input: {
-    goalSuggestionTemplateId: $goalSuggestionTemplateId
-  }) {
+mutation goalSuggestionTemplateDelete($goalSuggestionTemplateId: String!) {
+  goalSuggestionTemplateDelete(input: { goalSuggestionTemplateId: $goalSuggestionTemplateId }) {
     ...FullGoalSuggestionTemplate
   }
 }

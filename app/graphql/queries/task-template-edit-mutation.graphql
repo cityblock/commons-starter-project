@@ -10,16 +10,18 @@ mutation taskTemplateEdit(
   $priority: String
   $careTeamAssigneeRole: String
 ) {
-  taskTemplateEdit(input: {
-    taskTemplateId: $taskTemplateId
-    title: $title
-    goalSuggestionTemplateId: $goalSuggestionTemplateId
-    completedWithinNumber: $completedWithinNumber
-    completedWithinInterval: $completedWithinInterval
-    repeating: $repeating
-    priority: $priority
-    careTeamAssigneeRole: $careTeamAssigneeRole
-  }) {
+  taskTemplateEdit(
+    input: {
+      taskTemplateId: $taskTemplateId
+      title: $title
+      goalSuggestionTemplateId: $goalSuggestionTemplateId
+      completedWithinNumber: $completedWithinNumber
+      completedWithinInterval: $completedWithinInterval
+      repeating: $repeating
+      priority: $priority
+      careTeamAssigneeRole: $careTeamAssigneeRole
+    }
+  ) {
     ...FullTaskTemplate
   }
 }

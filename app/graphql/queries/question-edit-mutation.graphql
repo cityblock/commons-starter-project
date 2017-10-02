@@ -9,15 +9,17 @@ mutation questionEdit(
   $order: Int
   $applicableIfType: QuestionConditionTypeOptions
 ) {
-  questionEdit(input: {
-    questionId: $questionId
-    title: $title
-    answerType: $answerType
-    validatedSource: $validatedSource
-    riskAreaId: $riskAreaId
-    order: $order
-    applicableIfType: $applicableIfType
-  }) {
+  questionEdit(
+    input: {
+      questionId: $questionId
+      title: $title
+      answerType: $answerType
+      validatedSource: $validatedSource
+      riskAreaId: $riskAreaId
+      order: $order
+      applicableIfType: $applicableIfType
+    }
+  ) {
     ...FullQuestion
   }
 }

@@ -12,18 +12,20 @@ mutation patientEdit(
   $consentToCall: Boolean
   $consentToText: Boolean
 ) {
-  patientEdit(input: {
-    patientId: $patientId,
-    firstName: $firstName,
-    middleName: $middleName,
-    lastName: $lastName,
-    dateOfBirth: $dateOfBirth,
-    gender: $gender,
-    zip: $zip,
-    language: $language,
-    consentToCall: $consentToCall,
-    consentToText: $consentToText,
-   }) {
+  patientEdit(
+    input: {
+      patientId: $patientId
+      firstName: $firstName
+      middleName: $middleName
+      lastName: $lastName
+      dateOfBirth: $dateOfBirth
+      gender: $gender
+      zip: $zip
+      language: $language
+      consentToCall: $consentToCall
+      consentToText: $consentToText
+    }
+  ) {
     ...ShortPatient
   }
 }

@@ -34,6 +34,7 @@ initialize {
                           "attribs": Object {
                             "disabled": "",
                             "style": "display:inline-block;background:#d14836;color:#fff;width:190px;padding-top:10px;padding-bottom:10px;border-radius:2px;border:1px solid transparent;font-size:16px;font-weight:bold;font-family:Roboto;opacity:0.6",
+                            "type": "button",
                           },
                           "children": Array [
                             Object {
@@ -108,10 +109,12 @@ initialize {
                           "x-attribsNamespace": Object {
                             "disabled": undefined,
                             "style": undefined,
+                            "type": undefined,
                           },
                           "x-attribsPrefix": Object {
                             "disabled": undefined,
                             "style": undefined,
+                            "type": undefined,
                           },
                         },
                         "parent": [Circular],
@@ -124,6 +127,7 @@ initialize {
                         "attribs": Object {
                           "disabled": "",
                           "style": "display:inline-block;background:#d14836;color:#fff;width:190px;padding-top:10px;padding-bottom:10px;border-radius:2px;border:1px solid transparent;font-size:16px;font-weight:bold;font-family:Roboto;opacity:0.6",
+                          "type": "button",
                         },
                         "children": Array [
                           Object {
@@ -217,10 +221,12 @@ initialize {
                         "x-attribsNamespace": Object {
                           "disabled": undefined,
                           "style": undefined,
+                          "type": undefined,
                         },
                         "x-attribsPrefix": Object {
                           "disabled": undefined,
                           "style": undefined,
+                          "type": undefined,
                         },
                       },
                     ],
@@ -326,6 +332,7 @@ initialize {
                             "attribs": Object {
                               "disabled": "",
                               "style": "display:inline-block;background:#d14836;color:#fff;width:190px;padding-top:10px;padding-bottom:10px;border-radius:2px;border:1px solid transparent;font-size:16px;font-weight:bold;font-family:Roboto;opacity:0.6",
+                              "type": "button",
                             },
                             "children": Array [
                               Object {
@@ -400,10 +407,12 @@ initialize {
                             "x-attribsNamespace": Object {
                               "disabled": undefined,
                               "style": undefined,
+                              "type": undefined,
                             },
                             "x-attribsPrefix": Object {
                               "disabled": undefined,
                               "style": undefined,
+                              "type": undefined,
                             },
                           },
                           "parent": [Circular],
@@ -416,6 +425,7 @@ initialize {
                           "attribs": Object {
                             "disabled": "",
                             "style": "display:inline-block;background:#d14836;color:#fff;width:190px;padding-top:10px;padding-bottom:10px;border-radius:2px;border:1px solid transparent;font-size:16px;font-weight:bold;font-family:Roboto;opacity:0.6",
+                            "type": "button",
                           },
                           "children": Array [
                             Object {
@@ -509,10 +519,12 @@ initialize {
                           "x-attribsNamespace": Object {
                             "disabled": undefined,
                             "style": undefined,
+                            "type": undefined,
                           },
                           "x-attribsPrefix": Object {
                             "disabled": undefined,
                             "style": undefined,
+                            "type": undefined,
                           },
                         },
                       ],

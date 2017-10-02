@@ -1,8 +1,15 @@
-import { IUserCreateInput, IUserEdges, IUserLoginInput, IUserNode } from 'schema';
+import {
+  IUserCreateInput,
+  IUserDeleteInput,
+  IUserEdges,
+  IUserEditRoleInput,
+  IUserLoginInput,
+  IUserNode,
+} from 'schema';
 import { parseIdToken, OauthAuthorize } from '../apis/google/oauth-authorize';
 import config from '../config';
 import GoogleAuth from '../models/google-auth';
-import User, { IUserFilterOptions, UserOrderOptions } from '../models/user';
+import User, { IUserFilterOptions, UserOrderOptions, UserRole } from '../models/user';
 import accessControls from './shared/access-controls';
 import {
   checkUserLoggedIn,
@@ -22,6 +29,14 @@ export interface IResolveUserOptions {
 
 export interface IUserLoginOptions {
   input: IUserLoginInput;
+}
+
+export interface IUserEditRoleOptions {
+  input: IUserEditRoleInput;
+}
+
+export interface IUserDeleteOptions {
+  input: IUserDeleteInput;
 }
 
 export interface IEditCurrentUserInput {
@@ -58,6 +73,40 @@ export async function userCreate(root: any, { input }: IUserCreateArgs, context:
 
     return { user: newUser, authToken };
   }
+}
+
+export async function userEditRole(root: any, { input }: IUserEditRoleOptions, context: IContext) {
+  const { userRole, email } = input;
+  await accessControls.isAllowed(context.userRole, 'edit', 'user');
+
+  // Special case - only admin can edit this field
+  if (context.userRole !== 'admin') {
+    throw new Error(`${context.userRole} not able to edit user role`);
+  }
+
+  const user = await User.getBy('email', email);
+  if (!user) {
+    throw new Error('User not found');
+  }
+
+  return await User.updateUserRole(user.id, userRole as UserRole);
+}
+
+export async function userDelete(
+  root: any,
+  { input }: IUserDeleteOptions,
+  { db, userRole }: IContext,
+) {
+  const { email } = input;
+  await accessControls.isAllowed(userRole, 'delete', 'user');
+
+  const user = await User.getBy('email', email);
+  if (!user) {
+    throw new Error('User not found');
+  }
+
+  await User.delete(user.id);
+  return user;
 }
 
 export async function resolveUser(

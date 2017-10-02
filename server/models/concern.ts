@@ -66,8 +66,7 @@ export default class Concern extends Model {
   }
 
   static async findOrCreateByTitle(title: string, txn?: Transaction): Promise<Concern> {
-    const fetchedConcern = await this
-      .query(txn)
+    const fetchedConcern = await this.query(txn)
       .whereRaw('lower("title") = ?', title.toLowerCase())
       .limit(1)
       .first();

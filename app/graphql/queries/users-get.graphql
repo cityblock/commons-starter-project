@@ -1,0 +1,15 @@
+#import "../fragments/full-user.graphql"
+
+query getUsers($pageNumber: Int, $pageSize: Int, $orderBy: UserOrderOptions, $hasLoggedIn: Boolean) {
+  users(pageNumber: $pageNumber, pageSize: $pageSize, orderBy: $orderBy, hasLoggedIn: $hasLoggedIn) {
+    edges {
+      node {
+        ...FullUser
+      }
+    }
+    pageInfo {
+      hasPreviousPage
+      hasNextPage
+    }
+  }
+}

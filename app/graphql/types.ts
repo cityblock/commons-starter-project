@@ -3256,6 +3256,43 @@ export type getTasksForCurrentUserQuery = {
   } | null,
 };
 
+export type userDeleteMutationVariables = {
+  email: string,
+};
+
+export type userDeleteMutation = {
+  // Delete user
+  userDelete:  {
+    id: string,
+    locale: string | null,
+    firstName: string | null,
+    lastName: string | null,
+    userRole: UserRole,
+    email: string | null,
+    homeClinicId: string,
+    googleProfileImageUrl: string | null,
+  } | null,
+};
+
+export type userEditRoleMutationVariables = {
+  email: string,
+  userRole: string,
+};
+
+export type userEditRoleMutation = {
+  // Edit user
+  userEditRole:  {
+    id: string,
+    locale: string | null,
+    firstName: string | null,
+    lastName: string | null,
+    userRole: UserRole,
+    email: string | null,
+    homeClinicId: string,
+    googleProfileImageUrl: string | null,
+  } | null,
+};
+
 export type FullConcernFragment = {
   id: string,
   title: string,

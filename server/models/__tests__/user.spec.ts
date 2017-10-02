@@ -232,6 +232,19 @@ describe('user model', () => {
     });
   });
 
+  it('updates user role', async () => {
+    const user1 = await User.create({
+      email: 'user@place.com',
+      userRole,
+      homeClinicId: '1',
+      athenaProviderId: 1,
+    });
+    expect(user1.userRole).toEqual(userRole);
+    await User.updateUserRole(user1.id, 'nurseCareManager');
+    const fetchedUser1 = await User.getBy('email', 'user@place.com');
+    expect(fetchedUser1!.userRole).toEqual('nurseCareManager');
+  });
+
   it('marks a user as deleted', async () => {
     const user1 = await User.create({
       email: 'user@place.com',

@@ -1,0 +1,13 @@
+#import "../fragments/full-user.graphql"
+
+mutation userEditRole(
+  $email: String!
+  $userRole: String!
+) {
+  userEditRole(input: {
+    email: $email,
+    userRole: $userRole,
+  }) {
+    ...FullUser
+  }
+}

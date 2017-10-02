@@ -617,6 +617,8 @@ declare module 'schema' {
   interface IRootMutationType {
     userCreate: IUserWithAuthToken | null;
     userLogin: IUserWithAuthToken | null;
+    userEditRole: IUser | null;
+    userDelete: IUser | null;
     currentUserEdit: IUser | null;
     clinicCreate: IClinic | null;
     careTeamAddUser: Array<IUser> | null;
@@ -698,6 +700,21 @@ declare module 'schema' {
   */
   interface IUserLoginInput {
     googleAuthCode: string;
+  }
+
+  /*
+    description: params for editing a user - only supports user role
+  */
+  interface IUserEditRoleInput {
+    userRole: string;
+    email: string;
+  }
+
+  /*
+    description: params for deleting a user
+  */
+  interface IUserDeleteInput {
+    email: string;
   }
 
   /*

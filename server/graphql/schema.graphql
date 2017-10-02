@@ -549,6 +549,17 @@ input UserLoginInput {
   googleAuthCode: String!
 }
 
+# params for editing a user - only supports user role
+input UserEditRoleInput {
+  userRole: String!
+  email: String!
+}
+
+# params for deleting a user
+input UserDeleteInput {
+  email: String!
+}
+
 # params for creating a clinic
 input ClinicCreateInput {
   departmentId: Int!
@@ -934,6 +945,12 @@ type RootMutationType {
 
   # Login user
   userLogin(input: UserLoginInput): UserWithAuthToken
+
+  # Edit user
+  userEditRole(input: UserEditRoleInput): User
+
+  # Delete user
+  userDelete(input: UserDeleteInput): User
 
   # Edit current user
   currentUserEdit(input: CurrentUserEditInput): User

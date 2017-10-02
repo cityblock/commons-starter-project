@@ -16,8 +16,12 @@ export default [
     roles: ['physician', 'nurseCareManager'],
     allows: [
       {
-        resources: ['patient', 'user', 'clinic', 'task', 'patientAnswer', 'appointment'],
+        resources: ['patient', 'clinic', 'task', 'patientAnswer', 'appointment'],
         permissions: ['edit', 'view', 'delete', 'create'],
+      },
+      {
+        resources: ['user'],
+        permissions: ['view', 'create', 'edit'],
       },
     ],
   },

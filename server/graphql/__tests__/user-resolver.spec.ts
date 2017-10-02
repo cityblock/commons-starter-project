@@ -358,4 +358,73 @@ describe('user tests', () => {
       );
     });
   });
+
+  describe('userEditRole', () => {
+    it('edits user role', async () => {
+      await User.create({
+        email: 'a@b.com',
+        userRole,
+        homeClinicId,
+      });
+      const mutation = `mutation {
+        userEditRole(input: { email: "a@b.com", userRole: "nurseCareManager" }) {
+          email, userRole
+        } }`;
+      const result = await graphql(schema, mutation, null, { db, userRole: 'admin' });
+      expect(cloneDeep(result.data!.userEditRole)).toEqual({
+        email: 'a@b.com',
+        userRole: 'nurseCareManager',
+      });
+    });
+
+    it('error if user not able to edit user role for other users', async () => {
+      await User.create({
+        email: 'a@b.com',
+        userRole,
+        homeClinicId,
+      });
+      const mutation = `mutation {
+        userEditRole(input: { email: "a@b.com", userRole: "nurseCareManager" }) {
+          email, userRole
+        } }`;
+      const result = await graphql(schema, mutation, null, { db, userRole });
+      expect(cloneDeep(result.errors![0].message)).toMatch(
+        `${userRole} not able to edit user role`,
+      );
+    });
+  });
+
+  describe('userDelete', () => {
+    it('deletes user', async () => {
+      await User.create({
+        email: 'a@b.com',
+        userRole,
+        homeClinicId,
+      });
+      const mutation = `mutation {
+        userDelete(input: { email: "a@b.com" }) {
+          email, userRole
+        } }`;
+
+      const result = await graphql(schema, mutation, null, { db, userRole: 'admin' });
+      expect(cloneDeep(result.data!.userDelete)).toEqual({
+        email: 'a@b.com',
+        userRole,
+      });
+    });
+
+    it('error if user not able to delete user', async () => {
+      await User.create({
+        email: 'a@b.com',
+        userRole,
+        homeClinicId,
+      });
+      const mutation = `mutation {
+        userDelete(input: { email: "a@b.com" }) {
+          email, userRole
+        } }`;
+      const result = await graphql(schema, mutation, null, { db, userRole });
+      expect(cloneDeep(result.errors![0].message)).toMatch(`${userRole} not able to delete user`);
+    });
+  });
 });

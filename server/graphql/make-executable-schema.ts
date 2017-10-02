@@ -140,6 +140,8 @@ import {
   resolveUser,
   resolveUsers,
   userCreate,
+  userDelete,
+  userEditRole,
   userLogin,
 } from './user-resolver';
 
@@ -203,6 +205,8 @@ const resolveFunctions = {
     currentUserEdit,
     userCreate,
     userLogin,
+    userEditRole,
+    userDelete,
     taskCreate,
     taskDelete,
     taskEdit,

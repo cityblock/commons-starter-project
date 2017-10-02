@@ -163,6 +163,11 @@ export default class User extends Model {
     return await this.query().updateAndFetchById(userId, user);
   }
 
+  // NOTE: Separated because it is admin only - a user should not be able to change their own role
+  static async updateUserRole(userId: string, userRole: UserRole): Promise<User> {
+    return await this.query().updateAndFetchById(userId, { userRole });
+  }
+
   static async get(userId: string): Promise<User> {
     const user = await this.query().findById(userId);
     if (!user || !!user.deletedAt) {

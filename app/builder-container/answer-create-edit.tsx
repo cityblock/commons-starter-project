@@ -13,10 +13,10 @@ import {
 } from '../graphql/types';
 import * as formStyles from '../shared/css/forms.css';
 import * as loadingStyles from '../shared/css/loading-spinner.css';
+import * as answerStyles from '../shared/css/two-panel-right.css';
 import { IUpdatedField } from '../shared/patient-demographics-form';
 import CarePlanSuggestions from './care-plan-suggestions';
 import * as styles from './css/risk-area-create.css';
-import * as answerStyles from './css/two-panel-right.css';
 
 export interface ICreateOptions { variables: answerCreateMutationVariables; }
 export interface IEditOptions { variables: answerEditMutationVariables; }

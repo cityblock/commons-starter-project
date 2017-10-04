@@ -11,7 +11,7 @@ import {
   goalSuggestionTemplateDeleteMutationVariables,
   FullGoalSuggestionTemplateFragment,
 } from '../graphql/types';
-import * as styles from './css/two-panel-builder.css';
+import * as styles from '../shared/css/two-panel.css';
 import Goal from './goal';
 import GoalCreate from './goal-create';
 import { GoalRow } from './goal-row';

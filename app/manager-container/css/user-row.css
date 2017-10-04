@@ -1,0 +1,65 @@
+@import '../../shared/css/sizes';
+.container {
+  background: white;
+  padding: 12px 15px;
+  display: flex;
+  justify-content: space-between;
+  flex-direction: row;
+  align-items: center;
+  border-radius: 5px;
+  border: 1px solid #fff;
+  color: var(--black-color);
+  margin: 0 10px 10px 10px;
+}
+
+.title {
+  font-weight: var(--roboto-medium-weight);
+}
+
+.meta {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+}
+
+.userDel {
+  display: flex;
+  justify-content: flex-end;
+  padding-right: 10px;
+  margin-right: 10px;
+  border-right: 1px solid var(--gray-background-color);
+}
+
+
+.dateSection {
+  border-left: 1px solid var(--gray-background-color);
+}
+
+.dueAtSection {
+  min-width: 97px;
+  text-align: right;
+}
+
+.dateSection:last-child {
+  padding-right: 0;
+}
+
+.dateLabel {
+  font-family: var(--roboto);
+  font-size: var(--extra-small-font-size);
+  line-height: var(--extra-small-font-line-height);
+  color: var(--light-gray-font-color);
+  margin-right: 10px;
+}
+
+.dateValue {
+  font-family: var(--roboto);
+  font-size: var(--extra-small-font-size);
+  line-height: var(--extra-small-font-line-height);
+  color: var(--black-color)
+}
+
+.button {
+  font-family: var(--roboto);
+  font-size: var(--extra-small-font-size);
+}

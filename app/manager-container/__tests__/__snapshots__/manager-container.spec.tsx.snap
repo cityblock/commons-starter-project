@@ -1,0 +1,59 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders manager container 1`] = `
+<div
+  className={undefined}
+>
+  <div
+    className={undefined}
+  >
+    left nav
+  </div>
+  <div
+    className={undefined}
+  >
+    <div
+      className={undefined}
+    >
+      <a
+        className="undefined"
+        href="/manager/users"
+        onClick={[Function]}
+      >
+        Users
+      </a>
+      <a
+        className=""
+        href="/manager/invites"
+        onClick={[Function]}
+      >
+        Invites
+      </a>
+    </div>
+    <div
+      className={undefined}
+    >
+      <div
+        className={undefined}
+      >
+        <div
+          className={undefined}
+        >
+          <div
+            className={undefined}
+          >
+            Create User
+          </div>
+        </div>
+      </div>
+      <div
+        className={undefined}
+      >
+        <div
+          className={undefined}
+        />
+      </div>
+    </div>
+  </div>
+</div>
+`;

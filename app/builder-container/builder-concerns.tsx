@@ -9,10 +9,10 @@ import {
   concernDeleteMutationVariables,
   FullConcernFragment,
 } from '../graphql/types';
+import * as styles from '../shared/css/two-panel.css';
 import Concern from './concern';
 import ConcernCreate from './concern-create';
 import { ConcernRow } from './concern-row';
-import * as styles from './css/two-panel-builder.css';
 
 export interface IComponentProps {
   routeBase: string;

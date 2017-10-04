@@ -1,3 +1,3 @@
 export const loadingSpinner: string;
-export const a: string;
+export const skRotateplane: string;
 export const loadingText: string;

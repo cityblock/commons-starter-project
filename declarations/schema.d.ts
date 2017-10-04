@@ -79,6 +79,7 @@ declare module 'schema' {
     createdAt: string;
     homeClinicId: string;
     googleProfileImageUrl: string | null;
+    updatedAt: string;
   }
 
   /*

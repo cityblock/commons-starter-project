@@ -558,6 +558,8 @@ export type currentUserEditMutation = {
     email: string | null,
     homeClinicId: string,
     googleProfileImageUrl: string | null,
+    createdAt: string,
+    updatedAt: string,
   } | null,
 };
 
@@ -580,6 +582,8 @@ export type eventNotificationDismissMutation = {
       email: string | null,
       homeClinicId: string,
       googleProfileImageUrl: string | null,
+      createdAt: string,
+      updatedAt: string,
     },
     taskEventId: string | null,
     taskEvent:  {
@@ -638,6 +642,8 @@ export type eventNotificationDismissMutation = {
         email: string | null,
         homeClinicId: string,
         googleProfileImageUrl: string | null,
+        createdAt: string,
+        updatedAt: string,
       },
       eventType: TaskEventTypes | null,
       eventCommentId: string | null,
@@ -653,6 +659,8 @@ export type eventNotificationDismissMutation = {
           email: string | null,
           homeClinicId: string,
           googleProfileImageUrl: string | null,
+          createdAt: string,
+          updatedAt: string,
         },
         taskId: string,
         createdAt: string,
@@ -668,6 +676,8 @@ export type eventNotificationDismissMutation = {
         email: string | null,
         homeClinicId: string,
         googleProfileImageUrl: string | null,
+        createdAt: string,
+        updatedAt: string,
       } | null,
       createdAt: string,
       updatedAt: string,
@@ -823,6 +833,8 @@ export type getCurrentUserQuery = {
     email: string | null,
     homeClinicId: string,
     googleProfileImageUrl: string | null,
+    createdAt: string,
+    updatedAt: string,
   } | null,
 };
 
@@ -849,6 +861,8 @@ export type getEventNotificationsForCurrentUserQuery = {
           email: string | null,
           homeClinicId: string,
           googleProfileImageUrl: string | null,
+          createdAt: string,
+          updatedAt: string,
         },
         taskEventId: string | null,
         taskEvent:  {
@@ -907,6 +921,8 @@ export type getEventNotificationsForCurrentUserQuery = {
             email: string | null,
             homeClinicId: string,
             googleProfileImageUrl: string | null,
+            createdAt: string,
+            updatedAt: string,
           },
           eventType: TaskEventTypes | null,
           eventCommentId: string | null,
@@ -922,6 +938,8 @@ export type getEventNotificationsForCurrentUserQuery = {
               email: string | null,
               homeClinicId: string,
               googleProfileImageUrl: string | null,
+              createdAt: string,
+              updatedAt: string,
             },
             taskId: string,
             createdAt: string,
@@ -937,6 +955,8 @@ export type getEventNotificationsForCurrentUserQuery = {
             email: string | null,
             homeClinicId: string,
             googleProfileImageUrl: string | null,
+            createdAt: string,
+            updatedAt: string,
           } | null,
           createdAt: string,
           updatedAt: string,
@@ -1404,6 +1424,8 @@ export type getPatientCareTeamQuery = {
     email: string | null,
     homeClinicId: string,
     googleProfileImageUrl: string | null,
+    createdAt: string,
+    updatedAt: string,
   } | null > | null,
 };
 
@@ -1815,6 +1837,8 @@ export type getTaskCommentQuery = {
       email: string | null,
       homeClinicId: string,
       googleProfileImageUrl: string | null,
+      createdAt: string,
+      updatedAt: string,
     },
     taskId: string,
     createdAt: string,
@@ -1844,6 +1868,8 @@ export type getTaskCommentsQuery = {
           email: string | null,
           homeClinicId: string,
           googleProfileImageUrl: string | null,
+          createdAt: string,
+          updatedAt: string,
         },
         taskId: string,
         createdAt: string,
@@ -1928,6 +1954,8 @@ export type getUsersQuery = {
         email: string | null,
         homeClinicId: string,
         googleProfileImageUrl: string | null,
+        createdAt: string,
+        updatedAt: string,
       } | null,
     } | null > | null,
     pageInfo:  {
@@ -2098,6 +2126,8 @@ export type logInUserMutation = {
       email: string | null,
       homeClinicId: string,
       googleProfileImageUrl: string | null,
+      createdAt: string,
+      updatedAt: string,
     },
   } | null,
 };
@@ -2768,6 +2798,8 @@ export type taskCommentCreateMutation = {
       email: string | null,
       homeClinicId: string,
       googleProfileImageUrl: string | null,
+      createdAt: string,
+      updatedAt: string,
     },
     taskId: string,
     createdAt: string,
@@ -2794,6 +2826,8 @@ export type taskCommentEditMutation = {
       email: string | null,
       homeClinicId: string,
       googleProfileImageUrl: string | null,
+      createdAt: string,
+      updatedAt: string,
     },
     taskId: string,
     createdAt: string,
@@ -3256,6 +3290,17 @@ export type getTasksForCurrentUserQuery = {
   } | null,
 };
 
+export type userCreateMutationVariables = {
+  email: string,
+  homeClinicId: string,
+};
+
+export type userCreateMutation = {
+  // Create a new user
+  userCreate:  {
+  } | null,
+};
+
 export type userDeleteMutationVariables = {
   email: string,
 };
@@ -3271,6 +3316,8 @@ export type userDeleteMutation = {
     email: string | null,
     homeClinicId: string,
     googleProfileImageUrl: string | null,
+    createdAt: string,
+    updatedAt: string,
   } | null,
 };
 
@@ -3290,6 +3337,8 @@ export type userEditRoleMutation = {
     email: string | null,
     homeClinicId: string,
     googleProfileImageUrl: string | null,
+    createdAt: string,
+    updatedAt: string,
   } | null,
 };
 
@@ -3492,6 +3541,8 @@ export type FullUserFragment = {
   email: string | null,
   homeClinicId: string,
   googleProfileImageUrl: string | null,
+  createdAt: string,
+  updatedAt: string,
 };
 
 export type FullTaskFragment = {
@@ -3550,6 +3601,8 @@ export type FullTaskCommentFragment = {
     email: string | null,
     homeClinicId: string,
     googleProfileImageUrl: string | null,
+    createdAt: string,
+    updatedAt: string,
   },
   taskId: string,
   createdAt: string,
@@ -3612,6 +3665,8 @@ export type FullTaskEventFragment = {
     email: string | null,
     homeClinicId: string,
     googleProfileImageUrl: string | null,
+    createdAt: string,
+    updatedAt: string,
   },
   eventType: TaskEventTypes | null,
   eventCommentId: string | null,
@@ -3627,6 +3682,8 @@ export type FullTaskEventFragment = {
       email: string | null,
       homeClinicId: string,
       googleProfileImageUrl: string | null,
+      createdAt: string,
+      updatedAt: string,
     },
     taskId: string,
     createdAt: string,
@@ -3642,6 +3699,8 @@ export type FullTaskEventFragment = {
     email: string | null,
     homeClinicId: string,
     googleProfileImageUrl: string | null,
+    createdAt: string,
+    updatedAt: string,
   } | null,
   createdAt: string,
   updatedAt: string,
@@ -3661,6 +3720,8 @@ export type FullEventNotificationFragment = {
     email: string | null,
     homeClinicId: string,
     googleProfileImageUrl: string | null,
+    createdAt: string,
+    updatedAt: string,
   },
   taskEventId: string | null,
   taskEvent:  {
@@ -3719,6 +3780,8 @@ export type FullEventNotificationFragment = {
       email: string | null,
       homeClinicId: string,
       googleProfileImageUrl: string | null,
+      createdAt: string,
+      updatedAt: string,
     },
     eventType: TaskEventTypes | null,
     eventCommentId: string | null,
@@ -3734,6 +3797,8 @@ export type FullEventNotificationFragment = {
         email: string | null,
         homeClinicId: string,
         googleProfileImageUrl: string | null,
+        createdAt: string,
+        updatedAt: string,
       },
       taskId: string,
       createdAt: string,
@@ -3749,6 +3814,8 @@ export type FullEventNotificationFragment = {
       email: string | null,
       homeClinicId: string,
       googleProfileImageUrl: string | null,
+      createdAt: string,
+      updatedAt: string,
     } | null,
     createdAt: string,
     updatedAt: string,

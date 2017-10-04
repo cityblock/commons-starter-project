@@ -12,8 +12,12 @@ import BuilderConcerns from '../builder-concerns';
 const oldDate = Date.now;
 
 describe('builder concerns', () => {
-  beforeAll(() => { Date.now = jest.fn(() => 1500494779252); });
-  afterAll(() => { Date.now = oldDate; });
+  beforeAll(() => {
+    Date.now = jest.fn(() => 1500494779252);
+  });
+  afterAll(() => {
+    Date.now = oldDate;
+  });
 
   it('renders builder concerns', () => {
     const mockStore = configureMockStore([]);
@@ -23,10 +27,7 @@ describe('builder concerns', () => {
       <MockedProvider mocks={[]} store={mockStore({ locale, concern })}>
         <ReduxConnectedIntlProvider>
           <ConnectedRouter history={history}>
-            <BuilderConcerns
-              routeBase='/route/base'
-              concernId={concern.id}
-              concerns={[concern]} />
+            <BuilderConcerns routeBase='/route/base' concernId={concern.id} concerns={[concern]} />
           </ConnectedRouter>
         </ReduxConnectedIntlProvider>
       </MockedProvider>,

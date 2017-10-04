@@ -1,9 +1,9 @@
 import * as classNames from 'classnames';
 import * as React from 'react';
 import { FullAnswerFragment } from '../graphql/types';
+import * as styles from '../shared/css/two-panel-right.css';
 import CarePlanSuggestion from './care-plan-suggestion';
 import CarePlanSuggestionCreate from './care-plan-suggestion-create';
-import * as styles from './css/two-panel-right.css';
 
 export interface IProps {
   answer: FullAnswerFragment;

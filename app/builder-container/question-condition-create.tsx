@@ -11,8 +11,8 @@ import {
 } from '../graphql/types';
 import * as formStyles from '../shared/css/forms.css';
 import * as loadingStyles from '../shared/css/loading-spinner.css';
+import * as questionConditionStyles from '../shared/css/two-panel-right.css';
 import * as styles from './css/risk-area-create.css';
-import * as questionConditionStyles from './css/two-panel-right.css';
 import QuestionAnswerOption from './question-answer-option';
 
 export interface ICreateOptions { variables: questionConditionCreateMutationVariables; }

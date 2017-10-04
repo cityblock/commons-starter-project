@@ -1,0 +1,59 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`user row renders manager users with users 1`] = `
+<div
+  className={undefined}
+>
+  <div
+    className={undefined}
+  >
+    first
+     
+    last
+  </div>
+  <div
+    className={undefined}
+  >
+    <div
+      className={undefined}
+    >
+      <span
+        className={undefined}
+      >
+        Created At
+        :
+      </span>
+      <span
+        className={undefined}
+      >
+        in 2 months
+      </span>
+    </div>
+    <div
+      className={undefined}
+    >
+      <span
+        className={undefined}
+      >
+        Last edited
+        :
+      </span>
+      <span
+        className={undefined}
+      >
+        Sep 7, 2017
+      </span>
+    </div>
+    <div
+      className={undefined}
+    >
+      <span
+        className={undefined}
+        onClick={[Function]}
+      >
+        Delete User
+      </span>
+    </div>
+  </div>
+</div>
+`;

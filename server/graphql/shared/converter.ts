@@ -27,6 +27,7 @@ export function convertUser(user: User): IUser {
     email: user.email,
     userRole: user.userRole,
     createdAt: user.createdAt,
+    updatedAt: user.updatedAt,
     homeClinicId: user.homeClinicId,
     locale: user.locale,
     googleProfileImageUrl: user.googleProfileImageUrl,

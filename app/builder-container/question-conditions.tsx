@@ -4,7 +4,7 @@ import {
   FullQuestionConditionFragment,
   FullQuestionFragment,
 } from '../graphql/types';
-import * as styles from './css/two-panel-right.css';
+import * as styles from '../shared/css/two-panel-right.css';
 import QuestionConditionCreate from './question-condition-create';
 import QuestionConditionRow from './question-condition-row';
 

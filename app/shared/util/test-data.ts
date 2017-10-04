@@ -7,6 +7,8 @@ export const currentUser = {
   email: 'a@b.com',
   homeClinicId: '1',
   googleProfileImageUrl: null,
+  createdAt: '2017-09-07T13:45:14.532Z',
+  updatedAt: '2017-09-07T13:45:14.532Z',
 };
 
 export const user = {
@@ -18,6 +20,8 @@ export const user = {
   email: 'b@c.com',
   homeClinicId: '1',
   googleProfileImageUrl: null,
+  createdAt: '2017-09-07T13:45:14.532Z',
+  updatedAt: '2017-09-07T13:45:14.532Z',
 };
 
 export const patient = {

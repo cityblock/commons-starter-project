@@ -12,7 +12,7 @@ import {
   FullRiskAreaFragment,
 } from '../graphql/types';
 import * as sortSearchStyles from '../shared/css/sort-search.css';
-import * as styles from './css/two-panel-builder.css';
+import * as styles from '../shared/css/two-panel.css';
 import Question from './question';
 import QuestionCreate from './question-create';
 import { QuestionRow } from './question-row';

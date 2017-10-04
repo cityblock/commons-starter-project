@@ -105,6 +105,8 @@ type User implements uniqueId {
   createdAt: String!
   homeClinicId: String!
   googleProfileImageUrl: String
+  createdAt: String!
+  updatedAt: String!
 }
 
 # The user account with an optional auth token

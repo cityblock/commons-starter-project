@@ -9,7 +9,7 @@ import {
   riskAreaDeleteMutationVariables,
   FullRiskAreaFragment,
 } from '../graphql/types';
-import * as styles from './css/two-panel-builder.css';
+import * as styles from '../shared/css/two-panel.css';
 import RiskArea from './risk-area';
 import RiskAreaCreate from './risk-area-create';
 import { RiskAreaRow } from './risk-area-row';

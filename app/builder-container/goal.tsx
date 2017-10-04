@@ -11,8 +11,8 @@ import {
   goalSuggestionTemplateEditMutationVariables,
   FullGoalSuggestionTemplateFragment,
 } from '../graphql/types';
+import * as styles from '../shared/css/two-panel-right.css';
 import { IState as IAppState } from '../store';
-import * as styles from './css/two-panel-right.css';
 import TaskTemplateCreateEdit from './task-template-create-edit';
 
 export interface IProps {

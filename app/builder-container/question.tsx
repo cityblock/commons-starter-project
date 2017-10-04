@@ -10,9 +10,9 @@ import {
   FullQuestionFragment,
 } from '../graphql/types';
 import * as formStyles from '../shared/css/forms.css';
+import * as styles from '../shared/css/two-panel-right.css';
 import { IState as IAppState } from '../store';
 import AnswerCreateEdit from './answer-create-edit';
-import * as styles from './css/two-panel-right.css';
 import QuestionConditions from './question-conditions';
 
 export interface IProps {

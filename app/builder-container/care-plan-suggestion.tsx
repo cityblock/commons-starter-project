@@ -11,7 +11,7 @@ import {
   FullConcernFragment,
   FullGoalSuggestionTemplateFragment,
 } from '../graphql/types';
-import * as styles from './css/two-panel-right.css';
+import * as styles from '../shared/css/two-panel-right.css';
 
 export interface IProps {
   answerId: string;

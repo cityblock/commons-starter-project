@@ -3,8 +3,8 @@ import * as React from 'react';
 import { FormattedRelative } from 'react-intl';
 import { Link } from 'react-router-dom';
 import { FullQuestionFragment } from '../graphql/types';
+import * as questionsStyles from '../shared/css/two-panel.css';
 import * as styles from './css/risk-area-row.css';
-import * as questionsStyles from './css/two-panel-builder.css';
 
 export interface IProps {
   question: FullQuestionFragment;

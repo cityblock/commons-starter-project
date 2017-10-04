@@ -111,5 +111,8 @@ export const ENGLISH_TRANSLATION = {
     'notifications.leftPane': 'Left Pane',
     'notifications.noNotifications': 'No Notifications',
     'notification.time': 'Time',
+    'user.createdAt': 'Created At',
+    'user.editedAt': 'Last edited',
+    'user.delete': 'Delete User',
   },
 };

@@ -9,8 +9,8 @@ import {
   concernEditMutationVariables,
   FullConcernFragment,
 } from '../graphql/types';
+import * as styles from '../shared/css/two-panel-right.css';
 import { IState as IAppState } from '../store';
-import * as styles from './css/two-panel-right.css';
 
 export interface IProps {
   concern?: FullConcernFragment;

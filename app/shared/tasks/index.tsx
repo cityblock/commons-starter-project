@@ -37,7 +37,7 @@ export interface IProps {
   taskId?: string;
   routeBase: string;
   patient?: ShortPatientFragment;
-  patientGoals?: FullPatientGoalFragment;
+  patientGoals?: FullPatientGoalFragment[];
   tasks?: FullTaskFragment[];
   loading?: boolean;
   error?: string;
@@ -45,10 +45,21 @@ export interface IProps {
   fetchMoreTasks: () => any;
   hasNextPage?: boolean;
   hasPreviousPage?: boolean;
+  mutate?: any;
+}
+
+export interface IApolloProps {
   deleteTask: (
     options: { variables: taskDeleteMutationVariables },
   ) => { data: { taskDelete: FullTaskFragment } };
-  redirectToTasks: () => any;
+}
+
+interface IStateProps {
+  taskId?: string;
+}
+
+interface IDispatchProps {
+  redirectToTasks: () => void;
 }
 
 export interface IState {
@@ -66,8 +77,8 @@ const getPageParams = () => {
   };
 };
 
-class Tasks extends React.Component<IProps, IState> {
-  constructor(props: IProps) {
+class Tasks extends React.Component<IProps & IDispatchProps & IStateProps & IApolloProps, IState> {
+  constructor(props: IProps & IDispatchProps & IStateProps & IApolloProps) {
     super(props);
 
     this.renderTasks = this.renderTasks.bind(this);
@@ -109,33 +120,21 @@ class Tasks extends React.Component<IProps, IState> {
     } else if (!loading && !error) {
       return (
         <div className={styles.emptyTasksMessage}>
-          <div className={styles.emptyTasksLogo}></div>
+          <div className={styles.emptyTasksLogo} />
           <FormattedMessage id='tasks.noTasks'>
-            {(message: string) =>
-              <div className={styles.emptyTasksLabel}>{message}</div>}
+            {(message: string) => <div className={styles.emptyTasksLabel}>{message}</div>}
           </FormattedMessage>
         </div>
       );
     } else {
-      return (
-        <TasksLoadingError
-          error={error}
-          loading={loading}
-          onRetryClick={() => false}
-        />
-      );
+      return <TasksLoadingError error={error} loading={loading} onRetryClick={() => false} />;
     }
   }
 
   renderTask(task: FullTaskFragment) {
     const selected = task.id === this.props.taskId;
     return (
-      <TaskRow
-        key={task.id}
-        task={task}
-        selected={selected}
-        routeBase={this.props.routeBase}
-      />
+      <TaskRow key={task.id} task={task} selected={selected} routeBase={this.props.routeBase} />
     );
   }
 
@@ -175,28 +174,34 @@ class Tasks extends React.Component<IProps, IState> {
     const createTaskButton = patient ? (
       <div className={styles.createContainer}>
         <FormattedMessage id='tasks.createTask'>
-          {(message: string) => <div
-            onClick={this.showCreateTask}
-            className={styles.createButton}>{message}</div>}
+          {(message: string) => (
+            <div onClick={this.showCreateTask} className={styles.createButton}>
+              {message}
+            </div>
+          )}
         </FormattedMessage>
       </div>
     ) : null;
-    const createTaskHtml = patient && showCreateTask ? (
-      <TaskCreate
-        patient={patient}
-        patientGoals={patientGoals}
-        onClose={this.hideCreateTask}
-        routeBase={this.props.routeBase} />
-    ) : null;
+    const createTaskHtml =
+      patient && showCreateTask ? (
+        <TaskCreate
+          patient={patient}
+          patientGoals={patientGoals}
+          onClose={this.hideCreateTask}
+          routeBase={this.props.routeBase}
+        />
+      ) : null;
     const RenderedTask = (props: any) => (
       <Task
         routeBase={routeBase}
         onDelete={this.onDeleteTask}
         patientGoals={patientGoals}
-        {...props} />
+        {...props}
+      />
     );
-    const taskHtml = showCreateTask ?
-      null : (<Route path={`${routeBase}/:taskId`} render={RenderedTask} />);
+    const taskHtml = showCreateTask ? null : (
+      <Route path={`${routeBase}/:taskId`} render={RenderedTask} />
+    );
     return (
       <div className={styles.container}>
         <div className={sortSearchStyles.sortSearchBar}>
@@ -233,13 +238,13 @@ class Tasks extends React.Component<IProps, IState> {
   }
 }
 
-function mapStateToProps(state: IAppState): Partial<IProps> {
+function mapStateToProps(state: IAppState): IStateProps {
   return {
     taskId: state.task.taskId,
   };
 }
 
-function mapDispatchToProps(dispatch: Dispatch<() => void>, ownProps: IProps): Partial<IProps> {
+function mapDispatchToProps(dispatch: Dispatch<() => void>, ownProps: IProps): IDispatchProps {
   return {
     redirectToTasks: () => {
       const { routeBase } = ownProps;
@@ -248,7 +253,7 @@ function mapDispatchToProps(dispatch: Dispatch<() => void>, ownProps: IProps): P
   };
 }
 
-export default (compose as any)(
-  connect<any, any, IProps>(mapStateToProps, mapDispatchToProps),
-  graphql(taskDeleteMutation as any, { name: 'deleteTask' }),
+export default compose(
+  connect<IStateProps, IDispatchProps, IProps>(mapStateToProps, mapDispatchToProps),
+  graphql<IApolloProps>(taskDeleteMutation as any, { name: 'deleteTask' }),
 )(Tasks);

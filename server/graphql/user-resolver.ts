@@ -59,19 +59,11 @@ export async function userCreate(root: any, { input }: IUserCreateArgs, context:
   if (user) {
     throw new Error(`Cannot create account: Email already exists for ${email}`);
   } else {
-    const newUser = await User.create({
+    return await User.create({
       email,
       userRole: 'healthCoach',
       homeClinicId,
     });
-
-    const authToken = signJwt({
-      userId: newUser.id,
-      userRole: newUser.userRole,
-      lastLoginAt: new Date().toUTCString(),
-    });
-
-    return { user: newUser, authToken };
   }
 }
 

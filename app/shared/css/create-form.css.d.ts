@@ -1,3 +1,4 @@
+export const container: string;
 export const loading: string;
 export const loadingHidden: string;
 export const loadingContainer: string;
@@ -9,8 +10,8 @@ export const flexInputGroup: string;
 export const flexInputItem: string;
 export const submitButton: string;
 export const cancelButton: string;
-export const smallPatientSection: string;
-export const smallPatientPhoto: string;
-export const smallPatientName: string;
+export const smallSection: string;
+export const smallImage: string;
+export const smallText: string;
 export const close: string;
 export const formCenter: string;

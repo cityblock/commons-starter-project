@@ -96,7 +96,7 @@ class Tasks extends React.Component<IProps, IState> {
     this.setState(() => ({ showCreateTask: true }));
   }
 
-  hideCreateTask(task?: FullTaskFragment) {
+  hideCreateTask() {
     this.setState(() => ({ showCreateTask: false }));
   }
 

@@ -23,10 +23,10 @@
 }
 
 .userDel {
+  @apply --button;
   display: flex;
   justify-content: flex-end;
-  padding-right: 10px;
-  margin-right: 10px;
+  margin: 0px 10px;
   border-right: 1px solid var(--gray-background-color);
 }
 

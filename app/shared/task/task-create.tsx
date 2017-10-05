@@ -14,11 +14,10 @@ import {
   FullUserFragment,
   ShortPatientFragment,
 } from '../../graphql/types';
+import * as styles from '../css/create-form.css';
 import * as formStyles from '../css/forms.css';
 import * as loadingStyles from '../css/loading-spinner.css';
 import { IUpdatedField } from '../patient-demographics-form';
-import * as styles from './css/task-create.css';
-import * as taskStyles from './css/task.css';
 
 export interface IOptions { variables: taskCreateMutationVariables; }
 
@@ -140,15 +139,15 @@ class TaskCreate extends React.Component<IProps, IState> {
     ));
 
     return (
-      <div className={taskStyles.container}>
+      <div className={styles.container}>
         <form onSubmit={this.onSubmit}>
           <div className={styles.formTop}>
-            <div className={styles.smallPatientSection}>
+            <div className={styles.smallSection}>
               <div
-                className={styles.smallPatientPhoto}
+                className={styles.smallImage}
                 style={{ backgroundImage: `url('http://bit.ly/2u9bJDA')` }}>
               </div>
-              <div className={styles.smallPatientName}>{shortName}</div>
+              <div className={styles.smallText}>{shortName}</div>
             </div>
             <div className={styles.close} onClick={this.props.onClose} />
           </div>

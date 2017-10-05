@@ -3298,6 +3298,16 @@ export type userCreateMutationVariables = {
 export type userCreateMutation = {
   // Create a new user
   userCreate:  {
+    id: string,
+    locale: string | null,
+    firstName: string | null,
+    lastName: string | null,
+    userRole: UserRole,
+    email: string | null,
+    homeClinicId: string,
+    googleProfileImageUrl: string | null,
+    createdAt: string,
+    updatedAt: string,
   } | null,
 };
 

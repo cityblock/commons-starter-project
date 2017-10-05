@@ -1,4 +1,12 @@
-@import '../../css/sizes';
+@import './sizes';
+
+.container {
+  background: white;
+  box-shadow: 0 6px 8px 0 rgba(0,0,0,0.1);
+  border-radius: 5px;
+  min-height: 535px;
+  margin-bottom: 10px;
+}
 
 .loading {
   position: fixed;
@@ -72,12 +80,12 @@
   margin-right: 20px;
 }
 
-.smallPatientSection {
+.smallSection {
   display: flex;
   align-items: center;
 }
 
-.smallPatientPhoto {
+.smallImage {
   height: 20px;
   width: 20px;
   border-radius: 50%;
@@ -85,7 +93,7 @@
   background-size: cover;
 }
 
-.smallPatientName {
+.smallText {
   padding: 10px 6px;
   font-family: var(--roboto);
   font-size: var(--small-font-size);
@@ -94,7 +102,7 @@
 }
 
 .close {
-  background: url('../../../assets/close.svg');
+  background: url('../../assets/close.svg');
   height: 18px;
   width: 18px;
   background-position: top center;

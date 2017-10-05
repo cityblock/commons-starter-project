@@ -940,7 +940,7 @@ input CarePlanSuggestionDismissInput {
 
 type RootMutationType {
   # Create a new user
-  userCreate(input: UserCreateInput): UserWithAuthToken
+  userCreate(input: UserCreateInput): User
   # Login user
   userLogin(input: UserLoginInput): UserWithAuthToken
   # Edit user

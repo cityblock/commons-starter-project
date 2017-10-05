@@ -33,7 +33,7 @@ export const UserRow: React.StatelessComponent<IProps> = props => {
   return (
     <div className={styles.container}>
       <div className={styles.title}>
-        {user.firstName} {user.lastName}
+        {user.firstName} {user.lastName} ({user.email})
       </div>
       <div className={styles.meta}>
         <div className={styles.dateSection}>

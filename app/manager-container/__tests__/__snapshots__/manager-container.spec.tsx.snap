@@ -42,7 +42,46 @@ exports[`renders manager container 1`] = `
           <div
             className={undefined}
           >
-            Create User
+            Sort by:
+          </div>
+          <div
+            className={undefined}
+          >
+            <select
+              onChange={[Function]}
+              value="createdAtDesc"
+            >
+              <option
+                value="createdAtDesc"
+              >
+                Newest first
+              </option>
+              <option
+                value="createdAtAsc"
+              >
+                Oldest first
+              </option>
+              <option
+                value="lastLoginAtDesc"
+              >
+                Logged in descending
+              </option>
+              <option
+                value="lastLoginAtAsc"
+              >
+                Logged in ascending
+              </option>
+              <option
+                value="updatedAtDesc"
+              >
+                Last updated
+              </option>
+              <option
+                value="updatedAtAsc"
+              >
+                Last updated desc
+              </option>
+            </select>
           </div>
         </div>
       </div>
@@ -50,7 +89,17 @@ exports[`renders manager container 1`] = `
         className={undefined}
       >
         <div
-          className={undefined}
+          className=""
+        />
+        <div
+          className=""
+        />
+        <span
+          style={
+            Object {
+              "fontSize": 0,
+            }
+          }
         />
       </div>
     </div>

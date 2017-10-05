@@ -331,12 +331,11 @@ describe('user tests', () => {
     it('creates a new user', async () => {
       const mutation = `mutation {
         userCreate(input: { email: "a@b.com", homeClinicId: "1" }) {
-          authToken
-          user { email }
+          email
         }
       }`;
       const result = await graphql(schema, mutation, null, { db, userRole });
-      expect(cloneDeep(result.data!.userCreate.user)).toMatchObject({
+      expect(cloneDeep(result.data!.userCreate)).toMatchObject({
         email: 'a@b.com',
       });
     });
@@ -349,8 +348,7 @@ describe('user tests', () => {
       });
       const mutation = `mutation {
         userCreate(input: { email: "a@b.com", homeClinicId: "1" }) {
-        authToken
-        user { email }
+          email
       } }`;
       const result = await graphql(schema, mutation, null, { db, userRole });
       expect(cloneDeep(result.errors![0].message)).toMatch(

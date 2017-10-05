@@ -616,7 +616,7 @@ declare module 'schema' {
     description: 
   */
   interface IRootMutationType {
-    userCreate: IUserWithAuthToken | null;
+    userCreate: IUser | null;
     userLogin: IUserWithAuthToken | null;
     userEditRole: IUser | null;
     userDelete: IUser | null;
@@ -689,18 +689,18 @@ declare module 'schema' {
   }
 
   /*
+    description: params for logging in a user
+  */
+  interface IUserLoginInput {
+    googleAuthCode: string;
+  }
+
+  /*
     description: The user account with an optional auth token
   */
   interface IUserWithAuthToken {
     user: IUser;
     authToken: string | null;
-  }
-
-  /*
-    description: params for logging in a user
-  */
-  interface IUserLoginInput {
-    googleAuthCode: string;
   }
 
   /*

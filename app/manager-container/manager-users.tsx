@@ -1,12 +1,18 @@
+import * as classNames from 'classnames';
+import { pickBy } from 'lodash';
 import * as querystring from 'querystring';
 import * as React from 'react';
 import { compose, graphql } from 'react-apollo';
+import { connect, Dispatch } from 'react-redux';
+import { push } from 'react-router-redux';
+import * as Waypoint from 'react-waypoint';
 import * as userCreateMutation from '../graphql/queries/user-create-mutation.graphql';
 import * as userDeleteMutation from '../graphql/queries/user-delete-mutation.graphql';
 import * as userEditRoleMutation from '../graphql/queries/user-edit-role-mutation.graphql';
 import * as usersQuery from '../graphql/queries/users-get.graphql';
 import {
   getUsersQuery,
+  getUsersQueryVariables,
   userCreateMutationVariables,
   userDeleteMutationVariables,
   userEditRoleMutationVariables,
@@ -15,6 +21,7 @@ import {
 import * as sortSearchStyles from '../shared/css/sort-search.css';
 import * as styles from '../shared/css/two-panel.css';
 import { fetchMoreUsers } from '../shared/util/fetch-more-users';
+import UserInvite from './user-invite';
 import { UserRow } from './user-row';
 
 export type OrderByOptions =
@@ -29,9 +36,22 @@ export interface IPageParams {
   orderBy: OrderByOptions;
 }
 
+export interface IDispatchProps {
+  updatePageParams: (pageParams: IPageParams) => any;
+  redirectToUsers: () => any;
+}
+
 export interface IProps {
   hasLoggedIn: boolean;
   routeBase: string;
+}
+
+export interface IState {
+  showInviteUser: false;
+  orderBy: string;
+}
+
+export interface IGraphqlProps {
   loading?: boolean;
   error?: string;
   deleteUser?: (
@@ -46,17 +66,34 @@ export interface IProps {
   mutate?: any;
   usersResponse?: getUsersQuery['users'];
   fetchMoreUsers: () => any;
-  updatePageParams: (pageParams: IPageParams) => any;
-  refetchUsers: () => any;
 }
 
-export class ManagerUsers extends React.Component<IProps> {
-  constructor(props: IProps) {
+export class ManagerUsers extends React.Component<IProps & IDispatchProps & IGraphqlProps, IState> {
+  constructor(props: IProps & IDispatchProps & IGraphqlProps) {
     super(props);
 
     this.renderUsers = this.renderUsers.bind(this);
     this.renderUser = this.renderUser.bind(this);
     this.onDeleteUser = this.onDeleteUser.bind(this);
+    this.showInviteUser = this.showInviteUser.bind(this);
+    this.hideInviteUser = this.hideInviteUser.bind(this);
+    this.onInviteUser = this.onInviteUser.bind(this);
+    this.onSortChange = this.onSortChange.bind(this);
+
+    const pageParams = getPageParams(props);
+
+    this.state = {
+      showInviteUser: false,
+      orderBy: (pageParams.orderBy as any) || 'createdAtDesc',
+    };
+  }
+
+  showInviteUser() {
+    this.setState(() => ({ showInviteUser: true }));
+  }
+
+  hideInviteUser() {
+    this.setState(() => ({ showInviteUser: false }));
   }
 
   renderUsers(users: FullUserFragment[]) {
@@ -72,6 +109,25 @@ export class ManagerUsers extends React.Component<IProps> {
         </div>
       );
     }
+  }
+
+  getNextPage() {
+    const { usersResponse } = this.props;
+    const usersLength = usersResponse && usersResponse.edges ? usersResponse.edges.length : 0;
+    const hasNextPage =
+      usersResponse && usersResponse.pageInfo ? usersResponse.pageInfo.hasNextPage : false;
+    if (this.props.loading || !hasNextPage || usersLength < 1) {
+      return;
+    }
+    this.props.fetchMoreUsers();
+  }
+
+  onSortChange(event: React.ChangeEvent<HTMLSelectElement>) {
+    const value = event.target.value as OrderByOptions;
+    this.setState({
+      orderBy: value,
+    });
+    this.props.updatePageParams({ orderBy: value });
   }
 
   renderUser(user: FullUserFragment) {
@@ -91,53 +147,71 @@ export class ManagerUsers extends React.Component<IProps> {
     if (deleteUser) {
       await deleteUser({ variables: { email: userEmail } });
     }
-
-    this.props.refetchUsers();
   }
 
-  getSearchBarContent(showCreateButton: boolean) {
-    if (showCreateButton) {
-      return (
-        <div className={styles.createContainer}>
-          <div className={styles.createButton}>
-            Create User
-          </div>
-        </div>
-      );
+  async onInviteUser(localPartOfEmail: string) {
+    const { createUser } = this.props;
+
+    if (createUser) {
+      await createUser({
+        variables: {
+          email: `${localPartOfEmail}@cityblock.com`,
+          homeClinicId: '1', // TODO
+        },
+      });
     }
-    return (
-      <div className={sortSearchStyles.sort}>
-        <div className={sortSearchStyles.sortLabel}>Sort by:</div>
-        <div className={sortSearchStyles.sortDropdown}>
-          <select value='Newest first'>
-            <option value='createdAtDesc'>Newest first</option>
-            <option value='createdAtAsc'>Oldest first</option>
-            <option value='lastLoginAtDesc'>Logged in descending</option>
-            <option value='lastLoginAtAsc'>Logged in ascending</option>
-            <option value='updatedAtDesc'>Last updated</option>
-            <option value='updatedAtAsc'>Last updated desc</option>
-          </select>
-        </div>
-      </div>
-    );
   }
 
   render() {
     const { usersResponse, hasLoggedIn } = this.props;
+    const { orderBy, showInviteUser } = this.state;
+    let createButton = null;
+    if (!hasLoggedIn) {
+      createButton = (
+        <div className={styles.createContainer}>
+          <div onClick={this.showInviteUser} className={styles.createButton}>
+            Invite User
+          </div>
+        </div>
+      );
+    }
     const users =
       usersResponse && usersResponse.edges ? usersResponse.edges.map((edge: any) => edge.node) : [];
+    const usersStyles = classNames(styles.itemsList, {
+      [styles.compressed]: showInviteUser,
+    });
+    const inviteUserHtml = showInviteUser ? (
+      <UserInvite onClose={this.hideInviteUser} inviteUser={this.onInviteUser} />
+    ) : null;
     return (
       <div className={styles.container}>
-        <div className={styles.sortSearchBar}>{this.getSearchBarContent(hasLoggedIn)}</div>
+        <div className={styles.sortSearchBar}>
+          <div className={sortSearchStyles.sort}>
+            <div className={sortSearchStyles.sortLabel}>Sort by:</div>
+            <div className={sortSearchStyles.sortDropdown}>
+              <select value={orderBy} onChange={this.onSortChange}>
+                <option value='createdAtDesc'>Newest first</option>
+                <option value='createdAtAsc'>Oldest first</option>
+                <option value='lastLoginAtDesc'>Logged in descending</option>
+                <option value='lastLoginAtAsc'>Logged in ascending</option>
+                <option value='updatedAtDesc'>Last updated</option>
+                <option value='updatedAtAsc'>Last updated desc</option>
+              </select>
+            </div>
+          </div>
+          {createButton}
+        </div>
         <div className={styles.bottomContainer}>
-          <div className={styles.itemsList}>{this.renderUsers(users || [])}</div>
+          <div className={usersStyles}>{this.renderUsers(users || [])}</div>
+          <div className={usersStyles}>{inviteUserHtml}</div>
+          <Waypoint onEnter={this.getNextPage} />
         </div>
       </div>
     );
   }
 }
 
-const getPageParams = (props: IProps) => {
+const getPageParams = (props: IProps): getUsersQueryVariables => {
   const pageParams = querystring.parse(window.location.search.substring(1));
   return {
     pageNumber: 0,
@@ -147,10 +221,34 @@ const getPageParams = (props: IProps) => {
   };
 };
 
-export default (compose as any)(
-  graphql(userDeleteMutation as any, { name: 'deleteUser' }),
+function mapDispatchToProps(dispatch: Dispatch<() => void>, ownProps: IProps): IDispatchProps {
+  return {
+    redirectToUsers: () => {
+      const { routeBase } = ownProps;
+      dispatch(push(routeBase));
+    },
+    updatePageParams: (pageParams: IPageParams) => {
+      const cleanedPageParams = pickBy<IPageParams, {}>(pageParams);
+      dispatch(push({ search: querystring.stringify(cleanedPageParams) }));
+    },
+  };
+}
+
+export default compose(
+  connect<{}, IDispatchProps, IProps>(undefined, mapDispatchToProps),
+  graphql(userDeleteMutation as any, {
+    name: 'deleteUser',
+    options: {
+      refetchQueries: ['getUsers'],
+    },
+  }),
   graphql(userEditRoleMutation as any, { name: 'editUserRole' }),
-  graphql(userCreateMutation as any, { name: 'createUser' }),
+  graphql(userCreateMutation as any, {
+    name: 'createUser',
+    options: {
+      refetchQueries: ['getUsers'],
+    },
+  }),
   graphql(usersQuery as any, {
     options: (props: IProps) => ({ variables: getPageParams(props) }),
     props: ({ data, ownProps }) => ({

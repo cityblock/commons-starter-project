@@ -4,7 +4,7 @@ import { FormattedMessage } from 'react-intl';
 import { FullUserFragment } from '../graphql/types';
 import * as styles from './css/care-team-widget-member.css';
 
-export interface IProps {
+interface IProps {
   careTeamMember: FullUserFragment;
   selected: boolean;
   onClick: (careTeamMemberId: string) => any;

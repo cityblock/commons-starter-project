@@ -3,7 +3,7 @@ import { FormattedMessage } from 'react-intl';
 import * as loadingStyles from '../shared/css/loading-spinner.css';
 import * as styles from './css/table-loading-error.css';
 
-export interface IProps {
+interface IProps {
   error?: string;
   isLoading: boolean;
   onRetryClick: () => any;

@@ -15,7 +15,7 @@ import {
 import Tasks, { IPageParams } from '../shared/tasks';
 import { fetchMoreTasks } from '../shared/util/fetch-more-tasks';
 
-export interface IProps {
+interface IProps {
   patient?: ShortPatientFragment;
   patientId: string;
   carePlanLoading: boolean;

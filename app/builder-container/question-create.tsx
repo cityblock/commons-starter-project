@@ -11,12 +11,12 @@ import {
 import * as formStyles from '../shared/css/forms.css';
 import * as loadingStyles from '../shared/css/loading-spinner.css';
 import * as questionStyles from '../shared/css/two-panel-right.css';
-import { IUpdatedField } from '../shared/patient-demographics-form';
+import { IUpdatedField } from '../shared/util/updated-fields';
 import * as styles from './css/risk-area-create.css';
 
 export interface IOptions { variables: questionCreateMutationVariables; }
 
-export interface IProps {
+interface IProps {
   riskAreaId: string;
   routeBase: string;
   onClose: () => any;
@@ -24,7 +24,7 @@ export interface IProps {
   redirectToQuestion: (questionId: string) => any;
 }
 
-export interface IState {
+interface IState {
   loading: boolean;
   error?: string;
   question: questionCreateMutationVariables;

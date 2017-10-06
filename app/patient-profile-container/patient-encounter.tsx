@@ -3,7 +3,7 @@ import { injectIntl, InjectedIntlProps } from 'react-intl';
 import { FullPatientEncounterFragment } from '../graphql/types';
 import * as styles from './css/patient-encounter.css';
 
-export interface IProps {
+interface IProps {
   encounter: FullPatientEncounterFragment;
   onClickAttachment: (attachment: string, attachmentList: string[]) => any;
 }

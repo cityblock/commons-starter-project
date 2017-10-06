@@ -14,7 +14,7 @@ import * as styles from './css/event-notifications.css';
 import { EventNotificationRow } from './event-notification-row';
 import { EventNotificationsLoadingError } from './event-notifications-loading-error';
 
-export interface IProps {
+interface IProps {
   eventNotifications?: FullEventNotificationFragment[];
   loading?: boolean;
   error?: string;

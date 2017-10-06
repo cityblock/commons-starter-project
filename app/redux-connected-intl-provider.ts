@@ -8,7 +8,7 @@ if (window && (window as any).ReactIntlLocaleData) {
   addLocaleData((window as any).ReactIntlLocaleData.es);
 }
 
-export interface IProps {
+interface IProps {
   initialNow: number;
   locale: string;
   key: string;

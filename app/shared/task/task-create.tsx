@@ -14,14 +14,14 @@ import {
   FullUserFragment,
   ShortPatientFragment,
 } from '../../graphql/types';
+import { IUpdatedField } from '../../shared/util/updated-fields';
 import * as styles from '../css/create-form.css';
 import * as formStyles from '../css/forms.css';
 import * as loadingStyles from '../css/loading-spinner.css';
-import { IUpdatedField } from '../patient-demographics-form';
 
 export interface IOptions { variables: taskCreateMutationVariables; }
 
-export interface IProps {
+interface IProps {
   patient: ShortPatientFragment;
   careTeam?: FullUserFragment[];
   patientGoals?: FullPatientGoalFragment[];
@@ -31,7 +31,7 @@ export interface IProps {
   redirectToTask: (taskId: string) => any;
 }
 
-export interface IState {
+interface IState {
   loading: boolean;
   error?: string;
   task: taskCreateMutationVariables;

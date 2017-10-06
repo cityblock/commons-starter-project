@@ -11,7 +11,7 @@ import * as styles from './css/patient-care-plan.css';
 import PopupPatientCarePlanSuggestionDismissedModalBody from './popup-patient-care-plan-suggestion-dismissed-modal-body';
 /* tslint:enable:max-line-length */
 
-export interface IProps {
+interface IProps {
   visible: boolean;
   suggestion?: FullCarePlanSuggestionFragment;
   dismissCarePlanSuggestion: (
@@ -20,7 +20,7 @@ export interface IProps {
   onDismiss: () => any;
 }
 
-export interface IState {
+interface IState {
   dismissedReason: string;
   loading: boolean;
   error?: string;

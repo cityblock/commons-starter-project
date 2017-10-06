@@ -2,7 +2,7 @@ import * as classNames from 'classnames';
 import * as React from 'react';
 import * as styles from './css/pagination.css';
 
-export interface IProps {
+interface IProps {
   hasNextPage?: boolean;
   hasPreviousPage?: boolean;
   onNextClick: () => any;

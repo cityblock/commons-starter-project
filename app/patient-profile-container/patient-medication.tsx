@@ -3,7 +3,7 @@ import * as React from 'react';
 import { FullPatientMedicationFragment } from '../graphql/types';
 import * as styles from './css/patient-medication.css';
 
-export interface IProps {
+interface IProps {
   medication: FullPatientMedicationFragment;
   selected: boolean;
   onClick: (medicationId: string) => any;

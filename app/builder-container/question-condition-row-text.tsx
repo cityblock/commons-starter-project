@@ -11,7 +11,7 @@ import formatQuestionCondition from './helpers/format-question-condition';
 
 export interface IDeleteOptions { variables: questionConditionDeleteMutationVariables; }
 
-export interface IProps {
+interface IProps {
   question?: FullQuestionFragment;
   answer: FullAnswerFragment;
   questionId: string;

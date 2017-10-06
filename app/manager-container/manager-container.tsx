@@ -8,7 +8,7 @@ import * as styles from './css/manager.css';
 import ManagerLeftNav from './manager-left-nav';
 import ManagerUsers from './manager-users';
 
-export interface IProps {
+interface IProps {
   tabId: 'invites' | 'users';
   match: {
     params: {

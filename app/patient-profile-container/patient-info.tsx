@@ -10,18 +10,18 @@ import * as sortSearchStyles from '../shared/css/sort-search.css';
 import PatientContactForm, { IState as IPatientContactState } from '../shared/patient-contact-form';
 import PatientDemographicsForm, {
   IState as IPatientDemographicsState,
-  IUpdatedField,
 } from '../shared/patient-demographics-form';
 import PatientInsuranceForm, {
   IState as IPatientInsuranceState,
 } from '../shared/patient-insurance-form';
+import { IUpdatedField } from '../shared/util/updated-fields';
 import * as styles from './css/patient-info.css';
 
 export interface IOptions {
   variables: patientEditMutationVariables;
 }
 
-export interface IProps {
+interface IProps {
   loading?: boolean;
   error?: string;
   patientId: string;

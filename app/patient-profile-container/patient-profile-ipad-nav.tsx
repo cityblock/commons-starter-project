@@ -7,13 +7,13 @@ import * as styles from './css/patient-profile-left-nav.css';
 import PatientLeftNavInfo from './patient-left-nav-info';
 import PatientMedications from './patient-medications';
 
-export interface IProps {
+interface IProps {
   intl: InjectedIntl;
   patientId: string;
   patient?: ShortPatientFragment;
 }
 
-export interface IState {
+interface IState {
   selectedItem: string | null;
 }
 

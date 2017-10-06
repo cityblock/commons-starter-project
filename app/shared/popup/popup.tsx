@@ -2,7 +2,7 @@ import * as classNames from 'classnames';
 import * as React from 'react';
 import * as styles from './popup.css';
 
-export interface IProps {
+interface IProps {
   visible: boolean;
   children: any;
   smallPadding?: boolean;

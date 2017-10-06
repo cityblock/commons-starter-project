@@ -4,15 +4,9 @@ import { FormattedMessage } from 'react-intl';
 import * as formStyles from '../css/forms.css';
 import maritalStatusCodes from '../util/marital-status-codes';
 import races from '../util/race-codes';
+import { FormField, IUpdatedField } from '../util/updated-fields';
 
-export type FormField = string | undefined;
-
-export interface IUpdatedField {
-  fieldName: string;
-  fieldValue: FormField;
-}
-
-export interface IProps {
+interface IProps {
   fields: { [field: string]: FormField };
   onFieldUpdate: (updatedField: IUpdatedField) => any;
 }

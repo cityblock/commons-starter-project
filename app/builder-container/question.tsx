@@ -15,7 +15,7 @@ import { IState as IAppState } from '../store';
 import AnswerCreateEdit from './answer-create-edit';
 import QuestionConditions from './question-conditions';
 
-export interface IProps {
+interface IProps {
   questions: FullQuestionFragment[];
   question?: FullQuestionFragment;
   routeBase: string;
@@ -34,7 +34,7 @@ export interface IProps {
   onDelete: (questionId: string) => any;
 }
 
-export interface IState {
+interface IState {
   deleteConfirmationInProgress: boolean;
   deleteError?: string;
   editedTitle: string;

@@ -2,7 +2,7 @@ import { Action } from '../actions';
 
 export type Size = 'small' | 'large';
 
-export interface IState {
+interface IState {
   size: Size;
 }
 

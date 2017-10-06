@@ -5,14 +5,14 @@ import { FullCarePlanSuggestionFragment, FullUserFragment } from '../graphql/typ
 import * as styles from './css/patient-care-plan.css';
 import TaskTemplate from './task-template';
 
-export interface IProps {
+interface IProps {
   suggestion: FullCarePlanSuggestionFragment;
   careTeam?: FullUserFragment[];
   onAccept: (suggestion: FullCarePlanSuggestionFragment, taskTemplateIds?: string[]) => any;
   onDismiss: (suggestion: FullCarePlanSuggestionFragment) => any;
 }
 
-export interface IState {
+interface IState {
   selectedTaskTemplateIds: string[];
 }
 

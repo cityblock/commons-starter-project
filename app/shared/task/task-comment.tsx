@@ -10,13 +10,13 @@ import {
 } from '../../graphql/types';
 import * as styles from './css/task-comments.css';
 
-export interface IProps {
+interface IProps {
   comment: FullTaskCommentFragment;
   currentUser?: FullUserFragment;
   onEdit: (editedComment: taskCommentEditMutationVariables) => any;
 }
 
-export interface IState {
+interface IState {
   editedCommentBody: string;
   editing: boolean;
   textHeight: string;

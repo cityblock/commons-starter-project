@@ -6,7 +6,7 @@ import { Pagination } from './pagination';
 import PatientRosterItem from './patient-roster-item';
 import { TableLoadingError } from './table-loading-error';
 
-export interface IProps {
+interface IProps {
   patients: ShortPatientFragment[];
   hasNextPage?: boolean;
   hasPreviousPage?: boolean;

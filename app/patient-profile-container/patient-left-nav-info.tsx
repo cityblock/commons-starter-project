@@ -6,7 +6,7 @@ import { ShortPatientFragment } from '../graphql/types';
 import * as styles from './css/patient-profile-left-nav.css';
 import PatientScratchPad from './patient-scratch-pad';
 
-export interface IProps {
+interface IProps {
   intl: InjectedIntl;
   patientId: string;
   patient?: ShortPatientFragment;

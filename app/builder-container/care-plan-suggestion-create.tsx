@@ -19,7 +19,7 @@ import * as loadingStyles from '../shared/css/loading-spinner.css';
 import * as carePlanSuggestionStyles from '../shared/css/two-panel-right.css';
 import * as styles from './css/risk-area-create.css';
 
-export interface IProps {
+interface IProps {
   goals?: FullGoalSuggestionTemplateFragment[];
   concerns?: FullConcernFragment[];
   answer: FullAnswerFragment;
@@ -31,7 +31,7 @@ export interface IProps {
   ) => { data: { goalSuggestionCreate: FullGoalSuggestionTemplateFragment } };
 }
 
-export interface IState {
+interface IState {
   suggestionType?: 'concern' | 'goal';
   suggestionId?: string;
   loading: boolean;

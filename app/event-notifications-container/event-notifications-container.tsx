@@ -20,7 +20,7 @@ import * as styles from './css/event-notifications-container.css';
 
 type SelectableNotificationTypes = 'tasks';
 
-export interface IProps {
+interface IProps {
   eventNotificationType?: SelectableNotificationTypes;
   eventNotificationsLoading: boolean;
   eventNotificationsError?: string;

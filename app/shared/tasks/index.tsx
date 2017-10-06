@@ -22,19 +22,13 @@ import * as styles from './css/tasks.css';
 import { TaskRow } from './task-row';
 import { TasksLoadingError } from './tasks-loading-error';
 
-export type OrderByOptions = 'createdAtDesc' | 'createdAtAsc' | 'dueAtAsc' | 'updatedAtAsc';
+type OrderByOptions = 'createdAtDesc' | 'createdAtAsc' | 'dueAtAsc' | 'updatedAtAsc';
 
 export interface IPageParams {
   orderBy: OrderByOptions;
 }
 
-export interface ITaskPageInfo {
-  hasNextPage: boolean;
-  hasPreviousPage: boolean;
-}
-
-export interface IProps {
-  taskId?: string;
+interface IProps {
   routeBase: string;
   patient?: ShortPatientFragment;
   patientGoals?: FullPatientGoalFragment[];
@@ -48,7 +42,7 @@ export interface IProps {
   mutate?: any;
 }
 
-export interface IApolloProps {
+interface IApolloProps {
   deleteTask: (
     options: { variables: taskDeleteMutationVariables },
   ) => { data: { taskDelete: FullTaskFragment } };
@@ -62,7 +56,7 @@ interface IDispatchProps {
   redirectToTasks: () => void;
 }
 
-export interface IState {
+interface IState {
   orderBy: OrderByOptions;
   showCreateTask: false;
 }

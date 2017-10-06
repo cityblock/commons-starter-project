@@ -6,7 +6,7 @@ import { FullTaskTemplateFragment, FullUserFragment } from '../graphql/types';
 import { DEFAULT_AVATAR_URL } from '../shared/task/task';
 import * as styles from './css/patient-care-plan.css';
 
-export interface IProps {
+interface IProps {
   taskTemplate: FullTaskTemplateFragment;
   selected: boolean;
   onToggleRemoved: (taskTemplateId: string) => any;

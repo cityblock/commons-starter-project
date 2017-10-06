@@ -23,7 +23,7 @@ import * as sortSearchStyles from '../shared/css/sort-search.css';
 import * as styles from './css/risk-areas.css';
 import RiskAreaQuestion from './risk-area-question';
 
-export interface IProps {
+interface IProps {
   riskAreaId: string;
   patientId: string;
   routeBase: string;
@@ -62,7 +62,7 @@ export interface IQuestionsState {
   };
 }
 
-export interface IState {
+interface IState {
   inProgress: boolean;
   questions: IQuestionsState;
   assessmentLoading: boolean;

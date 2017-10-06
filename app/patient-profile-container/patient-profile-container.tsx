@@ -19,7 +19,7 @@ import PatientThreeSixtyView from './patient-three-sixty-view';
 
 type SelectableTabs = 'encounters' | 'patientInfo' | 'tasks' | '360' | 'carePlan';
 
-export interface IProps {
+interface IProps {
   intl: InjectedIntl;
   patientId: string;
   taskId?: string;

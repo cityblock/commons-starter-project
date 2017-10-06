@@ -16,14 +16,14 @@ import {
 import * as formStyles from '../shared/css/forms.css';
 import * as loadingStyles from '../shared/css/loading-spinner.css';
 import * as taskTemplateStyles from '../shared/css/two-panel-right.css';
-import { IUpdatedField } from '../shared/patient-demographics-form';
+import { IUpdatedField } from '../shared/util/updated-fields';
 import * as styles from './css/risk-area-create.css';
 
 export interface ICreateOptions { variables: taskTemplateCreateMutationVariables; }
 export interface IEditOptions { variables: taskTemplateEditMutationVariables; }
 export interface IDeleteOptions { variables: taskTemplateDeleteMutationVariables; }
 
-export interface IProps {
+interface IProps {
   taskTemplate?: FullTaskTemplateFragment;
   goalSuggestionTemplateId: string;
   createTaskTemplate: (options: ICreateOptions) => {
@@ -37,7 +37,7 @@ export interface IProps {
   };
 }
 
-export interface IState {
+interface IState {
   loading: boolean;
   error?: string;
   taskTemplate: taskTemplateCreateMutationVariables;

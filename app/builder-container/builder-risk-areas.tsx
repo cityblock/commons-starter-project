@@ -20,7 +20,7 @@ export interface IComponentProps {
   riskAreaId?: string;
 }
 
-export interface IProps extends IComponentProps {
+interface IProps extends IComponentProps {
   loading?: boolean;
   error?: string;
   mutate: any;
@@ -30,7 +30,7 @@ export interface IProps extends IComponentProps {
   redirectToRiskAreas: () => any;
 }
 
-export interface IState {
+interface IState {
   showCreateRiskArea: false;
 }
 

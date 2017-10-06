@@ -5,7 +5,7 @@ import { ShortPatientFragment } from '../graphql/types';
 import { Popup } from '../shared/popup/popup';
 import * as styles from './css/popup-patient-created.css';
 
-export interface IProps {
+interface IProps {
   patient?: ShortPatientFragment;
 }
 

@@ -3,12 +3,12 @@ import * as styles from '../shared/css/create-form.css';
 import * as formStyles from '../shared/css/forms.css';
 import * as loadingStyles from '../shared/css/loading-spinner.css';
 
-export interface IProps {
+interface IProps {
   onClose: () => any;
   inviteUser: (email: string) => any;
 }
 
-export interface IState {
+interface IState {
   loading: boolean;
   error?: string;
   localEmail?: string;

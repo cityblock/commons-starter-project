@@ -20,7 +20,7 @@ import BuilderQuestions from './builder-questions';
 import BuilderRiskAreas from './builder-risk-areas';
 import * as styles from './css/builder.css';
 
-export interface IProps {
+interface IProps {
   riskAreas: FullRiskAreaFragment[];
   concerns: FullConcernFragment[];
   goals: FullGoalSuggestionTemplateFragment[];

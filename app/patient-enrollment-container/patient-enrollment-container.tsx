@@ -13,14 +13,15 @@ import {
 } from '../graphql/types';
 import * as loadingStyles from '../shared/css/loading-spinner.css';
 import PatientContactForm from '../shared/patient-contact-form';
-import PatientDemographicsForm, { IUpdatedField } from '../shared/patient-demographics-form';
+import PatientDemographicsForm from '../shared/patient-demographics-form';
 import PatientInsuranceForm from '../shared/patient-insurance-form';
 import { PatientPhotoUpload } from '../shared/patient-photo-upload';
+import { IUpdatedField } from '../shared/util/updated-fields';
 import * as styles from './css/patient-enrollment.css';
 import PopupEnrollmentError from './popup-enrollment-error';
 import PopupPatientCreated from './popup-patient-created';
 
-export interface IProps {
+interface IProps {
   createPatient: (
     options: { variables: patientSetupMutationVariables },
   ) => { data: { patientSetup: ShortPatientFragment } };
@@ -30,7 +31,7 @@ export interface IProps {
   clinicsError?: string;
 }
 
-export interface IState {
+interface IState {
   displayErrorPopup: boolean;
   loading: boolean;
   error?: string;

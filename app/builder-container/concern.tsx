@@ -12,7 +12,7 @@ import {
 import * as styles from '../shared/css/two-panel-right.css';
 import { IState as IAppState } from '../store';
 
-export interface IProps {
+interface IProps {
   concern?: FullConcernFragment;
   concernId?: string;
   concernLoading?: boolean;
@@ -30,7 +30,7 @@ export interface IProps {
   onDelete: (concernId: string) => any;
 }
 
-export interface IState {
+interface IState {
   deleteConfirmationInProgress: boolean;
   deleteError?: string;
   editedTitle: string;

@@ -15,7 +15,7 @@ import * as styles from '../shared/css/two-panel-right.css';
 import { IState as IAppState } from '../store';
 import TaskTemplateCreateEdit from './task-template-create-edit';
 
-export interface IProps {
+interface IProps {
   goal?: FullGoalSuggestionTemplateFragment;
   goalId?: string;
   goalLoading?: boolean;
@@ -33,7 +33,7 @@ export interface IProps {
   onDelete: (goalId: string) => any;
 }
 
-export interface IState {
+interface IState {
   deleteConfirmationInProgress: boolean;
   deleteError?: string;
   editedTitle: string;

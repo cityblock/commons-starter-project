@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Popup } from '../shared/popup/popup';
 import * as styles from './css/idle-popup.css';
 
-export interface IProps {
+interface IProps {
   idleEnd: () => any;
   isIdle: boolean;
 }

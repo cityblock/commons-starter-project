@@ -14,13 +14,13 @@ import Concern from './concern';
 import ConcernCreate from './concern-create';
 import { ConcernRow } from './concern-row';
 
-export interface IComponentProps {
+interface IComponentProps {
   routeBase: string;
   concerns?: FullConcernFragment[];
   concernId?: string;
 }
 
-export interface IProps extends IComponentProps {
+interface IProps extends IComponentProps {
   loading?: boolean;
   error?: string;
   mutate: any;
@@ -30,7 +30,7 @@ export interface IProps extends IComponentProps {
   redirectToConcerns: () => any;
 }
 
-export interface IState {
+interface IState {
   showCreateConcern: false;
 }
 

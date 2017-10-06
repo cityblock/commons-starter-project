@@ -29,7 +29,7 @@ export interface IPatientPanel {
   pageInfo: IPatientPanelPageInfo;
 }
 
-export interface IProps {
+interface IProps {
   refetchPatientPanel: (variables: { pageNumber: number, pageSize: number }) => any;
   updatePageParams: (pageNumber: number) => any;
   loading: boolean;
@@ -37,7 +37,7 @@ export interface IProps {
   patientPanel?: IPatientPanel;
 }
 
-export interface IState extends IPageParams {
+interface IState extends IPageParams {
   hasNextPage?: boolean;
   hasPreviousPage?: boolean;
 }

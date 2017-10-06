@@ -24,7 +24,7 @@ import { fetchMoreUsers } from '../shared/util/fetch-more-users';
 import UserInvite from './user-invite';
 import { UserRow } from './user-row';
 
-export type OrderByOptions =
+type OrderByOptions =
   | 'createdAtDesc'
   | 'createdAtAsc'
   | 'updatedAtDesc'
@@ -32,21 +32,21 @@ export type OrderByOptions =
   | 'lastLoginAtDesc'
   | 'lastLoginAtAsc';
 
-export interface IPageParams {
+interface IPageParams {
   orderBy: OrderByOptions;
 }
 
-export interface IDispatchProps {
+interface IDispatchProps {
   updatePageParams: (pageParams: IPageParams) => any;
   redirectToUsers: () => any;
 }
 
-export interface IProps {
+interface IProps {
   hasLoggedIn: boolean;
   routeBase: string;
 }
 
-export interface IState {
+interface IState {
   showInviteUser: false;
   orderBy: string;
 }

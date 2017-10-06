@@ -7,7 +7,7 @@ import CareTeamWidgetMember from './care-team-widget-member';
 import * as careTeamMemberStyles from './css/care-team-widget-member.css';
 import * as styles from './css/care-team-widget.css';
 
-export interface IProps {
+interface IProps {
   patientId: string;
   loading?: boolean;
   error?: string;
@@ -15,7 +15,7 @@ export interface IProps {
   condensedWidget?: boolean;
 }
 
-export interface IState {
+interface IState {
   open: boolean;
   selectedCareTeamMemberId: string | null;
 }

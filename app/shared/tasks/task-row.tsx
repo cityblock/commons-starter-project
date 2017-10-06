@@ -7,7 +7,7 @@ import { DEFAULT_AVATAR_URL } from '../task/task';
 import * as styles from './css/task-row.css';
 import * as tasksStyles from './css/tasks.css';
 
-export interface IProps {
+interface IProps {
   task: FullTaskFragment;
   selected: boolean;
   routeBase: string;

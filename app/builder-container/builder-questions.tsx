@@ -24,7 +24,7 @@ export interface IComponentProps {
   questionId?: string;
 }
 
-export interface IProps extends IComponentProps {
+interface IProps extends IComponentProps {
   loading?: boolean;
   error?: string;
   deleteQuestion: (
@@ -36,7 +36,7 @@ export interface IProps extends IComponentProps {
   directToRiskAreaQuestions: (riskAreaId: string) => any;
 }
 
-export interface IState {
+interface IState {
   showCreateQuestion: false;
 }
 

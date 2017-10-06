@@ -16,7 +16,7 @@ import Goal from './goal';
 import GoalCreate from './goal-create';
 import { GoalRow } from './goal-row';
 
-export interface IProps {
+interface IProps {
   loading?: boolean;
   error?: string;
   deleteGoal?: (
@@ -30,7 +30,7 @@ export interface IProps {
   refetchGoals: () => any;
 }
 
-export interface IState {
+interface IState {
   showCreateGoal: false;
 }
 

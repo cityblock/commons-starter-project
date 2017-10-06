@@ -8,14 +8,14 @@ import PatientLeftNavInfo from './patient-left-nav-info';
 import PatientMedications from './patient-medications';
 import PatientProfileIpadNav from './patient-profile-ipad-nav';
 
-export interface IProps {
+interface IProps {
   intl: InjectedIntl;
   browserSize: Size;
   patient?: ShortPatientFragment;
   patientId: string;
 }
 
-export interface IState {
+interface IState {
   selectedItem: string | null;
 }
 

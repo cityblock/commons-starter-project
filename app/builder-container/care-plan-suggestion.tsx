@@ -13,7 +13,7 @@ import {
 } from '../graphql/types';
 import * as styles from '../shared/css/two-panel-right.css';
 
-export interface IProps {
+interface IProps {
   answerId: string;
   suggestionType: 'concern' | 'goal';
   suggestion: FullGoalSuggestionTemplateFragment | FullConcernFragment;
@@ -26,7 +26,7 @@ export interface IProps {
   mutate: any;
 }
 
-export interface IState {
+interface IState {
   loading: boolean;
   error?: string;
 }

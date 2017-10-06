@@ -7,7 +7,7 @@ import * as styles from './css/patient-medications.css';
 import { MedicationsLoadingError } from './medications-loading-error';
 import PatientMedication from './patient-medication';
 
-export interface IProps {
+interface IProps {
   patientId: string;
   loading?: boolean;
   error?: string;
@@ -15,7 +15,7 @@ export interface IProps {
   refetchPatientMedications?: (variables: { patientId: string }) => any;
 }
 
-export interface IState {
+interface IState {
   selectedMedicationId: string | null;
   loading?: boolean;
   error?: string;

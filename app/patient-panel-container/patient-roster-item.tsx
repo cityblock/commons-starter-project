@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import { ShortPatientFragment } from '../graphql/types';
 import * as styles from './css/patient-roster.css';
 
-export interface IProps {
+interface IProps {
   patient: ShortPatientFragment;
 }
 

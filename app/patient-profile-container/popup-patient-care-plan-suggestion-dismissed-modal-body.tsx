@@ -4,7 +4,7 @@ import { FullCarePlanSuggestionFragment } from '../graphql/types';
 import * as formStyles from '../shared/css/forms.css';
 import * as styles from './css/patient-care-plan.css';
 
-export interface IProps {
+interface IProps {
   suggestion?: FullCarePlanSuggestionFragment;
   dismissedReason: string;
   onChange: (event: React.ChangeEvent<HTMLSelectElement>) => any;

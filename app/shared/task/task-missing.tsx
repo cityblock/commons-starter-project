@@ -2,7 +2,7 @@ import * as classNames from 'classnames';
 import * as React from 'react';
 import * as styles from './css/task.css';
 
-export interface IProps {
+interface IProps {
   taskLoading?: boolean;
   taskError?: string;
   reloadTask: () => void;

@@ -12,7 +12,7 @@ import {
 import * as styles from './css/patient-scratch-pad.css';
 import { PatientScratchPadStatus } from './patient-scratch-pad-status';
 
-export interface IProps {
+interface IProps {
   patientId: string;
   scratchPad?: {
     text: string;
@@ -25,7 +25,7 @@ export interface IProps {
   refetchScratchPad: (variables: { patientId: string }) => any;
 }
 
-export interface IState {
+interface IState {
   loading?: boolean;
   error?: string;
   scratchPad?: string;

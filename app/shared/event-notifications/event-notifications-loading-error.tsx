@@ -1,7 +1,7 @@
 import * as React from 'react';
 import * as styles from './css/event-notifications.css';
 
-export interface IProps {
+interface IProps {
   onRetryClick: () => any;
   loading?: boolean;
   error?: string;

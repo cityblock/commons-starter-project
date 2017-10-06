@@ -9,7 +9,7 @@ import Lightbox from './lightbox';
 import NewPatientEncounter from './new-patient-encounter';
 import PatientEncounter from './patient-encounter';
 
-export interface IProps {
+interface IProps {
   patientId: string;
   loading?: boolean;
   error?: string;
@@ -17,7 +17,7 @@ export interface IProps {
   refetchPatientEncounters?: (variables: { patientId: string }) => any;
 }
 
-export interface IState {
+interface IState {
   loading?: boolean;
   error?: string;
   clickedAttachment?: string;

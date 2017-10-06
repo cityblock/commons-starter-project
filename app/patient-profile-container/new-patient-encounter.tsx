@@ -15,7 +15,7 @@ import * as styles from './css/new-patient-encounter.css';
 
 import NewPatientEncounterLoadingError from './new-patient-encounter-loading-error';
 
-export interface IProps {
+interface IProps {
   patientId: string;
   startAppointment: (
     options: { variables: appointmentStartMutationVariables },
@@ -25,7 +25,7 @@ export interface IProps {
   ) => { data: { appointmentEnd: { success: boolean } } };
 }
 
-export interface IState {
+interface IState {
   open: boolean;
   encounterReason: string;
   encounterLocation: string;

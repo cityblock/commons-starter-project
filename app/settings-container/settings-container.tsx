@@ -7,7 +7,7 @@ import { currentUserEditMutationVariables, FullUserFragment } from '../graphql/t
 import * as formStyles from '../shared/css/forms.css';
 import * as styles from './css/settings.css';
 
-export interface IProps {
+interface IProps {
   updateUser: (options: { variables: currentUserEditMutationVariables }) => any;
   currentUser?: FullUserFragment;
   loading: boolean;

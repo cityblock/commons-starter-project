@@ -4,7 +4,7 @@ import { FullPatientGoalFragment } from '../graphql/types';
 import { TaskRow } from '../shared/tasks/task-row';
 import * as styles from './css/patient-care-plan.css';
 
-export interface IProps {
+interface IProps {
   goalNumber: number;
   patientGoal: FullPatientGoalFragment;
 }

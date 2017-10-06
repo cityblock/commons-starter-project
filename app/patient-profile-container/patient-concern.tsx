@@ -5,7 +5,7 @@ import { FullPatientConcernFragment } from '../graphql/types';
 import * as styles from './css/patient-care-plan.css';
 import PatientGoal from './patient-goal';
 
-export interface IProps {
+interface IProps {
   patientConcern: FullPatientConcernFragment;
   selected: boolean;
   onClick: (id: string) => any;

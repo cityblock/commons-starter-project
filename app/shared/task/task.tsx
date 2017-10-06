@@ -24,7 +24,7 @@ import TaskComments from './task-comments';
 import { TaskHamburgerMenu } from './task-hamburger-menu';
 import { TaskMissing } from './task-missing';
 
-export interface IProps {
+interface IProps {
   task?: FullTaskFragment;
   taskId?: string;
   taskLoading?: boolean;
@@ -50,7 +50,7 @@ export interface IProps {
   onDelete: (taskId: string) => any;
 }
 
-export interface IState {
+interface IState {
   hamburgerMenuVisible: boolean;
   copySuccessVisible: boolean;
   toggleCompletionError?: string;

@@ -3,14 +3,14 @@ import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
 import * as styles from './css/lightbox.css';
 
-export interface IProps {
+interface IProps {
   images: string[];
   isOpen: boolean;
   openingImage?: string;
   onDismiss: () => any;
 }
 
-export interface IState {
+interface IState {
   selectedImageIndex: number;
 }
 

@@ -3,7 +3,7 @@ import * as React from 'react';
 import * as CopyToClipboard from 'react-copy-to-clipboard';
 import * as styles from './css/task.css';
 
-export interface IProps {
+interface IProps {
   taskId: string;
   patientId: string;
   visible: boolean;

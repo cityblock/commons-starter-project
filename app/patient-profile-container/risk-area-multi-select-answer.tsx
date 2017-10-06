@@ -3,7 +3,7 @@ import * as React from 'react';
 import { FullAnswerFragment } from '../graphql/types';
 import * as styles from './css/risk-areas.css';
 
-export interface IProps {
+interface IProps {
   onClick: (value: string | number, answerId: string) => any;
   answer: FullAnswerFragment;
   editable: boolean;

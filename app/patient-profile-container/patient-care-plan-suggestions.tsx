@@ -23,7 +23,7 @@ export interface IAcceptedGoalSuggestion {
 
 export type SuggestionTypes = 'goal' | 'concern';
 
-export interface IProps {
+interface IProps {
   patientId: string;
   routeBase: string;
   loading?: boolean;
@@ -33,7 +33,7 @@ export interface IProps {
   careTeam?: FullUserFragment[];
 }
 
-export interface IState {
+interface IState {
   acceptModalVisible: boolean;
   acceptedSuggestion?: FullCarePlanSuggestionFragment;
   acceptedTaskTemplateIds?: string[];

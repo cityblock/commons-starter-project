@@ -5,7 +5,7 @@ import * as styles from '../shared/css/two-panel-right.css';
 import CarePlanSuggestion from './care-plan-suggestion';
 import CarePlanSuggestionCreate from './care-plan-suggestion-create';
 
-export interface IProps {
+interface IProps {
   answer: FullAnswerFragment;
 }
 

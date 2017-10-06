@@ -3,7 +3,7 @@ import * as React from 'react';
 import * as loadingStyles from '../shared/css/loading-spinner.css';
 import * as styles from './css/new-patient-encounter.css';
 
-export interface IProps {
+interface IProps {
   onClick: () => any;
   loading: boolean;
   error?: string;

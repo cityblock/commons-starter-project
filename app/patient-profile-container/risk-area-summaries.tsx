@@ -8,7 +8,7 @@ import * as styles from './css/risk-areas.css';
 import RiskAreaSummary from './risk-area-summary';
 import { RiskAreasLoadingError } from './risk-areas-loading-error';
 
-export interface IProps {
+interface IProps {
   patientId: string;
   routeBase: string;
   riskAreas?: FullRiskAreaFragment[];

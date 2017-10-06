@@ -14,7 +14,7 @@ import QuestionConditionRowText from './question-condition-row-text';
 
 export interface IDeleteOptions { variables: questionConditionDeleteMutationVariables; }
 
-export interface IProps {
+interface IProps {
   answer?: FullAnswerFragment;
   questionCondition: FullQuestionConditionFragment;
   deleteQuestionCondition: (

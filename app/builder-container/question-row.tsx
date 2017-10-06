@@ -6,7 +6,7 @@ import { FullQuestionFragment } from '../graphql/types';
 import * as questionsStyles from '../shared/css/two-panel.css';
 import * as styles from './css/risk-area-row.css';
 
-export interface IProps {
+interface IProps {
   question: FullQuestionFragment;
   selected: boolean;
   routeBase: string;

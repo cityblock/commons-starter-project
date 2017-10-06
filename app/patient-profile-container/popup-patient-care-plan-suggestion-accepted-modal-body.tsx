@@ -6,7 +6,7 @@ import * as formStyles from '../shared/css/forms.css';
 import * as styles from './css/patient-care-plan.css';
 import PatientCarePlanSuggestionOptionGroup from './patient-care-plan-suggestion-option-group';
 
-export interface IProps {
+interface IProps {
   carePlan?: ICarePlan;
   carePlanSuggestions?: FullCarePlanSuggestionFragment[];
   concernId: string;

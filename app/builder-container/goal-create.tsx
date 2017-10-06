@@ -12,12 +12,12 @@ import {
 import * as formStyles from '../shared/css/forms.css';
 import * as loadingStyles from '../shared/css/loading-spinner.css';
 import * as goalStyles from '../shared/css/two-panel-right.css';
-import { IUpdatedField } from '../shared/patient-demographics-form';
+import { IUpdatedField } from '../shared/util/updated-fields';
 import * as styles from './css/risk-area-create.css';
 
-export interface IOptions { variables: goalSuggestionTemplateCreateMutationVariables; }
+interface IOptions { variables: goalSuggestionTemplateCreateMutationVariables; }
 
-export interface IProps {
+interface IProps {
   routeBase: string;
   onClose: () => any;
   createGoal: (options: IOptions) => {
@@ -26,7 +26,7 @@ export interface IProps {
   redirectToGoal: (goalId: string) => any;
 }
 
-export interface IState {
+interface IState {
   loading: boolean;
   error?: string;
   goal: goalSuggestionTemplateCreateMutationVariables;

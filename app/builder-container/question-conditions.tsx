@@ -8,7 +8,7 @@ import * as styles from '../shared/css/two-panel-right.css';
 import QuestionConditionCreate from './question-condition-create';
 import QuestionConditionRow from './question-condition-row';
 
-export interface IProps {
+interface IProps {
   questions: FullQuestionFragment[];
   questionConditions?: FullQuestionConditionFragment[] | null;
   questionId: string;

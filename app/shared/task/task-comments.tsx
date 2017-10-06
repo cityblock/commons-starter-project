@@ -16,7 +16,7 @@ import TaskComment from './task-comment';
 
 export type ITaskCommentsResponse = getTaskCommentsQuery['taskComments'];
 
-export interface IProps {
+interface IProps {
   taskId: string;
   createComment: (
     options: { variables: taskCommentCreateMutationVariables },
@@ -35,7 +35,7 @@ export interface IProps {
   ) => { data: { taskCommentEdit: FullTaskCommentFragment } };
 }
 
-export interface IState {
+interface IState {
   commentBody: string;
   createCommentError?: string;
   comments: FullTaskCommentFragment[];

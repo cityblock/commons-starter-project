@@ -15,7 +15,7 @@ import { fetchMoreTasks } from '../shared/util/fetch-more-tasks';
 import { IState as IAppState } from '../store';
 import * as styles from './css/tasks-container.css';
 
-export interface IProps {
+interface IProps {
   intl: InjectedIntl;
   tasksLoading: boolean;
   tasksError?: string;

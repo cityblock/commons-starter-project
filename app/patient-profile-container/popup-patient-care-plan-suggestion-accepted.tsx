@@ -13,7 +13,7 @@ import * as styles from './css/patient-care-plan.css';
 import PopupPatientCarePlanSuggestionAcceptedModalBody from './popup-patient-care-plan-suggestion-accepted-modal-body';
 /* tslint:enable:max-line-length */
 
-export interface IProps {
+interface IProps {
   visible: boolean;
   suggestion?: FullCarePlanSuggestionFragment;
   taskTemplateIds?: string[];
@@ -28,7 +28,7 @@ export interface IProps {
   onDismiss: () => any;
 }
 
-export interface IState {
+interface IState {
   concernType: '' | 'inactive' | 'active';
   concernId: string;
   newConcernTitle: string;

@@ -11,7 +11,7 @@ import * as styles from './css/auth.css';
 import Header from './header';
 import { IdlePopup } from './idle-popup';
 
-export interface IStateProps {
+interface IStateProps {
   isIdle: boolean;
 }
 
@@ -21,7 +21,7 @@ export interface IDispatchProps {
   selectLocale: (locale: Lang) => any;
 }
 
-export interface IProps {
+interface IProps {
   error?: string;
   loading?: boolean;
   currentUser?: FullUserFragment;

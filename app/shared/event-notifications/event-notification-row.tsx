@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import { FullEventNotificationFragment } from '../../graphql/types';
 import * as styles from './css/event-notification-row.css';
 
-export interface IProps {
+interface IProps {
   notification: FullEventNotificationFragment;
   onDismiss: (id: string) => any;
 }

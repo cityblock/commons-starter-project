@@ -11,7 +11,7 @@ import {
 import * as styles from './css/add-task-follower.css';
 import { DEFAULT_AVATAR_URL } from './task';
 
-export interface IProps {
+interface IProps {
   patientId: string;
   taskId: string;
   followers: FullUserFragment[];
@@ -23,7 +23,7 @@ export interface IProps {
   ) => { data: { taskUserFollow: FullTaskFragment } };
 }
 
-export interface IState {
+interface IState {
   open: boolean;
   loading: boolean;
   lastCareTeamMemberId?: string;

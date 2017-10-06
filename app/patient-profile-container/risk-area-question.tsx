@@ -5,7 +5,7 @@ import * as formStyles from '../shared/css/forms.css';
 import * as styles from './css/risk-areas.css';
 import RiskAreaMultiSelectAnswer from './risk-area-multi-select-answer';
 
-export interface IProps {
+interface IProps {
   onChange: (questionId: string, answerId: string, value: string | number) => any;
   visible: boolean;
   question: FullQuestionFragment;

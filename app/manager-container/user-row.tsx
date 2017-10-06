@@ -6,7 +6,7 @@ import {
 } from '../graphql/types';
 import * as styles from './css/user-row.css';
 
-export interface IProps {
+interface IProps {
   user: FullUserFragment;
   deleteUser: (userEmail: string) => void;
   editUserRole?: (

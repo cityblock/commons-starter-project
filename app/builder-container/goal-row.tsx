@@ -6,7 +6,7 @@ import { FullGoalSuggestionTemplateFragment } from '../graphql/types';
 import * as concernStyles from '../shared/css/two-panel.css';
 import * as styles from './css/risk-area-row.css';
 
-export interface IProps {
+interface IProps {
   goal: FullGoalSuggestionTemplateFragment;
   selected: boolean;
   routeBase: string;

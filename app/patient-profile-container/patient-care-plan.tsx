@@ -6,7 +6,7 @@ import PatientConcern from './patient-concern';
 
 export type ICarePlanDisplayTypes = 'inactive' | 'active';
 
-export interface IProps {
+interface IProps {
   loading?: boolean;
   routeBase: string;
   patientId: string;
@@ -14,7 +14,7 @@ export interface IProps {
   displayType?: ICarePlanDisplayTypes;
 }
 
-export interface IState {
+interface IState {
   selectedPatientConcernId?: string;
 }
 

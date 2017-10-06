@@ -6,7 +6,7 @@ import { FullRiskAreaFragment } from '../graphql/types';
 import * as riskAreasStyles from '../shared/css/two-panel.css';
 import * as styles from './css/risk-area-row.css';
 
-export interface IProps {
+interface IProps {
   riskArea: FullRiskAreaFragment;
   selected: boolean;
   routeBase: string;

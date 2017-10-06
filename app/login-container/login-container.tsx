@@ -10,7 +10,7 @@ import { logInUserMutationVariables, FullUserFragment } from '../graphql/types';
 import * as styles from './css/login.css';
 import Footer from './footer';
 
-export interface IProps {
+interface IProps {
   logIn: (options: { variables: logInUserMutationVariables }) => any;
   onSuccess: () => any;
   currentUser?: FullUserFragment;

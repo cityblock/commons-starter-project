@@ -17,7 +17,7 @@ import QuestionAnswerOption from './question-answer-option';
 
 export interface ICreateOptions { variables: questionConditionCreateMutationVariables; }
 
-export interface IProps {
+interface IProps {
   questionCondition?: FullQuestionConditionFragment;
   questionId: string;
   answers: FullAnswerFragment[];
@@ -26,7 +26,7 @@ export interface IProps {
   ) => { data: { questionConditionCreate: FullQuestionConditionFragment } };
 }
 
-export interface IState {
+interface IState {
   loading: boolean;
   error?: string;
   questionCondition: {

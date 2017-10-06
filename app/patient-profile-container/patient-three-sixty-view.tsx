@@ -2,7 +2,7 @@ import * as React from 'react';
 import RiskAreaAssessment from './risk-area-assessment';
 import RiskAreaSummaries from './risk-area-summaries';
 
-export interface IProps {
+interface IProps {
   patientId: string;
   routeBase: string;
   riskAreaId?: string;

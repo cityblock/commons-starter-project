@@ -14,7 +14,7 @@ import {
 } from '../graphql/types';
 import * as styles from './css/risk-areas.css';
 
-export interface IProps {
+interface IProps {
   patientId: string;
   routeBase: string;
   riskArea: FullRiskAreaFragment;

@@ -13,7 +13,7 @@ import { getEventNotificationsForCurrentUserQuery, FullUserFragment } from '../g
 import { IState as IAppState } from '../store';
 import * as styles from './css/header.css';
 
-export interface IProps {
+interface IProps {
   currentUser: FullUserFragment;
   notificationsCount?: number;
   updateNotificationsCount?: (count: number) => any;

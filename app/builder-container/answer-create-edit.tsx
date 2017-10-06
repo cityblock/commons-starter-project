@@ -14,15 +14,15 @@ import {
 import * as formStyles from '../shared/css/forms.css';
 import * as loadingStyles from '../shared/css/loading-spinner.css';
 import * as answerStyles from '../shared/css/two-panel-right.css';
-import { IUpdatedField } from '../shared/patient-demographics-form';
+import { IUpdatedField } from '../shared/util/updated-fields';
 import CarePlanSuggestions from './care-plan-suggestions';
 import * as styles from './css/risk-area-create.css';
 
-export interface ICreateOptions { variables: answerCreateMutationVariables; }
-export interface IEditOptions { variables: answerEditMutationVariables; }
-export interface IDeleteOptions { variables: answerDeleteMutationVariables; }
+interface ICreateOptions { variables: answerCreateMutationVariables; }
+interface IEditOptions { variables: answerEditMutationVariables; }
+interface IDeleteOptions { variables: answerDeleteMutationVariables; }
 
-export interface IProps {
+interface IProps {
   answer?: FullAnswerFragment;
   questionId: string;
   createAnswer: (options: ICreateOptions) => { data: { answerCreate: FullAnswerFragment } };
@@ -30,7 +30,7 @@ export interface IProps {
   deleteAnswer: (options: IDeleteOptions) => { data: { answerDelete: FullAnswerFragment } };
 }
 
-export interface IState {
+interface IState {
   loading: boolean;
   error?: string;
   answer: answerCreateMutationVariables;

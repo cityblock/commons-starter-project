@@ -2,7 +2,7 @@ import * as React from 'react';
 import { ICarePlan, IPatientConcern } from 'schema';
 import { FullCarePlanSuggestionFragment } from '../graphql/types';
 
-export interface IProps {
+interface IProps {
   carePlan?: ICarePlan;
   carePlanSuggestions?: FullCarePlanSuggestionFragment[];
   optionType: 'suggested' | 'active' | 'inactive';

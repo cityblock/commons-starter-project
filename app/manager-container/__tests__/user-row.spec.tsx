@@ -24,11 +24,12 @@ describe('user row', () => {
     const history = createMemoryHistory();
     const locale = { messages: ENGLISH_TRANSLATION.messages };
     const deleteUser = () => false;
+    const editUserRole = (userRole: string, userEmail: string) => false;
     const tree = create(
       <MockedProvider mocks={[]} store={mockStore({ locale })}>
         <ReduxConnectedIntlProvider>
           <ConnectedRouter history={history}>
-            <UserRow user={user} deleteUser={deleteUser} />
+            <UserRow user={user} deleteUser={deleteUser} editUserRole={editUserRole} />
           </ConnectedRouter>
         </ReduxConnectedIntlProvider>
       </MockedProvider>,

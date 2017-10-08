@@ -75,6 +75,7 @@ export class ManagerUsers extends React.Component<IProps & IDispatchProps & IGra
     this.renderUsers = this.renderUsers.bind(this);
     this.renderUser = this.renderUser.bind(this);
     this.onDeleteUser = this.onDeleteUser.bind(this);
+    this.onEditUserRole = this.onEditUserRole.bind(this);
     this.showInviteUser = this.showInviteUser.bind(this);
     this.hideInviteUser = this.hideInviteUser.bind(this);
     this.onInviteUser = this.onInviteUser.bind(this);
@@ -136,9 +137,17 @@ export class ManagerUsers extends React.Component<IProps & IDispatchProps & IGra
         key={user.id}
         user={user}
         deleteUser={this.onDeleteUser}
-        editUserRole={this.props.editUserRole}
+        editUserRole={this.onEditUserRole}
       />
     );
+  }
+
+  async onEditUserRole(userRole: string, userEmail: string) {
+    const { editUserRole } = this.props;
+
+    if (editUserRole) {
+      await editUserRole({ variables: { userRole, email: userEmail } });
+    }
   }
 
   async onDeleteUser(userEmail: string) {

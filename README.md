@@ -42,7 +42,7 @@ _Getting up to speed with PostgreSQL:_
 
 Create a migration (using [knex][]) with: (TODO: make a yarn script)
 
-    yarn knex migrate:make initial-migration -- --knexfile=server/models/knexfile.js
+    yarn knex migrate:make initial-migration --knexfile=server/models/knexfile.js
 
 Run a migration with:
 
@@ -197,7 +197,7 @@ You should see the changes at our [staging][] endpoint.
 
 ### To automatically fix linter errors, run:
 
-    yarn lint -- --fix
+    yarn lint --fix
 
 Once you've added the aptible git remote, you can use Aptible toolbelt to interface with the app:
 
@@ -229,7 +229,7 @@ master.
 
 ### Update react jest snapshots
 
-    yarn test -- -u
+    yarn test -u
 
 ### Recreate Production DB
 
@@ -274,26 +274,6 @@ To remove a user, run the following command:
 `EMAIL=email@email.com yarn user:remove:dev`
 
 When running on production, replace `user:remove:dev` with `user:remove:production`.
-
-### Run RabbitMQ, Workers, and Cron
-
-We are using RabbitMQ as our message broker. It allows us to throw tasks into the background to be performed at a later time when workers have bandwidth. Currently, there are two ways to do this. You can either manually create publishers and consumers or just rely on the `low-priority` and `high-priority` queues by creating services that extend `BaseService`. (For now, everthing is just getting published to the default exchange which, in effect, creates the illusion of a publish-to-queue-and-consume-from-queue model.)
-
-For tasks that need to be scheduled, we are using the `cron` node module. Jobs are specified in `config/cron.ts` and will run at their scheduled times. You are free to run any arbitrary code within these scheduled jobs, though it's preferable to have the jobs fire off background jobs which workers can then work off.
-
-To get started
-
-1. Install RabbitMQ:
-
-    brew install rabbitmq
-
-2. Run RabbitMQ:
-
-    rabbitmq-server
-
-3. Run individual consumers/cron with:
-
-    yarn run low-priority-dev / yarn run high-priority-dev / yarn run cron-dev
 
 ### PostgreSQL Log Settings
 

@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { compose, graphql } from 'react-apollo';
+import { connect } from 'react-redux';
 import { ICarePlan } from 'schema';
 /* tslint:disable:max-line-length */
 import * as carePlanSuggestionAcceptMutation from '../graphql/queries/care-plan-suggestion-accept-mutation.graphql';
@@ -15,17 +16,20 @@ import PopupPatientCarePlanSuggestionAcceptedModalBody from './popup-patient-car
 
 interface IProps {
   visible: boolean;
+  carePlanSuggestions?: FullCarePlanSuggestionFragment[];
   suggestion?: FullCarePlanSuggestionFragment;
   taskTemplateIds?: string[];
   patientId: string;
-  carePlanSuggestions?: FullCarePlanSuggestionFragment[];
+  onDismiss: () => any;
+}
+
+interface IGraphqlProps {
   carePlanLoading?: boolean;
   carePlanError?: string;
   carePlan?: ICarePlan;
   acceptCarePlanSuggestion: (
     options: { variables: carePlanSuggestionAcceptMutationVariables },
   ) => { data: { carePlanSuggestionAccept: FullCarePlanSuggestionFragment } };
-  onDismiss: () => any;
 }
 
 interface IState {
@@ -36,8 +40,10 @@ interface IState {
   error?: string;
 }
 
-class PopupPatientCarePlanSuggestionAccepted extends React.Component<IProps, IState> {
-  constructor(props: IProps) {
+type allProps = IProps & IGraphqlProps;
+
+class PopupPatientCarePlanSuggestionAccepted extends React.Component<allProps, IState> {
+  constructor(props: allProps) {
     super(props);
 
     this.onDismiss = this.onDismiss.bind(this);
@@ -56,8 +62,9 @@ class PopupPatientCarePlanSuggestionAccepted extends React.Component<IProps, ISt
     } = this.props;
     const { concernType, concernId, newConcernTitle } = this.state;
     const startedAt = concernType === 'active' ? new Date().toISOString() : undefined;
-    const acceptCarePlanSuggestionVariables:
-      Partial<carePlanSuggestionAcceptMutationVariables> = {};
+    const acceptCarePlanSuggestionVariables: Partial<
+      carePlanSuggestionAcceptMutationVariables
+    > = {};
     const acceptingConcernSuggestion = suggestion && !!suggestion.concern && concernType;
     const acceptingGoalSuggestion = suggestion && !!suggestion.goalSuggestionTemplate;
 
@@ -126,23 +133,14 @@ class PopupPatientCarePlanSuggestionAccepted extends React.Component<IProps, ISt
   }
 
   render() {
-    const {
-      carePlan,
-      carePlanSuggestions,
-      suggestion,
-      visible,
-    } = this.props;
-    const {
-      concernId,
-      concernType,
-      newConcernTitle,
-    } = this.state;
+    const { carePlan, carePlanSuggestions, suggestion, visible } = this.props;
+    const { concernId, concernType, newConcernTitle } = this.state;
 
     return (
       <Popup visible={visible} smallPadding={true}>
         <div className={styles.acceptModalContent}>
           <div className={styles.acceptModalHeader}>
-            <div className={styles.acceptModalDismissButton} onClick={this.onDismiss}></div>
+            <div className={styles.acceptModalDismissButton} onClick={this.onDismiss} />
           </div>
           <PopupPatientCarePlanSuggestionAcceptedModalBody
             carePlan={carePlan}
@@ -153,33 +151,32 @@ class PopupPatientCarePlanSuggestionAccepted extends React.Component<IProps, ISt
             suggestion={suggestion}
             onChange={this.onChange}
             onDismiss={this.onDismiss}
-            onSubmit={this.onSubmit} />
+            onSubmit={this.onSubmit}
+          />
         </div>
       </Popup>
     );
   }
 }
 
-export default (compose as any)(
+export default compose(
+  connect<{}, {}, IProps>(undefined),
   graphql(patientCarePlanQuery as any, {
-    options: (props: IProps) => ({
+    options: (props: allProps) => ({
       variables: {
         patientId: props.patientId,
       },
     }),
     props: ({ data }) => ({
-      carePlanLoading: (data ? data.loading : false),
-      carePlanError: (data ? data.error : null),
-      carePlan: (data ? (data as any).carePlanForPatient : null),
+      carePlanLoading: data ? data.loading : false,
+      carePlanError: data ? data.error : null,
+      carePlan: data ? (data as any).carePlanForPatient : null,
     }),
   }),
   graphql(carePlanSuggestionAcceptMutation as any, {
     name: 'acceptCarePlanSuggestion',
     options: {
-      refetchQueries: [
-        'getPatientCarePlanSuggestions',
-        'getPatientCarePlan',
-      ],
+      refetchQueries: ['getPatientCarePlanSuggestions', 'getPatientCarePlan'],
     },
   }),
 )(PopupPatientCarePlanSuggestionAccepted);

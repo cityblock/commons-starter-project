@@ -24,7 +24,6 @@ it('correctly renders/does not render the add task follower button', () => {
             patientId={patient.id}
             taskId={taskWithComment.id}
             followers={[currentUser, user]}
-            careTeam={[currentUser, user]}
           />
         </ConnectedRouter>
       </ReduxConnectedIntlProvider>

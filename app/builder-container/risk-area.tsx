@@ -12,18 +12,24 @@ import {
 import * as styles from '../shared/css/two-panel-right.css';
 import { IState as IAppState } from '../store';
 
-interface IProps {
-  riskArea?: FullRiskAreaFragment;
+interface IStateProps {
   riskAreaId?: string;
-  riskAreaLoading?: boolean;
-  riskAreaError?: string;
+}
+
+interface IProps {
   routeBase: string;
-  refetchRiskArea: () => any;
   match?: {
     params: {
       riskAreaId?: string;
     };
   };
+}
+
+interface IGraphqlProps {
+  riskArea?: FullRiskAreaFragment;
+  riskAreaLoading?: boolean;
+  riskAreaError?: string;
+  refetchRiskArea: () => any;
   editRiskArea: (
     options: { variables: riskAreaEditMutationVariables },
   ) => { data: { riskAreaComplete: FullRiskAreaFragment } };
@@ -41,13 +47,15 @@ interface IState {
   editingOrder: boolean;
 }
 
-class RiskArea extends React.Component<IProps, IState> {
+type allProps = IProps & IStateProps & IGraphqlProps;
+
+class RiskArea extends React.Component<allProps, IState> {
   editTitleInput: HTMLInputElement | null;
   editOrderInput: HTMLInputElement | null;
   titleBody: HTMLDivElement | null;
   orderBody: HTMLDivElement | null;
 
-  constructor(props: IProps) {
+  constructor(props: allProps) {
     super(props);
 
     this.reloadRiskArea = this.reloadRiskArea.bind(this);
@@ -76,7 +84,7 @@ class RiskArea extends React.Component<IProps, IState> {
     };
   }
 
-  componentWillReceiveProps(nextProps: IProps) {
+  componentWillReceiveProps(nextProps: allProps) {
     const { riskArea } = nextProps;
 
     if (riskArea) {
@@ -341,18 +349,18 @@ class RiskArea extends React.Component<IProps, IState> {
   }
 }
 
-function mapStateToProps(state: IAppState, ownProps: IProps): Partial<IProps> {
+function mapStateToProps(state: IAppState, ownProps: IProps): IStateProps {
   return {
     riskAreaId: ownProps.match ? ownProps.match.params.riskAreaId : undefined,
   };
 }
 
-export default (compose as any)(
-  connect(mapStateToProps),
+export default compose(
+  connect<IStateProps, {}, IProps>(mapStateToProps),
   graphql(riskAreaEditMutation as any, { name: 'editRiskArea' }),
   graphql(riskAreaQuery as any, {
-    skip: (props: IProps) => !props.riskAreaId,
-    options: (props: IProps) => ({ variables: { riskAreaId: props.riskAreaId } }),
+    skip: (props: allProps) => !props.riskAreaId,
+    options: (props: allProps) => ({ variables: { riskAreaId: props.riskAreaId } }),
     props: ({ data }) => ({
       riskAreaLoading: (data ? data.loading : false),
       riskAreaError: (data ? data.error : null),

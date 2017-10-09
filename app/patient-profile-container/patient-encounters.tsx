@@ -66,7 +66,7 @@ class PatientEncounters extends React.Component<IProps, IState> {
     } else if (!loading && !error) {
       return (
         <div className={styles.emptyEncountersMessage}>
-          <div className={styles.emptyEncountersLogo}></div>
+          <div className={styles.emptyEncountersLogo} />
           <div className={styles.emptyEncountersLabel}>No encounter history for this patient</div>
           <div className={styles.emptyEncountersSubtext}>
             Future encounters with this patient will be displayed here.
@@ -129,10 +129,8 @@ class PatientEncounters extends React.Component<IProps, IState> {
           </div>
         </div>
         <div className={styles.encountersPanel}>
-          <NewPatientEncounter patientId={ patientId } />
-          <div className={styles.encounters}>
-            {this.renderPatientEncounters(encountersList)}
-          </div>
+          <NewPatientEncounter patientId={patientId} />
+          <div className={styles.encounters}>{this.renderPatientEncounters(encountersList)}</div>
         </div>
         <Lightbox
           images={lightboxAttachments}
@@ -152,9 +150,9 @@ export default graphql(patientEncountersQuery as any, {
     },
   }),
   props: ({ data }) => ({
-    loading: (data ? data.loading : false),
-    error: (data ? data.error : null),
-    patientEncounters: (data ? (data as any).patientEncounters : null),
-    refetchPatientEncounters: (data ? data.refetch : null),
+    loading: data ? data.loading : false,
+    error: data ? data.error : null,
+    patientEncounters: data ? (data as any).patientEncounters : null,
+    refetchPatientEncounters: data ? data.refetch : null,
   }),
 })(PatientEncounters);

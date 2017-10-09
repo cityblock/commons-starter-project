@@ -1,9 +1,9 @@
 import * as classNames from 'classnames';
-
 import { format } from 'date-fns';
 import * as React from 'react';
 import { compose, graphql } from 'react-apollo';
 import { FormattedMessage } from 'react-intl';
+import { connect } from 'react-redux';
 import * as appointmentEndMutation from '../graphql/queries/appointment-end-mutation.graphql';
 import * as appointmentStartMutation from '../graphql/queries/appointment-start-mutation.graphql';
 import {
@@ -17,6 +17,10 @@ import NewPatientEncounterLoadingError from './new-patient-encounter-loading-err
 
 interface IProps {
   patientId: string;
+  mutate?: any;
+}
+
+interface IGraphqlProps {
   startAppointment: (
     options: { variables: appointmentStartMutationVariables },
   ) => { data: { appointmentStart: FullAppointmentFragment } };
@@ -35,10 +39,12 @@ interface IState {
   error?: string;
 }
 
-class NewPatientEncounter extends React.Component<IProps, IState> {
+type allProps = IProps & IGraphqlProps;
+
+class NewPatientEncounter extends React.Component<allProps, IState> {
   encounterReasonInput: HTMLInputElement | null;
 
-  constructor(props: IProps) {
+  constructor(props: allProps) {
     super(props);
 
     this.onClick = this.onClick.bind(this);
@@ -133,11 +139,9 @@ class NewPatientEncounter extends React.Component<IProps, IState> {
   render() {
     const { open } = this.state;
 
-    const newEncounterStyles = classNames(
-      styles.invertedButton,
-      styles.newEncounter,
-      { [styles.expandedNewEncounter]: open },
-    );
+    const newEncounterStyles = classNames(styles.invertedButton, styles.newEncounter, {
+      [styles.expandedNewEncounter]: open,
+    });
 
     const newEncounterCancelButtonStyles = classNames(
       styles.invertedButton,
@@ -156,7 +160,7 @@ class NewPatientEncounter extends React.Component<IProps, IState> {
       encounterSummary,
       loading,
       error,
-     } = this.state;
+    } = this.state;
 
     return (
       <div className={newEncounterStyles} onClick={this.onClick}>
@@ -166,28 +170,30 @@ class NewPatientEncounter extends React.Component<IProps, IState> {
           onClick={this.onSubmitClick}
         />
         <FormattedMessage id='encounter.new'>
-          {(message: string) =>
-            <div className={styles.newEncounterLabel}>{message}</div>}
+          {(message: string) => <div className={styles.newEncounterLabel}>{message}</div>}
         </FormattedMessage>
         <div className={styles.newEncounterForm}>
           <FormattedMessage id='encounter.newReason'>
-            {(message: string) =>
-              <div className={styles.newEncounterFormLabel}>{message}:</div>}
+            {(message: string) => <div className={styles.newEncounterFormLabel}>{message}:</div>}
           </FormattedMessage>
           <div className={styles.newEncounterFormTextInput}>
             <input
-              ref={input => { this.encounterReasonInput = input; }}
+              ref={input => {
+                this.encounterReasonInput = input;
+              }}
               required
               name='encounterReason'
               type='text'
               onChange={this.onChange}
-              value={encounterReason} />
+              value={encounterReason}
+            />
           </div>
           <div className={styles.newEncounterFormMultiInputRow}>
             <div className={styles.newEncounterInputLargeFormGroup}>
               <FormattedMessage id='encounter.newLocation'>
-                {(message: string) =>
-                  <div className={styles.newEncounterFormLabel}>{message}:</div>}
+                {(message: string) => (
+                  <div className={styles.newEncounterFormLabel}>{message}:</div>
+                )}
               </FormattedMessage>
               <div className={styles.newEncounterFormTextInput}>
                 <input
@@ -195,13 +201,15 @@ class NewPatientEncounter extends React.Component<IProps, IState> {
                   name='encounterLocation'
                   type='text'
                   onChange={this.onChange}
-                  value={encounterLocation} />
+                  value={encounterLocation}
+                />
               </div>
             </div>
             <div className={styles.newEncounterInputSmallFormGroup}>
               <FormattedMessage id='encounter.newStartTime'>
-                {(message: string) =>
-                  <div className={styles.newEncounterFormLabel}>{message}:</div>}
+                {(message: string) => (
+                  <div className={styles.newEncounterFormLabel}>{message}:</div>
+                )}
               </FormattedMessage>
               <div className={styles.newEncounterFormTextInput}>
                 <input
@@ -209,44 +217,46 @@ class NewPatientEncounter extends React.Component<IProps, IState> {
                   name='encounterStartTime'
                   type='time'
                   onChange={this.onChange}
-                  value={encounterStartTime} />
+                  value={encounterStartTime}
+                />
               </div>
             </div>
           </div>
           <FormattedMessage id='encounter.newSummary'>
-            {(message: string) =>
-              <div className={styles.newEncounterFormLabel}>{message}:</div>}
+            {(message: string) => <div className={styles.newEncounterFormLabel}>{message}:</div>}
           </FormattedMessage>
           <div className={styles.newEncounterFormTextArea}>
             <textarea
               required
               name='encounterSummary'
               onChange={this.onChange}
-              value={encounterSummary} />
+              value={encounterSummary}
+            />
           </div>
           <div className={styles.newEncounterFormAddAttachmentRow}>
             <div className={styles.newEncounterFormAddAttachment}>
-              <div className={styles.newEncounterFormAddAttachmentIcon}></div>
+              <div className={styles.newEncounterFormAddAttachmentIcon} />
               <FormattedMessage id='encounter.newAttachment'>
-                {(message: string) =>
-                  <div className={styles.newEncounterFormAddAttachmentLabel}>{message}</div>}
+                {(message: string) => (
+                  <div className={styles.newEncounterFormAddAttachmentLabel}>{message}</div>
+                )}
               </FormattedMessage>
             </div>
           </div>
           <div className={styles.newEncounterFormButtonRow}>
             <FormattedMessage id='encounter.newCancel'>
-              {(message: string) =>
-                <div
-                  className={newEncounterCancelButtonStyles}
-                  onClick={this.onCancelClick}>{message}
-                </div>}
+              {(message: string) => (
+                <div className={newEncounterCancelButtonStyles} onClick={this.onCancelClick}>
+                  {message}
+                </div>
+              )}
             </FormattedMessage>
             <FormattedMessage id='encounter.newSubmit'>
-              {(message: string) =>
-                <div
-                  className={newEncounterSubmitButtonStyles}
-                  onClick={this.onSubmitClick}>{message}
-                </div>}
+              {(message: string) => (
+                <div className={newEncounterSubmitButtonStyles} onClick={this.onSubmitClick}>
+                  {message}
+                </div>
+              )}
             </FormattedMessage>
           </div>
         </div>
@@ -255,7 +265,8 @@ class NewPatientEncounter extends React.Component<IProps, IState> {
   }
 }
 
-export default (compose as any)(
+export default compose(
+  connect<{}, {}, IProps>(undefined), // TODO: Figure out how to pass these types through graphql
   graphql(appointmentStartMutation as any, { name: 'startAppointment' }),
   graphql(appointmentEndMutation as any, { name: 'endAppointment' }),
 )(NewPatientEncounter);

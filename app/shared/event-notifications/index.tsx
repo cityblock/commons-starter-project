@@ -1,10 +1,6 @@
 import * as React from 'react';
-import { compose, graphql } from 'react-apollo';
 import { FormattedMessage } from 'react-intl';
 import * as Waypoint from 'react-waypoint';
-/* tslint:disable:max-line-length */
-import * as eventNotificationDismissMutation from '../../graphql/queries/event-notification-dismiss-mutation.graphql';
-/* tslint:enable:max-line-length */
 import {
   eventNotificationDismissMutationVariables,
   FullEventNotificationFragment,
@@ -111,6 +107,4 @@ class EventNotifications extends React.Component<IProps, {}> {
   }
 }
 
-export default (compose as any)(
-  graphql(eventNotificationDismissMutation as any, { name: 'dismissEventNotification' }),
-)(EventNotifications);
+export default EventNotifications;

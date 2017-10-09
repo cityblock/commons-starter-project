@@ -33,13 +33,6 @@ it('correctly renders comments component', () => {
         <ConnectedRouter history={history}>
           <TaskComments
             taskId={taskWithComment.id}
-            taskCommentsLoading={false}
-            taskCommentsError={null}
-            taskCommentsResponse={tasksResponse}
-            createComment={jest.fn}
-            refetchTaskComments={jest.fn}
-            updateTaskComments={jest.fn}
-            editComment={jest.fn}
           />
         </ConnectedRouter>
       </ReduxConnectedIntlProvider>

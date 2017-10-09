@@ -5,29 +5,32 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import * as questionQuery from '../graphql/queries/get-question.graphql';
 import * as questionEditMutation from '../graphql/queries/question-edit-mutation.graphql';
-import {
-  questionEditMutationVariables,
-  FullQuestionFragment,
-} from '../graphql/types';
+import { questionEditMutationVariables, FullQuestionFragment } from '../graphql/types';
 import * as formStyles from '../shared/css/forms.css';
 import * as styles from '../shared/css/two-panel-right.css';
 import { IState as IAppState } from '../store';
 import AnswerCreateEdit from './answer-create-edit';
 import QuestionConditions from './question-conditions';
 
-interface IProps {
-  questions: FullQuestionFragment[];
-  question?: FullQuestionFragment;
-  routeBase: string;
+interface IStateProps {
   questionId?: string;
-  questionLoading?: boolean;
-  questionError?: string;
-  refetchQuestion: () => any;
+}
+
+interface IProps {
+  routeBase: string;
   match?: {
     params: {
       questionId?: string;
     };
   };
+}
+
+interface IGraphqlProps {
+  questions: FullQuestionFragment[];
+  question?: FullQuestionFragment;
+  questionLoading?: boolean;
+  questionError?: string;
+  refetchQuestion: () => any;
   editQuestion: (
     options: { variables: questionEditMutationVariables },
   ) => { data: { questionComplete: FullQuestionFragment } };
@@ -45,13 +48,15 @@ interface IState {
   editingOrder: boolean;
 }
 
-class Question extends React.Component<IProps, IState> {
+type allProps = IProps & IStateProps & IGraphqlProps;
+
+class Question extends React.Component<allProps, IState> {
   editTitleInput: HTMLInputElement | null;
   editOrderInput: HTMLInputElement | null;
   titleBody: HTMLDivElement | null;
   orderBody: HTMLDivElement | null;
 
-  constructor(props: IProps) {
+  constructor(props: allProps) {
     super(props);
 
     this.reloadQuestion = this.reloadQuestion.bind(this);
@@ -81,7 +86,7 @@ class Question extends React.Component<IProps, IState> {
     };
   }
 
-  componentWillReceiveProps(nextProps: IProps) {
+  componentWillReceiveProps(nextProps: allProps) {
     const { question } = nextProps;
 
     if (question) {
@@ -216,10 +221,7 @@ class Question extends React.Component<IProps, IState> {
     const { question } = this.props;
     if (question && question.answers) {
       return question.answers.map(answer => (
-        <AnswerCreateEdit
-          key={answer ? answer.id : ''}
-          answer={answer}
-          questionId={question.id} />
+        <AnswerCreateEdit key={answer ? answer.id : ''} answer={answer} questionId={question.id} />
       ));
     }
   }
@@ -271,19 +273,18 @@ class Question extends React.Component<IProps, IState> {
       return (
         <div className={outerContainerStyles}>
           <div className={deleteConfirmationStyles}>
-            <div className={styles.deleteConfirmationIcon}></div>
+            <div className={styles.deleteConfirmationIcon} />
             <div className={styles.deleteConfirmationText}>
               Are you sure you want to delete this question?
             </div>
             <div className={styles.deleteConfirmationButtons}>
               <div
                 className={classNames(styles.deleteCancelButton, styles.invertedButton)}
-                onClick={this.onCancelDelete}>
+                onClick={this.onCancelDelete}
+              >
                 Cancel
               </div>
-              <div
-                className={styles.deleteConfirmButton}
-                onClick={this.onConfirmDelete}>
+              <div className={styles.deleteConfirmButton} onClick={this.onConfirmDelete}>
                 Yes, delete
               </div>
             </div>
@@ -298,9 +299,11 @@ class Question extends React.Component<IProps, IState> {
             <div>
               <div className={styles.infoRow}>
                 <div className={styles.controls}>
-                  <Link to={closeRoute} className={styles.close}>Close</Link>
+                  <Link to={closeRoute} className={styles.close}>
+                    Close
+                  </Link>
                   <div className={styles.menuItem} onClick={this.onClickDelete}>
-                    <div className={styles.trashIcon}></div>
+                    <div className={styles.trashIcon} />
                     <div className={styles.menuLabel}>Delete question</div>
                   </div>
                 </div>
@@ -309,47 +312,61 @@ class Question extends React.Component<IProps, IState> {
             <div className={styles.itemBody}>
               <div className={styles.smallText}>Title:</div>
               <div
-                ref={div => { this.titleBody = div; }}
+                ref={div => {
+                  this.titleBody = div;
+                }}
                 className={titleTextStyles}
-                onClick={this.onClickToEditTitle}>
+                onClick={this.onClickToEditTitle}
+              >
                 {question.title}
               </div>
               <div className={titleEditStyles}>
                 <input
                   name='editedTitle'
-                  ref={area => { this.editTitleInput = area; }}
+                  ref={area => {
+                    this.editTitleInput = area;
+                  }}
                   value={editedTitle}
                   onChange={this.onChange}
                   onKeyDown={this.onKeyDown}
-                  onBlur={this.onBlur} />
+                  onBlur={this.onBlur}
+                />
               </div>
               <div className={styles.smallText}>Order:</div>
               <div
-                ref={div => { this.orderBody = div; }}
+                ref={div => {
+                  this.orderBody = div;
+                }}
                 onClick={this.onClickToEditOrder}
-                className={orderTextStyles}>
+                className={orderTextStyles}
+              >
                 {question.order}
               </div>
               <div className={orderEditStyles}>
                 <input
                   type='number'
                   name='editedOrder'
-                  ref={area => { this.editOrderInput = area; }}
+                  ref={area => {
+                    this.editOrderInput = area;
+                  }}
                   value={editedOrder}
                   onChange={this.onChange}
                   onKeyDown={this.onKeyDown}
-                  onBlur={this.onBlur} />
+                  onBlur={this.onBlur}
+                />
               </div>
               <br />
               <div className={styles.borderTop}>
                 <br />
                 <div className={styles.smallText}>Answer display:</div>
               </div>
-              <select required
+              <select
+                required
                 name='answerType'
                 value={question.answerType}
                 onChange={this.onSelectChange}
-                className={classNames(formStyles.select, formStyles.inputSmall)}>
+                className={classNames(formStyles.select, formStyles.inputSmall)}
+              >
                 <option value='dropdown'>dropdown</option>
                 <option value='radio'>radio</option>
                 <option value='freetext'>freetext</option>
@@ -357,9 +374,7 @@ class Question extends React.Component<IProps, IState> {
               </select>
               <br />
               <div className={styles.smallText}>Answers:</div>
-              <div>
-                {answers}
-              </div>
+              <div>{answers}</div>
               <div className={styles.smallText}>Create answer:</div>
               <AnswerCreateEdit questionId={question.id} />
               <div className={styles.smallText}>Applicable if type:</div>
@@ -368,7 +383,8 @@ class Question extends React.Component<IProps, IState> {
                 name='applicableIfType'
                 value={question.applicableIfType || ''}
                 onChange={this.onSelectChange}
-                className={classNames(formStyles.select, formStyles.inputSmall)}>
+                className={classNames(formStyles.select, formStyles.inputSmall)}
+              >
                 <option value='oneTrue'>one true</option>
                 <option value='allTrue'>all true</option>
               </select>
@@ -376,7 +392,8 @@ class Question extends React.Component<IProps, IState> {
               <QuestionConditions
                 questions={questions}
                 questionConditions={question.applicableIfQuestionConditions}
-                questionId={question.id} />
+                questionId={question.id}
+              />
             </div>
           </div>
         </div>
@@ -393,43 +410,44 @@ class Question extends React.Component<IProps, IState> {
         return (
           <div className={styles.container}>
             <div className={styles.loadingError}>
-              <div className={styles.loadingErrorIcon}></div>
+              <div className={styles.loadingErrorIcon} />
               <div className={styles.loadingErrorLabel}>Unable to load question</div>
               <div className={styles.loadingErrorSubheading}>
                 Sorry, something went wrong. Please try again.
               </div>
               <div
                 className={classNames(styles.loadingErrorButton, styles.invertedButton)}
-                onClick={this.reloadQuestion}>
+                onClick={this.reloadQuestion}
+              >
                 Try again
               </div>
             </div>
           </div>
         );
       } else {
-        return <div className={styles.container}></div>;
+        return <div className={styles.container} />;
       }
     }
   }
 }
 
-function mapStateToProps(state: IAppState, ownProps: IProps): Partial<IProps> {
+function mapStateToProps(state: IAppState, ownProps: allProps): IStateProps {
   return {
     questionId: ownProps.match ? ownProps.match.params.questionId : undefined,
   };
 }
 
-export default (compose as any)(
-  connect(mapStateToProps),
+export default compose(
+  connect<IStateProps, {}, IProps>(mapStateToProps),
   graphql(questionEditMutation as any, { name: 'editQuestion' }),
   graphql(questionQuery as any, {
-    skip: (props: IProps) => !props.questionId,
-    options: (props: IProps) => ({ variables: { questionId: props.questionId } }),
+    skip: (props: allProps) => !props.questionId,
+    options: (props: allProps) => ({ variables: { questionId: props.questionId } }),
     props: ({ data }) => ({
-      questionLoading: (data ? data.loading : false),
-      questionError: (data ? data.error : null),
-      question: (data ? (data as any).question : null),
-      refetchQuestion: (data ? data.refetch : null),
+      questionLoading: data ? data.loading : false,
+      questionError: data ? data.error : null,
+      question: data ? (data as any).question : null,
+      refetchQuestion: data ? data.refetch : null,
     }),
   }),
 )(Question);

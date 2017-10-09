@@ -5,25 +5,29 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import * as concernEditMutation from '../graphql/queries/concern-edit-mutation.graphql';
 import * as concernQuery from '../graphql/queries/get-concern.graphql';
-import {
-  concernEditMutationVariables,
-  FullConcernFragment,
-} from '../graphql/types';
+import { concernEditMutationVariables, FullConcernFragment } from '../graphql/types';
 import * as styles from '../shared/css/two-panel-right.css';
 import { IState as IAppState } from '../store';
 
-interface IProps {
-  concern?: FullConcernFragment;
+interface IStateProps {
   concernId?: string;
-  concernLoading?: boolean;
-  concernError?: string;
+}
+
+interface IProps {
   routeBase: string;
-  refetchConcern: () => any;
   match?: {
     params: {
       objectId?: string;
     };
   };
+  mutate?: any;
+}
+
+interface IGraphqlProps {
+  concern?: FullConcernFragment;
+  concernLoading?: boolean;
+  concernError?: string;
+  refetchConcern: () => any;
   editConcern: (
     options: { variables: concernEditMutationVariables },
   ) => { data: { concernEdit: FullConcernFragment } };
@@ -38,11 +42,13 @@ interface IState {
   editTitleError?: string;
 }
 
-class Concern extends React.Component<IProps, IState> {
+type allProps = IProps & IStateProps & IGraphqlProps;
+
+class Concern extends React.Component<allProps, IState> {
   editTitleInput: HTMLInputElement | null;
   titleBody: HTMLDivElement | null;
 
-  constructor(props: IProps) {
+  constructor(props: allProps) {
     super(props);
 
     this.reloadConcern = this.reloadConcern.bind(this);
@@ -66,7 +72,7 @@ class Concern extends React.Component<IProps, IState> {
     };
   }
 
-  componentWillReceiveProps(nextProps: IProps) {
+  componentWillReceiveProps(nextProps: allProps) {
     const { concern } = nextProps;
 
     if (concern) {
@@ -195,19 +201,18 @@ class Concern extends React.Component<IProps, IState> {
       return (
         <div className={outerContainerStyles}>
           <div className={deleteConfirmationStyles}>
-            <div className={styles.deleteConfirmationIcon}></div>
+            <div className={styles.deleteConfirmationIcon} />
             <div className={styles.deleteConfirmationText}>
               Are you ure you want to delete this concern?
             </div>
             <div className={styles.deleteConfirmationButtons}>
               <div
                 className={classNames(styles.deleteCancelButton, styles.invertedButton)}
-                onClick={this.onCancelDelete}>
+                onClick={this.onCancelDelete}
+              >
                 Cancel
               </div>
-              <div
-                className={styles.deleteConfirmButton}
-                onClick={this.onConfirmDelete}>
+              <div className={styles.deleteConfirmButton} onClick={this.onConfirmDelete}>
                 Yes, delete
               </div>
             </div>
@@ -222,9 +227,11 @@ class Concern extends React.Component<IProps, IState> {
             <div>
               <div className={styles.infoRow}>
                 <div className={styles.controls}>
-                  <Link to={closeRoute} className={styles.close}>Close</Link>
+                  <Link to={closeRoute} className={styles.close}>
+                    Close
+                  </Link>
                   <div className={styles.menuItem} onClick={this.onClickDelete}>
-                    <div className={styles.trashIcon}></div>
+                    <div className={styles.trashIcon} />
                     <div className={styles.menuLabel}>Delete concern</div>
                   </div>
                 </div>
@@ -233,19 +240,25 @@ class Concern extends React.Component<IProps, IState> {
             <div className={styles.itemBody}>
               <div className={styles.smallText}>Title:</div>
               <div
-                ref={div => { this.titleBody = div; }}
+                ref={div => {
+                  this.titleBody = div;
+                }}
                 className={titleTextStyles}
-                onClick={this.onClickToEditTitle}>
+                onClick={this.onClickToEditTitle}
+              >
                 {concern.title}
               </div>
               <div className={titleEditStyles}>
                 <input
                   name='editedTitle'
-                  ref={area => { this.editTitleInput = area; }}
+                  ref={area => {
+                    this.editTitleInput = area;
+                  }}
                   value={editedTitle}
                   onChange={this.onChange}
                   onKeyDown={this.onKeyDown}
-                  onBlur={this.onBlur} />
+                  onBlur={this.onBlur}
+                />
               </div>
             </div>
           </div>
@@ -263,43 +276,44 @@ class Concern extends React.Component<IProps, IState> {
         return (
           <div className={styles.container}>
             <div className={styles.loadingError}>
-              <div className={styles.loadingErrorIcon}></div>
+              <div className={styles.loadingErrorIcon} />
               <div className={styles.loadingErrorLabel}>Unable to load concern</div>
               <div className={styles.loadingErrorSubheading}>
                 Sorry, something went wrong. Please try again.
               </div>
               <div
                 className={classNames(styles.loadingErrorButton, styles.invertedButton)}
-                onClick={this.reloadConcern}>
+                onClick={this.reloadConcern}
+              >
                 Try again
               </div>
             </div>
           </div>
         );
       } else {
-        return <div className={styles.container}></div>;
+        return <div className={styles.container} />;
       }
     }
   }
 }
 
-function mapStateToProps(state: IAppState, ownProps: IProps): Partial<IProps> {
+function mapStateToProps(state: IAppState, ownProps: IProps): IStateProps {
   return {
     concernId: ownProps.match ? ownProps.match.params.objectId : undefined,
   };
 }
 
-export default (compose as any)(
-  connect(mapStateToProps),
+export default compose(
+  connect<IStateProps, {}, IProps>(mapStateToProps),
   graphql(concernEditMutation as any, { name: 'editConcern' }),
   graphql(concernQuery as any, {
-    skip: (props: IProps) => !props.concernId,
-    options: (props: IProps) => ({ variables: { concernId: props.concernId } }),
+    skip: (props: IStateProps) => !props.concernId,
+    options: (props: IStateProps) => ({ variables: { concernId: props.concernId } }),
     props: ({ data }) => ({
-      concernLoading: (data ? data.loading : false),
-      concernError: (data ? data.error : null),
-      concern: (data ? (data as any).concern : null),
-      refetchConcern: (data ? data.refetch : null),
+      concernLoading: data ? data.loading : false,
+      concernError: data ? data.error : null,
+      concern: data ? (data as any).concern : null,
+      refetchConcern: data ? data.refetch : null,
     }),
   }),
 )(Concern);

@@ -6,9 +6,11 @@ import { connect, Dispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { updateEventNotificationsCount } from '../actions/event-notifications-action';
 /* tslint:disable:max-line-length */
+import * as eventNotificationDismissMutation from '../graphql/queries/event-notification-dismiss-mutation.graphql';
 import * as eventNotificationsQuery from '../graphql/queries/get-event-notifications-for-current-user.graphql';
 /* tslint:enable:max-line-length */
 import {
+  eventNotificationDismissMutationVariables,
   getEventNotificationsForCurrentUserQuery,
   FullEventNotificationFragment,
 } from '../graphql/types';
@@ -29,6 +31,9 @@ interface IProps {
   eventNotifications?: FullEventNotificationFragment[];
   fetchMoreEventNotifications: () => any;
   updateNotificationsCount: (count: number) => any;
+  dismissEventNotification: (
+    options: { variables: eventNotificationDismissMutationVariables },
+  ) => { data: { eventNotificationDismiss: FullEventNotificationFragment } };
   notificationsCount: number;
   match: {
     params: {
@@ -57,12 +62,15 @@ export class EventNotificationsContainer extends React.Component<IProps> {
       eventNotificationsLoading,
       eventNotificationsError,
       notificationsCount,
+      dismissEventNotification,
     } = this.props;
 
-    const hasNextPage = eventNotificationsResponse ?
-      eventNotificationsResponse.pageInfo.hasNextPage : false;
-    const hasPreviousPage = eventNotificationsResponse ?
-      eventNotificationsResponse.pageInfo.hasPreviousPage : false;
+    const hasNextPage = eventNotificationsResponse
+      ? eventNotificationsResponse.pageInfo.hasNextPage
+      : false;
+    const hasPreviousPage = eventNotificationsResponse
+      ? eventNotificationsResponse.pageInfo.hasPreviousPage
+      : false;
 
     const tasksTabStyles = tabStyles.tab;
     const calendarTabStyles = tabStyles.tab;
@@ -80,31 +88,28 @@ export class EventNotificationsContainer extends React.Component<IProps> {
       <div className={styles.container}>
         <div className={styles.leftPane}>
           <FormattedMessage id='notifications.leftPane'>
-            {(message: string) =>
-              <div className={styles.leftHeading}>{message}</div>}
+            {(message: string) => <div className={styles.leftHeading}>{message}</div>}
           </FormattedMessage>
         </div>
         <div className={styles.mainBody}>
           <div className={tabStyles.tabs}>
             <FormattedMessage id='tasks.listView'>
-              {(message: string) =>
-                <Link
-                  className={tasksTabStyles}
-                  to={'/tasks'}>
+              {(message: string) => (
+                <Link className={tasksTabStyles} to={'/tasks'}>
                   {message}
-                </Link>}
+                </Link>
+              )}
             </FormattedMessage>
             <FormattedMessage id='tasks.calendar'>
-              {(message: string) =>
-                <Link
-                  className={calendarTabStyles}
-                  to={'/calendar'}>
+              {(message: string) => (
+                <Link className={calendarTabStyles} to={'/calendar'}>
                   {message}
-                </Link>}
+                </Link>
+              )}
             </FormattedMessage>
             <Link className={notificationsTabStyles} to={'/notifications/tasks'}>
               <FormattedMessage id='tasks.notifications'>
-                {(message: string) => <span>{message}</span> }
+                {(message: string) => <span>{message}</span>}
               </FormattedMessage>
               <div className={notificationsBadgeStyles} />
             </Link>
@@ -116,7 +121,9 @@ export class EventNotificationsContainer extends React.Component<IProps> {
               error={eventNotificationsError}
               hasNextPage={hasNextPage}
               hasPreviousPage={hasPreviousPage}
-              eventNotifications={eventNotifications} />
+              dismissEventNotification={dismissEventNotification}
+              eventNotifications={eventNotifications}
+            />
           </div>
         </div>
       </div>
@@ -133,8 +140,7 @@ function mapStateToProps(state: IAppState, ownProps: IProps): Partial<IProps> {
 
 function mapDispatchToProps(dispatch: Dispatch<() => void>): Partial<IProps> {
   return {
-    updateNotificationsCount: (count: number) =>
-      dispatch(updateEventNotificationsCount(count)),
+    updateNotificationsCount: (count: number) => dispatch(updateEventNotificationsCount(count)),
   };
 }
 
@@ -143,8 +149,7 @@ export function formatEventNotifications(
     getEventNotificationsForCurrentUserQuery['eventNotificationsForCurrentUser'],
 ) {
   if (eventNotificationsResponse && eventNotificationsResponse.edges) {
-    return eventNotificationsResponse
-      .edges
+    return eventNotificationsResponse.edges
       .map((edge: any) => edge.node)
       .filter(eventNotification => eventNotification.seenAt === null);
   } else {
@@ -172,11 +177,13 @@ export default compose(
           { taskEventNotificationsOnly: ownProps.eventNotificationType === 'tasks' },
           'eventNotificationsForCurrentUser',
         ),
-      eventNotificationsLoading: (data ? data.loading : false),
-      eventNotificationsError: (data ? data.error : null),
-      eventNotificationsResponse: (data ? (data as any).eventNotificationsForCurrentUser : null),
-      eventNotifications: (data ?
-        formatEventNotifications((data as any).eventNotificationsForCurrentUser) : []),
+      eventNotificationsLoading: data ? data.loading : false,
+      eventNotificationsError: data ? data.error : null,
+      eventNotificationsResponse: data ? (data as any).eventNotificationsForCurrentUser : null,
+      eventNotifications: data
+        ? formatEventNotifications((data as any).eventNotificationsForCurrentUser)
+        : [],
     }),
   }),
+  graphql(eventNotificationDismissMutation as any, { name: 'dismissEventNotification' }),
 )(EventNotificationsContainer);

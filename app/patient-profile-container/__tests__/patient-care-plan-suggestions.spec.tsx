@@ -118,6 +118,7 @@ fragment ShortUser on User {
   id
   firstName
   lastName
+  userRole
   googleProfileImageUrl
   __typename
 }`);

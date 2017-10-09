@@ -15,35 +15,16 @@ const mockStore = configureMockStore([]);
 
 it('renders task', () => {
   const history = createMemoryHistory();
+  const match = {
+    params: {
+      taskId: assignedTask.id,
+    },
+  };
   const tree = create(
     <MockedProvider mocks={[]} store={mockStore({ locale, task: assignedTask })}>
       <ReduxConnectedIntlProvider>
         <ConnectedRouter history={history}>
-          <Task
-            task={assignedTask}
-            taskId={assignedTask.id}
-            taskLoading={false}
-            selectTask={() => false}
-          />
-        </ConnectedRouter>
-      </ReduxConnectedIntlProvider>
-    </MockedProvider>,
-  ).toJSON();
-  expect(tree).toMatchSnapshot();
-});
-
-it('renders missing task', () => {
-  const history = createMemoryHistory();
-  const tree = create(
-    <MockedProvider mocks={[]} store={mockStore({ locale, task: assignedTask })}>
-      <ReduxConnectedIntlProvider>
-        <ConnectedRouter history={history}>
-          <Task
-            task={undefined}
-            taskId={assignedTask.id}
-            taskLoading={false}
-            selectTask={() => false}
-          />
+          <Task routeBase={'foo'} match={match} />
         </ConnectedRouter>
       </ReduxConnectedIntlProvider>
     </MockedProvider>,
@@ -118,5 +99,4 @@ describe('method tests', () => {
     instance.onKeyDown(editedDescription);
     expect(editTask).toBeCalled();
   });
-
 });

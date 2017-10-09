@@ -25,7 +25,6 @@ it('renders popup for concern suggestion', () => {
             visible={true}
             suggestion={carePlanSuggestionWithConcern}
             patientId={'patient-id'}
-            suggestionType={'concern'}
             onDismiss={() => true}
           />
         </ConnectedRouter>
@@ -45,7 +44,6 @@ it('renders popup for goal suggestion', () => {
             patientId={'patient-id'}
             visible={true}
             suggestion={carePlanSuggestionWithGoal}
-            suggestionType={'goal'}
             onDismiss={() => true}
           />
         </ConnectedRouter>

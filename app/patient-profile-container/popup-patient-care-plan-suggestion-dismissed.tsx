@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { compose, graphql } from 'react-apollo';
+import { connect } from 'react-redux';
 /* tslint:disable:max-line-length */
 import * as carePlanSuggestionDismissMutation from '../graphql/queries/care-plan-suggestion-dismiss-mutation.graphql';
 import {
@@ -14,10 +15,14 @@ import PopupPatientCarePlanSuggestionDismissedModalBody from './popup-patient-ca
 interface IProps {
   visible: boolean;
   suggestion?: FullCarePlanSuggestionFragment;
+  onDismiss: () => any;
+  mutate?: any;
+}
+
+interface IGraphqlProps {
   dismissCarePlanSuggestion: (
     options: { variables: carePlanSuggestionDismissMutationVariables },
   ) => { data: { carePlanSuggestionDismiss: FullCarePlanSuggestionFragment } };
-  onDismiss: () => any;
 }
 
 interface IState {
@@ -26,8 +31,10 @@ interface IState {
   error?: string;
 }
 
-class PopupPatientCarePlanSuggestionDismissed extends React.Component<IProps, IState> {
-  constructor(props: IProps) {
+type allProps = IProps & IGraphqlProps;
+
+class PopupPatientCarePlanSuggestionDismissed extends React.Component<allProps, IState> {
+  constructor(props: allProps) {
     super(props);
 
     this.onDismiss = this.onDismiss.bind(this);
@@ -38,10 +45,7 @@ class PopupPatientCarePlanSuggestionDismissed extends React.Component<IProps, IS
   }
 
   async onSubmit() {
-    const {
-      suggestion,
-      dismissCarePlanSuggestion,
-    } = this.props;
+    const { suggestion, dismissCarePlanSuggestion } = this.props;
 
     const { dismissedReason } = this.state;
 
@@ -49,9 +53,12 @@ class PopupPatientCarePlanSuggestionDismissed extends React.Component<IProps, IS
       this.setState(() => ({ loading: true }));
 
       try {
-        await dismissCarePlanSuggestion({ variables: {
-          carePlanSuggestionId: suggestion.id, dismissedReason,
-        }});
+        await dismissCarePlanSuggestion({
+          variables: {
+            carePlanSuggestionId: suggestion.id,
+            dismissedReason,
+          },
+        });
 
         this.setState(() => ({ loading: false, error: undefined }));
 
@@ -88,27 +95,27 @@ class PopupPatientCarePlanSuggestionDismissed extends React.Component<IProps, IS
       <Popup visible={visible} smallPadding={true}>
         <div className={styles.acceptModalContent}>
           <div className={styles.acceptModalHeader}>
-            <div className={styles.acceptModalDismissButton} onClick={this.onDismiss}></div>
+            <div className={styles.acceptModalDismissButton} onClick={this.onDismiss} />
           </div>
           <PopupPatientCarePlanSuggestionDismissedModalBody
             suggestion={suggestion}
             dismissedReason={dismissedReason}
             onChange={this.onChange}
             onDismiss={this.onDismiss}
-            onSubmit={this.onSubmit} />
+            onSubmit={this.onSubmit}
+          />
         </div>
       </Popup>
     );
   }
 }
 
-export default (compose as any)(
+export default compose(
+  connect<{}, {}, IProps>(undefined),
   graphql(carePlanSuggestionDismissMutation as any, {
     name: 'dismissCarePlanSuggestion',
     options: {
-      refetchQueries: [
-        'getPatientCarePlanSuggestions',
-      ],
+      refetchQueries: ['getPatientCarePlanSuggestions'],
     },
   }),
 )(PopupPatientCarePlanSuggestionDismissed);

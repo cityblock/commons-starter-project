@@ -17,7 +17,7 @@ it('renders encounter creation', () => {
     <MockedProvider mocks={[]} store={mockStore({ locale })}>
       <ReduxConnectedIntlProvider>
         <ConnectedRouter history={history}>
-          <NewPatientEncounter />
+          <NewPatientEncounter patientId={''} />
         </ConnectedRouter>
       </ReduxConnectedIntlProvider>
     </MockedProvider>,

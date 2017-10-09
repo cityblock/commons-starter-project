@@ -1,6 +1,7 @@
 import * as classNames from 'classnames';
 import * as React from 'react';
 import { compose, graphql } from 'react-apollo';
+import { connect } from 'react-redux';
 import * as taskCommentsQuery from '../../graphql/queries/get-task-comments.graphql';
 import * as commentCreateMutation from '../../graphql/queries/task-comment-create-mutation.graphql';
 import * as commentEditMutation from '../../graphql/queries/task-comment-edit-mutation.graphql';
@@ -18,6 +19,9 @@ export type ITaskCommentsResponse = getTaskCommentsQuery['taskComments'];
 
 interface IProps {
   taskId: string;
+}
+
+interface IGraphqlProps {
   createComment: (
     options: { variables: taskCommentCreateMutationVariables },
   ) => { data: { taskCommentCreate: FullTaskCommentFragment } };
@@ -41,10 +45,12 @@ interface IState {
   comments: FullTaskCommentFragment[];
 }
 
+type allProps = IProps & IGraphqlProps;
+
 export const DEFAULT_AVATAR_URL = 'http://bit.ly/2u9bJDA';
 
-export class TaskComments extends React.Component<IProps, IState> {
-  constructor(props: IProps) {
+export class TaskComments extends React.Component<allProps, IState> {
+  constructor(props: allProps) {
     super(props);
 
     this.renderComments = this.renderComments.bind(this);
@@ -57,7 +63,7 @@ export class TaskComments extends React.Component<IProps, IState> {
     this.state = { comments: [], commentBody: '', createCommentError: undefined };
   }
 
-  componentWillReceiveProps(nextProps: IProps) {
+  componentWillReceiveProps(nextProps: allProps) {
     const { taskCommentsResponse } = nextProps;
 
     if (taskCommentsResponse && taskCommentsResponse.edges) {
@@ -212,7 +218,8 @@ export class TaskComments extends React.Component<IProps, IState> {
   }
 }
 
-export default (compose as any)(
+export default compose(
+  connect<{}, {}, IProps>(undefined),
   graphql(commentCreateMutation as any, { name: 'createComment' }),
   graphql(commentEditMutation as any, { name: 'editComment' }),
   graphql(taskCommentsQuery as any, {

@@ -15,18 +15,24 @@ import * as styles from '../shared/css/two-panel-right.css';
 import { IState as IAppState } from '../store';
 import TaskTemplateCreateEdit from './task-template-create-edit';
 
-interface IProps {
-  goal?: FullGoalSuggestionTemplateFragment;
+interface IStateProps {
   goalId?: string;
-  goalLoading?: boolean;
-  goalError?: string;
+}
+
+interface IProps {
   routeBase: string;
-  refetchGoal: () => any;
   match?: {
     params: {
       objectId?: string;
     };
   };
+}
+
+interface IGraphqlProps {
+  goal?: FullGoalSuggestionTemplateFragment;
+  goalLoading?: boolean;
+  goalError?: string;
+  refetchGoal: () => any;
   editGoal: (
     options: { variables: goalSuggestionTemplateEditMutationVariables },
   ) => { data: { goalSuggestionTemplateEdit: FullGoalSuggestionTemplateFragment } };
@@ -41,11 +47,13 @@ interface IState {
   editTitleError?: string;
 }
 
-class Goal extends React.Component<IProps, IState> {
+type allProps = IStateProps & IProps & IGraphqlProps;
+
+class Goal extends React.Component<allProps, IState> {
   editTitleInput: HTMLInputElement | null;
   titleBody: HTMLDivElement | null;
 
-  constructor(props: IProps) {
+  constructor(props: allProps) {
     super(props);
 
     this.reloadGoal = this.reloadGoal.bind(this);
@@ -69,7 +77,7 @@ class Goal extends React.Component<IProps, IState> {
     };
   }
 
-  componentWillReceiveProps(nextProps: IProps) {
+  componentWillReceiveProps(nextProps: allProps) {
     const { goal } = nextProps;
 
     if (goal) {
@@ -173,7 +181,8 @@ class Goal extends React.Component<IProps, IState> {
         <TaskTemplateCreateEdit
           key={taskTemplate ? taskTemplate.id : ''}
           taskTemplate={taskTemplate}
-          goalSuggestionTemplateId={goal.id} />
+          goalSuggestionTemplateId={goal.id}
+        />
       ));
     }
   }
@@ -215,19 +224,18 @@ class Goal extends React.Component<IProps, IState> {
       return (
         <div className={outerContainerStyles}>
           <div className={deleteConfirmationStyles}>
-            <div className={styles.deleteConfirmationIcon}></div>
+            <div className={styles.deleteConfirmationIcon} />
             <div className={styles.deleteConfirmationText}>
               Are you sure you want to delete this goal?
             </div>
             <div className={styles.deleteConfirmationButtons}>
               <div
                 className={classNames(styles.deleteCancelButton, styles.invertedButton)}
-                onClick={this.onCancelDelete}>
+                onClick={this.onCancelDelete}
+              >
                 Cancel
               </div>
-              <div
-                className={styles.deleteConfirmButton}
-                onClick={this.onConfirmDelete}>
+              <div className={styles.deleteConfirmButton} onClick={this.onConfirmDelete}>
                 Yes, delete
               </div>
             </div>
@@ -242,9 +250,11 @@ class Goal extends React.Component<IProps, IState> {
             <div>
               <div className={styles.infoRow}>
                 <div className={styles.controls}>
-                  <Link to={closeRoute} className={styles.close}>Close</Link>
+                  <Link to={closeRoute} className={styles.close}>
+                    Close
+                  </Link>
                   <div className={styles.menuItem} onClick={this.onClickDelete}>
-                    <div className={styles.trashIcon}></div>
+                    <div className={styles.trashIcon} />
                     <div className={styles.menuLabel}>Delete goal</div>
                   </div>
                 </div>
@@ -253,25 +263,29 @@ class Goal extends React.Component<IProps, IState> {
             <div className={styles.itemBody}>
               <div className={styles.smallText}>Title:</div>
               <div
-                ref={div => { this.titleBody = div; }}
+                ref={div => {
+                  this.titleBody = div;
+                }}
                 className={titleTextStyles}
-                onClick={this.onClickToEditTitle}>
+                onClick={this.onClickToEditTitle}
+              >
                 {goal.title}
               </div>
               <div className={titleEditStyles}>
                 <input
                   name='editedTitle'
-                  ref={area => { this.editTitleInput = area; }}
+                  ref={area => {
+                    this.editTitleInput = area;
+                  }}
                   value={editedTitle}
                   onChange={this.onChange}
                   onKeyDown={this.onKeyDown}
-                  onBlur={this.onBlur} />
+                  onBlur={this.onBlur}
+                />
               </div>
               <br />
               <div className={styles.smallText}>Task Templates:</div>
-              <div>
-                {taskTemplates}
-              </div>
+              <div>{taskTemplates}</div>
               <div className={styles.smallText}>Create task template:</div>
               <TaskTemplateCreateEdit goalSuggestionTemplateId={goal.id} />
             </div>
@@ -290,43 +304,44 @@ class Goal extends React.Component<IProps, IState> {
         return (
           <div className={styles.container}>
             <div className={styles.loadingError}>
-              <div className={styles.loadingErrorIcon}></div>
+              <div className={styles.loadingErrorIcon} />
               <div className={styles.loadingErrorLabel}>Unable to load goal</div>
               <div className={styles.loadingErrorSubheading}>
                 Sorry, something went wrong. Please try again.
               </div>
               <div
                 className={classNames(styles.loadingErrorButton, styles.invertedButton)}
-                onClick={this.reloadGoal}>
+                onClick={this.reloadGoal}
+              >
                 Try again
               </div>
             </div>
           </div>
         );
       } else {
-        return <div className={styles.container}></div>;
+        return <div className={styles.container} />;
       }
     }
   }
 }
 
-function mapStateToProps(state: IAppState, ownProps: IProps): Partial<IProps> {
+function mapStateToProps(state: IAppState, ownProps: IProps): IStateProps {
   return {
     goalId: ownProps.match ? ownProps.match.params.objectId : undefined,
   };
 }
 
-export default (compose as any)(
-  connect(mapStateToProps),
+export default compose(
+  connect<IStateProps, {}, IProps>(mapStateToProps),
   graphql(goalSuggestionTemplateEditMutation as any, { name: 'editGoal' }),
   graphql(goalSuggestionTemplateQuery as any, {
-    skip: (props: IProps) => !props.goalId,
-    options: (props: IProps) => ({ variables: { goalSuggestionTemplateId: props.goalId } }),
+    skip: (props: allProps) => !props.goalId,
+    options: (props: allProps) => ({ variables: { goalSuggestionTemplateId: props.goalId } }),
     props: ({ data }) => ({
-      goalLoading: (data ? data.loading : false),
-      goalError: (data ? data.error : null),
-      goal: (data ? (data as any).goalSuggestionTemplate : null),
-      refetchGoal: (data ? data.refetch : null),
+      goalLoading: data ? data.loading : false,
+      goalError: data ? data.error : null,
+      goal: data ? (data as any).goalSuggestionTemplate : null,
+      refetchGoal: data ? data.refetch : null,
     }),
   }),
 )(Goal);

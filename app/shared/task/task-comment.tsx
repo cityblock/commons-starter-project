@@ -2,6 +2,7 @@ import * as classNames from 'classnames';
 import * as React from 'react';
 import { compose, graphql } from 'react-apollo';
 import { FormattedDate } from 'react-intl';
+import { connect } from 'react-redux';
 import * as currentUserQuery from '../../graphql/queries/get-current-user.graphql';
 import {
   taskCommentEditMutationVariables,
@@ -11,9 +12,13 @@ import {
 import * as styles from './css/task-comments.css';
 
 interface IProps {
-  comment: FullTaskCommentFragment;
-  currentUser?: FullUserFragment;
+  mutate?: any;
   onEdit: (editedComment: taskCommentEditMutationVariables) => any;
+  comment: FullTaskCommentFragment;
+}
+
+interface IGraphqlProps {
+  currentUser?: FullUserFragment;
 }
 
 interface IState {
@@ -23,15 +28,17 @@ interface IState {
   editError?: string;
 }
 
+type allProps = IProps & IGraphqlProps;
+
 export const DEFAULT_AVATAR_URL = 'http://bit.ly/2u9bJDA';
 
 const BASE_TEXT_HEIGHT = '2px';
 
-export class TaskComment extends React.Component<IProps, IState> {
+export class TaskComment extends React.Component<allProps, IState> {
   editInput: HTMLTextAreaElement | null;
   textBody: HTMLDivElement | null;
 
-  constructor(props: IProps) {
+  constructor(props: allProps) {
     super(props);
 
     const { comment } = props;
@@ -114,7 +121,7 @@ export class TaskComment extends React.Component<IProps, IState> {
       try {
         this.setState(() => ({ editError: undefined }));
 
-        await onEdit({ taskCommentId: comment.id, body: editedCommentBody});
+        await onEdit({ taskCommentId: comment.id, body: editedCommentBody });
 
         this.setState(() => ({ editError: undefined, editing: false }));
       } catch (err) {
@@ -145,7 +152,10 @@ export class TaskComment extends React.Component<IProps, IState> {
     const { editedCommentBody, editing, textHeight } = this.state;
 
     const formattedCommentBody = comment.body.split('\n').map((item: string, sKey: number) => (
-      <span key={sKey}>{item}<br /></span>
+      <span key={sKey}>
+        {item}
+        <br />
+      </span>
     ));
 
     const commentStyles = classNames(styles.comment, {
@@ -164,8 +174,8 @@ export class TaskComment extends React.Component<IProps, IState> {
               className={styles.avatar}
               style={{
                 backgroundImage: `url('${user.googleProfileImageUrl || DEFAULT_AVATAR_URL}')`,
-              }}>
-            </div>
+              }}
+            />
             <div className={styles.name}>{`${user.firstName} ${user.lastName}`}</div>
             <div className={styles.smallText}>{user.userRole}</div>
           </div>
@@ -178,14 +188,19 @@ export class TaskComment extends React.Component<IProps, IState> {
           </div>
         </div>
         <div
-          ref={div => { this.textBody = div; }}
-          className={styles.commentBody}>
+          ref={div => {
+            this.textBody = div;
+          }}
+          className={styles.commentBody}
+        >
           {formattedCommentBody}
         </div>
         <div className={styles.commentEditArea}>
           <textarea
             style={{ height: textHeight }}
-            ref={input => { this.editInput = input; }}
+            ref={input => {
+              this.editInput = input;
+            }}
             value={editedCommentBody}
             onChange={this.onChange}
             onKeyDown={this.onKeyDown}
@@ -197,10 +212,11 @@ export class TaskComment extends React.Component<IProps, IState> {
   }
 }
 
-export default (compose as any)(
+export default compose(
+  connect<{}, {}, IProps>(undefined),
   graphql(currentUserQuery as any, {
     props: ({ data }) => ({
-      currentUser: (data ? (data as any).currentUser : null),
+      currentUser: data ? (data as any).currentUser : null,
     }),
   }),
 )(TaskComment);

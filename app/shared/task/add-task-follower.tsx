@@ -1,12 +1,14 @@
 import * as classNames from 'classnames';
 import * as React from 'react';
 import { compose, graphql } from 'react-apollo';
+import { connect } from 'react-redux';
 import * as careTeamQuery from '../../graphql/queries/get-patient-care-team.graphql';
 import * as taskUserFollowMutation from '../../graphql/queries/task-user-follow-mutation.graphql';
 import {
   taskUserFollowMutationVariables,
   FullTaskFragment,
   FullUserFragment,
+  ShortUserFragment,
 } from '../../graphql/types';
 import * as styles from './css/add-task-follower.css';
 import { DEFAULT_AVATAR_URL } from './task';
@@ -14,13 +16,17 @@ import { DEFAULT_AVATAR_URL } from './task';
 interface IProps {
   patientId: string;
   taskId: string;
-  followers: FullUserFragment[];
+  followers: ShortUserFragment[];
+}
+
+interface IGraphqlProps {
   loading?: boolean;
   error?: string;
   careTeam?: FullUserFragment[];
   addTaskFollower: (
     options: { variables: taskUserFollowMutationVariables },
   ) => { data: { taskUserFollow: FullTaskFragment } };
+  mutate?: any;
 }
 
 interface IState {
@@ -30,8 +36,10 @@ interface IState {
   addFollowerError?: string;
 }
 
-export class AddTaskFollower extends React.Component<IProps, IState> {
-  constructor(props: any) {
+type allProps = IProps & IGraphqlProps;
+
+export class AddTaskFollower extends React.Component<allProps, IState> {
+  constructor(props: allProps) {
     super(props);
 
     this.onClick = this.onClick.bind(this);
@@ -62,18 +70,19 @@ export class AddTaskFollower extends React.Component<IProps, IState> {
       <div
         key={careTeamMember.id}
         onClick={async () => this.onCareTeamMemberClick(careTeamMember.id)}
-        className={styles.careTeamMemberDetails}>
+        className={styles.careTeamMemberDetails}
+      >
         <div
           className={styles.careTeamAvatar}
           style={{
             backgroundImage: `url('${avatar}')`,
-          }}>
-        </div>
+          }}
+        />
         <div className={styles.careTeamMemberLabel}>
           <div className={styles.careTeamMemberName}>{fullName}</div>
           <div className={styles.careTeamMemberRole}>{role}</div>
         </div>
-        <div className={errorStyles}></div>
+        <div className={errorStyles} />
       </div>
     );
   }
@@ -81,9 +90,9 @@ export class AddTaskFollower extends React.Component<IProps, IState> {
   getValidNewFollowers() {
     const { careTeam, followers } = this.props;
 
-    return (careTeam || []).filter(careTeamMember => (
-      !(followers || []).some(follower => (follower.id === careTeamMember.id))
-    ));
+    return (careTeam || []).filter(
+      careTeamMember => !(followers || []).some(follower => follower.id === careTeamMember.id),
+    );
   }
 
   renderCareTeamMembers(careTeamMembers: FullUserFragment[]) {
@@ -147,13 +156,14 @@ export class AddTaskFollower extends React.Component<IProps, IState> {
         <div className={careTeamContainerStyles}>
           {this.renderCareTeamMembers(validNewFollowers)}
         </div>
-        <div className={addFollowerButtonStyles} onClick={this.onClick}></div>
+        <div className={addFollowerButtonStyles} onClick={this.onClick} />
       </div>
     );
   }
 }
 
-export default (compose as any)(
+export default compose(
+  connect<{}, {}, IProps>(undefined),
   graphql(taskUserFollowMutation as any, { name: 'addTaskFollower' }),
   graphql(careTeamQuery as any, {
     options: (props: IProps) => ({
@@ -162,9 +172,9 @@ export default (compose as any)(
       },
     }),
     props: ({ data }) => ({
-      loading: (data ? data.loading : false),
-      error: (data ? data.error : null),
-      careTeam: (data ? (data as any).patientCareTeam : null),
+      loading: data ? data.loading : false,
+      error: data ? data.error : null,
+      careTeam: data ? (data as any).patientCareTeam : null,
     }),
   }),
 )(AddTaskFollower);

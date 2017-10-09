@@ -18,7 +18,7 @@ it('correctly renders a comment as editable or not', () => {
     <MockedProvider mocks={[]} store={mockStore({ locale, task: assignedTask })}>
       <ReduxConnectedIntlProvider>
         <ConnectedRouter history={history}>
-          <TaskComment comment={comment} currentUser={currentUser} onEdit={() => true} />
+          <TaskComment comment={comment} onEdit={() => true} />
         </ConnectedRouter>
       </ReduxConnectedIntlProvider>
     </MockedProvider>,

@@ -24,20 +24,29 @@ import TaskComments from './task-comments';
 import { TaskHamburgerMenu } from './task-hamburger-menu';
 import { TaskMissing } from './task-missing';
 
-interface IProps {
-  task?: FullTaskFragment;
+interface IStateProps {
   taskId?: string;
-  taskLoading?: boolean;
-  taskError?: string;
-  routeBase: string;
-  patientGoals?: FullPatientGoalFragment[];
+}
+
+interface IDispatchProps {
   selectTask: (taskId?: string) => any;
-  refetchTask: () => any;
+}
+
+interface IProps {
+  routeBase: string;
   match?: {
     params: {
       taskId?: string;
     };
   };
+}
+
+interface IGraphqlProps {
+  task?: FullTaskFragment;
+  taskLoading?: boolean;
+  taskError?: string;
+  patientGoals?: FullPatientGoalFragment[];
+  refetchTask: () => any;
   completeTask: (
     options: { variables: taskCompleteMutationVariables },
   ) => { data: { taskComplete: FullTaskFragment } };
@@ -49,6 +58,8 @@ interface IProps {
   ) => { data: { taskEdit: FullTaskFragment } };
   onDelete: (taskId: string) => any;
 }
+
+type allProps = IStateProps & IDispatchProps & IGraphqlProps & IProps;
 
 interface IState {
   hamburgerMenuVisible: boolean;
@@ -75,13 +86,13 @@ const COPY_SUCCESS_TIMEOUT_MILLISECONDS = 2000;
 
 const BASE_TEXT_HEIGHT = '2px';
 
-export class Task extends React.Component<IProps, IState> {
+export class Task extends React.Component<allProps, IState> {
   editTitleTextArea: HTMLTextAreaElement | null;
   editDescriptionTextArea: HTMLTextAreaElement | null;
   titleBody: HTMLDivElement | null;
   descriptionBody: HTMLDivElement | null;
 
-  constructor(props: IProps) {
+  constructor(props: allProps) {
     super(props);
 
     this.reloadTask = this.reloadTask.bind(this);
@@ -160,7 +171,7 @@ export class Task extends React.Component<IProps, IState> {
     this.props.selectTask(undefined);
   }
 
-  componentWillReceiveProps(nextProps: IProps) {
+  componentWillReceiveProps(nextProps: allProps) {
     const { task } = nextProps;
 
     if (this.props.taskId !== nextProps.taskId) {
@@ -242,8 +253,9 @@ export class Task extends React.Component<IProps, IState> {
 
     // TODO: update this once attachments are a thing
     if (task && (task as any).attachments) {
-      const attachmentsHtml = ((task as any).attachments || [])
-        .map((attachment: any) => <div className={styles.attachment}>{attachment.title}</div>);
+      const attachmentsHtml = ((task as any).attachments || []).map((attachment: any) => (
+        <div className={styles.attachment}>{attachment.title}</div>
+      ));
       return <div className={styles.attachments}>{attachmentsHtml}</div>;
     } else {
       return <div className={styles.emptyAttachments} />;
@@ -271,7 +283,7 @@ export class Task extends React.Component<IProps, IState> {
             {followersHtml}
             <AddTaskFollower
               taskId={task.id}
-              followers={task.followers}
+              followers={task.followers ? task.followers : []}
               patientId={task.patientId}
             />
           </div>
@@ -611,7 +623,11 @@ export class Task extends React.Component<IProps, IState> {
               </div>
               {this.renderTaskCompletionToggle()}
             </div>
-            <TaskAssignee taskId={task.id} patientId={task.patientId} assignee={task.assignedTo} />
+            <TaskAssignee
+              taskId={task.id}
+              patientId={task.patientId}
+              assignee={task.assignedTo ? task.assignedTo : undefined}
+            />
           </div>
           <div className={styles.taskBody}>
             <div
@@ -701,26 +717,26 @@ export class Task extends React.Component<IProps, IState> {
   }
 }
 
-function mapStateToProps(state: IAppState, ownProps: IProps): Partial<IProps> {
+function mapStateToProps(state: IAppState, ownProps: IProps): IStateProps {
   return {
     taskId: ownProps.match ? ownProps.match.params.taskId : undefined,
   };
 }
 
-function mapDispatchToProps(dispatch: Dispatch<() => void>): Partial<IProps> {
+function mapDispatchToProps(dispatch: Dispatch<() => void>): IDispatchProps {
   return {
     selectTask: (taskId?: string) => dispatch(selectTask(taskId)),
   };
 }
 
-export default (compose as any)(
-  connect(mapStateToProps, mapDispatchToProps),
+export default compose(
+  connect<IStateProps, IDispatchProps, IProps>(mapStateToProps, mapDispatchToProps),
   graphql(taskCompleteMutation as any, { name: 'completeTask' }),
   graphql(taskUncompleteMutation as any, { name: 'uncompleteTask' }),
   graphql(taskEditMutation as any, { name: 'editTask' }),
   graphql(taskQuery as any, {
-    skip: (props: IProps) => !props.taskId,
-    options: (props: IProps) => ({ variables: { taskId: props.taskId } }),
+    skip: (props: allProps) => !props.taskId,
+    options: (props: allProps) => ({ variables: { taskId: props.taskId } }),
     props: ({ data }) => ({
       taskLoading: data ? data.loading : false,
       taskError: data ? data.error : null,

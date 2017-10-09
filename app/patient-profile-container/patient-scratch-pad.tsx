@@ -1,6 +1,7 @@
 import { debounce } from 'lodash';
 import * as React from 'react';
 import { compose, graphql } from 'react-apollo';
+import { connect } from 'react-redux';
 import * as patientScratchPadQuery from '../graphql/queries/get-patient-scratch-pad.graphql';
 /* tslint:disable:max-line-length */
 import * as savePatientScratchPadMutation from '../graphql/queries/patient-scratch-pad-edit-mutation.graphql';
@@ -14,6 +15,10 @@ import { PatientScratchPadStatus } from './patient-scratch-pad-status';
 
 interface IProps {
   patientId: string;
+  mutate?: any;
+}
+
+interface IGraphqlProps {
   scratchPad?: {
     text: string;
   };
@@ -33,11 +38,13 @@ interface IState {
   saveError: boolean;
 }
 
+type allProps = IProps & IGraphqlProps;
+
 const SAVE_TIMEOUT_MILLISECONDS = 500;
 const SAVE_SUCCESS_TIMEOUT_MILLISECONDS = 2000;
 
-class PatientScratchPad extends React.Component<IProps, IState> {
-  constructor(props: IProps) {
+class PatientScratchPad extends React.Component<allProps, IState> {
+  constructor(props: allProps) {
     super(props);
 
     const { loading, error } = props;
@@ -58,7 +65,7 @@ class PatientScratchPad extends React.Component<IProps, IState> {
     };
   }
 
-  componentWillReceiveProps(nextProps: IProps) {
+  componentWillReceiveProps(nextProps: allProps) {
     const { scratchPad } = this.state;
     const { loading, error } = nextProps;
 
@@ -71,7 +78,7 @@ class PatientScratchPad extends React.Component<IProps, IState> {
     }
   }
 
-  getScratchPadTextFromProps(props: IProps) {
+  getScratchPadTextFromProps(props: allProps) {
     const { scratchPad } = props;
 
     let scratchPadText: string = '';
@@ -151,7 +158,8 @@ class PatientScratchPad extends React.Component<IProps, IState> {
   }
 }
 
-export default (compose as any)(
+export default compose(
+  connect<{}, {}, IProps>(undefined),
   graphql(savePatientScratchPadMutation as any,
    { name: 'saveScratchPad' }),
   graphql(patientScratchPadQuery as any, {

@@ -10,9 +10,8 @@ interface IProps {
   onClick: (careTeamMemberId: string) => any;
 }
 
-const generateIconStyles = (iconStyle: string): string => (
-  classNames(styles.careTeamContactIcon, iconStyle)
-);
+const generateIconStyles = (iconStyle: string): string =>
+  classNames(styles.careTeamContactIcon, iconStyle);
 
 const slackIconStyles = generateIconStyles(styles.careTeamSlackIcon);
 const phoneIconStyles = generateIconStyles(styles.careTeamPhoneIcon);
@@ -21,10 +20,6 @@ const emailIconStyles = generateIconStyles(styles.careTeamEmailIcon);
 const profileIconStyles = generateIconStyles(styles.careTeamProfileIcon);
 
 export default class CareTeamWidgetMember extends React.Component<IProps, {}> {
-  constructor(props: any) {
-    super(props);
-  }
-
   formatCareTeamMemberRole(role: string): string {
     return role.charAt(0).toUpperCase() + role.slice(1);
   }
@@ -40,9 +35,7 @@ export default class CareTeamWidgetMember extends React.Component<IProps, {}> {
 
     return (
       <div className={styles.careTeamMemberRow}>
-        <div
-          className={styles.careTeamMemberDetails}
-          onClick={() => (onClick(careTeamMember.id))}>
+        <div className={styles.careTeamMemberDetails} onClick={() => onClick(careTeamMember.id)}>
           <div className={styles.careTeamMemberPhoto}>
             <img src={careTeamMemberPhotoUrl} />
           </div>
@@ -53,38 +46,33 @@ export default class CareTeamWidgetMember extends React.Component<IProps, {}> {
         </div>
         <div className={contactStyles}>
           <div className={styles.careTeamMemberContactRow}>
-            <div className={slackIconStyles}></div>
+            <div className={slackIconStyles} />
             <FormattedMessage id='careTeam.slack'>
-              {(message: string) =>
-                <div className={styles.careTeamContactLabel}>{message}</div>}
+              {(message: string) => <div className={styles.careTeamContactLabel}>{message}</div>}
             </FormattedMessage>
           </div>
           <div className={styles.careTeamMemberContactRow}>
-            <div className={phoneIconStyles}></div>
+            <div className={phoneIconStyles} />
             <FormattedMessage id='careTeam.call'>
-              {(message: string) =>
-                <div className={styles.careTeamContactLabel}>{message}</div>}
+              {(message: string) => <div className={styles.careTeamContactLabel}>{message}</div>}
             </FormattedMessage>
           </div>
           <div className={styles.careTeamMemberContactRow}>
-            <div className={smsIconStyles}></div>
+            <div className={smsIconStyles} />
             <FormattedMessage id='careTeam.text'>
-              {(message: string) =>
-                <div className={styles.careTeamContactLabel}>{message}</div>}
+              {(message: string) => <div className={styles.careTeamContactLabel}>{message}</div>}
             </FormattedMessage>
           </div>
           <div className={styles.careTeamMemberContactRow}>
-            <div className={emailIconStyles}></div>
+            <div className={emailIconStyles} />
             <FormattedMessage id='careTeam.email'>
-              {(message: string) =>
-                <div className={styles.careTeamContactLabel}>{message}</div>}
+              {(message: string) => <div className={styles.careTeamContactLabel}>{message}</div>}
             </FormattedMessage>
           </div>
           <div className={styles.careTeamMemberContactRow}>
-            <div className={profileIconStyles}></div>
+            <div className={profileIconStyles} />
             <FormattedMessage id='careTeam.profile'>
-              {(message: string) =>
-                <div className={styles.careTeamContactLabel}>{message}</div>}
+              {(message: string) => <div className={styles.careTeamContactLabel}>{message}</div>}
             </FormattedMessage>
           </div>
         </div>

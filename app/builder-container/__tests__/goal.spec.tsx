@@ -14,51 +14,16 @@ const mockStore = configureMockStore([]);
 
 it('renders goal', () => {
   const history = createMemoryHistory();
+  const match = {
+    params: {
+      objectId: goal.id,
+    },
+  };
   const tree = create(
     <MockedProvider mocks={[]} store={mockStore({ locale, goal })}>
       <ReduxConnectedIntlProvider>
         <ConnectedRouter history={history}>
-          <Goal
-            goal={goal}
-            goalId={goal.id}
-            goalLoading={false}
-            goalError={null} />
-        </ConnectedRouter>
-      </ReduxConnectedIntlProvider>
-    </MockedProvider>,
-  ).toJSON();
-  expect(tree).toMatchSnapshot();
-});
-
-it('renders goal error', () => {
-  const history = createMemoryHistory();
-  const tree = create(
-    <MockedProvider mocks={[]} store={mockStore({ locale })}>
-      <ReduxConnectedIntlProvider>
-        <ConnectedRouter history={history}>
-          <Goal
-            goal={null}
-            goalId={null}
-            goalLoading={false}
-            goalError={'error'} />
-        </ConnectedRouter>
-      </ReduxConnectedIntlProvider>
-    </MockedProvider>,
-  ).toJSON();
-  expect(tree).toMatchSnapshot();
-});
-
-it('renders goal loading', () => {
-  const history = createMemoryHistory();
-  const tree = create(
-    <MockedProvider mocks={[]} store={mockStore({ locale })}>
-      <ReduxConnectedIntlProvider>
-        <ConnectedRouter history={history}>
-          <Goal
-            goal={null}
-            goalId={null}
-            goalLoading={true}
-            goalError={null} />
+          <Goal routeBase={'/route/base'} match={match} />
         </ConnectedRouter>
       </ReduxConnectedIntlProvider>
     </MockedProvider>,

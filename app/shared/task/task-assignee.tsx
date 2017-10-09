@@ -1,12 +1,14 @@
 import * as classNames from 'classnames';
 import * as React from 'react';
 import { compose, graphql } from 'react-apollo';
+import { connect } from 'react-redux';
 import * as careTeamQuery from '../../graphql/queries/get-patient-care-team.graphql';
 import * as editTaskMutation from '../../graphql/queries/task-edit-mutation.graphql';
 import {
   taskEditMutationVariables,
   FullTaskFragment,
   FullUserFragment,
+  ShortUserFragment,
 } from '../../graphql/types';
 import * as styles from './css/add-task-follower.css';
 import * as taskStyles from './css/task.css';
@@ -15,10 +17,13 @@ import { DEFAULT_AVATAR_URL } from './task';
 interface IProps {
   patientId: string;
   taskId: string;
-  assignee?: FullUserFragment;
+  assignee?: ShortUserFragment;
   loading?: boolean;
   error?: string;
   careTeam?: FullUserFragment[];
+}
+
+interface IGraphqlProps {
   changeAssignee: (
     options: { variables: taskEditMutationVariables },
   ) => { data: { taskEdit: FullTaskFragment } };
@@ -30,15 +35,17 @@ interface IState {
   changeAssigneeError?: string;
 }
 
-export interface IAssigneeInfo {
+interface IAssigneeInfo {
   avatar: string;
   name: string;
   role: string;
 }
 
+type allProps = IProps & IGraphqlProps;
+
 // TODO: genericize this and AddTaskFollower component
-export class TaskAssignee extends React.Component<IProps, IState> {
-  constructor(props: any) {
+export class TaskAssignee extends React.Component<allProps, IState> {
+  constructor(props: allProps) {
     super(props);
 
     this.onClick = this.onClick.bind(this);
@@ -185,10 +192,11 @@ export class TaskAssignee extends React.Component<IProps, IState> {
   }
 }
 
-export default (compose as any)(
+export default compose(
+  connect<{}, {}, IProps>(undefined),
   graphql(editTaskMutation as any, { name: 'changeAssignee' }),
   graphql(careTeamQuery as any, {
-    options: (props: IProps) => ({
+    options: (props: allProps) => ({
       variables: {
         patientId: props.patientId,
       },

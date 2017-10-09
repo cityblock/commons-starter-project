@@ -56,6 +56,7 @@ it('updates notification count with new props', () => {
       fetchMoreEventNotifications={() => false}
       updateNotificationsCount={updateNotificationsCount}
       notificationsCount={1}
+      dismissEventNotification={() => false as any}
       match={{ params: { eventNotificationType: 'tasks', patientId: 'patient-id' } }}
     />,
   );

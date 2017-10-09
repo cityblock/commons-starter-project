@@ -21,8 +21,7 @@ interface IState {
 }
 
 class CareTeamWidget extends React.Component<IProps, IState> {
-
-  constructor(props: any) {
+  constructor(props: IProps) {
     super(props);
 
     const { condensedWidget } = props;
@@ -104,14 +103,14 @@ class CareTeamWidget extends React.Component<IProps, IState> {
       <div key='slackContact'>
         <div className={careTeamMemberStyles.careTeamMemberRow}>
           <div className={careTeamMemberStyles.careTeamMemberDetails}>
-            <div className={styles.chatLogo}></div>
+            <div className={styles.chatLogo} />
             <div className={careTeamMemberStyles.careTeamMemberLabel}>
               <div className={careTeamMemberStyles.careTeamMemberName}>Chat with team</div>
               <div className={careTeamMemberStyles.careTeamMemberRole}>Patient slack channel</div>
             </div>
           </div>
         </div>
-        <div className={careTeamMemberStyles.careTeamMemberContact}></div>
+        <div className={careTeamMemberStyles.careTeamMemberContact} />
       </div>
     );
 
@@ -125,10 +124,10 @@ class CareTeamWidget extends React.Component<IProps, IState> {
           <div className={styles.careTeamWidgetContent}>
             <div className={buttonClasses} onClick={this.onClick}>
               <div className={styles.buttonLabel}>
-                <div className={buttonIconClasses}></div>
+                <div className={buttonIconClasses} />
                 <div className={styles.buttonTitle}>Care Team</div>
               </div>
-              <div className={buttonArrowClasses}></div>
+              <div className={buttonArrowClasses} />
             </div>
             <div className={drawerClasses}>{renderedCareTeamMembers}</div>
           </div>
@@ -145,8 +144,8 @@ export default graphql(careTeamQuery as any, {
     },
   }),
   props: ({ data }) => ({
-    loading: (data ? data.loading : false),
-    error: (data ? data.error : null),
-    careTeam: (data ? (data as any).patientCareTeam : null),
+    loading: data ? data.loading : false,
+    error: data ? data.error : null,
+    careTeam: data ? (data as any).patientCareTeam : null,
   }),
 })(CareTeamWidget);

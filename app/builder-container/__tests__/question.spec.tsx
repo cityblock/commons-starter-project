@@ -14,50 +14,16 @@ const mockStore = configureMockStore([]);
 
 it('renders question', () => {
   const history = createMemoryHistory();
+  const match = {
+    params: {
+      questionId: question.id,
+    },
+  };
   const tree = create(
     <MockedProvider mocks={[]} store={mockStore({ locale, question })}>
       <ReduxConnectedIntlProvider>
         <ConnectedRouter history={history}>
-          <Question
-            routeBase='/route/base'
-            question={question}
-            questionId={question.id}
-            questionLoading={false}
-            questionError={null} />
-        </ConnectedRouter>
-      </ReduxConnectedIntlProvider>
-    </MockedProvider>,
-  ).toJSON();
-  expect(tree).toMatchSnapshot();
-});
-
-it('question error', () => {
-  const history = createMemoryHistory();
-  const tree = create(
-    <MockedProvider mocks={[]} store={mockStore({ locale })}>
-      <ReduxConnectedIntlProvider>
-        <ConnectedRouter history={history}>
-          <Question
-            routeBase='/route/base'
-            questionLoading={false}
-            questionError={'an error'} />
-        </ConnectedRouter>
-      </ReduxConnectedIntlProvider>
-    </MockedProvider>,
-  ).toJSON();
-  expect(tree).toMatchSnapshot();
-});
-
-it('risk area loading', () => {
-  const history = createMemoryHistory();
-  const tree = create(
-    <MockedProvider mocks={[]} store={mockStore({ locale })}>
-      <ReduxConnectedIntlProvider>
-        <ConnectedRouter history={history}>
-          <Question
-            routeBase='/route/base'
-            questionLoading={false}
-            questionError={'an error'} />
+          <Question routeBase='/route/base' match={match} />
         </ConnectedRouter>
       </ReduxConnectedIntlProvider>
     </MockedProvider>,

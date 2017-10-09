@@ -56,7 +56,7 @@ exports[`renders comments 1`] = `
   <div
     className={undefined}
   >
-    <Apollo(TaskComment)
+    <Connect(Apollo(TaskComment))
       comment={
         Object {
           "body": "body",

@@ -3,6 +3,7 @@ import { format } from 'date-fns';
 import * as React from 'react';
 import { compose, graphql } from 'react-apollo';
 import { FormattedMessage } from 'react-intl';
+import { connect } from 'react-redux';
 import { DOB_FORMAT } from '../config';
 import * as editPatientMutation from '../graphql/queries/patient-edit-mutation.graphql';
 import { patientEditMutationVariables, ShortPatientFragment } from '../graphql/types';
@@ -17,19 +18,23 @@ import PatientInsuranceForm, {
 import { IUpdatedField } from '../shared/util/updated-fields';
 import * as styles from './css/patient-info.css';
 
-export interface IOptions {
+interface IOptions {
   variables: patientEditMutationVariables;
 }
 
 interface IProps {
-  loading?: boolean;
-  error?: string;
+  mutate?: any;
   patientId: string;
   patient?: ShortPatientFragment;
+  loading?: boolean;
+  error?: string;
+}
+
+interface IGraphqlProps {
   updatePatientInfo: (options: IOptions) => { data: { patientEdit: ShortPatientFragment } };
 }
 
-export type IState = IPatientDemographicsState &
+type IState = IPatientDemographicsState &
   IPatientContactState &
   IPatientInsuranceState & {
     saveLoading?: boolean;
@@ -38,10 +43,12 @@ export type IState = IPatientDemographicsState &
     clearSaveSuccessTimeout?: number;
   };
 
+type allProps = IProps & IGraphqlProps;
+
 const SAVE_SUCCESS_TIMEOUT_MILLISECONDS = 2000;
 
-export class PatientInfo extends React.Component<IProps, IState> {
-  constructor(props: IProps) {
+export class PatientInfo extends React.Component<allProps, IState> {
+  constructor(props: allProps) {
     super(props);
 
     this.state = {
@@ -74,7 +81,7 @@ export class PatientInfo extends React.Component<IProps, IState> {
     this.clearSaveSuccess = this.clearSaveSuccess.bind(this);
   }
 
-  componentWillReceiveProps(nextProps: IProps) {
+  componentWillReceiveProps(nextProps: allProps) {
     const { patient } = nextProps;
 
     if (patient) {
@@ -286,6 +293,7 @@ export class PatientInfo extends React.Component<IProps, IState> {
   }
 }
 
-export default (compose as any)(graphql(editPatientMutation as any, { name: 'updatePatientInfo' }))(
-  PatientInfo,
-);
+export default compose(
+  connect<{}, {}, IProps>(undefined),
+  graphql(editPatientMutation as any, { name: 'updatePatientInfo' }),
+)(PatientInfo);

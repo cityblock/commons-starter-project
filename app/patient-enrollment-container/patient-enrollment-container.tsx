@@ -21,11 +21,18 @@ import * as styles from './css/patient-enrollment.css';
 import PopupEnrollmentError from './popup-enrollment-error';
 import PopupPatientCreated from './popup-patient-created';
 
+interface IDispatchProps {
+  onSuccess: (patientId: string) => any;
+}
+
 interface IProps {
+  mutate?: any;
+}
+
+interface IGraphqlProps {
   createPatient: (
     options: { variables: patientSetupMutationVariables },
   ) => { data: { patientSetup: ShortPatientFragment } };
-  onSuccess: (patientId: string) => any;
   clinic: FullClinicFragment;
   clinicsLoading: boolean;
   clinicsError?: string;
@@ -68,9 +75,10 @@ function formatDate(date: string) {
   return format(new Date(date.replace('-', '/')), 'MM/DD/YYYY');
 }
 
-class PatientEnrollmentContainer extends React.Component<IProps, IState> {
+type allProps = IDispatchProps & IProps & IGraphqlProps;
 
-  constructor(props: IProps) {
+class PatientEnrollmentContainer extends React.Component<allProps, IState> {
+  constructor(props: allProps) {
     super(props);
     this.onSubmit = this.onSubmit.bind(this);
     this.onFieldUpdate = this.onFieldUpdate.bind(this);
@@ -109,7 +117,7 @@ class PatientEnrollmentContainer extends React.Component<IProps, IState> {
     };
   }
 
-  componentWillReceiveProps(newProps: IProps) {
+  componentWillReceiveProps(newProps: allProps) {
     if (newProps.clinic) {
       const patient = this.state.patient;
       patient.homeClinicId = newProps.clinic.id;
@@ -181,14 +189,7 @@ class PatientEnrollmentContainer extends React.Component<IProps, IState> {
   }
 
   render() {
-    const {
-      insurance,
-      patient,
-      loading,
-      createdPatient,
-      displayErrorPopup,
-      error,
-    } = this.state;
+    const { insurance, patient, loading, createdPatient, displayErrorPopup, error } = this.state;
     const loadingClass = loading ? styles.loading : styles.loadingHidden;
     return (
       <form onSubmit={this.onSubmit} className={styles.container}>
@@ -196,10 +197,11 @@ class PatientEnrollmentContainer extends React.Component<IProps, IState> {
         <PopupEnrollmentError
           onClose={this.hideErrorPopup}
           visible={displayErrorPopup}
-          error={error} />
+          error={error}
+        />
         <div className={loadingClass}>
           <div className={styles.loadingContainer}>
-            <div className={loadingStyles.loadingSpinner}></div>
+            <div className={loadingStyles.loadingSpinner} />
           </div>
         </div>
         <div className={styles.formContainer}>
@@ -260,26 +262,26 @@ class PatientEnrollmentContainer extends React.Component<IProps, IState> {
               <div className={styles.formRow}>
                 <PatientPhotoUpload
                   onUploadPhotoClick={this.onUploadPhotoClick}
-                  onTakePhotoClick={this.onTakePhotoClick} />
+                  onTakePhotoClick={this.onTakePhotoClick}
+                />
               </div>
             </div>
           </div>
         </div>
         <div className={styles.formBottom}>
           <div className={styles.formBottomContent}>
-            <Link to={'/patients'} className={styles.cancelButton}>Cancel</Link>
-            <input
-              type='submit'
-              className={styles.submitButton}
-              value='submit' />
+            <Link to={'/patients'} className={styles.cancelButton}>
+              Cancel
+            </Link>
+            <input type='submit' className={styles.submitButton} value='submit' />
           </div>
         </div>
-      </form >
+      </form>
     );
   }
 }
 
-function mapDispatchToProps(dispatch: Dispatch<() => void>): Partial<IProps> {
+function mapDispatchToProps(dispatch: Dispatch<() => void>): IDispatchProps {
   return {
     onSuccess: (patientId: string) => {
       dispatch(push(`/patient/${patientId}`));
@@ -293,8 +295,8 @@ function formatClinic(clinics: any) {
   }
 }
 
-export default (compose as any)(
-  connect(undefined, mapDispatchToProps),
+export default compose(
+  connect<{}, IDispatchProps, IProps>(undefined, mapDispatchToProps),
   graphql(setupPatientMutation as any, { name: 'createPatient' }),
   graphql(getClinicsQuery as any, {
     options: {
@@ -304,9 +306,9 @@ export default (compose as any)(
       },
     },
     props: ({ data }) => ({
-      clinicsLoading: (data ? data.loading : false),
-      clinicsError: (data ? data.error : null),
-      clinic: (data ? formatClinic((data as any).clinics) : null),
+      clinicsLoading: data ? data.loading : false,
+      clinicsError: data ? data.error : null,
+      clinic: data ? formatClinic((data as any).clinics) : null,
     }),
   }),
 )(PatientEnrollmentContainer);

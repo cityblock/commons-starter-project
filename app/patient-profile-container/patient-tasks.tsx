@@ -10,10 +10,11 @@ import * as patientTasksQuery from '../graphql/queries/get-patient-tasks.graphql
 import {
   getPatientCarePlanQuery,
   getPatientTasksQuery,
+  FullTaskFragment,
   ShortPatientFragment,
 } from '../graphql/types';
 import Tasks, { IPageParams } from '../shared/tasks';
-import { fetchMoreTasks } from '../shared/util/fetch-more-tasks';
+import { fetchMore } from '../shared/util/fetch-more';
 
 interface IProps {
   patient?: ShortPatientFragment;
@@ -93,7 +94,7 @@ export default compose(
     }),
     props: ({ data, ownProps }) => ({
       fetchMoreTasks: () =>
-        fetchMoreTasks(data as any, getPageParams(ownProps), 'tasksForPatient'),
+        fetchMore<FullTaskFragment>(data as any, getPageParams(ownProps), 'tasksForPatient'),
       tasksLoading: (data ? data.loading : false),
       tasksError: (data ? data.error : null),
       tasksResponse: (data ? (data as any).tasksForPatient : null),

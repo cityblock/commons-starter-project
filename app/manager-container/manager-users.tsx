@@ -20,7 +20,7 @@ import {
 } from '../graphql/types';
 import * as sortSearchStyles from '../shared/css/sort-search.css';
 import * as styles from '../shared/css/two-panel.css';
-import { fetchMoreUsers } from '../shared/util/fetch-more-users';
+import { fetchMore } from '../shared/util/fetch-more';
 import UserInvite from './user-invite';
 import { UserRow } from './user-row';
 
@@ -261,7 +261,8 @@ export default compose(
   graphql(usersQuery as any, {
     options: (props: IProps) => ({ variables: getPageParams(props) }),
     props: ({ data, ownProps }) => ({
-      fetchMoreUsers: () => fetchMoreUsers(data as any, getPageParams(ownProps), 'users'),
+      fetchMoreUsers: () =>
+        fetchMore<FullUserFragment>(data as any, getPageParams(ownProps), 'users'),
       loading: data ? data.loading : false,
       error: data ? data.error : null,
       usersResponse: data ? (data as any).users : null,

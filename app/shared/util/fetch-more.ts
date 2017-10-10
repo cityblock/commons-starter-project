@@ -1,9 +1,23 @@
-import { getUsersQuery } from '../../graphql/types';
+interface IRes<item> {
+  [key: string]: {
+    edges: [
+      {
+        node: item;
+      }
+    ];
+    pageInfo: {
+      hasPreviousPage: boolean;
+      hasNextPage: boolean;
+    };
+  };
+  fetchMore: any;
+}
 
-export type UsersResponse = getUsersQuery & { fetchMore: any };
-export type Key = 'users';
-
-function updateQuery(previousResponse: UsersResponse, fetchMoreResponse: UsersResponse, key: Key) {
+function updateQuery<Item>(
+  previousResponse: IRes<Item>,
+  fetchMoreResponse: IRes<Item>,
+  key: string,
+) {
   const result = fetchMoreResponse[key];
   if (!result) {
     return previousResponse;
@@ -23,18 +37,18 @@ function updateQuery(previousResponse: UsersResponse, fetchMoreResponse: UsersRe
   return response;
 }
 
-export function fetchMoreUsers(data: UsersResponse, variables: any, key: Key) {
+export function fetchMore<Item>(data: IRes<Item>, variables: any, key: string) {
   const result = data[key];
   if (!data.fetchMore || !result) {
     return;
   }
 
-  // auto-add pageNumber based on results
+  // TODO: Add pageNumber based on results
   variables.pageNumber = result.edges ? Math.floor(result.edges.length / 10) : 0;
 
   return data.fetchMore({
     variables,
-    updateQuery: (previousResult: UsersResponse, d: any) =>
+    updateQuery: (previousResult: IRes<Item>, d: any) =>
       updateQuery(previousResult, d.fetchMoreResult, key),
   });
 }

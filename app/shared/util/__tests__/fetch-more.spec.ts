@@ -1,13 +1,25 @@
-import { fetchMoreTasks } from '../fetch-more-tasks';
+import { FullTaskFragment } from '../../../graphql/types';
+import { fetchMore } from '../fetch-more';
 import { task } from '../test-data';
+
 const tasksResponse = {
-  tasksForCurrentUser: null,
+  tasksForCurrentUser: {
+    edges: [
+      {
+        node: task,
+      },
+    ] as any,
+    pageInfo: {
+      hasPreviousPage: false,
+      hasNextPage: false,
+    },
+  },
   tasksForPatient: {
     edges: [
       {
         node: task,
       },
-    ],
+    ] as any,
     pageInfo: {
       hasPreviousPage: false,
       hasNextPage: false,
@@ -96,6 +108,6 @@ describe('fetch more tasks', () => {
       );
     };
 
-    fetchMoreTasks(tasksResponse, {}, 'tasksForPatient');
+    fetchMore<FullTaskFragment>(tasksResponse as any, {}, 'tasksForPatient');
   });
 });

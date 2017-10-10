@@ -16,7 +16,7 @@ import {
 } from '../graphql/types';
 import * as tabStyles from '../shared/css/tabs.css';
 import EventNotifications from '../shared/event-notifications/index';
-import { fetchMoreEventNotifications } from '../shared/util/fetch-more-event-notifications';
+import { fetchMore } from '../shared/util/fetch-more';
 import { IState as IAppState } from '../store';
 import * as styles from './css/event-notifications-container.css';
 
@@ -172,7 +172,7 @@ export default compose(
     },
     props: ({ data, ownProps }) => ({
       fetchMoreEventNotifications: () =>
-        fetchMoreEventNotifications(
+        fetchMore<FullEventNotificationFragment>(
           data as any,
           { taskEventNotificationsOnly: ownProps.eventNotificationType === 'tasks' },
           'eventNotificationsForCurrentUser',

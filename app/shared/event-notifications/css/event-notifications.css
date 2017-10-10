@@ -9,22 +9,6 @@
   overflow-y: hidden;
 }
 
-.eventNotificationsList {
-  display: inline-block;
-  height: calc(100vh - 223px);
-  overflow-y: scroll;
-  -webkit-overflow-scrolling: touch;
-  width: 100%;
-  transition: width 0.3s ease-out;
-}
-
-.eventNotificationsList.emptyEventNotificationsList {
-  width: 100%;
-  &:hover {
-    cursor: default;
-  }
-}
-
 .emptyEventNotificationsMessage {
   border: 1px dashed var(--border-color);
   border-radius: 4px;

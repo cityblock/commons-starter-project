@@ -1,7 +1,5 @@
 export const container: string;
 export const bottomContainer: string;
-export const eventNotificationsList: string;
-export const emptyEventNotificationsList: string;
 export const emptyEventNotificationsMessage: string;
 export const emptyEventNotificationsLogo: string;
 export const emptyEventNotificationsLabel: string;

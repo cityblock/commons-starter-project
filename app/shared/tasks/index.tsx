@@ -6,7 +6,6 @@ import { FormattedMessage } from 'react-intl';
 import { connect, Dispatch } from 'react-redux';
 import { Route } from 'react-router-dom';
 import { push } from 'react-router-redux';
-import * as Waypoint from 'react-waypoint';
 import * as taskDeleteMutation from '../../graphql/queries/task-delete-mutation.graphql';
 import {
   taskDeleteMutationVariables,
@@ -16,6 +15,7 @@ import {
 } from '../../graphql/types';
 import { IState as IAppState } from '../../store';
 import * as sortSearchStyles from '../css/sort-search.css';
+import InfiniteScroll from '../infinite-scroll/infinite-scroll';
 import Task from '../task/task';
 import TaskCreate from '../task/task-create';
 import * as styles from './css/tasks.css';
@@ -77,7 +77,6 @@ class Tasks extends React.Component<IProps & IDispatchProps & IStateProps & IApo
 
     this.renderTasks = this.renderTasks.bind(this);
     this.renderTask = this.renderTask.bind(this);
-    this.getNextPage = this.getNextPage.bind(this);
     this.showCreateTask = this.showCreateTask.bind(this);
     this.hideCreateTask = this.hideCreateTask.bind(this);
     this.onSortChange = this.onSortChange.bind(this);
@@ -140,13 +139,6 @@ class Tasks extends React.Component<IProps & IDispatchProps & IStateProps & IApo
     this.props.updatePageParams({ orderBy: value });
   }
 
-  getNextPage() {
-    if (this.props.loading || !this.props.hasNextPage || (this.props.tasks || []).length < 1) {
-      return;
-    }
-    this.props.fetchMoreTasks();
-  }
-
   async onDeleteTask(taskId: string) {
     const { redirectToTasks, deleteTask } = this.props;
 
@@ -156,14 +148,21 @@ class Tasks extends React.Component<IProps & IDispatchProps & IStateProps & IApo
   }
 
   render() {
-    const { tasks, routeBase, taskId, patient, patientGoals } = this.props;
+    const {
+      tasks,
+      routeBase,
+      taskId,
+      patient,
+      patientGoals,
+      error,
+      loading,
+      hasNextPage,
+      fetchMoreTasks,
+    } = this.props;
     const { orderBy, showCreateTask } = this.state;
     const tasksList = tasks || [];
     const taskContainerStyles = classNames(styles.taskContainer, {
       [styles.visible]: !!taskId || showCreateTask,
-    });
-    const tasksListStyles = classNames(styles.tasksList, {
-      [styles.compressed]: !!taskId || showCreateTask,
     });
     const createTaskButton = patient ? (
       <div className={styles.createContainer}>
@@ -218,10 +217,16 @@ class Tasks extends React.Component<IProps & IDispatchProps & IStateProps & IApo
           {createTaskButton}
         </div>
         <div className={styles.bottomContainer}>
-          <div className={tasksListStyles}>
+          <InfiniteScroll
+            loading={loading}
+            error={error}
+            fetchMore={fetchMoreTasks}
+            hasNextPage={hasNextPage}
+            isEmpty={tasks ? tasks.length > 0 : true}
+            compressed={!!taskId || showCreateTask}
+          >
             {this.renderTasks(tasksList)}
-            <Waypoint onEnter={this.getNextPage} />
-          </div>
+          </InfiniteScroll>
           <div className={taskContainerStyles}>
             {taskHtml}
             {createTaskHtml}

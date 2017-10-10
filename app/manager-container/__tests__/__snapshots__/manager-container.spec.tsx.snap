@@ -90,16 +90,17 @@ exports[`renders manager container 1`] = `
       >
         <div
           className=""
-        />
+        >
+          <span
+            style={
+              Object {
+                "fontSize": 0,
+              }
+            }
+          />
+        </div>
         <div
           className=""
-        />
-        <span
-          style={
-            Object {
-              "fontSize": 0,
-            }
-          }
         />
       </div>
     </div>

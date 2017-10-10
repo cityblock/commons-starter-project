@@ -1,11 +1,11 @@
 import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
-import * as Waypoint from 'react-waypoint';
 import {
   eventNotificationDismissMutationVariables,
   FullEventNotificationFragment,
 } from '../../graphql/types';
 import * as sortSearchStyles from '../css/sort-search.css';
+import InfiniteScroll from '../infinite-scroll/infinite-scroll';
 import * as styles from './css/event-notifications.css';
 import { EventNotificationRow } from './event-notification-row';
 import { EventNotificationsLoadingError } from './event-notifications-loading-error';
@@ -25,16 +25,9 @@ interface IProps {
 class EventNotifications extends React.Component<IProps, {}> {
   constructor(props: IProps) {
     super(props);
-
     this.renderEventNotifications = this.renderEventNotifications.bind(this);
     this.renderEventNotification = this.renderEventNotification.bind(this);
-    this.getNextPage = this.getNextPage.bind(this);
     this.onDismissEventNotification = this.onDismissEventNotification.bind(this);
-  }
-
-  componentWillReceiveProps(nextProps: IProps) {
-    const { loading, error } = nextProps;
-    this.setState(() => ({ loading, error }));
   }
 
   renderEventNotifications(eventNotifications: FullEventNotificationFragment[]) {
@@ -46,10 +39,11 @@ class EventNotifications extends React.Component<IProps, {}> {
     } else if (!loading && !error) {
       return (
         <div className={styles.emptyEventNotificationsMessage}>
-          <div className={styles.emptyEventNotificationsLogo}></div>
+          <div className={styles.emptyEventNotificationsLogo} />
           <FormattedMessage id='notifications.noNotifications'>
-            {(message: string) =>
-              <div className={styles.emptyEventNotificationsLabel}>{message}</div>}
+            {(message: string) => (
+              <div className={styles.emptyEventNotificationsLabel}>{message}</div>
+            )}
           </FormattedMessage>
         </div>
       );
@@ -74,15 +68,6 @@ class EventNotifications extends React.Component<IProps, {}> {
     );
   }
 
-  getNextPage() {
-    const { loading, hasNextPage, eventNotifications } = this.props;
-
-    if (loading || !hasNextPage || (eventNotifications || []).length < 1) {
-      return;
-    }
-    this.props.fetchMoreEventNotifications();
-  }
-
   async onDismissEventNotification(eventNotificationId: string) {
     const { dismissEventNotification } = this.props;
 
@@ -90,17 +75,22 @@ class EventNotifications extends React.Component<IProps, {}> {
   }
 
   render() {
-    const { eventNotifications } = this.props;
+    const { eventNotifications, error, loading, hasNextPage } = this.props;
     const eventNotificationsList = eventNotifications || [];
 
     return (
       <div className={styles.container}>
-        <div className={sortSearchStyles.sortSearchBar}></div>
+        <div className={sortSearchStyles.sortSearchBar} />
         <div className={styles.bottomContainer}>
-          <div className={styles.eventNotificationsList}>
+          <InfiniteScroll
+            fetchMore={this.props.fetchMoreEventNotifications}
+            error={error}
+            loading={loading}
+            hasNextPage={hasNextPage}
+            isEmpty={eventNotifications ? eventNotifications.length > 0 : true}
+          >
             {this.renderEventNotifications(eventNotificationsList)}
-            <Waypoint onEnter={this.getNextPage} />
-          </div>
+          </InfiniteScroll>
         </div>
       </div>
     );

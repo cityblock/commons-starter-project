@@ -59,7 +59,7 @@ exports[`renders event notifications containers 1`] = `
           className={undefined}
         >
           <div
-            className={undefined}
+            className=""
           >
             <div
               className={undefined}

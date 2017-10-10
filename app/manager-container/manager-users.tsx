@@ -5,7 +5,6 @@ import * as React from 'react';
 import { compose, graphql } from 'react-apollo';
 import { connect, Dispatch } from 'react-redux';
 import { push } from 'react-router-redux';
-import * as Waypoint from 'react-waypoint';
 import * as userCreateMutation from '../graphql/queries/user-create-mutation.graphql';
 import * as userDeleteMutation from '../graphql/queries/user-delete-mutation.graphql';
 import * as userEditRoleMutation from '../graphql/queries/user-edit-role-mutation.graphql';
@@ -20,6 +19,7 @@ import {
 } from '../graphql/types';
 import * as sortSearchStyles from '../shared/css/sort-search.css';
 import * as styles from '../shared/css/two-panel.css';
+import InfiniteScroll from '../shared/infinite-scroll/infinite-scroll';
 import { fetchMore } from '../shared/util/fetch-more';
 import UserInvite from './user-invite';
 import { UserRow } from './user-row';
@@ -112,17 +112,6 @@ export class ManagerUsers extends React.Component<IProps & IDispatchProps & IGra
     }
   }
 
-  getNextPage() {
-    const { usersResponse } = this.props;
-    const usersLength = usersResponse && usersResponse.edges ? usersResponse.edges.length : 0;
-    const hasNextPage =
-      usersResponse && usersResponse.pageInfo ? usersResponse.pageInfo.hasNextPage : false;
-    if (this.props.loading || !hasNextPage || usersLength < 1) {
-      return;
-    }
-    this.props.fetchMoreUsers();
-  }
-
   onSortChange(event: React.ChangeEvent<HTMLSelectElement>) {
     const value = event.target.value as OrderByOptions;
     this.setState({
@@ -172,7 +161,7 @@ export class ManagerUsers extends React.Component<IProps & IDispatchProps & IGra
   }
 
   render() {
-    const { usersResponse, hasLoggedIn } = this.props;
+    const { usersResponse, hasLoggedIn, loading, error, fetchMoreUsers } = this.props;
     const { orderBy, showInviteUser } = this.state;
     let createButton = null;
     if (!hasLoggedIn) {
@@ -186,6 +175,8 @@ export class ManagerUsers extends React.Component<IProps & IDispatchProps & IGra
     }
     const users =
       usersResponse && usersResponse.edges ? usersResponse.edges.map((edge: any) => edge.node) : [];
+    const hasNextPage =
+      usersResponse && usersResponse.pageInfo ? usersResponse.pageInfo.hasNextPage : false;
     const usersStyles = classNames(styles.itemsList, {
       [styles.compressed]: showInviteUser,
     });
@@ -211,9 +202,17 @@ export class ManagerUsers extends React.Component<IProps & IDispatchProps & IGra
           {createButton}
         </div>
         <div className={styles.bottomContainer}>
-          <div className={usersStyles}>{this.renderUsers(users || [])}</div>
+          <InfiniteScroll
+            loading={loading}
+            error={error}
+            fetchMore={fetchMoreUsers}
+            hasNextPage={hasNextPage}
+            isEmpty={users ? users.length > 0 : true}
+            compressed={showInviteUser}
+          >
+            {this.renderUsers(users || [])}
+          </InfiniteScroll>
           <div className={usersStyles}>{inviteUserHtml}</div>
-          <Waypoint onEnter={this.getNextPage} />
         </div>
       </div>
     );

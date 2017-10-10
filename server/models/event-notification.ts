@@ -81,8 +81,7 @@ export default class EventNotification extends Model {
     },
 
     task: {
-      // TODO: remove once (if) https://github.com/Vincit/objection.js/pull/462 gets merged
-      relation: (Model as any).HasOneThroughRelation,
+      relation: Model.HasOneThroughRelation,
       modelClass: 'task',
       join: {
         from: 'event_notification.taskEventId',

@@ -80,8 +80,7 @@ export default class PatientAnswer extends Model {
     },
 
     question: {
-      // TODO: remove once (if) https://github.com/Vincit/objection.js/pull/462 gets merged
-      relation: (Model as any).HasOneThroughRelation,
+      relation: Model.HasOneThroughRelation,
       modelClass: 'question',
       join: {
         from: 'patient_answer.answerId',

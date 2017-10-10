@@ -85,6 +85,14 @@ import {
   resolvePatientScratchPad,
 } from './patient-resolver';
 import {
+  patientScreeningToolSubmissionCreate,
+  patientScreeningToolSubmissionDelete,
+  patientScreeningToolSubmissionEdit,
+  resolvePatientScreeningToolSubmission,
+  resolvePatientScreeningToolSubmissions,
+  resolvePatientScreeningToolSubmissionsForPatient,
+} from './patient-screening-tool-submission-resolver';
+import {
   questionConditionCreate,
   questionConditionDelete,
   questionConditionEdit,
@@ -106,6 +114,23 @@ import {
   riskAreaDelete,
   riskAreaEdit,
 } from './risk-area-resolver';
+import {
+  resolveScreeningTool,
+  resolveScreeningTools,
+  resolveScreeningToolsForRiskArea,
+  screeningToolCreate,
+  screeningToolDelete,
+  screeningToolEdit,
+} from './screening-tool-resolver';
+import {
+  resolveScreeningToolScoreRange,
+  resolveScreeningToolScoreRanges,
+  resolveScreeningToolScoreRangesForScreeningTool,
+  resolveScreeningToolScoreRangeForScoreAndScreeningTool,
+  screeningToolScoreRangeCreate,
+  screeningToolScoreRangeDelete,
+  screeningToolScoreRangeEdit,
+} from './screening-tool-score-range-resolver';
 import {
   resolveTaskComment,
   resolveTaskComments,
@@ -147,6 +172,7 @@ import {
 
 const schemaGql = fs.readFileSync(path.join(__dirname, 'schema.graphql'), 'utf-8');
 
+/* tslint:disable:max-line-length */
 const resolveFunctions = {
   RootQueryType: {
     clinic: resolveClinic,
@@ -194,7 +220,18 @@ const resolveFunctions = {
     taskTemplates: resolveTaskTemplates,
     carePlanSuggestionsForPatient: resolveCarePlanSuggestionsForPatient,
     carePlanForPatient: resolveCarePlanForPatient,
+    screeningTool: resolveScreeningTool,
+    screeningTools: resolveScreeningTools,
+    screeningToolsForRiskArea: resolveScreeningToolsForRiskArea,
+    screeningToolScoreRange: resolveScreeningToolScoreRange,
+    screeningToolScoreRangeForScoreAndScreeningTool: resolveScreeningToolScoreRangeForScoreAndScreeningTool,
+    screeningToolScoreRanges: resolveScreeningToolScoreRanges,
+    screeningToolScoreRangesForScreeningTool: resolveScreeningToolScoreRangesForScreeningTool,
+    patientScreeningToolSubmission: resolvePatientScreeningToolSubmission,
+    patientScreeningToolSubmissionsForPatient: resolvePatientScreeningToolSubmissionsForPatient,
+    patientScreeningToolSubmissions: resolvePatientScreeningToolSubmissions,
   },
+  /* tslint:enable:max-line-length */
   RootMutationType: {
     careTeamAddUser,
     careTeamRemoveUser,
@@ -255,6 +292,15 @@ const resolveFunctions = {
     patientGoalEdit,
     carePlanSuggestionAccept,
     carePlanSuggestionDismiss,
+    screeningToolCreate,
+    screeningToolEdit,
+    screeningToolDelete,
+    screeningToolScoreRangeCreate,
+    screeningToolScoreRangeEdit,
+    screeningToolScoreRangeDelete,
+    patientScreeningToolSubmissionCreate,
+    patientScreeningToolSubmissionEdit,
+    patientScreeningToolSubmissionDelete,
   },
 };
 

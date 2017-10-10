@@ -61,16 +61,18 @@ describe('answer tests', () => {
 
     it('gets all risk areas', async () => {
       const query = `{
-        riskArea(riskAreaId: "${riskArea.id}") {
+        riskAreas {
           id
           title
         }
       }`;
       const result = await graphql(schema, query, null, { db, userRole });
-      expect(cloneDeep(result.data!.riskArea)).toMatchObject({
-        id: riskArea.id,
-        title: 'testing',
-      });
+      expect(cloneDeep(result.data!.riskAreas)).toMatchObject([
+        {
+          id: riskArea.id,
+          title: 'testing',
+        },
+      ]);
     });
   });
 

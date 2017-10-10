@@ -536,6 +536,43 @@ type CarePlan {
   concerns: [PatientConcern!]!
 }
 
+type ScreeningTool implements uniqueId {
+  id: ID!
+  title: String!
+  riskAreaId: String!
+  riskArea: RiskArea!
+  createdAt: String!
+  updatedAt: String!
+  deletedAt: String
+}
+
+type ScreeningToolScoreRange implements uniqueId {
+  id: ID!
+  description: String!
+  screeningToolId: String!
+  screeningTool: ScreeningTool!
+  minimumScore: Int!
+  maximumScore: Int!
+  createdAt: String!
+  updatedAt: String!
+  deletedAt: String
+}
+
+type PatientScreeningToolSubmission implements uniqueId {
+  id: ID!
+  screeningToolId: String!
+  screeningTool: ScreeningTool!
+  patientId: String!
+  patient: Patient!
+  userId: String!
+  user: User!
+  score: Int!
+  riskArea: RiskArea!
+  createdAt: String!
+  updatedAt: String!
+  deletedAt: String
+}
+
 #
 # BEGIN INPUT FIELDS
 #
@@ -938,6 +975,60 @@ input CarePlanSuggestionDismissInput {
   dismissedReason: String!
 }
 
+input ScreeningToolCreateInput {
+  title: String!
+  riskAreaId: String!
+}
+
+input ScreeningToolEditInput {
+  screeningToolId: String!
+  title: String
+  riskAreaId: String
+}
+
+input ScreeningToolDeleteInput {
+  screeningToolId: String!
+}
+
+input ScreeningToolScoreRangeCreateInput {
+  screeningToolId: String!
+  description: String!
+  minimumScore: Int!
+  maximumScore: Int!
+}
+
+input ScreeningToolScoreRangeEditInput {
+  screeningToolScoreRangeId: String!
+  description: String
+  screeningToolId: String
+  minimumScore: Int
+  maximumScore: Int
+  deletedAt: String
+}
+
+input ScreeningToolScoreRangeDeleteInput {
+  screeningToolScoreRangeId: String!
+}
+
+input PatientScreeningToolSubmissionCreateInput {
+  screeningToolId: String!
+  patientId: String!
+  userId: String!
+  score: Int!
+}
+
+input PatientScreeningToolSubmissionEditInput {
+  patientScreeningToolSubmissionId: String!
+  screeningToolId: String
+  patientId: String
+  userId: String
+  score: Int
+}
+
+input PatientScreeningToolSubmissionDeleteInput {
+  patientScreeningToolSubmissionId: String!
+}
+
 type RootMutationType {
   # Create a new user
   userCreate(input: UserCreateInput): User
@@ -1063,6 +1154,30 @@ type RootMutationType {
   carePlanSuggestionAccept(input: CarePlanSuggestionAcceptInput): CarePlanSuggestion
   # care plan suggestion dismiss
   carePlanSuggestionDismiss(input: CarePlanSuggestionDismissInput): CarePlanSuggestion
+  # screening tool create
+  screeningToolCreate(input: ScreeningToolCreateInput): ScreeningTool
+  # screening tool edit
+  screeningToolEdit(input: ScreeningToolEditInput): ScreeningTool
+  # screening tool delete
+  screeningToolDelete(input: ScreeningToolDeleteInput): ScreeningTool
+  # screening tool score range create
+  screeningToolScoreRangeCreate(input: ScreeningToolScoreRangeCreateInput): ScreeningToolScoreRange
+  # screening tool score range edit
+  screeningToolScoreRangeEdit(input: ScreeningToolScoreRangeEditInput): ScreeningToolScoreRange
+  # screening tool score range delete
+  screeningToolScoreRangeDelete(input: ScreeningToolScoreRangeDeleteInput): ScreeningToolScoreRange
+  # patient screening tool submission create
+  patientScreeningToolSubmissionCreate(
+    input: PatientScreeningToolSubmissionCreateInput
+  ): PatientScreeningToolSubmission
+  # patient screening tool submission edit
+  patientScreeningToolSubmissionEdit(
+    input: PatientScreeningToolSubmissionEditInput
+  ): PatientScreeningToolSubmission
+  # patient screening tool submission delete
+  patientScreeningToolSubmissionDelete(
+    input: PatientScreeningToolSubmissionDeleteInput
+  ): PatientScreeningToolSubmission
 }
 
 type RootQueryType {
@@ -1170,6 +1285,34 @@ type RootQueryType {
   carePlanSuggestionsForPatient(patientId: String!): [CarePlanSuggestion]
   # Care Plan
   carePlanForPatient(patientId: String!): CarePlan
+  # screening tool
+  screeningTool(screeningToolId: String!): ScreeningTool
+  # screening tools
+  screeningTools: [ScreeningTool]
+  # screening tools for risk area
+  screeningToolsForRiskArea(riskAreaId: String!): [ScreeningTool]
+  # screening tool score range
+  screeningToolScoreRange(screeningToolScoreRangeId: String!): ScreeningToolScoreRange
+  # screening tool score range for screening tool and score
+  screeningToolScoreRangeForScoreAndScreeningTool(
+    screeningToolId: String!
+    score: Int!
+  ): ScreeningToolScoreRange
+  # screening tool score ranges
+  screeningToolScoreRanges: [ScreeningToolScoreRange]
+  # screening tool score ranges for screening tool
+  screeningToolScoreRangesForScreeningTool(screeningToolId: String!): [ScreeningToolScoreRange]
+  # patient screening tool submission
+  patientScreeningToolSubmission(
+    patientScreeningToolSubmissionId: String!
+  ): PatientScreeningToolSubmission
+  # patient screening tool submissions for patient and screening tool (optioanlly)
+  patientScreeningToolSubmissionsForPatient(
+    patientId: String!
+    screeningToolId: String
+  ): [PatientScreeningToolSubmission]
+  # patient screening tool submissions
+  patientScreeningToolSubmissions: [PatientScreeningToolSubmission]
 }
 
 schema {

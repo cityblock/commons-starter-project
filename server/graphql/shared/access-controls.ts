@@ -22,7 +22,9 @@ export type Resource =
   | 'patientConcern'
   | 'taskTemplate'
   | 'goalSuggestionTemplate'
-  | 'patientGoal';
+  | 'patientGoal'
+  | 'screeningTool'
+  | 'patientScreeningToolSubmission';
 
 /*
 ACL SPEC:

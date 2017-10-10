@@ -199,9 +199,9 @@
   dependencies:
     "@types/node" "*"
 
-"@types/enzyme@^2.8.7":
-  version "2.8.10"
-  resolved "https://registry.yarnpkg.com/@types/enzyme/-/enzyme-2.8.10.tgz#deff580e10cd4997a79345aabedcdc584e860438"
+"@types/enzyme@^2.8.11":
+  version "2.8.11"
+  resolved "https://registry.yarnpkg.com/@types/enzyme/-/enzyme-2.8.11.tgz#d8fb69c934ab4e1cd2099d0d390eac72f20d107c"
   dependencies:
     "@types/cheerio" "*"
     "@types/react" "*"
@@ -336,9 +336,9 @@
   version "6.0.88"
   resolved "https://registry.yarnpkg.com/@types/node/-/node-6.0.88.tgz#f618f11a944f6a18d92b5c472028728a3e3d4b66"
 
-"@types/node@^8.0.31":
-  version "8.0.32"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-8.0.32.tgz#869a716538b6eec65ab3893f183d557be3cda206"
+"@types/node@^8.0.33":
+  version "8.0.33"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-8.0.33.tgz#1126e94374014e54478092830704f6ea89df04cd"
 
 "@types/optics-agent@^1.1.2":
   version "1.1.2"
@@ -363,9 +363,9 @@
   dependencies:
     "@types/react" "*"
 
-"@types/react-dom@^16.0.0":
-  version "16.0.0"
-  resolved "https://registry.yarnpkg.com/@types/react-dom/-/react-dom-16.0.0.tgz#7fac396cbd1cf44e112b957c8ef9c7ef401a90b3"
+"@types/react-dom@^16.0.1":
+  version "16.0.1"
+  resolved "https://registry.yarnpkg.com/@types/react-dom/-/react-dom-16.0.1.tgz#de159d00dd70050000f462e8bcff0c08ef803dee"
   dependencies:
     "@types/node" "*"
     "@types/react" "*"
@@ -404,9 +404,9 @@
     "@types/history" "*"
     "@types/react" "*"
 
-"@types/react-test-renderer@^15.5.4":
-  version "15.5.4"
-  resolved "https://registry.yarnpkg.com/@types/react-test-renderer/-/react-test-renderer-15.5.4.tgz#1f579bc615231f3cc3f1b0a25b88940d4c85f925"
+"@types/react-test-renderer@^16.0.0":
+  version "16.0.0"
+  resolved "https://registry.yarnpkg.com/@types/react-test-renderer/-/react-test-renderer-16.0.0.tgz#905a12076d7315eb4a36c4f0e5e760c7b3115420"
   dependencies:
     "@types/react" "*"
 
@@ -648,22 +648,22 @@ apollo-link@^0.7.0:
     graphql "^0.11.3"
     zen-observable-ts "^0.5.0"
 
-apollo-server-core@^1.1.0:
-  version "1.1.0"
-  resolved "https://registry.yarnpkg.com/apollo-server-core/-/apollo-server-core-1.1.0.tgz#74c3bf4394e14eae7ab60b1d999a3c5b8aa94e9a"
+apollo-server-core@^1.1.6:
+  version "1.1.6"
+  resolved "https://registry.yarnpkg.com/apollo-server-core/-/apollo-server-core-1.1.6.tgz#be45833e15a6fa28e52bc7e853cd77dfb2558da7"
   dependencies:
     apollo-tracing "^0.0.7"
 
-apollo-server-express@^1.1.2:
-  version "1.1.2"
-  resolved "https://registry.yarnpkg.com/apollo-server-express/-/apollo-server-express-1.1.2.tgz#6933c77fe5dfb9a7f30dd393239ad9953a613cd9"
+apollo-server-express@^1.1.6:
+  version "1.1.6"
+  resolved "https://registry.yarnpkg.com/apollo-server-express/-/apollo-server-express-1.1.6.tgz#57360d9dd87dea4913da27f41b7d6eb422e0a3c0"
   dependencies:
-    apollo-server-core "^1.1.0"
-    apollo-server-module-graphiql "^1.1.2"
+    apollo-server-core "^1.1.6"
+    apollo-server-module-graphiql "^1.1.6"
 
-apollo-server-module-graphiql@^1.1.2:
-  version "1.1.2"
-  resolved "https://registry.yarnpkg.com/apollo-server-module-graphiql/-/apollo-server-module-graphiql-1.1.2.tgz#49a154cf80e984acb082bd0096175b561e1bfbcc"
+apollo-server-module-graphiql@^1.1.6:
+  version "1.1.6"
+  resolved "https://registry.yarnpkg.com/apollo-server-module-graphiql/-/apollo-server-module-graphiql-1.1.6.tgz#9a0c8ff7ed7c4fff313065db388f08b1e7b6f9b9"
 
 apollo-tracing@^0.0.7:
   version "0.0.7"
@@ -3082,11 +3082,11 @@ graphql-document-collector@^0.1.3:
     graphql-tag "^0.1.14"
     typed-graphql "^1.0.2"
 
-graphql-server-express@^1.1.2:
-  version "1.1.2"
-  resolved "https://registry.yarnpkg.com/graphql-server-express/-/graphql-server-express-1.1.2.tgz#6e8a306a6616ac72c7850efa9fda9cba29836335"
+graphql-server-express@^1.1.6:
+  version "1.1.6"
+  resolved "https://registry.yarnpkg.com/graphql-server-express/-/graphql-server-express-1.1.6.tgz#cf9a43f15b26dd15a920d05140dd22cf2e446875"
   dependencies:
-    apollo-server-express "^1.1.2"
+    apollo-server-express "^1.1.6"
 
 graphql-tag@^0.1.14:
   version "0.1.17"
@@ -4204,9 +4204,9 @@ jsonify@~0.0.0:
   version "0.0.0"
   resolved "https://registry.yarnpkg.com/jsonify/-/jsonify-0.0.0.tgz#2c74b6ee41d93ca51b7b5aaee8f503631d252a73"
 
-jsonwebtoken@^8.0.0:
-  version "8.0.1"
-  resolved "https://registry.yarnpkg.com/jsonwebtoken/-/jsonwebtoken-8.0.1.tgz#50daef8d0a8c7de2cd06bc1013b75b04ccf3f0cf"
+jsonwebtoken@^8.1.0:
+  version "8.1.0"
+  resolved "https://registry.yarnpkg.com/jsonwebtoken/-/jsonwebtoken-8.1.0.tgz#c6397cd2e5fd583d65c007a83dc7bb78e6982b83"
   dependencies:
     jws "^3.1.4"
     lodash.includes "^4.3.0"
@@ -7467,9 +7467,9 @@ trim-right@^1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/trim-right/-/trim-right-1.0.1.tgz#cb2e1203067e0c8de1f614094b9fe45704ea6003"
 
-ts-jest@^21.1.0:
-  version "21.1.0"
-  resolved "https://registry.yarnpkg.com/ts-jest/-/ts-jest-21.1.0.tgz#f8d1a6dfadd6e65f8ced525c638eac3543842d3c"
+ts-jest@^21.1.1:
+  version "21.1.1"
+  resolved "https://registry.yarnpkg.com/ts-jest/-/ts-jest-21.1.1.tgz#a63380127e59e112a113106237f302d17c72cd48"
   dependencies:
     babel-core "^6.24.1"
     babel-plugin-istanbul "^4.1.4"

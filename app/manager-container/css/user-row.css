@@ -23,13 +23,9 @@
 }
 
 .userDel {
-  @apply --button;
   display: flex;
   justify-content: flex-end;
-  margin: 0px 10px;
-  border-right: 1px solid var(--gray-background-color);
 }
-
 
 .dateSection {
   border-left: 1px solid var(--gray-background-color);
@@ -60,6 +56,29 @@
 }
 
 .button {
-  font-family: var(--roboto);
-  font-size: var(--extra-small-font-size);
+  @apply --button;
+  display: block;
+  width: 180px;
+  padding: 7px 0px 3px;
+  margin-bottom: 10px;
+}
+
+.buttonInverted {
+  @apply --inverted-button;
+  display: block;
+  width: 180px;
+  padding: 7px 0px 3px;
+  margin-bottom: 10px;
+}
+
+.popupHeading {
+  font-size: var(--large-font-size);
+  line-height: var(--gslarge-font-line-height);
+  text-align: center;
+  margin-bottom: 50px;
+}
+
+.buttons {
+  display: flex;
+  justify-content: space-between;
 }

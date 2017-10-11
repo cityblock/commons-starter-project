@@ -7,3 +7,6 @@ export const dueAtSection: string;
 export const dateLabel: string;
 export const dateValue: string;
 export const button: string;
+export const buttonInverted: string;
+export const popupHeading: string;
+export const buttons: string;

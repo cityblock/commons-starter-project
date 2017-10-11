@@ -22,7 +22,7 @@ import * as styles from '../shared/css/two-panel.css';
 import InfiniteScroll from '../shared/infinite-scroll/infinite-scroll';
 import { fetchMore } from '../shared/util/fetch-more';
 import UserInvite from './user-invite';
-import { UserRow } from './user-row';
+import UserRow from './user-row';
 
 type OrderByOptions =
   | 'createdAtDesc'

@@ -83,7 +83,6 @@ class Tasks extends React.Component<IProps & IDispatchProps & IStateProps & IApo
     this.onDeleteTask = this.onDeleteTask.bind(this);
 
     const pageParams = getPageParams();
-
     this.state = {
       showCreateTask: false,
       orderBy: (pageParams.orderBy as any) || 'createdAtDesc',

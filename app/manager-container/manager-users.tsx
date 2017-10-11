@@ -183,6 +183,7 @@ export class ManagerUsers extends React.Component<IProps & IDispatchProps & IGra
     const inviteUserHtml = showInviteUser ? (
       <UserInvite onClose={this.hideInviteUser} inviteUser={this.onInviteUser} />
     ) : null;
+
     return (
       <div className={styles.container}>
         <div className={styles.sortSearchBar}>

@@ -10,8 +10,6 @@ module.exports = ({ production = false } = {}) => {
     new webpack.WatchIgnorePlugin([/css\.d\.ts$/]),
     new webpack.EnvironmentPlugin(['NODE_ENV', 'GOOGLE_OAUTH_TOKEN']),
     new webpack.NamedModulesPlugin(),
-    new webpack.optimize.OccurrenceOrderPlugin(),
-    new webpack.NoEmitOnErrorsPlugin(),
   ];
   if (!production) {
     plugins.push(

@@ -40,7 +40,6 @@ export const UserRow: React.StatelessComponent<IProps> = props => {
             <option value='nurseCareManager'>Nurse Care Manager</option>
             <option value='healthCoach'>Health Coach</option>
             <option value='familyMember'>Family Memeber</option>
-            <option value='anonymousUser'>Not yet set</option>
             <option value='admin'>Admin</option>
           </select>
         </div>

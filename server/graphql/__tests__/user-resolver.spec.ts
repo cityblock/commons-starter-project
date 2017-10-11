@@ -260,10 +260,12 @@ describe('user tests', () => {
           user { firstName, lastName }
         }
       }`;
+
       const result = await graphql(schema, mutation, null, { db, userRole, logger });
+      // update user name from google response
       expect(cloneDeep(result.data!.userLogin.user)).toMatchObject({
-        firstName: 'Bertrand',
-        lastName: 'Russell',
+        firstName: 'Logan',
+        lastName: 'Hasson',
       });
       const freshUser = await User.query().findById(user.id);
       expect(freshUser!.lastLoginAt).not.toBeNull();

@@ -195,6 +195,8 @@ export async function userLogin(root: any, { input }: IUserLoginOptions, { db, l
     lastLoginAt,
     googleProfileImageUrl: googleResult.picture,
     googleAuthId: googleAuth.id,
+    firstName: googleResult.given_name,
+    lastName: googleResult.family_name,
   });
 
   const authToken = signJwt({

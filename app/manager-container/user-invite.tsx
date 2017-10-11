@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { isEmail } from 'validator';
 import * as styles from '../shared/css/create-form.css';
 import * as formStyles from '../shared/css/forms.css';
 import * as loadingStyles from '../shared/css/loading-spinner.css';
@@ -37,10 +38,14 @@ class UserInvite extends React.Component<IProps, IState> {
     event.preventDefault();
     if (this.state.localEmail) {
       try {
-        this.setState({ loading: true });
-        this.props.inviteUser(this.state.localEmail);
-        this.setState({ loading: false, localEmail: '' });
-        this.props.onClose();
+        if (isEmail(`${this.state.localEmail}@cityblock.com`)) {
+          this.setState({ loading: true });
+          this.props.inviteUser(this.state.localEmail);
+          this.setState({ loading: false, localEmail: '' });
+          this.props.onClose();
+        } else {
+          this.setState({ error: "Please enter only the start of an email address (ie: 'logan')" });
+        }
       } catch (e) {
         this.setState({ error: e.message, loading: false });
       }
@@ -48,7 +53,7 @@ class UserInvite extends React.Component<IProps, IState> {
     return false;
   }
   render() {
-    const { loading, localEmail } = this.state;
+    const { loading, localEmail, error } = this.state;
 
     const loadingClass = loading ? styles.loading : styles.loadingHidden;
 
@@ -67,6 +72,7 @@ class UserInvite extends React.Component<IProps, IState> {
                 <div className={loadingStyles.loadingSpinner} />
               </div>
             </div>
+            <div className={styles.error}>{error}</div>
             <div className={styles.inputGroup}>
               <input
                 name='email'

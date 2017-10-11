@@ -3,6 +3,7 @@ export const loading: string;
 export const loadingHidden: string;
 export const loadingContainer: string;
 export const formBottom: string;
+export const error: string;
 export const formBottomContent: string;
 export const formTop: string;
 export const inputGroup: string;

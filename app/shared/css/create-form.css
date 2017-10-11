@@ -34,6 +34,10 @@
   margin: 20px;
 }
 
+.error {
+  color: var(--red-color);
+}
+
 .formBottomContent {
   width: 100%;
   display: flex;

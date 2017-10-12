@@ -6,6 +6,8 @@ import GoalSuggestion from '../../models/goal-suggestion';
 import GoalSuggestionTemplate from '../../models/goal-suggestion-template';
 import Question from '../../models/question';
 import RiskArea from '../../models/risk-area';
+import ScreeningTool from '../../models/screening-tool';
+import ScreeningToolScoreRange from '../../models/screening-tool-score-range';
 import schema from '../make-executable-schema';
 
 describe('goal suggestion resolver', () => {
@@ -71,6 +73,36 @@ describe('goal suggestion resolver', () => {
         goalSuggestionCreate(
           input: {
             answerId: "${answer.id}", goalSuggestionTemplateId: "${goalSuggestionTemplate.id}"
+          }
+        ) {
+          title
+        }
+      }`;
+      const result = await graphql(schema, mutation, null, { userRole });
+      expect(cloneDeep(result.data!.goalSuggestionCreate)).toMatchObject([
+        {
+          title: 'Fix housing',
+        },
+      ]);
+    });
+
+    it('suggests a goal for a screening tool score range', async () => {
+      const riskArea = await RiskArea.create({ title: 'Housing', order: 1 });
+      const screeningTool = await ScreeningTool.create({
+        title: 'Screening Tool',
+        riskAreaId: riskArea.id,
+      });
+      const screeningToolScoreRange = await ScreeningToolScoreRange.create({
+        description: 'Score Range',
+        screeningToolId: screeningTool.id,
+        minimumScore: 0,
+        maximumScore: 10,
+      });
+      const mutation = `mutation {
+        goalSuggestionCreate(
+          input: {
+            screeningToolScoreRangeId: "${screeningToolScoreRange.id}"
+            goalSuggestionTemplateId: "${goalSuggestionTemplate.id}"
           }
         ) {
           title

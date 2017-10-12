@@ -4,7 +4,8 @@ mutation questionCreate(
   $title: String!
   $answerType: AnswerTypeOptions!
   $validatedSource: String
-  $riskAreaId: String!
+  $riskAreaId: String
+  $screeningToolId: String
   $order: Int!
   $applicableIfType: QuestionConditionTypeOptions
 ) {
@@ -14,6 +15,7 @@ mutation questionCreate(
       answerType: $answerType
       validatedSource: $validatedSource
       riskAreaId: $riskAreaId
+      screeningToolId: $screeningToolId
       order: $order
       applicableIfType: $applicableIfType
     }

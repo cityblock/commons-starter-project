@@ -103,7 +103,7 @@ import {
   questionDelete,
   questionEdit,
   resolveQuestion,
-  resolveQuestionsForRiskArea,
+  resolveQuestionsForRiskAreaOrScreeningTool,
 } from './question-resolver';
 import {
   resolvePatientRiskAreaRiskScore,
@@ -196,7 +196,7 @@ const resolveFunctions = {
     patientRiskAreaRiskScore: resolvePatientRiskAreaRiskScore,
     patientRiskAreaSummary: resolvePatientRiskAreaSummary,
     question: resolveQuestion,
-    questionsForRiskArea: resolveQuestionsForRiskArea,
+    questionsForRiskAreaOrScreeningTool: resolveQuestionsForRiskAreaOrScreeningTool,
     answer: resolveAnswer,
     answersForQuestion: resolveAnswersForQuestion,
     questionCondition: resolveQuestionCondition,

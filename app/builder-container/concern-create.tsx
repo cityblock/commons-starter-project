@@ -18,8 +18,11 @@ interface IOptions { variables: concernCreateMutationVariables; }
 interface IProps {
   routeBase: string;
   onClose: () => any;
-  createConcern: (options: IOptions) => { data: { concernCreate: FullConcernFragment } };
-  redirectToConcern: (concernId: string) => any;
+  redirectToConcern?: (concernId: string) => any;
+}
+
+interface IGraphqlProps {
+  createConcern?: (options: IOptions) => { data: { concernCreate: FullConcernFragment } };
 }
 
 interface IState {
@@ -28,8 +31,10 @@ interface IState {
   concern: concernCreateMutationVariables;
 }
 
-class ConcernCreate extends React.Component<IProps, IState> {
-  constructor(props: IProps) {
+type allProps = IProps & IGraphqlProps;
+
+class ConcernCreate extends React.Component<allProps, IState> {
+  constructor(props: allProps) {
     super(props);
 
     this.onSubmit = this.onSubmit.bind(this);
@@ -62,18 +67,22 @@ class ConcernCreate extends React.Component<IProps, IState> {
 
   async onSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    try {
-      this.setState({ loading: true });
-      const concern = await this.props.createConcern({
-        variables: {
-          ...this.state.concern,
-        },
-      });
-      this.setState({ loading: false });
-      this.props.onClose();
-      this.props.redirectToConcern(concern.data.concernCreate.id);
-    } catch (e) {
-      this.setState({ error: e.message, loading: false });
+    if (this.props.createConcern) {
+      try {
+        this.setState({ loading: true });
+        const concern = await this.props.createConcern({
+          variables: {
+            ...this.state.concern,
+          },
+        });
+        this.setState({ loading: false });
+        this.props.onClose();
+        if (this.props.redirectToConcern) {
+          this.props.redirectToConcern(concern.data.concernCreate.id);
+        }
+      } catch (e) {
+        this.setState({ error: e.message, loading: false });
+      }
     }
     return false;
   }
@@ -118,7 +127,7 @@ class ConcernCreate extends React.Component<IProps, IState> {
   }
 }
 
-function mapDispatchToProps(dispatch: Dispatch<() => void>, ownProps: IProps): Partial<IProps> {
+function mapDispatchToProps(dispatch: Dispatch<() => void>, ownProps: allProps): Partial<allProps> {
   return {
     redirectToConcern: (concernId: string) => {
       dispatch(push(`${ownProps.routeBase}/${concernId}`));
@@ -128,7 +137,7 @@ function mapDispatchToProps(dispatch: Dispatch<() => void>, ownProps: IProps): P
 
 export default compose(
   connect(undefined, mapDispatchToProps),
-  graphql(concernCreateMutation as any, {
+  graphql<IGraphqlProps, IProps>(concernCreateMutation as any, {
     name: 'createConcern',
     options: {
       refetchQueries: [
@@ -136,4 +145,4 @@ export default compose(
       ],
     },
   }),
-)(ConcernCreate as any) as any;
+)(ConcernCreate);

@@ -1,7 +1,0 @@
-#import "../fragments/full-question.graphql"
-
-query getQuestionsForRiskArea($riskAreaId: String!) {
-  questionsForRiskArea(riskAreaId: $riskAreaId) {
-    ...FullQuestion
-  }
-}

@@ -21,6 +21,9 @@ interface IProps {
   questionCondition?: FullQuestionConditionFragment;
   questionId: string;
   answers: FullAnswerFragment[];
+}
+
+interface IGraphqlProps {
   createQuestionCondition: (
     options: ICreateOptions,
   ) => { data: { questionConditionCreate: FullQuestionConditionFragment } };
@@ -34,9 +37,11 @@ interface IState {
   };
 }
 
-class QuestionConditionCreate extends React.Component<IProps, IState> {
+type allProps = IProps & IGraphqlProps;
 
-  constructor(props: IProps) {
+class QuestionConditionCreate extends React.Component<allProps, IState> {
+
+  constructor(props: allProps) {
     super(props);
 
     this.onSubmit = this.onSubmit.bind(this);
@@ -113,12 +118,12 @@ class QuestionConditionCreate extends React.Component<IProps, IState> {
 }
 
 export default compose(
-  graphql(questionConditionCreateMutation as any, {
+  graphql<IGraphqlProps, IProps>(questionConditionCreateMutation as any, {
     name: 'createQuestionCondition',
     options: {
       refetchQueries: [
-        'getQuestionsForRiskArea',
+        'getQuestionsForRiskAreaOrScreeningTool',
       ],
     },
   }),
-)(QuestionConditionCreate as any) as any;
+)(QuestionConditionCreate);

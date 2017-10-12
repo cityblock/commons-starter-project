@@ -514,7 +514,8 @@ export type concernEditMutation = {
 };
 
 export type concernSuggestionCreateMutationVariables = {
-  answerId: string,
+  answerId?: string | null,
+  screeningToolScoreRangeId?: string | null,
   concernId: string,
 };
 
@@ -530,7 +531,8 @@ export type concernSuggestionCreateMutation = {
 };
 
 export type concernSuggestionDeleteMutationVariables = {
-  answerId: string,
+  answerId?: string | null,
+  screeningToolScoreRangeId?: string | null,
   concernId: string,
 };
 
@@ -1686,7 +1688,8 @@ export type getQuestionQuery = {
     title: string,
     validatedSource: string | null,
     answerType: AnswerTypeOptions,
-    riskAreaId: string,
+    riskAreaId: string | null,
+    screeningToolId: string | null,
     order: number,
     applicableIfType: QuestionConditionTypeOptions | null,
     answers:  Array< {
@@ -1735,20 +1738,22 @@ export type getQuestionQuery = {
   } | null,
 };
 
-export type getQuestionsForRiskAreaQueryVariables = {
-  riskAreaId: string,
+export type getQuestionsForRiskAreaOrScreeningToolQueryVariables = {
+  riskAreaId?: string | null,
+  screeningToolId?: string | null,
 };
 
-export type getQuestionsForRiskAreaQuery = {
+export type getQuestionsForRiskAreaOrScreeningToolQuery = {
   // Questions
-  questionsForRiskArea:  Array< {
+  questionsForRiskAreaOrScreeningTool:  Array< {
     id: string,
     createdAt: string,
     deletedAt: string | null,
     title: string,
     validatedSource: string | null,
     answerType: AnswerTypeOptions,
-    riskAreaId: string,
+    riskAreaId: string | null,
+    screeningToolId: string | null,
     order: number,
     applicableIfType: QuestionConditionTypeOptions | null,
     answers:  Array< {
@@ -1822,6 +1827,124 @@ export type getRiskAreasQuery = {
     deletedAt: string | null,
     title: string,
     order: number,
+  } | null > | null,
+};
+
+export type getScreeningToolQueryVariables = {
+  screeningToolId: string,
+};
+
+export type getScreeningToolQuery = {
+  // screening tool
+  screeningTool:  {
+    id: string,
+    title: string,
+    riskAreaId: string,
+    riskArea:  {
+      id: string,
+      createdAt: string,
+      updatedAt: string,
+      deletedAt: string | null,
+      title: string,
+      order: number,
+    },
+    screeningToolScoreRanges:  Array< {
+      id: string,
+      description: string,
+      minimumScore: number,
+      maximumScore: number,
+      screeningToolId: string,
+      createdAt: string,
+      updatedAt: string,
+      deletedAt: string | null,
+      concernSuggestions:  Array< {
+        id: string,
+        title: string,
+        createdAt: string,
+        updatedAt: string,
+        deletedAt: string | null,
+      } | null > | null,
+      goalSuggestions:  Array< {
+        id: string,
+        title: string,
+        taskTemplates:  Array< {
+          id: string,
+          title: string,
+          completedWithinNumber: number | null,
+          completedWithinInterval: CompletedWithinInterval | null,
+          repeating: boolean | null,
+          goalSuggestionTemplateId: string,
+          priority: Priority | null,
+          careTeamAssigneeRole: UserRole | null,
+          createdAt: string,
+          updatedAt: string,
+          deletedAt: string | null,
+        } | null > | null,
+        createdAt: string,
+        updatedAt: string,
+        deletedAt: string | null,
+      } | null > | null,
+    } | null >,
+    createdAt: string,
+    updatedAt: string,
+    deletedAt: string | null,
+  } | null,
+};
+
+export type getScreeningToolsQuery = {
+  // screening tools
+  screeningTools:  Array< {
+    id: string,
+    title: string,
+    riskAreaId: string,
+    riskArea:  {
+      id: string,
+      createdAt: string,
+      updatedAt: string,
+      deletedAt: string | null,
+      title: string,
+      order: number,
+    },
+    screeningToolScoreRanges:  Array< {
+      id: string,
+      description: string,
+      minimumScore: number,
+      maximumScore: number,
+      screeningToolId: string,
+      createdAt: string,
+      updatedAt: string,
+      deletedAt: string | null,
+      concernSuggestions:  Array< {
+        id: string,
+        title: string,
+        createdAt: string,
+        updatedAt: string,
+        deletedAt: string | null,
+      } | null > | null,
+      goalSuggestions:  Array< {
+        id: string,
+        title: string,
+        taskTemplates:  Array< {
+          id: string,
+          title: string,
+          completedWithinNumber: number | null,
+          completedWithinInterval: CompletedWithinInterval | null,
+          repeating: boolean | null,
+          goalSuggestionTemplateId: string,
+          priority: Priority | null,
+          careTeamAssigneeRole: UserRole | null,
+          createdAt: string,
+          updatedAt: string,
+          deletedAt: string | null,
+        } | null > | null,
+        createdAt: string,
+        updatedAt: string,
+        deletedAt: string | null,
+      } | null > | null,
+    } | null >,
+    createdAt: string,
+    updatedAt: string,
+    deletedAt: string | null,
   } | null > | null,
 };
 
@@ -1972,7 +2095,8 @@ export type getUsersQuery = {
 };
 
 export type goalSuggestionCreateMutationVariables = {
-  answerId: string,
+  answerId?: string | null,
+  screeningToolScoreRangeId?: string | null,
   goalSuggestionTemplateId: string,
 };
 
@@ -2001,7 +2125,8 @@ export type goalSuggestionCreateMutation = {
 };
 
 export type goalSuggestionDeleteMutationVariables = {
-  answerId: string,
+  answerId?: string | null,
+  screeningToolScoreRangeId?: string | null,
   goalSuggestionTemplateId: string,
 };
 
@@ -2541,7 +2666,8 @@ export type questionCreateMutationVariables = {
   title: string,
   answerType: AnswerTypeOptions,
   validatedSource?: string | null,
-  riskAreaId: string,
+  riskAreaId?: string | null,
+  screeningToolId?: string | null,
   order: number,
   applicableIfType?: QuestionConditionTypeOptions | null,
 };
@@ -2555,7 +2681,8 @@ export type questionCreateMutation = {
     title: string,
     validatedSource: string | null,
     answerType: AnswerTypeOptions,
-    riskAreaId: string,
+    riskAreaId: string | null,
+    screeningToolId: string | null,
     order: number,
     applicableIfType: QuestionConditionTypeOptions | null,
     answers:  Array< {
@@ -2617,7 +2744,8 @@ export type questionDeleteMutation = {
     title: string,
     validatedSource: string | null,
     answerType: AnswerTypeOptions,
-    riskAreaId: string,
+    riskAreaId: string | null,
+    screeningToolId: string | null,
     order: number,
     applicableIfType: QuestionConditionTypeOptions | null,
     answers:  Array< {
@@ -2685,7 +2813,8 @@ export type questionEditMutation = {
     title: string,
     validatedSource: string | null,
     answerType: AnswerTypeOptions,
-    riskAreaId: string,
+    riskAreaId: string | null,
+    screeningToolId: string | null,
     order: number,
     applicableIfType: QuestionConditionTypeOptions | null,
     answers:  Array< {
@@ -2782,6 +2911,334 @@ export type riskAreaEditMutation = {
     deletedAt: string | null,
     title: string,
     order: number,
+  } | null,
+};
+
+export type screeningToolCreateMutationVariables = {
+  title: string,
+  riskAreaId: string,
+};
+
+export type screeningToolCreateMutation = {
+  // screening tool create
+  screeningToolCreate:  {
+    id: string,
+    title: string,
+    riskAreaId: string,
+    riskArea:  {
+      id: string,
+      createdAt: string,
+      updatedAt: string,
+      deletedAt: string | null,
+      title: string,
+      order: number,
+    },
+    screeningToolScoreRanges:  Array< {
+      id: string,
+      description: string,
+      minimumScore: number,
+      maximumScore: number,
+      screeningToolId: string,
+      createdAt: string,
+      updatedAt: string,
+      deletedAt: string | null,
+      concernSuggestions:  Array< {
+        id: string,
+        title: string,
+        createdAt: string,
+        updatedAt: string,
+        deletedAt: string | null,
+      } | null > | null,
+      goalSuggestions:  Array< {
+        id: string,
+        title: string,
+        taskTemplates:  Array< {
+          id: string,
+          title: string,
+          completedWithinNumber: number | null,
+          completedWithinInterval: CompletedWithinInterval | null,
+          repeating: boolean | null,
+          goalSuggestionTemplateId: string,
+          priority: Priority | null,
+          careTeamAssigneeRole: UserRole | null,
+          createdAt: string,
+          updatedAt: string,
+          deletedAt: string | null,
+        } | null > | null,
+        createdAt: string,
+        updatedAt: string,
+        deletedAt: string | null,
+      } | null > | null,
+    } | null >,
+    createdAt: string,
+    updatedAt: string,
+    deletedAt: string | null,
+  } | null,
+};
+
+export type screeningToolDeleteMutationVariables = {
+  screeningToolId: string,
+};
+
+export type screeningToolDeleteMutation = {
+  // screening tool delete
+  screeningToolDelete:  {
+    id: string,
+    title: string,
+    riskAreaId: string,
+    riskArea:  {
+      id: string,
+      createdAt: string,
+      updatedAt: string,
+      deletedAt: string | null,
+      title: string,
+      order: number,
+    },
+    screeningToolScoreRanges:  Array< {
+      id: string,
+      description: string,
+      minimumScore: number,
+      maximumScore: number,
+      screeningToolId: string,
+      createdAt: string,
+      updatedAt: string,
+      deletedAt: string | null,
+      concernSuggestions:  Array< {
+        id: string,
+        title: string,
+        createdAt: string,
+        updatedAt: string,
+        deletedAt: string | null,
+      } | null > | null,
+      goalSuggestions:  Array< {
+        id: string,
+        title: string,
+        taskTemplates:  Array< {
+          id: string,
+          title: string,
+          completedWithinNumber: number | null,
+          completedWithinInterval: CompletedWithinInterval | null,
+          repeating: boolean | null,
+          goalSuggestionTemplateId: string,
+          priority: Priority | null,
+          careTeamAssigneeRole: UserRole | null,
+          createdAt: string,
+          updatedAt: string,
+          deletedAt: string | null,
+        } | null > | null,
+        createdAt: string,
+        updatedAt: string,
+        deletedAt: string | null,
+      } | null > | null,
+    } | null >,
+    createdAt: string,
+    updatedAt: string,
+    deletedAt: string | null,
+  } | null,
+};
+
+export type screeningToolEditMutationVariables = {
+  screeningToolId: string,
+  title?: string | null,
+  riskAreaId?: string | null,
+};
+
+export type screeningToolEditMutation = {
+  // screening tool edit
+  screeningToolEdit:  {
+    id: string,
+    title: string,
+    riskAreaId: string,
+    riskArea:  {
+      id: string,
+      createdAt: string,
+      updatedAt: string,
+      deletedAt: string | null,
+      title: string,
+      order: number,
+    },
+    screeningToolScoreRanges:  Array< {
+      id: string,
+      description: string,
+      minimumScore: number,
+      maximumScore: number,
+      screeningToolId: string,
+      createdAt: string,
+      updatedAt: string,
+      deletedAt: string | null,
+      concernSuggestions:  Array< {
+        id: string,
+        title: string,
+        createdAt: string,
+        updatedAt: string,
+        deletedAt: string | null,
+      } | null > | null,
+      goalSuggestions:  Array< {
+        id: string,
+        title: string,
+        taskTemplates:  Array< {
+          id: string,
+          title: string,
+          completedWithinNumber: number | null,
+          completedWithinInterval: CompletedWithinInterval | null,
+          repeating: boolean | null,
+          goalSuggestionTemplateId: string,
+          priority: Priority | null,
+          careTeamAssigneeRole: UserRole | null,
+          createdAt: string,
+          updatedAt: string,
+          deletedAt: string | null,
+        } | null > | null,
+        createdAt: string,
+        updatedAt: string,
+        deletedAt: string | null,
+      } | null > | null,
+    } | null >,
+    createdAt: string,
+    updatedAt: string,
+    deletedAt: string | null,
+  } | null,
+};
+
+export type screeningToolScoreRangeCreateMutationVariables = {
+  description: string,
+  screeningToolId: string,
+  minimumScore: number,
+  maximumScore: number,
+};
+
+export type screeningToolScoreRangeCreateMutation = {
+  // screening tool score range create
+  screeningToolScoreRangeCreate:  {
+    id: string,
+    description: string,
+    minimumScore: number,
+    maximumScore: number,
+    screeningToolId: string,
+    createdAt: string,
+    updatedAt: string,
+    deletedAt: string | null,
+    concernSuggestions:  Array< {
+      id: string,
+      title: string,
+      createdAt: string,
+      updatedAt: string,
+      deletedAt: string | null,
+    } | null > | null,
+    goalSuggestions:  Array< {
+      id: string,
+      title: string,
+      taskTemplates:  Array< {
+        id: string,
+        title: string,
+        completedWithinNumber: number | null,
+        completedWithinInterval: CompletedWithinInterval | null,
+        repeating: boolean | null,
+        goalSuggestionTemplateId: string,
+        priority: Priority | null,
+        careTeamAssigneeRole: UserRole | null,
+        createdAt: string,
+        updatedAt: string,
+        deletedAt: string | null,
+      } | null > | null,
+      createdAt: string,
+      updatedAt: string,
+      deletedAt: string | null,
+    } | null > | null,
+  } | null,
+};
+
+export type screeningToolScoreRangeDeleteMutationVariables = {
+  screeningToolScoreRangeId: string,
+};
+
+export type screeningToolScoreRangeDeleteMutation = {
+  // screening tool score range delete
+  screeningToolScoreRangeDelete:  {
+    id: string,
+    description: string,
+    minimumScore: number,
+    maximumScore: number,
+    screeningToolId: string,
+    createdAt: string,
+    updatedAt: string,
+    deletedAt: string | null,
+    concernSuggestions:  Array< {
+      id: string,
+      title: string,
+      createdAt: string,
+      updatedAt: string,
+      deletedAt: string | null,
+    } | null > | null,
+    goalSuggestions:  Array< {
+      id: string,
+      title: string,
+      taskTemplates:  Array< {
+        id: string,
+        title: string,
+        completedWithinNumber: number | null,
+        completedWithinInterval: CompletedWithinInterval | null,
+        repeating: boolean | null,
+        goalSuggestionTemplateId: string,
+        priority: Priority | null,
+        careTeamAssigneeRole: UserRole | null,
+        createdAt: string,
+        updatedAt: string,
+        deletedAt: string | null,
+      } | null > | null,
+      createdAt: string,
+      updatedAt: string,
+      deletedAt: string | null,
+    } | null > | null,
+  } | null,
+};
+
+export type screeningToolScoreRangeEditMutationVariables = {
+  screeningToolScoreRangeId: string,
+  description?: string | null,
+  screeningToolId?: string | null,
+  minimumScore?: number | null,
+  maximumScore?: number | null,
+};
+
+export type screeningToolScoreRangeEditMutation = {
+  // screening tool score range edit
+  screeningToolScoreRangeEdit:  {
+    id: string,
+    description: string,
+    minimumScore: number,
+    maximumScore: number,
+    screeningToolId: string,
+    createdAt: string,
+    updatedAt: string,
+    deletedAt: string | null,
+    concernSuggestions:  Array< {
+      id: string,
+      title: string,
+      createdAt: string,
+      updatedAt: string,
+      deletedAt: string | null,
+    } | null > | null,
+    goalSuggestions:  Array< {
+      id: string,
+      title: string,
+      taskTemplates:  Array< {
+        id: string,
+        title: string,
+        completedWithinNumber: number | null,
+        completedWithinInterval: CompletedWithinInterval | null,
+        repeating: boolean | null,
+        goalSuggestionTemplateId: string,
+        priority: Priority | null,
+        careTeamAssigneeRole: UserRole | null,
+        createdAt: string,
+        updatedAt: string,
+        deletedAt: string | null,
+      } | null > | null,
+      createdAt: string,
+      updatedAt: string,
+      deletedAt: string | null,
+    } | null > | null,
   } | null,
 };
 
@@ -4161,7 +4618,8 @@ export type FullQuestionFragment = {
   title: string,
   validatedSource: string | null,
   answerType: AnswerTypeOptions,
-  riskAreaId: string,
+  riskAreaId: string | null,
+  screeningToolId: string | null,
   order: number,
   applicableIfType: QuestionConditionTypeOptions | null,
   answers:  Array< {
@@ -4216,5 +4674,97 @@ export type FullRiskAreaFragment = {
   deletedAt: string | null,
   title: string,
   order: number,
+};
+
+export type FullScreeningToolScoreRangeFragment = {
+  id: string,
+  description: string,
+  minimumScore: number,
+  maximumScore: number,
+  screeningToolId: string,
+  createdAt: string,
+  updatedAt: string,
+  deletedAt: string | null,
+  concernSuggestions:  Array< {
+    id: string,
+    title: string,
+    createdAt: string,
+    updatedAt: string,
+    deletedAt: string | null,
+  } | null > | null,
+  goalSuggestions:  Array< {
+    id: string,
+    title: string,
+    taskTemplates:  Array< {
+      id: string,
+      title: string,
+      completedWithinNumber: number | null,
+      completedWithinInterval: CompletedWithinInterval | null,
+      repeating: boolean | null,
+      goalSuggestionTemplateId: string,
+      priority: Priority | null,
+      careTeamAssigneeRole: UserRole | null,
+      createdAt: string,
+      updatedAt: string,
+      deletedAt: string | null,
+    } | null > | null,
+    createdAt: string,
+    updatedAt: string,
+    deletedAt: string | null,
+  } | null > | null,
+};
+
+export type FullScreeningToolFragment = {
+  id: string,
+  title: string,
+  riskAreaId: string,
+  riskArea:  {
+    id: string,
+    createdAt: string,
+    updatedAt: string,
+    deletedAt: string | null,
+    title: string,
+    order: number,
+  },
+  screeningToolScoreRanges:  Array< {
+    id: string,
+    description: string,
+    minimumScore: number,
+    maximumScore: number,
+    screeningToolId: string,
+    createdAt: string,
+    updatedAt: string,
+    deletedAt: string | null,
+    concernSuggestions:  Array< {
+      id: string,
+      title: string,
+      createdAt: string,
+      updatedAt: string,
+      deletedAt: string | null,
+    } | null > | null,
+    goalSuggestions:  Array< {
+      id: string,
+      title: string,
+      taskTemplates:  Array< {
+        id: string,
+        title: string,
+        completedWithinNumber: number | null,
+        completedWithinInterval: CompletedWithinInterval | null,
+        repeating: boolean | null,
+        goalSuggestionTemplateId: string,
+        priority: Priority | null,
+        careTeamAssigneeRole: UserRole | null,
+        createdAt: string,
+        updatedAt: string,
+        deletedAt: string | null,
+      } | null > | null,
+      createdAt: string,
+      updatedAt: string,
+      deletedAt: string | null,
+    } | null > | null,
+  } | null >,
+  createdAt: string,
+  updatedAt: string,
+  deletedAt: string | null,
 };
 /* tslint:enable */

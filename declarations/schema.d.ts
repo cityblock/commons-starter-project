@@ -38,7 +38,7 @@ declare module 'schema' {
     riskArea: IRiskArea | null;
     riskAreas: Array<IRiskArea> | null;
     question: IQuestion | null;
-    questionsForRiskArea: Array<IQuestion>;
+    questionsForRiskAreaOrScreeningTool: Array<IQuestion>;
     answer: IAnswer | null;
     answersForQuestion: Array<IAnswer>;
     patientAnswer: IPatientAnswer | null;
@@ -408,7 +408,8 @@ declare module 'schema' {
     validatedSource: string | null;
     answers: Array<IAnswer>;
     answerType: IAnswerTypeOptionsEnum;
-    riskAreaId: string;
+    riskAreaId: string | null;
+    screeningToolId: string | null;
     applicableIfQuestionConditions: Array<IQuestionCondition>;
     applicableIfType: IQuestionConditionTypeOptionsEnum | null;
     order: number;
@@ -630,6 +631,7 @@ declare module 'schema' {
     title: string;
     riskAreaId: string;
     riskArea: IRiskArea;
+    screeningToolScoreRanges: Array<IScreeningToolScoreRange>;
     createdAt: string;
     updatedAt: string;
     deletedAt: string | null;
@@ -648,6 +650,8 @@ declare module 'schema' {
     createdAt: string;
     updatedAt: string;
     deletedAt: string | null;
+    concernSuggestions: Array<IConcern> | null;
+    goalSuggestions: Array<IGoalSuggestionTemplate> | null;
   }
 
   /*
@@ -1032,7 +1036,8 @@ declare module 'schema' {
     title: string;
     answerType: IAnswerTypeOptionsEnum;
     validatedSource?: string | null;
-    riskAreaId: string;
+    riskAreaId?: string | null;
+    screeningToolId?: string | null;
     order: number;
     applicableIfType?: IQuestionConditionTypeOptionsEnum | null;
   }
@@ -1193,7 +1198,8 @@ declare module 'schema' {
   */
   interface IConcernSuggestInput {
     concernId: string;
-    answerId: string;
+    answerId?: string | null;
+    screeningToolScoreRangeId?: string | null;
   }
 
   /*
@@ -1222,7 +1228,8 @@ declare module 'schema' {
     description: 
   */
   interface IGoalSuggestInput {
-    answerId: string;
+    answerId?: string | null;
+    screeningToolScoreRangeId?: string | null;
     goalSuggestionTemplateId: string;
   }
 

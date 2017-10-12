@@ -25,6 +25,9 @@ interface IDeleteOptions { variables: answerDeleteMutationVariables; }
 interface IProps {
   answer?: FullAnswerFragment;
   questionId: string;
+}
+
+interface IGraphqlProps {
   createAnswer: (options: ICreateOptions) => { data: { answerCreate: FullAnswerFragment } };
   editAnswer: (options: IEditOptions) => { data: { answerEdit: FullAnswerFragment } };
   deleteAnswer: (options: IDeleteOptions) => { data: { answerDelete: FullAnswerFragment } };
@@ -36,9 +39,11 @@ interface IState {
   answer: answerCreateMutationVariables;
 }
 
-class AnswerCreateEdit extends React.Component<IProps, IState> {
+type allProps = IProps & IGraphqlProps;
 
-  constructor(props: IProps) {
+class AnswerCreateEdit extends React.Component<allProps, IState> {
+
+  constructor(props: allProps) {
     super(props);
 
     this.onSubmit = this.onSubmit.bind(this);
@@ -61,7 +66,7 @@ class AnswerCreateEdit extends React.Component<IProps, IState> {
     };
   }
 
-  componentWillReceiveProps(nextProps: IProps) {
+  componentWillReceiveProps(nextProps: allProps) {
     const { questionId } = nextProps;
 
     if (questionId !== this.props.questionId) {
@@ -268,23 +273,23 @@ class AnswerCreateEdit extends React.Component<IProps, IState> {
 }
 
 export default compose(
-  graphql(answerCreateMutation as any, {
+  graphql<IGraphqlProps, IProps>(answerCreateMutation as any, {
     name: 'createAnswer',
     options: {
       refetchQueries: [
-        'getQuestionsForRiskArea',
+        'getQuestionsForRiskAreaOrScreeningTool',
       ],
     },
   }),
-  graphql(answerEditMutation as any, {
+  graphql<IGraphqlProps, IProps>(answerEditMutation as any, {
     name: 'editAnswer',
   }),
-  graphql(answerDeleteMutation as any, {
+  graphql<IGraphqlProps, IProps>(answerDeleteMutation as any, {
     name: 'deleteAnswer',
     options: {
       refetchQueries: [
-        'getQuestionsForRiskArea',
+        'getQuestionsForRiskAreaOrScreeningTool',
       ],
     },
   }),
-)(AnswerCreateEdit as any) as any;
+)(AnswerCreateEdit);

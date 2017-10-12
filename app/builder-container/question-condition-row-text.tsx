@@ -38,4 +38,4 @@ export default compose(
       question: (data ? (data as any).question : null),
     }),
   }),
-)(QuestionConditionRowText as any) as any;
+)(QuestionConditionRowText);

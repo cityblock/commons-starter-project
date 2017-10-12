@@ -4,12 +4,15 @@ import { compose, graphql } from 'react-apollo';
 import { connect, Dispatch } from 'react-redux';
 import { Route } from 'react-router-dom';
 import { push } from 'react-router-redux';
-import * as questionsQuery from '../graphql/queries/get-questions-for-risk-area.graphql';
+/* tslint:disable:max-line-length */
+import * as questionsQuery from '../graphql/queries/get-questions-for-risk-area-or-screening-tool.graphql';
+/* tslint:enable:max-line-length */
 import * as questionDeleteMutation from '../graphql/queries/question-delete-mutation.graphql';
 import {
   questionDeleteMutationVariables,
   FullQuestionFragment,
   FullRiskAreaFragment,
+  FullScreeningToolFragment,
 } from '../graphql/types';
 import * as sortSearchStyles from '../shared/css/sort-search.css';
 import * as styles from '../shared/css/two-panel.css';
@@ -21,6 +24,8 @@ export interface IComponentProps {
   routeBase: string;
   riskAreaId?: string;
   riskAreas?: FullRiskAreaFragment[];
+  screeningToolId?: string;
+  screeningTools?: FullScreeningToolFragment[];
   questionId?: string;
 }
 
@@ -34,6 +39,7 @@ interface IProps extends IComponentProps {
   questions?: FullQuestionFragment[];
   questionsRefetch: (variables: { riskAreaId: string }) => any;
   directToRiskAreaQuestions: (riskAreaId: string) => any;
+  directToScreeningToolQuestions: (screeningToolId: string) => any;
 }
 
 interface IState {
@@ -66,7 +72,13 @@ class BuilderQuestions extends React.Component<IProps, IState> {
 
   onSortChange(event: React.ChangeEvent<HTMLSelectElement>) {
     const value = event.target.value;
-    this.props.directToRiskAreaQuestions(value);
+    const optionType = (event.target.options[event.target.selectedIndex].dataset as any).optiontype;
+
+    if (optionType === 'riskArea') {
+      this.props.directToRiskAreaQuestions(value);
+    } else if (optionType === 'screeningTool') {
+      this.props.directToScreeningToolQuestions(value);
+    }
   }
 
   showCreateQuestion() {
@@ -120,6 +132,8 @@ class BuilderQuestions extends React.Component<IProps, IState> {
       questionId,
       riskAreas,
       riskAreaId,
+      screeningTools,
+      screeningToolId,
     } = this.props;
     const { showCreateQuestion } = this.state;
     const questionsList = questions || [];
@@ -136,9 +150,11 @@ class BuilderQuestions extends React.Component<IProps, IState> {
           className={styles.createButton}>Create Question</div>
       </div>
     );
+
     const createQuestionHtml = showCreateQuestion ? (
       <QuestionCreate
         riskAreaId={riskAreaId}
+        screeningToolId={screeningToolId}
         onClose={this.hideCreateQuestion}
         routeBase={this.props.routeBase} />
     ) : null;
@@ -151,16 +167,25 @@ class BuilderQuestions extends React.Component<IProps, IState> {
     );
     const questionHtml = showCreateQuestion ?
       null : (<Route path={`${routeBase}/:questionId`} render={renderedQuestion} />);
-    const sortOptions = (riskAreas || []).map(riskArea => (
-      <option key={riskArea.id} value={riskArea.id}>{riskArea.title}</option>
+    const riskAreaSortOptions = (riskAreas || []).map(riskArea => (
+      <option key={riskArea.id} value={riskArea.id} data-optiontype={'riskArea'}>
+        {riskArea.title}
+      </option>
     ));
+    const screeningToolSortOptions = (screeningTools || []).map(screeningTool => (
+      <option key={screeningTool.id} value={screeningTool.id} data-optiontype={'screeningTool'}>
+        {screeningTool.title}
+      </option>
+    ));
+    const sortOptions = riskAreaSortOptions.concat(screeningToolSortOptions);
+    const selectedValue = screeningToolId ? screeningToolId : riskAreaId;
     return (
       <div className={styles.container}>
         <div className={styles.sortSearchBar}>
           <div className={sortSearchStyles.sort}>
-            <div className={sortSearchStyles.sortLabel}>Questions for domain:</div>
+            <div className={sortSearchStyles.sortLabel}>Questions for domain/tool:</div>
             <div className={sortSearchStyles.sortDropdown}>
-              <select value={riskAreaId} onChange={this.onSortChange}>
+              <select value={selectedValue} onChange={this.onSortChange}>
                 {sortOptions}
               </select>
             </div>
@@ -182,8 +207,13 @@ class BuilderQuestions extends React.Component<IProps, IState> {
 }
 
 function getPageParams(props: IProps) {
-  const { riskAreaId } = props;
-  return { riskAreaId };
+  const { riskAreaId, screeningToolId } = props;
+
+  if (riskAreaId) {
+    return { riskAreaId, screeningToolId: null };
+  } else if (screeningToolId) {
+    return { screeningToolId, riskAreaId: null };
+  }
 }
 
 function mapDispatchToProps(dispatch: Dispatch<() => void>, ownProps: IProps): Partial<IProps> {
@@ -194,6 +224,9 @@ function mapDispatchToProps(dispatch: Dispatch<() => void>, ownProps: IProps): P
     },
     directToRiskAreaQuestions: (riskAreaId: string) => {
       dispatch(push(`/builder/domains/${riskAreaId}/questions`));
+    },
+    directToScreeningToolQuestions: (screeningToolId: string) => {
+      dispatch(push(`/builder/tools/${screeningToolId}/questions`));
     },
   };
 }
@@ -209,7 +242,7 @@ export default (compose)(
       questionsRefetch: (data ? data.refetch : false),
       questionsLoading: (data ? data.loading : false),
       questionsError: (data ? data.error : null),
-      questions: (data ? (data as any).questionsForRiskArea : null),
+      questions: (data ? (data as any).questionsForRiskAreaOrScreeningTool : null),
     }),
   }),
 )(BuilderQuestions);

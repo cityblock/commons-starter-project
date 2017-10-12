@@ -3,12 +3,14 @@ import * as uuid from 'uuid/v4';
 import Answer from './answer';
 import QuestionCondition from './question-condition';
 import RiskArea from './risk-area';
+import ScreeningTool from './screening-tool';
 
 export interface IQuestionEditableFields {
   title: string;
   answerType: AnswerType;
   validatedSource?: string;
-  riskAreaId: string;
+  riskAreaId?: string;
+  screeningToolId?: string;
   order: number;
   applicableIfType?: QuestionConditionType;
 }
@@ -29,6 +31,8 @@ export default class Question extends Model {
   answerType: AnswerType;
   riskAreaId: string;
   riskArea: RiskArea;
+  screeningToolId: string;
+  screeningTool: ScreeningTool;
   applicableIfQuestionConditions: QuestionCondition[];
   applicableIfType: QuestionConditionType;
   validatedSource: string;
@@ -52,6 +56,7 @@ export default class Question extends Model {
       answerType: { type: 'string' },
       applicableIfType: { type: 'string' },
       riskAreaId: { type: 'string' },
+      screeningToolId: { type: 'string' },
       order: { type: 'integer' },
       deletedAt: { type: 'string' },
       validatedSource: { type: 'string' },
@@ -83,6 +88,15 @@ export default class Question extends Model {
       join: {
         from: 'question.riskAreaId',
         to: 'risk_area.id',
+      },
+    },
+
+    screeningTool: {
+      relation: Model.BelongsToOneRelation,
+      modelClass: 'screening-tool',
+      join: {
+        from: 'question.screeningToolId',
+        to: 'screening_tool.id',
       },
     },
   };
@@ -153,7 +167,33 @@ export default class Question extends Model {
 
   static async getAllForRiskArea(riskAreaId: string): Promise<Question[]> {
     return this.query()
-      .where({ riskAreaId, deletedAt: null })
+      .where({ riskAreaId, deletedAt: null, screeningToolId: null })
+      .eager(EAGER_QUERY, {
+        orderByOrder: (builder: any) => {
+          builder.orderBy('order');
+        },
+      })
+      .modifyEager('applicableIfQuestionConditions', builder => {
+        builder.where('question_condition.deletedAt', null);
+      })
+      .modifyEager('answers', builder => {
+        builder.where('answer.deletedAt', null);
+      })
+      .modifyEager('answers.concernSuggestions', builder => {
+        builder.where('concern_suggestion.deletedAt', null);
+      })
+      .modifyEager('answers.goalSuggestions', builder => {
+        builder.where('goal_suggestion.deletedAt', null);
+      })
+      .modifyEager('answers.goalSuggestions.taskTemplates', builder => {
+        builder.where('task_template.deletedAt', null);
+      })
+      .orderBy('order');
+  }
+
+  static async getAllForScreeningTool(screeningToolId: string): Promise<Question[]> {
+    return this.query()
+      .where({ screeningToolId, deletedAt: null })
       .eager(EAGER_QUERY, {
         orderByOrder: (builder: any) => {
           builder.orderBy('order');

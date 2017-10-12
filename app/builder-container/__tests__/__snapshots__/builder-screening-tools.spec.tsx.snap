@@ -1,0 +1,76 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders builder screening tools 1`] = `
+<div
+  className={undefined}
+>
+  <div
+    className={undefined}
+  >
+    <div
+      className={undefined}
+    >
+      <div
+        className={undefined}
+        onClick={[Function]}
+      >
+        Create Screening Tool
+      </div>
+    </div>
+  </div>
+  <div
+    className={undefined}
+  >
+    <div
+      className="undefined"
+    >
+      <a
+        className="undefined"
+        href="/foo/bar/screening-tool-id"
+        onClick={[Function]}
+      >
+        <div
+          className={undefined}
+        >
+          Screening Tool
+        </div>
+        <div
+          className={undefined}
+        >
+          <div
+            className=""
+          >
+            <span
+              className={undefined}
+            >
+              Risk Area:
+            </span>
+            <span
+              className={undefined}
+            >
+              Risk Area Title
+            </span>
+          </div>
+          <div
+            className=""
+          >
+            <span
+              className={undefined}
+            >
+              Created:
+            </span>
+            <span
+              className={undefined}
+            >
+              3 months ago
+            </span>
+          </div>
+        </div>
+      </a>
+    </div>
+    <div
+      className="undefined"
+    />
+  </div>
+</div>
+`;

@@ -48,7 +48,7 @@ describe('screening tool score range model', () => {
     });
 
     expect(scoreRange.description).toEqual('Score Range');
-    expect(scoreRange.screeningTool).toMatchObject(screeningTool);
+    expect(scoreRange.screeningTool.id).toEqual(screeningTool.id);
     expect(await ScreeningToolScoreRange.get(scoreRange.id)).toMatchObject(scoreRange);
   });
 

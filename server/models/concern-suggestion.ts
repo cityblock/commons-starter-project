@@ -6,7 +6,8 @@ import Concern from './concern';
 
 export interface IConcernSuggestionEditableFields {
   concernId: string;
-  answerId: string;
+  answerId?: string | null;
+  screeningToolScoreRangeId?: string | null;
 }
 
 /* tslint:disable:member-ordering */
@@ -15,6 +16,7 @@ export default class ConcernSuggestion extends Model {
   concernId: string;
   concern: Concern;
   answerId: string;
+  screeningToolScoreRangeId: string;
   answer: Answer;
   createdAt: string;
   updatedAt: string;
@@ -31,6 +33,7 @@ export default class ConcernSuggestion extends Model {
     properties: {
       id: { type: 'string' },
       answerId: { type: 'string' },
+      screeningToolScoreRangeId: { type: 'string' },
       concernId: { type: 'string' },
       deletedAt: { type: 'string' },
     },
@@ -51,6 +54,14 @@ export default class ConcernSuggestion extends Model {
       join: {
         from: 'concern_suggestion.answerId',
         to: 'answer.id',
+      },
+    },
+    screeningToolScoreRange: {
+      relation: Model.HasOneRelation,
+      modelClass: 'screening-tool-score-range',
+      join: {
+        from: 'concern_suggestion.screeningToolScoreRangeId',
+        to: 'screening_tool_score_range.id',
       },
     },
   };
@@ -86,6 +97,19 @@ export default class ConcernSuggestion extends Model {
     );
   }
 
+  static async getForScreeningToolScoreRange(
+    screeningToolScoreRangeId: string,
+  ): Promise<Concern[]> {
+    const concernSuggestions = (await this.query()
+      .where('screeningToolScoreRangeId', screeningToolScoreRangeId)
+      .andWhere('deletedAt', null)
+      .orderBy('createdAt')
+      .eager('concern')) as any;
+    return concernSuggestions.map(
+      (concernSuggestion: ConcernSuggestion) => concernSuggestion.concern,
+    );
+  }
+
   static async getNewForPatient(patientId: string, txn?: Transaction): Promise<Concern[]> {
     const existingPatientCarePlanSuggestionsQuery = CarePlanSuggestion.query(txn)
       .where('patientId', patientId)
@@ -111,32 +135,56 @@ export default class ConcernSuggestion extends Model {
   static async create({
     concernId,
     answerId,
+    screeningToolScoreRangeId,
   }: IConcernSuggestionEditableFields): Promise<Concern[]> {
     // TODO: use postgres UPCERT here to add relation if it doesn't exist instead of a transaction
     await transaction(ConcernSuggestion, async ConcernSuggestionWithTransaction => {
-      const relations = await ConcernSuggestionWithTransaction.query()
-        .where('concernId', concernId)
-        .andWhere('answerId', answerId)
-        .andWhere('deletedAt', null);
+      const relations = await ConcernSuggestionWithTransaction.query().where({
+        concernId,
+        answerId: answerId || '',
+        screeningToolScoreRangeId: screeningToolScoreRangeId || '',
+        deletedAt: null,
+      });
 
       if (relations.length < 1) {
-        await ConcernSuggestionWithTransaction.query().insert({ concernId, answerId });
+        await ConcernSuggestionWithTransaction.query().insert({
+          concernId,
+          answerId,
+          screeningToolScoreRangeId,
+        });
       }
     });
 
-    return await this.getForAnswer(answerId);
+    if (answerId) {
+      return await this.getForAnswer(answerId);
+    } else if (screeningToolScoreRangeId) {
+      return await this.getForScreeningToolScoreRange(screeningToolScoreRangeId);
+    } else {
+      return [];
+    }
   }
 
   static async delete({
     concernId,
     answerId,
+    screeningToolScoreRangeId,
   }: IConcernSuggestionEditableFields): Promise<Concern[]> {
     await this.query()
-      .where('concernId', concernId)
-      .andWhere('answerId', answerId)
-      .andWhere('deletedAt', null)
+      .where({
+        concernId,
+        answerId: answerId || null,
+        screeningToolScoreRangeId: screeningToolScoreRangeId || null,
+        deletedAt: null,
+      })
       .update({ deletedAt: new Date().toISOString() });
-    return await this.getForAnswer(answerId);
+
+    if (answerId) {
+      return await this.getForAnswer(answerId);
+    } else if (screeningToolScoreRangeId) {
+      return await this.getForScreeningToolScoreRange(screeningToolScoreRangeId);
+    } else {
+      return [];
+    }
   }
 }
 /* tslint:disable:member-ordering */

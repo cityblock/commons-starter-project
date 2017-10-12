@@ -13,7 +13,7 @@ exports[`renders builder questions 1`] = `
       <div
         className={undefined}
       >
-        Questions for domain:
+        Questions for domain/tool:
       </div>
       <div
         className={undefined}
@@ -23,6 +23,7 @@ exports[`renders builder questions 1`] = `
           value="risk-area-id"
         >
           <option
+            data-optiontype="riskArea"
             value="cool-task-id"
           >
             Risk Area Title

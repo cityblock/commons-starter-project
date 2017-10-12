@@ -9,6 +9,7 @@ fragment FullQuestion on Question {
   validatedSource
   answerType
   riskAreaId
+  screeningToolId
   order
   applicableIfType
   answers {

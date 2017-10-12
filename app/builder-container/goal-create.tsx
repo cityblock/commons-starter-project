@@ -20,10 +20,13 @@ interface IOptions { variables: goalSuggestionTemplateCreateMutationVariables; }
 interface IProps {
   routeBase: string;
   onClose: () => any;
-  createGoal: (options: IOptions) => {
+  redirectToGoal?: (goalId: string) => any;
+}
+
+interface IGraphqlProps {
+  createGoal?: (options: IOptions) => {
     data: { goalSuggestionTemplateCreate: FullGoalSuggestionTemplateFragment },
   };
-  redirectToGoal: (goalId: string) => any;
 }
 
 interface IState {
@@ -32,8 +35,10 @@ interface IState {
   goal: goalSuggestionTemplateCreateMutationVariables;
 }
 
-class GoalCreate extends React.Component<IProps, IState> {
-  constructor(props: IProps) {
+type allProps = IProps & IGraphqlProps;
+
+class GoalCreate extends React.Component<allProps, IState> {
+  constructor(props: allProps) {
     super(props);
 
     this.onSubmit = this.onSubmit.bind(this);
@@ -66,18 +71,22 @@ class GoalCreate extends React.Component<IProps, IState> {
 
   async onSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    try {
-      this.setState({ loading: true });
-      const goal = await this.props.createGoal({
-        variables: {
-          ...this.state.goal,
-        },
-      });
-      this.setState({ loading: false });
-      this.props.onClose();
-      this.props.redirectToGoal(goal.data.goalSuggestionTemplateCreate.id);
-    } catch (e) {
-      this.setState({ error: e.message, loading: false });
+    if (this.props.createGoal) {
+      try {
+        this.setState({ loading: true });
+        const goal = await this.props.createGoal({
+          variables: {
+            ...this.state.goal,
+          },
+        });
+        this.setState({ loading: false });
+        this.props.onClose();
+        if (this.props.redirectToGoal) {
+          this.props.redirectToGoal(goal.data.goalSuggestionTemplateCreate.id);
+        }
+      } catch (e) {
+        this.setState({ error: e.message, loading: false });
+      }
     }
     return false;
   }
@@ -122,7 +131,7 @@ class GoalCreate extends React.Component<IProps, IState> {
   }
 }
 
-function mapDispatchToProps(dispatch: Dispatch<() => void>, ownProps: IProps): Partial<IProps> {
+function mapDispatchToProps(dispatch: Dispatch<() => void>, ownProps: allProps): Partial<allProps> {
   return {
     redirectToGoal: (goalId: string) => {
       dispatch(push(`${ownProps.routeBase}/${goalId}`));
@@ -132,7 +141,7 @@ function mapDispatchToProps(dispatch: Dispatch<() => void>, ownProps: IProps): P
 
 export default compose(
   connect(undefined, mapDispatchToProps),
-  graphql(goalCreateMutation as any, {
+  graphql<IGraphqlProps, IProps>(goalCreateMutation as any, {
     name: 'createGoal',
     options: {
       refetchQueries: [
@@ -140,4 +149,4 @@ export default compose(
       ],
     },
   }),
-)(GoalCreate as any) as any;
+)(GoalCreate);

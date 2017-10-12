@@ -24,8 +24,11 @@ export interface IEditOptions { variables: taskTemplateEditMutationVariables; }
 export interface IDeleteOptions { variables: taskTemplateDeleteMutationVariables; }
 
 interface IProps {
-  taskTemplate?: FullTaskTemplateFragment;
+  taskTemplate?: FullTaskTemplateFragment | null;
   goalSuggestionTemplateId: string;
+}
+
+interface IGraphqlProps {
   createTaskTemplate: (options: ICreateOptions) => {
     data: { taskTemplateCreate: FullTaskTemplateFragment },
   };
@@ -43,8 +46,10 @@ interface IState {
   taskTemplate: taskTemplateCreateMutationVariables;
 }
 
-class TaskTemplateCreateEdit extends React.Component<IProps, IState> {
-  constructor(props: IProps) {
+type allProps = IProps & IGraphqlProps;
+
+class TaskTemplateCreateEdit extends React.Component<allProps, IState> {
+  constructor(props: allProps) {
     super(props);
 
     this.onSubmit = this.onSubmit.bind(this);
@@ -66,7 +71,7 @@ class TaskTemplateCreateEdit extends React.Component<IProps, IState> {
     };
   }
 
-  componentWillReceiveProps(nextProps: IProps) {
+  componentWillReceiveProps(nextProps: allProps) {
     const { goalSuggestionTemplateId } = nextProps;
 
     if (goalSuggestionTemplateId !== this.props.goalSuggestionTemplateId) {
@@ -279,7 +284,7 @@ class TaskTemplateCreateEdit extends React.Component<IProps, IState> {
 }
 
 export default compose(
-  graphql(taskTemplateCreateMutation as any, {
+  graphql<IGraphqlProps, IProps>(taskTemplateCreateMutation as any, {
     name: 'createTaskTemplate',
     options: {
       refetchQueries: [
@@ -287,10 +292,10 @@ export default compose(
       ],
     },
   }),
-  graphql(taskTemplateEditMutation as any, {
+  graphql<IGraphqlProps, IProps>(taskTemplateEditMutation as any, {
     name: 'editTaskTemplate',
   }),
-  graphql(taskTemplateDeleteMutation as any, {
+  graphql<IGraphqlProps, IProps>(taskTemplateDeleteMutation as any, {
     name: 'deleteTaskTemplate',
     options: {
       refetchQueries: [
@@ -298,4 +303,4 @@ export default compose(
       ],
     },
   }),
-)(TaskTemplateCreateEdit as any) as any;
+)(TaskTemplateCreateEdit);

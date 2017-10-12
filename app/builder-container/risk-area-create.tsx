@@ -18,8 +18,11 @@ interface IOptions { variables: riskAreaCreateMutationVariables; }
 interface IProps {
   routeBase: string;
   onClose: () => any;
-  createRiskArea: (options: IOptions) => { data: { riskAreaCreate: FullRiskAreaFragment } };
-  redirectToRiskArea: (riskAreaId: string) => any;
+  redirectToRiskArea?: (riskAreaId: string) => any;
+}
+
+interface IGraphqlProps {
+  createRiskArea?: (options: IOptions) => { data: { riskAreaCreate: FullRiskAreaFragment } };
 }
 
 interface IState {
@@ -28,9 +31,11 @@ interface IState {
   riskArea: riskAreaCreateMutationVariables;
 }
 
-class RiskAreaCreate extends React.Component<IProps, IState> {
+type allProps = IProps & IGraphqlProps;
 
-  constructor(props: IProps) {
+class RiskAreaCreate extends React.Component<allProps, IState> {
+
+  constructor(props: allProps) {
     super(props);
 
     this.onSubmit = this.onSubmit.bind(this);
@@ -66,18 +71,22 @@ class RiskAreaCreate extends React.Component<IProps, IState> {
 
   async onSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    try {
-      this.setState({ loading: true });
-      const riskArea = await this.props.createRiskArea({
-        variables: {
-          ...this.state.riskArea,
-        },
-      });
-      this.setState({ loading: false });
-      this.props.onClose();
-      this.props.redirectToRiskArea(riskArea.data.riskAreaCreate.id);
-    } catch (e) {
-      this.setState({ error: e.message, loading: false });
+    if (this.props.createRiskArea) {
+      try {
+        this.setState({ loading: true });
+        const riskArea = await this.props.createRiskArea({
+          variables: {
+            ...this.state.riskArea,
+          },
+        });
+        this.setState({ loading: false });
+        this.props.onClose();
+        if (this.props.redirectToRiskArea) {
+          this.props.redirectToRiskArea(riskArea.data.riskAreaCreate.id);
+        }
+      } catch (e) {
+        this.setState({ error: e.message, loading: false });
+      }
     }
     return false;
   }
@@ -129,7 +138,7 @@ class RiskAreaCreate extends React.Component<IProps, IState> {
   }
 }
 
-function mapDispatchToProps(dispatch: Dispatch<() => void>, ownProps: IProps): Partial<IProps> {
+function mapDispatchToProps(dispatch: Dispatch<() => void>, ownProps: allProps): Partial<allProps> {
   return {
     redirectToRiskArea: (riskAreaId: string) => {
       dispatch(push(`${ownProps.routeBase}/${riskAreaId}`));
@@ -139,7 +148,7 @@ function mapDispatchToProps(dispatch: Dispatch<() => void>, ownProps: IProps): P
 
 export default compose(
   connect(undefined, mapDispatchToProps),
-  graphql(riskAreaCreateMutation as any, {
+  graphql<IGraphqlProps, IProps>(riskAreaCreateMutation as any, {
     name: 'createRiskArea',
     options: {
       refetchQueries: [
@@ -147,4 +156,4 @@ export default compose(
       ],
     },
   }),
-)(RiskAreaCreate as any) as any;
+)(RiskAreaCreate);

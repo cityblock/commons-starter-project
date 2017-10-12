@@ -8,6 +8,8 @@ import PatientAnswer from '../patient-answer';
 import PatientConcern from '../patient-concern';
 import Question from '../question';
 import RiskArea from '../risk-area';
+import ScreeningTool from '../screening-tool';
+import ScreeningToolScoreRange from '../screening-tool-score-range';
 import User from '../user';
 
 describe('concern suggestion model', () => {
@@ -308,6 +310,32 @@ describe('concern suggestion model', () => {
       const secondConcernSuggestions = await ConcernSuggestion.getNewForPatient(patient.id);
       expect(secondConcernSuggestions[0]).toMatchObject(concern2);
       expect(secondConcernSuggestions.length).toEqual(1);
+    });
+
+    it('gets concern suggestions for a screening tool score range', async () => {
+      const concern = await Concern.create({ title: 'Housing' });
+      const concern2 = await Concern.create({ title: 'Other' });
+      const screeningTool = await ScreeningTool.create({ title: 'Test', riskAreaId: riskArea.id });
+      const screeningToolScoreRange = await ScreeningToolScoreRange.create({
+        description: 'Range',
+        screeningToolId: screeningTool.id,
+        minimumScore: 0,
+        maximumScore: 10,
+      });
+      await ConcernSuggestion.create({
+        concernId: concern.id,
+        screeningToolScoreRangeId: screeningToolScoreRange.id,
+      });
+      await ConcernSuggestion.create({
+        concernId: concern2.id,
+        screeningToolScoreRangeId: screeningToolScoreRange.id,
+      });
+      const fetchedConcernSuggestions = await ConcernSuggestion.getForScreeningToolScoreRange(
+        screeningToolScoreRange.id,
+      );
+      expect(fetchedConcernSuggestions.length).toEqual(2);
+      expect(fetchedConcernSuggestions[0].id).toEqual(concern.id);
+      expect(fetchedConcernSuggestions[1].id).toEqual(concern2.id);
     });
   });
 });

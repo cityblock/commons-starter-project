@@ -25,6 +25,7 @@ const riskAreaQuestions = [
     title: 'Question 2',
     answerType: 'radio' as any,
     riskAreaId: 'risk-area-id',
+    screeningToolId: null,
     order: 2,
     applicableIfType: 'allTrue' as any,
     answers: [

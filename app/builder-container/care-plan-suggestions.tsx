@@ -1,12 +1,18 @@
 import * as classNames from 'classnames';
 import * as React from 'react';
-import { FullAnswerFragment } from '../graphql/types';
+import {
+  FullAnswerFragment,
+  FullConcernFragment,
+  FullGoalSuggestionTemplateFragment,
+  FullScreeningToolScoreRangeFragment,
+} from '../graphql/types';
 import * as styles from '../shared/css/two-panel-right.css';
 import CarePlanSuggestion from './care-plan-suggestion';
 import CarePlanSuggestionCreate from './care-plan-suggestion-create';
 
 interface IProps {
-  answer: FullAnswerFragment;
+  answer?: FullAnswerFragment;
+  scoreRange?: FullScreeningToolScoreRangeFragment;
 }
 
 class CarePlanSuggestions extends React.Component<IProps> {
@@ -19,14 +25,22 @@ class CarePlanSuggestions extends React.Component<IProps> {
   }
 
   renderConcernSuggestions() {
-    const { answer } = this.props;
-    const { concernSuggestions } = answer;
+    const { answer, scoreRange } = this.props;
+
+    let concernSuggestions: FullConcernFragment[] | null = null;
+
+    if (answer) {
+      concernSuggestions = answer.concernSuggestions as FullConcernFragment[];
+    } else if (scoreRange) {
+      concernSuggestions = scoreRange.concernSuggestions as FullConcernFragment[];
+    }
 
     if (concernSuggestions && concernSuggestions.length) {
       const concernSuggestionsHtml = concernSuggestions.map((concernSuggestion, index) => (
         <CarePlanSuggestion
           key={concernSuggestion ? concernSuggestion.id : index}
-          answerId={answer.id}
+          answerId={answer ? answer.id : undefined}
+          screeningToolScoreRangeId={scoreRange ? scoreRange.id : undefined}
           suggestionType='concern'
           suggestion={concernSuggestion}
         />
@@ -40,14 +54,21 @@ class CarePlanSuggestions extends React.Component<IProps> {
   }
 
   renderGoalSuggestions() {
-    const { answer } = this.props;
-    const { goalSuggestions } = answer;
+    const { answer, scoreRange } = this.props;
+    let goalSuggestions: FullGoalSuggestionTemplateFragment[] | null = null;
+
+    if (answer) {
+      goalSuggestions = answer.goalSuggestions as FullGoalSuggestionTemplateFragment[];
+    } else if (scoreRange) {
+      goalSuggestions = scoreRange.goalSuggestions as FullGoalSuggestionTemplateFragment[];
+    }
 
     if (goalSuggestions && goalSuggestions.length) {
       const goalSuggestionsHtml = goalSuggestions.map((goalSuggestion, index) => (
         <CarePlanSuggestion
           key={goalSuggestion ? goalSuggestion.id : index}
-          answerId={answer.id}
+          answerId={answer ? answer.id : undefined}
+          screeningToolScoreRangeId={scoreRange ? scoreRange.id : undefined}
           suggestionType='goal'
           suggestion={goalSuggestion}
         />
@@ -74,7 +95,7 @@ class CarePlanSuggestions extends React.Component<IProps> {
   }
 
   render() {
-    const { answer } = this.props;
+    const { answer, scoreRange } = this.props;
     return (
       <div>
         <br />
@@ -83,7 +104,7 @@ class CarePlanSuggestions extends React.Component<IProps> {
         {this.renderCarePlanSuggestions()}
         <br />
         <div className={styles.smallText}>Add Care Plan Suggestion</div>
-        <CarePlanSuggestionCreate answer={answer} />
+        <CarePlanSuggestionCreate answer={answer} screeningToolScoreRange={scoreRange} />
       </div>
     );
   }

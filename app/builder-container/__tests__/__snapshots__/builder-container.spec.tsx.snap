@@ -24,6 +24,13 @@ exports[`renders builder container 1`] = `
       </a>
       <a
         className=""
+        href="/builder/tools"
+        onClick={[Function]}
+      >
+        Tools
+      </a>
+      <a
+        className=""
         href="/builder/domains/undefined/questions"
         onClick={[Function]}
       >

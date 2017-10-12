@@ -17,7 +17,7 @@ export interface IDeleteOptions { variables: questionConditionDeleteMutationVari
 interface IProps {
   answer?: FullAnswerFragment;
   questionCondition: FullQuestionConditionFragment;
-  deleteQuestionCondition: (
+  deleteQuestionCondition?: (
     options: IDeleteOptions,
   ) => { data: { questionConditionDelete: FullQuestionConditionFragment } };
 }
@@ -31,7 +31,10 @@ class QuestionConditionRow extends React.Component<IProps> {
 
   onClick() {
     const { deleteQuestionCondition, questionCondition } = this.props;
-    deleteQuestionCondition({ variables: { questionConditionId: questionCondition.id } });
+
+    if (deleteQuestionCondition) {
+      deleteQuestionCondition({ variables: { questionConditionId: questionCondition.id } });
+    }
   }
 
   render() {
@@ -62,8 +65,8 @@ export default compose(
     name: 'deleteQuestionCondition',
     options: {
       refetchQueries: [
-        'getQuestionsForRiskArea',
+        'getQuestionsForRiskAreaOrScreeningTool',
       ],
     },
   }),
-)(QuestionConditionRow as any) as any;
+)(QuestionConditionRow);

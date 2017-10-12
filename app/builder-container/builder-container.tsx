@@ -6,10 +6,12 @@ import { Link } from 'react-router-dom';
 import * as concernsQuery from '../graphql/queries/get-concerns.graphql';
 import * as goalsQuery from '../graphql/queries/get-goal-suggestion-templates.graphql';
 import * as riskAreasQuery from '../graphql/queries/get-risk-areas.graphql';
+import * as screeningToolsQuery from '../graphql/queries/get-screening-tools.graphql';
 import {
   FullConcernFragment,
   FullGoalSuggestionTemplateFragment,
   FullRiskAreaFragment,
+  FullScreeningToolFragment,
 } from '../graphql/types';
 import * as tabStyles from '../shared/css/tabs.css';
 import { IState as IAppState } from '../store';
@@ -18,18 +20,23 @@ import BuilderGoals from './builder-goals';
 import BuilderLeftNav from './builder-left-nav';
 import BuilderQuestions from './builder-questions';
 import BuilderRiskAreas from './builder-risk-areas';
+import BuilderScreeningTools from './builder-screening-tools';
 import * as styles from './css/builder.css';
 
 interface IProps {
   riskAreas: FullRiskAreaFragment[];
   concerns: FullConcernFragment[];
   goals: FullGoalSuggestionTemplateFragment[];
-  tabId: 'domains' | 'concerns' | 'goals';
+  screeningTools: FullScreeningToolFragment[];
+  tabId: 'domains' | 'concerns' | 'goals' | 'tools';
   subTabId?: 'questions';
   objectId?: string;
   questionId?: string;
+  screeningToolId?: string;
   riskAreasLoading: boolean;
   riskAreasError?: string;
+  screeningToolsLoading: boolean;
+  screeningToolsError?: string;
   concernsLoading: boolean;
   concernsError?: string;
   goalsLoading: boolean;
@@ -38,9 +45,10 @@ interface IProps {
   refetchGoals: () => any;
   match: {
     params: {
-      tabId?: 'domains' | 'concerns' | 'goals';
+      tabId?: 'domains' | 'concerns' | 'goals' | 'tools';
       subTabId?: 'questions';
       questionId?: string;
+      screeningToolId?: string;
       objectId?: string;
     };
   };
@@ -52,6 +60,7 @@ class BuilderContainer extends React.Component<IProps, {}> {
       objectId,
       questionId,
       riskAreas,
+      screeningTools,
       subTabId,
       concerns,
       goals,
@@ -61,7 +70,9 @@ class BuilderContainer extends React.Component<IProps, {}> {
     const questionsTabSelected = subTabId === 'questions';
     const concernsTabSelected = tabId === 'concerns';
     const goalsTabSelected = tabId === 'goals';
-    const riskAreasTabSelected = !questionsTabSelected && !concernsTabSelected && !goalsTabSelected;
+    const toolsTabSelected = tabId === 'tools' && subTabId !== 'questions';
+    const riskAreasTabSelected =
+      !questionsTabSelected && !concernsTabSelected && !goalsTabSelected && !toolsTabSelected;
     const riskAreaTabStyles = classNames(tabStyles.tab, {
       [tabStyles.selectedTab]: riskAreasTabSelected,
     });
@@ -74,12 +85,19 @@ class BuilderContainer extends React.Component<IProps, {}> {
     const goalTabStyles = classNames(tabStyles.tab, {
       [tabStyles.selectedTab]: goalsTabSelected,
     });
+    const toolTabStyles = classNames(tabStyles.tab, {
+      [tabStyles.selectedTab]: toolsTabSelected,
+    });
+    const riskAreaId = tabId === 'tools' ? undefined : objectId;
+    const screeningToolId = tabId === 'tools' ? objectId : undefined;
 
     const questions = questionsTabSelected ? (
       <BuilderQuestions
         riskAreas={riskAreas}
-        riskAreaId={objectId}
-        routeBase={`/builder/domains/${objectId}/questions`}
+        riskAreaId={riskAreaId}
+        screeningTools={screeningTools}
+        screeningToolId={screeningToolId}
+        routeBase={`/builder/${tabId}/${objectId}/questions`}
         questionId={questionId}
       />
     ) : null;
@@ -101,6 +119,14 @@ class BuilderContainer extends React.Component<IProps, {}> {
         riskAreaId={objectId}
       />
     ) : null;
+    const toolsHtml = toolsTabSelected ? (
+      <BuilderScreeningTools
+        routeBase={'/builder/tools'}
+        screeningTools={screeningTools}
+        riskAreas={riskAreas}
+        screeningToolId={objectId}
+      />
+    ) : null;
     const fallbackRiskAreaId = riskAreas && riskAreas[0] ? riskAreas[0].id : undefined;
     const selectedRiskAreaId = objectId ? objectId : fallbackRiskAreaId;
     return (
@@ -108,8 +134,11 @@ class BuilderContainer extends React.Component<IProps, {}> {
         <BuilderLeftNav />
         <div className={styles.mainBody}>
           <div className={tabStyles.tabs}>
-            <Link to={`/builder/domains`} className={riskAreaTabStyles}>
+            <Link to={'/builder/domains'} className={riskAreaTabStyles}>
               Domains
+            </Link>
+            <Link to={'/builder/tools'} className={toolTabStyles}>
+              Tools
             </Link>
             <Link
               to={`/builder/domains/${selectedRiskAreaId}/questions`}
@@ -117,10 +146,10 @@ class BuilderContainer extends React.Component<IProps, {}> {
             >
               Questions
             </Link>
-            <Link to={`/builder/concerns`} className={concernTabStyles}>
+            <Link to={'/builder/concerns'} className={concernTabStyles}>
               Concerns
             </Link>
-            <Link to={`/builder/goals`} className={goalTabStyles}>
+            <Link to={'/builder/goals'} className={goalTabStyles}>
               Goals
             </Link>
           </div>
@@ -128,6 +157,7 @@ class BuilderContainer extends React.Component<IProps, {}> {
           {riskAreasHtml}
           {concernsHtml}
           {goalsHtml}
+          {toolsHtml}
         </div>
       </div>
     );
@@ -165,6 +195,13 @@ export default compose(
       goalsLoading: data ? data.loading : false,
       goalsError: data ? data.error : null,
       goals: data ? (data as any).goalSuggestionTemplates : null,
+    }),
+  }),
+  graphql(screeningToolsQuery as any, {
+    props: ({ data }) => ({
+      screeningToolsLoading: data ? data.loading : false,
+      screeningToolsError: data ? data.error : null,
+      screeningTools: data ? (data as any).screeningTools : null,
     }),
   }),
 )(BuilderContainer);

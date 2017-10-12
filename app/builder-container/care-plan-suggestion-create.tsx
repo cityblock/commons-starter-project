@@ -13,6 +13,7 @@ import {
   FullAnswerFragment,
   FullConcernFragment,
   FullGoalSuggestionTemplateFragment,
+  FullScreeningToolScoreRangeFragment,
 } from '../graphql/types';
 import * as formStyles from '../shared/css/forms.css';
 import * as loadingStyles from '../shared/css/loading-spinner.css';
@@ -22,11 +23,15 @@ import * as styles from './css/risk-area-create.css';
 interface IProps {
   goals?: FullGoalSuggestionTemplateFragment[];
   concerns?: FullConcernFragment[];
-  answer: FullAnswerFragment;
-  createConcernSuggestion: (
+  answer?: FullAnswerFragment;
+  screeningToolScoreRange?: FullScreeningToolScoreRangeFragment;
+}
+
+interface IGraphqlProps {
+  createConcernSuggestion?: (
     options: { variables: concernSuggestionCreateMutationVariables },
   ) => { data: { concernSuggestionCreate: FullConcernFragment } };
-  createGoalSuggestion: (
+  createGoalSuggestion?: (
     options: { variables: goalSuggestionCreateMutationVariables },
   ) => { data: { goalSuggestionCreate: FullGoalSuggestionTemplateFragment } };
 }
@@ -38,8 +43,10 @@ interface IState {
   error?: string;
 }
 
-class CarePlanSuggestionCreate extends React.Component<IProps, IState> {
-  constructor(props: IProps) {
+type allProps = IProps & IGraphqlProps;
+
+export class CarePlanSuggestionCreate extends React.Component<allProps, IState> {
+  constructor(props: allProps) {
     super(props);
 
     this.onClick = this.onClick.bind(this);
@@ -66,18 +73,33 @@ class CarePlanSuggestionCreate extends React.Component<IProps, IState> {
     event.preventDefault();
 
     const { suggestionType, suggestionId } = this.state;
-    const { createGoalSuggestion, createConcernSuggestion, answer } = this.props;
+    const {
+      createGoalSuggestion,
+      createConcernSuggestion,
+      answer,
+      screeningToolScoreRange,
+    } = this.props;
 
     this.setState(() => ({ loading: true, error: undefined }));
 
     try {
-      if (suggestionType === 'concern' && suggestionId) {
+      if (suggestionType === 'concern' && suggestionId && createConcernSuggestion) {
         await createConcernSuggestion({
-          variables: { answerId: answer.id, concernId: suggestionId },
+          variables: {
+            answerId: answer ? answer.id : undefined,
+            screeningToolScoreRangeId: screeningToolScoreRange ?
+              screeningToolScoreRange.id : undefined,
+            concernId: suggestionId,
+          },
         });
-      } else if (suggestionType === 'goal' && suggestionId) {
+      } else if (suggestionType === 'goal' && suggestionId && createGoalSuggestion) {
         await createGoalSuggestion({
-          variables: { answerId: answer.id, goalSuggestionTemplateId: suggestionId },
+          variables: {
+            answerId: answer ? answer.id : undefined,
+            screeningToolScoreRangeId: screeningToolScoreRange ?
+              screeningToolScoreRange.id : undefined,
+            goalSuggestionTemplateId: suggestionId,
+          },
         });
       }
       this.setState(() => ({
@@ -123,11 +145,18 @@ class CarePlanSuggestionCreate extends React.Component<IProps, IState> {
   }
 
   getGoalOptions() {
-    const { goals, answer } = this.props;
+    const { goals, answer, screeningToolScoreRange } = this.props;
+    let existingGoalIds: any[] = [];
 
-    const existingGoalIds = (answer.goalSuggestions || [])
-      .map(goal => goal ? goal.id : null)
-      .filter(id => !!id);
+    if (answer) {
+      existingGoalIds = (answer.goalSuggestions || [])
+        .map(goal => goal ? goal.id : null)
+        .filter(id => !!id);
+    } else if (screeningToolScoreRange) {
+      existingGoalIds = (screeningToolScoreRange.goalSuggestions || [])
+        .map(goal => goal ? goal.id : null)
+        .filter(id => !!id);
+    }
 
     return (goals || [])
       .filter(goal => existingGoalIds.indexOf(goal.id) === -1)
@@ -137,11 +166,18 @@ class CarePlanSuggestionCreate extends React.Component<IProps, IState> {
   }
 
   getConcernOptions() {
-    const { concerns, answer } = this.props;
+    const { concerns, answer, screeningToolScoreRange } = this.props;
+    let existingConcernIds: any[] = [];
 
-    const existingConcernIds = (answer.concernSuggestions || [])
-      .map(concern => concern ? concern.id : null)
-      .filter(id => !!id);
+    if (answer) {
+      existingConcernIds = (answer.concernSuggestions || [])
+        .map(concern => concern ? concern.id : null)
+        .filter(id => !!id);
+    } else if (screeningToolScoreRange) {
+      existingConcernIds = (screeningToolScoreRange.concernSuggestions || [])
+        .map(concern => concern ? concern.id : null)
+        .filter(id => !!id);
+    }
 
     return (concerns || [])
       .filter(concern => existingConcernIds.indexOf(concern.id) === -1)
@@ -218,14 +254,14 @@ class CarePlanSuggestionCreate extends React.Component<IProps, IState> {
 }
 
 export default compose(
-  graphql(concernsQuery as any, {
+  graphql<IGraphqlProps, IProps>(concernsQuery as any, {
     props: ({ data }) => ({
       concernsLoading: (data ? data.loading : false),
       concernsError: (data ? data.error : null),
       concerns: (data ? (data as any).concerns : null),
     }),
   }),
-  graphql(goalsQuery as any, {
+  graphql<IGraphqlProps, IProps>(goalsQuery as any, {
     props: ({ data }) => ({
       refetchGoals: (data ? data.refetch : null),
       goalsLoading: (data ? data.loading : false),
@@ -233,20 +269,22 @@ export default compose(
       goals: (data ? (data as any).goalSuggestionTemplates : null),
     }),
   }),
-  graphql(concernSuggestionCreateMutation as any, {
+  graphql<IGraphqlProps, IProps>(concernSuggestionCreateMutation as any, {
     name: 'createConcernSuggestion',
     options: {
       refetchQueries: [
-        'getQuestionsForRiskArea',
+        'getQuestionsForRiskAreaOrScreeningTool',
+        'getScreeningTools',
       ],
     },
   }),
-  graphql(goalSuggestionCreateMutation as any, {
+  graphql<IGraphqlProps, IProps>(goalSuggestionCreateMutation as any, {
     name: 'createGoalSuggestion',
     options: {
       refetchQueries: [
-        'getQuestionsForRiskArea',
+        'getQuestionsForRiskAreaOrScreeningTool',
+        'getScreeningTools',
       ],
     },
   }),
-)(CarePlanSuggestionCreate as any) as any;
+)(CarePlanSuggestionCreate);

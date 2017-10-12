@@ -6,10 +6,10 @@ import { FormattedRelative } from 'react-intl';
 import { connect, Dispatch } from 'react-redux';
 import { push } from 'react-router-redux';
 import * as patientAnswersQuery from '../graphql/queries/get-patient-answers-for-risk-area.graphql';
-import * as riskAreaQuestionsQuery from '../graphql/queries/get-questions-for-risk-area.graphql';
+/* tslint:disable:max-line-length */
+import * as riskAreaQuestionsQuery from '../graphql/queries/get-questions-for-risk-area-or-screening-tool.graphql';
 import * as riskAreaQuery from '../graphql/queries/get-risk-area.graphql';
 import * as patientAnswersCreate from '../graphql/queries/patient-answers-create-mutation.graphql';
-/* tslint:disable:max-line-length */
 import * as patientAnswersUpdateApplicability from '../graphql/queries/patient-answers-update-applicable-mutation.graphql';
 /* tsline:enable:max-line-length */
 import {
@@ -586,7 +586,7 @@ export default compose(
     props: ({ data }) => ({
       riskAreaQuestionsLoading: data ? data.loading : false,
       riskAreaQuestionsError: data ? data.error : null,
-      riskAreaQuestions: data ? (data as any).questionsForRiskArea : null,
+      riskAreaQuestions: data ? (data as any).questionsForRiskAreaOrScreeningTool : null,
       refetchRiskAreaQuestions: data ? data.refetch : null,
     }),
   }),

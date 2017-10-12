@@ -6,6 +6,8 @@ import Concern from '../../models/concern';
 import ConcernSuggestion from '../../models/concern-suggestion';
 import Question from '../../models/question';
 import RiskArea from '../../models/risk-area';
+import ScreeningTool from '../../models/screening-tool';
+import ScreeningToolScoreRange from '../../models/screening-tool-score-range';
 import schema from '../make-executable-schema';
 
 describe('concern suggestion resolver', () => {
@@ -75,6 +77,37 @@ describe('concern suggestion resolver', () => {
       expect(cloneDeep(result.data!.concernSuggestionCreate)).toMatchObject([
         {
           title: 'Housing',
+        },
+      ]);
+    });
+
+    it('suggests a concern for a screening tool score range', async () => {
+      const riskArea = await RiskArea.create({ title: 'Housing', order: 1 });
+      const concern = await Concern.create({ title: 'No Housing' });
+      const screeningTool = await ScreeningTool.create({
+        title: 'Screening Tool',
+        riskAreaId: riskArea.id,
+      });
+      const screeningToolScoreRange = await ScreeningToolScoreRange.create({
+        description: 'Score Range',
+        screeningToolId: screeningTool.id,
+        minimumScore: 0,
+        maximumScore: 10,
+      });
+      const mutation = `mutation {
+        concernSuggestionCreate(
+          input: {
+            screeningToolScoreRangeId: "${screeningToolScoreRange.id}"
+            concernId: "${concern.id}"
+          }
+        ) {
+          title
+        }
+      }`;
+      const result = await graphql(schema, mutation, null, { userRole });
+      expect(cloneDeep(result.data!.concernSuggestionCreate)).toMatchObject([
+        {
+          title: 'No Housing',
         },
       ]);
     });

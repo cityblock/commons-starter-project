@@ -1,6 +1,7 @@
 import { Model, RelationMappings } from 'objection';
 import * as uuid from 'uuid/v4';
 import RiskArea from './risk-area';
+import ScreeningToolScoreRange from './screening-tool-score-range';
 
 export interface IScreeningToolCreateFields {
   title: string;
@@ -13,12 +14,18 @@ export interface IScreeningToolEditableFields {
   deletedAt?: string;
 }
 
+/* tslint:disable:max-line-length */
+export const EAGER_QUERY =
+  '[riskArea, screeningToolScoreRanges.[concernSuggestions, goalSuggestions.[taskTemplates]]]';
+/* tslint:enable:max-line-length */
+
 /* tslint:disable:member-ordering */
 export default class ScreeningTool extends Model {
   id: string;
   title: string;
   riskAreaId: string;
   riskArea: RiskArea;
+  screeningToolScoreRanges: ScreeningToolScoreRange[];
 
   createdAt: string;
   updatedAt: string;
@@ -49,6 +56,14 @@ export default class ScreeningTool extends Model {
         to: 'risk_area.id',
       },
     },
+    screeningToolScoreRanges: {
+      relation: Model.HasManyRelation,
+      modelClass: 'screening-tool-score-range',
+      join: {
+        from: 'screening_tool_score_range.screeningToolId',
+        to: 'screening_tool.id',
+      },
+    },
   };
 
   $beforeInsert() {
@@ -61,18 +76,33 @@ export default class ScreeningTool extends Model {
   }
 
   static async create(input: IScreeningToolCreateFields): Promise<ScreeningTool> {
-    return await this.query().insertAndFetch(input);
+    return await this.query()
+      .eager(EAGER_QUERY)
+      .insertAndFetch(input);
   }
 
   static async edit(
     screeningToolId: string,
     screeningTool: IScreeningToolEditableFields,
   ): Promise<ScreeningTool> {
-    return await this.query().updateAndFetchById(screeningToolId, screeningTool);
+    return await this.query()
+      .eager(EAGER_QUERY)
+      .updateAndFetchById(screeningToolId, screeningTool);
   }
 
   static async get(screeningToolId: string): Promise<ScreeningTool> {
-    const screeningTool = await this.query().findOne({ id: screeningToolId, deletedAt: null });
+    const screeningTool = await this.query()
+      .eager(EAGER_QUERY)
+      .modifyEager('screeningToolScoreRanges', builder =>
+        builder.where('screening_tool_score_range.deletedAt', null),
+      )
+      .modifyEager('screeningToolScoreRanges.concernSuggestions', builder =>
+        builder.where('concern_suggestion.deletedAt', null),
+      )
+      .modifyEager('screeningToolScoreRanges.goalSuggestions', builder =>
+        builder.where('goal_suggestion.deletedAt', null),
+      )
+      .findOne({ id: screeningToolId, deletedAt: null });
 
     if (!screeningTool) {
       return Promise.reject(`No such screening tool: ${screeningToolId}`);
@@ -82,17 +112,32 @@ export default class ScreeningTool extends Model {
   }
 
   static async getForRiskArea(riskAreaId: string): Promise<ScreeningTool[]> {
-    return await this.query().where({ deletedAt: null, riskAreaId });
+    return await this.query()
+      .eager(EAGER_QUERY)
+      .where({ deletedAt: null, riskAreaId });
   }
 
   static async getAll(): Promise<ScreeningTool[]> {
-    return await this.query().where({ deletedAt: null });
+    return await this.query()
+      .eager(EAGER_QUERY)
+      .modifyEager('screeningToolScoreRanges', builder =>
+        builder.where('screening_tool_score_range.deletedAt', null),
+      )
+      .modifyEager('screeningToolScoreRanges.concernSuggestions', builder =>
+        builder.where('concern_suggestion.deletedAt', null),
+      )
+      .modifyEager('screeningToolScoreRanges.goalSuggestions', builder =>
+        builder.where('goal_suggestion.deletedAt', null),
+      )
+      .where({ deletedAt: null });
   }
 
   static async delete(screeningToolId: string): Promise<ScreeningTool> {
-    return await this.query().updateAndFetchById(screeningToolId, {
-      deletedAt: new Date().toISOString(),
-    });
+    return await this.query()
+      .eager(EAGER_QUERY)
+      .updateAndFetchById(screeningToolId, {
+        deletedAt: new Date().toISOString(),
+      });
   }
 }
 /* tslint:disable:member-ordering */

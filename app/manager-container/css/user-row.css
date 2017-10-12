@@ -73,7 +73,7 @@
 
 .popupHeading {
   font-size: var(--large-font-size);
-  line-height: var(--gslarge-font-line-height);
+  line-height: var(--large-font-line-height);
   text-align: center;
   margin-bottom: 50px;
 }

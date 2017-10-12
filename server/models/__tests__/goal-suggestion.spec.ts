@@ -8,6 +8,8 @@ import PatientAnswer from '../patient-answer';
 import PatientGoal from '../patient-goal';
 import Question from '../question';
 import RiskArea from '../risk-area';
+import ScreeningTool from '../screening-tool';
+import ScreeningToolScoreRange from '../screening-tool-score-range';
 import User from '../user';
 
 describe('goal suggestion model', () => {
@@ -315,6 +317,31 @@ describe('goal suggestion model', () => {
       const secondGoalSuggestions = await GoalSuggestion.getNewForPatient(patient.id);
       expect(secondGoalSuggestions[0]).toMatchObject(goalSuggestionTemplate2);
       expect(secondGoalSuggestions.length).toEqual(1);
+    });
+
+    it('gets goal suggestions for a screening tool score range', async () => {
+      const goalSuggestionTemplate2 = await GoalSuggestionTemplate.create({ title: 'Fix Food' });
+      const screeningTool = await ScreeningTool.create({ title: 'Test', riskAreaId: riskArea.id });
+      const screeningToolScoreRange = await ScreeningToolScoreRange.create({
+        description: 'Range',
+        screeningToolId: screeningTool.id,
+        minimumScore: 0,
+        maximumScore: 10,
+      });
+      await GoalSuggestion.create({
+        goalSuggestionTemplateId: goalSuggestionTemplate.id,
+        screeningToolScoreRangeId: screeningToolScoreRange.id,
+      });
+      await GoalSuggestion.create({
+        goalSuggestionTemplateId: goalSuggestionTemplate2.id,
+        screeningToolScoreRangeId: screeningToolScoreRange.id,
+      });
+      const fetchedGoalSuggestions = await GoalSuggestion.getForScreeningToolScoreRange(
+        screeningToolScoreRange.id,
+      );
+      expect(fetchedGoalSuggestions.length).toEqual(2);
+      expect(fetchedGoalSuggestions[0].id).toEqual(goalSuggestionTemplate.id);
+      expect(fetchedGoalSuggestions[1].id).toEqual(goalSuggestionTemplate2.id);
     });
   });
 });

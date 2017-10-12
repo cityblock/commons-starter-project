@@ -155,6 +155,6 @@ function mapDispatchToProps(dispatch: Dispatch<() => void>, ownProps: IProps): P
 }
 
 export default (compose)(
-  connect<any, any, IComponentProps>(null, mapDispatchToProps),
+  connect<{}, {}, IComponentProps>(null, mapDispatchToProps),
   graphql(riskAreaDeleteMutation as any, { name: 'deleteRiskArea' }),
 )(AdminRiskAreas);

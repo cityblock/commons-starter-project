@@ -1,0 +1,85 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders screening tool screate 1`] = `
+<div
+  className={undefined}
+>
+  <form
+    onSubmit={[Function]}
+  >
+    <div
+      className={undefined}
+    >
+      <div
+        className={undefined}
+        onClick={[Function]}
+      />
+    </div>
+    <div
+      className={undefined}
+    >
+      <div
+        className={undefined}
+      >
+        <div
+          className={undefined}
+        >
+          <div
+            className={undefined}
+          />
+        </div>
+      </div>
+      <div
+        className={undefined}
+      >
+        <input
+          className={undefined}
+          name="title"
+          onChange={[Function]}
+          placeholder="Enter screening tool title"
+          value=""
+        />
+        <select
+          className={undefined}
+          name="riskAreaId"
+          onChange={[Function]}
+          required={true}
+          value=""
+        >
+          <option
+            disabled={true}
+            hidden={true}
+            value=""
+          >
+            Select Risk Area
+          </option>
+          <option
+            value="cool-task-id"
+          >
+            Risk Area Title
+          </option>
+        </select>
+      </div>
+    </div>
+    <div
+      className={undefined}
+    >
+      <div
+        className={undefined}
+      >
+        <div
+          className={undefined}
+          onClick={[Function]}
+        >
+          Cancel
+        </div>
+        <input
+          className={undefined}
+          type="submit"
+          value="Add screening tool"
+        />
+      </div>
+    </div>
+  </form>
+</div>
+`;

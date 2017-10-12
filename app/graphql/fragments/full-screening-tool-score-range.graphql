@@ -1,0 +1,19 @@
+#import "./full-concern.graphql"
+#import "./full-goal-suggestion-template.graphql"
+
+fragment FullScreeningToolScoreRange on ScreeningToolScoreRange {
+  id
+  description
+  minimumScore
+  maximumScore
+  screeningToolId
+  createdAt
+  updatedAt
+  deletedAt
+  concernSuggestions {
+    ...FullConcern
+  }
+  goalSuggestions {
+    ...FullGoalSuggestionTemplate
+  }
+}

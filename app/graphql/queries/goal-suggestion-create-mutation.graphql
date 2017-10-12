@@ -1,8 +1,16 @@
 #import "../fragments/full-goal-suggestion-template.graphql"
 
-mutation goalSuggestionCreate($answerId: String!, $goalSuggestionTemplateId: String!) {
+mutation goalSuggestionCreate(
+  $answerId: String
+  $screeningToolScoreRangeId: String
+  $goalSuggestionTemplateId: String!
+) {
   goalSuggestionCreate(
-    input: { answerId: $answerId, goalSuggestionTemplateId: $goalSuggestionTemplateId }
+    input: {
+      answerId: $answerId
+      screeningToolScoreRangeId: $screeningToolScoreRangeId
+      goalSuggestionTemplateId: $goalSuggestionTemplateId
+    }
   ) {
     ...FullGoalSuggestionTemplate
   }

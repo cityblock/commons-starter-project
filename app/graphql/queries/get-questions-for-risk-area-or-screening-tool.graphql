@@ -1,0 +1,7 @@
+#import "../fragments/full-question.graphql"
+
+query getQuestionsForRiskAreaOrScreeningTool($riskAreaId: String, $screeningToolId: String) {
+  questionsForRiskAreaOrScreeningTool(riskAreaId: $riskAreaId, screeningToolId: $screeningToolId) {
+    ...FullQuestion
+  }
+}

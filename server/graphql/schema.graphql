@@ -357,7 +357,8 @@ type Question implements uniqueId {
   validatedSource: String
   answers: [Answer!]
   answerType: AnswerTypeOptions!
-  riskAreaId: String!
+  riskAreaId: String
+  screeningToolId: String
   applicableIfQuestionConditions: [QuestionCondition!]
   applicableIfType: QuestionConditionTypeOptions
   order: Int!
@@ -541,6 +542,7 @@ type ScreeningTool implements uniqueId {
   title: String!
   riskAreaId: String!
   riskArea: RiskArea!
+  screeningToolScoreRanges: [ScreeningToolScoreRange]!
   createdAt: String!
   updatedAt: String!
   deletedAt: String
@@ -556,6 +558,8 @@ type ScreeningToolScoreRange implements uniqueId {
   createdAt: String!
   updatedAt: String!
   deletedAt: String
+  concernSuggestions: [Concern]
+  goalSuggestions: [GoalSuggestionTemplate]
 }
 
 type PatientScreeningToolSubmission implements uniqueId {
@@ -764,7 +768,8 @@ input QuestionCreateInput {
   title: String!
   answerType: AnswerTypeOptions!
   validatedSource: String
-  riskAreaId: String!
+  riskAreaId: String
+  screeningToolId: String
   order: Int!
   applicableIfType: QuestionConditionTypeOptions
 }
@@ -873,7 +878,8 @@ input ConcernDeleteInput {
 
 input ConcernSuggestInput {
   concernId: String!
-  answerId: String!
+  answerId: String
+  screeningToolScoreRangeId: String
 }
 
 input PatientConcernCreateInput {
@@ -910,7 +916,8 @@ input GoalSuggestionTemplateDeleteInput {
 }
 
 input GoalSuggestInput {
-  answerId: String!
+  answerId: String
+  screeningToolScoreRangeId: String
   goalSuggestionTemplateId: String!
 }
 
@@ -1228,7 +1235,7 @@ type RootQueryType {
   # Question
   question(questionId: String!): Question
   # Questions
-  questionsForRiskArea(riskAreaId: String!): [Question]!
+  questionsForRiskAreaOrScreeningTool(riskAreaId: String, screeningToolId: String): [Question]!
   # Answer
   answer(answerId: String!): Answer
   # Answers

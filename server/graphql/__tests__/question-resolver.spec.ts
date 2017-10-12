@@ -4,6 +4,7 @@ import Db from '../../db';
 import Answer from '../../models/answer';
 import Question from '../../models/question';
 import RiskArea from '../../models/risk-area';
+import ScreeningTool from '../../models/screening-tool';
 import User from '../../models/user';
 import schema from '../make-executable-schema';
 
@@ -11,7 +12,9 @@ describe('question tests', () => {
   let db: Db;
   const userRole = 'admin';
   let riskArea: RiskArea;
+  let screeningTool: ScreeningTool;
   let question: Question;
+  let question2: Question;
   let answer: Answer;
   let user: User;
 
@@ -24,10 +27,20 @@ describe('question tests', () => {
       title: 'testing',
       order: 1,
     });
+    screeningTool = await ScreeningTool.create({
+      title: 'screening tool',
+      riskAreaId: riskArea.id,
+    });
     question = await Question.create({
       title: 'like writing tests?',
       answerType: 'dropdown',
       riskAreaId: riskArea.id,
+      order: 1,
+    });
+    question2 = await Question.create({
+      title: 'hate writing tests?',
+      answerType: 'dropdown',
+      screeningToolId: screeningTool.id,
       order: 1,
     });
     answer = await Answer.create({
@@ -91,20 +104,37 @@ describe('question tests', () => {
     });
   });
 
-  describe('resolveQuestionsForRiskArea', () => {
+  describe('resolveQuestionsForRiskAreaOrScreeningTool', () => {
     it('gets questions for risk area', async () => {
       const query = `{
-        questionsForRiskArea(riskAreaId: "${riskArea.id}") {
+        questionsForRiskAreaOrScreeningTool(riskAreaId: "${riskArea.id}") {
           title, answerType, order, answers { id }
         }
       }`;
       const result = await graphql(schema, query, null, { db, userRole, userId: user.id });
-      expect(cloneDeep(result.data!.questionsForRiskArea)).toMatchObject([
+      expect(cloneDeep(result.data!.questionsForRiskAreaOrScreeningTool)).toMatchObject([
         {
           title: 'like writing tests?',
           answerType: 'dropdown',
           order: 1,
           answers: [{ id: answer.id }],
+        },
+      ]);
+    });
+
+    it('gets questions for screening tool', async () => {
+      const query = `{
+        questionsForRiskAreaOrScreeningTool(screeningToolId: "${screeningTool.id}") {
+          title, answerType, order, answers { id }
+        }
+      }`;
+      const result = await graphql(schema, query, null, { db, userRole, userId: user.id });
+      expect(cloneDeep(result.data!.questionsForRiskAreaOrScreeningTool)).toMatchObject([
+        {
+          title: 'hate writing tests?',
+          answerType: 'dropdown',
+          order: 1,
+          answers: [],
         },
       ]);
     });
@@ -133,6 +163,32 @@ describe('question tests', () => {
         answerType: 'radio',
         validatedSource: 'logan',
         riskAreaId: riskArea.id,
+        order: 2,
+      });
+    });
+
+    it('creates a new question for a screening tool', async () => {
+      const mutation = `mutation {
+        questionCreate(input: {
+          title: "new title",
+          answerType: radio,
+          validatedSource: "brennan"
+          screeningToolId: "${screeningTool.id}"
+          order: 2
+        }) {
+          title, answerType, validatedSource, screeningToolId, order
+        }
+      }`;
+      const result = await graphql(schema, mutation, null, {
+        db,
+        userRole,
+        userId: user.id,
+      });
+      expect(cloneDeep(result.data!.questionCreate)).toMatchObject({
+        title: 'new title',
+        answerType: 'radio',
+        validatedSource: 'brennan',
+        screeningToolId: screeningTool.id,
         order: 2,
       });
     });

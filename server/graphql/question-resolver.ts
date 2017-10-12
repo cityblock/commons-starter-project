@@ -29,14 +29,18 @@ export async function questionCreate(root: any, { input }: IQuestionCreateArgs, 
   return await Question.create(input as any);
 }
 
-export async function resolveQuestionsForRiskArea(
+export async function resolveQuestionsForRiskAreaOrScreeningTool(
   root: any,
-  args: { riskAreaId: string },
+  args: { riskAreaId?: string; screeningToolId?: string },
   { db, userRole }: IContext,
 ) {
   await accessControls.isAllowed(userRole, 'view', 'question');
 
-  return await Question.getAllForRiskArea(args.riskAreaId);
+  if (args.screeningToolId) {
+    return await Question.getAllForScreeningTool(args.screeningToolId);
+  } else if (args.riskAreaId) {
+    return await Question.getAllForRiskArea(args.riskAreaId);
+  }
 }
 
 export async function resolveQuestion(

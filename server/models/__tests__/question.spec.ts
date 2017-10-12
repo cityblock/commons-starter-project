@@ -2,10 +2,12 @@ import Db from '../../db';
 import Answer from '../answer';
 import Question from '../question';
 import RiskArea from '../risk-area';
+import ScreeningTool from '../screening-tool';
 
 describe('answer model', () => {
   let db: Db;
   let riskArea: RiskArea;
+  let screeningTool: ScreeningTool;
 
   beforeEach(async () => {
     db = await Db.get();
@@ -14,6 +16,10 @@ describe('answer model', () => {
     riskArea = await RiskArea.create({
       title: 'testing',
       order: 1,
+    });
+    screeningTool = await ScreeningTool.create({
+      title: 'screening tool',
+      riskAreaId: riskArea.id,
     });
   });
 
@@ -38,6 +44,27 @@ describe('answer model', () => {
       title: 'testing?',
       answerType: 'dropdown',
       riskAreaId: riskArea.id,
+      order: 1,
+    });
+  });
+
+  it('creates and gets a question for a screening tool', async () => {
+    const question = await Question.create({
+      title: 'testing?',
+      answerType: 'dropdown',
+      screeningToolId: screeningTool.id,
+      order: 1,
+    });
+    expect(question).toMatchObject({
+      title: 'testing?',
+      answerType: 'dropdown',
+      screeningToolId: screeningTool.id,
+      order: 1,
+    });
+    expect(await Question.get(question.id)).toMatchObject({
+      title: 'testing?',
+      answerType: 'dropdown',
+      screeningToolId: screeningTool.id,
       order: 1,
     });
   });
@@ -72,7 +99,43 @@ describe('answer model', () => {
       riskAreaId: riskArea.id,
       order: 2,
     });
-    expect(await Question.getAllForRiskArea(riskArea.id)).toMatchObject([question1, question2]);
+    const question3 = await Question.create({
+      title: 'testing?',
+      answerType: 'dropdown',
+      screeningToolId: screeningTool.id,
+      riskAreaId: riskArea.id,
+      order: 3,
+    });
+    const fetchedQuestions = await Question.getAllForRiskArea(riskArea.id);
+    const fetchedQuestionIds = fetchedQuestions.map(q => q.id);
+    expect(fetchedQuestions).toMatchObject([question1, question2]);
+    expect(fetchedQuestionIds).not.toContain(question3.id);
+  });
+
+  it('gets questions for screening tool', async () => {
+    const question1 = await Question.create({
+      title: 'testing?',
+      answerType: 'dropdown',
+      screeningToolId: screeningTool.id,
+      order: 1,
+    });
+    const question2 = await Question.create({
+      title: 'testing?',
+      answerType: 'dropdown',
+      screeningToolId: screeningTool.id,
+      riskAreaId: riskArea.id,
+      order: 2,
+    });
+    const question3 = await Question.create({
+      title: 'testing?',
+      answerType: 'dropdown',
+      riskAreaId: riskArea.id,
+      order: 3,
+    });
+    const fetchedQuestions = await Question.getAllForScreeningTool(screeningTool.id);
+    const fetchedQuestionIds = fetchedQuestions.map(q => q.id);
+    expect(fetchedQuestions).toMatchObject([question1, question2]);
+    expect(fetchedQuestionIds).not.toContain(question3.id);
   });
 
   it('eager loads answers ordered by...order', async () => {

@@ -118,7 +118,6 @@ exports[`renders goal create 1`] = `
       className="undefined"
     >
       <Connect(Apollo(GoalCreate))
-        goalId={undefined}
         onClose={[Function]}
         routeBase="/route/base"
       />

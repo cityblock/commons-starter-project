@@ -1,0 +1,21 @@
+#import "../fragments/full-screening-tool-score-range.graphql"
+
+mutation screeningToolScoreRangeEdit(
+  $screeningToolScoreRangeId: String!
+  $description: String
+  $screeningToolId: String
+  $minimumScore: Int
+  $maximumScore: Int
+) {
+  screeningToolScoreRangeEdit(
+    input: {
+      screeningToolScoreRangeId: $screeningToolScoreRangeId
+      description: $description
+      screeningToolId: $screeningToolId
+      minimumScore: $minimumScore
+      maximumScore: $maximumScore
+    }
+  ) {
+    ...FullScreeningToolScoreRange
+  }
+}

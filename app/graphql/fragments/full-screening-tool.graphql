@@ -1,0 +1,17 @@
+#import "./full-risk-area.graphql"
+#import "./full-screening-tool-score-range.graphql"
+
+fragment FullScreeningTool on ScreeningTool {
+  id
+  title
+  riskAreaId
+  riskArea {
+    ...FullRiskArea
+  }
+  screeningToolScoreRanges {
+    ...FullScreeningToolScoreRange
+  }
+  createdAt
+  updatedAt
+  deletedAt
+}

@@ -140,6 +140,7 @@ export const question = {
   answerType: 'radio' as any,
   answers: [answer],
   riskAreaId: 'risk-area-id',
+  screeningToolId: null,
   applicableIfType: 'allTrue' as any,
   applicableIfQuestionConditions: [
     {
@@ -362,4 +363,28 @@ export const eventNotification = {
   createdAt: 'Thu Jul 13 2017 16:52:56 GMT-0400 (EDT)',
   updatedAt: 'Thu Jul 13 2017 16:52:56 GMT-0400 (EDT)',
   deletedAt: null,
+};
+
+export const screeningTool = {
+  id: 'screening-tool-id',
+  title: 'Screening Tool',
+  riskAreaId: riskArea.id,
+  riskArea,
+  screeningToolScoreRanges: [],
+  createdAt: 'Thu Jul 13 2017 16:52:56 GMT-0400 (EDT)',
+  updatedAt: 'Thu Jul 13 2017 16:52:56 GMT-0400 (EDT)',
+  deletedAt: null,
+};
+
+export const screeningToolScoreRange = {
+  id: 'screening-tool-score-range-id',
+  screeningToolId: screeningTool.id,
+  description: 'Screening Tool Score Range',
+  minimumScore: 0,
+  maximumScore: 10,
+  createdAt: 'Thu Jul 13 2017 16:52:56 GMT-0400 (EDT)',
+  updatedAt: 'Thu Jul 13 2017 16:52:56 GMT-0400 (EDT)',
+  deletedAt: null,
+  concernSuggestions: [],
+  goalSuggestions: [],
 };

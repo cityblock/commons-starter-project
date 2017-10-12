@@ -27,6 +27,7 @@ export async function concernSuggestionCreate(
 
   return await ConcernSuggestion.create({
     answerId: args.input.answerId,
+    screeningToolScoreRangeId: args.input.screeningToolScoreRangeId,
     concernId: args.input.concernId,
   });
 }
@@ -40,6 +41,7 @@ export async function concernSuggestionDelete(
 
   return await ConcernSuggestion.delete({
     answerId: args.input.answerId,
+    screeningToolScoreRangeId: args.input.screeningToolScoreRangeId,
     concernId: args.input.concernId,
   });
 }

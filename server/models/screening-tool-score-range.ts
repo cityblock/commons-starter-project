@@ -59,6 +59,30 @@ export default class ScreeningToolScoreRange extends Model {
         to: 'screening_tool.id',
       },
     },
+    concernSuggestions: {
+      relation: Model.ManyToManyRelation,
+      modelClass: 'concern',
+      join: {
+        from: 'screening_tool_score_range.id',
+        through: {
+          from: 'concern_suggestion.screeningToolScoreRangeId',
+          to: 'concern_suggestion.concernId',
+        },
+        to: 'concern.id',
+      },
+    },
+    goalSuggestions: {
+      relation: Model.ManyToManyRelation,
+      modelClass: 'goal-suggestion-template',
+      join: {
+        from: 'screening_tool_score_range.id',
+        through: {
+          from: 'goal_suggestion.screeningToolScoreRangeId',
+          to: 'goal_suggestion.goalSuggestionTemplateId',
+        },
+        to: 'goal_suggestion_template.id',
+      },
+    },
   };
 
   $beforeInsert() {

@@ -124,7 +124,6 @@ export class BuilderGoals extends React.Component<IProps, IState> {
     );
     const createGoalHtml = showCreateGoal ? (
       <GoalCreate
-        goalId={goalId}
         onClose={this.hideCreateGoal}
         routeBase={this.props.routeBase} />
     ) : null;

@@ -14,16 +14,20 @@ import {
 import * as styles from '../shared/css/two-panel-right.css';
 
 interface IProps {
-  answerId: string;
+  answerId?: string;
+  screeningToolScoreRangeId?: string;
   suggestionType: 'concern' | 'goal';
   suggestion: FullGoalSuggestionTemplateFragment | FullConcernFragment;
+  mutate?: any;
+}
+
+interface IGraphqlProps {
   deleteConcernSuggestion: (
     options: { variables: concernSuggestionDeleteMutationVariables },
   ) => { data: { concernSuggestionDelete: FullConcernFragment } };
   deleteGoalSuggestion: (
     options: { variables: goalSuggestionDeleteMutationVariables },
   ) => { data: { goalSuggestionDelete: FullGoalSuggestionTemplateFragment } };
-  mutate: any;
 }
 
 interface IState {
@@ -31,8 +35,10 @@ interface IState {
   error?: string;
 }
 
-class CarePlanSuggestion extends React.Component<IProps, IState> {
-  constructor(props: IProps) {
+type allProps = IProps & IGraphqlProps;
+
+class CarePlanSuggestion extends React.Component<allProps, IState> {
+  constructor(props: allProps) {
     super(props);
 
     this.onClickDelete = this.onClickDelete.bind(this);
@@ -48,6 +54,7 @@ class CarePlanSuggestion extends React.Component<IProps, IState> {
       suggestionType,
       suggestion,
       answerId,
+      screeningToolScoreRangeId,
       deleteConcernSuggestion,
       deleteGoalSuggestion,
     } = this.props;
@@ -57,11 +64,15 @@ class CarePlanSuggestion extends React.Component<IProps, IState> {
     try {
       if (suggestionType === 'concern') {
         await deleteConcernSuggestion({
-          variables: { answerId, concernId: suggestion.id },
+          variables: { answerId, screeningToolScoreRangeId, concernId: suggestion.id },
         });
       } else if (suggestionType === 'goal') {
         await deleteGoalSuggestion({
-          variables: { answerId, goalSuggestionTemplateId: suggestion.id },
+          variables: {
+            answerId,
+            screeningToolScoreRangeId,
+            goalSuggestionTemplateId: suggestion.id,
+          },
         });
       }
 
@@ -127,20 +138,22 @@ class CarePlanSuggestion extends React.Component<IProps, IState> {
 }
 
 export default compose(
-  graphql(concernSuggestionDeleteMutation as any, {
+  graphql<IGraphqlProps, IProps>(concernSuggestionDeleteMutation as any, {
     name: 'deleteConcernSuggestion',
     options: {
       refetchQueries: [
-        'getQuestionsForRiskArea',
+        'getQuestionsForRiskAreaOrScreeningTool',
+        'getScreeningTools',
       ],
     },
   }),
-  graphql(goalSuggestionDeleteMutation as any, {
+  graphql<IGraphqlProps, IProps>(goalSuggestionDeleteMutation as any, {
     name: 'deleteGoalSuggestion',
     options: {
       refetchQueries: [
-        'getQuestionsForRiskArea',
+        'getQuestionsForRiskAreaOrScreeningTool',
+        'getScreeningTools',
       ],
     },
   }),
-)(CarePlanSuggestion as any) as any;
+)(CarePlanSuggestion);

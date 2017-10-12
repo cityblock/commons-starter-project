@@ -3,10 +3,12 @@ import * as uuid from 'uuid/v4';
 import Answer from './answer';
 import CarePlanSuggestion from './care-plan-suggestion';
 import GoalSuggestionTemplate from './goal-suggestion-template';
+import ScreeningToolScoreRange from './screening-tool-score-range';
 
 export interface IGoalSuggestionEditableFields {
   goalSuggestionTemplateId: string;
-  answerId: string;
+  answerId?: string | null;
+  screeningToolScoreRangeId?: string | null;
 }
 
 /* tslint:disable:member-ordering */
@@ -16,6 +18,8 @@ export default class GoalSuggestion extends Model {
   goalSuggestionTemplate: GoalSuggestionTemplate;
   answerId: string;
   answer: Answer;
+  screeningToolScoreRangeId: string;
+  screeningToolScoreRange: ScreeningToolScoreRange;
   createdAt: string;
   updatedAt: string;
   deletedAt?: string;
@@ -31,6 +35,7 @@ export default class GoalSuggestion extends Model {
     properties: {
       id: { type: 'string' },
       answerId: { type: 'string' },
+      screeningToolScoreRangeId: { type: 'string' },
       goalSuggestionTemplateId: { type: 'string' },
       deletedAt: { type: 'string' },
     },
@@ -51,6 +56,14 @@ export default class GoalSuggestion extends Model {
       join: {
         from: 'goal_suggestion.answerId',
         to: 'answer.id',
+      },
+    },
+    screeningToolScoreRange: {
+      relation: Model.HasOneRelation,
+      modelClass: 'screening-tool-score-range',
+      join: {
+        from: 'goal_suggestion.screeningToolScoreRangeId',
+        to: 'screening_tool_score_range.id',
       },
     },
   };
@@ -76,6 +89,19 @@ export default class GoalSuggestion extends Model {
   static async getForAnswer(answerId: string): Promise<GoalSuggestionTemplate[]> {
     const goalSuggestionAnswers = (await GoalSuggestion.query()
       .where('answerId', answerId)
+      .andWhere('deletedAt', null)
+      .orderBy('createdAt')
+      .eager('goalSuggestionTemplate')) as any;
+    return goalSuggestionAnswers.map(
+      (goalSuggestion: GoalSuggestion) => goalSuggestion.goalSuggestionTemplate,
+    );
+  }
+
+  static async getForScreeningToolScoreRange(
+    screeningToolScoreRangeId: string,
+  ): Promise<GoalSuggestionTemplate[]> {
+    const goalSuggestionAnswers = (await GoalSuggestion.query()
+      .where('screeningToolScoreRangeId', screeningToolScoreRangeId)
       .andWhere('deletedAt', null)
       .orderBy('createdAt')
       .eager('goalSuggestionTemplate')) as any;
@@ -122,32 +148,56 @@ export default class GoalSuggestion extends Model {
   static async create({
     goalSuggestionTemplateId,
     answerId,
+    screeningToolScoreRangeId,
   }: IGoalSuggestionEditableFields): Promise<GoalSuggestionTemplate[]> {
     // TODO: use postgres UPCERT here to add relation if it doesn't exist instead of a transaction
     await transaction(GoalSuggestion, async GoalSuggestionWithTransaction => {
-      const relations = await GoalSuggestionWithTransaction.query()
-        .where('goalSuggestionTemplateId', goalSuggestionTemplateId)
-        .andWhere('answerId', answerId)
-        .andWhere('deletedAt', null);
+      const relations = await GoalSuggestionWithTransaction.query().where({
+        goalSuggestionTemplateId,
+        answerId: answerId || '',
+        screeningToolScoreRangeId: screeningToolScoreRangeId || '',
+        deletedAt: null,
+      });
 
       if (relations.length < 1) {
-        await GoalSuggestionWithTransaction.query().insert({ goalSuggestionTemplateId, answerId });
+        await GoalSuggestionWithTransaction.query().insert({
+          goalSuggestionTemplateId,
+          answerId,
+          screeningToolScoreRangeId,
+        });
       }
     });
 
-    return await this.getForAnswer(answerId);
+    if (answerId) {
+      return await this.getForAnswer(answerId);
+    } else if (screeningToolScoreRangeId) {
+      return await this.getForScreeningToolScoreRange(screeningToolScoreRangeId);
+    } else {
+      return [];
+    }
   }
 
   static async delete({
     goalSuggestionTemplateId,
     answerId,
+    screeningToolScoreRangeId,
   }: IGoalSuggestionEditableFields): Promise<GoalSuggestionTemplate[]> {
     await this.query()
-      .where('goalSuggestionTemplateId', goalSuggestionTemplateId)
-      .andWhere('answerId', answerId)
-      .andWhere('deletedAt', null)
+      .where({
+        goalSuggestionTemplateId,
+        answerId: answerId || null,
+        screeningToolScoreRangeId: screeningToolScoreRangeId || null,
+        deletedAt: null,
+      })
       .update({ deletedAt: new Date().toISOString() });
-    return await this.getForAnswer(answerId);
+
+    if (answerId) {
+      return await this.getForAnswer(answerId);
+    } else if (screeningToolScoreRangeId) {
+      return await this.getForScreeningToolScoreRange(screeningToolScoreRangeId);
+    } else {
+      return [];
+    }
   }
 }
 /* tslint:disable:member-ordering */

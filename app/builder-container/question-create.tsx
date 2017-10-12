@@ -17,11 +17,15 @@ import * as styles from './css/risk-area-create.css';
 export interface IOptions { variables: questionCreateMutationVariables; }
 
 interface IProps {
-  riskAreaId: string;
+  riskAreaId?: string;
+  screeningToolId?: string;
   routeBase: string;
   onClose: () => any;
-  createQuestion: (options: IOptions) => { data: { questionCreate: FullQuestionFragment } };
-  redirectToQuestion: (questionId: string) => any;
+  redirectToQuestion?: (questionId: string) => any;
+}
+
+interface IGraphqlProps {
+  createQuestion?: (options: IOptions) => { data: { questionCreate: FullQuestionFragment } };
 }
 
 interface IState {
@@ -30,9 +34,10 @@ interface IState {
   question: questionCreateMutationVariables;
 }
 
-class QuestionCreate extends React.Component<IProps, IState> {
+type allProps = IProps & IGraphqlProps;
 
-  constructor(props: IProps) {
+class QuestionCreate extends React.Component<allProps, IState> {
+  constructor(props: allProps) {
     super(props);
 
     this.onSubmit = this.onSubmit.bind(this);
@@ -46,6 +51,7 @@ class QuestionCreate extends React.Component<IProps, IState> {
         order: 1,
         answerType: 'dropdown',
         riskAreaId: props.riskAreaId,
+        screeningToolId: props.screeningToolId,
         applicableIfType: undefined,
       },
     };
@@ -71,18 +77,22 @@ class QuestionCreate extends React.Component<IProps, IState> {
 
   async onSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    try {
-      this.setState({ loading: true });
-      const question = await this.props.createQuestion({
-        variables: {
-          ...this.state.question,
-        },
-      });
-      this.setState({ loading: false });
-      this.props.onClose();
-      this.props.redirectToQuestion(question.data.questionCreate.id);
-    } catch (e) {
-      this.setState({ error: e.message, loading: false });
+    if (this.props.createQuestion) {
+      try {
+        this.setState({ loading: true });
+        const question = await this.props.createQuestion({
+          variables: {
+            ...this.state.question,
+          },
+        });
+        this.setState({ loading: false });
+        this.props.onClose();
+        if (this.props.redirectToQuestion) {
+          this.props.redirectToQuestion(question.data.questionCreate.id);
+        }
+      } catch (e) {
+        this.setState({ error: e.message, loading: false });
+      }
     }
     return false;
   }
@@ -156,7 +166,7 @@ class QuestionCreate extends React.Component<IProps, IState> {
   }
 }
 
-function mapDispatchToProps(dispatch: Dispatch<() => void>, ownProps: IProps): Partial<IProps> {
+function mapDispatchToProps(dispatch: Dispatch<() => void>, ownProps: allProps): Partial<allProps> {
   return {
     redirectToQuestion: (questionId: string) => {
       dispatch(push(`${ownProps.routeBase}/${questionId}`));
@@ -166,12 +176,12 @@ function mapDispatchToProps(dispatch: Dispatch<() => void>, ownProps: IProps): P
 
 export default compose(
   connect(undefined, mapDispatchToProps),
-  graphql(questionCreateMutation as any, {
+  graphql<IGraphqlProps, IProps>(questionCreateMutation as any, {
     name: 'createQuestion',
     options: {
       refetchQueries: [
-        'getQuestionsForRiskArea',
+        'getQuestionsForRiskAreaOrScreeningTool',
       ],
     },
   }),
-)(QuestionCreate as any) as any;
+)(QuestionCreate);

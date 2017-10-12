@@ -27,6 +27,7 @@ export async function goalSuggestionCreate(
 
   return await GoalSuggestion.create({
     answerId: args.input.answerId,
+    screeningToolScoreRangeId: args.input.screeningToolScoreRangeId,
     goalSuggestionTemplateId: args.input.goalSuggestionTemplateId,
   });
 }
@@ -40,6 +41,7 @@ export async function goalSuggestionDelete(
 
   return await GoalSuggestion.delete({
     answerId: args.input.answerId,
+    screeningToolScoreRangeId: args.input.screeningToolScoreRangeId,
     goalSuggestionTemplateId: args.input.goalSuggestionTemplateId,
   });
 }

@@ -41,6 +41,7 @@ Array [
         "id": "cool-question-id",
         "order": 1,
         "riskAreaId": "risk-area-id",
+        "screeningToolId": null,
         "title": "Question Title",
         "updatedAt": "Thu Jul 13 2017 16:52:56 GMT-0400 (EDT)",
         "validatedSource": "validated source",
@@ -89,6 +90,7 @@ Array [
         "id": "question-2",
         "order": 2,
         "riskAreaId": "risk-area-id",
+        "screeningToolId": null,
         "title": "Question 2",
         "validatedSource": null,
       }

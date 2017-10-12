@@ -3,7 +3,6 @@ import { format } from 'date-fns';
 import * as React from 'react';
 import { compose, graphql } from 'react-apollo';
 import { FormattedMessage } from 'react-intl';
-import { connect } from 'react-redux';
 import { DOB_FORMAT } from '../config';
 import * as editPatientMutation from '../graphql/queries/patient-edit-mutation.graphql';
 import { patientEditMutationVariables, ShortPatientFragment } from '../graphql/types';
@@ -294,6 +293,5 @@ export class PatientInfo extends React.Component<allProps, IState> {
 }
 
 export default compose(
-  connect<{}, {}, IProps>(undefined),
-  graphql(editPatientMutation as any, { name: 'updatePatientInfo' }),
+  graphql<IGraphqlProps, IProps>(editPatientMutation as any, { name: 'updatePatientInfo' }),
 )(PatientInfo);

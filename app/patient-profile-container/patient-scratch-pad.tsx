@@ -1,7 +1,6 @@
 import { debounce } from 'lodash';
 import * as React from 'react';
 import { compose, graphql } from 'react-apollo';
-import { connect } from 'react-redux';
 import * as patientScratchPadQuery from '../graphql/queries/get-patient-scratch-pad.graphql';
 /* tslint:disable:max-line-length */
 import * as savePatientScratchPadMutation from '../graphql/queries/patient-scratch-pad-edit-mutation.graphql';
@@ -159,10 +158,9 @@ class PatientScratchPad extends React.Component<allProps, IState> {
 }
 
 export default compose(
-  connect<{}, {}, IProps>(undefined),
-  graphql(savePatientScratchPadMutation as any,
+  graphql<IGraphqlProps, IProps>(savePatientScratchPadMutation as any,
    { name: 'saveScratchPad' }),
-  graphql(patientScratchPadQuery as any, {
+  graphql<IGraphqlProps, IProps>(patientScratchPadQuery as any, {
     options: (props: IProps) => ({
       variables: {
         patientId: props.patientId,

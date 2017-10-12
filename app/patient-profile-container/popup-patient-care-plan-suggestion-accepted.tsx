@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { compose, graphql } from 'react-apollo';
-import { connect } from 'react-redux';
 import { ICarePlan } from 'schema';
 /* tslint:disable:max-line-length */
 import * as carePlanSuggestionAcceptMutation from '../graphql/queries/care-plan-suggestion-accept-mutation.graphql';
@@ -160,8 +159,7 @@ class PopupPatientCarePlanSuggestionAccepted extends React.Component<allProps, I
 }
 
 export default compose(
-  connect<{}, {}, IProps>(undefined),
-  graphql(patientCarePlanQuery as any, {
+  graphql<IGraphqlProps, IProps>(patientCarePlanQuery as any, {
     options: (props: allProps) => ({
       variables: {
         patientId: props.patientId,
@@ -173,7 +171,7 @@ export default compose(
       carePlan: data ? (data as any).carePlanForPatient : null,
     }),
   }),
-  graphql(carePlanSuggestionAcceptMutation as any, {
+  graphql<IGraphqlProps, IProps>(carePlanSuggestionAcceptMutation as any, {
     name: 'acceptCarePlanSuggestion',
     options: {
       refetchQueries: ['getPatientCarePlanSuggestions', 'getPatientCarePlan'],

@@ -9,6 +9,9 @@ import PatientMedication from './patient-medication';
 
 interface IProps {
   patientId: string;
+}
+
+interface IGraphqlProps {
   loading?: boolean;
   error?: string;
   patientMedications?: FullPatientMedicationFragment[];
@@ -21,8 +24,10 @@ interface IState {
   error?: string;
 }
 
-class PatientMedications extends React.Component<IProps, IState> {
-  constructor(props: IProps) {
+type allProps = IProps & IGraphqlProps;
+
+class PatientMedications extends React.Component<allProps, IState> {
+  constructor(props: allProps) {
     super(props);
 
     const { loading, error } = props;
@@ -35,7 +40,7 @@ class PatientMedications extends React.Component<IProps, IState> {
     this.state = { selectedMedicationId: null, loading, error };
   }
 
-  componentWillReceiveProps(nextProps: IProps) {
+  componentWillReceiveProps(nextProps: allProps) {
     const { loading, error } = nextProps;
 
     this.setState(() => ({ loading, error }));
@@ -61,7 +66,7 @@ class PatientMedications extends React.Component<IProps, IState> {
     } else if (!loading && !error) {
       return (
         <div className={styles.emptyMedicationsMessage}>
-          <div className={styles.emptyMedicationsLogo}></div>
+          <div className={styles.emptyMedicationsLogo} />
           <div className={styles.emptyMedicationsLabel}>No active medications</div>
         </div>
       );
@@ -114,7 +119,7 @@ class PatientMedications extends React.Component<IProps, IState> {
       <div className={styles.patientMedications}>
         <div className={styles.medicationsHeader}>
           <div className={styles.medicationsTitle}>Active medications</div>
-          <div className={styles.medicationsHamburger}></div>
+          <div className={styles.medicationsHamburger} />
         </div>
         <div className={medicationsListStyles}>
           {this.renderPatientMedications(medicationsList)}
@@ -140,16 +145,16 @@ const formatPatientMedications = (
   }
 };
 
-export default graphql(patientMedicationsQuery as any, {
+export default graphql<IGraphqlProps, IProps>(patientMedicationsQuery as any, {
   options: (props: IProps) => ({
     variables: {
       patientId: props.patientId,
     },
   }),
   props: ({ data }) => ({
-    loading: (data ? data.loading : false),
-    error: (data ? data.error : null),
-    patientMedications: (data ? formatPatientMedications((data as any).patientMedications) : null),
-    refetchPatientMedications: (data ? data.refetch : null),
+    loading: data ? data.loading : false,
+    error: data ? data.error : null,
+    patientMedications: data ? formatPatientMedications((data as any).patientMedications) : null,
+    refetchPatientMedications: data ? data.refetch : null,
   }),
 })(PatientMedications);

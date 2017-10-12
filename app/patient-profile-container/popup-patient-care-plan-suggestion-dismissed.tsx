@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { compose, graphql } from 'react-apollo';
-import { connect } from 'react-redux';
 /* tslint:disable:max-line-length */
 import * as carePlanSuggestionDismissMutation from '../graphql/queries/care-plan-suggestion-dismiss-mutation.graphql';
 import {
@@ -111,8 +110,7 @@ class PopupPatientCarePlanSuggestionDismissed extends React.Component<allProps, 
 }
 
 export default compose(
-  connect<{}, {}, IProps>(undefined),
-  graphql(carePlanSuggestionDismissMutation as any, {
+  graphql<IGraphqlProps, IProps>(carePlanSuggestionDismissMutation as any, {
     name: 'dismissCarePlanSuggestion',
     options: {
       refetchQueries: ['getPatientCarePlanSuggestions'],

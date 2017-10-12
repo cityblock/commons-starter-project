@@ -1,7 +1,6 @@
 import * as classNames from 'classnames';
 import * as React from 'react';
 import { compose, graphql } from 'react-apollo';
-import { connect } from 'react-redux';
 import * as careTeamQuery from '../../graphql/queries/get-patient-care-team.graphql';
 import * as taskUserFollowMutation from '../../graphql/queries/task-user-follow-mutation.graphql';
 import {
@@ -163,9 +162,8 @@ export class AddTaskFollower extends React.Component<allProps, IState> {
 }
 
 export default compose(
-  connect<{}, {}, IProps>(undefined),
-  graphql(taskUserFollowMutation as any, { name: 'addTaskFollower' }),
-  graphql(careTeamQuery as any, {
+  graphql<IGraphqlProps, IProps>(taskUserFollowMutation as any, { name: 'addTaskFollower' }),
+  graphql<IGraphqlProps, IProps>(careTeamQuery as any, {
     options: (props: IProps) => ({
       variables: {
         patientId: props.patientId,

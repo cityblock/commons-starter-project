@@ -1,7 +1,6 @@
 import * as classNames from 'classnames';
 import * as React from 'react';
 import { compose, graphql } from 'react-apollo';
-import { connect } from 'react-redux';
 import * as careTeamQuery from '../../graphql/queries/get-patient-care-team.graphql';
 import * as editTaskMutation from '../../graphql/queries/task-edit-mutation.graphql';
 import {
@@ -193,9 +192,8 @@ export class TaskAssignee extends React.Component<allProps, IState> {
 }
 
 export default compose(
-  connect<{}, {}, IProps>(undefined),
-  graphql(editTaskMutation as any, { name: 'changeAssignee' }),
-  graphql(careTeamQuery as any, {
+  graphql<IGraphqlProps, IProps>(editTaskMutation as any, { name: 'changeAssignee' }),
+  graphql<IGraphqlProps, IProps>(careTeamQuery as any, {
     options: (props: allProps) => ({
       variables: {
         patientId: props.patientId,

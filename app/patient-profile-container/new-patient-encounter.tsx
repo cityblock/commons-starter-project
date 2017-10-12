@@ -3,7 +3,6 @@ import { format } from 'date-fns';
 import * as React from 'react';
 import { compose, graphql } from 'react-apollo';
 import { FormattedMessage } from 'react-intl';
-import { connect } from 'react-redux';
 import * as appointmentEndMutation from '../graphql/queries/appointment-end-mutation.graphql';
 import * as appointmentStartMutation from '../graphql/queries/appointment-start-mutation.graphql';
 import {
@@ -266,7 +265,6 @@ class NewPatientEncounter extends React.Component<allProps, IState> {
 }
 
 export default compose(
-  connect<{}, {}, IProps>(undefined), // TODO: Figure out how to pass these types through graphql
-  graphql(appointmentStartMutation as any, { name: 'startAppointment' }),
-  graphql(appointmentEndMutation as any, { name: 'endAppointment' }),
+  graphql<IGraphqlProps, IProps>(appointmentStartMutation as any, { name: 'startAppointment' }),
+  graphql<IGraphqlProps, IProps>(appointmentEndMutation as any, { name: 'endAppointment' }),
 )(NewPatientEncounter);

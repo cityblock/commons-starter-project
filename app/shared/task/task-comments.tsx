@@ -1,7 +1,6 @@
 import * as classNames from 'classnames';
 import * as React from 'react';
 import { compose, graphql } from 'react-apollo';
-import { connect } from 'react-redux';
 import * as taskCommentsQuery from '../../graphql/queries/get-task-comments.graphql';
 import * as commentCreateMutation from '../../graphql/queries/task-comment-create-mutation.graphql';
 import * as commentEditMutation from '../../graphql/queries/task-comment-edit-mutation.graphql';
@@ -219,10 +218,9 @@ export class TaskComments extends React.Component<allProps, IState> {
 }
 
 export default compose(
-  connect<{}, {}, IProps>(undefined),
-  graphql(commentCreateMutation as any, { name: 'createComment' }),
-  graphql(commentEditMutation as any, { name: 'editComment' }),
-  graphql(taskCommentsQuery as any, {
+  graphql<IGraphqlProps, IProps>(commentCreateMutation as any, { name: 'createComment' }),
+  graphql<IGraphqlProps, IProps>(commentEditMutation as any, { name: 'editComment' }),
+  graphql<IGraphqlProps, IProps>(taskCommentsQuery as any, {
     options: (props: IProps) => ({
       variables: {
         taskId: props.taskId,

@@ -2,7 +2,6 @@ import * as classNames from 'classnames';
 import * as React from 'react';
 import { compose, graphql } from 'react-apollo';
 import { FormattedDate } from 'react-intl';
-import { connect } from 'react-redux';
 import * as currentUserQuery from '../../graphql/queries/get-current-user.graphql';
 import {
   taskCommentEditMutationVariables,
@@ -213,8 +212,7 @@ export class TaskComment extends React.Component<allProps, IState> {
 }
 
 export default compose(
-  connect<{}, {}, IProps>(undefined),
-  graphql(currentUserQuery as any, {
+  graphql<IGraphqlProps, IProps>(currentUserQuery as any, {
     props: ({ data }) => ({
       currentUser: data ? (data as any).currentUser : null,
     }),

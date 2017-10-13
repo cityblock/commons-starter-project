@@ -6,6 +6,7 @@ import { push } from 'react-router-redux';
 import * as questionCreateMutation from '../graphql/queries/question-create-mutation.graphql';
 import {
   questionCreateMutationVariables,
+  AnswerTypeOptions,
   FullQuestionFragment,
 } from '../graphql/types';
 import * as formStyles from '../shared/css/forms.css';
@@ -49,7 +50,7 @@ class QuestionCreate extends React.Component<allProps, IState> {
       question: {
         title: '',
         order: 1,
-        answerType: 'dropdown',
+        answerType: 'dropdown' as AnswerTypeOptions,
         riskAreaId: props.riskAreaId,
         screeningToolId: props.screeningToolId,
         applicableIfType: undefined,

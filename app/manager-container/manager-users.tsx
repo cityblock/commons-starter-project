@@ -5,10 +5,10 @@ import * as React from 'react';
 import { compose, graphql } from 'react-apollo';
 import { connect, Dispatch } from 'react-redux';
 import { push } from 'react-router-redux';
+import * as usersQuery from '../graphql/queries/get-users.graphql';
 import * as userCreateMutation from '../graphql/queries/user-create-mutation.graphql';
 import * as userDeleteMutation from '../graphql/queries/user-delete-mutation.graphql';
 import * as userEditRoleMutation from '../graphql/queries/user-edit-role-mutation.graphql';
-import * as usersQuery from '../graphql/queries/users-get.graphql';
 import {
   getUsersQuery,
   getUsersQueryVariables,

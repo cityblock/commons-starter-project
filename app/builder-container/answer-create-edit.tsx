@@ -9,6 +9,7 @@ import {
   answerCreateMutationVariables,
   answerDeleteMutationVariables,
   answerEditMutationVariables,
+  AnswerValueTypeOptions,
   FullAnswerFragment,
 } from '../graphql/types';
 import * as formStyles from '../shared/css/forms.css';
@@ -56,7 +57,7 @@ class AnswerCreateEdit extends React.Component<allProps, IState> {
       answer: props.answer ? props.answer : {
         displayValue: 'edit me!',
         value: 'true',
-        valueType: 'boolean',
+        valueType: 'boolean' as AnswerValueTypeOptions,
         riskAdjustmentType: null,
         inSummary: false,
         summaryText: null,

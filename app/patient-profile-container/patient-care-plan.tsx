@@ -57,15 +57,20 @@ export default class PatientCarePlan extends React.Component<IProps, IState> {
     let patientConcerns: FullPatientConcernFragment[] = [];
 
     if (displayType === 'inactive') {
-      patientConcerns = carePlan.concerns.filter(patientConcern => !patientConcern.startedAt);
+      // 'as any' addresses iirrelevant enum type inconsistency
+      patientConcerns = carePlan.concerns.filter(
+        patientConcern => !patientConcern.startedAt,
+      ) as any;
     } else {
-      patientConcerns = carePlan.concerns.filter(patientConcern => !!patientConcern.startedAt);
+      patientConcerns = carePlan.concerns.filter(
+        patientConcern => !!patientConcern.startedAt,
+      ) as any;
     }
 
     if (!patientConcerns.length) {
       return (
         <div className={styles.emptyCarePlanSuggestionsContainer}>
-          <div className={styles.emptyCarePlanSuggestionsLogo}></div>
+          <div className={styles.emptyCarePlanSuggestionsLogo} />
           <div className={styles.emptyCarePlanSuggestionsLabel}>
             {`No ${displayType} concerns or goals for this patient`}
           </div>
@@ -90,16 +95,13 @@ export default class PatientCarePlan extends React.Component<IProps, IState> {
           key={patientConcern.id}
           selected={selected}
           patientConcern={patientConcern}
-          onClick={this.onClickPatientConcern} />
+          onClick={this.onClickPatientConcern}
+        />
       );
     });
   }
 
   render() {
-    return (
-      <div className={styles.carePlan}>
-        {this.renderCarePlan()}
-      </div>
-    );
+    return <div className={styles.carePlan}>{this.renderCarePlan()}</div>;
   }
 }

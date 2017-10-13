@@ -1,100 +1,112 @@
 /* tslint:disable */
 //  This file was automatically generated and should not be edited.
 
-export type AnswerValueTypeOptions =
-  "string" |
-  "boolean" |
-  "number";
+export enum AnswerValueTypeOptions {
+  string = "string",
+  boolean = "boolean",
+  number = "number",
+}
 
 
-export type RiskAdjustmentTypeOptions =
-  "inactive" |
-  "increment" |
-  "forceHighRisk";
+export enum RiskAdjustmentTypeOptions {
+  inactive = "inactive",
+  increment = "increment",
+  forceHighRisk = "forceHighRisk",
+}
 
 
-export type CompletedWithinInterval =
-  "hour" |
-  "day" |
-  "week" |
-  "month" |
-  "year";
+export enum AppointmentStatus {
+  cancelled = "cancelled",
+  future = "future",
+  open = "open",
+  checkedIn = "checkedIn",
+  checkedOut = "checkedOut",
+  chargeEntered = "chargeEntered",
+}
 
 
-export type Priority =
-  "low" |
-  "medium" |
-  "high";
+export enum CarePlanSuggestionType {
+  concern = "concern",
+  goal = "goal",
+}
 
 
-export type UserRole =
-  "physician" |
-  "nurseCareManager" |
-  "healthCoach" |
-  "familyMember" |
-  "anonymousUser" |
-  "admin";
+export enum AnswerTypeOptions {
+  dropdown = "dropdown",
+  radio = "radio",
+  freetext = "freetext",
+  multiselect = "multiselect",
+}
 
 
-export type AppointmentStatus =
-  "cancelled" |
-  "future" |
-  "open" |
-  "checkedIn" |
-  "checkedOut" |
-  "chargeEntered";
+export enum QuestionConditionTypeOptions {
+  allTrue = "allTrue",
+  oneTrue = "oneTrue",
+}
 
 
-export type CarePlanSuggestionType =
-  "concern" |
-  "goal";
+export enum TaskEventTypes {
+  create_task = "create_task",
+  add_follower = "add_follower",
+  remove_follower = "remove_follower",
+  complete_task = "complete_task",
+  uncomplete_task = "uncomplete_task",
+  delete_task = "delete_task",
+  add_comment = "add_comment",
+  edit_comment = "edit_comment",
+  delete_comment = "delete_comment",
+  edit_priority = "edit_priority",
+  edit_due_date = "edit_due_date",
+  edit_assignee = "edit_assignee",
+  edit_title = "edit_title",
+  edit_description = "edit_description",
+}
 
 
-export type TaskEventTypes =
-  "create_task" |
-  "add_follower" |
-  "remove_follower" |
-  "complete_task" |
-  "uncomplete_task" |
-  "delete_task" |
-  "add_comment" |
-  "edit_comment" |
-  "delete_comment" |
-  "edit_priority" |
-  "edit_due_date" |
-  "edit_assignee" |
-  "edit_title" |
-  "edit_description";
+export enum CompletedWithinInterval {
+  hour = "hour",
+  day = "day",
+  week = "week",
+  month = "month",
+  year = "year",
+}
 
 
-export type TaskOrderOptions =
-  "createdAtDesc" |
-  "createdAtAsc" |
-  "dueAtDesc" |
-  "dueAtAsc" |
-  "updatedAtDesc" |
-  "updatedAtAsc";
+export enum Priority {
+  low = "low",
+  medium = "medium",
+  high = "high",
+}
 
 
-export type AnswerTypeOptions =
-  "dropdown" |
-  "radio" |
-  "freetext" |
-  "multiselect";
+export enum UserRole {
+  physician = "physician",
+  nurseCareManager = "nurseCareManager",
+  healthCoach = "healthCoach",
+  familyMember = "familyMember",
+  anonymousUser = "anonymousUser",
+  admin = "admin",
+}
 
 
-export type QuestionConditionTypeOptions =
-  "allTrue" |
-  "oneTrue";
+export enum TaskOrderOptions {
+  createdAtDesc = "createdAtDesc",
+  createdAtAsc = "createdAtAsc",
+  dueAtDesc = "dueAtDesc",
+  dueAtAsc = "dueAtAsc",
+  updatedAtDesc = "updatedAtDesc",
+  updatedAtAsc = "updatedAtAsc",
+}
 
 
-export type UserOrderOptions =
-  "createdAtDesc" |
-  "createdAtAsc" |
-  "lastLoginAtDesc" |
-  "lastLoginAtAsc" |
-  "updatedAtDesc" |
-  "updatedAtAsc";
+export enum UserOrderOptions {
+  createdAtDesc = "createdAtDesc",
+  createdAtAsc = "createdAtAsc",
+  lastLoginAtDesc = "lastLoginAtDesc",
+  lastLoginAtAsc = "lastLoginAtAsc",
+  updatedAtDesc = "updatedAtDesc",
+  updatedAtAsc = "updatedAtAsc",
+}
 
 
 export type PatientAnswerInput = {
@@ -3815,49 +3827,6 @@ export type userEditRoleMutation = {
   } | null,
 };
 
-export type FullConcernFragment = {
-  id: string,
-  title: string,
-  createdAt: string,
-  updatedAt: string,
-  deletedAt: string | null,
-};
-
-export type FullTaskTemplateFragment = {
-  id: string,
-  title: string,
-  completedWithinNumber: number | null,
-  completedWithinInterval: CompletedWithinInterval | null,
-  repeating: boolean | null,
-  goalSuggestionTemplateId: string,
-  priority: Priority | null,
-  careTeamAssigneeRole: UserRole | null,
-  createdAt: string,
-  updatedAt: string,
-  deletedAt: string | null,
-};
-
-export type FullGoalSuggestionTemplateFragment = {
-  id: string,
-  title: string,
-  taskTemplates:  Array< {
-    id: string,
-    title: string,
-    completedWithinNumber: number | null,
-    completedWithinInterval: CompletedWithinInterval | null,
-    repeating: boolean | null,
-    goalSuggestionTemplateId: string,
-    priority: Priority | null,
-    careTeamAssigneeRole: UserRole | null,
-    createdAt: string,
-    updatedAt: string,
-    deletedAt: string | null,
-  } | null > | null,
-  createdAt: string,
-  updatedAt: string,
-  deletedAt: string | null,
-};
-
 export type FullAnswerFragment = {
   id: string,
   displayValue: string,
@@ -3910,28 +3879,6 @@ export type FullAppointmentFragment = {
   userId: string,
   patientId: string,
   clinicId: string,
-};
-
-export type ShortPatientFragment = {
-  id: string,
-  firstName: string | null,
-  middleName: string | null,
-  lastName: string | null,
-  language: string | null,
-  gender: string | null,
-  dateOfBirth: string | null,
-  zip: string | null,
-  createdAt: string,
-  consentToText: boolean | null,
-  consentToCall: boolean | null,
-};
-
-export type ShortUserFragment = {
-  id: string,
-  firstName: string | null,
-  lastName: string | null,
-  userRole: UserRole,
-  googleProfileImageUrl: string | null,
 };
 
 export type FullCarePlanSuggestionFragment = {
@@ -4008,176 +3955,9 @@ export type FullClinicFragment = {
   name: string,
 };
 
-export type FullUserFragment = {
-  id: string,
-  locale: string | null,
-  firstName: string | null,
-  lastName: string | null,
-  userRole: UserRole,
-  email: string | null,
-  homeClinicId: string,
-  googleProfileImageUrl: string | null,
-  createdAt: string,
-  updatedAt: string,
-};
-
-export type FullTaskFragment = {
+export type FullConcernFragment = {
   id: string,
   title: string,
-  description: string | null,
-  createdAt: string,
-  updatedAt: string,
-  completedAt: string | null,
-  deletedAt: string | null,
-  dueAt: string | null,
-  patientId: string,
-  priority: Priority | null,
-  patient:  {
-    id: string,
-    firstName: string | null,
-    middleName: string | null,
-    lastName: string | null,
-  } | null,
-  assignedTo:  {
-    id: string,
-    firstName: string | null,
-    lastName: string | null,
-    googleProfileImageUrl: string | null,
-    userRole: UserRole,
-  } | null,
-  followers:  Array< {
-    id: string,
-    firstName: string | null,
-    lastName: string | null,
-    googleProfileImageUrl: string | null,
-    userRole: UserRole,
-  } > | null,
-  createdBy:  {
-    id: string,
-    firstName: string | null,
-    lastName: string | null,
-    googleProfileImageUrl: string | null,
-    userRole: UserRole,
-  } | null,
-  patientGoal:  {
-    id: string,
-    title: string,
-  } | null,
-};
-
-export type FullTaskCommentFragment = {
-  id: string,
-  body: string,
-  user:  {
-    id: string,
-    locale: string | null,
-    firstName: string | null,
-    lastName: string | null,
-    userRole: UserRole,
-    email: string | null,
-    homeClinicId: string,
-    googleProfileImageUrl: string | null,
-    createdAt: string,
-    updatedAt: string,
-  },
-  taskId: string,
-  createdAt: string,
-  updatedAt: string | null,
-};
-
-export type FullTaskEventFragment = {
-  id: string,
-  taskId: string,
-  task:  {
-    id: string,
-    title: string,
-    description: string | null,
-    createdAt: string,
-    updatedAt: string,
-    completedAt: string | null,
-    deletedAt: string | null,
-    dueAt: string | null,
-    patientId: string,
-    priority: Priority | null,
-    patient:  {
-      id: string,
-      firstName: string | null,
-      middleName: string | null,
-      lastName: string | null,
-    } | null,
-    assignedTo:  {
-      id: string,
-      firstName: string | null,
-      lastName: string | null,
-      googleProfileImageUrl: string | null,
-      userRole: UserRole,
-    } | null,
-    followers:  Array< {
-      id: string,
-      firstName: string | null,
-      lastName: string | null,
-      googleProfileImageUrl: string | null,
-      userRole: UserRole,
-    } > | null,
-    createdBy:  {
-      id: string,
-      firstName: string | null,
-      lastName: string | null,
-      googleProfileImageUrl: string | null,
-      userRole: UserRole,
-    } | null,
-    patientGoal:  {
-      id: string,
-      title: string,
-    } | null,
-  },
-  userId: string,
-  user:  {
-    id: string,
-    locale: string | null,
-    firstName: string | null,
-    lastName: string | null,
-    userRole: UserRole,
-    email: string | null,
-    homeClinicId: string,
-    googleProfileImageUrl: string | null,
-    createdAt: string,
-    updatedAt: string,
-  },
-  eventType: TaskEventTypes | null,
-  eventCommentId: string | null,
-  eventComment:  {
-    id: string,
-    body: string,
-    user:  {
-      id: string,
-      locale: string | null,
-      firstName: string | null,
-      lastName: string | null,
-      userRole: UserRole,
-      email: string | null,
-      homeClinicId: string,
-      googleProfileImageUrl: string | null,
-      createdAt: string,
-      updatedAt: string,
-    },
-    taskId: string,
-    createdAt: string,
-    updatedAt: string | null,
-  } | null,
-  eventUserId: string | null,
-  eventUser:  {
-    id: string,
-    locale: string | null,
-    firstName: string | null,
-    lastName: string | null,
-    userRole: UserRole,
-    email: string | null,
-    homeClinicId: string,
-    googleProfileImageUrl: string | null,
-    createdAt: string,
-    updatedAt: string,
-  } | null,
   createdAt: string,
   updatedAt: string,
   deletedAt: string | null,
@@ -4348,6 +4128,27 @@ export type FullEventNotificationFragment = {
   deletedAt: string | null,
 };
 
+export type FullGoalSuggestionTemplateFragment = {
+  id: string,
+  title: string,
+  taskTemplates:  Array< {
+    id: string,
+    title: string,
+    completedWithinNumber: number | null,
+    completedWithinInterval: CompletedWithinInterval | null,
+    repeating: boolean | null,
+    goalSuggestionTemplateId: string,
+    priority: Priority | null,
+    careTeamAssigneeRole: UserRole | null,
+    createdAt: string,
+    updatedAt: string,
+    deletedAt: string | null,
+  } | null > | null,
+  createdAt: string,
+  updatedAt: string,
+  deletedAt: string | null,
+};
+
 export type FullPatientAnswerFragment = {
   id: string,
   createdAt: string,
@@ -4360,93 +4161,6 @@ export type FullPatientAnswerFragment = {
   question:  {
     id: string,
   } | null,
-};
-
-export type FullPatientGoalFragment = {
-  id: string,
-  title: string,
-  patientId: string,
-  patient:  {
-    id: string,
-    firstName: string | null,
-    middleName: string | null,
-    lastName: string | null,
-    language: string | null,
-    gender: string | null,
-    dateOfBirth: string | null,
-    zip: string | null,
-    createdAt: string,
-    consentToText: boolean | null,
-    consentToCall: boolean | null,
-  },
-  patientConcernId: string | null,
-  goalSuggestionTemplateId: string | null,
-  goalSuggestionTemplate:  {
-    id: string,
-    title: string,
-    taskTemplates:  Array< {
-      id: string,
-      title: string,
-      completedWithinNumber: number | null,
-      completedWithinInterval: CompletedWithinInterval | null,
-      repeating: boolean | null,
-      goalSuggestionTemplateId: string,
-      priority: Priority | null,
-      careTeamAssigneeRole: UserRole | null,
-      createdAt: string,
-      updatedAt: string,
-      deletedAt: string | null,
-    } | null > | null,
-    createdAt: string,
-    updatedAt: string,
-    deletedAt: string | null,
-  } | null,
-  tasks:  Array< {
-    id: string,
-    title: string,
-    description: string | null,
-    createdAt: string,
-    updatedAt: string,
-    completedAt: string | null,
-    deletedAt: string | null,
-    dueAt: string | null,
-    patientId: string,
-    priority: Priority | null,
-    patient:  {
-      id: string,
-      firstName: string | null,
-      middleName: string | null,
-      lastName: string | null,
-    } | null,
-    assignedTo:  {
-      id: string,
-      firstName: string | null,
-      lastName: string | null,
-      googleProfileImageUrl: string | null,
-      userRole: UserRole,
-    } | null,
-    followers:  Array< {
-      id: string,
-      firstName: string | null,
-      lastName: string | null,
-      googleProfileImageUrl: string | null,
-      userRole: UserRole,
-    } > | null,
-    createdBy:  {
-      id: string,
-      firstName: string | null,
-      lastName: string | null,
-      googleProfileImageUrl: string | null,
-      userRole: UserRole,
-    } | null,
-    patientGoal:  {
-      id: string,
-      title: string,
-    } | null,
-  } >,
-  createdAt: string,
-  updatedAt: string,
-  deletedAt: string | null,
 };
 
 export type FullPatientConcernFragment = {
@@ -4581,6 +4295,93 @@ export type FullPatientEncounterFragment = {
   dateTime: string,
 };
 
+export type FullPatientGoalFragment = {
+  id: string,
+  title: string,
+  patientId: string,
+  patient:  {
+    id: string,
+    firstName: string | null,
+    middleName: string | null,
+    lastName: string | null,
+    language: string | null,
+    gender: string | null,
+    dateOfBirth: string | null,
+    zip: string | null,
+    createdAt: string,
+    consentToText: boolean | null,
+    consentToCall: boolean | null,
+  },
+  patientConcernId: string | null,
+  goalSuggestionTemplateId: string | null,
+  goalSuggestionTemplate:  {
+    id: string,
+    title: string,
+    taskTemplates:  Array< {
+      id: string,
+      title: string,
+      completedWithinNumber: number | null,
+      completedWithinInterval: CompletedWithinInterval | null,
+      repeating: boolean | null,
+      goalSuggestionTemplateId: string,
+      priority: Priority | null,
+      careTeamAssigneeRole: UserRole | null,
+      createdAt: string,
+      updatedAt: string,
+      deletedAt: string | null,
+    } | null > | null,
+    createdAt: string,
+    updatedAt: string,
+    deletedAt: string | null,
+  } | null,
+  tasks:  Array< {
+    id: string,
+    title: string,
+    description: string | null,
+    createdAt: string,
+    updatedAt: string,
+    completedAt: string | null,
+    deletedAt: string | null,
+    dueAt: string | null,
+    patientId: string,
+    priority: Priority | null,
+    patient:  {
+      id: string,
+      firstName: string | null,
+      middleName: string | null,
+      lastName: string | null,
+    } | null,
+    assignedTo:  {
+      id: string,
+      firstName: string | null,
+      lastName: string | null,
+      googleProfileImageUrl: string | null,
+      userRole: UserRole,
+    } | null,
+    followers:  Array< {
+      id: string,
+      firstName: string | null,
+      lastName: string | null,
+      googleProfileImageUrl: string | null,
+      userRole: UserRole,
+    } > | null,
+    createdBy:  {
+      id: string,
+      firstName: string | null,
+      lastName: string | null,
+      googleProfileImageUrl: string | null,
+      userRole: UserRole,
+    } | null,
+    patientGoal:  {
+      id: string,
+      title: string,
+    } | null,
+  } >,
+  createdAt: string,
+  updatedAt: string,
+  deletedAt: string | null,
+};
+
 export type FullPatientMedicationFragment = {
   medicationId: string,
   name: string,
@@ -4588,17 +4389,6 @@ export type FullPatientMedicationFragment = {
   quantityUnit: string | null,
   dosageInstructions: string | null,
   startDate: string | null,
-};
-
-export type FullRiskScoreFragment = {
-  score: number,
-  forceHighRisk: boolean,
-};
-
-export type FullRiskAreaSummaryFragment = {
-  summary: Array< string >,
-  started: boolean,
-  lastUpdated: string | null,
 };
 
 export type FullPatientScratchPadFragment = {
@@ -4667,6 +4457,12 @@ export type FullQuestionFragment = {
   } > | null,
 };
 
+export type FullRiskAreaSummaryFragment = {
+  summary: Array< string >,
+  started: boolean,
+  lastUpdated: string | null,
+};
+
 export type FullRiskAreaFragment = {
   id: string,
   createdAt: string,
@@ -4674,6 +4470,11 @@ export type FullRiskAreaFragment = {
   deletedAt: string | null,
   title: string,
   order: number,
+};
+
+export type FullRiskScoreFragment = {
+  score: number,
+  forceHighRisk: boolean,
 };
 
 export type FullScreeningToolScoreRangeFragment = {
@@ -4766,5 +4567,216 @@ export type FullScreeningToolFragment = {
   createdAt: string,
   updatedAt: string,
   deletedAt: string | null,
+};
+
+export type FullTaskCommentFragment = {
+  id: string,
+  body: string,
+  user:  {
+    id: string,
+    locale: string | null,
+    firstName: string | null,
+    lastName: string | null,
+    userRole: UserRole,
+    email: string | null,
+    homeClinicId: string,
+    googleProfileImageUrl: string | null,
+    createdAt: string,
+    updatedAt: string,
+  },
+  taskId: string,
+  createdAt: string,
+  updatedAt: string | null,
+};
+
+export type FullTaskEventFragment = {
+  id: string,
+  taskId: string,
+  task:  {
+    id: string,
+    title: string,
+    description: string | null,
+    createdAt: string,
+    updatedAt: string,
+    completedAt: string | null,
+    deletedAt: string | null,
+    dueAt: string | null,
+    patientId: string,
+    priority: Priority | null,
+    patient:  {
+      id: string,
+      firstName: string | null,
+      middleName: string | null,
+      lastName: string | null,
+    } | null,
+    assignedTo:  {
+      id: string,
+      firstName: string | null,
+      lastName: string | null,
+      googleProfileImageUrl: string | null,
+      userRole: UserRole,
+    } | null,
+    followers:  Array< {
+      id: string,
+      firstName: string | null,
+      lastName: string | null,
+      googleProfileImageUrl: string | null,
+      userRole: UserRole,
+    } > | null,
+    createdBy:  {
+      id: string,
+      firstName: string | null,
+      lastName: string | null,
+      googleProfileImageUrl: string | null,
+      userRole: UserRole,
+    } | null,
+    patientGoal:  {
+      id: string,
+      title: string,
+    } | null,
+  },
+  userId: string,
+  user:  {
+    id: string,
+    locale: string | null,
+    firstName: string | null,
+    lastName: string | null,
+    userRole: UserRole,
+    email: string | null,
+    homeClinicId: string,
+    googleProfileImageUrl: string | null,
+    createdAt: string,
+    updatedAt: string,
+  },
+  eventType: TaskEventTypes | null,
+  eventCommentId: string | null,
+  eventComment:  {
+    id: string,
+    body: string,
+    user:  {
+      id: string,
+      locale: string | null,
+      firstName: string | null,
+      lastName: string | null,
+      userRole: UserRole,
+      email: string | null,
+      homeClinicId: string,
+      googleProfileImageUrl: string | null,
+      createdAt: string,
+      updatedAt: string,
+    },
+    taskId: string,
+    createdAt: string,
+    updatedAt: string | null,
+  } | null,
+  eventUserId: string | null,
+  eventUser:  {
+    id: string,
+    locale: string | null,
+    firstName: string | null,
+    lastName: string | null,
+    userRole: UserRole,
+    email: string | null,
+    homeClinicId: string,
+    googleProfileImageUrl: string | null,
+    createdAt: string,
+    updatedAt: string,
+  } | null,
+  createdAt: string,
+  updatedAt: string,
+  deletedAt: string | null,
+};
+
+export type FullTaskTemplateFragment = {
+  id: string,
+  title: string,
+  completedWithinNumber: number | null,
+  completedWithinInterval: CompletedWithinInterval | null,
+  repeating: boolean | null,
+  goalSuggestionTemplateId: string,
+  priority: Priority | null,
+  careTeamAssigneeRole: UserRole | null,
+  createdAt: string,
+  updatedAt: string,
+  deletedAt: string | null,
+};
+
+export type FullTaskFragment = {
+  id: string,
+  title: string,
+  description: string | null,
+  createdAt: string,
+  updatedAt: string,
+  completedAt: string | null,
+  deletedAt: string | null,
+  dueAt: string | null,
+  patientId: string,
+  priority: Priority | null,
+  patient:  {
+    id: string,
+    firstName: string | null,
+    middleName: string | null,
+    lastName: string | null,
+  } | null,
+  assignedTo:  {
+    id: string,
+    firstName: string | null,
+    lastName: string | null,
+    googleProfileImageUrl: string | null,
+    userRole: UserRole,
+  } | null,
+  followers:  Array< {
+    id: string,
+    firstName: string | null,
+    lastName: string | null,
+    googleProfileImageUrl: string | null,
+    userRole: UserRole,
+  } > | null,
+  createdBy:  {
+    id: string,
+    firstName: string | null,
+    lastName: string | null,
+    googleProfileImageUrl: string | null,
+    userRole: UserRole,
+  } | null,
+  patientGoal:  {
+    id: string,
+    title: string,
+  } | null,
+};
+
+export type FullUserFragment = {
+  id: string,
+  locale: string | null,
+  firstName: string | null,
+  lastName: string | null,
+  userRole: UserRole,
+  email: string | null,
+  homeClinicId: string,
+  googleProfileImageUrl: string | null,
+  createdAt: string,
+  updatedAt: string,
+};
+
+export type ShortPatientFragment = {
+  id: string,
+  firstName: string | null,
+  middleName: string | null,
+  lastName: string | null,
+  language: string | null,
+  gender: string | null,
+  dateOfBirth: string | null,
+  zip: string | null,
+  createdAt: string,
+  consentToText: boolean | null,
+  consentToCall: boolean | null,
+};
+
+export type ShortUserFragment = {
+  id: string,
+  firstName: string | null,
+  lastName: string | null,
+  userRole: UserRole,
+  googleProfileImageUrl: string | null,
 };
 /* tslint:enable */

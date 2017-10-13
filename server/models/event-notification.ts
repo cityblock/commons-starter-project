@@ -127,7 +127,7 @@ export default class EventNotification extends Model {
     { initiatingUserId, taskEventId, taskId }: ICreateTaskNotificationsOptions,
     txn?: Transaction,
   ) {
-    const task = await Task.get(taskId, txn);
+    const task = await Task.getIgnoreDeletedAt(taskId, txn);
 
     const interestedUserIds = task.followers.map((follower: User) => follower.id);
     if (task.assignedToId) {
@@ -146,9 +146,15 @@ export default class EventNotification extends Model {
   }
 
   static async delete(eventNotificationId: string): Promise<EventNotification> {
-    return await this.query().updateAndFetchById(eventNotificationId, {
-      deletedAt: new Date().toISOString(),
-    });
+    await this.query()
+      .where({ id: eventNotificationId, deletedAt: null })
+      .update({ deletedAt: new Date().toISOString() });
+
+    const eventNotification = await this.query().findById(eventNotificationId);
+    if (!eventNotification) {
+      return Promise.reject(`No such eventNotification: ${eventNotificationId}`);
+    }
+    return eventNotification;
   }
 
   static async update(

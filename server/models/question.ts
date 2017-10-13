@@ -132,7 +132,7 @@ export default class Question extends Model {
       .modifyEager('answers.goalSuggestions.taskTemplates', builder => {
         builder.where('task_template.deletedAt', null);
       })
-      .findById(questionId);
+      .findOne({ id: questionId, deletedAt: null });
 
     if (!question) {
       return Promise.reject(`No such question: ${questionId}`);
@@ -246,9 +246,15 @@ export default class Question extends Model {
   }
 
   static async delete(questionId: string): Promise<Question> {
-    return await this.query().updateAndFetchById(questionId, {
-      deletedAt: new Date().toISOString(),
-    });
+    await this.query()
+      .where({ id: questionId, deletedAt: null })
+      .update({ deletedAt: new Date().toISOString() });
+
+    const question = await this.query().findById(questionId);
+    if (!question) {
+      return Promise.reject(`No such question: ${questionId}`);
+    }
+    return question;
   }
 }
 /* tslint:disable:member-ordering */

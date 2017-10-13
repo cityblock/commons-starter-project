@@ -52,8 +52,8 @@ export default class Concern extends Model {
     this.updatedAt = new Date().toISOString();
   }
 
-  static async get(concernId: string): Promise<Concern | undefined> {
-    const concern = await this.query().findById(concernId);
+  static async get(concernId: string): Promise<Concern> {
+    const concern = await this.query().findOne({ id: concernId, deletedAt: null });
 
     if (!concern) {
       return Promise.reject(`No such concern: ${concernId}`);
@@ -87,9 +87,15 @@ export default class Concern extends Model {
   }
 
   static async delete(concernId: string): Promise<Concern> {
-    return await this.query().updateAndFetchById(concernId, {
-      deletedAt: new Date().toISOString(),
-    });
+    await this.query()
+      .where({ id: concernId, deletedAt: null })
+      .update({ deletedAt: new Date().toISOString() });
+
+    const concern = await this.query().findById(concernId);
+    if (!concern) {
+      return Promise.reject(`No such concern: ${concernId}`);
+    }
+    return concern;
   }
 }
 /* tslint:disable:member-ordering */

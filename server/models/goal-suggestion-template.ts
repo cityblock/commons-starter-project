@@ -53,11 +53,11 @@ export default class GoalSuggestionTemplate extends Model {
   static async get(
     goalSuggestionTemplateId: string,
     txn?: Transaction,
-  ): Promise<GoalSuggestionTemplate | undefined> {
+  ): Promise<GoalSuggestionTemplate> {
     const goalSuggestionTemplate = await this.query(txn)
       .eager('taskTemplates')
       .modifyEager('taskTemplates', builder => builder.where('deletedAt', null))
-      .findById(goalSuggestionTemplateId);
+      .findOne({ id: goalSuggestionTemplateId, deletedAt: null });
 
     if (!goalSuggestionTemplate) {
       return Promise.reject(`No such goalSuggestionTemplate: ${goalSuggestionTemplateId}`);
@@ -91,9 +91,15 @@ export default class GoalSuggestionTemplate extends Model {
   }
 
   static async delete(goalSuggestionTemplateId: string): Promise<GoalSuggestionTemplate> {
-    return await this.query().updateAndFetchById(goalSuggestionTemplateId, {
-      deletedAt: new Date().toISOString(),
-    });
+    await this.query()
+      .where({ id: goalSuggestionTemplateId, deletedAt: null })
+      .update({ deletedAt: new Date().toISOString() });
+
+    const goalSuggestion = await this.query().findById(goalSuggestionTemplateId);
+    if (!goalSuggestion) {
+      return Promise.reject(`No such goalSuggestionTemplate: ${goalSuggestionTemplateId}`);
+    }
+    return goalSuggestion;
   }
 }
 /* tslint:disable:member-ordering */

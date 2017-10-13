@@ -160,11 +160,15 @@ export default class ScreeningToolScoreRange extends Model {
   }
 
   static async delete(screeningToolScoreRangeId: string): Promise<ScreeningToolScoreRange> {
-    return await this.query()
-      .eager(EAGER_QUERY)
-      .updateAndFetchById(screeningToolScoreRangeId, {
-        deletedAt: new Date().toISOString(),
-      });
+    await this.query()
+      .where({ id: screeningToolScoreRangeId, deletedAt: null })
+      .update({ deletedAt: new Date().toISOString() });
+
+    const screeningToolScoreRange = await this.query().findById(screeningToolScoreRangeId);
+    if (!screeningToolScoreRange) {
+      return Promise.reject(`No such screeningToolScoreRange: ${screeningToolScoreRangeId}`);
+    }
+    return screeningToolScoreRange;
   }
 }
 /* tslint:disable:member-ordering */

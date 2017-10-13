@@ -118,7 +118,7 @@ export default class TaskEvent extends Model {
   static async get(taskEventId: string): Promise<TaskEvent> {
     const taskEvent = await this.query()
       .eager(EAGER_QUERY)
-      .findById(taskEventId);
+      .findOne({ id: taskEventId, deletedAt: null });
     if (!taskEvent) {
       return Promise.reject(`No such taskEvent: ${taskEventId}`);
     }
@@ -148,9 +148,17 @@ export default class TaskEvent extends Model {
   }
 
   static async delete(taskEventId: string): Promise<TaskEvent> {
-    return await this.query().updateAndFetchById(taskEventId, {
-      deletedAt: new Date().toISOString(),
-    });
+    await this.query()
+      .where({ id: taskEventId, deletedAt: null })
+      .update({ deletedAt: new Date().toISOString() });
+
+    const taskEvent = await this.query()
+      .eager(EAGER_QUERY)
+      .findById(taskEventId);
+    if (!taskEvent) {
+      return Promise.reject(`No such taskEvent: ${taskEventId}`);
+    }
+    return taskEvent;
   }
 
   static async getTaskEvents(

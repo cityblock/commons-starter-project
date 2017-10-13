@@ -169,8 +169,8 @@ export default class User extends Model {
   }
 
   static async get(userId: string): Promise<User> {
-    const user = await this.query().findById(userId);
-    if (!user || !!user.deletedAt) {
+    const user = await this.query().findOne({ id: userId, deletedAt: null });
+    if (!user) {
       return Promise.reject(`No such user: ${userId}`);
     }
     return user;
@@ -214,11 +214,15 @@ export default class User extends Model {
     };
   }
 
-  static async delete(userId: string) {
-    return await this.query()
-      .where('id', userId)
-      .where('deletedAt', null)
+  static async delete(userId: string): Promise<User> {
+    await this.query()
+      .where({ id: userId, deletedAt: null })
       .update({ deletedAt: new Date().toISOString() });
+    const user = await this.query().findById(userId);
+    if (!user) {
+      return Promise.reject(`No such user: ${userId}`);
+    }
+    return user;
   }
 }
 /* tslint:enable:member-ordering */

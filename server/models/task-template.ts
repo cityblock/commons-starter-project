@@ -70,8 +70,8 @@ export default class TaskTemplate extends Model {
     this.updatedAt = new Date().toISOString();
   }
 
-  static async get(taskTemplateId: string): Promise<TaskTemplate | undefined> {
-    const taskTemplate = await this.query().findById(taskTemplateId);
+  static async get(taskTemplateId: string): Promise<TaskTemplate> {
+    const taskTemplate = await this.query().findOne({ id: taskTemplateId, deletedAt: null });
 
     if (!taskTemplate) {
       return Promise.reject(`No such taskTemplate: ${taskTemplateId}`);
@@ -96,9 +96,15 @@ export default class TaskTemplate extends Model {
   }
 
   static async delete(taskTemplateId: string): Promise<TaskTemplate> {
-    return await this.query().updateAndFetchById(taskTemplateId, {
-      deletedAt: new Date().toISOString(),
-    });
+    await this.query()
+      .where({ id: taskTemplateId, deletedAt: null })
+      .update({ deletedAt: new Date().toISOString() });
+
+    const taskTemplate = await this.query().findById(taskTemplateId);
+    if (!taskTemplate) {
+      return Promise.reject(`No such taskTemplate: ${taskTemplateId}`);
+    }
+    return taskTemplate;
   }
 }
 /* tslint:disable:member-ordering */

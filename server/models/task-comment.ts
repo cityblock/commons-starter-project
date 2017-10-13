@@ -74,7 +74,7 @@ export default class TaskComment extends Model {
   static async get(taskCommentId: string): Promise<TaskComment> {
     const taskComment = await this.query()
       .eager(EAGER_QUERY)
-      .findById(taskCommentId);
+      .findOne({ id: taskCommentId, deletedAt: null });
     if (!taskComment) {
       return Promise.reject(`No such taskComment: ${taskCommentId}`);
     }
@@ -101,9 +101,17 @@ export default class TaskComment extends Model {
   }
 
   static async delete(taskCommentId: string, txn?: Transaction): Promise<TaskComment> {
-    return await this.query(txn).updateAndFetchById(taskCommentId, {
-      deletedAt: new Date().toISOString(),
-    });
+    await this.query(txn)
+      .where({ id: taskCommentId, deletedAt: null })
+      .update({ deletedAt: new Date().toISOString() });
+
+    const taskComment = await this.query(txn)
+      .eager(EAGER_QUERY)
+      .findById(taskCommentId);
+    if (!taskComment) {
+      return Promise.reject(`No such taskComment: ${taskCommentId}`);
+    }
+    return taskComment;
   }
 
   static async getTaskComments(

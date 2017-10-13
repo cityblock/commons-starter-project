@@ -63,7 +63,10 @@ export default class QuestionCondition extends Model {
   }
 
   static async get(questionConditionId: string): Promise<QuestionCondition> {
-    const questionCondition = await this.query().findById(questionConditionId);
+    const questionCondition = await this.query().findOne({
+      id: questionConditionId,
+      deletedAt: null,
+    });
 
     if (!questionCondition) {
       return Promise.reject(`No such questionCondition: ${questionConditionId}`);
@@ -94,9 +97,15 @@ export default class QuestionCondition extends Model {
   }
 
   static async delete(questionConditionId: string): Promise<QuestionCondition> {
-    return await this.query().updateAndFetchById(questionConditionId, {
-      deletedAt: new Date().toISOString(),
-    });
+    await this.query()
+      .where({ id: questionConditionId, deletedAt: null })
+      .update({ deletedAt: new Date().toISOString() });
+
+    const questionCondition = await this.query().findById(questionConditionId);
+    if (!questionCondition) {
+      return Promise.reject(`No such questionCondition: ${questionConditionId}`);
+    }
+    return questionCondition;
   }
 }
 /* tslint:disable:member-ordering */

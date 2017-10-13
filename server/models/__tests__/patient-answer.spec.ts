@@ -196,7 +196,10 @@ describe('answer model', () => {
       ],
     });
     expect(patientAnswers[0].answerValue).toEqual('3');
-    expect((await PatientAnswer.get(patientAnswers[0].id))!.id).toEqual(patientAnswers[0].id);
+
+    await expect(PatientAnswer.get(patientAnswers[0].id)).rejects.toMatch(
+      `No such patientAnswer: ${patientAnswers[0].id}`,
+    );
     expect(
       (await PatientAnswer.getForQuestion(question.id, patient.id))!.map(ans => ans.id),
     ).toEqual([patientAnswers2[0].id]); // Only checking for answer2, since it will replace answer1
@@ -273,11 +276,13 @@ describe('answer model', () => {
       ],
     });
 
-    const updatedOldAnswer = await PatientAnswer.get(patientAnswers[0].id);
-
-    expect(await PatientAnswer.getPreviousAnswersForQuestion(question.id, patient.id)).toEqual([
-      updatedOldAnswer,
-    ]);
+    expect(
+      (await PatientAnswer.getPreviousAnswersForQuestion(question.id, patient.id))[0],
+    ).toMatchObject({
+      answerId: patientAnswers[0].answerId,
+      answerValue: '3',
+      patientId: patient.id,
+    });
   });
 
   it('edits patient answer applicable', async () => {

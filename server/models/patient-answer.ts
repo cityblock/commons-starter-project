@@ -104,7 +104,7 @@ export default class PatientAnswer extends Model {
   }
 
   static async get(patientAnswerId: string): Promise<PatientAnswer> {
-    const patientAnswer = await this.query().findById(patientAnswerId);
+    const patientAnswer = await this.query().findOne({ id: patientAnswerId, deletedAt: null });
 
     if (!patientAnswer) {
       return Promise.reject(`No such patientAnswer: ${patientAnswerId}`);
@@ -207,9 +207,15 @@ export default class PatientAnswer extends Model {
   }
 
   static async delete(patientAnswerId: string): Promise<PatientAnswer> {
-    return await this.query().updateAndFetchById(patientAnswerId, {
-      deletedAt: new Date().toISOString(),
-    });
+    await this.query()
+      .where({ id: patientAnswerId, deletedAt: null })
+      .update({ deletedAt: new Date().toISOString() });
+
+    const patientAnswer = await this.query().findById(patientAnswerId);
+    if (!patientAnswer) {
+      return Promise.reject(`No such patientAnswer: ${patientAnswerId}`);
+    }
+    return patientAnswer;
   }
 }
 /* tslint:disable:member-ordering */

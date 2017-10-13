@@ -159,7 +159,19 @@ export default class Task extends Model {
     const task = await this.query(txn)
       .eager(EAGER_QUERY)
       .modifyEager('followers', builder => builder.where('task_follower.deletedAt', null))
-      .findById(taskId);
+      .findOne({ id: taskId, deletedAt: null });
+
+    if (!task) {
+      return Promise.reject(`No such task: ${taskId}`);
+    }
+    return task;
+  }
+
+  static async getIgnoreDeletedAt(taskId: string, txn?: Transaction): Promise<Task> {
+    const task = await this.query(txn)
+      .eager(EAGER_QUERY)
+      .modifyEager('followers', builder => builder.where('task_follower.deletedAt', null))
+      .findOne({ id: taskId });
 
     if (!task) {
       return Promise.reject(`No such task: ${taskId}`);
@@ -225,10 +237,20 @@ export default class Task extends Model {
       .updateAndFetchById(taskId, task);
   }
 
-  static async delete(taskId: string, txn?: Transaction): Promise<Task> {
-    return await this.query(txn).updateAndFetchById(taskId, {
-      deletedAt: new Date().toISOString(),
-    });
+  static async delete(taskId: string, txn?: Transaction): Promise<Task | undefined> {
+    await this.query(txn)
+      .where({ id: taskId, deletedAt: null })
+      .update({ deletedAt: new Date().toISOString() });
+
+    const task = await this.query(txn)
+      .eager(EAGER_QUERY)
+      .modifyEager('followers', builder => builder.where('task_follower.deletedAt', null))
+      .findById(taskId);
+
+    if (!task) {
+      return Promise.reject(`No such task: ${taskId}`);
+    }
+    return task;
   }
 
   static async complete(taskId: string, userId: string, txn?: Transaction): Promise<Task> {

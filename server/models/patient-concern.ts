@@ -86,13 +86,13 @@ export default class PatientConcern extends Model {
     this.updatedAt = new Date().toISOString();
   }
 
-  static async get(patientConcernId: string): Promise<PatientConcern | undefined> {
+  static async get(patientConcernId: string): Promise<PatientConcern> {
     const patientConcern = await this.query()
       .eager(EAGER_QUERY)
       .modifyEager('patientGoals.tasks', builder => {
         builder.where('task.completedAt', null);
       })
-      .findById(patientConcernId);
+      .findOne({ id: patientConcernId, deletedAt: null });
 
     if (!patientConcern) {
       return Promise.reject(`No such patient concern: ${patientConcernId}`);
@@ -136,11 +136,15 @@ export default class PatientConcern extends Model {
   }
 
   static async delete(patientConcernId: string): Promise<PatientConcern> {
-    return await this.query()
-      .eager(EAGER_QUERY)
-      .updateAndFetchById(patientConcernId, {
-        deletedAt: new Date().toISOString(),
-      });
+    await this.query()
+      .where({ id: patientConcernId, deletedAt: null })
+      .update({ deletedAt: new Date().toISOString() });
+
+    const patientConcern = await this.query().findById(patientConcernId);
+    if (!patientConcern) {
+      return Promise.reject(`No such patientConcern: ${patientConcern}`);
+    }
+    return patientConcern;
   }
 }
 /* tslint:disable:member-ordering */

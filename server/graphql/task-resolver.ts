@@ -97,7 +97,6 @@ export async function resolveTask(
   { db, userRole }: IContext,
 ) {
   await accessControls.isAllowed(userRole, 'view', 'task');
-
   return await Task.get(args.taskId);
 }
 
@@ -179,7 +178,7 @@ export async function taskDelete(
   checkUserLoggedIn(userId);
 
   return await transaction(Task.knex(), async txn => {
-    const task = Task.delete(args.input.taskId, txn);
+    const task = await Task.delete(args.input.taskId, txn);
 
     await TaskEvent.create(
       {

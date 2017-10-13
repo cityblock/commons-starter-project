@@ -166,11 +166,19 @@ export default class PatientScreeningToolSubmission extends Model {
   static async delete(
     patientScreeningToolSubmissionId: string,
   ): Promise<PatientScreeningToolSubmission> {
-    return await this.query()
-      .eager(EAGER_QUERY)
-      .updateAndFetchById(patientScreeningToolSubmissionId, {
-        deletedAt: new Date().toISOString(),
-      });
+    await this.query()
+      .where({ id: patientScreeningToolSubmissionId, deletedAt: null })
+      .update({ deletedAt: new Date().toISOString() });
+
+    const patientScreeningToolSubmission = await this.query().findById(
+      patientScreeningToolSubmissionId,
+    );
+    if (!patientScreeningToolSubmission) {
+      return Promise.reject(
+        `No such patientScreeningToolSubmission: ${patientScreeningToolSubmissionId}`,
+      );
+    }
+    return patientScreeningToolSubmission;
   }
 }
 /* tslint:disable:member-ordering */

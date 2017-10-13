@@ -64,7 +64,7 @@ export default class RiskArea extends Model {
   }
 
   static async get(riskAreaId: string): Promise<RiskArea> {
-    const riskArea = await this.query().findById(riskAreaId);
+    const riskArea = await this.query().findOne({ id: riskAreaId, deletedAt: null });
 
     if (!riskArea) {
       return Promise.reject(`No such risk area: ${riskAreaId}`);
@@ -90,9 +90,15 @@ export default class RiskArea extends Model {
   }
 
   static async delete(riskAreaId: string): Promise<RiskArea> {
-    return await this.query().updateAndFetchById(riskAreaId, {
-      deletedAt: new Date().toISOString(),
-    });
+    await this.query()
+      .where({ id: riskAreaId, deletedAt: null })
+      .update({ deletedAt: new Date().toISOString() });
+
+    const riskArea = await this.query().findById(riskAreaId);
+    if (!riskArea) {
+      return Promise.reject(`No such riskArea: ${riskAreaId}`);
+    }
+    return riskArea;
   }
 
   // TODO: Add cross-risk-score methods

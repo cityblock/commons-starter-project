@@ -133,11 +133,16 @@ export default class ScreeningTool extends Model {
   }
 
   static async delete(screeningToolId: string): Promise<ScreeningTool> {
-    return await this.query()
+    await this.query()
+      .where({ id: screeningToolId, deletedAt: null })
+      .update({ deletedAt: new Date().toISOString() });
+    const screeningTool = await this.query()
       .eager(EAGER_QUERY)
-      .updateAndFetchById(screeningToolId, {
-        deletedAt: new Date().toISOString(),
-      });
+      .findById(screeningToolId);
+    if (!screeningTool) {
+      return Promise.reject(`No such screeningTool: ${screeningToolId}`);
+    }
+    return screeningTool;
   }
 }
 /* tslint:disable:member-ordering */

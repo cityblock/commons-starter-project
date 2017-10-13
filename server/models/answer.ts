@@ -123,7 +123,7 @@ export default class Answer extends Model {
         builder.where('concern_suggestion.deletedAt', null),
       )
       .modifyEager('goalSuggestions', builder => builder.where('goal_suggestion.deletedAt', null))
-      .findById(answerId);
+      .findOne({ id: answerId, deletedAt: null });
 
     if (!answer) {
       return Promise.reject(`No such answer: ${answerId}`);
@@ -163,9 +163,15 @@ export default class Answer extends Model {
   }
 
   static async delete(answerId: string): Promise<Answer> {
-    return await this.query().updateAndFetchById(answerId, {
-      deletedAt: new Date().toISOString(),
-    });
+    await this.query()
+      .where({ id: answerId, deletedAt: null })
+      .update({ deletedAt: new Date().toISOString() });
+
+    const answer = await this.query().findById(answerId);
+    if (!answer) {
+      return Promise.reject(`No such answer: ${answerId}`);
+    }
+    return answer;
   }
 }
 /* tslint:disable:member-ordering */

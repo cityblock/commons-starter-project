@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`renders goal 1`] = `
+exports[`renders without goal 1`] = `
 <div
   className={undefined}
 >
@@ -8,6 +8,149 @@ exports[`renders goal 1`] = `
     className={undefined}
   >
     Loading...
+  </div>
+</div>
+`;
+
+exports[`shallow rendered renders with goal 1`] = `
+<div
+  className=""
+>
+  <div
+    className="undefined"
+  >
+    <div
+      className={undefined}
+    />
+    <div
+      className={undefined}
+    >
+      Are you sure you want to delete this goal?
+    </div>
+    <div
+      className={undefined}
+    >
+      <div
+        className=""
+        onClick={[Function]}
+      >
+        Cancel
+      </div>
+      <div
+        className={undefined}
+        onClick={[Function]}
+      >
+        Yes, delete
+      </div>
+    </div>
+    <div
+      className="undefined"
+    >
+      <div
+        className=""
+      >
+        Error deleting goal.
+      </div>
+      <div
+        className={undefined}
+      >
+        Please try again.
+      </div>
+    </div>
+  </div>
+  <div
+    className=""
+  >
+    <div>
+      <div
+        className={undefined}
+      >
+        <div
+          className={undefined}
+        >
+          <Link
+            className={undefined}
+            replace={false}
+            to="/route/base"
+          >
+            Close
+          </Link>
+          <div
+            className={undefined}
+            onClick={[Function]}
+          >
+            <div
+              className={undefined}
+            />
+            <div
+              className={undefined}
+            >
+              Delete goal
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div
+      className={undefined}
+    >
+      <div
+        className={undefined}
+      >
+        Title:
+      </div>
+      <div
+        className=""
+        onClick={[Function]}
+      >
+        Goal Title
+      </div>
+      <div
+        className=""
+      >
+        <input
+          name="editedTitle"
+          onBlur={[Function]}
+          onChange={[Function]}
+          onKeyDown={[Function]}
+          value=""
+        />
+      </div>
+      <br />
+      <div
+        className={undefined}
+      >
+        Task Templates:
+      </div>
+      <div>
+        <Apollo(Apollo(Apollo(TaskTemplateCreateEdit)))
+          goalSuggestionTemplateId="goal-id"
+          taskTemplate={
+            Object {
+              "careTeamAssigneeRole": "physician",
+              "completedWithinInterval": "hour",
+              "completedWithinNumber": 1,
+              "createdAt": "Thu Jul 13 2017 16:52:56 GMT-0400 (EDT)",
+              "deletedAt": null,
+              "goalSuggestionTemplateId": "goal-suggestion-template-id",
+              "id": "task-template-id",
+              "priority": "high",
+              "repeating": false,
+              "title": "Task Template Title",
+              "updatedAt": "Thu Jul 13 2017 16:52:56 GMT-0400 (EDT)",
+            }
+          }
+        />
+      </div>
+      <div
+        className={undefined}
+      >
+        Create task template:
+      </div>
+      <Apollo(Apollo(Apollo(TaskTemplateCreateEdit)))
+        goalSuggestionTemplateId="goal-id"
+      />
+    </div>
   </div>
 </div>
 `;

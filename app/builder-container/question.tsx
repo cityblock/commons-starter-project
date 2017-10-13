@@ -50,7 +50,7 @@ interface IState {
 
 type allProps = IProps & IStateProps & IGraphqlProps;
 
-class Question extends React.Component<allProps, IState> {
+export class Question extends React.Component<allProps, IState> {
   editTitleInput: HTMLInputElement | null;
   editOrderInput: HTMLInputElement | null;
   titleBody: HTMLDivElement | null;

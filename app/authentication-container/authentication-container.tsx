@@ -32,7 +32,10 @@ interface IProps {
 const LOGOUT_TIME = 1800000; // 30 minutes
 const IDLE_TIME = 1000000; // 18 minutes
 
-class Authentication extends React.Component<IProps & IStateProps & IDispatchProps, {}> {
+export class AuthenticationContainer extends React.Component<
+  IProps & IStateProps & IDispatchProps,
+  {}
+> {
   idleInterval: NodeJS.Timer;
 
   constructor(props: IProps & IStateProps & IDispatchProps) {
@@ -78,12 +81,12 @@ class Authentication extends React.Component<IProps & IStateProps & IDispatchPro
   }
 
   render() {
-    const { isIdle } = this.props;
+    const { isIdle, currentUser } = this.props;
     let header = null;
     let app = null;
     let idle = null;
-    if (this.props.currentUser) {
-      header = <Header currentUser={this.props.currentUser} />;
+    if (currentUser) {
+      header = <Header currentUser={currentUser} />;
       app = <div className={styles.app}>{this.props.children}</div>;
       idle = <IdlePopup idleEnd={this.props.idleEnd} isIdle={isIdle} />;
     }
@@ -121,7 +124,7 @@ const AuthenticationWithGraphQL = graphql<
     error: data ? data.error : null,
     currentUser: data ? (data as any).currentUser : null,
   }),
-})(Authentication);
+})(AuthenticationContainer);
 
 export default connect<IStateProps, IDispatchProps, IProps>(mapStateToProps, mapDispatchToProps)(
   AuthenticationWithGraphQL,

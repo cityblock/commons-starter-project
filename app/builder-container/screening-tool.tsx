@@ -41,7 +41,7 @@ export interface IState {
   editTitleError?: string;
 }
 
-class ScreeningTool extends React.Component<IProps, IState> {
+export class ScreeningTool extends React.Component<IProps, IState> {
   editTitleInput: HTMLInputElement | null;
   titleBody: HTMLDivElement | null;
 

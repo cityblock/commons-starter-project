@@ -11,3 +11,290 @@ exports[`renders question 1`] = `
   </div>
 </div>
 `;
+
+exports[`shallow rendered renders with screening tool 1`] = `
+<div
+  className=""
+>
+  <div
+    className="undefined"
+  >
+    <div
+      className={undefined}
+    />
+    <div
+      className={undefined}
+    >
+      Are you sure you want to delete this question?
+    </div>
+    <div
+      className={undefined}
+    >
+      <div
+        className=""
+        onClick={[Function]}
+      >
+        Cancel
+      </div>
+      <div
+        className={undefined}
+        onClick={[Function]}
+      >
+        Yes, delete
+      </div>
+    </div>
+    <div
+      className="undefined"
+    >
+      <div
+        className=""
+      >
+        Error deleting question.
+      </div>
+      <div
+        className={undefined}
+      >
+        Please try again.
+      </div>
+    </div>
+  </div>
+  <div
+    className=""
+  >
+    <div>
+      <div
+        className={undefined}
+      >
+        <div
+          className={undefined}
+        >
+          <Link
+            className={undefined}
+            replace={false}
+            to="/route/base"
+          >
+            Close
+          </Link>
+          <div
+            className={undefined}
+            onClick={[Function]}
+          >
+            <div
+              className={undefined}
+            />
+            <div
+              className={undefined}
+            >
+              Delete question
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div
+      className={undefined}
+    >
+      <div
+        className={undefined}
+      >
+        Title:
+      </div>
+      <div
+        className=""
+        onClick={[Function]}
+      >
+        Question Title
+      </div>
+      <div
+        className=""
+      >
+        <input
+          name="editedTitle"
+          onBlur={[Function]}
+          onChange={[Function]}
+          onKeyDown={[Function]}
+          value=""
+        />
+      </div>
+      <div
+        className={undefined}
+      >
+        Order:
+      </div>
+      <div
+        className=""
+        onClick={[Function]}
+      >
+        1
+      </div>
+      <div
+        className=""
+      >
+        <input
+          name="editedOrder"
+          onBlur={[Function]}
+          onChange={[Function]}
+          onKeyDown={[Function]}
+          type="number"
+          value={1}
+        />
+      </div>
+      <br />
+      <div
+        className={undefined}
+      >
+        <br />
+        <div
+          className={undefined}
+        >
+          Answer display:
+        </div>
+      </div>
+      <select
+        className=""
+        name="answerType"
+        onChange={[Function]}
+        required={true}
+        value="radio"
+      >
+        <option
+          value="dropdown"
+        >
+          dropdown
+        </option>
+        <option
+          value="radio"
+        >
+          radio
+        </option>
+        <option
+          value="freetext"
+        >
+          freetext
+        </option>
+        <option
+          value="multiselect"
+        >
+          multiselect
+        </option>
+      </select>
+      <br />
+      <div
+        className={undefined}
+      >
+        Answers:
+      </div>
+      <div>
+        <Apollo(Apollo(Apollo(AnswerCreateEdit)))
+          answer={
+            Object {
+              "concernSuggestions": Array [],
+              "createdAt": "Thu Jul 13 2017 16:52:56 GMT-0400 (EDT)",
+              "deletedAt": null,
+              "displayValue": "answer value",
+              "goalSuggestions": Array [],
+              "id": "answer-id",
+              "inSummary": true,
+              "order": 1,
+              "questionId": "cool-task-id",
+              "riskAdjustmentType": "increment",
+              "summaryText": "summary text",
+              "updatedAt": "Thu Jul 13 2017 16:52:56 GMT-0400 (EDT)",
+              "value": "true",
+              "valueType": "boolean",
+            }
+          }
+          questionId="cool-question-id"
+        />
+      </div>
+      <div
+        className={undefined}
+      >
+        Create answer:
+      </div>
+      <Apollo(Apollo(Apollo(AnswerCreateEdit)))
+        questionId="cool-question-id"
+      />
+      <div
+        className={undefined}
+      >
+        Applicable if type:
+      </div>
+      <br />
+      <select
+        className=""
+        name="applicableIfType"
+        onChange={[Function]}
+        value="allTrue"
+      >
+        <option
+          value="oneTrue"
+        >
+          one true
+        </option>
+        <option
+          value="allTrue"
+        >
+          all true
+        </option>
+      </select>
+      <br />
+      <QuestionConditions
+        questionConditions={
+          Array [
+            Object {
+              "answerId": "answer-id",
+              "id": "question-condition",
+              "questionId": "cool-question-id",
+            },
+          ]
+        }
+        questionId="cool-question-id"
+        questions={
+          Array [
+            Object {
+              "answerType": "radio",
+              "answers": Array [
+                Object {
+                  "concernSuggestions": Array [],
+                  "createdAt": "Thu Jul 13 2017 16:52:56 GMT-0400 (EDT)",
+                  "deletedAt": null,
+                  "displayValue": "answer value",
+                  "goalSuggestions": Array [],
+                  "id": "answer-id",
+                  "inSummary": true,
+                  "order": 1,
+                  "questionId": "cool-task-id",
+                  "riskAdjustmentType": "increment",
+                  "summaryText": "summary text",
+                  "updatedAt": "Thu Jul 13 2017 16:52:56 GMT-0400 (EDT)",
+                  "value": "true",
+                  "valueType": "boolean",
+                },
+              ],
+              "applicableIfQuestionConditions": Array [
+                Object {
+                  "answerId": "answer-id",
+                  "id": "question-condition",
+                  "questionId": "cool-question-id",
+                },
+              ],
+              "applicableIfType": "allTrue",
+              "createdAt": "Thu Jul 13 2017 16:52:56 GMT-0400 (EDT)",
+              "deletedAt": null,
+              "dueAt": "Thu Jul 13 2017 16:52:56 GMT-0400 (EDT)",
+              "id": "cool-question-id",
+              "order": 1,
+              "riskAreaId": "risk-area-id",
+              "screeningToolId": null,
+              "title": "Question Title",
+              "updatedAt": "Thu Jul 13 2017 16:52:56 GMT-0400 (EDT)",
+              "validatedSource": "validated source",
+            },
+          ]
+        }
+      />
+    </div>
+  </div>
+</div>
+`;

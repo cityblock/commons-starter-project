@@ -563,7 +563,7 @@ export class Task extends React.Component<allProps, IState> {
         <div className={deleteConfirmationStyles}>
           <div className={styles.deleteConfirmationIcon} />
           <div className={styles.deleteConfirmationText}>
-            Are you ure you want to delete this task?
+            Are you sure you want to delete this task?
           </div>
           <div className={styles.deleteConfirmationSubtext}>
             Deleting this task will completely remove it from this patient's record.

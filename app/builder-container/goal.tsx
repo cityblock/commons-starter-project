@@ -49,7 +49,7 @@ interface IState {
 
 type allProps = IStateProps & IProps & IGraphqlProps;
 
-class Goal extends React.Component<allProps, IState> {
+export class Goal extends React.Component<allProps, IState> {
   editTitleInput: HTMLInputElement | null;
   titleBody: HTMLDivElement | null;
 

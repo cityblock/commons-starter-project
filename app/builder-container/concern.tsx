@@ -44,7 +44,7 @@ interface IState {
 
 type allProps = IProps & IStateProps & IGraphqlProps;
 
-class Concern extends React.Component<allProps, IState> {
+export class Concern extends React.Component<allProps, IState> {
   editTitleInput: HTMLInputElement | null;
   titleBody: HTMLDivElement | null;
 
@@ -203,7 +203,7 @@ class Concern extends React.Component<allProps, IState> {
           <div className={deleteConfirmationStyles}>
             <div className={styles.deleteConfirmationIcon} />
             <div className={styles.deleteConfirmationText}>
-              Are you ure you want to delete this concern?
+              Are you sure you want to delete this concern?
             </div>
             <div className={styles.deleteConfirmationButtons}>
               <div

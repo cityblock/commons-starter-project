@@ -49,7 +49,7 @@ interface IState {
 
 type allProps = IProps & IStateProps & IGraphqlProps;
 
-class RiskArea extends React.Component<allProps, IState> {
+export class RiskArea extends React.Component<allProps, IState> {
   editTitleInput: HTMLInputElement | null;
   editOrderInput: HTMLInputElement | null;
   titleBody: HTMLDivElement | null;
@@ -246,7 +246,7 @@ class RiskArea extends React.Component<allProps, IState> {
           <div className={deleteConfirmationStyles}>
             <div className={styles.deleteConfirmationIcon}></div>
             <div className={styles.deleteConfirmationText}>
-              Are you ure you want to delete this domain?
+              Are you sure you want to delete this domain?
             </div>
             <div className={styles.deleteConfirmationButtons}>
               <div

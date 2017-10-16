@@ -4779,4 +4779,3 @@ export type ShortUserFragment = {
   userRole: UserRole,
   googleProfileImageUrl: string | null,
 };
-/* tslint:enable */

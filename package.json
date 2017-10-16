@@ -85,11 +85,11 @@
     }
   },
   "devDependencies": {
-    "@types/enzyme": "^2.8.11",
+    "@types/enzyme": "^3.1.0",
     "@types/jest": "^21.1.1",
     "@types/nock": "^8.2.1",
     "@types/react-test-renderer": "^16.0.0",
-    "apollo-codegen": "^0.17.0-alpha.13",
+    "apollo-codegen": "^0.17.0",
     "coveralls": "^3.0.0",
     "enzyme": "^3.0.0",
     "expect": "^21.2.0",
@@ -105,12 +105,12 @@
     "nock": "^9.0.21",
     "node-mocks-http": "^1.6.5",
     "prettier": "^1.7.3",
-    "react-hot-loader": "^3.0.0",
+    "react-hot-loader": "^3.1.1",
     "react-test-renderer": "^16.0.0",
     "ts-jest": "^21.1.1",
     "tslint": "^5.7.0",
     "tslint-microsoft-contrib": "^5.0.1",
-    "webpack-dev-server": "^2.7.1"
+    "webpack-dev-server": "^2.9.2"
   },
   "engines": {
     "node": "8.4.0"
@@ -130,7 +130,7 @@
     "@types/graphql": "^0.11.5",
     "@types/history": "^4.6.0",
     "@types/jsonwebtoken": "^7.2.3",
-    "@types/knex": "^0.0.61",
+    "@types/knex": "^0.0.62",
     "@types/lodash": "^4.14.76",
     "@types/morgan": "^1.7.33",
     "@types/node": "^8.0.33",
@@ -204,11 +204,11 @@
     "ts-node": "^3.3.0",
     "typescript": "^2.5.3",
     "typings-for-css-modules-loader": "^1.7.0",
-    "uglifyjs-webpack-plugin": "v1.0.0-beta.2",
+    "uglifyjs-webpack-plugin": "1.0.0-beta.3",
     "url-loader": "^0.6.2",
     "uuid": "^3.0.1",
     "validator": "^9.0.0",
     "webpack": "^3.5.6",
-    "webpack-hot-middleware": "^2.19.1"
+    "webpack-hot-middleware": "^2.20.0"
   }
 }

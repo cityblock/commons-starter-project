@@ -1,6 +1,14 @@
 module.exports = () => {
   return {
     test: /\.tsx?$/,
-    use: ['ts-loader?configFile=tsconfig.webpack.json&transpileOnly=true'],
+    use: [
+      {
+        loader: 'ts-loader',
+        options: {
+          transpileOnly: true,
+          configFile: 'tsconfig.webpack.json'
+        }
+      }
+    ]
   };
 };

@@ -1,3 +1,4 @@
+import { isNumber, omit } from 'lodash';
 import { Model, RelationMappings } from 'objection';
 import * as uuid from 'uuid/v4';
 import ScreeningTool from './screening-tool';
@@ -18,6 +19,7 @@ export interface IScreeningToolScoreRangeEditableFields {
 }
 
 export const EAGER_QUERY = '[screeningTool]';
+export const RANGE_REGEX = /\[(\d+),(\d+)\)/;
 
 /* tslint:disable:member-ordering */
 export default class ScreeningToolScoreRange extends Model {
@@ -25,8 +27,7 @@ export default class ScreeningToolScoreRange extends Model {
   screeningToolId: string;
   screeningTool: ScreeningTool;
   description: string;
-  minimumScore: number;
-  maximumScore: number;
+  range: string;
 
   createdAt: string;
   updatedAt: string;
@@ -44,8 +45,7 @@ export default class ScreeningToolScoreRange extends Model {
       id: { type: 'string' },
       screeningToolId: { type: 'string' },
       description: { type: 'string' },
-      minimumScore: { type: 'integer' },
-      maximumScore: { type: 'integer' },
+      range: { type: 'int4range' },
       deletedAt: { type: 'string' },
     },
   };
@@ -94,21 +94,76 @@ export default class ScreeningToolScoreRange extends Model {
     this.updatedAt = new Date().toISOString();
   }
 
+  static withMinimumAndMaximumScore(screeningToolScoreRange: ScreeningToolScoreRange) {
+    const rangeMatch = RANGE_REGEX.exec(screeningToolScoreRange.range);
+
+    return {
+      ...screeningToolScoreRange,
+      minimumScore: parseInt(rangeMatch![1], 10),
+      // Objection/Knex or Postgres is storing our inclusive ranges as exclusive of the top end
+      // This corrects the max score
+      maximumScore: parseInt(rangeMatch![2], 10) - 1,
+    };
+  }
+
   static async create(
     input: IScreeningToolScoreRangeCreateFields,
   ): Promise<ScreeningToolScoreRange> {
+    const { minimumScore, maximumScore } = input;
+
+    const range = `[${minimumScore}, ${maximumScore}]`;
+
+    const filtered = {
+      range,
+      ...omit<IScreeningToolScoreRangeCreateFields, {}>(input, ['minimumScore', 'maximumScore']),
+    };
+
     return await this.query()
       .eager(EAGER_QUERY)
-      .insertAndFetch(input);
+      .insertAndFetch(filtered);
   }
 
   static async edit(
     screeningToolScoreRangeId: string,
     screeningToolScoreRange: IScreeningToolScoreRangeEditableFields,
   ): Promise<ScreeningToolScoreRange> {
+    const { minimumScore, maximumScore } = screeningToolScoreRange;
+    const editedMinimumScore = isNumber(minimumScore);
+    const editedMaximumScore = isNumber(maximumScore);
+    const fetchedScoreRange = await this.get(screeningToolScoreRangeId);
+    let filtered: any = screeningToolScoreRange;
+    let range: string = '';
+
+    // The easy case: both ends of the range are being updated
+    if (editedMinimumScore && editedMaximumScore) {
+      range = `[${minimumScore}, ${maximumScore}]`;
+
+      filtered = {
+        range,
+        ...omit(screeningToolScoreRange, ['minimumScore', 'maximumScore']),
+      };
+      // The less easy case: one end of the range is being updated
+    } else if ((editedMinimumScore || editedMaximumScore) && fetchedScoreRange) {
+      // Fetch the record from the database to get the other end of the range
+      const rangeMatch = RANGE_REGEX.exec(fetchedScoreRange.range);
+
+      if (editedMinimumScore) {
+        const maximumScoreMatch = parseInt(rangeMatch![2], 10) - 1;
+        range = `[${minimumScore}, ${maximumScoreMatch}]`;
+      } else if (editedMaximumScore) {
+        const minimumScoreMatch = rangeMatch![1];
+        range = `[${minimumScoreMatch}, ${maximumScore}]`;
+      }
+
+      filtered = {
+        range,
+        ...omit(screeningToolScoreRange, ['minimumScore', 'maximumScore']),
+      };
+    }
+
     return await this.query()
       .eager(EAGER_QUERY)
-      .updateAndFetchById(screeningToolScoreRangeId, screeningToolScoreRange);
+      .updateAndFetchById(screeningToolScoreRangeId, filtered);
   }
 
   static async get(screeningToolScoreRangeId: string): Promise<ScreeningToolScoreRange> {
@@ -135,11 +190,8 @@ export default class ScreeningToolScoreRange extends Model {
   ): Promise<ScreeningToolScoreRange> {
     const screeningToolScoreRange = await this.query()
       .eager(EAGER_QUERY)
-      .whereRaw('"minimumScore" <= ? and "maximumScore" >= ? and "screeningToolId" = ?', [
-        score,
-        score,
-        screeningToolId,
-      ])
+      // @> == 'contains element'
+      .whereRaw('"range" @> ?::int4 and "screeningToolId" = ?', [score, screeningToolId])
       .findOne({ deletedAt: null });
 
     if (!screeningToolScoreRange) {

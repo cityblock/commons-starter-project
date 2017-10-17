@@ -221,7 +221,11 @@ export class Question extends React.Component<allProps, IState> {
     const { question } = this.props;
     if (question && question.answers) {
       return question.answers.map(answer => (
-        <AnswerCreateEdit key={answer ? answer.id : ''} answer={answer} questionId={question.id} />
+        <AnswerCreateEdit
+          key={answer ? answer.id : ''}
+          screeningToolAnswer={!!question.screeningToolId}
+          answer={answer}
+          questionId={question.id} />
       ));
     }
   }
@@ -376,7 +380,9 @@ export class Question extends React.Component<allProps, IState> {
               <div className={styles.smallText}>Answers:</div>
               <div>{answers}</div>
               <div className={styles.smallText}>Create answer:</div>
-              <AnswerCreateEdit questionId={question.id} />
+              <AnswerCreateEdit
+                questionId={question.id}
+                screeningToolAnswer={!!question.screeningToolId} />
               <div className={styles.smallText}>Applicable if type:</div>
               <br />
               <select

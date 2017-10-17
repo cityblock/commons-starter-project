@@ -26,6 +26,7 @@ interface IDeleteOptions { variables: answerDeleteMutationVariables; }
 interface IProps {
   answer?: FullAnswerFragment;
   questionId: string;
+  screeningToolAnswer?: boolean;
 }
 
 interface IGraphqlProps {
@@ -47,17 +48,20 @@ class AnswerCreateEdit extends React.Component<allProps, IState> {
   constructor(props: allProps) {
     super(props);
 
+    const { screeningToolAnswer } = props;
+
     this.onSubmit = this.onSubmit.bind(this);
     this.onFieldUpdate = this.onFieldUpdate.bind(this);
     this.onChange = this.onChange.bind(this);
     this.onDeleteClick = this.onDeleteClick.bind(this);
+    this.getValueTypeOptions = this.getValueTypeOptions.bind(this);
 
     this.state = {
       loading: false,
       answer: props.answer ? props.answer : {
         displayValue: 'edit me!',
-        value: 'true',
-        valueType: 'boolean' as AnswerValueTypeOptions,
+        value: screeningToolAnswer ? '0' : 'true',
+        valueType: (screeningToolAnswer ? 'number' : 'boolean') as AnswerValueTypeOptions,
         riskAdjustmentType: null,
         inSummary: false,
         summaryText: null,
@@ -134,8 +138,24 @@ class AnswerCreateEdit extends React.Component<allProps, IState> {
     }
   }
 
+  getValueTypeOptions() {
+    const { screeningToolAnswer } = this.props;
+
+    if (screeningToolAnswer) {
+      return <option value='number'>number</option>;
+    } else {
+      return [
+        <option key={'default-option'} value='' disabled hidden>Select Answer value type</option>,
+        <option key={'string-option'} value='string'>text</option>,
+        <option key={'boolean-option'} value='boolean'>true / false</option>,
+        <option key={'number-option'} value='number'>number</option>,
+      ];
+    }
+  }
+
   render() {
     const { loading, answer } = this.state;
+    const { screeningToolAnswer } = this.props;
     const loadingClass = loading ? styles.loading : styles.loadingHidden;
     const createEditText = this.props.answer ? 'Save' : 'Add answer';
     const deleteHtml = this.props.answer ? (<div onClick={this.onDeleteClick}>delete</div>) : null;
@@ -147,6 +167,7 @@ class AnswerCreateEdit extends React.Component<allProps, IState> {
     ));
     const carePlanSuggestionsHtml = this.props.answer ?
       (<CarePlanSuggestions answer={this.props.answer} />) : null;
+    const valueType = screeningToolAnswer ? 'number' : answer.valueType || '';
     return (
       <form onSubmit={this.onSubmit} className={answerStyles.borderContainer}>
         <div className={loadingClass}>
@@ -191,14 +212,11 @@ class AnswerCreateEdit extends React.Component<allProps, IState> {
             <div className={answerStyles.smallText}>Backend value type:</div>
             <select
               name='valueType'
-              value={answer.valueType || ''}
+              value={valueType}
               onChange={this.onChange}
               className={
                 classNames(formStyles.select, formStyles.inputSmall)}>
-              <option value='' disabled hidden>Select Answer value type</option>
-              <option value='string'>text</option>
-              <option value='boolean'>true / false</option>
-              <option value='number'>number</option>
+              {this.getValueTypeOptions()}
             </select>
           </div>
           <div className={styles.inlineInputGroup}>

@@ -50,12 +50,16 @@ describe('screening tool score range resolver tests', () => {
         screeningToolScoreRange(screeningToolScoreRangeId: "${screeningToolScoreRange.id}") {
           id
           description
+          minimumScore
+          maximumScore
         }
       }`;
       const result = await graphql(schema, query, null, { db, userRole });
       expect(cloneDeep(result.data!.screeningToolScoreRange)).toMatchObject({
         id: screeningToolScoreRange.id,
         description: screeningToolScoreRange.description,
+        minimumScore: 0,
+        maximumScore: 10,
       });
     });
 
@@ -77,6 +81,8 @@ describe('screening tool score range resolver tests', () => {
         screeningToolScoreRanges {
           id
           description
+          minimumScore
+          maximumScore
         }
       }`;
       const result = await graphql(schema, query, null, { db, userRole });
@@ -84,10 +90,14 @@ describe('screening tool score range resolver tests', () => {
         {
           id: screeningToolScoreRange.id,
           description: screeningToolScoreRange.description,
+          minimumScore: 0,
+          maximumScore: 10,
         },
         {
           id: screeningToolScoreRange2.id,
           description: screeningToolScoreRange2.description,
+          minimumScore: 11,
+          maximumScore: 22,
         },
       ]);
     });
@@ -109,6 +119,8 @@ describe('screening tool score range resolver tests', () => {
         screeningToolScoreRangesForScreeningTool(screeningToolId: "${screeningTool.id}") {
           id
           description
+          minimumScore
+          maximumScore
         }
       }`;
       const result = await graphql(schema, query, null, { db, userRole });
@@ -120,10 +132,14 @@ describe('screening tool score range resolver tests', () => {
         {
           id: screeningToolScoreRange.id,
           description: screeningToolScoreRange.description,
+          minimumScore: 0,
+          maximumScore: 10,
         },
         {
           id: screeningToolScoreRange2.id,
           description: screeningToolScoreRange2.description,
+          minimumScore: 11,
+          maximumScore: 20,
         },
       ]);
       expect(scoreRangeIds).not.toContain(screeningToolScoreRange3.id);
@@ -143,6 +159,8 @@ describe('screening tool score range resolver tests', () => {
         ) {
           id
           description
+          minimumScore
+          maximumScore
         }
       }`;
       const result = await graphql(schema, query, null, { db, userRole });
@@ -150,6 +168,8 @@ describe('screening tool score range resolver tests', () => {
         result.data!.screeningToolScoreRangeForScoreAndScreeningTool,
       );
       expect(resultScoreRange.id).toEqual(screeningToolScoreRange2.id);
+      expect(resultScoreRange.minimumScore).toEqual(11);
+      expect(resultScoreRange.maximumScore).toEqual(20);
     });
   });
 
@@ -161,6 +181,8 @@ describe('screening tool score range resolver tests', () => {
           screeningToolScoreRangeId: "${screeningToolScoreRange.id}"
         }) {
           description
+          minimumScore
+          maximumScore
         }
       }`;
       const result = await graphql(schema, query, null, {
@@ -174,7 +196,7 @@ describe('screening tool score range resolver tests', () => {
     });
   });
 
-  describe('screeningToolScoreRange Create', () => {
+  describe('screeningToolScoreRange create', () => {
     it('creates a new screeningToolScoreRange', async () => {
       const mutation = `mutation {
         screeningToolScoreRangeCreate(input: {
@@ -184,6 +206,8 @@ describe('screening tool score range resolver tests', () => {
           maximumScore: 100
         }) {
           description
+          minimumScore
+          maximumScore
         }
       }`;
       const result = await graphql(schema, mutation, null, {
@@ -193,6 +217,8 @@ describe('screening tool score range resolver tests', () => {
       });
       expect(cloneDeep(result.data!.screeningToolScoreRangeCreate)).toMatchObject({
         description: 'A Description',
+        minimumScore: 50,
+        maximumScore: 100,
       });
     });
   });
@@ -205,6 +231,8 @@ describe('screening tool score range resolver tests', () => {
         }) {
           id
           deletedAt
+          minimumScore
+          maximumScore
         }
       }`;
       const result = await graphql(schema, mutation, null, {
@@ -215,6 +243,8 @@ describe('screening tool score range resolver tests', () => {
       const deletedScoreRange = cloneDeep(result.data!.screeningToolScoreRangeDelete);
       expect(deletedScoreRange).toMatchObject({
         id: screeningToolScoreRange.id,
+        minimumScore: 0,
+        maximumScore: 10,
       });
       expect(deletedScoreRange.deletedAt).not.toBeNull();
       expect(deletedScoreRange.deletedAt).not.toBeUndefined();

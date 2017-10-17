@@ -48,6 +48,7 @@ describe('screening tool score range model', () => {
     });
 
     expect(scoreRange.description).toEqual('Score Range');
+    expect(scoreRange.range).toEqual('[0,11)'); // Postgres representation of a range
     expect(scoreRange.screeningTool.id).toEqual(screeningTool.id);
     expect(await ScreeningToolScoreRange.get(scoreRange.id)).toMatchObject(scoreRange);
   });
@@ -59,6 +60,60 @@ describe('screening tool score range model', () => {
     );
   });
 
+  it('does not allow creation of a score range with an overlapping min/max', async () => {
+    await ScreeningToolScoreRange.create({
+      screeningToolId: screeningTool.id,
+      description: 'Score Range',
+      minimumScore: 0,
+      maximumScore: 10,
+    });
+    const validSecondScoreRange = await ScreeningToolScoreRange.create({
+      screeningToolId: screeningTool.id,
+      description: 'Valid Second Score Range',
+      minimumScore: 11,
+      maximumScore: 20,
+    });
+    const anotherValidScoreRange = await ScreeningToolScoreRange.create({
+      screeningToolId: screeningTool2.id,
+      description: 'Second Valid Score Range',
+      minimumScore: 15,
+      maximumScore: 25,
+    });
+
+    // This score range does not overlap, so creation should have been successful
+    expect(validSecondScoreRange.description).toEqual('Valid Second Score Range');
+
+    // This score range does overlap, but for a different screeningTool so should be fine
+    expect(anotherValidScoreRange.description).toEqual('Second Valid Score Range');
+
+    try {
+      // This overlaps and should throw an error
+      await ScreeningToolScoreRange.create({
+        screeningToolId: screeningTool.id,
+        description: 'Invalid Score Range',
+        minimumScore: 15,
+        maximumScore: 25,
+      });
+    } catch (err) {
+      expect(err.message).toMatch(
+        'conflicting key value violates exclusion constraint "screening_tool_score_range_range"',
+      );
+    }
+
+    // Now we delete the overlapping score range
+    await ScreeningToolScoreRange.delete(validSecondScoreRange.id);
+
+    const nowValidScoreRange = await ScreeningToolScoreRange.create({
+      screeningToolId: screeningTool.id,
+      description: '(No Longer) Invalid Score Range',
+      minimumScore: 15,
+      maximumScore: 25,
+    });
+
+    // All should be well now
+    expect(nowValidScoreRange.description).toEqual('(No Longer) Invalid Score Range');
+  });
+
   it('edits a screening tool score range', async () => {
     const scoreRange = await ScreeningToolScoreRange.create({
       screeningToolId: screeningTool.id,
@@ -68,11 +123,64 @@ describe('screening tool score range model', () => {
     });
 
     const fetchedScoreRange = await ScreeningToolScoreRange.get(scoreRange.id);
-    expect(fetchedScoreRange.minimumScore).toEqual(0);
+    expect(fetchedScoreRange.description).toEqual('Score Range');
+    // Sanity check on ranges
+    expect(fetchedScoreRange.range).toEqual('[0,11)');
 
-    await ScreeningToolScoreRange.edit(scoreRange.id, { minimumScore: 5 });
+    await ScreeningToolScoreRange.edit(scoreRange.id, { description: 'Hello' });
     const fetchedEditedScoreRange = await ScreeningToolScoreRange.get(scoreRange.id);
-    expect(fetchedEditedScoreRange.minimumScore).toEqual(5);
+    expect(fetchedEditedScoreRange.description).toEqual('Hello');
+    expect(fetchedEditedScoreRange.range).toEqual('[0,11)');
+  });
+
+  describe('editing a screening tool score range min/max score', () => {
+    it('works when both new minimum and maximum scores are entered', async () => {
+      const scoreRange = await ScreeningToolScoreRange.create({
+        screeningToolId: screeningTool.id,
+        description: 'Score Range',
+        minimumScore: 0,
+        maximumScore: 10,
+      });
+
+      const fetchedScoreRange = await ScreeningToolScoreRange.get(scoreRange.id);
+      expect(fetchedScoreRange.range).toEqual('[0,11)');
+
+      await ScreeningToolScoreRange.edit(scoreRange.id, { minimumScore: 20, maximumScore: 25 });
+      const fetchedEditedScoreRange = await ScreeningToolScoreRange.get(scoreRange.id);
+      expect(fetchedEditedScoreRange.range).toEqual('[20,26)');
+    });
+
+    it('works when only a new minimum score is entered', async () => {
+      const scoreRange = await ScreeningToolScoreRange.create({
+        screeningToolId: screeningTool.id,
+        description: 'Score Range',
+        minimumScore: 5,
+        maximumScore: 10,
+      });
+
+      const fetchedScoreRange = await ScreeningToolScoreRange.get(scoreRange.id);
+      expect(fetchedScoreRange.range).toEqual('[5,11)');
+
+      await ScreeningToolScoreRange.edit(scoreRange.id, { minimumScore: 0 });
+      const fetchedEditedScoreRange = await ScreeningToolScoreRange.get(scoreRange.id);
+      expect(fetchedEditedScoreRange.range).toEqual('[0,11)');
+    });
+
+    it('works when only a new maximum score is entered', async () => {
+      const scoreRange = await ScreeningToolScoreRange.create({
+        screeningToolId: screeningTool.id,
+        description: 'Score Range',
+        minimumScore: 0,
+        maximumScore: 10,
+      });
+
+      const fetchedScoreRange = await ScreeningToolScoreRange.get(scoreRange.id);
+      expect(fetchedScoreRange.range).toEqual('[0,11)');
+
+      await ScreeningToolScoreRange.edit(scoreRange.id, { maximumScore: 8 });
+      const fetchedEditedScoreRange = await ScreeningToolScoreRange.get(scoreRange.id);
+      expect(fetchedEditedScoreRange.range).toEqual('[0,9)');
+    });
   });
 
   it('gets all score ranges for a screening tool', async () => {

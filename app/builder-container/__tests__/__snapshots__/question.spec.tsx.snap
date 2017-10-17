@@ -205,6 +205,7 @@ exports[`shallow rendered renders with screening tool 1`] = `
             }
           }
           questionId="cool-question-id"
+          screeningToolAnswer={false}
         />
       </div>
       <div
@@ -214,6 +215,7 @@ exports[`shallow rendered renders with screening tool 1`] = `
       </div>
       <Apollo(Apollo(Apollo(AnswerCreateEdit)))
         questionId="cool-question-id"
+        screeningToolAnswer={false}
       />
       <div
         className={undefined}

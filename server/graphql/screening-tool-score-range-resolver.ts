@@ -33,7 +33,9 @@ export async function screeningToolScoreRangeCreate(
   await accessControls.isAllowed(userRole, 'create', 'screeningTool');
   checkUserLoggedIn(userId);
 
-  return await ScreeningToolScoreRange.create(input as any);
+  const screeningToolScoreRange = await ScreeningToolScoreRange.create(input as any);
+
+  return ScreeningToolScoreRange.withMinimumAndMaximumScore(screeningToolScoreRange);
 }
 
 export async function resolveScreeningToolScoreRanges(
@@ -43,7 +45,11 @@ export async function resolveScreeningToolScoreRanges(
 ) {
   await accessControls.isAllowed(userRole, 'view', 'screeningTool');
 
-  return await ScreeningToolScoreRange.getAll();
+  const screeningToolScoreRanges = await ScreeningToolScoreRange.getAll();
+
+  return screeningToolScoreRanges.map(screeningToolScoreRange =>
+    ScreeningToolScoreRange.withMinimumAndMaximumScore(screeningToolScoreRange),
+  );
 }
 
 export async function resolveScreeningToolScoreRangesForScreeningTool(
@@ -53,7 +59,13 @@ export async function resolveScreeningToolScoreRangesForScreeningTool(
 ) {
   await accessControls.isAllowed(userRole, 'view', 'screeningTool');
 
-  return await ScreeningToolScoreRange.getForScreeningTool(args.screeningToolId);
+  const screeningToolScoreRanges = await ScreeningToolScoreRange.getForScreeningTool(
+    args.screeningToolId,
+  );
+
+  return screeningToolScoreRanges.map(screeningToolScoreRange =>
+    ScreeningToolScoreRange.withMinimumAndMaximumScore(screeningToolScoreRange),
+  );
 }
 
 export async function resolveScreeningToolScoreRange(
@@ -63,7 +75,9 @@ export async function resolveScreeningToolScoreRange(
 ) {
   await accessControls.isAllowed(userRole, 'view', 'screeningTool');
 
-  return await ScreeningToolScoreRange.get(args.screeningToolScoreRangeId);
+  const screeningToolScoreRange = await ScreeningToolScoreRange.get(args.screeningToolScoreRangeId);
+
+  return ScreeningToolScoreRange.withMinimumAndMaximumScore(screeningToolScoreRange);
 }
 
 export async function resolveScreeningToolScoreRangeForScoreAndScreeningTool(
@@ -73,7 +87,12 @@ export async function resolveScreeningToolScoreRangeForScoreAndScreeningTool(
 ) {
   await accessControls.isAllowed(userRole, 'view', 'screeningTool');
 
-  return await ScreeningToolScoreRange.getByScoreForScreeningTool(args.score, args.screeningToolId);
+  const screeningToolScoreRange = await ScreeningToolScoreRange.getByScoreForScreeningTool(
+    args.score,
+    args.screeningToolId,
+  );
+
+  return ScreeningToolScoreRange.withMinimumAndMaximumScore(screeningToolScoreRange);
 }
 
 export async function screeningToolScoreRangeEdit(
@@ -85,7 +104,12 @@ export async function screeningToolScoreRangeEdit(
   checkUserLoggedIn(userId);
 
   const cleanedParams = pickBy<IScreeningToolScoreRangeEditInput, {}>(args.input) as any;
-  return await ScreeningToolScoreRange.edit(args.input.screeningToolScoreRangeId, cleanedParams);
+  const screeningToolScoreRange = await ScreeningToolScoreRange.edit(
+    args.input.screeningToolScoreRangeId,
+    cleanedParams,
+  );
+
+  return ScreeningToolScoreRange.withMinimumAndMaximumScore(screeningToolScoreRange);
 }
 
 export async function screeningToolScoreRangeDelete(
@@ -96,5 +120,9 @@ export async function screeningToolScoreRangeDelete(
   await accessControls.isAllowedForUser(userRole, 'edit', 'screeningTool');
   checkUserLoggedIn(userId);
 
-  return await ScreeningToolScoreRange.delete(args.input.screeningToolScoreRangeId);
+  const screeningToolScoreRange = await ScreeningToolScoreRange.delete(
+    args.input.screeningToolScoreRangeId,
+  );
+
+  return ScreeningToolScoreRange.withMinimumAndMaximumScore(screeningToolScoreRange);
 }

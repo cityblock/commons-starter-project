@@ -75,6 +75,15 @@ export default class ScreeningTool extends Model {
     this.updatedAt = new Date().toISOString();
   }
 
+  static withFormattedScreeningToolScoreRanges(screeningTool: ScreeningTool) {
+    return {
+      ...screeningTool,
+      screeningToolScoreRanges: screeningTool.screeningToolScoreRanges.map(scoreRange =>
+        ScreeningToolScoreRange.withMinimumAndMaximumScore(scoreRange),
+      ),
+    };
+  }
+
   static async create(input: IScreeningToolCreateFields): Promise<ScreeningTool> {
     return await this.query()
       .eager(EAGER_QUERY)

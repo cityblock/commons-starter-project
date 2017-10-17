@@ -39,7 +39,11 @@ export async function screeningToolCreate(
 export async function resolveScreeningTools(root: any, args: any, { db, userRole }: IContext) {
   await accessControls.isAllowed(userRole, 'view', 'screeningTool');
 
-  return await ScreeningTool.getAll();
+  const screeningTools = await ScreeningTool.getAll();
+
+  return screeningTools.map(screeningTool =>
+    ScreeningTool.withFormattedScreeningToolScoreRanges(screeningTool),
+  );
 }
 
 export async function resolveScreeningToolsForRiskArea(
@@ -49,7 +53,11 @@ export async function resolveScreeningToolsForRiskArea(
 ) {
   await accessControls.isAllowed(userRole, 'view', 'screeningTool');
 
-  return await ScreeningTool.getForRiskArea(args.riskAreaId);
+  const screeningTools = await ScreeningTool.getForRiskArea(args.riskAreaId);
+
+  return screeningTools.map(screeningTool =>
+    ScreeningTool.withFormattedScreeningToolScoreRanges(screeningTool),
+  );
 }
 
 export async function resolveScreeningTool(
@@ -59,7 +67,9 @@ export async function resolveScreeningTool(
 ) {
   await accessControls.isAllowed(userRole, 'view', 'screeningTool');
 
-  return await ScreeningTool.get(args.screeningToolId);
+  const screeningTool = await ScreeningTool.get(args.screeningToolId);
+
+  return ScreeningTool.withFormattedScreeningToolScoreRanges(screeningTool);
 }
 
 export async function screeningToolEdit(
@@ -71,7 +81,9 @@ export async function screeningToolEdit(
   checkUserLoggedIn(userId);
 
   const cleanedParams = pickBy<IScreeningToolEditInput, {}>(args.input) as any;
-  return await ScreeningTool.edit(args.input.screeningToolId, cleanedParams);
+  const screeningTool = await ScreeningTool.edit(args.input.screeningToolId, cleanedParams);
+
+  return ScreeningTool.withFormattedScreeningToolScoreRanges(screeningTool);
 }
 
 export async function screeningToolDelete(
@@ -82,5 +94,7 @@ export async function screeningToolDelete(
   await accessControls.isAllowedForUser(userRole, 'edit', 'screeningTool');
   checkUserLoggedIn(userId);
 
-  return await ScreeningTool.delete(args.input.screeningToolId);
+  const screeningTool = await ScreeningTool.delete(args.input.screeningToolId);
+
+  return ScreeningTool.withFormattedScreeningToolScoreRanges(screeningTool);
 }

@@ -10,7 +10,7 @@ export interface ITaskTemplateEditableFields {
   completedWithinNumber?: number;
   completedWithinInterval?: CompletedWithinInterval;
   repeating: boolean;
-  goalSuggestionTemplateId: string;
+  goalSuggestionTemplateId?: string;
   priority: Priority;
   careTeamAssigneeRole: UserRole;
 }
@@ -21,7 +21,7 @@ export default class TaskTemplate extends BaseModel {
   completedWithinNumber: number;
   completedWithinInterval: CompletedWithinInterval;
   repeating: boolean;
-  goalSuggestionTemplateId: string;
+  goalSuggestionTemplateId?: string;
   priority: Priority;
   careTeamAssigneeRole: UserRole;
 

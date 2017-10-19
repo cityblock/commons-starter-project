@@ -1,6 +1,6 @@
 import { Model, RelationMappings, Transaction } from 'objection';
-import * as uuid from 'uuid/v4';
 import { IPaginatedResults, IPaginationOptions } from '../db';
+import BaseModel from './base-model';
 import Patient from './patient';
 import PatientGoal from './patient-goal';
 import TaskFollower from './task-follower';
@@ -31,8 +31,7 @@ export type Priority = 'low' | 'medium' | 'high';
 const EAGER_QUERY = '[createdBy, assignedTo, patient, completedBy, followers, patientGoal]';
 
 /* tslint:disable:member-ordering */
-export default class Task extends Model {
-  id: string;
+export default class Task extends BaseModel {
   title: string;
   description: string;
   patient: Patient;
@@ -45,19 +44,12 @@ export default class Task extends Model {
   completedById: string | null;
   patientGoalId: string;
   patientGoal: PatientGoal;
-  createdAt: string;
-  updatedAt: string;
   dueAt: string;
   completedAt: string | null;
-  deletedAt?: string;
   followers: User[];
   priority: Priority;
 
   static tableName = 'task';
-
-  static modelPaths = [__dirname];
-
-  static pickJsonSchemaProperties = true;
 
   static jsonSchema = {
     type: 'object',
@@ -145,15 +137,6 @@ export default class Task extends Model {
       },
     },
   };
-
-  $beforeInsert() {
-    this.id = uuid();
-    this.createdAt = new Date().toISOString();
-  }
-
-  $beforeUpdate() {
-    this.updatedAt = new Date().toISOString();
-  }
 
   static async get(taskId: string, txn?: Transaction): Promise<Task> {
     const task = await this.query(txn)

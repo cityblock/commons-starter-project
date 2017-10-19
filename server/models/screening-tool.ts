@@ -1,5 +1,5 @@
 import { Model, RelationMappings } from 'objection';
-import * as uuid from 'uuid/v4';
+import BaseModel from './base-model';
 import RiskArea from './risk-area';
 import ScreeningToolScoreRange from './screening-tool-score-range';
 
@@ -20,22 +20,13 @@ export const EAGER_QUERY =
 /* tslint:enable:max-line-length */
 
 /* tslint:disable:member-ordering */
-export default class ScreeningTool extends Model {
-  id: string;
+export default class ScreeningTool extends BaseModel {
   title: string;
   riskAreaId: string;
   riskArea: RiskArea;
   screeningToolScoreRanges: ScreeningToolScoreRange[];
 
-  createdAt: string;
-  updatedAt: string;
-  deletedAt: string;
-
   static tableName = 'screening_tool';
-
-  static modelPaths = [__dirname];
-
-  static pickJsonSchemaProperties = true;
 
   static jsonSchema = {
     type: 'object',
@@ -65,15 +56,6 @@ export default class ScreeningTool extends Model {
       },
     },
   };
-
-  $beforeInsert() {
-    this.id = uuid();
-    this.createdAt = new Date().toISOString();
-  }
-
-  $beforeUpdate() {
-    this.updatedAt = new Date().toISOString();
-  }
 
   static withFormattedScreeningToolScoreRanges(screeningTool: ScreeningTool) {
     return {

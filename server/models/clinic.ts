@@ -1,6 +1,6 @@
 import { Model, RelationMappings } from 'objection';
-import * as uuid from 'uuid/v4';
 import { IPaginatedResults, IPaginationOptions } from '../db';
+import BaseModel from './base-model';
 import Patient from './patient';
 import User from './user';
 
@@ -12,20 +12,13 @@ export interface IClinicEditableFields {
 export type GetByOptions = 'name' | 'departmentId';
 
 /* tslint:disable:member-ordering */
-export default class Clinic extends Model {
-  id: string;
-  createdAt: string;
-  updatedAt: string;
+export default class Clinic extends BaseModel {
   name: string;
   departmentId: number;
   users: User[];
   patients: Patient[];
 
   static tableName = 'clinic';
-
-  static modelPaths = [__dirname];
-
-  static pickJsonSchemaProperties = true;
 
   static jsonSchema = {
     type: 'object',
@@ -55,15 +48,6 @@ export default class Clinic extends Model {
       },
     },
   };
-
-  async $beforeInsert() {
-    this.id = uuid();
-    this.createdAt = new Date().toISOString();
-  }
-
-  async $beforeUpdate() {
-    this.updatedAt = new Date().toISOString();
-  }
 
   static async create(clinic: IClinicEditableFields): Promise<Clinic> {
     return await this.query().insertAndFetch(clinic);

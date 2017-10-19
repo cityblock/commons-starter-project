@@ -1,6 +1,6 @@
 import { transaction, Model, RelationMappings, Transaction } from 'objection';
-import * as uuid from 'uuid/v4';
 import Answer from './answer';
+import BaseModel from './base-model';
 import CarePlanSuggestion from './care-plan-suggestion';
 import Concern from './concern';
 
@@ -11,22 +11,14 @@ export interface IConcernSuggestionEditableFields {
 }
 
 /* tslint:disable:member-ordering */
-export default class ConcernSuggestion extends Model {
-  id: string;
+export default class ConcernSuggestion extends BaseModel {
   concernId: string;
   concern: Concern;
   answerId: string;
   screeningToolScoreRangeId: string;
   answer: Answer;
-  createdAt: string;
-  updatedAt: string;
-  deletedAt?: string;
 
   static tableName = 'concern_suggestion';
-
-  static modelPaths = [__dirname];
-
-  static pickJsonSchemaProperties = true;
 
   static jsonSchema = {
     type: 'object',
@@ -65,15 +57,6 @@ export default class ConcernSuggestion extends Model {
       },
     },
   };
-
-  $beforeInsert() {
-    this.id = uuid();
-    this.createdAt = new Date().toISOString();
-  }
-
-  $beforeUpdate() {
-    this.updatedAt = new Date().toISOString();
-  }
 
   static async getForConcern(concernId: string): Promise<Answer[]> {
     const concernSuggestions = await this.query()

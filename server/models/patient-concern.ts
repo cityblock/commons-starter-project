@@ -1,6 +1,6 @@
 import { keys } from 'lodash';
 import { Model, RelationMappings, Transaction } from 'objection';
-import * as uuid from 'uuid/v4';
+import BaseModel from './base-model';
 import Concern from './concern';
 import Patient from './patient';
 import PatientGoal from './patient-goal';
@@ -17,8 +17,7 @@ export const EAGER_QUERY =
   '[patient, concern, patientGoals.[patient, tasks.[assignedTo, followers]]]';
 
 /* tslint:disable:member-ordering */
-export default class PatientConcern extends Model {
-  id: string;
+export default class PatientConcern extends BaseModel {
   order: number;
   concernId: string;
   concern: Concern;
@@ -27,9 +26,6 @@ export default class PatientConcern extends Model {
   patient: Patient;
   startedAt: string;
   completedAt: string;
-  createdAt: string;
-  updatedAt: string;
-  deletedAt?: string;
 
   static tableName = 'patient_concern';
 
@@ -76,15 +72,6 @@ export default class PatientConcern extends Model {
       },
     },
   };
-
-  $beforeInsert() {
-    this.id = uuid();
-    this.createdAt = new Date().toISOString();
-  }
-
-  $beforeUpdate() {
-    this.updatedAt = new Date().toISOString();
-  }
 
   static async get(patientConcernId: string): Promise<PatientConcern> {
     const patientConcern = await this.query()

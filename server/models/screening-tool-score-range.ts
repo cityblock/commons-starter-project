@@ -1,6 +1,6 @@
 import { isNumber, omit } from 'lodash';
 import { Model, RelationMappings } from 'objection';
-import * as uuid from 'uuid/v4';
+import BaseModel from './base-model';
 import ScreeningTool from './screening-tool';
 
 export interface IScreeningToolScoreRangeCreateFields {
@@ -22,7 +22,7 @@ export const EAGER_QUERY = '[screeningTool]';
 export const RANGE_REGEX = /\[(\d+),(\d+)\)/;
 
 /* tslint:disable:member-ordering */
-export default class ScreeningToolScoreRange extends Model {
+export default class ScreeningToolScoreRange extends BaseModel {
   id: string;
   screeningToolId: string;
   screeningTool: ScreeningTool;
@@ -84,15 +84,6 @@ export default class ScreeningToolScoreRange extends Model {
       },
     },
   };
-
-  $beforeInsert() {
-    this.id = uuid();
-    this.createdAt = new Date().toISOString();
-  }
-
-  $beforeUpdate() {
-    this.updatedAt = new Date().toISOString();
-  }
 
   static withMinimumAndMaximumScore(screeningToolScoreRange: ScreeningToolScoreRange) {
     const rangeMatch = RANGE_REGEX.exec(screeningToolScoreRange.range);

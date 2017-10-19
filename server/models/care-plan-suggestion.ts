@@ -1,5 +1,5 @@
 import { Model, RelationMappings, Transaction } from 'objection';
-import * as uuid from 'uuid/v4';
+import BaseModel from './base-model';
 import Concern from './concern';
 import GoalSuggestionTemplate from './goal-suggestion-template';
 import Patient from './patient';
@@ -32,8 +32,7 @@ export const EAGER_QUERY =
 /* tslint:enable:max-line-length */
 
 /* tslint:disable:member-ordering */
-export default class CarePlanSuggestion extends Model {
-  id: string;
+export default class CarePlanSuggestion extends BaseModel {
   patientId: string;
   patient: Patient;
   suggestionType: SuggestionType;
@@ -48,14 +47,8 @@ export default class CarePlanSuggestion extends Model {
   dismissedBy?: User;
   dismissedReason?: string;
   dismissedAt?: string;
-  createdAt: string;
-  updatedAt: string;
 
   static tableName = 'care_plan_suggestion';
-
-  static modelPaths = [__dirname];
-
-  static pickJsonSchemaProperties = true;
 
   static jsonSchema = {
     type: 'object',
@@ -115,15 +108,6 @@ export default class CarePlanSuggestion extends Model {
       },
     },
   };
-
-  $beforeInsert() {
-    this.id = uuid();
-    this.createdAt = new Date().toISOString();
-  }
-
-  $beforeUpdate() {
-    this.updatedAt = new Date().toISOString();
-  }
 
   static async get(
     carePlanSuggestionId: string,

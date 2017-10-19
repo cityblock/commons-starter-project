@@ -1,5 +1,5 @@
 import { Model, RelationMappings } from 'objection';
-import * as uuid from 'uuid/v4';
+import BaseModel from './base-model';
 import Question from './question';
 
 export interface IAnswerEditableFields {
@@ -22,8 +22,7 @@ export type RiskAdjustmentType = 'inactive' | 'increment' | 'forceHighRisk';
 const EAGER_QUERY = '[concernSuggestions, goalSuggestions]';
 
 /* tslint:disable:member-ordering */
-export default class Answer extends Model {
-  id: string;
+export default class Answer extends BaseModel {
   displayValue: string;
   value: string;
   valueType: ValueTypeOptions;
@@ -34,15 +33,7 @@ export default class Answer extends Model {
   questionId: string;
   order: number;
 
-  createdAt: string;
-  updatedAt: string;
-  deletedAt: string;
-
   static tableName = 'answer';
-
-  static modelPaths = [__dirname];
-
-  static pickJsonSchemaProperties = true;
 
   static jsonSchema = {
     type: 'object',
@@ -94,15 +85,6 @@ export default class Answer extends Model {
       },
     },
   };
-
-  $beforeInsert() {
-    this.id = uuid();
-    this.createdAt = new Date().toISOString();
-  }
-
-  $beforeUpdate() {
-    this.updatedAt = new Date().toISOString();
-  }
 
   static async get(answerId: string): Promise<Answer> {
     const answer = await this.query()

@@ -1,7 +1,7 @@
 import { last, values } from 'lodash';
 import { Model, RelationMappings } from 'objection';
 import { IRiskAreaStatistic, IRiskAreaSummary, IThreeSixtySummary } from 'schema';
-import * as uuid from 'uuid/v4';
+import BaseModel from './base-model';
 import PatientAnswer from './patient-answer';
 import Question from './question';
 
@@ -17,21 +17,13 @@ export interface IRiskScore {
 
 /* tslint:disable:member-ordering */
 // 360 Domain
-export default class RiskArea extends Model {
+export default class RiskArea extends BaseModel {
   id: string;
   title: string;
   questions: Question[];
   order: number;
 
-  createdAt: string;
-  updatedAt: string;
-  deletedAt: string;
-
   static tableName = 'risk_area';
-
-  static modelPaths = [__dirname];
-
-  static pickJsonSchemaProperties = true;
 
   static jsonSchema = {
     type: 'object',
@@ -53,15 +45,6 @@ export default class RiskArea extends Model {
       },
     },
   };
-
-  $beforeInsert() {
-    this.id = uuid();
-    this.createdAt = new Date().toISOString();
-  }
-
-  $beforeUpdate() {
-    this.updatedAt = new Date().toISOString();
-  }
 
   static async get(riskAreaId: string): Promise<RiskArea> {
     const riskArea = await this.query().findOne({ id: riskAreaId, deletedAt: null });

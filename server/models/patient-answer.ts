@@ -1,7 +1,7 @@
 import { transaction, Model, RelationMappings, Transaction } from 'objection';
-import * as uuid from 'uuid/v4';
 import { IPaginatedResults } from '../db';
 import Answer from './answer';
+import BaseModel from './base-model';
 import Question from './question';
 
 export interface IPatientAnswerCreateFields {
@@ -18,8 +18,7 @@ export interface IPatientAnswerCreateFields {
 }
 
 /* tslint:disable:member-ordering */
-export default class PatientAnswer extends Model {
-  id: string;
+export default class PatientAnswer extends BaseModel {
   answerId: string;
   answerValue: string;
   answer: Answer;
@@ -28,15 +27,7 @@ export default class PatientAnswer extends Model {
   applicable: boolean;
   question: Question;
 
-  createdAt: string;
-  updatedAt: string;
-  deletedAt: string;
-
   static tableName = 'patient_answer';
-
-  static modelPaths = [__dirname];
-
-  static pickJsonSchemaProperties = true;
 
   static jsonSchema = {
     type: 'object',
@@ -93,15 +84,6 @@ export default class PatientAnswer extends Model {
       },
     },
   };
-
-  $beforeInsert() {
-    this.id = uuid();
-    this.createdAt = new Date().toISOString();
-  }
-
-  $beforeUpdate() {
-    this.updatedAt = new Date().toISOString();
-  }
 
   static async get(patientAnswerId: string): Promise<PatientAnswer> {
     const patientAnswer = await this.query().findOne({ id: patientAnswerId, deletedAt: null });

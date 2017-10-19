@@ -1,7 +1,7 @@
 import { uniq } from 'lodash';
 import { Model, RelationMappings, Transaction } from 'objection';
-import * as uuid from 'uuid/v4';
 import { IPaginatedResults, IPaginationOptions } from '../db';
+import BaseModel from './base-model';
 import Task from './task';
 import TaskEvent from './task-event';
 import User from './user';
@@ -28,8 +28,7 @@ const EAGER_QUERY =
 /* tslint:enable:max-line-length */
 
 /* tslint:disable:member-ordering */
-export default class EventNotification extends Model {
-  id: string;
+export default class EventNotification extends BaseModel {
   userId: string;
   user: User;
   taskEventId: string;
@@ -38,15 +37,8 @@ export default class EventNotification extends Model {
   seenAt: string;
   emailSentAt: string;
   deliveredAt: string;
-  createdAt: string;
-  updatedAt: string;
-  deletedAt: string;
 
   static tableName = 'event_notification';
-
-  static modelPaths = [__dirname];
-
-  static pickJsonSchemaProperties = true;
 
   static jsonSchema = {
     type: 'object',
@@ -94,15 +86,6 @@ export default class EventNotification extends Model {
       },
     },
   };
-
-  $beforeInsert() {
-    this.id = uuid();
-    this.createdAt = new Date().toISOString();
-  }
-
-  $beforeUpdate() {
-    this.updatedAt = new Date().toISOString();
-  }
 
   static async get(eventNotificationId: string): Promise<EventNotification> {
     const eventNotification = await this.query()

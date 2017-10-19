@@ -1,5 +1,5 @@
 import { Model, RelationMappings, Transaction } from 'objection';
-import * as uuid from 'uuid/v4';
+import BaseModel from './base-model';
 import TaskTemplate from './task-template';
 
 export interface IGoalSuggestionTemplateEditableFields {
@@ -7,19 +7,11 @@ export interface IGoalSuggestionTemplateEditableFields {
 }
 
 /* tslint:disable:member-ordering */
-export default class GoalSuggestionTemplate extends Model {
-  id: string;
+export default class GoalSuggestionTemplate extends BaseModel {
   title: string;
-  createdAt: string;
-  updatedAt: string;
-  deletedAt?: string;
   taskTemplates: TaskTemplate[];
 
   static tableName = 'goal_suggestion_template';
-
-  static modelPaths = [__dirname];
-
-  static pickJsonSchemaProperties = true;
 
   static jsonSchema = {
     type: 'object',
@@ -40,15 +32,6 @@ export default class GoalSuggestionTemplate extends Model {
       },
     },
   };
-
-  $beforeInsert() {
-    this.id = uuid();
-    this.createdAt = new Date().toISOString();
-  }
-
-  $beforeUpdate() {
-    this.updatedAt = new Date().toISOString();
-  }
 
   static async get(
     goalSuggestionTemplateId: string,

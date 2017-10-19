@@ -1,5 +1,5 @@
 import { Model, RelationMappings } from 'objection';
-import * as uuid from 'uuid/v4';
+import BaseModel from './base-model';
 
 export interface ICreateGoogleAuth {
   accessToken: string;
@@ -8,18 +8,11 @@ export interface ICreateGoogleAuth {
 }
 
 /* tslint:disable:member-ordering */
-export default class GoogleAuth extends Model {
-  id: string;
-  createdAt: string;
-  updatedAt: string;
+export default class GoogleAuth extends BaseModel {
   accessToken: string;
   expiresAt: string;
 
   static tableName = 'google_auth';
-
-  static modelPaths = [__dirname];
-
-  static pickJsonSchemaProperties = true;
 
   static jsonSchema = {
     type: 'object',
@@ -42,15 +35,6 @@ export default class GoogleAuth extends Model {
       },
     },
   };
-
-  async $beforeInsert() {
-    this.id = uuid();
-    this.createdAt = new Date().toISOString();
-  }
-
-  async $beforeUpdate() {
-    this.updatedAt = new Date().toISOString();
-  }
 
   static async updateOrCreate(options: ICreateGoogleAuth): Promise<GoogleAuth> {
     const existingGoogleAuth = await this.query()

@@ -1,5 +1,5 @@
 import { Model, RelationMappings } from 'objection';
-import * as uuid from 'uuid/v4';
+import BaseModel from './base-model';
 import { Priority } from './task';
 import { UserRole } from './user';
 
@@ -16,8 +16,7 @@ export interface ITaskTemplateEditableFields {
 }
 
 /* tslint:disable:member-ordering */
-export default class TaskTemplate extends Model {
-  id: string;
+export default class TaskTemplate extends BaseModel {
   title: string;
   completedWithinNumber: number;
   completedWithinInterval: CompletedWithinInterval;
@@ -25,15 +24,8 @@ export default class TaskTemplate extends Model {
   goalSuggestionTemplateId: string;
   priority: Priority;
   careTeamAssigneeRole: UserRole;
-  createdAt: string;
-  updatedAt: string;
-  deletedAt?: string;
 
   static tableName = 'task_template';
-
-  static modelPaths = [__dirname];
-
-  static pickJsonSchemaProperties = true;
 
   static jsonSchema = {
     type: 'object',
@@ -60,15 +52,6 @@ export default class TaskTemplate extends Model {
       },
     },
   };
-
-  $beforeInsert() {
-    this.id = uuid();
-    this.createdAt = new Date().toISOString();
-  }
-
-  $beforeUpdate() {
-    this.updatedAt = new Date().toISOString();
-  }
 
   static async get(taskTemplateId: string): Promise<TaskTemplate> {
     const taskTemplate = await this.query().findOne({ id: taskTemplateId, deletedAt: null });

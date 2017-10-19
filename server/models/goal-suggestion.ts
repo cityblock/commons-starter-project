@@ -1,6 +1,6 @@
 import { transaction, Model, RelationMappings, Transaction } from 'objection';
-import * as uuid from 'uuid/v4';
 import Answer from './answer';
+import BaseModel from './base-model';
 import CarePlanSuggestion from './care-plan-suggestion';
 import GoalSuggestionTemplate from './goal-suggestion-template';
 import ScreeningToolScoreRange from './screening-tool-score-range';
@@ -12,23 +12,15 @@ export interface IGoalSuggestionEditableFields {
 }
 
 /* tslint:disable:member-ordering */
-export default class GoalSuggestion extends Model {
-  id: string;
+export default class GoalSuggestion extends BaseModel {
   goalSuggestionTemplateId: string;
   goalSuggestionTemplate: GoalSuggestionTemplate;
   answerId: string;
   answer: Answer;
   screeningToolScoreRangeId: string;
   screeningToolScoreRange: ScreeningToolScoreRange;
-  createdAt: string;
-  updatedAt: string;
-  deletedAt?: string;
 
   static tableName = 'goal_suggestion';
-
-  static modelPaths = [__dirname];
-
-  static pickJsonSchemaProperties = true;
 
   static jsonSchema = {
     type: 'object',
@@ -67,15 +59,6 @@ export default class GoalSuggestion extends Model {
       },
     },
   };
-
-  $beforeInsert() {
-    this.id = uuid();
-    this.createdAt = new Date().toISOString();
-  }
-
-  $beforeUpdate() {
-    this.updatedAt = new Date().toISOString();
-  }
 
   static async getForGoalSuggestion(goalSuggestionTemplateId: string): Promise<Answer[]> {
     const goalSuggestionAnswers = await GoalSuggestion.query()

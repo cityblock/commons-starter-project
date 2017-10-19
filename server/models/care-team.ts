@@ -1,6 +1,6 @@
 import { transaction, Model, RelationMappings } from 'objection';
-import * as uuid from 'uuid/v4';
 import { IPaginatedResults, IPaginationOptions } from '../db';
+import BaseModel from './base-model';
 import Patient from './patient';
 import User from './user';
 
@@ -10,21 +10,13 @@ export interface ICareTeamOptions {
 }
 
 /* tslint:disable:member-ordering */
-export default class CareTeam extends Model {
-  id: string;
-  createdAt: string;
-  updatedAt: string;
-  deletedAt: string;
+export default class CareTeam extends BaseModel {
   patient: Patient;
   patientId: string;
   user: User;
   userId: string;
 
   static tableName = 'care_team';
-
-  static modelPaths = [__dirname];
-
-  static pickJsonSchemaProperties = true;
 
   static jsonSchema = {
     type: 'object',
@@ -54,15 +46,6 @@ export default class CareTeam extends Model {
       },
     },
   };
-
-  $beforeInsert() {
-    this.id = uuid();
-    this.createdAt = new Date().toISOString();
-  }
-
-  $beforeUpdate() {
-    this.updatedAt = new Date().toISOString();
-  }
 
   static async getForPatient(patientId: string): Promise<User[]> {
     const careTeam = await CareTeam.query()

@@ -1,6 +1,6 @@
 import { Model, RelationMappings, Transaction } from 'objection';
-import * as uuid from 'uuid/v4';
 import { IPaginatedResults, IPaginationOptions } from '../db';
+import BaseModel from './base-model';
 import EventNotification from './event-notification';
 import Task from './task';
 import TaskComment from './task-comment';
@@ -34,8 +34,7 @@ export type EventTypes =
 const EAGER_QUERY = '[task, user, eventComment, eventUser]';
 
 /* tslint:disable:member-ordering */
-export default class TaskEvent extends Model {
-  id: string;
+export default class TaskEvent extends BaseModel {
   taskId: string;
   task: Task;
   userId: string;
@@ -45,15 +44,8 @@ export default class TaskEvent extends Model {
   eventComment: TaskComment;
   eventUserId: string;
   eventUser: User;
-  createdAt: string;
-  updatedAt: string;
-  deletedAt: string;
 
   static tableName = 'task_event';
-
-  static modelPaths = [__dirname];
-
-  static pickJsonSchemaProperties = true;
 
   static jsonSchema = {
     type: 'object',
@@ -105,15 +97,6 @@ export default class TaskEvent extends Model {
       },
     },
   };
-
-  $beforeInsert() {
-    this.id = uuid();
-    this.createdAt = new Date().toISOString();
-  }
-
-  $beforeUpdate() {
-    this.updatedAt = new Date().toISOString();
-  }
 
   static async get(taskEventId: string): Promise<TaskEvent> {
     const taskEvent = await this.query()

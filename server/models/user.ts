@@ -115,7 +115,6 @@ export default class User extends Model {
       modelClass: 'patient',
       join: {
         from: 'user.id',
-        // ManyToMany relation needs the `through` object to describe the join table.
         through: {
           modelClass: 'care-team',
           from: 'care_team.userId',

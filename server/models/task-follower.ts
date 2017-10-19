@@ -1,5 +1,5 @@
 import { Model, RelationMappings, Transaction } from 'objection';
-import * as uuid from 'uuid/v4';
+import BaseModel from './base-model';
 import Task from './task';
 import User from './user';
 
@@ -9,21 +9,13 @@ export interface ITaskFollowerOptions {
 }
 
 /* tslint:disable:member-ordering */
-export default class TaskFollower extends Model {
-  id: string;
-  createdAt: string;
-  updatedAt: string;
-  deletedAt: string;
+export default class TaskFollower extends BaseModel {
   task: Task;
   taskId: string;
   user: User;
   userId: string;
 
   static tableName = 'task_follower';
-
-  static modelPaths = [__dirname];
-
-  static pickJsonSchemaProperties = true;
 
   static jsonSchema = {
     type: 'object',
@@ -54,15 +46,6 @@ export default class TaskFollower extends Model {
       },
     },
   };
-
-  $beforeInsert() {
-    this.id = uuid();
-    this.createdAt = new Date().toISOString();
-  }
-
-  $beforeUpdate() {
-    this.updatedAt = new Date().toISOString();
-  }
 
   static async followTask(
     { userId, taskId }: ITaskFollowerOptions,

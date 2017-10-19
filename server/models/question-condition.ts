@@ -1,6 +1,6 @@
 import { Model, RelationMappings } from 'objection';
-import * as uuid from 'uuid/v4';
 import Answer from './answer';
+import BaseModel from './base-model';
 
 export interface IQuestionConditionEditableFields {
   answerId: string;
@@ -8,20 +8,11 @@ export interface IQuestionConditionEditableFields {
 }
 
 /* tslint:disable:member-ordering */
-export default class QuestionCondition extends Model {
-  id: string;
+export default class QuestionCondition extends BaseModel {
   answerId: string;
   questionId: string;
 
-  createdAt: string;
-  updatedAt: string;
-  deletedAt: string;
-
   static tableName = 'question_condition';
-
-  static modelPaths = [__dirname];
-
-  static pickJsonSchemaProperties = true;
 
   static jsonSchema = {
     type: 'object',
@@ -52,15 +43,6 @@ export default class QuestionCondition extends Model {
       },
     },
   };
-
-  $beforeInsert() {
-    this.id = uuid();
-    this.createdAt = new Date().toISOString();
-  }
-
-  $beforeUpdate() {
-    this.updatedAt = new Date().toISOString();
-  }
 
   static async get(questionConditionId: string): Promise<QuestionCondition> {
     const questionCondition = await this.query().findOne({

@@ -1,6 +1,6 @@
 import { Model, RelationMappings, Transaction } from 'objection';
-import * as uuid from 'uuid/v4';
 import { IPaginatedResults, IPaginationOptions } from '../db';
+import BaseModel from './base-model';
 import Task from './task';
 import User from './user';
 
@@ -14,12 +14,8 @@ export interface ITaskCommentOptions {
 const EAGER_QUERY = '[user]';
 
 /* tslint:disable:member-ordering */
-export default class TaskComment extends Model {
-  id: string;
+export default class TaskComment extends BaseModel {
   body: string;
-  createdAt: string;
-  updatedAt: string;
-  deletedAt: string;
   task: Task;
   taskId: string;
   user: User;
@@ -61,15 +57,6 @@ export default class TaskComment extends Model {
       },
     },
   };
-
-  $beforeInsert() {
-    this.id = uuid();
-    this.createdAt = new Date().toISOString();
-  }
-
-  $beforeUpdate() {
-    this.updatedAt = new Date().toISOString();
-  }
 
   static async get(taskCommentId: string): Promise<TaskComment> {
     const taskComment = await this.query()

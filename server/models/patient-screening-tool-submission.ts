@@ -1,5 +1,5 @@
 import { Model, RelationMappings } from 'objection';
-import * as uuid from 'uuid/v4';
+import BaseModel from './base-model';
 import Patient from './patient';
 import RiskArea from './risk-area';
 import ScreeningTool from './screening-tool';
@@ -22,8 +22,7 @@ export interface IPatientScreeningToolSubmissionEditableFields {
 export const EAGER_QUERY = '[screeningTool, patient, user, riskArea]';
 
 /* tslint:disable:member-ordering */
-export default class PatientScreeningToolSubmission extends Model {
-  id: string;
+export default class PatientScreeningToolSubmission extends BaseModel {
   screeningToolId: string;
   screeningTool: ScreeningTool;
   patientId: string;
@@ -33,15 +32,7 @@ export default class PatientScreeningToolSubmission extends Model {
   score: number;
   riskArea: RiskArea;
 
-  createdAt: string;
-  updatedAt: string;
-  deletedAt: string;
-
   static tableName = 'patient_screening_tool_submission';
-
-  static modelPaths = [__dirname];
-
-  static pickJsonSchemaProperties = true;
 
   static jsonSchema = {
     type: 'object',
@@ -97,15 +88,6 @@ export default class PatientScreeningToolSubmission extends Model {
       },
     },
   };
-
-  $beforeInsert() {
-    this.id = uuid();
-    this.createdAt = new Date().toISOString();
-  }
-
-  $beforeUpdate() {
-    this.updatedAt = new Date().toISOString();
-  }
 
   static async create(
     input: IPatientScreeningToolSubmissionCreateFields,

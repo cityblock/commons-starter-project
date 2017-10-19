@@ -1,7 +1,7 @@
 import { omit } from 'lodash';
 import { transaction, Model, RelationMappings, Transaction } from 'objection';
-import * as uuid from 'uuid/v4';
 import { dateAdd } from '../lib/date';
+import BaseModel from './base-model';
 import CareTeam from './care-team';
 import GoalSuggestionTemplate from './goal-suggestion-template';
 import Patient from './patient';
@@ -20,8 +20,7 @@ export interface IPatientGoalEditableFields {
 export const EAGER_QUERY = '[patient, tasks, goalSuggestionTemplate]';
 
 /* tslint:disable:member-ordering */
-export default class PatientGoal extends Model {
-  id: string;
+export default class PatientGoal extends BaseModel {
   title: string;
   patient: Patient;
   patientId: string;
@@ -29,15 +28,8 @@ export default class PatientGoal extends Model {
   goalSuggestionTemplate: GoalSuggestionTemplate;
   patientConcernId?: string;
   tasks: Task[];
-  createdAt: string;
-  updatedAt: string;
-  deletedAt?: string;
 
   static tableName = 'patient_goal';
-
-  static modelPaths = [__dirname];
-
-  static pickJsonSchemaProperties = true;
 
   static jsonSchema = {
     type: 'object',
@@ -85,15 +77,6 @@ export default class PatientGoal extends Model {
       },
     },
   };
-
-  $beforeInsert() {
-    this.id = uuid();
-    this.createdAt = new Date().toISOString();
-  }
-
-  $beforeUpdate() {
-    this.updatedAt = new Date().toISOString();
-  }
 
   static async get(patientGoalId: string): Promise<PatientGoal> {
     const patientGoal = await this.query()

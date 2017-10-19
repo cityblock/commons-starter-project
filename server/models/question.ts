@@ -1,6 +1,6 @@
 import { Model, RelationMappings } from 'objection';
-import * as uuid from 'uuid/v4';
 import Answer from './answer';
+import BaseModel from './base-model';
 import QuestionCondition from './question-condition';
 import RiskArea from './risk-area';
 import ScreeningTool from './screening-tool';
@@ -24,8 +24,7 @@ const EAGER_QUERY =
 /* tslint:enable:max-line-length */
 
 /* tslint:disable:member-ordering */
-export default class Question extends Model {
-  id: string;
+export default class Question extends BaseModel {
   title: string;
   answers: Answer[];
   answerType: AnswerType;
@@ -38,15 +37,7 @@ export default class Question extends Model {
   validatedSource: string;
   order: number;
 
-  createdAt: string;
-  updatedAt: string;
-  deletedAt: string;
-
   static tableName = 'question';
-
-  static modelPaths = [__dirname];
-
-  static pickJsonSchemaProperties = true;
 
   static jsonSchema = {
     type: 'object',
@@ -100,15 +91,6 @@ export default class Question extends Model {
       },
     },
   };
-
-  $beforeInsert() {
-    this.id = uuid();
-    this.createdAt = new Date().toISOString();
-  }
-
-  $beforeUpdate() {
-    this.updatedAt = new Date().toISOString();
-  }
 
   static async get(questionId: string): Promise<Question> {
     const question = await this.query()

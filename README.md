@@ -94,6 +94,7 @@ Getting up to speed:
     createdb commons
     createdb commons_test
     psql -d commons -c "create extension if not exists btree_gist"
+    psql -d commons_test -c "create extension if not exists btree_gist"
     ```
 
 ### Development

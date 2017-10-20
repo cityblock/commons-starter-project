@@ -26,7 +26,7 @@ export async function careTeamAddUser(
 ): Promise<User[]> {
   const { userRole } = context;
   const { userId, patientId } = input;
-  await accessControls.isAllowed(userRole, 'edit', 'patient');
+  await accessControls.isAllowed(userRole, 'edit', 'careTeam');
 
   return await CareTeam.create({ userId, patientId });
 }
@@ -38,7 +38,7 @@ export async function careTeamRemoveUser(
 ) {
   const { userRole } = context;
   const { userId, patientId } = input;
-  await accessControls.isAllowed(userRole, 'edit', 'patient');
+  await accessControls.isAllowed(userRole, 'edit', 'careTeam');
 
   return await CareTeam.delete({ userId, patientId });
 }

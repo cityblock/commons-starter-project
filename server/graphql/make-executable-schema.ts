@@ -93,6 +93,11 @@ import {
   resolvePatientScreeningToolSubmissionsForPatient,
 } from './patient-screening-tool-submission-resolver';
 import {
+  patientTaskSuggestionAccept,
+  patientTaskSuggestionDismiss,
+  resolvePatientTaskSuggestions,
+} from './patient-task-suggestion-resolver';
+import {
   questionConditionCreate,
   questionConditionDelete,
   questionConditionEdit,
@@ -152,6 +157,11 @@ import {
   taskEdit,
   taskUncomplete,
 } from './task-resolver';
+import {
+  resolveTaskSuggestionTemplatesForAnswer,
+  taskSuggestionCreate,
+  taskSuggestionDelete,
+} from './task-suggestion-resolver';
 import {
   resolveTaskTemplate,
   resolveTaskTemplates,
@@ -218,6 +228,8 @@ const resolveFunctions = {
     goalSuggestionTemplatesForAnswer: resolveGoalSuggestionTemplatesForAnswer,
     taskTemplate: resolveTaskTemplate,
     taskTemplates: resolveTaskTemplates,
+    taskTemplatesForAnswer: resolveTaskSuggestionTemplatesForAnswer,
+    patientTaskSuggestions: resolvePatientTaskSuggestions,
     carePlanSuggestionsForPatient: resolveCarePlanSuggestionsForPatient,
     carePlanForPatient: resolveCarePlanForPatient,
     screeningTool: resolveScreeningTool,
@@ -284,6 +296,10 @@ const resolveFunctions = {
     taskTemplateCreate,
     taskTemplateEdit,
     taskTemplateDelete,
+    taskSuggestionCreate,
+    taskSuggestionDelete,
+    patientTaskSuggestionAccept,
+    patientTaskSuggestionDismiss,
     patientConcernCreate,
     patientConcernDelete,
     patientConcernEdit,

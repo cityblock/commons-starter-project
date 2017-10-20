@@ -62,6 +62,8 @@ declare module 'schema' {
     goalSuggestionTemplates: Array<IGoalSuggestionTemplate> | null;
     goalSuggestionTemplatesForAnswer: Array<IGoalSuggestionTemplate> | null;
     taskTemplates: Array<ITaskTemplate> | null;
+    taskTemplatesForAnswer: Array<ITaskTemplate> | null;
+    patientTaskSuggestions: Array<IPatientTaskSuggestion> | null;
     carePlanSuggestionsForPatient: Array<ICarePlanSuggestion> | null;
     carePlanForPatient: ICarePlan | null;
     screeningTool: IScreeningTool | null;
@@ -95,7 +97,7 @@ declare module 'schema' {
   /*
     description: An object with a Globally Unique ID
   */
-  type uniqueId = IUser | IPatient | IClinic | ITask | IPatientGoal | IGoalSuggestionTemplate | ITaskTemplate | ITaskComment | IRiskArea | IQuestion | IAnswer | IConcern | IQuestionCondition | IPatientAnswer | IPatientScreeningToolSubmission | IScreeningTool | IScreeningToolScoreRange | IEventNotification | ITaskEvent | IPatientConcern | ICarePlanSuggestion;
+  type uniqueId = IUser | IPatient | IClinic | ITask | IPatientGoal | IGoalSuggestionTemplate | ITaskTemplate | ITaskComment | IRiskArea | IQuestion | IAnswer | IConcern | IQuestionCondition | IPatientAnswer | IPatientScreeningToolSubmission | IScreeningTool | IScreeningToolScoreRange | IEventNotification | ITaskEvent | IPatientConcern | IPatientTaskSuggestion | ICarePlanSuggestion;
 
   /*
     description: An object with a Globally Unique ID
@@ -641,6 +643,26 @@ declare module 'schema' {
   /*
     description: 
   */
+  interface IPatientTaskSuggestion {
+    id: string;
+    patientId: string;
+    patient: IPatient;
+    taskTemplateId: string | null;
+    taskTemplate: ITaskTemplate | null;
+    acceptedById: string | null;
+    acceptedBy: IUser | null;
+    dismissedById: string | null;
+    dismissedBy: IUser | null;
+    dismissedReason: string | null;
+    createdAt: string;
+    updatedAt: string;
+    dismissedAt: string | null;
+    acceptedAt: string | null;
+  }
+
+  /*
+    description: 
+  */
   interface ICarePlanSuggestion {
     id: string;
     patientId: string;
@@ -734,6 +756,10 @@ declare module 'schema' {
     taskTemplateCreate: ITaskTemplate | null;
     taskTemplateEdit: ITaskTemplate | null;
     taskTemplateDelete: ITaskTemplate | null;
+    taskSuggestionCreate: Array<ITaskTemplate> | null;
+    taskSuggestionDelete: Array<ITaskTemplate> | null;
+    patientTaskSuggestionAccept: IPatientTaskSuggestion | null;
+    patientTaskSuggestionDismiss: IPatientTaskSuggestion | null;
     patientGoalCreate: IPatientGoal | null;
     patientGoalEdit: IPatientGoal | null;
     patientGoalDelete: IPatientGoal | null;
@@ -1270,6 +1296,29 @@ declare module 'schema' {
   */
   interface ITaskTemplateDeleteInput {
     taskTemplateId: string;
+  }
+
+  /*
+    description: 
+  */
+  interface ITaskSuggestInput {
+    answerId: string;
+    taskTemplateId: string;
+  }
+
+  /*
+    description: 
+  */
+  interface IPatientTaskSuggestionAcceptInput {
+    patientTaskSuggestionId: string;
+  }
+
+  /*
+    description: 
+  */
+  interface IPatientTaskSuggestionDismissInput {
+    patientTaskSuggestionId: string;
+    dismissedReason: string;
   }
 
   /*

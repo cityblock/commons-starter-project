@@ -24,6 +24,11 @@ export type Resource =
   | 'goalSuggestionTemplate'
   | 'patientGoal'
   | 'screeningTool'
+  | 'carePlanSuggestion'
+  | 'careTeam'
+  | 'goalSuggestion'
+  | 'patientTaskSuggestion'
+  | 'taskSuggestion'
   | 'patientScreeningToolSubmission';
 
 /*

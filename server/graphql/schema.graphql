@@ -514,6 +514,23 @@ type TaskTemplate implements uniqueId {
   deletedAt: String
 }
 
+type PatientTaskSuggestion implements uniqueId {
+  id: ID!
+  patientId: String!
+  patient: Patient!
+  taskTemplateId: String
+  taskTemplate: TaskTemplate
+  acceptedById: String
+  acceptedBy: User
+  dismissedById: String
+  dismissedBy: User
+  dismissedReason: String
+  createdAt: String!
+  updatedAt: String!
+  dismissedAt: String
+  acceptedAt: String
+}
+
 type CarePlanSuggestion implements uniqueId {
   id: ID!
   patientId: String!
@@ -973,6 +990,20 @@ input TaskTemplateDeleteInput {
   taskTemplateId: String!
 }
 
+input TaskSuggestInput {
+  answerId: String!
+  taskTemplateId: String!
+}
+
+input PatientTaskSuggestionAcceptInput {
+  patientTaskSuggestionId: String!
+}
+
+input PatientTaskSuggestionDismissInput {
+  patientTaskSuggestionId: String!
+  dismissedReason: String!
+}
+
 input CarePlanSuggestionAcceptInput {
   carePlanSuggestionId: String!
   patientConcernId: String
@@ -1150,6 +1181,14 @@ type RootMutationType {
   taskTemplateEdit(input: TaskTemplateEditInput): TaskTemplate
   # Deletes a task template
   taskTemplateDelete(input: TaskTemplateDeleteInput): TaskTemplate
+  # Suggest a task template for an answer
+  taskSuggestionCreate(input: TaskSuggestInput): [TaskTemplate]
+  # unsuggest a task template for an answer
+  taskSuggestionDelete(input: TaskSuggestInput): [TaskTemplate]
+  # patient task suggestion accept
+  patientTaskSuggestionAccept(input: PatientTaskSuggestionAcceptInput): PatientTaskSuggestion
+  # patient task suggestion dismiss
+  patientTaskSuggestionDismiss(input: PatientTaskSuggestionDismissInput): PatientTaskSuggestion
   # patient goal create
   patientGoalCreate(input: PatientGoalCreateInput): PatientGoal
   # patient goal edit
@@ -1287,12 +1326,16 @@ type RootQueryType {
   goalSuggestionTemplate(goalSuggestionTemplateId: String!): GoalSuggestionTemplate
   # Goal suggestion templates
   goalSuggestionTemplates: [GoalSuggestionTemplate]
-  # goal suggestion for template
+  # Goal suggestion for template for answer
   goalSuggestionTemplatesForAnswer(answerId: String!): [GoalSuggestionTemplate]
   # Task template
   taskTemplate(taskTemplateId: String!): TaskTemplate
   # Task templates
   taskTemplates: [TaskTemplate]
+  # Task templates suggested for answer
+  taskTemplatesForAnswer(answerId: String!): [TaskTemplate]
+  # patient task suggestions
+  patientTaskSuggestions(patientId: String!): [PatientTaskSuggestion]
   # Care Plan Suggestions
   carePlanSuggestionsForPatient(patientId: String!): [CarePlanSuggestion]
   # Care Plan

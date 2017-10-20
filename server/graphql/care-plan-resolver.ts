@@ -7,7 +7,7 @@ import GoalSuggestionTemplate from '../models/goal-suggestion-template';
 import PatientConcern from '../models/patient-concern';
 import PatientGoal from '../models/patient-goal';
 import accessControls from './shared/access-controls';
-import { IContext } from './shared/utils';
+import { checkUserLoggedIn, IContext } from './shared/utils';
 
 export interface IResolveCarePlanSuggestionsOptions {
   patientId: string;
@@ -36,7 +36,7 @@ export async function resolveCarePlanSuggestionsForPatient(
   args: IResolveCarePlanSuggestionsOptions,
   { db, userRole }: IContext,
 ): Promise<CarePlanSuggestion[]> {
-  await accessControls.isAllowed(userRole, 'view', 'patient');
+  await accessControls.isAllowed(userRole, 'view', 'carePlanSuggestion');
 
   return await CarePlanSuggestion.getForPatient(args.patientId);
 }
@@ -46,7 +46,7 @@ export async function resolveCarePlanForPatient(
   args: IResolveCarePlanOptions,
   { db, userRole }: IContext,
 ): Promise<ICarePlan> {
-  await accessControls.isAllowed(userRole, 'view', 'patient');
+  await accessControls.isAllowed(userRole, 'view', 'carePlanSuggestion');
 
   const concerns = await PatientConcern.getForPatient(args.patientId);
   const goals = await PatientGoal.getForPatient(args.patientId);
@@ -62,14 +62,12 @@ export async function carePlanSuggestionDismiss(
   { input }: ICarePlanSuggestionDismissArgs,
   { db, userRole, userId }: IContext,
 ): Promise<CarePlanSuggestion | undefined> {
-  await accessControls.isAllowed(userRole, 'edit', 'patient');
-  if (!userId) {
-    throw new Error('not logged in');
-  }
+  await accessControls.isAllowed(userRole, 'edit', 'carePlanSuggestion');
+  checkUserLoggedIn(userId);
 
   return await CarePlanSuggestion.dismiss({
     carePlanSuggestionId: input.carePlanSuggestionId,
-    dismissedById: userId,
+    dismissedById: userId!,
     dismissedReason: input.dismissedReason,
   });
 }
@@ -80,9 +78,7 @@ export async function carePlanSuggestionAccept(
   { db, userRole, userId }: IContext,
 ): Promise<CarePlanSuggestion | undefined> {
   await accessControls.isAllowed(userRole, 'edit', 'patient');
-  if (!userId) {
-    throw new Error('not logged in');
-  }
+  checkUserLoggedIn(userId);
 
   return await transaction(CarePlanSuggestion.knex(), async txn => {
     const carePlanSuggestion = await CarePlanSuggestion.get(input.carePlanSuggestionId, txn);
@@ -143,10 +139,10 @@ export async function carePlanSuggestionAccept(
         await PatientGoal.create(patientGoalCreateInput, txn);
       }
 
-      await CarePlanSuggestion.accept(carePlanSuggestion.id, userId, txn);
+      await CarePlanSuggestion.accept(carePlanSuggestion.id, userId!, txn);
 
       if (secondaryCarePlanSuggestion) {
-        await CarePlanSuggestion.accept(secondaryCarePlanSuggestion.id, userId, txn);
+        await CarePlanSuggestion.accept(secondaryCarePlanSuggestion.id, userId!, txn);
       }
     }
 

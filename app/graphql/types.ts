@@ -1097,7 +1097,7 @@ export type getGoalSuggestionsForAnswerQueryVariables = {
 };
 
 export type getGoalSuggestionsForAnswerQuery = {
-  // goal suggestion for template
+  // Goal suggestion for template for answer
   goalSuggestionTemplatesForAnswer:  Array< {
     id: string,
     title: string,

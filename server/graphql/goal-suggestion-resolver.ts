@@ -13,7 +13,7 @@ export async function resolveGoalSuggestionTemplatesForAnswer(
   args: { answerId: string },
   { db, userRole }: IContext,
 ): Promise<GoalSuggestionTemplate[]> {
-  await accessControls.isAllowed(userRole, 'view', 'goalSuggestionTemplate');
+  await accessControls.isAllowed(userRole, 'view', 'goalSuggestion');
 
   return await GoalSuggestion.getForAnswer(args.answerId);
 }
@@ -23,7 +23,7 @@ export async function goalSuggestionCreate(
   args: IGoalSuggestOptions,
   { db, userRole }: IContext,
 ): Promise<GoalSuggestionTemplate[]> {
-  await accessControls.isAllowed(userRole, 'view', 'goalSuggestionTemplate');
+  await accessControls.isAllowed(userRole, 'view', 'goalSuggestion');
 
   return await GoalSuggestion.create({
     answerId: args.input.answerId,
@@ -37,7 +37,7 @@ export async function goalSuggestionDelete(
   args: IGoalSuggestOptions,
   { db, userRole }: IContext,
 ): Promise<GoalSuggestionTemplate[]> {
-  await accessControls.isAllowed(userRole, 'view', 'goalSuggestionTemplate');
+  await accessControls.isAllowed(userRole, 'view', 'goalSuggestion');
 
   return await GoalSuggestion.delete({
     answerId: args.input.answerId,

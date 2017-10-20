@@ -7,7 +7,15 @@ export default [
     roles: ['healthCoach'],
     allows: [
       {
-        resources: ['patient', 'user', 'clinic', 'task', 'patientAnswer', 'appointment'],
+        resources: [
+          'patient',
+          'user',
+          'clinic',
+          'task',
+          'patientAnswer',
+          'appointment',
+          'careTeam',
+        ],
         permissions: ['edit', 'view', 'delete'],
       },
     ],
@@ -16,12 +24,20 @@ export default [
     roles: ['physician', 'nurseCareManager'],
     allows: [
       {
-        resources: ['patient', 'clinic', 'task', 'patientAnswer', 'appointment'],
-        permissions: ['edit', 'view', 'delete', 'create'],
-      },
-      {
         resources: ['user'],
         permissions: ['view', 'create', 'edit'],
+      },
+      {
+        resources: [
+          'patient',
+          'clinic',
+          'task',
+          'patientAnswer',
+          'appointment',
+          'patientTaskSuggestion',
+          'careTeam',
+        ],
+        permissions: ['edit', 'view', 'delete', 'create'],
       },
     ],
   },
@@ -41,6 +57,16 @@ export default [
         ],
         permissions: ['view'],
       },
+      {
+        resources: [
+          'carePlanSuggestion',
+          'careTeam',
+          'goalSuggestion',
+          'patientTaskSuggestion',
+          'taskSuggestion',
+        ],
+        permissions: ['view', 'create', 'edit', 'delete'],
+      },
     ],
   },
   {
@@ -50,6 +76,7 @@ export default [
         resources: [
           'patient',
           'user',
+          'careTeam',
           'allUsers',
           'clinic',
           'task',
@@ -61,9 +88,13 @@ export default [
           'question',
           'concern',
           'patientConcern',
-          'taskTemplate',
+          'carePlanSuggestion',
+          'goalSuggestion',
           'goalSuggestionTemplate',
           'patientGoal',
+          'taskTemplate',
+          'taskSuggestion',
+          'patientTaskSuggestion',
           'screeningTool',
           'patientScreeningToolSubmission',
         ],

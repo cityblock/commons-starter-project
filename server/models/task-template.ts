@@ -1,4 +1,4 @@
-import { Model, RelationMappings } from 'objection';
+import { Model, RelationMappings, Transaction } from 'objection';
 import BaseModel from './base-model';
 import { Priority } from './task';
 import { UserRole } from './user';
@@ -53,8 +53,8 @@ export default class TaskTemplate extends BaseModel {
     },
   };
 
-  static async get(taskTemplateId: string): Promise<TaskTemplate> {
-    const taskTemplate = await this.query().findOne({ id: taskTemplateId, deletedAt: null });
+  static async get(taskTemplateId: string, txn?: Transaction): Promise<TaskTemplate> {
+    const taskTemplate = await this.query(txn).findOne({ id: taskTemplateId, deletedAt: null });
 
     if (!taskTemplate) {
       return Promise.reject(`No such taskTemplate: ${taskTemplateId}`);

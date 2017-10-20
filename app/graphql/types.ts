@@ -382,6 +382,7 @@ export type carePlanSuggestionAcceptMutation = {
     updatedAt: string,
     dismissedAt: string | null,
     acceptedAt: string | null,
+    patientScreeningToolSubmissionId: string | null,
   } | null,
 };
 
@@ -459,6 +460,7 @@ export type carePlanSuggestionDismissMutation = {
     updatedAt: string,
     dismissedAt: string | null,
     acceptedAt: string | null,
+    patientScreeningToolSubmissionId: string | null,
   } | null,
 };
 
@@ -1213,6 +1215,7 @@ export type getPatientCarePlanSuggestionsQuery = {
     updatedAt: string,
     dismissedAt: string | null,
     acceptedAt: string | null,
+    patientScreeningToolSubmissionId: string | null,
   } | null > | null,
 };
 
@@ -2279,6 +2282,7 @@ export type patientAnswersCreateMutationVariables = {
   patientId: string,
   patientAnswers: Array< PatientAnswerInput | null >,
   questionIds: Array< string | null >,
+  screeningToolId?: string | null,
 };
 
 export type patientAnswersCreateMutation = {
@@ -3948,6 +3952,7 @@ export type FullCarePlanSuggestionFragment = {
   updatedAt: string,
   dismissedAt: string | null,
   acceptedAt: string | null,
+  patientScreeningToolSubmissionId: string | null,
 };
 
 export type FullClinicFragment = {

@@ -2,11 +2,14 @@ import { transaction, Model, RelationMappings, Transaction } from 'objection';
 import { IPaginatedResults } from '../db';
 import Answer from './answer';
 import BaseModel from './base-model';
+import PatientScreeningToolSubmission from './patient-screening-tool-submission';
 import Question from './question';
+import ScreeningTool from './screening-tool';
 
 export interface IPatientAnswerCreateFields {
   patientId: string;
   questionIds?: string[];
+  patientScreeningToolSubmissionId?: string;
   answers: Array<{
     answerId: string;
     questionId: string;
@@ -26,6 +29,9 @@ export default class PatientAnswer extends BaseModel {
   userId: string;
   applicable: boolean;
   question: Question;
+  patientScreeningToolSubmissionId: string;
+  patientScreeningToolSubmission: PatientScreeningToolSubmission;
+  screeningTool: ScreeningTool;
 
   static tableName = 'patient_answer';
 
@@ -39,6 +45,7 @@ export default class PatientAnswer extends BaseModel {
       answerValue: { type: 'string' },
       applicable: { type: 'boolean' },
       deletedAt: { type: 'string' },
+      patientScreeningToolSubmissionId: { type: 'string' },
     },
   };
 
@@ -83,10 +90,35 @@ export default class PatientAnswer extends BaseModel {
         to: 'question.id',
       },
     },
+
+    patientScreeningToolSubmission: {
+      relation: Model.HasOneRelation,
+      modelClass: 'patient-screening-tool-submission',
+      join: {
+        from: 'patient_answer.patientScreeningToolSubmissionId',
+        to: 'patient_screening_tool_submission.id',
+      },
+    },
+
+    screeningTool: {
+      relation: Model.HasOneThroughRelation,
+      modelClass: 'screening-tool',
+      join: {
+        from: 'patient_answer.screeningToolSubmissionId',
+        through: {
+          modelClass: 'patient-screening-tool-submission',
+          from: 'patient_screening_tool_submission.id',
+          to: 'patient_screening_tool_submission.screeningToolId',
+        },
+        to: 'screening_tool.id',
+      },
+    },
   };
 
   static async get(patientAnswerId: string): Promise<PatientAnswer> {
-    const patientAnswer = await this.query().findOne({ id: patientAnswerId, deletedAt: null });
+    const patientAnswer = await this.query()
+      .eager('answer')
+      .findOne({ id: patientAnswerId, deletedAt: null });
 
     if (!patientAnswer) {
       return Promise.reject(`No such patientAnswer: ${patientAnswerId}`);
@@ -99,6 +131,7 @@ export default class PatientAnswer extends BaseModel {
     patientId: string,
   ): Promise<PatientAnswer[] | null> {
     const patientAnswers = await this.query()
+      .eager('answer')
       .joinRelation('answer')
       .where('patient_answer.deletedAt', null)
       .andWhere('patientId', patientId)
@@ -126,7 +159,7 @@ export default class PatientAnswer extends BaseModel {
   static async getForRiskArea(
     riskAreaId: string,
     patientId: string,
-    eager = '',
+    eager = 'answer',
   ): Promise<PatientAnswer[]> {
     const patientAnswers = await this.query()
       .joinRelation('answer.question')
@@ -172,7 +205,9 @@ export default class PatientAnswer extends BaseModel {
       let results: PatientAnswer[] = [];
 
       if (input.answers.length) {
-        results = await PatientAnswer.query(existingTxn || txn).insertGraphAndFetch(input.answers);
+        results = await PatientAnswer.query(existingTxn || txn)
+          .eager('answer')
+          .insertGraphAndFetch(input.answers);
       }
 
       return results;
@@ -184,7 +219,7 @@ export default class PatientAnswer extends BaseModel {
     patientAnswerId: string,
   ): Promise<PatientAnswer> {
     return await this.query()
-      .eager('question')
+      .eager('[question, answer]')
       .updateAndFetchById(patientAnswerId, { applicable });
   }
 

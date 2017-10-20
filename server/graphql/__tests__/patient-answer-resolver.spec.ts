@@ -4,9 +4,11 @@ import Db from '../../db';
 import Answer from '../../models/answer';
 import Patient from '../../models/patient';
 import PatientAnswer from '../../models/patient-answer';
+import PatientScreeningToolSubmission from '../../models/patient-screening-tool-submission';
 import Question from '../../models/question';
 import QuestionCondition from '../../models/question-condition';
 import RiskArea from '../../models/risk-area';
+import ScreeningTool from '../../models/screening-tool';
 import User from '../../models/user';
 import { createMockPatient, createPatient } from '../../spec-helpers';
 import schema from '../make-executable-schema';
@@ -401,6 +403,66 @@ describe('patient answer tests', () => {
 
       const fetchedAnswers2 = await PatientAnswer.getForQuestion(answer.questionId, patient.id);
       expect(fetchedAnswers2!.map(ans => ans.id)).not.toContain(createdAnswers[0].id);
+    });
+
+    it('correctly records a screening tool submission when necessary', async () => {
+      const screeningTool = await ScreeningTool.create({
+        title: 'Screening Tool',
+        riskAreaId: riskArea.id,
+      });
+
+      const mutation = `mutation {
+        patientAnswersCreate(input: {
+          patientId: "${patient.id}",
+          questionIds: ["${answer.questionId}", "${answer2.questionId}"],
+          screeningToolId: "${screeningTool.id}",
+          patientAnswers: [{
+            questionId: "${answer.questionId}"
+            answerValue: "3"
+            answerId: "${answer.id}",
+            patientId: "${patient.id}",
+            applicable: false,
+          }, {
+            questionId: "${answer2.questionId}"
+            answerValue: "4"
+            answerId: "${answer2.id}",
+            patientId: "${patient.id}",
+            applicable: false,
+          }]
+        }) {
+          answerId,
+          answerValue,
+          patientId,
+          applicable,
+        }
+      }`;
+      const result = await graphql(schema, mutation, null, {
+        db,
+        userRole,
+        userId: user.id,
+      });
+      const clonedResult = cloneDeep(result.data!.patientAnswersCreate);
+      expect(clonedResult[0]).toMatchObject({
+        answerValue: '3',
+        answerId: answer.id,
+        patientId: patient.id,
+        applicable: false,
+      });
+      expect(clonedResult[1]).toMatchObject({
+        answerValue: '4',
+        answerId: answer2.id,
+        patientId: patient.id,
+        applicable: false,
+      });
+
+      const patientScreeningToolSubmissions = await PatientScreeningToolSubmission.getForPatient(
+        patient.id,
+        screeningTool.id,
+      );
+
+      expect(patientScreeningToolSubmissions.length).toEqual(1);
+      expect(patientScreeningToolSubmissions[0].screeningToolId).toEqual(screeningTool.id);
+      expect(patientScreeningToolSubmissions[0].score).toEqual(7);
     });
   });
 

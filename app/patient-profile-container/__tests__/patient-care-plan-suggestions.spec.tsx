@@ -59,6 +59,7 @@ fragment FullCarePlanSuggestion on CarePlanSuggestion {
   updatedAt
   dismissedAt
   acceptedAt
+  patientScreeningToolSubmissionId
   __typename
 }
 

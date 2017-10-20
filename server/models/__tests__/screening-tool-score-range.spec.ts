@@ -231,7 +231,7 @@ describe('screening tool score range model', () => {
     expect(fetchedScoreRange).toMatchObject(scoreRange1);
   });
 
-  it('throws an error if a score range does not exist for a score and screening tool', async () => {
+  it('returns null if a score range does not exist for a score and screening tool', async () => {
     await ScreeningToolScoreRange.create({
       screeningToolId: screeningTool.id,
       description: 'Score Range 1',
@@ -245,11 +245,12 @@ describe('screening tool score range model', () => {
       maximumScore: 20,
     });
 
-    await expect(
-      ScreeningToolScoreRange.getByScoreForScreeningTool(21, screeningTool.id),
-    ).rejects.toMatch(
-      `No such screening tool score range for score: 21 and screeningToolId: ${screeningTool.id}`,
+    const screeningToolScoreRange = await ScreeningToolScoreRange.getByScoreForScreeningTool(
+      21,
+      screeningTool.id,
     );
+
+    expect(screeningToolScoreRange).toBeNull();
   });
 
   it('deletes a screening tool score range', async () => {

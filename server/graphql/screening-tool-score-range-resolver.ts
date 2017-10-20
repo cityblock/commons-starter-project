@@ -92,6 +92,10 @@ export async function resolveScreeningToolScoreRangeForScoreAndScreeningTool(
     args.screeningToolId,
   );
 
+  if (!screeningToolScoreRange) {
+    return null;
+  }
+
   return ScreeningToolScoreRange.withMinimumAndMaximumScore(screeningToolScoreRange);
 }
 

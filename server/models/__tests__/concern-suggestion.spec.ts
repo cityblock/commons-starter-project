@@ -6,6 +6,7 @@ import Concern from '../concern';
 import ConcernSuggestion from '../concern-suggestion';
 import PatientAnswer from '../patient-answer';
 import PatientConcern from '../patient-concern';
+import PatientScreeningToolSubmission from '../patient-screening-tool-submission';
 import Question from '../question';
 import RiskArea from '../risk-area';
 import ScreeningTool from '../screening-tool';
@@ -180,6 +181,33 @@ describe('concern suggestion model', () => {
       expect(secondConcernSuggestions[0]).toMatchObject(concern1);
       expect(secondConcernSuggestions[1]).toMatchObject(concern2);
       expect(secondConcernSuggestions.length).toEqual(2);
+
+      const concern3 = await Concern.create({ title: 'Screening Tool Concern' });
+      const screeningTool = await ScreeningTool.create({ title: 'Test', riskAreaId: riskArea.id });
+      const screeningToolScoreRange = await ScreeningToolScoreRange.create({
+        description: 'Range',
+        screeningToolId: screeningTool.id,
+        minimumScore: 0,
+        maximumScore: 10,
+      });
+      await ConcernSuggestion.create({
+        concernId: concern3.id,
+        screeningToolScoreRangeId: screeningToolScoreRange.id,
+      });
+      await PatientScreeningToolSubmission.create({
+        screeningToolId: screeningTool.id,
+        patientId: patient.id,
+        userId: user.id,
+        score: 4,
+        patientAnswers: [],
+      });
+
+      // Now it should suggest three concerns, including one based on a screening tool
+      const thirdConcernSuggestions = await ConcernSuggestion.getNewForPatient(patient.id);
+      expect(thirdConcernSuggestions[0]).toMatchObject(concern1);
+      expect(thirdConcernSuggestions[1]).toMatchObject(concern2);
+      expect(thirdConcernSuggestions[2]).toMatchObject(concern3);
+      expect(thirdConcernSuggestions.length).toEqual(3);
     });
 
     it('does not return concern suggestions where one already exists', async () => {
@@ -247,6 +275,42 @@ describe('concern suggestion model', () => {
       const concernSuggestions = await ConcernSuggestion.getNewForPatient(patient.id);
       expect(concernSuggestions.length).toEqual(1);
       expect(concernSuggestions[0]).toMatchObject(concern2);
+
+      // Check to make sure it handles screening tool concern suggestions as well
+      const concern3 = await Concern.create({ title: 'Housing' });
+      const screeningTool = await ScreeningTool.create({ title: 'Test', riskAreaId: riskArea.id });
+      const screeningToolScoreRange = await ScreeningToolScoreRange.create({
+        description: 'Range',
+        screeningToolId: screeningTool.id,
+        minimumScore: 0,
+        maximumScore: 10,
+      });
+      await ConcernSuggestion.create({
+        concernId: concern3.id,
+        screeningToolScoreRangeId: screeningToolScoreRange.id,
+      });
+      await PatientScreeningToolSubmission.create({
+        screeningToolId: screeningTool.id,
+        patientId: patient.id,
+        userId: user.id,
+        score: 4,
+        patientAnswers: [],
+      });
+
+      const concernSuggestions2 = await ConcernSuggestion.getNewForPatient(patient.id);
+      expect(concernSuggestions2.length).toEqual(2);
+      expect(concernSuggestions2[0]).toMatchObject(concern2);
+      expect(concernSuggestions2[1]).toMatchObject(concern3);
+
+      await CarePlanSuggestion.create({
+        patientId: patient.id,
+        suggestionType: 'concern',
+        concernId: concern3.id,
+      });
+
+      const concernSuggestions3 = await ConcernSuggestion.getNewForPatient(patient.id);
+      expect(concernSuggestions3.length).toEqual(1);
+      expect(concernSuggestions3[0]).toMatchObject(concern2);
     });
 
     it('does not return suggestions for concerns that are already in the care plan', async () => {
@@ -310,6 +374,131 @@ describe('concern suggestion model', () => {
       const secondConcernSuggestions = await ConcernSuggestion.getNewForPatient(patient.id);
       expect(secondConcernSuggestions[0]).toMatchObject(concern2);
       expect(secondConcernSuggestions.length).toEqual(1);
+
+      // It handles screening tool concern suggestions as well
+      const concern3 = await Concern.create({ title: 'Screening Tool Concern' });
+      const screeningTool = await ScreeningTool.create({ title: 'Test', riskAreaId: riskArea.id });
+      const screeningToolScoreRange = await ScreeningToolScoreRange.create({
+        description: 'Range',
+        screeningToolId: screeningTool.id,
+        minimumScore: 0,
+        maximumScore: 10,
+      });
+      await ConcernSuggestion.create({
+        concernId: concern3.id,
+        screeningToolScoreRangeId: screeningToolScoreRange.id,
+      });
+      await PatientScreeningToolSubmission.create({
+        screeningToolId: screeningTool.id,
+        patientId: patient.id,
+        userId: user.id,
+        score: 4,
+        patientAnswers: [],
+      });
+
+      // The new screening tool concern suggestion should be returned
+      const thirdConcernSuggestions = await ConcernSuggestion.getNewForPatient(patient.id);
+      expect(thirdConcernSuggestions[0]).toMatchObject(concern2);
+      expect(thirdConcernSuggestions[1]).toMatchObject(concern3);
+      expect(thirdConcernSuggestions.length).toEqual(2);
+
+      await PatientConcern.create({ order: 2, concernId: concern3.id, patientId: patient.id });
+
+      // Now it should not be returned
+      const fourthConcernSuggestions = await ConcernSuggestion.getNewForPatient(patient.id);
+      expect(fourthConcernSuggestions[0]).toMatchObject(concern2);
+      expect(fourthConcernSuggestions.length).toEqual(1);
+    });
+
+    it('gets new concern suggestions based on screening tool score ranges', async () => {
+      const user = await User.create({
+        email: 'care@care.com',
+        userRole: 'physician',
+        homeClinicId: '1',
+      });
+      const patient = await createPatient(createMockPatient(123), user.id);
+      const concern = await Concern.create({ title: 'Housing' });
+      const screeningTool = await ScreeningTool.create({ title: 'Test', riskAreaId: riskArea.id });
+      const screeningToolScoreRange = await ScreeningToolScoreRange.create({
+        description: 'Range',
+        screeningToolId: screeningTool.id,
+        minimumScore: 0,
+        maximumScore: 10,
+      });
+      await ConcernSuggestion.create({
+        concernId: concern.id,
+        screeningToolScoreRangeId: screeningToolScoreRange.id,
+      });
+      await PatientScreeningToolSubmission.create({
+        screeningToolId: screeningTool.id,
+        patientId: patient.id,
+        userId: user.id,
+        score: 4,
+        patientAnswers: [],
+      });
+
+      const concernSuggestions = await ConcernSuggestion.getNewForPatient(patient.id);
+      expect(concernSuggestions[0]).toMatchObject(concern);
+      expect(concernSuggestions.length).toEqual(1);
+    });
+
+    it('dedupes the same concern suggestion for an answer and score range', async () => {
+      const user = await User.create({
+        email: 'care@care.com',
+        userRole: 'physician',
+        homeClinicId: '1',
+      });
+
+      const patient = await createPatient(createMockPatient(123), user.id);
+      const concern = await Concern.create({ title: 'Housing' });
+      const screeningTool = await ScreeningTool.create({ title: 'Test', riskAreaId: riskArea.id });
+      const screeningToolScoreRange = await ScreeningToolScoreRange.create({
+        description: 'Range',
+        screeningToolId: screeningTool.id,
+        minimumScore: 0,
+        maximumScore: 10,
+      });
+      const answer2 = await Answer.create({
+        displayValue: 'hates writing tests!',
+        value: '3',
+        valueType: 'number',
+        riskAdjustmentType: 'forceHighRisk',
+        inSummary: false,
+        questionId: question.id,
+        order: 1,
+      });
+      await ConcernSuggestion.create({
+        concernId: concern.id,
+        screeningToolScoreRangeId: screeningToolScoreRange.id,
+      });
+      await ConcernSuggestion.create({
+        concernId: concern.id,
+        answerId: answer2.id,
+      });
+      await PatientScreeningToolSubmission.create({
+        screeningToolId: screeningTool.id,
+        patientId: patient.id,
+        userId: user.id,
+        score: 4,
+        patientAnswers: [],
+      });
+      await PatientAnswer.create({
+        patientId: patient.id,
+        answers: [
+          {
+            patientId: patient.id,
+            answerId: answer2.id,
+            answerValue: answer2.value,
+            applicable: true,
+            questionId: question.id,
+            userId: user.id,
+          },
+        ],
+      });
+
+      const concernSuggestions = await ConcernSuggestion.getNewForPatient(patient.id);
+      expect(concernSuggestions[0]).toMatchObject(concern);
+      expect(concernSuggestions.length).toEqual(1);
     });
 
     it('gets concern suggestions for a screening tool score range', async () => {

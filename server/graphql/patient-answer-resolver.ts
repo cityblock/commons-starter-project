@@ -1,3 +1,4 @@
+import { omit } from 'lodash';
 import { transaction } from 'objection';
 import {
   IPatientAnswersCreateInput,
@@ -5,10 +6,12 @@ import {
   IPatientAnswerDeleteInput,
   IPatientAnswerEditInput,
 } from 'schema';
+import Answer from '../models/answer';
 import CarePlanSuggestion from '../models/care-plan-suggestion';
 import ConcernSuggestion from '../models/concern-suggestion';
 import GoalSuggestion from '../models/goal-suggestion';
 import PatientAnswer from '../models/patient-answer';
+import PatientScreeningToolSubmission from '../models/patient-screening-tool-submission';
 import Question from '../models/question';
 import accessControls from './shared/access-controls';
 import { updatePatientAnswerApplicable } from './shared/answer-applicable';
@@ -56,13 +59,39 @@ export async function patientAnswersCreate(
   await accessControls.isAllowed(userRole, 'create', 'patientAnswer');
   checkUserLoggedIn(userId);
 
-  const { patientAnswers, patientId, questionIds } = input;
+  const { patientAnswers, patientId, questionIds, screeningToolId } = input;
 
   return await transaction(PatientAnswer.knex(), async txn => {
+    let patientScreeningToolSubmissionId: string | undefined;
+
+    if (!!screeningToolId) {
+      const answerIds = patientAnswers.map(patientAnswer => patientAnswer.answerId);
+      const answers = await Answer.getMultiple(answerIds, txn);
+      const formattedPatientAnswers = patientAnswers.map(patientAnswer => (
+        {
+          answer: answers.find(answer => answer.id === patientAnswer.answerId),
+          ...patientAnswer,
+        }
+      ));
+
+      const patientScreeningToolSubmission = await PatientScreeningToolSubmission.create(
+        {
+          screeningToolId,
+          patientId,
+          userId: userId!,
+          patientAnswers: omit(formattedPatientAnswers, ['id']),
+        },
+        txn,
+      );
+
+      patientScreeningToolSubmissionId = patientScreeningToolSubmission.id;
+    }
+
     const createdAnswers = await PatientAnswer.create(
       {
         patientId,
         questionIds,
+        patientScreeningToolSubmissionId,
         answers: patientAnswers.map(patientAnswer => ({ ...patientAnswer, userId: userId! })),
       },
       txn,
@@ -74,11 +103,13 @@ export async function patientAnswersCreate(
       patientId,
       suggestionType: 'concern' as any,
       concernId: concernSuggestion.id,
+      patientScreeningToolSubmissionId,
     }));
     const formattedGoalSuggestions = newGoalSuggestions.map(goalSuggestion => ({
       patientId,
       suggestionType: 'goal' as any,
       goalSuggestionTemplateId: goalSuggestion.id,
+      patientScreeningToolSubmissionId,
     }));
 
     const suggestions = formattedConcernSuggestions.concat(formattedGoalSuggestions as any);

@@ -1,4 +1,4 @@
-import { Model, RelationMappings } from 'objection';
+import { Model, RelationMappings, Transaction } from 'objection';
 import BaseModel from './base-model';
 import Question from './question';
 
@@ -99,6 +99,11 @@ export default class Answer extends BaseModel {
       return Promise.reject(`No such answer: ${answerId}`);
     }
     return answer;
+  }
+
+  static async getMultiple(answerIds: string[], txn?: Transaction): Promise<Answer[]> {
+    return await this.query(txn)
+      .where('id', 'in', answerIds);
   }
 
   static async getAllForQuestion(questionId: string): Promise<Answer[]> {

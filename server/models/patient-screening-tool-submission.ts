@@ -1,15 +1,20 @@
-import { Model, RelationMappings } from 'objection';
+import { isInteger, omit, reduce } from 'lodash';
+import { Model, RelationMappings, Transaction } from 'objection';
 import BaseModel from './base-model';
 import Patient from './patient';
+import PatientAnswer from './patient-answer';
 import RiskArea from './risk-area';
 import ScreeningTool from './screening-tool';
+import ScreeningToolScoreRange from './screening-tool-score-range';
 import User from './user';
 
 export interface IPatientScreeningToolSubmissionCreateFields {
   screeningToolId: string;
   patientId: string;
   userId: string;
-  score: number;
+  score?: number;
+  patientAnswers: PatientAnswer[];
+  screeningToolScoreRangeId?: string;
 }
 
 export interface IPatientScreeningToolSubmissionEditableFields {
@@ -19,7 +24,7 @@ export interface IPatientScreeningToolSubmissionEditableFields {
   score?: number;
 }
 
-export const EAGER_QUERY = '[screeningTool, patient, user, riskArea]';
+export const EAGER_QUERY = '[screeningTool, patient, user, riskArea, patientAnswers]';
 
 /* tslint:disable:member-ordering */
 export default class PatientScreeningToolSubmission extends BaseModel {
@@ -31,6 +36,8 @@ export default class PatientScreeningToolSubmission extends BaseModel {
   user: User;
   score: number;
   riskArea: RiskArea;
+  patientAnswers: PatientAnswer[];
+  patientScreeningToolId: string;
 
   static tableName = 'patient_screening_tool_submission';
 
@@ -39,6 +46,7 @@ export default class PatientScreeningToolSubmission extends BaseModel {
     properties: {
       id: { type: 'string' },
       screeningToolId: { type: 'string' },
+      screeningToolScoreRangeId: { type: 'string' },
       patientId: { type: 'string' },
       userId: { type: 'string' },
       score: { type: 'integer' },
@@ -87,14 +95,64 @@ export default class PatientScreeningToolSubmission extends BaseModel {
         to: 'risk_area.id',
       },
     },
+
+    patientAnswers: {
+      relation: Model.HasManyRelation,
+      modelClass: 'patient-answer',
+      join: {
+        from: 'patient_screening_tool_submission.id',
+        to: 'patient_answer.patientScreeningToolSubmissionId',
+      },
+    },
   };
+
+  static calculateScore(patientAnswers: PatientAnswer[]): number {
+    return reduce(
+      patientAnswers,
+      (total, patientAnswer) => {
+        const answerValue = parseInt(patientAnswer.answer.value, 10);
+
+        if (isInteger(answerValue)) {
+          return total + answerValue;
+        } else {
+          return total;
+        }
+      },
+      0,
+    );
+  }
 
   static async create(
     input: IPatientScreeningToolSubmissionCreateFields,
+    txn?: Transaction,
   ): Promise<PatientScreeningToolSubmission> {
-    return await this.query()
+    const { patientAnswers, screeningToolId } = input;
+    let score: number = 0;
+
+    if (!!input.score) {
+      score = input.score;
+    } else {
+      score = this.calculateScore(patientAnswers);
+    }
+
+    const screeningToolScoreRange = await ScreeningToolScoreRange.getByScoreForScreeningTool(
+      score,
+      screeningToolId,
+      txn,
+    );
+
+    input.screeningToolScoreRangeId = screeningToolScoreRange
+      ? screeningToolScoreRange.id
+      : undefined;
+
+    input.score = score;
+    const filteredInput = omit<IPatientScreeningToolSubmissionCreateFields, {}>(input, [
+      'patientAnswers',
+    ]);
+
+    return await this.query(txn)
       .eager(EAGER_QUERY)
-      .insertAndFetch(input);
+      .insertAndFetch(filteredInput);
   }
 
   static async edit(

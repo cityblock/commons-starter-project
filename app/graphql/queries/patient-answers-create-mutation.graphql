@@ -4,9 +4,15 @@ mutation patientAnswersCreate(
   $patientId: String!
   $patientAnswers: [PatientAnswerInput]!
   $questionIds: [String]!
+  $screeningToolId: String
 ) {
   patientAnswersCreate(
-    input: { patientId: $patientId, patientAnswers: $patientAnswers, questionIds: $questionIds }
+    input: {
+      patientId: $patientId
+      patientAnswers: $patientAnswers
+      questionIds: $questionIds
+      screeningToolId: $screeningToolId
+    }
   ) {
     ...FullPatientAnswer
   }

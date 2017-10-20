@@ -36,6 +36,7 @@ describe('patient screening tool submission resolver tests', () => {
       userId: user.id,
       screeningToolId: screeningTool.id,
       score: 10,
+      patientAnswers: [],
     });
   });
 
@@ -80,6 +81,7 @@ describe('patient screening tool submission resolver tests', () => {
         userId: user.id,
         screeningToolId: screeningTool2.id,
         score: 20,
+        patientAnswers: [],
       });
 
       const query = `{
@@ -112,12 +114,14 @@ describe('patient screening tool submission resolver tests', () => {
         userId: user.id,
         screeningToolId: screeningTool2.id,
         score: 20,
+        patientAnswers: [],
       });
       const submission3 = await PatientScreeningToolSubmission.create({
         patientId: patient2.id,
         userId: user.id,
         screeningToolId: screeningTool2.id,
         score: 20,
+        patientAnswers: [],
       });
 
       const query = `{
@@ -153,12 +157,14 @@ describe('patient screening tool submission resolver tests', () => {
         userId: user.id,
         screeningToolId: screeningTool2.id,
         score: 20,
+        patientAnswers: [],
       });
       const submission3 = await PatientScreeningToolSubmission.create({
         patientId: patient.id,
         userId: user.id,
         screeningToolId: screeningTool2.id,
         score: 20,
+        patientAnswers: [],
       });
 
       const query = `{

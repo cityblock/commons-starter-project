@@ -95,7 +95,7 @@ declare module 'schema' {
   /*
     description: An object with a Globally Unique ID
   */
-  type uniqueId = IUser | IPatient | IClinic | ITask | IPatientGoal | IGoalSuggestionTemplate | ITaskTemplate | ITaskComment | IRiskArea | IQuestion | IAnswer | IConcern | IQuestionCondition | IPatientAnswer | IEventNotification | ITaskEvent | IPatientConcern | ICarePlanSuggestion | IScreeningTool | IScreeningToolScoreRange | IPatientScreeningToolSubmission;
+  type uniqueId = IUser | IPatient | IClinic | ITask | IPatientGoal | IGoalSuggestionTemplate | ITaskTemplate | ITaskComment | IRiskArea | IQuestion | IAnswer | IConcern | IQuestionCondition | IPatientAnswer | IPatientScreeningToolSubmission | IScreeningTool | IScreeningToolScoreRange | IEventNotification | ITaskEvent | IPatientConcern | ICarePlanSuggestion;
 
   /*
     description: An object with a Globally Unique ID
@@ -491,6 +491,57 @@ declare module 'schema' {
     patientId: string;
     applicable: boolean | null;
     question: IQuestion | null;
+    patientScreeningToolSubmissionId: string | null;
+    patientScreeningToolSubmission: IPatientScreeningToolSubmission | null;
+  }
+
+  /*
+    description: 
+  */
+  interface IPatientScreeningToolSubmission {
+    id: string;
+    screeningToolId: string;
+    screeningTool: IScreeningTool;
+    patientId: string;
+    patient: IPatient;
+    userId: string;
+    user: IUser;
+    score: number;
+    riskArea: IRiskArea;
+    createdAt: string;
+    updatedAt: string;
+    deletedAt: string | null;
+  }
+
+  /*
+    description: 
+  */
+  interface IScreeningTool {
+    id: string;
+    title: string;
+    riskAreaId: string;
+    riskArea: IRiskArea;
+    screeningToolScoreRanges: Array<IScreeningToolScoreRange>;
+    createdAt: string;
+    updatedAt: string;
+    deletedAt: string | null;
+  }
+
+  /*
+    description: 
+  */
+  interface IScreeningToolScoreRange {
+    id: string;
+    description: string;
+    screeningToolId: string;
+    screeningTool: IScreeningTool;
+    minimumScore: number;
+    maximumScore: number;
+    createdAt: string;
+    updatedAt: string;
+    deletedAt: string | null;
+    concernSuggestions: Array<IConcern> | null;
+    goalSuggestions: Array<IGoalSuggestionTemplate> | null;
   }
 
   /*
@@ -608,6 +659,8 @@ declare module 'schema' {
     updatedAt: string;
     dismissedAt: string | null;
     acceptedAt: string | null;
+    patientScreeningToolSubmissionId: string | null;
+    patientScreeningToolSubmission: IPatientScreeningToolSubmission | null;
   }
 
   /*
@@ -621,55 +674,6 @@ declare module 'schema' {
   interface ICarePlan {
     goals: Array<IPatientGoal>;
     concerns: Array<IPatientConcern>;
-  }
-
-  /*
-    description: 
-  */
-  interface IScreeningTool {
-    id: string;
-    title: string;
-    riskAreaId: string;
-    riskArea: IRiskArea;
-    screeningToolScoreRanges: Array<IScreeningToolScoreRange>;
-    createdAt: string;
-    updatedAt: string;
-    deletedAt: string | null;
-  }
-
-  /*
-    description: 
-  */
-  interface IScreeningToolScoreRange {
-    id: string;
-    description: string;
-    screeningToolId: string;
-    screeningTool: IScreeningTool;
-    minimumScore: number;
-    maximumScore: number;
-    createdAt: string;
-    updatedAt: string;
-    deletedAt: string | null;
-    concernSuggestions: Array<IConcern> | null;
-    goalSuggestions: Array<IGoalSuggestionTemplate> | null;
-  }
-
-  /*
-    description: 
-  */
-  interface IPatientScreeningToolSubmission {
-    id: string;
-    screeningToolId: string;
-    screeningTool: IScreeningTool;
-    patientId: string;
-    patient: IPatient;
-    userId: string;
-    user: IUser;
-    score: number;
-    riskArea: IRiskArea;
-    createdAt: string;
-    updatedAt: string;
-    deletedAt: string | null;
   }
 
   /*
@@ -1104,6 +1108,7 @@ declare module 'schema' {
     patientId: string;
     patientAnswers: Array<IPatientAnswerInput>;
     questionIds: Array<string>;
+    screeningToolId?: string | null;
   }
 
   /*

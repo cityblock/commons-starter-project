@@ -14,6 +14,7 @@ export interface ICarePlanSuggestionCreateArgs {
   suggestionType: SuggestionType;
   concernId?: string;
   goalSuggestionTemplateId?: string;
+  patientScreeningToolSubmissionId?: string;
 }
 
 export interface ICarePlanSuggestionCreateMultipleArgs {
@@ -47,6 +48,7 @@ export default class CarePlanSuggestion extends BaseModel {
   dismissedBy?: User;
   dismissedReason?: string;
   dismissedAt?: string;
+  patientScreeningToolSubmissionId?: string;
 
   static tableName = 'care_plan_suggestion';
 
@@ -63,6 +65,7 @@ export default class CarePlanSuggestion extends BaseModel {
       dismissedAt: { type: 'string' },
       acceptedAt: { type: 'string' },
       acceptedById: { type: 'string' },
+      patientScreeningToolSubmissionId: { type: 'string' },
     },
   };
 
@@ -105,6 +108,14 @@ export default class CarePlanSuggestion extends BaseModel {
       join: {
         from: 'care_plan_suggestion.dismissedById',
         to: 'user.id',
+      },
+    },
+    patientScreeningToolSubmission: {
+      relation: Model.HasOneRelation,
+      modelClass: 'patient-screening-tool-submission',
+      join: {
+        from: 'care_plan_suggestion.patientScreeningToolSubmissionId',
+        to: 'patient_screening_tool_submission.id',
       },
     },
   };

@@ -345,6 +345,8 @@ type PatientAnswer implements uniqueId {
   patientId: String!
   applicable: Boolean
   question: Question
+  patientScreeningToolSubmissionId: String
+  patientScreeningToolSubmission: PatientScreeningToolSubmission
 }
 
 # Question
@@ -530,6 +532,8 @@ type CarePlanSuggestion implements uniqueId {
   updatedAt: String!
   dismissedAt: String
   acceptedAt: String
+  patientScreeningToolSubmissionId: String
+  patientScreeningToolSubmission: PatientScreeningToolSubmission
 }
 
 type CarePlan {
@@ -826,6 +830,7 @@ input PatientAnswersCreateInput {
   patientId: String!
   patientAnswers: [PatientAnswerInput]!
   questionIds: [String]!
+  screeningToolId: String
 }
 
 input PatientAnswerEditInput {

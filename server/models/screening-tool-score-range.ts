@@ -1,5 +1,5 @@
 import { isNumber, omit } from 'lodash';
-import { Model, RelationMappings } from 'objection';
+import { Model, RelationMappings, Transaction } from 'objection';
 import BaseModel from './base-model';
 import ScreeningTool from './screening-tool';
 
@@ -23,21 +23,12 @@ export const RANGE_REGEX = /\[(\d+),(\d+)\)/;
 
 /* tslint:disable:member-ordering */
 export default class ScreeningToolScoreRange extends BaseModel {
-  id: string;
   screeningToolId: string;
   screeningTool: ScreeningTool;
   description: string;
   range: string;
 
-  createdAt: string;
-  updatedAt: string;
-  deletedAt: string;
-
   static tableName = 'screening_tool_score_range';
-
-  static modelPaths = [__dirname];
-
-  static pickJsonSchemaProperties = true;
 
   static jsonSchema = {
     type: 'object',
@@ -178,19 +169,16 @@ export default class ScreeningToolScoreRange extends BaseModel {
   static async getByScoreForScreeningTool(
     score: number,
     screeningToolId: string,
-  ): Promise<ScreeningToolScoreRange> {
-    const screeningToolScoreRange = await this.query()
+    txn?: Transaction,
+  ): Promise<ScreeningToolScoreRange | null> {
+    const screeningToolScoreRange = await this.query(txn)
       .eager(EAGER_QUERY)
       // @> == 'contains element'
       .whereRaw('"range" @> ?::int4 and "screeningToolId" = ?', [score, screeningToolId])
       .findOne({ deletedAt: null });
 
     if (!screeningToolScoreRange) {
-      return Promise.reject(
-        /* tslint:disable:max-line-length */
-        `No such screening tool score range for score: ${score} and screeningToolId: ${screeningToolId}`,
-        /* tslint:enable:max-line-length */
-      );
+      return null;
     }
 
     return screeningToolScoreRange;

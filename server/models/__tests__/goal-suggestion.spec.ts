@@ -6,6 +6,7 @@ import GoalSuggestion from '../goal-suggestion';
 import GoalSuggestionTemplate from '../goal-suggestion-template';
 import PatientAnswer from '../patient-answer';
 import PatientGoal from '../patient-goal';
+import PatientScreeningToolSubmission from '../patient-screening-tool-submission';
 import Question from '../question';
 import RiskArea from '../risk-area';
 import ScreeningTool from '../screening-tool';
@@ -99,11 +100,11 @@ describe('goal suggestion model', () => {
       const goalSuggestionsForAnswer = await GoalSuggestion.getForAnswer(answer.id);
       expect(goalSuggestionsForAnswer[0].id).toEqual(goalSuggestionTemplate.id);
 
-      const concernAnswerResponse = await GoalSuggestion.delete({
+      const goalAnswerResponse = await GoalSuggestion.delete({
         goalSuggestionTemplateId: goalSuggestionTemplate.id,
         answerId: answer.id,
       });
-      expect(concernAnswerResponse).toMatchObject([]);
+      expect(goalAnswerResponse).toMatchObject([]);
       expect(await GoalSuggestion.getForAnswer(answer.id)).toEqual([]);
     });
 
@@ -180,6 +181,35 @@ describe('goal suggestion model', () => {
       expect(secondGoalSuggestions[0]).toMatchObject(goalSuggestionTemplate);
       expect(secondGoalSuggestions[1]).toMatchObject(goalSuggestionTemplate2);
       expect(secondGoalSuggestions.length).toEqual(2);
+
+      const screeningTool = await ScreeningTool.create({ title: 'Test', riskAreaId: riskArea.id });
+      const screeningToolScoreRange = await ScreeningToolScoreRange.create({
+        description: 'Range',
+        screeningToolId: screeningTool.id,
+        minimumScore: 0,
+        maximumScore: 10,
+      });
+      const goalSuggestionTemplate3 = await GoalSuggestionTemplate.create({
+        title: 'Fix Stuff',
+      });
+      await GoalSuggestion.create({
+        goalSuggestionTemplateId: goalSuggestionTemplate3.id,
+        screeningToolScoreRangeId: screeningToolScoreRange.id,
+      });
+      await PatientScreeningToolSubmission.create({
+        screeningToolId: screeningTool.id,
+        patientId: patient.id,
+        userId: user.id,
+        score: 4,
+        patientAnswers: [],
+      });
+
+      // Now it should suggest three goals, including one based on a screening tool
+      const thirdGoalSuggestions = await GoalSuggestion.getNewForPatient(patient.id);
+      expect(thirdGoalSuggestions[0]).toMatchObject(goalSuggestionTemplate);
+      expect(thirdGoalSuggestions[1]).toMatchObject(goalSuggestionTemplate2);
+      expect(thirdGoalSuggestions[2]).toMatchObject(goalSuggestionTemplate3);
+      expect(thirdGoalSuggestions.length).toEqual(3);
     });
 
     it('does not return goal suggestions where one already exists', async () => {
@@ -249,6 +279,42 @@ describe('goal suggestion model', () => {
       expect(goalSuggestions.length).toEqual(1);
       expect(goalSuggestions[0]).toMatchObject(goalSuggestionTemplate2);
       expect(goalSuggestions.length).toEqual(1);
+
+      // Check to make sure it handles screening tool goal suggestions as well
+      const goalSuggestionTemplate3 = await GoalSuggestionTemplate.create({ title: 'Third' });
+      const screeningTool = await ScreeningTool.create({ title: 'Test', riskAreaId: riskArea.id });
+      const screeningToolScoreRange = await ScreeningToolScoreRange.create({
+        description: 'Range',
+        screeningToolId: screeningTool.id,
+        minimumScore: 0,
+        maximumScore: 10,
+      });
+      await GoalSuggestion.create({
+        goalSuggestionTemplateId: goalSuggestionTemplate3.id,
+        screeningToolScoreRangeId: screeningToolScoreRange.id,
+      });
+      await PatientScreeningToolSubmission.create({
+        screeningToolId: screeningTool.id,
+        patientId: patient.id,
+        userId: user.id,
+        score: 4,
+        patientAnswers: [],
+      });
+
+      const goalSuggestions2 = await GoalSuggestion.getNewForPatient(patient.id);
+      expect(goalSuggestions2.length).toEqual(2);
+      expect(goalSuggestions2[0]).toMatchObject(goalSuggestionTemplate2);
+      expect(goalSuggestions2[1]).toMatchObject(goalSuggestionTemplate3);
+
+      await CarePlanSuggestion.create({
+        patientId: patient.id,
+        suggestionType: 'goal',
+        goalSuggestionTemplateId: goalSuggestionTemplate3.id,
+      });
+
+      const goalSuggestions3 = await GoalSuggestion.getNewForPatient(patient.id);
+      expect(goalSuggestions3.length).toEqual(1);
+      expect(goalSuggestions3[0]).toMatchObject(goalSuggestionTemplate2);
     });
 
     it('does not return goal suggestions that already exist on the care plan', async () => {
@@ -313,10 +379,128 @@ describe('goal suggestion model', () => {
         userId: user.id,
       });
 
-      // Now both goals should be suggested
       const secondGoalSuggestions = await GoalSuggestion.getNewForPatient(patient.id);
       expect(secondGoalSuggestions[0]).toMatchObject(goalSuggestionTemplate2);
       expect(secondGoalSuggestions.length).toEqual(1);
+
+      // It handles screening tool goal suggestions as well
+      const goalSuggestionTemplate3 = await GoalSuggestionTemplate.create({ title: 'Goal' });
+      const screeningTool = await ScreeningTool.create({ title: 'Test', riskAreaId: riskArea.id });
+      const screeningToolScoreRange = await ScreeningToolScoreRange.create({
+        description: 'Range',
+        screeningToolId: screeningTool.id,
+        minimumScore: 0,
+        maximumScore: 10,
+      });
+      await GoalSuggestion.create({
+        goalSuggestionTemplateId: goalSuggestionTemplate3.id,
+        screeningToolScoreRangeId: screeningToolScoreRange.id,
+      });
+      await PatientScreeningToolSubmission.create({
+        screeningToolId: screeningTool.id,
+        patientId: patient.id,
+        userId: user.id,
+        score: 4,
+        patientAnswers: [],
+      });
+
+      // The new screening tool goal suggesiton should be returned
+      const thirdGoalSuggestions = await GoalSuggestion.getNewForPatient(patient.id);
+      expect(thirdGoalSuggestions[0]).toMatchObject(goalSuggestionTemplate2);
+      expect(thirdGoalSuggestions[1]).toMatchObject(goalSuggestionTemplate3);
+      expect(thirdGoalSuggestions.length).toEqual(2);
+
+      await PatientGoal.create({
+        title: 'Patient Goal',
+        patientId: patient.id,
+        goalSuggestionTemplateId: goalSuggestionTemplate3.id,
+        userId: user.id,
+      });
+
+      // Now it should not be returned
+      const fourthGoalSuggestions = await GoalSuggestion.getNewForPatient(patient.id);
+      expect(fourthGoalSuggestions[0]).toMatchObject(goalSuggestionTemplate2);
+      expect(fourthGoalSuggestions.length).toEqual(1);
+    });
+
+    it('gets new goal suggestions based on screening tool score ranges', async () => {
+      const user = await User.create({
+        email: 'care@care.com',
+        userRole: 'physician',
+        homeClinicId: '1',
+      });
+      const patient = await createPatient(createMockPatient(123), user.id);
+      const screeningTool = await ScreeningTool.create({ title: 'Test', riskAreaId: riskArea.id });
+      const screeningToolScoreRange = await ScreeningToolScoreRange.create({
+        description: 'Range',
+        screeningToolId: screeningTool.id,
+        minimumScore: 0,
+        maximumScore: 10,
+      });
+      await GoalSuggestion.create({
+        goalSuggestionTemplateId: goalSuggestionTemplate.id,
+        screeningToolScoreRangeId: screeningToolScoreRange.id,
+      });
+      await PatientScreeningToolSubmission.create({
+        screeningToolId: screeningTool.id,
+        patientId: patient.id,
+        userId: user.id,
+        score: 4,
+        patientAnswers: [],
+      });
+
+      const goalSuggestions = await GoalSuggestion.getNewForPatient(patient.id);
+      expect(goalSuggestions[0]).toMatchObject(goalSuggestionTemplate);
+      expect(goalSuggestions.length).toEqual(1);
+    });
+
+    it('dedupes the same goal suggestion for an answer and score range', async () => {
+      const user = await User.create({
+        email: 'care@care.com',
+        userRole: 'physician',
+        homeClinicId: '1',
+      });
+      const patient = await createPatient(createMockPatient(123), user.id);
+      const screeningTool = await ScreeningTool.create({ title: 'Test', riskAreaId: riskArea.id });
+      const screeningToolScoreRange = await ScreeningToolScoreRange.create({
+        description: 'Range',
+        screeningToolId: screeningTool.id,
+        minimumScore: 0,
+        maximumScore: 10,
+      });
+
+      await GoalSuggestion.create({
+        goalSuggestionTemplateId: goalSuggestionTemplate.id,
+        answerId: answer.id,
+      });
+      await GoalSuggestion.create({
+        goalSuggestionTemplateId: goalSuggestionTemplate.id,
+        screeningToolScoreRangeId: screeningToolScoreRange.id,
+      });
+      await PatientScreeningToolSubmission.create({
+        screeningToolId: screeningTool.id,
+        patientId: patient.id,
+        userId: user.id,
+        score: 4,
+        patientAnswers: [],
+      });
+      await PatientAnswer.create({
+        patientId: patient.id,
+        answers: [
+          {
+            patientId: patient.id,
+            answerId: answer.id,
+            answerValue: answer.value,
+            applicable: true,
+            questionId: question.id,
+            userId: user.id,
+          },
+        ],
+      });
+
+      const goalSuggestions = await GoalSuggestion.getNewForPatient(patient.id);
+      expect(goalSuggestions[0]).toMatchObject(goalSuggestionTemplate);
+      expect(goalSuggestions.length).toEqual(1);
     });
 
     it('gets goal suggestions for a screening tool score range', async () => {

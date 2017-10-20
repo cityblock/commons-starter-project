@@ -1,3 +1,4 @@
+import { unionBy } from 'lodash';
 import { transaction, Model, RelationMappings, Transaction } from 'objection';
 import Answer from './answer';
 import BaseModel from './base-model';
@@ -101,7 +102,7 @@ export default class ConcernSuggestion extends BaseModel {
       .andWhere('suggestionType', 'concern')
       .select('concernId');
 
-    const concernSuggestions = await this.query(txn)
+    const answerConcernSuggestions = await this.query(txn)
       .eager('concern')
       .joinRelation('answer')
       .join('patient_answer', 'answer.id', 'patient_answer.answerId')
@@ -111,6 +112,27 @@ export default class ConcernSuggestion extends BaseModel {
       .andWhere('patient_answer.patientId', patientId)
       .andWhere('patient_answer.applicable', true)
       .andWhere('patient_concern.id', null);
+
+    // TODO: make this work in a 'union' query. Can't get it to act properly right now though.
+    const screeningToolConcernSuggestions = await this.query(txn)
+      .eager('concern')
+      .joinRelation('screeningToolScoreRange')
+      .join(
+        'patient_screening_tool_submission',
+        'screeningToolScoreRange.id',
+        'patient_screening_tool_submission.screeningToolScoreRangeId',
+      )
+      .leftOuterJoin('patient_concern', 'concern_suggestion.concernId', 'patient_concern.concernId')
+      .where('patient_screening_tool_submission.deletedAt', null)
+      .andWhere('patient_screening_tool_submission.patientId', patientId)
+      .andWhere('concern_suggestion.concernId', 'not in', existingPatientCarePlanSuggestionsQuery)
+      .andWhere('patient_concern.id', null);
+
+    const concernSuggestions = unionBy(
+      answerConcernSuggestions,
+      screeningToolConcernSuggestions,
+      'concernId',
+    );
 
     return concernSuggestions.map((suggestion: ConcernSuggestion) => suggestion.concern);
   }

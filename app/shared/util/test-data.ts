@@ -169,6 +169,7 @@ export const carePlanSuggestionWithConcern = {
   acceptedAt: null,
   createdAt: '2017-08-16T19:27:36.378Z',
   updatedAt: '2017-08-16T19:27:36.378Z',
+  patientScreeningToolSubmissionId: null,
 };
 
 export const carePlanSuggestionWithGoal = {
@@ -210,6 +211,7 @@ export const carePlanSuggestionWithGoal = {
   acceptedAt: null,
   createdAt: '2017-08-16T19:27:36.378Z',
   updatedAt: '2017-08-16T19:27:36.378Z',
+  patientScreeningToolSubmissionId: null,
 };
 
 export const task = {

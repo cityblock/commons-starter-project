@@ -39,6 +39,48 @@ describe('anser model', () => {
     expect(await Answer.get(answer.id)).toEqual(answer);
   });
 
+  it('should get multiple answers', async () => {
+    const riskArea = await RiskArea.create({
+      title: 'testing',
+      order: 1,
+    });
+    const question = await Question.create({
+      title: 'like writing tests?',
+      answerType: 'dropdown',
+      riskAreaId: riskArea.id,
+      order: 1,
+    });
+    const question2 = await Question.create({
+      title: 'hate writing tests?',
+      answerType: 'dropdown',
+      riskAreaId: riskArea.id,
+      order: 2,
+    });
+    const answer = await Answer.create({
+      displayValue: 'loves writing tests!',
+      value: '3',
+      valueType: 'number',
+      riskAdjustmentType: 'forceHighRisk',
+      inSummary: false,
+      questionId: question.id,
+      order: 1,
+    });
+    const answer2 = await Answer.create({
+      displayValue: 'hate writing tests!',
+      value: '2',
+      valueType: 'number',
+      riskAdjustmentType: 'forceHighRisk',
+      inSummary: false,
+      questionId: question2.id,
+      order: 1,
+    });
+    const fetchedAnswers = await Answer.getMultiple([answer.id, answer2.id]);
+    const fetchedAnswerIds = fetchedAnswers.map(ans => ans.id);
+    expect(fetchedAnswerIds.length).toEqual(2);
+    expect(fetchedAnswerIds).toContain(answer.id);
+    expect(fetchedAnswerIds).toContain(answer2.id);
+  });
+
   it('sets default riskAdjustmentType to inactive', async () => {
     const riskArea = await RiskArea.create({
       title: 'testing',

@@ -1,3 +1,4 @@
+import { unionBy } from 'lodash';
 import { transaction, Model, RelationMappings, Transaction } from 'objection';
 import Answer from './answer';
 import BaseModel from './base-model';
@@ -104,7 +105,7 @@ export default class GoalSuggestion extends BaseModel {
       .andWhere('suggestionType', 'goal')
       .select('goalSuggestionTemplateId');
 
-    const goalSuggestions = await this.query(txn)
+    const answerGoalSuggestions = await this.query(txn)
       .eager('goalSuggestionTemplate.[taskTemplates]')
       .joinRelation('answer')
       .join('patient_answer', 'answer.id', 'patient_answer.answerId')
@@ -122,6 +123,35 @@ export default class GoalSuggestion extends BaseModel {
       .andWhere('patient_answer.patientId', patientId)
       .andWhere('patient_answer.applicable', true)
       .andWhere('patient_goal.id', null);
+
+    // TODO: make this work in a 'union' query. Can't get it to act properly right now though.
+    const screeningToolGoalSuggestions = await this.query(txn)
+      .eager('goalSuggestionTemplate.[taskTemplates]')
+      .joinRelation('screeningToolScoreRange')
+      .join(
+        'patient_screening_tool_submission',
+        'screeningToolScoreRange.id',
+        'patient_screening_tool_submission.screeningToolScoreRangeId',
+      )
+      .leftOuterJoin(
+        'patient_goal',
+        'goal_suggestion.goalSuggestionTemplateId',
+        'patient_goal.goalSuggestionTemplateId',
+      )
+      .where('patient_screening_tool_submission.deletedAt', null)
+      .andWhere(
+        'goal_suggestion.goalSuggestionTemplateId',
+        'not in',
+        existingPatientCarePlanSuggestionsQuery,
+      )
+      .andWhere('patient_screening_tool_submission.patientId', patientId)
+      .andWhere('patient_goal.id', null);
+
+    const goalSuggestions = unionBy(
+      answerGoalSuggestions,
+      screeningToolGoalSuggestions,
+      'goalSuggestionTemplateId',
+    );
 
     return goalSuggestions.map(
       (goalSuggestion: GoalSuggestion) => goalSuggestion.goalSuggestionTemplate,

@@ -4,9 +4,7 @@
 [![CircleCI](https://circleci.com/gh/cityblock/commons.svg?style=svg&circle-token=ff9336cd2c27998733f1abe9a3c3bcbba62a045f)](https://circleci.com/gh/cityblock/commons)
 [![NSP Status](https://nodesecurity.io/orgs/cityblock/projects/c914cd48-0065-4791-8267-b5b15f6b7e80/badge)](https://nodesecurity.io/orgs/cityblock/projects/c914cd48-0065-4791-8267-b5b15f6b7e80)
 
-Care MVP. For a more detailed spec, see the [PRD][] and [Tech Design Doc][]
-
-Tech wise, this app is an Express server running GraphQL, PostgreSQL (Objection.js) and GraphiQL written in TypeScript. Tested using Jest. Hosted on [Aptible][].
+Tech wise, this app is an Express server running GraphQL and PostgreSQL (Objection.js) written in TypeScript. Tested using Jest. Hosted on [Aptible][].
 
 ## Meta
 
@@ -20,73 +18,15 @@ Tech wise, this app is an Express server running GraphQL, PostgreSQL (Objection.
 * __Optics:__ https://optics.apollodata.com/service/sidewalklabs-Commons-Production?range=lastHour
 * __AppCanary:__ https://appcanary.com/monitors/2283
 * __Logentries:__ https://logentries.com/app/87be99c5#/sets
-
-## Getting started
-
-Tools this repo uses and how to get started using them.
-
-#### GraphQL
-
-_Getting up to speed with GraphQL:_
-- [Learn GraphQL](https://learngraphql.com/basics/introduction)
-- [Example large GraphQL project](https://github.com/artsy/metaphysics)
-- [Building Apollo](https://dev-blog.apollodata.com/tutorial-building-a-graphql-server-cddaa023c035)
-- [GraphQL Tips after a Year in Production](https://hackernoon.com/graphql-tips-after-a-year-in-production-419341db52e3#.voca72wji)
-- We use [apollo tools][] to reduce boilerplate in our app.
-
-#### PostgreSQL + Objection.js ORM
-
-_Getting up to speed with PostgreSQL:_
-- Basic familiarity with SQL
-- [objection.js][]
-
-Create a migration (using [knex][]) with: (TODO: make a yarn script)
-
-    yarn knex migrate:make initial-migration --knexfile=server/models/knexfile.js
-
-Run a migration with:
-
-    yarn migrate
-
-#### GraphiQL
-
-GraphiQL is accessible locally at [http://localhost:3000/graphiql](http://localhost:3000/graphiql) and on production at [https://app-6170.on-aptible.com/graphiql](https://app-6170.on-aptible.com/graphiql). All endpoints except login require you to be authenticated. In order to pass auth information we need to...
-
-1. create a user (NOTE: You may need to disable authentication checks locally in the `createUser` mutation resolver.)
-
-        mutation {
-          createUser(input: {email: "your-name@sidewalklabs.com", password: "password"}) {
-            user { id }
-          }
-        }
-
-2. log in and get `authToken`
-
-        mutation {
-          login(input: {email: "brennan@sidewalklabs.com", password: "password"}) {
-            authToken
-          }
-        }
-
-3. pass auth information via [modheader][] for future requests
-- copy `authToken`
-- download [modheader][] for Chrome
-- add `auth_token` to the request header (note underscore!)
-
-#### Aptible
-
-This app is hosted on [Aptible][]. It is a heroku-like wrapper around some AWS services to make it easier to setup HIPAA compliant infrastructure. It is modeled after Heroku so if you have some experience there, it should be pretty straightforward.
-
-Getting up to speed:
-- Try deploying a node app to Aptible (or Heroku if that is easier)
-- Learn about HIPAA: https://www.aptible.com/resources/common-hipaa-questions/
-
-## Developer Workflow
+* __Model Documentation:__ https://docs.google.com/document/d/1L1MX7QPJl2Mn3DC1icvPGIkufepJORtJA4SxdKqbIAg/edit
+* __Tools Documentation:__: https://docs.google.com/document/d/1LZPlWvR3O8bpP86bQRHnuYWxKlWG9ADfIPsuh3RyjIA/edit
 
 ### Installation
 
+- Install [nvm][] and node 8.4
 - Install [yarn][]
 - Create a `.env` file in the project root (see: [.env][])
+- Install [Zenhub][]
 - Create a Postgres database:
 
     ```
@@ -190,7 +130,32 @@ You should see the changes at our [staging][] endpoint.
 
 ## How-to
 
-## Revert a PR merge into master
+### Use GraphiQL
+
+GraphiQL is accessible locally at [http://localhost:3000/graphiql](http://localhost:3000/graphiql) and on production at [https://app-6170.on-aptible.com/graphiql](https://app-6170.on-aptible.com/graphiql). All endpoints except login require you to be authenticated. In order to pass auth information we need to...
+
+1. create a user (NOTE: You may need to disable authentication checks locally in the `createUser` mutation resolver.)
+
+        mutation {
+          createUser(input: {email: "your-name@sidewalklabs.com", password: "password"}) {
+            user { id }
+          }
+        }
+
+2. log in and get `authToken`
+
+        mutation {
+          login(input: {email: "brennan@sidewalklabs.com", password: "password"}) {
+            authToken
+          }
+        }
+
+3. pass auth information via [modheader][] for future requests
+- copy `authToken`
+- download [modheader][] for Chrome
+- add `auth_token` to the request header (note underscore!)
+
+### Revert a PR merge into master
 
 1. As quickly as possible, cancel the build of master on CircleCI so that there is no deploy to production.
 2. Click the 'Revert' button on GitHub that appears near the bottom of the page on the merged PR.
@@ -277,6 +242,17 @@ To remove a user, run the following command:
 
 When running on production, replace `user:remove:dev` with `user:remove:production`.
 
+### Create a new migration
+
+Create a migration (using [knex][]) with:
+
+    yarn knex migrate:make initial-migration --knexfile=server/models/knexfile.js
+
+Run a migration with:
+
+    yarn migrate
+
+
 ### PostgreSQL Log Settings
 
 We've modified the default PostgreSQL logging behavior to give us more visibility into the database. A good description of what all of these different settings can be found in the [PostgreSQL Documentation][]. All of these settings are modified by running the following statements against the database:
@@ -304,11 +280,13 @@ We are able to run the application locally using Docker and Docker Compose. For 
 5. If you make changes to the application and wish to see them, the application container will need to be rebuilt and restarted. To do this, in another terminal window, run `yarn run docker-prod:restart`.
 6. To stop the application, run: `yarn run docker-prod:stop`.
 
+[nvm]: https://github.com/creationix/nvm
+[Zenhub]: https://www.zenhub.com/
 [Aptible]: https://aptible.com
 [Aptible toolbelt]: https://www.aptible.com/support/toolbelt/
 [staging]: https://app-5428.on-aptible.com
 [yarn]: https://yarnpkg.com/lang/en/docs/install/
-[.env]: https://drive.google.com/open?id=0B0Wqc3F0KwLCVVotMm5haWVQbkU
+[.env]: https://drive.google.com/a/cityblock.com/file/d/0ByoS7xhzfIR0VUJIby00eGQwWmc
 [PRD]: https://docs.google.com/document/d/1yfcbwghOUcJ2PlK_J5JxBIUcXaYuArZuR6VN8-NcZ6g/edit?usp=sharing
 [modheader]: https://chrome.google.com/webstore/detail/modheader/idgpnmonknjnojddfkpgkljpfnnfcklj
 [apollo tools]: https://github.com/apollographql/graphql-tools

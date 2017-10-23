@@ -15,7 +15,6 @@ Tech wise, this app is an Express server running GraphQL and PostgreSQL (Objecti
 * __Point People:__ @zamiang, @loganhasson
 * __Pingdom:__ http://stats.pingdom.com/8uqm3ndqqgmh
 * __Trace:__ https://trace.risingstack.com/app/#/infrastructure/5915e849e665183589dd7506/dashboard
-* __Optics:__ https://optics.apollodata.com/service/sidewalklabs-Commons-Production?range=lastHour
 * __AppCanary:__ https://appcanary.com/monitors/2283
 * __Logentries:__ https://logentries.com/app/87be99c5#/sets
 * __Model Documentation:__ https://docs.google.com/document/d/1L1MX7QPJl2Mn3DC1icvPGIkufepJORtJA4SxdKqbIAg/edit

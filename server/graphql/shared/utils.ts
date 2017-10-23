@@ -2,7 +2,6 @@ import * as base64 from 'base-64';
 import * as express from 'express';
 import { GraphQLBoolean, GraphQLNonNull, GraphQLObjectType } from 'graphql';
 import { decode, sign, verify } from 'jsonwebtoken';
-import OpticsAgent from 'optics-agent';
 import RedoxApi from '../../apis/redox';
 import config from '../../config';
 import Db from '../../db';
@@ -19,7 +18,6 @@ export interface IContext {
   redoxApi: RedoxApi;
   userRole: UserRole;
   userId?: string;
-  opticsContext: any;
   logger: ILogger;
 }
 
@@ -74,12 +72,6 @@ export async function getGraphQLContext(
 
   let userRole: UserRole = 'anonymousUser';
   let userId;
-  let opticsContext;
-
-  /* istanbul ignore next */
-  if (config.NODE_ENV === 'production') {
-    opticsContext = OpticsAgent.context(request);
-  }
 
   if (authToken) {
     try {
@@ -91,7 +83,6 @@ export async function getGraphQLContext(
         db,
         redoxApi,
         userRole: 'anonymousUser',
-        opticsContext,
         logger,
       };
     }
@@ -102,7 +93,6 @@ export async function getGraphQLContext(
     userRole,
     db,
     redoxApi,
-    opticsContext,
     logger,
   };
 }

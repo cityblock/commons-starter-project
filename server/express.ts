@@ -3,7 +3,6 @@ import * as bodyParser from 'body-parser';
 import * as express from 'express';
 import { graphiqlExpress, graphqlExpress } from 'graphql-server-express';
 import * as morgan from 'morgan';
-import OpticsAgent from 'optics-agent';
 import * as path from 'path';
 import renderApp from './app';
 import config from './config';
@@ -50,12 +49,6 @@ export default async (app: express.Application, logger: Console) => {
       maxAge: '24h',
     }),
   );
-
-  /* istanbul ignore next */
-  if (config.NODE_ENV === 'production') {
-    OpticsAgent.instrumentSchema(schema);
-    app.use(OpticsAgent.middleware());
-  }
 
   app.get('/graphiql', graphiqlExpress({ endpointURL: '/graphql' }));
   app.use(

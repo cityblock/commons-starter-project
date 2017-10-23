@@ -1233,10 +1233,7 @@ type RootMutationType {
 
 type RootQueryType {
   # A single User
-  user(
-    # The id of the User
-    userId: String!
-  ): User
+  user(userId: String!): User
   # All Users (admin only)
   users(pageNumber: Int, pageSize: Int, hasLoggedIn: Boolean, orderBy: UserOrderOptions): UserEdges
   # List of patients the user is on the care team for (their 'patient panel')

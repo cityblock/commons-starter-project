@@ -2,9 +2,10 @@ import * as React from 'react';
 import { compose, graphql } from 'react-apollo';
 import { ICarePlan } from 'schema';
 /* tslint:disable:max-line-length */
-import * as carePlanSuggestionAcceptMutation from '../graphql/queries/care-plan-suggestion-accept-mutation.graphql';
+import * as carePlanSuggestionAcceptMutationGraphql from '../graphql/queries/care-plan-suggestion-accept-mutation.graphql';
 import * as patientCarePlanQuery from '../graphql/queries/get-patient-care-plan.graphql';
 import {
+  carePlanSuggestionAcceptMutation,
   carePlanSuggestionAcceptMutationVariables,
   FullCarePlanSuggestionFragment,
 } from '../graphql/types';
@@ -28,7 +29,7 @@ interface IGraphqlProps {
   carePlan?: ICarePlan;
   acceptCarePlanSuggestion: (
     options: { variables: carePlanSuggestionAcceptMutationVariables },
-  ) => { data: { carePlanSuggestionAccept: FullCarePlanSuggestionFragment } };
+  ) => { data: carePlanSuggestionAcceptMutation };
 }
 
 interface IState {
@@ -171,7 +172,7 @@ export default compose(
       carePlan: data ? (data as any).carePlanForPatient : null,
     }),
   }),
-  graphql<IGraphqlProps, IProps>(carePlanSuggestionAcceptMutation as any, {
+  graphql<IGraphqlProps, IProps>(carePlanSuggestionAcceptMutationGraphql as any, {
     name: 'acceptCarePlanSuggestion',
     options: {
       refetchQueries: ['getPatientCarePlanSuggestions', 'getPatientCarePlan'],

@@ -4,8 +4,12 @@ import { compose, graphql } from 'react-apollo';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import * as questionQuery from '../graphql/queries/get-question.graphql';
-import * as questionEditMutation from '../graphql/queries/question-edit-mutation.graphql';
-import { questionEditMutationVariables, FullQuestionFragment } from '../graphql/types';
+import * as questionEditMutationGraphql from '../graphql/queries/question-edit-mutation.graphql';
+import {
+  questionEditMutation,
+  questionEditMutationVariables,
+  FullQuestionFragment,
+} from '../graphql/types';
 import * as formStyles from '../shared/css/forms.css';
 import * as styles from '../shared/css/two-panel-right.css';
 import { IState as IAppState } from '../store';
@@ -33,7 +37,7 @@ interface IGraphqlProps {
   refetchQuestion: () => any;
   editQuestion: (
     options: { variables: questionEditMutationVariables },
-  ) => { data: { questionComplete: FullQuestionFragment } };
+  ) => { data: questionEditMutation };
   onDelete: (questionId: string) => any;
 }
 
@@ -225,7 +229,8 @@ export class Question extends React.Component<allProps, IState> {
           key={answer ? answer.id : ''}
           screeningToolAnswer={!!question.screeningToolId}
           answer={answer}
-          questionId={question.id} />
+          questionId={question.id}
+        />
       ));
     }
   }
@@ -382,7 +387,8 @@ export class Question extends React.Component<allProps, IState> {
               <div className={styles.smallText}>Create answer:</div>
               <AnswerCreateEdit
                 questionId={question.id}
-                screeningToolAnswer={!!question.screeningToolId} />
+                screeningToolAnswer={!!question.screeningToolId}
+              />
               <div className={styles.smallText}>Applicable if type:</div>
               <br />
               <select
@@ -445,7 +451,7 @@ function mapStateToProps(state: IAppState, ownProps: allProps): IStateProps {
 
 export default compose(
   connect<IStateProps, {}, IProps>(mapStateToProps),
-  graphql(questionEditMutation as any, { name: 'editQuestion' }),
+  graphql(questionEditMutationGraphql as any, { name: 'editQuestion' }),
   graphql(questionQuery as any, {
     skip: (props: allProps) => !props.questionId,
     options: (props: allProps) => ({ variables: { questionId: props.questionId } }),

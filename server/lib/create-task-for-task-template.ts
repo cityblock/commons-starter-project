@@ -66,7 +66,7 @@ export async function createTaskForTaskTemplate(
         eventType: 'edit_assignee',
         eventUserId: assignedToId,
       },
-    txn,
+      txn,
     );
   }
 }

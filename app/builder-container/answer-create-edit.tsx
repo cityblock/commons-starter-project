@@ -2,12 +2,15 @@ import * as classNames from 'classnames';
 import { clone, isNil, omit, omitBy, range } from 'lodash';
 import * as React from 'react';
 import { compose, graphql } from 'react-apollo';
-import * as answerCreateMutation from '../graphql/queries/answer-create-mutation.graphql';
-import * as answerDeleteMutation from '../graphql/queries/answer-delete-mutation.graphql';
-import * as answerEditMutation from '../graphql/queries/answer-edit-mutation.graphql';
+import * as answerCreateMutationGraphql from '../graphql/queries/answer-create-mutation.graphql';
+import * as answerDeleteMutationGraphql from '../graphql/queries/answer-delete-mutation.graphql';
+import * as answerEditMutationGraphql from '../graphql/queries/answer-edit-mutation.graphql';
 import {
+  answerCreateMutation,
   answerCreateMutationVariables,
+  answerDeleteMutation,
   answerDeleteMutationVariables,
+  answerEditMutation,
   answerEditMutationVariables,
   AnswerValueTypeOptions,
   FullAnswerFragment,
@@ -30,9 +33,9 @@ interface IProps {
 }
 
 interface IGraphqlProps {
-  createAnswer: (options: ICreateOptions) => { data: { answerCreate: FullAnswerFragment } };
-  editAnswer: (options: IEditOptions) => { data: { answerEdit: FullAnswerFragment } };
-  deleteAnswer: (options: IDeleteOptions) => { data: { answerDelete: FullAnswerFragment } };
+  createAnswer: (options: ICreateOptions) => { data: answerCreateMutation };
+  editAnswer: (options: IEditOptions) => { data: answerEditMutation };
+  deleteAnswer: (options: IDeleteOptions) => { data: { answerDelete: answerDeleteMutation } };
 }
 
 interface IState {
@@ -292,7 +295,7 @@ class AnswerCreateEdit extends React.Component<allProps, IState> {
 }
 
 export default compose(
-  graphql<IGraphqlProps, IProps>(answerCreateMutation as any, {
+  graphql<IGraphqlProps, IProps>(answerCreateMutationGraphql as any, {
     name: 'createAnswer',
     options: {
       refetchQueries: [
@@ -300,10 +303,10 @@ export default compose(
       ],
     },
   }),
-  graphql<IGraphqlProps, IProps>(answerEditMutation as any, {
+  graphql<IGraphqlProps, IProps>(answerEditMutationGraphql as any, {
     name: 'editAnswer',
   }),
-  graphql<IGraphqlProps, IProps>(answerDeleteMutation as any, {
+  graphql<IGraphqlProps, IProps>(answerDeleteMutationGraphql as any, {
     name: 'deleteAnswer',
     options: {
       refetchQueries: [

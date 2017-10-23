@@ -3,11 +3,13 @@ import * as React from 'react';
 import { compose, graphql } from 'react-apollo';
 import { connect, Dispatch } from 'react-redux';
 import { push } from 'react-router-redux';
-import * as questionCreateMutation from '../graphql/queries/question-create-mutation.graphql';
+/* tslint:disable:max-line-length */
+import * as questionCreateMutationGraphql from '../graphql/queries/question-create-mutation.graphql';
+/* tslint:enable:max-line-length */
 import {
+  questionCreateMutation,
   questionCreateMutationVariables,
   AnswerTypeOptions,
-  FullQuestionFragment,
 } from '../graphql/types';
 import * as formStyles from '../shared/css/forms.css';
 import * as loadingStyles from '../shared/css/loading-spinner.css';
@@ -26,7 +28,7 @@ interface IProps {
 }
 
 interface IGraphqlProps {
-  createQuestion?: (options: IOptions) => { data: { questionCreate: FullQuestionFragment } };
+  createQuestion?: (options: IOptions) => { data: questionCreateMutation };
 }
 
 interface IState {
@@ -88,7 +90,7 @@ class QuestionCreate extends React.Component<allProps, IState> {
         });
         this.setState({ loading: false });
         this.props.onClose();
-        if (this.props.redirectToQuestion) {
+        if (this.props.redirectToQuestion && question.data.questionCreate) {
           this.props.redirectToQuestion(question.data.questionCreate.id);
         }
       } catch (e) {
@@ -177,7 +179,7 @@ function mapDispatchToProps(dispatch: Dispatch<() => void>, ownProps: allProps):
 
 export default compose(
   connect(undefined, mapDispatchToProps),
-  graphql<IGraphqlProps, IProps>(questionCreateMutation as any, {
+  graphql<IGraphqlProps, IProps>(questionCreateMutationGraphql as any, {
     name: 'createQuestion',
     options: {
       refetchQueries: [

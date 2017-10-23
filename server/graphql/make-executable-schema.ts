@@ -331,7 +331,7 @@ const logger = {
   },
 };
 
-const schema = (makeExecutableSchema as any)({
+const schema = makeExecutableSchema({
   typeDefs: schemaGql,
   resolvers: resolveFunctions,
   logger,

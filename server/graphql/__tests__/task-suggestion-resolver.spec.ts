@@ -56,9 +56,7 @@ describe('task suggestion resolver', () => {
       });
       // one if suggested task
       const result2 = await graphql(schema, query, null, { userRole });
-      expect(cloneDeep(result2.data!.taskTemplatesForAnswer)).toMatchObject([
-        { title: 'Housing' },
-      ]);
+      expect(cloneDeep(result2.data!.taskTemplatesForAnswer)).toMatchObject([{ title: 'Housing' }]);
     });
   });
 

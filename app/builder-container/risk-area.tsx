@@ -4,8 +4,9 @@ import { compose, graphql } from 'react-apollo';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import * as riskAreaQuery from '../graphql/queries/get-risk-area.graphql';
-import * as riskAreaEditMutation from '../graphql/queries/risk-area-edit-mutation.graphql';
+import * as riskAreaEditMutationGraphql from '../graphql/queries/risk-area-edit-mutation.graphql';
 import {
+  riskAreaEditMutation,
   riskAreaEditMutationVariables,
   FullRiskAreaFragment,
 } from '../graphql/types';
@@ -32,7 +33,7 @@ interface IGraphqlProps {
   refetchRiskArea: () => any;
   editRiskArea: (
     options: { variables: riskAreaEditMutationVariables },
-  ) => { data: { riskAreaComplete: FullRiskAreaFragment } };
+  ) => { data: riskAreaEditMutation };
   onDelete: (riskAreaId: string) => any;
 }
 
@@ -244,19 +245,18 @@ export class RiskArea extends React.Component<allProps, IState> {
       return (
         <div className={outerContainerStyles}>
           <div className={deleteConfirmationStyles}>
-            <div className={styles.deleteConfirmationIcon}></div>
+            <div className={styles.deleteConfirmationIcon} />
             <div className={styles.deleteConfirmationText}>
               Are you sure you want to delete this domain?
             </div>
             <div className={styles.deleteConfirmationButtons}>
               <div
                 className={classNames(styles.deleteCancelButton, styles.invertedButton)}
-                onClick={this.onCancelDelete}>
+                onClick={this.onCancelDelete}
+              >
                 Cancel
               </div>
-              <div
-                className={styles.deleteConfirmButton}
-                onClick={this.onConfirmDelete}>
+              <div className={styles.deleteConfirmButton} onClick={this.onConfirmDelete}>
                 Yes, delete
               </div>
             </div>
@@ -271,9 +271,11 @@ export class RiskArea extends React.Component<allProps, IState> {
             <div>
               <div className={styles.infoRow}>
                 <div className={styles.controls}>
-                  <Link to={closeRoute} className={styles.close}>Close</Link>
+                  <Link to={closeRoute} className={styles.close}>
+                    Close
+                  </Link>
                   <div className={styles.menuItem} onClick={this.onClickDelete}>
-                    <div className={styles.trashIcon}></div>
+                    <div className={styles.trashIcon} />
                     <div className={styles.menuLabel}>Delete domain</div>
                   </div>
                 </div>
@@ -282,36 +284,48 @@ export class RiskArea extends React.Component<allProps, IState> {
             <div className={styles.itemBody}>
               <div className={styles.smallText}>Title:</div>
               <div
-                ref={div => { this.titleBody = div; }}
+                ref={div => {
+                  this.titleBody = div;
+                }}
                 className={titleTextStyles}
-                onClick={this.onClickToEditTitle}>
+                onClick={this.onClickToEditTitle}
+              >
                 {riskArea.title}
               </div>
               <div className={titleEditStyles}>
                 <input
                   name='editedTitle'
-                  ref={area => { this.editTitleInput = area; }}
+                  ref={area => {
+                    this.editTitleInput = area;
+                  }}
                   value={editedTitle}
                   onChange={this.onChange}
                   onKeyDown={this.onKeyDown}
-                  onBlur={this.onBlur} />
+                  onBlur={this.onBlur}
+                />
               </div>
               <div className={styles.smallText}>Order:</div>
               <div
-                ref={div => { this.orderBody = div; }}
+                ref={div => {
+                  this.orderBody = div;
+                }}
                 onClick={this.onClickToEditOrder}
-                className={orderTextStyles}>
+                className={orderTextStyles}
+              >
                 {riskArea.order}
               </div>
               <div className={orderEditStyles}>
                 <input
                   type='number'
                   name='editedOrder'
-                  ref={area => { this.editOrderInput = area; }}
+                  ref={area => {
+                    this.editOrderInput = area;
+                  }}
                   value={editedOrder}
                   onChange={this.onChange}
                   onKeyDown={this.onKeyDown}
-                  onBlur={this.onBlur} />
+                  onBlur={this.onBlur}
+                />
               </div>
             </div>
           </div>
@@ -329,21 +343,22 @@ export class RiskArea extends React.Component<allProps, IState> {
         return (
           <div className={styles.container}>
             <div className={styles.loadingError}>
-              <div className={styles.loadingErrorIcon}></div>
+              <div className={styles.loadingErrorIcon} />
               <div className={styles.loadingErrorLabel}>Unable to load domain</div>
               <div className={styles.loadingErrorSubheading}>
                 Sorry, something went wrong. Please try again.
               </div>
               <div
                 className={classNames(styles.loadingErrorButton, styles.invertedButton)}
-                onClick={this.reloadRiskArea}>
+                onClick={this.reloadRiskArea}
+              >
                 Try again
               </div>
             </div>
           </div>
         );
       } else {
-        return <div className={styles.container}></div>;
+        return <div className={styles.container} />;
       }
     }
   }
@@ -357,15 +372,15 @@ function mapStateToProps(state: IAppState, ownProps: IProps): IStateProps {
 
 export default compose(
   connect<IStateProps, {}, IProps>(mapStateToProps),
-  graphql(riskAreaEditMutation as any, { name: 'editRiskArea' }),
+  graphql(riskAreaEditMutationGraphql as any, { name: 'editRiskArea' }),
   graphql(riskAreaQuery as any, {
     skip: (props: allProps) => !props.riskAreaId,
     options: (props: allProps) => ({ variables: { riskAreaId: props.riskAreaId } }),
     props: ({ data }) => ({
-      riskAreaLoading: (data ? data.loading : false),
-      riskAreaError: (data ? data.error : null),
-      riskArea: (data ? (data as any).riskArea : null),
-      refetchRiskArea: (data ? data.refetch : null),
+      riskAreaLoading: data ? data.loading : false,
+      riskAreaError: data ? data.error : null,
+      riskArea: data ? (data as any).riskArea : null,
+      refetchRiskArea: data ? data.refetch : null,
     }),
   }),
 )(RiskArea);

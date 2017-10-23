@@ -67,12 +67,10 @@ export async function patientAnswersCreate(
     if (!!screeningToolId) {
       const answerIds = patientAnswers.map(patientAnswer => patientAnswer.answerId);
       const answers = await Answer.getMultiple(answerIds, txn);
-      const formattedPatientAnswers = patientAnswers.map(patientAnswer => (
-        {
-          answer: answers.find(answer => answer.id === patientAnswer.answerId),
-          ...patientAnswer,
-        }
-      ));
+      const formattedPatientAnswers = patientAnswers.map(patientAnswer => ({
+        answer: answers.find(answer => answer.id === patientAnswer.answerId),
+        ...patientAnswer,
+      }));
 
       const patientScreeningToolSubmission = await PatientScreeningToolSubmission.create(
         {

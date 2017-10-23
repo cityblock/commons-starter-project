@@ -3,12 +3,15 @@ import { format } from 'date-fns';
 import * as React from 'react';
 import { compose, graphql } from 'react-apollo';
 import { FormattedMessage } from 'react-intl';
-import * as appointmentEndMutation from '../graphql/queries/appointment-end-mutation.graphql';
-import * as appointmentStartMutation from '../graphql/queries/appointment-start-mutation.graphql';
+/* tslint:disable:max-line-length */
+import * as appointmentEndMutationGraphql from '../graphql/queries/appointment-end-mutation.graphql';
+import * as appointmentStartMutationGraphql from '../graphql/queries/appointment-start-mutation.graphql';
+/* tslint:enable:max-line-length */
 import {
+  appointmentEndMutation,
   appointmentEndMutationVariables,
+  appointmentStartMutation,
   appointmentStartMutationVariables,
-  FullAppointmentFragment,
 } from '../graphql/types';
 import * as styles from './css/new-patient-encounter.css';
 
@@ -22,10 +25,10 @@ interface IProps {
 interface IGraphqlProps {
   startAppointment: (
     options: { variables: appointmentStartMutationVariables },
-  ) => { data: { appointmentStart: FullAppointmentFragment } };
+  ) => { data: appointmentStartMutation };
   endAppointment: (
     options: { variables: appointmentEndMutationVariables },
-  ) => { data: { appointmentEnd: { success: boolean } } };
+  ) => { data: appointmentEndMutation };
 }
 
 interface IState {
@@ -109,7 +112,8 @@ class NewPatientEncounter extends React.Component<allProps, IState> {
         await endAppointment({
           variables: {
             patientId,
-            appointmentId: appointment.athenaAppointmentId,
+            // TODO: Handle null appointment
+            appointmentId: appointment!.athenaAppointmentId,
             appointmentNote: encounterSummary,
           },
         });
@@ -265,6 +269,8 @@ class NewPatientEncounter extends React.Component<allProps, IState> {
 }
 
 export default compose(
-  graphql<IGraphqlProps, IProps>(appointmentStartMutation as any, { name: 'startAppointment' }),
-  graphql<IGraphqlProps, IProps>(appointmentEndMutation as any, { name: 'endAppointment' }),
+  graphql<IGraphqlProps, IProps>(appointmentStartMutationGraphql as any, {
+    name: 'startAppointment',
+  }),
+  graphql<IGraphqlProps, IProps>(appointmentEndMutationGraphql as any, { name: 'endAppointment' }),
 )(NewPatientEncounter);

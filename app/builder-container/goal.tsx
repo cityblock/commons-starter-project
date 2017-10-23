@@ -5,9 +5,10 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 /* tslint:disable:max-line-length */
 import * as goalSuggestionTemplateQuery from '../graphql/queries/get-goal-suggestion-template.graphql';
-import * as goalSuggestionTemplateEditMutation from '../graphql/queries/goal-suggestion-template-edit-mutation.graphql';
+import * as goalSuggestionTemplateEditMutationGraphql from '../graphql/queries/goal-suggestion-template-edit-mutation.graphql';
 /* tslint:enable:max-line-length */
 import {
+  goalSuggestionTemplateEditMutation,
   goalSuggestionTemplateEditMutationVariables,
   FullGoalSuggestionTemplateFragment,
 } from '../graphql/types';
@@ -35,7 +36,7 @@ interface IGraphqlProps {
   refetchGoal: () => any;
   editGoal: (
     options: { variables: goalSuggestionTemplateEditMutationVariables },
-  ) => { data: { goalSuggestionTemplateEdit: FullGoalSuggestionTemplateFragment } };
+  ) => { data: goalSuggestionTemplateEditMutation };
   onDelete: (goalId: string) => any;
 }
 
@@ -333,7 +334,7 @@ function mapStateToProps(state: IAppState, ownProps: IProps): IStateProps {
 
 export default compose(
   connect<IStateProps, {}, IProps>(mapStateToProps),
-  graphql(goalSuggestionTemplateEditMutation as any, { name: 'editGoal' }),
+  graphql(goalSuggestionTemplateEditMutationGraphql as any, { name: 'editGoal' }),
   graphql(goalSuggestionTemplateQuery as any, {
     skip: (props: allProps) => !props.goalId,
     options: (props: allProps) => ({ variables: { goalSuggestionTemplateId: props.goalId } }),

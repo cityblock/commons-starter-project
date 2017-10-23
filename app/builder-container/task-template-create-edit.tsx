@@ -3,13 +3,16 @@ import { clone, isNil, omit, omitBy } from 'lodash';
 import * as React from 'react';
 import { compose, graphql } from 'react-apollo';
 /* tslint:disable:max-line-length */
-import * as taskTemplateCreateMutation from '../graphql/queries/task-template-create-mutation.graphql';
-import * as taskTemplateDeleteMutation from '../graphql/queries/task-template-delete-mutation.graphql';
+import * as taskTemplateCreateMutationGraphql from '../graphql/queries/task-template-create-mutation.graphql';
+import * as taskTemplateDeleteMutationGraphql from '../graphql/queries/task-template-delete-mutation.graphql';
+import * as taskTemplateEditMutationGraphql from '../graphql/queries/task-template-edit-mutation.graphql';
 /* tslint:enable:max-line-length */
-import * as taskTemplateEditMutation from '../graphql/queries/task-template-edit-mutation.graphql';
 import {
+  taskTemplateCreateMutation,
   taskTemplateCreateMutationVariables,
+  taskTemplateDeleteMutation,
   taskTemplateDeleteMutationVariables,
+  taskTemplateEditMutation,
   taskTemplateEditMutationVariables,
   FullTaskTemplateFragment,
 } from '../graphql/types';
@@ -30,13 +33,13 @@ interface IProps {
 
 interface IGraphqlProps {
   createTaskTemplate: (options: ICreateOptions) => {
-    data: { taskTemplateCreate: FullTaskTemplateFragment },
+    data: taskTemplateCreateMutation,
   };
   editTaskTemplate: (options: IEditOptions) => {
-    data: { taskTemplateEdit: FullTaskTemplateFragment },
+    data: taskTemplateEditMutation,
   };
   deleteTaskTemplate: (options: IDeleteOptions) => {
-    data: { taskTemplateDelete: FullTaskTemplateFragment },
+    data: taskTemplateDeleteMutation,
   };
 }
 
@@ -284,7 +287,7 @@ class TaskTemplateCreateEdit extends React.Component<allProps, IState> {
 }
 
 export default compose(
-  graphql<IGraphqlProps, IProps>(taskTemplateCreateMutation as any, {
+  graphql<IGraphqlProps, IProps>(taskTemplateCreateMutationGraphql as any, {
     name: 'createTaskTemplate',
     options: {
       refetchQueries: [
@@ -292,10 +295,10 @@ export default compose(
       ],
     },
   }),
-  graphql<IGraphqlProps, IProps>(taskTemplateEditMutation as any, {
+  graphql<IGraphqlProps, IProps>(taskTemplateEditMutationGraphql as any, {
     name: 'editTaskTemplate',
   }),
-  graphql<IGraphqlProps, IProps>(taskTemplateDeleteMutation as any, {
+  graphql<IGraphqlProps, IProps>(taskTemplateDeleteMutationGraphql as any, {
     name: 'deleteTaskTemplate',
     options: {
       refetchQueries: [

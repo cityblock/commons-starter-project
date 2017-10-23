@@ -6,12 +6,17 @@ import { connect, Dispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { selectTask } from '../../actions/task-action';
 import * as taskQuery from '../../graphql/queries/get-task.graphql';
-import * as taskCompleteMutation from '../../graphql/queries/task-complete-mutation.graphql';
-import * as taskEditMutation from '../../graphql/queries/task-edit-mutation.graphql';
-import * as taskUncompleteMutation from '../../graphql/queries/task-uncomplete-mutation.graphql';
+/* tslint:disable:max-line-length */
+import * as taskCompleteMutationGraphql from '../../graphql/queries/task-complete-mutation.graphql';
+import * as taskEditMutationGraphql from '../../graphql/queries/task-edit-mutation.graphql';
+import * as taskUncompleteMutationGraphql from '../../graphql/queries/task-uncomplete-mutation.graphql';
+/* tslint:enable:max-line-length */
 import {
+  taskCompleteMutation,
   taskCompleteMutationVariables,
+  taskEditMutation,
   taskEditMutationVariables,
+  taskUncompleteMutation,
   taskUncompleteMutationVariables,
   FullPatientGoalFragment,
   FullTaskFragment,
@@ -49,13 +54,13 @@ interface IGraphqlProps {
   refetchTask: () => any;
   completeTask: (
     options: { variables: taskCompleteMutationVariables },
-  ) => { data: { taskComplete: FullTaskFragment } };
+  ) => { data: taskCompleteMutation };
   uncompleteTask: (
     options: { variables: taskUncompleteMutationVariables },
-  ) => { data: { taskUncomplete: FullTaskFragment } };
+  ) => { data: taskUncompleteMutation };
   editTask: (
     options: { variables: taskEditMutationVariables },
-  ) => { data: { taskEdit: FullTaskFragment } };
+  ) => { data: taskEditMutation };
   onDelete: (taskId: string) => any;
 }
 
@@ -731,9 +736,9 @@ function mapDispatchToProps(dispatch: Dispatch<() => void>): IDispatchProps {
 
 export default compose(
   connect<IStateProps, IDispatchProps, IProps>(mapStateToProps, mapDispatchToProps),
-  graphql(taskCompleteMutation as any, { name: 'completeTask' }),
-  graphql(taskUncompleteMutation as any, { name: 'uncompleteTask' }),
-  graphql(taskEditMutation as any, { name: 'editTask' }),
+  graphql(taskCompleteMutationGraphql as any, { name: 'completeTask' }),
+  graphql(taskUncompleteMutationGraphql as any, { name: 'uncompleteTask' }),
+  graphql(taskEditMutationGraphql as any, { name: 'editTask' }),
   graphql(taskQuery as any, {
     skip: (props: allProps) => !props.taskId,
     options: (props: allProps) => ({ variables: { taskId: props.taskId } }),

@@ -5,8 +5,9 @@ import { connect, Dispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { push } from 'react-router-redux';
 import * as getClinicsQuery from '../graphql/queries/clinics-get.graphql';
-import * as setupPatientMutation from '../graphql/queries/patient-setup-mutation.graphql';
+import * as setupPatientMutationGraphql from '../graphql/queries/patient-setup-mutation.graphql';
 import {
+  patientSetupMutation,
   patientSetupMutationVariables,
   FullClinicFragment,
   ShortPatientFragment,
@@ -32,7 +33,7 @@ interface IProps {
 interface IGraphqlProps {
   createPatient: (
     options: { variables: patientSetupMutationVariables },
-  ) => { data: { patientSetup: ShortPatientFragment } };
+  ) => { data: patientSetupMutation };
   clinic: FullClinicFragment;
   clinicsLoading: boolean;
   clinicsError?: string;
@@ -180,7 +181,9 @@ class PatientEnrollmentContainer extends React.Component<allProps, IState> {
           dateOfBirth: formatDate(this.state.patient.dateOfBirth),
         },
       });
-      this.setState({ createdPatient: patient.data.patientSetup, loading: false });
+      if (patient.data.patientSetup) {
+        this.setState({ createdPatient: patient.data.patientSetup, loading: false });
+      }
     } catch (e) {
       this.setState({ error: e.message, loading: false });
       this.showErrorPopup();
@@ -297,7 +300,7 @@ function formatClinic(clinics: any) {
 
 export default compose(
   connect<{}, IDispatchProps, IProps>(undefined, mapDispatchToProps),
-  graphql(setupPatientMutation as any, { name: 'createPatient' }),
+  graphql(setupPatientMutationGraphql as any, { name: 'createPatient' }),
   graphql(getClinicsQuery as any, {
     options: {
       variables: {

@@ -3,11 +3,11 @@ import * as React from 'react';
 import { compose, graphql } from 'react-apollo';
 import * as patientScratchPadQuery from '../graphql/queries/get-patient-scratch-pad.graphql';
 /* tslint:disable:max-line-length */
-import * as savePatientScratchPadMutation from '../graphql/queries/patient-scratch-pad-edit-mutation.graphql';
+import * as savePatientScratchPadMutationGraphql from '../graphql/queries/patient-scratch-pad-edit-mutation.graphql';
 /* tslint:enable:max-line-length */
 import {
+  patientScratchPadEditMutation,
   patientScratchPadEditMutationVariables,
-  FullPatientScratchPadFragment,
 } from '../graphql/types';
 import * as styles from './css/patient-scratch-pad.css';
 import { PatientScratchPadStatus } from './patient-scratch-pad-status';
@@ -25,7 +25,7 @@ interface IGraphqlProps {
   error?: string;
   saveScratchPad: (
     options: { variables: patientScratchPadEditMutationVariables },
-  ) => { data: { patientScratchPad: FullPatientScratchPadFragment } };
+  ) => { data: patientScratchPadEditMutation };
   refetchScratchPad: (variables: { patientId: string }) => any;
 }
 
@@ -158,7 +158,7 @@ class PatientScratchPad extends React.Component<allProps, IState> {
 }
 
 export default compose(
-  graphql<IGraphqlProps, IProps>(savePatientScratchPadMutation as any,
+  graphql<IGraphqlProps, IProps>(savePatientScratchPadMutationGraphql as any,
    { name: 'saveScratchPad' }),
   graphql<IGraphqlProps, IProps>(patientScratchPadQuery as any, {
     options: (props: IProps) => ({

@@ -2,10 +2,10 @@ import * as classNames from 'classnames';
 import * as React from 'react';
 import { compose, graphql } from 'react-apollo';
 import * as careTeamQuery from '../../graphql/queries/get-patient-care-team.graphql';
-import * as editTaskMutation from '../../graphql/queries/task-edit-mutation.graphql';
+import * as editTaskMutationGraphql from '../../graphql/queries/task-edit-mutation.graphql';
 import {
+  taskEditMutation,
   taskEditMutationVariables,
-  FullTaskFragment,
   FullUserFragment,
   ShortUserFragment,
 } from '../../graphql/types';
@@ -25,7 +25,7 @@ interface IProps {
 interface IGraphqlProps {
   changeAssignee: (
     options: { variables: taskEditMutationVariables },
-  ) => { data: { taskEdit: FullTaskFragment } };
+  ) => { data: taskEditMutation };
 }
 
 interface IState {
@@ -192,7 +192,7 @@ export class TaskAssignee extends React.Component<allProps, IState> {
 }
 
 export default compose(
-  graphql<IGraphqlProps, IProps>(editTaskMutation as any, { name: 'changeAssignee' }),
+  graphql<IGraphqlProps, IProps>(editTaskMutationGraphql as any, { name: 'changeAssignee' }),
   graphql<IGraphqlProps, IProps>(careTeamQuery as any, {
     options: (props: allProps) => ({
       variables: {

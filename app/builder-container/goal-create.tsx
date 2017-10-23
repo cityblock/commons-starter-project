@@ -3,11 +3,11 @@ import { compose, graphql } from 'react-apollo';
 import { connect, Dispatch } from 'react-redux';
 import { push } from 'react-router-redux';
 /* tslint:disable:max-line-length */
-import * as goalCreateMutation from '../graphql/queries/goal-suggestion-template-create-mutation.graphql';
+import * as goalCreateMutationGraphql from '../graphql/queries/goal-suggestion-template-create-mutation.graphql';
 /* tslint:enable:max-line-length */
 import {
+  goalSuggestionTemplateCreateMutation,
   goalSuggestionTemplateCreateMutationVariables,
-  FullGoalSuggestionTemplateFragment,
 } from '../graphql/types';
 import * as formStyles from '../shared/css/forms.css';
 import * as loadingStyles from '../shared/css/loading-spinner.css';
@@ -15,7 +15,9 @@ import * as goalStyles from '../shared/css/two-panel-right.css';
 import { IUpdatedField } from '../shared/util/updated-fields';
 import * as styles from './css/risk-area-create.css';
 
-interface IOptions { variables: goalSuggestionTemplateCreateMutationVariables; }
+interface IOptions {
+  variables: goalSuggestionTemplateCreateMutationVariables;
+}
 
 interface IProps {
   routeBase: string;
@@ -24,8 +26,10 @@ interface IProps {
 }
 
 interface IGraphqlProps {
-  createGoal?: (options: IOptions) => {
-    data: { goalSuggestionTemplateCreate: FullGoalSuggestionTemplateFragment },
+  createGoal?: (
+    options: IOptions,
+  ) => {
+    data: goalSuggestionTemplateCreateMutation;
   };
 }
 
@@ -74,15 +78,15 @@ class GoalCreate extends React.Component<allProps, IState> {
     if (this.props.createGoal) {
       try {
         this.setState({ loading: true });
-        const goal = await this.props.createGoal({
+        const goalResponse = await this.props.createGoal({
           variables: {
             ...this.state.goal,
           },
         });
         this.setState({ loading: false });
         this.props.onClose();
-        if (this.props.redirectToGoal) {
-          this.props.redirectToGoal(goal.data.goalSuggestionTemplateCreate.id);
+        if (this.props.redirectToGoal && goalResponse.data.goalSuggestionTemplateCreate) {
+          this.props.redirectToGoal(goalResponse.data.goalSuggestionTemplateCreate.id);
         }
       } catch (e) {
         this.setState({ error: e.message, loading: false });
@@ -104,7 +108,7 @@ class GoalCreate extends React.Component<allProps, IState> {
           <div className={styles.formCenter}>
             <div className={loadingClass}>
               <div className={styles.loadingContainer}>
-                <div className={loadingStyles.loadingSpinner}></div>
+                <div className={loadingStyles.loadingSpinner} />
               </div>
             </div>
             <div className={styles.inputGroup}>
@@ -113,16 +117,16 @@ class GoalCreate extends React.Component<allProps, IState> {
                 value={goal.title}
                 placeholder={'Enter goal title'}
                 className={formStyles.input}
-                onChange={this.onChange} />
+                onChange={this.onChange}
+              />
             </div>
           </div>
           <div className={styles.formBottom}>
             <div className={styles.formBottomContent}>
-              <div className={styles.cancelButton} onClick={this.props.onClose}>Cancel</div>
-              <input
-                type='submit'
-                className={styles.submitButton}
-                value='Add goal' />
+              <div className={styles.cancelButton} onClick={this.props.onClose}>
+                Cancel
+              </div>
+              <input type='submit' className={styles.submitButton} value='Add goal' />
             </div>
           </div>
         </form>
@@ -141,12 +145,10 @@ function mapDispatchToProps(dispatch: Dispatch<() => void>, ownProps: allProps):
 
 export default compose(
   connect(undefined, mapDispatchToProps),
-  graphql<IGraphqlProps, IProps>(goalCreateMutation as any, {
+  graphql<IGraphqlProps, IProps>(goalCreateMutationGraphql as any, {
     name: 'createGoal',
     options: {
-      refetchQueries: [
-        'goalSuggestionTemplates',
-      ],
+      refetchQueries: ['goalSuggestionTemplates'],
     },
   }),
 )(GoalCreate);

@@ -3,13 +3,16 @@ import { clone, isNil, omit, omitBy } from 'lodash';
 import * as React from 'react';
 import { compose, graphql } from 'react-apollo';
 /* tslint:disable:max-line-length */
-import * as scoreRangeCreateMutation from '../graphql/queries/screening-tool-score-range-create-mutation.graphql';
-import * as scoreRangeDeleteMutation from '../graphql/queries/screening-tool-score-range-delete-mutation.graphql';
-import * as scoreRangeEditMutation from '../graphql/queries/screening-tool-score-range-edit-mutation.graphql';
+import * as scoreRangeCreateMutationGraphql from '../graphql/queries/screening-tool-score-range-create-mutation.graphql';
+import * as scoreRangeDeleteMutationGraphql from '../graphql/queries/screening-tool-score-range-delete-mutation.graphql';
+import * as scoreRangeEditMutationGraphql from '../graphql/queries/screening-tool-score-range-edit-mutation.graphql';
 /* tslint:enable:max-line-length */
 import {
+  screeningToolScoreRangeCreateMutation,
   screeningToolScoreRangeCreateMutationVariables,
+  screeningToolScoreRangeDeleteMutation,
   screeningToolScoreRangeDeleteMutationVariables,
+  screeningToolScoreRangeEditMutation,
   screeningToolScoreRangeEditMutationVariables,
   FullScreeningToolScoreRangeFragment,
 } from '../graphql/types';
@@ -32,11 +35,11 @@ interface IProps {
 
 interface IGraphqlProps {
   createScoreRange?: (options: ICreateOptions) =>
-    { data: { scoreRangeCreate: FullScreeningToolScoreRangeFragment } };
+    { data: screeningToolScoreRangeCreateMutation };
   editScoreRange?: (options: IEditOptions) =>
-    { data: { scoreRangeEdit: FullScreeningToolScoreRangeFragment } };
+    { data: screeningToolScoreRangeEditMutation };
   deleteScoreRange?: (options: IDeleteOptions) =>
-    { data: { scoreRangeDelete: FullScreeningToolScoreRangeFragment } };
+    { data: screeningToolScoreRangeDeleteMutation };
 }
 
 interface IState {
@@ -197,7 +200,7 @@ class ScoreRangeCreateEdit extends React.Component<allProps, IState> {
 }
 
 export default compose(
-  graphql<IGraphqlProps, IProps>(scoreRangeCreateMutation as any, {
+  graphql<IGraphqlProps, IProps>(scoreRangeCreateMutationGraphql as any, {
     name: 'createScoreRange',
     options: {
       refetchQueries: [
@@ -205,10 +208,10 @@ export default compose(
       ],
     },
   }),
-  graphql<IGraphqlProps, IProps>(scoreRangeEditMutation as any, {
+  graphql<IGraphqlProps, IProps>(scoreRangeEditMutationGraphql as any, {
     name: 'editScoreRange',
   }),
-  graphql<IGraphqlProps, IProps>(scoreRangeDeleteMutation as any, {
+  graphql<IGraphqlProps, IProps>(scoreRangeDeleteMutationGraphql as any, {
     name: 'deleteScoreRange',
     options: {
       refetchQueries: [

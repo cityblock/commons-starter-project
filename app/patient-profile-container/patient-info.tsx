@@ -4,8 +4,12 @@ import * as React from 'react';
 import { compose, graphql } from 'react-apollo';
 import { FormattedMessage } from 'react-intl';
 import { DOB_FORMAT } from '../config';
-import * as editPatientMutation from '../graphql/queries/patient-edit-mutation.graphql';
-import { patientEditMutationVariables, ShortPatientFragment } from '../graphql/types';
+import * as editPatientMutationGraphql from '../graphql/queries/patient-edit-mutation.graphql';
+import {
+  patientEditMutation,
+  patientEditMutationVariables,
+  ShortPatientFragment,
+} from '../graphql/types';
 import * as sortSearchStyles from '../shared/css/sort-search.css';
 import PatientContactForm, { IState as IPatientContactState } from '../shared/patient-contact-form';
 import PatientDemographicsForm, {
@@ -30,7 +34,7 @@ interface IProps {
 }
 
 interface IGraphqlProps {
-  updatePatientInfo: (options: IOptions) => { data: { patientEdit: ShortPatientFragment } };
+  updatePatientInfo: (options: IOptions) => { data: patientEditMutation };
 }
 
 type IState = IPatientDemographicsState &
@@ -293,5 +297,5 @@ export class PatientInfo extends React.Component<allProps, IState> {
 }
 
 export default compose(
-  graphql<IGraphqlProps, IProps>(editPatientMutation as any, { name: 'updatePatientInfo' }),
+  graphql<IGraphqlProps, IProps>(editPatientMutationGraphql as any, { name: 'updatePatientInfo' }),
 )(PatientInfo);

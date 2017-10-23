@@ -9,11 +9,13 @@ import * as patientAnswersQuery from '../graphql/queries/get-patient-answers-for
 /* tslint:disable:max-line-length */
 import * as riskAreaQuestionsQuery from '../graphql/queries/get-questions-for-risk-area-or-screening-tool.graphql';
 import * as riskAreaQuery from '../graphql/queries/get-risk-area.graphql';
-import * as patientAnswersCreate from '../graphql/queries/patient-answers-create-mutation.graphql';
-import * as patientAnswersUpdateApplicability from '../graphql/queries/patient-answers-update-applicable-mutation.graphql';
+import * as patientAnswersCreateMutationGraphql from '../graphql/queries/patient-answers-create-mutation.graphql';
+import * as patientAnswersUpdateApplicabilityMutationGraphql from '../graphql/queries/patient-answers-update-applicable-mutation.graphql';
 /* tsline:enable:max-line-length */
 import {
+  patientAnswersCreateMutation,
   patientAnswersCreateMutationVariables,
+  patientAnswersUpdateApplicableMutation,
   patientAnswersUpdateApplicableMutationVariables,
   FullPatientAnswerFragment,
   FullQuestionFragment,
@@ -36,10 +38,10 @@ interface IProps {
   riskAreaQuestionsError?: string;
   createPatientAnswers?: (
     options: { variables: patientAnswersCreateMutationVariables },
-  ) => { data: { patientAnswersCreate: [FullPatientAnswerFragment] } };
+  ) => { data: patientAnswersCreateMutation };
   updateAnswersApplicability?: (
     options: { variables: patientAnswersUpdateApplicableMutationVariables },
-  ) => { data: { patientAnswersUpdateApplicable: [FullPatientAnswerFragment] } };
+  ) => { data: patientAnswersUpdateApplicableMutation };
   patientAnswers?: [FullPatientAnswerFragment];
   patientAnswersLoading?: boolean;
   patientAnswersError?: string;
@@ -230,13 +232,11 @@ export class RiskAreaAssessment extends React.Component<IProps, IState> {
     this.setState(() => ({ inProgress: false, questions }));
   }
 
-  updateVisibility(updatedAnswersResponse: {
-    data: { patientAnswersUpdateApplicable: FullPatientAnswerFragment[] };
-  }) {
+  updateVisibility(updatedAnswersResponse: { data: patientAnswersUpdateApplicableMutation }) {
     const { data } = updatedAnswersResponse;
 
     // TODO: use the response here to verify the visibility of answers in the assessment
-    if (data && data.patientAnswersUpdateApplicable.length) {
+    if (data && data.patientAnswersUpdateApplicable) {
       return data;
     }
   }
@@ -604,6 +604,8 @@ export default compose(
       refetchPatientAnswers: data ? data.refetch : null,
     }),
   }),
-  graphql(patientAnswersCreate as any, { name: 'createPatientAnswers' }),
-  graphql(patientAnswersUpdateApplicability as any, { name: 'updateAnswersApplicability' }),
+  graphql(patientAnswersCreateMutationGraphql as any, { name: 'createPatientAnswers' }),
+  graphql(patientAnswersUpdateApplicabilityMutationGraphql as any, {
+    name: 'updateAnswersApplicability',
+  }),
 )(RiskAreaAssessment);

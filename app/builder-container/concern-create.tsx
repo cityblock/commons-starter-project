@@ -2,10 +2,10 @@ import * as React from 'react';
 import { compose, graphql } from 'react-apollo';
 import { connect, Dispatch } from 'react-redux';
 import { push } from 'react-router-redux';
-import * as concernCreateMutation from '../graphql/queries/concern-create-mutation.graphql';
+import * as concernCreateMutationGraphql from '../graphql/queries/concern-create-mutation.graphql';
 import {
+  concernCreateMutation,
   concernCreateMutationVariables,
-  FullConcernFragment,
 } from '../graphql/types';
 import * as formStyles from '../shared/css/forms.css';
 import * as loadingStyles from '../shared/css/loading-spinner.css';
@@ -22,7 +22,7 @@ interface IProps {
 }
 
 interface IGraphqlProps {
-  createConcern?: (options: IOptions) => { data: { concernCreate: FullConcernFragment } };
+  createConcern?: (options: IOptions) => { data: concernCreateMutation };
 }
 
 interface IState {
@@ -77,7 +77,7 @@ class ConcernCreate extends React.Component<allProps, IState> {
         });
         this.setState({ loading: false });
         this.props.onClose();
-        if (this.props.redirectToConcern) {
+        if (this.props.redirectToConcern && concern.data.concernCreate) {
           this.props.redirectToConcern(concern.data.concernCreate.id);
         }
       } catch (e) {
@@ -137,7 +137,7 @@ function mapDispatchToProps(dispatch: Dispatch<() => void>, ownProps: allProps):
 
 export default compose(
   connect(undefined, mapDispatchToProps),
-  graphql<IGraphqlProps, IProps>(concernCreateMutation as any, {
+  graphql<IGraphqlProps, IProps>(concernCreateMutationGraphql as any, {
     name: 'createConcern',
     options: {
       refetchQueries: [

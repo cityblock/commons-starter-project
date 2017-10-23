@@ -6,9 +6,10 @@ import { Route } from 'react-router-dom';
 import { push } from 'react-router-redux';
 /* tslint:disable:max-line-length */
 import * as questionsQuery from '../graphql/queries/get-questions-for-risk-area-or-screening-tool.graphql';
+import * as questionDeleteMutationGraphql from '../graphql/queries/question-delete-mutation.graphql';
 /* tslint:enable:max-line-length */
-import * as questionDeleteMutation from '../graphql/queries/question-delete-mutation.graphql';
 import {
+  questionDeleteMutation,
   questionDeleteMutationVariables,
   FullQuestionFragment,
   FullRiskAreaFragment,
@@ -34,7 +35,7 @@ interface IProps extends IComponentProps {
   error?: string;
   deleteQuestion: (
     options: { variables: questionDeleteMutationVariables },
-  ) => { data: { questionDelete: FullQuestionFragment } };
+  ) => { data: questionDeleteMutation };
   redirectToQuestions: () => any;
   questions?: FullQuestionFragment[];
   questionsRefetch: (variables: { riskAreaId: string }) => any;
@@ -233,7 +234,7 @@ function mapDispatchToProps(dispatch: Dispatch<() => void>, ownProps: IProps): P
 
 export default (compose)(
   connect<any, any, IComponentProps>(null, mapDispatchToProps),
-  graphql(questionDeleteMutation as any, { name: 'deleteQuestion' }),
+  graphql(questionDeleteMutationGraphql as any, { name: 'deleteQuestion' }),
   graphql(questionsQuery as any, {
     options: (props: IProps) => ({
       variables: getPageParams(props),

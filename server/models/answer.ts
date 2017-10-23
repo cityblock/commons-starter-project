@@ -102,8 +102,7 @@ export default class Answer extends BaseModel {
   }
 
   static async getMultiple(answerIds: string[], txn?: Transaction): Promise<Answer[]> {
-    return await this.query(txn)
-      .where('id', 'in', answerIds);
+    return await this.query(txn).where('id', 'in', answerIds);
   }
 
   static async getAllForQuestion(questionId: string): Promise<Answer[]> {

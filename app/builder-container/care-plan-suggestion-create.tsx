@@ -2,13 +2,15 @@ import * as classNames from 'classnames';
 import * as React from 'react';
 import { compose, graphql } from 'react-apollo';
 /* tslint:disable:max-line-length */
-import * as concernSuggestionCreateMutation from '../graphql/queries/concern-suggestion-create-mutation.graphql';
+import * as concernSuggestionCreateMutationGraphql from '../graphql/queries/concern-suggestion-create-mutation.graphql';
 import * as concernsQuery from '../graphql/queries/get-concerns.graphql';
 import * as goalsQuery from '../graphql/queries/get-goal-suggestion-templates.graphql';
-import * as goalSuggestionCreateMutation from '../graphql/queries/goal-suggestion-create-mutation.graphql';
+import * as goalSuggestionCreateMutationGraphql from '../graphql/queries/goal-suggestion-create-mutation.graphql';
 /* tslint:enable:max-line-length */
 import {
+  concernSuggestionCreateMutation,
   concernSuggestionCreateMutationVariables,
+  goalSuggestionCreateMutation,
   goalSuggestionCreateMutationVariables,
   FullAnswerFragment,
   FullConcernFragment,
@@ -30,10 +32,10 @@ interface IProps {
 interface IGraphqlProps {
   createConcernSuggestion?: (
     options: { variables: concernSuggestionCreateMutationVariables },
-  ) => { data: { concernSuggestionCreate: FullConcernFragment } };
+  ) => { data: concernSuggestionCreateMutation };
   createGoalSuggestion?: (
     options: { variables: goalSuggestionCreateMutationVariables },
-  ) => { data: { goalSuggestionCreate: FullGoalSuggestionTemplateFragment } };
+  ) => { data: goalSuggestionCreateMutation };
 }
 
 interface IState {
@@ -269,7 +271,7 @@ export default compose(
       goals: (data ? (data as any).goalSuggestionTemplates : null),
     }),
   }),
-  graphql<IGraphqlProps, IProps>(concernSuggestionCreateMutation as any, {
+  graphql<IGraphqlProps, IProps>(concernSuggestionCreateMutationGraphql as any, {
     name: 'createConcernSuggestion',
     options: {
       refetchQueries: [
@@ -278,7 +280,7 @@ export default compose(
       ],
     },
   }),
-  graphql<IGraphqlProps, IProps>(goalSuggestionCreateMutation as any, {
+  graphql<IGraphqlProps, IProps>(goalSuggestionCreateMutationGraphql as any, {
     name: 'createGoalSuggestion',
     options: {
       refetchQueries: [

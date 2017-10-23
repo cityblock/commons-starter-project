@@ -8,6 +8,7 @@ import { push } from 'react-router-redux';
 import * as goalDeleteMutation from '../graphql/queries/goal-suggestion-template-delete-mutation.graphql';
 /* tslint:enable:max-line-length */
 import {
+  goalSuggestionTemplateDeleteMutation,
   goalSuggestionTemplateDeleteMutationVariables,
   FullGoalSuggestionTemplateFragment,
 } from '../graphql/types';
@@ -21,7 +22,7 @@ interface IProps {
   error?: string;
   deleteGoal?: (
     options: { variables: goalSuggestionTemplateDeleteMutationVariables },
-  ) => { data: { goalDelete: FullGoalSuggestionTemplateFragment } };
+  ) => { data: goalSuggestionTemplateDeleteMutation };
   mutate?: any;
   redirectToGoals?: () => any;
   routeBase: string;

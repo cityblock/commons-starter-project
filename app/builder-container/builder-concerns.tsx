@@ -4,8 +4,9 @@ import { compose, graphql } from 'react-apollo';
 import { connect, Dispatch } from 'react-redux';
 import { Route } from 'react-router-dom';
 import { push } from 'react-router-redux';
-import * as concernDeleteMutation from '../graphql/queries/concern-delete-mutation.graphql';
+import * as concernDeleteMutationGraphql from '../graphql/queries/concern-delete-mutation.graphql';
 import {
+  concernDeleteMutation,
   concernDeleteMutationVariables,
   FullConcernFragment,
 } from '../graphql/types';
@@ -26,7 +27,7 @@ interface IProps extends IComponentProps {
   mutate: any;
   deleteConcern: (
     options: { variables: concernDeleteMutationVariables },
-  ) => { data: { riskAreaDelete: FullConcernFragment } };
+  ) => { data: concernDeleteMutation };
   redirectToConcerns: () => any;
 }
 
@@ -156,5 +157,5 @@ function mapDispatchToProps(dispatch: Dispatch<() => void>, ownProps: IProps): P
 
 export default (compose)(
   connect<any, any, IComponentProps>(null, mapDispatchToProps),
-  graphql(concernDeleteMutation as any, { name: 'deleteConcern' }),
+  graphql(concernDeleteMutationGraphql as any, { name: 'deleteConcern' }),
 )(BuilderConcerns);

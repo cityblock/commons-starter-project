@@ -2,10 +2,12 @@ import * as React from 'react';
 import { compose, graphql } from 'react-apollo';
 import { connect, Dispatch } from 'react-redux';
 import { push } from 'react-router-redux';
-import * as riskAreaCreateMutation from '../graphql/queries/risk-area-create-mutation.graphql';
+/* tslint:disable:max-line-length */
+import * as riskAreaCreateMutationGraphql from '../graphql/queries/risk-area-create-mutation.graphql';
+/* tslint:enable:max-line-length */
 import {
+  riskAreaCreateMutation,
   riskAreaCreateMutationVariables,
-  FullRiskAreaFragment,
 } from '../graphql/types';
 import * as formStyles from '../shared/css/forms.css';
 import * as loadingStyles from '../shared/css/loading-spinner.css';
@@ -13,7 +15,9 @@ import * as riskAreaStyles from '../shared/css/two-panel-right.css';
 import { IUpdatedField } from '../shared/util/updated-fields';
 import * as styles from './css/risk-area-create.css';
 
-interface IOptions { variables: riskAreaCreateMutationVariables; }
+interface IOptions {
+  variables: riskAreaCreateMutationVariables;
+}
 
 interface IProps {
   routeBase: string;
@@ -22,7 +26,7 @@ interface IProps {
 }
 
 interface IGraphqlProps {
-  createRiskArea?: (options: IOptions) => { data: { riskAreaCreate: FullRiskAreaFragment } };
+  createRiskArea?: (options: IOptions) => { data: riskAreaCreateMutation };
 }
 
 interface IState {
@@ -34,7 +38,6 @@ interface IState {
 type allProps = IProps & IGraphqlProps;
 
 class RiskAreaCreate extends React.Component<allProps, IState> {
-
   constructor(props: allProps) {
     super(props);
 
@@ -81,7 +84,7 @@ class RiskAreaCreate extends React.Component<allProps, IState> {
         });
         this.setState({ loading: false });
         this.props.onClose();
-        if (this.props.redirectToRiskArea) {
+        if (this.props.redirectToRiskArea && riskArea.data.riskAreaCreate) {
           this.props.redirectToRiskArea(riskArea.data.riskAreaCreate.id);
         }
       } catch (e) {
@@ -104,7 +107,7 @@ class RiskAreaCreate extends React.Component<allProps, IState> {
           <div className={styles.formCenter}>
             <div className={loadingClass}>
               <div className={styles.loadingContainer}>
-                <div className={loadingStyles.loadingSpinner}></div>
+                <div className={loadingStyles.loadingSpinner} />
               </div>
             </div>
             <div className={styles.inputGroup}>
@@ -113,23 +116,24 @@ class RiskAreaCreate extends React.Component<allProps, IState> {
                 value={riskArea.title}
                 placeholder={'Enter domain title'}
                 className={formStyles.input}
-                onChange={this.onChange} />
+                onChange={this.onChange}
+              />
               <input
                 type='number'
                 name='order'
                 placeholder={'Enter domain order'}
                 value={riskArea.order}
                 className={formStyles.input}
-                onChange={this.onChange} />
+                onChange={this.onChange}
+              />
             </div>
           </div>
           <div className={styles.formBottom}>
             <div className={styles.formBottomContent}>
-              <div className={styles.cancelButton} onClick={this.props.onClose}>Cancel</div>
-              <input
-                type='submit'
-                className={styles.submitButton}
-                value='Add domain' />
+              <div className={styles.cancelButton} onClick={this.props.onClose}>
+                Cancel
+              </div>
+              <input type='submit' className={styles.submitButton} value='Add domain' />
             </div>
           </div>
         </form>
@@ -148,12 +152,10 @@ function mapDispatchToProps(dispatch: Dispatch<() => void>, ownProps: allProps):
 
 export default compose(
   connect(undefined, mapDispatchToProps),
-  graphql<IGraphqlProps, IProps>(riskAreaCreateMutation as any, {
+  graphql<IGraphqlProps, IProps>(riskAreaCreateMutationGraphql as any, {
     name: 'createRiskArea',
     options: {
-      refetchQueries: [
-        'getRiskAreas',
-      ],
+      refetchQueries: ['getRiskAreas'],
     },
   }),
 )(RiskAreaCreate);

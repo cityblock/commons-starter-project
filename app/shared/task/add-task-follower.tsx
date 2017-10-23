@@ -2,10 +2,12 @@ import * as classNames from 'classnames';
 import * as React from 'react';
 import { compose, graphql } from 'react-apollo';
 import * as careTeamQuery from '../../graphql/queries/get-patient-care-team.graphql';
-import * as taskUserFollowMutation from '../../graphql/queries/task-user-follow-mutation.graphql';
+/* tslint:disable:max-line-length */
+import * as taskUserFollowMutationGraphql from '../../graphql/queries/task-user-follow-mutation.graphql';
+/* tslint:enable:max-line-length */
 import {
+  taskUserFollowMutation,
   taskUserFollowMutationVariables,
-  FullTaskFragment,
   FullUserFragment,
   ShortUserFragment,
 } from '../../graphql/types';
@@ -24,7 +26,7 @@ interface IGraphqlProps {
   careTeam?: FullUserFragment[];
   addTaskFollower: (
     options: { variables: taskUserFollowMutationVariables },
-  ) => { data: { taskUserFollow: FullTaskFragment } };
+  ) => { data: taskUserFollowMutation };
   mutate?: any;
 }
 
@@ -162,7 +164,7 @@ export class AddTaskFollower extends React.Component<allProps, IState> {
 }
 
 export default compose(
-  graphql<IGraphqlProps, IProps>(taskUserFollowMutation as any, { name: 'addTaskFollower' }),
+  graphql<IGraphqlProps, IProps>(taskUserFollowMutationGraphql as any, { name: 'addTaskFollower' }),
   graphql<IGraphqlProps, IProps>(careTeamQuery as any, {
     options: (props: IProps) => ({
       variables: {

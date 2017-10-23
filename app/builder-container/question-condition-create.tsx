@@ -2,9 +2,10 @@ import * as classNames from 'classnames';
 import * as React from 'react';
 import { compose, graphql } from 'react-apollo';
 /* tslint:disable:max-line-length */
-import * as questionConditionCreateMutation from '../graphql/queries/question-condition-create-mutation.graphql';
+import * as questionConditionCreateMutationGraphql from '../graphql/queries/question-condition-create-mutation.graphql';
 /* tslint:enable:max-line-length */
 import {
+  questionConditionCreateMutation,
   questionConditionCreateMutationVariables,
   FullAnswerFragment,
   FullQuestionConditionFragment,
@@ -15,7 +16,9 @@ import * as questionConditionStyles from '../shared/css/two-panel-right.css';
 import * as styles from './css/risk-area-create.css';
 import QuestionAnswerOption from './question-answer-option';
 
-export interface ICreateOptions { variables: questionConditionCreateMutationVariables; }
+export interface ICreateOptions {
+  variables: questionConditionCreateMutationVariables;
+}
 
 interface IProps {
   questionCondition?: FullQuestionConditionFragment;
@@ -24,9 +27,7 @@ interface IProps {
 }
 
 interface IGraphqlProps {
-  createQuestionCondition: (
-    options: ICreateOptions,
-  ) => { data: { questionConditionCreate: FullQuestionConditionFragment } };
+  createQuestionCondition: (options: ICreateOptions) => { data: questionConditionCreateMutation };
 }
 
 interface IState {
@@ -40,15 +41,16 @@ interface IState {
 type allProps = IProps & IGraphqlProps;
 
 class QuestionConditionCreate extends React.Component<allProps, IState> {
-
   constructor(props: allProps) {
     super(props);
 
     this.onSubmit = this.onSubmit.bind(this);
     this.onAnswerChange = this.onAnswerChange.bind(this);
-    const questionCondition = props.questionCondition ? {
-      answerId: props.questionCondition.answerId,
-    } : { answerId: 'undefined' };
+    const questionCondition = props.questionCondition
+      ? {
+          answerId: props.questionCondition.answerId,
+        }
+      : { answerId: 'undefined' };
 
     this.state = {
       loading: false,
@@ -90,7 +92,7 @@ class QuestionConditionCreate extends React.Component<allProps, IState> {
       <form onSubmit={this.onSubmit} className={questionConditionStyles.borderContainer}>
         <div className={loadingClass}>
           <div className={styles.loadingContainer}>
-            <div className={loadingStyles.loadingSpinner}></div>
+            <div className={loadingStyles.loadingSpinner} />
           </div>
         </div>
         <div className={styles.flexInputGroup}>
@@ -98,18 +100,17 @@ class QuestionConditionCreate extends React.Component<allProps, IState> {
             name='answerId'
             value={selectedAnswer}
             onChange={this.onAnswerChange}
-            className={
-              classNames(formStyles.select, formStyles.inputSmall, styles.flexInputItem)}>
-            <option value='' disabled hidden>Select Answer</option>
+            className={classNames(formStyles.select, formStyles.inputSmall, styles.flexInputItem)}
+          >
+            <option value='' disabled hidden>
+              Select Answer
+            </option>
             {answerOptions}
           </select>
         </div>
         <div className={styles.formBottom}>
           <div className={styles.formBottomContent}>
-            <input
-              type='submit'
-              className={styles.submitButton}
-              value={'Add question condition'} />
+            <input type='submit' className={styles.submitButton} value={'Add question condition'} />
           </div>
         </div>
       </form>
@@ -118,12 +119,10 @@ class QuestionConditionCreate extends React.Component<allProps, IState> {
 }
 
 export default compose(
-  graphql<IGraphqlProps, IProps>(questionConditionCreateMutation as any, {
+  graphql<IGraphqlProps, IProps>(questionConditionCreateMutationGraphql as any, {
     name: 'createQuestionCondition',
     options: {
-      refetchQueries: [
-        'getQuestionsForRiskAreaOrScreeningTool',
-      ],
+      refetchQueries: ['getQuestionsForRiskAreaOrScreeningTool'],
     },
   }),
 )(QuestionConditionCreate);

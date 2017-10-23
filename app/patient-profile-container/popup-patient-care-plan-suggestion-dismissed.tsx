@@ -1,8 +1,9 @@
 import * as React from 'react';
 import { compose, graphql } from 'react-apollo';
 /* tslint:disable:max-line-length */
-import * as carePlanSuggestionDismissMutation from '../graphql/queries/care-plan-suggestion-dismiss-mutation.graphql';
+import * as carePlanSuggestionDismissMutationGraphql from '../graphql/queries/care-plan-suggestion-dismiss-mutation.graphql';
 import {
+  carePlanSuggestionDismissMutation,
   carePlanSuggestionDismissMutationVariables,
   FullCarePlanSuggestionFragment,
 } from '../graphql/types';
@@ -21,7 +22,7 @@ interface IProps {
 interface IGraphqlProps {
   dismissCarePlanSuggestion: (
     options: { variables: carePlanSuggestionDismissMutationVariables },
-  ) => { data: { carePlanSuggestionDismiss: FullCarePlanSuggestionFragment } };
+  ) => { data: carePlanSuggestionDismissMutation };
 }
 
 interface IState {
@@ -110,7 +111,7 @@ class PopupPatientCarePlanSuggestionDismissed extends React.Component<allProps, 
 }
 
 export default compose(
-  graphql<IGraphqlProps, IProps>(carePlanSuggestionDismissMutation as any, {
+  graphql<IGraphqlProps, IProps>(carePlanSuggestionDismissMutationGraphql as any, {
     name: 'dismissCarePlanSuggestion',
     options: {
       refetchQueries: ['getPatientCarePlanSuggestions'],

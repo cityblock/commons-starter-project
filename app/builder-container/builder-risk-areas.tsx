@@ -4,8 +4,11 @@ import { compose, graphql } from 'react-apollo';
 import { connect, Dispatch } from 'react-redux';
 import { Route } from 'react-router-dom';
 import { push } from 'react-router-redux';
-import * as riskAreaDeleteMutation from '../graphql/queries/risk-area-delete-mutation.graphql';
+/* tslint:disable:max-line-length */
+import * as riskAreaDeleteMutationGraphql from '../graphql/queries/risk-area-delete-mutation.graphql';
+/* tslint:enable:max-line-length */
 import {
+  riskAreaDeleteMutation,
   riskAreaDeleteMutationVariables,
   FullRiskAreaFragment,
 } from '../graphql/types';
@@ -26,7 +29,7 @@ interface IProps extends IComponentProps {
   mutate: any;
   deleteRiskArea: (
     options: { variables: riskAreaDeleteMutationVariables },
-  ) => { data: { riskAreaDelete: FullRiskAreaFragment } };
+  ) => { data: riskAreaDeleteMutation };
   redirectToRiskAreas: () => any;
 }
 
@@ -156,5 +159,5 @@ function mapDispatchToProps(dispatch: Dispatch<() => void>, ownProps: IProps): P
 
 export default (compose)(
   connect<{}, {}, IComponentProps>(null, mapDispatchToProps),
-  graphql(riskAreaDeleteMutation as any, { name: 'deleteRiskArea' }),
+  graphql(riskAreaDeleteMutationGraphql as any, { name: 'deleteRiskArea' }),
 )(AdminRiskAreas);

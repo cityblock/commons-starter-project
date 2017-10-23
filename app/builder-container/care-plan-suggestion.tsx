@@ -2,11 +2,13 @@ import * as classNames from 'classnames';
 import * as React from 'react';
 import { compose, graphql } from 'react-apollo';
 /* tslint:disable:max-line-length */
-import * as concernSuggestionDeleteMutation from '../graphql/queries/concern-suggestion-delete-mutation.graphql';
-import * as goalSuggestionDeleteMutation from '../graphql/queries/goal-suggestion-delete-mutation.graphql';
+import * as concernSuggestionDeleteMutationGraphql from '../graphql/queries/concern-suggestion-delete-mutation.graphql';
+import * as goalSuggestionDeleteMutationGraphql from '../graphql/queries/goal-suggestion-delete-mutation.graphql';
 /* tslint:enable:max-line-length */
 import {
+  concernSuggestionCreateMutation,
   concernSuggestionDeleteMutationVariables,
+  goalSuggestionCreateMutation,
   goalSuggestionDeleteMutationVariables,
   FullConcernFragment,
   FullGoalSuggestionTemplateFragment,
@@ -24,10 +26,10 @@ interface IProps {
 interface IGraphqlProps {
   deleteConcernSuggestion: (
     options: { variables: concernSuggestionDeleteMutationVariables },
-  ) => { data: { concernSuggestionDelete: FullConcernFragment } };
+  ) => { data: concernSuggestionCreateMutation };
   deleteGoalSuggestion: (
     options: { variables: goalSuggestionDeleteMutationVariables },
-  ) => { data: { goalSuggestionDelete: FullGoalSuggestionTemplateFragment } };
+  ) => { data: goalSuggestionCreateMutation };
 }
 
 interface IState {
@@ -138,7 +140,7 @@ class CarePlanSuggestion extends React.Component<allProps, IState> {
 }
 
 export default compose(
-  graphql<IGraphqlProps, IProps>(concernSuggestionDeleteMutation as any, {
+  graphql<IGraphqlProps, IProps>(concernSuggestionDeleteMutationGraphql as any, {
     name: 'deleteConcernSuggestion',
     options: {
       refetchQueries: [
@@ -147,7 +149,7 @@ export default compose(
       ],
     },
   }),
-  graphql<IGraphqlProps, IProps>(goalSuggestionDeleteMutation as any, {
+  graphql<IGraphqlProps, IProps>(goalSuggestionDeleteMutationGraphql as any, {
     name: 'deleteGoalSuggestion',
     options: {
       refetchQueries: [

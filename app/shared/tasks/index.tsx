@@ -6,8 +6,9 @@ import { FormattedMessage } from 'react-intl';
 import { connect, Dispatch } from 'react-redux';
 import { Route } from 'react-router-dom';
 import { push } from 'react-router-redux';
-import * as taskDeleteMutation from '../../graphql/queries/task-delete-mutation.graphql';
+import * as taskDeleteMutationGraphql from '../../graphql/queries/task-delete-mutation.graphql';
 import {
+  taskDeleteMutation,
   taskDeleteMutationVariables,
   FullPatientGoalFragment,
   FullTaskFragment,
@@ -43,9 +44,7 @@ interface IProps {
 }
 
 interface IApolloProps {
-  deleteTask: (
-    options: { variables: taskDeleteMutationVariables },
-  ) => { data: { taskDelete: FullTaskFragment } };
+  deleteTask: (options: { variables: taskDeleteMutationVariables }) => { data: taskDeleteMutation };
 }
 
 interface IStateProps {
@@ -253,5 +252,5 @@ function mapDispatchToProps(dispatch: Dispatch<() => void>, ownProps: IProps): I
 
 export default compose(
   connect<IStateProps, IDispatchProps, IProps>(mapStateToProps, mapDispatchToProps),
-  graphql<IApolloProps>(taskDeleteMutation as any, { name: 'deleteTask' }),
+  graphql<IApolloProps>(taskDeleteMutationGraphql as any, { name: 'deleteTask' }),
 )(Tasks);

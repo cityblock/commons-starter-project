@@ -33,6 +33,7 @@ interface IProps {
   updateNotificationsCount: (count: number) => any;
   dismissEventNotification: (
     options: { variables: eventNotificationDismissMutationVariables },
+    // TODO: Use generated typings here
   ) => { data: { eventNotificationDismiss: FullEventNotificationFragment } };
   notificationsCount: number;
   match: {

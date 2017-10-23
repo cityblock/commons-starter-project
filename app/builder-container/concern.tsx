@@ -3,9 +3,13 @@ import * as React from 'react';
 import { compose, graphql } from 'react-apollo';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
-import * as concernEditMutation from '../graphql/queries/concern-edit-mutation.graphql';
+import * as concernEditMutationGraphql from '../graphql/queries/concern-edit-mutation.graphql';
 import * as concernQuery from '../graphql/queries/get-concern.graphql';
-import { concernEditMutationVariables, FullConcernFragment } from '../graphql/types';
+import {
+  concernEditMutation,
+  concernEditMutationVariables,
+  FullConcernFragment,
+} from '../graphql/types';
 import * as styles from '../shared/css/two-panel-right.css';
 import { IState as IAppState } from '../store';
 
@@ -30,7 +34,7 @@ interface IGraphqlProps {
   refetchConcern: () => any;
   editConcern: (
     options: { variables: concernEditMutationVariables },
-  ) => { data: { concernEdit: FullConcernFragment } };
+  ) => { data: concernEditMutation };
   onDelete: (concernId: string) => any;
 }
 
@@ -305,7 +309,7 @@ function mapStateToProps(state: IAppState, ownProps: IProps): IStateProps {
 
 export default compose(
   connect<IStateProps, {}, IProps>(mapStateToProps),
-  graphql(concernEditMutation as any, { name: 'editConcern' }),
+  graphql(concernEditMutationGraphql as any, { name: 'editConcern' }),
   graphql(concernQuery as any, {
     skip: (props: IStateProps) => !props.concernId,
     options: (props: IStateProps) => ({ variables: { concernId: props.concernId } }),

@@ -5,9 +5,10 @@ import { connect, Dispatch } from 'react-redux';
 import { Route } from 'react-router-dom';
 import { push } from 'react-router-redux';
 /* tslint:disable:max-line-length */
-import * as screeningToolDeleteMutation from '../graphql/queries/screening-tool-delete-mutation.graphql';
+import * as screeningToolDeleteMutationGraphql from '../graphql/queries/screening-tool-delete-mutation.graphql';
 /* tslint:enable:max-line-length */
 import {
+  screeningToolDeleteMutation,
   screeningToolDeleteMutationVariables,
   FullRiskAreaFragment,
   FullScreeningToolFragment,
@@ -30,7 +31,7 @@ interface IProps {
   mutate: any;
   deleteScreeningTool: (
     options: { variables: screeningToolDeleteMutationVariables },
-  ) => { data: { screeningToolDelete: FullScreeningToolFragment } };
+  ) => { data: screeningToolDeleteMutation };
   redirectToScreeningTools: () => any;
 }
 
@@ -163,5 +164,5 @@ function mapDispatchToProps(dispatch: Dispatch<() => void>, ownProps: allProps):
 
 export default (compose)(
   connect<{}, {}, IComponentProps>(null, mapDispatchToProps),
-  graphql(screeningToolDeleteMutation as any, { name: 'deleteScreeningTool' }),
+  graphql(screeningToolDeleteMutationGraphql as any, { name: 'deleteScreeningTool' }),
 )(BuilderScreeningTools);

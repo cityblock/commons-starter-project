@@ -6,14 +6,17 @@ import { compose, graphql } from 'react-apollo';
 import { connect, Dispatch } from 'react-redux';
 import { push } from 'react-router-redux';
 import * as usersQuery from '../graphql/queries/get-users.graphql';
-import * as userCreateMutation from '../graphql/queries/user-create-mutation.graphql';
-import * as userDeleteMutation from '../graphql/queries/user-delete-mutation.graphql';
-import * as userEditRoleMutation from '../graphql/queries/user-edit-role-mutation.graphql';
+import * as userCreateMutationGraphql from '../graphql/queries/user-create-mutation.graphql';
+import * as userDeleteMutationGraphql from '../graphql/queries/user-delete-mutation.graphql';
+import * as userEditRoleMutationGraphql from '../graphql/queries/user-edit-role-mutation.graphql';
 import {
   getUsersQuery,
   getUsersQueryVariables,
+  userCreateMutation,
   userCreateMutationVariables,
+  userDeleteMutation,
   userDeleteMutationVariables,
+  userEditRoleMutation,
   userEditRoleMutationVariables,
   FullUserFragment,
 } from '../graphql/types';
@@ -56,13 +59,13 @@ export interface IGraphqlProps {
   error?: string;
   deleteUser?: (
     options: { variables: userDeleteMutationVariables },
-  ) => { data: { userDelete: FullUserFragment } };
+  ) => { data: userDeleteMutation };
   editUserRole?: (
     options: { variables: userEditRoleMutationVariables },
-  ) => { data: { userEdit: FullUserFragment } };
+  ) => { data: userEditRoleMutation };
   createUser?: (
     options: { variables: userCreateMutationVariables },
-  ) => { data: { userDelete: FullUserFragment } };
+  ) => { data: userCreateMutation };
   mutate?: any;
   usersResponse?: getUsersQuery['users'];
   fetchMoreUsers: () => any;
@@ -245,14 +248,14 @@ function mapDispatchToProps(dispatch: Dispatch<() => void>, ownProps: IProps): I
 
 export default compose(
   connect<{}, IDispatchProps, IProps>(undefined, mapDispatchToProps),
-  graphql(userDeleteMutation as any, {
+  graphql(userDeleteMutationGraphql as any, {
     name: 'deleteUser',
     options: {
       refetchQueries: ['getUsers'],
     },
   }),
-  graphql(userEditRoleMutation as any, { name: 'editUserRole' }),
-  graphql(userCreateMutation as any, {
+  graphql(userEditRoleMutationGraphql as any, { name: 'editUserRole' }),
+  graphql(userCreateMutationGraphql as any, {
     name: 'createUser',
     options: {
       refetchQueries: ['getUsers'],

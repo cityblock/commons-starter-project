@@ -2,12 +2,16 @@ import * as classNames from 'classnames';
 import * as React from 'react';
 import { compose, graphql } from 'react-apollo';
 import * as taskCommentsQuery from '../../graphql/queries/get-task-comments.graphql';
-import * as commentCreateMutation from '../../graphql/queries/task-comment-create-mutation.graphql';
-import * as commentEditMutation from '../../graphql/queries/task-comment-edit-mutation.graphql';
+/* tslint:disable:max-line-length */
+import * as commentCreateMutationGraphql from '../../graphql/queries/task-comment-create-mutation.graphql';
+import * as commentEditMutationGraphql from '../../graphql/queries/task-comment-edit-mutation.graphql';
+/* tslint:enable:max-line-length */
 import {
   getTaskCommentsQuery,
   getTaskCommentsQueryVariables,
+  taskCommentCreateMutation,
   taskCommentCreateMutationVariables,
+  taskCommentEditMutation,
   taskCommentEditMutationVariables,
   FullTaskCommentFragment,
 } from '../../graphql/types';
@@ -23,7 +27,7 @@ interface IProps {
 interface IGraphqlProps {
   createComment: (
     options: { variables: taskCommentCreateMutationVariables },
-  ) => { data: { taskCommentCreate: FullTaskCommentFragment } };
+  ) => { data: taskCommentCreateMutation };
   taskCommentsLoading: boolean;
   taskCommentsError?: string;
   taskCommentsResponse?: ITaskCommentsResponse;
@@ -32,10 +36,11 @@ interface IGraphqlProps {
     updateFunction: (
       previousResult: getTaskCommentsQuery,
       args?: { variables: getTaskCommentsQueryVariables },
-    ) => any) => { taskComments: ITaskCommentsResponse };
+    ) => any,
+  ) => { taskComments: ITaskCommentsResponse };
   editComment: (
     options: { variables: taskCommentEditMutationVariables },
-  ) => { data: { taskCommentEdit: FullTaskCommentFragment } };
+  ) => { data: taskCommentEditMutation };
 }
 
 interface IState {
@@ -86,8 +91,10 @@ export class TaskComments extends React.Component<allProps, IState> {
     try {
       await editComment({ variables: { taskCommentId, body } });
       updateTaskComments((previousResult: getTaskCommentsQuery) => {
-        const edges = previousResult.taskComments && previousResult.taskComments.edges ?
-          previousResult.taskComments.edges : [];
+        const edges =
+          previousResult.taskComments && previousResult.taskComments.edges
+            ? previousResult.taskComments.edges
+            : [];
         const newNodes = edges.map((edge: { node: FullTaskCommentFragment }) => {
           const { node } = edge;
 
@@ -106,7 +113,6 @@ export class TaskComments extends React.Component<allProps, IState> {
           },
         };
       });
-
     } catch (err) {
       throw new Error(err.message);
     }
@@ -137,7 +143,7 @@ export class TaskComments extends React.Component<allProps, IState> {
   }
 
   renderComment(comment: FullTaskCommentFragment) {
-    return (<TaskComment key={comment.id} comment={comment} onEdit={this.onCommentEdit} />);
+    return <TaskComment key={comment.id} comment={comment} onEdit={this.onCommentEdit} />;
   }
 
   reloadComments() {
@@ -156,9 +162,7 @@ export class TaskComments extends React.Component<allProps, IState> {
       return (
         <div>
           <div className={styles.smallText}>Loading comments...</div>
-          <div className={styles.commentsList}>
-            {comments.map(this.renderComment)}
-          </div>
+          <div className={styles.commentsList}>{comments.map(this.renderComment)}</div>
         </div>
       );
     } else if (taskCommentsError) {
@@ -168,10 +172,8 @@ export class TaskComments extends React.Component<allProps, IState> {
             Error loading comments.
           </div>
           <div className={styles.reload} onClick={this.reloadComments}>
-            <div className={styles.smallText}>
-              Click to try again.
-            </div>
-            <div className={styles.reloadIcon}></div>
+            <div className={styles.smallText}>Click to try again.</div>
+            <div className={styles.reloadIcon} />
           </div>
         </div>
       );
@@ -179,9 +181,7 @@ export class TaskComments extends React.Component<allProps, IState> {
       return (
         <div>
           <div className={styles.smallText}>Activity and comments ({comments.length})</div>
-          <div className={styles.commentsList}>
-            {comments.map(this.renderComment)}
-          </div>
+          <div className={styles.commentsList}>{comments.map(this.renderComment)}</div>
         </div>
       );
     }
@@ -203,7 +203,7 @@ export class TaskComments extends React.Component<allProps, IState> {
             onChange={this.onCommentBodyChange}
             onKeyDown={this.onCommentBodyKeyDown}
           />
-          <div className={styles.uploadAttachment}></div>
+          <div className={styles.uploadAttachment} />
           <div className={addCommentErrorStyles}>
             <div className={classNames(styles.smallText, styles.redText)}>
               Error adding comment.
@@ -218,8 +218,8 @@ export class TaskComments extends React.Component<allProps, IState> {
 }
 
 export default compose(
-  graphql<IGraphqlProps, IProps>(commentCreateMutation as any, { name: 'createComment' }),
-  graphql<IGraphqlProps, IProps>(commentEditMutation as any, { name: 'editComment' }),
+  graphql<IGraphqlProps, IProps>(commentCreateMutationGraphql as any, { name: 'createComment' }),
+  graphql<IGraphqlProps, IProps>(commentEditMutationGraphql as any, { name: 'editComment' }),
   graphql<IGraphqlProps, IProps>(taskCommentsQuery as any, {
     options: (props: IProps) => ({
       variables: {
@@ -229,11 +229,11 @@ export default compose(
       },
     }),
     props: ({ data }) => ({
-      refetchTaskComments: (data ? data.refetch : null),
-      taskCommentsLoading: (data ? data.loading : false),
-      taskCommentsError: (data ? data.error : null),
-      taskCommentsResponse: (data ? (data as any).taskComments : null),
-      updateTaskComments: (data ? data.updateQuery : null),
+      refetchTaskComments: data ? data.refetch : null,
+      taskCommentsLoading: data ? data.loading : false,
+      taskCommentsError: data ? data.error : null,
+      taskCommentsResponse: data ? (data as any).taskComments : null,
+      updateTaskComments: data ? data.updateQuery : null,
     }),
   }),
 )(TaskComments);

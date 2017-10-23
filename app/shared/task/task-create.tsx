@@ -6,11 +6,11 @@ import { FormattedMessage } from 'react-intl';
 import { connect, Dispatch } from 'react-redux';
 import { push } from 'react-router-redux';
 import * as careTeamQuery from '../../graphql/queries/get-patient-care-team.graphql';
-import * as createTaskMutation from '../../graphql/queries/task-create-mutation.graphql';
+import * as createTaskMutationGraphql from '../../graphql/queries/task-create-mutation.graphql';
 import {
+  taskCreateMutation,
   taskCreateMutationVariables,
   FullPatientGoalFragment,
-  FullTaskFragment,
   FullUserFragment,
   ShortPatientFragment,
 } from '../../graphql/types';
@@ -19,7 +19,9 @@ import * as styles from '../css/create-form.css';
 import * as formStyles from '../css/forms.css';
 import * as loadingStyles from '../css/loading-spinner.css';
 
-export interface IOptions { variables: taskCreateMutationVariables; }
+export interface IOptions {
+  variables: taskCreateMutationVariables;
+}
 
 interface IProps {
   patient: ShortPatientFragment;
@@ -27,7 +29,7 @@ interface IProps {
   patientGoals?: FullPatientGoalFragment[];
   routeBase: string;
   onClose: () => any;
-  createTask: (options: IOptions) => { data: { taskCreate: FullTaskFragment } };
+  createTask: (options: IOptions) => { data: taskCreateMutation };
   redirectToTask: (taskId: string) => any;
 }
 
@@ -93,7 +95,10 @@ class TaskCreate extends React.Component<IProps, IState> {
       });
       this.setState({ loading: false });
       this.props.onClose();
-      this.props.redirectToTask(task.data.taskCreate.id);
+      // TODO: Handle error
+      if (task.data.taskCreate) {
+        this.props.redirectToTask(task.data.taskCreate.id);
+      }
     } catch (e) {
       this.setState({ error: e.message, loading: false });
     }
@@ -109,7 +114,9 @@ class TaskCreate extends React.Component<IProps, IState> {
     }
 
     const patientGoalOptions = patientGoals.map(patientGoal => (
-      <option value={patientGoal.id} key={patientGoal.id}>{patientGoal.title}</option>
+      <option value={patientGoal.id} key={patientGoal.id}>
+        {patientGoal.title}
+      </option>
     ));
 
     return (
@@ -117,10 +124,14 @@ class TaskCreate extends React.Component<IProps, IState> {
         name='patientGoalId'
         value={task.patientGoalId || ''}
         onChange={this.onChange}
-        className={
-          classNames(formStyles.select, styles.flexInputItem)}>
+        className={classNames(formStyles.select, styles.flexInputItem)}
+      >
         <FormattedMessage id='tasks.patientGoalPlaceholder'>
-          {(message: string) => <option value='' disabled hidden>{message}</option>}
+          {(message: string) => (
+            <option value='' disabled hidden>
+              {message}
+            </option>
+          )}
         </FormattedMessage>
         {patientGoalOptions}
       </select>
@@ -135,7 +146,9 @@ class TaskCreate extends React.Component<IProps, IState> {
     const loadingClass = loading ? styles.loading : styles.loadingHidden;
 
     const careTeamHtml = (careTeam || []).map(user => (
-      <option value={user.id} key={user.id}>{user.firstName} {user.lastName}</option>
+      <option value={user.id} key={user.id}>
+        {user.firstName} {user.lastName}
+      </option>
     ));
 
     return (
@@ -145,8 +158,8 @@ class TaskCreate extends React.Component<IProps, IState> {
             <div className={styles.smallSection}>
               <div
                 className={styles.smallImage}
-                style={{ backgroundImage: `url('http://bit.ly/2u9bJDA')` }}>
-              </div>
+                style={{ backgroundImage: `url('http://bit.ly/2u9bJDA')` }}
+              />
               <div className={styles.smallText}>{shortName}</div>
             </div>
             <div className={styles.close} onClick={this.props.onClose} />
@@ -154,25 +167,39 @@ class TaskCreate extends React.Component<IProps, IState> {
           <div className={styles.formCenter}>
             <div className={loadingClass}>
               <div className={styles.loadingContainer}>
-                <div className={loadingStyles.loadingSpinner}></div>
+                <div className={loadingStyles.loadingSpinner} />
               </div>
             </div>
             <div className={styles.flexInputGroup}>
-              <input required
+              <input
+                required
                 name='dueAt'
-                className={
-                  classNames(formStyles.input, formStyles.inputSmall, styles.flexInputItem)}
+                className={classNames(
+                  formStyles.input,
+                  formStyles.inputSmall,
+                  styles.flexInputItem,
+                )}
                 value={task.dueAt}
                 type='date'
-                onChange={this.onChange} />
-              <select required
+                onChange={this.onChange}
+              />
+              <select
+                required
                 name='assignedToId'
                 value={task.assignedToId || ''}
                 onChange={this.onChange}
-                className={
-                  classNames(formStyles.select, formStyles.inputSmall, styles.flexInputItem)}>
+                className={classNames(
+                  formStyles.select,
+                  formStyles.inputSmall,
+                  styles.flexInputItem,
+                )}
+              >
                 <FormattedMessage id='tasks.assignedToPlaceholder'>
-                  {(message: string) => <option value='' disabled hidden>{message}</option>}
+                  {(message: string) => (
+                    <option value='' disabled hidden>
+                      {message}
+                    </option>
+                  )}
                 </FormattedMessage>
                 {careTeamHtml}
               </select>
@@ -183,23 +210,24 @@ class TaskCreate extends React.Component<IProps, IState> {
                 value={task.title}
                 placeholder={'Enter task title'}
                 className={formStyles.input}
-                onChange={this.onChange} />
+                onChange={this.onChange}
+              />
               <textarea
                 name='description'
                 placeholder={'Enter task description …'}
                 value={task.description}
                 className={formStyles.textarea}
-                onChange={this.onChange} />
+                onChange={this.onChange}
+              />
               {this.renderPatientGoalSelect()}
             </div>
           </div>
           <div className={styles.formBottom}>
             <div className={styles.formBottomContent}>
-              <div className={styles.cancelButton} onClick={this.props.onClose}>Cancel</div>
-              <input
-                type='submit'
-                className={styles.submitButton}
-                value='Add task' />
+              <div className={styles.cancelButton} onClick={this.props.onClose}>
+                Cancel
+              </div>
+              <input type='submit' className={styles.submitButton} value='Add task' />
             </div>
           </div>
         </form>
@@ -225,17 +253,15 @@ export default compose(
       },
     }),
     props: ({ data }) => ({
-      loading: (data ? data.loading : false),
-      error: (data ? data.error : null),
-      careTeam: (data ? (data as any).patientCareTeam : null),
+      loading: data ? data.loading : false,
+      error: data ? data.error : null,
+      careTeam: data ? (data as any).patientCareTeam : null,
     }),
   }),
-  graphql(createTaskMutation as any, {
+  graphql(createTaskMutationGraphql as any, {
     name: 'createTask',
     options: {
-      refetchQueries: [
-        'getPatientTasks',
-      ],
+      refetchQueries: ['getPatientTasks'],
     },
   }),
 )(TaskCreate as any) as any;

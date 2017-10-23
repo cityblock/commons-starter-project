@@ -19,6 +19,7 @@ import {
   userEditRoleMutation,
   userEditRoleMutationVariables,
   FullUserFragment,
+  UserOrderOptions,
 } from '../graphql/types';
 import * as sortSearchStyles from '../shared/css/sort-search.css';
 import * as styles from '../shared/css/two-panel.css';
@@ -228,7 +229,7 @@ const getPageParams = (props: IProps): getUsersQueryVariables => {
   return {
     pageNumber: 0,
     pageSize: 10,
-    orderBy: pageParams.orderBy || 'createdAtDesc',
+    orderBy: (pageParams.orderBy || 'createdAtDesc') as UserOrderOptions,
     hasLoggedIn: props.hasLoggedIn,
   };
 };

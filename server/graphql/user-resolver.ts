@@ -1,4 +1,6 @@
+import { pickBy } from 'lodash';
 import {
+  ICurrentUserEditInput,
   IUserCreateInput,
   IUserDeleteInput,
   IUserEdges,
@@ -39,14 +41,8 @@ export interface IUserDeleteOptions {
   input: IUserDeleteInput;
 }
 
-export interface IEditCurrentUserInput {
-  firstName: string;
-  lastName: string;
-  locale: 'en' | 'es';
-}
-
 export interface IEditCurrentUserOptions {
-  input: IEditCurrentUserInput;
+  input: ICurrentUserEditInput;
 }
 
 export async function userCreate(root: any, { input }: IUserCreateArgs, context: IContext) {
@@ -126,7 +122,8 @@ export async function currentUserEdit(
   await accessControls.isAllowedForUser(userRole, 'edit', 'user', userId, userId);
   checkUserLoggedIn(userId);
 
-  return await User.update(userId!, args.input);
+  const cleanedParams = pickBy<ICurrentUserEditInput, {}>(args.input) as any;
+  return await User.update(userId!, cleanedParams);
 }
 
 export async function resolveUsers(

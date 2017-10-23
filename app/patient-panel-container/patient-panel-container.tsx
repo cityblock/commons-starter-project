@@ -148,8 +148,8 @@ const getPageParams = (): IPageParams => {
   const pageParams = querystring.parse(window.location.search.substring(1));
 
   return {
-    pageNumber: pageParams.pageNumber || 0,
-    pageSize: pageParams.pageSize || 10,
+    pageNumber: Number(pageParams.pageNumber || 0),
+    pageSize: Number(pageParams.pageSize || 10),
   };
 };
 

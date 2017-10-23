@@ -1,7 +1,8 @@
+import { pickBy } from 'lodash';
 import { transaction } from 'objection';
-import { ITaskCreateInput, ITaskEdges, ITaskNode } from 'schema';
+import { ITaskCreateInput, ITaskEdges, ITaskEditInput, ITaskNode } from 'schema';
 import { IPaginationOptions } from '../db';
-import Task, { Priority, TaskOrderOptions } from '../models/task';
+import Task, { TaskOrderOptions } from '../models/task';
 import TaskEvent from '../models/task-event';
 import accessControls from './shared/access-controls';
 import { checkUserLoggedIn, formatOrderOptions, formatRelayEdge, IContext } from './shared/utils';
@@ -14,22 +15,12 @@ export interface IResolveTaskOptions {
   taskId: string;
 }
 
-export interface IEditTaskInput {
-  taskId: string;
-  title?: string;
-  description?: string;
-  assignedToId?: string;
-  dueAt?: string;
-  priority?: Priority;
-  patientGoalId?: string;
-}
-
 export interface IDeleteTaskInput {
   taskId: string;
 }
 
 export interface IEditTaskOptions {
-  input: IEditTaskInput;
+  input: ITaskEditInput;
 }
 
 export interface IDeleteTaskOptions {
@@ -112,8 +103,8 @@ export async function taskEdit(
 
   return await transaction(Task.knex(), async txn => {
     const { priority, dueAt, assignedToId, title, description } = task;
-
-    const updatedTask = await Task.update(args.input.taskId, args.input, txn);
+    const cleanedParams = pickBy<ITaskEditInput, {}>(args.input) as any;
+    const updatedTask = await Task.update(args.input.taskId, cleanedParams, txn);
 
     if (args.input.priority && args.input.priority !== priority) {
       await TaskEvent.create(

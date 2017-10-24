@@ -1,6 +1,7 @@
 import { Model, RelationMappings } from 'objection';
 import Answer from './answer';
 import BaseModel from './base-model';
+import ProgressNote from './progress-note';
 import QuestionCondition from './question-condition';
 import RiskArea from './risk-area';
 import ScreeningTool from './screening-tool';
@@ -32,6 +33,8 @@ export default class Question extends BaseModel {
   riskArea: RiskArea;
   screeningToolId: string;
   screeningTool: ScreeningTool;
+  progressNoteId: string;
+  progressNote: ProgressNote;
   applicableIfQuestionConditions: QuestionCondition[];
   applicableIfType: QuestionConditionType;
   validatedSource: string;
@@ -55,6 +58,15 @@ export default class Question extends BaseModel {
   };
 
   static relationMappings: RelationMappings = {
+    progressNote: {
+      relation: Model.HasOneRelation,
+      modelClass: 'progress-note',
+      join: {
+        from: 'question.progressNoteId',
+        to: 'progress_note.id',
+      },
+    },
+
     answers: {
       relation: Model.HasManyRelation,
       modelClass: 'answer',

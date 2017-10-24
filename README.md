@@ -35,6 +35,7 @@ Tech wise, this app is an Express server running GraphQL and PostgreSQL (Objecti
     psql -d commons -c "create extension if not exists btree_gist"
     psql -d commons_test -c "create extension if not exists btree_gist"
     ```
+
 - Seed development database with `yarn seed`
 - [Add your user account](#add-a-new-user)
 

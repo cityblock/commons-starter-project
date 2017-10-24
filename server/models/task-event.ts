@@ -2,6 +2,7 @@ import { Model, RelationMappings, Transaction } from 'objection';
 import { IPaginatedResults, IPaginationOptions } from '../db';
 import BaseModel from './base-model';
 import EventNotification from './event-notification';
+import ProgressNote from './progress-note';
 import Task from './task';
 import TaskComment from './task-comment';
 import User from './user';
@@ -13,6 +14,7 @@ export interface ITaskEventOptions {
   eventCommentId?: string;
   eventUserId?: string;
   skipNotifsCreate?: boolean;
+  progressNoteId?: string;
 }
 
 export type EventTypes =
@@ -44,6 +46,8 @@ export default class TaskEvent extends BaseModel {
   eventComment: TaskComment;
   eventUserId: string;
   eventUser: User;
+  progressNote: ProgressNote;
+  progressNoteId: string;
 
   static tableName = 'task_event';
 
@@ -56,6 +60,7 @@ export default class TaskEvent extends BaseModel {
       eventType: { type: 'string' },
       eventCommentId: { type: 'string' },
       eventUserId: { type: 'string' },
+      progressNoteId: { type: 'string' },
       deletedAt: { type: 'string' },
     },
   };
@@ -94,6 +99,15 @@ export default class TaskEvent extends BaseModel {
       join: {
         from: 'task_event.eventUserId',
         to: 'user.id',
+      },
+    },
+
+    progressNote: {
+      relation: Model.BelongsToOneRelation,
+      modelClass: 'progress-note',
+      join: {
+        from: 'task_event.progressNoteId',
+        to: 'progress_note.id',
       },
     },
   };

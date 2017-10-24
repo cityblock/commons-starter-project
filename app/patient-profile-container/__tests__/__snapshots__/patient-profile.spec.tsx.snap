@@ -287,6 +287,13 @@ exports[`renders patient profile container correctly 1`] = `
       >
         Tasks
       </a>
+      <a
+        className=""
+        href="/patients/undefined/tools"
+        onClick={[Function]}
+      >
+        Tools
+      </a>
     </div>
     <div>
       <div
@@ -895,6 +902,13 @@ exports[`renders patient profile for ipad 1`] = `
         onClick={[Function]}
       >
         Tasks
+      </a>
+      <a
+        className=""
+        href="/patients/undefined/tools"
+        onClick={[Function]}
+      >
+        Tools
       </a>
     </div>
     <div>

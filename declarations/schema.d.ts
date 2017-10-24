@@ -45,6 +45,7 @@ declare module 'schema' {
     patientAnswersForQuestion: Array<IPatientAnswer> | null;
     patientPreviousAnswersForQuestion: Array<IPatientAnswer> | null;
     patientAnswersForRiskArea: Array<IPatientAnswer> | null;
+    patientAnswersForScreeningTool: Array<IPatientAnswer> | null;
     patientRiskAreaSummary: IRiskAreaSummary | null;
     patientRiskAreaRiskScore: IRiskScore | null;
     questionCondition: IQuestionCondition | null;
@@ -97,7 +98,7 @@ declare module 'schema' {
   /*
     description: An object with a Globally Unique ID
   */
-  type uniqueId = IUser | IPatient | IClinic | ITask | IPatientGoal | IGoalSuggestionTemplate | ITaskTemplate | ITaskComment | IRiskArea | IQuestion | IAnswer | IConcern | IQuestionCondition | IPatientAnswer | IPatientScreeningToolSubmission | IScreeningTool | IScreeningToolScoreRange | IEventNotification | ITaskEvent | IPatientConcern | IPatientTaskSuggestion | ICarePlanSuggestion;
+  type uniqueId = IUser | IPatient | IClinic | ITask | IPatientGoal | IGoalSuggestionTemplate | ITaskTemplate | ITaskComment | IRiskArea | IQuestion | IAnswer | IConcern | IQuestionCondition | IPatientAnswer | IPatientScreeningToolSubmission | IScreeningTool | IScreeningToolScoreRange | ICarePlanSuggestion | IEventNotification | ITaskEvent | IPatientConcern | IPatientTaskSuggestion;
 
   /*
     description: An object with a Globally Unique ID
@@ -513,6 +514,7 @@ declare module 'schema' {
     createdAt: string;
     updatedAt: string;
     deletedAt: string | null;
+    carePlanSuggestions: Array<ICarePlanSuggestion>;
   }
 
   /*
@@ -545,6 +547,36 @@ declare module 'schema' {
     concernSuggestions: Array<IConcern> | null;
     goalSuggestions: Array<IGoalSuggestionTemplate> | null;
   }
+
+  /*
+    description: 
+  */
+  interface ICarePlanSuggestion {
+    id: string;
+    patientId: string;
+    patient: IPatient;
+    suggestionType: ICarePlanSuggestionTypeEnum;
+    concernId: string | null;
+    concern: IConcern | null;
+    goalSuggestionTemplateId: string | null;
+    goalSuggestionTemplate: IGoalSuggestionTemplate | null;
+    acceptedById: string | null;
+    acceptedBy: IUser | null;
+    dismissedById: string | null;
+    dismissedBy: IUser | null;
+    dismissedReason: string | null;
+    createdAt: string;
+    updatedAt: string;
+    dismissedAt: string | null;
+    acceptedAt: string | null;
+    patientScreeningToolSubmissionId: string | null;
+    patientScreeningToolSubmission: IPatientScreeningToolSubmission | null;
+  }
+
+  /*
+    description: 
+  */
+  type ICarePlanSuggestionTypeEnum = 'concern' | 'goal';
 
   /*
     description: 
@@ -659,36 +691,6 @@ declare module 'schema' {
     dismissedAt: string | null;
     acceptedAt: string | null;
   }
-
-  /*
-    description: 
-  */
-  interface ICarePlanSuggestion {
-    id: string;
-    patientId: string;
-    patient: IPatient;
-    suggestionType: ICarePlanSuggestionTypeEnum;
-    concernId: string | null;
-    concern: IConcern | null;
-    goalSuggestionTemplateId: string | null;
-    goalSuggestionTemplate: IGoalSuggestionTemplate | null;
-    acceptedById: string | null;
-    acceptedBy: IUser | null;
-    dismissedById: string | null;
-    dismissedBy: IUser | null;
-    dismissedReason: string | null;
-    createdAt: string;
-    updatedAt: string;
-    dismissedAt: string | null;
-    acceptedAt: string | null;
-    patientScreeningToolSubmissionId: string | null;
-    patientScreeningToolSubmission: IPatientScreeningToolSubmission | null;
-  }
-
-  /*
-    description: 
-  */
-  type ICarePlanSuggestionTypeEnum = 'concern' | 'goal';
 
   /*
     description: 

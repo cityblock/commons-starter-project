@@ -16,8 +16,9 @@ import PatientInfo from './patient-info';
 import PatientProfileLeftNav from './patient-profile-left-nav';
 import PatientTasks from './patient-tasks';
 import PatientThreeSixtyView from './patient-three-sixty-view';
+import { PatientToolsView } from './patient-tools-view';
 
-type SelectableTabs = 'encounters' | 'patientInfo' | 'tasks' | '360' | 'carePlan';
+type SelectableTabs = 'encounters' | 'patientInfo' | 'tasks' | '360' | 'carePlan' | 'tools';
 
 interface IProps {
   intl: InjectedIntl;
@@ -77,6 +78,9 @@ class PatientProfileContainer extends React.Component<IProps, {}> {
     const tasksTabStyles = classNames(tabStyles.tab, {
       [tabStyles.selectedTab]: tabId === 'tasks',
     });
+    const toolsTabStyles = classNames(tabStyles.tab, {
+      [tabStyles.selectedTab]: tabId === 'tools',
+    });
 
     const mainBodyStyle = classNames({
       [styles.mainBody]: browserSize === 'large',
@@ -93,12 +97,19 @@ class PatientProfileContainer extends React.Component<IProps, {}> {
       <PatientThreeSixtyView
         riskAreaId={match.params.riskAreaOrSubTabId}
         patientId={patientId}
+        patientRoute={`/patients/${patientId}`}
         routeBase={`/patients/${patientId}/360`} /> : null;
     const carePlan = tabId === 'carePlan' ?
       <PatientCarePlanView
         patientId={patientId}
         routeBase={`/patients/${patientId}/carePlan`}
         subTabId={match.params.riskAreaOrSubTabId as any} /> : null; // TODO: Fix typing
+    const tools = tabId === 'tools' ?
+      <PatientToolsView
+        screeningToolId={match.params.riskAreaOrSubTabId}
+        patientId={patientId}
+        patientRoute={`/patients/${patientId}`}
+        routeBase={`/patients/${patientId}/tools`} /> : null;
     return (
       <div className={styles.container}>
         <PatientProfileLeftNav
@@ -148,12 +159,21 @@ class PatientProfileContainer extends React.Component<IProps, {}> {
                   {message}
                 </Link>}
             </FormattedMessage>
+            <FormattedMessage id='patient.tools'>
+              {(message: string) =>
+                <Link
+                  to={`/patients/${patientId}/tools`}
+                  className={toolsTabStyles}>
+                  {message}
+                </Link>}
+            </FormattedMessage>
           </div>
           {encounters}
           {patientInfo}
           {tasks}
           {threeSixty}
           {carePlan}
+          {tools}
         </div>
       </div>
     );

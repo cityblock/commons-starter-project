@@ -1,0 +1,150 @@
+@import '../../shared/css/sizes';
+.screeningToolsPopupContent {
+  display: flex;
+  flex-direction: column;
+}
+
+.screeningToolsPopupHeader {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.screeningToolsPopupDismissButton {
+  height: 16px;
+  width: 16px;
+  background-image: url('../../assets/close-grey.svg');
+  background-position: center center;
+  background-size: contain;
+  background-repeat: no-repeat;
+
+  &:hover {
+    cursor: pointer;
+  }
+}
+
+.screeningToolsPopupBody {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 10px;
+}
+
+.screeningToolsPopupTitle {
+  font-family: var(--basetica-black);
+  font-size: var(--medium-font-size);
+  line-height: var(--medium-font-line-height);
+  color: var(--default-font-color);
+  margin-bottom: var(--gutter);
+}
+
+.screeningToolsPopupTitle.noMargin {
+  margin-bottom: 0;
+}
+
+.screeningToolsPopupSubtitle {
+  font-family: var(--roboto);
+  font-size: var(--default-font-size);
+  line-height: var(--body-copy-line-height);
+  color: var(--gray-font-color);
+  margin-bottom: var(--gutter);
+  text-align: center;
+}
+
+.screeningToolsPopupSubtitle.noMargin {
+  margin-bottom: 0;
+}
+
+.screeningToolOptions {
+  margin: var(--medium-gutter) 0 var(--small-gutter);
+  width: 100%;
+}
+
+.screeningToolOption {
+  height: 50px;
+  width: 100%;
+  padding: 16px var(--small-gutter);
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  margin-bottom: 10px;
+  transition: background-color 0.2s linear;
+}
+
+.screeningToolOption:hover {
+  cursor: pointer;
+  background-color: var(--gray-background-color);
+}
+
+.screeningToolOption:last-child {
+  margin-bottom: 0;
+}
+
+.screeningToolOptionText {
+  color: var(--black-color);
+  font-family: var(--roboto);
+  font-weight: var(--roboto-medium-weight);
+  font-size: var(--default-font-size);
+  line-height: var(--medium-font-line-height);
+}
+
+.screeningToolOptionsLoading, .emptyScreeningToolOptions {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  color: var(--light-gray-font-color);
+  font-family: var(--roboto);
+  font-weight: var(--roboto-medium-weight);
+  font-size: var(--default-font-size);
+  line-height: var(--medium-font-line-height);
+}
+
+.screeningToolResults {
+  margin: var(--medium-gutter) 0 var(--small-gutter);
+  width: 30%;
+}
+
+.screeningToolResultRow {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.screeningToolResultLabel, .screeningToolResultCount {
+  font-family: var(--roboto);
+  font-size: var(--default-font-size);
+  line-height: var(--default-line-height);
+}
+
+.screeningToolResultLabel {
+  color: var(--light-gray-font-color);
+  margin-right: var(--gutter);
+}
+
+.screeningToolResultCount {
+  color: var(--black-color);
+  font-weight: var(--roboto-medium-weight);
+  text-align: right;
+}
+
+.screeningToolsPopupButtons {
+  display: flex;
+  flex-direction: row;
+  margin: 0 auto var(--medium-gutter);
+}
+
+.button {
+  @apply --button;
+}
+
+.smallButton {
+  height: 32px;
+  width: 148px;
+  font-size: var(--small-font-size);
+  line-height: var(--small-font-line-height);
+  padding: 10px var(--small-gutter);
+}

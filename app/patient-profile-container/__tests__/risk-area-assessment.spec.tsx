@@ -60,7 +60,8 @@ it('renders a risk area assessment', async () => {
         <RiskAreaAssessment
           riskAreaId={'risk-area-1'}
           patientId={'patient-1'}
-          routeBase={`/patients/patient-1/360`}
+          patientRoute={'/patients/patient-1'}
+          routeBase={'/patients/patient-1/360'}
           refetchRiskArea={() => true}
           refetchRiskAreaQuestions={() => true}
           refetchPatientAnswers={() => true}
@@ -78,6 +79,7 @@ describe('method tests', () => {
         riskAreaId={'risk-area-id'}
         riskAreaQuestions={riskAreaQuestions}
         patientId={'patient-id'}
+        patientRoute={'/patients/patient-1'}
         routeBase={'/patients/patient-id/360'}
         refetchRiskArea={() => true}
         refetchRiskAreaQuestions={() => true}
@@ -101,6 +103,7 @@ describe('method tests', () => {
         riskAreaId={'risk-area-id'}
         riskAreaQuestions={undefined}
         patientId={'patient-id'}
+        patientRoute={'/patients/patient-1'}
         routeBase={'/patients/patient-id/360'}
         refetchRiskArea={() => true}
         refetchRiskAreaQuestions={() => true}
@@ -112,6 +115,7 @@ describe('method tests', () => {
     instance.componentWillReceiveProps({
       riskAreaId: 'risk-area-id',
       patientId: 'patient-id',
+      patientRoute: '/patients/patient-1',
       routeBase: '/patients/patient-id/360',
       riskAreaQuestions: undefined,
       patientAnswers: [patientAnswer],
@@ -138,6 +142,7 @@ describe('method tests', () => {
         riskAreaId={'risk-area-id'}
         riskAreaQuestions={undefined}
         patientId={'patient-id'}
+        patientRoute={'/patients/patient-id'}
         routeBase={'/patients/patient-id/360'}
         refetchRiskArea={() => true}
         refetchRiskAreaQuestions={() => true}
@@ -150,6 +155,7 @@ describe('method tests', () => {
       riskAreaId: 'risk-area-id',
       patientId: 'patient-id',
       routeBase: '/patients/patient-id/360',
+      patientRoute: '/patients/patient-id',
       riskAreaQuestions,
       refetchRiskArea: () => true,
       refetchRiskAreaQuestions: () => true,

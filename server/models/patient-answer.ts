@@ -172,6 +172,22 @@ export default class PatientAnswer extends BaseModel {
     return patientAnswers as PatientAnswer[];
   }
 
+  static async getForScreeningTool(
+    screeningToolId: string,
+    patientId: string,
+    eager = 'answer',
+  ): Promise<PatientAnswer[]> {
+    const patientAnswers = await this.query()
+      .joinRelation('answer.question')
+      .eager(eager)
+      .where('patient_answer.deletedAt', null)
+      .andWhere('patientId', patientId)
+      .andWhere('answer:question.screeningToolId', screeningToolId)
+      .orderBy('patient_answer.updatedAt', 'asc');
+
+    return patientAnswers as PatientAnswer[];
+  }
+
   static async getAllForPatient(patientId: string): Promise<PatientAnswer[]> {
     const patientAnswers = await this.query()
       .joinRelation('answer.question')

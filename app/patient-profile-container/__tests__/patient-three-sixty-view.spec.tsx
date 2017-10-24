@@ -17,7 +17,10 @@ it('renders patient 360 view', () => {
     <MockedProvider mocks={[]} store={mockStore({ locale })}>
       <ReduxConnectedIntlProvider>
         <ConnectedRouter history={history}>
-          <PatientThreeSixtyView patientId={'patient-1'} routeBase={'/patients/patient-1/360'} />
+          <PatientThreeSixtyView
+            patientId={'patient-1'}
+            patientRoute={'/patients/patient-1'}
+            routeBase={'/patients/patient-1/360'} />
         </ConnectedRouter>
       </ReduxConnectedIntlProvider>
     </MockedProvider>,

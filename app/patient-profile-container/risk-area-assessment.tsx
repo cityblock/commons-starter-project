@@ -9,6 +9,7 @@ import * as patientAnswersQuery from '../graphql/queries/get-patient-answers-for
 /* tslint:disable:max-line-length */
 import * as riskAreaQuestionsQuery from '../graphql/queries/get-questions-for-risk-area-or-screening-tool.graphql';
 import * as riskAreaQuery from '../graphql/queries/get-risk-area.graphql';
+import * as screeningToolsQuery from '../graphql/queries/get-screening-tools-for-risk-area.graphql';
 import * as patientAnswersCreateMutationGraphql from '../graphql/queries/patient-answers-create-mutation.graphql';
 import * as patientAnswersUpdateApplicabilityMutationGraphql from '../graphql/queries/patient-answers-update-applicable-mutation.graphql';
 /* tsline:enable:max-line-length */
@@ -20,16 +21,21 @@ import {
   FullPatientAnswerFragment,
   FullQuestionFragment,
   FullRiskAreaFragment,
+  FullScreeningToolFragment,
 } from '../graphql/types';
 import * as sortSearchStyles from '../shared/css/sort-search.css';
+import { Popup } from '../shared/popup/popup';
 import * as styles from './css/risk-areas.css';
 import RiskAreaQuestion from './risk-area-question';
+import ScreeningToolsPopup from './screening-tools-popup';
 
 interface IProps {
   riskAreaId: string;
   patientId: string;
   routeBase: string;
+  patientRoute: string;
   redirectToThreeSixty?: () => any;
+  redirectToScreeningTool?: (screeningTool: FullScreeningToolFragment) => any;
   riskArea?: FullRiskAreaFragment;
   loading?: boolean;
   error?: string;
@@ -48,6 +54,9 @@ interface IProps {
   refetchRiskArea?: () => any;
   refetchRiskAreaQuestions?: () => any;
   refetchPatientAnswers?: () => any;
+  screeningTools?: FullScreeningToolFragment[];
+  screeningToolsLoading?: boolean;
+  screeningToolsError?: string;
 }
 
 export interface IQuestionsState {
@@ -71,6 +80,8 @@ interface IState {
   assessmentError?: string;
   updateAnswersApplicabilityLoading: boolean;
   updateAnswersApplicabilityError?: string;
+  selectingScreeningTool: boolean;
+  currentlyAdministeringScreeningTool?: FullScreeningToolFragment;
 }
 
 export interface IQuestionCondition {
@@ -101,12 +112,17 @@ export class RiskAreaAssessment extends React.Component<IProps, IState> {
     this.isLoadingOrError = this.isLoadingOrError.bind(this);
     this.getLastUpdated = this.getLastUpdated.bind(this);
     this.onRetryLoad = this.onRetryLoad.bind(this);
+    this.onClickToSelectScreeningTool = this.onClickToSelectScreeningTool.bind(this);
+    this.onDismissScreeningToolSelect = this.onDismissScreeningToolSelect.bind(this);
+    this.onSelectScreeningTool = this.onSelectScreeningTool.bind(this);
 
     this.state = {
       inProgress: false,
       questions: {},
       assessmentLoading: false,
       updateAnswersApplicabilityLoading: false,
+      selectingScreeningTool: false,
+      currentlyAdministeringScreeningTool: undefined,
     };
   }
 
@@ -483,12 +499,35 @@ export class RiskAreaAssessment extends React.Component<IProps, IState> {
     }
   }
 
+  onClickToSelectScreeningTool() {
+    this.setState(() => ({ selectingScreeningTool: true }));
+  }
+
+  onDismissScreeningToolSelect() {
+    this.setState(() => ({ selectingScreeningTool: false }));
+  }
+
+  onSelectScreeningTool(screeningTool: FullScreeningToolFragment) {
+    const { redirectToScreeningTool } = this.props;
+    this.setState(() => ({
+      selectingScreeningTool: false,
+      currentlyAdministeringScreeningTool: screeningTool,
+    }));
+
+    if (redirectToScreeningTool) {
+      redirectToScreeningTool(screeningTool);
+    }
+  }
+
   render() {
-    const { riskArea } = this.props;
-    const { inProgress } = this.state;
+    const { riskArea, screeningTools } = this.props;
+    const { inProgress, selectingScreeningTool } = this.state;
 
     const title = riskArea ? riskArea.title : 'Loading...';
 
+    const toolsButtonStyles = classNames(styles.invertedButton, styles.toolsButton, {
+      [styles.hidden]: inProgress,
+    });
     const cancelButtonStyles = classNames(styles.invertedButton, styles.cancelButton, {
       [styles.hidden]: !inProgress,
     });
@@ -541,6 +580,9 @@ export class RiskAreaAssessment extends React.Component<IProps, IState> {
           <div className={cancelButtonStyles} onClick={this.onCancel}>
             Cancel
           </div>
+          <div className={toolsButtonStyles} onClick={this.onClickToSelectScreeningTool}>
+            Administer tool
+          </div>
           <div className={saveButtonStyles} onClick={this.onSave}>
             Save updates
           </div>
@@ -549,6 +591,13 @@ export class RiskAreaAssessment extends React.Component<IProps, IState> {
           </div>
         </div>
         <div className={styles.riskAreasPanel}>{assessmentHtml}</div>
+        <Popup visible={selectingScreeningTool} smallPadding={true}>
+          <ScreeningToolsPopup
+            screeningTools={screeningTools}
+            onDismiss={this.onDismissScreeningToolSelect}
+            onSelectScreeningTool={this.onSelectScreeningTool}
+          />
+        </Popup>
       </div>
     );
   }
@@ -558,6 +607,9 @@ function mapDispatchToProps(dispatch: Dispatch<() => void>, ownProps: IProps): P
   return {
     redirectToThreeSixty: () => {
       dispatch(push(ownProps.routeBase));
+    },
+    redirectToScreeningTool: (screeningTool: FullScreeningToolFragment) => {
+      dispatch(push(`${ownProps.patientRoute}/tools/${screeningTool.id}`));
     },
   };
 }
@@ -602,6 +654,18 @@ export default compose(
       patientAnswersError: data ? data.error : null,
       patientAnswers: data ? (data as any).patientAnswersForRiskArea : null,
       refetchPatientAnswers: data ? data.refetch : null,
+    }),
+  }),
+  graphql(screeningToolsQuery as any, {
+    options: (props: IProps) => ({
+      variables: {
+        riskAreaId: props.riskAreaId,
+      },
+    }),
+    props: ({ data }) => ({
+      screeningToolsLoading: data ? data.loading : false,
+      screeningToolsError: data ? data.error : null,
+      screeningTools: data ? (data as any).screeningToolsForRiskArea : null,
     }),
   }),
   graphql(patientAnswersCreateMutationGraphql as any, { name: 'createPatientAnswers' }),

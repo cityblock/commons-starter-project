@@ -56,13 +56,13 @@ exports[`renders patient care plan suggestion (goal) 1`] = `
   <div
     className={undefined}
   >
-    Suggested concern
+    Suggested goal
   </div>
   <div
     className={undefined}
   >
     <div
-      className=""
+      className="undefined"
     >
       Goal Title
     </div>

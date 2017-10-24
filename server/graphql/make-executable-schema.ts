@@ -59,6 +59,7 @@ import {
   resolvePatientAnswer,
   resolvePatientAnswersForQuestion,
   resolvePatientAnswersForRiskArea,
+  resolvePatientAnswersForScreeningTool,
   resolvePreviousPatientAnswersForQuestion,
 } from './patient-answer-resolver';
 import {
@@ -216,6 +217,7 @@ const resolveFunctions = {
     patientAnswersForQuestion: resolvePatientAnswersForQuestion,
     patientPreviousAnswersForQuestion: resolvePreviousPatientAnswersForQuestion,
     patientAnswersForRiskArea: resolvePatientAnswersForRiskArea,
+    patientAnswersForScreeningTool: resolvePatientAnswersForScreeningTool,
     concern: resolveConcern,
     concerns: resolveConcerns,
     concernsForAnswer: resolveConcernsForAnswer,

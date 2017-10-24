@@ -1,0 +1,155 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders screening tool results popup 1`] = `
+<div
+  className={undefined}
+>
+  <div
+    className={undefined}
+  >
+    <div
+      className={undefined}
+    >
+      New Care Plan Suggestions
+    </div>
+    <div
+      className=""
+    >
+      Based on the results of this tool, the following have been recommended as additions to the patient's care plan.
+    </div>
+    <div
+      className={undefined}
+    >
+      <div
+        className={undefined}
+      >
+        <div
+          className={undefined}
+        >
+          New Concerns
+        </div>
+        <div
+          className={undefined}
+        >
+          0
+        </div>
+      </div>
+      <div
+        className={undefined}
+      >
+        <div
+          className={undefined}
+        >
+          New Goals
+        </div>
+        <div
+          className={undefined}
+        >
+          0
+        </div>
+      </div>
+      <div
+        className={undefined}
+      >
+        <div
+          className={undefined}
+        >
+          New Tasks
+        </div>
+        <div
+          className={undefined}
+        >
+          0
+        </div>
+      </div>
+    </div>
+    <div
+      className={undefined}
+    >
+      <div
+        className=""
+        onClick={[Function]}
+      >
+        See Suggestions
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`renders the correct results 1`] = `
+<div
+  className={undefined}
+>
+  <div
+    className={undefined}
+  >
+    <div
+      className={undefined}
+    >
+      New Care Plan Suggestions
+    </div>
+    <div
+      className=""
+    >
+      Based on the results of this tool, the following have been recommended as additions to the patient's care plan.
+    </div>
+    <div
+      className={undefined}
+    >
+      <div
+        className={undefined}
+      >
+        <div
+          className={undefined}
+        >
+          New Concerns
+        </div>
+        <div
+          className={undefined}
+        >
+          1
+        </div>
+      </div>
+      <div
+        className={undefined}
+      >
+        <div
+          className={undefined}
+        >
+          New Goals
+        </div>
+        <div
+          className={undefined}
+        >
+          1
+        </div>
+      </div>
+      <div
+        className={undefined}
+      >
+        <div
+          className={undefined}
+        >
+          New Tasks
+        </div>
+        <div
+          className={undefined}
+        >
+          1
+        </div>
+      </div>
+    </div>
+    <div
+      className={undefined}
+    >
+      <div
+        className=""
+        onClick={[Function]}
+      >
+        See Suggestions
+      </div>
+    </div>
+  </div>
+</div>
+`;

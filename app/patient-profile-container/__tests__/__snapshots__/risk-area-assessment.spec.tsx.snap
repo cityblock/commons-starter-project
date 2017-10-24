@@ -112,6 +112,12 @@ exports[`renders a risk area assessment 1`] = `
       Cancel
     </div>
     <div
+      className=""
+      onClick={[Function]}
+    >
+      Administer tool
+    </div>
+    <div
       className="undefined"
       onClick={[Function]}
     >
@@ -162,5 +168,6 @@ exports[`renders a risk area assessment 1`] = `
       </div>
     </div>
   </div>
+  <div />
 </div>
 `;

@@ -98,12 +98,56 @@ exports[`renders popup for goal suggestion 1`] = `
         className={undefined}
       >
         <div
-          className={undefined}
+          className=""
         >
-          Add as active or inactive concern?
+          Add this goal to a concern
         </div>
         <div
           className={undefined}
+        >
+          Select an existing patient concern, a suggested concern, or create a new one
+        </div>
+        <div
+          className={undefined}
+        >
+          <select
+            className=""
+            name="concernId"
+            onChange={[Function]}
+            value=""
+          >
+            <option
+              disabled={true}
+              hidden={true}
+              value=""
+            >
+              Select a concern
+            </option>
+            <optgroup
+              label="New concern"
+            >
+              <option
+                value="new-concern"
+              >
+                Add a new concern
+              </option>
+            </optgroup>
+          </select>
+        </div>
+        <div
+          className="undefined"
+        >
+          <input
+            className=""
+            name="newConcernTitle"
+            onChange={[Function]}
+            placeholder="Enter concern title"
+            type="text"
+            value=""
+          />
+        </div>
+        <div
+          className="undefined"
         >
           <select
             className=""

@@ -163,7 +163,7 @@ exports[`renders popup for goal suggestion 1`] = `
             className=""
             onClick={[Function]}
           >
-            Dismiss concern
+            Dismiss goal
           </div>
         </div>
       </div>

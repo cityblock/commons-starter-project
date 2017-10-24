@@ -24,7 +24,10 @@ export interface IPatientScreeningToolSubmissionEditableFields {
   score?: number;
 }
 
-export const EAGER_QUERY = '[screeningTool, patient, user, riskArea, patientAnswers]';
+/* tslint:disable:max-line-length */
+export const EAGER_QUERY =
+  '[screeningTool, patient, user, riskArea, patientAnswers, carePlanSuggestions.[patient, concern, goalSuggestionTemplate.[taskTemplates]]]';
+/* tslint:enable:max-line-length */
 
 /* tslint:disable:member-ordering */
 export default class PatientScreeningToolSubmission extends BaseModel {
@@ -102,6 +105,15 @@ export default class PatientScreeningToolSubmission extends BaseModel {
       join: {
         from: 'patient_screening_tool_submission.id',
         to: 'patient_answer.patientScreeningToolSubmissionId',
+      },
+    },
+
+    carePlanSuggestions: {
+      relation: Model.HasManyRelation,
+      modelClass: 'care-plan-suggestion',
+      join: {
+        from: 'patient_screening_tool_submission.id',
+        to: 'care_plan_suggestion.patientScreeningToolSubmissionId',
       },
     },
   };

@@ -1,0 +1,17 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders free text answer 1`] = `
+<div
+  className={undefined}
+>
+  <div
+    className={undefined}
+  >
+    <textarea
+      className={undefined}
+      onChange={[Function]}
+      value="true"
+    />
+  </div>
+</div>
+`;

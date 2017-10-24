@@ -596,6 +596,7 @@ type PatientScreeningToolSubmission implements uniqueId {
   createdAt: String!
   updatedAt: String!
   deletedAt: String
+  carePlanSuggestions: [CarePlanSuggestion]!
 }
 
 #
@@ -1289,6 +1290,8 @@ type RootQueryType {
   patientPreviousAnswersForQuestion(questionId: String!, patientId: String!): [PatientAnswer]
   # PatientAnswersForRiskArea
   patientAnswersForRiskArea(riskAreaId: String!, patientId: String!): [PatientAnswer]
+  # PatientAnswersForScreeningTool
+  patientAnswersForScreeningTool(screeningToolId: String!, patientId: String!): [PatientAnswer]
   # PatientRiskAreaSummary
   patientRiskAreaSummary(riskAreaId: String!, patientId: String!): RiskAreaSummary
   # PatientRiskAreaRiskScore

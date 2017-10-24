@@ -2,6 +2,11 @@ import { graphql } from 'graphql';
 import { cloneDeep } from 'lodash';
 import Db from '../../db';
 import Answer from '../../models/answer';
+import CarePlanSuggestion from '../../models/care-plan-suggestion';
+import Concern from '../../models/concern';
+import ConcernSuggestion from '../../models/concern-suggestion';
+import GoalSuggestion from '../../models/goal-suggestion';
+import GoalSuggestionTemplate from '../../models/goal-suggestion-template';
 import Patient from '../../models/patient';
 import PatientAnswer from '../../models/patient-answer';
 import PatientScreeningToolSubmission from '../../models/patient-screening-tool-submission';
@@ -9,6 +14,8 @@ import Question from '../../models/question';
 import QuestionCondition from '../../models/question-condition';
 import RiskArea from '../../models/risk-area';
 import ScreeningTool from '../../models/screening-tool';
+import ScreeningToolScoreRange from '../../models/screening-tool-score-range';
+import TaskTemplate from '../../models/task-template';
 import User from '../../models/user';
 import { createMockPatient, createPatient } from '../../spec-helpers';
 import schema from '../make-executable-schema';
@@ -257,6 +264,67 @@ describe('patient answer tests', () => {
     });
   });
 
+  describe('resolve patient answers for screening tool', () => {
+    it('resolves patient answers for a screening tool', async () => {
+      const screeningTool = await ScreeningTool.create({
+        title: 'Screening Tool',
+        riskAreaId: riskArea.id,
+      });
+      const screeningToolQuestion = await Question.create({
+        title: 'like writing tests again?',
+        answerType: 'dropdown',
+        screeningToolId: screeningTool.id,
+        order: 1,
+      });
+      const screeningToolAnswer = await Answer.create({
+        displayValue: 'loves writing more tests!',
+        value: '3',
+        valueType: 'number',
+        riskAdjustmentType: 'forceHighRisk',
+        inSummary: false,
+        questionId: screeningToolQuestion.id,
+        order: 1,
+      });
+      const patientAnswers = await PatientAnswer.create({
+        patientId: patient.id,
+        answers: [
+          {
+            questionId: screeningToolAnswer.questionId,
+            answerId: screeningToolAnswer.id,
+            answerValue: '3',
+            patientId: patient.id,
+            applicable: true,
+            userId: user.id,
+          },
+        ],
+      });
+
+      const query = `{
+        patientAnswersForScreeningTool(
+          screeningToolId: "${screeningTool.id}", patientId: "${patient.id}"
+        ) {
+          id
+          answerValue
+          question {
+            id
+          }
+        }
+      }`;
+      const result = await graphql(schema, query, null, { db, userRole });
+      const answers = cloneDeep(result.data!.patientAnswersForScreeningTool);
+
+      expect(answers).toMatchObject([
+        {
+          id: patientAnswers[0].id,
+          answerValue: '3',
+          question: {
+            id: screeningToolQuestion.id,
+          },
+        },
+      ]);
+    });
+  });
+
   describe('answer edit', () => {
     it('edits answer', async () => {
       const patientAnswers = await PatientAnswer.create({
@@ -463,6 +531,87 @@ describe('patient answer tests', () => {
       expect(patientScreeningToolSubmissions.length).toEqual(1);
       expect(patientScreeningToolSubmissions[0].screeningToolId).toEqual(screeningTool.id);
       expect(patientScreeningToolSubmissions[0].score).toEqual(7);
+    });
+
+    it('generates the correct care plan suggestions for a submitted screening tool', async () => {
+      const concern = await Concern.create({ title: 'Concern' });
+      const goalSuggestionTemplate = await GoalSuggestionTemplate.create({
+        title: 'Goal',
+      });
+      await TaskTemplate.create({
+        title: 'Task',
+        goalSuggestionTemplateId: goalSuggestionTemplate.id,
+        repeating: false,
+        priority: 'low',
+        careTeamAssigneeRole: 'physician',
+      });
+      const screeningTool = await ScreeningTool.create({
+        title: 'Screening Tool',
+        riskAreaId: riskArea.id,
+      });
+      const screeningToolScoreRange = await ScreeningToolScoreRange.create({
+        description: 'Score Range',
+        minimumScore: 0,
+        maximumScore: 10,
+        screeningToolId: screeningTool.id,
+      });
+      await ConcernSuggestion.create({
+        concernId: concern.id,
+        screeningToolScoreRangeId: screeningToolScoreRange.id,
+      });
+      await GoalSuggestion.create({
+        goalSuggestionTemplateId: goalSuggestionTemplate.id,
+        screeningToolScoreRangeId: screeningToolScoreRange.id,
+      });
+
+      const mutation = `mutation {
+        patientAnswersCreate(input: {
+          patientId: "${patient.id}",
+          questionIds: ["${answer.questionId}", "${answer2.questionId}"],
+          screeningToolId: "${screeningTool.id}",
+          patientAnswers: [{
+            questionId: "${answer.questionId}"
+            answerValue: "3"
+            answerId: "${answer.id}",
+            patientId: "${patient.id}",
+            applicable: false,
+          }, {
+            questionId: "${answer2.questionId}"
+            answerValue: "4"
+            answerId: "${answer2.id}",
+            patientId: "${patient.id}",
+            applicable: false,
+          }]
+        }) {
+          answerId,
+          answerValue,
+          patientId,
+          applicable,
+        }
+      }`;
+      const result = await graphql(schema, mutation, null, {
+        db,
+        userRole,
+        userId: user.id,
+      });
+      const clonedResult = cloneDeep(result.data!.patientAnswersCreate);
+      expect(clonedResult[0]).toMatchObject({
+        answerValue: '3',
+        answerId: answer.id,
+        patientId: patient.id,
+        applicable: false,
+      });
+      expect(clonedResult[1]).toMatchObject({
+        answerValue: '4',
+        answerId: answer2.id,
+        patientId: patient.id,
+        applicable: false,
+      });
+
+      const carePlanSuggestions = await CarePlanSuggestion.getForPatient(patient.id);
+      expect(carePlanSuggestions.length).toEqual(2);
+      expect(carePlanSuggestions[0].goalSuggestionTemplate!.id).toEqual(goalSuggestionTemplate.id);
+      expect(carePlanSuggestions[1].concern!.id).toEqual(concern.id);
     });
   });
 

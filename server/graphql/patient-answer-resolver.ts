@@ -90,7 +90,11 @@ export async function patientAnswersCreate(
         patientId,
         questionIds,
         patientScreeningToolSubmissionId,
-        answers: patientAnswers.map(patientAnswer => ({ ...patientAnswer, userId: userId! })),
+        answers: patientAnswers.map(patientAnswer => ({
+          ...patientAnswer,
+          userId: userId!,
+          patientScreeningToolSubmissionId,
+        })),
       },
       txn,
     );
@@ -148,6 +152,16 @@ export async function resolvePatientAnswersForRiskArea(
   await accessControls.isAllowed(userRole, 'view', 'patientAnswer');
 
   return await PatientAnswer.getForRiskArea(args.riskAreaId, args.patientId, 'question');
+}
+
+export async function resolvePatientAnswersForScreeningTool(
+  root: any,
+  args: { screeningToolId: string; patientId: string },
+  { db, userRole }: IContext,
+) {
+  await accessControls.isAllowed(userRole, 'view', 'patientAnswer');
+
+  return await PatientAnswer.getForScreeningTool(args.screeningToolId, args.patientId, 'question');
 }
 
 export async function resolvePatientAnswer(

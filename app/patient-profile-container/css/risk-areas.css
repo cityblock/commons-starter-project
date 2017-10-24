@@ -36,7 +36,7 @@
   }
 }
 
-.cancelButton, .saveButton, .startButton {
+.cancelButton, .saveButton, .startButton, .toolsButton {
   height: 32px;
   width: 173px;
   padding: 9px 30px;
@@ -44,6 +44,10 @@
 
 .cancelButton {
   padding-top: 8px;
+}
+
+.toolsButton {
+  margin-right: 10px;
 }
 
 .hidden {

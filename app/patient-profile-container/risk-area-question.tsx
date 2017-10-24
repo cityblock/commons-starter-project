@@ -3,7 +3,7 @@ import * as React from 'react';
 import { FullAnswerFragment, FullQuestionFragment } from '../graphql/types';
 import * as formStyles from '../shared/css/forms.css';
 import * as styles from './css/risk-areas.css';
-import RiskAreaMultiSelectAnswer from './risk-area-multi-select-answer';
+import MultiSelectAnswer from './multi-select-answer';
 
 interface IProps {
   onChange: (questionId: string, answerId: string, value: string | number) => any;
@@ -67,7 +67,7 @@ export default class RiskAreaQuestion extends React.Component<IProps, {}> {
 
   renderSelectOption(answer: FullAnswerFragment, index: number) {
     return (
-      <option key={`${answer.id}-${index}`} data-answerId={answer.id} value={answer.value}>
+      <option key={`${answer.id}-${index}`} value={answer.value}>
         {answer.displayValue}
       </option>
     );
@@ -105,7 +105,7 @@ export default class RiskAreaQuestion extends React.Component<IProps, {}> {
     const selected = !!answers.find(answer => answer.id === multiSelectAnswer.id);
 
     return (
-      <RiskAreaMultiSelectAnswer
+      <MultiSelectAnswer
         key={`${multiSelectAnswer.id}-${index}`}
         answer={multiSelectAnswer}
         onClick={this.onClickMultiSelect}

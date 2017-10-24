@@ -126,7 +126,7 @@ exports[`renders popup modal body for goal suggestion 1`] = `
       className=""
       onClick={[Function]}
     >
-      Dismiss concern
+      Dismiss goal
     </div>
   </div>
 </div>

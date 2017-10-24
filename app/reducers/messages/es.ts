@@ -20,6 +20,7 @@ export const SPANISH_TRANSLATION = {
     'patient.location': 'Ubicación',
     'patient.joinedAt': 'Paciente desde',
     'patient.tasks': 'Tareas',
+    'patient.tools': 'Instrumentos',
     'patient.threeSixty': 'Vista de 360°',
     'patient.carePlan': 'Plan de cuidado',
     'patient.activeCarePlan': 'Activo',

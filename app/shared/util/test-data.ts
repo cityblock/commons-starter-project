@@ -176,7 +176,7 @@ export const carePlanSuggestionWithGoal = {
   id: 'care-plan-suggestion-id',
   patientId: 'patient-id',
   patient,
-  suggestionType: 'concern' as any,
+  suggestionType: 'goal' as any,
   concernId: null,
   concern: null,
   goalSuggestionTemplateId: 'goal-suggestion-template-id',
@@ -307,6 +307,7 @@ export const patientAnswer = {
   answerValue: answer.value,
   patientId: patient.id,
   applicable: true,
+  patientScreeningToolSubmissionId: null,
   question: {
     id: question.id,
   },
@@ -389,4 +390,19 @@ export const screeningToolScoreRange = {
   deletedAt: null,
   concernSuggestions: [],
   goalSuggestions: [],
+};
+
+export const patientScreeningToolSubmission = {
+  id: 'patient-screening-tool-submission-id',
+  screeningToolId: screeningTool.id,
+  patientId: patient.id,
+  patient,
+  userId: user.id,
+  user,
+  riskArea,
+  score: 5,
+  deletedAt: null,
+  createdAt: 'Thu Jul 13 2017 16:52:56 GMT-0400 (EDT)',
+  updatedAt: 'Thu Jul 13 2017 16:52:56 GMT-0400 (EDT)',
+  carePlanSuggestions: [carePlanSuggestionWithConcern, carePlanSuggestionWithGoal],
 };

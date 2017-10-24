@@ -18,7 +18,7 @@ export default class ScreeningToolsPopup extends React.Component<IProps, {}> {
       return <div className={styles.screeningToolOptionsLoading}>Loading...</div>;
     }
 
-    if (!screeningTools) {
+    if (!screeningTools || !screeningTools.length) {
       return (
         <div className={styles.emptyScreeningToolOptions}>
           No screening tools for this domain

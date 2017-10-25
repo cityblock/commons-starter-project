@@ -90,4 +90,4 @@ export default class QuestionCondition extends BaseModel {
     return questionCondition;
   }
 }
-/* tslint:disable:member-ordering */
+/* tslint:enable:member-ordering */

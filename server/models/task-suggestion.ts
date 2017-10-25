@@ -103,4 +103,4 @@ export default class TaskSuggestion extends BaseModel {
     return await this.getForAnswer(answerId);
   }
 }
-/* tslint:disable:member-ordering */
+/* tslint:enable:member-ordering */

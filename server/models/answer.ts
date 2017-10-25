@@ -148,4 +148,4 @@ export default class Answer extends BaseModel {
     return answer;
   }
 }
-/* tslint:disable:member-ordering */
+/* tslint:enable:member-ordering */

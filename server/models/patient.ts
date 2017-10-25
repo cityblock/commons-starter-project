@@ -139,4 +139,4 @@ export default class Patient extends BaseModel {
     return await transaction(this as any, callback);
   }
 }
-/* tslint:disable:member-ordering */
+/* tslint:enable:member-ordering */

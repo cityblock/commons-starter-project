@@ -81,4 +81,4 @@ export default class Concern extends BaseModel {
     return concern;
   }
 }
-/* tslint:disable:member-ordering */
+/* tslint:enable:member-ordering */

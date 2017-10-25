@@ -251,4 +251,4 @@ export default class Question extends BaseModel {
     return question;
   }
 }
-/* tslint:disable:member-ordering */
+/* tslint:enable:member-ordering */

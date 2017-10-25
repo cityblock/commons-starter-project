@@ -90,4 +90,4 @@ export default class TaskTemplate extends BaseModel {
     return taskTemplate;
   }
 }
-/* tslint:disable:member-ordering */
+/* tslint:enable:member-ordering */

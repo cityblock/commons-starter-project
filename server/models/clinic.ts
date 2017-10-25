@@ -92,4 +92,4 @@ export default class Clinic extends BaseModel {
     return clinic;
   }
 }
-/* tslint:disable:member-ordering */
+/* tslint:enable:member-ordering */

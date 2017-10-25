@@ -190,4 +190,4 @@ export default class TaskEvent extends BaseModel {
     };
   }
 }
-/* tslint:disable:member-ordering */
+/* tslint:enable:member-ordering */

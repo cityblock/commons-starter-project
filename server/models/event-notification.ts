@@ -203,4 +203,4 @@ export default class EventNotification extends BaseModel {
     };
   }
 }
-/* tslint:disable:member-ordering */
+/* tslint:enable:member-ordering */

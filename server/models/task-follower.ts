@@ -74,4 +74,4 @@ export default class TaskFollower extends BaseModel {
       .update({ deletedAt: new Date().toISOString() });
   }
 }
-/* tslint:disable:member-ordering */
+/* tslint:enable:member-ordering */

@@ -233,4 +233,4 @@ export default class PatientScreeningToolSubmission extends BaseModel {
     return patientScreeningToolSubmission;
   }
 }
-/* tslint:disable:member-ordering */
+/* tslint:enable:member-ordering */

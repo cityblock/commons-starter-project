@@ -213,4 +213,4 @@ export default class GoalSuggestion extends BaseModel {
     }
   }
 }
-/* tslint:disable:member-ordering */
+/* tslint:enable:member-ordering */

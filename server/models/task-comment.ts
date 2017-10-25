@@ -117,4 +117,4 @@ export default class TaskComment extends BaseModel {
     };
   }
 }
-/* tslint:disable:member-ordering */
+/* tslint:enable:member-ordering */

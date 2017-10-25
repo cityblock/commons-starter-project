@@ -169,4 +169,4 @@ export default class RiskArea extends BaseModel {
     return { riskAreas: values(knownRiskAreas) };
   }
 }
-/* tslint:disable:member-ordering */
+/* tslint:enable:member-ordering */

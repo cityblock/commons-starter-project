@@ -168,4 +168,4 @@ export default class PatientGoal extends BaseModel {
     return patientGoal;
   }
 }
-/* tslint:disable:member-ordering */
+/* tslint:enable:member-ordering */

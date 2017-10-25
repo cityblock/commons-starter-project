@@ -97,4 +97,4 @@ export default class CareTeam extends BaseModel {
     return await this.getForPatient(patientId);
   }
 }
-/* tslint:disable:member-ordering */
+/* tslint:enable:member-ordering */

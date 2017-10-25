@@ -202,4 +202,4 @@ export default class ScreeningToolScoreRange extends BaseModel {
     return screeningToolScoreRange;
   }
 }
-/* tslint:disable:member-ordering */
+/* tslint:enable:member-ordering */

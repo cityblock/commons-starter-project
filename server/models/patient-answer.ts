@@ -251,4 +251,4 @@ export default class PatientAnswer extends BaseModel {
     return patientAnswer;
   }
 }
-/* tslint:disable:member-ordering */
+/* tslint:enable:member-ordering */

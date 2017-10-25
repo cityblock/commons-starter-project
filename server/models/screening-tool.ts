@@ -136,4 +136,4 @@ export default class ScreeningTool extends BaseModel {
     return screeningTool;
   }
 }
-/* tslint:disable:member-ordering */
+/* tslint:enable:member-ordering */

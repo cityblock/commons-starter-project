@@ -210,4 +210,4 @@ export default class CarePlanSuggestion extends BaseModel {
       });
   }
 }
-/* tslint:disable:member-ordering */
+/* tslint:enable:member-ordering */

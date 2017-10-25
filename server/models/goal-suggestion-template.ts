@@ -85,4 +85,4 @@ export default class GoalSuggestionTemplate extends BaseModel {
     return goalSuggestion;
   }
 }
-/* tslint:disable:member-ordering */
+/* tslint:enable:member-ordering */

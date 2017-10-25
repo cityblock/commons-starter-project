@@ -134,4 +134,4 @@ export default class PatientConcern extends BaseModel {
     return patientConcern;
   }
 }
-/* tslint:disable:member-ordering */
+/* tslint:enable:member-ordering */

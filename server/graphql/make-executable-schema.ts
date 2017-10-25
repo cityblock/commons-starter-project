@@ -99,6 +99,19 @@ import {
   resolvePatientTaskSuggestions,
 } from './patient-task-suggestion-resolver';
 import {
+  progressNoteComplete,
+  progressNoteCreate,
+  resolveProgressNote,
+  resolveProgressNotesForPatient,
+} from './progress-note-resolver';
+import {
+  progressNoteTemplateCreate,
+  progressNoteTemplateDelete,
+  progressNoteTemplateEdit,
+  resolveProgressNoteTemplate,
+  resolveProgressNoteTemplates,
+} from './progress-note-template-resolver';
+import {
   questionConditionCreate,
   questionConditionDelete,
   questionConditionEdit,
@@ -244,6 +257,10 @@ const resolveFunctions = {
     patientScreeningToolSubmission: resolvePatientScreeningToolSubmission,
     patientScreeningToolSubmissionsForPatient: resolvePatientScreeningToolSubmissionsForPatient,
     patientScreeningToolSubmissions: resolvePatientScreeningToolSubmissions,
+    progressNoteTemplate: resolveProgressNoteTemplate,
+    progressNoteTemplates: resolveProgressNoteTemplates,
+    progressNote: resolveProgressNote,
+    progressNotesForPatient: resolveProgressNotesForPatient,
   },
   /* tslint:enable:max-line-length */
   RootMutationType: {
@@ -319,6 +336,11 @@ const resolveFunctions = {
     patientScreeningToolSubmissionCreate,
     patientScreeningToolSubmissionEdit,
     patientScreeningToolSubmissionDelete,
+    progressNoteTemplateCreate,
+    progressNoteTemplateDelete,
+    progressNoteTemplateEdit,
+    progressNoteComplete,
+    progressNoteCreate,
   },
 };
 

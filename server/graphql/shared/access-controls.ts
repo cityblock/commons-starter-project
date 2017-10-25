@@ -29,7 +29,9 @@ export type Resource =
   | 'goalSuggestion'
   | 'patientTaskSuggestion'
   | 'taskSuggestion'
-  | 'patientScreeningToolSubmission';
+  | 'patientScreeningToolSubmission'
+  | 'progressNote'
+  | 'progressNoteTemplate';
 
 /*
 ACL SPEC:

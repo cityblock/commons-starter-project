@@ -599,6 +599,29 @@ type PatientScreeningToolSubmission implements uniqueId {
   carePlanSuggestions: [CarePlanSuggestion]!
 }
 
+type ProgressNoteTemplate implements uniqueId {
+  id: ID!
+  title: String!
+  createdAt: String!
+  updatedAt: String!
+  deletedAt: String
+  carePlanSuggestions: [CarePlanSuggestion]!
+}
+
+type ProgressNote implements uniqueId {
+  id: ID!
+  patientId: String!
+  patient: Patient!
+  userId: String!
+  user: User!
+  progressNoteTemplateId: String!
+  progressNoteTemplate: ProgressNoteTemplate!
+  completedAt: String!
+  createdAt: String!
+  updatedAt: String!
+  deletedAt: String
+}
+
 #
 # BEGIN INPUT FIELDS
 #
@@ -1073,6 +1096,28 @@ input PatientScreeningToolSubmissionDeleteInput {
   patientScreeningToolSubmissionId: String!
 }
 
+input ProgressNoteTemplateCreateInput {
+  title: String!
+}
+
+input ProgressNoteTemplateDeleteInput {
+  progressNoteTemplateId: String!
+}
+
+input ProgressNoteTemplateEditInput {
+  progressNoteTemplateId: String!
+  title: String!
+}
+
+input ProgressNoteCreateInput {
+  progressNoteTemplateId: String!
+  patientId: String!
+}
+
+input ProgressNoteCompleteInput {
+  progressNoteId: String!
+}
+
 type RootMutationType {
   # Create a new user
   userCreate(input: UserCreateInput): User
@@ -1230,6 +1275,16 @@ type RootMutationType {
   patientScreeningToolSubmissionDelete(
     input: PatientScreeningToolSubmissionDeleteInput
   ): PatientScreeningToolSubmission
+  # create a progress note template
+  progressNoteTemplateCreate(input: ProgressNoteTemplateCreateInput): ProgressNoteTemplate
+  # edits a progress note template
+  progressNoteTemplateEdit(input: ProgressNoteTemplateEditInput): ProgressNoteTemplate
+  # deletes a progress note template
+  progressNoteTemplateDelete(input: ProgressNoteTemplateDeleteInput): ProgressNoteTemplate
+  # create a progress note
+  progressNoteCreate(input: ProgressNoteCreateInput): ProgressNote
+  # completes a progress note
+  progressNoteComplete(input: ProgressNoteCompleteInput): ProgressNote
 }
 
 type RootQueryType {
@@ -1368,6 +1423,15 @@ type RootQueryType {
   ): [PatientScreeningToolSubmission]
   # patient screening tool submissions
   patientScreeningToolSubmissions: [PatientScreeningToolSubmission]
+  # progress note template
+  progressNoteTemplate(progressNoteTemplateId: String!): ProgressNoteTemplate
+  # progress note templates
+  progressNoteTemplates: [ProgressNoteTemplate]
+  # progress note
+  progressNote(progressNoteId: String!): ProgressNote
+  # progress notes for patient
+  progressNotesForPatient(patientId: String!): [ProgressNote]
+
 }
 
 schema {

@@ -77,6 +77,10 @@ declare module 'schema' {
     patientScreeningToolSubmission: IPatientScreeningToolSubmission | null;
     patientScreeningToolSubmissionsForPatient: Array<IPatientScreeningToolSubmission> | null;
     patientScreeningToolSubmissions: Array<IPatientScreeningToolSubmission> | null;
+    progressNoteTemplate: IProgressNoteTemplate | null;
+    progressNoteTemplates: Array<IProgressNoteTemplate> | null;
+    progressNote: IProgressNote | null;
+    progressNotesForPatient: Array<IProgressNote> | null;
   }
 
   /*
@@ -98,7 +102,7 @@ declare module 'schema' {
   /*
     description: An object with a Globally Unique ID
   */
-  type uniqueId = IUser | IPatient | IClinic | ITask | IPatientGoal | IGoalSuggestionTemplate | ITaskTemplate | ITaskComment | IRiskArea | IQuestion | IAnswer | IConcern | IQuestionCondition | IPatientAnswer | IPatientScreeningToolSubmission | IScreeningTool | IScreeningToolScoreRange | ICarePlanSuggestion | IEventNotification | ITaskEvent | IPatientConcern | IPatientTaskSuggestion;
+  type uniqueId = IUser | IPatient | IClinic | ITask | IPatientGoal | IGoalSuggestionTemplate | ITaskTemplate | ITaskComment | IRiskArea | IQuestion | IAnswer | IConcern | IQuestionCondition | IPatientAnswer | IPatientScreeningToolSubmission | IScreeningTool | IScreeningToolScoreRange | ICarePlanSuggestion | IEventNotification | ITaskEvent | IPatientConcern | IPatientTaskSuggestion | IProgressNoteTemplate | IProgressNote;
 
   /*
     description: An object with a Globally Unique ID
@@ -703,6 +707,35 @@ declare module 'schema' {
   /*
     description: 
   */
+  interface IProgressNoteTemplate {
+    id: string;
+    title: string;
+    createdAt: string;
+    updatedAt: string;
+    deletedAt: string | null;
+    carePlanSuggestions: Array<ICarePlanSuggestion>;
+  }
+
+  /*
+    description: 
+  */
+  interface IProgressNote {
+    id: string;
+    patientId: string;
+    patient: IPatient;
+    userId: string;
+    user: IUser;
+    progressNoteTemplateId: string;
+    progressNoteTemplate: IProgressNoteTemplate;
+    completedAt: string;
+    createdAt: string;
+    updatedAt: string;
+    deletedAt: string | null;
+  }
+
+  /*
+    description: 
+  */
   interface IRootMutationType {
     userCreate: IUser | null;
     userLogin: IUserWithAuthToken | null;
@@ -779,6 +812,11 @@ declare module 'schema' {
     patientScreeningToolSubmissionCreate: IPatientScreeningToolSubmission | null;
     patientScreeningToolSubmissionEdit: IPatientScreeningToolSubmission | null;
     patientScreeningToolSubmissionDelete: IPatientScreeningToolSubmission | null;
+    progressNoteTemplateCreate: IProgressNoteTemplate | null;
+    progressNoteTemplateEdit: IProgressNoteTemplate | null;
+    progressNoteTemplateDelete: IProgressNoteTemplate | null;
+    progressNoteCreate: IProgressNote | null;
+    progressNoteComplete: IProgressNote | null;
   }
 
   /*
@@ -1482,6 +1520,43 @@ declare module 'schema' {
   */
   interface IPatientScreeningToolSubmissionDeleteInput {
     patientScreeningToolSubmissionId: string;
+  }
+
+  /*
+    description: 
+  */
+  interface IProgressNoteTemplateCreateInput {
+    title: string;
+  }
+
+  /*
+    description: 
+  */
+  interface IProgressNoteTemplateEditInput {
+    progressNoteTemplateId: string;
+    title: string;
+  }
+
+  /*
+    description: 
+  */
+  interface IProgressNoteTemplateDeleteInput {
+    progressNoteTemplateId: string;
+  }
+
+  /*
+    description: 
+  */
+  interface IProgressNoteCreateInput {
+    progressNoteTemplateId: string;
+    patientId: string;
+  }
+
+  /*
+    description: 
+  */
+  interface IProgressNoteCompleteInput {
+    progressNoteId: string;
   }
 
   /*

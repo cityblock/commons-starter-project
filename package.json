@@ -11,7 +11,7 @@
     "start": "NODE_ENV=production nodemon --exec node ./server-compiled/index.js",
     "dev": "NODE_ENV=development nodemon --exec ts-node ./server/index.ts",
     "build:dev": "cross-env NODE_ENV=development webpack --colors --display-error-details --config ./webpack/webpack.config.js",
-    "build": "yarn run clean && yarn run build-server && cross-env NODE_ENV=production GOOGLE_OAUTH_TOKEN=453019684022-7hpt0vfk9bjjc53pm2rl9f1vgmujkl68.apps.googleusercontent.com webpack --colors --config ./webpack/webpack.config.js",
+    "build": "yarn run clean && yarn run build-server && cross-env NODE_ENV=production GOOGLE_OAUTH_TOKEN=640963223283-n944uqosb4kae9cj99d35v6ut6n5bvlc.apps.googleusercontent.com webpack --colors --config ./webpack/webpack.config.js",
     "build-server": "./node_modules/typescript/bin/tsc --project tsconfig.server.json",
     "prettier": "prettier --write \"./**/*.{ts,graphql}\"",
     "prettier:check": "prettier --debug-check \"./**/*.ts\"",

@@ -85,11 +85,13 @@ class CarePlanSuggestion extends React.Component<allProps, IState> {
   }
 
   renderGoalTaskTemplates(goalSuggestion: FullGoalSuggestionTemplateFragment) {
-    return (goalSuggestion.taskTemplates || []).map(taskTemplate => {
-      if (taskTemplate) {
-        return <li key={taskTemplate.id}>{taskTemplate.title}</li>;
-      }
-    }).filter(li => !!li); // Really not sure why taskTemplate can be null
+    return (goalSuggestion.taskTemplates || [])
+      .map(taskTemplate => {
+        if (taskTemplate) {
+          return <li key={taskTemplate.id}>{taskTemplate.title}</li>;
+        }
+      })
+      .filter(li => !!li); // Really not sure why taskTemplate can be null
   }
 
   renderGoalSuggestion() {
@@ -101,7 +103,7 @@ class CarePlanSuggestion extends React.Component<allProps, IState> {
       return (
         <div className={suggestionStyles}>
           <div className={styles.flexRow}>
-            <div className={styles.deleteSuggestionButton} onClick={this.onClickDelete}></div>
+            <div className={styles.deleteSuggestionButton} onClick={this.onClickDelete} />
             <div>{suggestion.title}</div>
           </div>
           <ul className={styles.smallMarginPadding}>
@@ -121,7 +123,7 @@ class CarePlanSuggestion extends React.Component<allProps, IState> {
       return (
         <div className={suggestionStyles}>
           <div className={styles.flexRow}>
-            <div className={styles.deleteSuggestionButton} onClick={this.onClickDelete}></div>
+            <div className={styles.deleteSuggestionButton} onClick={this.onClickDelete} />
             <div>{suggestion.title}</div>
           </div>
         </div>
@@ -143,19 +145,13 @@ export default compose(
   graphql<IGraphqlProps, IProps>(concernSuggestionDeleteMutationGraphql as any, {
     name: 'deleteConcernSuggestion',
     options: {
-      refetchQueries: [
-        'getQuestionsForRiskAreaOrScreeningTool',
-        'getScreeningTools',
-      ],
+      refetchQueries: ['getQuestionsForRiskAreaOrScreeningTool', 'getScreeningTools'],
     },
   }),
   graphql<IGraphqlProps, IProps>(goalSuggestionDeleteMutationGraphql as any, {
     name: 'deleteGoalSuggestion',
     options: {
-      refetchQueries: [
-        'getQuestionsForRiskAreaOrScreeningTool',
-        'getScreeningTools',
-      ],
+      refetchQueries: ['getQuestionsForRiskAreaOrScreeningTool', 'getScreeningTools'],
     },
   }),
 )(CarePlanSuggestion);

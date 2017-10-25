@@ -48,7 +48,7 @@ export default class PatientProfileLeftNav extends React.Component<IProps, IStat
     const { browserSize, patient, patientId, intl } = this.props;
 
     if (browserSize === 'small') {
-      return (<PatientProfileIpadNav intl={intl} patientId={patientId} patient={patient} />);
+      return <PatientProfileIpadNav intl={intl} patientId={patientId} patient={patient} />;
     } else {
       return (
         <div className={styles.leftPane}>

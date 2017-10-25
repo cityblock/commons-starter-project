@@ -294,7 +294,7 @@ export class RiskArea extends React.Component<allProps, IState> {
               </div>
               <div className={titleEditStyles}>
                 <input
-                  name='editedTitle'
+                  name="editedTitle"
                   ref={area => {
                     this.editTitleInput = area;
                   }}
@@ -316,8 +316,8 @@ export class RiskArea extends React.Component<allProps, IState> {
               </div>
               <div className={orderEditStyles}>
                 <input
-                  type='number'
-                  name='editedOrder'
+                  type="number"
+                  name="editedOrder"
                   ref={area => {
                     this.editOrderInput = area;
                   }}

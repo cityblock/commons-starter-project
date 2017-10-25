@@ -11,7 +11,6 @@ interface IProps {
 type Props = IProps & InjectedIntlProps;
 
 class PatientEncounter extends React.Component<Props> {
-
   constructor(props: Props) {
     super(props);
     this.renderEncounterAttachments = this.renderEncounterAttachments.bind(this);
@@ -33,13 +32,12 @@ class PatientEncounter extends React.Component<Props> {
         <div
           key={`${attachment}=${index}`}
           className={styles.encounterAttachmentPhoto}
-          onClick={() => onClickAttachment(attachment, attachments)}>
+          onClick={() => onClickAttachment(attachment, attachments)}
+        >
           <img src={attachment} />
         </div>
       ));
-      return (
-        <div className={styles.encounterAttachments}>{attachmentsHtml}</div>
-      );
+      return <div className={styles.encounterAttachments}>{attachmentsHtml}</div>;
     }
   }
 
@@ -56,8 +54,8 @@ class PatientEncounter extends React.Component<Props> {
     // TODO: Better fallback for location
     const encounterLocation = encounter.location || '100 Main St.';
     // TODO: This is just for demo
-    const providerRole = encounter.providerRole === 'Dermatology' ?
-      'Mental Health' : encounter.providerRole;
+    const providerRole =
+      encounter.providerRole === 'Dermatology' ? 'Mental Health' : encounter.providerRole;
 
     let encounterNote =
       'TBD: Auctor congue consequat dictum dignissim eleifend et euismod hac in ipsum ' +
@@ -120,11 +118,9 @@ class PatientEncounter extends React.Component<Props> {
         <div className={styles.encounterBody}>
           <div className={styles.encounterHeader}>
             <div className={styles.encounterSummary}>{encounter.encounterType}</div>
-            <div className={styles.encounterHamburger}></div>
+            <div className={styles.encounterHamburger} />
           </div>
-          <div className={styles.encounterMain}>
-            {encounterNote}
-          </div>
+          <div className={styles.encounterMain}>{encounterNote}</div>
           <div className={styles.encounterFooter}>
             <div className={styles.encounterLocation}>{encounterLocation}</div>
             {this.renderEncounterAttachments(encounter)}

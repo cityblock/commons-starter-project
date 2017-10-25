@@ -50,7 +50,8 @@ describe('shallow rendered', () => {
         refetchConcern={refetchConcern}
         editConcern={editConcern}
         onDelete={onDelete}
-        concernId={concern.id} />,
+        concernId={concern.id}
+      />,
     );
     instance = component.instance() as Component;
   });

@@ -20,7 +20,8 @@ it('renders patient 360 view', () => {
           <PatientThreeSixtyView
             patientId={'patient-1'}
             patientRoute={'/patients/patient-1'}
-            routeBase={'/patients/patient-1/360'} />
+            routeBase={'/patients/patient-1/360'}
+          />
         </ConnectedRouter>
       </ReduxConnectedIntlProvider>
     </MockedProvider>,

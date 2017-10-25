@@ -15,11 +15,11 @@ const store = createStore(client, history);
 render(
   <ApolloProvider store={store} client={client}>
     <ReduxConnectedIntlProvider>
-      <ConnectedRouter history={history}>
-        {Routes}
-      </ConnectedRouter>
+      <ConnectedRouter history={history}>{Routes}</ConnectedRouter>
     </ReduxConnectedIntlProvider>
-  </ApolloProvider>, document.getElementById('app'));
+  </ApolloProvider>,
+  document.getElementById('app'),
+);
 
 if ((module as any).hot) {
   (module as any).hot.accept();

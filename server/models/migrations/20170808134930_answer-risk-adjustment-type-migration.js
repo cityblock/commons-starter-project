@@ -1,4 +1,4 @@
-exports.up = function (knex, Promise) {
+exports.up = function(knex, Promise) {
   return knex.schema.raw(`
     ALTER TABLE "answer"
     DROP CONSTRAINT "answer_riskAdjustmentType_check",
@@ -15,6 +15,6 @@ exports.up = function (knex, Promise) {
   `);
 };
 
-exports.down = function (knex, Promise) {
+exports.down = function(knex, Promise) {
   return knex.schema;
 };

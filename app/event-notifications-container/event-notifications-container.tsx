@@ -26,15 +26,16 @@ interface IProps {
   eventNotificationType?: SelectableNotificationTypes;
   eventNotificationsLoading: boolean;
   eventNotificationsError?: string;
-  eventNotificationsResponse?:
-    getEventNotificationsForCurrentUserQuery['eventNotificationsForCurrentUser'];
+  /* tslint:disable:max-line-length */
+  eventNotificationsResponse?: getEventNotificationsForCurrentUserQuery['eventNotificationsForCurrentUser'];
+  /* tslint:disable:max-line-length */
   eventNotifications?: FullEventNotificationFragment[];
   fetchMoreEventNotifications: () => any;
   updateNotificationsCount: (count: number) => any;
   dismissEventNotification: (
     options: { variables: eventNotificationDismissMutationVariables },
-    // TODO: Use generated typings here
-  ) => { data: { eventNotificationDismiss: FullEventNotificationFragment } };
+  ) => // TODO: Use generated typings here
+  { data: { eventNotificationDismiss: FullEventNotificationFragment } };
   notificationsCount: number;
   match: {
     params: {
@@ -88,20 +89,20 @@ export class EventNotificationsContainer extends React.Component<IProps> {
     return (
       <div className={styles.container}>
         <div className={styles.leftPane}>
-          <FormattedMessage id='notifications.leftPane'>
+          <FormattedMessage id="notifications.leftPane">
             {(message: string) => <div className={styles.leftHeading}>{message}</div>}
           </FormattedMessage>
         </div>
         <div className={styles.mainBody}>
           <div className={tabStyles.tabs}>
-            <FormattedMessage id='tasks.listView'>
+            <FormattedMessage id="tasks.listView">
               {(message: string) => (
                 <Link className={tasksTabStyles} to={'/tasks'}>
                   {message}
                 </Link>
               )}
             </FormattedMessage>
-            <FormattedMessage id='tasks.calendar'>
+            <FormattedMessage id="tasks.calendar">
               {(message: string) => (
                 <Link className={calendarTabStyles} to={'/calendar'}>
                   {message}
@@ -109,7 +110,7 @@ export class EventNotificationsContainer extends React.Component<IProps> {
               )}
             </FormattedMessage>
             <Link className={notificationsTabStyles} to={'/notifications/tasks'}>
-              <FormattedMessage id='tasks.notifications'>
+              <FormattedMessage id="tasks.notifications">
                 {(message: string) => <span>{message}</span>}
               </FormattedMessage>
               <div className={notificationsBadgeStyles} />
@@ -146,8 +147,7 @@ function mapDispatchToProps(dispatch: Dispatch<() => void>): Partial<IProps> {
 }
 
 export function formatEventNotifications(
-  eventNotificationsResponse?:
-    getEventNotificationsForCurrentUserQuery['eventNotificationsForCurrentUser'],
+  eventNotificationsResponse?: getEventNotificationsForCurrentUserQuery['eventNotificationsForCurrentUser'],
 ) {
   if (eventNotificationsResponse && eventNotificationsResponse.edges) {
     return eventNotificationsResponse.edges

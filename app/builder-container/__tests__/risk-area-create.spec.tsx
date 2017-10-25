@@ -7,7 +7,7 @@ import { create } from 'react-test-renderer';
 import configureMockStore from 'redux-mock-store';
 import { ENGLISH_TRANSLATION } from '../../reducers/messages/en';
 import ReduxConnectedIntlProvider from '../../redux-connected-intl-provider';
-import RiskAreaCreate, {RiskAreaCreate as Component} from '../risk-area-create';
+import RiskAreaCreate, { RiskAreaCreate as Component } from '../risk-area-create';
 
 const locale = { messages: ENGLISH_TRANSLATION.messages };
 const mockStore = configureMockStore([]);
@@ -18,9 +18,7 @@ it('renders risk area', () => {
     <MockedProvider mocks={[]} store={mockStore({ locale })}>
       <ReduxConnectedIntlProvider>
         <ConnectedRouter history={history}>
-          <RiskAreaCreate
-            routeBase='/builder/tasks'
-            onClose={() => false} />
+          <RiskAreaCreate routeBase="/builder/tasks" onClose={() => false} />
         </ConnectedRouter>
       </ReduxConnectedIntlProvider>
     </MockedProvider>,
@@ -35,9 +33,10 @@ describe('shallow rendered', () => {
   beforeEach(() => {
     const component = shallow(
       <Component
-      routeBase='/builder/concerns'
-      createRiskArea={createRiskArea}
-      onClose={() => false} />,
+        routeBase="/builder/concerns"
+        createRiskArea={createRiskArea}
+        onClose={() => false}
+      />,
     );
     instance = component.instance() as Component;
   });

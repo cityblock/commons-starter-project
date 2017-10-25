@@ -21,7 +21,8 @@ it('renders a care plan suggestion', () => {
           <CarePlanSuggestion
             answerId={'answer-id'}
             suggestionType={'concern'}
-            suggestion={concern} />
+            suggestion={concern}
+          />
         </ConnectedRouter>
       </ReduxConnectedIntlProvider>
     </MockedProvider>,

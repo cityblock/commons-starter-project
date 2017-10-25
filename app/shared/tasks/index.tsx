@@ -112,7 +112,7 @@ class Tasks extends React.Component<IProps & IDispatchProps & IStateProps & IApo
       return (
         <div className={styles.emptyTasksMessage}>
           <div className={styles.emptyTasksLogo} />
-          <FormattedMessage id='tasks.noTasks'>
+          <FormattedMessage id="tasks.noTasks">
             {(message: string) => <div className={styles.emptyTasksLabel}>{message}</div>}
           </FormattedMessage>
         </div>
@@ -164,7 +164,7 @@ class Tasks extends React.Component<IProps & IDispatchProps & IStateProps & IApo
     });
     const createTaskButton = patient ? (
       <div className={styles.createContainer}>
-        <FormattedMessage id='tasks.createTask'>
+        <FormattedMessage id="tasks.createTask">
           {(message: string) => (
             <div onClick={this.showCreateTask} className={styles.createButton}>
               {message}
@@ -200,16 +200,16 @@ class Tasks extends React.Component<IProps & IDispatchProps & IStateProps & IApo
             <div className={sortSearchStyles.sortLabel}>Sort by:</div>
             <div className={sortSearchStyles.sortDropdown}>
               <select value={orderBy} onChange={this.onSortChange}>
-                <option value='createdAtDesc'>Newest first</option>
-                <option value='createdAtAsc'>Oldest first</option>
-                <option value='dueAtAsc'>Due soonest</option>
-                <option value='dueAtDesc'>Due latest</option>
-                <option value='updatedAtDesc'>Last updated</option>
-                <option value='updatedAtAsc'>Last updated desc</option>
+                <option value="createdAtDesc">Newest first</option>
+                <option value="createdAtAsc">Oldest first</option>
+                <option value="dueAtAsc">Due soonest</option>
+                <option value="dueAtDesc">Due latest</option>
+                <option value="updatedAtDesc">Last updated</option>
+                <option value="updatedAtAsc">Last updated desc</option>
               </select>
             </div>
             <div className={classNames(sortSearchStyles.search, styles.search)}>
-              <input required type='text' placeholder='Search by user or keywords' />
+              <input required type="text" placeholder="Search by user or keywords" />
             </div>
           </div>
           {createTaskButton}

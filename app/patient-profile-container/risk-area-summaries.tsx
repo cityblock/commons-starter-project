@@ -32,7 +32,8 @@ class RiskAreas extends React.Component<IProps, {}> {
         key={index}
         routeBase={routeBase}
         riskArea={riskArea}
-        patientId={patientId} />
+        patientId={patientId}
+      />
     );
   }
 
@@ -50,7 +51,7 @@ class RiskAreas extends React.Component<IProps, {}> {
     } else if (!loading && !error) {
       return (
         <div className={styles.emptyRiskAreasMessage}>
-          <div className={styles.emptyRiskAreasLogo}></div>
+          <div className={styles.emptyRiskAreasLogo} />
           <div className={styles.emptyRiskAreasLabel}>No risk areas available</div>
           <div className={styles.emptyRiskAreasSubtext}>
             Risk areas will be shown here once they are created.
@@ -58,15 +59,8 @@ class RiskAreas extends React.Component<IProps, {}> {
         </div>
       );
     } else {
-      return (
-        <RiskAreasLoadingError
-          error={error}
-          loading={loading}
-          onRetryClick={() => true}
-        />
-      );
+      return <RiskAreasLoadingError error={error} loading={loading} onRetryClick={() => true} />;
     }
-
   }
 
   render() {
@@ -76,12 +70,12 @@ class RiskAreas extends React.Component<IProps, {}> {
           <div className={sortSearchStyles.sort}>
             <div className={sortSearchStyles.sortLabel}>Sort by:</div>
             <div className={sortSearchStyles.sortDropdown}>
-              <select value='Newest first'>
-                <option value='Newest first'>Newest first</option>
+              <select value="Newest first">
+                <option value="Newest first">Newest first</option>
               </select>
             </div>
             <div className={classNames(sortSearchStyles.search, styles.marginLeft)}>
-              <input required type='text' placeholder='Search by user or keywords' />
+              <input required type="text" placeholder="Search by user or keywords" />
             </div>
           </div>
         </div>
@@ -96,8 +90,8 @@ class RiskAreas extends React.Component<IProps, {}> {
 export default graphql(riskAreasQuery as any, {
   options: (props: IProps) => ({ variables: {} }),
   props: ({ data }) => ({
-    loading: (data ? data.loading : false),
-    error: (data ? data.error : null),
-    riskAreas: (data ? (data as any).riskAreas : null),
+    loading: data ? data.loading : false,
+    error: data ? data.error : null,
+    riskAreas: data ? (data as any).riskAreas : null,
   }),
 })(RiskAreas);

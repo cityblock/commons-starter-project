@@ -17,17 +17,17 @@ describe('shallow rendered', () => {
 
   beforeEach(() => {
     const component = shallow(
-        <Component
-          match={match}
-          routeBase={'/route/base'}
-          screeningTool={screeningTool}
-          screeningToolId={screeningTool.id}
-          screeningToolLoading={false}
-          screeningToolError={undefined}
-          onDelete={onDelete}
-          refetchScreeningTool={refetchScreeningTool}
-          editScreeningTool={editScreeningTool}
-        />,
+      <Component
+        match={match}
+        routeBase={'/route/base'}
+        screeningTool={screeningTool}
+        screeningToolId={screeningTool.id}
+        screeningToolLoading={false}
+        screeningToolError={undefined}
+        onDelete={onDelete}
+        refetchScreeningTool={refetchScreeningTool}
+        editScreeningTool={editScreeningTool}
+      />,
     );
     instance = component.instance() as Component;
   });

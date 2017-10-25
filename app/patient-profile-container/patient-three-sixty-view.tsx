@@ -13,15 +13,18 @@ export default class PatientThreeSixtyView extends React.Component<IProps, {}> {
   render() {
     const { patientId, riskAreaId, routeBase, patientRoute } = this.props;
 
-    const riskAreas = !riskAreaId ?
-      <RiskAreaSummaries patientId={patientId} routeBase={routeBase} /> : null;
+    const riskAreas = !riskAreaId ? (
+      <RiskAreaSummaries patientId={patientId} routeBase={routeBase} />
+    ) : null;
 
-    const riskAreaAssessment = riskAreaId ?
+    const riskAreaAssessment = riskAreaId ? (
       <RiskAreaAssessment
         routeBase={routeBase}
         patientRoute={patientRoute}
         riskAreaId={riskAreaId}
-        patientId={patientId} /> : null;
+        patientId={patientId}
+      />
+    ) : null;
 
     return (
       <div>

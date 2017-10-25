@@ -17,7 +17,7 @@ it('renders a lightbox correctly', () => {
           images={['http://bit.ly/2sqLuUh', 'http://bit.ly/2ttumSW']}
           isOpen={true}
           openingImage={'http://bit.ly/2ttumSW'}
-          onDismiss={() => (true)}
+          onDismiss={() => true}
         />
       </ReduxConnectedIntlProvider>
     </MockedProvider>,

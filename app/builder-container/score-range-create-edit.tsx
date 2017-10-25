@@ -23,9 +23,15 @@ import { IUpdatedField } from '../shared/util/updated-fields';
 import CarePlanSuggestions from './care-plan-suggestions';
 import * as styles from './css/risk-area-create.css';
 
-interface ICreateOptions { variables: screeningToolScoreRangeCreateMutationVariables; }
-interface IEditOptions { variables: screeningToolScoreRangeEditMutationVariables; }
-interface IDeleteOptions { variables: screeningToolScoreRangeDeleteMutationVariables; }
+interface ICreateOptions {
+  variables: screeningToolScoreRangeCreateMutationVariables;
+}
+interface IEditOptions {
+  variables: screeningToolScoreRangeEditMutationVariables;
+}
+interface IDeleteOptions {
+  variables: screeningToolScoreRangeDeleteMutationVariables;
+}
 
 interface IProps {
   scoreRange?: FullScreeningToolScoreRangeFragment | null;
@@ -34,12 +40,9 @@ interface IProps {
 }
 
 interface IGraphqlProps {
-  createScoreRange?: (options: ICreateOptions) =>
-    { data: screeningToolScoreRangeCreateMutation };
-  editScoreRange?: (options: IEditOptions) =>
-    { data: screeningToolScoreRangeEditMutation };
-  deleteScoreRange?: (options: IDeleteOptions) =>
-    { data: screeningToolScoreRangeDeleteMutation };
+  createScoreRange?: (options: ICreateOptions) => { data: screeningToolScoreRangeCreateMutation };
+  editScoreRange?: (options: IEditOptions) => { data: screeningToolScoreRangeEditMutation };
+  deleteScoreRange?: (options: IDeleteOptions) => { data: screeningToolScoreRangeDeleteMutation };
 }
 
 interface IState {
@@ -61,12 +64,14 @@ class ScoreRangeCreateEdit extends React.Component<allProps, IState> {
 
     this.state = {
       loading: false,
-      scoreRange: props.scoreRange ? props.scoreRange : {
-        description: 'edit me!',
-        minimumScore: 0,
-        maximumScore: 1,
-        screeningToolId: props.screeningToolId,
-      },
+      scoreRange: props.scoreRange
+        ? props.scoreRange
+        : {
+            description: 'edit me!',
+            minimumScore: 0,
+            maximumScore: 1,
+            screeningToolId: props.screeningToolId,
+          },
     };
   }
 
@@ -101,7 +106,8 @@ class ScoreRangeCreateEdit extends React.Component<allProps, IState> {
     try {
       this.setState({ loading: true });
       const filtered = omitBy<screeningToolScoreRangeCreateMutationVariables, {}>(
-        this.state.scoreRange, isNil,
+        this.state.scoreRange,
+        isNil,
       );
 
       if (this.props.scoreRange && this.props.editScoreRange) {
@@ -137,20 +143,22 @@ class ScoreRangeCreateEdit extends React.Component<allProps, IState> {
     const { loading, scoreRange } = this.state;
     const loadingClass = loading ? styles.loading : styles.loadingHidden;
     const createEditText = this.props.scoreRange ? 'Save' : 'Add score range';
-    const deleteHtml = this.props.scoreRange ?
-      (<div onClick={this.onDeleteClick}>delete</div>) : null;
-    const scoreRangeId = this.props.scoreRange ?
-      (<div className={scoreRangeStyles.smallText}>
-        Score Range ID: {this.props.scoreRange.id}
-       </div>) :
-      (<div className={scoreRangeStyles.smallText}>New Score Range!</div>);
-    const carePlanSuggestionsHtml = this.props.scoreRange ?
-      (<CarePlanSuggestions scoreRange={this.props.scoreRange} />) : null;
+    const deleteHtml = this.props.scoreRange ? (
+      <div onClick={this.onDeleteClick}>delete</div>
+    ) : null;
+    const scoreRangeId = this.props.scoreRange ? (
+      <div className={scoreRangeStyles.smallText}>Score Range ID: {this.props.scoreRange.id}</div>
+    ) : (
+      <div className={scoreRangeStyles.smallText}>New Score Range!</div>
+    );
+    const carePlanSuggestionsHtml = this.props.scoreRange ? (
+      <CarePlanSuggestions scoreRange={this.props.scoreRange} />
+    ) : null;
     return (
       <form onSubmit={this.onSubmit} className={scoreRangeStyles.borderContainer}>
         <div className={loadingClass}>
           <div className={styles.loadingContainer}>
-            <div className={loadingStyles.loadingSpinner}></div>
+            <div className={loadingStyles.loadingSpinner} />
           </div>
         </div>
         <div className={styles.inputGroup}>
@@ -159,38 +167,38 @@ class ScoreRangeCreateEdit extends React.Component<allProps, IState> {
           <div className={styles.inlineInputGroup}>
             <div className={scoreRangeStyles.smallText}>Description:</div>
             <input
-              name='description'
+              name="description"
               value={scoreRange.description}
               placeholder={'Enter score range description'}
               className={classNames(formStyles.input, formStyles.inputSmall)}
-              onChange={this.onChange} />
+              onChange={this.onChange}
+            />
           </div>
           <div className={styles.inlineInputGroup}>
             <div className={scoreRangeStyles.smallText}>Minimum Score:</div>
             <input
-              name='minimumScore'
+              name="minimumScore"
               value={scoreRange.minimumScore}
               placeholder={'Enter minimum score'}
               className={classNames(formStyles.input, formStyles.inputSmall)}
-              onChange={this.onChange} />
+              onChange={this.onChange}
+            />
           </div>
           <div className={styles.inlineInputGroup}>
             <div className={scoreRangeStyles.smallText}>Maximum Score:</div>
             <input
-              name='maximumScore'
+              name="maximumScore"
               value={scoreRange.maximumScore}
               placeholder={'Enter maximum score'}
               className={classNames(formStyles.input, formStyles.inputSmall)}
-              onChange={this.onChange} />
+              onChange={this.onChange}
+            />
           </div>
         </div>
         {carePlanSuggestionsHtml}
         <div className={styles.formBottom}>
           <div className={styles.formBottomContent}>
-            <input
-              type='submit'
-              className={styles.submitButton}
-              value={createEditText} />
+            <input type="submit" className={styles.submitButton} value={createEditText} />
             {deleteHtml}
           </div>
         </div>
@@ -203,9 +211,7 @@ export default compose(
   graphql<IGraphqlProps, IProps>(scoreRangeCreateMutationGraphql as any, {
     name: 'createScoreRange',
     options: {
-      refetchQueries: [
-        'getScreeningTools',
-      ],
+      refetchQueries: ['getScreeningTools'],
     },
   }),
   graphql<IGraphqlProps, IProps>(scoreRangeEditMutationGraphql as any, {
@@ -214,9 +220,7 @@ export default compose(
   graphql<IGraphqlProps, IProps>(scoreRangeDeleteMutationGraphql as any, {
     name: 'deleteScoreRange',
     options: {
-      refetchQueries: [
-        'getScreeningTools',
-      ],
+      refetchQueries: ['getScreeningTools'],
     },
   }),
 )(ScoreRangeCreateEdit);

@@ -43,9 +43,9 @@ export class ScreeningToolResultsPopup extends React.Component<IProps, {}> {
       return 0;
     }
 
-    const concernSuggestions = carePlanSuggestions.filter(suggestion => (
-      suggestion!.suggestionType === 'concern'
-    ));
+    const concernSuggestions = carePlanSuggestions.filter(
+      suggestion => suggestion!.suggestionType === 'concern',
+    );
 
     return concernSuggestions.length;
   }
@@ -63,9 +63,7 @@ export class ScreeningToolResultsPopup extends React.Component<IProps, {}> {
       return [];
     }
 
-    return carePlanSuggestions.filter(suggestion => (
-      suggestion!.suggestionType === 'goal'
-    ));
+    return carePlanSuggestions.filter(suggestion => suggestion!.suggestionType === 'goal');
   }
 
   getGoalCount() {
@@ -79,9 +77,9 @@ export class ScreeningToolResultsPopup extends React.Component<IProps, {}> {
 
     const goalSuggestions = this.getGoalSuggestions();
 
-    const taskSuggestions = goalSuggestions.map(goalSuggestion =>
-      goalSuggestion!.goalSuggestionTemplate!.taskTemplates,
-    ).reduce((taskSuggestions1, taskSuggestions2) => taskSuggestions1!.concat(taskSuggestions2));
+    const taskSuggestions = goalSuggestions
+      .map(goalSuggestion => goalSuggestion!.goalSuggestionTemplate!.taskTemplates)
+      .reduce((taskSuggestions1, taskSuggestions2) => taskSuggestions1!.concat(taskSuggestions2));
 
     return (taskSuggestions || []).length;
   }
@@ -100,11 +98,10 @@ export class ScreeningToolResultsPopup extends React.Component<IProps, {}> {
     return (
       <div className={styles.screeningToolsPopupContent}>
         <div className={styles.screeningToolsPopupBody}>
-          <div className={styles.screeningToolsPopupTitle}>
-            New Care Plan Suggestions
-          </div>
+          <div className={styles.screeningToolsPopupTitle}>New Care Plan Suggestions</div>
           <div className={classNames(styles.screeningToolsPopupSubtitle, styles.noMargin)}>
-            Based on the results of this tool, the following have been recommended as additions to the patient's care plan.
+            Based on the results of this tool, the following have been recommended as additions to
+            the patient's care plan.
           </div>
           <div className={styles.screeningToolResults}>
             <div className={styles.screeningToolResultRow}>
@@ -121,7 +118,9 @@ export class ScreeningToolResultsPopup extends React.Component<IProps, {}> {
             </div>
           </div>
           <div className={styles.screeningToolsPopupButtons}>
-            <div className={suggestionsButtonStyles} onClick={this.onClick}>See Suggestions</div>
+            <div className={suggestionsButtonStyles} onClick={this.onClick}>
+              See Suggestions
+            </div>
           </div>
         </div>
       </div>

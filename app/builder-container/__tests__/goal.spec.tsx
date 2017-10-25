@@ -48,7 +48,8 @@ describe('shallow rendered', () => {
         refetchGoal={refetchGoal}
         editGoal={editGoal}
         onDelete={onDelete}
-        goalId={goal.id} />,
+        goalId={goal.id}
+      />,
     );
     instance = component.instance() as Component;
   });

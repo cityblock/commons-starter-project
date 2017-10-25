@@ -14,9 +14,7 @@ it('renders encounter', () => {
   const tree = create(
     <MockedProvider mocks={[]} store={mockStore({ locale })}>
       <ReduxConnectedIntlProvider>
-        <PatientEncounters
-          patientId={'1234'}
-          patientEncounters={[encounter]} />
+        <PatientEncounters patientId={'1234'} patientEncounters={[encounter]} />
       </ReduxConnectedIntlProvider>
     </MockedProvider>,
   ).toJSON();

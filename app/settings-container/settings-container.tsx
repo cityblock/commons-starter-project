@@ -15,7 +15,6 @@ interface IProps {
 }
 
 class SettingsContainer extends React.Component<IProps, { error?: string }> {
-
   constructor(props: IProps) {
     super(props);
     this.updateUser = this.updateUser.bind(this);
@@ -47,30 +46,32 @@ class SettingsContainer extends React.Component<IProps, { error?: string }> {
     const { currentUser } = this.props;
     let errorHtml = null;
     if (error) {
-      errorHtml = (<div>{error}</div>);
+      errorHtml = <div>{error}</div>;
     }
     const locale = currentUser && currentUser.locale ? currentUser.locale : 'en';
     return (
       <div className={styles.container}>
         {errorHtml}
         <div className={styles.background}>
-          <FormattedMessage id='settings.heading'>
+          <FormattedMessage id="settings.heading">
             {(message: string) => <div className={styles.heading}>{message}</div>}
           </FormattedMessage>
           <div className={styles.form}>
             <div className={formStyles.multiInputFormRow}>
               <div className={formStyles.inputGroup}>
-                <div className={formStyles.inputLabel}>
-                  Locale
-                </div>
-                <select required
-                  name='locale'
+                <div className={formStyles.inputLabel}>Locale</div>
+                <select
+                  required
+                  name="locale"
                   value={locale}
                   onChange={this.updateUser}
-                  className={formStyles.select}>
-                  <option value='' disabled hidden>Select Locale</option>
-                  <option value='en'>English</option>
-                  <option value='es'>Spanish</option>
+                  className={formStyles.select}
+                >
+                  <option value="" disabled hidden>
+                    Select Locale
+                  </option>
+                  <option value="en">English</option>
+                  <option value="es">Spanish</option>
                 </select>
               </div>
             </div>
@@ -87,9 +88,9 @@ export default compose(
       variables: {},
     }),
     props: ({ data }) => ({
-      loading: (data ? data.loading : false),
-      error: (data ? data.error : null),
-      currentUser: (data ? (data as any).currentUser : null),
+      loading: data ? data.loading : false,
+      error: data ? data.error : null,
+      currentUser: data ? (data as any).currentUser : null,
     }),
   }),
   graphql(userMutation as any, { name: 'updateUser' }),

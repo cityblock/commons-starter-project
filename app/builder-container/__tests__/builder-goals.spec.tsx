@@ -19,7 +19,7 @@ it('renders builder goals', () => {
     <MockedProvider mocks={[]} store={mockStore({ locale, task })}>
       <ReduxConnectedIntlProvider>
         <ConnectedRouter history={history}>
-          <BuilderGoals refetchGoals={() => false} routeBase='/route/base' goals={[goal]} />
+          <BuilderGoals refetchGoals={() => false} routeBase="/route/base" goals={[goal]} />
         </ConnectedRouter>
       </ReduxConnectedIntlProvider>
     </MockedProvider>,
@@ -29,7 +29,7 @@ it('renders builder goals', () => {
 
 it('renders goal create', () => {
   const component = shallow(
-    <Component refetchGoals={() => false} routeBase='/route/base' goals={[goal]} />,
+    <Component refetchGoals={() => false} routeBase="/route/base" goals={[goal]} />,
   );
   const instance = component.instance() as Component;
   instance.showCreateGoal();

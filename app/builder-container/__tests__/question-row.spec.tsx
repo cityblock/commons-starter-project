@@ -14,9 +14,12 @@ const mockStore = configureMockStore([]);
 const oldDate = Date.now;
 
 describe('question row', () => {
-
-  beforeAll(() => { Date.now = jest.fn(() => 1500494779252); });
-  afterAll(() => { Date.now = oldDate; });
+  beforeAll(() => {
+    Date.now = jest.fn(() => 1500494779252);
+  });
+  afterAll(() => {
+    Date.now = oldDate;
+  });
 
   it('renders question row', () => {
     const history = createMemoryHistory();
@@ -24,10 +27,7 @@ describe('question row', () => {
       <MockedProvider mocks={[]} store={mockStore({ locale, question })}>
         <ReduxConnectedIntlProvider>
           <ConnectedRouter history={history}>
-            <QuestionRow
-              question={question}
-              selected={true}
-              routeBase={'/foo/bar'} />
+            <QuestionRow question={question} selected={true} routeBase={'/foo/bar'} />
           </ConnectedRouter>
         </ReduxConnectedIntlProvider>
       </MockedProvider>,

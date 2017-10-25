@@ -13,11 +13,7 @@ it('renders empty div', () => {
   const tree = create(
     <MockedProvider mocks={[]} store={mockStore({ locale })}>
       <ReduxConnectedIntlProvider>
-        <TableLoadingError
-          isLoading={false}
-          error={undefined}
-          onRetryClick={() => false}
-        />
+        <TableLoadingError isLoading={false} error={undefined} onRetryClick={() => false} />
       </ReduxConnectedIntlProvider>
     </MockedProvider>,
   ).toJSON();
@@ -28,11 +24,7 @@ it('renders error', () => {
   const tree = create(
     <MockedProvider mocks={[]} store={mockStore({ locale })}>
       <ReduxConnectedIntlProvider>
-        <TableLoadingError
-          isLoading={false}
-          error={'my error'}
-          onRetryClick={() => false}
-        />
+        <TableLoadingError isLoading={false} error={'my error'} onRetryClick={() => false} />
       </ReduxConnectedIntlProvider>
     </MockedProvider>,
   ).toJSON();
@@ -43,11 +35,7 @@ it('renders loading', () => {
   const tree = create(
     <MockedProvider mocks={[]} store={mockStore({ locale })}>
       <ReduxConnectedIntlProvider>
-        <TableLoadingError
-          isLoading={true}
-          error={undefined}
-          onRetryClick={() => false}
-        />
+        <TableLoadingError isLoading={true} error={undefined} onRetryClick={() => false} />
       </ReduxConnectedIntlProvider>
     </MockedProvider>,
   ).toJSON();

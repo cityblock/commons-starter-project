@@ -1,29 +1,40 @@
-exports.up = function (knex, Promise) {
+exports.up = function(knex, Promise) {
   return knex.schema
     .table('question', table => {
-      table.string('screeningToolId').references('id').inTable('screening_tool');
+      table
+        .string('screeningToolId')
+        .references('id')
+        .inTable('screening_tool');
 
       table.index('screeningToolId');
     })
     .table('concern_suggestion', table => {
-      table.string('screeningToolScoreRangeId').references('id').inTable('screening_tool_score_range');
+      table
+        .string('screeningToolScoreRangeId')
+        .references('id')
+        .inTable('screening_tool_score_range');
 
       table.index('screeningToolScoreRangeId');
     })
     .table('goal_suggestion', table => {
-      table.string('screeningToolScoreRangeId').references('id').inTable('screening_tool_score_range');
+      table
+        .string('screeningToolScoreRangeId')
+        .references('id')
+        .inTable('screening_tool_score_range');
 
       table.index('screeningToolScoreRangeId');
     })
     .table('patient_answer', table => {
-      table.string('patientScreeningToolSubmissionId').references('id')
+      table
+        .string('patientScreeningToolSubmissionId')
+        .references('id')
         .inTable('patient_screening_tool_submission');
 
       table.index('patientScreeningToolSubmissionId');
     });
 };
 
-exports.down = function (knex, Promise) {
+exports.down = function(knex, Promise) {
   return knex.schema
     .table('question', table => {
       table.dropIndex('screeningToolId');

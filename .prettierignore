@@ -1,4 +1,4 @@
-./app/graphql/types.ts
-./declarations/schema.d.ts
-./app/shared/util/marital-status-codes.ts
-./app/shared/util/race-codes.ts
+app/graphql/types.ts
+declarations/schema.d.ts
+app/shared/util/marital-status-codes.ts
+app/shared/util/race-codes.ts

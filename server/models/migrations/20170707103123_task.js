@@ -1,13 +1,25 @@
-exports.up = function (knex, Promise) {
+exports.up = function(knex, Promise) {
   return knex.schema
     .createTableIfNotExists('task', table => {
       table.string('id').primary();
       table.string('title');
       table.text('description');
-      table.string('patientId').references('id').inTable('patient');
-      table.string('createdById').references('id').inTable('user');
-      table.string('assignedToId').references('id').inTable('user');
-      table.string('completedById').references('id').inTable('user');
+      table
+        .string('patientId')
+        .references('id')
+        .inTable('patient');
+      table
+        .string('createdById')
+        .references('id')
+        .inTable('user');
+      table
+        .string('assignedToId')
+        .references('id')
+        .inTable('user');
+      table
+        .string('completedById')
+        .references('id')
+        .inTable('user');
 
       // timestamps
       table.timestamp('completedAt');
@@ -16,15 +28,21 @@ exports.up = function (knex, Promise) {
       table.timestamp('updatedAt').defaultTo(knex.raw('now()'));
 
       // indexes
-      table.index('patientId')
-      table.index('createdById')
-      table.index('assignedToId')
-      table.index('completedById')
+      table.index('patientId');
+      table.index('createdById');
+      table.index('assignedToId');
+      table.index('completedById');
     })
     .createTableIfNotExists('task_follower', table => {
       table.string('id').primary();
-      table.string('userId').references('id').inTable('user');
-      table.string('taskId').references('id').inTable('task');
+      table
+        .string('userId')
+        .references('id')
+        .inTable('user');
+      table
+        .string('taskId')
+        .references('id')
+        .inTable('task');
       table.unique(['userId', 'taskId']);
 
       // timestamps
@@ -39,13 +57,10 @@ exports.up = function (knex, Promise) {
        * https://dba.stackexchange.com/questions/6115/working-of-indexes-in-postgresql
        */
       table.index('taskId');
-      table.index('deletedAt')
-    })
+      table.index('deletedAt');
+    });
 };
 
-
-exports.down = function (knex, Promise) {
-  return knex.schema
-    .dropTableIfExists('task_follower')
-    .dropTableIfExists('task');
+exports.down = function(knex, Promise) {
+  return knex.schema.dropTableIfExists('task_follower').dropTableIfExists('task');
 };

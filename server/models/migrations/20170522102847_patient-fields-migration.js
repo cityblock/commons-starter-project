@@ -1,4 +1,4 @@
-exports.up = function (knex, Promise) {
+exports.up = function(knex, Promise) {
   return knex.schema.table('patient', table => {
     table.enu('gender', ['M', 'F']);
     table.string('dateOfBirth');
@@ -6,7 +6,7 @@ exports.up = function (knex, Promise) {
   });
 };
 
-exports.down = function (knex, Promise) {
+exports.down = function(knex, Promise) {
   return knex.schema.table('patient', table => {
     table.dropColumn('gender');
     table.dropColumn('dateOfBirth');

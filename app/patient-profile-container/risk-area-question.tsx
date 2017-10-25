@@ -86,13 +86,14 @@ export default class RiskAreaQuestion extends React.Component<IProps, {}> {
           <input
             disabled={!editable}
             className={formStyles.radio}
-            type='radio'
+            type="radio"
             onClick={event => this.onChange(answer.value, answer.id)}
             checked={!!currentAnswer && currentAnswer.id === answer.id}
-            value={answer.value} />
+            value={answer.value}
+          />
           <label className={styles.radioFill} />
         </div>
-        <span className={labelStyles} onClick={() => (this.onChange(answer.value, answer.id))}>
+        <span className={labelStyles} onClick={() => this.onChange(answer.value, answer.id)}>
           {answer.displayValue}
         </span>
       </div>
@@ -110,7 +111,8 @@ export default class RiskAreaQuestion extends React.Component<IProps, {}> {
         answer={multiSelectAnswer}
         onClick={this.onClickMultiSelect}
         selected={selected}
-        editable={editable} />
+        editable={editable}
+      />
     );
   }
 
@@ -135,8 +137,11 @@ export default class RiskAreaQuestion extends React.Component<IProps, {}> {
               disabled={!editable}
               value={currentAnswer ? currentAnswer.value : 'Select one'}
               onChange={event => this.onDropdownChange(event.currentTarget.value)}
-              className={selectStyles}>
-              <option value={'Select one'} disabled={true}>Select one</option>
+              className={selectStyles}
+            >
+              <option value={'Select one'} disabled={true}>
+                Select one
+              </option>
               {answers.map(this.renderSelectOption)}
             </select>
           </div>
@@ -165,7 +170,8 @@ export default class RiskAreaQuestion extends React.Component<IProps, {}> {
                   value={currentAnswer ? currentAnswer.value : ''}
                   onChange={event => this.onChange(event.target.value, answerId)}
                   disabled={!editable}
-                  className={formStyles.textarea} />
+                  className={formStyles.textarea}
+                />
               </div>
             </div>
           );
@@ -173,9 +179,7 @@ export default class RiskAreaQuestion extends React.Component<IProps, {}> {
       case 'multiselect':
         return (
           <div className={questionBodyStyles}>
-            <div className={styles.multiSelectRow}>
-              {answers.map(this.renderMultiSelectItem)}
-            </div>
+            <div className={styles.multiSelectRow}>{answers.map(this.renderMultiSelectItem)}</div>
           </div>
         );
       default:
@@ -209,7 +213,7 @@ export default class RiskAreaQuestion extends React.Component<IProps, {}> {
       <div className={questionStyles}>
         <div className={styles.riskAssessmentQuestionHeader}>
           <div className={styles.riskAssessmentQuestionTitle}>{question.title}</div>
-          <div className={styles.riskAssessmentQuestionHamburger}></div>
+          <div className={styles.riskAssessmentQuestionHamburger} />
         </div>
         {this.renderAnswers()}
       </div>

@@ -16,12 +16,14 @@ export const RiskAreasLoadingError: React.StatelessComponent<IProps> = props => 
   if (error) {
     return (
       <div className={styles.riskAreasError}>
-        <div className={styles.riskAreasErrorIcon}></div>
+        <div className={styles.riskAreasErrorIcon} />
         <div className={styles.riskAreasErrorLabel}>Unable to load risk areas</div>
         <div className={styles.riskAreasErrorSubheading}>
           Sorry, something went wrong. Please try reloading this section again.
         </div>
-        <div className={buttonStyles} onClick={onRetryClick}>Try again</div>
+        <div className={buttonStyles} onClick={onRetryClick}>
+          Try again
+        </div>
       </div>
     );
   } else if (loading) {

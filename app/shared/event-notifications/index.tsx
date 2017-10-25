@@ -40,7 +40,7 @@ class EventNotifications extends React.Component<IProps, {}> {
       return (
         <div className={styles.emptyEventNotificationsMessage}>
           <div className={styles.emptyEventNotificationsLogo} />
-          <FormattedMessage id='notifications.noNotifications'>
+          <FormattedMessage id="notifications.noNotifications">
             {(message: string) => (
               <div className={styles.emptyEventNotificationsLabel}>{message}</div>
             )}

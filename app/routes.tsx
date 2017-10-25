@@ -28,33 +28,29 @@ const PatientRedirect = (options: any) => (
 export default (
   <Main>
     <Switch>
-      <Route exact path='/' component={LogIn as any} />
+      <Route exact path="/" component={LogIn as any} />
       <Authentication>
         <Route
           exact
-          path='/notifications/:eventNotificationType?'
+          path="/notifications/:eventNotificationType?"
           component={EventNotificationsContainer as any}
         />
-        <Route exact path='/tasks/:taskId?' component={TasksContainer as any} />
-        <Route exact path='/settings' component={SettingsContainer as any} />
-        <Route exact path='/patient-intake' component={PatientEnrollmentContainer as any} />
-        <Route exact path='/patients' component={PatientPanelContainer as any} />
-        <Route exact path='/patients/:patientId' component={PatientRedirect as any} />
+        <Route exact path="/tasks/:taskId?" component={TasksContainer as any} />
+        <Route exact path="/settings" component={SettingsContainer as any} />
+        <Route exact path="/patient-intake" component={PatientEnrollmentContainer as any} />
+        <Route exact path="/patients" component={PatientPanelContainer as any} />
+        <Route exact path="/patients/:patientId" component={PatientRedirect as any} />
         <Route
           exact
-          path='/patients/:patientId/:tabId/:riskAreaOrSubTabId?'
+          path="/patients/:patientId/:tabId/:riskAreaOrSubTabId?"
           component={PatientProfileContainer as any}
         />
         <Route
           exact
-          path='/builder/:tabId?/:objectId?/:subTabId?/:questionId?'
+          path="/builder/:tabId?/:objectId?/:subTabId?/:questionId?"
           component={BuilderContainer as any}
         />
-        <Route
-          exact
-          path='/manager/:tabId?/:objectId?'
-          component={ManagerContainer as any}
-        />
+        <Route exact path="/manager/:tabId?/:objectId?" component={ManagerContainer as any} />
       </Authentication>
     </Switch>
   </Main>

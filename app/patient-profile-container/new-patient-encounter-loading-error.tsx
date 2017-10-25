@@ -28,16 +28,18 @@ export default class NewPatientEncounterLoadingError extends React.Component<IPr
     return (
       <div className={displayClass}>
         <div className={styles.newEncounterSavingSpinner}>
-          <div className={spinnerStyles}></div>
+          <div className={spinnerStyles} />
           <div className={loadingStyles.loadingText}>Saving</div>
         </div>
         <div className={styles.newEncounterSavingError}>
-          <div className={styles.newEncounterSavingErrorIcon}></div>
+          <div className={styles.newEncounterSavingErrorIcon} />
           <div className={styles.newEncounterSavingErrorLabel}>Unable to save encounter</div>
           <div className={styles.newEncounterSavingErrorSubtext}>
             Sorry, something went wrong. Please try saving this encounter again.
           </div>
-          <div className={buttonStyles} onClick={onClick}>Try again</div>
+          <div className={buttonStyles} onClick={onClick}>
+            Try again
+          </div>
         </div>
       </div>
     );

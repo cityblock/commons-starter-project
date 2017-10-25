@@ -58,7 +58,8 @@ class PatientCarePlanSuggestions extends React.Component<IProps, IState> {
   }
 
   onAcceptSuggestion(
-    acceptedSuggestion: FullCarePlanSuggestionFragment, taskTemplateIds?: string[],
+    acceptedSuggestion: FullCarePlanSuggestionFragment,
+    taskTemplateIds?: string[],
   ) {
     this.setState(() => ({
       acceptModalVisible: true,
@@ -113,8 +114,8 @@ class PatientCarePlanSuggestions extends React.Component<IProps, IState> {
       return defaultHtml;
     }
 
-    const suggestionsToUse = carePlanSuggestions.filter(carePlanSuggestion =>
-      carePlanSuggestion.suggestionType === suggestionType,
+    const suggestionsToUse = carePlanSuggestions.filter(
+      carePlanSuggestion => carePlanSuggestion.suggestionType === suggestionType,
     );
 
     if (suggestionsToUse.length) {
@@ -124,7 +125,8 @@ class PatientCarePlanSuggestions extends React.Component<IProps, IState> {
           onAccept={this.onAcceptSuggestion}
           onDismiss={this.onDismissSuggestion}
           careTeam={careTeam}
-          suggestion={suggestion} />
+          suggestion={suggestion}
+        />
       ));
     } else {
       return defaultHtml;
@@ -146,22 +148,18 @@ class PatientCarePlanSuggestions extends React.Component<IProps, IState> {
         <div className={styles.section}>
           <div className={styles.sectionHeading}>
             <div className={styles.sectionTitle}>Suggested Concerns</div>
-            <div className={styles.sectionDivider}></div>
-            <div className={styles.sectionHamburger}></div>
+            <div className={styles.sectionDivider} />
+            <div className={styles.sectionHamburger} />
           </div>
-          <div>
-            {this.renderSuggestions('concern')}
-          </div>
+          <div>{this.renderSuggestions('concern')}</div>
         </div>
         <div className={styles.section}>
           <div className={styles.sectionHeading}>
             <div className={styles.sectionTitle}>Suggested Goals</div>
-            <div className={styles.sectionDivider}></div>
-            <div className={styles.sectionHamburger}></div>
+            <div className={styles.sectionDivider} />
+            <div className={styles.sectionHamburger} />
           </div>
-          <div>
-            {this.renderSuggestions('goal')}
-          </div>
+          <div>{this.renderSuggestions('goal')}</div>
         </div>
         <PopupPatientCarePlanSuggestionAccepted
           visible={acceptModalVisible}
@@ -169,11 +167,13 @@ class PatientCarePlanSuggestions extends React.Component<IProps, IState> {
           carePlanSuggestions={carePlanSuggestions}
           suggestion={acceptedSuggestion}
           taskTemplateIds={acceptedTaskTemplateIds}
-          onDismiss={this.onAcceptModalDismiss} />
+          onDismiss={this.onAcceptModalDismiss}
+        />
         <PopupPatientCarePlanSuggestionDismissed
           visible={dismissModalVisible}
           suggestion={dismissedSuggestion}
-          onDismiss={this.onDismissModalDismiss} />
+          onDismiss={this.onDismissModalDismiss}
+        />
       </div>
     );
   }
@@ -181,33 +181,33 @@ class PatientCarePlanSuggestions extends React.Component<IProps, IState> {
   renderEmptySuggestionsHtml() {
     const { loading } = this.props;
 
-    const html = loading ?
-      (<div className={styles.emptyCarePlanSuggestionsContainer}>
+    const html = loading ? (
+      <div className={styles.emptyCarePlanSuggestionsContainer}>
         <div className={styles.loadingLabel}>Loading...</div>
-      </div>) :
-      (<div className={styles.emptyCarePlanSuggestionsContainer}>
-        <div className={styles.emptyCarePlanSuggestionsLogo}></div>
+      </div>
+    ) : (
+      <div className={styles.emptyCarePlanSuggestionsContainer}>
+        <div className={styles.emptyCarePlanSuggestionsLogo} />
         <div className={styles.emptyCarePlanSuggestionsLabel}>
           No Care Plan suggestions for this patient
         </div>
         <div className={styles.emptyCarePlanSuggestionsSubtext}>
           Any new suggestions will be displayed here
         </div>
-      </div>);
+      </div>
+    );
 
     return html;
   }
 
   render() {
     const { carePlanSuggestions } = this.props;
-    const suggestionsHtml = carePlanSuggestions && carePlanSuggestions.length ?
-      this.renderSuggestionsHtml() : this.renderEmptySuggestionsHtml();
+    const suggestionsHtml =
+      carePlanSuggestions && carePlanSuggestions.length
+        ? this.renderSuggestionsHtml()
+        : this.renderEmptySuggestionsHtml();
 
-    return (
-      <div className={styles.carePlanSuggestions}>
-        {suggestionsHtml}
-      </div>
-    );
+    return <div className={styles.carePlanSuggestions}>{suggestionsHtml}</div>;
   }
 }
 
@@ -220,10 +220,10 @@ export default compose(
       fetchPolicy: 'cache-and-network', // Always get the latest suggestions, but return cache first
     }),
     props: ({ data }) => ({
-      loading: (data ? data.loading : false),
-      error: (data ? data.error : null),
-      carePlanSuggestions: (data ? (data as any).carePlanSuggestionsForPatient : null),
-      refetchCarePlanSuggestions: (data ? data.refetch : null),
+      loading: data ? data.loading : false,
+      error: data ? data.error : null,
+      carePlanSuggestions: data ? (data as any).carePlanSuggestionsForPatient : null,
+      refetchCarePlanSuggestions: data ? data.refetch : null,
     }),
   }),
   graphql(patientCareTeamQuery as any, {
@@ -233,7 +233,7 @@ export default compose(
       },
     }),
     props: ({ data }) => ({
-      careTeam: (data ? (data as any).patientCareTeam : null),
+      careTeam: data ? (data as any).patientCareTeam : null,
     }),
   }),
 )(PatientCarePlanSuggestions);

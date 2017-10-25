@@ -1,7 +1,8 @@
 var uuid = require('uuid');
 
 exports.seed = function(knex, Promise) {
-  return knex.table('clinic')
+  return knex
+    .table('clinic')
     .returning('id')
     .insert({
       id: uuid.v4(),
@@ -11,7 +12,8 @@ exports.seed = function(knex, Promise) {
       departmentId: 1,
     })
     .then(function(clinicIds) {
-      return knex.table('user')
+      return knex
+        .table('user')
         .insert([
           {
             id: uuid.v4(),
@@ -23,7 +25,8 @@ exports.seed = function(knex, Promise) {
             email: 'logan@cityblock.com',
             homeClinicId: clinicIds[0],
             athenaProviderId: 2,
-          }, {
+          },
+          {
             id: uuid.v4(),
             createdAt: new Date().toISOString(),
             updatedAt: new Date().toISOString(),
@@ -33,7 +36,8 @@ exports.seed = function(knex, Promise) {
             email: 'brennan@cityblock.com',
             homeClinicId: clinicIds[0],
             athenaProviderId: 3,
-          }, {
+          },
+          {
             id: uuid.v4(),
             createdAt: new Date().toISOString(),
             updatedAt: new Date().toISOString(),
@@ -43,7 +47,8 @@ exports.seed = function(knex, Promise) {
             email: 'frank@cityblock.com',
             homeClinicId: clinicIds[0],
             athenaProviderId: 4,
-          }, {
+          },
+          {
             id: uuid.v4(),
             createdAt: new Date().toISOString(),
             updatedAt: new Date().toISOString(),
@@ -53,7 +58,8 @@ exports.seed = function(knex, Promise) {
             email: 'mat@cityblock.com',
             homeClinicId: clinicIds[0],
             athenaProviderId: 5,
-          }, {
+          },
+          {
             id: uuid.v4(),
             createdAt: new Date().toISOString(),
             updatedAt: new Date().toISOString(),
@@ -63,7 +69,8 @@ exports.seed = function(knex, Promise) {
             email: 'ayna@cityblock.com',
             homeClinicId: clinicIds[0],
             athenaProviderId: 6,
-          }, {
+          },
+          {
             id: uuid.v4(),
             createdAt: new Date().toISOString(),
             updatedAt: new Date().toISOString(),
@@ -73,7 +80,8 @@ exports.seed = function(knex, Promise) {
             email: 'peter@cityblock.com',
             homeClinicId: clinicIds[0],
             athenaProviderId: 7,
-          }, {
+          },
+          {
             id: uuid.v4(),
             createdAt: new Date().toISOString(),
             updatedAt: new Date().toISOString(),
@@ -83,7 +91,8 @@ exports.seed = function(knex, Promise) {
             email: 'toyin@cityblock.com',
             homeClinicId: clinicIds[0],
             athenaProviderId: 8,
-          }, {
+          },
+          {
             id: uuid.v4(),
             createdAt: new Date().toISOString(),
             updatedAt: new Date().toISOString(),
@@ -93,7 +102,8 @@ exports.seed = function(knex, Promise) {
             email: 'iyah@cityblock.com',
             homeClinicId: clinicIds[0],
             athenaProviderId: 9,
-          }, {
+          },
+          {
             id: uuid.v4(),
             createdAt: new Date().toISOString(),
             updatedAt: new Date().toISOString(),
@@ -103,7 +113,8 @@ exports.seed = function(knex, Promise) {
             email: 'bay@cityblock.com',
             homeClinicId: clinicIds[0],
             athenaProviderId: 10,
-          }, {
+          },
+          {
             id: uuid.v4(),
             createdAt: new Date().toISOString(),
             updatedAt: new Date().toISOString(),
@@ -113,7 +124,8 @@ exports.seed = function(knex, Promise) {
             email: 'ari@cityblock.com',
             homeClinicId: clinicIds[0],
             athenaProviderId: 11,
-          }, {
+          },
+          {
             id: uuid.v4(),
             createdAt: new Date().toISOString(),
             updatedAt: new Date().toISOString(),
@@ -123,7 +135,8 @@ exports.seed = function(knex, Promise) {
             email: 'ariane@cityblock.com',
             homeClinicId: clinicIds[0],
             athenaProviderId: 12,
-          }, {
+          },
+          {
             id: uuid.v4(),
             createdAt: new Date().toISOString(),
             updatedAt: new Date().toISOString(),
@@ -133,12 +146,15 @@ exports.seed = function(knex, Promise) {
             email: 'tristan@cityblock.com',
             homeClinicId: clinicIds[0],
             athenaProviderId: 13,
-          }
+          },
         ])
         .then(function() {
-          return knex.table('clinic').pluck('id')
+          return knex
+            .table('clinic')
+            .pluck('id')
             .then(function(clinicIds) {
-              return knex.table('patient')
+              return knex
+                .table('patient')
                 .returning('id')
                 .insert([
                   {
@@ -150,7 +166,8 @@ exports.seed = function(knex, Promise) {
                     athenaPatientId: 1,
                     homeClinicId: clinicIds[0],
                     gender: 'F',
-                  }, {
+                  },
+                  {
                     id: uuid.v4(),
                     createdAt: new Date().toISOString(),
                     updatedAt: new Date().toISOString(),
@@ -159,7 +176,8 @@ exports.seed = function(knex, Promise) {
                     athenaPatientId: 2,
                     homeClinicId: clinicIds[0],
                     gender: 'M',
-                  }, {
+                  },
+                  {
                     id: uuid.v4(),
                     createdAt: new Date().toISOString(),
                     updatedAt: new Date().toISOString(),
@@ -168,7 +186,8 @@ exports.seed = function(knex, Promise) {
                     athenaPatientId: 3,
                     homeClinicId: clinicIds[0],
                     gender: 'M',
-                  }, {
+                  },
+                  {
                     id: uuid.v4(),
                     createdAt: new Date().toISOString(),
                     updatedAt: new Date().toISOString(),
@@ -177,7 +196,8 @@ exports.seed = function(knex, Promise) {
                     athenaPatientId: 4,
                     homeClinicId: clinicIds[0],
                     gender: 'F',
-                  }, {
+                  },
+                  {
                     id: uuid.v4(),
                     createdAt: new Date().toISOString(),
                     updatedAt: new Date().toISOString(),
@@ -186,7 +206,8 @@ exports.seed = function(knex, Promise) {
                     athenaPatientId: 5,
                     homeClinicId: clinicIds[0],
                     gender: 'F',
-                  }, {
+                  },
+                  {
                     id: uuid.v4(),
                     createdAt: new Date().toISOString(),
                     updatedAt: new Date().toISOString(),
@@ -195,7 +216,8 @@ exports.seed = function(knex, Promise) {
                     athenaPatientId: 6,
                     homeClinicId: clinicIds[0],
                     gender: 'M',
-                  }, {
+                  },
+                  {
                     id: uuid.v4(),
                     createdAt: new Date().toISOString(),
                     updatedAt: new Date().toISOString(),
@@ -204,7 +226,8 @@ exports.seed = function(knex, Promise) {
                     athenaPatientId: 7,
                     homeClinicId: clinicIds[0],
                     gender: 'F',
-                  }, {
+                  },
+                  {
                     id: uuid.v4(),
                     createdAt: new Date().toISOString(),
                     updatedAt: new Date().toISOString(),
@@ -213,7 +236,8 @@ exports.seed = function(knex, Promise) {
                     athenaPatientId: 8,
                     homeClinicId: clinicIds[0],
                     gender: 'M',
-                  }, {
+                  },
+                  {
                     id: uuid.v4(),
                     createdAt: new Date().toISOString(),
                     updatedAt: new Date().toISOString(),
@@ -222,7 +246,8 @@ exports.seed = function(knex, Promise) {
                     athenaPatientId: 9,
                     homeClinicId: clinicIds[0],
                     gender: 'F',
-                  }, {
+                  },
+                  {
                     id: uuid.v4(),
                     createdAt: new Date().toISOString(),
                     updatedAt: new Date().toISOString(),
@@ -231,7 +256,8 @@ exports.seed = function(knex, Promise) {
                     athenaPatientId: 10,
                     homeClinicId: clinicIds[0],
                     gender: 'F',
-                  }, {
+                  },
+                  {
                     id: uuid.v4(),
                     createdAt: new Date().toISOString(),
                     updatedAt: new Date().toISOString(),
@@ -240,7 +266,8 @@ exports.seed = function(knex, Promise) {
                     athenaPatientId: 11,
                     homeClinicId: clinicIds[0],
                     gender: 'M',
-                  }, {
+                  },
+                  {
                     id: uuid.v4(),
                     createdAt: new Date().toISOString(),
                     updatedAt: new Date().toISOString(),
@@ -250,21 +277,25 @@ exports.seed = function(knex, Promise) {
                     homeClinicId: clinicIds[0],
                     gender: 'M',
                   },
-                ])
+                ]);
             })
             .then(function(patientIds) {
-              return knex.table('user').pluck('id')
+              return knex
+                .table('user')
+                .pluck('id')
                 .then(function(userIds) {
                   const careTeamPromises = [];
                   for (let i = 0; i < patientIds.length; i++) {
                     for (let j = 0; j < userIds.length; j++) {
-                      careTeamPromises.push(knex.table('care_team').insert({
-                        id: uuid.v4(),
-                        createdAt: new Date().toISOString(),
-                        updatedAt: new Date().toISOString(),
-                        userId: userIds[j],
-                        patientId: patientIds[i],
-                      }));
+                      careTeamPromises.push(
+                        knex.table('care_team').insert({
+                          id: uuid.v4(),
+                          createdAt: new Date().toISOString(),
+                          updatedAt: new Date().toISOString(),
+                          userId: userIds[j],
+                          patientId: patientIds[i],
+                        }),
+                      );
                     }
                   }
                   return Promise.all(careTeamPromises);

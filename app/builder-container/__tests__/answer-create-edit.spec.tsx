@@ -18,9 +18,7 @@ it('renders answer create-edit', () => {
     <MockedProvider mocks={[]} store={mockStore({ locale })}>
       <ReduxConnectedIntlProvider>
         <ConnectedRouter history={history}>
-          <AnswerCreateEdit
-            questionId='question-id'
-            answer={answer} />
+          <AnswerCreateEdit questionId="question-id" answer={answer} />
         </ConnectedRouter>
       </ReduxConnectedIntlProvider>
     </MockedProvider>,

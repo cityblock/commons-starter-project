@@ -19,16 +19,16 @@ export interface IState {
   expirationDate: FormField;
 }
 
-const relationshipToPatientHtml = Object.keys(
-  relationshipToPatientOptions,
-).map((key: string) => (
+const relationshipToPatientHtml = Object.keys(relationshipToPatientOptions).map((key: string) => (
   <option key={key} value={relationshipToPatientOptions[key]}>
     {relationshipToPatientOptions[key]}
   </option>
 ));
 
 const insuranceTypeOptionsHtml = Object.keys(insuranceTypeOptions).map((key: string) => (
-  <option key={key} value={insuranceTypeOptions[key]}>{insuranceTypeOptions[key]}</option>
+  <option key={key} value={insuranceTypeOptions[key]}>
+    {insuranceTypeOptions[key]}
+  </option>
 ));
 
 export default class PatientInsuranceForm extends React.Component<IProps, IState> {
@@ -87,79 +87,95 @@ export default class PatientInsuranceForm extends React.Component<IProps, IState
       <div>
         <div className={formStyles.multiInputFormRow}>
           <div className={formStyles.inputGroup}>
-            <FormattedMessage id='insuranceForm.insuranceType'>
+            <FormattedMessage id="insuranceForm.insuranceType">
               {(message: string) => <div className={formStyles.inputLabel}>{message}</div>}
             </FormattedMessage>
-            <select required
-              name='insuranceType'
+            <select
+              required
+              name="insuranceType"
               value={insuranceType}
               onChange={this.onChange}
-              className={formStyles.select}>
-              <FormattedMessage id='insuranceForm.insuranceTypePlaceholder'>
-                {(message: string) => <option value='' disabled hidden>{message}</option>}
+              className={formStyles.select}
+            >
+              <FormattedMessage id="insuranceForm.insuranceTypePlaceholder">
+                {(message: string) => (
+                  <option value="" disabled hidden>
+                    {message}
+                  </option>
+                )}
               </FormattedMessage>
               {insuranceTypeOptionsHtml}
             </select>
           </div>
           <div className={formStyles.inputGroup}>
-            <FormattedMessage id='insuranceForm.policyHolderRelationship'>
+            <FormattedMessage id="insuranceForm.policyHolderRelationship">
               {(message: string) => <div className={formStyles.inputLabel}>{message}</div>}
             </FormattedMessage>
-            <select required
-              name='patientRelationshipToPolicyHolder'
+            <select
+              required
+              name="patientRelationshipToPolicyHolder"
               value={patientRelationshipToPolicyHolder}
               onChange={this.onChange}
-              className={formStyles.select}>
-              <FormattedMessage id='insuranceForm.policyHolderRelationshipPlaceholder'>
-                {(message: string) => <option value='' disabled hidden>{message}</option>}
+              className={formStyles.select}
+            >
+              <FormattedMessage id="insuranceForm.policyHolderRelationshipPlaceholder">
+                {(message: string) => (
+                  <option value="" disabled hidden>
+                    {message}
+                  </option>
+                )}
               </FormattedMessage>
               {relationshipToPatientHtml}
             </select>
           </div>
           <div className={formStyles.inputGroup}>
-            <FormattedMessage id='insuranceForm.memberId'>
+            <FormattedMessage id="insuranceForm.memberId">
               {(message: string) => <div className={formStyles.inputLabel}>{message}</div>}
             </FormattedMessage>
             <input
-              name='memberId'
+              name="memberId"
               value={memberId}
               onChange={this.onChange}
-              className={formStyles.input} />
+              className={formStyles.input}
+            />
           </div>
         </div>
         <div className={formStyles.multiInputFormRow}>
           <div className={formStyles.inputGroup}>
-            <FormattedMessage id='insuranceForm.policyGroupNumber'>
+            <FormattedMessage id="insuranceForm.policyGroupNumber">
               {(message: string) => <div className={formStyles.inputLabel}>{message}</div>}
             </FormattedMessage>
             <input
-              type='number'
-              name='policyGroupNumber'
+              type="number"
+              name="policyGroupNumber"
               value={policyGroupNumber}
               onChange={this.onChange}
-              className={formStyles.input} />
+              className={formStyles.input}
+            />
           </div>
           <div className={formStyles.inputGroup}>
-            <FormattedMessage id='insuranceForm.issueDate'>
+            <FormattedMessage id="insuranceForm.issueDate">
               {(message: string) => <div className={formStyles.inputLabel}>{message}</div>}
             </FormattedMessage>
             <input
-              name='issueDate'
+              name="issueDate"
               value={issueDate}
               onChange={this.onChange}
-              type='date'
-              className={formStyles.input} />
+              type="date"
+              className={formStyles.input}
+            />
           </div>
           <div className={formStyles.inputGroup}>
-            <FormattedMessage id='insuranceForm.expirationDate'>
+            <FormattedMessage id="insuranceForm.expirationDate">
               {(message: string) => <div className={formStyles.inputLabel}>{message}</div>}
             </FormattedMessage>
             <input
-              name='expirationDate'
+              name="expirationDate"
               value={expirationDate}
               onChange={this.onChange}
-              type='date'
-              className={formStyles.input} />
+              type="date"
+              className={formStyles.input}
+            />
           </div>
         </div>
       </div>

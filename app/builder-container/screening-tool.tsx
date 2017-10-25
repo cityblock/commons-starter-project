@@ -7,10 +7,7 @@ import * as screeningToolQuery from '../graphql/queries/get-screening-tool.graph
 /* tslint:disable:max-line-length */
 import * as screeningToolEditMutation from '../graphql/queries/screening-tool-edit-mutation.graphql';
 /* tslint:enable:max-line-length */
-import {
-  screeningToolEditMutationVariables,
-  FullScreeningToolFragment,
-} from '../graphql/types';
+import { screeningToolEditMutationVariables, FullScreeningToolFragment } from '../graphql/types';
 import * as styles from '../shared/css/two-panel-right.css';
 import { IState as IAppState } from '../store';
 import ScoreRangeCreateEdit from './score-range-create-edit';
@@ -170,7 +167,8 @@ export class ScreeningTool extends React.Component<IProps, IState> {
         <ScoreRangeCreateEdit
           key={scoreRange ? scoreRange.id : ''}
           scoreRange={scoreRange}
-          screeningToolId={screeningTool.id} />
+          screeningToolId={screeningTool.id}
+        />
       ));
     }
   }
@@ -211,19 +209,18 @@ export class ScreeningTool extends React.Component<IProps, IState> {
       return (
         <div className={outerContainerStyles}>
           <div className={deleteConfirmationStyles}>
-            <div className={styles.deleteConfirmationIcon}></div>
+            <div className={styles.deleteConfirmationIcon} />
             <div className={styles.deleteConfirmationText}>
               Are you sure you want to delete this screening tool?
             </div>
             <div className={styles.deleteConfirmationButtons}>
               <div
                 className={classNames(styles.deleteCancelButton, styles.invertedButton)}
-                onClick={this.onCancelDelete}>
+                onClick={this.onCancelDelete}
+              >
                 Cancel
               </div>
-              <div
-                className={styles.deleteConfirmButton}
-                onClick={this.onConfirmDelete}>
+              <div className={styles.deleteConfirmButton} onClick={this.onConfirmDelete}>
                 Yes, delete
               </div>
             </div>
@@ -238,9 +235,11 @@ export class ScreeningTool extends React.Component<IProps, IState> {
             <div>
               <div className={styles.infoRow}>
                 <div className={styles.controls}>
-                  <Link to={closeRoute} className={styles.close}>Close</Link>
+                  <Link to={closeRoute} className={styles.close}>
+                    Close
+                  </Link>
                   <div className={styles.menuItem} onClick={this.onClickDelete}>
-                    <div className={styles.trashIcon}></div>
+                    <div className={styles.trashIcon} />
                     <div className={styles.menuLabel}>Delete screening tool</div>
                   </div>
                 </div>
@@ -249,27 +248,31 @@ export class ScreeningTool extends React.Component<IProps, IState> {
             <div className={styles.itemBody}>
               <div className={styles.smallText}>Title:</div>
               <div
-                ref={div => { this.titleBody = div; }}
+                ref={div => {
+                  this.titleBody = div;
+                }}
                 className={titleTextStyles}
-                onClick={this.onClickToEditTitle}>
+                onClick={this.onClickToEditTitle}
+              >
                 {screeningTool.title}
               </div>
               <div className={titleEditStyles}>
                 <input
-                  name='editedTitle'
-                  ref={area => { this.editTitleInput = area; }}
+                  name="editedTitle"
+                  ref={area => {
+                    this.editTitleInput = area;
+                  }}
                   value={editedTitle}
                   onChange={this.onChange}
                   onKeyDown={this.onKeyDown}
-                  onBlur={this.onBlur} />
+                  onBlur={this.onBlur}
+                />
               </div>
               <div className={styles.smallText}>Risk Area:</div>
               <div className={styles.largeText}>{screeningTool.riskArea.title}</div>
               <br />
               <div className={styles.smallText}>Score Ranges:</div>
-              <div>
-                {scoreRanges}
-              </div>
+              <div>{scoreRanges}</div>
               <div className={styles.smallText}>Create score range:</div>
               <ScoreRangeCreateEdit screeningToolId={screeningTool.id} />
             </div>
@@ -288,21 +291,22 @@ export class ScreeningTool extends React.Component<IProps, IState> {
         return (
           <div className={styles.container}>
             <div className={styles.loadingError}>
-              <div className={styles.loadingErrorIcon}></div>
+              <div className={styles.loadingErrorIcon} />
               <div className={styles.loadingErrorLabel}>Unable to load screening tool</div>
               <div className={styles.loadingErrorSubheading}>
                 Sorry, something went wrong. Please try again.
               </div>
               <div
                 className={classNames(styles.loadingErrorButton, styles.invertedButton)}
-                onClick={this.reloadScreeningTool}>
+                onClick={this.reloadScreeningTool}
+              >
                 Try again
               </div>
             </div>
           </div>
         );
       } else {
-        return <div className={styles.container}></div>;
+        return <div className={styles.container} />;
       }
     }
   }
@@ -321,10 +325,10 @@ export default compose(
     skip: (props: IProps) => !props.screeningToolId,
     options: (props: IProps) => ({ variables: { screeningToolId: props.screeningToolId } }),
     props: ({ data }) => ({
-      screeningToolLoading: (data ? data.loading : false),
-      screeningToolError: (data ? data.error : null),
-      screeningTool: (data ? (data as any).screeningTool : null),
-      refetcScreeningTool: (data ? data.refetch : null),
+      screeningToolLoading: data ? data.loading : false,
+      screeningToolError: data ? data.error : null,
+      screeningTool: data ? (data as any).screeningTool : null,
+      refetcScreeningTool: data ? data.refetch : null,
     }),
   }),
 )(ScreeningTool);

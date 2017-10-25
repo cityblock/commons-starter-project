@@ -97,12 +97,12 @@ class QuestionConditionCreate extends React.Component<allProps, IState> {
         </div>
         <div className={styles.flexInputGroup}>
           <select
-            name='answerId'
+            name="answerId"
             value={selectedAnswer}
             onChange={this.onAnswerChange}
             className={classNames(formStyles.select, formStyles.inputSmall, styles.flexInputItem)}
           >
-            <option value='' disabled hidden>
+            <option value="" disabled hidden>
               Select Answer
             </option>
             {answerOptions}
@@ -110,7 +110,7 @@ class QuestionConditionCreate extends React.Component<allProps, IState> {
         </div>
         <div className={styles.formBottom}>
           <div className={styles.formBottomContent}>
-            <input type='submit' className={styles.submitButton} value={'Add question condition'} />
+            <input type="submit" className={styles.submitButton} value={'Add question condition'} />
           </div>
         </div>
       </form>

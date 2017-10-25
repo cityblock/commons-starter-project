@@ -30,7 +30,6 @@ interface IProps {
 }
 
 class PatientTasks extends React.Component<IProps, {}> {
-
   render() {
     const {
       updatePageParams,
@@ -42,12 +41,11 @@ class PatientTasks extends React.Component<IProps, {}> {
       carePlanResponse,
     } = this.props;
 
-    const tasks = tasksResponse && tasksResponse.edges ?
-      tasksResponse.edges.map((edge: any) => edge.node) : [];
+    const tasks =
+      tasksResponse && tasksResponse.edges ? tasksResponse.edges.map((edge: any) => edge.node) : [];
     const hasNextPage = tasksResponse ? tasksResponse.pageInfo.hasNextPage : false;
     const hasPreviousPage = tasksResponse ? tasksResponse.pageInfo.hasPreviousPage : false;
-    const patientGoals = carePlanResponse && carePlanResponse.goals ?
-      carePlanResponse.goals : [];
+    const patientGoals = carePlanResponse && carePlanResponse.goals ? carePlanResponse.goals : [];
 
     return (
       <Tasks
@@ -60,7 +58,8 @@ class PatientTasks extends React.Component<IProps, {}> {
         hasNextPage={hasNextPage}
         hasPreviousPage={hasPreviousPage}
         routeBase={`/patients/${patientId}/tasks`}
-        tasks={tasks} />
+        tasks={tasks}
+      />
     );
   }
 }
@@ -95,9 +94,9 @@ export default compose(
     props: ({ data, ownProps }) => ({
       fetchMoreTasks: () =>
         fetchMore<FullTaskFragment>(data as any, getPageParams(ownProps), 'tasksForPatient'),
-      tasksLoading: (data ? data.loading : false),
-      tasksError: (data ? data.error : null),
-      tasksResponse: (data ? (data as any).tasksForPatient : null),
+      tasksLoading: data ? data.loading : false,
+      tasksError: data ? data.error : null,
+      tasksResponse: data ? (data as any).tasksForPatient : null,
     }),
   }),
   graphql(patientCarePlanQuery as any, {
@@ -107,9 +106,9 @@ export default compose(
       },
     }),
     props: ({ data }) => ({
-      carePlanLoading: (data ? data.loading : false),
-      carePlanError: (data ? data.error : null),
-      carePlanResponse: (data ? (data as any).carePlanForPatient : null),
+      carePlanLoading: data ? data.loading : false,
+      carePlanError: data ? data.error : null,
+      carePlanResponse: data ? (data as any).carePlanForPatient : null,
     }),
   }),
 )(PatientTasks);

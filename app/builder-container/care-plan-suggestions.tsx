@@ -41,7 +41,7 @@ class CarePlanSuggestions extends React.Component<IProps> {
           key={concernSuggestion ? concernSuggestion.id : index}
           answerId={answer ? answer.id : undefined}
           screeningToolScoreRangeId={scoreRange ? scoreRange.id : undefined}
-          suggestionType='concern'
+          suggestionType="concern"
           suggestion={concernSuggestion}
         />
       ));
@@ -69,7 +69,7 @@ class CarePlanSuggestions extends React.Component<IProps> {
           key={goalSuggestion ? goalSuggestion.id : index}
           answerId={answer ? answer.id : undefined}
           screeningToolScoreRangeId={scoreRange ? scoreRange.id : undefined}
-          suggestionType='goal'
+          suggestionType="goal"
           suggestion={goalSuggestion}
         />
       ));

@@ -19,11 +19,7 @@ it('renders free text answer', () => {
     <MockedProvider mocks={[]} store={mockStore({ locale })}>
       <ReduxConnectedIntlProvider>
         <ConnectedRouter history={history}>
-          <FreeTextAnswer
-            question={question}
-            onChange={() => (true)}
-            currentAnswer={currentAnswer}
-            />
+          <FreeTextAnswer question={question} onChange={() => true} currentAnswer={currentAnswer} />
         </ConnectedRouter>
       </ReduxConnectedIntlProvider>
     </MockedProvider>,

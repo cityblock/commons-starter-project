@@ -31,9 +31,7 @@ it('correctly renders comments component', () => {
     <MockedProvider mocks={[]} store={mockStore({ locale, task: taskWithComment })}>
       <ReduxConnectedIntlProvider>
         <ConnectedRouter history={history}>
-          <TaskComments
-            taskId={taskWithComment.id}
-          />
+          <TaskComments taskId={taskWithComment.id} />
         </ConnectedRouter>
       </ReduxConnectedIntlProvider>
     </MockedProvider>,

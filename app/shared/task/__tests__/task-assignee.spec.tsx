@@ -18,10 +18,7 @@ it('renders the task assignee component', () => {
     <MockedProvider mocks={[]} store={mockStore({ locale, task: taskWithComment })}>
       <ReduxConnectedIntlProvider>
         <ConnectedRouter history={history}>
-          <TaskAssignee
-            patientId={patient.id}
-            taskId={taskWithComment.id}
-            assignee={currentUser} />
+          <TaskAssignee patientId={patient.id} taskId={taskWithComment.id} assignee={currentUser} />
         </ConnectedRouter>
       </ReduxConnectedIntlProvider>
     </MockedProvider>,

@@ -18,9 +18,7 @@ it('renders popup', () => {
     <MockedProvider mocks={[]} store={mockStore({ locale })}>
       <ReduxConnectedIntlProvider>
         <ConnectedRouter history={history}>
-          <PopupPatientCreated
-            patient={patient}
-          />
+          <PopupPatientCreated patient={patient} />
         </ConnectedRouter>
       </ReduxConnectedIntlProvider>
     </MockedProvider>,

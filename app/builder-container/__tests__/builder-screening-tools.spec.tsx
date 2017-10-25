@@ -18,10 +18,11 @@ it('renders builder screening tools', () => {
       <ReduxConnectedIntlProvider>
         <ConnectedRouter history={history}>
           <BuilderScreeningTools
-            routeBase='/foo/bar'
+            routeBase="/foo/bar"
             screeningToolId={screeningTool.id}
             screeningTools={[screeningTool]}
-            riskAreas={[riskArea]} />
+            riskAreas={[riskArea]}
+          />
         </ConnectedRouter>
       </ReduxConnectedIntlProvider>
     </MockedProvider>,

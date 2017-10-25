@@ -31,7 +31,8 @@ export const PatientRoster: React.StatelessComponent<IProps> = props => {
         error={props.error}
         isLoading={props.isLoading}
         onRetryClick={props.onRetryClick}
-      />);
+      />
+    );
   } else {
     tableBody = patients.map(renderPatient);
   }
@@ -40,22 +41,22 @@ export const PatientRoster: React.StatelessComponent<IProps> = props => {
     <div className={styles.table}>
       <div className={styles.tableHead}>
         <div className={styles.tableRow}>
-          <FormattedMessage id='patientPanel.firstName'>
+          <FormattedMessage id="patientPanel.firstName">
             {(message: string) => <div className={styles.tableColumn}>{message}</div>}
           </FormattedMessage>
-          <FormattedMessage id='patientPanel.lastName'>
+          <FormattedMessage id="patientPanel.lastName">
             {(message: string) => <div className={styles.tableColumn}>{message}</div>}
           </FormattedMessage>
-          <FormattedMessage id='patientPanel.age'>
+          <FormattedMessage id="patientPanel.age">
             {(message: string) => <div className={styles.tableColumn}>{message}</div>}
           </FormattedMessage>
-          <FormattedMessage id='patientPanel.location'>
+          <FormattedMessage id="patientPanel.location">
             {(message: string) => <div className={styles.tableColumn}>{message}</div>}
           </FormattedMessage>
-          <FormattedMessage id='patientPanel.joinedAt'>
+          <FormattedMessage id="patientPanel.joinedAt">
             {(message: string) => <div className={styles.tableColumn}>{message}</div>}
           </FormattedMessage>
-          <FormattedMessage id='patientPanel.engagedAt'>
+          <FormattedMessage id="patientPanel.engagedAt">
             {(message: string) => <div className={styles.tableColumn}>{message}</div>}
           </FormattedMessage>
         </div>

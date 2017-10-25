@@ -17,10 +17,11 @@ export const RiskAreaRow: React.StatelessComponent<IProps> = props => {
   const riskAreaClass = classNames(styles.container, {
     [styles.selected]: selected,
   });
-  const formattedCreatedAt = riskArea.createdAt ?
-    (<FormattedRelative value={riskArea.createdAt}>
+  const formattedCreatedAt = riskArea.createdAt ? (
+    <FormattedRelative value={riskArea.createdAt}>
       {(date: string) => <span className={styles.dateValue}>{date}</span>}
-    </FormattedRelative>) : null;
+    </FormattedRelative>
+  ) : null;
   return (
     <Link className={riskAreaClass} to={`${routeBase}/${riskArea.id}`}>
       <div className={styles.title}>{riskArea.title}</div>

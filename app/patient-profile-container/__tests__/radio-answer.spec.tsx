@@ -19,11 +19,7 @@ it('renders radio answer', () => {
     <MockedProvider mocks={[]} store={mockStore({ locale })}>
       <ReduxConnectedIntlProvider>
         <ConnectedRouter history={history}>
-          <RadioAnswer
-            question={question}
-            onChange={() => (true)}
-            currentAnswer={currentAnswer}
-            />
+          <RadioAnswer question={question} onChange={() => true} currentAnswer={currentAnswer} />
         </ConnectedRouter>
       </ReduxConnectedIntlProvider>
     </MockedProvider>,

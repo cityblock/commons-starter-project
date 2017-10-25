@@ -113,7 +113,7 @@ export class GoalCreate extends React.Component<allProps, IState> {
             </div>
             <div className={styles.inputGroup}>
               <input
-                name='title'
+                name="title"
                 value={goal.title}
                 placeholder={'Enter goal title'}
                 className={formStyles.input}
@@ -126,7 +126,7 @@ export class GoalCreate extends React.Component<allProps, IState> {
               <div className={styles.cancelButton} onClick={this.props.onClose}>
                 Cancel
               </div>
-              <input type='submit' className={styles.submitButton} value='Add goal' />
+              <input type="submit" className={styles.submitButton} value="Add goal" />
             </div>
           </div>
         </form>

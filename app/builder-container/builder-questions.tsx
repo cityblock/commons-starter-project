@@ -99,7 +99,7 @@ class BuilderQuestions extends React.Component<IProps, IState> {
     } else if (!loading && !error) {
       return (
         <div className={styles.emptyMessage}>
-          <div className={styles.emptyLogo}></div>
+          <div className={styles.emptyLogo} />
           <div className={styles.emptyLabel}>No Questions</div>
         </div>
       );
@@ -146,9 +146,9 @@ class BuilderQuestions extends React.Component<IProps, IState> {
     });
     const createQuestionButton = (
       <div className={styles.createContainer}>
-        <div
-          onClick={this.showCreateQuestion}
-          className={styles.createButton}>Create Question</div>
+        <div onClick={this.showCreateQuestion} className={styles.createButton}>
+          Create Question
+        </div>
       </div>
     );
 
@@ -157,17 +157,20 @@ class BuilderQuestions extends React.Component<IProps, IState> {
         riskAreaId={riskAreaId}
         screeningToolId={screeningToolId}
         onClose={this.hideCreateQuestion}
-        routeBase={this.props.routeBase} />
+        routeBase={this.props.routeBase}
+      />
     ) : null;
     const renderedQuestion = (props: any) => (
       <Question
         questions={questions}
         routeBase={routeBase}
         onDelete={this.onDeleteQuestion}
-        {...props } />
+        {...props}
+      />
     );
-    const questionHtml = showCreateQuestion ?
-      null : (<Route path={`${routeBase}/:questionId`} render={renderedQuestion} />);
+    const questionHtml = showCreateQuestion ? null : (
+      <Route path={`${routeBase}/:questionId`} render={renderedQuestion} />
+    );
     const riskAreaSortOptions = (riskAreas || []).map(riskArea => (
       <option key={riskArea.id} value={riskArea.id} data-optiontype={'riskArea'}>
         {riskArea.title}
@@ -194,9 +197,7 @@ class BuilderQuestions extends React.Component<IProps, IState> {
           {createQuestionButton}
         </div>
         <div className={styles.bottomContainer}>
-          <div className={questionsListStyles}>
-            {this.renderQuestions(questionsList)}
-          </div>
+          <div className={questionsListStyles}>{this.renderQuestions(questionsList)}</div>
           <div className={questionContainerStyles}>
             {questionHtml}
             {createQuestionHtml}
@@ -232,7 +233,7 @@ function mapDispatchToProps(dispatch: Dispatch<() => void>, ownProps: IProps): P
   };
 }
 
-export default (compose)(
+export default compose(
   connect<any, any, IComponentProps>(null, mapDispatchToProps),
   graphql(questionDeleteMutationGraphql as any, { name: 'deleteQuestion' }),
   graphql(questionsQuery as any, {
@@ -240,10 +241,10 @@ export default (compose)(
       variables: getPageParams(props),
     }),
     props: ({ data, ownProps }) => ({
-      questionsRefetch: (data ? data.refetch : false),
-      questionsLoading: (data ? data.loading : false),
-      questionsError: (data ? data.error : null),
-      questions: (data ? (data as any).questionsForRiskAreaOrScreeningTool : null),
+      questionsRefetch: data ? data.refetch : false,
+      questionsLoading: data ? data.loading : false,
+      questionsError: data ? data.error : null,
+      questions: data ? (data as any).questionsForRiskAreaOrScreeningTool : null,
     }),
   }),
 )(BuilderQuestions);

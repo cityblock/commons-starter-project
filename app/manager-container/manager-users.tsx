@@ -195,12 +195,12 @@ export class ManagerUsers extends React.Component<IProps & IDispatchProps & IGra
             <div className={sortSearchStyles.sortLabel}>Sort by:</div>
             <div className={sortSearchStyles.sortDropdown}>
               <select value={orderBy} onChange={this.onSortChange}>
-                <option value='createdAtDesc'>Newest first</option>
-                <option value='createdAtAsc'>Oldest first</option>
-                <option value='lastLoginAtDesc'>Logged in descending</option>
-                <option value='lastLoginAtAsc'>Logged in ascending</option>
-                <option value='updatedAtDesc'>Last updated</option>
-                <option value='updatedAtAsc'>Last updated desc</option>
+                <option value="createdAtDesc">Newest first</option>
+                <option value="createdAtAsc">Oldest first</option>
+                <option value="lastLoginAtDesc">Logged in descending</option>
+                <option value="lastLoginAtAsc">Logged in ascending</option>
+                <option value="updatedAtDesc">Last updated</option>
+                <option value="updatedAtAsc">Last updated desc</option>
               </select>
             </div>
           </div>

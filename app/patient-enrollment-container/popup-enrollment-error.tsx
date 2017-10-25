@@ -9,7 +9,6 @@ interface IProps {
 }
 
 class PopupEnrollmentError extends React.Component<IProps, {}> {
-
   render() {
     const { visible, error, onClose } = this.props;
     return (
@@ -20,7 +19,8 @@ class PopupEnrollmentError extends React.Component<IProps, {}> {
           <div className={styles.heading}>Unable to enroll this patient</div>
           <div className={styles.paragraph}>{error}</div>
         </div>
-      </Popup>);
+      </Popup>
+    );
   }
 }
 

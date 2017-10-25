@@ -46,7 +46,7 @@ describe('method tests', () => {
         taskId={assignedTask.id}
         taskLoading={false}
         selectTask={() => false}
-        routeBase='/route/base'
+        routeBase="/route/base"
         refetchTask={() => false}
         completeTask={completeTask}
         uncompleteTask={unCompleteTask}

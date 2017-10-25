@@ -1,11 +1,11 @@
-exports.up = function (knex, Promise) {
+exports.up = function(knex, Promise) {
   return knex.schema
     .table('concern_suggestion', table => {
       table.dropUnique(['answerId', 'concernId']);
       table.unique(['answerId', 'concernId', 'deletedAt']);
 
       table.index('answerId');
-      table.index('concernId')
+      table.index('concernId');
       table.index('deletedAt');
     })
     .table('goal_suggestion', table => {
@@ -16,7 +16,7 @@ exports.up = function (knex, Promise) {
       table.index('goalSuggestionTemplateId');
       table.index('deletedAt');
     });
-  };
+};
 
 exports.down = function(knex, Promise) {
   return knex.schema
@@ -25,7 +25,7 @@ exports.down = function(knex, Promise) {
       table.unique(['answerId', 'concernId']);
 
       table.dropIndex('answerId');
-      table.dropIndex('concernId')
+      table.dropIndex('concernId');
       table.dropIndex('deletedAt');
     })
     .table('goal_suggestion', table => {

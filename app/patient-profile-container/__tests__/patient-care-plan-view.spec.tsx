@@ -181,26 +181,32 @@ fragment FullTask on Task {
 it('renders patient care plan view', () => {
   const history = createMemoryHistory();
   const tree = create(
-    <MockedProvider mocks={[{
-      request: {
-        query,
-        variables: {
-          patientId: 'patient-1',
+    <MockedProvider
+      mocks={[
+        {
+          request: {
+            query,
+            variables: {
+              patientId: 'patient-1',
+            },
+          },
+          result: {
+            data: {
+              patientCarePlan: {},
+            },
+          },
         },
-      },
-      result: {
-        data: {
-          patientCarePlan: {},
-        },
-      },
-    }]} store={mockStore({ locale })}>
+      ]}
+      store={mockStore({ locale })}
+    >
       <ReduxConnectedIntlProvider>
         <ConnectedRouter history={history}>
           <PatientCarePlanView
             patientId={'patient-1'}
             subTabId={'active'}
             loading={false}
-            routeBase={'/patients/patient-1/carePlan'} />
+            routeBase={'/patients/patient-1/carePlan'}
+          />
         </ConnectedRouter>
       </ReduxConnectedIntlProvider>
     </MockedProvider>,

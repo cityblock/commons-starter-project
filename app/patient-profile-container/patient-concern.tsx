@@ -118,16 +118,16 @@ export default class PatientConcern extends React.Component<IProps, {}> {
                 <div className={styles.patientConcernDateValue}>
                   <FormattedDate
                     value={patientConcern.createdAt}
-                    year='numeric'
-                    month='short'
-                    day='numeric'
+                    year="numeric"
+                    month="short"
+                    day="numeric"
                   />
                 </div>
               </div>
               <div className={styles.patientConcernDate}>
                 <div className={styles.patientConcernDateLabel}>Last update:</div>
                 <div className={styles.patientConcernDateValue}>
-                  <FormattedDate value={lastUpdated} year='numeric' month='short' day='numeric' />
+                  <FormattedDate value={lastUpdated} year="numeric" month="short" day="numeric" />
                 </div>
               </div>
             </div>

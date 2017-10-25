@@ -10,23 +10,19 @@ interface IProps {
 }
 
 export const Pagination: React.StatelessComponent<IProps> = props => {
-  const prevButtonStyle = classNames(
-    styles.paginationButton,
-    styles.previousButton,
-    { [styles.hidden]: !props.hasPreviousPage },
-  );
+  const prevButtonStyle = classNames(styles.paginationButton, styles.previousButton, {
+    [styles.hidden]: !props.hasPreviousPage,
+  });
 
-  const nextButtonStyle = classNames(
-    styles.paginationButton,
-    styles.nextButton,
-    { [styles.hidden]: !props.hasNextPage },
-  );
+  const nextButtonStyle = classNames(styles.paginationButton, styles.nextButton, {
+    [styles.hidden]: !props.hasNextPage,
+  });
 
   return (
     <div className={styles.pagination}>
       <div className={styles.paginationRow}>
-        <div className={prevButtonStyle} onClick={props.onPreviousClick}></div>
-        <div className={nextButtonStyle} onClick={props.onNextClick}></div>
+        <div className={prevButtonStyle} onClick={props.onPreviousClick} />
+        <div className={nextButtonStyle} onClick={props.onNextClick} />
       </div>
     </div>
   );

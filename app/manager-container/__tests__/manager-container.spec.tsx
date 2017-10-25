@@ -12,7 +12,7 @@ import ManagerContainer from '../manager-container';
 it('renders manager container', () => {
   const mockStore = configureMockStore([]);
   const history = createMemoryHistory();
-  const locale = { messages: ENGLISH_TRANSLATION.messages};
+  const locale = { messages: ENGLISH_TRANSLATION.messages };
   const task = { taskId: 'foo' };
   const tree = create(
     <MockedProvider mocks={[]} store={mockStore({ locale, task })}>

@@ -30,7 +30,7 @@ export interface IPatientPanel {
 }
 
 interface IProps {
-  refetchPatientPanel: (variables: { pageNumber: number, pageSize: number }) => any;
+  refetchPatientPanel: (variables: { pageNumber: number; pageSize: number }) => any;
   updatePageParams: (pageNumber: number) => any;
   loading: boolean;
   error?: string;
@@ -43,7 +43,6 @@ interface IState extends IPageParams {
 }
 
 class PatientPanelContainer extends React.Component<IProps, IState> {
-
   title = 'Patient roster';
 
   constructor(props: IProps) {
@@ -118,12 +117,15 @@ class PatientPanelContainer extends React.Component<IProps, IState> {
       <div className={styles.container}>
         <div className={styles.header}>
           <div className={styles.headerRow}>
-            <FormattedMessage id='patientPanel.header'>
+            <FormattedMessage id="patientPanel.header">
               {(message: string) => <div className={styles.headerText}>{message}</div>}
             </FormattedMessage>
-            <FormattedMessage id='patientPanel.addPatient'>
-              {(message: string) =>
-                <Link to='/patient-intake' className={styles.button}>{message}</Link>}
+            <FormattedMessage id="patientPanel.addPatient">
+              {(message: string) => (
+                <Link to="/patient-intake" className={styles.button}>
+                  {message}
+                </Link>
+              )}
             </FormattedMessage>
           </div>
         </div>
@@ -171,10 +173,10 @@ export default compose(
       variables: getPageParams(),
     }),
     props: ({ data }) => ({
-      refetchPatientPanel: (data ? data.refetch : null),
-      loading: (data ? data.loading : false),
-      error: (data ? data.error : null),
-      patientPanel: (data ? (data as any).userPatientPanel : null),
+      refetchPatientPanel: data ? data.refetch : null,
+      loading: data ? data.loading : false,
+      error: data ? data.error : null,
+      patientPanel: data ? (data as any).userPatientPanel : null,
     }),
   }),
 )(PatientPanelContainer);

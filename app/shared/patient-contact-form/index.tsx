@@ -81,62 +81,62 @@ export default class PatientContactForm extends React.Component<IProps, IState> 
 
     return (
       <div>
-        <PopupConsent
-          onClose={this.hidePhoneConsent}
-          visible={displayConsentToPhoneTextPopup}
-        />
+        <PopupConsent onClose={this.hidePhoneConsent} visible={displayConsentToPhoneTextPopup} />
         <div className={formStyles.multiInputFormRow}>
           <div className={formStyles.inputGroup}>
             <div className={formStyles.inputLabel}>
-              <FormattedMessage id='contactForm.email'>
+              <FormattedMessage id="contactForm.email">
                 {(message: string) => <span>{message}</span>}
               </FormattedMessage>
-              <FormattedMessage id='forms.optional'>
+              <FormattedMessage id="forms.optional">
                 {(message: string) => <span className={formStyles.optionalLabel}>{message}</span>}
               </FormattedMessage>
             </div>
             <input
-              name='email'
+              name="email"
               value={email}
               onChange={this.onChange}
-              className={formStyles.input} />
+              className={formStyles.input}
+            />
           </div>
           <div className={formStyles.inputGroup}>
-            <FormattedMessage id='contactForm.homePhone'>
+            <FormattedMessage id="contactForm.homePhone">
               {(message: string) => <div className={formStyles.inputLabel}>{message}</div>}
             </FormattedMessage>
             <input
-              name='homePhone'
-              type='text'
-              pattern='[0-9]{10}'
+              name="homePhone"
+              type="text"
+              pattern="[0-9]{10}"
               value={homePhone}
               className={formStyles.input}
-              onChange={this.onChange} />
+              onChange={this.onChange}
+            />
           </div>
           <div className={formStyles.inputGroup}>
-            <FormattedMessage id='contactForm.mobilePhone'>
+            <FormattedMessage id="contactForm.mobilePhone">
               {(message: string) => <div className={formStyles.inputLabel}>{message}</div>}
             </FormattedMessage>
             <input
-              name='mobilePhone'
-              type='text'
-              pattern='[0-9]{10}'
+              name="mobilePhone"
+              type="text"
+              pattern="[0-9]{10}"
               value={mobilePhone}
               onChange={this.onChange}
-              className={formStyles.input} />
+              className={formStyles.input}
+            />
           </div>
         </div>
         <div className={formStyles.radioInputFormRow}>
           <div className={formStyles.radioGroup}>
             <div className={formStyles.radioGroupLabel}>
-              <FormattedMessage id='contactForm.consentToText'>
+              <FormattedMessage id="contactForm.consentToText">
                 {(message: string) => <div className={formStyles.inputLabel}>{message}</div>}
               </FormattedMessage>
               <div className={formStyles.smallText}>
-                <FormattedMessage id='contactForm.readConsentStatement'>
+                <FormattedMessage id="contactForm.readConsentStatement">
                   {(message: string) => <span>{message} </span>}
                 </FormattedMessage>
-                <FormattedMessage id='forms.clickHere'>
+                <FormattedMessage id="forms.clickHere">
                   {(message: string) => <a onClick={this.showPhoneConsent}>{message}</a>}
                 </FormattedMessage>
               </div>
@@ -146,14 +146,15 @@ export default class PatientContactForm extends React.Component<IProps, IState> 
                 <div className={formStyles.radioGroupContainer}>
                   <input
                     className={formStyles.radio}
-                    type='radio'
-                    name='consentToText'
+                    type="radio"
+                    name="consentToText"
                     onChange={this.onChange}
                     checked={consentToText === 'true'}
-                    value='true' />
+                    value="true"
+                  />
                   <label />
                 </div>
-                <FormattedMessage id='forms.yes'>
+                <FormattedMessage id="forms.yes">
                   {(message: string) => <span className={formStyles.radioLabel}>{message}</span>}
                 </FormattedMessage>
               </div>
@@ -161,14 +162,15 @@ export default class PatientContactForm extends React.Component<IProps, IState> 
                 <div className={formStyles.radioGroupContainer}>
                   <input
                     className={formStyles.radio}
-                    type='radio'
-                    name='consentToText'
+                    type="radio"
+                    name="consentToText"
                     onChange={this.onChange}
                     checked={consentToText === 'false'}
-                    value='false' />
+                    value="false"
+                  />
                   <label />
                 </div>
-                <FormattedMessage id='forms.no'>
+                <FormattedMessage id="forms.no">
                   {(message: string) => <span className={formStyles.radioLabel}>{message}</span>}
                 </FormattedMessage>
               </div>
@@ -178,14 +180,14 @@ export default class PatientContactForm extends React.Component<IProps, IState> 
         <div className={formStyles.radioInputFormRow}>
           <div className={formStyles.radioGroup}>
             <div className={formStyles.radioGroupLabel}>
-              <FormattedMessage id='contactForm.consentToPhone'>
+              <FormattedMessage id="contactForm.consentToPhone">
                 {(message: string) => <div className={formStyles.inputLabel}>{message}</div>}
               </FormattedMessage>
               <div className={formStyles.smallText}>
-                <FormattedMessage id='contactForm.readConsentStatement'>
+                <FormattedMessage id="contactForm.readConsentStatement">
                   {(message: string) => <span>{message} </span>}
                 </FormattedMessage>
-                <FormattedMessage id='forms.clickHere'>
+                <FormattedMessage id="forms.clickHere">
                   {(message: string) => <a onClick={this.showPhoneConsent}>{message}</a>}
                 </FormattedMessage>
               </div>
@@ -195,14 +197,15 @@ export default class PatientContactForm extends React.Component<IProps, IState> 
                 <div className={formStyles.radioGroupContainer}>
                   <input
                     className={formStyles.radio}
-                    type='radio'
-                    name='consentToCall'
+                    type="radio"
+                    name="consentToCall"
                     onChange={this.onChange}
                     checked={consentToCall === 'true'}
-                    value='true' />
+                    value="true"
+                  />
                   <label />
                 </div>
-                <FormattedMessage id='forms.yes'>
+                <FormattedMessage id="forms.yes">
                   {(message: string) => <span className={formStyles.radioLabel}>{message}</span>}
                 </FormattedMessage>
               </div>
@@ -210,14 +213,15 @@ export default class PatientContactForm extends React.Component<IProps, IState> 
                 <div className={formStyles.radioGroupContainer}>
                   <input
                     className={formStyles.radio}
-                    type='radio'
-                    name='consentToCall'
+                    type="radio"
+                    name="consentToCall"
                     onChange={this.onChange}
                     checked={consentToCall === 'false'}
-                    value='false' />
+                    value="false"
+                  />
                   <label />
                 </div>
-                <FormattedMessage id='forms.no'>
+                <FormattedMessage id="forms.no">
                   {(message: string) => <span className={formStyles.radioLabel}>{message}</span>}
                 </FormattedMessage>
               </div>

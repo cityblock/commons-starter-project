@@ -5,7 +5,7 @@ import * as formStyles from '../shared/css/forms.css';
 import * as styles from './css/risk-areas.css';
 
 interface IProps {
-  currentAnswer: { id: string; value: string; };
+  currentAnswer: { id: string; value: string };
   question: FullQuestionFragment;
   onChange: (questionId: string, answerId: string, value: string | number) => any;
 }
@@ -45,8 +45,11 @@ export default class DropdownAnswer extends React.Component<IProps, {}> {
         <select
           value={currentAnswer ? currentAnswer.value : 'Select one'}
           onChange={event => this.onDropdownChange(event.currentTarget.value)}
-          className={classNames(formStyles.select, styles.select)}>
-          <option value={'Select one'} disabled={true}>Select one</option>
+          className={classNames(formStyles.select, styles.select)}
+        >
+          <option value={'Select one'} disabled={true}>
+            Select one
+          </option>
           {answers.map(this.renderDropdownOption)}
         </select>
       </div>

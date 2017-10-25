@@ -21,11 +21,11 @@ interface IProps {
   riskAreaScore?: FullRiskScoreFragment;
   scoreLoading?: boolean;
   scoreError?: string;
-  reloadScore?: (variables: { patientId: string, riskAreaId: string }) => any;
+  reloadScore?: (variables: { patientId: string; riskAreaId: string }) => any;
   riskAreaSummary?: FullRiskAreaSummaryFragment;
   summaryLoading?: boolean;
   summaryError?: string;
-  reloadSummary?: (variables: { patientId: string, riskAreaId: string }) => any;
+  reloadSummary?: (variables: { patientId: string; riskAreaId: string }) => any;
 }
 
 class RiskAreaSummary extends React.Component<IProps, {}> {
@@ -66,7 +66,6 @@ class RiskAreaSummary extends React.Component<IProps, {}> {
       } else if (summary.length) {
         summaryListHtml = summary.map((summaryText, index) => <li key={index}>{summaryText}</li>);
       }
-
     } else if (this.isLoading()) {
       summaryListHtml = <div className={styles.emptySummary}>Loading...</div>;
     } else if (this.isError()) {
@@ -75,7 +74,7 @@ class RiskAreaSummary extends React.Component<IProps, {}> {
           <div className={styles.summaryErrorLabel}>Error loading.</div>
           <div className={styles.summaryErrorRetry} onClick={this.onRetryClick}>
             <div className={styles.summaryErrorRetryText}>Try again.</div>
-            <div className={styles.summaryErrorIcon}></div>
+            <div className={styles.summaryErrorIcon} />
           </div>
         </div>
       );
@@ -91,7 +90,7 @@ class RiskAreaSummary extends React.Component<IProps, {}> {
       const { lastUpdated, started } = riskAreaSummary;
 
       if (started && lastUpdated) {
-        return <FormattedDate value={lastUpdated} year='numeric' month='short' day='numeric' />;
+        return <FormattedDate value={lastUpdated} year="numeric" month="short" day="numeric" />;
       } else {
         return 'Never';
       }
@@ -174,14 +173,11 @@ class RiskAreaSummary extends React.Component<IProps, {}> {
     });
 
     return (
-      <Link
-        className={linkStyles}
-        to={`${routeBase}/${riskArea.id}`}
-        onClick={this.onClick}>
+      <Link className={linkStyles} to={`${routeBase}/${riskArea.id}`} onClick={this.onClick}>
         <div className={riskAreaStyles}>
           <div className={styles.riskAreaTitleRow}>
             <div className={styles.riskAreaTitle}>
-              <div className={styles.titleIcon}></div>
+              <div className={styles.titleIcon} />
               <div className={styles.titleText}>{riskArea.title}</div>
             </div>
             <div className={styles.riskAreaLastUpdated}>
@@ -189,9 +185,7 @@ class RiskAreaSummary extends React.Component<IProps, {}> {
               <div className={styles.lastUpdatedValue}>{this.getLastUpdated()}</div>
             </div>
           </div>
-          <div className={styles.riskAreaBody}>
-            {this.renderSummaryText()}
-          </div>
+          <div className={styles.riskAreaBody}>{this.renderSummaryText()}</div>
         </div>
       </Link>
     );
@@ -207,10 +201,10 @@ export default compose(
       },
     }),
     props: ({ data }) => ({
-      summaryLoading: (data ? data.loading : false),
-      summaryError: (data ? data.error : null),
-      riskAreaSummary: (data ? (data as any).patientRiskAreaSummary : null),
-      reloadSummary: (data ? (data as any).refetch : null),
+      summaryLoading: data ? data.loading : false,
+      summaryError: data ? data.error : null,
+      riskAreaSummary: data ? (data as any).patientRiskAreaSummary : null,
+      reloadSummary: data ? (data as any).refetch : null,
     }),
   }),
   graphql(riskScoreQuery as any, {
@@ -221,10 +215,10 @@ export default compose(
       },
     }),
     props: ({ data }) => ({
-      scoreLoading: (data ? data.loading : false),
-      scoreError: (data ? data.error : null),
-      riskAreaScore: (data ? (data as any).patientRiskAreaRiskScore : null),
-      reloadScore: (data ? (data as any).refetch : null),
+      scoreLoading: data ? data.loading : false,
+      scoreError: data ? data.error : null,
+      riskAreaScore: data ? (data as any).patientRiskAreaRiskScore : null,
+      reloadScore: data ? (data as any).refetch : null,
     }),
   }),
 )(RiskAreaSummary);

@@ -37,10 +37,10 @@ const PopupPatientCarePlanSuggestionAcceptedModalBody = (props: IProps) => {
   let suggestedConcernSelected: boolean = false;
 
   if (concernId && carePlanSuggestions) {
-    const suggestedConcern = carePlanSuggestions
-      .find(carePlanSuggestion =>
+    const suggestedConcern = carePlanSuggestions.find(
+      carePlanSuggestion =>
         !!carePlanSuggestion.concernId && carePlanSuggestion.concernId === concernId,
-      );
+    );
 
     if (suggestedConcern) {
       suggestedConcernSelected = true;
@@ -57,8 +57,8 @@ const PopupPatientCarePlanSuggestionAcceptedModalBody = (props: IProps) => {
     [styles.hidden]: isSuggestedConcern || concernId !== 'new-concern',
   });
   const selectConcernTypeInputDivStyles = classNames(styles.acceptModalInput, {
-    [styles.hidden]: isSuggestedConcern ||
-      (concernId !== 'new-concern' && !suggestedConcernSelected),
+    [styles.hidden]:
+      isSuggestedConcern || (concernId !== 'new-concern' && !suggestedConcernSelected),
   });
 
   const addButtonStyles = classNames(styles.button, styles.smallButton);
@@ -71,18 +71,25 @@ const PopupPatientCarePlanSuggestionAcceptedModalBody = (props: IProps) => {
         <div className={styles.acceptModalTitle}>Add as active or inactive concern?</div>
         <div className={styles.acceptModalDropdown}>
           <select
-            name='concernType'
+            name="concernType"
             className={classNames(formStyles.select, styles.roundedInput)}
             onChange={onChange}
-            value={concernType}>
-            <option value='' disabled hidden>Select a concern type</option>
-            <option value='active'>Active concern</option>
-            <option value='inactive'>Inactive concern</option>
+            value={concernType}
+          >
+            <option value="" disabled hidden>
+              Select a concern type
+            </option>
+            <option value="active">Active concern</option>
+            <option value="inactive">Inactive concern</option>
           </select>
         </div>
         <div className={styles.acceptModalButtons}>
-          <div className={cancelButtonStyles} onClick={onDismiss}>Cancel</div>
-          <div className={addButtonStyles} onClick={onSubmit}>Add to Care Plan</div>
+          <div className={cancelButtonStyles} onClick={onDismiss}>
+            Cancel
+          </div>
+          <div className={addButtonStyles} onClick={onSubmit}>
+            Add to Care Plan
+          </div>
         </div>
       </div>
     );
@@ -97,51 +104,65 @@ const PopupPatientCarePlanSuggestionAcceptedModalBody = (props: IProps) => {
         </div>
         <div className={styles.acceptModalDropdown}>
           <select
-            name='concernId'
+            name="concernId"
             className={classNames(formStyles.select, styles.roundedInput)}
             onChange={onChange}
-            value={concernId}>
-            <option value='' disabled hidden>Select a concern</option>
-            <optgroup label='New concern'>
-              <option value='new-concern'>Add a new concern</option>
+            value={concernId}
+          >
+            <option value="" disabled hidden>
+              Select a concern
+            </option>
+            <optgroup label="New concern">
+              <option value="new-concern">Add a new concern</option>
             </optgroup>
             <PatientCarePlanSuggestionOptionGroup
               optionType={'suggested'}
               carePlan={carePlan}
-              carePlanSuggestions={carePlanSuggestions} />
+              carePlanSuggestions={carePlanSuggestions}
+            />
             <PatientCarePlanSuggestionOptionGroup
               optionType={'active'}
               carePlan={carePlan}
-              carePlanSuggestions={carePlanSuggestions} />
+              carePlanSuggestions={carePlanSuggestions}
+            />
             <PatientCarePlanSuggestionOptionGroup
               optionType={'inactive'}
               carePlan={carePlan}
-              carePlanSuggestions={carePlanSuggestions} />
+              carePlanSuggestions={carePlanSuggestions}
+            />
           </select>
         </div>
         <div className={createConcernInputDivStyles}>
           <input
-            name='newConcernTitle'
+            name="newConcernTitle"
             className={createConcernInputStyles}
-            type='text'
+            type="text"
             onChange={onChange}
-            placeholder='Enter concern title'
-            value={newConcernTitle} />
+            placeholder="Enter concern title"
+            value={newConcernTitle}
+          />
         </div>
         <div className={selectConcernTypeInputDivStyles}>
           <select
-            name='concernType'
+            name="concernType"
             className={classNames(formStyles.select, styles.roundedInput)}
             onChange={onChange}
-            value={concernType}>
-            <option value='' disabled hidden>Select a concern type</option>
-            <option value='active'>Active concern</option>
-            <option value='inactive'>Inactive concern</option>
+            value={concernType}
+          >
+            <option value="" disabled hidden>
+              Select a concern type
+            </option>
+            <option value="active">Active concern</option>
+            <option value="inactive">Inactive concern</option>
           </select>
         </div>
         <div className={styles.acceptModalButtons}>
-          <div className={cancelButtonStyles} onClick={onDismiss}>Cancel</div>
-          <div className={addButtonStyles} onClick={onSubmit}>Add to Care Plan</div>
+          <div className={cancelButtonStyles} onClick={onDismiss}>
+            Cancel
+          </div>
+          <div className={addButtonStyles} onClick={onSubmit}>
+            Add to Care Plan
+          </div>
         </div>
       </div>
     );

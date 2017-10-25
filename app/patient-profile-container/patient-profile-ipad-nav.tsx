@@ -46,7 +46,7 @@ export default class PatientProfileIpadNav extends React.Component<IProps, IStat
     const { patientId, patient, intl } = this.props;
     const { selectedItem } = this.state;
 
-    const shortName = patient ? `${patient.firstName} ${patient.lastName}` : 'Loading Patient' ;
+    const shortName = patient ? `${patient.firstName} ${patient.lastName}` : 'Loading Patient';
 
     const profileButtonStyles = classNames(styles.smallButton, styles.profileIcon, {
       [styles.selected]: selectedItem === 'profile',
@@ -76,26 +76,17 @@ export default class PatientProfileIpadNav extends React.Component<IProps, IStat
       <div className={styles.smallLeftPane}>
         <div className={styles.smallLeftPaneMain}>
           <div className={styles.smallLeftPaneTop}>
-            <div className={styles.smallPatientRiskColor}></div>
+            <div className={styles.smallPatientRiskColor} />
             <div
               className={styles.smallPatientPhoto}
-              style={{ backgroundImage: `url('http://bit.ly/2vaOMQJ')`}}>
-            </div>
+              style={{ backgroundImage: `url('http://bit.ly/2vaOMQJ')` }}
+            />
             <div className={styles.smallPatientName}>{shortName}</div>
-            <div
-              className={profileButtonStyles}
-              onClick={() => this.onClick('profile')}>
-            </div>
-            <div
-              className={medsButtonStyles}
-              onClick={() => this.onClick('medications')}>
-            </div>
+            <div className={profileButtonStyles} onClick={() => this.onClick('profile')} />
+            <div className={medsButtonStyles} onClick={() => this.onClick('medications')} />
           </div>
           <div className={styles.smallLeftPaneBottom}>
-            <div
-              className={chatButtonStyles}
-              onClick={() => this.onClick('chat')}>
-            </div>
+            <div className={chatButtonStyles} onClick={() => this.onClick('chat')} />
           </div>
         </div>
         <div className={patientProfilePaneStyles}>
@@ -103,7 +94,8 @@ export default class PatientProfileIpadNav extends React.Component<IProps, IStat
             intl={intl}
             patientId={patientId}
             patient={patient}
-            condensedPatientInfo={true} />
+            condensedPatientInfo={true}
+          />
         </div>
         <div className={patientMedsPaneStyles}>
           <PatientMedications patientId={patientId} />
@@ -111,10 +103,7 @@ export default class PatientProfileIpadNav extends React.Component<IProps, IStat
         <div className={chatPaneStyles}>
           <CareTeamWidget patientId={patientId} condensedWidget={true} />
         </div>
-        <div
-          className={touchAreaStyles}
-          onClick={() => this.onClick(null)}>
-        </div>
+        <div className={touchAreaStyles} onClick={() => this.onClick(null)} />
       </div>
     );
   }

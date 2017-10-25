@@ -16,12 +16,14 @@ export const EncountersLoadingError: React.StatelessComponent<IProps> = props =>
   if (error) {
     return (
       <div className={styles.encountersError}>
-        <div className={styles.encountersErrorIcon}></div>
+        <div className={styles.encountersErrorIcon} />
         <div className={styles.encountersErrorLabel}>Unable to load encounter history</div>
         <div className={styles.encountersErrorSubheading}>
           Sorry, something went wrong. Please try reloading this section again.
         </div>
-        <div className={buttonStyles} onClick={onRetryClick}>Try again</div>
+        <div className={buttonStyles} onClick={onRetryClick}>
+          Try again
+        </div>
       </div>
     );
   } else if (loading) {

@@ -5,9 +5,7 @@ import PatientMedication from '../patient-medication';
 
 it('renders empty div', () => {
   const tree = create(
-    <PatientMedication
-      selected={false}
-      medication={medication}
-      onClick={() => false} />).toJSON();
+    <PatientMedication selected={false} medication={medication} onClick={() => false} />,
+  ).toJSON();
   expect(tree).toMatchSnapshot();
 });

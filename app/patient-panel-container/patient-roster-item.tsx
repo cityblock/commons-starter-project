@@ -14,12 +14,8 @@ const PatientRosterItem: React.StatelessComponent<IProps> = (props: Props) => {
   const { patient, intl } = props;
 
   // TODO: return fallbacks to normal
-  const patientAge = patient.dateOfBirth ?
-    intl.formatRelative(patient.dateOfBirth) :
-    '';
-  const patientJoined = patient.createdAt ?
-    intl.formatRelative(patient.createdAt) :
-    'Unknown';
+  const patientAge = patient.dateOfBirth ? intl.formatRelative(patient.dateOfBirth) : '';
+  const patientJoined = patient.createdAt ? intl.formatRelative(patient.createdAt) : 'Unknown';
 
   return (
     <Link className={styles.tableRow} to={`/patients/${patient.id}`}>
@@ -28,7 +24,7 @@ const PatientRosterItem: React.StatelessComponent<IProps> = (props: Props) => {
       <div className={styles.tableColumn}>{patientAge}</div>
       <div className={styles.tableColumn}>{patient.zip}</div>
       <div className={styles.tableColumn}>{patientJoined}</div>
-      <div className={styles.tableColumn}></div>
+      <div className={styles.tableColumn} />
     </Link>
   );
 };

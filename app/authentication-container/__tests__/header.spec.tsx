@@ -22,7 +22,8 @@ it('renders header', () => {
           <Header
             currentUser={currentUser}
             notificationsCount={0}
-            updateNotificationsCount={(count: any) => true} />
+            updateNotificationsCount={(count: any) => true}
+          />
         </ConnectedRouter>
       </ReduxConnectedIntlProvider>
     </MockedProvider>,

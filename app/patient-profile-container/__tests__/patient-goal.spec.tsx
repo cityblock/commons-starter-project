@@ -14,8 +14,12 @@ const mockStore = configureMockStore([]);
 
 const oldDate = Date.now;
 
-beforeAll(() => { Date.now = jest.fn(() => 1500494779252); });
-afterAll(() => { Date.now = oldDate; });
+beforeAll(() => {
+  Date.now = jest.fn(() => 1500494779252);
+});
+afterAll(() => {
+  Date.now = oldDate;
+});
 
 it('renders patient goal', () => {
   const history = createMemoryHistory();

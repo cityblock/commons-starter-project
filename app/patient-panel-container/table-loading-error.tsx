@@ -15,28 +15,28 @@ export const TableLoadingError: React.StatelessComponent<IProps> = props => {
   if (error) {
     return (
       <div className={styles.errorRow}>
-        <div className={styles.errorIcon}></div>
-        <FormattedMessage id='error.tableLoadingHeading'>
-          {(message: string) =>
-            <div className={styles.errorHeading}>{message}</div>}
+        <div className={styles.errorIcon} />
+        <FormattedMessage id="error.tableLoadingHeading">
+          {(message: string) => <div className={styles.errorHeading}>{message}</div>}
         </FormattedMessage>3
-        <FormattedMessage id='error.tableLoadingMessage'>
-          {(message: string) =>
-            <div className={styles.errorMessage}>{message}</div>}
+        <FormattedMessage id="error.tableLoadingMessage">
+          {(message: string) => <div className={styles.errorMessage}>{message}</div>}
         </FormattedMessage>
-        <FormattedMessage id='error.tableLoadingButton'>
-          {(message: string) =>
-            <div className={styles.errorButton} onClick={props.onRetryClick}>{message}</div>}
+        <FormattedMessage id="error.tableLoadingButton">
+          {(message: string) => (
+            <div className={styles.errorButton} onClick={props.onRetryClick}>
+              {message}
+            </div>
+          )}
         </FormattedMessage>
       </div>
     );
   } else if (isLoading) {
     return (
       <div className={styles.loadingRow}>
-        <div className={loadingStyles.loadingSpinner}></div>
-        <FormattedMessage id='error.tableLoading'>
-          {(message: string) =>
-            <div className={loadingStyles.loadingText}>{message}</div>}
+        <div className={loadingStyles.loadingSpinner} />
+        <FormattedMessage id="error.tableLoading">
+          {(message: string) => <div className={loadingStyles.loadingText}>{message}</div>}
         </FormattedMessage>
       </div>
     );

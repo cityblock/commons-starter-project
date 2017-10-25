@@ -17,10 +17,11 @@ export const GoalRow: React.StatelessComponent<IProps> = props => {
   const goalClass = classNames(styles.container, {
     [styles.selected]: selected,
   });
-  const formattedCreatedAt = goal.createdAt ?
-    (<FormattedRelative value={goal.createdAt}>
+  const formattedCreatedAt = goal.createdAt ? (
+    <FormattedRelative value={goal.createdAt}>
       {(date: string) => <span className={styles.dateValue}>{date}</span>}
-    </FormattedRelative>) : null;
+    </FormattedRelative>
+  ) : null;
   return (
     <Link className={goalClass} to={`${routeBase}/${goal.id}`}>
       <div className={styles.title}>{goal.title}</div>

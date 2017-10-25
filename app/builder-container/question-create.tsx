@@ -17,7 +17,9 @@ import * as questionStyles from '../shared/css/two-panel-right.css';
 import { IUpdatedField } from '../shared/util/updated-fields';
 import * as styles from './css/risk-area-create.css';
 
-export interface IOptions { variables: questionCreateMutationVariables; }
+export interface IOptions {
+  variables: questionCreateMutationVariables;
+}
 
 interface IProps {
   riskAreaId?: string;
@@ -113,54 +115,56 @@ class QuestionCreate extends React.Component<allProps, IState> {
           <div className={styles.formCenter}>
             <div className={loadingClass}>
               <div className={styles.loadingContainer}>
-                <div className={loadingStyles.loadingSpinner}></div>
+                <div className={loadingStyles.loadingSpinner} />
               </div>
             </div>
             <div className={styles.inputGroup}>
               <input
-                name='title'
+                name="title"
                 value={question.title}
                 placeholder={'Enter question title'}
                 className={formStyles.input}
-                onChange={this.onChange} />
+                onChange={this.onChange}
+              />
               <input
-                type='number'
-                name='order'
+                type="number"
+                name="order"
                 placeholder={'Enter question order'}
                 value={question.order}
                 className={formStyles.input}
-                onChange={this.onChange} />
+                onChange={this.onChange}
+              />
             </div>
           </div>
           <div className={styles.flexInputGroup}>
             <select
-              name='applicableIfType'
+              name="applicableIfType"
               value={question.applicableIfType || ''}
               onChange={this.onChange}
-              className={
-                classNames(formStyles.select, formStyles.inputSmall, styles.flexInputItem)}>
-              <option value='oneTrue'>one true</option>
-              <option value='allTrue'>all true</option>
+              className={classNames(formStyles.select, formStyles.inputSmall, styles.flexInputItem)}
+            >
+              <option value="oneTrue">one true</option>
+              <option value="allTrue">all true</option>
             </select>
-            <select required
-              name='answerType'
+            <select
+              required
+              name="answerType"
               value={question.answerType}
               onChange={this.onChange}
-              className={
-                classNames(formStyles.select, formStyles.inputSmall, styles.flexInputItem)}>
-              <option value='dropdown'>dropdown</option>
-              <option value='radio'>radio</option>
-              <option value='freetext'>freetext</option>
-              <option value='multiselect'>multiselect</option>
+              className={classNames(formStyles.select, formStyles.inputSmall, styles.flexInputItem)}
+            >
+              <option value="dropdown">dropdown</option>
+              <option value="radio">radio</option>
+              <option value="freetext">freetext</option>
+              <option value="multiselect">multiselect</option>
             </select>
           </div>
           <div className={styles.formBottom}>
             <div className={styles.formBottomContent}>
-              <div className={styles.cancelButton} onClick={this.props.onClose}>Cancel</div>
-              <input
-                type='submit'
-                className={styles.submitButton}
-                value='Add question' />
+              <div className={styles.cancelButton} onClick={this.props.onClose}>
+                Cancel
+              </div>
+              <input type="submit" className={styles.submitButton} value="Add question" />
             </div>
           </div>
         </form>
@@ -182,9 +186,7 @@ export default compose(
   graphql<IGraphqlProps, IProps>(questionCreateMutationGraphql as any, {
     name: 'createQuestion',
     options: {
-      refetchQueries: [
-        'getQuestionsForRiskAreaOrScreeningTool',
-      ],
+      refetchQueries: ['getQuestionsForRiskAreaOrScreeningTool'],
     },
   }),
 )(QuestionCreate);

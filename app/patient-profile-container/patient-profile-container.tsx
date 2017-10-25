@@ -38,12 +38,10 @@ interface IProps {
   };
 }
 
-export const getPatientName = (patient: ShortPatientFragment) => (
-  [patient.firstName, patient.middleName, patient.lastName].filter(Boolean).join(' ')
-);
+export const getPatientName = (patient: ShortPatientFragment) =>
+  [patient.firstName, patient.middleName, patient.lastName].filter(Boolean).join(' ');
 
 class PatientProfileContainer extends React.Component<IProps, {}> {
-
   componentWillReceiveProps(newProps: IProps) {
     if (newProps.patient) {
       document.title = `${getPatientName(newProps.patient)} | Commons`;
@@ -87,85 +85,91 @@ class PatientProfileContainer extends React.Component<IProps, {}> {
       [styles.mainBodySmall]: browserSize === 'small',
     });
     const encounters = tabId === 'encounters' ? <PatientEncounters patientId={patientId} /> : null;
-    const patientInfo = tabId === 'patientInfo' ?
-      <PatientInfo patientId={patientId} patient={patient} loading={loading} error={error} /> :
-      null;
-    const tasks = tabId === 'tasks' ?
-      <PatientTasks patient={patient} taskId={taskId} patientId={patientId} /> :
-      null;
-    const threeSixty = tabId === '360' ?
-      <PatientThreeSixtyView
-        riskAreaId={match.params.riskAreaOrSubTabId}
-        patientId={patientId}
-        patientRoute={`/patients/${patientId}`}
-        routeBase={`/patients/${patientId}/360`} /> : null;
-    const carePlan = tabId === 'carePlan' ?
-      <PatientCarePlanView
-        patientId={patientId}
-        routeBase={`/patients/${patientId}/carePlan`}
-        subTabId={match.params.riskAreaOrSubTabId as any} /> : null; // TODO: Fix typing
-    const tools = tabId === 'tools' ?
-      <PatientToolsView
-        screeningToolId={match.params.riskAreaOrSubTabId}
-        patientId={patientId}
-        patientRoute={`/patients/${patientId}`}
-        routeBase={`/patients/${patientId}/tools`} /> : null;
+    const patientInfo =
+      tabId === 'patientInfo' ? (
+        <PatientInfo patientId={patientId} patient={patient} loading={loading} error={error} />
+      ) : null;
+    const tasks =
+      tabId === 'tasks' ? (
+        <PatientTasks patient={patient} taskId={taskId} patientId={patientId} />
+      ) : null;
+    const threeSixty =
+      tabId === '360' ? (
+        <PatientThreeSixtyView
+          riskAreaId={match.params.riskAreaOrSubTabId}
+          patientId={patientId}
+          patientRoute={`/patients/${patientId}`}
+          routeBase={`/patients/${patientId}/360`}
+        />
+      ) : null;
+    const carePlan =
+      tabId === 'carePlan' ? (
+        <PatientCarePlanView
+          patientId={patientId}
+          routeBase={`/patients/${patientId}/carePlan`}
+          subTabId={match.params.riskAreaOrSubTabId as any}
+        />
+      ) : null; // TODO: Fix typing
+    const tools =
+      tabId === 'tools' ? (
+        <PatientToolsView
+          screeningToolId={match.params.riskAreaOrSubTabId}
+          patientId={patientId}
+          patientRoute={`/patients/${patientId}`}
+          routeBase={`/patients/${patientId}/tools`}
+        />
+      ) : null;
     return (
       <div className={styles.container}>
         <PatientProfileLeftNav
           browserSize={browserSize}
           intl={intl}
           patientId={patientId}
-          patient={patient} />
+          patient={patient}
+        />
         <div className={mainBodyStyle}>
           <div className={tabStyles.tabs}>
-            <FormattedMessage id='patient.threeSixty'>
-              {(message: string) =>
-                <Link
-                  to={`/patients/${patientId}/360`}
-                  className={threeSixtyViewTabStyles}>
+            <FormattedMessage id="patient.threeSixty">
+              {(message: string) => (
+                <Link to={`/patients/${patientId}/360`} className={threeSixtyViewTabStyles}>
                   {message}
-                </Link>}
+                </Link>
+              )}
             </FormattedMessage>
-            <FormattedMessage id='patient.carePlan'>
-              {(message: string) =>
-                <Link
-                  to={`/patients/${patientId}/carePlan`}
-                  className={carePlanTabStyles}>
+            <FormattedMessage id="patient.carePlan">
+              {(message: string) => (
+                <Link to={`/patients/${patientId}/carePlan`} className={carePlanTabStyles}>
                   {message}
-                </Link>}
+                </Link>
+              )}
             </FormattedMessage>
-            <FormattedMessage id='patient.encounters'>
-              {(message: string) =>
-                <Link
-                  to={`/patients/${patientId}/encounters`}
-                  className={encountersTabStyles}>
+            <FormattedMessage id="patient.encounters">
+              {(message: string) => (
+                <Link to={`/patients/${patientId}/encounters`} className={encountersTabStyles}>
                   {message}
-                </Link>}
+                </Link>
+              )}
             </FormattedMessage>
-            <FormattedMessage id='patient.patientInfo'>
-              {(message: string) =>
-                <Link
-                  to={`/patients/${patientId}/patientInfo`}
-                  className={patientInfoTabStyles}>
+            <FormattedMessage id="patient.patientInfo">
+              {(message: string) => (
+                <Link to={`/patients/${patientId}/patientInfo`} className={patientInfoTabStyles}>
                   {message}
-                </Link>}
+                </Link>
+              )}
             </FormattedMessage>
-            <FormattedMessage id='patient.tasks'>
-              {(message: string) =>
-                <Link
-                  to={`/patients/${patientId}/tasks`}
-                  className={tasksTabStyles}>
+            <FormattedMessage id="patient.tasks">
+              {(message: string) => (
+                <Link to={`/patients/${patientId}/tasks`} className={tasksTabStyles}>
                   {message}
-                </Link>}
+                </Link>
+              )}
             </FormattedMessage>
-            <FormattedMessage id='patient.tools'>
-              {(message: string) =>
-                <Link
-                  to={`/patients/${patientId}/tools`}
-                  className={toolsTabStyles}>
+            <FormattedMessage id="patient.tools">
+              {(message: string) => (
+                <Link to={`/patients/${patientId}/tools`} className={toolsTabStyles}>
                   {message}
-                </Link>}
+                </Link>
+              )}
             </FormattedMessage>
           </div>
           {encounters}
@@ -199,9 +203,9 @@ export default compose(
       },
     }),
     props: ({ data }) => ({
-      loading: (data ? data.loading : false),
-      error: (data ? data.error : null),
-      patient: (data ? (data as any).patient : null),
+      loading: data ? data.loading : false,
+      error: data ? data.error : null,
+      patient: data ? (data as any).patient : null,
     }),
   }),
 )(PatientProfileContainer);

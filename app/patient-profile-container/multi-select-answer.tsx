@@ -42,7 +42,9 @@ export default class MultiSelectAnswer extends React.Component<IProps, {}> {
     });
 
     return (
-      <div className={itemStyles} onClick={this.onClick}>{answer.displayValue}</div>
+      <div className={itemStyles} onClick={this.onClick}>
+        {answer.displayValue}
+      </div>
     );
   }
 }

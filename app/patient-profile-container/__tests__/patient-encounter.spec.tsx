@@ -11,7 +11,7 @@ const locale = { messages: ENGLISH_TRANSLATION.messages };
 const mockStore = configureMockStore([]);
 
 it('renders encounter', () => {
-  const onClickAttachment = () => (true);
+  const onClickAttachment = () => true;
 
   const tree = create(
     <MockedProvider mocks={[]} store={mockStore({ locale })}>

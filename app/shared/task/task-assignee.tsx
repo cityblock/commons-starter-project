@@ -23,9 +23,7 @@ interface IProps {
 }
 
 interface IGraphqlProps {
-  changeAssignee: (
-    options: { variables: taskEditMutationVariables },
-  ) => { data: taskEditMutation };
+  changeAssignee: (options: { variables: taskEditMutationVariables }) => { data: taskEditMutation };
 }
 
 interface IState {
@@ -84,13 +82,14 @@ export class TaskAssignee extends React.Component<allProps, IState> {
       <div
         key={careTeamMember.id}
         onClick={async () => this.onCareTeamMemberClick(careTeamMember.id)}
-        className={styles.careTeamMemberDetails}>
+        className={styles.careTeamMemberDetails}
+      >
         <div
           className={styles.careTeamAvatar}
           style={{
             backgroundImage: `url('${avatar}')`,
-          }}>
-        </div>
+          }}
+        />
         <div className={styles.careTeamMemberLabel}>
           <div className={styles.careTeamMemberName}>{fullName}</div>
           <div className={styles.careTeamMemberRole}>{role}</div>
@@ -103,9 +102,7 @@ export class TaskAssignee extends React.Component<allProps, IState> {
     const { careTeam, assignee } = this.props;
 
     if (assignee) {
-      return (careTeam || []).filter(careTeamMember => (
-        careTeamMember.id !== assignee.id
-      ));
+      return (careTeam || []).filter(careTeamMember => careTeamMember.id !== assignee.id);
     } else {
       return careTeam || [];
     }
@@ -172,8 +169,8 @@ export class TaskAssignee extends React.Component<allProps, IState> {
         <div className={assigneeStyles} onClick={this.onClick}>
           <div
             className={taskStyles.avatar}
-            style={{ backgroundImage: `url('${assigneeInfo.avatar}')` }}>
-          </div>
+            style={{ backgroundImage: `url('${assigneeInfo.avatar}')` }}
+          />
           <div className={taskStyles.name}>{assigneeInfo.name}</div>
           <div className={taskStyles.smallText}>{assigneeInfo.role}</div>
         </div>
@@ -183,9 +180,7 @@ export class TaskAssignee extends React.Component<allProps, IState> {
           </div>
           <div className={taskStyles.smallText}>Please try again.</div>
         </div>
-        <div className={careTeamContainerStyles}>
-          {this.renderCareTeamMembers(validAssignees)}
-        </div>
+        <div className={careTeamContainerStyles}>{this.renderCareTeamMembers(validAssignees)}</div>
       </div>
     );
   }
@@ -200,9 +195,9 @@ export default compose(
       },
     }),
     props: ({ data }) => ({
-      loading: (data ? data.loading : false),
-      error: (data ? data.error : null),
-      careTeam: (data ? (data as any).patientCareTeam : null),
+      loading: data ? data.loading : false,
+      error: data ? data.error : null,
+      careTeam: data ? (data as any).patientCareTeam : null,
     }),
   }),
 )(TaskAssignee);

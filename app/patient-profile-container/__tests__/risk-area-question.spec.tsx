@@ -23,7 +23,8 @@ it('renders a risk area question', () => {
             answerData={{ answers: [], oldAnswers: [], changed: false }}
             onChange={() => true}
             question={question}
-            editable={true} />
+            editable={true}
+          />
         </ConnectedRouter>
       </ReduxConnectedIntlProvider>
     </MockedProvider>,

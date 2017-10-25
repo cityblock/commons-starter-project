@@ -20,7 +20,7 @@ export const PatientScratchPadStatus: React.StatelessComponent<IProps> = props =
     return (
       <div className={saveSuccessStyles}>
         <div className={styles.saveSuccessLabel}>Note saved</div>
-        <div className={styles.saveSuccessIcon}></div>
+        <div className={styles.saveSuccessIcon} />
       </div>
     );
   } else if (saveError) {
@@ -29,7 +29,7 @@ export const PatientScratchPadStatus: React.StatelessComponent<IProps> = props =
         <div className={styles.errorLabel}>
           <span className={styles.errorRedLabel}>Not saved. </span>Click here to try again
         </div>
-        <div className={styles.errorIcon}></div>
+        <div className={styles.errorIcon} />
       </div>
     );
   } else if (loadingError) {
@@ -38,12 +38,10 @@ export const PatientScratchPadStatus: React.StatelessComponent<IProps> = props =
         <div className={styles.errorLabel}>
           <span className={styles.errorRedLabel}>Error loading note. </span>Click here to try again
         </div>
-        <div className={styles.errorIcon}></div>
+        <div className={styles.errorIcon} />
       </div>
     );
   } else {
-    return (
-      <div className={styles.scratchPadStatus}></div>
-    );
+    return <div className={styles.scratchPadStatus} />;
   }
 };

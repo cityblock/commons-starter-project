@@ -17,10 +17,11 @@ export const QuestionRow: React.StatelessComponent<IProps> = props => {
   const questionClass = classNames(styles.container, {
     [styles.selected]: selected,
   });
-  const formattedCreatedAt = question.createdAt ?
-    (<FormattedRelative value={question.createdAt}>
+  const formattedCreatedAt = question.createdAt ? (
+    <FormattedRelative value={question.createdAt}>
       {(date: string) => <span className={styles.dateValue}>{date}</span>}
-    </FormattedRelative>) : null;
+    </FormattedRelative>
+  ) : null;
   return (
     <Link className={questionClass} to={`${routeBase}/${question.id}`}>
       <div className={styles.title}>{question.title}</div>

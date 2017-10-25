@@ -17,8 +17,7 @@ it('renders care plan suggestions', () => {
     <MockedProvider mocks={[]} store={mockStore({ locale })}>
       <ReduxConnectedIntlProvider>
         <ConnectedRouter history={history}>
-          <CarePlanSuggestions
-            answer={answerWithConcernAndGoal} />
+          <CarePlanSuggestions answer={answerWithConcernAndGoal} />
         </ConnectedRouter>
       </ReduxConnectedIntlProvider>
     </MockedProvider>,

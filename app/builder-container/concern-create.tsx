@@ -3,17 +3,16 @@ import { compose, graphql } from 'react-apollo';
 import { connect, Dispatch } from 'react-redux';
 import { push } from 'react-router-redux';
 import * as concernCreateMutationGraphql from '../graphql/queries/concern-create-mutation.graphql';
-import {
-  concernCreateMutation,
-  concernCreateMutationVariables,
-} from '../graphql/types';
+import { concernCreateMutation, concernCreateMutationVariables } from '../graphql/types';
 import * as formStyles from '../shared/css/forms.css';
 import * as loadingStyles from '../shared/css/loading-spinner.css';
 import * as concernStyles from '../shared/css/two-panel-right.css';
 import { IUpdatedField } from '../shared/util/updated-fields';
 import * as styles from './css/risk-area-create.css';
 
-interface IOptions { variables: concernCreateMutationVariables; }
+interface IOptions {
+  variables: concernCreateMutationVariables;
+}
 
 interface IProps {
   routeBase: string;
@@ -100,25 +99,25 @@ export class ConcernCreate extends React.Component<allProps, IState> {
           <div className={styles.formCenter}>
             <div className={loadingClass}>
               <div className={styles.loadingContainer}>
-                <div className={loadingStyles.loadingSpinner}></div>
+                <div className={loadingStyles.loadingSpinner} />
               </div>
             </div>
             <div className={styles.inputGroup}>
               <input
-                name='title'
+                name="title"
                 value={concern.title}
                 placeholder={'Enter concern title'}
                 className={formStyles.input}
-                onChange={this.onChange} />
+                onChange={this.onChange}
+              />
             </div>
           </div>
           <div className={styles.formBottom}>
             <div className={styles.formBottomContent}>
-              <div className={styles.cancelButton} onClick={this.props.onClose}>Cancel</div>
-              <input
-                type='submit'
-                className={styles.submitButton}
-                value='Add concern' />
+              <div className={styles.cancelButton} onClick={this.props.onClose}>
+                Cancel
+              </div>
+              <input type="submit" className={styles.submitButton} value="Add concern" />
             </div>
           </div>
         </form>
@@ -140,9 +139,7 @@ export default compose(
   graphql<IGraphqlProps, IProps>(concernCreateMutationGraphql as any, {
     name: 'createConcern',
     options: {
-      refetchQueries: [
-        'getConcerns',
-      ],
+      refetchQueries: ['getConcerns'],
     },
   }),
 )(ConcernCreate);

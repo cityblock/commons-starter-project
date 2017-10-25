@@ -49,10 +49,7 @@ class PatientScratchPad extends React.Component<allProps, IState> {
     const { loading, error } = props;
 
     this.onChange = this.onChange.bind(this);
-    this.saveScratchPad = debounce(
-      this.saveScratchPad.bind(this),
-      SAVE_TIMEOUT_MILLISECONDS,
-    );
+    this.saveScratchPad = debounce(this.saveScratchPad.bind(this), SAVE_TIMEOUT_MILLISECONDS);
     this.clearSaveSuccess = this.clearSaveSuccess.bind(this);
     this.reloadPatientScratchPad = this.reloadPatientScratchPad.bind(this);
 
@@ -158,8 +155,9 @@ class PatientScratchPad extends React.Component<allProps, IState> {
 }
 
 export default compose(
-  graphql<IGraphqlProps, IProps>(savePatientScratchPadMutationGraphql as any,
-   { name: 'saveScratchPad' }),
+  graphql<IGraphqlProps, IProps>(savePatientScratchPadMutationGraphql as any, {
+    name: 'saveScratchPad',
+  }),
   graphql<IGraphqlProps, IProps>(patientScratchPadQuery as any, {
     options: (props: IProps) => ({
       variables: {
@@ -167,10 +165,10 @@ export default compose(
       },
     }),
     props: ({ data }) => ({
-      loading: (data ? data.loading : false),
-      error: (data ? data.error : null),
-      scratchPad: (data ? (data as any).patientScratchPad : null),
-      refetchScratchPad: (data ? data.refetch : null),
+      loading: data ? data.loading : false,
+      error: data ? data.error : null,
+      scratchPad: data ? (data as any).patientScratchPad : null,
+      refetchScratchPad: data ? data.refetch : null,
     }),
   }),
 )(PatientScratchPad);

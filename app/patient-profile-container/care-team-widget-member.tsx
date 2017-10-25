@@ -47,31 +47,31 @@ export default class CareTeamWidgetMember extends React.Component<IProps, {}> {
         <div className={contactStyles}>
           <div className={styles.careTeamMemberContactRow}>
             <div className={slackIconStyles} />
-            <FormattedMessage id='careTeam.slack'>
+            <FormattedMessage id="careTeam.slack">
               {(message: string) => <div className={styles.careTeamContactLabel}>{message}</div>}
             </FormattedMessage>
           </div>
           <div className={styles.careTeamMemberContactRow}>
             <div className={phoneIconStyles} />
-            <FormattedMessage id='careTeam.call'>
+            <FormattedMessage id="careTeam.call">
               {(message: string) => <div className={styles.careTeamContactLabel}>{message}</div>}
             </FormattedMessage>
           </div>
           <div className={styles.careTeamMemberContactRow}>
             <div className={smsIconStyles} />
-            <FormattedMessage id='careTeam.text'>
+            <FormattedMessage id="careTeam.text">
               {(message: string) => <div className={styles.careTeamContactLabel}>{message}</div>}
             </FormattedMessage>
           </div>
           <div className={styles.careTeamMemberContactRow}>
             <div className={emailIconStyles} />
-            <FormattedMessage id='careTeam.email'>
+            <FormattedMessage id="careTeam.email">
               {(message: string) => <div className={styles.careTeamContactLabel}>{message}</div>}
             </FormattedMessage>
           </div>
           <div className={styles.careTeamMemberContactRow}>
             <div className={profileIconStyles} />
-            <FormattedMessage id='careTeam.profile'>
+            <FormattedMessage id="careTeam.profile">
               {(message: string) => <div className={styles.careTeamContactLabel}>{message}</div>}
             </FormattedMessage>
           </div>

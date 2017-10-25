@@ -26,7 +26,6 @@ interface IProps {
 }
 
 class TasksContainer extends React.Component<IProps> {
-
   componentWillReceiveProps(newProps: IProps) {
     document.title = `My Tasks | Commons`;
   }
@@ -34,8 +33,8 @@ class TasksContainer extends React.Component<IProps> {
   render() {
     const { tasksResponse, notificationsCount } = this.props;
 
-    const tasks = tasksResponse && tasksResponse.edges
-      ? tasksResponse.edges.map((edge: any) => edge.node) : [];
+    const tasks =
+      tasksResponse && tasksResponse.edges ? tasksResponse.edges.map((edge: any) => edge.node) : [];
     const hasNextPage = tasksResponse ? tasksResponse.pageInfo.hasNextPage : false;
     const hasPreviousPage = tasksResponse ? tasksResponse.pageInfo.hasPreviousPage : false;
 
@@ -52,32 +51,29 @@ class TasksContainer extends React.Component<IProps> {
     return (
       <div className={styles.container}>
         <div className={styles.leftPane}>
-          <FormattedMessage id='tasks.tasksList'>
-            {(message: string) =>
-              <div className={styles.leftHeading}>{message}</div>}
+          <FormattedMessage id="tasks.tasksList">
+            {(message: string) => <div className={styles.leftHeading}>{message}</div>}
           </FormattedMessage>
         </div>
         <div className={styles.mainBody}>
           <div className={tabStyles.tabs}>
-            <FormattedMessage id='tasks.listView'>
-              {(message: string) =>
-                <Link
-                  className={tasksTabStyles}
-                  to={'/tasks'}>
+            <FormattedMessage id="tasks.listView">
+              {(message: string) => (
+                <Link className={tasksTabStyles} to={'/tasks'}>
                   {message}
-                </Link>}
+                </Link>
+              )}
             </FormattedMessage>
-            <FormattedMessage id='tasks.calendar'>
-              {(message: string) =>
-                <Link
-                  className={calendarTabStyles}
-                  to={'/calendar'}>
+            <FormattedMessage id="tasks.calendar">
+              {(message: string) => (
+                <Link className={calendarTabStyles} to={'/calendar'}>
                   {message}
-                </Link>}
+                </Link>
+              )}
             </FormattedMessage>
             <Link className={notificationsTabStyles} to={'/notifications/tasks'}>
-              <FormattedMessage id='tasks.notifications'>
-                {(message: string) => <span>{message}</span> }
+              <FormattedMessage id="tasks.notifications">
+                {(message: string) => <span>{message}</span>}
               </FormattedMessage>
               <div className={notificationsBadgeStyles} />
             </Link>
@@ -91,11 +87,10 @@ class TasksContainer extends React.Component<IProps> {
               hasNextPage={hasNextPage}
               hasPreviousPage={hasPreviousPage}
               routeBase={`/tasks`}
-              tasks={tasks} />
+              tasks={tasks}
+            />
           </div>
-          <div className={calendarPaneStyles}>
-            calendar!
-          </div>
+          <div className={calendarPaneStyles}>calendar!</div>
         </div>
       </div>
     );
@@ -134,9 +129,9 @@ export default compose(
     props: ({ data, ownProps }) => ({
       fetchMoreTasks: () =>
         fetchMore<FullTaskFragment>(data as any, getPageParams(ownProps), 'tasksForCurrentUser'),
-      tasksLoading: (data ? data.loading : false),
-      tasksError: (data ? data.error : null),
-      tasksResponse: (data ? (data as any).tasksForCurrentUser : null),
+      tasksLoading: data ? data.loading : false,
+      tasksError: data ? data.error : null,
+      tasksResponse: data ? (data as any).tasksForCurrentUser : null,
     }),
   }),
 )(TasksContainer);

@@ -25,7 +25,8 @@ it('renders screening tool results popup', () => {
             patientScreeningToolSubmissionId={patientScreeningToolSubmission.id}
             patientScreeningToolSubmission={patientScreeningToolSubmission}
             patientRoute={'/patients/patient-id'}
-            loading={false} />
+            loading={false}
+          />
         </ConnectedRouter>
       </ReduxConnectedIntlProvider>
     </MockedProvider>,
@@ -37,12 +38,12 @@ it('renders the correct results', async () => {
   const component = shallow(
     <Component
       patientScreeningToolSubmissionId={patientScreeningToolSubmission.id}
-      redirectToCarePlanSuggestions={() => (true)}
+      redirectToCarePlanSuggestions={() => true}
       patientRoute={`/patients/${patient.id}`}
       loading={false}
       error={undefined}
       patientScreeningToolSubmission={patientScreeningToolSubmission}
-      refetchPatientScreeningToolSubmission={() => (true)}
+      refetchPatientScreeningToolSubmission={() => true}
     />,
   );
   const instance = component.instance() as Component;

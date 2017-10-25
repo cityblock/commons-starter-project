@@ -27,7 +27,7 @@ export default class TaskTemplate extends React.Component<IProps, {}> {
 
     if (completedWithinInterval && completedWithinNumber) {
       const date = dateAdd(new Date(Date.now()), completedWithinNumber, completedWithinInterval);
-      return <FormattedDate value={date} year='numeric' month='short' day='numeric' />;
+      return <FormattedDate value={date} year="numeric" month="short" day="numeric" />;
     } else {
       return 'No due date set';
     }

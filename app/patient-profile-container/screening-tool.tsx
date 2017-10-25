@@ -216,7 +216,9 @@ export class ScreeningTool extends React.Component<IProps, IState> {
 
   onChange(questionId: string, answerId: string, value: string | number) {
     const { screeningToolQuestions } = this.props;
-    const fetchedQuestion = (screeningToolQuestions || []).find(question => question.id === questionId);
+    const fetchedQuestion = (screeningToolQuestions || []).find(
+      question => question.id === questionId,
+    );
 
     if (fetchedQuestion && fetchedQuestion.answerType === 'multiselect') {
       this.updateMultiSelectAnswer(questionId, answerId, value);
@@ -378,7 +380,8 @@ export class ScreeningTool extends React.Component<IProps, IState> {
         <Popup visible={!!patientScreeningToolSubmissionId} smallPadding={true}>
           <ScreeningToolResultsPopup
             patientRoute={patientRoute}
-            patientScreeningToolSubmissionId={patientScreeningToolSubmissionId} />
+            patientScreeningToolSubmissionId={patientScreeningToolSubmissionId}
+          />
         </Popup>
       </div>
     );

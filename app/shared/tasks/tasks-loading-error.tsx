@@ -13,12 +13,14 @@ export const TasksLoadingError: React.StatelessComponent<IProps> = props => {
   if (error) {
     return (
       <div className={styles.tasksError}>
-        <div className={styles.tasksErrorIcon}></div>
+        <div className={styles.tasksErrorIcon} />
         <div className={styles.tasksErrorLabel}>Unable to load active tasks</div>
         <div className={styles.tasksErrorSubheading}>
           Sorry, something went wrong. Please try reloading this section again.
         </div>
-        <div className={styles.tasksErrorButton} onClick={onRetryClick}>Try again</div>
+        <div className={styles.tasksErrorButton} onClick={onRetryClick}>
+          Try again
+        </div>
       </div>
     );
   } else if (loading) {

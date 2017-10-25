@@ -79,7 +79,7 @@ class UserRow extends React.Component<IProps, IState> {
       </FormattedRelative>
     );
     const formattedUpdatedAt = (
-      <FormattedDate value={user.updatedAt} year='numeric' month='short' day='numeric'>
+      <FormattedDate value={user.updatedAt} year="numeric" month="short" day="numeric">
         {(date: string) => <span className={styles.dateValue}>{date}</span>}
       </FormattedDate>
     );
@@ -89,27 +89,27 @@ class UserRow extends React.Component<IProps, IState> {
         <div className={styles.meta}>
           <div className={styles.dateSection}>
             <select value={user.userRole} onChange={onChangeUserRole}>
-              <option value='physician'>Physician</option>
-              <option value='nurseCareManager'>Nurse Care Manager</option>
-              <option value='healthCoach'>Health Coach</option>
-              <option value='familyMember'>Family Memeber</option>
-              <option value='admin'>Admin</option>
+              <option value="physician">Physician</option>
+              <option value="nurseCareManager">Nurse Care Manager</option>
+              <option value="healthCoach">Health Coach</option>
+              <option value="familyMember">Family Memeber</option>
+              <option value="admin">Admin</option>
             </select>
           </div>
           <div className={styles.dateSection}>
-            <FormattedMessage id='user.createdAt'>
+            <FormattedMessage id="user.createdAt">
               {(message: string) => <span className={styles.dateLabel}>{message}:</span>}
             </FormattedMessage>
             {formattedCreatedAt}
           </div>
           <div className={styles.dateSection}>
-            <FormattedMessage id='user.editedAt'>
+            <FormattedMessage id="user.editedAt">
               {(message: string) => <span className={styles.dateLabel}>{message}:</span>}
             </FormattedMessage>
             {formattedUpdatedAt}
           </div>
           <div className={styles.userDel}>
-            <FormattedMessage id='user.delete'>
+            <FormattedMessage id="user.delete">
               {(message: string) => (
                 <span onClick={this.onOpenClick} className={styles.button}>
                   {message}

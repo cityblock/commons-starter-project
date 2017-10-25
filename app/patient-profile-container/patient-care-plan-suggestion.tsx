@@ -130,9 +130,9 @@ export default class PatientCarePlanSuggestion extends React.Component<IProps, I
           <div className={styles.carePlanSuggestionSmallDate}>
             <FormattedDate
               value={suggestion.createdAt}
-              year='numeric'
-              month='short'
-              day='numeric'
+              year="numeric"
+              month="short"
+              day="numeric"
             />
           </div>
         </div>

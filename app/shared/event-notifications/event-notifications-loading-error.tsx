@@ -13,12 +13,14 @@ export const EventNotificationsLoadingError: React.StatelessComponent<IProps> = 
   if (error) {
     return (
       <div className={styles.eventNotificationsError}>
-        <div className={styles.eventNotificationsErrorIcon}></div>
+        <div className={styles.eventNotificationsErrorIcon} />
         <div className={styles.eventNotificationsErrorLabel}>Unable to load notifications</div>
         <div className={styles.eventNotificationsErrorSubheading}>
           Sorry, something went wrong. Please try reloading this section again.
         </div>
-        <div className={styles.eventNotificationsErrorButton} onClick={onRetryClick}>Try again</div>
+        <div className={styles.eventNotificationsErrorButton} onClick={onRetryClick}>
+          Try again
+        </div>
       </div>
     );
   } else if (loading) {

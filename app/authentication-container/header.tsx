@@ -17,8 +17,9 @@ interface IProps {
   currentUser: FullUserFragment;
   notificationsCount?: number;
   updateNotificationsCount?: (count: number) => any;
-  eventNotificationsResponse?:
-    getEventNotificationsForCurrentUserQuery['eventNotificationsForCurrentUser'];
+  /* tslint:disable:max-line-length */
+  eventNotificationsResponse?: getEventNotificationsForCurrentUserQuery['eventNotificationsForCurrentUser'];
+  /* tslint:enable:max-line-length */
 }
 
 class Header extends React.Component<IProps> {
@@ -56,7 +57,7 @@ class Header extends React.Component<IProps> {
       builderLink = (
         <Link to={'/builder'} className={styles.navItem}>
           <div className={styles.tasksIcon} />
-          <FormattedMessage id='header.builder'>
+          <FormattedMessage id="header.builder">
             {(message: string) => <div className={styles.navText}>{message}</div>}
           </FormattedMessage>
         </Link>
@@ -64,7 +65,7 @@ class Header extends React.Component<IProps> {
       managerLink = (
         <Link to={'/manager'} className={styles.navItem}>
           <div className={styles.tasksIcon} />
-          <FormattedMessage id='header.manager'>
+          <FormattedMessage id="header.manager">
             {(message: string) => <div className={styles.navText}>{message}</div>}
           </FormattedMessage>
         </Link>
@@ -78,24 +79,24 @@ class Header extends React.Component<IProps> {
       <div className={styles.header}>
         <div className={styles.container}>
           <div className={styles.left}>
-            <Link className={styles.link} to='/'>
+            <Link className={styles.link} to="/">
               <div className={styles.mark} />
             </Link>
             <div className={styles.navItem}>
               <div className={styles.searchIcon} />
-              <FormattedMessage id='header.search'>
+              <FormattedMessage id="header.search">
                 {(message: string) => <div className={styles.navText}>{message}</div>}
               </FormattedMessage>
             </div>
             <Link to={'/patients'} className={styles.navItem}>
               <div className={styles.patientsIcon} />
-              <FormattedMessage id='header.patients'>
+              <FormattedMessage id="header.patients">
                 {(message: string) => <div className={styles.navText}>{message}</div>}
               </FormattedMessage>
             </Link>
             <Link to={'/tasks'} className={classNames(styles.navItem, styles.relativeNavItem)}>
               <div className={styles.tasksIcon} />
-              <FormattedMessage id='header.tasks'>
+              <FormattedMessage id="header.tasks">
                 {(message: string) => <div className={styles.navText}>{message}</div>}
               </FormattedMessage>
               <div className={tasksBadgeStyles} />
@@ -115,11 +116,11 @@ class Header extends React.Component<IProps> {
             <div className={styles.dropdown}>
               <Link to={'/settings'}>
                 <div className={styles.settingsIcon} />
-                <FormattedMessage id='header.settings' />
+                <FormattedMessage id="header.settings" />
               </Link>
               <a onClick={this.logout}>
                 <div className={styles.logoutIcon} />
-                <FormattedMessage id='header.logOut' />
+                <FormattedMessage id="header.logOut" />
               </a>
             </div>
           </div>

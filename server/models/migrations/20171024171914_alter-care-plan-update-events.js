@@ -1,4 +1,4 @@
-exports.up = function (knex, Promise) {
+exports.up = function(knex, Promise) {
   return knex.schema.raw(`
     ALTER TABLE "care_plan_update_event"
     DROP CONSTRAINT "care_plan_update_event_eventType_check",
@@ -18,7 +18,7 @@ exports.up = function (knex, Promise) {
   `);
 };
 
-exports.down = function (knex, Promise) {
+exports.down = function(knex, Promise) {
   return knex.schema.raw(`
     ALTER TABLE "care_plan_update_event"
     DROP CONSTRAINT IF EXISTS "care_plan_update_event_patientConcernId_patientGoalId_check"

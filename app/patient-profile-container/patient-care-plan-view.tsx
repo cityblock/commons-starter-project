@@ -25,16 +25,21 @@ interface IProps {
 const PatientCarePlanView = (props: IProps) => {
   const { subTabId, routeBase, patientId, patientCarePlan, loading } = props;
 
-  const carePlanSuggestions = subTabId === 'suggestions' ?
-    <PatientCarePlanSuggestions routeBase={routeBase} patientId={patientId} /> : null;
+  const carePlanSuggestions =
+    subTabId === 'suggestions' ? (
+      <PatientCarePlanSuggestions routeBase={routeBase} patientId={patientId} />
+    ) : null;
 
-  const carePlan = !subTabId || subTabId === 'inactive' || subTabId === 'active' ?
-    (<PatientCarePlan
+  const carePlan =
+    !subTabId || subTabId === 'inactive' || subTabId === 'active' ? (
+      <PatientCarePlan
         loading={loading}
         carePlan={patientCarePlan}
         routeBase={routeBase}
         displayType={subTabId}
-        patientId={patientId} />) : null;
+        patientId={patientId}
+      />
+    ) : null;
 
   const activeCarePlanTabStyles = classNames(tabStyles.tab, {
     [tabStyles.selectedTab]: !subTabId || subTabId === 'active',
@@ -50,29 +55,26 @@ const PatientCarePlanView = (props: IProps) => {
   return (
     <div>
       <div className={tabRowStyles}>
-        <FormattedMessage id='patient.activeCarePlan'>
-          {(message: string) =>
-            <Link
-              to={`${routeBase}/active`}
-              className={activeCarePlanTabStyles}>
+        <FormattedMessage id="patient.activeCarePlan">
+          {(message: string) => (
+            <Link to={`${routeBase}/active`} className={activeCarePlanTabStyles}>
               {message}
-            </Link>}
+            </Link>
+          )}
         </FormattedMessage>
-        <FormattedMessage id='patient.inactiveCarePlan'>
-          {(message: string) =>
-            <Link
-              to={`${routeBase}/inactive`}
-              className={inactiveCarePlanTabStyles}>
+        <FormattedMessage id="patient.inactiveCarePlan">
+          {(message: string) => (
+            <Link to={`${routeBase}/inactive`} className={inactiveCarePlanTabStyles}>
               {message}
-            </Link>}
+            </Link>
+          )}
         </FormattedMessage>
-        <FormattedMessage id='patient.carePlanSuggestions'>
-          {(message: string) =>
-            <Link
-              to={`${routeBase}/suggestions`}
-              className={suggestionsTabStyles}>
+        <FormattedMessage id="patient.carePlanSuggestions">
+          {(message: string) => (
+            <Link to={`${routeBase}/suggestions`} className={suggestionsTabStyles}>
               {message}
-            </Link>}
+            </Link>
+          )}
         </FormattedMessage>
       </div>
       <div className={styles.carePlanPanel}>
@@ -85,15 +87,15 @@ const PatientCarePlanView = (props: IProps) => {
 
 export default graphql(patientCarePlanQuery as any, {
   options: (props: IProps) => ({
-    variables:  {
+    variables: {
       patientId: props.patientId,
     },
     fetchPolicy: 'cache-and-network', // Always get the latest care plan
   }),
   props: ({ data }) => ({
-    loading: (data ? data.loading : false),
-    error: (data ? data.error : null),
-    patientCarePlan: (data ? (data as any).carePlanForPatient : null),
-    refetchPatientCarePlan: (data ? data.refetch : null),
+    loading: data ? data.loading : false,
+    error: data ? data.error : null,
+    patientCarePlan: data ? (data as any).carePlanForPatient : null,
+    refetchPatientCarePlan: data ? data.refetch : null,
   }),
 })(PatientCarePlanView);

@@ -18,10 +18,11 @@ it('renders builder questions', () => {
       <ReduxConnectedIntlProvider>
         <ConnectedRouter history={history}>
           <BuilderQuestions
-            routeBase='/route/base'
-            riskAreaId='risk-area-id'
-            questionId='cool-question-id'
-            riskAreas={[riskArea]} />
+            routeBase="/route/base"
+            riskAreaId="risk-area-id"
+            questionId="cool-question-id"
+            riskAreas={[riskArea]}
+          />
         </ConnectedRouter>
       </ReduxConnectedIntlProvider>
     </MockedProvider>,

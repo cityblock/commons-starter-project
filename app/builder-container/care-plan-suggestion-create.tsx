@@ -89,8 +89,9 @@ export class CarePlanSuggestionCreate extends React.Component<allProps, IState> 
         await createConcernSuggestion({
           variables: {
             answerId: answer ? answer.id : undefined,
-            screeningToolScoreRangeId: screeningToolScoreRange ?
-              screeningToolScoreRange.id : undefined,
+            screeningToolScoreRangeId: screeningToolScoreRange
+              ? screeningToolScoreRange.id
+              : undefined,
             concernId: suggestionId,
           },
         });
@@ -98,8 +99,9 @@ export class CarePlanSuggestionCreate extends React.Component<allProps, IState> 
         await createGoalSuggestion({
           variables: {
             answerId: answer ? answer.id : undefined,
-            screeningToolScoreRangeId: screeningToolScoreRange ?
-              screeningToolScoreRange.id : undefined,
+            screeningToolScoreRangeId: screeningToolScoreRange
+              ? screeningToolScoreRange.id
+              : undefined,
             goalSuggestionTemplateId: suggestionId,
           },
         });
@@ -117,19 +119,20 @@ export class CarePlanSuggestionCreate extends React.Component<allProps, IState> 
 
   renderTaskTemplates(goal?: FullGoalSuggestionTemplateFragment) {
     if (goal) {
-      const taskTemplatesHtml = goal.taskTemplates ?
-        goal.taskTemplates.map(taskTemplate => {
-          if (taskTemplate) {
-            return <li key={taskTemplate.id}>{taskTemplate.title}</li>;
-          }
-        }).filter(li => !!li) : null;
+      const taskTemplatesHtml = goal.taskTemplates
+        ? goal.taskTemplates
+            .map(taskTemplate => {
+              if (taskTemplate) {
+                return <li key={taskTemplate.id}>{taskTemplate.title}</li>;
+              }
+            })
+            .filter(li => !!li)
+        : null;
 
       return (
         <div className={carePlanSuggestionStyles.smallText}>
           Tasks in this goal:
-          <ul className={carePlanSuggestionStyles.extraSmallMarginPadding}>
-            {taskTemplatesHtml}
-          </ul>
+          <ul className={carePlanSuggestionStyles.extraSmallMarginPadding}>{taskTemplatesHtml}</ul>
         </div>
       );
     }
@@ -152,19 +155,19 @@ export class CarePlanSuggestionCreate extends React.Component<allProps, IState> 
 
     if (answer) {
       existingGoalIds = (answer.goalSuggestions || [])
-        .map(goal => goal ? goal.id : null)
+        .map(goal => (goal ? goal.id : null))
         .filter(id => !!id);
     } else if (screeningToolScoreRange) {
       existingGoalIds = (screeningToolScoreRange.goalSuggestions || [])
-        .map(goal => goal ? goal.id : null)
+        .map(goal => (goal ? goal.id : null))
         .filter(id => !!id);
     }
 
-    return (goals || [])
-      .filter(goal => existingGoalIds.indexOf(goal.id) === -1)
-      .map(goal => (
-        <option key={goal.id} value={goal.id}>{goal.title}</option>
-      ));
+    return (goals || []).filter(goal => existingGoalIds.indexOf(goal.id) === -1).map(goal => (
+      <option key={goal.id} value={goal.id}>
+        {goal.title}
+      </option>
+    ));
   }
 
   getConcernOptions() {
@@ -173,18 +176,20 @@ export class CarePlanSuggestionCreate extends React.Component<allProps, IState> 
 
     if (answer) {
       existingConcernIds = (answer.concernSuggestions || [])
-        .map(concern => concern ? concern.id : null)
+        .map(concern => (concern ? concern.id : null))
         .filter(id => !!id);
     } else if (screeningToolScoreRange) {
       existingConcernIds = (screeningToolScoreRange.concernSuggestions || [])
-        .map(concern => concern ? concern.id : null)
+        .map(concern => (concern ? concern.id : null))
         .filter(id => !!id);
     }
 
     return (concerns || [])
       .filter(concern => existingConcernIds.indexOf(concern.id) === -1)
       .map(concern => (
-        <option key={concern.id} value={concern.id}>{concern.title}</option>
+        <option key={concern.id} value={concern.id}>
+          {concern.title}
+        </option>
       ));
   }
 
@@ -194,14 +199,12 @@ export class CarePlanSuggestionCreate extends React.Component<allProps, IState> 
 
     const goalOptions = this.getGoalOptions();
     const concernOptions = this.getConcernOptions();
-    const suggestionOptions = suggestionType === 'concern' ?
-      concernOptions : goalOptions;
+    const suggestionOptions = suggestionType === 'concern' ? concernOptions : goalOptions;
     let secondaryDropdownHtml = null;
 
     if (!!suggestionType && !suggestionOptions.length) {
       secondaryDropdownHtml = (
-        <div
-          className={carePlanSuggestionStyles.smallText}>
+        <div className={carePlanSuggestionStyles.smallText}>
           No available {suggestionType} suggestions
         </div>
       );
@@ -209,12 +212,14 @@ export class CarePlanSuggestionCreate extends React.Component<allProps, IState> 
       secondaryDropdownHtml = (
         <div className={styles.flexInputGroup}>
           <select
-            name='suggestionId'
+            name="suggestionId"
             value={suggestionId || ''}
             onChange={this.onChange}
-            className={
-              classNames(formStyles.select, formStyles.inputSmall, styles.flexInputItem)}>
-            <option value='' disabled hidden>Select a suggestion</option>
+            className={classNames(formStyles.select, formStyles.inputSmall, styles.flexInputItem)}
+          >
+            <option value="" disabled hidden>
+              Select a suggestion
+            </option>
             {suggestionOptions}
           </select>
         </div>
@@ -224,19 +229,21 @@ export class CarePlanSuggestionCreate extends React.Component<allProps, IState> 
       <div className={carePlanSuggestionStyles.borderContainer}>
         <div className={loadingClass}>
           <div className={styles.loadingContainer}>
-            <div className={loadingStyles.loadingSpinner}></div>
+            <div className={loadingStyles.loadingSpinner} />
           </div>
         </div>
         <div className={styles.flexInputGroup}>
           <select
-            name='suggestionType'
+            name="suggestionType"
             value={suggestionType || ''}
             onChange={this.onUpdateSuggestionType}
-            className={
-              classNames(formStyles.select, formStyles.inputSmall, styles.flexInputItem)}>
-            <option value='' disabled hidden>Select a type</option>
-            <option value='concern'>Concern</option>
-            <option value='goal'>Goal/Tasks</option>
+            className={classNames(formStyles.select, formStyles.inputSmall, styles.flexInputItem)}
+          >
+            <option value="" disabled hidden>
+              Select a type
+            </option>
+            <option value="concern">Concern</option>
+            <option value="goal">Goal/Tasks</option>
           </select>
         </div>
         {secondaryDropdownHtml}
@@ -244,10 +251,11 @@ export class CarePlanSuggestionCreate extends React.Component<allProps, IState> 
         <div className={styles.formBottom}>
           <div className={styles.formBottomContent}>
             <input
-              type='submit'
+              type="submit"
               onClick={this.onClick}
               className={styles.submitButton}
-              value={'Add care plan suggestion'} />
+              value={'Add care plan suggestion'}
+            />
           </div>
         </div>
       </div>
@@ -258,35 +266,29 @@ export class CarePlanSuggestionCreate extends React.Component<allProps, IState> 
 export default compose(
   graphql<IGraphqlProps, IProps>(concernsQuery as any, {
     props: ({ data }) => ({
-      concernsLoading: (data ? data.loading : false),
-      concernsError: (data ? data.error : null),
-      concerns: (data ? (data as any).concerns : null),
+      concernsLoading: data ? data.loading : false,
+      concernsError: data ? data.error : null,
+      concerns: data ? (data as any).concerns : null,
     }),
   }),
   graphql<IGraphqlProps, IProps>(goalsQuery as any, {
     props: ({ data }) => ({
-      refetchGoals: (data ? data.refetch : null),
-      goalsLoading: (data ? data.loading : false),
-      goalsError: (data ? data.error : null),
-      goals: (data ? (data as any).goalSuggestionTemplates : null),
+      refetchGoals: data ? data.refetch : null,
+      goalsLoading: data ? data.loading : false,
+      goalsError: data ? data.error : null,
+      goals: data ? (data as any).goalSuggestionTemplates : null,
     }),
   }),
   graphql<IGraphqlProps, IProps>(concernSuggestionCreateMutationGraphql as any, {
     name: 'createConcernSuggestion',
     options: {
-      refetchQueries: [
-        'getQuestionsForRiskAreaOrScreeningTool',
-        'getScreeningTools',
-      ],
+      refetchQueries: ['getQuestionsForRiskAreaOrScreeningTool', 'getScreeningTools'],
     },
   }),
   graphql<IGraphqlProps, IProps>(goalSuggestionCreateMutationGraphql as any, {
     name: 'createGoalSuggestion',
     options: {
-      refetchQueries: [
-        'getQuestionsForRiskAreaOrScreeningTool',
-        'getScreeningTools',
-      ],
+      refetchQueries: ['getQuestionsForRiskAreaOrScreeningTool', 'getScreeningTools'],
     },
   }),
 )(CarePlanSuggestionCreate);

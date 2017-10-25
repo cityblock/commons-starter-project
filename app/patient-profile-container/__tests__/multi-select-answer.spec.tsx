@@ -23,7 +23,8 @@ it('renders a multi-select answer', () => {
             onClick={() => true}
             answer={answerMutiSelect}
             selected={false}
-            editable={true} />
+            editable={true}
+          />
         </ConnectedRouter>
       </ReduxConnectedIntlProvider>
     </MockedProvider>,

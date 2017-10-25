@@ -4,8 +4,7 @@ exports.up = function(knex, Promise) {
     ALTER TABLE "user" DROP CONSTRAINT IF EXISTS "user_email_unique";
     ALTER TABLE "user" DROP CONSTRAINT IF EXISTS "user_athenaproviderid_unique";
     CREATE INDEX IF NOT EXISTS "user_deletedat_index" ON "user" ("deletedAt");
-  `)
-  .raw(`
+  `).raw(`
     DO $$
     BEGIN
       IF NOT EXISTS (SELECT constraint_name
@@ -15,8 +14,7 @@ exports.up = function(knex, Promise) {
         EXECUTE 'ALTER TABLE "user" ADD CONSTRAINT "user_deletedat_email_unique" UNIQUE ("deletedAt", "email");';
       END IF;
     END $$;
-  `)
-  .raw(`
+  `).raw(`
     DO $$
     BEGIN
       IF NOT EXISTS (SELECT constraint_name

@@ -119,13 +119,13 @@ class PatientEncounters extends React.Component<IProps, IState> {
           <div className={sortSearchStyles.sort}>
             <div className={sortSearchStyles.sortLabel}>Sort by:</div>
             <div className={sortSearchStyles.sortDropdown}>
-              <select value='Newest first'>
-                <option value='Newest first'>Newest first</option>
+              <select value="Newest first">
+                <option value="Newest first">Newest first</option>
               </select>
             </div>
           </div>
           <div className={sortSearchStyles.search}>
-            <input required type='text' placeholder='Search by user or keywords' />
+            <input required type="text" placeholder="Search by user or keywords" />
           </div>
         </div>
         <div className={styles.encountersPanel}>

@@ -331,7 +331,7 @@ export class Question extends React.Component<allProps, IState> {
               </div>
               <div className={titleEditStyles}>
                 <input
-                  name='editedTitle'
+                  name="editedTitle"
                   ref={area => {
                     this.editTitleInput = area;
                   }}
@@ -353,8 +353,8 @@ export class Question extends React.Component<allProps, IState> {
               </div>
               <div className={orderEditStyles}>
                 <input
-                  type='number'
-                  name='editedOrder'
+                  type="number"
+                  name="editedOrder"
                   ref={area => {
                     this.editOrderInput = area;
                   }}
@@ -371,15 +371,15 @@ export class Question extends React.Component<allProps, IState> {
               </div>
               <select
                 required
-                name='answerType'
+                name="answerType"
                 value={question.answerType}
                 onChange={this.onSelectChange}
                 className={classNames(formStyles.select, formStyles.inputSmall)}
               >
-                <option value='dropdown'>dropdown</option>
-                <option value='radio'>radio</option>
-                <option value='freetext'>freetext</option>
-                <option value='multiselect'>multiselect</option>
+                <option value="dropdown">dropdown</option>
+                <option value="radio">radio</option>
+                <option value="freetext">freetext</option>
+                <option value="multiselect">multiselect</option>
               </select>
               <br />
               <div className={styles.smallText}>Answers:</div>
@@ -392,13 +392,13 @@ export class Question extends React.Component<allProps, IState> {
               <div className={styles.smallText}>Applicable if type:</div>
               <br />
               <select
-                name='applicableIfType'
+                name="applicableIfType"
                 value={question.applicableIfType || ''}
                 onChange={this.onSelectChange}
                 className={classNames(formStyles.select, formStyles.inputSmall)}
               >
-                <option value='oneTrue'>one true</option>
-                <option value='allTrue'>all true</option>
+                <option value="oneTrue">one true</option>
+                <option value="allTrue">all true</option>
               </select>
               <br />
               <QuestionConditions

@@ -25,7 +25,7 @@ it('renders question', () => {
     <MockedProvider mocks={[]} store={mockStore({ locale, question })}>
       <ReduxConnectedIntlProvider>
         <ConnectedRouter history={history}>
-          <Question routeBase='/route/base' match={match} />
+          <Question routeBase="/route/base" match={match} />
         </ConnectedRouter>
       </ReduxConnectedIntlProvider>
     </MockedProvider>,

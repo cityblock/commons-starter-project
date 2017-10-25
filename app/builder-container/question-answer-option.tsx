@@ -8,7 +8,9 @@ import {
 } from '../graphql/types';
 import formatQuestionCondition from './helpers/format-question-condition';
 
-export interface IDeleteOptions { variables: questionConditionDeleteMutationVariables; }
+export interface IDeleteOptions {
+  variables: questionConditionDeleteMutationVariables;
+}
 
 interface IProps {
   question?: FullQuestionFragment;
@@ -16,14 +18,11 @@ interface IProps {
 }
 
 class QuestionAnswerOption extends React.Component<IProps> {
-
   render() {
     const { question, answer } = this.props;
-    const conditionText = question && answer ?
-      formatQuestionCondition(question, answer) : 'loading';
-    return (
-      <option value={answer.id}>{conditionText}</option>
-    );
+    const conditionText =
+      question && answer ? formatQuestionCondition(question, answer) : 'loading';
+    return <option value={answer.id}>{conditionText}</option>;
   }
 }
 
@@ -33,7 +32,7 @@ export default compose(
       variables: { questionId: props.answer.questionId },
     }),
     props: ({ data }) => ({
-      question: (data ? (data as any).question : null),
+      question: data ? (data as any).question : null,
     }),
   }),
 )(QuestionAnswerOption);

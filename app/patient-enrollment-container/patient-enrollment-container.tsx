@@ -276,7 +276,7 @@ class PatientEnrollmentContainer extends React.Component<allProps, IState> {
             <Link to={'/patients'} className={styles.cancelButton}>
               Cancel
             </Link>
-            <input type='submit' className={styles.submitButton} value='submit' />
+            <input type="submit" className={styles.submitButton} value="submit" />
           </div>
         </div>
       </form>

@@ -19,11 +19,7 @@ it('renders dropdown answer', () => {
     <MockedProvider mocks={[]} store={mockStore({ locale })}>
       <ReduxConnectedIntlProvider>
         <ConnectedRouter history={history}>
-          <DropdownAnswer
-            question={question}
-            onChange={() => (true)}
-            currentAnswer={currentAnswer}
-            />
+          <DropdownAnswer question={question} onChange={() => true} currentAnswer={currentAnswer} />
         </ConnectedRouter>
       </ReduxConnectedIntlProvider>
     </MockedProvider>,

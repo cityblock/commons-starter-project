@@ -27,7 +27,7 @@ describe('builder concerns', () => {
       <MockedProvider mocks={[]} store={mockStore({ locale, concern })}>
         <ReduxConnectedIntlProvider>
           <ConnectedRouter history={history}>
-            <BuilderConcerns routeBase='/route/base' concernId={concern.id} concerns={[concern]} />
+            <BuilderConcerns routeBase="/route/base" concernId={concern.id} concerns={[concern]} />
           </ConnectedRouter>
         </ReduxConnectedIntlProvider>
       </MockedProvider>,

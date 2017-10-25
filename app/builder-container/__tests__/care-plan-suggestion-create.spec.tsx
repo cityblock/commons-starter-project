@@ -55,7 +55,8 @@ it('renders the correct concern suggestion options', () => {
       goals={undefined}
       concerns={[concern, newConcern]}
       answer={answer}
-      screeningToolScoreRange={undefined} />,
+      screeningToolScoreRange={undefined}
+    />,
   );
   const instance = component.instance() as Component;
   const concernOptions = instance.getConcernOptions();
@@ -79,7 +80,8 @@ it('renders the correct goal suggestion options', () => {
       goals={[goalSuggestionTemplate, newGoalSuggestionTemplate]}
       concerns={undefined}
       answer={undefined}
-      screeningToolScoreRange={screeningToolScoreRange} />,
+      screeningToolScoreRange={screeningToolScoreRange}
+    />,
   );
   const instance = component.instance() as Component;
   const goalOptions = instance.getGoalOptions();

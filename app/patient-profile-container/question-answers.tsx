@@ -43,7 +43,8 @@ export class QuestionAnswers extends React.Component<IProps, {}> {
         answer={multiSelectAnswer}
         onClick={this.onClickMultiSelect}
         selected={selected}
-        editable={true} />
+        editable={true}
+      />
     );
   }
 
@@ -62,31 +63,20 @@ export class QuestionAnswers extends React.Component<IProps, {}> {
     switch (question.answerType) {
       case 'dropdown':
         return (
-          <DropdownAnswer
-            currentAnswer={currentAnswer}
-            question={question}
-            onChange={onChange} />
+          <DropdownAnswer currentAnswer={currentAnswer} question={question} onChange={onChange} />
         );
       case 'radio':
         return (
-          <RadioAnswer
-            currentAnswer={currentAnswer}
-            question={question}
-            onChange={onChange} />
+          <RadioAnswer currentAnswer={currentAnswer} question={question} onChange={onChange} />
         );
       case 'freetext':
         return (
-          <FreeTextAnswer
-            currentAnswer={currentAnswer}
-            question={question}
-            onChange={onChange} />
+          <FreeTextAnswer currentAnswer={currentAnswer} question={question} onChange={onChange} />
         );
       case 'multiselect':
         return (
           <div className={questionBodyStyles}>
-            <div className={styles.multiSelectRow}>
-              {answers.map(this.renderMultiSelectItem)}
-            </div>
+            <div className={styles.multiSelectRow}>{answers.map(this.renderMultiSelectItem)}</div>
           </div>
         );
       default:

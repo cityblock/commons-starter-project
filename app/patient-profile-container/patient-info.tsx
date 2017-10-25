@@ -221,12 +221,12 @@ export class PatientInfo extends React.Component<allProps, IState> {
       <div>
         <div className={sortSearchStyles.sortSearchBar}>
           <div className={sortSearchStyles.sort}>
-            <FormattedMessage id='patientInfo.jumpTo'>
+            <FormattedMessage id="patientInfo.jumpTo">
               {(message: string) => <div className={sortSearchStyles.sortLabel}>{message}</div>}
             </FormattedMessage>
             <div className={sortSearchStyles.sortDropdown}>
-              <select value='Demographic info'>
-                <option value='Demographic info'>Demographic info</option>
+              <select value="Demographic info">
+                <option value="Demographic info">Demographic info</option>
               </select>
             </div>
           </div>
@@ -239,7 +239,7 @@ export class PatientInfo extends React.Component<allProps, IState> {
               <div className={styles.saveButtonSuccessIcon} />
             </div>
             <div className={saveButtonStyles} onClick={this.onClickSave}>
-              <FormattedMessage id='patientInfo.saveChanges'>
+              <FormattedMessage id="patientInfo.saveChanges">
                 {(message: string) => <span>{message}</span>}
               </FormattedMessage>
             </div>
@@ -248,7 +248,7 @@ export class PatientInfo extends React.Component<allProps, IState> {
         <div className={styles.infoPanel}>
           <div className={styles.info}>
             <div className={styles.section}>
-              <FormattedMessage id='patientInfo.demographicInfo'>
+              <FormattedMessage id="patientInfo.demographicInfo">
                 {(message: string) => <div className={styles.sectionTitle}>{message}</div>}
               </FormattedMessage>
               <PatientDemographicsForm
@@ -265,7 +265,7 @@ export class PatientInfo extends React.Component<allProps, IState> {
               />
             </div>
             <div className={styles.section}>
-              <FormattedMessage id='patientInfo.contactInfo'>
+              <FormattedMessage id="patientInfo.contactInfo">
                 {(message: string) => <div className={styles.sectionTitle}>{message}</div>}
               </FormattedMessage>
               <PatientContactForm
@@ -274,7 +274,7 @@ export class PatientInfo extends React.Component<allProps, IState> {
               />
             </div>
             <div className={styles.section}>
-              <FormattedMessage id='patientInfo.insuranceInfo'>
+              <FormattedMessage id="patientInfo.insuranceInfo">
                 {(message: string) => <div className={styles.sectionTitle}>{message}</div>}
               </FormattedMessage>
               <PatientInsuranceForm

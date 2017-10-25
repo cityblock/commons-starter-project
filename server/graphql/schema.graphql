@@ -1431,7 +1431,6 @@ type RootQueryType {
   progressNote(progressNoteId: String!): ProgressNote
   # progress notes for patient
   progressNotesForPatient(patientId: String!): [ProgressNote]
-
 }
 
 schema {

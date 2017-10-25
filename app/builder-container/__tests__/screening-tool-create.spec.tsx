@@ -19,9 +19,10 @@ it('renders screening tool screate', () => {
       <ReduxConnectedIntlProvider>
         <ConnectedRouter history={history}>
           <ScreeningToolCreate
-            routeBase='/builder/tools'
+            routeBase="/builder/tools"
             riskAreas={[riskArea]}
-            onClose={() => false} />
+            onClose={() => false}
+          />
         </ConnectedRouter>
       </ReduxConnectedIntlProvider>
     </MockedProvider>,

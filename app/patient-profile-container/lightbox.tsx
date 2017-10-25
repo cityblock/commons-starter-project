@@ -110,18 +110,19 @@ export default class Lightbox extends React.Component<IProps, IState> {
 
     return (
       <div className={lightboxStyles}>
-        <div className={styles.background} onClick={onDismiss}></div>
+        <div className={styles.background} onClick={onDismiss} />
         <div className={styles.foreground}>
           <div
             className={styles.viewer}
-            style={{ backgroundImage: selectedImage ? `url('${selectedImage}')` : 'none' }}>
+            style={{ backgroundImage: selectedImage ? `url('${selectedImage}')` : 'none' }}
+          >
             <div className={styles.overlay}>
               <div className={styles.header}>
                 <div className={styles.imageCount}>
-                  <div className={styles.imageCountIcon}></div>
+                  <div className={styles.imageCountIcon} />
                   <div>
                     {`${selectedImageIndex + 1} `}
-                    <FormattedMessage id='lightbox.of'>
+                    <FormattedMessage id="lightbox.of">
                       {(message: string) => <span>{message}</span>}
                     </FormattedMessage>
                     {` ${imagesLength} `}
@@ -130,11 +131,11 @@ export default class Lightbox extends React.Component<IProps, IState> {
                     </FormattedMessage>
                   </div>
                 </div>
-                <div className={styles.close} onClick={onDismiss}></div>
+                <div className={styles.close} onClick={onDismiss} />
               </div>
               <div className={styles.controls}>
-                <div className={backArrowStyles} onClick={this.onBackClick}></div>
-                <div className={nextArrowStyles} onClick={this.onNextClick}></div>
+                <div className={backArrowStyles} onClick={this.onBackClick} />
+                <div className={nextArrowStyles} onClick={this.onNextClick} />
               </div>
             </div>
           </div>

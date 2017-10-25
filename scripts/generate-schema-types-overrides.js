@@ -1,6 +1,6 @@
 module.exports = {
-  generateNamespace: (name, contents) => (
+  generateNamespace: (name, contents) =>
     `declare module '${name}' {
       ${contents}
-    }`),
+    }`,
 };

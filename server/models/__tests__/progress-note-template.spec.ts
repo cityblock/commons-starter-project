@@ -53,10 +53,7 @@ describe('progress note template model', () => {
     });
 
     const progressNotes = await ProgressNoteTemplate.getAll();
-    expect(progressNotes).toEqual([
-      progressNoteTemplate1,
-      progressNoteTemplate2,
-    ]);
+    expect(progressNotes).toEqual([progressNoteTemplate1, progressNoteTemplate2]);
   });
 
   it('edits a progress note', async () => {
@@ -64,9 +61,12 @@ describe('progress note template model', () => {
       title: 'title',
     });
 
-    const editedDrogressNoteTemplate = await ProgressNoteTemplate.edit({
-      title: 'new title',
-    }, progressNoteTemplate.id);
+    const editedDrogressNoteTemplate = await ProgressNoteTemplate.edit(
+      {
+        title: 'new title',
+      },
+      progressNoteTemplate.id,
+    );
 
     expect(editedDrogressNoteTemplate.title).toEqual('new title');
   });

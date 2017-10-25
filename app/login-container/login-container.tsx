@@ -31,7 +31,6 @@ interface IGoogleLoginError {
 const SCOPE = 'https://www.googleapis.com/auth/calendar';
 
 class LoginContainer extends React.Component<IProps, { error?: string }> {
-
   constructor(props: IProps) {
     super(props);
     this.onSuccess = this.onSuccess.bind(this);
@@ -75,7 +74,8 @@ class LoginContainer extends React.Component<IProps, { error?: string }> {
         <div className={styles.error}>
           <div className={styles.errorIcon} />
           <div className={styles.errorText}>{error}</div>
-        </div>);
+        </div>
+      );
     }
     const clientId = process.env.GOOGLE_OAUTH_TOKEN || 'fake-token';
     return (
@@ -87,14 +87,15 @@ class LoginContainer extends React.Component<IProps, { error?: string }> {
                 <div className={styles.title}>Commons</div>
                 <GoogleLogin
                   clientId={clientId}
-                  buttonText='Login'
+                  buttonText="Login"
                   scope={SCOPE}
-                  responseType='code'
+                  responseType="code"
                   onSuccess={this.onSuccess}
                   onFailure={this.onError}
-                  className={styles.button}>
+                  className={styles.button}
+                >
                   <span className={styles.googleIcon} />
-                  <FormattedMessage id='login.logInGoogle'>
+                  <FormattedMessage id="login.logInGoogle">
                     {(message: string) => <span className={styles.buttonText}>{message}</span>}
                   </FormattedMessage>
                 </GoogleLogin>
@@ -115,13 +116,13 @@ function mapDispatchToProps(dispatch: Dispatch<() => void>): Partial<IProps> {
   };
 }
 
-export default (compose)(
+export default compose(
   connect(undefined, mapDispatchToProps),
   graphql(currentUserQuery as any, {
     props: ({ data }) => ({
-      loading: (data ? data.loading : false),
-      error: (data ? data.error : null),
-      currentUser: (data ? (data as any).currentUser : null),
+      loading: data ? data.loading : false,
+      error: data ? data.error : null,
+      currentUser: data ? (data as any).currentUser : null,
     }),
   }),
   graphql(loginMutation as any, { name: 'logIn' }),

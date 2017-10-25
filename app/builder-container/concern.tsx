@@ -254,7 +254,7 @@ export class Concern extends React.Component<allProps, IState> {
               </div>
               <div className={titleEditStyles}>
                 <input
-                  name='editedTitle'
+                  name="editedTitle"
                   ref={area => {
                     this.editTitleInput = area;
                   }}

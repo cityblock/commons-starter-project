@@ -121,14 +121,14 @@ class TaskCreate extends React.Component<IProps, IState> {
 
     return (
       <select
-        name='patientGoalId'
+        name="patientGoalId"
         value={task.patientGoalId || ''}
         onChange={this.onChange}
         className={classNames(formStyles.select, styles.flexInputItem)}
       >
-        <FormattedMessage id='tasks.patientGoalPlaceholder'>
+        <FormattedMessage id="tasks.patientGoalPlaceholder">
           {(message: string) => (
-            <option value='' disabled hidden>
+            <option value="" disabled hidden>
               {message}
             </option>
           )}
@@ -173,19 +173,19 @@ class TaskCreate extends React.Component<IProps, IState> {
             <div className={styles.flexInputGroup}>
               <input
                 required
-                name='dueAt'
+                name="dueAt"
                 className={classNames(
                   formStyles.input,
                   formStyles.inputSmall,
                   styles.flexInputItem,
                 )}
                 value={task.dueAt}
-                type='date'
+                type="date"
                 onChange={this.onChange}
               />
               <select
                 required
-                name='assignedToId'
+                name="assignedToId"
                 value={task.assignedToId || ''}
                 onChange={this.onChange}
                 className={classNames(
@@ -194,9 +194,9 @@ class TaskCreate extends React.Component<IProps, IState> {
                   styles.flexInputItem,
                 )}
               >
-                <FormattedMessage id='tasks.assignedToPlaceholder'>
+                <FormattedMessage id="tasks.assignedToPlaceholder">
                   {(message: string) => (
-                    <option value='' disabled hidden>
+                    <option value="" disabled hidden>
                       {message}
                     </option>
                   )}
@@ -206,14 +206,14 @@ class TaskCreate extends React.Component<IProps, IState> {
             </div>
             <div className={styles.inputGroup}>
               <input
-                name='title'
+                name="title"
                 value={task.title}
                 placeholder={'Enter task title'}
                 className={formStyles.input}
                 onChange={this.onChange}
               />
               <textarea
-                name='description'
+                name="description"
                 placeholder={'Enter task description …'}
                 value={task.description}
                 className={formStyles.textarea}
@@ -227,7 +227,7 @@ class TaskCreate extends React.Component<IProps, IState> {
               <div className={styles.cancelButton} onClick={this.props.onClose}>
                 Cancel
               </div>
-              <input type='submit' className={styles.submitButton} value='Add task' />
+              <input type="submit" className={styles.submitButton} value="Add task" />
             </div>
           </div>
         </form>

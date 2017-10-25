@@ -24,7 +24,9 @@ module.exports = (env = '') => {
   };
 
   const devtool = isProduction ? 'source-map' : 'cheap-module-eval-source-map';
-  const app = isProduction ? ['./client'] : ['react-hot-loader/patch', 'webpack-hot-middleware/client', './client'];
+  const app = isProduction
+    ? ['./client']
+    : ['react-hot-loader/patch', 'webpack-hot-middleware/client', './client'];
 
   const clientRender = {
     context: PATHS.app,

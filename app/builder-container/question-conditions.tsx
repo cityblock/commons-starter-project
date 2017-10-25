@@ -16,30 +16,29 @@ interface IProps {
 
 function getAnswersForQuestions(questions: FullQuestionFragment[], questionId: string) {
   let answers: FullAnswerFragment[] = [];
-  (questions || [])
-    .filter(question => question.id !== questionId)
-    .forEach(question => {
-      if (question.answers) {
-        answers = answers.concat(question.answers);
-      }
-    });
+  (questions || []).filter(question => question.id !== questionId).forEach(question => {
+    if (question.answers) {
+      answers = answers.concat(question.answers);
+    }
+  });
   return answers;
 }
 
 class QuestionConditions extends React.Component<IProps> {
-
   renderQuestionConditions(questionConditions: FullQuestionConditionFragment[]) {
     return questionConditions.map(questionCondition => (
-      <QuestionConditionRow
-        key={questionCondition.id}
-        questionCondition={questionCondition} />
+      <QuestionConditionRow key={questionCondition.id} questionCondition={questionCondition} />
     ));
   }
 
   render() {
     const { questionConditions, questionId, questions } = this.props;
-    const questionConditionsHtml = questionConditions && questionConditions.length ?
-      this.renderQuestionConditions(questionConditions) : (<div>no applicable if conditions</div>);
+    const questionConditionsHtml =
+      questionConditions && questionConditions.length ? (
+        this.renderQuestionConditions(questionConditions)
+      ) : (
+        <div>no applicable if conditions</div>
+      );
     const answers = getAnswersForQuestions(questions, questionId);
     return (
       <div>

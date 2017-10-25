@@ -6,9 +6,9 @@ module.exports = () => {
         loader: 'ts-loader',
         options: {
           transpileOnly: true,
-          configFile: 'tsconfig.webpack.json'
-        }
-      }
-    ]
+          configFile: 'tsconfig.webpack.json',
+        },
+      },
+    ],
   };
 };

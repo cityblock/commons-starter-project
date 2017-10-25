@@ -75,7 +75,7 @@ class AdminRiskAreas extends React.Component<IProps, IState> {
     } else if (!loading && !error) {
       return (
         <div className={styles.emptyMessage}>
-          <div className={styles.emptyLogo}></div>
+          <div className={styles.emptyLogo} />
           <div className={styles.emptyLabel}>No RiskAreas</div>
         </div>
       );
@@ -114,30 +114,25 @@ class AdminRiskAreas extends React.Component<IProps, IState> {
     });
     const createRiskAreaButton = (
       <div className={styles.createContainer}>
-        <div
-          onClick={this.showCreateRiskArea}
-          className={styles.createButton}>Create Domain</div>
+        <div onClick={this.showCreateRiskArea} className={styles.createButton}>
+          Create Domain
+        </div>
       </div>
     );
     const createRiskAreaHtml = showCreateRiskArea ? (
-      <RiskAreaCreate
-        onClose={this.hideCreateRiskArea}
-        routeBase={this.props.routeBase} />
+      <RiskAreaCreate onClose={this.hideCreateRiskArea} routeBase={this.props.routeBase} />
     ) : null;
     const RenderedRiskArea = (props: any) => (
       <RiskArea routeBase={routeBase} onDelete={this.onDeleteRiskArea} {...props} />
     );
-    const riskAreaHtml = showCreateRiskArea ?
-      null : (<Route path={`${routeBase}/:riskAreaId`} render={RenderedRiskArea} />);
+    const riskAreaHtml = showCreateRiskArea ? null : (
+      <Route path={`${routeBase}/:riskAreaId`} render={RenderedRiskArea} />
+    );
     return (
       <div className={styles.container}>
-        <div className={styles.sortSearchBar}>
-          {createRiskAreaButton}
-        </div>
+        <div className={styles.sortSearchBar}>{createRiskAreaButton}</div>
         <div className={styles.bottomContainer}>
-          <div className={riskAreasListStyles}>
-            {this.renderRiskAreas(riskAreasList)}
-          </div>
+          <div className={riskAreasListStyles}>{this.renderRiskAreas(riskAreasList)}</div>
           <div className={riskAreaContainerStyles}>
             {riskAreaHtml}
             {createRiskAreaHtml}
@@ -157,7 +152,7 @@ function mapDispatchToProps(dispatch: Dispatch<() => void>, ownProps: IProps): P
   };
 }
 
-export default (compose)(
+export default compose(
   connect<{}, {}, IComponentProps>(null, mapDispatchToProps),
   graphql(riskAreaDeleteMutationGraphql as any, { name: 'deleteRiskArea' }),
 )(AdminRiskAreas);

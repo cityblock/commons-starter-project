@@ -18,9 +18,7 @@ it('renders task template create-edit', () => {
     <MockedProvider mocks={[]} store={mockStore({ locale })}>
       <ReduxConnectedIntlProvider>
         <ConnectedRouter history={history}>
-          <TaskTemplateCreateEdit
-            goalSuggestionTemplateId='goal-id'
-            taskTemplate={taskTemplate} />
+          <TaskTemplateCreateEdit goalSuggestionTemplateId="goal-id" taskTemplate={taskTemplate} />
         </ConnectedRouter>
       </ReduxConnectedIntlProvider>
     </MockedProvider>,

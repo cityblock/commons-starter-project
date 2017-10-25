@@ -5,10 +5,7 @@ import { push } from 'react-router-redux';
 /* tslint:disable:max-line-length */
 import * as riskAreaCreateMutationGraphql from '../graphql/queries/risk-area-create-mutation.graphql';
 /* tslint:enable:max-line-length */
-import {
-  riskAreaCreateMutation,
-  riskAreaCreateMutationVariables,
-} from '../graphql/types';
+import { riskAreaCreateMutation, riskAreaCreateMutationVariables } from '../graphql/types';
 import * as formStyles from '../shared/css/forms.css';
 import * as loadingStyles from '../shared/css/loading-spinner.css';
 import * as riskAreaStyles from '../shared/css/two-panel-right.css';
@@ -112,15 +109,15 @@ export class RiskAreaCreate extends React.Component<allProps, IState> {
             </div>
             <div className={styles.inputGroup}>
               <input
-                name='title'
+                name="title"
                 value={riskArea.title}
                 placeholder={'Enter domain title'}
                 className={formStyles.input}
                 onChange={this.onChange}
               />
               <input
-                type='number'
-                name='order'
+                type="number"
+                name="order"
                 placeholder={'Enter domain order'}
                 value={riskArea.order}
                 className={formStyles.input}
@@ -133,7 +130,7 @@ export class RiskAreaCreate extends React.Component<allProps, IState> {
               <div className={styles.cancelButton} onClick={this.props.onClose}>
                 Cancel
               </div>
-              <input type='submit' className={styles.submitButton} value='Add domain' />
+              <input type="submit" className={styles.submitButton} value="Add domain" />
             </div>
           </div>
         </form>

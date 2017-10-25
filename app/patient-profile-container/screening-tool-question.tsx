@@ -67,7 +67,7 @@ export default class ScreeningToolQuestion extends React.Component<IProps, {}> {
       <div className={questionStyles}>
         <div className={styles.riskAssessmentQuestionHeader}>
           <div className={styles.riskAssessmentQuestionTitle}>{question.title}</div>
-          <div className={styles.riskAssessmentQuestionHamburger}></div>
+          <div className={styles.riskAssessmentQuestionHamburger} />
         </div>
         {this.renderAnswers()}
       </div>

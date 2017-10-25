@@ -22,9 +22,15 @@ import * as taskTemplateStyles from '../shared/css/two-panel-right.css';
 import { IUpdatedField } from '../shared/util/updated-fields';
 import * as styles from './css/risk-area-create.css';
 
-export interface ICreateOptions { variables: taskTemplateCreateMutationVariables; }
-export interface IEditOptions { variables: taskTemplateEditMutationVariables; }
-export interface IDeleteOptions { variables: taskTemplateDeleteMutationVariables; }
+export interface ICreateOptions {
+  variables: taskTemplateCreateMutationVariables;
+}
+export interface IEditOptions {
+  variables: taskTemplateEditMutationVariables;
+}
+export interface IDeleteOptions {
+  variables: taskTemplateDeleteMutationVariables;
+}
 
 interface IProps {
   taskTemplate?: FullTaskTemplateFragment | null;
@@ -32,14 +38,20 @@ interface IProps {
 }
 
 interface IGraphqlProps {
-  createTaskTemplate: (options: ICreateOptions) => {
-    data: taskTemplateCreateMutation,
+  createTaskTemplate: (
+    options: ICreateOptions,
+  ) => {
+    data: taskTemplateCreateMutation;
   };
-  editTaskTemplate: (options: IEditOptions) => {
-    data: taskTemplateEditMutation,
+  editTaskTemplate: (
+    options: IEditOptions,
+  ) => {
+    data: taskTemplateEditMutation;
   };
-  deleteTaskTemplate: (options: IDeleteOptions) => {
-    data: taskTemplateDeleteMutation,
+  deleteTaskTemplate: (
+    options: IDeleteOptions,
+  ) => {
+    data: taskTemplateDeleteMutation;
   };
 }
 
@@ -62,15 +74,17 @@ class TaskTemplateCreateEdit extends React.Component<allProps, IState> {
 
     this.state = {
       loading: false,
-      taskTemplate: props.taskTemplate ? props.taskTemplate : {
-        title: 'edit me!',
-        priority: null,
-        repeating: false,
-        completedWithinNumber: null,
-        completedWithinInterval: null,
-        careTeamAssigneeRole: null,
-        goalSuggestionTemplateId: props.goalSuggestionTemplateId,
-      },
+      taskTemplate: props.taskTemplate
+        ? props.taskTemplate
+        : {
+            title: 'edit me!',
+            priority: null,
+            repeating: false,
+            completedWithinNumber: null,
+            completedWithinInterval: null,
+            careTeamAssigneeRole: null,
+            goalSuggestionTemplateId: props.goalSuggestionTemplateId,
+          },
     };
   }
 
@@ -118,7 +132,8 @@ class TaskTemplateCreateEdit extends React.Component<allProps, IState> {
     try {
       this.setState({ loading: true });
       const filtered = omitBy<taskTemplateCreateMutationVariables, {}>(
-        this.state.taskTemplate, isNil,
+        this.state.taskTemplate,
+        isNil,
       );
 
       if (taskTemplate) {
@@ -133,15 +148,18 @@ class TaskTemplateCreateEdit extends React.Component<allProps, IState> {
           variables: filtered,
         });
       }
-      this.setState({ loading: false, taskTemplate: {
-        title: 'edit me!',
-        priority: null,
-        repeating: false,
-        completedWithinNumber: null,
-        completedWithinInterval: null,
-        careTeamAssigneeRole: null,
-        goalSuggestionTemplateId,
-      }});
+      this.setState({
+        loading: false,
+        taskTemplate: {
+          title: 'edit me!',
+          priority: null,
+          repeating: false,
+          completedWithinNumber: null,
+          completedWithinInterval: null,
+          careTeamAssigneeRole: null,
+          goalSuggestionTemplateId,
+        },
+      });
     } catch (e) {
       this.setState({ error: e.message, loading: false });
     }
@@ -164,19 +182,21 @@ class TaskTemplateCreateEdit extends React.Component<allProps, IState> {
     const { loading, taskTemplate } = this.state;
     const loadingClass = loading ? styles.loading : styles.loadingHidden;
     const createEditText = this.props.taskTemplate ? 'Save' : 'Add task';
-    const deleteHtml = this.props.taskTemplate ?
-      (<div onClick={this.onDeleteClick}>delete</div>) : null;
-    const taskTemplateId = this.props.taskTemplate ?
-      (<div
-          className={taskTemplateStyles.smallText}>
-          Task Template ID: {this.props.taskTemplate.id}
-        </div>) :
-      (<div className={taskTemplateStyles.smallText}>New Task!</div>);
+    const deleteHtml = this.props.taskTemplate ? (
+      <div onClick={this.onDeleteClick}>delete</div>
+    ) : null;
+    const taskTemplateId = this.props.taskTemplate ? (
+      <div className={taskTemplateStyles.smallText}>
+        Task Template ID: {this.props.taskTemplate.id}
+      </div>
+    ) : (
+      <div className={taskTemplateStyles.smallText}>New Task!</div>
+    );
     return (
       <form onSubmit={this.onSubmit} className={taskTemplateStyles.borderContainer}>
         <div className={loadingClass}>
           <div className={styles.loadingContainer}>
-            <div className={loadingStyles.loadingSpinner}></div>
+            <div className={loadingStyles.loadingSpinner} />
           </div>
         </div>
         <div className={styles.inputGroup}>
@@ -185,99 +205,108 @@ class TaskTemplateCreateEdit extends React.Component<allProps, IState> {
           <div className={styles.inlineInputGroup}>
             <div className={taskTemplateStyles.smallText}>Title:</div>
             <input
-              name='title'
+              name="title"
               value={taskTemplate.title}
               placeholder={'Enter task title'}
               className={classNames(formStyles.input, formStyles.inputSmall)}
-              onChange={this.onChange} />
+              onChange={this.onChange}
+            />
           </div>
           <div className={styles.inlineInputGroup}>
             <div className={taskTemplateStyles.smallText}>Priority:</div>
             <select
-              name='priority'
+              name="priority"
               value={taskTemplate.priority || ''}
               onChange={this.onChange}
-              className={
-                classNames(formStyles.select, formStyles.inputSmall)}>
-              <option value='' disabled hidden>Select Priority</option>
-              <option value='low'>Low</option>
-              <option value='medium'>Medium</option>
-              <option value='high'>High</option>
+              className={classNames(formStyles.select, formStyles.inputSmall)}
+            >
+              <option value="" disabled hidden>
+                Select Priority
+              </option>
+              <option value="low">Low</option>
+              <option value="medium">Medium</option>
+              <option value="high">High</option>
             </select>
           </div>
           <div className={styles.inlineInputGroup}>
             <div className={taskTemplateStyles.smallText}>Repeating:</div>
-            <select required
-              name='repeating'
+            <select
+              required
+              name="repeating"
               value={taskTemplate.repeating ? taskTemplate.repeating.toString() : 'false'}
               onChange={this.onChange}
-              className={
-                classNames(formStyles.select, formStyles.inputSmall)}>
-              <option value='true'>Yes</option>
-              <option value='false'>No</option>
+              className={classNames(formStyles.select, formStyles.inputSmall)}
+            >
+              <option value="true">Yes</option>
+              <option value="false">No</option>
             </select>
           </div>
           <div className={styles.inlineInputGroup}>
             <div className={taskTemplateStyles.smallText}>Completed Within Interval:</div>
             <select
-              name='completedWithinInterval'
+              name="completedWithinInterval"
               value={taskTemplate.completedWithinInterval || ''}
               onChange={this.onChange}
-              className={
-                classNames(formStyles.select, formStyles.inputSmall)}>
-              <option value='' disabled hidden>Select interval</option>
-              <option value='hour'>Hour</option>
-              <option value='day'>Day</option>
-              <option value='week'>Week</option>
-              <option value='month'>Month</option>
-              <option value='year'>Year</option>
+              className={classNames(formStyles.select, formStyles.inputSmall)}
+            >
+              <option value="" disabled hidden>
+                Select interval
+              </option>
+              <option value="hour">Hour</option>
+              <option value="day">Day</option>
+              <option value="week">Week</option>
+              <option value="month">Month</option>
+              <option value="year">Year</option>
             </select>
           </div>
           <div className={styles.inlineInputGroup}>
             <div className={taskTemplateStyles.smallText}>Completed Within Number:</div>
             <select
-              name='completedWithinNumber'
-              value={taskTemplate.completedWithinNumber ?
-                taskTemplate.completedWithinNumber.toString() : ''
+              name="completedWithinNumber"
+              value={
+                taskTemplate.completedWithinNumber
+                  ? taskTemplate.completedWithinNumber.toString()
+                  : ''
               }
               onChange={this.onChange}
-              className={
-                classNames(formStyles.select, formStyles.inputSmall)}>
-              <option value='' disabled hidden>Select number</option>
-              <option value='1'>1</option>
-              <option value='2'>2</option>
-              <option value='3'>3</option>
-              <option value='4'>4</option>
-              <option value='5'>5</option>
-              <option value='6'>6</option>
-              <option value='7'>7</option>
-              <option value='8'>8</option>
-              <option value='9'>9</option>
-              <option value='10'>10</option>
+              className={classNames(formStyles.select, formStyles.inputSmall)}
+            >
+              <option value="" disabled hidden>
+                Select number
+              </option>
+              <option value="1">1</option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+              <option value="4">4</option>
+              <option value="5">5</option>
+              <option value="6">6</option>
+              <option value="7">7</option>
+              <option value="8">8</option>
+              <option value="9">9</option>
+              <option value="10">10</option>
             </select>
           </div>
           <div className={styles.inlineInputGroup}>
             <div className={taskTemplateStyles.smallText}>Default Assignee Role:</div>
             <select
-              name='careTeamAssigneeRole'
+              name="careTeamAssigneeRole"
               value={taskTemplate.careTeamAssigneeRole || ''}
               onChange={this.onChange}
-              className={
-                classNames(formStyles.select, formStyles.inputSmall)}>
-              <option value='' disabled hidden>Select role</option>
-              <option value='physician'>Physician</option>
-              <option value='nurseCareManager'>Nurse Care Manager</option>
-              <option value='healthCoach'>Health Coach</option>
-              <option value='familyMember'>Family Member</option>
+              className={classNames(formStyles.select, formStyles.inputSmall)}
+            >
+              <option value="" disabled hidden>
+                Select role
+              </option>
+              <option value="physician">Physician</option>
+              <option value="nurseCareManager">Nurse Care Manager</option>
+              <option value="healthCoach">Health Coach</option>
+              <option value="familyMember">Family Member</option>
             </select>
           </div>
         </div>
         <div className={styles.formBottom}>
           <div className={styles.formBottomContent}>
-            <input
-              type='submit'
-              className={styles.submitButton}
-              value={createEditText} />
+            <input type="submit" className={styles.submitButton} value={createEditText} />
             {deleteHtml}
           </div>
         </div>
@@ -290,9 +319,7 @@ export default compose(
   graphql<IGraphqlProps, IProps>(taskTemplateCreateMutationGraphql as any, {
     name: 'createTaskTemplate',
     options: {
-      refetchQueries: [
-        'getGoalSuggestionTemplates',
-      ],
+      refetchQueries: ['getGoalSuggestionTemplates'],
     },
   }),
   graphql<IGraphqlProps, IProps>(taskTemplateEditMutationGraphql as any, {
@@ -301,9 +328,7 @@ export default compose(
   graphql<IGraphqlProps, IProps>(taskTemplateDeleteMutationGraphql as any, {
     name: 'deleteTaskTemplate',
     options: {
-      refetchQueries: [
-        'getGoalSuggestionTemplates',
-      ],
+      refetchQueries: ['getGoalSuggestionTemplates'],
     },
   }),
 )(TaskTemplateCreateEdit);

@@ -1,13 +1,19 @@
-exports.up = function (knex, Promise) {
+exports.up = function(knex, Promise) {
   return knex.schema
     .table('task', table => {
-      table.enu('priority', ['low', 'medium', 'high'])
+      table.enu('priority', ['low', 'medium', 'high']);
       table.timestamp('deletedAt');
     })
     .createTableIfNotExists('task_comment', table => {
       table.string('id').primary();
-      table.string('userId').references('id').inTable('user');
-      table.string('taskId').references('id').inTable('task');
+      table
+        .string('userId')
+        .references('id')
+        .inTable('user');
+      table
+        .string('taskId')
+        .references('id')
+        .inTable('task');
       table.text('body');
 
       // timestamps
@@ -20,11 +26,11 @@ exports.up = function (knex, Promise) {
        * https://dba.stackexchange.com/questions/6115/working-of-indexes-in-postgresql
        */
       table.index('taskId');
-      table.index('deletedAt')
-    })
+      table.index('deletedAt');
+    });
 };
 
-exports.down = function (knex, Promise) {
+exports.down = function(knex, Promise) {
   return knex.schema
     .table('task', table => {
       table.dropColumn('priority');

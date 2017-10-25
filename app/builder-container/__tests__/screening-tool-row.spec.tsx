@@ -14,9 +14,12 @@ const mockStore = configureMockStore([]);
 const oldDate = Date.now;
 
 describe('screening tool row', () => {
-
-  beforeAll(() => { Date.now = jest.fn(() => 1500494779252); });
-  afterAll(() => { Date.now = oldDate; });
+  beforeAll(() => {
+    Date.now = jest.fn(() => 1500494779252);
+  });
+  afterAll(() => {
+    Date.now = oldDate;
+  });
 
   it('renders screening tool row', () => {
     const history = createMemoryHistory();
@@ -27,7 +30,8 @@ describe('screening tool row', () => {
             <ScreeningToolRow
               screeningTool={screeningTool}
               selected={true}
-              routeBase={'/foo/bar'} />
+              routeBase={'/foo/bar'}
+            />
           </ConnectedRouter>
         </ReduxConnectedIntlProvider>
       </MockedProvider>,

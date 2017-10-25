@@ -58,9 +58,7 @@ interface IGraphqlProps {
   uncompleteTask: (
     options: { variables: taskUncompleteMutationVariables },
   ) => { data: taskUncompleteMutation };
-  editTask: (
-    options: { variables: taskEditMutationVariables },
-  ) => { data: taskEditMutation };
+  editTask: (options: { variables: taskEditMutationVariables }) => { data: taskEditMutation };
   onDelete: (taskId: string) => any;
 }
 
@@ -619,7 +617,7 @@ export class Task extends React.Component<allProps, IState> {
               <div className={styles.dueDate}>
                 <div className={styles.dueDateIcon} />
                 <input
-                  type='date'
+                  type="date"
                   className={styles.dueDateInput}
                   data-date={dueDate}
                   value={inputDueDate}
@@ -647,7 +645,7 @@ export class Task extends React.Component<allProps, IState> {
             <div className={titleEditStyles}>
               <textarea
                 style={{ height: titleHeight }}
-                name='editedTitle'
+                name="editedTitle"
                 ref={area => {
                   this.editTitleTextArea = area;
                 }}
@@ -665,7 +663,7 @@ export class Task extends React.Component<allProps, IState> {
                   className={styles.prioritySelect}
                   onChange={this.onPatientGoalChange}
                 >
-                  <option disabled value=''>
+                  <option disabled value="">
                     None
                   </option>
                   {this.renderPatientGoalOptions()}
@@ -684,7 +682,7 @@ export class Task extends React.Component<allProps, IState> {
             <div className={descriptionEditStyles}>
               <textarea
                 style={{ height: descriptionHeight }}
-                name='editedDescription'
+                name="editedDescription"
                 ref={area => {
                   this.editDescriptionTextArea = area;
                 }}
@@ -703,9 +701,9 @@ export class Task extends React.Component<allProps, IState> {
                   className={styles.prioritySelect}
                   onChange={this.onPriorityChange}
                 >
-                  <option value='low'>Low priority</option>
-                  <option value='medium'>Medium priority</option>
-                  <option value='high'>High priority</option>
+                  <option value="low">Low priority</option>
+                  <option value="medium">Medium priority</option>
+                  <option value="high">High priority</option>
                 </select>
               </div>
               <div className={styles.typeInfo}>

@@ -7,7 +7,7 @@ import { create } from 'react-test-renderer';
 import configureMockStore from 'redux-mock-store';
 import { ENGLISH_TRANSLATION } from '../../reducers/messages/en';
 import ReduxConnectedIntlProvider from '../../redux-connected-intl-provider';
-import ConcernCreate, {ConcernCreate as Component} from '../concern-create';
+import ConcernCreate, { ConcernCreate as Component } from '../concern-create';
 
 const locale = { messages: ENGLISH_TRANSLATION.messages };
 const mockStore = configureMockStore([]);
@@ -18,9 +18,7 @@ it('renders concern create', () => {
     <MockedProvider mocks={[]} store={mockStore({ locale })}>
       <ReduxConnectedIntlProvider>
         <ConnectedRouter history={history}>
-          <ConcernCreate
-            routeBase='/builder/concerns'
-            onClose={() => false} />
+          <ConcernCreate routeBase="/builder/concerns" onClose={() => false} />
         </ConnectedRouter>
       </ReduxConnectedIntlProvider>
     </MockedProvider>,
@@ -35,9 +33,10 @@ describe('shallow rendered', () => {
   beforeEach(() => {
     const component = shallow(
       <Component
-      routeBase='/builder/concerns'
-      createConcern={createConcern}
-      onClose={() => false} />,
+        routeBase="/builder/concerns"
+        createConcern={createConcern}
+        onClose={() => false}
+      />,
     );
     instance = component.instance() as Component;
   });

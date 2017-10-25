@@ -5,7 +5,7 @@ import * as formStyles from '../shared/css/forms.css';
 import * as styles from './css/risk-areas.css';
 
 interface IProps {
-  currentAnswer: { id: string; value: string; };
+  currentAnswer: { id: string; value: string };
   question: FullQuestionFragment;
   onChange: (questionId: string, answerId: string, value: string | number) => any;
 }
@@ -27,15 +27,17 @@ export default class RadioAnswer extends React.Component<IProps, {}> {
         <div className={formStyles.radioGroupContainer}>
           <input
             className={formStyles.radio}
-            type='radio'
+            type="radio"
             onClick={event => onChange(question.id, answer.id, answer.value)}
             checked={!!currentAnswer && currentAnswer.id === answer.id}
-            value={answer.value} />
+            value={answer.value}
+          />
           <label className={styles.radioFill} />
         </div>
         <span
           className={labelStyles}
-          onClick={() => (onChange(question.id, answer.id, answer.value))}>
+          onClick={() => onChange(question.id, answer.id, answer.value)}
+        >
           {answer.displayValue}
         </span>
       </div>

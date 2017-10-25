@@ -18,9 +18,10 @@ it('renders question', () => {
       <ReduxConnectedIntlProvider>
         <ConnectedRouter history={history}>
           <QuestionCreate
-            riskAreaId='risk-area-id'
-            routeBase='/builder/domain'
-            onClose={() => false} />
+            riskAreaId="risk-area-id"
+            routeBase="/builder/domain"
+            onClose={() => false}
+          />
         </ConnectedRouter>
       </ReduxConnectedIntlProvider>
     </MockedProvider>,

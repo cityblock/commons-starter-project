@@ -79,7 +79,7 @@ class BuilderScreeningTools extends React.Component<allProps, IState> {
     } else if (!loading && !error) {
       return (
         <div className={styles.emptyMessage}>
-          <div className={styles.emptyLogo}></div>
+          <div className={styles.emptyLogo} />
           <div className={styles.emptyLabel}>No Screening Tools</div>
         </div>
       );
@@ -118,27 +118,27 @@ class BuilderScreeningTools extends React.Component<allProps, IState> {
     });
     const createScreeningToolButton = (
       <div className={styles.createContainer}>
-        <div
-          onClick={this.showCreateScreeningTool}
-          className={styles.createButton}>Create Screening Tool</div>
+        <div onClick={this.showCreateScreeningTool} className={styles.createButton}>
+          Create Screening Tool
+        </div>
       </div>
     );
     const createScreeningToolHtml = showCreateScreeningTool ? (
       <ScreeningToolCreate
         onClose={this.hideCreateScreeningTool}
         riskAreas={riskAreas}
-        routeBase={this.props.routeBase} />
+        routeBase={this.props.routeBase}
+      />
     ) : null;
     const RenderedScreeningTool = (props: any) => (
       <ScreeningTool routeBase={routeBase} onDelete={this.onDeleteScreeningTool} {...props} />
     );
-    const screeningToolHtml = showCreateScreeningTool ?
-      null : (<Route path={`${routeBase}/:screeningToolId`} render={RenderedScreeningTool} />);
+    const screeningToolHtml = showCreateScreeningTool ? null : (
+      <Route path={`${routeBase}/:screeningToolId`} render={RenderedScreeningTool} />
+    );
     return (
       <div className={styles.container}>
-        <div className={styles.sortSearchBar}>
-          {createScreeningToolButton}
-        </div>
+        <div className={styles.sortSearchBar}>{createScreeningToolButton}</div>
         <div className={styles.bottomContainer}>
           <div className={screeningToolsListStyles}>
             {this.renderScreeningTools(screeningToolsList)}
@@ -162,7 +162,7 @@ function mapDispatchToProps(dispatch: Dispatch<() => void>, ownProps: allProps):
   };
 }
 
-export default (compose)(
+export default compose(
   connect<{}, {}, IComponentProps>(null, mapDispatchToProps),
   graphql(screeningToolDeleteMutationGraphql as any, { name: 'deleteScreeningTool' }),
 )(BuilderScreeningTools);

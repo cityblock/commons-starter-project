@@ -12,7 +12,7 @@ import TasksContainer from '../tasks-container';
 it('renders tasks container', () => {
   const mockStore = configureMockStore([]);
   const history = createMemoryHistory();
-  const locale = { messages: ENGLISH_TRANSLATION.messages};
+  const locale = { messages: ENGLISH_TRANSLATION.messages };
   const task = { taskId: 'foo' };
   const eventNotifications = { count: 0 };
   const tree = create(

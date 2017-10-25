@@ -13,8 +13,12 @@ const locale = { messages: ENGLISH_TRANSLATION.messages };
 const mockStore = configureMockStore([]);
 const oldDate = Date.now;
 
-beforeAll(() => { Date.now = jest.fn(() => 1500494779252); });
-afterAll(() => { Date.now = oldDate; });
+beforeAll(() => {
+  Date.now = jest.fn(() => 1500494779252);
+});
+afterAll(() => {
+  Date.now = oldDate;
+});
 
 it('renders a selected task template', () => {
   const history = createMemoryHistory();
@@ -25,7 +29,8 @@ it('renders a selected task template', () => {
           <TaskTemplate
             taskTemplate={taskTemplate}
             selected={true}
-            onToggleRemoved={(id: string) => true} />
+            onToggleRemoved={(id: string) => true}
+          />
         </ConnectedRouter>
       </ReduxConnectedIntlProvider>
     </MockedProvider>,
@@ -42,7 +47,8 @@ it('renders a removed task template', () => {
           <TaskTemplate
             taskTemplate={taskTemplate}
             selected={false}
-            onToggleRemoved={(id: string) => true} />
+            onToggleRemoved={(id: string) => true}
+          />
         </ConnectedRouter>
       </ReduxConnectedIntlProvider>
     </MockedProvider>,

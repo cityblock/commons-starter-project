@@ -10,14 +10,12 @@ import Routes from '../routes';
 it('renders routes correctly', () => {
   const mockStore = configureMockStore([]);
   const history = createMemoryHistory();
-  const locale =  { messages: {'login.logInGoogle': 'Sign in with Google'} };
+  const locale = { messages: { 'login.logInGoogle': 'Sign in with Google' } };
 
   const tree = render(
     <MockedProvider mocks={[]} store={mockStore({ locale })}>
       <ReduxConnectedIntlProvider>
-        <ConnectedRouter history={history}>
-          {Routes}
-        </ConnectedRouter>
+        <ConnectedRouter history={history}>{Routes}</ConnectedRouter>
       </ReduxConnectedIntlProvider>
     </MockedProvider>,
   );

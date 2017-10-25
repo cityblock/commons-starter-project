@@ -172,11 +172,11 @@ class NewPatientEncounter extends React.Component<allProps, IState> {
           error={error}
           onClick={this.onSubmitClick}
         />
-        <FormattedMessage id='encounter.new'>
+        <FormattedMessage id="encounter.new">
           {(message: string) => <div className={styles.newEncounterLabel}>{message}</div>}
         </FormattedMessage>
         <div className={styles.newEncounterForm}>
-          <FormattedMessage id='encounter.newReason'>
+          <FormattedMessage id="encounter.newReason">
             {(message: string) => <div className={styles.newEncounterFormLabel}>{message}:</div>}
           </FormattedMessage>
           <div className={styles.newEncounterFormTextInput}>
@@ -185,15 +185,15 @@ class NewPatientEncounter extends React.Component<allProps, IState> {
                 this.encounterReasonInput = input;
               }}
               required
-              name='encounterReason'
-              type='text'
+              name="encounterReason"
+              type="text"
               onChange={this.onChange}
               value={encounterReason}
             />
           </div>
           <div className={styles.newEncounterFormMultiInputRow}>
             <div className={styles.newEncounterInputLargeFormGroup}>
-              <FormattedMessage id='encounter.newLocation'>
+              <FormattedMessage id="encounter.newLocation">
                 {(message: string) => (
                   <div className={styles.newEncounterFormLabel}>{message}:</div>
                 )}
@@ -201,15 +201,15 @@ class NewPatientEncounter extends React.Component<allProps, IState> {
               <div className={styles.newEncounterFormTextInput}>
                 <input
                   required
-                  name='encounterLocation'
-                  type='text'
+                  name="encounterLocation"
+                  type="text"
                   onChange={this.onChange}
                   value={encounterLocation}
                 />
               </div>
             </div>
             <div className={styles.newEncounterInputSmallFormGroup}>
-              <FormattedMessage id='encounter.newStartTime'>
+              <FormattedMessage id="encounter.newStartTime">
                 {(message: string) => (
                   <div className={styles.newEncounterFormLabel}>{message}:</div>
                 )}
@@ -217,21 +217,21 @@ class NewPatientEncounter extends React.Component<allProps, IState> {
               <div className={styles.newEncounterFormTextInput}>
                 <input
                   required
-                  name='encounterStartTime'
-                  type='time'
+                  name="encounterStartTime"
+                  type="time"
                   onChange={this.onChange}
                   value={encounterStartTime}
                 />
               </div>
             </div>
           </div>
-          <FormattedMessage id='encounter.newSummary'>
+          <FormattedMessage id="encounter.newSummary">
             {(message: string) => <div className={styles.newEncounterFormLabel}>{message}:</div>}
           </FormattedMessage>
           <div className={styles.newEncounterFormTextArea}>
             <textarea
               required
-              name='encounterSummary'
+              name="encounterSummary"
               onChange={this.onChange}
               value={encounterSummary}
             />
@@ -239,7 +239,7 @@ class NewPatientEncounter extends React.Component<allProps, IState> {
           <div className={styles.newEncounterFormAddAttachmentRow}>
             <div className={styles.newEncounterFormAddAttachment}>
               <div className={styles.newEncounterFormAddAttachmentIcon} />
-              <FormattedMessage id='encounter.newAttachment'>
+              <FormattedMessage id="encounter.newAttachment">
                 {(message: string) => (
                   <div className={styles.newEncounterFormAddAttachmentLabel}>{message}</div>
                 )}
@@ -247,14 +247,14 @@ class NewPatientEncounter extends React.Component<allProps, IState> {
             </div>
           </div>
           <div className={styles.newEncounterFormButtonRow}>
-            <FormattedMessage id='encounter.newCancel'>
+            <FormattedMessage id="encounter.newCancel">
               {(message: string) => (
                 <div className={newEncounterCancelButtonStyles} onClick={this.onCancelClick}>
                   {message}
                 </div>
               )}
             </FormattedMessage>
-            <FormattedMessage id='encounter.newSubmit'>
+            <FormattedMessage id="encounter.newSubmit">
               {(message: string) => (
                 <div className={newEncounterSubmitButtonStyles} onClick={this.onSubmitClick}>
                   {message}

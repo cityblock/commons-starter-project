@@ -13,12 +13,14 @@ export const MedicationsLoadingError: React.StatelessComponent<IProps> = props =
   if (error) {
     return (
       <div className={styles.medicationsError}>
-        <div className={styles.medicationsErrorIcon}></div>
+        <div className={styles.medicationsErrorIcon} />
         <div className={styles.medicationsErrorLabel}>Unable to load active medications</div>
         <div className={styles.medicationsErrorSubheading}>
           Sorry, something went wrong. Please try reloading this section again.
         </div>
-        <div className={styles.medicationsErrorButton} onClick={onRetryClick}>Try again</div>
+        <div className={styles.medicationsErrorButton} onClick={onRetryClick}>
+          Try again
+        </div>
       </div>
     );
   } else if (loading) {

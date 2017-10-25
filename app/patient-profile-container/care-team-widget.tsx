@@ -100,7 +100,7 @@ class CareTeamWidget extends React.Component<IProps, IState> {
     });
 
     const slackContact = (
-      <div key='slackContact'>
+      <div key="slackContact">
         <div className={careTeamMemberStyles.careTeamMemberRow}>
           <div className={careTeamMemberStyles.careTeamMemberDetails}>
             <div className={styles.chatLogo} />

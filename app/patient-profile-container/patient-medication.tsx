@@ -17,20 +17,17 @@ export default class PatientMedication extends React.Component<IProps, {}> {
   // TODO: replace fallbacks post-demo
   render() {
     const { medication, selected } = this.props;
-    const dosage = medication.quantity && medication.quantityUnit ?
-      `${medication.quantity} ${medication.quantityUnit}` : 'Every 8 hours';
+    const dosage =
+      medication.quantity && medication.quantityUnit
+        ? `${medication.quantity} ${medication.quantityUnit}`
+        : 'Every 8 hours';
 
-    const medicationClass = classNames(
-      styles.medication,
-      { [styles.selected]: selected },
-    );
+    const medicationClass = classNames(styles.medication, { [styles.selected]: selected });
 
     const dosageInstructions = medication.dosageInstructions || 'No instructions provided.';
 
     return (
-      <div
-        className={medicationClass}
-        onClick={() => (this.props.onClick(medication.name))}>
+      <div className={medicationClass} onClick={() => this.props.onClick(medication.name)}>
         <div className={styles.medicationRow}>
           <div className={styles.medicationRowTitle}>{medication.name}</div>
           <div>{dosage}</div>

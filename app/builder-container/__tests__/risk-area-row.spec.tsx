@@ -14,9 +14,12 @@ const mockStore = configureMockStore([]);
 const oldDate = Date.now;
 
 describe('risk area row', () => {
-
-  beforeAll(() => { Date.now = jest.fn(() => 1500494779252); });
-  afterAll(() => { Date.now = oldDate; });
+  beforeAll(() => {
+    Date.now = jest.fn(() => 1500494779252);
+  });
+  afterAll(() => {
+    Date.now = oldDate;
+  });
 
   it('renders risk area row', () => {
     const history = createMemoryHistory();
@@ -24,10 +27,7 @@ describe('risk area row', () => {
       <MockedProvider mocks={[]} store={mockStore({ locale, riskArea })}>
         <ReduxConnectedIntlProvider>
           <ConnectedRouter history={history}>
-            <RiskAreaRow
-              riskArea={riskArea}
-              selected={true}
-              routeBase={'/foo/bar'} />
+            <RiskAreaRow riskArea={riskArea} selected={true} routeBase={'/foo/bar'} />
           </ConnectedRouter>
         </ReduxConnectedIntlProvider>
       </MockedProvider>,

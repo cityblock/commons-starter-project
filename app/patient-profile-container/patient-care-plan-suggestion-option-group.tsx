@@ -29,21 +29,17 @@ const PatientCarePlanSuggestionOptionGroup = (props: IProps) => {
   }
 
   if (patientConcerns.length) {
-    optionsHtml = patientConcerns.map(patientConcern =>
-      <option
-        key={patientConcern.id}
-        value={patientConcern.id}>
+    optionsHtml = patientConcerns.map(patientConcern => (
+      <option key={patientConcern.id} value={patientConcern.id}>
         {patientConcern.concern.title}
-      </option>,
-    );
+      </option>
+    ));
   } else if (concernSuggestions.length) {
-    optionsHtml = concernSuggestions.map(concernSuggestion =>
-      <option
-        key={concernSuggestion.concernId!}
-        value={concernSuggestion.concernId!}>
+    optionsHtml = concernSuggestions.map(concernSuggestion => (
+      <option key={concernSuggestion.concernId!} value={concernSuggestion.concernId!}>
         {concernSuggestion.concern!.title}
-      </option>,
-    );
+      </option>
+    ));
   }
 
   if (optionsHtml.length) {

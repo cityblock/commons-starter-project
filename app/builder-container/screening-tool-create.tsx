@@ -127,7 +127,7 @@ class ScreeningToolCreate extends React.Component<allProps, IState> {
             </div>
             <div className={styles.inputGroup}>
               <input
-                name='title'
+                name="title"
                 value={screeningTool.title}
                 placeholder={'Enter screening tool title'}
                 className={formStyles.input}
@@ -135,12 +135,12 @@ class ScreeningToolCreate extends React.Component<allProps, IState> {
               />
               <select
                 required
-                name='riskAreaId'
+                name="riskAreaId"
                 value={screeningTool.riskAreaId}
                 onChange={this.onChange}
                 className={formStyles.select}
               >
-                <option value='' disabled hidden>
+                <option value="" disabled hidden>
                   Select Risk Area
                 </option>
                 {this.renderRiskAreaOptions()}
@@ -152,7 +152,7 @@ class ScreeningToolCreate extends React.Component<allProps, IState> {
               <div className={styles.cancelButton} onClick={this.props.onClose}>
                 Cancel
               </div>
-              <input type='submit' className={styles.submitButton} value='Add screening tool' />
+              <input type="submit" className={styles.submitButton} value="Add screening tool" />
             </div>
           </div>
         </form>

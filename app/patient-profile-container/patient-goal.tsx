@@ -47,9 +47,9 @@ export default class PatientGoal extends React.Component<IProps, {}> {
               <div className={styles.patientGoalUpdatedDetailsDate}>
                 <FormattedDate
                   value={patientGoal.updatedAt}
-                  year='numeric'
-                  month='short'
-                  day='numeric'
+                  year="numeric"
+                  month="short"
+                  day="numeric"
                 />
               </div>
             </div>

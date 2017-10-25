@@ -51,5 +51,7 @@ exports.up = function(knex, Promise) {
 };
 
 exports.down = function(knex, Promise) {
-  return knex.schema.dropTableIfExists('patient_task_suggestion').dropTableIfExists('task_suggestion');
+  return knex.schema
+    .dropTableIfExists('patient_task_suggestion')
+    .dropTableIfExists('task_suggestion');
 };

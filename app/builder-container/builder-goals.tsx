@@ -75,7 +75,7 @@ export class BuilderGoals extends React.Component<IProps, IState> {
     } else if (!loading && !error) {
       return (
         <div className={styles.emptyMessage}>
-          <div className={styles.emptyLogo}></div>
+          <div className={styles.emptyLogo} />
           <div className={styles.emptyLabel}>No Goals</div>
         </div>
       );
@@ -85,12 +85,7 @@ export class BuilderGoals extends React.Component<IProps, IState> {
   renderGoal(goal: FullGoalSuggestionTemplateFragment) {
     const selected = goal.id === this.props.goalId;
     return (
-      <GoalRow
-        key={goal.id}
-        goal={goal}
-        selected={selected}
-        routeBase={this.props.routeBase}
-      />
+      <GoalRow key={goal.id} goal={goal} selected={selected} routeBase={this.props.routeBase} />
     );
   }
 
@@ -118,34 +113,25 @@ export class BuilderGoals extends React.Component<IProps, IState> {
     });
     const createGoalButton = (
       <div className={styles.createContainer}>
-        <div
-          onClick={this.showCreateGoal}
-          className={styles.createButton}>Create Goal</div>
+        <div onClick={this.showCreateGoal} className={styles.createButton}>
+          Create Goal
+        </div>
       </div>
     );
     const createGoalHtml = showCreateGoal ? (
-      <GoalCreate
-        onClose={this.hideCreateGoal}
-        routeBase={this.props.routeBase} />
+      <GoalCreate onClose={this.hideCreateGoal} routeBase={this.props.routeBase} />
     ) : null;
     const renderedGoal = (props: any) => (
-      <Goal
-        goals={goals}
-        routeBase={routeBase}
-        onDelete={this.onDeleteGoal}
-        {...props } />
+      <Goal goals={goals} routeBase={routeBase} onDelete={this.onDeleteGoal} {...props} />
     );
-    const goalHtml = showCreateGoal ?
-      null : (<Route path={`${routeBase}/:objectId`} render={renderedGoal} />);
+    const goalHtml = showCreateGoal ? null : (
+      <Route path={`${routeBase}/:objectId`} render={renderedGoal} />
+    );
     return (
       <div className={styles.container}>
-        <div className={styles.sortSearchBar}>
-          {createGoalButton}
-        </div>
+        <div className={styles.sortSearchBar}>{createGoalButton}</div>
         <div className={styles.bottomContainer}>
-          <div className={goalListStyles}>
-            {this.renderGoals(goalsList)}
-          </div>
+          <div className={goalListStyles}>{this.renderGoals(goalsList)}</div>
           <div className={goalContainerStyles}>
             {goalHtml}
             {createGoalHtml}
@@ -165,7 +151,7 @@ function mapDispatchToProps(dispatch: Dispatch<() => void>, ownProps: IProps): P
   };
 }
 
-export default (compose)(
+export default compose(
   connect<any, any, IProps>(null, mapDispatchToProps),
   graphql(goalDeleteMutation as any, { name: 'deleteGoal' }),
 )(BuilderGoals);

@@ -137,7 +137,7 @@ export class TaskComment extends React.Component<allProps, IState> {
 
   getCommentDate(comment: FullTaskCommentFragment) {
     if (comment.createdAt) {
-      return <FormattedDate value={comment.createdAt} year='numeric' month='short' day='numeric' />;
+      return <FormattedDate value={comment.createdAt} year="numeric" month="short" day="numeric" />;
     } else {
       return 'Unknown Date';
     }

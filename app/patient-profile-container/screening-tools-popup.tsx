@@ -20,9 +20,7 @@ export default class ScreeningToolsPopup extends React.Component<IProps, {}> {
 
     if (!screeningTools || !screeningTools.length) {
       return (
-        <div className={styles.emptyScreeningToolOptions}>
-          No screening tools for this domain
-        </div>
+        <div className={styles.emptyScreeningToolOptions}>No screening tools for this domain</div>
       );
     }
 
@@ -30,7 +28,8 @@ export default class ScreeningToolsPopup extends React.Component<IProps, {}> {
       <div
         key={screeningTool.id}
         className={styles.screeningToolOption}
-        onClick={() => onSelectScreeningTool(screeningTool)}>
+        onClick={() => onSelectScreeningTool(screeningTool)}
+      >
         <div className={styles.screeningToolOptionText}>{screeningTool.title}</div>
       </div>
     ));
@@ -48,9 +47,7 @@ export default class ScreeningToolsPopup extends React.Component<IProps, {}> {
           <div className={classNames(styles.screeningToolsPopupTitle, styles.noMargin)}>
             Select a tool
           </div>
-          <div className={styles.screeningToolOptions}>
-            {this.renderScreeningTools()}
-          </div>
+          <div className={styles.screeningToolOptions}>{this.renderScreeningTools()}</div>
         </div>
       </div>
     );

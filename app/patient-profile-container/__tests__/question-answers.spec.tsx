@@ -23,10 +23,7 @@ it('renders question answers', () => {
     <MockedProvider mocks={[]} store={mockStore({ locale })}>
       <ReduxConnectedIntlProvider>
         <ConnectedRouter history={history}>
-          <QuestionAnswers
-            question={question}
-            onChange={() => (true)}
-            answerData={answerData} />
+          <QuestionAnswers question={question} onChange={() => true} answerData={answerData} />
         </ConnectedRouter>
       </ReduxConnectedIntlProvider>
     </MockedProvider>,
@@ -37,11 +34,7 @@ it('renders question answers', () => {
 describe('rendering the correct answer type', () => {
   it('renders radio answers', async () => {
     const component = shallow(
-      <Component
-        question={question}
-        onChange={() => (true)}
-        answerData={answerData}
-      />,
+      <Component question={question} onChange={() => true} answerData={answerData} />,
     );
     const instance = component.instance() as Component;
     const result = instance.render();
@@ -53,11 +46,7 @@ describe('rendering the correct answer type', () => {
     multiSelectQuestion.answerType = 'dropdown';
 
     const component = shallow(
-      <Component
-        question={multiSelectQuestion}
-        onChange={() => (true)}
-        answerData={answerData}
-      />,
+      <Component question={multiSelectQuestion} onChange={() => true} answerData={answerData} />,
     );
     const instance = component.instance() as Component;
     const result = instance.render();
@@ -69,11 +58,7 @@ describe('rendering the correct answer type', () => {
     multiSelectQuestion.answerType = 'freetext';
 
     const component = shallow(
-      <Component
-        question={multiSelectQuestion}
-        onChange={() => (true)}
-        answerData={answerData}
-      />,
+      <Component question={multiSelectQuestion} onChange={() => true} answerData={answerData} />,
     );
     const instance = component.instance() as Component;
     const result = instance.render();
@@ -85,11 +70,7 @@ describe('rendering the correct answer type', () => {
     multiSelectQuestion.answerType = 'multiselect';
 
     const component = shallow(
-      <Component
-        question={multiSelectQuestion}
-        onChange={() => (true)}
-        answerData={answerData}
-      />,
+      <Component question={multiSelectQuestion} onChange={() => true} answerData={answerData} />,
     );
     const instance = component.instance() as Component;
     const result = instance.render();

@@ -14,11 +14,7 @@ it('renders care team widget', () => {
   const tree = create(
     <MockedProvider mocks={[]} store={mockStore({ locale })}>
       <ReduxConnectedIntlProvider>
-        <CareTeamWidgetMember
-          careTeamMember={currentUser}
-          selected={false}
-          onClick={() => false}
-        />
+        <CareTeamWidgetMember careTeamMember={currentUser} selected={false} onClick={() => false} />
       </ReduxConnectedIntlProvider>
     </MockedProvider>,
   ).toJSON();

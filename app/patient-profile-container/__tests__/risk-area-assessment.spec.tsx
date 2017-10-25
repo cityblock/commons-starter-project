@@ -12,8 +12,12 @@ const locale = { messages: ENGLISH_TRANSLATION.messages };
 const mockStore = configureMockStore([]);
 
 const oldDate = Date.now;
-beforeAll(() => { Date.now = jest.fn(() => 1500494779252); });
-afterAll(() => { Date.now = oldDate; });
+beforeAll(() => {
+  Date.now = jest.fn(() => 1500494779252);
+});
+afterAll(() => {
+  Date.now = oldDate;
+});
 
 const riskAreaQuestions = [
   question,
@@ -124,15 +128,19 @@ describe('method tests', () => {
       refetchPatientAnswers: () => true,
     });
     expect(instance.state.questions[question.id]).toEqual({
-      answers: [{
-        id: patientAnswer.answerId,
-        value: patientAnswer.answerValue,
-      }],
+      answers: [
+        {
+          id: patientAnswer.answerId,
+          value: patientAnswer.answerValue,
+        },
+      ],
       changed: false,
-      oldAnswers: [{
-        id: patientAnswer.answerId,
-        value: patientAnswer.answerValue,
-      }],
+      oldAnswers: [
+        {
+          id: patientAnswer.answerId,
+          value: patientAnswer.answerValue,
+        },
+      ],
     });
   });
 

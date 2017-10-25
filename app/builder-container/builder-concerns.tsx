@@ -73,7 +73,7 @@ class BuilderConcerns extends React.Component<IProps, IState> {
     } else if (!loading && !error) {
       return (
         <div className={styles.emptyMessage}>
-          <div className={styles.emptyLogo}></div>
+          <div className={styles.emptyLogo} />
           <div className={styles.emptyLabel}>No Concerns</div>
         </div>
       );
@@ -112,30 +112,25 @@ class BuilderConcerns extends React.Component<IProps, IState> {
     });
     const createConcernButton = (
       <div className={styles.createContainer}>
-        <div
-          onClick={this.showCreateConcern}
-          className={styles.createButton}>Create Concern</div>
+        <div onClick={this.showCreateConcern} className={styles.createButton}>
+          Create Concern
+        </div>
       </div>
     );
     const createConcernHtml = showCreateConcern ? (
-      <ConcernCreate
-        onClose={this.hideCreateConcern}
-        routeBase={this.props.routeBase} />
+      <ConcernCreate onClose={this.hideCreateConcern} routeBase={this.props.routeBase} />
     ) : null;
     const RenderedConcern = (props: any) => (
       <Concern routeBase={routeBase} onDelete={this.onDeleteConcern} {...props} />
     );
-    const concernHtml = showCreateConcern ?
-      null : (<Route path={`${routeBase}/:objectId`} render={RenderedConcern} />);
+    const concernHtml = showCreateConcern ? null : (
+      <Route path={`${routeBase}/:objectId`} render={RenderedConcern} />
+    );
     return (
       <div className={styles.container}>
-        <div className={styles.sortSearchBar}>
-          {createConcernButton}
-        </div>
+        <div className={styles.sortSearchBar}>{createConcernButton}</div>
         <div className={styles.bottomContainer}>
-          <div className={concernsListStyles}>
-            {this.renderConcerns(concernsList)}
-          </div>
+          <div className={concernsListStyles}>{this.renderConcerns(concernsList)}</div>
           <div className={concernContainerStyles}>
             {concernHtml}
             {createConcernHtml}
@@ -155,7 +150,7 @@ function mapDispatchToProps(dispatch: Dispatch<() => void>, ownProps: IProps): P
   };
 }
 
-export default (compose)(
+export default compose(
   connect<any, any, IComponentProps>(null, mapDispatchToProps),
   graphql(concernDeleteMutationGraphql as any, { name: 'deleteConcern' }),
 )(BuilderConcerns);

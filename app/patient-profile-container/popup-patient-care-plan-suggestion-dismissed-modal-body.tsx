@@ -28,25 +28,28 @@ const PopupPatientCarePlanSuggestionDismissedModalBody = (props: IProps) => {
       <div className={classNames(styles.acceptModalTitle, styles.noMargin)}>
         Reason for dismissing this suggestion
       </div>
-      <div className={styles.acceptModalSubtitle}>
-        Select from one of the available options
-      </div>
+      <div className={styles.acceptModalSubtitle}>Select from one of the available options</div>
       <div className={styles.acceptModalDropdown}>
         <select
-          name='dismissedReason'
+          name="dismissedReason"
           className={classNames(formStyles.select, styles.roundedInput)}
           onChange={onChange}
-          value={dismissedReason}>
-          <option value='' disabled hidden>Select a reason</option>
-          <option value='not applicable'>Not applicable to this patient</option>
-          <option value='too much work'>This suggestion requires too much work</option>
-          <option value='dangerous'>
+          value={dismissedReason}
+        >
+          <option value="" disabled hidden>
+            Select a reason
+          </option>
+          <option value="not applicable">Not applicable to this patient</option>
+          <option value="too much work">This suggestion requires too much work</option>
+          <option value="dangerous">
             Tackling this suggestion would be dangerous for the patient
           </option>
         </select>
       </div>
       <div className={styles.acceptModalButtons}>
-        <div className={cancelButtonStyles} onClick={onDismiss}>Cancel</div>
+        <div className={cancelButtonStyles} onClick={onDismiss}>
+          Cancel
+        </div>
         <div className={addButtonStyles} onClick={onSubmit}>
           {`Dismiss ${dismissDisplayText}`}
         </div>

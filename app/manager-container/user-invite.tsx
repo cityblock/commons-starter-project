@@ -75,7 +75,7 @@ class UserInvite extends React.Component<IProps, IState> {
             <div className={styles.error}>{error}</div>
             <div className={styles.inputGroup}>
               <input
-                name='email'
+                name="email"
                 value={localEmail}
                 placeholder={'Enter text before @cityblock in email'}
                 className={formStyles.input}
@@ -88,7 +88,7 @@ class UserInvite extends React.Component<IProps, IState> {
               <div className={styles.cancelButton} onClick={this.props.onClose}>
                 Cancel
               </div>
-              <input type='submit' className={styles.submitButton} value='Invite User' />
+              <input type="submit" className={styles.submitButton} value="Invite User" />
             </div>
           </div>
         </form>

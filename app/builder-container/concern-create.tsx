@@ -33,7 +33,7 @@ interface IState {
 
 type allProps = IProps & IGraphqlProps;
 
-class ConcernCreate extends React.Component<allProps, IState> {
+export class ConcernCreate extends React.Component<allProps, IState> {
   constructor(props: allProps) {
     super(props);
 

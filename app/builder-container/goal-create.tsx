@@ -41,7 +41,7 @@ interface IState {
 
 type allProps = IProps & IGraphqlProps;
 
-class GoalCreate extends React.Component<allProps, IState> {
+export class GoalCreate extends React.Component<allProps, IState> {
   constructor(props: allProps) {
     super(props);
 

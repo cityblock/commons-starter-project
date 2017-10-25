@@ -37,7 +37,7 @@ interface IState {
 
 type allProps = IProps & IGraphqlProps;
 
-class RiskAreaCreate extends React.Component<allProps, IState> {
+export class RiskAreaCreate extends React.Component<allProps, IState> {
   constructor(props: allProps) {
     super(props);
 

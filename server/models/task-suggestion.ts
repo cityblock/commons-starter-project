@@ -3,7 +3,7 @@ import Answer from './answer';
 import BaseModel from './base-model';
 import TaskTemplate from './task-template';
 
-export interface ITaskSuggestionEditableFields {
+interface ITaskSuggestionEditableFields {
   taskTemplateId: string;
   answerId: string;
 }

@@ -3,14 +3,14 @@ import { Model, RelationMappings, Transaction } from 'objection';
 import BaseModel from './base-model';
 import ScreeningTool from './screening-tool';
 
-export interface IScreeningToolScoreRangeCreateFields {
+interface IScreeningToolScoreRangeCreateFields {
   screeningToolId: string;
   description: string;
   minimumScore: number;
   maximumScore: number;
 }
 
-export interface IScreeningToolScoreRangeEditableFields {
+interface IScreeningToolScoreRangeEditableFields {
   description?: string;
   screeningToolId?: string;
   minimumScore?: number;

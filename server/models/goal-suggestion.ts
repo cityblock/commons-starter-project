@@ -6,7 +6,7 @@ import CarePlanSuggestion from './care-plan-suggestion';
 import GoalSuggestionTemplate from './goal-suggestion-template';
 import ScreeningToolScoreRange from './screening-tool-score-range';
 
-export interface IGoalSuggestionEditableFields {
+interface IGoalSuggestionEditableFields {
   goalSuggestionTemplateId: string;
   answerId?: string | null;
   screeningToolScoreRangeId?: string | null;

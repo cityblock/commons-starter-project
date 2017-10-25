@@ -5,7 +5,7 @@ import BaseModel from './base-model';
 import CarePlanSuggestion from './care-plan-suggestion';
 import Concern from './concern';
 
-export interface IConcernSuggestionEditableFields {
+interface IConcernSuggestionEditableFields {
   concernId: string;
   answerId?: string | null;
   screeningToolScoreRangeId?: string | null;

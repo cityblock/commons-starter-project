@@ -7,9 +7,9 @@ import PatientConcern from './patient-concern';
 import PatientGoal from './patient-goal';
 import User from './user';
 
-export type SuggestionType = 'concern' | 'goal';
+type SuggestionType = 'concern' | 'goal';
 
-export interface ICarePlanSuggestionCreateArgs {
+interface ICarePlanSuggestionCreateArgs {
   patientId: string;
   suggestionType: SuggestionType;
   concernId?: string;
@@ -17,11 +17,11 @@ export interface ICarePlanSuggestionCreateArgs {
   patientScreeningToolSubmissionId?: string;
 }
 
-export interface ICarePlanSuggestionCreateMultipleArgs {
+interface ICarePlanSuggestionCreateMultipleArgs {
   suggestions: ICarePlanSuggestionCreateArgs[];
 }
 
-export interface ICarePlanSuggestionDismissArgs {
+interface ICarePlanSuggestionDismissArgs {
   carePlanSuggestionId: string;
   dismissedById: string;
   dismissedReason: string;

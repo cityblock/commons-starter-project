@@ -1,7 +1,7 @@
 import { Model, RelationMappings } from 'objection';
 import BaseModel from './base-model';
 
-export interface ICreateGoogleAuth {
+interface ICreateGoogleAuth {
   accessToken: string;
   expiresAt: string;
   userId: string;

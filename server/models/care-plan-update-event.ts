@@ -6,7 +6,7 @@ import PatientConcern from './patient-concern';
 import PatientGoal from './patient-goal';
 import User from './user';
 
-export type EventTypes =
+type EventTypes =
   | 'create_patient_concern'
   | 'edit_patient_concern'
   | 'delete_patient_concern'
@@ -14,7 +14,7 @@ export type EventTypes =
   | 'edit_patient_goal'
   | 'delete_patient_goal';
 
-export interface ICarePlanUpdateEventOptions {
+interface ICarePlanUpdateEventOptions {
   patientId: string;
   userId: string;
   patientConcernId?: string;

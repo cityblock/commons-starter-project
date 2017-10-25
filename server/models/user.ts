@@ -13,7 +13,7 @@ export type UserRole =
   | 'anonymousUser'
   | 'admin';
 
-export interface ICreateUser {
+interface ICreateUser {
   email: string;
   homeClinicId: string;
   firstName?: string;
@@ -22,7 +22,7 @@ export interface ICreateUser {
   athenaProviderId?: number;
 }
 
-export interface IUpdateUser {
+interface IUpdateUser {
   locale: 'en' | 'es';
   googleProfileImageUrl: string;
   googleAuthId: string;
@@ -32,7 +32,7 @@ export interface IUpdateUser {
   lastLoginAt: string;
 }
 
-export type GetByOptions = 'email';
+type GetByOptions = 'email';
 
 export type UserOrderOptions =
   | 'createdAt'
@@ -47,6 +47,7 @@ export interface IUserFilterOptions extends IPaginationOptions {
   orderBy: UserOrderOptions;
   order: 'asc' | 'desc';
 }
+
 /* tslint:disable:member-ordering */
 export default class User extends Model {
   id: string;

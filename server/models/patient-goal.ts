@@ -6,7 +6,7 @@ import GoalSuggestionTemplate from './goal-suggestion-template';
 import Patient from './patient';
 import Task from './task';
 
-export interface IPatientGoalEditableFields {
+interface IPatientGoalEditableFields {
   title: string;
   patientId: string;
   goalSuggestionTemplateId?: string;

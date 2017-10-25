@@ -3,7 +3,7 @@ import BaseModel from './base-model';
 import Task from './task';
 import User from './user';
 
-export interface ITaskFollowerOptions {
+interface ITaskFollowerOptions {
   userId: string;
   taskId: string;
 }

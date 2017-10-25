@@ -8,7 +8,7 @@ import ScreeningTool from './screening-tool';
 import ScreeningToolScoreRange from './screening-tool-score-range';
 import User from './user';
 
-export interface IPatientScreeningToolSubmissionCreateFields {
+interface IPatientScreeningToolSubmissionCreateFields {
   screeningToolId: string;
   patientId: string;
   userId: string;
@@ -17,7 +17,7 @@ export interface IPatientScreeningToolSubmissionCreateFields {
   screeningToolScoreRangeId?: string;
 }
 
-export interface IPatientScreeningToolSubmissionEditableFields {
+interface IPatientScreeningToolSubmissionEditableFields {
   screeningToolId?: string;
   patientId?: string;
   userId?: string;

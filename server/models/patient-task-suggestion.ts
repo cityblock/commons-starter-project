@@ -4,16 +4,16 @@ import Patient from './patient';
 import TaskTemplate from './task-template';
 import User from './user';
 
-export interface IPatientTaskSuggestionCreateArgs {
+interface IPatientTaskSuggestionCreateArgs {
   patientId: string;
   taskTemplateId: string;
 }
 
-export interface IPatientTaskSuggestionCreateMultipleArgs {
+interface IPatientTaskSuggestionCreateMultipleArgs {
   suggestions: IPatientTaskSuggestionCreateArgs[];
 }
 
-export interface IPatientTaskSuggestionDismissArgs {
+interface IPatientTaskSuggestionDismissArgs {
   patientTaskSuggestionId: string;
   dismissedById: string;
   dismissedReason: string;

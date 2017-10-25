@@ -2,7 +2,7 @@ import { Model, RelationMappings, Transaction } from 'objection';
 import BaseModel from './base-model';
 import TaskTemplate from './task-template';
 
-export interface IGoalSuggestionTemplateEditableFields {
+interface IGoalSuggestionTemplateEditableFields {
   title: string;
 }
 

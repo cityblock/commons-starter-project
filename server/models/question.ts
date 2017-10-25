@@ -6,7 +6,7 @@ import QuestionCondition from './question-condition';
 import RiskArea from './risk-area';
 import ScreeningTool from './screening-tool';
 
-export interface IQuestionEditableFields {
+interface IQuestionEditableFields {
   title: string;
   answerType: AnswerType;
   validatedSource?: string;
@@ -16,8 +16,8 @@ export interface IQuestionEditableFields {
   applicableIfType?: QuestionConditionType;
 }
 
-export type AnswerType = 'dropdown' | 'radio' | 'freetext' | 'multiselect';
-export type QuestionConditionType = 'allTrue' | 'oneTrue';
+type AnswerType = 'dropdown' | 'radio' | 'freetext' | 'multiselect';
+type QuestionConditionType = 'allTrue' | 'oneTrue';
 
 /* tslint:disable:max-line-length */
 const EAGER_QUERY =

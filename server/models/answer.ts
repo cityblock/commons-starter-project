@@ -2,7 +2,7 @@ import { Model, RelationMappings, Transaction } from 'objection';
 import BaseModel from './base-model';
 import Question from './question';
 
-export interface IAnswerEditableFields {
+interface IAnswerEditableFields {
   displayValue: string;
   value: string;
   valueType: ValueTypeOptions;
@@ -12,12 +12,12 @@ export interface IAnswerEditableFields {
   order: number;
 }
 
-export interface IAnswerCreateFields extends IAnswerEditableFields {
+interface IAnswerCreateFields extends IAnswerEditableFields {
   questionId: string;
 }
 
-export type ValueTypeOptions = 'string' | 'boolean' | 'number';
-export type RiskAdjustmentType = 'inactive' | 'increment' | 'forceHighRisk';
+type ValueTypeOptions = 'string' | 'boolean' | 'number';
+type RiskAdjustmentType = 'inactive' | 'increment' | 'forceHighRisk';
 
 const EAGER_QUERY = '[concernSuggestions, goalSuggestions]';
 

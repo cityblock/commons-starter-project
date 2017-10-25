@@ -6,7 +6,7 @@ import PatientScreeningToolSubmission from './patient-screening-tool-submission'
 import Question from './question';
 import ScreeningTool from './screening-tool';
 
-export interface IPatientAnswerCreateFields {
+interface IPatientAnswerCreateFields {
   patientId: string;
   questionIds?: string[];
   patientScreeningToolSubmissionId?: string;

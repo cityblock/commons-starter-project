@@ -5,7 +5,7 @@ import BaseModel from './base-model';
 import PatientAnswer from './patient-answer';
 import Question from './question';
 
-export interface IRiskAreaEditableFields {
+interface IRiskAreaEditableFields {
   title: string;
   order: number;
 }

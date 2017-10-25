@@ -4,12 +4,12 @@ import BaseModel from './base-model';
 import Patient from './patient';
 import User from './user';
 
-export interface IClinicEditableFields {
+interface IClinicEditableFields {
   name: string;
   departmentId: number;
 }
 
-export type GetByOptions = 'name' | 'departmentId';
+type GetByOptions = 'name' | 'departmentId';
 
 /* tslint:disable:member-ordering */
 export default class Clinic extends BaseModel {

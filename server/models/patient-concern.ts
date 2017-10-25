@@ -5,7 +5,7 @@ import Concern from './concern';
 import Patient from './patient';
 import PatientGoal from './patient-goal';
 
-export interface IPatientConcernEditableFields {
+interface IPatientConcernEditableFields {
   order?: number;
   concernId: string;
   patientId: string;

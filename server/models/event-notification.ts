@@ -6,16 +6,16 @@ import Task from './task';
 import TaskEvent from './task-event';
 import User from './user';
 
-export interface IEventNotificationEditableFields {
+interface IEventNotificationEditableFields {
   seenAt?: string;
 }
 
-export interface IEventNotificationOptions {
+interface IEventNotificationOptions {
   userId: string;
   taskEventId?: string;
 }
 
-export interface ICreateTaskNotificationsOptions {
+interface ICreateTaskNotificationsOptions {
   initiatingUserId: string;
   taskEventId: string;
   taskId: string;

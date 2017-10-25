@@ -3,12 +3,12 @@ import BaseModel from './base-model';
 import RiskArea from './risk-area';
 import ScreeningToolScoreRange from './screening-tool-score-range';
 
-export interface IScreeningToolCreateFields {
+interface IScreeningToolCreateFields {
   title: string;
   riskAreaId: string;
 }
 
-export interface IScreeningToolEditableFields {
+interface IScreeningToolEditableFields {
   title?: string;
   riskAreaId?: string;
   deletedAt?: string;

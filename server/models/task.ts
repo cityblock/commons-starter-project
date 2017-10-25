@@ -6,7 +6,7 @@ import PatientGoal from './patient-goal';
 import TaskFollower from './task-follower';
 import User from './user';
 
-export interface ITaskEditableFields {
+interface ITaskEditableFields {
   title: string;
   description?: string;
   dueAt?: string;
@@ -20,7 +20,7 @@ export interface ITaskEditableFields {
 
 export type TaskOrderOptions = 'createdAt' | 'dueAt' | 'updatedAt';
 
-export interface ITaskPaginationOptions extends IPaginationOptions {
+interface ITaskPaginationOptions extends IPaginationOptions {
   orderBy: TaskOrderOptions;
   order: 'asc' | 'desc';
 }

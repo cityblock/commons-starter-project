@@ -4,7 +4,7 @@ import BaseModel from './base-model';
 import Task from './task';
 import User from './user';
 
-export interface ITaskCommentOptions {
+interface ITaskCommentOptions {
   userId: string;
   taskId: string;
   body: string;

@@ -4,7 +4,7 @@ import BaseModel from './base-model';
 import Patient from './patient';
 import User from './user';
 
-export interface ICareTeamOptions {
+interface ICareTeamOptions {
   userId: string;
   patientId: string;
 }

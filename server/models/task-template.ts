@@ -5,7 +5,7 @@ import { UserRole } from './user';
 
 export type CompletedWithinInterval = 'hour' | 'day' | 'week' | 'month' | 'year';
 
-export interface ITaskTemplateEditableFields {
+interface ITaskTemplateEditableFields {
   title: string;
   completedWithinNumber?: number;
   completedWithinInterval?: CompletedWithinInterval;

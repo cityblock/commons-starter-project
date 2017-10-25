@@ -2,7 +2,7 @@ import { Model, RelationMappings } from 'objection';
 import Answer from './answer';
 import BaseModel from './base-model';
 
-export interface IQuestionConditionEditableFields {
+interface IQuestionConditionEditableFields {
   answerId: string;
   questionId: string;
 }

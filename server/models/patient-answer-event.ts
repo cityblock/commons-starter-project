@@ -5,9 +5,9 @@ import Patient from './patient';
 import PatientAnswer from './patient-answer';
 import User from './user';
 
-export type EventTypes = 'create_patient_answer';
+type EventTypes = 'create_patient_answer';
 
-export interface IPatientAnswerEventOptions {
+interface IPatientAnswerEventOptions {
   patientId: string;
   userId: string;
   patientAnswerId: string;

@@ -1,7 +1,7 @@
 import { Model, RelationMappings, Transaction } from 'objection';
 import BaseModel from './base-model';
 
-export interface IConcernEditableFields {
+interface IConcernEditableFields {
   title: string;
 }
 

@@ -7,7 +7,7 @@ import Task from './task';
 import TaskComment from './task-comment';
 import User from './user';
 
-export interface ITaskEventOptions {
+interface ITaskEventOptions {
   taskId: string;
   userId: string;
   eventType: EventTypes;
@@ -17,7 +17,7 @@ export interface ITaskEventOptions {
   progressNoteId?: string;
 }
 
-export type EventTypes =
+type EventTypes =
   | 'create_task'
   | 'add_follower'
   | 'remove_follower'

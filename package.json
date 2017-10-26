@@ -5,7 +5,8 @@
   "repository": "https://github.com/sidewalklabs/commons",
   "main": "index.js",
   "scripts": {
-    "lint": "tslint --project tsconfig.json --config tslint.json --type-check",
+    "lint": "tslint --project tsconfig.json --config tslint.json",
+    "typecheck": "tsc --project tsconfig.server.json --noEmit && tsc --project tsconfig.webpack.json --noEmit",
     "clean": "rimraf public server-compiled",
     "prod-db": "./scripts/prod-psql.sh",
     "start": "NODE_ENV=production nodemon --exec node ./server-compiled/index.js",
@@ -21,7 +22,7 @@
     "migrate:rollback": "knex-migrate down --knexfile=server/models/knexfile.js",
     "test:watch": "yarn test -- --watch",
     "test:notify": "yarn run test:watch -- --notify",
-    "prepush": "yarn run lint",
+    "prepush": "yarn run lint && yarn typecheck",
     "update-schema": "./scripts/generate-schema-types.sh",
     "codegen": "./scripts/codegen.sh",
     "low-priority": "NODE_ENV=production nodemon --exec ts-node ./server/rabbitmq/workers/low-priority-worker.ts",

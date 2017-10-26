@@ -96,8 +96,5 @@
     "no-string-based-set-interval": true,
     "no-string-based-set-timeout": true,
     "no-eval": true
-  },
-  "linterOptions": {
-    "typeCheck": true
   }
 }

@@ -64,11 +64,15 @@ describe('patient screening tool submission model', () => {
     const question = await Question.create({
       title: 'Question Title',
       answerType: 'dropdown',
+      riskAreaId: riskArea.id,
+      type: 'riskArea',
       order: 1,
     });
     const question2 = await Question.create({
       title: 'Question 2 Title',
       answerType: 'dropdown',
+      riskAreaId: riskArea.id,
+      type: 'riskArea',
       order: 2,
     });
     const answer = await Answer.create({

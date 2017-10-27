@@ -84,6 +84,7 @@ describe('risk area model', () => {
         title: 'like writing tests?',
         answerType: 'dropdown',
         riskAreaId: riskArea.id,
+        type: 'riskArea',
         order: 1,
       });
       user = await User.create({
@@ -139,6 +140,7 @@ describe('risk area model', () => {
         title: 'hate writing tests?',
         answerType: 'dropdown',
         riskAreaId: riskArea.id,
+        type: 'riskArea',
         order: 2,
       });
       const highRiskAnswer = await Answer.create({
@@ -192,12 +194,14 @@ describe('risk area model', () => {
         title: 'hate writing tests?',
         answerType: 'dropdown',
         riskAreaId: riskArea.id,
+        type: 'riskArea',
         order: 2,
       });
       const question3 = await Question.create({
         title: 'really hate writing tests?',
         answerType: 'dropdown',
         riskAreaId: riskArea2.id,
+        type: 'riskArea',
         order: 1,
       });
       const answer1 = await Answer.create({

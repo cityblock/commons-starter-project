@@ -36,6 +36,7 @@ describe('patient answer event model', () => {
       riskAreaId: riskArea.id,
       title: 'Question Title',
       answerType: 'dropdown',
+      type: 'riskArea',
       order: 1,
     });
     answer = await Answer.create({

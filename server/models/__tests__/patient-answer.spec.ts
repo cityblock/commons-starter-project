@@ -30,6 +30,7 @@ describe('answer model', () => {
       title: 'like writing tests?',
       answerType: 'dropdown',
       riskAreaId: riskArea.id,
+      type: 'riskArea',
       order: 1,
     });
     answer = await Answer.create({
@@ -159,6 +160,7 @@ describe('answer model', () => {
       title: 'like writing tests?',
       answerType: 'multiselect',
       riskAreaId: riskArea.id,
+      type: 'riskArea',
       order: 1,
     });
     answer = await Answer.create({
@@ -350,6 +352,7 @@ describe('answer model', () => {
       title: 'like writing tests again?',
       answerType: 'dropdown',
       screeningToolId: screeningTool.id,
+      type: 'screeningTool',
       order: 1,
     });
     const screeningToolAnswer = await Answer.create({

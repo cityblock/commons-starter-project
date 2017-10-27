@@ -29,12 +29,14 @@ describe('questionCondition tests', () => {
     question = await Question.create({
       title: 'like writing tests?',
       answerType: 'dropdown',
+      type: 'riskArea',
       riskAreaId: riskArea.id,
       order: 1,
     });
     question2 = await Question.create({
       title: 'really like writing tests?',
       answerType: 'dropdown',
+      type: 'riskArea',
       riskAreaId: riskArea.id,
       order: 2,
     });

@@ -28,6 +28,7 @@ describe('answer tests', () => {
       title: 'like writing tests?',
       answerType: 'dropdown',
       riskAreaId: riskArea.id,
+      type: 'riskArea',
       order: 1,
     });
     answer = await Answer.create({

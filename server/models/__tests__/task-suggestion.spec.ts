@@ -1,6 +1,7 @@
 import Db from '../../db';
 import Answer from '../answer';
 import Question from '../question';
+import RiskArea from '../risk-area';
 import TaskSuggestion from '../task-suggestion';
 import TaskTemplate from '../task-template';
 
@@ -14,10 +15,17 @@ describe('task suggestion model', () => {
     db = await Db.get();
     await Db.clear();
 
+    const riskArea = await RiskArea.create({
+      title: 'test',
+      order: 1,
+    });
+
     question = await Question.create({
       title: 'like writing tests?',
       answerType: 'dropdown',
       order: 1,
+      type: 'riskArea',
+      riskAreaId: riskArea.id,
     });
     answer = await Answer.create({
       displayValue: 'loves writing tests!',

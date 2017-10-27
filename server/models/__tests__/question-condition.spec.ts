@@ -23,12 +23,14 @@ describe('answer model', () => {
       title: 'like writing tests?',
       answerType: 'dropdown',
       riskAreaId: riskArea.id,
+      type: 'riskArea',
       order: 1,
     });
     question2 = await Question.create({
       title: 'really like writing tests?',
       answerType: 'dropdown',
       riskAreaId: riskArea.id,
+      type: 'riskArea',
       order: 2,
     });
     answer = await Answer.create({

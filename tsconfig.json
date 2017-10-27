@@ -22,6 +22,12 @@
     ],
     "strict": true
   },
+  "include": [
+    "./server/**/*.ts",
+    "./app/**/*.ts",
+    "./app/**/*.tsx",
+    "./declarations/*"
+  ],
   "exclude": [
     "node_modules",
     "public",

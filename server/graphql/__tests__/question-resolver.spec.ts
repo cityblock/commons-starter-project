@@ -35,12 +35,14 @@ describe('question tests', () => {
       title: 'like writing tests?',
       answerType: 'dropdown',
       riskAreaId: riskArea.id,
+      type: 'riskArea',
       order: 1,
     });
     question2 = await Question.create({
       title: 'hate writing tests?',
       answerType: 'dropdown',
       screeningToolId: screeningTool.id,
+      type: 'screeningTool',
       order: 1,
     });
     answer = await Answer.create({

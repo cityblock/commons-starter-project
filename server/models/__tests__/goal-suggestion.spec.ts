@@ -32,6 +32,7 @@ describe('goal suggestion model', () => {
       title: 'like writing tests?',
       answerType: 'dropdown',
       riskAreaId: riskArea.id,
+      type: 'riskArea',
       order: 1,
     });
     answer = await Answer.create({
@@ -123,6 +124,7 @@ describe('goal suggestion model', () => {
         title: 'hate writing tests?',
         answerType: 'dropdown',
         riskAreaId: riskArea.id,
+        type: 'riskArea',
         order: 1,
       });
       const answer2 = await Answer.create({
@@ -227,6 +229,7 @@ describe('goal suggestion model', () => {
         title: 'hate writing tests?',
         answerType: 'dropdown',
         riskAreaId: riskArea.id,
+        type: 'riskArea',
         order: 1,
       });
       const answer2 = await Answer.create({
@@ -330,6 +333,7 @@ describe('goal suggestion model', () => {
         title: 'hate writing tests?',
         answerType: 'dropdown',
         riskAreaId: riskArea.id,
+        type: 'riskArea',
         order: 1,
       });
       const answer2 = await Answer.create({

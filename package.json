@@ -6,7 +6,7 @@
   "main": "index.js",
   "scripts": {
     "lint": "tslint --project tsconfig.json --config tslint.json",
-    "typecheck": "tsc --project tsconfig.server.json --noEmit && tsc --project tsconfig.webpack.json --noEmit",
+    "typecheck": "tsc --project tsconfig.json --noEmit --pretty",
     "clean": "rimraf public server-compiled",
     "prod-db": "./scripts/prod-psql.sh",
     "start": "NODE_ENV=production nodemon --exec node ./server-compiled/index.js",

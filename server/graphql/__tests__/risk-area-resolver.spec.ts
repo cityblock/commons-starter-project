@@ -29,6 +29,7 @@ describe('answer tests', () => {
     question = await Question.create({
       title: 'like writing tests?',
       answerType: 'dropdown',
+      type: 'riskArea',
       riskAreaId: riskArea.id,
       order: 1,
     });
@@ -144,6 +145,7 @@ describe('answer tests', () => {
       question = await Question.create({
         title: 'like writing tests?',
         answerType: 'dropdown',
+        type: 'riskArea',
         riskAreaId: riskArea.id,
         order: 1,
       });
@@ -240,6 +242,7 @@ describe('answer tests', () => {
       const question2 = await Question.create({
         title: 'other question',
         answerType: 'dropdown',
+        type: 'riskArea',
         riskAreaId: riskArea.id,
         order: 2,
       });

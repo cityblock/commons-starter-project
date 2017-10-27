@@ -1,13 +1,15 @@
 import Db from '../../db';
 import Answer from '../answer';
+import ProgressNoteTemplate from '../progress-note-template';
 import Question from '../question';
 import RiskArea from '../risk-area';
 import ScreeningTool from '../screening-tool';
 
-describe('answer model', () => {
+describe('question model', () => {
   let db: Db;
   let riskArea: RiskArea;
   let screeningTool: ScreeningTool;
+  let progressNoteTemplate: ProgressNoteTemplate;
 
   beforeEach(async () => {
     db = await Db.get();
@@ -21,6 +23,9 @@ describe('answer model', () => {
       title: 'screening tool',
       riskAreaId: riskArea.id,
     });
+    progressNoteTemplate = await ProgressNoteTemplate.create({
+      title: 'progress note template',
+    });
   });
 
   afterAll(async () => {
@@ -32,6 +37,7 @@ describe('answer model', () => {
       title: 'testing?',
       answerType: 'dropdown',
       riskAreaId: riskArea.id,
+      type: 'riskArea',
       order: 1,
     });
     expect(question).toMatchObject({
@@ -53,6 +59,7 @@ describe('answer model', () => {
       title: 'testing?',
       answerType: 'dropdown',
       screeningToolId: screeningTool.id,
+      type: 'screeningTool',
       order: 1,
     });
     expect(question).toMatchObject({
@@ -69,6 +76,28 @@ describe('answer model', () => {
     });
   });
 
+  it('creates and gets a question for a progress note template', async () => {
+    const question = await Question.create({
+      title: 'testing?',
+      answerType: 'dropdown',
+      progressNoteTemplateId: progressNoteTemplate.id,
+      type: 'progressNoteTemplate',
+      order: 1,
+    });
+    expect(question).toMatchObject({
+      title: 'testing?',
+      answerType: 'dropdown',
+      progressNoteTemplateId: progressNoteTemplate.id,
+      order: 1,
+    });
+    expect(await Question.get(question.id)).toMatchObject({
+      title: 'testing?',
+      answerType: 'dropdown',
+      progressNoteTemplateId: progressNoteTemplate.id,
+      order: 1,
+    });
+  });
+
   it('should throw an error if a question does not exist for the id', async () => {
     const fakeId = 'fakeId';
     await expect(Question.get(fakeId)).rejects.toMatch('No such question: fakeId');
@@ -79,6 +108,7 @@ describe('answer model', () => {
       title: 'testing?',
       answerType: 'dropdown',
       riskAreaId: riskArea.id,
+      type: 'riskArea',
       order: 1,
     });
     expect(await Question.edit({ title: 'Testing?' }, question.id)).toMatchObject({
@@ -91,12 +121,14 @@ describe('answer model', () => {
       title: 'testing?',
       answerType: 'dropdown',
       riskAreaId: riskArea.id,
+      type: 'riskArea',
       order: 1,
     });
     const question2 = await Question.create({
       title: 'testing?',
       answerType: 'dropdown',
       riskAreaId: riskArea.id,
+      type: 'riskArea',
       order: 2,
     });
     const question3 = await Question.create({
@@ -104,11 +136,13 @@ describe('answer model', () => {
       answerType: 'dropdown',
       screeningToolId: screeningTool.id,
       riskAreaId: riskArea.id,
+      type: 'riskArea',
       order: 3,
     });
     const fetchedQuestions = await Question.getAllForRiskArea(riskArea.id);
     const fetchedQuestionIds = fetchedQuestions.map(q => q.id);
-    expect(fetchedQuestions).toMatchObject([question1, question2]);
+    expect(fetchedQuestions[0].id).toEqual(question1.id);
+    expect(fetchedQuestions[1].id).toEqual(question2.id);
     expect(fetchedQuestionIds).not.toContain(question3.id);
   });
 
@@ -117,24 +151,56 @@ describe('answer model', () => {
       title: 'testing?',
       answerType: 'dropdown',
       screeningToolId: screeningTool.id,
+      type: 'screeningTool',
       order: 1,
     });
     const question2 = await Question.create({
       title: 'testing?',
       answerType: 'dropdown',
       screeningToolId: screeningTool.id,
-      riskAreaId: riskArea.id,
+      type: 'screeningTool',
       order: 2,
     });
     const question3 = await Question.create({
       title: 'testing?',
       answerType: 'dropdown',
       riskAreaId: riskArea.id,
+      type: 'riskArea',
       order: 3,
     });
     const fetchedQuestions = await Question.getAllForScreeningTool(screeningTool.id);
     const fetchedQuestionIds = fetchedQuestions.map(q => q.id);
-    expect(fetchedQuestions).toMatchObject([question1, question2]);
+    expect(fetchedQuestions[0].id).toEqual(question1.id);
+    expect(fetchedQuestions[1].id).toEqual(question2.id);
+    expect(fetchedQuestionIds).not.toContain(question3.id);
+  });
+
+  it('gets questions for progress note template', async () => {
+    const question1 = await Question.create({
+      title: 'testing?',
+      answerType: 'dropdown',
+      progressNoteTemplateId: progressNoteTemplate.id,
+      type: 'progressNoteTemplate',
+      order: 1,
+    });
+    const question2 = await Question.create({
+      title: 'testing?',
+      answerType: 'dropdown',
+      progressNoteTemplateId: progressNoteTemplate.id,
+      type: 'progressNoteTemplate',
+      order: 2,
+    });
+    const question3 = await Question.create({
+      title: 'testing?',
+      answerType: 'dropdown',
+      riskAreaId: riskArea.id,
+      type: 'riskArea',
+      order: 3,
+    });
+    const fetchedQuestions = await Question.getAllForProgressNoteTemplate(progressNoteTemplate.id);
+    const fetchedQuestionIds = fetchedQuestions.map(q => q.id);
+    expect(fetchedQuestions[0].id).toEqual(question1.id);
+    expect(fetchedQuestions[1].id).toEqual(question2.id);
     expect(fetchedQuestionIds).not.toContain(question3.id);
   });
 
@@ -143,6 +209,7 @@ describe('answer model', () => {
       title: 'testing?',
       answerType: 'dropdown',
       riskAreaId: riskArea.id,
+      type: 'riskArea',
       order: 1,
     });
     const answer = await Answer.create({
@@ -182,6 +249,7 @@ describe('answer model', () => {
       title: 'testing?',
       answerType: 'dropdown',
       riskAreaId: riskArea.id,
+      type: 'riskArea',
       order: 1,
     });
     expect(question.deletedAt).toBeNull();

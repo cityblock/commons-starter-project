@@ -24,6 +24,7 @@ describe('anser model', () => {
       title: 'like writing tests?',
       answerType: 'dropdown',
       riskAreaId: riskArea.id,
+      type: 'riskArea',
       order: 1,
     });
     const answer = await Answer.create({
@@ -48,12 +49,14 @@ describe('anser model', () => {
       title: 'like writing tests?',
       answerType: 'dropdown',
       riskAreaId: riskArea.id,
+      type: 'riskArea',
       order: 1,
     });
     const question2 = await Question.create({
       title: 'hate writing tests?',
       answerType: 'dropdown',
       riskAreaId: riskArea.id,
+      type: 'riskArea',
       order: 2,
     });
     const answer = await Answer.create({
@@ -90,6 +93,7 @@ describe('anser model', () => {
       title: 'like writing tests?',
       answerType: 'dropdown',
       riskAreaId: riskArea.id,
+      type: 'riskArea',
       order: 1,
     });
     const answer = await Answer.create({
@@ -117,6 +121,7 @@ describe('anser model', () => {
       title: 'like writing tests?',
       answerType: 'dropdown',
       riskAreaId: riskArea.id,
+      type: 'riskArea',
       order: 1,
     });
     const answer = await Answer.create({
@@ -142,6 +147,7 @@ describe('anser model', () => {
       title: 'like writing tests?',
       answerType: 'dropdown',
       riskAreaId: riskArea.id,
+      type: 'riskArea',
       order: 1,
     });
     const answer1 = await Answer.create({

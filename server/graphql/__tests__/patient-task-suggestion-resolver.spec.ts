@@ -6,6 +6,7 @@ import Concern from '../../models/concern';
 import Patient from '../../models/patient';
 import PatientTaskSuggestion from '../../models/patient-task-suggestion';
 import Question from '../../models/question';
+import RiskArea from '../../models/risk-area';
 import Task from '../../models/task';
 import TaskSuggestion from '../../models/task-suggestion';
 import TaskTemplate from '../../models/task-template';
@@ -28,6 +29,11 @@ describe('patient task suggestion resolver tests', () => {
     await Db.clear();
     user = await User.create({ email: 'a@b.com', userRole, homeClinicId: '1' });
 
+    const riskArea = await RiskArea.create({
+      title: 'test',
+      order: 1,
+    });
+
     concern = await Concern.create({ title: 'Concern' });
     taskTemplate = await TaskTemplate.create({
       title: 'Housing',
@@ -38,6 +44,8 @@ describe('patient task suggestion resolver tests', () => {
     question = await Question.create({
       title: 'like writing tests?',
       answerType: 'dropdown',
+      type: 'riskArea',
+      riskAreaId: riskArea.id,
       order: 1,
     });
     answer = await Answer.create({

@@ -47,12 +47,14 @@ describe('care plan resolver tests', () => {
       title: 'like writing tests?',
       answerType: 'dropdown',
       riskAreaId: riskArea.id,
+      type: 'riskArea',
       order: 1,
     });
     question2 = await Question.create({
       title: 'hate writing tests',
       answerType: 'dropdown',
       riskAreaId: riskArea2.id,
+      type: 'riskArea',
       order: 2,
     });
     answer = await Answer.create({

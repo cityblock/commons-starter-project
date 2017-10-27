@@ -43,6 +43,7 @@ describe('patient answer tests', () => {
       title: 'like writing tests?',
       answerType: 'dropdown',
       riskAreaId: riskArea.id,
+      type: 'riskArea',
       order: 1,
     });
     answer = await Answer.create({
@@ -198,6 +199,7 @@ describe('patient answer tests', () => {
         title: 'like writing tests again?',
         answerType: 'dropdown',
         riskAreaId: riskArea2.id,
+        type: 'riskArea',
         order: 1,
       });
       const differentAnswer = await Answer.create({
@@ -274,6 +276,7 @@ describe('patient answer tests', () => {
         title: 'like writing tests again?',
         answerType: 'dropdown',
         screeningToolId: screeningTool.id,
+        type: 'screeningTool',
         order: 1,
       });
       const screeningToolAnswer = await Answer.create({
@@ -668,6 +671,7 @@ describe('patient answer tests', () => {
         title: 'really really like writing tests?',
         answerType: 'dropdown',
         riskAreaId: riskArea.id,
+        type: 'riskArea',
         order: 1,
       });
       const answer3 = await Answer.create({
@@ -716,6 +720,7 @@ describe('patient answer tests', () => {
         title: 'really really like writing tests?',
         answerType: 'dropdown',
         riskAreaId: riskArea.id,
+        type: 'riskArea',
         order: 1,
       });
       const answer3 = await Answer.create({

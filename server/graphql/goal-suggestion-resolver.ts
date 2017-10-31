@@ -26,8 +26,8 @@ export async function goalSuggestionCreate(
   await accessControls.isAllowed(userRole, 'view', 'goalSuggestion');
 
   return await GoalSuggestion.create({
-    answerId: args.input.answerId,
-    screeningToolScoreRangeId: args.input.screeningToolScoreRangeId,
+    answerId: args.input.answerId || undefined,
+    screeningToolScoreRangeId: args.input.screeningToolScoreRangeId || undefined,
     goalSuggestionTemplateId: args.input.goalSuggestionTemplateId,
   });
 }
@@ -40,8 +40,8 @@ export async function goalSuggestionDelete(
   await accessControls.isAllowed(userRole, 'view', 'goalSuggestion');
 
   return await GoalSuggestion.delete({
-    answerId: args.input.answerId,
-    screeningToolScoreRangeId: args.input.screeningToolScoreRangeId,
+    answerId: args.input.answerId || undefined,
+    screeningToolScoreRangeId: args.input.screeningToolScoreRangeId || undefined,
     goalSuggestionTemplateId: args.input.goalSuggestionTemplateId,
   });
 }

@@ -8,8 +8,8 @@ import ScreeningToolScoreRange from './screening-tool-score-range';
 
 interface IGoalSuggestionEditableFields {
   goalSuggestionTemplateId: string;
-  answerId?: string | null;
-  screeningToolScoreRangeId?: string | null;
+  answerId?: string;
+  screeningToolScoreRangeId?: string;
 }
 
 /* tslint:disable:member-ordering */

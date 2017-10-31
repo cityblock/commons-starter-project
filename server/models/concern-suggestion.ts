@@ -7,8 +7,8 @@ import Concern from './concern';
 
 interface IConcernSuggestionEditableFields {
   concernId: string;
-  answerId?: string | null;
-  screeningToolScoreRangeId?: string | null;
+  answerId?: string;
+  screeningToolScoreRangeId?: string;
 }
 
 /* tslint:disable:member-ordering */

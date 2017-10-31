@@ -26,8 +26,8 @@ export async function concernSuggestionCreate(
   await accessControls.isAllowed(userRole, 'view', 'concern');
 
   return await ConcernSuggestion.create({
-    answerId: args.input.answerId,
-    screeningToolScoreRangeId: args.input.screeningToolScoreRangeId,
+    answerId: args.input.answerId || undefined,
+    screeningToolScoreRangeId: args.input.screeningToolScoreRangeId || undefined,
     concernId: args.input.concernId,
   });
 }
@@ -40,8 +40,8 @@ export async function concernSuggestionDelete(
   await accessControls.isAllowed(userRole, 'view', 'concern');
 
   return await ConcernSuggestion.delete({
-    answerId: args.input.answerId,
-    screeningToolScoreRangeId: args.input.screeningToolScoreRangeId,
+    answerId: args.input.answerId || undefined,
+    screeningToolScoreRangeId: args.input.screeningToolScoreRangeId || undefined,
     concernId: args.input.concernId,
   });
 }

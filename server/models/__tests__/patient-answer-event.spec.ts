@@ -1,5 +1,6 @@
+import { transaction } from 'objection';
 import Db from '../../db';
-import { createMockPatient, createPatient } from '../../spec-helpers';
+import { cleanPatientAnswerEvents, createMockPatient, createPatient } from '../../spec-helpers';
 import Answer from '../answer';
 import Patient from '../patient';
 import PatientAnswer from '../patient-answer';
@@ -59,6 +60,7 @@ describe('patient answer event model', () => {
         },
       ],
     }))[0];
+    await cleanPatientAnswerEvents(patient.id);
   });
 
   afterAll(async () => {
@@ -84,6 +86,63 @@ describe('patient answer event model', () => {
     expect(fetchedPatientAnswerEvent.deletedAt).toBeNull();
     expect(fetchedPatientAnswerEvent.createdAt).not.toBeNull();
     expect(fetchedPatientAnswerEvent.updatedAt).not.toBeNull();
+  });
+
+  it('creates multiple patientAnswerEvents', async () => {
+    const patientAnswer2 = (await PatientAnswer.create({
+      patientId: patient.id,
+      answers: [
+        {
+          answerId: answer.id,
+          questionId: question.id,
+          answerValue: answer.value,
+          patientId: patient.id,
+          applicable: true,
+          userId: user.id,
+        },
+      ],
+    }))[0];
+
+    await cleanPatientAnswerEvents(patient.id);
+
+    await transaction(
+      PatientAnswerEvent.knex(),
+      async txn =>
+        await PatientAnswerEvent.createMultiple(
+          {
+            patientAnswerEvents: [
+              {
+                patientId: patient.id,
+                userId: user.id,
+                patientAnswerId: patientAnswer.id,
+                eventType: 'create_patient_answer',
+              },
+              {
+                patientId: patient.id,
+                userId: user.id,
+                patientAnswerId: patientAnswer2.id,
+                eventType: 'create_patient_answer',
+              },
+            ],
+          },
+          txn,
+        ),
+    );
+
+    const fetchedPatientAnswerEvents = await PatientAnswerEvent.getAllForPatient(patient.id, {
+      pageNumber: 0,
+      pageSize: 10,
+    });
+
+    expect(fetchedPatientAnswerEvents.total).toEqual(2);
+    expect(fetchedPatientAnswerEvents.results).toMatchObject([
+      {
+        patientAnswerId: patientAnswer2.id,
+      },
+      {
+        patientAnswerId: patientAnswer.id,
+      },
+    ]);
   });
 
   it('throws an error when getting an invalid id', async () => {

@@ -1,8 +1,10 @@
+import { transaction } from 'objection';
 import Db from '../../db';
-import { createMockPatient, createPatient } from '../../spec-helpers';
+import { cleanPatientAnswerEvents, createMockPatient, createPatient } from '../../spec-helpers';
 import Answer from '../answer';
 import Patient from '../patient';
 import PatientAnswer from '../patient-answer';
+import PatientAnswerEvent from '../patient-answer-event';
 import Question from '../question';
 import RiskArea from '../risk-area';
 import ScreeningTool from '../screening-tool';
@@ -120,6 +122,23 @@ describe('answer model', () => {
 
     expect(fetchedAnswers2Ids).toContain(newAnswers[0].id);
     expect(fetchedAnswers2Ids).not.toContain(previousAnswers[0].id);
+
+    // Correct PatientAnswerEvents should also get created
+    const fetchedPatientAnswerEvents = await PatientAnswerEvent.getAllForPatient(patient.id, {
+      pageNumber: 0,
+      pageSize: 10,
+    });
+    expect(fetchedPatientAnswerEvents.total).toEqual(2);
+    expect(fetchedPatientAnswerEvents.results).toMatchObject([
+      {
+        patientAnswerId: newAnswers[0].id,
+        previousPatientAnswerId: previousAnswers[0].id,
+      },
+      {
+        patientAnswerId: previousAnswers[0].id,
+        previousPatientAnswerId: null,
+      },
+    ]);
   });
 
   it('getForQuestion returns most recent answer for non-multiselect question', async () => {
@@ -379,6 +398,112 @@ describe('answer model', () => {
     });
     expect(await PatientAnswer.getForScreeningTool(screeningTool.id, patient.id)).toEqual([
       patientAnswers[0],
+    ]);
+  });
+
+  it('creates patient answer events for a list of answers', async () => {
+    const screeningTool = await ScreeningTool.create({
+      title: 'Screening Tool',
+      riskAreaId: riskArea.id,
+    });
+    const screeningToolQuestion1 = await Question.create({
+      title: 'like writing tests again?',
+      answerType: 'dropdown',
+      screeningToolId: screeningTool.id,
+      order: 1,
+      type: 'screeningTool',
+    });
+    const screeningToolQuestion2 = await Question.create({
+      title: 'hate writing tests?',
+      answerType: 'dropdown',
+      screeningToolId: screeningTool.id,
+      order: 2,
+      type: 'screeningTool',
+    });
+    const screeningToolAnswer1 = await Answer.create({
+      displayValue: 'hates writing tests!',
+      value: '3',
+      valueType: 'number',
+      riskAdjustmentType: 'forceHighRisk',
+      inSummary: false,
+      questionId: screeningToolQuestion1.id,
+      order: 1,
+    });
+    const screeningToolAnswer2 = await Answer.create({
+      displayValue: 'hates writing tests!',
+      value: '4',
+      valueType: 'number',
+      riskAdjustmentType: 'forceHighRisk',
+      inSummary: false,
+      questionId: screeningToolQuestion2.id,
+      order: 1,
+    });
+    const oldPatientAnswers = await PatientAnswer.create({
+      patientId: patient.id,
+      answers: [
+        {
+          questionId: screeningToolAnswer1.questionId,
+          answerId: screeningToolAnswer1.id,
+          answerValue: screeningToolAnswer1.value,
+          patientId: patient.id,
+          applicable: true,
+          userId: user.id,
+        },
+        {
+          questionId: screeningToolAnswer2.questionId,
+          answerId: screeningToolAnswer2.id,
+          answerValue: screeningToolAnswer2.value,
+          patientId: patient.id,
+          applicable: true,
+          userId: user.id,
+        },
+      ],
+    });
+    const newPatientAnswers = await PatientAnswer.create({
+      patientId: patient.id,
+      answers: [
+        {
+          questionId: screeningToolAnswer1.questionId,
+          answerId: screeningToolAnswer1.id,
+          answerValue: screeningToolAnswer1.value,
+          patientId: patient.id,
+          applicable: true,
+          userId: user.id,
+        },
+        {
+          questionId: screeningToolAnswer2.questionId,
+          answerId: screeningToolAnswer2.id,
+          answerValue: screeningToolAnswer2.value,
+          patientId: patient.id,
+          applicable: true,
+          userId: user.id,
+        },
+      ],
+    });
+
+    await cleanPatientAnswerEvents(patient.id);
+
+    await transaction(
+      PatientAnswer.knex(),
+      async txn =>
+        await PatientAnswer.createPatientAnswerEvents(newPatientAnswers, oldPatientAnswers, txn),
+    );
+
+    const fetchedPatientAnswerEvents = await PatientAnswerEvent.getAllForPatient(patient.id, {
+      pageNumber: 0,
+      pageSize: 10,
+    });
+
+    expect(fetchedPatientAnswerEvents.total).toEqual(2);
+    expect(fetchedPatientAnswerEvents.results).toMatchObject([
+      {
+        patientAnswerId: newPatientAnswers[1].id,
+        previousPatientAnswerId: oldPatientAnswers[1].id,
+      },
+      {
+        patientAnswerId: newPatientAnswers[0].id,
+        previousPatientAnswerId: oldPatientAnswers[0].id,
+      },
     ]);
   });
 });

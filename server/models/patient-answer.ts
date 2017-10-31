@@ -1,7 +1,9 @@
+import { isEmpty, uniqBy } from 'lodash';
 import { transaction, Model, RelationMappings, Transaction } from 'objection';
 import { IPaginatedResults } from '../db';
 import Answer from './answer';
 import BaseModel from './base-model';
+import PatientAnswerEvent, { IPatientAnswerEventOptions } from './patient-answer-event';
 import PatientScreeningToolSubmission from './patient-screening-tool-submission';
 import Question from './question';
 import ScreeningTool from './screening-tool';
@@ -199,6 +201,39 @@ export default class PatientAnswer extends BaseModel {
     return patientAnswers as PatientAnswer[];
   }
 
+  static async createPatientAnswerEvents(
+    patientAnswers: PatientAnswer[],
+    deletedPatientAnswers: PatientAnswer[],
+    txn: Transaction,
+  ) {
+    const patientAnswerEventsToCreate = patientAnswers.map(patientAnswer => {
+      const patientAnswerEvent: IPatientAnswerEventOptions = {
+        patientId: patientAnswer.patientId,
+        userId: patientAnswer.userId,
+        patientAnswerId: patientAnswer.id,
+        eventType: 'create_patient_answer',
+      };
+      const previousPatientAnswer = deletedPatientAnswers.find(
+        deletedAnswer => deletedAnswer.answer.questionId === patientAnswer.answer.questionId,
+      );
+
+      if (previousPatientAnswer) {
+        patientAnswerEvent.previousPatientAnswerId = previousPatientAnswer.id;
+      }
+
+      return patientAnswerEvent;
+    });
+
+    if (!isEmpty(patientAnswerEventsToCreate)) {
+      await PatientAnswerEvent.createMultiple(
+        {
+          patientAnswerEvents: patientAnswerEventsToCreate,
+        },
+        txn,
+      );
+    }
+  }
+
   static async create(
     input: IPatientAnswerCreateFields,
     existingTxn?: Transaction,
@@ -214,9 +249,15 @@ export default class PatientAnswer extends BaseModel {
         .where('answer.questionId', 'in', questionIds)
         .select('patient_answer.id');
 
-      await PatientAnswer.query(existingTxn || txn)
+      const deletedPatientAnswers: PatientAnswer[] = (await PatientAnswer.query(existingTxn || txn)
+        .eager('answer')
         .where('id', 'in', patientAnswerIdsToDeleteQuery as any)
-        .patch({ deletedAt: new Date().toISOString() });
+        .patch({ deletedAt: new Date().toISOString() })
+        .returning('*')) as any;
+      const uniqueDeletedPatientAnswers = uniqBy(
+        deletedPatientAnswers,
+        deletedPatientAnswer => deletedPatientAnswer.answer.questionId,
+      );
 
       let results: PatientAnswer[] = [];
 
@@ -225,6 +266,12 @@ export default class PatientAnswer extends BaseModel {
           .eager('answer')
           .insertGraphAndFetch(input.answers);
       }
+
+      await PatientAnswer.createPatientAnswerEvents(
+        results,
+        uniqueDeletedPatientAnswers,
+        existingTxn || txn,
+      );
 
       return results;
     });

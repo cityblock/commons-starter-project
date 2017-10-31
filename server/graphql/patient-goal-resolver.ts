@@ -6,7 +6,7 @@ import Concern from '../models/concern';
 import PatientConcern from '../models/patient-concern';
 import PatientGoal from '../models/patient-goal';
 import accessControls from './shared/access-controls';
-import { IContext } from './shared/utils';
+import { checkUserLoggedIn, IContext } from './shared/utils';
 
 export interface IPatientGoalCreateArgs {
   input: IPatientGoalCreateInput;
@@ -30,6 +30,7 @@ export async function patientGoalCreate(
   { userRole, userId }: IContext,
 ) {
   await accessControls.isAllowed(userRole, 'create', 'patientGoal');
+  checkUserLoggedIn(userId);
 
   const { concernTitle, concernId, patientId, startedAt } = input;
   const validInput: any = omit(input, ['concernTitle, concernId, startedAt']);
@@ -42,6 +43,7 @@ export async function patientGoalCreate(
         {
           concernId: concern.id,
           patientId,
+          userId: userId!,
           startedAt: startedAt || undefined,
         },
         txn,
@@ -53,6 +55,7 @@ export async function patientGoalCreate(
         {
           concernId,
           patientId,
+          userId: userId!,
           startedAt: startedAt || undefined,
         },
         txn,
@@ -89,21 +92,23 @@ export async function resolvePatientGoalsForPatient(
 export async function patientGoalEdit(
   root: any,
   args: IEditPatientGoalOptions,
-  { db, userRole }: IContext,
+  { db, userRole, userId }: IContext,
 ) {
   await accessControls.isAllowedForUser(userRole, 'edit', 'patientGoal');
+  checkUserLoggedIn(userId);
 
   // TODO: fix typings here
   const cleanedParams = pickBy<IPatientGoalEditInput, {}>(args.input) as any;
-  return PatientGoal.update(args.input.patientGoalId, cleanedParams);
+  return PatientGoal.update(args.input.patientGoalId, cleanedParams, userId!);
 }
 
 export async function patientGoalDelete(
   root: any,
   args: IDeletePatientGoalOptions,
-  { db, userRole }: IContext,
+  { db, userRole, userId }: IContext,
 ) {
   await accessControls.isAllowedForUser(userRole, 'edit', 'patientGoal');
+  checkUserLoggedIn(userId);
 
-  return PatientGoal.delete(args.input.patientGoalId);
+  return PatientGoal.delete(args.input.patientGoalId, userId!);
 }

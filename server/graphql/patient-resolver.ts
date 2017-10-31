@@ -76,6 +76,13 @@ export async function patientSetup(
       policyGroupNumber: input.policyGroupNumber,
       issueDate: input.issueDate,
       expirationDate: input.expirationDate,
+      suffix: null,
+      preferredName: null,
+      city: null,
+      address1: null,
+      country: null,
+      county: null,
+      state: null,
     });
     const athenaPatientId = getAthenaPatientIdFromCreate(redoxPatient);
     if (!athenaPatientId) {

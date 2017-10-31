@@ -6,7 +6,7 @@ import {
 } from 'schema';
 import PatientConcern from '../models/patient-concern';
 import accessControls from './shared/access-controls';
-import { IContext } from './shared/utils';
+import { checkUserLoggedIn, IContext } from './shared/utils';
 
 export interface IPatientConcernCreateArgs {
   input: IPatientConcernCreateInput;
@@ -29,10 +29,11 @@ export async function patientConcernCreate(
   { input }: IPatientConcernCreateArgs,
   context: IContext,
 ) {
-  const { userRole } = context;
+  const { userRole, userId } = context;
   await accessControls.isAllowed(userRole, 'create', 'patientConcern');
+  checkUserLoggedIn(userId);
 
-  return await PatientConcern.create(input as any);
+  return await PatientConcern.create({ userId, ...input } as any);
 }
 
 export async function resolvePatientConcern(
@@ -58,21 +59,23 @@ export async function resolvePatientConcernsForPatient(
 export async function patientConcernEdit(
   root: any,
   args: IEditPatientConcernOptions,
-  { db, userRole }: IContext,
+  { db, userRole, userId }: IContext,
 ) {
   await accessControls.isAllowedForUser(userRole, 'edit', 'patientConcern');
+  checkUserLoggedIn(userId);
 
   // TODO: fix typings here
   const cleanedParams = pickBy<IPatientConcernEditInput, {}>(args.input) as any;
-  return PatientConcern.update(args.input.patientConcernId, cleanedParams);
+  return PatientConcern.update(args.input.patientConcernId, cleanedParams, userId!);
 }
 
 export async function patientConcernDelete(
   root: any,
   args: IDeletePatientConcernOptions,
-  { db, userRole }: IContext,
+  { db, userRole, userId }: IContext,
 ) {
   await accessControls.isAllowedForUser(userRole, 'edit', 'patientConcern');
+  checkUserLoggedIn(userId);
 
-  return PatientConcern.delete(args.input.patientConcernId);
+  return PatientConcern.delete(args.input.patientConcernId, userId!);
 }

@@ -1,5 +1,6 @@
 import Db from '../../db';
 import { createMockPatient, createPatient } from '../../spec-helpers';
+import CarePlanUpdateEvent from '../care-plan-update-event';
 import CareTeam from '../care-team';
 import Concern from '../concern';
 import GoalSuggestionTemplate from '../goal-suggestion-template';
@@ -42,6 +43,21 @@ describe('patient goal model', () => {
     });
     expect(patientGoal.title).toEqual('title');
     expect(await PatientGoal.get(patientGoal.id)).toMatchObject(patientGoal);
+  });
+
+  it('creates the correct CarePlanUpdateEvent when creating a patient goal', async () => {
+    const patientGoal = await PatientGoal.create({
+      title: 'title',
+      patientId: patient.id,
+      userId: user.id,
+    });
+    const fetchedCarePlanUpdateEvents = await CarePlanUpdateEvent.getAllForPatient(patient.id, {
+      pageNumber: 0,
+      pageSize: 10,
+    });
+    expect(fetchedCarePlanUpdateEvents.total).toEqual(1);
+    expect(fetchedCarePlanUpdateEvents.results[0].patientGoalId).toEqual(patientGoal.id);
+    expect(fetchedCarePlanUpdateEvents.results[0].eventType).toEqual('create_patient_goal');
   });
 
   it('creates a patient goal and links to goal template', async () => {
@@ -243,6 +259,7 @@ describe('patient goal model', () => {
       concernId: concern.id,
       patientId: patient.id,
       order: 1,
+      userId: user.id,
     });
 
     const patientGoal = await PatientGoal.create({
@@ -266,6 +283,7 @@ describe('patient goal model', () => {
       concernId: concern.id,
       patientId: patient.id,
       order: 1,
+      userId: user.id,
     });
     const patientGoal = await PatientGoal.create({
       title: 'title',
@@ -302,6 +320,7 @@ describe('patient goal model', () => {
       concernId: concern.id,
       patientId: patient.id,
       order: 1,
+      userId: user.id,
     });
     const patientGoal = await PatientGoal.create({
       title: 'title',
@@ -339,10 +358,37 @@ describe('patient goal model', () => {
       patientId: patient.id,
       userId: user.id,
     });
-    const patientGoalUpdated = await PatientGoal.update(patientGoal.id, {
-      title: 'new title',
-    });
+    const patientGoalUpdated = await PatientGoal.update(
+      patientGoal.id,
+      {
+        title: 'new title',
+      },
+      user.id,
+    );
     expect(patientGoalUpdated.title).toBe('new title');
+  });
+
+  it('creates the correct CarePlanUpdateEvent when editing a patient goal', async () => {
+    const patientGoal = await PatientGoal.create({
+      title: 'title',
+      patientId: patient.id,
+      userId: user.id,
+    });
+    await PatientGoal.update(
+      patientGoal.id,
+      {
+        title: 'new title',
+      },
+      user.id,
+    );
+    const fetchedCarePlanUpdateEvents = await CarePlanUpdateEvent.getAllForPatient(patient.id, {
+      pageNumber: 0,
+      pageSize: 10,
+    });
+
+    expect(fetchedCarePlanUpdateEvents.total).toEqual(2); // One for create and one for edit
+    expect(fetchedCarePlanUpdateEvents.results[0].patientGoalId).toEqual(patientGoal.id);
+    expect(fetchedCarePlanUpdateEvents.results[0].eventType).toEqual('edit_patient_goal');
   });
 
   it('deletes patient goal', async () => {
@@ -351,7 +397,25 @@ describe('patient goal model', () => {
       patientId: patient.id,
       userId: user.id,
     });
-    const deletedPatientGoal = await PatientGoal.delete(patientGoal.id);
+    const deletedPatientGoal = await PatientGoal.delete(patientGoal.id, user.id);
     expect(deletedPatientGoal).not.toBeNull();
+  });
+
+  it('creates the correct CarePlanUpdateEvent when deleting a patient goal', async () => {
+    const patientGoal = await PatientGoal.create({
+      title: 'title',
+      patientId: patient.id,
+      userId: user.id,
+    });
+    await PatientGoal.delete(patientGoal.id, user.id);
+
+    const fetchedCarePlanUpdateEvents = await CarePlanUpdateEvent.getAllForPatient(patient.id, {
+      pageNumber: 0,
+      pageSize: 10,
+    });
+
+    expect(fetchedCarePlanUpdateEvents.total).toEqual(2); // One for create and one for delete
+    expect(fetchedCarePlanUpdateEvents.results[0].patientGoalId).toEqual(patientGoal.id);
+    expect(fetchedCarePlanUpdateEvents.results[0].eventType).toEqual('delete_patient_goal');
   });
 });

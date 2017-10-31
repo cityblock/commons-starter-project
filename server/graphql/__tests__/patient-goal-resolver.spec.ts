@@ -60,7 +60,7 @@ describe('patient goal resolver', () => {
           patientId, title
         }
       }`;
-      const result = await graphql(schema, mutation, null, { userRole });
+      const result = await graphql(schema, mutation, null, { userRole, userId: user.id });
       expect(cloneDeep(result.data!.patientGoalCreate)).toMatchObject({
         patientId: patient.id,
         title: 'title',
@@ -91,7 +91,7 @@ describe('patient goal resolver', () => {
           patientId, title
         }
       }`;
-      const result = await graphql(schema, mutation, null, { userRole });
+      const result = await graphql(schema, mutation, null, { userRole, userId: user.id });
       expect(cloneDeep(result.data!.patientGoalCreate)).toMatchObject({
         patientId: patient.id,
         title: 'title',
@@ -113,7 +113,7 @@ describe('patient goal resolver', () => {
           patientId, patientConcernId, title
         }
       }`;
-      const result = await graphql(schema, mutation, null, { userRole });
+      const result = await graphql(schema, mutation, null, { userRole, userId: user.id });
       const clonedGoal = cloneDeep(result.data!.patientGoalCreate);
       const fetchedConcerns = await Concern.getAll();
       const fetchedPatientConcerns = await PatientConcern.getForPatient(patient.id);
@@ -143,7 +143,7 @@ describe('patient goal resolver', () => {
           patientId, patientConcernId, title
         }
       }`;
-      const result = await graphql(schema, mutation, null, { userRole });
+      const result = await graphql(schema, mutation, null, { userRole, userId: user.id });
       const clonedGoal = cloneDeep(result.data!.patientGoalCreate);
       const fetchedPatientConcerns = await PatientConcern.getForPatient(patient.id);
 
@@ -173,7 +173,7 @@ describe('patient goal resolver', () => {
           patientId, patientConcernId, title
         }
       }`;
-      const result = await graphql(schema, mutation, null, { userRole });
+      const result = await graphql(schema, mutation, null, { userRole, userId: user.id });
       const clonedGoal = cloneDeep(result.data!.patientGoalCreate);
       const fetchedPatientConcerns = await PatientConcern.getForPatient(patient.id);
 
@@ -199,7 +199,7 @@ describe('patient goal resolver', () => {
           title
         }
       }`;
-      const result = await graphql(schema, mutation, null, { userRole });
+      const result = await graphql(schema, mutation, null, { userRole, userId: user.id });
       expect(cloneDeep(result.data!.patientGoalEdit)).toMatchObject({
         title: 'better title',
       });
@@ -218,7 +218,7 @@ describe('patient goal resolver', () => {
           deletedAt
         }
       }`;
-      const result = await graphql(schema, mutation, null, { userRole });
+      const result = await graphql(schema, mutation, null, { userRole, userId: user.id });
       expect(cloneDeep(result.data!.patientGoalDelete).deletedAt).not.toBeNull();
     });
   });

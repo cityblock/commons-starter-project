@@ -373,7 +373,12 @@ describe('concern suggestion model', () => {
         ],
       });
 
-      await PatientConcern.create({ order: 1, concernId: concern1.id, patientId: patient.id });
+      await PatientConcern.create({
+        order: 1,
+        concernId: concern1.id,
+        patientId: patient.id,
+        userId: user.id,
+      });
 
       const secondConcernSuggestions = await ConcernSuggestion.getNewForPatient(patient.id);
       expect(secondConcernSuggestions[0]).toMatchObject(concern2);
@@ -406,7 +411,12 @@ describe('concern suggestion model', () => {
       expect(thirdConcernSuggestions[1]).toMatchObject(concern3);
       expect(thirdConcernSuggestions.length).toEqual(2);
 
-      await PatientConcern.create({ order: 2, concernId: concern3.id, patientId: patient.id });
+      await PatientConcern.create({
+        order: 2,
+        concernId: concern3.id,
+        patientId: patient.id,
+        userId: user.id,
+      });
 
       // Now it should not be returned
       const fourthConcernSuggestions = await ConcernSuggestion.getNewForPatient(patient.id);

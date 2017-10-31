@@ -1,5 +1,5 @@
 import Db from '../../db';
-import { createMockPatient, createPatient } from '../../spec-helpers';
+import { cleanCarePlanUpdateEvents, createMockPatient, createPatient } from '../../spec-helpers';
 import CarePlanUpdateEvent from '../care-plan-update-event';
 import Concern from '../concern';
 import Patient from '../patient';
@@ -33,12 +33,15 @@ describe('care plan update event model', () => {
     patientConcern = await PatientConcern.create({
       patientId: patient.id,
       concernId: concern.id,
+      userId: user.id,
     });
     patientGoal = await PatientGoal.create({
       patientId: patient.id,
       userId: user.id,
       title: 'Patient Goal',
     });
+
+    await cleanCarePlanUpdateEvents(patient.id);
   });
 
   afterAll(async () => {

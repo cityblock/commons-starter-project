@@ -40,6 +40,7 @@ describe('patient concern resolver', () => {
         patientId: patient.id,
         concernId: concern.id,
         order: 1,
+        userId: user.id,
       });
       const query = `{ patientConcern(patientConcernId: "${patientConcern.id}") {
         concernId, patientId, order
@@ -62,7 +63,7 @@ describe('patient concern resolver', () => {
           patientId, concernId, order
         }
       }`;
-      const result = await graphql(schema, mutation, null, { userRole });
+      const result = await graphql(schema, mutation, null, { userRole, userId: user.id });
       expect(cloneDeep(result.data!.patientConcernCreate)).toMatchObject({
         patientId: patient.id,
         concernId: concern.id,
@@ -71,19 +72,20 @@ describe('patient concern resolver', () => {
     });
   });
 
-  describe('patient concern Edit', () => {
+  describe('patient concern edit', () => {
     it('edits a patient concern', async () => {
       const patientConcern = await PatientConcern.create({
         patientId: patient.id,
         concernId: concern.id,
         order: 1,
+        userId: user.id,
       });
       const mutation = `mutation {
         patientConcernEdit(input: { order: 2, patientConcernId: "${patientConcern.id}" }) {
           order
         }
       }`;
-      const result = await graphql(schema, mutation, null, { userRole });
+      const result = await graphql(schema, mutation, null, { userRole, userId: user.id });
       expect(cloneDeep(result.data!.patientConcernEdit)).toMatchObject({
         order: 2,
       });
@@ -96,13 +98,14 @@ describe('patient concern resolver', () => {
         patientId: patient.id,
         concernId: concern.id,
         order: 1,
+        userId: user.id,
       });
       const mutation = `mutation {
         patientConcernDelete(input: { patientConcernId: "${patientConcern.id}" }) {
           deletedAt
         }
       }`;
-      const result = await graphql(schema, mutation, null, { userRole });
+      const result = await graphql(schema, mutation, null, { userRole, userId: user.id });
       expect(cloneDeep(result.data!.patientConcernDelete).deletedAt).not.toBeNull();
     });
   });
@@ -113,6 +116,7 @@ describe('patient concern resolver', () => {
         patientId: patient.id,
         concernId: concern.id,
         order: 1,
+        userId: user.id,
       });
       const query = `{
         patientConcerns(patientId: "${patient.id}") { concernId, order }

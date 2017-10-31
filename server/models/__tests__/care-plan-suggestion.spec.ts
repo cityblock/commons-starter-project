@@ -135,7 +135,11 @@ describe('care plan suggestion', () => {
         ],
       });
 
-      await PatientConcern.create({ patientId: patient.id, concernId: concern.id });
+      await PatientConcern.create({
+        patientId: patient.id,
+        concernId: concern.id,
+        userId: user.id,
+      });
       await PatientGoal.create({
         title: 'Patient Goal',
         userId: user.id,

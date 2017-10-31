@@ -88,6 +88,7 @@ describe('care plan resolver tests', () => {
         patientId: patient.id,
         concernId: concern.id,
         startedAt: new Date().toISOString(),
+        userId: user.id,
       });
       const patientGoal = await PatientGoal.create({
         patientId: patient.id,
@@ -303,6 +304,7 @@ describe('care plan resolver tests', () => {
       const patientConcern = await PatientConcern.create({
         patientId: patient.id,
         concernId: concern.id,
+        userId: user.id,
       });
 
       const mutation = `mutation {

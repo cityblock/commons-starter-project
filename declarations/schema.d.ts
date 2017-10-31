@@ -15,75 +15,259 @@ declare module 'schema' {
     column: number;
   }
 
-  /*
-    description: 
-  */
+
   interface IRootQueryType {
+    /**
+    description: A single User
+  */
     user: IUser | null;
+    /**
+    description: All Users (admin only)
+  */
     users: IUserEdges | null;
+    /**
+    description: List of patients the user is on the care team for (their 'patient panel')
+  */
     userPatientPanel: IPatientEdges | null;
+    /**
+    description: The current User
+  */
     currentUser: IUser | null;
+    /**
+    description: A single Patient
+  */
     patient: IPatient | null;
+    /**
+    description: Users on a care team
+  */
     patientCareTeam: Array<IUser> | null;
+    /**
+    description: Patient scratch pad
+  */
     patientScratchPad: IPatientScratchPad | null;
+    /**
+    description: A single clinic
+  */
     clinic: IClinic | null;
+    /**
+    description: Clinics
+  */
     clinics: IClinicEdges | null;
+    /**
+    description: Patient encounters
+  */
     patientEncounters: Array<IPatientEncounter> | null;
+    /**
+    description: Patient medications
+  */
     patientMedications: IPatientMedications | null;
+    /**
+    description: Task
+  */
     task: ITask | null;
+    /**
+    description: Patient's Tasks
+  */
     tasksForPatient: ITaskEdges | null;
+    /**
+    description: Current user's Tasks
+  */
     tasksForCurrentUser: ITaskEdges | null;
+    /**
+    description: List of task comments
+  */
     taskComments: ITaskCommentEdges | null;
+    /**
+    description: Single task comment
+  */
     taskComment: ITaskComment | null;
+    /**
+    description: RiskArea
+  */
     riskArea: IRiskArea | null;
+    /**
+    description: RiskAreas
+  */
     riskAreas: Array<IRiskArea> | null;
+    /**
+    description: Question
+  */
     question: IQuestion | null;
+    /**
+    description: Questions
+  */
     questionsForRiskAreaOrScreeningTool: Array<IQuestion>;
+    /**
+    description: Answer
+  */
     answer: IAnswer | null;
+    /**
+    description: Answers
+  */
     answersForQuestion: Array<IAnswer>;
+    /**
+    description: PatientAnswer
+  */
     patientAnswer: IPatientAnswer | null;
+    /**
+    description: PatientAnswersForQuestion
+  */
     patientAnswersForQuestion: Array<IPatientAnswer> | null;
+    /**
+    description: PatientPreviousAnswersForQuestion
+  */
     patientPreviousAnswersForQuestion: Array<IPatientAnswer> | null;
+    /**
+    description: PatientAnswersForRiskArea
+  */
     patientAnswersForRiskArea: Array<IPatientAnswer> | null;
+    /**
+    description: PatientAnswersForScreeningTool
+  */
     patientAnswersForScreeningTool: Array<IPatientAnswer> | null;
+    /**
+    description: PatientRiskAreaSummary
+  */
     patientRiskAreaSummary: IRiskAreaSummary | null;
+    /**
+    description: PatientRiskAreaRiskScore
+  */
     patientRiskAreaRiskScore: IRiskScore | null;
+    /**
+    description: QuestionCondition
+  */
     questionCondition: IQuestionCondition | null;
+    /**
+    description: Event notifications for a user
+  */
     eventNotificationsForCurrentUser: IEventNotificationEdges | null;
+    /**
+    description: Event notifications for a task
+  */
     eventNotificationsForTask: IEventNotificationEdges | null;
+    /**
+    description: Task template
+  */
     taskTemplate: ITaskTemplate | null;
+    /**
+    description: Concern
+  */
     concern: IConcern | null;
+    /**
+    description: Concerns
+  */
     concerns: Array<IConcern> | null;
+    /**
+    description: Concerns for answer
+  */
     concernsForAnswer: Array<IConcern> | null;
+    /**
+    description: patient concern
+  */
     patientConcern: IPatientConcern | null;
+    /**
+    description: patient concerns for patient
+  */
     patientConcerns: Array<IPatientConcern> | null;
+    /**
+    description: Patient goal
+  */
     patientGoal: IPatientGoal | null;
+    /**
+    description: Patient goals for patient
+  */
     patientGoals: Array<IPatientGoal> | null;
+    /**
+    description: Goal suggestion templates
+  */
     goalSuggestionTemplate: IGoalSuggestionTemplate | null;
+    /**
+    description: Goal suggestion templates
+  */
     goalSuggestionTemplates: Array<IGoalSuggestionTemplate> | null;
+    /**
+    description: Goal suggestion for template for answer
+  */
     goalSuggestionTemplatesForAnswer: Array<IGoalSuggestionTemplate> | null;
+    /**
+    description: Task templates
+  */
     taskTemplates: Array<ITaskTemplate> | null;
+    /**
+    description: Task templates suggested for answer
+  */
     taskTemplatesForAnswer: Array<ITaskTemplate> | null;
+    /**
+    description: patient task suggestions
+  */
     patientTaskSuggestions: Array<IPatientTaskSuggestion> | null;
+    /**
+    description: Care Plan Suggestions
+  */
     carePlanSuggestionsForPatient: Array<ICarePlanSuggestion> | null;
+    /**
+    description: Care Plan
+  */
     carePlanForPatient: ICarePlan | null;
+    /**
+    description: screening tool
+  */
     screeningTool: IScreeningTool | null;
+    /**
+    description: screening tools
+  */
     screeningTools: Array<IScreeningTool> | null;
+    /**
+    description: screening tools for risk area
+  */
     screeningToolsForRiskArea: Array<IScreeningTool> | null;
+    /**
+    description: screening tool score range
+  */
     screeningToolScoreRange: IScreeningToolScoreRange | null;
+    /**
+    description: screening tool score range for screening tool and score
+  */
     screeningToolScoreRangeForScoreAndScreeningTool: IScreeningToolScoreRange | null;
+    /**
+    description: screening tool score ranges
+  */
     screeningToolScoreRanges: Array<IScreeningToolScoreRange> | null;
+    /**
+    description: screening tool score ranges for screening tool
+  */
     screeningToolScoreRangesForScreeningTool: Array<IScreeningToolScoreRange> | null;
+    /**
+    description: patient screening tool submission
+  */
     patientScreeningToolSubmission: IPatientScreeningToolSubmission | null;
+    /**
+    description: patient screening tool submissions for patient and screening tool (optioanlly)
+  */
     patientScreeningToolSubmissionsForPatient: Array<IPatientScreeningToolSubmission> | null;
+    /**
+    description: patient screening tool submissions
+  */
     patientScreeningToolSubmissions: Array<IPatientScreeningToolSubmission> | null;
+    /**
+    description: progress note template
+  */
     progressNoteTemplate: IProgressNoteTemplate | null;
+    /**
+    description: progress note templates
+  */
     progressNoteTemplates: Array<IProgressNoteTemplate> | null;
+    /**
+    description: progress note
+  */
     progressNote: IProgressNote | null;
+    /**
+    description: progress notes for patient
+  */
     progressNotesForPatient: Array<IProgressNote> | null;
   }
 
-  /*
+  /**
     description: User account model
   */
   interface IUser {
@@ -99,29 +283,23 @@ declare module 'schema' {
     updatedAt: string;
   }
 
-  /*
-    description: An object with a Globally Unique ID
-  */
-  type uniqueId = IUser | IPatient | IClinic | ITask | IPatientGoal | IGoalSuggestionTemplate | ITaskTemplate | ITaskComment | IRiskArea | IQuestion | IAnswer | IConcern | IQuestionCondition | IPatientAnswer | IPatientScreeningToolSubmission | IScreeningTool | IScreeningToolScoreRange | ICarePlanSuggestion | IEventNotification | ITaskEvent | IPatientConcern | IPatientTaskSuggestion | IProgressNoteTemplate | IProgressNote;
-
-  /*
+  /**
     description: An object with a Globally Unique ID
   */
   interface IUniqueId {
+    /**
+    description: The ID of the object.
+  */
     id: string;
   }
 
-  /*
-    description: 
-  */
+
   type IUserRoleEnum = 'physician' | 'nurseCareManager' | 'healthCoach' | 'familyMember' | 'anonymousUser' | 'admin';
 
-  /*
-    description: 
-  */
+
   type IUserOrderOptionsEnum = 'createdAtDesc' | 'createdAtAsc' | 'lastLoginAtDesc' | 'lastLoginAtAsc' | 'updatedAtDesc' | 'updatedAtAsc';
 
-  /*
+  /**
     description: User edges
   */
   interface IUserEdges {
@@ -129,7 +307,7 @@ declare module 'schema' {
     pageInfo: IPageInfo;
   }
 
-  /*
+  /**
     description: User node
   */
   interface IUserNode {
@@ -137,7 +315,7 @@ declare module 'schema' {
     cursor: string;
   }
 
-  /*
+  /**
     description: Page info for paginated responses
   */
   interface IPageInfo {
@@ -145,7 +323,7 @@ declare module 'schema' {
     hasPreviousPage: boolean;
   }
 
-  /*
+  /**
     description: Patient edges
   */
   interface IPatientEdges {
@@ -153,7 +331,7 @@ declare module 'schema' {
     pageInfo: IPageInfo;
   }
 
-  /*
+  /**
     description: Patient node
   */
   interface IPatientNode {
@@ -161,7 +339,7 @@ declare module 'schema' {
     cursor: string;
   }
 
-  /*
+  /**
     description: Patient combining data in athena and our database
   */
   interface IPatient {
@@ -180,14 +358,14 @@ declare module 'schema' {
     consentToText: boolean | null;
   }
 
-  /*
+  /**
     description: Patient Scratch Pad
   */
   interface IPatientScratchPad {
     text: string | null;
   }
 
-  /*
+  /**
     description: Clinic
   */
   interface IClinic {
@@ -198,7 +376,7 @@ declare module 'schema' {
     updatedAt: string;
   }
 
-  /*
+  /**
     description: Clinic edges
   */
   interface IClinicEdges {
@@ -206,7 +384,7 @@ declare module 'schema' {
     pageInfo: IPageInfo;
   }
 
-  /*
+  /**
     description: Clinic node
   */
   interface IClinicNode {
@@ -214,7 +392,7 @@ declare module 'schema' {
     cursor: string;
   }
 
-  /*
+  /**
     description: PatientEncounter
   */
   interface IPatientEncounter {
@@ -227,7 +405,7 @@ declare module 'schema' {
     dateTime: string;
   }
 
-  /*
+  /**
     description: PatientDiagnosis
   */
   interface IPatientDiagnosis {
@@ -236,14 +414,14 @@ declare module 'schema' {
     description: string;
   }
 
-  /*
+  /**
     description: PatientMedications
   */
   interface IPatientMedications {
     medications: IPatientMedicationsDetails;
   }
 
-  /*
+  /**
     description: PatientMedicationsDetails
   */
   interface IPatientMedicationsDetails {
@@ -251,7 +429,7 @@ declare module 'schema' {
     inactive: Array<IPatientMedication>;
   }
 
-  /*
+  /**
     description: PatientMedication
   */
   interface IPatientMedication {
@@ -263,7 +441,7 @@ declare module 'schema' {
     startDate: string | null;
   }
 
-  /*
+  /**
     description: Task
   */
   interface ITask {
@@ -286,14 +464,10 @@ declare module 'schema' {
     patientGoal: IPatientGoal | null;
   }
 
-  /*
-    description: 
-  */
+
   type IPriorityEnum = 'low' | 'medium' | 'high';
 
-  /*
-    description: 
-  */
+
   interface IPatientGoal {
     id: string;
     title: string;
@@ -308,9 +482,7 @@ declare module 'schema' {
     deletedAt: string | null;
   }
 
-  /*
-    description: 
-  */
+
   interface IGoalSuggestionTemplate {
     id: string;
     title: string;
@@ -320,9 +492,7 @@ declare module 'schema' {
     deletedAt: string | null;
   }
 
-  /*
-    description: 
-  */
+
   interface ITaskTemplate {
     id: string;
     title: string;
@@ -337,17 +507,13 @@ declare module 'schema' {
     deletedAt: string | null;
   }
 
-  /*
-    description: 
-  */
+
   type ICompletedWithinIntervalEnum = 'hour' | 'day' | 'week' | 'month' | 'year';
 
-  /*
-    description: 
-  */
+
   type ITaskOrderOptionsEnum = 'createdAtDesc' | 'createdAtAsc' | 'dueAtDesc' | 'dueAtAsc' | 'updatedAtDesc' | 'updatedAtAsc';
 
-  /*
+  /**
     description: Task edges
   */
   interface ITaskEdges {
@@ -355,7 +521,7 @@ declare module 'schema' {
     pageInfo: IPageInfo;
   }
 
-  /*
+  /**
     description: Task node
   */
   interface ITaskNode {
@@ -363,7 +529,7 @@ declare module 'schema' {
     cursor: string;
   }
 
-  /*
+  /**
     description: Task comment edges
   */
   interface ITaskCommentEdges {
@@ -371,7 +537,7 @@ declare module 'schema' {
     pageInfo: IPageInfo;
   }
 
-  /*
+  /**
     description: Task comment node
   */
   interface ITaskCommentNode {
@@ -379,7 +545,7 @@ declare module 'schema' {
     cursor: string;
   }
 
-  /*
+  /**
     description: Task comment
   */
   interface ITaskComment {
@@ -391,7 +557,7 @@ declare module 'schema' {
     updatedAt: string | null;
   }
 
-  /*
+  /**
     description: Risk Area
   */
   interface IRiskArea {
@@ -403,7 +569,7 @@ declare module 'schema' {
     order: number;
   }
 
-  /*
+  /**
     description: Question
   */
   interface IQuestion {
@@ -422,7 +588,7 @@ declare module 'schema' {
     order: number;
   }
 
-  /*
+  /**
     description: Answer
   */
   interface IAnswer {
@@ -442,17 +608,13 @@ declare module 'schema' {
     goalSuggestions: Array<IGoalSuggestionTemplate> | null;
   }
 
-  /*
-    description: 
-  */
+
   type IAnswerValueTypeOptionsEnum = 'string' | 'boolean' | 'number';
 
-  /*
-    description: 
-  */
+
   type IRiskAdjustmentTypeOptionsEnum = 'inactive' | 'increment' | 'forceHighRisk';
 
-  /*
+  /**
     description: Concern
   */
   interface IConcern {
@@ -463,12 +625,10 @@ declare module 'schema' {
     deletedAt: string | null;
   }
 
-  /*
-    description: 
-  */
+
   type IAnswerTypeOptionsEnum = 'dropdown' | 'radio' | 'freetext' | 'multiselect';
 
-  /*
+  /**
     description: QuestionCondition
   */
   interface IQuestionCondition {
@@ -480,12 +640,10 @@ declare module 'schema' {
     questionId: string;
   }
 
-  /*
-    description: 
-  */
+
   type IQuestionConditionTypeOptionsEnum = 'allTrue' | 'oneTrue';
 
-  /*
+  /**
     description: PatientAnswer
   */
   interface IPatientAnswer {
@@ -502,9 +660,7 @@ declare module 'schema' {
     patientScreeningToolSubmission: IPatientScreeningToolSubmission | null;
   }
 
-  /*
-    description: 
-  */
+
   interface IPatientScreeningToolSubmission {
     id: string;
     screeningToolId: string;
@@ -521,9 +677,7 @@ declare module 'schema' {
     carePlanSuggestions: Array<ICarePlanSuggestion>;
   }
 
-  /*
-    description: 
-  */
+
   interface IScreeningTool {
     id: string;
     title: string;
@@ -535,9 +689,7 @@ declare module 'schema' {
     deletedAt: string | null;
   }
 
-  /*
-    description: 
-  */
+
   interface IScreeningToolScoreRange {
     id: string;
     description: string;
@@ -552,9 +704,7 @@ declare module 'schema' {
     goalSuggestions: Array<IGoalSuggestionTemplate> | null;
   }
 
-  /*
-    description: 
-  */
+
   interface ICarePlanSuggestion {
     id: string;
     patientId: string;
@@ -577,29 +727,23 @@ declare module 'schema' {
     patientScreeningToolSubmission: IPatientScreeningToolSubmission | null;
   }
 
-  /*
-    description: 
-  */
+
   type ICarePlanSuggestionTypeEnum = 'concern' | 'goal';
 
-  /*
-    description: 
-  */
+
   interface IRiskAreaSummary {
     summary: Array<string>;
     started: boolean;
     lastUpdated: string | null;
   }
 
-  /*
-    description: 
-  */
+
   interface IRiskScore {
     score: number;
     forceHighRisk: boolean;
   }
 
-  /*
+  /**
     description: Event Notification edges
   */
   interface IEventNotificationEdges {
@@ -607,7 +751,7 @@ declare module 'schema' {
     pageInfo: IPageInfo;
   }
 
-  /*
+  /**
     description: Event Notification node
   */
   interface IEventNotificationNode {
@@ -615,7 +759,7 @@ declare module 'schema' {
     cursor: string;
   }
 
-  /*
+  /**
     description: Event Notification
   */
   interface IEventNotification {
@@ -634,7 +778,7 @@ declare module 'schema' {
     deletedAt: string | null;
   }
 
-  /*
+  /**
     description: Task Event
   */
   interface ITaskEvent {
@@ -653,14 +797,10 @@ declare module 'schema' {
     deletedAt: string | null;
   }
 
-  /*
-    description: 
-  */
+
   type ITaskEventTypesEnum = 'create_task' | 'add_follower' | 'remove_follower' | 'complete_task' | 'uncomplete_task' | 'delete_task' | 'add_comment' | 'edit_comment' | 'delete_comment' | 'edit_priority' | 'edit_due_date' | 'edit_assignee' | 'edit_title' | 'edit_description';
 
-  /*
-    description: 
-  */
+
   interface IPatientConcern {
     id: string;
     order: number;
@@ -676,9 +816,7 @@ declare module 'schema' {
     deletedAt: string | null;
   }
 
-  /*
-    description: 
-  */
+
   interface IPatientTaskSuggestion {
     id: string;
     patientId: string;
@@ -696,17 +834,13 @@ declare module 'schema' {
     acceptedAt: string | null;
   }
 
-  /*
-    description: 
-  */
+
   interface ICarePlan {
     goals: Array<IPatientGoal>;
     concerns: Array<IPatientConcern>;
   }
 
-  /*
-    description: 
-  */
+
   interface IProgressNoteTemplate {
     id: string;
     title: string;
@@ -716,9 +850,7 @@ declare module 'schema' {
     carePlanSuggestions: Array<ICarePlanSuggestion>;
   }
 
-  /*
-    description: 
-  */
+
   interface IProgressNote {
     id: string;
     patientId: string;
@@ -733,93 +865,331 @@ declare module 'schema' {
     deletedAt: string | null;
   }
 
-  /*
-    description: 
-  */
+
   interface IRootMutationType {
+    /**
+    description: Create a new user
+  */
     userCreate: IUser | null;
+    /**
+    description: Login user
+  */
     userLogin: IUserWithAuthToken | null;
+    /**
+    description: Edit user
+  */
     userEditRole: IUser | null;
+    /**
+    description: Delete user
+  */
     userDelete: IUser | null;
+    /**
+    description: Edit current user
+  */
     currentUserEdit: IUser | null;
+    /**
+    description: Create a new clinic
+  */
     clinicCreate: IClinic | null;
+    /**
+    description: Add user to careTeam
+  */
     careTeamAddUser: Array<IUser> | null;
+    /**
+    description: Remove user from careTeam
+  */
     careTeamRemoveUser: Array<IUser> | null;
+    /**
+    description: Add a note to an appointment
+  */
     appointmentAddNote: IAppointmentAddNoteResult | null;
+    /**
+    description: Start an appointment
+  */
     appointmentStart: IAppointment | null;
+    /**
+    description: End an appointment
+  */
     appointmentEnd: IAppointmentEndResult | null;
+    /**
+    description: Edit fields on patient stored in the db
+  */
     patientEdit: IPatient | null;
+    /**
+    description: Setup patient creates the patient in the db AND in athena
+  */
     patientSetup: IPatient | null;
+    /**
+    description: Edit a patient scratch pad
+  */
     patientScratchPadEdit: IPatientScratchPad | null;
+    /**
+    description: Create a task
+  */
     taskCreate: ITask | null;
+    /**
+    description: Delete a task
+  */
     taskDelete: ITask | null;
+    /**
+    description: Edit a task
+  */
     taskEdit: ITask | null;
+    /**
+    description: Complete a task
+  */
     taskComplete: ITask | null;
+    /**
+    description: Uncomplete a task
+  */
     taskUncomplete: ITask | null;
+    /**
+    description: Add user to task followers
+  */
     taskUserFollow: ITask | null;
+    /**
+    description: Remove user from task followers
+  */
     taskUserUnfollow: ITask | null;
+    /**
+    description: Create a task
+  */
     taskCommentCreate: ITaskComment | null;
+    /**
+    description: Edit a task
+  */
     taskCommentEdit: ITaskComment | null;
+    /**
+    description: Delete a task
+  */
     taskCommentDelete: ITaskComment | null;
+    /**
+    description: Create a RiskArea
+  */
     riskAreaCreate: IRiskArea | null;
+    /**
+    description: Edit a RiskArea
+  */
     riskAreaEdit: IRiskArea | null;
+    /**
+    description: Deletes a RiskArea
+  */
     riskAreaDelete: IRiskArea | null;
+    /**
+    description: Create a Question
+  */
     questionCreate: IQuestion | null;
+    /**
+    description: Edit a Question
+  */
     questionEdit: IQuestion | null;
+    /**
+    description: Delete a question
+  */
     questionDelete: IQuestion | null;
+    /**
+    description: Create an Answer
+  */
     answerCreate: IAnswer | null;
+    /**
+    description: Edit an Answer
+  */
     answerEdit: IAnswer | null;
+    /**
+    description: Deletes an Answer
+  */
     answerDelete: IAnswer | null;
+    /**
+    description: Create a patient answer
+  */
     patientAnswersCreate: Array<IPatientAnswer> | null;
+    /**
+    description: Edit a patient answer
+  */
     patientAnswerEdit: IPatientAnswer | null;
+    /**
+    description: Deletes a patient Answer
+  */
     patientAnswerDelete: IPatientAnswer | null;
+    /**
+    description: Updates applicable for Patient Answers in risk area
+  */
     patientAnswersUpdateApplicable: Array<IPatientAnswer> | null;
+    /**
+    description: Create a QuestionCondition
+  */
     questionConditionCreate: IQuestionCondition | null;
+    /**
+    description: Edit a QuestionCondition
+  */
     questionConditionEdit: IQuestionCondition | null;
+    /**
+    description: Deletes a QuestionCondition
+  */
     questionConditionDelete: IQuestionCondition | null;
+    /**
+    description: Dismisses (marks as seen) an EventNotification
+  */
     eventNotificationDismiss: IEventNotification | null;
+    /**
+    description: Create a concern
+  */
     concernCreate: IConcern | null;
+    /**
+    description: Edit a concern
+  */
     concernEdit: IConcern | null;
+    /**
+    description: Deletes a concern
+  */
     concernDelete: IConcern | null;
+    /**
+    description: suggest a concern for an answer
+  */
     concernSuggestionCreate: Array<IConcern> | null;
+    /**
+    description: delete suggestion a concern for an answer
+  */
     concernSuggestionDelete: Array<IConcern> | null;
+    /**
+    description: goal suggestion template create
+  */
     goalSuggestionTemplateCreate: IGoalSuggestionTemplate | null;
+    /**
+    description: Edit a goal suggestion template
+  */
     goalSuggestionTemplateEdit: IGoalSuggestionTemplate | null;
+    /**
+    description: Deletes a goal suggestion template
+  */
     goalSuggestionTemplateDelete: IGoalSuggestionTemplate | null;
+    /**
+    description: Suggest a goal suggestion template for an answer
+  */
     goalSuggestionCreate: Array<IGoalSuggestionTemplate> | null;
+    /**
+    description: unsuggest a goal suggestion template for an answer
+  */
     goalSuggestionDelete: Array<IGoalSuggestionTemplate> | null;
+    /**
+    description: task template create
+  */
     taskTemplateCreate: ITaskTemplate | null;
+    /**
+    description: Edit a task template
+  */
     taskTemplateEdit: ITaskTemplate | null;
+    /**
+    description: Deletes a task template
+  */
     taskTemplateDelete: ITaskTemplate | null;
+    /**
+    description: Suggest a task template for an answer
+  */
     taskSuggestionCreate: Array<ITaskTemplate> | null;
+    /**
+    description: unsuggest a task template for an answer
+  */
     taskSuggestionDelete: Array<ITaskTemplate> | null;
+    /**
+    description: patient task suggestion accept
+  */
     patientTaskSuggestionAccept: IPatientTaskSuggestion | null;
+    /**
+    description: patient task suggestion dismiss
+  */
     patientTaskSuggestionDismiss: IPatientTaskSuggestion | null;
+    /**
+    description: patient goal create
+  */
     patientGoalCreate: IPatientGoal | null;
+    /**
+    description: patient goal edit
+  */
     patientGoalEdit: IPatientGoal | null;
+    /**
+    description: patient goal delete
+  */
     patientGoalDelete: IPatientGoal | null;
+    /**
+    description: patient concern create
+  */
     patientConcernCreate: IPatientConcern | null;
+    /**
+    description: patient concern edit
+  */
     patientConcernEdit: IPatientConcern | null;
+    /**
+    description: patient concern delete
+  */
     patientConcernDelete: IPatientConcern | null;
+    /**
+    description: care plan suggestion accept
+  */
     carePlanSuggestionAccept: ICarePlanSuggestion | null;
+    /**
+    description: care plan suggestion dismiss
+  */
     carePlanSuggestionDismiss: ICarePlanSuggestion | null;
+    /**
+    description: screening tool create
+  */
     screeningToolCreate: IScreeningTool | null;
+    /**
+    description: screening tool edit
+  */
     screeningToolEdit: IScreeningTool | null;
+    /**
+    description: screening tool delete
+  */
     screeningToolDelete: IScreeningTool | null;
+    /**
+    description: screening tool score range create
+  */
     screeningToolScoreRangeCreate: IScreeningToolScoreRange | null;
+    /**
+    description: screening tool score range edit
+  */
     screeningToolScoreRangeEdit: IScreeningToolScoreRange | null;
+    /**
+    description: screening tool score range delete
+  */
     screeningToolScoreRangeDelete: IScreeningToolScoreRange | null;
+    /**
+    description: patient screening tool submission create
+  */
     patientScreeningToolSubmissionCreate: IPatientScreeningToolSubmission | null;
+    /**
+    description: patient screening tool submission edit
+  */
     patientScreeningToolSubmissionEdit: IPatientScreeningToolSubmission | null;
+    /**
+    description: patient screening tool submission delete
+  */
     patientScreeningToolSubmissionDelete: IPatientScreeningToolSubmission | null;
+    /**
+    description: create a progress note template
+  */
     progressNoteTemplateCreate: IProgressNoteTemplate | null;
+    /**
+    description: edits a progress note template
+  */
     progressNoteTemplateEdit: IProgressNoteTemplate | null;
+    /**
+    description: deletes a progress note template
+  */
     progressNoteTemplateDelete: IProgressNoteTemplate | null;
+    /**
+    description: create a progress note
+  */
     progressNoteCreate: IProgressNote | null;
+    /**
+    description: completes a progress note
+  */
     progressNoteComplete: IProgressNote | null;
   }
 
-  /*
+  /**
     description: params for creating a user
   */
   interface IUserCreateInput {
@@ -827,22 +1197,25 @@ declare module 'schema' {
     homeClinicId: string;
   }
 
-  /*
+  /**
     description: params for logging in a user
   */
   interface IUserLoginInput {
     googleAuthCode: string;
   }
 
-  /*
+  /**
     description: The user account with an optional auth token
   */
   interface IUserWithAuthToken {
     user: IUser;
+    /**
+    description: The auth token to allow for quick login. JWT passed back in via headers for further requests
+  */
     authToken: string | null;
   }
 
-  /*
+  /**
     description: params for editing a user - only supports user role
   */
   interface IUserEditRoleInput {
@@ -850,23 +1223,23 @@ declare module 'schema' {
     email: string;
   }
 
-  /*
+  /**
     description: params for deleting a user
   */
   interface IUserDeleteInput {
     email: string;
   }
 
-  /*
+  /**
     description: params for editing a current user
   */
   interface ICurrentUserEditInput {
-    locale?: string | null;
-    firstName?: string | null;
-    lastName?: string | null;
+    locale: string | null;
+    firstName: string | null;
+    lastName: string | null;
   }
 
-  /*
+  /**
     description: params for creating a clinic
   */
   interface IClinicCreateInput {
@@ -874,7 +1247,7 @@ declare module 'schema' {
     name: string;
   }
 
-  /*
+  /**
     description: params for adding or removing patient from care team
   */
   interface ICareTeamInput {
@@ -882,7 +1255,7 @@ declare module 'schema' {
     patientId: string;
   }
 
-  /*
+  /**
     description: params for adding a note to an appointment
   */
   interface IAppointmentAddNoteInput {
@@ -891,7 +1264,7 @@ declare module 'schema' {
     appointmentNote: string;
   }
 
-  /*
+  /**
     description: Appointment Add Note Result
   */
   interface IAppointmentAddNoteResult {
@@ -899,15 +1272,15 @@ declare module 'schema' {
     appointmentNote: string;
   }
 
-  /*
+  /**
     description: params for starting an appointment
   */
   interface IAppointmentStartInput {
     patientId: string;
-    appointmentTypeId?: number | null;
+    appointmentTypeId: number | null;
   }
 
-  /*
+  /**
     description: Appointment
   */
   interface IAppointment {
@@ -925,79 +1298,77 @@ declare module 'schema' {
     clinicId: string;
   }
 
-  /*
-    description: 
-  */
+
   type IAppointmentStatusEnum = 'cancelled' | 'future' | 'open' | 'checkedIn' | 'checkedOut' | 'chargeEntered';
 
-  /*
+  /**
     description: params for ending an appointment
   */
   interface IAppointmentEndInput {
     patientId: string;
     appointmentId: string;
-    appointmentNote?: string | null;
+    appointmentNote: string | null;
   }
 
-  /*
+  /**
     description: Appointment End Result
   */
   interface IAppointmentEndResult {
     success: boolean;
   }
 
-  /*
+  /**
     description: params for editing a patient in the db
   */
   interface IPatientEditInput {
     patientId: string;
-    firstName?: string | null;
-    middleName?: string | null;
-    lastName?: string | null;
-    dateOfBirth?: string | null;
-    gender?: string | null;
-    zip?: string | null;
-    language?: string | null;
-    consentToCall?: boolean | null;
-    consentToText?: boolean | null;
+    firstName: string | null;
+    middleName: string | null;
+    lastName: string | null;
+    dateOfBirth: string | null;
+    gender: string | null;
+    zip: string | null;
+    language: string | null;
+    consentToCall: boolean | null;
+    consentToText: boolean | null;
   }
 
-  /*
+  /**
     description: params for creating a patient in the db and in athena
   */
   interface IPatientSetupInput {
     firstName: string;
-    middleName?: string | null;
+    middleName: string | null;
     lastName: string;
     dateOfBirth: string;
     gender: string;
     zip: string;
     homeClinicId: string;
-    suffix?: string | null;
-    preferredName?: string | null;
+    suffix: string | null;
+    preferredName: string | null;
     race: string;
     ssn: string;
     language: string;
     maritalStatus: string;
-    email?: string | null;
-    homePhone?: string | null;
-    mobilePhone?: string | null;
+    email: string | null;
+    homePhone: string | null;
+    mobilePhone: string | null;
     consentToCall: boolean;
     consentToText: boolean;
-    city?: string | null;
-    address1?: string | null;
-    county?: string | null;
-    country?: string | null;
-    state?: string | null;
-    insuranceType?: string | null;
-    patientRelationshipToPolicyHolder?: string | null;
-    memberId?: string | null;
-    policyGroupNumber?: string | null;
-    issueDate?: string | null;
-    expirationDate?: string | null;
+    city: string | null;
+    address1: string | null;
+    county: string | null;
+    country: string | null;
+    state: string | null;
+    insuranceType: string | null;
+    patientRelationshipToPolicyHolder: string | null;
+    memberId: string | null;
+    policyGroupNumber: string | null;
+    issueDate: string | null;
+    expirationDate: string | null;
   }
 
-  /*
+  /**
     description: params for editing a patient scratch pad
   */
   interface IPatientScratchPadEditInput {
@@ -1005,46 +1376,46 @@ declare module 'schema' {
     text: string;
   }
 
-  /*
+  /**
     description: params for creating a task
   */
   interface ITaskCreateInput {
     title: string;
-    description?: string | null;
-    dueAt?: string | null;
+    description: string | null;
+    dueAt: string | null;
     patientId: string;
-    assignedToId?: string | null;
-    patientGoalId?: string | null;
+    assignedToId: string | null;
+    patientGoalId: string | null;
   }
 
-  /*
+  /**
     description: params for deleting a task
   */
   interface ITaskDeleteInput {
     taskId: string;
   }
 
-  /*
+  /**
     description: params for creating a task
   */
   interface ITaskEditInput {
     taskId: string;
-    title?: string | null;
-    description?: string | null;
-    dueAt?: string | null;
-    assignedToId?: string | null;
-    priority?: string | null;
-    patientGoalId?: string | null;
+    title: string | null;
+    description: string | null;
+    dueAt: string | null;
+    assignedToId: string | null;
+    priority: string | null;
+    patientGoalId: string | null;
   }
 
-  /*
+  /**
     description: params for completing a task
   */
   interface ITaskCompleteInput {
     taskId: string;
   }
 
-  /*
+  /**
     description: params for adding user to a task's followers
   */
   interface ITaskFollowInput {
@@ -1052,7 +1423,7 @@ declare module 'schema' {
     taskId: string;
   }
 
-  /*
+  /**
     description: params for creating a task comment
   */
   interface ITaskCommentCreateInput {
@@ -1060,7 +1431,7 @@ declare module 'schema' {
     body: string;
   }
 
-  /*
+  /**
     description: params for editing a task comment
   */
   interface ITaskCommentEditInput {
@@ -1068,118 +1439,96 @@ declare module 'schema' {
     body: string;
   }
 
-  /*
+  /**
     description: params for deleting a task comment
   */
   interface ITaskCommentDeleteInput {
     taskCommentId: string;
   }
 
-  /*
-    description: 
-  */
+
   interface IRiskAreaCreateInput {
     title: string;
     order: number;
   }
 
-  /*
-    description: 
-  */
+
   interface IRiskAreaEditInput {
     riskAreaId: string;
-    title?: string | null;
-    order?: number | null;
+    title: string | null;
+    order: number | null;
   }
 
-  /*
-    description: 
-  */
+
   interface IRiskAreaDeleteInput {
     riskAreaId: string;
   }
 
-  /*
-    description: 
-  */
+
   interface IQuestionCreateInput {
     title: string;
     answerType: IAnswerTypeOptionsEnum;
-    validatedSource?: string | null;
-    riskAreaId?: string | null;
-    screeningToolId?: string | null;
+    validatedSource: string | null;
+    riskAreaId: string | null;
+    screeningToolId: string | null;
     order: number;
-    applicableIfType?: IQuestionConditionTypeOptionsEnum | null;
+    applicableIfType: IQuestionConditionTypeOptionsEnum | null;
   }
 
-  /*
-    description: 
-  */
+
   interface IQuestionEditInput {
     questionId: string;
-    title?: string | null;
-    answerType?: IAnswerTypeOptionsEnum | null;
-    validatedSource?: string | null;
-    riskAreaId?: string | null;
-    order?: number | null;
-    applicableIfType?: IQuestionConditionTypeOptionsEnum | null;
+    title: string | null;
+    answerType: IAnswerTypeOptionsEnum | null;
+    validatedSource: string | null;
+    riskAreaId: string | null;
+    order: number | null;
+    applicableIfType: IQuestionConditionTypeOptionsEnum | null;
   }
 
-  /*
-    description: 
-  */
+
   interface IQuestionDeleteInput {
     questionId: string;
   }
 
-  /*
-    description: 
-  */
+
   interface IAnswerCreateInput {
     displayValue: string;
     value: string;
     valueType: IAnswerValueTypeOptionsEnum;
-    riskAdjustmentType?: IRiskAdjustmentTypeOptionsEnum | null;
-    inSummary?: boolean | null;
-    summaryText?: string | null;
+    riskAdjustmentType: IRiskAdjustmentTypeOptionsEnum | null;
+    inSummary: boolean | null;
+    summaryText: string | null;
     questionId: string;
     order: number;
   }
 
-  /*
-    description: 
-  */
+
   interface IAnswerEditInput {
-    displayValue?: string | null;
-    value?: string | null;
-    valueType?: IAnswerValueTypeOptionsEnum | null;
-    riskAdjustmentType?: IRiskAdjustmentTypeOptionsEnum | null;
-    inSummary?: boolean | null;
-    summaryText?: string | null;
-    order?: number | null;
+    displayValue: string | null;
+    value: string | null;
+    valueType: IAnswerValueTypeOptionsEnum | null;
+    riskAdjustmentType: IRiskAdjustmentTypeOptionsEnum | null;
+    inSummary: boolean | null;
+    summaryText: string | null;
+    order: number | null;
     answerId: string;
   }
 
-  /*
-    description: 
-  */
+
   interface IAnswerDeleteInput {
     answerId: string;
   }
 
-  /*
-    description: 
-  */
+
   interface IPatientAnswersCreateInput {
     patientId: string;
     patientAnswers: Array<IPatientAnswerInput>;
     questionIds: Array<string>;
-    screeningToolId?: string | null;
+    screeningToolId: string | null;
   }
 
-  /*
-    description: 
-  */
+
   interface IPatientAnswerInput {
     answerId: string;
     answerValue: string;
@@ -1188,38 +1537,30 @@ declare module 'schema' {
     questionId: string;
   }
 
-  /*
-    description: 
-  */
+
   interface IPatientAnswerEditInput {
     applicable: boolean;
     patientAnswerId: string;
   }
 
-  /*
-    description: 
-  */
+
   interface IPatientAnswerDeleteInput {
     patientAnswerId: string;
   }
 
-  /*
-    description: 
-  */
+
   interface IPatientAnswersUpdateApplicableInput {
     patientId: string;
     riskAreaId: string;
   }
 
-  /*
-    description: 
-  */
+
   interface IQuestionConditionCreateInput {
     questionId: string;
     answerId: string;
   }
 
-  /*
+  /**
     description: QuestionCondition edit input - for validation, need to edit question and answer at the same time
   */
   interface IQuestionConditionEditInput {
@@ -1228,246 +1569,192 @@ declare module 'schema' {
     answerId: string;
   }
 
-  /*
-    description: 
-  */
+
   interface IQuestionConditionDeleteInput {
     questionConditionId: string;
   }
 
-  /*
+  /**
     description: EventNotification edit input
   */
   interface IEventNotificationEditInput {
     eventNotificationId: string;
   }
 
-  /*
-    description: 
-  */
+
   interface IConcernCreateInput {
     title: string;
   }
 
-  /*
-    description: 
-  */
+
   interface IConcernEditInput {
     title: string;
     concernId: string;
   }
 
-  /*
-    description: 
-  */
+
   interface IConcernDeleteInput {
     concernId: string;
   }
 
-  /*
-    description: 
-  */
+
   interface IConcernSuggestInput {
     concernId: string;
-    answerId?: string | null;
-    screeningToolScoreRangeId?: string | null;
+    answerId: string | null;
+    screeningToolScoreRangeId: string | null;
   }
 
-  /*
-    description: 
-  */
+
   interface IGoalSuggestionTemplateCreateInput {
     title: string;
   }
 
-  /*
-    description: 
-  */
+
   interface IGoalSuggestionTemplateEditInput {
     title: string;
     goalSuggestionTemplateId: string;
   }
 
-  /*
-    description: 
-  */
+
   interface IGoalSuggestionTemplateDeleteInput {
     goalSuggestionTemplateId: string;
   }
 
-  /*
-    description: 
-  */
+
   interface IGoalSuggestInput {
-    answerId?: string | null;
-    screeningToolScoreRangeId?: string | null;
+    answerId: string | null;
+    screeningToolScoreRangeId: string | null;
     goalSuggestionTemplateId: string;
   }
 
-  /*
-    description: 
-  */
+
   interface ITaskTemplateCreateInput {
     title: string;
-    completedWithinNumber?: number | null;
-    completedWithinInterval?: string | null;
-    repeating?: boolean | null;
+    completedWithinNumber: number | null;
+    completedWithinInterval: string | null;
+    repeating: boolean | null;
     goalSuggestionTemplateId: string;
-    priority?: string | null;
-    careTeamAssigneeRole?: string | null;
+    priority: string | null;
+    careTeamAssigneeRole: string | null;
   }
 
-  /*
-    description: 
-  */
+
   interface ITaskTemplateEditInput {
     title: string;
-    completedWithinNumber?: number | null;
-    completedWithinInterval?: string | null;
-    repeating?: boolean | null;
-    goalSuggestionTemplateId?: string | null;
-    priority?: string | null;
-    careTeamAssigneeRole?: string | null;
+    completedWithinNumber: number | null;
+    completedWithinInterval: string | null;
+    repeating: boolean | null;
+    goalSuggestionTemplateId: string | null;
+    priority: string | null;
+    careTeamAssigneeRole: string | null;
     taskTemplateId: string;
   }
 
-  /*
-    description: 
-  */
+
   interface ITaskTemplateDeleteInput {
     taskTemplateId: string;
   }
 
-  /*
-    description: 
-  */
+
   interface ITaskSuggestInput {
     answerId: string;
     taskTemplateId: string;
   }
 
-  /*
-    description: 
-  */
+
   interface IPatientTaskSuggestionAcceptInput {
     patientTaskSuggestionId: string;
   }
 
-  /*
-    description: 
-  */
+
   interface IPatientTaskSuggestionDismissInput {
     patientTaskSuggestionId: string;
     dismissedReason: string;
   }
 
-  /*
-    description: 
-  */
+
   interface IPatientGoalCreateInput {
     title: string;
     patientId: string;
-    patientConcernId?: string | null;
-    goalSuggestionTemplateId?: string | null;
-    taskTemplateIds?: Array<string> | null;
-    concernId?: string | null;
-    concernTitle?: string | null;
-    startedAt?: string | null;
+    patientConcernId: string | null;
+    goalSuggestionTemplateId: string | null;
+    taskTemplateIds: Array<string> | null;
+    concernId: string | null;
+    concernTitle: string | null;
+    startedAt: string | null;
   }
 
-  /*
-    description: 
-  */
+
   interface IPatientGoalEditInput {
     patientGoalId: string;
     title: string;
-    patientConcernId?: string | null;
-    goalSuggestionTemplateId?: string | null;
+    patientConcernId: string | null;
+    goalSuggestionTemplateId: string | null;
   }
 
-  /*
-    description: 
-  */
+
   interface IPatientGoalDeleteInput {
     patientGoalId: string;
   }
 
-  /*
-    description: 
-  */
+
   interface IPatientConcernCreateInput {
     concernId: string;
     patientId: string;
-    startedAt?: string | null;
-    completedAt?: string | null;
+    startedAt: string | null;
+    completedAt: string | null;
   }
 
-  /*
-    description: 
-  */
+
   interface IPatientConcernEditInput {
-    order?: number | null;
-    concernId?: string | null;
-    patientId?: string | null;
-    startedAt?: string | null;
-    completedAt?: string | null;
+    order: number | null;
+    concernId: string | null;
+    patientId: string | null;
+    startedAt: string | null;
+    completedAt: string | null;
     patientConcernId: string;
   }
 
-  /*
-    description: 
-  */
+
   interface IPatientConcernDeleteInput {
     patientConcernId: string;
   }
 
-  /*
-    description: 
-  */
+
   interface ICarePlanSuggestionAcceptInput {
     carePlanSuggestionId: string;
-    patientConcernId?: string | null;
-    concernId?: string | null;
-    concernTitle?: string | null;
-    startedAt?: string | null;
-    taskTemplateIds?: Array<string> | null;
+    patientConcernId: string | null;
+    concernId: string | null;
+    concernTitle: string | null;
+    startedAt: string | null;
+    taskTemplateIds: Array<string> | null;
   }
 
-  /*
-    description: 
-  */
+
   interface ICarePlanSuggestionDismissInput {
     carePlanSuggestionId: string;
     dismissedReason: string;
   }
 
-  /*
-    description: 
-  */
+
   interface IScreeningToolCreateInput {
     title: string;
     riskAreaId: string;
   }
 
-  /*
-    description: 
-  */
+
   interface IScreeningToolEditInput {
     screeningToolId: string;
-    title?: string | null;
-    riskAreaId?: string | null;
+    title: string | null;
+    riskAreaId: string | null;
   }
 
-  /*
-    description: 
-  */
+
   interface IScreeningToolDeleteInput {
     screeningToolId: string;
   }
 
-  /*
-    description: 
-  */
+
   interface IScreeningToolScoreRangeCreateInput {
     screeningToolId: string;
     description: string;
@@ -1475,28 +1762,22 @@ declare module 'schema' {
     maximumScore: number;
   }
 
-  /*
-    description: 
-  */
+
   interface IScreeningToolScoreRangeEditInput {
     screeningToolScoreRangeId: string;
-    description?: string | null;
-    screeningToolId?: string | null;
-    minimumScore?: number | null;
-    maximumScore?: number | null;
-    deletedAt?: string | null;
+    description: string | null;
+    screeningToolId: string | null;
+    minimumScore: number | null;
+    maximumScore: number | null;
+    deletedAt: string | null;
   }
 
-  /*
-    description: 
-  */
+
   interface IScreeningToolScoreRangeDeleteInput {
     screeningToolScoreRangeId: string;
   }
 
-  /*
-    description: 
-  */
+
   interface IPatientScreeningToolSubmissionCreateInput {
     screeningToolId: string;
     patientId: string;
@@ -1504,73 +1785,55 @@ declare module 'schema' {
     score: number;
   }
 
-  /*
-    description: 
-  */
+
   interface IPatientScreeningToolSubmissionEditInput {
     patientScreeningToolSubmissionId: string;
-    screeningToolId?: string | null;
-    patientId?: string | null;
-    userId?: string | null;
-    score?: number | null;
+    screeningToolId: string | null;
+    patientId: string | null;
+    userId: string | null;
+    score: number | null;
   }
 
-  /*
-    description: 
-  */
+
   interface IPatientScreeningToolSubmissionDeleteInput {
     patientScreeningToolSubmissionId: string;
   }
 
-  /*
-    description: 
-  */
+
   interface IProgressNoteTemplateCreateInput {
     title: string;
   }
 
-  /*
-    description: 
-  */
+
   interface IProgressNoteTemplateEditInput {
     progressNoteTemplateId: string;
     title: string;
   }
 
-  /*
-    description: 
-  */
+
   interface IProgressNoteTemplateDeleteInput {
     progressNoteTemplateId: string;
   }
 
-  /*
-    description: 
-  */
+
   interface IProgressNoteCreateInput {
     progressNoteTemplateId: string;
     patientId: string;
   }
 
-  /*
-    description: 
-  */
+
   interface IProgressNoteCompleteInput {
     progressNoteId: string;
   }
 
-  /*
-    description: 
-  */
+
   interface IRiskAreaStatistic {
     riskArea: IRiskArea;
     summaryData: IRiskAreaSummary;
     scoreData: IRiskScore;
   }
 
-  /*
-    description: 
-  */
+
   interface IThreeSixtySummary {
     riskAreas: Array<IRiskAreaStatistic>;
   }

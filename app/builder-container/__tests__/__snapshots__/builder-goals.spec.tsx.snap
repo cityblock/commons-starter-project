@@ -48,7 +48,7 @@ exports[`renders builder goals 1`] = `
             <span
               className={undefined}
             >
-              3 months ago
+              6 days ago
             </span>
           </div>
         </div>

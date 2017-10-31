@@ -5,8 +5,10 @@ import {
   IRedoxPatientCreateResponse,
 } from './apis/redox/types';
 import config from './config';
+import CarePlanUpdateEvent from './models/care-plan-update-event';
 import CareTeam from './models/care-team';
 import Patient, { IPatientEditableFields } from './models/patient';
+import PatientAnswerEvent from './models/patient-answer-event';
 
 export interface ICreatePatient extends IPatientEditableFields {
   athenaPatientId: number;
@@ -155,4 +157,26 @@ export function mockRedoxGetPatientMedications(
   };
 
   mockRedoxPost(fullResponseBody);
+}
+
+export async function cleanPatientAnswerEvents(patientId: string) {
+  const patientAnswerEvents = await PatientAnswerEvent.getAllForPatient(patientId, {
+    pageNumber: 0,
+    pageSize: 10,
+  });
+  patientAnswerEvents.results.map(
+    async patientAnswerEvent =>
+      await PatientAnswerEvent.delete(patientAnswerEvent.id),
+  );
+}
+
+export async function cleanCarePlanUpdateEvents(patientId: string) {
+  const carePlanUpdateEvents = await CarePlanUpdateEvent.getAllForPatient(patientId, {
+    pageNumber: 0,
+    pageSize: 10,
+  });
+
+  carePlanUpdateEvents.results.map(
+    async carePlanUpdateEvent => await CarePlanUpdateEvent.delete(carePlanUpdateEvent.id),
+  );
 }

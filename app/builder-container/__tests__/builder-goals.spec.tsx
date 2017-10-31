@@ -10,6 +10,14 @@ import ReduxConnectedIntlProvider from '../../redux-connected-intl-provider';
 import { goal } from '../../shared/util/test-data';
 import BuilderGoals, { BuilderGoals as Component } from '../builder-goals';
 
+const oldDate = Date.now;
+beforeAll(() => {
+  Date.now = jest.fn(() => 1500494779252);
+});
+afterAll(() => {
+  Date.now = oldDate;
+});
+
 it('renders builder goals', () => {
   const mockStore = configureMockStore([]);
   const history = createMemoryHistory();

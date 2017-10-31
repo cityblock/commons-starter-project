@@ -93,6 +93,7 @@ export async function carePlanSuggestionAccept(
           concernId: carePlanSuggestion.concernId,
           patientId,
           startedAt: startedAt || undefined,
+          userId: userId!,
         });
       } else if (!!carePlanSuggestion.goalSuggestionTemplate) {
         const patientGoalCreateInput: any = Object.assign(
@@ -113,6 +114,7 @@ export async function carePlanSuggestionAccept(
               concernId: concern.id,
               patientId,
               startedAt: startedAt || undefined,
+              userId: userId!,
             },
             txn,
           );
@@ -124,6 +126,7 @@ export async function carePlanSuggestionAccept(
               concernId,
               patientId,
               startedAt: startedAt || undefined,
+              userId: userId!,
             },
             txn,
           );

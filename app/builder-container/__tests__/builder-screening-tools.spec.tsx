@@ -9,6 +9,14 @@ import ReduxConnectedIntlProvider from '../../redux-connected-intl-provider';
 import { riskArea, screeningTool } from '../../shared/util/test-data';
 import BuilderScreeningTools from '../builder-screening-tools';
 
+const oldDate = Date.now;
+beforeAll(() => {
+  Date.now = jest.fn(() => 1500494779252);
+});
+afterAll(() => {
+  Date.now = oldDate;
+});
+
 it('renders builder screening tools', () => {
   const mockStore = configureMockStore([]);
   const history = createMemoryHistory();

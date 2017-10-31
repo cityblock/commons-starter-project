@@ -7,12 +7,16 @@ import User from './user';
 
 type EventTypes = 'create_patient_answer';
 
-interface IPatientAnswerEventOptions {
+export interface IPatientAnswerEventOptions {
   patientId: string;
   userId: string;
   patientAnswerId: string;
   previousPatientAnswerId?: string;
   eventType: EventTypes;
+}
+
+interface IMultiplePatientAnswerEventOptions {
+  patientAnswerEvents: IPatientAnswerEventOptions[];
 }
 
 const EAGER_QUERY = '[patientAnswer.[answer], patient, user]';
@@ -101,6 +105,15 @@ export default class PatientAnswerEvent extends BaseModel {
     return await this.query(txn)
       .eager(EAGER_QUERY)
       .insert(input);
+  }
+
+  static async createMultiple(
+    input: IMultiplePatientAnswerEventOptions,
+    txn: Transaction,
+  ): Promise<PatientAnswerEvent[]> {
+    return await this.query(txn)
+      .eager(EAGER_QUERY)
+      .insertGraphAndFetch(input.patientAnswerEvents);
   }
 
   static async delete(patientAnswerEventId: string): Promise<PatientAnswerEvent> {

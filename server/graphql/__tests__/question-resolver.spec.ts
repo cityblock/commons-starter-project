@@ -2,6 +2,7 @@ import { graphql } from 'graphql';
 import { cloneDeep } from 'lodash';
 import Db from '../../db';
 import Answer from '../../models/answer';
+import ProgressNoteTemplate from '../../models/progress-note-template';
 import Question from '../../models/question';
 import RiskArea from '../../models/risk-area';
 import ScreeningTool from '../../models/screening-tool';
@@ -11,38 +12,24 @@ import schema from '../make-executable-schema';
 describe('question tests', () => {
   let db: Db;
   const userRole = 'admin';
-  let riskArea: RiskArea;
-  let screeningTool: ScreeningTool;
   let question: Question;
-  let question2: Question;
   let answer: Answer;
   let user: User;
+  let riskArea: RiskArea;
 
   beforeEach(async () => {
     db = await Db.get();
     await Db.clear();
     user = await User.create({ email: 'a@b.com', userRole, homeClinicId: '1' });
-
     riskArea = await RiskArea.create({
       title: 'testing',
       order: 1,
-    });
-    screeningTool = await ScreeningTool.create({
-      title: 'screening tool',
-      riskAreaId: riskArea.id,
     });
     question = await Question.create({
       title: 'like writing tests?',
       answerType: 'dropdown',
       riskAreaId: riskArea.id,
       type: 'riskArea',
-      order: 1,
-    });
-    question2 = await Question.create({
-      title: 'hate writing tests?',
-      answerType: 'dropdown',
-      screeningToolId: screeningTool.id,
-      type: 'screeningTool',
       order: 1,
     });
     answer = await Answer.create({
@@ -106,15 +93,15 @@ describe('question tests', () => {
     });
   });
 
-  describe('resolveQuestionsForRiskAreaOrScreeningTool', () => {
+  describe('resolveQuestions', () => {
     it('gets questions for risk area', async () => {
       const query = `{
-        questionsForRiskAreaOrScreeningTool(riskAreaId: "${riskArea.id}") {
+        questions(filterType: riskArea, filterId: "${riskArea.id}") {
           title, answerType, order, answers { id }
         }
       }`;
       const result = await graphql(schema, query, null, { db, userRole, userId: user.id });
-      expect(cloneDeep(result.data!.questionsForRiskAreaOrScreeningTool)).toMatchObject([
+      expect(cloneDeep(result.data!.questions)).toMatchObject([
         {
           title: 'like writing tests?',
           answerType: 'dropdown',
@@ -125,13 +112,51 @@ describe('question tests', () => {
     });
 
     it('gets questions for screening tool', async () => {
+      const screeningTool = await ScreeningTool.create({
+        title: 'screening tool',
+        riskAreaId: riskArea.id,
+      });
+      await Question.create({
+        title: 'hate writing tests?',
+        answerType: 'dropdown',
+        screeningToolId: screeningTool.id,
+        type: 'screeningTool',
+        order: 1,
+      });
+
       const query = `{
-        questionsForRiskAreaOrScreeningTool(screeningToolId: "${screeningTool.id}") {
+        questions(filterType: screeningTool, filterId: "${screeningTool.id}") {
           title, answerType, order, answers { id }
         }
       }`;
       const result = await graphql(schema, query, null, { db, userRole, userId: user.id });
-      expect(cloneDeep(result.data!.questionsForRiskAreaOrScreeningTool)).toMatchObject([
+      expect(cloneDeep(result.data!.questions)).toMatchObject([
+        {
+          title: 'hate writing tests?',
+          answerType: 'dropdown',
+          order: 1,
+          answers: [],
+        },
+      ]);
+    });
+
+    it('gets questions for progress note template', async () => {
+      const progressNoteTemplate = await ProgressNoteTemplate.create({ title: 'title' });
+      await Question.create({
+        title: 'hate writing tests?',
+        answerType: 'dropdown',
+        progressNoteTemplateId: progressNoteTemplate.id,
+        type: 'progressNoteTemplate',
+        order: 1,
+      });
+
+      const query = `{
+        questions(filterType: progressNoteTemplate, filterId: "${progressNoteTemplate.id}") {
+          title, answerType, order, answers { id }
+        }
+      }`;
+      const result = await graphql(schema, query, null, { db, userRole, userId: user.id });
+      expect(cloneDeep(result.data!.questions)).toMatchObject([
         {
           title: 'hate writing tests?',
           answerType: 'dropdown',
@@ -170,6 +195,18 @@ describe('question tests', () => {
     });
 
     it('creates a new question for a screening tool', async () => {
+      const screeningTool = await ScreeningTool.create({
+        title: 'screening tool',
+        riskAreaId: riskArea.id,
+      });
+      await Question.create({
+        title: 'hate writing tests?',
+        answerType: 'dropdown',
+        screeningToolId: screeningTool.id,
+        type: 'screeningTool',
+        order: 1,
+      });
+
       const mutation = `mutation {
         questionCreate(input: {
           title: "new title",
@@ -191,6 +228,42 @@ describe('question tests', () => {
         answerType: 'radio',
         validatedSource: 'brennan',
         screeningToolId: screeningTool.id,
+        order: 2,
+      });
+    });
+
+    it('creates a new question for a progress note template', async () => {
+      const progressNoteTemplate = await ProgressNoteTemplate.create({ title: 'title' });
+
+      await Question.create({
+        title: 'hate writing tests?',
+        answerType: 'dropdown',
+        progressNoteTemplateId: progressNoteTemplate.id,
+        type: 'progressNoteTemplate',
+        order: 1,
+      });
+
+      const mutation = `mutation {
+        questionCreate(input: {
+          title: "new title",
+          answerType: radio,
+          validatedSource: "brennan"
+          progressNoteTemplateId: "${progressNoteTemplate.id}"
+          order: 2
+        }) {
+          title, answerType, validatedSource, progressNoteTemplateId, order
+        }
+      }`;
+      const result = await graphql(schema, mutation, null, {
+        db,
+        userRole,
+        userId: user.id,
+      });
+      expect(cloneDeep(result.data!.questionCreate)).toMatchObject({
+        title: 'new title',
+        answerType: 'radio',
+        validatedSource: 'brennan',
+        progressNoteTemplateId: progressNoteTemplate.id,
         order: 2,
       });
     });

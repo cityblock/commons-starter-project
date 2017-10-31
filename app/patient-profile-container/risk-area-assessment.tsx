@@ -5,9 +5,9 @@ import { compose, graphql } from 'react-apollo';
 import { FormattedRelative } from 'react-intl';
 import { connect, Dispatch } from 'react-redux';
 import { push } from 'react-router-redux';
-import * as patientAnswersQuery from '../graphql/queries/get-patient-answers-for-risk-area.graphql';
+import * as patientAnswersQuery from '../graphql/queries/get-patient-answers.graphql';
 /* tslint:disable:max-line-length */
-import * as riskAreaQuestionsQuery from '../graphql/queries/get-questions-for-risk-area-or-screening-tool.graphql';
+import * as riskAreaQuestionsQuery from '../graphql/queries/get-questions.graphql';
 import * as riskAreaQuery from '../graphql/queries/get-risk-area.graphql';
 import * as screeningToolsQuery from '../graphql/queries/get-screening-tools-for-risk-area.graphql';
 import * as patientAnswersCreateMutationGraphql from '../graphql/queries/patient-answers-create-mutation.graphql';
@@ -632,7 +632,8 @@ export default compose(
   graphql(riskAreaQuestionsQuery as any, {
     options: (props: IProps) => ({
       variables: {
-        riskAreaId: props.riskAreaId,
+        filterType: 'riskArea',
+        filterId: props.riskAreaId,
       },
     }),
     props: ({ data }) => ({
@@ -645,7 +646,8 @@ export default compose(
   graphql(patientAnswersQuery as any, {
     options: (props: IProps) => ({
       variables: {
-        riskAreaId: props.riskAreaId,
+        filterType: 'riskArea',
+        filterId: props.riskAreaId,
         patientId: props.patientId,
       },
     }),

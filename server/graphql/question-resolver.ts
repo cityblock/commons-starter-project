@@ -1,5 +1,10 @@
 import { pickBy } from 'lodash';
-import { IQuestionCreateInput, IQuestionDeleteInput, IQuestionEditInput } from 'schema';
+import {
+  IQuestionCreateInput,
+  IQuestionDeleteInput,
+  IQuestionEditInput,
+  IQuestionFilterTypeEnum,
+} from 'schema';
 import Question from '../models/question';
 import accessControls from './shared/access-controls';
 import { checkUserLoggedIn, IContext } from './shared/utils';
@@ -29,17 +34,21 @@ export async function questionCreate(root: any, { input }: IQuestionCreateArgs, 
   return await Question.create(input as any);
 }
 
-export async function resolveQuestionsForRiskAreaOrScreeningTool(
+export async function resolveQuestions(
   root: any,
-  args: { riskAreaId?: string; screeningToolId?: string },
+  args: { filterId: string; filterType: IQuestionFilterTypeEnum },
   { db, userRole }: IContext,
 ) {
   await accessControls.isAllowed(userRole, 'view', 'question');
 
-  if (args.screeningToolId) {
-    return await Question.getAllForScreeningTool(args.screeningToolId);
-  } else if (args.riskAreaId) {
-    return await Question.getAllForRiskArea(args.riskAreaId);
+  if (args.filterType === 'riskArea') {
+    return await Question.getAllForRiskArea(args.filterId);
+  } else if (args.filterType === 'screeningTool') {
+    return await Question.getAllForScreeningTool(args.filterId);
+  } else if (args.filterType === 'progressNoteTemplate') {
+    return await Question.getAllForProgressNoteTemplate(args.filterId);
+  } else {
+    throw new Error('invalid filter type');
   }
 }
 

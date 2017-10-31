@@ -1,7 +1,0 @@
-#import "../fragments/full-patient-answer.graphql"
-
-query getPatientAnswersForScreeningTool($screeningToolId: String!, $patientId: String!) {
-  patientAnswersForScreeningTool(screeningToolId: $screeningToolId, patientId: $patientId) {
-    ...FullPatientAnswer
-  }
-}

@@ -5,6 +5,8 @@ import Answer from '../answer';
 import Patient from '../patient';
 import PatientAnswer from '../patient-answer';
 import PatientAnswerEvent from '../patient-answer-event';
+import ProgressNote from '../progress-note';
+import ProgressNoteTemplate from '../progress-note-template';
 import Question from '../question';
 import RiskArea from '../risk-area';
 import ScreeningTool from '../screening-tool';
@@ -76,6 +78,93 @@ describe('answer model', () => {
       patientAnswers[0],
     ]);
   });
+
+  it('should create and get an answer for progress note', async () => {
+    const progressNoteTemplate = await ProgressNoteTemplate.create({
+      title: 'title',
+    });
+    const progressNote = await ProgressNote.create({
+      patientId: patient.id,
+      userId: user.id,
+      progressNoteTemplateId: progressNoteTemplate.id,
+    });
+    const progressNoteTemplateQuestion = await Question.create({
+      title: 'like writing tests?',
+      answerType: 'dropdown',
+      progressNoteTemplateId: progressNoteTemplate.id,
+      type: 'progressNoteTemplate',
+      order: 1,
+    });
+    const progressNoteTemplateAnswer = await Answer.create({
+      displayValue: 'loves writing tests!',
+      value: '3',
+      valueType: 'number',
+      riskAdjustmentType: 'forceHighRisk',
+      inSummary: false,
+      questionId: progressNoteTemplateQuestion.id,
+      order: 1,
+    });
+    const patientAnswers = await PatientAnswer.create({
+      patientId: patient.id,
+      progressNoteId: progressNote.id,
+      answers: [
+        {
+          questionId: progressNoteTemplateAnswer.questionId,
+          answerId: progressNoteTemplateAnswer.id,
+          answerValue: '3',
+          patientId: patient.id,
+          userId: user.id,
+          applicable: true,
+        },
+      ],
+    });
+    expect(patientAnswers[0].answerValue).toEqual('3');
+    expect(await PatientAnswer.get(patientAnswers[0].id)).toEqual(patientAnswers[0]);
+    expect(
+      await PatientAnswer.getForQuestion(progressNoteTemplateQuestion.id, patient.id),
+    ).toMatchObject([patientAnswers[0]]);
+  });
+
+  it(
+    "should error when creating a patient answer with a progress note where the progress note's" +
+      " progress note template is not the same as the answers's questions's progress note template",
+    async () => {
+      const progressNoteTemplate = await ProgressNoteTemplate.create({
+        title: 'title',
+      });
+      const progressNote = await ProgressNote.create({
+        patientId: patient.id,
+        userId: user.id,
+        progressNoteTemplateId: progressNoteTemplate.id,
+      });
+
+      let errorMessage = '';
+      try {
+        await PatientAnswer.create({
+          patientId: patient.id,
+          progressNoteId: progressNote.id,
+          answers: [
+            {
+              questionId: answer.questionId,
+              answerId: answer.id,
+              answerValue: '3',
+              patientId: patient.id,
+              userId: user.id,
+              applicable: true,
+            },
+          ],
+        });
+      } catch (e) {
+        errorMessage = e.message;
+      }
+
+      expect(errorMessage).toEqual(
+        /* tslint:disable:max-line-length */
+        `progress note ${progressNote.id} is not associated with the same progress note template as the question ${question.id}`,
+        /* tslint:enable:max-line-length */
+      );
+    },
+  );
 
   it('should mark appropriate previous answers as deleted', async () => {
     const previousAnswers = await PatientAnswer.create({

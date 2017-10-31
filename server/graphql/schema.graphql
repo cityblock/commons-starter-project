@@ -58,6 +58,19 @@ enum QuestionConditionTypeOptions {
   oneTrue
 }
 
+enum QuestionFilterType {
+  progressNoteTemplate
+  riskArea
+  screeningTool
+}
+
+enum AnswerFilterType {
+  question
+  progressNote
+  riskArea
+  screeningTool
+}
+
 enum TaskEventTypes {
   create_task
   add_follower
@@ -361,6 +374,7 @@ type Question implements uniqueId {
   answerType: AnswerTypeOptions!
   riskAreaId: String
   screeningToolId: String
+  progressNoteTemplateId: String
   applicableIfQuestionConditions: [QuestionCondition!]
   applicableIfType: QuestionConditionTypeOptions
   order: Int!
@@ -815,6 +829,7 @@ input QuestionCreateInput {
   validatedSource: String
   riskAreaId: String
   screeningToolId: String
+  progressNoteTemplateId: String
   order: Int!
   applicableIfType: QuestionConditionTypeOptions
 }
@@ -824,7 +839,6 @@ input QuestionEditInput {
   title: String
   answerType: AnswerTypeOptions
   validatedSource: String
-  riskAreaId: String
   order: Int
   applicableIfType: QuestionConditionTypeOptions
 }
@@ -872,6 +886,7 @@ input PatientAnswersCreateInput {
   patientAnswers: [PatientAnswerInput]!
   questionIds: [String]!
   screeningToolId: String
+  progressNoteId: String
 }
 
 input PatientAnswerEditInput {
@@ -1331,8 +1346,8 @@ type RootQueryType {
   riskAreas: [RiskArea]
   # Question
   question(questionId: String!): Question
-  # Questions
-  questionsForRiskAreaOrScreeningTool(riskAreaId: String, screeningToolId: String): [Question]!
+  # Questions for risk area, progress note template or screening tool
+  questions(filterId: String!, filterType: QuestionFilterType!): [Question]!
   # Answer
   answer(answerId: String!): Answer
   # Answers
@@ -1340,13 +1355,9 @@ type RootQueryType {
   # PatientAnswer
   patientAnswer(patientAnswerId: String!): PatientAnswer
   # PatientAnswersForQuestion
-  patientAnswersForQuestion(questionId: String!, patientId: String!): [PatientAnswer]
+  patientAnswers(filterId: String!, filterType: AnswerFilterType!, patientId: String!): [PatientAnswer]
   # PatientPreviousAnswersForQuestion
   patientPreviousAnswersForQuestion(questionId: String!, patientId: String!): [PatientAnswer]
-  # PatientAnswersForRiskArea
-  patientAnswersForRiskArea(riskAreaId: String!, patientId: String!): [PatientAnswer]
-  # PatientAnswersForScreeningTool
-  patientAnswersForScreeningTool(screeningToolId: String!, patientId: String!): [PatientAnswer]
   # PatientRiskAreaSummary
   patientRiskAreaSummary(riskAreaId: String!, patientId: String!): RiskAreaSummary
   # PatientRiskAreaRiskScore

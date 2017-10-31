@@ -89,6 +89,14 @@ export enum UserRole {
 }
 
 
+export enum AnswerFilterType {
+  question = "question",
+  progressNote = "progressNote",
+  riskArea = "riskArea",
+  screeningTool = "screeningTool",
+}
+
+
 export enum TaskOrderOptions {
   createdAtDesc = "createdAtDesc",
   createdAtAsc = "createdAtAsc",
@@ -96,6 +104,13 @@ export enum TaskOrderOptions {
   dueAtAsc = "dueAtAsc",
   updatedAtDesc = "updatedAtDesc",
   updatedAtAsc = "updatedAtAsc",
+}
+
+
+export enum QuestionFilterType {
+  progressNoteTemplate = "progressNoteTemplate",
+  riskArea = "riskArea",
+  screeningTool = "screeningTool",
 }
 
 
@@ -1120,37 +1135,15 @@ export type getGoalSuggestionsForAnswerQuery = {
   } | null > | null,
 };
 
-export type getPatientAnswersForRiskAreaQueryVariables = {
-  riskAreaId: string,
+export type getPatientAnswersQueryVariables = {
+  filterType: AnswerFilterType,
+  filterId: string,
   patientId: string,
 };
 
-export type getPatientAnswersForRiskAreaQuery = {
-  // PatientAnswersForRiskArea
-  patientAnswersForRiskArea:  Array< {
-    id: string,
-    createdAt: string,
-    updatedAt: string,
-    deletedAt: string | null,
-    answerId: string,
-    answerValue: string,
-    patientId: string,
-    applicable: boolean | null,
-    question:  {
-      id: string,
-    } | null,
-    patientScreeningToolSubmissionId: string | null,
-  } | null > | null,
-};
-
-export type getPatientAnswersForScreeningToolQueryVariables = {
-  screeningToolId: string,
-  patientId: string,
-};
-
-export type getPatientAnswersForScreeningToolQuery = {
-  // PatientAnswersForScreeningTool
-  patientAnswersForScreeningTool:  Array< {
+export type getPatientAnswersQuery = {
+  // PatientAnswersForQuestion
+  patientAnswers:  Array< {
     id: string,
     createdAt: string,
     updatedAt: string,
@@ -1892,14 +1885,14 @@ export type getQuestionQuery = {
   } | null,
 };
 
-export type getQuestionsForRiskAreaOrScreeningToolQueryVariables = {
-  riskAreaId?: string | null,
-  screeningToolId?: string | null,
+export type getQuestionsQueryVariables = {
+  filterId: string,
+  filterType: QuestionFilterType,
 };
 
-export type getQuestionsForRiskAreaOrScreeningToolQuery = {
-  // Questions
-  questionsForRiskAreaOrScreeningTool:  Array< {
+export type getQuestionsQuery = {
+  // Questions for risk area, progress note template or screening tool
+  questions:  Array< {
     id: string,
     createdAt: string,
     deletedAt: string | null,
@@ -3017,7 +3010,6 @@ export type questionEditMutationVariables = {
   title?: string | null,
   answerType?: AnswerTypeOptions | null,
   validatedSource?: string | null,
-  riskAreaId?: string | null,
   order?: number | null,
   applicableIfType?: QuestionConditionTypeOptions | null,
 };

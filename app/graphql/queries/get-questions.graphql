@@ -1,0 +1,7 @@
+#import "../fragments/full-question.graphql"
+
+query getQuestions($filterId: String!, $filterType: QuestionFilterType!) {
+  questions(filterId: $filterId, filterType: $filterType) {
+    ...FullQuestion
+  }
+}

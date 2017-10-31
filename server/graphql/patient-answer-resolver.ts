@@ -1,6 +1,7 @@
 import { omit } from 'lodash';
 import { transaction } from 'objection';
 import {
+  IAnswerFilterTypeEnum,
   IPatientAnswersCreateInput,
   IPatientAnswersUpdateApplicableInput,
   IPatientAnswerDeleteInput,
@@ -124,14 +125,24 @@ export async function patientAnswersCreate(
   });
 }
 
-export async function resolvePatientAnswersForQuestion(
+export async function resolvePatientAnswers(
   root: any,
-  args: { questionId: string; patientId: string },
+  args: { filterId: string; filterType: IAnswerFilterTypeEnum; patientId: string },
   { db, userRole }: IContext,
 ) {
   await accessControls.isAllowed(userRole, 'view', 'patientAnswer');
 
-  return await PatientAnswer.getForQuestion(args.questionId, args.patientId);
+  if (args.filterType === 'question') {
+    return await PatientAnswer.getForQuestion(args.filterId, args.patientId, '[answer, question]');
+  } else if (args.filterType === 'riskArea') {
+    return await PatientAnswer.getForRiskArea(args.filterId, args.patientId, 'question');
+  } else if (args.filterType === 'screeningTool') {
+    return await PatientAnswer.getForScreeningTool(args.filterId, args.patientId, 'question');
+  } else if (args.filterType === 'progressNote') {
+    return await PatientAnswer.getForProgressNote(args.filterId, args.patientId, 'question');
+  } else {
+    throw new Error('wrong filter type');
+  }
 }
 
 export async function resolvePreviousPatientAnswersForQuestion(
@@ -142,26 +153,6 @@ export async function resolvePreviousPatientAnswersForQuestion(
   await accessControls.isAllowed(userRole, 'view', 'patientAnswer');
 
   return await PatientAnswer.getPreviousAnswersForQuestion(args.questionId, args.patientId);
-}
-
-export async function resolvePatientAnswersForRiskArea(
-  root: any,
-  args: { riskAreaId: string; patientId: string },
-  { db, userRole }: IContext,
-) {
-  await accessControls.isAllowed(userRole, 'view', 'patientAnswer');
-
-  return await PatientAnswer.getForRiskArea(args.riskAreaId, args.patientId, 'question');
-}
-
-export async function resolvePatientAnswersForScreeningTool(
-  root: any,
-  args: { screeningToolId: string; patientId: string },
-  { db, userRole }: IContext,
-) {
-  await accessControls.isAllowed(userRole, 'view', 'patientAnswer');
-
-  return await PatientAnswer.getForScreeningTool(args.screeningToolId, args.patientId, 'question');
 }
 
 export async function resolvePatientAnswer(

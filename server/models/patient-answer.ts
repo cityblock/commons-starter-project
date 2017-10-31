@@ -5,6 +5,7 @@ import Answer from './answer';
 import BaseModel from './base-model';
 import PatientAnswerEvent, { IPatientAnswerEventOptions } from './patient-answer-event';
 import PatientScreeningToolSubmission from './patient-screening-tool-submission';
+import ProgressNote from './progress-note';
 import Question from './question';
 import ScreeningTool from './screening-tool';
 
@@ -12,6 +13,7 @@ interface IPatientAnswerCreateFields {
   patientId: string;
   questionIds?: string[];
   patientScreeningToolSubmissionId?: string;
+  progressNoteId?: string;
   answers: Array<{
     answerId: string;
     questionId: string;
@@ -34,6 +36,7 @@ export default class PatientAnswer extends BaseModel {
   patientScreeningToolSubmissionId: string;
   patientScreeningToolSubmission: PatientScreeningToolSubmission;
   screeningTool: ScreeningTool;
+  progressNoteId: string;
 
   static tableName = 'patient_answer';
 
@@ -48,6 +51,7 @@ export default class PatientAnswer extends BaseModel {
       applicable: { type: 'boolean' },
       deletedAt: { type: 'string' },
       patientScreeningToolSubmissionId: { type: 'string' },
+      progressNoteId: { type: 'string' },
     },
   };
 
@@ -128,20 +132,6 @@ export default class PatientAnswer extends BaseModel {
     return patientAnswer;
   }
 
-  static async getForQuestion(
-    questionId: string,
-    patientId: string,
-  ): Promise<PatientAnswer[] | null> {
-    const patientAnswers = await this.query()
-      .eager('answer')
-      .joinRelation('answer')
-      .where('patient_answer.deletedAt', null)
-      .andWhere('patientId', patientId)
-      .andWhere('answer.questionId', questionId);
-
-    return patientAnswers as PatientAnswer[];
-  }
-
   static async getPreviousAnswersForQuestion(
     questionId: string,
     patientId: string,
@@ -156,6 +146,22 @@ export default class PatientAnswer extends BaseModel {
       .page(0, limit)) as any;
 
     return patientAnswers.results;
+  }
+
+  static async getForQuestion(
+    questionId: string,
+    patientId: string,
+    eager = 'answer',
+  ): Promise<PatientAnswer[]> {
+    const patientAnswers = await this.query()
+      .eager(eager)
+      .joinRelation('answer')
+      .where('patient_answer.deletedAt', null)
+      .andWhere('patientId', patientId)
+      .andWhere('answer.questionId', questionId)
+      .orderBy('patient_answer.updatedAt', 'asc');
+
+    return patientAnswers as PatientAnswer[];
   }
 
   static async getForRiskArea(
@@ -190,6 +196,21 @@ export default class PatientAnswer extends BaseModel {
     return patientAnswers as PatientAnswer[];
   }
 
+  static async getForProgressNote(
+    progressNoteId: string,
+    patientId: string,
+    eager = 'answer',
+  ): Promise<PatientAnswer[]> {
+    const patientAnswers = await this.query()
+      .eager(eager)
+      .where('patient_answer.deletedAt', null)
+      .andWhere('patientId', patientId)
+      .andWhere('patient_answer.progressNoteId', progressNoteId)
+      .orderBy('patient_answer.updatedAt', 'asc');
+
+    return patientAnswers as PatientAnswer[];
+  }
+
   static async getAllForPatient(patientId: string): Promise<PatientAnswer[]> {
     const patientAnswers = await this.query()
       .joinRelation('answer.question')
@@ -199,6 +220,34 @@ export default class PatientAnswer extends BaseModel {
       .orderBy('patient_answer.updatedAt', 'asc');
 
     return patientAnswers as PatientAnswer[];
+  }
+
+  /**
+   * Ensure questions are part of the progress note template associated with the progress note
+   * The test:
+   * patientAnswer.progressNote.progressNoteTemplateId
+   * ===
+   * patientAnswer.answer.question.progressNoteTemplateId
+   *
+   * TODO: take a second pass to see if this is doable with a big 'ol join
+   */
+  static async validateQuestionsForProgressNote(
+    questionIds: string[],
+    progressNoteId: string,
+    txn: Transaction,
+  ) {
+    const progressNoteTemplateId = (await ProgressNote.get(progressNoteId, txn))
+      .progressNoteTemplateId;
+    const questions = await Question.query(txn).where('id', 'in', questionIds);
+    questions.forEach(question => {
+      if (question.progressNoteTemplateId !== progressNoteTemplateId) {
+        /* tslint:disable:max-line-length */
+        throw new Error(
+          `progress note ${progressNoteId} is not associated with the same progress note template as the question ${question.id}`,
+        );
+        /* tslint:enable:max-line-length */
+      }
+    });
   }
 
   static async createPatientAnswerEvents(
@@ -240,6 +289,14 @@ export default class PatientAnswer extends BaseModel {
   ): Promise<PatientAnswer[]> {
     return await transaction(PatientAnswer.knex(), async txn => {
       const questionIds = input.questionIds || input.answers.map(answer => answer.questionId);
+
+      if (input.progressNoteId) {
+        await this.validateQuestionsForProgressNote(
+          questionIds,
+          input.progressNoteId,
+          existingTxn || txn,
+        );
+      }
 
       // NOTE: This needs to be done as a subquery as knex doesn't support FROM clauses for updates
       const patientAnswerIdsToDeleteQuery = PatientAnswer.query(existingTxn || txn)

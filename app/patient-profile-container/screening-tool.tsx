@@ -5,7 +5,7 @@ import { compose, graphql } from 'react-apollo';
 import { connect, Dispatch } from 'react-redux';
 import { push } from 'react-router-redux';
 /* tslint:disable:max-line-length */
-import * as screeningToolQuestionsQuery from '../graphql/queries/get-questions-for-risk-area-or-screening-tool.graphql';
+import * as screeningToolQuestionsQuery from '../graphql/queries/get-questions.graphql';
 import * as screeningToolQuery from '../graphql/queries/get-screening-tool.graphql';
 import * as patientAnswersCreate from '../graphql/queries/patient-answers-create-mutation.graphql';
 /* tsline:enable:max-line-length */
@@ -401,7 +401,8 @@ export default compose(
   graphql(screeningToolQuery as any, {
     options: (props: IProps) => ({
       variables: {
-        screeningToolId: props.screeningToolId,
+        filterType: 'screeningTool',
+        filterId: props.screeningToolId,
       },
     }),
     props: ({ data }) => ({

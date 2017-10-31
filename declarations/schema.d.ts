@@ -94,9 +94,9 @@ declare module 'schema' {
   */
     question: IQuestion | null;
     /**
-    description: Questions
+    description: Questions for risk area, progress note template or screening tool
   */
-    questionsForRiskAreaOrScreeningTool: Array<IQuestion>;
+    questions: Array<IQuestion>;
     /**
     description: Answer
   */
@@ -112,19 +112,11 @@ declare module 'schema' {
     /**
     description: PatientAnswersForQuestion
   */
-    patientAnswersForQuestion: Array<IPatientAnswer> | null;
+    patientAnswers: Array<IPatientAnswer> | null;
     /**
     description: PatientPreviousAnswersForQuestion
   */
     patientPreviousAnswersForQuestion: Array<IPatientAnswer> | null;
-    /**
-    description: PatientAnswersForRiskArea
-  */
-    patientAnswersForRiskArea: Array<IPatientAnswer> | null;
-    /**
-    description: PatientAnswersForScreeningTool
-  */
-    patientAnswersForScreeningTool: Array<IPatientAnswer> | null;
     /**
     description: PatientRiskAreaSummary
   */
@@ -583,6 +575,7 @@ declare module 'schema' {
     answerType: IAnswerTypeOptionsEnum;
     riskAreaId: string | null;
     screeningToolId: string | null;
+    progressNoteTemplateId: string | null;
     applicableIfQuestionConditions: Array<IQuestionCondition>;
     applicableIfType: IQuestionConditionTypeOptionsEnum | null;
     order: number;
@@ -642,6 +635,9 @@ declare module 'schema' {
 
 
   type IQuestionConditionTypeOptionsEnum = 'allTrue' | 'oneTrue';
+
+
+  type IQuestionFilterTypeEnum = 'progressNoteTemplate' | 'riskArea' | 'screeningTool';
 
   /**
     description: PatientAnswer
@@ -729,6 +725,9 @@ declare module 'schema' {
 
 
   type ICarePlanSuggestionTypeEnum = 'concern' | 'goal';
+
+
+  type IAnswerFilterTypeEnum = 'question' | 'progressNote' | 'riskArea' | 'screeningTool';
 
 
   interface IRiskAreaSummary {
@@ -1471,6 +1470,7 @@ declare module 'schema' {
     validatedSource: string | null;
     riskAreaId: string | null;
     screeningToolId: string | null;
+    progressNoteTemplateId: string | null;
     order: number;
     applicableIfType: IQuestionConditionTypeOptionsEnum | null;
   }
@@ -1481,7 +1481,6 @@ declare module 'schema' {
     title: string | null;
     answerType: IAnswerTypeOptionsEnum | null;
     validatedSource: string | null;
-    riskAreaId: string | null;
     order: number | null;
     applicableIfType: IQuestionConditionTypeOptionsEnum | null;
   }
@@ -1526,6 +1525,7 @@ declare module 'schema' {
     patientAnswers: Array<IPatientAnswerInput>;
     questionIds: Array<string>;
     screeningToolId: string | null;
+    progressNoteId: string | null;
   }
 
 

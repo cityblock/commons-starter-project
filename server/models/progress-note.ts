@@ -1,4 +1,4 @@
-import { Model, RelationMappings } from 'objection';
+import { Model, RelationMappings, Transaction } from 'objection';
 import BaseModel from './base-model';
 
 interface IProgressNoteEditableFields {
@@ -77,8 +77,8 @@ export default class ProgressNote extends BaseModel {
     },
   };
 
-  static async get(progressNoteId: string): Promise<ProgressNote> {
-    const progressNote = await this.query().findOne({
+  static async get(progressNoteId: string, txn?: Transaction): Promise<ProgressNote> {
+    const progressNote = await this.query(txn).findOne({
       id: progressNoteId,
       deletedAt: null,
     });

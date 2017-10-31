@@ -5,7 +5,7 @@ import { connect, Dispatch } from 'react-redux';
 import { Route } from 'react-router-dom';
 import { push } from 'react-router-redux';
 /* tslint:disable:max-line-length */
-import * as questionsQuery from '../graphql/queries/get-questions-for-risk-area-or-screening-tool.graphql';
+import * as questionsQuery from '../graphql/queries/get-questions.graphql';
 import * as questionDeleteMutationGraphql from '../graphql/queries/question-delete-mutation.graphql';
 /* tslint:enable:max-line-length */
 import {
@@ -212,9 +212,15 @@ function getPageParams(props: IProps) {
   const { riskAreaId, screeningToolId } = props;
 
   if (riskAreaId) {
-    return { riskAreaId, screeningToolId: null };
+    return {
+      filterType: 'riskArea',
+      filterId: riskAreaId,
+    };
   } else if (screeningToolId) {
-    return { screeningToolId, riskAreaId: null };
+    return {
+      filterType: 'screeningTool',
+      filterId: screeningToolId,
+    };
   }
 }
 

@@ -128,12 +128,14 @@ describe('patient answer tests', () => {
         ],
       });
       const query = `{
-        patientAnswersForQuestion(questionId: "${question.id}", patientId: "${patient.id}") {
+        patientAnswers(
+          filterType: question, filterId: "${question.id}", patientId: "${patient.id}"
+        ) {
           id, answerValue
         }
       }`;
       const result = await graphql(schema, query, null, { db, userRole });
-      expect(cloneDeep(result.data!.patientAnswersForQuestion)).toMatchObject([
+      expect(cloneDeep(result.data!.patientAnswers)).toMatchObject([
         {
           id: patientAnswers[0].id,
           answerValue: patientAnswers[0].answerValue,
@@ -239,8 +241,8 @@ describe('patient answer tests', () => {
       });
 
       const query = `{
-        patientAnswersForRiskArea(
-          riskAreaId: "${riskArea.id}", patientId: "${patient.id}"
+        patientAnswers(
+          filterType: riskArea, filterId: "${riskArea.id}", patientId: "${patient.id}"
         ) {
           id
           answerValue
@@ -250,7 +252,7 @@ describe('patient answer tests', () => {
         }
       }`;
       const result = await graphql(schema, query, null, { db, userRole });
-      const answers = cloneDeep(result.data!.patientAnswersForRiskArea);
+      const answers = cloneDeep(result.data!.patientAnswers);
 
       expect(answers).toMatchObject([
         {
@@ -261,7 +263,6 @@ describe('patient answer tests', () => {
           },
         },
       ]);
-
       expect(answers.map((ans: any) => ans.id)).not.toContain(patientAnswers2[0].id);
     });
   });
@@ -303,8 +304,8 @@ describe('patient answer tests', () => {
       });
 
       const query = `{
-        patientAnswersForScreeningTool(
-          screeningToolId: "${screeningTool.id}", patientId: "${patient.id}"
+        patientAnswers(
+          filterType: screeningTool, filterId: "${screeningTool.id}", patientId: "${patient.id}"
         ) {
           id
           answerValue
@@ -314,7 +315,7 @@ describe('patient answer tests', () => {
         }
       }`;
       const result = await graphql(schema, query, null, { db, userRole });
-      const answers = cloneDeep(result.data!.patientAnswersForScreeningTool);
+      const answers = cloneDeep(result.data!.patientAnswers);
 
       expect(answers).toMatchObject([
         {

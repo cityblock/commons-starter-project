@@ -1,0 +1,65 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders progress note template create 1`] = `
+<div
+  className={undefined}
+>
+  <form
+    onSubmit={[Function]}
+  >
+    <div
+      className={undefined}
+    >
+      <div
+        className={undefined}
+        onClick={[Function]}
+      />
+    </div>
+    <div
+      className={undefined}
+    >
+      <div
+        className={undefined}
+      >
+        <div
+          className={undefined}
+        >
+          <div
+            className={undefined}
+          />
+        </div>
+      </div>
+      <div
+        className={undefined}
+      >
+        <input
+          className={undefined}
+          name="title"
+          onChange={[Function]}
+          placeholder="Enter progress note template title"
+          value=""
+        />
+      </div>
+    </div>
+    <div
+      className={undefined}
+    >
+      <div
+        className={undefined}
+      >
+        <div
+          className={undefined}
+          onClick={[Function]}
+        >
+          Cancel
+        </div>
+        <input
+          className={undefined}
+          type="submit"
+          value="Add progress note template"
+        />
+      </div>
+    </div>
+  </form>
+</div>
+`;

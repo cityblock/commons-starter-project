@@ -1,0 +1,33 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`question row renders question row 1`] = `
+<a
+  className="undefined"
+  href="/route/base/progress-note-template-id"
+  onClick={[Function]}
+>
+  <div
+    className={undefined}
+  >
+    Goal Title
+  </div>
+  <div
+    className={undefined}
+  >
+    <div
+      className=""
+    >
+      <span
+        className={undefined}
+      >
+        Created:
+      </span>
+      <span
+        className={undefined}
+      >
+        in 2 months
+      </span>
+    </div>
+  </div>
+</a>
+`;

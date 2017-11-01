@@ -11,6 +11,7 @@ import * as questionDeleteMutationGraphql from '../graphql/queries/question-dele
 import {
   questionDeleteMutation,
   questionDeleteMutationVariables,
+  FullProgressNoteTemplateFragment,
   FullQuestionFragment,
   FullRiskAreaFragment,
   FullScreeningToolFragment,
@@ -27,6 +28,8 @@ export interface IComponentProps {
   riskAreas?: FullRiskAreaFragment[];
   screeningToolId?: string;
   screeningTools?: FullScreeningToolFragment[];
+  progressNoteTemplateId?: string;
+  progressNoteTemplates?: FullProgressNoteTemplateFragment[];
   questionId?: string;
 }
 
@@ -38,9 +41,12 @@ interface IProps extends IComponentProps {
   ) => { data: questionDeleteMutation };
   redirectToQuestions: () => any;
   questions?: FullQuestionFragment[];
-  questionsRefetch: (variables: { riskAreaId: string }) => any;
+  questionsRefetch: (
+    variables: { riskAreaId?: string; progressNoteTemplateId?: string; screeningToolId?: string },
+  ) => any;
   directToRiskAreaQuestions: (riskAreaId: string) => any;
   directToScreeningToolQuestions: (screeningToolId: string) => any;
+  directToProgressNoteTemplateQuestions: (progressNoteTemplateId: string) => any;
 }
 
 interface IState {
@@ -64,10 +70,19 @@ class BuilderQuestions extends React.Component<IProps, IState> {
   }
 
   componentWillReceiveProps(nextProps: IProps) {
-    const { loading, error, riskAreaId } = nextProps;
+    const { loading, error, riskAreaId, screeningToolId, progressNoteTemplateId } = nextProps;
+    // TODO: Why do we do this for risk area id and not for other fields
     this.setState(() => ({ loading, error }));
     if (riskAreaId && riskAreaId !== this.props.riskAreaId) {
       this.props.questionsRefetch({ riskAreaId });
+    }
+
+    if (progressNoteTemplateId && riskAreaId !== this.props.progressNoteTemplateId) {
+      this.props.questionsRefetch({ progressNoteTemplateId });
+    }
+
+    if (screeningToolId && screeningToolId !== this.props.screeningToolId) {
+      this.props.questionsRefetch({ screeningToolId });
     }
   }
 
@@ -135,6 +150,8 @@ class BuilderQuestions extends React.Component<IProps, IState> {
       riskAreaId,
       screeningTools,
       screeningToolId,
+      progressNoteTemplateId,
+      progressNoteTemplates,
     } = this.props;
     const { showCreateQuestion } = this.state;
     const questionsList = questions || [];
@@ -156,6 +173,7 @@ class BuilderQuestions extends React.Component<IProps, IState> {
       <QuestionCreate
         riskAreaId={riskAreaId}
         screeningToolId={screeningToolId}
+        progressNoteTemplateId={progressNoteTemplateId}
         onClose={this.hideCreateQuestion}
         routeBase={this.props.routeBase}
       />
@@ -181,13 +199,27 @@ class BuilderQuestions extends React.Component<IProps, IState> {
         {screeningTool.title}
       </option>
     ));
-    const sortOptions = riskAreaSortOptions.concat(screeningToolSortOptions);
-    const selectedValue = screeningToolId ? screeningToolId : riskAreaId;
+    const progressNoteTemplateSortOptions = (progressNoteTemplates || []
+    ).map(progressNoteTemplate => (
+      <option
+        key={progressNoteTemplate.id}
+        value={progressNoteTemplate.id}
+        data-optiontype={'progressNoteTemplate'}
+      >
+        {progressNoteTemplate.title}
+      </option>
+    ));
+    const sortOptions = riskAreaSortOptions
+      .concat(screeningToolSortOptions)
+      .concat(progressNoteTemplateSortOptions);
+    const selectedValue = screeningToolId || riskAreaId || progressNoteTemplateId;
     return (
       <div className={styles.container}>
         <div className={styles.sortSearchBar}>
           <div className={sortSearchStyles.sort}>
-            <div className={sortSearchStyles.sortLabel}>Questions for domain/tool:</div>
+            <div className={sortSearchStyles.sortLabel}>
+              Questions for domain/tool/progress note template:
+            </div>
             <div className={sortSearchStyles.sortDropdown}>
               <select value={selectedValue} onChange={this.onSortChange}>
                 {sortOptions}
@@ -209,7 +241,7 @@ class BuilderQuestions extends React.Component<IProps, IState> {
 }
 
 function getPageParams(props: IProps) {
-  const { riskAreaId, screeningToolId } = props;
+  const { riskAreaId, screeningToolId, progressNoteTemplateId } = props;
 
   if (riskAreaId) {
     return {
@@ -220,6 +252,11 @@ function getPageParams(props: IProps) {
     return {
       filterType: 'screeningTool',
       filterId: screeningToolId,
+    };
+  } else if (progressNoteTemplateId) {
+    return {
+      filterType: 'progressNoteTemplate',
+      filterId: progressNoteTemplateId,
     };
   }
 }
@@ -236,6 +273,9 @@ function mapDispatchToProps(dispatch: Dispatch<() => void>, ownProps: IProps): P
     directToScreeningToolQuestions: (screeningToolId: string) => {
       dispatch(push(`/builder/tools/${screeningToolId}/questions`));
     },
+    directToProgressNoteTemplateQuestions: (progressNoteTemplateId: string) => {
+      dispatch(push(`/builder/progress-note-templates/${progressNoteTemplateId}/questions`));
+    },
   };
 }
 
@@ -250,7 +290,7 @@ export default compose(
       questionsRefetch: data ? data.refetch : false,
       questionsLoading: data ? data.loading : false,
       questionsError: data ? data.error : null,
-      questions: data ? (data as any).questionsForRiskAreaOrScreeningTool : null,
+      questions: data ? (data as any).questions : null,
     }),
   }),
 )(BuilderQuestions);

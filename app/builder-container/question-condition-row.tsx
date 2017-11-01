@@ -63,7 +63,7 @@ export default compose(
   graphql(questionConditionDeleteMutationGraphql as any, {
     name: 'deleteQuestionCondition',
     options: {
-      refetchQueries: ['getQuestionsForRiskAreaOrScreeningTool'],
+      refetchQueries: ['getQuestions'],
     },
   }),
 )(QuestionConditionRow);

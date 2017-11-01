@@ -406,3 +406,11 @@ export const patientScreeningToolSubmission = {
   updatedAt: 'Thu Jul 13 2017 16:52:56 GMT-0400 (EDT)',
   carePlanSuggestions: [carePlanSuggestionWithConcern, carePlanSuggestionWithGoal],
 };
+
+export const progressNoteTemplate = {
+  id: 'progress-note-template-id',
+  title: 'Goal Title',
+  createdAt: '2017-09-07T13:45:14.532Z',
+  updatedAt: '2017-09-07T13:45:14.532Z',
+  deletedAt: null,
+};

@@ -325,7 +325,7 @@ export default compose(
   graphql<IGraphqlProps, IProps>(answerCreateMutationGraphql as any, {
     name: 'createAnswer',
     options: {
-      refetchQueries: ['getQuestionsForRiskAreaOrScreeningTool'],
+      refetchQueries: ['getQuestions'],
     },
   }),
   graphql<IGraphqlProps, IProps>(answerEditMutationGraphql as any, {
@@ -334,7 +334,7 @@ export default compose(
   graphql<IGraphqlProps, IProps>(answerDeleteMutationGraphql as any, {
     name: 'deleteAnswer',
     options: {
-      refetchQueries: ['getQuestionsForRiskAreaOrScreeningTool'],
+      refetchQueries: ['getQuestions'],
     },
   }),
 )(AnswerCreateEdit);

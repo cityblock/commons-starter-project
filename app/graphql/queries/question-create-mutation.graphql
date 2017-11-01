@@ -6,6 +6,7 @@ mutation questionCreate(
   $validatedSource: String
   $riskAreaId: String
   $screeningToolId: String
+  $progressNoteTemplateId: String
   $order: Int!
   $applicableIfType: QuestionConditionTypeOptions
 ) {
@@ -16,6 +17,7 @@ mutation questionCreate(
       validatedSource: $validatedSource
       riskAreaId: $riskAreaId
       screeningToolId: $screeningToolId
+      progressNoteTemplateId: $progressNoteTemplateId
       order: $order
       applicableIfType: $applicableIfType
     }

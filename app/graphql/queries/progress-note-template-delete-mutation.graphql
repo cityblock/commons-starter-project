@@ -1,0 +1,7 @@
+#import "../fragments/full-progress-note-template.graphql"
+
+mutation progressNoteTemplateDelete($progressNoteTemplateId: String!) {
+  progressNoteTemplateDelete(input: { progressNoteTemplateId: $progressNoteTemplateId }) {
+    ...FullProgressNoteTemplate
+  }
+}

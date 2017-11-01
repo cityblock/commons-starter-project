@@ -1355,7 +1355,11 @@ type RootQueryType {
   # PatientAnswer
   patientAnswer(patientAnswerId: String!): PatientAnswer
   # PatientAnswersForQuestion
-  patientAnswers(filterId: String!, filterType: AnswerFilterType!, patientId: String!): [PatientAnswer]
+  patientAnswers(
+    filterId: String!
+    filterType: AnswerFilterType!
+    patientId: String!
+  ): [PatientAnswer]
   # PatientPreviousAnswersForQuestion
   patientPreviousAnswersForQuestion(questionId: String!, patientId: String!): [PatientAnswer]
   # PatientRiskAreaSummary

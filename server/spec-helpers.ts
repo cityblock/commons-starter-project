@@ -165,8 +165,7 @@ export async function cleanPatientAnswerEvents(patientId: string) {
     pageSize: 10,
   });
   patientAnswerEvents.results.map(
-    async patientAnswerEvent =>
-      await PatientAnswerEvent.delete(patientAnswerEvent.id),
+    async patientAnswerEvent => await PatientAnswerEvent.delete(patientAnswerEvent.id),
   );
 }
 

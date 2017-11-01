@@ -122,7 +122,7 @@ export default compose(
   graphql<IGraphqlProps, IProps>(questionConditionCreateMutationGraphql as any, {
     name: 'createQuestionCondition',
     options: {
-      refetchQueries: ['getQuestionsForRiskAreaOrScreeningTool'],
+      refetchQueries: ['getQuestions'],
     },
   }),
 )(QuestionConditionCreate);

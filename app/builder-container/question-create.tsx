@@ -24,6 +24,7 @@ export interface IOptions {
 interface IProps {
   riskAreaId?: string;
   screeningToolId?: string;
+  progressNoteTemplateId?: string;
   routeBase: string;
   onClose: () => any;
   redirectToQuestion?: (questionId: string) => any;
@@ -57,6 +58,7 @@ class QuestionCreate extends React.Component<allProps, IState> {
         answerType: 'dropdown' as AnswerTypeOptions,
         riskAreaId: props.riskAreaId,
         screeningToolId: props.screeningToolId,
+        progressNoteTemplateId: props.progressNoteTemplateId,
         applicableIfType: undefined,
       },
     };
@@ -186,7 +188,7 @@ export default compose(
   graphql<IGraphqlProps, IProps>(questionCreateMutationGraphql as any, {
     name: 'createQuestion',
     options: {
-      refetchQueries: ['getQuestionsForRiskAreaOrScreeningTool'],
+      refetchQueries: ['getQuestions'],
     },
   }),
 )(QuestionCreate);

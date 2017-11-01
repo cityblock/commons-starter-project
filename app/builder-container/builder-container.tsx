@@ -5,11 +5,15 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import * as concernsQuery from '../graphql/queries/get-concerns.graphql';
 import * as goalsQuery from '../graphql/queries/get-goal-suggestion-templates.graphql';
+/* tslint:disable:max-line-length */
+import * as progressNoteTemplatesQuery from '../graphql/queries/get-progress-note-templates.graphql';
+/* tslint:enable:max-line-length */
 import * as riskAreasQuery from '../graphql/queries/get-risk-areas.graphql';
 import * as screeningToolsQuery from '../graphql/queries/get-screening-tools.graphql';
 import {
   FullConcernFragment,
   FullGoalSuggestionTemplateFragment,
+  FullProgressNoteTemplateFragment,
   FullRiskAreaFragment,
   FullScreeningToolFragment,
 } from '../graphql/types';
@@ -17,18 +21,21 @@ import * as tabStyles from '../shared/css/tabs.css';
 import { IState as IAppState } from '../store';
 import BuilderConcerns from './builder-concerns';
 import BuilderGoals from './builder-goals';
-import BuilderLeftNav from './builder-left-nav';
+import BuilderProgressNoteTemplates from './builder-progress-note-templates';
 import BuilderQuestions from './builder-questions';
 import BuilderRiskAreas from './builder-risk-areas';
 import BuilderScreeningTools from './builder-screening-tools';
 import * as styles from './css/builder.css';
+
+type Tab = 'domains' | 'concerns' | 'goals' | 'tools' | 'progress-note-templates';
 
 interface IProps {
   riskAreas: FullRiskAreaFragment[];
   concerns: FullConcernFragment[];
   goals: FullGoalSuggestionTemplateFragment[];
   screeningTools: FullScreeningToolFragment[];
-  tabId: 'domains' | 'concerns' | 'goals' | 'tools';
+  progressNoteTemplates: FullProgressNoteTemplateFragment[];
+  tabId: Tab;
   subTabId?: 'questions';
   objectId?: string;
   questionId?: string;
@@ -45,7 +52,7 @@ interface IProps {
   refetchGoals: () => any;
   match: {
     params: {
-      tabId?: 'domains' | 'concerns' | 'goals' | 'tools';
+      tabId?: Tab;
       subTabId?: 'questions';
       questionId?: string;
       screeningToolId?: string;
@@ -65,14 +72,20 @@ class BuilderContainer extends React.Component<IProps, {}> {
       concerns,
       goals,
       refetchGoals,
+      progressNoteTemplates,
       tabId,
     } = this.props;
     const questionsTabSelected = subTabId === 'questions';
     const concernsTabSelected = tabId === 'concerns';
     const goalsTabSelected = tabId === 'goals';
+    const progressNoteTemplatesTabSelected = tabId === 'progress-note-templates';
     const toolsTabSelected = tabId === 'tools' && subTabId !== 'questions';
     const riskAreasTabSelected =
-      !questionsTabSelected && !concernsTabSelected && !goalsTabSelected && !toolsTabSelected;
+      !questionsTabSelected &&
+      !concernsTabSelected &&
+      !goalsTabSelected &&
+      !toolsTabSelected &&
+      !progressNoteTemplatesTabSelected;
     const riskAreaTabStyles = classNames(tabStyles.tab, {
       [tabStyles.selectedTab]: riskAreasTabSelected,
     });
@@ -84,6 +97,9 @@ class BuilderContainer extends React.Component<IProps, {}> {
     });
     const goalTabStyles = classNames(tabStyles.tab, {
       [tabStyles.selectedTab]: goalsTabSelected,
+    });
+    const progressNoteTemplatesTabStyles = classNames(tabStyles.tab, {
+      [tabStyles.selectedTab]: progressNoteTemplatesTabSelected,
     });
     const toolTabStyles = classNames(tabStyles.tab, {
       [tabStyles.selectedTab]: toolsTabSelected,
@@ -127,11 +143,17 @@ class BuilderContainer extends React.Component<IProps, {}> {
         screeningToolId={objectId}
       />
     ) : null;
+    const progressNoteTemplatesHtml = progressNoteTemplatesTabSelected ? (
+      <BuilderProgressNoteTemplates
+        routeBase={'/builder/progress-note-templates'}
+        progressNoteTemplates={progressNoteTemplates}
+        progressNoteTemplateId={objectId}
+      />
+    ) : null;
     const fallbackRiskAreaId = riskAreas && riskAreas[0] ? riskAreas[0].id : undefined;
     const selectedRiskAreaId = objectId ? objectId : fallbackRiskAreaId;
     return (
       <div className={styles.container}>
-        <BuilderLeftNav />
         <div className={styles.mainBody}>
           <div className={tabStyles.tabs}>
             <Link to={'/builder/domains'} className={riskAreaTabStyles}>
@@ -152,12 +174,19 @@ class BuilderContainer extends React.Component<IProps, {}> {
             <Link to={'/builder/goals'} className={goalTabStyles}>
               Goals
             </Link>
+            <Link
+              to={'/builder/progress-note-templates'}
+              className={progressNoteTemplatesTabStyles}
+            >
+              Progress Note Templates
+            </Link>
           </div>
           {questions}
           {riskAreasHtml}
           {concernsHtml}
           {goalsHtml}
           {toolsHtml}
+          {progressNoteTemplatesHtml}
         </div>
       </div>
     );
@@ -175,6 +204,13 @@ function mapStateToProps(state: IAppState, ownProps: IProps): Partial<IProps> {
 
 export default compose(
   connect(mapStateToProps),
+  graphql(progressNoteTemplatesQuery as any, {
+    props: ({ data }) => ({
+      progressNoteTemplatesLoading: data ? data.loading : false,
+      progressNoteTemplatesError: data ? data.error : null,
+      progressNoteTemplates: data ? (data as any).progressNoteTemplates : null,
+    }),
+  }),
   graphql(riskAreasQuery as any, {
     props: ({ data }) => ({
       riskAreasLoading: data ? data.loading : false,

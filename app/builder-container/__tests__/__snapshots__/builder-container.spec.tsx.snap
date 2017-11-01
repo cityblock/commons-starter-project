@@ -7,11 +7,6 @@ exports[`renders builder container 1`] = `
   <div
     className={undefined}
   >
-    left nav
-  </div>
-  <div
-    className={undefined}
-  >
     <div
       className={undefined}
     >
@@ -49,6 +44,13 @@ exports[`renders builder container 1`] = `
         onClick={[Function]}
       >
         Goals
+      </a>
+      <a
+        className=""
+        href="/builder/progress-note-templates"
+        onClick={[Function]}
+      >
+        Progress Note Templates
       </a>
     </div>
     <div

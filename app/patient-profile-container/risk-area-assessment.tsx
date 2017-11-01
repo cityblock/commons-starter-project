@@ -639,7 +639,7 @@ export default compose(
     props: ({ data }) => ({
       riskAreaQuestionsLoading: data ? data.loading : false,
       riskAreaQuestionsError: data ? data.error : null,
-      riskAreaQuestions: data ? (data as any).questionsForRiskAreaOrScreeningTool : null,
+      riskAreaQuestions: data ? (data as any).questions : null,
       refetchRiskAreaQuestions: data ? data.refetch : null,
     }),
   }),

@@ -421,7 +421,7 @@ export default compose(
     props: ({ data }) => ({
       screeningToolQuestionsLoading: data ? data.loading : false,
       screeningToolQuestionsError: data ? data.error : null,
-      screeningToolQuestions: data ? (data as any).questionsForRiskAreaOrScreeningTool : null,
+      screeningToolQuestions: data ? (data as any).questions : null,
       refetchScreeningToolQuestions: data ? data.refetch : null,
     }),
   }),

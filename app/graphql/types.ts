@@ -1776,6 +1776,30 @@ export type getPatientQuery = {
   } | null,
 };
 
+export type getProgressNoteTemplateQueryVariables = {
+  progressNoteTemplateId: string,
+};
+
+export type getProgressNoteTemplateQuery = {
+  // progress note template
+  progressNoteTemplate:  {
+    id: string,
+    title: string,
+    createdAt: string,
+    deletedAt: string | null,
+  } | null,
+};
+
+export type getProgressNoteTemplatesQuery = {
+  // progress note templates
+  progressNoteTemplates:  Array< {
+    id: string,
+    title: string,
+    createdAt: string,
+    deletedAt: string | null,
+  } | null > | null,
+};
+
 export type getQuestionAnswersQueryVariables = {
   questionId: string,
 };
@@ -2831,6 +2855,49 @@ export type patientSetupMutation = {
   } | null,
 };
 
+export type progressNoteTemplateCreateMutationVariables = {
+  title: string,
+};
+
+export type progressNoteTemplateCreateMutation = {
+  // create a progress note template
+  progressNoteTemplateCreate:  {
+    id: string,
+    title: string,
+    createdAt: string,
+    deletedAt: string | null,
+  } | null,
+};
+
+export type progressNoteTemplateDeleteMutationVariables = {
+  progressNoteTemplateId: string,
+};
+
+export type progressNoteTemplateDeleteMutation = {
+  // deletes a progress note template
+  progressNoteTemplateDelete:  {
+    id: string,
+    title: string,
+    createdAt: string,
+    deletedAt: string | null,
+  } | null,
+};
+
+export type progressNoteTemplateEditMutationVariables = {
+  title: string,
+  progressNoteTemplateId: string,
+};
+
+export type progressNoteTemplateEditMutation = {
+  // edits a progress note template
+  progressNoteTemplateEdit:  {
+    id: string,
+    title: string,
+    createdAt: string,
+    deletedAt: string | null,
+  } | null,
+};
+
 export type questionConditionCreateMutationVariables = {
   answerId: string,
   questionId: string,
@@ -2879,6 +2946,7 @@ export type questionCreateMutationVariables = {
   validatedSource?: string | null,
   riskAreaId?: string | null,
   screeningToolId?: string | null,
+  progressNoteTemplateId?: string | null,
   order: number,
   applicableIfType?: QuestionConditionTypeOptions | null,
 };
@@ -4701,6 +4769,13 @@ export type FullPatientScreeningToolSubmissionFragment = {
     acceptedAt: string | null,
     patientScreeningToolSubmissionId: string | null,
   } | null >,
+};
+
+export type FullProgressNoteTemplateFragment = {
+  id: string,
+  title: string,
+  createdAt: string,
+  deletedAt: string | null,
 };
 
 export type FullQuestionConditionFragment = {

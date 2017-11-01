@@ -282,13 +282,13 @@ export default compose(
   graphql<IGraphqlProps, IProps>(concernSuggestionCreateMutationGraphql as any, {
     name: 'createConcernSuggestion',
     options: {
-      refetchQueries: ['getQuestionsForRiskAreaOrScreeningTool', 'getScreeningTools'],
+      refetchQueries: ['getQuestions', 'getScreeningTools'],
     },
   }),
   graphql<IGraphqlProps, IProps>(goalSuggestionCreateMutationGraphql as any, {
     name: 'createGoalSuggestion',
     options: {
-      refetchQueries: ['getQuestionsForRiskAreaOrScreeningTool', 'getScreeningTools'],
+      refetchQueries: ['getQuestions', 'getScreeningTools'],
     },
   }),
 )(CarePlanSuggestionCreate);

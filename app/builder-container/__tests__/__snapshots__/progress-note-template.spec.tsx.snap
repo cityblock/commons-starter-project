@@ -1,0 +1,152 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders error without progress note template 1`] = `
+<div
+  className={undefined}
+>
+  <div
+    className={undefined}
+  >
+    <div
+      className={undefined}
+    />
+    <div
+      className={undefined}
+    >
+      Unable to load progress note template
+    </div>
+    <div
+      className={undefined}
+    >
+      Sorry, something went wrong. Please try again.
+    </div>
+    <div
+      className=""
+      onClick={[Function]}
+    >
+      Try again
+    </div>
+  </div>
+</div>
+`;
+
+exports[`renders loading 1`] = `
+<div
+  className={undefined}
+>
+  <div
+    className={undefined}
+  >
+    Loading...
+  </div>
+</div>
+`;
+
+exports[`renders progress note template 1`] = `
+<div
+  className=""
+>
+  <div
+    className="undefined"
+  >
+    <div
+      className={undefined}
+    />
+    <div
+      className={undefined}
+    >
+      Are you sure you want to delete this progress note template?
+    </div>
+    <div
+      className={undefined}
+    >
+      <div
+        className=""
+        onClick={[Function]}
+      >
+        Cancel
+      </div>
+      <div
+        className={undefined}
+        onClick={[Function]}
+      >
+        Yes, delete
+      </div>
+    </div>
+    <div
+      className="undefined"
+    >
+      <div
+        className=""
+      >
+        Error deleting progress note template.
+      </div>
+      <div
+        className={undefined}
+      >
+        Please try again.
+      </div>
+    </div>
+  </div>
+  <div
+    className=""
+  >
+    <div>
+      <div
+        className={undefined}
+      >
+        <div
+          className={undefined}
+        >
+          <Link
+            className={undefined}
+            replace={false}
+            to="/route/base"
+          >
+            Close
+          </Link>
+          <div
+            className={undefined}
+            onClick={[Function]}
+          >
+            <div
+              className={undefined}
+            />
+            <div
+              className={undefined}
+            >
+              Delete progress note template
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div
+      className={undefined}
+    >
+      <div
+        className={undefined}
+      >
+        Title:
+      </div>
+      <div
+        className=""
+        onClick={[Function]}
+      >
+        Goal Title
+      </div>
+      <div
+        className=""
+      >
+        <input
+          name="editedTitle"
+          onBlur={[Function]}
+          onChange={[Function]}
+          onKeyDown={[Function]}
+          value=""
+        />
+      </div>
+    </div>
+  </div>
+</div>
+`;

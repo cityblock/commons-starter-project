@@ -145,13 +145,13 @@ export default compose(
   graphql<IGraphqlProps, IProps>(concernSuggestionDeleteMutationGraphql as any, {
     name: 'deleteConcernSuggestion',
     options: {
-      refetchQueries: ['getQuestionsForRiskAreaOrScreeningTool', 'getScreeningTools'],
+      refetchQueries: ['getQuestions', 'getScreeningTools'],
     },
   }),
   graphql<IGraphqlProps, IProps>(goalSuggestionDeleteMutationGraphql as any, {
     name: 'deleteGoalSuggestion',
     options: {
-      refetchQueries: ['getQuestionsForRiskAreaOrScreeningTool', 'getScreeningTools'],
+      refetchQueries: ['getQuestions', 'getScreeningTools'],
     },
   }),
 )(CarePlanSuggestion);

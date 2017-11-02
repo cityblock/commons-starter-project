@@ -94,6 +94,8 @@ class BuilderQuestions extends React.Component<IProps, IState> {
       this.props.directToRiskAreaQuestions(value);
     } else if (optionType === 'screeningTool') {
       this.props.directToScreeningToolQuestions(value);
+    } else if (optionType === 'progressNoteTemplate') {
+      this.props.directToProgressNoteTemplateQuestions(value);
     }
   }
 

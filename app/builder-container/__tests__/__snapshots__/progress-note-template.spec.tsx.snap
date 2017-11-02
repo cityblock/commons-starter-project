@@ -146,6 +146,12 @@ exports[`renders progress note template 1`] = `
           value=""
         />
       </div>
+      <Link
+        replace={false}
+        to="/builder/progress-note-templates/progress-note-template-id/questions"
+      >
+        Add questions to progress note template
+      </Link>
     </div>
   </div>
 </div>

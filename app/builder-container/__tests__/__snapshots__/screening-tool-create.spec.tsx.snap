@@ -51,7 +51,7 @@ exports[`renders screening tool screate 1`] = `
             hidden={true}
             value=""
           >
-            Select Risk Area
+            Select Domain
           </option>
           <option
             value="cool-task-id"

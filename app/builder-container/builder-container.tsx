@@ -78,7 +78,8 @@ class BuilderContainer extends React.Component<IProps, {}> {
     const questionsTabSelected = subTabId === 'questions';
     const concernsTabSelected = tabId === 'concerns';
     const goalsTabSelected = tabId === 'goals';
-    const progressNoteTemplatesTabSelected = tabId === 'progress-note-templates';
+    const progressNoteTemplatesTabSelected =
+      tabId === 'progress-note-templates' && subTabId !== 'questions';
     const toolsTabSelected = tabId === 'tools' && subTabId !== 'questions';
     const riskAreasTabSelected =
       !questionsTabSelected &&
@@ -104,8 +105,9 @@ class BuilderContainer extends React.Component<IProps, {}> {
     const toolTabStyles = classNames(tabStyles.tab, {
       [tabStyles.selectedTab]: toolsTabSelected,
     });
-    const riskAreaId = tabId === 'tools' ? undefined : objectId;
+    const riskAreaId = tabId === 'domains' ? objectId : undefined;
     const screeningToolId = tabId === 'tools' ? objectId : undefined;
+    const progressNoteTemplateId = tabId === 'progress-note-templates' ? objectId : undefined;
 
     const questions = questionsTabSelected ? (
       <BuilderQuestions
@@ -113,6 +115,8 @@ class BuilderContainer extends React.Component<IProps, {}> {
         riskAreaId={riskAreaId}
         screeningTools={screeningTools}
         screeningToolId={screeningToolId}
+        progressNoteTemplateId={progressNoteTemplateId}
+        progressNoteTemplates={progressNoteTemplates}
         routeBase={`/builder/${tabId}/${objectId}/questions`}
         questionId={questionId}
       />

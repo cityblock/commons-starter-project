@@ -269,6 +269,9 @@ export class ProgressNoteTemplate extends React.Component<allProps, IState> {
                   onBlur={this.onBlur}
                 />
               </div>
+              <Link to={`/builder/progress-note-templates/${progressNoteTemplate.id}/questions`}>
+                Add questions to progress note template
+              </Link>
             </div>
           </div>
         </div>

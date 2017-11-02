@@ -141,7 +141,7 @@ class ScreeningToolCreate extends React.Component<allProps, IState> {
                 className={formStyles.select}
               >
                 <option value="" disabled hidden>
-                  Select Risk Area
+                  Select Domain
                 </option>
                 {this.renderRiskAreaOptions()}
               </select>

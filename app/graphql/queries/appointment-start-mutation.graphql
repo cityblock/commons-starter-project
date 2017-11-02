@@ -1,7 +1,0 @@
-#import "../fragments/full-appointment.graphql"
-
-mutation appointmentStart($patientId: String!) {
-  appointmentStart(input: { patientId: $patientId }) {
-    ...FullAppointment
-  }
-}

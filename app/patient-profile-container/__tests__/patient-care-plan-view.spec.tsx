@@ -12,7 +12,7 @@ import PatientCarePlanView from '../patient-care-plan-view';
 const locale = { messages: ENGLISH_TRANSLATION.messages };
 const mockStore = configureMockStore([]);
 
-const query = gql(`
+export const patientCarePlanQuery = gql(`
 query getPatientCarePlan($patientId: String!) {
   carePlanForPatient(patientId: $patientId) {
     concerns {
@@ -185,7 +185,7 @@ it('renders patient care plan view', () => {
       mocks={[
         {
           request: {
-            query,
+            query: patientCarePlanQuery,
             variables: {
               patientId: 'patient-1',
             },
@@ -205,7 +205,7 @@ it('renders patient care plan view', () => {
             patientId={'patient-1'}
             subTabId={'active'}
             loading={false}
-            routeBase={'/patients/patient-1/carePlan'}
+            routeBase={'/patients/patient-1/map'}
           />
         </ConnectedRouter>
       </ReduxConnectedIntlProvider>

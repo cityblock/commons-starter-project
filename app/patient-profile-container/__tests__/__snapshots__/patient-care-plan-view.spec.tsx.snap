@@ -7,21 +7,21 @@ exports[`renders patient care plan view 1`] = `
   >
     <a
       className="undefined"
-      href="/patients/patient-1/carePlan/active"
+      href="/patients/patient-1/map/active"
       onClick={[Function]}
     >
       Active
     </a>
     <a
       className=""
-      href="/patients/patient-1/carePlan/inactive"
+      href="/patients/patient-1/map/inactive"
       onClick={[Function]}
     >
       Inactive
     </a>
     <a
       className=""
-      href="/patients/patient-1/carePlan/suggestions"
+      href="/patients/patient-1/map/suggestions"
       onClick={[Function]}
     >
       Suggestions

@@ -144,7 +144,7 @@ it('renders patient care plan suggestions', () => {
           <PatientCarePlanSuggestions
             patientId={'patient-1'}
             carePlanSuggestions={carePlanSuggestions}
-            routeBase={'/patients/patient-1/carePlan'}
+            routeBase={'/patients/patient-1/map'}
           />
         </ConnectedRouter>
       </ReduxConnectedIntlProvider>

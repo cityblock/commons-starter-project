@@ -131,7 +131,7 @@ export class ScreeningToolResultsPopup extends React.Component<IProps, {}> {
 function mapDispatchToProps(dispatch: Dispatch<() => void>, ownProps: IProps): Partial<IProps> {
   return {
     redirectToCarePlanSuggestions: () => {
-      dispatch(push(`${ownProps.patientRoute}/carePlan/suggestions`));
+      dispatch(push(`${ownProps.patientRoute}/map/suggestions`));
     },
   };
 }

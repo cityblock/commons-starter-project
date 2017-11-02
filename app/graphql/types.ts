@@ -284,41 +284,6 @@ export type answerEditMutation = {
   } | null,
 };
 
-export type appointmentEndMutationVariables = {
-  patientId: string,
-  appointmentId: string,
-  appointmentNote: string,
-};
-
-export type appointmentEndMutation = {
-  // End an appointment
-  appointmentEnd:  {
-    success: boolean,
-  } | null,
-};
-
-export type appointmentStartMutationVariables = {
-  patientId: string,
-};
-
-export type appointmentStartMutation = {
-  // Start an appointment
-  appointmentStart:  {
-    athenaAppointmentId: string,
-    dateTime: string,
-    athenaDepartmentId: number,
-    status: AppointmentStatus,
-    athenaPatientId: number,
-    duration: number,
-    appointmentTypeId: number,
-    appointmentType: string,
-    athenaProviderId: number,
-    userId: string,
-    patientId: string,
-    clinicId: string,
-  } | null,
-};
-
 export type carePlanSuggestionAcceptMutationVariables = {
   carePlanSuggestionId: string,
   patientConcernId?: string | null,

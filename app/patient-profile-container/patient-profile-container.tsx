@@ -11,24 +11,24 @@ import * as tabStyles from '../shared/css/tabs.css';
 import { IState as IAppState } from '../store';
 import * as styles from './css/patient-profile.css';
 import PatientCarePlanView from './patient-care-plan-view';
-import PatientEncounters from './patient-encounters';
 import PatientInfo from './patient-info';
 import PatientProfileLeftNav from './patient-profile-left-nav';
-import PatientTasks from './patient-tasks';
 import PatientThreeSixtyView from './patient-three-sixty-view';
-import { PatientToolsView } from './patient-tools-view';
+import PatientTimeline from './patient-timeline';
 
-type SelectableTabs = 'encounters' | 'patientInfo' | 'tasks' | '360' | 'carePlan' | 'tools';
+type SelectableTabs = 'timeline' | 'patientInfo' | '360' | 'map';
 
-interface IProps {
-  intl: InjectedIntl;
+interface IStateProps {
   patientId: string;
-  taskId?: string;
   tabId: SelectableTabs;
+  browserSize: Size;
+}
+
+interface IProps extends IStateProps {
+  intl: InjectedIntl;
   loading: boolean;
   error?: string;
   patient?: ShortPatientFragment;
-  browserSize: Size;
   match: {
     params: {
       patientId: string;
@@ -49,49 +49,29 @@ class PatientProfileContainer extends React.Component<IProps, {}> {
   }
 
   render() {
-    const {
-      patientId,
-      patient,
-      loading,
-      error,
-      intl,
-      tabId,
-      taskId,
-      browserSize,
-      match,
-    } = this.props;
+    const { patientId, patient, loading, error, intl, tabId, browserSize, match } = this.props;
 
     const threeSixtyViewTabStyles = classNames(tabStyles.tab, {
       [tabStyles.selectedTab]: tabId === '360',
     });
-    const carePlanTabStyles = classNames(tabStyles.tab, {
-      [tabStyles.selectedTab]: tabId === 'carePlan',
+    const mapTabStyles = classNames(tabStyles.tab, {
+      [tabStyles.selectedTab]: tabId === 'map',
     });
-    const encountersTabStyles = classNames(tabStyles.tab, {
-      [tabStyles.selectedTab]: tabId === 'encounters',
+    const timelineTabStyles = classNames(tabStyles.tab, {
+      [tabStyles.selectedTab]: tabId === 'timeline',
     });
     const patientInfoTabStyles = classNames(tabStyles.tab, {
       [tabStyles.selectedTab]: tabId === 'patientInfo',
-    });
-    const tasksTabStyles = classNames(tabStyles.tab, {
-      [tabStyles.selectedTab]: tabId === 'tasks',
-    });
-    const toolsTabStyles = classNames(tabStyles.tab, {
-      [tabStyles.selectedTab]: tabId === 'tools',
     });
 
     const mainBodyStyle = classNames({
       [styles.mainBody]: browserSize === 'large',
       [styles.mainBodySmall]: browserSize === 'small',
     });
-    const encounters = tabId === 'encounters' ? <PatientEncounters patientId={patientId} /> : null;
+    const timeline = tabId === 'timeline' ? <PatientTimeline patientId={patientId} /> : null;
     const patientInfo =
       tabId === 'patientInfo' ? (
         <PatientInfo patientId={patientId} patient={patient} loading={loading} error={error} />
-      ) : null;
-    const tasks =
-      tabId === 'tasks' ? (
-        <PatientTasks patient={patient} taskId={taskId} patientId={patientId} />
       ) : null;
     const threeSixty =
       tabId === '360' ? (
@@ -102,21 +82,12 @@ class PatientProfileContainer extends React.Component<IProps, {}> {
           routeBase={`/patients/${patientId}/360`}
         />
       ) : null;
-    const carePlan =
-      tabId === 'carePlan' ? (
+    const map =
+      tabId === 'map' ? (
         <PatientCarePlanView
           patientId={patientId}
-          routeBase={`/patients/${patientId}/carePlan`}
+          routeBase={`/patients/${patientId}/map`}
           subTabId={match.params.riskAreaOrSubTabId as any}
-        />
-      ) : null; // TODO: Fix typing
-    const tools =
-      tabId === 'tools' ? (
-        <PatientToolsView
-          screeningToolId={match.params.riskAreaOrSubTabId}
-          patientId={patientId}
-          patientRoute={`/patients/${patientId}`}
-          routeBase={`/patients/${patientId}/tools`}
         />
       ) : null;
     return (
@@ -136,16 +107,16 @@ class PatientProfileContainer extends React.Component<IProps, {}> {
                 </Link>
               )}
             </FormattedMessage>
-            <FormattedMessage id="patient.carePlan">
+            <FormattedMessage id="patient.map">
               {(message: string) => (
-                <Link to={`/patients/${patientId}/carePlan`} className={carePlanTabStyles}>
+                <Link to={`/patients/${patientId}/map`} className={mapTabStyles}>
                   {message}
                 </Link>
               )}
             </FormattedMessage>
-            <FormattedMessage id="patient.encounters">
+            <FormattedMessage id="patient.timeline">
               {(message: string) => (
-                <Link to={`/patients/${patientId}/encounters`} className={encountersTabStyles}>
+                <Link to={`/patients/${patientId}/timeline`} className={timelineTabStyles}>
                   {message}
                 </Link>
               )}
@@ -157,45 +128,29 @@ class PatientProfileContainer extends React.Component<IProps, {}> {
                 </Link>
               )}
             </FormattedMessage>
-            <FormattedMessage id="patient.tasks">
-              {(message: string) => (
-                <Link to={`/patients/${patientId}/tasks`} className={tasksTabStyles}>
-                  {message}
-                </Link>
-              )}
-            </FormattedMessage>
-            <FormattedMessage id="patient.tools">
-              {(message: string) => (
-                <Link to={`/patients/${patientId}/tools`} className={toolsTabStyles}>
-                  {message}
-                </Link>
-              )}
-            </FormattedMessage>
           </div>
-          {encounters}
+          {map}
           {patientInfo}
-          {tasks}
           {threeSixty}
-          {carePlan}
-          {tools}
+          {timeline}
         </div>
       </div>
     );
   }
 }
 
-function mapStateToProps(state: IAppState, ownProps: IProps): Partial<IProps> {
+function mapStateToProps(state: IAppState, ownProps: IProps): IStateProps {
   const { browser } = state;
   return {
     browserSize: browser ? browser.size : 'large',
     patientId: ownProps.match.params.patientId,
-    tabId: ownProps.match.params.tabId || 'encounters',
+    tabId: ownProps.match.params.tabId || 'map',
   };
 }
 
 export default compose(
   injectIntl,
-  connect(mapStateToProps),
+  connect<IStateProps, {}, IProps>(mapStateToProps),
   graphql(patientQuery as any, {
     options: (props: IProps) => ({
       variables: {

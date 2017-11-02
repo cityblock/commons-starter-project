@@ -22,7 +22,7 @@ it('renders patient care plan', () => {
             patientId={'patient-1'}
             displayType={'active'}
             loading={false}
-            routeBase={'/patients/patient-1/carePlan'}
+            routeBase={'/patients/patient-1/map'}
           />
         </ConnectedRouter>
       </ReduxConnectedIntlProvider>

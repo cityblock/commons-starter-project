@@ -69,7 +69,7 @@ describe('task event model', () => {
       firstName: 'Dan',
       lastName: 'Plant',
       userRole,
-      homeClinicId: '1',
+      homeClinicId,
     });
     const patient = await createPatient(createMockPatient(123), user.id);
     const dueAt = new Date().toUTCString();

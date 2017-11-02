@@ -1,3 +1,4 @@
+import * as uuid from 'uuid/v4';
 import Db from '../../db';
 import { createMockPatient, createPatient } from '../../spec-helpers';
 import Task from '../task';
@@ -5,6 +6,7 @@ import TaskComment from '../task-comment';
 import User from '../user';
 
 const userRole = 'physician';
+const homeClinicId = uuid();
 
 describe('task comment model', () => {
   let db: Db;
@@ -24,7 +26,7 @@ describe('task comment model', () => {
       firstName: 'Dan',
       lastName: 'Plant',
       userRole,
-      homeClinicId: '1',
+      homeClinicId,
     });
     const patient = await createPatient(createMockPatient(123), user.id);
     const dueAt = new Date().toUTCString();
@@ -59,15 +61,15 @@ describe('task comment model', () => {
   });
 
   it('throws an error when getting an invalid id', async () => {
-    const fakeId = 'fakeId';
-    await expect(TaskComment.get(fakeId)).rejects.toMatch('No such taskComment: fakeId');
+    const fakeId = uuid();
+    await expect(TaskComment.get(fakeId)).rejects.toMatch(`No such taskComment: ${fakeId}`);
   });
 
   it('should update a comment', async () => {
     const user = await User.create({
       email: 'a@b.com',
       userRole,
-      homeClinicId: '1',
+      homeClinicId,
     });
     const patient = await createPatient(createMockPatient(123), user.id);
     const dueAt = new Date().toUTCString();
@@ -93,7 +95,7 @@ describe('task comment model', () => {
     const user = await User.create({
       email: 'a@b.com',
       userRole,
-      homeClinicId: '1',
+      homeClinicId,
     });
     const patient = await createPatient(createMockPatient(123), user.id);
     const dueAt = new Date().toUTCString();
@@ -167,7 +169,7 @@ describe('task comment model', () => {
     const user = await User.create({
       email: 'a@b.com',
       userRole,
-      homeClinicId: '1',
+      homeClinicId,
     });
     const patient = await createPatient(createMockPatient(123), user.id);
     const dueAt = new Date().toUTCString();

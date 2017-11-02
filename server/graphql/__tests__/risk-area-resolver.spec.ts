@@ -1,5 +1,6 @@
 import { graphql } from 'graphql';
 import { cloneDeep } from 'lodash';
+import * as uuid from 'uuid/v4';
 import Db from '../../db';
 import Answer from '../../models/answer';
 import Patient from '../../models/patient';
@@ -13,6 +14,7 @@ import schema from '../make-executable-schema';
 describe('answer tests', () => {
   let db: Db;
   const userRole = 'admin';
+  const homeClinicId = uuid();
   let riskArea: RiskArea;
   let question: Question;
   let user: User;
@@ -20,7 +22,7 @@ describe('answer tests', () => {
   beforeEach(async () => {
     db = await Db.get();
     await Db.clear();
-    user = await User.create({ email: 'a@b.com', userRole, homeClinicId: '1' });
+    user = await User.create({ email: 'a@b.com', userRole, homeClinicId });
 
     riskArea = await RiskArea.create({
       title: 'testing',
@@ -55,9 +57,10 @@ describe('answer tests', () => {
     });
 
     it('errors if an riskArea cannot be found', async () => {
-      const query = `{ riskArea(riskAreaId: "fakeId") { id } }`;
+      const fakeId = uuid();
+      const query = `{ riskArea(riskAreaId: "${fakeId}") { id } }`;
       const result = await graphql(schema, query, null, { db, userRole });
-      expect(result.errors![0].message).toMatch('No such risk area: fakeId');
+      expect(result.errors![0].message).toMatch(`No such risk area: ${fakeId}`);
     });
 
     it('gets all risk areas', async () => {

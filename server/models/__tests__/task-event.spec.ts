@@ -1,3 +1,4 @@
+import * as uuid from 'uuid/v4';
 import Db from '../../db';
 import { createMockPatient, createPatient } from '../../spec-helpers';
 import ProgressNote from '../progress-note';
@@ -6,6 +7,7 @@ import TaskEvent from '../task-event';
 import User from '../user';
 
 const userRole = 'physician';
+const homeClinicId = uuid();
 
 describe('task event model', () => {
   let db: Db;
@@ -25,7 +27,7 @@ describe('task event model', () => {
       firstName: 'Dan',
       lastName: 'Plant',
       userRole,
-      homeClinicId: '1',
+      homeClinicId,
     });
     const patient = await createPatient(createMockPatient(123), user.id);
     const dueAt = new Date().toUTCString();
@@ -89,15 +91,15 @@ describe('task event model', () => {
   });
 
   it('throws an error when getting an invalid id', async () => {
-    const fakeId = 'fakeId';
-    await expect(TaskEvent.get(fakeId)).rejects.toMatch('No such taskEvent: fakeId');
+    const fakeId = uuid();
+    await expect(TaskEvent.get(fakeId)).rejects.toMatch(`No such taskEvent: ${fakeId}`);
   });
 
   it('fetches all not deleted task events for a task', async () => {
     const user = await User.create({
       email: 'a@b.com',
       userRole,
-      homeClinicId: '1',
+      homeClinicId,
     });
     const patient = await createPatient(createMockPatient(123), user.id);
     const dueAt = new Date().toUTCString();
@@ -147,12 +149,12 @@ describe('task event model', () => {
     const user = await User.create({
       email: 'a@b.com',
       userRole,
-      homeClinicId: '1',
+      homeClinicId,
     });
     const user2 = await User.create({
       email: 'b@c.com',
       userRole,
-      homeClinicId: '1',
+      homeClinicId,
     });
     const patient = await createPatient(createMockPatient(123), user.id);
     const dueAt = new Date().toUTCString();
@@ -217,7 +219,7 @@ describe('task event model', () => {
     const user = await User.create({
       email: 'a@b.com',
       userRole,
-      homeClinicId: '1',
+      homeClinicId,
     });
     const patient = await createPatient(createMockPatient(123), user.id);
     const dueAt = new Date().toUTCString();

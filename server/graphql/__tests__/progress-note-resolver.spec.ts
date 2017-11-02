@@ -1,5 +1,6 @@
 import { graphql } from 'graphql';
 import { cloneDeep } from 'lodash';
+import * as uuid from 'uuid/v4';
 import Db from '../../db';
 import Patient from '../../models/patient';
 import ProgressNote from '../../models/progress-note';
@@ -19,7 +20,7 @@ describe('progress note resolver', () => {
     db = await Db.get();
     await Db.clear();
 
-    user = await User.create({ email: 'a@b.com', userRole, homeClinicId: '1' });
+    user = await User.create({ email: 'a@b.com', userRole, homeClinicId: uuid() });
     patient = await createPatient(createMockPatient(123), user.id);
     progressNoteTemplate = await ProgressNoteTemplate.create({
       title: 'title',

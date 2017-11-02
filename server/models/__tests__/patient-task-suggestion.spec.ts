@@ -1,3 +1,4 @@
+import * as uuid from 'uuid/v4';
 import Db from '../../db';
 import { createMockPatient, createPatient } from '../../spec-helpers';
 import Patient from '../patient';
@@ -10,13 +11,14 @@ describe('patient task suggestion', () => {
   let patient: Patient;
   let user: User;
   let taskTemplate: TaskTemplate;
+  const homeClinicId = uuid();
 
   beforeEach(async () => {
     db = await Db.get();
     await Db.clear();
 
-    user = await User.create({ email: 'user@email.com', homeClinicId: '1', userRole: 'physician' });
-    patient = await createPatient(createMockPatient(123, '1'), user.id);
+    user = await User.create({ email: 'user@email.com', homeClinicId, userRole: 'physician' });
+    patient = await createPatient(createMockPatient(123, homeClinicId), user.id);
     taskTemplate = await TaskTemplate.create({
       title: 'Housing',
       repeating: false,
@@ -41,9 +43,9 @@ describe('patient task suggestion', () => {
     });
 
     it('throws an error when getting an invalid id', async () => {
-      const fakeId = 'fakeId';
+      const fakeId = uuid();
       await expect(PatientTaskSuggestion.get(fakeId)).rejects.toMatch(
-        'No such patientTaskSuggestion: fakeId',
+        `No such patientTaskSuggestion: ${fakeId}`,
       );
     });
 

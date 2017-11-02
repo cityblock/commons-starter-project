@@ -1,4 +1,5 @@
 import * as nock from 'nock';
+import * as uuid from 'uuid/v4';
 import {
   IRedoxClinicalSummaryEncounter,
   IRedoxClinicalSummaryMedication,
@@ -20,7 +21,7 @@ export async function createPatient(patient: ICreatePatient, userId: string): Pr
   return instance;
 }
 
-export function createMockPatient(athenaPatientId = 1, homeClinicId = '1') {
+export function createMockPatient(athenaPatientId = 1, homeClinicId = uuid()) {
   return {
     athenaPatientId,
     firstName: 'dan',

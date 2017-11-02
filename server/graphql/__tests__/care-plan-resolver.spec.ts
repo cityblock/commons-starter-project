@@ -1,5 +1,6 @@
 import { graphql } from 'graphql';
 import { cloneDeep } from 'lodash';
+import * as uuid from 'uuid/v4';
 import Db from '../../db';
 import Answer from '../../models/answer';
 import CarePlanSuggestion from '../../models/care-plan-suggestion';
@@ -17,6 +18,7 @@ import schema from '../make-executable-schema';
 describe('care plan resolver tests', () => {
   let db: Db;
   const userRole = 'admin';
+  const homeClinicId = uuid();
   let riskArea: RiskArea;
   let riskArea2: RiskArea;
   let question: Question;
@@ -31,7 +33,7 @@ describe('care plan resolver tests', () => {
   beforeEach(async () => {
     db = await Db.get();
     await Db.clear();
-    user = await User.create({ email: 'a@b.com', userRole, homeClinicId: '1' });
+    user = await User.create({ email: 'a@b.com', userRole, homeClinicId });
 
     concern = await Concern.create({ title: 'Concern' });
     goalSuggestionTemplate = await GoalSuggestionTemplate.create({ title: 'Goal' });

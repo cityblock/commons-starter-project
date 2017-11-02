@@ -1,3 +1,4 @@
+import * as uuid from 'uuid/v4';
 import Db from '../../db';
 import { createMockPatient, createPatient } from '../../spec-helpers';
 import Answer from '../answer';
@@ -8,6 +9,8 @@ import Question from '../question';
 import RiskArea from '../risk-area';
 import ScreeningTool from '../screening-tool';
 import User from '../user';
+
+const homeClinicId = uuid();
 
 describe('patient screening tool submission model', () => {
   let db: Db;
@@ -34,7 +37,7 @@ describe('patient screening tool submission model', () => {
     user = await User.create({
       email: 'care@care.com',
       userRole: 'physician',
-      homeClinicId: '1',
+      homeClinicId,
     });
     patient1 = await createPatient(createMockPatient(123), user.id);
     patient2 = await createPatient(createMockPatient(456), user.id);
@@ -126,7 +129,7 @@ describe('patient screening tool submission model', () => {
   });
 
   it('throws an error if a patient submission does not exist for a given id', async () => {
-    const fakeId = 'fakeId';
+    const fakeId = uuid();
     await expect(PatientScreeningToolSubmission.get(fakeId)).rejects.toMatch(
       `No such patient screening tool submission: ${fakeId}`,
     );
@@ -175,7 +178,7 @@ describe('patient screening tool submission model', () => {
     const submissions = await PatientScreeningToolSubmission.getForPatient(patient1.id);
     const submissionIds = submissions.map(submission => submission.id);
     expect(submissions.length).toEqual(2);
-    expect(submissions).toMatchObject([submission2, submission1]);
+    expect(submissions).toMatchObject([submission1, submission2]);
     expect(submissionIds).not.toContain(submission3.id);
   });
 
@@ -291,7 +294,7 @@ describe('patient screening tool submission model', () => {
 
     const submissions = await PatientScreeningToolSubmission.getAll();
     expect(submissions.length).toEqual(3);
-    expect(submissions).toMatchObject([submission3, submission2, submission1]);
+    expect(submissions).toMatchObject([submission1, submission2, submission3]);
   });
 
   it('deletes a patient screening tool submission', async () => {

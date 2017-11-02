@@ -1,3 +1,4 @@
+import * as uuid from 'uuid/v4';
 import Db from '../../db';
 import Answer from '../answer';
 import Question from '../question';
@@ -82,7 +83,7 @@ describe('task suggestion model', () => {
 
       await expect(
         TaskSuggestion.create({
-          taskTemplateId: 'does-not-exist',
+          taskTemplateId: uuid(),
           answerId: answer.id,
         }),
       ).rejects.toMatchObject(new Error(error));

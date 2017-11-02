@@ -1,3 +1,4 @@
+import * as uuid from 'uuid/v4';
 import Db from '../../db';
 import GoalSuggestionTemplate from '../goal-suggestion-template';
 
@@ -24,9 +25,9 @@ describe('goal suggestion template model', () => {
     });
 
     it('throws an error when getting a goal suggestion template by an invalid id', async () => {
-      const fakeId = 'fakeId';
+      const fakeId = uuid();
       await expect(GoalSuggestionTemplate.get(fakeId)).rejects.toMatch(
-        'No such goalSuggestionTemplate: fakeId',
+        `No such goalSuggestionTemplate: ${fakeId}`,
       );
     });
 

@@ -1,3 +1,4 @@
+import * as uuid from 'uuid/v4';
 import Db from '../../db';
 import { createMockPatient, createPatient } from '../../spec-helpers';
 import Answer from '../answer';
@@ -18,6 +19,7 @@ describe('concern suggestion model', () => {
   let answer: Answer;
   let question: Question;
   let riskArea: RiskArea;
+  const homeClinicId = uuid();
 
   beforeEach(async () => {
     db = await Db.get();
@@ -87,7 +89,7 @@ describe('concern suggestion model', () => {
 
       await expect(
         ConcernSuggestion.create({
-          concernId: 'does-not-exist',
+          concernId: uuid(),
           answerId: answer.id,
         }),
       ).rejects.toMatchObject(new Error(error));
@@ -114,7 +116,7 @@ describe('concern suggestion model', () => {
       const user = await User.create({
         email: 'care@care.com',
         userRole: 'physician',
-        homeClinicId: '1',
+        homeClinicId,
       });
       const concern1 = await Concern.create({ title: 'Housing' });
       const concern2 = await Concern.create({ title: 'Food' });
@@ -216,7 +218,7 @@ describe('concern suggestion model', () => {
       const user = await User.create({
         email: 'care@care.com',
         userRole: 'physician',
-        homeClinicId: '1',
+        homeClinicId,
       });
       const concern1 = await Concern.create({ title: 'Housing' });
       const concern2 = await Concern.create({ title: 'Food' });
@@ -320,7 +322,7 @@ describe('concern suggestion model', () => {
       const user = await User.create({
         email: 'care@care.com',
         userRole: 'physician',
-        homeClinicId: '1',
+        homeClinicId,
       });
       const concern1 = await Concern.create({ title: 'Housing' });
       const concern2 = await Concern.create({ title: 'Food' });
@@ -428,7 +430,7 @@ describe('concern suggestion model', () => {
       const user = await User.create({
         email: 'care@care.com',
         userRole: 'physician',
-        homeClinicId: '1',
+        homeClinicId,
       });
       const patient = await createPatient(createMockPatient(123), user.id);
       const concern = await Concern.create({ title: 'Housing' });
@@ -460,7 +462,7 @@ describe('concern suggestion model', () => {
       const user = await User.create({
         email: 'care@care.com',
         userRole: 'physician',
-        homeClinicId: '1',
+        homeClinicId,
       });
 
       const patient = await createPatient(createMockPatient(123), user.id);

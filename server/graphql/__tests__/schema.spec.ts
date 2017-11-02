@@ -1,5 +1,7 @@
+import * as uuid from 'uuid/v4';
 import Db from '../../db';
 import User from '../../models/user';
+
 import {
   getGraphQLContext,
   parseAndVerifyJwt,
@@ -21,7 +23,7 @@ describe('util tests', () => {
 
   it('returns graphql context', async () => {
     const authToken = signJwt({
-      userId: '1',
+      userId: uuid(),
       userRole: 'physician',
       lastLoginAt: new Date().toUTCString(),
     });
@@ -42,7 +44,7 @@ describe('util tests', () => {
 
   it('returns graphql context with anonymous user for invalid JWT', async () => {
     const authToken = signJwt({
-      userId: '1',
+      userId: uuid(),
       userRole: 'physician',
       lastLoginAt: new Date('01/01/2010').toUTCString(),
     });
@@ -71,7 +73,7 @@ describe('util tests', () => {
       const user = await User.create({
         email: 'a@b.com',
         userRole: 'physician',
-        homeClinicId: '1',
+        homeClinicId: uuid(),
       });
       await User.update(user.id, { lastLoginAt: now.toUTCString() });
 
@@ -88,7 +90,7 @@ describe('util tests', () => {
     it('errors for token when the token is more than 24 hours old', async () => {
       const now = new Date();
       const authToken = signJwt({
-        userId: '1',
+        userId: uuid(),
         userRole: 'physician',
         lastLoginAt: new Date(
           now.valueOf() - (TWENTY_FOUR_HOURS_IN_MILLISECONDS + 1000),

@@ -1,3 +1,4 @@
+import * as uuid from 'uuid/v4';
 import Db from '../../db';
 import { createMockPatient, createPatient } from '../../spec-helpers';
 import EventNotification from '../event-notification';
@@ -8,6 +9,7 @@ import TaskFollower from '../task-follower';
 import User from '../user';
 
 const userRole = 'physician';
+const homeClinicId = uuid();
 
 describe('task event model', () => {
   let db: Db;
@@ -25,14 +27,14 @@ describe('task event model', () => {
       firstName: 'Dan',
       lastName: 'Plant',
       userRole,
-      homeClinicId: '1',
+      homeClinicId,
     });
     user2 = await User.create({
       email: 'care2@care.com',
       firstName: 'Dan2',
       lastName: 'Plant2',
       userRole,
-      homeClinicId: '1',
+      homeClinicId,
     });
     patient = await createPatient(createMockPatient(123), user.id);
     task = await Task.create({
@@ -66,9 +68,9 @@ describe('task event model', () => {
   });
 
   it('throws an error when fetching by an invalid id', async () => {
-    const fakeId = 'fakeId';
+    const fakeId = uuid();
     await expect(EventNotification.get(fakeId)).rejects.toMatch(
-      'No such eventNotification: fakeId',
+      `No such eventNotification: ${fakeId}`,
     );
   });
 
@@ -190,14 +192,14 @@ describe('task event model', () => {
       firstName: 'Dan3',
       lastName: 'Plant3',
       userRole,
-      homeClinicId: '1',
+      homeClinicId,
     });
     const user4 = await User.create({
       email: 'care@care4.com',
       firstName: 'Dan4',
       lastName: 'Plant4',
       userRole,
-      homeClinicId: '1',
+      homeClinicId,
     });
     await TaskFollower.followTask({ userId: user2.id, taskId: task.id });
     await TaskFollower.followTask({ userId: user3.id, taskId: task.id });

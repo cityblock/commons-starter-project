@@ -29,7 +29,7 @@ module.exports = {
     connection: {
       database: 'commons_test',
       host: '127.0.0.1',
-      user: 'root',
+      user: process.env.DB_USER || 'root',
     },
     migrations: {
       directory: __dirname + '/migrations',

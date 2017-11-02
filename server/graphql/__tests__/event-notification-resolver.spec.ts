@@ -1,5 +1,6 @@
 import { graphql } from 'graphql';
 import { IEventNotificationNode } from 'schema';
+import * as uuid from 'uuid/v4';
 import Db from '../../db';
 import EventNotification from '../../models/event-notification';
 import Task from '../../models/task';
@@ -16,16 +17,17 @@ describe('event notification tests', () => {
   let user: User;
   let user2: User;
   let patient;
+  const homeClinicId = uuid();
 
   beforeEach(async () => {
     db = await Db.get();
     await Db.clear();
 
-    user = await User.create({ email: 'a@b.com', userRole, homeClinicId: '1' });
+    user = await User.create({ email: 'a@b.com', userRole, homeClinicId });
     user2 = await User.create({
       email: 'b@c.com',
       userRole,
-      homeClinicId: '1',
+      homeClinicId,
     });
     patient = await createPatient(createMockPatient(123), user.id);
     const dueAt = new Date().toUTCString();

@@ -1,3 +1,4 @@
+import * as uuid from 'uuid/v4';
 import Db from '../../db';
 import { createMockPatient, createPatient } from '../../spec-helpers';
 import Answer from '../answer';
@@ -19,6 +20,7 @@ describe('goal suggestion model', () => {
   let goalSuggestionTemplate: GoalSuggestionTemplate;
   let riskArea: RiskArea;
   let question: Question;
+  const homeClinicId = uuid();
 
   beforeEach(async () => {
     db = await Db.get();
@@ -87,7 +89,7 @@ describe('goal suggestion model', () => {
 
       await expect(
         GoalSuggestion.create({
-          goalSuggestionTemplateId: 'does-not-exist',
+          goalSuggestionTemplateId: uuid(),
           answerId: answer.id,
         }),
       ).rejects.toMatchObject(new Error(error));
@@ -113,7 +115,7 @@ describe('goal suggestion model', () => {
       const user = await User.create({
         email: 'care@care.com',
         userRole: 'physician',
-        homeClinicId: '1',
+        homeClinicId,
       });
       const goalSuggestionTemplate2 = await GoalSuggestionTemplate.create({
         title: 'Fix Food',
@@ -180,8 +182,9 @@ describe('goal suggestion model', () => {
 
       // Now both goals should be suggested
       const secondGoalSuggestions = await GoalSuggestion.getNewForPatient(patient.id);
-      expect(secondGoalSuggestions[0]).toMatchObject(goalSuggestionTemplate);
-      expect(secondGoalSuggestions[1]).toMatchObject(goalSuggestionTemplate2);
+      expect(secondGoalSuggestions).toEqual(
+        expect.arrayContaining([goalSuggestionTemplate, goalSuggestionTemplate2]),
+      );
       expect(secondGoalSuggestions.length).toEqual(2);
 
       const screeningTool = await ScreeningTool.create({ title: 'Test', riskAreaId: riskArea.id });
@@ -208,9 +211,13 @@ describe('goal suggestion model', () => {
 
       // Now it should suggest three goals, including one based on a screening tool
       const thirdGoalSuggestions = await GoalSuggestion.getNewForPatient(patient.id);
-      expect(thirdGoalSuggestions[0]).toMatchObject(goalSuggestionTemplate);
-      expect(thirdGoalSuggestions[1]).toMatchObject(goalSuggestionTemplate2);
-      expect(thirdGoalSuggestions[2]).toMatchObject(goalSuggestionTemplate3);
+      expect(thirdGoalSuggestions).toEqual(
+        expect.arrayContaining([
+          goalSuggestionTemplate,
+          goalSuggestionTemplate2,
+          goalSuggestionTemplate3,
+        ]),
+      );
       expect(thirdGoalSuggestions.length).toEqual(3);
     });
 
@@ -218,7 +225,7 @@ describe('goal suggestion model', () => {
       const user = await User.create({
         email: 'care@care.com',
         userRole: 'physician',
-        homeClinicId: '1',
+        homeClinicId,
       });
       const goalSuggestionTemplate2 = await GoalSuggestionTemplate.create({
         title: 'Fix Food',
@@ -324,7 +331,7 @@ describe('goal suggestion model', () => {
       const user = await User.create({
         email: 'care@care.com',
         userRole: 'physician',
-        homeClinicId: '1',
+        homeClinicId,
       });
       const goalSuggestionTemplate2 = await GoalSuggestionTemplate.create({ title: 'Fix Food' });
       const patient = await createPatient(createMockPatient(123), user.id);
@@ -431,7 +438,7 @@ describe('goal suggestion model', () => {
       const user = await User.create({
         email: 'care@care.com',
         userRole: 'physician',
-        homeClinicId: '1',
+        homeClinicId,
       });
       const patient = await createPatient(createMockPatient(123), user.id);
       const screeningTool = await ScreeningTool.create({ title: 'Test', riskAreaId: riskArea.id });
@@ -462,7 +469,7 @@ describe('goal suggestion model', () => {
       const user = await User.create({
         email: 'care@care.com',
         userRole: 'physician',
-        homeClinicId: '1',
+        homeClinicId,
       });
       const patient = await createPatient(createMockPatient(123), user.id);
       const screeningTool = await ScreeningTool.create({ title: 'Test', riskAreaId: riskArea.id });

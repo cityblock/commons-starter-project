@@ -1,5 +1,6 @@
 import { graphql } from 'graphql';
 import { cloneDeep } from 'lodash';
+import * as uuid from 'uuid/v4';
 import Db from '../../db';
 import Concern from '../../models/concern';
 import GoalSuggestionTemplate from '../../models/goal-suggestion-template';
@@ -16,6 +17,7 @@ describe('patient goal resolver', () => {
   let patient: Patient;
   let user: User;
   const userRole = 'admin';
+  const homeClinicId = uuid();
 
   beforeEach(async () => {
     db = await Db.get();
@@ -24,7 +26,7 @@ describe('patient goal resolver', () => {
     user = await User.create({
       email: 'care@care.com',
       userRole,
-      homeClinicId: '1',
+      homeClinicId,
     });
     patient = await createPatient(createMockPatient(123), user.id);
   });

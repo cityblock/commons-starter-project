@@ -1,3 +1,4 @@
+import * as uuid from 'uuid/v4';
 import Db from '../../db';
 import Answer from '../answer';
 import Question from '../question';
@@ -108,8 +109,8 @@ describe('anser model', () => {
   });
 
   it('should throw an error if an answer does not exist for the id', async () => {
-    const fakeId = 'fakeId';
-    await expect(Answer.get(fakeId)).rejects.toMatch('No such answer: fakeId');
+    const fakeId = uuid();
+    await expect(Answer.get(fakeId)).rejects.toMatch(`No such answer: ${fakeId}`);
   });
 
   it('edits answer', async () => {

@@ -1,5 +1,6 @@
 import { graphql } from 'graphql';
 import { cloneDeep } from 'lodash';
+import * as uuid from 'uuid/v4';
 import Db from '../../db';
 import Patient from '../../models/patient';
 import Task from '../../models/task';
@@ -11,6 +12,7 @@ import schema from '../make-executable-schema';
 describe('task tests', () => {
   let db: Db;
   const userRole = 'physician';
+  const homeClinicId = uuid();
   let task1: Task;
   let task2: Task;
   let user: User;
@@ -21,11 +23,11 @@ describe('task tests', () => {
     db = await Db.get();
     await Db.clear();
 
-    user = await User.create({ email: 'a@b.com', userRole, homeClinicId: '1' });
+    user = await User.create({ email: 'a@b.com', userRole, homeClinicId });
     user2 = await User.create({
       email: 'b@c.com',
       userRole,
-      homeClinicId: '1',
+      homeClinicId,
     });
     patient = await createPatient(createMockPatient(123), user.id);
     const dueAt = new Date().toUTCString();
@@ -76,9 +78,10 @@ describe('task tests', () => {
     });
 
     it('errors if a task cannot be found', async () => {
-      const query = `{ task(taskId: "fakeId") { id } }`;
+      const fakeId = uuid();
+      const query = `{ task(taskId: "${fakeId}") { id } }`;
       const result = await graphql(schema, query, null, { db, userRole });
-      expect(result.errors![0].message).toMatch('No such task: fakeId');
+      expect(result.errors![0].message).toMatch(`No such task: ${fakeId}`);
     });
   });
 
@@ -438,8 +441,8 @@ describe('task tests', () => {
         pageSize: 10,
       });
       expect(taskEvents.total).toEqual(2);
-      expect(taskEvents.results[0].eventType).toEqual('edit_assignee');
-      expect(taskEvents.results[1].eventType).toEqual('create_task');
+      const expectedEventTypes = taskEvents.results.map(taskEvent => taskEvent.eventType);
+      expect(expectedEventTypes).toEqual(expect.arrayContaining(['edit_assignee', 'create_task']));
     });
   });
 

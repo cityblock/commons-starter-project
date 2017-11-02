@@ -1,3 +1,4 @@
+import * as uuid from 'uuid/v4';
 import Db from '../../db';
 import Answer from '../answer';
 import Question from '../question';
@@ -65,9 +66,9 @@ describe('answer model', () => {
   });
 
   it('should throw an error if a patient does not exist for the id', async () => {
-    const fakeId = 'fakeId';
+    const fakeId = uuid();
     await expect(QuestionCondition.get(fakeId)).rejects.toMatch(
-      'No such questionCondition: fakeId',
+      `No such questionCondition: ${fakeId}`,
     );
   });
 

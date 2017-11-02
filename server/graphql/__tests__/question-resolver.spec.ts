@@ -1,5 +1,6 @@
 import { graphql } from 'graphql';
 import { cloneDeep } from 'lodash';
+import * as uuid from 'uuid/v4';
 import Db from '../../db';
 import Answer from '../../models/answer';
 import ProgressNoteTemplate from '../../models/progress-note-template';
@@ -12,6 +13,7 @@ import schema from '../make-executable-schema';
 describe('question tests', () => {
   let db: Db;
   const userRole = 'admin';
+  const homeClinicId = uuid();
   let question: Question;
   let answer: Answer;
   let user: User;
@@ -20,7 +22,7 @@ describe('question tests', () => {
   beforeEach(async () => {
     db = await Db.get();
     await Db.clear();
-    user = await User.create({ email: 'a@b.com', userRole, homeClinicId: '1' });
+    user = await User.create({ email: 'a@b.com', userRole, homeClinicId });
     riskArea = await RiskArea.create({
       title: 'testing',
       order: 1,
@@ -62,9 +64,10 @@ describe('question tests', () => {
     });
 
     it('errors if an question cannot be found', async () => {
-      const query = `{ question(questionId: "fakeId") { id } }`;
+      const fakeId = uuid();
+      const query = `{ question(questionId: "${fakeId}") { id } }`;
       const result = await graphql(schema, query, null, { db, userRole });
-      expect(result.errors![0].message).toMatch('No such question: fakeId');
+      expect(result.errors![0].message).toMatch(`No such question: ${fakeId}`);
     });
   });
 

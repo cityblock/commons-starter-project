@@ -1,5 +1,6 @@
 import { graphql } from 'graphql';
 import { cloneDeep } from 'lodash';
+import * as uuid from 'uuid/v4';
 import Db from '../../db';
 import Answer from '../../models/answer';
 import CarePlanSuggestion from '../../models/care-plan-suggestion';
@@ -23,6 +24,7 @@ import schema from '../make-executable-schema';
 describe('patient answer tests', () => {
   let db: Db;
   const userRole = 'admin';
+  const homeClinicId = uuid();
   let riskArea: RiskArea;
   let question: Question;
   let answer: Answer;
@@ -33,7 +35,7 @@ describe('patient answer tests', () => {
   beforeEach(async () => {
     db = await Db.get();
     await Db.clear();
-    user = await User.create({ email: 'a@b.com', userRole, homeClinicId: '1' });
+    user = await User.create({ email: 'a@b.com', userRole, homeClinicId });
 
     riskArea = await RiskArea.create({
       title: 'testing',
@@ -106,9 +108,10 @@ describe('patient answer tests', () => {
     });
 
     it('errors if a patient answer cannot be found', async () => {
-      const query = `{ patientAnswer(patientAnswerId: "fakeId") { id } }`;
+      const fakeId = uuid();
+      const query = `{ patientAnswer(patientAnswerId: "${fakeId}") { id } }`;
       const result = await graphql(schema, query, null, { db, userRole });
-      expect(result.errors![0].message).toMatch('No such patientAnswer: fakeId');
+      expect(result.errors![0].message).toMatch(`No such patientAnswer: ${fakeId}`);
     });
   });
 
@@ -593,11 +596,13 @@ describe('patient answer tests', () => {
           applicable,
         }
       }`;
+
       const result = await graphql(schema, mutation, null, {
         db,
         userRole,
         userId: user.id,
       });
+
       const clonedResult = cloneDeep(result.data!.patientAnswersCreate);
       expect(clonedResult[0]).toMatchObject({
         answerValue: '3',
@@ -614,8 +619,8 @@ describe('patient answer tests', () => {
 
       const carePlanSuggestions = await CarePlanSuggestion.getForPatient(patient.id);
       expect(carePlanSuggestions.length).toEqual(2);
-      expect(carePlanSuggestions[0].goalSuggestionTemplate!.id).toEqual(goalSuggestionTemplate.id);
-      expect(carePlanSuggestions[1].concern!.id).toEqual(concern.id);
+      expect(carePlanSuggestions[1].goalSuggestionTemplate!.id).toEqual(goalSuggestionTemplate.id);
+      expect(carePlanSuggestions[0].concern!.id).toEqual(concern.id);
     });
   });
 

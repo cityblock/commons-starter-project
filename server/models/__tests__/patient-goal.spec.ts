@@ -1,3 +1,4 @@
+import * as uuid from 'uuid/v4';
 import Db from '../../db';
 import { createMockPatient, createPatient } from '../../spec-helpers';
 import CarePlanUpdateEvent from '../care-plan-update-event';
@@ -13,6 +14,7 @@ import TaskTemplate from '../task-template';
 import User from '../user';
 
 const userRole = 'physician';
+const homeClinicId = uuid();
 
 describe('patient goal model', () => {
   let db: Db;
@@ -26,7 +28,7 @@ describe('patient goal model', () => {
     user = await User.create({
       email: 'care@care.com',
       userRole,
-      homeClinicId: '1',
+      homeClinicId,
     });
     patient = await createPatient(createMockPatient(123), user.id);
   });
@@ -111,8 +113,8 @@ describe('patient goal model', () => {
     expect(fetchedTasks.results[0].title).toEqual(taskTemplate.title);
     expect(fetchedTasks.results[0].patientGoalId).toEqual(createdPatientGoal.id);
     expect(fetchedTaskEvents.total).toEqual(2);
-    expect(fetchedTaskEvents.results[0].eventType).toEqual('edit_assignee');
-    expect(fetchedTaskEvents.results[1].eventType).toEqual('create_task');
+    const expectedEventTypes = fetchedTaskEvents.results.map(taskEvent => taskEvent.eventType);
+    expect(expectedEventTypes).toEqual(expect.arrayContaining(['edit_assignee', 'create_task']));
   });
 
   it('correctly assigns tasks when taskTemplates have an default assignee role', async () => {
@@ -120,7 +122,7 @@ describe('patient goal model', () => {
     const user2 = await User.create({
       email: 'care2@care.com',
       userRole: 'healthCoach',
-      homeClinicId: '1',
+      homeClinicId,
     });
 
     await CareTeam.create({ userId: user2.id, patientId: patient.id });
@@ -273,8 +275,8 @@ describe('patient goal model', () => {
   });
 
   it('should throw an error if an patient goal does not exist for the id', async () => {
-    const fakeId = 'fakeId';
-    await expect(PatientGoal.get(fakeId)).rejects.toMatch('No such patientGoal: fakeId');
+    const fakeId = uuid();
+    await expect(PatientGoal.get(fakeId)).rejects.toMatch(`No such patientGoal: ${fakeId}`);
   });
 
   it('gets a patient goal', async () => {

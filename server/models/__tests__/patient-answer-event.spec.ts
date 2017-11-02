@@ -1,4 +1,5 @@
 import { transaction } from 'objection';
+import * as uuid from 'uuid/v4';
 import Db from '../../db';
 import { cleanPatientAnswerEvents, createMockPatient, createPatient } from '../../spec-helpers';
 import Answer from '../answer';
@@ -11,6 +12,7 @@ import RiskArea from '../risk-area';
 import User from '../user';
 
 const userRole = 'physician';
+const homeClinicId = uuid();
 
 describe('patient answer event model', () => {
   let db: Db;
@@ -30,7 +32,7 @@ describe('patient answer event model', () => {
       firstName: 'Dan',
       lastName: 'Plant',
       userRole,
-      homeClinicId: '1',
+      homeClinicId,
     });
     patient = await createPatient(createMockPatient(123), user.id);
     riskArea = await RiskArea.create({ title: 'Risk Area', order: 1 });
@@ -151,10 +153,10 @@ describe('patient answer event model', () => {
     expect(fetchedPatientAnswerEvents.total).toEqual(2);
     expect(fetchedPatientAnswerEvents.results).toMatchObject([
       {
-        patientAnswerId: patientAnswer2.id,
+        patientAnswerId: patientAnswer.id,
       },
       {
-        patientAnswerId: patientAnswer.id,
+        patientAnswerId: patientAnswer2.id,
       },
     ]);
   });
@@ -204,9 +206,9 @@ describe('patient answer event model', () => {
   });
 
   it('throws an error when getting an invalid id', async () => {
-    const fakeId = 'fakeId';
+    const fakeId = uuid();
     await expect(PatientAnswerEvent.get(fakeId)).rejects.toMatch(
-      'No such patientAnswerEvent: fakeId',
+      `No such patientAnswerEvent: ${fakeId}`,
     );
   });
 

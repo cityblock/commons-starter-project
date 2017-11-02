@@ -1,3 +1,4 @@
+import * as uuid from 'uuid/v4';
 import Db from '../../db';
 import { createMockPatient, createPatient } from '../../spec-helpers';
 import Task from '../task';
@@ -23,12 +24,12 @@ describe('task followers', () => {
       const user1 = await User.create({
         email: 'care@care.com',
         userRole,
-        homeClinicId: '1',
+        homeClinicId: uuid(),
       });
       const user2 = await User.create({
         email: 'b@c.com',
         userRole,
-        homeClinicId: '1',
+        homeClinicId: uuid(),
       });
       const patient1 = await createPatient(createMockPatient(123), user1.id);
       const task1 = await Task.create({
@@ -54,7 +55,7 @@ describe('task followers', () => {
       const user = await User.create({
         email: 'care@care.com',
         userRole,
-        homeClinicId: '1',
+        homeClinicId: uuid(),
       });
       const patient = await createPatient(createMockPatient(123), user.id);
       const task = await Task.create({
@@ -71,7 +72,7 @@ describe('task followers', () => {
         'constraint "task_follower_userid_foreign"';
 
       await expect(
-        TaskFollower.followTask({ userId: 'fakeUserId', taskId: task.id }),
+        TaskFollower.followTask({ userId: uuid(), taskId: task.id }),
       ).rejects.toMatchObject(new Error(error));
     });
 
@@ -79,7 +80,7 @@ describe('task followers', () => {
       const user = await User.create({
         email: 'care@care.com',
         userRole,
-        homeClinicId: '1',
+        homeClinicId: uuid(),
       });
       const patient = await createPatient(createMockPatient(123), user.id);
       const task = await Task.create({

@@ -1,3 +1,4 @@
+import * as uuid from 'uuid/v4';
 import Db from '../../../db';
 import Answer from '../../../models/answer';
 import Patient from '../../../models/patient';
@@ -15,6 +16,7 @@ import {
 
 describe('answer applicable tests', () => {
   const userRole = 'admin';
+  const homeClinicId = uuid();
 
   let db: Db;
   let riskArea: RiskArea;
@@ -26,7 +28,7 @@ describe('answer applicable tests', () => {
   beforeEach(async () => {
     db = await Db.get();
     await Db.clear();
-    user = await User.create({ email: 'a@b.com', userRole, homeClinicId: '1' });
+    user = await User.create({ email: 'a@b.com', userRole, homeClinicId });
 
     riskArea = await RiskArea.create({
       title: 'testing',

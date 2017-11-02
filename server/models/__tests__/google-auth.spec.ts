@@ -1,3 +1,4 @@
+import * as uuid from 'uuid/v4';
 import Db from '../../db';
 import GoogleAuth from '../google-auth';
 import User from '../user';
@@ -20,7 +21,7 @@ describe('google auth model', () => {
       firstName: 'Dan',
       lastName: 'Plant',
       userRole: 'physician',
-      homeClinicId: '1',
+      homeClinicId: uuid(),
     });
     const googleAuth = await GoogleAuth.updateOrCreate({
       accessToken: 'accessToken',

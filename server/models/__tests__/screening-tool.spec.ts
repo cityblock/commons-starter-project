@@ -1,3 +1,4 @@
+import * as uuid from 'uuid/v4';
 import Db from '../../db';
 import RiskArea from '../risk-area';
 import ScreeningTool from '../screening-tool';
@@ -28,7 +29,7 @@ describe('screening tool model', () => {
   });
 
   it('throws an error if a screening tool does not exist for a given id', async () => {
-    const fakeId = 'fakeId';
+    const fakeId = uuid();
     await expect(ScreeningTool.get(fakeId)).rejects.toMatch(`No such screening tool: ${fakeId}`);
   });
 

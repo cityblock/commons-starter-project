@@ -1,3 +1,4 @@
+import * as uuid from 'uuid/v4';
 import Db from '../../db';
 import Answer from '../../models/answer';
 import Patient from '../../models/patient';
@@ -6,6 +7,8 @@ import Question from '../../models/question';
 import RiskArea from '../../models/risk-area';
 import User from '../../models/user';
 import { createMockPatient, createPatient } from '../../spec-helpers';
+
+const homeClinicId = uuid();
 
 describe('risk area model', () => {
   let db: Db;
@@ -29,8 +32,8 @@ describe('risk area model', () => {
   });
 
   it('should throw an error if a risk area does not exist for the id', async () => {
-    const fakeId = 'fakeId';
-    await expect(RiskArea.get(fakeId)).rejects.toMatch('No such risk area: fakeId');
+    const fakeId = uuid();
+    await expect(RiskArea.get(fakeId)).rejects.toMatch(`No such risk area: ${fakeId}`);
   });
 
   it('edits risk area', async () => {
@@ -90,7 +93,7 @@ describe('risk area model', () => {
       user = await User.create({
         email: 'a@b.com',
         userRole: 'admin',
-        homeClinicId: '1',
+        homeClinicId,
       });
       patient = await createPatient(createMockPatient(123), user.id);
     });

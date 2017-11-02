@@ -1,5 +1,6 @@
 import { graphql } from 'graphql';
 import { cloneDeep } from 'lodash';
+import * as uuid from 'uuid/v4';
 import Db from '../../db';
 import Answer from '../../models/answer';
 import Question from '../../models/question';
@@ -18,7 +19,7 @@ describe('answer tests', () => {
   beforeEach(async () => {
     db = await Db.get();
     await Db.clear();
-    user = await User.create({ email: 'a@b.com', userRole, homeClinicId: '1' });
+    user = await User.create({ email: 'a@b.com', userRole, homeClinicId: uuid() });
 
     riskArea = await RiskArea.create({
       title: 'testing',
@@ -75,9 +76,10 @@ describe('answer tests', () => {
     });
 
     it('errors if an answer cannot be found', async () => {
-      const query = `{ answer(answerId: "fakeId") { id } }`;
+      const fakeId = uuid();
+      const query = `{ answer(answerId: "${fakeId}") { id } }`;
       const result = await graphql(schema, query, null, { db, userRole });
-      expect(result.errors![0].message).toMatch('No such answer: fakeId');
+      expect(result.errors![0].message).toMatch(`No such answer: ${fakeId}`);
     });
   });
 

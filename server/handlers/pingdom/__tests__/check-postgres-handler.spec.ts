@@ -1,4 +1,5 @@
 import * as httpMocks from 'node-mocks-http';
+import * as uuid from 'uuid/v4';
 import Db from '../../../db';
 import User from '../../../models/user';
 import { checkPostgresHandler } from '../check-postgres-handler';
@@ -30,7 +31,7 @@ describe('postgres pingdom test', () => {
       firstName: 'Bertrand',
       lastName: 'Russell',
       userRole,
-      homeClinicId: '1',
+      homeClinicId: uuid(),
     });
 
     await checkPostgresHandler(request, response);

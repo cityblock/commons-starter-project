@@ -1,5 +1,6 @@
 import { graphql } from 'graphql';
 import { cloneDeep } from 'lodash';
+import * as uuid from 'uuid/v4';
 import Db from '../../db';
 import Task from '../../models/task';
 import TaskComment from '../../models/task-comment';
@@ -13,7 +14,7 @@ describe('task comments', () => {
   let task: Task;
   let user: User;
   const userRole = 'physician';
-  const homeClinicId = '1';
+  const homeClinicId = uuid();
 
   beforeEach(async () => {
     db = await Db.get();

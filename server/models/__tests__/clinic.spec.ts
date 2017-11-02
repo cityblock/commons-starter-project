@@ -1,3 +1,4 @@
+import * as uuid from 'uuid/v4';
 import Db from '../../db';
 import Clinic from '../clinic';
 
@@ -55,8 +56,8 @@ describe('clinic model', () => {
     });
 
     it('throws an error when getting a clinic by an invalid id', async () => {
-      const fakeId = 'fakeId';
-      await expect(Clinic.get(fakeId)).rejects.toMatch('No such clinic for clinicId: fakeId');
+      const fakeId = uuid();
+      await expect(Clinic.get(fakeId)).rejects.toMatch(`No such clinic for clinicId: ${fakeId}`);
     });
 
     it('fetches all clinics', async () => {

@@ -1,3 +1,4 @@
+import * as uuid from 'uuid/v4';
 import Db from '../../db';
 import { createMockPatient, createPatient } from '../../spec-helpers';
 import CarePlanSuggestion from '../care-plan-suggestion';
@@ -7,6 +8,8 @@ import Patient from '../patient';
 import PatientConcern from '../patient-concern';
 import PatientGoal from '../patient-goal';
 import User from '../user';
+
+const homeClinicId = uuid();
 
 describe('care plan suggestion', () => {
   let db: Db;
@@ -19,8 +22,8 @@ describe('care plan suggestion', () => {
     db = await Db.get();
     await Db.clear();
 
-    user = await User.create({ email: 'user@email.com', homeClinicId: '1', userRole: 'physician' });
-    patient = await createPatient(createMockPatient(123, '1'), user.id);
+    user = await User.create({ email: 'user@email.com', homeClinicId, userRole: 'physician' });
+    patient = await createPatient(createMockPatient(123, homeClinicId), user.id);
     concern = await Concern.create({ title: 'Concern' });
     goalSuggestionTemplate = await GoalSuggestionTemplate.create({ title: 'Goal Template' });
   });
@@ -42,9 +45,9 @@ describe('care plan suggestion', () => {
     });
 
     it('throws an error when getting an invalid id', async () => {
-      const fakeId = 'fakeId';
+      const fakeId = uuid();
       await expect(CarePlanSuggestion.get(fakeId)).rejects.toMatch(
-        'No such carePlanSuggestion: fakeId',
+        `No such carePlanSuggestion: ${fakeId}`,
       );
     });
 
@@ -87,10 +90,10 @@ describe('care plan suggestion', () => {
 
       const fetchedCarePlanSuggestions = await CarePlanSuggestion.getForPatient(patient.id);
       expect(fetchedCarePlanSuggestions.length).toEqual(2);
-      expect(fetchedCarePlanSuggestions[0].goalSuggestionTemplate).toMatchObject(
+      expect(fetchedCarePlanSuggestions[1].goalSuggestionTemplate).toMatchObject(
         goalSuggestionTemplate,
       );
-      expect(fetchedCarePlanSuggestions[1].concern).toMatchObject(concern);
+      expect(fetchedCarePlanSuggestions[0].concern).toMatchObject(concern);
     });
 
     it('gets carePlanSuggestions for a patient', async () => {
@@ -149,10 +152,10 @@ describe('care plan suggestion', () => {
 
       const patientCarePlanSuggestions = await CarePlanSuggestion.getForPatient(patient.id);
       expect(patientCarePlanSuggestions.length).toEqual(2);
-      expect(patientCarePlanSuggestions[0].goalSuggestionTemplateId).toEqual(
+      expect(patientCarePlanSuggestions[1].goalSuggestionTemplateId).toEqual(
         goalSuggestionTemplate2.id,
       );
-      expect(patientCarePlanSuggestions[1].concernId).toEqual(concern2.id);
+      expect(patientCarePlanSuggestions[0].concernId).toEqual(concern2.id);
     });
 
     it('accepts a carePlanSuggestion', async () => {

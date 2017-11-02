@@ -1,5 +1,6 @@
 import { graphql } from 'graphql';
 import { cloneDeep } from 'lodash';
+import * as uuid from 'uuid/v4';
 import Db from '../../db';
 import User from '../../models/user';
 import { mockGoogleOauthAuthorize } from '../../spec-helpers';
@@ -8,7 +9,7 @@ import schema from '../make-executable-schema';
 describe('user tests', () => {
   let db: Db;
   const userRole = 'physician';
-  const homeClinicId = '1';
+  const homeClinicId = uuid();
   const log = jest.fn();
   const logger = { log };
 
@@ -40,10 +41,11 @@ describe('user tests', () => {
     });
 
     it('errors if a user cannot be found', async () => {
-      const query = `{ user(userId: "fakeId") { firstName } }`;
+      const fakeId = uuid();
+      const query = `{ user(userId: "${fakeId}") { firstName } }`;
       const result = await graphql(schema, query, null, { db, userRole });
 
-      expect(result.errors![0].message).toMatch('No such user: fakeId');
+      expect(result.errors![0].message).toMatch(`No such user: ${fakeId}`);
     });
   });
 
@@ -202,14 +204,15 @@ describe('user tests', () => {
     });
 
     it('errors if the logged in user does not exist', async () => {
+      const fakeId = uuid();
       const query = `{ currentUser { email, firstName, lastName } }`;
       const result = await graphql(schema, query, null, {
         db,
-        userId: 'fakeId',
+        userId: fakeId,
         userRole,
       });
 
-      expect(cloneDeep(result.errors![0].message)).toMatch('No such user: fakeId');
+      expect(cloneDeep(result.errors![0].message)).toMatch(`No such user: ${fakeId}`);
     });
   });
 
@@ -332,7 +335,7 @@ describe('user tests', () => {
   describe('userCreate', () => {
     it('creates a new user', async () => {
       const mutation = `mutation {
-        userCreate(input: { email: "a@b.com", homeClinicId: "1" }) {
+        userCreate(input: { email: "a@b.com", homeClinicId: "${homeClinicId}" }) {
           email
         }
       }`;
@@ -349,7 +352,7 @@ describe('user tests', () => {
         homeClinicId,
       });
       const mutation = `mutation {
-        userCreate(input: { email: "a@b.com", homeClinicId: "1" }) {
+        userCreate(input: { email: "a@b.com", homeClinicId: "${homeClinicId}" }) {
           email
       } }`;
       const result = await graphql(schema, mutation, null, { db, userRole });

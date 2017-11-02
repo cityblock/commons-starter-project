@@ -1,3 +1,4 @@
+import * as uuid from 'uuid/v4';
 import Db from '../../db';
 import { createMockPatient, createPatient } from '../../spec-helpers';
 import CarePlanUpdateEvent from '../care-plan-update-event';
@@ -9,6 +10,7 @@ import Task from '../task';
 import User from '../user';
 
 const userRole = 'physician';
+const homeClinicId = uuid();
 
 describe('patient concern model', () => {
   let db: Db;
@@ -26,7 +28,7 @@ describe('patient concern model', () => {
     user = await User.create({
       email: 'care@care.com',
       userRole,
-      homeClinicId: '1',
+      homeClinicId,
     });
     patient = await createPatient(createMockPatient(123), user.id);
   });
@@ -176,8 +178,8 @@ describe('patient concern model', () => {
   });
 
   it('should throw an error if a patient concern does not exist for the id', async () => {
-    const fakeId = 'fakeId';
-    await expect(PatientConcern.get(fakeId)).rejects.toMatch('No such patient concern: fakeId');
+    const fakeId = uuid();
+    await expect(PatientConcern.get(fakeId)).rejects.toMatch(`No such patient concern: ${fakeId}`);
   });
 
   it('edits patient concern', async () => {

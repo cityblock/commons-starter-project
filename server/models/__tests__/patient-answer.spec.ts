@@ -1,4 +1,5 @@
 import { transaction } from 'objection';
+import * as uuid from 'uuid/v4';
 import Db from '../../db';
 import { cleanPatientAnswerEvents, createMockPatient, createPatient } from '../../spec-helpers';
 import Answer from '../answer';
@@ -15,6 +16,7 @@ import User from '../user';
 const userRole = 'physician';
 
 describe('answer model', () => {
+  const homeClinicId = uuid();
   let db: Db;
   let riskArea: RiskArea;
   let question: Question;
@@ -49,7 +51,7 @@ describe('answer model', () => {
     user = await User.create({
       email: 'care@care.com',
       userRole,
-      homeClinicId: '1',
+      homeClinicId,
     });
     patient = await createPatient(createMockPatient(123), user.id);
   });
@@ -317,8 +319,8 @@ describe('answer model', () => {
   });
 
   it('should throw an error if an answer does not exist for the id', async () => {
-    const fakeId = 'fakeId';
-    await expect(PatientAnswer.get(fakeId)).rejects.toMatch('No such patientAnswer: fakeId');
+    const fakeId = uuid();
+    await expect(PatientAnswer.get(fakeId)).rejects.toMatch(`No such patientAnswer: ${fakeId}`);
   });
 
   it('gets all patient answers for a given patient', async () => {
@@ -586,12 +588,12 @@ describe('answer model', () => {
     expect(fetchedPatientAnswerEvents.total).toEqual(2);
     expect(fetchedPatientAnswerEvents.results).toMatchObject([
       {
-        patientAnswerId: newPatientAnswers[1].id,
-        previousPatientAnswerId: oldPatientAnswers[1].id,
-      },
-      {
         patientAnswerId: newPatientAnswers[0].id,
         previousPatientAnswerId: oldPatientAnswers[0].id,
+      },
+      {
+        patientAnswerId: newPatientAnswers[1].id,
+        previousPatientAnswerId: oldPatientAnswers[1].id,
       },
     ]);
   });

@@ -1,3 +1,4 @@
+import * as uuid from 'uuid/v4';
 import Db from '../../db';
 import GoalSuggestionTemplate from '../goal-suggestion-template';
 import TaskTemplate from '../task-template';
@@ -34,8 +35,8 @@ describe('task template model', () => {
     });
 
     it('throws an error when getting a taskTemplate by an invalid id', async () => {
-      const fakeId = 'fakeId';
-      await expect(TaskTemplate.get(fakeId)).rejects.toMatch('No such taskTemplate: fakeId');
+      const fakeId = uuid();
+      await expect(TaskTemplate.get(fakeId)).rejects.toMatch(`No such taskTemplate: ${fakeId}`);
     });
 
     it('edits task template', async () => {

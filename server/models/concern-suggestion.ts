@@ -146,8 +146,8 @@ export default class ConcernSuggestion extends BaseModel {
     await transaction(ConcernSuggestion, async ConcernSuggestionWithTransaction => {
       const relations = await ConcernSuggestionWithTransaction.query().where({
         concernId,
-        answerId: answerId || '',
-        screeningToolScoreRangeId: screeningToolScoreRangeId || '',
+        answerId: answerId || null,
+        screeningToolScoreRangeId: screeningToolScoreRangeId || null,
         deletedAt: null,
       });
 

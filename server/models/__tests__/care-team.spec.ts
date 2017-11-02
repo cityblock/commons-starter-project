@@ -1,9 +1,11 @@
+import * as uuid from 'uuid/v4';
 import Db from '../../db';
 import { createMockPatient, createPatient } from '../../spec-helpers';
 import CareTeam from '../care-team';
 import User from '../user';
 
 const userRole = 'physician';
+const homeClinicId = uuid();
 
 describe('care model', () => {
   let db: Db;
@@ -22,12 +24,12 @@ describe('care model', () => {
       const user1 = await User.create({
         email: 'care@care.com',
         userRole,
-        homeClinicId: '1',
+        homeClinicId,
       });
       const user2 = await User.create({
         email: 'b@c.com',
         userRole,
-        homeClinicId: '1',
+        homeClinicId,
       });
       // auto-adds user1
       const patient1 = await createPatient(createMockPatient(123), user1.id);
@@ -45,7 +47,7 @@ describe('care model', () => {
       const user = await User.create({
         email: 'care@care.com',
         userRole,
-        homeClinicId: '1',
+        homeClinicId,
       });
       const patient = await createPatient(createMockPatient(123), user.id);
       const error =
@@ -54,7 +56,7 @@ describe('care model', () => {
         '"care_team_userid_foreign"';
 
       await expect(
-        CareTeam.create({ userId: 'fakeUserId', patientId: patient.id }),
+        CareTeam.create({ userId: uuid(), patientId: patient.id }),
       ).rejects.toMatchObject(new Error(error));
     });
 
@@ -62,7 +64,7 @@ describe('care model', () => {
       const user = await User.create({
         email: 'care@care.com',
         userRole,
-        homeClinicId: '1',
+        homeClinicId,
       });
       const patient1 = await createPatient(createMockPatient(123), user.id);
 
@@ -79,7 +81,7 @@ describe('care model', () => {
       const user = await User.create({
         email: 'care@care.com',
         userRole,
-        homeClinicId: '1',
+        homeClinicId,
       });
       await createPatient(createMockPatient(123), user.id);
       await createPatient(createMockPatient(321), user.id);
@@ -101,7 +103,7 @@ describe('care model', () => {
       const user = await User.create({
         email: 'care@care.com',
         userRole,
-        homeClinicId: '1',
+        homeClinicId,
       });
       const patient = await createPatient(createMockPatient(123), user.id);
 

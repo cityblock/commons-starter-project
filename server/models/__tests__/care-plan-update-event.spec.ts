@@ -1,3 +1,4 @@
+import * as uuid from 'uuid/v4';
 import Db from '../../db';
 import { cleanCarePlanUpdateEvents, createMockPatient, createPatient } from '../../spec-helpers';
 import CarePlanUpdateEvent from '../care-plan-update-event';
@@ -9,6 +10,7 @@ import ProgressNote from '../progress-note';
 import User from '../user';
 
 const userRole = 'physician';
+const homeClinicId = uuid();
 
 describe('care plan update event model', () => {
   let db: Db;
@@ -27,7 +29,7 @@ describe('care plan update event model', () => {
       firstName: 'Dan',
       lastName: 'Plant',
       userRole,
-      homeClinicId: '1',
+      homeClinicId,
     });
     patient = await createPatient(createMockPatient(123), user.id);
     concern = await Concern.create({ title: 'Concern' });
@@ -102,9 +104,9 @@ describe('care plan update event model', () => {
   });
 
   it('throws an error when getting an invalid id', async () => {
-    const fakeId = 'fakeId';
+    const fakeId = uuid();
     await expect(CarePlanUpdateEvent.get(fakeId)).rejects.toMatch(
-      'No such carePlanUpdateEvent: fakeId',
+      `No such carePlanUpdateEvent: ${fakeId}`,
     );
   });
 

@@ -167,8 +167,8 @@ export default class GoalSuggestion extends BaseModel {
     await transaction(GoalSuggestion, async GoalSuggestionWithTransaction => {
       const relations = await GoalSuggestionWithTransaction.query().where({
         goalSuggestionTemplateId,
-        answerId: answerId || '',
-        screeningToolScoreRangeId: screeningToolScoreRangeId || '',
+        answerId: answerId || null,
+        screeningToolScoreRangeId: screeningToolScoreRangeId || null,
         deletedAt: null,
       });
 

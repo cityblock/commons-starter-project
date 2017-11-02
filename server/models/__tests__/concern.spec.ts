@@ -1,3 +1,4 @@
+import * as uuid from 'uuid/v4';
 import Db from '../../db';
 import Concern from '../concern';
 
@@ -22,8 +23,8 @@ describe('concern model', () => {
     });
 
     it('throws an error when getting a concern by an invalid id', async () => {
-      const fakeId = 'fakeId';
-      await expect(Concern.get(fakeId)).rejects.toMatch('No such concern: fakeId');
+      const fakeId = uuid();
+      await expect(Concern.get(fakeId)).rejects.toMatch(`No such concern: ${fakeId}`);
     });
 
     it('edits concern', async () => {

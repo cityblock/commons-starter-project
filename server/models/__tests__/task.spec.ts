@@ -1,3 +1,4 @@
+import * as uuid from 'uuid/v4';
 import Db from '../../db';
 import { createMockPatient, createPatient } from '../../spec-helpers';
 import Patient from '../patient';
@@ -11,6 +12,7 @@ const order = 'asc';
 const orderBy = 'createdAt';
 const pageNumber = 0;
 const pageSize = 10;
+const homeClinicId = uuid();
 
 describe('task model', () => {
   let db: Db;
@@ -22,7 +24,7 @@ describe('task model', () => {
     db = await Db.get();
     await Db.clear();
 
-    user = await User.create({ email: 'a@b.com', userRole, homeClinicId: '1' });
+    user = await User.create({ email: 'a@b.com', userRole, homeClinicId });
     patient = await createPatient(createMockPatient(123), user.id);
     patientGoal = await PatientGoal.create({
       title: 'patient goal',
@@ -60,8 +62,8 @@ describe('task model', () => {
   });
 
   it('throws an error when getting an invalid id', async () => {
-    const fakeId = 'fakeId';
-    await expect(Task.get(fakeId)).rejects.toMatch('No such task: fakeId');
+    const fakeId = uuid();
+    await expect(Task.get(fakeId)).rejects.toMatch(`No such task: ${fakeId}`);
   });
 
   it('should update task', async () => {
@@ -194,7 +196,7 @@ describe('task model', () => {
     const user2 = await User.create({
       email: 'b@a.com',
       userRole,
-      homeClinicId: '1',
+      homeClinicId,
     });
     const dueAt = new Date().toUTCString();
     await Task.create({

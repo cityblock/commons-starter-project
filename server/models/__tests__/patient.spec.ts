@@ -1,9 +1,11 @@
+import * as uuid from 'uuid/v4';
 import Db from '../../db';
 import { createMockPatient, createPatient } from '../../spec-helpers';
 import Patient from '../patient';
 import User from '../user';
 
 const userRole = 'physician';
+const homeClinicId = uuid();
 
 describe('patient model', () => {
   let db: Db;
@@ -22,7 +24,7 @@ describe('patient model', () => {
       const user = await User.create({
         email: 'care@care.com',
         userRole,
-        homeClinicId: '1',
+        homeClinicId,
       });
       const patient = await createPatient(createMockPatient(123), user.id);
       expect(patient).toMatchObject({
@@ -37,8 +39,8 @@ describe('patient model', () => {
     });
 
     it('should throw an error if a patient does not exist for the id', async () => {
-      const fakeId = 'fakeId';
-      await expect(Patient.get(fakeId)).rejects.toMatch('No such patient: fakeId');
+      const fakeId = uuid();
+      await expect(Patient.get(fakeId)).rejects.toMatch(`No such patient: ${fakeId}`);
     });
   });
 
@@ -47,7 +49,7 @@ describe('patient model', () => {
       const user = await User.create({
         email: 'care@care.com',
         userRole,
-        homeClinicId: '1',
+        homeClinicId,
       });
       const patient = await createPatient(createMockPatient(123), user.id);
       expect(patient).toMatchObject({
@@ -84,7 +86,7 @@ describe('patient model', () => {
         dateOfBirth: '02/02/1902',
         zip: '12345',
         gender: 'F',
-        homeClinicId: '1',
+        homeClinicId,
         consentToCall: false,
         consentToText: false,
         language: 'en',
@@ -108,7 +110,7 @@ describe('patient model', () => {
       const user = await User.create({
         email: 'care@care.com',
         userRole,
-        homeClinicId: '1',
+        homeClinicId,
       });
       await createPatient(createMockPatient(123), user.id);
       await createPatient(createMockPatient(234), user.id);

@@ -1,3 +1,4 @@
+import * as uuid from 'uuid/v4';
 import Db from '../../db';
 import { createMockPatient, createPatient } from '../../spec-helpers';
 import Patient from '../patient';
@@ -5,6 +6,8 @@ import RiskArea from '../risk-area';
 import ScreeningTool from '../screening-tool';
 import ScreeningToolScoreRange from '../screening-tool-score-range';
 import User from '../user';
+
+const homeClinicId = uuid();
 
 describe('screening tool score range model', () => {
   let db: Db;
@@ -30,7 +33,7 @@ describe('screening tool score range model', () => {
     user = await User.create({
       email: 'care@care.com',
       userRole: 'physician',
-      homeClinicId: '1',
+      homeClinicId,
     });
     patient = await createPatient(createMockPatient(123), user.id);
   });
@@ -54,7 +57,7 @@ describe('screening tool score range model', () => {
   });
 
   it('throws an error if a score range does not exist for a given id', async () => {
-    const fakeId = 'fakeId';
+    const fakeId = uuid();
     await expect(ScreeningToolScoreRange.get(fakeId)).rejects.toMatch(
       `No such screening tool score range: ${fakeId}`,
     );

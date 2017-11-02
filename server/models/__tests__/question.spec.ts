@@ -1,3 +1,4 @@
+import * as uuid from 'uuid/v4';
 import Db from '../../db';
 import Answer from '../answer';
 import ProgressNoteTemplate from '../progress-note-template';
@@ -99,8 +100,8 @@ describe('question model', () => {
   });
 
   it('should throw an error if a question does not exist for the id', async () => {
-    const fakeId = 'fakeId';
-    await expect(Question.get(fakeId)).rejects.toMatch('No such question: fakeId');
+    const fakeId = uuid();
+    await expect(Question.get(fakeId)).rejects.toMatch(`No such question: ${fakeId}`);
   });
 
   it('edits question', async () => {

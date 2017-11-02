@@ -1,5 +1,6 @@
 import { graphql } from 'graphql';
 import { cloneDeep } from 'lodash';
+import * as uuid from 'uuid/v4';
 import Db from '../../db';
 import Concern from '../../models/concern';
 import Patient from '../../models/patient';
@@ -25,7 +26,7 @@ describe('patient concern resolver', () => {
     user = await User.create({
       email: 'care@care.com',
       userRole,
-      homeClinicId: '1',
+      homeClinicId: uuid(),
     });
     patient = await createPatient(createMockPatient(123), user.id);
   });

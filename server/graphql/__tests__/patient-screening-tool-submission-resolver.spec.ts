@@ -1,5 +1,6 @@
 import { graphql } from 'graphql';
 import { cloneDeep } from 'lodash';
+import * as uuid from 'uuid/v4';
 import Db from '../../db';
 import Patient from '../../models/patient';
 import PatientScreeningToolSubmission from '../../models/patient-screening-tool-submission';
@@ -12,6 +13,7 @@ import schema from '../make-executable-schema';
 describe('patient screening tool submission resolver tests', () => {
   let db: Db;
   const userRole = 'admin';
+  const homeClinicId = uuid();
   let riskArea: RiskArea;
   let screeningTool: ScreeningTool;
   let patient: Patient;
@@ -21,7 +23,7 @@ describe('patient screening tool submission resolver tests', () => {
   beforeEach(async () => {
     db = await Db.get();
     await Db.clear();
-    user = await User.create({ email: 'a@b.com', userRole, homeClinicId: '1' });
+    user = await User.create({ email: 'a@b.com', userRole, homeClinicId });
     patient = await createPatient(createMockPatient(123), user.id);
     riskArea = await RiskArea.create({
       title: 'Risk Area',
@@ -60,14 +62,15 @@ describe('patient screening tool submission resolver tests', () => {
     });
 
     it('errors if a patientScreeningToolSubmission cannot be found', async () => {
+      const fakeId = uuid();
       const query = `{
-        patientScreeningToolSubmission(patientScreeningToolSubmissionId: "fakeId") {
+        patientScreeningToolSubmission(patientScreeningToolSubmissionId: "${fakeId}") {
           id
         }
       }`;
       const result = await graphql(schema, query, null, { db, userRole });
       expect(result.errors![0].message).toMatch(
-        'No such patient screening tool submission: fakeId',
+        `No such patient screening tool submission: ${fakeId}`,
       );
     });
 
@@ -93,12 +96,12 @@ describe('patient screening tool submission resolver tests', () => {
       const result = await graphql(schema, query, null, { db, userRole });
       expect(cloneDeep(result.data!.patientScreeningToolSubmissions)).toMatchObject([
         {
-          id: submission2.id,
-          score: submission2.score,
-        },
-        {
           id: submission.id,
           score: submission.score,
+        },
+        {
+          id: submission2.id,
+          score: submission2.score,
         },
       ]);
     });
@@ -137,12 +140,12 @@ describe('patient screening tool submission resolver tests', () => {
       expect(submissionIds).not.toContain(submission3.id);
       expect(submissions).toMatchObject([
         {
-          id: submission2.id,
-          score: submission2.score,
-        },
-        {
           id: submission.id,
           score: submission.score,
+        },
+        {
+          id: submission2.id,
+          score: submission2.score,
         },
       ]);
     });

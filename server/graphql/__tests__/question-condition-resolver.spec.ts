@@ -1,5 +1,6 @@
 import { graphql } from 'graphql';
 import { cloneDeep } from 'lodash';
+import * as uuid from 'uuid/v4';
 import Db from '../../db';
 import Answer from '../../models/answer';
 import Question from '../../models/question';
@@ -20,7 +21,7 @@ describe('questionCondition tests', () => {
   beforeEach(async () => {
     db = await Db.get();
     await Db.clear();
-    user = await User.create({ email: 'a@b.com', userRole, homeClinicId: '1' });
+    user = await User.create({ email: 'a@b.com', userRole, homeClinicId: uuid() });
 
     riskArea = await RiskArea.create({
       title: 'testing',
@@ -77,9 +78,10 @@ describe('questionCondition tests', () => {
     });
 
     it('errors if an questionCondition cannot be found', async () => {
-      const query = `{ questionCondition(questionConditionId: "fakeId") { id } }`;
+      const fakeId = uuid();
+      const query = `{ questionCondition(questionConditionId: "${fakeId}") { id } }`;
       const result = await graphql(schema, query, null, { db, userRole });
-      expect(result.errors![0].message).toMatch('No such questionCondition: fakeId');
+      expect(result.errors![0].message).toMatch(`No such questionCondition: ${fakeId}`);
     });
   });
 

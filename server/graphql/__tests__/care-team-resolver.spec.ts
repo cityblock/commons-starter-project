@@ -1,5 +1,6 @@
 import { graphql } from 'graphql';
 import { cloneDeep } from 'lodash';
+import * as uuid from 'uuid/v4';
 import Db from '../../db';
 import Patient from '../../models/patient';
 import User from '../../models/user';
@@ -11,7 +12,7 @@ describe('care team', () => {
   let patient: Patient;
   let user: User;
   const userRole = 'physician';
-  const homeClinicId = '1';
+  const homeClinicId = uuid();
 
   beforeEach(async () => {
     db = await Db.get();

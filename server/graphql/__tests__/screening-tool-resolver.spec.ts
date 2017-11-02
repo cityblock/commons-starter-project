@@ -1,5 +1,6 @@
 import { graphql } from 'graphql';
 import { cloneDeep } from 'lodash';
+import * as uuid from 'uuid/v4';
 import Db from '../../db';
 import RiskArea from '../../models/risk-area';
 import ScreeningTool from '../../models/screening-tool';
@@ -9,6 +10,7 @@ import schema from '../make-executable-schema';
 describe('screening tool resolver tests', () => {
   let db: Db;
   const userRole = 'admin';
+  const homeClinicId = uuid();
   let riskArea: RiskArea;
   let screeningTool: ScreeningTool;
   let user: User;
@@ -16,7 +18,7 @@ describe('screening tool resolver tests', () => {
   beforeEach(async () => {
     db = await Db.get();
     await Db.clear();
-    user = await User.create({ email: 'a@b.com', userRole, homeClinicId: '1' });
+    user = await User.create({ email: 'a@b.com', userRole, homeClinicId });
     riskArea = await RiskArea.create({
       title: 'Risk Area',
       order: 1,
@@ -47,9 +49,10 @@ describe('screening tool resolver tests', () => {
     });
 
     it('errors if a screeningTool cannot be found', async () => {
-      const query = `{ screeningTool(screeningToolId: "fakeId") { id } }`;
+      const fakeId = uuid();
+      const query = `{ screeningTool(screeningToolId: "${fakeId}") { id } }`;
       const result = await graphql(schema, query, null, { db, userRole });
-      expect(result.errors![0].message).toMatch('No such screening tool: fakeId');
+      expect(result.errors![0].message).toMatch(`No such screening tool: ${fakeId}`);
     });
 
     it('gets all screeningTools', async () => {

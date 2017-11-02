@@ -1,3 +1,4 @@
+import * as uuid from 'uuid/v4';
 import Db from '../../db';
 import { createMockPatient, createPatient } from '../../spec-helpers';
 import Patient from '../patient';
@@ -17,7 +18,7 @@ describe('progress note model', () => {
     db = await Db.get();
     await Db.clear();
 
-    user = await User.create({ email: 'a@b.com', userRole, homeClinicId: '1' });
+    user = await User.create({ email: 'a@b.com', userRole, homeClinicId: uuid() });
     patient = await createPatient(createMockPatient(123), user.id);
     progressNoteTemplate = await ProgressNoteTemplate.create({
       title: 'title',
@@ -48,8 +49,8 @@ describe('progress note model', () => {
   });
 
   it('throws an error when getting an invalid id', async () => {
-    const fakeId = 'fakeId';
-    await expect(ProgressNote.get(fakeId)).rejects.toMatch('No such progress note: fakeId');
+    const fakeId = uuid();
+    await expect(ProgressNote.get(fakeId)).rejects.toMatch(`No such progress note: ${fakeId}`);
   });
 
   it('gets progress notes for a patient', async () => {

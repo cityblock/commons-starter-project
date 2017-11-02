@@ -7,6 +7,11 @@ interface IProgressNoteEditableFields {
   progressNoteTemplateId: string;
 }
 
+interface IProgressNoteAutoOpenFields {
+  patientId: string;
+  userId: string;
+}
+
 /* tslint:disable:member-ordering */
 export default class ProgressNote extends BaseModel {
   patientId: string;
@@ -96,6 +101,23 @@ export default class ProgressNote extends BaseModel {
 
   static async create(input: IProgressNoteEditableFields) {
     return this.query().insertAndFetch(input);
+  }
+
+  static async autoOpenIfRequired(input: IProgressNoteAutoOpenFields, txn?: Transaction) {
+    const { patientId, userId } = input;
+
+    const existingProgressNote = await this.query(txn).findOne({
+      deletedAt: null,
+      completedAt: null,
+      patientId,
+      userId,
+    });
+
+    if (!existingProgressNote) {
+      return await this.query(txn).insertAndFetch(input);
+    }
+
+    return existingProgressNote;
   }
 
   static async complete(progressNoteId: string): Promise<ProgressNote> {

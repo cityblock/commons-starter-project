@@ -4,6 +4,7 @@ import BaseModel from './base-model';
 import Patient from './patient';
 import PatientConcern from './patient-concern';
 import PatientGoal from './patient-goal';
+import ProgressNote from './progress-note';
 import User from './user';
 
 type EventTypes =
@@ -105,9 +106,15 @@ export default class CarePlanUpdateEvent extends BaseModel {
     input: ICarePlanUpdateEventOptions,
     txn?: Transaction,
   ): Promise<CarePlanUpdateEvent> {
-    return await this.query(txn)
+    const { patientId, userId } = input;
+
+    const carePlanUpdateEvent = await this.query(txn)
       .eager(EAGER_QUERY)
       .insert(input);
+
+    await ProgressNote.autoOpenIfRequired({ patientId, userId }, txn);
+
+    return carePlanUpdateEvent;
   }
 
   static async delete(carePlanUpdateEventId: string): Promise<CarePlanUpdateEvent> {

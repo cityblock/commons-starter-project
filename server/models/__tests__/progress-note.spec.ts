@@ -86,4 +86,27 @@ describe('progress note model', () => {
     const deletedNote = await ProgressNote.delete(progressNote.id);
     expect(deletedNote.deletedAt).not.toBeNull();
   });
+
+  it('auto opens a progress note if necessary', async () => {
+    // The patient should not have any progress notes yet
+    const firstFetchedProgressNotes = await ProgressNote.getAllForPatient(patient.id);
+    expect(firstFetchedProgressNotes.length).toEqual(0);
+
+    // autoOpenIfRequired should open a note
+    const autoProgressNote = await ProgressNote.autoOpenIfRequired({
+      userId: user.id,
+      patientId: patient.id,
+    });
+    const secondFetchedProgressNotes = await ProgressNote.getAllForPatient(patient.id);
+    expect(secondFetchedProgressNotes.length).toEqual(1);
+
+    // autoOpenIfRequired should not open another note
+    const secondAutoProgressNote = await ProgressNote.autoOpenIfRequired({
+      userId: user.id,
+      patientId: patient.id,
+    });
+    const thirdFetchedProgressNotes = await ProgressNote.getAllForPatient(patient.id);
+    expect(thirdFetchedProgressNotes.length).toEqual(1);
+    expect(secondAutoProgressNote.id).toEqual(autoProgressNote.id);
+  });
 });

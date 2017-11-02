@@ -130,6 +130,12 @@ export default class TaskEvent extends BaseModel {
       .eager(EAGER_QUERY)
       .insert({ taskId, userId, eventType, eventCommentId, eventUserId });
 
+    const task = await Task.getIgnoreDeletedAt(taskId, txn);
+
+    if (task.patientId) {
+      await ProgressNote.autoOpenIfRequired({ patientId: task.patientId, userId }, txn);
+    }
+
     if (!skipNotifsCreate) {
       await EventNotification.createTaskNotifications(
         {

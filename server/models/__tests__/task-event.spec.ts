@@ -1,5 +1,6 @@
 import Db from '../../db';
 import { createMockPatient, createPatient } from '../../spec-helpers';
+import ProgressNote from '../progress-note';
 import Task from '../task';
 import TaskEvent from '../task-event';
 import User from '../user';
@@ -56,6 +57,35 @@ describe('task event model', () => {
     expect(taskEvent.deletedAt).toBeUndefined();
     expect(taskEvent.createdAt).not.toBeNull();
     expect(taskEvent.updatedAt).not.toBeNull();
+  });
+
+  it('automatically opens a progress note on create', async () => {
+    ProgressNote.autoOpenIfRequired = jest.fn();
+
+    const user = await User.create({
+      email: 'care@care.com',
+      firstName: 'Dan',
+      lastName: 'Plant',
+      userRole,
+      homeClinicId: '1',
+    });
+    const patient = await createPatient(createMockPatient(123), user.id);
+    const dueAt = new Date().toUTCString();
+    const task = await Task.create({
+      title: 'title',
+      description: 'description',
+      dueAt,
+      patientId: patient.id,
+      createdById: user.id,
+      assignedToId: user.id,
+    });
+    await TaskEvent.create({
+      taskId: task.id,
+      userId: user.id,
+      eventType: 'edit_assignee',
+    });
+
+    expect(ProgressNote.autoOpenIfRequired).toHaveBeenCalledTimes(1);
   });
 
   it('throws an error when getting an invalid id', async () => {

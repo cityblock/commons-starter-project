@@ -5,6 +5,7 @@ import Answer from '../answer';
 import Patient from '../patient';
 import PatientAnswer from '../patient-answer';
 import PatientAnswerEvent from '../patient-answer-event';
+import ProgressNote from '../progress-note';
 import Question from '../question';
 import RiskArea from '../risk-area';
 import User from '../user';
@@ -88,6 +89,19 @@ describe('patient answer event model', () => {
     expect(fetchedPatientAnswerEvent.updatedAt).not.toBeNull();
   });
 
+  it('automatically opens a progress note on create', async () => {
+    ProgressNote.autoOpenIfRequired = jest.fn();
+
+    await PatientAnswerEvent.create({
+      patientId: patient.id,
+      userId: user.id,
+      patientAnswerId: patientAnswer.id,
+      eventType: 'create_patient_answer',
+    });
+
+    expect(ProgressNote.autoOpenIfRequired).toHaveBeenCalledTimes(1);
+  });
+
   it('creates multiple patientAnswerEvents', async () => {
     const patientAnswer2 = (await PatientAnswer.create({
       patientId: patient.id,
@@ -143,6 +157,50 @@ describe('patient answer event model', () => {
         patientAnswerId: patientAnswer.id,
       },
     ]);
+  });
+
+  it('automatically opens a progress note on createMultiple', async () => {
+    const patientAnswer2 = (await PatientAnswer.create({
+      patientId: patient.id,
+      answers: [
+        {
+          answerId: answer.id,
+          questionId: question.id,
+          answerValue: answer.value,
+          patientId: patient.id,
+          applicable: true,
+          userId: user.id,
+        },
+      ],
+    }))[0];
+
+    ProgressNote.autoOpenIfRequired = jest.fn();
+
+    await transaction(
+      PatientAnswerEvent.knex(),
+      async txn =>
+        await PatientAnswerEvent.createMultiple(
+          {
+            patientAnswerEvents: [
+              {
+                patientId: patient.id,
+                userId: user.id,
+                patientAnswerId: patientAnswer.id,
+                eventType: 'create_patient_answer',
+              },
+              {
+                patientId: patient.id,
+                userId: user.id,
+                patientAnswerId: patientAnswer2.id,
+                eventType: 'create_patient_answer',
+              },
+            ],
+          },
+          txn,
+        ),
+    );
+
+    expect(ProgressNote.autoOpenIfRequired).toHaveBeenCalledTimes(1);
   });
 
   it('throws an error when getting an invalid id', async () => {

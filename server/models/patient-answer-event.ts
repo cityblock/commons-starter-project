@@ -3,6 +3,7 @@ import { IPaginatedResults, IPaginationOptions } from '../db';
 import BaseModel from './base-model';
 import Patient from './patient';
 import PatientAnswer from './patient-answer';
+import ProgressNote from './progress-note';
 import User from './user';
 
 type EventTypes = 'create_patient_answer';
@@ -102,18 +103,31 @@ export default class PatientAnswerEvent extends BaseModel {
     input: IPatientAnswerEventOptions,
     txn?: Transaction,
   ): Promise<PatientAnswerEvent> {
-    return await this.query(txn)
+    const { patientId, userId } = input;
+
+    const patientAnswerEvent = await this.query(txn)
       .eager(EAGER_QUERY)
       .insert(input);
+
+    await ProgressNote.autoOpenIfRequired({ patientId, userId }, txn);
+
+    return patientAnswerEvent;
   }
 
   static async createMultiple(
     input: IMultiplePatientAnswerEventOptions,
     txn: Transaction,
   ): Promise<PatientAnswerEvent[]> {
-    return await this.query(txn)
+    const { patientAnswerEvents } = input;
+    const { patientId, userId } = patientAnswerEvents[0];
+
+    const createdPatientAnswerEvents = await this.query(txn)
       .eager(EAGER_QUERY)
-      .insertGraphAndFetch(input.patientAnswerEvents);
+      .insertGraphAndFetch(patientAnswerEvents);
+
+    await ProgressNote.autoOpenIfRequired({ patientId, userId }, txn);
+
+    return createdPatientAnswerEvents;
   }
 
   static async delete(patientAnswerEventId: string): Promise<PatientAnswerEvent> {

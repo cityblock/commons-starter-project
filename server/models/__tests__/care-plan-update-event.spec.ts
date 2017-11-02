@@ -5,6 +5,7 @@ import Concern from '../concern';
 import Patient from '../patient';
 import PatientConcern from '../patient-concern';
 import PatientGoal from '../patient-goal';
+import ProgressNote from '../progress-note';
 import User from '../user';
 
 const userRole = 'physician';
@@ -85,6 +86,19 @@ describe('care plan update event model', () => {
     }
 
     expect(errorMessage).toMatch('violates check constraint');
+  });
+
+  it('automatically opens a progress note on create', async () => {
+    ProgressNote.autoOpenIfRequired = jest.fn();
+
+    await CarePlanUpdateEvent.create({
+      patientId: patient.id,
+      userId: user.id,
+      patientConcernId: patientConcern.id,
+      eventType: 'create_patient_concern',
+    });
+
+    expect(ProgressNote.autoOpenIfRequired).toHaveBeenCalledTimes(1);
   });
 
   it('throws an error when getting an invalid id', async () => {

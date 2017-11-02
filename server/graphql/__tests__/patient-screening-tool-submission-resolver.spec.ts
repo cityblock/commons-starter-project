@@ -192,6 +192,72 @@ describe('patient screening tool submission resolver tests', () => {
         },
       ]);
     });
+
+    it('gets the latest patientScreeningToolSubmission for a patient for a tool', async () => {
+      const screeningTool2 = await ScreeningTool.create({
+        riskAreaId: riskArea.id,
+        title: 'Another Screening Tool',
+      });
+      await PatientScreeningToolSubmission.create({
+        patientId: patient.id,
+        userId: user.id,
+        screeningToolId: screeningTool2.id,
+        score: 20,
+        patientAnswers: [],
+      });
+      const submission2 = await PatientScreeningToolSubmission.create({
+        patientId: patient.id,
+        userId: user.id,
+        screeningToolId: screeningTool2.id,
+        score: 20,
+        patientAnswers: [],
+      });
+
+      const query = `{
+        patientScreeningToolSubmissionForPatientAndScreeningTool(
+          screeningToolId: "${screeningTool2.id}"
+          patientId: "${patient.id}"
+        ) {
+          id
+          score
+        }
+      }`;
+      const result = await graphql(schema, query, null, { db, userRole });
+      const resultSubmission = cloneDeep(
+        result.data!.patientScreeningToolSubmissionForPatientAndScreeningTool,
+      );
+      expect(resultSubmission.id).toEqual(submission2.id);
+      expect(resultSubmission.score).toEqual(submission2.score);
+    });
+
+    it('returns null if no latest submission for a patient for a tool', async () => {
+      const screeningTool2 = await ScreeningTool.create({
+        riskAreaId: riskArea.id,
+        title: 'Another Screening Tool',
+      });
+      await PatientScreeningToolSubmission.create({
+        patientId: patient.id,
+        userId: user.id,
+        screeningToolId: screeningTool.id,
+        score: 20,
+        patientAnswers: [],
+      });
+
+      const query = `{
+        patientScreeningToolSubmissionForPatientAndScreeningTool(
+          screeningToolId: "${screeningTool2.id}"
+          patientId: "${patient.id}"
+        ) {
+          id
+          score
+        }
+      }`;
+      const result = await graphql(schema, query, null, { db, userRole });
+      const resultSubmission = cloneDeep(
+        result.data!.patientScreeningToolSubmissionForPatientAndScreeningTool,
+      );
+      expect(resultSubmission).toBeNull();
+    });
   });
 
   describe('patientScreeningToolSubmission edit', () => {

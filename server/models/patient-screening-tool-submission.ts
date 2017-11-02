@@ -26,7 +26,7 @@ interface IPatientScreeningToolSubmissionEditableFields {
 
 /* tslint:disable:max-line-length */
 export const EAGER_QUERY =
-  '[screeningTool, patient, user, riskArea, patientAnswers, carePlanSuggestions.[patient, concern, goalSuggestionTemplate.[taskTemplates]]]';
+  '[screeningTool, screeningToolScoreRange, patient, user, riskArea, patientAnswers, carePlanSuggestions.[patient, concern, goalSuggestionTemplate.[taskTemplates]]]';
 /* tslint:enable:max-line-length */
 
 /* tslint:disable:member-ordering */
@@ -41,6 +41,8 @@ export default class PatientScreeningToolSubmission extends BaseModel {
   riskArea: RiskArea;
   patientAnswers: PatientAnswer[];
   patientScreeningToolId: string;
+  screeningToolScoreRangeId: string;
+  screeningToolScoreRange: ScreeningToolScoreRange;
 
   static tableName = 'patient_screening_tool_submission';
 
@@ -114,6 +116,15 @@ export default class PatientScreeningToolSubmission extends BaseModel {
       join: {
         from: 'patient_screening_tool_submission.id',
         to: 'care_plan_suggestion.patientScreeningToolSubmissionId',
+      },
+    },
+
+    screeningToolScoreRange: {
+      relation: Model.BelongsToOneRelation,
+      modelClass: 'screening-tool-score-range',
+      join: {
+        from: 'patient_screening_tool_submission.screeningToolScoreRangeId',
+        to: 'screening_tool_score_range.id',
       },
     },
   };
@@ -206,6 +217,23 @@ export default class PatientScreeningToolSubmission extends BaseModel {
     return await this.query()
       .eager(EAGER_QUERY)
       .where({ patientId });
+  }
+
+  static async getLatestForPatientAndScreeningTool(
+    screeningToolId: string,
+    patientId: string,
+  ): Promise<PatientScreeningToolSubmission | null> {
+    const latestPatientScreeningToolSubmission = await this.query()
+      .eager(EAGER_QUERY)
+      .where({ patientId, screeningToolId })
+      .orderBy('createdAt', 'desc')
+      .first();
+
+    if (!latestPatientScreeningToolSubmission) {
+      return null;
+    }
+
+    return latestPatientScreeningToolSubmission;
   }
 
   static async getAll(): Promise<PatientScreeningToolSubmission[]> {

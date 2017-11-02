@@ -1578,6 +1578,126 @@ export type getPatientScratchPadQuery = {
   } | null,
 };
 
+export type getPatientScreeningToolSubmissionForPatientAndScreeningToolQueryVariables = {
+  screeningToolId: string,
+  patientId: string,
+};
+
+export type getPatientScreeningToolSubmissionForPatientAndScreeningToolQuery = {
+  // latest patient sreening tool submission for a screening tool
+  patientScreeningToolSubmissionForPatientAndScreeningTool:  {
+    id: string,
+    screeningToolId: string,
+    patientId: string,
+    patient:  {
+      id: string,
+      firstName: string | null,
+      middleName: string | null,
+      lastName: string | null,
+      language: string | null,
+      gender: string | null,
+      dateOfBirth: string | null,
+      zip: string | null,
+      createdAt: string,
+      consentToText: boolean | null,
+      consentToCall: boolean | null,
+    },
+    userId: string,
+    user:  {
+      id: string,
+      firstName: string | null,
+      lastName: string | null,
+      userRole: UserRole,
+      googleProfileImageUrl: string | null,
+    },
+    score: number,
+    riskArea:  {
+      id: string,
+      createdAt: string,
+      updatedAt: string,
+      deletedAt: string | null,
+      title: string,
+      order: number,
+    },
+    createdAt: string,
+    updatedAt: string,
+    deletedAt: string | null,
+    carePlanSuggestions:  Array< {
+      id: string,
+      patientId: string,
+      patient:  {
+        id: string,
+        firstName: string | null,
+        middleName: string | null,
+        lastName: string | null,
+        language: string | null,
+        gender: string | null,
+        dateOfBirth: string | null,
+        zip: string | null,
+        createdAt: string,
+        consentToText: boolean | null,
+        consentToCall: boolean | null,
+      },
+      suggestionType: CarePlanSuggestionType,
+      concernId: string | null,
+      concern:  {
+        id: string,
+        title: string,
+        createdAt: string,
+        updatedAt: string,
+        deletedAt: string | null,
+      } | null,
+      goalSuggestionTemplateId: string | null,
+      goalSuggestionTemplate:  {
+        id: string,
+        title: string,
+        taskTemplates:  Array< {
+          id: string,
+          title: string,
+          completedWithinNumber: number | null,
+          completedWithinInterval: CompletedWithinInterval | null,
+          repeating: boolean | null,
+          goalSuggestionTemplateId: string,
+          priority: Priority | null,
+          careTeamAssigneeRole: UserRole | null,
+          createdAt: string,
+          updatedAt: string,
+          deletedAt: string | null,
+        } | null > | null,
+        createdAt: string,
+        updatedAt: string,
+        deletedAt: string | null,
+      } | null,
+      acceptedById: string | null,
+      acceptedBy:  {
+        id: string,
+        firstName: string | null,
+        lastName: string | null,
+        userRole: UserRole,
+        googleProfileImageUrl: string | null,
+      } | null,
+      dismissedById: string | null,
+      dismissedBy:  {
+        id: string,
+        firstName: string | null,
+        lastName: string | null,
+        userRole: UserRole,
+        googleProfileImageUrl: string | null,
+      } | null,
+      dismissedReason: string | null,
+      createdAt: string,
+      updatedAt: string,
+      dismissedAt: string | null,
+      acceptedAt: string | null,
+      patientScreeningToolSubmissionId: string | null,
+    } | null >,
+    screeningToolScoreRangeId: string | null,
+    screeningToolScoreRange:  {
+      description: string,
+    } | null,
+  } | null,
+};
+
 export type getPatientScreeningToolSubmissionQueryVariables = {
   patientScreeningToolSubmissionId: string,
 };
@@ -1690,6 +1810,10 @@ export type getPatientScreeningToolSubmissionQuery = {
       acceptedAt: string | null,
       patientScreeningToolSubmissionId: string | null,
     } | null >,
+    screeningToolScoreRangeId: string | null,
+    screeningToolScoreRange:  {
+      description: string,
+    } | null,
   } | null,
 };
 
@@ -4769,6 +4893,10 @@ export type FullPatientScreeningToolSubmissionFragment = {
     acceptedAt: string | null,
     patientScreeningToolSubmissionId: string | null,
   } | null >,
+  screeningToolScoreRangeId: string | null,
+  screeningToolScoreRange:  {
+    description: string,
+  } | null,
 };
 
 export type FullProgressNoteTemplateFragment = {

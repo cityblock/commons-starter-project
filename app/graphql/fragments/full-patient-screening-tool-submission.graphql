@@ -24,4 +24,8 @@ fragment FullPatientScreeningToolSubmission on PatientScreeningToolSubmission {
   carePlanSuggestions {
     ...FullCarePlanSuggestion
   }
+  screeningToolScoreRangeId
+  screeningToolScoreRange {
+    description
+  }
 }

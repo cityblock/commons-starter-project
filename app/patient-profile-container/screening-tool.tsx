@@ -5,6 +5,7 @@ import { compose, graphql } from 'react-apollo';
 import { connect, Dispatch } from 'react-redux';
 import { push } from 'react-router-redux';
 /* tslint:disable:max-line-length */
+import * as patientScreeningToolSubmissionQuery from '../graphql/queries/get-patient-screening-tool-submission-for-patient-and-screening-tool.graphql';
 import * as screeningToolQuestionsQuery from '../graphql/queries/get-questions.graphql';
 import * as screeningToolQuery from '../graphql/queries/get-screening-tool.graphql';
 import * as patientAnswersCreate from '../graphql/queries/patient-answers-create-mutation.graphql';
@@ -12,12 +13,14 @@ import * as patientAnswersCreate from '../graphql/queries/patient-answers-create
 import {
   patientAnswersCreateMutationVariables,
   FullPatientAnswerFragment,
+  FullPatientScreeningToolSubmissionFragment,
   FullQuestionFragment,
   FullScreeningToolFragment,
 } from '../graphql/types';
 import * as sortSearchStyles from '../shared/css/sort-search.css';
 import { Popup } from '../shared/popup/popup';
 import * as styles from './css/risk-areas.css';
+import { PatientScreeningToolSubmission } from './patient-screening-tool-submission';
 import ScreeningToolQuestion from './screening-tool-question';
 import ScreeningToolResultsPopup from './screening-tool-results-popup';
 
@@ -38,6 +41,9 @@ interface IProps {
   ) => { data: { patientAnswersCreate: [FullPatientAnswerFragment] } };
   refetchScreeningTool?: () => any;
   refetchScreeningToolQuestions?: () => any;
+  previousPatientScreeningToolSubmissionLoading?: boolean;
+  previousPatientScreeningToolSubmissionError?: string;
+  previousPatientScreeningToolSubmission?: FullPatientScreeningToolSubmissionFragment;
 }
 
 export interface IQuestionsState {
@@ -79,6 +85,9 @@ export class ScreeningTool extends React.Component<IProps, IState> {
     this.isLoadingOrError = this.isLoadingOrError.bind(this);
     this.onRetryLoad = this.onRetryLoad.bind(this);
     this.allQuestionsAnswered = this.allQuestionsAnswered.bind(this);
+    this.renderPreviousPatientScreeningToolSubmission = this.renderPreviousPatientScreeningToolSubmission.bind(
+      this,
+    );
 
     this.state = {
       questions: {},
@@ -326,6 +335,22 @@ export class ScreeningTool extends React.Component<IProps, IState> {
     }
   }
 
+  renderPreviousPatientScreeningToolSubmission() {
+    const {
+      previousPatientScreeningToolSubmission,
+      previousPatientScreeningToolSubmissionLoading,
+      previousPatientScreeningToolSubmissionError,
+    } = this.props;
+
+    return (
+      <PatientScreeningToolSubmission
+        submission={previousPatientScreeningToolSubmission}
+        loading={previousPatientScreeningToolSubmissionLoading}
+        error={previousPatientScreeningToolSubmissionError}
+      />
+    );
+  }
+
   render() {
     const { screeningTool, patientRoute } = this.props;
     const { patientScreeningToolSubmissionId } = this.state;
@@ -355,6 +380,7 @@ export class ScreeningTool extends React.Component<IProps, IState> {
       </div>
     ) : (
       <div className={styles.riskAssessment}>
+        {this.renderPreviousPatientScreeningToolSubmission()}
         <div className={titleStyles}>
           <div className={styles.title}>
             <div className={styles.titleIcon} />
@@ -426,4 +452,20 @@ export default compose(
     }),
   }),
   graphql(patientAnswersCreate as any, { name: 'createPatientAnswers' }),
+  graphql(patientScreeningToolSubmissionQuery as any, {
+    skip: (props: IProps) => !props.screeningToolId,
+    options: (props: IProps) => ({
+      variables: {
+        screeningToolId: props.screeningToolId,
+        patientId: props.patientId,
+      },
+    }),
+    props: ({ data }) => ({
+      previousPatientScreeningToolSubmissionLoading: data ? data.loading : false,
+      previousPatientScreeningToolSubmissionError: data ? data.error : null,
+      previousPatientScreeningToolSubmission: data
+        ? (data as any).patientScreeningToolSubmissionForPatientAndScreeningTool
+        : null,
+    }),
+  }),
 )(ScreeningTool);

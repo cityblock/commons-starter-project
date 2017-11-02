@@ -1,0 +1,82 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders patient screening tool submission 1`] = `
+<div
+  className={undefined}
+>
+  <div
+    className={undefined}
+  >
+    <div
+      className={undefined}
+    >
+      <div
+        className={undefined}
+      >
+        <div
+          className={undefined}
+        >
+          Tool results:
+        </div>
+        <div
+          className={undefined}
+        >
+          <div>
+            Screening Tool Score Range
+          </div>
+          <div
+            className={undefined}
+          >
+            -
+          </div>
+          <div>
+            5
+          </div>
+          <div
+            className={undefined}
+          />
+        </div>
+      </div>
+      <div
+        className={undefined}
+      >
+        <div
+          className={undefined}
+        >
+          <div
+            className={undefined}
+          >
+            Conducted by:
+          </div>
+          <div
+            className={undefined}
+          >
+            first last
+          </div>
+        </div>
+        <div
+          className={undefined}
+        >
+          <div
+            className={undefined}
+          >
+            Date conducted:
+          </div>
+          <div
+            className={undefined}
+          >
+            <span>
+              Jul 13, 2017
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div
+      className={undefined}
+    >
+      TBD
+    </div>
+  </div>
+</div>
+`;

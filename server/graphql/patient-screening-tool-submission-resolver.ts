@@ -66,6 +66,19 @@ export async function resolvePatientScreeningToolSubmission(
   return await PatientScreeningToolSubmission.get(args.patientScreeningToolSubmissionId);
 }
 
+export async function resolvePatientScreeningToolSubmissionForPatientAndScreeningTool(
+  root: any,
+  args: { screeningToolId: string; patientId: string },
+  { db, userRole }: IContext,
+) {
+  await accessControls.isAllowed(userRole, 'view', 'patientScreeningToolSubmission');
+
+  return await PatientScreeningToolSubmission.getLatestForPatientAndScreeningTool(
+    args.screeningToolId,
+    args.patientId,
+  );
+}
+
 export async function resolvePatientScreeningToolSubmissionsForPatient(
   root: any,
   args: IResolvePatientScreeningToolSubmissionsOptions,

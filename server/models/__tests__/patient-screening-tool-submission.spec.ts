@@ -179,6 +179,60 @@ describe('patient screening tool submission model', () => {
     expect(submissionIds).not.toContain(submission3.id);
   });
 
+  it('gets the latest screening tool submission for a patient and tool', async () => {
+    await PatientScreeningToolSubmission.create({
+      screeningToolId: screeningTool1.id,
+      patientId: patient1.id,
+      userId: user.id,
+      score: 10,
+      patientAnswers: [],
+    });
+    const secondSubmission = await PatientScreeningToolSubmission.create({
+      screeningToolId: screeningTool1.id,
+      patientId: patient1.id,
+      userId: user.id,
+      score: 11,
+      patientAnswers: [],
+    });
+    await PatientScreeningToolSubmission.create({
+      screeningToolId: screeningTool2.id,
+      patientId: patient1.id,
+      userId: user.id,
+      score: 10,
+      patientAnswers: [],
+    });
+
+    const submission = await PatientScreeningToolSubmission.getLatestForPatientAndScreeningTool(
+      screeningTool1.id,
+      patient1.id,
+    );
+    expect(submission!.id).toEqual(secondSubmission.id);
+    expect(submission!.score).toEqual(secondSubmission.score);
+  });
+
+  it('returns null when there is no latest submission for a patient and tool', async () => {
+    await PatientScreeningToolSubmission.create({
+      screeningToolId: screeningTool1.id,
+      patientId: patient1.id,
+      userId: user.id,
+      score: 10,
+      patientAnswers: [],
+    });
+    await PatientScreeningToolSubmission.create({
+      screeningToolId: screeningTool1.id,
+      patientId: patient1.id,
+      userId: user.id,
+      score: 11,
+      patientAnswers: [],
+    });
+
+    const submission = await PatientScreeningToolSubmission.getLatestForPatientAndScreeningTool(
+      screeningTool2.id,
+      patient1.id,
+    );
+    expect(submission).toBeNull();
+  });
+
   it('gets all screening tool submissions for a patient for a screening tool', async () => {
     const submission1 = await PatientScreeningToolSubmission.create({
       screeningToolId: screeningTool1.id,

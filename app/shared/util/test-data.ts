@@ -405,6 +405,8 @@ export const patientScreeningToolSubmission = {
   createdAt: 'Thu Jul 13 2017 16:52:56 GMT-0400 (EDT)',
   updatedAt: 'Thu Jul 13 2017 16:52:56 GMT-0400 (EDT)',
   carePlanSuggestions: [carePlanSuggestionWithConcern, carePlanSuggestionWithGoal],
+  screeningToolScoreRangeId: screeningToolScoreRange.id,
+  screeningToolScoreRange,
 };
 
 export const progressNoteTemplate = {

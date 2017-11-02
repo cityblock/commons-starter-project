@@ -90,6 +90,7 @@ import {
   resolvePatientScreeningToolSubmission,
   resolvePatientScreeningToolSubmissions,
   resolvePatientScreeningToolSubmissionsForPatient,
+  resolvePatientScreeningToolSubmissionForPatientAndScreeningTool,
 } from './patient-screening-tool-submission-resolver';
 import {
   patientTaskSuggestionAccept,
@@ -251,6 +252,7 @@ const resolveFunctions = {
     screeningToolScoreRanges: resolveScreeningToolScoreRanges,
     screeningToolScoreRangesForScreeningTool: resolveScreeningToolScoreRangesForScreeningTool,
     patientScreeningToolSubmission: resolvePatientScreeningToolSubmission,
+    patientScreeningToolSubmissionForPatientAndScreeningTool: resolvePatientScreeningToolSubmissionForPatientAndScreeningTool,
     patientScreeningToolSubmissionsForPatient: resolvePatientScreeningToolSubmissionsForPatient,
     patientScreeningToolSubmissions: resolvePatientScreeningToolSubmissions,
     progressNoteTemplate: resolveProgressNoteTemplate,

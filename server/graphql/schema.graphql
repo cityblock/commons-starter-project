@@ -611,6 +611,8 @@ type PatientScreeningToolSubmission implements uniqueId {
   updatedAt: String!
   deletedAt: String
   carePlanSuggestions: [CarePlanSuggestion]!
+  screeningToolScoreRangeId: String
+  screeningToolScoreRange: ScreeningToolScoreRange
 }
 
 type ProgressNoteTemplate implements uniqueId {
@@ -1430,6 +1432,11 @@ type RootQueryType {
   # patient screening tool submission
   patientScreeningToolSubmission(
     patientScreeningToolSubmissionId: String!
+  ): PatientScreeningToolSubmission
+  # latest patient sreening tool submission for a screening tool
+  patientScreeningToolSubmissionForPatientAndScreeningTool(
+    screeningToolId: String!
+    patientId: String!
   ): PatientScreeningToolSubmission
   # patient screening tool submissions for patient and screening tool (optioanlly)
   patientScreeningToolSubmissionsForPatient(

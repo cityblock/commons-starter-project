@@ -234,6 +234,10 @@ declare module 'schema' {
   */
     patientScreeningToolSubmission: IPatientScreeningToolSubmission | null;
     /**
+    description: latest patient sreening tool submission for a screening tool
+  */
+    patientScreeningToolSubmissionForPatientAndScreeningTool: IPatientScreeningToolSubmission | null;
+    /**
     description: patient screening tool submissions for patient and screening tool (optioanlly)
   */
     patientScreeningToolSubmissionsForPatient: Array<IPatientScreeningToolSubmission> | null;
@@ -274,11 +278,6 @@ declare module 'schema' {
     googleProfileImageUrl: string | null;
     updatedAt: string;
   }
-
-  /**
-    description: An object with a Globally Unique ID
-  */
-  type uniqueId = IUser | IPatient | IClinic | ITask | IPatientGoal | IGoalSuggestionTemplate | ITaskTemplate | ITaskComment | IRiskArea | IQuestion | IAnswer | IConcern | IQuestionCondition | IPatientAnswer | IPatientScreeningToolSubmission | IScreeningTool | IScreeningToolScoreRange | ICarePlanSuggestion | IEventNotification | ITaskEvent | IPatientConcern | IPatientTaskSuggestion | IProgressNoteTemplate | IProgressNote;
 
   /**
     description: An object with a Globally Unique ID
@@ -676,6 +675,8 @@ declare module 'schema' {
     updatedAt: string;
     deletedAt: string | null;
     carePlanSuggestions: Array<ICarePlanSuggestion>;
+    screeningToolScoreRangeId: string | null;
+    screeningToolScoreRange: IScreeningToolScoreRange | null;
   }
 
 
@@ -1238,9 +1239,9 @@ declare module 'schema' {
     description: params for editing a current user
   */
   interface ICurrentUserEditInput {
-    locale?: string | null;
-    firstName?: string | null;
-    lastName?: string | null;
+    locale: string | null;
+    firstName: string | null;
+    lastName: string | null;
   }
 
   /**
@@ -1281,7 +1282,7 @@ declare module 'schema' {
   */
   interface IAppointmentStartInput {
     patientId: string;
-    appointmentTypeId?: number | null;
+    appointmentTypeId: number | null;
   }
 
   /**
@@ -1311,7 +1312,7 @@ declare module 'schema' {
   interface IAppointmentEndInput {
     patientId: string;
     appointmentId: string;
-    appointmentNote?: string | null;
+    appointmentNote: string | null;
   }
 
   /**
@@ -1326,15 +1327,15 @@ declare module 'schema' {
   */
   interface IPatientEditInput {
     patientId: string;
-    firstName?: string | null;
-    middleName?: string | null;
-    lastName?: string | null;
-    dateOfBirth?: string | null;
-    gender?: string | null;
-    zip?: string | null;
-    language?: string | null;
-    consentToCall?: boolean | null;
-    consentToText?: boolean | null;
+    firstName: string | null;
+    middleName: string | null;
+    lastName: string | null;
+    dateOfBirth: string | null;
+    gender: string | null;
+    zip: string | null;
+    language: string | null;
+    consentToCall: boolean | null;
+    consentToText: boolean | null;
   }
 
   /**
@@ -1342,34 +1343,34 @@ declare module 'schema' {
   */
   interface IPatientSetupInput {
     firstName: string;
-    middleName?: string | null;
+    middleName: string | null;
     lastName: string;
     dateOfBirth: string;
     gender: string;
     zip: string;
     homeClinicId: string;
-    suffix?: string | null;
-    preferredName?: string | null;
+    suffix: string | null;
+    preferredName: string | null;
     race: string;
     ssn: string;
     language: string;
     maritalStatus: string;
-    email?: string | null;
-    homePhone?: string | null;
-    mobilePhone?: string | null;
+    email: string | null;
+    homePhone: string | null;
+    mobilePhone: string | null;
     consentToCall: boolean;
     consentToText: boolean;
-    city?: string | null;
-    address1?: string | null;
-    county?: string | null;
-    country?: string | null;
-    state?: string | null;
-    insuranceType?: string | null;
-    patientRelationshipToPolicyHolder?: string | null;
-    memberId?: string | null;
-    policyGroupNumber?: string | null;
-    issueDate?: string | null;
-    expirationDate?: string | null;
+    city: string | null;
+    address1: string | null;
+    county: string | null;
+    country: string | null;
+    state: string | null;
+    insuranceType: string | null;
+    patientRelationshipToPolicyHolder: string | null;
+    memberId: string | null;
+    policyGroupNumber: string | null;
+    issueDate: string | null;
+    expirationDate: string | null;
   }
 
   /**
@@ -1385,11 +1386,11 @@ declare module 'schema' {
   */
   interface ITaskCreateInput {
     title: string;
-    description?: string | null;
-    dueAt?: string | null;
+    description: string | null;
+    dueAt: string | null;
     patientId: string;
-    assignedToId?: string | null;
-    patientGoalId?: string | null;
+    assignedToId: string | null;
+    patientGoalId: string | null;
   }
 
   /**
@@ -1404,12 +1405,12 @@ declare module 'schema' {
   */
   interface ITaskEditInput {
     taskId: string;
-    title?: string | null;
-    description?: string | null;
-    dueAt?: string | null;
-    assignedToId?: string | null;
-    priority?: string | null;
-    patientGoalId?: string | null;
+    title: string | null;
+    description: string | null;
+    dueAt: string | null;
+    assignedToId: string | null;
+    priority: string | null;
+    patientGoalId: string | null;
   }
 
   /**
@@ -1459,8 +1460,8 @@ declare module 'schema' {
 
   interface IRiskAreaEditInput {
     riskAreaId: string;
-    title?: string | null;
-    order?: number | null;
+    title: string | null;
+    order: number | null;
   }
 
 
@@ -1472,22 +1473,22 @@ declare module 'schema' {
   interface IQuestionCreateInput {
     title: string;
     answerType: IAnswerTypeOptionsEnum;
-    validatedSource?: string | null;
-    riskAreaId?: string | null;
-    screeningToolId?: string | null;
-    progressNoteTemplateId?: string | null;
+    validatedSource: string | null;
+    riskAreaId: string | null;
+    screeningToolId: string | null;
+    progressNoteTemplateId: string | null;
     order: number;
-    applicableIfType?: IQuestionConditionTypeOptionsEnum | null;
+    applicableIfType: IQuestionConditionTypeOptionsEnum | null;
   }
 
 
   interface IQuestionEditInput {
     questionId: string;
-    title?: string | null;
-    answerType?: IAnswerTypeOptionsEnum | null;
-    validatedSource?: string | null;
-    order?: number | null;
-    applicableIfType?: IQuestionConditionTypeOptionsEnum | null;
+    title: string | null;
+    answerType: IAnswerTypeOptionsEnum | null;
+    validatedSource: string | null;
+    order: number | null;
+    applicableIfType: IQuestionConditionTypeOptionsEnum | null;
   }
 
 
@@ -1500,22 +1501,22 @@ declare module 'schema' {
     displayValue: string;
     value: string;
     valueType: IAnswerValueTypeOptionsEnum;
-    riskAdjustmentType?: IRiskAdjustmentTypeOptionsEnum | null;
-    inSummary?: boolean | null;
-    summaryText?: string | null;
+    riskAdjustmentType: IRiskAdjustmentTypeOptionsEnum | null;
+    inSummary: boolean | null;
+    summaryText: string | null;
     questionId: string;
     order: number;
   }
 
 
   interface IAnswerEditInput {
-    displayValue?: string | null;
-    value?: string | null;
-    valueType?: IAnswerValueTypeOptionsEnum | null;
-    riskAdjustmentType?: IRiskAdjustmentTypeOptionsEnum | null;
-    inSummary?: boolean | null;
-    summaryText?: string | null;
-    order?: number | null;
+    displayValue: string | null;
+    value: string | null;
+    valueType: IAnswerValueTypeOptionsEnum | null;
+    riskAdjustmentType: IRiskAdjustmentTypeOptionsEnum | null;
+    inSummary: boolean | null;
+    summaryText: string | null;
+    order: number | null;
     answerId: string;
   }
 
@@ -1529,8 +1530,8 @@ declare module 'schema' {
     patientId: string;
     patientAnswers: Array<IPatientAnswerInput>;
     questionIds: Array<string>;
-    screeningToolId?: string | null;
-    progressNoteId?: string | null;
+    screeningToolId: string | null;
+    progressNoteId: string | null;
   }
 
 
@@ -1605,8 +1606,8 @@ declare module 'schema' {
 
   interface IConcernSuggestInput {
     concernId: string;
-    answerId?: string | null;
-    screeningToolScoreRangeId?: string | null;
+    answerId: string | null;
+    screeningToolScoreRangeId: string | null;
   }
 
 
@@ -1627,31 +1628,31 @@ declare module 'schema' {
 
 
   interface IGoalSuggestInput {
-    answerId?: string | null;
-    screeningToolScoreRangeId?: string | null;
+    answerId: string | null;
+    screeningToolScoreRangeId: string | null;
     goalSuggestionTemplateId: string;
   }
 
 
   interface ITaskTemplateCreateInput {
     title: string;
-    completedWithinNumber?: number | null;
-    completedWithinInterval?: string | null;
-    repeating?: boolean | null;
+    completedWithinNumber: number | null;
+    completedWithinInterval: string | null;
+    repeating: boolean | null;
     goalSuggestionTemplateId: string;
-    priority?: string | null;
-    careTeamAssigneeRole?: string | null;
+    priority: string | null;
+    careTeamAssigneeRole: string | null;
   }
 
 
   interface ITaskTemplateEditInput {
     title: string;
-    completedWithinNumber?: number | null;
-    completedWithinInterval?: string | null;
-    repeating?: boolean | null;
-    goalSuggestionTemplateId?: string | null;
-    priority?: string | null;
-    careTeamAssigneeRole?: string | null;
+    completedWithinNumber: number | null;
+    completedWithinInterval: string | null;
+    repeating: boolean | null;
+    goalSuggestionTemplateId: string | null;
+    priority: string | null;
+    careTeamAssigneeRole: string | null;
     taskTemplateId: string;
   }
 
@@ -1681,20 +1682,20 @@ declare module 'schema' {
   interface IPatientGoalCreateInput {
     title: string;
     patientId: string;
-    patientConcernId?: string | null;
-    goalSuggestionTemplateId?: string | null;
-    taskTemplateIds?: Array<string> | null;
-    concernId?: string | null;
-    concernTitle?: string | null;
-    startedAt?: string | null;
+    patientConcernId: string | null;
+    goalSuggestionTemplateId: string | null;
+    taskTemplateIds: Array<string> | null;
+    concernId: string | null;
+    concernTitle: string | null;
+    startedAt: string | null;
   }
 
 
   interface IPatientGoalEditInput {
     patientGoalId: string;
     title: string;
-    patientConcernId?: string | null;
-    goalSuggestionTemplateId?: string | null;
+    patientConcernId: string | null;
+    goalSuggestionTemplateId: string | null;
   }
 
 
@@ -1706,17 +1707,17 @@ declare module 'schema' {
   interface IPatientConcernCreateInput {
     concernId: string;
     patientId: string;
-    startedAt?: string | null;
-    completedAt?: string | null;
+    startedAt: string | null;
+    completedAt: string | null;
   }
 
 
   interface IPatientConcernEditInput {
-    order?: number | null;
-    concernId?: string | null;
-    patientId?: string | null;
-    startedAt?: string | null;
-    completedAt?: string | null;
+    order: number | null;
+    concernId: string | null;
+    patientId: string | null;
+    startedAt: string | null;
+    completedAt: string | null;
     patientConcernId: string;
   }
 
@@ -1728,11 +1729,11 @@ declare module 'schema' {
 
   interface ICarePlanSuggestionAcceptInput {
     carePlanSuggestionId: string;
-    patientConcernId?: string | null;
-    concernId?: string | null;
-    concernTitle?: string | null;
-    startedAt?: string | null;
-    taskTemplateIds?: Array<string> | null;
+    patientConcernId: string | null;
+    concernId: string | null;
+    concernTitle: string | null;
+    startedAt: string | null;
+    taskTemplateIds: Array<string> | null;
   }
 
 
@@ -1750,8 +1751,8 @@ declare module 'schema' {
 
   interface IScreeningToolEditInput {
     screeningToolId: string;
-    title?: string | null;
-    riskAreaId?: string | null;
+    title: string | null;
+    riskAreaId: string | null;
   }
 
 
@@ -1770,11 +1771,11 @@ declare module 'schema' {
 
   interface IScreeningToolScoreRangeEditInput {
     screeningToolScoreRangeId: string;
-    description?: string | null;
-    screeningToolId?: string | null;
-    minimumScore?: number | null;
-    maximumScore?: number | null;
-    deletedAt?: string | null;
+    description: string | null;
+    screeningToolId: string | null;
+    minimumScore: number | null;
+    maximumScore: number | null;
+    deletedAt: string | null;
   }
 
 
@@ -1793,10 +1794,10 @@ declare module 'schema' {
 
   interface IPatientScreeningToolSubmissionEditInput {
     patientScreeningToolSubmissionId: string;
-    screeningToolId?: string | null;
-    patientId?: string | null;
-    userId?: string | null;
-    score?: number | null;
+    screeningToolId: string | null;
+    patientId: string | null;
+    userId: string | null;
+    score: number | null;
   }
 
 

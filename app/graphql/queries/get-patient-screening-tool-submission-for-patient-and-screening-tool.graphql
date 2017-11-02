@@ -1,0 +1,13 @@
+#import "../fragments/full-patient-screening-tool-submission.graphql"
+
+query getPatientScreeningToolSubmissionForPatientAndScreeningTool(
+  $screeningToolId: String!
+  $patientId: String!
+) {
+  patientScreeningToolSubmissionForPatientAndScreeningTool(
+    screeningToolId: $screeningToolId
+    patientId: $patientId
+  ) {
+    ...FullPatientScreeningToolSubmission
+  }
+}

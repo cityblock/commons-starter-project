@@ -35,8 +35,20 @@ export default class Db {
 
   static async clear() {
     if (knex) {
-      await knex.migrate.rollback();
-      await knex.migrate.latest();
+      await knex.transaction(async trx => {
+        await trx
+          .withSchema('information_schema')
+          .select('table_name')
+          .from('tables')
+          .whereRaw(`table_catalog = ? AND table_schema = ? AND table_name != ?`, [
+            trx.client.database(),
+            'public',
+            'knex_migrations',
+          ])
+          .map(async (row: any) => {
+            await trx.raw(`TRUNCATE TABLE public.${row.table_name} CASCADE`);
+          });
+      });
     }
   }
 

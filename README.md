@@ -254,7 +254,8 @@ Run a migration with:
     yarn migrate
 
 
-### PostgreSQL Log Settings
+### PostgreSQL
+#### Log Settings
 
 We've modified the default PostgreSQL logging behavior to give us more visibility into the database. A good description of what all of these different settings can be found in the [PostgreSQL Documentation][]. All of these settings are modified by running the following statements against the database:
 
@@ -270,6 +271,9 @@ The settings are as follows:
 5. `log_min_duration_statement = -1`
 6. `log_min_messages = 'DEBUG2'`
 
+#### Spotlight Optimization
+Running the test suite causes a lot of database churning. This can cause low performance when Spotlight is attempting to index every change to your database files. To prevent this, [add][] your Postgres data directory (with a Homebrew install, typically `/usr/local/var/postgres`) to Spotlight's privacy list.
+
 ### Running in Production Mode Locally Using Docker
 
 We are able to run the application locally using Docker and Docker Compose. For now, this means running the web application with a postgres database, but no RabbitMQ. To get started, download and install [Docker][]. After you have Docker installed and running, follow these steps:
@@ -283,6 +287,7 @@ We are able to run the application locally using Docker and Docker Compose. For 
 
 [nvm]: https://github.com/creationix/nvm
 [Zenhub]: https://www.zenhub.com/
+[add]: http://osxdaily.com/2011/12/30/exclude-drives-or-folders-from-spotlight-index-mac-os-x/
 [Aptible]: https://aptible.com
 [Aptible toolbelt]: https://www.aptible.com/support/toolbelt/
 [staging]: https://app-5428.on-aptible.com

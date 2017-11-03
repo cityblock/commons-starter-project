@@ -22,7 +22,7 @@ Tech wise, this app is an Express server running GraphQL and PostgreSQL (Objecti
 
 ### Installation
 
-- Install [nvm][] and node 8.4
+- Install [nvm][] and node 8.9
 - Install [yarn][]
 - Create a `.env` file in the project root (see: [.env][])
 - Install [Zenhub][]

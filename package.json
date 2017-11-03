@@ -2,7 +2,9 @@
   "name": "commons",
   "version": "0.0.1",
   "description": "A Node.js app using Express and GraphQL",
-  "repository": "https://github.com/sidewalklabs/commons",
+  "license": "UNLICENSED",
+  "repository": "https://github.com/cityblock/commons",
+  "private": true,
   "main": "index.js",
   "scripts": {
     "lint": "tslint --project tsconfig.json --config tslint.json",

@@ -99,7 +99,8 @@ import {
 } from './patient-task-suggestion-resolver';
 import {
   progressNoteComplete,
-  progressNoteCreate,
+  progressNoteEdit,
+  progressNoteGetOrCreate,
   resolveProgressNote,
   resolveProgressNotesForPatient,
 } from './progress-note-resolver';
@@ -338,7 +339,8 @@ const resolveFunctions = {
     progressNoteTemplateDelete,
     progressNoteTemplateEdit,
     progressNoteComplete,
-    progressNoteCreate,
+    progressNoteGetOrCreate,
+    progressNoteEdit,
   },
 };
 

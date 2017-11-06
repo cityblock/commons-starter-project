@@ -403,7 +403,7 @@ export class ScreeningTool extends React.Component<IProps, IState> {
           </div>
         </div>
         <div className={styles.riskAreasPanel}>{assessmentHtml}</div>
-        <Popup visible={!!patientScreeningToolSubmissionId} smallPadding={true}>
+        <Popup visible={!!patientScreeningToolSubmissionId} style={'small-padding'}>
           <ScreeningToolResultsPopup
             patientRoute={patientRoute}
             patientScreeningToolSubmissionId={patientScreeningToolSubmissionId}

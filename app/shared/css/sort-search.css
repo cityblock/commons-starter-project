@@ -44,6 +44,10 @@
   font-family: var(--roboto);
 }
 
+.searchLeftPad {
+  margin-left: 10px;
+}
+
 .search input[type=text] {
   width: 273px;
   height: 32px;
@@ -52,7 +56,7 @@
   padding-left: 20px;
   font-size: var(--small-font-size);
   line-height: var(--small-font-line-height);
-
+  outline: none;
   &::placeholder {
     color: var(--light-gray-font-color);
   }

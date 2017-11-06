@@ -137,7 +137,7 @@ class PopupPatientCarePlanSuggestionAccepted extends React.Component<allProps, I
     const { concernId, concernType, newConcernTitle } = this.state;
 
     return (
-      <Popup visible={visible} smallPadding={true}>
+      <Popup visible={visible} style={'small-padding'}>
         <div className={styles.acceptModalContent}>
           <div className={styles.acceptModalHeader}>
             <div className={styles.acceptModalDismissButton} onClick={this.onDismiss} />

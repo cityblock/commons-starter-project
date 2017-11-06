@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`renders encounter 1`] = `
+exports[`renders timeline 1`] = `
 <div>
   <div
     className={undefined}
@@ -26,15 +26,27 @@ exports[`renders encounter 1`] = `
           </option>
         </select>
       </div>
+      <div
+        className=""
+      >
+        <input
+          placeholder="Search by user or keywords"
+          required={true}
+          type="text"
+        />
+      </div>
     </div>
     <div
       className={undefined}
     >
-      <input
-        placeholder="Search by user or keywords"
-        required={true}
-        type="text"
-      />
+      <div
+        className=""
+        onClick={[Function]}
+      >
+        <span>
+          New progress note
+        </span>
+      </div>
     </div>
   </div>
   <div
@@ -112,5 +124,6 @@ exports[`renders encounter 1`] = `
       </div>
     </div>
   </div>
+  <div />
 </div>
 `;

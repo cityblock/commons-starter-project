@@ -416,3 +416,15 @@ export const progressNoteTemplate = {
   updatedAt: '2017-09-07T13:45:14.532Z',
   deletedAt: null,
 };
+
+export const progressNote = {
+  id: 'progress-note-id',
+  createdAt: '2017-09-07T13:45:14.532Z',
+  updatedAt: '2017-09-07T13:45:14.532Z',
+  deletedAt: null,
+  completedAt: null,
+  patientId: patient.id,
+  userId: user.id,
+  progressNoteTemplateId: progressNoteTemplate.id,
+  progressNoteTemplate,
+};

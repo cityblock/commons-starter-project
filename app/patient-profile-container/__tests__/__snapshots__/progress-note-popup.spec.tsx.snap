@@ -1,0 +1,420 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`builder concerns renders progress note popup 1`] = `
+<div
+  className={undefined}
+>
+  <div
+    className="undefined"
+  >
+    <div>
+      <div
+        className={undefined}
+      >
+        <div
+          className={undefined}
+        >
+          Progress Note: 
+        </div>
+        <div
+          className={undefined}
+          onClick={[Function]}
+        />
+      </div>
+      <div
+        className={undefined}
+      >
+        <div
+          className={undefined}
+        >
+          <div
+            className={undefined}
+            style={
+              Object {
+                "backgroundImage": "url('http://bit.ly/2vaOMQJ')",
+              }
+            }
+          />
+          <div
+            className={undefined}
+          >
+            <div
+              className={undefined}
+            >
+              Unknown
+            </div>
+          </div>
+        </div>
+        <div
+          className={undefined}
+          onClick={[Function]}
+        >
+          Sign and Submit
+        </div>
+      </div>
+      <div
+        className={undefined}
+      >
+        <a
+          className="undefined"
+          onClick={[Function]}
+        >
+          Context
+        </a>
+        <a
+          className=""
+          onClick={[Function]}
+        >
+          Activity
+        </a>
+        <a
+          className=""
+          onClick={[Function]}
+        >
+          Tasks
+        </a>
+      </div>
+      <div>
+        <div
+          className={undefined}
+        >
+          <div
+            className={undefined}
+          >
+            Select encounter type:
+          </div>
+          <select
+            className={undefined}
+            onChange={[Function]}
+          >
+            <option
+              disabled={true}
+              hidden={true}
+              value=""
+            >
+              Select an encounter type template
+            </option>
+          </select>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`builder concerns renders progress note popup with templates renders progress note 1`] = `
+<Unknown
+  style="no-padding"
+  visible={true}
+>
+  <div>
+    <div
+      className={undefined}
+    >
+      <div
+        className={undefined}
+      >
+        Progress Note: 
+        Goal Title
+      </div>
+      <div
+        className={undefined}
+        onClick={[Function]}
+      />
+    </div>
+    <div
+      className={undefined}
+    >
+      <div
+        className={undefined}
+      >
+        <div
+          className={undefined}
+          style={
+            Object {
+              "backgroundImage": "url('http://bit.ly/2vaOMQJ')",
+            }
+          }
+        />
+        <div
+          className={undefined}
+        >
+          <div
+            className={undefined}
+          >
+            Bob Smith
+          </div>
+          <FormattedRelative
+            updateInterval={10000}
+            value="2017-09-07T13:45:14.532Z"
+          >
+            [Function]
+          </FormattedRelative>
+        </div>
+      </div>
+      <FormattedMessage
+        id="patient.submitProgressNote"
+        values={Object {}}
+      >
+        [Function]
+      </FormattedMessage>
+    </div>
+    <div
+      className={undefined}
+    >
+      <FormattedMessage
+        id="patient.context"
+        values={Object {}}
+      >
+        [Function]
+      </FormattedMessage>
+      <FormattedMessage
+        id="patient.activity"
+        values={Object {}}
+      >
+        [Function]
+      </FormattedMessage>
+      <FormattedMessage
+        id="patient.tasks"
+        values={Object {}}
+      >
+        [Function]
+      </FormattedMessage>
+    </div>
+    <ProgressNoteContext
+      onChange={[Function]}
+      patientId="patient-id"
+      progressNoteTemplates={
+        Array [
+          Object {
+            "createdAt": "2017-09-07T13:45:14.532Z",
+            "deletedAt": null,
+            "id": "progress-note-template-id",
+            "title": "Goal Title",
+            "updatedAt": "2017-09-07T13:45:14.532Z",
+          },
+        ]
+      }
+    />
+  </div>
+</Unknown>
+`;
+
+exports[`builder concerns renders progress note popup with templates renders progress note popup with templates 1`] = `
+<Unknown
+  style="no-padding"
+  visible={true}
+>
+  <div>
+    <div
+      className={undefined}
+    >
+      <div
+        className={undefined}
+      >
+        Progress Note: 
+      </div>
+      <div
+        className={undefined}
+        onClick={[Function]}
+      />
+    </div>
+    <div
+      className={undefined}
+    >
+      <div
+        className={undefined}
+      >
+        <div
+          className={undefined}
+          style={
+            Object {
+              "backgroundImage": "url('http://bit.ly/2vaOMQJ')",
+            }
+          }
+        />
+        <div
+          className={undefined}
+        >
+          <div
+            className={undefined}
+          >
+            Bob Smith
+          </div>
+        </div>
+      </div>
+      <FormattedMessage
+        id="patient.submitProgressNote"
+        values={Object {}}
+      >
+        [Function]
+      </FormattedMessage>
+    </div>
+    <div
+      className={undefined}
+    >
+      <FormattedMessage
+        id="patient.context"
+        values={Object {}}
+      >
+        [Function]
+      </FormattedMessage>
+      <FormattedMessage
+        id="patient.activity"
+        values={Object {}}
+      >
+        [Function]
+      </FormattedMessage>
+      <FormattedMessage
+        id="patient.tasks"
+        values={Object {}}
+      >
+        [Function]
+      </FormattedMessage>
+    </div>
+    <ProgressNoteContext
+      onChange={[Function]}
+      patientId="patient-id"
+      progressNoteTemplates={
+        Array [
+          Object {
+            "createdAt": "2017-09-07T13:45:14.532Z",
+            "deletedAt": null,
+            "id": "progress-note-template-id",
+            "title": "Goal Title",
+            "updatedAt": "2017-09-07T13:45:14.532Z",
+          },
+        ]
+      }
+    />
+  </div>
+</Unknown>
+`;
+
+exports[`renders timeline 1`] = `
+<div>
+  <div
+    className={undefined}
+  >
+    <div
+      className={undefined}
+    >
+      <div
+        className={undefined}
+      >
+        Sort by:
+      </div>
+      <div
+        className={undefined}
+      >
+        <select
+          value="Newest first"
+        >
+          <option
+            value="Newest first"
+          >
+            Newest first
+          </option>
+        </select>
+      </div>
+      <div
+        className=""
+      >
+        <input
+          placeholder="Search by user or keywords"
+          required={true}
+          type="text"
+        />
+      </div>
+    </div>
+    <div
+      className={undefined}
+    >
+      <div
+        className=""
+        onClick={[Function]}
+      >
+        <span>
+          New progress note
+        </span>
+      </div>
+    </div>
+  </div>
+  <div
+    className={undefined}
+  >
+    <div
+      className={undefined}
+    >
+      <div
+        className={undefined}
+      >
+        Loading...
+      </div>
+    </div>
+  </div>
+  <div
+    className="undefined"
+  >
+    <div
+      className={undefined}
+      onClick={[Function]}
+    />
+    <div
+      className={undefined}
+    >
+      <div
+        className={undefined}
+        style={
+          Object {
+            "backgroundImage": "none",
+          }
+        }
+      >
+        <div
+          className={undefined}
+        >
+          <div
+            className={undefined}
+          >
+            <div
+              className={undefined}
+            >
+              <div
+                className={undefined}
+              />
+              <div>
+                1 
+                <span>
+                  of
+                </span>
+                 0 
+                <span>
+                  images
+                </span>
+              </div>
+            </div>
+            <div
+              className={undefined}
+              onClick={[Function]}
+            />
+          </div>
+          <div
+            className={undefined}
+          >
+            <div
+              className="undefined"
+              onClick={[Function]}
+            />
+            <div
+              className=""
+              onClick={[Function]}
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div />
+</div>
+`;

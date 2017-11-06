@@ -117,8 +117,8 @@ class UserRow extends React.Component<IProps, IState> {
               )}
             </FormattedMessage>
           </div>
+          {popup}
         </div>
-        {popup}
       </div>
     );
   }

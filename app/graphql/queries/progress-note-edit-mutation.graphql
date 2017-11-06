@@ -1,0 +1,7 @@
+#import "../fragments/full-progress-note.graphql"
+
+mutation progressNoteEdit($progressNoteId: String!, $progressNoteTemplateId: String!) {
+  progressNoteEdit(input: { progressNoteId: $progressNoteId, progressNoteTemplateId: $progressNoteTemplateId }) {
+    ...FullProgressNote
+  }
+}

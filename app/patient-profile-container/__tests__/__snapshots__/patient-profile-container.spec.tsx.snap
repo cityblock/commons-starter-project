@@ -88,9 +88,7 @@ exports[`renders patient profile container correctly 1`] = `
               >
                 Unknown
               </div>
-              <div>
-                Unknown
-              </div>
+              <div />
             </div>
             <div
               className={undefined}
@@ -447,7 +445,7 @@ exports[`renders patient profile for ipad 1`] = `
               <div
                 className={undefined}
               >
-                Unknown Unknown
+                Unknown null
               </div>
               <div
                 className={undefined}

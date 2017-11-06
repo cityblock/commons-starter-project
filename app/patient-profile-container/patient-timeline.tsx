@@ -1,12 +1,16 @@
+import * as classNames from 'classnames';
 import * as React from 'react';
 import { graphql } from 'react-apollo';
+import { FormattedMessage } from 'react-intl';
 import * as patientEncountersQuery from '../graphql/queries/get-patient-encounters.graphql';
 import { FullPatientEncounterFragment } from '../graphql/types';
 import * as sortSearchStyles from '../shared/css/sort-search.css';
 import * as styles from './css/patient-encounters.css';
+import * as patientInfoStyles from './css/patient-info.css';
 import { EncountersLoadingError } from './encounters-loading-error';
 import Lightbox from './lightbox';
 import PatientEncounter from './patient-encounter';
+import ProgressNotePopup from './progress-note-popup';
 
 interface IProps {
   patientId: string;
@@ -21,7 +25,8 @@ interface IState {
   error?: string;
   clickedAttachment?: string;
   lightboxAttachments: string[];
-  lightboxIsOpen: boolean;
+  isLightboxOpen: boolean;
+  isProgressNotePopupVisible: boolean;
 }
 
 class PatientEncounters extends React.Component<IProps, IState> {
@@ -35,8 +40,16 @@ class PatientEncounters extends React.Component<IProps, IState> {
     this.reloadPatientEncounters = this.reloadPatientEncounters.bind(this);
     this.onClickAttachment = this.onClickAttachment.bind(this);
     this.onLightboxDismiss = this.onLightboxDismiss.bind(this);
+    this.showNewProgressNotePopup = this.showNewProgressNotePopup.bind(this);
+    this.hideNewProgressNotePopup = this.hideNewProgressNotePopup.bind(this);
 
-    this.state = { loading, error, lightboxIsOpen: false, lightboxAttachments: [] };
+    this.state = {
+      loading,
+      error,
+      isLightboxOpen: false,
+      lightboxAttachments: [],
+      isProgressNotePopupVisible: false,
+    };
   }
 
   componentWillReceiveProps(nextProps: IProps) {
@@ -107,10 +120,29 @@ class PatientEncounters extends React.Component<IProps, IState> {
     }
   }
 
+  showNewProgressNotePopup() {
+    this.setState({
+      isProgressNotePopupVisible: true,
+    });
+  }
+
+  hideNewProgressNotePopup() {
+    this.setState({
+      isProgressNotePopupVisible: false,
+    });
+  }
+
   render() {
-    const { lightboxAttachments, clickedAttachment, lightboxIsOpen } = this.state;
-    const { patientEncounters } = this.props;
+    const {
+      lightboxAttachments,
+      clickedAttachment,
+      isLightboxOpen,
+      isProgressNotePopupVisible,
+    } = this.state;
+    const { patientEncounters, patientId } = this.props;
     const encountersList = patientEncounters || [];
+
+    const saveButtonStyles = classNames(patientInfoStyles.button, patientInfoStyles.saveButton);
 
     return (
       <div>
@@ -122,9 +154,16 @@ class PatientEncounters extends React.Component<IProps, IState> {
                 <option value="Newest first">Newest first</option>
               </select>
             </div>
+            <div className={classNames(sortSearchStyles.search, sortSearchStyles.searchLeftPad)}>
+              <input required type="text" placeholder="Search by user or keywords" />
+            </div>
           </div>
-          <div className={sortSearchStyles.search}>
-            <input required type="text" placeholder="Search by user or keywords" />
+          <div className={patientInfoStyles.saveButtonGroup}>
+            <div className={saveButtonStyles} onClick={this.showNewProgressNotePopup}>
+              <FormattedMessage id="patient.newProgressNote">
+                {(message: string) => <span>{message}</span>}
+              </FormattedMessage>
+            </div>
           </div>
         </div>
         <div className={styles.encountersPanel}>
@@ -132,9 +171,14 @@ class PatientEncounters extends React.Component<IProps, IState> {
         </div>
         <Lightbox
           images={lightboxAttachments}
-          isOpen={lightboxIsOpen}
+          isOpen={isLightboxOpen}
           openingImage={clickedAttachment}
           onDismiss={this.onLightboxDismiss}
+        />
+        <ProgressNotePopup
+          patientId={patientId}
+          visible={isProgressNotePopupVisible}
+          close={this.hideNewProgressNotePopup}
         />
       </div>
     );

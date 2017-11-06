@@ -63,6 +63,21 @@ describe('progress note model', () => {
     expect(progressNotes).toEqual([createdNote]);
   });
 
+  it('updates a progress note', async () => {
+    const progressNote = await ProgressNote.create({
+      patientId: patient.id,
+      userId: user.id,
+      progressNoteTemplateId: progressNoteTemplate.id,
+    });
+    const progressNoteTemplate2 = await ProgressNoteTemplate.create({
+      title: 'title 2',
+    });
+    const updatedNote = await ProgressNote.update(progressNote.id, {
+      progressNoteTemplateId: progressNoteTemplate2.id,
+    });
+    expect(updatedNote.progressNoteTemplateId).toBe(progressNoteTemplate2.id);
+  });
+
   it('completes a progress note', async () => {
     const progressNote = await ProgressNote.create({
       patientId: patient.id,

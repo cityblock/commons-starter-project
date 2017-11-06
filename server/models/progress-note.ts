@@ -1,5 +1,6 @@
 import { Model, RelationMappings, Transaction } from 'objection';
 import BaseModel from './base-model';
+import ProgressNoteTemplate from './progress-note-template';
 
 interface IProgressNoteEditableFields {
   patientId: string;
@@ -12,11 +13,14 @@ interface IProgressNoteAutoOpenFields {
   userId: string;
 }
 
+const EAGER_QUERY = 'progressNoteTemplate';
+
 /* tslint:disable:member-ordering */
 export default class ProgressNote extends BaseModel {
   patientId: string;
   userId: string;
-  progressNoteTemplateId: string;
+  progressNoteTemplateId?: string;
+  progressNoteTemplate?: ProgressNoteTemplate;
   startedAt: string;
   completedAt: string;
 
@@ -35,7 +39,7 @@ export default class ProgressNote extends BaseModel {
     },
   };
 
-  static relationalMappings: RelationMappings = {
+  static relationMappings: RelationMappings = {
     /**
      *  Future relations
      * - Task Events - join on task events with a progress note id
@@ -53,7 +57,6 @@ export default class ProgressNote extends BaseModel {
         to: 'patient.id',
       },
     },
-
     user: {
       relation: Model.HasOneRelation,
       modelClass: 'user',
@@ -62,16 +65,14 @@ export default class ProgressNote extends BaseModel {
         to: 'user.id',
       },
     },
-
     progressNoteTemplate: {
       relation: Model.HasOneRelation,
-      modelClass: 'progress-note',
+      modelClass: 'progress-note-template',
       join: {
         from: 'progress_note.progressNoteTemplateId',
         to: 'progress_note_template.id',
       },
     },
-
     taskEvents: {
       relation: Model.HasManyRelation,
       modelClass: 'task-event',
@@ -83,10 +84,12 @@ export default class ProgressNote extends BaseModel {
   };
 
   static async get(progressNoteId: string, txn?: Transaction): Promise<ProgressNote> {
-    const progressNote = await this.query(txn).findOne({
-      id: progressNoteId,
-      deletedAt: null,
-    });
+    const progressNote = await this.query(txn)
+      .eager(EAGER_QUERY)
+      .findOne({
+        id: progressNoteId,
+        deletedAt: null,
+      });
     if (!progressNote) {
       return Promise.reject(`No such progress note: ${progressNoteId}`);
     }
@@ -95,39 +98,55 @@ export default class ProgressNote extends BaseModel {
 
   static async getAllForPatient(patientId: string): Promise<ProgressNote[]> {
     return this.query()
+      .eager(EAGER_QUERY)
       .orderBy('createdAt', 'asc')
       .where({ deletedAt: null, patientId });
   }
 
   static async create(input: IProgressNoteEditableFields) {
-    return this.query().insertAndFetch(input);
+    return this.query()
+      .eager(EAGER_QUERY)
+      .insertAndFetch(input);
+  }
+
+  static async update(progressNoteId: string, progressNote: Partial<IProgressNoteEditableFields>) {
+    return this.query()
+      .eager(EAGER_QUERY)
+      .updateAndFetchById(progressNoteId, progressNote);
   }
 
   static async autoOpenIfRequired(input: IProgressNoteAutoOpenFields, txn?: Transaction) {
     const { patientId, userId } = input;
 
-    const existingProgressNote = await this.query(txn).findOne({
-      deletedAt: null,
-      completedAt: null,
-      patientId,
-      userId,
-    });
+    const existingProgressNote = await this.query(txn)
+      .eager(EAGER_QUERY)
+      .findOne({
+        deletedAt: null,
+        completedAt: null,
+        patientId,
+        userId,
+      });
 
     if (!existingProgressNote) {
-      return await this.query(txn).insertAndFetch(input);
+      return await this.query(txn)
+        .eager(EAGER_QUERY)
+        .insertAndFetch(input);
     }
 
     return existingProgressNote;
   }
 
   static async complete(progressNoteId: string): Promise<ProgressNote> {
-    return await this.query().updateAndFetchById(progressNoteId, {
-      completedAt: new Date().toISOString(),
-    });
+    return await this.query()
+      .eager(EAGER_QUERY)
+      .updateAndFetchById(progressNoteId, {
+        completedAt: new Date().toISOString(),
+      });
   }
 
   static async delete(progressNoteId: string) {
     await this.query()
+      .eager(EAGER_QUERY)
       .where({ id: progressNoteId, deletedAt: null })
       .update({ deletedAt: new Date().toISOString() });
 

@@ -591,7 +591,7 @@ export class RiskAreaAssessment extends React.Component<IProps, IState> {
           </div>
         </div>
         <div className={styles.riskAreasPanel}>{assessmentHtml}</div>
-        <Popup visible={selectingScreeningTool} smallPadding={true}>
+        <Popup visible={selectingScreeningTool} style={'small-padding'}>
           <ScreeningToolsPopup
             screeningTools={screeningTools}
             onDismiss={this.onDismissScreeningToolSelect}

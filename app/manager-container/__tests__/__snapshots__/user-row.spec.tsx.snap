@@ -86,7 +86,7 @@ exports[`user row renders manager users with users 1`] = `
         Delete User
       </span>
     </div>
+    <div />
   </div>
-  <div />
 </div>
 `;

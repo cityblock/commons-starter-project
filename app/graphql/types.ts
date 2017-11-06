@@ -2944,6 +2944,76 @@ export type patientSetupMutation = {
   } | null,
 };
 
+export type progressNoteCompleteMutationVariables = {
+  progressNoteId: string,
+};
+
+export type progressNoteCompleteMutation = {
+  // completes a progress note
+  progressNoteComplete:  {
+    id: string,
+    patientId: string,
+    userId: string,
+    completedAt: string | null,
+    createdAt: string,
+    updatedAt: string,
+    deletedAt: string | null,
+    progressNoteTemplate:  {
+      id: string,
+      title: string,
+      createdAt: string,
+      deletedAt: string | null,
+    } | null,
+  } | null,
+};
+
+export type progressNoteEditMutationVariables = {
+  progressNoteId: string,
+  progressNoteTemplateId: string,
+};
+
+export type progressNoteEditMutation = {
+  // edits a progress note
+  progressNoteEdit:  {
+    id: string,
+    patientId: string,
+    userId: string,
+    completedAt: string | null,
+    createdAt: string,
+    updatedAt: string,
+    deletedAt: string | null,
+    progressNoteTemplate:  {
+      id: string,
+      title: string,
+      createdAt: string,
+      deletedAt: string | null,
+    } | null,
+  } | null,
+};
+
+export type progressNoteGetOrCreateMutationVariables = {
+  patientId: string,
+};
+
+export type progressNoteGetOrCreateMutation = {
+  // get or create a progress note
+  progressNoteGetOrCreate:  {
+    id: string,
+    patientId: string,
+    userId: string,
+    completedAt: string | null,
+    createdAt: string,
+    updatedAt: string,
+    deletedAt: string | null,
+    progressNoteTemplate:  {
+      id: string,
+      title: string,
+      createdAt: string,
+      deletedAt: string | null,
+    } | null,
+  } | null,
+};
+
 export type progressNoteTemplateCreateMutationVariables = {
   title: string,
 };
@@ -4869,6 +4939,22 @@ export type FullProgressNoteTemplateFragment = {
   title: string,
   createdAt: string,
   deletedAt: string | null,
+};
+
+export type FullProgressNoteFragment = {
+  id: string,
+  patientId: string,
+  userId: string,
+  completedAt: string | null,
+  createdAt: string,
+  updatedAt: string,
+  deletedAt: string | null,
+  progressNoteTemplate:  {
+    id: string,
+    title: string,
+    createdAt: string,
+    deletedAt: string | null,
+  } | null,
 };
 
 export type FullQuestionConditionFragment = {

@@ -1,0 +1,87 @@
+@import '../../shared/css/sizes';
+
+.tabContainer {}
+
+.topBar {
+  width: 100%;
+  background: var(--blue-color);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+}
+
+.topBarLabel {
+  color: var(--light-blue-color);
+  font-family: var(--basetica-medium);
+  font-size: var(--default-font-size);
+}
+
+.closeButton {
+  background: url('../../assets/chevron-down-white.svg');
+  background-repeat: no-repeat;
+  background-position: center center;
+  padding: 10px;
+  width: 15px;
+  height: 15px;
+  cursor: pointer;
+  opacity: 1;
+  transition: opacity 0.6s ease-in-out;
+}
+
+.closeButton:hover {
+  transition: opacity 0.3s ease-in-out;
+  opacity: 0.8;
+}
+
+.middleBar {
+  display: flex;
+  justify-content: space-between;
+  padding: 16px 20px;
+  background: var(--white-font-color);
+}
+
+.button {
+  @apply --button;
+  height: 32px;
+  padding: 8px 33px 7px;
+}
+
+.encounterTypeContainer {
+  background: var(--white-font-color);
+  padding: 20px;
+}
+
+.encounterTypeLabel {
+  font-family: var(--basetica-medium);
+  font-size: var(--default-font-size);
+}
+
+.encounterTypeSelect {
+  @apply --select;
+}
+
+.patientContainer {}
+
+.patientPhoto {
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center center;
+  width: 43px;
+  height: 43px;
+  display: inline-block;
+  vertical-align: top;
+}
+
+.patientContainerRight {
+  margin-left: 20px;
+  display: inline-block;
+  vertical-align: top;
+}
+
+.patientName {
+  font-weight: var(--roboto-medium-weight);
+  font-size: var(--medium-font-size);
+}
+
+.openedAt {}

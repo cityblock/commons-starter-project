@@ -1,10 +1,14 @@
-import { IProgressNoteCompleteInput, IProgressNoteCreateInput } from 'schema';
+import {
+  IProgressNoteCompleteInput,
+  IProgressNoteEditInput,
+  IProgressNoteGetOrCreateInput,
+} from 'schema';
 import ProgressNote from '../models/progress-note';
 import accessControls from './shared/access-controls';
 import { checkUserLoggedIn, IContext } from './shared/utils';
 
-interface IProgressNoteCreateArgs {
-  input: IProgressNoteCreateInput;
+interface IProgressNoteGetOrCreateArgs {
+  input: IProgressNoteGetOrCreateInput;
 }
 
 interface IResolveProgressNoteOptions {
@@ -19,16 +23,20 @@ interface ICompleteProgressNoteOptions {
   input: IProgressNoteCompleteInput;
 }
 
-export async function progressNoteCreate(
+interface IEditProgressNoteOptions {
+  input: IProgressNoteEditInput;
+}
+
+export async function progressNoteGetOrCreate(
   root: any,
-  { input }: IProgressNoteCreateArgs,
+  { input }: IProgressNoteGetOrCreateArgs,
   context: IContext,
 ) {
   const { userRole, userId } = context;
   await accessControls.isAllowed(userRole, 'create', 'progressNote');
   checkUserLoggedIn(userId);
 
-  return await ProgressNote.create({ ...input, userId: userId! });
+  return await ProgressNote.autoOpenIfRequired({ ...input, userId: userId! });
 }
 
 export async function progressNoteComplete(
@@ -41,6 +49,20 @@ export async function progressNoteComplete(
   checkUserLoggedIn(userId);
 
   return await ProgressNote.complete(input.progressNoteId);
+}
+
+export async function progressNoteEdit(
+  root: any,
+  { input }: IEditProgressNoteOptions,
+  context: IContext,
+) {
+  const { userRole, userId } = context;
+  await accessControls.isAllowed(userRole, 'edit', 'progressNote');
+  checkUserLoggedIn(userId);
+
+  return await ProgressNote.update(input.progressNoteId, {
+    progressNoteTemplateId: input.progressNoteTemplateId,
+  });
 }
 
 export async function resolveProgressNote(

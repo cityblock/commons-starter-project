@@ -630,9 +630,9 @@ type ProgressNote implements uniqueId {
   patient: Patient!
   userId: String!
   user: User!
-  progressNoteTemplateId: String!
-  progressNoteTemplate: ProgressNoteTemplate!
-  completedAt: String!
+  progressNoteTemplateId: String
+  progressNoteTemplate: ProgressNoteTemplate
+  completedAt: String
   createdAt: String!
   updatedAt: String!
   deletedAt: String
@@ -1126,13 +1126,17 @@ input ProgressNoteTemplateEditInput {
   title: String!
 }
 
-input ProgressNoteCreateInput {
-  progressNoteTemplateId: String!
+input ProgressNoteGetOrCreateInput {
   patientId: String!
 }
 
 input ProgressNoteCompleteInput {
   progressNoteId: String!
+}
+
+input ProgressNoteEditInput {
+  progressNoteId: String!
+  progressNoteTemplateId: String!
 }
 
 type RootMutationType {
@@ -1298,10 +1302,12 @@ type RootMutationType {
   progressNoteTemplateEdit(input: ProgressNoteTemplateEditInput): ProgressNoteTemplate
   # deletes a progress note template
   progressNoteTemplateDelete(input: ProgressNoteTemplateDeleteInput): ProgressNoteTemplate
-  # create a progress note
-  progressNoteCreate(input: ProgressNoteCreateInput): ProgressNote
+  # get or create a progress note
+  progressNoteGetOrCreate(input: ProgressNoteGetOrCreateInput): ProgressNote
   # completes a progress note
   progressNoteComplete(input: ProgressNoteCompleteInput): ProgressNote
+  # edits a progress note
+  progressNoteEdit(input: ProgressNoteEditInput): ProgressNote
 }
 
 type RootQueryType {

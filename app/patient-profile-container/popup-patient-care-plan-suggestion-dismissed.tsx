@@ -92,7 +92,7 @@ class PopupPatientCarePlanSuggestionDismissed extends React.Component<allProps, 
     const { dismissedReason } = this.state;
 
     return (
-      <Popup visible={visible} smallPadding={true}>
+      <Popup visible={visible} style={'small-padding'}>
         <div className={styles.acceptModalContent}>
           <div className={styles.acceptModalHeader}>
             <div className={styles.acceptModalDismissButton} onClick={this.onDismiss} />

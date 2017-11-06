@@ -1,0 +1,12 @@
+#import "../fragments/full-progress-note-template.graphql"
+
+fragment FullProgressNote on ProgressNote {
+  id
+  patientId
+  userId
+  completedAt
+  createdAt
+  updatedAt
+  deletedAt
+  progressNoteTemplate { ...FullProgressNoteTemplate }
+}

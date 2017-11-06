@@ -5,7 +5,7 @@ exports[`renders popup for concern suggestion 1`] = `
   className={undefined}
 >
   <div
-    className="undefined"
+    className=""
   >
     <div
       className={undefined}
@@ -81,7 +81,7 @@ exports[`renders popup for goal suggestion 1`] = `
   className={undefined}
 >
   <div
-    className="undefined"
+    className=""
   >
     <div
       className={undefined}

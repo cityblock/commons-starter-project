@@ -5,7 +5,6 @@ import { Link } from 'react-router-dom';
 import * as tabStyles from '../shared/css/tabs.css';
 import { IState as IAppState } from '../store';
 import * as styles from './css/manager.css';
-import ManagerLeftNav from './manager-left-nav';
 import ManagerUsers from './manager-users';
 
 interface IProps {
@@ -36,7 +35,6 @@ class ManagerContainer extends React.Component<IProps, {}> {
     ) : null;
     return (
       <div className={styles.container}>
-        <ManagerLeftNav />
         <div className={styles.mainBody}>
           <div className={tabStyles.tabs}>
             <Link to={`/manager/users`} className={usersTabStyles}>

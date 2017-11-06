@@ -7,11 +7,6 @@ exports[`renders manager container 1`] = `
   <div
     className={undefined}
   >
-    left nav
-  </div>
-  <div
-    className={undefined}
-  >
     <div
       className={undefined}
     >

@@ -862,9 +862,9 @@ declare module 'schema' {
     patient: IPatient;
     userId: string;
     user: IUser;
-    progressNoteTemplateId: string;
-    progressNoteTemplate: IProgressNoteTemplate;
-    completedAt: string;
+    progressNoteTemplateId: string | null;
+    progressNoteTemplate: IProgressNoteTemplate | null;
+    completedAt: string | null;
     createdAt: string;
     updatedAt: string;
     deletedAt: string | null;
@@ -1185,13 +1185,17 @@ declare module 'schema' {
   */
     progressNoteTemplateDelete: IProgressNoteTemplate | null;
     /**
-    description: create a progress note
+    description: get or create a progress note
   */
-    progressNoteCreate: IProgressNote | null;
+    progressNoteGetOrCreate: IProgressNote | null;
     /**
     description: completes a progress note
   */
     progressNoteComplete: IProgressNote | null;
+    /**
+    description: edits a progress note
+  */
+    progressNoteEdit: IProgressNote | null;
   }
 
   /**
@@ -1822,14 +1826,19 @@ declare module 'schema' {
   }
 
 
-  interface IProgressNoteCreateInput {
-    progressNoteTemplateId: string;
+  interface IProgressNoteGetOrCreateInput {
     patientId: string;
   }
 
 
   interface IProgressNoteCompleteInput {
     progressNoteId: string;
+  }
+
+
+  interface IProgressNoteEditInput {
+    progressNoteId: string;
+    progressNoteTemplateId: string;
   }
 
 

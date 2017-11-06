@@ -3,6 +3,7 @@ import * as langs from 'langs';
 import * as React from 'react';
 import { FormattedMessage, InjectedIntl } from 'react-intl';
 import { ShortPatientFragment } from '../graphql/types';
+import { getPatientFirstAndMiddleName } from '../shared/util/patient-name';
 import * as styles from './css/patient-profile-left-nav.css';
 import PatientScratchPad from './patient-scratch-pad';
 
@@ -14,14 +15,6 @@ interface IProps {
 }
 
 const GENDER: any = { F: 'Female', M: 'Male' };
-
-const getPatientFirstAndMiddleName = (patient: ShortPatientFragment) => {
-  if (patient.middleName) {
-    return `${patient.firstName} ${patient.middleName.charAt(0)}.`;
-  } else {
-    return patient.firstName;
-  }
-};
 
 export default class PatientLeftNavInfo extends React.Component<IProps, {}> {
   props: IProps;
@@ -35,7 +28,7 @@ export default class PatientLeftNavInfo extends React.Component<IProps, {}> {
   renderPatientHeader() {
     const { patient, condensedPatientInfo, intl } = this.props;
     const firstName = patient ? getPatientFirstAndMiddleName(patient) : 'Unknown';
-    const lastName = patient ? patient.lastName : 'Unknown';
+    const lastName = patient && patient.lastName ? patient.lastName : null;
     // TODO: this is a bad fallback
     const patientAge =
       patient && patient.dateOfBirth

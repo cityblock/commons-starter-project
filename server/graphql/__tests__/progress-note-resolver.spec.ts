@@ -49,14 +49,14 @@ describe('progress note resolver', () => {
 
   it('creates a progress note', async () => {
     const mutation = `mutation {
-        progressNoteCreate(input:
-          { patientId: "${patient.id}", progressNoteTemplateId: "${progressNoteTemplate.id}" }
+        progressNoteGetOrCreate(input:
+          { patientId: "${patient.id}" }
         ) {
           userId, patientId
         }
       }`;
     const result = await graphql(schema, mutation, null, { userRole, userId: user.id });
-    expect(cloneDeep(result.data!.progressNoteCreate)).toMatchObject({
+    expect(cloneDeep(result.data!.progressNoteGetOrCreate)).toMatchObject({
       userId: user.id,
       patientId: patient.id,
     });
@@ -79,6 +79,30 @@ describe('progress note resolver', () => {
     expect(cloneDeep(result.data!.progressNoteComplete)).toMatchObject({
       id: progressNote.id,
     });
+  });
+
+  it('edits a progress note', async () => {
+    const progressNote = await ProgressNote.create({
+      patientId: patient.id,
+      userId: user.id,
+      progressNoteTemplateId: progressNoteTemplate.id,
+    });
+    const progressNoteTemplate2 = await ProgressNoteTemplate.create({
+      title: 'title 2',
+    });
+    const mutation = `mutation {
+        progressNoteEdit(input: {
+          progressNoteId: "${progressNote.id}"
+          progressNoteTemplateId: "${progressNoteTemplate2.id}"
+        }) {
+          id
+          progressNoteTemplate { id }
+        }
+      }`;
+    const result = await graphql(schema, mutation, null, { userRole, userId: user.id });
+    expect(cloneDeep(result.data!.progressNoteEdit.progressNoteTemplate.id)).toEqual(
+      progressNoteTemplate2.id,
+    );
   });
 
   describe('progress notes', () => {

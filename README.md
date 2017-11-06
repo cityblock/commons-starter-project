@@ -36,6 +36,7 @@ Tech wise, this app is an Express server running GraphQL and PostgreSQL (Objecti
     psql -d commons_test -c "create extension if not exists btree_gist"
     ```
 
+- Run migrations with `yarn migrate`
 - Seed development database with `yarn seed`
 - [Add your user account](#add-a-new-user)
 
@@ -52,6 +53,10 @@ Next run:
     NODE_ENV=test yarn migrate
 
 This will setup the test database and you should be good to go.
+
+To actually run the tests, use:
+
+    yarn test
 
 ### Making changes
 
@@ -231,7 +236,7 @@ master.
 
 Before a new user can log in, they need to be added to the database. To do so, run the following command:
 
-`EMAIL=email@email.com FIRST_NAME=firstName LAST_NAME=lastName PROVIDER_ID=athenaProviderId yarn user:add:dev`
+`EMAIL=email@email.com FIRST_NAME=firstName LAST_NAME=lastName PROVIDER_ID=[some integer] yarn user:add:dev`
 
 When running on production, replace `user:add:dev` with `user:add:production`. You may also provide a `USER_ROLE` environment variable in front of the command if you would like the user to be anything other than a physician.
 

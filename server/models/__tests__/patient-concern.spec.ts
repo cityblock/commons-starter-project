@@ -1,7 +1,13 @@
 import * as uuid from 'uuid/v4';
 import Db from '../../db';
-import { createMockPatient, createPatient } from '../../spec-helpers';
+import {
+  createMockClinic,
+  createMockPatient,
+  createMockUser,
+  createPatient,
+} from '../../spec-helpers';
 import CarePlanUpdateEvent from '../care-plan-update-event';
+import Clinic from '../clinic';
 import Concern from '../concern';
 import Patient from '../patient';
 import PatientConcern from '../patient-concern';
@@ -10,13 +16,13 @@ import Task from '../task';
 import User from '../user';
 
 const userRole = 'physician';
-const homeClinicId = uuid();
 
 describe('patient concern model', () => {
   let db: Db;
   let concern: Concern;
   let patient: Patient;
   let user: User;
+  let clinic: Clinic;
 
   beforeEach(async () => {
     db = await Db.get();
@@ -25,12 +31,9 @@ describe('patient concern model', () => {
     concern = await Concern.create({
       title: 'Housing',
     });
-    user = await User.create({
-      email: 'care@care.com',
-      userRole,
-      homeClinicId,
-    });
-    patient = await createPatient(createMockPatient(123), user.id);
+    clinic = await Clinic.create(createMockClinic());
+    user = await User.create(createMockUser(11, clinic.id, userRole));
+    patient = await createPatient(createMockPatient(123, clinic.id), user.id);
   });
 
   afterAll(async () => {
@@ -149,7 +152,7 @@ describe('patient concern model', () => {
     const concern2 = await Concern.create({
       title: 'Food',
     });
-    const patient2 = await createPatient(createMockPatient(456), user.id);
+    const patient2 = await createPatient(createMockPatient(456, clinic.id), user.id);
     await PatientConcern.create({
       concernId: concern.id,
       patientId: patient.id,

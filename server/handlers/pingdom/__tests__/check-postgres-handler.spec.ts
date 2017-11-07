@@ -1,7 +1,8 @@
 import * as httpMocks from 'node-mocks-http';
-import * as uuid from 'uuid/v4';
 import Db from '../../../db';
+import Clinic from '../../../models/clinic';
 import User from '../../../models/user';
+import { createMockClinic } from '../../../spec-helpers';
 import { checkPostgresHandler } from '../check-postgres-handler';
 
 describe('postgres pingdom test', () => {
@@ -26,12 +27,13 @@ describe('postgres pingdom test', () => {
     const response = httpMocks.createResponse();
     response.sendStatus = jest.fn();
 
+    const clinic = await Clinic.create(createMockClinic());
     await User.create({
       email: 'brennan@cityblock.com',
       firstName: 'Bertrand',
       lastName: 'Russell',
       userRole,
-      homeClinicId: uuid(),
+      homeClinicId: clinic.id,
     });
 
     await checkPostgresHandler(request, response);

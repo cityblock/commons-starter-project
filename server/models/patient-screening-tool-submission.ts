@@ -211,12 +211,14 @@ export default class PatientScreeningToolSubmission extends BaseModel {
     if (screeningToolId) {
       return await this.query()
         .eager(EAGER_QUERY)
-        .where({ patientId, screeningToolId });
+        .where({ patientId, screeningToolId })
+        .orderBy('createdAt', 'asc');
     }
 
     return await this.query()
       .eager(EAGER_QUERY)
-      .where({ patientId });
+      .where({ patientId })
+      .orderBy('createdAt', 'asc');
   }
 
   static async getLatestForPatientAndScreeningTool(
@@ -240,7 +242,8 @@ export default class PatientScreeningToolSubmission extends BaseModel {
     // Note that this returns only current submissions (not deleted ones)
     return await this.query()
       .eager(EAGER_QUERY)
-      .where({ deletedAt: null });
+      .where({ deletedAt: null })
+      .orderBy('createdAt', 'asc');
   }
 
   static async delete(

@@ -1,33 +1,33 @@
 import { graphql } from 'graphql';
 import { cloneDeep } from 'lodash';
-import * as uuid from 'uuid/v4';
 import Db from '../../db';
+import Clinic from '../../models/clinic';
 import Task from '../../models/task';
 import TaskComment from '../../models/task-comment';
 import TaskEvent from '../../models/task-event';
 import User from '../../models/user';
-import { createMockPatient, createPatient } from '../../spec-helpers';
+import {
+  createMockClinic,
+  createMockPatient,
+  createMockUser,
+  createPatient,
+} from '../../spec-helpers';
 import schema from '../make-executable-schema';
 
 describe('task comments', () => {
   let db: Db;
   let task: Task;
   let user: User;
+  let clinic: Clinic;
   const userRole = 'physician';
-  const homeClinicId = uuid();
 
   beforeEach(async () => {
     db = await Db.get();
     await Db.clear();
 
-    user = await User.create({
-      email: 'a@b.com',
-      firstName: 'Dan',
-      lastName: 'Plant',
-      userRole,
-      homeClinicId,
-    });
-    const patient = await createPatient(createMockPatient(), user.id);
+    clinic = await Clinic.create(createMockClinic());
+    user = await User.create(createMockUser(11, clinic.id, userRole));
+    const patient = await createPatient(createMockPatient(11, clinic.id), user.id);
     const dueAt = new Date().toISOString();
     task = await Task.create({
       title: 'title',

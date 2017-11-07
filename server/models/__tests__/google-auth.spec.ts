@@ -1,5 +1,6 @@
-import * as uuid from 'uuid/v4';
 import Db from '../../db';
+import { createMockClinic, createMockUser } from '../../spec-helpers';
+import Clinic from '../clinic';
 import GoogleAuth from '../google-auth';
 import User from '../user';
 
@@ -16,13 +17,9 @@ describe('google auth model', () => {
   });
 
   it('should get and create', async () => {
-    const user = await User.create({
-      email: 'care@care.com',
-      firstName: 'Dan',
-      lastName: 'Plant',
-      userRole: 'physician',
-      homeClinicId: uuid(),
-    });
+    const clinic = await Clinic.create(createMockClinic());
+    const user = await User.create(createMockUser(11, clinic.id, 'physician', 'care@care.com'));
+
     const googleAuth = await GoogleAuth.updateOrCreate({
       accessToken: 'accessToken',
       expiresAt: 'expires!',

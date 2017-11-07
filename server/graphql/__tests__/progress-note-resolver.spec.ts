@@ -1,12 +1,17 @@
 import { graphql } from 'graphql';
 import { cloneDeep } from 'lodash';
-import * as uuid from 'uuid/v4';
 import Db from '../../db';
+import Clinic from '../../models/clinic';
 import Patient from '../../models/patient';
 import ProgressNote from '../../models/progress-note';
 import ProgressNoteTemplate from '../../models/progress-note-template';
 import User from '../../models/user';
-import { createMockPatient, createPatient } from '../../spec-helpers';
+import {
+  createMockClinic,
+  createMockPatient,
+  createMockUser,
+  createPatient,
+} from '../../spec-helpers';
 import schema from '../make-executable-schema';
 
 describe('progress note resolver', () => {
@@ -15,13 +20,15 @@ describe('progress note resolver', () => {
   let progressNoteTemplate: ProgressNoteTemplate;
   let user: User;
   let patient: Patient;
+  let clinic: Clinic;
 
   beforeEach(async () => {
     db = await Db.get();
     await Db.clear();
 
-    user = await User.create({ email: 'a@b.com', userRole, homeClinicId: uuid() });
-    patient = await createPatient(createMockPatient(123), user.id);
+    clinic = await Clinic.create(createMockClinic());
+    user = await User.create(createMockUser(11, clinic.id, userRole, 'a@b.com'));
+    patient = await createPatient(createMockPatient(123, clinic.id), user.id);
     progressNoteTemplate = await ProgressNoteTemplate.create({
       title: 'title',
     });

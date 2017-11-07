@@ -1,12 +1,17 @@
 import { graphql } from 'graphql';
 import { IEventNotificationNode } from 'schema';
-import * as uuid from 'uuid/v4';
 import Db from '../../db';
+import Clinic from '../../models/clinic';
 import EventNotification from '../../models/event-notification';
 import Task from '../../models/task';
 import TaskEvent from '../../models/task-event';
 import User from '../../models/user';
-import { createMockPatient, createPatient } from '../../spec-helpers';
+import {
+  createMockClinic,
+  createMockPatient,
+  createMockUser,
+  createPatient,
+} from '../../spec-helpers';
 import schema from '../make-executable-schema';
 
 describe('event notification tests', () => {
@@ -17,19 +22,15 @@ describe('event notification tests', () => {
   let user: User;
   let user2: User;
   let patient;
-  const homeClinicId = uuid();
+  let clinic: Clinic;
 
   beforeEach(async () => {
     db = await Db.get();
     await Db.clear();
-
-    user = await User.create({ email: 'a@b.com', userRole, homeClinicId });
-    user2 = await User.create({
-      email: 'b@c.com',
-      userRole,
-      homeClinicId,
-    });
-    patient = await createPatient(createMockPatient(123), user.id);
+    clinic = await Clinic.create(createMockClinic());
+    user = await User.create(createMockUser(11, clinic.id, userRole));
+    user2 = await User.create(createMockUser(11, clinic.id, userRole, 'b@c.com'));
+    patient = await createPatient(createMockPatient(123, clinic.id), user.id);
     const dueAt = new Date().toISOString();
     task = await Task.create({
       title: 'title',

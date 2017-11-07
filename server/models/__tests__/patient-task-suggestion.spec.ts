@@ -1,24 +1,33 @@
 import * as uuid from 'uuid/v4';
 import Db from '../../db';
-import { createMockPatient, createPatient } from '../../spec-helpers';
+import {
+  createMockClinic,
+  createMockPatient,
+  createMockUser,
+  createPatient,
+} from '../../spec-helpers';
+import Clinic from '../clinic';
 import Patient from '../patient';
 import PatientTaskSuggestion from '../patient-task-suggestion';
 import TaskTemplate from '../task-template';
 import User from '../user';
+
+const userRole = 'physician';
 
 describe('patient task suggestion', () => {
   let db: Db;
   let patient: Patient;
   let user: User;
   let taskTemplate: TaskTemplate;
-  const homeClinicId = uuid();
+  let clinic: Clinic;
 
   beforeEach(async () => {
     db = await Db.get();
     await Db.clear();
 
-    user = await User.create({ email: 'user@email.com', homeClinicId, userRole: 'physician' });
-    patient = await createPatient(createMockPatient(123, homeClinicId), user.id);
+    clinic = await Clinic.create(createMockClinic());
+    user = await User.create(createMockUser(11, clinic.id, userRole));
+    patient = await createPatient(createMockPatient(123, clinic.id), user.id);
     taskTemplate = await TaskTemplate.create({
       title: 'Housing',
       repeating: false,

@@ -1,8 +1,14 @@
 import * as uuid from 'uuid/v4';
 import Db from '../../db';
-import { createMockPatient, createPatient } from '../../spec-helpers';
+import {
+  createMockClinic,
+  createMockPatient,
+  createMockUser,
+  createPatient,
+} from '../../spec-helpers';
 import Answer from '../answer';
 import CarePlanSuggestion from '../care-plan-suggestion';
+import Clinic from '../clinic';
 import Concern from '../concern';
 import ConcernSuggestion from '../concern-suggestion';
 import PatientAnswer from '../patient-answer';
@@ -19,7 +25,7 @@ describe('concern suggestion model', () => {
   let answer: Answer;
   let question: Question;
   let riskArea: RiskArea;
-  const homeClinicId = uuid();
+  let clinic: Clinic;
 
   beforeEach(async () => {
     db = await Db.get();
@@ -113,14 +119,11 @@ describe('concern suggestion model', () => {
     });
 
     it('returns concern suggestions for a patient', async () => {
-      const user = await User.create({
-        email: 'care@care.com',
-        userRole: 'physician',
-        homeClinicId,
-      });
+      clinic = await Clinic.create(createMockClinic());
+      const user = await User.create(createMockUser(11, clinic.id, 'physician'));
       const concern1 = await Concern.create({ title: 'Housing' });
       const concern2 = await Concern.create({ title: 'Food' });
-      const patient = await createPatient(createMockPatient(123), user.id);
+      const patient = await createPatient(createMockPatient(123, clinic.id), user.id);
       const question2 = await Question.create({
         title: 'hate writing tests?',
         answerType: 'dropdown',
@@ -215,14 +218,11 @@ describe('concern suggestion model', () => {
     });
 
     it('does not return concern suggestions where one already exists', async () => {
-      const user = await User.create({
-        email: 'care@care.com',
-        userRole: 'physician',
-        homeClinicId,
-      });
+      clinic = await Clinic.create(createMockClinic());
+      const user = await User.create(createMockUser(11, clinic.id, 'physician'));
       const concern1 = await Concern.create({ title: 'Housing' });
       const concern2 = await Concern.create({ title: 'Food' });
-      const patient = await createPatient(createMockPatient(123), user.id);
+      const patient = await createPatient(createMockPatient(123, clinic.id), user.id);
       const question2 = await Question.create({
         title: 'hate writing tests?',
         answerType: 'dropdown',
@@ -319,14 +319,11 @@ describe('concern suggestion model', () => {
     });
 
     it('does not return suggestions for concerns that are already in the care plan', async () => {
-      const user = await User.create({
-        email: 'care@care.com',
-        userRole: 'physician',
-        homeClinicId,
-      });
+      clinic = await Clinic.create(createMockClinic());
+      const user = await User.create(createMockUser(11, clinic.id, 'physician'));
       const concern1 = await Concern.create({ title: 'Housing' });
       const concern2 = await Concern.create({ title: 'Food' });
-      const patient = await createPatient(createMockPatient(123), user.id);
+      const patient = await createPatient(createMockPatient(123, clinic.id), user.id);
       const question2 = await Question.create({
         title: 'hate writing tests?',
         answerType: 'dropdown',
@@ -427,12 +424,9 @@ describe('concern suggestion model', () => {
     });
 
     it('gets new concern suggestions based on screening tool score ranges', async () => {
-      const user = await User.create({
-        email: 'care@care.com',
-        userRole: 'physician',
-        homeClinicId,
-      });
-      const patient = await createPatient(createMockPatient(123), user.id);
+      clinic = await Clinic.create(createMockClinic());
+      const user = await User.create(createMockUser(11, clinic.id, 'physician'));
+      const patient = await createPatient(createMockPatient(123, clinic.id), user.id);
       const concern = await Concern.create({ title: 'Housing' });
       const screeningTool = await ScreeningTool.create({ title: 'Test', riskAreaId: riskArea.id });
       const screeningToolScoreRange = await ScreeningToolScoreRange.create({
@@ -459,13 +453,10 @@ describe('concern suggestion model', () => {
     });
 
     it('dedupes the same concern suggestion for an answer and score range', async () => {
-      const user = await User.create({
-        email: 'care@care.com',
-        userRole: 'physician',
-        homeClinicId,
-      });
+      clinic = await Clinic.create(createMockClinic());
+      const user = await User.create(createMockUser(11, clinic.id, 'physician'));
 
-      const patient = await createPatient(createMockPatient(123), user.id);
+      const patient = await createPatient(createMockPatient(123, clinic.id), user.id);
       const concern = await Concern.create({ title: 'Housing' });
       const screeningTool = await ScreeningTool.create({ title: 'Test', riskAreaId: riskArea.id });
       const screeningToolScoreRange = await ScreeningToolScoreRange.create({

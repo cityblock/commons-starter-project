@@ -1,6 +1,8 @@
 import * as uuid from 'uuid/v4';
 import Db from '../../db';
+import Clinic from '../../models/clinic';
 import User from '../../models/user';
+import { createMockClinic } from '../../spec-helpers';
 
 import {
   getGraphQLContext,
@@ -69,11 +71,12 @@ describe('util tests', () => {
   describe('old tokens', () => {
     it('errors for token when the user has more recently logged in on another device', async () => {
       const now = new Date();
+      const clinic = await Clinic.create(createMockClinic());
       // user with newer loginTime
       const user = await User.create({
         email: 'a@b.com',
         userRole: 'physician',
-        homeClinicId: uuid(),
+        homeClinicId: clinic.id,
       });
       await User.update(user.id, { lastLoginAt: now.toISOString() });
 

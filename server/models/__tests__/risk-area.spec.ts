@@ -1,14 +1,18 @@
 import * as uuid from 'uuid/v4';
 import Db from '../../db';
 import Answer from '../../models/answer';
+import Clinic from '../../models/clinic';
 import Patient from '../../models/patient';
 import PatientAnswer from '../../models/patient-answer';
 import Question from '../../models/question';
 import RiskArea from '../../models/risk-area';
 import User from '../../models/user';
-import { createMockPatient, createPatient } from '../../spec-helpers';
-
-const homeClinicId = uuid();
+import {
+  createMockClinic,
+  createMockPatient,
+  createMockUser,
+  createPatient,
+} from '../../spec-helpers';
 
 describe('risk area model', () => {
   let db: Db;
@@ -77,6 +81,7 @@ describe('risk area model', () => {
     let patient: Patient;
     let riskArea: RiskArea;
     let user: User;
+    let clinic: Clinic;
 
     beforeEach(async () => {
       riskArea = await RiskArea.create({
@@ -90,12 +95,9 @@ describe('risk area model', () => {
         type: 'riskArea',
         order: 1,
       });
-      user = await User.create({
-        email: 'a@b.com',
-        userRole: 'admin',
-        homeClinicId,
-      });
-      patient = await createPatient(createMockPatient(123), user.id);
+      clinic = await Clinic.create(createMockClinic());
+      user = await User.create(createMockUser(11, clinic.id));
+      patient = await createPatient(createMockPatient(123, clinic.id), user.id);
     });
 
     it('gets summary for patient', async () => {

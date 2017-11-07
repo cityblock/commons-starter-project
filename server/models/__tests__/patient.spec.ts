@@ -1,18 +1,26 @@
 import * as uuid from 'uuid/v4';
 import Db from '../../db';
-import { createMockPatient, createPatient } from '../../spec-helpers';
+import {
+  createMockClinic,
+  createMockPatient,
+  createMockUser,
+  createPatient,
+} from '../../spec-helpers';
+import Clinic from '../clinic';
 import Patient from '../patient';
 import User from '../user';
 
 const userRole = 'physician';
-const homeClinicId = uuid();
 
 describe('patient model', () => {
   let db: Db;
+  let clinic: Clinic;
 
   beforeEach(async () => {
     db = await Db.get();
     await Db.clear();
+
+    clinic = await Clinic.create(createMockClinic());
   });
 
   afterAll(async () => {
@@ -21,12 +29,8 @@ describe('patient model', () => {
 
   describe('get', () => {
     it('should create and retrieve a patient', async () => {
-      const user = await User.create({
-        email: 'care@care.com',
-        userRole,
-        homeClinicId,
-      });
-      const patient = await createPatient(createMockPatient(123), user.id);
+      const user = await User.create(createMockUser(11, clinic.id, userRole));
+      const patient = await createPatient(createMockPatient(123, clinic.id), user.id);
       expect(patient).toMatchObject({
         id: patient.id,
         athenaPatientId: 123,
@@ -38,6 +42,16 @@ describe('patient model', () => {
       });
     });
 
+    it('should not create a user with an invalid clinic id', async () => {
+      const fakeClinicId = uuid();
+      const message = `Key (homeClinicId)=(${fakeClinicId}) is not present in table "clinic".`;
+      const user = await User.create(createMockUser(11, clinic.id, userRole));
+
+      await createPatient(createMockPatient(11, fakeClinicId), user.id).catch(e => {
+        expect(e.detail).toEqual(message);
+      });
+    });
+
     it('should throw an error if a patient does not exist for the id', async () => {
       const fakeId = uuid();
       await expect(Patient.get(fakeId)).rejects.toMatch(`No such patient: ${fakeId}`);
@@ -46,12 +60,8 @@ describe('patient model', () => {
 
   describe('edit', () => {
     it('should edit patient', async () => {
-      const user = await User.create({
-        email: 'care@care.com',
-        userRole,
-        homeClinicId,
-      });
-      const patient = await createPatient(createMockPatient(123), user.id);
+      const user = await User.create(createMockUser(11, clinic.id, userRole));
+      const patient = await createPatient(createMockPatient(123, clinic.id), user.id);
       expect(patient).toMatchObject({
         id: patient.id,
         athenaPatientId: 123,
@@ -77,7 +87,7 @@ describe('patient model', () => {
     });
   });
 
-  describe('setup', () => {
+  describe('setup', async () => {
     it('should setup patient', async () => {
       const patient = await Patient.setup({
         firstName: 'first',
@@ -86,7 +96,7 @@ describe('patient model', () => {
         dateOfBirth: '02/02/1902',
         zip: '12345',
         gender: 'F',
-        homeClinicId,
+        homeClinicId: clinic.id,
         consentToCall: false,
         consentToText: false,
         language: 'en',
@@ -107,13 +117,9 @@ describe('patient model', () => {
 
   describe('patients', () => {
     beforeEach(async () => {
-      const user = await User.create({
-        email: 'care@care.com',
-        userRole,
-        homeClinicId,
-      });
-      await createPatient(createMockPatient(123), user.id);
-      await createPatient(createMockPatient(234), user.id);
+      const user = await User.create(createMockUser(11, clinic.id, userRole));
+      await createPatient(createMockPatient(123, clinic.id), user.id);
+      await createPatient(createMockPatient(234, clinic.id), user.id);
     });
 
     it('should fetch patients', async () => {

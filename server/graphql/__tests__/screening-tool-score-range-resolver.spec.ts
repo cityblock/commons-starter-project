@@ -2,26 +2,29 @@ import { graphql } from 'graphql';
 import { cloneDeep } from 'lodash';
 import * as uuid from 'uuid/v4';
 import Db from '../../db';
+import Clinic from '../../models/clinic';
 import RiskArea from '../../models/risk-area';
 import ScreeningTool from '../../models/screening-tool';
 import ScreeningToolScoreRange from '../../models/screening-tool-score-range';
 import User from '../../models/user';
+import { createMockClinic, createMockUser } from '../../spec-helpers';
 import schema from '../make-executable-schema';
 
 describe('screening tool score range resolver tests', () => {
   let db: Db;
   const userRole = 'admin';
-  const homeClinicId = uuid();
   let riskArea: RiskArea;
   let screeningTool: ScreeningTool;
   let screeningTool2: ScreeningTool;
   let screeningToolScoreRange: ScreeningToolScoreRange;
   let user: User;
+  let clinic: Clinic;
 
   beforeEach(async () => {
     db = await Db.get();
     await Db.clear();
-    user = await User.create({ email: 'a@b.com', userRole, homeClinicId });
+    clinic = await Clinic.create(createMockClinic());
+    user = await User.create(createMockUser(11, clinic.id, userRole));
     riskArea = await RiskArea.create({
       title: 'Risk Area',
       order: 1,

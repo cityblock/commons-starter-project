@@ -1,6 +1,12 @@
 import * as uuid from 'uuid/v4';
 import Db from '../../db';
-import { createMockPatient, createPatient } from '../../spec-helpers';
+import {
+  createMockClinic,
+  createMockPatient,
+  createMockUser,
+  createPatient,
+} from '../../spec-helpers';
+import Clinic from '../clinic';
 import EventNotification from '../event-notification';
 import Patient from '../patient';
 import Task from '../task';
@@ -9,7 +15,6 @@ import TaskFollower from '../task-follower';
 import User from '../user';
 
 const userRole = 'physician';
-const homeClinicId = uuid();
 
 describe('task event model', () => {
   let db: Db;
@@ -17,26 +22,17 @@ describe('task event model', () => {
   let user2: User;
   let patient: Patient;
   let task: Task;
+  let clinic: Clinic;
 
   beforeEach(async () => {
     db = await Db.get();
     await Db.clear();
 
-    user = await User.create({
-      email: 'care@care.com',
-      firstName: 'Dan',
-      lastName: 'Plant',
-      userRole,
-      homeClinicId,
-    });
-    user2 = await User.create({
-      email: 'care2@care.com',
-      firstName: 'Dan2',
-      lastName: 'Plant2',
-      userRole,
-      homeClinicId,
-    });
-    patient = await createPatient(createMockPatient(123), user.id);
+    clinic = await Clinic.create(createMockClinic());
+
+    user = await User.create(createMockUser(11, clinic.id, userRole));
+    user2 = await User.create(createMockUser(11, clinic.id, userRole, 'care@care2.com'));
+    patient = await createPatient(createMockPatient(123, clinic.id), user.id);
     task = await Task.create({
       title: 'title',
       description: 'description',
@@ -187,20 +183,8 @@ describe('task event model', () => {
   });
 
   it('creates notifications for all necessary users for a task', async () => {
-    const user3 = await User.create({
-      email: 'care@care3.com',
-      firstName: 'Dan3',
-      lastName: 'Plant3',
-      userRole,
-      homeClinicId,
-    });
-    const user4 = await User.create({
-      email: 'care@care4.com',
-      firstName: 'Dan4',
-      lastName: 'Plant4',
-      userRole,
-      homeClinicId,
-    });
+    const user3 = await User.create(createMockUser(11, clinic.id, userRole, 'care@care3.com'));
+    const user4 = await User.create(createMockUser(11, clinic.id, userRole, 'care@care4.com'));
     await TaskFollower.followTask({ userId: user2.id, taskId: task.id });
     await TaskFollower.followTask({ userId: user3.id, taskId: task.id });
     const taskEvent = await TaskEvent.create({

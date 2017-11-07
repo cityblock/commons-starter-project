@@ -1,12 +1,17 @@
 import * as uuid from 'uuid/v4';
 import Db from '../../db';
-import { createMockPatient, createPatient } from '../../spec-helpers';
+import {
+  createMockClinic,
+  createMockPatient,
+  createMockUser,
+  createPatient,
+} from '../../spec-helpers';
+import Clinic from '../clinic';
 import Task from '../task';
 import TaskComment from '../task-comment';
 import User from '../user';
 
 const userRole = 'physician';
-const homeClinicId = uuid();
 
 describe('task comment model', () => {
   let db: Db;
@@ -21,14 +26,9 @@ describe('task comment model', () => {
   });
 
   it('should create and retrieve a task', async () => {
-    const user = await User.create({
-      email: 'care@care.com',
-      firstName: 'Dan',
-      lastName: 'Plant',
-      userRole,
-      homeClinicId,
-    });
-    const patient = await createPatient(createMockPatient(123), user.id);
+    const clinic = await Clinic.create(createMockClinic());
+    const user = await User.create(createMockUser(11, clinic.id, userRole));
+    const patient = await createPatient(createMockPatient(123, clinic.id), user.id);
     const dueAt = new Date().toISOString();
     const task = await Task.create({
       title: 'title',
@@ -66,12 +66,9 @@ describe('task comment model', () => {
   });
 
   it('should update a comment', async () => {
-    const user = await User.create({
-      email: 'a@b.com',
-      userRole,
-      homeClinicId,
-    });
-    const patient = await createPatient(createMockPatient(123), user.id);
+    const clinic = await Clinic.create(createMockClinic());
+    const user = await User.create(createMockUser(11, clinic.id, userRole));
+    const patient = await createPatient(createMockPatient(123, clinic.id), user.id);
     const dueAt = new Date().toISOString();
     const task = await Task.create({
       title: 'title',
@@ -92,12 +89,9 @@ describe('task comment model', () => {
   });
 
   it('fetches all not deleted comments for a task', async () => {
-    const user = await User.create({
-      email: 'a@b.com',
-      userRole,
-      homeClinicId,
-    });
-    const patient = await createPatient(createMockPatient(123), user.id);
+    const clinic = await Clinic.create(createMockClinic());
+    const user = await User.create(createMockUser(11, clinic.id, userRole));
+    const patient = await createPatient(createMockPatient(123, clinic.id), user.id);
     const dueAt = new Date().toISOString();
     const task = await Task.create({
       title: 'title',
@@ -166,12 +160,9 @@ describe('task comment model', () => {
   });
 
   it('completes a task', async () => {
-    const user = await User.create({
-      email: 'a@b.com',
-      userRole,
-      homeClinicId,
-    });
-    const patient = await createPatient(createMockPatient(123), user.id);
+    const clinic = await Clinic.create(createMockClinic());
+    const user = await User.create(createMockUser(11, clinic.id, userRole));
+    const patient = await createPatient(createMockPatient(123, clinic.id), user.id);
     const dueAt = new Date().toISOString();
     const task = await Task.create({
       title: 'title',

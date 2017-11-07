@@ -105,7 +105,8 @@ export default class ScreeningTool extends BaseModel {
   static async getForRiskArea(riskAreaId: string): Promise<ScreeningTool[]> {
     return await this.query()
       .eager(EAGER_QUERY)
-      .where({ deletedAt: null, riskAreaId });
+      .where({ deletedAt: null, riskAreaId })
+      .orderBy('createdAt', 'asc');
   }
 
   static async getAll(): Promise<ScreeningTool[]> {
@@ -120,7 +121,8 @@ export default class ScreeningTool extends BaseModel {
       .modifyEager('screeningToolScoreRanges.goalSuggestions', builder =>
         builder.where('goal_suggestion.deletedAt', null),
       )
-      .where({ deletedAt: null });
+      .where({ deletedAt: null })
+      .orderBy('createdAt', 'asc');
   }
 
   static async delete(screeningToolId: string): Promise<ScreeningTool> {

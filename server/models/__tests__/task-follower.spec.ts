@@ -1,6 +1,12 @@
 import * as uuid from 'uuid/v4';
 import Db from '../../db';
-import { createMockPatient, createPatient } from '../../spec-helpers';
+import {
+  createMockClinic,
+  createMockPatient,
+  createMockUser,
+  createPatient,
+} from '../../spec-helpers';
+import Clinic from '../clinic';
 import Task from '../task';
 import TaskFollower from '../task-follower';
 import User from '../user';
@@ -21,17 +27,10 @@ describe('task followers', () => {
 
   describe('modify followers', () => {
     it('user follows a task', async () => {
-      const user1 = await User.create({
-        email: 'care@care.com',
-        userRole,
-        homeClinicId: uuid(),
-      });
-      const user2 = await User.create({
-        email: 'b@c.com',
-        userRole,
-        homeClinicId: uuid(),
-      });
-      const patient1 = await createPatient(createMockPatient(123), user1.id);
+      const clinic = await Clinic.create(createMockClinic());
+      const user1 = await User.create(createMockUser(11, clinic.id, userRole, 'care@care.com'));
+      const user2 = await User.create(createMockUser(11, clinic.id, userRole, 'b@c.com'));
+      const patient1 = await createPatient(createMockPatient(123, clinic.id), user1.id);
       const task1 = await Task.create({
         title: 'title',
         description: 'description',
@@ -52,12 +51,9 @@ describe('task followers', () => {
     });
 
     it('throws an error if adding a non-existant user to a task', async () => {
-      const user = await User.create({
-        email: 'care@care.com',
-        userRole,
-        homeClinicId: uuid(),
-      });
-      const patient = await createPatient(createMockPatient(123), user.id);
+      const clinic = await Clinic.create(createMockClinic());
+      const user = await User.create(createMockUser(11, clinic.id, userRole, 'care@care.com'));
+      const patient = await createPatient(createMockPatient(123, clinic.id), user.id);
       const task = await Task.create({
         title: 'title',
         description: 'description',
@@ -77,12 +73,9 @@ describe('task followers', () => {
     });
 
     it('can remove a user from a followed tasks', async () => {
-      const user = await User.create({
-        email: 'care@care.com',
-        userRole,
-        homeClinicId: uuid(),
-      });
-      const patient = await createPatient(createMockPatient(123), user.id);
+      const clinic = await Clinic.create(createMockClinic());
+      const user = await User.create(createMockUser(11, clinic.id, userRole, 'care@care.com'));
+      const patient = await createPatient(createMockPatient(123, clinic.id), user.id);
       const task = await Task.create({
         title: 'title',
         description: 'description',

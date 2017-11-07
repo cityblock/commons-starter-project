@@ -1,10 +1,14 @@
 import * as uuid from 'uuid/v4';
 import Db from '../../db';
+import {
+  createMockClinic,
+  createMockUser,
+} from '../../spec-helpers';
+import Clinic from '../clinic';
 import GoogleAuth from '../google-auth';
 import User from '../user';
 
 const userRole = 'physician';
-const homeClinicId = uuid();
 
 describe('user model', () => {
   let db: Db;
@@ -19,24 +23,20 @@ describe('user model', () => {
   });
 
   it('should create and retrieve a user', async () => {
-    const user = await User.create({
-      email: 'care@care.com',
-      firstName: 'Dan',
-      lastName: 'Plant',
-      userRole,
-      homeClinicId,
-    });
+    const clinic = await Clinic.create(createMockClinic());
+    const user = await User.create(createMockUser(11, clinic.id, userRole));
     expect(user).toMatchObject({
       id: user.id,
-      firstName: 'Dan',
-      lastName: 'Plant',
+      firstName: 'dan',
+      lastName: 'plant',
     });
 
     const userById = await User.get(user.id);
     expect(userById).toMatchObject({
       id: user.id,
-      firstName: 'Dan',
-      lastName: 'Plant',
+      firstName: 'dan',
+      lastName: 'plant',
+      homeClinicId: clinic.id,
     });
   });
 
@@ -60,20 +60,25 @@ describe('user model', () => {
   it('should not create a user when given an invalid email address', async () => {
     const email = 'nonEmail';
     const message = 'email is not valid';
+    const clinic = await Clinic.create(createMockClinic());
 
-    await expect(User.create({ email, userRole, homeClinicId })).rejects.toMatchObject(
+    await expect(User.create({ email, userRole, homeClinicId: clinic.id })).rejects.toMatchObject(
       new Error(JSON.stringify({ email: [{ message }] }, null, '  ')),
     );
   });
 
-  it('gets last login', async () => {
-    const user = await User.create({
-      email: 'care@care.com',
-      firstName: 'Dan',
-      lastName: 'Plant',
-      userRole,
-      homeClinicId,
+  it('should not create a user with an invalid clinic id', async () => {
+    const fakeClinicId = uuid();
+    const message = `Key (homeClinicId)=(${fakeClinicId}) is not present in table "clinic".`;
+
+    await (User.create(createMockUser(11, fakeClinicId, userRole))).catch(e => {
+      expect(e.detail).toEqual(message);
     });
+  });
+
+  it('gets last login', async () => {
+    const clinic = await Clinic.create(createMockClinic());
+    const user = await User.create(createMockUser(11, clinic.id, userRole));
     const lastLoginAt = new Date().toISOString();
 
     await user.$query().patch({ lastLoginAt });
@@ -83,45 +88,37 @@ describe('user model', () => {
   });
 
   it('retrieve user by email', async () => {
-    const user = await User.create({
-      email: 'danplant@b.com',
-      firstName: 'Dan',
-      lastName: 'Plant',
-      userRole,
-      homeClinicId,
-    });
+    const clinic = await Clinic.create(createMockClinic());
+    const user = await User.create(createMockUser(11, clinic.id, userRole, 'danplant@b.com'));
     expect(user).toMatchObject({
       id: user.id,
-      firstName: 'Dan',
-      lastName: 'Plant',
+      firstName: 'dan',
+      lastName: 'plant',
     });
 
     const userByEmail = await User.getBy('email', 'danplant@b.com');
     expect(userByEmail).toMatchObject({
       id: user.id,
-      firstName: 'Dan',
-      lastName: 'Plant',
+      firstName: 'dan',
+      lastName: 'plant',
     });
   });
 
   it('should update user', async () => {
-    const user = await User.create({
-      email: 'a@b.com',
-      userRole,
-      homeClinicId,
-    });
+    const clinic = await Clinic.create(createMockClinic());
+    const user = await User.create(createMockUser(11, clinic.id, userRole, 'a@b.com'));
     const googleAuth = await GoogleAuth.updateOrCreate({
       accessToken: 'accessToken',
       expiresAt: 'expires!',
       userId: user.id,
     });
-    const secondHomeClinicId = uuid();
+    const clinic2 = await Clinic.create(createMockClinic('The Bertrand Russell Center', 1));
     expect(
       await User.update(user.id, {
         firstName: 'first',
         lastName: 'last',
         googleProfileImageUrl: 'http://google.com',
-        homeClinicId: secondHomeClinicId,
+        homeClinicId: clinic2.id,
         googleAuthId: googleAuth.id,
       }),
     ).toMatchObject({
@@ -129,14 +126,15 @@ describe('user model', () => {
       firstName: 'first',
       lastName: 'last',
       googleProfileImageUrl: 'http://google.com',
-      homeClinicId: secondHomeClinicId,
+      homeClinicId: clinic2.id,
       googleAuthId: googleAuth.id,
     });
   });
 
   it('fetches all users', async () => {
-    await User.create({ email: 'a@b.com', userRole, homeClinicId });
-    await User.create({ email: 'b@c.com', userRole, homeClinicId });
+    const clinic = await Clinic.create(createMockClinic());
+    await User.create(createMockUser(11, clinic.id, userRole, 'a@b.com'));
+    await User.create(createMockUser(11, clinic.id, userRole, 'b@c.com'));
 
     expect(
       await User.getAll({
@@ -162,8 +160,9 @@ describe('user model', () => {
   });
 
   it('fetches a limited set of users', async () => {
-    await User.create({ email: 'a@b.com', userRole, homeClinicId });
-    await User.create({ email: 'b@c.com', userRole, homeClinicId });
+    const clinic = await Clinic.create(createMockClinic());
+    await User.create(createMockUser(11, clinic.id, userRole, 'a@b.com'));
+    await User.create(createMockUser(11, clinic.id, userRole, 'b@c.com'));
 
     expect(
       await User.getAll({
@@ -202,17 +201,12 @@ describe('user model', () => {
   });
 
   it('filter by logged in', async () => {
+    const clinic = await Clinic.create(createMockClinic());
     // not logged in user
-    await User.create({ email: 'b@c.com', userRole, homeClinicId });
+    await User.create(createMockUser(11, clinic.id, userRole, 'b@c.com'));
 
     // logged in user
-    const user = await User.create({
-      email: 'care@care.com',
-      firstName: 'Dan',
-      lastName: 'Plant',
-      userRole,
-      homeClinicId,
-    });
+    const user = await User.create(createMockUser(11, clinic.id, userRole, 'care@care.com'));
     const lastLoginAt = new Date().toISOString();
     await user.$query().patch({ lastLoginAt });
 
@@ -236,12 +230,8 @@ describe('user model', () => {
   });
 
   it('updates user role', async () => {
-    const user1 = await User.create({
-      email: 'user@place.com',
-      userRole,
-      homeClinicId,
-      athenaProviderId: 1,
-    });
+    const clinic = await Clinic.create(createMockClinic());
+    const user1 = await User.create(createMockUser(1, clinic.id, userRole, 'user@place.com'));
     expect(user1.userRole).toEqual(userRole);
     await User.updateUserRole(user1.id, 'nurseCareManager');
     const fetchedUser1 = await User.getBy('email', 'user@place.com');
@@ -249,12 +239,8 @@ describe('user model', () => {
   });
 
   it('marks a user as deleted', async () => {
-    const user1 = await User.create({
-      email: 'user@place.com',
-      userRole,
-      homeClinicId,
-      athenaProviderId: 1,
-    });
+    const clinic = await Clinic.create(createMockClinic());
+    const user1 = await User.create(createMockUser(1, clinic.id, userRole, 'user@place.com'));
     const fetchedUser1 = await User.getBy('email', 'user@place.com');
 
     // Just to make sure we're fetching the original user first
@@ -262,12 +248,9 @@ describe('user model', () => {
 
     await User.delete(user1.id);
 
-    const user2 = await User.create({
-      email: 'user@place.com',
-      userRole,
-      homeClinicId: uuid(), // Different clinic ID to confirm we're actually fetching a new user
-      athenaProviderId: 1,
-    });
+    const clinic2 = await Clinic.create(createMockClinic('The Bertrand Russell Clinic', 1));
+    // Different clinic id to confirm we're actually fetching a new user
+    const user2 = await User.create(createMockUser(1, clinic2.id, userRole, 'user@place.com'));
     const fetchedUser2 = await User.getBy('email', 'user@place.com');
 
     // We should have now fetched the re-created user

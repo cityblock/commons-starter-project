@@ -1,8 +1,14 @@
 import * as uuid from 'uuid/v4';
 import Db from '../../db';
-import { createMockPatient, createPatient } from '../../spec-helpers';
+import {
+  createMockClinic,
+  createMockPatient,
+  createMockUser,
+  createPatient,
+} from '../../spec-helpers';
 import CarePlanUpdateEvent from '../care-plan-update-event';
 import CareTeam from '../care-team';
+import Clinic from '../clinic';
 import Concern from '../concern';
 import GoalSuggestionTemplate from '../goal-suggestion-template';
 import Patient from '../patient';
@@ -14,23 +20,20 @@ import TaskTemplate from '../task-template';
 import User from '../user';
 
 const userRole = 'physician';
-const homeClinicId = uuid();
 
 describe('patient goal model', () => {
   let db: Db;
   let patient: Patient;
   let user: User;
+  let clinic: Clinic;
 
   beforeEach(async () => {
     db = await Db.get();
     await Db.clear();
 
-    user = await User.create({
-      email: 'care@care.com',
-      userRole,
-      homeClinicId,
-    });
-    patient = await createPatient(createMockPatient(123), user.id);
+    clinic = await Clinic.create(createMockClinic());
+    user = await User.create(createMockUser(11, clinic.id, userRole));
+    patient = await createPatient(createMockPatient(123, clinic.id), user.id);
   });
 
   afterAll(async () => {
@@ -119,11 +122,7 @@ describe('patient goal model', () => {
 
   it('correctly assigns tasks when taskTemplates have an default assignee role', async () => {
     const goalSuggestionTemplate = await GoalSuggestionTemplate.create({ title: 'Fix housing' });
-    const user2 = await User.create({
-      email: 'care2@care.com',
-      userRole: 'healthCoach',
-      homeClinicId,
-    });
+    const user2 = await User.create(createMockUser(11, clinic.id, 'healthCoach', 'care@care2.com'));
 
     await CareTeam.create({ userId: user2.id, patientId: patient.id });
 

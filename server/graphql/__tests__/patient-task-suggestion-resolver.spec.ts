@@ -1,8 +1,8 @@
 import { graphql } from 'graphql';
 import { cloneDeep } from 'lodash';
-import * as uuid from 'uuid/v4';
 import Db from '../../db';
 import Answer from '../../models/answer';
+import Clinic from '../../models/clinic';
 import Concern from '../../models/concern';
 import Patient from '../../models/patient';
 import PatientTaskSuggestion from '../../models/patient-task-suggestion';
@@ -12,7 +12,12 @@ import Task from '../../models/task';
 import TaskSuggestion from '../../models/task-suggestion';
 import TaskTemplate from '../../models/task-template';
 import User from '../../models/user';
-import { createMockPatient, createPatient } from '../../spec-helpers';
+import {
+  createMockClinic,
+  createMockPatient,
+  createMockUser,
+  createPatient,
+} from '../../spec-helpers';
 import schema from '../make-executable-schema';
 
 describe('patient task suggestion resolver tests', () => {
@@ -22,13 +27,16 @@ describe('patient task suggestion resolver tests', () => {
   let answer: Answer;
   let user: User;
   let patient: Patient;
+  let clinic: Clinic;
   let concern: Concern;
   let taskTemplate: TaskTemplate;
 
   beforeEach(async () => {
     db = await Db.get();
     await Db.clear();
-    user = await User.create({ email: 'a@b.com', userRole, homeClinicId: uuid() });
+
+    clinic = await Clinic.create(createMockClinic());
+    user = await User.create(createMockUser(11, clinic.id, userRole, 'a@b.com'));
 
     const riskArea = await RiskArea.create({
       title: 'test',
@@ -62,7 +70,7 @@ describe('patient task suggestion resolver tests', () => {
       answerId: answer.id,
       taskTemplateId: taskTemplate.id,
     });
-    patient = await createPatient(createMockPatient(123), user.id);
+    patient = await createPatient(createMockPatient(123, clinic.id), user.id);
   });
 
   afterAll(async () => {

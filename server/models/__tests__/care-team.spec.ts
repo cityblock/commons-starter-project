@@ -1,18 +1,26 @@
 import * as uuid from 'uuid/v4';
 import Db from '../../db';
-import { createMockPatient, createPatient } from '../../spec-helpers';
+import {
+  createMockClinic,
+  createMockPatient,
+  createMockUser,
+  createPatient,
+} from '../../spec-helpers';
 import CareTeam from '../care-team';
+import Clinic from '../clinic';
 import User from '../user';
 
 const userRole = 'physician';
-const homeClinicId = uuid();
 
 describe('care model', () => {
   let db: Db;
+  let clinic: Clinic;
 
   beforeEach(async () => {
     db = await Db.get();
     await Db.clear();
+
+    clinic = await Clinic.create(createMockClinic());
   });
 
   afterAll(async () => {
@@ -21,18 +29,10 @@ describe('care model', () => {
 
   describe('care team', () => {
     it('should associate multiple users with a patient', async () => {
-      const user1 = await User.create({
-        email: 'care@care.com',
-        userRole,
-        homeClinicId,
-      });
-      const user2 = await User.create({
-        email: 'b@c.com',
-        userRole,
-        homeClinicId,
-      });
+      const user1 = await User.create(createMockUser(11, clinic.id, userRole, 'care@care.com'));
+      const user2 = await User.create(createMockUser(11, clinic.id, userRole, 'b@c.com'));
       // auto-adds user1
-      const patient1 = await createPatient(createMockPatient(123), user1.id);
+      const patient1 = await createPatient(createMockPatient(123, clinic.id), user1.id);
 
       // Add 2nd user to patient 1 care team
       const careTeam = await CareTeam.create({
@@ -44,12 +44,8 @@ describe('care model', () => {
     });
 
     it('throws an error if adding a non-existant user to a care team', async () => {
-      const user = await User.create({
-        email: 'care@care.com',
-        userRole,
-        homeClinicId,
-      });
-      const patient = await createPatient(createMockPatient(123), user.id);
+      const user = await User.create(createMockUser(11, clinic.id, userRole, 'care@care.com'));
+      const patient = await createPatient(createMockPatient(123, clinic.id), user.id);
       const error =
         'insert into "care_team" ("id", "patientId", "userId") values ($1, $2, $3) ' +
         'returning "id" - insert or update on table "care_team" violates foreign key constraint ' +
@@ -61,12 +57,8 @@ describe('care model', () => {
     });
 
     it('can remove a user from a care team', async () => {
-      const user = await User.create({
-        email: 'care@care.com',
-        userRole,
-        homeClinicId,
-      });
-      const patient1 = await createPatient(createMockPatient(123), user.id);
+      const user = await User.create(createMockUser(11, clinic.id, userRole, 'care@care.com'));
+      const patient1 = await createPatient(createMockPatient(123, clinic.id), user.id);
 
       const careTeamResponse = await CareTeam.delete({
         userId: user.id,
@@ -78,13 +70,9 @@ describe('care model', () => {
 
   describe('get patients for user', () => {
     it('should fetch limited set of patients', async () => {
-      const user = await User.create({
-        email: 'care@care.com',
-        userRole,
-        homeClinicId,
-      });
-      await createPatient(createMockPatient(123), user.id);
-      await createPatient(createMockPatient(321), user.id);
+      const user = await User.create(createMockUser(11, clinic.id, userRole, 'care@care.com'));
+      await createPatient(createMockPatient(123, clinic.id), user.id);
+      await createPatient(createMockPatient(321, clinic.id), user.id);
 
       expect(await CareTeam.getForUser(user.id, { pageNumber: 1, pageSize: 1 })).toMatchObject({
         results: [{ athenaPatientId: 321 }],
@@ -100,12 +88,8 @@ describe('care model', () => {
 
   describe('get users for patient', () => {
     it('should fetch care team', async () => {
-      const user = await User.create({
-        email: 'care@care.com',
-        userRole,
-        homeClinicId,
-      });
-      const patient = await createPatient(createMockPatient(123), user.id);
+      const user = await User.create(createMockUser(11, clinic.id, userRole, 'care@care.com'));
+      const patient = await createPatient(createMockPatient(123, clinic.id), user.id);
 
       expect(await CareTeam.getForPatient(patient.id)).toMatchObject([{ id: user.id }]);
     });

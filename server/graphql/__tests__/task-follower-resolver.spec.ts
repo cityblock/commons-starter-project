@@ -1,34 +1,34 @@
 import { graphql } from 'graphql';
 import { cloneDeep } from 'lodash';
-import * as uuid from 'uuid/v4';
 import Db from '../../db';
+import Clinic from '../../models/clinic';
 import Patient from '../../models/patient';
 import Task from '../../models/task';
 import TaskEvent from '../../models/task-event';
 import User from '../../models/user';
-import { createMockPatient, createPatient } from '../../spec-helpers';
+import {
+  createMockClinic,
+  createMockPatient,
+  createMockUser,
+  createPatient,
+} from '../../spec-helpers';
 import schema from '../make-executable-schema';
 
 describe('task follower', () => {
   let db: Db;
   let task: Task;
   let user: User;
+  let clinic: Clinic;
   let patient: Patient;
   const userRole = 'physician';
-  const homeClinicId = uuid();
 
   beforeEach(async () => {
     db = await Db.get();
     await Db.clear();
 
-    user = await User.create({
-      email: 'a@b.com',
-      firstName: 'Dan',
-      lastName: 'Plant',
-      userRole,
-      homeClinicId,
-    });
-    patient = await createPatient(createMockPatient(), user.id);
+    clinic = await Clinic.create(createMockClinic());
+    user = await User.create(createMockUser(11, clinic.id, userRole));
+    patient = await createPatient(createMockPatient(11, clinic.id), user.id);
     const dueAt = new Date().toISOString();
     task = await Task.create({
       title: 'title',
@@ -121,7 +121,7 @@ describe('task follower', () => {
     });
 
     it('returns correct page information', async () => {
-      const patient2 = await createPatient(createMockPatient(123), user.id);
+      const patient2 = await createPatient(createMockPatient(123, clinic.id), user.id);
       const dueAt = new Date().toISOString();
       await Task.create({
         title: 'title',

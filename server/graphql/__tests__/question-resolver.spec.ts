@@ -3,26 +3,29 @@ import { cloneDeep } from 'lodash';
 import * as uuid from 'uuid/v4';
 import Db from '../../db';
 import Answer from '../../models/answer';
+import Clinic from '../../models/clinic';
 import ProgressNoteTemplate from '../../models/progress-note-template';
 import Question from '../../models/question';
 import RiskArea from '../../models/risk-area';
 import ScreeningTool from '../../models/screening-tool';
 import User from '../../models/user';
+import { createMockClinic, createMockUser } from '../../spec-helpers';
 import schema from '../make-executable-schema';
 
 describe('question tests', () => {
   let db: Db;
   const userRole = 'admin';
-  const homeClinicId = uuid();
   let question: Question;
   let answer: Answer;
   let user: User;
+  let clinic: Clinic;
   let riskArea: RiskArea;
 
   beforeEach(async () => {
     db = await Db.get();
     await Db.clear();
-    user = await User.create({ email: 'a@b.com', userRole, homeClinicId });
+    clinic = await Clinic.create(createMockClinic());
+    user = await User.create(createMockUser(11, clinic.id, userRole));
     riskArea = await RiskArea.create({
       title: 'testing',
       order: 1,

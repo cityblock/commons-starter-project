@@ -3,10 +3,12 @@ import { cloneDeep } from 'lodash';
 import * as uuid from 'uuid/v4';
 import Db from '../../db';
 import Answer from '../../models/answer';
+import Clinic from '../../models/clinic';
 import Question from '../../models/question';
 import QuestionCondition from '../../models/question-condition';
 import RiskArea from '../../models/risk-area';
 import User from '../../models/user';
+import { createMockClinic, createMockUser } from '../../spec-helpers';
 import schema from '../make-executable-schema';
 
 describe('questionCondition tests', () => {
@@ -17,11 +19,14 @@ describe('questionCondition tests', () => {
   let question2: Question;
   let answer: Answer;
   let user: User;
+  let clinic: Clinic;
 
   beforeEach(async () => {
     db = await Db.get();
     await Db.clear();
-    user = await User.create({ email: 'a@b.com', userRole, homeClinicId: uuid() });
+
+    clinic = await Clinic.create(createMockClinic());
+    user = await User.create(createMockUser(11, clinic.id, userRole, 'a@b.com'));
 
     riskArea = await RiskArea.create({
       title: 'testing',

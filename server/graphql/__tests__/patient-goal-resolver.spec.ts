@@ -1,7 +1,7 @@
 import { graphql } from 'graphql';
 import { cloneDeep } from 'lodash';
-import * as uuid from 'uuid/v4';
 import Db from '../../db';
+import Clinic from '../../models/clinic';
 import Concern from '../../models/concern';
 import GoalSuggestionTemplate from '../../models/goal-suggestion-template';
 import Patient from '../../models/patient';
@@ -9,26 +9,28 @@ import PatientConcern from '../../models/patient-concern';
 import PatientGoal from '../../models/patient-goal';
 import TaskTemplate from '../../models/task-template';
 import User from '../../models/user';
-import { createMockPatient, createPatient } from '../../spec-helpers';
+import {
+  createMockClinic,
+  createMockPatient,
+  createMockUser,
+  createPatient,
+} from '../../spec-helpers';
 import schema from '../make-executable-schema';
 
 describe('patient goal resolver', () => {
   let db: Db;
   let patient: Patient;
   let user: User;
+  let clinic: Clinic;
   const userRole = 'admin';
-  const homeClinicId = uuid();
 
   beforeEach(async () => {
     db = await Db.get();
     await Db.clear();
 
-    user = await User.create({
-      email: 'care@care.com',
-      userRole,
-      homeClinicId,
-    });
-    patient = await createPatient(createMockPatient(123), user.id);
+    clinic = await Clinic.create(createMockClinic());
+    user = await User.create(createMockUser(11, clinic.id, userRole));
+    patient = await createPatient(createMockPatient(123, clinic.id), user.id);
   });
 
   afterAll(async () => {

@@ -1,13 +1,19 @@
 import * as uuid from 'uuid/v4';
 import Db from '../../db';
-import { createMockPatient, createPatient } from '../../spec-helpers';
+import {
+  createMockClinic,
+  createMockPatient,
+  createMockUser,
+  createPatient,
+} from '../../spec-helpers';
+import Clinic from '../clinic';
 import Patient from '../patient';
 import RiskArea from '../risk-area';
 import ScreeningTool from '../screening-tool';
 import ScreeningToolScoreRange from '../screening-tool-score-range';
 import User from '../user';
 
-const homeClinicId = uuid();
+const userRole = 'physician';
 
 describe('screening tool score range model', () => {
   let db: Db;
@@ -16,6 +22,7 @@ describe('screening tool score range model', () => {
   let screeningTool2: ScreeningTool;
   let patient: Patient;
   let user: User;
+  let clinic: Clinic;
 
   beforeEach(async () => {
     db = await Db.get();
@@ -30,12 +37,9 @@ describe('screening tool score range model', () => {
       title: 'Screening Tool 2',
       riskAreaId: riskArea.id,
     });
-    user = await User.create({
-      email: 'care@care.com',
-      userRole: 'physician',
-      homeClinicId,
-    });
-    patient = await createPatient(createMockPatient(123), user.id);
+    clinic = await Clinic.create(createMockClinic());
+    user = await User.create(createMockUser(11, clinic.id, userRole));
+    patient = await createPatient(createMockPatient(123, clinic.id), user.id);
   });
 
   afterAll(async () => {

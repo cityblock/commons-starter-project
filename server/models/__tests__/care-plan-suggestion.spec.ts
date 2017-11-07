@@ -1,7 +1,13 @@
 import * as uuid from 'uuid/v4';
 import Db from '../../db';
-import { createMockPatient, createPatient } from '../../spec-helpers';
+import {
+  createMockClinic,
+  createMockPatient,
+  createMockUser,
+  createPatient,
+} from '../../spec-helpers';
 import CarePlanSuggestion from '../care-plan-suggestion';
+import Clinic from '../clinic';
 import Concern from '../concern';
 import GoalSuggestionTemplate from '../goal-suggestion-template';
 import Patient from '../patient';
@@ -9,12 +15,11 @@ import PatientConcern from '../patient-concern';
 import PatientGoal from '../patient-goal';
 import User from '../user';
 
-const homeClinicId = uuid();
-
 describe('care plan suggestion', () => {
   let db: Db;
   let patient: Patient;
   let user: User;
+  let clinic: Clinic;
   let concern: Concern;
   let goalSuggestionTemplate: GoalSuggestionTemplate;
 
@@ -22,8 +27,9 @@ describe('care plan suggestion', () => {
     db = await Db.get();
     await Db.clear();
 
-    user = await User.create({ email: 'user@email.com', homeClinicId, userRole: 'physician' });
-    patient = await createPatient(createMockPatient(123, homeClinicId), user.id);
+    clinic = await Clinic.create(createMockClinic());
+    user = await User.create(createMockUser(11, clinic.id, 'physician'));
+    patient = await createPatient(createMockPatient(123, clinic.id), user.id);
     concern = await Concern.create({ title: 'Concern' });
     goalSuggestionTemplate = await GoalSuggestionTemplate.create({ title: 'Goal Template' });
   });
@@ -89,11 +95,17 @@ describe('care plan suggestion', () => {
       });
 
       const fetchedCarePlanSuggestions = await CarePlanSuggestion.getForPatient(patient.id);
+
       expect(fetchedCarePlanSuggestions.length).toEqual(2);
-      expect(fetchedCarePlanSuggestions[1].goalSuggestionTemplate).toMatchObject(
+
+      const goalSuggestion = fetchedCarePlanSuggestions .find(s => s.suggestionType === 'goal');
+      const concernSuggestion =
+      fetchedCarePlanSuggestions .find(s => s.suggestionType === 'concern');
+
+      expect(concernSuggestion!.concern).toMatchObject(concern);
+      expect(goalSuggestion!.goalSuggestionTemplate).toMatchObject(
         goalSuggestionTemplate,
       );
-      expect(fetchedCarePlanSuggestions[0].concern).toMatchObject(concern);
     });
 
     it('gets carePlanSuggestions for a patient', async () => {
@@ -109,7 +121,7 @@ describe('care plan suggestion', () => {
       expect(patientCarePlanSuggestions[0].concern).toMatchObject(concern);
     });
 
-    it('does not get suggestions for which a patientGol or patientConcern exists', async () => {
+    it('does not get suggestions for which a patientGoal or patientConcern exists', async () => {
       const concern2 = await Concern.create({ title: 'Second Concern' });
       const goalSuggestionTemplate2 = await GoalSuggestionTemplate.create({ title: 'Second Goal' });
 
@@ -151,11 +163,16 @@ describe('care plan suggestion', () => {
       });
 
       const patientCarePlanSuggestions = await CarePlanSuggestion.getForPatient(patient.id);
+
       expect(patientCarePlanSuggestions.length).toEqual(2);
-      expect(patientCarePlanSuggestions[1].goalSuggestionTemplateId).toEqual(
+      const goalSuggestion = patientCarePlanSuggestions.find(s => s.suggestionType === 'goal');
+      const concernSuggestion =
+        patientCarePlanSuggestions.find(s => s.suggestionType === 'concern');
+
+      expect(concernSuggestion!.concernId).toEqual(concern2.id);
+      expect(goalSuggestion!.goalSuggestionTemplateId).toEqual(
         goalSuggestionTemplate2.id,
       );
-      expect(patientCarePlanSuggestions[0].concernId).toEqual(concern2.id);
     });
 
     it('accepts a carePlanSuggestion', async () => {

@@ -1,6 +1,12 @@
 import * as uuid from 'uuid/v4';
 import Db from '../../db';
-import { createMockPatient, createPatient } from '../../spec-helpers';
+import {
+  createMockClinic,
+  createMockPatient,
+  createMockUser,
+  createPatient,
+} from '../../spec-helpers';
+import Clinic from '../clinic';
 import Patient from '../patient';
 import PatientGoal from '../patient-goal';
 import Task from '../task';
@@ -12,20 +18,21 @@ const order = 'asc';
 const orderBy = 'createdAt';
 const pageNumber = 0;
 const pageSize = 10;
-const homeClinicId = uuid();
 
 describe('task model', () => {
   let db: Db;
   let patientGoal: PatientGoal;
   let user: User;
   let patient: Patient;
+  let clinic: Clinic;
 
   beforeEach(async () => {
     db = await Db.get();
     await Db.clear();
 
-    user = await User.create({ email: 'a@b.com', userRole, homeClinicId });
-    patient = await createPatient(createMockPatient(123), user.id);
+    clinic = await Clinic.create(createMockClinic());
+    user = await User.create(createMockUser(11, clinic.id, userRole));
+    patient = await createPatient(createMockPatient(123, clinic.id), user.id);
     patientGoal = await PatientGoal.create({
       title: 'patient goal',
       patientId: patient.id,
@@ -193,11 +200,7 @@ describe('task model', () => {
   });
 
   it('fetches a user tasks tasks', async () => {
-    const user2 = await User.create({
-      email: 'b@a.com',
-      userRole,
-      homeClinicId,
-    });
+    const user2 = await User.create(createMockUser(11, clinic.id, userRole, 'b@c.com'));
     const dueAt = new Date().toISOString();
     await Task.create({
       title: 'title',

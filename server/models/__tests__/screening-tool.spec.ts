@@ -65,7 +65,7 @@ describe('screening tool model', () => {
     const screeningTools = await ScreeningTool.getForRiskArea(riskArea.id);
     const screeningToolIds = screeningTools.map(tool => tool.id);
     expect(screeningTools.length).toEqual(2);
-    expect(screeningTools).toMatchObject([screeningTool2, screeningTool1]);
+    expect(screeningTools).toMatchObject([screeningTool1, screeningTool2]);
     expect(screeningToolIds).not.toContain(screeningTool3.id);
   });
 
@@ -86,7 +86,7 @@ describe('screening tool model', () => {
 
     const screeningTools = await ScreeningTool.getAll();
     expect(screeningTools.length).toEqual(3);
-    expect(screeningTools).toMatchObject([screeningTool3, screeningTool2, screeningTool1]);
+    expect(screeningTools).toMatchObject([screeningTool1, screeningTool2, screeningTool3]);
   });
 
   it('deletes a screening tool', async () => {

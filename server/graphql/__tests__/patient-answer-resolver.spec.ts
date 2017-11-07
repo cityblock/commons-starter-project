@@ -4,6 +4,7 @@ import * as uuid from 'uuid/v4';
 import Db from '../../db';
 import Answer from '../../models/answer';
 import CarePlanSuggestion from '../../models/care-plan-suggestion';
+import Clinic from '../../models/clinic';
 import Concern from '../../models/concern';
 import ConcernSuggestion from '../../models/concern-suggestion';
 import GoalSuggestion from '../../models/goal-suggestion';
@@ -18,24 +19,30 @@ import ScreeningTool from '../../models/screening-tool';
 import ScreeningToolScoreRange from '../../models/screening-tool-score-range';
 import TaskTemplate from '../../models/task-template';
 import User from '../../models/user';
-import { createMockPatient, createPatient } from '../../spec-helpers';
+import {
+  createMockClinic,
+  createMockPatient,
+  createMockUser,
+  createPatient,
+} from '../../spec-helpers';
 import schema from '../make-executable-schema';
 
 describe('patient answer tests', () => {
   let db: Db;
   const userRole = 'admin';
-  const homeClinicId = uuid();
   let riskArea: RiskArea;
   let question: Question;
   let answer: Answer;
   let answer2: Answer;
   let user: User;
   let patient: Patient;
+  let clinic: Clinic;
 
   beforeEach(async () => {
     db = await Db.get();
     await Db.clear();
-    user = await User.create({ email: 'a@b.com', userRole, homeClinicId });
+    clinic = await Clinic.create(createMockClinic());
+    user = await User.create(createMockUser(11, clinic.id, userRole));
 
     riskArea = await RiskArea.create({
       title: 'testing',
@@ -66,7 +73,7 @@ describe('patient answer tests', () => {
       questionId: question.id,
       order: 2,
     });
-    patient = await createPatient(createMockPatient(123), user.id);
+    patient = await createPatient(createMockPatient(123, clinic.id), user.id);
   });
 
   afterAll(async () => {

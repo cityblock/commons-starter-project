@@ -1,8 +1,15 @@
 import { transaction } from 'objection';
 import * as uuid from 'uuid/v4';
 import Db from '../../db';
-import { cleanPatientAnswerEvents, createMockPatient, createPatient } from '../../spec-helpers';
+import {
+  cleanPatientAnswerEvents,
+  createMockClinic,
+  createMockPatient,
+  createMockUser,
+  createPatient,
+} from '../../spec-helpers';
 import Answer from '../answer';
+import Clinic from '../clinic';
 import Patient from '../patient';
 import PatientAnswer from '../patient-answer';
 import PatientAnswerEvent from '../patient-answer-event';
@@ -12,7 +19,6 @@ import RiskArea from '../risk-area';
 import User from '../user';
 
 const userRole = 'physician';
-const homeClinicId = uuid();
 
 describe('patient answer event model', () => {
   let db: Db;
@@ -22,19 +28,15 @@ describe('patient answer event model', () => {
   let question: Question;
   let answer: Answer;
   let patientAnswer: PatientAnswer;
+  let clinic: Clinic;
 
   beforeEach(async () => {
     db = await Db.get();
     await Db.clear();
 
-    user = await User.create({
-      email: 'care@care.com',
-      firstName: 'Dan',
-      lastName: 'Plant',
-      userRole,
-      homeClinicId,
-    });
-    patient = await createPatient(createMockPatient(123), user.id);
+    clinic = await Clinic.create(createMockClinic());
+    user = await User.create(createMockUser(11, clinic.id, userRole));
+    patient = await createPatient(createMockPatient(123, clinic.id), user.id);
     riskArea = await RiskArea.create({ title: 'Risk Area', order: 1 });
     question = await Question.create({
       riskAreaId: riskArea.id,

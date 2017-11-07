@@ -1,7 +1,14 @@
 import * as uuid from 'uuid/v4';
 import Db from '../../db';
-import { cleanCarePlanUpdateEvents, createMockPatient, createPatient } from '../../spec-helpers';
+import {
+  cleanCarePlanUpdateEvents,
+  createMockClinic,
+  createMockPatient,
+  createMockUser,
+  createPatient,
+} from '../../spec-helpers';
 import CarePlanUpdateEvent from '../care-plan-update-event';
+import Clinic from '../clinic';
 import Concern from '../concern';
 import Patient from '../patient';
 import PatientConcern from '../patient-concern';
@@ -10,7 +17,6 @@ import ProgressNote from '../progress-note';
 import User from '../user';
 
 const userRole = 'physician';
-const homeClinicId = uuid();
 
 describe('care plan update event model', () => {
   let db: Db;
@@ -19,19 +25,15 @@ describe('care plan update event model', () => {
   let concern: Concern;
   let patientConcern: PatientConcern;
   let patientGoal: PatientGoal;
+  let clinic: Clinic;
 
   beforeEach(async () => {
     db = await Db.get();
     await Db.clear();
 
-    user = await User.create({
-      email: 'care@care.com',
-      firstName: 'Dan',
-      lastName: 'Plant',
-      userRole,
-      homeClinicId,
-    });
-    patient = await createPatient(createMockPatient(123), user.id);
+    clinic = await Clinic.create(createMockClinic());
+    user = await User.create(createMockUser(11, clinic.id, userRole));
+    patient = await createPatient(createMockPatient(123, clinic.id), user.id);
     concern = await Concern.create({ title: 'Concern' });
     patientConcern = await PatientConcern.create({
       patientId: patient.id,

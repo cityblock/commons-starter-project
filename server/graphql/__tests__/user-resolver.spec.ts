@@ -2,20 +2,26 @@ import { graphql } from 'graphql';
 import { cloneDeep } from 'lodash';
 import * as uuid from 'uuid/v4';
 import Db from '../../db';
+import Clinic from '../../models/clinic';
 import User from '../../models/user';
-import { mockGoogleOauthAuthorize } from '../../spec-helpers';
+import {
+  createMockClinic,
+  createMockUser,
+  mockGoogleOauthAuthorize,
+} from '../../spec-helpers';
 import schema from '../make-executable-schema';
 
 describe('user tests', () => {
   let db: Db;
+  let clinic: Clinic;
   const userRole = 'physician';
-  const homeClinicId = uuid();
   const log = jest.fn();
   const logger = { log };
 
   beforeEach(async () => {
     db = await Db.get();
     await Db.clear();
+    clinic = await Clinic.create(createMockClinic());
   });
 
   afterAll(async () => {
@@ -24,19 +30,13 @@ describe('user tests', () => {
 
   describe('resolve user', () => {
     it('can fetch user', async () => {
-      const user = await User.create({
-        email: 'a@b.com',
-        firstName: 'Bertrand',
-        lastName: 'Russell',
-        userRole,
-        homeClinicId,
-      });
+      const user = await User.create(createMockUser(11, clinic.id, userRole, 'a@b.com'));
       const query = `{ user(userId: "${user.id}") { email, firstName, lastName } }`;
       const result = await graphql(schema, query, null, { db, userRole });
       expect(cloneDeep(result.data!.user)).toMatchObject({
         email: 'a@b.com',
-        firstName: 'Bertrand',
-        lastName: 'Russell',
+        firstName: 'dan',
+        lastName: 'plant',
       });
     });
 
@@ -51,13 +51,7 @@ describe('user tests', () => {
 
   describe('resolve all users', () => {
     it('resolves all users', async () => {
-      const user = await User.create({
-        email: 'a@b.com',
-        firstName: 'Bertrand',
-        lastName: 'Russell',
-        userRole,
-        homeClinicId,
-      });
+      const user = await User.create(createMockUser(11, clinic.id, userRole));
 
       const query = `{ users { edges { node { id, firstName } } } }`;
       const result = await graphql(schema, query, null, {
@@ -70,7 +64,7 @@ describe('user tests', () => {
           {
             node: {
               id: user.id,
-              firstName: 'Bertrand',
+              firstName: 'dan',
             },
           },
         ],
@@ -78,13 +72,7 @@ describe('user tests', () => {
     });
 
     it('does not resolve all users for non-admins', async () => {
-      await User.create({
-        email: 'a@b.com',
-        firstName: 'Bertrand',
-        lastName: 'Russell',
-        userRole,
-        homeClinicId,
-      });
+      await User.create(createMockUser(11, clinic.id, userRole));
 
       const query = `{ users { edges { node { id, firstName } } } }`;
       const result = await graphql(schema, query, null, { db, userRole });
@@ -93,31 +81,11 @@ describe('user tests', () => {
     });
 
     it('returns correct page information', async () => {
-      await User.create({
-        email: 'a@b.com',
-        userRole,
-        homeClinicId,
-      });
-      const user2 = await User.create({
-        email: 'b@c.com',
-        userRole,
-        homeClinicId,
-      });
-      const user3 = await User.create({
-        email: 'c@d.com',
-        userRole: 'healthCoach',
-        homeClinicId,
-      });
-      const user4 = await User.create({
-        email: 'd@e.com',
-        userRole: 'familyMember',
-        homeClinicId,
-      });
-      const user5 = await User.create({
-        email: 'e@f.com',
-        userRole: 'nurseCareManager',
-        homeClinicId,
-      });
+      await User.create(createMockUser(11, clinic.id, userRole));
+      const user2 = await User.create(createMockUser(11, clinic.id, userRole, 'b@c.com'));
+      const user3 = await User.create(createMockUser(11, clinic.id, userRole, 'c@d.com'));
+      const user4 = await User.create(createMockUser(11, clinic.id, userRole, 'd@e.com'));
+      const user5 = await User.create(createMockUser(11, clinic.id, userRole, 'e@f.com'));
 
       const query = `{
         users(pageNumber: 0, pageSize: 4) {
@@ -176,13 +144,7 @@ describe('user tests', () => {
 
   describe('resolve current user', () => {
     it('can fetch current user', async () => {
-      const user = await User.create({
-        email: 'a@b.com',
-        firstName: 'Bertrand',
-        lastName: 'Russell',
-        userRole,
-        homeClinicId,
-      });
+      const user = await User.create(createMockUser(11, clinic.id, userRole));
       const query = `{ currentUser { email, firstName, lastName } }`;
       const result = await graphql(schema, query, null, {
         db,
@@ -190,9 +152,9 @@ describe('user tests', () => {
         userRole,
       });
       expect(cloneDeep(result.data!.currentUser)).toMatchObject({
-        email: 'a@b.com',
-        firstName: 'Bertrand',
-        lastName: 'Russell',
+        email: 'dan@plant.com',
+        firstName: 'dan',
+        lastName: 'plant',
       });
     });
 
@@ -218,13 +180,7 @@ describe('user tests', () => {
 
   describe('currentUserEdit', () => {
     it('edits user', async () => {
-      const user = await User.create({
-        email: 'a@b.com',
-        firstName: 'Bertrand',
-        lastName: 'Russell',
-        userRole,
-        homeClinicId,
-      });
+      const user = await User.create(createMockUser(11, clinic.id, userRole));
       const query = `mutation {
         currentUserEdit(input: { locale: "es", firstName: "first" }) {
           locale, firstName
@@ -253,7 +209,7 @@ describe('user tests', () => {
         firstName: 'Bertrand',
         lastName: 'Russell',
         userRole,
-        homeClinicId,
+        homeClinicId: clinic.id,
       });
       expect(user.lastLoginAt).toBeNull();
       mockGoogleOauthAuthorize(cityblockToken);
@@ -279,7 +235,7 @@ describe('user tests', () => {
       const user = await User.create({
         email: 'logan@cityblock.com',
         userRole,
-        homeClinicId,
+        homeClinicId: clinic.id,
       });
       mockGoogleOauthAuthorize(cityblockToken);
 
@@ -335,7 +291,7 @@ describe('user tests', () => {
   describe('userCreate', () => {
     it('creates a new user', async () => {
       const mutation = `mutation {
-        userCreate(input: { email: "a@b.com", homeClinicId: "${homeClinicId}" }) {
+        userCreate(input: { email: "a@b.com", homeClinicId: "${clinic.id}" }) {
           email
         }
       }`;
@@ -346,13 +302,9 @@ describe('user tests', () => {
     });
 
     it('errors if email already exists', async () => {
-      await User.create({
-        email: 'a@b.com',
-        userRole,
-        homeClinicId,
-      });
+      await User.create(createMockUser(11, clinic.id, userRole, 'a@b.com'));
       const mutation = `mutation {
-        userCreate(input: { email: "a@b.com", homeClinicId: "${homeClinicId}" }) {
+        userCreate(input: { email: "a@b.com", homeClinicId: "${clinic.id}" }) {
           email
       } }`;
       const result = await graphql(schema, mutation, null, { db, userRole });
@@ -364,11 +316,7 @@ describe('user tests', () => {
 
   describe('userEditRole', () => {
     it('edits user role', async () => {
-      await User.create({
-        email: 'a@b.com',
-        userRole,
-        homeClinicId,
-      });
+      await User.create(createMockUser(11, clinic.id, userRole, 'a@b.com'));
       const mutation = `mutation {
         userEditRole(input: { email: "a@b.com", userRole: "nurseCareManager" }) {
           email, userRole
@@ -381,11 +329,7 @@ describe('user tests', () => {
     });
 
     it('error if user not able to edit user role for other users', async () => {
-      await User.create({
-        email: 'a@b.com',
-        userRole,
-        homeClinicId,
-      });
+      await User.create(createMockUser(11, clinic.id, userRole, 'a@b.com'));
       const mutation = `mutation {
         userEditRole(input: { email: "a@b.com", userRole: "nurseCareManager" }) {
           email, userRole
@@ -399,11 +343,7 @@ describe('user tests', () => {
 
   describe('userDelete', () => {
     it('deletes user', async () => {
-      await User.create({
-        email: 'a@b.com',
-        userRole,
-        homeClinicId,
-      });
+      await User.create(createMockUser(11, clinic.id, userRole, 'a@b.com'));
       const mutation = `mutation {
         userDelete(input: { email: "a@b.com" }) {
           email, userRole
@@ -417,11 +357,7 @@ describe('user tests', () => {
     });
 
     it('error if user not able to delete user', async () => {
-      await User.create({
-        email: 'a@b.com',
-        userRole,
-        homeClinicId,
-      });
+      await User.create(createMockUser(11, clinic.id, userRole, 'a@b.com'));
       const mutation = `mutation {
         userDelete(input: { email: "a@b.com" }) {
           email, userRole

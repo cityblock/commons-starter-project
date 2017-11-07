@@ -166,12 +166,14 @@ export default class CarePlanSuggestion extends BaseModel {
     const existingPatientConcernIdsQuery = PatientConcern.query(txn)
       .where('patientId', patientId)
       .andWhere('deletedAt', null)
-      .select('concernId');
+      .select('concernId')
+      .orderBy('createdAt', 'asc');
 
     const existingPatientGoalIdsQuery = PatientGoal.query(txn)
       .where('patientId', patientId)
       .andWhere('deletedAt', null)
-      .select('goalSuggestionTemplateId');
+      .select('goalSuggestionTemplateId')
+      .orderBy('createdAt', 'asc');
 
     return await this.query(txn)
       .eager(EAGER_QUERY)

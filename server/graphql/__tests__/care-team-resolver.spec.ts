@@ -1,31 +1,31 @@
 import { graphql } from 'graphql';
 import { cloneDeep } from 'lodash';
-import * as uuid from 'uuid/v4';
 import Db from '../../db';
+import Clinic from '../../models/clinic';
 import Patient from '../../models/patient';
 import User from '../../models/user';
-import { createMockPatient, createPatient } from '../../spec-helpers';
+import {
+  createMockClinic,
+  createMockPatient,
+  createMockUser,
+  createPatient,
+} from '../../spec-helpers';
 import schema from '../make-executable-schema';
 
 describe('care team', () => {
   let db: Db;
   let patient: Patient;
   let user: User;
+  let clinic: Clinic;
   const userRole = 'physician';
-  const homeClinicId = uuid();
 
   beforeEach(async () => {
     db = await Db.get();
     await Db.clear();
 
-    user = await User.create({
-      email: 'a@b.com',
-      firstName: 'Dan',
-      lastName: 'Plant',
-      userRole,
-      homeClinicId,
-    });
-    patient = await createPatient(createMockPatient(), user.id);
+    clinic = await Clinic.create(createMockClinic());
+    user = await User.create(createMockUser(11, clinic.id, userRole));
+    patient = await createPatient(createMockPatient(11, clinic.id), user.id);
   });
 
   afterAll(async () => {
@@ -34,11 +34,7 @@ describe('care team', () => {
 
   describe('patient care team', () => {
     it('adds user to care team', async () => {
-      const user2 = await User.create({
-        email: 'b@c.com',
-        userRole,
-        homeClinicId,
-      });
+      const user2 = await User.create(createMockUser(11, clinic.id, userRole, 'b@c.com'));
       const mutation = `mutation {
         careTeamAddUser(input: { userId: "${user2.id}", patientId: "${patient.id}" }) {
           id
@@ -80,11 +76,7 @@ describe('care team', () => {
   describe('user patient panel', () => {
     describe('getting a patient panel for a different user', () => {
       it('works if user has no patients', async () => {
-        const user2 = await User.create({
-          email: 'b@c.com',
-          userRole,
-          homeClinicId,
-        });
+        const user2 = await User.create(createMockUser(11, clinic.id, userRole, 'b@c.com'));
         const query = `{
           userPatientPanel(userId: "${user2.id}", pageNumber: 0, pageSize: 10) {
             edges { node { id, firstName } }
@@ -101,8 +93,8 @@ describe('care team', () => {
       });
 
       it('works if user has patients', async () => {
-        const patient1 = await createPatient(createMockPatient(123), user.id);
-        const patient2 = await createPatient(createMockPatient(321), user.id);
+        const patient1 = await createPatient(createMockPatient(123, clinic.id), user.id);
+        const patient2 = await createPatient(createMockPatient(321, clinic.id), user.id);
 
         const query = `{
           userPatientPanel(userId: "${user.id}", pageNumber: 0, pageSize: 10) {
@@ -138,11 +130,7 @@ describe('care team', () => {
 
     describe('getting a patient panel for the current user', () => {
       it('works if user has no patients', async () => {
-        const user2 = await User.create({
-          email: 'b@c.com',
-          userRole,
-          homeClinicId,
-        });
+        const user2 = await User.create(createMockUser(11, clinic.id, userRole, 'b@c.com'));
         const query = `{
           userPatientPanel(pageNumber: 0, pageSize: 10) {
             edges { node { id, firstName } }
@@ -159,8 +147,8 @@ describe('care team', () => {
       });
 
       it('works if user has patients', async () => {
-        const patient1 = await createPatient(createMockPatient(123), user.id);
-        const patient2 = await createPatient(createMockPatient(321), user.id);
+        const patient1 = await createPatient(createMockPatient(123, clinic.id), user.id);
+        const patient2 = await createPatient(createMockPatient(321, clinic.id), user.id);
 
         const query = `{
           userPatientPanel(pageNumber: 0, pageSize: 10) {

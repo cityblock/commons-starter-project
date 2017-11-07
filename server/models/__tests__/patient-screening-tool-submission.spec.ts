@@ -1,7 +1,13 @@
 import * as uuid from 'uuid/v4';
 import Db from '../../db';
-import { createMockPatient, createPatient } from '../../spec-helpers';
+import {
+  createMockClinic,
+  createMockPatient,
+  createMockUser,
+  createPatient,
+} from '../../spec-helpers';
 import Answer from '../answer';
+import Clinic from '../clinic';
 import Patient from '../patient';
 import PatientAnswer from '../patient-answer';
 import PatientScreeningToolSubmission from '../patient-screening-tool-submission';
@@ -10,7 +16,7 @@ import RiskArea from '../risk-area';
 import ScreeningTool from '../screening-tool';
 import User from '../user';
 
-const homeClinicId = uuid();
+const userRole = 'physician';
 
 describe('patient screening tool submission model', () => {
   let db: Db;
@@ -20,6 +26,7 @@ describe('patient screening tool submission model', () => {
   let patient1: Patient;
   let patient2: Patient;
   let user: User;
+  let clinic: Clinic;
 
   beforeEach(async () => {
     db = await Db.get();
@@ -34,13 +41,10 @@ describe('patient screening tool submission model', () => {
       title: 'Screening Tool 2',
       riskAreaId: riskArea.id,
     });
-    user = await User.create({
-      email: 'care@care.com',
-      userRole: 'physician',
-      homeClinicId,
-    });
-    patient1 = await createPatient(createMockPatient(123), user.id);
-    patient2 = await createPatient(createMockPatient(456), user.id);
+    clinic = await Clinic.create(createMockClinic());
+    user = await User.create(createMockUser(11, clinic.id, userRole));
+    patient1 = await createPatient(createMockPatient(123, clinic.id), user.id);
+    patient2 = await createPatient(createMockPatient(45, clinic.id), user.id);
   });
 
   afterAll(async () => {
@@ -265,7 +269,7 @@ describe('patient screening tool submission model', () => {
     );
     const submissionIds = submissions.map(submission => submission.id);
     expect(submissions.length).toEqual(2);
-    expect(submissions).toMatchObject([submission3, submission1]);
+    expect(submissions).toMatchObject([submission1, submission3]);
     expect(submissionIds).not.toContain(submission2.id);
   });
 

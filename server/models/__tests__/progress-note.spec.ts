@@ -1,6 +1,12 @@
 import * as uuid from 'uuid/v4';
 import Db from '../../db';
-import { createMockPatient, createPatient } from '../../spec-helpers';
+import {
+  createMockClinic,
+  createMockPatient,
+  createMockUser,
+  createPatient,
+} from '../../spec-helpers';
+import Clinic from '../clinic';
 import Patient from '../patient';
 import ProgressNote from '../progress-note';
 import ProgressNoteTemplate from '../progress-note-template';
@@ -13,13 +19,15 @@ describe('progress note model', () => {
   let progressNoteTemplate: ProgressNoteTemplate;
   let user: User;
   let patient: Patient;
+  let clinic: Clinic;
 
   beforeEach(async () => {
     db = await Db.get();
     await Db.clear();
 
-    user = await User.create({ email: 'a@b.com', userRole, homeClinicId: uuid() });
-    patient = await createPatient(createMockPatient(123), user.id);
+    clinic = await Clinic.create(createMockClinic());
+    user = await User.create(createMockUser(11, clinic.id, userRole, 'a@b.com'));
+    patient = await createPatient(createMockPatient(123, clinic.id), user.id);
     progressNoteTemplate = await ProgressNoteTemplate.create({
       title: 'title',
     });

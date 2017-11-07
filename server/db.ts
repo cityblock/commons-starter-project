@@ -35,7 +35,7 @@ export default class Db {
 
   static async clear() {
     if (knex) {
-      await knex.transaction(async trx => {
+      return await knex.transaction(async trx => {
         await trx
           .withSchema('information_schema')
           .select('table_name')

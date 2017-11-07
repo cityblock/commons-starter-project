@@ -1,13 +1,18 @@
 import * as uuid from 'uuid/v4';
 import Db from '../../db';
-import { createMockPatient, createPatient } from '../../spec-helpers';
+import {
+  createMockClinic,
+  createMockPatient,
+  createMockUser,
+  createPatient,
+} from '../../spec-helpers';
+import Clinic from '../clinic';
 import ProgressNote from '../progress-note';
 import Task from '../task';
 import TaskEvent from '../task-event';
 import User from '../user';
 
 const userRole = 'physician';
-const homeClinicId = uuid();
 
 describe('task event model', () => {
   let db: Db;
@@ -22,14 +27,9 @@ describe('task event model', () => {
   });
 
   it('should create and retrieve a task event', async () => {
-    const user = await User.create({
-      email: 'care@care.com',
-      firstName: 'Dan',
-      lastName: 'Plant',
-      userRole,
-      homeClinicId,
-    });
-    const patient = await createPatient(createMockPatient(123), user.id);
+    const clinic = await Clinic.create(createMockClinic());
+    const user = await User.create(createMockUser(11, clinic.id, userRole));
+    const patient = await createPatient(createMockPatient(123, clinic.id), user.id);
     const dueAt = new Date().toISOString();
     const task = await Task.create({
       title: 'title',
@@ -64,14 +64,9 @@ describe('task event model', () => {
   it('automatically opens a progress note on create', async () => {
     ProgressNote.autoOpenIfRequired = jest.fn();
 
-    const user = await User.create({
-      email: 'care@care.com',
-      firstName: 'Dan',
-      lastName: 'Plant',
-      userRole,
-      homeClinicId,
-    });
-    const patient = await createPatient(createMockPatient(123), user.id);
+    const clinic = await Clinic.create(createMockClinic());
+    const user = await User.create(createMockUser(11, clinic.id, userRole));
+    const patient = await createPatient(createMockPatient(123, clinic.id), user.id);
     const dueAt = new Date().toISOString();
     const task = await Task.create({
       title: 'title',
@@ -96,12 +91,9 @@ describe('task event model', () => {
   });
 
   it('fetches all not deleted task events for a task', async () => {
-    const user = await User.create({
-      email: 'a@b.com',
-      userRole,
-      homeClinicId,
-    });
-    const patient = await createPatient(createMockPatient(123), user.id);
+    const clinic = await Clinic.create(createMockClinic());
+    const user = await User.create(createMockUser(11, clinic.id, userRole));
+    const patient = await createPatient(createMockPatient(123, clinic.id), user.id);
     const dueAt = new Date().toISOString();
     const task = await Task.create({
       title: 'title',
@@ -146,17 +138,10 @@ describe('task event model', () => {
   });
 
   it('fetches all not deleted task events for a user', async () => {
-    const user = await User.create({
-      email: 'a@b.com',
-      userRole,
-      homeClinicId,
-    });
-    const user2 = await User.create({
-      email: 'b@c.com',
-      userRole,
-      homeClinicId,
-    });
-    const patient = await createPatient(createMockPatient(123), user.id);
+    const clinic = await Clinic.create(createMockClinic());
+    const user = await User.create(createMockUser(11, clinic.id, userRole));
+    const user2 = await User.create(createMockUser(11, clinic.id, userRole, 'b@c.com'));
+    const patient = await createPatient(createMockPatient(123, clinic.id), user.id);
     const dueAt = new Date().toISOString();
     const task = await Task.create({
       title: 'title',
@@ -216,12 +201,9 @@ describe('task event model', () => {
   });
 
   it('deletes a task event', async () => {
-    const user = await User.create({
-      email: 'a@b.com',
-      userRole,
-      homeClinicId,
-    });
-    const patient = await createPatient(createMockPatient(123), user.id);
+    const clinic = await Clinic.create(createMockClinic());
+    const user = await User.create(createMockUser(11, clinic.id, userRole));
+    const patient = await createPatient(createMockPatient(123, clinic.id), user.id);
     const dueAt = new Date().toISOString();
     const task = await Task.create({
       title: 'title',

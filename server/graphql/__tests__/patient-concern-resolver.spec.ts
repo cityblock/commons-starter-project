@@ -1,12 +1,17 @@
 import { graphql } from 'graphql';
 import { cloneDeep } from 'lodash';
-import * as uuid from 'uuid/v4';
 import Db from '../../db';
+import Clinic from '../../models/clinic';
 import Concern from '../../models/concern';
 import Patient from '../../models/patient';
 import PatientConcern from '../../models/patient-concern';
 import User from '../../models/user';
-import { createMockPatient, createPatient } from '../../spec-helpers';
+import {
+  createMockClinic,
+  createMockPatient,
+  createMockUser,
+  createPatient,
+} from '../../spec-helpers';
 import schema from '../make-executable-schema';
 
 describe('patient concern resolver', () => {
@@ -14,21 +19,19 @@ describe('patient concern resolver', () => {
   let concern: Concern;
   let patient: Patient;
   let user: User;
+  let clinic: Clinic;
   const userRole = 'admin';
 
   beforeEach(async () => {
     db = await Db.get();
     await Db.clear();
 
+    clinic = await Clinic.create(createMockClinic());
+    user = await User.create(createMockUser(11, clinic.id, userRole, 'care@care.com'));
     concern = await Concern.create({
       title: 'Housing',
     });
-    user = await User.create({
-      email: 'care@care.com',
-      userRole,
-      homeClinicId: uuid(),
-    });
-    patient = await createPatient(createMockPatient(123), user.id);
+    patient = await createPatient(createMockPatient(123, clinic.id), user.id);
   });
 
   afterAll(async () => {

@@ -1,13 +1,18 @@
-import * as uuid from 'uuid/v4';
 import Db from '../../../db';
 import Answer from '../../../models/answer';
+import Clinic from '../../../models/clinic';
 import Patient from '../../../models/patient';
 import PatientAnswer from '../../../models/patient-answer';
 import Question from '../../../models/question';
 import QuestionCondition from '../../../models/question-condition';
 import RiskArea from '../../../models/risk-area';
 import User from '../../../models/user';
-import { createMockPatient, createPatient } from '../../../spec-helpers';
+import {
+  createMockClinic,
+  createMockPatient,
+  createMockUser,
+  createPatient,
+} from '../../../spec-helpers';
 import {
   getPatientAnswersByQuestionId,
   isQuestionApplicable,
@@ -16,7 +21,6 @@ import {
 
 describe('answer applicable tests', () => {
   const userRole = 'admin';
-  const homeClinicId = uuid();
 
   let db: Db;
   let riskArea: RiskArea;
@@ -24,11 +28,13 @@ describe('answer applicable tests', () => {
   let answer: Answer;
   let user: User;
   let patient: Patient;
+  let clinic: Clinic;
 
   beforeEach(async () => {
     db = await Db.get();
     await Db.clear();
-    user = await User.create({ email: 'a@b.com', userRole, homeClinicId });
+    clinic = await Clinic.create(createMockClinic());
+    user = await User.create(createMockUser(11, clinic.id, userRole));
 
     riskArea = await RiskArea.create({
       title: 'testing',
@@ -50,7 +56,7 @@ describe('answer applicable tests', () => {
       questionId: question.id,
       order: 1,
     });
-    patient = await createPatient(createMockPatient(123), user.id);
+    patient = await createPatient(createMockPatient(123, clinic.id), user.id);
   });
 
   afterAll(async () => {

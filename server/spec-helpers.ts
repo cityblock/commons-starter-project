@@ -1,5 +1,4 @@
 import * as nock from 'nock';
-import * as uuid from 'uuid/v4';
 import {
   IRedoxClinicalSummaryEncounter,
   IRedoxClinicalSummaryMedication,
@@ -10,6 +9,7 @@ import CarePlanUpdateEvent from './models/care-plan-update-event';
 import CareTeam from './models/care-team';
 import Patient, { IPatientEditableFields } from './models/patient';
 import PatientAnswerEvent from './models/patient-answer-event';
+import { UserRole } from './models/user';
 
 export interface ICreatePatient extends IPatientEditableFields {
   athenaPatientId: number;
@@ -21,7 +21,7 @@ export async function createPatient(patient: ICreatePatient, userId: string): Pr
   return instance;
 }
 
-export function createMockPatient(athenaPatientId = 1, homeClinicId = uuid()) {
+export function createMockPatient(athenaPatientId = 1, homeClinicId: string) {
   return {
     athenaPatientId,
     firstName: 'dan',
@@ -33,6 +33,29 @@ export function createMockPatient(athenaPatientId = 1, homeClinicId = uuid()) {
     consentToCall: false,
     consentToText: false,
     language: 'en',
+  };
+}
+
+export function createMockUser(
+    athenaProviderId = 1,
+    homeClinicId: string,
+    userRole: UserRole = 'admin',
+    email: string = 'dan@plant.com',
+) {
+  return {
+    firstName: 'dan',
+    lastName: 'plant',
+    userRole,
+    email,
+    homeClinicId,
+    athenaProviderId,
+  };
+}
+
+export function createMockClinic(name = 'The Dan Plant Center', departmentId = 11) {
+  return {
+    name,
+    departmentId,
   };
 }
 

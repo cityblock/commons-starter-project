@@ -125,6 +125,28 @@ exports.seed = function(knex, Promise) {
             homeClinicId: clinicIds[0],
             athenaProviderId: 12,
           },
+          {
+            id: uuid.v4(),
+            createdAt: new Date().toISOString(),
+            updatedAt: new Date().toISOString(),
+            firstName: 'Tristan',
+            lastName: 'Williams',
+            userRole: 'physician',
+            email: 'tristan@cityblock.com',
+            homeClinicId: clinicIds[0],
+            athenaProviderId: 13,
+          },
+          {
+            id: uuid.v4(),
+            createdAt: new Date().toISOString(),
+            updatedAt: new Date().toISOString(),
+            firstName: 'Laura',
+            lastName: 'Cressman',
+            userRole: 'physician',
+            email: 'laura@cityblock.com',
+            homeClinicId: clinicIds[0],
+            athenaProviderId: 27,
+          },
         ])
         .then(function() {
           return knex

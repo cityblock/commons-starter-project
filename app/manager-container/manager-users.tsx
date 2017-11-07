@@ -5,6 +5,7 @@ import * as React from 'react';
 import { compose, graphql } from 'react-apollo';
 import { connect, Dispatch } from 'react-redux';
 import { push } from 'react-router-redux';
+import * as currentUserQuery from '../graphql/queries/get-current-user.graphql';
 import * as usersQuery from '../graphql/queries/get-users.graphql';
 import * as userCreateMutationGraphql from '../graphql/queries/user-create-mutation.graphql';
 import * as userDeleteMutationGraphql from '../graphql/queries/user-delete-mutation.graphql';
@@ -56,6 +57,7 @@ interface IState {
 }
 
 export interface IGraphqlProps {
+  currentUser?: FullUserFragment;
   loading?: boolean;
   error?: string;
   deleteUser?: (
@@ -152,13 +154,13 @@ export class ManagerUsers extends React.Component<IProps & IDispatchProps & IGra
   }
 
   async onInviteUser(localPartOfEmail: string) {
-    const { createUser } = this.props;
+    const { createUser, currentUser } = this.props;
 
-    if (createUser) {
+    if (createUser && currentUser) {
       await createUser({
         variables: {
           email: `${localPartOfEmail}@cityblock.com`,
-          homeClinicId: '1', // TODO
+          homeClinicId: currentUser.homeClinicId,
         },
       });
     }
@@ -249,20 +251,25 @@ function mapDispatchToProps(dispatch: Dispatch<() => void>, ownProps: IProps): I
 
 export default compose(
   connect<{}, IDispatchProps, IProps>(undefined, mapDispatchToProps),
-  graphql(userDeleteMutationGraphql as any, {
+  graphql<IGraphqlProps, IProps>(userDeleteMutationGraphql as any, {
     name: 'deleteUser',
     options: {
       refetchQueries: ['getUsers'],
     },
   }),
-  graphql(userEditRoleMutationGraphql as any, { name: 'editUserRole' }),
-  graphql(userCreateMutationGraphql as any, {
+  graphql<IGraphqlProps, IProps>(userEditRoleMutationGraphql as any, { name: 'editUserRole' }),
+  graphql<IGraphqlProps, IProps>(userCreateMutationGraphql as any, {
     name: 'createUser',
     options: {
       refetchQueries: ['getUsers'],
     },
   }),
-  graphql(usersQuery as any, {
+  graphql<IGraphqlProps, IProps>(currentUserQuery as any, {
+    props: ({ data }) => ({
+      currentUser: data ? (data as any).currentUser : null,
+    }),
+  }),
+  graphql<IGraphqlProps, IProps>(usersQuery as any, {
     options: (props: IProps) => ({ variables: getPageParams(props) }),
     props: ({ data, ownProps }) => ({
       fetchMoreUsers: () =>

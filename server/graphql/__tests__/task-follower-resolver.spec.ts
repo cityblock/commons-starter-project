@@ -29,7 +29,7 @@ describe('task follower', () => {
       homeClinicId,
     });
     patient = await createPatient(createMockPatient(), user.id);
-    const dueAt = new Date().toUTCString();
+    const dueAt = new Date().toISOString();
     task = await Task.create({
       title: 'title',
       description: 'description',
@@ -122,7 +122,7 @@ describe('task follower', () => {
 
     it('returns correct page information', async () => {
       const patient2 = await createPatient(createMockPatient(123), user.id);
-      const dueAt = new Date().toUTCString();
+      const dueAt = new Date().toISOString();
       await Task.create({
         title: 'title',
         description: 'description',

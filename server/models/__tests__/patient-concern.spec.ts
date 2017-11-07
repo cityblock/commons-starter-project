@@ -188,7 +188,7 @@ describe('patient concern model', () => {
       patientId: patient.id,
       userId: user.id,
     });
-    const completedAt = new Date().toUTCString();
+    const completedAt = new Date().toISOString();
     const patientConcernUpdated = await PatientConcern.update(
       patientConcern.id,
       {
@@ -205,7 +205,7 @@ describe('patient concern model', () => {
       patientId: patient.id,
       userId: user.id,
     });
-    const completedAt = new Date().toUTCString();
+    const completedAt = new Date().toISOString();
     await PatientConcern.update(
       patientConcern.id,
       {

@@ -182,7 +182,7 @@ export async function userLogin(root: any, { input }: IUserLoginOptions, { db, l
     throw new Error(`User not found for ${googleResult.email}`);
   }
 
-  const lastLoginAt = new Date().toUTCString();
+  const lastLoginAt = new Date().toISOString();
   const googleAuth = await GoogleAuth.updateOrCreate({
     accessToken: oauth.access_token,
     expiresAt: new Date(new Date().valueOf() + oauth.expires_in).toISOString(),

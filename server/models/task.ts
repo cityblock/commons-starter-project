@@ -241,7 +241,7 @@ export default class Task extends BaseModel {
       .eager(EAGER_QUERY)
       .modifyEager('followers', builder => builder.where('task_follower.deletedAt', null))
       .updateAndFetchById(taskId, {
-        completedAt: new Date().toUTCString(),
+        completedAt: new Date().toISOString(),
         completedById: userId,
       });
   }

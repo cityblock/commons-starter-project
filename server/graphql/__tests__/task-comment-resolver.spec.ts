@@ -28,7 +28,7 @@ describe('task comments', () => {
       homeClinicId,
     });
     const patient = await createPatient(createMockPatient(), user.id);
-    const dueAt = new Date().toUTCString();
+    const dueAt = new Date().toISOString();
     task = await Task.create({
       title: 'title',
       description: 'description',

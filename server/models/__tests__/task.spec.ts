@@ -38,7 +38,7 @@ describe('task model', () => {
   });
 
   it('should create and retrieve a task', async () => {
-    const dueAt = new Date().toUTCString();
+    const dueAt = new Date().toISOString();
     const task = await Task.create({
       title: 'title',
       description: 'description',
@@ -67,7 +67,7 @@ describe('task model', () => {
   });
 
   it('should update task', async () => {
-    const dueAt = new Date().toUTCString();
+    const dueAt = new Date().toISOString();
     const task = await Task.create({
       title: 'title',
       description: 'description',
@@ -92,7 +92,7 @@ describe('task model', () => {
   });
 
   it('fetches all not deleted tasks', async () => {
-    const dueAt = new Date().toUTCString();
+    const dueAt = new Date().toISOString();
     await Task.create({
       title: 'title',
       description: 'description',
@@ -148,7 +148,7 @@ describe('task model', () => {
   });
 
   it('fetches a limited set of tasks', async () => {
-    const dueAt = new Date().toUTCString();
+    const dueAt = new Date().toISOString();
     await Task.create({
       title: 'title',
       description: 'description',
@@ -198,7 +198,7 @@ describe('task model', () => {
       userRole,
       homeClinicId,
     });
-    const dueAt = new Date().toUTCString();
+    const dueAt = new Date().toISOString();
     await Task.create({
       title: 'title',
       description: 'description',
@@ -240,7 +240,7 @@ describe('task model', () => {
   });
 
   it('completes a task', async () => {
-    const dueAt = new Date().toUTCString();
+    const dueAt = new Date().toISOString();
     const task = await Task.create({
       title: 'title',
       description: 'description',
@@ -257,7 +257,7 @@ describe('task model', () => {
   });
 
   it('uncompletes a task', async () => {
-    const dueAt = new Date().toUTCString();
+    const dueAt = new Date().toISOString();
     const task = await Task.create({
       title: 'title',
       description: 'description',

@@ -29,7 +29,7 @@ describe('task comment model', () => {
       homeClinicId,
     });
     const patient = await createPatient(createMockPatient(123), user.id);
-    const dueAt = new Date().toUTCString();
+    const dueAt = new Date().toISOString();
     const task = await Task.create({
       title: 'title',
       description: 'description',
@@ -72,7 +72,7 @@ describe('task comment model', () => {
       homeClinicId,
     });
     const patient = await createPatient(createMockPatient(123), user.id);
-    const dueAt = new Date().toUTCString();
+    const dueAt = new Date().toISOString();
     const task = await Task.create({
       title: 'title',
       description: 'description',
@@ -98,7 +98,7 @@ describe('task comment model', () => {
       homeClinicId,
     });
     const patient = await createPatient(createMockPatient(123), user.id);
-    const dueAt = new Date().toUTCString();
+    const dueAt = new Date().toISOString();
     const task = await Task.create({
       title: 'title',
       description: 'description',
@@ -172,7 +172,7 @@ describe('task comment model', () => {
       homeClinicId,
     });
     const patient = await createPatient(createMockPatient(123), user.id);
-    const dueAt = new Date().toUTCString();
+    const dueAt = new Date().toISOString();
     const task = await Task.create({
       title: 'title',
       description: 'description',

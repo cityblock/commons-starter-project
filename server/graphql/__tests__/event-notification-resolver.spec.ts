@@ -30,7 +30,7 @@ describe('event notification tests', () => {
       homeClinicId,
     });
     patient = await createPatient(createMockPatient(123), user.id);
-    const dueAt = new Date().toUTCString();
+    const dueAt = new Date().toISOString();
     task = await Task.create({
       title: 'title',
       description: 'description',

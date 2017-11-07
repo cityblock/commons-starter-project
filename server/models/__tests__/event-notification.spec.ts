@@ -40,7 +40,7 @@ describe('task event model', () => {
     task = await Task.create({
       title: 'title',
       description: 'description',
-      dueAt: new Date().toUTCString(),
+      dueAt: new Date().toISOString(),
       patientId: patient.id,
       createdById: user.id,
       assignedToId: user.id,

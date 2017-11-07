@@ -25,7 +25,7 @@ describe('util tests', () => {
     const authToken = signJwt({
       userId: uuid(),
       userRole: 'physician',
-      lastLoginAt: new Date().toUTCString(),
+      lastLoginAt: new Date().toISOString(),
     });
     const { userId, userRole } = await parseAndVerifyJwt(authToken);
     const context = await getGraphQLContext(
@@ -46,7 +46,7 @@ describe('util tests', () => {
     const authToken = signJwt({
       userId: uuid(),
       userRole: 'physician',
-      lastLoginAt: new Date('01/01/2010').toUTCString(),
+      lastLoginAt: new Date('01/01/2010').toISOString(),
     });
     const context = await getGraphQLContext(
       {
@@ -75,12 +75,12 @@ describe('util tests', () => {
         userRole: 'physician',
         homeClinicId: uuid(),
       });
-      await User.update(user.id, { lastLoginAt: now.toUTCString() });
+      await User.update(user.id, { lastLoginAt: now.toISOString() });
 
       const authToken = signJwt({
         userId: user.id,
         userRole: 'physician',
-        lastLoginAt: new Date(now.valueOf() - 10000).toUTCString(),
+        lastLoginAt: new Date(now.valueOf() - 10000).toISOString(),
       });
       await expect(parseAndVerifyJwt(authToken)).rejects.toMatchObject(
         new Error('token invalid: login too old'),
@@ -94,7 +94,7 @@ describe('util tests', () => {
         userRole: 'physician',
         lastLoginAt: new Date(
           now.valueOf() - (TWENTY_FOUR_HOURS_IN_MILLISECONDS + 1000),
-        ).toUTCString(),
+        ).toISOString(),
       });
       await expect(parseAndVerifyJwt(authToken)).rejects.toMatchObject(
         new Error('token invalid: login too old'),

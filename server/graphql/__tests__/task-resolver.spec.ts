@@ -30,7 +30,7 @@ describe('task tests', () => {
       homeClinicId,
     });
     patient = await createPatient(createMockPatient(123), user.id);
-    const dueAt = new Date().toUTCString();
+    const dueAt = new Date().toISOString();
     task1 = await Task.create({
       title: 'title',
       description: 'description',
@@ -241,7 +241,7 @@ describe('task tests', () => {
       expect(taskEvents2.total).toEqual(2);
       expect(taskEvents2.results[0].eventType).toEqual('edit_assignee');
 
-      const newDueAt = new Date().toUTCString();
+      const newDueAt = new Date().toISOString();
       const query3 = `mutation {
         taskEdit(input: { dueAt: "${newDueAt}", taskId: "${task1.id}" }) {
           id

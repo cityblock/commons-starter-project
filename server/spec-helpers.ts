@@ -65,7 +65,7 @@ export function mockRedoxTokenFetch() {
   nock(config.REDOX_TOKEN_URL)
     .post('')
     .reply(200, {
-      expires: new Date('01-01-2020').toUTCString(),
+      expires: new Date('01-01-2020').toISOString(),
       accessToken: 'cool-token',
       refreshToken: 'refreshing-token',
     });

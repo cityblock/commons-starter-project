@@ -114,17 +114,16 @@ function mapDispatchToProps(dispatch: Dispatch<() => void>): IDispatchProps {
   };
 }
 
-const AuthenticationWithGraphQL = graphql<
-  {},
-  IStateProps & IDispatchProps,
-  IProps
->(currentUserQuery as any, {
-  props: ({ data }) => ({
-    loading: data ? data.loading : false,
-    error: data ? data.error : null,
-    currentUser: data ? (data as any).currentUser : null,
-  }),
-})(AuthenticationContainer);
+const AuthenticationWithGraphQL = graphql<{}, IStateProps & IDispatchProps, IProps>(
+  currentUserQuery as any,
+  {
+    props: ({ data }) => ({
+      loading: data ? data.loading : false,
+      error: data ? data.error : null,
+      currentUser: data ? (data as any).currentUser : null,
+    }),
+  },
+)(AuthenticationContainer);
 
 export default connect<IStateProps, IDispatchProps, IProps>(mapStateToProps, mapDispatchToProps)(
   AuthenticationWithGraphQL,

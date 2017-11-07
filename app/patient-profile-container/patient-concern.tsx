@@ -18,13 +18,6 @@ export interface IPatientConcernStats {
 }
 
 export default class PatientConcern extends React.Component<IProps, {}> {
-  constructor(props: IProps) {
-    super(props);
-
-    this.getStats = this.getStats.bind(this);
-    this.renderGoals = this.renderGoals.bind(this);
-  }
-
   getStats() {
     const { patientConcern } = this.props;
     const { patientGoals } = patientConcern;

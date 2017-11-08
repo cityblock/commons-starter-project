@@ -18,6 +18,7 @@ exports[`renders patient concern 1`] = `
       </div>
       <div
         className={undefined}
+        onClick={[Function]}
       />
     </div>
     <div

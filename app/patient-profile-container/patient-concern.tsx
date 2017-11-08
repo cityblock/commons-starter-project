@@ -3,12 +3,15 @@ import * as React from 'react';
 import { FormattedDate } from 'react-intl';
 import { FullPatientConcernFragment } from '../graphql/types';
 import * as styles from './css/patient-care-plan.css';
+import PatientConcernOptions from './patient-concern-options/index';
 import PatientGoal from './patient-goal';
 
 interface IProps {
   patientConcern: FullPatientConcernFragment;
   selected: boolean;
-  onClick: (id: string) => any;
+  optionsOpen: boolean;
+  onClick: (id: string) => void;
+  onOptionsToggle: (id: string) => (e: React.MouseEvent<HTMLDivElement>) => void;
 }
 
 export interface IPatientConcernStats {
@@ -75,8 +78,11 @@ export default class PatientConcern extends React.Component<IProps, {}> {
   }
 
   render() {
-    const { onClick, patientConcern, selected } = this.props;
+    const { onClick, onOptionsToggle, patientConcern, selected, optionsOpen } = this.props;
     const { patientGoals } = patientConcern;
+    const hamburgerClass = optionsOpen
+      ? classNames(styles.patientConcernHamburger, styles.hamburgerSelected)
+      : styles.patientConcernHamburger;
 
     const patientConcernStyles = classNames(styles.patientConcern, {
       [styles.selected]: selected,
@@ -92,7 +98,9 @@ export default class PatientConcern extends React.Component<IProps, {}> {
         <div className={patientConcernStyles} onClick={() => onClick(patientConcern.id)}>
           <div className={styles.patientConcernTitleRow}>
             <div className={styles.patientConcernTitle}>{patientConcern.concern.title}</div>
-            <div className={styles.patientConcernHamburger} />
+            <div className={hamburgerClass} onClick={onOptionsToggle(patientConcern.id)}>
+              {optionsOpen && <PatientConcernOptions />}
+            </div>
           </div>
           <div className={styles.patientConcernMetaRow}>
             <div className={styles.patientConcernStats}>

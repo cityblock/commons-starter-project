@@ -14,8 +14,7 @@ exports.up = function(knex, Promise) {
 
 exports.down = function(knex, Promise) {
   return knex.schema.alterTable('user', table => {
-    table
-      .dropForeign('homeClinicId');
+    table.dropForeign('homeClinicId');
 
     table
       .uuid('homeClinicId')

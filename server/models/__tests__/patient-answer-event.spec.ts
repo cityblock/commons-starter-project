@@ -153,14 +153,15 @@ describe('patient answer event model', () => {
     });
 
     expect(fetchedPatientAnswerEvents.total).toEqual(2);
-    expect(fetchedPatientAnswerEvents.results).toMatchObject([
-      {
-        patientAnswerId: patientAnswer.id,
-      },
-      {
-        patientAnswerId: patientAnswer2.id,
-      },
-    ]);
+
+    expect(fetchedPatientAnswerEvents.total).toEqual(2);
+    const newAnswer = fetchedPatientAnswerEvents.results
+      .find(r => r.patientAnswerId === patientAnswer.id);
+    const newAnswer2 = fetchedPatientAnswerEvents.results
+      .find(r => r.patientAnswerId === patientAnswer2.id);
+
+    expect(newAnswer).toBeTruthy();
+    expect(newAnswer2).toBeTruthy();
   });
 
   it('automatically opens a progress note on createMultiple', async () => {

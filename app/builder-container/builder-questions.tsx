@@ -201,17 +201,16 @@ class BuilderQuestions extends React.Component<IProps, IState> {
         {screeningTool.title}
       </option>
     ));
-    const progressNoteTemplateSortOptions = (progressNoteTemplates || []).map(
-      progressNoteTemplate => (
-        <option
-          key={progressNoteTemplate.id}
-          value={progressNoteTemplate.id}
-          data-optiontype={'progressNoteTemplate'}
-        >
-          {progressNoteTemplate.title}
-        </option>
-      ),
-    );
+    const progressNoteTemplateSortOptions = (progressNoteTemplates || []
+    ).map(progressNoteTemplate => (
+      <option
+        key={progressNoteTemplate.id}
+        value={progressNoteTemplate.id}
+        data-optiontype={'progressNoteTemplate'}
+      >
+        {progressNoteTemplate.title}
+      </option>
+    ));
     const sortOptions = riskAreaSortOptions
       .concat(screeningToolSortOptions)
       .concat(progressNoteTemplateSortOptions);

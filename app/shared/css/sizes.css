@@ -45,6 +45,8 @@
   --basetica-medium: "BaseticaMedium", Helvetica, sans-serif;
   --roboto: 'Roboto', Helvetica, sans-serif;
   --roboto-medium-weight: 500;
+  --options-drop-shadow: 0 6px 8px 0 rgba(0, 0, 0, 0.15);
+  --light-blue-hover: rgba(143, 173, 255, 0.1);
 }
 
 :root {

@@ -67,6 +67,7 @@ export const patientConcernTitleRow: string;
 export const patientConcernMetaRow: string;
 export const patientConcernTitle: string;
 export const patientConcernHamburger: string;
+export const hamburgerSelected: string;
 export const patientConcernStats: string;
 export const patientConcernStat: string;
 export const patientConcernStatLabel: string;

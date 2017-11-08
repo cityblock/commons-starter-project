@@ -37,10 +37,10 @@ export function createMockPatient(athenaPatientId = 1, homeClinicId: string) {
 }
 
 export function createMockUser(
-    athenaProviderId = 1,
-    homeClinicId: string,
-    userRole: UserRole = 'admin',
-    email: string = 'dan@plant.com',
+  athenaProviderId = 1,
+  homeClinicId: string,
+  userRole: UserRole = 'admin',
+  email: string = 'dan@plant.com',
 ) {
   return {
     firstName: 'dan',

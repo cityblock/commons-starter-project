@@ -535,10 +535,17 @@
   background-position: center center;
   background-size: contain;
   background-repeat: no-repeat;
+  position: relative;
+  transition: background-image 0.2s ease-in-out;
 
   &:hover {
-    cursor: pointer;
+    background-image: url('../../assets/dot-hamburger-grey-small.svg');
   }
+}
+
+.hamburgerSelected {
+  /* Important so not overwritten when hovering inside menu */
+  background-image: url('../../assets/dot-hamburger-blue-small.svg') !important;
 }
 
 .patientConcernMetaRow {

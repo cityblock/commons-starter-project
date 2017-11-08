@@ -437,13 +437,21 @@ describe('patient answer tests', () => {
         userId: user.id,
       });
       const clonedResult = cloneDeep(result.data!.patientAnswersCreate);
-      expect(clonedResult[0]).toMatchObject({
+
+      const patientAnswer = clonedResult.find(
+        (r: any) => r.answerValue === 'loves writing tests too!',
+      );
+      const patientAnswer2 = clonedResult.find(
+        (r: any) => r.answerValue === 'hates writing tests too!',
+      );
+
+      expect(patientAnswer).toMatchObject({
         answerValue: 'loves writing tests too!',
         answerId: answer.id,
         patientId: patient.id,
         applicable: false,
       });
-      expect(clonedResult[1]).toMatchObject({
+      expect(patientAnswer2).toMatchObject({
         answerValue: 'hates writing tests too!',
         answerId: answer2.id,
         patientId: patient.id,
@@ -524,13 +532,17 @@ describe('patient answer tests', () => {
         userId: user.id,
       });
       const clonedResult = cloneDeep(result.data!.patientAnswersCreate);
-      expect(clonedResult[0]).toMatchObject({
+      const patientAnswer = clonedResult.find((r: any) => r.answerValue === '3');
+      const patientAnswer2 = clonedResult.find((r: any) => r.answerValue === '4');
+
+      expect(patientAnswer).toMatchObject({
         answerValue: '3',
         answerId: answer.id,
         patientId: patient.id,
         applicable: false,
       });
-      expect(clonedResult[1]).toMatchObject({
+
+      expect(patientAnswer2).toMatchObject({
         answerValue: '4',
         answerId: answer2.id,
         patientId: patient.id,
@@ -611,13 +623,17 @@ describe('patient answer tests', () => {
       });
 
       const clonedResult = cloneDeep(result.data!.patientAnswersCreate);
-      expect(clonedResult[0]).toMatchObject({
+      const patientAnswer = clonedResult.find((r: any) => r.answerValue === '3');
+      const patientAnswer2 = clonedResult.find((r: any) => r.answerValue === '4');
+
+      expect(patientAnswer).toMatchObject({
         answerValue: '3',
         answerId: answer.id,
         patientId: patient.id,
         applicable: false,
       });
-      expect(clonedResult[1]).toMatchObject({
+
+      expect(patientAnswer2).toMatchObject({
         answerValue: '4',
         answerId: answer2.id,
         patientId: patient.id,
@@ -626,8 +642,12 @@ describe('patient answer tests', () => {
 
       const carePlanSuggestions = await CarePlanSuggestion.getForPatient(patient.id);
       expect(carePlanSuggestions.length).toEqual(2);
-      expect(carePlanSuggestions[1].goalSuggestionTemplate!.id).toEqual(goalSuggestionTemplate.id);
-      expect(carePlanSuggestions[0].concern!.id).toEqual(concern.id);
+
+      const concernSuggestion = carePlanSuggestions.find(s => s.suggestionType === 'concern');
+      const goalSuggestion = carePlanSuggestions.find(s => s.suggestionType === 'goal');
+
+      expect(concernSuggestion!.concern!.id).toEqual(concern.id);
+      expect(goalSuggestion!.goalSuggestionTemplate!.id).toEqual(goalSuggestionTemplate.id);
     });
   });
 

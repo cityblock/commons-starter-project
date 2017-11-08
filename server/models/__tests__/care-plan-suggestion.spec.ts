@@ -98,14 +98,13 @@ describe('care plan suggestion', () => {
 
       expect(fetchedCarePlanSuggestions.length).toEqual(2);
 
-      const goalSuggestion = fetchedCarePlanSuggestions .find(s => s.suggestionType === 'goal');
-      const concernSuggestion =
-      fetchedCarePlanSuggestions .find(s => s.suggestionType === 'concern');
+      const goalSuggestion = fetchedCarePlanSuggestions.find(s => s.suggestionType === 'goal');
+      const concernSuggestion = fetchedCarePlanSuggestions.find(
+        s => s.suggestionType === 'concern',
+      );
 
       expect(concernSuggestion!.concern).toMatchObject(concern);
-      expect(goalSuggestion!.goalSuggestionTemplate).toMatchObject(
-        goalSuggestionTemplate,
-      );
+      expect(goalSuggestion!.goalSuggestionTemplate).toMatchObject(goalSuggestionTemplate);
     });
 
     it('gets carePlanSuggestions for a patient', async () => {
@@ -166,13 +165,12 @@ describe('care plan suggestion', () => {
 
       expect(patientCarePlanSuggestions.length).toEqual(2);
       const goalSuggestion = patientCarePlanSuggestions.find(s => s.suggestionType === 'goal');
-      const concernSuggestion =
-        patientCarePlanSuggestions.find(s => s.suggestionType === 'concern');
+      const concernSuggestion = patientCarePlanSuggestions.find(
+        s => s.suggestionType === 'concern',
+      );
 
       expect(concernSuggestion!.concernId).toEqual(concern2.id);
-      expect(goalSuggestion!.goalSuggestionTemplateId).toEqual(
-        goalSuggestionTemplate2.id,
-      );
+      expect(goalSuggestion!.goalSuggestionTemplateId).toEqual(goalSuggestionTemplate2.id);
     });
 
     it('accepts a carePlanSuggestion', async () => {

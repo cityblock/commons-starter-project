@@ -1,9 +1,6 @@
 import * as uuid from 'uuid/v4';
 import Db from '../../db';
-import {
-  createMockClinic,
-  createMockUser,
-} from '../../spec-helpers';
+import { createMockClinic, createMockUser } from '../../spec-helpers';
 import Clinic from '../clinic';
 import GoogleAuth from '../google-auth';
 import User from '../user';
@@ -71,7 +68,7 @@ describe('user model', () => {
     const fakeClinicId = uuid();
     const message = `Key (homeClinicId)=(${fakeClinicId}) is not present in table "clinic".`;
 
-    await (User.create(createMockUser(11, fakeClinicId, userRole))).catch(e => {
+    await User.create(createMockUser(11, fakeClinicId, userRole)).catch(e => {
       expect(e.detail).toEqual(message);
     });
   });

@@ -4,11 +4,7 @@ import * as uuid from 'uuid/v4';
 import Db from '../../db';
 import Clinic from '../../models/clinic';
 import User from '../../models/user';
-import {
-  createMockClinic,
-  createMockUser,
-  mockGoogleOauthAuthorize,
-} from '../../spec-helpers';
+import { createMockClinic, createMockUser, mockGoogleOauthAuthorize } from '../../spec-helpers';
 import schema from '../make-executable-schema';
 
 describe('user tests', () => {

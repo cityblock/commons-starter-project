@@ -16,19 +16,20 @@ interface IProps {
 
 interface IState {
   selectedPatientConcernId?: string;
+  optionsDropdownConcernId?: string;
 }
 
 export default class PatientCarePlan extends React.Component<IProps, IState> {
   constructor(props: IProps) {
     super(props);
 
-    this.renderCarePlan = this.renderCarePlan.bind(this);
-    this.onClickPatientConcern = this.onClickPatientConcern.bind(this);
-
-    this.state = { selectedPatientConcernId: undefined };
+    this.state = {
+      selectedPatientConcernId: undefined,
+      optionsDropdownConcernId: undefined,
+    };
   }
 
-  onClickPatientConcern(patientConcernId: string) {
+  onClickPatientConcern = (patientConcernId: string) => {
     const { selectedPatientConcernId } = this.state;
 
     if (patientConcernId === selectedPatientConcernId) {
@@ -38,9 +39,21 @@ export default class PatientCarePlan extends React.Component<IProps, IState> {
     }
   }
 
+  onOptionsToggle = (patientConcernId: string) => (e: React.MouseEvent<HTMLDivElement>) => {
+    // Prevents closing of selected concern if unselected concern options toggle clicked
+    e.stopPropagation();
+    const { optionsDropdownConcernId } = this.state;
+
+    if (patientConcernId === optionsDropdownConcernId) {
+      this.setState(() => ({ optionsDropdownConcernId: undefined }));
+    } else {
+      this.setState(() => ({ optionsDropdownConcernId: patientConcernId }));
+    }
+  }
+
   renderCarePlan() {
     const { loading, carePlan, displayType } = this.props;
-    const { selectedPatientConcernId } = this.state;
+    const { selectedPatientConcernId, optionsDropdownConcernId } = this.state;
 
     if (loading) {
       return (
@@ -82,13 +95,11 @@ export default class PatientCarePlan extends React.Component<IProps, IState> {
     }
 
     return patientConcerns.map((patientConcern, index) => {
-      let selected: boolean = false;
-
-      if (index === 0 && selectedPatientConcernId === undefined) {
-        selected = true;
-      } else {
-        selected = selectedPatientConcernId === patientConcern.id;
-      }
+      const selected =
+        index === 0 && selectedPatientConcernId === undefined
+          ? true
+          : selectedPatientConcernId === patientConcern.id;
+      const optionsOpen = optionsDropdownConcernId === patientConcern.id;
 
       return (
         <PatientConcern
@@ -96,6 +107,8 @@ export default class PatientCarePlan extends React.Component<IProps, IState> {
           selected={selected}
           patientConcern={patientConcern}
           onClick={this.onClickPatientConcern}
+          onOptionsToggle={this.onOptionsToggle}
+          optionsOpen={optionsOpen}
         />
       );
     });

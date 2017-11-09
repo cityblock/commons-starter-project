@@ -7,7 +7,7 @@ mutation taskTemplateEdit(
   $completedWithinNumber: Int
   $completedWithinInterval: String
   $repeating: Boolean
-  $priority: String
+  $priority: Priority
   $careTeamAssigneeRole: String
 ) {
   taskTemplateEdit(

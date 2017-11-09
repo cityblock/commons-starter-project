@@ -20,6 +20,7 @@ import {
   taskUncompleteMutationVariables,
   FullPatientGoalFragment,
   FullTaskFragment,
+  Priority,
 } from '../../graphql/types';
 import { IState as IAppState } from '../../store';
 import AddTaskFollower from './add-task-follower';
@@ -387,7 +388,7 @@ export class Task extends React.Component<allProps, IState> {
     if (taskId) {
       try {
         this.setState(() => ({ changePriorityError: undefined }));
-        await editTask({ variables: { taskId, priority: event.target.value } });
+        await editTask({ variables: { taskId, priority: event.target.value as Priority } });
       } catch (err) {
         this.setState(() => ({ changePriorityError: err.message }));
       }

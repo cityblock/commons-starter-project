@@ -5,7 +5,7 @@ mutation taskEdit(
   $assignedToId: String
   $title: String
   $description: String
-  $priority: String
+  $priority: Priority
   $dueAt: String
   $patientGoalId: String
 ) {

@@ -835,7 +835,7 @@ input TaskEditInput {
   description: String
   dueAt: String
   assignedToId: String
-  priority: String
+  priority: Priority
   patientGoalId: String
 }
 
@@ -1069,7 +1069,7 @@ input TaskTemplateCreateInput {
   completedWithinInterval: String
   repeating: Boolean
   goalSuggestionTemplateId: String!
-  priority: String
+  priority: Priority
   careTeamAssigneeRole: String
 }
 
@@ -1079,7 +1079,7 @@ input TaskTemplateEditInput {
   completedWithinInterval: String
   repeating: Boolean
   goalSuggestionTemplateId: String
-  priority: String
+  priority: Priority
   careTeamAssigneeRole: String
   taskTemplateId: String!
 }

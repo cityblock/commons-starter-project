@@ -205,7 +205,7 @@ describe('task tests', () => {
     it('creates the relevant TaskEvent records', async () => {
       // Editing one field at a time
       const query = `mutation {
-        taskEdit(input: { priority: "high", taskId: "${task1.id}" }) {
+        taskEdit(input: { priority: high, taskId: "${task1.id}" }) {
           id
           priority
         }
@@ -307,7 +307,7 @@ describe('task tests', () => {
         taskEdit(input: {
           dueAt: "${newDueAt}"
           assignedToId: "${user.id}"
-          priority: "medium"
+          priority: medium
           taskId: "${task1.id}"
           title: "brand new title"
           description: "fancy new description"

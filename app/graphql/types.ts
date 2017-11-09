@@ -4311,7 +4311,7 @@ export type taskEditMutationVariables = {
   assignedToId?: string | null,
   title?: string | null,
   description?: string | null,
-  priority?: string | null,
+  priority?: Priority | null,
   dueAt?: string | null,
   patientGoalId?: string | null,
 };
@@ -4369,7 +4369,7 @@ export type taskTemplateCreateMutationVariables = {
   completedWithinNumber?: number | null,
   completedWithinInterval?: string | null,
   repeating?: boolean | null,
-  priority?: string | null,
+  priority?: Priority | null,
   careTeamAssigneeRole?: string | null,
 };
 
@@ -4418,7 +4418,7 @@ export type taskTemplateEditMutationVariables = {
   completedWithinNumber?: number | null,
   completedWithinInterval?: string | null,
   repeating?: boolean | null,
-  priority?: string | null,
+  priority?: Priority | null,
   careTeamAssigneeRole?: string | null,
 };
 

@@ -1472,7 +1472,7 @@ declare module 'schema' {
     description: string | null;
     dueAt: string | null;
     assignedToId: string | null;
-    priority: string | null;
+    priority: IPriorityEnum | null;
     patientGoalId: string | null;
   }
 
@@ -1703,7 +1703,7 @@ declare module 'schema' {
     completedWithinInterval: string | null;
     repeating: boolean | null;
     goalSuggestionTemplateId: string;
-    priority: string | null;
+    priority: IPriorityEnum | null;
     careTeamAssigneeRole: string | null;
   }
 
@@ -1714,7 +1714,7 @@ declare module 'schema' {
     completedWithinInterval: string | null;
     repeating: boolean | null;
     goalSuggestionTemplateId: string | null;
-    priority: string | null;
+    priority: IPriorityEnum | null;
     careTeamAssigneeRole: string | null;
     taskTemplateId: string;
   }

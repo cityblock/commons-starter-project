@@ -47,7 +47,7 @@ describe('task template resolver', () => {
           title: "Housing",
           repeating: false,
           goalSuggestionTemplateId: "${goalSuggestionTemplate.id}",
-          priority: "low",
+          priority: low,
           careTeamAssigneeRole: "physician",
          }) {
           title

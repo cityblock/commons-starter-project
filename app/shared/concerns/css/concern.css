@@ -149,7 +149,7 @@
 }
 
 .inactive .patientConcernTitle, .inactive .patientConcernStatValue, .inactive .patientConcernDateValue {
-  color: var(--black-opqaue);
+  color: var(--black-opaque);
 }
 
 .patientGoals {

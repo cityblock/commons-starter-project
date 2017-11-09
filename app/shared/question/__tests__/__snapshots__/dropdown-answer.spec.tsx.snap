@@ -1,0 +1,26 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders dropdown answer 1`] = `
+<div
+  className={undefined}
+>
+  <select
+    className=""
+    disabled={false}
+    onChange={[Function]}
+    value="true"
+  >
+    <option
+      disabled={true}
+      value="Select one"
+    >
+      Select one
+    </option>
+    <option
+      value="true"
+    >
+      answer value
+    </option>
+  </select>
+</div>
+`;

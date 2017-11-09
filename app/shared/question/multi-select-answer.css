@@ -1,0 +1,42 @@
+@import '../../shared/css/sizes';
+.multiSelectAnswer {
+  margin: 0 10px var(--small-gutter) 0;
+  display: flex;
+  align-items: center;
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  height: 50px;
+  padding: var(--small-gutter);
+  font-family: var(--roboto);
+  font-size: var(--default-font-size);
+  line-height: var(--default-line-height);
+  color: var(--black-color);
+  user-select: none;
+  transition: all 0.2s linear;
+
+  &:hover {
+    cursor: pointer;
+    color: var(--blue-color);
+    border-color: var(--blue-color);
+  }
+}
+
+.multiSelectAnswer.disabled {
+  color: var(--dark-gray-background-color);
+  border-color: var(--dark-gray-background-color);
+
+  &:hover {
+    cursor: default;
+  }
+}
+
+.multiSelectAnswer.selected {
+  color: var(--blue-color);
+  border: 1px solid var(--blue-color);
+}
+
+.multiSelectAnswer.disabled.selected {
+  color: var(--border-color);
+  border-color: var(--border-color);
+  background-color: var(--gray-background-color);
+}

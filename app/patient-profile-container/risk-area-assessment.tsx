@@ -1,8 +1,7 @@
 import * as classNames from 'classnames';
-import { clone, isEqual, keys, values } from 'lodash';
+import { clone, keys } from 'lodash';
 import * as React from 'react';
 import { compose, graphql } from 'react-apollo';
-import { FormattedRelative } from 'react-intl';
 import { connect, Dispatch } from 'react-redux';
 import { push } from 'react-router-redux';
 import * as patientAnswersQuery from '../graphql/queries/get-patient-answers.graphql';
@@ -25,8 +24,17 @@ import {
 } from '../graphql/types';
 import * as sortSearchStyles from '../shared/css/sort-search.css';
 import { Popup } from '../shared/popup/popup';
+import PatientQuestion from '../shared/question/patient-question';
+import {
+  getLastUpdated,
+  getNewPatientAnswers,
+  getQuestionVisibility,
+  getUpdateForAnswer,
+  setupQuestionsState,
+  updateQuestionAnswersState,
+  IQuestionsState,
+} from '../shared/question/question-helpers';
 import * as styles from './css/risk-areas.css';
-import RiskAreaQuestion from './risk-area-question';
 import ScreeningToolsPopup from './screening-tools-popup';
 
 interface IProps {
@@ -59,20 +67,6 @@ interface IProps {
   screeningToolsError?: string;
 }
 
-export interface IQuestionsState {
-  [questionId: string]: {
-    answers: Array<{
-      id: string;
-      value: string;
-    }>;
-    oldAnswers: Array<{
-      id: string;
-      value: string;
-    }>;
-    changed: boolean;
-  };
-}
-
 interface IState {
   inProgress: boolean;
   questions: IQuestionsState;
@@ -93,29 +87,6 @@ export interface IQuestionCondition {
 export class RiskAreaAssessment extends React.Component<IProps, IState> {
   constructor(props: IProps) {
     super(props);
-
-    this.onStart = this.onStart.bind(this);
-    this.onCancel = this.onCancel.bind(this);
-    this.onSave = this.onSave.bind(this);
-    this.updateAnswersApplicability = this.updateAnswersApplicability.bind(this);
-    this.getChangedQuestionIds = this.getChangedQuestionIds.bind(this);
-    this.onChange = this.onChange.bind(this);
-    this.evaluateQuestionConditions = this.evaluateQuestionConditions.bind(this);
-    this.getQuestionVisibility = this.getQuestionVisibility.bind(this);
-    this.renderRiskAreaQuestion = this.renderRiskAreaQuestion.bind(this);
-    this.renderRiskAreaQuestions = this.renderRiskAreaQuestions.bind(this);
-    this.updateMultiSelectAnswer = this.updateMultiSelectAnswer.bind(this);
-    this.updateAnswer = this.updateAnswer.bind(this);
-    this.updateVisibility = this.updateVisibility.bind(this);
-    this.isLoading = this.isLoading.bind(this);
-    this.isError = this.isError.bind(this);
-    this.isLoadingOrError = this.isLoadingOrError.bind(this);
-    this.getLastUpdated = this.getLastUpdated.bind(this);
-    this.onRetryLoad = this.onRetryLoad.bind(this);
-    this.onClickToSelectScreeningTool = this.onClickToSelectScreeningTool.bind(this);
-    this.onDismissScreeningToolSelect = this.onDismissScreeningToolSelect.bind(this);
-    this.onSelectScreeningTool = this.onSelectScreeningTool.bind(this);
-
     this.state = {
       inProgress: false,
       questions: {},
@@ -127,115 +98,48 @@ export class RiskAreaAssessment extends React.Component<IProps, IState> {
   }
 
   componentWillReceiveProps(nextProps: IProps) {
-    const { error, redirectToThreeSixty, patientAnswers, riskAreaQuestions } = nextProps;
-    const { questions } = this.state;
+    const { error, redirectToThreeSixty } = nextProps;
 
     // The chosen RiskArea most likely does not exist
     if (error && redirectToThreeSixty) {
       redirectToThreeSixty();
     }
 
-    // RiskArea Questions have loaded
-    if (riskAreaQuestions && !this.props.riskAreaQuestions) {
-      riskAreaQuestions.forEach(question => {
-        if (!questions[question.id]) {
-          questions[question.id] = { answers: [], oldAnswers: [], changed: false };
-        }
-      });
-
-      this.setState(() => ({ questions }));
-    }
-
-    // Existing PatientAnswers have loaded
-    if (patientAnswers && !this.props.patientAnswers) {
-      patientAnswers.forEach(patientAnswer => {
-        const { question, answerId, answerValue } = patientAnswer;
-
-        if (question) {
-          const existingQuestionState = questions[question.id] || { answers: [], oldAnswers: [] };
-
-          questions[question.id] = {
-            answers: [
-              ...existingQuestionState.answers,
-              {
-                id: answerId,
-                value: answerValue,
-              },
-            ],
-            oldAnswers: [
-              ...existingQuestionState.oldAnswers,
-              {
-                id: answerId,
-                value: answerValue,
-              },
-            ],
-            changed: false,
-          };
-        }
-      });
-
-      this.setState(() => ({ questions }));
-    }
-  }
-
-  getLastUpdated() {
-    const { patientAnswers, patientAnswersLoading, patientAnswersError } = this.props;
-
-    if (patientAnswersLoading) {
-      return 'Loading...';
-    }
-
-    if (patientAnswersError) {
-      return 'Error';
-    }
-
-    if (!patientAnswers || !patientAnswers.length) {
-      return 'Never';
-    }
-
-    const latestAnswer = clone(patientAnswers).sort((answerA, answerB) => {
-      const answerAUpdatedAt = new Date(answerA.updatedAt).valueOf();
-      const answerBUpdatedAt = new Date(answerB.updatedAt).valueOf();
-
-      if (answerAUpdatedAt < answerBUpdatedAt) {
-        return -1;
-      } else if (answerBUpdatedAt < answerAUpdatedAt) {
-        return 1;
-      } else {
-        return 0;
-      }
-    })[0];
-
-    return (
-      <FormattedRelative value={latestAnswer.updatedAt}>
-        {(date: string) => <span>{date}</span>}
-      </FormattedRelative>
+    const questions = setupQuestionsState(
+      this.state.questions,
+      this.props.riskAreaQuestions,
+      nextProps.riskAreaQuestions,
     );
+
+    updateQuestionAnswersState(
+      this.state.questions,
+      nextProps.patientAnswers || [],
+      this.props.patientAnswers,
+    );
+    this.setState({ questions });
   }
 
-  isLoading() {
+  isLoading = () => {
     const { loading, riskAreaQuestionsLoading, patientAnswersLoading } = this.props;
 
     return loading || riskAreaQuestionsLoading || patientAnswersLoading;
-  }
+  };
 
-  isError() {
+  isError = () => {
     const { error, riskAreaQuestionsError, patientAnswersError } = this.props;
 
     return !!error || !!riskAreaQuestionsError || !!patientAnswersError;
-  }
+  };
 
-  isLoadingOrError() {
-    return this.isError() || this.isLoading();
-  }
+  isLoadingOrError = () => this.isError() || this.isLoading();
 
-  onStart() {
+  onStart = () => {
     if (!this.isLoadingOrError()) {
       this.setState(() => ({ inProgress: true }));
     }
-  }
+  };
 
-  onCancel() {
+  onCancel = () => {
     const { questions } = this.state;
 
     keys(questions).forEach(questionId => {
@@ -246,17 +150,20 @@ export class RiskAreaAssessment extends React.Component<IProps, IState> {
     });
 
     this.setState(() => ({ inProgress: false, questions }));
-  }
+  };
 
-  updateVisibility(updatedAnswersResponse: { data: patientAnswersUpdateApplicableMutation }) {
+  updateVisibility = (updatedAnswersResponse: { data: patientAnswersUpdateApplicableMutation }) => {
     const { data } = updatedAnswersResponse;
 
     // TODO: use the response here to verify the visibility of answers in the assessment
     if (data && data.patientAnswersUpdateApplicable) {
       return data;
     }
-  }
+  };
 
+  /**
+   * TODO: evaluate moving to helper
+   */
   async updateAnswersApplicability() {
     const { updateAnswersApplicability, patientId, riskAreaId } = this.props;
 
@@ -284,16 +191,16 @@ export class RiskAreaAssessment extends React.Component<IProps, IState> {
     }
   }
 
-  getChangedQuestionIds() {
+  getChangedQuestionIds = () => {
     const { questions } = this.state;
     const questionIds = keys(questions);
 
     return questionIds.filter(
       questionId => !!questions[questionId] && questions[questionId].changed,
     );
-  }
+  };
 
-  async onSave() {
+  onSave = async () => {
     const { createPatientAnswers, patientId, riskAreaQuestions } = this.props;
     const { questions } = this.state;
     const questionIds = keys(questions);
@@ -302,20 +209,7 @@ export class RiskAreaAssessment extends React.Component<IProps, IState> {
     if (createPatientAnswers && changedQuestionIds.length) {
       this.setState(() => ({ assessmentLoading: true, assessmentError: undefined }));
 
-      const newPatientAnswers = questionIds
-        .filter(questionId => !!questions[questionId] && questions[questionId].changed)
-        .map(questionId => questions[questionId].answers.map(answer => ({ ...answer, questionId })))
-        .reduce((answers1, answers2) => answers1.concat(answers2))
-        .map(answer => {
-          const question = (riskAreaQuestions || []).find(q => q.id === answer.questionId);
-          return {
-            patientId,
-            questionId: answer.questionId,
-            applicable: this.getQuestionVisibility(question),
-            answerId: answer.id,
-            answerValue: answer.value,
-          };
-        });
+      const newPatientAnswers = getNewPatientAnswers(patientId, questions, riskAreaQuestions || []);
 
       try {
         await createPatientAnswers({
@@ -326,6 +220,9 @@ export class RiskAreaAssessment extends React.Component<IProps, IState> {
           },
         });
 
+        /**
+         * TODO: evaluate moving to helper
+         */
         const resetQuestions: IQuestionsState = {};
 
         questionIds.forEach(questionId => {
@@ -350,121 +247,30 @@ export class RiskAreaAssessment extends React.Component<IProps, IState> {
         this.setState(() => ({ assessmentLoading: false, assessmentError: err.message }));
       }
     }
-  }
+  };
 
-  updateMultiSelectAnswer(questionId: string, answerId: string, value: string | number) {
-    const { questions } = this.state;
-    const questionData = questions[questionId];
-
-    const answerIndex = questionData.answers.findIndex((answer: any) => answer.id === answerId);
-
-    if (answerIndex > -1) {
-      questionData.answers.splice(answerIndex, 1);
-    } else {
-      (questionData as any).answers.push({ id: answerId, value });
-    }
-
-    const changed = !isEqual(questionData.answers, questions[questionId].oldAnswers);
-
-    this.setState(() => ({
-      questions: { ...questions, [questionId]: { ...questionData, changed } },
-    }));
-  }
-
-  updateAnswer(questionId: string, answerId: string, value: string | number) {
-    const { questions } = this.state;
-    const questionData = questions[questionId];
-
-    (questionData as any).answers = [{ id: answerId, value }];
-
-    const changed = !isEqual(questionData.answers, questions[questionId].oldAnswers);
-
-    this.setState(() => ({
-      questions: { ...questions, [questionId]: { ...questionData, changed } },
-    }));
-  }
-
-  onChange(questionId: string, answerId: string, value: string | number) {
+  onChange = (questionId: string, answerId: string, value: string | number) => {
     const { riskAreaQuestions } = this.props;
-    const fetchedQuestion = (riskAreaQuestions || []).find(question => question.id === questionId);
 
-    if (fetchedQuestion && fetchedQuestion.answerType === 'multiselect') {
-      this.updateMultiSelectAnswer(questionId, answerId, value);
-    } else if (fetchedQuestion) {
-      this.updateAnswer(questionId, answerId, value);
+    const update = getUpdateForAnswer(
+      questionId,
+      answerId,
+      value,
+      riskAreaQuestions || [],
+      this.state.questions,
+    );
+    if (update) {
+      this.setState({ questions: update });
     }
-  }
+  };
 
-  evaluateQuestionConditions(questionConditions: IQuestionCondition[]) {
-    const { questions } = this.state;
-
-    const questionAnswers = values(questions).map(questionValue => questionValue.answers);
-
-    const conditionsStatus = {
-      total: questionConditions.length,
-      satisfied: 0,
-    };
-
-    if (questionAnswers.length) {
-      const flattenedAnswers = questionAnswers.reduce((answers1, answers2) =>
-        answers1.concat(answers2),
-      );
-
-      questionConditions.forEach(condition => {
-        if (flattenedAnswers.some(answer => answer.id === condition.answerId)) {
-          conditionsStatus.satisfied += 1;
-        }
-      });
-    }
-
-    return conditionsStatus;
-  }
-
-  getQuestionVisibility(question?: FullQuestionFragment): boolean {
-    if (!question) {
-      return false;
-    }
-
-    let visible: boolean = true;
-
-    const questionConditions = question.applicableIfQuestionConditions;
-
-    if (questionConditions && questionConditions.length) {
-      const conditionsMet = this.evaluateQuestionConditions(questionConditions);
-
-      const allTrue = conditionsMet.satisfied === conditionsMet.total;
-      const oneTrue = conditionsMet.satisfied > 0;
-
-      switch (question.applicableIfType) {
-        case 'allTrue': {
-          if (!allTrue) {
-            visible = false;
-            break;
-          }
-        }
-        case 'oneTrue': {
-          if (!oneTrue) {
-            visible = false;
-            break;
-          }
-        }
-        default: {
-          visible = true;
-          break;
-        }
-      }
-    }
-
-    return visible;
-  }
-
-  renderRiskAreaQuestion(question: FullQuestionFragment, index: number) {
+  renderRiskAreaQuestion = (question: FullQuestionFragment, index: number) => {
     const { questions, inProgress } = this.state;
 
-    const visible = this.getQuestionVisibility(question);
+    const visible = getQuestionVisibility(question, questions);
 
     return (
-      <RiskAreaQuestion
+      <PatientQuestion
         visible={visible}
         answerData={questions[question.id]}
         onChange={this.onChange}
@@ -473,15 +279,15 @@ export class RiskAreaAssessment extends React.Component<IProps, IState> {
         editable={inProgress}
       />
     );
-  }
+  };
 
-  renderRiskAreaQuestions() {
+  renderRiskAreaQuestions = () => {
     const { riskAreaQuestions } = this.props;
 
     return (riskAreaQuestions || []).map(this.renderRiskAreaQuestion);
-  }
+  };
 
-  onRetryLoad() {
+  onRetryLoad = () => {
     const { refetchRiskArea, refetchRiskAreaQuestions, refetchPatientAnswers } = this.props;
 
     // TODO: What to do if there is a serious error and these fuctions don't exist?
@@ -497,17 +303,17 @@ export class RiskAreaAssessment extends React.Component<IProps, IState> {
     if (refetchPatientAnswers) {
       refetchPatientAnswers();
     }
-  }
+  };
 
-  onClickToSelectScreeningTool() {
+  onClickToSelectScreeningTool = () => {
     this.setState(() => ({ selectingScreeningTool: true }));
-  }
+  };
 
-  onDismissScreeningToolSelect() {
+  onDismissScreeningToolSelect = () => {
     this.setState(() => ({ selectingScreeningTool: false }));
-  }
+  };
 
-  onSelectScreeningTool(screeningTool: FullScreeningToolFragment) {
+  onSelectScreeningTool = (screeningTool: FullScreeningToolFragment) => {
     const { redirectToScreeningTool } = this.props;
     this.setState(() => ({
       selectingScreeningTool: false,
@@ -517,35 +323,25 @@ export class RiskAreaAssessment extends React.Component<IProps, IState> {
     if (redirectToScreeningTool) {
       redirectToScreeningTool(screeningTool);
     }
-  }
+  };
 
-  render() {
-    const { riskArea, screeningTools } = this.props;
-    const { inProgress, selectingScreeningTool } = this.state;
+  getAssessmentHtml = () => {
+    const { riskArea, patientAnswers, patientAnswersError, patientAnswersLoading } = this.props;
 
+    const lastUpdated = getLastUpdated(
+      patientAnswers || [],
+      patientAnswersLoading,
+      patientAnswersError,
+    );
     const title = riskArea ? riskArea.title : 'Loading...';
 
-    const toolsButtonStyles = classNames(styles.invertedButton, styles.toolsButton, {
-      [styles.hidden]: inProgress,
-    });
-    const cancelButtonStyles = classNames(styles.invertedButton, styles.cancelButton, {
-      [styles.hidden]: !inProgress,
-    });
-    const saveButtonStyles = classNames(styles.button, styles.saveButton, {
-      [styles.hidden]: !inProgress,
-      [styles.disabled]: !this.getChangedQuestionIds().length,
-    });
-    const startButtonStyles = classNames(styles.button, styles.startButton, {
-      [styles.hidden]: inProgress,
-      [styles.disabled]: this.isLoadingOrError(),
-    });
     const titleStyles = classNames(styles.riskAssessmentTitle, {
       [styles.lowRisk]: false,
       [styles.mediumRisk]: true,
       [styles.highRisk]: false,
     });
 
-    const assessmentHtml = this.isError() ? (
+    return this.isError() ? (
       <div className={styles.riskAssessmentError}>
         <div className={styles.riskAssessmentErrorMessage}>
           <div className={styles.riskAssessmentErrorIcon} />
@@ -567,13 +363,33 @@ export class RiskAreaAssessment extends React.Component<IProps, IState> {
           </div>
           <div className={styles.meta}>
             <div className={styles.lastUpdatedLabel}>Last updated:</div>
-            <div className={styles.lastUpdatedValue}>{this.getLastUpdated()}</div>
+            <div className={styles.lastUpdatedValue}>{lastUpdated}</div>
           </div>
         </div>
         {this.renderRiskAreaQuestions()}
       </div>
     );
+  };
 
+  render() {
+    const { screeningTools } = this.props;
+    const { inProgress, selectingScreeningTool } = this.state;
+
+    const toolsButtonStyles = classNames(styles.invertedButton, styles.toolsButton, {
+      [styles.hidden]: inProgress,
+    });
+    const cancelButtonStyles = classNames(styles.invertedButton, styles.cancelButton, {
+      [styles.hidden]: !inProgress,
+    });
+    const saveButtonStyles = classNames(styles.button, styles.saveButton, {
+      [styles.hidden]: !inProgress,
+      [styles.disabled]: !this.getChangedQuestionIds().length,
+    });
+    const startButtonStyles = classNames(styles.button, styles.startButton, {
+      [styles.hidden]: inProgress,
+      [styles.disabled]: this.isLoadingOrError(),
+    });
+    const assessmentHtml = this.getAssessmentHtml();
     return (
       <div>
         <div className={classNames(sortSearchStyles.sortSearchBar, styles.buttonBar)}>

@@ -181,9 +181,10 @@ exports[`builder concerns renders progress note popup with templates renders pro
         [Function]
       </FormattedMessage>
     </div>
-    <ProgressNoteContext
+    <Apollo(Apollo(Apollo(ProgressNoteContext)))
       onChange={[Function]}
       patientId="patient-id"
+      progressNoteId="progress-note-id"
       progressNoteTemplates={
         Array [
           Object {
@@ -272,9 +273,10 @@ exports[`builder concerns renders progress note popup with templates renders pro
         [Function]
       </FormattedMessage>
     </div>
-    <ProgressNoteContext
+    <Apollo(Apollo(Apollo(ProgressNoteContext)))
       onChange={[Function]}
       patientId="patient-id"
+      progressNoteId={undefined}
       progressNoteTemplates={
         Array [
           Object {

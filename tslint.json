@@ -26,6 +26,7 @@
         "named-imports-order": "lowercase-first" // aka Nehabetical
       }
     ],
+    "semicolon": [true, "always", "ignore-bound-class-methods"],
     "object-literal-key-quotes": [true, "as-needed"],
     "variable-name": [
       "check-format",

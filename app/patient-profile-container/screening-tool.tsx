@@ -2,8 +2,6 @@ import * as classNames from 'classnames';
 import { keys, values } from 'lodash';
 import * as React from 'react';
 import { compose, graphql } from 'react-apollo';
-import { connect, Dispatch } from 'react-redux';
-import { push } from 'react-router-redux';
 /* tslint:disable:max-line-length */
 import * as patientScreeningToolSubmissionQuery from '../graphql/queries/get-patient-screening-tool-submission-for-patient-and-screening-tool.graphql';
 import * as screeningToolQuestionsQuery from '../graphql/queries/get-questions.graphql';
@@ -11,25 +9,33 @@ import * as screeningToolQuery from '../graphql/queries/get-screening-tool.graph
 import * as patientAnswersCreate from '../graphql/queries/patient-answers-create-mutation.graphql';
 /* tsline:enable:max-line-length */
 import {
+  patientAnswersCreateMutation,
   patientAnswersCreateMutationVariables,
-  FullPatientAnswerFragment,
   FullPatientScreeningToolSubmissionFragment,
   FullQuestionFragment,
   FullScreeningToolFragment,
 } from '../graphql/types';
 import * as sortSearchStyles from '../shared/css/sort-search.css';
 import { Popup } from '../shared/popup/popup';
+import PatientQuestion from '../shared/question/patient-question';
+import {
+  getNewPatientAnswers,
+  getQuestionVisibility,
+  getUpdateForAnswer,
+  setupQuestionsState,
+  IQuestionsState,
+} from '../shared/question/question-helpers';
 import * as styles from './css/risk-areas.css';
 import { PatientScreeningToolSubmission } from './patient-screening-tool-submission';
-import ScreeningToolQuestion from './screening-tool-question';
 import ScreeningToolResultsPopup from './screening-tool-results-popup';
 
 interface IProps {
   screeningToolId: string;
   patientId: string;
-  routeBase: string;
   patientRoute: string;
-  redirectToScreeningTools?: () => any;
+}
+
+interface IGraphqlProps {
   screeningTool?: FullScreeningToolFragment;
   loading?: boolean;
   error?: string;
@@ -38,21 +44,12 @@ interface IProps {
   screeningToolQuestionsError?: string;
   createPatientAnswers?: (
     options: { variables: patientAnswersCreateMutationVariables },
-  ) => { data: { patientAnswersCreate: [FullPatientAnswerFragment] } };
+  ) => { data: patientAnswersCreateMutation };
   refetchScreeningTool?: () => any;
   refetchScreeningToolQuestions?: () => any;
   previousPatientScreeningToolSubmissionLoading?: boolean;
   previousPatientScreeningToolSubmissionError?: string;
   previousPatientScreeningToolSubmission?: FullPatientScreeningToolSubmissionFragment;
-}
-
-export interface IQuestionsState {
-  [questionId: string]: {
-    answers: Array<{
-      id: string;
-      value: string;
-    }>;
-  };
 }
 
 interface IState {
@@ -62,24 +59,23 @@ interface IState {
   patientScreeningToolSubmissionId?: string;
 }
 
+type allProps = IGraphqlProps & IProps;
+
 export interface IQuestionCondition {
   id: string;
   questionId: string;
   answerId: string;
 }
 
-export class ScreeningTool extends React.Component<IProps, IState> {
-  constructor(props: IProps) {
+export class ScreeningTool extends React.Component<allProps, IState> {
+  constructor(props: allProps) {
     super(props);
 
     this.onSubmit = this.onSubmit.bind(this);
     this.onChange = this.onChange.bind(this);
     this.evaluateQuestionConditions = this.evaluateQuestionConditions.bind(this);
-    this.getQuestionVisibility = this.getQuestionVisibility.bind(this);
     this.renderScreeningToolQuestion = this.renderScreeningToolQuestion.bind(this);
     this.renderScreeningToolQuestions = this.renderScreeningToolQuestions.bind(this);
-    this.updateMultiSelectAnswer = this.updateMultiSelectAnswer.bind(this);
-    this.updateAnswer = this.updateAnswer.bind(this);
     this.isLoading = this.isLoading.bind(this);
     this.isError = this.isError.bind(this);
     this.isLoadingOrError = this.isLoadingOrError.bind(this);
@@ -95,17 +91,14 @@ export class ScreeningTool extends React.Component<IProps, IState> {
     };
   }
 
-  componentWillReceiveProps(nextProps: IProps) {
-    const { screeningToolQuestions } = nextProps;
-    const { questions } = this.state;
-
+  componentWillReceiveProps(nextProps: allProps) {
     // ScreeningTool Questions have loaded
-    if (screeningToolQuestions && !this.props.screeningToolQuestions) {
-      screeningToolQuestions.forEach(question => {
-        if (!questions[question.id]) {
-          questions[question.id] = { answers: [] };
-        }
-      });
+    if (nextProps.screeningToolQuestions && !this.props.screeningToolQuestions) {
+      const questions = setupQuestionsState(
+        this.state.questions,
+        this.props.screeningToolQuestions,
+        nextProps.screeningToolQuestions,
+      );
 
       this.setState(() => ({ questions }));
     }
@@ -150,19 +143,11 @@ export class ScreeningTool extends React.Component<IProps, IState> {
     if (createPatientAnswers && this.allQuestionsAnswered()) {
       this.setState(() => ({ screeningToolLoading: true, screeningToolError: undefined }));
 
-      const patientAnswers = questionIds
-        .map(questionId => questions[questionId].answers.map(answer => ({ ...answer, questionId })))
-        .reduce((answers1, answers2) => answers1.concat(answers2))
-        .map(answer => {
-          const question = (screeningToolQuestions || []).find(q => q.id === answer.questionId);
-          return {
-            patientId,
-            questionId: answer.questionId,
-            applicable: this.getQuestionVisibility(question),
-            answerId: answer.id,
-            answerValue: answer.value,
-          };
-        });
+      const patientAnswers = getNewPatientAnswers(
+        patientId,
+        questions,
+        screeningToolQuestions || [],
+      );
 
       try {
         const results = await createPatientAnswers({
@@ -177,62 +162,39 @@ export class ScreeningTool extends React.Component<IProps, IState> {
         const resetQuestions: IQuestionsState = {};
 
         questionIds.forEach(questionId => {
-          resetQuestions[questionId] = { answers: [] };
+          resetQuestions[questionId] = { answers: [], oldAnswers: [], changed: false };
         });
 
         const { data } = results;
-        const firstCreatedAnswer = data.patientAnswersCreate[0];
-
-        this.setState(() => ({
-          screeningToolLoading: false,
-          screeningToolError: undefined,
-          questions: resetQuestions,
-          patientScreeningToolSubmissionId: firstCreatedAnswer.patientScreeningToolSubmissionId,
-        }));
+        const firstCreatedAnswer = data.patientAnswersCreate ? data.patientAnswersCreate[0] : null;
+        if (firstCreatedAnswer) {
+          this.setState(() => ({
+            screeningToolLoading: false,
+            screeningToolError: undefined,
+            questions: resetQuestions,
+            patientScreeningToolSubmissionId: firstCreatedAnswer.patientScreeningToolSubmissionId,
+          }));
+        }
       } catch (err) {
         this.setState(() => ({ screeningToolLoading: false, screeningToolError: err.message }));
       }
     }
   }
 
-  updateMultiSelectAnswer(questionId: string, answerId: string, value: string | number) {
-    const { questions } = this.state;
-    const questionData = questions[questionId];
-
-    const answerIndex = questionData.answers.findIndex((answer: any) => answer.id === answerId);
-
-    if (answerIndex > -1) {
-      questionData.answers.splice(answerIndex, 1);
-    } else {
-      (questionData as any).answers.push({ id: answerId, value });
-    }
-
-    this.setState(() => ({
-      questions: { ...questions, [questionId]: questionData },
-    }));
-  }
-
-  updateAnswer(questionId: string, answerId: string, value: string | number) {
-    const { questions } = this.state;
-    const questionData = questions[questionId];
-
-    (questionData as any).answers = [{ id: answerId, value }];
-
-    this.setState(() => ({
-      questions: { ...questions, [questionId]: questionData },
-    }));
-  }
-
   onChange(questionId: string, answerId: string, value: string | number) {
     const { screeningToolQuestions } = this.props;
-    const fetchedQuestion = (screeningToolQuestions || []).find(
-      question => question.id === questionId,
-    );
 
-    if (fetchedQuestion && fetchedQuestion.answerType === 'multiselect') {
-      this.updateMultiSelectAnswer(questionId, answerId, value);
-    } else if (fetchedQuestion) {
-      this.updateAnswer(questionId, answerId, value);
+    const update = getUpdateForAnswer(
+      questionId,
+      answerId,
+      value,
+      screeningToolQuestions || [],
+      this.state.questions,
+    );
+    if (update) {
+      this.setState({
+        questions: update,
+      });
     }
   }
 
@@ -261,51 +223,14 @@ export class ScreeningTool extends React.Component<IProps, IState> {
     return conditionsStatus;
   }
 
-  getQuestionVisibility(question?: FullQuestionFragment): boolean {
-    if (!question) {
-      return false;
-    }
-
-    let visible: boolean = true;
-
-    const questionConditions = question.applicableIfQuestionConditions;
-
-    if (questionConditions && questionConditions.length) {
-      const conditionsMet = this.evaluateQuestionConditions(questionConditions);
-
-      const allTrue = conditionsMet.satisfied === conditionsMet.total;
-      const oneTrue = conditionsMet.satisfied > 0;
-
-      switch (question.applicableIfType) {
-        case 'allTrue': {
-          if (!allTrue) {
-            visible = false;
-            break;
-          }
-        }
-        case 'oneTrue': {
-          if (!oneTrue) {
-            visible = false;
-            break;
-          }
-        }
-        default: {
-          visible = true;
-          break;
-        }
-      }
-    }
-
-    return visible;
-  }
-
   renderScreeningToolQuestion(question: FullQuestionFragment, index: number) {
     const { questions } = this.state;
 
-    const visible = this.getQuestionVisibility(question);
+    const visible = getQuestionVisibility(question, questions);
 
     return (
-      <ScreeningToolQuestion
+      <PatientQuestion
+        editable={true}
         visible={visible}
         answerData={questions[question.id]}
         onChange={this.onChange}
@@ -351,21 +276,16 @@ export class ScreeningTool extends React.Component<IProps, IState> {
     );
   }
 
-  render() {
-    const { screeningTool, patientRoute } = this.props;
-    const { patientScreeningToolSubmissionId } = this.state;
+  getAssessmentHtml() {
+    const { screeningTool } = this.props;
     const title = screeningTool ? screeningTool.title : 'Loading...';
-
-    const submitButtonStyles = classNames(styles.button, styles.saveButton, {
-      [styles.disabled]: !this.allQuestionsAnswered(),
-    });
     const titleStyles = classNames(styles.riskAssessmentTitle, {
       [styles.lowRisk]: false,
       [styles.mediumRisk]: true,
       [styles.highRisk]: false,
     });
 
-    const assessmentHtml = this.isError() ? (
+    return this.isError() ? (
       <div className={styles.riskAssessmentError}>
         <div className={styles.riskAssessmentErrorMessage}>
           <div className={styles.riskAssessmentErrorIcon} />
@@ -394,6 +314,17 @@ export class ScreeningTool extends React.Component<IProps, IState> {
         {this.renderScreeningToolQuestions()}
       </div>
     );
+  }
+
+  render() {
+    const { patientRoute } = this.props;
+    const { patientScreeningToolSubmissionId } = this.state;
+
+    const submitButtonStyles = classNames(styles.button, styles.saveButton, {
+      [styles.disabled]: !this.allQuestionsAnswered(),
+    });
+
+    const assessmentHtml = this.getAssessmentHtml();
 
     return (
       <div>
@@ -414,21 +345,11 @@ export class ScreeningTool extends React.Component<IProps, IState> {
   }
 }
 
-function mapDispatchToProps(dispatch: Dispatch<() => void>, ownProps: IProps): Partial<IProps> {
-  return {
-    redirectToScreeningTools: () => {
-      dispatch(push(ownProps.routeBase));
-    },
-  };
-}
-
 export default compose(
-  connect(undefined, mapDispatchToProps),
-  graphql(screeningToolQuery as any, {
+  graphql<IGraphqlProps, IProps>(screeningToolQuery as any, {
     options: (props: IProps) => ({
       variables: {
-        filterType: 'screeningTool',
-        filterId: props.screeningToolId,
+        screeningToolId: props.screeningToolId,
       },
     }),
     props: ({ data }) => ({
@@ -438,10 +359,11 @@ export default compose(
       refetchScreeningTool: data ? data.refetch : null,
     }),
   }),
-  graphql(screeningToolQuestionsQuery as any, {
+  graphql<IGraphqlProps, IProps>(screeningToolQuestionsQuery as any, {
     options: (props: IProps) => ({
       variables: {
-        screeningToolId: props.screeningToolId,
+        filterType: 'screeningTool',
+        filterId: props.screeningToolId,
       },
     }),
     props: ({ data }) => ({
@@ -451,8 +373,8 @@ export default compose(
       refetchScreeningToolQuestions: data ? data.refetch : null,
     }),
   }),
-  graphql(patientAnswersCreate as any, { name: 'createPatientAnswers' }),
-  graphql(patientScreeningToolSubmissionQuery as any, {
+  graphql<IGraphqlProps, IProps>(patientAnswersCreate as any, { name: 'createPatientAnswers' }),
+  graphql<IGraphqlProps, IProps>(patientScreeningToolSubmissionQuery as any, {
     skip: (props: IProps) => !props.screeningToolId,
     options: (props: IProps) => ({
       variables: {

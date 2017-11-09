@@ -3001,6 +3001,7 @@ export type patientAnswersCreateMutationVariables = {
   patientAnswers: Array< PatientAnswerInput | null >,
   questionIds: Array< string | null >,
   screeningToolId?: string | null,
+  progressNoteId?: string | null,
 };
 
 export type patientAnswersCreateMutation = {

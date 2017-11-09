@@ -60,7 +60,7 @@ export async function patientAnswersCreate(
   await accessControls.isAllowed(userRole, 'create', 'patientAnswer');
   checkUserLoggedIn(userId);
 
-  const { patientAnswers, patientId, questionIds, screeningToolId } = input;
+  const { patientAnswers, patientId, questionIds, screeningToolId, progressNoteId } = input;
 
   return await transaction(PatientAnswer.knex(), async txn => {
     let patientScreeningToolSubmissionId: string | undefined;
@@ -90,6 +90,7 @@ export async function patientAnswersCreate(
       {
         patientId,
         questionIds,
+        progressNoteId: progressNoteId || undefined,
         patientScreeningToolSubmissionId,
         answers: patientAnswers.map(patientAnswer => ({
           ...patientAnswer,

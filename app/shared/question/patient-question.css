@@ -1,0 +1,180 @@
+
+@import '../../shared/css/sizes';
+
+.question {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--small-gutter) var(--small-gutter) 0 16px;
+  border-radius: 4px;
+  background-color: var(--white-color);
+  margin-bottom: 10px;
+  border-left: 4px solid transparent;
+}
+
+.question.hidden {
+  display: none;
+}
+
+.question.highRiskAnswer {
+  border-left: 4px solid var(--red-color);
+}
+
+.question:last-child {
+  margin-bottom: 0;
+}
+
+.questionHeader, .questionTitle {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.questionHeader {
+  align-items: normal;
+}
+
+.questionTitle {
+  color: var(--black-color);
+  font-family: var(--basetica-medium);
+  font-size: var(--default-font-size);
+  line-height: var(--default-line-height);
+  margin-right: var(--gutter);
+}
+
+.question.disabled .questionTitle {
+  color: var(--light-gray-font-color);
+}
+
+.questionHamburger {
+  background-image: url('../../assets/dot-hamburger-grey.svg');
+  background-size: contain;
+  background-position: center center;
+  background-repeat: no-repeat;
+  height: 12px;
+  width: 5px;
+
+  &:hover {
+    cursor: pointer;
+  }
+}
+
+.question.disabled .questionHeader .questionHamburger {
+  &:hover {
+    cursor: default;
+  }
+}
+
+.questionBody {
+  width: 100%;
+  padding: var(--small-gutter) 0;
+}
+
+.questionBody.noBottomPadding {
+  padding-bottom: 0;
+}
+
+.questionHistory {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  border-top: 1px solid var(--light-gray-font-color);
+  padding-top: 10px;
+}
+
+.questionHistoryLabel, .questionHistoryText {
+  color: var(--light-gray-font-color);
+  font-family: var(--roboto);
+  font-size: var(--extra-small-font-size);
+  line-height: var(--extra-small-font-line-height);
+  color: var(--light-gray-font-color);
+}
+
+.questionHistoryLabel {
+  margin-right: 5px;
+}
+
+
+select.select {
+  width: 50%;
+  border-radius: 4px;
+  transition: color 0.2s linear;
+}
+
+.question.disabled select.select {
+  background-size: 12px;
+  background-image: url('../../assets/down-arrow-grey.svg');
+}
+
+.radioGroup {
+  width: 100%;
+  max-width: 100%;
+  flex-basis: 100%;
+  flex-wrap: wrap;
+}
+
+.radioGroupItem {
+  display: inline-block;
+  margin: 0 15px var(--small-gutter) 0;
+  min-width: 55px;
+}
+
+.radioLabel {
+  user-select: none;
+
+  &:hover {
+    cursor: pointer;
+  }
+}
+
+.question.disabled .radioFill:after {
+  background: var(--border-color);
+}
+
+.question.disabled .radioLabel {
+  color: var(--light-gray-font-color);
+}
+
+.question.disabled .radioLabel:hover {
+  cursor: default;
+}
+
+.question.disabled input[type='radio']:hover {
+  cursor: default;
+}
+
+.textArea {
+  height: 50px;
+}
+
+.textArea textarea {
+  resize: none;
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  padding: 15px var(--small-gutter);
+  height: 50px;
+  font-family: var(--roboto);
+  font-size: var(--default-font-size);
+  line-height: var(--medium-font-line-height);
+}
+
+.question.disabled .textArea textarea {
+  color: var(--light-gray-font-color);
+}
+
+input[type='radio']:hover {
+  cursor: pointer;
+}
+
+.multiSelectRow {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-start;
+}

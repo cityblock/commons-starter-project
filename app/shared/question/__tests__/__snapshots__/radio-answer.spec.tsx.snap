@@ -1,0 +1,41 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders radio answer 1`] = `
+<div
+  className=""
+>
+  <div
+    className={undefined}
+  >
+    <div
+      className=""
+    >
+      <div
+        className={undefined}
+      >
+        <div
+          className={undefined}
+        >
+          <input
+            checked={true}
+            className={undefined}
+            disabled={false}
+            onClick={[Function]}
+            type="radio"
+            value="true"
+          />
+          <label
+            className={undefined}
+          />
+        </div>
+        <span
+          className=""
+          onClick={[Function]}
+        >
+          answer value
+        </span>
+      </div>
+    </div>
+  </div>
+</div>
+`;

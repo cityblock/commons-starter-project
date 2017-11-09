@@ -82,9 +82,11 @@ export class ProgressNotePopup extends React.Component<allProps, IState> {
   async setProgressNote() {
     const { patientId } = this.props;
     const response = await this.props.getOrCreateProgressNote({ variables: { patientId } });
-    this.setState({
-      progressNote: response.data.progressNoteGetOrCreate,
-    });
+    if (response && response.data) {
+      this.setState({
+        progressNote: response.data.progressNoteGetOrCreate,
+      });
+    }
   }
 
   selectTab(tab: Tab) {
@@ -137,6 +139,7 @@ export class ProgressNotePopup extends React.Component<allProps, IState> {
       tab === 'context' ? (
         <ProgressNoteContext
           patientId={patientId}
+          progressNoteId={progressNote ? progressNote.id : undefined}
           progressNoteTemplates={progressNoteTemplates}
           onChange={this.updateProgressNote}
         />

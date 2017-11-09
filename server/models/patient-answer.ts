@@ -243,7 +243,9 @@ export default class PatientAnswer extends BaseModel {
       if (question.progressNoteTemplateId !== progressNoteTemplateId) {
         /* tslint:disable:max-line-length */
         throw new Error(
-          `progress note ${progressNoteId} is not associated with the same progress note template as the question ${question.id}`,
+          `progress note ${
+            progressNoteId
+          } is not associated with the same progress note template as the question ${question.id}`,
         );
         /* tslint:enable:max-line-length */
       }

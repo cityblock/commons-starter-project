@@ -15,8 +15,9 @@ import PatientInfo from './patient-info';
 import PatientProfileLeftNav from './patient-profile-left-nav';
 import PatientThreeSixtyView from './patient-three-sixty-view';
 import PatientTimeline from './patient-timeline';
+import ScreeningTool from './screening-tool';
 
-type SelectableTabs = 'timeline' | 'patientInfo' | '360' | 'map';
+type SelectableTabs = 'timeline' | 'patientInfo' | '360' | 'map' | 'tools';
 
 interface IStateProps {
   patientId: string;
@@ -63,11 +64,18 @@ class PatientProfileContainer extends React.Component<IProps, {}> {
     const patientInfoTabStyles = classNames(tabStyles.tab, {
       [tabStyles.selectedTab]: tabId === 'patientInfo',
     });
-
     const mainBodyStyle = classNames({
       [styles.mainBody]: browserSize === 'large',
       [styles.mainBodySmall]: browserSize === 'small',
     });
+    const tools =
+      tabId === 'tools' && match.params.riskAreaOrSubTabId ? (
+        <ScreeningTool
+          screeningToolId={match.params.riskAreaOrSubTabId}
+          patientId={patientId}
+          patientRoute={`/patients/${patientId}`}
+        />
+      ) : null;
     const timeline = tabId === 'timeline' ? <PatientTimeline patientId={patientId} /> : null;
     const patientInfo =
       tabId === 'patientInfo' ? (
@@ -133,6 +141,7 @@ class PatientProfileContainer extends React.Component<IProps, {}> {
           {patientInfo}
           {threeSixty}
           {timeline}
+          {tools}
         </div>
       </div>
     );

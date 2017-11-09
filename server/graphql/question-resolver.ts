@@ -71,7 +71,7 @@ export async function questionEdit(
   checkUserLoggedIn(userId);
 
   // TODO: fix typings here
-  const cleanedParams = pickBy<IQuestionEditInput, {}>(args.input) as any;
+  const cleanedParams = pickBy<IQuestionEditInput>(args.input) as any;
   return Question.edit(cleanedParams, args.input.questionId);
 }
 

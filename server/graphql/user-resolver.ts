@@ -11,7 +11,7 @@ import {
 import { parseIdToken, OauthAuthorize } from '../apis/google/oauth-authorize';
 import config from '../config';
 import GoogleAuth from '../models/google-auth';
-import User, { IUserFilterOptions, UserOrderOptions, UserRole } from '../models/user';
+import User, { IUserFilterOptions, Locale, UserOrderOptions, UserRole } from '../models/user';
 import accessControls from './shared/access-controls';
 import {
   checkUserLoggedIn,
@@ -122,8 +122,12 @@ export async function currentUserEdit(
   await accessControls.isAllowedForUser(userRole, 'edit', 'user', userId, userId);
   checkUserLoggedIn(userId);
 
-  const cleanedParams = pickBy<ICurrentUserEditInput, {}>(args.input) as any;
-  return await User.update(userId!, cleanedParams);
+  const cleanedParams = pickBy<ICurrentUserEditInput>(args.input);
+  return await User.update(userId!, {
+    locale: (cleanedParams.locale as Locale) || undefined,
+    firstName: cleanedParams.firstName || undefined,
+    lastName: cleanedParams.lastName || undefined,
+  });
 }
 
 export async function resolveUsers(

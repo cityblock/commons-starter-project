@@ -169,7 +169,7 @@ export default class PatientScreeningToolSubmission extends BaseModel {
       : undefined;
 
     input.score = score;
-    const filteredInput = omit<IPatientScreeningToolSubmissionCreateFields, {}>(input, [
+    const filteredInput = omit<IPatientScreeningToolSubmissionCreateFields>(input, [
       'patientAnswers',
     ]);
 

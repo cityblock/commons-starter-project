@@ -107,7 +107,7 @@ export async function screeningToolScoreRangeEdit(
   await accessControls.isAllowedForUser(userRole, 'edit', 'screeningTool');
   checkUserLoggedIn(userId);
 
-  const cleanedParams = pickBy<IScreeningToolScoreRangeEditInput, {}>(args.input) as any;
+  const cleanedParams = pickBy<IScreeningToolScoreRangeEditInput>(args.input) as any;
   const screeningToolScoreRange = await ScreeningToolScoreRange.edit(
     args.input.screeningToolScoreRangeId,
     cleanedParams,

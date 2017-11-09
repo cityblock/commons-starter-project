@@ -77,7 +77,7 @@ function getPageParams(props: IProps) {
 function mapDispatchToProps(dispatch: Dispatch<() => void>, ownProps: IProps): Partial<IProps> {
   return {
     updatePageParams: (pageParams: IPageParams) => {
-      const cleanedPageParams = pickBy<IPageParams, {}>(pageParams);
+      const cleanedPageParams = pickBy<IPageParams>(pageParams);
       dispatch(push({ search: querystring.stringify(cleanedPageParams) }));
     },
   };

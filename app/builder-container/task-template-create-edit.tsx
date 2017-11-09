@@ -131,10 +131,10 @@ class TaskTemplateCreateEdit extends React.Component<allProps, IState> {
     event.preventDefault();
     try {
       this.setState({ loading: true });
-      const filtered = omitBy<taskTemplateCreateMutationVariables, {}>(
+      const filtered = omitBy<taskTemplateCreateMutationVariables>(
         this.state.taskTemplate,
         isNil,
-      );
+      ) as any;
 
       if (taskTemplate) {
         await editTaskTemplate({

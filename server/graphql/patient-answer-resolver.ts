@@ -78,7 +78,7 @@ export async function patientAnswersCreate(
           screeningToolId,
           patientId,
           userId: userId!,
-          patientAnswers: omit(formattedPatientAnswers, ['id']),
+          patientAnswers: omit(formattedPatientAnswers, ['id']) as any,
         },
         txn,
       );

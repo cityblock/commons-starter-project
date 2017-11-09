@@ -117,7 +117,7 @@ class AnswerCreateEdit extends React.Component<allProps, IState> {
     event.preventDefault();
     try {
       this.setState({ loading: true });
-      const filtered = omitBy<answerCreateMutationVariables, {}>(this.state.answer, isNil);
+      const filtered = omitBy<answerCreateMutationVariables>(this.state.answer, isNil);
 
       if (this.props.answer) {
         await this.props.editAnswer({
@@ -128,7 +128,7 @@ class AnswerCreateEdit extends React.Component<allProps, IState> {
         });
       } else {
         await this.props.createAnswer({
-          variables: filtered,
+          variables: filtered as any,
         });
       }
       this.setState({ loading: false });

@@ -49,7 +49,7 @@ export async function patientScreeningToolSubmissionEdit(
   await accessControls.isAllowedForUser(userRole, 'edit', 'patientScreeningToolSubmission');
   checkUserLoggedIn(userId);
 
-  const cleanedParams = pickBy<IPatientScreeningToolSubmissionEditInput, {}>(args.input) as any;
+  const cleanedParams = pickBy<IPatientScreeningToolSubmissionEditInput>(args.input) as any;
   return await PatientScreeningToolSubmission.edit(
     args.input.patientScreeningToolSubmissionId,
     cleanedParams,

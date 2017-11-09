@@ -97,7 +97,7 @@ export async function carePlanSuggestionAccept(
         });
       } else if (!!carePlanSuggestion.goalSuggestionTemplate) {
         const patientGoalCreateInput: any = Object.assign(
-          omit<{}, any>(input, ['concernTitle', 'concernId', 'startedAt', 'carePlanSuggestionId']),
+          omit(input, ['concernTitle', 'concernId', 'startedAt', 'carePlanSuggestionId']),
           {
             userId,
             goalSuggestionTemplateId,

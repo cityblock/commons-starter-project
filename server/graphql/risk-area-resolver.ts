@@ -59,7 +59,7 @@ export async function riskAreaEdit(
   checkUserLoggedIn(userId);
 
   // TODO: fix typings here
-  const cleanedParams = pickBy<IRiskAreaEditInput, {}>(args.input) as any;
+  const cleanedParams = pickBy<IRiskAreaEditInput>(args.input) as any;
   return await RiskArea.edit(cleanedParams, args.input.riskAreaId);
 }
 

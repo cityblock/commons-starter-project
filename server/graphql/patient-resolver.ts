@@ -32,9 +32,9 @@ export async function patientEdit(
 ): Promise<IPatient> {
   await accessControls.isAllowedForUser(userRole, 'edit', 'patient', input.patientId, userId);
 
-  const filtered = omitBy<{}, IPatientEditInput>(input, isNil);
+  const filtered = omitBy<IPatientEditInput>(input, isNil);
   logger.log(`EDIT patient ${input.patientId} by ${userId}`, 2);
-  return await Patient.edit(filtered, input.patientId);
+  return await Patient.edit(filtered as any, input.patientId);
 }
 
 export interface IPatientSetupOptions {

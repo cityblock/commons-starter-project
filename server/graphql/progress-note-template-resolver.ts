@@ -63,7 +63,7 @@ export async function progressNoteTemplateEdit(
   await accessControls.isAllowedForUser(userRole, 'edit', 'progressNoteTemplate');
 
   // TODO: fix typings here
-  const cleanedParams = pickBy<IProgressNoteTemplateEditInput, {}>(args.input) as any;
+  const cleanedParams = pickBy<IProgressNoteTemplateEditInput>(args.input) as any;
   return ProgressNoteTemplate.edit(cleanedParams, args.input.progressNoteTemplateId);
 }
 

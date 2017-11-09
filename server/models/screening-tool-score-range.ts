@@ -97,7 +97,7 @@ export default class ScreeningToolScoreRange extends BaseModel {
 
     const filtered = {
       range,
-      ...omit<IScreeningToolScoreRangeCreateFields, {}>(input, ['minimumScore', 'maximumScore']),
+      ...omit<IScreeningToolScoreRangeCreateFields>(input, ['minimumScore', 'maximumScore']),
     };
 
     return await this.query()

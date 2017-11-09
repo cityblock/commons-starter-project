@@ -103,7 +103,7 @@ export async function taskEdit(
 
   return await transaction(Task.knex(), async txn => {
     const { priority, dueAt, assignedToId, title, description } = task;
-    const cleanedParams = pickBy<ITaskEditInput, {}>(args.input) as any;
+    const cleanedParams = pickBy<ITaskEditInput>(args.input) as any;
     const updatedTask = await Task.update(args.input.taskId, cleanedParams, txn);
 
     if (args.input.priority && args.input.priority !== priority) {

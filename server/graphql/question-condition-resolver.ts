@@ -55,7 +55,7 @@ export async function questionConditionEdit(
   await accessControls.isAllowedForUser(userRole, 'edit', 'questionCondition');
   checkUserLoggedIn(userId);
 
-  const cleanedParams = pickBy<IQuestionConditionEditInput, {}>(args.input) as any;
+  const cleanedParams = pickBy<IQuestionConditionEditInput>(args.input) as any;
   return QuestionCondition.edit(cleanedParams, args.input.questionConditionId);
 }
 

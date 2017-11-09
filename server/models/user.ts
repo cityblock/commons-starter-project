@@ -13,6 +13,8 @@ export type UserRole =
   | 'anonymousUser'
   | 'admin';
 
+export type Locale = 'en' | 'es';
+
 interface ICreateUser {
   email: string;
   homeClinicId: string;
@@ -23,7 +25,7 @@ interface ICreateUser {
 }
 
 interface IUpdateUser {
-  locale: 'en' | 'es';
+  locale: Locale;
   googleProfileImageUrl: string;
   googleAuthId: string;
   homeClinicId: string;

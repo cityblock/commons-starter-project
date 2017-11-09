@@ -98,7 +98,7 @@ export async function patientGoalEdit(
   checkUserLoggedIn(userId);
 
   // TODO: fix typings here
-  const cleanedParams = pickBy<IPatientGoalEditInput, {}>(args.input) as any;
+  const cleanedParams = pickBy<IPatientGoalEditInput>(args.input) as any;
   return PatientGoal.update(args.input.patientGoalId, cleanedParams, userId!);
 }
 

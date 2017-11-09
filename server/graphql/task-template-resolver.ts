@@ -54,7 +54,7 @@ export async function taskTemplateEdit(
   await accessControls.isAllowedForUser(userRole, 'edit', 'taskTemplate');
 
   // TODO: fix typings here
-  const cleanedParams = pickBy<ITaskTemplateEditInput, {}>(args.input) as any;
+  const cleanedParams = pickBy<ITaskTemplateEditInput>(args.input) as any;
   return TaskTemplate.edit(args.input.taskTemplateId, cleanedParams);
 }
 

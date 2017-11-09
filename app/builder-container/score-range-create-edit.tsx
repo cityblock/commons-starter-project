@@ -105,7 +105,7 @@ class ScoreRangeCreateEdit extends React.Component<allProps, IState> {
     event.preventDefault();
     try {
       this.setState({ loading: true });
-      const filtered = omitBy<screeningToolScoreRangeCreateMutationVariables, {}>(
+      const filtered = omitBy<screeningToolScoreRangeCreateMutationVariables>(
         this.state.scoreRange,
         isNil,
       );
@@ -119,7 +119,7 @@ class ScoreRangeCreateEdit extends React.Component<allProps, IState> {
         });
       } else if (this.props.createScoreRange) {
         await this.props.createScoreRange({
-          variables: filtered,
+          variables: filtered as any,
         });
       }
       this.setState({ loading: false });

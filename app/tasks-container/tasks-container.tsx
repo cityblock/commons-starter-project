@@ -106,7 +106,7 @@ function mapStateToProps(state: IAppState, ownProps: IProps): Partial<IProps> {
 function mapDispatchToProps(dispatch: Dispatch<() => void>): Partial<IProps> {
   return {
     updatePageParams: (pageParams: IPageParams) => {
-      const cleanedPageParams = pickBy<IPageParams, {}>(pageParams);
+      const cleanedPageParams = pickBy<IPageParams>(pageParams);
       dispatch(push({ search: querystring.stringify(cleanedPageParams) }));
     },
   };

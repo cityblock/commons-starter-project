@@ -93,16 +93,14 @@ describe('care plan update event model', () => {
   });
 
   it('automatically opens a progress note on create', async () => {
-    ProgressNote.autoOpenIfRequired = jest.fn();
-
-    await CarePlanUpdateEvent.create({
+    const carePlanUpdateEvent = await CarePlanUpdateEvent.create({
       patientId: patient.id,
       userId: user.id,
       patientConcernId: patientConcern.id,
       eventType: 'create_patient_concern',
     });
 
-    expect(ProgressNote.autoOpenIfRequired).toHaveBeenCalledTimes(1);
+    expect(carePlanUpdateEvent.progressNoteId).not.toBeNull();
   });
 
   it('throws an error when getting an invalid id', async () => {
@@ -302,5 +300,42 @@ describe('care plan update event model', () => {
       results: [{ id: carePlanUpdateEvent.id }],
       total: 1,
     });
+  });
+
+  it('fetches all not deleted care plan update events for a progress note', async () => {
+    const progressNote = await ProgressNote.autoOpenIfRequired({
+      patientId: patient.id,
+      userId: user.id,
+    });
+    const carePlanUpdateEvent = await CarePlanUpdateEvent.create({
+      patientId: patient.id,
+      userId: user.id,
+      patientGoalId: patientGoal.id,
+      eventType: 'create_patient_goal',
+      progressNoteId: progressNote.id,
+    });
+    const carePlanUpdateEventToBeDeleted = await CarePlanUpdateEvent.create({
+      patientId: patient.id,
+      userId: user.id,
+      patientGoalId: patientGoal.id,
+      eventType: 'edit_patient_goal',
+      progressNoteId: progressNote.id,
+    });
+
+    // Make sure all carePlanUpdateEvents are returned
+    const fetchedCarePlanUpdateEvents = await CarePlanUpdateEvent.getAllForProgressNote(
+      progressNote.id,
+    );
+    const fetchedCarePlanUpdateEventIds = fetchedCarePlanUpdateEvents.map(event => event.id);
+    expect(fetchedCarePlanUpdateEventIds).toContain(carePlanUpdateEvent.id);
+    expect(fetchedCarePlanUpdateEventIds).toContain(carePlanUpdateEventToBeDeleted.id);
+
+    await CarePlanUpdateEvent.delete(carePlanUpdateEventToBeDeleted.id);
+
+    // Make sure the deleted carePlanUpdateEvent isn't returned
+    const secondFetchedCarePlanUpdateEvents = await CarePlanUpdateEvent.getAllForProgressNote(
+      progressNote.id,
+    );
+    expect(secondFetchedCarePlanUpdateEvents).toMatchObject([{ id: carePlanUpdateEvent.id }]);
   });
 });

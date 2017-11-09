@@ -88,6 +88,19 @@ enum TaskEventTypes {
   edit_description
 }
 
+enum CarePlanUpdateEventTypes {
+  create_patient_concern
+  edit_patient_concern
+  delete_patient_concern
+  create_patient_goal
+  edit_patient_goal
+  delete_patient_goal
+}
+
+enum PatientAnswerEventTypes {
+  create_patient_answer
+}
+
 enum CompletedWithinInterval {
   hour
   day
@@ -433,6 +446,44 @@ type TaskEvent implements uniqueId {
   eventComment: TaskComment
   eventUserId: String
   eventUser: User
+  progressNoteId: String
+  progressNote: ProgressNote
+  createdAt: String!
+  updatedAt: String!
+  deletedAt: String
+}
+
+# Care Plan Update Event
+type CarePlanUpdateEvent implements uniqueId {
+  id: ID!
+  patientId: String!
+  patient: Patient!
+  userId: String!
+  user: User!
+  patientConcernId: String
+  patientGoalId: String
+  patientConcern: PatientConcern
+  patientGoal: PatientGoal
+  eventType: CarePlanUpdateEventTypes!
+  progressNoteId: String
+  progressNote: ProgressNote
+  createdAt: String!
+  updatedAt: String!
+  deletedAt: String
+}
+
+# Patient Answer Event
+type PatientAnswerEvent implements uniqueId {
+  id: ID!
+  patientId: String!
+  patient: Patient!
+  userId: String!
+  user: User!
+  patientAnswerId: String!
+  patientAnswer: PatientAnswer!
+  eventType: PatientAnswerEventTypes!
+  progressNoteId: String
+  progressNote: ProgressNote
   createdAt: String!
   updatedAt: String!
   deletedAt: String
@@ -636,6 +687,12 @@ type ProgressNote implements uniqueId {
   createdAt: String!
   updatedAt: String!
   deletedAt: String
+}
+
+type ProgressNoteActivity {
+  taskEvents: [TaskEvent!]!
+  patientAnswerEvents: [PatientAnswerEvent!]!
+  carePlanUpdateEvents: [CarePlanUpdateEvent!]!
 }
 
 #
@@ -1459,6 +1516,8 @@ type RootQueryType {
   progressNote(progressNoteId: String!): ProgressNote
   # progress notes for patient
   progressNotesForPatient(patientId: String!): [ProgressNote]
+  # progress note activities for progress note
+  progressNoteActivityForProgressNote(progressNoteId: String!): ProgressNoteActivity
 }
 
 schema {

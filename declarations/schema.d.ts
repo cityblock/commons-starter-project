@@ -261,6 +261,10 @@ declare module 'schema' {
     description: progress notes for patient
   */
     progressNotesForPatient: Array<IProgressNote> | null;
+    /**
+    description: progress note activities for progress note
+  */
+    progressNoteActivityForProgressNote: IProgressNoteActivity | null;
   }
 
   /**
@@ -797,6 +801,8 @@ declare module 'schema' {
     eventComment: ITaskComment | null;
     eventUserId: string | null;
     eventUser: IUser | null;
+    progressNoteId: string | null;
+    progressNote: IProgressNote | null;
     createdAt: string;
     updatedAt: string;
     deletedAt: string | null;
@@ -804,6 +810,31 @@ declare module 'schema' {
 
 
   type ITaskEventTypesEnum = 'create_task' | 'add_follower' | 'remove_follower' | 'complete_task' | 'uncomplete_task' | 'delete_task' | 'add_comment' | 'edit_comment' | 'delete_comment' | 'edit_priority' | 'edit_due_date' | 'edit_assignee' | 'edit_title' | 'edit_description';
+
+
+  interface IProgressNote {
+    id: string;
+    patientId: string;
+    patient: IPatient;
+    userId: string;
+    user: IUser;
+    progressNoteTemplateId: string | null;
+    progressNoteTemplate: IProgressNoteTemplate | null;
+    completedAt: string | null;
+    createdAt: string;
+    updatedAt: string;
+    deletedAt: string | null;
+  }
+
+
+  interface IProgressNoteTemplate {
+    id: string;
+    title: string;
+    createdAt: string;
+    updatedAt: string;
+    deletedAt: string | null;
+    carePlanSuggestions: Array<ICarePlanSuggestion>;
+  }
 
 
   interface IPatientConcern {
@@ -846,29 +877,57 @@ declare module 'schema' {
   }
 
 
-  interface IProgressNoteTemplate {
-    id: string;
-    title: string;
-    createdAt: string;
-    updatedAt: string;
-    deletedAt: string | null;
-    carePlanSuggestions: Array<ICarePlanSuggestion>;
+  interface IProgressNoteActivity {
+    taskEvents: Array<ITaskEvent>;
+    patientAnswerEvents: Array<IPatientAnswerEvent>;
+    carePlanUpdateEvents: Array<ICarePlanUpdateEvent>;
   }
 
-
-  interface IProgressNote {
+  /**
+    description: Patient Answer Event
+  */
+  interface IPatientAnswerEvent {
     id: string;
     patientId: string;
     patient: IPatient;
     userId: string;
     user: IUser;
-    progressNoteTemplateId: string | null;
-    progressNoteTemplate: IProgressNoteTemplate | null;
-    completedAt: string | null;
+    patientAnswerId: string;
+    patientAnswer: IPatientAnswer;
+    eventType: IPatientAnswerEventTypesEnum;
+    progressNoteId: string | null;
+    progressNote: IProgressNote | null;
     createdAt: string;
     updatedAt: string;
     deletedAt: string | null;
   }
+
+
+  type IPatientAnswerEventTypesEnum = 'create_patient_answer';
+
+  /**
+    description: Care Plan Update Event
+  */
+  interface ICarePlanUpdateEvent {
+    id: string;
+    patientId: string;
+    patient: IPatient;
+    userId: string;
+    user: IUser;
+    patientConcernId: string | null;
+    patientGoalId: string | null;
+    patientConcern: IPatientConcern | null;
+    patientGoal: IPatientGoal | null;
+    eventType: ICarePlanUpdateEventTypesEnum;
+    progressNoteId: string | null;
+    progressNote: IProgressNote | null;
+    createdAt: string;
+    updatedAt: string;
+    deletedAt: string | null;
+  }
+
+
+  type ICarePlanUpdateEventTypesEnum = 'create_patient_concern' | 'edit_patient_concern' | 'delete_patient_concern' | 'create_patient_goal' | 'edit_patient_goal' | 'delete_patient_goal';
 
 
   interface IRootMutationType {

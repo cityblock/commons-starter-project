@@ -1,0 +1,15 @@
+#import "./full-task-event.graphql"
+#import "./full-patient-answer-event.graphql"
+#import "./full-care-plan-update-event.graphql"
+
+fragment FullProgressNoteActivity on ProgressNoteActivity {
+  taskEvents {
+    ...FullTaskEvent
+  }
+  patientAnswerEvents {
+    ...FullPatientAnswerEvent
+  }
+  carePlanUpdateEvents {
+    ...FullCarePlanUpdateEvent
+  }
+}

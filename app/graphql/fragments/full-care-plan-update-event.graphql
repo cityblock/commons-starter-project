@@ -1,0 +1,29 @@
+#import "./full-user.graphql"
+#import "./short-patient.graphql"
+#import "./full-patient-concern.graphql"
+#import "./full-patient-goal.graphql"
+
+fragment FullCarePlanUpdateEvent on CarePlanUpdateEvent {
+  id
+  patientId
+  patient {
+    ...ShortPatient
+  }
+  userId
+  user {
+    ...FullUser
+  }
+  patientConcernId
+  patientConcern {
+    ...FullPatientConcern
+  }
+  patientGoalId
+  patientGoal {
+    ...FullPatientGoal
+  }
+  eventType
+  progressNoteId
+  createdAt
+  updatedAt
+  deletedAt
+}

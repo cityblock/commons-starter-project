@@ -141,7 +141,10 @@ export class ProgressNotePopup extends React.Component<allProps, IState> {
           onChange={this.updateProgressNote}
         />
       ) : null;
-    const activity = tab === 'activity' ? <ProgressNoteActivity patientId={patientId} /> : null;
+    const activity =
+      tab === 'activity' ? (
+        <ProgressNoteActivity progressNote={progressNote} patientId={patientId} />
+      ) : null;
     const tasks = tab === 'tasks' ? <ProgressNoteTasks patientId={patientId} /> : null;
 
     let progressNoteName = null;

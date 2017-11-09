@@ -14,6 +14,7 @@ export interface IPatientAnswerEventOptions {
   patientAnswerId: string;
   previousPatientAnswerId?: string;
   eventType: EventTypes;
+  progressNoteId?: string;
 }
 
 interface IMultiplePatientAnswerEventOptions {
@@ -33,6 +34,8 @@ export default class PatientAnswerEvent extends BaseModel {
   previousPatientAnswerId: string;
   previousPatientAnswser: PatientAnswer;
   eventType: EventTypes;
+  progressNoteId: string;
+  progressNote: ProgressNote;
 
   static tableName = 'patient_answer_event';
 
@@ -44,6 +47,7 @@ export default class PatientAnswerEvent extends BaseModel {
       userId: { type: 'string' },
       patientAnswerId: { type: 'string' },
       previousPatientAnswerId: { type: 'string' },
+      progressNoteId: { type: 'string' },
       eventType: { type: 'string' },
       deletedAt: { type: 'string' },
     },
@@ -85,6 +89,15 @@ export default class PatientAnswerEvent extends BaseModel {
         to: 'patient_answer.id',
       },
     },
+
+    progressNote: {
+      relation: Model.BelongsToOneRelation,
+      modelClass: 'progress-note',
+      join: {
+        from: 'patient_answer_event.progressNoteId',
+        to: 'progress_note.id',
+      },
+    },
   };
 
   static async get(patientAnswerEventId: string): Promise<PatientAnswerEvent> {
@@ -99,17 +112,24 @@ export default class PatientAnswerEvent extends BaseModel {
     return patientAnswerEvent;
   }
 
+  static async getAllForProgressNote(progressNoteId: string): Promise<PatientAnswerEvent[]> {
+    return await this.query()
+      .eager(EAGER_QUERY)
+      .where({ progressNoteId, deletedAt: null });
+  }
+
   static async create(
     input: IPatientAnswerEventOptions,
     txn?: Transaction,
   ): Promise<PatientAnswerEvent> {
     const { patientId, userId } = input;
 
+    const progressNote = await ProgressNote.autoOpenIfRequired({ patientId, userId }, txn);
+    input.progressNoteId = progressNote.id;
+
     const patientAnswerEvent = await this.query(txn)
       .eager(EAGER_QUERY)
       .insert(input);
-
-    await ProgressNote.autoOpenIfRequired({ patientId, userId }, txn);
 
     return patientAnswerEvent;
   }
@@ -121,11 +141,15 @@ export default class PatientAnswerEvent extends BaseModel {
     const { patientAnswerEvents } = input;
     const { patientId, userId } = patientAnswerEvents[0];
 
+    const progressNote = await ProgressNote.autoOpenIfRequired({ patientId, userId }, txn);
+    const patientAnswerEventsWithProgressNoteId = patientAnswerEvents.map(patientAnswerEvent => ({
+      progressNoteId: progressNote.id,
+      ...patientAnswerEvent,
+    }));
+
     const createdPatientAnswerEvents = await this.query(txn)
       .eager(EAGER_QUERY)
-      .insertGraphAndFetch(patientAnswerEvents);
-
-    await ProgressNote.autoOpenIfRequired({ patientId, userId }, txn);
+      .insertGraphAndFetch(patientAnswerEventsWithProgressNoteId);
 
     return createdPatientAnswerEvents;
   }

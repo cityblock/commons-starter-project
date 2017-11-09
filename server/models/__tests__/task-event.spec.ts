@@ -15,10 +15,8 @@ import User from '../user';
 const userRole = 'physician';
 
 describe('task event model', () => {
-  let db: Db;
-
   beforeEach(async () => {
-    db = await Db.get();
+    await Db.get();
     await Db.clear();
   });
 
@@ -62,8 +60,6 @@ describe('task event model', () => {
   });
 
   it('automatically opens a progress note on create', async () => {
-    ProgressNote.autoOpenIfRequired = jest.fn();
-
     const clinic = await Clinic.create(createMockClinic());
     const user = await User.create(createMockUser(11, clinic.id, userRole));
     const patient = await createPatient(createMockPatient(123, clinic.id), user.id);
@@ -76,13 +72,13 @@ describe('task event model', () => {
       createdById: user.id,
       assignedToId: user.id,
     });
-    await TaskEvent.create({
+    const taskEvent = await TaskEvent.create({
       taskId: task.id,
       userId: user.id,
       eventType: 'edit_assignee',
     });
 
-    expect(ProgressNote.autoOpenIfRequired).toHaveBeenCalledTimes(1);
+    expect(taskEvent.progressNoteId).not.toBeNull();
   });
 
   it('throws an error when getting an invalid id', async () => {
@@ -198,6 +194,52 @@ describe('task event model', () => {
       results: [{ eventType: 'add_comment' }],
       total: 1,
     });
+  });
+
+  it('fetches all not deleted task events for a progress note', async () => {
+    const clinic = await Clinic.create(createMockClinic());
+    const user = await User.create(createMockUser(11, clinic.id, userRole));
+    const patient = await createPatient(createMockPatient(123, clinic.id), user.id);
+    const progressNote = await ProgressNote.autoOpenIfRequired({
+      patientId: patient.id,
+      userId: user.id,
+    });
+    const dueAt = new Date().toISOString();
+    const task = await Task.create({
+      title: 'title',
+      description: 'description',
+      dueAt,
+      patientId: patient.id,
+      createdById: user.id,
+      assignedToId: user.id,
+    });
+
+    const toNotBeDeletedEvent = await TaskEvent.create({
+      taskId: task.id,
+      userId: user.id,
+      eventType: 'add_comment',
+      progressNoteId: progressNote.id,
+    });
+    const toBeDeletedEvent = await TaskEvent.create({
+      taskId: task.id,
+      userId: user.id,
+      eventType: 'edit_comment',
+      progressNoteId: progressNote.id,
+    });
+
+    // Make sure all events are returned
+    const taskEvents = await TaskEvent.getAllForProgressNote(progressNote.id);
+    const taskEventIds = taskEvents.map(event => event.id);
+    expect(taskEvents.length).toEqual(2);
+    expect(taskEventIds).toContain(toNotBeDeletedEvent.id);
+    expect(taskEventIds).toContain(toBeDeletedEvent.id);
+
+    await TaskEvent.delete(toBeDeletedEvent.id);
+
+    // Make sure deleted event isn't returned
+    expect(await TaskEvent.getAllForProgressNote(progressNote.id)).toMatchObject([
+      { id: toNotBeDeletedEvent.id },
+    ]);
   });
 
   it('deletes a task event', async () => {

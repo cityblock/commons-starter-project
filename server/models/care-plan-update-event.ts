@@ -21,6 +21,7 @@ interface ICarePlanUpdateEventOptions {
   patientConcernId?: string;
   patientGoalId?: string;
   eventType: EventTypes;
+  progressNoteId?: string;
 }
 
 const EAGER_QUERY = '[patientConcern, patientGoal, patient, user]';
@@ -36,6 +37,8 @@ export default class CarePlanUpdateEvent extends BaseModel {
   patientGoalId: string;
   patientGoal: PatientGoal;
   eventType: EventTypes;
+  progressNoteId: string;
+  progressNote: ProgressNote;
 
   static tableName = 'care_plan_update_event';
 
@@ -47,6 +50,7 @@ export default class CarePlanUpdateEvent extends BaseModel {
       userId: { type: 'string' },
       patientConcernId: { type: 'string' },
       patientGoalId: { type: 'string' },
+      progressNoteId: { type: 'string' },
       eventType: { type: 'string' },
       deletedAt: { type: 'string' },
     },
@@ -88,6 +92,15 @@ export default class CarePlanUpdateEvent extends BaseModel {
         to: 'patient_goal.id',
       },
     },
+
+    progressNote: {
+      relation: Model.BelongsToOneRelation,
+      modelClass: 'progress-note',
+      join: {
+        from: 'care_plan_update_event.progressNoteId',
+        to: 'progress_note.id',
+      },
+    },
   };
 
   static async get(carePlanUpdateEventId: string): Promise<CarePlanUpdateEvent> {
@@ -102,17 +115,24 @@ export default class CarePlanUpdateEvent extends BaseModel {
     return carePlanUpdateEvent;
   }
 
+  static async getAllForProgressNote(progressNoteId: string): Promise<CarePlanUpdateEvent[]> {
+    return await this.query()
+      .eager(EAGER_QUERY)
+      .where({ progressNoteId, deletedAt: null });
+  }
+
   static async create(
     input: ICarePlanUpdateEventOptions,
     txn?: Transaction,
   ): Promise<CarePlanUpdateEvent> {
     const { patientId, userId } = input;
 
+    const progressNote = await ProgressNote.autoOpenIfRequired({ patientId, userId }, txn);
+    input.progressNoteId = progressNote.id;
+
     const carePlanUpdateEvent = await this.query(txn)
       .eager(EAGER_QUERY)
       .insert(input);
-
-    await ProgressNote.autoOpenIfRequired({ patientId, userId }, txn);
 
     return carePlanUpdateEvent;
   }

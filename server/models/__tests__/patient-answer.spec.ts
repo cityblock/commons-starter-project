@@ -590,10 +590,12 @@ describe('answer model', () => {
     });
 
     expect(fetchedPatientAnswerEvents.total).toEqual(2);
-    const newAnswer = fetchedPatientAnswerEvents.results
-      .find(r => r.patientAnswerId === newPatientAnswers[0].id);
-    const newAnswer2 = fetchedPatientAnswerEvents.results
-      .find(r => r.patientAnswerId === newPatientAnswers[1].id);
+    const newAnswer = fetchedPatientAnswerEvents.results.find(
+      r => r.patientAnswerId === newPatientAnswers[0].id,
+    );
+    const newAnswer2 = fetchedPatientAnswerEvents.results.find(
+      r => r.patientAnswerId === newPatientAnswers[1].id,
+    );
 
     expect(newAnswer).toMatchObject({
       patientAnswerId: newPatientAnswers[0].id,

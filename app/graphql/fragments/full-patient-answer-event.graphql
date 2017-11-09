@@ -1,0 +1,24 @@
+#import "./full-user.graphql"
+#import "./short-patient.graphql"
+#import "./full-patient-answer.graphql"
+
+fragment FullPatientAnswerEvent on PatientAnswerEvent {
+  id
+  patientId
+  patient {
+    ...ShortPatient
+  }
+  userId
+  user {
+    ...FullUser
+  }
+  patientAnswerId
+  patientAnswer {
+    ...FullPatientAnswer
+  }
+  eventType
+  progressNoteId
+  createdAt
+  updatedAt
+  deletedAt
+}

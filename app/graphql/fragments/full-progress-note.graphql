@@ -8,5 +8,7 @@ fragment FullProgressNote on ProgressNote {
   createdAt
   updatedAt
   deletedAt
-  progressNoteTemplate { ...FullProgressNoteTemplate }
+  progressNoteTemplate {
+    ...FullProgressNoteTemplate
+  }
 }

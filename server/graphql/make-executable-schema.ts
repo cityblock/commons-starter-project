@@ -97,6 +97,7 @@ import {
   patientTaskSuggestionDismiss,
   resolvePatientTaskSuggestions,
 } from './patient-task-suggestion-resolver';
+import { resolveProgressNoteActivityForProgressNote } from './progress-note-activity-resolver';
 import {
   progressNoteComplete,
   progressNoteEdit,
@@ -260,6 +261,7 @@ const resolveFunctions = {
     progressNoteTemplates: resolveProgressNoteTemplates,
     progressNote: resolveProgressNote,
     progressNotesForPatient: resolveProgressNotesForPatient,
+    progressNoteActivityForProgressNote: resolveProgressNoteActivityForProgressNote,
   },
   /* tslint:enable:max-line-length */
   RootMutationType: {

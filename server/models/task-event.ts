@@ -122,19 +122,31 @@ export default class TaskEvent extends BaseModel {
     return taskEvent;
   }
 
+  static async getAllForProgressNote(progressNoteId: string): Promise<TaskEvent[]> {
+    return await this.query()
+      .eager(EAGER_QUERY)
+      .where({ progressNoteId, deletedAt: null });
+  }
+
   static async create(
     { taskId, userId, eventType, eventCommentId, eventUserId, skipNotifsCreate }: ITaskEventOptions,
     txn?: Transaction,
   ): Promise<TaskEvent> {
-    const taskEvent = await this.query(txn)
-      .eager(EAGER_QUERY)
-      .insert({ taskId, userId, eventType, eventCommentId, eventUserId });
-
+    let progressNoteId: string | undefined;
     const task = await Task.getIgnoreDeletedAt(taskId, txn);
 
     if (task.patientId) {
-      await ProgressNote.autoOpenIfRequired({ patientId: task.patientId, userId }, txn);
+      const progressNote = await ProgressNote.autoOpenIfRequired(
+        { patientId: task.patientId, userId },
+        txn,
+      );
+
+      progressNoteId = progressNote.id;
     }
+
+    const taskEvent = await this.query(txn)
+      .eager(EAGER_QUERY)
+      .insert({ taskId, userId, eventType, eventCommentId, eventUserId, progressNoteId });
 
     if (!skipNotifsCreate) {
       await EventNotification.createTaskNotifications(

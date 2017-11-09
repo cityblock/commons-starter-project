@@ -116,7 +116,7 @@
     "webpack-dev-server": "^2.9.4"
   },
   "engines": {
-    "node": "8.9.0"
+    "node": "8.9"
   },
   "dependencies": {
     "@risingstack/trace": "^3.16.0",

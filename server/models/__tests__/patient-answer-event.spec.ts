@@ -94,16 +94,14 @@ describe('patient answer event model', () => {
   });
 
   it('automatically opens a progress note on create', async () => {
-    ProgressNote.autoOpenIfRequired = jest.fn();
-
-    await PatientAnswerEvent.create({
+    const patientAnswerEvent = await PatientAnswerEvent.create({
       patientId: patient.id,
       userId: user.id,
       patientAnswerId: patientAnswer.id,
       eventType: 'create_patient_answer',
     });
 
-    expect(ProgressNote.autoOpenIfRequired).toHaveBeenCalledTimes(1);
+    expect(patientAnswerEvent.progressNoteId).not.toBeNull();
   });
 
   it('creates multiple patientAnswerEvents', async () => {
@@ -155,10 +153,12 @@ describe('patient answer event model', () => {
     expect(fetchedPatientAnswerEvents.total).toEqual(2);
 
     expect(fetchedPatientAnswerEvents.total).toEqual(2);
-    const newAnswer = fetchedPatientAnswerEvents.results
-      .find(r => r.patientAnswerId === patientAnswer.id);
-    const newAnswer2 = fetchedPatientAnswerEvents.results
-      .find(r => r.patientAnswerId === patientAnswer2.id);
+    const newAnswer = fetchedPatientAnswerEvents.results.find(
+      r => r.patientAnswerId === patientAnswer.id,
+    );
+    const newAnswer2 = fetchedPatientAnswerEvents.results.find(
+      r => r.patientAnswerId === patientAnswer2.id,
+    );
 
     expect(newAnswer).toBeTruthy();
     expect(newAnswer2).toBeTruthy();
@@ -179,9 +179,7 @@ describe('patient answer event model', () => {
       ],
     }))[0];
 
-    ProgressNote.autoOpenIfRequired = jest.fn();
-
-    await transaction(
+    const patientAnswerEvents = await transaction(
       PatientAnswerEvent.knex(),
       async txn =>
         await PatientAnswerEvent.createMultiple(
@@ -205,7 +203,8 @@ describe('patient answer event model', () => {
         ),
     );
 
-    expect(ProgressNote.autoOpenIfRequired).toHaveBeenCalledTimes(1);
+    expect(patientAnswerEvents[0].progressNoteId).not.toBeNull();
+    expect(patientAnswerEvents[1].progressNoteId).not.toBeNull();
   });
 
   it('throws an error when getting an invalid id', async () => {
@@ -361,5 +360,42 @@ describe('patient answer event model', () => {
       results: [{ id: patientAnswerEvent.id }],
       total: 1,
     });
+  });
+
+  it('fetches all not deleted patient answer events for a progress note', async () => {
+    const progressNote = await ProgressNote.autoOpenIfRequired({
+      patientId: patient.id,
+      userId: user.id,
+    });
+    const patientAnswerEvent = await PatientAnswerEvent.create({
+      patientId: patient.id,
+      userId: user.id,
+      patientAnswerId: patientAnswer.id,
+      eventType: 'create_patient_answer',
+      progressNoteId: progressNote.id,
+    });
+    const patientAnswerEventToBeDeleted = await PatientAnswerEvent.create({
+      patientId: patient.id,
+      userId: user.id,
+      patientAnswerId: patientAnswer.id,
+      eventType: 'create_patient_answer',
+      progressNoteId: progressNote.id,
+    });
+
+    // Make sure all patientAnswerEvents are returned
+    const fetchedPatientAnswerEvents = await PatientAnswerEvent.getAllForProgressNote(
+      progressNote.id,
+    );
+    const fetchedPatientAnswerEventIds = fetchedPatientAnswerEvents.map(event => event.id);
+    expect(fetchedPatientAnswerEventIds).toContain(patientAnswerEventToBeDeleted.id);
+    expect(fetchedPatientAnswerEventIds).toContain(patientAnswerEvent.id);
+
+    await PatientAnswerEvent.delete(patientAnswerEventToBeDeleted.id);
+
+    // Make sure the deleted patientAnswerEvent isn't returned
+    const secondFetchedPatientAnswerEvents = await PatientAnswerEvent.getAllForProgressNote(
+      progressNote.id,
+    );
+    expect(secondFetchedPatientAnswerEvents).toMatchObject([{ id: patientAnswerEvent.id }]);
   });
 });

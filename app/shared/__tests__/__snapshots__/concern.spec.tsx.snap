@@ -5,7 +5,7 @@ exports[`renders patient concern 1`] = `
   className={undefined}
 >
   <div
-    className="undefined"
+    className=""
     onClick={[Function]}
   >
     <div
@@ -17,7 +17,7 @@ exports[`renders patient concern 1`] = `
         Concern Title
       </div>
       <div
-        className={undefined}
+        className=""
         onClick={[Function]}
       />
     </div>

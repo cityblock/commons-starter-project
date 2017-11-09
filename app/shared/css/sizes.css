@@ -47,6 +47,8 @@
   --roboto-medium-weight: 500;
   --options-drop-shadow: 0 6px 8px 0 rgba(0, 0, 0, 0.15);
   --light-blue-hover: rgba(143, 173, 255, 0.1);
+  --white-opaque: rgba(255, 255, 255, 0.4);
+  --black-opaque: rgba(0, 0, 0, 0.4);
 }
 
 :root {

@@ -7,7 +7,7 @@ import configureMockStore from 'redux-mock-store';
 import { ENGLISH_TRANSLATION } from '../../reducers/messages/en';
 import ReduxConnectedIntlProvider from '../../redux-connected-intl-provider';
 import { patientGoal } from '../../shared/util/test-data';
-import PatientGoal from '../patient-goal';
+import PatientGoal from '../goals/goal';
 
 const locale = { messages: ENGLISH_TRANSLATION.messages };
 const mockStore = configureMockStore([]);

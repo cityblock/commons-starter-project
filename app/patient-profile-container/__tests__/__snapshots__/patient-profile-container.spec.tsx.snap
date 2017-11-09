@@ -14,13 +14,6 @@ exports[`renders patient care plan view 1`] = `
     </a>
     <a
       className=""
-      href="/patients/patient-1/map/inactive"
-      onClick={[Function]}
-    >
-      Inactive
-    </a>
-    <a
-      className=""
       href="/patients/patient-1/map/suggestions"
       onClick={[Function]}
     >
@@ -336,13 +329,6 @@ exports[`renders patient profile container correctly 1`] = `
           onClick={[Function]}
         >
           Active
-        </a>
-        <a
-          className=""
-          href="/patients/patient-1/map/inactive"
-          onClick={[Function]}
-        >
-          Inactive
         </a>
         <a
           className=""
@@ -706,13 +692,6 @@ exports[`renders patient profile for ipad 1`] = `
           onClick={[Function]}
         >
           Active
-        </a>
-        <a
-          className=""
-          href="/patients/patient-1/map/inactive"
-          onClick={[Function]}
-        >
-          Inactive
         </a>
         <a
           className=""

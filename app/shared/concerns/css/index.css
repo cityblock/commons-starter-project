@@ -1,0 +1,37 @@
+@import '../../css/sizes';
+
+.emptyCarePlanSuggestionsContainer {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  border: 1px dashed var(--border-color);
+  border-radius: 4px;
+  padding: 50px;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.emptyCarePlanSuggestionsLogo {
+  height: 30px;
+  width: 30px;
+  background-image: url('../../../assets/calendar-event-grey.svg');
+  background-position: center center;
+  background-size: contain;
+  background-repeat: no-repeat;
+  margin-bottom: 30px;
+}
+
+.emptyCarePlanSuggestionsLabel {
+  font-family: var(--basetica-medium);
+  font-size: var(--medium-font-size);
+  line-height: var(--medium-font-line-height);
+  color: var(--light-gray-font-color);
+  margin-bottom: 10px;
+}
+
+.emptyCarePlanSuggestionsSubtext {
+  font-family: var(--roboto);
+  font-size: var(--default-font-size);
+  line-height: var(--default-line-height);
+  color: var(--light-gray-font-color);
+}

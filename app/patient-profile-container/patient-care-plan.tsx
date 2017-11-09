@@ -1,17 +1,14 @@
 import * as React from 'react';
 import { ICarePlan } from 'schema';
-import { FullPatientConcernFragment } from '../graphql/types';
+import PatientConcerns from '../shared/concerns';
+import TextDivider from '../shared/text-divider';
 import * as styles from './css/patient-care-plan.css';
-import PatientConcern from './patient-concern';
-
-export type ICarePlanDisplayTypes = 'inactive' | 'active';
 
 interface IProps {
   loading?: boolean;
   routeBase: string;
   patientId: string;
   carePlan?: ICarePlan;
-  displayType?: ICarePlanDisplayTypes;
 }
 
 interface IState {
@@ -52,7 +49,7 @@ export default class PatientCarePlan extends React.Component<IProps, IState> {
   }
 
   renderCarePlan() {
-    const { loading, carePlan, displayType } = this.props;
+    const { loading, carePlan } = this.props;
     const { selectedPatientConcernId, optionsDropdownConcernId } = this.state;
 
     if (loading) {
@@ -67,51 +64,33 @@ export default class PatientCarePlan extends React.Component<IProps, IState> {
       return null;
     }
 
-    let patientConcerns: FullPatientConcernFragment[] = [];
+    const activeConcerns = carePlan.concerns.filter(
+      patientConcern => !!patientConcern.startedAt,
+    ) as any;
+    const inactiveConcerns = carePlan.concerns.filter(
+      patientConcern => !patientConcern.startedAt,
+    ) as any;
 
-    if (displayType === 'inactive') {
-      // 'as any' addresses iirrelevant enum type inconsistency
-      patientConcerns = carePlan.concerns.filter(
-        patientConcern => !patientConcern.startedAt,
-      ) as any;
-    } else {
-      patientConcerns = carePlan.concerns.filter(
-        patientConcern => !!patientConcern.startedAt,
-      ) as any;
-    }
-
-    if (!patientConcerns.length) {
-      return (
-        <div className={styles.emptyCarePlanSuggestionsContainer}>
-          <div className={styles.emptyCarePlanSuggestionsLogo} />
-          <div className={styles.emptyCarePlanSuggestionsLabel}>
-            {`No ${displayType} concerns or goals for this patient`}
-          </div>
-          <div className={styles.emptyCarePlanSuggestionsSubtext}>
-            New concerns and goals will be displayed here as they are added
-          </div>
-        </div>
-      );
-    }
-
-    return patientConcerns.map((patientConcern, index) => {
-      const selected =
-        index === 0 && selectedPatientConcernId === undefined
-          ? true
-          : selectedPatientConcernId === patientConcern.id;
-      const optionsOpen = optionsDropdownConcernId === patientConcern.id;
-
-      return (
-        <PatientConcern
-          key={patientConcern.id}
-          selected={selected}
-          patientConcern={patientConcern}
+    return (
+      <div>
+        <PatientConcerns
+          concerns={activeConcerns}
+          selectedPatientConcernId={selectedPatientConcernId}
+          optionsDropdownConcernId={optionsDropdownConcernId}
           onClick={this.onClickPatientConcern}
           onOptionsToggle={this.onOptionsToggle}
-          optionsOpen={optionsOpen}
         />
-      );
-    });
+        <TextDivider label="Next Up" />
+        <PatientConcerns
+          concerns={inactiveConcerns}
+          inactive={true}
+          selectedPatientConcernId={selectedPatientConcernId}
+          optionsDropdownConcernId={optionsDropdownConcernId}
+          onClick={this.onClickPatientConcern}
+          onOptionsToggle={this.onOptionsToggle}
+        />
+      </div>
+    );
   }
 
   render() {

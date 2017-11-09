@@ -14,7 +14,7 @@ import PatientCarePlanSuggestions from './patient-care-plan-suggestions';
 
 interface IProps {
   patientId: string;
-  subTabId?: 'active' | 'inactive' | 'suggestions';
+  subTabId?: 'active' | 'suggestions';
   routeBase: string;
   patientCarePlan?: ICarePlan;
   refetchPatientCarePlan?: () => any;
@@ -31,21 +31,17 @@ const PatientCarePlanView = (props: IProps) => {
     ) : null;
 
   const carePlan =
-    !subTabId || subTabId === 'inactive' || subTabId === 'active' ? (
+    !subTabId || subTabId === 'active' ? (
       <PatientCarePlan
         loading={loading}
         carePlan={patientCarePlan}
         routeBase={routeBase}
-        displayType={subTabId}
         patientId={patientId}
       />
     ) : null;
 
   const activeCarePlanTabStyles = classNames(tabStyles.tab, {
     [tabStyles.selectedTab]: !subTabId || subTabId === 'active',
-  });
-  const inactiveCarePlanTabStyles = classNames(tabStyles.tab, {
-    [tabStyles.selectedTab]: subTabId === 'inactive',
   });
   const suggestionsTabStyles = classNames(tabStyles.tab, {
     [tabStyles.selectedTab]: subTabId === 'suggestions',
@@ -58,13 +54,6 @@ const PatientCarePlanView = (props: IProps) => {
         <FormattedMessage id="patient.activeCarePlan">
           {(message: string) => (
             <Link to={`${routeBase}/active`} className={activeCarePlanTabStyles}>
-              {message}
-            </Link>
-          )}
-        </FormattedMessage>
-        <FormattedMessage id="patient.inactiveCarePlan">
-          {(message: string) => (
-            <Link to={`${routeBase}/inactive`} className={inactiveCarePlanTabStyles}>
               {message}
             </Link>
           )}

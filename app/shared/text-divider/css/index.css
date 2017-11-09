@@ -1,0 +1,24 @@
+@import '../../css/sizes';
+
+.container {
+  display: flex;
+  margin: 30px 0 20px;
+  align-items: center;
+}
+
+.container p {
+  color: var(--light-blue-color);
+  font-family: var(--basetica-medium);
+  font-size: var(--default-font-size);
+  line-height: var(--medium-font-line-height);
+  font-weight: var(--roboto-medium-weight);
+  padding-right: 8px;
+  margin: 0;
+  white-space: nowrap;
+}
+
+.divider {
+  background: var(--border-color);
+  height: 1px;
+  width: 100%;
+}

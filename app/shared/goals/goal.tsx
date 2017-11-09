@@ -1,8 +1,8 @@
 import * as React from 'react';
 import { FormattedDate } from 'react-intl';
-import { FullPatientGoalFragment } from '../graphql/types';
-import { TaskRow } from '../shared/tasks/task-row';
-import * as styles from './css/patient-care-plan.css';
+import { FullPatientGoalFragment } from '../../graphql/types';
+import { TaskRow } from '../tasks/task-row';
+import * as styles from './css/goal.css';
 
 interface IProps {
   goalNumber: number;

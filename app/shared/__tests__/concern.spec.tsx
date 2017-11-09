@@ -7,10 +7,9 @@ import { create } from 'react-test-renderer';
 import configureMockStore from 'redux-mock-store';
 import { ENGLISH_TRANSLATION } from '../../reducers/messages/en';
 import ReduxConnectedIntlProvider from '../../redux-connected-intl-provider';
-import { patientConcern } from '../../shared/util/test-data';
-import PatientConcern from '../patient-concern';
-import PatientConcernOptions from '../patient-concern-options/index';
-
+import PatientConcern from '../concerns/concern';
+import PatientConcernOptions from '../concerns/options-menu';
+import { patientConcern } from '../util/test-data';
 const locale = { messages: ENGLISH_TRANSLATION.messages };
 const mockStore = configureMockStore([]);
 

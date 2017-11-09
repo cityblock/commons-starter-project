@@ -1,10 +1,10 @@
 import * as classNames from 'classnames';
 import * as React from 'react';
 import { FormattedDate } from 'react-intl';
-import { FullPatientConcernFragment } from '../graphql/types';
-import * as styles from './css/patient-care-plan.css';
-import PatientConcernOptions from './patient-concern-options/index';
-import PatientGoal from './patient-goal';
+import { FullPatientConcernFragment } from '../../graphql/types';
+import PatientGoal from '../goals/goal';
+import * as styles from './css/concern.css';
+import PatientConcernOptions from './options-menu';
 
 interface IProps {
   patientConcern: FullPatientConcernFragment;
@@ -12,6 +12,7 @@ interface IProps {
   optionsOpen: boolean;
   onClick: (id: string) => void;
   onOptionsToggle: (id: string) => (e: React.MouseEvent<HTMLDivElement>) => void;
+  inactive?: boolean;
 }
 
 export interface IPatientConcernStats {
@@ -78,14 +79,22 @@ export default class PatientConcern extends React.Component<IProps, {}> {
   }
 
   render() {
-    const { onClick, onOptionsToggle, patientConcern, selected, optionsOpen } = this.props;
+    const {
+      onClick,
+      onOptionsToggle,
+      patientConcern,
+      selected,
+      optionsOpen,
+      inactive,
+    } = this.props;
     const { patientGoals } = patientConcern;
-    const hamburgerClass = optionsOpen
-      ? classNames(styles.patientConcernHamburger, styles.hamburgerSelected)
-      : styles.patientConcernHamburger;
+    const hamburgerClass = classNames(styles.patientConcernHamburger, {
+      [styles.hamburgerSelected]: optionsOpen,
+    });
 
     const patientConcernStyles = classNames(styles.patientConcern, {
       [styles.selected]: selected,
+      [styles.inactive]: inactive,
     });
     const patientGoalsStyles = classNames(styles.patientGoals, {
       [styles.hidden]: !selected || (!patientGoals || !patientGoals.length),
@@ -99,7 +108,7 @@ export default class PatientConcern extends React.Component<IProps, {}> {
           <div className={styles.patientConcernTitleRow}>
             <div className={styles.patientConcernTitle}>{patientConcern.concern.title}</div>
             <div className={hamburgerClass} onClick={onOptionsToggle(patientConcern.id)}>
-              {optionsOpen && <PatientConcernOptions />}
+              {optionsOpen && <PatientConcernOptions inactive={inactive || false} />}
             </div>
           </div>
           <div className={styles.patientConcernMetaRow}>

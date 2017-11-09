@@ -34,7 +34,7 @@ export default class PatientCarePlan extends React.Component<IProps, IState> {
     } else {
       this.setState(() => ({ selectedPatientConcernId: patientConcernId }));
     }
-  }
+  };
 
   onOptionsToggle = (patientConcernId: string) => (e: React.MouseEvent<HTMLDivElement>) => {
     // Prevents closing of selected concern if unselected concern options toggle clicked
@@ -46,7 +46,7 @@ export default class PatientCarePlan extends React.Component<IProps, IState> {
     } else {
       this.setState(() => ({ optionsDropdownConcernId: patientConcernId }));
     }
-  }
+  };
 
   renderCarePlan() {
     const { loading, carePlan } = this.props;

@@ -166,7 +166,9 @@ describe('answer model', () => {
 
       expect(errorMessage).toEqual(
         /* tslint:disable:max-line-length */
-        `progress note ${progressNote.id} is not associated with the same progress note template as the question ${question.id}`,
+        `progress note ${
+          progressNote.id
+        } is not associated with the same progress note template as the question ${question.id}`,
         /* tslint:enable:max-line-length */
       );
     },

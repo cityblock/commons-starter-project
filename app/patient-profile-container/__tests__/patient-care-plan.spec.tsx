@@ -42,7 +42,8 @@ describe('Patient Care Plan Component', () => {
         carePlan={{ concerns: [], goals: [] }}
         patientId={patientId}
         loading={true}
-        routeBase={routeBase} />,
+        routeBase={routeBase}
+      />,
     );
 
     expect(wrapper.find(PatientConcerns).length).toBe(0);
@@ -66,11 +67,22 @@ describe('Patient Care Plan Component', () => {
         carePlan={carePlan}
         patientId={patientId}
         loading={false}
-        routeBase={routeBase} />,
+        routeBase={routeBase}
+      />,
     );
 
-    expect(wrapper.find(PatientConcerns).at(0).props().concerns).toEqual([activeConcern]);
+    expect(
+      wrapper
+        .find(PatientConcerns)
+        .at(0)
+        .props().concerns,
+    ).toEqual([activeConcern]);
     expect(wrapper.find(TextDivider).length).toBe(1);
-    expect(wrapper.find(PatientConcerns).at(1).props().concerns).toEqual([inactiveConcern]);
+    expect(
+      wrapper
+        .find(PatientConcerns)
+        .at(1)
+        .props().concerns,
+    ).toEqual([inactiveConcern]);
   });
 });

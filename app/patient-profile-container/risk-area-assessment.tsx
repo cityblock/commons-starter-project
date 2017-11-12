@@ -272,6 +272,7 @@ export class RiskAreaAssessment extends React.Component<IProps, IState> {
     return (
       <PatientQuestion
         visible={visible}
+        displayHamburger={true}
         answerData={questions[question.id]}
         onChange={this.onChange}
         key={`${question.id}-${index}`}

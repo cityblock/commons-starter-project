@@ -411,7 +411,7 @@ export const patientScreeningToolSubmission = {
 
 export const progressNoteTemplate = {
   id: 'progress-note-template-id',
-  title: 'Goal Title',
+  title: 'Progress Note Template Title',
   createdAt: '2017-09-07T13:45:14.532Z',
   updatedAt: '2017-09-07T13:45:14.532Z',
   deletedAt: null,

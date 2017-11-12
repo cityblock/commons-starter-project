@@ -86,6 +86,7 @@ exports[`builder concerns renders progress note popup 1`] = `
           <select
             className={undefined}
             onChange={[Function]}
+            value={undefined}
           >
             <option
               disabled={true}
@@ -115,7 +116,7 @@ exports[`builder concerns renders progress note popup with templates renders pro
         className={undefined}
       >
         Progress Note: 
-        Goal Title
+        Progress Note Template Title
       </div>
       <div
         className={undefined}
@@ -185,13 +186,14 @@ exports[`builder concerns renders progress note popup with templates renders pro
       onChange={[Function]}
       patientId="patient-id"
       progressNoteId="progress-note-id"
+      progressNoteTemplateId="progress-note-template-id"
       progressNoteTemplates={
         Array [
           Object {
             "createdAt": "2017-09-07T13:45:14.532Z",
             "deletedAt": null,
             "id": "progress-note-template-id",
-            "title": "Goal Title",
+            "title": "Progress Note Template Title",
             "updatedAt": "2017-09-07T13:45:14.532Z",
           },
         ]
@@ -277,13 +279,14 @@ exports[`builder concerns renders progress note popup with templates renders pro
       onChange={[Function]}
       patientId="patient-id"
       progressNoteId={undefined}
+      progressNoteTemplateId={undefined}
       progressNoteTemplates={
         Array [
           Object {
             "createdAt": "2017-09-07T13:45:14.532Z",
             "deletedAt": null,
             "id": "progress-note-template-id",
-            "title": "Goal Title",
+            "title": "Progress Note Template Title",
             "updatedAt": "2017-09-07T13:45:14.532Z",
           },
         ]

@@ -133,7 +133,7 @@ exports[`renders progress note template 1`] = `
         className=""
         onClick={[Function]}
       >
-        Goal Title
+        Progress Note Template Title
       </div>
       <div
         className=""

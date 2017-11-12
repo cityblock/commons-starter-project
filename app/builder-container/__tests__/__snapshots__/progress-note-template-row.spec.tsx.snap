@@ -9,7 +9,7 @@ exports[`question row renders question row 1`] = `
   <div
     className={undefined}
   >
-    Goal Title
+    Progress Note Template Title
   </div>
   <div
     className={undefined}

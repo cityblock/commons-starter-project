@@ -9,6 +9,7 @@ interface IProps {
   visible: boolean;
   question: FullQuestionFragment;
   editable: boolean;
+  displayHamburger: boolean;
   answerData: {
     answers: Array<{
       id: string;
@@ -45,7 +46,7 @@ export default class PatientQuestion extends React.Component<IProps, {}> {
   };
 
   render() {
-    const { question, editable, answerData, visible } = this.props;
+    const { question, editable, answerData, visible, displayHamburger } = this.props;
 
     let highRiskAnswer: boolean = false;
 
@@ -66,11 +67,12 @@ export default class PatientQuestion extends React.Component<IProps, {}> {
       [styles.hidden]: !visible,
     });
 
+    const hamburger = displayHamburger ? <div className={styles.questionHamburger} /> : null;
     return (
       <div className={questionStyles}>
         <div className={styles.questionHeader}>
           <div className={styles.questionTitle}>{question.title}</div>
-          <div className={styles.questionHamburger} />
+          {hamburger}
         </div>
         {this.renderAnswers()}
       </div>

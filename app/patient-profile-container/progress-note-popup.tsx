@@ -140,6 +140,11 @@ export class ProgressNotePopup extends React.Component<allProps, IState> {
         <ProgressNoteContext
           patientId={patientId}
           progressNoteId={progressNote ? progressNote.id : undefined}
+          progressNoteTemplateId={
+            progressNote && progressNote.progressNoteTemplate
+              ? progressNote.progressNoteTemplate.id
+              : undefined
+          }
           progressNoteTemplates={progressNoteTemplates}
           onChange={this.updateProgressNote}
         />

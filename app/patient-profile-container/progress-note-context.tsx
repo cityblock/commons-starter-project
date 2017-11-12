@@ -27,6 +27,7 @@ import * as styles from './css/progress-note-popup.css';
 interface IProps {
   patientId: string;
   progressNoteId?: string;
+  progressNoteTemplateId?: string;
   progressNoteTemplates?: FullProgressNoteTemplateFragment[];
   onChange: (progressNoteTemplateId: string) => void;
 }
@@ -50,11 +51,9 @@ interface IState {
   questions: IQuestionsState;
 }
 
-class ProgressNoteContext extends React.Component<allProps, IState> {
+export class ProgressNoteContext extends React.Component<allProps, IState> {
   constructor(props: allProps) {
     super(props);
-
-    this.onEncounterTypeChange = this.onEncounterTypeChange.bind(this);
     this.state = {
       questions: {},
     };
@@ -73,11 +72,11 @@ class ProgressNoteContext extends React.Component<allProps, IState> {
     }
   }
 
-  onEncounterTypeChange(event: React.ChangeEvent<HTMLSelectElement>) {
+  onEncounterTypeChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     this.props.onChange(event.currentTarget.value);
-  }
+  };
 
-  allQuestionsAnswered() {
+  allQuestionsAnswered = () => {
     const { questions } = this.state;
 
     if (!this.props.questions) {
@@ -89,7 +88,7 @@ class ProgressNoteContext extends React.Component<allProps, IState> {
 
       return !!questionData && !!questionData.answers.length;
     });
-  }
+  };
 
   async onSubmit() {
     const { createPatientAnswers, patientId, progressNoteId } = this.props;
@@ -133,7 +132,7 @@ class ProgressNoteContext extends React.Component<allProps, IState> {
     }
   }
 
-  onChange(questionId: string, answerId: string, value: string | number) {
+  onChange = (questionId: string, answerId: string, value: string | number) => {
     const { questions } = this.props;
 
     const update = getUpdateForAnswer(
@@ -148,9 +147,9 @@ class ProgressNoteContext extends React.Component<allProps, IState> {
         questions: update,
       });
     }
-  }
+  };
 
-  renderQuestion(question: FullQuestionFragment, index: number) {
+  renderQuestion = (question: FullQuestionFragment, index: number) => {
     const { questions } = this.state;
 
     const visible = getQuestionVisibility(question, questions);
@@ -158,6 +157,7 @@ class ProgressNoteContext extends React.Component<allProps, IState> {
     return (
       <PatientQuestion
         editable={true}
+        displayHamburger={false}
         visible={visible}
         answerData={questions[question.id]}
         onChange={this.onChange}
@@ -165,7 +165,7 @@ class ProgressNoteContext extends React.Component<allProps, IState> {
         question={question}
       />
     );
-  }
+  };
 
   renderQuestions() {
     const { questions } = this.props;
@@ -174,25 +174,29 @@ class ProgressNoteContext extends React.Component<allProps, IState> {
   }
 
   render() {
-    const { progressNoteTemplates } = this.props;
+    const { progressNoteTemplates, progressNoteTemplateId } = this.props;
     const options = (progressNoteTemplates || []).map(template => (
       <option key={template.id} value={template.id}>
         {template.title}
       </option>
     ));
-
     return (
       <div>
         <div className={styles.encounterTypeContainer}>
           <FormattedMessage id="patient.selectProgressNoteType">
             {(message: string) => <div className={styles.encounterTypeLabel}>{message}</div>}
           </FormattedMessage>
-          <select onChange={this.onEncounterTypeChange} className={styles.encounterTypeSelect}>
-            <option value="" disabled hidden>
+          <select
+            value={progressNoteTemplateId}
+            onChange={this.onEncounterTypeChange}
+            className={styles.encounterTypeSelect}
+          >
+            <option value={''} disabled hidden>
               Select an encounter type template
             </option>
             {options}
           </select>
+          {this.renderQuestions()}
         </div>
       </div>
     );
@@ -207,7 +211,7 @@ export default compose(
     options: (props: IProps) => ({
       variables: {
         filterType: 'progressNoteTemplate',
-        filterId: props.progressNoteId,
+        filterId: props.progressNoteTemplateId,
       },
     }),
     props: ({ data }) => ({

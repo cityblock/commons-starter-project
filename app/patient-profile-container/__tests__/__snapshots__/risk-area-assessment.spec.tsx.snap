@@ -4,6 +4,7 @@ exports[`method tests renders questions with correct visibility 1`] = `
 Array [
   <PatientQuestion
     answerData={undefined}
+    displayHamburger={true}
     editable={false}
     onChange={[Function]}
     question={
@@ -57,6 +58,7 @@ Array [
         "oldAnswers": Array [],
       }
     }
+    displayHamburger={true}
     editable={false}
     onChange={[Function]}
     question={

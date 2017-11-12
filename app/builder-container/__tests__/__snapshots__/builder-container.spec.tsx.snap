@@ -2,51 +2,51 @@
 
 exports[`renders builder container 1`] = `
 <div
-  className={undefined}
+  className="container"
 >
   <div
-    className={undefined}
+    className="mainBody"
   >
     <div
-      className={undefined}
+      className="tabs"
     >
       <a
-        className="undefined"
+        className="tab selectedTab"
         href="/builder/domains"
         onClick={[Function]}
       >
         Domains
       </a>
       <a
-        className=""
+        className="tab"
         href="/builder/tools"
         onClick={[Function]}
       >
         Tools
       </a>
       <a
-        className=""
+        className="tab"
         href="/builder/domains/undefined/questions"
         onClick={[Function]}
       >
         Questions
       </a>
       <a
-        className=""
+        className="tab"
         href="/builder/concerns"
         onClick={[Function]}
       >
         Concerns
       </a>
       <a
-        className=""
+        className="tab"
         href="/builder/goals"
         onClick={[Function]}
       >
         Goals
       </a>
       <a
-        className=""
+        className="tab"
         href="/builder/progress-note-templates"
         onClick={[Function]}
       >
@@ -54,16 +54,16 @@ exports[`renders builder container 1`] = `
       </a>
     </div>
     <div
-      className={undefined}
+      className="container"
     >
       <div
-        className={undefined}
+        className="sortSearchBar"
       >
         <div
-          className={undefined}
+          className="createContainer"
         >
           <div
-            className={undefined}
+            className="createButton"
             onClick={[Function]}
           >
             Create Domain
@@ -71,26 +71,26 @@ exports[`renders builder container 1`] = `
         </div>
       </div>
       <div
-        className={undefined}
+        className="bottomContainer"
       >
         <div
-          className=""
+          className="itemsList"
         >
           <div
-            className={undefined}
+            className="emptyMessage"
           >
             <div
-              className={undefined}
+              className="emptyLogo"
             />
             <div
-              className={undefined}
+              className="emptyLabel"
             >
               No RiskAreas
             </div>
           </div>
         </div>
         <div
-          className=""
+          className="itemContainer"
         />
       </div>
     </div>

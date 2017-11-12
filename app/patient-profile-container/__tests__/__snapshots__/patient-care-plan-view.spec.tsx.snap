@@ -3,17 +3,17 @@
 exports[`renders patient care plan view 1`] = `
 <div>
   <div
-    className=""
+    className="tabs darkTabs"
   >
     <a
-      className="undefined"
+      className="tab selectedTab"
       href="/patients/patient-1/map/active"
       onClick={[Function]}
     >
       Active
     </a>
     <a
-      className=""
+      className="tab"
       href="/patients/patient-1/map/suggestions"
       onClick={[Function]}
     >
@@ -21,16 +21,16 @@ exports[`renders patient care plan view 1`] = `
     </a>
   </div>
   <div
-    className={undefined}
+    className="carePlanPanel"
   >
     <div
-      className={undefined}
+      className="carePlan"
     >
       <div
-        className={undefined}
+        className="emptyCarePlanSuggestionsContainer"
       >
         <div
-          className={undefined}
+          className="loadingLabel"
         >
           Loading...
         </div>

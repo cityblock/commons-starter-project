@@ -2,14 +2,14 @@
 
 exports[`renders empty div 1`] = `
 <div
-  className=""
+  className="medication"
   onClick={[Function]}
 >
   <div
-    className={undefined}
+    className="medicationRow"
   >
     <div
-      className={undefined}
+      className="medicationRowTitle"
     >
       name
     </div>
@@ -18,83 +18,83 @@ exports[`renders empty div 1`] = `
     </div>
   </div>
   <div
-    className={undefined}
+    className="medicationDetails"
   >
     <div
-      className={undefined}
+      className="medicationDetailsRow"
     >
       <div
-        className={undefined}
+        className="medicationInstructions"
       >
         once daily
       </div>
     </div>
     <div
-      className={undefined}
+      className="medicationDetailsRow"
     >
       <div
-        className={undefined}
+        className="medicationDetailsTitle"
       >
         Prescribed by
       </div>
       <div
-        className={undefined}
+        className="medicationDetailsInfo"
       >
         TBD
       </div>
     </div>
     <div
-      className={undefined}
+      className="medicationDetailsRow"
     >
       <div
-        className={undefined}
+        className="medicationDetailsTitle"
       >
         Prescribed on
       </div>
       <div
-        className={undefined}
+        className="medicationDetailsInfo"
       >
         10/10/2010
       </div>
     </div>
     <div
-      className={undefined}
+      className="medicationDetailsRow"
     >
       <div
-        className={undefined}
+        className="medicationDetailsTitle"
       >
         Refills allowed
       </div>
       <div
-        className={undefined}
+        className="medicationDetailsInfo"
       >
         TBD
       </div>
     </div>
     <div
-      className={undefined}
+      className="medicationDetailsRow"
     >
       <div
-        className={undefined}
+        className="medicationDetailsTitle"
       >
         Renewable
       </div>
       <div
-        className={undefined}
+        className="medicationDetailsInfo"
       >
         TBD
       </div>
     </div>
     <div
-      className={undefined}
+      className="medicationDetailsRow"
     >
       <div
-        className={undefined}
+        className="medicationDetailsTitle"
       >
         Status
       </div>
       <div
-        className={undefined}
+        className="medicationDetailsInfo"
       >
         TBD
       </div>

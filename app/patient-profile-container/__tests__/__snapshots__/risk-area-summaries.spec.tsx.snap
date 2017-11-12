@@ -3,18 +3,18 @@
 exports[`renders risk area summaries 1`] = `
 <div>
   <div
-    className={undefined}
+    className="sortSearchBar"
   >
     <div
-      className={undefined}
+      className="sort"
     >
       <div
-        className={undefined}
+        className="sortLabel"
       >
         Sort by:
       </div>
       <div
-        className={undefined}
+        className="sortDropdown"
       >
         <select
           value="Newest first"
@@ -27,7 +27,7 @@ exports[`renders risk area summaries 1`] = `
         </select>
       </div>
       <div
-        className=""
+        className="search marginLeft"
       >
         <input
           placeholder="Search by user or keywords"
@@ -38,13 +38,13 @@ exports[`renders risk area summaries 1`] = `
     </div>
   </div>
   <div
-    className={undefined}
+    className="riskAreasPanel"
   >
     <div
-      className={undefined}
+      className="riskAreas"
     >
       <div
-        className={undefined}
+        className="riskAreasLoading"
       >
         Loading...
       </div>

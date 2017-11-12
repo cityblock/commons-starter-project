@@ -2,39 +2,39 @@
 
 exports[`renders event notifications containers 1`] = `
 <div
-  className={undefined}
+  className="container"
 >
   <div
-    className={undefined}
+    className="leftPane"
   >
     <div
-      className={undefined}
+      className="leftHeading"
     >
       Left Pane
     </div>
   </div>
   <div
-    className={undefined}
+    className="mainBody"
   >
     <div
-      className={undefined}
+      className="tabs"
     >
       <a
-        className={undefined}
+        className="tab"
         href="/tasks"
         onClick={[Function]}
       >
         Tasks
       </a>
       <a
-        className={undefined}
+        className="tab"
         href="/calendar"
         onClick={[Function]}
       >
         Calendar
       </a>
       <a
-        className=""
+        className="tab relativeTab selectedTab"
         href="/notifications/tasks"
         onClick={[Function]}
       >
@@ -42,27 +42,27 @@ exports[`renders event notifications containers 1`] = `
           Notifications
         </span>
         <div
-          className="undefined"
+          className="notificationBadge visible"
         />
       </a>
     </div>
     <div
-      className=""
+      className="pane selectedPane"
     >
       <div
-        className={undefined}
+        className="container"
       >
         <div
-          className={undefined}
+          className="sortSearchBar"
         />
         <div
-          className={undefined}
+          className="bottomContainer"
         >
           <div
-            className=""
+            className="list"
           >
             <div
-              className={undefined}
+              className="eventNotificationsLoading"
             >
               Loading...
             </div>

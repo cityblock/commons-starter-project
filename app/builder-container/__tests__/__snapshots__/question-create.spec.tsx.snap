@@ -2,45 +2,45 @@
 
 exports[`renders question 1`] = `
 <div
-  className={undefined}
+  className="container"
 >
   <form
     onSubmit={[Function]}
   >
     <div
-      className={undefined}
+      className="formTop"
     >
       <div
-        className={undefined}
+        className="close"
         onClick={[Function]}
       />
     </div>
     <div
-      className={undefined}
+      className="formCenter"
     >
       <div
-        className={undefined}
+        className="loadingHidden"
       >
         <div
-          className={undefined}
+          className="loadingContainer"
         >
           <div
-            className={undefined}
+            className="loadingSpinner"
           />
         </div>
       </div>
       <div
-        className={undefined}
+        className="inputGroup"
       >
         <input
-          className={undefined}
+          className="input"
           name="title"
           onChange={[Function]}
           placeholder="Enter question title"
           value=""
         />
         <input
-          className={undefined}
+          className="input"
           name="order"
           onChange={[Function]}
           placeholder="Enter question order"
@@ -50,10 +50,10 @@ exports[`renders question 1`] = `
       </div>
     </div>
     <div
-      className={undefined}
+      className="flexInputGroup"
     >
       <select
-        className=""
+        className="select inputSmall flexInputItem"
         name="applicableIfType"
         onChange={[Function]}
         value=""
@@ -70,7 +70,7 @@ exports[`renders question 1`] = `
         </option>
       </select>
       <select
-        className=""
+        className="select inputSmall flexInputItem"
         name="answerType"
         onChange={[Function]}
         required={true}
@@ -99,19 +99,19 @@ exports[`renders question 1`] = `
       </select>
     </div>
     <div
-      className={undefined}
+      className="formBottom"
     >
       <div
-        className={undefined}
+        className="formBottomContent"
       >
         <div
-          className={undefined}
+          className="cancelButton"
           onClick={[Function]}
         >
           Cancel
         </div>
         <input
-          className={undefined}
+          className="submitButton"
           type="submit"
           value="Add question"
         />

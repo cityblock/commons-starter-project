@@ -2,23 +2,23 @@
 
 exports[`task row renders task row 1`] = `
 <a
-  className=""
+  className="container selected highPriority"
   href="/foo/bar/task-id"
   onClick={[Function]}
 >
   <div
-    className={undefined}
+    className="title"
   >
     Task Title
   </div>
   <div
-    className={undefined}
+    className="meta"
   >
     <div
-      className={undefined}
+      className="followers"
     >
       <div
-        className={undefined}
+        className="assignedTo"
         style={
           Object {
             "backgroundImage": "url(https://bit.ly/2weRwJm)",
@@ -27,31 +27,31 @@ exports[`task row renders task row 1`] = `
       />
     </div>
     <div
-      className=""
+      className="dateSection openedAt openedAtSection"
     >
       <span
-        className={undefined}
+        className="dateLabel"
       >
         Opened
         :
       </span>
       <span
-        className={undefined}
+        className="dateValue"
       >
         in 2 months
       </span>
     </div>
     <div
-      className={undefined}
+      className="dateSection"
     >
       <span
-        className={undefined}
+        className="dateLabel"
       >
         Due
         :
       </span>
       <span
-        className={undefined}
+        className="dateValue"
       >
         Sep 7, 2017
       </span>
@@ -62,23 +62,23 @@ exports[`task row renders task row 1`] = `
 
 exports[`task row renders task row with multiple followers 1`] = `
 <a
-  className=""
+  className="container selected highPriority"
   href="/foo/bar/task-id"
   onClick={[Function]}
 >
   <div
-    className={undefined}
+    className="title"
   >
     Task Title
   </div>
   <div
-    className={undefined}
+    className="meta"
   >
     <div
-      className={undefined}
+      className="followers"
     >
       <div
-        className={undefined}
+        className="assignedTo"
         style={
           Object {
             "backgroundImage": "url(https://bit.ly/2weRwJm)",
@@ -86,37 +86,37 @@ exports[`task row renders task row with multiple followers 1`] = `
         }
       />
       <div
-        className={undefined}
+        className="follower"
       >
         +2
       </div>
     </div>
     <div
-      className=""
+      className="dateSection openedAt openedAtSection"
     >
       <span
-        className={undefined}
+        className="dateLabel"
       >
         Opened
         :
       </span>
       <span
-        className={undefined}
+        className="dateValue"
       >
         in 2 months
       </span>
     </div>
     <div
-      className={undefined}
+      className="dateSection"
     >
       <span
-        className={undefined}
+        className="dateLabel"
       >
         Due
         :
       </span>
       <span
-        className={undefined}
+        className="dateValue"
       >
         Sep 7, 2017
       </span>

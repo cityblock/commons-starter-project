@@ -3,18 +3,18 @@
 exports[`renders timeline 1`] = `
 <div>
   <div
-    className={undefined}
+    className="sortSearchBar"
   >
     <div
-      className={undefined}
+      className="sort"
     >
       <div
-        className={undefined}
+        className="sortLabel"
       >
         Sort by:
       </div>
       <div
-        className={undefined}
+        className="sortDropdown"
       >
         <select
           value="Newest first"
@@ -27,7 +27,7 @@ exports[`renders timeline 1`] = `
         </select>
       </div>
       <div
-        className=""
+        className="search searchLeftPad"
       >
         <input
           placeholder="Search by user or keywords"
@@ -37,10 +37,10 @@ exports[`renders timeline 1`] = `
       </div>
     </div>
     <div
-      className={undefined}
+      className="saveButtonGroup"
     >
       <div
-        className=""
+        className="button saveButton"
         onClick={[Function]}
       >
         <span>
@@ -50,30 +50,30 @@ exports[`renders timeline 1`] = `
     </div>
   </div>
   <div
-    className={undefined}
+    className="encountersPanel"
   >
     <div
-      className={undefined}
+      className="encounters"
     >
       <div
-        className={undefined}
+        className="encountersLoading"
       >
         Loading...
       </div>
     </div>
   </div>
   <div
-    className="undefined"
+    className="lightbox hidden"
   >
     <div
-      className={undefined}
+      className="background"
       onClick={[Function]}
     />
     <div
-      className={undefined}
+      className="foreground"
     >
       <div
-        className={undefined}
+        className="viewer"
         style={
           Object {
             "backgroundImage": "none",
@@ -81,16 +81,16 @@ exports[`renders timeline 1`] = `
         }
       >
         <div
-          className={undefined}
+          className="overlay"
         >
           <div
-            className={undefined}
+            className="header"
           >
             <div
-              className={undefined}
+              className="imageCount"
             >
               <div
-                className={undefined}
+                className="imageCountIcon"
               />
               <div>
                 1 
@@ -104,19 +104,19 @@ exports[`renders timeline 1`] = `
               </div>
             </div>
             <div
-              className={undefined}
+              className="close"
               onClick={[Function]}
             />
           </div>
           <div
-            className={undefined}
+            className="controls"
           >
             <div
-              className="undefined"
+              className="backArrow hidden"
               onClick={[Function]}
             />
             <div
-              className=""
+              className="nextArrow"
               onClick={[Function]}
             />
           </div>

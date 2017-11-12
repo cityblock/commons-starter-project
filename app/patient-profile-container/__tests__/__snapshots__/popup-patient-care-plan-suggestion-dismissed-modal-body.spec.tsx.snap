@@ -2,23 +2,23 @@
 
 exports[`renders popup modal body for concern suggestion 1`] = `
 <div
-  className={undefined}
+  className="acceptModalBody"
 >
   <div
-    className=""
+    className="acceptModalTitle noMargin"
   >
     Reason for dismissing this suggestion
   </div>
   <div
-    className={undefined}
+    className="acceptModalSubtitle"
   >
     Select from one of the available options
   </div>
   <div
-    className={undefined}
+    className="acceptModalDropdown"
   >
     <select
-      className=""
+      className="select roundedInput"
       name="dismissedReason"
       onChange={[Function]}
       value="Because"
@@ -48,16 +48,16 @@ exports[`renders popup modal body for concern suggestion 1`] = `
     </select>
   </div>
   <div
-    className={undefined}
+    className="acceptModalButtons"
   >
     <div
-      className=""
+      className="invertedButton rightSmallGutter smallButton"
       onClick={[Function]}
     >
       Cancel
     </div>
     <div
-      className=""
+      className="button smallButton redButton"
       onClick={[Function]}
     >
       Dismiss concern
@@ -68,23 +68,23 @@ exports[`renders popup modal body for concern suggestion 1`] = `
 
 exports[`renders popup modal body for goal suggestion 1`] = `
 <div
-  className={undefined}
+  className="acceptModalBody"
 >
   <div
-    className=""
+    className="acceptModalTitle noMargin"
   >
     Reason for dismissing this suggestion
   </div>
   <div
-    className={undefined}
+    className="acceptModalSubtitle"
   >
     Select from one of the available options
   </div>
   <div
-    className={undefined}
+    className="acceptModalDropdown"
   >
     <select
-      className=""
+      className="select roundedInput"
       name="dismissedReason"
       onChange={[Function]}
       value="Because"
@@ -114,16 +114,16 @@ exports[`renders popup modal body for goal suggestion 1`] = `
     </select>
   </div>
   <div
-    className={undefined}
+    className="acceptModalButtons"
   >
     <div
-      className=""
+      className="invertedButton rightSmallGutter smallButton"
       onClick={[Function]}
     >
       Cancel
     </div>
     <div
-      className=""
+      className="button smallButton redButton"
       onClick={[Function]}
     >
       Dismiss goal

@@ -2,41 +2,41 @@
 
 exports[`renders popup 1`] = `
 <div
-  className={undefined}
+  className="background"
 >
   <div
-    className=""
+    className="content"
   >
     <div
-      className={undefined}
+      className="content"
     >
       <div
-        className={undefined}
+        className="heading"
       >
         Bob Smith
         <span
-          className={undefined}
+          className="highlight"
         >
           successfully enrolled
         </span>
       </div>
       <div
-        className={undefined}
+        className="paragraph"
       >
         successfully enrolled
       </div>
       <div
-        className={undefined}
+        className="buttonContainer"
       >
         <a
-          className={undefined}
+          className="invertedButton"
           href="/patients"
           onClick={[Function]}
         >
           Patient Roster
         </a>
         <a
-          className={undefined}
+          className="button"
           href="/patients/patient-id"
           onClick={[Function]}
         >

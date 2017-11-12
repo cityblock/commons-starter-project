@@ -2,13 +2,13 @@
 
 exports[`correctly renders/does not render the add task follower button 1`] = `
 <div
-  className={undefined}
+  className="container"
 >
   <div
-    className="undefined"
+    className="careTeam hidden"
   />
   <div
-    className="undefined"
+    className="addFollower hidden"
     onClick={[Function]}
   />
 </div>
@@ -17,11 +17,11 @@ exports[`correctly renders/does not render the add task follower button 1`] = `
 exports[`renders care team 1`] = `
 Array [
   <div
-    className={undefined}
+    className="careTeamMemberDetails"
     onClick={[Function]}
   >
     <div
-      className={undefined}
+      className="careTeamAvatar"
       style={
         Object {
           "backgroundImage": "url('https://bit.ly/2weRwJm')",
@@ -29,29 +29,29 @@ Array [
       }
     />
     <div
-      className={undefined}
+      className="careTeamMemberLabel"
     >
       <div
-        className={undefined}
+        className="careTeamMemberName"
       >
         first last
       </div>
       <div
-        className={undefined}
+        className="careTeamMemberRole"
       >
         physician
       </div>
     </div>
     <div
-      className=""
+      className="addError"
     />
   </div>,
   <div
-    className={undefined}
+    className="careTeamMemberDetails"
     onClick={[Function]}
   >
     <div
-      className={undefined}
+      className="careTeamAvatar"
       style={
         Object {
           "backgroundImage": "url('https://bit.ly/2weRwJm')",
@@ -59,21 +59,21 @@ Array [
       }
     />
     <div
-      className={undefined}
+      className="careTeamMemberLabel"
     >
       <div
-        className={undefined}
+        className="careTeamMemberName"
       >
         first last
       </div>
       <div
-        className={undefined}
+        className="careTeamMemberRole"
       >
         physician
       </div>
     </div>
     <div
-      className=""
+      className="addError"
     />
   </div>,
 ]

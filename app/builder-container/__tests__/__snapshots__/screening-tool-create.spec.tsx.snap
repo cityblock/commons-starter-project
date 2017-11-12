@@ -2,45 +2,45 @@
 
 exports[`renders screening tool screate 1`] = `
 <div
-  className={undefined}
+  className="container"
 >
   <form
     onSubmit={[Function]}
   >
     <div
-      className={undefined}
+      className="formTop"
     >
       <div
-        className={undefined}
+        className="close"
         onClick={[Function]}
       />
     </div>
     <div
-      className={undefined}
+      className="formCenter"
     >
       <div
-        className={undefined}
+        className="loadingHidden"
       >
         <div
-          className={undefined}
+          className="loadingContainer"
         >
           <div
-            className={undefined}
+            className="loadingSpinner"
           />
         </div>
       </div>
       <div
-        className={undefined}
+        className="inputGroup"
       >
         <input
-          className={undefined}
+          className="input"
           name="title"
           onChange={[Function]}
           placeholder="Enter screening tool title"
           value=""
         />
         <select
-          className={undefined}
+          className="select"
           name="riskAreaId"
           onChange={[Function]}
           required={true}
@@ -62,19 +62,19 @@ exports[`renders screening tool screate 1`] = `
       </div>
     </div>
     <div
-      className={undefined}
+      className="formBottom"
     >
       <div
-        className={undefined}
+        className="formBottomContent"
       >
         <div
-          className={undefined}
+          className="cancelButton"
           onClick={[Function]}
         >
           Cancel
         </div>
         <input
-          className={undefined}
+          className="submitButton"
           type="submit"
           value="Add screening tool"
         />

@@ -2,13 +2,13 @@
 
 exports[`renders patient care plan suggestions 1`] = `
 <div
-  className={undefined}
+  className="carePlanSuggestions"
 >
   <div
-    className={undefined}
+    className="emptyCarePlanSuggestionsContainer"
   >
     <div
-      className={undefined}
+      className="loadingLabel"
     >
       Loading...
     </div>

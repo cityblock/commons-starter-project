@@ -2,34 +2,34 @@
 
 exports[`renders question answers 1`] = `
 <div
-  className=""
+  className="questionBody noBottomPadding"
 >
   <div
-    className={undefined}
+    className="radioGroup"
   >
     <div
-      className=""
+      className="radioGroupOptions radioGroup"
     >
       <div
-        className={undefined}
+        className="radioGroupItem"
       >
         <div
-          className={undefined}
+          className="radioGroupContainer"
         >
           <input
             checked={false}
-            className={undefined}
+            className="radio"
             disabled={false}
             onClick={[Function]}
             type="radio"
             value="true"
           />
           <label
-            className={undefined}
+            className="radioFill"
           />
         </div>
         <span
-          className=""
+          className="radioLabel radioLabel"
           onClick={[Function]}
         >
           answer value

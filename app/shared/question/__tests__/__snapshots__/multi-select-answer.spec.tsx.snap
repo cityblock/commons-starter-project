@@ -2,7 +2,7 @@
 
 exports[`renders a multi-select answer 1`] = `
 <div
-  className=""
+  className="multiSelectAnswer"
   onClick={[Function]}
 >
   Answer

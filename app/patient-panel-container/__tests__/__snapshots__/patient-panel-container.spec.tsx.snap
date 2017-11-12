@@ -2,21 +2,21 @@
 
 exports[`renders patient panel container correctly 1`] = `
 <div
-  className={undefined}
+  className="container"
 >
   <div
-    className={undefined}
+    className="header"
   >
     <div
-      className={undefined}
+      className="headerRow"
     >
       <div
-        className={undefined}
+        className="headerText"
       >
         Patient Panel
       </div>
       <a
-        className={undefined}
+        className="button"
         href="/patient-intake"
         onClick={[Function]}
       >
@@ -25,76 +25,76 @@ exports[`renders patient panel container correctly 1`] = `
     </div>
   </div>
   <div
-    className={undefined}
+    className="patientPanelBody"
   >
     <div
-      className={undefined}
+      className="table"
     >
       <div
-        className={undefined}
+        className="tableHead"
       >
         <div
-          className={undefined}
+          className="tableRow"
         >
           <div
-            className={undefined}
+            className="tableColumn"
           >
             First Name
           </div>
           <div
-            className={undefined}
+            className="tableColumn"
           >
             Last Name
           </div>
           <div
-            className={undefined}
+            className="tableColumn"
           >
             Age
           </div>
           <div
-            className={undefined}
+            className="tableColumn"
           >
             Location
           </div>
           <div
-            className={undefined}
+            className="tableColumn"
           >
             Patient Joined
           </div>
           <div
-            className={undefined}
+            className="tableColumn"
           >
             Last Update
           </div>
         </div>
       </div>
       <div
-        className={undefined}
+        className="tableBody"
       >
         <div
-          className={undefined}
+          className="loadingRow"
         >
           <div
-            className={undefined}
+            className="loadingSpinner"
           />
           <div
-            className={undefined}
+            className="loadingText"
           >
             Loading
           </div>
         </div>
         <div
-          className={undefined}
+          className="pagination"
         >
           <div
-            className={undefined}
+            className="paginationRow"
           >
             <div
-              className="undefined"
+              className="paginationButton previousButton hidden"
               onClick={[Function]}
             />
             <div
-              className="undefined"
+              className="paginationButton nextButton hidden"
               onClick={[Function]}
             />
           </div>

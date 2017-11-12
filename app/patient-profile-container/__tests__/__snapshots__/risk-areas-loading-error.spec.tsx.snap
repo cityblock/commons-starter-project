@@ -2,23 +2,23 @@
 
 exports[`renders risk areas error 1`] = `
 <div
-  className={undefined}
+  className="riskAreasError"
 >
   <div
-    className={undefined}
+    className="riskAreasErrorIcon"
   />
   <div
-    className={undefined}
+    className="riskAreasErrorLabel"
   >
     Unable to load risk areas
   </div>
   <div
-    className={undefined}
+    className="riskAreasErrorSubheading"
   >
     Sorry, something went wrong. Please try reloading this section again.
   </div>
   <div
-    className=""
+    className="invertedButton riskAreasErrorButton"
     onClick={[Function]}
   >
     Try again
@@ -28,7 +28,7 @@ exports[`renders risk areas error 1`] = `
 
 exports[`renders risk areas loading 1`] = `
 <div
-  className={undefined}
+  className="riskAreasLoading"
 >
   Loading...
 </div>

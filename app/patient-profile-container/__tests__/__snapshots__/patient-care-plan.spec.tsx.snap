@@ -2,49 +2,49 @@
 
 exports[`renders patient care plan 1`] = `
 <div
-  className={undefined}
+  className="carePlan"
 >
   <div>
     <div
-      className={undefined}
+      className="emptyCarePlanSuggestionsContainer"
     >
       <div
-        className={undefined}
+        className="emptyCarePlanSuggestionsLogo"
       />
       <div
-        className={undefined}
+        className="emptyCarePlanSuggestionsLabel"
       >
         No active concerns or goals for this patient
       </div>
       <div
-        className={undefined}
+        className="emptyCarePlanSuggestionsSubtext"
       >
         New concerns and goals will be displayed here as they are added
       </div>
     </div>
     <div
-      className={undefined}
+      className="container"
     >
       <p>
         Next Up
       </p>
       <div
-        className={undefined}
+        className="divider"
       />
     </div>
     <div
-      className={undefined}
+      className="emptyCarePlanSuggestionsContainer"
     >
       <div
-        className={undefined}
+        className="emptyCarePlanSuggestionsLogo"
       />
       <div
-        className={undefined}
+        className="emptyCarePlanSuggestionsLabel"
       >
         No next up concerns or goals for this patient
       </div>
       <div
-        className={undefined}
+        className="emptyCarePlanSuggestionsSubtext"
       >
         New concerns and goals will be displayed here as they are added
       </div>

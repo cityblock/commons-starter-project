@@ -2,24 +2,24 @@
 
 exports[`renders care plan suggestion create component 1`] = `
 <div
-  className={undefined}
+  className="borderContainer"
 >
   <div
-    className={undefined}
+    className="loadingHidden"
   >
     <div
-      className={undefined}
+      className="loadingContainer"
     >
       <div
-        className={undefined}
+        className="loadingSpinner"
       />
     </div>
   </div>
   <div
-    className={undefined}
+    className="flexInputGroup"
   >
     <select
-      className=""
+      className="select inputSmall flexInputItem"
       name="suggestionType"
       onChange={[Function]}
       value=""
@@ -44,13 +44,13 @@ exports[`renders care plan suggestion create component 1`] = `
     </select>
   </div>
   <div
-    className={undefined}
+    className="formBottom"
   >
     <div
-      className={undefined}
+      className="formBottomContent"
     >
       <input
-        className={undefined}
+        className="submitButton"
         onClick={[Function]}
         type="submit"
         value="Add care plan suggestion"

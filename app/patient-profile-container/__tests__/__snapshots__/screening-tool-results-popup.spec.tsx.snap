@@ -2,72 +2,72 @@
 
 exports[`renders screening tool results popup 1`] = `
 <div
-  className={undefined}
+  className="screeningToolsPopupContent"
 >
   <div
-    className={undefined}
+    className="screeningToolsPopupBody"
   >
     <div
-      className={undefined}
+      className="screeningToolsPopupTitle"
     >
       New Care Plan Suggestions
     </div>
     <div
-      className=""
+      className="screeningToolsPopupSubtitle noMargin"
     >
       Based on the results of this tool, the following have been recommended as additions to the patient's care plan.
     </div>
     <div
-      className={undefined}
+      className="screeningToolResults"
     >
       <div
-        className={undefined}
+        className="screeningToolResultRow"
       >
         <div
-          className={undefined}
+          className="screeningToolResultLabel"
         >
           New Concerns
         </div>
         <div
-          className={undefined}
+          className="screeningToolResultCount"
         >
           0
         </div>
       </div>
       <div
-        className={undefined}
+        className="screeningToolResultRow"
       >
         <div
-          className={undefined}
+          className="screeningToolResultLabel"
         >
           New Goals
         </div>
         <div
-          className={undefined}
+          className="screeningToolResultCount"
         >
           0
         </div>
       </div>
       <div
-        className={undefined}
+        className="screeningToolResultRow"
       >
         <div
-          className={undefined}
+          className="screeningToolResultLabel"
         >
           New Tasks
         </div>
         <div
-          className={undefined}
+          className="screeningToolResultCount"
         >
           0
         </div>
       </div>
     </div>
     <div
-      className={undefined}
+      className="screeningToolsPopupButtons"
     >
       <div
-        className=""
+        className="button smallButton"
         onClick={[Function]}
       >
         See Suggestions
@@ -79,72 +79,72 @@ exports[`renders screening tool results popup 1`] = `
 
 exports[`renders the correct results 1`] = `
 <div
-  className={undefined}
+  className="screeningToolsPopupContent"
 >
   <div
-    className={undefined}
+    className="screeningToolsPopupBody"
   >
     <div
-      className={undefined}
+      className="screeningToolsPopupTitle"
     >
       New Care Plan Suggestions
     </div>
     <div
-      className=""
+      className="screeningToolsPopupSubtitle noMargin"
     >
       Based on the results of this tool, the following have been recommended as additions to the patient's care plan.
     </div>
     <div
-      className={undefined}
+      className="screeningToolResults"
     >
       <div
-        className={undefined}
+        className="screeningToolResultRow"
       >
         <div
-          className={undefined}
+          className="screeningToolResultLabel"
         >
           New Concerns
         </div>
         <div
-          className={undefined}
+          className="screeningToolResultCount"
         >
           1
         </div>
       </div>
       <div
-        className={undefined}
+        className="screeningToolResultRow"
       >
         <div
-          className={undefined}
+          className="screeningToolResultLabel"
         >
           New Goals
         </div>
         <div
-          className={undefined}
+          className="screeningToolResultCount"
         >
           1
         </div>
       </div>
       <div
-        className={undefined}
+        className="screeningToolResultRow"
       >
         <div
-          className={undefined}
+          className="screeningToolResultLabel"
         >
           New Tasks
         </div>
         <div
-          className={undefined}
+          className="screeningToolResultCount"
         >
           1
         </div>
       </div>
     </div>
     <div
-      className={undefined}
+      className="screeningToolsPopupButtons"
     >
       <div
-        className=""
+        className="button smallButton"
         onClick={[Function]}
       >
         See Suggestions

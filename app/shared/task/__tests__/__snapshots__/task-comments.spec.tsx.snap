@@ -2,10 +2,10 @@
 
 exports[`correctly renders comments component 1`] = `
 <div
-  className={undefined}
+  className="taskComments"
 >
   <div
-    className={undefined}
+    className="addComment"
   >
     <textarea
       onChange={[Function]}
@@ -14,18 +14,18 @@ exports[`correctly renders comments component 1`] = `
       value=""
     />
     <div
-      className={undefined}
+      className="uploadAttachment"
     />
     <div
-      className="undefined"
+      className="addCommentError hiddenError"
     >
       <div
-        className=""
+        className="smallText redText"
       >
         Error adding comment.
       </div>
       <div
-        className={undefined}
+        className="smallText"
       >
         Please try again.
       </div>
@@ -33,12 +33,12 @@ exports[`correctly renders comments component 1`] = `
   </div>
   <div>
     <div
-      className={undefined}
+      className="smallText"
     >
       Loading comments...
     </div>
     <div
-      className={undefined}
+      className="commentsList"
     />
   </div>
 </div>
@@ -47,14 +47,14 @@ exports[`correctly renders comments component 1`] = `
 exports[`renders comments 1`] = `
 <div>
   <div
-    className={undefined}
+    className="smallText"
   >
     Activity and comments (
     1
     )
   </div>
   <div
-    className={undefined}
+    className="commentsList"
   >
     <Apollo(TaskComment)
       comment={

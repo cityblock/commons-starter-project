@@ -2,17 +2,17 @@
 
 exports[`correctly renders a comment as editable or not 1`] = `
 <div
-  className=""
+  className="comment"
   onClick={[Function]}
 >
   <div
-    className={undefined}
+    className="commentHeader"
   >
     <div
-      className={undefined}
+      className="commentAuthor"
     >
       <div
-        className={undefined}
+        className="avatar"
         style={
           Object {
             "backgroundImage": "url('http://bit.ly/2u9bJDA')",
@@ -20,35 +20,35 @@ exports[`correctly renders a comment as editable or not 1`] = `
         }
       />
       <div
-        className={undefined}
+        className="name"
       >
         first last
       </div>
       <div
-        className={undefined}
+        className="smallText"
       >
         physician
       </div>
     </div>
     <div
-      className={undefined}
+      className="commentDate"
     >
       <div
-        className="undefined"
+        className="error hidden"
       >
         <div
-          className={undefined}
+          className="errorText"
         >
           Error saving.
         </div>
         <div
-          className={undefined}
+          className="smallText"
         >
           Please try again
         </div>
       </div>
       <div
-        className={undefined}
+        className="smallText"
       >
         <span>
           Jul 14, 2017
@@ -57,7 +57,7 @@ exports[`correctly renders a comment as editable or not 1`] = `
     </div>
   </div>
   <div
-    className={undefined}
+    className="commentBody"
   >
     <span>
       body
@@ -65,7 +65,7 @@ exports[`correctly renders a comment as editable or not 1`] = `
     </span>
   </div>
   <div
-    className={undefined}
+    className="commentEditArea"
   >
     <textarea
       onBlur={[Function]}

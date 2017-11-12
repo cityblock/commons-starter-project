@@ -2,18 +2,18 @@
 
 exports[`renders popup modal body for concern suggestion 1`] = `
 <div
-  className={undefined}
+  className="acceptModalBody"
 >
   <div
-    className={undefined}
+    className="acceptModalTitle"
   >
     Add as active or inactive concern?
   </div>
   <div
-    className={undefined}
+    className="acceptModalDropdown"
   >
     <select
-      className=""
+      className="select roundedInput"
       name="concernType"
       onChange={[Function]}
       value="active"
@@ -38,16 +38,16 @@ exports[`renders popup modal body for concern suggestion 1`] = `
     </select>
   </div>
   <div
-    className={undefined}
+    className="acceptModalButtons"
   >
     <div
-      className=""
+      className="invertedButton rightSmallGutter smallButton"
       onClick={[Function]}
     >
       Cancel
     </div>
     <div
-      className=""
+      className="button smallButton"
       onClick={[Function]}
     >
       Add to Care Plan
@@ -58,23 +58,23 @@ exports[`renders popup modal body for concern suggestion 1`] = `
 
 exports[`renders popup modal body for goal suggestion 1`] = `
 <div
-  className={undefined}
+  className="acceptModalBody"
 >
   <div
-    className=""
+    className="acceptModalTitle noMargin"
   >
     Add this goal to a concern
   </div>
   <div
-    className={undefined}
+    className="acceptModalSubtitle"
   >
     Select an existing patient concern, a suggested concern, or create a new one
   </div>
   <div
-    className={undefined}
+    className="acceptModalDropdown"
   >
     <select
-      className=""
+      className="select roundedInput"
       name="concernId"
       onChange={[Function]}
       value="concern-id"
@@ -107,10 +107,10 @@ exports[`renders popup modal body for goal suggestion 1`] = `
     </select>
   </div>
   <div
-    className="undefined"
+    className="acceptModalInput hidden"
   >
     <input
-      className=""
+      className="input roundedInput"
       name="newConcernTitle"
       onChange={[Function]}
       placeholder="Enter concern title"
@@ -119,10 +119,10 @@ exports[`renders popup modal body for goal suggestion 1`] = `
     />
   </div>
   <div
-    className=""
+    className="acceptModalInput"
   >
     <select
-      className=""
+      className="select roundedInput"
       name="concernType"
       onChange={[Function]}
       value="active"
@@ -147,16 +147,16 @@ exports[`renders popup modal body for goal suggestion 1`] = `
     </select>
   </div>
   <div
-    className={undefined}
+    className="acceptModalButtons"
   >
     <div
-      className=""
+      className="invertedButton rightSmallGutter smallButton"
       onClick={[Function]}
     >
       Cancel
     </div>
     <div
-      className=""
+      className="button smallButton"
       onClick={[Function]}
     >
       Add to Care Plan

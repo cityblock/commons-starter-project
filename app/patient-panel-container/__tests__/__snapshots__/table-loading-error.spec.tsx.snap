@@ -4,24 +4,24 @@ exports[`renders empty div 1`] = `<div />`;
 
 exports[`renders error 1`] = `
 <div
-  className={undefined}
+  className="errorRow"
 >
   <div
-    className={undefined}
+    className="errorIcon"
   />
   <div
-    className={undefined}
+    className="errorHeading"
   >
     Unable to load your roster
   </div>
   3
   <div
-    className={undefined}
+    className="errorMessage"
   >
     Sorry, something went wrong. Please try reloading the page again.
   </div>
   <div
-    className={undefined}
+    className="errorButton"
     onClick={[Function]}
   >
     Try Again
@@ -31,13 +31,13 @@ exports[`renders error 1`] = `
 
 exports[`renders loading 1`] = `
 <div
-  className={undefined}
+  className="loadingRow"
 >
   <div
-    className={undefined}
+    className="loadingSpinner"
   />
   <div
-    className={undefined}
+    className="loadingText"
   >
     Loading
   </div>

@@ -2,10 +2,10 @@
 
 exports[`renders dropdown answer 1`] = `
 <div
-  className={undefined}
+  className="questionBody"
 >
   <select
-    className=""
+    className="select select"
     disabled={false}
     onChange={[Function]}
     value="true"

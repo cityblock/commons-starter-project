@@ -2,17 +2,17 @@
 
 exports[`renders a lightbox correctly 1`] = `
 <div
-  className=""
+  className="lightbox"
 >
   <div
-    className={undefined}
+    className="background"
     onClick={[Function]}
   />
   <div
-    className={undefined}
+    className="foreground"
   >
     <div
-      className={undefined}
+      className="viewer"
       style={
         Object {
           "backgroundImage": "url('http://bit.ly/2ttumSW')",
@@ -20,16 +20,16 @@ exports[`renders a lightbox correctly 1`] = `
       }
     >
       <div
-        className={undefined}
+        className="overlay"
       >
         <div
-          className={undefined}
+          className="header"
         >
           <div
-            className={undefined}
+            className="imageCount"
           >
             <div
-              className={undefined}
+              className="imageCountIcon"
             />
             <div>
               2 
@@ -43,19 +43,19 @@ exports[`renders a lightbox correctly 1`] = `
             </div>
           </div>
           <div
-            className={undefined}
+            className="close"
             onClick={[Function]}
           />
         </div>
         <div
-          className={undefined}
+          className="controls"
         >
           <div
-            className=""
+            className="backArrow"
             onClick={[Function]}
           />
           <div
-            className="undefined"
+            className="nextArrow hidden"
             onClick={[Function]}
           />
         </div>

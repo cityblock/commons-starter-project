@@ -2,73 +2,73 @@
 
 exports[`renders patient concern 1`] = `
 <div
-  className={undefined}
+  className="patientConcernGroup"
 >
   <div
-    className=""
+    className="patientConcern selected"
     onClick={[Function]}
   >
     <div
-      className={undefined}
+      className="patientConcernTitleRow"
     >
       <div
-        className={undefined}
+        className="patientConcernTitle"
       >
         Concern Title
       </div>
       <div
-        className=""
+        className="patientConcernHamburger"
         onClick={[Function]}
       />
     </div>
     <div
-      className={undefined}
+      className="patientConcernMetaRow"
     >
       <div
-        className={undefined}
+        className="patientConcernStats"
       >
         <div
-          className={undefined}
+          className="patientConcernStat"
         >
           <div
-            className={undefined}
+            className="patientConcernStatLabel"
           >
             Goals:
           </div>
           <div
-            className={undefined}
+            className="patientConcernStatValue"
           >
             1
           </div>
         </div>
         <div
-          className={undefined}
+          className="patientConcernStat"
         >
           <div
-            className={undefined}
+            className="patientConcernStatLabel"
           >
             Tasks:
           </div>
           <div
-            className={undefined}
+            className="patientConcernStatValue"
           >
             1
           </div>
         </div>
       </div>
       <div
-        className={undefined}
+        className="patientConcernDates"
       >
         <div
-          className={undefined}
+          className="patientConcernDate"
         >
           <div
-            className={undefined}
+            className="patientConcernDateLabel"
           >
             Created:
           </div>
           <div
-            className={undefined}
+            className="patientConcernDateValue"
           >
             <span>
               Sep 7, 2017
@@ -76,15 +76,15 @@ exports[`renders patient concern 1`] = `
           </div>
         </div>
         <div
-          className={undefined}
+          className="patientConcernDate"
         >
           <div
-            className={undefined}
+            className="patientConcernDateLabel"
           >
             Last update:
           </div>
           <div
-            className={undefined}
+            className="patientConcernDateValue"
           >
             <span>
               Sep 7, 2017
@@ -95,32 +95,32 @@ exports[`renders patient concern 1`] = `
     </div>
   </div>
   <div
-    className=""
+    className="patientGoals"
   >
     <div
-      className={undefined}
+      className="patientGoalTaskGroup"
     >
       <div
-        className={undefined}
+        className="patientGoal"
       >
         <div
-          className={undefined}
+          className="patientGoalHeaderRow"
         >
           <div
-            className={undefined}
+            className="patientGoalNumber"
           >
             Goal 1
           </div>
           <div
-            className={undefined}
+            className="patientGoalUpdatedDetails"
           >
             <div
-              className={undefined}
+              className="patientGoalUpdatedDetailsLabel"
             >
               Last update:
             </div>
             <div
-              className={undefined}
+              className="patientGoalUpdatedDetailsDate"
             >
               <span>
                 Sep 7, 2017
@@ -129,29 +129,29 @@ exports[`renders patient concern 1`] = `
           </div>
         </div>
         <div
-          className={undefined}
+          className="patientGoalTitle"
         >
           Goal Title
         </div>
       </div>
       <a
-        className="undefined"
+        className="container highPriority condensed"
         href="/patients/patient-id/tasks/task-id"
         onClick={[Function]}
       >
         <div
-          className={undefined}
+          className="title"
         >
           Task Title
         </div>
         <div
-          className={undefined}
+          className="meta"
         >
           <div
-            className={undefined}
+            className="followers"
           >
             <div
-              className={undefined}
+              className="assignedTo"
               style={
                 Object {
                   "backgroundImage": "url(https://bit.ly/2weRwJm)",
@@ -160,31 +160,31 @@ exports[`renders patient concern 1`] = `
             />
           </div>
           <div
-            className=""
+            className="dateSection openedAt openedAtSection"
           >
             <span
-              className={undefined}
+              className="dateLabel"
             >
               Opened
               :
             </span>
             <span
-              className={undefined}
+              className="dateValue"
             >
               in 2 months
             </span>
           </div>
           <div
-            className={undefined}
+            className="dateSection"
           >
             <span
-              className={undefined}
+              className="dateLabel"
             >
               Due
               :
             </span>
             <span
-              className={undefined}
+              className="dateValue"
             >
               Sep 7, 2017
             </span>

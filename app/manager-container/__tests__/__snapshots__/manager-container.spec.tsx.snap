@@ -2,23 +2,23 @@
 
 exports[`renders manager container 1`] = `
 <div
-  className={undefined}
+  className="container"
 >
   <div
-    className={undefined}
+    className="mainBody"
   >
     <div
-      className={undefined}
+      className="tabs"
     >
       <a
-        className="undefined"
+        className="tab selectedTab"
         href="/manager/users"
         onClick={[Function]}
       >
         Users
       </a>
       <a
-        className=""
+        className="tab"
         href="/manager/invites"
         onClick={[Function]}
       >
@@ -26,21 +26,21 @@ exports[`renders manager container 1`] = `
       </a>
     </div>
     <div
-      className={undefined}
+      className="container"
     >
       <div
-        className={undefined}
+        className="sortSearchBar"
       >
         <div
-          className={undefined}
+          className="sort"
         >
           <div
-            className={undefined}
+            className="sortLabel"
           >
             Sort by:
           </div>
           <div
-            className={undefined}
+            className="sortDropdown"
           >
             <select
               onChange={[Function]}
@@ -81,10 +81,10 @@ exports[`renders manager container 1`] = `
         </div>
       </div>
       <div
-        className={undefined}
+        className="bottomContainer"
       >
         <div
-          className=""
+          className="list"
         >
           <span
             style={
@@ -95,7 +95,7 @@ exports[`renders manager container 1`] = `
           />
         </div>
         <div
-          className=""
+          className="itemsList"
         />
       </div>
     </div>

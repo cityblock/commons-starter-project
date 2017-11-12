@@ -2,23 +2,23 @@
 
 exports[`renders encounter error 1`] = `
 <div
-  className={undefined}
+  className="encountersError"
 >
   <div
-    className={undefined}
+    className="encountersErrorIcon"
   />
   <div
-    className={undefined}
+    className="encountersErrorLabel"
   >
     Unable to load encounter history
   </div>
   <div
-    className={undefined}
+    className="encountersErrorSubheading"
   >
     Sorry, something went wrong. Please try reloading this section again.
   </div>
   <div
-    className=""
+    className="invertedButton encountersErrorButton"
     onClick={[Function]}
   >
     Try again
@@ -28,7 +28,7 @@ exports[`renders encounter error 1`] = `
 
 exports[`renders encounter loading 1`] = `
 <div
-  className={undefined}
+  className="encountersLoading"
 >
   Loading...
 </div>

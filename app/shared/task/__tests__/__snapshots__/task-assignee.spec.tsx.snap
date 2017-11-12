@@ -2,14 +2,14 @@
 
 exports[`renders the task assignee component 1`] = `
 <div
-  className={undefined}
+  className="infoRowLeft"
 >
   <div
-    className=""
+    className="assignee"
     onClick={[Function]}
   >
     <div
-      className={undefined}
+      className="avatar"
       style={
         Object {
           "backgroundImage": "url('https://bit.ly/2weRwJm')",
@@ -17,32 +17,32 @@ exports[`renders the task assignee component 1`] = `
       }
     />
     <div
-      className={undefined}
+      className="name"
     >
       first last
     </div>
     <div
-      className={undefined}
+      className="smallText"
     >
       physician
     </div>
   </div>
   <div
-    className="undefined"
+    className="changeAssigneeError hidden"
   >
     <div
-      className=""
+      className="smallText redText"
     >
       Error changing assignee.
     </div>
     <div
-      className={undefined}
+      className="smallText"
     >
       Please try again.
     </div>
   </div>
   <div
-    className="undefined"
+    className="careTeam assigneeCareTeam hidden"
   />
 </div>
 `;

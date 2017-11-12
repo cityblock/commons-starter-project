@@ -2,48 +2,48 @@
 
 exports[`renders a risk area summary 1`] = `
 <a
-  className="undefined"
+  className="riskAreaLink inactive"
   href="/patients/patient-1/360/cool-task-id"
   onClick={[Function]}
 >
   <div
-    className="undefined"
+    className="riskArea unstarted"
   >
     <div
-      className={undefined}
+      className="riskAreaTitleRow"
     >
       <div
-        className={undefined}
+        className="riskAreaTitle"
       >
         <div
-          className={undefined}
+          className="titleIcon"
         />
         <div
-          className={undefined}
+          className="titleText"
         >
           Risk Area Title
         </div>
       </div>
       <div
-        className={undefined}
+        className="riskAreaLastUpdated"
       >
         <div
-          className={undefined}
+          className="lastUpdatedLabel"
         >
           Updated:
         </div>
         <div
-          className={undefined}
+          className="lastUpdatedValue"
         >
           Loading
         </div>
       </div>
     </div>
     <div
-      className={undefined}
+      className="riskAreaBody"
     >
       <div
-        className={undefined}
+        className="emptySummary"
       >
         Loading...
       </div>

@@ -2,10 +2,10 @@
 
 exports[`renders question 1`] = `
 <div
-  className={undefined}
+  className="container"
 >
   <div
-    className={undefined}
+    className="loading"
   >
     Loading...
   </div>
@@ -14,76 +14,76 @@ exports[`renders question 1`] = `
 
 exports[`shallow rendered renders with screening tool 1`] = `
 <div
-  className=""
+  className="container"
 >
   <div
-    className="undefined"
+    className="deleteConfirmation hidden"
   >
     <div
-      className={undefined}
+      className="deleteConfirmationIcon"
     />
     <div
-      className={undefined}
+      className="deleteConfirmationText"
     >
       Are you sure you want to delete this question?
     </div>
     <div
-      className={undefined}
+      className="deleteConfirmationButtons"
     >
       <div
-        className=""
+        className="deleteCancelButton invertedButton"
         onClick={[Function]}
       >
         Cancel
       </div>
       <div
-        className={undefined}
+        className="deleteConfirmButton"
         onClick={[Function]}
       >
         Yes, delete
       </div>
     </div>
     <div
-      className="undefined"
+      className="deleteError hidden"
     >
       <div
-        className=""
+        className="redText smallText"
       >
         Error deleting question.
       </div>
       <div
-        className={undefined}
+        className="smallText"
       >
         Please try again.
       </div>
     </div>
   </div>
   <div
-    className=""
+    className="itemContainer"
   >
     <div>
       <div
-        className={undefined}
+        className="infoRow"
       >
         <div
-          className={undefined}
+          className="controls"
         >
           <Link
-            className={undefined}
+            className="close"
             replace={false}
             to="/route/base"
           >
             Close
           </Link>
           <div
-            className={undefined}
+            className="menuItem"
             onClick={[Function]}
           >
             <div
-              className={undefined}
+              className="trashIcon"
             />
             <div
-              className={undefined}
+              className="menuLabel"
             >
               Delete question
             </div>
@@ -92,21 +92,21 @@ exports[`shallow rendered renders with screening tool 1`] = `
       </div>
     </div>
     <div
-      className={undefined}
+      className="itemBody"
     >
       <div
-        className={undefined}
+        className="smallText"
       >
         Title:
       </div>
       <div
-        className=""
+        className="largeText title"
         onClick={[Function]}
       >
         Question Title
       </div>
       <div
-        className=""
+        className="largeTextEditor hidden"
       >
         <input
           name="editedTitle"
@@ -117,18 +117,18 @@ exports[`shallow rendered renders with screening tool 1`] = `
         />
       </div>
       <div
-        className={undefined}
+        className="smallText"
       >
         Order:
       </div>
       <div
-        className=""
+        className="largeText"
         onClick={[Function]}
       >
         1
       </div>
       <div
-        className=""
+        className="largeTextEditor hidden"
       >
         <input
           name="editedOrder"
@@ -141,17 +141,17 @@ exports[`shallow rendered renders with screening tool 1`] = `
       </div>
       <br />
       <div
-        className={undefined}
+        className="borderTop"
       >
         <br />
         <div
-          className={undefined}
+          className="smallText"
         >
           Answer display:
         </div>
       </div>
       <select
-        className=""
+        className="select inputSmall"
         name="answerType"
         onChange={[Function]}
         required={true}
@@ -180,7 +180,7 @@ exports[`shallow rendered renders with screening tool 1`] = `
       </select>
       <br />
       <div
-        className={undefined}
+        className="smallText"
       >
         Answers:
       </div>
@@ -209,7 +209,7 @@ exports[`shallow rendered renders with screening tool 1`] = `
         />
       </div>
       <div
-        className={undefined}
+        className="smallText"
       >
         Create answer:
       </div>
@@ -218,13 +218,13 @@ exports[`shallow rendered renders with screening tool 1`] = `
         screeningToolAnswer={false}
       />
       <div
-        className={undefined}
+        className="smallText"
       >
         Applicable if type:
       </div>
       <br />
       <select
-        className=""
+        className="select inputSmall"
         name="applicableIfType"
         onChange={[Function]}
         value="allTrue"

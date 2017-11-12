@@ -2,16 +2,16 @@
 
 exports[`renders builder screening tools 1`] = `
 <div
-  className={undefined}
+  className="container"
 >
   <div
-    className={undefined}
+    className="sortSearchBar"
   >
     <div
-      className={undefined}
+      className="createContainer"
     >
       <div
-        className={undefined}
+        className="createButton"
         onClick={[Function]}
       >
         Create Screening Tool
@@ -19,48 +19,48 @@ exports[`renders builder screening tools 1`] = `
     </div>
   </div>
   <div
-    className={undefined}
+    className="bottomContainer"
   >
     <div
-      className="undefined"
+      className="itemsList compressed"
     >
       <a
-        className="undefined"
+        className="container selected"
         href="/foo/bar/screening-tool-id"
         onClick={[Function]}
       >
         <div
-          className={undefined}
+          className="title"
         >
           Screening Tool
         </div>
         <div
-          className={undefined}
+          className="meta"
         >
           <div
-            className=""
+            className="dateSection orderSection"
           >
             <span
-              className={undefined}
+              className="dateLabel"
             >
               Risk Area:
             </span>
             <span
-              className={undefined}
+              className="dateValue"
             >
               Risk Area Title
             </span>
           </div>
           <div
-            className=""
+            className="dateSection createdAtSection"
           >
             <span
-              className={undefined}
+              className="dateLabel"
             >
               Created:
             </span>
             <span
-              className={undefined}
+              className="dateValue"
             >
               6 days ago
             </span>
@@ -69,7 +69,7 @@ exports[`renders builder screening tools 1`] = `
       </a>
     </div>
     <div
-      className="undefined"
+      className="itemContainer visible"
     />
   </div>
 </div>

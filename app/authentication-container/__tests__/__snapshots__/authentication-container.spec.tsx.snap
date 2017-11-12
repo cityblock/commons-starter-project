@@ -21,7 +21,7 @@ exports[`shallow rendered renders authentication container correctly with curren
     }
   />
   <div
-    className={undefined}
+    className="app"
   >
     <div />
   </div>

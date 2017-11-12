@@ -2,74 +2,74 @@
 
 exports[`renders patient enrollment container correctly 1`] = `
 <form
-  className={undefined}
+  className="container"
   onSubmit={[Function]}
 >
   <div />
   <div />
   <div
-    className={undefined}
+    className="loadingHidden"
   >
     <div
-      className={undefined}
+      className="loadingContainer"
     >
       <div
-        className={undefined}
+        className="loadingSpinner"
       />
     </div>
   </div>
   <div
-    className={undefined}
+    className="formContainer"
   >
     <div
-      className={undefined}
+      className="leftNav"
     >
       <div
-        className={undefined}
+        className="leftNavLink"
       >
         Demographic info
       </div>
       <div
-        className={undefined}
+        className="leftNavLink"
       >
         Contact info
       </div>
       <div
-        className={undefined}
+        className="leftNavLink"
       >
         Insurance info
       </div>
       <div
-        className={undefined}
+        className="leftNavLink"
       >
         Upload photo
       </div>
     </div>
     <div
-      className={undefined}
+      className="form"
     >
       <div
-        className={undefined}
+        className="formSection"
       >
         <div
-          className={undefined}
+          className="formHeading"
         >
           Tell us about this patient
         </div>
         <div>
           <div
-            className={undefined}
+            className="multiInputFormRow"
           >
             <div
-              className={undefined}
+              className="inputGroup"
             >
               <div
-                className={undefined}
+                className="inputLabel"
               >
                 First name
               </div>
               <input
-                className={undefined}
+                className="input"
                 name="firstName"
                 onChange={[Function]}
                 required={true}
@@ -77,37 +77,37 @@ exports[`renders patient enrollment container correctly 1`] = `
               />
             </div>
             <div
-              className={undefined}
+              className="inputGroup"
             >
               <div
-                className={undefined}
+                className="inputLabel"
               >
                 <span>
                   Middle name
                 </span>
                 <span
-                  className={undefined}
+                  className="optionalLabel"
                 >
                   optional
                 </span>
               </div>
               <input
-                className={undefined}
+                className="input"
                 name="middleName"
                 onChange={[Function]}
                 value=""
               />
             </div>
             <div
-              className={undefined}
+              className="inputGroup"
             >
               <div
-                className={undefined}
+                className="inputLabel"
               >
                 Last name
               </div>
               <input
-                className={undefined}
+                className="input"
                 name="lastName"
                 onChange={[Function]}
                 required={true}
@@ -116,18 +116,18 @@ exports[`renders patient enrollment container correctly 1`] = `
             </div>
           </div>
           <div
-            className={undefined}
+            className="multiInputFormRow"
           >
             <div
-              className={undefined}
+              className="inputGroup"
             >
               <div
-                className={undefined}
+                className="inputLabel"
               >
                 Date of birth
               </div>
               <input
-                className={undefined}
+                className="input"
                 name="dateOfBirth"
                 onChange={[Function]}
                 required={true}
@@ -136,15 +136,15 @@ exports[`renders patient enrollment container correctly 1`] = `
               />
             </div>
             <div
-              className={undefined}
+              className="inputGroup"
             >
               <div
-                className={undefined}
+                className="inputLabel"
               >
                 Gender
               </div>
               <select
-                className={undefined}
+                className="select"
                 name="gender"
                 onChange={[Function]}
                 required={true}
@@ -170,15 +170,15 @@ exports[`renders patient enrollment container correctly 1`] = `
               </select>
             </div>
             <div
-              className={undefined}
+              className="inputGroup"
             >
               <div
-                className={undefined}
+                className="inputLabel"
               >
                 Marital status
               </div>
               <select
-                className={undefined}
+                className="select"
                 name="maritalStatus"
                 onChange={[Function]}
                 required={true}
@@ -275,18 +275,18 @@ exports[`renders patient enrollment container correctly 1`] = `
             </div>
           </div>
           <div
-            className={undefined}
+            className="multiInputFormRow"
           >
             <div
-              className={undefined}
+              className="inputGroup"
             >
               <div
-                className={undefined}
+                className="inputLabel"
               >
                 Preferred language
               </div>
               <select
-                className={undefined}
+                className="select"
                 name="language"
                 onChange={[Function]}
                 required={true}
@@ -1227,15 +1227,15 @@ exports[`renders patient enrollment container correctly 1`] = `
               </select>
             </div>
             <div
-              className={undefined}
+              className="inputGroup"
             >
               <div
-                className={undefined}
+                className="inputLabel"
               >
                 Race
               </div>
               <select
-                className={undefined}
+                className="select"
                 name="race"
                 onChange={[Function]}
                 required={true}
@@ -5857,18 +5857,18 @@ exports[`renders patient enrollment container correctly 1`] = `
             </div>
           </div>
           <div
-            className={undefined}
+            className="multiInputFormRow"
           >
             <div
-              className={undefined}
+              className="inputGroup"
             >
               <div
-                className={undefined}
+                className="inputLabel"
               >
                 Social security number
               </div>
               <input
-                className={undefined}
+                className="input"
                 name="ssn"
                 onChange={[Function]}
                 pattern="[0-9]{9}"
@@ -5878,15 +5878,15 @@ exports[`renders patient enrollment container correctly 1`] = `
               />
             </div>
             <div
-              className={undefined}
+              className="inputGroup"
             >
               <div
-                className={undefined}
+                className="inputLabel"
               >
                 Zip code
               </div>
               <input
-                className={undefined}
+                className="input"
                 name="zip"
                 onChange={[Function]}
                 pattern="[0-9]{5}"
@@ -5899,50 +5899,50 @@ exports[`renders patient enrollment container correctly 1`] = `
         </div>
       </div>
       <div
-        className={undefined}
+        className="formSection"
       >
         <div
-          className={undefined}
+          className="formHeading"
         >
           Patient contact information
         </div>
         <div>
           <div />
           <div
-            className={undefined}
+            className="multiInputFormRow"
           >
             <div
-              className={undefined}
+              className="inputGroup"
             >
               <div
-                className={undefined}
+                className="inputLabel"
               >
                 <span>
                   Email address
                 </span>
                 <span
-                  className={undefined}
+                  className="optionalLabel"
                 >
                   optional
                 </span>
               </div>
               <input
-                className={undefined}
+                className="input"
                 name="email"
                 onChange={[Function]}
                 value=""
               />
             </div>
             <div
-              className={undefined}
+              className="inputGroup"
             >
               <div
-                className={undefined}
+                className="inputLabel"
               >
                 Home phone number
               </div>
               <input
-                className={undefined}
+                className="input"
                 name="homePhone"
                 onChange={[Function]}
                 pattern="[0-9]{10}"
@@ -5951,15 +5951,15 @@ exports[`renders patient enrollment container correctly 1`] = `
               />
             </div>
             <div
-              className={undefined}
+              className="inputGroup"
             >
               <div
-                className={undefined}
+                className="inputLabel"
               >
                 Mobile phone number
               </div>
               <input
-                className={undefined}
+                className="input"
                 name="mobilePhone"
                 onChange={[Function]}
                 pattern="[0-9]{10}"
@@ -5969,21 +5969,21 @@ exports[`renders patient enrollment container correctly 1`] = `
             </div>
           </div>
           <div
-            className={undefined}
+            className="radioInputFormRow"
           >
             <div
-              className={undefined}
+              className="radioGroup"
             >
               <div
-                className={undefined}
+                className="radioGroupLabel"
               >
                 <div
-                  className={undefined}
+                  className="inputLabel"
                 >
                   Does the patient consent to being contacted via text?
                 </div>
                 <div
-                  className={undefined}
+                  className="smallText"
                 >
                   <span>
                     Read consent statement to patient:
@@ -5997,17 +5997,17 @@ exports[`renders patient enrollment container correctly 1`] = `
                 </div>
               </div>
               <div
-                className={undefined}
+                className="radioGroupOptions"
               >
                 <div
-                  className={undefined}
+                  className="radioGroupItem"
                 >
                   <div
-                    className={undefined}
+                    className="radioGroupContainer"
                   >
                     <input
                       checked={false}
-                      className={undefined}
+                      className="radio"
                       name="consentToText"
                       onChange={[Function]}
                       type="radio"
@@ -6016,20 +6016,20 @@ exports[`renders patient enrollment container correctly 1`] = `
                     <label />
                   </div>
                   <span
-                    className={undefined}
+                    className="radioLabel"
                   >
                     Yes
                   </span>
                 </div>
                 <div
-                  className={undefined}
+                  className="radioGroupItem"
                 >
                   <div
-                    className={undefined}
+                    className="radioGroupContainer"
                   >
                     <input
                       checked={true}
-                      className={undefined}
+                      className="radio"
                       name="consentToText"
                       onChange={[Function]}
                       type="radio"
@@ -6038,7 +6038,7 @@ exports[`renders patient enrollment container correctly 1`] = `
                     <label />
                   </div>
                   <span
-                    className={undefined}
+                    className="radioLabel"
                   >
                     No
                   </span>
@@ -6047,21 +6047,21 @@ exports[`renders patient enrollment container correctly 1`] = `
             </div>
           </div>
           <div
-            className={undefined}
+            className="radioInputFormRow"
           >
             <div
-              className={undefined}
+              className="radioGroup"
             >
               <div
-                className={undefined}
+                className="radioGroupLabel"
               >
                 <div
-                  className={undefined}
+                  className="inputLabel"
                 >
                   Does the patient consent to being contacted via phone?
                 </div>
                 <div
-                  className={undefined}
+                  className="smallText"
                 >
                   <span>
                     Read consent statement to patient:
@@ -6075,17 +6075,17 @@ exports[`renders patient enrollment container correctly 1`] = `
                 </div>
               </div>
               <div
-                className={undefined}
+                className="radioGroupOptions"
               >
                 <div
-                  className={undefined}
+                  className="radioGroupItem"
                 >
                   <div
-                    className={undefined}
+                    className="radioGroupContainer"
                   >
                     <input
                       checked={false}
-                      className={undefined}
+                      className="radio"
                       name="consentToCall"
                       onChange={[Function]}
                       type="radio"
@@ -6094,20 +6094,20 @@ exports[`renders patient enrollment container correctly 1`] = `
                     <label />
                   </div>
                   <span
-                    className={undefined}
+                    className="radioLabel"
                   >
                     Yes
                   </span>
                 </div>
                 <div
-                  className={undefined}
+                  className="radioGroupItem"
                 >
                   <div
-                    className={undefined}
+                    className="radioGroupContainer"
                   >
                     <input
                       checked={true}
-                      className={undefined}
+                      className="radio"
                       name="consentToCall"
                       onChange={[Function]}
                       type="radio"
@@ -6116,7 +6116,7 @@ exports[`renders patient enrollment container correctly 1`] = `
                     <label />
                   </div>
                   <span
-                    className={undefined}
+                    className="radioLabel"
                   >
                     No
                   </span>
@@ -6127,27 +6127,27 @@ exports[`renders patient enrollment container correctly 1`] = `
         </div>
       </div>
       <div
-        className={undefined}
+        className="formSection"
       >
         <div
-          className={undefined}
+          className="formHeading"
         >
           Patient insurance information
         </div>
         <div>
           <div
-            className={undefined}
+            className="multiInputFormRow"
           >
             <div
-              className={undefined}
+              className="inputGroup"
             >
               <div
-                className={undefined}
+                className="inputLabel"
               >
                 Insurance type
               </div>
               <select
-                className={undefined}
+                className="select"
                 name="insuranceType"
                 onChange={[Function]}
                 required={true}
@@ -6278,15 +6278,15 @@ exports[`renders patient enrollment container correctly 1`] = `
               </select>
             </div>
             <div
-              className={undefined}
+              className="inputGroup"
             >
               <div
-                className={undefined}
+                className="inputLabel"
               >
                 Patient relationship to policyholder
               </div>
               <select
-                className={undefined}
+                className="select"
                 name="patientRelationshipToPolicyHolder"
                 onChange={[Function]}
                 required={true}
@@ -6452,15 +6452,15 @@ exports[`renders patient enrollment container correctly 1`] = `
               </select>
             </div>
             <div
-              className={undefined}
+              className="inputGroup"
             >
               <div
-                className={undefined}
+                className="inputLabel"
               >
                 Member ID
               </div>
               <input
-                className={undefined}
+                className="input"
                 name="memberId"
                 onChange={[Function]}
                 value=""
@@ -6468,18 +6468,18 @@ exports[`renders patient enrollment container correctly 1`] = `
             </div>
           </div>
           <div
-            className={undefined}
+            className="multiInputFormRow"
           >
             <div
-              className={undefined}
+              className="inputGroup"
             >
               <div
-                className={undefined}
+                className="inputLabel"
               >
                 Policy group number
               </div>
               <input
-                className={undefined}
+                className="input"
                 name="policyGroupNumber"
                 onChange={[Function]}
                 type="number"
@@ -6487,15 +6487,15 @@ exports[`renders patient enrollment container correctly 1`] = `
               />
             </div>
             <div
-              className={undefined}
+              className="inputGroup"
             >
               <div
-                className={undefined}
+                className="inputLabel"
               >
                 Issue date
               </div>
               <input
-                className={undefined}
+                className="input"
                 name="issueDate"
                 onChange={[Function]}
                 type="date"
@@ -6503,15 +6503,15 @@ exports[`renders patient enrollment container correctly 1`] = `
               />
             </div>
             <div
-              className={undefined}
+              className="inputGroup"
             >
               <div
-                className={undefined}
+                className="inputLabel"
               >
                 Expiration date
               </div>
               <input
-                className={undefined}
+                className="input"
                 name="expirationDate"
                 onChange={[Function]}
                 type="date"
@@ -6522,43 +6522,43 @@ exports[`renders patient enrollment container correctly 1`] = `
         </div>
       </div>
       <div
-        className={undefined}
+        className="formSection"
       >
         <div
-          className={undefined}
+          className="formHeading"
         >
           Patient photo
         </div>
         <div
-          className={undefined}
+          className="formRow"
         >
           <div
-            className={undefined}
+            className="container"
           >
             <div
-              className={undefined}
+              className="patientPhoto"
             />
             <div
-              className={undefined}
+              className="centerText"
             >
               Patient identification is very important to us. Uploading a patient photo will help our staff ensure the identity of the patient.
               <div
-                className={undefined}
+                className="smallText"
               >
                 Photo should be at least 300px x 300px.
               </div>
             </div>
             <div
-              className={undefined}
+              className="rightButtonContainer"
             >
               <button
-                className={undefined}
+                className="button"
                 onClick={[Function]}
               >
                 Take Photo
               </button>
               <button
-                className={undefined}
+                className="button"
                 onClick={[Function]}
               >
                 Upload Photo
@@ -6570,20 +6570,20 @@ exports[`renders patient enrollment container correctly 1`] = `
     </div>
   </div>
   <div
-    className={undefined}
+    className="formBottom"
   >
     <div
-      className={undefined}
+      className="formBottomContent"
     >
       <a
-        className={undefined}
+        className="cancelButton"
         href="/patients"
         onClick={[Function]}
       >
         Cancel
       </a>
       <input
-        className={undefined}
+        className="submitButton"
         type="submit"
         value="submit"
       />

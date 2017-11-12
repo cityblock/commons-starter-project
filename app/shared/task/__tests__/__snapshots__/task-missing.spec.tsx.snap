@@ -3,35 +3,35 @@
 exports[`task missing renders various task missing states 1`] = `
 <div>
   <div
-    className={undefined}
+    className="container"
   >
     <div
-      className={undefined}
+      className="loading"
     >
       Loading...
     </div>
   </div>
   <div
-    className={undefined}
+    className="container"
   >
     <div
-      className={undefined}
+      className="loadingError"
     >
       <div
-        className={undefined}
+        className="loadingErrorIcon"
       />
       <div
-        className={undefined}
+        className="loadingErrorLabel"
       >
         Unable to load task
       </div>
       <div
-        className={undefined}
+        className="loadingErrorSubheading"
       >
         Sorry, something went wrong. Please try again.
       </div>
       <div
-        className=""
+        className="loadingErrorButton invertedButton"
         onClick={[Function]}
       >
         Try again
@@ -39,7 +39,7 @@ exports[`task missing renders various task missing states 1`] = `
     </div>
   </div>
   <div
-    className={undefined}
+    className="container"
   />
 </div>
 `;

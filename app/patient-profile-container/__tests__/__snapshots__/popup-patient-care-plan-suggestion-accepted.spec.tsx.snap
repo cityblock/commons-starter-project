@@ -2,35 +2,35 @@
 
 exports[`renders popup for concern suggestion 1`] = `
 <div
-  className={undefined}
+  className="background"
 >
   <div
-    className=""
+    className="content smallContentPadding"
   >
     <div
-      className={undefined}
+      className="acceptModalContent"
     >
       <div
-        className={undefined}
+        className="acceptModalHeader"
       >
         <div
-          className={undefined}
+          className="acceptModalDismissButton"
           onClick={[Function]}
         />
       </div>
       <div
-        className={undefined}
+        className="acceptModalBody"
       >
         <div
-          className={undefined}
+          className="acceptModalTitle"
         >
           Add as active or inactive concern?
         </div>
         <div
-          className={undefined}
+          className="acceptModalDropdown"
         >
           <select
-            className=""
+            className="select roundedInput"
             name="concernType"
             onChange={[Function]}
             value=""
@@ -55,16 +55,16 @@ exports[`renders popup for concern suggestion 1`] = `
           </select>
         </div>
         <div
-          className={undefined}
+          className="acceptModalButtons"
         >
           <div
-            className=""
+            className="invertedButton rightSmallGutter smallButton"
             onClick={[Function]}
           >
             Cancel
           </div>
           <div
-            className=""
+            className="button smallButton"
             onClick={[Function]}
           >
             Add to Care Plan
@@ -78,40 +78,40 @@ exports[`renders popup for concern suggestion 1`] = `
 
 exports[`renders popup for goal suggestion 1`] = `
 <div
-  className={undefined}
+  className="background"
 >
   <div
-    className=""
+    className="content smallContentPadding"
   >
     <div
-      className={undefined}
+      className="acceptModalContent"
     >
       <div
-        className={undefined}
+        className="acceptModalHeader"
       >
         <div
-          className={undefined}
+          className="acceptModalDismissButton"
           onClick={[Function]}
         />
       </div>
       <div
-        className={undefined}
+        className="acceptModalBody"
       >
         <div
-          className=""
+          className="acceptModalTitle noMargin"
         >
           Add this goal to a concern
         </div>
         <div
-          className={undefined}
+          className="acceptModalSubtitle"
         >
           Select an existing patient concern, a suggested concern, or create a new one
         </div>
         <div
-          className={undefined}
+          className="acceptModalDropdown"
         >
           <select
-            className=""
+            className="select roundedInput"
             name="concernId"
             onChange={[Function]}
             value=""
@@ -135,10 +135,10 @@ exports[`renders popup for goal suggestion 1`] = `
           </select>
         </div>
         <div
-          className="undefined"
+          className="acceptModalInput hidden"
         >
           <input
-            className=""
+            className="input roundedInput"
             name="newConcernTitle"
             onChange={[Function]}
             placeholder="Enter concern title"
@@ -147,10 +147,10 @@ exports[`renders popup for goal suggestion 1`] = `
           />
         </div>
         <div
-          className="undefined"
+          className="acceptModalInput hidden"
         >
           <select
-            className=""
+            className="select roundedInput"
             name="concernType"
             onChange={[Function]}
             value=""
@@ -175,16 +175,16 @@ exports[`renders popup for goal suggestion 1`] = `
           </select>
         </div>
         <div
-          className={undefined}
+          className="acceptModalButtons"
         >
           <div
-            className=""
+            className="invertedButton rightSmallGutter smallButton"
             onClick={[Function]}
           >
             Cancel
           </div>
           <div
-            className=""
+            className="button smallButton"
             onClick={[Function]}
           >
             Add to Care Plan

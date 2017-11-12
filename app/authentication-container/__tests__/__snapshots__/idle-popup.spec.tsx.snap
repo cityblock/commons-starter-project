@@ -2,24 +2,24 @@
 
 exports[`renders idle popup 1`] = `
 <div
-  className={undefined}
+  className="background"
 >
   <div
-    className=""
+    className="content"
   >
     <div>
       <div
-        className={undefined}
+        className="idlePopupTitle"
       >
         Looks like you are idle
       </div>
       <div
-        className={undefined}
+        className="idleSubheading"
       >
         Please click below to prevent from being automatically logged out
       </div>
       <div
-        className={undefined}
+        className="idleButton"
         onClick={[Function]}
       >
         Keep me logged in

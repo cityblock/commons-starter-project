@@ -2,86 +2,86 @@
 
 exports[`renders header 1`] = `
 <div
-  className={undefined}
+  className="header"
 >
   <div
-    className={undefined}
+    className="container"
   >
     <div
-      className={undefined}
+      className="left"
     >
       <a
-        className={undefined}
+        className="link"
         href="/"
         onClick={[Function]}
       >
         <div
-          className={undefined}
+          className="mark"
         />
       </a>
       <div
-        className={undefined}
+        className="navItem"
       >
         <div
-          className={undefined}
+          className="searchIcon"
         />
         <div
-          className={undefined}
+          className="navText"
         >
           Search
         </div>
       </div>
       <a
-        className={undefined}
+        className="navItem"
         href="/patients"
         onClick={[Function]}
       >
         <div
-          className={undefined}
+          className="patientsIcon"
         />
         <div
-          className={undefined}
+          className="navText"
         >
           Patients
         </div>
       </a>
       <a
-        className=""
+        className="navItem relativeNavItem"
         href="/tasks"
         onClick={[Function]}
       >
         <div
-          className={undefined}
+          className="tasksIcon"
         />
         <div
-          className={undefined}
+          className="navText"
         >
           Tasks
         </div>
         <div
-          className=""
+          className="notificationBadge"
         />
       </a>
     </div>
     <div
-      className={undefined}
+      className="right"
     >
       <div
-        className={undefined}
+        className="userInfo"
       >
         <div
-          className={undefined}
+          className="userName"
         >
           first last
         </div>
         <div
-          className={undefined}
+          className="userRole"
         >
           physician
         </div>
       </div>
       <div
-        className={undefined}
+        className="userPhoto"
         style={
           Object {
             "backgroundImage": "url('null')",
@@ -89,14 +89,14 @@ exports[`renders header 1`] = `
         }
       />
       <div
-        className={undefined}
+        className="dropdown"
       >
         <a
           href="/settings"
           onClick={[Function]}
         >
           <div
-            className={undefined}
+            className="settingsIcon"
           />
           <span>
             Settings
@@ -106,7 +106,7 @@ exports[`renders header 1`] = `
           onClick={[Function]}
         >
           <div
-            className={undefined}
+            className="logoutIcon"
           />
           <span>
             Logout

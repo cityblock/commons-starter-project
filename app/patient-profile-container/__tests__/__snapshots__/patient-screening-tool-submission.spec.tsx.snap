@@ -2,30 +2,30 @@
 
 exports[`renders patient screening tool submission 1`] = `
 <div
-  className={undefined}
+  className="screeningToolSubmissionSection"
 >
   <div
-    className={undefined}
+    className="screeningToolSubmission"
   >
     <div
-      className={undefined}
+      className="screeningToolSubmissionTitleRow"
     >
       <div
-        className={undefined}
+        className="screeningToolSubmissionTitle"
       >
         <div
-          className={undefined}
+          className="screeningToolSubmissionTitleLabel"
         >
           Tool results:
         </div>
         <div
-          className={undefined}
+          className="screeningToolSubmissionTitleScore"
         >
           <div>
             Screening Tool Score Range
           </div>
           <div
-            className={undefined}
+            className="screeningToolSubmissionTitleScoreDivider"
           >
             -
           </div>
@@ -33,37 +33,37 @@ exports[`renders patient screening tool submission 1`] = `
             5
           </div>
           <div
-            className={undefined}
+            className="screeningToolSubmissionTitleInfoButton"
           />
         </div>
       </div>
       <div
-        className={undefined}
+        className="screeningToolSubmissionMeta"
       >
         <div
-          className={undefined}
+          className="screeningToolSubmissionMetaGroup"
         >
           <div
-            className={undefined}
+            className="screeningToolSubmissionMetaLabel"
           >
             Conducted by:
           </div>
           <div
-            className={undefined}
+            className="screeningToolSubmissionMetaData"
           >
             first last
           </div>
         </div>
         <div
-          className={undefined}
+          className="screeningToolSubmissionMetaGroup"
         >
           <div
-            className={undefined}
+            className="screeningToolSubmissionMetaLabel"
           >
             Date conducted:
           </div>
           <div
-            className={undefined}
+            className="screeningToolSubmissionMetaData"
           >
             <span>
               Jul 13, 2017
@@ -73,7 +73,7 @@ exports[`renders patient screening tool submission 1`] = `
       </div>
     </div>
     <div
-      className={undefined}
+      className="screeningToolSubmissionSummaryRow"
     >
       TBD
     </div>

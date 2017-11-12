@@ -3,17 +3,17 @@
 exports[`renders patient care plan view 1`] = `
 <div>
   <div
-    className=""
+    className="tabs darkTabs"
   >
     <a
-      className="undefined"
+      className="tab selectedTab"
       href="/patients/patient-1/map/active"
       onClick={[Function]}
     >
       Active
     </a>
     <a
-      className=""
+      className="tab"
       href="/patients/patient-1/map/suggestions"
       onClick={[Function]}
     >
@@ -21,16 +21,16 @@ exports[`renders patient care plan view 1`] = `
     </a>
   </div>
   <div
-    className={undefined}
+    className="carePlanPanel"
   >
     <div
-      className={undefined}
+      className="carePlan"
     >
       <div
-        className={undefined}
+        className="emptyCarePlanSuggestionsContainer"
       >
         <div
-          className={undefined}
+          className="loadingLabel"
         >
           Loading...
         </div>
@@ -42,23 +42,23 @@ exports[`renders patient care plan view 1`] = `
 
 exports[`renders patient profile container correctly 1`] = `
 <div
-  className={undefined}
+  className="container"
 >
   <div
-    className={undefined}
+    className="leftPane"
   >
     <div>
       <div
-        className={undefined}
+        className="patientRisk"
       />
       <div
-        className=""
+        className="patientMain"
       >
         <div
-          className={undefined}
+          className="patientHeader"
         >
           <div
-            className={undefined}
+            className="patientPhoto"
             style={
               Object {
                 "backgroundImage": "url('http://bit.ly/2vaOMQJ')",
@@ -66,25 +66,25 @@ exports[`renders patient profile container correctly 1`] = `
             }
           />
           <div
-            className={undefined}
+            className="patientTitle"
           >
             <div
-              className={undefined}
+              className="patientRiskText"
             >
               High Risk Patient
             </div>
             <div
-              className={undefined}
+              className="patientName"
             >
               <div
-                className={undefined}
+                className="patientFirstName"
               >
                 Unknown
               </div>
               <div />
             </div>
             <div
-              className={undefined}
+              className="patientSubheading"
             >
               40
                • 
@@ -92,183 +92,183 @@ exports[`renders patient profile container correctly 1`] = `
           </div>
         </div>
         <div
-          className={undefined}
+          className="patientBasicInfo"
         >
           <div
-            className={undefined}
+            className="patientBasicInfoRow"
           >
             <div>
               Date of birth
               :
             </div>
             <div
-              className={undefined}
+              className="patientBasicInfoRowData"
             >
               2/16/1977
             </div>
           </div>
           <div
-            className={undefined}
+            className="patientBasicInfoRow"
           >
             <div>
               Preferred language
               :
             </div>
             <div
-              className={undefined}
+              className="patientBasicInfoRowData"
             >
               Declined
             </div>
           </div>
           <div
-            className={undefined}
+            className="patientBasicInfoRow"
           >
             <div>
               Location
               :
             </div>
             <div
-              className={undefined}
+              className="patientBasicInfoRowData"
             >
               Brooklyn, NY
             </div>
           </div>
           <div
-            className={undefined}
+            className="patientBasicInfoRow"
           >
             <div>
               Patient since
               :
             </div>
             <div
-              className={undefined}
+              className="patientBasicInfoRowData"
             >
               Unknown
             </div>
           </div>
           <div
-            className={undefined}
+            className="patientBasicInfoRow"
           >
             <div>
               Medicare ID
               :
             </div>
             <div
-              className={undefined}
+              className="patientBasicInfoRowData"
             >
               123456789
             </div>
           </div>
         </div>
         <div
-          className={undefined}
+          className="patientCommunication"
         >
           <div
-            className=""
+            className="patientCommItem patientCommPhone"
           />
           <div
-            className=""
+            className="patientCommItem patientCommText"
           />
           <div
-            className=""
+            className="patientCommItem patientCommEmail"
           />
           <div
-            className=""
+            className="patientCommItem patientCommVideo"
           />
         </div>
         <div
-          className={undefined}
+          className="patientScratchPad"
         >
           <textarea
-            className={undefined}
+            className="textArea"
             disabled={true}
             onChange={[Function]}
             placeholder="Loading..."
             value={undefined}
           />
           <div
-            className={undefined}
+            className="scratchPadStatus"
           />
         </div>
       </div>
     </div>
     <div
-      className={undefined}
+      className="patientMedications"
     >
       <div
-        className={undefined}
+        className="medicationsHeader"
       >
         <div
-          className={undefined}
+          className="medicationsTitle"
         >
           Active medications
         </div>
         <div
-          className={undefined}
+          className="medicationsHamburger"
         />
       </div>
       <div
-        className="undefined"
+        className="medicationsList emptyMedicationsList"
       >
         <div
-          className={undefined}
+          className="medicationsLoading"
         >
           Loading...
         </div>
       </div>
     </div>
     <div
-      className=""
+      className="careTeamWidget"
     >
       <div
-        className={undefined}
+        className="careTeamWidgetRow"
       >
         <div
-          className={undefined}
+          className="careTeamWidgetContent"
         >
           <div
-            className=""
+            className="button"
             onClick={[Function]}
           >
             <div
-              className={undefined}
+              className="buttonLabel"
             >
               <div
-                className=""
+                className="buttonIcon"
               />
               <div
-                className={undefined}
+                className="buttonTitle"
               >
                 Care Team
               </div>
             </div>
             <div
-              className=""
+              className="buttonArrow"
             />
           </div>
           <div
-            className=""
+            className="drawer"
           >
             <div>
               <div
-                className={undefined}
+                className="careTeamMemberRow"
               >
                 <div
-                  className={undefined}
+                  className="careTeamMemberDetails"
                 >
                   <div
-                    className={undefined}
+                    className="chatLogo"
                   />
                   <div
-                    className={undefined}
+                    className="careTeamMemberLabel"
                   >
                     <div
-                      className={undefined}
+                      className="careTeamMemberName"
                     >
                       Chat with team
                     </div>
                     <div
-                      className={undefined}
+                      className="careTeamMemberRole"
                     >
                       Patient slack channel
                     </div>
@@ -276,7 +276,7 @@ exports[`renders patient profile container correctly 1`] = `
                 </div>
               </div>
               <div
-                className={undefined}
+                className="careTeamMemberContact"
               />
             </div>
           </div>
@@ -285,34 +285,34 @@ exports[`renders patient profile container correctly 1`] = `
     </div>
   </div>
   <div
-    className=""
+    className="mainBody"
   >
     <div
-      className={undefined}
+      className="tabs"
     >
       <a
-        className=""
+        className="tab"
         href="/patients/patient-1/360"
         onClick={[Function]}
       >
         360° View
       </a>
       <a
-        className="undefined"
+        className="tab selectedTab"
         href="/patients/patient-1/map"
         onClick={[Function]}
       >
         MAP
       </a>
       <a
-        className=""
+        className="tab"
         href="/patients/patient-1/timeline"
         onClick={[Function]}
       >
         Timeline
       </a>
       <a
-        className=""
+        className="tab"
         href="/patients/patient-1/patientInfo"
         onClick={[Function]}
       >
@@ -321,17 +321,17 @@ exports[`renders patient profile container correctly 1`] = `
     </div>
     <div>
       <div
-        className=""
+        className="tabs darkTabs"
       >
         <a
-          className="undefined"
+          className="tab selectedTab"
           href="/patients/patient-1/map/active"
           onClick={[Function]}
         >
           Active
         </a>
         <a
-          className=""
+          className="tab"
           href="/patients/patient-1/map/suggestions"
           onClick={[Function]}
         >
@@ -339,16 +339,16 @@ exports[`renders patient profile container correctly 1`] = `
         </a>
       </div>
       <div
-        className={undefined}
+        className="carePlanPanel"
       >
         <div
-          className={undefined}
+          className="carePlan"
         >
           <div
-            className={undefined}
+            className="emptyCarePlanSuggestionsContainer"
           >
             <div
-              className={undefined}
+              className="loadingLabel"
             >
               Loading...
             </div>
@@ -362,22 +362,22 @@ exports[`renders patient profile container correctly 1`] = `
 
 exports[`renders patient profile for ipad 1`] = `
 <div
-  className={undefined}
+  className="container"
 >
   <div
-    className={undefined}
+    className="smallLeftPane"
   >
     <div
-      className={undefined}
+      className="smallLeftPaneMain"
     >
       <div
-        className={undefined}
+        className="smallLeftPaneTop"
       >
         <div
-          className={undefined}
+          className="smallPatientRiskColor"
         />
         <div
-          className={undefined}
+          className="smallPatientPhoto"
           style={
             Object {
               "backgroundImage": "url('http://bit.ly/2vaOMQJ')",
@@ -385,56 +385,56 @@ exports[`renders patient profile for ipad 1`] = `
           }
         />
         <div
-          className={undefined}
+          className="smallPatientName"
         >
           Loading Patient
         </div>
         <div
-          className=""
+          className="smallButton profileIcon"
           onClick={[Function]}
         />
         <div
-          className=""
+          className="smallButton medsIcon"
           onClick={[Function]}
         />
       </div>
       <div
-        className={undefined}
+        className="smallLeftPaneBottom"
       >
         <div
-          className=""
+          className="smallChatButton"
           onClick={[Function]}
         />
       </div>
     </div>
     <div
-      className="undefined"
+      className="smallDisplayPane hidden"
     >
       <div>
         <div
-          className={undefined}
+          className="patientRisk"
         />
         <div
-          className="undefined"
+          className="patientMain noBorder"
         >
           <div
-            className={undefined}
+            className="patientHeader"
           >
             <div
-              className={undefined}
+              className="patientTitle"
             >
               <div
-                className={undefined}
+                className="patientRiskText"
               >
                 High Risk Patient
               </div>
               <div
-                className={undefined}
+                className="patientSingleLineName"
               >
                 Unknown null
               </div>
               <div
-                className={undefined}
+                className="patientSubheading"
               >
                 40
                  • 
@@ -442,130 +442,130 @@ exports[`renders patient profile for ipad 1`] = `
             </div>
           </div>
           <div
-            className={undefined}
+            className="patientBasicInfo"
           >
             <div
-              className={undefined}
+              className="patientBasicInfoRow"
             >
               <div>
                 Date of birth
                 :
               </div>
               <div
-                className={undefined}
+                className="patientBasicInfoRowData"
               >
                 2/16/1977
               </div>
             </div>
             <div
-              className={undefined}
+              className="patientBasicInfoRow"
             >
               <div>
                 Preferred language
                 :
               </div>
               <div
-                className={undefined}
+                className="patientBasicInfoRowData"
               >
                 Declined
               </div>
             </div>
             <div
-              className={undefined}
+              className="patientBasicInfoRow"
             >
               <div>
                 Location
                 :
               </div>
               <div
-                className={undefined}
+                className="patientBasicInfoRowData"
               >
                 Brooklyn, NY
               </div>
             </div>
             <div
-              className={undefined}
+              className="patientBasicInfoRow"
             >
               <div>
                 Patient since
                 :
               </div>
               <div
-                className={undefined}
+                className="patientBasicInfoRowData"
               >
                 Unknown
               </div>
             </div>
             <div
-              className={undefined}
+              className="patientBasicInfoRow"
             >
               <div>
                 Medicare ID
                 :
               </div>
               <div
-                className={undefined}
+                className="patientBasicInfoRowData"
               >
                 123456789
               </div>
             </div>
           </div>
           <div
-            className={undefined}
+            className="patientCommunication"
           >
             <div
-              className=""
+              className="patientCommItem patientCommPhone"
             />
             <div
-              className=""
+              className="patientCommItem patientCommText"
             />
             <div
-              className=""
+              className="patientCommItem patientCommEmail"
             />
             <div
-              className=""
+              className="patientCommItem patientCommVideo"
             />
           </div>
           <div
-            className={undefined}
+            className="patientScratchPad"
           >
             <textarea
-              className={undefined}
+              className="textArea"
               disabled={true}
               onChange={[Function]}
               placeholder="Loading..."
               value={undefined}
             />
             <div
-              className={undefined}
+              className="scratchPadStatus"
             />
           </div>
         </div>
       </div>
     </div>
     <div
-      className="undefined"
+      className="smallDisplayPane hidden"
     >
       <div
-        className={undefined}
+        className="patientMedications"
       >
         <div
-          className={undefined}
+          className="medicationsHeader"
         >
           <div
-            className={undefined}
+            className="medicationsTitle"
           >
             Active medications
           </div>
           <div
-            className={undefined}
+            className="medicationsHamburger"
           />
         </div>
         <div
-          className="undefined"
+          className="medicationsList emptyMedicationsList"
         >
           <div
-            className={undefined}
+            className="medicationsLoading"
           >
             Loading...
           </div>
@@ -573,60 +573,60 @@ exports[`renders patient profile for ipad 1`] = `
       </div>
     </div>
     <div
-      className="undefined"
+      className="chatDisplayPane hidden"
     >
       <div
-        className="undefined"
+        className="careTeamWidget skinny"
       >
         <div
-          className={undefined}
+          className="careTeamWidgetRow"
         >
           <div
-            className={undefined}
+            className="careTeamWidgetContent"
           >
             <div
-              className="undefined"
+              className="button openButton condensed"
               onClick={[Function]}
             >
               <div
-                className={undefined}
+                className="buttonLabel"
               >
                 <div
-                  className="undefined"
+                  className="buttonIcon hidden"
                 />
                 <div
-                  className={undefined}
+                  className="buttonTitle"
                 >
                   Care Team
                 </div>
               </div>
               <div
-                className="undefined"
+                className="buttonArrow hidden"
               />
             </div>
             <div
-              className="undefined"
+              className="drawer open tall"
             >
               <div>
                 <div
-                  className={undefined}
+                  className="careTeamMemberRow"
                 >
                   <div
-                    className={undefined}
+                    className="careTeamMemberDetails"
                   >
                     <div
-                      className={undefined}
+                      className="chatLogo"
                     />
                     <div
-                      className={undefined}
+                      className="careTeamMemberLabel"
                     >
                       <div
-                        className={undefined}
+                        className="careTeamMemberName"
                       >
                         Chat with team
                       </div>
                       <div
-                        className={undefined}
+                        className="careTeamMemberRole"
                       >
                         Patient slack channel
                       </div>
@@ -634,7 +634,7 @@ exports[`renders patient profile for ipad 1`] = `
                   </div>
                 </div>
                 <div
-                  className={undefined}
+                  className="careTeamMemberContact"
                 />
               </div>
             </div>
@@ -643,39 +643,39 @@ exports[`renders patient profile for ipad 1`] = `
       </div>
     </div>
     <div
-      className=""
+      className="touchArea hidden"
       onClick={[Function]}
     />
   </div>
   <div
-    className="undefined"
+    className="mainBodySmall"
   >
     <div
-      className={undefined}
+      className="tabs"
     >
       <a
-        className=""
+        className="tab"
         href="/patients/patient-1/360"
         onClick={[Function]}
       >
         360° View
       </a>
       <a
-        className="undefined"
+        className="tab selectedTab"
         href="/patients/patient-1/map"
         onClick={[Function]}
       >
         MAP
       </a>
       <a
-        className=""
+        className="tab"
         href="/patients/patient-1/timeline"
         onClick={[Function]}
       >
         Timeline
       </a>
       <a
-        className=""
+        className="tab"
         href="/patients/patient-1/patientInfo"
         onClick={[Function]}
       >
@@ -684,17 +684,17 @@ exports[`renders patient profile for ipad 1`] = `
     </div>
     <div>
       <div
-        className=""
+        className="tabs darkTabs"
       >
         <a
-          className="undefined"
+          className="tab selectedTab"
           href="/patients/patient-1/map/active"
           onClick={[Function]}
         >
           Active
         </a>
         <a
-          className=""
+          className="tab"
           href="/patients/patient-1/map/suggestions"
           onClick={[Function]}
         >
@@ -702,16 +702,16 @@ exports[`renders patient profile for ipad 1`] = `
         </a>
       </div>
       <div
-        className={undefined}
+        className="carePlanPanel"
       >
         <div
-          className={undefined}
+          className="carePlan"
         >
           <div
-            className={undefined}
+            className="emptyCarePlanSuggestionsContainer"
           >
             <div
-              className={undefined}
+              className="loadingLabel"
             >
               Loading...
             </div>

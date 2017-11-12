@@ -3,7 +3,7 @@
 exports[`renders main container correctly 1`] = `
 <div>
   <div
-    className={undefined}
+    className="body"
   />
 </div>
 `;

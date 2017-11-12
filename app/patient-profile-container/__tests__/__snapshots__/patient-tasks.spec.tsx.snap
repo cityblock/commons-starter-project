@@ -2,21 +2,21 @@
 
 exports[`renders patient tasks 1`] = `
 <div
-  className={undefined}
+  className="container"
 >
   <div
-    className={undefined}
+    className="sortSearchBar"
   >
     <div
-      className={undefined}
+      className="sort"
     >
       <div
-        className={undefined}
+        className="sortLabel"
       >
         Sort by:
       </div>
       <div
-        className={undefined}
+        className="sortDropdown"
       >
         <select
           onChange={[Function]}
@@ -55,7 +55,7 @@ exports[`renders patient tasks 1`] = `
         </select>
       </div>
       <div
-        className=""
+        className="search search"
       >
         <input
           placeholder="Search by user or keywords"
@@ -66,13 +66,13 @@ exports[`renders patient tasks 1`] = `
     </div>
   </div>
   <div
-    className={undefined}
+    className="bottomContainer"
   >
     <div
-      className=""
+      className="list"
     >
       <div
-        className={undefined}
+        className="tasksLoading"
       >
         Loading...
       </div>
@@ -85,7 +85,7 @@ exports[`renders patient tasks 1`] = `
       />
     </div>
     <div
-      className=""
+      className="taskContainer"
     />
   </div>
 </div>

@@ -2,39 +2,39 @@
 
 exports[`renders tasks container 1`] = `
 <div
-  className={undefined}
+  className="container"
 >
   <div
-    className={undefined}
+    className="leftPane"
   >
     <div
-      className={undefined}
+      className="leftHeading"
     >
       My tasks lists
     </div>
   </div>
   <div
-    className={undefined}
+    className="mainBody"
   >
     <div
-      className={undefined}
+      className="tabs"
     >
       <a
-        className=""
+        className="tab selectedTab"
         href="/tasks"
         onClick={[Function]}
       >
         Tasks
       </a>
       <a
-        className={undefined}
+        className="tab"
         href="/calendar"
         onClick={[Function]}
       >
         Calendar
       </a>
       <a
-        className=""
+        className="tab relativeTab"
         href="/notifications/tasks"
         onClick={[Function]}
       >
@@ -42,29 +42,29 @@ exports[`renders tasks container 1`] = `
           Notifications
         </span>
         <div
-          className=""
+          className="notificationBadge"
         />
       </a>
     </div>
     <div
-      className=""
+      className="pane selectedPane"
     >
       <div
-        className={undefined}
+        className="container"
       >
         <div
-          className={undefined}
+          className="sortSearchBar"
         >
           <div
-            className={undefined}
+            className="sort"
           >
             <div
-              className={undefined}
+              className="sortLabel"
             >
               Sort by:
             </div>
             <div
-              className={undefined}
+              className="sortDropdown"
             >
               <select
                 onChange={[Function]}
@@ -103,7 +103,7 @@ exports[`renders tasks container 1`] = `
               </select>
             </div>
             <div
-              className=""
+              className="search search"
             >
               <input
                 placeholder="Search by user or keywords"
@@ -114,13 +114,13 @@ exports[`renders tasks container 1`] = `
           </div>
         </div>
         <div
-          className={undefined}
+          className="bottomContainer"
         >
           <div
-            className="undefined"
+            className="list compressed"
           >
             <div
-              className={undefined}
+              className="tasksLoading"
             >
               Loading...
             </div>
@@ -133,13 +133,13 @@ exports[`renders tasks container 1`] = `
             />
           </div>
           <div
-            className="undefined"
+            className="taskContainer visible"
           />
         </div>
       </div>
     </div>
     <div
-      className={undefined}
+      className="pane"
     >
       calendar!
     </div>

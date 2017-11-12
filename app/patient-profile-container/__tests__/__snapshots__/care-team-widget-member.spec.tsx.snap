@@ -2,93 +2,93 @@
 
 exports[`renders care team widget 1`] = `
 <div
-  className={undefined}
+  className="careTeamMemberRow"
 >
   <div
-    className={undefined}
+    className="careTeamMemberDetails"
     onClick={[Function]}
   >
     <div
-      className={undefined}
+      className="careTeamMemberPhoto"
     >
       <img
         src=""
       />
     </div>
     <div
-      className={undefined}
+      className="careTeamMemberLabel"
     >
       <div
-        className={undefined}
+        className="careTeamMemberName"
       >
         first last
       </div>
       <div
-        className={undefined}
+        className="careTeamMemberRole"
       >
         Physician
       </div>
     </div>
   </div>
   <div
-    className=""
+    className="careTeamMemberContact"
   >
     <div
-      className={undefined}
+      className="careTeamMemberContactRow"
     >
       <div
-        className=""
+        className="careTeamContactIcon careTeamSlackIcon"
       />
       <div
-        className={undefined}
+        className="careTeamContactLabel"
       >
         Message on Slack
       </div>
     </div>
     <div
-      className={undefined}
+      className="careTeamMemberContactRow"
     >
       <div
-        className=""
+        className="careTeamContactIcon careTeamPhoneIcon"
       />
       <div
-        className={undefined}
+        className="careTeamContactLabel"
       >
         Call on phone
       </div>
     </div>
     <div
-      className={undefined}
+      className="careTeamMemberContactRow"
     >
       <div
-        className=""
+        className="careTeamContactIcon careTeamSmsIcon"
       />
       <div
-        className={undefined}
+        className="careTeamContactLabel"
       >
         Send text message
       </div>
     </div>
     <div
-      className={undefined}
+      className="careTeamMemberContactRow"
     >
       <div
-        className=""
+        className="careTeamContactIcon careTeamEmailIcon"
       />
       <div
-        className={undefined}
+        className="careTeamContactLabel"
       >
         Send an email
       </div>
     </div>
     <div
-      className={undefined}
+      className="careTeamMemberContactRow"
     >
       <div
-        className=""
+        className="careTeamContactIcon careTeamProfileIcon"
       />
       <div
-        className={undefined}
+        className="careTeamContactLabel"
       >
         Go to profile
       </div>

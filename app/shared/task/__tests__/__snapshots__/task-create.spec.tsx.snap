@@ -2,19 +2,19 @@
 
 exports[`renders task create 1`] = `
 <div
-  className={undefined}
+  className="container"
 >
   <form
     onSubmit={[Function]}
   >
     <div
-      className={undefined}
+      className="formTop"
     >
       <div
-        className={undefined}
+        className="smallSection"
       >
         <div
-          className={undefined}
+          className="smallImage"
           style={
             Object {
               "backgroundImage": "url('http://bit.ly/2u9bJDA')",
@@ -22,35 +22,35 @@ exports[`renders task create 1`] = `
           }
         />
         <div
-          className={undefined}
+          className="smallText"
         >
           Bob Smith
         </div>
       </div>
       <div
-        className={undefined}
+        className="close"
         onClick={[Function]}
       />
     </div>
     <div
-      className={undefined}
+      className="formCenter"
     >
       <div
-        className={undefined}
+        className="loadingHidden"
       >
         <div
-          className={undefined}
+          className="loadingContainer"
         >
           <div
-            className={undefined}
+            className="loadingSpinner"
           />
         </div>
       </div>
       <div
-        className={undefined}
+        className="flexInputGroup"
       >
         <input
-          className=""
+          className="input inputSmall flexInputItem"
           name="dueAt"
           onChange={[Function]}
           required={true}
@@ -58,7 +58,7 @@ exports[`renders task create 1`] = `
           value=""
         />
         <select
-          className=""
+          className="select inputSmall flexInputItem"
           name="assignedToId"
           onChange={[Function]}
           required={true}
@@ -74,17 +74,17 @@ exports[`renders task create 1`] = `
         </select>
       </div>
       <div
-        className={undefined}
+        className="inputGroup"
       >
         <input
-          className={undefined}
+          className="input"
           name="title"
           onChange={[Function]}
           placeholder="Enter task title"
           value=""
         />
         <textarea
-          className={undefined}
+          className="textarea"
           name="description"
           onChange={[Function]}
           placeholder="Enter task description …"
@@ -93,19 +93,19 @@ exports[`renders task create 1`] = `
       </div>
     </div>
     <div
-      className={undefined}
+      className="formBottom"
     >
       <div
-        className={undefined}
+        className="formBottomContent"
       >
         <div
-          className={undefined}
+          className="cancelButton"
           onClick={[Function]}
         >
           Cancel
         </div>
         <input
-          className={undefined}
+          className="submitButton"
           type="submit"
           value="Add task"
         />

@@ -2,10 +2,10 @@
 
 exports[`renders without goal 1`] = `
 <div
-  className={undefined}
+  className="container"
 >
   <div
-    className={undefined}
+    className="loading"
   >
     Loading...
   </div>
@@ -14,76 +14,76 @@ exports[`renders without goal 1`] = `
 
 exports[`shallow rendered renders with goal 1`] = `
 <div
-  className=""
+  className="container"
 >
   <div
-    className="undefined"
+    className="deleteConfirmation hidden"
   >
     <div
-      className={undefined}
+      className="deleteConfirmationIcon"
     />
     <div
-      className={undefined}
+      className="deleteConfirmationText"
     >
       Are you sure you want to delete this goal?
     </div>
     <div
-      className={undefined}
+      className="deleteConfirmationButtons"
     >
       <div
-        className=""
+        className="deleteCancelButton invertedButton"
         onClick={[Function]}
       >
         Cancel
       </div>
       <div
-        className={undefined}
+        className="deleteConfirmButton"
         onClick={[Function]}
       >
         Yes, delete
       </div>
     </div>
     <div
-      className="undefined"
+      className="deleteError hidden"
     >
       <div
-        className=""
+        className="redText smallText"
       >
         Error deleting goal.
       </div>
       <div
-        className={undefined}
+        className="smallText"
       >
         Please try again.
       </div>
     </div>
   </div>
   <div
-    className=""
+    className="itemContainer"
   >
     <div>
       <div
-        className={undefined}
+        className="infoRow"
       >
         <div
-          className={undefined}
+          className="controls"
         >
           <Link
-            className={undefined}
+            className="close"
             replace={false}
             to="/route/base"
           >
             Close
           </Link>
           <div
-            className={undefined}
+            className="menuItem"
             onClick={[Function]}
           >
             <div
-              className={undefined}
+              className="trashIcon"
             />
             <div
-              className={undefined}
+              className="menuLabel"
             >
               Delete goal
             </div>
@@ -92,21 +92,21 @@ exports[`shallow rendered renders with goal 1`] = `
       </div>
     </div>
     <div
-      className={undefined}
+      className="itemBody"
     >
       <div
-        className={undefined}
+        className="smallText"
       >
         Title:
       </div>
       <div
-        className=""
+        className="largeText title"
         onClick={[Function]}
       >
         Goal Title
       </div>
       <div
-        className=""
+        className="largeTextEditor hidden"
       >
         <input
           name="editedTitle"
@@ -118,7 +118,7 @@ exports[`shallow rendered renders with goal 1`] = `
       </div>
       <br />
       <div
-        className={undefined}
+        className="smallText"
       >
         Task Templates:
       </div>
@@ -143,7 +143,7 @@ exports[`shallow rendered renders with goal 1`] = `
         />
       </div>
       <div
-        className={undefined}
+        className="smallText"
       >
         Create task template:
       </div>

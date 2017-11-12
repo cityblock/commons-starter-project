@@ -2,28 +2,28 @@
 
 exports[`question row renders question row 1`] = `
 <a
-  className="undefined"
+  className="container selected"
   href="/route/base/progress-note-template-id"
   onClick={[Function]}
 >
   <div
-    className={undefined}
+    className="title"
   >
     Progress Note Template Title
   </div>
   <div
-    className={undefined}
+    className="meta"
   >
     <div
-      className=""
+      className="dateSection createdAtSection"
     >
       <span
-        className={undefined}
+        className="dateLabel"
       >
         Created:
       </span>
       <span
-        className={undefined}
+        className="dateValue"
       >
         in 2 months
       </span>

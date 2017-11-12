@@ -2,44 +2,44 @@
 
 exports[`renders patient care plan suggestion (concern) 1`] = `
 <div
-  className={undefined}
+  className="carePlanSuggestion"
 >
   <div
-    className={undefined}
+    className="carePlanSuggestionType"
   >
     Suggested concern
   </div>
   <div
-    className={undefined}
+    className="carePlanSuggestionTitleRow"
   >
     <div
-      className=""
+      className="carePlanSuggestionConcernTitle"
     >
       Concern Title
     </div>
     <div
-      className={undefined}
+      className="carePlanSuggestionActionButtons"
     >
       <div
-        className={undefined}
+        className="rejectButton"
         onClick={[Function]}
       />
       <div
-        className={undefined}
+        className="acceptButton"
         onClick={[Function]}
       />
     </div>
   </div>
   <div
-    className=""
+    className="carePlanSuggestionMetaRow"
   >
     <div
-      className={undefined}
+      className="carePlanSuggestionSmallLabel"
     >
       Suggested:
     </div>
     <div
-      className={undefined}
+      className="carePlanSuggestionSmallDate"
     >
       <span>
         Aug 16, 2017
@@ -51,44 +51,44 @@ exports[`renders patient care plan suggestion (concern) 1`] = `
 
 exports[`renders patient care plan suggestion (goal) 1`] = `
 <div
-  className={undefined}
+  className="carePlanSuggestion"
 >
   <div
-    className={undefined}
+    className="carePlanSuggestionType"
   >
     Suggested goal
   </div>
   <div
-    className={undefined}
+    className="carePlanSuggestionTitleRow"
   >
     <div
-      className="undefined"
+      className="carePlanSuggestionGoalTitle"
     >
       Goal Title
     </div>
     <div
-      className={undefined}
+      className="carePlanSuggestionActionButtons"
     >
       <div
-        className={undefined}
+        className="rejectButton"
         onClick={[Function]}
       />
       <div
-        className={undefined}
+        className="acceptButton"
         onClick={[Function]}
       />
     </div>
   </div>
   <div
-    className="undefined"
+    className="carePlanSuggestionMetaRow largerMargin"
   >
     <div
-      className={undefined}
+      className="carePlanSuggestionSmallLabel"
     >
       Suggested:
     </div>
     <div
-      className={undefined}
+      className="carePlanSuggestionSmallDate"
     >
       <span>
         Aug 16, 2017
@@ -96,18 +96,18 @@ exports[`renders patient care plan suggestion (goal) 1`] = `
     </div>
   </div>
   <div
-    className=""
+    className="taskTemplateRow highPriority"
   >
     <div
-      className={undefined}
+      className="taskTemplateTitle"
     >
       Task Title
     </div>
     <div
-      className={undefined}
+      className="taskTemplateInfoControls"
     >
       <div
-        className={undefined}
+        className="taskTemplateAssigneeAvatar"
         style={
           Object {
             "backgroundImage": "url(https://bit.ly/2weRwJm)",
@@ -115,15 +115,15 @@ exports[`renders patient care plan suggestion (goal) 1`] = `
         }
       />
       <div
-        className={undefined}
+        className="taskTemplateDueDate"
       >
         <div
-          className={undefined}
+          className="taskTemplateDueDateLabel"
         >
           Due:
         </div>
         <div
-          className={undefined}
+          className="taskTemplateDueDateText"
         >
           <span>
             Jul 26, 2017
@@ -131,7 +131,7 @@ exports[`renders patient care plan suggestion (goal) 1`] = `
         </div>
       </div>
       <div
-        className={undefined}
+        className="taskTemplateRejectButton"
         onClick={[Function]}
       />
     </div>

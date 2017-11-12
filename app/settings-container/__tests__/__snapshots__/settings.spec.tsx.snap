@@ -3,13 +3,19 @@
 exports[`renders settings form correctly 1`] = `
 initialize {
   "0": Object {
-    "attribs": Object {},
+    "attribs": Object {
+      "class": "container",
+    },
     "children": Array [
       Object {
-        "attribs": Object {},
+        "attribs": Object {
+          "class": "background",
+        },
         "children": Array [
           Object {
-            "attribs": Object {},
+            "attribs": Object {
+              "class": "heading",
+            },
             "children": Array [
               Object {
                 "data": "Settings",
@@ -22,16 +28,24 @@ initialize {
             "name": "div",
             "namespace": "http://www.w3.org/1999/xhtml",
             "next": Object {
-              "attribs": Object {},
+              "attribs": Object {
+                "class": "form",
+              },
               "children": Array [
                 Object {
-                  "attribs": Object {},
+                  "attribs": Object {
+                    "class": "multiInputFormRow",
+                  },
                   "children": Array [
                     Object {
-                      "attribs": Object {},
+                      "attribs": Object {
+                        "class": "inputGroup",
+                      },
                       "children": Array [
                         Object {
-                          "attribs": Object {},
+                          "attribs": Object {
+                            "class": "inputLabel",
+                          },
                           "children": Array [
                             Object {
                               "data": "Locale",
@@ -45,6 +59,7 @@ initialize {
                           "namespace": "http://www.w3.org/1999/xhtml",
                           "next": Object {
                             "attribs": Object {
+                              "class": "select",
                               "name": "locale",
                               "required": "",
                             },
@@ -312,10 +327,12 @@ initialize {
                             "prev": [Circular],
                             "type": "tag",
                             "x-attribsNamespace": Object {
+                              "class": undefined,
                               "name": undefined,
                               "required": undefined,
                             },
                             "x-attribsPrefix": Object {
+                              "class": undefined,
                               "name": undefined,
                               "required": undefined,
                             },
@@ -323,11 +340,16 @@ initialize {
                           "parent": [Circular],
                           "prev": null,
                           "type": "tag",
-                          "x-attribsNamespace": Object {},
-                          "x-attribsPrefix": Object {},
+                          "x-attribsNamespace": Object {
+                            "class": undefined,
+                          },
+                          "x-attribsPrefix": Object {
+                            "class": undefined,
+                          },
                         },
                         Object {
                           "attribs": Object {
+                            "class": "select",
                             "name": "locale",
                             "required": "",
                           },
@@ -593,7 +615,9 @@ initialize {
                           "next": null,
                           "parent": [Circular],
                           "prev": Object {
-                            "attribs": Object {},
+                            "attribs": Object {
+                              "class": "inputLabel",
+                            },
                             "children": Array [
                               Object {
                                 "data": "Locale",
@@ -609,15 +633,21 @@ initialize {
                             "parent": [Circular],
                             "prev": null,
                             "type": "tag",
-                            "x-attribsNamespace": Object {},
-                            "x-attribsPrefix": Object {},
+                            "x-attribsNamespace": Object {
+                              "class": undefined,
+                            },
+                            "x-attribsPrefix": Object {
+                              "class": undefined,
+                            },
                           },
                           "type": "tag",
                           "x-attribsNamespace": Object {
+                            "class": undefined,
                             "name": undefined,
                             "required": undefined,
                           },
                           "x-attribsPrefix": Object {
+                            "class": undefined,
                             "name": undefined,
                             "required": undefined,
                           },
@@ -629,8 +659,12 @@ initialize {
                       "parent": [Circular],
                       "prev": null,
                       "type": "tag",
-                      "x-attribsNamespace": Object {},
-                      "x-attribsPrefix": Object {},
+                      "x-attribsNamespace": Object {
+                        "class": undefined,
+                      },
+                      "x-attribsPrefix": Object {
+                        "class": undefined,
+                      },
                     },
                   ],
                   "name": "div",
@@ -639,8 +673,12 @@ initialize {
                   "parent": [Circular],
                   "prev": null,
                   "type": "tag",
-                  "x-attribsNamespace": Object {},
-                  "x-attribsPrefix": Object {},
+                  "x-attribsNamespace": Object {
+                    "class": undefined,
+                  },
+                  "x-attribsPrefix": Object {
+                    "class": undefined,
+                  },
                 },
               ],
               "name": "div",
@@ -649,26 +687,42 @@ initialize {
               "parent": [Circular],
               "prev": [Circular],
               "type": "tag",
-              "x-attribsNamespace": Object {},
-              "x-attribsPrefix": Object {},
+              "x-attribsNamespace": Object {
+                "class": undefined,
+              },
+              "x-attribsPrefix": Object {
+                "class": undefined,
+              },
             },
             "parent": [Circular],
             "prev": null,
             "type": "tag",
-            "x-attribsNamespace": Object {},
-            "x-attribsPrefix": Object {},
+            "x-attribsNamespace": Object {
+              "class": undefined,
+            },
+            "x-attribsPrefix": Object {
+              "class": undefined,
+            },
           },
           Object {
-            "attribs": Object {},
+            "attribs": Object {
+              "class": "form",
+            },
             "children": Array [
               Object {
-                "attribs": Object {},
+                "attribs": Object {
+                  "class": "multiInputFormRow",
+                },
                 "children": Array [
                   Object {
-                    "attribs": Object {},
+                    "attribs": Object {
+                      "class": "inputGroup",
+                    },
                     "children": Array [
                       Object {
-                        "attribs": Object {},
+                        "attribs": Object {
+                          "class": "inputLabel",
+                        },
                         "children": Array [
                           Object {
                             "data": "Locale",
@@ -682,6 +736,7 @@ initialize {
                         "namespace": "http://www.w3.org/1999/xhtml",
                         "next": Object {
                           "attribs": Object {
+                            "class": "select",
                             "name": "locale",
                             "required": "",
                           },
@@ -949,10 +1004,12 @@ initialize {
                           "prev": [Circular],
                           "type": "tag",
                           "x-attribsNamespace": Object {
+                            "class": undefined,
                             "name": undefined,
                             "required": undefined,
                           },
                           "x-attribsPrefix": Object {
+                            "class": undefined,
                             "name": undefined,
                             "required": undefined,
                           },
@@ -960,11 +1017,16 @@ initialize {
                         "parent": [Circular],
                         "prev": null,
                         "type": "tag",
-                        "x-attribsNamespace": Object {},
-                        "x-attribsPrefix": Object {},
+                        "x-attribsNamespace": Object {
+                          "class": undefined,
+                        },
+                        "x-attribsPrefix": Object {
+                          "class": undefined,
+                        },
                       },
                       Object {
                         "attribs": Object {
+                          "class": "select",
                           "name": "locale",
                           "required": "",
                         },
@@ -1230,7 +1292,9 @@ initialize {
                         "next": null,
                         "parent": [Circular],
                         "prev": Object {
-                          "attribs": Object {},
+                          "attribs": Object {
+                            "class": "inputLabel",
+                          },
                           "children": Array [
                             Object {
                               "data": "Locale",
@@ -1246,15 +1310,21 @@ initialize {
                           "parent": [Circular],
                           "prev": null,
                           "type": "tag",
-                          "x-attribsNamespace": Object {},
-                          "x-attribsPrefix": Object {},
+                          "x-attribsNamespace": Object {
+                            "class": undefined,
+                          },
+                          "x-attribsPrefix": Object {
+                            "class": undefined,
+                          },
                         },
                         "type": "tag",
                         "x-attribsNamespace": Object {
+                          "class": undefined,
                           "name": undefined,
                           "required": undefined,
                         },
                         "x-attribsPrefix": Object {
+                          "class": undefined,
                           "name": undefined,
                           "required": undefined,
                         },
@@ -1266,8 +1336,12 @@ initialize {
                     "parent": [Circular],
                     "prev": null,
                     "type": "tag",
-                    "x-attribsNamespace": Object {},
-                    "x-attribsPrefix": Object {},
+                    "x-attribsNamespace": Object {
+                      "class": undefined,
+                    },
+                    "x-attribsPrefix": Object {
+                      "class": undefined,
+                    },
                   },
                 ],
                 "name": "div",
@@ -1276,8 +1350,12 @@ initialize {
                 "parent": [Circular],
                 "prev": null,
                 "type": "tag",
-                "x-attribsNamespace": Object {},
-                "x-attribsPrefix": Object {},
+                "x-attribsNamespace": Object {
+                  "class": undefined,
+                },
+                "x-attribsPrefix": Object {
+                  "class": undefined,
+                },
               },
             ],
             "name": "div",
@@ -1285,7 +1363,9 @@ initialize {
             "next": null,
             "parent": [Circular],
             "prev": Object {
-              "attribs": Object {},
+              "attribs": Object {
+                "class": "heading",
+              },
               "children": Array [
                 Object {
                   "data": "Settings",
@@ -1301,12 +1381,20 @@ initialize {
               "parent": [Circular],
               "prev": null,
               "type": "tag",
-              "x-attribsNamespace": Object {},
-              "x-attribsPrefix": Object {},
+              "x-attribsNamespace": Object {
+                "class": undefined,
+              },
+              "x-attribsPrefix": Object {
+                "class": undefined,
+              },
             },
             "type": "tag",
-            "x-attribsNamespace": Object {},
-            "x-attribsPrefix": Object {},
+            "x-attribsNamespace": Object {
+              "class": undefined,
+            },
+            "x-attribsPrefix": Object {
+              "class": undefined,
+            },
           },
         ],
         "name": "div",
@@ -1315,8 +1403,12 @@ initialize {
         "parent": [Circular],
         "prev": null,
         "type": "tag",
-        "x-attribsNamespace": Object {},
-        "x-attribsPrefix": Object {},
+        "x-attribsNamespace": Object {
+          "class": undefined,
+        },
+        "x-attribsPrefix": Object {
+          "class": undefined,
+        },
       },
     ],
     "name": "div",
@@ -1339,8 +1431,12 @@ initialize {
       "x-attribsPrefix": Object {},
     },
     "type": "tag",
-    "x-attribsNamespace": Object {},
-    "x-attribsPrefix": Object {},
+    "x-attribsNamespace": Object {
+      "class": undefined,
+    },
+    "x-attribsPrefix": Object {
+      "class": undefined,
+    },
   },
   "_root": [Circular],
   "length": 1,

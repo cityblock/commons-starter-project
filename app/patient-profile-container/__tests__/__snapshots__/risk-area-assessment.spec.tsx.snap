@@ -105,64 +105,64 @@ Array [
 exports[`renders a risk area assessment 1`] = `
 <div>
   <div
-    className=""
+    className="sortSearchBar buttonBar"
   >
     <div
-      className="undefined"
+      className="invertedButton cancelButton hidden"
       onClick={[Function]}
     >
       Cancel
     </div>
     <div
-      className=""
+      className="invertedButton toolsButton"
       onClick={[Function]}
     >
       Administer tool
     </div>
     <div
-      className="undefined"
+      className="button saveButton hidden disabled"
       onClick={[Function]}
     >
       Save updates
     </div>
     <div
-      className="undefined"
+      className="button startButton disabled"
       onClick={[Function]}
     >
       Start assessment
     </div>
   </div>
   <div
-    className={undefined}
+    className="riskAreasPanel"
   >
     <div
-      className={undefined}
+      className="riskAssessment"
     >
       <div
-        className=""
+        className="riskAssessmentTitle mediumRisk"
       >
         <div
-          className={undefined}
+          className="title"
         >
           <div
-            className={undefined}
+            className="titleIcon"
           />
           <div
-            className={undefined}
+            className="titleText"
           >
             Loading...
           </div>
         </div>
         <div
-          className={undefined}
+          className="meta"
         >
           <div
-            className={undefined}
+            className="lastUpdatedLabel"
           >
             Last updated:
           </div>
           <div
-            className={undefined}
+            className="lastUpdatedValue"
           >
             Loading...
           </div>

@@ -4,29 +4,29 @@ exports[`renders care plan suggestions 1`] = `
 <div>
   <br />
   <div
-    className={undefined}
+    className="smallText"
   >
     Care Plan Suggestions
   </div>
   <br />
   <div>
     <div
-      className=""
+      className="smallText smallMargin"
     >
       Concern Suggestions
     </div>
     <div
-      className={undefined}
+      className="indented"
     >
       <div>
         <div
-          className=""
+          className="smallText smallMargin"
         >
           <div
-            className={undefined}
+            className="flexRow"
           >
             <div
-              className={undefined}
+              className="deleteSuggestionButton"
               onClick={[Function]}
             />
             <div>
@@ -38,22 +38,22 @@ exports[`renders care plan suggestions 1`] = `
     </div>
     <br />
     <div
-      className=""
+      className="smallText smallMargin"
     >
       Goal/Task Suggestions
     </div>
     <div
-      className={undefined}
+      className="indented"
     >
       <div>
         <div
-          className=""
+          className="smallText smallMargin"
         >
           <div
-            className={undefined}
+            className="flexRow"
           >
             <div
-              className={undefined}
+              className="deleteSuggestionButton"
               onClick={[Function]}
             />
             <div>
@@ -61,7 +61,7 @@ exports[`renders care plan suggestions 1`] = `
             </div>
           </div>
           <ul
-            className={undefined}
+            className="smallMarginPadding"
           >
             <li>
               Task Template Title
@@ -73,29 +73,29 @@ exports[`renders care plan suggestions 1`] = `
   </div>
   <br />
   <div
-    className={undefined}
+    className="smallText"
   >
     Add Care Plan Suggestion
   </div>
   <div
-    className={undefined}
+    className="borderContainer"
   >
     <div
-      className={undefined}
+      className="loadingHidden"
     >
       <div
-        className={undefined}
+        className="loadingContainer"
       >
         <div
-          className={undefined}
+          className="loadingSpinner"
         />
       </div>
     </div>
     <div
-      className={undefined}
+      className="flexInputGroup"
     >
       <select
-        className=""
+        className="select inputSmall flexInputItem"
         name="suggestionType"
         onChange={[Function]}
         value=""
@@ -120,13 +120,13 @@ exports[`renders care plan suggestions 1`] = `
       </select>
     </div>
     <div
-      className={undefined}
+      className="formBottom"
     >
       <div
-        className={undefined}
+        className="formBottomContent"
       >
         <input
-          className={undefined}
+          className="submitButton"
           onClick={[Function]}
           type="submit"
           value="Add care plan suggestion"

@@ -3,13 +3,13 @@
 exports[`renders a care plan suggestion 1`] = `
 <div>
   <div
-    className=""
+    className="smallText smallMargin"
   >
     <div
-      className={undefined}
+      className="flexRow"
     >
       <div
-        className={undefined}
+        className="deleteSuggestionButton"
         onClick={[Function]}
       />
       <div>

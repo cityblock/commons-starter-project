@@ -2,26 +2,26 @@
 
 exports[`renders error without progress note template 1`] = `
 <div
-  className={undefined}
+  className="container"
 >
   <div
-    className={undefined}
+    className="loadingError"
   >
     <div
-      className={undefined}
+      className="loadingErrorIcon"
     />
     <div
-      className={undefined}
+      className="loadingErrorLabel"
     >
       Unable to load progress note template
     </div>
     <div
-      className={undefined}
+      className="loadingErrorSubheading"
     >
       Sorry, something went wrong. Please try again.
     </div>
     <div
-      className=""
+      className="loadingErrorButton invertedButton"
       onClick={[Function]}
     >
       Try again
@@ -32,10 +32,10 @@ exports[`renders error without progress note template 1`] = `
 
 exports[`renders loading 1`] = `
 <div
-  className={undefined}
+  className="container"
 >
   <div
-    className={undefined}
+    className="loading"
   >
     Loading...
   </div>
@@ -44,76 +44,76 @@ exports[`renders loading 1`] = `
 
 exports[`renders progress note template 1`] = `
 <div
-  className=""
+  className="container"
 >
   <div
-    className="undefined"
+    className="deleteConfirmation hidden"
   >
     <div
-      className={undefined}
+      className="deleteConfirmationIcon"
     />
     <div
-      className={undefined}
+      className="deleteConfirmationText"
     >
       Are you sure you want to delete this progress note template?
     </div>
     <div
-      className={undefined}
+      className="deleteConfirmationButtons"
     >
       <div
-        className=""
+        className="deleteCancelButton invertedButton"
         onClick={[Function]}
       >
         Cancel
       </div>
       <div
-        className={undefined}
+        className="deleteConfirmButton"
         onClick={[Function]}
       >
         Yes, delete
       </div>
     </div>
     <div
-      className="undefined"
+      className="deleteError hidden"
     >
       <div
-        className=""
+        className="redText smallText"
       >
         Error deleting progress note template.
       </div>
       <div
-        className={undefined}
+        className="smallText"
       >
         Please try again.
       </div>
     </div>
   </div>
   <div
-    className=""
+    className="itemContainer"
   >
     <div>
       <div
-        className={undefined}
+        className="infoRow"
       >
         <div
-          className={undefined}
+          className="controls"
         >
           <Link
-            className={undefined}
+            className="close"
             replace={false}
             to="/route/base"
           >
             Close
           </Link>
           <div
-            className={undefined}
+            className="menuItem"
             onClick={[Function]}
           >
             <div
-              className={undefined}
+              className="trashIcon"
             />
             <div
-              className={undefined}
+              className="menuLabel"
             >
               Delete progress note template
             </div>
@@ -122,21 +122,21 @@ exports[`renders progress note template 1`] = `
       </div>
     </div>
     <div
-      className={undefined}
+      className="itemBody"
     >
       <div
-        className={undefined}
+        className="smallText"
       >
         Title:
       </div>
       <div
-        className=""
+        className="largeText title"
         onClick={[Function]}
       >
         Progress Note Template Title
       </div>
       <div
-        className=""
+        className="largeTextEditor hidden"
       >
         <input
           name="editedTitle"

@@ -2,40 +2,40 @@
 
 exports[`renders task template create-edit 1`] = `
 <form
-  className={undefined}
+  className="borderContainer"
   onSubmit={[Function]}
 >
   <div
-    className={undefined}
+    className="loadingHidden"
   >
     <div
-      className={undefined}
+      className="loadingContainer"
     >
       <div
-        className={undefined}
+        className="loadingSpinner"
       />
     </div>
   </div>
   <div
-    className={undefined}
+    className="inputGroup"
   >
     <div
-      className={undefined}
+      className="smallText"
     >
       Task Template ID: 
       task-template-id
     </div>
     <br />
     <div
-      className={undefined}
+      className="inlineInputGroup"
     >
       <div
-        className={undefined}
+        className="smallText"
       >
         Title:
       </div>
       <input
-        className=""
+        className="input inputSmall"
         name="title"
         onChange={[Function]}
         placeholder="Enter task title"
@@ -43,15 +43,15 @@ exports[`renders task template create-edit 1`] = `
       />
     </div>
     <div
-      className={undefined}
+      className="inlineInputGroup"
     >
       <div
-        className={undefined}
+        className="smallText"
       >
         Priority:
       </div>
       <select
-        className=""
+        className="select inputSmall"
         name="priority"
         onChange={[Function]}
         value="high"
@@ -81,15 +81,15 @@ exports[`renders task template create-edit 1`] = `
       </select>
     </div>
     <div
-      className={undefined}
+      className="inlineInputGroup"
     >
       <div
-        className={undefined}
+        className="smallText"
       >
         Repeating:
       </div>
       <select
-        className=""
+        className="select inputSmall"
         name="repeating"
         onChange={[Function]}
         required={true}
@@ -108,15 +108,15 @@ exports[`renders task template create-edit 1`] = `
       </select>
     </div>
     <div
-      className={undefined}
+      className="inlineInputGroup"
     >
       <div
-        className={undefined}
+        className="smallText"
       >
         Completed Within Interval:
       </div>
       <select
-        className=""
+        className="select inputSmall"
         name="completedWithinInterval"
         onChange={[Function]}
         value="hour"
@@ -156,15 +156,15 @@ exports[`renders task template create-edit 1`] = `
       </select>
     </div>
     <div
-      className={undefined}
+      className="inlineInputGroup"
     >
       <div
-        className={undefined}
+        className="smallText"
       >
         Completed Within Number:
       </div>
       <select
-        className=""
+        className="select inputSmall"
         name="completedWithinNumber"
         onChange={[Function]}
         value="1"
@@ -229,15 +229,15 @@ exports[`renders task template create-edit 1`] = `
       </select>
     </div>
     <div
-      className={undefined}
+      className="inlineInputGroup"
     >
       <div
-        className={undefined}
+        className="smallText"
       >
         Default Assignee Role:
       </div>
       <select
-        className=""
+        className="select inputSmall"
         name="careTeamAssigneeRole"
         onChange={[Function]}
         value="physician"
@@ -273,13 +273,13 @@ exports[`renders task template create-edit 1`] = `
     </div>
   </div>
   <div
-    className={undefined}
+    className="formBottom"
   >
     <div
-      className={undefined}
+      className="formBottomContent"
     >
       <input
-        className={undefined}
+        className="submitButton"
         type="submit"
         value="Save"
       />

@@ -2,18 +2,18 @@
 
 exports[`renders a removed task template 1`] = `
 <div
-  className=""
+  className="taskTemplateRow removedTask highPriority"
 >
   <div
-    className={undefined}
+    className="taskTemplateTitle"
   >
     Task Template Title
   </div>
   <div
-    className={undefined}
+    className="taskTemplateInfoControls"
   >
     <div
-      className={undefined}
+      className="taskTemplateAssigneeAvatar"
       style={
         Object {
           "backgroundImage": "url(https://bit.ly/2weRwJm)",
@@ -21,15 +21,15 @@ exports[`renders a removed task template 1`] = `
       }
     />
     <div
-      className={undefined}
+      className="taskTemplateDueDate"
     >
       <div
-        className={undefined}
+        className="taskTemplateDueDateLabel"
       >
         Due:
       </div>
       <div
-        className={undefined}
+        className="taskTemplateDueDateText"
       >
         <span>
           Jul 19, 2017
@@ -37,7 +37,7 @@ exports[`renders a removed task template 1`] = `
       </div>
     </div>
     <div
-      className={undefined}
+      className="taskTemplateRejectButton"
       onClick={[Function]}
     />
   </div>
@@ -46,18 +46,18 @@ exports[`renders a removed task template 1`] = `
 
 exports[`renders a selected task template 1`] = `
 <div
-  className=""
+  className="taskTemplateRow highPriority"
 >
   <div
-    className={undefined}
+    className="taskTemplateTitle"
   >
     Task Template Title
   </div>
   <div
-    className={undefined}
+    className="taskTemplateInfoControls"
   >
     <div
-      className={undefined}
+      className="taskTemplateAssigneeAvatar"
       style={
         Object {
           "backgroundImage": "url(https://bit.ly/2weRwJm)",
@@ -65,15 +65,15 @@ exports[`renders a selected task template 1`] = `
       }
     />
     <div
-      className={undefined}
+      className="taskTemplateDueDate"
     >
       <div
-        className={undefined}
+        className="taskTemplateDueDateLabel"
       >
         Due:
       </div>
       <div
-        className={undefined}
+        className="taskTemplateDueDateText"
       >
         <span>
           Jul 19, 2017
@@ -81,7 +81,7 @@ exports[`renders a selected task template 1`] = `
       </div>
     </div>
     <div
-      className={undefined}
+      className="taskTemplateRejectButton"
       onClick={[Function]}
     />
   </div>

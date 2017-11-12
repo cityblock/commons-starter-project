@@ -2,33 +2,33 @@
 
 exports[`builder concerns renders progress note popup 1`] = `
 <div
-  className={undefined}
+  className="background"
 >
   <div
-    className="undefined"
+    className="content noContentPadding"
   >
     <div>
       <div
-        className={undefined}
+        className="topBar"
       >
         <div
-          className={undefined}
+          className="topBarLabel"
         >
           Progress Note: 
         </div>
         <div
-          className={undefined}
+          className="closeButton"
           onClick={[Function]}
         />
       </div>
       <div
-        className={undefined}
+        className="middleBar"
       >
         <div
-          className={undefined}
+          className="patientContainer"
         >
           <div
-            className={undefined}
+            className="patientPhoto"
             style={
               Object {
                 "backgroundImage": "url('http://bit.ly/2vaOMQJ')",
@@ -36,39 +36,39 @@ exports[`builder concerns renders progress note popup 1`] = `
             }
           />
           <div
-            className={undefined}
+            className="patientContainerRight"
           >
             <div
-              className={undefined}
+              className="patientName"
             >
               Unknown
             </div>
           </div>
         </div>
         <div
-          className={undefined}
+          className="button"
           onClick={[Function]}
         >
           Sign and Submit
         </div>
       </div>
       <div
-        className={undefined}
+        className="tabs"
       >
         <a
-          className="undefined"
+          className="tab selectedTab"
           onClick={[Function]}
         >
           Context
         </a>
         <a
-          className=""
+          className="tab"
           onClick={[Function]}
         >
           Activity
         </a>
         <a
-          className=""
+          className="tab"
           onClick={[Function]}
         >
           Tasks
@@ -76,15 +76,15 @@ exports[`builder concerns renders progress note popup 1`] = `
       </div>
       <div>
         <div
-          className={undefined}
+          className="encounterTypeContainer"
         >
           <div
-            className={undefined}
+            className="encounterTypeLabel"
           >
             Select encounter type:
           </div>
           <select
-            className={undefined}
+            className="encounterTypeSelect"
             onChange={[Function]}
             value={undefined}
           >
@@ -110,27 +110,27 @@ exports[`builder concerns renders progress note popup with templates renders pro
 >
   <div>
     <div
-      className={undefined}
+      className="topBar"
     >
       <div
-        className={undefined}
+        className="topBarLabel"
       >
         Progress Note: 
         Progress Note Template Title
       </div>
       <div
-        className={undefined}
+        className="closeButton"
         onClick={[Function]}
       />
     </div>
     <div
-      className={undefined}
+      className="middleBar"
     >
       <div
-        className={undefined}
+        className="patientContainer"
       >
         <div
-          className={undefined}
+          className="patientPhoto"
           style={
             Object {
               "backgroundImage": "url('http://bit.ly/2vaOMQJ')",
@@ -138,10 +138,10 @@ exports[`builder concerns renders progress note popup with templates renders pro
           }
         />
         <div
-          className={undefined}
+          className="patientContainerRight"
         >
           <div
-            className={undefined}
+            className="patientName"
           >
             Bob Smith
           </div>
@@ -161,7 +161,7 @@ exports[`builder concerns renders progress note popup with templates renders pro
       </FormattedMessage>
     </div>
     <div
-      className={undefined}
+      className="tabs"
     >
       <FormattedMessage
         id="patient.context"
@@ -210,26 +210,26 @@ exports[`builder concerns renders progress note popup with templates renders pro
 >
   <div>
     <div
-      className={undefined}
+      className="topBar"
     >
       <div
-        className={undefined}
+        className="topBarLabel"
       >
         Progress Note: 
       </div>
       <div
-        className={undefined}
+        className="closeButton"
         onClick={[Function]}
       />
     </div>
     <div
-      className={undefined}
+      className="middleBar"
     >
       <div
-        className={undefined}
+        className="patientContainer"
       >
         <div
-          className={undefined}
+          className="patientPhoto"
           style={
             Object {
               "backgroundImage": "url('http://bit.ly/2vaOMQJ')",
@@ -237,10 +237,10 @@ exports[`builder concerns renders progress note popup with templates renders pro
           }
         />
         <div
-          className={undefined}
+          className="patientContainerRight"
         >
           <div
-            className={undefined}
+            className="patientName"
           >
             Bob Smith
           </div>
@@ -254,7 +254,7 @@ exports[`builder concerns renders progress note popup with templates renders pro
       </FormattedMessage>
     </div>
     <div
-      className={undefined}
+      className="tabs"
     >
       <FormattedMessage
         id="patient.context"
@@ -299,18 +299,18 @@ exports[`builder concerns renders progress note popup with templates renders pro
 exports[`renders timeline 1`] = `
 <div>
   <div
-    className={undefined}
+    className="sortSearchBar"
   >
     <div
-      className={undefined}
+      className="sort"
     >
       <div
-        className={undefined}
+        className="sortLabel"
       >
         Sort by:
       </div>
       <div
-        className={undefined}
+        className="sortDropdown"
       >
         <select
           value="Newest first"
@@ -323,7 +323,7 @@ exports[`renders timeline 1`] = `
         </select>
       </div>
       <div
-        className=""
+        className="search searchLeftPad"
       >
         <input
           placeholder="Search by user or keywords"
@@ -333,10 +333,10 @@ exports[`renders timeline 1`] = `
       </div>
     </div>
     <div
-      className={undefined}
+      className="saveButtonGroup"
     >
       <div
-        className=""
+        className="button saveButton"
         onClick={[Function]}
       >
         <span>
@@ -346,30 +346,30 @@ exports[`renders timeline 1`] = `
     </div>
   </div>
   <div
-    className={undefined}
+    className="encountersPanel"
   >
     <div
-      className={undefined}
+      className="encounters"
     >
       <div
-        className={undefined}
+        className="encountersLoading"
       >
         Loading...
       </div>
     </div>
   </div>
   <div
-    className="undefined"
+    className="lightbox hidden"
   >
     <div
-      className={undefined}
+      className="background"
       onClick={[Function]}
     />
     <div
-      className={undefined}
+      className="foreground"
     >
       <div
-        className={undefined}
+        className="viewer"
         style={
           Object {
             "backgroundImage": "none",
@@ -377,16 +377,16 @@ exports[`renders timeline 1`] = `
         }
       >
         <div
-          className={undefined}
+          className="overlay"
         >
           <div
-            className={undefined}
+            className="header"
           >
             <div
-              className={undefined}
+              className="imageCount"
             >
               <div
-                className={undefined}
+                className="imageCountIcon"
               />
               <div>
                 1 
@@ -400,19 +400,19 @@ exports[`renders timeline 1`] = `
               </div>
             </div>
             <div
-              className={undefined}
+              className="close"
               onClick={[Function]}
             />
           </div>
           <div
-            className={undefined}
+            className="controls"
           >
             <div
-              className="undefined"
+              className="backArrow hidden"
               onClick={[Function]}
             />
             <div
-              className=""
+              className="nextArrow"
               onClick={[Function]}
             />
           </div>

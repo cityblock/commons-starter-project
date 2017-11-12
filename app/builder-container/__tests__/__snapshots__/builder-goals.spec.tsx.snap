@@ -2,16 +2,16 @@
 
 exports[`renders builder goals 1`] = `
 <div
-  className={undefined}
+  className="container"
 >
   <div
-    className={undefined}
+    className="sortSearchBar"
   >
     <div
-      className={undefined}
+      className="createContainer"
     >
       <div
-        className={undefined}
+        className="createButton"
         onClick={[Function]}
       >
         Create Goal
@@ -19,34 +19,34 @@ exports[`renders builder goals 1`] = `
     </div>
   </div>
   <div
-    className={undefined}
+    className="bottomContainer"
   >
     <div
-      className=""
+      className="itemsList"
     >
       <a
-        className=""
+        className="container"
         href="/route/base/goal-id"
         onClick={[Function]}
       >
         <div
-          className={undefined}
+          className="title"
         >
           Goal Title
         </div>
         <div
-          className={undefined}
+          className="meta"
         >
           <div
-            className=""
+            className="dateSection createdAtSection"
           >
             <span
-              className={undefined}
+              className="dateLabel"
             >
               Created:
             </span>
             <span
-              className={undefined}
+              className="dateValue"
             >
               6 days ago
             </span>
@@ -55,7 +55,7 @@ exports[`renders builder goals 1`] = `
       </a>
     </div>
     <div
-      className=""
+      className="itemContainer"
     />
   </div>
 </div>
@@ -63,16 +63,16 @@ exports[`renders builder goals 1`] = `
 
 exports[`renders goal create 1`] = `
 <div
-  className={undefined}
+  className="container"
 >
   <div
-    className={undefined}
+    className="sortSearchBar"
   >
     <div
-      className={undefined}
+      className="createContainer"
     >
       <div
-        className={undefined}
+        className="createButton"
         onClick={[Function]}
       >
         Create Goal
@@ -80,10 +80,10 @@ exports[`renders goal create 1`] = `
     </div>
   </div>
   <div
-    className={undefined}
+    className="bottomContainer"
   >
     <div
-      className="undefined"
+      className="itemsList compressed"
     >
       <Unknown
         goal={
@@ -115,7 +115,7 @@ exports[`renders goal create 1`] = `
       />
     </div>
     <div
-      className="undefined"
+      className="itemContainer visible"
     >
       <Connect(Apollo(GoalCreate))
         onClose={[Function]}

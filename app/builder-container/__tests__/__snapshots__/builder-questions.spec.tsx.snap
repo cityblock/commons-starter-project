@@ -2,21 +2,21 @@
 
 exports[`renders builder questions 1`] = `
 <div
-  className={undefined}
+  className="container"
 >
   <div
-    className={undefined}
+    className="sortSearchBar"
   >
     <div
-      className={undefined}
+      className="sort"
     >
       <div
-        className={undefined}
+        className="sortLabel"
       >
         Questions for domain/tool/progress note template:
       </div>
       <div
-        className={undefined}
+        className="sortDropdown"
       >
         <select
           onChange={[Function]}
@@ -32,10 +32,10 @@ exports[`renders builder questions 1`] = `
       </div>
     </div>
     <div
-      className={undefined}
+      className="createContainer"
     >
       <div
-        className={undefined}
+        className="createButton"
         onClick={[Function]}
       >
         Create Question
@@ -43,26 +43,26 @@ exports[`renders builder questions 1`] = `
     </div>
   </div>
   <div
-    className={undefined}
+    className="bottomContainer"
   >
     <div
-      className="undefined"
+      className="itemsList compressed"
     >
       <div
-        className={undefined}
+        className="emptyMessage"
       >
         <div
-          className={undefined}
+          className="emptyLogo"
         />
         <div
-          className={undefined}
+          className="emptyLabel"
         >
           No Questions
         </div>
       </div>
     </div>
     <div
-      className="undefined"
+      className="itemContainer visible"
     />
   </div>
 </div>

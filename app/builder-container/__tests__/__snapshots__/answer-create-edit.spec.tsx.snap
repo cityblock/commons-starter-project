@@ -2,40 +2,40 @@
 
 exports[`renders answer create-edit 1`] = `
 <form
-  className={undefined}
+  className="borderContainer"
   onSubmit={[Function]}
 >
   <div
-    className={undefined}
+    className="loadingHidden"
   >
     <div
-      className={undefined}
+      className="loadingContainer"
     >
       <div
-        className={undefined}
+        className="loadingSpinner"
       />
     </div>
   </div>
   <div
-    className={undefined}
+    className="inputGroup"
   >
     <div
-      className={undefined}
+      className="smallText"
     >
       Answer ID: 
       answer-id
     </div>
     <br />
     <div
-      className={undefined}
+      className="inlineInputGroup"
     >
       <div
-        className={undefined}
+        className="smallText"
       >
         Order:
       </div>
       <select
-        className=""
+        className="select inputSmall"
         name="order"
         onChange={[Function]}
         value={1}
@@ -195,15 +195,15 @@ exports[`renders answer create-edit 1`] = `
       </select>
     </div>
     <div
-      className={undefined}
+      className="inlineInputGroup"
     >
       <div
-        className={undefined}
+        className="smallText"
       >
         Display Value:
       </div>
       <input
-        className=""
+        className="input inputSmall"
         name="displayValue"
         onChange={[Function]}
         placeholder="Enter answer display value"
@@ -211,15 +211,15 @@ exports[`renders answer create-edit 1`] = `
       />
     </div>
     <div
-      className={undefined}
+      className="inlineInputGroup"
     >
       <div
-        className={undefined}
+        className="smallText"
       >
         Backend Value:
       </div>
       <input
-        className=""
+        className="input inputSmall"
         name="value"
         onChange={[Function]}
         placeholder="Enter answer value"
@@ -227,15 +227,15 @@ exports[`renders answer create-edit 1`] = `
       />
     </div>
     <div
-      className={undefined}
+      className="inlineInputGroup"
     >
       <div
-        className={undefined}
+        className="smallText"
       >
         Backend value type:
       </div>
       <select
-        className=""
+        className="select inputSmall"
         name="valueType"
         onChange={[Function]}
         value="boolean"
@@ -265,15 +265,15 @@ exports[`renders answer create-edit 1`] = `
       </select>
     </div>
     <div
-      className={undefined}
+      className="inlineInputGroup"
     >
       <div
-        className={undefined}
+        className="smallText"
       >
         Risk adjustment type:
       </div>
       <select
-        className=""
+        className="select inputSmall"
         name="riskAdjustmentType"
         onChange={[Function]}
         required={true}
@@ -304,15 +304,15 @@ exports[`renders answer create-edit 1`] = `
       </select>
     </div>
     <div
-      className={undefined}
+      className="inlineInputGroup"
     >
       <div
-        className={undefined}
+        className="smallText"
       >
         Summary Text:
       </div>
       <input
-        className=""
+        className="input inputSmall"
         name="summaryText"
         onChange={[Function]}
         placeholder="Enter summary text"
@@ -320,29 +320,29 @@ exports[`renders answer create-edit 1`] = `
       />
     </div>
     <div
-      className={undefined}
+      className="radioGroup"
     >
       <div
-        className={undefined}
+        className="radioGroupLabel"
       >
         <div
-          className={undefined}
+          className="smallText"
         >
           Display in summary?
         </div>
       </div>
       <div
-        className=""
+        className="radioGroupOptions radioGroup"
       >
         <div
-          className={undefined}
+          className="radioGroupItem"
         >
           <div
-            className={undefined}
+            className="radioGroupContainer"
           >
             <input
               checked={true}
-              className={undefined}
+              className="radio"
               name="inSummary"
               onChange={[Function]}
               type="radio"
@@ -351,20 +351,20 @@ exports[`renders answer create-edit 1`] = `
             <label />
           </div>
           <span
-            className={undefined}
+            className="radioLabel"
           >
             Yes
           </span>
         </div>
         <div
-          className={undefined}
+          className="radioGroupItem"
         >
           <div
-            className={undefined}
+            className="radioGroupContainer"
           >
             <input
               checked={false}
-              className={undefined}
+              className="radio"
               name="inSummary"
               onChange={[Function]}
               type="radio"
@@ -373,7 +373,7 @@ exports[`renders answer create-edit 1`] = `
             <label />
           </div>
           <span
-            className={undefined}
+            className="radioLabel"
           >
             No
           </span>
@@ -384,59 +384,59 @@ exports[`renders answer create-edit 1`] = `
   <div>
     <br />
     <div
-      className={undefined}
+      className="smallText"
     >
       Care Plan Suggestions
     </div>
     <br />
     <div>
       <div
-        className=""
+        className="smallText smallMargin"
       >
         Concern Suggestions
       </div>
       <div
-        className=""
+        className="smallText indented"
       >
         No concern suggestions
       </div>
       <br />
       <div
-        className=""
+        className="smallText smallMargin"
       >
         Goal/Task Suggestions
       </div>
       <div
-        className=""
+        className="smallText indented"
       >
         No goal/task suggestions
       </div>
     </div>
     <br />
     <div
-      className={undefined}
+      className="smallText"
     >
       Add Care Plan Suggestion
     </div>
     <div
-      className={undefined}
+      className="borderContainer"
     >
       <div
-        className={undefined}
+        className="loadingHidden"
       >
         <div
-          className={undefined}
+          className="loadingContainer"
         >
           <div
-            className={undefined}
+            className="loadingSpinner"
           />
         </div>
       </div>
       <div
-        className={undefined}
+        className="flexInputGroup"
       >
         <select
-          className=""
+          className="select inputSmall flexInputItem"
           name="suggestionType"
           onChange={[Function]}
           value=""
@@ -461,13 +461,13 @@ exports[`renders answer create-edit 1`] = `
         </select>
       </div>
       <div
-        className={undefined}
+        className="formBottom"
       >
         <div
-          className={undefined}
+          className="formBottomContent"
         >
           <input
-            className={undefined}
+            className="submitButton"
             onClick={[Function]}
             type="submit"
             value="Add care plan suggestion"
@@ -477,13 +477,13 @@ exports[`renders answer create-edit 1`] = `
     </div>
   </div>
   <div
-    className={undefined}
+    className="formBottom"
   >
     <div
-      className={undefined}
+      className="formBottomContent"
     >
       <input
-        className={undefined}
+        className="submitButton"
         type="submit"
         value="Save"
       />

@@ -2,13 +2,13 @@
 
 exports[`renders free text answer 1`] = `
 <div
-  className={undefined}
+  className="questionBody"
 >
   <div
-    className={undefined}
+    className="textArea"
   >
     <textarea
-      className={undefined}
+      className="textarea"
       disabled={false}
       onChange={[Function]}
       value="true"

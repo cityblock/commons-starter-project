@@ -2,42 +2,42 @@
 
 exports[`question row renders question row 1`] = `
 <a
-  className="undefined"
+  className="container selected"
   href="/foo/bar/cool-question-id"
   onClick={[Function]}
 >
   <div
-    className={undefined}
+    className="title"
   >
     Question Title
   </div>
   <div
-    className={undefined}
+    className="meta"
   >
     <div
-      className=""
+      className="dateSection orderSection"
     >
       <span
-        className={undefined}
+        className="dateLabel"
       >
         Order:
       </span>
       <span
-        className={undefined}
+        className="dateValue"
       >
         1
       </span>
     </div>
     <div
-      className=""
+      className="dateSection createdAtSection"
     >
       <span
-        className={undefined}
+        className="dateLabel"
       >
         Created:
       </span>
       <span
-        className={undefined}
+        className="dateValue"
       >
         6 days ago
       </span>

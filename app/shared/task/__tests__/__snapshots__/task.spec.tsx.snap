@@ -2,10 +2,10 @@
 
 exports[`renders task 1`] = `
 <div
-  className={undefined}
+  className="container"
 >
   <div
-    className={undefined}
+    className="loading"
   >
     Loading...
   </div>

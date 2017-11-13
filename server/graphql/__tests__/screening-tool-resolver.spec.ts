@@ -176,8 +176,8 @@ describe('screening tool resolver tests', () => {
       expect(deletedScreeningTool).toMatchObject({
         id: screeningTool.id,
       });
-      expect(deletedScreeningTool.deletedAt).not.toBeNull();
-      expect(deletedScreeningTool.deletedAt).not.toBeUndefined();
+      expect(deletedScreeningTool.deletedAt).not.toBeFalsy();
+      expect(deletedScreeningTool.deletedAt).not.toBeFalsy();
     });
   });
 });

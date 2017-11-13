@@ -96,7 +96,7 @@ describe('screening tool model', () => {
     });
 
     const fetchedScreeningTool = await ScreeningTool.get(screeningTool.id);
-    expect(fetchedScreeningTool.deletedAt).toBeNull();
+    expect(fetchedScreeningTool.deletedAt).toBeFalsy();
 
     await ScreeningTool.delete(screeningTool.id);
 

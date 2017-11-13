@@ -207,7 +207,7 @@ describe('user tests', () => {
         userRole,
         homeClinicId: clinic.id,
       });
-      expect(user.lastLoginAt).toBeNull();
+      expect(user.lastLoginAt).toBeFalsy();
       mockGoogleOauthAuthorize(cityblockToken);
       const mutation = `mutation {
         userLogin(input: { googleAuthCode: "google-auth-code" }) {
@@ -223,7 +223,7 @@ describe('user tests', () => {
         lastName: 'Hasson',
       });
       const freshUser = await User.query().findById(user.id);
-      expect(freshUser!.lastLoginAt).not.toBeNull();
+      expect(freshUser!.lastLoginAt).not.toBeFalsy();
       expect(log).toBeCalled();
     });
 
@@ -235,7 +235,7 @@ describe('user tests', () => {
       });
       mockGoogleOauthAuthorize(cityblockToken);
 
-      expect(user.lastLoginAt).toBeNull();
+      expect(user.lastLoginAt).toBeFalsy();
       const mutation = `mutation {
         userLogin(input: { googleAuthCode: "google-auth-code" }) {
           authToken
@@ -244,7 +244,7 @@ describe('user tests', () => {
       await graphql(schema, mutation, null, { db, userRole });
 
       const freshUser = await User.query().findById(user.id);
-      expect(freshUser!.lastLoginAt).not.toBeNull();
+      expect(freshUser!.lastLoginAt).not.toBeFalsy();
     });
 
     it('errors if no user', async () => {

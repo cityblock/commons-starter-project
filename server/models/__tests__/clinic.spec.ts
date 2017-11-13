@@ -52,7 +52,7 @@ describe('clinic model', () => {
 
     it('returns null if calling getBy without a comparison parameter', async () => {
       const result = await Clinic.getBy('name');
-      expect(result).toBeNull();
+      expect(result).toBeFalsy();
     });
 
     it('throws an error when getting a clinic by an invalid id', async () => {

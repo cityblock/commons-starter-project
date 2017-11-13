@@ -252,8 +252,8 @@ describe('screening tool score range resolver tests', () => {
         minimumScore: 0,
         maximumScore: 10,
       });
-      expect(deletedScoreRange.deletedAt).not.toBeNull();
-      expect(deletedScoreRange.deletedAt).not.toBeUndefined();
+      expect(deletedScoreRange.deletedAt).not.toBeFalsy();
+      expect(deletedScoreRange.deletedAt).not.toBeFalsy();
     });
   });
 });

@@ -281,7 +281,7 @@ describe('event notification tests', () => {
   describe('dismiss event notification', () => {
     it('dismisses an event notification', async () => {
       const notification = await EventNotification.create({ userId: user.id });
-      expect(notification.seenAt).toBeUndefined();
+      expect(notification.seenAt).toBeFalsy();
 
       const mutation = `mutation {
         eventNotificationDismiss(input: { eventNotificationId: "${notification.id}" }) {
@@ -293,8 +293,8 @@ describe('event notification tests', () => {
         userRole,
         userId: user.id,
       });
-      expect(result.data!.eventNotificationDismiss.seenAt).not.toBeNull();
-      expect(result.data!.eventNotificationDismiss.seenAt).not.toBeUndefined();
+      expect(result.data!.eventNotificationDismiss.seenAt).not.toBeFalsy();
+      expect(result.data!.eventNotificationDismiss.seenAt).not.toBeFalsy();
     });
   });
 });

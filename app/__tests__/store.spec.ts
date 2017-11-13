@@ -7,7 +7,7 @@ it('creates redux store', () => {
   const store = createStore(new ApolloClient(), history);
   const state = store.getState() as any;
   expect(state.locale.lang).toEqual('en');
-  expect(state.locale.messages).not.toBeNull();
+  expect(state.locale.messages).not.toBeFalsy();
   expect(state.routing).toEqual({
     location: null,
   });

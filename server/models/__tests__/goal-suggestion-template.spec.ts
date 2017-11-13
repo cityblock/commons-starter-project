@@ -45,9 +45,9 @@ describe('goal suggestion template model', () => {
       const goalSuggestion = await GoalSuggestionTemplate.create({
         title: 'fix Housing',
       });
-      expect(goalSuggestion.deletedAt).toBeNull();
+      expect(goalSuggestion.deletedAt).toBeFalsy();
       const deleted = await GoalSuggestionTemplate.delete(goalSuggestion.id);
-      expect(deleted.deletedAt).not.toBeNull();
+      expect(deleted.deletedAt).not.toBeFalsy();
     });
 
     it('fetches all goal suggestions templates', async () => {

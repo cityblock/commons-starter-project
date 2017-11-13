@@ -437,7 +437,7 @@ describe('answer model', () => {
       ],
     });
     const deletedPatientAnswer = await PatientAnswer.delete(patientAnswers[0].id);
-    expect(deletedPatientAnswer).not.toBeNull();
+    expect(deletedPatientAnswer).not.toBeFalsy();
   });
 
   it('gets all for risk area', async () => {

@@ -45,13 +45,13 @@ describe('user model', () => {
   it('returns null if getBy is called without a search parameter', async () => {
     const result = await User.getBy('email');
 
-    expect(result).toBeNull();
+    expect(result).toBeFalsy();
   });
 
   it('returns null if getBy does not return a user', async () => {
     const result = await User.getBy('email', 'fake@email.nowhere');
 
-    expect(result).toBeNull();
+    expect(result).toBeFalsy();
   });
 
   it('should not create a user when given an invalid email address', async () => {

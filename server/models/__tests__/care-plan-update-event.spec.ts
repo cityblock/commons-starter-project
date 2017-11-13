@@ -69,9 +69,9 @@ describe('care plan update event model', () => {
       userId: carePlanUpdateEvent.userId,
       eventType: 'create_patient_concern',
     });
-    expect(fetchedCarePlanUpdateEvent.deletedAt).toBeNull();
-    expect(fetchedCarePlanUpdateEvent.createdAt).not.toBeNull();
-    expect(fetchedCarePlanUpdateEvent.updatedAt).not.toBeNull();
+    expect(fetchedCarePlanUpdateEvent.deletedAt).toBeFalsy();
+    expect(fetchedCarePlanUpdateEvent.createdAt).not.toBeFalsy();
+    expect(fetchedCarePlanUpdateEvent.updatedAt).not.toBeFalsy();
   });
 
   it('does not allow creating a carePlanUpdateEvent with both concern and goal ids', async () => {
@@ -100,7 +100,7 @@ describe('care plan update event model', () => {
       eventType: 'create_patient_concern',
     });
 
-    expect(carePlanUpdateEvent.progressNoteId).not.toBeNull();
+    expect(carePlanUpdateEvent.progressNoteId).not.toBeFalsy();
   });
 
   it('throws an error when getting an invalid id', async () => {
@@ -118,7 +118,7 @@ describe('care plan update event model', () => {
       eventType: 'create_patient_concern',
     });
     const fetchedCarePlanUpdateEvent = await CarePlanUpdateEvent.get(carePlanUpdateEvent.id);
-    expect(fetchedCarePlanUpdateEvent.deletedAt).toBeNull();
+    expect(fetchedCarePlanUpdateEvent.deletedAt).toBeFalsy();
 
     await CarePlanUpdateEvent.delete(carePlanUpdateEvent.id);
     await expect(CarePlanUpdateEvent.get(carePlanUpdateEvent.id)).rejects.toMatch(

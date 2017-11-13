@@ -41,9 +41,9 @@ describe('concern model', () => {
       const concern = await Concern.create({
         title: 'Housing',
       });
-      expect(concern.deletedAt).toBeNull();
+      expect(concern.deletedAt).toBeFalsy();
       const deleted = await Concern.delete(concern.id);
-      expect(deleted.deletedAt).not.toBeNull();
+      expect(deleted.deletedAt).not.toBeFalsy();
     });
 
     it('fetches all concerns', async () => {

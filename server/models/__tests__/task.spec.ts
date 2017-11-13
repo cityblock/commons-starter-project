@@ -63,9 +63,9 @@ describe('task model', () => {
       createdById: user.id,
       assignedToId: user.id,
     });
-    expect(task.createdAt).not.toBeNull();
-    expect(task.completedAt).toBeNull();
-    expect(task.updatedAt).not.toBeNull();
+    expect(task.createdAt).not.toBeFalsy();
+    expect(task.completedAt).toBeFalsy();
+    expect(task.updatedAt).not.toBeFalsy();
   });
 
   it('throws an error when getting an invalid id', async () => {
@@ -273,7 +273,7 @@ describe('task model', () => {
 
     await Task.complete(task.id, user.id);
     const fetchedTask = await Task.get(task.id);
-    expect(fetchedTask.completedAt).not.toBeNull();
+    expect(fetchedTask.completedAt).not.toBeFalsy();
 
     expect(await Task.uncomplete(task.id, user.id)).toMatchObject({
       completedAt: null,

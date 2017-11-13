@@ -100,7 +100,7 @@ describe('patient task suggestion', () => {
       const fetchedPatientTaskSuggestion = await PatientTaskSuggestion.get(
         patientTaskSuggestion.id,
       );
-      expect(fetchedPatientTaskSuggestion!.acceptedAt).not.toBeNull();
+      expect(fetchedPatientTaskSuggestion!.acceptedAt).not.toBeFalsy();
       expect(fetchedPatientTaskSuggestion!.acceptedBy).toMatchObject(user);
     });
 
@@ -119,7 +119,7 @@ describe('patient task suggestion', () => {
       const fetchedPatientTaskSuggestion = await PatientTaskSuggestion.get(
         patientTaskSuggestion.id,
       );
-      expect(fetchedPatientTaskSuggestion!.dismissedAt).not.toBeNull();
+      expect(fetchedPatientTaskSuggestion!.dismissedAt).not.toBeFalsy();
       expect(fetchedPatientTaskSuggestion!.dismissedBy).toMatchObject(user);
       expect(fetchedPatientTaskSuggestion!.dismissedReason).toEqual('Because');
     });

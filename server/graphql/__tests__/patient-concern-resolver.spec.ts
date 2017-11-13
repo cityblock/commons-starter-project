@@ -110,7 +110,7 @@ describe('patient concern resolver', () => {
         }
       }`;
       const result = await graphql(schema, mutation, null, { userRole, userId: user.id });
-      expect(cloneDeep(result.data!.patientConcernDelete).deletedAt).not.toBeNull();
+      expect(cloneDeep(result.data!.patientConcernDelete).deletedAt).not.toBeFalsy();
     });
   });
 

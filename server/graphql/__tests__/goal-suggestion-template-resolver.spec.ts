@@ -78,7 +78,7 @@ describe('goal suggestion template resolver', () => {
         }
       }`;
       const result = await graphql(schema, mutation, null, { userRole });
-      expect(cloneDeep(result.data!.goalSuggestionTemplateDelete).deletedAt).not.toBeNull();
+      expect(cloneDeep(result.data!.goalSuggestionTemplateDelete).deletedAt).not.toBeFalsy();
     });
   });
 

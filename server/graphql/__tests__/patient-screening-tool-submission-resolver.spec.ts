@@ -266,7 +266,7 @@ describe('patient screening tool submission resolver tests', () => {
       const resultSubmission = cloneDeep(
         result.data!.patientScreeningToolSubmissionForPatientAndScreeningTool,
       );
-      expect(resultSubmission).toBeNull();
+      expect(resultSubmission).toBeFalsy();
     });
   });
 
@@ -333,8 +333,8 @@ describe('patient screening tool submission resolver tests', () => {
       expect(deletedSubmission).toMatchObject({
         id: submission.id,
       });
-      expect(deletedSubmission.deletedAt).not.toBeNull();
-      expect(deletedSubmission.deletedAt).not.toBeUndefined();
+      expect(deletedSubmission.deletedAt).not.toBeFalsy();
+      expect(deletedSubmission.deletedAt).not.toBeFalsy();
     });
   });
 });

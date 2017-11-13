@@ -75,7 +75,7 @@ describe('care plan suggestion', () => {
       );
 
       expect(foundCarePlanSuggestion!.id).toEqual(carePlanSuggestion.id);
-      expect(notFoundCarePlanSuggestion).toBeUndefined();
+      expect(notFoundCarePlanSuggestion).toBeFalsy();
     });
 
     it('creates multiple carePlanSuggestions at once', async () => {
@@ -183,7 +183,7 @@ describe('care plan suggestion', () => {
       await CarePlanSuggestion.accept(carePlanSuggestion.id, user.id);
 
       const fetchedCarePlanSuggestion = await CarePlanSuggestion.get(carePlanSuggestion.id);
-      expect(fetchedCarePlanSuggestion!.acceptedAt).not.toBeNull();
+      expect(fetchedCarePlanSuggestion!.acceptedAt).not.toBeFalsy();
       expect(fetchedCarePlanSuggestion!.acceptedBy).toMatchObject(user);
     });
 
@@ -201,7 +201,7 @@ describe('care plan suggestion', () => {
       });
 
       const fetchedCarePlanSuggestion = await CarePlanSuggestion.get(carePlanSuggestion.id);
-      expect(fetchedCarePlanSuggestion!.dismissedAt).not.toBeNull();
+      expect(fetchedCarePlanSuggestion!.dismissedAt).not.toBeFalsy();
       expect(fetchedCarePlanSuggestion!.dismissedBy).toMatchObject(user);
       expect(fetchedCarePlanSuggestion!.dismissedReason).toEqual('Because');
     });

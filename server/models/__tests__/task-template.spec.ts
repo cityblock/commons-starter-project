@@ -61,9 +61,9 @@ describe('task template model', () => {
         priority: 'low',
         careTeamAssigneeRole: 'physician',
       });
-      expect(taskTemplate.deletedAt).toBeNull();
+      expect(taskTemplate.deletedAt).toBeFalsy();
       const deleted = await TaskTemplate.delete(taskTemplate.id);
-      expect(deleted.deletedAt).not.toBeNull();
+      expect(deleted.deletedAt).not.toBeFalsy();
     });
 
     it('fetches all task template', async () => {

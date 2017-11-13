@@ -199,7 +199,7 @@ describe('patient concern model', () => {
       },
       user.id,
     );
-    expect(patientConcernUpdated.completedAt).not.toBeNull();
+    expect(patientConcernUpdated.completedAt).not.toBeFalsy();
   });
 
   it('creates the correct CarePlanUpdateEvent when editing a patient concern', async () => {
@@ -233,7 +233,7 @@ describe('patient concern model', () => {
       userId: user.id,
     });
     const deletedPatientConcern = await PatientConcern.delete(patientConcern.id, user.id);
-    expect(deletedPatientConcern).not.toBeNull();
+    expect(deletedPatientConcern).not.toBeFalsy();
   });
 
   it('creates the correct CarePlanUpdateEvent when deleting a patient concern', async () => {

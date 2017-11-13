@@ -92,8 +92,8 @@ describe('task event model', () => {
     expect(fetchedEventNotification1.taskEvent.id).toEqual(taskEvent.id);
 
     expect(fetchedEventNotification2.user.id).toEqual(user.id);
-    expect(fetchedEventNotification2.task).toBeNull();
-    expect(fetchedEventNotification2.taskEvent).toBeNull();
+    expect(fetchedEventNotification2.task).toBeFalsy();
+    expect(fetchedEventNotification2.taskEvent).toBeFalsy();
   });
 
   it('fetches for a given user', async () => {
@@ -232,10 +232,10 @@ describe('task event model', () => {
       taskEventId: taskEvent.id,
       userId: user.id,
     });
-    expect(eventNotification.deletedAt).toBeUndefined(); // TODO: huh? why is this not null?
+    expect(eventNotification.deletedAt).toBeFalsy(); // TODO: huh? why is this not null?
 
     const deletedNotification = await EventNotification.delete(eventNotification.id);
-    expect(deletedNotification.deletedAt).not.toBeNull();
+    expect(deletedNotification.deletedAt).not.toBeFalsy();
   });
 
   it('updates a notification', async () => {
@@ -243,14 +243,14 @@ describe('task event model', () => {
       userId: user.id,
     });
 
-    expect(eventNotification.seenAt).toBeUndefined();
+    expect(eventNotification.seenAt).toBeFalsy();
 
     await EventNotification.update(eventNotification.id, {
       seenAt: new Date().toISOString(),
     });
     const fetchedNotification = await EventNotification.get(eventNotification.id);
 
-    expect(fetchedNotification.seenAt).not.toBeUndefined();
-    expect(fetchedNotification.seenAt).not.toBeNull();
+    expect(fetchedNotification.seenAt).not.toBeFalsy();
+    expect(fetchedNotification.seenAt).not.toBeFalsy();
   });
 });

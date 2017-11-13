@@ -42,8 +42,8 @@ describe('progress note template model', () => {
       title: 'title',
     });
 
-    expect(progressNoteTemplate.createdAt).not.toBeNull();
-    expect(progressNoteTemplate.updatedAt).not.toBeNull();
+    expect(progressNoteTemplate.createdAt).not.toBeFalsy();
+    expect(progressNoteTemplate.updatedAt).not.toBeFalsy();
   });
 
   it('throws an error when getting an invalid id', async () => {
@@ -84,8 +84,8 @@ describe('progress note template model', () => {
     const progressNoteTemplate = await ProgressNoteTemplate.create({
       title: 'title',
     });
-    expect(progressNoteTemplate.deletedAt).toBeNull();
+    expect(progressNoteTemplate.deletedAt).toBeFalsy();
     const deletedNote = await ProgressNoteTemplate.delete(progressNoteTemplate.id);
-    expect(deletedNote.deletedAt).not.toBeNull();
+    expect(deletedNote.deletedAt).not.toBeFalsy();
   });
 });

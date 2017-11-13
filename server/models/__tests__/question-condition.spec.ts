@@ -108,8 +108,8 @@ describe('answer model', () => {
       answerId: answer.id,
       questionId: question2.id,
     });
-    expect(questionCondition.deletedAt).toBeNull();
+    expect(questionCondition.deletedAt).toBeFalsy();
     const deleted = await QuestionCondition.delete(questionCondition.id);
-    expect(deleted.deletedAt).not.toBeNull();
+    expect(deleted.deletedAt).not.toBeFalsy();
   });
 });

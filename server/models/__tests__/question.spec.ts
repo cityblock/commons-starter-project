@@ -253,8 +253,8 @@ describe('question model', () => {
       type: 'riskArea',
       order: 1,
     });
-    expect(question.deletedAt).toBeNull();
+    expect(question.deletedAt).toBeFalsy();
     const deleted = await Question.delete(question.id);
-    expect(deleted.deletedAt).not.toBeNull();
+    expect(deleted.deletedAt).not.toBeFalsy();
   });
 });

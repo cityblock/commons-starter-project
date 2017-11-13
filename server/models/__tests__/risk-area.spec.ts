@@ -59,9 +59,9 @@ describe('risk area model', () => {
       title: 'Housing 2',
       order: 2,
     });
-    expect(riskArea.deletedAt).toBeNull();
+    expect(riskArea.deletedAt).toBeFalsy();
     const deleted = await RiskArea.delete(riskArea.id);
-    expect(deleted.deletedAt).not.toBeNull();
+    expect(deleted.deletedAt).not.toBeFalsy();
 
     expect(await RiskArea.getAll()).toMatchObject([riskArea2]);
   });
@@ -71,9 +71,9 @@ describe('risk area model', () => {
       title: 'Housing',
       order: 1,
     });
-    expect(riskArea.deletedAt).toBeNull();
+    expect(riskArea.deletedAt).toBeFalsy();
     const deleted = await RiskArea.delete(riskArea.id);
-    expect(deleted.deletedAt).not.toBeNull();
+    expect(deleted.deletedAt).not.toBeFalsy();
   });
 
   describe('questions with patient answers', () => {

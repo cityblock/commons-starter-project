@@ -55,9 +55,9 @@ describe('task comment model', () => {
       taskId: task.id,
       userId: user.id,
     });
-    expect(taskComment.deletedAt).toBeUndefined();
-    expect(taskComment.createdAt).not.toBeNull();
-    expect(taskComment.updatedAt).not.toBeNull();
+    expect(taskComment.deletedAt).toBeFalsy();
+    expect(taskComment.createdAt).not.toBeFalsy();
+    expect(taskComment.updatedAt).not.toBeFalsy();
   });
 
   it('throws an error when getting an invalid id', async () => {

@@ -127,7 +127,7 @@ describe('patient goal resolver', () => {
         title: 'title',
       });
       expect(fetchedConcerns[0].title).toEqual('Brand new concern');
-      expect(clonedGoal.patientConcernId).not.toBeNull();
+      expect(clonedGoal.patientConcernId).not.toBeFalsy();
       expect(fetchedPatientConcerns[0].concernId).toEqual(fetchedConcerns[0].id);
     });
 
@@ -155,7 +155,7 @@ describe('patient goal resolver', () => {
         patientId: patient.id,
         title: 'title',
       });
-      expect(clonedGoal.patientConcernId).not.toBeNull();
+      expect(clonedGoal.patientConcernId).not.toBeFalsy();
       expect(fetchedPatientConcerns[0].concernId).toEqual(concern.id);
     });
 
@@ -185,9 +185,9 @@ describe('patient goal resolver', () => {
         patientId: patient.id,
         title: 'title',
       });
-      expect(clonedGoal.patientConcernId).not.toBeNull();
+      expect(clonedGoal.patientConcernId).not.toBeFalsy();
       expect(fetchedPatientConcerns[0].concernId).toEqual(concern.id);
-      expect(fetchedPatientConcerns[0].startedAt).not.toBeNull();
+      expect(fetchedPatientConcerns[0].startedAt).not.toBeFalsy();
     });
   });
 
@@ -223,7 +223,7 @@ describe('patient goal resolver', () => {
         }
       }`;
       const result = await graphql(schema, mutation, null, { userRole, userId: user.id });
-      expect(cloneDeep(result.data!.patientGoalDelete).deletedAt).not.toBeNull();
+      expect(cloneDeep(result.data!.patientGoalDelete).deletedAt).not.toBeFalsy();
     });
   });
 

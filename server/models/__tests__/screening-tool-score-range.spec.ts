@@ -257,7 +257,7 @@ describe('screening tool score range model', () => {
       screeningTool.id,
     );
 
-    expect(screeningToolScoreRange).toBeNull();
+    expect(screeningToolScoreRange).toBeFalsy();
   });
 
   it('deletes a screening tool score range', async () => {
@@ -269,7 +269,7 @@ describe('screening tool score range model', () => {
     });
 
     const fetchedScoreRange = await ScreeningToolScoreRange.get(scoreRange.id);
-    expect(fetchedScoreRange.deletedAt).toBeNull();
+    expect(fetchedScoreRange.deletedAt).toBeFalsy();
 
     await ScreeningToolScoreRange.delete(scoreRange.id);
 

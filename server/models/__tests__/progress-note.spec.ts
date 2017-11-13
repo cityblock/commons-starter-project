@@ -51,9 +51,9 @@ describe('progress note model', () => {
       progressNoteTemplateId: progressNoteTemplate.id,
     });
 
-    expect(progressNote.createdAt).not.toBeNull();
-    expect(progressNote.completedAt).toBeNull();
-    expect(progressNote.updatedAt).not.toBeNull();
+    expect(progressNote.createdAt).not.toBeFalsy();
+    expect(progressNote.completedAt).toBeFalsy();
+    expect(progressNote.updatedAt).not.toBeFalsy();
   });
 
   it('throws an error when getting an invalid id', async () => {
@@ -92,12 +92,12 @@ describe('progress note model', () => {
       userId: user.id,
       progressNoteTemplateId: progressNoteTemplate.id,
     });
-    expect(progressNote.createdAt).not.toBeNull();
-    expect(progressNote.completedAt).toBeNull();
-    expect(progressNote.updatedAt).not.toBeNull();
+    expect(progressNote.createdAt).not.toBeFalsy();
+    expect(progressNote.completedAt).toBeFalsy();
+    expect(progressNote.updatedAt).not.toBeFalsy();
 
     const completedNote = await ProgressNote.complete(progressNote.id);
-    expect(completedNote.completedAt).not.toBeNull();
+    expect(completedNote.completedAt).not.toBeFalsy();
   });
 
   it('deletes a progress note', async () => {
@@ -106,9 +106,9 @@ describe('progress note model', () => {
       userId: user.id,
       progressNoteTemplateId: progressNoteTemplate.id,
     });
-    expect(progressNote.deletedAt).toBeNull();
+    expect(progressNote.deletedAt).toBeFalsy();
     const deletedNote = await ProgressNote.delete(progressNote.id);
-    expect(deletedNote.deletedAt).not.toBeNull();
+    expect(deletedNote.deletedAt).not.toBeFalsy();
   });
 
   it('auto opens a progress note if necessary', async () => {

@@ -66,7 +66,7 @@ describe('progressNoteTemplate resolver', () => {
         }
       }`;
     const result = await graphql(schema, mutation, null, { userRole });
-    expect(cloneDeep(result.data!.progressNoteTemplateDelete).deletedAt).not.toBeNull();
+    expect(cloneDeep(result.data!.progressNoteTemplateDelete).deletedAt).not.toBeFalsy();
   });
 
   describe('progress note templates', () => {

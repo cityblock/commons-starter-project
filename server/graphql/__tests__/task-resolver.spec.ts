@@ -338,7 +338,7 @@ describe('task tests', () => {
 
   describe('taskComplete', () => {
     it('completes a task', async () => {
-      expect(task1.completedAt).toBeNull();
+      expect(task1.completedAt).toBeFalsy();
       const query = `mutation {
         taskComplete(input: { taskId: "${task1.id}" }) {
           completedAt
@@ -349,7 +349,7 @@ describe('task tests', () => {
         userRole,
         userId: user.id,
       });
-      expect(result.data!.taskComplete.completedAt).not.toBeNull();
+      expect(result.data!.taskComplete.completedAt).not.toBeFalsy();
     });
 
     it('creates the relevant TaskEvent model', async () => {
@@ -382,7 +382,7 @@ describe('task tests', () => {
         userRole,
         userId: user.id,
       });
-      expect(result.data!.taskUncomplete.completedAt).toBeNull();
+      expect(result.data!.taskUncomplete.completedAt).toBeFalsy();
     });
 
     it('creates the relevant TaskEvent model', async () => {

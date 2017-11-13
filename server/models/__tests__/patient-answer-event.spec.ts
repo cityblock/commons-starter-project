@@ -88,9 +88,9 @@ describe('patient answer event model', () => {
       userId: patientAnswerEvent.userId,
       eventType: 'create_patient_answer',
     });
-    expect(fetchedPatientAnswerEvent.deletedAt).toBeNull();
-    expect(fetchedPatientAnswerEvent.createdAt).not.toBeNull();
-    expect(fetchedPatientAnswerEvent.updatedAt).not.toBeNull();
+    expect(fetchedPatientAnswerEvent.deletedAt).toBeFalsy();
+    expect(fetchedPatientAnswerEvent.createdAt).not.toBeFalsy();
+    expect(fetchedPatientAnswerEvent.updatedAt).not.toBeFalsy();
   });
 
   it('automatically opens a progress note on create', async () => {
@@ -101,7 +101,7 @@ describe('patient answer event model', () => {
       eventType: 'create_patient_answer',
     });
 
-    expect(patientAnswerEvent.progressNoteId).not.toBeNull();
+    expect(patientAnswerEvent.progressNoteId).not.toBeFalsy();
   });
 
   it('creates multiple patientAnswerEvents', async () => {
@@ -203,8 +203,8 @@ describe('patient answer event model', () => {
         ),
     );
 
-    expect(patientAnswerEvents[0].progressNoteId).not.toBeNull();
-    expect(patientAnswerEvents[1].progressNoteId).not.toBeNull();
+    expect(patientAnswerEvents[0].progressNoteId).not.toBeFalsy();
+    expect(patientAnswerEvents[1].progressNoteId).not.toBeFalsy();
   });
 
   it('throws an error when getting an invalid id', async () => {
@@ -222,7 +222,7 @@ describe('patient answer event model', () => {
       eventType: 'create_patient_answer',
     });
     const fetchedPatientAnswerEvent = await PatientAnswerEvent.get(patientAnswerEvent.id);
-    expect(fetchedPatientAnswerEvent.deletedAt).toBeNull();
+    expect(fetchedPatientAnswerEvent.deletedAt).toBeFalsy();
 
     await PatientAnswerEvent.delete(patientAnswerEvent.id);
     await expect(PatientAnswerEvent.get(patientAnswerEvent.id)).rejects.toMatch(

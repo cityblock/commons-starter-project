@@ -97,7 +97,7 @@ describe('task template resolver', () => {
         }
       }`;
       const result = await graphql(schema, mutation, null, { userRole });
-      expect(cloneDeep(result.data!.taskTemplateDelete).deletedAt).not.toBeNull();
+      expect(cloneDeep(result.data!.taskTemplateDelete).deletedAt).not.toBeFalsy();
     });
   });
 

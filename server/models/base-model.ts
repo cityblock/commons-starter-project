@@ -13,6 +13,7 @@ export default class BaseModel extends Model {
   $beforeInsert() {
     this.id = uuid();
     this.createdAt = new Date().toISOString();
+    this.updatedAt = new Date().toISOString();
   }
 
   $beforeUpdate() {

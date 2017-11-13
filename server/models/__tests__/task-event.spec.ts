@@ -54,9 +54,9 @@ describe('task event model', () => {
       userId: user.id,
       eventType: 'edit_assignee',
     });
-    expect(taskEvent.deletedAt).toBeUndefined();
-    expect(taskEvent.createdAt).not.toBeNull();
-    expect(taskEvent.updatedAt).not.toBeNull();
+    expect(taskEvent.deletedAt).toBeFalsy();
+    expect(taskEvent.createdAt).not.toBeFalsy();
+    expect(taskEvent.updatedAt).not.toBeFalsy();
   });
 
   it('automatically opens a progress note on create', async () => {
@@ -78,7 +78,7 @@ describe('task event model', () => {
       eventType: 'edit_assignee',
     });
 
-    expect(taskEvent.progressNoteId).not.toBeNull();
+    expect(taskEvent.progressNoteId).not.toBeFalsy();
   });
 
   it('throws an error when getting an invalid id', async () => {

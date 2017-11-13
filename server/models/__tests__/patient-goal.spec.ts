@@ -399,7 +399,7 @@ describe('patient goal model', () => {
       userId: user.id,
     });
     const deletedPatientGoal = await PatientGoal.delete(patientGoal.id, user.id);
-    expect(deletedPatientGoal).not.toBeNull();
+    expect(deletedPatientGoal).not.toBeFalsy();
   });
 
   it('creates the correct CarePlanUpdateEvent when deleting a patient goal', async () => {

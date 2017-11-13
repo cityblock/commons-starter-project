@@ -141,7 +141,7 @@ describe('patient task suggestion resolver tests', () => {
         patientId: patient.id,
         taskTemplateId: taskTemplate.id,
       });
-      expect(suggestion!.acceptedAt).toBeNull();
+      expect(suggestion!.acceptedAt).toBeFalsy();
       const tasks = await Task.getPatientTasks(patient.id, {
         pageNumber: 0,
         pageSize: 10,
@@ -160,7 +160,7 @@ describe('patient task suggestion resolver tests', () => {
       await graphql(schema, mutation, null, { db, userRole, userId: user.id });
 
       const fetchedSuggestion = await PatientTaskSuggestion.get(suggestion.id);
-      expect(fetchedSuggestion!.acceptedAt).not.toBeNull();
+      expect(fetchedSuggestion!.acceptedAt).not.toBeFalsy();
 
       const fetchedTasks = await Task.getPatientTasks(patient.id, {
         pageNumber: 0,

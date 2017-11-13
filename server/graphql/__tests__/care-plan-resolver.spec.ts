@@ -231,14 +231,14 @@ describe('care plan resolver tests', () => {
 
       const patientConcerns = await PatientConcern.getForPatient(patient.id);
       expect(patientConcerns[0].concernId).toEqual(concern.id);
-      expect(patientConcerns[0].startedAt).toBeNull();
+      expect(patientConcerns[0].startedAt).toBeFalsy();
       expect(patientConcerns[1].concernId).toEqual(concern2.id);
-      expect(patientConcerns[1].startedAt).not.toBeNull();
+      expect(patientConcerns[1].startedAt).not.toBeFalsy();
 
       const fetchedSuggestion1 = await CarePlanSuggestion.get(suggestion1.id);
       const fetchedSuggestion2 = await CarePlanSuggestion.get(suggestion2.id);
-      expect(fetchedSuggestion1!.acceptedAt).not.toBeNull();
-      expect(fetchedSuggestion2!.acceptedAt).not.toBeNull();
+      expect(fetchedSuggestion1!.acceptedAt).not.toBeFalsy();
+      expect(fetchedSuggestion2!.acceptedAt).not.toBeFalsy();
     });
 
     it('accepts a goal suggestion and creates a new concern/patientConcern', async () => {
@@ -266,7 +266,7 @@ describe('care plan resolver tests', () => {
       expect(patientGoals[0].patientConcernId).toEqual(patientConcerns[0].id);
 
       const fetchedSuggestion = await CarePlanSuggestion.get(suggestion.id);
-      expect(fetchedSuggestion!.acceptedAt).not.toBeNull();
+      expect(fetchedSuggestion!.acceptedAt).not.toBeFalsy();
     });
 
     it('accepts a goal suggestion and attaches to a newly concern suggestion', async () => {
@@ -299,8 +299,8 @@ describe('care plan resolver tests', () => {
 
       const fetchedConcernSuggestion = await CarePlanSuggestion.get(concernSuggestion.id);
       const fetchedGoalSuggestion = await CarePlanSuggestion.get(goalSuggestion.id);
-      expect(fetchedConcernSuggestion!.acceptedAt).not.toBeNull();
-      expect(fetchedGoalSuggestion!.acceptedAt).not.toBeNull();
+      expect(fetchedConcernSuggestion!.acceptedAt).not.toBeFalsy();
+      expect(fetchedGoalSuggestion!.acceptedAt).not.toBeFalsy();
     });
 
     it('accepts a goal suggestion and attaches to an existing patientConcern', async () => {
@@ -334,7 +334,7 @@ describe('care plan resolver tests', () => {
       expect(patientGoals[0].patientConcernId).toEqual(patientConcern.id);
 
       const fetchedSuggestion = await CarePlanSuggestion.get(suggestion.id);
-      expect(fetchedSuggestion!.acceptedAt).not.toBeNull();
+      expect(fetchedSuggestion!.acceptedAt).not.toBeFalsy();
     });
   });
 });

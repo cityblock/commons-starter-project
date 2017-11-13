@@ -162,11 +162,11 @@ describe('patient model', () => {
     });
 
     it('should return null if calling getBy without a matchable param', async () => {
-      expect(await Patient.getBy('athenaPatientId')).toBeNull();
+      expect(await Patient.getBy('athenaPatientId')).toBeFalsy();
     });
 
     it('should return null if a patient cannot be found for the matchable param', async () => {
-      expect(await Patient.getBy('athenaPatientId', '99999')).toBeNull();
+      expect(await Patient.getBy('athenaPatientId', '99999')).toBeFalsy();
     });
   });
 });

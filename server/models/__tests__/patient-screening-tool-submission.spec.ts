@@ -237,7 +237,7 @@ describe('patient screening tool submission model', () => {
       screeningTool2.id,
       patient1.id,
     );
-    expect(submission).toBeNull();
+    expect(submission).toBeFalsy();
   });
 
   it('gets all screening tool submissions for a patient for a screening tool', async () => {
@@ -311,7 +311,7 @@ describe('patient screening tool submission model', () => {
     });
 
     const fetchedSubmission = await PatientScreeningToolSubmission.get(submission.id);
-    expect(fetchedSubmission.deletedAt).toBeNull();
+    expect(fetchedSubmission.deletedAt).toBeFalsy();
 
     await PatientScreeningToolSubmission.delete(submission.id);
 

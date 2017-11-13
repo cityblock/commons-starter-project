@@ -60,8 +60,7 @@ export class ProgressNoteContext extends React.Component<allProps, IState> {
   }
 
   componentWillReceiveProps(nextProps: allProps) {
-    // Questions have loaded
-    if (nextProps.questions && !this.props.questions) {
+    if (nextProps.questions) {
       const questions = setupQuestionsState(
         this.state.questions,
         this.props.questions,
@@ -153,7 +152,6 @@ export class ProgressNoteContext extends React.Component<allProps, IState> {
     const { questions } = this.state;
 
     const visible = getQuestionVisibility(question, questions);
-
     return (
       <PatientQuestion
         editable={true}
@@ -231,7 +229,7 @@ export default compose(
     props: ({ data }) => ({
       patientAnswersLoading: data ? data.loading : false,
       patientAnswersError: data ? data.error : null,
-      patientAnswers: data ? (data as any).patientAnswersForRiskArea : null,
+      patientAnswers: data ? (data as any).patientAnswers : null,
       refetchPatientAnswers: data ? data.refetch : null,
     }),
   }),

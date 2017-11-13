@@ -471,7 +471,7 @@ export default compose(
     props: ({ data }) => ({
       patientAnswersLoading: data ? data.loading : false,
       patientAnswersError: data ? data.error : null,
-      patientAnswers: data ? (data as any).patientAnswersForRiskArea : null,
+      patientAnswers: data ? (data as any).patientAnswers : null,
       refetchPatientAnswers: data ? data.refetch : null,
     }),
   }),

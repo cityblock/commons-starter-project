@@ -23,26 +23,22 @@ const PatientConcerns: React.StatelessComponent<IProps> = (props: IProps) => {
   } = props;
 
   if (!concerns.length) {
-    const label = inactive ? 'next up' : 'active';
-
     return (
       <div className={styles.emptyCarePlanSuggestionsContainer}>
         <div className={styles.emptyCarePlanSuggestionsLogo} />
         <div className={styles.emptyCarePlanSuggestionsLabel}>
-          {`No ${label} concerns or goals for this patient`}
+          There are no Next Up concerns for this patient
         </div>
         <div className={styles.emptyCarePlanSuggestionsSubtext}>
-          New concerns and goals will be displayed here as they are added
+          Add concerns here that the patient and the care team do not want to
+          focus on right now but would like to keep track of
         </div>
       </div>
     );
   }
 
   const renderedConcerns = concerns.map((concern, index) => {
-    const selected =
-      !inactive && index === 0 && selectedPatientConcernId === undefined
-        ? true
-        : selectedPatientConcernId === concern.id;
+    const selected = !!selectedPatientConcernId && selectedPatientConcernId === concern.id;
     const optionsOpen = optionsDropdownConcernId === concern.id;
 
     return (

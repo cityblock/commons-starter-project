@@ -5,4 +5,5 @@ export const addIcon: string;
 export const shareIcon: string;
 export const reorderIcon: string;
 export const nextUpIcon: string;
+export const playIcon: string;
 export const editIcon: string;

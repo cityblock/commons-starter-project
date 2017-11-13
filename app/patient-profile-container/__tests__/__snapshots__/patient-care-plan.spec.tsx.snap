@@ -14,12 +14,12 @@ exports[`renders patient care plan 1`] = `
       <div
         className="emptyCarePlanSuggestionsLabel"
       >
-        No active concerns or goals for this patient
+        There are no Next Up concerns for this patient
       </div>
       <div
         className="emptyCarePlanSuggestionsSubtext"
       >
-        New concerns and goals will be displayed here as they are added
+        Add concerns here that the patient and the care team do not want to focus on right now but would like to keep track of
       </div>
     </div>
     <div
@@ -41,12 +41,12 @@ exports[`renders patient care plan 1`] = `
       <div
         className="emptyCarePlanSuggestionsLabel"
       >
-        No next up concerns or goals for this patient
+        There are no Next Up concerns for this patient
       </div>
       <div
         className="emptyCarePlanSuggestionsSubtext"
       >
-        New concerns and goals will be displayed here as they are added
+        Add concerns here that the patient and the care team do not want to focus on right now but would like to keep track of
       </div>
     </div>
   </div>

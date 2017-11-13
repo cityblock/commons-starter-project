@@ -152,6 +152,10 @@
   color: var(--black-opaque);
 }
 
+.selected .patientConcernTitle, .selected .patientConcernStatValue, .selected .patientConcernDateValue {
+  color: var(--black-color);
+}
+
 .patientGoals {
   padding-left: var(--small-gutter);
   margin-top: 10px;

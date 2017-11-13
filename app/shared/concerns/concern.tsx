@@ -93,8 +93,8 @@ export default class PatientConcern extends React.Component<IProps, {}> {
     });
 
     const patientConcernStyles = classNames(styles.patientConcern, {
-      [styles.selected]: selected,
       [styles.inactive]: inactive,
+      [styles.selected]: selected,
     });
     const patientGoalsStyles = classNames(styles.patientGoals, {
       [styles.hidden]: !selected || (!patientGoals || !patientGoals.length),

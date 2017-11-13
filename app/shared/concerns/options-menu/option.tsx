@@ -9,6 +9,8 @@ const getClassName = (icon: string) => {
       return styles.editIcon;
     case 'nextUp':
       return styles.nextUpIcon;
+    case 'play':
+      return styles.playIcon;
     case 'reorder':
       return styles.reorderIcon;
     case 'share':

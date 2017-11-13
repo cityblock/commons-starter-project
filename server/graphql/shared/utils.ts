@@ -2,6 +2,7 @@ import * as base64 from 'base-64';
 import * as express from 'express';
 import { GraphQLBoolean, GraphQLNonNull, GraphQLObjectType } from 'graphql';
 import { decode, sign, verify } from 'jsonwebtoken';
+import { Transaction } from 'objection';
 import RedoxApi from '../../apis/redox';
 import config from '../../config';
 import Db from '../../db';
@@ -19,6 +20,7 @@ export interface IContext {
   userRole: UserRole;
   userId?: string;
   logger: ILogger;
+  txn?: Transaction;
 }
 
 export function formatRelayEdge(node: any, id: string) {

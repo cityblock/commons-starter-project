@@ -120,6 +120,11 @@ enum CarePlanSuggestionType {
   goal
 }
 
+enum QuickCallDirection {
+  Inbound
+  Outbound
+}
+
 # User account model
 type User implements uniqueId {
   id: ID!
@@ -689,6 +694,23 @@ type ProgressNote implements uniqueId {
   deletedAt: String
 }
 
+type QuickCall implements uniqueId {
+  id: ID!
+  progressNoteId: String!
+  progressNote: ProgressNote!
+  userId: String!
+  user: User!
+  reason: String!
+  summary: String!
+  direction: QuickCallDirection!
+  callRecipient: String!
+  wasSuccessful: Boolean!
+  startTime: String!
+  createdAt: String!
+  updatedAt: String!
+  deletedAt: String
+}
+
 type ProgressNoteActivity {
   taskEvents: [TaskEvent!]!
   patientAnswerEvents: [PatientAnswerEvent!]!
@@ -1196,6 +1218,17 @@ input ProgressNoteEditInput {
   progressNoteTemplateId: String!
 }
 
+input QuickCallCreateInput {
+  userId: String!
+  patientId: String! # Needed to lookup or create progressNoteId
+  reason: String!
+  summary: String!
+  direction: QuickCallDirection!
+  callRecipient: String!
+  wasSuccessful: Boolean!
+  startTime: String!
+}
+
 type RootMutationType {
   # Create a new user
   userCreate(input: UserCreateInput): User
@@ -1365,6 +1398,8 @@ type RootMutationType {
   progressNoteComplete(input: ProgressNoteCompleteInput): ProgressNote
   # edits a progress note
   progressNoteEdit(input: ProgressNoteEditInput): ProgressNote
+  # creates a quick call
+  quickCallCreate(input: QuickCallCreateInput): QuickCall
 }
 
 type RootQueryType {
@@ -1518,6 +1553,10 @@ type RootQueryType {
   progressNotesForPatient(patientId: String!): [ProgressNote]
   # progress note activities for progress note
   progressNoteActivityForProgressNote(progressNoteId: String!): ProgressNoteActivity
+  # quick call
+  quickCall(quickCallId: String!): QuickCall
+  # quick calls for progress note
+  quickCallsForProgressNote(progressNoteId: String!): [QuickCall]
 }
 
 schema {

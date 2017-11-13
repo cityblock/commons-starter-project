@@ -126,6 +126,11 @@ import {
   resolveQuestions,
 } from './question-resolver';
 import {
+  quickCallCreate,
+  resolveQuickCall,
+  resolveQuickCallsForProgressNote,
+} from './quick-call-resolver';
+import {
   resolvePatientRiskAreaRiskScore,
   resolvePatientRiskAreaSummary,
   resolveRiskArea,
@@ -262,6 +267,8 @@ const resolveFunctions = {
     progressNote: resolveProgressNote,
     progressNotesForPatient: resolveProgressNotesForPatient,
     progressNoteActivityForProgressNote: resolveProgressNoteActivityForProgressNote,
+    quickCall: resolveQuickCall,
+    quickCallsForProgressNote: resolveQuickCallsForProgressNote,
   },
   /* tslint:enable:max-line-length */
   RootMutationType: {
@@ -343,6 +350,7 @@ const resolveFunctions = {
     progressNoteComplete,
     progressNoteGetOrCreate,
     progressNoteEdit,
+    quickCallCreate,
   },
 };
 

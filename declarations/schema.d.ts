@@ -265,6 +265,14 @@ declare module 'schema' {
     description: progress note activities for progress note
   */
     progressNoteActivityForProgressNote: IProgressNoteActivity | null;
+    /**
+    description: quick call
+  */
+    quickCall: IQuickCall | null;
+    /**
+    description: quick calls for progress note
+  */
+    quickCallsForProgressNote: Array<IQuickCall> | null;
   }
 
   /**
@@ -930,6 +938,27 @@ declare module 'schema' {
   type ICarePlanUpdateEventTypesEnum = 'create_patient_concern' | 'edit_patient_concern' | 'delete_patient_concern' | 'create_patient_goal' | 'edit_patient_goal' | 'delete_patient_goal';
 
 
+  interface IQuickCall {
+    id: string;
+    progressNoteId: string;
+    progressNote: IProgressNote;
+    userId: string;
+    user: IUser;
+    reason: string;
+    summary: string;
+    direction: IQuickCallDirectionEnum;
+    callRecipient: string;
+    wasSuccessful: boolean;
+    startTime: string;
+    createdAt: string;
+    updatedAt: string;
+    deletedAt: string | null;
+  }
+
+
+  type IQuickCallDirectionEnum = 'Inbound' | 'Outbound';
+
+
   interface IRootMutationType {
     /**
     description: Create a new user
@@ -1255,6 +1284,10 @@ declare module 'schema' {
     description: edits a progress note
   */
     progressNoteEdit: IProgressNote | null;
+    /**
+    description: creates a quick call
+  */
+    quickCallCreate: IQuickCall | null;
   }
 
   /**
@@ -1898,6 +1931,18 @@ declare module 'schema' {
   interface IProgressNoteEditInput {
     progressNoteId: string;
     progressNoteTemplateId: string;
+  }
+
+
+  interface IQuickCallCreateInput {
+    userId: string;
+    patientId: string;
+    reason: string;
+    summary: string;
+    direction: IQuickCallDirectionEnum;
+    callRecipient: string;
+    wasSuccessful: boolean;
+    startTime: string;
   }
 
 

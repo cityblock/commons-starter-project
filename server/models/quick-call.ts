@@ -5,6 +5,8 @@ import ProgressNote from './progress-note';
 import User from './user';
 
 type direction = 'Inbound' | 'Outbound';
+
+const EAGER_QUERY = '[user,progressNote]';
 interface IQuickCallCreateOptions {
   userId: string;
   patientId: string; // Needed to lookup or create progressNoteId
@@ -58,6 +60,14 @@ export default class QuickCall extends BaseModel {
         to: 'progress_note.id',
       },
     },
+    user: {
+      relation: Model.BelongsToOneRelation,
+      modelClass: 'user',
+      join: {
+        from: 'quick_call.userId',
+        to: 'user.id',
+      },
+    },
   };
 
   static async create(input: IQuickCallCreateOptions, txn: Transaction): Promise<QuickCall> {
@@ -69,6 +79,29 @@ export default class QuickCall extends BaseModel {
     const quickCallInsertParams: any = omit(input, ['patientId']);
     quickCallInsertParams.progressNoteId = progressNote.id;
     return this.query<QuickCall>(txn).insert(quickCallInsertParams) as any;
+  }
+
+  static async get(quickCallId: string, txn: Transaction): Promise<QuickCall> {
+    const quickCall = await this.query(txn)
+      .eager(EAGER_QUERY)
+      .findOne({
+        id: quickCallId,
+      });
+    if (!quickCall) {
+      return Promise.reject(`No such quick call: ${quickCallId}`);
+    }
+    return quickCall;
+  }
+
+  static async getQuickCallsForProgressNote(
+    progressNoteId: string,
+    txn: Transaction,
+  ): Promise<QuickCall[]> {
+    const quickCalls = await this.query(txn)
+      .eager(EAGER_QUERY)
+      .where('progressNoteId', progressNoteId);
+
+    return quickCalls;
   }
 }
 /* tslint:enable:member-ordering */

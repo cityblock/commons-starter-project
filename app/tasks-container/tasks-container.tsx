@@ -17,16 +17,27 @@ import * as styles from './css/tasks-container.css';
 
 interface IProps {
   intl: InjectedIntl;
+}
+
+interface IGraphqlProps {
   tasksLoading: boolean;
   tasksError?: string;
   tasksResponse?: getTasksForCurrentUserQuery['tasksForCurrentUser'];
   fetchMoreTasks: () => any;
-  updatePageParams: (pageParams: IPageParams) => any;
+}
+
+interface IStateProps {
   notificationsCount: number;
 }
 
-class TasksContainer extends React.Component<IProps> {
-  componentWillReceiveProps(newProps: IProps) {
+interface IDispatchProps {
+  updatePageParams: (pageParams: IPageParams) => any;
+}
+
+type allProps = IProps & IGraphqlProps & IStateProps & IDispatchProps;
+
+class TasksContainer extends React.Component<allProps> {
+  componentWillReceiveProps() {
     document.title = `My Tasks | Commons`;
   }
 
@@ -50,11 +61,6 @@ class TasksContainer extends React.Component<IProps> {
     });
     return (
       <div className={styles.container}>
-        <div className={styles.leftPane}>
-          <FormattedMessage id="tasks.tasksList">
-            {(message: string) => <div className={styles.leftHeading}>{message}</div>}
-          </FormattedMessage>
-        </div>
         <div className={styles.mainBody}>
           <div className={tabStyles.tabs}>
             <FormattedMessage id="tasks.listView">
@@ -97,13 +103,13 @@ class TasksContainer extends React.Component<IProps> {
   }
 }
 
-function mapStateToProps(state: IAppState, ownProps: IProps): Partial<IProps> {
+function mapStateToProps(state: IAppState, ownProps: IProps): IStateProps {
   return {
     notificationsCount: state.eventNotifications.count,
   };
 }
 
-function mapDispatchToProps(dispatch: Dispatch<() => void>): Partial<IProps> {
+function mapDispatchToProps(dispatch: Dispatch<() => void>): IDispatchProps {
   return {
     updatePageParams: (pageParams: IPageParams) => {
       const cleanedPageParams = pickBy<IPageParams>(pageParams);
@@ -123,8 +129,8 @@ const getPageParams = (props: IProps) => {
 
 export default compose(
   injectIntl,
-  connect(mapStateToProps, mapDispatchToProps),
-  graphql(tasksQuery as any, {
+  connect<IStateProps, IDispatchProps>(mapStateToProps, mapDispatchToProps),
+  graphql<IGraphqlProps, IProps>(tasksQuery as any, {
     options: (props: IProps) => ({ variables: getPageParams(props) }),
     props: ({ data, ownProps }) => ({
       fetchMoreTasks: () =>

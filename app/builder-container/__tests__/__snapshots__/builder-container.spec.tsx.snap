@@ -19,13 +19,6 @@ exports[`renders builder container 1`] = `
       </a>
       <a
         className="tab"
-        href="/builder/tools"
-        onClick={[Function]}
-      >
-        Tools
-      </a>
-      <a
-        className="tab"
         href="/builder/domains/undefined/questions"
         onClick={[Function]}
       >
@@ -44,6 +37,13 @@ exports[`renders builder container 1`] = `
         onClick={[Function]}
       >
         Goals
+      </a>
+      <a
+        className="tab"
+        href="/builder/tools"
+        onClick={[Function]}
+      >
+        Tools
       </a>
       <a
         className="tab"

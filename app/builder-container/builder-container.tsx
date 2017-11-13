@@ -163,9 +163,6 @@ class BuilderContainer extends React.Component<IProps, {}> {
             <Link to={'/builder/domains'} className={riskAreaTabStyles}>
               Domains
             </Link>
-            <Link to={'/builder/tools'} className={toolTabStyles}>
-              Tools
-            </Link>
             <Link
               to={`/builder/domains/${selectedRiskAreaId}/questions`}
               className={questionTabStyles}
@@ -177,6 +174,9 @@ class BuilderContainer extends React.Component<IProps, {}> {
             </Link>
             <Link to={'/builder/goals'} className={goalTabStyles}>
               Goals
+            </Link>
+            <Link to={'/builder/tools'} className={toolTabStyles}>
+              Tools
             </Link>
             <Link
               to={'/builder/progress-note-templates'}

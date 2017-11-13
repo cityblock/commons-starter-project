@@ -5,15 +5,6 @@ exports[`renders tasks container 1`] = `
   className="container"
 >
   <div
-    className="leftPane"
-  >
-    <div
-      className="leftHeading"
-    >
-      My tasks lists
-    </div>
-  </div>
-  <div
     className="mainBody"
   >
     <div

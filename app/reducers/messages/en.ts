@@ -104,7 +104,6 @@ export const ENGLISH_TRANSLATION = {
     'settings.heading': 'Settings',
     'tasks.assignedToPlaceholder': 'Assign to',
     'tasks.patientGoalPlaceholder': 'Patient goal',
-    'tasks.tasksList': 'My tasks lists',
     'tasks.listView': 'Tasks',
     'tasks.createTask': 'Create a new task',
     'tasks.calendar': 'Calendar',

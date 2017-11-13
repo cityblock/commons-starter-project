@@ -1,6 +1,7 @@
 export const avatar: string;
 export const smallText: string;
 export const errorText: string;
+export const divider: string;
 export const commentDate: string;
 export const error: string;
 export const hidden: string;

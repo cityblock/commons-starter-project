@@ -22,7 +22,7 @@ exports[`correctly renders comments component 1`] = `
       <div
         className="smallText redText"
       >
-        Error adding comment.
+        Error adding comment
       </div>
       <div
         className="smallText"
@@ -46,13 +46,12 @@ exports[`correctly renders comments component 1`] = `
 
 exports[`renders comments 1`] = `
 <div>
-  <div
-    className="smallText"
+  <FormattedMessage
+    id="taskComment.activity"
+    values={Object {}}
   >
-    Activity and comments (
-    1
-    )
-  </div>
+    [Function]
+  </FormattedMessage>
   <div
     className="commentsList"
   >

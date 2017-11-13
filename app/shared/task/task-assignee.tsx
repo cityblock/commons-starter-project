@@ -10,6 +10,7 @@ import {
   ShortUserFragment,
 } from '../../graphql/types';
 import * as styles from './css/add-task-follower.css';
+import * as bodyStyles from './css/task-body.css';
 import * as taskStyles from './css/task.css';
 import { DEFAULT_AVATAR_URL } from './task';
 
@@ -165,14 +166,16 @@ export class TaskAssignee extends React.Component<allProps, IState> {
     const assigneeInfo = this.getAssigneeInfo();
 
     return (
-      <div className={taskStyles.infoRowLeft}>
+      <div className={bodyStyles.relative}>
+        <h3 className={bodyStyles.label}>Assign task:</h3>
         <div className={assigneeStyles} onClick={this.onClick}>
           <div
             className={taskStyles.avatar}
             style={{ backgroundImage: `url('${assigneeInfo.avatar}')` }}
           />
           <div className={taskStyles.name}>{assigneeInfo.name}</div>
-          <div className={taskStyles.smallText}>{assigneeInfo.role}</div>
+          <div className={taskStyles.smallText}>({assigneeInfo.role})</div>
+          <div className={taskStyles.arrowIcon} />
         </div>
         <div className={changeAssigneeErrorStyles}>
           <div className={classNames(taskStyles.smallText, taskStyles.redText)}>

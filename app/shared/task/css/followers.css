@@ -1,0 +1,16 @@
+@import '../../css/sizes';
+
+.container {
+  display: flex;
+}
+
+.avatar {
+  width: 30px;
+  height: 30px;
+  border: 1px solid var(--border-color);
+  border-radius: 50%;
+  background-position: center center;
+  background-size: contain;
+  background-repeat: no-repeat;
+  margin-right: 10px;
+}

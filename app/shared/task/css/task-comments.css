@@ -17,6 +17,11 @@
   color: var(--gray-font-color);
 }
 
+.divider {
+  border-bottom: 1px solid var(--gray-font-color);
+  padding-bottom: 10px;
+}
+
 .commentDate .error {
   display: flex;
   flex-direction: row;
@@ -51,15 +56,20 @@
 
 .taskComments {
   display: flex;
+  width: 100%;
   flex-direction: column;
-  margin: 0 var(--small-gutter) 10px;
+  padding: 15px 20px 20px;
   max-height: 205px;
   overflow: scroll;
   -webkit-overflow-scrolling: touch;
+  border-top: 1px solid var(--border-color);
+  background: var(--gray-background-color);
+  box-sizing: border-box;
+  border-bottom-left-radius: 4px;
+  border-bottom-right-radius: 4px;
 }
 
 .addComment {
-  margin-bottom: 5px;
   position: relative;
 }
 
@@ -73,7 +83,7 @@
   line-height: var(--body-copy-line-height);
   padding: 10px var(--medium-gutter) 10px var(--small-gutter);
   border: 1px solid var(--border-color);
-  border-radius: 4px;
+  border-radius: 2px;
   outline: none;
 
   &::placeholder {
@@ -99,7 +109,7 @@
   flex-direction: column;
   margin-top: 10px;
   padding-bottom: 10px;
-  border-bottom: 1px solid var(--gray-background-color);
+  border-bottom: 1px solid var(--border-color);
   word-wrap: break-word;
 }
 
@@ -123,7 +133,6 @@
 
 .comment.editable.editing .commentEditArea {
   display: flex;
-  margin-left: 20px;
 }
 
 .comment.editable.editing .commentBody {
@@ -135,13 +144,14 @@
   width: 100%;
   outline: none;
   border: 1px solid var(--blue-color);
-  border-radius: 4px;
+  border-radius: 2px;
   font-family: var(--roboto);
   font-size: var(--small-font-size);
   line-height: var(--medium-font-line-height);
   color: var(--gray-font-color);
   padding-left: var(--medium-gutter);
   padding: 5px 10px;
+  margin: 0;
   word-wrap: break-word;
   white-space: pre-wrap;
 }
@@ -194,7 +204,7 @@
   margin-left: var(--small-gutter);
   padding: 5px 10px;
   border: 1px solid transparent;
-  border-radius: 4px;
+  border-radius: 2px;
   transition: border .2s linear;
 }
 

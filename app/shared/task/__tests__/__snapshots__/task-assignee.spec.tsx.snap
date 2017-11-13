@@ -2,8 +2,13 @@
 
 exports[`renders the task assignee component 1`] = `
 <div
-  className="infoRowLeft"
+  className="relative"
 >
+  <h3
+    className="label"
+  >
+    Assign task:
+  </h3>
   <div
     className="assignee"
     onClick={[Function]}
@@ -24,8 +29,13 @@ exports[`renders the task assignee component 1`] = `
     <div
       className="smallText"
     >
+      (
       physician
+      )
     </div>
+    <div
+      className="arrowIcon"
+    />
   </div>
   <div
     className="changeAssigneeError hidden"

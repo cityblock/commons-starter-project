@@ -1,6 +1,7 @@
 import * as classNames from 'classnames';
 import * as React from 'react';
 import { compose, graphql } from 'react-apollo';
+import { FormattedMessage } from 'react-intl';
 import * as taskCommentsQuery from '../../graphql/queries/get-task-comments.graphql';
 /* tslint:disable:max-line-length */
 import * as commentCreateMutationGraphql from '../../graphql/queries/task-comment-create-mutation.graphql';
@@ -180,7 +181,13 @@ export class TaskComments extends React.Component<allProps, IState> {
     } else {
       return (
         <div>
-          <div className={styles.smallText}>Activity and comments ({comments.length})</div>
+          <FormattedMessage id="taskComment.activity">{
+            (message: string) => (
+              <div className={classNames(styles.smallText, styles.divider)}>
+                {`${message} (${comments.length})`}
+              </div>
+            )
+          }</FormattedMessage>
           <div className={styles.commentsList}>{comments.map(this.renderComment)}</div>
         </div>
       );
@@ -205,9 +212,13 @@ export class TaskComments extends React.Component<allProps, IState> {
           />
           <div className={styles.uploadAttachment} />
           <div className={addCommentErrorStyles}>
-            <div className={classNames(styles.smallText, styles.redText)}>
-              Error adding comment.
-            </div>
+          <FormattedMessage id="taskComment.error">{
+            (message: string) => (
+              <div className={classNames(styles.smallText, styles.redText)}>
+                {message}
+              </div>
+            )
+          }</FormattedMessage>
             <div className={styles.smallText}>Please try again.</div>
           </div>
         </div>

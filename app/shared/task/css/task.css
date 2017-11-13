@@ -126,14 +126,14 @@
 .name {
   color: var(--black-color);
   font-family: var(--roboto);
-  font-weight: var(--roboto-medium-weight);
+  font-weight: var(--default-font-weight);
   font-size: var(--small-font-size);
   line-height: var(--small-font-line-height);
 }
 
 .avatar {
-  width: 20px;
-  height: 20px;
+  width: 30px;
+  height: 30px;
   border: 1px solid var(--border-color);
   border-radius: 50%;
   background-position: center center;
@@ -177,17 +177,27 @@
   justify-content: flex-start;
   align-items: center;
   border: 1px solid transparent;
-  border-radius: 4px;
+  border-radius: 2px;
   padding: 5px;
   transition: border .2s linear;
+  position: relative;
+  border: 1px solid var(--border-color);
 }
 
 .assignee.blueBorder {
-  border: 1px solid var(--blue-color);
+  border-color: var(--blue-color);
 }
 
 .assignee .name {
   margin-right: 10px;
+}
+
+.arrowIcon {
+  height: 6px;
+  width: 12px;
+  background-image: url('../../../assets/down-arrow.svg');
+  position: absolute;
+  right: 20px;
 }
 
 .smallText, .darkSmallText {
@@ -197,7 +207,7 @@
 }
 
 .smallText {
-  color: var(--gray-font-color);
+  color: var(--light-gray-font-color);
 }
 
 .darkSmallText {

@@ -1,0 +1,21 @@
+@import '../../css/sizes';
+
+.container {
+  background: var(--white-color);
+  box-shadow: var(--drop-shadow);
+  border-radius: 4px;
+  min-height: 535px;
+  margin-bottom: 10px;
+  border: 1px solid var(--border-color);
+}
+
+.divider {
+  height: 1px;
+  width: 100%;
+  background: var(--gray-background-color);
+  margin: 15px 0;
+}
+
+.task {
+  padding: 20px;
+}

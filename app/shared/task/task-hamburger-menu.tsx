@@ -40,3 +40,5 @@ export const TaskHamburgerMenu: React.StatelessComponent<IProps> = props => {
     </div>
   );
 };
+
+export default TaskHamburgerMenu;

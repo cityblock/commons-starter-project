@@ -23,6 +23,7 @@ export const hamburger: string;
 export const close: string;
 export const assignee: string;
 export const blueBorder: string;
+export const arrowIcon: string;
 export const smallText: string;
 export const darkSmallText: string;
 export const redText: string;

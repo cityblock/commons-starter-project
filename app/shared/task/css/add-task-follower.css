@@ -4,11 +4,10 @@
 }
 
 .addFollower {
-  width: 20px;
-  height: 20px;
+  width: var(--medium-gutter);
+  height: var(--medium-gutter);
   border-radius: 50%;
   border: none;
-  margin-bottom: 10px;
   background-position: center center;
   background-size: contain;
   background-repeat: no-repeat;

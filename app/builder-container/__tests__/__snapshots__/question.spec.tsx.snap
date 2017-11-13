@@ -158,6 +158,12 @@ exports[`shallow rendered renders with screening tool 1`] = `
         value="radio"
       >
         <option
+          disabled={true}
+          value="Select one"
+        >
+          Select one (Required!)
+        </option>
+        <option
           value="dropdown"
         >
           dropdown
@@ -229,6 +235,12 @@ exports[`shallow rendered renders with screening tool 1`] = `
         onChange={[Function]}
         value="allTrue"
       >
+        <option
+          disabled={true}
+          value="Select one"
+        >
+          Select one (Required!)
+        </option>
         <option
           value="oneTrue"
         >

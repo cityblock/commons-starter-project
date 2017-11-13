@@ -8,7 +8,7 @@ exports[`renders dropdown answer 1`] = `
     className="select select"
     disabled={false}
     onChange={[Function]}
-    value="true"
+    value="answer-id"
   >
     <option
       disabled={true}
@@ -17,7 +17,7 @@ exports[`renders dropdown answer 1`] = `
       Select one
     </option>
     <option
-      value="true"
+      value="answer-id"
     >
       answer value
     </option>

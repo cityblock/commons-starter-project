@@ -21,19 +21,19 @@ export default class DropdownAnswer extends React.Component<IProps, {}> {
 
   renderDropdownOption(answer: FullAnswerFragment, index: number) {
     return (
-      <option key={`${answer.id}-${index}`} value={answer.value}>
+      <option key={`${answer.id}-${index}`} value={answer.id}>
         {answer.displayValue}
       </option>
     );
   }
 
-  onDropdownChange(value: string | number) {
+  onDropdownChange(id: string) {
     const { question, onChange } = this.props;
 
-    const chosenAnswer = (question.answers || []).find(answer => answer.value === value);
+    const chosenAnswer = (question.answers || []).find(answer => answer.id === id);
 
     if (chosenAnswer) {
-      onChange(question.id, chosenAnswer.id, value);
+      onChange(question.id, chosenAnswer.id, id);
     }
   }
 
@@ -45,7 +45,7 @@ export default class DropdownAnswer extends React.Component<IProps, {}> {
       <div className={styles.questionBody}>
         <select
           disabled={!editable}
-          value={currentAnswer ? currentAnswer.value : 'Select one'}
+          value={currentAnswer ? currentAnswer.id : 'Select one'}
           onChange={event => this.onDropdownChange(event.currentTarget.value)}
           className={classNames(formStyles.select, styles.select)}
         >

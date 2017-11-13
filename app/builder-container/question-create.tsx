@@ -141,20 +141,26 @@ class QuestionCreate extends React.Component<allProps, IState> {
           <div className={styles.flexInputGroup}>
             <select
               name="applicableIfType"
-              value={question.applicableIfType || ''}
+              value={question.applicableIfType || 'Select one'}
               onChange={this.onChange}
               className={classNames(formStyles.select, formStyles.inputSmall, styles.flexInputItem)}
             >
+              <option value={'Select one'} disabled={true}>
+                Select one (Required!)
+              </option>
               <option value="oneTrue">one true</option>
               <option value="allTrue">all true</option>
             </select>
             <select
               required
               name="answerType"
-              value={question.answerType}
+              value={question.answerType || 'Select one'}
               onChange={this.onChange}
               className={classNames(formStyles.select, formStyles.inputSmall, styles.flexInputItem)}
             >
+              <option value={'Select one'} disabled={true}>
+                Select one (Required!)
+              </option>
               <option value="dropdown">dropdown</option>
               <option value="radio">radio</option>
               <option value="freetext">freetext</option>

@@ -56,8 +56,14 @@ exports[`renders question 1`] = `
         className="select inputSmall flexInputItem"
         name="applicableIfType"
         onChange={[Function]}
-        value=""
+        value="Select one"
       >
+        <option
+          disabled={true}
+          value="Select one"
+        >
+          Select one (Required!)
+        </option>
         <option
           value="oneTrue"
         >
@@ -76,6 +82,12 @@ exports[`renders question 1`] = `
         required={true}
         value="dropdown"
       >
+        <option
+          disabled={true}
+          value="Select one"
+        >
+          Select one (Required!)
+        </option>
         <option
           value="dropdown"
         >

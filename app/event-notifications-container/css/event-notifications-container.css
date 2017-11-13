@@ -9,18 +9,8 @@
   lost-center: var(--max-width);
 }
 
-.leftPane {
-  background-color: var(--white-color);
-  border-top: 1px solid var(--gray-background-color);
-  border-left: 1px solid var(--gray-background-color);
-  border-right: 1px solid var(--border-color);
-  flex-basis: 25%;
-  height: calc(100vh - 70px);
-  overflow: scroll;
-}
-
 .mainBody {
-  flex-basis: 75%;
+  flex-basis: 100%;
 }
 
 .leftHeading {

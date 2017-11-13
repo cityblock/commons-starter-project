@@ -32,7 +32,7 @@ export default class RadioAnswer extends React.Component<IProps, {}> {
             type="radio"
             onClick={event => onChange(question.id, answer.id, answer.value)}
             checked={!!currentAnswer && currentAnswer.id === answer.id}
-            value={answer.value}
+            value={answer.id}
           />
           <label className={styles.radioFill} />
         </div>

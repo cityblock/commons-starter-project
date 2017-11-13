@@ -88,11 +88,6 @@ export class EventNotificationsContainer extends React.Component<IProps> {
 
     return (
       <div className={styles.container}>
-        <div className={styles.leftPane}>
-          <FormattedMessage id="notifications.leftPane">
-            {(message: string) => <div className={styles.leftHeading}>{message}</div>}
-          </FormattedMessage>
-        </div>
         <div className={styles.mainBody}>
           <div className={tabStyles.tabs}>
             <FormattedMessage id="tasks.listView">

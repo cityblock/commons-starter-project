@@ -22,7 +22,7 @@ exports[`renders question answers 1`] = `
             disabled={false}
             onClick={[Function]}
             type="radio"
-            value="true"
+            value="answer-id"
           />
           <label
             className="radioFill"

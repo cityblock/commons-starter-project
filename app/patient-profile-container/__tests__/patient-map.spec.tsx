@@ -8,11 +8,7 @@ describe('Patient Map Component', () => {
   const patientId = 'sansaStark';
   const routeBase = '/patients/sansaStark/map';
 
-  const wrapper = shallow(
-    <PatientMap
-      patientId={patientId}
-      routeBase={routeBase} />,
-  );
+  const wrapper = shallow(<PatientMap patientId={patientId} routeBase={routeBase} />);
 
   it('renders patient care plan', () => {
     const carePlan = wrapper.find(PatientCarePlan);
@@ -31,10 +27,7 @@ describe('Patient Map Component', () => {
     const taskId = 'littlefinger';
 
     const wrapper2 = shallow(
-      <PatientMap
-        patientId={patientId}
-        routeBase={routeBase}
-        taskId={taskId} />,
+      <PatientMap patientId={patientId} routeBase={routeBase} taskId={taskId} />,
     );
 
     it('renders associated task', () => {

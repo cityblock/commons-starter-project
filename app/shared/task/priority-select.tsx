@@ -1,6 +1,8 @@
 import * as classNames from 'classnames';
 import * as React from 'react';
 import { taskEditMutation, taskEditMutationVariables, Priority } from '../../graphql/types';
+import Option from '../library/option';
+import Select from '../library/select';
 import * as styles from './css/priority-select.css';
 
 interface IProps {
@@ -12,12 +14,6 @@ interface IProps {
 interface IState {
   changePriorityError: string;
 }
-
-export const Option: React.StatelessComponent<{ value: string }> = ({ value }) => {
-  const capitalizedValue = value.charAt(0).toUpperCase() + value.slice(1);
-
-  return <option value={value as Priority}>{`${capitalizedValue} priority`}</option>;
-};
 
 class PrioritySelect extends React.Component<IProps, IState> {
   constructor(props: IProps) {
@@ -46,7 +42,9 @@ class PrioritySelect extends React.Component<IProps, IState> {
 
   render(): JSX.Element {
     const { priority } = this.props;
+
     const selectStyles = classNames(styles.select, {
+      [styles.red]: priority === 'high',
       [styles.yellow]: priority === 'medium',
       [styles.grey]: priority === 'low',
       [styles.error]: !!this.state.changePriorityError,
@@ -54,11 +52,12 @@ class PrioritySelect extends React.Component<IProps, IState> {
 
     return (
       <div>
-        <select value={priority || 'medium'} className={selectStyles} onChange={this.onChange}>
-          <Option value="low" />
-          <Option value="medium" />
-          <Option value="high" />
-        </select>
+        <Select value={priority || ''} className={selectStyles} onChange={this.onChange}>
+          <Option value="" messageId="taskPriority.select" disabled={true} />
+          <Option value="low" messageId="taskPriority.low" />
+          <Option value="medium" messageId="taskPriority.medium" />
+          <Option value="high" messageId="taskPriority.high" />
+        </Select>
       </div>
     );
   }

@@ -25,20 +25,18 @@ interface IProps {
 export const PatientCarePlanView = (props: IProps) => {
   const { subTabId, routeBase, patientId, patientCarePlan, loading } = props;
   const isSuggestions = subTabId === 'suggestions';
-  const carePlanSuggestions = isSuggestions
-     ? (
-      <PatientCarePlanSuggestions routeBase={routeBase} patientId={patientId} />
-    ) : null;
+  const carePlanSuggestions = isSuggestions ? (
+    <PatientCarePlanSuggestions routeBase={routeBase} patientId={patientId} />
+  ) : null;
 
-  const carePlan =
-    !isSuggestions ? (
-      <PatientMap
-        loading={loading}
-        carePlan={patientCarePlan}
-        routeBase={routeBase}
-        patientId={patientId}
-      />
-    ) : null;
+  const carePlan = !isSuggestions ? (
+    <PatientMap
+      loading={loading}
+      carePlan={patientCarePlan}
+      routeBase={routeBase}
+      patientId={patientId}
+    />
+  ) : null;
 
   const activeCarePlanTabStyles = classNames(tabStyles.tab, {
     [tabStyles.selectedTab]: !isSuggestions,

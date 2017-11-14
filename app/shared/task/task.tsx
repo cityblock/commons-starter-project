@@ -721,8 +721,9 @@ export class Task extends React.Component<allProps, IState> {
 }
 
 function mapStateToProps(state: IAppState, ownProps: IProps): IStateProps {
-  const taskId = state.task.taskId ? state.task.taskId :
-    ownProps.match ? ownProps.match.params.taskId : undefined;
+  const taskId = state.task.taskId
+    ? state.task.taskId
+    : ownProps.match ? ownProps.match.params.taskId : undefined;
 
   return { taskId };
 }

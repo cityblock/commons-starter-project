@@ -88,12 +88,8 @@ export class TaskHeader extends React.Component<IProps, IState> {
   }
 }
 
-const mapDispatchToProps = (dispatch: Dispatch<() => void>): IDispatchProps =>
-({
+const mapDispatchToProps = (dispatch: Dispatch<() => void>): IDispatchProps => ({
   closeTask: () => dispatch(selectTask('')),
 });
 
-export default connect<{}, IDispatchProps, IOwnProps>(
-  null,
-  mapDispatchToProps,
-)(TaskHeader);
+export default connect<{}, IDispatchProps, IOwnProps>(null, mapDispatchToProps)(TaskHeader);

@@ -32,7 +32,8 @@ describe('task row', () => {
               task={task}
               selected={true}
               routeBase={'/foo/bar'}
-              selectTaskAction={selectTask}/>
+              selectTaskAction={selectTask}
+            />
           </ConnectedRouter>
         </ReduxConnectedIntlProvider>
       </MockedProvider>,
@@ -58,10 +59,11 @@ describe('task row', () => {
         <ReduxConnectedIntlProvider>
           <ConnectedRouter history={history}>
             <TaskRow
-            task={task}
-            selected={true}
-            routeBase={'/foo/bar'}
-            selectTaskAction={selectTask} />
+              task={task}
+              selected={true}
+              routeBase={'/foo/bar'}
+              selectTaskAction={selectTask}
+            />
           </ConnectedRouter>
         </ReduxConnectedIntlProvider>
       </MockedProvider>,

@@ -1,0 +1,23 @@
+@import '../../../css/sizes';
+
+.select {
+  background: var(--white-color);
+  outline: none;
+  font-family: var(--roboto);
+  height: 34px;
+  border: 1px solid var(--border-color);
+  transition: border 0.2s linear;
+  padding-left: 12px;
+  border-radius: 2px;
+  background-image: url('../../../../assets/down-arrow.svg');
+  background-repeat: no-repeat;
+  background-position-x: calc(100% - 20px);
+  background-position-y: center;
+  appearance: none;
+
+  &:hover,
+  &:active {
+    border-color: var(--blue-color);
+    cursor: pointer;
+  }
+}

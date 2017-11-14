@@ -2,7 +2,9 @@
   display: flex;
 }
 
-.full, .split, .collapsed {
+.full,
+.split,
+.collapsed {
   transition: width 0.2s linear;
 }
 

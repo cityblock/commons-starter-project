@@ -490,21 +490,30 @@ exports[`patient profile container renders patient profile container correctly 1
                     </h3>
                     <div>
                       <select
-                        className="select"
+                        className="select select"
                         onChange={[Function]}
-                        value="medium"
+                        value=""
                       >
                         <option
+                          disabled={true}
+                          value=""
+                        >
+                          Select priority
+                        </option>
+                        <option
+                          disabled={undefined}
                           value="low"
                         >
                           Low priority
                         </option>
                         <option
+                          disabled={undefined}
                           value="medium"
                         >
                           Medium priority
                         </option>
                         <option
+                          disabled={undefined}
                           value="high"
                         >
                           High priority
@@ -1119,21 +1128,30 @@ exports[`patient profile container renders patient profile for ipad 1`] = `
                     </h3>
                     <div>
                       <select
-                        className="select"
+                        className="select select"
                         onChange={[Function]}
-                        value="medium"
+                        value=""
                       >
                         <option
+                          disabled={true}
+                          value=""
+                        >
+                          Select priority
+                        </option>
+                        <option
+                          disabled={undefined}
                           value="low"
                         >
                           Low priority
                         </option>
                         <option
+                          disabled={undefined}
                           value="medium"
                         >
                           Medium priority
                         </option>
                         <option
+                          disabled={undefined}
                           value="high"
                         >
                           High priority

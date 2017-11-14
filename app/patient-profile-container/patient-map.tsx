@@ -40,7 +40,8 @@ export const PatientMap: React.StatelessComponent<IProps> = (props: IProps) => {
           loading={loading}
           carePlan={carePlan}
           routeBase={routeBase}
-          patientId={patientId} />
+          patientId={patientId}
+        />
       </div>
       <div className={sideBarStyles}>
         <Task routeBase={routeBase} />
@@ -53,6 +54,4 @@ const mapStateToProps = (state: IAppState): IStateProps => ({
   taskId: (state.task && state.task.taskId) || '',
 });
 
-export default connect<IStateProps, {}, IOwnProps>(
-  mapStateToProps,
-)(PatientMap);
+export default connect<IStateProps, {}, IOwnProps>(mapStateToProps)(PatientMap);

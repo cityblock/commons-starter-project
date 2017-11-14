@@ -11,10 +11,7 @@ describe('Patient Care Plan View Component', () => {
 
   it('renders patient suggestions when on suggestions tab', () => {
     const wrapper = shallow(
-      <PatientCarePlanView
-        patientId={patientId}
-        routeBase={routeBase}
-        subTabId='suggestions' />,
+      <PatientCarePlanView patientId={patientId} routeBase={routeBase} subTabId="suggestions" />,
     );
 
     const suggestions = wrapper.find(PatientCarePlanSuggestions);
@@ -27,11 +24,7 @@ describe('Patient Care Plan View Component', () => {
   });
 
   it('renders patient MAP when on active tab tab', () => {
-    const wrapper = shallow(
-      <PatientCarePlanView
-        patientId={patientId}
-        routeBase={routeBase} />,
-    );
+    const wrapper = shallow(<PatientCarePlanView patientId={patientId} routeBase={routeBase} />);
 
     const suggestions = wrapper.find(PatientMap);
 
@@ -43,11 +36,7 @@ describe('Patient Care Plan View Component', () => {
   });
 
   it('renders two tabs', () => {
-    const wrapper = shallow(
-      <PatientCarePlanView
-        patientId={patientId}
-        routeBase={routeBase} />,
-    );
+    const wrapper = shallow(<PatientCarePlanView patientId={patientId} routeBase={routeBase} />);
 
     const tabs = wrapper.find(FormattedMessage);
     expect(tabs.length).toBe(2);

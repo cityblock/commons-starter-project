@@ -106,12 +106,8 @@ export const TaskRow: React.StatelessComponent<IProps> = (props: IProps) => {
   );
 };
 
-const mapDispatchToProps = (dispatch: Dispatch<() => void>): IDispatchProps =>
-  ({
-    selectTaskAction: (taskId?: string) => dispatch(selectTask(taskId)),
-  });
+const mapDispatchToProps = (dispatch: Dispatch<() => void>): IDispatchProps => ({
+  selectTaskAction: (taskId?: string) => dispatch(selectTask(taskId)),
+});
 
-export default connect<{}, IDispatchProps, IOwnProps>(
-  null,
-  mapDispatchToProps,
-)(TaskRow);
+export default connect<{}, IDispatchProps, IOwnProps>(null, mapDispatchToProps)(TaskRow);

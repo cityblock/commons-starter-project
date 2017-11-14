@@ -1,6 +1,8 @@
 import { shallow } from 'enzyme';
 import * as React from 'react';
-import PrioritySelect, { Option } from '../priority-select';
+import Option from '../../library/option';
+import Select from '../../library/select';
+import PrioritySelect from '../priority-select';
 
 describe('Task Priority Select Component', () => {
   const taskId = 'taylorSwift';
@@ -12,29 +14,41 @@ describe('Task Priority Select Component', () => {
   );
 
   it('renders select tag with correct value', () => {
-    expect(wrapper.find('select').length).toBe(1);
-    expect(wrapper.find('select').props().value).toBe(priority);
+    expect(wrapper.find(Select).length).toBe(1);
+    expect(wrapper.find(Select).props().value).toBe(priority);
   });
 
-  it('renders three options for each priority level', () => {
-    expect(wrapper.find(Option).length).toBe(3);
+  it('renders four options for each priority level and instructions', () => {
+    expect(wrapper.find(Option).length).toBe(4);
 
     expect(
       wrapper
         .find(Option)
         .at(0)
         .props().value,
-    ).toBe('low');
+    ).toBe('');
+    expect(
+      wrapper
+        .find(Option)
+        .at(0)
+        .props().disabled,
+    ).toBeTruthy();
     expect(
       wrapper
         .find(Option)
         .at(1)
         .props().value,
-    ).toBe('medium');
+    ).toBe('low');
     expect(
       wrapper
         .find(Option)
         .at(2)
+        .props().value,
+    ).toBe('medium');
+    expect(
+      wrapper
+        .find(Option)
+        .at(3)
         .props().value,
     ).toBe('high');
   });

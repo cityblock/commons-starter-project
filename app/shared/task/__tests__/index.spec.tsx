@@ -37,7 +37,6 @@ describe('Task Component', () => {
 
     expect(header.length).toBe(1);
     expect(header.props().taskId).toBe(taskId);
-    expect(header.props().patientId).toBe(patientId);
     expect(header.props().patientName).toBe('Bob Smith');
     expect(header.props().routeBase).toBe(routeBase);
   });

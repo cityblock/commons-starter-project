@@ -20,6 +20,7 @@ describe('task row', () => {
   afterAll(() => {
     Date.now = oldDate;
   });
+  const selectTask = () => true as any;
 
   it('renders task row', () => {
     const history = createMemoryHistory();
@@ -27,7 +28,11 @@ describe('task row', () => {
       <MockedProvider mocks={[]} store={mockStore({ locale, task })}>
         <ReduxConnectedIntlProvider>
           <ConnectedRouter history={history}>
-            <TaskRow task={task} selected={true} routeBase={'/foo/bar'} />
+            <TaskRow
+              task={task}
+              selected={true}
+              routeBase={'/foo/bar'}
+              selectTaskAction={selectTask}/>
           </ConnectedRouter>
         </ReduxConnectedIntlProvider>
       </MockedProvider>,
@@ -52,7 +57,11 @@ describe('task row', () => {
       <MockedProvider mocks={[]} store={mockStore({ locale, task })}>
         <ReduxConnectedIntlProvider>
           <ConnectedRouter history={history}>
-            <TaskRow task={task} selected={true} routeBase={'/foo/bar'} />
+            <TaskRow
+            task={task}
+            selected={true}
+            routeBase={'/foo/bar'}
+            selectTaskAction={selectTask} />
           </ConnectedRouter>
         </ReduxConnectedIntlProvider>
       </MockedProvider>,

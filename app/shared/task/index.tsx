@@ -28,7 +28,7 @@ interface IDispatchProps {
 
 interface IOwnProps {
   routeBase: string;
-  match: {
+  match?: {
     params: {
       taskId?: string;
     };
@@ -82,7 +82,6 @@ export class Task extends React.Component<IProps, IState> {
         <div className={styles.task}>
           <TaskHeader
             taskId={taskId}
-            patientId={patientId}
             patientName={patientName}
             confirmDelete={this.confirmDelete}
             routeBase={routeBase}
@@ -121,9 +120,12 @@ export class Task extends React.Component<IProps, IState> {
   }
 }
 
-const mapStateToProps = (state: IAppState, ownProps: IProps): IStateProps => ({
-  taskId: ownProps.match ? ownProps.match.params.taskId : '',
-});
+const mapStateToProps = (state: IAppState, ownProps: IProps): IStateProps => {
+  const taskId = state.task.taskId ? state.task.taskId :
+    ownProps.match ? ownProps.match.params.taskId : '';
+
+  return { taskId };
+};
 
 const mapDispatchToProps = (dispatch: Dispatch<() => void>): IDispatchProps => ({
   selectTask: (taskId?: string) => dispatch(selectTask(taskId)),

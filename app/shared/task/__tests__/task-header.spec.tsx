@@ -1,13 +1,13 @@
 import { shallow } from 'enzyme';
 import * as React from 'react';
 import { Link } from 'react-router-dom';
-import TaskHeader from '../header';
+import { TaskHeader } from '../header';
 import TaskHamburgerMenu from '../task-hamburger-menu';
 
 describe('Task Header Component', () => {
-  const patientId = 'judyHopps';
   const patientName = 'Lt. Judy Hopps';
   const confirmDelete = () => true;
+  const closeTask = () => true;
   const routeBase = '/tasks';
 
   it('renders nothing if task id or base route undefined', () => {
@@ -16,10 +16,10 @@ describe('Task Header Component', () => {
     const wrapper = shallow(
       <TaskHeader
         taskId={taskId}
-        patientId={patientId}
         patientName={patientName}
         confirmDelete={confirmDelete}
         routeBase={routeBase}
+        closeTask={closeTask}
       />,
     );
 
@@ -32,16 +32,15 @@ describe('Task Header Component', () => {
     const wrapper = shallow(
       <TaskHeader
         taskId={taskId}
-        patientId={patientId}
         patientName={patientName}
         confirmDelete={confirmDelete}
         routeBase={routeBase}
+        closeTask={closeTask}
       />,
     );
 
     expect(wrapper.find(TaskHamburgerMenu).length).toBe(1);
     expect(wrapper.find(TaskHamburgerMenu).props().taskId).toBe(taskId);
-    expect(wrapper.find(TaskHamburgerMenu).props().patientId).toBe(patientId);
 
     expect(wrapper.find(Link).length).toBe(1);
   });

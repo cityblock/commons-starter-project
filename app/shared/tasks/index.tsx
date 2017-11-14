@@ -20,7 +20,7 @@ import InfiniteScroll from '../infinite-scroll/infinite-scroll';
 import Task from '../task';
 import TaskCreate from '../task/task-create';
 import * as styles from './css/tasks.css';
-import { TaskRow } from './task-row';
+import TaskRow from './task-row';
 import { TasksLoadingError } from './tasks-loading-error';
 
 type OrderByOptions = 'createdAtDesc' | 'createdAtAsc' | 'dueAtAsc' | 'updatedAtAsc';

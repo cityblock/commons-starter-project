@@ -9,8 +9,8 @@ import * as patientCarePlanQuery from '../graphql/queries/get-patient-care-plan.
 /* tslint:enable:max-line-length */
 import * as tabStyles from '../shared/css/tabs.css';
 import * as styles from './css/patient-care-plan.css';
-import PatientCarePlan from './patient-care-plan';
 import PatientCarePlanSuggestions from './patient-care-plan-suggestions';
+import PatientMap from './patient-map';
 
 interface IProps {
   patientId: string;
@@ -22,17 +22,17 @@ interface IProps {
   error?: string;
 }
 
-const PatientCarePlanView = (props: IProps) => {
+export const PatientCarePlanView = (props: IProps) => {
   const { subTabId, routeBase, patientId, patientCarePlan, loading } = props;
-
-  const carePlanSuggestions =
-    subTabId === 'suggestions' ? (
+  const isSuggestions = subTabId === 'suggestions';
+  const carePlanSuggestions = isSuggestions
+     ? (
       <PatientCarePlanSuggestions routeBase={routeBase} patientId={patientId} />
     ) : null;
 
   const carePlan =
-    !subTabId || subTabId === 'active' ? (
-      <PatientCarePlan
+    !isSuggestions ? (
+      <PatientMap
         loading={loading}
         carePlan={patientCarePlan}
         routeBase={routeBase}
@@ -41,10 +41,10 @@ const PatientCarePlanView = (props: IProps) => {
     ) : null;
 
   const activeCarePlanTabStyles = classNames(tabStyles.tab, {
-    [tabStyles.selectedTab]: !subTabId || subTabId === 'active',
+    [tabStyles.selectedTab]: !isSuggestions,
   });
   const suggestionsTabStyles = classNames(tabStyles.tab, {
-    [tabStyles.selectedTab]: subTabId === 'suggestions',
+    [tabStyles.selectedTab]: isSuggestions,
   });
   const tabRowStyles = classNames(tabStyles.tabs, tabStyles.darkTabs);
 

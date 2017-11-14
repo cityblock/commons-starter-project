@@ -1,0 +1,24 @@
+.container {
+  display: flex;
+}
+
+.full, .split, .collapsed {
+  transition: width 0.2s linear;
+}
+
+.full {
+  width: 100%;
+}
+
+.split {
+  width: 50%;
+}
+
+.collapsed {
+  width: 0%;
+  display: none;
+}
+
+.leftMargin {
+  margin-left: 18px;
+}

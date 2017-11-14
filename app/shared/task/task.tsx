@@ -609,7 +609,6 @@ export class Task extends React.Component<allProps, IState> {
                   onClickDelete={this.onClickDelete}
                   onCopy={this.onCopyShareLinkClick}
                   taskId={task.id}
-                  patientId={task.patientId}
                 />
                 <Link to={closeRoute} className={styles.close} />
               </div>
@@ -722,9 +721,10 @@ export class Task extends React.Component<allProps, IState> {
 }
 
 function mapStateToProps(state: IAppState, ownProps: IProps): IStateProps {
-  return {
-    taskId: ownProps.match ? ownProps.match.params.taskId : undefined,
-  };
+  const taskId = state.task.taskId ? state.task.taskId :
+    ownProps.match ? ownProps.match.params.taskId : undefined;
+
+  return { taskId };
 }
 
 function mapDispatchToProps(dispatch: Dispatch<() => void>): IDispatchProps {

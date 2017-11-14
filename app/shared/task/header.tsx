@@ -1,25 +1,32 @@
 import * as classNames from 'classnames';
 import * as React from 'react';
+import { connect, Dispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
+import { selectTask } from '../../actions/task-action';
 import * as styles from './css/header.css';
 import TaskHamburgerMenu from './task-hamburger-menu';
 
 const COPY_SUCCESS_TIMEOUT_MILLISECONDS = 2000;
 
-interface IProps {
+interface IDispatchProps {
+  closeTask: () => void;
+}
+
+interface IOwnProps {
   taskId: string;
-  patientId: string;
   patientName: string;
   confirmDelete: () => void;
   routeBase: string;
 }
+
+type IProps = IDispatchProps & IOwnProps;
 
 interface IState {
   hamburgerMenuVisible: boolean;
   copySuccessVisible: boolean;
 }
 
-class TaskHeader extends React.Component<IProps, IState> {
+export class TaskHeader extends React.Component<IProps, IState> {
   constructor(props: IProps) {
     super(props);
 
@@ -49,7 +56,7 @@ class TaskHeader extends React.Component<IProps, IState> {
   };
 
   render() {
-    const { patientName, taskId, patientId, routeBase } = this.props;
+    const { patientName, taskId, routeBase, closeTask } = this.props;
     const { hamburgerMenuVisible, copySuccessVisible } = this.state;
 
     if (!taskId || !routeBase) return null;
@@ -69,17 +76,24 @@ class TaskHeader extends React.Component<IProps, IState> {
           <div className={styles.hamburger} onClick={this.onToggleHamburgerMenu} />
           <TaskHamburgerMenu
             taskId={taskId}
-            patientId={patientId}
             visible={hamburgerMenuVisible}
             onClickAddAttachment={() => false}
             onClickDelete={this.onClickDelete}
             onCopy={this.onCopyShareLink}
           />
-          <Link to={routeBase} className={styles.close} />
+          <Link to={routeBase} className={styles.close} onClick={closeTask} />
         </div>
       </div>
     );
   }
 }
 
-export default TaskHeader;
+const mapDispatchToProps = (dispatch: Dispatch<() => void>): IDispatchProps =>
+({
+  closeTask: () => dispatch(selectTask('')),
+});
+
+export default connect<{}, IDispatchProps, IOwnProps>(
+  null,
+  mapDispatchToProps,
+)(TaskHeader);

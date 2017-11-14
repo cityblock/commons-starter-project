@@ -17,7 +17,7 @@ import PatientThreeSixtyView from './patient-three-sixty-view';
 import PatientTimeline from './patient-timeline';
 import ScreeningTool from './screening-tool';
 
-type SelectableTabs = 'timeline' | 'patientInfo' | '360' | 'map' | 'tools';
+type SelectableTabs = 'timeline' | 'patientInfo' | '360' | 'map' | 'tasks' | 'tools';
 
 interface IStateProps {
   patientId: string;
@@ -91,7 +91,7 @@ class PatientProfileContainer extends React.Component<IProps, {}> {
         />
       ) : null;
     const map =
-      tabId === 'map' ? (
+      tabId === 'map' || tabId === 'tasks' ? (
         <PatientCarePlanView
           patientId={patientId}
           routeBase={`/patients/${patientId}/map`}

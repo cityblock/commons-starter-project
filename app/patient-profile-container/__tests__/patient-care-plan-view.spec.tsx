@@ -1,215 +1,55 @@
-import { createMemoryHistory } from 'history';
+import { shallow } from 'enzyme';
 import * as React from 'react';
-import { gql } from 'react-apollo';
-import { MockedProvider } from 'react-apollo/test-utils';
-import { ConnectedRouter } from 'react-router-redux';
-import { create } from 'react-test-renderer';
-import configureMockStore from 'redux-mock-store';
-import { ENGLISH_TRANSLATION } from '../../reducers/messages/en';
-import ReduxConnectedIntlProvider from '../../redux-connected-intl-provider';
-import PatientCarePlanView from '../patient-care-plan-view';
+import { FormattedMessage } from 'react-intl';
+import PatientCarePlanSuggestions from '../patient-care-plan-suggestions';
+import { PatientCarePlanView } from '../patient-care-plan-view';
+import PatientMap from '../patient-map';
 
-const locale = { messages: ENGLISH_TRANSLATION.messages };
-const mockStore = configureMockStore([]);
+describe('Patient Care Plan View Component', () => {
+  const patientId = 'aryaStark';
+  const routeBase = '/patients';
 
-export const patientCarePlanQuery = gql(`
-query getPatientCarePlan($patientId: String!) {
-  carePlanForPatient(patientId: $patientId) {
-    concerns {
-      ...FullPatientConcern
-      __typename
-    }
-    goals {
-      ...FullPatientGoal
-      __typename
-    }
-    __typename
-  }
-}
+  it('renders patient suggestions when on suggestions tab', () => {
+    const wrapper = shallow(
+      <PatientCarePlanView
+        patientId={patientId}
+        routeBase={routeBase}
+        subTabId='suggestions' />,
+    );
 
-fragment FullPatientConcern on PatientConcern {
-  id
-  order
-  concernId
-  concern {
-    ...FullConcern
-    __typename
-  }
-  patientId
-  patient {
-    ...ShortPatient
-    __typename
-  }
-  patientGoals {
-    ...FullPatientGoal
-    __typename
-  }
-  startedAt
-  completedAt
-  createdAt
-  updatedAt
-  deletedAt
-  __typename
-}
+    const suggestions = wrapper.find(PatientCarePlanSuggestions);
 
-fragment FullConcern on Concern {
-  id
-  title
-  createdAt
-  updatedAt
-  deletedAt
-  __typename
-}
+    expect(suggestions.length).toBe(1);
+    expect(suggestions.props().routeBase).toBe(routeBase);
+    expect(suggestions.props().patientId).toBe(patientId);
 
-fragment ShortPatient on Patient {
-  id
-  firstName
-  middleName
-  lastName
-  language
-  gender
-  dateOfBirth
-  zip
-  createdAt
-  consentToText
-  consentToCall
-  __typename
-}
+    expect(wrapper.find(PatientMap).length).toBe(0);
+  });
 
-fragment FullPatientGoal on PatientGoal {
-  id
-  title
-  patientId
-  patient {
-    ...ShortPatient
-    __typename
-  }
-  patientConcernId
-  goalSuggestionTemplateId
-  goalSuggestionTemplate {
-    ...FullGoalSuggestionTemplate
-    __typename
-  }
-  tasks {
-    ...FullTask
-    __typename
-  }
-  createdAt
-  updatedAt
-  deletedAt
-  __typename
-}
+  it('renders patient MAP when on active tab tab', () => {
+    const wrapper = shallow(
+      <PatientCarePlanView
+        patientId={patientId}
+        routeBase={routeBase} />,
+    );
 
-fragment FullGoalSuggestionTemplate on GoalSuggestionTemplate {
-  id
-  title
-  taskTemplates {
-    ...FullTaskTemplate
-    __typename
-  }
-  createdAt
-  updatedAt
-  deletedAt
-  __typename
-}
+    const suggestions = wrapper.find(PatientMap);
 
-fragment FullTaskTemplate on TaskTemplate {
-  id
-  title
-  completedWithinNumber
-  completedWithinInterval
-  repeating
-  goalSuggestionTemplateId
-  priority
-  careTeamAssigneeRole
-  createdAt
-  updatedAt
-  deletedAt
-  __typename
-}
+    expect(suggestions.length).toBe(1);
+    expect(suggestions.props().routeBase).toBe(routeBase);
+    expect(suggestions.props().patientId).toBe(patientId);
 
-fragment FullTask on Task {
-  id
-  title
-  description
-  createdAt
-  updatedAt
-  completedAt
-  deletedAt
-  dueAt
-  patientId
-  priority
-  patient {
-    id
-    firstName
-    middleName
-    lastName
-    __typename
-  }
-  assignedTo {
-    id
-    firstName
-    lastName
-    googleProfileImageUrl
-    userRole
-    __typename
-  }
-  followers {
-    id
-    firstName
-    lastName
-    googleProfileImageUrl
-    userRole
-    __typename
-  }
-  createdBy {
-    id
-    firstName
-    lastName
-    googleProfileImageUrl
-    userRole
-    __typename
-  }
-  patientGoal {
-    id
-    title
-    __typename
-  }
-  __typename
-}`);
+    expect(wrapper.find(PatientCarePlanSuggestions).length).toBe(0);
+  });
 
-it('renders patient care plan view', () => {
-  const history = createMemoryHistory();
-  const tree = create(
-    <MockedProvider
-      mocks={[
-        {
-          request: {
-            query: patientCarePlanQuery,
-            variables: {
-              patientId: 'patient-1',
-            },
-          },
-          result: {
-            data: {
-              patientCarePlan: {},
-            },
-          },
-        },
-      ]}
-      store={mockStore({ locale })}
-    >
-      <ReduxConnectedIntlProvider>
-        <ConnectedRouter history={history}>
-          <PatientCarePlanView
-            patientId={'patient-1'}
-            subTabId={'active'}
-            loading={false}
-            routeBase={'/patients/patient-1/map'}
-          />
-        </ConnectedRouter>
-      </ReduxConnectedIntlProvider>
-    </MockedProvider>,
-  ).toJSON();
-  expect(tree).toMatchSnapshot();
+  it('renders two tabs', () => {
+    const wrapper = shallow(
+      <PatientCarePlanView
+        patientId={patientId}
+        routeBase={routeBase} />,
+    );
+
+    const tabs = wrapper.find(FormattedMessage);
+    expect(tabs.length).toBe(2);
+  });
 });

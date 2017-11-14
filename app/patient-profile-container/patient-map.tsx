@@ -43,15 +43,13 @@ export const PatientMap: React.StatelessComponent<IProps> = (props: IProps) => {
           patientId={patientId}
         />
       </div>
-      <div className={sideBarStyles}>
-        <Task routeBase={routeBase} />
-      </div>
+      <div className={sideBarStyles}>{taskId && <Task routeBase={routeBase} />}</div>
     </div>
   );
 };
 
 const mapStateToProps = (state: IAppState): IStateProps => ({
-  taskId: (state.task && state.task.taskId) || '',
+  taskId: state.task.taskId || '',
 });
 
 export default connect<IStateProps, {}, IOwnProps>(mapStateToProps)(PatientMap);

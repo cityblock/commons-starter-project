@@ -1,5 +1,6 @@
 import { shallow } from 'enzyme';
 import * as React from 'react';
+import Spinner from '../../library/spinner';
 import { taskWithComment } from '../../util/test-data';
 import TaskHeader from '../header';
 import { Divider, Task } from '../index';
@@ -31,6 +32,10 @@ describe('Task Component', () => {
       task={taskWithComment}
     />,
   );
+
+  it('does not render loading spinner if not loading', () => {
+    expect(wrapper.find(Spinner).length).toBe(0);
+  });
 
   it('renders the task header with correct props', () => {
     const header = wrapper.find(TaskHeader);
@@ -87,5 +92,22 @@ describe('Task Component', () => {
 
     expect(comments.length).toBe(1);
     expect(comments.props().taskId).toBe(taskId);
+  });
+
+  it('renders loading component if fetching data', () => {
+    const wrapper2 = shallow(
+      <Task
+        selectTask={placeholderFn}
+        editTask={placeholderFn}
+        routeBase={routeBase}
+        match={match}
+        taskId={taskId}
+        task={taskWithComment}
+        taskLoading={true}
+      />,
+    );
+
+    expect(wrapper2.find(TaskHeader).length).toBe(0);
+    expect(wrapper2.find(Spinner).length).toBe(1);
   });
 });

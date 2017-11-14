@@ -21,6 +21,7 @@ describe('Patient Map Component', () => {
   it('makes care plan full view when no task present', () => {
     expect(wrapper.find('.full').length).toBe(1);
     expect(wrapper.find('.collapsed').length).toBe(1);
+    expect(wrapper.find(Task).length).toBe(0);
   });
 
   describe('Expanded Task View', () => {

@@ -8,6 +8,7 @@ import * as taskEditMutationGraphql from '../../graphql/queries/task-edit-mutati
 import { taskEditMutation, taskEditMutationVariables, FullTaskFragment } from '../../graphql/types';
 import { IState as IAppState } from '../../store';
 import { formatPatientName } from '../helpers/format-helpers';
+import Spinner from '../library/spinner';
 import * as styles from './css/index.css';
 import TaskHeader from './header';
 import TaskAssignee from './task-assignee';
@@ -68,14 +69,23 @@ export class Task extends React.Component<IProps, IState> {
   };
 
   render(): JSX.Element {
-    const { task, routeBase, editTask } = this.props;
+    const { task, routeBase, editTask, taskLoading } = this.props;
 
+    const taskId = task && task.id;
+
+    if (taskLoading) {
+      return (
+        <div className={styles.container}>
+          <Spinner />
+        </div>
+      );
+    }
+
+    const patientId = task && task.patientId;
     const patientName =
       task && task.patient
         ? formatPatientName(task.patient.firstName || '', task.patient.lastName || '')
         : 'No Patient';
-    const taskId = task && task.id;
-    const patientId = task && task.patientId;
 
     return (
       <div className={styles.container}>

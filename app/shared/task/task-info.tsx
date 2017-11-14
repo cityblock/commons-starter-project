@@ -34,13 +34,18 @@ class TaskTitle extends React.Component<IProps, IState> {
     this.state = {
       editTitleMode: false,
       editDescriptionMode: false,
-      editedTitle: '',
+      editedTitle: props.title || '',
       editTitleError: '',
-      editedDescription: '',
+      editedDescription: props.description || '',
       editDescriptionError: '',
     };
 
     this.onKeyDown = this.onKeyDown.bind(this);
+  }
+
+  componentDidMount() {
+    const { title, description } = this.getTextHeights();
+    this.setState(() => ({ titleHeight: title, descriptionHeight: description }));
   }
 
   componentWillReceiveProps(nextProps: IProps): void {

@@ -1,7 +1,7 @@
 import * as classNames from 'classnames';
 import * as React from 'react';
 import { compose, graphql } from 'react-apollo';
-import { injectIntl, FormattedMessage } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 import { connect, Dispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { updateEventNotificationsCount } from '../actions/event-notifications-action';
@@ -20,23 +20,13 @@ import { fetchMore } from '../shared/util/fetch-more';
 import { IState as IAppState } from '../store';
 import * as styles from './css/event-notifications-container.css';
 
-type SelectableNotificationTypes = 'tasks';
+export type SelectableNotificationTypes = 'tasks';
 
 interface IProps {
-  eventNotificationType?: SelectableNotificationTypes;
-  eventNotificationsLoading: boolean;
-  eventNotificationsError?: string;
-  /* tslint:disable:max-line-length */
-  eventNotificationsResponse?: getEventNotificationsForCurrentUserQuery['eventNotificationsForCurrentUser'];
-  /* tslint:disable:max-line-length */
-  eventNotifications?: FullEventNotificationFragment[];
-  fetchMoreEventNotifications: () => any;
-  updateNotificationsCount: (count: number) => any;
   dismissEventNotification: (
     options: { variables: eventNotificationDismissMutationVariables },
   ) => // TODO: Use generated typings here
   { data: { eventNotificationDismiss: FullEventNotificationFragment } };
-  notificationsCount: number;
   match: {
     params: {
       patientId: string;
@@ -45,8 +35,29 @@ interface IProps {
   };
 }
 
-export class EventNotificationsContainer extends React.Component<IProps> {
-  componentWillReceiveProps(nextProps: IProps) {
+interface IDispatchProps {
+  updateNotificationsCount: (count: number) => any;
+}
+
+interface IStateProps {
+  notificationsCount: number;
+  eventNotificationType?: SelectableNotificationTypes;
+}
+
+interface IGraphqlProps {
+  fetchMoreEventNotifications: () => any;
+  eventNotificationsLoading: boolean;
+  eventNotificationsError?: string;
+  /* tslint:disable:max-line-length */
+  eventNotificationsResponse?: getEventNotificationsForCurrentUserQuery['eventNotificationsForCurrentUser'];
+  /* tslint:disable:max-line-length */
+  eventNotifications?: FullEventNotificationFragment[];
+}
+
+type allProps = IProps & IDispatchProps & IStateProps & IGraphqlProps;
+
+export class EventNotificationsContainer extends React.Component<allProps> {
+  componentWillReceiveProps(nextProps: allProps) {
     document.title = `Notifications | Commons`;
 
     const { updateNotificationsCount } = this.props;
@@ -128,14 +139,14 @@ export class EventNotificationsContainer extends React.Component<IProps> {
   }
 }
 
-function mapStateToProps(state: IAppState, ownProps: IProps): Partial<IProps> {
+function mapStateToProps(state: IAppState, ownProps: IProps): IStateProps {
   return {
     eventNotificationType: ownProps.match.params.eventNotificationType,
     notificationsCount: state.eventNotifications.count,
   };
 }
 
-function mapDispatchToProps(dispatch: Dispatch<() => void>): Partial<IProps> {
+function mapDispatchToProps(dispatch: Dispatch<() => void>): IDispatchProps {
   return {
     updateNotificationsCount: (count: number) => dispatch(updateEventNotificationsCount(count)),
   };
@@ -154,10 +165,9 @@ export function formatEventNotifications(
 }
 
 export default compose(
-  injectIntl,
-  connect(mapStateToProps, mapDispatchToProps),
-  graphql(eventNotificationsQuery as any, {
-    options: (props: IProps) => {
+  connect<IStateProps, IDispatchProps, IProps>(mapStateToProps, mapDispatchToProps),
+  graphql<IGraphqlProps, IProps & IStateProps>(eventNotificationsQuery as any, {
+    options: (props: allProps) => {
       const variables: any = {
         pageNumber: 0,
         pageSize: 15,
@@ -181,5 +191,7 @@ export default compose(
         : [],
     }),
   }),
-  graphql(eventNotificationDismissMutation as any, { name: 'dismissEventNotification' }),
+  graphql<IGraphqlProps, IProps>(eventNotificationDismissMutation as any, {
+    name: 'dismissEventNotification',
+  }),
 )(EventNotificationsContainer);

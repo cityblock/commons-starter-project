@@ -1,14 +1,13 @@
 import * as classNames from 'classnames';
 import * as langs from 'langs';
 import * as React from 'react';
-import { FormattedMessage, InjectedIntl } from 'react-intl';
+import { FormattedDate, FormattedMessage, FormattedRelative } from 'react-intl';
 import { ShortPatientFragment } from '../graphql/types';
 import { getPatientFirstAndMiddleName } from '../shared/util/patient-name';
 import * as styles from './css/patient-profile-left-nav.css';
 import PatientScratchPad from './patient-scratch-pad';
 
 interface IProps {
-  intl: InjectedIntl;
   patientId: string;
   patient?: ShortPatientFragment;
   condensedPatientInfo?: boolean;
@@ -26,14 +25,18 @@ export default class PatientLeftNavInfo extends React.Component<IProps, {}> {
   }
 
   renderPatientHeader() {
-    const { patient, condensedPatientInfo, intl } = this.props;
+    const { patient, condensedPatientInfo } = this.props;
     const firstName = patient ? getPatientFirstAndMiddleName(patient) : 'Unknown';
     const lastName = patient && patient.lastName ? patient.lastName : null;
     // TODO: this is a bad fallback
     const patientAge =
-      patient && patient.dateOfBirth
-        ? intl.formatRelative(patient.dateOfBirth).replace('years', '')
-        : '40';
+      patient && patient.dateOfBirth ? (
+        <FormattedRelative value={patient.dateOfBirth}>
+          {(date: string) => <span>{date.replace('years', '')}</span>}
+        </FormattedRelative>
+      ) : (
+        '40'
+      );
     const gender = patient && patient.gender ? GENDER[patient.gender] : null;
 
     if (condensedPatientInfo) {
@@ -71,13 +74,25 @@ export default class PatientLeftNavInfo extends React.Component<IProps, {}> {
   }
 
   render() {
-    const { patient, patientId, intl, condensedPatientInfo } = this.props;
+    const { patient, patientId, condensedPatientInfo } = this.props;
 
     // TODO: This is a bad fallback
     const dateOfBirth =
-      patient && patient.dateOfBirth ? intl.formatDate(patient.dateOfBirth) : '2/16/1977';
+      patient && patient.dateOfBirth ? (
+        <FormattedDate value={patient.dateOfBirth}>
+          {(date: string) => <span>{date}</span>}{' '}
+        </FormattedDate>
+      ) : (
+        '2/16/1977'
+      );
     const patientJoined =
-      patient && patient.createdAt ? intl.formatRelative(patient.createdAt) : 'Unknown';
+      patient && patient.createdAt ? (
+        <FormattedRelative value={patient.createdAt}>
+          {(date: string) => <span>{date}</span>}
+        </FormattedRelative>
+      ) : (
+        'Unknown'
+      );
     // TODO: Replace 'Brooklyn, NY' and 'English' with better defaults
     const zip = patient && patient.zip ? patient.zip : 'Brooklyn, NY';
     let languageName = 'Declined';

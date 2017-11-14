@@ -3,7 +3,7 @@ import { pickBy } from 'lodash';
 import * as querystring from 'querystring';
 import * as React from 'react';
 import { compose, graphql } from 'react-apollo';
-import { injectIntl, FormattedMessage, InjectedIntl } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 import { connect, Dispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { push } from 'react-router-redux';
@@ -16,7 +16,7 @@ import { IState as IAppState } from '../store';
 import * as styles from './css/tasks-container.css';
 
 interface IProps {
-  intl: InjectedIntl;
+  mutate?: any;
 }
 
 interface IGraphqlProps {
@@ -128,7 +128,6 @@ const getPageParams = (props: IProps) => {
 };
 
 export default compose(
-  injectIntl,
   connect<IStateProps, IDispatchProps>(mapStateToProps, mapDispatchToProps),
   graphql<IGraphqlProps, IProps>(tasksQuery as any, {
     options: (props: IProps) => ({ variables: getPageParams(props) }),

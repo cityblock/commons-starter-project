@@ -7,7 +7,7 @@ import { create } from 'react-test-renderer';
 import configureMockStore from 'redux-mock-store';
 import { ENGLISH_TRANSLATION } from '../../reducers/messages/en';
 import ReduxConnectedIntlProvider from '../../redux-connected-intl-provider';
-import PatientProfileContainer from '../patient-profile-container';
+import PatientProfileContainer, { SelectableTabs } from '../patient-profile-container';
 
 export const patientCarePlanQuery = gql(`
 query getPatientCarePlan($patientId: String!) {
@@ -31,7 +31,7 @@ const oldDate = Date.now;
 const match = {
   params: {
     patientId: 'patient-1',
-    tabId: 'map',
+    tabId: 'map' as SelectableTabs,
   },
 };
 
@@ -66,7 +66,7 @@ describe('patient profile container', () => {
       >
         <ReduxConnectedIntlProvider>
           <ConnectedRouter history={history}>
-            <PatientProfileContainer patientId={'patient-id'} match={match} />
+            <PatientProfileContainer match={match} />
           </ConnectedRouter>
         </ReduxConnectedIntlProvider>
       </MockedProvider>,
@@ -98,7 +98,7 @@ describe('patient profile container', () => {
       >
         <ReduxConnectedIntlProvider>
           <ConnectedRouter history={history}>
-            <PatientProfileContainer browserSize={'small'} patientId={'patient-1'} match={match} />
+            <PatientProfileContainer match={match} />
           </ConnectedRouter>
         </ReduxConnectedIntlProvider>
       </MockedProvider>,

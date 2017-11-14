@@ -17,28 +17,33 @@ import RiskArea from './risk-area';
 import RiskAreaCreate from './risk-area-create';
 import { RiskAreaRow } from './risk-area-row';
 
-export interface IComponentProps {
+interface IProps {
   routeBase: string;
   riskAreas?: FullRiskAreaFragment[];
   riskAreaId?: string;
+  mutate?: any;
 }
 
-interface IProps extends IComponentProps {
+interface IGraphqlProps {
   loading?: boolean;
   error?: string;
-  mutate: any;
   deleteRiskArea: (
     options: { variables: riskAreaDeleteMutationVariables },
   ) => { data: riskAreaDeleteMutation };
+}
+
+interface IDispatchProps {
   redirectToRiskAreas: () => any;
 }
+
+type allProps = IProps & IGraphqlProps & IDispatchProps;
 
 interface IState {
   showCreateRiskArea: false;
 }
 
-class AdminRiskAreas extends React.Component<IProps, IState> {
-  constructor(props: IProps) {
+class AdminRiskAreas extends React.Component<allProps, IState> {
+  constructor(props: allProps) {
     super(props);
 
     this.renderRiskAreas = this.renderRiskAreas.bind(this);
@@ -52,7 +57,7 @@ class AdminRiskAreas extends React.Component<IProps, IState> {
     };
   }
 
-  componentWillReceiveProps(nextProps: IProps) {
+  componentWillReceiveProps(nextProps: allProps) {
     const { loading, error } = nextProps;
 
     this.setState(() => ({ loading, error }));
@@ -143,7 +148,7 @@ class AdminRiskAreas extends React.Component<IProps, IState> {
   }
 }
 
-function mapDispatchToProps(dispatch: Dispatch<() => void>, ownProps: IProps): Partial<IProps> {
+function mapDispatchToProps(dispatch: Dispatch<() => void>, ownProps: IProps): IDispatchProps {
   return {
     redirectToRiskAreas: () => {
       const { routeBase } = ownProps;
@@ -153,6 +158,8 @@ function mapDispatchToProps(dispatch: Dispatch<() => void>, ownProps: IProps): P
 }
 
 export default compose(
-  connect<{}, {}, IComponentProps>(null, mapDispatchToProps),
-  graphql(riskAreaDeleteMutationGraphql as any, { name: 'deleteRiskArea' }),
+  connect<{}, IDispatchProps, IProps>(null, mapDispatchToProps),
+  graphql<IGraphqlProps, IProps>(riskAreaDeleteMutationGraphql as any, {
+    name: 'deleteRiskArea',
+  }),
 )(AdminRiskAreas);

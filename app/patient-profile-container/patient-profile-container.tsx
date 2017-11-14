@@ -1,7 +1,7 @@
 import * as classNames from 'classnames';
 import * as React from 'react';
 import { compose, graphql } from 'react-apollo';
-import { injectIntl, FormattedMessage, InjectedIntl } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import * as patientQuery from '../graphql/queries/get-patient.graphql';
@@ -17,19 +17,9 @@ import PatientThreeSixtyView from './patient-three-sixty-view';
 import PatientTimeline from './patient-timeline';
 import ScreeningTool from './screening-tool';
 
-type SelectableTabs = 'timeline' | 'patientInfo' | '360' | 'map' | 'tasks' | 'tools';
+export type SelectableTabs = 'timeline' | 'patientInfo' | '360' | 'map' | 'tasks' | 'tools';
 
-interface IStateProps {
-  patientId: string;
-  tabId: SelectableTabs;
-  browserSize: Size;
-}
-
-interface IProps extends IStateProps {
-  intl: InjectedIntl;
-  loading: boolean;
-  error?: string;
-  patient?: ShortPatientFragment;
+interface IProps {
   match: {
     params: {
       patientId: string;
@@ -39,18 +29,32 @@ interface IProps extends IStateProps {
   };
 }
 
+interface IStateProps {
+  patientId: string;
+  tabId: SelectableTabs;
+  browserSize: Size;
+}
+
+interface IGraphqlProps {
+  loading: boolean;
+  error?: string;
+  patient?: ShortPatientFragment;
+}
+
+type allProps = IStateProps & IProps & IGraphqlProps;
+
 export const getPatientName = (patient: ShortPatientFragment) =>
   [patient.firstName, patient.middleName, patient.lastName].filter(Boolean).join(' ');
 
-class PatientProfileContainer extends React.Component<IProps, {}> {
-  componentWillReceiveProps(newProps: IProps) {
+class PatientProfileContainer extends React.Component<allProps> {
+  componentWillReceiveProps(newProps: allProps) {
     if (newProps.patient) {
       document.title = `${getPatientName(newProps.patient)} | Commons`;
     }
   }
 
   render() {
-    const { patientId, patient, loading, error, intl, tabId, browserSize, match } = this.props;
+    const { patientId, patient, loading, error, tabId, browserSize, match } = this.props;
 
     const threeSixtyViewTabStyles = classNames(tabStyles.tab, {
       [tabStyles.selectedTab]: tabId === '360',
@@ -100,12 +104,7 @@ class PatientProfileContainer extends React.Component<IProps, {}> {
       ) : null;
     return (
       <div className={styles.container}>
-        <PatientProfileLeftNav
-          browserSize={browserSize}
-          intl={intl}
-          patientId={patientId}
-          patient={patient}
-        />
+        <PatientProfileLeftNav browserSize={browserSize} patientId={patientId} patient={patient} />
         <div className={mainBodyStyle}>
           <div className={tabStyles.tabs}>
             <FormattedMessage id="patient.threeSixty">
@@ -158,10 +157,9 @@ function mapStateToProps(state: IAppState, ownProps: IProps): IStateProps {
 }
 
 export default compose(
-  injectIntl,
   connect<IStateProps, {}, IProps>(mapStateToProps),
-  graphql(patientQuery as any, {
-    options: (props: IProps) => ({
+  graphql<IGraphqlProps, IProps>(patientQuery as any, {
+    options: (props: allProps) => ({
       variables: {
         patientId: props.patientId,
       },

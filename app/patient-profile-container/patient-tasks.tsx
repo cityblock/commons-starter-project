@@ -2,7 +2,6 @@ import { pickBy } from 'lodash';
 import * as querystring from 'querystring';
 import * as React from 'react';
 import { compose, graphql } from 'react-apollo';
-import { injectIntl } from 'react-intl';
 import { connect, Dispatch } from 'react-redux';
 import { push } from 'react-router-redux';
 import * as patientCarePlanQuery from '../graphql/queries/get-patient-care-plan.graphql';
@@ -84,7 +83,6 @@ function mapDispatchToProps(dispatch: Dispatch<() => void>, ownProps: IProps): P
 }
 
 export default compose(
-  injectIntl,
   connect(undefined, mapDispatchToProps),
   graphql(patientTasksQuery as any, {
     options: (props: IProps) => ({

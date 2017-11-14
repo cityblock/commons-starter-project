@@ -1,6 +1,5 @@
 import * as classNames from 'classnames';
 import * as React from 'react';
-import { InjectedIntl } from 'react-intl';
 import { ShortPatientFragment } from '../graphql/types';
 import CareTeamWidget from './care-team-widget';
 import * as styles from './css/patient-profile-left-nav.css';
@@ -8,7 +7,6 @@ import PatientLeftNavInfo from './patient-left-nav-info';
 import PatientMedications from './patient-medications';
 
 interface IProps {
-  intl: InjectedIntl;
   patientId: string;
   patient?: ShortPatientFragment;
 }
@@ -22,9 +20,6 @@ type SelectableItem = 'profile' | 'medications' | 'chat' | null;
 export default class PatientProfileIpadNav extends React.Component<IProps, IState> {
   constructor(props: IProps) {
     super(props);
-
-    this.onClick = this.onClick.bind(this);
-
     this.state = { selectedItem: null };
   }
 
@@ -32,7 +27,7 @@ export default class PatientProfileIpadNav extends React.Component<IProps, IStat
     this.setState(() => ({}));
   }
 
-  onClick(clickedItem: SelectableItem) {
+  onClick = (clickedItem: SelectableItem) => {
     const { selectedItem } = this.state;
 
     if (clickedItem === selectedItem) {
@@ -40,10 +35,10 @@ export default class PatientProfileIpadNav extends React.Component<IProps, IStat
     } else {
       this.setState(() => ({ selectedItem: clickedItem }));
     }
-  }
+  };
 
   render() {
-    const { patientId, patient, intl } = this.props;
+    const { patientId, patient } = this.props;
     const { selectedItem } = this.state;
 
     const shortName = patient ? `${patient.firstName} ${patient.lastName}` : 'Loading Patient';
@@ -90,12 +85,7 @@ export default class PatientProfileIpadNav extends React.Component<IProps, IStat
           </div>
         </div>
         <div className={patientProfilePaneStyles}>
-          <PatientLeftNavInfo
-            intl={intl}
-            patientId={patientId}
-            patient={patient}
-            condensedPatientInfo={true}
-          />
+          <PatientLeftNavInfo patientId={patientId} patient={patient} condensedPatientInfo={true} />
         </div>
         <div className={patientMedsPaneStyles}>
           <PatientMedications patientId={patientId} />

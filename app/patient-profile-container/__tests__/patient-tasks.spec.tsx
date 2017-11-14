@@ -126,9 +126,11 @@ it('renders patient tasks', () => {
         <ConnectedRouter history={history}>
           <PatientTasks
             updatePageParams={() => false}
-            refetchTasks={() => false}
             tasksResponse={tasksResponse}
             patientId={patient.id}
+            carePlanLoading={false}
+            tasksLoading={false}
+            fetchMoreTasks={() => false}
           />
         </ConnectedRouter>
       </ReduxConnectedIntlProvider>

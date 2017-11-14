@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { injectIntl, InjectedIntlProps } from 'react-intl';
+import { FormattedRelative } from 'react-intl';
 import { Link } from 'react-router-dom';
 import { ShortPatientFragment } from '../graphql/types';
 import * as styles from './css/patient-roster.css';
@@ -8,15 +8,24 @@ interface IProps {
   patient: ShortPatientFragment;
 }
 
-type Props = IProps & InjectedIntlProps;
+const PatientRosterItem: React.StatelessComponent<IProps> = (props: IProps) => {
+  const { patient } = props;
 
-const PatientRosterItem: React.StatelessComponent<IProps> = (props: Props) => {
-  const { patient, intl } = props;
+  const patientAge = patient.dateOfBirth ? (
+    <FormattedRelative value={patient.dateOfBirth}>
+      {(date: string) => <div className={styles.tableColumn}>{date}</div>}
+    </FormattedRelative>
+  ) : (
+    'unknown'
+  );
 
-  // TODO: return fallbacks to normal
-  const patientAge = patient.dateOfBirth ? intl.formatRelative(patient.dateOfBirth) : '';
-  const patientJoined = patient.createdAt ? intl.formatRelative(patient.createdAt) : 'Unknown';
-
+  const patientJoined = patient.createdAt ? (
+    <FormattedRelative value={patient.createdAt}>
+      {(date: string) => <div className={styles.tableColumn}>{date}</div>}
+    </FormattedRelative>
+  ) : (
+    'unknown'
+  );
   return (
     <Link className={styles.tableRow} to={`/patients/${patient.id}`}>
       <div className={styles.tableColumn}>{patient.firstName}</div>
@@ -29,4 +38,4 @@ const PatientRosterItem: React.StatelessComponent<IProps> = (props: Props) => {
   );
 };
 
-export default injectIntl<IProps>(PatientRosterItem);
+export default PatientRosterItem;

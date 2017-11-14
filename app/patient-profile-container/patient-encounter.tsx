@@ -49,6 +49,7 @@ class PatientEncounter extends React.Component<Props> {
   render() {
     const { encounter, intl } = this.props;
     const providerName = encounter.providerName;
+    // TODO: Remove intl from this compnent and use <FormattedDate / FormattedTime>
     const formattedEncounterDate = intl.formatDate(encounter.dateTime);
     const formattedEncounterTime = intl.formatTime(encounter.dateTime);
     // TODO: Better fallback for location

@@ -8,7 +8,7 @@ import configureMockStore from 'redux-mock-store';
 /* tslint:enable:max-line-length */
 import { ENGLISH_TRANSLATION } from '../../reducers/messages/en';
 import ReduxConnectedIntlProvider from '../../redux-connected-intl-provider';
-import { eventNotification } from '../../shared/util/test-data';
+import { eventNotification, patient } from '../../shared/util/test-data';
 /* tslint:disable:max-line-length */
 import EventNotificationsContainer, {
   EventNotificationsContainer as Component,
@@ -31,13 +31,8 @@ it('renders event notifications containers', () => {
       <ReduxConnectedIntlProvider>
         <ConnectedRouter history={history}>
           <EventNotificationsContainer
-            eventNotificationType={'tasks'}
-            eventNotificationsLoading={false}
-            eventNotifications={[eventNotification]}
-            fetchMoreEventNotifications={() => false}
-            updateNotificationsCount={(n: number) => false}
-            notificationsCount={1}
-            match={{ params: { eventNotificationType: 'tasks' } }}
+            dismissEventNotification={() => false as any}
+            match={{ params: { eventNotificationType: 'tasks', patientId: patient.id } }}
           />
         </ConnectedRouter>
       </ReduxConnectedIntlProvider>

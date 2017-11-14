@@ -1,6 +1,7 @@
 @import '../../shared/css/sizes';
 
-.tabContainer {}
+.tabContainer {
+}
 
 .topBar {
   width: 100%;
@@ -61,7 +62,8 @@
   @apply --select;
 }
 
-.patientContainer {}
+.patientContainer {
+}
 
 .patientPhoto {
   background-repeat: no-repeat;
@@ -84,4 +86,5 @@
   font-size: var(--medium-font-size);
 }
 
-.openedAt {}
+.openedAt {
+}

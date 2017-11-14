@@ -18,7 +18,8 @@
   lost-column: 2/12;
 }
 
-.tableBody, .tableHead {
+.tableBody,
+.tableHead {
   width: 100%;
 }
 

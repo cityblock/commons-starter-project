@@ -4,8 +4,8 @@
   height: 60px;
   flex: 0 60px;
   display: flex;
-  background-color: #8FADFF;
-  background: linear-gradient(315deg, #66C5DD 0%, #2962FF 100%);
+  background-color: #8fadff;
+  background: linear-gradient(315deg, #66c5dd 0%, #2962ff 100%);
 }
 
 .container {
@@ -59,7 +59,9 @@
   background-color: var(--blue-color);
 }
 
-.searchIcon, .patientsIcon, .tasksIcon {
+.searchIcon,
+.patientsIcon,
+.tasksIcon {
   height: 24px;
   width: 24px;
   background-repeat: no-repeat;
@@ -81,7 +83,8 @@
   background-image: url('../../assets/tasks.svg');
 }
 
-.left, .right {
+.left,
+.right {
   display: flex;
   align-items: center;
 }
@@ -100,7 +103,7 @@
 }
 
 .userName {
-  color: #FFFFFF;
+  color: #ffffff;
   font-weight: bold;
   text-align: right;
 }
@@ -159,7 +162,8 @@
   }
 }
 
-.settingsIcon, .logoutIcon {
+.settingsIcon,
+.logoutIcon {
   background-repeat: no-repeat;
   background-position: center center;
   width: 18px;

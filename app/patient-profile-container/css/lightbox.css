@@ -65,17 +65,20 @@
   transition-delay: 0.5s;
 }
 
-.header, .controls, .imageCount {
+.header,
+.controls,
+.imageCount {
   display: flex;
   flex-direction: row;
   align-items: center;
   width: 100%;
 }
 
-.header, .controls {
+.header,
+.controls {
   justify-content: space-between;
   padding: var(--small-gutter) var(--small-gutter) var(--medium-gutter);
-  background: linear-gradient(0deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0.65) 100%);
+  background: linear-gradient(0deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.65) 100%);
   border-top-left-radius: 6px;
   border-top-right-radius: 6px;
 }
@@ -88,7 +91,10 @@
   justify-content: flex-start;
 }
 
-.imageCountIcon, .close, .backArrow, .nextArrow {
+.imageCountIcon,
+.close,
+.backArrow,
+.nextArrow {
   background-size: contain;
   background-position: center center;
   background-repeat: no-repeat;
@@ -107,13 +113,16 @@
   width: 26px;
 }
 
-.backArrow, .nextArrow {
+.backArrow,
+.nextArrow {
   background-image: url('../../assets/chevron-left-white.svg');
   height: 36px;
   width: 36px;
 }
 
-.backArrow, .nextArrow, .close {
+.backArrow,
+.nextArrow,
+.close {
   opacity: 1;
   transition: opacity 0.1s linear;
 

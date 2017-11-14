@@ -126,7 +126,7 @@
   padding-right: 72px;
 }
 
-.radioRow input[type=radio] {
+.radioRow input[type='radio'] {
   &:checked + label:after {
     opacity: 1;
   }

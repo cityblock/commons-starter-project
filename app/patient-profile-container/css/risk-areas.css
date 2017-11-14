@@ -28,14 +28,18 @@
   margin-left: 10px;
 }
 
-.saveButton.disabled, .startButton.disabled {
+.saveButton.disabled,
+.startButton.disabled {
   opacity: 0.4;
   &:hover {
     cursor: not-allowed;
   }
 }
 
-.cancelButton, .saveButton, .startButton, .toolsButton {
+.cancelButton,
+.saveButton,
+.startButton,
+.toolsButton {
   height: 32px;
   width: 173px;
   padding: 9px 30px;
@@ -62,7 +66,9 @@
   display: none;
 }
 
-.riskAreas, .riskAssessment, .riskAssessmentError {
+.riskAreas,
+.riskAssessment,
+.riskAssessmentError {
   height: calc(100vh - 200px);
   overflow-y: scroll;
   -webkit-overflow-scrolling: touch;
@@ -257,7 +263,8 @@
   color: var(--black-color);
 }
 
-.emptySummary, .errorLoadingSummary {
+.emptySummary,
+.errorLoadingSummary {
   font-family: var(--roboto);
   color: var(--border-color);
   font-size: var(--small-font-size);
@@ -331,7 +338,8 @@
   border-left: 4px solid var(--red-color);
 }
 
-.title, .meta {
+.title,
+.meta {
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -377,7 +385,7 @@
   font-family: var(--roboto);
   font-size: var(--extra-small-font-size);
   line-height: var(--extra-small-font-line-height);
-  color: var(--black-color)
+  color: var(--black-color);
 }
 
 .riskAssessmentErrorMessage {

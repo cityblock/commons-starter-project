@@ -8,20 +8,20 @@
   --tablet: 700;
   --max-width: 1600px;
   --border-color: #cccccc;
-  --gray-background-color: #F2F2F2;
+  --gray-background-color: #f2f2f2;
   --lightbox-background-color: #131c34;
   --dark-gray-background-color: #e6e6e6;
   --white-color: #ffffff;
   --black-color: #000000;
-  --blue-color: #2962FF;
-  --light-blue-color: #8FADFF;
+  --blue-color: #2962ff;
+  --light-blue-color: #8fadff;
   --red-color: #ff715b;
-  --green-color: #85D578;
-  --teal-color: #66C5DD;
+  --green-color: #85d578;
+  --teal-color: #66c5dd;
   --yellow-color: #ffd900;
   --gray-font-color: #666666;
   --light-gray-font-color: #cccccc;
-  --white-font-color: #F2F2F2;
+  --white-font-color: #f2f2f2;
   --default-font-color: #333333;
   --highlight-background-color: #fafafa;
   --login-drop-shadow: 0 12px 20px 0 rgba(0, 0, 0, 0.15), 0 10px 20px 0 rgba(0, 0, 0, 0.1);
@@ -39,14 +39,14 @@
   --large-font-size: 24px;
   --large-font-line-height: 29px;
   --body-copy-line-height: 20px;
-  --basetica-black-italic: "BaseticaBlackItalic", Helvetica, sans-serif;
-  --basetica-black: "BaseticaBlack", Helvetica, sans-serif;
-  --basetica-medium-italic: "BaseticaMediumItalic", Helvetica, sans-serif;
-  --basetica-medium: "BaseticaMedium", Helvetica, sans-serif;
+  --basetica-black-italic: 'BaseticaBlackItalic', Helvetica, sans-serif;
+  --basetica-black: 'BaseticaBlack', Helvetica, sans-serif;
+  --basetica-medium-italic: 'BaseticaMediumItalic', Helvetica, sans-serif;
+  --basetica-medium: 'BaseticaMedium', Helvetica, sans-serif;
   --roboto: 'Roboto', Helvetica, sans-serif;
   --roboto-medium-weight: 500;
   --default-font-weight: 400;
-  --drop-shadow: 0 6px 8px 0 rgba(0,0,0,0.15);
+  --drop-shadow: 0 6px 8px 0 rgba(0, 0, 0, 0.15);
   --light-blue-hover: rgba(143, 173, 255, 0.1);
   --white-opaque: rgba(255, 255, 255, 0.4);
   --black-opaque: rgba(0, 0, 0, 0.4);
@@ -125,7 +125,7 @@
   }
   --input {
     border: 1px solid var(--border-color);
-    background-color: #FFFFFF;
+    background-color: #ffffff;
     outline: none;
     padding: 16px 20px;
     font-family: var(--roboto);
@@ -138,7 +138,7 @@
     width: 100%;
     outline: none;
     border: 1px solid var(--border-color);
-    background-color: #FFFFFF;
+    background-color: #ffffff;
     outline: none;
     background-image: url('../../assets/down-arrow.svg');
     background-repeat: no-repeat;

@@ -22,17 +22,13 @@ const TaskTracking: React.StatelessComponent<IProps> = (props: IProps) => {
     <div className={styles.container}>
       <div className={styles.detail}>
         <FormattedMessage id="task.priority">
-          {(message: string) => (
-            <h3>{message}</h3>
-          )}
+          {(message: string) => <h3>{message}</h3>}
         </FormattedMessage>
         <PrioritySelect taskId={taskId} priority={priority} editTask={editTask} />
       </div>
       <div className={styles.detail}>
         <FormattedMessage id="task.followers">
-          {(message: string) => (
-            <h3>{message}</h3>
-          )}
+          {(message: string) => <h3>{message}</h3>}
         </FormattedMessage>
         <TaskFollowers taskId={taskId} patientId={patientId} followers={followers} />
       </div>

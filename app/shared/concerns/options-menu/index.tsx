@@ -9,8 +9,8 @@ interface IProps {
 }
 
 const PatientConcernOptions: React.StatelessComponent<IProps> = ({ inactive }) => {
-  const sendToLabel = inactive ? "Send to Active" : "Send to Next Up";
-  const sendToIcon = inactive ? "play" : "nextUp";
+  const sendToLabel = inactive ? 'Send to Active' : 'Send to Next Up';
+  const sendToIcon = inactive ? 'play' : 'nextUp';
   const sendToOption = <PatientConcernOption label={sendToLabel} icon={sendToIcon} />;
 
   return (

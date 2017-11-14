@@ -25,7 +25,8 @@
   display: none;
 }
 
-.carePlanSuggestions, .carePlan {
+.carePlanSuggestions,
+.carePlan {
   height: calc(100vh - 200px);
   overflow-y: scroll;
   -webkit-overflow-scrolling: touch;
@@ -113,7 +114,8 @@
   padding: 0 var(--small-gutter);
 }
 
-.carePlanSuggestionConcernTitle, .carePlanSuggestionGoalTitle {
+.carePlanSuggestionConcernTitle,
+.carePlanSuggestionGoalTitle {
   font-family: var(--roboto);
   font-weight: var(--roboto-medium-weight);
   color: var(--black-color);
@@ -136,7 +138,8 @@
   justify-content: flex-end;
 }
 
-.rejectButton, .acceptButton {
+.rejectButton,
+.acceptButton {
   height: 20px;
   width: 20px;
   background-size: contain;
@@ -170,7 +173,8 @@
   margin-bottom: 15px;
 }
 
-.carePlanSuggestionSmallLabel, .carePlanSuggestionSmallDate {
+.carePlanSuggestionSmallLabel,
+.carePlanSuggestionSmallDate {
   font-family: var(--roboto);
   font-size: var(--extra-small-font-size);
   line-height: var(--extra-small-font-line-height);
@@ -383,7 +387,8 @@
   color: var(--light-gray-font-color);
 }
 
-.carePlanLoading, .carePlanSuggestionsLoading {
+.carePlanLoading,
+.carePlanSuggestionsLoading {
   margin: 0 auto;
   text-align: center;
   color: var(--light-gray-font-color);

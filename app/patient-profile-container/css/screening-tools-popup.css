@@ -89,7 +89,8 @@
   line-height: var(--medium-font-line-height);
 }
 
-.screeningToolOptionsLoading, .emptyScreeningToolOptions {
+.screeningToolOptionsLoading,
+.emptyScreeningToolOptions {
   display: flex;
   flex-direction: row;
   justify-content: center;
@@ -114,7 +115,8 @@
   margin-bottom: 10px;
 }
 
-.screeningToolResultLabel, .screeningToolResultCount {
+.screeningToolResultLabel,
+.screeningToolResultCount {
   font-family: var(--roboto);
   font-size: var(--default-font-size);
   line-height: var(--default-line-height);

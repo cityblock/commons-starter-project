@@ -65,7 +65,7 @@ export class Task extends React.Component<IProps, IState> {
 
   confirmDelete = (): void => {
     this.setState({ deleteConfirmation: true });
-  }
+  };
 
   render(): JSX.Element {
     const { task, routeBase, editTask } = this.props;

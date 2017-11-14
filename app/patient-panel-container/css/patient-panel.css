@@ -16,7 +16,7 @@
   lost-flex-container: row;
 }
 
-.headerText{
+.headerText {
   font-family: var(--basetica-black);
   font-size: var(--large-font-size);
   color: var(--default-font-color);

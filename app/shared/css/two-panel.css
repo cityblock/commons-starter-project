@@ -107,7 +107,8 @@
   border-left: 1px solid var(--gray-background-color);
 }
 
-.orderSection, .createdAtSection {
+.orderSection,
+.createdAtSection {
   min-width: 97px;
   text-align: right;
 }

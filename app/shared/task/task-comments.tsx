@@ -181,13 +181,13 @@ export class TaskComments extends React.Component<allProps, IState> {
     } else {
       return (
         <div>
-          <FormattedMessage id="taskComment.activity">{
-            (message: string) => (
+          <FormattedMessage id="taskComment.activity">
+            {(message: string) => (
               <div className={classNames(styles.smallText, styles.divider)}>
                 {`${message} (${comments.length})`}
               </div>
-            )
-          }</FormattedMessage>
+            )}
+          </FormattedMessage>
           <div className={styles.commentsList}>{comments.map(this.renderComment)}</div>
         </div>
       );
@@ -212,13 +212,11 @@ export class TaskComments extends React.Component<allProps, IState> {
           />
           <div className={styles.uploadAttachment} />
           <div className={addCommentErrorStyles}>
-          <FormattedMessage id="taskComment.error">{
-            (message: string) => (
-              <div className={classNames(styles.smallText, styles.redText)}>
-                {message}
-              </div>
-            )
-          }</FormattedMessage>
+            <FormattedMessage id="taskComment.error">
+              {(message: string) => (
+                <div className={classNames(styles.smallText, styles.redText)}>{message}</div>
+              )}
+            </FormattedMessage>
             <div className={styles.smallText}>Please try again.</div>
           </div>
         </div>

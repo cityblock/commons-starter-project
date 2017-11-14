@@ -1,5 +1,6 @@
 @import '../../shared/css/sizes';
-.errorRow, .loadingRow {
+.errorRow,
+.loadingRow {
   padding: 150px var(--gutter);
   justify-content: center;
   align-items: center;

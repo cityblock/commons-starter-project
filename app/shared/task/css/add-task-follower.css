@@ -45,7 +45,7 @@
   background-color: var(--white-color);
   border: 1px solid var(--gray-background-color);
   border-radius: 2px;
-  box-shadow: 0 6px 8px 0 rgba(0,0,0,0.1);
+  box-shadow: 0 6px 8px 0 rgba(0, 0, 0, 0.1);
   overflow-y: scroll;
   -webkit-overflow-scrolling: touch;
   padding: var(--small-gutter) var(--small-gutter) 0;

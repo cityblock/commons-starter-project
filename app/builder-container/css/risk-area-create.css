@@ -46,7 +46,7 @@
   vertical-align: top;
   width: 45%;
   &:nth-child(odd) {
-    margin-right: 10%
+    margin-right: 10%;
   }
 }
 
@@ -54,7 +54,9 @@
   border-bottom: 1px solid var(--white-font-color);
 }
 
-.inputGroup input, .inputGroup textarea, .inputGroup select {
+.inputGroup input,
+.inputGroup textarea,
+.inputGroup select {
   margin-bottom: 10px;
 }
 

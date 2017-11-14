@@ -4,7 +4,7 @@
   bottom: 0;
   width: 25%;
   lost-center: var(--max-width);
-  box-shadow: -8px -1px 10px 0 rgba(0,0,0,0.15);
+  box-shadow: -8px -1px 10px 0 rgba(0, 0, 0, 0.15);
   max-width: 400px;
 }
 
@@ -45,7 +45,7 @@
 .drawer {
   height: 0px;
   background-color: var(--white-color);
-  transition: height .3s ease-in-out;
+  transition: height 0.3s ease-in-out;
 }
 
 .drawer.open {
@@ -58,7 +58,8 @@
   height: calc(100vh - 100px);
 }
 
-.buttonLabel, .buttonChatLabel {
+.buttonLabel,
+.buttonChatLabel {
   align-items: center;
   justify-content: space-between;
   lost-flex-container: row;

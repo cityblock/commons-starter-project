@@ -1,6 +1,6 @@
 import * as classNames from 'classnames';
 import * as React from 'react';
-import {  taskEditMutation, taskEditMutationVariables, Priority } from '../../graphql/types';
+import { taskEditMutation, taskEditMutationVariables, Priority } from '../../graphql/types';
 import * as styles from './css/priority-select.css';
 
 interface IProps {
@@ -37,7 +37,7 @@ class PrioritySelect extends React.Component<IProps, IState> {
     if (taskId) {
       try {
         this.setState({ changePriorityError: '' });
-        await editTask({ variables: { taskId, priority }});
+        await editTask({ variables: { taskId, priority } });
       } catch (err) {
         this.setState({ changePriorityError: err.message });
       }
@@ -55,9 +55,9 @@ class PrioritySelect extends React.Component<IProps, IState> {
     return (
       <div>
         <select value={priority || 'medium'} className={selectStyles} onChange={this.onChange}>
-          <Option value='low' />
-          <Option value='medium' />
-          <Option value='high' />
+          <Option value="low" />
+          <Option value="medium" />
+          <Option value="high" />
         </select>
       </div>
     );

@@ -87,12 +87,12 @@ class TaskTitle extends React.Component<IProps, IState> {
   onEditTitle = (): void => {
     this.setState({ editTitleMode: true });
     setTimeout(() => this.focusInput(this.editTitle), FOCUS_TIMEOUT);
-  }
+  };
 
   onEditDescription = (): void => {
     this.setState({ editDescriptionMode: true });
     setTimeout(() => this.focusInput(this.editDescription), FOCUS_TIMEOUT);
-  }
+  };
 
   onChange = (e: React.ChangeEvent<HTMLTextAreaElement>): void => {
     const value = e.currentTarget.value;
@@ -103,7 +103,7 @@ class TaskTitle extends React.Component<IProps, IState> {
     } else if (name === 'editedDescription') {
       this.setState({ editedDescription: value });
     }
-  }
+  };
 
   async onKeyDown(e: React.KeyboardEvent<HTMLTextAreaElement>) {
     const { taskId, editTask } = this.props;
@@ -135,7 +135,7 @@ class TaskTitle extends React.Component<IProps, IState> {
 
   focusInput = (input: HTMLTextAreaElement | HTMLInputElement | null): void => {
     if (input) input.focus();
-  }
+  };
 
   onBlur = (e: React.FocusEvent<HTMLTextAreaElement>): void => {
     const name = e.currentTarget.name;
@@ -145,7 +145,7 @@ class TaskTitle extends React.Component<IProps, IState> {
     } else if (name === 'editedDescription') {
       this.setState({ editDescriptionMode: false, editedDescription: this.props.description });
     }
-  }
+  };
 
   render(): JSX.Element {
     const { title, description } = this.props;

@@ -41,7 +41,12 @@
   background: var(--gray-background-color);
 }
 
-.addIcon, .shareIcon, .reorderIcon, .nextUpIcon, .playIcon, .editIcon {
+.addIcon,
+.shareIcon,
+.reorderIcon,
+.nextUpIcon,
+.playIcon,
+.editIcon {
   height: 20px;
   width: 20px;
   margin-right: 10px;

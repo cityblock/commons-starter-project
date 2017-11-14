@@ -13,11 +13,12 @@
     "prod-db": "./scripts/prod-psql.sh",
     "start": "NODE_ENV=production nodemon --exec node ./server-compiled/index.js",
     "dev": "NODE_ENV=development nodemon --exec ts-node ./server/index.ts",
-    "build:dev": "cross-env NODE_ENV=development webpack --colors --display-error-details --config ./webpack/webpack.config.js",
-    "build": "yarn run clean && yarn run build-server && cross-env NODE_ENV=production GOOGLE_OAUTH_TOKEN=640963223283-n944uqosb4kae9cj99d35v6ut6n5bvlc.apps.googleusercontent.com webpack --colors --config ./webpack/webpack.config.js",
+    "build:dev":
+      "cross-env NODE_ENV=development webpack --colors --display-error-details --config ./webpack/webpack.config.js",
+    "build":
+      "yarn run clean && yarn run build-server && cross-env NODE_ENV=production GOOGLE_OAUTH_TOKEN=640963223283-n944uqosb4kae9cj99d35v6ut6n5bvlc.apps.googleusercontent.com webpack --colors --config ./webpack/webpack.config.js",
     "build-server": "./node_modules/typescript/bin/tsc --project tsconfig.server.json",
-    "prettier": "prettier --write \"{app,server,webpack,scripts}/**/*.{ts,tsx,js}\"",
-    "prettier:check": "prettier --debug-check \"{app,server,webpack,scripts}/**/*.{ts,tsx}\"",
+    "prettier": "prettier --write \"{app,server,webpack,scripts}/**/*.{ts,tsx,js,css,graphql}\"",
     "test": "NODE_ENV=test node initialize-test-db.js && jest --runInBand",
     "coverage": "NODE_ENV=test node initialize-test-db.js && jest --coverage --runInBand",
     "migrate": "knex migrate:latest --knexfile=server/models/knexfile.js",
@@ -27,14 +28,19 @@
     "prepush": "yarn run lint && yarn typecheck",
     "update-schema": "./scripts/generate-schema-types.sh",
     "codegen": "./scripts/codegen.sh",
-    "low-priority": "NODE_ENV=production nodemon --exec ts-node ./server/rabbitmq/workers/low-priority-worker.ts",
-    "high-priority": "NODE_ENV=production nodemon --exec ts-node ./server/rabbitmq/workers/high-priority-worker.ts",
+    "low-priority":
+      "NODE_ENV=production nodemon --exec ts-node ./server/rabbitmq/workers/low-priority-worker.ts",
+    "high-priority":
+      "NODE_ENV=production nodemon --exec ts-node ./server/rabbitmq/workers/high-priority-worker.ts",
     "cron": "NODE_ENV=production nodemon --exec ts-node ./server/config/cron.ts",
-    "low-priority-dev": "NODE_ENV=development nodemon --exec ts-node ./server/rabbitmq/workers/low-priority-worker.ts",
-    "high-priority-dev": "NODE_ENV=development nodemon --exec ts-node ./server/rabbitmq/workers/high-priority-worker.ts",
+    "low-priority-dev":
+      "NODE_ENV=development nodemon --exec ts-node ./server/rabbitmq/workers/low-priority-worker.ts",
+    "high-priority-dev":
+      "NODE_ENV=development nodemon --exec ts-node ./server/rabbitmq/workers/high-priority-worker.ts",
     "cron-dev": "NODE_ENV=development nodemon --exec ts-node ./server/config/cron.ts",
     "docker-prod:start": "docker-compose stop 2>/dev/null; docker-compose up",
-    "docker-prod:restart": "docker-compose stop 2>/dev/null; docker-compose build && docker-compose up",
+    "docker-prod:restart":
+      "docker-compose stop 2>/dev/null; docker-compose build && docker-compose up",
     "docker-prod:stop": "docker-compose stop",
     "docker-prod:migrate": "docker-compose exec web yarn migrate -- --env=production",
     "docker-prod:ts-node": "docker-compose exec web yarn ts-node",
@@ -68,18 +74,8 @@
       "<rootDir>/app/**/?(*.)(spec|test).ts?(x)",
       "<rootDir>/server/**/?(*.)(spec|test).ts?(x)"
     ],
-    "moduleFileExtensions": [
-      "ts",
-      "tsx",
-      "js",
-      "jsx",
-      "json"
-    ],
-    "setupFiles": [
-      "raf/polyfill",
-      "./browser-mocks.js",
-      "./enzyme-setup.js"
-    ],
+    "moduleFileExtensions": ["ts", "tsx", "js", "jsx", "json"],
+    "setupFiles": ["raf/polyfill", "./browser-mocks.js", "./enzyme-setup.js"],
     "setupTestFrameworkScriptFile": "./jest-setup.js",
     "globals": {
       "ts-jest": {

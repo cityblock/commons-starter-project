@@ -41,7 +41,8 @@
   justify-content: flex-start;
 }
 
-.screeningToolSubmissionTitleLabel, .screeningToolSubmissionTitleScore {
+.screeningToolSubmissionTitleLabel,
+.screeningToolSubmissionTitleScore {
   font-family: var(--basetica-medium);
   font-size: var(--medium-font-size);
   line-height: var(--medium-font-line-height);
@@ -110,7 +111,8 @@
   border-right: none;
 }
 
-.screeningToolSubmissionMetaLabel, .screeningToolSubmissionMetaData {
+.screeningToolSubmissionMetaLabel,
+.screeningToolSubmissionMetaData {
   font-family: var(--roboto);
   font-size: var(--extra-small-font-size);
   line-height: var(--extra-small-font-line-height);

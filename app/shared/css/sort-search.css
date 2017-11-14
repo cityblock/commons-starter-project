@@ -48,7 +48,7 @@
   margin-left: 10px;
 }
 
-.search input[type=text] {
+.search input[type='text'] {
   width: 273px;
   height: 32px;
   border: 1px solid var(--border-color);

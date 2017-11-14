@@ -2,7 +2,7 @@
 
 .container {
   background: white;
-  box-shadow: 0 6px 8px 0 rgba(0,0,0,0.1);
+  box-shadow: 0 6px 8px 0 rgba(0, 0, 0, 0.1);
   border-radius: 5px;
   min-height: 535px;
   margin-bottom: 10px;
@@ -57,7 +57,9 @@
   border-bottom: 1px solid var(--white-font-color);
 }
 
-.inputGroup input, .inputGroup textarea, .inputGroup select {
+.inputGroup input,
+.inputGroup textarea,
+.inputGroup select {
   margin-bottom: 10px;
 }
 

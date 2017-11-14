@@ -1,6 +1,7 @@
 @import '../../css/sizes';
 
-.associations, .container {
+.associations,
+.container {
   display: flex;
   width: 100%;
 }
@@ -17,7 +18,8 @@
   width: 50%;
 }
 
-.detail h3, .label {
+.detail h3,
+.label {
   color: var(--light-gray-font-color);
   font-size: var(--small-font-size);
   line-height: var(--small-font-line-height);
@@ -25,7 +27,8 @@
   margin: 0;
 }
 
-.detail h3:first-child, .label:first-child {
+.detail h3:first-child,
+.label:first-child {
   margin: 0 0 5px;
 }
 

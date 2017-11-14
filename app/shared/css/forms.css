@@ -61,7 +61,8 @@
   border-radius: 2px;
 }
 
-.multiInputFormRow, .radioInputFormRow {
+.multiInputFormRow,
+.radioInputFormRow {
   margin-bottom: var(--medium-gutter);
   lost-flex-container: row;
 }
@@ -70,7 +71,8 @@
   lost-column: 1/3;
 }
 
-.multiInputFormRow:last-child, .radioInputFormRow:last-child {
+.multiInputFormRow:last-child,
+.radioInputFormRow:last-child {
   margin-bottom: 0;
 }
 

@@ -20,7 +20,8 @@
   font-weight: var(--roboto-medium-weight);
 }
 
-.titleLink, .titleLink:hover {
+.titleLink,
+.titleLink:hover {
   color: var(--black-color);
 }
 
@@ -39,7 +40,7 @@
   font-family: var(--roboto);
   font-size: var(--extra-small-font-size);
   line-height: var(--extra-small-font-line-height);
-  color: var(--black-color)
+  color: var(--black-color);
 }
 
 .dismissButton {

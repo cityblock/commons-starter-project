@@ -30,8 +30,8 @@ const PatientConcerns: React.StatelessComponent<IProps> = (props: IProps) => {
           There are no Next Up concerns for this patient
         </div>
         <div className={styles.emptyCarePlanSuggestionsSubtext}>
-          Add concerns here that the patient and the care team do not want to
-          focus on right now but would like to keep track of
+          Add concerns here that the patient and the care team do not want to focus on right now but
+          would like to keep track of
         </div>
       </div>
     );

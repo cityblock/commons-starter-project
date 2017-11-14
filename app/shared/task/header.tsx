@@ -31,22 +31,22 @@ class TaskHeader extends React.Component<IProps, IState> {
 
   onToggleHamburgerMenu = (): void => {
     this.setState({ hamburgerMenuVisible: !this.state.hamburgerMenuVisible });
-  }
+  };
 
   onCopyShareLink = (): void => {
     this.setState({ hamburgerMenuVisible: false, copySuccessVisible: true });
     setTimeout(this.clearCopySuccess, COPY_SUCCESS_TIMEOUT_MILLISECONDS);
-  }
+  };
 
   clearCopySuccess = (): void => {
     this.setState({ copySuccessVisible: false });
-  }
+  };
 
   onClickDelete = (): void => {
     const { taskId, confirmDelete } = this.props;
     if (taskId) confirmDelete();
     this.setState({ hamburgerMenuVisible: false });
-  }
+  };
 
   render() {
     const { patientName, taskId, patientId, routeBase } = this.props;

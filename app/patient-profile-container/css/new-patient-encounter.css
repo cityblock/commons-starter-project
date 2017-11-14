@@ -75,7 +75,8 @@
   display: block;
 }
 
-.newEncounterFormTextInput, .newEncounterFormTextArea {
+.newEncounterFormTextInput,
+.newEncounterFormTextArea {
   width: 100%;
   margin-bottom: var(--small-gutter);
   display: none;
@@ -97,8 +98,8 @@
   height: 100px;
 }
 
-.newEncounterFormTextInput input[type=text],
-.newEncounterFormTextInput input[type=time],
+.newEncounterFormTextInput input[type='text'],
+.newEncounterFormTextInput input[type='time'],
 .newEncounterFormTextArea textarea {
   border: 1px solid var(--border-color);
   outline: none;
@@ -116,7 +117,7 @@
   }
 }
 
-.newEncounterFormTextInput input[type=time] {
+.newEncounterFormTextInput input[type='time'] {
   text-transform: lowercase;
 }
 
@@ -132,7 +133,9 @@
   lost-column: 1/4 2;
 }
 
-.newEncounterFormAddAttachmentRow, .newEncounterFormButtonRow, .newEncounterFormAddAttachment {
+.newEncounterFormAddAttachmentRow,
+.newEncounterFormButtonRow,
+.newEncounterFormAddAttachment {
   align-items: center;
   lost-flex-container: row;
 }
@@ -145,7 +148,8 @@
   display: block;
 }
 
-.newEncounterFormAddAttachmentRow, .newEncounterFormAddAttachment {
+.newEncounterFormAddAttachmentRow,
+.newEncounterFormAddAttachment {
   padding-top: 6px;
   justify-content: flex-start;
 }
@@ -180,7 +184,8 @@
   margin-left: 14px;
 }
 
-.newEncounterCancelButton, .newEncounterSubmitButton {
+.newEncounterCancelButton,
+.newEncounterSubmitButton {
   display: none;
 }
 
@@ -210,7 +215,8 @@
   width: 100%;
 }
 
-.newEncounterSavingSpinner, .newEncounterSavingError {
+.newEncounterSavingSpinner,
+.newEncounterSavingError {
   display: none;
 }
 

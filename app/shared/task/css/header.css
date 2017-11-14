@@ -24,7 +24,8 @@
   align-items: center;
 }
 
-.hamburger, .close {
+.hamburger,
+.close {
   width: 16px;
   height: 16px;
   background-position: center center;

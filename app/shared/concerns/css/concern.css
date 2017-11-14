@@ -41,7 +41,8 @@
   background: var(--white-color);
 }
 
-.patientConcernTitleRow, .patientConcernMetaRow {
+.patientConcernTitleRow,
+.patientConcernMetaRow {
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -148,11 +149,15 @@
   color: var(--black-color);
 }
 
-.inactive .patientConcernTitle, .inactive .patientConcernStatValue, .inactive .patientConcernDateValue {
+.inactive .patientConcernTitle,
+.inactive .patientConcernStatValue,
+.inactive .patientConcernDateValue {
   color: var(--black-opaque);
 }
 
-.selected .patientConcernTitle, .selected .patientConcernStatValue, .selected .patientConcernDateValue {
+.selected .patientConcernTitle,
+.selected .patientConcernStatValue,
+.selected .patientConcernDateValue {
   color: var(--black-color);
 }
 

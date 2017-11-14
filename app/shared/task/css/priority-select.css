@@ -17,7 +17,8 @@
   /* Give 18px space on right */
   width: calc(100% - 18px);
 
-  &:hover, &:active {
+  &:hover,
+  &:active {
     border-color: var(--blue-color);
   }
 }

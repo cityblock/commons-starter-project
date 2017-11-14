@@ -58,7 +58,8 @@
   border-bottom: 1px solid var(--gray-background-color);
 }
 
-.profileIcon, .medsIcon {
+.profileIcon,
+.medsIcon {
   background-position: center center;
   background-repeat: no-repeat;
 }
@@ -67,7 +68,8 @@
   background-image: url('../../assets/patient-profile-icon-dark-grey.svg');
 }
 
-.profileIcon.selected, .medsIcon.selected {
+.profileIcon.selected,
+.medsIcon.selected {
   background-color: var(--gray-background-color);
 }
 
@@ -144,7 +146,8 @@
   text-transform: uppercase;
 }
 
-.patientName, .patientSingleLineName {
+.patientName,
+.patientSingleLineName {
   font-family: var(--basetica-black);
   font-size: var(--large-font-size);
   line-height: var(--large-font-line-height);
@@ -224,7 +227,8 @@
   background-size: 30px;
 }
 
-.smallDisplayPane, .chatDisplayPane {
+.smallDisplayPane,
+.chatDisplayPane {
   z-index: 2;
   min-height: calc(100vh - 60px);
   position: absolute;
@@ -232,7 +236,7 @@
   top: 60px;
   background-color: white;
   border-right: 1px solid var(--border-color);
-  box-shadow: 10px 0 12px 0 rgba(0,0,0,0.1);
+  box-shadow: 10px 0 12px 0 rgba(0, 0, 0, 0.1);
   transition: left 0.3s cubic-bezier(0.25, 0.1, 0.25, 1);
 }
 
@@ -244,7 +248,8 @@
   width: 245px;
 }
 
-.chatDisplayPane.hidden, .smallDisplayPane.hidden {
+.chatDisplayPane.hidden,
+.smallDisplayPane.hidden {
   z-index: 1;
 }
 

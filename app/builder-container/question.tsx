@@ -457,8 +457,8 @@ function mapStateToProps(state: IAppState, ownProps: allProps): IStateProps {
 
 export default compose(
   connect<IStateProps, {}, IProps>(mapStateToProps),
-  graphql(questionEditMutationGraphql as any, { name: 'editQuestion' }),
-  graphql(questionQuery as any, {
+  graphql<IGraphqlProps, IProps>(questionEditMutationGraphql as any, { name: 'editQuestion' }),
+  graphql<IGraphqlProps, IProps>(questionQuery as any, {
     skip: (props: allProps) => !props.questionId,
     options: (props: allProps) => ({ variables: { questionId: props.questionId } }),
     props: ({ data }) => ({

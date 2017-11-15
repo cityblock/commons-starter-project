@@ -5,7 +5,6 @@ import { create } from 'react-test-renderer';
 import configureMockStore from 'redux-mock-store';
 import { ENGLISH_TRANSLATION } from '../../reducers/messages/en';
 import ReduxConnectedIntlProvider from '../../redux-connected-intl-provider';
-import { encounter } from '../../shared/util/test-data';
 import { patient, progressNote } from '../../shared/util/test-data';
 import PatientTimeline from '../patient-timeline';
 
@@ -64,7 +63,7 @@ it('renders timeline', () => {
       store={mockStore({ locale })}
     >
       <ReduxConnectedIntlProvider>
-        <PatientTimeline patientId={patient.id} patientEncounters={[encounter]} />
+        <PatientTimeline patientId={patient.id} />
       </ReduxConnectedIntlProvider>
     </MockedProvider>,
   ).toJSON();

@@ -8,9 +8,9 @@ import * as riskScoreQuery from '../graphql/queries/get-patient-risk-score-for-r
 import * as riskSummaryQuery from '../graphql/queries/get-patient-risk-summary-for-risk-area.graphql';
 /* tslint:enable:max-line-length */
 import {
+  getPatientRiskScoreForRiskAreaQuery,
+  getPatientRiskSummaryForRiskAreaQuery,
   FullRiskAreaFragment,
-  FullRiskAreaSummaryFragment,
-  FullRiskScoreFragment,
 } from '../graphql/types';
 import * as styles from './css/risk-areas.css';
 
@@ -18,30 +18,20 @@ interface IProps {
   patientId: string;
   routeBase: string;
   riskArea: FullRiskAreaFragment;
-  riskAreaScore?: FullRiskScoreFragment;
+}
+
+interface IGraphqlProps {
+  riskAreaScore?: getPatientRiskScoreForRiskAreaQuery['patientRiskAreaRiskScore'];
   scoreLoading?: boolean;
   scoreError?: string;
   reloadScore?: (variables: { patientId: string; riskAreaId: string }) => any;
-  riskAreaSummary?: FullRiskAreaSummaryFragment;
+  riskAreaSummary?: getPatientRiskSummaryForRiskAreaQuery['patientRiskAreaSummary'];
   summaryLoading?: boolean;
   summaryError?: string;
   reloadSummary?: (variables: { patientId: string; riskAreaId: string }) => any;
 }
 
-class RiskAreaSummary extends React.Component<IProps, {}> {
-  constructor(props: IProps) {
-    super(props);
-
-    this.renderSummaryText = this.renderSummaryText.bind(this);
-    this.isLoading = this.isLoading.bind(this);
-    this.isError = this.isError.bind(this);
-    this.isLoadingOrError = this.isLoadingOrError.bind(this);
-    this.onClick = this.onClick.bind(this);
-    this.onRetryClick = this.onRetryClick.bind(this);
-    this.reloadScore = this.reloadScore.bind(this);
-    this.reloadSummary = this.reloadSummary.bind(this);
-  }
-
+class RiskAreaSummary extends React.Component<IProps & IGraphqlProps, {}> {
   renderSummaryText() {
     const { riskAreaSummary } = this.props;
     let summaryListHtml: any = <div className={styles.emptySummary}>No summary available</div>;
@@ -147,16 +137,16 @@ class RiskAreaSummary extends React.Component<IProps, {}> {
     }
   }
 
-  onRetryClick() {
+  onRetryClick = () => {
     this.reloadScore();
     this.reloadSummary();
-  }
+  };
 
-  onClick(event: React.MouseEvent<HTMLAnchorElement>) {
+  onClick = (event: React.MouseEvent<HTMLAnchorElement>) => {
     if (this.isLoadingOrError()) {
       event.preventDefault();
     }
-  }
+  };
 
   render() {
     const { riskArea, routeBase, riskAreaScore, riskAreaSummary } = this.props;
@@ -193,7 +183,7 @@ class RiskAreaSummary extends React.Component<IProps, {}> {
 }
 
 export default compose(
-  graphql(riskSummaryQuery as any, {
+  graphql<IGraphqlProps, IProps>(riskSummaryQuery as any, {
     options: (props: IProps) => ({
       variables: {
         patientId: props.patientId,
@@ -207,7 +197,7 @@ export default compose(
       reloadSummary: data ? (data as any).refetch : null,
     }),
   }),
-  graphql(riskScoreQuery as any, {
+  graphql<IGraphqlProps, IProps>(riskScoreQuery as any, {
     options: (props: IProps) => ({
       variables: {
         patientId: props.patientId,

@@ -319,8 +319,10 @@ function mapStateToProps(state: IAppState, ownProps: allProps): IStateProps {
 
 export default compose(
   connect<IStateProps, {}, IProps>(mapStateToProps),
-  graphql(progressNoteTemplateEditMutationGraphql as any, { name: 'editProgressNoteTemplate' }),
-  graphql(progressNoteTemplateQuery as any, {
+  graphql<IGraphqlProps, IProps>(progressNoteTemplateEditMutationGraphql as any, {
+    name: 'editProgressNoteTemplate',
+  }),
+  graphql<IGraphqlProps, IProps>(progressNoteTemplateQuery as any, {
     skip: (props: allProps) => !props.progressNoteTemplateId,
     options: (props: allProps) => ({
       variables: { progressNoteTemplateId: props.progressNoteTemplateId },

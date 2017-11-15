@@ -2,7 +2,7 @@ import * as classNames from 'classnames';
 import * as React from 'react';
 import { graphql } from 'react-apollo';
 import * as riskAreasQuery from '../graphql/queries/get-risk-areas.graphql';
-import { FullRiskAreaFragment } from '../graphql/types';
+import { getRiskAreasQuery, FullRiskAreaFragment } from '../graphql/types';
 import * as sortSearchStyles from '../shared/css/sort-search.css';
 import * as styles from './css/risk-areas.css';
 import RiskAreaSummary from './risk-area-summary';
@@ -11,20 +11,16 @@ import { RiskAreasLoadingError } from './risk-areas-loading-error';
 interface IProps {
   patientId: string;
   routeBase: string;
-  riskAreas?: FullRiskAreaFragment[];
+}
+
+interface IGraphqlProps {
+  riskAreas?: getRiskAreasQuery['riskAreas'];
   loading?: boolean;
   error?: string;
 }
 
-class RiskAreas extends React.Component<IProps, {}> {
-  constructor(props: IProps) {
-    super(props);
-
-    this.renderRiskAreaSummary = this.renderRiskAreaSummary.bind(this);
-    this.renderRiskAreaSummaries = this.renderRiskAreaSummaries.bind(this);
-  }
-
-  renderRiskAreaSummary(riskArea: FullRiskAreaFragment, index: number) {
+class RiskAreas extends React.Component<IProps & IGraphqlProps, {}> {
+  renderRiskAreaSummary = (riskArea: FullRiskAreaFragment, index: number) => {
     const { routeBase, patientId } = this.props;
 
     return (
@@ -35,7 +31,7 @@ class RiskAreas extends React.Component<IProps, {}> {
         patientId={patientId}
       />
     );
-  }
+  };
 
   renderRiskAreaSummaries() {
     const { loading, error, riskAreas } = this.props;
@@ -87,7 +83,7 @@ class RiskAreas extends React.Component<IProps, {}> {
   }
 }
 
-export default graphql(riskAreasQuery as any, {
+export default graphql<IGraphqlProps, IProps>(riskAreasQuery as any, {
   options: (props: IProps) => ({ variables: {} }),
   props: ({ data }) => ({
     loading: data ? data.loading : false,

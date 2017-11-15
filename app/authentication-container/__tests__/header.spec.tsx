@@ -19,11 +19,7 @@ it('renders header', () => {
     <MockedProvider mocks={[]} store={mockStore({ locale, eventNotifications })}>
       <ReduxConnectedIntlProvider>
         <ConnectedRouter history={history}>
-          <Header
-            currentUser={currentUser}
-            notificationsCount={0}
-            updateNotificationsCount={(count: any) => true}
-          />
+          <Header currentUser={currentUser} />
         </ConnectedRouter>
       </ReduxConnectedIntlProvider>
     </MockedProvider>,

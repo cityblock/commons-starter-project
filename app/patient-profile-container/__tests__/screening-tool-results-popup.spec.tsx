@@ -23,9 +23,7 @@ it('renders screening tool results popup', () => {
         <ConnectedRouter history={history}>
           <ScreeningToolResultsPopup
             patientScreeningToolSubmissionId={patientScreeningToolSubmission.id}
-            patientScreeningToolSubmission={patientScreeningToolSubmission}
             patientRoute={'/patients/patient-id'}
-            loading={false}
           />
         </ConnectedRouter>
       </ReduxConnectedIntlProvider>

@@ -18,39 +18,40 @@ import GoalCreate from './goal-create';
 import { GoalRow } from './goal-row';
 
 interface IProps {
-  loading?: boolean;
-  error?: string;
-  deleteGoal?: (
-    options: { variables: goalSuggestionTemplateDeleteMutationVariables },
-  ) => { data: goalSuggestionTemplateDeleteMutation };
   mutate?: any;
-  redirectToGoals?: () => any;
   routeBase: string;
   goalId?: string;
   goals?: FullGoalSuggestionTemplateFragment[];
   refetchGoals: () => any;
 }
 
+interface IDispatchProps {
+  redirectToGoals?: () => any;
+}
+
+interface IGraphqlProps {
+  loading?: boolean;
+  error?: string;
+  deleteGoal?: (
+    options: { variables: goalSuggestionTemplateDeleteMutationVariables },
+  ) => { data: goalSuggestionTemplateDeleteMutation };
+}
+
+type allProps = IProps & IDispatchProps & IGraphqlProps;
+
 interface IState {
   showCreateGoal: false;
 }
 
-export class BuilderGoals extends React.Component<IProps, IState> {
-  constructor(props: IProps) {
+export class BuilderGoals extends React.Component<allProps, IState> {
+  constructor(props: allProps) {
     super(props);
-
-    this.renderGoals = this.renderGoals.bind(this);
-    this.renderGoal = this.renderGoal.bind(this);
-    this.showCreateGoal = this.showCreateGoal.bind(this);
-    this.hideCreateGoal = this.hideCreateGoal.bind(this);
-    this.onDeleteGoal = this.onDeleteGoal.bind(this);
-
     this.state = {
       showCreateGoal: false,
     };
   }
 
-  componentWillReceiveProps(nextProps: IProps) {
+  componentWillReceiveProps(nextProps: allProps) {
     const { loading, error, goalId } = nextProps;
     this.setState(() => ({ loading, error }));
     if (goalId && goalId !== this.props.goalId) {
@@ -58,15 +59,15 @@ export class BuilderGoals extends React.Component<IProps, IState> {
     }
   }
 
-  showCreateGoal() {
+  showCreateGoal = () => {
     this.setState(() => ({ showCreateGoal: true }));
-  }
+  };
 
-  hideCreateGoal(goal?: FullGoalSuggestionTemplateFragment) {
+  hideCreateGoal = (goal?: FullGoalSuggestionTemplateFragment) => {
     this.setState(() => ({ showCreateGoal: false }));
-  }
+  };
 
-  renderGoals(goals: FullGoalSuggestionTemplateFragment[]) {
+  renderGoals = (goals: FullGoalSuggestionTemplateFragment[]) => {
     const { loading, error } = this.props;
     const validGoals = goals.filter(goal => !goal.deletedAt);
 
@@ -80,14 +81,14 @@ export class BuilderGoals extends React.Component<IProps, IState> {
         </div>
       );
     }
-  }
+  };
 
-  renderGoal(goal: FullGoalSuggestionTemplateFragment) {
+  renderGoal = (goal: FullGoalSuggestionTemplateFragment) => {
     const selected = goal.id === this.props.goalId;
     return (
       <GoalRow key={goal.id} goal={goal} selected={selected} routeBase={this.props.routeBase} />
     );
-  }
+  };
 
   async onDeleteGoal(goalId: string) {
     const { redirectToGoals, deleteGoal } = this.props;
@@ -142,7 +143,7 @@ export class BuilderGoals extends React.Component<IProps, IState> {
   }
 }
 
-function mapDispatchToProps(dispatch: Dispatch<() => void>, ownProps: IProps): Partial<IProps> {
+function mapDispatchToProps(dispatch: Dispatch<() => void>, ownProps: IProps): IDispatchProps {
   return {
     redirectToGoals: () => {
       const { routeBase } = ownProps;
@@ -152,6 +153,6 @@ function mapDispatchToProps(dispatch: Dispatch<() => void>, ownProps: IProps): P
 }
 
 export default compose(
-  connect<any, any, IProps>(null, mapDispatchToProps),
-  graphql(goalDeleteMutation as any, { name: 'deleteGoal' }),
+  connect<{}, IDispatchProps, IProps>(null, mapDispatchToProps),
+  graphql<IGraphqlProps, IProps>(goalDeleteMutation as any, { name: 'deleteGoal' }),
 )(BuilderGoals);

@@ -8,14 +8,20 @@ import * as formStyles from '../shared/css/forms.css';
 import * as styles from './css/settings.css';
 
 interface IProps {
+  mutate?: any;
+}
+
+interface IGraphqlProps {
   updateUser: (options: { variables: currentUserEditMutationVariables }) => any;
   currentUser?: FullUserFragment;
   loading: boolean;
   error?: string;
 }
 
-class SettingsContainer extends React.Component<IProps, { error?: string }> {
-  constructor(props: IProps) {
+type allProps = IProps & IGraphqlProps;
+
+class SettingsContainer extends React.Component<allProps, { error?: string }> {
+  constructor(props: allProps) {
     super(props);
     this.updateUser = this.updateUser.bind(this);
     this.state = {
@@ -23,7 +29,7 @@ class SettingsContainer extends React.Component<IProps, { error?: string }> {
     };
   }
 
-  updateUser(event: React.ChangeEvent<HTMLSelectElement>) {
+  updateUser = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const { currentUser } = this.props;
     if (currentUser) {
       const locale = event.target.value;
@@ -35,7 +41,7 @@ class SettingsContainer extends React.Component<IProps, { error?: string }> {
         },
       });
     }
-  }
+  };
 
   componentDidMount() {
     document.title = 'Settings | Commons';
@@ -83,7 +89,7 @@ class SettingsContainer extends React.Component<IProps, { error?: string }> {
 }
 
 export default compose(
-  graphql(currentUserQuery as any, {
+  graphql<IGraphqlProps, IProps>(currentUserQuery as any, {
     options: (props: IProps) => ({
       variables: {},
     }),
@@ -93,5 +99,5 @@ export default compose(
       currentUser: data ? (data as any).currentUser : null,
     }),
   }),
-  graphql(userMutation as any, { name: 'updateUser' }),
+  graphql<IGraphqlProps, IProps>(userMutation as any, { name: 'updateUser' }),
 )(SettingsContainer);

@@ -1,14 +1,17 @@
 import * as classNames from 'classnames';
 import * as React from 'react';
-import { ICarePlan } from 'schema';
-import { FullCarePlanSuggestionFragment } from '../graphql/types';
+import {
+  getPatientCarePlanQuery,
+  getPatientCarePlanSuggestionsQuery,
+  FullCarePlanSuggestionFragment,
+} from '../graphql/types';
 import * as formStyles from '../shared/css/forms.css';
 import * as styles from './css/patient-care-plan.css';
 import PatientCarePlanSuggestionOptionGroup from './patient-care-plan-suggestion-option-group';
 
 interface IProps {
-  carePlan?: ICarePlan;
-  carePlanSuggestions?: FullCarePlanSuggestionFragment[];
+  carePlan?: getPatientCarePlanQuery['carePlanForPatient'];
+  carePlanSuggestions?: getPatientCarePlanSuggestionsQuery['carePlanSuggestionsForPatient'];
   concernId: string;
   concernType: '' | 'inactive' | 'active';
   newConcernTitle: string;
@@ -39,7 +42,9 @@ const PopupPatientCarePlanSuggestionAcceptedModalBody = (props: IProps) => {
   if (concernId && carePlanSuggestions) {
     const suggestedConcern = carePlanSuggestions.find(
       carePlanSuggestion =>
-        !!carePlanSuggestion.concernId && carePlanSuggestion.concernId === concernId,
+        carePlanSuggestion
+          ? !!carePlanSuggestion.concernId && carePlanSuggestion.concernId === concernId
+          : false,
     );
 
     if (suggestedConcern) {

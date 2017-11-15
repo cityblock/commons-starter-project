@@ -30,26 +30,7 @@ import * as styles from './css/builder.css';
 type Tab = 'domains' | 'concerns' | 'goals' | 'tools' | 'progress-note-templates';
 
 interface IProps {
-  riskAreas: FullRiskAreaFragment[];
-  concerns: FullConcernFragment[];
-  goals: FullGoalSuggestionTemplateFragment[];
-  screeningTools: FullScreeningToolFragment[];
-  progressNoteTemplates: FullProgressNoteTemplateFragment[];
-  tabId: Tab;
-  subTabId?: 'questions';
-  objectId?: string;
-  questionId?: string;
-  screeningToolId?: string;
-  riskAreasLoading: boolean;
-  riskAreasError?: string;
-  screeningToolsLoading: boolean;
-  screeningToolsError?: string;
-  concernsLoading: boolean;
-  concernsError?: string;
-  goalsLoading: boolean;
-  goalsError?: string;
-  mutate: any;
-  refetchGoals: () => any;
+  mutate?: any;
   match: {
     params: {
       tabId?: Tab;
@@ -61,7 +42,34 @@ interface IProps {
   };
 }
 
-class BuilderContainer extends React.Component<IProps, {}> {
+interface IStateProps {
+  tabId: Tab;
+  subTabId?: 'questions';
+  objectId?: string;
+  questionId?: string;
+}
+
+interface IGraphqlProps {
+  screeningToolId?: string;
+  riskAreasLoading: boolean;
+  riskAreasError?: string;
+  screeningToolsLoading: boolean;
+  screeningToolsError?: string;
+  concernsLoading: boolean;
+  concernsError?: string;
+  goalsLoading: boolean;
+  goalsError?: string;
+  refetchGoals: () => any;
+  riskAreas: FullRiskAreaFragment[];
+  concerns: FullConcernFragment[];
+  goals: FullGoalSuggestionTemplateFragment[];
+  screeningTools: FullScreeningToolFragment[];
+  progressNoteTemplates: FullProgressNoteTemplateFragment[];
+}
+
+type allProps = IProps & IGraphqlProps & IStateProps;
+
+class BuilderContainer extends React.Component<allProps, {}> {
   render() {
     const {
       objectId,
@@ -197,7 +205,7 @@ class BuilderContainer extends React.Component<IProps, {}> {
   }
 }
 
-function mapStateToProps(state: IAppState, ownProps: IProps): Partial<IProps> {
+function mapStateToProps(state: IAppState, ownProps: IProps): IStateProps {
   return {
     tabId: ownProps.match.params.tabId || 'domains',
     objectId: ownProps.match.params.objectId,
@@ -207,29 +215,29 @@ function mapStateToProps(state: IAppState, ownProps: IProps): Partial<IProps> {
 }
 
 export default compose(
-  connect(mapStateToProps),
-  graphql(progressNoteTemplatesQuery as any, {
+  connect<IStateProps, {}, IProps>(mapStateToProps),
+  graphql<IGraphqlProps, IProps>(progressNoteTemplatesQuery as any, {
     props: ({ data }) => ({
       progressNoteTemplatesLoading: data ? data.loading : false,
       progressNoteTemplatesError: data ? data.error : null,
       progressNoteTemplates: data ? (data as any).progressNoteTemplates : null,
     }),
   }),
-  graphql(riskAreasQuery as any, {
+  graphql<IGraphqlProps, IProps>(riskAreasQuery as any, {
     props: ({ data }) => ({
       riskAreasLoading: data ? data.loading : false,
       riskAreasError: data ? data.error : null,
       riskAreas: data ? (data as any).riskAreas : null,
     }),
   }),
-  graphql(concernsQuery as any, {
+  graphql<IGraphqlProps, IProps>(concernsQuery as any, {
     props: ({ data }) => ({
       concernsLoading: data ? data.loading : false,
       concernsError: data ? data.error : null,
       concerns: data ? (data as any).concerns : null,
     }),
   }),
-  graphql(goalsQuery as any, {
+  graphql<IGraphqlProps, IProps>(goalsQuery as any, {
     props: ({ data }) => ({
       refetchGoals: data ? data.refetch : null,
       goalsLoading: data ? data.loading : false,
@@ -237,7 +245,7 @@ export default compose(
       goals: data ? (data as any).goalSuggestionTemplates : null,
     }),
   }),
-  graphql(screeningToolsQuery as any, {
+  graphql<IGraphqlProps, IProps>(screeningToolsQuery as any, {
     props: ({ data }) => ({
       screeningToolsLoading: data ? data.loading : false,
       screeningToolsError: data ? data.error : null,

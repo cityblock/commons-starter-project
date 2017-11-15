@@ -93,7 +93,8 @@ export class Task extends React.Component<IProps, IState> {
           <TaskDelete
             taskId={taskId}
             cancelDelete={this.cancelDelete}
-            clearTask={() => selectTaskAction('')}/>
+            clearTask={() => selectTaskAction('')}
+          />
         </div>
       );
     }
@@ -161,8 +162,8 @@ const mapDispatchToProps = (dispatch: Dispatch<() => void>): IDispatchProps => (
 
 export default compose(
   connect<IStateProps, IDispatchProps, IOwnProps>(mapStateToProps, mapDispatchToProps),
-  graphql(taskEditMutationGraphql as any, { name: 'editTask' }),
-  graphql(taskQuery as any, {
+  graphql<IGraphqlProps, IProps>(taskEditMutationGraphql as any, { name: 'editTask' }),
+  graphql<IGraphqlProps, IProps>(taskQuery as any, {
     skip: (props: IProps) => !props.taskId,
     options: (props: IProps) => ({ variables: { taskId: props.taskId } }),
     props: ({ data }) => ({

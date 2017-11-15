@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { ICarePlan } from 'schema';
+import { getPatientCarePlanQuery } from '../graphql/types';
 import PatientConcerns from '../shared/concerns';
 import TextDivider from '../shared/text-divider';
 import * as styles from './css/patient-care-plan.css';
@@ -8,7 +8,7 @@ interface IProps {
   loading?: boolean;
   routeBase: string;
   patientId: string;
-  carePlan?: ICarePlan;
+  carePlan?: getPatientCarePlanQuery['carePlanForPatient'];
 }
 
 interface IState {

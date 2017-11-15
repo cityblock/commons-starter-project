@@ -85,13 +85,6 @@ fragment FullTask on Task {
 /* tslint:enable:max-line-length */
 
 it('renders patient tasks', () => {
-  const tasksResponse = {
-    edges: [{ node: completedTask }],
-    pageInfo: {
-      hasNextPage: true,
-      hasPreviousPage: true,
-    },
-  };
   const history = createMemoryHistory();
   const tree = create(
     <MockedProvider
@@ -124,14 +117,7 @@ it('renders patient tasks', () => {
     >
       <ReduxConnectedIntlProvider>
         <ConnectedRouter history={history}>
-          <PatientTasks
-            updatePageParams={() => false}
-            tasksResponse={tasksResponse}
-            patientId={patient.id}
-            carePlanLoading={false}
-            tasksLoading={false}
-            fetchMoreTasks={() => false}
-          />
+          <PatientTasks patientId={patient.id} />
         </ConnectedRouter>
       </ReduxConnectedIntlProvider>
     </MockedProvider>,

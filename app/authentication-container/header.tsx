@@ -15,21 +15,33 @@ import * as styles from './css/header.css';
 
 interface IProps {
   currentUser: FullUserFragment;
-  notificationsCount?: number;
-  updateNotificationsCount?: (count: number) => any;
+  mutate?: any;
+}
+
+interface IGraphqlProps {
   /* tslint:disable:max-line-length */
   eventNotificationsResponse?: getEventNotificationsForCurrentUserQuery['eventNotificationsForCurrentUser'];
   /* tslint:enable:max-line-length */
 }
 
-class Header extends React.Component<IProps> {
-  constructor(props: IProps) {
+interface IDispatchProps {
+  updateNotificationsCount?: (count: number) => any;
+}
+
+interface IStateProps {
+  notificationsCount?: number;
+}
+
+type allProps = IGraphqlProps & IStateProps & IDispatchProps & IProps;
+
+class Header extends React.Component<allProps> {
+  constructor(props: allProps) {
     super(props);
 
     this.logout = this.logout.bind(this);
   }
 
-  componentWillReceiveProps(nextProps: IProps) {
+  componentWillReceiveProps(nextProps: allProps) {
     const { updateNotificationsCount } = this.props;
     const { eventNotificationsResponse } = nextProps;
 
@@ -130,22 +142,22 @@ class Header extends React.Component<IProps> {
   }
 }
 
-function mapStateToProps(state: IAppState, ownProps: IProps): Partial<IProps> {
+function mapStateToProps(state: IAppState, ownProps: {}): IStateProps {
   return {
     notificationsCount: state.eventNotifications.count,
   };
 }
 
-function mapDispatchToProps(dispatch: Dispatch<() => void>): Partial<IProps> {
+function mapDispatchToProps(dispatch: Dispatch<() => void>): IDispatchProps {
   return {
     updateNotificationsCount: (count: number) => dispatch(updateEventNotificationsCount(count)),
   };
 }
 
 export default compose(
-  connect(mapStateToProps, mapDispatchToProps),
-  graphql(eventNotificationsQuery as any, {
-    options: (props: IProps) => {
+  connect<IStateProps, IDispatchProps, IProps>(mapStateToProps, mapDispatchToProps),
+  graphql<IGraphqlProps, IProps>(eventNotificationsQuery as any, {
+    options: (props: allProps) => {
       const variables: any = { pageNumber: 0, pageSize: 15 };
       return { variables };
     },

@@ -2,17 +2,20 @@ import * as classNames from 'classnames';
 import * as React from 'react';
 import { graphql } from 'react-apollo';
 import * as careTeamQuery from '../graphql/queries/get-patient-care-team.graphql';
-import { FullUserFragment } from '../graphql/types';
+import { getPatientCareTeamQuery, FullUserFragment } from '../graphql/types';
 import CareTeamWidgetMember from './care-team-widget-member';
 import * as careTeamMemberStyles from './css/care-team-widget-member.css';
 import * as styles from './css/care-team-widget.css';
 
 interface IProps {
   patientId: string;
+  condensedWidget?: boolean;
+}
+
+interface IGraphqlProps {
   loading?: boolean;
   error?: string;
-  careTeam?: FullUserFragment[];
-  condensedWidget?: boolean;
+  careTeam?: getPatientCareTeamQuery['patientCareTeam'];
 }
 
 interface IState {
@@ -20,8 +23,8 @@ interface IState {
   selectedCareTeamMemberId: string | null;
 }
 
-class CareTeamWidget extends React.Component<IProps, IState> {
-  constructor(props: IProps) {
+class CareTeamWidget extends React.Component<IProps & IGraphqlProps, IState> {
+  constructor(props: IProps & IGraphqlProps) {
     super(props);
 
     const { condensedWidget } = props;
@@ -137,7 +140,7 @@ class CareTeamWidget extends React.Component<IProps, IState> {
   }
 }
 
-export default graphql(careTeamQuery as any, {
+export default graphql<IGraphqlProps, IProps>(careTeamQuery as any, {
   options: (props: IProps) => ({
     variables: {
       patientId: props.patientId,

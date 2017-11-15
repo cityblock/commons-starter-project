@@ -300,8 +300,8 @@ function formatClinic(clinics: any) {
 
 export default compose(
   connect<{}, IDispatchProps, IProps>(undefined, mapDispatchToProps),
-  graphql(setupPatientMutationGraphql as any, { name: 'createPatient' }),
-  graphql(getClinicsQuery as any, {
+  graphql<IGraphqlProps, IProps>(setupPatientMutationGraphql as any, { name: 'createPatient' }),
+  graphql<IGraphqlProps, IProps>(getClinicsQuery as any, {
     options: {
       variables: {
         pageNumber: 0,

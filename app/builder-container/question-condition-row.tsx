@@ -5,9 +5,9 @@ import * as answerQuery from '../graphql/queries/get-answer.graphql';
 import * as questionConditionDeleteMutationGraphql from '../graphql/queries/question-condition-delete-mutation.graphql';
 /* tslint:enable:max-line-length */
 import {
+  getAnswerQuery,
   questionConditionDeleteMutation,
   questionConditionDeleteMutationVariables,
-  FullAnswerFragment,
   FullQuestionConditionFragment,
 } from '../graphql/types';
 import * as styles from './css/risk-area-row.css';
@@ -18,24 +18,23 @@ export interface IDeleteOptions {
 }
 
 interface IProps {
-  answer?: FullAnswerFragment;
   questionCondition: FullQuestionConditionFragment;
+  mutation?: any;
+}
+
+interface IGraphqlProps {
+  answer?: getAnswerQuery['answer'];
   deleteQuestionCondition?: (options: IDeleteOptions) => { data: questionConditionDeleteMutation };
 }
 
-class QuestionConditionRow extends React.Component<IProps> {
-  constructor(props: IProps) {
-    super(props);
-    this.onClick = this.onClick.bind(this);
-  }
-
-  onClick() {
+class QuestionConditionRow extends React.Component<IProps & IGraphqlProps> {
+  onClick = () => {
     const { deleteQuestionCondition, questionCondition } = this.props;
 
     if (deleteQuestionCondition) {
       deleteQuestionCondition({ variables: { questionConditionId: questionCondition.id } });
     }
-  }
+  };
 
   render() {
     const { answer } = this.props;
@@ -52,7 +51,7 @@ class QuestionConditionRow extends React.Component<IProps> {
 }
 
 export default compose(
-  graphql(answerQuery as any, {
+  graphql<IGraphqlProps, IProps>(answerQuery as any, {
     options: (props: IProps) => ({
       variables: { answerId: props.questionCondition.answerId },
     }),
@@ -60,7 +59,7 @@ export default compose(
       answer: data ? (data as any).answer : null,
     }),
   }),
-  graphql(questionConditionDeleteMutationGraphql as any, {
+  graphql<IGraphqlProps, IProps>(questionConditionDeleteMutationGraphql as any, {
     name: 'deleteQuestionCondition',
     options: {
       refetchQueries: ['getQuestions'],

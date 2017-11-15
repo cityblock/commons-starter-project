@@ -309,7 +309,7 @@ function mapStateToProps(state: IAppState, ownProps: IProps): IStateProps {
 
 export default compose(
   connect<IStateProps, {}, IProps>(mapStateToProps),
-  graphql(concernEditMutationGraphql as any, { name: 'editConcern' }),
+  graphql<IGraphqlProps, IProps>(concernEditMutationGraphql as any, { name: 'editConcern' }),
   graphql(concernQuery as any, {
     skip: (props: IStateProps) => !props.concernId,
     options: (props: IStateProps) => ({ variables: { concernId: props.concernId } }),

@@ -66,9 +66,6 @@ it('renders a risk area assessment', async () => {
           patientId={'patient-1'}
           patientRoute={'/patients/patient-1'}
           routeBase={'/patients/patient-1/360'}
-          refetchRiskArea={() => true}
-          refetchRiskAreaQuestions={() => true}
-          refetchPatientAnswers={() => true}
         />
       </ReduxConnectedIntlProvider>
     </MockedProvider>,

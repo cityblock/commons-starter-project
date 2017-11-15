@@ -334,8 +334,10 @@ function mapStateToProps(state: IAppState, ownProps: IProps): IStateProps {
 
 export default compose(
   connect<IStateProps, {}, IProps>(mapStateToProps),
-  graphql(goalSuggestionTemplateEditMutationGraphql as any, { name: 'editGoal' }),
-  graphql(goalSuggestionTemplateQuery as any, {
+  graphql<IGraphqlProps, IProps>(goalSuggestionTemplateEditMutationGraphql as any, {
+    name: 'editGoal',
+  }),
+  graphql<IGraphqlProps, IProps>(goalSuggestionTemplateQuery as any, {
     skip: (props: allProps) => !props.goalId,
     options: (props: allProps) => ({ variables: { goalSuggestionTemplateId: props.goalId } }),
     props: ({ data }) => ({

@@ -29,23 +29,32 @@ export interface IPatientPanel {
   pageInfo: IPatientPanelPageInfo;
 }
 
-interface IProps {
+interface IGraphqlProps {
   refetchPatientPanel: (variables: { pageNumber: number; pageSize: number }) => any;
-  updatePageParams: (pageNumber: number) => any;
   loading: boolean;
   error?: string;
   patientPanel?: IPatientPanel;
 }
+
+interface IProps {
+  mutate?: any;
+}
+
+interface IDispatchProps {
+  updatePageParams: (pageNumber: number) => any;
+}
+
+type allProps = IDispatchProps & IGraphqlProps & IProps;
 
 interface IState extends IPageParams {
   hasNextPage?: boolean;
   hasPreviousPage?: boolean;
 }
 
-class PatientPanelContainer extends React.Component<IProps, IState> {
+class PatientPanelContainer extends React.Component<allProps, IState> {
   title = 'Patient roster';
 
-  constructor(props: IProps) {
+  constructor(props: allProps) {
     super(props);
 
     this.getNextPage = this.getNextPage.bind(this);
@@ -99,7 +108,7 @@ class PatientPanelContainer extends React.Component<IProps, IState> {
     return this.props.patientPanel ? this.props.patientPanel.edges.map(edge => edge.node) : [];
   }
 
-  componentWillReceiveProps(nextProps: IProps) {
+  componentWillReceiveProps(nextProps: allProps) {
     if (nextProps.patientPanel) {
       const { hasNextPage, hasPreviousPage } = nextProps.patientPanel.pageInfo;
 
@@ -155,7 +164,7 @@ const getPageParams = (): IPageParams => {
   };
 };
 
-function mapDispatchToProps(dispatch: Dispatch<() => void>): Partial<IProps> {
+function mapDispatchToProps(dispatch: Dispatch<() => void>): IDispatchProps {
   return {
     updatePageParams: (pageNumber: number) => {
       const pageParams = getPageParams();
@@ -167,9 +176,9 @@ function mapDispatchToProps(dispatch: Dispatch<() => void>): Partial<IProps> {
 }
 
 export default compose(
-  connect(undefined, mapDispatchToProps),
-  graphql(patientPanelQuery as any, {
-    options: (props: IProps) => ({
+  connect<{}, IDispatchProps>(undefined, mapDispatchToProps),
+  graphql<IGraphqlProps, IProps>(patientPanelQuery as any, {
+    options: () => ({
       variables: getPageParams(),
     }),
     props: ({ data }) => ({

@@ -22,7 +22,7 @@ import Question from './question';
 import QuestionCreate from './question-create';
 import { QuestionRow } from './question-row';
 
-export interface IComponentProps {
+interface IProps {
   routeBase: string;
   riskAreaId?: string;
   riskAreas?: FullRiskAreaFragment[];
@@ -33,28 +33,33 @@ export interface IComponentProps {
   questionId?: string;
 }
 
-interface IProps extends IComponentProps {
+interface IGraphqlProps {
   loading?: boolean;
   error?: string;
   deleteQuestion: (
     options: { variables: questionDeleteMutationVariables },
   ) => { data: questionDeleteMutation };
-  redirectToQuestions: () => any;
   questions?: FullQuestionFragment[];
   questionsRefetch: (
     variables: { riskAreaId?: string; progressNoteTemplateId?: string; screeningToolId?: string },
   ) => any;
+}
+
+interface IDispatchProps {
+  redirectToQuestions: () => any;
   directToRiskAreaQuestions: (riskAreaId: string) => any;
   directToScreeningToolQuestions: (screeningToolId: string) => any;
   directToProgressNoteTemplateQuestions: (progressNoteTemplateId: string) => any;
 }
 
+type allProps = IProps & IGraphqlProps & IDispatchProps;
+
 interface IState {
   showCreateQuestion: false;
 }
 
-class BuilderQuestions extends React.Component<IProps, IState> {
-  constructor(props: IProps) {
+class BuilderQuestions extends React.Component<allProps, IState> {
+  constructor(props: allProps) {
     super(props);
 
     this.renderQuestions = this.renderQuestions.bind(this);
@@ -69,7 +74,7 @@ class BuilderQuestions extends React.Component<IProps, IState> {
     };
   }
 
-  componentWillReceiveProps(nextProps: IProps) {
+  componentWillReceiveProps(nextProps: allProps) {
     const { loading, error, riskAreaId, screeningToolId, progressNoteTemplateId } = nextProps;
     // TODO: Why do we do this for risk area id and not for other fields
     this.setState(() => ({ loading, error }));
@@ -264,7 +269,7 @@ function getPageParams(props: IProps) {
   }
 }
 
-function mapDispatchToProps(dispatch: Dispatch<() => void>, ownProps: IProps): Partial<IProps> {
+function mapDispatchToProps(dispatch: Dispatch<() => void>, ownProps: IProps): IDispatchProps {
   return {
     redirectToQuestions: () => {
       const { routeBase } = ownProps;
@@ -283,9 +288,9 @@ function mapDispatchToProps(dispatch: Dispatch<() => void>, ownProps: IProps): P
 }
 
 export default compose(
-  connect<any, any, IComponentProps>(null, mapDispatchToProps),
-  graphql(questionDeleteMutationGraphql as any, { name: 'deleteQuestion' }),
-  graphql(questionsQuery as any, {
+  connect<{}, IDispatchProps, IProps>(null, mapDispatchToProps),
+  graphql<IGraphqlProps, IProps>(questionDeleteMutationGraphql as any, { name: 'deleteQuestion' }),
+  graphql<IGraphqlProps, IProps>(questionsQuery as any, {
     options: (props: IProps) => ({
       variables: getPageParams(props),
     }),

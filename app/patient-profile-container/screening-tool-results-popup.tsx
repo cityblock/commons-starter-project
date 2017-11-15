@@ -6,31 +6,29 @@ import { push } from 'react-router-redux';
 /* tslint:disable:max-line-length */
 import * as patientScreeningToolSubmissionQuery from '../graphql/queries/get-patient-screening-tool-submission.graphql';
 /* tsline:enable:max-line-length */
-import { FullPatientScreeningToolSubmissionFragment } from '../graphql/types';
+import { getPatientScreeningToolSubmissionQuery } from '../graphql/types';
 import * as styles from './css/screening-tools-popup.css';
 
 interface IProps {
   patientScreeningToolSubmissionId?: string;
-  redirectToCarePlanSuggestions?: () => any;
   patientRoute: string;
+}
+
+interface IDispatchProps {
+  redirectToCarePlanSuggestions?: () => any;
+}
+
+interface IGraphqlProps {
   loading?: boolean;
   error?: string;
-  patientScreeningToolSubmission?: FullPatientScreeningToolSubmissionFragment;
+  patientScreeningToolSubmission?: getPatientScreeningToolSubmissionQuery['patientScreeningToolSubmission'];
   refetchPatientScreeningToolSubmission?: () => any;
 }
 
-export class ScreeningToolResultsPopup extends React.Component<IProps, {}> {
-  constructor(props: IProps) {
-    super(props);
+type allProps = IProps & IDispatchProps & IGraphqlProps;
 
-    this.getConcernCount = this.getConcernCount.bind(this);
-    this.getGoalSuggestions = this.getGoalSuggestions.bind(this);
-    this.getGoalCount = this.getGoalCount.bind(this);
-    this.getTaskCount = this.getTaskCount.bind(this);
-    this.onClick = this.onClick.bind(this);
-  }
-
-  getConcernCount() {
+export class ScreeningToolResultsPopup extends React.Component<allProps, {}> {
+  getConcernCount = () => {
     const { patientScreeningToolSubmission } = this.props;
 
     if (!patientScreeningToolSubmission) {
@@ -48,9 +46,9 @@ export class ScreeningToolResultsPopup extends React.Component<IProps, {}> {
     );
 
     return concernSuggestions.length;
-  }
+  };
 
-  getGoalSuggestions() {
+  getGoalSuggestions = () => {
     const { patientScreeningToolSubmission } = this.props;
 
     if (!patientScreeningToolSubmission) {
@@ -64,13 +62,11 @@ export class ScreeningToolResultsPopup extends React.Component<IProps, {}> {
     }
 
     return carePlanSuggestions.filter(suggestion => suggestion!.suggestionType === 'goal');
-  }
+  };
 
-  getGoalCount() {
-    return this.getGoalSuggestions().length;
-  }
+  getGoalCount = () => this.getGoalSuggestions().length;
 
-  getTaskCount() {
+  getTaskCount = () => {
     if (this.getGoalCount() === 0) {
       return 0;
     }
@@ -82,15 +78,15 @@ export class ScreeningToolResultsPopup extends React.Component<IProps, {}> {
       .reduce((taskSuggestions1, taskSuggestions2) => taskSuggestions1!.concat(taskSuggestions2));
 
     return (taskSuggestions || []).length;
-  }
+  };
 
-  onClick() {
+  onClick = () => {
     const { redirectToCarePlanSuggestions } = this.props;
 
     if (redirectToCarePlanSuggestions) {
       redirectToCarePlanSuggestions();
     }
-  }
+  };
 
   render() {
     const suggestionsButtonStyles = classNames(styles.button, styles.smallButton);
@@ -128,7 +124,7 @@ export class ScreeningToolResultsPopup extends React.Component<IProps, {}> {
   }
 }
 
-function mapDispatchToProps(dispatch: Dispatch<() => void>, ownProps: IProps): Partial<IProps> {
+function mapDispatchToProps(dispatch: Dispatch<() => void>, ownProps: IProps): IDispatchProps {
   return {
     redirectToCarePlanSuggestions: () => {
       dispatch(push(`${ownProps.patientRoute}/map/suggestions`));
@@ -137,8 +133,8 @@ function mapDispatchToProps(dispatch: Dispatch<() => void>, ownProps: IProps): P
 }
 
 export default compose(
-  connect(undefined, mapDispatchToProps),
-  graphql(patientScreeningToolSubmissionQuery as any, {
+  connect<{}, IDispatchProps, IProps>(undefined, mapDispatchToProps),
+  graphql<IGraphqlProps, IProps>(patientScreeningToolSubmissionQuery as any, {
     skip: (props: IProps) => !props.patientScreeningToolSubmissionId,
     options: (props: IProps) => ({
       variables: {

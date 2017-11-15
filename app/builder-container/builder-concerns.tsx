@@ -15,34 +15,35 @@ import Concern from './concern';
 import ConcernCreate from './concern-create';
 import { ConcernRow } from './concern-row';
 
-interface IComponentProps {
+interface IProps {
   routeBase: string;
   concerns?: FullConcernFragment[];
   concernId?: string;
+  mutate?: any;
 }
 
-interface IProps extends IComponentProps {
-  loading?: boolean;
-  error?: string;
-  mutate: any;
+interface IGraphqlProps {
   deleteConcern: (
     options: { variables: concernDeleteMutationVariables },
   ) => { data: concernDeleteMutation };
+}
+
+interface IDispatchProps {
   redirectToConcerns: () => any;
 }
+
+type allProps = IGraphqlProps & IDispatchProps & IProps;
 
 interface IState {
   showCreateConcern: false;
 }
 
-class BuilderConcerns extends React.Component<IProps, IState> {
-  constructor(props: IProps) {
+class BuilderConcerns extends React.Component<allProps, IState> {
+  constructor(props: allProps) {
     super(props);
 
     this.renderConcerns = this.renderConcerns.bind(this);
     this.renderConcern = this.renderConcern.bind(this);
-    this.showCreateConcern = this.showCreateConcern.bind(this);
-    this.hideCreateConcern = this.hideCreateConcern.bind(this);
     this.onDeleteConcern = this.onDeleteConcern.bind(this);
 
     this.state = {
@@ -50,33 +51,19 @@ class BuilderConcerns extends React.Component<IProps, IState> {
     };
   }
 
-  componentWillReceiveProps(nextProps: IProps) {
-    const { loading, error } = nextProps;
-
-    this.setState(() => ({ loading, error }));
-  }
-
-  showCreateConcern() {
+  showCreateConcern = () => {
     this.setState(() => ({ showCreateConcern: true }));
-  }
+  };
 
-  hideCreateConcern(riskArea?: FullConcernFragment) {
+  hideCreateConcern = (riskArea?: FullConcernFragment) => {
     this.setState(() => ({ showCreateConcern: false }));
-  }
+  };
 
   renderConcerns(concerns: FullConcernFragment[]) {
-    const { loading, error } = this.props;
     const validConcerns = concerns.filter(concern => !concern.deletedAt);
 
     if (validConcerns.length > 0) {
       return validConcerns.map(this.renderConcern);
-    } else if (!loading && !error) {
-      return (
-        <div className={styles.emptyMessage}>
-          <div className={styles.emptyLogo} />
-          <div className={styles.emptyLabel}>No Concerns</div>
-        </div>
-      );
     }
   }
 
@@ -141,7 +128,7 @@ class BuilderConcerns extends React.Component<IProps, IState> {
   }
 }
 
-function mapDispatchToProps(dispatch: Dispatch<() => void>, ownProps: IProps): Partial<IProps> {
+function mapDispatchToProps(dispatch: Dispatch<() => void>, ownProps: IProps): IDispatchProps {
   return {
     redirectToConcerns: () => {
       const { routeBase } = ownProps;
@@ -151,6 +138,6 @@ function mapDispatchToProps(dispatch: Dispatch<() => void>, ownProps: IProps): P
 }
 
 export default compose(
-  connect<any, any, IComponentProps>(null, mapDispatchToProps),
-  graphql(concernDeleteMutationGraphql as any, { name: 'deleteConcern' }),
+  connect<{}, IDispatchProps, IProps>(null, mapDispatchToProps),
+  graphql<IGraphqlProps, IProps>(concernDeleteMutationGraphql as any, { name: 'deleteConcern' }),
 )(BuilderConcerns);

@@ -3,10 +3,10 @@ import * as React from 'react';
 import { graphql } from 'react-apollo';
 import { FormattedMessage } from 'react-intl';
 import { Link } from 'react-router-dom';
-import { ICarePlan } from 'schema';
 /* tslint:disable:max-line-length */
 import * as patientCarePlanQuery from '../graphql/queries/get-patient-care-plan.graphql';
 /* tslint:enable:max-line-length */
+import { getPatientCarePlanQuery } from '../graphql/types';
 import * as tabStyles from '../shared/css/tabs.css';
 import * as styles from './css/patient-care-plan.css';
 import PatientCarePlanSuggestions from './patient-care-plan-suggestions';
@@ -16,13 +16,16 @@ interface IProps {
   patientId: string;
   subTabId?: 'active' | 'suggestions';
   routeBase: string;
-  patientCarePlan?: ICarePlan;
+}
+
+interface IGraphqlProps {
+  patientCarePlan?: getPatientCarePlanQuery['carePlanForPatient'];
   refetchPatientCarePlan?: () => any;
   loading?: boolean;
   error?: string;
 }
 
-export const PatientCarePlanView = (props: IProps) => {
+export const PatientCarePlanView = (props: IProps & IGraphqlProps) => {
   const { subTabId, routeBase, patientId, patientCarePlan, loading } = props;
   const isSuggestions = subTabId === 'suggestions';
   const carePlanSuggestions = isSuggestions ? (
@@ -72,7 +75,7 @@ export const PatientCarePlanView = (props: IProps) => {
   );
 };
 
-export default graphql(patientCarePlanQuery as any, {
+export default graphql<IGraphqlProps, IProps>(patientCarePlanQuery as any, {
   options: (props: IProps) => ({
     variables: {
       patientId: props.patientId,

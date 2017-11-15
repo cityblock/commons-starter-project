@@ -18,6 +18,9 @@ import { fetchMore } from '../shared/util/fetch-more';
 interface IProps {
   patient?: ShortPatientFragment;
   patientId: string;
+}
+
+interface IGraphqlProps {
   carePlanLoading: boolean;
   carePlanError?: string;
   carePlanResponse?: getPatientCarePlanQuery['carePlanForPatient'];
@@ -25,10 +28,15 @@ interface IProps {
   tasksError?: string;
   tasksResponse?: getPatientTasksQuery['tasksForPatient'];
   fetchMoreTasks: () => any;
+}
+
+interface IDispatchProps {
   updatePageParams: (params: IPageParams) => any;
 }
 
-class PatientTasks extends React.Component<IProps, {}> {
+type allProps = IProps & IGraphqlProps & IDispatchProps;
+
+class PatientTasks extends React.Component<allProps, {}> {
   render() {
     const {
       updatePageParams,
@@ -73,7 +81,7 @@ function getPageParams(props: IProps) {
   };
 }
 
-function mapDispatchToProps(dispatch: Dispatch<() => void>, ownProps: IProps): Partial<IProps> {
+function mapDispatchToProps(dispatch: Dispatch<() => void>, ownProps: IProps): IDispatchProps {
   return {
     updatePageParams: (pageParams: IPageParams) => {
       const cleanedPageParams = pickBy<IPageParams>(pageParams);
@@ -83,8 +91,8 @@ function mapDispatchToProps(dispatch: Dispatch<() => void>, ownProps: IProps): P
 }
 
 export default compose(
-  connect(undefined, mapDispatchToProps),
-  graphql(patientTasksQuery as any, {
+  connect<{}, IDispatchProps, IProps>(undefined, mapDispatchToProps),
+  graphql<IGraphqlProps, IProps>(patientTasksQuery as any, {
     options: (props: IProps) => ({
       variables: getPageParams(props),
       fetchPolicy: 'cache-and-network',
@@ -97,7 +105,7 @@ export default compose(
       tasksResponse: data ? (data as any).tasksForPatient : null,
     }),
   }),
-  graphql(patientCarePlanQuery as any, {
+  graphql<IGraphqlProps, IProps>(patientCarePlanQuery as any, {
     options: (props: IProps) => ({
       variables: {
         patientId: props.patientId,

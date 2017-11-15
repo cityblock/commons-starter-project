@@ -13,7 +13,7 @@ const PatientRosterItem: React.StatelessComponent<IProps> = (props: IProps) => {
 
   const patientAge = patient.dateOfBirth ? (
     <FormattedRelative value={patient.dateOfBirth}>
-      {(date: string) => <div className={styles.tableColumn}>{date}</div>}
+      {(date: string) => <span>{date}</span>}
     </FormattedRelative>
   ) : (
     'unknown'
@@ -21,7 +21,7 @@ const PatientRosterItem: React.StatelessComponent<IProps> = (props: IProps) => {
 
   const patientJoined = patient.createdAt ? (
     <FormattedRelative value={patient.createdAt}>
-      {(date: string) => <div className={styles.tableColumn}>{date}</div>}
+      {(date: string) => <span>{date}</span>}
     </FormattedRelative>
   ) : (
     'unknown'

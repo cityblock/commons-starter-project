@@ -2,7 +2,7 @@ import * as classNames from 'classnames';
 import * as React from 'react';
 import { FormattedDate } from 'react-intl';
 import { dateAdd } from '../../server/lib/date';
-import { FullTaskTemplateFragment, FullUserFragment } from '../graphql/types';
+import { getPatientCareTeamQuery, FullTaskTemplateFragment } from '../graphql/types';
 import { DEFAULT_AVATAR_URL } from '../shared/task/task';
 import * as styles from './css/patient-care-plan.css';
 
@@ -10,7 +10,7 @@ interface IProps {
   taskTemplate: FullTaskTemplateFragment;
   selected: boolean;
   onToggleRemoved: (taskTemplateId: string) => any;
-  careTeam?: FullUserFragment[];
+  careTeam?: getPatientCareTeamQuery['patientCareTeam'];
 }
 
 export default class TaskTemplate extends React.Component<IProps, {}> {
@@ -39,7 +39,8 @@ export default class TaskTemplate extends React.Component<IProps, {}> {
 
     if (careTeamAssigneeRole && careTeam) {
       const assignedCareTeamMember = careTeam.find(
-        careTeamMember => careTeamMember.userRole === careTeamAssigneeRole,
+        careTeamMember =>
+          careTeamMember ? careTeamMember.userRole === careTeamAssigneeRole : false,
       );
 
       if (assignedCareTeamMember && assignedCareTeamMember.googleProfileImageUrl) {

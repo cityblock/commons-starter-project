@@ -8,10 +8,10 @@ import { push } from 'react-router-redux';
 import * as careTeamQuery from '../../graphql/queries/get-patient-care-team.graphql';
 import * as createTaskMutationGraphql from '../../graphql/queries/task-create-mutation.graphql';
 import {
+  getPatientCareTeamQuery,
   taskCreateMutation,
   taskCreateMutationVariables,
   FullPatientGoalFragment,
-  FullUserFragment,
   ShortPatientFragment,
 } from '../../graphql/types';
 import { IUpdatedField } from '../../shared/util/updated-fields';
@@ -25,13 +25,21 @@ export interface IOptions {
 
 interface IProps {
   patient: ShortPatientFragment;
-  careTeam?: FullUserFragment[];
   patientGoals?: FullPatientGoalFragment[];
   routeBase: string;
   onClose: () => any;
+}
+
+interface IGraphqlProps {
+  careTeam?: getPatientCareTeamQuery['patientCareTeam'];
   createTask: (options: IOptions) => { data: taskCreateMutation };
+}
+
+interface IDispatchProps {
   redirectToTask: (taskId: string) => any;
 }
+
+type allProps = IProps & IGraphqlProps & IDispatchProps;
 
 interface IState {
   loading: boolean;
@@ -43,8 +51,8 @@ function formatDate(date: string) {
   return format(date, 'MM/DD/YYYY');
 }
 
-class TaskCreate extends React.Component<IProps, IState> {
-  constructor(props: IProps) {
+class TaskCreate extends React.Component<allProps, IState> {
+  constructor(props: allProps) {
     super(props);
 
     this.onSubmit = this.onSubmit.bind(this);
@@ -145,11 +153,14 @@ class TaskCreate extends React.Component<IProps, IState> {
     const shortName = patient ? `${patient.firstName} ${patient.lastName}` : 'Loading Patient';
     const loadingClass = loading ? styles.loading : styles.loadingHidden;
 
-    const careTeamHtml = (careTeam || []).map(user => (
-      <option value={user.id} key={user.id}>
-        {user.firstName} {user.lastName}
-      </option>
-    ));
+    const careTeamHtml = (careTeam || []).map(
+      user =>
+        user ? (
+          <option value={user.id} key={user.id}>
+            {user.firstName} {user.lastName}
+          </option>
+        ) : null,
+    );
 
     return (
       <div className={styles.container}>
@@ -236,7 +247,7 @@ class TaskCreate extends React.Component<IProps, IState> {
   }
 }
 
-function mapDispatchToProps(dispatch: Dispatch<() => void>, ownProps: IProps): Partial<IProps> {
+function mapDispatchToProps(dispatch: Dispatch<() => void>, ownProps: IProps): IDispatchProps {
   return {
     redirectToTask: (taskId: string) => {
       dispatch(push(`${ownProps.routeBase}/${taskId}`));
@@ -245,23 +256,21 @@ function mapDispatchToProps(dispatch: Dispatch<() => void>, ownProps: IProps): P
 }
 
 export default compose(
-  connect(undefined, mapDispatchToProps),
-  graphql(careTeamQuery as any, {
+  connect<{}, IDispatchProps, IProps>(undefined, mapDispatchToProps),
+  graphql<IGraphqlProps, IProps>(careTeamQuery as any, {
     options: (props: IProps) => ({
       variables: {
         patientId: props.patient.id,
       },
     }),
     props: ({ data }) => ({
-      loading: data ? data.loading : false,
-      error: data ? data.error : null,
       careTeam: data ? (data as any).patientCareTeam : null,
     }),
   }),
-  graphql(createTaskMutationGraphql as any, {
+  graphql<IGraphqlProps, IProps>(createTaskMutationGraphql as any, {
     name: 'createTask',
     options: {
       refetchQueries: ['getPatientTasks'],
     },
   }),
-)(TaskCreate as any) as any;
+)(TaskCreate);

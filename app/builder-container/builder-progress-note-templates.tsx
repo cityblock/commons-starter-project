@@ -29,6 +29,10 @@ interface IDispatchProps {
 }
 
 interface IProps {
+  mutate: any;
+}
+
+interface IGraphqlProps {
   loading?: boolean;
   error?: string;
   deleteProgressNoteTemplate: (
@@ -36,14 +40,13 @@ interface IProps {
   ) => { data: progressNoteTemplateDeleteMutation };
   progressNoteTemplates?: FullProgressNoteTemplateFragment[];
   progressNoteTemplatesRefetch: () => any;
-  mutate: any;
 }
 
 interface IState {
   showCreateProgressNoteTemplate: false;
 }
 
-type allProps = IProps & IComponentProps & IDispatchProps;
+type allProps = IProps & IComponentProps & IDispatchProps & IGraphqlProps;
 
 class BuilderProgressNoteTemplates extends React.Component<allProps, IState> {
   constructor(props: allProps) {
@@ -171,8 +174,10 @@ function mapDispatchToProps(dispatch: Dispatch<() => void>, ownProps: allProps):
 
 export default compose(
   connect<{}, IDispatchProps, IComponentProps>(null, mapDispatchToProps),
-  graphql(progressNoteTemplateDeleteMutationGraphql as any, { name: 'deleteProgressNoteTemplate' }),
-  graphql(progressNoteTemplatesQuery as any, {
+  graphql<IGraphqlProps, IProps>(progressNoteTemplateDeleteMutationGraphql as any, {
+    name: 'deleteProgressNoteTemplate',
+  }),
+  graphql<IGraphqlProps, IProps>(progressNoteTemplatesQuery as any, {
     props: ({ data, ownProps }) => ({
       progressNoteTemplatesRefetch: data ? data.refetch : false,
       progressNoteTemplatesLoading: data ? data.loading : false,

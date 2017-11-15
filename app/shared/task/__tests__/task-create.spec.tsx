@@ -6,7 +6,7 @@ import { create } from 'react-test-renderer';
 import configureMockStore from 'redux-mock-store';
 import { ENGLISH_TRANSLATION } from '../../../reducers/messages/en';
 import ReduxConnectedIntlProvider from '../../../redux-connected-intl-provider';
-import { currentUser, patient } from '../../util/test-data';
+import { patient } from '../../util/test-data';
 import TaskCreate from '../task-create';
 
 const locale = { messages: ENGLISH_TRANSLATION.messages };
@@ -18,7 +18,7 @@ it('renders task create', () => {
     <MockedProvider mocks={[]} store={mockStore({ locale })}>
       <ReduxConnectedIntlProvider>
         <ConnectedRouter history={history}>
-          <TaskCreate patient={patient} careTeam={[currentUser]} onClose={() => false} />
+          <TaskCreate patient={patient} onClose={() => false} routeBase={'route-base'} />
         </ConnectedRouter>
       </ReduxConnectedIntlProvider>
     </MockedProvider>,

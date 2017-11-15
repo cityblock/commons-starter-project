@@ -1,7 +1,7 @@
 import * as classNames from 'classnames';
 import * as React from 'react';
 import { connect } from 'react-redux';
-import { ICarePlan } from 'schema';
+import { getPatientCarePlanQuery } from '../graphql/types';
 import Task from '../shared/task/task';
 import { IState as IAppState } from '../store';
 import * as styles from './css/patient-map.css';
@@ -15,7 +15,7 @@ interface IOwnProps {
   patientId: string;
   loading?: boolean;
   routeBase: string;
-  carePlan?: ICarePlan;
+  carePlan?: getPatientCarePlanQuery['carePlanForPatient'];
 }
 
 type IProps = IStateProps & IOwnProps;

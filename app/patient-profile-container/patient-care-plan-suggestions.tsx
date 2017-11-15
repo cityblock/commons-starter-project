@@ -4,9 +4,10 @@ import { compose, graphql } from 'react-apollo';
 import * as patientCarePlanSuggestionsQuery from '../graphql/queries/get-patient-care-plan-suggestions.graphql';
 import * as patientCareTeamQuery from '../graphql/queries/get-patient-care-team.graphql';
 import {
+  getPatientCarePlanSuggestionsQuery,
+  getPatientCareTeamQuery,
   FullCarePlanSuggestionFragment,
   FullGoalSuggestionTemplateFragment,
-  FullUserFragment,
 } from '../graphql/types';
 import * as styles from './css/patient-care-plan.css';
 import PatientCarePlanSuggestion from './patient-care-plan-suggestion';
@@ -26,11 +27,14 @@ export type SuggestionTypes = 'goal' | 'concern';
 interface IProps {
   patientId: string;
   routeBase: string;
+}
+
+interface IGraphqlProps {
   loading?: boolean;
   error?: string;
-  carePlanSuggestions?: FullCarePlanSuggestionFragment[];
+  carePlanSuggestions?: getPatientCarePlanSuggestionsQuery['carePlanSuggestionsForPatient'];
   refetchCarePlanSuggestions?: () => any;
-  careTeam?: FullUserFragment[];
+  careTeam?: getPatientCareTeamQuery['patientCareTeam'];
 }
 
 interface IState {
@@ -41,8 +45,8 @@ interface IState {
   dismissedSuggestion?: FullCarePlanSuggestionFragment;
 }
 
-class PatientCarePlanSuggestions extends React.Component<IProps, IState> {
-  constructor(props: IProps) {
+class PatientCarePlanSuggestions extends React.Component<IProps & IGraphqlProps, IState> {
+  constructor(props: IProps & IGraphqlProps) {
     super(props);
 
     this.renderSuggestions = this.renderSuggestions.bind(this);
@@ -115,19 +119,23 @@ class PatientCarePlanSuggestions extends React.Component<IProps, IState> {
     }
 
     const suggestionsToUse = carePlanSuggestions.filter(
-      carePlanSuggestion => carePlanSuggestion.suggestionType === suggestionType,
+      carePlanSuggestion =>
+        carePlanSuggestion && carePlanSuggestion.suggestionType === suggestionType,
     );
 
     if (suggestionsToUse.length) {
-      return suggestionsToUse.map(suggestion => (
-        <PatientCarePlanSuggestion
-          key={suggestion.id}
-          onAccept={this.onAcceptSuggestion}
-          onDismiss={this.onDismissSuggestion}
-          careTeam={careTeam}
-          suggestion={suggestion}
-        />
-      ));
+      return suggestionsToUse.map(
+        suggestion =>
+          suggestion ? (
+            <PatientCarePlanSuggestion
+              key={suggestion.id}
+              onAccept={this.onAcceptSuggestion}
+              onDismiss={this.onDismissSuggestion}
+              careTeam={careTeam}
+              suggestion={suggestion!}
+            />
+          ) : null,
+      );
     } else {
       return defaultHtml;
     }
@@ -165,7 +173,7 @@ class PatientCarePlanSuggestions extends React.Component<IProps, IState> {
           visible={acceptModalVisible}
           patientId={patientId}
           carePlanSuggestions={carePlanSuggestions}
-          suggestion={acceptedSuggestion}
+          suggestion={acceptedSuggestion!}
           taskTemplateIds={acceptedTaskTemplateIds}
           onDismiss={this.onAcceptModalDismiss}
         />
@@ -212,7 +220,7 @@ class PatientCarePlanSuggestions extends React.Component<IProps, IState> {
 }
 
 export default compose(
-  graphql(patientCarePlanSuggestionsQuery as any, {
+  graphql<IGraphqlProps, IProps>(patientCarePlanSuggestionsQuery as any, {
     options: (props: IProps) => ({
       variables: {
         patientId: props.patientId,
@@ -226,7 +234,7 @@ export default compose(
       refetchCarePlanSuggestions: data ? data.refetch : null,
     }),
   }),
-  graphql(patientCareTeamQuery as any, {
+  graphql<IGraphqlProps, IProps>(patientCareTeamQuery as any, {
     options: (props: IProps) => ({
       variables: {
         patientId: props.patientId,

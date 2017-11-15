@@ -1,19 +1,23 @@
 import * as React from 'react';
-import { ICarePlan, IPatientConcern } from 'schema';
+import {
+  getPatientCarePlanQuery,
+  getPatientCarePlanSuggestionsQuery,
+  FullPatientConcernFragment,
+} from '../graphql/types';
 import { FullCarePlanSuggestionFragment } from '../graphql/types';
 
 interface IProps {
-  carePlan?: ICarePlan;
-  carePlanSuggestions?: FullCarePlanSuggestionFragment[];
+  carePlan?: getPatientCarePlanQuery['carePlanForPatient'];
+  carePlanSuggestions?: getPatientCarePlanSuggestionsQuery['carePlanSuggestionsForPatient'];
   optionType: 'suggested' | 'active' | 'inactive';
 }
 
 const PatientCarePlanSuggestionOptionGroup = (props: IProps) => {
   const { carePlan, carePlanSuggestions, optionType } = props;
   let label: string = '';
-  let patientConcerns: IPatientConcern[] = [];
-  let concernSuggestions: FullCarePlanSuggestionFragment[] = [];
-  let optionsHtml: JSX.Element[] = [];
+  let patientConcerns: FullPatientConcernFragment[] = [];
+  let concernSuggestions: Array<FullCarePlanSuggestionFragment | null> = [];
+  let optionsHtml: Array<JSX.Element | null> = [];
 
   if (carePlan && ['active', 'inactive'].includes(optionType)) {
     if (optionType === 'active') {
@@ -25,7 +29,9 @@ const PatientCarePlanSuggestionOptionGroup = (props: IProps) => {
     }
   } else if (carePlanSuggestions && optionType === 'suggested') {
     label = 'Suggested concerns';
-    concernSuggestions = carePlanSuggestions.filter(suggestion => !!suggestion.concern);
+    concernSuggestions = carePlanSuggestions.filter(
+      suggestion => (suggestion ? !!suggestion.concern : false),
+    );
   }
 
   if (patientConcerns.length) {
@@ -35,11 +41,14 @@ const PatientCarePlanSuggestionOptionGroup = (props: IProps) => {
       </option>
     ));
   } else if (concernSuggestions.length) {
-    optionsHtml = concernSuggestions.map(concernSuggestion => (
-      <option key={concernSuggestion.concernId!} value={concernSuggestion.concernId!}>
-        {concernSuggestion.concern!.title}
-      </option>
-    ));
+    optionsHtml = concernSuggestions.map(
+      concernSuggestion =>
+        concernSuggestion ? (
+          <option key={concernSuggestion.concernId!} value={concernSuggestion.concernId!}>
+            {concernSuggestion.concern!.title}
+          </option>
+        ) : null,
+    );
   }
 
   if (optionsHtml.length) {

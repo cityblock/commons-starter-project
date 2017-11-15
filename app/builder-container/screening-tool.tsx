@@ -12,11 +12,7 @@ import * as styles from '../shared/css/two-panel-right.css';
 import { IState as IAppState } from '../store';
 import ScoreRangeCreateEdit from './score-range-create-edit';
 
-export interface IProps {
-  screeningTool?: FullScreeningToolFragment;
-  screeningToolId?: string;
-  screeningToolLoading?: boolean;
-  screeningToolError?: string;
+interface IProps {
   routeBase: string;
   refetchScreeningTool: () => any;
   match?: {
@@ -24,13 +20,23 @@ export interface IProps {
       screeningToolId?: string;
     };
   };
-  editScreeningTool: (
-    options: { variables: screeningToolEditMutationVariables },
-  ) => { data: { screeningToolEdit: FullScreeningToolFragment } };
   onDelete: (screeningToolId: string) => any;
 }
 
-export interface IState {
+interface IGraphqlProps {
+  screeningTool?: FullScreeningToolFragment;
+  screeningToolLoading?: boolean;
+  screeningToolError?: string;
+  editScreeningTool: (
+    options: { variables: screeningToolEditMutationVariables },
+  ) => { data: { screeningToolEdit: FullScreeningToolFragment } };
+}
+
+interface IStateProps {
+  screeningToolId?: string;
+}
+
+interface IState {
   deleteConfirmationInProgress: boolean;
   deleteError?: string;
   editedTitle: string;
@@ -38,11 +44,13 @@ export interface IState {
   editTitleError?: string;
 }
 
-export class ScreeningTool extends React.Component<IProps, IState> {
+type allProps = IGraphqlProps & IStateProps & IProps;
+
+export class ScreeningTool extends React.Component<allProps, IState> {
   editTitleInput: HTMLInputElement | null;
   titleBody: HTMLDivElement | null;
 
-  constructor(props: IProps) {
+  constructor(props: allProps) {
     super(props);
 
     this.reloadScreeningTool = this.reloadScreeningTool.bind(this);
@@ -67,7 +75,7 @@ export class ScreeningTool extends React.Component<IProps, IState> {
     };
   }
 
-  componentWillReceiveProps(nextProps: IProps) {
+  componentWillReceiveProps(nextProps: allProps) {
     const { screeningTool } = nextProps;
 
     if (screeningTool) {
@@ -312,18 +320,18 @@ export class ScreeningTool extends React.Component<IProps, IState> {
   }
 }
 
-function mapStateToProps(state: IAppState, ownProps: IProps): Partial<IProps> {
+function mapStateToProps(state: IAppState, ownProps: IProps): IStateProps {
   return {
     screeningToolId: ownProps.match ? ownProps.match.params.screeningToolId : undefined,
   };
 }
 
 export default compose(
-  connect(mapStateToProps),
-  graphql(screeningToolEditMutation as any, { name: 'editScreeningTool' }),
-  graphql(screeningToolQuery as any, {
-    skip: (props: IProps) => !props.screeningToolId,
-    options: (props: IProps) => ({ variables: { screeningToolId: props.screeningToolId } }),
+  connect<IStateProps, {}, IProps>(mapStateToProps),
+  graphql<IGraphqlProps, IProps>(screeningToolEditMutation as any, { name: 'editScreeningTool' }),
+  graphql<IGraphqlProps, IProps>(screeningToolQuery as any, {
+    skip: (props: allProps) => !props.screeningToolId,
+    options: (props: allProps) => ({ variables: { screeningToolId: props.screeningToolId } }),
     props: ({ data }) => ({
       screeningToolLoading: data ? data.loading : false,
       screeningToolError: data ? data.error : null,

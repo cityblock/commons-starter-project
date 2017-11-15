@@ -18,28 +18,31 @@ import ScreeningTool from './screening-tool';
 import ScreeningToolCreate from './screening-tool-create';
 import { ScreeningToolRow } from './screening-tool-row';
 
-interface IComponentProps {
+interface IProps {
   routeBase: string;
   screeningTools?: FullScreeningToolFragment[];
   riskAreas?: FullRiskAreaFragment[];
   screeningToolId?: string;
+  mutate?: any;
 }
 
-interface IProps {
+interface IDispatchProps {
+  redirectToScreeningTools: () => any;
+}
+
+interface IGraphqlProps {
   loading?: boolean;
   error?: string;
-  mutate: any;
   deleteScreeningTool: (
     options: { variables: screeningToolDeleteMutationVariables },
   ) => { data: screeningToolDeleteMutation };
-  redirectToScreeningTools: () => any;
 }
 
 interface IState {
   showCreateScreeningTool: false;
 }
 
-type allProps = IProps & IComponentProps;
+type allProps = IProps & IDispatchProps & IGraphqlProps;
 
 class BuilderScreeningTools extends React.Component<allProps, IState> {
   constructor(props: allProps) {
@@ -153,7 +156,7 @@ class BuilderScreeningTools extends React.Component<allProps, IState> {
   }
 }
 
-function mapDispatchToProps(dispatch: Dispatch<() => void>, ownProps: allProps): Partial<IProps> {
+function mapDispatchToProps(dispatch: Dispatch<() => void>, ownProps: allProps): IDispatchProps {
   return {
     redirectToScreeningTools: () => {
       const { routeBase } = ownProps;
@@ -163,6 +166,8 @@ function mapDispatchToProps(dispatch: Dispatch<() => void>, ownProps: allProps):
 }
 
 export default compose(
-  connect<{}, {}, IComponentProps>(null, mapDispatchToProps),
-  graphql(screeningToolDeleteMutationGraphql as any, { name: 'deleteScreeningTool' }),
+  connect<{}, IDispatchProps, IProps>(null, mapDispatchToProps),
+  graphql<IGraphqlProps, IProps>(screeningToolDeleteMutationGraphql as any, {
+    name: 'deleteScreeningTool',
+  }),
 )(BuilderScreeningTools);

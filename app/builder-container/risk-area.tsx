@@ -372,8 +372,8 @@ function mapStateToProps(state: IAppState, ownProps: IProps): IStateProps {
 
 export default compose(
   connect<IStateProps, {}, IProps>(mapStateToProps),
-  graphql(riskAreaEditMutationGraphql as any, { name: 'editRiskArea' }),
-  graphql(riskAreaQuery as any, {
+  graphql<IGraphqlProps, IProps>(riskAreaEditMutationGraphql as any, { name: 'editRiskArea' }),
+  graphql<IGraphqlProps, IProps>(riskAreaQuery as any, {
     skip: (props: allProps) => !props.riskAreaId,
     options: (props: allProps) => ({ variables: { riskAreaId: props.riskAreaId } }),
     props: ({ data }) => ({

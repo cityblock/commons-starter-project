@@ -1,12 +1,13 @@
 import * as React from 'react';
 import { compose, graphql } from 'react-apollo';
-import { ICarePlan } from 'schema';
 /* tslint:disable:max-line-length */
 import * as carePlanSuggestionAcceptMutationGraphql from '../graphql/queries/care-plan-suggestion-accept-mutation.graphql';
 import * as patientCarePlanQuery from '../graphql/queries/get-patient-care-plan.graphql';
 import {
   carePlanSuggestionAcceptMutation,
   carePlanSuggestionAcceptMutationVariables,
+  getPatientCarePlanQuery,
+  getPatientCarePlanSuggestionsQuery,
   FullCarePlanSuggestionFragment,
 } from '../graphql/types';
 import { Popup } from '../shared/popup/popup';
@@ -16,7 +17,7 @@ import PopupPatientCarePlanSuggestionAcceptedModalBody from './popup-patient-car
 
 interface IProps {
   visible: boolean;
-  carePlanSuggestions?: FullCarePlanSuggestionFragment[];
+  carePlanSuggestions?: getPatientCarePlanSuggestionsQuery['carePlanSuggestionsForPatient'];
   suggestion?: FullCarePlanSuggestionFragment;
   taskTemplateIds?: string[];
   patientId: string;
@@ -26,7 +27,7 @@ interface IProps {
 interface IGraphqlProps {
   carePlanLoading?: boolean;
   carePlanError?: string;
-  carePlan?: ICarePlan;
+  carePlan?: getPatientCarePlanQuery['carePlanForPatient'];
   acceptCarePlanSuggestion: (
     options: { variables: carePlanSuggestionAcceptMutationVariables },
   ) => { data: carePlanSuggestionAcceptMutation };
@@ -84,8 +85,8 @@ class PopupPatientCarePlanSuggestionAccepted extends React.Component<allProps, I
 
       if (existingConcernOrConcernSuggestion) {
         const suggestedConcernIds = carePlanSuggestions!
-          .filter(carePlanSuggestion => !!carePlanSuggestion.concern)
-          .map(concernSuggestion => concernSuggestion.concernId);
+          .filter(carePlanSuggestion => carePlanSuggestion && !!carePlanSuggestion.concern)
+          .map(concernSuggestion => concernSuggestion!.concernId);
         const addingToSuggestedConcern = suggestedConcernIds.includes(concernId);
 
         if (addingToSuggestedConcern) {

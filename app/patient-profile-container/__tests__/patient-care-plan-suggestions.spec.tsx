@@ -7,16 +7,10 @@ import { create } from 'react-test-renderer';
 import configureMockStore from 'redux-mock-store';
 import { ENGLISH_TRANSLATION } from '../../reducers/messages/en';
 import ReduxConnectedIntlProvider from '../../redux-connected-intl-provider';
-import {
-  carePlanSuggestionWithConcern,
-  carePlanSuggestionWithGoal,
-} from '../../shared/util/test-data';
 import PatientCarePlanSuggestions from '../patient-care-plan-suggestions';
 
 const locale = { messages: ENGLISH_TRANSLATION.messages };
 const mockStore = configureMockStore([]);
-
-const carePlanSuggestions = [carePlanSuggestionWithConcern, carePlanSuggestionWithGoal];
 
 const query = gql(`
 query getPatientCarePlanSuggestions($patientId: String!) {
@@ -143,7 +137,6 @@ it('renders patient care plan suggestions', () => {
         <ConnectedRouter history={history}>
           <PatientCarePlanSuggestions
             patientId={'patient-1'}
-            carePlanSuggestions={carePlanSuggestions}
             routeBase={'/patients/patient-1/map'}
           />
         </ConnectedRouter>

@@ -6,17 +6,23 @@ import { connect, Dispatch } from 'react-redux';
 import { push } from 'react-router-redux';
 import * as currentUserQuery from '../graphql/queries/get-current-user.graphql';
 import * as loginMutation from '../graphql/queries/log-in-user-mutation.graphql';
-import { logInUserMutationVariables, FullUserFragment } from '../graphql/types';
+import { getCurrentUserQuery, logInUserMutationVariables } from '../graphql/types';
 import * as styles from './css/login.css';
 import Footer from './footer';
 
 interface IProps {
+  mutate?: any;
+}
+
+interface IGraphqlProps {
   logIn: (options: { variables: logInUserMutationVariables }) => any;
-  onSuccess: () => any;
-  currentUser?: FullUserFragment;
-  mutate: any;
+  currentUser?: getCurrentUserQuery['currentUser'];
   loading: boolean;
   error?: string;
+}
+
+interface IDispatchProps {
+  onSuccess: () => any;
 }
 
 interface IGoogleLoginResponseOffline {
@@ -28,10 +34,12 @@ interface IGoogleLoginError {
   details: string;
 }
 
+type allProps = IDispatchProps & IGraphqlProps & IProps;
+
 const SCOPE = 'https://www.googleapis.com/auth/calendar';
 
-class LoginContainer extends React.Component<IProps, { error?: string }> {
-  constructor(props: IProps) {
+class LoginContainer extends React.Component<allProps, { error?: string }> {
+  constructor(props: allProps) {
     super(props);
     this.onSuccess = this.onSuccess.bind(this);
     this.onError = this.onError.bind(this);
@@ -40,7 +48,7 @@ class LoginContainer extends React.Component<IProps, { error?: string }> {
     };
   }
 
-  componentWillReceiveProps(newProps: IProps) {
+  componentWillReceiveProps(newProps: allProps) {
     if (newProps.currentUser) {
       // Log in succeeded. Navigate to the patients list scene.
       this.props.onSuccess();
@@ -110,20 +118,20 @@ class LoginContainer extends React.Component<IProps, { error?: string }> {
   }
 }
 
-function mapDispatchToProps(dispatch: Dispatch<() => void>): Partial<IProps> {
+function mapDispatchToProps(dispatch: Dispatch<() => void>): IDispatchProps {
   return {
     onSuccess: async () => dispatch(push('/patients')),
   };
 }
 
 export default compose(
-  connect(undefined, mapDispatchToProps),
-  graphql(currentUserQuery as any, {
+  connect<{}, IDispatchProps, IProps>(undefined, mapDispatchToProps),
+  graphql<IGraphqlProps, IProps>(currentUserQuery as any, {
     props: ({ data }) => ({
       loading: data ? data.loading : false,
       error: data ? data.error : null,
       currentUser: data ? (data as any).currentUser : null,
     }),
   }),
-  graphql(loginMutation as any, { name: 'logIn' }),
+  graphql<IGraphqlProps, IProps>(loginMutation as any, { name: 'logIn' }),
 )(LoginContainer);

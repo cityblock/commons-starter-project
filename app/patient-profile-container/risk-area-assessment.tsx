@@ -42,8 +42,14 @@ interface IProps {
   patientId: string;
   routeBase: string;
   patientRoute: string;
+}
+
+interface IDispatchProps {
   redirectToThreeSixty?: () => any;
   redirectToScreeningTool?: (screeningTool: FullScreeningToolFragment) => any;
+}
+
+interface IGraphqlProps {
   riskArea?: FullRiskAreaFragment;
   loading?: boolean;
   error?: string;
@@ -67,6 +73,8 @@ interface IProps {
   screeningToolsError?: string;
 }
 
+type allProps = IGraphqlProps & IProps & IDispatchProps;
+
 interface IState {
   inProgress: boolean;
   questions: IQuestionsState;
@@ -84,8 +92,8 @@ export interface IQuestionCondition {
   answerId: string;
 }
 
-export class RiskAreaAssessment extends React.Component<IProps, IState> {
-  constructor(props: IProps) {
+export class RiskAreaAssessment extends React.Component<allProps, IState> {
+  constructor(props: allProps) {
     super(props);
     this.state = {
       inProgress: false,
@@ -97,7 +105,7 @@ export class RiskAreaAssessment extends React.Component<IProps, IState> {
     };
   }
 
-  componentWillReceiveProps(nextProps: IProps) {
+  componentWillReceiveProps(nextProps: allProps) {
     const { error, redirectToThreeSixty } = nextProps;
 
     // The chosen RiskArea most likely does not exist
@@ -420,7 +428,7 @@ export class RiskAreaAssessment extends React.Component<IProps, IState> {
   }
 }
 
-function mapDispatchToProps(dispatch: Dispatch<() => void>, ownProps: IProps): Partial<IProps> {
+function mapDispatchToProps(dispatch: Dispatch<() => void>, ownProps: IProps): IDispatchProps {
   return {
     redirectToThreeSixty: () => {
       dispatch(push(ownProps.routeBase));
@@ -432,8 +440,8 @@ function mapDispatchToProps(dispatch: Dispatch<() => void>, ownProps: IProps): P
 }
 
 export default compose(
-  connect(undefined, mapDispatchToProps),
-  graphql(riskAreaQuery as any, {
+  connect<{}, IDispatchProps, IProps>(undefined, mapDispatchToProps),
+  graphql<IGraphqlProps, IProps>(riskAreaQuery as any, {
     options: (props: IProps) => ({
       variables: {
         riskAreaId: props.riskAreaId,
@@ -446,7 +454,7 @@ export default compose(
       refetchRiskArea: data ? data.refetch : null,
     }),
   }),
-  graphql(riskAreaQuestionsQuery as any, {
+  graphql<IGraphqlProps, IProps>(riskAreaQuestionsQuery as any, {
     options: (props: IProps) => ({
       variables: {
         filterType: 'riskArea',
@@ -460,7 +468,7 @@ export default compose(
       refetchRiskAreaQuestions: data ? data.refetch : null,
     }),
   }),
-  graphql(patientAnswersQuery as any, {
+  graphql<IGraphqlProps, IProps>(patientAnswersQuery as any, {
     options: (props: IProps) => ({
       variables: {
         filterType: 'riskArea',
@@ -475,7 +483,7 @@ export default compose(
       refetchPatientAnswers: data ? data.refetch : null,
     }),
   }),
-  graphql(screeningToolsQuery as any, {
+  graphql<IGraphqlProps, IProps>(screeningToolsQuery as any, {
     options: (props: IProps) => ({
       variables: {
         riskAreaId: props.riskAreaId,
@@ -487,8 +495,10 @@ export default compose(
       screeningTools: data ? (data as any).screeningToolsForRiskArea : null,
     }),
   }),
-  graphql(patientAnswersCreateMutationGraphql as any, { name: 'createPatientAnswers' }),
-  graphql(patientAnswersUpdateApplicabilityMutationGraphql as any, {
+  graphql<IGraphqlProps, IProps>(patientAnswersCreateMutationGraphql as any, {
+    name: 'createPatientAnswers',
+  }),
+  graphql<IGraphqlProps, IProps>(patientAnswersUpdateApplicabilityMutationGraphql as any, {
     name: 'updateAnswersApplicability',
   }),
 )(RiskAreaAssessment);

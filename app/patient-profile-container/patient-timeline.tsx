@@ -3,7 +3,7 @@ import * as React from 'react';
 import { graphql } from 'react-apollo';
 import { FormattedMessage } from 'react-intl';
 import * as patientEncountersQuery from '../graphql/queries/get-patient-encounters.graphql';
-import { FullPatientEncounterFragment } from '../graphql/types';
+import { getPatientEncountersQuery, FullPatientEncounterFragment } from '../graphql/types';
 import * as sortSearchStyles from '../shared/css/sort-search.css';
 import * as styles from './css/patient-encounters.css';
 import * as patientInfoStyles from './css/patient-info.css';
@@ -14,9 +14,12 @@ import ProgressNotePopup from './progress-note-popup';
 
 interface IProps {
   patientId: string;
+}
+
+interface IGraphqlProps {
   loading?: boolean;
   error?: string;
-  patientEncounters?: FullPatientEncounterFragment[];
+  patientEncounters?: getPatientEncountersQuery['patientEncounters'];
   refetchPatientEncounters?: (variables: { patientId: string }) => any;
 }
 
@@ -29,8 +32,8 @@ interface IState {
   isProgressNotePopupVisible: boolean;
 }
 
-class PatientEncounters extends React.Component<IProps, IState> {
-  constructor(props: IProps) {
+class PatientEncounters extends React.Component<IProps & IGraphqlProps, IState> {
+  constructor(props: IProps & IGraphqlProps) {
     super(props);
 
     const { loading, error } = props;
@@ -52,7 +55,7 @@ class PatientEncounters extends React.Component<IProps, IState> {
     };
   }
 
-  componentWillReceiveProps(nextProps: IProps) {
+  componentWillReceiveProps(nextProps: IProps & IGraphqlProps) {
     const { loading, error } = nextProps;
 
     this.setState(() => ({ loading, error }));
@@ -70,7 +73,7 @@ class PatientEncounters extends React.Component<IProps, IState> {
     this.setState(() => ({ lightboxIsOpen: false }));
   }
 
-  renderPatientEncounters(encounters: FullPatientEncounterFragment[]) {
+  renderPatientEncounters(encounters: Array<FullPatientEncounterFragment | null>) {
     const { loading, error } = this.state;
 
     if (encounters.length) {
@@ -185,7 +188,7 @@ class PatientEncounters extends React.Component<IProps, IState> {
   }
 }
 
-export default graphql(patientEncountersQuery as any, {
+export default graphql<IGraphqlProps, IProps>(patientEncountersQuery as any, {
   options: (props: IProps) => ({
     variables: {
       patientId: props.patientId,

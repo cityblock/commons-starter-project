@@ -304,8 +304,15 @@ describe('patient goal model', () => {
       patientGoalId: patientGoal.id,
       createdById: user.id,
     });
+    const deletedTask = await Task.create({
+      title: 'Deleted Task',
+      patientId: patient.id,
+      patientGoalId: patientGoal.id,
+      createdById: user.id,
+    });
 
     await Task.complete(completeTask.id, user.id);
+    await Task.delete(deletedTask.id);
 
     const fetchedPatientGoal = await PatientGoal.get(patientGoal.id);
     const taskIds = fetchedPatientGoal!.tasks.map(task => task.id);
@@ -313,6 +320,7 @@ describe('patient goal model', () => {
     expect(fetchedPatientGoal!.id).toEqual(patientGoal.id);
     expect(taskIds).toContain(incompleteTask.id);
     expect(taskIds).not.toContain(completeTask.id);
+    expect(taskIds).not.toContain(deletedTask.id);
   });
 
   it('get goals for a patient', async () => {
@@ -341,8 +349,15 @@ describe('patient goal model', () => {
       patientGoalId: patientGoal.id,
       createdById: user.id,
     });
+    const deletedTask = await Task.create({
+      title: 'Deleted Task',
+      patientId: patient.id,
+      patientGoalId: patientGoal.id,
+      createdById: user.id,
+    });
 
     await Task.complete(completeTask.id, user.id);
+    await Task.delete(deletedTask.id);
 
     const patientGoals = await PatientGoal.getForPatient(patient.id);
     const taskIds = patientGoals[0].tasks.map(task => task.id);
@@ -351,6 +366,7 @@ describe('patient goal model', () => {
     expect(patientGoals[0].id).toEqual(patientGoal.id);
     expect(taskIds).toContain(incompleteTask.id);
     expect(taskIds).not.toContain(completeTask.id);
+    expect(taskIds).not.toContain(deletedTask.id);
   });
 
   it('edits patient goal title', async () => {

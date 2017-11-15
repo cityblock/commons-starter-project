@@ -83,6 +83,7 @@ export default class PatientGoal extends BaseModel {
       .eager(EAGER_QUERY)
       .modifyEager('tasks', builder => {
         builder.where('task.completedAt', null);
+        builder.where('task.deletedAt', null);
       })
       .findOne({ id: patientGoalId, deletedAt: null });
 
@@ -176,6 +177,7 @@ export default class PatientGoal extends BaseModel {
       .eager(EAGER_QUERY)
       .modifyEager('tasks', builder => {
         builder.where('task.completedAt', null);
+        builder.where('task.deletedAt', null);
       })
       .where('deletedAt', null)
       .andWhere('patientId', patientId)

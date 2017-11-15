@@ -24,7 +24,8 @@ export default class PatientGoal extends React.Component<IProps, {}> {
       return null;
     }
 
-    return tasks.map(task => (
+    // don't show tasks that have been deleted
+    return tasks.filter(task => task && !task.deletedAt).map(task => (
       <TaskRow
         key={task.id}
         condensed={true}

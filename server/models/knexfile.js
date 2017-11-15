@@ -9,6 +9,9 @@ module.exports = {
     migrations: {
       directory: __dirname + '/migrations',
     },
+    seeds: {
+      directory: __dirname + '/seeds/dev'
+    }
   },
   production: {
     client: 'pg',

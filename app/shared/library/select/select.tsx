@@ -1,6 +1,6 @@
 import * as classNames from 'classnames';
 import * as React from 'react';
-import * as styles from './css/index.css';
+import * as styles from './css/select.css';
 
 interface IProps {
   value: string;

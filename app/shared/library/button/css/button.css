@@ -1,0 +1,43 @@
+@import '../../../css/sizes';
+
+.button {
+  font-size: var(--default-font-size);
+  line-height: var(--medium-font-line-height);
+  font-family: var(--basetica-medium);
+  color: var(--white-color);
+  background: var(--blue-color);
+  border-radius: 2px;
+  height: 32px;
+  padding: 8px 36px;
+  border: none;
+
+  &:hover {
+    cursor: pointer;
+    background: var(--light-blue-color);
+  }
+}
+
+.red {
+  background: var(--red-color);
+
+  &:hover {
+    background: var(--red-color);
+  }
+}
+
+.white {
+  background: var(--white-color);
+  color: var(--blue-color);
+  box-sizing: border-box;
+  border: 1px solid var(--blue-color);
+
+  &:hover {
+    background: var(--gray-background-color);
+  }
+}
+
+.small {
+  font-size: var(--small-font-size);
+  line-height: var(--small-font-line-height);
+  padding: 9px 16px;
+}

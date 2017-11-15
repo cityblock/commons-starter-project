@@ -2,7 +2,7 @@ import * as classNames from 'classnames';
 import * as React from 'react';
 import { connect } from 'react-redux';
 import { ICarePlan } from 'schema';
-import Task from '../shared/task';
+import Task from '../shared/task/task';
 import { IState as IAppState } from '../store';
 import * as styles from './css/patient-map.css';
 import PatientCarePlan from './patient-care-plan';

@@ -1,102 +1,121 @@
 import { shallow } from 'enzyme';
-import { createMemoryHistory } from 'history';
 import * as React from 'react';
-import { MockedProvider } from 'react-apollo/test-utils';
-import { ConnectedRouter } from 'react-router-redux';
-import { create } from 'react-test-renderer';
-import configureMockStore from 'redux-mock-store';
-import { ENGLISH_TRANSLATION } from '../../../reducers/messages/en';
-import ReduxConnectedIntlProvider from '../../../redux-connected-intl-provider';
-import { assignedTask, completedTask } from '../../util/test-data';
-import Task, { Task as Component } from '../task';
+import Spinner from '../../library/spinner';
+import { taskWithComment } from '../../util/test-data';
+import TaskHeader from '../header';
+import { Divider, Task } from '../task';
+import TaskAssignee from '../task-assignee';
+import TaskBody from '../task-body';
+import TaskComments from '../task-comments';
+import TaskDelete from '../task-delete';
+import TaskProgress from '../task-progress';
+import TaskTracking from '../task-tracking';
 
-const locale = { messages: ENGLISH_TRANSLATION.messages };
-const mockStore = configureMockStore([]);
+describe('Task Component', () => {
+  const placeholderFn = () => true as any;
+  const routeBase = '/tasks';
+  const taskId = taskWithComment.id;
+  const patientId = taskWithComment.patientId;
 
-it('renders task', () => {
-  const history = createMemoryHistory();
   const match = {
     params: {
-      taskId: assignedTask.id,
+      taskId,
     },
   };
-  const tree = create(
-    <MockedProvider mocks={[]} store={mockStore({ locale, task: assignedTask })}>
-      <ReduxConnectedIntlProvider>
-        <ConnectedRouter history={history}>
-          <Task routeBase={'foo'} match={match} />
-        </ConnectedRouter>
-      </ReduxConnectedIntlProvider>
-    </MockedProvider>,
-  ).toJSON();
-  expect(tree).toMatchSnapshot();
-});
 
-describe('method tests', () => {
-  let instance: any;
-  const completeTask = jest.fn();
-  const unCompleteTask = jest.fn();
-  const editTask = jest.fn();
-  const onDelete = jest.fn();
+  const wrapper = shallow(
+    <Task
+      selectTaskAction={placeholderFn}
+      editTask={placeholderFn}
+      routeBase={routeBase}
+      match={match}
+      taskId={taskId}
+      task={taskWithComment}
+    />,
+  );
 
-  beforeEach(() => {
-    const component = shallow(
-      <Component
-        task={assignedTask}
-        taskId={assignedTask.id}
-        taskLoading={false}
-        selectTask={() => false}
-        routeBase="/route/base"
-        refetchTask={() => false}
-        completeTask={completeTask}
-        uncompleteTask={unCompleteTask}
-        editTask={editTask}
-        onDelete={onDelete}
+  it('does not render loading spinner if not loading', () => {
+    expect(wrapper.find(Spinner).length).toBe(0);
+  });
+
+  it('renders the task header with correct props', () => {
+    const header = wrapper.find(TaskHeader);
+
+    expect(header.length).toBe(1);
+    expect(header.props().taskId).toBe(taskId);
+    expect(header.props().patientName).toBe('Bob Smith');
+    expect(header.props().routeBase).toBe(routeBase);
+  });
+
+  it('renders two dividers', () => {
+    expect(wrapper.find(Divider).length).toBe(2);
+  });
+
+  it('renders task progress with correct props', () => {
+    const progress = wrapper.find(TaskProgress);
+
+    expect(progress.length).toBe(1);
+    expect(progress.props().taskId).toBe(taskId);
+    expect(progress.props().dueAt).toBe('2017-09-07T13:45:14.532Z');
+    expect(progress.props().completedAt).toBeFalsy();
+  });
+
+  it('renders task body with correct props', () => {
+    const body = wrapper.find(TaskBody);
+
+    expect(body.length).toBe(1);
+    expect(body.props().taskId).toBe(taskId);
+    expect(body.props().title).toBe(taskWithComment.title);
+    expect(body.props().description).toBeFalsy();
+  });
+
+  it('renders task assignee with correct props', () => {
+    const assignee = wrapper.find(TaskAssignee);
+
+    expect(assignee.length).toBe(1);
+    expect(assignee.props().taskId).toBe(taskId);
+    expect(assignee.props().patientId).toBe(patientId);
+    expect(assignee.props().assignee).toBe(taskWithComment.assignedTo);
+  });
+
+  it('renders task tracking with correct props', () => {
+    const tracking = wrapper.find(TaskTracking);
+
+    expect(tracking.length).toBe(1);
+    expect(tracking.props().taskId).toBe(taskId);
+    expect(tracking.props().patientId).toBe(patientId);
+    expect(tracking.props().priority).toBe(taskWithComment.priority);
+    expect(tracking.props().followers).toEqual(taskWithComment.followers);
+  });
+
+  it('renders task comments with correct props', () => {
+    const comments = wrapper.find(TaskComments);
+
+    expect(comments.length).toBe(1);
+    expect(comments.props().taskId).toBe(taskId);
+  });
+
+  it('renders loading component if fetching data', () => {
+    const wrapper2 = shallow(
+      <Task
+        selectTaskAction={placeholderFn}
+        editTask={placeholderFn}
+        routeBase={routeBase}
+        match={match}
+        taskId={taskId}
+        task={taskWithComment}
+        taskLoading={true}
       />,
     );
-    instance = component.instance();
+
+    expect(wrapper2.find(TaskHeader).length).toBe(0);
+    expect(wrapper2.find(Spinner).length).toBe(1);
   });
 
-  it('updates title and description if it gets a new task', () => {
-    completedTask.id = 'new-id';
-    completedTask.title = 'new title';
-    (completedTask.description as any) = 'new description';
-    instance.componentWillReceiveProps({
-      task: completedTask,
-    });
-    expect(instance.state.editedTitle).toEqual('new title');
-    expect(instance.state.editedDescription).toEqual('new description');
-  });
+  it('renders task delete if delete confirmation in progress', () => {
+    wrapper.setState({ deleteConfirmation: true });
 
-  it('calls complete and uncomplete task', () => {
-    instance.onClickToggleCompletion();
-    expect(completeTask).toBeCalled();
-    instance.props.task.completedAt = new Date().toISOString();
-    instance.onClickToggleCompletion();
-    expect(unCompleteTask).toBeCalled();
-  });
-
-  it('onKey down correctly handles title', () => {
-    const editedTitle = {
-      keyCode: 13,
-      preventDefault: jest.fn(),
-      currentTarget: {
-        name: 'editedTitle',
-      },
-    };
-    instance.onKeyDown(editedTitle);
-    expect(editTask).toBeCalled();
-  });
-
-  it('onKey down correctly handles description', () => {
-    const editedDescription = {
-      keyCode: 13,
-      preventDefault: jest.fn(),
-      currentTarget: {
-        name: 'editedDescription',
-      },
-    };
-    instance.onKeyDown(editedDescription);
-    expect(editTask).toBeCalled();
+    expect(wrapper.find(TaskDelete).length).toBe(1);
+    expect(wrapper.find(TaskDelete).props().taskId).toBe(taskId);
   });
 });

@@ -1,8 +1,8 @@
 import * as classNames from 'classnames';
 import * as React from 'react';
 import { taskEditMutation, taskEditMutationVariables, Priority } from '../../graphql/types';
-import Option from '../library/option';
-import Select from '../library/select';
+import Option from '../library/option/option';
+import Select from '../library/select/select';
 import * as styles from './css/priority-select.css';
 
 interface IProps {
@@ -22,11 +22,9 @@ class PrioritySelect extends React.Component<IProps, IState> {
     this.state = {
       changePriorityError: '',
     };
-
-    this.onChange = this.onChange.bind(this);
   }
 
-  async onChange(e: React.ChangeEvent<HTMLSelectElement>) {
+  onChange = async (e: React.ChangeEvent<HTMLSelectElement>) => {
     const { taskId, editTask } = this.props;
     const priority = e.target.value as Priority;
 

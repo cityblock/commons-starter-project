@@ -22,11 +22,9 @@ class TaskDue extends React.Component<IProps, IState> {
     this.state = {
       changeDueDateError: '',
     };
-
-    this.onDueDateChange = this.onDueDateChange.bind(this);
   }
 
-  async onDueDateChange(event: React.ChangeEvent<HTMLInputElement>) {
+  onDueDateChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const { taskId, editTask } = this.props;
 
     if (taskId) {

@@ -1,0 +1,46 @@
+@import '../../css/sizes';
+
+.body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.body h2 {
+  font-family: var(--basetica-black);
+  font-size: var(--medium-font-size);
+  margin: 0;
+  margin-bottom: 10px;
+}
+
+.body p {
+  margin-bottom: var(--medium-gutter);
+  color: var(--gray-font-color);
+}
+
+.warningIcon {
+  background-image: url('../../../assets/error-circle.svg');
+  height: 30px;
+  width: 30px;
+  margin-bottom: var(--small-gutter);
+}
+
+.options {
+  display: flex;
+  width: 100%;
+  justify-content: center;
+}
+
+.button {
+  width: 94px;
+  padding-left: 0;
+  padding-right: 0;
+}
+
+.rightMargin {
+  margin-right: var(--small-gutter);
+}
+
+.error {
+  color: var(--color-red);
+}

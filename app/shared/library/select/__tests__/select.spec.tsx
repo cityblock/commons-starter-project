@@ -1,6 +1,6 @@
 import { shallow } from 'enzyme';
 import * as React from 'react';
-import Select from '../index';
+import Select from '../select';
 
 describe('Library Select Component', () => {
   it('renders a select tag with correct props', () => {

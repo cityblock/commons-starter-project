@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { taskEditMutation, taskEditMutationVariables } from '../../graphql/types';
 import * as styles from './css/task-body.css';
-import { Divider } from './index';
+import { Divider } from './task';
 import TaskInfo from './task-info';
 
 interface IProps {

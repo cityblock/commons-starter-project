@@ -1,6 +1,6 @@
 import { shallow } from 'enzyme';
 import * as React from 'react';
-import Task from '../../shared/task';
+import Task from '../../shared/task/task';
 import PatientCarePlan from '../patient-care-plan';
 import { PatientMap } from '../patient-map';
 

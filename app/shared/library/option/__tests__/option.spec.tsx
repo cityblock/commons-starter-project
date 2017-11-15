@@ -1,7 +1,7 @@
 import { shallow } from 'enzyme';
 import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
-import Option from '../index';
+import Option from '../option';
 
 describe('Library Option Component', () => {
   const value = 'Blastoise';

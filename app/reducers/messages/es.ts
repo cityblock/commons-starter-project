@@ -108,6 +108,13 @@ export const SPANISH_TRANSLATION = {
     'tasks.notifications': 'Notificaciones',
     'tasks.createTask': 'Crear Tarea',
     'tasks.noTasks': 'Sin Tareas',
+    'taskDelete.cancel': 'Cancelar',
+    'taskDelete.confirm': 'Sí, eliminar',
+    'taskDelete.title': '¿Seguro que quieres eliminar esta tarea?',
+    'taskDelete.titleError': 'Error al eliminar la tarea.',
+    'taskDelete.body':
+      'Eliminar esta tarea la eliminará completamente del registro de este paciente.',
+    'taskDelete.bodyError': 'Por favor intente de nuevo.',
     'task.due': 'Debido',
     'task.followers': 'Seguidores de esta tarea:',
     'task.opened': 'Abrió',

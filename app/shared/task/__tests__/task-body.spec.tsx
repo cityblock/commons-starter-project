@@ -8,6 +8,7 @@ describe('Task Body Component', () => {
   const title = 'Evolve into Gyrados';
   const description = 'Splash sucks :(';
   const goal = 'Become stronger';
+  const concern = 'Pokemon master';
   const editTask = () => true as any;
 
   const wrapper = shallow(
@@ -16,6 +17,7 @@ describe('Task Body Component', () => {
       title={title}
       description={description}
       goal={goal}
+      concern={concern}
       editTask={editTask}
     />,
   );
@@ -26,6 +28,23 @@ describe('Task Body Component', () => {
     expect(wrapper.find(TaskInfo).props().taskId).toBe(taskId);
     expect(wrapper.find(TaskInfo).props().title).toBe(title);
     expect(wrapper.find(TaskInfo).props().description).toBe(description);
+  });
+
+  it('renders information about the concern', () => {
+    expect(wrapper.find('h3').length).toBe(4);
+
+    expect(
+      wrapper
+        .find('h3')
+        .at(0)
+        .text(),
+    ).toBe('Concern:');
+    expect(
+      wrapper
+        .find('h3')
+        .at(1)
+        .text(),
+    ).toBe(concern);
   });
 
   it('renders information about the goal', () => {

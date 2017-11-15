@@ -28,7 +28,14 @@ interface ITaskPaginationOptions extends IPaginationOptions {
 export type Priority = 'low' | 'medium' | 'high';
 
 // TODO: Only fetch needed eager models
-const EAGER_QUERY = '[createdBy, assignedTo, patient, completedBy, followers, patientGoal]';
+const EAGER_QUERY = `[
+  createdBy,
+  assignedTo,
+  patient,
+  completedBy,
+  followers,
+  patientGoal.[patientConcern.[concern]]
+]`;
 
 /* tslint:disable:member-ordering */
 export default class Task extends BaseModel {

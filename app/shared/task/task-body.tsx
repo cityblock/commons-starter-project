@@ -8,12 +8,13 @@ interface IProps {
   taskId: string;
   title: string;
   description: string;
+  concern: string;
   goal: string;
   editTask: (options: { variables: taskEditMutationVariables }) => { data: taskEditMutation };
 }
 
 const TaskBody: React.StatelessComponent<IProps> = (props: IProps) => {
-  const { title, description, taskId, goal, editTask } = props;
+  const { title, description, taskId, concern, goal, editTask } = props;
 
   return (
     <div>
@@ -22,7 +23,7 @@ const TaskBody: React.StatelessComponent<IProps> = (props: IProps) => {
       <div className={styles.associations}>
         <div className={styles.detail}>
           <h3>Concern:</h3>
-          <h3 className={styles.black}>Placeholder</h3>
+          <h3 className={styles.black}>{concern}</h3>
         </div>
         <div className={styles.detail}>
           <h3>Goal:</h3>

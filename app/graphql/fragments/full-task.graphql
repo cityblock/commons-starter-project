@@ -39,5 +39,11 @@ fragment FullTask on Task {
   patientGoal {
     id
     title
+    patientConcern {
+      concern {
+        id
+        title
+      }
+    }
   }
 }

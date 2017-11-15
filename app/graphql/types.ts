@@ -645,6 +645,12 @@ export type eventNotificationDismissMutation = {
         patientGoal:  {
           id: string,
           title: string,
+          patientConcern:  {
+            concern:  {
+              id: string,
+              title: string,
+            },
+          } | null,
         } | null,
       },
       userId: string,
@@ -739,6 +745,12 @@ export type eventNotificationDismissMutation = {
       patientGoal:  {
         id: string,
         title: string,
+        patientConcern:  {
+          concern:  {
+            id: string,
+            title: string,
+          },
+        } | null,
       } | null,
     } | null,
     seenAt: string | null,
@@ -924,6 +936,12 @@ export type getEventNotificationsForCurrentUserQuery = {
             patientGoal:  {
               id: string,
               title: string,
+              patientConcern:  {
+                concern:  {
+                  id: string,
+                  title: string,
+                },
+              } | null,
             } | null,
           },
           userId: string,
@@ -1018,6 +1036,12 @@ export type getEventNotificationsForCurrentUserQuery = {
           patientGoal:  {
             id: string,
             title: string,
+            patientConcern:  {
+              concern:  {
+                id: string,
+                title: string,
+              },
+            } | null,
           } | null,
         } | null,
         seenAt: string | null,
@@ -1328,6 +1352,12 @@ export type getPatientCarePlanQuery = {
           patientGoal:  {
             id: string,
             title: string,
+            patientConcern:  {
+              concern:  {
+                id: string,
+                title: string,
+              },
+            } | null,
           } | null,
         } >,
         createdAt: string,
@@ -1420,6 +1450,12 @@ export type getPatientCarePlanQuery = {
         patientGoal:  {
           id: string,
           title: string,
+          patientConcern:  {
+            concern:  {
+              id: string,
+              title: string,
+            },
+          } | null,
         } | null,
       } >,
       createdAt: string,
@@ -1849,6 +1885,12 @@ export type getPatientTasksQuery = {
         patientGoal:  {
           id: string,
           title: string,
+          patientConcern:  {
+            concern:  {
+              id: string,
+              title: string,
+            },
+          } | null,
         } | null,
       } | null,
     } | null > | null,
@@ -1931,6 +1973,12 @@ export type getProgressNoteActivityForProgressNoteQuery = {
         patientGoal:  {
           id: string,
           title: string,
+          patientConcern:  {
+            concern:  {
+              id: string,
+              title: string,
+            },
+          } | null,
         } | null,
       },
       userId: string,
@@ -2169,6 +2217,12 @@ export type getProgressNoteActivityForProgressNoteQuery = {
             patientGoal:  {
               id: string,
               title: string,
+              patientConcern:  {
+                concern:  {
+                  id: string,
+                  title: string,
+                },
+              } | null,
             } | null,
           } >,
           createdAt: string,
@@ -2262,6 +2316,12 @@ export type getProgressNoteActivityForProgressNoteQuery = {
           patientGoal:  {
             id: string,
             title: string,
+            patientConcern:  {
+              concern:  {
+                id: string,
+                title: string,
+              },
+            } | null,
           } | null,
         } >,
         createdAt: string,
@@ -2792,6 +2852,12 @@ export type getTaskQuery = {
     patientGoal:  {
       id: string,
       title: string,
+      patientConcern:  {
+        concern:  {
+          id: string,
+          title: string,
+        },
+      } | null,
     } | null,
   } | null,
 };
@@ -3158,6 +3224,12 @@ export type patientConcernCreateMutation = {
         patientGoal:  {
           id: string,
           title: string,
+          patientConcern:  {
+            concern:  {
+              id: string,
+              title: string,
+            },
+          } | null,
         } | null,
       } >,
       createdAt: string,
@@ -3295,6 +3367,12 @@ export type patientGoalCreateMutation = {
       patientGoal:  {
         id: string,
         title: string,
+        patientConcern:  {
+          concern:  {
+            id: string,
+            title: string,
+          },
+        } | null,
       } | null,
     } >,
     createdAt: string,
@@ -4195,6 +4273,12 @@ export type taskCompleteMutation = {
     patientGoal:  {
       id: string,
       title: string,
+      patientConcern:  {
+        concern:  {
+          id: string,
+          title: string,
+        },
+      } | null,
     } | null,
   } | null,
 };
@@ -4251,6 +4335,12 @@ export type taskCreateMutation = {
     patientGoal:  {
       id: string,
       title: string,
+      patientConcern:  {
+        concern:  {
+          id: string,
+          title: string,
+        },
+      } | null,
     } | null,
   } | null,
 };
@@ -4302,6 +4392,12 @@ export type taskDeleteMutation = {
     patientGoal:  {
       id: string,
       title: string,
+      patientConcern:  {
+        concern:  {
+          id: string,
+          title: string,
+        },
+      } | null,
     } | null,
   } | null,
 };
@@ -4359,6 +4455,12 @@ export type taskEditMutation = {
     patientGoal:  {
       id: string,
       title: string,
+      patientConcern:  {
+        concern:  {
+          id: string,
+          title: string,
+        },
+      } | null,
     } | null,
   } | null,
 };
@@ -4486,6 +4588,12 @@ export type taskUncompleteMutation = {
     patientGoal:  {
       id: string,
       title: string,
+      patientConcern:  {
+        concern:  {
+          id: string,
+          title: string,
+        },
+      } | null,
     } | null,
   } | null,
 };
@@ -4538,6 +4646,12 @@ export type taskUserFollowMutation = {
     patientGoal:  {
       id: string,
       title: string,
+      patientConcern:  {
+        concern:  {
+          id: string,
+          title: string,
+        },
+      } | null,
     } | null,
   } | null,
 };
@@ -4593,6 +4707,12 @@ export type getTasksForCurrentUserQuery = {
         patientGoal:  {
           id: string,
           title: string,
+          patientConcern:  {
+            concern:  {
+              id: string,
+              title: string,
+            },
+          } | null,
         } | null,
       } | null,
     } | null > | null,
@@ -4924,6 +5044,12 @@ export type FullCarePlanUpdateEventFragment = {
         patientGoal:  {
           id: string,
           title: string,
+          patientConcern:  {
+            concern:  {
+              id: string,
+              title: string,
+            },
+          } | null,
         } | null,
       } >,
       createdAt: string,
@@ -5017,6 +5143,12 @@ export type FullCarePlanUpdateEventFragment = {
       patientGoal:  {
         id: string,
         title: string,
+        patientConcern:  {
+          concern:  {
+            id: string,
+            title: string,
+          },
+        } | null,
       } | null,
     } >,
     createdAt: string,
@@ -5104,6 +5236,12 @@ export type FullEventNotificationFragment = {
       patientGoal:  {
         id: string,
         title: string,
+        patientConcern:  {
+          concern:  {
+            id: string,
+            title: string,
+          },
+        } | null,
       } | null,
     },
     userId: string,
@@ -5198,6 +5336,12 @@ export type FullEventNotificationFragment = {
     patientGoal:  {
       id: string,
       title: string,
+      patientConcern:  {
+        concern:  {
+          id: string,
+          title: string,
+        },
+      } | null,
     } | null,
   } | null,
   seenAt: string | null,
@@ -5400,6 +5544,12 @@ export type FullPatientConcernFragment = {
       patientGoal:  {
         id: string,
         title: string,
+        patientConcern:  {
+          concern:  {
+            id: string,
+            title: string,
+          },
+        } | null,
       } | null,
     } >,
     createdAt: string,
@@ -5507,6 +5657,12 @@ export type FullPatientGoalFragment = {
     patientGoal:  {
       id: string,
       title: string,
+      patientConcern:  {
+        concern:  {
+          id: string,
+          title: string,
+        },
+      } | null,
     } | null,
   } >,
   createdAt: string,
@@ -5684,6 +5840,12 @@ export type FullProgressNoteActivityFragment = {
       patientGoal:  {
         id: string,
         title: string,
+        patientConcern:  {
+          concern:  {
+            id: string,
+            title: string,
+          },
+        } | null,
       } | null,
     },
     userId: string,
@@ -5922,6 +6084,12 @@ export type FullProgressNoteActivityFragment = {
           patientGoal:  {
             id: string,
             title: string,
+            patientConcern:  {
+              concern:  {
+                id: string,
+                title: string,
+              },
+            } | null,
           } | null,
         } >,
         createdAt: string,
@@ -6015,6 +6183,12 @@ export type FullProgressNoteActivityFragment = {
         patientGoal:  {
           id: string,
           title: string,
+          patientConcern:  {
+            concern:  {
+              id: string,
+              title: string,
+            },
+          } | null,
         } | null,
       } >,
       createdAt: string,
@@ -6290,6 +6464,12 @@ export type FullTaskEventFragment = {
     patientGoal:  {
       id: string,
       title: string,
+      patientConcern:  {
+        concern:  {
+          id: string,
+          title: string,
+        },
+      } | null,
     } | null,
   },
   userId: string,
@@ -6399,6 +6579,12 @@ export type FullTaskFragment = {
   patientGoal:  {
     id: string,
     title: string,
+    patientConcern:  {
+      concern:  {
+        id: string,
+        title: string,
+      },
+    } | null,
   } | null,
 };
 

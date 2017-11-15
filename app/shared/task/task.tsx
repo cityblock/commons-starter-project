@@ -105,6 +105,11 @@ export class Task extends React.Component<IProps, IState> {
         ? formatPatientName(task.patient.firstName || '', task.patient.lastName || '')
         : 'No Patient';
 
+    const goal = task && task.patientGoal;
+    const concern = goal
+      && goal.patientConcern
+      && goal.patientConcern.concern;
+
     return (
       <div className={styles.container}>
         <div className={styles.task}>
@@ -126,7 +131,8 @@ export class Task extends React.Component<IProps, IState> {
             taskId={taskId}
             title={task && task.title}
             description={(task && task.description) || ''}
-            goal={(task && task.patientGoal && task.patientGoal.title) || ''}
+            concern={(concern && concern.title) || ''}
+            goal={(goal && goal.title) || ''}
             editTask={editTask}
           />
           <TaskAssignee

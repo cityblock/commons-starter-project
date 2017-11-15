@@ -487,9 +487,37 @@ declare module 'schema' {
     patientId: string;
     patient: IPatient;
     patientConcernId: string | null;
+    patientConcern: IPatientConcern | null;
     goalSuggestionTemplateId: string | null;
     goalSuggestionTemplate: IGoalSuggestionTemplate | null;
     tasks: Array<ITask>;
+    createdAt: string;
+    updatedAt: string;
+    deletedAt: string | null;
+  }
+
+
+  interface IPatientConcern {
+    id: string;
+    order: number;
+    concernId: string;
+    concern: IConcern;
+    patientGoals: Array<IPatientGoal>;
+    patientId: string;
+    patient: IPatient;
+    startedAt: string | null;
+    completedAt: string | null;
+    createdAt: string;
+    updatedAt: string;
+    deletedAt: string | null;
+  }
+
+  /**
+    description: Concern
+  */
+  interface IConcern {
+    id: string;
+    title: string;
     createdAt: string;
     updatedAt: string;
     deletedAt: string | null;
@@ -627,17 +655,6 @@ declare module 'schema' {
 
 
   type IRiskAdjustmentTypeOptionsEnum = 'inactive' | 'increment' | 'forceHighRisk';
-
-  /**
-    description: Concern
-  */
-  interface IConcern {
-    id: string;
-    title: string;
-    createdAt: string;
-    updatedAt: string;
-    deletedAt: string | null;
-  }
 
 
   type IAnswerTypeOptionsEnum = 'dropdown' | 'radio' | 'freetext' | 'multiselect';
@@ -847,22 +864,6 @@ declare module 'schema' {
     updatedAt: string;
     deletedAt: string | null;
     carePlanSuggestions: Array<ICarePlanSuggestion>;
-  }
-
-
-  interface IPatientConcern {
-    id: string;
-    order: number;
-    concernId: string;
-    concern: IConcern;
-    patientGoals: Array<IPatientGoal>;
-    patientId: string;
-    patient: IPatient;
-    startedAt: string | null;
-    completedAt: string | null;
-    createdAt: string;
-    updatedAt: string;
-    deletedAt: string | null;
   }
 
 

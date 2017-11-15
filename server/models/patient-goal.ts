@@ -5,6 +5,7 @@ import BaseModel from './base-model';
 import CarePlanUpdateEvent from './care-plan-update-event';
 import GoalSuggestionTemplate from './goal-suggestion-template';
 import Patient from './patient';
+import PatientConcern from './patient-concern';
 import Task from './task';
 import TaskTemplate from './task-template';
 
@@ -27,6 +28,7 @@ export default class PatientGoal extends BaseModel {
   goalSuggestionTemplateId?: string;
   goalSuggestionTemplate: GoalSuggestionTemplate;
   patientConcernId?: string;
+  patientConcern?: PatientConcern; // not eager loaded
   tasks: Task[];
 
   static tableName = 'patient_goal';

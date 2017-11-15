@@ -7,7 +7,9 @@ import {
   createPatient,
 } from '../../spec-helpers';
 import Clinic from '../clinic';
+import Concern from '../concern';
 import Patient from '../patient';
+import PatientConcern from '../patient-concern';
 import PatientGoal from '../patient-goal';
 import Task from '../task';
 import TaskFollower from '../task-follower';
@@ -66,6 +68,33 @@ describe('task model', () => {
     expect(task.createdAt).not.toBeFalsy();
     expect(task.completedAt).toBeFalsy();
     expect(task.updatedAt).not.toBeFalsy();
+  });
+
+  it('should get associated concern if there is one', async () => {
+    const title = 'Sandslash';
+    const concern = await Concern.create({ title });
+    const patientConcern = await PatientConcern.create({
+      concernId: concern.id,
+      userId: user.id,
+      patientId: patient.id,
+    });
+
+    await PatientGoal.update(patientGoal.id, {
+      patientConcernId: patientConcern.id,
+    }, user.id);
+
+    const dueAt = new Date().toISOString();
+    const task = await Task.create({
+      title: 'Sandshrew',
+      dueAt,
+      patientId: patient.id,
+      createdById: user.id,
+      assignedToId: user.id,
+      patientGoalId: patientGoal.id,
+    });
+
+    expect(task.patientGoal.patientConcern!.concern).toBeTruthy();
+    expect(task.patientGoal.patientConcern!.concern.title).toBe(title);
   });
 
   it('throws an error when getting an invalid id', async () => {

@@ -538,6 +538,7 @@ type PatientGoal implements uniqueId {
   patientId: String!
   patient: Patient!
   patientConcernId: String
+  patientConcern: PatientConcern
   goalSuggestionTemplateId: String
   goalSuggestionTemplate: GoalSuggestionTemplate
   tasks: [Task!]!

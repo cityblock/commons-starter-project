@@ -1,6 +1,7 @@
 @import '../css/sizes';
+
 .container {
-  margin: 0px;
+  margin: 0;
   width: 100%;
 }
 
@@ -18,7 +19,7 @@
   display: inline-block;
   vertical-align: top;
   max-width: 280px;
-  margin: 0px 30px;
+  margin: 0 30px;
   line-height: 20px;
 }
 
@@ -29,9 +30,10 @@
 
 .button {
   @apply --inverted-button;
+
   display: block;
   width: 180px;
-  padding: 7px 0px 3px;
+  padding: 7px 0 3px;
   margin-bottom: 10px;
 }
 

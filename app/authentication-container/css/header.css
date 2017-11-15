@@ -1,16 +1,16 @@
 @import '../../shared/css/sizes';
+
 .header {
   z-index: 0;
   height: 60px;
   flex: 0 60px;
   display: flex;
-  background-color: #8fadff;
   background: linear-gradient(315deg, #66c5dd 0%, #2962ff 100%);
 }
 
 .container {
   width: 100%;
-  padding: 0px var(--medium-gutter) 0px 0px;
+  padding: 0 var(--medium-gutter) 0 0;
   lost-center: var(--max-width);
   align-items: center;
   justify-content: space-between;
@@ -19,7 +19,7 @@
 }
 
 .link {
-  border: 0px solid;
+  border: 0 solid;
   text-decoration: none;
 }
 
@@ -103,7 +103,7 @@
 }
 
 .userName {
-  color: #ffffff;
+  color: #fff;
   font-weight: bold;
   text-align: right;
 }
@@ -152,13 +152,15 @@
   font-family: var(--roboto);
   font-weight: var(--roboto-medium-weight);
   border-bottom: 1px solid var(--border-color);
-  padding: 10px 0px;
+  padding: 10px 0;
+
   &:first-child {
-    padding-top: 0px;
+    padding-top: 0;
   }
+
   &:last-child {
     border-bottom: 1px solid var(--highlight-background-color);
-    padding-bottom: 0px;
+    padding-bottom: 0;
   }
 }
 

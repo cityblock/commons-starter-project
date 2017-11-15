@@ -1,4 +1,5 @@
 @import '../css/sizes';
+
 .content {
   background: var(--white-color);
 }
@@ -16,5 +17,6 @@
 
 .button {
   @apply --button;
+
   margin-top: 40px;
 }

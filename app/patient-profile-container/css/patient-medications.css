@@ -1,4 +1,5 @@
 @import '../../shared/css/sizes';
+
 .patientMedications {
   padding: 25px 0 0;
   margin-bottom: 65px;
@@ -27,6 +28,7 @@
   background-repeat: no-repeat;
   background-size: cover;
   background-image: url('../../assets/dot-hamburger-black.svg');
+
   &:hover {
     cursor: pointer;
   }
@@ -36,6 +38,7 @@
   padding: 15px 0;
   overflow: scroll;
   -webkit-overflow-scrolling: touch;
+
   &:hover {
     cursor: pointer;
   }
@@ -117,6 +120,7 @@
 
 .medicationsErrorButton {
   @apply --inverted-button;
+
   width: 94px;
   height: 32px;
   margin: 0 auto;

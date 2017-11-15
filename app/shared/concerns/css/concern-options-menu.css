@@ -13,6 +13,7 @@
   flex-direction: column;
   align-items: center;
   opacity: 1;
+
   /* To ensure that dropdown appears above concern */
   z-index: 1;
 }

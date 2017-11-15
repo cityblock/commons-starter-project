@@ -1,4 +1,5 @@
 @import './sizes';
+
 .tabs {
   padding: var(--small-gutter) var(--medium-gutter) 0;
   border-bottom: 1px solid var(--border-color);

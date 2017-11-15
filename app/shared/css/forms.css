@@ -1,4 +1,5 @@
 @import './sizes';
+
 .inputLabel {
   color: var(--gray-font-color);
   font-family: var(--basetica-medium);
@@ -16,7 +17,9 @@
 
 .input {
   @apply --input;
+
   width: 100%;
+
   &:focus {
     border: 1px solid var(--light-blue-color);
   }
@@ -36,6 +39,7 @@
 
 .textarea {
   @apply --input;
+
   font-size: var(--small-font-size);
   line-height: var(--small-font-line-height);
   padding: 5px 20px;
@@ -45,10 +49,13 @@
 
 .select {
   @apply --select;
+
   color: var(--border-color);
+
   &:valid {
     color: black;
   }
+
   &:focus {
     border: 1px solid var(--light-blue-color);
   }
@@ -96,7 +103,7 @@
 }
 
 .radioGroupItem {
-  lost-column: 4/10 2 0px;
+  lost-column: 4/10 2 0;
   display: inline-block;
   vertical-align: top;
   min-width: 55px;
@@ -106,7 +113,7 @@
   width: 20px;
   height: 20px;
   position: relative;
-  margin: 0px;
+  margin: 0;
   background: white;
   border: 1px solid var(--border-color);
   display: inline-block;
@@ -115,7 +122,7 @@
 }
 
 .radio {
-  &:checked + label:after {
+  &:checked + label::after {
     opacity: 1;
   }
 }
@@ -124,13 +131,13 @@
   width: 16px;
   height: 16px;
   position: absolute;
-  top: 0px;
-  left: 0px;
+  top: 0;
+  left: 0;
   background: white;
   pointer-events: none;
 }
 
-.radioGroupContainer label:after {
+.radioGroupContainer label::after {
   content: '';
   width: 12px;
   height: 12px;

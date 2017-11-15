@@ -1,4 +1,5 @@
 @import '../../shared/css/sizes';
+
 .close {
   position: absolute;
   top: 20px;
@@ -17,7 +18,7 @@
   background-repeat: no-repeat;
   height: 36px;
   width: 36px;
-  margin: 0px auto 13px;
+  margin: 0 auto 13px;
 }
 
 .content {

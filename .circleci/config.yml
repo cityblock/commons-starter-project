@@ -22,6 +22,7 @@ jobs:
           paths:
             - ./node_modules
       - run: yarn lint
+      - run: yarn stylelint
       - run:
           name: check-schema
           command: './scripts/check-schema-in-sync.sh'

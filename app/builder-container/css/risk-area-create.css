@@ -5,8 +5,8 @@
   width: 100vw;
   height: 100vh;
   z-index: 10;
-  top: 0px;
-  left: 0px;
+  top: 0;
+  left: 0;
   background: rgba(255, 255, 255, 0.8);
   align-items: center;
   display: flex;
@@ -38,13 +38,14 @@
   border-bottom: 1px solid var(--white-font-color);
   justify-content: space-between;
   align-items: center;
-  margin: 0px 20px;
+  margin: 0 20px;
 }
 
 .inlineInputGroup {
   display: inline-block;
   vertical-align: top;
   width: 45%;
+
   &:nth-child(odd) {
     margin-right: 10%;
   }
@@ -62,7 +63,7 @@
 
 .flexInputGroup {
   border-bottom: 1px solid var(--white-font-color);
-  padding: 0px 0px 10px;
+  padding: 0 0 10px;
   margin-bottom: 10px;
   display: flex;
   justify-content: space-between;
@@ -80,6 +81,7 @@
 .cancelButton {
   @apply --inverted-button;
   @apply --small-button;
+
   margin-right: 20px;
 }
 
@@ -94,7 +96,7 @@
 }
 
 .formCenter {
-  padding: 10px 20px 0px;
+  padding: 10px 20px 0;
 }
 
 .radioGroup {

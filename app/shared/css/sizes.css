@@ -1,5 +1,6 @@
 @custom-media --small-viewport (max-width: 900px);
 @custom-media --large-viewport (min-width: 900px);
+
 :root {
   --gutter: 40px;
   --medium-gutter: 30px;
@@ -7,22 +8,22 @@
   --mobile: 500;
   --tablet: 700;
   --max-width: 1600px;
-  --border-color: #cccccc;
+  --border-color: #ccc;
   --gray-background-color: #f2f2f2;
   --lightbox-background-color: #131c34;
   --dark-gray-background-color: #e6e6e6;
-  --white-color: #ffffff;
-  --black-color: #000000;
+  --white-color: #fff;
+  --black-color: #000;
   --blue-color: #2962ff;
   --light-blue-color: #8fadff;
   --red-color: #ff715b;
   --green-color: #85d578;
   --teal-color: #66c5dd;
   --yellow-color: #ffd900;
-  --gray-font-color: #666666;
-  --light-gray-font-color: #cccccc;
+  --gray-font-color: #666;
+  --light-gray-font-color: #ccc;
   --white-font-color: #f2f2f2;
-  --default-font-color: #333333;
+  --default-font-color: #333;
   --highlight-background-color: #fafafa;
   --login-drop-shadow: 0 12px 20px 0 rgba(0, 0, 0, 0.15), 0 10px 20px 0 rgba(0, 0, 0, 0.1);
   --popup-background-color: rgba(19, 28, 52, 0.65);
@@ -53,18 +54,19 @@
 }
 
 :root {
-  --input {
+  --input: {
     border: 1px solid var(--border-color);
     -webkit-style: none;
     background-color: transparent;
     font-size: 16px;
-    border-radius: 0px;
+    border-radius: 0;
     padding: 10px;
     outline: none;
   }
-  --button {
+
+  --button: {
     padding: 14px 64px 11px;
-    border: 0px solid;
+    border: 0 solid;
     cursor: pointer;
     transition: background-color 0.3s;
     outline: none;
@@ -79,7 +81,8 @@
     -webkit-appearance: none;
     user-select: none;
   }
-  --inverted-button {
+
+  --inverted-button: {
     padding: 14px 64px 11px;
     border: 1px solid var(--blue-color);
     cursor: pointer;
@@ -96,7 +99,8 @@
     -webkit-appearance: none;
     user-select: none;
   }
-  --red-button {
+
+  --red-button: {
     padding: 14px 64px 11px;
     border: 1px solid var(--red-color);
     cursor: pointer;
@@ -113,33 +117,36 @@
     -webkit-appearance: none;
     user-select: none;
   }
-  --title {
+
+  --title: {
     font-family: var(--basetica-black);
     font-size: var(--large-font-size);
     line-height: var(--large-font-line-height);
   }
-  --label {
+
+  --label: {
     font-family: var(--basetica-medium);
     font-size: var(--default-font-size);
     line-height: var(--medium-font-line-height);
   }
-  --input {
+
+  --input: {
     border: 1px solid var(--border-color);
-    background-color: #ffffff;
+    background-color: #fff;
     outline: none;
     padding: 16px 20px;
     font-family: var(--roboto);
     font-size: 16px;
     line-height: 19px;
   }
-  --select {
+
+  --select: {
     -webkit-appearance: none;
-    border-radius: 0px;
+    border-radius: 0;
     width: 100%;
     outline: none;
     border: 1px solid var(--border-color);
-    background-color: #ffffff;
-    outline: none;
+    background-color: #fff;
     background-image: url('../../assets/down-arrow.svg');
     background-repeat: no-repeat;
     background-position: 95% 50%;
@@ -148,11 +155,9 @@
     font-size: 16px;
     line-height: 19px;
   }
-  --small-button {
-    padding-top: 7px;
-    padding-bottom: 7px;
+
+  --small-button: {
     line-height: 16px;
-    padding-top: 8px;
-    padding-bottom: 4px;
+    padding: 8px 0 4px;
   }
 }

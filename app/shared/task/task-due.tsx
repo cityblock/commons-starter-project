@@ -35,7 +35,7 @@ class TaskDue extends React.Component<IProps, IState> {
         this.setState({ changeDueDateError: err.message });
       }
     }
-  }
+  };
 
   render(): JSX.Element {
     const { dueAt, completedAt } = this.props;

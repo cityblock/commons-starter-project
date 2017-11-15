@@ -1,4 +1,5 @@
 @import '../../shared/css/sizes';
+
 .container {
   background: white;
   padding: 12px 15px;
@@ -57,17 +58,19 @@
 
 .button {
   @apply --button;
+
   display: block;
   width: 180px;
-  padding: 7px 0px 3px;
+  padding: 7px 0 3px;
   margin-bottom: 10px;
 }
 
 .buttonInverted {
   @apply --inverted-button;
+
   display: block;
   width: 180px;
-  padding: 7px 0px 3px;
+  padding: 7px 0 3px;
   margin-bottom: 10px;
 }
 

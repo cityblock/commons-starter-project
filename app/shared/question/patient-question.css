@@ -89,7 +89,6 @@
 
 .questionHistoryLabel,
 .questionHistoryText {
-  color: var(--light-gray-font-color);
   font-family: var(--roboto);
   font-size: var(--extra-small-font-size);
   line-height: var(--extra-small-font-line-height);
@@ -132,7 +131,7 @@ select.select {
   }
 }
 
-.question.disabled .radioFill:after {
+.question.disabled .radioFill::after {
   background: var(--border-color);
 }
 
@@ -173,8 +172,7 @@ input[type='radio']:hover {
 
 .multiSelectRow {
   display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
+  flex-flow: row wrap;
   align-items: center;
   justify-content: flex-start;
 }

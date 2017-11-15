@@ -1,4 +1,5 @@
 @import '../../shared/css/sizes';
+
 .container {
   background: var(--white-font-color);
 }
@@ -29,6 +30,7 @@
 
 .itemsList.emptyList {
   width: 100%;
+
   &:hover {
     cursor: default;
   }

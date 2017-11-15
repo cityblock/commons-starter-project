@@ -45,7 +45,7 @@ export class TaskDelete extends React.Component<allProps, IState> {
         this.setState({ deleteError: err.message });
       }
     }
-  }
+  };
 
   render(): JSX.Element {
     const { cancelDelete } = this.props;

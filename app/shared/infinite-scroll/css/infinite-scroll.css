@@ -11,6 +11,7 @@
 
 .button {
   @apply --inverted-button;
+
   width: 94px;
   height: 32px;
   margin: 0 auto;

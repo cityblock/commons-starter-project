@@ -1,4 +1,5 @@
 @import '../../css/sizes';
+
 .avatar {
   width: 20px;
   height: 20px;
@@ -119,10 +120,8 @@
   visibility: hidden;
 }
 
-.comment.editable {
-  &:hover {
-    cursor: pointer;
-  }
+.comment.editable:hover {
+  cursor: pointer;
 }
 
 .comment.editable:hover .commentBody {
@@ -151,7 +150,6 @@
   font-size: var(--small-font-size);
   line-height: var(--medium-font-line-height);
   color: var(--gray-font-color);
-  padding-left: var(--medium-gutter);
   padding: 5px 10px;
   margin: 0;
   word-wrap: break-word;
@@ -202,7 +200,6 @@
   font-family: var(--roboto);
   font-size: var(--small-font-size);
   line-height: var(--medium-font-line-height);
-  padding-left: var(--medium-gutter);
   margin-left: var(--small-gutter);
   padding: 5px 10px;
   border: 1px solid transparent;

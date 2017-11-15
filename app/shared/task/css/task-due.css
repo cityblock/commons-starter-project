@@ -24,7 +24,7 @@
   }
 }
 
-.dueDate input:before {
+.dueDate input::before {
   content: attr(data-date);
   display: inline-block;
   color: var(--black-color);
@@ -38,7 +38,7 @@
   color: transparent;
 }
 
-.dueDate input:before::-webkit-calendar-picker-indicator {
+.dueDate input::before::-webkit-calendar-picker-indicator {
   position: absolute;
   top: 9px;
   right: 2px;

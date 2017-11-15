@@ -1,4 +1,5 @@
 @import '../../css/sizes';
+
 .container {
   background: white;
   box-shadow: 0 6px 8px 0 rgba(0, 0, 0, 0.1);
@@ -179,7 +180,6 @@
   flex-direction: row;
   justify-content: flex-start;
   align-items: center;
-  border: 1px solid transparent;
   border-radius: 2px;
   padding: 5px;
   transition: border 0.2s linear;
@@ -244,7 +244,7 @@ input[type='date'].dueDateInput {
   transition: border 0.2s linear;
 }
 
-input[type='date'].dueDateInput:before {
+input[type='date'].dueDateInput::before {
   content: attr(data-date);
   display: inline-block;
   color: var(--black-color);
@@ -487,8 +487,7 @@ input[type='date'].dueDateInput::-webkit-calendar-picker-indicator {
 .attachments {
   margin: var(--small-gutter) var(--small-gutter) 10px;
   display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
+  flex-flow: row wrap;
 }
 
 .emptyAttachments {
@@ -565,8 +564,7 @@ input[type='date'].dueDateInput::-webkit-calendar-picker-indicator {
 
 .followersList {
   display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
+  flex-flow: row wrap;
   margin-top: 10px;
   width: 50%;
 }
@@ -708,6 +706,7 @@ input[type='date'].dueDateInput::-webkit-calendar-picker-indicator {
 
 .deleteConfirmButton {
   @apply --red-button;
+
   padding: 9px;
   font-size: var(--small-font-size);
   line-height: var(--small-font-line-height);

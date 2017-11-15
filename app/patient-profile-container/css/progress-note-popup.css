@@ -1,6 +1,7 @@
 @import '../../shared/css/sizes';
 
 .tabContainer {
+  display: block;
 }
 
 .topBar {
@@ -44,6 +45,7 @@
 
 .button {
   @apply --button;
+
   height: 32px;
   padding: 8px 33px 7px;
 }
@@ -63,6 +65,7 @@
 }
 
 .patientContainer {
+  display: block;
 }
 
 .patientPhoto {
@@ -87,4 +90,5 @@
 }
 
 .openedAt {
+  display: block;
 }

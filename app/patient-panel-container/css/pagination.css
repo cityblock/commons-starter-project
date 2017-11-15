@@ -1,4 +1,5 @@
 @import '../../shared/css/sizes';
+
 .pagination {
   width: 100%;
 }
@@ -22,6 +23,7 @@
 
 .nextButton {
   background-image: url('../../assets/chevron-right-grey.svg');
+
   &:hover {
     background-image: url('../../assets/chevron-right-blue.svg');
   }
@@ -29,6 +31,7 @@
 
 .previousButton {
   background-image: url('../../assets/chevron-left-grey.svg');
+
   &:hover {
     background-image: url('../../assets/chevron-left-blue.svg');
   }

@@ -1,4 +1,5 @@
 @import '../../shared/css/sizes';
+
 .container {
   width: 100%;
   height: calc(100vh - 70px);
@@ -7,13 +8,13 @@
 
 .formContainer {
   max-width: var(--max-width);
-  margin: 0px auto;
+  margin: 0 auto;
   lost-flex-container: row;
 }
 
 .leftNav {
   background: var(--gray-background-color);
-  padding: 50px 55px 0px var(--gutter);
+  padding: 50px 55px 0 var(--gutter);
   lost-column: 2/12;
 }
 
@@ -39,28 +40,29 @@
 
 .formSection:last-child {
   margin-bottom: 100px;
-  border-bottom: 0px solid;
+  border-bottom: 0 solid;
 }
 
 .formHeading {
   @apply --title;
-  margin: 50px 0px;
+
+  margin: 50px 0;
 }
 
 .formBottom {
   position: fixed;
-  bottom: 0px;
-  left: 0px;
+  bottom: 0;
+  left: 0;
   background: white;
-  padding: 15px 0px;
+  padding: 15px 0;
   width: 100%;
 }
 
 .formBottomContent {
   width: 100%;
   max-width: var(--max-width);
-  margin: 0px auto;
-  padding: 0px var(--gutter);
+  margin: 0 auto;
+  padding: 0 var(--gutter);
   display: flex;
   flex-direction: row;
   justify-content: space-between;
@@ -79,8 +81,8 @@
   width: 100vw;
   height: 100vh;
   z-index: 10;
-  top: 0px;
-  left: 0px;
+  top: 0;
+  left: 0;
   background: rgba(255, 255, 255, 0.8);
   align-items: center;
   display: flex;
@@ -98,6 +100,6 @@
 
 .formRow {
   max-width: var(--max-width);
-  margin: 0px auto;
+  margin: 0 auto;
   lost-flex-container: row;
 }

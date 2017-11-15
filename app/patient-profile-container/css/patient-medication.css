@@ -1,4 +1,5 @@
 @import '../../shared/css/sizes';
+
 .medication {
   padding: 0 var(--medium-gutter);
   background-color: var(--white-color);

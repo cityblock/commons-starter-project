@@ -1,4 +1,5 @@
 @import '../../shared/css/sizes';
+
 @lost gutter 30px;
 @lost flexbox flex;
 
@@ -42,15 +43,14 @@ html {
 }
 
 html body {
-  padding: 0px;
-  margin: 0px;
-  letter-spacing: 0rem;
+  padding: 0;
+  margin: 0;
+  letter-spacing: 0;
   background: inherit;
   color: var(--default-font-color);
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  font-smoothing: antialiased;
   overflow-x: hidden;
   font-weight: normal;
   font-style: normal;

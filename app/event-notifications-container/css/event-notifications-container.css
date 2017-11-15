@@ -1,4 +1,5 @@
 @import '../../shared/css/sizes';
+
 .container {
   display: flex;
   flex: 1;

@@ -1,4 +1,5 @@
 @import '../../shared/css/sizes';
+
 .container {
   background: white;
   padding: 12px 15px;
@@ -13,7 +14,7 @@
 }
 
 .container:last-child {
-  margin-bottom: 0px;
+  margin-bottom: 0;
 }
 
 .container:hover {

@@ -1,4 +1,5 @@
 @import '../../css/sizes';
+
 .container {
   background: var(--white-font-color);
 }
@@ -37,6 +38,7 @@
 
 .tasksList.emptyTasksList {
   width: 100%;
+
   &:hover {
     cursor: default;
   }
@@ -118,6 +120,7 @@
 
 .tasksErrorButton {
   @apply --inverted-button;
+
   width: 94px;
   height: 32px;
   margin: 0 auto;

@@ -1,11 +1,12 @@
 @import '../../shared/css/sizes';
+
 .table {
   width: 100%;
   font-family: var(--roboto);
   font-size: var(--default-font-size);
   color: var(--default-font-color);
   text-align: left;
-  padding: 0px var(--small-gutter);
+  padding: 0 var(--small-gutter);
   position: relative;
 }
 
@@ -49,6 +50,7 @@
   border-right: 1px solid transparent;
   border-top: 1px solid transparent;
   color: black;
+
   &:hover {
     border: 1px solid var(--gray-background-color);
     border-radius: 4px;

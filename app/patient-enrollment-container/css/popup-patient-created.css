@@ -25,6 +25,7 @@
 
 a.button {
   @apply --button;
+
   padding: 14px 42px 11px;
   margin-top: 40px;
   display: block;
@@ -32,6 +33,7 @@ a.button {
 
 a.invertedButton {
   @apply --inverted-button;
+
   padding: 14px 42px 11px;
   margin-top: 40px;
   display: block;

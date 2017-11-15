@@ -1,11 +1,12 @@
 @import '../css/sizes';
+
 .background {
   position: fixed;
   width: 100vw;
   height: 100vh;
   z-index: 10;
-  top: 0px;
-  left: 0px;
+  top: 0;
+  left: 0;
   background: var(--popup-background-color);
   align-items: center;
   display: flex;
@@ -14,8 +15,8 @@
 .content {
   flex: 1;
   max-width: 600px;
-  margin: 0px auto;
-  border: 1px solid #cccccc;
+  margin: 0 auto;
+  border: 1px solid #ccc;
   box-shadow: 0 10px 10px 0 rgba(0, 0, 0, 0.2);
   background: white;
   padding: 50px 100px;
@@ -27,6 +28,6 @@
 }
 
 .content.noContentPadding {
-  padding: 0px;
-  border: 0px solid;
+  padding: 0;
+  border: 0 solid;
 }

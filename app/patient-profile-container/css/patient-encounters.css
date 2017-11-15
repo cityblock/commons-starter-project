@@ -1,4 +1,5 @@
 @import '../../shared/css/sizes';
+
 .invertedButton {
   @apply --inverted-button;
 }

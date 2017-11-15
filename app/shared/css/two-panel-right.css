@@ -1,4 +1,5 @@
 @import '../../shared/css/sizes';
+
 .container {
   background: white;
   box-shadow: 0 6px 8px 0 rgba(0, 0, 0, 0.1);
@@ -117,6 +118,7 @@
   background-image: url('../../assets/close-grey.svg');
   padding-left: 20px;
   padding-right: 20px;
+
   &:hover {
     cursor: pointer;
   }
@@ -128,6 +130,7 @@
   display: flex;
   flex-direction: row;
   align-items: center;
+
   &:hover {
     cursor: pointer;
   }
@@ -171,12 +174,12 @@
   flex-direction: column;
   color: var(--black-color);
   margin: 10px 0 var(--small-gutter);
-  padding: 0px 20px 20px;
+  padding: 0 20px 20px;
 }
 
 .largeText.title {
-  margin: 0 0px 4px;
-  padding: 10px 0px 6px;
+  margin: 0 0 4px;
+  padding: 10px 0 6px;
   font-family: var(--basetica-medium);
   font-size: var(--medium-font-size);
   line-height: var(--medium-font-line-height);
@@ -190,7 +193,7 @@
 }
 
 .largeTextEditor {
-  margin: 0 0px 1px;
+  margin: 0 0 1px;
 }
 
 .largeTextEditor input {
@@ -219,7 +222,7 @@
   padding: var(--small-gutter);
   width: 100%;
   border-radius: 5px;
-  margin: var(--small-gutter) 0px;
+  margin: var(--small-gutter) 0;
 }
 
 .bodyText {
@@ -283,6 +286,7 @@
 
 .deleteConfirmButton {
   @apply --red-button;
+
   padding: 9px;
   font-size: var(--small-font-size);
   line-height: var(--small-font-line-height);

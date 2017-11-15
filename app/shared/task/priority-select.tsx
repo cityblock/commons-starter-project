@@ -36,7 +36,7 @@ class PrioritySelect extends React.Component<IProps, IState> {
         this.setState({ changePriorityError: err.message });
       }
     }
-  }
+  };
 
   render(): JSX.Element {
     const { priority } = this.props;

@@ -11,7 +11,7 @@ interface IStateProps {
   taskId?: string;
 }
 
-interface IOwnProps {
+export interface IOwnProps {
   patientId: string;
   loading?: boolean;
   routeBase: string;

@@ -1,7 +1,7 @@
 import { shallow } from 'enzyme';
 import * as React from 'react';
 import TaskCompletion from '../task-completion';
-import TaskDue from '../task-due';
+import TaskDue, { IProps } from '../task-due';
 import TaskProgress from '../task-progress';
 
 describe('Task Progress Component - Due Date and Completion Toggle', () => {
@@ -23,8 +23,8 @@ describe('Task Progress Component - Due Date and Completion Toggle', () => {
   });
 
   it('renders the task completion toggle with correct props', () => {
-    expect(wrapper.find(TaskDue).length).toBe(1);
-    expect(wrapper.find(TaskCompletion).props().taskId).toBe(taskId);
-    expect(wrapper.find(TaskCompletion).props().completedAt).toBe(completedAt);
+    expect(wrapper.find<IProps>(TaskDue).length).toBe(1);
+    expect(wrapper.find<IProps>(TaskCompletion).props().taskId).toBe(taskId);
+    expect(wrapper.find<IProps>(TaskCompletion).props().completedAt).toBe(completedAt);
   });
 });

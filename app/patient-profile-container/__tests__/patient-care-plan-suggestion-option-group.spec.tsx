@@ -1,6 +1,7 @@
 import { createMemoryHistory } from 'history';
 import * as React from 'react';
 import { MockedProvider } from 'react-apollo/test-utils';
+import { Provider } from 'react-redux';
 import { ConnectedRouter } from 'react-router-redux';
 import { create } from 'react-test-renderer';
 import configureMockStore from 'redux-mock-store';
@@ -55,16 +56,18 @@ const carePlan = {
 it('renders options for suggested concerns', () => {
   const history = createMemoryHistory();
   const tree = create(
-    <MockedProvider mocks={[]} store={mockStore({ locale })}>
-      <ReduxConnectedIntlProvider>
-        <ConnectedRouter history={history}>
-          <PatientCarePlanSuggestionOptionGroup
-            carePlan={carePlan}
-            carePlanSuggestions={[carePlanSuggestionWithConcern]}
-            optionType={'suggested'}
-          />
-        </ConnectedRouter>
-      </ReduxConnectedIntlProvider>
+    <MockedProvider mocks={[]}>
+      <Provider store={mockStore({ locale })}>
+        <ReduxConnectedIntlProvider>
+          <ConnectedRouter history={history}>
+            <PatientCarePlanSuggestionOptionGroup
+              carePlan={carePlan}
+              carePlanSuggestions={[carePlanSuggestionWithConcern]}
+              optionType={'suggested'}
+            />
+          </ConnectedRouter>
+        </ReduxConnectedIntlProvider>
+      </Provider>
     </MockedProvider>,
   ).toJSON();
   expect(tree).toMatchSnapshot();
@@ -73,16 +76,18 @@ it('renders options for suggested concerns', () => {
 it('renders options for active concerns', () => {
   const history = createMemoryHistory();
   const tree = create(
-    <MockedProvider mocks={[]} store={mockStore({ locale })}>
-      <ReduxConnectedIntlProvider>
-        <ConnectedRouter history={history}>
-          <PatientCarePlanSuggestionOptionGroup
-            carePlan={carePlan}
-            carePlanSuggestions={[carePlanSuggestionWithConcern]}
-            optionType={'active'}
-          />
-        </ConnectedRouter>
-      </ReduxConnectedIntlProvider>
+    <MockedProvider mocks={[]}>
+      <Provider store={mockStore({ locale })}>
+        <ReduxConnectedIntlProvider>
+          <ConnectedRouter history={history}>
+            <PatientCarePlanSuggestionOptionGroup
+              carePlan={carePlan}
+              carePlanSuggestions={[carePlanSuggestionWithConcern]}
+              optionType={'active'}
+            />
+          </ConnectedRouter>
+        </ReduxConnectedIntlProvider>
+      </Provider>
     </MockedProvider>,
   ).toJSON();
   expect(tree).toMatchSnapshot();
@@ -91,16 +96,18 @@ it('renders options for active concerns', () => {
 it('renders options for inactive concerns', () => {
   const history = createMemoryHistory();
   const tree = create(
-    <MockedProvider mocks={[]} store={mockStore({ locale })}>
-      <ReduxConnectedIntlProvider>
-        <ConnectedRouter history={history}>
-          <PatientCarePlanSuggestionOptionGroup
-            carePlan={carePlan}
-            carePlanSuggestions={[carePlanSuggestionWithConcern]}
-            optionType={'inactive'}
-          />
-        </ConnectedRouter>
-      </ReduxConnectedIntlProvider>
+    <MockedProvider mocks={[]}>
+      <Provider store={mockStore({ locale })}>
+        <ReduxConnectedIntlProvider>
+          <ConnectedRouter history={history}>
+            <PatientCarePlanSuggestionOptionGroup
+              carePlan={carePlan}
+              carePlanSuggestions={[carePlanSuggestionWithConcern]}
+              optionType={'inactive'}
+            />
+          </ConnectedRouter>
+        </ReduxConnectedIntlProvider>
+      </Provider>
     </MockedProvider>,
   ).toJSON();
   expect(tree).toMatchSnapshot();

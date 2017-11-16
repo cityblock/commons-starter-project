@@ -14,7 +14,7 @@ import * as bodyStyles from './css/task-body.css';
 import * as taskStyles from './css/task.css';
 import { DEFAULT_AVATAR_URL } from './task';
 
-interface IProps {
+export interface IProps {
   patientId: string;
   taskId: string;
   assignee?: ShortUserFragment;

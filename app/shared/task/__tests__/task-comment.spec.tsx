@@ -1,6 +1,7 @@
 import { createMemoryHistory } from 'history';
 import * as React from 'react';
 import { MockedProvider } from 'react-apollo/test-utils';
+import { Provider } from 'react-redux';
 import { ConnectedRouter } from 'react-router-redux';
 import { create } from 'react-test-renderer';
 import configureMockStore from 'redux-mock-store';
@@ -15,12 +16,14 @@ const mockStore = configureMockStore([]);
 it('correctly renders a comment as editable or not', () => {
   const history = createMemoryHistory();
   const tree = create(
-    <MockedProvider mocks={[]} store={mockStore({ locale, task: assignedTask })}>
-      <ReduxConnectedIntlProvider>
-        <ConnectedRouter history={history}>
-          <TaskComment comment={comment} onEdit={() => true} />
-        </ConnectedRouter>
-      </ReduxConnectedIntlProvider>
+    <MockedProvider mocks={[]}>
+      <Provider store={mockStore({ locale, task: assignedTask })}>
+        <ReduxConnectedIntlProvider>
+          <ConnectedRouter history={history}>
+            <TaskComment comment={comment} onEdit={() => true} />
+          </ConnectedRouter>
+        </ReduxConnectedIntlProvider>
+      </Provider>
     </MockedProvider>,
   ).toJSON();
   expect(tree).toMatchSnapshot();

@@ -2,7 +2,7 @@ import { shallow } from 'enzyme';
 import * as React from 'react';
 import Task from '../../shared/task/task';
 import PatientCarePlan from '../patient-care-plan';
-import { PatientMap } from '../patient-map';
+import { IOwnProps, PatientMap } from '../patient-map';
 
 describe('Patient Map Component', () => {
   const patientId = 'sansaStark';
@@ -32,7 +32,7 @@ describe('Patient Map Component', () => {
     );
 
     it('renders associated task', () => {
-      const task = wrapper2.find(Task);
+      const task = wrapper2.find<IOwnProps>(Task);
 
       expect(task.length).toBe(1);
       expect(task.props().routeBase).toBe(routeBase);

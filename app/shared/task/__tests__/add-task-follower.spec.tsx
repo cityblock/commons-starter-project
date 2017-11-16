@@ -2,6 +2,7 @@ import { shallow } from 'enzyme';
 import { createMemoryHistory } from 'history';
 import * as React from 'react';
 import { MockedProvider } from 'react-apollo/test-utils';
+import { Provider } from 'react-redux';
 import { ConnectedRouter } from 'react-router-redux';
 import { create } from 'react-test-renderer';
 import configureMockStore from 'redux-mock-store';
@@ -17,16 +18,18 @@ const history = createMemoryHistory();
 
 it('correctly renders/does not render the add task follower button', () => {
   const tree = create(
-    <MockedProvider mocks={[]} store={mockStore({ locale, task: taskWithComment })}>
-      <ReduxConnectedIntlProvider>
-        <ConnectedRouter history={history}>
-          <AddTaskFollower
-            patientId={patient.id}
-            taskId={taskWithComment.id}
-            followers={[currentUser, user]}
-          />
-        </ConnectedRouter>
-      </ReduxConnectedIntlProvider>
+    <MockedProvider mocks={[]}>
+      <Provider store={mockStore({ locale, task: taskWithComment })}>
+        <ReduxConnectedIntlProvider>
+          <ConnectedRouter history={history}>
+            <AddTaskFollower
+              patientId={patient.id}
+              taskId={taskWithComment.id}
+              followers={[currentUser, user]}
+            />
+          </ConnectedRouter>
+        </ReduxConnectedIntlProvider>
+      </Provider>
     </MockedProvider>,
   ).toJSON();
   expect(tree).toMatchSnapshot();

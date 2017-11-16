@@ -1,6 +1,7 @@
 import { createMemoryHistory } from 'history';
 import * as React from 'react';
 import { MockedProvider } from 'react-apollo/test-utils';
+import { Provider } from 'react-redux';
 import { ConnectedRouter } from 'react-router-redux';
 import { create } from 'react-test-renderer';
 import configureMockStore from 'redux-mock-store';
@@ -27,16 +28,18 @@ afterAll(() => {
 it('renders patient care plan suggestion (concern)', () => {
   const history = createMemoryHistory();
   const tree = create(
-    <MockedProvider mocks={[]} store={mockStore({ locale })}>
-      <ReduxConnectedIntlProvider>
-        <ConnectedRouter history={history}>
-          <PatientCarePlanSuggestion
-            suggestion={carePlanSuggestionWithConcern}
-            onDismiss={suggestion => true}
-            onAccept={(suggestion, type) => true}
-          />
-        </ConnectedRouter>
-      </ReduxConnectedIntlProvider>
+    <MockedProvider mocks={[]}>
+      <Provider store={mockStore({ locale })}>
+        <ReduxConnectedIntlProvider>
+          <ConnectedRouter history={history}>
+            <PatientCarePlanSuggestion
+              suggestion={carePlanSuggestionWithConcern}
+              onDismiss={suggestion => true}
+              onAccept={(suggestion, type) => true}
+            />
+          </ConnectedRouter>
+        </ReduxConnectedIntlProvider>
+      </Provider>
     </MockedProvider>,
   ).toJSON();
   expect(tree).toMatchSnapshot();
@@ -45,16 +48,18 @@ it('renders patient care plan suggestion (concern)', () => {
 it('renders patient care plan suggestion (goal)', () => {
   const history = createMemoryHistory();
   const tree = create(
-    <MockedProvider mocks={[]} store={mockStore({ locale })}>
-      <ReduxConnectedIntlProvider>
-        <ConnectedRouter history={history}>
-          <PatientCarePlanSuggestion
-            suggestion={carePlanSuggestionWithGoal}
-            onDismiss={suggestion => true}
-            onAccept={(suggestion, type) => true}
-          />
-        </ConnectedRouter>
-      </ReduxConnectedIntlProvider>
+    <MockedProvider mocks={[]}>
+      <Provider store={mockStore({ locale })}>
+        <ReduxConnectedIntlProvider>
+          <ConnectedRouter history={history}>
+            <PatientCarePlanSuggestion
+              suggestion={carePlanSuggestionWithGoal}
+              onDismiss={suggestion => true}
+              onAccept={(suggestion, type) => true}
+            />
+          </ConnectedRouter>
+        </ReduxConnectedIntlProvider>
+      </Provider>
     </MockedProvider>,
   ).toJSON();
   expect(tree).toMatchSnapshot();

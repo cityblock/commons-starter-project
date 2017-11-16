@@ -1,6 +1,5 @@
 import { History } from 'history';
 import { debounce } from 'lodash';
-import { ApolloClient } from 'react-apollo';
 import { routerMiddleware } from 'react-router-redux';
 import { routerReducer } from 'react-router-redux';
 import { applyMiddleware, compose, createStore } from 'redux';
@@ -37,17 +36,16 @@ async function setLastAction() {
 }
 const debouncedSetLastAction = debounce(setLastAction, 500);
 
-export default (client: ApolloClient, history: History) => {
+export default (history: History) => {
   const composeEnhancers = (window as any).__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
-  const middleware = [routerMiddleware(history), client.middleware()];
+  const middleware = [routerMiddleware(history)];
 
   if (process.env.NODE_ENV === 'development') {
     middleware.push(createLogger());
   }
 
   const reducers = combineReducers<IState>({
-    apollo: client.reducer(),
     browser: browserReducer,
     locale: localeReducer,
     routing: routerReducer,

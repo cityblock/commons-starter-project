@@ -5,7 +5,7 @@ import { formatDueDate, isDueSoon, isPastDue } from '../helpers/format-helpers';
 import DateInput from '../library/date-input/date-input';
 import * as styles from './css/task-due.css';
 
-interface IProps {
+export interface IProps {
   dueAt: string;
   taskId: string;
   completedAt: string;

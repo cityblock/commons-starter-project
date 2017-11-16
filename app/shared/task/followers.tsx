@@ -5,7 +5,7 @@ import * as styles from './css/followers.css';
 
 export const DEFAULT_AVATAR_URL = 'https://bit.ly/2weRwJm';
 
-interface IProps {
+export interface IProps {
   patientId: string;
   taskId: string;
   followers: ShortUserFragment[];

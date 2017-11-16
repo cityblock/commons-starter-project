@@ -2,7 +2,7 @@ import { shallow } from 'enzyme';
 import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
 import PatientCarePlanSuggestions from '../patient-care-plan-suggestions';
-import { PatientCarePlanView } from '../patient-care-plan-view';
+import { IProps, PatientCarePlanView } from '../patient-care-plan-view';
 import PatientMap from '../patient-map';
 
 describe('Patient Care Plan View Component', () => {
@@ -14,7 +14,7 @@ describe('Patient Care Plan View Component', () => {
       <PatientCarePlanView patientId={patientId} routeBase={routeBase} subTabId="suggestions" />,
     );
 
-    const suggestions = wrapper.find(PatientCarePlanSuggestions);
+    const suggestions = wrapper.find<IProps>(PatientCarePlanSuggestions);
 
     expect(suggestions.length).toBe(1);
     expect(suggestions.props().routeBase).toBe(routeBase);

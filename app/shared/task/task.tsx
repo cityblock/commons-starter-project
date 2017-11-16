@@ -31,7 +31,7 @@ interface IDispatchProps {
   selectTaskAction: (taskId: string) => any;
 }
 
-interface IOwnProps {
+export interface IOwnProps {
   routeBase: string;
   match?: {
     params: {
@@ -106,9 +106,7 @@ export class Task extends React.Component<IProps, IState> {
         : 'No Patient';
 
     const goal = task && task.patientGoal;
-    const concern = goal
-      && goal.patientConcern
-      && goal.patientConcern.concern;
+    const concern = goal && goal.patientConcern && goal.patientConcern.concern;
 
     return (
       <div className={styles.container}>

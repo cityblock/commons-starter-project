@@ -2,6 +2,7 @@ import { shallow } from 'enzyme';
 import { clone } from 'lodash';
 import * as React from 'react';
 import { MockedProvider } from 'react-apollo/test-utils';
+import { Provider } from 'react-redux';
 import { create } from 'react-test-renderer';
 import configureMockStore from 'redux-mock-store';
 import { currentUser } from '../../shared/util/test-data';
@@ -12,10 +13,12 @@ import AuthenticationContainer, {
 it('renders authentication container correctly', () => {
   const mockStore = configureMockStore([]);
   const tree = create(
-    <MockedProvider mocks={[]} store={mockStore({ idle: { isIdle: false } })}>
-      <AuthenticationContainer loading={true}>
-        <div />
-      </AuthenticationContainer>
+    <MockedProvider mocks={[]}>
+      <Provider store={mockStore({ idle: { isIdle: false } })}>
+        <AuthenticationContainer loading={true}>
+          <div />
+        </AuthenticationContainer>
+      </Provider>
     </MockedProvider>,
   ).toJSON();
   expect(tree).toMatchSnapshot();

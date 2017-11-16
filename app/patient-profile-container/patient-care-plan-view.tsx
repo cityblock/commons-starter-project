@@ -12,7 +12,7 @@ import * as styles from './css/patient-care-plan.css';
 import PatientCarePlanSuggestions from './patient-care-plan-suggestions';
 import PatientMap from './patient-map';
 
-interface IProps {
+export interface IProps {
   patientId: string;
   subTabId?: 'active' | 'suggestions';
   routeBase: string;

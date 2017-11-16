@@ -2,7 +2,7 @@ import { shallow } from 'enzyme';
 import * as React from 'react';
 import { taskWithComment } from '../../util/test-data';
 import AddTaskFollower from '../add-task-follower';
-import TaskFollowers, { Follower } from '../followers';
+import TaskFollowers, { Follower, IProps } from '../followers';
 
 describe('Task Followers Component', () => {
   const patientId = 'moana';
@@ -19,8 +19,8 @@ describe('Task Followers Component', () => {
 
   it('renders add task follower component', () => {
     expect(wrapper.find(AddTaskFollower).length).toBe(1);
-    expect(wrapper.find(AddTaskFollower).props().patientId).toBe(patientId);
-    expect(wrapper.find(AddTaskFollower).props().taskId).toBe(taskId);
-    expect(wrapper.find(AddTaskFollower).props().followers).toEqual(followers);
+    expect(wrapper.find<IProps>(AddTaskFollower).props().patientId).toBe(patientId);
+    expect(wrapper.find<IProps>(AddTaskFollower).props().taskId).toBe(taskId);
+    expect(wrapper.find<IProps>(AddTaskFollower).props().followers).toEqual(followers);
   });
 });

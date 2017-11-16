@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`question row renders question row 1`] = `
+exports[`question row renders progress note template row 1`] = `
 <a
   className="container selected"
   href="/route/base/progress-note-template-id"

@@ -2,6 +2,8 @@ import { shallow } from 'enzyme';
 import { createMemoryHistory } from 'history';
 import * as React from 'react';
 import { MockedProvider } from 'react-apollo/test-utils';
+import { Provider } from 'react-redux';
+
 import { ConnectedRouter } from 'react-router-redux';
 import { create } from 'react-test-renderer';
 import configureMockStore from 'redux-mock-store';
@@ -22,12 +24,14 @@ const match = {
 it('renders without concern', () => {
   const history = createMemoryHistory();
   const tree = create(
-    <MockedProvider mocks={[]} store={mockStore({ locale, concern })}>
-      <ReduxConnectedIntlProvider>
-        <ConnectedRouter history={history}>
-          <Concern routeBase={'/route/base'} match={match} />
-        </ConnectedRouter>
-      </ReduxConnectedIntlProvider>
+    <MockedProvider mocks={[]}>
+      <Provider store={mockStore({ locale, concern })}>
+        <ReduxConnectedIntlProvider>
+          <ConnectedRouter history={history}>
+            <Concern routeBase={'/route/base'} match={match} />
+          </ConnectedRouter>
+        </ReduxConnectedIntlProvider>
+      </Provider>
     </MockedProvider>,
   ).toJSON();
   expect(tree).toMatchSnapshot();

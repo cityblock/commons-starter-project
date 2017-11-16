@@ -1,7 +1,8 @@
+import gql from 'graphql-tag';
 import { createMemoryHistory } from 'history';
 import * as React from 'react';
-import { gql } from 'react-apollo';
 import { MockedProvider } from 'react-apollo/test-utils';
+import { Provider } from 'react-redux';
 import { ConnectedRouter } from 'react-router-redux';
 import { create } from 'react-test-renderer';
 import configureMockStore from 'redux-mock-store';
@@ -131,16 +132,17 @@ it('renders patient care plan suggestions', () => {
           result: { data: { carePlanSuggestionsForPatient: [] } },
         },
       ]}
-      store={mockStore({ locale })}
     >
-      <ReduxConnectedIntlProvider>
-        <ConnectedRouter history={history}>
-          <PatientCarePlanSuggestions
-            patientId={'patient-1'}
-            routeBase={'/patients/patient-1/map'}
-          />
-        </ConnectedRouter>
-      </ReduxConnectedIntlProvider>
+      <Provider store={mockStore({ locale })}>
+        <ReduxConnectedIntlProvider>
+          <ConnectedRouter history={history}>
+            <PatientCarePlanSuggestions
+              patientId={'patient-1'}
+              routeBase={'/patients/patient-1/map'}
+            />
+          </ConnectedRouter>
+        </ReduxConnectedIntlProvider>
+      </Provider>
     </MockedProvider>,
   ).toJSON();
   expect(tree).toMatchSnapshot();

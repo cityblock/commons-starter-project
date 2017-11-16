@@ -1,6 +1,7 @@
 import { createMemoryHistory } from 'history';
 import * as React from 'react';
 import { MockedProvider } from 'react-apollo/test-utils';
+import { Provider } from 'react-redux';
 import { ConnectedRouter } from 'react-router-redux';
 import { create } from 'react-test-renderer';
 import configureMockStore from 'redux-mock-store';
@@ -15,12 +16,14 @@ const mockStore = configureMockStore([]);
 it('renders patient info', () => {
   const history = createMemoryHistory();
   const tree = create(
-    <MockedProvider mocks={[]} store={mockStore({ locale })}>
-      <ReduxConnectedIntlProvider>
-        <ConnectedRouter history={history}>
-          <PatientInfo patientId={patient.id} patient={patient} />
-        </ConnectedRouter>
-      </ReduxConnectedIntlProvider>
+    <MockedProvider mocks={[]}>
+      <Provider store={mockStore({ locale })}>
+        <ReduxConnectedIntlProvider>
+          <ConnectedRouter history={history}>
+            <PatientInfo patientId={patient.id} patient={patient} />
+          </ConnectedRouter>
+        </ReduxConnectedIntlProvider>
+      </Provider>
     </MockedProvider>,
   ).toJSON();
   expect(tree).toMatchSnapshot();

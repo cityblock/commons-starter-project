@@ -14,10 +14,8 @@
     "prod-db": "./scripts/prod-psql.sh",
     "start": "NODE_ENV=production nodemon --exec node ./server-compiled/index.js",
     "dev": "NODE_ENV=development nodemon --exec ts-node ./server/index.ts",
-    "build:dev":
-      "cross-env NODE_ENV=development webpack --colors --display-error-details --config ./webpack/webpack.config.js",
-    "build":
-      "yarn run clean && yarn run build-server && cross-env NODE_ENV=production GOOGLE_OAUTH_TOKEN=640963223283-n944uqosb4kae9cj99d35v6ut6n5bvlc.apps.googleusercontent.com webpack --colors --config ./webpack/webpack.config.js",
+    "build:dev": "cross-env NODE_ENV=development webpack --colors --display-error-details --config ./webpack/webpack.config.js",
+    "build": "yarn run clean && yarn run build-server && cross-env NODE_ENV=production GOOGLE_OAUTH_TOKEN=640963223283-n944uqosb4kae9cj99d35v6ut6n5bvlc.apps.googleusercontent.com webpack --colors --config ./webpack/webpack.config.js",
     "build-server": "./node_modules/typescript/bin/tsc --project tsconfig.server.json",
     "prettier": "prettier --write \"{app,server,webpack,scripts}/**/*.{ts,tsx,js,css,graphql}\"",
     "test": "NODE_ENV=test node initialize-test-db.js && jest --runInBand",
@@ -29,19 +27,14 @@
     "prepush": "yarn run lint && yarn typecheck",
     "update-schema": "./scripts/generate-schema-types.sh",
     "codegen": "./scripts/codegen.sh",
-    "low-priority":
-      "NODE_ENV=production nodemon --exec ts-node ./server/rabbitmq/workers/low-priority-worker.ts",
-    "high-priority":
-      "NODE_ENV=production nodemon --exec ts-node ./server/rabbitmq/workers/high-priority-worker.ts",
+    "low-priority": "NODE_ENV=production nodemon --exec ts-node ./server/rabbitmq/workers/low-priority-worker.ts",
+    "high-priority": "NODE_ENV=production nodemon --exec ts-node ./server/rabbitmq/workers/high-priority-worker.ts",
     "cron": "NODE_ENV=production nodemon --exec ts-node ./server/config/cron.ts",
-    "low-priority-dev":
-      "NODE_ENV=development nodemon --exec ts-node ./server/rabbitmq/workers/low-priority-worker.ts",
-    "high-priority-dev":
-      "NODE_ENV=development nodemon --exec ts-node ./server/rabbitmq/workers/high-priority-worker.ts",
+    "low-priority-dev": "NODE_ENV=development nodemon --exec ts-node ./server/rabbitmq/workers/low-priority-worker.ts",
+    "high-priority-dev": "NODE_ENV=development nodemon --exec ts-node ./server/rabbitmq/workers/high-priority-worker.ts",
     "cron-dev": "NODE_ENV=development nodemon --exec ts-node ./server/config/cron.ts",
     "docker-prod:start": "docker-compose stop 2>/dev/null; docker-compose up",
-    "docker-prod:restart":
-      "docker-compose stop 2>/dev/null; docker-compose build && docker-compose up",
+    "docker-prod:restart": "docker-compose stop 2>/dev/null; docker-compose build && docker-compose up",
     "docker-prod:stop": "docker-compose stop",
     "docker-prod:migrate": "docker-compose exec web yarn migrate -- --env=production",
     "docker-prod:ts-node": "docker-compose exec web yarn ts-node",
@@ -75,8 +68,18 @@
       "<rootDir>/app/**/?(*.)(spec|test).ts?(x)",
       "<rootDir>/server/**/?(*.)(spec|test).ts?(x)"
     ],
-    "moduleFileExtensions": ["ts", "tsx", "js", "jsx", "json"],
-    "setupFiles": ["raf/polyfill", "./browser-mocks.js", "./enzyme-setup.js"],
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js",
+      "jsx",
+      "json"
+    ],
+    "setupFiles": [
+      "raf/polyfill",
+      "./browser-mocks.js",
+      "./enzyme-setup.js"
+    ],
     "setupTestFrameworkScriptFile": "./jest-setup.js",
     "globals": {
       "ts-jest": {
@@ -92,10 +95,12 @@
     "apollo-codegen": "^0.17.2",
     "coveralls": "^3.0.0",
     "enzyme": "^3.1.1",
+    "enzyme-adapter-react-16": "^1.1.0",
     "expect": "^21.2.0",
     "foreman": "^2.0.0",
     "gql2ts": "^1.3.0",
     "graphql-document-collector": "^0.1.3",
+    "graphql-tag": "^2.5.0",
     "husky": "^0.14.3",
     "identity-obj-proxy": "^3.0.0",
     "jest": "^21.2.0",
@@ -148,10 +153,12 @@
     "@types/uuid": "^3.4.3",
     "@types/validator": "^6.3.0",
     "@types/webpack": "^3.8.1",
-    "@types/zen-observable": "^0.5.3",
     "acl": "^0.4.10",
-    "apollo-client": "^1.9.3",
+    "apollo-cache-inmemory": "^1.1.0",
+    "apollo-client": "^2.0.2",
     "apollo-link": "^1.0.3",
+    "apollo-link-context": "^1.0.1",
+    "apollo-link-http": "^1.2.0",
     "base-64": "^0.1.0",
     "basic-auth": "^2.0.0",
     "body-parser": "^1.18.2",
@@ -190,7 +197,7 @@
     "prop-types": "^15.6.0",
     "raw-loader": "^0.5.1",
     "react": "16.1.1",
-    "react-apollo": "^1.4.15",
+    "react-apollo": "^2.0.1",
     "react-copy-to-clipboard": "^5.0.0",
     "react-dom": "^16.1.1",
     "react-google-login": "3.0.2",

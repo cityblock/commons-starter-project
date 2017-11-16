@@ -2,6 +2,7 @@ import { shallow } from 'enzyme';
 import { createMemoryHistory } from 'history';
 import * as React from 'react';
 import { MockedProvider } from 'react-apollo/test-utils';
+import { Provider } from 'react-redux';
 import { ConnectedRouter } from 'react-router-redux';
 import { create } from 'react-test-renderer';
 import configureMockStore from 'redux-mock-store';
@@ -25,18 +26,20 @@ afterAll(() => {
 it('renders patient concern', () => {
   const history = createMemoryHistory();
   const tree = create(
-    <MockedProvider mocks={[]} store={mockStore({ locale })}>
-      <ReduxConnectedIntlProvider>
-        <ConnectedRouter history={history}>
-          <PatientConcern
-            patientConcern={patientConcern}
-            selected={true}
-            onClick={() => true}
-            onOptionsToggle={() => e => true}
-            optionsOpen={false}
-          />
-        </ConnectedRouter>
-      </ReduxConnectedIntlProvider>
+    <MockedProvider mocks={[]}>
+      <Provider store={mockStore({ locale })}>
+        <ReduxConnectedIntlProvider>
+          <ConnectedRouter history={history}>
+            <PatientConcern
+              patientConcern={patientConcern}
+              selected={true}
+              onClick={() => true}
+              onOptionsToggle={() => e => true}
+              optionsOpen={false}
+            />
+          </ConnectedRouter>
+        </ReduxConnectedIntlProvider>
+      </Provider>
     </MockedProvider>,
   ).toJSON();
   expect(tree).toMatchSnapshot();

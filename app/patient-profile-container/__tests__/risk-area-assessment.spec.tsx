@@ -1,6 +1,7 @@
 import { shallow } from 'enzyme';
 import * as React from 'react';
 import { MockedProvider } from 'react-apollo/test-utils';
+import { Provider } from 'react-redux';
 import { create } from 'react-test-renderer';
 import configureMockStore from 'redux-mock-store';
 import { ENGLISH_TRANSLATION } from '../../reducers/messages/en';
@@ -59,15 +60,17 @@ const riskAreaQuestions = [
 
 it('renders a risk area assessment', async () => {
   const tree = create(
-    <MockedProvider mocks={[]} store={mockStore({ locale })}>
-      <ReduxConnectedIntlProvider>
-        <RiskAreaAssessment
-          riskAreaId={'risk-area-1'}
-          patientId={'patient-1'}
-          patientRoute={'/patients/patient-1'}
-          routeBase={'/patients/patient-1/360'}
-        />
-      </ReduxConnectedIntlProvider>
+    <MockedProvider mocks={[]}>
+      <Provider store={mockStore({ locale })}>
+        <ReduxConnectedIntlProvider>
+          <RiskAreaAssessment
+            riskAreaId={'risk-area-1'}
+            patientId={'patient-1'}
+            patientRoute={'/patients/patient-1'}
+            routeBase={'/patients/patient-1/360'}
+          />
+        </ReduxConnectedIntlProvider>
+      </Provider>
     </MockedProvider>,
   ).toJSON();
   expect(tree).toMatchSnapshot();

@@ -2,6 +2,7 @@ import { shallow } from 'enzyme';
 import { createMemoryHistory } from 'history';
 import * as React from 'react';
 import { MockedProvider } from 'react-apollo/test-utils';
+import { Provider } from 'react-redux';
 import { ConnectedRouter } from 'react-router-redux';
 import { create } from 'react-test-renderer';
 import configureMockStore from 'redux-mock-store';
@@ -28,12 +29,14 @@ const tasksResponse = {
 it('correctly renders comments component', () => {
   const history = createMemoryHistory();
   const tree = create(
-    <MockedProvider mocks={[]} store={mockStore({ locale, task: taskWithComment })}>
-      <ReduxConnectedIntlProvider>
-        <ConnectedRouter history={history}>
-          <TaskComments taskId={taskWithComment.id} />
-        </ConnectedRouter>
-      </ReduxConnectedIntlProvider>
+    <MockedProvider mocks={[]}>
+      <Provider store={mockStore({ locale, task: taskWithComment })}>
+        <ReduxConnectedIntlProvider>
+          <ConnectedRouter history={history}>
+            <TaskComments taskId={taskWithComment.id} />
+          </ConnectedRouter>
+        </ReduxConnectedIntlProvider>
+      </Provider>
     </MockedProvider>,
   ).toJSON();
   expect(tree).toMatchSnapshot();

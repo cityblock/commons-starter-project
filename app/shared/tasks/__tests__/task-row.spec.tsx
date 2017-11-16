@@ -1,6 +1,7 @@
 import { createMemoryHistory } from 'history';
 import * as React from 'react';
 import { MockedProvider } from 'react-apollo/test-utils';
+import { Provider } from 'react-redux';
 import { ConnectedRouter } from 'react-router-redux';
 import { create } from 'react-test-renderer';
 import configureMockStore from 'redux-mock-store';
@@ -25,17 +26,19 @@ describe('task row', () => {
   it('renders task row', () => {
     const history = createMemoryHistory();
     const tree = create(
-      <MockedProvider mocks={[]} store={mockStore({ locale, task })}>
-        <ReduxConnectedIntlProvider>
-          <ConnectedRouter history={history}>
-            <TaskRow
-              task={task}
-              selected={true}
-              routeBase={'/foo/bar'}
-              selectTaskAction={selectTask}
-            />
-          </ConnectedRouter>
-        </ReduxConnectedIntlProvider>
+      <MockedProvider mocks={[]}>
+        <Provider store={mockStore({ locale, task })}>
+          <ReduxConnectedIntlProvider>
+            <ConnectedRouter history={history}>
+              <TaskRow
+                task={task}
+                selected={true}
+                routeBase={'/foo/bar'}
+                selectTaskAction={selectTask}
+              />
+            </ConnectedRouter>
+          </ReduxConnectedIntlProvider>
+        </Provider>
       </MockedProvider>,
     ).toJSON();
     expect(tree).toMatchSnapshot();
@@ -55,17 +58,19 @@ describe('task row', () => {
     (task as any).followers = [user, user2];
     const history = createMemoryHistory();
     const tree = create(
-      <MockedProvider mocks={[]} store={mockStore({ locale, task })}>
-        <ReduxConnectedIntlProvider>
-          <ConnectedRouter history={history}>
-            <TaskRow
-              task={task}
-              selected={true}
-              routeBase={'/foo/bar'}
-              selectTaskAction={selectTask}
-            />
-          </ConnectedRouter>
-        </ReduxConnectedIntlProvider>
+      <MockedProvider mocks={[]}>
+        <Provider store={mockStore({ locale, task })}>
+          <ReduxConnectedIntlProvider>
+            <ConnectedRouter history={history}>
+              <TaskRow
+                task={task}
+                selected={true}
+                routeBase={'/foo/bar'}
+                selectTaskAction={selectTask}
+              />
+            </ConnectedRouter>
+          </ReduxConnectedIntlProvider>
+        </Provider>
       </MockedProvider>,
     ).toJSON();
     expect(tree).toMatchSnapshot();

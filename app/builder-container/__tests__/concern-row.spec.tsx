@@ -1,6 +1,7 @@
 import { createMemoryHistory } from 'history';
 import * as React from 'react';
 import { MockedProvider } from 'react-apollo/test-utils';
+import { Provider } from 'react-redux';
 import { ConnectedRouter } from 'react-router-redux';
 import { create } from 'react-test-renderer';
 import configureMockStore from 'redux-mock-store';
@@ -24,12 +25,14 @@ describe('concern row', () => {
   it('renders concern row', () => {
     const history = createMemoryHistory();
     const tree = create(
-      <MockedProvider mocks={[]} store={mockStore({ locale, concern })}>
-        <ReduxConnectedIntlProvider>
-          <ConnectedRouter history={history}>
-            <ConcernRow concern={concern} selected={true} routeBase={'/foo/bar'} />
-          </ConnectedRouter>
-        </ReduxConnectedIntlProvider>
+      <MockedProvider mocks={[]}>
+        <Provider store={mockStore({ locale, concern })}>
+          <ReduxConnectedIntlProvider>
+            <ConnectedRouter history={history}>
+              <ConcernRow concern={concern} selected={true} routeBase={'/foo/bar'} />
+            </ConnectedRouter>
+          </ReduxConnectedIntlProvider>
+        </Provider>
       </MockedProvider>,
     ).toJSON();
     expect(tree).toMatchSnapshot();

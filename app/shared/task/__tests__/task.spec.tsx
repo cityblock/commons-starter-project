@@ -4,7 +4,7 @@ import Spinner from '../../library/spinner';
 import { taskWithComment } from '../../util/test-data';
 import TaskHeader from '../header';
 import { Divider, Task } from '../task';
-import TaskAssignee from '../task-assignee';
+import TaskAssignee, { IProps } from '../task-assignee';
 import TaskBody from '../task-body';
 import TaskComments from '../task-comments';
 import TaskDelete from '../task-delete';
@@ -70,7 +70,7 @@ describe('Task Component', () => {
   });
 
   it('renders task assignee with correct props', () => {
-    const assignee = wrapper.find(TaskAssignee);
+    const assignee = wrapper.find<IProps>(TaskAssignee);
 
     expect(assignee.length).toBe(1);
     expect(assignee.props().taskId).toBe(taskId);
@@ -89,7 +89,7 @@ describe('Task Component', () => {
   });
 
   it('renders task comments with correct props', () => {
-    const comments = wrapper.find(TaskComments);
+    const comments = wrapper.find<IProps>(TaskComments);
 
     expect(comments.length).toBe(1);
     expect(comments.props().taskId).toBe(taskId);

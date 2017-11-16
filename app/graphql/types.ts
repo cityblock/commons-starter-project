@@ -1485,27 +1485,6 @@ export type getPatientCareTeamQuery = {
   } | null > | null,
 };
 
-export type getPatientEncountersQueryVariables = {
-  patientId: string,
-};
-
-export type getPatientEncountersQuery = {
-  // Patient encounters
-  patientEncounters:  Array< {
-    encounterType: string,
-    providerName: string,
-    providerRole: string,
-    location: string,
-    diagnoses:  Array< {
-      code: string,
-      codeSystem: string,
-      description: string,
-    } | null >,
-    reasons: Array< string | null >,
-    dateTime: string,
-  } | null > | null,
-};
-
 export type getPatientMedicationsQueryVariables = {
   patientId: string,
 };
@@ -2358,6 +2337,40 @@ export type getProgressNoteTemplatesQuery = {
     title: string,
     createdAt: string,
     deletedAt: string | null,
+  } | null > | null,
+};
+
+export type getProgressNotesForPatientQueryVariables = {
+  patientId: string,
+};
+
+export type getProgressNotesForPatientQuery = {
+  // progress notes for patient
+  progressNotesForPatient:  Array< {
+    id: string,
+    patientId: string,
+    user:  {
+      id: string,
+      locale: string | null,
+      firstName: string | null,
+      lastName: string | null,
+      userRole: UserRole,
+      email: string | null,
+      homeClinicId: string,
+      googleProfileImageUrl: string | null,
+      createdAt: string,
+      updatedAt: string,
+    },
+    completedAt: string | null,
+    createdAt: string,
+    updatedAt: string,
+    deletedAt: string | null,
+    progressNoteTemplate:  {
+      id: string,
+      title: string,
+      createdAt: string,
+      deletedAt: string | null,
+    } | null,
   } | null > | null,
 };
 
@@ -3444,7 +3457,18 @@ export type progressNoteCompleteMutation = {
   progressNoteComplete:  {
     id: string,
     patientId: string,
-    userId: string,
+    user:  {
+      id: string,
+      locale: string | null,
+      firstName: string | null,
+      lastName: string | null,
+      userRole: UserRole,
+      email: string | null,
+      homeClinicId: string,
+      googleProfileImageUrl: string | null,
+      createdAt: string,
+      updatedAt: string,
+    },
     completedAt: string | null,
     createdAt: string,
     updatedAt: string,
@@ -3468,7 +3492,18 @@ export type progressNoteEditMutation = {
   progressNoteEdit:  {
     id: string,
     patientId: string,
-    userId: string,
+    user:  {
+      id: string,
+      locale: string | null,
+      firstName: string | null,
+      lastName: string | null,
+      userRole: UserRole,
+      email: string | null,
+      homeClinicId: string,
+      googleProfileImageUrl: string | null,
+      createdAt: string,
+      updatedAt: string,
+    },
     completedAt: string | null,
     createdAt: string,
     updatedAt: string,
@@ -3491,7 +3526,18 @@ export type progressNoteGetOrCreateMutation = {
   progressNoteGetOrCreate:  {
     id: string,
     patientId: string,
-    userId: string,
+    user:  {
+      id: string,
+      locale: string | null,
+      firstName: string | null,
+      lastName: string | null,
+      userRole: UserRole,
+      email: string | null,
+      homeClinicId: string,
+      googleProfileImageUrl: string | null,
+      createdAt: string,
+      updatedAt: string,
+    },
     completedAt: string | null,
     createdAt: string,
     updatedAt: string,
@@ -5563,20 +5609,6 @@ export type FullPatientConcernFragment = {
   deletedAt: string | null,
 };
 
-export type FullPatientEncounterFragment = {
-  encounterType: string,
-  providerName: string,
-  providerRole: string,
-  location: string,
-  diagnoses:  Array< {
-    code: string,
-    codeSystem: string,
-    description: string,
-  } | null >,
-  reasons: Array< string | null >,
-  dateTime: string,
-};
-
 export type FullPatientGoalFragment = {
   id: string,
   title: string,
@@ -6213,7 +6245,18 @@ export type FullProgressNoteTemplateFragment = {
 export type FullProgressNoteFragment = {
   id: string,
   patientId: string,
-  userId: string,
+  user:  {
+    id: string,
+    locale: string | null,
+    firstName: string | null,
+    lastName: string | null,
+    userRole: UserRole,
+    email: string | null,
+    homeClinicId: string,
+    googleProfileImageUrl: string | null,
+    createdAt: string,
+    updatedAt: string,
+  },
   completedAt: string | null,
   createdAt: string,
   updatedAt: string,

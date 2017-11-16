@@ -424,7 +424,7 @@ export const progressNote = {
   deletedAt: null,
   completedAt: null,
   patientId: patient.id,
-  userId: user.id,
+  user: currentUser,
   progressNoteTemplateId: progressNoteTemplate.id,
   progressNoteTemplate,
 };

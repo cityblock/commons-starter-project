@@ -46,7 +46,7 @@ type allProps = IStateProps & IProps & IGraphqlProps;
 export const getPatientName = (patient: ShortPatientFragment) =>
   [patient.firstName, patient.middleName, patient.lastName].filter(Boolean).join(' ');
 
-class PatientProfileContainer extends React.Component<allProps> {
+export class PatientProfileContainer extends React.Component<allProps> {
   componentWillReceiveProps(newProps: allProps) {
     if (newProps.patient) {
       document.title = `${getPatientName(newProps.patient)} | Commons`;

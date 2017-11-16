@@ -1,9 +1,12 @@
 #import "../fragments/full-progress-note-template.graphql"
+#import "../fragments/full-user.graphql"
 
 fragment FullProgressNote on ProgressNote {
   id
   patientId
-  userId
+  user {
+    ...FullUser
+  }
   completedAt
   createdAt
   updatedAt

@@ -1,0 +1,110 @@
+@import '../../shared/css/sizes';
+
+.invertedButton {
+  @apply --inverted-button;
+}
+
+.button {
+  @apply --button;
+}
+
+.progressNotesContainer {
+  background-color: var(--gray-background-color);
+  padding: 20px var(--medium-gutter);
+}
+
+::-webkit-scrollbar {
+  display: none;
+}
+
+.progressNotes {
+  margin-top: var(--small-gutter);
+  height: calc(100vh - 262px);
+  overflow: scroll;
+  -webkit-overflow-scrolling: touch;
+}
+
+.emptyMessage {
+  border: 1px dashed var(--border-color);
+  border-radius: 4px;
+  padding: 50px 0;
+}
+
+.emptyLogo {
+  background-image: url('../../assets/calendar-event-grey.svg');
+  background-position: center center;
+  height: 30px;
+  width: 30px;
+  margin: 0 auto 25px;
+}
+
+.emptyLabel {
+  margin: 0 auto 10px;
+  text-align: center;
+  color: var(--light-gray-font-color);
+  font-family: var(--basetica-medium);
+  font-size: var(--medium-font-size);
+  line-height: var(--medium-font-line-height);
+}
+
+.emptySubtext {
+  margin: 0 auto;
+  text-align: center;
+  color: var(--light-gray-font-color);
+  font-family: var(--roboto);
+  font-size: var(--default-font-size);
+  line-height: var(--default-line-height);
+}
+
+.loading {
+  margin: 0 auto;
+  text-align: center;
+  color: var(--light-gray-font-color);
+  font-family: var(--basetica-medium);
+  font-size: var(--medium-font-size);
+  line-height: var(--medium-font-line-height);
+  padding-top: 50px;
+}
+
+.error {
+  margin: var(--gutter) var(--gutter) 0;
+}
+
+.errorIcon {
+  background-image: url('../../assets/error-circle.svg');
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-size: contain;
+  height: 30px;
+  width: 30px;
+  margin: 0 auto var(--small-gutter);
+}
+
+.errorLabel {
+  color: var(--default-font-color);
+  font-family: var(--basetica-black);
+  font-size: var(--medium-font-size);
+  line-height: var(--medium-font-line-height);
+  text-align: center;
+  margin: 0 auto 10px;
+}
+
+.errorSubheading {
+  color: var(--gray-font-color);
+  font-family: var(--roboto);
+  font-size: var(--default-font-size);
+  line-height: var(--default-line-height);
+  text-align: center;
+  margin: 0 auto var(--medium-gutter);
+  padding: 0 var(--small-gutter);
+}
+
+.errorButton {
+  width: 94px;
+  height: 32px;
+  margin: 0 auto;
+  padding: 9px 0 0 0;
+  text-align: center;
+  font-size: var(--small-font-size);
+  line-height: var(--small-font-line-height);
+}

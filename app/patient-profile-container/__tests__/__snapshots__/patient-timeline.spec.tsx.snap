@@ -30,8 +30,8 @@ exports[`renders timeline 1`] = `
         className="search searchLeftPad"
       >
         <input
+          defaultValue=""
           placeholder="Search by user or keywords"
-          required={true}
           type="text"
         />
       </div>
@@ -43,87 +43,44 @@ exports[`renders timeline 1`] = `
         className="button saveButton"
         onClick={[Function]}
       >
-        <span>
-          New progress note
-        </span>
+        <FormattedMessage
+          id="patient.newProgressNote"
+          values={Object {}}
+        >
+          [Function]
+        </FormattedMessage>
       </div>
     </div>
   </div>
   <div
-    className="encountersPanel"
+    className="progressNotesContainer"
   >
     <div
-      className="encounters"
+      className="progressNotes"
     >
       <div
-        className="encountersLoading"
-      >
-        Loading...
-      </div>
-    </div>
-  </div>
-  <div
-    className="lightbox hidden"
-  >
-    <div
-      className="background"
-      onClick={[Function]}
-    />
-    <div
-      className="foreground"
-    >
-      <div
-        className="viewer"
-        style={
-          Object {
-            "backgroundImage": "none",
-          }
-        }
+        className="emptyMessage"
       >
         <div
-          className="overlay"
+          className="emptyLogo"
+        />
+        <div
+          className="emptyLabel"
         >
-          <div
-            className="header"
-          >
-            <div
-              className="imageCount"
-            >
-              <div
-                className="imageCountIcon"
-              />
-              <div>
-                1 
-                <span>
-                  of
-                </span>
-                 0 
-                <span>
-                  images
-                </span>
-              </div>
-            </div>
-            <div
-              className="close"
-              onClick={[Function]}
-            />
-          </div>
-          <div
-            className="controls"
-          >
-            <div
-              className="backArrow hidden"
-              onClick={[Function]}
-            />
-            <div
-              className="nextArrow"
-              onClick={[Function]}
-            />
-          </div>
+          No encounter history for this patient
+        </div>
+        <div
+          className="emptySubtext"
+        >
+          Future encounters with this patient will be displayed here.
         </div>
       </div>
     </div>
   </div>
-  <div />
+  <Apollo(Apollo(Apollo(Apollo(Apollo(ProgressNotePopup)))))
+    close={[Function]}
+    patientId="patient-id"
+    visible={false}
+  />
 </div>
 `;

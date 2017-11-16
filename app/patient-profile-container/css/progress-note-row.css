@@ -1,0 +1,54 @@
+@import '../../shared/css/sizes';
+
+.container {
+  border: 1px solid var(--border-color);
+  border-radius: 5px;
+  background-color: var(--white-color);
+  margin: 20px 0;
+  padding: 20px;
+}
+
+.topBar {
+  display: flex;
+  justify-content: space-between;
+}
+
+.userSection {
+  display: flex;
+  font-family: var(--roboto);
+  font-size: var(--small-font-size);
+}
+
+.userName {
+  font-weight: var(--roboto-medium-weight);
+  margin-right: 20px;
+}
+
+.userRole {
+  color: var(--light-gray-font-color);
+}
+
+.dateSection {
+  font-family: var(--roboto);
+  font-size: var(--small-font-size);
+}
+
+.createdTime {
+  margin-right: 20px;
+}
+
+.titleSection {
+  margin: 0;
+}
+
+.title {
+  @apply --title;
+}
+
+.tabSection {
+  margin: 0;
+}
+
+.answers {
+  margin: 0;
+}

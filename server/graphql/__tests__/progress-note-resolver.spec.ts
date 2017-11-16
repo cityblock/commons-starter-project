@@ -136,10 +136,10 @@ describe('progress note resolver', () => {
       });
       expect(cloneDeep(result.data!.progressNotesForPatient)).toMatchObject([
         {
-          id: progressNote1.id,
+          id: progressNote2.id,
         },
         {
-          id: progressNote2.id,
+          id: progressNote1.id,
         },
       ]);
     });

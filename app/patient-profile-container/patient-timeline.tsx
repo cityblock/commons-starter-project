@@ -2,15 +2,14 @@ import * as classNames from 'classnames';
 import * as React from 'react';
 import { graphql } from 'react-apollo';
 import { FormattedMessage } from 'react-intl';
-import * as patientEncountersQuery from '../graphql/queries/get-patient-encounters.graphql';
-import { getPatientEncountersQuery, FullPatientEncounterFragment } from '../graphql/types';
+import * as progressNotesQuery from '../graphql/queries/get-progress-notes-for-patient.graphql';
+import { getProgressNotesForPatientQuery, FullProgressNoteFragment } from '../graphql/types';
 import * as sortSearchStyles from '../shared/css/sort-search.css';
-import * as styles from './css/patient-encounters.css';
 import * as patientInfoStyles from './css/patient-info.css';
-import { EncountersLoadingError } from './encounters-loading-error';
-import Lightbox from './lightbox';
-import PatientEncounter from './patient-encounter';
+import * as styles from './css/patient-timeline.css';
+import { ProgressNoteLoadingError } from './progress-note-loading-error';
 import ProgressNotePopup from './progress-note-popup';
+import ProgressNoteRow from './progress-note-row';
 
 interface IProps {
   patientId: string;
@@ -19,38 +18,21 @@ interface IProps {
 interface IGraphqlProps {
   loading?: boolean;
   error?: string;
-  patientEncounters?: getPatientEncountersQuery['patientEncounters'];
-  refetchPatientEncounters?: (variables: { patientId: string }) => any;
+  progressNotes?: getProgressNotesForPatientQuery['progressNotesForPatient'];
 }
 
 interface IState {
   loading?: boolean;
   error?: string;
-  clickedAttachment?: string;
-  lightboxAttachments: string[];
-  isLightboxOpen: boolean;
   isProgressNotePopupVisible: boolean;
 }
 
-class PatientEncounters extends React.Component<IProps & IGraphqlProps, IState> {
+export class PatientTimeline extends React.Component<IProps & IGraphqlProps, IState> {
   constructor(props: IProps & IGraphqlProps) {
     super(props);
-
-    const { loading, error } = props;
-
-    this.renderPatientEncounters = this.renderPatientEncounters.bind(this);
-    this.renderPatientEncounter = this.renderPatientEncounter.bind(this);
-    this.reloadPatientEncounters = this.reloadPatientEncounters.bind(this);
-    this.onClickAttachment = this.onClickAttachment.bind(this);
-    this.onLightboxDismiss = this.onLightboxDismiss.bind(this);
-    this.showNewProgressNotePopup = this.showNewProgressNotePopup.bind(this);
-    this.hideNewProgressNotePopup = this.hideNewProgressNotePopup.bind(this);
-
     this.state = {
-      loading,
-      error,
-      isLightboxOpen: false,
-      lightboxAttachments: [],
+      loading: props.loading,
+      error: props.error,
       isProgressNotePopupVisible: false,
     };
   }
@@ -61,92 +43,51 @@ class PatientEncounters extends React.Component<IProps & IGraphqlProps, IState> 
     this.setState(() => ({ loading, error }));
   }
 
-  onClickAttachment(clickedAttachment: string, allAttachments: string[]) {
-    this.setState(() => ({
-      lightboxIsOpen: true,
-      clickedAttachment,
-      lightboxAttachments: allAttachments,
-    }));
-  }
-
-  onLightboxDismiss() {
-    this.setState(() => ({ lightboxIsOpen: false }));
-  }
-
-  renderPatientEncounters(encounters: Array<FullPatientEncounterFragment | null>) {
+  renderProgressNotes = (
+    progressNotes: getProgressNotesForPatientQuery['progressNotesForPatient'],
+  ) => {
     const { loading, error } = this.state;
-
-    if (encounters.length) {
-      return encounters.map(this.renderPatientEncounter);
+    if (progressNotes && progressNotes.length) {
+      return progressNotes
+        .filter(progressNote => progressNote && progressNote.completedAt)
+        .map(this.renderPatientEncounter);
     } else if (!loading && !error) {
       return (
-        <div className={styles.emptyEncountersMessage}>
-          <div className={styles.emptyEncountersLogo} />
-          <div className={styles.emptyEncountersLabel}>No encounter history for this patient</div>
-          <div className={styles.emptyEncountersSubtext}>
+        <div className={styles.emptyMessage}>
+          <div className={styles.emptyLogo} />
+          <div className={styles.emptyLabel}>No encounter history for this patient</div>
+          <div className={styles.emptySubtext}>
             Future encounters with this patient will be displayed here.
           </div>
         </div>
       );
     } else {
-      return (
-        <EncountersLoadingError
-          error={error}
-          loading={loading}
-          onRetryClick={this.reloadPatientEncounters}
-        />
-      );
+      return <ProgressNoteLoadingError error={error} loading={loading} />;
     }
+  };
+
+  renderPatientEncounter(progressNote: FullProgressNoteFragment, index: number) {
+    return <ProgressNoteRow key={index} progressNote={progressNote} />;
   }
 
-  renderPatientEncounter(encounter: FullPatientEncounterFragment, index: number) {
-    return (
-      <PatientEncounter
-        key={index}
-        encounter={encounter}
-        onClickAttachment={this.onClickAttachment}
-      />
-    );
-  }
-
-  async reloadPatientEncounters() {
-    const { patientId, refetchPatientEncounters } = this.props;
-
-    if (refetchPatientEncounters) {
-      try {
-        this.setState(() => ({ loading: true, error: undefined }));
-        await refetchPatientEncounters({ patientId });
-      } catch (err) {
-        // TODO: This is redundant. Props will get set by the result of the refetch.
-        this.setState(() => ({ loading: false, error: err.message }));
-      }
-    }
-  }
-
-  showNewProgressNotePopup() {
+  showNewProgressNotePopup = () => {
     this.setState({
       isProgressNotePopupVisible: true,
     });
-  }
+  };
 
-  hideNewProgressNotePopup() {
+  hideNewProgressNotePopup = () => {
     this.setState({
       isProgressNotePopupVisible: false,
     });
-  }
+  };
 
   render() {
-    const {
-      lightboxAttachments,
-      clickedAttachment,
-      isLightboxOpen,
-      isProgressNotePopupVisible,
-    } = this.state;
-    const { patientEncounters, patientId } = this.props;
-    const encountersList = patientEncounters || [];
+    const { isProgressNotePopupVisible } = this.state;
+    const { progressNotes, patientId } = this.props;
+    const progressNotesList = progressNotes || [];
 
     const saveButtonStyles = classNames(patientInfoStyles.button, patientInfoStyles.saveButton);
-
     return (
       <div>
         <div className={sortSearchStyles.sortSearchBar}>
@@ -158,7 +99,7 @@ class PatientEncounters extends React.Component<IProps & IGraphqlProps, IState> 
               </select>
             </div>
             <div className={classNames(sortSearchStyles.search, sortSearchStyles.searchLeftPad)}>
-              <input required type="text" placeholder="Search by user or keywords" />
+              <input defaultValue="" type="text" placeholder="Search by user or keywords" />
             </div>
           </div>
           <div className={patientInfoStyles.saveButtonGroup}>
@@ -169,15 +110,9 @@ class PatientEncounters extends React.Component<IProps & IGraphqlProps, IState> 
             </div>
           </div>
         </div>
-        <div className={styles.encountersPanel}>
-          <div className={styles.encounters}>{this.renderPatientEncounters(encountersList)}</div>
+        <div className={styles.progressNotesContainer}>
+          <div className={styles.progressNotes}>{this.renderProgressNotes(progressNotesList)}</div>
         </div>
-        <Lightbox
-          images={lightboxAttachments}
-          isOpen={isLightboxOpen}
-          openingImage={clickedAttachment}
-          onDismiss={this.onLightboxDismiss}
-        />
         <ProgressNotePopup
           patientId={patientId}
           visible={isProgressNotePopupVisible}
@@ -188,7 +123,7 @@ class PatientEncounters extends React.Component<IProps & IGraphqlProps, IState> 
   }
 }
 
-export default graphql<IGraphqlProps, IProps>(patientEncountersQuery as any, {
+export default graphql<IGraphqlProps, IProps>(progressNotesQuery as any, {
   options: (props: IProps) => ({
     variables: {
       patientId: props.patientId,
@@ -197,7 +132,6 @@ export default graphql<IGraphqlProps, IProps>(patientEncountersQuery as any, {
   props: ({ data }) => ({
     loading: data ? data.loading : false,
     error: data ? data.error : null,
-    patientEncounters: data ? (data as any).patientEncounters : null,
-    refetchPatientEncounters: data ? data.refetch : null,
+    progressNotes: data ? (data as any).progressNotesForPatient : null,
   }),
-})(PatientEncounters);
+})(PatientTimeline);

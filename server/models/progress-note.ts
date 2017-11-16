@@ -13,7 +13,7 @@ interface IProgressNoteAutoOpenFields {
   userId: string;
 }
 
-const EAGER_QUERY = 'progressNoteTemplate';
+const EAGER_QUERY = '[progressNoteTemplate, user]';
 
 /* tslint:disable:member-ordering */
 export default class ProgressNote extends BaseModel {
@@ -99,7 +99,7 @@ export default class ProgressNote extends BaseModel {
   static async getAllForPatient(patientId: string): Promise<ProgressNote[]> {
     return this.query()
       .eager(EAGER_QUERY)
-      .orderBy('createdAt', 'asc')
+      .orderBy('createdAt', 'desc')
       .where({ deletedAt: null, patientId });
   }
 

@@ -16,7 +16,7 @@ export const formatDueDate = (dueDate?: string, complete?: boolean): string => {
   return dueDate ? `${prefix} ${format(new Date(dueDate), 'MMM D, YYYY')}` : 'Unknown Due Date';
 };
 
-export const formatInputDueDate = (dueDate?: string): string =>
+export const formatInputDate = (dueDate?: string): string =>
   format(dueDate || Date.now(), 'YYYY-MM-DD');
 
 export const isDueSoon = (dueDate?: string): boolean => {

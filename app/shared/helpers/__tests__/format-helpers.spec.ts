@@ -1,6 +1,6 @@
 import {
   formatDueDate,
-  formatInputDueDate,
+  formatInputDate,
   formatPatientName,
   isDueSoon,
   isPastDue,
@@ -62,13 +62,13 @@ describe('Shared Component Helpers', () => {
     });
   });
 
-  describe('formatInputDueDate', () => {
+  describe('formatInputDate', () => {
     it('formats due date if present', () => {
-      expect(formatInputDueDate(dueDate)).toBe('2017-12-01');
+      expect(formatInputDate(dueDate)).toBe('2017-12-01');
     });
 
     it('returns today if due date not defined', () => {
-      expect(formatInputDueDate('')).toBe('2017-11-11');
+      expect(formatInputDate('')).toBe('2017-11-11');
     });
   });
 

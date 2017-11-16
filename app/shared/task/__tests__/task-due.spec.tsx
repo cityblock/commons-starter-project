@@ -1,6 +1,6 @@
 import { shallow } from 'enzyme';
 import * as React from 'react';
-import { formatInputDueDate } from '../../helpers/format-helpers';
+import DateInput from '../../library/date-input/date-input';
 import TaskDue from '../task-due';
 
 describe('Task Due Date Component', () => {
@@ -13,12 +13,12 @@ describe('Task Due Date Component', () => {
   );
 
   it('renders date input element', () => {
-    expect(wrapper.find('input').length).toBe(1);
+    expect(wrapper.find(DateInput).length).toBe(1);
   });
 
   it('renders the input due date', () => {
-    const inputValue = wrapper.find('input').props().value;
-    expect(inputValue).toBe(formatInputDueDate(dueAt));
+    const inputValue = wrapper.find(DateInput).props().value;
+    expect(inputValue).toBe(dueAt);
   });
 
   it('renders a due date icon', () => {
@@ -32,7 +32,7 @@ describe('Task Due Date Component', () => {
       <TaskDue completedAt={completedAt} dueAt={dueAt} taskId={taskId} editTask={editTask} />,
     );
 
-    const inputValue = wrapper2.find('input').props().value;
-    expect(inputValue).toBe(formatInputDueDate(completedAt));
+    const inputValue = wrapper2.find(DateInput).props().value;
+    expect(inputValue).toBe(completedAt);
   });
 });

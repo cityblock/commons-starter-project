@@ -1,0 +1,1 @@
+export const dateInput: string;

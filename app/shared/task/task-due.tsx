@@ -1,7 +1,8 @@
 import * as classNames from 'classnames';
 import * as React from 'react';
 import { taskEditMutation, taskEditMutationVariables } from '../../graphql/types';
-import { formatDueDate, formatInputDueDate, isDueSoon, isPastDue } from '../helpers/format-helpers';
+import { formatDueDate, isDueSoon, isPastDue } from '../helpers/format-helpers';
+import DateInput from '../library/date-input/date-input';
 import * as styles from './css/task-due.css';
 
 interface IProps {
@@ -43,7 +44,6 @@ class TaskDue extends React.Component<IProps, IState> {
     const pastDue = isPastDue(dueAt);
     const dueDate = completedAt ? formatDueDate(completedAt, true) : formatDueDate(dueAt, false);
     const { changeDueDateError } = this.state;
-    const value = completedAt ? formatInputDueDate(completedAt) : formatInputDueDate(dueAt);
 
     const iconStyles = classNames(styles.dueDateIcon, {
       [styles.dueSoonIcon]: dueSoon,
@@ -54,12 +54,10 @@ class TaskDue extends React.Component<IProps, IState> {
     return (
       <div className={styles.dueDate}>
         <div className={iconStyles} />
-        <input
-          type="date"
-          data-date={changeDueDateError || dueDate}
-          value={value}
+        <DateInput
+          value={completedAt || dueAt}
           onChange={this.onDueDateChange}
-        />
+          displayText={changeDueDateError || dueDate} />
       </div>
     );
   }

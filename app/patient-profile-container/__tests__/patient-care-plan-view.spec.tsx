@@ -29,7 +29,7 @@ describe('Patient Care Plan View Component', () => {
     const suggestions = wrapper.find(PatientMap);
 
     expect(suggestions.length).toBe(1);
-    expect(suggestions.props().routeBase).toBe(routeBase);
+    expect(suggestions.props().routeBase).toBe(`${routeBase}/active`);
     expect(suggestions.props().patientId).toBe(patientId);
 
     expect(wrapper.find(PatientCarePlanSuggestions).length).toBe(0);

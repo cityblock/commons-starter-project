@@ -2,12 +2,11 @@ import * as classNames from 'classnames';
 import * as React from 'react';
 import { compose, graphql } from 'react-apollo';
 import { connect, Dispatch } from 'react-redux';
+import { push } from 'react-router-redux';
 import { Priority } from '../../../server/models/task';
-import { selectTask } from '../../actions/task-action';
 import * as taskQuery from '../../graphql/queries/get-task.graphql';
 import * as taskEditMutationGraphql from '../../graphql/queries/task-edit-mutation.graphql';
 import { taskEditMutation, taskEditMutationVariables, FullTaskFragment } from '../../graphql/types';
-import { IState as IAppState } from '../../store';
 import { formatPatientName } from '../helpers/format-helpers';
 import Spinner from '../library/spinner';
 import * as styles from './css/index.css';
@@ -23,21 +22,13 @@ export const DEFAULT_AVATAR_URL = 'https://bit.ly/2weRwJm';
 
 export const Divider: React.StatelessComponent<{}> = () => <div className={styles.divider} />;
 
-interface IStateProps {
-  taskId?: string;
-}
-
 interface IDispatchProps {
-  selectTaskAction: (taskId: string) => any;
+  redirectToMap: () => void;
 }
 
-export interface IOwnProps {
+export interface IProps {
   routeBase: string;
-  match?: {
-    params: {
-      taskId?: string;
-    };
-  };
+  taskId: string;
 }
 
 interface IGraphqlProps {
@@ -51,21 +42,15 @@ interface IState {
   deleteConfirmation: boolean;
 }
 
-type IProps = IStateProps & IDispatchProps & IOwnProps & IGraphqlProps;
+type allProps = IDispatchProps & IProps & IGraphqlProps;
 
-export class Task extends React.Component<IProps, IState> {
-  constructor(props: IProps) {
+export class Task extends React.Component<allProps, IState> {
+  constructor(props: allProps) {
     super(props);
 
     this.state = {
       deleteConfirmation: false,
     };
-  }
-
-  componentDidMount(): void {
-    if (this.props.taskId) {
-      this.props.selectTaskAction(this.props.taskId);
-    }
   }
 
   confirmDelete = (): void => {
@@ -77,8 +62,7 @@ export class Task extends React.Component<IProps, IState> {
   };
 
   render(): JSX.Element {
-    const { task, routeBase, editTask, taskLoading, selectTaskAction } = this.props;
-
+    const { task, routeBase, editTask, taskLoading, redirectToMap } = this.props;
     const taskId = task && task.id;
 
     if (taskLoading) {
@@ -93,7 +77,7 @@ export class Task extends React.Component<IProps, IState> {
           <TaskDelete
             taskId={taskId}
             cancelDelete={this.cancelDelete}
-            clearTask={() => selectTaskAction('')}
+            redirectToMap={redirectToMap}
           />
         </div>
       );
@@ -116,6 +100,7 @@ export class Task extends React.Component<IProps, IState> {
             patientName={patientName}
             confirmDelete={this.confirmDelete}
             routeBase={routeBase}
+            patientId={patientId}
           />
           <Divider />
           <TaskProgress
@@ -152,24 +137,16 @@ export class Task extends React.Component<IProps, IState> {
   }
 }
 
-const mapStateToProps = (state: IAppState, ownProps: IProps): IStateProps => {
-  const taskId = state.task.taskId
-    ? state.task.taskId
-    : ownProps.match ? ownProps.match.params.taskId : '';
-
-  return { taskId };
-};
-
-const mapDispatchToProps = (dispatch: Dispatch<() => void>): IDispatchProps => ({
-  selectTaskAction: (taskId?: string) => dispatch(selectTask(taskId)),
+const mapDispatchToProps = (dispatch: Dispatch<() => void>, ownProps: IProps): IDispatchProps => ({
+  redirectToMap: () => dispatch(push(ownProps.routeBase)),
 });
 
 export default compose(
-  connect<IStateProps, IDispatchProps, IOwnProps>(mapStateToProps, mapDispatchToProps),
+  connect<{}, IDispatchProps, IProps>(null, mapDispatchToProps),
   graphql<IGraphqlProps, IProps>(taskEditMutationGraphql as any, { name: 'editTask' }),
   graphql<IGraphqlProps, IProps>(taskQuery as any, {
-    skip: (props: IProps) => !props.taskId,
-    options: (props: IProps) => ({ variables: { taskId: props.taskId } }),
+    skip: (props: allProps) => !props.taskId,
+    options: (props: allProps) => ({ variables: { taskId: props.taskId } }),
     props: ({ data }) => ({
       taskLoading: data ? data.loading : false,
       taskError: data ? data.error : null,

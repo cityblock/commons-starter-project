@@ -1322,12 +1322,6 @@ export type getPatientCarePlanQuery = {
           dueAt: string | null,
           patientId: string,
           priority: Priority | null,
-          patient:  {
-            id: string,
-            firstName: string | null,
-            middleName: string | null,
-            lastName: string | null,
-          } | null,
           assignedTo:  {
             id: string,
             firstName: string | null,
@@ -1348,16 +1342,6 @@ export type getPatientCarePlanQuery = {
             lastName: string | null,
             googleProfileImageUrl: string | null,
             userRole: UserRole,
-          } | null,
-          patientGoal:  {
-            id: string,
-            title: string,
-            patientConcern:  {
-              concern:  {
-                id: string,
-                title: string,
-              },
-            } | null,
           } | null,
         } >,
         createdAt: string,
@@ -1420,12 +1404,6 @@ export type getPatientCarePlanQuery = {
         dueAt: string | null,
         patientId: string,
         priority: Priority | null,
-        patient:  {
-          id: string,
-          firstName: string | null,
-          middleName: string | null,
-          lastName: string | null,
-        } | null,
         assignedTo:  {
           id: string,
           firstName: string | null,
@@ -1446,16 +1424,6 @@ export type getPatientCarePlanQuery = {
           lastName: string | null,
           googleProfileImageUrl: string | null,
           userRole: UserRole,
-        } | null,
-        patientGoal:  {
-          id: string,
-          title: string,
-          patientConcern:  {
-            concern:  {
-              id: string,
-              title: string,
-            },
-          } | null,
         } | null,
       } >,
       createdAt: string,
@@ -2166,12 +2134,6 @@ export type getProgressNoteActivityForProgressNoteQuery = {
             dueAt: string | null,
             patientId: string,
             priority: Priority | null,
-            patient:  {
-              id: string,
-              firstName: string | null,
-              middleName: string | null,
-              lastName: string | null,
-            } | null,
             assignedTo:  {
               id: string,
               firstName: string | null,
@@ -2192,16 +2154,6 @@ export type getProgressNoteActivityForProgressNoteQuery = {
               lastName: string | null,
               googleProfileImageUrl: string | null,
               userRole: UserRole,
-            } | null,
-            patientGoal:  {
-              id: string,
-              title: string,
-              patientConcern:  {
-                concern:  {
-                  id: string,
-                  title: string,
-                },
-              } | null,
             } | null,
           } >,
           createdAt: string,
@@ -2265,12 +2217,6 @@ export type getProgressNoteActivityForProgressNoteQuery = {
           dueAt: string | null,
           patientId: string,
           priority: Priority | null,
-          patient:  {
-            id: string,
-            firstName: string | null,
-            middleName: string | null,
-            lastName: string | null,
-          } | null,
           assignedTo:  {
             id: string,
             firstName: string | null,
@@ -2291,16 +2237,6 @@ export type getProgressNoteActivityForProgressNoteQuery = {
             lastName: string | null,
             googleProfileImageUrl: string | null,
             userRole: UserRole,
-          } | null,
-          patientGoal:  {
-            id: string,
-            title: string,
-            patientConcern:  {
-              concern:  {
-                id: string,
-                title: string,
-              },
-            } | null,
           } | null,
         } >,
         createdAt: string,
@@ -3207,12 +3143,6 @@ export type patientConcernCreateMutation = {
         dueAt: string | null,
         patientId: string,
         priority: Priority | null,
-        patient:  {
-          id: string,
-          firstName: string | null,
-          middleName: string | null,
-          lastName: string | null,
-        } | null,
         assignedTo:  {
           id: string,
           firstName: string | null,
@@ -3233,16 +3163,6 @@ export type patientConcernCreateMutation = {
           lastName: string | null,
           googleProfileImageUrl: string | null,
           userRole: UserRole,
-        } | null,
-        patientGoal:  {
-          id: string,
-          title: string,
-          patientConcern:  {
-            concern:  {
-              id: string,
-              title: string,
-            },
-          } | null,
         } | null,
       } >,
       createdAt: string,
@@ -3350,12 +3270,6 @@ export type patientGoalCreateMutation = {
       dueAt: string | null,
       patientId: string,
       priority: Priority | null,
-      patient:  {
-        id: string,
-        firstName: string | null,
-        middleName: string | null,
-        lastName: string | null,
-      } | null,
       assignedTo:  {
         id: string,
         firstName: string | null,
@@ -3376,16 +3290,6 @@ export type patientGoalCreateMutation = {
         lastName: string | null,
         googleProfileImageUrl: string | null,
         userRole: UserRole,
-      } | null,
-      patientGoal:  {
-        id: string,
-        title: string,
-        patientConcern:  {
-          concern:  {
-            id: string,
-            title: string,
-          },
-        } | null,
       } | null,
     } >,
     createdAt: string,
@@ -5060,12 +4964,6 @@ export type FullCarePlanUpdateEventFragment = {
         dueAt: string | null,
         patientId: string,
         priority: Priority | null,
-        patient:  {
-          id: string,
-          firstName: string | null,
-          middleName: string | null,
-          lastName: string | null,
-        } | null,
         assignedTo:  {
           id: string,
           firstName: string | null,
@@ -5086,16 +4984,6 @@ export type FullCarePlanUpdateEventFragment = {
           lastName: string | null,
           googleProfileImageUrl: string | null,
           userRole: UserRole,
-        } | null,
-        patientGoal:  {
-          id: string,
-          title: string,
-          patientConcern:  {
-            concern:  {
-              id: string,
-              title: string,
-            },
-          } | null,
         } | null,
       } >,
       createdAt: string,
@@ -5159,12 +5047,6 @@ export type FullCarePlanUpdateEventFragment = {
       dueAt: string | null,
       patientId: string,
       priority: Priority | null,
-      patient:  {
-        id: string,
-        firstName: string | null,
-        middleName: string | null,
-        lastName: string | null,
-      } | null,
       assignedTo:  {
         id: string,
         firstName: string | null,
@@ -5185,16 +5067,6 @@ export type FullCarePlanUpdateEventFragment = {
         lastName: string | null,
         googleProfileImageUrl: string | null,
         userRole: UserRole,
-      } | null,
-      patientGoal:  {
-        id: string,
-        title: string,
-        patientConcern:  {
-          concern:  {
-            id: string,
-            title: string,
-          },
-        } | null,
       } | null,
     } >,
     createdAt: string,
@@ -5560,12 +5432,6 @@ export type FullPatientConcernFragment = {
       dueAt: string | null,
       patientId: string,
       priority: Priority | null,
-      patient:  {
-        id: string,
-        firstName: string | null,
-        middleName: string | null,
-        lastName: string | null,
-      } | null,
       assignedTo:  {
         id: string,
         firstName: string | null,
@@ -5586,16 +5452,6 @@ export type FullPatientConcernFragment = {
         lastName: string | null,
         googleProfileImageUrl: string | null,
         userRole: UserRole,
-      } | null,
-      patientGoal:  {
-        id: string,
-        title: string,
-        patientConcern:  {
-          concern:  {
-            id: string,
-            title: string,
-          },
-        } | null,
       } | null,
     } >,
     createdAt: string,
@@ -5659,12 +5515,6 @@ export type FullPatientGoalFragment = {
     dueAt: string | null,
     patientId: string,
     priority: Priority | null,
-    patient:  {
-      id: string,
-      firstName: string | null,
-      middleName: string | null,
-      lastName: string | null,
-    } | null,
     assignedTo:  {
       id: string,
       firstName: string | null,
@@ -5685,16 +5535,6 @@ export type FullPatientGoalFragment = {
       lastName: string | null,
       googleProfileImageUrl: string | null,
       userRole: UserRole,
-    } | null,
-    patientGoal:  {
-      id: string,
-      title: string,
-      patientConcern:  {
-        concern:  {
-          id: string,
-          title: string,
-        },
-      } | null,
     } | null,
   } >,
   createdAt: string,
@@ -6086,12 +5926,6 @@ export type FullProgressNoteActivityFragment = {
           dueAt: string | null,
           patientId: string,
           priority: Priority | null,
-          patient:  {
-            id: string,
-            firstName: string | null,
-            middleName: string | null,
-            lastName: string | null,
-          } | null,
           assignedTo:  {
             id: string,
             firstName: string | null,
@@ -6112,16 +5946,6 @@ export type FullProgressNoteActivityFragment = {
             lastName: string | null,
             googleProfileImageUrl: string | null,
             userRole: UserRole,
-          } | null,
-          patientGoal:  {
-            id: string,
-            title: string,
-            patientConcern:  {
-              concern:  {
-                id: string,
-                title: string,
-              },
-            } | null,
           } | null,
         } >,
         createdAt: string,
@@ -6185,12 +6009,6 @@ export type FullProgressNoteActivityFragment = {
         dueAt: string | null,
         patientId: string,
         priority: Priority | null,
-        patient:  {
-          id: string,
-          firstName: string | null,
-          middleName: string | null,
-          lastName: string | null,
-        } | null,
         assignedTo:  {
           id: string,
           firstName: string | null,
@@ -6211,16 +6029,6 @@ export type FullProgressNoteActivityFragment = {
           lastName: string | null,
           googleProfileImageUrl: string | null,
           userRole: UserRole,
-        } | null,
-        patientGoal:  {
-          id: string,
-          title: string,
-          patientConcern:  {
-            concern:  {
-              id: string,
-              title: string,
-            },
-          } | null,
         } | null,
       } >,
       createdAt: string,
@@ -6656,6 +6464,40 @@ export type ShortPatientFragment = {
   createdAt: string,
   consentToText: boolean | null,
   consentToCall: boolean | null,
+};
+
+export type ShortTaskFragment = {
+  id: string,
+  title: string,
+  description: string | null,
+  createdAt: string,
+  updatedAt: string,
+  completedAt: string | null,
+  deletedAt: string | null,
+  dueAt: string | null,
+  patientId: string,
+  priority: Priority | null,
+  assignedTo:  {
+    id: string,
+    firstName: string | null,
+    lastName: string | null,
+    googleProfileImageUrl: string | null,
+    userRole: UserRole,
+  } | null,
+  followers:  Array< {
+    id: string,
+    firstName: string | null,
+    lastName: string | null,
+    googleProfileImageUrl: string | null,
+    userRole: UserRole,
+  } > | null,
+  createdBy:  {
+    id: string,
+    firstName: string | null,
+    lastName: string | null,
+    googleProfileImageUrl: string | null,
+    userRole: UserRole,
+  } | null,
 };
 
 export type ShortUserFragment = {

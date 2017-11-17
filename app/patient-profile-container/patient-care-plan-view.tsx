@@ -28,6 +28,7 @@ interface IGraphqlProps {
 export const PatientCarePlanView = (props: IProps & IGraphqlProps) => {
   const { subTabId, routeBase, patientId, patientCarePlan, loading } = props;
   const isSuggestions = subTabId === 'suggestions';
+
   const carePlanSuggestions = isSuggestions ? (
     <PatientCarePlanSuggestions routeBase={routeBase} patientId={patientId} />
   ) : null;
@@ -36,7 +37,7 @@ export const PatientCarePlanView = (props: IProps & IGraphqlProps) => {
     <PatientMap
       loading={loading}
       carePlan={patientCarePlan}
-      routeBase={routeBase}
+      routeBase={`${routeBase}/active`}
       patientId={patientId}
     />
   ) : null;

@@ -13,7 +13,7 @@ describe('Task Delete Component', () => {
       taskId={taskId}
       cancelDelete={placeholderFn}
       deleteTask={placeholderFn}
-      clearTask={placeholderFn}
+      redirectToMap={placeholderFn}
     />,
   );
 

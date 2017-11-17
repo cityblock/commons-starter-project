@@ -10,7 +10,7 @@ import * as styles from './css/task-delete.css';
 interface IProps {
   taskId: string;
   cancelDelete: () => void;
-  clearTask: () => void;
+  redirectToMap: () => void;
 }
 
 interface IGraphqlProps {
@@ -33,14 +33,14 @@ export class TaskDelete extends React.Component<allProps, IState> {
   }
 
   onConfirmDelete = async () => {
-    const { taskId, deleteTask, cancelDelete, clearTask } = this.props;
+    const { taskId, deleteTask, cancelDelete, redirectToMap } = this.props;
 
     if (taskId) {
       try {
         this.setState({ deleteError: '' });
         await deleteTask({ variables: { taskId } });
         cancelDelete();
-        clearTask();
+        redirectToMap();
       } catch (err) {
         this.setState({ deleteError: err.message });
       }

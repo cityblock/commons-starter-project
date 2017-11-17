@@ -79,9 +79,13 @@ describe('task model', () => {
       patientId: patient.id,
     });
 
-    await PatientGoal.update(patientGoal.id, {
-      patientConcernId: patientConcern.id,
-    }, user.id);
+    await PatientGoal.update(
+      patientGoal.id,
+      {
+        patientConcernId: patientConcern.id,
+      },
+      user.id,
+    );
 
     const dueAt = new Date().toISOString();
     const task = await Task.create({

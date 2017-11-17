@@ -17,20 +17,13 @@ describe('Task Component', () => {
   const taskId = taskWithComment.id;
   const patientId = taskWithComment.patientId;
 
-  const match = {
-    params: {
-      taskId,
-    },
-  };
-
   const wrapper = shallow(
     <Task
-      selectTaskAction={placeholderFn}
       editTask={placeholderFn}
       routeBase={routeBase}
-      match={match}
       taskId={taskId}
       task={taskWithComment}
+      redirectToMap={placeholderFn}
     />,
   );
 
@@ -98,13 +91,12 @@ describe('Task Component', () => {
   it('renders loading component if fetching data', () => {
     const wrapper2 = shallow(
       <Task
-        selectTaskAction={placeholderFn}
         editTask={placeholderFn}
         routeBase={routeBase}
-        match={match}
         taskId={taskId}
         task={taskWithComment}
         taskLoading={true}
+        redirectToMap={placeholderFn}
       />,
     );
 

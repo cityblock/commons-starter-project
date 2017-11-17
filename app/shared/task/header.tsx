@@ -1,25 +1,18 @@
 import * as classNames from 'classnames';
 import * as React from 'react';
-import { connect, Dispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { selectTask } from '../../actions/task-action';
 import * as styles from './css/header.css';
 import TaskHamburgerMenu from './task-hamburger-menu';
 
 const COPY_SUCCESS_TIMEOUT_MILLISECONDS = 2000;
 
-interface IDispatchProps {
-  closeTask: () => void;
-}
-
-interface IOwnProps {
+interface IProps {
   taskId: string;
+  patientId: string;
   patientName: string;
   confirmDelete: () => void;
   routeBase: string;
 }
-
-type IProps = IDispatchProps & IOwnProps;
 
 interface IState {
   hamburgerMenuVisible: boolean;
@@ -56,11 +49,10 @@ export class TaskHeader extends React.Component<IProps, IState> {
   };
 
   render() {
-    const { patientName, taskId, routeBase, closeTask } = this.props;
+    const { patientName, taskId, routeBase, patientId } = this.props;
     const { hamburgerMenuVisible, copySuccessVisible } = this.state;
 
     if (!taskId || !routeBase) return null;
-    // HANDLE LOADING STATE
 
     const copySuccessStyles = classNames(styles.copySuccess, {
       [styles.visible]: copySuccessVisible,
@@ -76,20 +68,17 @@ export class TaskHeader extends React.Component<IProps, IState> {
           <div className={styles.hamburger} onClick={this.onToggleHamburgerMenu} />
           <TaskHamburgerMenu
             taskId={taskId}
+            patientId={patientId}
             visible={hamburgerMenuVisible}
             onClickAddAttachment={() => false}
             onClickDelete={this.onClickDelete}
             onCopy={this.onCopyShareLink}
           />
-          <Link to={routeBase} className={styles.close} onClick={closeTask} />
+          <Link to={routeBase} className={styles.close} />
         </div>
       </div>
     );
   }
 }
 
-const mapDispatchToProps = (dispatch: Dispatch<() => void>): IDispatchProps => ({
-  closeTask: () => dispatch(selectTask('')),
-});
-
-export default connect<{}, IDispatchProps, IOwnProps>(null, mapDispatchToProps)(TaskHeader);
+export default TaskHeader;

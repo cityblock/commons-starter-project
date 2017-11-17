@@ -23,15 +23,17 @@ interface IProps {
   match: {
     params: {
       patientId: string;
-      tabId?: SelectableTabs;
-      riskAreaOrSubTabId?: string;
+      tab?: SelectableTabs;
+      subTab?: string;
+      subsubTab?: string;
+      subSubTabId?: string;
     };
   };
 }
 
 interface IStateProps {
   patientId: string;
-  tabId: SelectableTabs;
+  tab: SelectableTabs;
   browserSize: Size;
 }
 
@@ -54,52 +56,52 @@ export class PatientProfileContainer extends React.Component<allProps> {
   }
 
   render() {
-    const { patientId, patient, loading, error, tabId, browserSize, match } = this.props;
+    const { patientId, patient, loading, error, tab, browserSize, match } = this.props;
 
     const threeSixtyViewTabStyles = classNames(tabStyles.tab, {
-      [tabStyles.selectedTab]: tabId === '360',
+      [tabStyles.selectedTab]: tab === '360',
     });
     const mapTabStyles = classNames(tabStyles.tab, {
-      [tabStyles.selectedTab]: tabId === 'map',
+      [tabStyles.selectedTab]: tab === 'map',
     });
     const timelineTabStyles = classNames(tabStyles.tab, {
-      [tabStyles.selectedTab]: tabId === 'timeline',
+      [tabStyles.selectedTab]: tab === 'timeline',
     });
     const patientInfoTabStyles = classNames(tabStyles.tab, {
-      [tabStyles.selectedTab]: tabId === 'patientInfo',
+      [tabStyles.selectedTab]: tab === 'patientInfo',
     });
     const mainBodyStyle = classNames({
       [styles.mainBody]: browserSize === 'large',
       [styles.mainBodySmall]: browserSize === 'small',
     });
     const tools =
-      tabId === 'tools' && match.params.riskAreaOrSubTabId ? (
+      tab === 'tools' && match.params.subTab ? (
         <ScreeningTool
-          screeningToolId={match.params.riskAreaOrSubTabId}
+          screeningToolId={match.params.subTab}
           patientId={patientId}
           patientRoute={`/patients/${patientId}`}
         />
       ) : null;
-    const timeline = tabId === 'timeline' ? <PatientTimeline patientId={patientId} /> : null;
+    const timeline = tab === 'timeline' ? <PatientTimeline patientId={patientId} /> : null;
     const patientInfo =
-      tabId === 'patientInfo' ? (
+      tab === 'patientInfo' ? (
         <PatientInfo patientId={patientId} patient={patient} loading={loading} error={error} />
       ) : null;
     const threeSixty =
-      tabId === '360' ? (
+      tab === '360' ? (
         <PatientThreeSixtyView
-          riskAreaId={match.params.riskAreaOrSubTabId}
+          riskAreaId={match.params.subTab}
           patientId={patientId}
           patientRoute={`/patients/${patientId}`}
           routeBase={`/patients/${patientId}/360`}
         />
       ) : null;
     const map =
-      tabId === 'map' || tabId === 'tasks' ? (
+      tab === 'map' ? (
         <PatientCarePlanView
           patientId={patientId}
           routeBase={`/patients/${patientId}/map`}
-          subTabId={match.params.riskAreaOrSubTabId as any}
+          subTabId={match.params.subTab as any}
         />
       ) : null;
     return (
@@ -116,7 +118,7 @@ export class PatientProfileContainer extends React.Component<allProps> {
             </FormattedMessage>
             <FormattedMessage id="patient.map">
               {(message: string) => (
-                <Link to={`/patients/${patientId}/map`} className={mapTabStyles}>
+                <Link to={`/patients/${patientId}/map/active`} className={mapTabStyles}>
                   {message}
                 </Link>
               )}
@@ -152,7 +154,7 @@ function mapStateToProps(state: IAppState, ownProps: IProps): IStateProps {
   return {
     browserSize: browser ? browser.size : 'large',
     patientId: ownProps.match.params.patientId,
-    tabId: ownProps.match.params.tabId || 'map',
+    tab: ownProps.match.params.tab || 'map',
   };
 }
 

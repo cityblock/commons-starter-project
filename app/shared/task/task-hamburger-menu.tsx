@@ -5,6 +5,7 @@ import * as styles from './css/task.css';
 
 interface IProps {
   taskId: string;
+  patientId: string;
   visible: boolean;
   onCopy: () => any;
   onClickAddAttachment: () => any;
@@ -12,13 +13,13 @@ interface IProps {
 }
 
 export const TaskHamburgerMenu: React.StatelessComponent<IProps> = props => {
-  const { visible, onClickAddAttachment, onClickDelete, taskId, onCopy } = props;
+  const { visible, onClickAddAttachment, onClickDelete, taskId, patientId, onCopy } = props;
 
   const menuStyles = classNames(styles.hamburgerMenu, {
     [styles.visible]: visible,
   });
 
-  const url = `${window.location.origin}/tasks/${taskId}`;
+  const url = `${window.location.origin}/patients/${patientId}/map/active/tasks/${taskId}`;
 
   return (
     <div className={menuStyles}>

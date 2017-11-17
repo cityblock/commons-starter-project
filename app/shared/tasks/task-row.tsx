@@ -1,26 +1,18 @@
 import * as classNames from 'classnames';
 import * as React from 'react';
 import { FormattedDate, FormattedMessage, FormattedRelative } from 'react-intl';
-import { connect, Dispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { selectTask } from '../../actions/task-action';
-import { FullTaskFragment, ShortUserFragment } from '../../graphql/types';
+import { ShortTaskFragment, ShortUserFragment } from '../../graphql/types';
 import { DEFAULT_AVATAR_URL } from '../task/task';
 import * as styles from './css/task-row.css';
 import * as tasksStyles from './css/tasks.css';
 
-interface IDispatchProps {
-  selectTaskAction: (taskId: string) => void;
-}
-
-interface IOwnProps {
-  task: FullTaskFragment;
+interface IProps {
+  task: ShortTaskFragment;
   selected: boolean;
   routeBase: string;
   condensed?: boolean;
 }
-
-type IProps = IDispatchProps & IOwnProps;
 
 function renderFollowers(followers: ShortUserFragment[], photo?: boolean) {
   const followerCount = followers.length;
@@ -50,7 +42,7 @@ function renderAssignedTo(user: ShortUserFragment | null) {
 }
 
 export const TaskRow: React.StatelessComponent<IProps> = (props: IProps) => {
-  const { task, selected, routeBase, condensed, selectTaskAction } = props;
+  const { task, selected, routeBase, condensed } = props;
 
   const taskClass = classNames(styles.container, {
     [styles.selected]: selected,
@@ -64,7 +56,7 @@ export const TaskRow: React.StatelessComponent<IProps> = (props: IProps) => {
     tasksStyles.openedAt,
     styles.openedAtSection,
   );
-  const onClick = () => selectTaskAction(task.id);
+
   const followers = renderFollowers(task.followers || []);
   const assignedTo = renderAssignedTo(task.assignedTo);
   const formattedCreatedAt = task.createdAt ? (
@@ -81,8 +73,9 @@ export const TaskRow: React.StatelessComponent<IProps> = (props: IProps) => {
       {(message: string) => <span className={styles.dateValue}>{message}</span>}
     </FormattedMessage>
   );
+
   return (
-    <Link className={taskClass} to={`${routeBase}/${task.id}`} onClick={onClick}>
+    <Link className={taskClass} to={`${routeBase}/${task.id}`}>
       <div className={styles.title}>{task.title}</div>
       <div className={styles.meta}>
         <div className={styles.followers}>
@@ -106,8 +99,4 @@ export const TaskRow: React.StatelessComponent<IProps> = (props: IProps) => {
   );
 };
 
-const mapDispatchToProps = (dispatch: Dispatch<() => void>): IDispatchProps => ({
-  selectTaskAction: (taskId?: string) => dispatch(selectTask(taskId)),
-});
-
-export default connect<{}, IDispatchProps, IOwnProps>(null, mapDispatchToProps)(TaskRow);
+export default TaskRow;

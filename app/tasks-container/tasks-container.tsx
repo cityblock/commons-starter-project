@@ -17,6 +17,11 @@ import * as styles from './css/tasks-container.css';
 
 interface IProps {
   mutate?: any;
+  match?: {
+    params: {
+      taskId?: string;
+    };
+  };
 }
 
 interface IGraphqlProps {
@@ -42,7 +47,8 @@ class TasksContainer extends React.Component<allProps> {
   }
 
   render() {
-    const { tasksResponse, notificationsCount } = this.props;
+    const { tasksResponse, notificationsCount, match } = this.props;
+    const taskId = match && match.params.taskId;
 
     const tasks =
       tasksResponse && tasksResponse.edges ? tasksResponse.edges.map((edge: any) => edge.node) : [];
@@ -59,6 +65,7 @@ class TasksContainer extends React.Component<allProps> {
     const notificationsBadgeStyles = classNames(tabStyles.notificationBadge, {
       [tabStyles.visible]: notificationsCount > 0,
     });
+
     return (
       <div className={styles.container}>
         <div className={styles.mainBody}>
@@ -94,6 +101,7 @@ class TasksContainer extends React.Component<allProps> {
               hasPreviousPage={hasPreviousPage}
               routeBase={`/tasks`}
               tasks={tasks}
+              taskId={taskId || ''}
             />
           </div>
           <div className={calendarPaneStyles}>calendar!</div>

@@ -21,7 +21,6 @@ describe('task row', () => {
   afterAll(() => {
     Date.now = oldDate;
   });
-  const selectTask = () => true as any;
 
   it('renders task row', () => {
     const history = createMemoryHistory();
@@ -34,7 +33,6 @@ describe('task row', () => {
                 task={task}
                 selected={true}
                 routeBase={'/foo/bar'}
-                selectTaskAction={selectTask}
               />
             </ConnectedRouter>
           </ReduxConnectedIntlProvider>
@@ -66,7 +64,6 @@ describe('task row', () => {
                 task={task}
                 selected={true}
                 routeBase={'/foo/bar'}
-                selectTaskAction={selectTask}
               />
             </ConnectedRouter>
           </ReduxConnectedIntlProvider>

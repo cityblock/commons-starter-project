@@ -22,7 +22,7 @@ describe('patient profile container', () => {
       <Component
         match={match}
         patientId={'patient-1'}
-        tabId={'map' as any}
+        tab={'map' as any}
         browserSize={'large'}
         loading={false}
       />,

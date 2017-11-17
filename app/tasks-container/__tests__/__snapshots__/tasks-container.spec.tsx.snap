@@ -108,7 +108,7 @@ exports[`renders tasks container 1`] = `
           className="bottomContainer"
         >
           <div
-            className="list compressed"
+            className="list"
           >
             <div
               className="tasksLoading"
@@ -124,7 +124,7 @@ exports[`renders tasks container 1`] = `
             />
           </div>
           <div
-            className="taskContainer visible"
+            className="taskContainer"
           />
         </div>
       </div>

@@ -2,13 +2,18 @@ import { shallow } from 'enzyme';
 import * as React from 'react';
 import Task from '../../shared/task/task';
 import PatientCarePlan from '../patient-care-plan';
-import { IOwnProps, PatientMap } from '../patient-map';
+import { IProps, PatientMap } from '../patient-map';
 
 describe('Patient Map Component', () => {
   const patientId = 'sansaStark';
   const routeBase = '/patients/sansaStark/map';
+  const match = {
+    params: {
+      subSubTabId: '',
+    },
+  };
 
-  const wrapper = shallow(<PatientMap patientId={patientId} routeBase={routeBase} />);
+  const wrapper = shallow(<PatientMap patientId={patientId} routeBase={routeBase} match={match} />);
 
   it('renders patient care plan', () => {
     const carePlan = wrapper.find(PatientCarePlan);
@@ -26,13 +31,18 @@ describe('Patient Map Component', () => {
 
   describe('Expanded Task View', () => {
     const taskId = 'littlefinger';
+    const match2 = {
+      params: {
+        subSubTabId: taskId,
+      },
+    };
 
     const wrapper2 = shallow(
-      <PatientMap patientId={patientId} routeBase={routeBase} taskId={taskId} />,
+      <PatientMap patientId={patientId} routeBase={routeBase} match={match2} />,
     );
 
     it('renders associated task', () => {
-      const task = wrapper2.find<IOwnProps>(Task);
+      const task = wrapper2.find<IProps>(Task);
 
       expect(task.length).toBe(1);
       expect(task.props().routeBase).toBe(routeBase);

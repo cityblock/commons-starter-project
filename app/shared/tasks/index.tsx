@@ -14,7 +14,6 @@ import {
   FullTaskFragment,
   ShortPatientFragment,
 } from '../../graphql/types';
-import { IState as IAppState } from '../../store';
 import * as sortSearchStyles from '../css/sort-search.css';
 import InfiniteScroll from '../infinite-scroll/infinite-scroll';
 import Task from '../task/task';
@@ -41,14 +40,11 @@ interface IProps {
   hasNextPage?: boolean;
   hasPreviousPage?: boolean;
   mutate?: any;
+  taskId: string;
 }
 
-interface IApolloProps {
+interface IGraphqlProps {
   deleteTask: (options: { variables: taskDeleteMutationVariables }) => { data: taskDeleteMutation };
-}
-
-interface IStateProps {
-  taskId?: string;
 }
 
 interface IDispatchProps {
@@ -60,6 +56,8 @@ interface IState {
   showCreateTask: false;
 }
 
+type allProps = IProps & IDispatchProps & IGraphqlProps;
+
 const getPageParams = () => {
   const pageParams = querystring.parse(window.location.search.substring(1));
 
@@ -70,8 +68,8 @@ const getPageParams = () => {
   };
 };
 
-class Tasks extends React.Component<IProps & IDispatchProps & IStateProps & IApolloProps, IState> {
-  constructor(props: IProps & IDispatchProps & IStateProps & IApolloProps) {
+class Tasks extends React.Component<allProps, IState> {
+  constructor(props: allProps) {
     super(props);
 
     this.renderTasks = this.renderTasks.bind(this);
@@ -157,6 +155,7 @@ class Tasks extends React.Component<IProps & IDispatchProps & IStateProps & IApo
       hasNextPage,
       fetchMoreTasks,
     } = this.props;
+
     const { orderBy, showCreateTask } = this.state;
     const tasksList = tasks || [];
     const taskContainerStyles = classNames(styles.taskContainer, {
@@ -187,6 +186,7 @@ class Tasks extends React.Component<IProps & IDispatchProps & IStateProps & IApo
         routeBase={routeBase}
         onDelete={this.onDeleteTask}
         patientGoals={patientGoals}
+        taskId={taskId}
         {...props}
       />
     );
@@ -235,12 +235,6 @@ class Tasks extends React.Component<IProps & IDispatchProps & IStateProps & IApo
   }
 }
 
-function mapStateToProps(state: IAppState): IStateProps {
-  return {
-    taskId: state.task.taskId,
-  };
-}
-
 function mapDispatchToProps(dispatch: Dispatch<() => void>, ownProps: IProps): IDispatchProps {
   return {
     redirectToTasks: () => {
@@ -251,6 +245,6 @@ function mapDispatchToProps(dispatch: Dispatch<() => void>, ownProps: IProps): I
 }
 
 export default compose(
-  connect<IStateProps, IDispatchProps, IProps>(mapStateToProps, mapDispatchToProps),
-  graphql<IApolloProps>(taskDeleteMutationGraphql as any, { name: 'deleteTask' }),
+  connect<{}, IDispatchProps, IProps>(null, mapDispatchToProps),
+  graphql<IGraphqlProps>(taskDeleteMutationGraphql as any, { name: 'deleteTask' }),
 )(Tasks);

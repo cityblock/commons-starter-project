@@ -11,8 +11,8 @@ function deleteTables(knex, Promise) {
         'public',
         'knex_migrations',
       ])
-      .map(function (row) {
-        return trx.raw(`TRUNCATE TABLE public.${row.table_name} CASCADE`)
+      .map(function(row) {
+        return trx.raw(`TRUNCATE TABLE public.${row.table_name} CASCADE`);
       });
 
     return Promise.all(deletePromises);
@@ -26,7 +26,7 @@ function buildClinic(name, departmentId) {
     updatedAt: new Date().toISOString(),
     name,
     departmentId,
-  }
+  };
 }
 
 function buildPhysician(firstName, lastName, email, homeClinicId, athenaProviderId) {
@@ -40,7 +40,7 @@ function buildPhysician(firstName, lastName, email, homeClinicId, athenaProvider
     email,
     homeClinicId,
     athenaProviderId,
-  }
+  };
 }
 
 function buildPatient(firstName, lastName, athenaPatientId, homeClinicId, gender) {
@@ -53,7 +53,7 @@ function buildPatient(firstName, lastName, athenaPatientId, homeClinicId, gender
     athenaPatientId,
     homeClinicId,
     gender,
-  }
+  };
 }
 
 function buildCareTeam(userId, patientId) {
@@ -63,46 +63,46 @@ function buildCareTeam(userId, patientId) {
     updatedAt: new Date().toISOString(),
     userId,
     patientId,
-  }
+  };
 }
 
 function createPhysicians(knex, clinicIds) {
   return knex
-  .table('user')
-  .insert([
-    buildPhysician('Logan', 'Hasson', 'logan@cityblock.com', clinicIds[0], 2),
-    buildPhysician('Brennan', 'Moore', 'brennan@cityblock.com', clinicIds[0], 3),
-    buildPhysician('Frank', 'Guzzone', 'frank@cityblock.com', clinicIds[0], 4),
-    buildPhysician('Mat', 'Balez', 'mat@cityblock.com', clinicIds[0], 5),
-    buildPhysician('Peter', 'Weinberg', 'peter@cityblock.com', clinicIds[0], 7),
-    buildPhysician('Toyin', 'Ajayi', 'toyin@cityblock.com', clinicIds[0], 8),
-    buildPhysician('Iyah', 'Romm', 'iyah@cityblock.com', clinicIds[0], 9),
-    buildPhysician('Bay', 'Gross', 'bay@cityblock.com', clinicIds[0], 10),
-    buildPhysician('Ari', 'Rosner', 'ari@cityblock.com', clinicIds[0], 11),
-    buildPhysician('Ariane', 'Tschumi', 'ariane@cityblock.com', clinicIds[0], 12),
-    buildPhysician('Tristan', 'Williams', 'tristan@cityblock.com', clinicIds[0], 13),
-    buildPhysician('Laura', 'Cressman', 'laura@cityblock.com', clinicIds[0], 27),
-  ])
+    .table('user')
+    .insert([
+      buildPhysician('Logan', 'Hasson', 'logan@cityblock.com', clinicIds[0], 2),
+      buildPhysician('Brennan', 'Moore', 'brennan@cityblock.com', clinicIds[0], 3),
+      buildPhysician('Frank', 'Guzzone', 'frank@cityblock.com', clinicIds[0], 4),
+      buildPhysician('Mat', 'Balez', 'mat@cityblock.com', clinicIds[0], 5),
+      buildPhysician('Peter', 'Weinberg', 'peter@cityblock.com', clinicIds[0], 7),
+      buildPhysician('Toyin', 'Ajayi', 'toyin@cityblock.com', clinicIds[0], 8),
+      buildPhysician('Iyah', 'Romm', 'iyah@cityblock.com', clinicIds[0], 9),
+      buildPhysician('Bay', 'Gross', 'bay@cityblock.com', clinicIds[0], 10),
+      buildPhysician('Ari', 'Rosner', 'ari@cityblock.com', clinicIds[0], 11),
+      buildPhysician('Ariane', 'Tschumi', 'ariane@cityblock.com', clinicIds[0], 12),
+      buildPhysician('Tristan', 'Williams', 'tristan@cityblock.com', clinicIds[0], 13),
+      buildPhysician('Laura', 'Cressman', 'laura@cityblock.com', clinicIds[0], 27),
+    ]);
 }
 
 function createPatients(knex, clinicIds) {
   return knex
-  .table('patient')
-  .returning('id')
-  .insert([
-    buildPatient('Carmen', 'Vasbinder', 1, clinicIds[0], 'F'),
-    buildPatient('Minh', 'Marceau', 2, clinicIds[0], 'M'),
-    buildPatient('Florentino', 'Berge', 3, clinicIds[0], 'M'),
-    buildPatient('Jacquiline', 'Santore', 4, clinicIds[0], 'F'),
-    buildPatient('Lan', 'Overstreet', 5, clinicIds[0], 'F'),
-    buildPatient('Toby', 'Hartshorn', 6, clinicIds[0], 'M'),
-    buildPatient('Birdie', 'Wansley', 7, clinicIds[0], 'F'),
-    buildPatient('Emery', 'Official', 8, clinicIds[0], 'M'),
-    buildPatient('Candace', 'Kimberlin', 9, clinicIds[0], 'F'),
-    buildPatient('Ula', 'Hertel', 10, clinicIds[0], 'F'),
-    buildPatient('Rolland', 'Auman', 11, clinicIds[0], 'M'),
-    buildPatient('Barney', 'Ober', 12, clinicIds[0], 'M'),
-  ]);
+    .table('patient')
+    .returning('id')
+    .insert([
+      buildPatient('Carmen', 'Vasbinder', 1, clinicIds[0], 'F'),
+      buildPatient('Minh', 'Marceau', 2, clinicIds[0], 'M'),
+      buildPatient('Florentino', 'Berge', 3, clinicIds[0], 'M'),
+      buildPatient('Jacquiline', 'Santore', 4, clinicIds[0], 'F'),
+      buildPatient('Lan', 'Overstreet', 5, clinicIds[0], 'F'),
+      buildPatient('Toby', 'Hartshorn', 6, clinicIds[0], 'M'),
+      buildPatient('Birdie', 'Wansley', 7, clinicIds[0], 'F'),
+      buildPatient('Emery', 'Official', 8, clinicIds[0], 'M'),
+      buildPatient('Candace', 'Kimberlin', 9, clinicIds[0], 'F'),
+      buildPatient('Ula', 'Hertel', 10, clinicIds[0], 'F'),
+      buildPatient('Rolland', 'Auman', 11, clinicIds[0], 'M'),
+      buildPatient('Barney', 'Ober', 12, clinicIds[0], 'M'),
+    ]);
 }
 
 function createCareTeam(knex, Promise, patientIds) {
@@ -128,24 +128,22 @@ const seed = function(knex, Promise) {
     .returning('id')
     .insert(buildClinic('Clinic Zero', 1))
     .then(function(clinicIds) {
-      return createPhysicians(knex, clinicIds)
-        .then(function() {
-          return knex
-            .table('clinic')
-            .pluck('id')
-            .then(function(clinicIds) {
-              return createPatients(knex, clinicIds)
-            })
-            .then(function(patientIds) {
-              return createCareTeam(knex, Promise, patientIds)
-            });
-        });
-  });
-}
+      return createPhysicians(knex, clinicIds).then(function() {
+        return knex
+          .table('clinic')
+          .pluck('id')
+          .then(function(clinicIds) {
+            return createPatients(knex, clinicIds);
+          })
+          .then(function(patientIds) {
+            return createCareTeam(knex, Promise, patientIds);
+          });
+      });
+    });
+};
 
 exports.seed = function(knex, Promise) {
-  return deleteTables(knex, Promise)
-    .then(function () {
-      return seed(knex, Promise);
-    });
+  return deleteTables(knex, Promise).then(function() {
+    return seed(knex, Promise);
+  });
 };

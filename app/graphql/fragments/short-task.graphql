@@ -1,0 +1,33 @@
+fragment ShortTask on Task {
+  id
+  title
+  description
+  createdAt
+  updatedAt
+  completedAt
+  deletedAt
+  dueAt
+  patientId
+  priority
+  assignedTo {
+    id
+    firstName
+    lastName
+    googleProfileImageUrl
+    userRole
+  }
+  followers {
+    id
+    firstName
+    lastName
+    googleProfileImageUrl
+    userRole
+  }
+  createdBy {
+    id
+    firstName
+    lastName
+    googleProfileImageUrl
+    userRole
+  }
+}

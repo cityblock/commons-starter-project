@@ -9,7 +9,6 @@ import { browserReducer, Size } from './reducers/browser-reducer';
 import { eventNotificationsReducer } from './reducers/event-notifications-reducer';
 import { idleReducer } from './reducers/idle-reducer';
 import { localeReducer, Lang } from './reducers/locale-reducer';
-import { taskReducer } from './reducers/task-reducer';
 
 export interface IState {
   routing: any;
@@ -49,7 +48,6 @@ export default (history: History) => {
     browser: browserReducer,
     locale: localeReducer,
     routing: routerReducer,
-    task: taskReducer,
     idle: idleReducer,
     eventNotifications: eventNotificationsReducer,
   });

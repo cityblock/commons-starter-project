@@ -1,6 +1,6 @@
 #import "./short-patient.graphql"
 #import "./full-goal-suggestion-template.graphql"
-#import "./full-task.graphql"
+#import "./short-task.graphql"
 
 fragment FullPatientGoal on PatientGoal {
   id
@@ -15,7 +15,7 @@ fragment FullPatientGoal on PatientGoal {
     ...FullGoalSuggestionTemplate
   }
   tasks {
-    ...FullTask
+    ...ShortTask
   }
   createdAt
   updatedAt

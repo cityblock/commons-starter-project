@@ -40,7 +40,7 @@ exports[`renders patient goal 1`] = `
   </div>
   <a
     className="container highPriority condensed"
-    href="/patients/patient-id/tasks/task-id"
+    href="/patients/patient-id/map/active/tasks/task-id"
     onClick={[Function]}
   >
     <div

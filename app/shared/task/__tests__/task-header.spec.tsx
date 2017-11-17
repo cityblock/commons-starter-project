@@ -6,8 +6,8 @@ import TaskHamburgerMenu from '../task-hamburger-menu';
 
 describe('Task Header Component', () => {
   const patientName = 'Lt. Judy Hopps';
+  const patientId = 'judyHopps';
   const confirmDelete = () => true;
-  const closeTask = () => true;
   const routeBase = '/tasks';
 
   it('renders nothing if task id or base route undefined', () => {
@@ -19,7 +19,7 @@ describe('Task Header Component', () => {
         patientName={patientName}
         confirmDelete={confirmDelete}
         routeBase={routeBase}
-        closeTask={closeTask}
+        patientId={patientId}
       />,
     );
 
@@ -35,7 +35,7 @@ describe('Task Header Component', () => {
         patientName={patientName}
         confirmDelete={confirmDelete}
         routeBase={routeBase}
-        closeTask={closeTask}
+        patientId={patientId}
       />,
     );
 

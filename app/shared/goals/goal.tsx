@@ -25,15 +25,17 @@ export default class PatientGoal extends React.Component<IProps, {}> {
     }
 
     // don't show tasks that have been deleted
-    return tasks.filter(task => task && !task.deletedAt).map(task => (
-      <TaskRow
-        key={task.id}
-        condensed={true}
-        task={task}
-        selected={false}
-        routeBase={`/patients/${patientId}/tasks`}
-      />
-    ));
+    return tasks
+      .filter(task => task && !task.deletedAt)
+      .map(task => (
+        <TaskRow
+          key={task.id}
+          condensed={true}
+          task={task}
+          selected={false}
+          routeBase={`/patients/${patientId}/map/active/tasks`}
+        />
+      ));
   }
 
   render() {

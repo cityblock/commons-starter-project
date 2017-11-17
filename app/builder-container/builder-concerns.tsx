@@ -5,34 +5,44 @@ import { connect, Dispatch } from 'react-redux';
 import { Route } from 'react-router-dom';
 import { push } from 'react-router-redux';
 import * as concernDeleteMutationGraphql from '../graphql/queries/concern-delete-mutation.graphql';
+import * as concernsQuery from '../graphql/queries/get-concerns.graphql';
 import {
   concernDeleteMutation,
   concernDeleteMutationVariables,
   FullConcernFragment,
 } from '../graphql/types';
 import * as styles from '../shared/css/two-panel.css';
+import { IState as IAppState } from '../store';
 import Concern from './concern';
 import ConcernCreate from './concern-create';
 import { ConcernRow } from './concern-row';
 
 interface IProps {
-  routeBase: string;
-  concerns?: FullConcernFragment[];
-  concernId?: string;
   mutate?: any;
+  match: {
+    params: {
+      concernId: string;
+    };
+  };
 }
 
 interface IGraphqlProps {
+  concerns?: FullConcernFragment[];
   deleteConcern: (
     options: { variables: concernDeleteMutationVariables },
   ) => { data: concernDeleteMutation };
+}
+
+interface IStateProps {
+  routeBase: string;
+  concernId?: string;
 }
 
 interface IDispatchProps {
   redirectToConcerns: () => any;
 }
 
-type allProps = IGraphqlProps & IDispatchProps & IProps;
+type allProps = IGraphqlProps & IDispatchProps & IProps & IStateProps;
 
 interface IState {
   showCreateConcern: false;
@@ -128,7 +138,17 @@ class BuilderConcerns extends React.Component<allProps, IState> {
   }
 }
 
-function mapDispatchToProps(dispatch: Dispatch<() => void>, ownProps: IProps): IDispatchProps {
+function mapStateToProps(state: IAppState, ownProps: IProps): IStateProps {
+  return {
+    concernId: ownProps.match.params.concernId,
+    routeBase: '/builder/concerns',
+  };
+}
+
+function mapDispatchToProps(
+  dispatch: Dispatch<() => void>,
+  ownProps: IProps & IStateProps,
+): IDispatchProps {
   return {
     redirectToConcerns: () => {
       const { routeBase } = ownProps;
@@ -138,6 +158,13 @@ function mapDispatchToProps(dispatch: Dispatch<() => void>, ownProps: IProps): I
 }
 
 export default compose(
-  connect<{}, IDispatchProps, IProps>(null, mapDispatchToProps),
+  connect<IStateProps, IDispatchProps, IProps>(mapStateToProps, mapDispatchToProps),
+  graphql<IGraphqlProps, IProps>(concernsQuery as any, {
+    props: ({ data }) => ({
+      concernsLoading: data ? data.loading : false,
+      concernsError: data ? data.error : null,
+      concerns: data ? (data as any).concerns : null,
+    }),
+  }),
   graphql<IGraphqlProps, IProps>(concernDeleteMutationGraphql as any, { name: 'deleteConcern' }),
 )(BuilderConcerns);

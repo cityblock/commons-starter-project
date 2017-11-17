@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`renders builder questions 1`] = `
+exports[`builder concerns renders builder questions 1`] = `
 <div
   className="container"
 >
@@ -20,15 +20,8 @@ exports[`renders builder questions 1`] = `
       >
         <select
           onChange={[Function]}
-          value="risk-area-id"
-        >
-          <option
-            data-optiontype="riskArea"
-            value="cool-task-id"
-          >
-            Risk Area Title
-          </option>
-        </select>
+          value="cool-task-id"
+        />
       </div>
     </div>
     <div
@@ -46,7 +39,7 @@ exports[`renders builder questions 1`] = `
     className="bottomContainer"
   >
     <div
-      className="itemsList compressed"
+      className="itemsList"
     >
       <div
         className="emptyMessage"
@@ -62,7 +55,7 @@ exports[`renders builder questions 1`] = `
       </div>
     </div>
     <div
-      className="itemContainer visible"
+      className="itemContainer"
     />
   </div>
 </div>

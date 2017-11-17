@@ -11,6 +11,11 @@ import { concern } from '../../shared/util/test-data';
 import BuilderConcerns from '../builder-concerns';
 
 const oldDate = Date.now;
+const match = {
+  params: {
+    goalId: undefined,
+  },
+};
 
 describe('builder concerns', () => {
   beforeAll(() => {
@@ -30,6 +35,7 @@ describe('builder concerns', () => {
           <ReduxConnectedIntlProvider>
             <ConnectedRouter history={history}>
               <BuilderConcerns
+                match={match}
                 routeBase="/route/base"
                 concernId={concern.id}
                 concerns={[concern]}

@@ -4,6 +4,7 @@ import { compose, graphql } from 'react-apollo';
 import { connect, Dispatch } from 'react-redux';
 import { Route } from 'react-router-dom';
 import { push } from 'react-router-redux';
+import * as riskAreasQuery from '../graphql/queries/get-risk-areas.graphql';
 /* tslint:disable:max-line-length */
 import * as riskAreaDeleteMutationGraphql from '../graphql/queries/risk-area-delete-mutation.graphql';
 /* tslint:enable:max-line-length */
@@ -13,18 +14,26 @@ import {
   FullRiskAreaFragment,
 } from '../graphql/types';
 import * as styles from '../shared/css/two-panel.css';
+import { IState as IAppState } from '../store';
 import RiskArea from './risk-area';
 import RiskAreaCreate from './risk-area-create';
 import { RiskAreaRow } from './risk-area-row';
 
 interface IProps {
-  routeBase: string;
-  riskAreas?: FullRiskAreaFragment[];
-  riskAreaId?: string;
   mutate?: any;
+  match: {
+    params: {
+      riskAreaId?: string;
+    };
+  };
+}
+
+interface IStateProps {
+  riskAreaId?: string;
 }
 
 interface IGraphqlProps {
+  riskAreas?: FullRiskAreaFragment[];
   loading?: boolean;
   error?: string;
   deleteRiskArea: (
@@ -36,11 +45,13 @@ interface IDispatchProps {
   redirectToRiskAreas: () => any;
 }
 
-type allProps = IProps & IGraphqlProps & IDispatchProps;
+type allProps = IProps & IGraphqlProps & IDispatchProps & IStateProps;
 
 interface IState {
   showCreateRiskArea: false;
 }
+
+const ROUTE_BASE = '/builder/domains';
 
 class AdminRiskAreas extends React.Component<allProps, IState> {
   constructor(props: allProps) {
@@ -94,7 +105,7 @@ class AdminRiskAreas extends React.Component<allProps, IState> {
         key={riskArea.id}
         riskArea={riskArea}
         selected={selected}
-        routeBase={this.props.routeBase}
+        routeBase={ROUTE_BASE}
       />
     );
   }
@@ -108,7 +119,7 @@ class AdminRiskAreas extends React.Component<allProps, IState> {
   }
 
   render() {
-    const { riskAreas, routeBase, riskAreaId } = this.props;
+    const { riskAreas, riskAreaId } = this.props;
     const { showCreateRiskArea } = this.state;
     const riskAreasList = riskAreas || [];
     const riskAreaContainerStyles = classNames(styles.itemContainer, {
@@ -125,13 +136,13 @@ class AdminRiskAreas extends React.Component<allProps, IState> {
       </div>
     );
     const createRiskAreaHtml = showCreateRiskArea ? (
-      <RiskAreaCreate onClose={this.hideCreateRiskArea} routeBase={this.props.routeBase} />
+      <RiskAreaCreate onClose={this.hideCreateRiskArea} routeBase={ROUTE_BASE} />
     ) : null;
     const RenderedRiskArea = (props: any) => (
-      <RiskArea routeBase={routeBase} onDelete={this.onDeleteRiskArea} {...props} />
+      <RiskArea routeBase={ROUTE_BASE} onDelete={this.onDeleteRiskArea} {...props} />
     );
     const riskAreaHtml = showCreateRiskArea ? null : (
-      <Route path={`${routeBase}/:riskAreaId`} render={RenderedRiskArea} />
+      <Route path={`${ROUTE_BASE}/:riskAreaId`} render={RenderedRiskArea} />
     );
     return (
       <div className={styles.container}>
@@ -148,17 +159,29 @@ class AdminRiskAreas extends React.Component<allProps, IState> {
   }
 }
 
+function mapStateToProps(state: IAppState, ownProps: IProps): IStateProps {
+  return {
+    riskAreaId: ownProps.match.params.riskAreaId,
+  };
+}
+
 function mapDispatchToProps(dispatch: Dispatch<() => void>, ownProps: IProps): IDispatchProps {
   return {
     redirectToRiskAreas: () => {
-      const { routeBase } = ownProps;
-      dispatch(push(routeBase));
+      dispatch(push(ROUTE_BASE));
     },
   };
 }
 
 export default compose(
-  connect<{}, IDispatchProps, IProps>(null, mapDispatchToProps),
+  connect<IStateProps, IDispatchProps, IProps>(mapStateToProps, mapDispatchToProps),
+  graphql<IGraphqlProps, IProps>(riskAreasQuery as any, {
+    props: ({ data }) => ({
+      riskAreasLoading: data ? data.loading : false,
+      riskAreasError: data ? data.error : null,
+      riskAreas: data ? (data as any).riskAreas : null,
+    }),
+  }),
   graphql<IGraphqlProps, IProps>(riskAreaDeleteMutationGraphql as any, {
     name: 'deleteRiskArea',
   }),

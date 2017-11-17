@@ -14,22 +14,27 @@ import {
   FullProgressNoteTemplateFragment,
 } from '../graphql/types';
 import * as styles from '../shared/css/two-panel.css';
+import { IState as IAppState } from '../store';
 import ProgressNoteTemplate from './progress-note-template';
 import ProgressNoteTemplateCreate from './progress-note-template-create';
 import { ProgressNoteTemplateRow } from './progress-note-template-row';
 
-interface IComponentProps {
+interface IProps {
+  mutate?: any;
+  match: {
+    params: {
+      progressNoteTemplateId?: string;
+    };
+  };
+}
+
+interface IStateProps {
   routeBase: string;
   progressNoteTemplateId?: string;
-  progressNoteTemplates?: FullProgressNoteTemplateFragment[];
 }
 
 interface IDispatchProps {
   redirectToProgressNoteTemplates: () => any;
-}
-
-interface IProps {
-  mutate: any;
 }
 
 interface IGraphqlProps {
@@ -46,7 +51,7 @@ interface IState {
   showCreateProgressNoteTemplate: false;
 }
 
-type allProps = IProps & IComponentProps & IDispatchProps & IGraphqlProps;
+type allProps = IProps & IStateProps & IDispatchProps & IGraphqlProps;
 
 class BuilderProgressNoteTemplates extends React.Component<allProps, IState> {
   constructor(props: allProps) {
@@ -163,6 +168,13 @@ class BuilderProgressNoteTemplates extends React.Component<allProps, IState> {
   }
 }
 
+function mapStateToProps(state: IAppState, ownProps: IProps): IStateProps {
+  return {
+    progressNoteTemplateId: ownProps.match.params.progressNoteTemplateId,
+    routeBase: '/builder/progress-note-templates',
+  };
+}
+
 function mapDispatchToProps(dispatch: Dispatch<() => void>, ownProps: allProps): IDispatchProps {
   return {
     redirectToProgressNoteTemplates: () => {
@@ -173,7 +185,7 @@ function mapDispatchToProps(dispatch: Dispatch<() => void>, ownProps: allProps):
 }
 
 export default compose(
-  connect<{}, IDispatchProps, IComponentProps>(null, mapDispatchToProps),
+  connect<IStateProps, IDispatchProps, IProps>(mapStateToProps, mapDispatchToProps),
   graphql<IGraphqlProps, IProps>(progressNoteTemplateDeleteMutationGraphql as any, {
     name: 'deleteProgressNoteTemplate',
   }),

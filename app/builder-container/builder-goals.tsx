@@ -4,6 +4,7 @@ import { compose, graphql } from 'react-apollo';
 import { connect, Dispatch } from 'react-redux';
 import { Route } from 'react-router-dom';
 import { push } from 'react-router-redux';
+import * as goalsQuery from '../graphql/queries/get-goal-suggestion-templates.graphql';
 /* tslint:disable:max-line-length */
 import * as goalDeleteMutation from '../graphql/queries/goal-suggestion-template-delete-mutation.graphql';
 /* tslint:enable:max-line-length */
@@ -13,16 +14,23 @@ import {
   FullGoalSuggestionTemplateFragment,
 } from '../graphql/types';
 import * as styles from '../shared/css/two-panel.css';
+import { IState as IAppState } from '../store';
 import Goal from './goal';
 import GoalCreate from './goal-create';
 import { GoalRow } from './goal-row';
 
 interface IProps {
   mutate?: any;
-  routeBase: string;
+  match: {
+    params: {
+      goalId?: string;
+    };
+  };
+}
+
+interface IStateProps {
   goalId?: string;
-  goals?: FullGoalSuggestionTemplateFragment[];
-  refetchGoals: () => any;
+  routeBase: string;
 }
 
 interface IDispatchProps {
@@ -30,6 +38,8 @@ interface IDispatchProps {
 }
 
 interface IGraphqlProps {
+  refetchGoals: () => any;
+  goals?: FullGoalSuggestionTemplateFragment[];
   loading?: boolean;
   error?: string;
   deleteGoal?: (
@@ -37,7 +47,7 @@ interface IGraphqlProps {
   ) => { data: goalSuggestionTemplateDeleteMutation };
 }
 
-type allProps = IProps & IDispatchProps & IGraphqlProps;
+type allProps = IProps & IDispatchProps & IGraphqlProps & IStateProps;
 
 interface IState {
   showCreateGoal: false;
@@ -143,7 +153,17 @@ export class BuilderGoals extends React.Component<allProps, IState> {
   }
 }
 
-function mapDispatchToProps(dispatch: Dispatch<() => void>, ownProps: IProps): IDispatchProps {
+function mapStateToProps(state: IAppState, ownProps: IProps): IStateProps {
+  return {
+    goalId: ownProps.match.params.goalId,
+    routeBase: '/builder/goals',
+  };
+}
+
+function mapDispatchToProps(
+  dispatch: Dispatch<() => void>,
+  ownProps: IProps & IStateProps,
+): IDispatchProps {
   return {
     redirectToGoals: () => {
       const { routeBase } = ownProps;
@@ -153,6 +173,14 @@ function mapDispatchToProps(dispatch: Dispatch<() => void>, ownProps: IProps): I
 }
 
 export default compose(
-  connect<{}, IDispatchProps, IProps>(null, mapDispatchToProps),
+  connect<IStateProps, IDispatchProps, IProps>(mapStateToProps, mapDispatchToProps),
   graphql<IGraphqlProps, IProps>(goalDeleteMutation as any, { name: 'deleteGoal' }),
+  graphql<IGraphqlProps, IProps>(goalsQuery as any, {
+    props: ({ data }) => ({
+      refetchGoals: data ? data.refetch : null,
+      goalsLoading: data ? data.loading : false,
+      goalsError: data ? data.error : null,
+      goals: data ? (data as any).goalSuggestionTemplates : null,
+    }),
+  }),
 )(BuilderGoals);

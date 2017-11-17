@@ -22,40 +22,10 @@ exports[`builder concerns renders builder concerns 1`] = `
     className="bottomContainer"
   >
     <div
-      className="itemsList compressed"
-    >
-      <a
-        className="container selected"
-        href="/route/base/concern-id"
-        onClick={[Function]}
-      >
-        <div
-          className="title"
-        >
-          Concern Title
-        </div>
-        <div
-          className="meta"
-        >
-          <div
-            className="dateSection createdAtSection"
-          >
-            <span
-              className="dateLabel"
-            >
-              Created:
-            </span>
-            <span
-              className="dateValue"
-            >
-              6 days ago
-            </span>
-          </div>
-        </div>
-      </a>
-    </div>
+      className="itemsList"
+    />
     <div
-      className="itemContainer visible"
+      className="itemContainer"
     />
   </div>
 </div>

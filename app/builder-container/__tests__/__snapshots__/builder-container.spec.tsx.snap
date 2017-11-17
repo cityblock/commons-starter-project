@@ -19,7 +19,7 @@ exports[`renders builder container 1`] = `
       </a>
       <a
         className="tab"
-        href="/builder/domains/undefined/questions"
+        href="/builder/domains/redirect/questions"
         onClick={[Function]}
       >
         Questions
@@ -52,47 +52,6 @@ exports[`renders builder container 1`] = `
       >
         Progress Note Templates
       </a>
-    </div>
-    <div
-      className="container"
-    >
-      <div
-        className="sortSearchBar"
-      >
-        <div
-          className="createContainer"
-        >
-          <div
-            className="createButton"
-            onClick={[Function]}
-          >
-            Create Domain
-          </div>
-        </div>
-      </div>
-      <div
-        className="bottomContainer"
-      >
-        <div
-          className="itemsList"
-        >
-          <div
-            className="emptyMessage"
-          >
-            <div
-              className="emptyLogo"
-            />
-            <div
-              className="emptyLabel"
-            >
-              No RiskAreas
-            </div>
-          </div>
-        </div>
-        <div
-          className="itemContainer"
-        />
-      </div>
     </div>
   </div>
 </div>

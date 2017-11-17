@@ -47,7 +47,7 @@ export default (
         />
         <Route
           exact
-          path="/builder/:tabId?/:objectId?/:subTabId?/:questionId?"
+          path="/builder/:tab?/:objectId?/:subTab?/:subTabId?"
           component={BuilderContainer as any}
         />
         <Route exact path="/manager/:tabId?/:objectId?" component={ManagerContainer as any} />

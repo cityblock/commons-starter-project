@@ -4,6 +4,8 @@ import { compose, graphql } from 'react-apollo';
 import { connect, Dispatch } from 'react-redux';
 import { Route } from 'react-router-dom';
 import { push } from 'react-router-redux';
+import * as riskAreasQuery from '../graphql/queries/get-risk-areas.graphql';
+import * as screeningToolsQuery from '../graphql/queries/get-screening-tools.graphql';
 /* tslint:disable:max-line-length */
 import * as screeningToolDeleteMutationGraphql from '../graphql/queries/screening-tool-delete-mutation.graphql';
 /* tslint:enable:max-line-length */
@@ -14,16 +16,23 @@ import {
   FullScreeningToolFragment,
 } from '../graphql/types';
 import * as styles from '../shared/css/two-panel.css';
+import { IState as IAppState } from '../store';
 import ScreeningTool from './screening-tool';
 import ScreeningToolCreate from './screening-tool-create';
 import { ScreeningToolRow } from './screening-tool-row';
 
 interface IProps {
-  routeBase: string;
-  screeningTools?: FullScreeningToolFragment[];
-  riskAreas?: FullRiskAreaFragment[];
-  screeningToolId?: string;
+  match: {
+    params: {
+      toolId?: string;
+    };
+  };
   mutate?: any;
+}
+
+interface IStateProps {
+  screeningToolId?: string;
+  routeBase: string;
 }
 
 interface IDispatchProps {
@@ -33,6 +42,8 @@ interface IDispatchProps {
 interface IGraphqlProps {
   loading?: boolean;
   error?: string;
+  riskAreas?: FullRiskAreaFragment[];
+  screeningTools?: FullScreeningToolFragment[];
   deleteScreeningTool: (
     options: { variables: screeningToolDeleteMutationVariables },
   ) => { data: screeningToolDeleteMutation };
@@ -42,7 +53,7 @@ interface IState {
   showCreateScreeningTool: false;
 }
 
-type allProps = IProps & IDispatchProps & IGraphqlProps;
+type allProps = IProps & IDispatchProps & IGraphqlProps & IStateProps;
 
 class BuilderScreeningTools extends React.Component<allProps, IState> {
   constructor(props: allProps) {
@@ -156,6 +167,13 @@ class BuilderScreeningTools extends React.Component<allProps, IState> {
   }
 }
 
+function mapStateToProps(state: IAppState, ownProps: IProps): IStateProps {
+  return {
+    screeningToolId: ownProps.match.params.toolId,
+    routeBase: '/builder/tools',
+  };
+}
+
 function mapDispatchToProps(dispatch: Dispatch<() => void>, ownProps: allProps): IDispatchProps {
   return {
     redirectToScreeningTools: () => {
@@ -166,8 +184,22 @@ function mapDispatchToProps(dispatch: Dispatch<() => void>, ownProps: allProps):
 }
 
 export default compose(
-  connect<{}, IDispatchProps, IProps>(null, mapDispatchToProps),
+  connect<IStateProps, IDispatchProps, IProps>(mapStateToProps, mapDispatchToProps),
   graphql<IGraphqlProps, IProps>(screeningToolDeleteMutationGraphql as any, {
     name: 'deleteScreeningTool',
+  }),
+  graphql<IGraphqlProps, IProps>(riskAreasQuery as any, {
+    props: ({ data }) => ({
+      riskAreasLoading: data ? data.loading : false,
+      riskAreasError: data ? data.error : null,
+      riskAreas: data ? (data as any).riskAreas : null,
+    }),
+  }),
+  graphql<IGraphqlProps, IProps>(screeningToolsQuery as any, {
+    props: ({ data }) => ({
+      screeningToolsLoading: data ? data.loading : false,
+      screeningToolsError: data ? data.error : null,
+      screeningTools: data ? (data as any).screeningTools : null,
+    }),
   }),
 )(BuilderScreeningTools);

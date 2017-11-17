@@ -10,25 +10,37 @@ import ReduxConnectedIntlProvider from '../../redux-connected-intl-provider';
 import { riskArea } from '../../shared/util/test-data';
 import BuilderQuestions from '../builder-questions';
 
-it('renders builder questions', () => {
-  const mockStore = configureMockStore([]);
-  const history = createMemoryHistory();
-  const locale = { messages: ENGLISH_TRANSLATION.messages };
-  const tree = create(
-    <MockedProvider mocks={[]}>
-      <Provider store={mockStore({ locale, riskArea })}>
-        <ReduxConnectedIntlProvider>
-          <ConnectedRouter history={history}>
-            <BuilderQuestions
-              routeBase="/route/base"
-              riskAreaId="risk-area-id"
-              questionId="cool-question-id"
-              riskAreas={[riskArea]}
-            />
-          </ConnectedRouter>
-        </ReduxConnectedIntlProvider>
-      </Provider>
-    </MockedProvider>,
-  ).toJSON();
-  expect(tree).toMatchSnapshot();
+const match = {
+  params: {
+    riskAreaId: riskArea.id,
+    progressNoteTemplateId: undefined,
+    toolId: undefined,
+    questionId: undefined,
+  },
+};
+
+describe('builder concerns', () => {
+  it('renders builder questions', () => {
+    const mockStore = configureMockStore([]);
+    const history = createMemoryHistory();
+    const locale = { messages: ENGLISH_TRANSLATION.messages };
+    const tree = create(
+      <MockedProvider mocks={[]}>
+        <Provider store={mockStore({ locale, riskArea })}>
+          <ReduxConnectedIntlProvider>
+            <ConnectedRouter history={history}>
+              <BuilderQuestions
+                match={match}
+                routeBase="/route/base"
+                riskAreaId="risk-area-id"
+                questionId="cool-question-id"
+                riskAreas={[riskArea]}
+              />
+            </ConnectedRouter>
+          </ReduxConnectedIntlProvider>
+        </Provider>
+      </MockedProvider>,
+    ).toJSON();
+    expect(tree).toMatchSnapshot();
+  });
 });

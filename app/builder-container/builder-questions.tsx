@@ -5,7 +5,10 @@ import { connect, Dispatch } from 'react-redux';
 import { Route } from 'react-router-dom';
 import { push } from 'react-router-redux';
 /* tslint:disable:max-line-length */
+import * as progressNoteTemplatesQuery from '../graphql/queries/get-progress-note-templates.graphql';
 import * as questionsQuery from '../graphql/queries/get-questions.graphql';
+import * as riskAreasQuery from '../graphql/queries/get-risk-areas.graphql';
+import * as screeningToolsQuery from '../graphql/queries/get-screening-tools.graphql';
 import * as questionDeleteMutationGraphql from '../graphql/queries/question-delete-mutation.graphql';
 /* tslint:enable:max-line-length */
 import {
@@ -18,31 +21,43 @@ import {
 } from '../graphql/types';
 import * as sortSearchStyles from '../shared/css/sort-search.css';
 import * as styles from '../shared/css/two-panel.css';
+import { IState as IAppState } from '../store';
 import Question from './question';
 import QuestionCreate from './question-create';
 import { QuestionRow } from './question-row';
 
 interface IProps {
-  routeBase: string;
-  riskAreaId?: string;
-  riskAreas?: FullRiskAreaFragment[];
-  screeningToolId?: string;
-  screeningTools?: FullScreeningToolFragment[];
-  progressNoteTemplateId?: string;
-  progressNoteTemplates?: FullProgressNoteTemplateFragment[];
-  questionId?: string;
+  match: {
+    params: {
+      riskAreaId?: string;
+      progressNoteTemplateId?: string;
+      toolId?: string;
+      questionId?: string;
+    };
+  };
 }
 
 interface IGraphqlProps {
+  riskAreas?: FullRiskAreaFragment[];
+  screeningTools?: FullScreeningToolFragment[];
+  progressNoteTemplates?: FullProgressNoteTemplateFragment[];
   loading?: boolean;
   error?: string;
   deleteQuestion: (
     options: { variables: questionDeleteMutationVariables },
   ) => { data: questionDeleteMutation };
   questions?: FullQuestionFragment[];
-  questionsRefetch: (
+  questionsRefetch?: (
     variables: { riskAreaId?: string; progressNoteTemplateId?: string; screeningToolId?: string },
   ) => any;
+}
+
+interface IStateProps {
+  questionId?: string;
+  routeBase: string;
+  riskAreaId?: string;
+  progressNoteTemplateId?: string;
+  toolId?: string;
 }
 
 interface IDispatchProps {
@@ -52,7 +67,7 @@ interface IDispatchProps {
   directToProgressNoteTemplateQuestions: (progressNoteTemplateId: string) => any;
 }
 
-type allProps = IProps & IGraphqlProps & IDispatchProps;
+type allProps = IProps & IGraphqlProps & IDispatchProps & IStateProps;
 
 interface IState {
   showCreateQuestion: false;
@@ -75,19 +90,34 @@ class BuilderQuestions extends React.Component<allProps, IState> {
   }
 
   componentWillReceiveProps(nextProps: allProps) {
-    const { loading, error, riskAreaId, screeningToolId, progressNoteTemplateId } = nextProps;
-    // TODO: Why do we do this for risk area id and not for other fields
-    this.setState(() => ({ loading, error }));
-    if (riskAreaId && riskAreaId !== this.props.riskAreaId) {
-      this.props.questionsRefetch({ riskAreaId });
+    const {
+      loading,
+      error,
+      riskAreaId,
+      toolId,
+      progressNoteTemplateId,
+      directToRiskAreaQuestions,
+      riskAreas,
+      questionsRefetch,
+    } = nextProps;
+
+    if (!riskAreaId && !toolId && !progressNoteTemplateId && riskAreas) {
+      return directToRiskAreaQuestions(riskAreas[0].id);
     }
 
-    if (progressNoteTemplateId && riskAreaId !== this.props.progressNoteTemplateId) {
-      this.props.questionsRefetch({ progressNoteTemplateId });
-    }
+    if (questionsRefetch) {
+      this.setState(() => ({ loading, error }));
+      if (riskAreaId && riskAreaId !== this.props.riskAreaId) {
+        questionsRefetch({ riskAreaId });
+      }
 
-    if (screeningToolId && screeningToolId !== this.props.screeningToolId) {
-      this.props.questionsRefetch({ screeningToolId });
+      if (progressNoteTemplateId && riskAreaId !== this.props.progressNoteTemplateId) {
+        questionsRefetch({ progressNoteTemplateId });
+      }
+
+      if (toolId && toolId !== this.props.toolId) {
+        questionsRefetch({ screeningToolId: toolId });
+      }
     }
   }
 
@@ -151,12 +181,12 @@ class BuilderQuestions extends React.Component<allProps, IState> {
   render() {
     const {
       questions,
-      routeBase,
       questionId,
       riskAreas,
       riskAreaId,
       screeningTools,
-      screeningToolId,
+      toolId,
+      routeBase,
       progressNoteTemplateId,
       progressNoteTemplates,
     } = this.props;
@@ -179,10 +209,10 @@ class BuilderQuestions extends React.Component<allProps, IState> {
     const createQuestionHtml = showCreateQuestion ? (
       <QuestionCreate
         riskAreaId={riskAreaId}
-        screeningToolId={screeningToolId}
+        screeningToolId={toolId}
         progressNoteTemplateId={progressNoteTemplateId}
         onClose={this.hideCreateQuestion}
-        routeBase={this.props.routeBase}
+        routeBase={routeBase}
       />
     ) : null;
     const renderedQuestion = (props: any) => (
@@ -220,7 +250,7 @@ class BuilderQuestions extends React.Component<allProps, IState> {
     const sortOptions = riskAreaSortOptions
       .concat(screeningToolSortOptions)
       .concat(progressNoteTemplateSortOptions);
-    const selectedValue = screeningToolId || riskAreaId || progressNoteTemplateId;
+    const selectedValue = toolId || riskAreaId || progressNoteTemplateId;
     return (
       <div className={styles.container}>
         <div className={styles.sortSearchBar}>
@@ -249,27 +279,57 @@ class BuilderQuestions extends React.Component<allProps, IState> {
 }
 
 function getPageParams(props: IProps) {
-  const { riskAreaId, screeningToolId, progressNoteTemplateId } = props;
-
-  if (riskAreaId) {
+  const { match } = props;
+  if (match.params.riskAreaId && match.params.riskAreaId !== 'redirect') {
     return {
       filterType: 'riskArea',
-      filterId: riskAreaId,
+      filterId: match.params.riskAreaId,
     };
-  } else if (screeningToolId) {
+  } else if (match.params.toolId) {
     return {
       filterType: 'screeningTool',
-      filterId: screeningToolId,
+      filterId: match.params.toolId,
     };
-  } else if (progressNoteTemplateId) {
+  } else if (match.params.progressNoteTemplateId) {
     return {
       filterType: 'progressNoteTemplate',
-      filterId: progressNoteTemplateId,
+      filterId: match.params.progressNoteTemplateId,
     };
   }
+  return {
+    filterId: undefined,
+  };
 }
 
-function mapDispatchToProps(dispatch: Dispatch<() => void>, ownProps: IProps): IDispatchProps {
+function mapStateToProps(state: IAppState, ownProps: IProps): IStateProps {
+  let routeBase = '';
+  let selectedValue = '';
+  if (ownProps.match.params.toolId) {
+    selectedValue = ownProps.match.params.toolId;
+    routeBase = `/builder/tools/${selectedValue}/questions`;
+  } else if (ownProps.match.params.riskAreaId && ownProps.match.params.riskAreaId !== 'redirect') {
+    selectedValue = ownProps.match.params.riskAreaId;
+    routeBase = `/builder/domains/${selectedValue}/questions`;
+  } else if (ownProps.match.params.progressNoteTemplateId) {
+    selectedValue = ownProps.match.params.progressNoteTemplateId;
+    routeBase = `/builder/progress-note-templates/${selectedValue}/questions`;
+  }
+  return {
+    questionId: ownProps.match.params.questionId,
+    toolId: ownProps.match.params.toolId,
+    progressNoteTemplateId: ownProps.match.params.progressNoteTemplateId,
+    riskAreaId:
+      ownProps.match.params.riskAreaId !== 'redirect'
+        ? ownProps.match.params.riskAreaId
+        : undefined, // Hack to allow us to link to this page w/o knowing about risk areas
+    routeBase,
+  };
+}
+
+function mapDispatchToProps(
+  dispatch: Dispatch<() => void>,
+  ownProps: IProps & IStateProps,
+): IDispatchProps {
   return {
     redirectToQuestions: () => {
       const { routeBase } = ownProps;
@@ -288,17 +348,39 @@ function mapDispatchToProps(dispatch: Dispatch<() => void>, ownProps: IProps): I
 }
 
 export default compose(
-  connect<{}, IDispatchProps, IProps>(null, mapDispatchToProps),
+  connect<IStateProps, IDispatchProps, IProps>(mapStateToProps, mapDispatchToProps),
   graphql<IGraphqlProps, IProps>(questionDeleteMutationGraphql as any, { name: 'deleteQuestion' }),
   graphql<IGraphqlProps, IProps>(questionsQuery as any, {
     options: (props: IProps) => ({
       variables: getPageParams(props),
     }),
+    skip: (props: IProps) => !getPageParams(props).filterId,
     props: ({ data, ownProps }) => ({
       questionsRefetch: data ? data.refetch : false,
       questionsLoading: data ? data.loading : false,
       questionsError: data ? data.error : null,
       questions: data ? (data as any).questions : null,
+    }),
+  }),
+  graphql<IGraphqlProps, IProps>(riskAreasQuery as any, {
+    props: ({ data }) => ({
+      riskAreasLoading: data ? data.loading : false,
+      riskAreasError: data ? data.error : null,
+      riskAreas: data ? (data as any).riskAreas : null,
+    }),
+  }),
+  graphql<IGraphqlProps, IProps>(progressNoteTemplatesQuery as any, {
+    props: ({ data }) => ({
+      progressNoteTemplatesLoading: data ? data.loading : false,
+      progressNoteTemplatesError: data ? data.error : null,
+      progressNoteTemplates: data ? (data as any).progressNoteTemplates : null,
+    }),
+  }),
+  graphql<IGraphqlProps, IProps>(screeningToolsQuery as any, {
+    props: ({ data }) => ({
+      screeningToolsLoading: data ? data.loading : false,
+      screeningToolsError: data ? data.error : null,
+      screeningTools: data ? (data as any).screeningTools : null,
     }),
   }),
 )(BuilderQuestions);

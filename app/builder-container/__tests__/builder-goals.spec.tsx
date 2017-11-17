@@ -19,6 +19,12 @@ afterAll(() => {
   Date.now = oldDate;
 });
 
+const match = {
+  params: {
+    goalId: undefined,
+  },
+};
+
 it('renders builder goals', () => {
   const mockStore = configureMockStore([]);
   const history = createMemoryHistory();
@@ -29,7 +35,12 @@ it('renders builder goals', () => {
       <Provider store={mockStore({ locale, task })}>
         <ReduxConnectedIntlProvider>
           <ConnectedRouter history={history}>
-            <BuilderGoals refetchGoals={() => false} routeBase="/route/base" goals={[goal]} />
+            <BuilderGoals
+              match={match}
+              refetchGoals={() => false}
+              routeBase="/route/base"
+              goals={[goal]}
+            />
           </ConnectedRouter>
         </ReduxConnectedIntlProvider>
       </Provider>
@@ -40,7 +51,7 @@ it('renders builder goals', () => {
 
 it('renders goal create', () => {
   const component = shallow(
-    <Component refetchGoals={() => false} routeBase="/route/base" goals={[goal]} />,
+    <Component match={match} refetchGoals={jest.fn()} routeBase={'/builder/goals'} />,
   );
   const instance = component.instance() as Component;
   instance.showCreateGoal();

@@ -1,7 +1,7 @@
 import * as classNames from 'classnames';
 import * as React from 'react';
 import { connect } from 'react-redux';
-import { Link } from 'react-router-dom';
+import { Link, Redirect, Route, Switch } from 'react-router-dom';
 import * as tabStyles from '../shared/css/tabs.css';
 import { IState as IAppState } from '../store';
 import * as styles from './css/manager.css';
@@ -27,12 +27,6 @@ class ManagerContainer extends React.Component<IProps, {}> {
     const invitesTabStyles = classNames(tabStyles.tab, {
       [tabStyles.selectedTab]: invitesTabSelected,
     });
-    const usersHtml = usersTabSelected ? (
-      <ManagerUsers hasLoggedIn={true} routeBase={`/manager/users`} />
-    ) : null;
-    const invitesHtml = invitesTabSelected ? (
-      <ManagerUsers hasLoggedIn={false} routeBase={`/manager/invites`} />
-    ) : null;
     return (
       <div className={styles.container}>
         <div className={styles.mainBody}>
@@ -44,8 +38,19 @@ class ManagerContainer extends React.Component<IProps, {}> {
               Invites
             </Link>
           </div>
-          {usersHtml}
-          {invitesHtml}
+          <Switch>
+            <Route
+              exact
+              path="/manager/users"
+              component={() => <ManagerUsers hasLoggedIn={true} routeBase={`/manager/users`} />}
+            />
+            <Route
+              exact
+              path="/manager/invites"
+              component={() => <ManagerUsers hasLoggedIn={false} routeBase={`/manager/invites`} />}
+            />
+            <Redirect to="/manager/users" />
+          </Switch>
         </div>
       </div>
     );

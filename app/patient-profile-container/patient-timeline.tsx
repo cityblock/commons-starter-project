@@ -1,6 +1,6 @@
 import * as classNames from 'classnames';
 import * as React from 'react';
-import { graphql } from 'react-apollo';
+import { compose, graphql } from 'react-apollo';
 import { FormattedMessage } from 'react-intl';
 import * as progressNotesQuery from '../graphql/queries/get-progress-notes-for-patient.graphql';
 import { getProgressNotesForPatientQuery, FullProgressNoteFragment } from '../graphql/types';
@@ -12,7 +12,11 @@ import ProgressNotePopup from './progress-note-popup';
 import ProgressNoteRow from './progress-note-row';
 
 interface IProps {
-  patientId: string;
+  match: {
+    params: {
+      patientId: string;
+    };
+  };
 }
 
 interface IGraphqlProps {
@@ -27,8 +31,10 @@ interface IState {
   isProgressNotePopupVisible: boolean;
 }
 
-export class PatientTimeline extends React.Component<IProps & IGraphqlProps, IState> {
-  constructor(props: IProps & IGraphqlProps) {
+type allProps = IProps & IGraphqlProps;
+
+export class PatientTimeline extends React.Component<allProps, IState> {
+  constructor(props: allProps) {
     super(props);
     this.state = {
       loading: props.loading,
@@ -37,7 +43,7 @@ export class PatientTimeline extends React.Component<IProps & IGraphqlProps, ISt
     };
   }
 
-  componentWillReceiveProps(nextProps: IProps & IGraphqlProps) {
+  componentWillReceiveProps(nextProps: allProps) {
     const { loading, error } = nextProps;
 
     this.setState(() => ({ loading, error }));
@@ -84,9 +90,9 @@ export class PatientTimeline extends React.Component<IProps & IGraphqlProps, ISt
 
   render() {
     const { isProgressNotePopupVisible } = this.state;
-    const { progressNotes, patientId } = this.props;
+    const { progressNotes, match } = this.props;
+    const patientId = match.params.patientId;
     const progressNotesList = progressNotes || [];
-
     const saveButtonStyles = classNames(patientInfoStyles.button, patientInfoStyles.saveButton);
     return (
       <div>
@@ -94,7 +100,7 @@ export class PatientTimeline extends React.Component<IProps & IGraphqlProps, ISt
           <div className={sortSearchStyles.sort}>
             <div className={sortSearchStyles.sortLabel}>Sort by:</div>
             <div className={sortSearchStyles.sortDropdown}>
-              <select value="Newest first">
+              <select defaultValue="Newest first">
                 <option value="Newest first">Newest first</option>
               </select>
             </div>
@@ -123,15 +129,17 @@ export class PatientTimeline extends React.Component<IProps & IGraphqlProps, ISt
   }
 }
 
-export default graphql<IGraphqlProps, IProps>(progressNotesQuery as any, {
-  options: (props: IProps) => ({
-    variables: {
-      patientId: props.patientId,
-    },
+export default compose(
+  graphql<IGraphqlProps, IProps>(progressNotesQuery as any, {
+    options: (props: IProps) => ({
+      variables: {
+        patientId: props.match.params.patientId,
+      },
+    }),
+    props: ({ data }) => ({
+      loading: data ? data.loading : false,
+      error: data ? data.error : null,
+      progressNotes: data ? (data as any).progressNotesForPatient : null,
+    }),
   }),
-  props: ({ data }) => ({
-    loading: data ? data.loading : false,
-    error: data ? data.error : null,
-    progressNotes: data ? (data as any).progressNotesForPatient : null,
-  }),
-})(PatientTimeline);
+)(PatientTimeline);

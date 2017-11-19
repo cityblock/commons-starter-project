@@ -20,7 +20,7 @@ it('renders builder container', () => {
       <Provider store={mockStore({ locale, task })}>
         <ReduxConnectedIntlProvider>
           <ConnectedRouter history={history}>
-            <Route component={BuilderContainer as any} />
+            <Route component={BuilderContainer} />
           </ConnectedRouter>
         </ReduxConnectedIntlProvider>
       </Provider>

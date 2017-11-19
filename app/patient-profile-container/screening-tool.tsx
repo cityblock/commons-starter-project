@@ -30,9 +30,12 @@ import { PatientScreeningToolSubmission } from './patient-screening-tool-submiss
 import ScreeningToolResultsPopup from './screening-tool-results-popup';
 
 interface IProps {
-  screeningToolId: string;
-  patientId: string;
-  patientRoute: string;
+  match: {
+    params: {
+      patientId: string;
+      screeningToolId: string;
+    };
+  };
 }
 
 interface IGraphqlProps {
@@ -136,7 +139,9 @@ export class ScreeningTool extends React.Component<allProps, IState> {
   }
 
   async onSubmit() {
-    const { createPatientAnswers, patientId, screeningToolQuestions, screeningToolId } = this.props;
+    const { createPatientAnswers, screeningToolQuestions, match } = this.props;
+    const patientId = match.params.patientId;
+    const screeningToolId = match.params.screeningToolId;
     const { questions } = this.state;
     const questionIds = keys(questions);
 
@@ -318,7 +323,8 @@ export class ScreeningTool extends React.Component<allProps, IState> {
   }
 
   render() {
-    const { patientRoute } = this.props;
+    const { match } = this.props;
+    const patientRoute = `/patients/${match.params.patientId}`;
     const { patientScreeningToolSubmissionId } = this.state;
 
     const submitButtonStyles = classNames(styles.button, styles.saveButton, {
@@ -350,7 +356,7 @@ export default compose(
   graphql<IGraphqlProps, IProps>(screeningToolQuery as any, {
     options: (props: IProps) => ({
       variables: {
-        screeningToolId: props.screeningToolId,
+        screeningToolId: props.match.params.screeningToolId,
       },
     }),
     props: ({ data }) => ({
@@ -364,7 +370,7 @@ export default compose(
     options: (props: IProps) => ({
       variables: {
         filterType: 'screeningTool',
-        filterId: props.screeningToolId,
+        filterId: props.match.params.screeningToolId,
       },
     }),
     props: ({ data }) => ({
@@ -376,11 +382,11 @@ export default compose(
   }),
   graphql<IGraphqlProps, IProps>(patientAnswersCreate as any, { name: 'createPatientAnswers' }),
   graphql<IGraphqlProps, IProps>(patientScreeningToolSubmissionQuery as any, {
-    skip: (props: IProps) => !props.screeningToolId,
+    skip: (props: IProps) => !props.match.params.screeningToolId,
     options: (props: IProps) => ({
       variables: {
-        screeningToolId: props.screeningToolId,
-        patientId: props.patientId,
+        screeningToolId: props.match.params.screeningToolId,
+        patientId: props.match.params.patientId,
       },
     }),
     props: ({ data }) => ({

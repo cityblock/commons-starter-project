@@ -40,11 +40,33 @@ exports[`patient profile container renders patient profile container 1`] = `
         [Function]
       </FormattedMessage>
     </div>
-    <Apollo(Component)
-      patientId="patient-1"
-      routeBase="/patients/patient-1/map"
-      subTabId={undefined}
-    />
+    <Switch>
+      <Route
+        component={[Function]}
+        exact={true}
+        path="/patients/:patientId/map/:subTab?/tasks?/:taskId?"
+      />
+      <Route
+        component={[Function]}
+        exact={true}
+        path="/patients/:patientId/360/:riskAreaId?"
+      />
+      <Route
+        component={[Function]}
+        exact={true}
+        path="/patients/:patientId/tools/:screeningToolId?"
+      />
+      <Route
+        component={[Function]}
+        exact={true}
+        path="/patients/:patientId/timeline"
+      />
+      <Route
+        component={[Function]}
+        exact={true}
+        path="/patients/:patientId/patientInfo"
+      />
+    </Switch>
   </div>
 </div>
 `;

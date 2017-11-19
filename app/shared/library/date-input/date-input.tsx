@@ -17,11 +17,12 @@ const DateInput: React.StatelessComponent<IProps> = (props: IProps) => {
 
   return (
     <input
-      type='date'
+      type="date"
       value={formattedValue}
       onChange={onChange}
       className={dateInputStyles}
-      data-date={displayText || value}/>
+      data-date={displayText || value}
+    />
   );
 };
 

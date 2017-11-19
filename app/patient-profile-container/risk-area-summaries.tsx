@@ -66,12 +66,17 @@ class RiskAreas extends React.Component<IProps & IGraphqlProps, {}> {
           <div className={sortSearchStyles.sort}>
             <div className={sortSearchStyles.sortLabel}>Sort by:</div>
             <div className={sortSearchStyles.sortDropdown}>
-              <select value="Newest first">
+              <select defaultValue="Newest first">
                 <option value="Newest first">Newest first</option>
               </select>
             </div>
             <div className={classNames(sortSearchStyles.search, styles.marginLeft)}>
-              <input required type="text" placeholder="Search by user or keywords" />
+              <input
+                required
+                defaultValue=""
+                type="text"
+                placeholder="Search by user or keywords"
+              />
             </div>
           </div>
         </div>

@@ -1,7 +1,7 @@
 import * as classNames from 'classnames';
 import * as React from 'react';
 import { connect } from 'react-redux';
-import { Link, Route, Switch } from 'react-router-dom';
+import { Link, Redirect, Route, Switch } from 'react-router-dom';
 import {
   FullConcernFragment,
   FullGoalSuggestionTemplateFragment,
@@ -133,15 +133,16 @@ class BuilderContainer extends React.Component<allProps, {}> {
               path="/builder/progress-note-templates/:progressNoteTemplateId/questions/:questionId?"
               component={BuilderQuestions}
             />
-            <Route exact path="/builder/domains/:riskAreaId?" component={BuilderRiskAreas as any} />
-            <Route exact path="/builder/tools/:toolId?" component={BuilderScreeningTools as any} />
-            <Route exact path="/builder/concerns/:concernId?" component={BuilderConcerns as any} />
-            <Route exact path="/builder/goals/:goalId?" component={BuilderGoals as any} />
+            <Route exact path="/builder/domains/:riskAreaId?" component={BuilderRiskAreas} />
+            <Route exact path="/builder/tools/:toolId?" component={BuilderScreeningTools} />
+            <Route exact path="/builder/concerns/:concernId?" component={BuilderConcerns} />
+            <Route exact path="/builder/goals/:goalId?" component={BuilderGoals} />
             <Route
               exact
               path="/builder/progress-note-templates/:progressNoteTemplateId?"
-              component={BuilderProgressNoteTemplates as any}
+              component={BuilderProgressNoteTemplates}
             />
+            <Redirect to="/builder/domains" />
           </Switch>
         </div>
       </div>

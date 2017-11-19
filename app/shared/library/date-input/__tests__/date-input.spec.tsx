@@ -26,9 +26,7 @@ describe('Library Date Input Component', () => {
     expect(wrapper.find('input').props().className).toBe('dateInput');
   });
 
-  const wrapper2 = shallow(
-    <DateInput value={value} onChange={onChange} className={custom} />,
-  );
+  const wrapper2 = shallow(<DateInput value={value} onChange={onChange} className={custom} />);
 
   it('applies custom styles', () => {
     expect(wrapper2.find('input').props().className).toBe(`dateInput ${custom}`);

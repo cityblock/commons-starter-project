@@ -7,13 +7,7 @@ import { IProps, PatientMap } from '../patient-map';
 describe('Patient Map Component', () => {
   const patientId = 'sansaStark';
   const routeBase = '/patients/sansaStark/map';
-  const match = {
-    params: {
-      subSubTabId: '',
-    },
-  };
-
-  const wrapper = shallow(<PatientMap patientId={patientId} routeBase={routeBase} match={match} />);
+  const wrapper = shallow(<PatientMap patientId={patientId} routeBase={routeBase} />);
 
   it('renders patient care plan', () => {
     const carePlan = wrapper.find(PatientCarePlan);
@@ -31,14 +25,8 @@ describe('Patient Map Component', () => {
 
   describe('Expanded Task View', () => {
     const taskId = 'littlefinger';
-    const match2 = {
-      params: {
-        subSubTabId: taskId,
-      },
-    };
-
     const wrapper2 = shallow(
-      <PatientMap patientId={patientId} routeBase={routeBase} match={match2} />,
+      <PatientMap patientId={patientId} routeBase={routeBase} taskId={taskId} />,
     );
 
     it('renders associated task', () => {

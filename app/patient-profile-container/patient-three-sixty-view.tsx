@@ -3,34 +3,40 @@ import RiskAreaAssessment from './risk-area-assessment';
 import RiskAreaSummaries from './risk-area-summaries';
 
 interface IProps {
-  patientId: string;
-  routeBase: string;
-  patientRoute: string;
-  riskAreaId?: string;
+  match: {
+    params: {
+      patientId: string;
+      riskAreaId?: string;
+    };
+  };
 }
 
-export default class PatientThreeSixtyView extends React.Component<IProps, {}> {
-  render() {
-    const { patientId, riskAreaId, routeBase, patientRoute } = this.props;
+const PatientThreeSixtyView: React.StatelessComponent<IProps> = props => {
+  const { match } = props;
+  const patientId = match.params.patientId;
+  const riskAreaId = match.params.riskAreaId;
+  const routeBase = `/patients/${match.params.patientId}/360`;
+  const patientRoute = `/patients/${match.params.patientId}`;
 
-    const riskAreas = !riskAreaId ? (
-      <RiskAreaSummaries patientId={patientId} routeBase={routeBase} />
-    ) : null;
+  const riskAreas = !riskAreaId ? (
+    <RiskAreaSummaries patientId={patientId} routeBase={routeBase} />
+  ) : null;
 
-    const riskAreaAssessment = riskAreaId ? (
-      <RiskAreaAssessment
-        routeBase={routeBase}
-        patientRoute={patientRoute}
-        riskAreaId={riskAreaId}
-        patientId={patientId}
-      />
-    ) : null;
+  const riskAreaAssessment = riskAreaId ? (
+    <RiskAreaAssessment
+      routeBase={routeBase}
+      patientRoute={patientRoute}
+      riskAreaId={riskAreaId}
+      patientId={patientId}
+    />
+  ) : null;
 
-    return (
-      <div>
-        {riskAreas}
-        {riskAreaAssessment}
-      </div>
-    );
-  }
-}
+  return (
+    <div>
+      {riskAreas}
+      {riskAreaAssessment}
+    </div>
+  );
+};
+
+export default PatientThreeSixtyView;

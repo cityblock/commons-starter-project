@@ -9,7 +9,7 @@ import PatientScratchPad from './patient-scratch-pad';
 
 interface IProps {
   patientId: string;
-  patient?: ShortPatientFragment;
+  patient?: ShortPatientFragment | null;
   condensedPatientInfo?: boolean;
 }
 

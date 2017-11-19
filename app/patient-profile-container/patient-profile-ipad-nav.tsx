@@ -8,7 +8,7 @@ import PatientMedications from './patient-medications';
 
 interface IProps {
   patientId: string;
-  patient?: ShortPatientFragment;
+  patient?: ShortPatientFragment | null;
 }
 
 interface IState {

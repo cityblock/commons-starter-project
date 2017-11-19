@@ -29,11 +29,7 @@ describe('task row', () => {
         <Provider store={mockStore({ locale, task })}>
           <ReduxConnectedIntlProvider>
             <ConnectedRouter history={history}>
-              <TaskRow
-                task={task}
-                selected={true}
-                routeBase={'/foo/bar'}
-              />
+              <TaskRow task={task} selected={true} routeBase={'/foo/bar'} />
             </ConnectedRouter>
           </ReduxConnectedIntlProvider>
         </Provider>
@@ -60,11 +56,7 @@ describe('task row', () => {
         <Provider store={mockStore({ locale, task })}>
           <ReduxConnectedIntlProvider>
             <ConnectedRouter history={history}>
-              <TaskRow
-                task={task}
-                selected={true}
-                routeBase={'/foo/bar'}
-              />
+              <TaskRow task={task} selected={true} routeBase={'/foo/bar'} />
             </ConnectedRouter>
           </ReduxConnectedIntlProvider>
         </Provider>

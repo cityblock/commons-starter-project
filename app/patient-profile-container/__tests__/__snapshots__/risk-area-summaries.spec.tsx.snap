@@ -17,7 +17,7 @@ exports[`renders risk area summaries 1`] = `
         className="sortDropdown"
       >
         <select
-          value="Newest first"
+          defaultValue="Newest first"
         >
           <option
             value="Newest first"
@@ -30,6 +30,7 @@ exports[`renders risk area summaries 1`] = `
         className="search marginLeft"
       >
         <input
+          defaultValue=""
           placeholder="Search by user or keywords"
           required={true}
           type="text"

@@ -17,7 +17,7 @@ exports[`renders patient info 1`] = `
         className="sortDropdown"
       >
         <select
-          value="Demographic info"
+          defaultValue="Demographic info"
         >
           <option
             value="Demographic info"
@@ -53,7 +53,7 @@ exports[`renders patient info 1`] = `
         />
       </div>
       <div
-        className="button saveButton"
+        className="button saveButton inactiveButton"
         onClick={[Function]}
       >
         <span>

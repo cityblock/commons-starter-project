@@ -17,7 +17,7 @@ exports[`renders timeline 1`] = `
         className="sortDropdown"
       >
         <select
-          value="Newest first"
+          defaultValue="Newest first"
         >
           <option
             value="Newest first"

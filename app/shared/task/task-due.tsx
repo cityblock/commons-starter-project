@@ -57,7 +57,8 @@ class TaskDue extends React.Component<IProps, IState> {
         <DateInput
           value={completedAt || dueAt}
           onChange={this.onDueDateChange}
-          displayText={changeDueDateError || dueDate} />
+          displayText={changeDueDateError || dueDate}
+        />
       </div>
     );
   }

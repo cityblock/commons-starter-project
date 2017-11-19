@@ -18,7 +18,7 @@ exports[`renders patient 360 view 1`] = `
           className="sortDropdown"
         >
           <select
-            value="Newest first"
+            defaultValue="Newest first"
           >
             <option
               value="Newest first"
@@ -31,6 +31,7 @@ exports[`renders patient 360 view 1`] = `
           className="search marginLeft"
         >
           <input
+            defaultValue=""
             placeholder="Search by user or keywords"
             required={true}
             type="text"

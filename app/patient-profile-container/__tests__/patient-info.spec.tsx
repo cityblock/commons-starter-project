@@ -12,6 +12,7 @@ import PatientInfo from '../patient-info';
 
 const locale = { messages: ENGLISH_TRANSLATION.messages };
 const mockStore = configureMockStore([]);
+const match = { params: { patientId: patient.id } };
 
 it('renders patient info', () => {
   const history = createMemoryHistory();
@@ -20,7 +21,7 @@ it('renders patient info', () => {
       <Provider store={mockStore({ locale })}>
         <ReduxConnectedIntlProvider>
           <ConnectedRouter history={history}>
-            <PatientInfo patientId={patient.id} patient={patient} />
+            <PatientInfo patientId={patient.id} patient={patient} match={match} />
           </ConnectedRouter>
         </ReduxConnectedIntlProvider>
       </Provider>

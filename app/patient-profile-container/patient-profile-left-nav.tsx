@@ -9,7 +9,7 @@ import PatientProfileIpadNav from './patient-profile-ipad-nav';
 
 interface IProps {
   browserSize: Size;
-  patient?: ShortPatientFragment;
+  patient?: ShortPatientFragment | null;
   patientId: string;
 }
 

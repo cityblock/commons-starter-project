@@ -21,7 +21,7 @@ it('renders tasks container', () => {
       <Provider store={mockStore({ locale, task, eventNotifications })}>
         <ReduxConnectedIntlProvider>
           <ConnectedRouter history={history}>
-            <Route component={TasksContainer as any} />
+            <Route component={TasksContainer} />
           </ConnectedRouter>
         </ReduxConnectedIntlProvider>
       </Provider>

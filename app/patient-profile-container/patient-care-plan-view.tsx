@@ -10,12 +10,18 @@ import { getPatientCarePlanQuery } from '../graphql/types';
 import * as tabStyles from '../shared/css/tabs.css';
 import * as styles from './css/patient-care-plan.css';
 import PatientCarePlanSuggestions from './patient-care-plan-suggestions';
-import PatientMap from './patient-map';
+import { PatientMap } from './patient-map';
 
-export interface IProps {
-  patientId: string;
-  subTabId?: 'active' | 'suggestions';
-  routeBase: string;
+type SelectableTabs = 'active' | 'suggestions';
+
+interface IProps {
+  match: {
+    params: {
+      patientId: string;
+      subTab?: SelectableTabs;
+      taskId?: string;
+    };
+  };
 }
 
 interface IGraphqlProps {
@@ -25,20 +31,28 @@ interface IGraphqlProps {
   error?: string;
 }
 
-export const PatientCarePlanView = (props: IProps & IGraphqlProps) => {
-  const { subTabId, routeBase, patientId, patientCarePlan, loading } = props;
-  const isSuggestions = subTabId === 'suggestions';
+export type allProps = IProps & IGraphqlProps;
+
+export const PatientCarePlanView = (props: allProps) => {
+  const { patientCarePlan, loading, match } = props;
+
+  const patientId = match.params.patientId;
+  const subTab = match.params.subTab;
+  const routeBase = `/patients/${match.params.patientId}/map`;
+  const taskId = match.params.taskId;
+
+  const isSuggestions = subTab === 'suggestions';
 
   const carePlanSuggestions = isSuggestions ? (
     <PatientCarePlanSuggestions routeBase={routeBase} patientId={patientId} />
   ) : null;
-
   const carePlan = !isSuggestions ? (
     <PatientMap
       loading={loading}
       carePlan={patientCarePlan}
       routeBase={`${routeBase}/active`}
       patientId={patientId}
+      taskId={taskId}
     />
   ) : null;
 
@@ -79,7 +93,7 @@ export const PatientCarePlanView = (props: IProps & IGraphqlProps) => {
 export default graphql<IGraphqlProps, IProps>(patientCarePlanQuery as any, {
   options: (props: IProps) => ({
     variables: {
-      patientId: props.patientId,
+      patientId: props.match.params.patientId,
     },
     fetchPolicy: 'cache-and-network', // Always get the latest care plan
   }),

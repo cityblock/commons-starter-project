@@ -28,29 +28,25 @@ const PatientRedirect = (options: any) => (
 export default (
   <Main>
     <Switch>
-      <Route exact path="/" component={LogIn as any} />
+      <Route exact path="/" component={LogIn} />
       <Authentication>
         <Route
           exact
           path="/notifications/:eventNotificationType?"
-          component={EventNotificationsContainer as any}
+          component={EventNotificationsContainer}
         />
-        <Route exact path="/tasks/:taskId?" component={TasksContainer as any} />
-        <Route exact path="/settings" component={SettingsContainer as any} />
-        <Route exact path="/patient-intake" component={PatientEnrollmentContainer as any} />
-        <Route exact path="/patients" component={PatientPanelContainer as any} />
-        <Route exact path="/patients/:patientId" component={PatientRedirect as any} />
-        <Route
-          exact
-          path="/patients/:patientId/:tab/:subTab?/:subSubTab?/:subSubTabId?"
-          component={PatientProfileContainer as any}
-        />
+        <Route exact path="/tasks/:taskId?" component={TasksContainer} />
+        <Route exact path="/settings" component={SettingsContainer} />
+        <Route exact path="/patient-intake" component={PatientEnrollmentContainer} />
+        <Route exact path="/patients" component={PatientPanelContainer} />
+        <Route exact path="/patients/:patientId" component={PatientRedirect} />
+        <Route path="/patients/:patientId/:tab" component={PatientProfileContainer} />
         <Route
           exact
           path="/builder/:tab?/:objectId?/:subTab?/:subTabId?"
-          component={BuilderContainer as any}
+          component={BuilderContainer}
         />
-        <Route exact path="/manager/:tabId?/:objectId?" component={ManagerContainer as any} />
+        <Route exact path="/manager/:tabId?/:objectId?" component={ManagerContainer} />
       </Authentication>
     </Switch>
   </Main>

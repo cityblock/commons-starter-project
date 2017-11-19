@@ -7,10 +7,12 @@ import { create } from 'react-test-renderer';
 import configureMockStore from 'redux-mock-store';
 import { ENGLISH_TRANSLATION } from '../../reducers/messages/en';
 import ReduxConnectedIntlProvider from '../../redux-connected-intl-provider';
+import { patient } from '../../shared/util/test-data';
 import PatientThreeSixtyView from '../patient-three-sixty-view';
 
 const locale = { messages: ENGLISH_TRANSLATION.messages };
 const mockStore = configureMockStore([]);
+const match = { params: { patientId: patient.id } };
 
 it('renders patient 360 view', () => {
   const history = createMemoryHistory();
@@ -19,11 +21,7 @@ it('renders patient 360 view', () => {
       <Provider store={mockStore({ locale })}>
         <ReduxConnectedIntlProvider>
           <ConnectedRouter history={history}>
-            <PatientThreeSixtyView
-              patientId={'patient-1'}
-              patientRoute={'/patients/patient-1'}
-              routeBase={'/patients/patient-1/360'}
-            />
+            <PatientThreeSixtyView match={match} />
           </ConnectedRouter>
         </ReduxConnectedIntlProvider>
       </Provider>

@@ -4,11 +4,12 @@ import * as React from 'react';
 import { compose, graphql } from 'react-apollo';
 import { FormattedMessage } from 'react-intl';
 import { DOB_FORMAT } from '../config';
+import * as patientQuery from '../graphql/queries/get-patient.graphql';
 import * as editPatientMutationGraphql from '../graphql/queries/patient-edit-mutation.graphql';
 import {
+  getPatientQuery,
   patientEditMutation,
   patientEditMutationVariables,
-  ShortPatientFragment,
 } from '../graphql/types';
 import * as sortSearchStyles from '../shared/css/sort-search.css';
 import PatientContactForm, { IState as IPatientContactState } from '../shared/patient-contact-form';
@@ -27,14 +28,18 @@ interface IOptions {
 
 interface IProps {
   mutate?: any;
-  patientId: string;
-  patient?: ShortPatientFragment;
-  loading?: boolean;
-  error?: string;
+  match: {
+    params: {
+      patientId: string;
+    };
+  };
 }
 
 interface IGraphqlProps {
   updatePatientInfo: (options: IOptions) => { data: patientEditMutation };
+  patient?: getPatientQuery['patient'];
+  loading?: boolean;
+  error?: string;
 }
 
 type IState = IPatientDemographicsState &
@@ -136,7 +141,7 @@ export class PatientInfo extends React.Component<allProps, IState> {
   }
 
   async onClickSave() {
-    const { patientId, updatePatientInfo, loading, error } = this.props;
+    const { match, updatePatientInfo, loading, error } = this.props;
     const {
       firstName,
       middleName,
@@ -149,7 +154,7 @@ export class PatientInfo extends React.Component<allProps, IState> {
       consentToText,
       saveLoading,
     } = this.state;
-
+    const patientId = match.params.patientId;
     if (!loading && !error && !saveLoading) {
       this.setState(() => ({ saveSuccess: false, saveLoading: true, saveError: undefined }));
       try {
@@ -225,7 +230,7 @@ export class PatientInfo extends React.Component<allProps, IState> {
               {(message: string) => <div className={sortSearchStyles.sortLabel}>{message}</div>}
             </FormattedMessage>
             <div className={sortSearchStyles.sortDropdown}>
-              <select value="Demographic info">
+              <select defaultValue="Demographic info">
                 <option value="Demographic info">Demographic info</option>
               </select>
             </div>
@@ -298,4 +303,16 @@ export class PatientInfo extends React.Component<allProps, IState> {
 
 export default compose(
   graphql<IGraphqlProps, IProps>(editPatientMutationGraphql as any, { name: 'updatePatientInfo' }),
+  graphql<IGraphqlProps, IProps>(patientQuery as any, {
+    options: (props: allProps) => ({
+      variables: {
+        patientId: props.match.params.patientId,
+      },
+    }),
+    props: ({ data }) => ({
+      loading: data ? data.loading : false,
+      error: data ? data.error : null,
+      patient: data ? (data as any).patient : null,
+    }),
+  }),
 )(PatientInfo);

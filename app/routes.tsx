@@ -17,7 +17,7 @@ import SettingsContainer from './settings-container/settings-container';
 import TasksContainer from './tasks-container/tasks-container';
 
 const PatientRedirect = (options: any) => (
-  <Redirect to={`/patients/${options.match.params.patientId}/map`} />
+  <Redirect to={`/patients/${options.match.params.patientId}/map/active`} />
 );
 
 /**

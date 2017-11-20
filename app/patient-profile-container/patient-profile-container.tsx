@@ -107,8 +107,13 @@ export class PatientProfileContainer extends React.Component<allProps> {
           </div>
           <Switch>
             <Route
+                exact
+                path="/patients/:patientId/map/:subTab"
+                component={PatientCarePlanView}
+            />
+            <Route
               exact
-              path="/patients/:patientId/map/:subTab?/tasks?/:taskId?"
+              path="/patients/:patientId/map/:subTab?/tasks/:taskId"
               component={PatientCarePlanView}
             />
             <Route

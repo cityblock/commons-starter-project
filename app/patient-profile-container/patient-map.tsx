@@ -5,7 +5,7 @@ import { push } from 'react-router-redux';
 import { getPatientCarePlanQuery } from '../graphql/types';
 import Task from '../shared/task/task';
 import * as styles from './css/patient-map.css';
-import PatientCarePlan from './patient-care-plan';
+import DnDPatientCarePlan from './drag-and-drop/patient-care-plan';
 
 interface IDispatchProps {
   closeTask?: () => void;
@@ -52,7 +52,7 @@ export class PatientMap extends React.Component<allProps, {}> {
     return (
       <div className={styles.container} onClick={this.closeTask}>
         <div className={mainStyles}>
-          <PatientCarePlan
+          <DnDPatientCarePlan
             loading={loading}
             carePlan={carePlan}
             routeBase={routeBase}

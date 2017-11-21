@@ -1,4 +1,4 @@
-@import '../../css/sizes';
+@import '../../../css/sizes';
 
 .container {
   display: flex;

@@ -486,8 +486,3 @@
   line-height: var(--default-line-height);
   color: var(--light-gray-font-color);
 }
-
-.draggable {
-  user-select: none;
-  cursor: grab;
-}

@@ -93,6 +93,7 @@ export const SPANISH_TRANSLATION = {
     'patientInfo.demographicInfo': 'Información demográfica',
     'patientInfo.contactInfo': 'Información del contacto',
     'patientInfo.insuranceInfo': 'Información del seguro',
+    'patientMap.nextUp': 'El Siguiente',
     'header.settings': 'Ajustes',
     'header.search': 'Buscar',
     'header.patients': 'Pacientes',

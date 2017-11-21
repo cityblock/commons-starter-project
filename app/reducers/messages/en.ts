@@ -94,6 +94,7 @@ export const ENGLISH_TRANSLATION = {
     'patientInfo.demographicInfo': 'Demographic information',
     'patientInfo.contactInfo': 'Contact information',
     'patientInfo.insuranceInfo': 'Insurance information',
+    'patientMap.nextUp': 'Next Up',
     'header.settings': 'Settings',
     'header.search': 'Search',
     'header.patients': 'Patients',

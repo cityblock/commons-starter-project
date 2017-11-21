@@ -181,8 +181,8 @@ export class PatientConcern extends React.Component<IProps, {}> {
                   </div>
                 </div>
               </div>
-              {provided.placeholder}
               <div className={patientGoalsStyles}>{this.renderGoals()}</div>
+              {provided.placeholder}
             </div>
           );
         }}

@@ -1,7 +1,7 @@
 import { shallow } from 'enzyme';
 import * as React from 'react';
 import Task from '../../shared/task/task';
-import PatientCarePlan from '../patient-care-plan';
+import PatientCarePlanDnD from '../drag-and-drop/patient-care-plan';
 import { PatientMap } from '../patient-map';
 
 describe('Patient Map Component', () => {
@@ -15,7 +15,7 @@ describe('Patient Map Component', () => {
   );
 
   it('renders patient care plan', () => {
-    const carePlan = wrapper.find(PatientCarePlan);
+    const carePlan = wrapper.find(PatientCarePlanDnD);
 
     expect(carePlan.length).toBe(1);
     expect(carePlan.props().routeBase).toBe(routeBase);
@@ -53,7 +53,7 @@ describe('Patient Map Component', () => {
     });
 
     it('indicates to patient care plan that task is selected', () => {
-      expect(wrapper2.find(PatientCarePlan).props().selectedTaskId).toBe(taskId);
+      expect(wrapper2.find(PatientCarePlanDnD).props().selectedTaskId).toBe(taskId);
     });
   });
 });

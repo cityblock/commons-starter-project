@@ -8,7 +8,7 @@ import * as taskQuery from '../../graphql/queries/get-task.graphql';
 import * as taskEditMutationGraphql from '../../graphql/queries/task-edit-mutation.graphql';
 import { taskEditMutation, taskEditMutationVariables, FullTaskFragment } from '../../graphql/types';
 import { formatFullName } from '../helpers/format-helpers';
-import Spinner from '../library/spinner';
+import Spinner from '../library/spinner/spinner';
 import * as styles from './css/index.css';
 import TaskHeader from './header';
 import TaskAssignee from './task-assignee';

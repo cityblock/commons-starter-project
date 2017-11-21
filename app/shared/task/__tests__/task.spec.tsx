@@ -1,6 +1,6 @@
 import { shallow } from 'enzyme';
 import * as React from 'react';
-import Spinner from '../../library/spinner';
+import Spinner from '../../library/spinner/spinner';
 import { taskWithComment } from '../../util/test-data';
 import TaskHeader from '../header';
 import { Divider, Task } from '../task';

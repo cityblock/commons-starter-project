@@ -1,7 +1,7 @@
 import * as classNames from 'classnames';
 import * as React from 'react';
 import * as loadingStyles from '../../../shared/css/loading-spinner.css';
-import * as styles from './css/index.css';
+import * as styles from './css/spinner.css';
 
 interface IProps {
   className?: string;

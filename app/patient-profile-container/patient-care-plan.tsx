@@ -1,27 +1,23 @@
-import * as _ from 'lodash';
 import * as React from 'react';
-import { DragDropContext, DropResult } from 'react-beautiful-dnd';
 import { FullPatientConcernFragment } from '../graphql/types';
-import { getPatientCarePlanQuery } from '../graphql/types';
 import PatientConcerns from '../shared/concerns';
-import { insert, remove, reorder } from '../shared/helpers/order-helpers';
-import TextDivider from '../shared/text-divider';
+import Spinner from '../shared/library/spinner/spinner';
+import TextDivider from '../shared/library/text-divider/text-divider';
 import * as styles from './css/patient-care-plan.css';
 
 interface IProps {
   loading?: boolean;
   routeBase: string;
   patientId: string;
-  carePlan?: getPatientCarePlanQuery['carePlanForPatient'];
   selectedTaskId: string;
+  activeConcerns: FullPatientConcernFragment[];
+  inactiveConcerns: FullPatientConcernFragment[];
+  isDragging?: boolean;
 }
 
 interface IState {
   selectedPatientConcernId: string;
   optionsDropdownConcernId: string;
-  activeConcerns: FullPatientConcernFragment[];
-  inactiveConcerns: FullPatientConcernFragment[];
-  isDragging: boolean;
 }
 
 export default class PatientCarePlan extends React.Component<IProps, IState> {
@@ -31,91 +27,16 @@ export default class PatientCarePlan extends React.Component<IProps, IState> {
     this.state = {
       selectedPatientConcernId: '',
       optionsDropdownConcernId: '',
-      activeConcerns: [],
-      inactiveConcerns: [],
-      isDragging: false,
     };
   }
 
   componentWillReceiveProps(nextProps: IProps) {
-    if (!nextProps.carePlan || !nextProps.carePlan.concerns.length) return;
-
-    const activeConcerns = nextProps.carePlan.concerns.filter(
-      (patientConcern: FullPatientConcernFragment) => !!patientConcern.startedAt,
-    );
-    const inactiveConcerns = nextProps.carePlan.concerns.filter(
-      (patientConcern: FullPatientConcernFragment) => !patientConcern.startedAt,
-    );
-
-    if (!_.isEqual(this.state.activeConcerns, activeConcerns)) {
-      this.setState(() => ({ activeConcerns }));
+    if (nextProps.isDragging) {
+      this.setState(() => ({
+        selectedPatientConcernId: '',
+        optionsDropdownConcernId: '',
+      }));
     }
-
-    if (!_.isEqual(this.state.inactiveConcerns, inactiveConcerns)) {
-      this.setState(() => ({ inactiveConcerns }));
-    }
-  }
-
-  onDragStart = () => {
-    // close open concerns and options menu when dragging
-    // will likely remove this and handle when we put re-ordering behind menu option
-    this.setState(() => ({
-      selectedPatientConcernId: '',
-      optionsDropdownConcernId: '',
-      isDragging: true,
-    }));
-  };
-
-  onDragEnd = (result: DropResult) => {
-    // dropped outside the list of concerns
-    if (!result.destination) return;
-
-    // if moving around within active or inactive concern group
-    if (result.source.droppableId === result.destination.droppableId) {
-      this.reorderConcernList(result);
-      // if switching from one group to another
-    } else {
-      this.moveBetweenConcernLists(result);
-    }
-
-    this.setState(() => ({ isDragging: false }));
-  };
-
-  reorderConcernList(result: DropResult) {
-    const endList = result.destination!.droppableId;
-
-    const updatedConcerns = reorder(
-      this.state[endList as 'activeConcerns' | 'inactiveConcerns'],
-      result.source.index,
-      result.destination!.index,
-    );
-
-    this.setState(() => ({ [endList]: updatedConcerns }));
-  }
-
-  moveBetweenConcernLists(result: DropResult) {
-    const startList = result.source.droppableId;
-    const endList = result.destination!.droppableId;
-
-    const updatedStartList = remove(
-      this.state[startList as 'activeConcerns' | 'inactiveConcerns'],
-      this.state[startList as 'activeConcerns' | 'inactiveConcerns'].findIndex(
-        concern => concern.id === result.draggableId,
-      ),
-    );
-
-    const updatedEndList = insert(
-      this.state[endList as 'activeConcerns' | 'inactiveConcerns'],
-      this.state[startList as 'activeConcerns' | 'inactiveConcerns'].find(
-        concern => concern.id === result.draggableId,
-      ),
-      result.destination!.index,
-    );
-
-    this.setState(() => ({
-      [startList]: updatedStartList,
-      [endList]: updatedEndList,
-    }));
   }
 
   onClickPatientConcern = (patientConcernId: string) => {
@@ -144,55 +65,33 @@ export default class PatientCarePlan extends React.Component<IProps, IState> {
     }
   };
 
-  renderCarePlan() {
-    const { loading, selectedTaskId } = this.props;
-    const {
-      selectedPatientConcernId,
-      optionsDropdownConcernId,
-      activeConcerns,
-      inactiveConcerns,
-      isDragging,
-    } = this.state;
+  render(): JSX.Element {
+    const { loading, selectedTaskId, activeConcerns, inactiveConcerns } = this.props;
+    const { selectedPatientConcernId, optionsDropdownConcernId } = this.state;
 
-    if (loading) {
-      return (
-        <div className={styles.emptyCarePlanSuggestionsContainer}>
-          <div className={styles.loadingLabel}>Loading...</div>
-        </div>
-      );
-    }
-
-    if (!activeConcerns.length) {
-      return null;
-    }
+    if (loading) return <Spinner />;
 
     return (
-      <div className={isDragging ? styles.draggable : ''}>
-        <DragDropContext onDragStart={this.onDragStart} onDragEnd={this.onDragEnd}>
-          <PatientConcerns
-            concerns={activeConcerns}
-            selectedPatientConcernId={selectedPatientConcernId}
-            optionsDropdownConcernId={optionsDropdownConcernId}
-            onClick={this.onClickPatientConcern}
-            onOptionsToggle={this.onOptionsToggle}
-            selectedTaskId={selectedTaskId}
-          />
-          <TextDivider label="Next Up" />
-          <PatientConcerns
-            concerns={inactiveConcerns}
-            inactive={true}
-            selectedPatientConcernId={selectedPatientConcernId}
-            optionsDropdownConcernId={optionsDropdownConcernId}
-            onClick={this.onClickPatientConcern}
-            onOptionsToggle={this.onOptionsToggle}
-            selectedTaskId={selectedTaskId}
-          />
-        </DragDropContext>
+      <div className={styles.carePlan}>
+        <PatientConcerns
+          concerns={activeConcerns}
+          selectedPatientConcernId={selectedPatientConcernId}
+          optionsDropdownConcernId={optionsDropdownConcernId}
+          onClick={this.onClickPatientConcern}
+          onOptionsToggle={this.onOptionsToggle}
+          selectedTaskId={selectedTaskId}
+        />
+        <TextDivider messageId="patientMap.nextUp" />
+        <PatientConcerns
+          concerns={inactiveConcerns}
+          inactive={true}
+          selectedPatientConcernId={selectedPatientConcernId}
+          optionsDropdownConcernId={optionsDropdownConcernId}
+          onClick={this.onClickPatientConcern}
+          onOptionsToggle={this.onOptionsToggle}
+          selectedTaskId={selectedTaskId}
+        />
       </div>
     );
-  }
-
-  render() {
-    return <div className={styles.carePlan}>{this.renderCarePlan()}</div>;
   }
 }

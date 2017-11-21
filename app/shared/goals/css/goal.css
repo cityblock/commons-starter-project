@@ -58,3 +58,19 @@
   font-size: var(--default-font-size);
   line-height: var(--default-line-height);
 }
+
+.inactive {
+  /* Cannot just set element opacity because menus will also be opaque */
+  border: 1px solid var(--border-color);
+  background: var(--white-opaque);
+}
+
+.inactive .patientGoalTitle,
+.inactive .patientGoalUpdatedDetailsLabel,
+.inactive .patientGoalUpdatedDetailsDate {
+  color: var(--black-opaque);
+}
+
+.inactive .patientGoalNumber {
+  color: var(--light-blue-opaque);
+}

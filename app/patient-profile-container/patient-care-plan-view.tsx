@@ -10,7 +10,7 @@ import { getPatientCarePlanQuery } from '../graphql/types';
 import * as tabStyles from '../shared/css/tabs.css';
 import * as styles from './css/patient-care-plan.css';
 import PatientCarePlanSuggestions from './patient-care-plan-suggestions';
-import { PatientMap } from './patient-map';
+import PatientMap from './patient-map';
 
 type SelectableTabs = 'active' | 'suggestions';
 

@@ -10,7 +10,6 @@ interface IProps {
   onClick: () => void;
   messageId?: string;
   label?: string;
-
   color?: Color;
   small?: boolean;
   className?: string;

@@ -121,3 +121,7 @@
   margin-right: 10px;
   border-right: 1px solid var(--gray-background-color);
 }
+
+.inactive {
+  opacity: 0.4;
+}

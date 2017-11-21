@@ -9,12 +9,12 @@ import * as tasksStyles from './css/tasks.css';
 
 interface IProps {
   task: ShortTaskFragment;
-  selected: boolean;
+  selectedTaskId: string;
   routeBase: string;
   condensed?: boolean;
 }
 
-function renderFollowers(followers: ShortUserFragment[], photo?: boolean) {
+function renderFollowers(followers: ShortUserFragment[]) {
   const followerCount = followers.length;
   const followersHtmlMap = [];
 
@@ -42,14 +42,15 @@ function renderAssignedTo(user: ShortUserFragment | null) {
 }
 
 export const TaskRow: React.StatelessComponent<IProps> = (props: IProps) => {
-  const { task, selected, routeBase, condensed } = props;
+  const { task, selectedTaskId, routeBase, condensed } = props;
 
   const taskClass = classNames(styles.container, {
-    [styles.selected]: selected,
+    [styles.selected]: !!selectedTaskId && selectedTaskId === task.id,
     [styles.highPriority]: task.priority === 'high',
     [styles.mediumPriority]: task.priority === 'medium',
     [styles.lowPriority]: task.priority === 'low' || task.priority === null,
     [styles.condensed]: !!condensed,
+    [styles.inactive]: !!selectedTaskId && selectedTaskId !== task.id,
   });
   const openedAtStyles = classNames(
     tasksStyles.dateSection,

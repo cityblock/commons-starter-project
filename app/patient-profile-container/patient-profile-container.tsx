@@ -113,7 +113,7 @@ export class PatientProfileContainer extends React.Component<allProps> {
             />
             <Route
               exact
-              path="/patients/:patientId/map/:subTab?/tasks/:taskId"
+              path="/patients/:patientId/map/:subTab/tasks/:taskId"
               component={PatientCarePlanView}
             />
             <Route

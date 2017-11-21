@@ -10,6 +10,7 @@ interface IProps {
   inactive?: boolean;
   onClick: (id: string) => void;
   onOptionsToggle: (id: string) => (e: React.MouseEvent<HTMLDivElement>) => void;
+  selectedTaskId: string;
 }
 
 const PatientConcerns: React.StatelessComponent<IProps> = (props: IProps) => {
@@ -20,6 +21,7 @@ const PatientConcerns: React.StatelessComponent<IProps> = (props: IProps) => {
     inactive,
     onClick,
     onOptionsToggle,
+    selectedTaskId,
   } = props;
 
   if (!concerns.length) {
@@ -50,6 +52,7 @@ const PatientConcerns: React.StatelessComponent<IProps> = (props: IProps) => {
         onOptionsToggle={onOptionsToggle}
         optionsOpen={optionsOpen}
         inactive={inactive}
+        selectedTaskId={selectedTaskId}
       />
     );
   });

@@ -13,6 +13,7 @@ interface IProps {
   onClick: (id: string) => void;
   onOptionsToggle: (id: string) => (e: React.MouseEvent<HTMLDivElement>) => void;
   inactive?: boolean;
+  selectedTaskId: string;
 }
 
 export interface IPatientConcernStats {
@@ -21,7 +22,7 @@ export interface IPatientConcernStats {
   lastUpdated: string;
 }
 
-export default class PatientConcern extends React.Component<IProps, {}> {
+export class PatientConcern extends React.Component<IProps, {}> {
   getStats() {
     const { patientConcern } = this.props;
     const { patientGoals } = patientConcern;
@@ -66,7 +67,7 @@ export default class PatientConcern extends React.Component<IProps, {}> {
   }
 
   renderGoals() {
-    const { patientConcern } = this.props;
+    const { patientConcern, selectedTaskId } = this.props;
     const { patientGoals } = patientConcern;
 
     if (!patientGoals) {
@@ -74,7 +75,12 @@ export default class PatientConcern extends React.Component<IProps, {}> {
     }
 
     return patientGoals.map((patientGoal, index) => (
-      <PatientGoal key={patientGoal.id} patientGoal={patientGoal} goalNumber={index + 1} />
+      <PatientGoal
+        key={patientGoal.id}
+        patientGoal={patientGoal}
+        goalNumber={index + 1}
+        selectedTaskId={selectedTaskId}
+      />
     ));
   }
 
@@ -86,6 +92,7 @@ export default class PatientConcern extends React.Component<IProps, {}> {
       selected,
       optionsOpen,
       inactive,
+      selectedTaskId,
     } = this.props;
     const { patientGoals } = patientConcern;
     const hamburgerClass = classNames(styles.patientConcernHamburger, {
@@ -93,8 +100,8 @@ export default class PatientConcern extends React.Component<IProps, {}> {
     });
 
     const patientConcernStyles = classNames(styles.patientConcern, {
-      [styles.inactive]: inactive,
-      [styles.selected]: selected,
+      [styles.inactive]: inactive || !!selectedTaskId,
+      [styles.selected]: !selectedTaskId && selected,
     });
     const patientGoalsStyles = classNames(styles.patientGoals, {
       [styles.hidden]: !selected || (!patientGoals || !patientGoals.length),
@@ -148,3 +155,5 @@ export default class PatientConcern extends React.Component<IProps, {}> {
     );
   }
 }
+
+export default PatientConcern;

@@ -14,3 +14,4 @@ export const dueAtSection: string;
 export const dateLabel: string;
 export const dateValue: string;
 export const openedAtSection: string;
+export const inactive: string;

@@ -6,3 +6,4 @@ export const patientGoalUpdatedDetails: string;
 export const patientGoalUpdatedDetailsLabel: string;
 export const patientGoalUpdatedDetailsDate: string;
 export const patientGoalTitle: string;
+export const inactive: string;

@@ -9,6 +9,7 @@ interface IProps {
   routeBase: string;
   patientId: string;
   carePlan?: getPatientCarePlanQuery['carePlanForPatient'];
+  selectedTaskId: string;
 }
 
 interface IState {
@@ -37,8 +38,12 @@ export default class PatientCarePlan extends React.Component<IProps, IState> {
   };
 
   onOptionsToggle = (patientConcernId: string) => (e: React.MouseEvent<HTMLDivElement>) => {
+    // do nothing if task open as we close task on clicking outside of task
+    if (this.props.selectedTaskId) return;
+
     // Prevents closing of selected concern if unselected concern options toggle clicked
     e.stopPropagation();
+
     const { optionsDropdownConcernId } = this.state;
 
     if (patientConcernId === optionsDropdownConcernId) {
@@ -49,7 +54,7 @@ export default class PatientCarePlan extends React.Component<IProps, IState> {
   };
 
   renderCarePlan() {
-    const { loading, carePlan } = this.props;
+    const { loading, carePlan, selectedTaskId } = this.props;
     const { selectedPatientConcernId, optionsDropdownConcernId } = this.state;
 
     if (loading) {
@@ -79,6 +84,7 @@ export default class PatientCarePlan extends React.Component<IProps, IState> {
           optionsDropdownConcernId={optionsDropdownConcernId}
           onClick={this.onClickPatientConcern}
           onOptionsToggle={this.onOptionsToggle}
+          selectedTaskId={selectedTaskId}
         />
         <TextDivider label="Next Up" />
         <PatientConcerns
@@ -88,6 +94,7 @@ export default class PatientCarePlan extends React.Component<IProps, IState> {
           optionsDropdownConcernId={optionsDropdownConcernId}
           onClick={this.onClickPatientConcern}
           onOptionsToggle={this.onOptionsToggle}
+          selectedTaskId={selectedTaskId}
         />
       </div>
     );

@@ -1,3 +1,4 @@
+import * as classNames from 'classnames';
 import * as React from 'react';
 import { FormattedDate } from 'react-intl';
 import { FullPatientGoalFragment } from '../../graphql/types';
@@ -7,6 +8,7 @@ import * as styles from './css/goal.css';
 interface IProps {
   goalNumber: number;
   patientGoal: FullPatientGoalFragment;
+  selectedTaskId: string;
 }
 
 export default class PatientGoal extends React.Component<IProps, {}> {
@@ -17,32 +19,37 @@ export default class PatientGoal extends React.Component<IProps, {}> {
   }
 
   renderTasks() {
-    const { patientGoal } = this.props;
+    const { patientGoal, selectedTaskId } = this.props;
     const { patientId, tasks } = patientGoal;
 
     if (!tasks) {
       return null;
     }
 
-    // don't show tasks that have been deleted
+    // don't show tasks that have been completed or deleted
     return tasks
-      .filter(task => task && !task.deletedAt)
+      .filter(task => task && !task.completedAt && !task.deletedAt)
       .map(task => (
         <TaskRow
           key={task.id}
           condensed={true}
           task={task}
-          selected={false}
+          selectedTaskId={selectedTaskId}
           routeBase={`/patients/${patientId}/map/active/tasks`}
         />
       ));
   }
 
   render() {
-    const { patientGoal, goalNumber } = this.props;
+    const { patientGoal, goalNumber, selectedTaskId } = this.props;
+
+    const goalStyles = classNames(styles.patientGoal, {
+      [styles.inactive]: !!selectedTaskId,
+    });
+
     return (
       <div className={styles.patientGoalTaskGroup}>
-        <div className={styles.patientGoal}>
+        <div className={goalStyles}>
           <div className={styles.patientGoalHeaderRow}>
             <div className={styles.patientGoalNumber}>{`Goal ${goalNumber}`}</div>
             <div className={styles.patientGoalUpdatedDetails}>

@@ -1,3 +1,4 @@
+import { shallow } from 'enzyme';
 import { createMemoryHistory } from 'history';
 import * as React from 'react';
 import { MockedProvider } from 'react-apollo/test-utils';
@@ -29,11 +30,29 @@ it('renders patient goal', () => {
       <Provider store={mockStore({ locale })}>
         <ReduxConnectedIntlProvider>
           <ConnectedRouter history={history}>
-            <PatientGoal patientGoal={patientGoal} goalNumber={1} />
+            <PatientGoal patientGoal={patientGoal} goalNumber={1} selectedTaskId="" />
           </ConnectedRouter>
         </ReduxConnectedIntlProvider>
       </Provider>
     </MockedProvider>,
   ).toJSON();
   expect(tree).toMatchSnapshot();
+});
+
+describe('Patient Goal Component', () => {
+  it('applies inactive styles if a task selected', () => {
+    const wrapper = shallow(
+      <PatientGoal goalNumber={1} patientGoal={patientGoal} selectedTaskId="aryaStark" />,
+    );
+
+    expect(wrapper.find('.inactive').length).toBe(1);
+  });
+
+  it('does not apply inactive styles if a task is not selected', () => {
+    const wrapper = shallow(
+      <PatientGoal goalNumber={1} patientGoal={patientGoal} selectedTaskId="" />,
+    );
+
+    expect(wrapper.find('.inactive').length).toBe(0);
+  });
 });

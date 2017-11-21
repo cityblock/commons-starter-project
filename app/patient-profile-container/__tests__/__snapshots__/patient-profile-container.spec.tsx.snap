@@ -49,7 +49,7 @@ exports[`patient profile container renders patient profile container 1`] = `
       <Route
         component={[Function]}
         exact={true}
-        path="/patients/:patientId/map/:subTab?/tasks/:taskId"
+        path="/patients/:patientId/map/:subTab/tasks/:taskId"
       />
       <Route
         component={[Function]}

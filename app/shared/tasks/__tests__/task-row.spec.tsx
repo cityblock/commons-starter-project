@@ -1,3 +1,4 @@
+import { shallow } from 'enzyme';
 import { createMemoryHistory } from 'history';
 import * as React from 'react';
 import { MockedProvider } from 'react-apollo/test-utils';
@@ -29,7 +30,7 @@ describe('task row', () => {
         <Provider store={mockStore({ locale, task })}>
           <ReduxConnectedIntlProvider>
             <ConnectedRouter history={history}>
-              <TaskRow task={task} selected={true} routeBase={'/foo/bar'} />
+              <TaskRow task={task} selectedTaskId={task.id} routeBase={'/foo/bar'} />
             </ConnectedRouter>
           </ReduxConnectedIntlProvider>
         </Provider>
@@ -56,12 +57,32 @@ describe('task row', () => {
         <Provider store={mockStore({ locale, task })}>
           <ReduxConnectedIntlProvider>
             <ConnectedRouter history={history}>
-              <TaskRow task={task} selected={true} routeBase={'/foo/bar'} />
+              <TaskRow task={task} selectedTaskId={task.id} routeBase={'/foo/bar'} />
             </ConnectedRouter>
           </ReduxConnectedIntlProvider>
         </Provider>
       </MockedProvider>,
     ).toJSON();
     expect(tree).toMatchSnapshot();
+  });
+});
+
+describe('Task Row Component', () => {
+  it('applies inactive styles if task row not selected', () => {
+    const wrapper = shallow(
+      <TaskRow task={task} selectedTaskId="sansaStark" routeBase={'/foo/bar'} />,
+    );
+
+    expect(wrapper.find('.inactive').length).toBe(1);
+    expect(wrapper.find('.selected').length).toBe(0);
+  });
+
+  it('applies selected styles if task row selected', () => {
+    const wrapper = shallow(
+      <TaskRow task={task} selectedTaskId={task.id} routeBase={'/foo/bar'} />,
+    );
+
+    expect(wrapper.find('.inactive').length).toBe(0);
+    expect(wrapper.find('.selected').length).toBe(1);
   });
 });

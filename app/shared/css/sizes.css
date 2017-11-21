@@ -51,6 +51,10 @@
   --light-blue-hover: rgba(143, 173, 255, 0.1);
   --white-opaque: rgba(255, 255, 255, 0.4);
   --black-opaque: rgba(0, 0, 0, 0.4);
+  --light-blue-opaque: rgba(143, 173, 255, 0.4);
+  --red-opaque: rgba(255, 113, 91, 0.4);
+  --yellow-opaque: rgba(255, 217, 0, 0.4);
+  --border-opaque: rgba(204, 204, 204, 0.4);
   --border-radius: 2px;
 }
 

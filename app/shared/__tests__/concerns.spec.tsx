@@ -9,7 +9,11 @@ describe('Patient Care Plan Concerns Component', () => {
 
   it('renders no concerns if there are none', () => {
     const wrapper = shallow(
-      <PatientConcerns onClick={onClick} onOptionsToggle={onOptionsToggle} concerns={[]} />,
+      <PatientConcerns
+        onClick={onClick}
+        onOptionsToggle={onOptionsToggle}
+        concerns={[]}
+        selectedTaskId='' />,
     );
 
     expect(wrapper.find(PatientConcern).length).toBe(0);
@@ -36,6 +40,7 @@ describe('Patient Care Plan Concerns Component', () => {
         selectedPatientConcernId={selectedPatientConcernId}
         optionsDropdownConcernId={optionsDropdownConcernId}
         concerns={concerns}
+        selectedTaskId=''
       />,
     );
 

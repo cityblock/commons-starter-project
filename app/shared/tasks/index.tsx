@@ -121,9 +121,13 @@ class Tasks extends React.Component<allProps, IState> {
   }
 
   renderTask(task: FullTaskFragment) {
-    const selected = task.id === this.props.taskId;
     return (
-      <TaskRow key={task.id} task={task} selected={selected} routeBase={this.props.routeBase} />
+      <TaskRow
+        key={task.id}
+        task={task}
+        selectedTaskId={this.props.taskId}
+        routeBase={this.props.routeBase}
+      />
     );
   }
 

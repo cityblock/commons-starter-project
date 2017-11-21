@@ -3,52 +3,5 @@
 exports[`renders patient care plan 1`] = `
 <div
   className="carePlan"
->
-  <div>
-    <div
-      className="emptyCarePlanSuggestionsContainer"
-    >
-      <div
-        className="emptyCarePlanSuggestionsLogo"
-      />
-      <div
-        className="emptyCarePlanSuggestionsLabel"
-      >
-        There are no Next Up concerns for this patient
-      </div>
-      <div
-        className="emptyCarePlanSuggestionsSubtext"
-      >
-        Add concerns here that the patient and the care team do not want to focus on right now but would like to keep track of
-      </div>
-    </div>
-    <div
-      className="container"
-    >
-      <p>
-        Next Up
-      </p>
-      <div
-        className="divider"
-      />
-    </div>
-    <div
-      className="emptyCarePlanSuggestionsContainer"
-    >
-      <div
-        className="emptyCarePlanSuggestionsLogo"
-      />
-      <div
-        className="emptyCarePlanSuggestionsLabel"
-      >
-        There are no Next Up concerns for this patient
-      </div>
-      <div
-        className="emptyCarePlanSuggestionsSubtext"
-      >
-        Add concerns here that the patient and the care team do not want to focus on right now but would like to keep track of
-      </div>
-    </div>
-  </div>
-</div>
+/>
 `;

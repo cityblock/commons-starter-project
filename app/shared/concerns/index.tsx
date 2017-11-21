@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { Droppable, DroppableProvided, DroppableStateSnapshot } from 'react-beautiful-dnd';
 import { FullPatientConcernFragment } from '../../graphql/types';
 import PatientConcern from './concern';
 import * as styles from './css/index.css';
@@ -57,7 +58,18 @@ const PatientConcerns: React.StatelessComponent<IProps> = (props: IProps) => {
     );
   });
 
-  return <div>{renderedConcerns}</div>;
+  const droppableId = inactive ? 'inactiveConcerns' : 'activeConcerns';
+
+  return (
+    <Droppable droppableId={droppableId} type='CONCERN'>
+      {(provided: DroppableProvided, snapshot: DroppableStateSnapshot) => (
+        <div ref={provided.innerRef}>
+          {renderedConcerns}
+          {provided.placeholder}
+        </div>
+      )}
+    </Droppable>
+  );
 };
 
 export default PatientConcerns;

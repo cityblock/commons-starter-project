@@ -1,5 +1,6 @@
 import * as classNames from 'classnames';
 import * as React from 'react';
+import { Draggable, DraggableProvided, DraggableStateSnapshot } from 'react-beautiful-dnd';
 import { FormattedDate } from 'react-intl';
 import { FullPatientConcernFragment } from '../../graphql/types';
 import PatientGoal from '../goals/goal';
@@ -99,59 +100,92 @@ export class PatientConcern extends React.Component<IProps, {}> {
       [styles.hamburgerSelected]: optionsOpen,
     });
 
-    const patientConcernStyles = classNames(styles.patientConcern, {
-      [styles.inactive]: inactive || !!selectedTaskId,
-      [styles.selected]: !selectedTaskId && selected,
-    });
     const patientGoalsStyles = classNames(styles.patientGoals, {
       [styles.hidden]: !selected || (!patientGoals || !patientGoals.length),
     });
 
     const patientConcernStats = this.getStats();
     const { goalCount, taskCount, lastUpdated } = patientConcernStats;
+
     return (
-      <div className={styles.patientConcernGroup}>
-        <div className={patientConcernStyles} onClick={() => onClick(patientConcern.id)}>
-          <div className={styles.patientConcernTitleRow}>
-            <div className={styles.patientConcernTitle}>{patientConcern.concern.title}</div>
-            <div className={hamburgerClass} onClick={onOptionsToggle(patientConcern.id)}>
-              {optionsOpen && <PatientConcernOptions inactive={inactive || false} />}
-            </div>
-          </div>
-          <div className={styles.patientConcernMetaRow}>
-            <div className={styles.patientConcernStats}>
-              <div className={styles.patientConcernStat}>
-                <div className={styles.patientConcernStatLabel}>Goals:</div>
-                <div className={styles.patientConcernStatValue}>{goalCount}</div>
-              </div>
-              <div className={styles.patientConcernStat}>
-                <div className={styles.patientConcernStatLabel}>Tasks:</div>
-                <div className={styles.patientConcernStatValue}>{taskCount}</div>
-              </div>
-            </div>
-            <div className={styles.patientConcernDates}>
-              <div className={styles.patientConcernDate}>
-                <div className={styles.patientConcernDateLabel}>Created:</div>
-                <div className={styles.patientConcernDateValue}>
-                  <FormattedDate
-                    value={patientConcern.createdAt}
-                    year="numeric"
-                    month="short"
-                    day="numeric"
-                  />
+      <Draggable draggableId={patientConcern.id} type='CONCERN'>
+        {(provided: DraggableProvided, snapshot: DraggableStateSnapshot) => {
+          const onClickFull = (() => {
+            // if dragHandleProps null such as when dragging disabled
+            if (!provided.dragHandleProps) {
+              return () => onClick(patientConcern.id);
+            }
+
+            // creating a new onClick function that calls our onClick
+            // event as well as the provided one.
+            return (event: React.MouseEvent<HTMLDivElement>) => {
+              provided.dragHandleProps!.onClick(event);
+              onClick(patientConcern.id);
+            };
+          })();
+
+          const patientConcernStyles = classNames(styles.patientConcern, {
+            [styles.inactive]: inactive || !!selectedTaskId,
+            [styles.selected]: snapshot.isDragging || (!selectedTaskId && selected),
+          });
+
+          return (
+            <div className={styles.patientConcernGroup}>
+              <div
+                className={patientConcernStyles}
+                ref={provided.innerRef}
+                style={provided.draggableStyle}
+                {...provided.dragHandleProps}
+                onClick={onClickFull}>
+                <div className={styles.patientConcernTitleRow}>
+                  <div className={styles.patientConcernTitle}>{patientConcern.concern.title}</div>
+                  <div className={hamburgerClass} onClick={onOptionsToggle(patientConcern.id)}>
+                    {optionsOpen && <PatientConcernOptions inactive={inactive || false} />}
+                  </div>
+                </div>
+                <div className={styles.patientConcernMetaRow}>
+                  <div className={styles.patientConcernStats}>
+                    <div className={styles.patientConcernStat}>
+                      <div className={styles.patientConcernStatLabel}>Goals:</div>
+                      <div className={styles.patientConcernStatValue}>{goalCount}</div>
+                    </div>
+                    <div className={styles.patientConcernStat}>
+                      <div className={styles.patientConcernStatLabel}>Tasks:</div>
+                      <div className={styles.patientConcernStatValue}>{taskCount}</div>
+                    </div>
+                  </div>
+                  <div className={styles.patientConcernDates}>
+                    <div className={styles.patientConcernDate}>
+                      <div className={styles.patientConcernDateLabel}>Created:</div>
+                      <div className={styles.patientConcernDateValue}>
+                        <FormattedDate
+                          value={patientConcern.createdAt}
+                          year="numeric"
+                          month="short"
+                          day="numeric"
+                        />
+                      </div>
+                    </div>
+                    <div className={styles.patientConcernDate}>
+                      <div className={styles.patientConcernDateLabel}>Last update:</div>
+                      <div className={styles.patientConcernDateValue}>
+                        <FormattedDate
+                          value={lastUpdated}
+                          year="numeric"
+                          month="short"
+                          day="numeric" />
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
-              <div className={styles.patientConcernDate}>
-                <div className={styles.patientConcernDateLabel}>Last update:</div>
-                <div className={styles.patientConcernDateValue}>
-                  <FormattedDate value={lastUpdated} year="numeric" month="short" day="numeric" />
-                </div>
-              </div>
+              {provided.placeholder}
+              <div className={patientGoalsStyles}>{this.renderGoals()}</div>
             </div>
-          </div>
-        </div>
-        <div className={patientGoalsStyles}>{this.renderGoals()}</div>
-      </div>
+          );
+          }
+        }
+      </Draggable>
     );
   }
 }

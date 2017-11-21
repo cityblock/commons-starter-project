@@ -1,34 +1,48 @@
-import { createMemoryHistory } from 'history';
+import { shallow } from 'enzyme';
 import * as React from 'react';
-import { MockedProvider } from 'react-apollo/test-utils';
-import { Provider } from 'react-redux';
-import { ConnectedRouter } from 'react-router-redux';
-import { create } from 'react-test-renderer';
-import configureMockStore from 'redux-mock-store';
-import { ENGLISH_TRANSLATION } from '../../../reducers/messages/en';
-import ReduxConnectedIntlProvider from '../../../redux-connected-intl-provider';
-import { currentUser, patient, taskWithComment } from '../../util/test-data';
-import TaskAssignee from '../task-assignee';
+import { FormattedMessage } from 'react-intl';
+import SelectDropdown from '../../library/select-dropdown/select-dropdown';
+import SelectDropdownOption from '../../library/select-dropdown/select-dropdown';
+import { currentUser, user } from '../../util/test-data';
+import { TaskAssignee } from '../task-assignee';
 
-const locale = { messages: ENGLISH_TRANSLATION.messages };
-const mockStore = configureMockStore([]);
+describe('Task Assignee Component', () => {
+  const patientId = 'aryaStark';
+  const taskId = 'facelessMan';
+  const editTask = () => true as any;
 
-it('renders the task assignee component', () => {
-  const history = createMemoryHistory();
-  const tree = create(
-    <MockedProvider mocks={[]}>
-      <Provider store={mockStore({ locale, task: taskWithComment })}>
-        <ReduxConnectedIntlProvider>
-          <ConnectedRouter history={history}>
-            <TaskAssignee
-              patientId={patient.id}
-              taskId={taskWithComment.id}
-              assignee={currentUser}
-            />
-          </ConnectedRouter>
-        </ReduxConnectedIntlProvider>
-      </Provider>
-    </MockedProvider>,
-  ).toJSON();
-  expect(tree).toMatchSnapshot();
+  const wrapper = shallow(
+    <TaskAssignee
+      patientId={patientId}
+      taskId={taskId}
+      editTask={editTask}
+      assignee={currentUser}
+      loading={false}
+      error=''
+      careTeam={[currentUser, user]} />,
+  );
+
+  it('renders basic task assignee component', () => {
+    expect(wrapper.find(FormattedMessage).length).toBe(1);
+    expect(wrapper.find(FormattedMessage).props().id).toBe('task.assign');
+
+    expect(wrapper.find(SelectDropdown).length).toBe(1);
+    expect(wrapper.find(SelectDropdown).props().value).toBe('first last');
+    expect(wrapper.find(SelectDropdown).props().detail).toBe('physician');
+    expect(wrapper.find(SelectDropdown).props().loading).toBeFalsy();
+    expect(wrapper.find(SelectDropdown).props().error).toBeFalsy();
+  });
+
+  it('renders dropdown options for each valid assignee', () => {
+    expect(wrapper.find(SelectDropdownOption).length).toBe(1);
+    expect(wrapper.find(SelectDropdownOption).props().value).toBe('first last');
+    expect(wrapper.find(SelectDropdownOption).props().detail).toBe('physician');
+  });
+
+  it('passes error data if error present', () => {
+    const error = 'Error!';
+    wrapper.setState({ changeAssigneeError: error });
+
+    expect(wrapper.find(SelectDropdown).props().error).toBe(error);
+  });
 });

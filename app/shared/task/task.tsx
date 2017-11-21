@@ -7,7 +7,7 @@ import { Priority } from '../../../server/models/task';
 import * as taskQuery from '../../graphql/queries/get-task.graphql';
 import * as taskEditMutationGraphql from '../../graphql/queries/task-edit-mutation.graphql';
 import { taskEditMutation, taskEditMutationVariables, FullTaskFragment } from '../../graphql/types';
-import { formatPatientName } from '../helpers/format-helpers';
+import { formatFullName } from '../helpers/format-helpers';
 import Spinner from '../library/spinner';
 import * as styles from './css/index.css';
 import TaskHeader from './header';
@@ -86,7 +86,7 @@ export class Task extends React.Component<allProps, IState> {
     const patientId = task && task.patientId;
     const patientName =
       task && task.patient
-        ? formatPatientName(task.patient.firstName || '', task.patient.lastName || '')
+        ? formatFullName(task.patient.firstName || '', task.patient.lastName || '')
         : 'No Patient';
 
     const goal = task && task.patientGoal;
@@ -122,6 +122,7 @@ export class Task extends React.Component<allProps, IState> {
             taskId={taskId}
             patientId={patientId}
             assignee={(task && task.assignedTo) || undefined}
+            editTask={editTask}
           />
           <TaskTracking
             taskId={taskId}

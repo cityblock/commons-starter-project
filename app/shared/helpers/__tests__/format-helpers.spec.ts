@@ -1,7 +1,7 @@
 import {
   formatDueDate,
+  formatFullName,
   formatInputDate,
-  formatPatientName,
   isDueSoon,
   isPastDue,
 } from '../format-helpers';
@@ -19,16 +19,16 @@ describe('Shared Component Helpers', () => {
     Date.now = oldDate;
   });
 
-  describe('formatPatientName', () => {
+  describe('formatFullName', () => {
     const firstName = 'Arya';
     const lastName = 'Stark';
 
     it('renders a patients full name properly', () => {
-      expect(formatPatientName(firstName, lastName)).toBe('Arya Stark');
+      expect(formatFullName(firstName, lastName)).toBe('Arya Stark');
     });
 
     it('renders unknown if full name not present', () => {
-      expect(formatPatientName('', lastName)).toBe('Unknown Stark');
+      expect(formatFullName('', lastName)).toBe('Unknown Stark');
     });
   });
 

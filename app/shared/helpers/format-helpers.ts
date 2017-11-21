@@ -2,7 +2,7 @@ import { format } from 'date-fns';
 
 const ONE_DAY_IN_MILLISECONDS = 24 * 60 * 60 * 1000;
 
-export const formatPatientName = (firstName?: string, lastName?: string): string =>
+export const formatFullName = (firstName?: string, lastName?: string): string =>
   `${firstName || 'Unknown'} ${lastName || 'Unknown'}`;
 
 export const formatDueDate = (dueDate?: string, complete?: boolean): string => {

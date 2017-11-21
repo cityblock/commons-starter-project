@@ -8,7 +8,7 @@
   border: 1px solid var(--border-color);
   transition: border 0.2s linear;
   padding-left: 12px;
-  border-radius: 2px;
+  border-radius: var(--border-radius);
   background-image: url('../../../../assets/down-arrow.svg');
   background-repeat: no-repeat;
   background-position-x: calc(100% - 20px);

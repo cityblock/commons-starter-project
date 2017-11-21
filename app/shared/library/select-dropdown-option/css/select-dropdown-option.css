@@ -1,0 +1,16 @@
+@import '../../../css/sizes';
+
+.option {
+  display: flex;
+  align-items: center;
+  padding: 10px var(--small-gutter);
+
+  &:hover {
+    cursor: pointer;
+    background: var(--light-blue-hover);
+  }
+}
+
+.option .img {
+  margin-left: 0;
+}

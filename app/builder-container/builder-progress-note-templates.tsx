@@ -185,11 +185,11 @@ function mapDispatchToProps(dispatch: Dispatch<() => void>, ownProps: allProps):
 }
 
 export default compose(
-  connect<IStateProps, IDispatchProps, IProps>(mapStateToProps, mapDispatchToProps),
-  graphql<IGraphqlProps, IProps>(progressNoteTemplateDeleteMutationGraphql as any, {
+  connect<IStateProps, IDispatchProps, allProps>(mapStateToProps as any, mapDispatchToProps),
+  graphql<IGraphqlProps, IProps, allProps>(progressNoteTemplateDeleteMutationGraphql as any, {
     name: 'deleteProgressNoteTemplate',
   }),
-  graphql<IGraphqlProps, IProps>(progressNoteTemplatesQuery as any, {
+  graphql<IGraphqlProps, IProps, allProps>(progressNoteTemplatesQuery as any, {
     props: ({ data, ownProps }) => ({
       progressNoteTemplatesRefetch: data ? data.refetch : false,
       progressNoteTemplatesLoading: data ? data.loading : false,

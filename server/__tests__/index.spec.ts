@@ -1,7 +1,6 @@
 import { get as httpGet, IncomingMessage } from 'http';
-import Db from '../db';
-
 import config from '../config';
+import Db from '../db';
 import { main } from '../index';
 
 config.PORT = '3001'; // Use a different route for testing than serving.
@@ -14,10 +13,8 @@ const getFromServer = async (uri: string, basicAuthString?: string) =>
   });
 
 describe('main', () => {
-  let db: Db;
-
   beforeAll(async () => {
-    db = await Db.get();
+    await Db.get();
   });
 
   afterAll(async () => {

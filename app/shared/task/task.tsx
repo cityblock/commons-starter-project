@@ -144,8 +144,8 @@ const mapDispatchToProps = (dispatch: Dispatch<() => void>, ownProps: IProps): I
 
 export default compose(
   connect<{}, IDispatchProps, IProps>(null, mapDispatchToProps),
-  graphql<IGraphqlProps, IProps>(taskEditMutationGraphql as any, { name: 'editTask' }),
-  graphql<IGraphqlProps, IProps>(taskQuery as any, {
+  graphql<IGraphqlProps, IProps, allProps>(taskEditMutationGraphql as any, { name: 'editTask' }),
+  graphql<IGraphqlProps, allProps>(taskQuery as any, {
     skip: (props: allProps) => !props.taskId,
     options: (props: allProps) => ({ variables: { taskId: props.taskId } }),
     props: ({ data }) => ({

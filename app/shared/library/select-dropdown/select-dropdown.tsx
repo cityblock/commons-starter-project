@@ -48,11 +48,11 @@ class SelectDropdown extends React.Component<IProps, IState> {
     if (this.menu && !this.menu.contains(target)) {
       this.setState(() => ({ open: false }));
     }
-  }
+  };
 
   onClick = (e: React.MouseEvent<HTMLDivElement>): void => {
     this.setState((prevState: IState) => ({ open: !prevState.open }));
-  }
+  };
 
   render(): JSX.Element {
     const { avatarUrl, value, detail, loading, error, children } = this.props;
@@ -65,12 +65,10 @@ class SelectDropdown extends React.Component<IProps, IState> {
     const options = isOpen ? (
       loading ? (
         <div className={styles.dropdown}>
-          <SelectDropdownOption value='Loading...' />
+          <SelectDropdownOption value="Loading..." />
         </div>
       ) : (
-        <div className={styles.dropdown}>
-          {children}
-        </div>
+        <div className={styles.dropdown}>{children}</div>
       )
     ) : null;
 
@@ -78,10 +76,13 @@ class SelectDropdown extends React.Component<IProps, IState> {
       <div className={styles.main}>
         <div
           className={containerStyles}
-          ref={ menu => { this.menu = menu; }}
+          ref={menu => {
+            this.menu = menu;
+          }}
           onClick={this.onClick}
-          tabIndex={0}>
-          {avatarUrl && <img src={avatarUrl} alt='avatar photo' />}
+          tabIndex={0}
+        >
+          {avatarUrl && <img src={avatarUrl} alt="avatar photo" />}
           <h4>{value}</h4>
           {detail && <p>{`(${detail})`}</p>}
           {options}

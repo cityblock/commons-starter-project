@@ -257,7 +257,7 @@ function mapDispatchToProps(dispatch: Dispatch<() => void>, ownProps: IProps): I
 
 export default compose(
   connect<{}, IDispatchProps, IProps>(undefined, mapDispatchToProps),
-  graphql<IGraphqlProps, IProps>(careTeamQuery as any, {
+  graphql<IGraphqlProps, IProps, allProps>(careTeamQuery as any, {
     options: (props: IProps) => ({
       variables: {
         patientId: props.patient.id,
@@ -267,7 +267,7 @@ export default compose(
       careTeam: data ? (data as any).patientCareTeam : null,
     }),
   }),
-  graphql<IGraphqlProps, IProps>(createTaskMutationGraphql as any, {
+  graphql<IGraphqlProps, IProps, allProps>(createTaskMutationGraphql as any, {
     name: 'createTask',
     options: {
       refetchQueries: ['getPatientTasks'],

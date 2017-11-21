@@ -174,15 +174,15 @@ function mapDispatchToProps(dispatch: Dispatch<() => void>, ownProps: IProps): I
 }
 
 export default compose(
-  connect<IStateProps, IDispatchProps, IProps>(mapStateToProps, mapDispatchToProps),
-  graphql<IGraphqlProps, IProps>(riskAreasQuery as any, {
+  connect<IStateProps, IDispatchProps, IProps>(mapStateToProps as any, mapDispatchToProps),
+  graphql<IGraphqlProps, IProps, allProps>(riskAreasQuery as any, {
     props: ({ data }) => ({
       riskAreasLoading: data ? data.loading : false,
       riskAreasError: data ? data.error : null,
       riskAreas: data ? (data as any).riskAreas : null,
     }),
   }),
-  graphql<IGraphqlProps, IProps>(riskAreaDeleteMutationGraphql as any, {
+  graphql<IGraphqlProps, IProps, allProps>(riskAreaDeleteMutationGraphql as any, {
     name: 'deleteRiskArea',
   }),
 )(AdminRiskAreas);

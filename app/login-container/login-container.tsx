@@ -25,10 +25,6 @@ interface IDispatchProps {
   onSuccess: () => any;
 }
 
-interface IGoogleLoginResponseOffline {
-  code: string;
-}
-
 interface IGoogleLoginError {
   error: string;
   details: string;
@@ -59,7 +55,7 @@ class LoginContainer extends React.Component<allProps, { error?: string }> {
     document.title = 'Log in | Commons';
   }
 
-  async onSuccess(response: IGoogleLoginResponseOffline) {
+  async onSuccess(response: any) {
     try {
       const res = await this.props.logIn({ variables: { googleAuthCode: response.code } });
       await localStorage.setItem('authToken', res.data.userLogin.authToken);
@@ -126,12 +122,12 @@ function mapDispatchToProps(dispatch: Dispatch<() => void>): IDispatchProps {
 
 export default compose(
   connect<{}, IDispatchProps, IProps>(undefined, mapDispatchToProps),
-  graphql<IGraphqlProps, IProps>(currentUserQuery as any, {
+  graphql<IGraphqlProps, IProps, allProps>(currentUserQuery as any, {
     props: ({ data }) => ({
       loading: data ? data.loading : false,
       error: data ? data.error : null,
       currentUser: data ? (data as any).currentUser : null,
     }),
   }),
-  graphql<IGraphqlProps, IProps>(loginMutation as any, { name: 'logIn' }),
+  graphql<IGraphqlProps, IProps, allProps>(loginMutation as any, { name: 'logIn' }),
 )(LoginContainer);

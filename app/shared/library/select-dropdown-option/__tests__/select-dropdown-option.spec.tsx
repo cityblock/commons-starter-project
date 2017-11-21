@@ -7,11 +7,7 @@ describe('Library Select Dropdown Option Component', () => {
   const onClick = () => true as any;
 
   it('renders basic option component', () => {
-    const wrapper = shallow(
-      <SelectDropdownOption
-        value={value}
-        onClick={onClick} />,
-    );
+    const wrapper = shallow(<SelectDropdownOption value={value} onClick={onClick} />);
 
     expect(wrapper.find('.option').length).toBe(1);
     expect(wrapper.find('.option').props().onClick).toBe(onClick);
@@ -26,10 +22,7 @@ describe('Library Select Dropdown Option Component', () => {
     const avatarUrl = 'sansa.png';
 
     const wrapper = shallow(
-      <SelectDropdownOption
-        value={value}
-        detail={detail}
-        avatarUrl={avatarUrl} />,
+      <SelectDropdownOption value={value} detail={detail} avatarUrl={avatarUrl} />,
     );
 
     expect(wrapper.find('img').length).toBe(1);

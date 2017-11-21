@@ -212,7 +212,7 @@ export class TaskComment extends React.Component<allProps, IState> {
 }
 
 export default compose(
-  graphql<IGraphqlProps, IProps>(currentUserQuery as any, {
+  graphql<IGraphqlProps, IProps, allProps>(currentUserQuery as any, {
     props: ({ data }) => ({
       currentUser: data ? (data as any).currentUser : null,
     }),

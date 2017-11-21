@@ -90,7 +90,7 @@ export const PatientCarePlanView = (props: allProps) => {
   );
 };
 
-export default graphql<IGraphqlProps, IProps>(patientCarePlanQuery as any, {
+export default graphql<IGraphqlProps, IProps, allProps>(patientCarePlanQuery as any, {
   options: (props: IProps) => ({
     variables: {
       patientId: props.match.params.patientId,

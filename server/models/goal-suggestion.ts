@@ -151,7 +151,7 @@ export default class GoalSuggestion extends BaseModel {
       answerGoalSuggestions,
       screeningToolGoalSuggestions,
       'goalSuggestionTemplateId',
-    );
+    ) as GoalSuggestion[];
 
     return goalSuggestions.map(
       (goalSuggestion: GoalSuggestion) => goalSuggestion.goalSuggestionTemplate,

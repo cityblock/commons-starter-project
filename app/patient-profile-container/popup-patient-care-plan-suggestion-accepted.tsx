@@ -161,7 +161,7 @@ class PopupPatientCarePlanSuggestionAccepted extends React.Component<allProps, I
 }
 
 export default compose(
-  graphql<IGraphqlProps, IProps>(patientCarePlanQuery as any, {
+  graphql<IGraphqlProps, allProps>(patientCarePlanQuery as any, {
     options: (props: allProps) => ({
       variables: {
         patientId: props.patientId,
@@ -173,7 +173,7 @@ export default compose(
       carePlan: data ? (data as any).carePlanForPatient : null,
     }),
   }),
-  graphql<IGraphqlProps, IProps>(carePlanSuggestionAcceptMutationGraphql as any, {
+  graphql<IGraphqlProps, IProps, allProps>(carePlanSuggestionAcceptMutationGraphql as any, {
     name: 'acceptCarePlanSuggestion',
     options: {
       refetchQueries: ['getPatientCarePlanSuggestions', 'getPatientCarePlan'],

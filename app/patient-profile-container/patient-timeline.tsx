@@ -72,8 +72,10 @@ export class PatientTimeline extends React.Component<allProps, IState> {
     }
   };
 
-  renderPatientEncounter(progressNote: FullProgressNoteFragment, index: number) {
-    return <ProgressNoteRow key={index} progressNote={progressNote} />;
+  renderPatientEncounter(progressNote: FullProgressNoteFragment | null, index: number) {
+    if (progressNote) {
+      return <ProgressNoteRow key={index} progressNote={progressNote} />;
+    }
   }
 
   showNewProgressNotePopup = () => {
@@ -130,7 +132,7 @@ export class PatientTimeline extends React.Component<allProps, IState> {
 }
 
 export default compose(
-  graphql<IGraphqlProps, IProps>(progressNotesQuery as any, {
+  graphql<IGraphqlProps, IProps, allProps>(progressNotesQuery as any, {
     options: (props: IProps) => ({
       variables: {
         patientId: props.match.params.patientId,

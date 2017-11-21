@@ -96,13 +96,16 @@ export class TaskComments extends React.Component<allProps, IState> {
           previousResult.taskComments && previousResult.taskComments.edges
             ? previousResult.taskComments.edges
             : [];
-        const newNodes = edges.map((edge: { node: FullTaskCommentFragment }) => {
-          const { node } = edge;
-
-          if (node.id === taskCommentId) {
-            return { ...edge, node: { ...node, body } };
-          } else {
-            return { ...edge, node };
+        const newNodes = edges.map(edge => {
+          if (edge && edge.node) {
+            const { node } = edge;
+            if (node) {
+              if (node.id === taskCommentId) {
+                return { ...edge, node: { ...node, body } };
+              } else {
+                return { ...edge, node };
+              }
+            }
           }
         });
 
@@ -227,9 +230,13 @@ export class TaskComments extends React.Component<allProps, IState> {
 }
 
 export default compose(
-  graphql<IGraphqlProps, IProps>(commentCreateMutationGraphql as any, { name: 'createComment' }),
-  graphql<IGraphqlProps, IProps>(commentEditMutationGraphql as any, { name: 'editComment' }),
-  graphql<IGraphqlProps, IProps>(taskCommentsQuery as any, {
+  graphql<IGraphqlProps, IProps, allProps>(commentCreateMutationGraphql as any, {
+    name: 'createComment',
+  }),
+  graphql<IGraphqlProps, IProps, allProps>(commentEditMutationGraphql as any, {
+    name: 'editComment',
+  }),
+  graphql<IGraphqlProps, IProps, allProps>(taskCommentsQuery as any, {
     options: (props: IProps) => ({
       variables: {
         taskId: props.taskId,

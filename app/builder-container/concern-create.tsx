@@ -136,7 +136,7 @@ function mapDispatchToProps(dispatch: Dispatch<() => void>, ownProps: allProps):
 
 export default compose(
   connect(undefined, mapDispatchToProps),
-  graphql<IGraphqlProps, IProps>(concernCreateMutationGraphql as any, {
+  graphql<IGraphqlProps, IProps, allProps>(concernCreateMutationGraphql as any, {
     name: 'createConcern',
     options: {
       refetchQueries: ['getConcerns'],

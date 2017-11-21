@@ -54,9 +54,9 @@ export default async (app: express.Application, logger: Console) => {
   app.use(
     '/graphql',
     bodyParser.json(),
-    graphqlExpress(async (request: express.Request) => ({
+    graphqlExpress(async (request: express.Request | undefined) => ({
       schema: schema as any,
-      context: await getGraphQLContext(request, logger),
+      context: await getGraphQLContext(request!, logger),
       debug: false,
     })),
   );

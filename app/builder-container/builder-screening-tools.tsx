@@ -184,18 +184,18 @@ function mapDispatchToProps(dispatch: Dispatch<() => void>, ownProps: allProps):
 }
 
 export default compose(
-  connect<IStateProps, IDispatchProps, IProps>(mapStateToProps, mapDispatchToProps),
-  graphql<IGraphqlProps, IProps>(screeningToolDeleteMutationGraphql as any, {
+  connect<IStateProps, IDispatchProps, allProps>(mapStateToProps as any, mapDispatchToProps),
+  graphql<IGraphqlProps, IProps, allProps>(screeningToolDeleteMutationGraphql as any, {
     name: 'deleteScreeningTool',
   }),
-  graphql<IGraphqlProps, IProps>(riskAreasQuery as any, {
+  graphql<IGraphqlProps, IProps, allProps>(riskAreasQuery as any, {
     props: ({ data }) => ({
       riskAreasLoading: data ? data.loading : false,
       riskAreasError: data ? data.error : null,
       riskAreas: data ? (data as any).riskAreas : null,
     }),
   }),
-  graphql<IGraphqlProps, IProps>(screeningToolsQuery as any, {
+  graphql<IGraphqlProps, IProps, allProps>(screeningToolsQuery as any, {
     props: ({ data }) => ({
       screeningToolsLoading: data ? data.loading : false,
       screeningToolsError: data ? data.error : null,

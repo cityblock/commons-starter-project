@@ -25,7 +25,7 @@ it('renders patient care plan', () => {
               patientId={'patient-1'}
               loading={false}
               routeBase={'/patients/patient-1/map'}
-              selectedTaskId=''
+              selectedTaskId=""
             />
           </ConnectedRouter>
         </ReduxConnectedIntlProvider>
@@ -46,7 +46,7 @@ describe('Patient Care Plan Component', () => {
         patientId={patientId}
         loading={true}
         routeBase={routeBase}
-        selectedTaskId=''
+        selectedTaskId=""
       />,
     );
 

@@ -145,7 +145,7 @@ function mapDispatchToProps(dispatch: Dispatch<() => void>, ownProps: allProps):
 
 export default compose(
   connect(undefined, mapDispatchToProps),
-  graphql<IGraphqlProps, IProps>(goalCreateMutationGraphql as any, {
+  graphql<IGraphqlProps, IProps, allProps>(goalCreateMutationGraphql as any, {
     name: 'createGoal',
     options: {
       refetchQueries: ['goalSuggestionTemplates'],

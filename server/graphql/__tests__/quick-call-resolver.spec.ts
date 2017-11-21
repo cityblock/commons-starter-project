@@ -15,14 +15,13 @@ import {
 import schema from '../make-executable-schema';
 
 describe('quick call resolver', () => {
-  let db: Db;
   const userRole = 'admin';
   let user: User;
   let patient: Patient;
   let clinic: Clinic;
 
   beforeEach(async () => {
-    db = await Db.get();
+    await Db.get();
     await Db.clear();
 
     clinic = await Clinic.create(createMockClinic());

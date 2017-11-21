@@ -32,7 +32,7 @@ describe('Patient Concern Component', () => {
         onClick={onClick}
         onOptionsToggle={onOptionsToggle}
         optionsOpen={false}
-        selectedTaskId=''
+        selectedTaskId=""
       />,
     );
 

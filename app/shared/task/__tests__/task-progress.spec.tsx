@@ -23,7 +23,7 @@ describe('Task Progress Component - Due Date and Completion Toggle', () => {
   });
 
   it('renders the task completion toggle with correct props', () => {
-    expect(wrapper.find<IProps>(TaskDue).length).toBe(1);
+    expect(wrapper.find<IProps>(TaskDue as any).length).toBe(1);
     expect(wrapper.find<IProps>(TaskCompletion).props().taskId).toBe(taskId);
     expect(wrapper.find<IProps>(TaskCompletion).props().completedAt).toBe(completedAt);
   });

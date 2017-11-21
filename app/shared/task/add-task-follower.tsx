@@ -164,8 +164,10 @@ export class AddTaskFollower extends React.Component<allProps, IState> {
 }
 
 export default compose(
-  graphql<IGraphqlProps, IProps>(taskUserFollowMutationGraphql as any, { name: 'addTaskFollower' }),
-  graphql<IGraphqlProps, IProps>(careTeamQuery as any, {
+  graphql<IGraphqlProps, IProps, allProps>(taskUserFollowMutationGraphql as any, {
+    name: 'addTaskFollower',
+  }),
+  graphql<IGraphqlProps, IProps, allProps>(careTeamQuery as any, {
     options: (props: IProps) => ({
       variables: {
         patientId: props.patientId,

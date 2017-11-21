@@ -108,6 +108,6 @@ describe('Task Component', () => {
     wrapper.setState({ deleteConfirmation: true });
 
     expect(wrapper.find(TaskDelete).length).toBe(1);
-    expect(wrapper.find(TaskDelete).props().taskId).toBe(taskId);
+    expect((wrapper.find(TaskDelete).props() as any).taskId).toBe(taskId);
   });
 });

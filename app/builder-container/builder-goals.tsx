@@ -173,9 +173,9 @@ function mapDispatchToProps(
 }
 
 export default compose(
-  connect<IStateProps, IDispatchProps, IProps>(mapStateToProps, mapDispatchToProps),
-  graphql<IGraphqlProps, IProps>(goalDeleteMutation as any, { name: 'deleteGoal' }),
-  graphql<IGraphqlProps, IProps>(goalsQuery as any, {
+  connect<IStateProps, IDispatchProps, allProps>(mapStateToProps as any, mapDispatchToProps),
+  graphql<IGraphqlProps, IProps, allProps>(goalDeleteMutation as any, { name: 'deleteGoal' }),
+  graphql<IGraphqlProps, IProps, allProps>(goalsQuery as any, {
     props: ({ data }) => ({
       refetchGoals: data ? data.refetch : null,
       goalsLoading: data ? data.loading : false,

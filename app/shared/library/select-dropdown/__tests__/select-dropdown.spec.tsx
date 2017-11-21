@@ -18,17 +18,23 @@ describe('Library Select Dropdown Component', () => {
     const error = 'White walkers breached the wall!';
 
     const wrapper = shallow(
-      <SelectDropdown
-        value={value}
-        error={error}
-        loading={true}
-        children={[]} />,
+      <SelectDropdown value={value} error={error} loading={true} children={[]} />,
     );
 
     wrapper.setState({ open: true });
     expect(wrapper.find('h4').length).toBe(2);
-    expect(wrapper.find('h4').at(1).text()).toBe(error);
-    expect(wrapper.find('h4').at(1).props().className).toBe('errorText');
+    expect(
+      wrapper
+        .find('h4')
+        .at(1)
+        .text(),
+    ).toBe(error);
+    expect(
+      wrapper
+        .find('h4')
+        .at(1)
+        .props().className,
+    ).toBe('errorText');
 
     expect(wrapper.find(SelectDropdownOption).length).toBe(1);
     expect(wrapper.find(SelectDropdownOption).props().value).toBe('Loading...');
@@ -36,14 +42,9 @@ describe('Library Select Dropdown Component', () => {
 
   it('renders avatar and detail if present', () => {
     const avatarUrl = 'jon-snow.png';
-    const detail = 'Night\'s Watch';
+    const detail = "Night's Watch";
 
-    const wrapper = shallow(
-      <SelectDropdown
-        value={value}
-        avatarUrl={avatarUrl}
-        detail={detail} />,
-    );
+    const wrapper = shallow(<SelectDropdown value={value} avatarUrl={avatarUrl} detail={detail} />);
 
     expect(wrapper.find('img').length).toBe(1);
     expect(wrapper.find('img').props().src).toBe(avatarUrl);

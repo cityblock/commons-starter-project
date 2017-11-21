@@ -4,11 +4,10 @@ import RiskArea from '../risk-area';
 import ScreeningTool from '../screening-tool';
 
 describe('screening tool model', () => {
-  let db: Db;
   let riskArea: RiskArea;
 
   beforeEach(async () => {
-    db = await Db.get();
+    await Db.get();
     await Db.clear();
 
     riskArea = await RiskArea.create({ title: 'Housing', order: 1 });

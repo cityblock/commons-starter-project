@@ -224,16 +224,16 @@ export class ProgressNotePopup extends React.Component<allProps, IState> {
 }
 
 export default compose(
-  graphql<IGraphqlProps, IProps>(progressNoteCompleteMutationGraphql as any, {
+  graphql<IGraphqlProps, IProps, allProps>(progressNoteCompleteMutationGraphql as any, {
     name: 'completeProgressNote',
   }),
-  graphql<IGraphqlProps, IProps>(progressNoteGetOrCreateMutationGraphql as any, {
+  graphql<IGraphqlProps, IProps, allProps>(progressNoteGetOrCreateMutationGraphql as any, {
     name: 'getOrCreateProgressNote',
   }),
-  graphql<IGraphqlProps, IProps>(progressNoteEditMutationGraphql as any, {
+  graphql<IGraphqlProps, IProps, allProps>(progressNoteEditMutationGraphql as any, {
     name: 'editProgressNote',
   }),
-  graphql<IGraphqlProps, IProps>(patientQuery as any, {
+  graphql<IGraphqlProps, IProps, allProps>(patientQuery as any, {
     options: (props: IProps) => ({
       variables: {
         patientId: props.patientId,
@@ -246,7 +246,7 @@ export default compose(
       patient: data ? (data as any).patient : null,
     }),
   }),
-  graphql<IGraphqlProps, IProps>(progressNoteTemplatesQuery as any, {
+  graphql<IGraphqlProps, IProps, allProps>(progressNoteTemplatesQuery as any, {
     props: ({ data }) => ({
       progressNoteTemplatesLoading: data ? data.loading : false,
       progressNoteTemplatesError: data ? data.error : null,

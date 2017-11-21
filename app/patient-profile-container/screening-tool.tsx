@@ -353,7 +353,7 @@ export class ScreeningTool extends React.Component<allProps, IState> {
 }
 
 export default compose(
-  graphql<IGraphqlProps, IProps>(screeningToolQuery as any, {
+  graphql<IGraphqlProps, IProps, allProps>(screeningToolQuery as any, {
     options: (props: IProps) => ({
       variables: {
         screeningToolId: props.match.params.screeningToolId,
@@ -366,7 +366,7 @@ export default compose(
       refetchScreeningTool: data ? data.refetch : null,
     }),
   }),
-  graphql<IGraphqlProps, IProps>(screeningToolQuestionsQuery as any, {
+  graphql<IGraphqlProps, IProps, allProps>(screeningToolQuestionsQuery as any, {
     options: (props: IProps) => ({
       variables: {
         filterType: 'screeningTool',
@@ -380,8 +380,10 @@ export default compose(
       refetchScreeningToolQuestions: data ? data.refetch : null,
     }),
   }),
-  graphql<IGraphqlProps, IProps>(patientAnswersCreate as any, { name: 'createPatientAnswers' }),
-  graphql<IGraphqlProps, IProps>(patientScreeningToolSubmissionQuery as any, {
+  graphql<IGraphqlProps, IProps, allProps>(patientAnswersCreate as any, {
+    name: 'createPatientAnswers',
+  }),
+  graphql<IGraphqlProps, IProps, allProps>(patientScreeningToolSubmissionQuery as any, {
     skip: (props: IProps) => !props.match.params.screeningToolId,
     options: (props: IProps) => ({
       variables: {

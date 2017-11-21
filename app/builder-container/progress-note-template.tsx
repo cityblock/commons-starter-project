@@ -1,7 +1,6 @@
 import * as classNames from 'classnames';
 import * as React from 'react';
 import { compose, graphql } from 'react-apollo';
-import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import * as progressNoteTemplateQuery from '../graphql/queries/get-progress-note-template.graphql';
 /* tslint:disable:max-line-length */
@@ -13,11 +12,6 @@ import {
   FullProgressNoteTemplateFragment,
 } from '../graphql/types';
 import * as styles from '../shared/css/two-panel-right.css';
-import { IState as IAppState } from '../store';
-
-interface IStateProps {
-  progressNoteTemplateId?: string;
-}
 
 interface IProps {
   routeBase: string;
@@ -47,7 +41,7 @@ interface IState {
   editTitleError?: string;
 }
 
-type allProps = IProps & IStateProps & IGraphqlProps;
+type allProps = IProps & IGraphqlProps;
 
 export class ProgressNoteTemplate extends React.Component<allProps, IState> {
   editTitleInput: HTMLInputElement | null;
@@ -102,16 +96,15 @@ export class ProgressNoteTemplate extends React.Component<allProps, IState> {
   }
 
   onClickDelete() {
-    const { progressNoteTemplateId } = this.props;
-
+    const progressNoteTemplateId = getProgressNoteTemplateId(this.props);
     if (progressNoteTemplateId) {
       this.setState(() => ({ deleteConfirmationInProgress: true }));
     }
   }
 
   async onConfirmDelete() {
-    const { onDelete, progressNoteTemplateId } = this.props;
-
+    const { onDelete } = this.props;
+    const progressNoteTemplateId = getProgressNoteTemplateId(this.props);
     if (progressNoteTemplateId) {
       try {
         this.setState(() => ({ deleteError: undefined }));
@@ -135,8 +128,9 @@ export class ProgressNoteTemplate extends React.Component<allProps, IState> {
   }
 
   async onKeyDown(event: React.KeyboardEvent<HTMLInputElement>) {
-    const { progressNoteTemplateId, editProgressNoteTemplate } = this.props;
+    const { editProgressNoteTemplate } = this.props;
     const { editedTitle } = this.state;
+    const progressNoteTemplateId = getProgressNoteTemplateId(this.props);
     const enterPressed = event.keyCode === 13;
     const name = event.currentTarget.name;
 
@@ -309,23 +303,18 @@ export class ProgressNoteTemplate extends React.Component<allProps, IState> {
   }
 }
 
-function mapStateToProps(state: IAppState, ownProps: allProps): IStateProps {
-  return {
-    progressNoteTemplateId: ownProps.match
-      ? ownProps.match.params.progressNoteTemplateId
-      : undefined,
-  };
+function getProgressNoteTemplateId(ownProps: IProps): string | undefined {
+  return ownProps.match ? ownProps.match.params.progressNoteTemplateId : undefined;
 }
 
 export default compose(
-  connect<IStateProps, {}, IProps>(mapStateToProps),
-  graphql<IGraphqlProps, IProps>(progressNoteTemplateEditMutationGraphql as any, {
+  graphql<IGraphqlProps, IProps, allProps>(progressNoteTemplateEditMutationGraphql as any, {
     name: 'editProgressNoteTemplate',
   }),
-  graphql<IGraphqlProps, IProps>(progressNoteTemplateQuery as any, {
-    skip: (props: allProps) => !props.progressNoteTemplateId,
-    options: (props: allProps) => ({
-      variables: { progressNoteTemplateId: props.progressNoteTemplateId },
+  graphql<IGraphqlProps, IProps, allProps>(progressNoteTemplateQuery as any, {
+    skip: (props: IProps) => !getProgressNoteTemplateId(props),
+    options: (props: IProps) => ({
+      variables: { progressNoteTemplateId: getProgressNoteTemplateId(props) },
     }),
     props: ({ data }) => ({
       progressNoteTemplateLoading: data ? data.loading : false,

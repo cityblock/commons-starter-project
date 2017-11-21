@@ -7,13 +7,12 @@ import RiskArea from '../risk-area';
 import ScreeningTool from '../screening-tool';
 
 describe('question model', () => {
-  let db: Db;
   let riskArea: RiskArea;
   let screeningTool: ScreeningTool;
   let progressNoteTemplate: ProgressNoteTemplate;
 
   beforeEach(async () => {
-    db = await Db.get();
+    await Db.get();
     await Db.clear();
 
     riskArea = await RiskArea.create({
@@ -136,8 +135,7 @@ describe('question model', () => {
       title: 'testing?',
       answerType: 'dropdown',
       screeningToolId: screeningTool.id,
-      riskAreaId: riskArea.id,
-      type: 'riskArea',
+      type: 'screeningTool',
       order: 3,
     });
     const fetchedQuestions = await Question.getAllForRiskArea(riskArea.id);

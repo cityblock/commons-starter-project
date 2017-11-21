@@ -158,13 +158,15 @@ function mapDispatchToProps(
 }
 
 export default compose(
-  connect<IStateProps, IDispatchProps, IProps>(mapStateToProps, mapDispatchToProps),
-  graphql<IGraphqlProps, IProps>(concernsQuery as any, {
+  connect<IStateProps, IDispatchProps, allProps>(mapStateToProps as any, mapDispatchToProps),
+  graphql<IGraphqlProps, IProps, allProps>(concernsQuery as any, {
     props: ({ data }) => ({
       concernsLoading: data ? data.loading : false,
       concernsError: data ? data.error : null,
       concerns: data ? (data as any).concerns : null,
     }),
   }),
-  graphql<IGraphqlProps, IProps>(concernDeleteMutationGraphql as any, { name: 'deleteConcern' }),
+  graphql<IGraphqlProps, IProps, allProps>(concernDeleteMutationGraphql as any, {
+    name: 'deleteConcern',
+  }),
 )(BuilderConcerns);

@@ -19,7 +19,6 @@ import User from '../user';
 const userRole = 'physician';
 
 describe('patient screening tool submission model', () => {
-  let db: Db;
   let riskArea: RiskArea;
   let screeningTool1: ScreeningTool;
   let screeningTool2: ScreeningTool;
@@ -29,7 +28,7 @@ describe('patient screening tool submission model', () => {
   let clinic: Clinic;
 
   beforeEach(async () => {
-    db = await Db.get();
+    await Db.get();
     await Db.clear();
 
     riskArea = await RiskArea.create({ title: 'Housing', order: 1 });

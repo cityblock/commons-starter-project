@@ -348,9 +348,11 @@ function mapDispatchToProps(
 }
 
 export default compose(
-  connect<IStateProps, IDispatchProps, IProps>(mapStateToProps, mapDispatchToProps),
-  graphql<IGraphqlProps, IProps>(questionDeleteMutationGraphql as any, { name: 'deleteQuestion' }),
-  graphql<IGraphqlProps, IProps>(questionsQuery as any, {
+  connect<IStateProps, IDispatchProps, allProps>(mapStateToProps as any, mapDispatchToProps),
+  graphql<IGraphqlProps, IProps, allProps>(questionDeleteMutationGraphql as any, {
+    name: 'deleteQuestion',
+  }),
+  graphql<IGraphqlProps, IProps, allProps>(questionsQuery as any, {
     options: (props: IProps) => ({
       variables: getPageParams(props),
     }),
@@ -362,21 +364,21 @@ export default compose(
       questions: data ? (data as any).questions : null,
     }),
   }),
-  graphql<IGraphqlProps, IProps>(riskAreasQuery as any, {
+  graphql<IGraphqlProps, IProps, allProps>(riskAreasQuery as any, {
     props: ({ data }) => ({
       riskAreasLoading: data ? data.loading : false,
       riskAreasError: data ? data.error : null,
       riskAreas: data ? (data as any).riskAreas : null,
     }),
   }),
-  graphql<IGraphqlProps, IProps>(progressNoteTemplatesQuery as any, {
+  graphql<IGraphqlProps, IProps, allProps>(progressNoteTemplatesQuery as any, {
     props: ({ data }) => ({
       progressNoteTemplatesLoading: data ? data.loading : false,
       progressNoteTemplatesError: data ? data.error : null,
       progressNoteTemplates: data ? (data as any).progressNoteTemplates : null,
     }),
   }),
-  graphql<IGraphqlProps, IProps>(screeningToolsQuery as any, {
+  graphql<IGraphqlProps, IProps, allProps>(screeningToolsQuery as any, {
     props: ({ data }) => ({
       screeningToolsLoading: data ? data.loading : false,
       screeningToolsError: data ? data.error : null,

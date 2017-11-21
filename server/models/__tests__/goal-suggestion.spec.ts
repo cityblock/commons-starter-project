@@ -23,7 +23,6 @@ import User from '../user';
 const userRole = 'physician';
 
 describe('goal suggestion model', () => {
-  let db: Db;
   let answer: Answer;
   let goalSuggestionTemplate: GoalSuggestionTemplate;
   let riskArea: RiskArea;
@@ -31,7 +30,7 @@ describe('goal suggestion model', () => {
   let clinic: Clinic;
 
   beforeEach(async () => {
-    db = await Db.get();
+    await Db.get();
     await Db.clear();
 
     clinic = await Clinic.create(createMockClinic());

@@ -119,7 +119,7 @@ class QuestionConditionCreate extends React.Component<allProps, IState> {
 }
 
 export default compose(
-  graphql<IGraphqlProps, IProps>(questionConditionCreateMutationGraphql as any, {
+  graphql<IGraphqlProps, IProps, allProps>(questionConditionCreateMutationGraphql as any, {
     name: 'createQuestionCondition',
     options: {
       refetchQueries: ['getQuestions'],

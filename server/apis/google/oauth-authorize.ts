@@ -33,7 +33,7 @@ export async function OauthAuthorize(code: string): Promise<IAuthToken> {
     method: 'POST',
     headers: {
       'Content-Type': 'application/x-www-form-urlencoded',
-    },
+    } as any,
     body: stringify({
       client_id: config.GOOGLE_OAUTH_TOKEN,
       client_secret: config.GOOGLE_OAUTH_SECRET,

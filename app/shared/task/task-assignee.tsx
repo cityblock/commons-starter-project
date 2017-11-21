@@ -50,13 +50,13 @@ export class TaskAssignee extends React.Component<allProps, IState> {
       this.setState(() => ({ loading: true, changeAssigneeError: '' }));
 
       try {
-        await editTask({ variables: { assignedToId: careTeamMemberId, taskId }});
+        await editTask({ variables: { assignedToId: careTeamMemberId, taskId } });
         this.setState(() => ({ loading: false }));
       } catch (err) {
         this.setState(() => ({ loading: false, changeAssigneeError: err.message }));
       }
     }
-  }
+  };
 
   getValidAssignees(): FullUserFragment[] {
     const { careTeam, assignee } = this.props;
@@ -75,7 +75,8 @@ export class TaskAssignee extends React.Component<allProps, IState> {
           onClick={async () => this.onNewAssigneeClick(assigneeOption.id)}
           avatarUrl={avatar}
           value={name}
-          detail={role} />
+          detail={role}
+        />
       );
     });
   }
@@ -85,15 +86,16 @@ export class TaskAssignee extends React.Component<allProps, IState> {
 
     return (
       <div>
-        <FormattedMessage id='task.assign'>{
-          (message: string) => <h3 className={styles.label}>{message}</h3>
-        }</FormattedMessage>
+        <FormattedMessage id="task.assign">
+          {(message: string) => <h3 className={styles.label}>{message}</h3>}
+        </FormattedMessage>
         <SelectDropdown
           value={assigneeInfo.name}
           detail={assigneeInfo.role}
           avatarUrl={assigneeInfo.avatar}
           loading={this.props.loading}
-          error={this.state.changeAssigneeError}>
+          error={this.state.changeAssigneeError}
+        >
           {this.renderCareTeamOptions()}
         </SelectDropdown>
       </div>
@@ -102,7 +104,7 @@ export class TaskAssignee extends React.Component<allProps, IState> {
 }
 
 export default compose(
-  graphql<IGraphqlProps, IProps>(careTeamQuery as any, {
+  graphql<IGraphqlProps, IProps, allProps>(careTeamQuery as any, {
     options: (props: IProps) => ({
       variables: {
         patientId: props.patientId,

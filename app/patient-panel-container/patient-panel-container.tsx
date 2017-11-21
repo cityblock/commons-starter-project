@@ -177,7 +177,7 @@ function mapDispatchToProps(dispatch: Dispatch<() => void>): IDispatchProps {
 
 export default compose(
   connect<{}, IDispatchProps>(undefined, mapDispatchToProps),
-  graphql<IGraphqlProps, IProps>(patientPanelQuery as any, {
+  graphql<IGraphqlProps, IProps, allProps>(patientPanelQuery as any, {
     options: () => ({
       variables: getPageParams(),
     }),

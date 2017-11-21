@@ -14,10 +14,8 @@ import User from '../user';
 const userRole = 'physician';
 
 describe('task followers', () => {
-  let db: Db;
-
   beforeEach(async () => {
-    db = await Db.get();
+    await Db.get();
     await Db.clear();
   });
 

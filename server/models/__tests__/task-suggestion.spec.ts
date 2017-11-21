@@ -7,13 +7,12 @@ import TaskSuggestion from '../task-suggestion';
 import TaskTemplate from '../task-template';
 
 describe('task suggestion model', () => {
-  let db: Db;
   let answer: Answer;
   let taskTemplate: TaskTemplate;
   let question: Question;
 
   beforeEach(async () => {
-    db = await Db.get();
+    await Db.get();
     await Db.clear();
 
     const riskArea = await RiskArea.create({

@@ -134,7 +134,7 @@ function mapDispatchToProps(dispatch: Dispatch<() => void>, ownProps: IProps): I
 
 export default compose(
   connect<{}, IDispatchProps, IProps>(undefined, mapDispatchToProps),
-  graphql<IGraphqlProps, IProps>(patientScreeningToolSubmissionQuery as any, {
+  graphql<IGraphqlProps, IProps, allProps>(patientScreeningToolSubmissionQuery as any, {
     skip: (props: IProps) => !props.patientScreeningToolSubmissionId,
     options: (props: IProps) => ({
       variables: {

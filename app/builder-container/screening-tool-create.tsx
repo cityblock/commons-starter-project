@@ -171,7 +171,7 @@ function mapDispatchToProps(dispatch: Dispatch<() => void>, ownProps: allProps):
 
 export default compose(
   connect(undefined, mapDispatchToProps),
-  graphql<IGraphqlProps, IProps>(screeningToolCreateMutationGraphql as any, {
+  graphql<IGraphqlProps, IProps, allProps>(screeningToolCreateMutationGraphql as any, {
     name: 'createScreeningTool',
     options: {
       refetchQueries: ['getScreeningTools'],

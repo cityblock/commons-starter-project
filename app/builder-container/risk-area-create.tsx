@@ -149,7 +149,7 @@ function mapDispatchToProps(dispatch: Dispatch<() => void>, ownProps: allProps):
 
 export default compose(
   connect(undefined, mapDispatchToProps),
-  graphql<IGraphqlProps, IProps>(riskAreaCreateMutationGraphql as any, {
+  graphql<IGraphqlProps, IProps, allProps>(riskAreaCreateMutationGraphql as any, {
     name: 'createRiskArea',
     options: {
       refetchQueries: ['getRiskAreas'],

@@ -6,14 +6,13 @@ import QuestionCondition from '../question-condition';
 import RiskArea from '../risk-area';
 
 describe('answer model', () => {
-  let db: Db;
   let riskArea: RiskArea;
   let question: Question;
   let question2: Question;
   let answer: Answer;
 
   beforeEach(async () => {
-    db = await Db.get();
+    await Db.get();
     await Db.clear();
 
     riskArea = await RiskArea.create({

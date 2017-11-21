@@ -22,14 +22,13 @@ const pageNumber = 0;
 const pageSize = 10;
 
 describe('task model', () => {
-  let db: Db;
   let patientGoal: PatientGoal;
   let user: User;
   let patient: Patient;
   let clinic: Clinic;
 
   beforeEach(async () => {
-    db = await Db.get();
+    await Db.get();
     await Db.clear();
 
     clinic = await Clinic.create(createMockClinic());

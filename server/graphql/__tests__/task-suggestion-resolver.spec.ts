@@ -9,13 +9,12 @@ import TaskTemplate from '../../models/task-template';
 import schema from '../make-executable-schema';
 
 describe('task suggestion resolver', () => {
-  let db: Db;
   const userRole = 'admin';
   let answer: Answer;
   let taskTemplate: TaskTemplate;
 
   beforeEach(async () => {
-    db = await Db.get();
+    await Db.get();
     await Db.clear();
 
     const riskArea = await RiskArea.create({

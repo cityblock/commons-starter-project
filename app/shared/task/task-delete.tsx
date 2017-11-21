@@ -8,6 +8,8 @@ import Button from '../library/button/button';
 import * as styles from './css/task-delete.css';
 
 interface IProps {
+  mutate?: any;
+  data?: any;
   taskId: string;
   cancelDelete: () => void;
   redirectToMap: () => void;
@@ -85,6 +87,6 @@ export class TaskDelete extends React.Component<allProps, IState> {
   }
 }
 
-export default graphql<IGraphqlProps, IProps>(taskDeleteMutationGraphql as any, {
+export default graphql<IGraphqlProps, IProps, allProps>(taskDeleteMutationGraphql as any, {
   name: 'deleteTask',
 })(TaskDelete);

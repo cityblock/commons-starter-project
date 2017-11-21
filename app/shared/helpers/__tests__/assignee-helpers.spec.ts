@@ -1,7 +1,4 @@
-import {
-  getAssigneeInfo,
-  DEFAULT_AVATAR_URL,
-} from '../assignee-helpers';
+import { getAssigneeInfo, DEFAULT_AVATAR_URL } from '../assignee-helpers';
 
 describe('Assignee Helpers', () => {
   describe('getAssigneeInfo', () => {

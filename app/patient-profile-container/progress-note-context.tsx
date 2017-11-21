@@ -202,10 +202,10 @@ export class ProgressNoteContext extends React.Component<allProps, IState> {
 }
 
 export default compose(
-  graphql<IGraphqlProps, IProps>(patientAnswersCreateMutationGraphql as any, {
+  graphql<IGraphqlProps, IProps, allProps>(patientAnswersCreateMutationGraphql as any, {
     name: 'createPatientAnswers',
   }),
-  graphql<IGraphqlProps, IProps>(questionsQuery as any, {
+  graphql<IGraphqlProps, IProps, allProps>(questionsQuery as any, {
     options: (props: IProps) => ({
       variables: {
         filterType: 'progressNoteTemplate',
@@ -218,7 +218,7 @@ export default compose(
       questions: data ? (data as any).questions : null,
     }),
   }),
-  graphql<IGraphqlProps, IProps>(patientAnswersQuery as any, {
+  graphql<IGraphqlProps, IProps, allProps>(patientAnswersQuery as any, {
     options: (props: IProps) => ({
       variables: {
         filterType: 'progressNote',

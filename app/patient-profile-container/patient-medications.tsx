@@ -145,7 +145,7 @@ const formatPatientMedications = (
   }
 };
 
-export default graphql<IGraphqlProps, IProps>(patientMedicationsQuery as any, {
+export default graphql<IGraphqlProps, IProps, allProps>(patientMedicationsQuery as any, {
   options: (props: IProps) => ({
     variables: {
       patientId: props.patientId,

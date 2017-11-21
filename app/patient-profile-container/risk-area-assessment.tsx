@@ -441,7 +441,7 @@ function mapDispatchToProps(dispatch: Dispatch<() => void>, ownProps: IProps): I
 
 export default compose(
   connect<{}, IDispatchProps, IProps>(undefined, mapDispatchToProps),
-  graphql<IGraphqlProps, IProps>(riskAreaQuery as any, {
+  graphql<IGraphqlProps, IProps, allProps>(riskAreaQuery as any, {
     options: (props: IProps) => ({
       variables: {
         riskAreaId: props.riskAreaId,
@@ -454,7 +454,7 @@ export default compose(
       refetchRiskArea: data ? data.refetch : null,
     }),
   }),
-  graphql<IGraphqlProps, IProps>(riskAreaQuestionsQuery as any, {
+  graphql<IGraphqlProps, IProps, allProps>(riskAreaQuestionsQuery as any, {
     options: (props: IProps) => ({
       variables: {
         filterType: 'riskArea',
@@ -468,7 +468,7 @@ export default compose(
       refetchRiskAreaQuestions: data ? data.refetch : null,
     }),
   }),
-  graphql<IGraphqlProps, IProps>(patientAnswersQuery as any, {
+  graphql<IGraphqlProps, IProps, allProps>(patientAnswersQuery as any, {
     options: (props: IProps) => ({
       variables: {
         filterType: 'riskArea',
@@ -483,7 +483,7 @@ export default compose(
       refetchPatientAnswers: data ? data.refetch : null,
     }),
   }),
-  graphql<IGraphqlProps, IProps>(screeningToolsQuery as any, {
+  graphql<IGraphqlProps, IProps, allProps>(screeningToolsQuery as any, {
     options: (props: IProps) => ({
       variables: {
         riskAreaId: props.riskAreaId,
@@ -495,10 +495,13 @@ export default compose(
       screeningTools: data ? (data as any).screeningToolsForRiskArea : null,
     }),
   }),
-  graphql<IGraphqlProps, IProps>(patientAnswersCreateMutationGraphql as any, {
+  graphql<IGraphqlProps, IProps, allProps>(patientAnswersCreateMutationGraphql as any, {
     name: 'createPatientAnswers',
   }),
-  graphql<IGraphqlProps, IProps>(patientAnswersUpdateApplicabilityMutationGraphql as any, {
-    name: 'updateAnswersApplicability',
-  }),
+  graphql<IGraphqlProps, IProps, allProps>(
+    patientAnswersUpdateApplicabilityMutationGraphql as any,
+    {
+      name: 'updateAnswersApplicability',
+    },
+  ),
 )(RiskAreaAssessment);

@@ -165,9 +165,9 @@ export function formatEventNotifications(
 }
 
 export default compose(
-  connect<IStateProps, IDispatchProps, IProps>(mapStateToProps, mapDispatchToProps),
-  graphql<IGraphqlProps, IProps & IStateProps>(eventNotificationsQuery as any, {
-    options: (props: allProps) => {
+  connect<IStateProps, IDispatchProps, allProps>(mapStateToProps as any, mapDispatchToProps),
+  graphql<IGraphqlProps, IProps & IStateProps, allProps>(eventNotificationsQuery as any, {
+    options: (props: IProps & IStateProps) => {
       const variables: any = {
         pageNumber: 0,
         pageSize: 15,
@@ -191,7 +191,7 @@ export default compose(
         : [],
     }),
   }),
-  graphql<IGraphqlProps, IProps>(eventNotificationDismissMutation as any, {
+  graphql<IGraphqlProps, IProps, allProps>(eventNotificationDismissMutation as any, {
     name: 'dismissEventNotification',
   }),
 )(EventNotificationsContainer);

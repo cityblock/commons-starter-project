@@ -16,7 +16,6 @@ import PatientGoal from '../patient-goal';
 import User from '../user';
 
 describe('care plan suggestion', () => {
-  let db: Db;
   let patient: Patient;
   let user: User;
   let clinic: Clinic;
@@ -24,7 +23,7 @@ describe('care plan suggestion', () => {
   let goalSuggestionTemplate: GoalSuggestionTemplate;
 
   beforeEach(async () => {
-    db = await Db.get();
+    await Db.get();
     await Db.clear();
 
     clinic = await Clinic.create(createMockClinic());

@@ -132,7 +132,7 @@ export default class ConcernSuggestion extends BaseModel {
       answerConcernSuggestions,
       screeningToolConcernSuggestions,
       'concernId',
-    );
+    ) as ConcernSuggestion[];
 
     return concernSuggestions.map((suggestion: ConcernSuggestion) => suggestion.concern);
   }

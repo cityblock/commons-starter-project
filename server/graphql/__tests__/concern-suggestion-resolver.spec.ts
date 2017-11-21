@@ -11,13 +11,12 @@ import ScreeningToolScoreRange from '../../models/screening-tool-score-range';
 import schema from '../make-executable-schema';
 
 describe('concern suggestion resolver', () => {
-  let db: Db;
   const userRole = 'admin';
   let answer: Answer;
   let question: Question;
 
   beforeEach(async () => {
-    db = await Db.get();
+    await Db.get();
     await Db.clear();
 
     const riskArea = await RiskArea.create({

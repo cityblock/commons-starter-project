@@ -61,7 +61,7 @@ const PatientConcerns: React.StatelessComponent<IProps> = (props: IProps) => {
   const droppableId = inactive ? 'inactiveConcerns' : 'activeConcerns';
 
   return (
-    <Droppable droppableId={droppableId} type='CONCERN'>
+    <Droppable droppableId={droppableId} type="CONCERN">
       {(provided: DroppableProvided, snapshot: DroppableStateSnapshot) => (
         <div ref={provided.innerRef}>
           {renderedConcerns}

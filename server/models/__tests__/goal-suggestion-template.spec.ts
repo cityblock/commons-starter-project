@@ -3,10 +3,8 @@ import Db from '../../db';
 import GoalSuggestionTemplate from '../goal-suggestion-template';
 
 describe('goal suggestion template model', () => {
-  let db: Db;
-
   beforeEach(async () => {
-    db = await Db.get();
+    await Db.get();
     await Db.clear();
   });
 

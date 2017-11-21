@@ -1,10 +1,11 @@
 import * as React from 'react';
-import { graphql } from 'react-apollo';
+import { compose, graphql } from 'react-apollo';
 import { connect, Dispatch } from 'react-redux';
 import { idleEnd, idleStart } from '../actions/idle-action';
 import { selectLocale } from '../actions/locale-action';
 import * as currentUserQuery from '../graphql/queries/get-current-user.graphql';
 import { FullUserFragment } from '../graphql/types';
+import { IGraphqlProps } from '../manager-container/manager-users';
 import { Lang } from '../reducers/locale-reducer';
 import { IState as IAppState } from '../store';
 import * as styles from './css/auth.css';
@@ -32,10 +33,9 @@ interface IProps {
 const LOGOUT_TIME = 1800000; // 30 minutes
 const IDLE_TIME = 1000000; // 18 minutes
 
-export class AuthenticationContainer extends React.Component<
-  IProps & IStateProps & IDispatchProps,
-  {}
-> {
+type allProps = IProps & IStateProps & IDispatchProps;
+
+export class AuthenticationContainer extends React.Component<allProps> {
   idleInterval: NodeJS.Timer;
 
   constructor(props: IProps & IStateProps & IDispatchProps) {
@@ -114,17 +114,13 @@ function mapDispatchToProps(dispatch: Dispatch<() => void>): IDispatchProps {
   };
 }
 
-const AuthenticationWithGraphQL = graphql<{}, IStateProps & IDispatchProps, IProps>(
-  currentUserQuery as any,
-  {
+export default compose(
+  connect<IStateProps, IDispatchProps, allProps>(mapStateToProps as any, mapDispatchToProps),
+  graphql<IGraphqlProps, IProps, allProps>(currentUserQuery as any, {
     props: ({ data }) => ({
       loading: data ? data.loading : false,
       error: data ? data.error : null,
       currentUser: data ? (data as any).currentUser : null,
     }),
-  },
+  }),
 )(AuthenticationContainer);
-
-export default connect<IStateProps, IDispatchProps, IProps>(mapStateToProps, mapDispatchToProps)(
-  AuthenticationWithGraphQL,
-);

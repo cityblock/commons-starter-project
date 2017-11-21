@@ -13,7 +13,7 @@ const SelectDropdownOption: React.StatelessComponent<IProps> = (props: IProps) =
 
   return (
     <div className={styles.option} onClick={onClick}>
-      {avatarUrl && <img className={styles.img} src={avatarUrl} alt='avatar photo' />}
+      {avatarUrl && <img className={styles.img} src={avatarUrl} alt="avatar photo" />}
       <h4>{value}</h4>
       {detail && <p>{`(${detail})`}</p>}
     </div>

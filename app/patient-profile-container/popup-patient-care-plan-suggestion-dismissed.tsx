@@ -111,7 +111,7 @@ class PopupPatientCarePlanSuggestionDismissed extends React.Component<allProps, 
 }
 
 export default compose(
-  graphql<IGraphqlProps, IProps>(carePlanSuggestionDismissMutationGraphql as any, {
+  graphql<IGraphqlProps, IProps, allProps>(carePlanSuggestionDismissMutationGraphql as any, {
     name: 'dismissCarePlanSuggestion',
     options: {
       refetchQueries: ['getPatientCarePlanSuggestions'],

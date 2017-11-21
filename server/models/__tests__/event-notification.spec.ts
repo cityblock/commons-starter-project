@@ -17,7 +17,6 @@ import User from '../user';
 const userRole = 'physician';
 
 describe('task event model', () => {
-  let db: Db;
   let user: User;
   let user2: User;
   let patient: Patient;
@@ -25,7 +24,7 @@ describe('task event model', () => {
   let clinic: Clinic;
 
   beforeEach(async () => {
-    db = await Db.get();
+    await Db.get();
     await Db.clear();
 
     clinic = await Clinic.create(createMockClinic());

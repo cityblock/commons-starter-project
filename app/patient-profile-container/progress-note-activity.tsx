@@ -26,7 +26,7 @@ class ProgressNoteActivity extends React.Component<allProps> {
 }
 
 export default compose(
-  graphql<IGraphqlProps, IProps>(progressNoteActivityQuery as any, {
+  graphql<IGraphqlProps, IProps, allProps>(progressNoteActivityQuery as any, {
     skip: (props: IProps) => !props.progressNote,
     options: (props: IProps) => ({
       variables: {

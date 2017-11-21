@@ -18,8 +18,9 @@ describe('Task Assignee Component', () => {
       editTask={editTask}
       assignee={currentUser}
       loading={false}
-      error=''
-      careTeam={[currentUser, user]} />,
+      error=""
+      careTeam={[currentUser, user]}
+    />,
   );
 
   it('renders basic task assignee component', () => {

@@ -7,7 +7,6 @@ import {
   createPatient,
 } from '../../spec-helpers';
 import Clinic from '../clinic';
-import Patient from '../patient';
 import RiskArea from '../risk-area';
 import ScreeningTool from '../screening-tool';
 import ScreeningToolScoreRange from '../screening-tool-score-range';
@@ -16,16 +15,14 @@ import User from '../user';
 const userRole = 'physician';
 
 describe('screening tool score range model', () => {
-  let db: Db;
   let riskArea: RiskArea;
   let screeningTool: ScreeningTool;
   let screeningTool2: ScreeningTool;
-  let patient: Patient;
   let user: User;
   let clinic: Clinic;
 
   beforeEach(async () => {
-    db = await Db.get();
+    await Db.get();
     await Db.clear();
 
     riskArea = await RiskArea.create({ title: 'Housing', order: 1 });
@@ -39,7 +36,7 @@ describe('screening tool score range model', () => {
     });
     clinic = await Clinic.create(createMockClinic());
     user = await User.create(createMockUser(11, clinic.id, userRole));
-    patient = await createPatient(createMockPatient(123, clinic.id), user.id);
+    await createPatient(createMockPatient(123, clinic.id), user.id);
   });
 
   afterAll(async () => {

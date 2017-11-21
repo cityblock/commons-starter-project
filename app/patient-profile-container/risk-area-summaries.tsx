@@ -20,7 +20,11 @@ interface IGraphqlProps {
 }
 
 class RiskAreas extends React.Component<IProps & IGraphqlProps, {}> {
-  renderRiskAreaSummary = (riskArea: FullRiskAreaFragment, index: number) => {
+  renderRiskAreaSummary = (riskArea: FullRiskAreaFragment | null, index: number) => {
+    if (!riskArea) {
+      return null;
+    }
+
     const { routeBase, patientId } = this.props;
 
     return (

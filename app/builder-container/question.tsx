@@ -456,11 +456,13 @@ function mapStateToProps(state: IAppState, ownProps: allProps): IStateProps {
 }
 
 export default compose(
-  connect<IStateProps, {}, IProps>(mapStateToProps),
-  graphql<IGraphqlProps, IProps>(questionEditMutationGraphql as any, { name: 'editQuestion' }),
-  graphql<IGraphqlProps, IProps>(questionQuery as any, {
-    skip: (props: allProps) => !props.questionId,
-    options: (props: allProps) => ({ variables: { questionId: props.questionId } }),
+  connect<IStateProps, {}, IProps>(mapStateToProps as any),
+  graphql<IGraphqlProps, IProps, allProps>(questionEditMutationGraphql as any, {
+    name: 'editQuestion',
+  }),
+  graphql<IGraphqlProps, IProps, allProps>(questionQuery as any, {
+    skip: (props: IProps & IStateProps) => !props.questionId,
+    options: (props: IProps & IStateProps) => ({ variables: { questionId: props.questionId } }),
     props: ({ data }) => ({
       questionLoading: data ? data.loading : false,
       questionError: data ? data.error : null,

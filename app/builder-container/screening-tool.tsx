@@ -327,11 +327,15 @@ function mapStateToProps(state: IAppState, ownProps: IProps): IStateProps {
 }
 
 export default compose(
-  connect<IStateProps, {}, IProps>(mapStateToProps),
-  graphql<IGraphqlProps, IProps>(screeningToolEditMutation as any, { name: 'editScreeningTool' }),
-  graphql<IGraphqlProps, IProps>(screeningToolQuery as any, {
-    skip: (props: allProps) => !props.screeningToolId,
-    options: (props: allProps) => ({ variables: { screeningToolId: props.screeningToolId } }),
+  connect<IStateProps, {}, IProps>(mapStateToProps as any),
+  graphql<IGraphqlProps, IProps, allProps>(screeningToolEditMutation as any, {
+    name: 'editScreeningTool',
+  }),
+  graphql<IGraphqlProps, IProps, allProps>(screeningToolQuery as any, {
+    skip: (props: IProps & IStateProps) => !props.screeningToolId,
+    options: (props: IProps & IStateProps) => ({
+      variables: { screeningToolId: props.screeningToolId },
+    }),
     props: ({ data }) => ({
       screeningToolLoading: data ? data.loading : false,
       screeningToolError: data ? data.error : null,

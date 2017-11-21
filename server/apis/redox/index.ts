@@ -33,7 +33,7 @@ export default class RedoxApi {
     const response = await fetch(config.REDOX_TOKEN_URL, {
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
-      },
+      } as any,
       body: stringify({
         apiKey: config.REDOX_KEY,
         secret: config.REDOX_SECRET,
@@ -105,7 +105,7 @@ export default class RedoxApi {
         headers: {
           Authorization: `Bearer ${this.auth.accessToken}`,
           'Content-Type': 'application/json',
-        },
+        } as any,
       });
 
       if (!response.ok) {

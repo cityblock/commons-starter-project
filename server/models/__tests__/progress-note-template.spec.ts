@@ -7,25 +7,22 @@ import {
   createPatient,
 } from '../../spec-helpers';
 import Clinic from '../clinic';
-import Patient from '../patient';
 import ProgressNoteTemplate from '../progress-note-template';
 import User from '../user';
 
 const userRole = 'physician';
 
 describe('progress note template model', () => {
-  let db: Db;
   let user: User;
-  let patient: Patient;
   let clinic: Clinic;
 
   beforeEach(async () => {
-    db = await Db.get();
+    await Db.get();
     await Db.clear();
 
     clinic = await Clinic.create(createMockClinic());
     user = await User.create(createMockUser(11, clinic.id, userRole, 'a@b.com'));
-    patient = await createPatient(createMockPatient(123, clinic.id), user.id);
+    await createPatient(createMockPatient(123, clinic.id), user.id);
   });
 
   afterAll(async () => {

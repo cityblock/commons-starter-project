@@ -39,9 +39,12 @@ class CareTeamWidget extends React.Component<IProps & IGraphqlProps, IState> {
     };
   }
 
-  renderCareTeamMember(careTeamMember: FullUserFragment) {
-    const selected = careTeamMember.id === this.state.selectedCareTeamMemberId;
+  renderCareTeamMember(careTeamMember: FullUserFragment | null) {
+    if (!careTeamMember) {
+      return null;
+    }
 
+    const selected = careTeamMember.id === this.state.selectedCareTeamMemberId;
     return (
       <CareTeamWidgetMember
         key={careTeamMember.id}

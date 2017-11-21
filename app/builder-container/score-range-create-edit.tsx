@@ -53,7 +53,7 @@ interface IState {
 
 type allProps = IProps & IGraphqlProps;
 
-class ScoreRangeCreateEdit extends React.Component<allProps, IState> {
+export class ScoreRangeCreateEdit extends React.Component<allProps, IState> {
   constructor(props: allProps) {
     super(props);
 
@@ -208,16 +208,16 @@ class ScoreRangeCreateEdit extends React.Component<allProps, IState> {
 }
 
 export default compose(
-  graphql<IGraphqlProps, IProps>(scoreRangeCreateMutationGraphql as any, {
+  graphql<IGraphqlProps, IProps, allProps>(scoreRangeCreateMutationGraphql as any, {
     name: 'createScoreRange',
     options: {
       refetchQueries: ['getScreeningTools'],
     },
   }),
-  graphql<IGraphqlProps, IProps>(scoreRangeEditMutationGraphql as any, {
+  graphql<IGraphqlProps, IProps, allProps>(scoreRangeEditMutationGraphql as any, {
     name: 'editScoreRange',
   }),
-  graphql<IGraphqlProps, IProps>(scoreRangeDeleteMutationGraphql as any, {
+  graphql<IGraphqlProps, IProps, allProps>(scoreRangeDeleteMutationGraphql as any, {
     name: 'deleteScoreRange',
     options: {
       refetchQueries: ['getScreeningTools'],

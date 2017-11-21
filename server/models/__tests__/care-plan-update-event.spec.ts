@@ -19,7 +19,6 @@ import User from '../user';
 const userRole = 'physician';
 
 describe('care plan update event model', () => {
-  let db: Db;
   let user: User;
   let patient: Patient;
   let concern: Concern;
@@ -28,7 +27,7 @@ describe('care plan update event model', () => {
   let clinic: Clinic;
 
   beforeEach(async () => {
-    db = await Db.get();
+    await Db.get();
     await Db.clear();
 
     clinic = await Clinic.create(createMockClinic());

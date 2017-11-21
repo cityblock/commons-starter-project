@@ -21,14 +21,13 @@ import ScreeningToolScoreRange from '../screening-tool-score-range';
 import User from '../user';
 
 describe('concern suggestion model', () => {
-  let db: Db;
   let answer: Answer;
   let question: Question;
   let riskArea: RiskArea;
   let clinic: Clinic;
 
   beforeEach(async () => {
-    db = await Db.get();
+    await Db.get();
     await Db.clear();
 
     riskArea = await RiskArea.create({

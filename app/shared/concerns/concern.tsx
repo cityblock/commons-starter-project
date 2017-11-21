@@ -108,7 +108,7 @@ export class PatientConcern extends React.Component<IProps, {}> {
     const { goalCount, taskCount, lastUpdated } = patientConcernStats;
 
     return (
-      <Draggable draggableId={patientConcern.id} type='CONCERN'>
+      <Draggable draggableId={patientConcern.id} type="CONCERN">
         {(provided: DraggableProvided, snapshot: DraggableStateSnapshot) => {
           const onClickFull = (() => {
             // if dragHandleProps null such as when dragging disabled
@@ -136,7 +136,8 @@ export class PatientConcern extends React.Component<IProps, {}> {
                 ref={provided.innerRef}
                 style={provided.draggableStyle}
                 {...provided.dragHandleProps}
-                onClick={onClickFull}>
+                onClick={onClickFull}
+              >
                 <div className={styles.patientConcernTitleRow}>
                   <div className={styles.patientConcernTitle}>{patientConcern.concern.title}</div>
                   <div className={hamburgerClass} onClick={onOptionsToggle(patientConcern.id)}>
@@ -173,7 +174,8 @@ export class PatientConcern extends React.Component<IProps, {}> {
                           value={lastUpdated}
                           year="numeric"
                           month="short"
-                          day="numeric" />
+                          day="numeric"
+                        />
                       </div>
                     </div>
                   </div>
@@ -183,8 +185,7 @@ export class PatientConcern extends React.Component<IProps, {}> {
               <div className={patientGoalsStyles}>{this.renderGoals()}</div>
             </div>
           );
-          }
-        }
+        }}
       </Draggable>
     );
   }

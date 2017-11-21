@@ -155,8 +155,8 @@ function mapDispatchToProps(dispatch: Dispatch<() => void>): IDispatchProps {
 }
 
 export default compose(
-  connect<IStateProps, IDispatchProps, IProps>(mapStateToProps, mapDispatchToProps),
-  graphql<IGraphqlProps, IProps>(eventNotificationsQuery as any, {
+  connect<IStateProps, IDispatchProps, IProps>(mapStateToProps as any, mapDispatchToProps),
+  graphql<IGraphqlProps, IProps, allProps>(eventNotificationsQuery as any, {
     options: (props: allProps) => {
       const variables: any = { pageNumber: 0, pageSize: 15 };
       return { variables };

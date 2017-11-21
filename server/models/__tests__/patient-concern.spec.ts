@@ -18,14 +18,13 @@ import User from '../user';
 const userRole = 'physician';
 
 describe('patient concern model', () => {
-  let db: Db;
   let concern: Concern;
   let patient: Patient;
   let user: User;
   let clinic: Clinic;
 
   beforeEach(async () => {
-    db = await Db.get();
+    await Db.get();
     await Db.clear();
 
     concern = await Concern.create({

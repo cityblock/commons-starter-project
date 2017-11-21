@@ -155,10 +155,10 @@ class PatientScratchPad extends React.Component<allProps, IState> {
 }
 
 export default compose(
-  graphql<IGraphqlProps, IProps>(savePatientScratchPadMutationGraphql as any, {
+  graphql<IGraphqlProps, IProps, allProps>(savePatientScratchPadMutationGraphql as any, {
     name: 'saveScratchPad',
   }),
-  graphql<IGraphqlProps, IProps>(patientScratchPadQuery as any, {
+  graphql<IGraphqlProps, IProps, allProps>(patientScratchPadQuery as any, {
     options: (props: IProps) => ({
       variables: {
         patientId: props.patientId,

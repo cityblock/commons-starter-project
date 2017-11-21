@@ -27,8 +27,6 @@ describe('care plan resolver tests', () => {
   let riskArea2: RiskArea;
   let question: Question;
   let question2: Question;
-  let answer: Answer;
-  let answer2: Answer;
   let user: User;
   let clinic: Clinic;
   let patient: Patient;
@@ -65,7 +63,7 @@ describe('care plan resolver tests', () => {
       type: 'riskArea',
       order: 2,
     });
-    answer = await Answer.create({
+    await Answer.create({
       displayValue: 'loves writing tests!',
       value: '3',
       valueType: 'number',
@@ -74,7 +72,7 @@ describe('care plan resolver tests', () => {
       questionId: question.id,
       order: 1,
     });
-    answer2 = await Answer.create({
+    await Answer.create({
       displayValue: 'hates writing tests!',
       value: '4',
       valueType: 'number',

@@ -13,11 +13,10 @@ import User from '../user';
 const userRole = 'physician';
 
 describe('patient model', () => {
-  let db: Db;
   let clinic: Clinic;
 
   beforeEach(async () => {
-    db = await Db.get();
+    await Db.get();
     await Db.clear();
 
     clinic = await Clinic.create(createMockClinic());

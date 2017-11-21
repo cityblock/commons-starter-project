@@ -64,7 +64,7 @@ export default class PatientCarePlan extends React.Component<IProps, IState> {
       optionsDropdownConcernId: '',
       isDragging: true,
     }));
-  }
+  };
 
   onDragEnd = (result: DropResult) => {
     // dropped outside the list of concerns
@@ -73,13 +73,13 @@ export default class PatientCarePlan extends React.Component<IProps, IState> {
     // if moving around within active or inactive concern group
     if (result.source.droppableId === result.destination.droppableId) {
       this.reorderConcernList(result);
-    // if switching from one group to another
+      // if switching from one group to another
     } else {
       this.moveBetweenConcernLists(result);
     }
 
     this.setState(() => ({ isDragging: false }));
-  }
+  };
 
   reorderConcernList(result: DropResult) {
     const endList = result.destination!.droppableId;
@@ -177,7 +177,7 @@ export default class PatientCarePlan extends React.Component<IProps, IState> {
             onOptionsToggle={this.onOptionsToggle}
             selectedTaskId={selectedTaskId}
           />
-          <TextDivider label='Next Up' />
+          <TextDivider label="Next Up" />
           <PatientConcerns
             concerns={inactiveConcerns}
             inactive={true}

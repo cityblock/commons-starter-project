@@ -369,6 +369,6 @@ const schema = makeExecutableSchema({
   typeDefs: schemaGql,
   resolvers: resolveFunctions,
   logger,
-});
+} as any);
 
 export default schema;

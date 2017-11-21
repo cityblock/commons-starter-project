@@ -4,11 +4,10 @@ import GoalSuggestionTemplate from '../goal-suggestion-template';
 import TaskTemplate from '../task-template';
 
 describe('task template model', () => {
-  let db: Db;
   let goalSuggestionTemplate: GoalSuggestionTemplate;
 
   beforeEach(async () => {
-    db = await Db.get();
+    await Db.get();
     await Db.clear();
 
     goalSuggestionTemplate = await GoalSuggestionTemplate.create({

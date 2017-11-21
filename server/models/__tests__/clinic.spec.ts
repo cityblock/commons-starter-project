@@ -3,10 +3,8 @@ import Db from '../../db';
 import Clinic from '../clinic';
 
 describe('clinic model', () => {
-  let db: Db;
-
   beforeEach(async () => {
-    db = await Db.get();
+    await Db.get();
     await Db.clear();
   });
 

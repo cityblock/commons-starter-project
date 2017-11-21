@@ -333,13 +333,15 @@ function mapStateToProps(state: IAppState, ownProps: IProps): IStateProps {
 }
 
 export default compose(
-  connect<IStateProps, {}, IProps>(mapStateToProps),
-  graphql<IGraphqlProps, IProps>(goalSuggestionTemplateEditMutationGraphql as any, {
+  connect<IStateProps, {}, IProps>(mapStateToProps as any),
+  graphql<IGraphqlProps, IProps, allProps>(goalSuggestionTemplateEditMutationGraphql as any, {
     name: 'editGoal',
   }),
-  graphql<IGraphqlProps, IProps>(goalSuggestionTemplateQuery as any, {
-    skip: (props: allProps) => !props.goalId,
-    options: (props: allProps) => ({ variables: { goalSuggestionTemplateId: props.goalId } }),
+  graphql<IGraphqlProps, IProps, allProps>(goalSuggestionTemplateQuery as any, {
+    skip: (props: IProps & IStateProps) => !props.goalId,
+    options: (props: IProps & IStateProps) => ({
+      variables: { goalSuggestionTemplateId: props.goalId },
+    }),
     props: ({ data }) => ({
       goalLoading: data ? data.loading : false,
       goalError: data ? data.error : null,

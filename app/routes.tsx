@@ -44,9 +44,9 @@ export default (
         <Route
           exact
           path="/builder/:tab?/:objectId?/:subTab?/:subTabId?"
-          component={BuilderContainer}
+          component={BuilderContainer as any}
         />
-        <Route exact path="/manager/:tabId?/:objectId?" component={ManagerContainer} />
+        <Route exact path="/manager/:tabId?/:objectId?" component={ManagerContainer as any} />
       </Authentication>
     </Switch>
   </Main>

@@ -72,7 +72,4 @@ const mapDispatchToProps = (dispatch: Dispatch<() => void>, ownProps: IProps): I
   closeTask: () => dispatch(push(ownProps.routeBase)),
 });
 
-export default connect<{}, IDispatchProps, IProps>(
-  null,
-  mapDispatchToProps)
-(PatientMap);
+export default connect<{}, IDispatchProps, IProps>(null, mapDispatchToProps)(PatientMap);

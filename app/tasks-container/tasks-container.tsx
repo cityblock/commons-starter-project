@@ -10,7 +10,7 @@ import { push } from 'react-router-redux';
 import * as tasksQuery from '../graphql/queries/tasks-for-current-user.graphql';
 import { getTasksForCurrentUserQuery, FullTaskFragment } from '../graphql/types';
 import * as tabStyles from '../shared/css/tabs.css';
-import Tasks, { IPageParams } from '../shared/tasks';
+import Tasks, { IPageParams } from '../shared/tasks/tasks';
 import { fetchMore } from '../shared/util/fetch-more';
 import { IState as IAppState } from '../store';
 import * as styles from './css/tasks-container.css';
@@ -136,8 +136,8 @@ const getPageParams = (props: IProps) => {
 };
 
 export default compose(
-  connect<IStateProps, IDispatchProps>(mapStateToProps, mapDispatchToProps),
-  graphql<IGraphqlProps, IProps>(tasksQuery as any, {
+  connect<IStateProps, IDispatchProps>(mapStateToProps as any, mapDispatchToProps),
+  graphql<IGraphqlProps, IProps, allProps>(tasksQuery as any, {
     options: (props: IProps) => ({ variables: getPageParams(props) }),
     props: ({ data, ownProps }) => ({
       fetchMoreTasks: () =>

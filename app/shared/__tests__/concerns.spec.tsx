@@ -13,7 +13,8 @@ describe('Patient Care Plan Concerns Component', () => {
         onClick={onClick}
         onOptionsToggle={onOptionsToggle}
         concerns={[]}
-        selectedTaskId='' />,
+        selectedTaskId=""
+      />,
     );
 
     expect(wrapper.find(PatientConcern).length).toBe(0);

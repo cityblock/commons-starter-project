@@ -107,19 +107,19 @@ export class PatientProfileContainer extends React.Component<allProps> {
           </div>
           <Switch>
             <Route
-                exact
-                path="/patients/:patientId/map/:subTab"
-                component={PatientCarePlanView}
+              exact
+              path="/patients/:patientId/map/:subTab"
+              component={PatientCarePlanView as any}
             />
             <Route
               exact
               path="/patients/:patientId/map/:subTab/tasks/:taskId"
-              component={PatientCarePlanView}
+              component={PatientCarePlanView as any}
             />
             <Route
               exact
               path="/patients/:patientId/360/:riskAreaId?"
-              component={PatientThreeSixtyView}
+              component={PatientThreeSixtyView as any}
             />
             <Route
               exact
@@ -145,9 +145,9 @@ function mapStateToProps(state: IAppState, ownProps: IProps): IStateProps {
 }
 
 export default compose(
-  connect<IStateProps, {}, IProps>(mapStateToProps),
-  graphql<IGraphqlProps, IProps>(patientQuery as any, {
-    options: (props: allProps) => ({
+  connect<IStateProps, {}, IProps>(mapStateToProps as any),
+  graphql<IGraphqlProps, IProps & IStateProps, allProps>(patientQuery as any, {
+    options: (props: IProps & IStateProps) => ({
       variables: {
         patientId: props.patientId,
       },

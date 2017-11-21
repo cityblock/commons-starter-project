@@ -142,7 +142,7 @@ function mapDispatchToProps(dispatch: Dispatch<() => void>, ownProps: allProps):
 
 export default compose(
   connect(undefined, mapDispatchToProps),
-  graphql<IGraphqlProps, IProps>(progressNoteTemplateCreateMutationGraphql as any, {
+  graphql<IGraphqlProps, IProps, allProps>(progressNoteTemplateCreateMutationGraphql as any, {
     name: 'createProgressNoteTemplate',
     options: {
       refetchQueries: ['getProgressNoteTemplates'],

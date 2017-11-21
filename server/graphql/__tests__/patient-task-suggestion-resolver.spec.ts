@@ -28,7 +28,6 @@ describe('patient task suggestion resolver tests', () => {
   let user: User;
   let patient: Patient;
   let clinic: Clinic;
-  let concern: Concern;
   let taskTemplate: TaskTemplate;
 
   beforeEach(async () => {
@@ -43,7 +42,7 @@ describe('patient task suggestion resolver tests', () => {
       order: 1,
     });
 
-    concern = await Concern.create({ title: 'Concern' });
+    await Concern.create({ title: 'Concern' });
     taskTemplate = await TaskTemplate.create({
       title: 'Housing',
       repeating: false,

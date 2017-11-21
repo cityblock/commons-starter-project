@@ -11,11 +11,7 @@ describe('Patient Map Component', () => {
   const closeTask = () => true as any;
 
   const wrapper = shallow(
-    <PatientMap
-      patientId={patientId}
-      routeBase={routeBase}
-      closeTask={closeTask}
-      taskId='' />,
+    <PatientMap patientId={patientId} routeBase={routeBase} closeTask={closeTask} taskId="" />,
   );
 
   it('renders patient care plan', () => {

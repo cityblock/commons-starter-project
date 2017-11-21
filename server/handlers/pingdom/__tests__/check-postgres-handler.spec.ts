@@ -6,12 +6,11 @@ import { createMockClinic } from '../../../spec-helpers';
 import { checkPostgresHandler } from '../check-postgres-handler';
 
 describe('postgres pingdom test', () => {
-  let db: Db;
   let error: any;
   const userRole = 'physician';
 
   beforeEach(async () => {
-    db = await Db.get();
+    await Db.get();
     await Db.clear();
     error = console.error;
     console.error = jest.fn();

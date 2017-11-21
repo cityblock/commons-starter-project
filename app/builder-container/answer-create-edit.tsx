@@ -322,16 +322,16 @@ class AnswerCreateEdit extends React.Component<allProps, IState> {
 }
 
 export default compose(
-  graphql<IGraphqlProps, IProps>(answerCreateMutationGraphql as any, {
+  graphql<IGraphqlProps, IProps, allProps>(answerCreateMutationGraphql as any, {
     name: 'createAnswer',
     options: {
       refetchQueries: ['getQuestions'],
     },
   }),
-  graphql<IGraphqlProps, IProps>(answerEditMutationGraphql as any, {
+  graphql<IGraphqlProps, IProps, allProps>(answerEditMutationGraphql as any, {
     name: 'editAnswer',
   }),
-  graphql<IGraphqlProps, IProps>(answerDeleteMutationGraphql as any, {
+  graphql<IGraphqlProps, IProps, allProps>(answerDeleteMutationGraphql as any, {
     name: 'deleteAnswer',
     options: {
       refetchQueries: ['getQuestions'],

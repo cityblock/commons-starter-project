@@ -142,13 +142,13 @@ class CarePlanSuggestion extends React.Component<allProps, IState> {
 }
 
 export default compose(
-  graphql<IGraphqlProps, IProps>(concernSuggestionDeleteMutationGraphql as any, {
+  graphql<IGraphqlProps, IProps, allProps>(concernSuggestionDeleteMutationGraphql as any, {
     name: 'deleteConcernSuggestion',
     options: {
       refetchQueries: ['getQuestions', 'getScreeningTools'],
     },
   }),
-  graphql<IGraphqlProps, IProps>(goalSuggestionDeleteMutationGraphql as any, {
+  graphql<IGraphqlProps, IProps, allProps>(goalSuggestionDeleteMutationGraphql as any, {
     name: 'deleteGoalSuggestion',
     options: {
       refetchQueries: ['getQuestions', 'getScreeningTools'],

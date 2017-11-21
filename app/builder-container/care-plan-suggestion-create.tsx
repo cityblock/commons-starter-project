@@ -264,14 +264,14 @@ export class CarePlanSuggestionCreate extends React.Component<allProps, IState> 
 }
 
 export default compose(
-  graphql<IGraphqlProps, IProps>(concernsQuery as any, {
+  graphql<IGraphqlProps, IProps, allProps>(concernsQuery as any, {
     props: ({ data }) => ({
       concernsLoading: data ? data.loading : false,
       concernsError: data ? data.error : null,
       concerns: data ? (data as any).concerns : null,
     }),
   }),
-  graphql<IGraphqlProps, IProps>(goalsQuery as any, {
+  graphql<IGraphqlProps, IProps, allProps>(goalsQuery as any, {
     props: ({ data }) => ({
       refetchGoals: data ? data.refetch : null,
       goalsLoading: data ? data.loading : false,
@@ -279,13 +279,13 @@ export default compose(
       goals: data ? (data as any).goalSuggestionTemplates : null,
     }),
   }),
-  graphql<IGraphqlProps, IProps>(concernSuggestionCreateMutationGraphql as any, {
+  graphql<IGraphqlProps, IProps, allProps>(concernSuggestionCreateMutationGraphql as any, {
     name: 'createConcernSuggestion',
     options: {
       refetchQueries: ['getQuestions', 'getScreeningTools'],
     },
   }),
-  graphql<IGraphqlProps, IProps>(goalSuggestionCreateMutationGraphql as any, {
+  graphql<IGraphqlProps, IProps, allProps>(goalSuggestionCreateMutationGraphql as any, {
     name: 'createGoalSuggestion',
     options: {
       refetchQueries: ['getQuestions', 'getScreeningTools'],

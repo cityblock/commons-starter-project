@@ -32,6 +32,7 @@ export const ENGLISH_TRANSLATION = {
     'patient.medicareId': 'Medicare ID',
     'patient.patientInfo': 'Patient Info',
     'patient.newProgressNote': 'New progress note',
+    'patient.newQuickCallNote': '+ Quick call note',
     'patient.selectProgressNoteType': 'Select encounter type:',
     'patient.createdPopupHeading': 'successfully enrolled',
     'patient.createdPopupBody':
@@ -143,5 +144,14 @@ export const ENGLISH_TRANSLATION = {
     'user.createdAt': 'Created At',
     'user.editedAt': 'Last edited',
     'user.delete': 'Delete User',
+    'quickCallForm.title': 'Quick call note',
+    'quickCallForm.submit': 'Save call',
+    'quickCallForm.inboundCall': 'Inbound call',
+    'quickCallForm.outboundCall': 'Outbound call',
+    'quickCallForm.startTime': 'What time was the call?',
+    'quickCallForm.callRecipient': 'Who was the call with?',
+    'quickCallForm.wasSuccessful': 'Were you able to speak with them?',
+    'quickCallForm.reason': 'What was the reason for the call?',
+    'quickCallForm.summary': 'Please provide additional notes about the call here …',
   },
 };

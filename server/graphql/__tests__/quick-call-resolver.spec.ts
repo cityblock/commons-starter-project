@@ -66,7 +66,6 @@ describe('quick call resolver', () => {
       const mutation = `mutation {
           quickCallCreate(input:
             {
-              userId: "${user.id}",
               patientId: "${patient.id}",
               reason: "Had to call the son",
               summary: "package is on the way",

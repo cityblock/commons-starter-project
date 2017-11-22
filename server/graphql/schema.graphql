@@ -1220,7 +1220,6 @@ input ProgressNoteEditInput {
 }
 
 input QuickCallCreateInput {
-  userId: String!
   patientId: String! # Needed to lookup or create progressNoteId
   reason: String!
   summary: String!

@@ -60,6 +60,12 @@ export enum QuestionConditionTypeOptions {
 }
 
 
+export enum QuickCallDirection {
+  Inbound = "Inbound",
+  Outbound = "Outbound",
+}
+
+
 export enum TaskEventTypes {
   create_task = "create_task",
   add_follower = "add_follower",
@@ -3741,6 +3747,33 @@ export type questionEditMutation = {
   } | null,
 };
 
+export type quickCallCreateMutationVariables = {
+  patientId: string,
+  reason: string,
+  summary: string,
+  direction: QuickCallDirection,
+  callRecipient: string,
+  wasSuccessful: boolean,
+  startTime: string,
+};
+
+export type quickCallCreateMutation = {
+  // creates a quick call
+  quickCallCreate:  {
+    id: string,
+    progressNoteId: string,
+    reason: string,
+    summary: string,
+    direction: QuickCallDirection,
+    callRecipient: string,
+    wasSuccessful: boolean,
+    startTime: string,
+    createdAt: string,
+    updatedAt: string,
+    deletedAt: string | null,
+  } | null,
+};
+
 export type riskAreaCreateMutationVariables = {
   title: string,
   order: number,
@@ -6137,6 +6170,20 @@ export type FullQuestionFragment = {
     questionId: string,
     answerId: string,
   } > | null,
+};
+
+export type FullQuickCallFragment = {
+  id: string,
+  progressNoteId: string,
+  reason: string,
+  summary: string,
+  direction: QuickCallDirection,
+  callRecipient: string,
+  wasSuccessful: boolean,
+  startTime: string,
+  createdAt: string,
+  updatedAt: string,
+  deletedAt: string | null,
 };
 
 export type FullRiskAreaSummaryFragment = {

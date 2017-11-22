@@ -451,3 +451,18 @@ export const progressNote = {
   progressNoteTemplateId: progressNoteTemplate.id,
   progressNoteTemplate,
 };
+
+export const quickCall = {
+  id: 'quick-call-id',
+  createdAt: '2017-11-07T13:45:14.532Z',
+  updatedAt: '2017-11-07T13:45:14.532Z',
+  deletedAt: null,
+  reason: 'Quick Call reason',
+  summary: 'Quick Call summary',
+  direction: 'Outbound',
+  callRecipient: 'Social worker',
+  wasSuccessful: true,
+  startTime: '2017-11-07T13:45:14.532Z',
+  progressNoteId: progressNote.id,
+  userId: user.id,
+};

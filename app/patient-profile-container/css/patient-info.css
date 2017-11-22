@@ -26,6 +26,11 @@
   width: 173px;
   height: 32px;
   padding: 9px 0 11px;
+  margin-right: 10px;
+}
+
+.saveQuickCallButton {
+  background-color: var(--teal-color);
 }
 
 .saveButtonError {

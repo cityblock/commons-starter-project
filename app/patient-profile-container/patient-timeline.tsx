@@ -10,6 +10,7 @@ import * as styles from './css/patient-timeline.css';
 import { ProgressNoteLoadingError } from './progress-note-loading-error';
 import ProgressNotePopup from './progress-note-popup';
 import ProgressNoteRow from './progress-note-row';
+import QuickCallPopup from './quick-call-popup';
 
 interface IProps {
   match: {
@@ -29,6 +30,7 @@ interface IState {
   loading?: boolean;
   error?: string;
   isProgressNotePopupVisible: boolean;
+  isQuickCallPopupVisible: boolean;
 }
 
 type allProps = IProps & IGraphqlProps;
@@ -40,6 +42,7 @@ export class PatientTimeline extends React.Component<allProps, IState> {
       loading: props.loading,
       error: props.error,
       isProgressNotePopupVisible: false,
+      isQuickCallPopupVisible: false,
     };
   }
 
@@ -90,12 +93,30 @@ export class PatientTimeline extends React.Component<allProps, IState> {
     });
   };
 
+  showNewQuickCallPopup = () => {
+    this.setState({
+      isQuickCallPopupVisible: true,
+    });
+  };
+
+  hideNewQuickCallPopup = () => {
+    this.setState({
+      isQuickCallPopupVisible: false,
+    });
+  };
+
   render() {
-    const { isProgressNotePopupVisible } = this.state;
+    const { isProgressNotePopupVisible, isQuickCallPopupVisible } = this.state;
     const { progressNotes, match } = this.props;
     const patientId = match.params.patientId;
     const progressNotesList = progressNotes || [];
     const saveButtonStyles = classNames(patientInfoStyles.button, patientInfoStyles.saveButton);
+    const saveQuickCallButtonStyles = classNames(
+      patientInfoStyles.button,
+      patientInfoStyles.saveButton,
+      patientInfoStyles.saveQuickCallButton,
+    );
+
     return (
       <div>
         <div className={sortSearchStyles.sortSearchBar}>
@@ -111,6 +132,11 @@ export class PatientTimeline extends React.Component<allProps, IState> {
             </div>
           </div>
           <div className={patientInfoStyles.saveButtonGroup}>
+            <div className={saveQuickCallButtonStyles} onClick={this.showNewQuickCallPopup}>
+              <FormattedMessage id="patient.newQuickCallNote">
+                {(message: string) => <span>{message}</span>}
+              </FormattedMessage>
+            </div>
             <div className={saveButtonStyles} onClick={this.showNewProgressNotePopup}>
               <FormattedMessage id="patient.newProgressNote">
                 {(message: string) => <span>{message}</span>}
@@ -125,6 +151,11 @@ export class PatientTimeline extends React.Component<allProps, IState> {
           patientId={patientId}
           visible={isProgressNotePopupVisible}
           close={this.hideNewProgressNotePopup}
+        />
+        <QuickCallPopup
+          patientId={patientId}
+          visible={isQuickCallPopupVisible}
+          close={this.hideNewQuickCallPopup}
         />
       </div>
     );

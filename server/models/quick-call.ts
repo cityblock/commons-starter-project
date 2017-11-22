@@ -78,7 +78,9 @@ export default class QuickCall extends BaseModel {
 
     const quickCallInsertParams: any = omit(input, ['patientId']);
     quickCallInsertParams.progressNoteId = progressNote.id;
-    return this.query<QuickCall>(txn).insert(quickCallInsertParams) as any;
+    return this.query<QuickCall>(txn)
+      .insert(quickCallInsertParams)
+      .eager(EAGER_QUERY) as any;
   }
 
   static async get(quickCallId: string, txn: Transaction): Promise<QuickCall> {

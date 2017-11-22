@@ -26,7 +26,7 @@ export async function quickCallCreate(
     await accessControls.isAllowed(userRole, 'create', 'quickCall');
     checkUserLoggedIn(userId);
 
-    return await QuickCall.create(input, newTxn);
+    return await QuickCall.create({ ...input, userId: userId! }, newTxn);
   });
 }
 

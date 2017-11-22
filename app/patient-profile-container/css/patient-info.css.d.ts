@@ -3,6 +3,7 @@ export const button: string;
 export const select: string;
 export const saveButtonGroup: string;
 export const saveButton: string;
+export const saveQuickCallButton: string;
 export const saveButtonError: string;
 export const saveButtonErrorRedText: string;
 export const saveButtonSuccess: string;

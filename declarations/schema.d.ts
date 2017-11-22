@@ -1941,7 +1941,6 @@ declare module 'schema' {
 
 
   interface IQuickCallCreateInput {
-    userId: string;
     patientId: string;
     reason: string;
     summary: string;

@@ -40,6 +40,17 @@ exports[`renders timeline 1`] = `
       className="saveButtonGroup"
     >
       <div
+        className="button saveButton saveQuickCallButton"
+        onClick={[Function]}
+      >
+        <FormattedMessage
+          id="patient.newQuickCallNote"
+          values={Object {}}
+        >
+          [Function]
+        </FormattedMessage>
+      </div>
+      <div
         className="button saveButton"
         onClick={[Function]}
       >
@@ -78,6 +89,11 @@ exports[`renders timeline 1`] = `
     </div>
   </div>
   <Apollo(Apollo(Apollo(Apollo(Apollo(ProgressNotePopup)))))
+    close={[Function]}
+    patientId="patient-id"
+    visible={false}
+  />
+  <Apollo(Apollo(QuickCallPopup))
     close={[Function]}
     patientId="patient-id"
     visible={false}

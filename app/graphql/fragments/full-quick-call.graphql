@@ -1,0 +1,13 @@
+fragment FullQuickCall on QuickCall {
+  id
+  progressNoteId
+  reason
+  summary
+  direction
+  callRecipient
+  wasSuccessful
+  startTime
+  createdAt
+  updatedAt
+  deletedAt
+}

@@ -31,6 +31,7 @@ export const SPANISH_TRANSLATION = {
     'patient.medicareId': 'ID de Medicare',
     'patient.patientInfo': 'Información del Paciente',
     'patient.newProgressNote': 'New progress note',
+    'patient.newQuickCallNote': '+ Nota de llamada rápida',
     'patient.selectProgressNoteType': 'Select encounter type:',
     'patient.createdPopupHeading': 'Inscrito con éxito',
     'patient.createdPopupBody':
@@ -140,5 +141,14 @@ export const SPANISH_TRANSLATION = {
     'notifications.leftPane': 'Panel izquierdo',
     'notifications.noNotifications': 'Sin Notificaciones',
     'notification.time': 'Hora',
+    'quickCallForm.title': 'Nota de llamada rápida',
+    'quickCallForm.submit': 'Guardar llamada',
+    'quickCallForm.inboundCall': 'Llamada entrante',
+    'quickCallForm.outboundCall': 'Llamada saliente',
+    'quickCallForm.startTime': '¿A qué hora fue la llamada?',
+    'quickCallForm.callRecipient': '¿Con quién fue la llamada?',
+    'quickCallForm.wasSuccessful': '¿Pudiste hablar con ellos?',
+    'quickCallForm.reason': '¿Cuál fue el motivo de la llamada?',
+    'quickCallForm.summary': 'Proporcione notas adicionales sobre la llamada aquí …',
   },
 };

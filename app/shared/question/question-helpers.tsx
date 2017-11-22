@@ -40,6 +40,17 @@ export function setupQuestionsState(
         questionsState[question.id] = { answers: [], oldAnswers: [], changed: false };
       }
     });
+    // Questions have changed
+  } else if (
+    nextQuestions &&
+    currentQuestions &&
+    (nextQuestions[0] || {}).id !== (currentQuestions[0] || {}).id
+  ) {
+    nextQuestions.forEach(question => {
+      if (!questionsState[question.id]) {
+        questionsState[question.id] = { answers: [], oldAnswers: [], changed: false };
+      }
+    });
   }
   return questionsState;
 }

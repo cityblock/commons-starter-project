@@ -60,14 +60,18 @@ export class ProgressNoteContext extends React.Component<allProps, IState> {
   }
 
   componentWillReceiveProps(nextProps: allProps) {
+    let questionsState = this.state.questions;
+    if (nextProps.progressNoteTemplateId !== this.props.progressNoteTemplateId) {
+      questionsState = {};
+    }
     if (nextProps.questions) {
+      // Should happen every time
       const questions = setupQuestionsState(
-        this.state.questions,
+        questionsState,
         this.props.questions,
         nextProps.questions,
       );
-
-      this.setState(() => ({ questions }));
+      this.setState({ questions });
     }
   }
 
@@ -159,7 +163,7 @@ export class ProgressNoteContext extends React.Component<allProps, IState> {
         visible={visible}
         answerData={questions[question.id]}
         onChange={this.onChange}
-        key={`${question.id}-${index}`}
+        key={question.id}
         question={question}
       />
     );

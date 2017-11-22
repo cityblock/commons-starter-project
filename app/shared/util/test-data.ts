@@ -151,6 +151,29 @@ export const question = {
   ],
 };
 
+export const questionWithAnswerWithConcernAndGoal = {
+  id: 'different-question-id',
+  createdAt: 'Thu Jul 13 2017 16:52:56 GMT-0400 (EDT)',
+  updatedAt: 'Thu Jul 13 2017 16:52:56 GMT-0400 (EDT)',
+  dueAt: 'Thu Jul 13 2017 16:52:56 GMT-0400 (EDT)',
+  deletedAt: null,
+  title: 'different Question Title',
+  order: 1,
+  validatedSource: 'validated source',
+  answerType: 'radio' as any,
+  answers: [answerWithConcernAndGoal],
+  riskAreaId: 'risk-area-id',
+  screeningToolId: null,
+  applicableIfType: 'allTrue' as any,
+  applicableIfQuestionConditions: [
+    {
+      id: 'question-condition',
+      questionId: 'cool-question-id',
+      answerId: 'answer-id',
+    },
+  ],
+};
+
 export const carePlanSuggestionWithConcern = {
   id: 'care-plan-suggestion-id',
   patientId: 'patient-id',

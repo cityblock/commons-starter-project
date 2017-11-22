@@ -1,13 +1,12 @@
 import * as React from 'react';
-import { Droppable, DroppableProvided, DroppableStateSnapshot } from 'react-beautiful-dnd';
 import { FullPatientConcernFragment } from '../../graphql/types';
+import EmptyPlaceholder from '../library/empty-placeholder/empty-placeholder';
 import PatientConcern from './concern';
-import * as styles from './css/index.css';
 
 interface IProps {
   concerns: FullPatientConcernFragment[];
-  selectedPatientConcernId?: string;
-  optionsDropdownConcernId?: string;
+  selectedPatientConcernId: string;
+  optionsDropdownConcernId: string;
   inactive?: boolean;
   onClick: (id: string) => void;
   onOptionsToggle: (id: string) => (e: React.MouseEvent<HTMLDivElement>) => void;
@@ -25,18 +24,12 @@ const PatientConcerns: React.StatelessComponent<IProps> = (props: IProps) => {
     selectedTaskId,
   } = props;
 
-  if (!concerns.length) {
+  if (inactive && !concerns.length) {
     return (
-      <div className={styles.emptyCarePlanSuggestionsContainer}>
-        <div className={styles.emptyCarePlanSuggestionsLogo} />
-        <div className={styles.emptyCarePlanSuggestionsLabel}>
-          There are no Next Up concerns for this patient
-        </div>
-        <div className={styles.emptyCarePlanSuggestionsSubtext}>
-          Add concerns here that the patient and the care team do not want to focus on right now but
-          would like to keep track of
-        </div>
-      </div>
+      <EmptyPlaceholder
+        headerMessageId="patientMap.emptyNextUpHeader"
+        detailMessageId="patientMap.emptyNextUpDetail"
+      />
     );
   }
 
@@ -58,18 +51,7 @@ const PatientConcerns: React.StatelessComponent<IProps> = (props: IProps) => {
     );
   });
 
-  const droppableId = inactive ? 'inactiveConcerns' : 'activeConcerns';
-
-  return (
-    <Droppable droppableId={droppableId} type="CONCERN">
-      {(provided: DroppableProvided, snapshot: DroppableStateSnapshot) => (
-        <div ref={provided.innerRef}>
-          {renderedConcerns}
-          {provided.placeholder}
-        </div>
-      )}
-    </Droppable>
-  );
+  return <div>{renderedConcerns}</div>;
 };
 
 export default PatientConcerns;

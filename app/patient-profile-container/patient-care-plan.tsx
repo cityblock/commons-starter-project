@@ -1,9 +1,9 @@
 import * as React from 'react';
 import { FullPatientConcernFragment } from '../graphql/types';
-import PatientConcerns from '../shared/concerns';
 import Spinner from '../shared/library/spinner/spinner';
 import TextDivider from '../shared/library/text-divider/text-divider';
 import * as styles from './css/patient-care-plan.css';
+import DnDPatientConcerns from './drag-and-drop/patient-concerns';
 
 interface IProps {
   loading?: boolean;
@@ -73,8 +73,9 @@ export default class PatientCarePlan extends React.Component<IProps, IState> {
 
     return (
       <div className={styles.carePlan}>
-        <PatientConcerns
+        <DnDPatientConcerns
           concerns={activeConcerns}
+          inactive={false}
           selectedPatientConcernId={selectedPatientConcernId}
           optionsDropdownConcernId={optionsDropdownConcernId}
           onClick={this.onClickPatientConcern}
@@ -82,7 +83,7 @@ export default class PatientCarePlan extends React.Component<IProps, IState> {
           selectedTaskId={selectedTaskId}
         />
         <TextDivider messageId="patientMap.nextUp" />
-        <PatientConcerns
+        <DnDPatientConcerns
           concerns={inactiveConcerns}
           inactive={true}
           selectedPatientConcernId={selectedPatientConcernId}

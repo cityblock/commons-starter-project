@@ -95,6 +95,11 @@ export const ENGLISH_TRANSLATION = {
     'patientInfo.contactInfo': 'Contact information',
     'patientInfo.insuranceInfo': 'Insurance information',
     'patientMap.nextUp': 'Next Up',
+    'patientMap.emptyNextUpHeader': 'There are no Next Up concerns for this patient',
+    /* tslint:disable:max-line-length */
+    'patientMap.emptyNextUpDetail':
+      'Add concerns here that the patient and the care team do not want to focus on right now but would like to keep track of',
+    /* tslint:enable:max-line-length */
     'header.settings': 'Settings',
     'header.search': 'Search',
     'header.patients': 'Patients',

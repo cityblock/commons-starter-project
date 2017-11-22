@@ -1,8 +1,8 @@
 import { shallow } from 'enzyme';
 import * as React from 'react';
-import PatientConcerns from '../../shared/concerns';
 import Spinner from '../../shared/library/spinner/spinner';
 import TextDivider from '../../shared/library/text-divider/text-divider';
+import DnDPatientConcerns from '../drag-and-drop/patient-concerns';
 import PatientCarePlan from '../patient-care-plan';
 
 describe('Patient Care Plan Component', () => {
@@ -22,7 +22,7 @@ describe('Patient Care Plan Component', () => {
     );
 
     expect(wrapperLoading.find(Spinner).length).toBe(1);
-    expect(wrapperLoading.find(PatientConcerns).length).toBe(0);
+    expect(wrapperLoading.find(DnDPatientConcerns).length).toBe(0);
   });
 
   const selectedTaskId = 'growlithe';
@@ -39,7 +39,7 @@ describe('Patient Care Plan Component', () => {
     />,
   );
 
-  const patientConcerns = wrapper.find(PatientConcerns);
+  const patientConcerns = wrapper.find(DnDPatientConcerns);
 
   it('renders active and inactive concerns', () => {
     expect(patientConcerns.length).toBe(2);
@@ -67,7 +67,7 @@ describe('Patient Care Plan Component', () => {
     expect(patientConcerns.at(1).props().selectedPatientConcernId).toBe('');
 
     wrapper.setState({ selectedPatientConcernId });
-    const patientConcerns2 = wrapper.find(PatientConcerns);
+    const patientConcerns2 = wrapper.find(DnDPatientConcerns);
 
     expect(patientConcerns2.at(0).props().selectedPatientConcernId).toBe(selectedPatientConcernId);
     expect(patientConcerns2.at(1).props().selectedPatientConcernId).toBe(selectedPatientConcernId);
@@ -80,7 +80,7 @@ describe('Patient Care Plan Component', () => {
     expect(patientConcerns.at(1).props().optionsDropdownConcernId).toBe('');
 
     wrapper.setState({ optionsDropdownConcernId });
-    const patientConcerns2 = wrapper.find(PatientConcerns);
+    const patientConcerns2 = wrapper.find(DnDPatientConcerns);
 
     expect(patientConcerns2.at(0).props().optionsDropdownConcernId).toBe(optionsDropdownConcernId);
     expect(patientConcerns2.at(1).props().optionsDropdownConcernId).toBe(optionsDropdownConcernId);

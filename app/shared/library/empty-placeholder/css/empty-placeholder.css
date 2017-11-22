@@ -1,6 +1,6 @@
-@import '../../css/sizes';
+@import '../../../css/sizes';
 
-.emptyCarePlanSuggestionsContainer {
+.container {
   display: flex;
   flex-direction: column;
   width: 100%;
@@ -9,27 +9,29 @@
   padding: 50px;
   justify-content: space-between;
   align-items: center;
+  text-align: center;
 }
 
-.emptyCarePlanSuggestionsLogo {
+.icon {
   height: 30px;
   width: 30px;
-  background-image: url('../../../assets/pause-light-grey.svg');
+  background-image: url('../../../../assets/pause-light-grey.svg');
   background-position: center center;
   background-size: contain;
   background-repeat: no-repeat;
   margin-bottom: 30px;
 }
 
-.emptyCarePlanSuggestionsLabel {
+.container h3 {
   font-family: var(--basetica-medium);
   font-size: var(--medium-font-size);
+  font-weight: var(--roboto-medium-weight);
   line-height: var(--medium-font-line-height);
   color: var(--light-gray-font-color);
   margin-bottom: 10px;
 }
 
-.emptyCarePlanSuggestionsSubtext {
+.container p {
   font-family: var(--roboto);
   font-size: var(--default-font-size);
   line-height: var(--default-line-height);

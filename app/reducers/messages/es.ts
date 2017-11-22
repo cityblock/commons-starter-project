@@ -94,6 +94,11 @@ export const SPANISH_TRANSLATION = {
     'patientInfo.contactInfo': 'Información del contacto',
     'patientInfo.insuranceInfo': 'Información del seguro',
     'patientMap.nextUp': 'El Siguiente',
+    'patientMap.emptyNextUpHeader': 'No hay preocupaciones Siguientes para este paciente',
+    /* tslint:disable:max-line-length */
+    'patientMap.emptyNextUpDetail':
+      'Agregue preocupaciones aquí que el paciente y el equipo de atención no quieren enfocarse en este momento, pero le gustaría hacer un seguimiento de',
+    /* tslint:enable:max-line-length */
     'header.settings': 'Ajustes',
     'header.search': 'Buscar',
     'header.patients': 'Pacientes',

@@ -1,6 +1,6 @@
 import { shallow } from 'enzyme';
 import * as React from 'react';
-import PatientConcern from '../concerns/concern';
+import DnDPatientConcern from '../../patient-profile-container/drag-and-drop/patient-concern';
 import PatientConcerns from '../concerns/patient-concerns';
 import EmptyPlaceholder from '../library/empty-placeholder/empty-placeholder';
 
@@ -31,7 +31,7 @@ describe('Patient Care Plan Concerns Component', () => {
       'patientMap.emptyNextUpDetail',
     );
 
-    expect(wrapper.find(PatientConcern).length).toBe(0);
+    expect(wrapper.find(DnDPatientConcern).length).toBe(0);
   });
 
   describe('Concerns present', () => {
@@ -56,32 +56,28 @@ describe('Patient Care Plan Concerns Component', () => {
     );
 
     it('renders correct number of patient concerns', () => {
-      expect(wrapper.find(PatientConcern).length).toBe(2);
+      expect(wrapper.find(DnDPatientConcern).length).toBe(2);
     });
 
     it('passes correct props to selected concern', () => {
       const renderedConcern1Props = wrapper
-        .find(PatientConcern)
+        .find(DnDPatientConcern)
         .at(0)
         .props();
 
       expect(renderedConcern1Props.selected).toBeTruthy();
       expect(renderedConcern1Props.optionsOpen).toBeFalsy();
-      expect(renderedConcern1Props.onClick).toBe(onClick);
-      expect(renderedConcern1Props.onOptionsToggle).toBe(onOptionsToggle);
       expect(renderedConcern1Props.patientConcern).toBe(concern1);
     });
 
     it('passes correct props to concern with options open', () => {
       const renderedConcern1Props = wrapper
-        .find(PatientConcern)
+        .find(DnDPatientConcern)
         .at(1)
         .props();
 
       expect(renderedConcern1Props.selected).toBeFalsy();
       expect(renderedConcern1Props.optionsOpen).toBeTruthy();
-      expect(renderedConcern1Props.onClick).toBe(onClick);
-      expect(renderedConcern1Props.onOptionsToggle).toBe(onOptionsToggle);
       expect(renderedConcern1Props.patientConcern).toBe(concern2);
     });
   });

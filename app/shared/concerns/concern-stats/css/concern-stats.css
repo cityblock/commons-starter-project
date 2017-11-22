@@ -1,0 +1,57 @@
+@import '../../../css/sizes';
+
+.container {
+  display: flex;
+  margin-bottom: 0;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.group,
+.stat {
+  display: flex;
+  align-items: center;
+}
+
+.group {
+  justify-content: space-between;
+}
+
+.label,
+.stat h5 {
+  margin: 0;
+  font-family: var(--roboto);
+  font-size: var(--small-font-size);
+  line-height: var(--small-font-line-height);
+}
+
+.label {
+  color: var(--gray-font-color);
+  font-weight: var(--default-font-weight);
+}
+
+.small,
+.date {
+  font-size: var(--extra-small-font-size);
+}
+
+.stat h5,
+.date {
+  color: var(--black-color);
+  margin: 0 10px;
+}
+
+.stat h5 {
+  font-weight: var(--roboto-medium-weight);
+}
+
+.stat:last-child {
+  border-left: 1px solid var(--gray-background-color);
+  padding-left: 10px;
+}
+
+.inactive .label,
+.inactive .stat h5,
+.inactive .date {
+  color: var(--black-opaque);
+}

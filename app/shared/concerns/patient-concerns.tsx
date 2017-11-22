@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { FullPatientConcernFragment } from '../../graphql/types';
+import DnDPatientConcern from '../../patient-profile-container/drag-and-drop/patient-concern';
 import EmptyPlaceholder from '../library/empty-placeholder/empty-placeholder';
-import PatientConcern from './concern';
 
 interface IProps {
   concerns: FullPatientConcernFragment[];
@@ -38,14 +38,14 @@ const PatientConcerns: React.StatelessComponent<IProps> = (props: IProps) => {
     const optionsOpen = optionsDropdownConcernId === concern.id;
 
     return (
-      <PatientConcern
+      <DnDPatientConcern
         key={concern.id}
         selected={selected}
         patientConcern={concern}
-        onClick={onClick}
-        onOptionsToggle={onOptionsToggle}
+        onClick={() => onClick(concern.id)}
+        onOptionsToggle={onOptionsToggle(concern.id)}
         optionsOpen={optionsOpen}
-        inactive={inactive}
+        inactive={inactive || false}
         selectedTaskId={selectedTaskId}
       />
     );

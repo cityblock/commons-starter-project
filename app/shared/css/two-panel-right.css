@@ -159,9 +159,6 @@
   font-family: var(--roboto);
   font-size: var(--extra-small-font-size);
   line-height: var(--extra-small-font-line-height);
-}
-
-.smallText {
   color: var(--gray-font-color);
 }
 

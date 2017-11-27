@@ -56,17 +56,16 @@
   --yellow-opaque: rgba(255, 217, 0, 0.4);
   --border-opaque: rgba(204, 204, 204, 0.4);
   --border-radius: 2px;
-}
-
-:root {
   --input: {
     border: 1px solid var(--border-color);
     -webkit-style: none;
-    background-color: transparent;
     font-size: 16px;
     border-radius: 0;
-    padding: 10px;
     outline: none;
+    background-color: #fff;
+    padding: 16px 20px;
+    font-family: var(--roboto);
+    line-height: 19px;
   }
 
   --button: {
@@ -133,16 +132,6 @@
     font-family: var(--basetica-medium);
     font-size: var(--default-font-size);
     line-height: var(--medium-font-line-height);
-  }
-
-  --input: {
-    border: 1px solid var(--border-color);
-    background-color: #fff;
-    outline: none;
-    padding: 16px 20px;
-    font-family: var(--roboto);
-    font-size: 16px;
-    line-height: 19px;
   }
 
   --select: {

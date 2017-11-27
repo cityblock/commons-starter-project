@@ -153,6 +153,15 @@
   position: relative;
 }
 
+.hamburger {
+  margin-right: var(--medium-gutter);
+  background-image: url('../../../assets/dot-hamburger-grey.svg');
+}
+
+.close {
+  background-image: url('../../../assets/close-grey.svg');
+}
+
 .hamburger,
 .close {
   width: 12px;
@@ -164,15 +173,6 @@
   &:hover {
     cursor: pointer;
   }
-}
-
-.hamburger {
-  margin-right: var(--medium-gutter);
-  background-image: url('../../../assets/dot-hamburger-grey.svg');
-}
-
-.close {
-  background-image: url('../../../assets/close-grey.svg');
 }
 
 .assignee {
@@ -524,10 +524,6 @@ input[type='date'].dueDateInput::-webkit-calendar-picker-indicator {
   background-repeat: no-repeat;
 }
 
-.typeIcon {
-  margin-right: 10px;
-}
-
 .typeText {
   color: var(--black-color);
   font-family: var(--roboto);
@@ -551,6 +547,7 @@ input[type='date'].dueDateInput::-webkit-calendar-picker-indicator {
 }
 
 .typeIcon {
+  margin-right: 10px;
   width: 15px;
   height: 10px;
   background-image: url('../../../assets/type-icon-black.svg');

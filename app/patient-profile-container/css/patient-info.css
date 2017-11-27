@@ -117,9 +117,6 @@
 .radioRow {
   margin-bottom: var(--medium-gutter);
   lost-flex-container: row;
-}
-
-.radioRow {
   justify-content: flex-start;
   align-items: middle;
 }

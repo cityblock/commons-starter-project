@@ -5,24 +5,18 @@
   align-items: center;
 }
 
-.dueDateIcon {
-  width: 20px;
-  height: 20px;
-  background-position: center center;
-  background-size: contain;
-  background-repeat: no-repeat;
-  background-image: url('../../../assets/calendar-light-grey.svg');
-  margin: 0 7px 0 2px;
+.icon {
+  margin-right: 8px;
 }
 
 .dueSoonIcon {
-  background-image: url('../../../assets/calendar-yellow.svg');
+  fill: var(--yellow-color);
 }
 
 .pastDueIcon {
-  background-image: url('../../../assets/calendar-red.svg');
+  fill: var(--red-color);
 }
 
 .completeIcon {
-  background-image: url('../../../assets/calendar-green.svg');
+  fill: var(--green-color);
 }

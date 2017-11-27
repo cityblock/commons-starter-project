@@ -3,6 +3,7 @@ import * as React from 'react';
 import { taskEditMutation, taskEditMutationVariables } from '../../graphql/types';
 import { formatDueDate, isDueSoon, isPastDue } from '../helpers/format-helpers';
 import DateInput from '../library/date-input/date-input';
+import Icon from '../library/icon/icon';
 import * as styles from './css/task-due.css';
 
 export interface IProps {
@@ -45,7 +46,7 @@ class TaskDue extends React.Component<IProps, IState> {
     const dueDate = completedAt ? formatDueDate(completedAt, true) : formatDueDate(dueAt, false);
     const { changeDueDateError } = this.state;
 
-    const iconStyles = classNames(styles.dueDateIcon, {
+    const iconStyles = classNames(styles.icon, {
       [styles.dueSoonIcon]: dueSoon,
       [styles.pastDueIcon]: pastDue,
       [styles.completeIcon]: !!completedAt,
@@ -53,7 +54,7 @@ class TaskDue extends React.Component<IProps, IState> {
 
     return (
       <div className={styles.dueDate}>
-        <div className={iconStyles} />
+        <Icon name='event' className={iconStyles} />
         <DateInput
           value={completedAt || dueAt}
           onChange={this.onDueDateChange}

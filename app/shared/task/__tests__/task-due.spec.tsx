@@ -1,6 +1,7 @@
 import { shallow } from 'enzyme';
 import * as React from 'react';
 import DateInput from '../../library/date-input/date-input';
+import Icon from '../../library/icon/icon';
 import TaskDue from '../task-due';
 
 describe('Task Due Date Component', () => {
@@ -22,7 +23,8 @@ describe('Task Due Date Component', () => {
   });
 
   it('renders a due date icon', () => {
-    expect(wrapper.find('div').length).toBe(2);
+    expect(wrapper.find(Icon).length).toBe(1);
+    expect(wrapper.find(Icon).props().className).toBe('icon');
   });
 
   it('renders completion date if task complete', () => {
@@ -34,5 +36,7 @@ describe('Task Due Date Component', () => {
 
     const inputValue = wrapper2.find(DateInput).props().value;
     expect(inputValue).toBe(completedAt);
+
+    expect(wrapper2.find(Icon).props().className).toBe('icon completeIcon');
   });
 });

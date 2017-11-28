@@ -27,7 +27,7 @@ describe('builder concerns', () => {
           patient={patient}
           editProgressNote={editProgressNote}
           completeProgressNote={completeProgressNote}
-          getOrCreateProgressNote={getOrCreateProgressNote}
+          createProgressNote={getOrCreateProgressNote}
           progressNoteTemplates={progressNoteTemplates}
         />,
       );
@@ -44,12 +44,13 @@ describe('builder concerns', () => {
           patient={patient}
           editProgressNote={editProgressNote}
           completeProgressNote={completeProgressNote}
-          getOrCreateProgressNote={getOrCreateProgressNote}
+          createProgressNote={getOrCreateProgressNote}
+          progressNote={progressNote}
           progressNoteTemplates={progressNoteTemplates}
         />,
       );
       const instance = component.instance() as Component;
-      instance.setState({ progressNote });
+
       const result = instance.render();
       expect(result).toMatchSnapshot();
     });

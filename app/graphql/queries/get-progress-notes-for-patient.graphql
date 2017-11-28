@@ -1,7 +1,7 @@
 #import "../fragments/full-progress-note.graphql"
 
-query getProgressNotesForPatient($patientId: String!) {
-  progressNotesForPatient(patientId: $patientId) {
+query getProgressNotesForPatient($patientId: String!, $completed: Boolean!) {
+  progressNotesForPatient(patientId: $patientId, completed: $completed) {
     ...FullProgressNote
   }
 }

@@ -172,6 +172,7 @@ export default graphql<IGraphqlProps, IProps, allProps>(progressNotesQuery as an
   options: (props: IProps) => ({
     variables: {
       patientId: props.match.params.patientId,
+      completed: true,
     },
   }),
   props: ({ data }) => ({

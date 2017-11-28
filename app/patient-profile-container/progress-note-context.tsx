@@ -13,6 +13,7 @@ import {
   patientAnswersCreateMutation,
   patientAnswersCreateMutationVariables,
   FullPatientAnswerFragment,
+  FullProgressNoteFragment,
   FullProgressNoteTemplateFragment,
   FullQuestionFragment,
 } from '../graphql/types';
@@ -29,8 +30,7 @@ import { getCurrentTime, ProgressNoteTime } from './progress-note-time';
 
 interface IProps {
   patientId: string;
-  progressNoteId?: string;
-  progressNoteTemplateId?: string;
+  progressNote?: FullProgressNoteFragment;
   progressNoteTemplates?: FullProgressNoteTemplateFragment[];
   updateReadyToSubmit: (readyToSubmit: boolean) => void;
   onChange: (progressNoteTemplateId: string, startedAt?: string, location?: string) => void;
@@ -63,22 +63,43 @@ interface IState {
   error?: string;
 }
 
+function getProgressNoteId(props: IProps) {
+  return props.progressNote ? props.progressNote.id : undefined;
+}
+
+function getProgressNoteTemplateId(props: IProps) {
+  return props.progressNote && props.progressNote.progressNoteTemplate
+    ? props.progressNote.progressNoteTemplate.id
+    : undefined;
+}
+
 export class ProgressNoteContext extends React.Component<allProps, IState> {
   constructor(props: allProps) {
     super(props);
     const defaultDate = getCurrentTime();
+    const { progressNote } = props;
     this.state = {
       questions: {},
       loading: false,
-      error: undefined,
-      progressNoteTemplateId: undefined,
-      progressNoteTime: defaultDate.toISOString(),
+      progressNoteTime:
+        progressNote && progressNote.startedAt
+          ? new Date(progressNote.startedAt).toISOString()
+          : defaultDate.toISOString(),
+      progressNoteLocation:
+        progressNote && progressNote.location ? progressNote.location : undefined,
+      progressNoteTemplateId: getProgressNoteTemplateId(props),
     };
   }
 
   componentWillReceiveProps(nextProps: allProps) {
     let questionsState = this.state.questions;
-    if (nextProps.progressNoteTemplateId !== this.props.progressNoteTemplateId) {
+    const currentProgressNoteTemplateId = getProgressNoteTemplateId(this.props);
+    const nextProgressNoteTemplateId = getProgressNoteTemplateId(nextProps);
+
+    if (
+      nextProgressNoteTemplateId &&
+      nextProgressNoteTemplateId !== currentProgressNoteTemplateId
+    ) {
       questionsState = {};
     }
     if (nextProps.questions) {
@@ -90,6 +111,25 @@ export class ProgressNoteContext extends React.Component<allProps, IState> {
       );
       this.setState({ questions });
     }
+
+    // setup default state
+    if (nextProps.progressNote && !this.props.progressNote) {
+      this.setDefaultProgressNoteFields(nextProps);
+    }
+  }
+
+  setDefaultProgressNoteFields(props: allProps) {
+    const defaultDate = getCurrentTime();
+    const { progressNote } = props;
+    this.setState({
+      progressNoteTime:
+        progressNote && progressNote.startedAt
+          ? new Date(progressNote.startedAt).toISOString()
+          : defaultDate.toISOString(),
+      progressNoteLocation:
+        progressNote && progressNote.location ? progressNote.location : undefined,
+      progressNoteTemplateId: getProgressNoteTemplateId(props),
+    });
   }
 
   allQuestionsAnswered = () => {
@@ -107,7 +147,7 @@ export class ProgressNoteContext extends React.Component<allProps, IState> {
   };
 
   onChange = async (questionId: string, answerId: string, value: string | number) => {
-    const { questions, createPatientAnswers, progressNoteId, patientId } = this.props;
+    const { questions, createPatientAnswers, progressNote, patientId } = this.props;
 
     const update = getUpdateForAnswer(
       questionId,
@@ -116,7 +156,7 @@ export class ProgressNoteContext extends React.Component<allProps, IState> {
       questions || [],
       this.state.questions,
     );
-    if (update) {
+    if (update && progressNote) {
       this.setState({ questions: update });
       if (createPatientAnswers) {
         await createPatientAnswers({
@@ -132,7 +172,7 @@ export class ProgressNoteContext extends React.Component<allProps, IState> {
               },
             ],
             questionIds: [questionId],
-            progressNoteId,
+            progressNoteId: progressNote.id,
           },
         });
         this.props.updateReadyToSubmit(this.allQuestionsAnswered());
@@ -163,20 +203,20 @@ export class ProgressNoteContext extends React.Component<allProps, IState> {
     return (questions || []).map(this.renderQuestion);
   }
 
-  onLocationChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+  onLocationChange = async (event: React.ChangeEvent<HTMLSelectElement>) => {
     const fieldValue = event.currentTarget.value;
-    this.setState({ progressNoteLocation: fieldValue });
+    await this.setState({ progressNoteLocation: fieldValue });
     this.saveProgressNote();
   };
 
-  onTimeChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+  onTimeChange = async (event: React.ChangeEvent<HTMLSelectElement>) => {
     const fieldValue = event.currentTarget.value;
-    this.setState({ progressNoteTime: fieldValue });
+    await this.setState({ progressNoteTime: fieldValue });
     this.saveProgressNote();
   };
 
-  onEncounterTypeChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    this.setState({
+  onProgressNoteTemplateType = async (event: React.ChangeEvent<HTMLSelectElement>) => {
+    await this.setState({
       progressNoteTemplateId: event.currentTarget.value,
     });
     this.saveProgressNote();
@@ -190,8 +230,8 @@ export class ProgressNoteContext extends React.Component<allProps, IState> {
   };
 
   render() {
-    const { progressNoteTemplates, progressNoteTemplateId, clinics } = this.props;
-    const { progressNoteTime, progressNoteLocation, error } = this.state;
+    const { progressNoteTemplates, clinics } = this.props;
+    const { progressNoteTime, progressNoteLocation, error, progressNoteTemplateId } = this.state;
     const encounterTypes = (progressNoteTemplates || []).map(template => (
       <option key={template.id} value={template.id}>
         {template.title}
@@ -205,7 +245,7 @@ export class ProgressNoteContext extends React.Component<allProps, IState> {
           </FormattedMessage>
           <select
             value={progressNoteTemplateId || ''}
-            onChange={this.onEncounterTypeChange}
+            onChange={this.onProgressNoteTemplateType}
             className={styles.encounterTypeSelect}
           >
             <option value={''} disabled hidden>
@@ -250,11 +290,11 @@ export default compose(
     }),
   }),
   graphql<IGraphqlProps, IProps, allProps>(questionsQuery as any, {
-    skip: (props: IProps) => !props.progressNoteTemplateId,
+    skip: (props: IProps) => !getProgressNoteTemplateId(props),
     options: (props: IProps) => ({
       variables: {
         filterType: 'progressNoteTemplate',
-        filterId: props.progressNoteTemplateId,
+        filterId: getProgressNoteTemplateId(props),
       },
     }),
     props: ({ data }) => ({
@@ -264,10 +304,11 @@ export default compose(
     }),
   }),
   graphql<IGraphqlProps, IProps, allProps>(patientAnswersQuery as any, {
+    skip: (props: IProps) => !getProgressNoteId(props),
     options: (props: IProps) => ({
       variables: {
         filterType: 'progressNote',
-        filterId: props.progressNoteId,
+        filterId: getProgressNoteId(props),
         patientId: props.patientId,
       },
     }),

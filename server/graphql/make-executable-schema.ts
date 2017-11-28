@@ -101,8 +101,8 @@ import {
 import { resolveProgressNoteActivityForProgressNote } from './progress-note-activity-resolver';
 import {
   progressNoteComplete,
+  progressNoteCreate,
   progressNoteEdit,
-  progressNoteGetOrCreate,
   resolveProgressNote,
   resolveProgressNotesForPatient,
 } from './progress-note-resolver';
@@ -350,7 +350,7 @@ const resolveFunctions = {
     progressNoteTemplateDelete,
     progressNoteTemplateEdit,
     progressNoteComplete,
-    progressNoteGetOrCreate,
+    progressNoteCreate,
     progressNoteEdit,
     quickCallCreate,
   },

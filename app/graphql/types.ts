@@ -2293,6 +2293,7 @@ export type getProgressNoteTemplatesQuery = {
 
 export type getProgressNotesForPatientQueryVariables = {
   patientId: string,
+  completed: boolean,
 };
 
 export type getProgressNotesForPatientQuery = {
@@ -3523,16 +3524,13 @@ export type progressNoteCompleteMutation = {
   } | null,
 };
 
-export type progressNoteEditMutationVariables = {
-  progressNoteId: string,
-  progressNoteTemplateId: string,
-  startedAt?: string | null,
-  location?: string | null,
+export type progressNoteCreateMutationVariables = {
+  patientId: string,
 };
 
-export type progressNoteEditMutation = {
-  // edits a progress note
-  progressNoteEdit:  {
+export type progressNoteCreateMutation = {
+  // creates a progress note
+  progressNoteCreate:  {
     id: string,
     patientId: string,
     user:  {
@@ -3562,13 +3560,16 @@ export type progressNoteEditMutation = {
   } | null,
 };
 
-export type progressNoteGetOrCreateMutationVariables = {
-  patientId: string,
+export type progressNoteEditMutationVariables = {
+  progressNoteId: string,
+  progressNoteTemplateId: string,
+  startedAt?: string | null,
+  location?: string | null,
 };
 
-export type progressNoteGetOrCreateMutation = {
-  // get or create a progress note
-  progressNoteGetOrCreate:  {
+export type progressNoteEditMutation = {
+  // edits a progress note
+  progressNoteEdit:  {
     id: string,
     patientId: string,
     user:  {

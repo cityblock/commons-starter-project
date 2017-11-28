@@ -1285,9 +1285,9 @@ declare module 'schema' {
   */
     progressNoteTemplateDelete: IProgressNoteTemplate | null;
     /**
-    description: get or create a progress note
+    description: creates a progress note
   */
-    progressNoteGetOrCreate: IProgressNote | null;
+    progressNoteCreate: IProgressNote | null;
     /**
     description: completes a progress note
   */
@@ -1944,7 +1944,7 @@ declare module 'schema' {
   }
 
 
-  interface IProgressNoteGetOrCreateInput {
+  interface IProgressNoteCreateInput {
     patientId: string;
   }
 

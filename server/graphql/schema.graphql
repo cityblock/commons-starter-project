@@ -1220,7 +1220,7 @@ input ProgressNoteTemplateEditInput {
   title: String!
 }
 
-input ProgressNoteGetOrCreateInput {
+input ProgressNoteCreateInput {
   patientId: String!
 }
 
@@ -1410,8 +1410,8 @@ type RootMutationType {
   progressNoteTemplateEdit(input: ProgressNoteTemplateEditInput): ProgressNoteTemplate
   # deletes a progress note template
   progressNoteTemplateDelete(input: ProgressNoteTemplateDeleteInput): ProgressNoteTemplate
-  # get or create a progress note
-  progressNoteGetOrCreate(input: ProgressNoteGetOrCreateInput): ProgressNote
+  # creates a progress note
+  progressNoteCreate(input: ProgressNoteCreateInput): ProgressNote
   # completes a progress note
   progressNoteComplete(input: ProgressNoteCompleteInput): ProgressNote
   # edits a progress note
@@ -1568,7 +1568,7 @@ type RootQueryType {
   # progress note
   progressNote(progressNoteId: String!): ProgressNote
   # progress notes for patient
-  progressNotesForPatient(patientId: String!): [ProgressNote]
+  progressNotesForPatient(patientId: String!, completed: Boolean!): [ProgressNote]
   # progress note activities for progress note
   progressNoteActivityForProgressNote(progressNoteId: String!): ProgressNoteActivity
   # quick call

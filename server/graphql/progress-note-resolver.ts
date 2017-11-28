@@ -1,14 +1,14 @@
 import {
   IProgressNoteCompleteInput,
+  IProgressNoteCreateInput,
   IProgressNoteEditInput,
-  IProgressNoteGetOrCreateInput,
 } from 'schema';
 import ProgressNote from '../models/progress-note';
 import accessControls from './shared/access-controls';
 import { checkUserLoggedIn, IContext } from './shared/utils';
 
-interface IProgressNoteGetOrCreateArgs {
-  input: IProgressNoteGetOrCreateInput;
+interface IProgressNoteCreateArgs {
+  input: IProgressNoteCreateInput;
 }
 
 interface IResolveProgressNoteOptions {
@@ -17,6 +17,7 @@ interface IResolveProgressNoteOptions {
 
 interface IResolveProgressNotesForPatientOptions {
   patientId: string;
+  completed: boolean;
 }
 
 interface ICompleteProgressNoteOptions {
@@ -27,9 +28,9 @@ interface IEditProgressNoteOptions {
   input: IProgressNoteEditInput;
 }
 
-export async function progressNoteGetOrCreate(
+export async function progressNoteCreate(
   root: any,
-  { input }: IProgressNoteGetOrCreateArgs,
+  { input }: IProgressNoteCreateArgs,
   context: IContext,
 ) {
   const { userRole, userId } = context;
@@ -62,6 +63,8 @@ export async function progressNoteEdit(
 
   return await ProgressNote.update(input.progressNoteId, {
     progressNoteTemplateId: input.progressNoteTemplateId,
+    startedAt: input.startedAt || undefined,
+    location: input.location || undefined,
   });
 }
 
@@ -82,5 +85,5 @@ export async function resolveProgressNotesForPatient(
 ) {
   await accessControls.isAllowed(userRole, 'view', 'progressNote');
 
-  return await ProgressNote.getAllForPatient(args.patientId);
+  return await ProgressNote.getAllForPatient(args.patientId, args.completed);
 }

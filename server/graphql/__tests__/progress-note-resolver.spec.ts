@@ -56,14 +56,14 @@ describe('progress note resolver', () => {
 
   it('creates a progress note', async () => {
     const mutation = `mutation {
-        progressNoteGetOrCreate(input:
+        progressNoteCreate(input:
           { patientId: "${patient.id}" }
         ) {
           userId, patientId
         }
       }`;
     const result = await graphql(schema, mutation, null, { userRole, userId: user.id });
-    expect(cloneDeep(result.data!.progressNoteGetOrCreate)).toMatchObject({
+    expect(cloneDeep(result.data!.progressNoteCreate)).toMatchObject({
       userId: user.id,
       patientId: patient.id,
     });
@@ -126,7 +126,7 @@ describe('progress note resolver', () => {
       });
 
       const query = `{
-        progressNotesForPatient(patientId: "${patient.id}") { id }
+        progressNotesForPatient(patientId: "${patient.id}", completed: false) { id }
       }`;
 
       const result = await graphql(schema, query, null, {

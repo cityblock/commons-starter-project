@@ -82,8 +82,38 @@ exports[`builder concerns renders progress note popup with templates renders pro
     <Apollo(Apollo(Apollo(Apollo(ProgressNoteContext))))
       onChange={[Function]}
       patientId="patient-id"
-      progressNoteId="progress-note-id"
-      progressNoteTemplateId="progress-note-template-id"
+      progressNote={
+        Object {
+          "completedAt": null,
+          "createdAt": "2017-09-07T13:45:14.532Z",
+          "deletedAt": null,
+          "id": "progress-note-id",
+          "location": null,
+          "patientId": "patient-id",
+          "progressNoteTemplate": Object {
+            "createdAt": "2017-09-07T13:45:14.532Z",
+            "deletedAt": null,
+            "id": "progress-note-template-id",
+            "title": "Progress Note Template Title",
+            "updatedAt": "2017-09-07T13:45:14.532Z",
+          },
+          "progressNoteTemplateId": "progress-note-template-id",
+          "startedAt": null,
+          "updatedAt": "2017-09-07T13:45:14.532Z",
+          "user": Object {
+            "createdAt": "2017-09-07T13:45:14.532Z",
+            "email": "a@b.com",
+            "firstName": "first",
+            "googleProfileImageUrl": null,
+            "homeClinicId": "clinic-id",
+            "id": "id",
+            "lastName": "last",
+            "locale": "en",
+            "updatedAt": "2017-09-07T13:45:14.532Z",
+            "userRole": "physician",
+          },
+        }
+      }
       progressNoteTemplates={
         Array [
           Object {
@@ -176,8 +206,7 @@ exports[`builder concerns renders progress note popup with templates renders pro
     <Apollo(Apollo(Apollo(Apollo(ProgressNoteContext))))
       onChange={[Function]}
       patientId="patient-id"
-      progressNoteId={undefined}
-      progressNoteTemplateId={undefined}
+      progressNote={undefined}
       progressNoteTemplates={
         Array [
           Object {

@@ -66,7 +66,7 @@ describe('progress note model', () => {
       userId: user.id,
       progressNoteTemplateId: progressNoteTemplate.id,
     });
-    const progressNotes = await ProgressNote.getAllForPatient(patient.id);
+    const progressNotes = await ProgressNote.getAllForPatient(patient.id, false);
     expect(progressNotes).toEqual([createdNote]);
   });
 
@@ -103,6 +103,11 @@ describe('progress note model', () => {
 
     const completedNote = await ProgressNote.complete(progressNote.id);
     expect(completedNote.completedAt).not.toBeFalsy();
+
+    // fetches completed progress note
+    const fetchedProgressNotes = await ProgressNote.getAllForPatient(patient.id, true);
+    expect(fetchedProgressNotes.length).toEqual(1);
+    expect(fetchedProgressNotes[0].id).toEqual(completedNote.id);
   });
 
   it('deletes a progress note', async () => {
@@ -118,7 +123,7 @@ describe('progress note model', () => {
 
   it('auto opens a progress note if necessary', async () => {
     // The patient should not have any progress notes yet
-    const firstFetchedProgressNotes = await ProgressNote.getAllForPatient(patient.id);
+    const firstFetchedProgressNotes = await ProgressNote.getAllForPatient(patient.id, false);
     expect(firstFetchedProgressNotes.length).toEqual(0);
 
     // autoOpenIfRequired should open a note
@@ -126,7 +131,7 @@ describe('progress note model', () => {
       userId: user.id,
       patientId: patient.id,
     });
-    const secondFetchedProgressNotes = await ProgressNote.getAllForPatient(patient.id);
+    const secondFetchedProgressNotes = await ProgressNote.getAllForPatient(patient.id, false);
     expect(secondFetchedProgressNotes.length).toEqual(1);
 
     // autoOpenIfRequired should not open another note
@@ -134,7 +139,7 @@ describe('progress note model', () => {
       userId: user.id,
       patientId: patient.id,
     });
-    const thirdFetchedProgressNotes = await ProgressNote.getAllForPatient(patient.id);
+    const thirdFetchedProgressNotes = await ProgressNote.getAllForPatient(patient.id, false);
     expect(thirdFetchedProgressNotes.length).toEqual(1);
     expect(secondAutoProgressNote.id).toEqual(autoProgressNote.id);
   });

@@ -1,4 +1,5 @@
 import { shallow } from 'enzyme';
+import { clone } from 'lodash';
 import * as React from 'react';
 import PatientQuestion from '../../shared/question/patient-question';
 import {
@@ -23,8 +24,7 @@ describe('progress note context', () => {
     component = shallow(
       <Component
         patientId={patient.id}
-        progressNoteId={progressNote.id}
-        progressNoteTemplateId={progressNoteTemplate.id}
+        progressNote={progressNote}
         progressNoteTemplates={[progressNoteTemplate]}
         onChange={jest.fn()}
         updateReadyToSubmit={jest.fn()}
@@ -69,8 +69,7 @@ describe('progress note context without questions', () => {
     const component = shallow(
       <Component
         patientId={patient.id}
-        progressNoteId={progressNote.id}
-        progressNoteTemplateId={progressNoteTemplate.id}
+        progressNote={progressNote}
         progressNoteTemplates={[progressNoteTemplate]}
         onChange={jest.fn()}
         updateReadyToSubmit={jest.fn()}
@@ -97,8 +96,7 @@ describe('progress note context without questions', () => {
     const component = shallow(
       <Component
         patientId={patient.id}
-        progressNoteId={progressNote.id}
-        progressNoteTemplateId={progressNoteTemplate.id}
+        progressNote={progressNote}
         progressNoteTemplates={[progressNoteTemplate]}
         onChange={jest.fn()}
         updateReadyToSubmit={jest.fn()}
@@ -111,7 +109,6 @@ describe('progress note context without questions', () => {
     // Setup initial blank state (runs willReceiveProps)
     component.setProps({
       questions: [question],
-      progressNoteTemplateId: progressNoteTemplate.id,
       patientId: patient.id,
       onChange: jest.fn(),
     });
@@ -131,10 +128,15 @@ describe('progress note context without questions', () => {
     };
     expect(component.state().questions).toEqual(initialQuestionsState);
 
+    // Clone is shallow, so need to clone progress note and the template
+    const newProgressNote = clone(progressNote);
+    newProgressNote.progressNoteTemplate = clone(progressNoteTemplate);
+    newProgressNote.progressNoteTemplate.id = newProgressNote.progressNoteTemplate.id + 'different';
+
     // Change the progress note template
     component.setProps({
       questions: [questionWithAnswerWithConcernAndGoal],
-      progressNoteTemplateId: progressNoteTemplate.id + 'different',
+      progressNote: newProgressNote,
       patientId: patient.id,
       onChange: jest.fn(),
     });

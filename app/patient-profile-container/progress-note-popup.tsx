@@ -5,17 +5,18 @@ import { FormattedMessage, FormattedRelative } from 'react-intl';
 /* tslint:disable:max-line-length */
 import * as patientQuery from '../graphql/queries/get-patient.graphql';
 import * as progressNoteTemplatesQuery from '../graphql/queries/get-progress-note-templates.graphql';
+import * as progressNotesQuery from '../graphql/queries/get-progress-notes-for-patient.graphql';
 import * as progressNoteCompleteMutationGraphql from '../graphql/queries/progress-note-complete-mutation.graphql';
+import * as progressNoteCreateMutationGraphql from '../graphql/queries/progress-note-create.graphql';
 import * as progressNoteEditMutationGraphql from '../graphql/queries/progress-note-edit-mutation.graphql';
-import * as progressNoteGetOrCreateMutationGraphql from '../graphql/queries/progress-note-get-or-create.graphql';
 /* tslint:enable:max-line-length */
 import {
   progressNoteCompleteMutation,
   progressNoteCompleteMutationVariables,
+  progressNoteCreateMutation,
+  progressNoteCreateMutationVariables,
   progressNoteEditMutation,
   progressNoteEditMutationVariables,
-  progressNoteGetOrCreateMutation,
-  progressNoteGetOrCreateMutationVariables,
   FullProgressNoteFragment,
   FullProgressNoteTemplateFragment,
   ShortPatientFragment,
@@ -43,12 +44,15 @@ interface IGraphqlProps {
   completeProgressNote: (
     options: { variables: progressNoteCompleteMutationVariables },
   ) => { data: progressNoteCompleteMutation };
-  getOrCreateProgressNote: (
-    options: { variables: progressNoteGetOrCreateMutationVariables },
-  ) => { data: progressNoteGetOrCreateMutation };
+  createProgressNote: (
+    options: { variables: progressNoteCreateMutationVariables },
+  ) => { data: progressNoteCreateMutation };
   progressNoteTemplatesLoading?: boolean;
   progressNoteTemplatesError?: string;
   progressNoteTemplates: FullProgressNoteTemplateFragment[];
+  progressNoteError?: string;
+  progressNoteLoading?: boolean;
+  progressNote?: FullProgressNoteFragment;
   patientLoading?: boolean;
   patientError?: string;
   patient?: ShortPatientFragment;
@@ -56,7 +60,6 @@ interface IGraphqlProps {
 
 interface IState {
   tab: Tab;
-  progressNote?: FullProgressNoteFragment | null;
   readyToSubmit: boolean;
 }
 
@@ -73,17 +76,9 @@ export class ProgressNotePopup extends React.Component<allProps, IState> {
     };
   }
 
-  componentWillMount() {
-    this.setProgressNote();
-  }
-
-  async setProgressNote() {
-    const { patientId } = this.props;
-    const response = await this.props.getOrCreateProgressNote({ variables: { patientId } });
-    if (response && response.data) {
-      this.setState({
-        progressNote: response.data.progressNoteGetOrCreate,
-      });
+  componentWillReceiveProps(newProps: allProps) {
+    if (!newProps.progressNote && !newProps.progressNoteLoading) {
+      this.props.createProgressNote({ variables: { patientId: newProps.patientId } });
     }
   }
 
@@ -92,9 +87,10 @@ export class ProgressNotePopup extends React.Component<allProps, IState> {
     startedAt?: string,
     location?: string,
   ) => {
-    const { progressNote } = this.state;
+    const { progressNote } = this.props;
+
     if (progressNote) {
-      const response = await this.props.editProgressNote({
+      await this.props.editProgressNote({
         variables: {
           progressNoteId: progressNote.id,
           progressNoteTemplateId,
@@ -102,11 +98,6 @@ export class ProgressNotePopup extends React.Component<allProps, IState> {
           location,
         },
       });
-      if (response.data && response.data.progressNoteEdit) {
-        this.setState({
-          progressNote: response.data.progressNoteEdit,
-        });
-      }
     }
   };
 
@@ -115,7 +106,8 @@ export class ProgressNotePopup extends React.Component<allProps, IState> {
   };
 
   submit = async () => {
-    const { progressNote, readyToSubmit } = this.state;
+    const { progressNote } = this.props;
+    const { readyToSubmit } = this.state;
     if (progressNote && readyToSubmit) {
       await this.props.completeProgressNote({
         variables: {
@@ -132,8 +124,8 @@ export class ProgressNotePopup extends React.Component<allProps, IState> {
   };
 
   render() {
-    const { close, visible, patientId, progressNoteTemplates, patient } = this.props;
-    const { tab, progressNote, readyToSubmit } = this.state;
+    const { close, visible, patientId, progressNoteTemplates, patient, progressNote } = this.props;
+    const { tab, readyToSubmit } = this.state;
 
     const contextStyles = classNames(tabStyles.tab, {
       [tabStyles.selectedTab]: tab === 'context',
@@ -144,18 +136,12 @@ export class ProgressNotePopup extends React.Component<allProps, IState> {
     const tasksTabStyles = classNames(tabStyles.tab, {
       [tabStyles.selectedTab]: tab === 'tasks',
     });
-
     const context =
       tab === 'context' ? (
         <ProgressNoteContext
           updateReadyToSubmit={this.updateReadyToSubmit}
           patientId={patientId}
-          progressNoteId={progressNote ? progressNote.id : undefined}
-          progressNoteTemplateId={
-            progressNote && progressNote.progressNoteTemplate
-              ? progressNote.progressNoteTemplate.id
-              : undefined
-          }
+          progressNote={progressNote}
           progressNoteTemplates={progressNoteTemplates}
           onChange={this.updateProgressNote}
         />
@@ -233,15 +219,36 @@ export class ProgressNotePopup extends React.Component<allProps, IState> {
   }
 }
 
+function getProgressNote(data: any) {
+  if (data && data.progressNotesForPatient) {
+    return data.progressNotesForPatient[0];
+  }
+}
+
 export default compose(
   graphql<IGraphqlProps, IProps, allProps>(progressNoteCompleteMutationGraphql as any, {
     name: 'completeProgressNote',
   }),
-  graphql<IGraphqlProps, IProps, allProps>(progressNoteGetOrCreateMutationGraphql as any, {
-    name: 'getOrCreateProgressNote',
+  graphql<IGraphqlProps, IProps, allProps>(progressNoteCreateMutationGraphql as any, {
+    name: 'createProgressNote',
+    options: { refetchQueries: ['getProgressNotesForPatient'] },
   }),
   graphql<IGraphqlProps, IProps, allProps>(progressNoteEditMutationGraphql as any, {
     name: 'editProgressNote',
+    options: { refetchQueries: ['getProgressNotesForPatient'] },
+  }),
+  graphql<IGraphqlProps, IProps, allProps>(progressNotesQuery as any, {
+    options: (props: IProps) => ({
+      variables: {
+        patientId: props.patientId,
+        completed: false,
+      },
+    }),
+    props: ({ data }) => ({
+      progressNoteLoading: data ? data.loading : false,
+      progressNoteError: data ? data.error : null,
+      progressNote: data ? getProgressNote(data as any) : null,
+    }),
   }),
   graphql<IGraphqlProps, IProps, allProps>(patientQuery as any, {
     options: (props: IProps) => ({

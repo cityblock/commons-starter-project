@@ -100,11 +100,18 @@ export default class ProgressNote extends BaseModel {
     return progressNote;
   }
 
-  static async getAllForPatient(patientId: string): Promise<ProgressNote[]> {
-    return this.query()
+  static async getAllForPatient(patientId: string, completed: boolean): Promise<ProgressNote[]> {
+    const query = this.query()
       .eager(EAGER_QUERY)
       .orderBy('createdAt', 'desc')
       .where({ deletedAt: null, patientId });
+
+    if (completed) {
+      query.whereNotNull('completedAt');
+    } else {
+      query.whereNull('completedAt');
+    }
+    return await query;
   }
 
   static async create(input: IProgressNoteEditableFields) {

@@ -1219,6 +1219,10 @@ declare module 'schema' {
   */
     patientConcernEdit: IPatientConcern | null;
     /**
+    description: patient concern bulk edit
+  */
+    patientConcernBulkEdit: Array<IPatientConcern> | null;
+    /**
     description: patient concern delete
   */
     patientConcernDelete: IPatientConcern | null;
@@ -1821,6 +1825,20 @@ declare module 'schema' {
     startedAt?: string | null;
     completedAt?: string | null;
     patientConcernId: string;
+  }
+
+
+  interface IPatientConcernBulkEditInput {
+    patientConcerns: Array<IPatientConcernBulkEditFields>;
+    patientId: string;
+  }
+
+
+  interface IPatientConcernBulkEditFields {
+    id: string;
+    order?: number | null;
+    startedAt?: string | null;
+    completedAt?: string | null;
   }
 
 

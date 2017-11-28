@@ -1,0 +1,15 @@
+#import "../fragments/full-patient-concern.graphql"
+
+mutation patientConcernBulkEdit(
+  $patientConcerns: [PatientConcernBulkEditFields]!,
+  $patientId: String!
+) {
+  patientConcernBulkEdit(
+    input: {
+      patientConcerns: $patientConcerns
+      patientId: $patientId
+    }
+  ) {
+    ...FullPatientConcern
+  }
+}

@@ -1041,6 +1041,18 @@ input PatientConcernEditInput {
   patientConcernId: String!
 }
 
+input PatientConcernBulkEditFields {
+  id: String!
+  order: Int
+  startedAt: String
+  completedAt: String
+}
+
+input PatientConcernBulkEditInput {
+  patientConcerns: [PatientConcernBulkEditFields]!
+  patientId: String!
+}
+
 input PatientConcernDeleteInput {
   patientConcernId: String!
 }
@@ -1356,6 +1368,8 @@ type RootMutationType {
   patientConcernCreate(input: PatientConcernCreateInput): PatientConcern
   # patient concern edit
   patientConcernEdit(input: PatientConcernEditInput): PatientConcern
+  # patient concern bulk edit
+  patientConcernBulkEdit(input: PatientConcernBulkEditInput): [PatientConcern]
   # patient concern delete
   patientConcernDelete(input: PatientConcernDeleteInput): PatientConcern
   # care plan suggestion accept

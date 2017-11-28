@@ -2,12 +2,13 @@ import { shallow } from 'enzyme';
 import * as React from 'react';
 import { DragDropContext } from 'react-beautiful-dnd';
 import PatientCarePlan from '../../patient-care-plan';
-import DnDPatientCarePlan, { DnDPatientCarePlan as Component } from '../patient-care-plan';
+import { DnDPatientCarePlan as Component } from '../patient-care-plan';
 
 describe('Drag and Drop Patient Care Plan Wrapper Component', () => {
   const routeBase = '/charmander';
   const patientId = 'bulbasaur';
   const selectedTaskId = '';
+  const patientConcernBulkEdit = () => true as any;
 
   const activeConcern1 = {
     id: 'activeConcern1',
@@ -33,11 +34,12 @@ describe('Drag and Drop Patient Care Plan Wrapper Component', () => {
   } as any;
 
   const wrapper = shallow(
-    <DnDPatientCarePlan
+    <Component
       routeBase={routeBase}
       patientId={patientId}
       selectedTaskId={selectedTaskId}
       carePlan={carePlan}
+      patientConcernBulkEdit={patientConcernBulkEdit}
     />,
   );
 

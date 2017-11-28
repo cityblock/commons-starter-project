@@ -61,6 +61,7 @@ import {
   resolvePreviousPatientAnswersForQuestion,
 } from './patient-answer-resolver';
 import {
+  patientConcernBulkEdit,
   patientConcernCreate,
   patientConcernDelete,
   patientConcernEdit,
@@ -330,6 +331,7 @@ const resolveFunctions = {
     patientConcernCreate,
     patientConcernDelete,
     patientConcernEdit,
+    patientConcernBulkEdit,
     patientGoalCreate,
     patientGoalDelete,
     patientGoalEdit,

@@ -1,5 +1,6 @@
 import { pickBy } from 'lodash';
 import {
+  IPatientConcernBulkEditInput,
   IPatientConcernCreateInput,
   IPatientConcernDeleteInput,
   IPatientConcernEditInput,
@@ -18,6 +19,10 @@ export interface IResolvePatientConcernOptions {
 
 export interface IEditPatientConcernOptions {
   input: IPatientConcernEditInput;
+}
+
+export interface IBulkEditPatientConcernOptions {
+  input: IPatientConcernBulkEditInput;
 }
 
 export interface IDeletePatientConcernOptions {
@@ -67,6 +72,16 @@ export async function patientConcernEdit(
   // TODO: fix typings here
   const cleanedParams = pickBy<IPatientConcernEditInput>(args.input) as any;
   return PatientConcern.update(args.input.patientConcernId, cleanedParams, userId!);
+}
+
+export async function patientConcernBulkEdit(
+  root: any,
+  args: IBulkEditPatientConcernOptions,
+  { db, userRole, userId }: IContext,
+) {
+  await accessControls.isAllowedForUser(userRole, 'edit', 'patientConcern');
+  checkUserLoggedIn(userId);
+  return PatientConcern.bulkUpdate(args.input.patientConcerns as any, args.input.patientId);
 }
 
 export async function patientConcernDelete(

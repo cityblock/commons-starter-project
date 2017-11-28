@@ -1,9 +1,25 @@
-import * as _ from 'lodash';
+import { isEqual } from 'lodash';
 import * as React from 'react';
+import { graphql } from 'react-apollo';
 import { DragDropContext, DropResult } from 'react-beautiful-dnd';
-import { FullPatientConcernFragment } from '../../graphql/types';
-import { getPatientCarePlanQuery } from '../../graphql/types';
-import { insert, remove, reorder } from '../../shared/helpers/order-helpers';
+/* tslint:disable:max-line-length */
+import * as patientConcernBulkEditMutationGraphql from '../../graphql/queries/patient-concern-bulk-edit-mutation.graphql';
+/* tslint:enable:max-line-length */
+import {
+  patientConcernBulkEditMutation,
+  patientConcernBulkEditMutationVariables,
+} from '../../graphql/types';
+import {
+  getPatientCarePlanQuery,
+  FullPatientConcernFragment,
+  PatientConcernBulkEditFields,
+} from '../../graphql/types';
+import {
+  getOrderDiffs,
+  insert,
+  remove,
+  reorder,
+} from '../../shared/helpers/order-helpers';
 import PatientCarePlan from '../patient-care-plan';
 import * as styles from './css/patient-care-plan.css';
 
@@ -15,38 +31,50 @@ interface IProps {
   selectedTaskId: string;
 }
 
+interface IGraphqlProps {
+  patientConcernBulkEdit:
+    (options: { variables: patientConcernBulkEditMutationVariables }) =>
+    { data: patientConcernBulkEditMutation };
+}
+
+export type allProps = IProps & IGraphqlProps;
+
 interface IState {
   activeConcerns: FullPatientConcernFragment[];
   inactiveConcerns: FullPatientConcernFragment[];
   isDragging: boolean;
+  loading: boolean;
+  reorderError: string;
 }
 
-export class DnDPatientCarePlan extends React.Component<IProps, IState> {
-  constructor(props: IProps) {
+export class DnDPatientCarePlan extends React.Component<allProps, IState> {
+  constructor(props: allProps) {
     super(props);
 
     this.state = {
       activeConcerns: [],
       inactiveConcerns: [],
       isDragging: false,
+      loading: false,
+      reorderError: '',
     };
   }
 
-  componentWillReceiveProps(nextProps: IProps): void {
+  componentWillReceiveProps(nextProps: allProps): void {
     if (!nextProps.carePlan || !nextProps.carePlan.concerns.length) return;
 
     const activeConcerns = nextProps.carePlan.concerns.filter(
       (patientConcern: FullPatientConcernFragment) => !!patientConcern.startedAt,
-    );
+    ).sort((a, b) => a.order - b.order);
     const inactiveConcerns = nextProps.carePlan.concerns.filter(
       (patientConcern: FullPatientConcernFragment) => !patientConcern.startedAt,
-    );
+    ).sort((a, b) => a.order - b.order);
 
-    if (!_.isEqual(this.state.activeConcerns, activeConcerns)) {
+    if (!isEqual(this.state.activeConcerns, activeConcerns)) {
       this.setState(() => ({ activeConcerns }));
     }
 
-    if (!_.isEqual(this.state.inactiveConcerns, inactiveConcerns)) {
+    if (!isEqual(this.state.inactiveConcerns, inactiveConcerns)) {
       this.setState(() => ({ inactiveConcerns }));
     }
   }
@@ -73,35 +101,56 @@ export class DnDPatientCarePlan extends React.Component<IProps, IState> {
   };
 
   reorderConcernList(result: DropResult): void {
-    const endList = result.destination!.droppableId;
+    const endList = result.destination!.droppableId as 'activeConcerns' | 'inactiveConcerns';
 
     const updatedConcerns = reorder(
-      this.state[endList as 'activeConcerns' | 'inactiveConcerns'],
+      this.state[endList],
       result.source.index,
       result.destination!.index,
     );
+
+    const orderDiffs = getOrderDiffs(
+      this.state[endList as 'activeConcerns' | 'inactiveConcerns'],
+      updatedConcerns,
+      endList === 'inactiveConcerns' ? this.state.activeConcerns.length : 0,
+    );
+
+    this.updateConcernOrder(orderDiffs);
 
     this.setState(() => ({ [endList]: updatedConcerns }));
   }
 
   moveBetweenConcernLists(result: DropResult): void {
-    const startList = result.source.droppableId;
-    const endList = result.destination!.droppableId;
+    const startList = result.source.droppableId as 'activeConcerns' | 'inactiveConcerns';
+    const endList = result.destination!.droppableId as 'activeConcerns' | 'inactiveConcerns';
 
     const updatedStartList = remove(
-      this.state[startList as 'activeConcerns' | 'inactiveConcerns'],
-      this.state[startList as 'activeConcerns' | 'inactiveConcerns'].findIndex(
+      this.state[startList],
+      this.state[startList].findIndex(
         concern => concern.id === result.draggableId,
       ),
-    );
+    ) as FullPatientConcernFragment[];
 
     const updatedEndList = insert(
-      this.state[endList as 'activeConcerns' | 'inactiveConcerns'],
-      this.state[startList as 'activeConcerns' | 'inactiveConcerns'].find(
+      this.state[endList],
+      this.state[startList].find(
         concern => concern.id === result.draggableId,
       ),
       result.destination!.index,
+    ) as FullPatientConcernFragment[];
+
+    const newList = startList === 'activeConcerns' ?
+      updatedStartList.concat(updatedEndList) :
+      updatedEndList.concat(updatedStartList);
+
+    const orderDiffs = getOrderDiffs(
+      this.state.activeConcerns.concat(this.state.inactiveConcerns),
+      newList,
+      0,
+      result.draggableId,
     );
+
+    this.updateConcernOrder(orderDiffs);
 
     this.setState(() => ({
       [startList]: updatedStartList,
@@ -109,9 +158,24 @@ export class DnDPatientCarePlan extends React.Component<IProps, IState> {
     }));
   }
 
+  async updateConcernOrder(orderDiffs: PatientConcernBulkEditFields[]) {
+    const { patientConcernBulkEdit, patientId } = this.props;
+
+    if (!this.state.loading) {
+      this.setState(() => ({ loading: true, reorderError: '' }));
+
+      try {
+        await patientConcernBulkEdit({ variables: { patientConcerns: orderDiffs, patientId }});
+        this.setState(() => ({ loading: false }));
+      } catch (err) {
+        this.setState(() => ({ loading: false, reorderError: err.message }));
+      }
+    }
+  }
+
   render(): JSX.Element {
     const { loading, routeBase, patientId, selectedTaskId } = this.props;
-    const { activeConcerns, inactiveConcerns, isDragging } = this.state;
+    const { activeConcerns, inactiveConcerns, isDragging, reorderError } = this.state;
 
     return (
       <div className={isDragging ? styles.draggable : ''}>
@@ -124,6 +188,7 @@ export class DnDPatientCarePlan extends React.Component<IProps, IState> {
             activeConcerns={activeConcerns}
             inactiveConcerns={inactiveConcerns}
             isDragging={isDragging}
+            error={reorderError}
           />
         </DragDropContext>
       </div>
@@ -131,4 +196,8 @@ export class DnDPatientCarePlan extends React.Component<IProps, IState> {
   }
 }
 
-export default DnDPatientCarePlan;
+export default graphql<IGraphqlProps, IProps, allProps>(
+  patientConcernBulkEditMutationGraphql as any, {
+    name: 'patientConcernBulkEdit',
+  },
+)(DnDPatientCarePlan);

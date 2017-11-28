@@ -1,7 +1,7 @@
-import { shallow } from 'enzyme';
+import { shallow, ShallowWrapper } from 'enzyme';
 import * as React from 'react';
 import Task from '../../shared/task/task';
-import PatientCarePlanDnD from '../drag-and-drop/patient-care-plan';
+import PatientCarePlanDnD, { allProps } from '../drag-and-drop/patient-care-plan';
 import { PatientMap } from '../patient-map';
 
 describe('Patient Map Component', () => {
@@ -15,12 +15,10 @@ describe('Patient Map Component', () => {
   );
 
   it('renders patient care plan', () => {
-    const carePlan = wrapper.find(PatientCarePlanDnD);
-
-    expect(carePlan.length).toBe(1);
-    expect(carePlan.props().routeBase).toBe(routeBase);
-    expect(carePlan.props().patientId).toBe(patientId);
-    expect(carePlan.props().selectedTaskId).toBeFalsy();
+    expect((wrapper.find(PatientCarePlanDnD) as ShallowWrapper<allProps>).length).toBe(1);
+    expect(wrapper.find(PatientCarePlanDnD).props().routeBase).toBe(routeBase);
+    expect(wrapper.find(PatientCarePlanDnD).props().patientId).toBe(patientId);
+    expect(wrapper.find(PatientCarePlanDnD).props().selectedTaskId).toBeFalsy();
   });
 
   it('makes care plan full view when no task present', () => {

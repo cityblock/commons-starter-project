@@ -5,6 +5,7 @@ export const hidden: string;
 export const carePlanPanel: string;
 export const carePlanSuggestions: string;
 export const carePlan: string;
+export const error: string;
 export const section: string;
 export const sectionHeading: string;
 export const sectionTitle: string;

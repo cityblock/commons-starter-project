@@ -153,6 +153,13 @@ export type PatientAnswerInput = {
   questionId: string,
 };
 
+export type PatientConcernBulkEditFields = {
+  id: string,
+  order?: number | null,
+  startedAt?: string | null,
+  completedAt?: string | null,
+};
+
 export type answerCreateMutationVariables = {
   displayValue: string,
   value: string,
@@ -3063,6 +3070,122 @@ export type patientAnswersUpdateApplicableMutation = {
       id: string,
     } | null,
     patientScreeningToolSubmissionId: string | null,
+  } | null > | null,
+};
+
+export type patientConcernBulkEditMutationVariables = {
+  patientConcerns: Array< PatientConcernBulkEditFields | null >,
+  patientId: string,
+};
+
+export type patientConcernBulkEditMutation = {
+  // patient concern bulk edit
+  patientConcernBulkEdit:  Array< {
+    id: string,
+    order: number,
+    concernId: string,
+    concern:  {
+      id: string,
+      title: string,
+      createdAt: string,
+      updatedAt: string,
+      deletedAt: string | null,
+    },
+    patientId: string,
+    patient:  {
+      id: string,
+      firstName: string | null,
+      middleName: string | null,
+      lastName: string | null,
+      language: string | null,
+      gender: string | null,
+      dateOfBirth: string | null,
+      zip: string | null,
+      createdAt: string,
+      consentToText: boolean | null,
+      consentToCall: boolean | null,
+    },
+    patientGoals:  Array< {
+      id: string,
+      title: string,
+      patientId: string,
+      patient:  {
+        id: string,
+        firstName: string | null,
+        middleName: string | null,
+        lastName: string | null,
+        language: string | null,
+        gender: string | null,
+        dateOfBirth: string | null,
+        zip: string | null,
+        createdAt: string,
+        consentToText: boolean | null,
+        consentToCall: boolean | null,
+      },
+      patientConcernId: string | null,
+      goalSuggestionTemplateId: string | null,
+      goalSuggestionTemplate:  {
+        id: string,
+        title: string,
+        taskTemplates:  Array< {
+          id: string,
+          title: string,
+          completedWithinNumber: number | null,
+          completedWithinInterval: CompletedWithinInterval | null,
+          repeating: boolean | null,
+          goalSuggestionTemplateId: string,
+          priority: Priority | null,
+          careTeamAssigneeRole: UserRole | null,
+          createdAt: string,
+          updatedAt: string,
+          deletedAt: string | null,
+        } | null > | null,
+        createdAt: string,
+        updatedAt: string,
+        deletedAt: string | null,
+      } | null,
+      tasks:  Array< {
+        id: string,
+        title: string,
+        description: string | null,
+        createdAt: string,
+        updatedAt: string,
+        completedAt: string | null,
+        deletedAt: string | null,
+        dueAt: string | null,
+        patientId: string,
+        priority: Priority | null,
+        assignedTo:  {
+          id: string,
+          firstName: string | null,
+          lastName: string | null,
+          googleProfileImageUrl: string | null,
+          userRole: UserRole,
+        } | null,
+        followers:  Array< {
+          id: string,
+          firstName: string | null,
+          lastName: string | null,
+          googleProfileImageUrl: string | null,
+          userRole: UserRole,
+        } > | null,
+        createdBy:  {
+          id: string,
+          firstName: string | null,
+          lastName: string | null,
+          googleProfileImageUrl: string | null,
+          userRole: UserRole,
+        } | null,
+      } >,
+      createdAt: string,
+      updatedAt: string,
+      deletedAt: string | null,
+    } > | null,
+    startedAt: string | null,
+    completedAt: string | null,
+    createdAt: string,
+    updatedAt: string,
+    deletedAt: string | null,
   } | null > | null,
 };
 

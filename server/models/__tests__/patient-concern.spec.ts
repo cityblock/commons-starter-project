@@ -19,6 +19,7 @@ const userRole = 'physician';
 
 describe('patient concern model', () => {
   let concern: Concern;
+  let concern2: Concern;
   let patient: Patient;
   let user: User;
   let clinic: Clinic;
@@ -29,6 +30,9 @@ describe('patient concern model', () => {
 
     concern = await Concern.create({
       title: 'Housing',
+    });
+    concern2 = await Concern.create({
+      title: 'Food',
     });
     clinic = await Clinic.create(createMockClinic());
     user = await User.create(createMockUser(11, clinic.id, userRole));
@@ -148,9 +152,6 @@ describe('patient concern model', () => {
   });
 
   it('auto increments "order" on create', async () => {
-    const concern2 = await Concern.create({
-      title: 'Food',
-    });
     const patient2 = await createPatient(createMockPatient(456, clinic.id), user.id);
     await PatientConcern.create({
       concernId: concern.id,
@@ -223,6 +224,129 @@ describe('patient concern model', () => {
     expect(fetchedCarePlanUpdateEvents.total).toEqual(2); // One for create and one for edit
     expect(fetchedCarePlanUpdateEvents.results[0].patientConcernId).toEqual(patientConcern.id);
     expect(fetchedCarePlanUpdateEvents.results[0].eventType).toEqual('edit_patient_concern');
+  });
+
+  it('bulk updates patient concerns order', async () => {
+    const patientConcern = await PatientConcern.create({
+      concernId: concern.id,
+      patientId: patient.id,
+      userId: user.id,
+    });
+
+    const patientConcern2 = await PatientConcern.create({
+      concernId: concern2.id,
+      patientId: patient.id,
+      userId: user.id,
+    });
+
+    const patientConcernUpdateData = [
+      {
+        id: patientConcern.id,
+        order: 2,
+      },
+      {
+        id: patientConcern2.id,
+        order: 1,
+      },
+    ];
+
+    const patientConcerns = await PatientConcern.bulkUpdate(
+      patientConcernUpdateData,
+      patient.id,
+    );
+
+    expect(patientConcerns.length).toBe(2);
+
+    expect(patientConcerns[0]).toMatchObject({
+      id: patientConcern2.id,
+      order: 1,
+      concernId: concern2.id,
+    });
+    expect(patientConcerns[1]).toMatchObject({
+      id: patientConcern.id,
+      order: 2,
+      concernId: concern.id,
+    });
+  });
+
+  it('bulk updates patient concerns started and completed at', async () => {
+    const patientConcern = await PatientConcern.create({
+      concernId: concern.id,
+      patientId: patient.id,
+      userId: user.id,
+      startedAt: new Date().toISOString(),
+      order: 1,
+    });
+
+    const patientConcern2 = await PatientConcern.create({
+      concernId: concern2.id,
+      patientId: patient.id,
+      userId: user.id,
+      order: 2,
+    });
+
+    const completedAt = new Date().toISOString();
+    const patientConcernUpdateData = [
+      {
+        id: patientConcern.id,
+        startedAt: null,
+        order: 2,
+      },
+      {
+        id: patientConcern2.id,
+        completedAt,
+        order: 1,
+      },
+    ];
+
+    const patientConcerns = await PatientConcern.bulkUpdate(
+      patientConcernUpdateData,
+      patient.id,
+    );
+
+    expect(patientConcerns.length).toBe(2);
+    expect(patientConcerns[0]).toMatchObject({
+      id: patientConcern2.id,
+      order: 1,
+      concernId: concern2.id,
+    });
+    expect(patientConcerns[0].completedAt).toBeTruthy();
+    expect(patientConcerns[1]).toMatchObject({
+      id: patientConcern.id,
+      order: 2,
+      concernId: concern.id,
+      startedAt: null,
+      completedAt: null,
+    });
+  });
+
+  it('bulk updates without changing unaffected concerns', async () => {
+    const patientConcern1 = await PatientConcern.create({
+      concernId: concern.id,
+      patientId: patient.id,
+      userId: user.id,
+    });
+
+    const patientConcern2 = await PatientConcern.create({
+      concernId: concern2.id,
+      patientId: patient.id,
+      userId: user.id,
+    });
+
+    const patientConcernUpdateData = [
+      {
+        id: patientConcern1.id,
+        order: 2,
+      },
+    ];
+
+    await PatientConcern.bulkUpdate(
+      patientConcernUpdateData,
+      patient.id,
+    );
+
+    const fetchedPatientConcern2 = await PatientConcern.get(patientConcern2.id);
+    expect(fetchedPatientConcern2).toEqual(patientConcern2);
   });
 
   it('deletes patient concern', async () => {

@@ -1,3 +1,4 @@
+import * as classNames from 'classnames';
 import * as React from 'react';
 import { FullPatientConcernFragment } from '../graphql/types';
 import Spinner from '../shared/library/spinner/spinner';
@@ -13,6 +14,7 @@ interface IProps {
   activeConcerns: FullPatientConcernFragment[];
   inactiveConcerns: FullPatientConcernFragment[];
   isDragging?: boolean;
+  error?: string;
 }
 
 interface IState {
@@ -66,13 +68,16 @@ export default class PatientCarePlan extends React.Component<IProps, IState> {
   };
 
   render(): JSX.Element {
-    const { loading, selectedTaskId, activeConcerns, inactiveConcerns } = this.props;
-    const { selectedPatientConcernId, optionsDropdownConcernId } = this.state;
-
+    const { loading, selectedTaskId, activeConcerns, inactiveConcerns, error } = this.props;
     if (loading) return <Spinner />;
 
+    const { selectedPatientConcernId, optionsDropdownConcernId } = this.state;
+    const carePlanStyles = classNames(styles.carePlan, {
+      [styles.error]: !!error,
+    });
+
     return (
-      <div className={styles.carePlan}>
+      <div className={carePlanStyles}>
         <DnDPatientConcerns
           concerns={activeConcerns}
           inactive={false}

@@ -96,6 +96,72 @@ describe('patient concern resolver', () => {
     });
   });
 
+  describe('patient concern bulk edit', () => {
+    it('bulk edits patient concerns', async () => {
+      const patientConcern = await PatientConcern.create({
+        patientId: patient.id,
+        concernId: concern.id,
+        order: 1,
+        userId: user.id,
+      });
+
+      const concern2 = await Concern.create({
+        title: 'Food insecurity',
+      });
+
+      const patientConcern2 = await PatientConcern.create({
+        patientId: patient.id,
+        concernId: concern2.id,
+        order: 2,
+        userId: user.id,
+      });
+
+      const concern3 = await Concern.create({
+        title: 'Mental illness',
+      });
+
+      const patientConcern3 = await PatientConcern.create({
+        patientId: patient.id,
+        concernId: concern3.id,
+        order: 3,
+        userId: user.id,
+      });
+
+      const mutation = `mutation {
+        patientConcernBulkEdit(input: {
+          patientConcerns: [
+            { id: "${patientConcern.id}", order: 2 },
+            { id: "${patientConcern2.id}", order: 1 }
+          ],
+          patientId: "${patient.id}"
+        }) {
+          id
+          order
+          concernId
+        }
+      }`;
+
+      const result = await graphql(schema, mutation, null, { userRole, userId: user.id });
+
+      expect(result.data!.patientConcernBulkEdit.length).toBe(3);
+      expect(result.data!.patientConcernBulkEdit[0]).toMatchObject({
+        id: patientConcern2.id,
+        order: 1,
+        concernId: concern2.id,
+      });
+      expect(result.data!.patientConcernBulkEdit[1]).toMatchObject({
+        id: patientConcern.id,
+        order: 2,
+        concernId: concern.id,
+      });
+      expect(result.data!.patientConcernBulkEdit[2]).toMatchObject({
+        id: patientConcern3.id,
+        order: 3,
+        concernId: concern3.id,
+      });
+    });
+  });
+
   describe('patient concern delete', () => {
     it('deletes a patient concern', async () => {
       const patientConcern = await PatientConcern.create({

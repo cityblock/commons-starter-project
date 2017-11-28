@@ -11,8 +11,8 @@ interface IPatientConcernEditableFields {
   concernId: string;
   patientId: string;
   userId: string;
-  startedAt?: string;
-  completedAt?: string;
+  startedAt?: string | null;
+  completedAt?: string | null;
 }
 
 export const EAGER_QUERY =
@@ -26,8 +26,8 @@ export default class PatientConcern extends BaseModel {
   patientId: string;
   patientGoals: PatientGoal[];
   patient: Patient;
-  startedAt: string;
-  completedAt: string;
+  startedAt: string | null;
+  completedAt: string | null;
 
   static tableName = 'patient_concern';
 
@@ -43,8 +43,8 @@ export default class PatientConcern extends BaseModel {
       patientId: { type: 'string' },
       concernId: { type: 'string' },
       deletedAt: { type: 'string' },
-      startedAt: { type: 'string' },
-      completedAt: { type: 'string' },
+      startedAt: { type: 'string | null' },
+      completedAt: { type: 'string | null' },
     },
   };
 
@@ -142,8 +142,29 @@ export default class PatientConcern extends BaseModel {
     });
   }
 
-  static async getForPatient(patientId: string): Promise<PatientConcern[]> {
-    return await this.query()
+  static async bulkUpdate(
+    patientConcerns: Array<Partial<IPatientConcernEditableFields>>,
+    patientId: string,
+    existingTxn?: Transaction,
+  ): Promise<PatientConcern[]> {
+    return await transaction(existingTxn || PatientConcern.knex(), async txn => {
+      if (patientConcerns.length) {
+        await (PatientConcern
+          .query(txn) as any)
+          .upsertGraph(patientConcerns, {
+            noDelete: true,
+        });
+      }
+
+      return await this.getForPatient(patientId, txn);
+    });
+  }
+
+  static async getForPatient(
+    patientId: string,
+    txn?: Transaction,
+  ): Promise<PatientConcern[]> {
+    return await this.query(txn)
       .eager(EAGER_QUERY)
       .modifyEager('patientGoals.tasks', builder => {
         builder.where('task.completedAt', null);

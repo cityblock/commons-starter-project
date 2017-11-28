@@ -1,0 +1,29 @@
+@import '../../../css/sizes';
+
+.option {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  padding: 20px;
+
+  &:hover {
+    background: var(--light-blue-hover);
+  }
+}
+
+.center {
+  justify-content: center;
+}
+
+.option p {
+  margin: 0;
+  font-size: var(--small-font-size);
+  font-weight: var(--roboto-medium-weight);
+  line-height: var(--small-font-line-height);
+  white-space: nowrap;
+}
+
+.icon {
+  margin-right: 10px;
+  fill: var(--gray-font-color);
+}

@@ -6,14 +6,15 @@ import { IconName } from './icon-types';
 
 interface IProps {
   name: IconName;
-  className?: string;
+  className?: string; // optional styles to be applied over defaults
+  onClick?: () => void; // optional click handler for icon
 }
 
-const Icon: React.StatelessComponent<IProps> = ({ name, className }) => {
+const Icon: React.StatelessComponent<IProps> = ({ name, className, onClick }) => {
   const IconComponent = iconComponents[name];
   const iconStyles = classNames(styles.icon, className);
 
-  return <IconComponent className={iconStyles} />;
+  return <IconComponent className={iconStyles} onClick={onClick} />;
 };
 
 export default Icon;

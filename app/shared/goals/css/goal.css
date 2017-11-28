@@ -33,24 +33,6 @@
   line-height: var(--small-font-line-height);
 }
 
-.patientGoalUpdatedDetails {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: flex-end;
-  font-size: var(--extra-small-font-size);
-  line-height: var(--extra-small-font-line-height);
-}
-
-.patientGoalUpdatedDetailsLabel {
-  color: var(--light-gray-font-color);
-  margin-right: 10px;
-}
-
-.patientGoalUpdatedDetailsDate {
-  color: var(--black-color);
-}
-
 .patientGoalTitle {
   color: var(--black-color);
   font-family: var(--roboto);

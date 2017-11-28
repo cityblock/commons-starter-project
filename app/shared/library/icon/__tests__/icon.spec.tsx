@@ -9,6 +9,7 @@ describe('Library Icon Component', () => {
 
     expect(wrapper.find(EventIcon).length).toBe(1);
     expect(wrapper.find(EventIcon).props().className).toBe('icon');
+    expect(wrapper.find(EventIcon).props().onClick).toBeFalsy();
   });
 
   it('returns an icon with custom styles applied', () => {
@@ -16,5 +17,12 @@ describe('Library Icon Component', () => {
     const wrapper = shallow(<Icon name='event' className={className} />);
 
     expect(wrapper.find(EventIcon).props().className).toBe(`icon ${className}`);
+  });
+
+  it('returns an icon with click handler when given', () => {
+    const onClick = () => true as any;
+    const wrapper = shallow(<Icon name='event' onClick={onClick} />);
+
+    expect(wrapper.find(EventIcon).props().onClick).toBe(onClick);
   });
 });

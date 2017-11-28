@@ -1,14 +1,16 @@
 import * as classNames from 'classnames';
 import * as React from 'react';
-import { FormattedDate } from 'react-intl';
 import { FullPatientGoalFragment } from '../../graphql/types';
 import TaskRow from '../tasks/task-row';
 import * as styles from './css/goal.css';
+import GoalOptions from './goal-options';
 
 interface IProps {
   goalNumber: number;
   patientGoal: FullPatientGoalFragment;
   selectedTaskId: string;
+  optionsOpen: boolean;
+  onOptionsToggle: (e: React.MouseEvent<HTMLDivElement>) => void;
 }
 
 export default class PatientGoal extends React.Component<IProps, {}> {
@@ -41,7 +43,7 @@ export default class PatientGoal extends React.Component<IProps, {}> {
   }
 
   render() {
-    const { patientGoal, goalNumber, selectedTaskId } = this.props;
+    const { patientGoal, goalNumber, selectedTaskId, optionsOpen, onOptionsToggle } = this.props;
 
     const goalStyles = classNames(styles.patientGoal, {
       [styles.inactive]: !!selectedTaskId,
@@ -52,17 +54,7 @@ export default class PatientGoal extends React.Component<IProps, {}> {
         <div className={goalStyles}>
           <div className={styles.patientGoalHeaderRow}>
             <div className={styles.patientGoalNumber}>{`Goal ${goalNumber}`}</div>
-            <div className={styles.patientGoalUpdatedDetails}>
-              <div className={styles.patientGoalUpdatedDetailsLabel}>Last update:</div>
-              <div className={styles.patientGoalUpdatedDetailsDate}>
-                <FormattedDate
-                  value={patientGoal.updatedAt}
-                  year="numeric"
-                  month="short"
-                  day="numeric"
-                />
-              </div>
-            </div>
+              <GoalOptions open={optionsOpen} onMenuToggle={onOptionsToggle} />
           </div>
           <div className={styles.patientGoalTitle}>{patientGoal.title}</div>
         </div>

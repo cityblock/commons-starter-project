@@ -1,58 +1,46 @@
 import { shallow } from 'enzyme';
-import { createMemoryHistory } from 'history';
 import * as React from 'react';
-import { MockedProvider } from 'react-apollo/test-utils';
-import { Provider } from 'react-redux';
-import { ConnectedRouter } from 'react-router-redux';
-import { create } from 'react-test-renderer';
-import configureMockStore from 'redux-mock-store';
-import { ENGLISH_TRANSLATION } from '../../reducers/messages/en';
-import ReduxConnectedIntlProvider from '../../redux-connected-intl-provider';
 import { patientGoal } from '../../shared/util/test-data';
 import PatientGoal from '../goals/goal';
-
-const locale = { messages: ENGLISH_TRANSLATION.messages };
-const mockStore = configureMockStore([]);
-
-const oldDate = Date.now;
-
-beforeAll(() => {
-  Date.now = jest.fn(() => 1500494779252);
-});
-afterAll(() => {
-  Date.now = oldDate;
-});
-
-it('renders patient goal', () => {
-  const history = createMemoryHistory();
-  const tree = create(
-    <MockedProvider mocks={[]}>
-      <Provider store={mockStore({ locale })}>
-        <ReduxConnectedIntlProvider>
-          <ConnectedRouter history={history}>
-            <PatientGoal patientGoal={patientGoal} goalNumber={1} selectedTaskId="" />
-          </ConnectedRouter>
-        </ReduxConnectedIntlProvider>
-      </Provider>
-    </MockedProvider>,
-  ).toJSON();
-  expect(tree).toMatchSnapshot();
-});
+import GoalOptions from '../goals/goal-options';
 
 describe('Patient Goal Component', () => {
-  it('applies inactive styles if a task selected', () => {
-    const wrapper = shallow(
-      <PatientGoal goalNumber={1} patientGoal={patientGoal} selectedTaskId="aryaStark" />,
-    );
+  const placeholderFn = () => true as any;
 
-    expect(wrapper.find('.inactive').length).toBe(1);
-  });
+  const wrapper = shallow(
+    <PatientGoal
+      goalNumber={1}
+      patientGoal={patientGoal}
+      selectedTaskId=""
+      optionsOpen={false}
+      onOptionsToggle={placeholderFn} />,
+  );
 
   it('does not apply inactive styles if a task is not selected', () => {
-    const wrapper = shallow(
-      <PatientGoal goalNumber={1} patientGoal={patientGoal} selectedTaskId="" />,
+    expect(wrapper.find('.inactive').length).toBe(0);
+  });
+
+  it('renders patient goal options menu', () => {
+    expect(wrapper.find(GoalOptions).length).toBe(1);
+    expect(wrapper.find(GoalOptions).props().open).toBeFalsy();
+    expect(wrapper.find(GoalOptions).props().onMenuToggle).toBe(placeholderFn);
+  });
+
+  it('opens goal options menu', () => {
+    wrapper.setProps({ optionsOpen: true });
+    expect(wrapper.find(GoalOptions).props().open).toBeTruthy();
+  });
+
+  it('applies inactive styles if a task selected', () => {
+    const wrapper2 = shallow(
+      <PatientGoal
+        goalNumber={1}
+        patientGoal={patientGoal}
+        selectedTaskId="aryaStark"
+        optionsOpen={false}
+        onOptionsToggle={placeholderFn} />,
     );
 
-    expect(wrapper.find('.inactive').length).toBe(0);
+    expect(wrapper2.find('.inactive').length).toBe(1);
   });
 });

@@ -1,1 +1,6 @@
-export type IconName = 'event';
+export type IconName =
+  'addAlert' |
+  'addCircleOutline' |
+  'event' |
+  'moreVert'
+;

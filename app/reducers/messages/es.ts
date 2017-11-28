@@ -98,6 +98,8 @@ export const SPANISH_TRANSLATION = {
     'patientInfo.demographicInfo': 'Información demográfica',
     'patientInfo.contactInfo': 'Información del contacto',
     'patientInfo.insuranceInfo': 'Información del seguro',
+    'patientMap.addGoal': 'Agrega un nuevo objetivo',
+    'patientMap.addTask': 'Agregar tarea',
     'patientMap.nextUp': 'El Siguiente',
     'patientMap.emptyNextUpHeader': 'No hay preocupaciones Siguientes para este paciente',
     /* tslint:disable:max-line-length */

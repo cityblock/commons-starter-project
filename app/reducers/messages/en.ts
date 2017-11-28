@@ -99,6 +99,8 @@ export const ENGLISH_TRANSLATION = {
     'patientInfo.demographicInfo': 'Demographic information',
     'patientInfo.contactInfo': 'Contact information',
     'patientInfo.insuranceInfo': 'Insurance information',
+    'patientMap.addGoal': 'Add a new goal',
+    'patientMap.addTask': 'Add a task',
     'patientMap.nextUp': 'Next Up',
     'patientMap.emptyNextUpHeader': 'There are no Next Up concerns for this patient',
     /* tslint:disable:max-line-length */

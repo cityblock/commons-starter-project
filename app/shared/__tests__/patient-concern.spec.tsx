@@ -1,7 +1,7 @@
 import { shallow } from 'enzyme';
 import * as React from 'react';
 import PatientConcernStats from '../concerns/concern-stats/concern-stats';
-import PatientConcernOptions from '../concerns/options-menu';
+import PatientConcernOptions from '../concerns/options-menu/options-menu';
 import PatientConcern from '../concerns/patient-concern';
 import PatientGoal from '../goals/goal';
 import { patientConcern } from '../util/test-data';
@@ -52,31 +52,14 @@ describe('Patient Concern Component', () => {
     expect(wrapper.find('.inactive').length).toBe(0);
   });
 
-  it('does not render menu if options menu is closed', () => {
-    expect(wrapper.find(PatientConcernOptions).length).toBe(0);
+  it('renders options menu', () => {
+    expect(wrapper.find(PatientConcernOptions).length).toBe(1);
+    expect(wrapper.find(PatientConcernOptions).props().open).toBeFalsy();
+    expect(wrapper.find(PatientConcernOptions).props().onMenuToggle).toBe(onOptionsToggle);
   });
 
-  const wrapper2 = shallow(
-    <PatientConcern
-      patientConcern={patientConcern}
-      selected={false}
-      inactive={true}
-      onClick={onClick}
-      onOptionsToggle={onOptionsToggle}
-      optionsOpen={true}
-      selectedTaskId=""
-    />,
-  );
-
-  it('has opens menu open if specified', () => {
-    expect(wrapper2.find(PatientConcernOptions).length).toBe(1);
-  });
-
-  it('does not apply selected styles if not needed', () => {
-    expect(wrapper2.find('.selected').length).toBe(0);
-  });
-
-  it('applies inactive styles if needed', () => {
-    expect(wrapper2.find('.inactive').length).toBe(1);
+  it('opens options menu if props change', () => {
+    wrapper.setProps({ optionsOpen: true });
+    expect(wrapper.find(PatientConcernOptions).props().open).toBeTruthy();
   });
 });

@@ -130,6 +130,7 @@ export const ENGLISH_TRANSLATION = {
     'taskDelete.titleError': 'Error deleting task.',
     'taskDelete.body': "Deleting this task will completely remove it from this patient's record.",
     'taskDelete.bodyError': 'Please try again.',
+    'taskDescription.empty': 'Click to add a task description...',
     'task.assign': 'Assign Task:',
     'task.due': 'Due',
     'task.followers': 'Followers of this task:',

@@ -29,10 +29,10 @@
 
 .icon {
   fill: var(--black-color);
+  cursor: pointer;
   transition: fill 0.2s;
 
   &:hover {
-    cursor: pointer;
     fill: var(--border-color);
   }
 }

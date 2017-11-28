@@ -1,5 +1,6 @@
 import { shallow } from 'enzyme';
 import * as React from 'react';
+import EditableMultilineText from '../../library/editable-multiline-text/editable-multiline-text';
 import TaskInfo from '../task-info';
 
 describe('Task Info Component', () => {
@@ -12,15 +13,49 @@ describe('Task Info Component', () => {
     <TaskInfo title={title} description={description} taskId={taskId} editTask={editTask} />,
   );
 
-  it('renders task title if not in edit mode', () => {
-    expect(wrapper.find('h2').length).toBe(1);
-    expect(wrapper.find('h2').text()).toBe(title);
-    expect(wrapper.find('textarea').length).toBe(2);
+  it('renders two editable text fields for title and description', () => {
+    expect(wrapper.find(EditableMultilineText).length).toBe(2);
   });
 
-  it('renders description if not in edit mode', () => {
-    expect(wrapper.find('p').length).toBe(1);
-    expect(wrapper.find('p').text()).toBe(description);
-    expect(wrapper.find('textarea').length).toBe(2);
+  it('renders editable text for title', () => {
+    expect(
+      wrapper
+        .find(EditableMultilineText)
+        .at(0)
+        .props().text,
+    ).toBe(title);
+    expect(
+      wrapper
+        .find(EditableMultilineText)
+        .at(0)
+        .props().descriptionField,
+    ).toBeFalsy();
+    expect(
+      wrapper
+        .find(EditableMultilineText)
+        .at(0)
+        .props().placeholderMessageId,
+    ).toBeFalsy();
+  });
+
+  it('renders editable text for description', () => {
+    expect(
+      wrapper
+        .find(EditableMultilineText)
+        .at(1)
+        .props().text,
+    ).toBe(description);
+    expect(
+      wrapper
+        .find(EditableMultilineText)
+        .at(1)
+        .props().descriptionField,
+    ).toBeTruthy();
+    expect(
+      wrapper
+        .find(EditableMultilineText)
+        .at(1)
+        .props().placeholderMessageId,
+    ).toBe('taskDescription.empty');
   });
 });

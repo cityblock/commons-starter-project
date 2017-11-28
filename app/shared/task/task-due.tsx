@@ -54,7 +54,7 @@ class TaskDue extends React.Component<IProps, IState> {
 
     return (
       <div className={styles.dueDate}>
-        <Icon name='event' className={iconStyles} />
+        <Icon name="event" className={iconStyles} />
         <DateInput
           value={completedAt || dueAt}
           onChange={this.onDueDateChange}

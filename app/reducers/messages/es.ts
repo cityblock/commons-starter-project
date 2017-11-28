@@ -128,6 +128,7 @@ export const SPANISH_TRANSLATION = {
     'taskDelete.body':
       'Eliminar esta tarea la eliminará completamente del registro de este paciente.',
     'taskDelete.bodyError': 'Por favor intente de nuevo.',
+    'taskDescription.empty': 'Haga clic para agregar una descripción de la tarea...',
     'task.assign': 'Asignar Tarea:',
     'task.due': 'Debido',
     'task.followers': 'Seguidores de esta tarea:',

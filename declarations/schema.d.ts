@@ -294,7 +294,7 @@ declare module 'schema' {
   /**
     description: An object with a Globally Unique ID
   */
-  type uniqueId = IUser | IPatient | IClinic | ITask | IPatientGoal | IPatientConcern | IConcern | IGoalSuggestionTemplate | ITaskTemplate | ITaskComment | IRiskArea | IQuestion | IAnswer | IQuestionCondition | IPatientAnswer | IPatientScreeningToolSubmission | IScreeningTool | IScreeningToolScoreRange | ICarePlanSuggestion | IEventNotification | ITaskEvent | IProgressNote | IProgressNoteTemplate | IPatientTaskSuggestion | IPatientAnswerEvent | ICarePlanUpdateEvent | IQuickCall;
+  type uniqueId = IUser | IPatient | IClinic | ITask | IPatientGoal | IPatientConcern | IConcern | IGoalSuggestionTemplate | ITaskTemplate | ITaskComment | IRiskArea | IQuestion | IAnswer | IScreeningTool | IScreeningToolScoreRange | IQuestionCondition | IPatientAnswer | IPatientScreeningToolSubmission | ICarePlanSuggestion | IEventNotification | ITaskEvent | IProgressNote | IProgressNoteTemplate | IPatientTaskSuggestion | IPatientAnswerEvent | ICarePlanUpdateEvent | IQuickCall;
 
   /**
     description: An object with a Globally Unique ID
@@ -648,6 +648,8 @@ declare module 'schema' {
     order: number;
     concernSuggestions: Array<IConcern> | null;
     goalSuggestions: Array<IGoalSuggestionTemplate> | null;
+    riskArea: IRiskArea | null;
+    screeningTool: IScreeningTool | null;
   }
 
 
@@ -655,6 +657,33 @@ declare module 'schema' {
 
 
   type IRiskAdjustmentTypeOptionsEnum = 'inactive' | 'increment' | 'forceHighRisk';
+
+
+  interface IScreeningTool {
+    id: string;
+    title: string;
+    riskAreaId: string;
+    riskArea: IRiskArea;
+    screeningToolScoreRanges: Array<IScreeningToolScoreRange> | null;
+    createdAt: string;
+    updatedAt: string;
+    deletedAt: string | null;
+  }
+
+
+  interface IScreeningToolScoreRange {
+    id: string;
+    description: string;
+    screeningToolId: string;
+    screeningTool: IScreeningTool;
+    minimumScore: number;
+    maximumScore: number;
+    createdAt: string;
+    updatedAt: string;
+    deletedAt: string | null;
+    concernSuggestions: Array<IConcern> | null;
+    goalSuggestions: Array<IGoalSuggestionTemplate> | null;
+  }
 
 
   type IAnswerTypeOptionsEnum = 'dropdown' | 'radio' | 'freetext' | 'multiselect';
@@ -686,6 +715,7 @@ declare module 'schema' {
     updatedAt: string;
     deletedAt: string | null;
     answerId: string;
+    answer: IAnswer;
     answerValue: string;
     patientId: string;
     applicable: boolean | null;
@@ -711,33 +741,6 @@ declare module 'schema' {
     carePlanSuggestions: Array<ICarePlanSuggestion>;
     screeningToolScoreRangeId: string | null;
     screeningToolScoreRange: IScreeningToolScoreRange | null;
-  }
-
-
-  interface IScreeningTool {
-    id: string;
-    title: string;
-    riskAreaId: string;
-    riskArea: IRiskArea;
-    screeningToolScoreRanges: Array<IScreeningToolScoreRange>;
-    createdAt: string;
-    updatedAt: string;
-    deletedAt: string | null;
-  }
-
-
-  interface IScreeningToolScoreRange {
-    id: string;
-    description: string;
-    screeningToolId: string;
-    screeningTool: IScreeningTool;
-    minimumScore: number;
-    maximumScore: number;
-    createdAt: string;
-    updatedAt: string;
-    deletedAt: string | null;
-    concernSuggestions: Array<IConcern> | null;
-    goalSuggestions: Array<IGoalSuggestionTemplate> | null;
   }
 
 
@@ -897,6 +900,7 @@ declare module 'schema' {
     taskEvents: Array<ITaskEvent>;
     patientAnswerEvents: Array<IPatientAnswerEvent>;
     carePlanUpdateEvents: Array<ICarePlanUpdateEvent>;
+    quickCallEvents: Array<IQuickCall>;
   }
 
   /**
@@ -910,6 +914,8 @@ declare module 'schema' {
     user: IUser;
     patientAnswerId: string;
     patientAnswer: IPatientAnswer;
+    previousPatientAnswerId: string | null;
+    previousPatientAnswer: IPatientAnswer | null;
     eventType: IPatientAnswerEventTypesEnum;
     progressNoteId: string | null;
     progressNote: IProgressNote | null;

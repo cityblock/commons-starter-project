@@ -7,13 +7,9 @@ interface IProps {
   onMenuToggle: (e?: any) => void;
 }
 
-const GoalOptions: React.StatelessComponent<IProps> = ({ open, onMenuToggle }) =>
-(
+const GoalOptions: React.StatelessComponent<IProps> = ({ open, onMenuToggle }) => (
   <HamburgerMenu open={open} onMenuToggle={onMenuToggle}>
-    <HamburgerMenuOption
-      messageId='patientMap.addTask'
-      icon='addAlert'
-      onClick={() => true} />
+    <HamburgerMenuOption messageId="patientMap.addTask" icon="addAlert" onClick={() => true} />
   </HamburgerMenu>
 );
 

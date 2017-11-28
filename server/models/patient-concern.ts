@@ -149,10 +149,8 @@ export default class PatientConcern extends BaseModel {
   ): Promise<PatientConcern[]> {
     return await transaction(existingTxn || PatientConcern.knex(), async txn => {
       if (patientConcerns.length) {
-        await (PatientConcern
-          .query(txn) as any)
-          .upsertGraph(patientConcerns, {
-            noDelete: true,
+        await (PatientConcern.query(txn) as any).upsertGraph(patientConcerns, {
+          noDelete: true,
         });
       }
 
@@ -160,10 +158,7 @@ export default class PatientConcern extends BaseModel {
     });
   }
 
-  static async getForPatient(
-    patientId: string,
-    txn?: Transaction,
-  ): Promise<PatientConcern[]> {
+  static async getForPatient(patientId: string, txn?: Transaction): Promise<PatientConcern[]> {
     return await this.query(txn)
       .eager(EAGER_QUERY)
       .modifyEager('patientGoals.tasks', builder => {

@@ -21,7 +21,7 @@ describe('Library Icon Component', () => {
 
   it('returns an icon with click handler when given', () => {
     const onClick = () => true as any;
-    const wrapper = shallow(<Icon name='event' onClick={onClick} />);
+    const wrapper = shallow(<Icon name="event" onClick={onClick} />);
 
     expect(wrapper.find(EventIcon).props().onClick).toBe(onClick);
   });

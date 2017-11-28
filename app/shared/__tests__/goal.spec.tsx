@@ -13,7 +13,8 @@ describe('Patient Goal Component', () => {
       patientGoal={patientGoal}
       selectedTaskId=""
       optionsOpen={false}
-      onOptionsToggle={placeholderFn} />,
+      onOptionsToggle={placeholderFn}
+    />,
   );
 
   it('does not apply inactive styles if a task is not selected', () => {
@@ -38,7 +39,8 @@ describe('Patient Goal Component', () => {
         patientGoal={patientGoal}
         selectedTaskId="aryaStark"
         optionsOpen={false}
-        onOptionsToggle={placeholderFn} />,
+        onOptionsToggle={placeholderFn}
+      />,
     );
 
     expect(wrapper2.find('.inactive').length).toBe(1);

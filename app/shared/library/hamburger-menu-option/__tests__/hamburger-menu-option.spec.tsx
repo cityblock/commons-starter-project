@@ -10,11 +10,7 @@ describe('Library Hamburger Menu Option Component', () => {
   const icon = 'event';
 
   it('renders basic menu option component with translation', () => {
-    const wrapper = shallow(
-      <HamburgerMenuOption
-        messageId={messageId}
-        onClick={onClick} />,
-    );
+    const wrapper = shallow(<HamburgerMenuOption messageId={messageId} onClick={onClick} />);
 
     expect(wrapper.find('p').length).toBe(0);
     expect(wrapper.find(Icon).length).toBe(0);
@@ -28,11 +24,7 @@ describe('Library Hamburger Menu Option Component', () => {
 
   it('renders menu option component with label', () => {
     const label = 'Eleven';
-    const wrapper = shallow(
-      <HamburgerMenuOption
-        label={label}
-        onClick={onClick} />,
-    );
+    const wrapper = shallow(<HamburgerMenuOption label={label} onClick={onClick} />);
 
     expect(wrapper.find('p').length).toBe(1);
     expect(wrapper.find('p').text()).toBe(label);
@@ -42,10 +34,7 @@ describe('Library Hamburger Menu Option Component', () => {
 
   it('renders menu option with icon', () => {
     const wrapper = shallow(
-      <HamburgerMenuOption
-        messageId={messageId}
-        onClick={onClick}
-        icon={icon} />,
+      <HamburgerMenuOption messageId={messageId} onClick={onClick} icon={icon} />,
     );
 
     expect(wrapper.find(Icon).length).toBe(1);
@@ -63,7 +52,8 @@ describe('Library Hamburger Menu Option Component', () => {
         onClick={onClick}
         icon={icon}
         className={className}
-        iconStyles={iconStyles} />,
+        iconStyles={iconStyles}
+      />,
     );
 
     expect(wrapper.find('div').props().className).toBe(`option ${className}`);

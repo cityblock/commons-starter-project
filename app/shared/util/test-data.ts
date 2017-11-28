@@ -79,6 +79,8 @@ export const answer = {
   deletedAt: null,
   concernSuggestions: [],
   goalSuggestions: [],
+  riskArea: null,
+  screeningTool: null,
 };
 
 export const answerMutiSelect = {
@@ -93,6 +95,8 @@ export const answerMutiSelect = {
   summaryText: null,
   concernSuggestions: [],
   goalSuggestions: [],
+  riskArea: null,
+  screeningTool: null,
 };
 
 export const taskTemplate = {
@@ -340,6 +344,7 @@ export const patientAnswer = {
     id: question.id,
     title: question.title,
   },
+  answer,
 };
 
 export const encounter = {

@@ -97,7 +97,7 @@ export default class QuickCall extends BaseModel {
 
   static async getQuickCallsForProgressNote(
     progressNoteId: string,
-    txn: Transaction,
+    txn?: Transaction,
   ): Promise<QuickCall[]> {
     const quickCalls = await this.query(txn)
       .eager(EAGER_QUERY)

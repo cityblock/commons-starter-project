@@ -24,7 +24,10 @@ interface ICarePlanUpdateEventOptions {
   progressNoteId?: string;
 }
 
-const EAGER_QUERY = '[patientConcern, patientGoal, patient, user]';
+/* tslint:disable:max-line-length */
+const EAGER_QUERY =
+  '[patientConcern.[concern, patient], patientGoal.[patient, tasks], patient, user]';
+/* tslint:enable:max-line-length */
 
 /* tslint:disable:member-ordering */
 export default class CarePlanUpdateEvent extends BaseModel {

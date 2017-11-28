@@ -67,7 +67,8 @@ describe('Library Editable Text Component', () => {
       <EditableMultilineText
         text=""
         onEnterPress={onEnterPress}
-        placeholderMessageId={messageId} />,
+        placeholderMessageId={messageId}
+      />,
     );
 
     expect(wrapper2.find('p').length).toBe(0);

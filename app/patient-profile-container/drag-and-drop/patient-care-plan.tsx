@@ -14,12 +14,7 @@ import {
   FullPatientConcernFragment,
   PatientConcernBulkEditFields,
 } from '../../graphql/types';
-import {
-  getOrderDiffs,
-  insert,
-  remove,
-  reorder,
-} from '../../shared/helpers/order-helpers';
+import { getOrderDiffs, insert, remove, reorder } from '../../shared/helpers/order-helpers';
 import PatientCarePlan from '../patient-care-plan';
 import * as styles from './css/patient-care-plan.css';
 
@@ -32,9 +27,9 @@ interface IProps {
 }
 
 interface IGraphqlProps {
-  patientConcernBulkEdit:
-    (options: { variables: patientConcernBulkEditMutationVariables }) =>
-    { data: patientConcernBulkEditMutation };
+  patientConcernBulkEdit: (
+    options: { variables: patientConcernBulkEditMutationVariables },
+  ) => { data: patientConcernBulkEditMutation };
 }
 
 export type allProps = IProps & IGraphqlProps;
@@ -63,12 +58,12 @@ export class DnDPatientCarePlan extends React.Component<allProps, IState> {
   componentWillReceiveProps(nextProps: allProps): void {
     if (!nextProps.carePlan || !nextProps.carePlan.concerns.length) return;
 
-    const activeConcerns = nextProps.carePlan.concerns.filter(
-      (patientConcern: FullPatientConcernFragment) => !!patientConcern.startedAt,
-    ).sort((a, b) => a.order - b.order);
-    const inactiveConcerns = nextProps.carePlan.concerns.filter(
-      (patientConcern: FullPatientConcernFragment) => !patientConcern.startedAt,
-    ).sort((a, b) => a.order - b.order);
+    const activeConcerns = nextProps.carePlan.concerns
+      .filter((patientConcern: FullPatientConcernFragment) => !!patientConcern.startedAt)
+      .sort((a, b) => a.order - b.order);
+    const inactiveConcerns = nextProps.carePlan.concerns
+      .filter((patientConcern: FullPatientConcernFragment) => !patientConcern.startedAt)
+      .sort((a, b) => a.order - b.order);
 
     if (!isEqual(this.state.activeConcerns, activeConcerns)) {
       this.setState(() => ({ activeConcerns }));
@@ -126,22 +121,19 @@ export class DnDPatientCarePlan extends React.Component<allProps, IState> {
 
     const updatedStartList = remove(
       this.state[startList],
-      this.state[startList].findIndex(
-        concern => concern.id === result.draggableId,
-      ),
+      this.state[startList].findIndex(concern => concern.id === result.draggableId),
     ) as FullPatientConcernFragment[];
 
     const updatedEndList = insert(
       this.state[endList],
-      this.state[startList].find(
-        concern => concern.id === result.draggableId,
-      ),
+      this.state[startList].find(concern => concern.id === result.draggableId),
       result.destination!.index,
     ) as FullPatientConcernFragment[];
 
-    const newList = startList === 'activeConcerns' ?
-      updatedStartList.concat(updatedEndList) :
-      updatedEndList.concat(updatedStartList);
+    const newList =
+      startList === 'activeConcerns'
+        ? updatedStartList.concat(updatedEndList)
+        : updatedEndList.concat(updatedStartList);
 
     const orderDiffs = getOrderDiffs(
       this.state.activeConcerns.concat(this.state.inactiveConcerns),
@@ -165,7 +157,7 @@ export class DnDPatientCarePlan extends React.Component<allProps, IState> {
       this.setState(() => ({ loading: true, reorderError: '' }));
 
       try {
-        await patientConcernBulkEdit({ variables: { patientConcerns: orderDiffs, patientId }});
+        await patientConcernBulkEdit({ variables: { patientConcerns: orderDiffs, patientId } });
         this.setState(() => ({ loading: false }));
       } catch (err) {
         this.setState(() => ({ loading: false, reorderError: err.message }));
@@ -197,7 +189,8 @@ export class DnDPatientCarePlan extends React.Component<allProps, IState> {
 }
 
 export default graphql<IGraphqlProps, IProps, allProps>(
-  patientConcernBulkEditMutationGraphql as any, {
+  patientConcernBulkEditMutationGraphql as any,
+  {
     name: 'patientConcernBulkEdit',
   },
 )(DnDPatientCarePlan);

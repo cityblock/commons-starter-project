@@ -1,6 +1,7 @@
 #import "./full-task-event.graphql"
 #import "./full-patient-answer-event.graphql"
 #import "./full-care-plan-update-event.graphql"
+#import "./full-quick-call.graphql"
 
 fragment FullProgressNoteActivity on ProgressNoteActivity {
   taskEvents {
@@ -11,5 +12,8 @@ fragment FullProgressNoteActivity on ProgressNoteActivity {
   }
   carePlanUpdateEvents {
     ...FullCarePlanUpdateEvent
+  }
+  quickCallEvents {
+    ...FullQuickCall
   }
 }

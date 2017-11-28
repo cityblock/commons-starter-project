@@ -1,15 +1,10 @@
 #import "../fragments/full-patient-concern.graphql"
 
 mutation patientConcernBulkEdit(
-  $patientConcerns: [PatientConcernBulkEditFields]!,
+  $patientConcerns: [PatientConcernBulkEditFields]!
   $patientId: String!
 ) {
-  patientConcernBulkEdit(
-    input: {
-      patientConcerns: $patientConcerns
-      patientId: $patientId
-    }
-  ) {
+  patientConcernBulkEdit(input: { patientConcerns: $patientConcerns, patientId: $patientId }) {
     ...FullPatientConcern
   }
 }

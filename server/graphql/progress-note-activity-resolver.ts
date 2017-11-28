@@ -1,6 +1,7 @@
 import { IProgressNoteActivity } from 'schema';
 import CarePlanUpdateEvent from '../models/care-plan-update-event';
 import PatientAnswerEvent from '../models/patient-answer-event';
+import QuickCall from '../models/quick-call';
 import TaskEvent from '../models/task-event';
 import accessControls from './shared/access-controls';
 import { checkUserLoggedIn, IContext } from './shared/utils';
@@ -26,10 +27,12 @@ export async function resolveProgressNoteActivityForProgressNote(
   const carePlanUpdateEvents = (await CarePlanUpdateEvent.getAllForProgressNote(
     progressNoteId,
   )) as any;
+  const quickCallEvents = (await QuickCall.getQuickCallsForProgressNote(progressNoteId)) as any;
 
   return {
     taskEvents,
     patientAnswerEvents,
     carePlanUpdateEvents,
+    quickCallEvents,
   };
 }

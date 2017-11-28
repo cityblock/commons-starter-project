@@ -7,15 +7,15 @@ interface IProps {
   onMenuToggle: (e?: any) => void;
 }
 
-const PatientConcernOptions: React.StatelessComponent<IProps> = ({ open, onMenuToggle }) =>
-  (
-    <HamburgerMenu open={open} onMenuToggle={onMenuToggle}>
-      <HamburgerMenuOption
-        messageId='patientMap.addGoal'
-        icon='addCircleOutline'
-        onClick={() => true} />
-    </HamburgerMenu>
-  );
+const PatientConcernOptions: React.StatelessComponent<IProps> = ({ open, onMenuToggle }) => (
+  <HamburgerMenu open={open} onMenuToggle={onMenuToggle}>
+    <HamburgerMenuOption
+      messageId="patientMap.addGoal"
+      icon="addCircleOutline"
+      onClick={() => true}
+    />
+  </HamburgerMenu>
+);
 
 PatientConcernOptions.displayName = 'PatientConcernOptions';
 

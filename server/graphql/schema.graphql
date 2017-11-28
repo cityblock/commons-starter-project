@@ -363,6 +363,8 @@ type Answer implements uniqueId {
   order: Int!
   concernSuggestions: [Concern]
   goalSuggestions: [GoalSuggestionTemplate]
+  riskArea: RiskArea
+  screeningTool: ScreeningTool
 }
 
 # PatientAnswer
@@ -372,6 +374,7 @@ type PatientAnswer implements uniqueId {
   updatedAt: String!
   deletedAt: String
   answerId: String!
+  answer: Answer!
   answerValue: String!
   patientId: String!
   applicable: Boolean
@@ -486,6 +489,8 @@ type PatientAnswerEvent implements uniqueId {
   user: User!
   patientAnswerId: String!
   patientAnswer: PatientAnswer!
+  previousPatientAnswerId: String
+  previousPatientAnswer: PatientAnswer
   eventType: PatientAnswerEventTypes!
   progressNoteId: String
   progressNote: ProgressNote
@@ -634,7 +639,7 @@ type ScreeningTool implements uniqueId {
   title: String!
   riskAreaId: String!
   riskArea: RiskArea!
-  screeningToolScoreRanges: [ScreeningToolScoreRange]!
+  screeningToolScoreRanges: [ScreeningToolScoreRange]
   createdAt: String!
   updatedAt: String!
   deletedAt: String
@@ -718,6 +723,7 @@ type ProgressNoteActivity {
   taskEvents: [TaskEvent!]!
   patientAnswerEvents: [PatientAnswerEvent!]!
   carePlanUpdateEvents: [CarePlanUpdateEvent!]!
+  quickCallEvents: [QuickCall!]!
 }
 
 #

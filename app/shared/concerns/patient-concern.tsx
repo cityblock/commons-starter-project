@@ -112,7 +112,8 @@ export class PatientConcern extends React.Component<IProps, IState> {
         goalNumber={index + 1}
         selectedTaskId={selectedTaskId}
         optionsOpen={!!optionsDropdownGoalId && patientGoal.id === optionsDropdownGoalId}
-        onOptionsToggle={this.onOptionsToggle(patientGoal.id)} />
+        onOptionsToggle={this.onOptionsToggle(patientGoal.id)}
+      />
     ));
   }
 

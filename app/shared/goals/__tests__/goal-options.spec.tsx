@@ -6,9 +6,7 @@ import GoalOptions from '../goal-options';
 
 describe('Patient Concern Options Menu Component', () => {
   const onMenuToggle = () => true as any;
-  const wrapper = shallow(
-    <GoalOptions open={false} onMenuToggle={onMenuToggle} />,
-  );
+  const wrapper = shallow(<GoalOptions open={false} onMenuToggle={onMenuToggle} />);
 
   it('renders hamburger menu component', () => {
     expect(wrapper.find(HamburgerMenu).length).toBe(1);

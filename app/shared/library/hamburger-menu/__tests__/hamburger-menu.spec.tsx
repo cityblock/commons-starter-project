@@ -9,11 +9,9 @@ describe('Library Hamburger Menu Component', () => {
 
   it('renders icon and no options if closed', () => {
     const wrapper = shallow(
-      <HamburgerMenu
-      onMenuToggle={placeholderFn}
-      open={false}>
-        <HamburgerMenuOption icon='event' onClick={placeholderFn} />
-        <HamburgerMenuOption icon='event' onClick={placeholderFn} />
+      <HamburgerMenu onMenuToggle={placeholderFn} open={false}>
+        <HamburgerMenuOption icon="event" onClick={placeholderFn} />
+        <HamburgerMenuOption icon="event" onClick={placeholderFn} />
       </HamburgerMenu>,
     );
 
@@ -29,11 +27,9 @@ describe('Library Hamburger Menu Component', () => {
 
   it('renders icon and options if open', () => {
     const wrapper = shallow(
-      <HamburgerMenu
-      onMenuToggle={placeholderFn}
-      open={true}>
-        <HamburgerMenuOption icon='event' onClick={placeholderFn} />
-        <HamburgerMenuOption icon='moreVert' onClick={placeholderFn} />
+      <HamburgerMenu onMenuToggle={placeholderFn} open={true}>
+        <HamburgerMenuOption icon="event" onClick={placeholderFn} />
+        <HamburgerMenuOption icon="moreVert" onClick={placeholderFn} />
       </HamburgerMenu>,
     );
 
@@ -41,7 +37,17 @@ describe('Library Hamburger Menu Component', () => {
     expect(wrapper.find(Divider).length).toBe(1);
     expect(wrapper.find(HamburgerMenuOption).length).toBe(2);
 
-    expect(wrapper.find(HamburgerMenuOption).at(0).props().icon).toBe('event');
-    expect(wrapper.find(HamburgerMenuOption).at(1).props().icon).toBe('moreVert');
+    expect(
+      wrapper
+        .find(HamburgerMenuOption)
+        .at(0)
+        .props().icon,
+    ).toBe('event');
+    expect(
+      wrapper
+        .find(HamburgerMenuOption)
+        .at(1)
+        .props().icon,
+    ).toBe('moreVert');
   });
 });

@@ -1,6 +1,8 @@
 import { Model, RelationMappings, Transaction } from 'objection';
 import BaseModel from './base-model';
 import Question from './question';
+import RiskArea from './risk-area';
+import ScreeningTool from './screening-tool';
 
 interface IAnswerEditableFields {
   displayValue: string;
@@ -31,6 +33,8 @@ export default class Answer extends BaseModel {
   summaryText?: string;
   question: Question;
   questionId: string;
+  riskArea?: RiskArea;
+  screeningTool?: ScreeningTool;
   order: number;
 
   static tableName = 'answer';
@@ -82,6 +86,32 @@ export default class Answer extends BaseModel {
           to: 'goal_suggestion.goalSuggestionTemplateId',
         },
         to: 'goal_suggestion_template.id',
+      },
+    },
+    riskArea: {
+      relation: Model.HasOneThroughRelation,
+      modelClass: 'risk-area',
+      join: {
+        from: 'answer.questionId',
+        through: {
+          modelClass: 'question',
+          from: 'question.id',
+          to: 'question.riskAreaId',
+        },
+        to: 'risk_area.id',
+      },
+    },
+    screeningTool: {
+      relation: Model.HasOneThroughRelation,
+      modelClass: 'screening-tool',
+      join: {
+        from: 'answer.questionId',
+        through: {
+          modelClass: 'question',
+          from: 'question.id',
+          to: 'question.screeningToolId',
+        },
+        to: 'screening_tool.id',
       },
     },
   };

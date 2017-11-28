@@ -133,14 +133,16 @@ export async function resolvePatientAnswers(
 ) {
   await accessControls.isAllowed(userRole, 'view', 'patientAnswer');
 
+  const eagerQuery = '[answer, question]';
+
   if (args.filterType === 'question') {
-    return await PatientAnswer.getForQuestion(args.filterId, args.patientId, '[answer, question]');
+    return await PatientAnswer.getForQuestion(args.filterId, args.patientId, eagerQuery);
   } else if (args.filterType === 'riskArea') {
-    return await PatientAnswer.getForRiskArea(args.filterId, args.patientId, 'question');
+    return await PatientAnswer.getForRiskArea(args.filterId, args.patientId, eagerQuery);
   } else if (args.filterType === 'screeningTool') {
-    return await PatientAnswer.getForScreeningTool(args.filterId, args.patientId, 'question');
+    return await PatientAnswer.getForScreeningTool(args.filterId, args.patientId, eagerQuery);
   } else if (args.filterType === 'progressNote') {
-    return await PatientAnswer.getForProgressNote(args.filterId, args.patientId, 'question');
+    return await PatientAnswer.getForProgressNote(args.filterId, args.patientId, eagerQuery);
   } else {
     throw new Error('wrong filter type');
   }

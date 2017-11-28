@@ -33,7 +33,7 @@ type EventTypes =
   | 'edit_title'
   | 'edit_description';
 
-const EAGER_QUERY = '[task, user, eventComment, eventUser]';
+const EAGER_QUERY = '[task, user, eventComment.[user], eventUser]';
 
 /* tslint:disable:member-ordering */
 export default class TaskEvent extends BaseModel {

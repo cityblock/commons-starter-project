@@ -54,7 +54,7 @@ export const getOrderDiffs = <T extends IOrderable>(
       diffData.startedAt = newItem.startedAt ? null : new Date().toISOString();
     }
 
-    if (diffData.order || ('startedAt' in diffData)) orderDiffs.push(diffData);
+    if (diffData.order || 'startedAt' in diffData) orderDiffs.push(diffData);
   });
 
   return orderDiffs;

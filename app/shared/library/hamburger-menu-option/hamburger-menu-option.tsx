@@ -16,14 +16,16 @@ interface IProps {
 
 const HamburgerMenuOption: React.StatelessComponent<IProps> = (props: IProps) => {
   const { messageId, label, onClick, className, icon, iconStyles } = props;
-  const optionStyles = classNames(styles.option, {
-    [styles.center]: !icon,
-  }, className);
+  const optionStyles = classNames(
+    styles.option,
+    {
+      [styles.center]: !icon,
+    },
+    className,
+  );
 
   const text = messageId ? (
-    <FormattedMessage id={messageId}>{
-      (message: string) => <p>{message}</p>
-    }</FormattedMessage>
+    <FormattedMessage id={messageId}>{(message: string) => <p>{message}</p>}</FormattedMessage>
   ) : (
     <p>{label}</p>
   );

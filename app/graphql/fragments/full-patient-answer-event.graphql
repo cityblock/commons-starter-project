@@ -16,6 +16,10 @@ fragment FullPatientAnswerEvent on PatientAnswerEvent {
   patientAnswer {
     ...FullPatientAnswer
   }
+  previousPatientAnswerId
+  previousPatientAnswer {
+    ...FullPatientAnswer
+  }
   eventType
   progressNoteId
   createdAt

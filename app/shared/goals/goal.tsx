@@ -54,7 +54,7 @@ export default class PatientGoal extends React.Component<IProps, {}> {
         <div className={goalStyles}>
           <div className={styles.patientGoalHeaderRow}>
             <div className={styles.patientGoalNumber}>{`Goal ${goalNumber}`}</div>
-              <GoalOptions open={optionsOpen} onMenuToggle={onOptionsToggle} />
+            <GoalOptions open={optionsOpen} onMenuToggle={onOptionsToggle} />
           </div>
           <div className={styles.patientGoalTitle}>{patientGoal.title}</div>
         </div>

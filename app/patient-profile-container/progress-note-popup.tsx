@@ -26,7 +26,7 @@ import Button from '../shared/library/button/button';
 import { Popup } from '../shared/popup/popup';
 import { getPatientFullName } from '../shared/util/patient-name';
 import * as styles from './css/progress-note-popup.css';
-import ProgressNoteActivity from './progress-note-activity';
+import ProgressNoteActivity from './progress-note-activity/progress-note-activity';
 import ProgressNoteContext from './progress-note-context';
 import ProgressNoteTasks from './progress-note-tasks';
 

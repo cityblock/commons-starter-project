@@ -250,10 +250,7 @@ describe('patient concern model', () => {
       },
     ];
 
-    const patientConcerns = await PatientConcern.bulkUpdate(
-      patientConcernUpdateData,
-      patient.id,
-    );
+    const patientConcerns = await PatientConcern.bulkUpdate(patientConcernUpdateData, patient.id);
 
     expect(patientConcerns.length).toBe(2);
 
@@ -299,10 +296,7 @@ describe('patient concern model', () => {
       },
     ];
 
-    const patientConcerns = await PatientConcern.bulkUpdate(
-      patientConcernUpdateData,
-      patient.id,
-    );
+    const patientConcerns = await PatientConcern.bulkUpdate(patientConcernUpdateData, patient.id);
 
     expect(patientConcerns.length).toBe(2);
     expect(patientConcerns[0]).toMatchObject({
@@ -340,10 +334,7 @@ describe('patient concern model', () => {
       },
     ];
 
-    await PatientConcern.bulkUpdate(
-      patientConcernUpdateData,
-      patient.id,
-    );
+    await PatientConcern.bulkUpdate(patientConcernUpdateData, patient.id);
 
     const fetchedPatientConcern2 = await PatientConcern.get(patientConcern2.id);
     expect(fetchedPatientConcern2).toEqual(patientConcern2);

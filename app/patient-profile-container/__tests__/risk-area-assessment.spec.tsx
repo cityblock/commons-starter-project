@@ -46,6 +46,8 @@ const riskAreaQuestions = [
         summaryText: 'None',
         concernSuggestions: [],
         goalSuggestions: [],
+        riskArea: null,
+        screeningTool: null,
       },
     ],
     applicableIfQuestionConditions: [

@@ -19,7 +19,7 @@ const HamburgerMenu: React.StatelessComponent<IProps> = ({ open, onMenuToggle, c
       if (i > 0) (menuOptions as JSX.Element[]).push(<Divider key={i} />);
       (menuOptions as JSX.Element[]).push(child);
     });
-  // otherwise just render the element
+    // otherwise just render the element
   } else if (open) {
     menuOptions = children;
   }
@@ -35,12 +35,8 @@ const HamburgerMenu: React.StatelessComponent<IProps> = ({ open, onMenuToggle, c
 
   return (
     <div onClick={onMenuClick} className={styles.container}>
-      <Icon name='moreVert' className={iconStyles} onClick={onMenuToggle} />
-      {open && (
-        <div className={styles.menu}>
-          {menuOptions}
-        </div>
-      )}
+      <Icon name="moreVert" className={iconStyles} onClick={onMenuToggle} />
+      {open && <div className={styles.menu}>{menuOptions}</div>}
     </div>
   );
 };

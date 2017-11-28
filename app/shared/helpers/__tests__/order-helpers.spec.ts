@@ -57,17 +57,9 @@ describe('Order Helper Methods', () => {
     const id3 = 'charizard';
 
     it('gets the diffs when reordering in one list', () => {
-      const oldList = [
-        { id: id1, order: 1 },
-        { id: id2, order: 2 },
-        { id: id3, order: 3 },
-      ] as any;
+      const oldList = [{ id: id1, order: 1 }, { id: id2, order: 2 }, { id: id3, order: 3 }] as any;
 
-      const newList = [
-        { id: id1, order: 1 },
-        { id: id3, order: 3 },
-        { id: id2, order: 2 },
-      ] as any;
+      const newList = [{ id: id1, order: 1 }, { id: id3, order: 3 }, { id: id2, order: 2 }] as any;
 
       expect(getOrderDiffs(oldList, newList)).toEqual([
         { id: id3, order: 2 },
@@ -76,17 +68,9 @@ describe('Order Helper Methods', () => {
     });
 
     it('gets the diffs when reordering in list with offset', () => {
-      const oldList = [
-        { id: id1, order: 1 },
-        { id: id2, order: 2 },
-        { id: id3, order: 3 },
-      ] as any;
+      const oldList = [{ id: id1, order: 1 }, { id: id2, order: 2 }, { id: id3, order: 3 }] as any;
 
-      const newList = [
-        { id: id1, order: 1 },
-        { id: id3, order: 3 },
-        { id: id2, order: 2 },
-      ] as any;
+      const newList = [{ id: id1, order: 1 }, { id: id3, order: 3 }, { id: id2, order: 2 }] as any;
 
       expect(getOrderDiffs(oldList, newList, 4)).toEqual([
         { id: id1, order: 5 },
@@ -108,9 +92,7 @@ describe('Order Helper Methods', () => {
         { id: id3, order: 3 },
       ] as any;
 
-      expect(getOrderDiffs(oldList, newList, 0, id2)).toEqual([
-        { id: id2, startedAt: null },
-      ]);
+      expect(getOrderDiffs(oldList, newList, 0, id2)).toEqual([{ id: id2, startedAt: null }]);
     });
 
     it('adds change to startedAt if from inactive to active', () => {
@@ -153,17 +135,9 @@ describe('Order Helper Methods', () => {
     });
 
     it('returns empty arary if no changes made', () => {
-      const oldList = [
-        { id: id1, order: 1 },
-        { id: id2, order: 2 },
-        { id: id3, order: 3 },
-      ] as any;
+      const oldList = [{ id: id1, order: 1 }, { id: id2, order: 2 }, { id: id3, order: 3 }] as any;
 
-      const newList = [
-        { id: id1, order: 1 },
-        { id: id2, order: 2 },
-        { id: id3, order: 3 },
-      ] as any;
+      const newList = [{ id: id1, order: 1 }, { id: id2, order: 2 }, { id: id3, order: 3 }] as any;
 
       expect(getOrderDiffs(oldList, newList)).toEqual([]);
     });

@@ -1,5 +1,11 @@
+#import "./full-user.graphql"
+
 fragment FullQuickCall on QuickCall {
   id
+  userId
+  user {
+    ...FullUser
+  }
   progressNoteId
   reason
   summary

@@ -393,7 +393,7 @@ declare module 'schema' {
     description: Clinic edges
   */
   interface IClinicEdges {
-    edges: Array<IClinicNode> | null;
+    edges: Array<IClinicNode>;
     pageInfo: IPageInfo;
   }
 
@@ -401,7 +401,7 @@ declare module 'schema' {
     description: Clinic node
   */
   interface IClinicNode {
-    node: IClinic | null;
+    node: IClinic;
     cursor: string;
   }
 
@@ -850,7 +850,9 @@ declare module 'schema' {
     user: IUser;
     progressNoteTemplateId: string | null;
     progressNoteTemplate: IProgressNoteTemplate | null;
+    location: string | null;
     completedAt: string | null;
+    startedAt: string | null;
     createdAt: string;
     updatedAt: string;
     deletedAt: string | null;
@@ -1955,6 +1957,8 @@ declare module 'schema' {
   interface IProgressNoteEditInput {
     progressNoteId: string;
     progressNoteTemplateId: string;
+    startedAt?: string | null;
+    location?: string | null;
   }
 
 

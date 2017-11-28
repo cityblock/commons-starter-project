@@ -50,12 +50,12 @@ exports[`builder concerns renders progress note popup with templates renders pro
           </FormattedRelative>
         </div>
       </div>
-      <FormattedMessage
-        id="patient.submitProgressNote"
-        values={Object {}}
-      >
-        [Function]
-      </FormattedMessage>
+      <Button
+        className="buttonInactive"
+        color="blue"
+        messageId="patient.submitProgressNote"
+        onClick={[Function]}
+      />
     </div>
     <div
       className="tabs"
@@ -79,7 +79,7 @@ exports[`builder concerns renders progress note popup with templates renders pro
         [Function]
       </FormattedMessage>
     </div>
-    <Apollo(Apollo(Apollo(ProgressNoteContext)))
+    <Apollo(Apollo(Apollo(Apollo(ProgressNoteContext))))
       onChange={[Function]}
       patientId="patient-id"
       progressNoteId="progress-note-id"
@@ -95,6 +95,7 @@ exports[`builder concerns renders progress note popup with templates renders pro
           },
         ]
       }
+      updateReadyToSubmit={[Function]}
     />
   </div>
 </Unknown>
@@ -143,12 +144,12 @@ exports[`builder concerns renders progress note popup with templates renders pro
           </div>
         </div>
       </div>
-      <FormattedMessage
-        id="patient.submitProgressNote"
-        values={Object {}}
-      >
-        [Function]
-      </FormattedMessage>
+      <Button
+        className="buttonInactive"
+        color="blue"
+        messageId="patient.submitProgressNote"
+        onClick={[Function]}
+      />
     </div>
     <div
       className="tabs"
@@ -172,7 +173,7 @@ exports[`builder concerns renders progress note popup with templates renders pro
         [Function]
       </FormattedMessage>
     </div>
-    <Apollo(Apollo(Apollo(ProgressNoteContext)))
+    <Apollo(Apollo(Apollo(Apollo(ProgressNoteContext))))
       onChange={[Function]}
       patientId="patient-id"
       progressNoteId={undefined}
@@ -188,6 +189,7 @@ exports[`builder concerns renders progress note popup with templates renders pro
           },
         ]
       }
+      updateReadyToSubmit={[Function]}
     />
   </div>
 </Unknown>

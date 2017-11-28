@@ -11,7 +11,7 @@ exports[`shallow rendered renders authentication container correctly with curren
         "email": "a@b.com",
         "firstName": "first",
         "googleProfileImageUrl": null,
-        "homeClinicId": "1",
+        "homeClinicId": "clinic-id",
         "id": "id",
         "lastName": "last",
         "locale": "en",

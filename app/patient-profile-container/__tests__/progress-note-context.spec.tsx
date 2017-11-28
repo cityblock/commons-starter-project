@@ -2,6 +2,7 @@ import { shallow } from 'enzyme';
 import * as React from 'react';
 import PatientQuestion from '../../shared/question/patient-question';
 import {
+  clinic,
   patient,
   progressNote,
   progressNoteTemplate,
@@ -11,6 +12,9 @@ import {
 import { ProgressNoteContext as Component } from '../progress-note-context';
 
 const oldDate = Date.now;
+const clinics = {
+  edges: [{ node: clinic }],
+};
 
 describe('progress note context', () => {
   let component: any;
@@ -23,6 +27,8 @@ describe('progress note context', () => {
         progressNoteTemplateId={progressNoteTemplate.id}
         progressNoteTemplates={[progressNoteTemplate]}
         onChange={jest.fn()}
+        updateReadyToSubmit={jest.fn()}
+        clinics={clinics}
         questions={[question]}
       />,
     );
@@ -47,7 +53,7 @@ describe('progress note context', () => {
   it('sets up question state', async () => {
     const instance = component.instance() as Component;
     instance.render();
-    expect(component.state()).toEqual({ questions: {} });
+    expect(component.state().questions).toEqual({});
   });
 });
 
@@ -67,6 +73,8 @@ describe('progress note context without questions', () => {
         progressNoteTemplateId={progressNoteTemplate.id}
         progressNoteTemplates={[progressNoteTemplate]}
         onChange={jest.fn()}
+        updateReadyToSubmit={jest.fn()}
+        clinics={clinics}
         questions={[]}
       />,
     );
@@ -82,10 +90,10 @@ describe('progress note context without questions', () => {
       changed: false,
       oldAnswers: [],
     };
-    expect(component.state()).toEqual({ questions });
+    expect(component.state().questions).toEqual(questions);
   });
 
-  it('changes question state when a different progress note template changes', async () => {
+  it('changes question state when progress note template changes', async () => {
     const component = shallow(
       <Component
         patientId={patient.id}
@@ -93,6 +101,8 @@ describe('progress note context without questions', () => {
         progressNoteTemplateId={progressNoteTemplate.id}
         progressNoteTemplates={[progressNoteTemplate]}
         onChange={jest.fn()}
+        updateReadyToSubmit={jest.fn()}
+        clinics={clinics}
         questions={[]}
       />,
     );
@@ -119,9 +129,7 @@ describe('progress note context without questions', () => {
       changed: true,
       oldAnswers: [],
     };
-    expect(component.state()).toEqual({
-      questions: initialQuestionsState,
-    });
+    expect(component.state().questions).toEqual(initialQuestionsState);
 
     // Change the progress note template
     component.setProps({
@@ -138,6 +146,6 @@ describe('progress note context without questions', () => {
     };
 
     // Ensure answers associated with the previous progress note template are gone
-    expect(component.state()).toEqual({ questions });
+    expect(component.state().questions).toEqual(questions);
   });
 });

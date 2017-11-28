@@ -1,3 +1,8 @@
+export const clinic = {
+  id: 'clinic-id',
+  name: 'Home clinic',
+};
+
 export const currentUser = {
   id: 'id',
   locale: 'en',
@@ -5,7 +10,7 @@ export const currentUser = {
   lastName: 'last',
   userRole: 'physician' as any,
   email: 'a@b.com',
-  homeClinicId: '1',
+  homeClinicId: clinic.id,
   googleProfileImageUrl: null,
   createdAt: '2017-09-07T13:45:14.532Z',
   updatedAt: '2017-09-07T13:45:14.532Z',
@@ -18,7 +23,7 @@ export const user = {
   lastName: 'last',
   userRole: 'physician' as any,
   email: 'b@c.com',
-  homeClinicId: '1',
+  homeClinicId: clinic.id,
   googleProfileImageUrl: null,
   createdAt: '2017-09-07T13:45:14.532Z',
   updatedAt: '2017-09-07T13:45:14.532Z',
@@ -33,7 +38,7 @@ export const patient = {
   dateOfBirth: '01/01/1999',
   gender: 'male',
   zip: '05431',
-  homeClinicId: 'clinic-id',
+  homeClinicId: clinic.id,
   createdAt: '2017-09-07T13:45:14.532Z',
   scratchPad: 'Note',
   consentToCall: true,
@@ -333,6 +338,7 @@ export const patientAnswer = {
   patientScreeningToolSubmissionId: null,
   question: {
     id: question.id,
+    title: question.title,
   },
 };
 
@@ -444,6 +450,8 @@ export const progressNote = {
   id: 'progress-note-id',
   createdAt: '2017-09-07T13:45:14.532Z',
   updatedAt: '2017-09-07T13:45:14.532Z',
+  startedAt: null,
+  location: null,
   deletedAt: null,
   completedAt: null,
   patientId: patient.id,

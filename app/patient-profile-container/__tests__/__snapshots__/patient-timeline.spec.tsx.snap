@@ -44,7 +44,7 @@ exports[`renders timeline 1`] = `
         onClick={[Function]}
       >
         <FormattedMessage
-          id="patient.newQuickCallNote"
+          id="quickCallNote.new"
           values={Object {}}
         >
           [Function]
@@ -55,7 +55,7 @@ exports[`renders timeline 1`] = `
         onClick={[Function]}
       >
         <FormattedMessage
-          id="patient.newProgressNote"
+          id="progressNote.new"
           values={Object {}}
         >
           [Function]

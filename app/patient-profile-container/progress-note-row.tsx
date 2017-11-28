@@ -4,9 +4,11 @@ import { FormattedDate, FormattedMessage, FormattedTime } from 'react-intl';
 import { FullProgressNoteFragment } from '../graphql/types';
 import * as tabStyles from '../shared/css/tabs.css';
 import * as styles from './css/progress-note-row.css';
+import ProgressNoteRowQuestions from './progress-note-row-questions';
 
 interface IProps {
   progressNote: FullProgressNoteFragment;
+  patientId: string;
 }
 
 type Tab = 'context' | 'activity';
@@ -15,7 +17,7 @@ interface IState {
   tab: Tab;
 }
 
-export default class PatientEncounters extends React.Component<IProps, IState> {
+export default class ProgressNoteRow extends React.Component<IProps, IState> {
   constructor(props: IProps) {
     super(props);
     this.state = {
@@ -30,7 +32,7 @@ export default class PatientEncounters extends React.Component<IProps, IState> {
   };
 
   render() {
-    const { progressNote } = this.props;
+    const { progressNote, patientId } = this.props;
     const { tab } = this.state;
     const title = progressNote.progressNoteTemplate ? progressNote.progressNoteTemplate.title : '';
 
@@ -42,6 +44,11 @@ export default class PatientEncounters extends React.Component<IProps, IState> {
     });
     const onContextClick = () => this.onTabClick('context');
     const onActivityClick = () => this.onTabClick('activity');
+    const questionsHtml =
+      tab === 'context' ? (
+        <ProgressNoteRowQuestions progressNoteId={progressNote.id} patientId={patientId} />
+      ) : null;
+    const activityHtml = tab === 'activity' ? <div>activity</div> : null;
     return (
       <div className={styles.container}>
         <div className={styles.topBar}>
@@ -58,23 +65,26 @@ export default class PatientEncounters extends React.Component<IProps, IState> {
         </div>
         <div className={styles.titleSection}>
           <div className={styles.title}>{title}</div>
-          <div className={tabStyles.tabs}>
-            <FormattedMessage id="patient.context">
-              {(message: string) => (
-                <div className={contextTabStyles} onClick={onContextClick}>
-                  {message}
-                </div>
-              )}
-            </FormattedMessage>
-            <FormattedMessage id="patient.activity">
-              {(message: string) => (
-                <div onClick={onActivityClick} className={activityTabStyles}>
-                  {message}
-                </div>
-              )}
-            </FormattedMessage>
-          </div>
+          <div className={styles.dotHamburger} />
         </div>
+        <div className={classNames(tabStyles.tabs, styles.tabs)}>
+          <FormattedMessage id="patient.context">
+            {(message: string) => (
+              <div className={contextTabStyles} onClick={onContextClick}>
+                {message}
+              </div>
+            )}
+          </FormattedMessage>
+          <FormattedMessage id="patient.activity">
+            {(message: string) => (
+              <div onClick={onActivityClick} className={activityTabStyles}>
+                {message}
+              </div>
+            )}
+          </FormattedMessage>
+        </div>
+        {questionsHtml}
+        {activityHtml}
       </div>
     );
   }

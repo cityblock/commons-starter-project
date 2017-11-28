@@ -68,7 +68,7 @@ exports[`renders comments 1`] = `
             "email": "a@b.com",
             "firstName": "first",
             "googleProfileImageUrl": null,
-            "homeClinicId": "1",
+            "homeClinicId": "clinic-id",
             "id": "id",
             "lastName": "last",
             "locale": "en",

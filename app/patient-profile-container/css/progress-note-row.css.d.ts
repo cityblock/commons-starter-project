@@ -7,5 +7,7 @@ export const dateSection: string;
 export const createdTime: string;
 export const titleSection: string;
 export const title: string;
+export const dotHamburger: string;
+export const tabs: string;
 export const tabSection: string;
 export const answers: string;

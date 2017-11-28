@@ -21,6 +21,7 @@ import {
   ShortPatientFragment,
 } from '../graphql/types';
 import * as tabStyles from '../shared/css/tabs.css';
+import Button from '../shared/library/button/button';
 import { Popup } from '../shared/popup/popup';
 import { getPatientFullName } from '../shared/util/patient-name';
 import * as styles from './css/progress-note-popup.css';
@@ -56,6 +57,7 @@ interface IGraphqlProps {
 interface IState {
   tab: Tab;
   progressNote?: FullProgressNoteFragment | null;
+  readyToSubmit: boolean;
 }
 
 type Tab = 'context' | 'activity' | 'tasks';
@@ -65,13 +67,9 @@ type allProps = IProps & IGraphqlProps;
 export class ProgressNotePopup extends React.Component<allProps, IState> {
   constructor(props: allProps) {
     super(props);
-
-    this.selectTab = this.selectTab.bind(this);
-    this.submit = this.submit.bind(this);
-    this.updateProgressNote = this.updateProgressNote.bind(this);
-
     this.state = {
       tab: 'context',
+      readyToSubmit: false,
     };
   }
 
@@ -89,17 +87,19 @@ export class ProgressNotePopup extends React.Component<allProps, IState> {
     }
   }
 
-  selectTab(tab: Tab) {
-    this.setState({ tab });
-  }
-
-  async updateProgressNote(progressNoteTemplateId: string) {
+  updateProgressNote = async (
+    progressNoteTemplateId: string,
+    startedAt?: string,
+    location?: string,
+  ) => {
     const { progressNote } = this.state;
     if (progressNote) {
       const response = await this.props.editProgressNote({
         variables: {
           progressNoteId: progressNote.id,
           progressNoteTemplateId,
+          startedAt,
+          location,
         },
       });
       if (response.data && response.data.progressNoteEdit) {
@@ -108,22 +108,32 @@ export class ProgressNotePopup extends React.Component<allProps, IState> {
         });
       }
     }
-  }
+  };
 
-  async submit() {
-    const { progressNote } = this.state;
-    if (progressNote) {
+  selectTab = (tab: Tab) => {
+    this.setState({ tab });
+  };
+
+  submit = async () => {
+    const { progressNote, readyToSubmit } = this.state;
+    if (progressNote && readyToSubmit) {
       await this.props.completeProgressNote({
         variables: {
           progressNoteId: progressNote.id,
         },
       });
+      this.props.close();
     }
-  }
+    // todo: handle error
+  };
+
+  updateReadyToSubmit = (readyToSubmit: boolean) => {
+    this.setState({ readyToSubmit });
+  };
 
   render() {
     const { close, visible, patientId, progressNoteTemplates, patient } = this.props;
-    const { tab, progressNote } = this.state;
+    const { tab, progressNote, readyToSubmit } = this.state;
 
     const contextStyles = classNames(tabStyles.tab, {
       [tabStyles.selectedTab]: tab === 'context',
@@ -138,6 +148,7 @@ export class ProgressNotePopup extends React.Component<allProps, IState> {
     const context =
       tab === 'context' ? (
         <ProgressNoteContext
+          updateReadyToSubmit={this.updateReadyToSubmit}
           patientId={patientId}
           progressNoteId={progressNote ? progressNote.id : undefined}
           progressNoteTemplateId={
@@ -183,13 +194,12 @@ export class ProgressNotePopup extends React.Component<allProps, IState> {
                 {openedAt}
               </div>
             </div>
-            <FormattedMessage id="patient.submitProgressNote">
-              {(message: string) => (
-                <div onClick={this.submit} className={styles.button}>
-                  {message}
-                </div>
-              )}
-            </FormattedMessage>
+            <Button
+              onClick={this.submit}
+              className={readyToSubmit ? undefined : styles.buttonInactive}
+              messageId="patient.submitProgressNote"
+              color="blue"
+            />
           </div>
           <div className={tabStyles.tabs}>
             <FormattedMessage id="patient.context">

@@ -4,6 +4,8 @@ import ProgressNoteTemplate from './progress-note-template';
 
 interface IProgressNoteEditableFields {
   patientId: string;
+  startedAt?: string;
+  location?: string;
   userId: string;
   progressNoteTemplateId: string;
 }
@@ -21,6 +23,7 @@ export default class ProgressNote extends BaseModel {
   userId: string;
   progressNoteTemplateId?: string;
   progressNoteTemplate?: ProgressNoteTemplate;
+  location: string;
   startedAt: string;
   completedAt: string;
 
@@ -34,6 +37,7 @@ export default class ProgressNote extends BaseModel {
       userId: { type: 'string' },
       progressNoteTemplateId: { type: 'string' },
       startedAt: { type: 'string' },
+      location: { type: 'string' },
       completedAt: { type: 'string' },
       deletedAt: { type: 'string ' },
     },

@@ -1,0 +1,14 @@
+@import '../../shared/css/sizes';
+
+.container {
+  font-size: var(--small-font-size);
+}
+
+.title {
+  font-size: var(--small-font-size);
+}
+
+.answer {
+  font-family: var(--roboto);
+  font-size: var(--small-font-size);
+}

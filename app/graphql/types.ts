@@ -484,8 +484,8 @@ export type getClinicsQuery = {
       node:  {
         id: string,
         name: string,
-      } | null,
-    } | null > | null,
+      },
+    } >,
   } | null,
 };
 
@@ -1171,6 +1171,7 @@ export type getPatientAnswersQuery = {
     applicable: boolean | null,
     question:  {
       id: string,
+      title: string,
     } | null,
     patientScreeningToolSubmissionId: string | null,
   } | null > | null,
@@ -2033,6 +2034,7 @@ export type getProgressNoteActivityForProgressNoteQuery = {
         applicable: boolean | null,
         question:  {
           id: string,
+          title: string,
         } | null,
         patientScreeningToolSubmissionId: string | null,
       },
@@ -2313,6 +2315,8 @@ export type getProgressNotesForPatientQuery = {
     completedAt: string | null,
     createdAt: string,
     updatedAt: string,
+    startedAt: string | null,
+    location: string | null,
     deletedAt: string | null,
     progressNoteTemplate:  {
       id: string,
@@ -2493,7 +2497,7 @@ export type getQuestionsQuery = {
       questionId: string,
       answerId: string,
     } > | null,
-  } | null >,
+  } >,
 };
 
 export type getRiskAreaQueryVariables = {
@@ -3045,6 +3049,7 @@ export type patientAnswersCreateMutation = {
     applicable: boolean | null,
     question:  {
       id: string,
+      title: string,
     } | null,
     patientScreeningToolSubmissionId: string | null,
   } | null > | null,
@@ -3068,6 +3073,7 @@ export type patientAnswersUpdateApplicableMutation = {
     applicable: boolean | null,
     question:  {
       id: string,
+      title: string,
     } | null,
     patientScreeningToolSubmissionId: string | null,
   } | null > | null,
@@ -3505,6 +3511,8 @@ export type progressNoteCompleteMutation = {
     completedAt: string | null,
     createdAt: string,
     updatedAt: string,
+    startedAt: string | null,
+    location: string | null,
     deletedAt: string | null,
     progressNoteTemplate:  {
       id: string,
@@ -3518,6 +3526,8 @@ export type progressNoteCompleteMutation = {
 export type progressNoteEditMutationVariables = {
   progressNoteId: string,
   progressNoteTemplateId: string,
+  startedAt?: string | null,
+  location?: string | null,
 };
 
 export type progressNoteEditMutation = {
@@ -3540,6 +3550,8 @@ export type progressNoteEditMutation = {
     completedAt: string | null,
     createdAt: string,
     updatedAt: string,
+    startedAt: string | null,
+    location: string | null,
     deletedAt: string | null,
     progressNoteTemplate:  {
       id: string,
@@ -3574,6 +3586,8 @@ export type progressNoteGetOrCreateMutation = {
     completedAt: string | null,
     createdAt: string,
     updatedAt: string,
+    startedAt: string | null,
+    location: string | null,
     deletedAt: string | null,
     progressNoteTemplate:  {
       id: string,
@@ -5488,6 +5502,7 @@ export type FullPatientAnswerEventFragment = {
     applicable: boolean | null,
     question:  {
       id: string,
+      title: string,
     } | null,
     patientScreeningToolSubmissionId: string | null,
   },
@@ -5509,6 +5524,7 @@ export type FullPatientAnswerFragment = {
   applicable: boolean | null,
   question:  {
     id: string,
+    title: string,
   } | null,
   patientScreeningToolSubmissionId: string | null,
 };
@@ -5968,6 +5984,7 @@ export type FullProgressNoteActivityFragment = {
       applicable: boolean | null,
       question:  {
         id: string,
+        title: string,
       } | null,
       patientScreeningToolSubmissionId: string | null,
     },
@@ -6224,6 +6241,8 @@ export type FullProgressNoteFragment = {
   completedAt: string | null,
   createdAt: string,
   updatedAt: string,
+  startedAt: string | null,
+  location: string | null,
   deletedAt: string | null,
   progressNoteTemplate:  {
     id: string,

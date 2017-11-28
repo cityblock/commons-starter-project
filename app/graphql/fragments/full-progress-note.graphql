@@ -10,6 +10,8 @@ fragment FullProgressNote on ProgressNote {
   completedAt
   createdAt
   updatedAt
+  startedAt
+  location
   deletedAt
   progressNoteTemplate {
     ...FullProgressNoteTemplate

@@ -202,13 +202,13 @@ type PatientEdges {
 
 # Clinic node
 type ClinicNode {
-  node: Clinic
+  node: Clinic!
   cursor: String!
 }
 
 # Clinic edges
 type ClinicEdges {
-  edges: [ClinicNode]
+  edges: [ClinicNode!]!
   pageInfo: PageInfo!
 }
 
@@ -689,7 +689,9 @@ type ProgressNote implements uniqueId {
   user: User!
   progressNoteTemplateId: String
   progressNoteTemplate: ProgressNoteTemplate
+  location: String
   completedAt: String
+  startedAt: String
   createdAt: String!
   updatedAt: String!
   deletedAt: String
@@ -1229,6 +1231,8 @@ input ProgressNoteCompleteInput {
 input ProgressNoteEditInput {
   progressNoteId: String!
   progressNoteTemplateId: String!
+  startedAt: String
+  location: String
 }
 
 input QuickCallCreateInput {
@@ -1461,7 +1465,7 @@ type RootQueryType {
   # Question
   question(questionId: String!): Question
   # Questions for risk area, progress note template or screening tool
-  questions(filterId: String!, filterType: QuestionFilterType!): [Question]!
+  questions(filterId: String!, filterType: QuestionFilterType!): [Question!]!
   # Answer
   answer(answerId: String!): Answer
   # Answers

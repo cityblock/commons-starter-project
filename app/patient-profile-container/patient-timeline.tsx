@@ -1,6 +1,6 @@
 import * as classNames from 'classnames';
 import * as React from 'react';
-import { compose, graphql } from 'react-apollo';
+import { graphql } from 'react-apollo';
 import { FormattedMessage } from 'react-intl';
 import * as progressNotesQuery from '../graphql/queries/get-progress-notes-for-patient.graphql';
 import { getProgressNotesForPatientQuery, FullProgressNoteFragment } from '../graphql/types';
@@ -75,11 +75,17 @@ export class PatientTimeline extends React.Component<allProps, IState> {
     }
   };
 
-  renderPatientEncounter(progressNote: FullProgressNoteFragment | null, index: number) {
+  renderPatientEncounter = (progressNote: FullProgressNoteFragment | null, index: number) => {
     if (progressNote) {
-      return <ProgressNoteRow key={index} progressNote={progressNote} />;
+      return (
+        <ProgressNoteRow
+          key={index}
+          progressNote={progressNote}
+          patientId={this.props.match.params.patientId}
+        />
+      );
     }
-  }
+  };
 
   showNewProgressNotePopup = () => {
     this.setState({
@@ -133,12 +139,12 @@ export class PatientTimeline extends React.Component<allProps, IState> {
           </div>
           <div className={patientInfoStyles.saveButtonGroup}>
             <div className={saveQuickCallButtonStyles} onClick={this.showNewQuickCallPopup}>
-              <FormattedMessage id="patient.newQuickCallNote">
+              <FormattedMessage id="quickCallNote.new">
                 {(message: string) => <span>{message}</span>}
               </FormattedMessage>
             </div>
             <div className={saveButtonStyles} onClick={this.showNewProgressNotePopup}>
-              <FormattedMessage id="patient.newProgressNote">
+              <FormattedMessage id="progressNote.new">
                 {(message: string) => <span>{message}</span>}
               </FormattedMessage>
             </div>
@@ -162,17 +168,15 @@ export class PatientTimeline extends React.Component<allProps, IState> {
   }
 }
 
-export default compose(
-  graphql<IGraphqlProps, IProps, allProps>(progressNotesQuery as any, {
-    options: (props: IProps) => ({
-      variables: {
-        patientId: props.match.params.patientId,
-      },
-    }),
-    props: ({ data }) => ({
-      loading: data ? data.loading : false,
-      error: data ? data.error : null,
-      progressNotes: data ? (data as any).progressNotesForPatient : null,
-    }),
+export default graphql<IGraphqlProps, IProps, allProps>(progressNotesQuery as any, {
+  options: (props: IProps) => ({
+    variables: {
+      patientId: props.match.params.patientId,
+    },
   }),
-)(PatientTimeline);
+  props: ({ data }) => ({
+    loading: data ? data.loading : false,
+    error: data ? data.error : null,
+    progressNotes: data ? (data as any).progressNotesForPatient : null,
+  }),
+})(PatientTimeline);

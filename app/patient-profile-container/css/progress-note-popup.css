@@ -50,6 +50,10 @@
   padding: 8px 33px 7px;
 }
 
+.buttonInactive {
+  opacity: 0.5;
+}
+
 .encounterTypeContainer {
   background: var(--white-font-color);
   padding: 20px;
@@ -62,6 +66,20 @@
 
 .encounterTypeSelect {
   @apply --select;
+}
+
+.locationTimeRow {
+  padding-top: var(--small-gutter);
+  display: flex;
+}
+
+.location {
+  flex: 1;
+  padding-right: var(--small-gutter);
+}
+
+.time {
+  flex: 1;
 }
 
 .patientContainer {
@@ -91,4 +109,8 @@
 
 .openedAt {
   display: block;
+}
+
+.error {
+  color: var(--red-color);
 }

@@ -79,10 +79,16 @@ describe('progress note model', () => {
     const progressNoteTemplate2 = await ProgressNoteTemplate.create({
       title: 'title 2',
     });
+    const startedAt = new Date().toISOString();
+    const location = 'cool location';
     const updatedNote = await ProgressNote.update(progressNote.id, {
       progressNoteTemplateId: progressNoteTemplate2.id,
+      startedAt,
+      location,
     });
     expect(updatedNote.progressNoteTemplateId).toBe(progressNoteTemplate2.id);
+    expect(updatedNote.startedAt).not.toBeFalsy();
+    expect(updatedNote.location).toBe(location);
   });
 
   it('completes a progress note', async () => {

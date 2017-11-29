@@ -1576,6 +1576,8 @@ type RootQueryType {
   progressNote(progressNoteId: String!): ProgressNote
   # progress notes for patient
   progressNotesForPatient(patientId: String!, completed: Boolean!): [ProgressNote]
+  # progress notes for current user
+  progressNotesForCurrentUser(completed: Boolean!): [ProgressNote]
   # progress note activities for progress note
   progressNoteActivityForProgressNote(progressNoteId: String!): ProgressNoteActivity
   # quick call

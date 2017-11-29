@@ -143,5 +143,35 @@ describe('progress note resolver', () => {
         },
       ]);
     });
+    it('returns progress notes for current user', async () => {
+      const progressNote1 = await ProgressNote.create({
+        patientId: patient.id,
+        userId: user.id,
+        progressNoteTemplateId: progressNoteTemplate.id,
+      });
+      const progressNote2 = await ProgressNote.create({
+        patientId: patient.id,
+        userId: user.id,
+        progressNoteTemplateId: progressNoteTemplate.id,
+      });
+
+      const query = `{
+        progressNotesForCurrentUser(completed: false) { id }
+      }`;
+
+      const result = await graphql(schema, query, null, {
+        db,
+        userRole: 'admin',
+        userId: user.id,
+      });
+      expect(cloneDeep(result.data!.progressNotesForCurrentUser)).toMatchObject([
+        {
+          id: progressNote2.id,
+        },
+        {
+          id: progressNote1.id,
+        },
+      ]);
+    });
   });
 });

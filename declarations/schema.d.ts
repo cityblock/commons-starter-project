@@ -262,6 +262,10 @@ declare module 'schema' {
   */
     progressNotesForPatient: Array<IProgressNote> | null;
     /**
+    description: progress notes for current user
+  */
+    progressNotesForCurrentUser: Array<IProgressNote> | null;
+    /**
     description: progress note activities for progress note
   */
     progressNoteActivityForProgressNote: IProgressNoteActivity | null;

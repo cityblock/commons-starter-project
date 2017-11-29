@@ -25,6 +25,7 @@ exports[`shallow rendered renders authentication container correctly with curren
   >
     <div />
   </div>
+  <Connect(Apollo(ProgressNoteContainer)) />
   <Unknown
     idleEnd={[Function]}
     isIdle={false}

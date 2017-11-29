@@ -1,14 +1,15 @@
 import * as classNames from 'classnames';
 import * as React from 'react';
-import { graphql } from 'react-apollo';
+import { compose, graphql } from 'react-apollo';
 import { FormattedMessage } from 'react-intl';
+import { connect, Dispatch } from 'react-redux';
+import { openProgressNote } from '../actions/popup-action';
 import * as progressNotesQuery from '../graphql/queries/get-progress-notes-for-patient.graphql';
 import { getProgressNotesForPatientQuery, FullProgressNoteFragment } from '../graphql/types';
 import * as sortSearchStyles from '../shared/css/sort-search.css';
 import * as patientInfoStyles from './css/patient-info.css';
 import * as styles from './css/patient-timeline.css';
 import { ProgressNoteLoadingError } from './progress-note-loading-error';
-import ProgressNotePopup from './progress-note-popup';
 import ProgressNoteRow from './progress-note-row';
 import QuickCallPopup from './quick-call-popup';
 
@@ -20,6 +21,10 @@ interface IProps {
   };
 }
 
+interface IDispatchProps {
+  openProgressNotePopup: (patientId: string) => any;
+}
+
 interface IGraphqlProps {
   loading?: boolean;
   error?: string;
@@ -29,11 +34,10 @@ interface IGraphqlProps {
 interface IState {
   loading?: boolean;
   error?: string;
-  isProgressNotePopupVisible: boolean;
   isQuickCallPopupVisible: boolean;
 }
 
-type allProps = IProps & IGraphqlProps;
+type allProps = IProps & IGraphqlProps & IDispatchProps;
 
 export class PatientTimeline extends React.Component<allProps, IState> {
   constructor(props: allProps) {
@@ -41,7 +45,6 @@ export class PatientTimeline extends React.Component<allProps, IState> {
     this.state = {
       loading: props.loading,
       error: props.error,
-      isProgressNotePopupVisible: false,
       isQuickCallPopupVisible: false,
     };
   }
@@ -88,15 +91,7 @@ export class PatientTimeline extends React.Component<allProps, IState> {
   };
 
   showNewProgressNotePopup = () => {
-    this.setState({
-      isProgressNotePopupVisible: true,
-    });
-  };
-
-  hideNewProgressNotePopup = () => {
-    this.setState({
-      isProgressNotePopupVisible: false,
-    });
+    this.props.openProgressNotePopup(this.props.match.params.patientId);
   };
 
   showNewQuickCallPopup = () => {
@@ -112,7 +107,7 @@ export class PatientTimeline extends React.Component<allProps, IState> {
   };
 
   render() {
-    const { isProgressNotePopupVisible, isQuickCallPopupVisible } = this.state;
+    const { isQuickCallPopupVisible } = this.state;
     const { progressNotes, match } = this.props;
     const patientId = match.params.patientId;
     const progressNotesList = progressNotes || [];
@@ -153,11 +148,6 @@ export class PatientTimeline extends React.Component<allProps, IState> {
         <div className={styles.progressNotesContainer}>
           <div className={styles.progressNotes}>{this.renderProgressNotes(progressNotesList)}</div>
         </div>
-        <ProgressNotePopup
-          patientId={patientId}
-          visible={isProgressNotePopupVisible}
-          close={this.hideNewProgressNotePopup}
-        />
         <QuickCallPopup
           patientId={patientId}
           visible={isQuickCallPopupVisible}
@@ -168,16 +158,25 @@ export class PatientTimeline extends React.Component<allProps, IState> {
   }
 }
 
-export default graphql<IGraphqlProps, IProps, allProps>(progressNotesQuery as any, {
-  options: (props: IProps) => ({
-    variables: {
-      patientId: props.match.params.patientId,
-      completed: true,
-    },
+function mapDispatchToProps(dispatch: Dispatch<() => void>): IDispatchProps {
+  return {
+    openProgressNotePopup: (patientId: string) => dispatch(openProgressNote(patientId)),
+  };
+}
+
+export default compose(
+  connect<{}, IDispatchProps, allProps>(undefined, mapDispatchToProps),
+  graphql<IGraphqlProps, IProps, allProps>(progressNotesQuery as any, {
+    options: (props: IProps) => ({
+      variables: {
+        patientId: props.match.params.patientId,
+        completed: true,
+      },
+    }),
+    props: ({ data }) => ({
+      loading: data ? data.loading : false,
+      error: data ? data.error : null,
+      progressNotes: data ? (data as any).progressNotesForPatient : null,
+    }),
   }),
-  props: ({ data }) => ({
-    loading: data ? data.loading : false,
-    error: data ? data.error : null,
-    progressNotes: data ? (data as any).progressNotesForPatient : null,
-  }),
-})(PatientTimeline);
+)(PatientTimeline);

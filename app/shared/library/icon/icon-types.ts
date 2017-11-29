@@ -4,5 +4,7 @@ export type IconName =
   | 'close'
   | 'event'
   | 'moreVert'
+  | 'expandMore'
+  | 'expandLess'
   | 'expandArrow'
   | 'phone';

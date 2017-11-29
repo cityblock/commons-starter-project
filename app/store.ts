@@ -9,6 +9,7 @@ import { browserReducer, Size } from './reducers/browser-reducer';
 import { eventNotificationsReducer } from './reducers/event-notifications-reducer';
 import { idleReducer } from './reducers/idle-reducer';
 import { localeReducer, Lang } from './reducers/locale-reducer';
+import { popupReducer } from './reducers/popup-reducer';
 
 export interface IState {
   routing: any;
@@ -27,6 +28,10 @@ export interface IState {
   };
   idle: {
     isIdle: boolean;
+  };
+  popup: {
+    progressNoteOpen: boolean;
+    patientId?: string;
   };
 }
 
@@ -50,6 +55,7 @@ export default (history: History) => {
     routing: routerReducer,
     idle: idleReducer,
     eventNotifications: eventNotificationsReducer,
+    popup: popupReducer,
   });
 
   const store = createStore(reducers, composeEnhancers(applyMiddleware(...middleware)));

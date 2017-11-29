@@ -156,6 +156,7 @@ export const ENGLISH_TRANSLATION = {
     'user.editedAt': 'Last edited',
     'user.delete': 'Delete User',
     'progressNote.new': 'New progress note',
+    'progressNote.progressNotes': 'Progress Note',
     'progressNote.selectType': 'Select progress note type:',
     'progressNote.selectTime': 'Select progress note time:',
     'progressNote.selectLocation': 'Select progress note location:',

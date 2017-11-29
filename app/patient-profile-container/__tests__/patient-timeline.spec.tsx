@@ -6,7 +6,7 @@ import { PatientTimeline as Component } from '../patient-timeline';
 const match = { params: { patientId: patient.id } };
 
 it('renders timeline', () => {
-  const component = shallow(<Component match={match} />);
+  const component = shallow(<Component match={match} openProgressNotePopup={jest.fn() as any} />);
   const instance = component.instance() as Component;
   const result = instance.render();
   expect(result).toMatchSnapshot();

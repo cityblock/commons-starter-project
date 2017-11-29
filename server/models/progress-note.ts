@@ -1,6 +1,8 @@
 import { Model, RelationMappings, Transaction } from 'objection';
 import BaseModel from './base-model';
+import Patient from './patient';
 import ProgressNoteTemplate from './progress-note-template';
+import User from './user';
 
 interface IProgressNoteEditableFields {
   patientId: string;
@@ -15,7 +17,7 @@ interface IProgressNoteAutoOpenFields {
   userId: string;
 }
 
-const EAGER_QUERY = '[progressNoteTemplate, user]';
+const EAGER_QUERY = '[progressNoteTemplate, user, patient]';
 
 /* tslint:disable:member-ordering */
 export default class ProgressNote extends BaseModel {
@@ -26,6 +28,8 @@ export default class ProgressNote extends BaseModel {
   location: string;
   startedAt: string;
   completedAt: string;
+  user: User;
+  patient: Patient;
 
   static tableName = 'progress_note';
 
@@ -105,6 +109,20 @@ export default class ProgressNote extends BaseModel {
       .eager(EAGER_QUERY)
       .orderBy('createdAt', 'desc')
       .where({ deletedAt: null, patientId });
+
+    if (completed) {
+      query.whereNotNull('completedAt');
+    } else {
+      query.whereNull('completedAt');
+    }
+    return await query;
+  }
+
+  static async getAllForUser(userId: string, completed: boolean): Promise<ProgressNote[]> {
+    const query = this.query()
+      .eager(EAGER_QUERY)
+      .orderBy('createdAt', 'desc')
+      .where({ deletedAt: null, userId });
 
     if (completed) {
       query.whereNotNull('completedAt');

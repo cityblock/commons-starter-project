@@ -1,0 +1,34 @@
+@import '../../shared/css/sizes';
+
+.container {
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  z-index: 10;
+}
+
+.topBar {
+  background: var(--blue-color);
+  padding: 15px var(--small-gutter);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+}
+
+.text {
+  color: var(--white-color);
+  font-family: var(--basetica-medium);
+  font-size: var(--medium-font-size);
+  margin-right: var(--gutter);
+}
+
+.icon {
+  fill: var(--white-color);
+  height: 27px;
+  width: 27px;
+}
+
+.progressNotes {
+  background: white;
+}

@@ -6,6 +6,7 @@ import { selectLocale } from '../actions/locale-action';
 import * as currentUserQuery from '../graphql/queries/get-current-user.graphql';
 import { FullUserFragment } from '../graphql/types';
 import { IGraphqlProps } from '../manager-container/manager-users';
+import ProgressNoteContainer from '../progress-note-container/progress-note-container';
 import { Lang } from '../reducers/locale-reducer';
 import { IState as IAppState } from '../store';
 import * as styles from './css/auth.css';
@@ -85,22 +86,25 @@ export class AuthenticationContainer extends React.Component<allProps> {
     let header = null;
     let app = null;
     let idle = null;
+    let progressNote = null;
     if (currentUser) {
       header = <Header currentUser={currentUser} />;
       app = <div className={styles.app}>{this.props.children}</div>;
       idle = <IdlePopup idleEnd={this.props.idleEnd} isIdle={isIdle} />;
+      progressNote = <ProgressNoteContainer />;
     }
     return (
       <div>
         {header}
         {app}
+        {progressNote}
         {idle}
       </div>
     );
   }
 }
 
-function mapStateToProps(state: IAppState): IStateProps {
+function mapStateToProps(state: IAppState, ownProps: any): IStateProps {
   return {
     isIdle: state.idle.isIdle,
   };

@@ -1,0 +1,7 @@
+#import "../fragments/full-progress-note.graphql"
+
+query getProgressNotesForCurrentUser($completed: Boolean!) {
+  progressNotesForCurrentUser(completed: $completed) {
+    ...FullProgressNote
+  }
+}

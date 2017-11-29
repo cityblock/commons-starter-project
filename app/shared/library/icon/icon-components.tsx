@@ -3,6 +3,8 @@ import AddAlertIcon = require('react-icons/lib/md/add-alert');
 import AddCircleOutlineIcon = require('react-icons/lib/md/add-circle-outline');
 import CloseIcon = require('react-icons/lib/md/close');
 import EventIcon = require('react-icons/lib/md/event');
+import ExpandLessIcon = require('react-icons/lib/md/expand-less');
+import ExpandMoreIcon = require('react-icons/lib/md/expand-more');
 import ExpandArrowIcon = require('react-icons/lib/md/keyboard-arrow-down');
 import MoreVertIcon = require('react-icons/lib/md/more-vert');
 import PhoneIcon = require('react-icons/lib/md/phone');
@@ -15,6 +17,8 @@ const components = {
   close: CloseIcon,
   event: EventIcon,
   moreVert: MoreVertIcon,
+  expandMore: ExpandMoreIcon,
+  expandLess: ExpandLessIcon,
   expandArrow: ExpandArrowIcon,
   phone: PhoneIcon,
 };

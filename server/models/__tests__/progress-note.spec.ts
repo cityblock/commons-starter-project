@@ -70,6 +70,16 @@ describe('progress note model', () => {
     expect(progressNotes).toEqual([createdNote]);
   });
 
+  it('gets progress notes for a user', async () => {
+    const createdNote = await ProgressNote.create({
+      patientId: patient.id,
+      userId: user.id,
+      progressNoteTemplateId: progressNoteTemplate.id,
+    });
+    const progressNotes = await ProgressNote.getAllForUser(user.id, false);
+    expect(progressNotes).toEqual([createdNote]);
+  });
+
   it('updates a progress note', async () => {
     const progressNote = await ProgressNote.create({
       patientId: patient.id,
@@ -104,10 +114,15 @@ describe('progress note model', () => {
     const completedNote = await ProgressNote.complete(progressNote.id);
     expect(completedNote.completedAt).not.toBeFalsy();
 
-    // fetches completed progress note
-    const fetchedProgressNotes = await ProgressNote.getAllForPatient(patient.id, true);
-    expect(fetchedProgressNotes.length).toEqual(1);
-    expect(fetchedProgressNotes[0].id).toEqual(completedNote.id);
+    // fetches completed progress note by patient
+    const fetchedProgressNotesForPatient = await ProgressNote.getAllForPatient(patient.id, true);
+    expect(fetchedProgressNotesForPatient.length).toEqual(1);
+    expect(fetchedProgressNotesForPatient[0].id).toEqual(completedNote.id);
+
+    // fetches completed progress note by user
+    const fetchedProgressNotesForUser = await ProgressNote.getAllForUser(user.id, true);
+    expect(fetchedProgressNotesForUser.length).toEqual(1);
+    expect(fetchedProgressNotesForUser[0].id).toEqual(completedNote.id);
   });
 
   it('deletes a progress note', async () => {

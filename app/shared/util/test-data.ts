@@ -460,6 +460,7 @@ export const progressNote = {
   deletedAt: null,
   completedAt: null,
   patientId: patient.id,
+  patient,
   user: currentUser,
   progressNoteTemplateId: progressNoteTemplate.id,
   progressNoteTemplate,

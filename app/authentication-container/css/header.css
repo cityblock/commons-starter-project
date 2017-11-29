@@ -2,7 +2,7 @@
 
 .header {
   z-index: 0;
-  height: 60px;
+  height: var(--header-height);
   flex: 0 60px;
   display: flex;
   background: linear-gradient(315deg, #66c5dd 0%, #2962ff 100%);

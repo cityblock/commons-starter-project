@@ -153,6 +153,7 @@ export const SPANISH_TRANSLATION = {
     'notifications.noNotifications': 'Sin Notificaciones',
     'notification.time': 'Hora',
     'progressNote.new': 'Nueva nota de progreso',
+    'progressNote.progressNotes': 'Nota de Progreso',
     'progressNote.selectType': 'Seleccione el tipo de nota de progreso:',
     'progressNote.selectTime': 'Seleccione el tiempo de la nota de progreso:',
     'progressNote.selectLocation': 'Seleccione la ubicación de la nota de progreso:',

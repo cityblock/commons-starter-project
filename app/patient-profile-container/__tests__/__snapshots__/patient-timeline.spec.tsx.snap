@@ -88,11 +88,6 @@ exports[`renders timeline 1`] = `
       </div>
     </div>
   </div>
-  <Apollo(Apollo(Apollo(Apollo(Apollo(Apollo(ProgressNotePopup))))))
-    close={[Function]}
-    patientId="patient-id"
-    visible={false}
-  />
   <Apollo(Apollo(QuickCallPopup))
     close={[Function]}
     patientId="patient-id"

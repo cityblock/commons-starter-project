@@ -20,6 +20,10 @@ interface IResolveProgressNotesForPatientOptions {
   completed: boolean;
 }
 
+interface IResolveProgressNotesForCurrentUserOptions {
+  completed: boolean;
+}
+
 interface ICompleteProgressNoteOptions {
   input: IProgressNoteCompleteInput;
 }
@@ -86,4 +90,15 @@ export async function resolveProgressNotesForPatient(
   await accessControls.isAllowed(userRole, 'view', 'progressNote');
 
   return await ProgressNote.getAllForPatient(args.patientId, args.completed);
+}
+
+export async function resolveProgressNotesForCurrentUser(
+  root: any,
+  args: IResolveProgressNotesForCurrentUserOptions,
+  { db, userRole, userId }: IContext,
+) {
+  await accessControls.isAllowed(userRole, 'view', 'progressNote');
+  checkUserLoggedIn(userId);
+
+  return await ProgressNote.getAllForUser(userId!, args.completed);
 }

@@ -58,7 +58,7 @@ export class ProgressNoteTemplateCreate extends React.Component<allProps, IState
     const fieldValue = event.target.value;
 
     (progressNoteTemplate as any)[fieldName] = fieldValue;
-    this.setState(() => ({ progressNoteTemplate }));
+    this.setState({ progressNoteTemplate });
   }
 
   async onSubmit(event: React.FormEvent<HTMLFormElement>) {

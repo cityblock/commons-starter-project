@@ -79,7 +79,7 @@ class PatientPanelContainer extends React.Component<allProps, IState> {
       });
 
       this.props.updatePageParams(pageNumber);
-      this.setState((state: IState) => ({ pageNumber }));
+      this.setState({ pageNumber });
     }
   }
 
@@ -93,7 +93,7 @@ class PatientPanelContainer extends React.Component<allProps, IState> {
       });
 
       this.props.updatePageParams(pageNumber);
-      this.setState((state: IState) => ({ pageNumber }));
+      this.setState({ pageNumber });
     }
   }
 
@@ -112,7 +112,7 @@ class PatientPanelContainer extends React.Component<allProps, IState> {
     if (nextProps.patientPanel) {
       const { hasNextPage, hasPreviousPage } = nextProps.patientPanel.pageInfo;
 
-      this.setState((state: IState) => ({ hasNextPage, hasPreviousPage }));
+      this.setState({ hasNextPage, hasPreviousPage });
     }
   }
 

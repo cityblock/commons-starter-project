@@ -90,15 +90,15 @@ export class RiskArea extends React.Component<allProps, IState> {
 
     if (riskArea) {
       if (!this.props.riskArea) {
-        this.setState(() => ({
+        this.setState({
           editedTitle: riskArea.title,
           editedOrder: riskArea.order,
-        }));
+        });
       } else if (this.props.riskArea.id !== riskArea.id) {
-        this.setState(() => ({
+        this.setState({
           editedTitle: riskArea.title,
           editedOrder: riskArea.order,
-        }));
+        });
       }
     }
   }
@@ -115,7 +115,7 @@ export class RiskArea extends React.Component<allProps, IState> {
     const { riskAreaId } = this.props;
 
     if (riskAreaId) {
-      this.setState(() => ({ deleteConfirmationInProgress: true }));
+      this.setState({ deleteConfirmationInProgress: true });
     }
   }
 
@@ -124,24 +124,24 @@ export class RiskArea extends React.Component<allProps, IState> {
 
     if (riskAreaId) {
       try {
-        this.setState(() => ({ deleteError: undefined }));
+        this.setState({ deleteError: undefined });
         await onDelete(riskAreaId);
-        this.setState(() => ({ deleteConfirmationInProgress: false }));
+        this.setState({ deleteConfirmationInProgress: false });
       } catch (err) {
-        this.setState(() => ({ deleteError: err.message }));
+        this.setState({ deleteError: err.message });
       }
     }
   }
 
   onCancelDelete() {
-    this.setState(() => ({ deleteError: undefined, deleteConfirmationInProgress: false }));
+    this.setState({ deleteError: undefined, deleteConfirmationInProgress: false });
   }
 
   onChange(event: React.ChangeEvent<HTMLInputElement>) {
     const value = event.currentTarget.value;
     const name = event.currentTarget.name;
 
-    this.setState(() => ({ [name]: value || '' }));
+    this.setState({ [name as any]: value || '' });
   }
 
   async onKeyDown(event: React.KeyboardEvent<HTMLInputElement>) {
@@ -155,19 +155,19 @@ export class RiskArea extends React.Component<allProps, IState> {
 
       if (name === 'editedTitle') {
         try {
-          this.setState(() => ({ editTitleError: undefined }));
+          this.setState({ editTitleError: undefined });
           await editRiskArea({ variables: { riskAreaId, title: editedTitle } });
-          this.setState(() => ({ editTitleError: undefined, editingTitle: false }));
+          this.setState({ editTitleError: undefined, editingTitle: false });
         } catch (err) {
-          this.setState(() => ({ editTitleError: err.message }));
+          this.setState({ editTitleError: err.message });
         }
       } else if (name === 'editedOrder') {
         try {
-          this.setState(() => ({ editOrderError: undefined }));
+          this.setState({ editOrderError: undefined });
           await editRiskArea({ variables: { riskAreaId, order: editedOrder } });
-          this.setState(() => ({ editOrderError: undefined, editingOrder: false }));
+          this.setState({ editOrderError: undefined, editingOrder: false });
         } catch (err) {
-          this.setState(() => ({ editOrderError: err.message }));
+          this.setState({ editOrderError: err.message });
         }
       }
     }
@@ -177,19 +177,19 @@ export class RiskArea extends React.Component<allProps, IState> {
     const name = event.currentTarget.name;
 
     if (name === 'editedTitle') {
-      this.setState(() => ({ editingTitle: false }));
+      this.setState({ editingTitle: false });
     } else if (name === 'editedOrder') {
-      this.setState(() => ({ editingOrder: false }));
+      this.setState({ editingOrder: false });
     }
   }
 
   onClickToEditTitle() {
-    this.setState(() => ({ editingTitle: true }));
+    this.setState({ editingTitle: true });
     setTimeout(() => (this.focusInput(this.editTitleInput), 100));
   }
 
   onClickToEditOrder() {
-    this.setState(() => ({ editingOrder: true }));
+    this.setState({ editingOrder: true });
     setTimeout(() => (this.focusInput(this.editOrderInput), 100));
   }
 

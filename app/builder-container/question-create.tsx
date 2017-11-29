@@ -70,14 +70,14 @@ class QuestionCreate extends React.Component<allProps, IState> {
 
     (question as any)[fieldName] = fieldValue;
 
-    this.setState(() => ({ question }));
+    this.setState({ question });
   }
 
   onChange(event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) {
     const fieldName = event.target.name;
     const fieldValue = event.target.value;
 
-    this.setState(() => ({ [fieldName]: fieldValue }));
+    this.setState({ [fieldName as any]: fieldValue });
 
     this.onFieldUpdate({ fieldName, fieldValue });
   }

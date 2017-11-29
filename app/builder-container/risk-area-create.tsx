@@ -57,14 +57,14 @@ export class RiskAreaCreate extends React.Component<allProps, IState> {
 
     (riskArea as any)[fieldName] = fieldValue;
 
-    this.setState(() => ({ riskArea }));
+    this.setState({ riskArea });
   }
 
   onChange(event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) {
     const fieldName = event.target.name;
     const fieldValue = event.target.value;
 
-    this.setState(() => ({ [fieldName]: fieldValue }));
+    this.setState({ [fieldName as any]: fieldValue });
 
     this.onFieldUpdate({ fieldName, fieldValue });
   }

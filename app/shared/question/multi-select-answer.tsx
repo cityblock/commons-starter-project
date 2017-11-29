@@ -21,7 +21,7 @@ export default class MultiSelectAnswer extends React.Component<IProps, {}> {
     const { editable } = nextProps;
 
     if (!editable) {
-      this.setState(() => ({ selected: false }));
+      this.setState({ selected: false });
     }
   }
 

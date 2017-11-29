@@ -79,7 +79,7 @@ describe('shallow rendered', () => {
   });
 
   it('handles editing', async () => {
-    await instance.setState(() => ({ editedTitle: 'new title' }));
+    await instance.setState({ editedTitle: 'new title' });
     await instance.onKeyDown({
       keyCode: 13,
       currentTarget: {

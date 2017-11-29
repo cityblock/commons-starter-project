@@ -65,38 +65,38 @@ class PatientCarePlanSuggestions extends React.Component<IProps & IGraphqlProps,
     acceptedSuggestion: FullCarePlanSuggestionFragment,
     taskTemplateIds?: string[],
   ) {
-    this.setState(() => ({
+    this.setState({
       acceptModalVisible: true,
       acceptedSuggestion,
       acceptedTaskTemplateIds: taskTemplateIds,
       dismissedSuggestion: undefined,
       dismissModalVisible: false,
-    }));
+    });
   }
 
   onAcceptModalDismiss() {
-    this.setState(() => ({
+    this.setState({
       acceptModalVisible: false,
       acceptedSuggestion: undefined,
       acceptedTaskTemplateIds: undefined,
-    }));
+    });
   }
 
   onDismissSuggestion(dismissedSuggestion: FullCarePlanSuggestionFragment) {
-    this.setState(() => ({
+    this.setState({
       acceptModalVisible: false,
       acceptedSuggestion: undefined,
       acceptedTaskTemplateIds: undefined,
       dismissModalVisible: true,
       dismissedSuggestion,
-    }));
+    });
   }
 
   onDismissModalDismiss() {
-    this.setState(() => ({
+    this.setState({
       dismissModalVisible: false,
       dismissedSuggestion: undefined,
-    }));
+    });
   }
 
   defaultSuggestionsHtml(suggestionType: SuggestionTypes) {

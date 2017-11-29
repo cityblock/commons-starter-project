@@ -61,14 +61,14 @@ export class GoalCreate extends React.Component<allProps, IState> {
 
     (goal as any)[fieldName] = fieldValue;
 
-    this.setState(() => ({ goal }));
+    this.setState({ goal });
   }
 
   onChange(event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) {
     const fieldName = event.target.name;
     const fieldValue = event.target.value;
 
-    this.setState(() => ({ [fieldName]: fieldValue }));
+    this.setState({ [fieldName as any]: fieldValue });
 
     this.onFieldUpdate({ fieldName, fieldValue });
   }

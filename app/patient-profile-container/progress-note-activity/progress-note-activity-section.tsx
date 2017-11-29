@@ -66,7 +66,7 @@ class ProgressNoteActivitySection extends React.Component<IProps, IState> {
   onClick = () => {
     const { expanded } = this.state;
 
-    this.setState(() => ({ expanded: !expanded }));
+    this.setState({ expanded: !expanded });
   };
 
   renderSectionChild = () => {

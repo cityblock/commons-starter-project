@@ -73,16 +73,16 @@ export class TaskComments extends React.Component<allProps, IState> {
 
     if (taskCommentsResponse && taskCommentsResponse.edges) {
       const edges = taskCommentsResponse.edges;
-      this.setState(() => ({
+      this.setState({
         comments: edges.map((edge: any) => edge.node),
-      }));
+      });
     }
   }
 
   onCommentBodyChange(event: React.ChangeEvent<HTMLTextAreaElement>) {
     const value = event.target.value;
 
-    this.setState(() => ({ commentBody: value || '' }));
+    this.setState({ commentBody: value || '' });
   }
 
   async onCommentEdit(editedComment: taskCommentEditMutationVariables) {
@@ -134,13 +134,13 @@ export class TaskComments extends React.Component<allProps, IState> {
 
       if (taskId && commentBody) {
         try {
-          this.setState(() => ({ createCommentError: undefined }));
+          this.setState({ createCommentError: undefined });
           await createComment({ variables: { taskId, body: commentBody } });
-          this.setState(() => ({ commentBody: '' }));
+          this.setState({ commentBody: '' });
 
           refetchTaskComments();
         } catch (err) {
-          this.setState(() => ({ createCommentError: err.message }));
+          this.setState({ createCommentError: err.message });
         }
       }
     }

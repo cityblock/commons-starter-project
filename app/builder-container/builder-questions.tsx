@@ -70,7 +70,9 @@ interface IDispatchProps {
 type allProps = IProps & IGraphqlProps & IDispatchProps & IStateProps;
 
 interface IState {
-  showCreateQuestion: false;
+  showCreateQuestion: boolean;
+  loading?: boolean;
+  error?: string;
 }
 
 class BuilderQuestions extends React.Component<allProps, IState> {
@@ -106,7 +108,7 @@ class BuilderQuestions extends React.Component<allProps, IState> {
     }
 
     if (questionsRefetch) {
-      this.setState(() => ({ loading, error }));
+      this.setState({ loading, error });
       if (riskAreaId && riskAreaId !== this.props.riskAreaId) {
         questionsRefetch({ riskAreaId });
       }
@@ -135,11 +137,11 @@ class BuilderQuestions extends React.Component<allProps, IState> {
   }
 
   showCreateQuestion() {
-    this.setState(() => ({ showCreateQuestion: true }));
+    this.setState({ showCreateQuestion: true });
   }
 
   hideCreateQuestion(question?: FullQuestionFragment) {
-    this.setState(() => ({ showCreateQuestion: false }));
+    this.setState({ showCreateQuestion: false });
   }
 
   renderQuestions(questions: FullQuestionFragment[]) {

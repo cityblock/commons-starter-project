@@ -48,7 +48,7 @@ type IState = IPatientDemographicsState &
     saveLoading?: boolean;
     saveError?: boolean;
     saveSuccess?: boolean;
-    clearSaveSuccessTimeout?: number;
+    clearSaveSuccessTimeout?: any; // Should be Timer
   };
 
 type allProps = IProps & IGraphqlProps;
@@ -95,7 +95,7 @@ export class PatientInfo extends React.Component<allProps, IState> {
     if (patient) {
       const { dateOfBirth } = patient;
 
-      this.setState(() => ({
+      this.setState({
         firstName: patient.firstName || '',
         middleName: patient.middleName || '',
         lastName: patient.lastName || '',
@@ -114,7 +114,7 @@ export class PatientInfo extends React.Component<allProps, IState> {
         expirationDate: '',
         consentToText: patient.consentToText ? patient.consentToText.toString() : 'false',
         consentToCall: patient.consentToCall ? patient.consentToCall.toString() : 'false',
-      }));
+      });
     }
   }
 
@@ -127,17 +127,17 @@ export class PatientInfo extends React.Component<allProps, IState> {
   clearSaveSuccess() {
     const { clearSaveSuccessTimeout } = this.state;
 
-    const resetSaveSuccess = () => this.setState(() => ({ saveSuccess: false }));
+    const resetSaveSuccess = () => this.setState({ saveSuccess: false });
 
     if (clearSaveSuccessTimeout) {
       clearTimeout(clearSaveSuccessTimeout);
     }
 
-    this.setState(() => ({
+    this.setState({
       /* tslint:disable:no-string-based-set-timeout */
       clearSaveSuccessTimeout: setTimeout(resetSaveSuccess, SAVE_SUCCESS_TIMEOUT_MILLISECONDS),
       /* tslint:enable:no-string-based-set-timeout */
-    }));
+    });
   }
 
   async onClickSave() {
@@ -156,7 +156,7 @@ export class PatientInfo extends React.Component<allProps, IState> {
     } = this.state;
     const patientId = match.params.patientId;
     if (!loading && !error && !saveLoading) {
-      this.setState(() => ({ saveSuccess: false, saveLoading: true, saveError: undefined }));
+      this.setState({ saveSuccess: false, saveLoading: true, saveError: undefined });
       try {
         // TODO: Make this less annoying
         await updatePatientInfo({
@@ -173,13 +173,13 @@ export class PatientInfo extends React.Component<allProps, IState> {
             consentToText: consentToText === 'true',
           },
         });
-        this.setState(() => ({ saveSuccess: true }));
+        this.setState({ saveSuccess: true });
         this.clearSaveSuccess();
       } catch (err) {
-        this.setState(() => ({ saveError: err.message }));
+        this.setState({ saveError: err.message });
       }
 
-      this.setState(() => ({ saveLoading: false }));
+      this.setState({ saveLoading: false });
     }
   }
 

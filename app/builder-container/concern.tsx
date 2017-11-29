@@ -81,9 +81,9 @@ export class Concern extends React.Component<allProps, IState> {
 
     if (concern) {
       if (!this.props.concern) {
-        this.setState(() => ({ editedTitle: concern.title }));
+        this.setState({ editedTitle: concern.title });
       } else if (this.props.concern.id !== concern.id) {
-        this.setState(() => ({ editedTitle: concern.title }));
+        this.setState({ editedTitle: concern.title });
       }
     }
   }
@@ -100,7 +100,7 @@ export class Concern extends React.Component<allProps, IState> {
     const { concernId } = this.props;
 
     if (concernId) {
-      this.setState(() => ({ deleteConfirmationInProgress: true }));
+      this.setState({ deleteConfirmationInProgress: true });
     }
   }
 
@@ -109,24 +109,24 @@ export class Concern extends React.Component<allProps, IState> {
 
     if (concernId) {
       try {
-        this.setState(() => ({ deleteError: undefined }));
+        this.setState({ deleteError: undefined });
         await onDelete(concernId);
-        this.setState(() => ({ deleteConfirmationInProgress: false }));
+        this.setState({ deleteConfirmationInProgress: false });
       } catch (err) {
-        this.setState(() => ({ deleteError: err.message }));
+        this.setState({ deleteError: err.message });
       }
     }
   }
 
   onCancelDelete() {
-    this.setState(() => ({ deleteError: undefined, deleteConfirmationInProgress: false }));
+    this.setState({ deleteError: undefined, deleteConfirmationInProgress: false });
   }
 
   onChange(event: React.ChangeEvent<HTMLInputElement>) {
     const value = event.currentTarget.value;
     const name = event.currentTarget.name;
 
-    this.setState(() => ({ [name]: value || '' }));
+    this.setState({ [name as any]: value || '' });
   }
 
   async onKeyDown(event: React.KeyboardEvent<HTMLInputElement>) {
@@ -140,11 +140,11 @@ export class Concern extends React.Component<allProps, IState> {
 
       if (name === 'editedTitle') {
         try {
-          this.setState(() => ({ editTitleError: undefined }));
+          this.setState({ editTitleError: undefined });
           await editConcern({ variables: { concernId, title: editedTitle } });
-          this.setState(() => ({ editTitleError: undefined, editingTitle: false }));
+          this.setState({ editTitleError: undefined, editingTitle: false });
         } catch (err) {
-          this.setState(() => ({ editTitleError: err.message }));
+          this.setState({ editTitleError: err.message });
         }
       }
     }
@@ -154,12 +154,12 @@ export class Concern extends React.Component<allProps, IState> {
     const name = event.currentTarget.name;
 
     if (name === 'editedTitle') {
-      this.setState(() => ({ editingTitle: false }));
+      this.setState({ editingTitle: false });
     }
   }
 
   onClickToEditTitle() {
-    this.setState(() => ({ editingTitle: true }));
+    this.setState({ editingTitle: true });
     setTimeout(() => (this.focusInput(this.editTitleInput), 100));
   }
 

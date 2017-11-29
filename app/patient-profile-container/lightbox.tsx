@@ -12,6 +12,7 @@ interface IProps {
 
 interface IState {
   selectedImageIndex: number;
+  imagesLength?: number;
 }
 
 export default class Lightbox extends React.Component<IProps, IState> {
@@ -41,7 +42,7 @@ export default class Lightbox extends React.Component<IProps, IState> {
       document.addEventListener('keydown', this.onKeyDown as any);
 
       const selectedImageIndex = this.getOpeningImageIndex(openingImage, images);
-      this.setState(() => ({ imagesLength: images.length, selectedImageIndex }));
+      this.setState({ imagesLength: images.length, selectedImageIndex });
     } else {
       document.removeEventListener('keydown', this.onKeyDown as any);
     }
@@ -61,7 +62,7 @@ export default class Lightbox extends React.Component<IProps, IState> {
     const { selectedImageIndex } = this.state;
 
     if (selectedImageIndex > 0) {
-      this.setState(() => ({ selectedImageIndex: selectedImageIndex - 1 }));
+      this.setState({ selectedImageIndex: selectedImageIndex - 1 });
     }
   }
 
@@ -71,7 +72,7 @@ export default class Lightbox extends React.Component<IProps, IState> {
     const imagesLength = images.length;
 
     if (selectedImageIndex < imagesLength - 1) {
-      this.setState(() => ({ selectedImageIndex: selectedImageIndex + 1 }));
+      this.setState({ selectedImageIndex: selectedImageIndex + 1 });
     }
   }
 

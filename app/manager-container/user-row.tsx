@@ -33,18 +33,18 @@ class UserRow extends React.Component<IProps, IState> {
   }
 
   onCloseClick() {
-    this.setState(() => ({ popupVisible: false }));
+    this.setState({ popupVisible: false });
   }
 
   onOpenClick() {
-    this.setState(() => ({ popupVisible: true }));
+    this.setState({ popupVisible: true });
   }
 
   onConfirmClick() {
     const { user } = this.props;
     if (user.email) {
       this.props.deleteUser(user.email);
-      this.setState(() => ({ popupVisible: true }));
+      this.setState({ popupVisible: true });
     }
   }
 

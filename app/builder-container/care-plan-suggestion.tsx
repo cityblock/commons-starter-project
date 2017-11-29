@@ -61,7 +61,7 @@ class CarePlanSuggestion extends React.Component<allProps, IState> {
       deleteGoalSuggestion,
     } = this.props;
 
-    this.setState(() => ({ loading: true, error: undefined }));
+    this.setState({ loading: true, error: undefined });
 
     try {
       if (suggestionType === 'concern') {
@@ -78,9 +78,9 @@ class CarePlanSuggestion extends React.Component<allProps, IState> {
         });
       }
 
-      this.setState(() => ({ loading: false, error: undefined }));
+      this.setState({ loading: false, error: undefined });
     } catch (err) {
-      this.setState(() => ({ loading: false, error: err.message }));
+      this.setState({ loading: false, error: err.message });
     }
   }
 

@@ -48,7 +48,9 @@ interface IGraphqlProps {
 }
 
 interface IState {
-  showCreateProgressNoteTemplate: false;
+  showCreateProgressNoteTemplate: boolean;
+  loading?: boolean;
+  error?: string;
 }
 
 type allProps = IProps & IStateProps & IDispatchProps & IGraphqlProps;
@@ -65,20 +67,21 @@ class BuilderProgressNoteTemplates extends React.Component<allProps, IState> {
 
     this.state = {
       showCreateProgressNoteTemplate: false,
+      loading: false,
     };
   }
 
   componentWillReceiveProps(nextProps: allProps) {
     const { loading, error } = nextProps;
-    this.setState(() => ({ loading, error }));
+    this.setState({ loading, error });
   }
 
   showCreateProgressNoteTemplate() {
-    this.setState(() => ({ showCreateProgressNoteTemplate: true }));
+    this.setState({ showCreateProgressNoteTemplate: true });
   }
 
   hideCreateProgressNoteTemplate() {
-    this.setState(() => ({ showCreateProgressNoteTemplate: false }));
+    this.setState({ showCreateProgressNoteTemplate: false });
   }
 
   renderProgressNoteTemplates(progressNoteTemplates: FullProgressNoteTemplateFragment[]) {

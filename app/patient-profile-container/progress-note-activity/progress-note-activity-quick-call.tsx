@@ -23,7 +23,7 @@ class ProgressNoteActivityQuickCall extends React.Component<IProps, IState> {
   onClick = () => {
     const { summaryExpanded } = this.state;
 
-    this.setState(() => ({ summaryExpanded: !summaryExpanded }));
+    this.setState({ summaryExpanded: !summaryExpanded });
   };
 
   getLabel() {

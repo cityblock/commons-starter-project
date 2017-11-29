@@ -73,7 +73,7 @@ class PopupPatientCarePlanSuggestionAccepted extends React.Component<allProps, I
       return null;
     }
 
-    this.setState(() => ({ loading: true }));
+    this.setState({ loading: true });
 
     acceptCarePlanSuggestionVariables.carePlanSuggestionId = suggestion!.id;
     acceptCarePlanSuggestionVariables.startedAt = startedAt;
@@ -106,23 +106,23 @@ class PopupPatientCarePlanSuggestionAccepted extends React.Component<allProps, I
       await acceptCarePlanSuggestion({
         variables: acceptCarePlanSuggestionVariables as carePlanSuggestionAcceptMutationVariables,
       });
-      this.setState(() => ({ loading: false, error: undefined }));
+      this.setState({ loading: false, error: undefined });
       this.onDismiss();
     } catch (err) {
-      this.setState(() => ({ loading: false, error: err.message }));
+      this.setState({ loading: false, error: err.message });
     }
   }
 
   onDismiss() {
     const { onDismiss } = this.props;
 
-    this.setState(() => ({
+    this.setState({
       concernType: '',
       concernId: '',
       newConcernTitle: '',
       loading: false,
       error: undefined,
-    }));
+    });
 
     onDismiss();
   }
@@ -130,7 +130,7 @@ class PopupPatientCarePlanSuggestionAccepted extends React.Component<allProps, I
   onChange(event: React.ChangeEvent<HTMLSelectElement | HTMLInputElement>) {
     const fieldValue = event.currentTarget.value;
     const fieldName = event.currentTarget.name;
-    this.setState(() => ({ [fieldName]: fieldValue }));
+    this.setState({ [fieldName as any]: fieldValue });
   }
 
   render() {

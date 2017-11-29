@@ -78,14 +78,14 @@ class TaskCreate extends React.Component<allProps, IState> {
 
     (task as any)[fieldName] = fieldValue;
 
-    this.setState(() => ({ task }));
+    this.setState({ task });
   }
 
   onChange(event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) {
     const fieldName = event.target.name;
     const fieldValue = event.target.value;
 
-    this.setState(() => ({ [fieldName]: fieldValue }));
+    this.setState({ [fieldName as any]: fieldValue });
 
     this.onFieldUpdate({ fieldName, fieldValue });
   }

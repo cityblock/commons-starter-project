@@ -95,15 +95,15 @@ export class Question extends React.Component<allProps, IState> {
 
     if (question) {
       if (!this.props.question) {
-        this.setState(() => ({
+        this.setState({
           editedTitle: question.title,
           editedOrder: question.order,
-        }));
+        });
       } else if (this.props.question.id !== question.id) {
-        this.setState(() => ({
+        this.setState({
           editedTitle: question.title,
           editedOrder: question.order,
-        }));
+        });
       }
     }
   }
@@ -120,7 +120,7 @@ export class Question extends React.Component<allProps, IState> {
     const { questionId } = this.props;
 
     if (questionId) {
-      this.setState(() => ({ deleteConfirmationInProgress: true }));
+      this.setState({ deleteConfirmationInProgress: true });
     }
   }
 
@@ -129,24 +129,24 @@ export class Question extends React.Component<allProps, IState> {
 
     if (questionId) {
       try {
-        this.setState(() => ({ deleteError: undefined }));
+        this.setState({ deleteError: undefined });
         await onDelete(questionId);
-        this.setState(() => ({ deleteConfirmationInProgress: false }));
+        this.setState({ deleteConfirmationInProgress: false });
       } catch (err) {
-        this.setState(() => ({ deleteError: err.message }));
+        this.setState({ deleteError: err.message });
       }
     }
   }
 
   onCancelDelete() {
-    this.setState(() => ({ deleteError: undefined, deleteConfirmationInProgress: false }));
+    this.setState({ deleteError: undefined, deleteConfirmationInProgress: false });
   }
 
   onChange(event: React.ChangeEvent<HTMLInputElement>) {
     const value = event.currentTarget.value;
     const name = event.currentTarget.name;
 
-    this.setState(() => ({ [name]: value || '' }));
+    this.setState({ [name as any]: value || '' });
   }
 
   async onSelectChange(event: React.ChangeEvent<HTMLSelectElement>) {
@@ -161,7 +161,7 @@ export class Question extends React.Component<allProps, IState> {
     const name = event.currentTarget.name;
     const variables = { questionId, [name]: value };
 
-    this.setState(() => ({ [name]: value || '' }));
+    this.setState({ [name as any]: value || '' });
 
     await editQuestion({ variables });
   }
@@ -177,19 +177,19 @@ export class Question extends React.Component<allProps, IState> {
 
       if (name === 'editedTitle') {
         try {
-          this.setState(() => ({ editTitleError: undefined }));
+          this.setState({ editTitleError: undefined });
           await editQuestion({ variables: { questionId, title: editedTitle } });
-          this.setState(() => ({ editTitleError: undefined, editingTitle: false }));
+          this.setState({ editTitleError: undefined, editingTitle: false });
         } catch (err) {
-          this.setState(() => ({ editTitleError: err.message }));
+          this.setState({ editTitleError: err.message });
         }
       } else if (name === 'editedOrder') {
         try {
-          this.setState(() => ({ editOrderError: undefined }));
+          this.setState({ editOrderError: undefined });
           await editQuestion({ variables: { questionId, order: editedOrder } });
-          this.setState(() => ({ editOrderError: undefined, editingOrder: false }));
+          this.setState({ editOrderError: undefined, editingOrder: false });
         } catch (err) {
-          this.setState(() => ({ editOrderError: err.message }));
+          this.setState({ editOrderError: err.message });
         }
       }
     }
@@ -199,19 +199,19 @@ export class Question extends React.Component<allProps, IState> {
     const name = event.currentTarget.name;
 
     if (name === 'editedTitle') {
-      this.setState(() => ({ editingTitle: false }));
+      this.setState({ editingTitle: false });
     } else if (name === 'editedOrder') {
-      this.setState(() => ({ editingOrder: false }));
+      this.setState({ editingOrder: false });
     }
   }
 
   onClickToEditTitle() {
-    this.setState(() => ({ editingTitle: true }));
+    this.setState({ editingTitle: true });
     setTimeout(() => (this.focusInput(this.editTitleInput), 100));
   }
 
   onClickToEditOrder() {
-    this.setState(() => ({ editingOrder: true }));
+    this.setState({ editingOrder: true });
     setTimeout(() => (this.focusInput(this.editOrderInput), 100));
   }
 

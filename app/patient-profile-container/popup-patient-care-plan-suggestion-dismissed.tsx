@@ -50,7 +50,7 @@ class PopupPatientCarePlanSuggestionDismissed extends React.Component<allProps, 
     const { dismissedReason } = this.state;
 
     if (suggestion && dismissedReason.length) {
-      this.setState(() => ({ loading: true }));
+      this.setState({ loading: true });
 
       try {
         await dismissCarePlanSuggestion({
@@ -60,11 +60,11 @@ class PopupPatientCarePlanSuggestionDismissed extends React.Component<allProps, 
           },
         });
 
-        this.setState(() => ({ loading: false, error: undefined }));
+        this.setState({ loading: false, error: undefined });
 
         this.onDismiss();
       } catch (err) {
-        this.setState(() => ({ loading: false, error: err.message }));
+        this.setState({ loading: false, error: err.message });
       }
     }
   }
@@ -72,11 +72,11 @@ class PopupPatientCarePlanSuggestionDismissed extends React.Component<allProps, 
   onDismiss() {
     const { onDismiss } = this.props;
 
-    this.setState(() => ({
+    this.setState({
       loading: false,
       error: undefined,
       dismissedReason: '',
-    }));
+    });
 
     onDismiss();
   }
@@ -84,7 +84,7 @@ class PopupPatientCarePlanSuggestionDismissed extends React.Component<allProps, 
   onChange(event: React.ChangeEvent<HTMLSelectElement>) {
     const fieldValue = event.currentTarget.value;
     const fieldName = event.currentTarget.name;
-    this.setState(() => ({ [fieldName]: fieldValue }));
+    this.setState({ [fieldName as any]: fieldValue });
   }
 
   render() {

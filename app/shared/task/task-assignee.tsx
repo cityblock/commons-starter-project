@@ -47,13 +47,13 @@ export class TaskAssignee extends React.Component<allProps, IState> {
     const { taskId, editTask } = this.props;
 
     if (!this.state.loading) {
-      this.setState(() => ({ loading: true, changeAssigneeError: '' }));
+      this.setState({ loading: true, changeAssigneeError: '' });
 
       try {
         await editTask({ variables: { assignedToId: careTeamMemberId, taskId } });
-        this.setState(() => ({ loading: false }));
+        this.setState({ loading: false });
       } catch (err) {
-        this.setState(() => ({ loading: false, changeAssigneeError: err.message }));
+        this.setState({ loading: false, changeAssigneeError: err.message });
       }
     }
   };

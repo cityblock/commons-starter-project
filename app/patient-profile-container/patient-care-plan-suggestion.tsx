@@ -51,7 +51,7 @@ export default class PatientCarePlanSuggestion extends React.Component<IProps, I
       selectedTaskTemplateIds.push(taskTemplateId);
     }
 
-    this.setState(() => ({ selectedTaskTemplateIds }));
+    this.setState({ selectedTaskTemplateIds });
   }
 
   onAccept() {

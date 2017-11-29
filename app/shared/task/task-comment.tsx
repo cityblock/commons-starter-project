@@ -64,7 +64,7 @@ export class TaskComment extends React.Component<allProps, IState> {
 
   componentDidMount() {
     const textHeight = this.getTextHeight();
-    this.setState(() => ({ textHeight }));
+    this.setState({ textHeight });
   }
 
   componentDidUpdate() {
@@ -90,12 +90,12 @@ export class TaskComment extends React.Component<allProps, IState> {
   }
 
   onBlur() {
-    this.setState(() => ({ editing: false }));
+    this.setState({ editing: false });
   }
 
   onClick() {
     if (this.isEditable()) {
-      this.setState(() => ({ editing: true }));
+      this.setState({ editing: true });
 
       setTimeout(this.focusEditInput, 100);
     }
@@ -104,7 +104,7 @@ export class TaskComment extends React.Component<allProps, IState> {
   onChange(event: React.ChangeEvent<HTMLTextAreaElement>) {
     const value = event.target.value;
 
-    this.setState(() => ({ editedCommentBody: value || '' }));
+    this.setState({ editedCommentBody: value || '' });
   }
 
   async onKeyDown(event: React.KeyboardEvent<HTMLTextAreaElement>) {
@@ -118,13 +118,13 @@ export class TaskComment extends React.Component<allProps, IState> {
       const { editedCommentBody } = this.state;
 
       try {
-        this.setState(() => ({ editError: undefined }));
+        this.setState({ editError: undefined });
 
         await onEdit({ taskCommentId: comment.id, body: editedCommentBody });
 
-        this.setState(() => ({ editError: undefined, editing: false }));
+        this.setState({ editError: undefined, editing: false });
       } catch (err) {
-        this.setState(() => ({ editError: err.message }));
+        this.setState({ editError: err.message });
       }
     }
   }

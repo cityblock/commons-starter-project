@@ -52,14 +52,14 @@ export default class PatientInsuranceForm extends React.Component<IProps, IState
   componentWillReceiveProps(nextProps: IProps) {
     const { fields } = nextProps;
 
-    this.setState(() => ({
+    this.setState({
       insuranceType: fields.insuranceType,
       patientRelationshipToPolicyHolder: fields.patientRelationshipToPolicyHolder,
       memberId: fields.memberId,
       policyGroupNumber: fields.policyGroupNumber,
       issueDate: fields.issueDate,
       expirationDate: fields.expirationDate,
-    }));
+    });
   }
 
   onChange(event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) {
@@ -68,7 +68,7 @@ export default class PatientInsuranceForm extends React.Component<IProps, IState
     const fieldName = event.target.name;
     const fieldValue = event.target.value;
 
-    this.setState(() => ({ [fieldName]: fieldValue }));
+    this.setState({ [fieldName as any]: fieldValue });
 
     onFieldUpdate({ fieldName, fieldValue });
   }

@@ -48,7 +48,9 @@ interface IDispatchProps {
 type allProps = IProps & IGraphqlProps & IDispatchProps & IStateProps;
 
 interface IState {
-  showCreateRiskArea: false;
+  showCreateRiskArea: boolean;
+  loading?: boolean;
+  error?: string;
 }
 
 const ROUTE_BASE = '/builder/domains';
@@ -71,15 +73,15 @@ class AdminRiskAreas extends React.Component<allProps, IState> {
   componentWillReceiveProps(nextProps: allProps) {
     const { loading, error } = nextProps;
 
-    this.setState(() => ({ loading, error }));
+    this.setState({ loading, error });
   }
 
   showCreateRiskArea() {
-    this.setState(() => ({ showCreateRiskArea: true }));
+    this.setState({ showCreateRiskArea: true });
   }
 
   hideCreateRiskArea(riskArea?: FullRiskAreaFragment) {
-    this.setState(() => ({ showCreateRiskArea: false }));
+    this.setState({ showCreateRiskArea: false });
   }
 
   renderRiskAreas(riskAreas: FullRiskAreaFragment[]) {

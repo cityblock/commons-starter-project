@@ -37,7 +37,7 @@ class ProgressNoteActivityPatientAnswerGroup extends React.Component<IProps, ISt
   onClick = () => {
     const { answersExpanded } = this.state;
 
-    this.setState(() => ({ answersExpanded: !answersExpanded }));
+    this.setState({ answersExpanded: !answersExpanded });
   };
 
   renderPatientAnswerEvents = () => {

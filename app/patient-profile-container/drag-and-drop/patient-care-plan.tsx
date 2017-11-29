@@ -66,18 +66,16 @@ export class DnDPatientCarePlan extends React.Component<allProps, IState> {
       .sort((a, b) => a.order - b.order);
 
     if (!isEqual(this.state.activeConcerns, activeConcerns)) {
-      this.setState(() => ({ activeConcerns }));
+      this.setState({ activeConcerns });
     }
 
     if (!isEqual(this.state.inactiveConcerns, inactiveConcerns)) {
-      this.setState(() => ({ inactiveConcerns }));
+      this.setState({ inactiveConcerns });
     }
   }
 
   onDragStart = (): void => {
-    this.setState(() => ({
-      isDragging: true,
-    }));
+    this.setState({ isDragging: true });
   };
 
   onDragEnd = (result: DropResult): void => {
@@ -92,7 +90,7 @@ export class DnDPatientCarePlan extends React.Component<allProps, IState> {
       this.moveBetweenConcernLists(result);
     }
 
-    this.setState(() => ({ isDragging: false }));
+    this.setState({ isDragging: false });
   };
 
   reorderConcernList(result: DropResult): void {
@@ -111,7 +109,7 @@ export class DnDPatientCarePlan extends React.Component<allProps, IState> {
     );
 
     this.updateConcernOrder(orderDiffs);
-
+    // TODO: Remove functional set state here
     this.setState(() => ({ [endList]: updatedConcerns }));
   }
 
@@ -144,6 +142,7 @@ export class DnDPatientCarePlan extends React.Component<allProps, IState> {
 
     this.updateConcernOrder(orderDiffs);
 
+    // TODO: Remove functional set state here
     this.setState(() => ({
       [startList]: updatedStartList,
       [endList]: updatedEndList,
@@ -154,13 +153,13 @@ export class DnDPatientCarePlan extends React.Component<allProps, IState> {
     const { patientConcernBulkEdit, patientId } = this.props;
 
     if (!this.state.loading) {
-      this.setState(() => ({ loading: true, reorderError: '' }));
+      this.setState({ loading: true, reorderError: '' });
 
       try {
         await patientConcernBulkEdit({ variables: { patientConcerns: orderDiffs, patientId } });
-        this.setState(() => ({ loading: false }));
+        this.setState({ loading: false });
       } catch (err) {
-        this.setState(() => ({ loading: false, reorderError: err.message }));
+        this.setState({ loading: false, reorderError: err.message });
       }
     }
   }

@@ -49,7 +49,7 @@ export class PatientTimeline extends React.Component<allProps, IState> {
   componentWillReceiveProps(nextProps: allProps) {
     const { loading, error } = nextProps;
 
-    this.setState(() => ({ loading, error }));
+    this.setState({ loading, error });
   }
 
   renderProgressNotes = (

@@ -111,13 +111,13 @@ class RiskAreaSummary extends React.Component<IProps & IGraphqlProps, {}> {
     const { scoreError, reloadScore, patientId, riskArea } = this.props;
 
     if (!!scoreError && reloadScore) {
-      this.setState(() => ({ scoreLoading: true, scoreError: undefined }));
+      this.setState({ scoreLoading: true, scoreError: undefined });
 
       try {
         await reloadScore({ patientId, riskAreaId: riskArea.id });
-        this.setState(() => ({ scoreLoading: false, scoreError: undefined }));
+        this.setState({ scoreLoading: false, scoreError: undefined });
       } catch (err) {
-        this.setState(() => ({ scoreLoading: false, scoreError: err.message }));
+        this.setState({ scoreLoading: false, scoreError: err.message });
       }
     }
   }
@@ -126,13 +126,13 @@ class RiskAreaSummary extends React.Component<IProps & IGraphqlProps, {}> {
     const { summaryError, reloadSummary, patientId, riskArea } = this.props;
 
     if (!!summaryError && reloadSummary) {
-      this.setState(() => ({ summaryLoading: true, summaryError: undefined }));
+      this.setState({ summaryLoading: true, summaryError: undefined });
 
       try {
         await reloadSummary({ patientId, riskAreaId: riskArea.id });
-        this.setState(() => ({ summaryLoading: false, summaryError: undefined }));
+        this.setState({ summaryLoading: false, summaryError: undefined });
       } catch (err) {
-        this.setState(() => ({ summaryLoading: false, summaryError: err.message }));
+        this.setState({ summaryLoading: false, summaryError: err.message });
       }
     }
   }

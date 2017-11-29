@@ -38,8 +38,9 @@ interface IGraphqlProps {
   ) => { data: goalSuggestionCreateMutation };
 }
 
+type SuggestionType = 'concern' | 'goal';
 interface IState {
-  suggestionType?: 'concern' | 'goal';
+  suggestionType?: SuggestionType;
   suggestionId?: string;
   loading: boolean;
   error?: string;
@@ -63,12 +64,12 @@ export class CarePlanSuggestionCreate extends React.Component<allProps, IState> 
 
   onUpdateSuggestionType(event: React.ChangeEvent<HTMLSelectElement>) {
     const value = event.currentTarget.value;
-    this.setState(() => ({ suggestionType: value }));
+    this.setState({ suggestionType: value as SuggestionType });
   }
 
   onChange(event: React.ChangeEvent<HTMLSelectElement>) {
     const value = event.currentTarget.value;
-    this.setState(() => ({ suggestionId: value }));
+    this.setState({ suggestionId: value });
   }
 
   async onClick(event: React.MouseEvent<HTMLInputElement>) {
@@ -82,7 +83,7 @@ export class CarePlanSuggestionCreate extends React.Component<allProps, IState> 
       screeningToolScoreRange,
     } = this.props;
 
-    this.setState(() => ({ loading: true, error: undefined }));
+    this.setState({ loading: true, error: undefined });
 
     try {
       if (suggestionType === 'concern' && suggestionId && createConcernSuggestion) {
@@ -106,14 +107,14 @@ export class CarePlanSuggestionCreate extends React.Component<allProps, IState> 
           },
         });
       }
-      this.setState(() => ({
+      this.setState({
         loading: false,
         error: undefined,
         suggestionType: undefined,
         suggestionId: undefined,
-      }));
+      });
     } catch (err) {
-      this.setState(() => ({ loading: false, error: err.message }));
+      this.setState({ loading: false, error: err.message });
     }
   }
 

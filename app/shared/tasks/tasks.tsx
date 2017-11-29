@@ -53,7 +53,9 @@ interface IDispatchProps {
 
 interface IState {
   orderBy: OrderByOptions;
-  showCreateTask: false;
+  showCreateTask: boolean;
+  loading?: boolean;
+  error?: string;
 }
 
 type allProps = IProps & IDispatchProps & IGraphqlProps;
@@ -89,15 +91,15 @@ class Tasks extends React.Component<allProps, IState> {
   componentWillReceiveProps(nextProps: IProps) {
     const { loading, error } = nextProps;
 
-    this.setState(() => ({ loading, error }));
+    this.setState({ loading, error });
   }
 
   showCreateTask() {
-    this.setState(() => ({ showCreateTask: true }));
+    this.setState({ showCreateTask: true });
   }
 
   hideCreateTask() {
-    this.setState(() => ({ showCreateTask: false }));
+    this.setState({ showCreateTask: false });
   }
 
   renderTasks(tasks: FullTaskFragment[]) {

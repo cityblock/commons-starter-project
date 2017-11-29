@@ -48,13 +48,13 @@ class EditableMultilineText extends React.Component<IProps, IState> {
   }
 
   onClick = (): void => {
-    this.setState(() => ({ editMode: true }));
+    this.setState({ editMode: true });
     setTimeout(() => this.focusInput(this.editText), FOCUS_TIMEOUT);
   };
 
   onChange = (e: React.ChangeEvent<HTMLTextAreaElement>): void => {
     const editedText = e.currentTarget.value;
-    this.setState(() => ({ editedText }));
+    this.setState({ editedText });
   };
 
   onKeyDown = async (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
@@ -64,9 +64,9 @@ class EditableMultilineText extends React.Component<IProps, IState> {
 
       try {
         await this.props.onEnterPress(this.state.editedText);
-        this.setState(() => ({ editMode: false, error: '' }));
+        this.setState({ editMode: false, error: '' });
       } catch (err) {
-        this.setState(() => ({ error: err.message }));
+        this.setState({ error: err.message });
       }
     }
   };
@@ -76,7 +76,7 @@ class EditableMultilineText extends React.Component<IProps, IState> {
   };
 
   onBlur = (e: React.FocusEvent<HTMLTextAreaElement>): void => {
-    this.setState(() => ({ editMode: false, editedText: this.props.text }));
+    this.setState({ editMode: false, editedText: this.props.text });
   };
 
   render(): JSX.Element {

@@ -66,11 +66,11 @@ class PatientScratchPad extends React.Component<allProps, IState> {
     const { loading, error } = nextProps;
 
     if (!scratchPad) {
-      this.setState(() => ({
+      this.setState({
         loading,
         error,
         scratchPad: this.getScratchPadTextFromProps(nextProps),
-      }));
+      });
     }
   }
 
@@ -87,7 +87,7 @@ class PatientScratchPad extends React.Component<allProps, IState> {
   }
 
   clearSaveSuccess() {
-    this.setState(() => ({ saveSuccess: false }));
+    this.setState({ saveSuccess: false });
   }
 
   async saveScratchPad() {
@@ -96,21 +96,21 @@ class PatientScratchPad extends React.Component<allProps, IState> {
 
     // TODO: you can't actually delete the scratch pad completely
     if (scratchPad) {
-      this.setState(() => ({ saveError: false, saveSuccess: false }));
+      this.setState({ saveError: false, saveSuccess: false });
 
       try {
         await saveScratchPad({ variables: { patientId, text: scratchPad } });
-        this.setState(() => ({ saveSuccess: true, saveError: false }));
+        this.setState({ saveSuccess: true, saveError: false });
         setTimeout(this.clearSaveSuccess, SAVE_SUCCESS_TIMEOUT_MILLISECONDS);
       } catch (err) {
-        this.setState(() => ({ saveSuccess: false, saveError: true }));
+        this.setState({ saveSuccess: false, saveError: true });
       }
     }
   }
 
   onChange(event: React.ChangeEvent<HTMLTextAreaElement>) {
     const scratchPad = event.target.value;
-    this.setState(() => ({ scratchPad, saveSuccess: false }));
+    this.setState({ scratchPad, saveSuccess: false });
     this.saveScratchPad();
   }
 
@@ -118,10 +118,10 @@ class PatientScratchPad extends React.Component<allProps, IState> {
     const { refetchScratchPad, patientId } = this.props;
 
     try {
-      this.setState(() => ({ loading: true, error: undefined }));
+      this.setState({ loading: true, error: undefined });
       await refetchScratchPad({ patientId });
     } catch (err) {
-      this.setState(() => ({ loading: false, error: err.message }));
+      this.setState({ loading: false, error: err.message });
     }
   }
 

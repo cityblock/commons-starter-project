@@ -60,13 +60,13 @@ export class QuickCallPopup extends React.Component<allProps, IState> {
   ) => {
     const fieldName = event.target.name;
     const fieldValue = event.target.value;
+    const { quickCall } = this.state;
 
-    this.setState(({ quickCall }) => ({
-      quickCall: {
-        ...quickCall,
-        [fieldName]: fieldValue,
-      },
-    }));
+    const newQuickCall = {
+      ...quickCall,
+      [fieldName]: fieldValue,
+    };
+    this.setState({ quickCall: newQuickCall });
   };
 
   submit = async (event: React.FormEvent<HTMLFormElement>) => {

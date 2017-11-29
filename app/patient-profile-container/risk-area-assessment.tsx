@@ -143,7 +143,7 @@ export class RiskAreaAssessment extends React.Component<allProps, IState> {
 
   onStart = () => {
     if (!this.isLoadingOrError()) {
-      this.setState(() => ({ inProgress: true }));
+      this.setState({ inProgress: true });
     }
   };
 
@@ -157,7 +157,7 @@ export class RiskAreaAssessment extends React.Component<allProps, IState> {
       }
     });
 
-    this.setState(() => ({ inProgress: false, questions }));
+    this.setState({ inProgress: false, questions });
   };
 
   updateVisibility = (updatedAnswersResponse: { data: patientAnswersUpdateApplicableMutation }) => {
@@ -177,24 +177,24 @@ export class RiskAreaAssessment extends React.Component<allProps, IState> {
 
     if (updateAnswersApplicability) {
       try {
-        this.setState(() => ({
+        this.setState({
           updateAnswersApplicabilityLoading: true,
           updateAnswersApplicabilityError: undefined,
-        }));
+        });
 
         const result = await updateAnswersApplicability({ variables: { patientId, riskAreaId } });
 
         this.updateVisibility(result);
 
-        this.setState(() => ({
+        this.setState({
           updateAnswersApplicabilityLoading: false,
           updateAnswersApplicabilityError: undefined,
-        }));
+        });
       } catch (err) {
-        this.setState(() => ({
+        this.setState({
           updateAnswersApplicabilityLoading: false,
           updateAnswersApplicabilityError: err.message,
-        }));
+        });
       }
     }
   }
@@ -215,7 +215,7 @@ export class RiskAreaAssessment extends React.Component<allProps, IState> {
     const changedQuestionIds = this.getChangedQuestionIds();
 
     if (createPatientAnswers && changedQuestionIds.length) {
-      this.setState(() => ({ assessmentLoading: true, assessmentError: undefined }));
+      this.setState({ assessmentLoading: true, assessmentError: undefined });
 
       const newPatientAnswers = getNewPatientAnswers(patientId, questions, riskAreaQuestions || []);
 
@@ -243,16 +243,16 @@ export class RiskAreaAssessment extends React.Component<allProps, IState> {
           };
         });
 
-        this.setState(() => ({
+        this.setState({
           assessmentLoading: false,
           assessmentError: undefined,
           inProgress: false,
           questions: resetQuestions,
-        }));
+        });
 
         this.updateAnswersApplicability();
       } catch (err) {
-        this.setState(() => ({ assessmentLoading: false, assessmentError: err.message }));
+        this.setState({ assessmentLoading: false, assessmentError: err.message });
       }
     }
   };
@@ -315,19 +315,19 @@ export class RiskAreaAssessment extends React.Component<allProps, IState> {
   };
 
   onClickToSelectScreeningTool = () => {
-    this.setState(() => ({ selectingScreeningTool: true }));
+    this.setState({ selectingScreeningTool: true });
   };
 
   onDismissScreeningToolSelect = () => {
-    this.setState(() => ({ selectingScreeningTool: false }));
+    this.setState({ selectingScreeningTool: false });
   };
 
   onSelectScreeningTool = (screeningTool: FullScreeningToolFragment) => {
     const { redirectToScreeningTool } = this.props;
-    this.setState(() => ({
+    this.setState({
       selectingScreeningTool: false,
       currentlyAdministeringScreeningTool: screeningTool,
-    }));
+    });
 
     if (redirectToScreeningTool) {
       redirectToScreeningTool(screeningTool);

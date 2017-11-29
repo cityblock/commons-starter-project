@@ -144,7 +144,7 @@ class PatientEnrollmentContainer extends React.Component<allProps, IState> {
 
     (patient as any)[fieldName] = fieldValue;
 
-    this.setState(() => ({ patient }));
+    this.setState({ patient });
   }
 
   onInsuranceFieldUpdate(updatedField: IUpdatedField) {
@@ -153,7 +153,7 @@ class PatientEnrollmentContainer extends React.Component<allProps, IState> {
 
     (insurance as any)[fieldName] = fieldValue;
 
-    this.setState(() => ({ insurance }));
+    this.setState({ insurance });
   }
 
   showErrorPopup() {

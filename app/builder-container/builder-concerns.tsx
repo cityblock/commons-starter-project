@@ -45,7 +45,7 @@ interface IDispatchProps {
 type allProps = IGraphqlProps & IDispatchProps & IProps & IStateProps;
 
 interface IState {
-  showCreateConcern: false;
+  showCreateConcern: boolean;
 }
 
 class BuilderConcerns extends React.Component<allProps, IState> {
@@ -62,11 +62,11 @@ class BuilderConcerns extends React.Component<allProps, IState> {
   }
 
   showCreateConcern = () => {
-    this.setState(() => ({ showCreateConcern: true }));
+    this.setState({ showCreateConcern: true });
   };
 
   hideCreateConcern = (riskArea?: FullConcernFragment) => {
-    this.setState(() => ({ showCreateConcern: false }));
+    this.setState({ showCreateConcern: false });
   };
 
   renderConcerns(concerns: FullConcernFragment[]) {

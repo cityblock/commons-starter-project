@@ -41,13 +41,13 @@ export default class PatientContactForm extends React.Component<IProps, IState> 
   componentWillReceiveProps(nextProps: IProps) {
     const { fields } = nextProps;
 
-    this.setState(() => ({
+    this.setState({
       email: fields.email,
       homePhone: fields.homePhone,
       mobilePhone: fields.mobilePhone,
       consentToCall: fields.consentToCall,
       consentToText: fields.consentToText,
-    }));
+    });
   }
 
   showPhoneConsent() {
@@ -64,7 +64,7 @@ export default class PatientContactForm extends React.Component<IProps, IState> 
     const fieldName = event.target.name;
     const fieldValue = event.target.value;
 
-    this.setState(() => ({ [fieldName]: fieldValue }));
+    this.setState({ [fieldName as any]: fieldValue });
 
     onFieldUpdate({ fieldName, fieldValue });
   }

@@ -50,7 +50,9 @@ interface IGraphqlProps {
 type allProps = IProps & IDispatchProps & IGraphqlProps & IStateProps;
 
 interface IState {
-  showCreateGoal: false;
+  showCreateGoal: boolean;
+  loading?: boolean;
+  error?: string;
 }
 
 export class BuilderGoals extends React.Component<allProps, IState> {
@@ -58,23 +60,24 @@ export class BuilderGoals extends React.Component<allProps, IState> {
     super(props);
     this.state = {
       showCreateGoal: false,
+      loading: false,
     };
   }
 
   componentWillReceiveProps(nextProps: allProps) {
     const { loading, error, goalId } = nextProps;
-    this.setState(() => ({ loading, error }));
+    this.setState({ loading, error });
     if (goalId && goalId !== this.props.goalId) {
       this.props.refetchGoals();
     }
   }
 
   showCreateGoal = () => {
-    this.setState(() => ({ showCreateGoal: true }));
+    this.setState({ showCreateGoal: true });
   };
 
   hideCreateGoal = (goal?: FullGoalSuggestionTemplateFragment) => {
-    this.setState(() => ({ showCreateGoal: false }));
+    this.setState({ showCreateGoal: false });
   };
 
   renderGoals = (goals: FullGoalSuggestionTemplateFragment[]) => {

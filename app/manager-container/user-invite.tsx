@@ -31,7 +31,7 @@ class UserInvite extends React.Component<IProps, IState> {
   onChangeEmail(event: React.ChangeEvent<HTMLInputElement>) {
     const fieldValue = event.target.value;
 
-    this.setState(() => ({ localEmail: fieldValue }));
+    this.setState({ localEmail: fieldValue });
   }
 
   async onSubmit(event: React.FormEvent<HTMLFormElement>) {

@@ -67,7 +67,7 @@ export default class PatientDemographicsForm extends React.Component<IProps, ISt
   componentWillReceiveProps(nextProps: IProps) {
     const { fields } = nextProps;
 
-    this.setState(() => ({
+    this.setState({
       firstName: fields.firstName,
       middleName: fields.middleName,
       lastName: fields.lastName,
@@ -78,7 +78,7 @@ export default class PatientDemographicsForm extends React.Component<IProps, ISt
       race: fields.race,
       ssn: fields.ssn,
       zip: fields.zip,
-    }));
+    });
   }
 
   onChange(event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) {
@@ -87,7 +87,7 @@ export default class PatientDemographicsForm extends React.Component<IProps, ISt
     const fieldName = event.target.name;
     const fieldValue = event.target.value;
 
-    this.setState(() => ({ [fieldName]: fieldValue }));
+    this.setState({ [fieldName as any]: fieldValue });
 
     onFieldUpdate({ fieldName, fieldValue });
   }

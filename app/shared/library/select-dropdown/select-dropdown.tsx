@@ -46,12 +46,13 @@ class SelectDropdown extends React.Component<IProps, IState> {
 
     // if clicking away from menu
     if (this.menu && !this.menu.contains(target)) {
-      this.setState(() => ({ open: false }));
+      this.setState({ open: false });
     }
   };
 
   onClick = (e: React.MouseEvent<HTMLDivElement>): void => {
-    this.setState((prevState: IState) => ({ open: !prevState.open }));
+    const { open } = this.state;
+    this.setState({ open: !open });
   };
 
   render(): JSX.Element {

@@ -105,11 +105,11 @@ export class AddTaskFollower extends React.Component<allProps, IState> {
     const { loading } = this.state;
 
     if (!loading) {
-      this.setState(() => ({
+      this.setState({
         loading: true,
         addFollowerError: undefined,
         lastCareTeamMemberId: undefined,
-      }));
+      });
 
       try {
         await addTaskFollower({
@@ -119,24 +119,25 @@ export class AddTaskFollower extends React.Component<allProps, IState> {
           },
         });
 
-        this.setState(() => ({
+        this.setState({
           open: false,
           loading: false,
           addFollowerError: undefined,
           lastCareTeamMemberId: undefined,
-        }));
+        });
       } catch (err) {
-        this.setState(() => ({
+        this.setState({
           loading: false,
           addFollowerError: err.message,
           lastCareTeamMemberId: careTeamMemberId,
-        }));
+        });
       }
     }
   }
 
   onClick() {
-    this.setState((prevState: IState) => ({ open: !prevState.open }));
+    const { open } = this.state;
+    this.setState({ open: !open });
   }
 
   render() {

@@ -50,7 +50,9 @@ interface IGraphqlProps {
 }
 
 interface IState {
-  showCreateScreeningTool: false;
+  showCreateScreeningTool: boolean;
+  loading?: boolean;
+  error?: string;
 }
 
 type allProps = IProps & IDispatchProps & IGraphqlProps & IStateProps;
@@ -73,15 +75,15 @@ class BuilderScreeningTools extends React.Component<allProps, IState> {
   componentWillReceiveProps(nextProps: allProps) {
     const { loading, error } = nextProps;
 
-    this.setState(() => ({ loading, error }));
+    this.setState({ loading, error });
   }
 
   showCreateScreeningTool() {
-    this.setState(() => ({ showCreateScreeningTool: true }));
+    this.setState({ showCreateScreeningTool: true });
   }
 
   hideCreateScreeningTool(screeningTool?: FullScreeningToolFragment) {
-    this.setState(() => ({ showCreateScreeningTool: false }));
+    this.setState({ showCreateScreeningTool: false });
   }
 
   renderScreeningTools(screeningTools: FullScreeningToolFragment[]) {

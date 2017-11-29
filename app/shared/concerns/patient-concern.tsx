@@ -36,7 +36,7 @@ export class PatientConcern extends React.Component<IProps, IState> {
   componentWillReceiveProps(nextProps: IProps) {
     // close any open goal dropdown menus if concern no longer selected or viewing task
     if (!nextProps.selected || !!nextProps.selectedTaskId) {
-      this.setState(() => ({ optionsDropdownGoalId: '' }));
+      this.setState({ optionsDropdownGoalId: '' });
     }
   }
 
@@ -47,9 +47,9 @@ export class PatientConcern extends React.Component<IProps, IState> {
     const { optionsDropdownGoalId } = this.state;
 
     if (goalId === optionsDropdownGoalId) {
-      this.setState(() => ({ optionsDropdownGoalId: '' }));
+      this.setState({ optionsDropdownGoalId: '' });
     } else {
-      this.setState(() => ({ optionsDropdownGoalId: goalId }));
+      this.setState({ optionsDropdownGoalId: goalId });
     }
   };
 

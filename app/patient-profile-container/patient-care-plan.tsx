@@ -34,10 +34,10 @@ export default class PatientCarePlan extends React.Component<IProps, IState> {
 
   componentWillReceiveProps(nextProps: IProps) {
     if (nextProps.isDragging) {
-      this.setState(() => ({
+      this.setState({
         selectedPatientConcernId: '',
         optionsDropdownConcernId: '',
-      }));
+      });
     }
   }
 
@@ -45,9 +45,9 @@ export default class PatientCarePlan extends React.Component<IProps, IState> {
     const { selectedPatientConcernId } = this.state;
 
     if (patientConcernId === selectedPatientConcernId) {
-      this.setState(() => ({ selectedPatientConcernId: '' }));
+      this.setState({ selectedPatientConcernId: '' });
     } else {
-      this.setState(() => ({ selectedPatientConcernId: patientConcernId }));
+      this.setState({ selectedPatientConcernId: patientConcernId });
     }
   };
 
@@ -61,9 +61,9 @@ export default class PatientCarePlan extends React.Component<IProps, IState> {
     const { optionsDropdownConcernId } = this.state;
 
     if (patientConcernId === optionsDropdownConcernId) {
-      this.setState(() => ({ optionsDropdownConcernId: undefined }));
+      this.setState({ optionsDropdownConcernId: '' });
     } else {
-      this.setState(() => ({ optionsDropdownConcernId: patientConcernId }));
+      this.setState({ optionsDropdownConcernId: patientConcernId });
     }
   };
 

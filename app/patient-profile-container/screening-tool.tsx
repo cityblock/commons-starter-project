@@ -103,7 +103,7 @@ export class ScreeningTool extends React.Component<allProps, IState> {
         nextProps.screeningToolQuestions,
       );
 
-      this.setState(() => ({ questions }));
+      this.setState({ questions });
     }
   }
 
@@ -146,7 +146,7 @@ export class ScreeningTool extends React.Component<allProps, IState> {
     const questionIds = keys(questions);
 
     if (createPatientAnswers && this.allQuestionsAnswered()) {
-      this.setState(() => ({ screeningToolLoading: true, screeningToolError: undefined }));
+      this.setState({ screeningToolLoading: true, screeningToolError: undefined });
 
       const patientAnswers = getNewPatientAnswers(
         patientId,
@@ -173,15 +173,16 @@ export class ScreeningTool extends React.Component<allProps, IState> {
         const { data } = results;
         const firstCreatedAnswer = data.patientAnswersCreate ? data.patientAnswersCreate[0] : null;
         if (firstCreatedAnswer) {
-          this.setState(() => ({
+          this.setState({
             screeningToolLoading: false,
             screeningToolError: undefined,
             questions: resetQuestions,
-            patientScreeningToolSubmissionId: firstCreatedAnswer.patientScreeningToolSubmissionId,
-          }));
+            patientScreeningToolSubmissionId:
+              firstCreatedAnswer.patientScreeningToolSubmissionId || undefined,
+          });
         }
       } catch (err) {
-        this.setState(() => ({ screeningToolLoading: false, screeningToolError: err.message }));
+        this.setState({ screeningToolLoading: false, screeningToolError: err.message });
       }
     }
   }

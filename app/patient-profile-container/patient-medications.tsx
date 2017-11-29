@@ -43,7 +43,7 @@ class PatientMedications extends React.Component<allProps, IState> {
   componentWillReceiveProps(nextProps: allProps) {
     const { loading, error } = nextProps;
 
-    this.setState(() => ({ loading, error }));
+    this.setState({ loading, error });
   }
 
   onClickMedication(medicationId: string) {
@@ -99,11 +99,11 @@ class PatientMedications extends React.Component<allProps, IState> {
 
     if (refetchPatientMedications) {
       try {
-        this.setState(() => ({ loading: true, error: undefined }));
+        this.setState({ loading: true, error: undefined });
         await refetchPatientMedications({ patientId });
       } catch (err) {
         // TODO: This is redundant. Props will get set by the result of the refetch.
-        this.setState(() => ({ loading: false, error: err.message }));
+        this.setState({ loading: false, error: err.message });
       }
     }
   }

@@ -52,7 +52,7 @@ interface IProps {
 }
 
 interface IState {
-  showInviteUser: false;
+  showInviteUser: boolean;
   orderBy: string;
 }
 
@@ -96,11 +96,11 @@ export class ManagerUsers extends React.Component<IProps & IDispatchProps & IGra
   }
 
   showInviteUser() {
-    this.setState(() => ({ showInviteUser: true }));
+    this.setState({ showInviteUser: true });
   }
 
   hideInviteUser() {
-    this.setState(() => ({ showInviteUser: false }));
+    this.setState({ showInviteUser: false });
   }
 
   renderUsers(users: FullUserFragment[]) {

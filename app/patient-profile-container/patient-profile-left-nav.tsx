@@ -25,17 +25,13 @@ export default class PatientProfileLeftNav extends React.Component<IProps, IStat
     this.state = { selectedItem: null };
   }
 
-  componentWillReceiveProps(nextProps: IProps) {
-    this.setState(() => ({}));
-  }
-
   onClick = (clickedItem: SelectableItem) => {
     const { selectedItem } = this.state;
 
     if (clickedItem === selectedItem) {
-      this.setState(() => ({ selectedItem: null }));
+      this.setState({ selectedItem: null });
     } else {
-      this.setState(() => ({ selectedItem: clickedItem }));
+      this.setState({ selectedItem: clickedItem });
     }
   };
 

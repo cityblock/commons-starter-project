@@ -40,7 +40,9 @@
     "user:add:dev": "NODE_ENV=development ts-node ./scripts/add-user.ts",
     "user:add:production": "NODE_ENV=production ts-node ./scripts/add-user.ts",
     "user:remove:dev": "NODE_ENV=development ts-node ./scripts/remove-user.ts",
-    "user:remove:production": "NODE_ENV=production ts-node ./scripts/remove-user.ts"
+    "user:remove:production": "NODE_ENV=production ts-node ./scripts/remove-user.ts",
+    "patients:add-admin-tasks-concern:dev": "NODE_ENV=development ts-node ./scripts/add-admin-task-concern-to-patients.ts",
+    "patients:add-admin-tasks-concern:production": "NODE_ENV=production ts-node ./scripts/add-admin-task-concern-to-patients.ts"
   },
   "author": "Brennan Moore",
   "jest": {

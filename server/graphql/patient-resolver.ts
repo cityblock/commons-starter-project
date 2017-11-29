@@ -1,8 +1,9 @@
 import { isNil, omitBy } from 'lodash';
+import { transaction } from 'objection';
 import { IPatient, IPatientEditInput, IPatientScratchPad, IPatientSetupInput } from 'schema';
 import { getAthenaPatientIdFromCreate } from '../apis/redox/formatters';
 import CareTeam from '../models/care-team';
-import HomeClinic from '../models/clinic';
+import Clinic from '../models/clinic';
 import Patient from '../models/patient';
 import accessControls from './shared/access-controls';
 import { checkUserLoggedIn, IContext } from './shared/utils';
@@ -49,9 +50,9 @@ export async function patientSetup(
   await accessControls.isAllowedForUser(userRole, 'create', 'patient');
   checkUserLoggedIn(userId);
 
-  const result = await Patient.execWithTransaction(async patientWithTransaction => {
-    const patient = await patientWithTransaction.setup(input);
-    const department = await HomeClinic.get(input.homeClinicId);
+  const result = await transaction(Patient.knex(), async txn => {
+    const patient = await Patient.setup(input, userId!, txn);
+    const department = await Clinic.get(input.homeClinicId, txn);
     const redoxPatient = await redoxApi.patientCreate({
       id: patient.id,
       firstName: input.firstName,
@@ -88,7 +89,7 @@ export async function patientSetup(
     if (!athenaPatientId) {
       throw new Error('Athena patient was not correctly created');
     }
-    return await patientWithTransaction.addAthenaPatientId(athenaPatientId, patient.id);
+    return await Patient.addAthenaPatientId(athenaPatientId, patient.id, txn);
   });
   // Need to wait until the transaction is complete to add relations like Care Team
   await CareTeam.create({ userId: userId!, patientId: result.id });

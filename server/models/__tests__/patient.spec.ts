@@ -7,7 +7,9 @@ import {
   createPatient,
 } from '../../spec-helpers';
 import Clinic from '../clinic';
+import { adminTasksConcernTitle } from '../concern';
 import Patient from '../patient';
+import PatientConcern from '../patient-concern';
 import User from '../user';
 
 const userRole = 'physician';
@@ -88,18 +90,23 @@ describe('patient model', () => {
 
   describe('setup', async () => {
     it('should setup patient', async () => {
-      const patient = await Patient.setup({
-        firstName: 'first',
-        middleName: 'middle',
-        lastName: 'last',
-        dateOfBirth: '02/02/1902',
-        zip: '12345',
-        gender: 'F',
-        homeClinicId: clinic.id,
-        consentToCall: false,
-        consentToText: false,
-        language: 'en',
-      });
+      const user = await User.create(createMockUser(11, clinic.id, userRole));
+      const patient = await Patient.setup(
+        {
+          firstName: 'first',
+          middleName: 'middle',
+          lastName: 'last',
+          dateOfBirth: '02/02/1902',
+          zip: '12345',
+          gender: 'F',
+          homeClinicId: clinic.id,
+          consentToCall: false,
+          consentToText: false,
+          language: 'en',
+        },
+        user.id,
+      );
+
       expect(patient).toMatchObject({
         firstName: 'first',
         middleName: 'middle',
@@ -111,6 +118,29 @@ describe('patient model', () => {
         consentToText: false,
         language: 'en',
       });
+    });
+
+    it('should give the patient an administrative tasks concern', async () => {
+      const user = await User.create(createMockUser(11, clinic.id, userRole));
+      const patient = await Patient.setup(
+        {
+          firstName: 'first',
+          middleName: 'middle',
+          lastName: 'last',
+          dateOfBirth: '02/02/1902',
+          zip: '12345',
+          gender: 'F',
+          homeClinicId: clinic.id,
+          consentToCall: false,
+          consentToText: false,
+          language: 'en',
+        },
+        user.id,
+      );
+      const patientConcerns = await PatientConcern.getForPatient(patient.id);
+
+      expect(patientConcerns.length).toEqual(1);
+      expect(patientConcerns[0].concern.title).toEqual(adminTasksConcernTitle);
     });
   });
 

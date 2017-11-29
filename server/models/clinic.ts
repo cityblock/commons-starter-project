@@ -1,4 +1,4 @@
-import { Model, RelationMappings } from 'objection';
+import { Model, RelationMappings, Transaction } from 'objection';
 import { IPaginatedResults, IPaginationOptions } from '../db';
 import BaseModel from './base-model';
 import Patient from './patient';
@@ -53,8 +53,8 @@ export default class Clinic extends BaseModel {
     return await this.query().insertAndFetch(clinic);
   }
 
-  static async get(clinicId: string): Promise<Clinic> {
-    const clinic = await this.query().findById(clinicId);
+  static async get(clinicId: string, txn?: Transaction): Promise<Clinic> {
+    const clinic = await this.query(txn).findById(clinicId);
 
     if (!clinic) {
       return Promise.reject(`No such clinic for clinicId: ${clinicId}`);

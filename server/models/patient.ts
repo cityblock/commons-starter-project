@@ -1,7 +1,9 @@
-import { transaction, Model, RelationMappings } from 'objection';
+import { transaction, Model, RelationMappings, Transaction } from 'objection';
 import { IPaginatedResults, IPaginationOptions } from '../db';
 import BaseModel from './base-model';
 import Clinic from './clinic';
+import Concern, { adminTasksConcernTitle } from './concern';
+import PatientConcern from './patient-concern';
 
 export interface IPatientEditableFields {
   firstName: string;
@@ -120,8 +122,27 @@ export default class Patient extends BaseModel {
     return patient;
   }
 
-  static async setup(input: IPatientEditableFields) {
-    return this.query().insertAndFetch(input);
+  static async setup(input: IPatientEditableFields, userId: string, existingTxn?: Transaction) {
+    return await transaction(Patient.knex(), async txn => {
+      const adminConcern = await Concern.findOrCreateByTitle(
+        adminTasksConcernTitle,
+        existingTxn || txn,
+      );
+      const patient = await this.query(existingTxn || txn).insertAndFetch(input);
+
+      // TODO: once we actually figure out our patient onboarding flow, let's move to the resolver
+      await PatientConcern.create(
+        {
+          concernId: adminConcern.id,
+          patientId: patient.id,
+          userId,
+          startedAt: new Date().toISOString(),
+        },
+        existingTxn || txn,
+      );
+
+      return patient;
+    });
   }
 
   static async edit(patient: IEditPatient, patientId: string): Promise<Patient> {
@@ -129,8 +150,12 @@ export default class Patient extends BaseModel {
   }
 
   // limit accidentally editing the athenaPatientId by only allowing it explicitly here
-  static async addAthenaPatientId(athenaPatientId: number, patientId: string): Promise<Patient> {
-    return this.query().updateAndFetchById(patientId, { athenaPatientId });
+  static async addAthenaPatientId(
+    athenaPatientId: number,
+    patientId: string,
+    txn?: Transaction,
+  ): Promise<Patient> {
+    return this.query(txn).updateAndFetchById(patientId, { athenaPatientId });
   }
 
   static async execWithTransaction(

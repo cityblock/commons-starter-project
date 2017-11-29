@@ -6,7 +6,7 @@
   position: relative;
   border: 1px solid var(--border-color);
   border-radius: var(--border-radius);
-  transition: border 0.2s linear;
+  transition: border 0.2s;
   height: 44px;
   box-sizing: border-box;
   background-image: url('../../../../assets/down-arrow.svg');

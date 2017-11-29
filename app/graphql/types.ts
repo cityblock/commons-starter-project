@@ -5569,6 +5569,7 @@ export type taskCreateMutationVariables = {
   description: string,
   dueAt: string,
   patientId: string,
+  priority?: Priority | null,
   assignedToId?: string | null,
   patientGoalId?: string | null,
 };

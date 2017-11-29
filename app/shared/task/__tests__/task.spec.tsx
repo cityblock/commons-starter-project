@@ -6,7 +6,7 @@ import TaskHeader from '../header';
 import { Divider, Task } from '../task';
 import TaskAssignee, { IProps } from '../task-assignee';
 import TaskBody from '../task-body';
-import TaskComments from '../task-comments';
+import TaskComments, { IProps as ITaskCommentsProps } from '../task-comments';
 import TaskDelete from '../task-delete';
 import TaskProgress from '../task-progress';
 import TaskTracking from '../task-tracking';
@@ -66,7 +66,6 @@ describe('Task Component', () => {
     const assignee = wrapper.find<IProps>(TaskAssignee);
 
     expect(assignee.length).toBe(1);
-    expect(assignee.props().taskId).toBe(taskId);
     expect(assignee.props().patientId).toBe(patientId);
     expect(assignee.props().assignee).toBe(taskWithComment.assignedTo);
   });
@@ -82,7 +81,7 @@ describe('Task Component', () => {
   });
 
   it('renders task comments with correct props', () => {
-    const comments = wrapper.find<IProps>(TaskComments);
+    const comments = wrapper.find<ITaskCommentsProps>(TaskComments);
 
     expect(comments.length).toBe(1);
     expect(comments.props().taskId).toBe(taskId);

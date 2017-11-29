@@ -1,0 +1,22 @@
+@import '../../../css/sizes';
+
+.textarea {
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius);
+  padding: 16px var(--small-gutter);
+  font-family: var(--roboto);
+  font-size: var(--medium-font-size);
+  line-height: var(--medium-font-line-height);
+  height: 152px;
+  resize: vertical;
+  outline: none;
+  width: 100%;
+  transition: border 0.2s;
+  box-sizing: border-box;
+
+  &:active,
+  &:hover,
+  &:focus {
+    border-color: var(--blue-color);
+  }
+}

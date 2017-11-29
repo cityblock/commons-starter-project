@@ -38,7 +38,7 @@ export interface IUserTasksFilterOptions extends IPaginationOptions {
 
 export async function taskCreate(root: any, { input }: ITaskCreateArgs, context: IContext) {
   const { userRole, userId } = context;
-  const { title, description, dueAt, patientId, assignedToId, patientGoalId } = input;
+  const { title, description, dueAt, patientId, assignedToId, patientGoalId, priority } = input;
   await accessControls.isAllowed(userRole, 'create', 'task');
   checkUserLoggedIn(userId);
 
@@ -51,6 +51,7 @@ export async function taskCreate(root: any, { input }: ITaskCreateArgs, context:
         description: description || undefined,
         dueAt: dueAt || undefined,
         patientId,
+        priority: priority || undefined,
         assignedToId: assignedToId || undefined,
         patientGoalId: patientGoalId || undefined,
       },

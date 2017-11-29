@@ -1,0 +1,35 @@
+@import '../../../css/sizes';
+
+.popup {
+  border-radius: 4px;
+}
+
+.fields {
+  padding: var(--medium-gutter);
+  padding-top: 0;
+}
+
+.scroll {
+  max-height: 500px;
+  overflow-y: scroll;
+  -webkit-overflow-scrolling: touch;
+}
+
+.dropdown {
+  height: 52px;
+}
+
+.menu {
+  top: 52px;
+}
+
+.flex {
+  display: flex;
+  justify-content: space-between;
+}
+
+.button {
+  width: calc(50% - 10px);
+  margin-top: var(--medium-gutter);
+  height: 42px;
+}

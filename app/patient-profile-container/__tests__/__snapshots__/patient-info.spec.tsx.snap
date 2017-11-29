@@ -5927,7 +5927,6 @@ exports[`renders patient info 1`] = `
           Contact information
         </div>
         <div>
-          <div />
           <div
             className="multiInputFormRow"
           >

@@ -3,10 +3,14 @@ import * as React from 'react';
 import { compose, graphql } from 'react-apollo';
 import { connect, Dispatch } from 'react-redux';
 import { push } from 'react-router-redux';
-import { Priority } from '../../../server/models/task';
 import * as taskQuery from '../../graphql/queries/get-task.graphql';
 import * as taskEditMutationGraphql from '../../graphql/queries/task-edit-mutation.graphql';
-import { taskEditMutation, taskEditMutationVariables, FullTaskFragment } from '../../graphql/types';
+import {
+  taskEditMutation,
+  taskEditMutationVariables,
+  FullTaskFragment,
+  Priority,
+} from '../../graphql/types';
 import { formatFullName } from '../helpers/format-helpers';
 import Spinner from '../library/spinner/spinner';
 import * as styles from './css/index.css';
@@ -59,6 +63,20 @@ export class Task extends React.Component<allProps, IState> {
 
   cancelDelete = (): void => {
     this.setState({ deleteConfirmation: false });
+  };
+
+  onAssigneeClick = async (careTeamMemberId: string) => {
+    const { editTask, task } = this.props;
+    const taskId = task && task.id;
+
+    if (taskId) await editTask({ variables: { assignedToId: careTeamMemberId, taskId } });
+  };
+
+  onPriorityClick = async (priority: Priority) => {
+    const { editTask, task } = this.props;
+    const taskId = task && task.id;
+
+    if (taskId) await editTask({ variables: { taskId, priority } });
   };
 
   render(): JSX.Element {
@@ -119,17 +137,16 @@ export class Task extends React.Component<allProps, IState> {
             editTask={editTask}
           />
           <TaskAssignee
-            taskId={taskId}
             patientId={patientId}
             assignee={(task && task.assignedTo) || undefined}
-            editTask={editTask}
+            onAssigneeClick={this.onAssigneeClick}
           />
           <TaskTracking
             taskId={taskId}
             patientId={patientId}
             priority={task && (task.priority as Priority)}
             followers={(task && task.followers) || []}
-            editTask={editTask}
+            onPriorityClick={this.onPriorityClick}
           />
         </div>
         <TaskComments taskId={taskId} />

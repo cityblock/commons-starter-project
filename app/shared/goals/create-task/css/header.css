@@ -1,0 +1,67 @@
+@import '../../../css/sizes';
+
+.container {
+  background: var(--navy-color);
+  text-align: center;
+  position: relative;
+  border-top-left-radius: 4px;
+  border-top-right-radius: 4px;
+}
+
+.container h2 {
+  margin: 0;
+  padding-top: 23px;
+  font-family: var(--basetica-black);
+  font-size: var(--medium-large-font-size);
+  line-height: 23px;
+}
+
+.container p {
+  margin: 0;
+  padding-bottom: 22px;
+  line-height: var(--body-copy-line-height);
+}
+
+.white {
+  color: var(--white-color);
+}
+
+.icon {
+  fill: var(--white-color);
+  position: absolute;
+  top: var(--small-gutter);
+  right: var(--small-gutter);
+  cursor: pointer;
+  transition: fill 0.2s;
+
+  &:hover {
+    fill: var(--border-color);
+  }
+}
+
+.detail {
+  background: var(--gray-background-color);
+  display: flex;
+  padding: var(--small-gutter) var(--medium-gutter);
+  text-align: left;
+}
+
+.detail p {
+  color: var(--black-color);
+  line-height: var(--medium-font-line-height);
+  margin: 0;
+  padding: 0;
+}
+
+.detail h4 {
+  color: var(--light-blue-color);
+  margin: 0 0 10px 0;
+  font-family: var(--basetica-medium);
+  font-size: var(--small-font-size);
+  line-height: var(--small-font-line-height);
+  font-weight: var(--roboto-medium-weight);
+}
+
+.detailGroup {
+  width: 50%;
+}

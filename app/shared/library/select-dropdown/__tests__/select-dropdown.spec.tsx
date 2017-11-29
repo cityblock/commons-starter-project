@@ -51,4 +51,19 @@ describe('Library Select Dropdown Component', () => {
     expect(wrapper.find('p').length).toBe(1);
     expect(wrapper.find('p').text()).toBe(`(${detail})`);
   });
+
+  it('applies custom styles if specified', () => {
+    const className = 'custom';
+
+    const wrapper = shallow(
+      <SelectDropdown value={value} loading={false} children={[]} className={className} />,
+    );
+
+    expect(
+      wrapper
+        .find('div')
+        .at(1)
+        .props().className,
+    ).toBe(`container ${className}`);
+  });
 });

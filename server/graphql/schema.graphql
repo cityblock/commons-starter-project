@@ -852,6 +852,7 @@ input TaskCreateInput {
   patientId: String!
   assignedToId: String
   patientGoalId: String
+  priority: Priority
 }
 
 # params for deleting a task

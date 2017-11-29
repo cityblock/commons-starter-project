@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
-import { Priority } from '../../../server/models/task';
-import { taskEditMutation, taskEditMutationVariables } from '../../graphql/types';
+import { Priority } from '../../graphql/types';
 import { ShortUserFragment } from '../../graphql/types';
 import * as styles from './css/task-body.css';
 import TaskFollowers from './followers';
@@ -12,11 +11,11 @@ interface IProps {
   patientId: string;
   priority: Priority;
   followers: ShortUserFragment[];
-  editTask: (options: { variables: taskEditMutationVariables }) => { data: taskEditMutation };
+  onPriorityClick: (priority: Priority) => void;
 }
 
 const TaskTracking: React.StatelessComponent<IProps> = (props: IProps) => {
-  const { taskId, patientId, priority, followers, editTask } = props;
+  const { taskId, patientId, priority, followers, onPriorityClick } = props;
 
   return (
     <div className={styles.container}>
@@ -24,7 +23,7 @@ const TaskTracking: React.StatelessComponent<IProps> = (props: IProps) => {
         <FormattedMessage id="task.priority">
           {(message: string) => <h3>{message}</h3>}
         </FormattedMessage>
-        <PrioritySelect taskId={taskId} priority={priority} editTask={editTask} />
+        <PrioritySelect priority={priority} onPriorityClick={onPriorityClick} />
       </div>
       <div className={styles.detail}>
         <FormattedMessage id="task.followers">

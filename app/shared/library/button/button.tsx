@@ -5,12 +5,11 @@ import * as styles from './css/button.css';
 
 type Color = 'blue' | 'white' | 'red';
 
-// Note: blue is default color
 interface IProps {
   onClick: () => void;
-  messageId?: string;
-  label?: string;
-  color?: Color;
+  messageId?: string; // prefer using translate message ids
+  label?: string; // use this if not translating
+  color?: Color; // if not provided, defaults to blue
   small?: boolean;
   className?: string;
 }

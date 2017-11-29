@@ -1505,6 +1505,7 @@ declare module 'schema' {
     patientId: string;
     assignedToId?: string | null;
     patientGoalId?: string | null;
+    priority?: IPriorityEnum | null;
   }
 
   /**

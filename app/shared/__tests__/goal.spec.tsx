@@ -1,11 +1,13 @@
 import { shallow } from 'enzyme';
 import * as React from 'react';
 import { patientGoal } from '../../shared/util/test-data';
+import CreateTaskModal from '../goals/create-task/create-task';
 import PatientGoal from '../goals/goal';
 import GoalOptions from '../goals/goal-options';
 
 describe('Patient Goal Component', () => {
   const placeholderFn = () => true as any;
+  const concernTitle = 'Housing';
 
   const wrapper = shallow(
     <PatientGoal
@@ -14,6 +16,7 @@ describe('Patient Goal Component', () => {
       selectedTaskId=""
       optionsOpen={false}
       onOptionsToggle={placeholderFn}
+      concernTitle={concernTitle}
     />,
   );
 
@@ -25,6 +28,19 @@ describe('Patient Goal Component', () => {
     expect(wrapper.find(GoalOptions).length).toBe(1);
     expect(wrapper.find(GoalOptions).props().open).toBeFalsy();
     expect(wrapper.find(GoalOptions).props().onMenuToggle).toBe(placeholderFn);
+  });
+
+  it('renders modal component to create task', () => {
+    expect(wrapper.find(CreateTaskModal).length).toBe(1);
+    expect(wrapper.find(CreateTaskModal).props().visible).toBeFalsy();
+    expect(wrapper.find(CreateTaskModal).props().concern).toBe(concernTitle);
+    expect(wrapper.find(CreateTaskModal).props().goal).toBe(patientGoal.title);
+    expect(wrapper.find(CreateTaskModal).props().patientGoalId).toBe(patientGoal.id);
+  });
+
+  it('opens modal to create task', () => {
+    wrapper.setState({ createTaskModal: true });
+    expect(wrapper.find(CreateTaskModal).props().visible).toBeTruthy();
   });
 
   it('opens goal options menu', () => {
@@ -40,6 +56,7 @@ describe('Patient Goal Component', () => {
         selectedTaskId="aryaStark"
         optionsOpen={false}
         onOptionsToggle={placeholderFn}
+        concernTitle={concernTitle}
       />,
     );
 

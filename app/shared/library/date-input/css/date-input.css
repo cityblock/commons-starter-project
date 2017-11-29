@@ -10,7 +10,7 @@
   font-weight: var(--roboto-medium-weight);
   font-size: var(--small-font-size);
   border-radius: var(--border-radius);
-  transition: border 0.2s linear;
+  transition: border 0.2s;
 
   &:hover {
     border-color: var(--blue-color);
@@ -36,7 +36,7 @@
 ::-webkit-datetime-edit-day-field,
 ::-webkit-datetime-edit-year-field,
 ::-webkit-datetime-edit-text {
-  color: transparent;
+  display: none;
 }
 
 /* Remove x button and up and down arrows */

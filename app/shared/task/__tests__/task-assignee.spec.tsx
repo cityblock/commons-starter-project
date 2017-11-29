@@ -8,14 +8,12 @@ import { TaskAssignee } from '../task-assignee';
 
 describe('Task Assignee Component', () => {
   const patientId = 'aryaStark';
-  const taskId = 'facelessMan';
-  const editTask = () => true as any;
+  const onAssigneeClick = () => true as any;
 
   const wrapper = shallow(
     <TaskAssignee
       patientId={patientId}
-      taskId={taskId}
-      editTask={editTask}
+      onAssigneeClick={onAssigneeClick}
       assignee={currentUser}
       loading={false}
       error=""
@@ -32,6 +30,41 @@ describe('Task Assignee Component', () => {
     expect(wrapper.find(SelectDropdown).props().detail).toBe('physician');
     expect(wrapper.find(SelectDropdown).props().loading).toBeFalsy();
     expect(wrapper.find(SelectDropdown).props().error).toBeFalsy();
+  });
+
+  it('renders selected assignee if id passed', () => {
+    const selectedAssigneeId = user.id;
+
+    const wrapper2 = shallow(
+      <TaskAssignee
+        patientId={patientId}
+        onAssigneeClick={onAssigneeClick}
+        loading={false}
+        error=""
+        careTeam={[currentUser, user]}
+        selectedAssigneeId={selectedAssigneeId}
+      />,
+    );
+
+    expect(wrapper2.find(SelectDropdown).props().value).toBe('first last');
+    expect(wrapper2.find(SelectDropdown).props().detail).toBe('physician');
+  });
+
+  it('renders custom message id if passed', () => {
+    const messageId = 'eleven';
+    const wrapper2 = shallow(
+      <TaskAssignee
+        patientId={patientId}
+        onAssigneeClick={onAssigneeClick}
+        assignee={currentUser}
+        loading={false}
+        error=""
+        careTeam={[currentUser, user]}
+        messageId={messageId}
+      />,
+    );
+
+    expect(wrapper2.find(FormattedMessage).props().id).toBe(messageId);
   });
 
   it('renders dropdown options for each valid assignee', () => {

@@ -5,13 +5,10 @@ import Select from '../../library/select/select';
 import PrioritySelect from '../priority-select';
 
 describe('Task Priority Select Component', () => {
-  const taskId = 'taylorSwift';
-  const priority = 'high';
-  const editTask = () => true as any;
+  const priority = 'high' as any;
+  const onPriorityClick = () => true as any;
 
-  const wrapper = shallow(
-    <PrioritySelect taskId={taskId} priority={priority} editTask={editTask} />,
-  );
+  const wrapper = shallow(<PrioritySelect priority={priority} onPriorityClick={onPriorityClick} />);
 
   it('renders select tag with correct value', () => {
     expect(wrapper.find(Select).length).toBe(1);
@@ -51,5 +48,18 @@ describe('Task Priority Select Component', () => {
         .at(3)
         .props().value,
     ).toBe('high');
+  });
+
+  it('passes custom styles if specified', () => {
+    const className = 'custom';
+    const wrapper2 = shallow(
+      <PrioritySelect
+        priority={priority}
+        onPriorityClick={onPriorityClick}
+        className={className}
+      />,
+    );
+
+    expect(wrapper2.find(Select).props().className).toBe(`select red ${className}`);
   });
 });

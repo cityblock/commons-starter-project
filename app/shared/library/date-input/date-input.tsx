@@ -8,10 +8,12 @@ interface IProps {
   onChange: (e?: any) => void;
   displayText?: string;
   className?: string;
+  id?: string;
+  name?: string;
 }
 
 const DateInput: React.StatelessComponent<IProps> = (props: IProps) => {
-  const { value, onChange, displayText, className } = props;
+  const { value, onChange, displayText, className, id, name } = props;
   const dateInputStyles = classNames(styles.dateInput, className);
   const formattedValue = formatInputDate(value);
 
@@ -22,6 +24,8 @@ const DateInput: React.StatelessComponent<IProps> = (props: IProps) => {
       onChange={onChange}
       className={dateInputStyles}
       data-date={displayText || value}
+      id={id || ''}
+      name={name || ''}
     />
   );
 };

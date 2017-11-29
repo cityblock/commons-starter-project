@@ -21,7 +21,7 @@ import TaskComment from './task-comment';
 
 export type ITaskCommentsResponse = getTaskCommentsQuery['taskComments'];
 
-interface IProps {
+export interface IProps {
   taskId: string;
 }
 

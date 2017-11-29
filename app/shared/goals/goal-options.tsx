@@ -5,11 +5,12 @@ import HamburgerMenu from '../library/hamburger-menu/hamburger-menu';
 interface IProps {
   open: boolean;
   onMenuToggle: (e?: any) => void;
+  addTask: () => void;
 }
 
-const GoalOptions: React.StatelessComponent<IProps> = ({ open, onMenuToggle }) => (
+const GoalOptions: React.StatelessComponent<IProps> = ({ open, onMenuToggle, addTask }) => (
   <HamburgerMenu open={open} onMenuToggle={onMenuToggle}>
-    <HamburgerMenuOption messageId="patientMap.addTask" icon="addAlert" onClick={() => true} />
+    <HamburgerMenuOption messageId="patientMap.addTask" icon="addAlert" onClick={addTask} />
   </HamburgerMenu>
 );
 

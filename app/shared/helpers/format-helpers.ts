@@ -19,6 +19,9 @@ export const formatDueDate = (dueDate?: string, complete?: boolean): string => {
 export const formatInputDate = (dueDate?: string): string =>
   format(dueDate || Date.now(), 'YYYY-MM-DD');
 
+export const formatDueDateDefault = (dueDate?: string): string =>
+  format(dueDate || Date.now(), 'MM/DD/YYYY');
+
 export const isDueSoon = (dueDate?: string): boolean => {
   if (!dueDate) return false;
 

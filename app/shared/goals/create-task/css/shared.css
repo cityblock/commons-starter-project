@@ -1,0 +1,26 @@
+@import '../../../css/sizes';
+
+.label {
+  display: block;
+  color: var(--light-gray-font-color);
+  font-family: var(--basetica-medium);
+  font-weight: var(--roboto-medium-weight);
+  font-size: var(--default-font-size);
+  line-height: var(--medium-font-line-height);
+  margin: 0 0 10px 0;
+  padding-top: var(--medium-gutter);
+}
+
+.flexItem {
+  width: calc(50% - 10px);
+}
+
+.select {
+  height: 52px;
+  padding-left: var(--small-gutter);
+  font-size: var(--medium-font-size);
+  line-height: var(--medium-font-line-height);
+  font-weight: var(--default-font-weight);
+  width: 100%;
+  border: 1px solid var(--border-color);
+}

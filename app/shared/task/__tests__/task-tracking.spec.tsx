@@ -1,5 +1,6 @@
 import { shallow } from 'enzyme';
 import * as React from 'react';
+import { Priority } from '../../../graphql/types';
 import { taskWithComment } from '../../util/test-data';
 import TaskFollowers from '../followers';
 import PrioritySelect from '../priority-select';
@@ -8,9 +9,9 @@ import TaskTracking from '../task-tracking';
 describe('Task Tracking Component', () => {
   const taskId = 'simba';
   const patientId = 'nala';
-  const priority = 'high';
+  const priority = 'high' as Priority;
   const followers = taskWithComment.followers;
-  const editTask = () => true as any;
+  const onPriorityClick = () => true as any;
 
   const wrapper = shallow(
     <TaskTracking
@@ -18,7 +19,7 @@ describe('Task Tracking Component', () => {
       patientId={patientId}
       priority={priority}
       followers={followers}
-      editTask={editTask}
+      onPriorityClick={onPriorityClick}
     />,
   );
 
@@ -27,9 +28,8 @@ describe('Task Tracking Component', () => {
 
     const props = wrapper.find(PrioritySelect).props();
 
-    expect(props.taskId).toBe(taskId);
     expect(props.priority).toBe(priority);
-    expect(props.editTask).toBe(editTask);
+    expect(props.onPriorityClick).toBe(onPriorityClick);
   });
 
   it('renders task followers', () => {

@@ -3,9 +3,11 @@
 exports[`renders popup 1`] = `
 <div
   className="background"
+  onClick={undefined}
 >
   <div
     className="content"
+    onClick={undefined}
   >
     <div
       className="content"

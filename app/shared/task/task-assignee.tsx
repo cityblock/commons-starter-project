@@ -2,12 +2,7 @@ import * as React from 'react';
 import { compose, graphql } from 'react-apollo';
 import { FormattedMessage } from 'react-intl';
 import * as careTeamQuery from '../../graphql/queries/get-patient-care-team.graphql';
-import {
-  taskEditMutation,
-  taskEditMutationVariables,
-  FullUserFragment,
-  ShortUserFragment,
-} from '../../graphql/types';
+import { FullUserFragment, ShortUserFragment } from '../../graphql/types';
 import { getAssigneeInfo } from '../helpers/assignee-helpers';
 import SelectDropdownOption from '../library/select-dropdown-option/select-dropdown-option';
 import SelectDropdown from '../library/select-dropdown/select-dropdown';
@@ -15,9 +10,13 @@ import * as styles from './css/task-body.css';
 
 export interface IProps {
   patientId: string;
-  taskId: string;
-  editTask: (options: { variables: taskEditMutationVariables }) => { data: taskEditMutation };
+  onAssigneeClick: (assignedToId: string) => void;
   assignee?: ShortUserFragment;
+  selectedAssigneeId?: string;
+  messageId?: string;
+  messageStyles?: string;
+  dropdownStyles?: string;
+  menuStyles?: string;
 }
 
 interface IGraphqlProps {
@@ -31,7 +30,7 @@ interface IState {
   changeAssigneeError: string;
 }
 
-type allProps = IProps & IGraphqlProps;
+export type allProps = IProps & IGraphqlProps;
 
 export class TaskAssignee extends React.Component<allProps, IState> {
   constructor(props: allProps) {
@@ -44,14 +43,14 @@ export class TaskAssignee extends React.Component<allProps, IState> {
   }
 
   onNewAssigneeClick = async (careTeamMemberId: string) => {
-    const { taskId, editTask } = this.props;
+    const { onAssigneeClick } = this.props;
 
     if (!this.state.loading) {
       this.setState({ loading: true, changeAssigneeError: '' });
 
       try {
-        await editTask({ variables: { assignedToId: careTeamMemberId, taskId } });
-        this.setState({ loading: false });
+        await onAssigneeClick(careTeamMemberId);
+        this.setState(() => ({ loading: false }));
       } catch (err) {
         this.setState({ loading: false, changeAssigneeError: err.message });
       }
@@ -60,7 +59,8 @@ export class TaskAssignee extends React.Component<allProps, IState> {
 
   getValidAssignees(): FullUserFragment[] {
     const { careTeam, assignee } = this.props;
-    return (careTeam || []).filter(member => assignee && member.id !== assignee.id);
+
+    return (careTeam || []).filter(member => (assignee ? member.id !== assignee.id : member));
   }
 
   renderCareTeamOptions(): JSX.Element[] {
@@ -82,12 +82,25 @@ export class TaskAssignee extends React.Component<allProps, IState> {
   }
 
   render(): JSX.Element {
-    const assigneeInfo = getAssigneeInfo(this.props.assignee);
+    const {
+      messageId,
+      messageStyles,
+      selectedAssigneeId,
+      careTeam,
+      dropdownStyles,
+      menuStyles,
+    } = this.props;
+    const assignee =
+      this.props.assignee ||
+      (selectedAssigneeId && careTeam.find(a => a.id === selectedAssigneeId)) ||
+      undefined;
+
+    const assigneeInfo = getAssigneeInfo(assignee);
 
     return (
       <div>
-        <FormattedMessage id="task.assign">
-          {(message: string) => <h3 className={styles.label}>{message}</h3>}
+        <FormattedMessage id={messageId || 'task.assign'}>
+          {(message: string) => <h3 className={messageStyles || styles.label}>{message}</h3>}
         </FormattedMessage>
         <SelectDropdown
           value={assigneeInfo.name}
@@ -95,6 +108,8 @@ export class TaskAssignee extends React.Component<allProps, IState> {
           avatarUrl={assigneeInfo.avatar}
           loading={this.props.loading}
           error={this.state.changeAssigneeError}
+          className={dropdownStyles}
+          menuStyles={menuStyles}
         >
           {this.renderCareTeamOptions()}
         </SelectDropdown>

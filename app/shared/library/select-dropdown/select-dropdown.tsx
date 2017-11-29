@@ -10,6 +10,8 @@ interface IProps {
   loading?: boolean;
   error?: string;
   children?: any;
+  className?: string;
+  menuStyles?: string;
 }
 
 interface IState {
@@ -56,12 +58,24 @@ class SelectDropdown extends React.Component<IProps, IState> {
   };
 
   render(): JSX.Element {
-    const { avatarUrl, value, detail, loading, error, children } = this.props;
+    const {
+      avatarUrl,
+      value,
+      detail,
+      loading,
+      error,
+      className,
+      children,
+      menuStyles,
+    } = this.props;
     const isOpen = this.state.open && children;
-
-    const containerStyles = classNames(styles.container, {
-      [styles.error]: !!error,
-    });
+    const containerStyles = classNames(
+      styles.container,
+      {
+        [styles.error]: !!error,
+      },
+      className,
+    );
 
     const options = isOpen ? (
       loading ? (
@@ -69,7 +83,7 @@ class SelectDropdown extends React.Component<IProps, IState> {
           <SelectDropdownOption value="Loading..." />
         </div>
       ) : (
-        <div className={styles.dropdown}>{children}</div>
+        <div className={classNames(styles.dropdown, menuStyles)}>{children}</div>
       )
     ) : null;
 

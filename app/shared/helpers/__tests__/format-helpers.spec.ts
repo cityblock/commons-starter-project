@@ -1,5 +1,6 @@
 import {
   formatDueDate,
+  formatDueDateDefault,
   formatFullName,
   formatInputDate,
   isDueSoon,
@@ -59,6 +60,16 @@ describe('Shared Component Helpers', () => {
 
     it('returns past due if due 2 days ago', () => {
       expect(formatDueDate('2017-11-09 12:00:00+00:00')).toBe('Past due 2 days');
+    });
+  });
+
+  describe('formatDueDateDefault', () => {
+    it('formats due date if one given', () => {
+      expect(formatDueDateDefault('')).toBe('11/11/2017');
+    });
+
+    it('formats invalid dates', () => {
+      expect(formatDueDateDefault('invalid')).toBe('Invalid Date');
     });
   });
 

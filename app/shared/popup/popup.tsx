@@ -6,23 +6,37 @@ interface IProps {
   style?: 'no-padding' | 'small-padding';
   visible: boolean;
   children: any;
+  closePopup?: () => void;
+  className?: string;
 }
 
 export const Popup: React.StatelessComponent<IProps> = props => {
   // Eventually there will be a transition here...
-  const { style } = props;
+  const { style, closePopup, className } = props;
 
-  const contentStyles = classNames(styles.content, {
-    [styles.smallContentPadding]: style === 'small-padding',
-    [styles.noContentPadding]: style === 'no-padding',
-  });
+  const contentStyles = classNames(
+    styles.content,
+    {
+      [styles.smallContentPadding]: style === 'small-padding',
+      [styles.noContentPadding]: style === 'no-padding',
+    },
+    className,
+  );
+
+  // prevent popup from closing if clicking on content
+  const stopPropagation = (e: React.MouseEvent<HTMLDivElement>) => {
+    e.stopPropagation();
+  };
+  const onContentClick = closePopup ? stopPropagation : undefined;
 
   if (props.visible) {
     return (
-      <div className={styles.background}>
-        <div className={contentStyles}>{props.children}</div>
+      <div className={styles.background} onClick={closePopup}>
+        <div className={contentStyles} onClick={onContentClick}>
+          {props.children}
+        </div>
       </div>
     );
   }
-  return <div />;
+  return null;
 };

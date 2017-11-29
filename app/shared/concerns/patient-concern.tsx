@@ -109,6 +109,7 @@ export class PatientConcern extends React.Component<IProps, IState> {
       <PatientGoal
         key={patientGoal.id}
         patientGoal={patientGoal}
+        concernTitle={patientConcern.concern.title}
         goalNumber={index + 1}
         selectedTaskId={selectedTaskId}
         optionsOpen={!!optionsDropdownGoalId && patientGoal.id === optionsDropdownGoalId}

@@ -2,6 +2,7 @@ import * as classNames from 'classnames';
 import * as React from 'react';
 import { FullPatientGoalFragment } from '../../graphql/types';
 import TaskRow from '../tasks/task-row';
+import CreateTask from './create-task/create-task';
 import * as styles from './css/goal.css';
 import GoalOptions from './goal-options';
 
@@ -11,14 +12,23 @@ interface IProps {
   selectedTaskId: string;
   optionsOpen: boolean;
   onOptionsToggle: (e: React.MouseEvent<HTMLDivElement>) => void;
+  concernTitle: string;
 }
 
-export default class PatientGoal extends React.Component<IProps, {}> {
+interface IState {
+  createTaskModal: boolean;
+}
+
+export default class PatientGoal extends React.Component<IProps, IState> {
   constructor(props: IProps) {
     super(props);
 
-    this.renderTasks = this.renderTasks.bind(this);
+    this.state = { createTaskModal: false };
   }
+
+  setCreateTaskModal = (createTaskModal: boolean): (() => void) => (): void => {
+    this.setState(() => ({ createTaskModal }));
+  };
 
   renderTasks() {
     const { patientGoal, selectedTaskId } = this.props;
@@ -43,7 +53,15 @@ export default class PatientGoal extends React.Component<IProps, {}> {
   }
 
   render() {
-    const { patientGoal, goalNumber, selectedTaskId, optionsOpen, onOptionsToggle } = this.props;
+    const {
+      patientGoal,
+      concernTitle,
+      goalNumber,
+      selectedTaskId,
+      optionsOpen,
+      onOptionsToggle,
+    } = this.props;
+    const { createTaskModal } = this.state;
 
     const goalStyles = classNames(styles.patientGoal, {
       [styles.inactive]: !!selectedTaskId,
@@ -51,10 +69,22 @@ export default class PatientGoal extends React.Component<IProps, {}> {
 
     return (
       <div className={styles.patientGoalTaskGroup}>
+        <CreateTask
+          visible={createTaskModal}
+          closePopup={this.setCreateTaskModal(false)}
+          patientId={patientGoal.patient.id}
+          patientGoalId={patientGoal.id}
+          goal={patientGoal.title}
+          concern={concernTitle}
+        />
         <div className={goalStyles}>
           <div className={styles.patientGoalHeaderRow}>
             <div className={styles.patientGoalNumber}>{`Goal ${goalNumber}`}</div>
-            <GoalOptions open={optionsOpen} onMenuToggle={onOptionsToggle} />
+            <GoalOptions
+              open={optionsOpen}
+              onMenuToggle={onOptionsToggle}
+              addTask={this.setCreateTaskModal(true)}
+            />
           </div>
           <div className={styles.patientGoalTitle}>{patientGoal.title}</div>
         </div>

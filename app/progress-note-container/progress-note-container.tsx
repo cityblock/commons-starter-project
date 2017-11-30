@@ -2,11 +2,12 @@ import * as React from 'react';
 import { compose, graphql } from 'react-apollo';
 import { FormattedMessage } from 'react-intl';
 import { connect, Dispatch } from 'react-redux';
-import { closeProgressNote, openProgressNote } from '../actions/popup-action';
+import { closePopup, openPopup } from '../actions/popup-action';
 /* tslint:disable:max-line-length */
 import * as progressNotesForCurrentUserQuery from '../graphql/queries/get-progress-notes-for-current-user.graphql';
 /* tsline:enable:max-line-length */
 import { getProgressNotesForCurrentUserQuery } from '../graphql/types';
+import { IProgressNotePopupOptions } from '../reducers/popup-reducer/popup-reducer-types';
 import Icon from '../shared/library/icon/icon';
 import { IState as IAppState } from '../store';
 import * as styles from './css/progress-note-container.css';
@@ -27,7 +28,7 @@ interface IGraphqlProps {
   progressNotesError?: string;
 }
 
-interface IStateProps {
+export interface IStateProps {
   popupIsOpen: boolean;
   popupPatientId?: string;
 }
@@ -111,16 +112,24 @@ export class ProgressNoteContainer extends React.Component<allProps, IState> {
 }
 
 function mapStateToProps(state: IAppState, ownProps: IProps): IStateProps {
+  const popupIsOpen = state.popup.name === 'PROGRESS_NOTE';
+
   return {
-    popupIsOpen: state.popup.progressNoteOpen,
-    popupPatientId: state.popup.patientId,
+    popupIsOpen,
+    popupPatientId: popupIsOpen ? (state.popup.options as IProgressNotePopupOptions).patientId :
+      undefined, // :(
   };
 }
 
 function mapDispatchToProps(dispatch: Dispatch<() => void>): IDispatchProps {
   return {
-    openProgressNote: (patientId: string) => dispatch(openProgressNote(patientId)),
-    closeProgressNote: () => dispatch(closeProgressNote()),
+    openProgressNote: (patientId: string) => dispatch(openPopup({
+      name: 'PROGRESS_NOTE',
+      options: {
+        patientId,
+      },
+    })),
+    closeProgressNote: () => dispatch(closePopup()),
   };
 }
 

@@ -1,20 +1,27 @@
-import { IProgressNoteClose, IProgressNoteOpen } from '../../actions/popup-action';
-import { popupReducer } from '../popup-reducer';
+import { IPopupClose, IPopupOpen } from '../../actions/popup-action';
+import { initialState, popupReducer } from '../popup-reducer/popup-reducer';
 
 describe('popup reducer', () => {
+  const patientId = 'mikeWheeler';
+
   it('correctly changes popup state on open', () => {
-    const action: IProgressNoteOpen = {
-      type: 'PROGRESS_NOTE_OPEN',
-      patientId: 'patient-id',
+    const action: IPopupOpen = {
+      type: 'POPUP_OPEN',
+      popup: {
+        name: 'PROGRESS_NOTE',
+        options: {
+          patientId,
+        },
+      },
     };
-    expect(popupReducer(undefined, action).progressNoteOpen).toBeTruthy();
-    expect(popupReducer(undefined, action).patientId).toEqual('patient-id');
+    expect(popupReducer(undefined, action).name).toBe('PROGRESS_NOTE');
+    expect((popupReducer(undefined, action).options as any).patientId).toBe(patientId);
   });
 
   it('correctly changes popup state on close', () => {
-    const action: IProgressNoteClose = {
-      type: 'PROGRESS_NOTE_CLOSE',
+    const action: IPopupClose = {
+      type: 'POPUP_CLOSE',
     };
-    expect(popupReducer(undefined, action).progressNoteOpen).toBeFalsy();
+    expect(popupReducer({ name: 'PROGRESS_NOTE' } as any, action)).toEqual(initialState);
   });
 });

@@ -2,7 +2,7 @@ import { IBrowserChanged } from './browser-action';
 import { IEventNotificationsCountUpdated } from './event-notifications-action';
 import { IIdleEnd, IIdleStart } from './idle-action';
 import { ILocaleSelected } from './locale-action';
-import { IProgressNoteClose, IProgressNoteOpen } from './popup-action';
+import { IPopupClose, IPopupOpen } from './popup-action';
 
 export type Action =
   | ILocaleSelected
@@ -10,6 +10,6 @@ export type Action =
   | IEventNotificationsCountUpdated
   | IIdleStart
   | IIdleEnd
-  | IProgressNoteOpen
-  | IProgressNoteClose;
+  | IPopupOpen
+  | IPopupClose;
 export type ActionType = Action['type'];

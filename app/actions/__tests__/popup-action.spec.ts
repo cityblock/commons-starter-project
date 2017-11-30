@@ -1,10 +1,21 @@
-import { closeProgressNote, openProgressNote } from '../popup-action';
+import { closePopup, openPopup } from '../popup-action';
 
 describe('popup action', () => {
+  const patientId = 'janeIves';
+
   it('correctly changes popup state', () => {
-    expect(closeProgressNote().type).toEqual('PROGRESS_NOTE_CLOSE');
+    expect(closePopup().type).toBe('POPUP_CLOSE');
   });
   it('correctly changes popup state', () => {
-    expect(openProgressNote('patient-id').patientId).toEqual('patient-id');
+    const openAction = openPopup({
+      name: 'PROGRESS_NOTE',
+      options: {
+        patientId,
+      },
+    });
+
+    expect(openAction.type).toBe('POPUP_OPEN');
+    expect(openAction.popup.name).toBe('PROGRESS_NOTE');
+    expect((openAction.popup.options as any).patientId).toBe(patientId);
   });
 });

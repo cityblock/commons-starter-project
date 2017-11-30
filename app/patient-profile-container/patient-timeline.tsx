@@ -3,7 +3,7 @@ import * as React from 'react';
 import { compose, graphql } from 'react-apollo';
 import { FormattedMessage } from 'react-intl';
 import { connect, Dispatch } from 'react-redux';
-import { openProgressNote } from '../actions/popup-action';
+import { openPopup } from '../actions/popup-action';
 import * as progressNotesQuery from '../graphql/queries/get-progress-notes-for-patient.graphql';
 import { getProgressNotesForPatientQuery, FullProgressNoteFragment } from '../graphql/types';
 import * as sortSearchStyles from '../shared/css/sort-search.css';
@@ -160,7 +160,12 @@ export class PatientTimeline extends React.Component<allProps, IState> {
 
 function mapDispatchToProps(dispatch: Dispatch<() => void>): IDispatchProps {
   return {
-    openProgressNotePopup: (patientId: string) => dispatch(openProgressNote(patientId)),
+    openProgressNotePopup: (patientId: string) => dispatch(openPopup({
+      name: 'PROGRESS_NOTE',
+      options: {
+        patientId,
+      },
+    })),
   };
 }
 

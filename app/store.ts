@@ -9,7 +9,8 @@ import { browserReducer, Size } from './reducers/browser-reducer';
 import { eventNotificationsReducer } from './reducers/event-notifications-reducer';
 import { idleReducer } from './reducers/idle-reducer';
 import { localeReducer, Lang } from './reducers/locale-reducer';
-import { popupReducer } from './reducers/popup-reducer';
+import { popupReducer } from './reducers/popup-reducer/popup-reducer';
+import PopupReducerState from './reducers/popup-reducer/popup-reducer-types';
 
 export interface IState {
   routing: any;
@@ -29,10 +30,7 @@ export interface IState {
   idle: {
     isIdle: boolean;
   };
-  popup: {
-    progressNoteOpen: boolean;
-    patientId?: string;
-  };
+  popup: PopupReducerState;
 }
 
 async function setLastAction() {

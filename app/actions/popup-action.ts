@@ -1,21 +1,19 @@
-export interface IProgressNoteOpen {
-  type: 'PROGRESS_NOTE_OPEN';
-  patientId: string;
+import PopupReducerState from '../reducers/popup-reducer/popup-reducer-types';
+
+export interface IPopupClose {
+  type: 'POPUP_CLOSE';
 }
 
-export interface IProgressNoteClose {
-  type: 'PROGRESS_NOTE_CLOSE';
+export interface IPopupOpen {
+  type: 'POPUP_OPEN';
+  popup: PopupReducerState;
 }
 
-export function openProgressNote(patientId: string): IProgressNoteOpen {
-  return {
-    type: 'PROGRESS_NOTE_OPEN',
-    patientId,
-  };
-}
+export const closePopup = (): IPopupClose => ({
+  type: 'POPUP_CLOSE',
+});
 
-export function closeProgressNote(): IProgressNoteClose {
-  return {
-    type: 'PROGRESS_NOTE_CLOSE',
-  };
-}
+export const openPopup = (popup: PopupReducerState): IPopupOpen => ({
+  type: 'POPUP_OPEN',
+  popup,
+});

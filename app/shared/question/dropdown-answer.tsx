@@ -33,7 +33,7 @@ export default class DropdownAnswer extends React.Component<IProps, {}> {
     const chosenAnswer = (question.answers || []).find(answer => answer.id === id);
 
     if (chosenAnswer) {
-      onChange(question.id, chosenAnswer.id, id);
+      onChange(question.id, chosenAnswer.id, chosenAnswer.value);
     }
   }
 

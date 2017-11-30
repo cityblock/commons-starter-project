@@ -180,7 +180,7 @@ exports[`builder concerns renders progress note popup with templates renders pro
         <div
           className="patientName"
         >
-          Bob Smith
+          Unknown
         </div>
       </div>
     </div>

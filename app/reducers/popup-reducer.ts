@@ -13,18 +13,18 @@ export const popupReducer = (state = initialState, action: Action) => {
   switch (action.type) {
     case 'PROGRESS_NOTE_OPEN':
       return {
-        ...initialState,
+        ...state,
         progressNoteOpen: true,
         patientId: action.patientId,
       };
     case 'PROGRESS_NOTE_CLOSE':
       return {
-        ...initialState,
+        ...state,
         progressNoteOpen: false,
       };
     default:
       return {
-        ...initialState,
+        ...state,
       };
   }
 };

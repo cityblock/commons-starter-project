@@ -6,9 +6,16 @@
   align-items: center;
   justify-content: space-between;
   padding: 10px var(--small-gutter);
+  cursor: pointer;
+  background-color: var(--white-color);
+  transition: background-color 0.3s;
 
   &:last-child {
     border-bottom: 0;
+  }
+
+  &:hover {
+    background-color: var(--gray-background-color);
   }
 }
 

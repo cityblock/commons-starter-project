@@ -3,7 +3,6 @@ import * as React from 'react';
 import { compose, graphql } from 'react-apollo';
 import { FormattedMessage, FormattedRelative } from 'react-intl';
 /* tslint:disable:max-line-length */
-import * as patientQuery from '../graphql/queries/get-patient.graphql';
 import * as progressNoteTemplatesQuery from '../graphql/queries/get-progress-note-templates.graphql';
 import * as progressNotesQuery from '../graphql/queries/get-progress-notes-for-patient.graphql';
 import * as progressNoteCompleteMutationGraphql from '../graphql/queries/progress-note-complete-mutation.graphql';
@@ -19,7 +18,6 @@ import {
   progressNoteEditMutationVariables,
   FullProgressNoteFragment,
   FullProgressNoteTemplateFragment,
-  ShortPatientFragment,
 } from '../graphql/types';
 import * as tabStyles from '../shared/css/tabs.css';
 import Button from '../shared/library/button/button';
@@ -52,9 +50,6 @@ interface IGraphqlProps {
   progressNoteError?: string;
   progressNoteLoading?: boolean;
   progressNote?: FullProgressNoteFragment;
-  patientLoading?: boolean;
-  patientError?: string;
-  patient?: ShortPatientFragment;
 }
 
 interface IState {
@@ -123,7 +118,7 @@ export class ProgressNotePopup extends React.Component<allProps, IState> {
   };
 
   render() {
-    const { close, visible, patientId, progressNoteTemplates, patient, progressNote } = this.props;
+    const { close, visible, patientId, progressNoteTemplates, progressNote } = this.props;
     const { tab, readyToSubmit } = this.state;
 
     const contextStyles = classNames(tabStyles.tab, {
@@ -158,7 +153,8 @@ export class ProgressNotePopup extends React.Component<allProps, IState> {
     if (progressNote && progressNote.progressNoteTemplate) {
       progressNoteName = progressNote.progressNoteTemplate.title;
     }
-    const patientName = patient ? getPatientFullName(patient) : 'Unknown';
+    const patientName =
+      progressNote && progressNote.patient ? getPatientFullName(progressNote.patient) : 'Unknown';
     const openedAt = progressNote ? (
       <FormattedRelative value={progressNote.createdAt}>
         {(date: string) => <div className={styles.openedAt}>Opened: {date}</div>}
@@ -228,14 +224,15 @@ function getProgressNote(data: any) {
 export default compose(
   graphql<IGraphqlProps, IProps, allProps>(progressNoteCompleteMutationGraphql as any, {
     name: 'completeProgressNote',
+    options: { refetchQueries: ['getProgressNotesForPatient', 'getProgressNotesForCurrentUser'] },
   }),
   graphql<IGraphqlProps, IProps, allProps>(progressNoteCreateMutationGraphql as any, {
     name: 'createProgressNote',
-    options: { refetchQueries: ['getProgressNotesForPatient'] },
+    options: { refetchQueries: ['getProgressNotesForPatient', 'getProgressNotesForCurrentUser'] },
   }),
   graphql<IGraphqlProps, IProps, allProps>(progressNoteEditMutationGraphql as any, {
     name: 'editProgressNote',
-    options: { refetchQueries: ['getProgressNotesForPatient'] },
+    options: { refetchQueries: ['getProgressNotesForPatient', 'getProgressNotesForCurrentUser'] },
   }),
   graphql<IGraphqlProps, IProps, allProps>(progressNotesQuery as any, {
     skip: (props: IProps) => !props.patientId,
@@ -249,20 +246,6 @@ export default compose(
       progressNoteLoading: data ? data.loading : false,
       progressNoteError: data ? data.error : null,
       progressNote: data ? getProgressNote(data as any) : null,
-    }),
-  }),
-  graphql<IGraphqlProps, IProps, allProps>(patientQuery as any, {
-    skip: (props: IProps) => !props.patientId,
-    options: (props: IProps) => ({
-      variables: {
-        patientId: props.patientId,
-      },
-      fetchPolicy: 'cache-only',
-    }),
-    props: ({ data }) => ({
-      patientLoading: data ? data.loading : false,
-      patientError: data ? data.error : null,
-      patient: data ? (data as any).patient : null,
     }),
   }),
   graphql<IGraphqlProps, IProps, allProps>(progressNoteTemplatesQuery as any, {

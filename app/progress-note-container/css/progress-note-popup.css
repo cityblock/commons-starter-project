@@ -25,11 +25,12 @@
 
 .topBar {
   width: 100%;
-  background: var(--blue-color);
+  background: var(--navy-color);
   height: 50px;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  font-size: var(--medium-font-size);
   padding: 26px var(--small-gutter) 23px;
 }
 

@@ -56,10 +56,8 @@ export class ProgressNoteContainer extends React.Component<allProps, IState> {
 
   getProgressNotesHtml() {
     const { drawerIsOpen } = this.state;
-    if (!drawerIsOpen) {
-      return null;
-    }
     const { progressNotes } = this.props;
+    const height = drawerIsOpen && progressNotes ? progressNotes.length * 63 : 0;
     const progressNotesHtml = (progressNotes || []).map(
       progressNote =>
         progressNote ? (
@@ -70,7 +68,11 @@ export class ProgressNoteContainer extends React.Component<allProps, IState> {
           />
         ) : null,
     );
-    return <div className={styles.progressNotes}>{progressNotesHtml}</div>;
+    return (
+      <div style={{ height: `${height}px` }} className={styles.progressNotes}>
+        {progressNotesHtml}
+      </div>
+    );
   }
 
   render() {

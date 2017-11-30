@@ -20,13 +20,13 @@ export const localeReducer = (state = initialState, action: Action) => {
       switch (action.locale) {
         case 'es':
           return {
-            ...initialState,
+            ...state,
             lang: SPANISH_TRANSLATION.lang,
             messages: SPANISH_TRANSLATION.messages,
           };
         default:
           return {
-            ...initialState,
+            ...state,
             lang: ENGLISH_TRANSLATION.lang,
             messages: ENGLISH_TRANSLATION.messages,
           };

@@ -16,12 +16,12 @@ export const browserReducer = (state = initialState, action: Action) => {
       switch (action.mediaQueryMatch) {
         case true:
           return {
-            ...initialState,
+            ...state,
             size: 'small',
           };
         default:
           return {
-            ...initialState,
+            ...state,
             size: 'large',
           };
       }

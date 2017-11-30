@@ -10,7 +10,7 @@ export const eventNotificationsReducer = (state = initialState, action: Action) 
   switch (action.type) {
     case 'EVENT_NOTIFICATIONS_COUNT_UPDATED':
       return {
-        ...initialState,
+        ...state,
         count: action.count,
       };
     default:

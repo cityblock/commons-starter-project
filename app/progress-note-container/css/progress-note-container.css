@@ -5,10 +5,11 @@
   bottom: 0;
   right: 0;
   z-index: 10;
+  box-shadow: var(--login-drop-shadow);
 }
 
 .topBar {
-  background: var(--blue-color);
+  background: var(--navy-color);
   padding: 15px var(--small-gutter);
   display: flex;
   justify-content: space-between;
@@ -31,4 +32,6 @@
 
 .progressNotes {
   background: white;
+  transition: height 0.3s ease-in-out;
+  overflow: hidden;
 }

@@ -1,6 +1,7 @@
 import { shallow } from 'enzyme';
 import * as React from 'react';
 import { DragDropContext } from 'react-beautiful-dnd';
+import { adminTasksConcernTitle } from '../../../../server/models/concern';
 import PatientCarePlan from '../../patient-care-plan';
 import { DnDPatientCarePlan as Component } from '../patient-care-plan';
 
@@ -12,22 +13,37 @@ describe('Drag and Drop Patient Care Plan Wrapper Component', () => {
 
   const activeConcern1 = {
     id: 'activeConcern1',
+    concern: { title: 'Active Concern 1 Title' },
     startedAt: 11,
   };
   const activeConcern2 = {
     id: 'activeConcern2',
+    concern: { title: 'Active Concern 2 Title' },
+    startedAt: 11,
+  };
+  const activeConcern3 = {
+    id: 'activeConcern3',
+    concern: { title: adminTasksConcernTitle },
     startedAt: 11,
   };
   const inactiveConcern1 = {
     id: 'inactiveConcern1',
+    concern: { title: 'Inactive Concern 1 Title' },
     startedAt: null,
   };
   const inactiveConcern2 = {
     id: 'inactiveConcern2',
+    concern: { title: 'Inactive Concern 2 Title' },
     startedAt: null,
   };
 
-  const allConcerns = [activeConcern1, inactiveConcern1, activeConcern2, inactiveConcern2];
+  const allConcerns = [
+    activeConcern1,
+    inactiveConcern1,
+    activeConcern2,
+    inactiveConcern2,
+    activeConcern3,
+  ];
 
   const carePlan = {
     concerns: allConcerns,
@@ -67,6 +83,7 @@ describe('Drag and Drop Patient Care Plan Wrapper Component', () => {
     expect(wrapper.find(PatientCarePlan).props().activeConcerns).toEqual([
       activeConcern1,
       activeConcern2,
+      activeConcern3,
     ]);
     expect(wrapper.find(PatientCarePlan).props().inactiveConcerns).toEqual([
       inactiveConcern1,
@@ -85,7 +102,11 @@ describe('Drag and Drop Patient Care Plan Wrapper Component', () => {
   it('does nothing if dragging outside of valid area', () => {
     instance.onDragEnd({ destination: null } as any);
 
-    expect(wrapper.state('activeConcerns')).toEqual([activeConcern1, activeConcern2]);
+    expect(wrapper.state('activeConcerns')).toEqual([
+      activeConcern1,
+      activeConcern2,
+      activeConcern3,
+    ]);
     expect(wrapper.state('inactiveConcerns')).toEqual([inactiveConcern1, inactiveConcern2]);
   });
 
@@ -103,7 +124,11 @@ describe('Drag and Drop Patient Care Plan Wrapper Component', () => {
 
     instance.onDragEnd(result);
 
-    expect(wrapper.state('activeConcerns')).toEqual([activeConcern2, activeConcern1]);
+    expect(wrapper.state('activeConcerns')).toEqual([
+      activeConcern2,
+      activeConcern1,
+      activeConcern3,
+    ]);
     expect(wrapper.state('inactiveConcerns')).toEqual([inactiveConcern1, inactiveConcern2]);
   });
 
@@ -121,7 +146,11 @@ describe('Drag and Drop Patient Care Plan Wrapper Component', () => {
 
     instance.onDragEnd(result);
 
-    expect(wrapper.state('activeConcerns')).toEqual([activeConcern2, activeConcern1]);
+    expect(wrapper.state('activeConcerns')).toEqual([
+      activeConcern2,
+      activeConcern1,
+      activeConcern3,
+    ]);
     expect(wrapper.state('inactiveConcerns')).toEqual([inactiveConcern2, inactiveConcern1]);
   });
 
@@ -140,7 +169,7 @@ describe('Drag and Drop Patient Care Plan Wrapper Component', () => {
 
     instance.onDragEnd(result);
 
-    expect(wrapper.state('activeConcerns')).toEqual([activeConcern1]);
+    expect(wrapper.state('activeConcerns')).toEqual([activeConcern1, activeConcern3]);
     expect(wrapper.state('inactiveConcerns')).toEqual([
       inactiveConcern2,
       activeConcern2,
@@ -163,7 +192,35 @@ describe('Drag and Drop Patient Care Plan Wrapper Component', () => {
 
     instance.onDragEnd(result);
 
-    expect(wrapper.state('activeConcerns')).toEqual([inactiveConcern1, activeConcern1]);
+    expect(wrapper.state('activeConcerns')).toEqual([
+      inactiveConcern1,
+      activeConcern1,
+      activeConcern3,
+    ]);
+    expect(wrapper.state('inactiveConcerns')).toEqual([inactiveConcern2, activeConcern2]);
+  });
+
+  it('does not move the admin tasks concern from active to inactive', () => {
+    // activeConcern3 is the admin tasks concern
+    const result = {
+      source: {
+        droppableId: 'activeConcerns',
+        index: 2,
+      },
+      destination: {
+        droppableId: 'inactiveConcerns',
+        index: 0,
+      },
+      draggableId: 'activeConcern3',
+    } as any;
+
+    instance.onDragEnd(result);
+
+    expect(wrapper.state('activeConcerns')).toEqual([
+      inactiveConcern1,
+      activeConcern1,
+      activeConcern3,
+    ]);
     expect(wrapper.state('inactiveConcerns')).toEqual([inactiveConcern2, activeConcern2]);
   });
 });

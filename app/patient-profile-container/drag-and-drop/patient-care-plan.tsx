@@ -2,17 +2,18 @@ import { isEqual } from 'lodash';
 import * as React from 'react';
 import { graphql } from 'react-apollo';
 import { DragDropContext, DropResult } from 'react-beautiful-dnd';
+import { adminTasksConcernTitle } from '../../../server/models/concern';
 /* tslint:disable:max-line-length */
 import * as patientConcernBulkEditMutationGraphql from '../../graphql/queries/patient-concern-bulk-edit-mutation.graphql';
-/* tslint:enable:max-line-length */
-import {
-  patientConcernBulkEditMutation,
-  patientConcernBulkEditMutationVariables,
-} from '../../graphql/types';
 import {
   getPatientCarePlanQuery,
   FullPatientConcernFragment,
   PatientConcernBulkEditFields,
+} from '../../graphql/types';
+/* tslint:enable:max-line-length */
+import {
+  patientConcernBulkEditMutation,
+  patientConcernBulkEditMutationVariables,
 } from '../../graphql/types';
 import { getOrderDiffs, insert, remove, reorder } from '../../shared/helpers/order-helpers';
 import PatientCarePlan from '../patient-care-plan';
@@ -82,6 +83,9 @@ export class DnDPatientCarePlan extends React.Component<allProps, IState> {
     // dropped outside the list of concerns
     if (!result.destination) return;
 
+    // right now, only invalid if moving admin tasks concern into inactiveConcerns
+    if (this.isRejectableDrop(result)) return;
+
     // if moving around within active or inactive concern group
     if (result.source.droppableId === result.destination.droppableId) {
       this.reorderConcernList(result);
@@ -92,6 +96,23 @@ export class DnDPatientCarePlan extends React.Component<allProps, IState> {
 
     this.setState({ isDragging: false });
   };
+
+  isRejectableDrop(result: DropResult): boolean {
+    const sourceDroppableId = result.source.droppableId;
+    const destinationDroppableId = result.destination ? result.destination.droppableId : null;
+
+    if (!destinationDroppableId) return true;
+
+    if (sourceDroppableId === 'activeConcerns' && destinationDroppableId === 'inactiveConcerns') {
+      const droppedConcern = this.state[sourceDroppableId].find(
+        patientConcern => patientConcern.id === result.draggableId,
+      );
+
+      return droppedConcern!.concern.title === adminTasksConcernTitle;
+    } else {
+      return false;
+    }
+  }
 
   reorderConcernList(result: DropResult): void {
     const endList = result.destination!.droppableId as 'activeConcerns' | 'inactiveConcerns';

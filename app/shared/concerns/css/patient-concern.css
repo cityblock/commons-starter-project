@@ -35,6 +35,10 @@
   background: var(--white-color);
 }
 
+.administrative {
+  border: 1px solid var(--purple-color);
+}
+
 .row {
   display: flex;
   align-items: center;

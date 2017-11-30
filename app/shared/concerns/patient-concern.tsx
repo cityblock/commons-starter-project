@@ -1,5 +1,6 @@
 import * as classNames from 'classnames';
 import * as React from 'react';
+import { adminTasksConcernTitle } from '../../../server/models/concern';
 import { FullPatientConcernFragment } from '../../graphql/types';
 import PatientGoal from '../goals/goal';
 import PatientConcernStats from './concern-stats/concern-stats';
@@ -129,7 +130,7 @@ export class PatientConcern extends React.Component<IProps, IState> {
       selectedTaskId,
       isDragging,
     } = this.props;
-    const { patientGoals } = patientConcern;
+    const { patientGoals, concern } = patientConcern;
 
     const goalsStyles = classNames(styles.goals, {
       [styles.hidden]: !selected || (!patientGoals || !patientGoals.length),
@@ -142,6 +143,7 @@ export class PatientConcern extends React.Component<IProps, IState> {
     const mainStyles = classNames(styles.main, {
       [styles.inactive]: isInactive && !isSelected,
       [styles.selected]: isSelected,
+      [styles.administrative]: concern.title === adminTasksConcernTitle,
     });
 
     return (

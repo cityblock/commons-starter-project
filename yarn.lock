@@ -584,29 +584,29 @@ apollo-cache-control@^0.0.x:
   dependencies:
     graphql-extensions "^0.0.x"
 
-apollo-cache-inmemory@^1.1.0:
-  version "1.1.1"
-  resolved "https://registry.yarnpkg.com/apollo-cache-inmemory/-/apollo-cache-inmemory-1.1.1.tgz#1511f00eb845da88504abf867f408c3026a909ba"
+apollo-cache-inmemory@^1.1.2:
+  version "1.1.2"
+  resolved "https://registry.yarnpkg.com/apollo-cache-inmemory/-/apollo-cache-inmemory-1.1.2.tgz#555d4d76cbea78b1454013f61aa8a8bc8131601f"
   dependencies:
-    apollo-cache "^1.0.1"
-    apollo-utilities "^1.0.2"
-    graphql-anywhere "^4.0.1"
+    apollo-cache "^1.0.2"
+    apollo-utilities "^1.0.3"
+    graphql-anywhere "^4.0.2"
 
-apollo-cache@^1.0.1:
-  version "1.0.1"
-  resolved "https://registry.yarnpkg.com/apollo-cache/-/apollo-cache-1.0.1.tgz#66c16141173bc752d3ad3dce990310c10dfc4076"
+apollo-cache@^1.0.2:
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/apollo-cache/-/apollo-cache-1.0.2.tgz#e3df98696c648649d16a6c3ca9c19e90a556effa"
   dependencies:
-    apollo-utilities "^1.0.2"
+    apollo-utilities "^1.0.3"
 
-apollo-client@^2.0.2:
-  version "2.0.3"
-  resolved "https://registry.yarnpkg.com/apollo-client/-/apollo-client-2.0.3.tgz#f99f32e2c851bbd52da1e1b113ce8f6a0cf94945"
+apollo-client@^2.1.0:
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/apollo-client/-/apollo-client-2.1.0.tgz#1d3716cb5d4ad70c3a4147da629fdfcb53925e7b"
   dependencies:
     "@types/zen-observable" "^0.5.3"
-    apollo-cache "^1.0.1"
+    apollo-cache "^1.0.2"
     apollo-link "^1.0.0"
     apollo-link-dedup "^1.0.0"
-    apollo-utilities "^1.0.2"
+    apollo-utilities "^1.0.3"
     symbol-observable "^1.0.2"
     zen-observable "^0.6.0"
   optionalDependencies:
@@ -637,21 +637,33 @@ apollo-codegen@^0.18.0:
     source-map-support "^0.4.15"
     yargs "^8.0.2"
 
-apollo-link-context@^1.0.1:
-  version "1.0.1"
-  resolved "https://registry.yarnpkg.com/apollo-link-context/-/apollo-link-context-1.0.1.tgz#a1a0a53c80abae36fe9cf3685360e0b9c1bb312f"
+apollo-link-context@^1.0.2:
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/apollo-link-context/-/apollo-link-context-1.0.2.tgz#e9d7a1a2cfe4e21b17d36a06510d032fb85d715d"
+  dependencies:
+    apollo-link "^1.0.4"
 
 apollo-link-dedup@^1.0.0:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/apollo-link-dedup/-/apollo-link-dedup-1.0.2.tgz#bab659dde41f8dd627839142d4dad90e55251110"
 
-apollo-link-http@^1.2.0:
-  version "1.2.0"
-  resolved "https://registry.yarnpkg.com/apollo-link-http/-/apollo-link-http-1.2.0.tgz#48464c2ebfa6474f7a89908696827d66b2deb5cc"
+apollo-link-http@^1.3.0:
+  version "1.3.0"
+  resolved "https://registry.yarnpkg.com/apollo-link-http/-/apollo-link-http-1.3.0.tgz#ce0f79b20e0d31acec1e38146c96fbe541c567f7"
+  dependencies:
+    apollo-link "^1.0.4"
 
-apollo-link@^1.0.0, apollo-link@^1.0.3:
+apollo-link@^1.0.0:
   version "1.0.3"
   resolved "https://registry.yarnpkg.com/apollo-link/-/apollo-link-1.0.3.tgz#759c36abeeb99e227eca45f919ee07fb8fee911e"
+  dependencies:
+    "@types/zen-observable" "0.5.3"
+    apollo-utilities "^1.0.0"
+    zen-observable "^0.6.0"
+
+apollo-link@^1.0.4:
+  version "1.0.4"
+  resolved "https://registry.yarnpkg.com/apollo-link/-/apollo-link-1.0.4.tgz#32b82f1bf882dcc56fdb430075656c501a906f85"
   dependencies:
     "@types/zen-observable" "0.5.3"
     apollo-utilities "^1.0.0"
@@ -682,9 +694,13 @@ apollo-tracing@^0.1.0:
   dependencies:
     graphql-extensions "^0.0.x"
 
-apollo-utilities@^1.0.0, apollo-utilities@^1.0.1, apollo-utilities@^1.0.2:
+apollo-utilities@^1.0.0, apollo-utilities@^1.0.1:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/apollo-utilities/-/apollo-utilities-1.0.2.tgz#bcf348a7e613e82e2624ddb5be2b9f6bf1259c6d"
+
+apollo-utilities@^1.0.3:
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/apollo-utilities/-/apollo-utilities-1.0.3.tgz#bf435277609850dd442cf1d5c2e8bc6655eaa943"
 
 append-transform@^0.4.0:
   version "0.4.0"
@@ -3361,11 +3377,11 @@ graceful-fs@^4.1.11, graceful-fs@^4.1.2, graceful-fs@^4.1.6:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/graceful-readlink/-/graceful-readlink-1.0.1.tgz#4cafad76bc62f02fa039b2f94e9a3dd3a391a725"
 
-graphql-anywhere@^4.0.1:
-  version "4.0.1"
-  resolved "https://registry.yarnpkg.com/graphql-anywhere/-/graphql-anywhere-4.0.1.tgz#eb53ed5c56ef42e21d34dc22951e3da38f88a342"
+graphql-anywhere@^4.0.2:
+  version "4.0.2"
+  resolved "https://registry.yarnpkg.com/graphql-anywhere/-/graphql-anywhere-4.0.2.tgz#1dd13a53a659c5e09d0b6ccecfba771ee4939fa1"
   dependencies:
-    apollo-utilities "^1.0.2"
+    apollo-utilities "^1.0.3"
 
 graphql-config@^1.0.5:
   version "1.0.8"
@@ -8667,7 +8683,7 @@ ua-parser-js@^0.7.9:
   version "0.7.17"
   resolved "https://registry.yarnpkg.com/ua-parser-js/-/ua-parser-js-0.7.17.tgz#e9ec5f9498b9ec910e7ae3ac626a805c4d09ecac"
 
-uglify-es@^3.1.3:
+uglify-es@^3.2.0:
   version "3.2.0"
   resolved "https://registry.yarnpkg.com/uglify-es/-/uglify-es-3.2.0.tgz#fbbfb9dc465ec7e5065701b9720d0de977d0bc24"
   dependencies:
@@ -8687,15 +8703,15 @@ uglify-to-browserify@~1.0.0:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/uglify-to-browserify/-/uglify-to-browserify-1.0.2.tgz#6e0924d6bda6b5afe349e39a6d632850a0f882b7"
 
-uglifyjs-webpack-plugin@1.1.1:
-  version "1.1.1"
-  resolved "https://registry.yarnpkg.com/uglifyjs-webpack-plugin/-/uglifyjs-webpack-plugin-1.1.1.tgz#6167c5aae218ee8109de8920bb769b8acbc55d03"
+uglifyjs-webpack-plugin@1.1.2:
+  version "1.1.2"
+  resolved "https://registry.yarnpkg.com/uglifyjs-webpack-plugin/-/uglifyjs-webpack-plugin-1.1.2.tgz#8a9abc238d01a33daaf86fa9a84c7ebc1e67b0f9"
   dependencies:
     cacache "^10.0.0"
     find-cache-dir "^1.0.0"
     schema-utils "^0.3.0"
     source-map "^0.6.1"
-    uglify-es "^3.1.3"
+    uglify-es "^3.2.0"
     webpack-sources "^1.0.1"
     worker-farm "^1.4.1"
 
@@ -9085,9 +9101,9 @@ webpack-sources@^1.0.1:
     source-list-map "^2.0.0"
     source-map "~0.6.1"
 
-webpack@^3.8.1:
-  version "3.8.1"
-  resolved "https://registry.yarnpkg.com/webpack/-/webpack-3.8.1.tgz#b16968a81100abe61608b0153c9159ef8bb2bd83"
+webpack@^3.9.1:
+  version "3.9.1"
+  resolved "https://registry.yarnpkg.com/webpack/-/webpack-3.9.1.tgz#9a60aa544ed5d4d454c069e3f521aa007e02643c"
   dependencies:
     acorn "^5.0.0"
     acorn-dynamic-import "^2.0.0"

@@ -160,12 +160,15 @@ export class PatientTimeline extends React.Component<allProps, IState> {
 
 function mapDispatchToProps(dispatch: Dispatch<() => void>): IDispatchProps {
   return {
-    openProgressNotePopup: (patientId: string) => dispatch(openPopup({
-      name: 'PROGRESS_NOTE',
-      options: {
-        patientId,
-      },
-    })),
+    openProgressNotePopup: (patientId: string) =>
+      dispatch(
+        openPopup({
+          name: 'PROGRESS_NOTE',
+          options: {
+            patientId,
+          },
+        }),
+      ),
   };
 }
 

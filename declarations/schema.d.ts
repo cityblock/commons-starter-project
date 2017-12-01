@@ -1864,7 +1864,6 @@ declare module 'schema' {
     carePlanSuggestionId: string;
     patientConcernId?: string | null;
     concernId?: string | null;
-    concernTitle?: string | null;
     startedAt?: string | null;
     taskTemplateIds?: Array<string> | null;
   }

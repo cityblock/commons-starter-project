@@ -1150,7 +1150,6 @@ input CarePlanSuggestionAcceptInput {
   carePlanSuggestionId: String!
   patientConcernId: String
   concernId: String
-  concernTitle: String
   startedAt: String
   taskTemplateIds: [String]
 }

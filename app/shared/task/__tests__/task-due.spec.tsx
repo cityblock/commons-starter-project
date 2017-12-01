@@ -15,9 +15,7 @@ describe('Task Due Date Component', () => {
   beforeAll(() => {
     Date.now = jest.fn(() => 1500494779252);
 
-    wrapper = shallow(
-      <TaskDue completedAt="" dueAt={dueAt} taskId={taskId} editTask={editTask} />,
-    );
+    wrapper = shallow(<TaskDue completedAt="" dueAt={dueAt} taskId={taskId} editTask={editTask} />);
   });
   afterAll(() => {
     Date.now = oldDate;

@@ -10,6 +10,7 @@ import ReduxConnectedIntlProvider from '../../redux-connected-intl-provider';
 import {
   carePlanSuggestionWithConcern,
   carePlanSuggestionWithGoal,
+  concern,
 } from '../../shared/util/test-data';
 
 /* tslint:disable:max-line-length */
@@ -36,7 +37,7 @@ it('renders popup modal body for concern suggestion', () => {
               carePlanSuggestions={[carePlanSuggestionWithGoal]}
               concernId={'concern-id'}
               concernType={'active'}
-              newConcernTitle={''}
+              concerns={[concern]}
               suggestion={carePlanSuggestionWithConcern}
               onDismiss={() => true}
               onSubmit={() => true}
@@ -62,7 +63,7 @@ it('renders popup modal body for goal suggestion', () => {
               carePlanSuggestions={[carePlanSuggestionWithConcern]}
               concernId={'concern-id'}
               concernType={'active'}
-              newConcernTitle={''}
+              concerns={[concern]}
               suggestion={carePlanSuggestionWithGoal}
               onDismiss={() => true}
               onSubmit={() => true}

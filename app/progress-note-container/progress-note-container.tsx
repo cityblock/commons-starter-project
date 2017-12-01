@@ -116,19 +116,23 @@ function mapStateToProps(state: IAppState, ownProps: IProps): IStateProps {
 
   return {
     popupIsOpen,
-    popupPatientId: popupIsOpen ? (state.popup.options as IProgressNotePopupOptions).patientId :
-      undefined, // :(
+    popupPatientId: popupIsOpen
+      ? (state.popup.options as IProgressNotePopupOptions).patientId
+      : undefined, // :(
   };
 }
 
 function mapDispatchToProps(dispatch: Dispatch<() => void>): IDispatchProps {
   return {
-    openProgressNote: (patientId: string) => dispatch(openPopup({
-      name: 'PROGRESS_NOTE',
-      options: {
-        patientId,
-      },
-    })),
+    openProgressNote: (patientId: string) =>
+      dispatch(
+        openPopup({
+          name: 'PROGRESS_NOTE',
+          options: {
+            patientId,
+          },
+        }),
+      ),
     closeProgressNote: () => dispatch(closePopup()),
   };
 }

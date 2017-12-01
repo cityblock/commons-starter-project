@@ -127,28 +127,7 @@ exports[`renders popup for goal suggestion 1`] = `
             >
               Select a concern
             </option>
-            <optgroup
-              label="New concern"
-            >
-              <option
-                value="new-concern"
-              >
-                Add a new concern
-              </option>
-            </optgroup>
           </select>
-        </div>
-        <div
-          className="acceptModalInput hidden"
-        >
-          <input
-            className="input roundedInput"
-            name="newConcernTitle"
-            onChange={[Function]}
-            placeholder="Enter concern title"
-            type="text"
-            value=""
-          />
         </div>
         <div
           className="acceptModalInput hidden"

@@ -87,15 +87,6 @@ exports[`renders popup modal body for goal suggestion 1`] = `
         Select a concern
       </option>
       <optgroup
-        label="New concern"
-      >
-        <option
-          value="new-concern"
-        >
-          Add a new concern
-        </option>
-      </optgroup>
-      <optgroup
         label="Suggested concerns"
       >
         <option
@@ -104,19 +95,16 @@ exports[`renders popup modal body for goal suggestion 1`] = `
           Concern Title
         </option>
       </optgroup>
+      <optgroup
+        label="All other concerns"
+      >
+        <option
+          value="concern-id"
+        >
+          Concern Title
+        </option>
+      </optgroup>
     </select>
-  </div>
-  <div
-    className="acceptModalInput hidden"
-  >
-    <input
-      className="input roundedInput"
-      name="newConcernTitle"
-      onChange={[Function]}
-      placeholder="Enter concern title"
-      type="text"
-      value=""
-    />
   </div>
   <div
     className="acceptModalInput"

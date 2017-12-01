@@ -499,7 +499,6 @@ export type carePlanSuggestionAcceptMutationVariables = {
   carePlanSuggestionId: string,
   patientConcernId?: string | null,
   concernId?: string | null,
-  concernTitle?: string | null,
   startedAt?: string | null,
   taskTemplateIds?: Array< string | null > | null,
 };

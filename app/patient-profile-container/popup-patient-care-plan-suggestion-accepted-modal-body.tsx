@@ -1,6 +1,8 @@
 import * as classNames from 'classnames';
+import { includes } from 'lodash';
 import * as React from 'react';
 import {
+  getConcernsQuery,
   getPatientCarePlanQuery,
   getPatientCarePlanSuggestionsQuery,
   FullCarePlanSuggestionFragment,
@@ -12,9 +14,9 @@ import PatientCarePlanSuggestionOptionGroup from './patient-care-plan-suggestion
 interface IProps {
   carePlan?: getPatientCarePlanQuery['carePlanForPatient'];
   carePlanSuggestions?: getPatientCarePlanSuggestionsQuery['carePlanSuggestionsForPatient'];
+  concerns?: getConcernsQuery['concerns'];
   concernId: string;
   concernType: '' | 'inactive' | 'active';
-  newConcernTitle: string;
   suggestion?: FullCarePlanSuggestionFragment;
   onChange: (event: React.ChangeEvent<HTMLSelectElement | HTMLInputElement>) => any;
   onDismiss: () => any;
@@ -25,9 +27,9 @@ const PopupPatientCarePlanSuggestionAcceptedModalBody = (props: IProps) => {
   const {
     carePlan,
     carePlanSuggestions,
+    concerns,
     concernId,
     concernType,
-    newConcernTitle,
     onChange,
     onDismiss,
     onSubmit,
@@ -38,7 +40,9 @@ const PopupPatientCarePlanSuggestionAcceptedModalBody = (props: IProps) => {
   const isSuggestedGoal = !!suggestion && suggestion.suggestionType === 'goal';
 
   let suggestedConcernSelected: boolean = false;
+  let newConcernSelected: boolean = false;
 
+  // Is this a suggested concern
   if (concernId && carePlanSuggestions) {
     const suggestedConcern = carePlanSuggestions.find(
       carePlanSuggestion =>
@@ -52,18 +56,19 @@ const PopupPatientCarePlanSuggestionAcceptedModalBody = (props: IProps) => {
     }
   }
 
+  // Is this a new concern
+  if (concernId && carePlan) {
+    const existingConcernIds = carePlan.concerns.map(concern => concern.id);
+    newConcernSelected = !includes(existingConcernIds, concernId);
+  }
+
   const cancelButtonStyles = classNames(
     styles.invertedButton,
     styles.rightSmallGutter,
     styles.smallButton,
   );
-  const createConcernInputStyles = classNames(formStyles.input, styles.roundedInput);
-  const createConcernInputDivStyles = classNames(styles.acceptModalInput, {
-    [styles.hidden]: isSuggestedConcern || concernId !== 'new-concern',
-  });
   const selectConcernTypeInputDivStyles = classNames(styles.acceptModalInput, {
-    [styles.hidden]:
-      isSuggestedConcern || (concernId !== 'new-concern' && !suggestedConcernSelected),
+    [styles.hidden]: isSuggestedConcern || (!newConcernSelected && !suggestedConcernSelected),
   });
 
   const addButtonStyles = classNames(styles.button, styles.smallButton);
@@ -117,9 +122,6 @@ const PopupPatientCarePlanSuggestionAcceptedModalBody = (props: IProps) => {
             <option value="" disabled hidden>
               Select a concern
             </option>
-            <optgroup label="New concern">
-              <option value="new-concern">Add a new concern</option>
-            </optgroup>
             <PatientCarePlanSuggestionOptionGroup
               optionType={'suggested'}
               carePlan={carePlan}
@@ -135,17 +137,13 @@ const PopupPatientCarePlanSuggestionAcceptedModalBody = (props: IProps) => {
               carePlan={carePlan}
               carePlanSuggestions={carePlanSuggestions}
             />
+            <PatientCarePlanSuggestionOptionGroup
+              optionType={'other'}
+              carePlan={carePlan}
+              carePlanSuggestions={carePlanSuggestions}
+              concerns={concerns}
+            />
           </select>
-        </div>
-        <div className={createConcernInputDivStyles}>
-          <input
-            name="newConcernTitle"
-            className={createConcernInputStyles}
-            type="text"
-            onChange={onChange}
-            placeholder="Enter concern title"
-            value={newConcernTitle}
-          />
         </div>
         <div className={selectConcernTypeInputDivStyles}>
           <select

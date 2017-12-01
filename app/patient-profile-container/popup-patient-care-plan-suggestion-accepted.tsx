@@ -2,10 +2,12 @@ import * as React from 'react';
 import { compose, graphql } from 'react-apollo';
 /* tslint:disable:max-line-length */
 import * as carePlanSuggestionAcceptMutationGraphql from '../graphql/queries/care-plan-suggestion-accept-mutation.graphql';
+import * as concernsQuery from '../graphql/queries/get-concerns.graphql';
 import * as patientCarePlanQuery from '../graphql/queries/get-patient-care-plan.graphql';
 import {
   carePlanSuggestionAcceptMutation,
   carePlanSuggestionAcceptMutationVariables,
+  getConcernsQuery,
   getPatientCarePlanQuery,
   getPatientCarePlanSuggestionsQuery,
   FullCarePlanSuggestionFragment,
@@ -28,6 +30,7 @@ interface IGraphqlProps {
   carePlanLoading?: boolean;
   carePlanError?: string;
   carePlan?: getPatientCarePlanQuery['carePlanForPatient'];
+  concerns?: getConcernsQuery['concerns'];
   acceptCarePlanSuggestion: (
     options: { variables: carePlanSuggestionAcceptMutationVariables },
   ) => { data: carePlanSuggestionAcceptMutation };
@@ -36,7 +39,6 @@ interface IGraphqlProps {
 interface IState {
   concernType: '' | 'inactive' | 'active';
   concernId: string;
-  newConcernTitle: string;
   loading: boolean;
   error?: string;
 }
@@ -51,7 +53,7 @@ class PopupPatientCarePlanSuggestionAccepted extends React.Component<allProps, I
     this.onSubmit = this.onSubmit.bind(this);
     this.onChange = this.onChange.bind(this);
 
-    this.state = { concernType: '', concernId: '', newConcernTitle: '', loading: false };
+    this.state = { concernType: '', concernId: '', loading: false };
   }
 
   async onSubmit() {
@@ -60,8 +62,9 @@ class PopupPatientCarePlanSuggestionAccepted extends React.Component<allProps, I
       acceptCarePlanSuggestion,
       carePlanSuggestions,
       taskTemplateIds,
+      concerns,
     } = this.props;
-    const { concernType, concernId, newConcernTitle } = this.state;
+    const { concernType, concernId } = this.state;
     const startedAt = concernType === 'active' ? new Date().toISOString() : undefined;
     const acceptCarePlanSuggestionVariables: Partial<
       carePlanSuggestionAcceptMutationVariables
@@ -78,26 +81,18 @@ class PopupPatientCarePlanSuggestionAccepted extends React.Component<allProps, I
     acceptCarePlanSuggestionVariables.carePlanSuggestionId = suggestion!.id;
     acceptCarePlanSuggestionVariables.startedAt = startedAt;
 
-    if (acceptingGoalSuggestion) {
-      const existingConcernOrConcernSuggestion =
-        concernId && concernId !== 'new-concern' && carePlanSuggestions;
-      const newConcern = concernId === 'new-concern' && newConcernTitle && concernType;
+    if (acceptingGoalSuggestion && concernId && carePlanSuggestions && concerns) {
+      const suggestedConcernIds = carePlanSuggestions!
+        .filter(carePlanSuggestion => carePlanSuggestion && !!carePlanSuggestion.concern)
+        .map(concernSuggestion => concernSuggestion!.concernId);
+      const addingToSuggestedConcern = suggestedConcernIds.includes(concernId);
+      const addingToNewConcern = concerns.map(concern => concern!.id).includes(concernId);
 
-      if (existingConcernOrConcernSuggestion) {
-        const suggestedConcernIds = carePlanSuggestions!
-          .filter(carePlanSuggestion => carePlanSuggestion && !!carePlanSuggestion.concern)
-          .map(concernSuggestion => concernSuggestion!.concernId);
-        const addingToSuggestedConcern = suggestedConcernIds.includes(concernId);
-
-        if (addingToSuggestedConcern) {
-          acceptCarePlanSuggestionVariables.concernId = concernId;
-          acceptCarePlanSuggestionVariables.taskTemplateIds = taskTemplateIds;
-        } else {
-          acceptCarePlanSuggestionVariables.patientConcernId = concernId;
-          acceptCarePlanSuggestionVariables.taskTemplateIds = taskTemplateIds;
-        }
-      } else if (newConcern) {
-        acceptCarePlanSuggestionVariables.concernTitle = newConcernTitle;
+      if (addingToSuggestedConcern || addingToNewConcern) {
+        acceptCarePlanSuggestionVariables.concernId = concernId;
+        acceptCarePlanSuggestionVariables.taskTemplateIds = taskTemplateIds;
+      } else {
+        acceptCarePlanSuggestionVariables.patientConcernId = concernId;
         acceptCarePlanSuggestionVariables.taskTemplateIds = taskTemplateIds;
       }
     }
@@ -119,7 +114,6 @@ class PopupPatientCarePlanSuggestionAccepted extends React.Component<allProps, I
     this.setState({
       concernType: '',
       concernId: '',
-      newConcernTitle: '',
       loading: false,
       error: undefined,
     });
@@ -134,8 +128,8 @@ class PopupPatientCarePlanSuggestionAccepted extends React.Component<allProps, I
   }
 
   render() {
-    const { carePlan, carePlanSuggestions, suggestion, visible } = this.props;
-    const { concernId, concernType, newConcernTitle } = this.state;
+    const { carePlan, carePlanSuggestions, concerns, suggestion, visible } = this.props;
+    const { concernId, concernType } = this.state;
 
     return (
       <Popup visible={visible} style={'small-padding'}>
@@ -146,9 +140,9 @@ class PopupPatientCarePlanSuggestionAccepted extends React.Component<allProps, I
           <PopupPatientCarePlanSuggestionAcceptedModalBody
             carePlan={carePlan}
             carePlanSuggestions={carePlanSuggestions}
+            concerns={concerns}
             concernId={concernId}
             concernType={concernType}
-            newConcernTitle={newConcernTitle}
             suggestion={suggestion}
             onChange={this.onChange}
             onDismiss={this.onDismiss}
@@ -171,6 +165,13 @@ export default compose(
       carePlanLoading: data ? data.loading : false,
       carePlanError: data ? data.error : null,
       carePlan: data ? (data as any).carePlanForPatient : null,
+    }),
+  }),
+  graphql<IGraphqlProps, allProps>(concernsQuery as any, {
+    props: ({ data }) => ({
+      concernsLoading: data ? data.loading : false,
+      concernsError: data ? data.error : null,
+      concerns: data ? (data as any).concerns : null,
     }),
   }),
   graphql<IGraphqlProps, IProps, allProps>(carePlanSuggestionAcceptMutationGraphql as any, {

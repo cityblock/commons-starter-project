@@ -239,16 +239,17 @@ describe('care plan resolver tests', () => {
       expect(fetchedSuggestion2!.acceptedAt).not.toBeFalsy();
     });
 
-    it('accepts a goal suggestion and creates a new concern/patientConcern', async () => {
+    it('accepts a goal suggestion and creates a new patientConcern', async () => {
       const suggestion = await CarePlanSuggestion.create({
         patientId: patient.id,
         suggestionType: 'goal',
         goalSuggestionTemplateId: goalSuggestionTemplate.id,
       });
+      const concern2 = await Concern.create({ title: 'Concern 2' });
 
       const mutation = `mutation {
         carePlanSuggestionAccept(
-          input: { carePlanSuggestionId: "${suggestion.id}", concernTitle: "New Concern Yo" }
+          input: { carePlanSuggestionId: "${suggestion.id}", concernId: "${concern2.id}" }
         ) {
           id
         }
@@ -258,8 +259,8 @@ describe('care plan resolver tests', () => {
       const patientConcerns = await PatientConcern.getForPatient(patient.id);
       const patientGoals = await PatientGoal.getForPatient(patient.id);
       const concerns = await Concern.getAll();
-      expect(concerns.map(c => c.title)).toContain('New Concern Yo');
-      expect(patientConcerns[0].concern.title).toEqual('New Concern Yo');
+      expect(concerns.map(c => c.title)).toContain(concern2.title);
+      expect(patientConcerns[0].concern.title).toEqual(concern2.title);
       expect(patientGoals[0].goalSuggestionTemplateId).toEqual(goalSuggestionTemplate.id);
       expect(patientGoals[0].patientConcernId).toEqual(patientConcerns[0].id);
 
@@ -267,7 +268,7 @@ describe('care plan resolver tests', () => {
       expect(fetchedSuggestion!.acceptedAt).not.toBeFalsy();
     });
 
-    it('accepts a goal suggestion and attaches to a newly concern suggestion', async () => {
+    it('accepts a goal suggestion and attaches to a newly suggested concern', async () => {
       const concernSuggestion = await CarePlanSuggestion.create({
         patientId: patient.id,
         suggestionType: 'concern',

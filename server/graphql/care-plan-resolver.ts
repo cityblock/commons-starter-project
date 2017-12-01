@@ -86,7 +86,7 @@ export async function carePlanSuggestionAccept(
 
     if (carePlanSuggestion) {
       const { patientId, goalSuggestionTemplateId } = carePlanSuggestion;
-      const { concernTitle, startedAt, concernId } = input;
+      const { startedAt, concernId } = input;
 
       if (!!carePlanSuggestion.concern && carePlanSuggestion.concernId) {
         await PatientConcern.create({
@@ -97,7 +97,7 @@ export async function carePlanSuggestionAccept(
         });
       } else if (!!carePlanSuggestion.goalSuggestionTemplate) {
         const patientGoalCreateInput: any = Object.assign(
-          omit(input, ['concernTitle', 'concernId', 'startedAt', 'carePlanSuggestionId']),
+          omit(input, ['concernId', 'startedAt', 'carePlanSuggestionId']),
           {
             userId,
             goalSuggestionTemplateId,
@@ -106,21 +106,7 @@ export async function carePlanSuggestionAccept(
           },
         );
 
-        if (concernTitle) {
-          const concern = await Concern.findOrCreateByTitle(concernTitle, txn);
-
-          const patientConcern = await PatientConcern.create(
-            {
-              concernId: concern.id,
-              patientId,
-              startedAt: startedAt || undefined,
-              userId: userId!,
-            },
-            txn,
-          );
-
-          patientGoalCreateInput.patientConcernId = patientConcern.id;
-        } else if (concernId) {
+        if (concernId) {
           const patientConcern = await PatientConcern.create(
             {
               concernId,

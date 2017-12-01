@@ -1,8 +1,9 @@
 import { transaction, Model, RelationMappings, Transaction } from 'objection';
 import { IPaginatedResults, IPaginationOptions } from '../db';
+import { adminTasksConcernTitle } from '../lib/consts';
 import BaseModel from './base-model';
 import Clinic from './clinic';
-import Concern, { adminTasksConcernTitle } from './concern';
+import Concern from './concern';
 import PatientConcern from './patient-concern';
 
 export interface IPatientEditableFields {

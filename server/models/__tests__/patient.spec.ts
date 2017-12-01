@@ -1,5 +1,6 @@
 import * as uuid from 'uuid/v4';
 import Db from '../../db';
+import { adminTasksConcernTitle } from '../../lib/consts';
 import {
   createMockClinic,
   createMockPatient,
@@ -7,7 +8,6 @@ import {
   createPatient,
 } from '../../spec-helpers';
 import Clinic from '../clinic';
-import { adminTasksConcernTitle } from '../concern';
 import Patient from '../patient';
 import PatientConcern from '../patient-concern';
 import User from '../user';

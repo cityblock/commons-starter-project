@@ -117,7 +117,7 @@
     "stylelint": "^8.3.1",
     "stylelint-config-lost": "^0.0.3",
     "stylelint-config-standard": "^18.0.0",
-    "ts-jest": "^21.2.3",
+    "ts-jest": "^21.2.4",
     "tslint": "^5.7.0",
     "tslint-microsoft-contrib": "^5.0.1",
     "webpack-dev-server": "^2.9.5"

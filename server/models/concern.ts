@@ -5,8 +5,6 @@ interface IConcernEditableFields {
   title: string;
 }
 
-export const adminTasksConcernTitle = 'Administrative Tasks';
-
 /* tslint:disable:member-ordering */
 export default class Concern extends BaseModel {
   title: string;

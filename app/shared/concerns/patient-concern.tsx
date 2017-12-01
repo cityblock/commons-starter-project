@@ -1,6 +1,6 @@
 import * as classNames from 'classnames';
 import * as React from 'react';
-import { adminTasksConcernTitle } from '../../../server/models/concern';
+import { adminTasksConcernTitle } from '../../../server/lib/consts';
 import { FullPatientConcernFragment } from '../../graphql/types';
 import PatientGoal from '../goals/goal';
 import PatientConcernStats from './concern-stats/concern-stats';

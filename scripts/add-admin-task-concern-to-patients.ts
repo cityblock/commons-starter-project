@@ -1,6 +1,7 @@
 /* tslint:disable no-console */
 import Db from '../server/db';
-import Concern, { adminTasksConcernTitle } from '../server/models/concern';
+import { adminTasksConcernTitle } from '../server/lib/consts';
+import Concern from '../server/models/concern';
 import Patient from '../server/models/patient';
 import PatientConcern from '../server/models/patient-concern';
 import User from '../server/models/user';

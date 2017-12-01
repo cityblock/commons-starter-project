@@ -13,8 +13,8 @@ export const ProgressNoteSmallRow: React.StatelessComponent<IProps> = props => {
   const name = progressNote.patient
     ? `${progressNote.patient.firstName} ${progressNote.patient.lastName}`
     : null;
-  const formattedTime = progressNote.startedAt ? (
-    <FormattedTime value={progressNote.startedAt} />
+  const formattedTime = progressNote.createdAt ? (
+    <FormattedTime value={progressNote.createdAt} />
   ) : null;
   return (
     <div

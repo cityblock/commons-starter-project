@@ -2,7 +2,7 @@ import { isEqual } from 'lodash';
 import * as React from 'react';
 import { graphql } from 'react-apollo';
 import { DragDropContext, DropResult } from 'react-beautiful-dnd';
-import { adminTasksConcernTitle } from '../../../server/models/concern';
+import { adminTasksConcernTitle } from '../../../server/lib/consts';
 /* tslint:disable:max-line-length */
 import * as patientConcernBulkEditMutationGraphql from '../../graphql/queries/patient-concern-bulk-edit-mutation.graphql';
 import {

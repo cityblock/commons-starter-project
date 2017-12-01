@@ -340,9 +340,8 @@ install [Docker][]. After you have Docker installed and running, follow these st
 [postgresql documentation]: https://www.postgresql.org/docs/9.6/static/runtime-config-logging.html
 [docker]: https://docs.docker.com/engine/installation/
 [tech design doc]: https://docs.google.com/document/d/1KlSX20FgUv1BllA6n8jJdg6beQ55ikrpaOOE8RnfQkE
-
-[Fog Creek code review]:
-https://blog.fogcreek.com/increase-defect-detection-with-our-code-review-checklist-example/] [revert
-functionality]: https://help.github.com/desktop/guides/contributing/reverting-a-commit/ [AppCanary]:
-https://appcanary.com/monitors/2283 [NSP]: https://nodesecurity.io [Secure Development Lifecycle]:
-https://github.com/Microsoft/tslint-microsoft-contrib/wiki/TSLint-and-the-Microsoft-Security-Development-Lifecycle
+[Fog Creek code review]: https://blog.fogcreek.com/increase-defect-detection-with-our-code-review-checklist-example/] 
+[revert functionality]: https://help.github.com/desktop/guides/contributing/reverting-a-commit/ 
+[AppCanary]: https://appcanary.com/monitors/2283 
+[NSP]: https://nodesecurity.io 
+[Secure Development Lifecycle]: https://github.com/Microsoft/tslint-microsoft-contrib/wiki/TSLint-and-the-Microsoft-Security-Development-Lifecycle

@@ -1,7 +1,7 @@
 #import "../fragments/full-patient-goal.graphql"
 
 mutation patientGoalCreate(
-  $title: String!
+  $title: String
   $patientId: String!
   $patientConcernId: String
   $goalSuggestionTemplateId: String

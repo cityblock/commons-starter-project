@@ -70,12 +70,13 @@ describe('patient goal model', () => {
     });
 
     const patientGoal = await PatientGoal.create({
-      title: 'title',
       patientId: patient.id,
       goalSuggestionTemplateId: goalSuggestionTemplate.id,
       userId: user.id,
     });
-    expect(patientGoal.goalSuggestionTemplateId).toEqual(goalSuggestionTemplate.id);
+
+    expect(patientGoal.goalSuggestionTemplateId).toBe(goalSuggestionTemplate.id);
+    expect(patientGoal.title).toBe(goalSuggestionTemplate.title);
     expect(await PatientGoal.get(patientGoal.id)).toMatchObject(patientGoal);
   });
 

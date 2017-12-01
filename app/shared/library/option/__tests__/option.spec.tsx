@@ -5,6 +5,7 @@ import Option from '../option';
 
 describe('Library Option Component', () => {
   const value = 'Blastoise';
+  const label = 'Water Gun';
 
   it('returns formatted message if message id given', () => {
     const messageId = 'water gun';
@@ -17,15 +18,17 @@ describe('Library Option Component', () => {
   });
 
   it('returns option tag if no message id given', () => {
-    const label = 'Water Gun';
-
     const wrapper = shallow(<Option value={value} label={label} />);
-
     const option = wrapper.find('option');
 
     expect(option.length).toBe(1);
     expect(option.props().value).toBe(value);
     expect(option.text()).toBe(label);
     expect(option.props().disabled).toBeFalsy();
+  });
+
+  it('indents option if specified', () => {
+    const wrapper = shallow(<Option value={value} label={label} indent={true} />);
+    expect(wrapper.find('option').text()).toBe('    Water Gun');
   });
 });

@@ -33,62 +33,79 @@ interface IGraphqlProps {
 
 export type allProps = IProps & IGraphqlProps;
 
-export const PatientCarePlanView = (props: allProps) => {
-  const { patientCarePlan, loading, match } = props;
+interface IState {
+  createConcernModal: boolean;
+}
 
-  const patientId = match.params.patientId;
-  const subTab = match.params.subTab;
-  const routeBase = `/patients/${match.params.patientId}/map`;
-  const taskId = match.params.taskId;
+export class PatientCarePlanView extends React.Component<allProps, IState> {
+  constructor(props: allProps) {
+    super(props);
 
-  const isSuggestions = subTab === 'suggestions';
+    this.state = {
+      createConcernModal: false,
+    };
+  }
 
-  const carePlanSuggestions = isSuggestions ? (
-    <PatientCarePlanSuggestions routeBase={routeBase} patientId={patientId} />
-  ) : null;
-  const carePlan = !isSuggestions ? (
-    <PatientMap
-      loading={loading}
-      carePlan={patientCarePlan}
-      routeBase={`${routeBase}/active`}
-      patientId={patientId}
-      taskId={taskId}
-    />
-  ) : null;
+  setCreateConcernModal = (createConcernModal: boolean): (() => void) => (): void => {
+    this.setState(() => ({ createConcernModal }));
+  };
 
-  const activeCarePlanTabStyles = classNames(tabStyles.tab, {
-    [tabStyles.selectedTab]: !isSuggestions,
-  });
-  const suggestionsTabStyles = classNames(tabStyles.tab, {
-    [tabStyles.selectedTab]: isSuggestions,
-  });
-  const tabRowStyles = classNames(tabStyles.tabs, tabStyles.darkTabs);
+  render(): JSX.Element {
+    const { patientCarePlan, loading, match } = this.props;
+    const patientId = match.params.patientId;
+    const subTab = match.params.subTab;
+    const routeBase = `/patients/${match.params.patientId}/map`;
+    const taskId = match.params.taskId;
 
-  return (
-    <div>
-      <div className={tabRowStyles}>
-        <FormattedMessage id="patient.activeCarePlan">
-          {(message: string) => (
-            <Link to={`${routeBase}/active`} className={activeCarePlanTabStyles}>
-              {message}
-            </Link>
-          )}
-        </FormattedMessage>
-        <FormattedMessage id="patient.carePlanSuggestions">
-          {(message: string) => (
-            <Link to={`${routeBase}/suggestions`} className={suggestionsTabStyles}>
-              {message}
-            </Link>
-          )}
-        </FormattedMessage>
+    const isSuggestions = subTab === 'suggestions';
+
+    const carePlanSuggestions = isSuggestions ? (
+      <PatientCarePlanSuggestions routeBase={routeBase} patientId={patientId} />
+    ) : null;
+    const carePlan = !isSuggestions ? (
+      <PatientMap
+        loading={loading}
+        carePlan={patientCarePlan}
+        routeBase={`${routeBase}/active`}
+        patientId={patientId}
+        taskId={taskId}
+      />
+    ) : null;
+
+    const activeCarePlanTabStyles = classNames(tabStyles.tab, {
+      [tabStyles.selectedTab]: !isSuggestions,
+    });
+    const suggestionsTabStyles = classNames(tabStyles.tab, {
+      [tabStyles.selectedTab]: isSuggestions,
+    });
+    const tabRowStyles = classNames(tabStyles.tabs, tabStyles.darkTabs);
+
+    return (
+      <div>
+        <div className={tabRowStyles}>
+          <FormattedMessage id="patient.activeCarePlan">
+            {(message: string) => (
+              <Link to={`${routeBase}/active`} className={activeCarePlanTabStyles}>
+                {message}
+              </Link>
+            )}
+          </FormattedMessage>
+          <FormattedMessage id="patient.carePlanSuggestions">
+            {(message: string) => (
+              <Link to={`${routeBase}/suggestions`} className={suggestionsTabStyles}>
+                {message}
+              </Link>
+            )}
+          </FormattedMessage>
+        </div>
+        <div className={styles.carePlanPanel}>
+          {carePlanSuggestions}
+          {carePlan}
+        </div>
       </div>
-      <div className={styles.carePlanPanel}>
-        {carePlanSuggestions}
-        {carePlan}
-      </div>
-    </div>
-  );
-};
+    );
+  }
+}
 
 export default graphql<IGraphqlProps, IProps, allProps>(patientCarePlanQuery as any, {
   options: (props: IProps) => ({

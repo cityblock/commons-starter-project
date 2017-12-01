@@ -2,6 +2,9 @@ import * as uuid from 'uuid/v4';
 import Db from '../../db';
 import GoalSuggestionTemplate from '../goal-suggestion-template';
 
+const order = 'asc';
+const orderBy = 'createdAt';
+
 describe('goal suggestion template model', () => {
   beforeEach(async () => {
     await Db.get();
@@ -50,16 +53,34 @@ describe('goal suggestion template model', () => {
 
     it('fetches all goal suggestions templates', async () => {
       const goalSuggestion1 = await GoalSuggestionTemplate.create({
-        title: 'fix Housing',
-      });
-      const goalSuggestion2 = await GoalSuggestionTemplate.create({
         title: 'fix Medical',
       });
+      const goalSuggestion2 = await GoalSuggestionTemplate.create({
+        title: 'fix Housing',
+      });
 
-      expect(await GoalSuggestionTemplate.getAll()).toMatchObject([
-        goalSuggestion1,
-        goalSuggestion2,
-      ]);
+      expect(
+        await GoalSuggestionTemplate.getAll({
+          orderBy,
+          order,
+        }),
+      ).toMatchObject([goalSuggestion1, goalSuggestion2]);
+    });
+
+    it('fetches goal suggetions templates with a custom order', async () => {
+      const goalSuggestion1 = await GoalSuggestionTemplate.create({
+        title: 'fix Medical',
+      });
+      const goalSuggestion2 = await GoalSuggestionTemplate.create({
+        title: 'fix Housing',
+      });
+
+      expect(
+        await GoalSuggestionTemplate.getAll({
+          orderBy: 'title',
+          order: 'asc',
+        }),
+      ).toMatchObject([goalSuggestion2, goalSuggestion1]);
     });
   });
 });

@@ -10,7 +10,7 @@ import Task from './task';
 import TaskTemplate from './task-template';
 
 interface IPatientGoalEditableFields {
-  title: string;
+  title?: string;
   patientId: string;
   goalSuggestionTemplateId?: string;
   taskTemplateIds?: string[];
@@ -96,13 +96,17 @@ export default class PatientGoal extends BaseModel {
   }
 
   static async create(input: IPatientGoalEditableFields, existingTxn?: Transaction) {
-    const { taskTemplateIds, goalSuggestionTemplateId, userId, patientId } = input;
+    const { taskTemplateIds, goalSuggestionTemplateId, userId, patientId, title } = input;
+
+    if (!goalSuggestionTemplateId && !title) {
+      return Promise.reject('Must include either goal suggestion template id or title');
+    }
 
     return await transaction(PatientGoal.knex(), async txn => {
       let patientGoal: PatientGoal;
       let validTaskTemplates: TaskTemplate[] = [];
 
-      if (!taskTemplateIds || !taskTemplateIds.length || !goalSuggestionTemplateId) {
+      if (!goalSuggestionTemplateId) {
         patientGoal = await this.query(existingTxn)
           .eager(EAGER_QUERY)
           .insertAndFetch(omit(input, ['userId', 'taskTemplates']));
@@ -111,9 +115,16 @@ export default class PatientGoal extends BaseModel {
           goalSuggestionTemplateId,
           existingTxn || txn,
         );
-        validTaskTemplates = goalSuggestionTemplate!.taskTemplates.filter(
-          taskTemplate => taskTemplateIds.indexOf(taskTemplate.id) > -1,
-        );
+
+        // set title to be same as goal suggestion template title
+        input.title = goalSuggestionTemplate.title;
+        validTaskTemplates =
+          taskTemplateIds && taskTemplateIds.length
+            ? goalSuggestionTemplate!.taskTemplates.filter(
+                taskTemplate => taskTemplateIds.indexOf(taskTemplate.id) > -1,
+              )
+            : [];
+
         patientGoal = await this.query(existingTxn || txn)
           .eager(EAGER_QUERY)
           .insertAndFetch(omit(input, ['userId', 'taskTemplates']));

@@ -531,7 +531,7 @@ declare module 'schema' {
   interface IGoalSuggestionTemplate {
     id: string;
     title: string;
-    taskTemplates: Array<ITaskTemplate> | null;
+    taskTemplates: Array<ITaskTemplate>;
     createdAt: string;
     updatedAt: string;
     deletedAt: string | null;
@@ -874,6 +874,9 @@ declare module 'schema' {
     deletedAt: string | null;
     carePlanSuggestions: Array<ICarePlanSuggestion>;
   }
+
+
+  type IGoalSuggestionOrderOptionsEnum = 'createdAtDesc' | 'createdAtAsc' | 'titleDesc' | 'titleAsc' | 'updatedAtDesc' | 'updatedAtAsc';
 
 
   interface IPatientTaskSuggestion {
@@ -1799,7 +1802,7 @@ declare module 'schema' {
 
 
   interface IPatientGoalCreateInput {
-    title: string;
+    title?: string | null;
     patientId: string;
     patientConcernId?: string | null;
     goalSuggestionTemplateId?: string | null;

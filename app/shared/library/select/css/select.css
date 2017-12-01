@@ -7,17 +7,18 @@
   height: 34px;
   border: 1px solid var(--border-color);
   transition: border 0.2s linear;
-  padding-left: 12px;
+  padding-left: var(--small-gutter);
   border-radius: var(--border-radius);
   background-image: url('../../../../assets/down-arrow.svg');
   background-repeat: no-repeat;
   background-position-x: calc(100% - 20px);
   background-position-y: center;
+  width: 100%;
+  cursor: pointer;
   appearance: none;
 
   &:hover,
   &:active {
     border-color: var(--blue-color);
-    cursor: pointer;
   }
 }

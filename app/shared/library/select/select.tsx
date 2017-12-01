@@ -9,7 +9,8 @@ interface IProps {
   className?: string;
 }
 
-const Select: React.StatelessComponent<IProps> = ({ value, onChange, className, children }) => {
+const Select: React.StatelessComponent<IProps> = (props: IProps) => {
+  const { value, onChange, className, children } = props;
   const selectStyles = classNames(styles.select, className);
 
   return (

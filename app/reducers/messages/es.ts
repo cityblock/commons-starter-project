@@ -53,6 +53,7 @@ export const SPANISH_TRANSLATION = {
     'careTeam.text': 'Envía un mensaje de texto',
     'careTeam.email': 'Enviar un correo electrónico',
     'careTeam.profile': 'Ir al perfil',
+    'concernCreate.addConcern': 'Añadir preocupación',
     'concernStats.created': 'Creado:',
     'concernStats.goals': 'Metas:',
     'concernStats.lastUpdated': 'Última actualización:',
@@ -82,6 +83,29 @@ export const SPANISH_TRANSLATION = {
     'contactForm.consentToText': '¿El paciente acepta ser contactado vía texto?',
     'contactForm.consentToPhone': '¿El paciente acepta ser contactado por teléfono?',
     'contactForm.readConsentStatement': 'Leer declaración de consentimiento al paciente:',
+    'goalCreate.addGoal': 'Agrega un objetivo',
+    'goalCreate.back': 'Regresa',
+    'goalCreate.cancel': 'Cancelar',
+    'goalCreate.custom': 'Escribe un nuevo objetivo',
+    /* tslint:disable:max-line-length */
+    'goalCreate.detail':
+      'Elija de una lista de objetivos o escriba un objetivo personalizado para el MAP de este miembro',
+    /* tslint:enable:max-line-length */
+    'goalCreate.goalAdded': 'Objetivo agregado:',
+    'goalCreate.loading': 'Cargando...',
+    'goalCreate.selectGoal': 'Seleccionar objetivo',
+    'goalCreate.selectLabel': 'Agrega un objetivo:',
+    'goalCreate.submit': 'Agregar objetivo',
+    'goalCreate.submitWithTasks': 'Hecho',
+    'goalCreate.suggestedTasks': 'Tareas sugeridas:',
+    /* tslint:disable:max-line-length */
+    'goalCreate.suggestionsDetail':
+      'Con base en esta adición al objetivo, se han recomendado las siguientes sugerencias para este Plan de acción para miembros. Debe aceptar o rechazar estas sugerencias antes de continuar.',
+    /* tslint:enable:max-line-length */
+    'goalCreate.suggestionsTitle': 'Nuevas sugerencias MAP',
+    'goalCreate.templates': 'Todos los demás objetivos',
+    'goalCreate.title': 'Ingresa el título del objetivo:',
+    'goalCreate.titlePlaceholder': 'Ingresa el título del objetivo...',
     'insuranceForm.insuranceType': 'Tipo de seguro',
     'insuranceForm.insuranceTypePlaceholder': 'Seleccione el tipo de seguro',
     'insuranceForm.policyHolderRelationship': 'Paciente con el asegurado',

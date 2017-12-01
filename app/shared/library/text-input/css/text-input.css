@@ -17,3 +17,7 @@
     border-color: var(--blue-color);
   }
 }
+
+.input::-webkit-input-placeholder {
+  color: var(--light-gray-font-color);
+}

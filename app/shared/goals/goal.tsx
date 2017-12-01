@@ -11,7 +11,7 @@ interface IProps {
   patientGoal: FullPatientGoalFragment;
   selectedTaskId: string;
   optionsOpen: boolean;
-  onOptionsToggle: (e: React.MouseEvent<HTMLDivElement>) => void;
+  onOptionsToggle: () => void;
   concernTitle: string;
 }
 

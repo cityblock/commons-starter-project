@@ -1,0 +1,13 @@
+@import '../../../css/sizes';
+
+.flex {
+  display: flex;
+  justify-content: space-between;
+}
+
+.button {
+  width: calc(50% - 10px);
+  margin-top: var(--medium-gutter);
+  height: 42px;
+  padding-top: 12px;
+}

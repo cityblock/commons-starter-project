@@ -3,6 +3,7 @@ import * as React from 'react';
 import { connect, Dispatch } from 'react-redux';
 import { push } from 'react-router-redux';
 import { getPatientCarePlanQuery } from '../graphql/types';
+import CreateGoalModal from '../shared/concerns/create-goal/create-goal';
 import Task from '../shared/task/task';
 import * as styles from './css/patient-map.css';
 import DnDPatientCarePlan from './drag-and-drop/patient-care-plan';
@@ -51,6 +52,7 @@ export class PatientMap extends React.Component<allProps, {}> {
 
     return (
       <div className={styles.container} onClick={this.closeTask}>
+        <CreateGoalModal />
         <div className={mainStyles}>
           <DnDPatientCarePlan
             loading={loading}

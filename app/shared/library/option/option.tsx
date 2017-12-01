@@ -6,15 +6,18 @@ interface IProps {
   label?: string;
   messageId?: string;
   disabled?: boolean;
+  indent?: boolean; // hack to indent when not possible to use optgroup, prefer optgroup
 }
 
-const Option: React.StatelessComponent<IProps> = ({ value, label, messageId, disabled }) => {
+const Option: React.StatelessComponent<IProps> = (props: IProps) => {
+  const { value, label, messageId, disabled, indent } = props;
+
   if (messageId) {
     return (
       <FormattedMessage id={messageId}>
         {(message: string) => (
           <option disabled={disabled} value={value}>
-            {message}
+            {indent ? `\u00A0\u00A0\u00A0\u00A0${message}` : `${message}`}
           </option>
         )}
       </FormattedMessage>
@@ -23,7 +26,7 @@ const Option: React.StatelessComponent<IProps> = ({ value, label, messageId, dis
 
   return (
     <option value={value} disabled={disabled}>
-      {label}
+      {indent ? `\u00A0\u00A0\u00A0\u00A0${label}` : `${label}`}
     </option>
   );
 };

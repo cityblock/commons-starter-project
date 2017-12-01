@@ -1,10 +1,12 @@
 export type IconName =
   | 'addAlert'
+  | 'addCircle'
   | 'addCircleOutline'
   | 'close'
   | 'event'
-  | 'moreVert'
-  | 'expandMore'
-  | 'expandLess'
   | 'expandArrow'
+  | 'expandLess'
+  | 'expandMore'
+  | 'highlightOff'
+  | 'moreVert'
   | 'phone';

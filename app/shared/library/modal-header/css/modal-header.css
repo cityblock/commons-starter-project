@@ -1,0 +1,55 @@
+@import '../../../css/sizes';
+
+.container {
+  background: var(--gray-background-color);
+  text-align: center;
+  position: relative;
+  border-top-left-radius: 4px;
+  border-top-right-radius: 4px;
+}
+
+.navyContainer {
+  background: var(--navy-color);
+}
+
+.container h2 {
+  margin: 0;
+  padding-top: var(--medium-gutter);
+  font-family: var(--basetica-black);
+  font-size: var(--medium-large-font-size);
+  line-height: 23px;
+  color: var(--black-color);
+}
+
+.container p {
+  margin: 0;
+  padding: var(--medium-gutter);
+  padding-top: 0;
+  line-height: var(--body-copy-line-height);
+  color: var(--gray-font-color);
+}
+
+.navyText {
+  color: var(--white-color);
+}
+
+.icon {
+  fill: var(--border-color);
+  position: absolute;
+  top: var(--small-gutter);
+  right: var(--small-gutter);
+  cursor: pointer;
+  transition: fill 0.2s;
+
+  &:hover {
+    fill: var(--gray-font-color);
+  }
+}
+
+.navyIcon {
+  fill: var(--white-color);
+
+  &:hover {
+    fill: var(--border-color);
+  }
+}

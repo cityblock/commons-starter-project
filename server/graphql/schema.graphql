@@ -16,6 +16,15 @@ enum AppointmentStatus {
   chargeEntered
 }
 
+enum GoalSuggestionOrderOptions {
+  createdAtDesc
+  createdAtAsc
+  titleDesc
+  titleAsc
+  updatedAtDesc
+  updatedAtAsc
+}
+
 enum TaskOrderOptions {
   createdAtDesc
   createdAtAsc
@@ -570,7 +579,7 @@ type PatientConcern implements uniqueId {
 type GoalSuggestionTemplate implements uniqueId {
   id: ID!
   title: String!
-  taskTemplates: [TaskTemplate]
+  taskTemplates: [TaskTemplate!]!
   createdAt: String!
   updatedAt: String!
   deletedAt: String
@@ -1086,7 +1095,7 @@ input GoalSuggestInput {
 }
 
 input PatientGoalCreateInput {
-  title: String!
+  title: String
   patientId: String!
   patientConcernId: String
   goalSuggestionTemplateId: String
@@ -1519,7 +1528,7 @@ type RootQueryType {
   # Goal suggestion templates
   goalSuggestionTemplate(goalSuggestionTemplateId: String!): GoalSuggestionTemplate
   # Goal suggestion templates
-  goalSuggestionTemplates: [GoalSuggestionTemplate]
+  goalSuggestionTemplates(orderBy: GoalSuggestionOrderOptions): [GoalSuggestionTemplate]
   # Goal suggestion for template for answer
   goalSuggestionTemplatesForAnswer(answerId: String!): [GoalSuggestionTemplate]
   # Task template

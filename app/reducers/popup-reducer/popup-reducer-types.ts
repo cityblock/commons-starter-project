@@ -7,11 +7,22 @@ interface IProgressNotePopup {
   options: IProgressNotePopupOptions;
 }
 
+export interface ICreatePatientGoalPopupOptions {
+  patientId: string;
+  patientConcernId: string;
+  goalSuggestionTemplateIds: string[];
+}
+
+interface ICreatePatientGoalPopup {
+  name: 'CREATE_PATIENT_GOAL';
+  options: ICreatePatientGoalPopupOptions;
+}
+
 export interface IDefaultState {
   name: '';
   options: {};
 }
 
-type PopupReducerState = IProgressNotePopup | IDefaultState;
+type PopupReducerState = ICreatePatientGoalPopup | IProgressNotePopup | IDefaultState;
 
 export default PopupReducerState;

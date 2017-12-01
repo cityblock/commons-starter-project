@@ -6,6 +6,13 @@ interface IGoalSuggestionTemplateEditableFields {
   title: string;
 }
 
+export type GoalSuggestionTemplateOrderOptions = 'createdAt' | 'title' | 'updatedAt';
+
+interface IGoalSuggestionTemplateOrderOptions {
+  orderBy: GoalSuggestionTemplateOrderOptions;
+  order: 'asc' | 'desc';
+}
+
 /* tslint:disable:member-ordering */
 export default class GoalSuggestionTemplate extends BaseModel {
   title: string;
@@ -65,12 +72,15 @@ export default class GoalSuggestionTemplate extends BaseModel {
       .updateAndFetchById(goalSuggestionTemplateId, goalSuggestionTemplate);
   }
 
-  // TODO: paginate?
-  static async getAll(): Promise<GoalSuggestionTemplate[]> {
+  static async getAll({
+    orderBy,
+    order,
+  }: IGoalSuggestionTemplateOrderOptions): Promise<GoalSuggestionTemplate[]> {
     return await this.query()
       .where('deletedAt', null)
       .eager('taskTemplates')
-      .modifyEager('taskTemplates', builder => builder.where('deletedAt', null));
+      .modifyEager('taskTemplates', builder => builder.where('deletedAt', null))
+      .orderBy(orderBy, order);
   }
 
   static async delete(goalSuggestionTemplateId: string): Promise<GoalSuggestionTemplate> {

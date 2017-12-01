@@ -1,5 +1,6 @@
 import { shallow } from 'enzyme';
 import * as React from 'react';
+import { FormattedMessage } from 'react-intl';
 import TextInput from '../text-input';
 
 describe('Library Text Input Component', () => {
@@ -32,5 +33,16 @@ describe('Library Text Input Component', () => {
 
     expect(wrapper.find('input').props().name).toBe(name);
     expect(wrapper.find('input').props().id).toBe(id);
+  });
+
+  it('renders formatted message with translated placeholder if provided', () => {
+    const placeholderMessageId = 'steveHarrington';
+
+    const wrapper = shallow(
+      <TextInput value={value} onChange={onChange} placeholderMessageId={placeholderMessageId} />,
+    );
+
+    expect(wrapper.find(FormattedMessage).length).toBe(1);
+    expect(wrapper.find(FormattedMessage).props().id).toBe(placeholderMessageId);
   });
 });

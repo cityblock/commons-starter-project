@@ -41,7 +41,7 @@ export class PatientConcern extends React.Component<IProps, IState> {
     }
   }
 
-  onOptionsToggle = (goalId: string) => (e: React.MouseEvent<HTMLDivElement>) => {
+  onOptionsToggle = (goalId: string) => () => {
     // do nothing if task open as we close task on clicking outside of task
     if (this.props.selectedTaskId) return;
 
@@ -119,6 +119,19 @@ export class PatientConcern extends React.Component<IProps, IState> {
     ));
   }
 
+  getGoalSuggestionTemplateIds(): string[] {
+    const goalTemplateIds: string[] = [];
+    const { patientConcern } = this.props;
+
+    if (patientConcern) {
+      patientConcern.patientGoals!.forEach(goal => {
+        if (goal.goalSuggestionTemplateId) goalTemplateIds.push(goal.goalSuggestionTemplateId);
+      });
+    }
+
+    return goalTemplateIds;
+  }
+
   render() {
     const {
       onClick,
@@ -147,21 +160,29 @@ export class PatientConcern extends React.Component<IProps, IState> {
     });
 
     return (
-      <div className={styles.container}>
-        <div className={mainStyles} onClick={onClick}>
-          <div className={styles.row}>
-            <h3>{patientConcern.concern.title}</h3>
-            <PatientConcernOptions open={optionsOpen} onMenuToggle={onOptionsToggle} />
+      <div>
+        <div className={styles.container}>
+          <div className={mainStyles} onClick={onClick}>
+            <div className={styles.row}>
+              <h3>{patientConcern.concern.title}</h3>
+              <PatientConcernOptions
+                open={optionsOpen}
+                onMenuToggle={onOptionsToggle}
+                patientId={patientConcern.patientId}
+                patientConcernId={patientConcern.id}
+                goalSuggestionTemplateIds={this.getGoalSuggestionTemplateIds()}
+              />
+            </div>
+            <PatientConcernStats
+              goalCount={goalCount}
+              taskCount={taskCount}
+              createdAt={patientConcern.createdAt}
+              lastUpdated={lastUpdated}
+              inactive={!isSelected && isInactive}
+            />
           </div>
-          <PatientConcernStats
-            goalCount={goalCount}
-            taskCount={taskCount}
-            createdAt={patientConcern.createdAt}
-            lastUpdated={lastUpdated}
-            inactive={!isSelected && isInactive}
-          />
+          <div className={goalsStyles}>{this.renderGoals()}</div>
         </div>
-        <div className={goalsStyles}>{this.renderGoals()}</div>
       </div>
     );
   }

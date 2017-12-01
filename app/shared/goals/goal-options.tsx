@@ -4,7 +4,7 @@ import HamburgerMenu from '../library/hamburger-menu/hamburger-menu';
 
 interface IProps {
   open: boolean;
-  onMenuToggle: (e?: any) => void;
+  onMenuToggle: () => void;
   addTask: () => void;
 }
 

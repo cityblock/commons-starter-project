@@ -54,6 +54,7 @@ export const ENGLISH_TRANSLATION = {
     'careTeam.text': 'Send text message',
     'careTeam.email': 'Send an email',
     'careTeam.profile': 'Go to profile',
+    'concernCreate.addConcern': 'Add concern',
     'concernStats.created': 'Created:',
     'concernStats.goals': 'Goals:',
     'concernStats.lastUpdated': 'Last update:',
@@ -83,6 +84,28 @@ export const ENGLISH_TRANSLATION = {
     'contactForm.consentToText': 'Does the patient consent to being contacted via text?',
     'contactForm.consentToPhone': 'Does the patient consent to being contacted via phone?',
     'contactForm.readConsentStatement': 'Read consent statement to patient:',
+    'goalCreate.addGoal': 'Add a goal',
+    'goalCreate.back': 'Back',
+    'goalCreate.cancel': 'Cancel',
+    'goalCreate.custom': 'Write a new goal',
+    /* tslint:disable:max-line-length */
+    'goalCreate.detail': "Choose from a list of goals or write a custom goal for this member's MAP",
+    /* tslint:enable:max-line-length */
+    'goalCreate.goalAdded': 'Goal added:',
+    'goalCreate.loading': 'Loading...',
+    'goalCreate.selectGoal': 'Select goal',
+    'goalCreate.selectLabel': 'Add a goal:',
+    'goalCreate.submit': 'Add goal',
+    'goalCreate.submitWithTasks': 'Done',
+    'goalCreate.suggestedTasks': 'Suggested tasks:',
+    /* tslint:disable:max-line-length */
+    'goalCreate.suggestionsDetail':
+      'Based on this goal addition, the following suggestions have been recommended to this Member Action Plan. You must accept or dismiss these suggestions before continuing.',
+    /* tslint:enable:max-line-length */
+    'goalCreate.suggestionsTitle': 'New MAP suggestions',
+    'goalCreate.templates': 'All other goals',
+    'goalCreate.title': 'Enter goal title:',
+    'goalCreate.titlePlaceholder': 'Enter goal title...',
     'insuranceForm.insuranceType': 'Insurance type',
     'insuranceForm.insuranceTypePlaceholder': 'Select insurance type',
     'insuranceForm.policyHolderRelationship': 'Patient relationship to policyholder',

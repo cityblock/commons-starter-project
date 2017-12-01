@@ -101,10 +101,38 @@ describe('goal suggestion template resolver', () => {
       });
       expect(cloneDeep(result.data!.goalSuggestionTemplates)).toMatchObject([
         {
-          title: goalSuggestion1.title,
+          title: goalSuggestion2.title,
         },
         {
+          title: goalSuggestion1.title,
+        },
+      ]);
+    });
+
+    it('returns goal suggestion templates with custom order', async () => {
+      const goalSuggestion1 = await GoalSuggestionTemplate.create({
+        title: 'fix Medical',
+      });
+
+      const goalSuggestion2 = await GoalSuggestionTemplate.create({
+        title: 'fix Housing',
+      });
+
+      const query = `{
+        goalSuggestionTemplates(orderBy: titleAsc) { title }
+      }`;
+
+      const result = await graphql(schema, query, null, {
+        db,
+        userRole: 'admin',
+      });
+
+      expect(cloneDeep(result.data!.goalSuggestionTemplates)).toMatchObject([
+        {
           title: goalSuggestion2.title,
+        },
+        {
+          title: goalSuggestion1.title,
         },
       ]);
     });

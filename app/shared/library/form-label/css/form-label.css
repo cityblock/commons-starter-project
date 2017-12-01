@@ -1,0 +1,16 @@
+@import '../../../css/sizes';
+
+.label {
+  display: block;
+  color: var(--black-color);
+  font-family: var(--basetica-medium);
+  font-weight: var(--roboto-medium-weight);
+  font-size: var(--default-font-size);
+  line-height: var(--medium-font-line-height);
+  margin: 0 0 10px 0;
+  padding-top: var(--medium-gutter);
+}
+
+.completed {
+  color: var(--light-gray-font-color);
+}

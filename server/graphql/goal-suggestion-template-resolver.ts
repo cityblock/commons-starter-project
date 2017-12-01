@@ -3,9 +3,11 @@ import {
   IGoalSuggestionTemplateDeleteInput,
   IGoalSuggestionTemplateEditInput,
 } from 'schema';
-import GoalSuggestionTemplate from '../models/goal-suggestion-template';
+import GoalSuggestionTemplate, {
+  GoalSuggestionTemplateOrderOptions,
+} from '../models/goal-suggestion-template';
 import accessControls from './shared/access-controls';
-import { IContext } from './shared/utils';
+import { formatOrderOptions, IContext } from './shared/utils';
 
 export interface IGoalSuggestionTemplatesCreateArgs {
   input: IGoalSuggestionTemplateCreateInput;
@@ -41,7 +43,12 @@ export async function resolveGoalSuggestionTemplates(
 ) {
   await accessControls.isAllowed(userRole, 'view', 'goalSuggestionTemplate');
 
-  return await GoalSuggestionTemplate.getAll();
+  const { order, orderBy } = formatOrderOptions<GoalSuggestionTemplateOrderOptions>(args.orderBy, {
+    orderBy: 'createdAt',
+    order: 'desc',
+  });
+
+  return await GoalSuggestionTemplate.getAll({ orderBy, order });
 }
 
 export async function resolveGoalSuggestionTemplate(

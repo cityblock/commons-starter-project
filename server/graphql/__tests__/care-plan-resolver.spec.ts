@@ -20,6 +20,9 @@ import {
 } from '../../spec-helpers';
 import schema from '../make-executable-schema';
 
+const orderBy = 'title';
+const order = 'asc';
+
 describe('care plan resolver tests', () => {
   let db: Db;
   const userRole = 'admin';
@@ -258,7 +261,7 @@ describe('care plan resolver tests', () => {
 
       const patientConcerns = await PatientConcern.getForPatient(patient.id);
       const patientGoals = await PatientGoal.getForPatient(patient.id);
-      const concerns = await Concern.getAll();
+      const concerns = await Concern.getAll({ orderBy, order });
       expect(concerns.map(c => c.title)).toContain(concern2.title);
       expect(patientConcerns[0].concern.title).toEqual(concern2.title);
       expect(patientGoals[0].goalSuggestionTemplateId).toEqual(goalSuggestionTemplate.id);

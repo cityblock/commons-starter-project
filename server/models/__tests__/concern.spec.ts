@@ -2,6 +2,9 @@ import * as uuid from 'uuid/v4';
 import Db from '../../db';
 import Concern from '../concern';
 
+const order = 'asc';
+const orderBy = 'createdAt';
+
 describe('concern model', () => {
   beforeEach(async () => {
     await Db.get();
@@ -48,13 +51,23 @@ describe('concern model', () => {
       const concern1 = await Concern.create({ title: 'Housing' });
       const concern2 = await Concern.create({ title: 'Medical' });
 
-      expect(await Concern.getAll()).toMatchObject([concern1, concern2]);
+      expect(await Concern.getAll({ orderBy, order })).toMatchObject([concern1, concern2]);
+    });
+
+    it('fetches all concerns in a custom order', async () => {
+      const concern1 = await Concern.create({ title: 'def' });
+      const concern2 = await Concern.create({ title: 'abc' });
+
+      expect(await Concern.getAll({ orderBy: 'title', order: 'asc' })).toMatchObject([
+        concern2,
+        concern1,
+      ]);
     });
 
     it('finds or creates a concern by title', async () => {
       const concern = await Concern.create({ title: 'housing' });
       const foundOrCreatedConcern = await Concern.findOrCreateByTitle('Housing');
-      const fetchedConcerns = await Concern.getAll();
+      const fetchedConcerns = await Concern.getAll({ orderBy, order });
 
       expect(fetchedConcerns.length).toEqual(1);
       expect(foundOrCreatedConcern).toMatchObject(concern);

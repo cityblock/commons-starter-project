@@ -85,6 +85,28 @@ describe('concern resolver', () => {
       });
       expect(cloneDeep(result.data!.concerns)).toMatchObject([
         {
+          title: concern2.title,
+        },
+        {
+          title: concern1.title,
+        },
+      ]);
+    });
+
+    it('returns concerns in a custom order', async () => {
+      const concern1 = await Concern.create({ title: 'abc' });
+      const concern2 = await Concern.create({ title: 'def' });
+
+      const query = `{
+        concerns(orderBy: titleAsc) { title }
+      }`;
+
+      const result = await graphql(schema, query, null, {
+        db,
+        userRole: 'admin',
+      });
+      expect(cloneDeep(result.data!.concerns)).toMatchObject([
+        {
           title: concern1.title,
         },
         {

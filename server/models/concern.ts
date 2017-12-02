@@ -5,6 +5,13 @@ interface IConcernEditableFields {
   title: string;
 }
 
+export type ConcernOrderOptions = 'createdAt' | 'title' | 'updatedAt';
+
+interface IConcernOrderOptions {
+  orderBy: ConcernOrderOptions;
+  order: 'asc' | 'desc';
+}
+
 /* tslint:disable:member-ordering */
 export default class Concern extends BaseModel {
   title: string;
@@ -65,8 +72,10 @@ export default class Concern extends BaseModel {
     return await this.query().updateAndFetchById(concernId, concern);
   }
 
-  static async getAll(): Promise<Concern[]> {
-    return await this.query().where('deletedAt', null);
+  static async getAll({ orderBy, order }: IConcernOrderOptions): Promise<Concern[]> {
+    return await this.query()
+      .where('deletedAt', null)
+      .orderBy(orderBy, order);
   }
 
   static async delete(concernId: string): Promise<Concern> {

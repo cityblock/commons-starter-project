@@ -877,6 +877,9 @@ declare module 'schema' {
   }
 
 
+  type IConcernOrderOptionsEnum = 'createdAtDesc' | 'createdAtAsc' | 'titleDesc' | 'titleAsc' | 'updatedAtDesc' | 'updatedAtAsc';
+
+
   type IGoalSuggestionOrderOptionsEnum = 'createdAtDesc' | 'createdAtAsc' | 'titleDesc' | 'titleAsc' | 'updatedAtDesc' | 'updatedAtAsc';
 
 

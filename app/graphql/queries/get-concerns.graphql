@@ -1,7 +1,7 @@
 #import "../fragments/full-concern.graphql"
 
-query getConcerns {
-  concerns {
+query getConcerns($orderBy: ConcernOrderOptions) {
+  concerns(orderBy: $orderBy) {
     ...FullConcern
   }
 }

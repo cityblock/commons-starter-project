@@ -110,6 +110,16 @@ export enum UserRole {
 }
 
 
+export enum ConcernOrderOptions {
+  createdAtDesc = "createdAtDesc",
+  createdAtAsc = "createdAtAsc",
+  titleDesc = "titleDesc",
+  titleAsc = "titleAsc",
+  updatedAtDesc = "updatedAtDesc",
+  updatedAtAsc = "updatedAtAsc",
+}
+
+
 export enum GoalSuggestionOrderOptions {
   createdAtDesc = "createdAtDesc",
   createdAtAsc = "createdAtAsc",
@@ -1102,6 +1112,10 @@ export type getConcernQuery = {
     updatedAt: string,
     deletedAt: string | null,
   } | null,
+};
+
+export type getConcernsQueryVariables = {
+  orderBy?: ConcernOrderOptions | null,
 };
 
 export type getConcernsQuery = {

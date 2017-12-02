@@ -1,8 +1,8 @@
 import { pickBy } from 'lodash';
 import { IConcernCreateInput, IConcernDeleteInput, IConcernEditInput } from 'schema';
-import Concern from '../models/concern';
+import Concern, { ConcernOrderOptions } from '../models/concern';
 import accessControls from './shared/access-controls';
-import { IContext } from './shared/utils';
+import { formatOrderOptions, IContext } from './shared/utils';
 
 export interface IConcernCreateArgs {
   input: IConcernCreateInput;
@@ -40,7 +40,12 @@ export async function resolveConcern(
 export async function resolveConcerns(root: any, args: any, { db, userRole }: IContext) {
   await accessControls.isAllowed(userRole, 'view', 'concern');
 
-  return await Concern.getAll();
+  const { order, orderBy } = formatOrderOptions<ConcernOrderOptions>(args.orderBy, {
+    orderBy: 'createdAt',
+    order: 'desc',
+  });
+
+  return await Concern.getAll({ orderBy, order });
 }
 
 export async function concernEdit(

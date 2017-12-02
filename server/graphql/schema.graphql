@@ -16,6 +16,15 @@ enum AppointmentStatus {
   chargeEntered
 }
 
+enum ConcernOrderOptions {
+  createdAtDesc
+  createdAtAsc
+  titleDesc
+  titleAsc
+  updatedAtDesc
+  updatedAtAsc
+}
+
 enum GoalSuggestionOrderOptions {
   createdAtDesc
   createdAtAsc
@@ -1516,7 +1525,7 @@ type RootQueryType {
   # Concern
   concern(concernId: String!): Concern
   # Concerns
-  concerns: [Concern]
+  concerns(orderBy: ConcernOrderOptions): [Concern]
   # Concerns for answer
   concernsForAnswer(answerId: String!): [Concern]
   # patient concern

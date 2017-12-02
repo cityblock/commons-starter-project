@@ -1,4 +1,3 @@
-import { sortBy } from 'lodash';
 import * as React from 'react';
 import { compose, graphql } from 'react-apollo';
 /* tslint:disable:max-line-length */
@@ -44,7 +43,7 @@ export const ConcernSelect: React.StatelessComponent<allProps> = (props: allProp
   const existingConcernIds = patientCarePlan
     ? patientCarePlan.concerns.map(concern => concern.concernId)
     : [];
-  const concernOptions = sortBy(concerns || [], 'title').filter(
+  const concernOptions = (concerns || []).filter(
     concern => !existingConcernIds.includes(concern!.id),
   );
   const concernOptionsList =
@@ -75,6 +74,7 @@ export const ConcernSelect: React.StatelessComponent<allProps> = (props: allProp
 
 export default compose(
   graphql<IGraphqlProps, IProps, allProps>(concernsQuery as any, {
+    options: () => ({ variables: { orderBy: 'titleAsc' } }),
     props: ({ data }) => ({
       loading: data ? data.loading : false,
       error: data ? data.error : null,

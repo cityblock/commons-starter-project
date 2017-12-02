@@ -9,10 +9,11 @@ import PatientMap from '../patient-map';
 describe('Patient Care Plan View Component', () => {
   const patientId = patient.id;
   const routeBase = '/patients';
+  const placeholderFn = () => true as any;
 
   it('renders patient suggestions when on suggestions tab', () => {
     const match = { params: { patientId: patient.id, subTab: 'suggestions' as any } };
-    const wrapper = shallow(<PatientCarePlanView match={match} />);
+    const wrapper = shallow(<PatientCarePlanView match={match} addConcern={placeholderFn} />);
 
     const suggestions = wrapper.find(PatientCarePlanSuggestions);
 
@@ -23,7 +24,7 @@ describe('Patient Care Plan View Component', () => {
 
   it('renders patient MAP when on active tab', () => {
     const match = { params: { patientId: patient.id, subTab: 'active' as any } };
-    const wrapper = shallow(<PatientCarePlanView match={match} />);
+    const wrapper = shallow(<PatientCarePlanView match={match} addConcern={placeholderFn} />);
 
     const map = wrapper.find(PatientMap);
 
@@ -36,7 +37,7 @@ describe('Patient Care Plan View Component', () => {
 
   it('renders two tabs', () => {
     const match = { params: { patientId: patient.id, subTab: 'active' as any } };
-    const wrapper = shallow(<PatientCarePlanView match={match} />);
+    const wrapper = shallow(<PatientCarePlanView match={match} addConcern={placeholderFn} />);
 
     const tabs = wrapper.find(FormattedMessage);
     expect(tabs.length).toBe(2);

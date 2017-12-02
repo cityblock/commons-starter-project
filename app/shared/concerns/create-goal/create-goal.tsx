@@ -190,7 +190,6 @@ export class CreateGoalModal extends React.Component<allProps, IState> {
 
   render() {
     const { visible, loading } = this.props;
-
     if (!visible) return null;
 
     const {

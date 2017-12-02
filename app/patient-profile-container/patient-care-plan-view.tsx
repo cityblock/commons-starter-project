@@ -1,13 +1,17 @@
 import * as classNames from 'classnames';
 import * as React from 'react';
-import { graphql } from 'react-apollo';
+import { compose, graphql } from 'react-apollo';
 import { FormattedMessage } from 'react-intl';
+import { connect, Dispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
+import { openPopup } from '../actions/popup-action';
 /* tslint:disable:max-line-length */
 import * as patientCarePlanQuery from '../graphql/queries/get-patient-care-plan.graphql';
 /* tslint:enable:max-line-length */
 import { getPatientCarePlanQuery } from '../graphql/types';
 import * as tabStyles from '../shared/css/tabs.css';
+import Button from '../shared/library/button/button';
+import CreateConcernModal from './create-concern/create-concern';
 import * as styles from './css/patient-care-plan.css';
 import PatientCarePlanSuggestions from './patient-care-plan-suggestions';
 import PatientMap from './patient-map';
@@ -31,27 +35,15 @@ interface IGraphqlProps {
   error?: string;
 }
 
-export type allProps = IProps & IGraphqlProps;
-
-interface IState {
-  createConcernModal: boolean;
+interface IDispatchProps {
+  addConcern: () => void;
 }
 
-export class PatientCarePlanView extends React.Component<allProps, IState> {
-  constructor(props: allProps) {
-    super(props);
+export type allProps = IProps & IDispatchProps & IGraphqlProps;
 
-    this.state = {
-      createConcernModal: false,
-    };
-  }
-
-  setCreateConcernModal = (createConcernModal: boolean): (() => void) => (): void => {
-    this.setState(() => ({ createConcernModal }));
-  };
-
+export class PatientCarePlanView extends React.Component<allProps> {
   render(): JSX.Element {
-    const { patientCarePlan, loading, match } = this.props;
+    const { patientCarePlan, loading, match, addConcern } = this.props;
     const patientId = match.params.patientId;
     const subTab = match.params.subTab;
     const routeBase = `/patients/${match.params.patientId}/map`;
@@ -97,27 +89,46 @@ export class PatientCarePlanView extends React.Component<allProps, IState> {
               </Link>
             )}
           </FormattedMessage>
+          <Button messageId="concernCreate.addConcern" onClick={addConcern} />
         </div>
         <div className={styles.carePlanPanel}>
           {carePlanSuggestions}
           {carePlan}
         </div>
+        <CreateConcernModal />
       </div>
     );
   }
 }
 
-export default graphql<IGraphqlProps, IProps, allProps>(patientCarePlanQuery as any, {
-  options: (props: IProps) => ({
-    variables: {
-      patientId: props.match.params.patientId,
-    },
-    fetchPolicy: 'cache-and-network', // Always get the latest care plan
+const getPatientId = (props: IProps): string => props.match.params.patientId;
+
+const mapDispatchToProps = (dispatch: Dispatch<() => void>, ownProps: IProps): IDispatchProps => {
+  const addConcern = () =>
+    dispatch(
+      openPopup({
+        name: 'CREATE_PATIENT_CONCERN',
+        options: { patientId: getPatientId(ownProps) },
+      }),
+    );
+
+  return { addConcern };
+};
+
+export default compose(
+  connect<{}, IDispatchProps, IProps>(null, mapDispatchToProps),
+  graphql<IGraphqlProps, IProps, allProps>(patientCarePlanQuery as any, {
+    options: (props: IProps) => ({
+      variables: {
+        patientId: getPatientId(props),
+      },
+      fetchPolicy: 'cache-and-network', // Always get the latest care plan
+    }),
+    props: ({ data }) => ({
+      loading: data ? data.loading : false,
+      error: data ? data.error : null,
+      patientCarePlan: data ? (data as any).carePlanForPatient : null,
+      refetchPatientCarePlan: data ? data.refetch : null,
+    }),
   }),
-  props: ({ data }) => ({
-    loading: data ? data.loading : false,
-    error: data ? data.error : null,
-    patientCarePlan: data ? (data as any).carePlanForPatient : null,
-    refetchPatientCarePlan: data ? data.refetch : null,
-  }),
-})(PatientCarePlanView);
+)(PatientCarePlanView);

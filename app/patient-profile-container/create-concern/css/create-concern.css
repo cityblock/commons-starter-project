@@ -1,0 +1,10 @@
+@import '../../../shared/css/sizes';
+
+.popup {
+  border-radius: 4px;
+}
+
+.fields {
+  padding: var(--medium-gutter);
+  padding-top: 0;
+}

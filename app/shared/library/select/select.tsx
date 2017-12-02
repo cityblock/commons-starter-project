@@ -7,14 +7,15 @@ interface IProps {
   onChange: (e?: any) => void;
   children?: any;
   className?: string;
+  name?: string;
 }
 
 const Select: React.StatelessComponent<IProps> = (props: IProps) => {
-  const { value, onChange, className, children } = props;
+  const { value, onChange, className, children, name } = props;
   const selectStyles = classNames(styles.select, className);
 
   return (
-    <select value={value || ''} className={selectStyles} onChange={onChange}>
+    <select name={name} value={value || ''} className={selectStyles} onChange={onChange}>
       {children}
     </select>
   );

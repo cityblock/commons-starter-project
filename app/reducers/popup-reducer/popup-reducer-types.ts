@@ -18,11 +18,24 @@ interface ICreatePatientGoalPopup {
   options: ICreatePatientGoalPopupOptions;
 }
 
+export interface ICreatePatientConcernPopupOptions {
+  patientId: string;
+}
+
+interface ICreatePatientConcernPopup {
+  name: 'CREATE_PATIENT_CONCERN';
+  options: ICreatePatientConcernPopupOptions;
+}
+
 export interface IDefaultState {
   name: '';
   options: {};
 }
 
-type PopupReducerState = ICreatePatientGoalPopup | IProgressNotePopup | IDefaultState;
+type PopupReducerState =
+  | ICreatePatientConcernPopup
+  | ICreatePatientGoalPopup
+  | IProgressNotePopup
+  | IDefaultState;
 
 export default PopupReducerState;

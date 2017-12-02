@@ -54,6 +54,18 @@ export const SPANISH_TRANSLATION = {
     'careTeam.email': 'Enviar un correo electrónico',
     'careTeam.profile': 'Ir al perfil',
     'concernCreate.addConcern': 'Añadir preocupación',
+    'concernCreate.cancel': 'Cancelar',
+    /* tslint:disable:max-line-length */
+    'concernCreate.detail':
+      'Completar este formulario para agregar una preocupación al MAP de este miembro',
+    /* tslint:enable:max-line-length */
+    'concernCreate.loading': 'Cargando...',
+    'concernCreate.selectConcern': 'Seleccione una preocupación',
+    'concernCreate.selectLabel': 'Agregue una preocupación:',
+    'concernCreate.submit': 'Añadir preocupación',
+    'concernCreate.title': 'Agregue una preocupación',
+    'concernCreate.selectConcernType': 'Seleccione un tipo de preocupación',
+    'concernCreate.selectConcernTypeLabel': 'Tipo de preocupación',
     'concernStats.created': 'Creado:',
     'concernStats.goals': 'Metas:',
     'concernStats.lastUpdated': 'Última actualización:',

@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
 import { getClinicsQuery } from '../graphql/types';
-import * as styles from './css/progress-note-popup.css';
+import * as styles from './css/progress-note-context.css';
 
 interface IProps {
   clinics: getClinicsQuery['clinics'];

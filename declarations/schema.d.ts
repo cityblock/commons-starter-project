@@ -858,6 +858,7 @@ declare module 'schema' {
     progressNoteTemplateId: string | null;
     progressNoteTemplate: IProgressNoteTemplate | null;
     location: string | null;
+    summary: string | null;
     completedAt: string | null;
     startedAt: string | null;
     createdAt: string;
@@ -1972,6 +1973,7 @@ declare module 'schema' {
     progressNoteTemplateId: string;
     startedAt?: string | null;
     location?: string | null;
+    summary?: string | null;
   }
 
 

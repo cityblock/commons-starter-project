@@ -69,6 +69,7 @@ export async function progressNoteEdit(
     progressNoteTemplateId: input.progressNoteTemplateId,
     startedAt: input.startedAt || undefined,
     location: input.location || undefined,
+    summary: input.summary || undefined,
   });
 }
 

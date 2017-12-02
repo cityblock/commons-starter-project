@@ -1,6 +1,8 @@
+import { debounce } from 'lodash';
 import * as React from 'react';
 import { compose, graphql } from 'react-apollo';
 import { FormattedMessage } from 'react-intl';
+import { Link } from 'react-router-dom';
 import * as clinicsQuery from '../graphql/queries/clinics-get.graphql';
 import * as patientAnswersQuery from '../graphql/queries/get-patient-answers.graphql';
 import * as questionsQuery from '../graphql/queries/get-questions.graphql';
@@ -17,6 +19,7 @@ import {
   FullProgressNoteTemplateFragment,
   FullQuestionFragment,
 } from '../graphql/types';
+import Textarea from '../shared/library/textarea/textarea';
 import PatientQuestion from '../shared/question/patient-question';
 import {
   getQuestionVisibility,
@@ -24,7 +27,7 @@ import {
   setupQuestionsState,
   IQuestionsState,
 } from '../shared/question/question-helpers';
-import * as styles from './css/progress-note-popup.css';
+import * as styles from './css/progress-note-context.css';
 import { ProgressNoteLocation } from './progress-note-location';
 import { getCurrentTime, ProgressNoteTime } from './progress-note-time';
 
@@ -33,7 +36,14 @@ interface IProps {
   progressNote?: FullProgressNoteFragment;
   progressNoteTemplates?: FullProgressNoteTemplateFragment[];
   updateReadyToSubmit: (readyToSubmit: boolean) => void;
-  onChange: (progressNoteTemplateId: string, startedAt?: string, location?: string) => void;
+  onChange: (
+    options: {
+      progressNoteTemplateId: string;
+      startedAt?: string;
+      location?: string;
+      summary?: string;
+    },
+  ) => void;
 }
 
 interface IGraphqlProps {
@@ -59,6 +69,7 @@ interface IState {
   progressNoteTime?: string;
   progressNoteLocation?: string;
   progressNoteTemplateId?: string;
+  progressNoteSummary?: string;
   loading?: boolean;
   error?: string;
 }
@@ -73,11 +84,16 @@ function getProgressNoteTemplateId(props: IProps) {
     : undefined;
 }
 
+const SAVE_TIMEOUT_MILLISECONDS = 500;
+
 export class ProgressNoteContext extends React.Component<allProps, IState> {
+  deferredSaveProgressNote: () => void;
+
   constructor(props: allProps) {
     super(props);
     const defaultDate = getCurrentTime();
     const { progressNote } = props;
+    this.deferredSaveProgressNote = debounce(this.saveProgressNote, SAVE_TIMEOUT_MILLISECONDS);
     this.state = {
       questions: {},
       loading: false,
@@ -88,6 +104,7 @@ export class ProgressNoteContext extends React.Component<allProps, IState> {
       progressNoteLocation:
         progressNote && progressNote.location ? progressNote.location : undefined,
       progressNoteTemplateId: getProgressNoteTemplateId(props),
+      progressNoteSummary: progressNote && progressNote.summary ? progressNote.summary : '',
     };
   }
 
@@ -129,6 +146,7 @@ export class ProgressNoteContext extends React.Component<allProps, IState> {
       progressNoteLocation:
         progressNote && progressNote.location ? progressNote.location : undefined,
       progressNoteTemplateId: getProgressNoteTemplateId(props),
+      progressNoteSummary: progressNote && progressNote.summary ? progressNote.summary : '',
     });
   }
 
@@ -206,32 +224,55 @@ export class ProgressNoteContext extends React.Component<allProps, IState> {
   onLocationChange = async (event: React.ChangeEvent<HTMLSelectElement>) => {
     const fieldValue = event.currentTarget.value;
     await this.setState({ progressNoteLocation: fieldValue });
-    this.saveProgressNote();
+    this.deferredSaveProgressNote();
   };
 
   onTimeChange = async (event: React.ChangeEvent<HTMLSelectElement>) => {
     const fieldValue = event.currentTarget.value;
     await this.setState({ progressNoteTime: fieldValue });
-    this.saveProgressNote();
+    this.deferredSaveProgressNote();
   };
 
   onProgressNoteTemplateType = async (event: React.ChangeEvent<HTMLSelectElement>) => {
     await this.setState({
       progressNoteTemplateId: event.currentTarget.value,
     });
-    this.saveProgressNote();
+    this.deferredSaveProgressNote();
+  };
+
+  onProgressNoteSummaryChange = async (event: React.ChangeEvent<HTMLTextAreaElement>) => {
+    await this.setState({
+      progressNoteSummary: event.currentTarget.value,
+    });
+    this.deferredSaveProgressNote();
   };
 
   saveProgressNote = () => {
-    const { progressNoteTime, progressNoteLocation, progressNoteTemplateId } = this.state;
+    const {
+      progressNoteTime,
+      progressNoteLocation,
+      progressNoteTemplateId,
+      progressNoteSummary,
+    } = this.state;
     if (progressNoteTemplateId) {
-      this.props.onChange(progressNoteTemplateId, progressNoteTime, progressNoteLocation);
+      this.props.onChange({
+        progressNoteTemplateId,
+        startedAt: progressNoteTime,
+        location: progressNoteLocation,
+        summary: progressNoteSummary,
+      });
     }
   };
 
   render() {
-    const { progressNoteTemplates, clinics } = this.props;
-    const { progressNoteTime, progressNoteLocation, error, progressNoteTemplateId } = this.state;
+    const { progressNoteTemplates, clinics, patientId } = this.props;
+    const {
+      progressNoteTime,
+      progressNoteLocation,
+      error,
+      progressNoteTemplateId,
+      progressNoteSummary,
+    } = this.state;
     const encounterTypes = (progressNoteTemplates || []).map(template => (
       <option key={template.id} value={template.id}>
         {template.title}
@@ -267,6 +308,13 @@ export class ProgressNoteContext extends React.Component<allProps, IState> {
         </div>
         <div className={styles.error}>{error}</div>
         {this.renderQuestions()}
+        <div className={styles.summaryContainer}>
+          <div className={styles.questionTitle}>Context and plan</div>
+          <Link className={styles.mapLink} to={`/patients/${patientId}/map/active`}>
+            Update MAP
+          </Link>
+          <Textarea value={progressNoteSummary || ''} onChange={this.onProgressNoteSummaryChange} />
+        </div>
       </div>
     );
   }

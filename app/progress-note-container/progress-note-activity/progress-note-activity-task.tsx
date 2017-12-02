@@ -1,7 +1,7 @@
 import * as classNames from 'classnames';
 import * as React from 'react';
 import { FullTaskEventFragment } from '../../graphql/types';
-import * as styles from '../css/progress-note-popup.css';
+import * as styles from '../css/progress-note-activity.css';
 
 interface IProps {
   taskEvents: FullTaskEventFragment[];

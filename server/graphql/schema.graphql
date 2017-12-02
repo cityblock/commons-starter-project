@@ -704,6 +704,7 @@ type ProgressNote implements uniqueId {
   progressNoteTemplateId: String
   progressNoteTemplate: ProgressNoteTemplate
   location: String
+  summary: String
   completedAt: String
   startedAt: String
   createdAt: String!
@@ -1248,6 +1249,7 @@ input ProgressNoteEditInput {
   progressNoteTemplateId: String!
   startedAt: String
   location: String
+  summary: String
 }
 
 input QuickCallCreateInput {

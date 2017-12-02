@@ -1,0 +1,53 @@
+@import '../../shared/css/sizes';
+
+.encounterTypeContainer {
+  background: var(--white-font-color);
+  padding: var(--small-gutter);
+}
+
+.encounterTypeLabel {
+  font-family: var(--basetica-medium);
+  font-size: var(--default-font-size);
+}
+
+.encounterTypeSelect {
+  @apply --select;
+}
+
+.locationTimeRow {
+  padding-top: var(--small-gutter);
+  display: flex;
+}
+
+.location {
+  flex: 1;
+  padding-right: var(--small-gutter);
+}
+
+.time {
+  flex: 1;
+}
+
+.error {
+  color: var(--red-color);
+}
+
+.summaryContainer {
+  display: block;
+  padding: var(--small-gutter);
+}
+
+.questionTitle {
+  font-family: var(--basetica-medium);
+  font-size: var(--default-font-size);
+  margin-bottom: var(--small-gutter);
+  color: var(--black-color);
+}
+
+.mapLink {
+  @apply --button;
+
+  width: 100%;
+  margin-bottom: var(--small-gutter);
+  display: block;
+}

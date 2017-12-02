@@ -76,20 +76,22 @@ export class ProgressNotePopup extends React.Component<allProps, IState> {
     }
   }
 
-  updateProgressNote = async (
-    progressNoteTemplateId: string,
-    startedAt?: string,
-    location?: string,
-  ) => {
+  updateProgressNote = async (options: {
+    progressNoteTemplateId: string;
+    startedAt?: string;
+    location?: string;
+    summary?: string;
+  }) => {
     const { progressNote } = this.props;
 
     if (progressNote) {
       await this.props.editProgressNote({
         variables: {
           progressNoteId: progressNote.id,
-          progressNoteTemplateId,
-          startedAt,
-          location,
+          progressNoteTemplateId: options.progressNoteTemplateId,
+          startedAt: options.startedAt,
+          location: options.location,
+          summary: options.summary,
         },
       });
     }
@@ -207,9 +209,11 @@ export class ProgressNotePopup extends React.Component<allProps, IState> {
             )}
           </FormattedMessage>
         </div>
-        {context}
-        {activity}
-        {tasks}
+        <div className={styles.bottomSection}>
+          {context}
+          {activity}
+          {tasks}
+        </div>
       </div>
     );
   }

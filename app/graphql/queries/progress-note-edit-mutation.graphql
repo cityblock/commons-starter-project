@@ -5,6 +5,7 @@ mutation progressNoteEdit(
   $progressNoteTemplateId: String!
   $startedAt: String
   $location: String
+  $summary: String
 ) {
   progressNoteEdit(
     input: {
@@ -12,6 +13,7 @@ mutation progressNoteEdit(
       progressNoteTemplateId: $progressNoteTemplateId
       startedAt: $startedAt
       location: $location
+      summary: $summary
     }
   ) {
     ...FullProgressNote

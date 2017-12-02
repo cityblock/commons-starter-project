@@ -4,7 +4,7 @@ import { compose, graphql } from 'react-apollo';
 import * as progressNoteActivityQuery from '../../graphql/queries/get-progress-note-activity-for-progress-note.graphql';
 /* tslint:enable:max-line-length */
 import { FullProgressNoteActivityFragment, FullProgressNoteFragment } from '../../graphql/types';
-import * as styles from '../css/progress-note-popup.css';
+import * as styles from '../css/progress-note-activity.css';
 import ProgressNoteActivitySection from './progress-note-activity-section';
 
 interface IProps {

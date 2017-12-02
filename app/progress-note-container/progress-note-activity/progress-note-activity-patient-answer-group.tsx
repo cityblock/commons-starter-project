@@ -2,7 +2,7 @@ import * as classNames from 'classnames';
 import * as React from 'react';
 import { FullPatientAnswerEventFragment } from '../../graphql/types';
 import Icon from '../../shared/library/icon/icon';
-import * as styles from '../css/progress-note-popup.css';
+import * as styles from '../css/progress-note-activity.css';
 import ProgressNoteActivityPatientAnswer from './progress-note-activity-patient-answer';
 
 interface IProps {

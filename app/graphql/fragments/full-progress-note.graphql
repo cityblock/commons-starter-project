@@ -14,6 +14,7 @@ fragment FullProgressNote on ProgressNote {
   completedAt
   createdAt
   updatedAt
+  summary
   startedAt
   location
   deletedAt

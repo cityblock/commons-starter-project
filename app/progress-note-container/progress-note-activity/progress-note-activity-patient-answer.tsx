@@ -2,7 +2,7 @@ import * as classNames from 'classnames';
 import * as React from 'react';
 import { FormattedDate } from 'react-intl';
 import { FullPatientAnswerEventFragment } from '../../graphql/types';
-import * as styles from '../css/progress-note-popup.css';
+import * as styles from '../css/progress-note-activity.css';
 
 interface IProps {
   patientAnswerEvent: FullPatientAnswerEventFragment;

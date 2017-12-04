@@ -70,25 +70,27 @@ export class PatientCarePlanView extends React.Component<allProps> {
     const suggestionsTabStyles = classNames(tabStyles.tab, {
       [tabStyles.selectedTab]: isSuggestions,
     });
-    const tabRowStyles = classNames(tabStyles.tabs, tabStyles.darkTabs);
+    const tabRowStyles = classNames(tabStyles.tabs, tabStyles.darkTabs, styles.tabRow);
 
     return (
       <div>
-        <div className={tabRowStyles}>
-          <FormattedMessage id="patient.activeCarePlan">
-            {(message: string) => (
-              <Link to={`${routeBase}/active`} className={activeCarePlanTabStyles}>
-                {message}
-              </Link>
-            )}
-          </FormattedMessage>
-          <FormattedMessage id="patient.carePlanSuggestions">
-            {(message: string) => (
-              <Link to={`${routeBase}/suggestions`} className={suggestionsTabStyles}>
-                {message}
-              </Link>
-            )}
-          </FormattedMessage>
+        <div className={styles.tabContainer}>
+          <div className={tabRowStyles}>
+            <FormattedMessage id="patient.activeCarePlan">
+              {(message: string) => (
+                <Link to={`${routeBase}/active`} className={activeCarePlanTabStyles}>
+                  {message}
+                </Link>
+              )}
+            </FormattedMessage>
+            <FormattedMessage id="patient.carePlanSuggestions">
+              {(message: string) => (
+                <Link to={`${routeBase}/suggestions`} className={suggestionsTabStyles}>
+                  {message}
+                </Link>
+              )}
+            </FormattedMessage>
+          </div>
           <Button messageId="concernCreate.addConcern" onClick={addConcern} />
         </div>
         <div className={styles.carePlanPanel}>

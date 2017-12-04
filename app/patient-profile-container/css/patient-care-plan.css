@@ -490,3 +490,16 @@
   line-height: var(--default-line-height);
   color: var(--light-gray-font-color);
 }
+
+.tabContainer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-right: var(--medium-gutter);
+  background-color: var(--dark-gray-background-color);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.tabRow {
+  border-bottom: none;
+}

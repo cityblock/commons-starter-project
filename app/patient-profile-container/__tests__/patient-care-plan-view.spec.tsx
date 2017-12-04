@@ -1,6 +1,7 @@
 import { shallow } from 'enzyme';
 import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
+import Button from '../../shared/library/button/button';
 import { patient } from '../../shared/util/test-data';
 import PatientCarePlanSuggestions from '../patient-care-plan-suggestions';
 import { PatientCarePlanView } from '../patient-care-plan-view';
@@ -10,22 +11,10 @@ describe('Patient Care Plan View Component', () => {
   const patientId = patient.id;
   const routeBase = '/patients';
   const placeholderFn = () => true as any;
-
-  it('renders patient suggestions when on suggestions tab', () => {
-    const match = { params: { patientId: patient.id, subTab: 'suggestions' as any } };
-    const wrapper = shallow(<PatientCarePlanView match={match} addConcern={placeholderFn} />);
-
-    const suggestions = wrapper.find(PatientCarePlanSuggestions);
-
-    expect(suggestions.length).toBe(1);
-
-    expect(wrapper.find(PatientMap).length).toBe(0);
-  });
+  const match = { params: { patientId: patient.id, subTab: 'active' as any } };
+  const wrapper = shallow(<PatientCarePlanView match={match} addConcern={placeholderFn} />);
 
   it('renders patient MAP when on active tab', () => {
-    const match = { params: { patientId: patient.id, subTab: 'active' as any } };
-    const wrapper = shallow(<PatientCarePlanView match={match} addConcern={placeholderFn} />);
-
     const map = wrapper.find(PatientMap);
 
     expect(map.length).toBe(1);
@@ -36,10 +25,20 @@ describe('Patient Care Plan View Component', () => {
   });
 
   it('renders two tabs', () => {
-    const match = { params: { patientId: patient.id, subTab: 'active' as any } };
-    const wrapper = shallow(<PatientCarePlanView match={match} addConcern={placeholderFn} />);
-
     const tabs = wrapper.find(FormattedMessage);
     expect(tabs.length).toBe(2);
+  });
+
+  it('renders button to add concern', () => {
+    expect(wrapper.find(Button).length).toBe(1);
+    expect(wrapper.find(Button).props().messageId).toBe("concernCreate.addConcern");
+  });
+
+  it('renders patient suggestions when on suggestions tab', () => {
+    const match2 = { params: { patientId: patient.id, subTab: 'suggestions' as any } };
+    const wrapper2 = shallow(<PatientCarePlanView match={match2} addConcern={placeholderFn} />);
+
+    expect(wrapper2.find(PatientCarePlanSuggestions).length).toBe(1);
+    expect(wrapper2.find(PatientMap).length).toBe(0);
   });
 });

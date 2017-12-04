@@ -138,7 +138,10 @@ function mapDispatchToProps(dispatch: Dispatch<() => void>): IDispatchProps {
 }
 
 export default compose(
-  connect<IStateProps, IDispatchProps, allProps>(mapStateToProps as any, mapDispatchToProps),
+  connect<IStateProps, IDispatchProps, allProps>(
+    mapStateToProps as (args?: any) => IStateProps,
+    mapDispatchToProps,
+  ),
   graphql<IGraphqlProps, {}, allProps>(progressNotesForCurrentUserQuery as any, {
     options: () => ({
       variables: {

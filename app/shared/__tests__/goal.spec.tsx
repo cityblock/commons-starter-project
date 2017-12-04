@@ -6,7 +6,6 @@ import PatientGoal from '../goals/goal';
 import GoalOptions from '../goals/goal-options';
 
 describe('Patient Goal Component', () => {
-  const placeholderFn = () => true as any;
   const concernTitle = 'Housing';
 
   const wrapper = shallow(
@@ -14,8 +13,6 @@ describe('Patient Goal Component', () => {
       goalNumber={1}
       patientGoal={patientGoal}
       selectedTaskId=""
-      optionsOpen={false}
-      onOptionsToggle={placeholderFn}
       concernTitle={concernTitle}
     />,
   );
@@ -27,7 +24,6 @@ describe('Patient Goal Component', () => {
   it('renders patient goal options menu', () => {
     expect(wrapper.find(GoalOptions).length).toBe(1);
     expect(wrapper.find(GoalOptions).props().open).toBeFalsy();
-    expect(wrapper.find(GoalOptions).props().onMenuToggle).toBe(placeholderFn);
   });
 
   it('renders modal component to create task', () => {
@@ -43,19 +39,12 @@ describe('Patient Goal Component', () => {
     expect(wrapper.find(CreateTaskModal).props().visible).toBeTruthy();
   });
 
-  it('opens goal options menu', () => {
-    wrapper.setProps({ optionsOpen: true });
-    expect(wrapper.find(GoalOptions).props().open).toBeTruthy();
-  });
-
   it('applies inactive styles if a task selected', () => {
     const wrapper2 = shallow(
       <PatientGoal
         goalNumber={1}
         patientGoal={patientGoal}
         selectedTaskId="aryaStark"
-        optionsOpen={false}
-        onOptionsToggle={placeholderFn}
         concernTitle={concernTitle}
       />,
     );

@@ -10,7 +10,9 @@ describe('Patient Concern Options Component', () => {
   const wrapper = shallow(
     <PatientConcernOptions
       open={false}
-      onMenuToggle={placeholderFn}
+      taskOpen={false}
+      closeMenu={placeholderFn}
+      openMenu={placeholderFn}
       patientId="janeIvs"
       patientConcernId="011"
       goalSuggestionTemplateIds={[]}
@@ -21,7 +23,6 @@ describe('Patient Concern Options Component', () => {
   it('renders hamburger menu', () => {
     expect(wrapper.find(HamburgerMenu).length).toBe(1);
     expect(wrapper.find(HamburgerMenu).props().open).toBeFalsy();
-    expect(wrapper.find(HamburgerMenu).props().onMenuToggle).toBe(placeholderFn);
   });
 
   it('renders option to add goal', () => {
@@ -34,5 +35,10 @@ describe('Patient Concern Options Component', () => {
   it('opens hamburger menu', () => {
     wrapper.setProps({ open: true });
     expect(wrapper.find(HamburgerMenu).props().open).toBeTruthy();
+  });
+
+  it('closes hamburger menu if task open', () => {
+    wrapper.setProps({ taskOpen: true });
+    expect(wrapper.find(HamburgerMenu).props().open).toBeFalsy();
   });
 });

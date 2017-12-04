@@ -72,17 +72,4 @@ describe('Patient Care Plan Component', () => {
     expect(patientConcerns2.at(0).props().selectedPatientConcernId).toBe(selectedPatientConcernId);
     expect(patientConcerns2.at(1).props().selectedPatientConcernId).toBe(selectedPatientConcernId);
   });
-
-  it('handles changes in ids of toggled dropdown options menu', () => {
-    const optionsDropdownConcernId = 'lycanroc';
-
-    expect(patientConcerns.at(0).props().optionsDropdownConcernId).toBe('');
-    expect(patientConcerns.at(1).props().optionsDropdownConcernId).toBe('');
-
-    wrapper.setState({ optionsDropdownConcernId });
-    const patientConcerns2 = wrapper.find(DnDPatientConcerns);
-
-    expect(patientConcerns2.at(0).props().optionsDropdownConcernId).toBe(optionsDropdownConcernId);
-    expect(patientConcerns2.at(1).props().optionsDropdownConcernId).toBe(optionsDropdownConcernId);
-  });
 });

@@ -10,8 +10,6 @@ interface IProps {
   goalNumber: number;
   patientGoal: FullPatientGoalFragment;
   selectedTaskId: string;
-  optionsOpen: boolean;
-  onOptionsToggle: () => void;
   concernTitle: string;
 }
 
@@ -53,14 +51,7 @@ export default class PatientGoal extends React.Component<IProps, IState> {
   }
 
   render() {
-    const {
-      patientGoal,
-      concernTitle,
-      goalNumber,
-      selectedTaskId,
-      optionsOpen,
-      onOptionsToggle,
-    } = this.props;
+    const { patientGoal, concernTitle, goalNumber, selectedTaskId } = this.props;
     const { createTaskModal } = this.state;
 
     const goalStyles = classNames(styles.patientGoal, {
@@ -81,9 +72,9 @@ export default class PatientGoal extends React.Component<IProps, IState> {
           <div className={styles.patientGoalHeaderRow}>
             <div className={styles.patientGoalNumber}>{`Goal ${goalNumber}`}</div>
             <GoalOptions
-              open={optionsOpen}
-              onMenuToggle={onOptionsToggle}
+              patientGoalId={patientGoal.id}
               addTask={this.setCreateTaskModal(true)}
+              taskOpen={!!selectedTaskId}
             />
           </div>
           <div className={styles.patientGoalTitle}>{patientGoal.title}</div>

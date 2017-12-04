@@ -6,23 +6,13 @@ import PatientConcerns from '../../shared/concerns/patient-concerns';
 interface IProps {
   concerns: FullPatientConcernFragment[];
   selectedPatientConcernId: string;
-  optionsDropdownConcernId: string;
   inactive: boolean;
   onClick: (id: string) => void;
-  onOptionsToggle: (id: string) => (e: React.MouseEvent<HTMLDivElement>) => void;
   selectedTaskId: string;
 }
 
 const DnDPatientConcerns: React.StatelessComponent<IProps> = (props: IProps) => {
-  const {
-    selectedPatientConcernId,
-    optionsDropdownConcernId,
-    concerns,
-    inactive,
-    onClick,
-    onOptionsToggle,
-    selectedTaskId,
-  } = props;
+  const { selectedPatientConcernId, concerns, inactive, onClick, selectedTaskId } = props;
 
   const droppableId = inactive ? 'inactiveConcerns' : 'activeConcerns';
 
@@ -33,9 +23,7 @@ const DnDPatientConcerns: React.StatelessComponent<IProps> = (props: IProps) => 
           <PatientConcerns
             concerns={concerns}
             selectedPatientConcernId={selectedPatientConcernId}
-            optionsDropdownConcernId={optionsDropdownConcernId}
             onClick={onClick}
-            onOptionsToggle={onOptionsToggle}
             selectedTaskId={selectedTaskId}
             inactive={inactive}
           />

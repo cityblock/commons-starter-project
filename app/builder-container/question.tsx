@@ -456,7 +456,7 @@ function mapStateToProps(state: IAppState, ownProps: allProps): IStateProps {
 }
 
 export default compose(
-  connect<IStateProps, {}, IProps>(mapStateToProps as any),
+  connect<IStateProps, {}, IProps>(mapStateToProps as (args?: any) => IStateProps),
   graphql<IGraphqlProps, IProps, allProps>(questionEditMutationGraphql as any, {
     name: 'editQuestion',
   }),

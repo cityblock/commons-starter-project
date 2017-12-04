@@ -158,7 +158,10 @@ function mapDispatchToProps(
 }
 
 export default compose(
-  connect<IStateProps, IDispatchProps, allProps>(mapStateToProps as any, mapDispatchToProps),
+  connect<IStateProps, IDispatchProps, allProps>(
+    mapStateToProps as (args?: any) => IStateProps,
+    mapDispatchToProps,
+  ),
   graphql<IGraphqlProps, IProps, allProps>(concernsQuery as any, {
     props: ({ data }) => ({
       concernsLoading: data ? data.loading : false,

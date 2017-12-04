@@ -11,10 +11,8 @@ describe('Drag and Drop Patient Concerns Component', () => {
       <DnDPatientConcerns
         concerns={[]}
         selectedPatientConcernId=""
-        optionsDropdownConcernId=""
         inactive={true}
         onClick={placeholderFn}
-        onOptionsToggle={placeholderFn}
         selectedTaskId=""
       />,
     );
@@ -29,10 +27,8 @@ describe('Drag and Drop Patient Concerns Component', () => {
       <DnDPatientConcerns
         concerns={[]}
         selectedPatientConcernId=""
-        optionsDropdownConcernId=""
         inactive={false}
         onClick={placeholderFn}
-        onOptionsToggle={placeholderFn}
         selectedTaskId=""
       />,
     );

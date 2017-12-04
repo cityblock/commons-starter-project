@@ -10,16 +10,10 @@ import PatientConcernOptions from './options-menu/options-menu';
 interface IProps {
   patientConcern: FullPatientConcernFragment;
   selected: boolean;
-  optionsOpen: boolean;
   onClick: (e?: React.MouseEvent<HTMLDivElement>) => void;
-  onOptionsToggle: (e: React.MouseEvent<HTMLDivElement>) => void;
   inactive?: boolean;
   selectedTaskId: string;
   isDragging?: boolean;
-}
-
-interface IState {
-  optionsDropdownGoalId: string;
 }
 
 export interface IPatientConcernStats {
@@ -28,32 +22,7 @@ export interface IPatientConcernStats {
   lastUpdated: string;
 }
 
-export class PatientConcern extends React.Component<IProps, IState> {
-  constructor(props: IProps) {
-    super(props);
-    this.state = { optionsDropdownGoalId: '' };
-  }
-
-  componentWillReceiveProps(nextProps: IProps) {
-    // close any open goal dropdown menus if concern no longer selected or viewing task
-    if (!nextProps.selected || !!nextProps.selectedTaskId) {
-      this.setState({ optionsDropdownGoalId: '' });
-    }
-  }
-
-  onOptionsToggle = (goalId: string) => () => {
-    // do nothing if task open as we close task on clicking outside of task
-    if (this.props.selectedTaskId) return;
-
-    const { optionsDropdownGoalId } = this.state;
-
-    if (goalId === optionsDropdownGoalId) {
-      this.setState({ optionsDropdownGoalId: '' });
-    } else {
-      this.setState({ optionsDropdownGoalId: goalId });
-    }
-  };
-
+export class PatientConcern extends React.Component<IProps, {}> {
   getStats() {
     const { patientConcern } = this.props;
     const { patientGoals } = patientConcern;
@@ -100,7 +69,6 @@ export class PatientConcern extends React.Component<IProps, IState> {
   renderGoals() {
     const { patientConcern, selectedTaskId } = this.props;
     const { patientGoals } = patientConcern;
-    const { optionsDropdownGoalId } = this.state;
 
     if (!patientGoals) {
       return null;
@@ -113,8 +81,6 @@ export class PatientConcern extends React.Component<IProps, IState> {
         concernTitle={patientConcern.concern.title}
         goalNumber={index + 1}
         selectedTaskId={selectedTaskId}
-        optionsOpen={!!optionsDropdownGoalId && patientGoal.id === optionsDropdownGoalId}
-        onOptionsToggle={this.onOptionsToggle(patientGoal.id)}
       />
     ));
   }
@@ -133,16 +99,7 @@ export class PatientConcern extends React.Component<IProps, IState> {
   }
 
   render() {
-    const {
-      onClick,
-      onOptionsToggle,
-      patientConcern,
-      selected,
-      optionsOpen,
-      inactive,
-      selectedTaskId,
-      isDragging,
-    } = this.props;
+    const { onClick, patientConcern, selected, inactive, selectedTaskId, isDragging } = this.props;
     const { patientGoals, concern } = patientConcern;
 
     const goalsStyles = classNames(styles.goals, {
@@ -166,11 +123,10 @@ export class PatientConcern extends React.Component<IProps, IState> {
             <div className={styles.row}>
               <h3>{patientConcern.concern.title}</h3>
               <PatientConcernOptions
-                open={optionsOpen}
-                onMenuToggle={onOptionsToggle}
                 patientId={patientConcern.patientId}
                 patientConcernId={patientConcern.id}
                 goalSuggestionTemplateIds={this.getGoalSuggestionTemplateIds()}
+                taskOpen={!!selectedTaskId}
               />
             </div>
             <PatientConcernStats

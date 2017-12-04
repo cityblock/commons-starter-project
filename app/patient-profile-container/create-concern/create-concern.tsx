@@ -135,7 +135,10 @@ const mapDispatchToProps = (dispatch: Dispatch<() => void>): IDispatchProps => (
 });
 
 export default compose(
-  connect<IStateProps, IDispatchProps, {}>(mapStateToProps as any, mapDispatchToProps),
+  connect<IStateProps, IDispatchProps, {}>(
+    mapStateToProps as (args?: any) => IStateProps,
+    mapDispatchToProps,
+  ),
   graphql<IGraphqlProps, {}, allProps>(patientConcernCreateMutationGraphql as any, {
     name: 'createPatientConcern',
     options: {

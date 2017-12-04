@@ -8,7 +8,6 @@ import { patientConcern } from '../util/test-data';
 
 describe('Patient Concern Component', () => {
   const onClick = () => true;
-  const onOptionsToggle = () => (e: React.MouseEvent<HTMLDivElement>) => true;
   const selectedTaskId = 'aryaStark';
 
   const wrapper = shallow(
@@ -16,8 +15,6 @@ describe('Patient Concern Component', () => {
       patientConcern={patientConcern}
       selected={true}
       onClick={onClick}
-      onOptionsToggle={onOptionsToggle}
-      optionsOpen={false}
       selectedTaskId={selectedTaskId}
       isDragging={true}
     />,
@@ -54,12 +51,5 @@ describe('Patient Concern Component', () => {
 
   it('renders options menu', () => {
     expect(wrapper.find(PatientConcernOptions).length).toBe(1);
-    expect(wrapper.find(PatientConcernOptions).props().open).toBeFalsy();
-    expect(wrapper.find(PatientConcernOptions).props().onMenuToggle).toBe(onOptionsToggle);
-  });
-
-  it('opens options menu if props change', () => {
-    wrapper.setProps({ optionsOpen: true });
-    expect(wrapper.find(PatientConcernOptions).props().open).toBeTruthy();
   });
 });

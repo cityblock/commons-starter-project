@@ -165,7 +165,10 @@ export function formatEventNotifications(
 }
 
 export default compose(
-  connect<IStateProps, IDispatchProps, allProps>(mapStateToProps as any, mapDispatchToProps),
+  connect<IStateProps, IDispatchProps, allProps>(
+    mapStateToProps as (args?: any) => IStateProps,
+    mapDispatchToProps,
+  ),
   graphql<IGraphqlProps, IProps & IStateProps, allProps>(eventNotificationsQuery as any, {
     options: (props: IProps & IStateProps) => {
       const variables: any = {

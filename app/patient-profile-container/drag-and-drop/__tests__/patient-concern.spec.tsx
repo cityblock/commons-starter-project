@@ -11,9 +11,7 @@ describe('Drag and Drop Patient Concern', () => {
     <DnDPatientConcern
       patientConcern={{ id } as any}
       selected={false}
-      optionsOpen={false}
       onClick={placeholderFn}
-      onOptionsToggle={placeholderFn}
       inactive={false}
       selectedTaskId=""
     />,
@@ -31,9 +29,7 @@ describe('Drag and Drop Patient Concern', () => {
       <DnDPatientConcern
         patientConcern={{ id } as any}
         selected={false}
-        optionsOpen={false}
         onClick={placeholderFn}
-        onOptionsToggle={placeholderFn}
         inactive={false}
         selectedTaskId="ninetales"
       />,
@@ -47,9 +43,7 @@ describe('Drag and Drop Patient Concern', () => {
       <DnDPatientConcern
         patientConcern={{ id } as any}
         selected={true}
-        optionsOpen={false}
         onClick={placeholderFn}
-        onOptionsToggle={placeholderFn}
         inactive={false}
         selectedTaskId=""
       />,

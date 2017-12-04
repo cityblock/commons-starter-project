@@ -176,7 +176,10 @@ function mapDispatchToProps(dispatch: Dispatch<() => void>, ownProps: IProps): I
 }
 
 export default compose(
-  connect<IStateProps, IDispatchProps, IProps>(mapStateToProps as any, mapDispatchToProps),
+  connect<IStateProps, IDispatchProps, IProps>(
+    mapStateToProps as (args?: any) => IStateProps,
+    mapDispatchToProps,
+  ),
   graphql<IGraphqlProps, IProps, allProps>(riskAreasQuery as any, {
     props: ({ data }) => ({
       riskAreasLoading: data ? data.loading : false,

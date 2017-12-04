@@ -158,4 +158,6 @@ function mapStateToProps(state: IAppState, ownProps: IProps): IStateProps {
   };
 }
 
-export default connect<IStateProps, {}, IProps>(mapStateToProps as any)(BuilderContainer);
+export default connect<IStateProps, {}, IProps>(mapStateToProps as (args?: any) => IStateProps)(
+  BuilderContainer,
+);

@@ -6,19 +6,15 @@ import EmptyPlaceholder from '../library/empty-placeholder/empty-placeholder';
 
 describe('Patient Care Plan Concerns Component', () => {
   const onClick = (() => true) as any;
-  const onOptionsToggle = (() => () => true) as any;
   const selectedPatientConcernId = 'umbreon';
-  const optionsDropdownConcernId = 'glaceon';
 
   it('renders no concerns if no next up concerns present', () => {
     const wrapper = shallow(
       <PatientConcerns
         onClick={onClick}
-        onOptionsToggle={onOptionsToggle}
         concerns={[]}
         selectedTaskId=""
         selectedPatientConcernId={selectedPatientConcernId}
-        optionsDropdownConcernId={optionsDropdownConcernId}
         inactive={true}
       />,
     );
@@ -47,11 +43,9 @@ describe('Patient Care Plan Concerns Component', () => {
     const wrapper = shallow(
       <PatientConcerns
         onClick={onClick}
-        onOptionsToggle={onOptionsToggle}
         concerns={concerns}
         selectedTaskId=""
         selectedPatientConcernId={selectedPatientConcernId}
-        optionsDropdownConcernId={optionsDropdownConcernId}
       />,
     );
 
@@ -68,17 +62,6 @@ describe('Patient Care Plan Concerns Component', () => {
       expect(renderedConcern1Props.selected).toBeTruthy();
       expect(renderedConcern1Props.optionsOpen).toBeFalsy();
       expect(renderedConcern1Props.patientConcern).toBe(concern1);
-    });
-
-    it('passes correct props to concern with options open', () => {
-      const renderedConcern1Props = wrapper
-        .find(DnDPatientConcern)
-        .at(1)
-        .props();
-
-      expect(renderedConcern1Props.selected).toBeFalsy();
-      expect(renderedConcern1Props.optionsOpen).toBeTruthy();
-      expect(renderedConcern1Props.patientConcern).toBe(concern2);
     });
   });
 });

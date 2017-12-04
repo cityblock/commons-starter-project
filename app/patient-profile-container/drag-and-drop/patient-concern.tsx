@@ -6,23 +6,13 @@ import PatientConcern from '../../shared/concerns/patient-concern';
 interface IProps {
   patientConcern: FullPatientConcernFragment;
   selected: boolean;
-  optionsOpen: boolean;
   onClick: () => void;
-  onOptionsToggle: (e: React.MouseEvent<HTMLDivElement>) => void;
   inactive: boolean;
   selectedTaskId: string;
 }
 
 export const DnDPatientConcern: React.StatelessComponent<IProps> = (props: IProps) => {
-  const {
-    onClick,
-    onOptionsToggle,
-    patientConcern,
-    selected,
-    optionsOpen,
-    inactive,
-    selectedTaskId,
-  } = props;
+  const { onClick, patientConcern, selected, inactive, selectedTaskId } = props;
 
   return (
     <Draggable
@@ -56,9 +46,7 @@ export const DnDPatientConcern: React.StatelessComponent<IProps> = (props: IProp
               <PatientConcern
                 patientConcern={patientConcern}
                 onClick={onClickFull}
-                onOptionsToggle={onOptionsToggle}
                 selected={selected}
-                optionsOpen={optionsOpen}
                 inactive={inactive}
                 selectedTaskId={selectedTaskId}
                 isDragging={snapshot.isDragging}

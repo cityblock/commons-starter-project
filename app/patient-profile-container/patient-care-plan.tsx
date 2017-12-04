@@ -19,7 +19,6 @@ interface IProps {
 
 interface IState {
   selectedPatientConcernId: string;
-  optionsDropdownConcernId: string;
 }
 
 export default class PatientCarePlan extends React.Component<IProps, IState> {
@@ -28,7 +27,6 @@ export default class PatientCarePlan extends React.Component<IProps, IState> {
 
     this.state = {
       selectedPatientConcernId: '',
-      optionsDropdownConcernId: '',
     };
   }
 
@@ -36,7 +34,6 @@ export default class PatientCarePlan extends React.Component<IProps, IState> {
     if (nextProps.isDragging) {
       this.setState({
         selectedPatientConcernId: '',
-        optionsDropdownConcernId: '',
       });
     }
   }
@@ -51,27 +48,11 @@ export default class PatientCarePlan extends React.Component<IProps, IState> {
     }
   };
 
-  onOptionsToggle = (patientConcernId: string) => (e: React.MouseEvent<HTMLDivElement>) => {
-    // do nothing if task open as we close task on clicking outside of task
-    if (this.props.selectedTaskId) return;
-
-    // Prevents closing of selected concern if unselected concern options toggle clicked
-    e.stopPropagation();
-
-    const { optionsDropdownConcernId } = this.state;
-
-    if (patientConcernId === optionsDropdownConcernId) {
-      this.setState({ optionsDropdownConcernId: '' });
-    } else {
-      this.setState({ optionsDropdownConcernId: patientConcernId });
-    }
-  };
-
   render(): JSX.Element {
     const { loading, selectedTaskId, activeConcerns, inactiveConcerns, error } = this.props;
     if (loading) return <Spinner />;
 
-    const { selectedPatientConcernId, optionsDropdownConcernId } = this.state;
+    const { selectedPatientConcernId } = this.state;
     const carePlanStyles = classNames(styles.carePlan, {
       [styles.error]: !!error,
     });
@@ -82,9 +63,7 @@ export default class PatientCarePlan extends React.Component<IProps, IState> {
           concerns={activeConcerns}
           inactive={false}
           selectedPatientConcernId={selectedPatientConcernId}
-          optionsDropdownConcernId={optionsDropdownConcernId}
           onClick={this.onClickPatientConcern}
-          onOptionsToggle={this.onOptionsToggle}
           selectedTaskId={selectedTaskId}
         />
         <TextDivider messageId="patientMap.nextUp" />
@@ -92,9 +71,7 @@ export default class PatientCarePlan extends React.Component<IProps, IState> {
           concerns={inactiveConcerns}
           inactive={true}
           selectedPatientConcernId={selectedPatientConcernId}
-          optionsDropdownConcernId={optionsDropdownConcernId}
           onClick={this.onClickPatientConcern}
-          onOptionsToggle={this.onOptionsToggle}
           selectedTaskId={selectedTaskId}
         />
       </div>

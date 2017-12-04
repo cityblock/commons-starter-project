@@ -119,7 +119,10 @@ function mapDispatchToProps(dispatch: Dispatch<() => void>): IDispatchProps {
 }
 
 export default compose(
-  connect<IStateProps, IDispatchProps, allProps>(mapStateToProps as any, mapDispatchToProps),
+  connect<IStateProps, IDispatchProps, allProps>(
+    mapStateToProps as (args?: any) => IStateProps,
+    mapDispatchToProps,
+  ),
   graphql<IGraphqlProps, IProps, allProps>(currentUserQuery as any, {
     props: ({ data }) => ({
       loading: data ? data.loading : false,

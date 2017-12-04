@@ -145,7 +145,7 @@ function mapStateToProps(state: IAppState, ownProps: IProps): IStateProps {
 }
 
 export default compose(
-  connect<IStateProps, {}, IProps>(mapStateToProps as any),
+  connect<IStateProps, {}, IProps>(mapStateToProps as (args?: any) => IStateProps),
   graphql<IGraphqlProps, IProps & IStateProps, allProps>(patientQuery as any, {
     options: (props: IProps & IStateProps) => ({
       variables: {

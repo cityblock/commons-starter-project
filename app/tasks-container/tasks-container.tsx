@@ -136,7 +136,10 @@ const getPageParams = (props: IProps) => {
 };
 
 export default compose(
-  connect<IStateProps, IDispatchProps>(mapStateToProps as any, mapDispatchToProps),
+  connect<IStateProps, IDispatchProps>(
+    mapStateToProps as (args?: any) => IStateProps,
+    mapDispatchToProps,
+  ),
   graphql<IGraphqlProps, IProps, allProps>(tasksQuery as any, {
     options: (props: IProps) => ({ variables: getPageParams(props) }),
     props: ({ data, ownProps }) => ({

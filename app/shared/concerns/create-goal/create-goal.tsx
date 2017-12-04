@@ -79,8 +79,8 @@ export class CreateGoalModal extends React.Component<allProps, IState> {
   }
 
   onClose = (): void => {
-    this.props.closePopup();
     this.setState(this.getInitialState());
+    this.props.closePopup();
   };
 
   onCustomSubmit = async () => {
@@ -100,13 +100,12 @@ export class CreateGoalModal extends React.Component<allProps, IState> {
           },
         });
 
+        this.setState({ loading: false });
         this.onClose();
       } catch (err) {
-        this.setState({ error: err.message });
+        this.setState({ error: err.message, loading: false });
       }
     }
-
-    this.setState({ loading: false });
   };
 
   onTemplateSubmit = async () => {

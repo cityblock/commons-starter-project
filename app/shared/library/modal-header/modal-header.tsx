@@ -16,25 +16,25 @@ interface IProps {
 const ModalHeader: React.StatelessComponent<IProps> = (props: IProps) => {
   const { titleMessageId, bodyMessageId, color, closePopup } = props;
   const navy = color === 'navy';
-  const textStyles = navy ? styles.navyText : '';
+  const containerStyles = classNames(styles.container, {
+    [styles.navyContainer]: navy,
+  });
   const iconStyles = classNames(styles.icon, {
     [styles.navyIcon]: navy,
   });
 
   const title = (
     <FormattedMessage id={titleMessageId}>
-      {(message: string) => <h2 className={textStyles}>{message}</h2>}
+      {(message: string) => <h2>{message}</h2>}
     </FormattedMessage>
   );
 
   const body = (
-    <FormattedMessage id={bodyMessageId}>
-      {(message: string) => <p className={textStyles}>{message}</p>}
-    </FormattedMessage>
+    <FormattedMessage id={bodyMessageId}>{(message: string) => <p>{message}</p>}</FormattedMessage>
   );
 
   return (
-    <div className={styles.container}>
+    <div className={containerStyles}>
       {title}
       {body}
       {closePopup && <Icon name="close" onClick={closePopup} className={iconStyles} />}

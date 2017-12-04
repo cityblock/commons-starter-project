@@ -3,6 +3,7 @@
 .select {
   /* Give 18px space on right */
   width: calc(100% - 18px);
+  padding-left: var(--extra-small-gutter);
 }
 
 .yellow {

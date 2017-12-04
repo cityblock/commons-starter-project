@@ -45,4 +45,16 @@ describe('Library Text Input Component', () => {
     expect(wrapper.find(FormattedMessage).length).toBe(1);
     expect(wrapper.find(FormattedMessage).props().id).toBe(placeholderMessageId);
   });
+
+  it('passes optional handlers for on blur and on focus', () => {
+    const onBlur = () => true as any;
+    const onFocus = () => true as any;
+
+    const wrapper = shallow(
+      <TextInput value={value} onChange={onChange} onBlur={onBlur} onFocus={onFocus} />,
+    );
+
+    expect(wrapper.find('input').props().onBlur).toBe(onBlur);
+    expect(wrapper.find('input').props().onFocus).toBe(onFocus);
+  });
 });

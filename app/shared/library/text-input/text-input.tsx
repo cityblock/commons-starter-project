@@ -10,10 +10,12 @@ interface IProps {
   className?: string; // optional styles to apply over defaults
   name?: string; // optional name field for input
   id?: string; // optional id field for input, likely use with label
+  onBlur?: () => void;
+  onFocus?: () => void;
 }
 
 const TextInput: React.StatelessComponent<IProps> = (props: IProps) => {
-  const { value, onChange, placeholderMessageId, className, name, id } = props;
+  const { value, onChange, placeholderMessageId, onBlur, onFocus, className, name, id } = props;
   const inputStyles = classNames(styles.input, className);
 
   if (placeholderMessageId) {
@@ -24,8 +26,10 @@ const TextInput: React.StatelessComponent<IProps> = (props: IProps) => {
             type="text"
             value={value}
             placeholder={message}
-            onChange={onChange}
             className={inputStyles}
+            onBlur={onBlur}
+            onFocus={onFocus}
+            onChange={onChange}
             name={name || ''}
             id={id || ''}
           />
@@ -40,6 +44,8 @@ const TextInput: React.StatelessComponent<IProps> = (props: IProps) => {
       value={value}
       onChange={onChange}
       className={inputStyles}
+      onFocus={onFocus}
+      onBlur={onBlur}
       name={name || ''}
       id={id || ''}
     />

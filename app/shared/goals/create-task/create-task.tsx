@@ -1,15 +1,16 @@
+import * as classNames from 'classnames';
 import * as React from 'react';
 import { graphql } from 'react-apollo';
 import * as taskCreateMutationGraphql from '../../../graphql/queries/task-create-mutation.graphql';
 import { taskCreateMutation, taskCreateMutationVariables, Priority } from '../../../graphql/types';
-import Button from '../../library/button/button';
+import ModalButtons from '../../library/modal-buttons/modal-buttons';
+import ModalHeader from '../../library/modal-header/modal-header';
 import { Popup } from '../../popup/popup';
 import TaskAssignee from '../../task/task-assignee';
 import * as styles from './css/create-task.css';
 import * as labelStyles from './css/shared.css';
 import CreateTaskDescription from './description';
 import CreateTaskDueDate from './due-date';
-import CreateTaskHeader from './header';
 import CreateTaskInfo from './info';
 import CreateTaskPriority from './priority';
 import CreateTaskTitle from './title';
@@ -68,8 +69,8 @@ export class CreateTaskModal extends React.Component<allProps, IState> {
 
   onClose = (): void => {
     // ensure that partially filled out fields don't persist
-    this.props.closePopup();
     this.setState(this.getInitialState());
+    this.props.closePopup();
   };
 
   onAssigneeClick = (assignedToId: string): void => {
@@ -83,7 +84,8 @@ export class CreateTaskModal extends React.Component<allProps, IState> {
   onSubmit = async () => {
     const { patientId, patientGoalId, createTask } = this.props;
     const { title, description, dueAt, assignedToId, priority, loading } = this.state;
-
+    // stop gap to prevent creating tasks with blank title, ticketed issue
+    if (!title) return;
     if (!loading) {
       try {
         this.setState({ loading: true, error: undefined });
@@ -99,19 +101,20 @@ export class CreateTaskModal extends React.Component<allProps, IState> {
             priority,
           },
         });
-
+        this.setState({ loading: false });
         this.onClose();
       } catch (err) {
-        this.setState({ error: err.message });
+        this.setState({ error: err.message, loading: false });
       }
-
-      this.setState({ loading: false });
     }
   };
 
   render(): JSX.Element {
     const { visible, patientId, goal, concern } = this.props;
     const { title, description, assignedToId, dueAt, priority } = this.state;
+    const assigneeLabelStyles = classNames(labelStyles.label, {
+      [labelStyles.black]: !assignedToId,
+    });
 
     return (
       <Popup
@@ -121,7 +124,12 @@ export class CreateTaskModal extends React.Component<allProps, IState> {
         className={styles.popup}
       >
         <div>
-          <CreateTaskHeader closePopup={this.onClose} />
+          <ModalHeader
+            titleMessageId="taskCreate.addTask"
+            bodyMessageId="taskCreate.detail"
+            color="navy"
+            closePopup={this.onClose}
+          />
           <div className={styles.scroll}>
             <CreateTaskInfo goal={goal} concern={concern} />
             <div className={styles.fields}>
@@ -132,7 +140,7 @@ export class CreateTaskModal extends React.Component<allProps, IState> {
                 onAssigneeClick={this.onAssigneeClick}
                 selectedAssigneeId={assignedToId}
                 messageId="taskCreate.assignee"
-                messageStyles={labelStyles.label}
+                messageStyles={assigneeLabelStyles}
                 dropdownStyles={styles.dropdown}
                 menuStyles={styles.menu}
               />
@@ -140,19 +148,12 @@ export class CreateTaskModal extends React.Component<allProps, IState> {
                 <CreateTaskDueDate value={dueAt} onChange={this.onChange('dueAt')} />
                 <CreateTaskPriority value={priority} onChange={this.onPriorityClick} />
               </div>
-              <div className={styles.flex}>
-                <Button
-                  messageId="taskCreate.cancel"
-                  color="white"
-                  onClick={this.onClose}
-                  className={styles.button}
-                />
-                <Button
-                  messageId="taskCreate.submit"
-                  onClick={this.onSubmit}
-                  className={styles.button}
-                />
-              </div>
+              <ModalButtons
+                cancelMessageId="taskCreate.cancel"
+                submitMessageId="taskCreate.submit"
+                cancel={this.onClose}
+                submit={this.onSubmit}
+              />
             </div>
           </div>
         </div>
@@ -163,4 +164,7 @@ export class CreateTaskModal extends React.Component<allProps, IState> {
 
 export default graphql<IGraphqlProps, IProps, allProps>(taskCreateMutationGraphql as any, {
   name: 'createTask',
+  options: {
+    refetchQueries: ['getPatientCarePlan'],
+  },
 })(CreateTaskModal);

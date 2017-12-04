@@ -1,12 +1,12 @@
 import { shallow } from 'enzyme';
 import * as React from 'react';
-import Button from '../../../library/button/button';
+import ModalButtons from '../../../library/modal-buttons/modal-buttons';
+import ModalHeader from '../../../library/modal-header/modal-header';
 import { Popup } from '../../../popup/popup';
 import TaskAssignee, { IProps } from '../../../task/task-assignee';
 import { CreateTaskModal } from '../create-task';
 import CreateTaskDescription from '../description';
 import CreateTaskDueDate from '../due-date';
-import CreateTaskHeader from '../header';
 import CreateTaskInfo from '../info';
 import CreateTaskPriority from '../priority';
 import CreateTaskTitle from '../title';
@@ -31,7 +31,10 @@ describe('Create Task Modal Component', () => {
   );
 
   it('renders task header component', () => {
-    expect(wrapper.find(CreateTaskHeader).length).toBe(1);
+    expect(wrapper.find(ModalHeader).length).toBe(1);
+    expect(wrapper.find(ModalHeader).props().titleMessageId).toBe('taskCreate.addTask');
+    expect(wrapper.find(ModalHeader).props().bodyMessageId).toBe('taskCreate.detail');
+    expect(wrapper.find(ModalHeader).props().color).toBe('navy');
   });
 
   it('renders task info component with correct props', () => {
@@ -85,7 +88,7 @@ describe('Create Task Modal Component', () => {
     expect(assignee.props().patientId).toBe(patientId);
     expect(assignee.props().selectedAssigneeId).toBeFalsy();
     expect(assignee.props().messageId).toBe('taskCreate.assignee');
-    expect(assignee.props().messageStyles).toBe('label');
+    expect(assignee.props().messageStyles).toBe('label black');
     expect(assignee.props().dropdownStyles).toBe('dropdown');
     expect(assignee.props().menuStyles).toBe('menu');
   });
@@ -94,6 +97,7 @@ describe('Create Task Modal Component', () => {
     wrapper.setState({ assignedToId: patientId });
     const assignee = wrapper.find<IProps>(TaskAssignee);
     expect(assignee.props().selectedAssigneeId).toBe(patientId);
+    expect(assignee.props().messageStyles).toBe('label');
   });
 
   it('renders date picker', () => {
@@ -119,40 +123,9 @@ describe('Create Task Modal Component', () => {
     expect(wrapper.find(CreateTaskPriority).props().value).toBe(priority);
   });
 
-  it('renders cancel button', () => {
-    expect(wrapper.find(Button).length).toBe(2);
-    expect(
-      wrapper
-        .find(Button)
-        .at(0)
-        .props().messageId,
-    ).toBe('taskCreate.cancel');
-    expect(
-      wrapper
-        .find(Button)
-        .at(0)
-        .props().color,
-    ).toBe('white');
-    expect(
-      wrapper
-        .find(Button)
-        .at(0)
-        .props().className,
-    ).toBe('button');
-  });
-
-  it('renders submit button', () => {
-    expect(
-      wrapper
-        .find(Button)
-        .at(1)
-        .props().messageId,
-    ).toBe('taskCreate.submit');
-    expect(
-      wrapper
-        .find(Button)
-        .at(1)
-        .props().className,
-    ).toBe('button');
+  it('renders modal buttons', () => {
+    expect(wrapper.find(ModalButtons).length).toBe(1);
+    expect(wrapper.find(ModalButtons).props().cancelMessageId).toBe('taskCreate.cancel');
+    expect(wrapper.find(ModalButtons).props().submitMessageId).toBe('taskCreate.submit');
   });
 });

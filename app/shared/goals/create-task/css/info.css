@@ -1,0 +1,28 @@
+@import '../../../css/sizes';
+
+.detail {
+  background: var(--gray-background-color);
+  display: flex;
+  padding: var(--small-gutter) var(--medium-gutter);
+  text-align: left;
+}
+
+.detail p {
+  color: var(--black-color);
+  line-height: var(--medium-font-line-height);
+  margin: 0;
+  padding: 0;
+}
+
+.detail h4 {
+  color: var(--light-blue-color);
+  margin: 0 0 10px 0;
+  font-family: var(--basetica-medium);
+  font-size: var(--small-font-size);
+  line-height: var(--small-font-line-height);
+  font-weight: var(--roboto-medium-weight);
+}
+
+.detailGroup {
+  width: 50%;
+}

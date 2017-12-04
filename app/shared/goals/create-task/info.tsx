@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
-import * as styles from './css/header.css';
+import * as styles from './css/info.css';
 
 interface IProps {
   goal: string;

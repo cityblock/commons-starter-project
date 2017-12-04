@@ -1,7 +1,7 @@
 import { shallow } from 'enzyme';
 import * as React from 'react';
+import FormLabel from '../../../library/form-label/form-label';
 import TextInput from '../../../library/text-input/text-input';
-import { FieldLabel } from '../shared';
 import CreateTaskTitle from '../title';
 
 describe('Create Task Modal Title Component', () => {
@@ -10,10 +10,11 @@ describe('Create Task Modal Title Component', () => {
 
   const wrapper = shallow(<CreateTaskTitle value={value} onChange={onChange} />);
 
-  it('renders a field label', () => {
-    expect(wrapper.find(FieldLabel).length).toBe(1);
-    expect(wrapper.find(FieldLabel).props().messageId).toBe('taskCreate.title');
-    expect(wrapper.find(FieldLabel).props().htmlFor).toBe('title');
+  it('renders a form label', () => {
+    expect(wrapper.find(FormLabel).length).toBe(1);
+    expect(wrapper.find(FormLabel).props().messageId).toBe('taskCreate.title');
+    expect(wrapper.find(FormLabel).props().htmlFor).toBe('title');
+    expect(wrapper.find(FormLabel).props().gray).toBeFalsy();
   });
 
   it('renders a text input component', () => {
@@ -22,5 +23,10 @@ describe('Create Task Modal Title Component', () => {
     expect(wrapper.find(TextInput).props().onChange).toBe(onChange);
     expect(wrapper.find(TextInput).props().id).toBe('title');
     expect(wrapper.find(TextInput).props().name).toBe('title');
+  });
+
+  it('changes form label to gray on completion', () => {
+    wrapper.setState({ complete: true });
+    expect(wrapper.find(FormLabel).props().gray).toBeTruthy();
   });
 });

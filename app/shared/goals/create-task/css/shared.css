@@ -9,6 +9,11 @@
   line-height: var(--medium-font-line-height);
   margin: 0 0 10px 0;
   padding-top: var(--medium-gutter);
+  transition: color 0.2s;
+}
+
+.black {
+  color: var(--black-color);
 }
 
 .flexItem {

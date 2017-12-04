@@ -51,5 +51,6 @@ describe('Library Modal Header Component', () => {
 
   it('applies navy styles if specified', () => {
     expect(wrapper2.find(Icon).props().className).toBe('icon navyIcon');
+    expect(wrapper2.find('div').props().className).toBe('container navyContainer');
   });
 });

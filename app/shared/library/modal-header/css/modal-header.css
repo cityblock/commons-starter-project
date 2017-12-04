@@ -29,7 +29,8 @@
   color: var(--gray-font-color);
 }
 
-.navyText {
+.navyContainer h2,
+.navyContainer p {
   color: var(--white-color);
 }
 

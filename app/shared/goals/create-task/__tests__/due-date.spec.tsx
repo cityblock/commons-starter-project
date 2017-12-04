@@ -1,8 +1,8 @@
 import { shallow } from 'enzyme';
 import * as React from 'react';
 import DateInput from '../../../library/date-input/date-input';
+import FormLabel from '../../../library/form-label/form-label';
 import CreateTaskDueDate from '../due-date';
-import { FieldLabel } from '../shared';
 
 describe('Create Task Modal Due Date Component', () => {
   const value = 'Eleven';
@@ -10,10 +10,11 @@ describe('Create Task Modal Due Date Component', () => {
 
   const wrapper = shallow(<CreateTaskDueDate value={value} onChange={onChange} />);
 
-  it('renders a field label', () => {
-    expect(wrapper.find(FieldLabel).length).toBe(1);
-    expect(wrapper.find(FieldLabel).props().messageId).toBe('taskCreate.dueAt');
-    expect(wrapper.find(FieldLabel).props().htmlFor).toBe('due-date');
+  it('renders a form label', () => {
+    expect(wrapper.find(FormLabel).length).toBe(1);
+    expect(wrapper.find(FormLabel).props().messageId).toBe('taskCreate.dueAt');
+    expect(wrapper.find(FormLabel).props().htmlFor).toBe('due-date');
+    expect(wrapper.find(FormLabel).props().gray).toBeTruthy();
   });
 
   it('renders a date input component', () => {

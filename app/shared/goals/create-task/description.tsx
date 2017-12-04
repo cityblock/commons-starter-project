@@ -1,21 +1,44 @@
 import * as React from 'react';
+import FormLabel from '../../library/form-label/form-label';
 import TextArea from '../../library/textarea/textarea';
-import { FieldLabel } from './shared';
 
 interface IProps {
   value: string;
   onChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
 }
 
-const CreateTaskDescription: React.StatelessComponent<IProps> = (props: IProps) => {
-  const { value, onChange } = props;
+interface IState {
+  complete: boolean;
+}
 
-  return (
-    <div>
-      <FieldLabel messageId="taskCreate.description" htmlFor="description" />
-      <TextArea value={value} onChange={onChange} id="description" name="description" />
-    </div>
-  );
-};
+class CreateTaskDescription extends React.Component<IProps, IState> {
+  constructor(props: IProps) {
+    super(props);
+    this.state = { complete: false };
+  }
+
+  render(): JSX.Element {
+    const { value, onChange } = this.props;
+    const { complete } = this.state;
+
+    return (
+      <div>
+        <FormLabel
+          messageId="taskCreate.description"
+          htmlFor="description"
+          gray={!!value && complete}
+        />
+        <TextArea
+          value={value}
+          onChange={onChange}
+          placeholderMessageId="taskCreate.descriptionPlaceholder"
+          onBlur={() => this.setState({ complete: true })}
+          onFocus={() => this.setState({ complete: false })}
+          id="description"
+        />
+      </div>
+    );
+  }
+}
 
 export default CreateTaskDescription;

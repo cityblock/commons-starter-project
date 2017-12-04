@@ -1,21 +1,41 @@
 import * as React from 'react';
+import FormLabel from '../../library/form-label/form-label';
 import TextInput from '../../library/text-input/text-input';
-import { FieldLabel } from './shared';
 
 interface IProps {
   value: string;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
-const CreateTaskTitle: React.StatelessComponent<IProps> = (props: IProps) => {
-  const { value, onChange } = props;
+interface IState {
+  complete: boolean;
+}
 
-  return (
-    <div>
-      <FieldLabel messageId="taskCreate.title" htmlFor="title" />
-      <TextInput value={value} onChange={onChange} id="title" name="title" />
-    </div>
-  );
-};
+class CreateTaskTitle extends React.Component<IProps, IState> {
+  constructor(props: IProps) {
+    super(props);
+    this.state = { complete: false };
+  }
+
+  render(): JSX.Element {
+    const { value, onChange } = this.props;
+    const { complete } = this.state;
+
+    return (
+      <div>
+        <FormLabel messageId="taskCreate.title" htmlFor="title" gray={!!value && complete} />
+        <TextInput
+          value={value}
+          onChange={onChange}
+          placeholderMessageId="taskCreate.titlePlaceholder"
+          onBlur={() => this.setState({ complete: true })}
+          onFocus={() => this.setState({ complete: false })}
+          id="title"
+          name="title"
+        />
+      </div>
+    );
+  }
+}
 
 export default CreateTaskTitle;

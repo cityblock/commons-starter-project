@@ -1,14 +1,14 @@
 @import '../../shared/css/sizes';
 
 .container {
+  z-index: 11;
   position: fixed;
   bottom: 0;
   right: 0;
   height: 0;
   width: 550px;
-  background: var(--white-color);
-  z-index: 11;
   transition: height 0.6s ease-in-out;
+  background: var(--white-color);
   box-shadow: var(--login-drop-shadow);
 }
 

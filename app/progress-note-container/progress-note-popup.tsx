@@ -21,9 +21,9 @@ import {
 } from '../graphql/types';
 import * as tabStyles from '../shared/css/tabs.css';
 import Button from '../shared/library/button/button';
+import ProgressNoteActivity from '../shared/progress-note-activity/progress-note-activity';
 import { getPatientFullName } from '../shared/util/patient-name';
 import * as styles from './css/progress-note-popup.css';
-import ProgressNoteActivity from './progress-note-activity/progress-note-activity';
 import ProgressNoteContext from './progress-note-context';
 import ProgressNoteTasks from './progress-note-tasks';
 

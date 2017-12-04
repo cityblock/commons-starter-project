@@ -13,6 +13,7 @@ import Clinic from '../clinic';
 import Patient from '../patient';
 import PatientAnswer from '../patient-answer';
 import PatientAnswerEvent from '../patient-answer-event';
+import PatientScreeningToolSubmission from '../patient-screening-tool-submission';
 import ProgressNote from '../progress-note';
 import ProgressNoteTemplate from '../progress-note-template';
 import Question from '../question';
@@ -124,6 +125,7 @@ describe('answer model', () => {
       ],
     });
     expect(patientAnswers[0].answerValue).toEqual('3');
+    expect(patientAnswers[0].progressNoteId).toEqual(progressNote.id);
     expect(await PatientAnswer.get(patientAnswers[0].id)).toEqual(patientAnswers[0]);
     expect(
       await PatientAnswer.getForQuestion(progressNoteTemplateQuestion.id, patient.id),
@@ -479,19 +481,28 @@ describe('answer model', () => {
       questionId: screeningToolQuestion.id,
       order: 1,
     });
+    const answerParams = {
+      questionId: screeningToolAnswer.questionId,
+      answerId: screeningToolAnswer.id,
+      answerValue: '3',
+      patientId: patient.id,
+      applicable: true,
+      userId: user.id,
+    };
+    const patientScreeningToolSubmission = await PatientScreeningToolSubmission.create({
+      screeningToolId: screeningTool.id,
+      patientId: patient.id,
+      userId: user.id,
+      patientAnswers: [{ answer, ...answerParams } as any],
+    });
     const patientAnswers = await PatientAnswer.create({
       patientId: patient.id,
-      answers: [
-        {
-          questionId: screeningToolAnswer.questionId,
-          answerId: screeningToolAnswer.id,
-          answerValue: '3',
-          patientId: patient.id,
-          applicable: true,
-          userId: user.id,
-        },
-      ],
+      patientScreeningToolSubmissionId: patientScreeningToolSubmission.id,
+      answers: [answerParams],
     });
+    expect(patientAnswers[0].patientScreeningToolSubmissionId).toEqual(
+      patientScreeningToolSubmission.id,
+    );
     expect(await PatientAnswer.getForScreeningTool(screeningTool.id, patient.id)).toEqual([
       patientAnswers[0],
     ]);

@@ -1,4 +1,4 @@
-@import '../../shared/css/sizes';
+@import '../../../shared/css/sizes';
 
 .container {
   font-size: var(--small-font-size);

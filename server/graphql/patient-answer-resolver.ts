@@ -1,5 +1,5 @@
 import { omit } from 'lodash';
-import { transaction } from 'objection';
+import { transaction, Transaction } from 'objection';
 import {
   IAnswerFilterTypeEnum,
   IPatientAnswersCreateInput,
@@ -63,28 +63,15 @@ export async function patientAnswersCreate(
   const { patientAnswers, patientId, questionIds, screeningToolId, progressNoteId } = input;
 
   return await transaction(PatientAnswer.knex(), async txn => {
-    let patientScreeningToolSubmissionId: string | undefined;
-
-    if (!!screeningToolId) {
-      const answerIds = patientAnswers.map(patientAnswer => patientAnswer.answerId);
-      const answers = await Answer.getMultiple(answerIds, txn);
-      const formattedPatientAnswers = patientAnswers.map(patientAnswer => ({
-        answer: answers.find(answer => answer.id === patientAnswer.answerId),
-        ...patientAnswer,
-      }));
-
-      const patientScreeningToolSubmission = await PatientScreeningToolSubmission.create(
-        {
+    const patientScreeningToolSubmissionId = screeningToolId
+      ? await getPatientScreeningToolSubmissionId(
           screeningToolId,
+          userId!,
           patientId,
-          userId: userId!,
-          patientAnswers: omit(formattedPatientAnswers, ['id']) as any,
-        },
-        txn,
-      );
-
-      patientScreeningToolSubmissionId = patientScreeningToolSubmission.id;
-    }
+          patientAnswers,
+          txn,
+        )
+      : undefined;
 
     const createdAnswers = await PatientAnswer.create(
       {
@@ -95,7 +82,6 @@ export async function patientAnswersCreate(
         answers: patientAnswers.map(patientAnswer => ({
           ...patientAnswer,
           userId: userId!,
-          patientScreeningToolSubmissionId,
         })),
       },
       txn,
@@ -189,3 +175,31 @@ export async function patientAnswerDelete(
 
   return PatientAnswer.delete(args.input.patientAnswerId);
 }
+
+// helper
+export const getPatientScreeningToolSubmissionId = async (
+  screeningToolId: string,
+  userId: string,
+  patientId: string,
+  patientAnswers: IPatientAnswersCreateInput['patientAnswers'],
+  txn: Transaction,
+) => {
+  const answerIds = patientAnswers.map(patientAnswer => patientAnswer.answerId);
+  const answers = await Answer.getMultiple(answerIds, txn);
+  const formattedPatientAnswers = patientAnswers.map(patientAnswer => ({
+    answer: answers.find(answer => answer.id === patientAnswer.answerId),
+    ...patientAnswer,
+  }));
+
+  const patientScreeningToolSubmission = await PatientScreeningToolSubmission.create(
+    {
+      screeningToolId,
+      patientId,
+      userId: userId!,
+      patientAnswers: omit(formattedPatientAnswers, ['id']) as any,
+    },
+    txn,
+  );
+
+  return patientScreeningToolSubmission.id;
+};

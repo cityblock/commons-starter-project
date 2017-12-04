@@ -1,8 +1,8 @@
 import * as React from 'react';
 import { graphql } from 'react-apollo';
-import * as patientAnswersQuery from '../graphql/queries/get-patient-answers.graphql';
-import { getPatientAnswersQuery } from '../graphql/types';
-import * as styles from './css/progress-note-row.css';
+import * as patientAnswersQuery from '../../graphql/queries/get-patient-answers.graphql';
+import { getPatientAnswersQuery } from '../../graphql/types';
+import * as styles from './css/progress-note-row-questions.css';
 import { ProgressNoteQuestionAnswer } from './progress-note-question-answer';
 
 interface IProps {
@@ -19,7 +19,7 @@ type allProps = IProps & IGraphqlProps;
 export class ProgressNoteRowQuestions extends React.Component<allProps> {
   renderAnswers(answers: getPatientAnswersQuery['patientAnswers']) {
     return (answers || []).map(
-      answer => (answer ? <ProgressNoteQuestionAnswer answer={answer} /> : null),
+      answer => (answer ? <ProgressNoteQuestionAnswer key={answer.id} answer={answer} /> : null),
     );
   }
 

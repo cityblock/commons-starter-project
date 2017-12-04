@@ -3,11 +3,13 @@ import * as React from 'react';
 import { compose, graphql } from 'react-apollo';
 import { FormattedMessage } from 'react-intl';
 import { connect, Dispatch } from 'react-redux';
-import { openPopup } from '../actions/popup-action';
-import * as progressNotesQuery from '../graphql/queries/get-progress-notes-for-patient.graphql';
-import { getProgressNotesForPatientQuery, FullProgressNoteFragment } from '../graphql/types';
-import * as sortSearchStyles from '../shared/css/sort-search.css';
-import * as patientInfoStyles from './css/patient-info.css';
+import { openPopup } from '../../actions/popup-action';
+/* tslint:disable:max-line-length */
+import * as progressNotesQuery from '../../graphql/queries/get-progress-notes-for-patient.graphql';
+/* tslint:enable:max-line-length */
+import { getProgressNotesForPatientQuery, FullProgressNoteFragment } from '../../graphql/types';
+import * as sortSearchStyles from '../../shared/css/sort-search.css';
+import * as patientInfoStyles from './../css/patient-info.css';
 import * as styles from './css/patient-timeline.css';
 import { ProgressNoteLoadingError } from './progress-note-loading-error';
 import ProgressNoteRow from './progress-note-row';

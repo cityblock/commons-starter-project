@@ -1,6 +1,6 @@
 import { shallow } from 'enzyme';
 import * as React from 'react';
-import { patient, progressNote } from '../../shared/util/test-data';
+import { patient, progressNote } from '../../../shared/util/test-data';
 import ProgressNoteRow from '../progress-note-row';
 
 it('renders the progress note row', () => {

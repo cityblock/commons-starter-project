@@ -2,17 +2,18 @@ import { every } from 'lodash';
 import * as React from 'react';
 import { compose, graphql } from 'react-apollo';
 import { FormattedMessage } from 'react-intl';
-import * as patientQuery from '../graphql/queries/get-patient.graphql';
+import * as patientQuery from '../../graphql/queries/get-patient.graphql';
 /* tslint:disable:max-line-length */
-import * as quickCallCreateMutationGraphql from '../graphql/queries/quick-call-create-mutation.graphql';
+import * as quickCallCreateMutationGraphql from '../../graphql/queries/quick-call-create-mutation.graphql';
 /* tslint:enable:max-line-length */
 import {
   quickCallCreateMutation,
   quickCallCreateMutationVariables,
   ShortPatientFragment,
-} from '../graphql/types';
-import { Popup } from '../shared/popup/popup';
-import { getPatientFullName } from '../shared/util/patient-name';
+} from '../../graphql/types';
+import { Popup } from '../../shared/popup/popup';
+import { getPatientFullName } from '../../shared/util/patient-name';
+
 import * as styles from './css/quick-call-popup.css';
 
 interface IProps {

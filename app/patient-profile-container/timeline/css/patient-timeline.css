@@ -1,4 +1,4 @@
-@import '../../shared/css/sizes';
+@import '../../../shared/css/sizes';
 
 .invertedButton {
   @apply --inverted-button;
@@ -10,7 +10,7 @@
 
 .progressNotesContainer {
   background-color: var(--gray-background-color);
-  padding: 20px var(--medium-gutter);
+  padding: 0 var(--medium-gutter);
 }
 
 ::-webkit-scrollbar {
@@ -18,9 +18,8 @@
 }
 
 .progressNotes {
-  margin-top: var(--small-gutter);
-  height: calc(100vh - 262px);
-  overflow: scroll;
+  height: calc(100vh - 160px);
+  overflow: auto;
   -webkit-overflow-scrolling: touch;
 }
 
@@ -31,7 +30,7 @@
 }
 
 .emptyLogo {
-  background-image: url('../../assets/calendar-event-grey.svg');
+  background-image: url('../../../assets/calendar-event-grey.svg');
   background-position: center center;
   height: 30px;
   width: 30px;
@@ -71,7 +70,7 @@
 }
 
 .errorIcon {
-  background-image: url('../../assets/error-circle.svg');
+  background-image: url('../../../assets/error-circle.svg');
   background-position: center center;
   background-repeat: no-repeat;
   background-size: contain;

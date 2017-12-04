@@ -1,6 +1,6 @@
 import { shallow } from 'enzyme';
 import * as React from 'react';
-import { patient } from '../../shared/util/test-data';
+import { patient } from '../../../shared/util/test-data';
 import { PatientTimeline as Component } from '../patient-timeline';
 
 const match = { params: { patientId: patient.id } };

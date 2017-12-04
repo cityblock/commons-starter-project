@@ -33,5 +33,6 @@
 .progressNotes {
   background: white;
   transition: height 0.3s ease-in-out;
-  overflow: hidden;
+  overflow: auto;
+  max-height: calc(100vh - 117px);
 }

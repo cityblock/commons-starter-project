@@ -2,7 +2,7 @@ import * as classNames from 'classnames';
 import { groupBy, keys } from 'lodash';
 import * as React from 'react';
 import { FullCarePlanUpdateEventFragment } from '../../graphql/types';
-import * as styles from '../css/progress-note-activity.css';
+import * as styles from './css/progress-note-activity.css';
 import ProgressNoteActivityCarePlanUpdate from './progress-note-activity-care-plan-update';
 
 interface IProps {

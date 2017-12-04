@@ -1,7 +1,7 @@
 import * as classNames from 'classnames';
 import * as React from 'react';
 import { FullQuickCallFragment } from '../../graphql/types';
-import * as styles from '../css/progress-note-activity.css';
+import * as styles from './css/progress-note-activity.css';
 import ProgressNoteActivityQuickCall from './progress-note-activity-quick-call';
 
 interface IProps {

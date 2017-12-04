@@ -1,4 +1,4 @@
-@import '../../shared/css/sizes';
+@import '../../../shared/css/sizes';
 
 .topBar {
   width: 100%;
@@ -17,7 +17,7 @@
 }
 
 .closeButton {
-  background: url('../../assets/chevron-down-white.svg');
+  background: url('../../../assets/chevron-down-white.svg');
   background-repeat: no-repeat;
   background-position: center center;
   padding: 10px;

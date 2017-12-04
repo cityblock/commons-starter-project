@@ -30,8 +30,34 @@ export async function questionCreate(root: any, { input }: IQuestionCreateArgs, 
   await accessControls.isAllowed(userRole, 'create', 'question');
   checkUserLoggedIn(userId);
 
-  // TODO: fix typings here
-  return await Question.create(input as any);
+  const question = {
+    order: input.order,
+    title: input.title,
+    answerType: input.answerType,
+    validatedSource: input.validatedSource || undefined,
+    applicableIfType: input.applicableIfType || undefined,
+  };
+
+  // A bit verbose to handle the typings
+  if (input.riskAreaId) {
+    return Question.create({
+      type: 'riskArea',
+      riskAreaId: input.riskAreaId,
+      ...question,
+    });
+  } else if (input.screeningToolId) {
+    return Question.create({
+      type: 'screeningTool',
+      screeningToolId: input.screeningToolId,
+      ...question,
+    });
+  } else if (input.progressNoteTemplateId) {
+    return Question.create({
+      type: 'progressNoteTemplate',
+      progressNoteTemplateId: input.progressNoteTemplateId,
+      ...question,
+    });
+  }
 }
 
 export async function resolveQuestions(

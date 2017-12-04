@@ -21,6 +21,8 @@ interface IPatientAnswerCreateFields {
     patientId: string;
     applicable: boolean;
     userId: string;
+    progressNoteId?: string;
+    patientScreeningToolSubmissionId?: string;
   }>;
 }
 
@@ -290,13 +292,20 @@ export default class PatientAnswer extends BaseModel {
     existingTxn?: Transaction,
   ): Promise<PatientAnswer[]> {
     return await transaction(PatientAnswer.knex(), async txn => {
-      const questionIds = input.questionIds || input.answers.map(answer => answer.questionId);
-
-      if (input.progressNoteId) {
+      const { answers, progressNoteId, patientId, patientScreeningToolSubmissionId } = input;
+      const questionIds = input.questionIds || answers.map(answer => answer.questionId);
+      if (progressNoteId) {
         await this.validateQuestionsForProgressNote(
           questionIds,
-          input.progressNoteId,
+          progressNoteId,
           existingTxn || txn,
+        );
+        // add progressNoteId to patient answers
+        answers.map(answer => (answer.progressNoteId = progressNoteId));
+      } else if (patientScreeningToolSubmissionId) {
+        // add patientScreeningToolSubmissionId to patient answers
+        answers.map(
+          answer => (answer.patientScreeningToolSubmissionId = patientScreeningToolSubmissionId),
         );
       }
 
@@ -304,7 +313,7 @@ export default class PatientAnswer extends BaseModel {
       const patientAnswerIdsToDeleteQuery = PatientAnswer.query(existingTxn || txn)
         .joinRelation('answer')
         .where('patient_answer.deletedAt', null)
-        .andWhere('patientId', input.patientId)
+        .andWhere('patientId', patientId)
         .where('answer.questionId', 'in', questionIds)
         .select('patient_answer.id');
 
@@ -320,10 +329,10 @@ export default class PatientAnswer extends BaseModel {
 
       let results: PatientAnswer[] = [];
 
-      if (input.answers.length) {
+      if (answers.length) {
         results = await PatientAnswer.query(existingTxn || txn)
           .eager('answer')
-          .insertGraphAndFetch(input.answers);
+          .insertGraphAndFetch(answers);
       }
 
       await PatientAnswer.createPatientAnswerEvents(

@@ -251,8 +251,8 @@ type PatientMedication {
 
 # PatientMedicationsDetails
 type PatientMedicationsDetails {
-  active: [PatientMedication]!
-  inactive: [PatientMedication]!
+  active: [PatientMedication!]!
+  inactive: [PatientMedication!]!
 }
 
 # PatientMedications
@@ -273,7 +273,7 @@ type PatientEncounter {
   providerName: String!
   providerRole: String!
   location: String!
-  diagnoses: [PatientDiagnosis]!
+  diagnoses: [PatientDiagnosis!]!
   reasons: [String]!
   dateTime: String!
 }
@@ -339,7 +339,7 @@ type TaskNode {
 
 # Task edges
 type TaskEdges {
-  edges: [TaskNode]
+  edges: [TaskNode!]!
   pageInfo: PageInfo!
 }
 
@@ -361,7 +361,7 @@ type TaskCommentNode {
 
 # Task comment edges
 type TaskCommentEdges {
-  edges: [TaskCommentNode]
+  edges: [TaskCommentNode!]!
   pageInfo: PageInfo!
 }
 
@@ -379,7 +379,7 @@ type Answer implements uniqueId {
   summaryText: String
   questionId: String!
   order: Int!
-  concernSuggestions: [Concern]
+  concernSuggestions: [Concern!]!
   goalSuggestions: [GoalSuggestionTemplate]
   riskArea: RiskArea
   screeningTool: ScreeningTool
@@ -414,7 +414,7 @@ type Question implements uniqueId {
   riskAreaId: String
   screeningToolId: String
   progressNoteTemplateId: String
-  applicableIfQuestionConditions: [QuestionCondition!]
+  applicableIfQuestionConditions: [QuestionCondition!]!
   applicableIfType: QuestionConditionTypeOptions
   order: Int!
 }
@@ -542,7 +542,7 @@ type EventNotificationNode {
 
 # Event Notification edges
 type EventNotificationEdges {
-  edges: [EventNotificationNode]
+  edges: [EventNotificationNode!]!
   pageInfo: PageInfo!
 }
 
@@ -575,7 +575,7 @@ type PatientConcern implements uniqueId {
   order: Int!
   concernId: String!
   concern: Concern!
-  patientGoals: [PatientGoal!]
+  patientGoals: [PatientGoal!]!
   patientId: String!
   patient: Patient!
   startedAt: String
@@ -657,7 +657,7 @@ type ScreeningTool implements uniqueId {
   title: String!
   riskAreaId: String!
   riskArea: RiskArea!
-  screeningToolScoreRanges: [ScreeningToolScoreRange]
+  screeningToolScoreRanges: [ScreeningToolScoreRange!]!
   createdAt: String!
   updatedAt: String!
   deletedAt: String
@@ -673,7 +673,7 @@ type ScreeningToolScoreRange implements uniqueId {
   createdAt: String!
   updatedAt: String!
   deletedAt: String
-  concernSuggestions: [Concern]
+  concernSuggestions: [Concern!]!
   goalSuggestions: [GoalSuggestionTemplate]
 }
 
@@ -690,7 +690,7 @@ type PatientScreeningToolSubmission implements uniqueId {
   createdAt: String!
   updatedAt: String!
   deletedAt: String
-  carePlanSuggestions: [CarePlanSuggestion]!
+  carePlanSuggestions: [CarePlanSuggestion!]!
   screeningToolScoreRangeId: String
   screeningToolScoreRange: ScreeningToolScoreRange
 }
@@ -701,7 +701,7 @@ type ProgressNoteTemplate implements uniqueId {
   createdAt: String!
   updatedAt: String!
   deletedAt: String
-  carePlanSuggestions: [CarePlanSuggestion]!
+  carePlanSuggestions: [CarePlanSuggestion!]!
 }
 
 type ProgressNote implements uniqueId {

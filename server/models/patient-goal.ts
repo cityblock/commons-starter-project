@@ -18,7 +18,7 @@ interface IPatientGoalEditableFields {
   userId: string;
 }
 
-export const EAGER_QUERY = '[patient, tasks, goalSuggestionTemplate]';
+export const EAGER_QUERY = '[patient, tasks, tasks.followers, goalSuggestionTemplate]';
 
 /* tslint:disable:member-ordering */
 export default class PatientGoal extends BaseModel {
@@ -191,6 +191,9 @@ export default class PatientGoal extends BaseModel {
       .modifyEager('tasks', builder => {
         builder.where('task.completedAt', null);
         builder.where('task.deletedAt', null);
+      })
+      .modifyEager('tasks.followers', builder => {
+        builder.where('task_follower.deletedAt', null);
       })
       .where('deletedAt', null)
       .andWhere('patientId', patientId)

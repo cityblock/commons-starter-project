@@ -16,6 +16,7 @@ import PatientConcern from '../patient-concern';
 import PatientGoal from '../patient-goal';
 import Task from '../task';
 import TaskEvent from '../task-event';
+import TaskFollower from '../task-follower';
 import TaskTemplate from '../task-template';
 import User from '../user';
 
@@ -355,7 +356,6 @@ describe('patient goal model', () => {
       patientGoalId: patientGoal.id,
       createdById: user.id,
     });
-
     await Task.complete(completeTask.id, user.id);
     await Task.delete(deletedTask.id);
 
@@ -367,6 +367,45 @@ describe('patient goal model', () => {
     expect(taskIds).toContain(incompleteTask.id);
     expect(taskIds).not.toContain(completeTask.id);
     expect(taskIds).not.toContain(deletedTask.id);
+  });
+
+  it('get task followers for goals for a patient', async () => {
+    const concern = await Concern.create({ title: 'Housing' });
+    const patientConcern = await PatientConcern.create({
+      concernId: concern.id,
+      patientId: patient.id,
+      order: 1,
+      userId: user.id,
+    });
+    const patientGoal = await PatientGoal.create({
+      title: 'title',
+      patientId: patient.id,
+      patientConcernId: patientConcern.id,
+      userId: user.id,
+    });
+    const task1 = await Task.create({
+      title: 'Task 1',
+      patientId: patient.id,
+      patientGoalId: patientGoal.id,
+      createdById: user.id,
+    });
+    const task2 = await Task.create({
+      title: 'Task 2',
+      patientId: patient.id,
+      patientGoalId: patientGoal.id,
+      createdById: user.id,
+    });
+
+    // Ensure task followers are loaded correctly
+    await TaskFollower.followTask({ userId: user.id, taskId: task1.id });
+
+    await TaskFollower.followTask({ userId: user.id, taskId: task2.id });
+    await TaskFollower.unfollowTask({ userId: user.id, taskId: task2.id });
+
+    const patientGoals = await PatientGoal.getForPatient(patient.id);
+
+    expect(patientGoals[0].tasks[0].followers[0].id).toEqual(user.id);
+    expect(patientGoals[0].tasks[1].followers).toEqual([]);
   });
 
   it('edits patient goal title', async () => {

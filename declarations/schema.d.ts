@@ -465,11 +465,11 @@ declare module 'schema' {
     id: string;
     title: string;
     description: string | null;
-    patient: IPatient | null;
+    patient: IPatient;
     patientId: string;
     dueAt: string | null;
     priority: IPriorityEnum | null;
-    createdBy: IUser | null;
+    createdBy: IUser;
     createdAt: string;
     updatedAt: string;
     deletedAt: string | null;
@@ -477,8 +477,8 @@ declare module 'schema' {
     completedAt: string | null;
     assignedTo: IUser | null;
     followers: Array<IUser>;
-    patientGoalId: string | null;
-    patientGoal: IPatientGoal | null;
+    patientGoalId: string;
+    patientGoal: IPatientGoal;
   }
 
 
@@ -562,7 +562,7 @@ declare module 'schema' {
     description: Task edges
   */
   interface ITaskEdges {
-    edges: Array<ITaskNode> | null;
+    edges: Array<ITaskNode>;
     pageInfo: IPageInfo;
   }
 
@@ -578,7 +578,7 @@ declare module 'schema' {
     description: Task comment edges
   */
   interface ITaskCommentEdges {
-    edges: Array<ITaskCommentNode> | null;
+    edges: Array<ITaskCommentNode>;
     pageInfo: IPageInfo;
   }
 
@@ -650,7 +650,7 @@ declare module 'schema' {
     summaryText: string | null;
     questionId: string;
     order: number;
-    concernSuggestions: Array<IConcern> | null;
+    concernSuggestions: Array<IConcern>;
     goalSuggestions: Array<IGoalSuggestionTemplate> | null;
     riskArea: IRiskArea | null;
     screeningTool: IScreeningTool | null;
@@ -668,7 +668,7 @@ declare module 'schema' {
     title: string;
     riskAreaId: string;
     riskArea: IRiskArea;
-    screeningToolScoreRanges: Array<IScreeningToolScoreRange> | null;
+    screeningToolScoreRanges: Array<IScreeningToolScoreRange>;
     createdAt: string;
     updatedAt: string;
     deletedAt: string | null;
@@ -685,7 +685,7 @@ declare module 'schema' {
     createdAt: string;
     updatedAt: string;
     deletedAt: string | null;
-    concernSuggestions: Array<IConcern> | null;
+    concernSuggestions: Array<IConcern>;
     goalSuggestions: Array<IGoalSuggestionTemplate> | null;
   }
 
@@ -793,7 +793,7 @@ declare module 'schema' {
     description: Event Notification edges
   */
   interface IEventNotificationEdges {
-    edges: Array<IEventNotificationNode> | null;
+    edges: Array<IEventNotificationNode>;
     pageInfo: IPageInfo;
   }
 

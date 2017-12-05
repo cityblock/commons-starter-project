@@ -49,7 +49,7 @@ it('updates notification count with new props', () => {
     <Component
       eventNotificationType={'tasks'}
       eventNotificationsLoading={false}
-      eventNotifications={[eventNotification]}
+      eventNotifications={[eventNotification] as any}
       fetchMoreEventNotifications={() => false}
       updateNotificationsCount={updateNotificationsCount}
       notificationsCount={1}

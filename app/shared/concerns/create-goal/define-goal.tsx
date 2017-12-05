@@ -16,7 +16,8 @@ interface IProps {
   hideSearchResults: boolean;
   showAllGoals: boolean;
   onTitleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  onGoalSuggestionTemplateClick: (goalSuggestionTemplateId: string) => void;
+  onGoalSuggestionTemplateClick:
+    (goalSuggestionTemplateId: string, goalSuggestionTemplateTitle: string) => void;
 }
 
 const DefineGoal: React.StatelessComponent<IProps> = (props: IProps) => {
@@ -31,8 +32,6 @@ const DefineGoal: React.StatelessComponent<IProps> = (props: IProps) => {
     onGoalSuggestionTemplateClick,
     onSubmit,
   } = props;
-
-  // TODO: CHANGE LINK FROM SHOW ALL TO HIDE ALL
 
   return (
     <div>

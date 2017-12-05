@@ -135,15 +135,13 @@ export class CreateGoalModal extends React.Component<allProps, IState> {
     this.setState({ loading: false });
   };
 
-  onGoalSuggestionTemplateClick = (goalSuggestionTemplateId: string): void => {
-    this.setState({ goalSuggestionTemplateId }, () => {
-      const selectedGoal = this.getSelectedGoal();
-      if (selectedGoal)
-        this.setState({
-          title: selectedGoal.title,
-          hideSearchResults: true,
-          showAllGoals: false,
-        });
+  onGoalSuggestionTemplateClick =
+    (goalSuggestionTemplateId: string, goalSuggestionTemplateTitle: string): void => {
+    this.setState({
+      goalSuggestionTemplateId,
+      title: goalSuggestionTemplateTitle,
+      hideSearchResults: true,
+      showAllGoals: false,
     });
   };
 

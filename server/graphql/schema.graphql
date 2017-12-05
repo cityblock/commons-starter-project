@@ -315,20 +315,20 @@ type Task implements uniqueId {
   id: ID!
   title: String!
   description: String
-  patient: Patient
+  patient: Patient!
   patientId: String!
   dueAt: String
   priority: Priority
-  createdBy: User
+  createdBy: User!
   createdAt: String!
   updatedAt: String!
   deletedAt: String
   completedBy: User
   completedAt: String
   assignedTo: User
-  followers: [User!]
-  patientGoalId: String
-  patientGoal: PatientGoal
+  followers: [User!]!
+  patientGoalId: String!
+  patientGoal: PatientGoal!
 }
 
 # Task node

@@ -274,6 +274,20 @@ export const comment = {
   updatedAt: 'Thu Jul 14 2017 16:52:56 GMT-0400 (EDT)',
 };
 
+export const patientGoal = {
+  id: 'patient-goal-id',
+  title: 'Goal Title',
+  patientId: 'patient-id',
+  patient,
+  patientConcernId: 'patient-concern-id',
+  goalSuggestionTemplateId: 'goal-suggestion-template-id',
+  goalSuggestionTemplate,
+  tasks: [task],
+  createdAt: '2017-09-07T13:45:14.532Z',
+  updatedAt: '2017-09-07T13:45:14.532Z',
+  deletedAt: null,
+};
+
 export const taskWithComment = {
   ...task,
   patient,
@@ -282,6 +296,7 @@ export const taskWithComment = {
   assignedTo: currentUser,
   createdBy: currentUser,
   followers: [currentUser],
+  patientGoal,
 };
 
 export const assignedTask = {
@@ -299,20 +314,6 @@ export const completedTask = {
   createdById: currentUser.id,
   assignedToId: currentUser.id,
   completedById: currentUser.id,
-};
-
-export const patientGoal = {
-  id: 'patient-goal-id',
-  title: 'Goal Title',
-  patientId: 'patient-id',
-  patient,
-  patientConcernId: 'patient-concern-id',
-  goalSuggestionTemplateId: 'goal-suggestion-template-id',
-  goalSuggestionTemplate,
-  tasks: [task],
-  createdAt: '2017-09-07T13:45:14.532Z',
-  updatedAt: '2017-09-07T13:45:14.532Z',
-  deletedAt: null,
 };
 
 export const patientConcern = {

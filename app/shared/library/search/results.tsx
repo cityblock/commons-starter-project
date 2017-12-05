@@ -7,7 +7,7 @@ interface IProps {
   searchResults: SearchOptions;
   value: string; // for formatting purposes to highlight text
   hideResults: boolean;
-  onOptionClick: (optionId: string) => void;
+  onOptionClick: (optionId: string, optionTitle: string) => void;
   showAll?: boolean;
   emptyPlaceholderMessageId?: string; // translated text to display if no results found
 }

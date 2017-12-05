@@ -59,9 +59,12 @@ export const SPANISH_TRANSLATION = {
     'concernCreate.detail':
       'Completar este formulario para agregar una preocupación al MAP de este miembro',
     /* tslint:enable:max-line-length */
+    'concernCreate.hideAll': 'Ocultar todas las preocupaciones',
     'concernCreate.loading': 'Cargando...',
-    'concernCreate.selectConcern': 'Seleccione una preocupación',
+    'concernCreate.noResults': 'No se encontraron preocupaciones coincidentes.',
+    'concernCreate.placeholder': 'Busque una preocupación...',
     'concernCreate.selectLabel': 'Agregue una preocupación:',
+    'concernCreate.showAll': 'Ver todas las preocupaciones posibles',
     'concernCreate.submit': 'Añadir preocupación',
     'concernCreate.title': 'Agregue una preocupación',
     'concernCreate.selectConcernType': 'Seleccione un tipo de preocupación',

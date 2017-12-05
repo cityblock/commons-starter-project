@@ -4,3 +4,15 @@
   height: 52px;
   font-size: var(--medium-font-size);
 }
+
+.showAll {
+  cursor: pointer;
+}
+
+.showAll p {
+  margin: 0;
+  padding-top: var(--extra-small-gutter);
+  color: var(--light-blue-color);
+  font-family: var(--basetica-medium);
+  font-weight: var(--roboto-medium-weight);
+}

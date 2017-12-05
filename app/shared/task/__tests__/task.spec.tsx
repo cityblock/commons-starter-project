@@ -22,7 +22,7 @@ describe('Task Component', () => {
       editTask={placeholderFn}
       routeBase={routeBase}
       taskId={taskId}
-      task={taskWithComment}
+      task={taskWithComment as any}
       redirectToMap={placeholderFn}
     />,
   );
@@ -93,7 +93,7 @@ describe('Task Component', () => {
         editTask={placeholderFn}
         routeBase={routeBase}
         taskId={taskId}
-        task={taskWithComment}
+        task={taskWithComment as any}
         taskLoading={true}
         redirectToMap={placeholderFn}
       />,

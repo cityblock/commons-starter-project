@@ -14,7 +14,7 @@ import ModalButtons from '../../shared/library/modal-buttons/modal-buttons';
 import ModalHeader from '../../shared/library/modal-header/modal-header';
 import { Popup } from '../../shared/popup/popup';
 import { IState as IAppState } from '../../store';
-import ConcernSelect from './concern-select';
+import ConcernSearch from './concern-search';
 import * as styles from './css/create-concern.css';
 
 interface IPatientConcernCreateOptions {
@@ -36,9 +36,14 @@ interface IGraphqlProps {
   ) => { data: patientConcernCreateMutation };
 }
 
+type ConcernType = 'active' | 'inactive';
+
 interface IState {
   concernId?: string;
-  concernType?: 'active' | 'inactive';
+  concernType?: ConcernType;
+  searchTerm: string;
+  hideSearchResults: boolean;
+  showAllConcerns: boolean;
   concernCreateError?: string;
 }
 
@@ -55,6 +60,9 @@ export class CreateConcernModal extends React.Component<allProps, IState> {
     return {
       concernId: undefined,
       concernType: undefined,
+      searchTerm: '',
+      hideSearchResults: false,
+      showAllConcerns: false,
       concernCreateError: undefined,
     };
   }
@@ -81,14 +89,34 @@ export class CreateConcernModal extends React.Component<allProps, IState> {
   };
 
   onSelectChange = (e: React.ChangeEvent<HTMLSelectElement>): void => {
-    if (['concernId', 'concernType'].includes(e.currentTarget.name)) {
-      this.setState({ [e.currentTarget.name as any]: e.currentTarget.value });
-    }
-  };
+    const concernType = e.currentTarget.value as ConcernType;
+    this.setState({ concernType });
+  }
+
+  onSearchTermChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
+    this.setState({
+      searchTerm: e.currentTarget.value,
+      concernId: undefined,
+      hideSearchResults: false,
+    });
+  }
+
+  onSearchTermClick = (concernId: string, concernTitle: string): void => {
+    this.setState({
+      concernId,
+      searchTerm: concernTitle,
+      hideSearchResults: true,
+      showAllConcerns: false,
+    });
+  }
+
+  toggleShowAllConcerns = (): void => {
+    this.setState((prevState: IState) => ({ showAllConcerns: !prevState.showAllConcerns }));
+  }
 
   render(): JSX.Element {
     const { visible, patientId } = this.props;
-    const { concernId, concernType } = this.state;
+    const { concernId, concernType, hideSearchResults, searchTerm, showAllConcerns } = this.state;
 
     return (
       <Popup
@@ -103,12 +131,17 @@ export class CreateConcernModal extends React.Component<allProps, IState> {
           closePopup={this.onClose}
         />
         <div className={styles.fields}>
-          <ConcernSelect
+          <ConcernSearch
+            patientId={patientId}
             concernId={concernId}
             concernType={concernType}
-            patientId={patientId}
+            hideSearchResults={hideSearchResults}
+            onSearchTermChange={this.onSearchTermChange}
+            onSearchTermClick={this.onSearchTermClick}
             onSelectChange={this.onSelectChange}
-          />
+            searchTerm={searchTerm}
+            showAllConcerns={showAllConcerns}
+            toggleShowAllConcerns={this.toggleShowAllConcerns} />
           <ModalButtons
             cancelMessageId="concernCreate.cancel"
             submitMessageId="concernCreate.submit"

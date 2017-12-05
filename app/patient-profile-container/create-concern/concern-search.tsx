@@ -1,21 +1,29 @@
 import * as React from 'react';
 import { compose, graphql } from 'react-apollo';
+import { FormattedMessage } from 'react-intl';
 /* tslint:disable:max-line-length */
 import * as concernsQuery from '../../graphql/queries/get-concerns.graphql';
 import * as patientCarePlanQuery from '../../graphql/queries/get-patient-care-plan.graphql';
 /* tslint:enaable:max-line-length */
 import { getConcernsQuery, getPatientCarePlanQuery } from '../../graphql/types';
 import FormLabel from '../../shared/library/form-label/form-label';
-import Option from '../../shared/library/option/option';
-import Select from '../../shared/library/select/select';
+import Search, { SearchOptions } from '../../shared/library/search/search';
+import Spinner from '../../shared/library/spinner/spinner';
 import ConcernTypeSelect from './concern-type-select';
 import * as styles from './css/concern-select.css';
+import createConcernFuseOptions from './fuse-options';
 
 export interface IProps {
   patientId: string;
   concernId?: string;
   concernType?: 'active' | 'inactive';
+  hideSearchResults: boolean;
   onSelectChange: (e: React.ChangeEvent<HTMLSelectElement>) => void;
+  onSearchTermChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onSearchTermClick: (concernId: string) => void;
+  searchTerm: string;
+  showAllConcerns: boolean;
+  toggleShowAllConcerns: () => void;
 }
 
 interface IGraphqlProps {
@@ -29,44 +37,54 @@ interface IGraphqlProps {
 
 type allProps = IProps & IGraphqlProps;
 
-export const ConcernSelect: React.StatelessComponent<allProps> = (props: allProps) => {
+export const ConcernSearch: React.StatelessComponent<allProps>  = (props: allProps) => {
   const {
     concernId,
     concernType,
     onSelectChange,
     concerns,
+    hideSearchResults,
     loading,
+    onSearchTermChange,
+    onSearchTermClick,
     patientCarePlanLoading,
     patientCarePlan,
+    searchTerm,
+    showAllConcerns,
+    toggleShowAllConcerns,
   } = props;
+
+  if (loading || patientCarePlanLoading) return <Spinner />;
 
   const existingConcernIds = patientCarePlan
     ? patientCarePlan.concerns.map(concern => concern.concernId)
     : [];
-  const concernOptions = (concerns || []).filter(
-    concern => !existingConcernIds.includes(concern!.id),
-  );
-  const concernOptionsList =
-    loading || patientCarePlanLoading ? (
-      <Option value="" messageId="concernCreate.loading" />
-    ) : (
-      concernOptions.map(concern => (
-        <Option key={concern!.id} value={concern!.id} label={concern!.title} />
-      ))
-    );
+
+  const concernOptions: SearchOptions = [];
+  (concerns || []).forEach(concern => {
+    if (!existingConcernIds.includes(concern!.id)) {
+      concernOptions.push({ title: concern!.title, id: concern!.id });
+    }
+  });
 
   return (
     <div>
       <FormLabel messageId="concernCreate.selectLabel" />
-      <Select
-        name="concernId"
-        value={concernId || ''}
-        onChange={onSelectChange}
-        className={styles.select}
-      >
-        <Option value="" messageId="concernCreate.selectConcern" disabled={true} />
-        {concernOptionsList}
-      </Select>
+      <Search
+        value={searchTerm}
+        onChange={onSearchTermChange}
+        searchOptions={concernOptions}
+        onOptionClick={onSearchTermClick}
+        hideResults={hideSearchResults}
+        showAll={showAllConcerns}
+        placeholderMessageId="concernCreate.placeholder"
+        emptyPlaceholderMessageId="concernCreate.noResults"
+        fuseOptions={createConcernFuseOptions} />
+      <div onClick={toggleShowAllConcerns} className={styles.showAll}>
+        <FormattedMessage id={showAllConcerns ? 'concernCreate.hideAll' : 'concernCreate.showAll'}>
+            {(message: string) => <p>{message}</p>}
+        </FormattedMessage>
+      </div>
       {concernId && <ConcernTypeSelect value={concernType} onChange={onSelectChange} />}
     </div>
   );
@@ -94,4 +112,4 @@ export default compose(
       patientCarePlan: data ? (data as any).carePlanForPatient : null,
     }),
   }),
-)(ConcernSelect);
+)(ConcernSearch);

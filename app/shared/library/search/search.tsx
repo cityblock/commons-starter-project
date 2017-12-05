@@ -1,6 +1,6 @@
 import Fuse = require('fuse.js');
 import * as React from 'react';
-import fuseOptions, { MAX_PATTERN_LENGTH } from './fuse-options';
+import defaultFuseOptions, { MAX_PATTERN_LENGTH } from './fuse-options';
 import SearchInput from './input';
 import SearchResults from './results';
 
@@ -15,11 +15,12 @@ interface IProps {
   value: string;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   searchOptions: SearchOptions;
-  onOptionClick: (optionId: string) => void; // what to do if user clicks on search option
+  onOptionClick: (optionId: string, optionTitle: string) => void;
   hideResults?: boolean; // hide dropdown menu
   showAll?: boolean; // simply render all search options
   placeholderMessageId?: string; // optional placeholderMessageId text for empty field
   emptyPlaceholderMessageId?: string; // optional placeholder message id if no results found
+  fuseOptions?: any; // optional fuse options to be applied on top of default
 }
 
 interface IState {
@@ -48,8 +49,11 @@ class Search extends React.Component<IProps, IState> {
   }
 
   setFuse(searchOptions: SearchOptions, callback?: () => void): void {
-    const fuse = new Fuse(searchOptions, fuseOptions);
-    this.setState({ fuse });
+    const options = Object.assign({}, defaultFuseOptions, this.props.fuseOptions || {});
+    const fuse = new Fuse(searchOptions, options);
+    this.setState({ fuse }, () => {
+      if (callback) callback();
+    });
   }
 
   search(value: string): void {

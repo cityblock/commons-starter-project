@@ -4,13 +4,14 @@ import { compose, graphql } from 'react-apollo';
 import { FormattedMessage } from 'react-intl';
 import { connect, Dispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { openPopup } from '../actions/popup-action';
+import { closePopup as closePopupAction, openPopup } from '../actions/popup-action';
 /* tslint:disable:max-line-length */
 import * as patientCarePlanQuery from '../graphql/queries/get-patient-care-plan.graphql';
 /* tslint:enable:max-line-length */
 import { getPatientCarePlanQuery } from '../graphql/types';
 import * as tabStyles from '../shared/css/tabs.css';
 import Button from '../shared/library/button/button';
+import { IState as IAppState } from '../store';
 import CreateConcernModal from './create-concern/create-concern';
 import * as styles from './css/patient-care-plan.css';
 import PatientCarePlanSuggestions from './patient-care-plan-suggestions';
@@ -35,13 +36,23 @@ interface IGraphqlProps {
   error?: string;
 }
 
-interface IDispatchProps {
-  addConcern: () => void;
+interface IStateProps {
+  isPopupOpen: boolean;
 }
 
-export type allProps = IProps & IDispatchProps & IGraphqlProps;
+interface IDispatchProps {
+  addConcern: () => void;
+  closePopup: () => void;
+}
+
+export type allProps = IProps & IStateProps & IDispatchProps & IGraphqlProps;
 
 export class PatientCarePlanView extends React.Component<allProps> {
+  onContainerClick = () => {
+    const { isPopupOpen, closePopup } = this.props;
+    if (isPopupOpen) closePopup(); // only dispatch action if needed
+  };
+
   render(): JSX.Element {
     const { patientCarePlan, loading, match, addConcern } = this.props;
     const patientId = match.params.patientId;
@@ -73,7 +84,7 @@ export class PatientCarePlanView extends React.Component<allProps> {
     const tabRowStyles = classNames(tabStyles.tabs, tabStyles.darkTabs, styles.tabRow);
 
     return (
-      <div>
+      <div onClick={this.onContainerClick}>
         <div className={styles.tabContainer}>
           <div className={tabRowStyles}>
             <FormattedMessage id="patient.activeCarePlan">
@@ -105,6 +116,11 @@ export class PatientCarePlanView extends React.Component<allProps> {
 
 const getPatientId = (props: IProps): string => props.match.params.patientId;
 
+const mapStateToProps = (state: IAppState): IStateProps => {
+  const isPopupOpen = !!state.popup.name;
+  return { isPopupOpen };
+};
+
 const mapDispatchToProps = (dispatch: Dispatch<() => void>, ownProps: IProps): IDispatchProps => {
   const addConcern = () =>
     dispatch(
@@ -114,11 +130,17 @@ const mapDispatchToProps = (dispatch: Dispatch<() => void>, ownProps: IProps): I
       }),
     );
 
-  return { addConcern };
+  return {
+    addConcern,
+    closePopup: () => dispatch(closePopupAction()),
+  };
 };
 
 export default compose(
-  connect<{}, IDispatchProps, IProps>(null, mapDispatchToProps),
+  connect<IStateProps, IDispatchProps, IProps>(
+    mapStateToProps as (args?: any) => IStateProps,
+    mapDispatchToProps,
+  ),
   graphql<IGraphqlProps, IProps, allProps>(patientCarePlanQuery as any, {
     options: (props: IProps) => ({
       variables: {

@@ -12,7 +12,14 @@ describe('Patient Care Plan View Component', () => {
   const routeBase = '/patients';
   const placeholderFn = () => true as any;
   const match = { params: { patientId: patient.id, subTab: 'active' as any } };
-  const wrapper = shallow(<PatientCarePlanView match={match} addConcern={placeholderFn} />);
+  const wrapper = shallow(
+    <PatientCarePlanView
+      match={match}
+      addConcern={placeholderFn}
+      isPopupOpen={false}
+      closePopup={placeholderFn}
+    />,
+  );
 
   it('renders patient MAP when on active tab', () => {
     const map = wrapper.find(PatientMap);
@@ -31,12 +38,19 @@ describe('Patient Care Plan View Component', () => {
 
   it('renders button to add concern', () => {
     expect(wrapper.find(Button).length).toBe(1);
-    expect(wrapper.find(Button).props().messageId).toBe("concernCreate.addConcern");
+    expect(wrapper.find(Button).props().messageId).toBe('concernCreate.addConcern');
   });
 
   it('renders patient suggestions when on suggestions tab', () => {
     const match2 = { params: { patientId: patient.id, subTab: 'suggestions' as any } };
-    const wrapper2 = shallow(<PatientCarePlanView match={match2} addConcern={placeholderFn} />);
+    const wrapper2 = shallow(
+      <PatientCarePlanView
+        match={match2}
+        addConcern={placeholderFn}
+        isPopupOpen={false}
+        closePopup={placeholderFn}
+      />,
+    );
 
     expect(wrapper2.find(PatientCarePlanSuggestions).length).toBe(1);
     expect(wrapper2.find(PatientMap).length).toBe(0);

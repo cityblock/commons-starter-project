@@ -10,6 +10,7 @@ import HighlightOffIcon = require('react-icons/lib/md/highlight-off');
 import ExpandArrowIcon = require('react-icons/lib/md/keyboard-arrow-down');
 import MoreVertIcon = require('react-icons/lib/md/more-vert');
 import PhoneIcon = require('react-icons/lib/md/phone');
+import SearchIcon = require('react-icons/lib/md/search');
 
 // Add other components as needed from here, preserving name used in material icon
 // Then add icon name to icon-types file to ensure only accepted icon names passed as icon props
@@ -25,6 +26,7 @@ const components = {
   highlightOff: HighlightOffIcon,
   moreVert: MoreVertIcon,
   phone: PhoneIcon,
+  search: SearchIcon,
 };
 
 export default components;

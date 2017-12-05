@@ -13,12 +13,12 @@ import {
 } from '../../../graphql/types';
 /* tslint:disable:max-line-length */
 import { ICreatePatientGoalPopupOptions } from '../../../reducers/popup-reducer';
+import { SearchOptions } from '../../../shared/library/search/search';
 /* tslint:enable:max-line-length */
 import { IState as IAppState } from '../../../store';
 import { Popup } from '../../popup/popup';
 import * as styles from './css/create-goal.css';
 import DefineGoal from './define-goal';
-import { CUSTOM_GOAL_ID } from './goal-select';
 import SuggestedTasks from './suggested-tasks';
 
 interface IStateProps {
@@ -46,6 +46,8 @@ type allProps = IStateProps & IDispatchProps & IGraphqlProps;
 interface IState {
   title: string;
   goalSuggestionTemplateId?: string;
+  showAllGoals: boolean;
+  hideSearchResults: boolean;
   loading: boolean;
   error?: string;
   suggestedTaskView: boolean;
@@ -65,6 +67,8 @@ export class CreateGoalModal extends React.Component<allProps, IState> {
       suggestedTaskView: false,
       rejectedTaskTemplateIds: [],
       goalSuggestionTemplateId: undefined,
+      showAllGoals: false,
+      hideSearchResults: false,
     };
   }
 
@@ -83,78 +87,86 @@ export class CreateGoalModal extends React.Component<allProps, IState> {
     this.props.closePopup();
   };
 
-  onCustomSubmit = async () => {
-    const { title, loading } = this.state;
+  onSubmit = async (custom: boolean) => {
+    const { title, loading, rejectedTaskTemplateIds, goalSuggestionTemplateId } = this.state;
     const { patientId, patientConcernId, createPatientGoal } = this.props;
 
     if (!loading) {
       try {
         this.setState({ loading: true, error: undefined });
 
-        await createPatientGoal({
-          variables: {
-            patientId,
-            patientConcernId,
-            title,
-            goalSuggestionTemplateId: undefined,
-          },
-        });
-
-        this.setState({ loading: false });
-        this.onClose();
-      } catch (err) {
-        this.setState({ error: err.message, loading: false });
-      }
-    }
-  };
-
-  onTemplateSubmit = async () => {
-    const { title, rejectedTaskTemplateIds, loading, goalSuggestionTemplateId } = this.state;
-    const { patientId, patientConcernId, createPatientGoal } = this.props;
-
-    if (!loading) {
-      const goalSuggestionTemplate = this.getSelectedGoal();
-
-      if (goalSuggestionTemplate) {
-        try {
-          const taskTemplateIds: string[] = [];
-          goalSuggestionTemplate.taskTemplates!.forEach(template => {
-            if (!rejectedTaskTemplateIds.includes(template!.id)) taskTemplateIds.push(template!.id);
-          });
-
-          this.setState({ loading: true, error: undefined });
-
+        if (custom) {
           await createPatientGoal({
             variables: {
               patientId,
               patientConcernId,
               title,
-              goalSuggestionTemplateId,
-              taskTemplateIds,
+              goalSuggestionTemplateId: undefined,
             },
           });
+        } else {
+          const goalSuggestionTemplate = this.getSelectedGoal();
 
-          this.onClose();
-        } catch (err) {
-          this.setState({ error: err.message });
+          if (goalSuggestionTemplate) {
+            const taskTemplateIds: string[] = [];
+            goalSuggestionTemplate.taskTemplates!.forEach(template => {
+              if (!rejectedTaskTemplateIds.includes(template!.id)) {
+                taskTemplateIds.push(template!.id);
+              }
+            });
+
+            await createPatientGoal({
+              variables: {
+                patientId,
+                patientConcernId,
+                title,
+                goalSuggestionTemplateId,
+                taskTemplateIds,
+              },
+            });
+          }
         }
+        this.onClose();
+      } catch (err) {
+        this.setState({ error: err.message });
       }
     }
 
     this.setState({ loading: false });
   };
 
-  onSelectChange = (e: React.ChangeEvent<HTMLSelectElement>): void => {
-    this.setState({ goalSuggestionTemplateId: e.currentTarget.value });
+  onGoalSuggestionTemplateClick = (goalSuggestionTemplateId: string): void => {
+    this.setState({ goalSuggestionTemplateId }, () => {
+      const selectedGoal = this.getSelectedGoal();
+      if (selectedGoal)
+        this.setState({
+          title: selectedGoal.title,
+          hideSearchResults: true,
+          showAllGoals: false,
+        });
+    });
   };
 
   onTitleChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
-    this.setState({ title: e.currentTarget.value });
+    // ensure goal suggestion template id undefined if they keep typing
+    this.setState({
+      title: e.currentTarget.value,
+      goalSuggestionTemplateId: undefined,
+      hideSearchResults: false,
+    });
+  };
+
+  toggleShowAllGoals = (): void => {
+    this.setState((prevState: IState) => ({ showAllGoals: !prevState.showAllGoals }));
   };
 
   setSuggestedTaskView = (suggestedTaskView: boolean): (() => void) => (): void => {
     // do not let user move on to suggested tasks if goal not selected
-    if (this.state.goalSuggestionTemplateId) this.setState(() => ({ suggestedTaskView }));
+    if (this.state.goalSuggestionTemplateId)
+      this.setState({
+        suggestedTaskView,
+        hideSearchResults: true,
+      });
   };
 
   toggleSelectedTask = (taskTemplateId: string): void => {
@@ -174,21 +186,29 @@ export class CreateGoalModal extends React.Component<allProps, IState> {
     const { goalSuggestionTemplateId } = this.state;
     const { goalSuggestionTemplates } = this.props;
 
-    if (!goalSuggestionTemplateId || goalSuggestionTemplateId === CUSTOM_GOAL_ID) {
-      return null;
-    }
-
+    if (!goalSuggestionTemplateId) return null;
     return goalSuggestionTemplates.find(t => t.id === goalSuggestionTemplateId) || null;
   }
 
-  getGoalSuggestionTemplates(): FullGoalSuggestionTemplateFragment[] {
+  getGoalSuggestionTemplates(): SearchOptions {
     const { goalSuggestionTemplates, goalSuggestionTemplateIds } = this.props;
-    if (!goalSuggestionTemplates) return [];
-    return goalSuggestionTemplates.filter(t => !goalSuggestionTemplateIds.includes(t.id));
+    const templates: SearchOptions = [];
+    if (!goalSuggestionTemplates) return templates;
+
+    goalSuggestionTemplates.forEach(template => {
+      if (!goalSuggestionTemplateIds.includes(template.id)) {
+        templates.push({
+          title: template.title,
+          id: template.id,
+        });
+      }
+    });
+
+    return templates;
   }
 
   render() {
-    const { visible, loading } = this.props;
+    const { visible } = this.props;
     if (!visible) return null;
 
     const {
@@ -196,13 +216,15 @@ export class CreateGoalModal extends React.Component<allProps, IState> {
       title,
       suggestedTaskView,
       rejectedTaskTemplateIds,
+      showAllGoals,
+      hideSearchResults,
     } = this.state;
-    const isCustomGoal = goalSuggestionTemplateId === CUSTOM_GOAL_ID;
+    const isCustomGoal = !goalSuggestionTemplateId;
 
     const modalBody = suggestedTaskView ? (
       <SuggestedTasks
         onGoBack={this.setSuggestedTaskView(false)}
-        onSubmit={this.onTemplateSubmit}
+        onSubmit={async () => this.onSubmit(false)}
         closePopup={this.onClose}
         goalSuggestionTemplate={this.getSelectedGoal()}
         rejectedTaskTemplateIds={rejectedTaskTemplateIds}
@@ -214,10 +236,12 @@ export class CreateGoalModal extends React.Component<allProps, IState> {
         goalSuggestionTemplateId={goalSuggestionTemplateId}
         goalSuggestionTemplates={this.getGoalSuggestionTemplates()}
         closePopup={this.onClose}
-        onSubmit={isCustomGoal ? this.onCustomSubmit : this.setSuggestedTaskView(true)}
-        loading={loading}
-        onSelectChange={this.onSelectChange}
+        onSubmit={isCustomGoal ? async () => this.onSubmit(true) : this.setSuggestedTaskView(true)}
+        hideSearchResults={hideSearchResults}
+        toggleShowAllGoals={this.toggleShowAllGoals}
+        showAllGoals={showAllGoals}
         onTitleChange={this.onTitleChange}
+        onGoalSuggestionTemplateClick={this.onGoalSuggestionTemplateClick}
       />
     );
 

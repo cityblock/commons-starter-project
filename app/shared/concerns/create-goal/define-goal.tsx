@@ -1,35 +1,38 @@
 import * as React from 'react';
-import { getGoalSuggestionTemplatesQuery } from '../../../graphql/types';
+import { FormattedMessage } from 'react-intl';
+import FormLabel from '../../library/form-label/form-label';
 import ModalButtons from '../../library/modal-buttons/modal-buttons';
 import ModalHeader from '../../library/modal-header/modal-header';
+import Search, { SearchOptions } from '../../library/search/search';
 import * as styles from './css/create-goal.css';
-import GoalSelect, { CUSTOM_GOAL_ID } from './goal-select';
-import CreateGoalTitle from './title';
 
 interface IProps {
   title: string;
   goalSuggestionTemplateId?: string;
-  goalSuggestionTemplates: getGoalSuggestionTemplatesQuery['goalSuggestionTemplates'];
-  loading: boolean;
+  goalSuggestionTemplates: SearchOptions;
   onSubmit: () => void;
   closePopup: () => void;
-  onSelectChange: (e: React.ChangeEvent<HTMLSelectElement>) => void;
+  toggleShowAllGoals: () => void;
+  hideSearchResults: boolean;
+  showAllGoals: boolean;
   onTitleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onGoalSuggestionTemplateClick: (goalSuggestionTemplateId: string) => void;
 }
 
 const DefineGoal: React.StatelessComponent<IProps> = (props: IProps) => {
   const {
-    loading,
+    hideSearchResults,
     title,
-    goalSuggestionTemplateId,
     goalSuggestionTemplates,
+    toggleShowAllGoals,
+    showAllGoals,
     closePopup,
-    onSelectChange,
     onTitleChange,
+    onGoalSuggestionTemplateClick,
     onSubmit,
   } = props;
 
-  const customGoal = goalSuggestionTemplateId === CUSTOM_GOAL_ID;
+  // TODO: CHANGE LINK FROM SHOW ALL TO HIDE ALL
 
   return (
     <div>
@@ -39,13 +42,22 @@ const DefineGoal: React.StatelessComponent<IProps> = (props: IProps) => {
         closePopup={closePopup}
       />
       <div className={styles.fields}>
-        <GoalSelect
-          loading={loading}
-          goalSuggestionTemplates={goalSuggestionTemplates}
-          goalSuggestionTemplateId={goalSuggestionTemplateId}
-          onSelectChange={onSelectChange}
+        <FormLabel messageId="goalCreate.selectLabel" />
+        <Search
+          value={title}
+          onChange={onTitleChange}
+          searchOptions={goalSuggestionTemplates}
+          onOptionClick={onGoalSuggestionTemplateClick}
+          showAll={showAllGoals}
+          hideResults={hideSearchResults}
+          placeholderMessageId="goalCreate.search"
+          emptyPlaceholderMessageId="goalCreate.noResults"
         />
-        {customGoal && <CreateGoalTitle value={title} onChange={onTitleChange} />}
+        <div onClick={toggleShowAllGoals} className={styles.showAll}>
+          <FormattedMessage id={showAllGoals ? 'goalCreate.hideAll' : 'goalCreate.showAll'}>
+            {(message: string) => <p>{message}</p>}
+          </FormattedMessage>
+        </div>
         <ModalButtons
           cancelMessageId="goalCreate.cancel"
           submitMessageId="goalCreate.submit"

@@ -101,9 +101,13 @@ export const ENGLISH_TRANSLATION = {
     'goalCreate.detail': "Choose from a list of goals or write a custom goal for this member's MAP",
     /* tslint:enable:max-line-length */
     'goalCreate.goalAdded': 'Goal added:',
+    'goalCreate.hideAll': 'Hide list of goals',
     'goalCreate.loading': 'Loading...',
+    'goalCreate.noResults': 'No matching goals found. Adding as a custom goal.',
+    'goalCreate.search': 'Search for a goal or write a custom goal...',
     'goalCreate.selectGoal': 'Select goal',
     'goalCreate.selectLabel': 'Add a goal:',
+    'goalCreate.showAll': 'See list of goals',
     'goalCreate.submit': 'Add goal',
     'goalCreate.submitWithTasks': 'Done',
     'goalCreate.suggestedTasks': 'Suggested tasks:',

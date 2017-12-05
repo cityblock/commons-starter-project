@@ -71,6 +71,17 @@ describe('Create Goal Modal', () => {
     expect(wrapper.find(DefineGoal).props().title).toBe(title);
   });
 
+  it('does not show all goals or hide search results initially', () => {
+    expect(wrapper.find(DefineGoal).props().showAllGoals).toBeFalsy();
+    expect(wrapper.find(DefineGoal).props().hideSearchResults).toBeFalsy();
+  });
+
+  it('shows all goals and hide search results', () => {
+    wrapper.setState({ showAllGoals: true, hideSearchResults: true });
+    expect(wrapper.find(DefineGoal).props().showAllGoals).toBeTruthy();
+    expect(wrapper.find(DefineGoal).props().hideSearchResults).toBeTruthy();
+  });
+
   it('renders suggested tasks if view changes', () => {
     wrapper.setState({ suggestedTaskView: true });
 

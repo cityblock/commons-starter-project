@@ -104,9 +104,16 @@ export const SPANISH_TRANSLATION = {
       'Elija de una lista de objetivos o escriba un objetivo personalizado para el MAP de este miembro',
     /* tslint:enable:max-line-length */
     'goalCreate.goalAdded': 'Objetivo agregado:',
+    'goalCreate.hideAll': 'Ocultar lista de objetivos',
     'goalCreate.loading': 'Cargando...',
+    /* tslint:disable:max-line-length */
+    'goalCreate.noResults':
+      'No se encontraron objetivos coincidentes. Agregar como un objetivo personalizado.',
+    /* tslint:enable:max-line-length */
+    'goalCreate.search': 'Busque un objetivo o escriba un objetivo personalizado...',
     'goalCreate.selectGoal': 'Seleccionar objetivo',
     'goalCreate.selectLabel': 'Agrega un objetivo:',
+    'goalCreate.showAll': 'Ver lista de objetivos',
     'goalCreate.submit': 'Agregar objetivo',
     'goalCreate.submitWithTasks': 'Hecho',
     'goalCreate.suggestedTasks': 'Tareas sugeridas:',

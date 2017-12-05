@@ -3,6 +3,7 @@
 .container {
   border: 1px dashed var(--gray-font-color);
   border-radius: var(--big-border-radius);
+  background: var(--highlight-background-color);
   display: flex;
   align-items: center;
   padding: var(--small-gutter);

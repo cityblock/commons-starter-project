@@ -23,3 +23,15 @@
   /* Kept getting overwritten :( */
   margin-bottom: var(--extra-small-gutter) !important;
 }
+
+.showAll {
+  cursor: pointer;
+}
+
+.showAll p {
+  margin: 0;
+  padding-top: var(--extra-small-gutter);
+  color: var(--light-blue-color);
+  font-family: var(--basetica-medium);
+  font-weight: var(--roboto-medium-weight);
+}

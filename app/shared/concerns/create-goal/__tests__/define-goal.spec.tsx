@@ -1,10 +1,11 @@
 import { shallow } from 'enzyme';
 import * as React from 'react';
+import { FormattedMessage } from 'react-intl';
+import FormLabel from '../../../library/form-label/form-label';
 import ModalButtons from '../../../library/modal-buttons/modal-buttons';
 import ModalHeader from '../../../library/modal-header/modal-header';
+import Search from '../../../library/search/search';
 import DefineGoal from '../define-goal';
-import GoalSelect, { CUSTOM_GOAL_ID } from '../goal-select';
-import CreateGoalTitle from '../title';
 
 describe('Create Goal Modal', () => {
   const placeholderFn = () => true as any;
@@ -13,14 +14,16 @@ describe('Create Goal Modal', () => {
 
   const wrapper = shallow(
     <DefineGoal
-      loading={false}
       title={title}
       goalSuggestionTemplateId={goalSuggestionTemplateId}
       goalSuggestionTemplates={[]}
       closePopup={placeholderFn}
-      onSelectChange={placeholderFn}
       onTitleChange={placeholderFn}
+      onGoalSuggestionTemplateClick={placeholderFn}
       onSubmit={placeholderFn}
+      toggleShowAllGoals={placeholderFn}
+      hideSearchResults={false}
+      showAllGoals={false}
     />,
   );
 
@@ -30,32 +33,32 @@ describe('Create Goal Modal', () => {
     expect(wrapper.find(ModalHeader).props().bodyMessageId).toBe('goalCreate.detail');
   });
 
-  it('renders select tag to choose goal', () => {
-    expect(wrapper.find(GoalSelect).length).toBe(1);
-    expect(wrapper.find(GoalSelect).props().goalSuggestionTempalteId).toBeFalsy();
+  it('renders form label to add a goal', () => {
+    expect(wrapper.find(FormLabel).length).toBe(1);
+    expect(wrapper.find(FormLabel).props().messageId).toBe('goalCreate.selectLabel');
   });
 
-  it('changes value of goal select', () => {
-    wrapper.setProps({ goalSuggestionTemplateId });
-    expect(wrapper.find(GoalSelect).props().goalSuggestionTemplateId).toBe(
-      goalSuggestionTemplateId,
-    );
+  it('renders search field', () => {
+    expect(wrapper.find(Search).length).toBe(1);
+    expect(wrapper.find(Search).props().value).toBe(title);
+    expect(wrapper.find(Search).props().searchOptions).toEqual([]);
+    expect(wrapper.find(Search).props().hideSearchResults).toBeFalsy();
+    expect(wrapper.find(Search).props().showAllGoals).toBeFalsy();
+    expect(wrapper.find(Search).props().placeholderMessageId).toBe('goalCreate.search');
+    expect(wrapper.find(Search).props().emptyPlaceholderMessageId).toBe('goalCreate.noResults');
   });
 
-  it('does not render custom goal title field initially', () => {
-    expect(wrapper.find(CreateGoalTitle).length).toBe(0);
+  it('passes prop to show all goals and hide search results', () => {
+    wrapper.setProps({ showAllGoals: true, hideSearchResults: true });
+    expect(wrapper.find(Search).props().hideResults).toBeTruthy();
+    expect(wrapper.find(Search).props().showAll).toBeTruthy();
   });
 
-  it('renders custom goal title field if specified', () => {
-    wrapper.setProps({ goalSuggestionTemplateId: CUSTOM_GOAL_ID });
-    expect(wrapper.find(CreateGoalTitle).length).toBe(1);
-    expect(wrapper.find(CreateGoalTitle).props().value).toBeFalsy();
-  });
-
-  it('changes the custom goal title', () => {
-    const newTitle = 'The Upside Down';
-    wrapper.setProps({ title: newTitle });
-    expect(wrapper.find(CreateGoalTitle).props().value).toBe(newTitle);
+  it('renders label to show and hide all goals', () => {
+    expect(wrapper.find(FormattedMessage).length).toBe(1);
+    expect(wrapper.find(FormattedMessage).props().id).toBe('goalCreate.hideAll');
+    wrapper.setProps({ showAllGoals: false });
+    expect(wrapper.find(FormattedMessage).props().id).toBe('goalCreate.showAll');
   });
 
   it('renders modal buttons', () => {

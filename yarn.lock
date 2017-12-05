@@ -229,6 +229,10 @@
     "@types/express-serve-static-core" "*"
     "@types/serve-static" "*"
 
+"@types/fuse@^2.5.2":
+  version "2.5.2"
+  resolved "https://registry.yarnpkg.com/@types/fuse/-/fuse-2.5.2.tgz#19ebc90b465942448a2c9857cb6b45f501c1e64a"
+
 "@types/glob@*":
   version "5.0.33"
   resolved "https://registry.yarnpkg.com/@types/glob/-/glob-5.0.33.tgz#3dff7c6ce09d65abe919c7961dc3dee016f36ad7"
@@ -3199,6 +3203,10 @@ function.prototype.name@^1.0.3:
     define-properties "^1.1.2"
     function-bind "^1.1.0"
     is-callable "^1.1.3"
+
+fuse.js@^3.2.0:
+  version "3.2.0"
+  resolved "https://registry.yarnpkg.com/fuse.js/-/fuse.js-3.2.0.tgz#f0448e8069855bf2a3e683cdc1d320e7e2a07ef4"
 
 gather-stream@^1.0.0:
   version "1.0.0"

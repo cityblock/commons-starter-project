@@ -9,4 +9,5 @@ export type IconName =
   | 'expandMore'
   | 'highlightOff'
   | 'moreVert'
-  | 'phone';
+  | 'phone'
+  | 'search';

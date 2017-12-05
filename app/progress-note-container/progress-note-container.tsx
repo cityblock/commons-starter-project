@@ -7,7 +7,7 @@ import { closePopup, openPopup } from '../actions/popup-action';
 import * as progressNotesForCurrentUserQuery from '../graphql/queries/get-progress-notes-for-current-user.graphql';
 /* tsline:enable:max-line-length */
 import { getProgressNotesForCurrentUserQuery } from '../graphql/types';
-import { IProgressNotePopupOptions } from '../reducers/popup-reducer/popup-reducer-types';
+import { IProgressNotePopupOptions } from '../reducers/popup-reducer';
 import Icon from '../shared/library/icon/icon';
 import { IState as IAppState } from '../store';
 import * as styles from './css/progress-note-container.css';

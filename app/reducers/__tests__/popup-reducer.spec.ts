@@ -1,5 +1,5 @@
 import { IPopupClose, IPopupOpen } from '../../actions/popup-action';
-import { initialState, popupReducer } from '../popup-reducer/popup-reducer';
+import { initialState, popupReducer } from '../popup-reducer';
 
 describe('popup reducer', () => {
   const patientId = 'mikeWheeler';

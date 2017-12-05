@@ -1,4 +1,4 @@
-import PopupReducerState from '../reducers/popup-reducer/popup-reducer-types';
+import { IState as PopupReducerState } from '../reducers/popup-reducer';
 
 export interface IPopupClose {
   type: 'POPUP_CLOSE';

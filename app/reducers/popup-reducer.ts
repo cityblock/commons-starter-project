@@ -1,3 +1,5 @@
+import { Action } from '../actions';
+
 export interface IProgressNotePopupOptions {
   patientId: string;
 }
@@ -50,7 +52,7 @@ export interface IDefaultState {
   options: {};
 }
 
-type PopupReducerState =
+export type IState =
   | ICreatePatientConcernPopup
   | ICreatePatientGoalPopup
   | IProgressNotePopup
@@ -58,4 +60,18 @@ type PopupReducerState =
   | IPatientGoalHamburgerMenu
   | IDefaultState;
 
-export default PopupReducerState;
+export const initialState: IDefaultState = {
+  name: '',
+  options: {},
+};
+
+export const popupReducer = (state = initialState, action: Action): IState => {
+  switch (action.type) {
+    case 'POPUP_OPEN':
+      return action.popup;
+    case 'POPUP_CLOSE':
+      return initialState;
+    default:
+      return state;
+  }
+};

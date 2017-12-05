@@ -12,7 +12,7 @@ import {
   FullGoalSuggestionTemplateFragment,
 } from '../../../graphql/types';
 /* tslint:disable:max-line-length */
-import { ICreatePatientGoalPopupOptions } from '../../../reducers/popup-reducer/popup-reducer-types';
+import { ICreatePatientGoalPopupOptions } from '../../../reducers/popup-reducer';
 /* tslint:enable:max-line-length */
 import { IState as IAppState } from '../../../store';
 import { Popup } from '../../popup/popup';

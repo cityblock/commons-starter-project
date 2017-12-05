@@ -4,12 +4,12 @@ import { connect, Dispatch } from 'react-redux';
 import { closePopup } from '../../actions/popup-action';
 /* tslint:disable:max-line-length */
 import * as patientConcernCreateMutationGraphql from '../../graphql/queries/patient-concern-create-mutation.graphql';
+/* tslint:enable:max-line-length */
 import {
   patientConcernCreateMutation,
   patientConcernCreateMutationVariables,
 } from '../../graphql/types';
-import { ICreatePatientConcernPopupOptions } from '../../reducers/popup-reducer/popup-reducer-types';
-/* tslint:enable:max-line-length */
+import { ICreatePatientConcernPopupOptions } from '../../reducers/popup-reducer';
 import ModalButtons from '../../shared/library/modal-buttons/modal-buttons';
 import ModalHeader from '../../shared/library/modal-header/modal-header';
 import { Popup } from '../../shared/popup/popup';

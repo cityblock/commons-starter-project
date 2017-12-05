@@ -3,6 +3,8 @@ export type IconName =
   | 'addCircle'
   | 'addCircleOutline'
   | 'close'
+  | 'delete'
+  | 'errorOutline'
   | 'event'
   | 'expandArrow'
   | 'expandLess'

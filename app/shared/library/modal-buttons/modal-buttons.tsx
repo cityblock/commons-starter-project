@@ -3,24 +3,30 @@ import Button from '../button/button';
 import * as styles from './css/modal-buttons.css';
 
 interface IProps {
-  cancelMessageId: string; // translate id for cancel (white left) button
-  submitMessageId: string; // translate id for submit (blue right) button
+  cancelMessageId?: string; // translate id for cancel (white left) button, default is 'Cancel'
+  submitMessageId?: string; // translate id for submit (blue right) button, default is 'Submit'
   cancel: () => void; // click handler for cancel button
   submit: () => void; // click handler for submit button
+  redSubmit?: boolean; // if true, makes submit button red
 }
 
 const ModalButtons: React.StatelessComponent<IProps> = (props: IProps) => {
-  const { cancelMessageId, submitMessageId, cancel, submit } = props;
+  const { cancelMessageId, submitMessageId, cancel, submit, redSubmit } = props;
 
   return (
     <div className={styles.flex}>
       <Button
-        messageId={cancelMessageId}
+        messageId={cancelMessageId || 'modalButtons.cancel'}
         color="white"
         onClick={cancel}
         className={styles.button}
       />
-      <Button messageId={submitMessageId} onClick={submit} className={styles.button} />
+      <Button
+        messageId={submitMessageId || 'modalButtons.submit'}
+        color={redSubmit ? 'red' : 'blue'}
+        onClick={submit}
+        className={styles.button}
+      />
     </div>
   );
 };

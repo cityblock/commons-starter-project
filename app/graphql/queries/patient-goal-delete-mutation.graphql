@@ -1,0 +1,7 @@
+#import "../fragments/full-patient-goal.graphql"
+
+mutation patientGoalDelete($patientGoalId: String!) {
+  patientGoalDelete(input: { patientGoalId: $patientGoalId }) {
+    ...FullPatientGoal
+  }
+}

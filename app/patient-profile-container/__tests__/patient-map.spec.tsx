@@ -2,6 +2,7 @@ import { shallow, ShallowWrapper } from 'enzyme';
 import * as React from 'react';
 import Task from '../../shared/task/task';
 import PatientCarePlanDnD, { allProps } from '../drag-and-drop/patient-care-plan';
+import MapModals from '../modals/modals';
 import { PatientMap } from '../patient-map';
 
 describe('Patient Map Component', () => {
@@ -52,6 +53,10 @@ describe('Patient Map Component', () => {
 
     it('indicates to patient care plan that task is selected', () => {
       expect(wrapper2.find(PatientCarePlanDnD).props().selectedTaskId).toBe(taskId);
+    });
+
+    it('renders patient MAP modals', () => {
+      expect(wrapper.find(MapModals).length).toBe(1);
     });
   });
 });

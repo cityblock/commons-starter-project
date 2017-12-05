@@ -58,7 +58,39 @@ describe('Library Modal Buttons Component', () => {
       wrapper
         .find(Button)
         .at(1)
+        .props().color,
+    ).toBe('blue');
+    expect(
+      wrapper
+        .find(Button)
+        .at(1)
         .props().onClick,
     ).toBe(placeholderFn);
+  });
+
+  it('passes default messages for cancel and submit if none provided', () => {
+    wrapper.setProps({ cancelMessageId: '', submitMessageId: '' });
+    expect(
+      wrapper
+        .find(Button)
+        .at(0)
+        .props().messageId,
+    ).toBe('modalButtons.cancel');
+    expect(
+      wrapper
+        .find(Button)
+        .at(1)
+        .props().messageId,
+    ).toBe('modalButtons.submit');
+  });
+
+  it('sets the submit button to red if specified', () => {
+    wrapper.setProps({ redSubmit: true });
+    expect(
+      wrapper
+        .find(Button)
+        .at(1)
+        .props().color,
+    ).toBe('red');
   });
 });

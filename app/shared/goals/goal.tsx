@@ -72,9 +72,11 @@ export default class PatientGoal extends React.Component<IProps, IState> {
           <div className={styles.patientGoalHeaderRow}>
             <div className={styles.patientGoalNumber}>{`Goal ${goalNumber}`}</div>
             <GoalOptions
-              patientGoalId={patientGoal.id}
+              patientGoalId={patientGoal && patientGoal.id}
+              patientGoalTitle={patientGoal && patientGoal.title}
               addTask={this.setCreateTaskModal(true)}
               taskOpen={!!selectedTaskId}
+              canDelete={patientGoal.tasks && !patientGoal.tasks.length}
             />
           </div>
           <div className={styles.patientGoalTitle}>{patientGoal.title}</div>

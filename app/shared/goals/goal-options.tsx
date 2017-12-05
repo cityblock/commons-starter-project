@@ -12,18 +12,21 @@ interface IStateProps {
 interface IDispatchProps {
   closeMenu: () => void;
   openMenu: () => void;
+  deleteGoal: () => void;
 }
 
 interface IProps {
   patientGoalId: string;
+  patientGoalTitle: string;
   addTask: () => void;
   taskOpen: boolean;
+  canDelete: boolean;
 }
 
 type allProps = IStateProps & IDispatchProps & IProps;
 
 export const GoalOptions: React.StatelessComponent<allProps> = (props: allProps) => {
-  const { open, addTask, closeMenu, openMenu, taskOpen } = props;
+  const { open, addTask, deleteGoal, closeMenu, openMenu, taskOpen, canDelete } = props;
 
   const onClick = () => {
     closeMenu();
@@ -33,6 +36,9 @@ export const GoalOptions: React.StatelessComponent<allProps> = (props: allProps)
   return (
     <HamburgerMenu open={open && !taskOpen} onMenuToggle={open ? closeMenu : openMenu}>
       <HamburgerMenuOption messageId="patientMap.addTask" icon="addAlert" onClick={onClick} />
+      {canDelete && (
+        <HamburgerMenuOption messageId="goalDelete.menu" icon="delete" onClick={deleteGoal} />
+      )}
     </HamburgerMenu>
   );
 };
@@ -48,7 +54,7 @@ const mapStateToProps = (state: IAppState, ownProps: IProps): IStateProps => {
 };
 
 const mapDispatchToProps = (dispatch: Dispatch<() => void>, ownProps: IProps): IDispatchProps => {
-  const { patientGoalId } = ownProps;
+  const { patientGoalId, patientGoalTitle } = ownProps;
 
   const openMenu = () =>
     dispatch(
@@ -59,10 +65,21 @@ const mapDispatchToProps = (dispatch: Dispatch<() => void>, ownProps: IProps): I
         },
       }),
     );
+  const deleteGoal = () =>
+    dispatch(
+      openPopup({
+        name: 'DELETE_PATIENT_GOAL',
+        options: {
+          patientGoalTitle,
+          patientGoalId,
+        },
+      }),
+    );
 
   return {
     closeMenu: () => dispatch(closePopup()),
     openMenu,
+    deleteGoal,
   };
 };
 

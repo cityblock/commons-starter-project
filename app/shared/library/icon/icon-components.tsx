@@ -3,6 +3,8 @@ import AddAlertIcon = require('react-icons/lib/md/add-alert');
 import AddCircleIcon = require('react-icons/lib/md/add-circle');
 import AddCircleOutlineIcon = require('react-icons/lib/md/add-circle-outline');
 import CloseIcon = require('react-icons/lib/md/close');
+import DeleteIcon = require('react-icons/lib/md/delete');
+import ErrorOutlineIcon = require('react-icons/lib/md/error-outline');
 import EventIcon = require('react-icons/lib/md/event');
 import ExpandLessIcon = require('react-icons/lib/md/expand-less');
 import ExpandMoreIcon = require('react-icons/lib/md/expand-more');
@@ -19,6 +21,8 @@ const components = {
   addCircle: AddCircleIcon,
   addCircleOutline: AddCircleOutlineIcon,
   close: CloseIcon,
+  delete: DeleteIcon,
+  errorOutline: ErrorOutlineIcon,
   event: EventIcon,
   expandArrow: ExpandArrowIcon,
   expandLess: ExpandLessIcon,

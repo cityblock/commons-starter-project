@@ -125,6 +125,13 @@ export const SPANISH_TRANSLATION = {
     'goalCreate.templates': 'Todos los demás objetivos',
     'goalCreate.title': 'Ingresa el título del objetivo:',
     'goalCreate.titlePlaceholder': 'Ingresa el título del objetivo...',
+    /* tslint:disable:max-line-length */
+    'goalDelete.description':
+      'Eliminarlo lo eliminará completamente del registro de este paciente.',
+    /* tslint:enable:max-line-length */
+    'goalDelete.menu': 'Eliminar Objetivo',
+    'goalDelete.name': 'Objetivo para ser eliminado:',
+    'goalDelete.title': '¿Estás seguro de que deseas eliminar este objetivo?',
     'insuranceForm.insuranceType': 'Tipo de seguro',
     'insuranceForm.insuranceTypePlaceholder': 'Seleccione el tipo de seguro',
     'insuranceForm.policyHolderRelationship': 'Paciente con el asegurado',
@@ -133,6 +140,9 @@ export const SPANISH_TRANSLATION = {
     'insuranceForm.policyGroupNumber': 'Número de grupo de políticas',
     'insuranceForm.issueDate': 'Fecha de asunto',
     'insuranceForm.expirationDate': 'Fecha de caducidad',
+    'modalButtons.cancel': 'Cancelar',
+    'modalButtons.delete': 'Sí, borrar',
+    'modalButtons.submit': 'Enviar',
     'patientInfo.jumpTo': 'Salta a:',
     'patientInfo.saveChanges': 'Guardar cambios',
     'patientInfo.demographicInfo': 'Información demográfica',

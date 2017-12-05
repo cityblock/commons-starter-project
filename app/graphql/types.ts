@@ -4349,6 +4349,70 @@ export type patientGoalCreateMutation = {
   } | null,
 };
 
+export type patientGoalDeleteMutationVariables = {
+  patientGoalId: string,
+};
+
+export type patientGoalDeleteMutation = {
+  // patient goal delete
+  patientGoalDelete:  {
+    id: string,
+    title: string,
+    patientId: string,
+    patient:  {
+      id: string,
+      firstName: string | null,
+      middleName: string | null,
+      lastName: string | null,
+      language: string | null,
+      gender: string | null,
+      dateOfBirth: string | null,
+      zip: string | null,
+      createdAt: string,
+      consentToText: boolean | null,
+      consentToCall: boolean | null,
+    },
+    patientConcernId: string | null,
+    goalSuggestionTemplateId: string | null,
+    tasks:  Array< {
+      id: string,
+      title: string,
+      description: string | null,
+      createdAt: string,
+      updatedAt: string,
+      completedAt: string | null,
+      deletedAt: string | null,
+      dueAt: string | null,
+      patientId: string,
+      priority: Priority | null,
+      assignedTo:  {
+        id: string,
+        firstName: string | null,
+        lastName: string | null,
+        googleProfileImageUrl: string | null,
+        userRole: UserRole,
+      } | null,
+      followers:  Array< {
+        id: string,
+        firstName: string | null,
+        lastName: string | null,
+        googleProfileImageUrl: string | null,
+        userRole: UserRole,
+      } > | null,
+      createdBy:  {
+        id: string,
+        firstName: string | null,
+        lastName: string | null,
+        googleProfileImageUrl: string | null,
+        userRole: UserRole,
+      } | null,
+    } >,
+    createdAt: string,
+    updatedAt: string,
+    deletedAt: string | null,
+  } | null,
+};
+
 export type patientScratchPadEditMutationVariables = {
   patientId: string,
   text: string,

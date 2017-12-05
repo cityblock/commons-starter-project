@@ -89,4 +89,7 @@ export class TaskDelete extends React.Component<allProps, IState> {
 
 export default graphql<IGraphqlProps, IProps, allProps>(taskDeleteMutationGraphql as any, {
   name: 'deleteTask',
+  options: {
+    refetchQueries: ['getPatientCarePlan'],
+  },
 })(TaskDelete);

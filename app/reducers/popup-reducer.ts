@@ -47,6 +47,16 @@ export interface IPatientGoalHamburgerMenu {
   options: IPatientGoalHamburgerMenuOptions;
 }
 
+export interface IPatientGoalDeletePopupOptions {
+  patientGoalTitle: string;
+  patientGoalId: string;
+}
+
+export interface IPatientGoalDeletePopup {
+  name: 'DELETE_PATIENT_GOAL';
+  options: IPatientGoalDeletePopupOptions;
+}
+
 export interface IDefaultState {
   name: '';
   options: {};
@@ -58,6 +68,7 @@ export type IState =
   | IProgressNotePopup
   | IPatientConcernHamburgerMenu
   | IPatientGoalHamburgerMenu
+  | IPatientGoalDeletePopup
   | IDefaultState;
 
 export const initialState: IDefaultState = {

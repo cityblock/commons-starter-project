@@ -125,8 +125,10 @@ export class PatientConcern extends React.Component<IProps, {}> {
               <PatientConcernOptions
                 patientId={patientConcern.patientId}
                 patientConcernId={patientConcern.id}
+                patientConcernTitle={patientConcern.concern.title}
                 goalSuggestionTemplateIds={this.getGoalSuggestionTemplateIds()}
                 taskOpen={!!selectedTaskId}
+                canDelete={!!patientGoals && !patientGoals.length}
               />
             </div>
             <PatientConcernStats

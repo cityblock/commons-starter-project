@@ -21,9 +21,11 @@ describe('Create Concern Modal Concern Select Component', () => {
   };
   const concerns = [concern1, concern2] as any;
   const patientCarePlan = {
-    concerns: [{
-      concernId: id,
-    }],
+    concerns: [
+      {
+        concernId: id,
+      },
+    ],
   } as any;
 
   const wrapper = shallow(
@@ -56,8 +58,8 @@ describe('Create Concern Modal Concern Select Component', () => {
     expect(wrapper.find(Search).props().showAll).toBeFalsy();
     expect(wrapper.find(Search).props().hideResults).toBeFalsy();
     expect(wrapper.find(Search).props().searchOptions).toEqual([concern2]);
-    expect(wrapper.find(Search).props().placeholderMessageId).toBe("concernCreate.placeholder");
-    expect(wrapper.find(Search).props().emptyPlaceholderMessageId).toBe("concernCreate.noResults");
+    expect(wrapper.find(Search).props().placeholderMessageId).toBe('concernCreate.placeholder');
+    expect(wrapper.find(Search).props().emptyPlaceholderMessageId).toBe('concernCreate.noResults');
   });
 
   it('renders toggle to show all concerns', () => {

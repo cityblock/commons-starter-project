@@ -67,6 +67,13 @@ export const ENGLISH_TRANSLATION = {
     'concernCreate.title': 'Add a concern',
     'concernCreate.selectConcernType': 'Select a concern type',
     'concernCreate.selectConcernTypeLabel': 'Concern type',
+    /* tslint:disable:max-line-length */
+    'concernDelete.description':
+      'Deleting it will completely remove it from this patient’s record.',
+    /* tslint:enable:max-line-length */
+    'concernDelete.menu': 'Delete Concern',
+    'concernDelete.name': 'Concern to be deleted:',
+    'concernDelete.title': 'Are you sure you want to delete this concern?',
     'concernStats.created': 'Created:',
     'concernStats.goals': 'Goals:',
     'concernStats.lastUpdated': 'Last update:',

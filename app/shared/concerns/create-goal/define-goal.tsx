@@ -16,8 +16,10 @@ interface IProps {
   hideSearchResults: boolean;
   showAllGoals: boolean;
   onTitleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  onGoalSuggestionTemplateClick:
-    (goalSuggestionTemplateId: string, goalSuggestionTemplateTitle: string) => void;
+  onGoalSuggestionTemplateClick: (
+    goalSuggestionTemplateId: string,
+    goalSuggestionTemplateTitle: string,
+  ) => void;
 }
 
 const DefineGoal: React.StatelessComponent<IProps> = (props: IProps) => {

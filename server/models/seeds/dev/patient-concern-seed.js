@@ -36,8 +36,30 @@ function buildPatientTask(title, patientId, priority, assignedToId, patientGoalI
     priority,
     assignedToId,
     patientGoalId,
+    createdById: assignedToId,
     // 2 weeks from now
     dueAt: new Date(+new Date() + 12096e5),
+  };
+}
+
+function buildGoalSuggestionTemplate(title) {
+  return {
+    id: uuid.v4(),
+    title,
+  };
+}
+
+function buildTaskTemplate(title, goalSuggestionTemplateId) {
+  const priority = ['low', 'medium', 'high'][Math.floor(Math.random() * 3)];
+  return {
+    id: uuid.v4(),
+    title,
+    completedWithinNumber: 2,
+    completedWithinInterval: 'week',
+    repeating: false,
+    goalSuggestionTemplateId,
+    priority,
+    careTeamAssigneeRole: 'physician',
   };
 }
 
@@ -56,6 +78,20 @@ function createConcerns(knex) {
         'Inability to maintain the needed amount of medicine (or any health care) for self/family',
       ),
       buildConcern('Inability to maintain the needed amount of clothing for self/family'),
+      buildConcern('Needed financial assistance, but no connection to entitlements'),
+      buildConcern('Currently does not feel motivated to eat'),
+      buildConcern('Currently does not have accompaniment for meals'),
+      buildConcern('Currently does not have an appetite'),
+      buildConcern('Currently is not physically able to cook or shop for food'),
+      buildConcern('Member does not have accessible transportation options'),
+      buildConcern('Member needs assistance for travel'),
+      buildConcern('Member has difficulty sleeping'),
+      buildConcern('Member experiences psychotic episodes'),
+      buildConcern('Diabetes needs to be managed'),
+      buildConcern('Diabetes medication not accessible'),
+      buildConcern('Member suspected of having diabetes'),
+      buildConcern('Member is not connected to mental health services'),
+      buildConcern('Mental health makes it difficult to find employment'),
     ]);
 }
 
@@ -67,7 +103,7 @@ function createPatientConcerns(knex, Promise, concernIds) {
       const patientConcernPromises = [];
 
       for (let i = 0; i < patientIds.length; i++) {
-        for (let j = 0; j < concernIds.length; j++) {
+        for (let j = 0; j < 8; j++) {
           const startedAt = j < 4 ? new Date().toISOString() : null;
           patientConcernPromises.push(
             knex
@@ -186,6 +222,73 @@ function createPatientTasks(knex, Promise) {
     });
 }
 
+function createGoalSuggestionTemplates(knex, Promise) {
+  return knex
+    .table('goal_suggestion_template')
+    .returning('id')
+    .insert([
+      buildGoalSuggestionTemplate(
+        'Complete full financial assessment to determine eligibility for assistance',
+      ),
+      buildGoalSuggestionTemplate(
+        'Restructure/reformat health related materials to match learning needs',
+      ),
+      buildGoalSuggestionTemplate('Assess eligibility for a vocational or educational program'),
+      buildGoalSuggestionTemplate('Assess need for assistance with financial management'),
+      buildGoalSuggestionTemplate(
+        'Maintain access to needed medications and health care appointments',
+      ),
+      buildGoalSuggestionTemplate('Collaborate with entitlements care team'),
+      buildGoalSuggestionTemplate('Assess eligibility for phone resources'),
+      buildGoalSuggestionTemplate('Research clothing resources'),
+      buildGoalSuggestionTemplate('Assess childcare resources'),
+      buildGoalSuggestionTemplate('Increase access to food'),
+      buildGoalSuggestionTemplate('Increase social supports'),
+      buildGoalSuggestionTemplate('Refer for medical or dental follow up'),
+      buildGoalSuggestionTemplate('Assess for depression'),
+      buildGoalSuggestionTemplate('Assess eligibility for SNAP benefits'),
+      buildGoalSuggestionTemplate('Assess eligibility for food delivery service'),
+      buildGoalSuggestionTemplate('Improve current transportation services'),
+      buildGoalSuggestionTemplate('Create a plan for scheduling transportation'),
+      buildGoalSuggestionTemplate(
+        'Assess eligibility for cash assistance benefits to help cover transportation costs',
+      ),
+      buildGoalSuggestionTemplate('Obtain consistent accompaniment for travel needs'),
+      buildGoalSuggestionTemplate('Obtain non-Medicaid transportation services'),
+      buildGoalSuggestionTemplate('Initiate shelter intake process'),
+      buildGoalSuggestionTemplate('Assess home for safety and general conditions'),
+      buildGoalSuggestionTemplate('Assess eligibility for rent assistance'),
+      buildGoalSuggestionTemplate('Assess eligibility for utility assistance'),
+      buildGoalSuggestionTemplate(' Assess eligibility for supportive housing'),
+    ]);
+}
+
+function createTaskTemplates(knex, Promise, goalSuggestionTemplateIds) {
+  const taskTemplatePromises = [];
+
+  for (let i = 0; i < goalSuggestionTemplateIds.length; i++) {
+    taskTemplatePromises.push(
+      knex
+        .table('task_template')
+        .insert(buildTaskTemplate('Accompany to housing interviews', goalSuggestionTemplateIds[i])),
+      knex
+        .table('task_template')
+        .insert(
+          buildTaskTemplate('Complete home assessment using JustFix', goalSuggestionTemplateIds[i]),
+        ),
+      knex
+        .table('task_template')
+        .insert(buildTaskTemplate('Review listings and open units', goalSuggestionTemplateIds[i])),
+      knex
+        .table('task_template')
+        .insert(
+          buildTaskTemplate('Apply for reduced MetroCard fare', goalSuggestionTemplateIds[i]),
+        ),
+    );
+  }
+  return Promise.all(taskTemplatePromises);
+}
+
 exports.seed = function(knex, Promise) {
   return createConcerns(knex)
     .then(function(concernIds) {
@@ -196,5 +299,10 @@ exports.seed = function(knex, Promise) {
     })
     .then(function() {
       return createPatientTasks(knex, Promise);
+    })
+    .then(function() {
+      return createGoalSuggestionTemplates(knex, Promise).then(function(goalSuggestionTemplateIds) {
+        return createTaskTemplates(knex, Promise, goalSuggestionTemplateIds);
+      });
     });
 };

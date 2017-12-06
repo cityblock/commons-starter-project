@@ -16,7 +16,7 @@ interface IPatientConcernEditableFields {
 }
 
 export const EAGER_QUERY =
-  '[patient, concern, patientGoals.[patient, tasks.[assignedTo, followers]]]';
+  '[patient, concern, patientGoals.[patient, tasks.[assignedTo, createdBy, followers]]]';
 
 /* tslint:disable:member-ordering */
 export default class PatientConcern extends BaseModel {
@@ -178,7 +178,10 @@ export default class PatientConcern extends BaseModel {
         .where({ id: patientConcernId, deletedAt: null })
         .update({ deletedAt: new Date().toISOString() });
 
-      const patientConcern = await this.query(txn).findById(patientConcernId);
+      const patientConcern = await this.query(txn)
+        .eager(EAGER_QUERY)
+        .findById(patientConcernId);
+
       if (!patientConcern) {
         return Promise.reject(`No such patientConcern: ${patientConcern}`);
       }

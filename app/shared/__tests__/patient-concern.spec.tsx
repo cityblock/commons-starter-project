@@ -51,5 +51,9 @@ describe('Patient Concern Component', () => {
 
   it('renders options menu', () => {
     expect(wrapper.find(PatientConcernOptions).length).toBe(1);
+    expect(wrapper.find(PatientConcernOptions).props().patientId).toBe(patientConcern.patientId);
+    expect(wrapper.find(PatientConcernOptions).props().patientConcernTitle).toBe(
+      patientConcern.concern.title,
+    );
   });
 });

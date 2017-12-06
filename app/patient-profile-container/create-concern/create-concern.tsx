@@ -91,7 +91,7 @@ export class CreateConcernModal extends React.Component<allProps, IState> {
   onSelectChange = (e: React.ChangeEvent<HTMLSelectElement>): void => {
     const concernType = e.currentTarget.value as ConcernType;
     this.setState({ concernType });
-  }
+  };
 
   onSearchTermChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
     this.setState({
@@ -99,7 +99,7 @@ export class CreateConcernModal extends React.Component<allProps, IState> {
       concernId: undefined,
       hideSearchResults: false,
     });
-  }
+  };
 
   onSearchTermClick = (concernId: string, concernTitle: string): void => {
     this.setState({
@@ -108,11 +108,11 @@ export class CreateConcernModal extends React.Component<allProps, IState> {
       hideSearchResults: true,
       showAllConcerns: false,
     });
-  }
+  };
 
   toggleShowAllConcerns = (): void => {
     this.setState((prevState: IState) => ({ showAllConcerns: !prevState.showAllConcerns }));
-  }
+  };
 
   render(): JSX.Element {
     const { visible, patientId } = this.props;
@@ -141,7 +141,8 @@ export class CreateConcernModal extends React.Component<allProps, IState> {
             onSelectChange={this.onSelectChange}
             searchTerm={searchTerm}
             showAllConcerns={showAllConcerns}
-            toggleShowAllConcerns={this.toggleShowAllConcerns} />
+            toggleShowAllConcerns={this.toggleShowAllConcerns}
+          />
           <ModalButtons
             cancelMessageId="concernCreate.cancel"
             submitMessageId="concernCreate.submit"

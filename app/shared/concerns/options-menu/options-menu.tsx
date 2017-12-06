@@ -13,13 +13,16 @@ interface IDispatchProps {
   addGoal: () => void;
   closeMenu: () => void;
   openMenu: () => void;
+  deleteConcern: () => void;
 }
 
 interface IProps {
   patientId: string;
   patientConcernId: string;
+  patientConcernTitle: string;
   goalSuggestionTemplateIds: string[];
   taskOpen: boolean;
+  canDelete: boolean;
 }
 
 type allProps = IProps & IStateProps & IDispatchProps;
@@ -35,7 +38,7 @@ export class PatientConcernOptions extends React.Component<allProps, {}> {
   };
 
   render() {
-    const { open, addGoal, taskOpen } = this.props;
+    const { open, addGoal, deleteConcern, taskOpen, canDelete } = this.props;
 
     return (
       <HamburgerMenu open={open && !taskOpen} onMenuToggle={this.onMenuToggle}>
@@ -44,6 +47,13 @@ export class PatientConcernOptions extends React.Component<allProps, {}> {
           icon="addCircleOutline"
           onClick={addGoal}
         />
+        {canDelete && (
+          <HamburgerMenuOption
+            messageId="concernDelete.menu"
+            icon="delete"
+            onClick={deleteConcern}
+          />
+        )}
       </HamburgerMenu>
     );
   }
@@ -58,7 +68,7 @@ const mapStateToProps = (state: IAppState, ownProps: IProps): IStateProps => {
 };
 
 const mapDispatchToProps = (dispatch: Dispatch<() => void>, ownProps: IProps): IDispatchProps => {
-  const { patientId, patientConcernId, goalSuggestionTemplateIds } = ownProps;
+  const { patientId, patientConcernId, patientConcernTitle, goalSuggestionTemplateIds } = ownProps;
   const addGoal = () =>
     dispatch(
       openPopup({
@@ -67,6 +77,16 @@ const mapDispatchToProps = (dispatch: Dispatch<() => void>, ownProps: IProps): I
           patientId,
           patientConcernId,
           goalSuggestionTemplateIds,
+        },
+      }),
+    );
+  const deleteConcern = () =>
+    dispatch(
+      openPopup({
+        name: 'DELETE_PATIENT_CONCERN',
+        options: {
+          patientConcernId,
+          patientConcernTitle,
         },
       }),
     );
@@ -84,6 +104,7 @@ const mapDispatchToProps = (dispatch: Dispatch<() => void>, ownProps: IProps): I
     addGoal,
     closeMenu: () => dispatch(closePopup()),
     openMenu,
+    deleteConcern,
   };
 };
 

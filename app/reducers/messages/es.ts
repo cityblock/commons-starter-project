@@ -69,6 +69,13 @@ export const SPANISH_TRANSLATION = {
     'concernCreate.title': 'Agregue una preocupación',
     'concernCreate.selectConcernType': 'Seleccione un tipo de preocupación',
     'concernCreate.selectConcernTypeLabel': 'Tipo de preocupación',
+    /* tslint:disable:max-line-length */
+    'concernDelete.description':
+      'Eliminarlo lo eliminará completamente del registro de este paciente.',
+    /* tslint:enable:max-line-length */
+    'concernDelete.menu': 'Eliminar la preocupación',
+    'concernDelete.name': 'Preocupación por eliminar:',
+    'concernDelete.title': '¿Estás seguro de que deseas eliminar esta preocupación?',
     'concernStats.created': 'Creado:',
     'concernStats.goals': 'Metas:',
     'concernStats.lastUpdated': 'Última actualización:',

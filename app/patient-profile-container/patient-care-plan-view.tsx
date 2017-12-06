@@ -12,7 +12,6 @@ import { getPatientCarePlanQuery } from '../graphql/types';
 import * as tabStyles from '../shared/css/tabs.css';
 import Button from '../shared/library/button/button';
 import { IState as IAppState } from '../store';
-import CreateConcernModal from './create-concern/create-concern';
 import * as styles from './css/patient-care-plan.css';
 import PatientCarePlanSuggestions from './patient-care-plan-suggestions';
 import PatientMap from './patient-map';
@@ -108,7 +107,6 @@ export class PatientCarePlanView extends React.Component<allProps> {
           {carePlanSuggestions}
           {carePlan}
         </div>
-        <CreateConcernModal />
       </div>
     );
   }

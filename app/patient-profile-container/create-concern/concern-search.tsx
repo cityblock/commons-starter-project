@@ -37,7 +37,7 @@ interface IGraphqlProps {
 
 type allProps = IProps & IGraphqlProps;
 
-export const ConcernSearch: React.StatelessComponent<allProps>  = (props: allProps) => {
+export const ConcernSearch: React.StatelessComponent<allProps> = (props: allProps) => {
   const {
     concernId,
     concernType,
@@ -79,10 +79,11 @@ export const ConcernSearch: React.StatelessComponent<allProps>  = (props: allPro
         showAll={showAllConcerns}
         placeholderMessageId="concernCreate.placeholder"
         emptyPlaceholderMessageId="concernCreate.noResults"
-        fuseOptions={createConcernFuseOptions} />
+        fuseOptions={createConcernFuseOptions}
+      />
       <div onClick={toggleShowAllConcerns} className={styles.showAll}>
         <FormattedMessage id={showAllConcerns ? 'concernCreate.hideAll' : 'concernCreate.showAll'}>
-            {(message: string) => <p>{message}</p>}
+          {(message: string) => <p>{message}</p>}
         </FormattedMessage>
       </div>
       {concernId && <ConcernTypeSelect value={concernType} onChange={onSelectChange} />}

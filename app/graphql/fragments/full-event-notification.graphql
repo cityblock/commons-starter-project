@@ -1,6 +1,5 @@
 #import "./full-user.graphql"
 #import "./full-task-event.graphql"
-#import "./full-task.graphql"
 
 fragment FullEventNotification on EventNotification {
   id
@@ -9,12 +8,8 @@ fragment FullEventNotification on EventNotification {
   user {
     ...FullUser
   }
-  taskEventId
   taskEvent {
     ...FullTaskEvent
-  }
-  task {
-    ...FullTask
   }
   seenAt
   emailSentAt

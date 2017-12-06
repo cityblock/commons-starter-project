@@ -815,7 +815,6 @@ declare module 'schema' {
     user: IUser;
     taskEventId: string | null;
     taskEvent: ITaskEvent | null;
-    task: ITask | null;
     seenAt: string | null;
     emailSentAt: string | null;
     deliveredAt: string | null;

@@ -23,8 +23,7 @@ interface ICreateTaskNotificationsOptions {
 
 /* tslint:disable:max-line-length */
 // TODO: figure out why the [relation.^] style doesn't work to eager load the whole tree recursively
-const EAGER_QUERY =
-  '[task.[patient, assignedTo, createdBy, followers], taskEvent.[task, user, eventComment.[user], eventUser], user]';
+const EAGER_QUERY = '[taskEvent.[task, user, eventComment.[user], eventUser], user]';
 /* tslint:enable:max-line-length */
 
 /* tslint:disable:member-ordering */
@@ -71,25 +70,12 @@ export default class EventNotification extends BaseModel {
         to: 'task_event.id',
       },
     },
-
-    task: {
-      relation: Model.HasOneThroughRelation,
-      modelClass: 'task',
-      join: {
-        from: 'event_notification.taskEventId',
-        through: {
-          modelClass: 'task-event',
-          from: 'task_event.id',
-          to: 'task_event.taskId',
-        },
-        to: 'task.id',
-      },
-    },
   };
 
   static async get(eventNotificationId: string): Promise<EventNotification> {
     const eventNotification = await this.query()
       .eager(EAGER_QUERY)
+      .modifyEager('taskEvent', builder => builder.where('deletedAt', null))
       .findById(eventNotificationId);
     if (!eventNotification) {
       return Promise.reject(`No such eventNotification: ${eventNotificationId}`);
@@ -103,6 +89,7 @@ export default class EventNotification extends BaseModel {
   ): Promise<EventNotification> {
     return await this.query(txn)
       .eager(EAGER_QUERY)
+      .modifyEager('taskEvent', builder => builder.where('deletedAt', null))
       .insert({ taskEventId, userId });
   }
 
@@ -146,6 +133,7 @@ export default class EventNotification extends BaseModel {
   ): Promise<EventNotification> {
     return await this.query()
       .eager(EAGER_QUERY)
+      .modifyEager('taskEvent', builder => builder.where('deletedAt', null))
       .updateAndFetchById(eventNotificationId, eventNotification);
   }
 
@@ -157,6 +145,7 @@ export default class EventNotification extends BaseModel {
     const eventNotifications = (await this.query()
       .where({ userId, deletedAt: null, seenAt: null })
       .eager(EAGER_QUERY)
+      .modifyEager('taskEvent', builder => builder.where('deletedAt', null))
       .orderBy('createdAt', 'desc')
       .page(pageNumber, pageSize)) as any;
 
@@ -175,6 +164,7 @@ export default class EventNotification extends BaseModel {
       .whereNot({ taskEventId: null })
       .andWhere({ userId, deletedAt: null, seenAt: null })
       .eager(EAGER_QUERY)
+      .modifyEager('taskEvent', builder => builder.where('deletedAt', null))
       .orderBy('createdAt', 'desc')
       .page(pageNumber, pageSize)) as any;
 
@@ -189,11 +179,12 @@ export default class EventNotification extends BaseModel {
     { pageNumber, pageSize }: IPaginationOptions,
   ): Promise<IPaginatedResults<EventNotification>> {
     const eventNotifications = (await this.query()
-      .joinRelation('task')
+      .joinRelation('taskEvent')
       .where('event_notification.deletedAt', null)
       .andWhere('event_notification.seenAt', null)
-      .andWhere('task.id', taskId)
+      .andWhere('taskEvent.taskId', taskId)
       .eager(EAGER_QUERY)
+      .modifyEager('taskEvent', builder => builder.where('deletedAt', null))
       .orderBy('event_notification.createdAt', 'desc')
       .page(pageNumber, pageSize)) as any;
 

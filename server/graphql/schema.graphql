@@ -525,7 +525,6 @@ type EventNotification implements uniqueId {
   user: User!
   taskEventId: String
   taskEvent: TaskEvent
-  task: Task
   seenAt: String
   emailSentAt: String
   deliveredAt: String

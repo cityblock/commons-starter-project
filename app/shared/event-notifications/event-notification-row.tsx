@@ -12,7 +12,7 @@ interface IProps {
 export class EventNotificationRow extends React.Component<IProps, {}> {
   render() {
     const { notification, onDismiss } = this.props;
-    const eventLink = notification.task ? `/tasks/${notification.task.id}` : '#';
+    const eventLink = notification.taskEvent ? `/tasks/${notification.taskEvent.task.id}` : '#';
     const formattedCreatedAt = notification.createdAt ? (
       <FormattedRelative value={notification.createdAt}>
         {(date: string) => <span className={styles.dateValue}>{date}</span>}

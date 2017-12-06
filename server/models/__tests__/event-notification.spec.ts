@@ -87,11 +87,9 @@ describe('task event model', () => {
     const fetchedEventNotification2 = await EventNotification.get(eventNotification2.id);
 
     expect(fetchedEventNotification1.user.id).toEqual(user.id);
-    expect(fetchedEventNotification1.task.id).toEqual(task.id);
     expect(fetchedEventNotification1.taskEvent.id).toEqual(taskEvent.id);
 
     expect(fetchedEventNotification2.user.id).toEqual(user.id);
-    expect(fetchedEventNotification2.task).toBeFalsy();
     expect(fetchedEventNotification2.taskEvent).toBeFalsy();
   });
 

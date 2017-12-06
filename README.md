@@ -324,6 +324,18 @@ install [Docker][]. After you have Docker installed and running, follow these st
    docker-prod:restart`.
 6. To stop the application, run: `yarn run docker-prod:stop`.
 
+### Copying staging database to local database
+
+Note: this will eventually become untenable but for now it is convenient.
+
+  aptible login
+  aptible db:dump commons
+  dropdb commons
+  createdb commons 
+  psql commons < commons.dump
+  rm commons.dump
+
+
 [nvm]: https://github.com/creationix/nvm
 [zenhub]: https://www.zenhub.com/
 [add]: http://osxdaily.com/2011/12/30/exclude-drives-or-folders-from-spotlight-index-mac-os-x/

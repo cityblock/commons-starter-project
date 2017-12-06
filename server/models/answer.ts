@@ -1,5 +1,7 @@
 import { Model, RelationMappings, Transaction } from 'objection';
 import BaseModel from './base-model';
+import ConcernSuggestion from './concern-suggestion';
+import GoalSuggestion from './goal-suggestion';
 import Question from './question';
 import RiskArea from './risk-area';
 import ScreeningTool from './screening-tool';
@@ -21,7 +23,7 @@ interface IAnswerCreateFields extends IAnswerEditableFields {
 type ValueTypeOptions = 'string' | 'boolean' | 'number';
 type RiskAdjustmentType = 'inactive' | 'increment' | 'forceHighRisk';
 
-const EAGER_QUERY = '[concernSuggestions, goalSuggestions]';
+const EAGER_QUERY = '[concernSuggestions, goalSuggestions.[taskTemplates]]';
 
 /* tslint:disable:member-ordering */
 export default class Answer extends BaseModel {
@@ -36,6 +38,8 @@ export default class Answer extends BaseModel {
   riskArea?: RiskArea;
   screeningTool?: ScreeningTool;
   order: number;
+  goalSuggestions: GoalSuggestion[];
+  concernSuggestions: ConcernSuggestion[];
 
   static tableName = 'answer';
 
@@ -117,13 +121,7 @@ export default class Answer extends BaseModel {
   };
 
   static async get(answerId: string): Promise<Answer> {
-    const answer = await this.query()
-      .eager(EAGER_QUERY)
-      .modifyEager('concernSuggestions', builder =>
-        builder.where('concern_suggestion.deletedAt', null),
-      )
-      .modifyEager('goalSuggestions', builder => builder.where('goal_suggestion.deletedAt', null))
-      .findOne({ id: answerId, deletedAt: null });
+    const answer = await this.getQuery().findOne({ id: answerId, deletedAt: null });
 
     if (!answer) {
       return Promise.reject(`No such answer: ${answerId}`);
@@ -136,38 +134,21 @@ export default class Answer extends BaseModel {
   }
 
   static async getAllForQuestion(questionId: string): Promise<Answer[]> {
-    return this.query()
+    return this.getQuery()
       .where({ questionId, deletedAt: null })
-      .eager(EAGER_QUERY)
-      .modifyEager('concernSuggestions', builder =>
-        builder.where('concern_suggestion.deletedAt', null),
-      )
-      .modifyEager('goalSuggestions', builder => builder.where('goal_suggestion.deletedAt', null))
       .orderBy('order');
   }
 
   static async create(input: IAnswerCreateFields) {
-    return this.query()
-      .eager(EAGER_QUERY)
-      .modifyEager('concernSuggestions', builder =>
-        builder.where('concern_suggestion.deletedAt', null),
-      )
-      .modifyEager('goalSuggestions', builder => builder.where('goal_suggestion.deletedAt', null))
-      .insertAndFetch(input);
+    return this.getQuery().insertAndFetch(input);
   }
 
   static async edit(answer: Partial<IAnswerEditableFields>, answerId: string): Promise<Answer> {
-    return await this.query()
-      .eager('[concernSuggestions, goalSuggestions]')
-      .modifyEager('concernSuggestions', builder =>
-        builder.where('concern_suggestion.deletedAt', null),
-      )
-      .modifyEager('goalSuggestions', builder => builder.where('goal_suggestion.deletedAt', null))
-      .updateAndFetchById(answerId, answer);
+    return await this.getQuery().updateAndFetchById(answerId, answer);
   }
 
   static async delete(answerId: string): Promise<Answer> {
-    await this.query()
+    await this.getQuery()
       .where({ id: answerId, deletedAt: null })
       .update({ deletedAt: new Date().toISOString() });
 
@@ -176,6 +157,15 @@ export default class Answer extends BaseModel {
       return Promise.reject(`No such answer: ${answerId}`);
     }
     return answer;
+  }
+
+  static getQuery() {
+    return this.query()
+      .eager(EAGER_QUERY)
+      .modifyEager('concernSuggestions', builder =>
+        builder.where('concern_suggestion.deletedAt', null),
+      )
+      .modifyEager('goalSuggestions', builder => builder.where('goal_suggestion.deletedAt', null));
   }
 }
 /* tslint:enable:member-ordering */

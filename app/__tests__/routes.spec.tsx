@@ -3,7 +3,6 @@ import { createMemoryHistory } from 'history';
 import * as React from 'react';
 import { MockedProvider } from 'react-apollo/test-utils';
 import { Provider } from 'react-redux';
-
 import { ConnectedRouter } from 'react-router-redux';
 import configureMockStore from 'redux-mock-store';
 import ReduxConnectedIntlProvider from '../redux-connected-intl-provider';

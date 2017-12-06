@@ -15,7 +15,7 @@ import {
   FullEventNotificationFragment,
 } from '../graphql/types';
 import * as tabStyles from '../shared/css/tabs.css';
-import EventNotifications from '../shared/event-notifications/index';
+import EventNotifications from '../shared/event-notifications/event-notifications';
 import { fetchMore } from '../shared/util/fetch-more';
 import { IState as IAppState } from '../store';
 import * as styles from './css/event-notifications-container.css';

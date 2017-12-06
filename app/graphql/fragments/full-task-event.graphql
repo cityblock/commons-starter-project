@@ -1,13 +1,9 @@
 #import "./full-user.graphql"
-#import "./full-task.graphql"
 #import "./full-task-comment.graphql"
 
 fragment FullTaskEvent on TaskEvent {
   id
   taskId
-  task {
-    ...FullTask
-  }
   userId
   user {
     ...FullUser

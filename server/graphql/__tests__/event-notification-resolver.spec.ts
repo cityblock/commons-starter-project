@@ -222,9 +222,6 @@ describe('event notification tests', () => {
               id
               taskEvent {
                 taskId
-                task {
-                  id
-                }
               }
             }
           }
@@ -242,8 +239,6 @@ describe('event notification tests', () => {
       expect(fetchedNotifs).not.toContain(notification1.id);
       expect(fetchedNotifs).toContain(notification2.id);
       expect(fetchedNotifResults.edges[0].node.taskEvent.taskId).toEqual(task.id);
-      // Fetches task relation
-      expect(fetchedNotifResults.edges[0].node.taskEvent.task.id).toEqual(task.id);
     });
 
     it('does not resolve sen notifications for a task', async () => {

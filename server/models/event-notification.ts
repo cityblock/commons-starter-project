@@ -21,10 +21,7 @@ interface ICreateTaskNotificationsOptions {
   taskId: string;
 }
 
-/* tslint:disable:max-line-length */
-// TODO: figure out why the [relation.^] style doesn't work to eager load the whole tree recursively
-const EAGER_QUERY = '[taskEvent.[task, user, eventComment.[user], eventUser], user]';
-/* tslint:enable:max-line-length */
+const EAGER_QUERY = '[taskEvent.[user, eventComment, eventComment.user, eventUser, task], user]';
 
 /* tslint:disable:member-ordering */
 export default class EventNotification extends BaseModel {
@@ -32,7 +29,6 @@ export default class EventNotification extends BaseModel {
   user: User;
   taskEventId: string;
   taskEvent: TaskEvent;
-  task: Task;
   seenAt: string;
   emailSentAt: string;
   deliveredAt: string;

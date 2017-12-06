@@ -464,7 +464,6 @@ type ThreeSixtySummary {
 type TaskEvent implements uniqueId {
   id: ID!
   taskId: String!
-  task: Task!
   userId: String!
   user: User!
   eventType: TaskEventTypes

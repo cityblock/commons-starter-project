@@ -7,7 +7,7 @@ import {
 import * as sortSearchStyles from '../css/sort-search.css';
 import InfiniteScroll from '../infinite-scroll/infinite-scroll';
 import * as styles from './css/event-notifications.css';
-import { EventNotificationRow } from './event-notification-row';
+import EventNotificationRow from './event-notification-row';
 import { EventNotificationsLoadingError } from './event-notifications-loading-error';
 
 interface IProps {

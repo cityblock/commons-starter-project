@@ -829,7 +829,6 @@ declare module 'schema' {
   interface ITaskEvent {
     id: string;
     taskId: string;
-    task: ITask;
     userId: string;
     user: IUser;
     eventType: ITaskEventTypesEnum | null;

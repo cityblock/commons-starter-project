@@ -83,6 +83,7 @@ import {
   patientSetup,
   resolvePatient,
   resolvePatientScratchPad,
+  resolvePatientSearch,
 } from './patient-resolver';
 import {
   patientScreeningToolSubmissionCreate,
@@ -215,6 +216,7 @@ const resolveFunctions = {
     patientEncounters: resolvePatientEncounters,
     patientMedications: resolvePatientMedications,
     patientScratchPad: resolvePatientScratchPad,
+    patientSearch: resolvePatientSearch,
     user: resolveUser,
     users: resolveUsers,
     userPatientPanel: resolveUserPatientPanel,

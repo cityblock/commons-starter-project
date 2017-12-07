@@ -1459,6 +1459,8 @@ type RootQueryType {
   patientCareTeam(patientId: String!): [User]
   # Patient scratch pad
   patientScratchPad(patientId: String!): PatientScratchPad
+  # Patient search
+  patientSearch(query: String!, pageNumber: Int!, pageSize: Int!): PatientEdges
   # A single clinic
   clinic(clinicId: String!): Clinic
   # Clinics

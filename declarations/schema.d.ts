@@ -46,6 +46,10 @@ declare module 'schema' {
   */
     patientScratchPad: IPatientScratchPad | null;
     /**
+    description: Patient search
+  */
+    patientSearch: IPatientEdges | null;
+    /**
     description: A single clinic
   */
     clinic: IClinic | null;

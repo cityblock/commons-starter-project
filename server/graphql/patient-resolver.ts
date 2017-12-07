@@ -1,15 +1,27 @@
 import { isNil, omitBy } from 'lodash';
 import { transaction } from 'objection';
-import { IPatient, IPatientEditInput, IPatientScratchPad, IPatientSetupInput } from 'schema';
+import {
+  IPatient,
+  IPatientEdges,
+  IPatientEditInput,
+  IPatientNode,
+  IPatientScratchPad,
+  IPatientSetupInput,
+} from 'schema';
 import { getAthenaPatientIdFromCreate } from '../apis/redox/formatters';
+import { IPaginatedResults, IPaginationOptions } from '../db';
 import CareTeam from '../models/care-team';
 import Clinic from '../models/clinic';
 import Patient from '../models/patient';
 import accessControls from './shared/access-controls';
-import { checkUserLoggedIn, IContext } from './shared/utils';
+import { checkUserLoggedIn, formatRelayEdge, IContext } from './shared/utils';
 
 export interface IQuery {
   patientId: string;
+}
+
+export interface IPatientSearchOptions extends IPaginationOptions {
+  query: string;
 }
 
 export async function resolvePatient(
@@ -131,4 +143,31 @@ export async function patientScratchPadEdit(
   const patient = await Patient.edit({ scratchPad: text }, patientId);
 
   return { text: patient.scratchPad };
+}
+
+export async function resolvePatientSearch(
+  root: any,
+  { query, pageNumber, pageSize }: IPatientSearchOptions,
+  { userRole }: IContext,
+): Promise<IPatientEdges> {
+  let patients: IPaginatedResults<Patient>;
+
+  await accessControls.isAllowedForUser(userRole, 'view', 'patient');
+
+  patients = await Patient.search(query, { pageNumber, pageSize});
+
+  const patientEdges = patients.results.map(
+    (patient, i) => formatRelayEdge(patient, patient.id) as IPatientNode,
+  );
+
+  const hasPreviousPage = pageNumber !== 0;
+  const hasNextPage = (pageNumber + 1) * pageSize < patients.total;
+
+  return {
+    edges: patientEdges,
+    pageInfo: {
+      hasPreviousPage,
+      hasNextPage,
+    },
+  };
 }

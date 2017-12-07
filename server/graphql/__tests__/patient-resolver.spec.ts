@@ -199,4 +199,80 @@ describe('patient', () => {
       });
     });
   });
+
+  describe('patient search', () => {
+    beforeEach(async () => {
+      await createPatient(createMockPatient(11, homeClinicId, "Jon", "Snow"), user.id);
+      await createPatient(createMockPatient(12, homeClinicId, "Arya", "Stark"), user.id);
+      await createPatient(createMockPatient(13, homeClinicId, "Sansa", "Stark"), user.id);
+    });
+
+    it('searches for a single patients', async () => {
+      const query = `{
+        patientSearch(query: "jon", pageNumber: 0, pageSize: 10) {
+          edges { node { firstName, lastName } }
+        }
+      }`;
+      const result = await graphql(schema, query, null, {
+        db,
+        userRole,
+      });
+
+      expect(cloneDeep(result.data!.patientSearch)).toMatchObject({
+        edges: [{
+          node: {
+            firstName: 'Jon',
+            lastName: 'Snow',
+          },
+        }],
+      });
+    });
+
+    it('searches for multiple patients', async () => {
+      const query = `{
+        patientSearch(query: "stark", pageNumber: 0, pageSize: 10) {
+          edges { node { firstName, lastName } }
+        }
+      }`;
+      const result = await graphql(schema, query, null, {
+        db,
+        userRole,
+      });
+
+      expect(cloneDeep(result.data!.patientSearch)).toMatchObject({
+        edges: [{
+          node: {
+            firstName: 'Arya',
+            lastName: 'Stark',
+          },
+        }, {
+          node: {
+            firstName: 'Sansa',
+            lastName: 'Stark',
+          },
+        }],
+      });
+    });
+
+    it('fuzzy searches for a patient', async () => {
+      const query = `{
+        patientSearch(query: "john", pageNumber: 0, pageSize: 10) {
+          edges { node { firstName, lastName } }
+        }
+      }`;
+      const result = await graphql(schema, query, null, {
+        db,
+        userRole,
+      });
+
+      expect(cloneDeep(result.data!.patientSearch)).toMatchObject({
+        edges: [{
+          node: {
+            firstName: 'Jon',
+            lastName: 'Snow',
+          },
+        }],
+      });
+    });
+  });
 });

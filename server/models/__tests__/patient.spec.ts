@@ -31,6 +31,7 @@ describe('patient model', () => {
   describe('get', () => {
     it('should create and retrieve a patient', async () => {
       const user = await User.create(createMockUser(11, clinic.id, userRole));
+
       const patient = await createPatient(createMockPatient(123, clinic.id), user.id);
       expect(patient).toMatchObject({
         id: patient.id,
@@ -196,6 +197,49 @@ describe('patient model', () => {
 
     it('should return null if a patient cannot be found for the matchable param', async () => {
       expect(await Patient.getBy('athenaPatientId', '99999')).toBeFalsy();
+    });
+  });
+
+  describe('search', () => {
+    beforeEach(async () => {
+      const user = await User.create(createMockUser(11, clinic.id, userRole));
+      await createPatient(createMockPatient(11, clinic.id, "Jon", "Snow"), user.id);
+      await createPatient(createMockPatient(12, clinic.id, "Arya", "Stark"), user.id);
+      await createPatient(createMockPatient(13, clinic.id, "Sansa", "Stark"), user.id);
+    });
+
+    it('returns single result', async () => {
+      expect(await Patient.search('jon', { pageNumber: 0, pageSize: 1 })).toMatchObject({
+        results: [{
+          firstName: 'Jon',
+          lastName: 'Snow',
+        }],
+        total: 1,
+      });
+    });
+
+    it('returns multiple matching results', async () => {
+      expect(await Patient.search('stark', { pageNumber: 0, pageSize: 2 })).toMatchObject({
+        results: [{
+          firstName: 'Arya',
+          lastName: 'Stark',
+        },
+        {
+          firstName: 'Sansa',
+          lastName: 'Stark',
+        }],
+        total: 2,
+      });
+    });
+
+    it('returns a close matching result', async () => {
+      expect(await Patient.search('john', { pageNumber: 0, pageSize: 1 })).toMatchObject({
+        results: [{
+          firstName: 'Jon',
+          lastName: 'Snow',
+        }],
+        total: 1,
+      });
     });
   });
 });

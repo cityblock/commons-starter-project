@@ -21,11 +21,16 @@ export async function createPatient(patient: ICreatePatient, userId: string): Pr
   return instance;
 }
 
-export function createMockPatient(athenaPatientId = 1, homeClinicId: string) {
+export function createMockPatient(
+  athenaPatientId = 1,
+  homeClinicId: string,
+  firstName?: string,
+  lastName?: string,
+) {
   return {
     athenaPatientId,
-    firstName: 'dan',
-    lastName: 'plant',
+    firstName: firstName || 'dan',
+    lastName: lastName || 'plant',
     homeClinicId,
     zip: '11238',
     gender: 'M',

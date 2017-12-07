@@ -6,6 +6,9 @@ import Clinic from './clinic';
 import Concern from './concern';
 import PatientConcern from './patient-concern';
 
+// how fuzzy is patient name search (0 (match everything) to 1 (exact match))
+const SIMILARITY_THRESHOLD = 0.15;
+
 export interface IPatientEditableFields {
   firstName: string;
   middleName?: string | undefined | null;
@@ -163,6 +166,24 @@ export default class Patient extends BaseModel {
     callback: (boundModelClass: typeof Patient) => Promise<Patient>,
   ) {
     return await transaction(this as any, callback);
+  }
+
+  static async search(query: string, {
+    pageNumber,
+    pageSize,
+  }: IPaginationOptions): Promise<IPaginatedResults<Patient>> {
+    const patientsResult = await this.query()
+      .whereRaw(
+        `similarity("firstName" || \' \' || "lastName", ?) > ${SIMILARITY_THRESHOLD}`,
+        query,
+      )
+      .orderByRaw('"firstName" || \' \' || "lastName" <-> ?', query)
+      .page(pageNumber, pageSize);
+
+    return {
+      results: patientsResult.results,
+      total: patientsResult.total,
+    };
   }
 }
 /* tslint:enable:member-ordering */

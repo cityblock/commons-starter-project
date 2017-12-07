@@ -281,6 +281,14 @@ declare module 'schema' {
     description: quick calls for progress note
   */
     quickCallsForProgressNote: Array<IQuickCall> | null;
+    /**
+    description: computed field
+  */
+    computedField: IComputedField | null;
+    /**
+    description: computed fields
+  */
+    computedFields: Array<IComputedField> | null;
   }
 
   /**
@@ -302,7 +310,7 @@ declare module 'schema' {
   /**
     description: An object with a Globally Unique ID
   */
-  type uniqueId = IUser | IPatient | IClinic | ITask | IPatientGoal | IPatientConcern | IConcern | IGoalSuggestionTemplate | ITaskTemplate | ITaskComment | IRiskArea | IQuestion | IAnswer | IScreeningTool | IScreeningToolScoreRange | IQuestionCondition | IPatientAnswer | IPatientScreeningToolSubmission | ICarePlanSuggestion | IEventNotification | ITaskEvent | IProgressNote | IProgressNoteTemplate | IPatientTaskSuggestion | IPatientAnswerEvent | ICarePlanUpdateEvent | IQuickCall;
+  type uniqueId = IUser | IPatient | IClinic | ITask | IPatientGoal | IPatientConcern | IConcern | IGoalSuggestionTemplate | ITaskTemplate | ITaskComment | IRiskArea | IQuestion | IAnswer | IScreeningTool | IScreeningToolScoreRange | IQuestionCondition | IPatientAnswer | IPatientScreeningToolSubmission | ICarePlanSuggestion | IEventNotification | ITaskEvent | IProgressNote | IProgressNoteTemplate | IPatientTaskSuggestion | IPatientAnswerEvent | ICarePlanUpdateEvent | IQuickCall | IComputedField;
 
   /**
     description: An object with a Globally Unique ID
@@ -986,6 +994,23 @@ declare module 'schema' {
   type IQuickCallDirectionEnum = 'Inbound' | 'Outbound';
 
 
+  interface IComputedField {
+    id: string;
+    slug: string;
+    label: string;
+    dataType: IComputedFieldDataTypesEnum;
+    createdAt: string;
+    updatedAt: string;
+    deletedAt: string | null;
+  }
+
+
+  type IComputedFieldDataTypesEnum = 'boolean' | 'string' | 'number';
+
+
+  type IComputedFieldOrderOptionsEnum = 'labelDesc' | 'labelAsc' | 'slugDesc' | 'slugAsc';
+
+
   interface IRootMutationType {
     /**
     description: Create a new user
@@ -1319,6 +1344,14 @@ declare module 'schema' {
     description: creates a quick call
   */
     quickCallCreate: IQuickCall | null;
+    /**
+    description: Create a computed field
+  */
+    computedFieldCreate: IComputedField | null;
+    /**
+    description: Delete a computed field
+  */
+    computedFieldDelete: IComputedField | null;
   }
 
   /**
@@ -1990,6 +2023,17 @@ declare module 'schema' {
     callRecipient: string;
     wasSuccessful: boolean;
     startTime: string;
+  }
+
+
+  interface IComputedFieldCreateInput {
+    label: string;
+    dataType: IComputedFieldDataTypesEnum;
+  }
+
+
+  interface IComputedFieldDeleteInput {
+    computedFieldId: string;
   }
 
 

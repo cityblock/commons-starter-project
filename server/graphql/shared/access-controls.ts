@@ -32,7 +32,8 @@ export type Resource =
   | 'patientScreeningToolSubmission'
   | 'progressNote'
   | 'progressNoteTemplate'
-  | 'quickCall';
+  | 'quickCall'
+  | 'computedField';
 
 /*
 ACL SPEC:

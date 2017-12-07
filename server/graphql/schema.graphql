@@ -52,6 +52,13 @@ enum UserOrderOptions {
   updatedAtAsc
 }
 
+enum ComputedFieldOrderOptions {
+  labelDesc
+  labelAsc
+  slugDesc
+  slugAsc
+}
+
 enum AnswerValueTypeOptions {
   string
   boolean
@@ -141,6 +148,12 @@ enum CarePlanSuggestionType {
 enum QuickCallDirection {
   Inbound
   Outbound
+}
+
+enum ComputedFieldDataTypes {
+  boolean
+  string
+  number
 }
 
 # User account model
@@ -743,6 +756,16 @@ type ProgressNoteActivity {
   quickCallEvents: [QuickCall!]!
 }
 
+type ComputedField implements uniqueId {
+  id: ID!
+  slug: String!
+  label: String!
+  dataType: ComputedFieldDataTypes!
+  createdAt: String!
+  updatedAt: String!
+  deletedAt: String
+}
+
 #
 # BEGIN INPUT FIELDS
 #
@@ -1269,6 +1292,15 @@ input QuickCallCreateInput {
   startTime: String!
 }
 
+input ComputedFieldCreateInput {
+  label: String!
+  dataType: ComputedFieldDataTypes!
+}
+
+input ComputedFieldDeleteInput {
+  computedFieldId: String!
+}
+
 type RootMutationType {
   # Create a new user
   userCreate(input: UserCreateInput): User
@@ -1442,6 +1474,10 @@ type RootMutationType {
   progressNoteEdit(input: ProgressNoteEditInput): ProgressNote
   # creates a quick call
   quickCallCreate(input: QuickCallCreateInput): QuickCall
+  # Create a computed field
+  computedFieldCreate(input: ComputedFieldCreateInput): ComputedField
+  # Delete a computed field
+  computedFieldDelete(input: ComputedFieldDeleteInput): ComputedField
 }
 
 type RootQueryType {
@@ -1603,6 +1639,10 @@ type RootQueryType {
   quickCall(quickCallId: String!): QuickCall
   # quick calls for progress note
   quickCallsForProgressNote(progressNoteId: String!): [QuickCall]
+  # computed field
+  computedField(computedFieldId: String!): ComputedField
+  # computed fields
+  computedFields(orderBy: ComputedFieldOrderOptions): [ComputedField]
 }
 
 schema {

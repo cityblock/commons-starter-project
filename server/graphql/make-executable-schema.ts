@@ -23,6 +23,12 @@ import {
 } from './care-team-resolver';
 import { clinicCreate, resolveClinic, resolveClinics } from './clinic-resolver';
 import {
+  computedFieldCreate,
+  computedFieldDelete,
+  resolveComputedField,
+  resolveComputedFields,
+} from './computed-field-resolver';
+import {
   concernCreate,
   concernDelete,
   concernEdit,
@@ -274,6 +280,8 @@ const resolveFunctions = {
     progressNoteActivityForProgressNote: resolveProgressNoteActivityForProgressNote,
     quickCall: resolveQuickCall,
     quickCallsForProgressNote: resolveQuickCallsForProgressNote,
+    computedField: resolveComputedField,
+    computedFields: resolveComputedFields,
   },
   /* tslint:enable:max-line-length */
   RootMutationType: {
@@ -357,6 +365,8 @@ const resolveFunctions = {
     progressNoteCreate,
     progressNoteEdit,
     quickCallCreate,
+    computedFieldCreate,
+    computedFieldDelete,
   },
 };
 

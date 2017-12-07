@@ -108,6 +108,7 @@ export default [
           'progressNote',
           'progressNoteTemplate',
           'quickCall',
+          'computedField',
         ],
         permissions: ['edit', 'view', 'delete', 'create'],
       },

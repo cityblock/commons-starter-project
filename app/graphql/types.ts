@@ -41,6 +41,13 @@ export enum CarePlanUpdateEventTypes {
 }
 
 
+export enum ComputedFieldDataTypes {
+  boolean = "boolean",
+  string = "string",
+  number = "number",
+}
+
+
 export enum PatientAnswerEventTypes {
   create_patient_answer = "create_patient_answer",
 }
@@ -107,6 +114,14 @@ export enum UserRole {
   familyMember = "familyMember",
   anonymousUser = "anonymousUser",
   admin = "admin",
+}
+
+
+export enum ComputedFieldOrderOptions {
+  labelDesc = "labelDesc",
+  labelAsc = "labelAsc",
+  slugDesc = "slugDesc",
+  slugAsc = "slugAsc",
 }
 
 
@@ -691,6 +706,41 @@ export type getClinicsQuery = {
   } | null,
 };
 
+export type computedFieldCreateMutationVariables = {
+  label: string,
+  dataType: ComputedFieldDataTypes,
+};
+
+export type computedFieldCreateMutation = {
+  // Create a computed field
+  computedFieldCreate:  {
+    id: string,
+    label: string,
+    slug: string,
+    dataType: ComputedFieldDataTypes,
+    createdAt: string,
+    updatedAt: string,
+    deletedAt: string | null,
+  } | null,
+};
+
+export type computedFieldDeleteMutationVariables = {
+  computedFieldId: string,
+};
+
+export type computedFieldDeleteMutation = {
+  // Delete a computed field
+  computedFieldDelete:  {
+    id: string,
+    label: string,
+    slug: string,
+    dataType: ComputedFieldDataTypes,
+    createdAt: string,
+    updatedAt: string,
+    deletedAt: string | null,
+  } | null,
+};
+
 export type concernCreateMutationVariables = {
   title: string,
 };
@@ -983,6 +1033,40 @@ export type getAnswerQuery = {
       deletedAt: string | null,
     } | null,
   } | null,
+};
+
+export type getComputedFieldQueryVariables = {
+  computedFieldId: string,
+};
+
+export type getComputedFieldQuery = {
+  // computed field
+  computedField:  {
+    id: string,
+    label: string,
+    slug: string,
+    dataType: ComputedFieldDataTypes,
+    createdAt: string,
+    updatedAt: string,
+    deletedAt: string | null,
+  } | null,
+};
+
+export type getComputedFieldsQueryVariables = {
+  orderBy?: ComputedFieldOrderOptions | null,
+};
+
+export type getComputedFieldsQuery = {
+  // computed fields
+  computedFields:  Array< {
+    id: string,
+    label: string,
+    slug: string,
+    dataType: ComputedFieldDataTypes,
+    createdAt: string,
+    updatedAt: string,
+    deletedAt: string | null,
+  } | null > | null,
 };
 
 export type getConcernSuggestionsForAnswerQueryVariables = {
@@ -6342,6 +6426,16 @@ export type FullCarePlanUpdateEventFragment = {
 export type FullClinicFragment = {
   id: string,
   name: string,
+};
+
+export type FullComputedFieldFragment = {
+  id: string,
+  label: string,
+  slug: string,
+  dataType: ComputedFieldDataTypes,
+  createdAt: string,
+  updatedAt: string,
+  deletedAt: string | null,
 };
 
 export type FullConcernFragment = {

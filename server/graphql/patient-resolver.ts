@@ -154,7 +154,7 @@ export async function resolvePatientSearch(
 
   await accessControls.isAllowedForUser(userRole, 'view', 'patient');
 
-  patients = await Patient.search(query, { pageNumber, pageSize});
+  patients = await Patient.search(query, { pageNumber, pageSize });
 
   const patientEdges = patients.results.map(
     (patient, i) => formatRelayEdge(patient, patient.id) as IPatientNode,

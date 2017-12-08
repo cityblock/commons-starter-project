@@ -168,10 +168,10 @@ export default class Patient extends BaseModel {
     return await transaction(this as any, callback);
   }
 
-  static async search(query: string, {
-    pageNumber,
-    pageSize,
-  }: IPaginationOptions): Promise<IPaginatedResults<Patient>> {
+  static async search(
+    query: string,
+    { pageNumber, pageSize }: IPaginationOptions,
+  ): Promise<IPaginatedResults<Patient>> {
     const patientsResult = await this.query()
       .whereRaw(
         `similarity("firstName" || \' \' || "lastName", ?) > ${SIMILARITY_THRESHOLD}`,

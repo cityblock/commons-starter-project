@@ -225,5 +225,10 @@ export const ENGLISH_TRANSLATION = {
     'quickCallForm.wasSuccessful': 'Were you able to speak with them?',
     'quickCallForm.reason': 'What was the reason for the call?',
     'quickCallForm.summary': 'Please provide additional notes about the call here …',
+    'computedField.create': 'Create Computed Field',
+    'computedFieldCreate.createLabelPlaceholder': 'Enter label',
+    'computedFieldCreate.createDataTypeLabel': 'Select a data type',
+    'computedFieldCreate.cancel': 'Cancel',
+    'computedField.confirmDelete': 'Yes, delete',
   },
 };

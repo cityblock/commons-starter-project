@@ -482,3 +482,13 @@ export const quickCall = {
   progressNoteId: progressNote.id,
   userId: user.id,
 };
+
+export const computedField = {
+  id: 'computed-field-id',
+  label: 'Computed Field',
+  slug: 'computed-field',
+  dataType: 'boolean' as any,
+  createdAt: '2017-11-07T13:45:14.532Z',
+  updatedAt: '2017-11-07T13:45:14.532Z',
+  deletedAt: null,
+};

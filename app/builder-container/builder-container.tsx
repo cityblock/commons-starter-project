@@ -11,6 +11,7 @@ import {
 } from '../graphql/types';
 import * as tabStyles from '../shared/css/tabs.css';
 import { IState as IAppState } from '../store';
+import BuilderComputedFields from './builder-computed-fields';
 import BuilderConcerns from './builder-concerns';
 import BuilderGoals from './builder-goals';
 import BuilderProgressNoteTemplates from './builder-progress-note-templates';
@@ -19,7 +20,13 @@ import BuilderRiskAreas from './builder-risk-areas';
 import BuilderScreeningTools from './builder-screening-tools';
 import * as styles from './css/builder.css';
 
-type Tab = 'domains' | 'concerns' | 'goals' | 'tools' | 'progress-note-templates';
+type Tab =
+  | 'domains'
+  | 'concerns'
+  | 'goals'
+  | 'tools'
+  | 'progress-note-templates'
+  | 'computed-fields';
 
 interface IProps {
   mutate?: any;
@@ -63,6 +70,7 @@ class BuilderContainer extends React.Component<allProps, {}> {
     const { subTab, tab } = this.props;
     const questionsTabSelected = subTab === 'questions';
     const concernsTabSelected = tab === 'concerns';
+    const computedFieldsTabSelected = tab === 'computed-fields';
     const goalsTabSelected = tab === 'goals';
     const progressNoteTemplatesTabSelected =
       tab === 'progress-note-templates' && subTab !== 'questions';
@@ -72,7 +80,8 @@ class BuilderContainer extends React.Component<allProps, {}> {
       !concernsTabSelected &&
       !goalsTabSelected &&
       !toolsTabSelected &&
-      !progressNoteTemplatesTabSelected;
+      !progressNoteTemplatesTabSelected &&
+      !computedFieldsTabSelected;
     const riskAreaTabStyles = classNames(tabStyles.tab, {
       [tabStyles.selectedTab]: riskAreasTabSelected,
     });
@@ -90,6 +99,9 @@ class BuilderContainer extends React.Component<allProps, {}> {
     });
     const toolTabStyles = classNames(tabStyles.tab, {
       [tabStyles.selectedTab]: toolsTabSelected,
+    });
+    const computedFieldsTabStyles = classNames(tabStyles.tab, {
+      [tabStyles.selectedTab]: computedFieldsTabSelected,
     });
     return (
       <div className={styles.container}>
@@ -116,6 +128,9 @@ class BuilderContainer extends React.Component<allProps, {}> {
             >
               Progress Note Templates
             </Link>
+            <Link to={'/builder/computed-fields'} className={computedFieldsTabStyles}>
+              Computed Fields
+            </Link>
           </div>
           <Switch>
             <Route
@@ -141,6 +156,11 @@ class BuilderContainer extends React.Component<allProps, {}> {
               exact
               path="/builder/progress-note-templates/:progressNoteTemplateId?"
               component={BuilderProgressNoteTemplates}
+            />
+            <Route
+              exact
+              path="/builder/computed-fields/:computedFieldId?"
+              component={BuilderComputedFields}
             />
             <Redirect to="/builder/domains" />
           </Switch>

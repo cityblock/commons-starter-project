@@ -1,0 +1,9 @@
+fragment FullComputedField on ComputedField {
+  id
+  label
+  slug
+  dataType
+  createdAt
+  updatedAt
+  deletedAt
+}

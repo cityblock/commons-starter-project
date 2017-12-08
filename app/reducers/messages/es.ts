@@ -232,5 +232,10 @@ export const SPANISH_TRANSLATION = {
     'quickCallForm.wasSuccessful': '¿Pudiste hablar con ellos?',
     'quickCallForm.reason': '¿Cuál fue el motivo de la llamada?',
     'quickCallForm.summary': 'Proporcione notas adicionales sobre la llamada aquí …',
+    'computedField.create': 'Crear campo computado',
+    'computedFieldCreate.createLabelPlaceholder': 'Ingresar una etiqueta',
+    'computedFieldCreate.createDataTypeLabel': 'Seleccione un tipo de datos',
+    'computedFieldCreate.cancel': 'Cancelar',
+    'computedField.confirmDelete': 'Sí, borrar',
   },
 };

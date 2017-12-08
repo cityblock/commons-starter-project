@@ -52,6 +52,13 @@ exports[`renders builder container 1`] = `
       >
         Progress Note Templates
       </a>
+      <a
+        className="tab"
+        href="/builder/computed-fields"
+        onClick={[Function]}
+      >
+        Computed Fields
+      </a>
     </div>
     <div
       className="container"

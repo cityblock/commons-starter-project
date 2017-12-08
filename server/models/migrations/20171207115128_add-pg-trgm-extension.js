@@ -1,4 +1,3 @@
-
 exports.up = function(knex, Promise) {
   return knex.schema.raw('create extension if not exists pg_trgm');
 };

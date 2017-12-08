@@ -202,9 +202,9 @@ describe('patient', () => {
 
   describe('patient search', () => {
     beforeEach(async () => {
-      await createPatient(createMockPatient(11, homeClinicId, "Jon", "Snow"), user.id);
-      await createPatient(createMockPatient(12, homeClinicId, "Arya", "Stark"), user.id);
-      await createPatient(createMockPatient(13, homeClinicId, "Sansa", "Stark"), user.id);
+      await createPatient(createMockPatient(11, homeClinicId, 'Jon', 'Snow'), user.id);
+      await createPatient(createMockPatient(12, homeClinicId, 'Arya', 'Stark'), user.id);
+      await createPatient(createMockPatient(13, homeClinicId, 'Sansa', 'Stark'), user.id);
     });
 
     it('searches for a single patients', async () => {
@@ -219,12 +219,14 @@ describe('patient', () => {
       });
 
       expect(cloneDeep(result.data!.patientSearch)).toMatchObject({
-        edges: [{
-          node: {
-            firstName: 'Jon',
-            lastName: 'Snow',
+        edges: [
+          {
+            node: {
+              firstName: 'Jon',
+              lastName: 'Snow',
+            },
           },
-        }],
+        ],
       });
     });
 
@@ -240,17 +242,20 @@ describe('patient', () => {
       });
 
       expect(cloneDeep(result.data!.patientSearch)).toMatchObject({
-        edges: [{
-          node: {
-            firstName: 'Arya',
-            lastName: 'Stark',
+        edges: [
+          {
+            node: {
+              firstName: 'Arya',
+              lastName: 'Stark',
+            },
           },
-        }, {
-          node: {
-            firstName: 'Sansa',
-            lastName: 'Stark',
+          {
+            node: {
+              firstName: 'Sansa',
+              lastName: 'Stark',
+            },
           },
-        }],
+        ],
       });
     });
 
@@ -266,12 +271,14 @@ describe('patient', () => {
       });
 
       expect(cloneDeep(result.data!.patientSearch)).toMatchObject({
-        edges: [{
-          node: {
-            firstName: 'Jon',
-            lastName: 'Snow',
+        edges: [
+          {
+            node: {
+              firstName: 'Jon',
+              lastName: 'Snow',
+            },
           },
-        }],
+        ],
       });
     });
   });

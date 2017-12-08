@@ -13,26 +13,37 @@
     "clean": "rimraf public server-compiled",
     "prod-db": "./scripts/prod-psql.sh",
     "start": "NODE_ENV=production nodemon --exec node ./server-compiled/index.js",
-    "dev": "NODE_ENV=development nodemon --exec ts-node ./server/index.ts",
-    "build:dev": "cross-env NODE_ENV=development webpack --colors --display-error-details --config ./webpack/webpack.config.js",
-    "build": "yarn run clean && yarn run build-server && cross-env NODE_ENV=production GOOGLE_OAUTH_TOKEN=640963223283-n944uqosb4kae9cj99d35v6ut6n5bvlc.apps.googleusercontent.com webpack --colors --config ./webpack/webpack.config.js",
+    "dev":
+      "yarn check --verify-tree && NODE_ENV=development nodemon --exec ts-node ./server/index.ts",
+    "build:dev":
+      "cross-env NODE_ENV=development webpack --colors --display-error-details --config ./webpack/webpack.config.js",
+    "build":
+      "yarn run clean && yarn run build-server && cross-env NODE_ENV=production GOOGLE_OAUTH_TOKEN=640963223283-n944uqosb4kae9cj99d35v6ut6n5bvlc.apps.googleusercontent.com webpack --colors --config ./webpack/webpack.config.js",
     "build-server": "./node_modules/typescript/bin/tsc --project tsconfig.server.json",
     "prettier": "prettier --write \"{app,server,webpack,scripts}/**/*.{ts,tsx,js,css,graphql}\"",
-    "test": "NODE_ENV=test node initialize-test-db.js && jest --runInBand",
+    "test":
+      "yarn check --verify-tree && NODE_ENV=test node initialize-test-db.js && jest --runInBand",
     "coverage": "NODE_ENV=test node initialize-test-db.js && jest --coverage --runInBand",
     "migrate": "knex migrate:latest --knexfile=server/models/knexfile.js",
     "migrate:rollback": "knex-migrate down --knexfile=server/models/knexfile.js",
     "test:watch": "yarn test -- --watch",
     "test:notify": "yarn run test:watch -- --notify",
     "prepush": "yarn run lint && yarn typecheck",
-    "update-schema": "./scripts/generate-schema-types.sh",
-    "codegen": "./scripts/codegen.sh",
-    "low-priority": "NODE_ENV=production nodemon --exec ts-node ./server/rabbitmq/workers/low-priority-worker.ts",
-    "high-priority": "NODE_ENV=production nodemon --exec ts-node ./server/rabbitmq/workers/high-priority-worker.ts",
-    "low-priority-dev": "NODE_ENV=development nodemon --exec ts-node ./server/rabbitmq/workers/low-priority-worker.ts",
-    "high-priority-dev": "NODE_ENV=development nodemon --exec ts-node ./server/rabbitmq/workers/high-priority-worker.ts",
+    "update-schema": "yarn check --verify-tree && ./scripts/generate-schema-types.sh",
+    "codegen": "yarn check --verify-tree && ./scripts/codegen.sh",
+    "typegen":
+      "yarn check --verify-tree && ./scripts/generate-schema-types.sh && ./scripts/codegen.sh",
+    "low-priority":
+      "NODE_ENV=production nodemon --exec ts-node ./server/rabbitmq/workers/low-priority-worker.ts",
+    "high-priority":
+      "NODE_ENV=production nodemon --exec ts-node ./server/rabbitmq/workers/high-priority-worker.ts",
+    "low-priority-dev":
+      "NODE_ENV=development nodemon --exec ts-node ./server/rabbitmq/workers/low-priority-worker.ts",
+    "high-priority-dev":
+      "NODE_ENV=development nodemon --exec ts-node ./server/rabbitmq/workers/high-priority-worker.ts",
     "docker-prod:start": "docker-compose stop 2>/dev/null; docker-compose up",
-    "docker-prod:restart": "docker-compose stop 2>/dev/null; docker-compose build && docker-compose up",
+    "docker-prod:restart":
+      "docker-compose stop 2>/dev/null; docker-compose build && docker-compose up",
     "docker-prod:stop": "docker-compose stop",
     "docker-prod:migrate": "docker-compose exec web yarn migrate -- --env=production",
     "docker-prod:ts-node": "docker-compose exec web yarn ts-node",
@@ -41,8 +52,10 @@
     "user:add:production": "NODE_ENV=production ts-node ./scripts/add-user.ts",
     "user:remove:dev": "NODE_ENV=development ts-node ./scripts/remove-user.ts",
     "user:remove:production": "NODE_ENV=production ts-node ./scripts/remove-user.ts",
-    "patients:add-admin-tasks-concern:dev": "NODE_ENV=development ts-node ./scripts/add-admin-task-concern-to-patients.ts",
-    "patients:add-admin-tasks-concern:production": "NODE_ENV=production ts-node ./scripts/add-admin-task-concern-to-patients.ts"
+    "patients:add-admin-tasks-concern:dev":
+      "NODE_ENV=development ts-node ./scripts/add-admin-task-concern-to-patients.ts",
+    "patients:add-admin-tasks-concern:production":
+      "NODE_ENV=production ts-node ./scripts/add-admin-task-concern-to-patients.ts"
   },
   "author": "Brennan Moore",
   "jest": {
@@ -68,18 +81,8 @@
       "<rootDir>/app/**/?(*.)(spec|test).ts?(x)",
       "<rootDir>/server/**/?(*.)(spec|test).ts?(x)"
     ],
-    "moduleFileExtensions": [
-      "ts",
-      "tsx",
-      "js",
-      "jsx",
-      "json"
-    ],
-    "setupFiles": [
-      "raf/polyfill",
-      "./browser-mocks.js",
-      "./enzyme-setup.js"
-    ],
+    "moduleFileExtensions": ["ts", "tsx", "js", "jsx", "json"],
+    "setupFiles": ["raf/polyfill", "./browser-mocks.js", "./enzyme-setup.js"],
     "setupTestFrameworkScriptFile": "./jest-setup.js",
     "globals": {
       "ts-jest": {

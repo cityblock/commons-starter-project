@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { compose, graphql } from 'react-apollo';
+import { graphql } from 'react-apollo';
 import * as questionQuery from '../graphql/queries/get-question.graphql';
 import {
   questionConditionDeleteMutationVariables,
@@ -13,11 +13,14 @@ export interface IDeleteOptions {
 }
 
 interface IProps {
-  question?: FullQuestionFragment;
   answer: FullAnswerFragment;
 }
 
-class QuestionAnswerOption extends React.Component<IProps> {
+interface IGraphqlProps {
+  question?: FullQuestionFragment;
+}
+
+class QuestionAnswerOption extends React.Component<IProps & IGraphqlProps> {
   render() {
     const { question, answer } = this.props;
     const conditionText =
@@ -26,13 +29,11 @@ class QuestionAnswerOption extends React.Component<IProps> {
   }
 }
 
-export default compose(
-  graphql(questionQuery as any, {
-    options: (props: IProps) => ({
-      variables: { questionId: props.answer.questionId },
-    }),
-    props: ({ data }) => ({
-      question: data ? (data as any).question : null,
-    }),
+export default graphql<IGraphqlProps, IProps>(questionQuery as any, {
+  options: (props: IProps) => ({
+    variables: { questionId: props.answer.questionId },
   }),
-)(QuestionAnswerOption);
+  props: ({ data }) => ({
+    question: data ? (data as any).question : null,
+  }),
+})(QuestionAnswerOption);

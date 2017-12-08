@@ -1,0 +1,20 @@
+#import "../fragments/full-patient-search-result.graphql"
+
+query getPatientSearch($query: String!, $pageNumber: Int!, $pageSize: Int!) {
+  patientSearch(
+    query: $query
+    pageNumber: $pageNumber
+    pageSize: $pageSize
+  ) {
+    edges {
+      node {
+        ...FullPatientSearchResult
+      }
+    }
+    pageInfo {
+      hasPreviousPage
+      hasNextPage
+    }
+    total
+  }
+}

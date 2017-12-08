@@ -166,6 +166,12 @@ export const SPANISH_TRANSLATION = {
     'patientMap.emptyNextUpDetail':
       'Agregue preocupaciones aquí que el paciente y el equipo de atención no quieren enfocarse en este momento, pero le gustaría hacer un seguimiento de',
     /* tslint:enable:max-line-length */
+    'patientSearch.placeholder': 'Buscar miembro...',
+    'patientSearch.resultsDescription': 'miembros encontrados',
+    'patientSearch.resultsTitle': 'Resultados de la búsqueda:',
+    'patientSearch.search': 'Buscar',
+    'patientSearch.searchDescription': 'Buscar por nombre o apellido',
+    'patientSearch.searchTitle': 'Buscar miembro',
     'header.settings': 'Ajustes',
     'header.search': 'Buscar',
     'header.patients': 'Pacientes',

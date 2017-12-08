@@ -27,6 +27,10 @@ interface IEditPatient extends Partial<IPatientEditableFields> {
   scratchPad?: string;
 }
 
+interface IPatientSearchResult {
+  userCareTeam: boolean;
+}
+
 type GetByOptions = 'athenaPatientId';
 
 /* tslint:disable:member-ordering */
@@ -53,9 +57,9 @@ export default class Patient extends BaseModel {
       id: { type: 'string' },
       athenaPatientId: { type: 'number' },
       homeClinicId: { type: 'string' },
-      firstName: { type: 'string' },
+      firstName: { type: 'string', minLength: 1 }, // cannot be blank
       middleName: { type: 'string' },
-      lastName: { type: 'string' },
+      lastName: { type: 'string', minLength: 1 }, // cannot be blank
       language: { type: 'string' },
       gender: { type: 'string' },
       dateOfBirth: { type: 'string' },
@@ -169,16 +173,37 @@ export default class Patient extends BaseModel {
   }
 
   static async search(
-    query: string,
-    { pageNumber, pageSize }: IPaginationOptions,
-  ): Promise<IPaginatedResults<Patient>> {
-    const patientsResult = await this.query()
+    query: string, {
+    pageNumber,
+    pageSize,
+    }: IPaginationOptions,
+    userId?: string): Promise<IPaginatedResults<Patient & IPatientSearchResult>> {
+
+    if (!userId) {
+      return Promise.reject('Must be logged in to search patients');
+    } else if (!query) {
+      return Promise.reject('Must provide a search term');
+    }
+
+    const patientsResult = (await this.query()
+      .select(
+        'patient.*',
+        this.raw(
+          '(CASE WHEN care_team."userId" IS NULL THEN FALSE ELSE TRUE END) AS "userCareTeam"',
+        ),
+      )
+      .joinRaw(
+        'LEFT JOIN care_team ON patient.id = care_team."patientId" AND care_team."userId" = ?',
+        userId,
+      )
       .whereRaw(
         `similarity("firstName" || \' \' || "lastName", ?) > ${SIMILARITY_THRESHOLD}`,
         query,
       )
+      .groupBy('patient.id', 'care_team.userId')
+      .orderBy('userCareTeam', 'DESC')
       .orderByRaw('"firstName" || \' \' || "lastName" <-> ?', query)
-      .page(pageNumber, pageSize);
+      .page(pageNumber, pageSize) as IPaginatedResults<Patient & IPatientSearchResult>);
 
     return {
       results: patientsResult.results,

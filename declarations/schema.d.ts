@@ -48,7 +48,7 @@ declare module 'schema' {
     /**
     description: Patient search
   */
-    patientSearch: IPatientEdges | null;
+    patientSearch: IPatientSearchResultEdges | null;
     /**
     description: A single clinic
   */
@@ -310,7 +310,7 @@ declare module 'schema' {
   /**
     description: An object with a Globally Unique ID
   */
-  type uniqueId = IUser | IPatient | IClinic | ITask | IPatientGoal | IPatientConcern | IConcern | IGoalSuggestionTemplate | ITaskTemplate | ITaskComment | IRiskArea | IQuestion | IAnswer | IScreeningTool | IScreeningToolScoreRange | IQuestionCondition | IPatientAnswer | IPatientScreeningToolSubmission | ICarePlanSuggestion | IEventNotification | ITaskEvent | IProgressNote | IProgressNoteTemplate | IPatientTaskSuggestion | IPatientAnswerEvent | ICarePlanUpdateEvent | IQuickCall | IComputedField;
+  type uniqueId = IUser | IPatient | IPatientSearchResult | IClinic | ITask | IPatientGoal | IPatientConcern | IConcern | IGoalSuggestionTemplate | ITaskTemplate | ITaskComment | IRiskArea | IQuestion | IAnswer | IScreeningTool | IScreeningToolScoreRange | IQuestionCondition | IPatientAnswer | IPatientScreeningToolSubmission | ICarePlanSuggestion | IEventNotification | ITaskEvent | IProgressNote | IProgressNoteTemplate | IPatientTaskSuggestion | IPatientAnswerEvent | ICarePlanUpdateEvent | IQuickCall | IComputedField;
 
   /**
     description: An object with a Globally Unique ID
@@ -356,7 +356,7 @@ declare module 'schema' {
     description: Patient edges
   */
   interface IPatientEdges {
-    edges: Array<IPatientNode> | null;
+    edges: Array<IPatientNode>;
     pageInfo: IPageInfo;
   }
 
@@ -392,6 +392,35 @@ declare module 'schema' {
   */
   interface IPatientScratchPad {
     text: string | null;
+  }
+
+  /**
+    description: Patient search result edges
+  */
+  interface IPatientSearchResultEdges {
+    edges: Array<IPatientSearchResultNode>;
+    pageInfo: IPageInfo;
+    total: number;
+  }
+
+  /**
+    description: Patient search result node
+  */
+  interface IPatientSearchResultNode {
+    node: IPatientSearchResult | null;
+    cursor: string;
+  }
+
+  /**
+    description: Patient search result
+  */
+  interface IPatientSearchResult {
+    id: string;
+    firstName: string;
+    lastName: string;
+    dateOfBirth: string | null;
+    gender: string | null;
+    userCareTeam: boolean;
   }
 
   /**

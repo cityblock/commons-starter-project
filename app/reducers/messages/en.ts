@@ -157,6 +157,12 @@ export const ENGLISH_TRANSLATION = {
     'patientMap.emptyNextUpDetail':
       'Add concerns here that the patient and the care team do not want to focus on right now but would like to keep track of',
     /* tslint:enable:max-line-length */
+    'patientSearch.placeholder': 'Search for member...',
+    'patientSearch.resultsDescription': 'members found',
+    'patientSearch.resultsTitle': 'Search results:',
+    'patientSearch.search': 'Search',
+    'patientSearch.searchDescription': 'Search by first name or last name',
+    'patientSearch.searchTitle': 'Search for member',
     'header.settings': 'Settings',
     'header.search': 'Search',
     'header.patients': 'Patients',

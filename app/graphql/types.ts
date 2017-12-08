@@ -1725,7 +1725,7 @@ export type getPatientPanelQuery = {
         consentToText: boolean | null,
         consentToCall: boolean | null,
       } | null,
-    } | null > | null,
+    } >,
     pageInfo:  {
       hasPreviousPage: boolean,
       hasNextPage: boolean,
@@ -2007,6 +2007,33 @@ export type getPatientScreeningToolSubmissionQuery = {
     screeningToolScoreRange:  {
       description: string,
     } | null,
+  } | null,
+};
+
+export type getPatientSearchQueryVariables = {
+  query: string,
+  pageNumber: number,
+  pageSize: number,
+};
+
+export type getPatientSearchQuery = {
+  // Patient search
+  patientSearch:  {
+    edges:  Array< {
+      node:  {
+        id: string,
+        firstName: string,
+        lastName: string,
+        dateOfBirth: string | null,
+        gender: string | null,
+        userCareTeam: boolean,
+      } | null,
+    } >,
+    pageInfo:  {
+      hasPreviousPage: boolean,
+      hasNextPage: boolean,
+    },
+    total: number,
   } | null,
 };
 
@@ -7194,6 +7221,15 @@ export type FullPatientScreeningToolSubmissionFragment = {
   screeningToolScoreRange:  {
     description: string,
   } | null,
+};
+
+export type FullPatientSearchResultFragment = {
+  id: string,
+  firstName: string,
+  lastName: string,
+  dateOfBirth: string | null,
+  gender: string | null,
+  userCareTeam: boolean,
 };
 
 export type FullProgressNoteActivityFragment = {

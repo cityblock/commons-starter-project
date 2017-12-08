@@ -2,10 +2,11 @@ import { isNil, omitBy } from 'lodash';
 import { transaction } from 'objection';
 import {
   IPatient,
-  IPatientEdges,
   IPatientEditInput,
-  IPatientNode,
   IPatientScratchPad,
+  IPatientSearchResult,
+  IPatientSearchResultEdges,
+  IPatientSearchResultNode,
   IPatientSetupInput,
 } from 'schema';
 import { getAthenaPatientIdFromCreate } from '../apis/redox/formatters';
@@ -148,16 +149,16 @@ export async function patientScratchPadEdit(
 export async function resolvePatientSearch(
   root: any,
   { query, pageNumber, pageSize }: IPatientSearchOptions,
-  { userRole }: IContext,
-): Promise<IPatientEdges> {
-  let patients: IPaginatedResults<Patient>;
+  { userRole, userId }: IContext,
+): Promise<IPatientSearchResultEdges> {
+  let patients: IPaginatedResults<IPatientSearchResult>;
 
   await accessControls.isAllowedForUser(userRole, 'view', 'patient');
 
-  patients = await Patient.search(query, { pageNumber, pageSize });
+  patients = await Patient.search(query, { pageNumber, pageSize }, userId);
 
   const patientEdges = patients.results.map(
-    (patient, i) => formatRelayEdge(patient, patient.id) as IPatientNode,
+    (patient, i) => formatRelayEdge(patient, patient.id) as IPatientSearchResultNode,
   );
 
   const hasPreviousPage = pageNumber !== 0;
@@ -169,5 +170,6 @@ export async function resolvePatientSearch(
       hasPreviousPage,
       hasNextPage,
     },
+    total: patients.total,
   };
 }

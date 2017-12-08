@@ -19,8 +19,10 @@ exports[`renders header 1`] = `
           className="mark"
         />
       </a>
-      <div
+      <a
         className="navItem"
+        href="/search"
+        onClick={[Function]}
       >
         <div
           className="searchIcon"
@@ -30,7 +32,7 @@ exports[`renders header 1`] = `
         >
           Search
         </div>
-      </div>
+      </a>
       <a
         className="navItem"
         href="/patients"

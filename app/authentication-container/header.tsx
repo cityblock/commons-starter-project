@@ -94,12 +94,12 @@ class Header extends React.Component<allProps> {
             <Link className={styles.link} to="/">
               <div className={styles.mark} />
             </Link>
-            <div className={styles.navItem}>
+            <Link to={'/search'} className={styles.navItem}>
               <div className={styles.searchIcon} />
               <FormattedMessage id="header.search">
                 {(message: string) => <div className={styles.navText}>{message}</div>}
               </FormattedMessage>
-            </div>
+            </Link>
             <Link to={'/patients'} className={styles.navItem}>
               <div className={styles.patientsIcon} />
               <FormattedMessage id="header.patients">

@@ -1,0 +1,6 @@
+@import '../../shared/css/sizes';
+
+.container {
+  padding: var(--medium-gutter);
+  width: 100%;
+}

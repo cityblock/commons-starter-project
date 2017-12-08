@@ -13,6 +13,7 @@ import PatientEnrollmentContainer from './patient-enrollment-container/patient-e
 /* tslint:enable:max-line-length */
 import PatientPanelContainer from './patient-panel-container/patient-panel-container';
 import PatientProfileContainer from './patient-profile-container/patient-profile-container';
+import PatientSearchContainer from './patient-search-container/patient-search-container';
 import SettingsContainer from './settings-container/settings-container';
 import TasksContainer from './tasks-container/tasks-container';
 
@@ -37,6 +38,7 @@ export default (
         />
         <Route exact path="/tasks/:taskId?" component={TasksContainer} />
         <Route exact path="/settings" component={SettingsContainer} />
+        <Route exact path="/search" component={PatientSearchContainer} />
         <Route exact path="/patient-intake" component={PatientEnrollmentContainer} />
         <Route exact path="/patients" component={PatientPanelContainer} />
         <Route exact path="/patients/:patientId" component={PatientRedirect} />

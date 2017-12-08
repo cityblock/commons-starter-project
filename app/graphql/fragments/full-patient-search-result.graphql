@@ -1,0 +1,8 @@
+fragment FullPatientSearchResult on PatientSearchResult {
+  id
+  firstName
+  lastName
+  dateOfBirth
+  gender
+  userCareTeam
+}

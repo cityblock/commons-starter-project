@@ -202,84 +202,153 @@ describe('patient', () => {
 
   describe('patient search', () => {
     beforeEach(async () => {
-      await createPatient(createMockPatient(11, homeClinicId, 'Jon', 'Snow'), user.id);
-      await createPatient(createMockPatient(12, homeClinicId, 'Arya', 'Stark'), user.id);
-      await createPatient(createMockPatient(13, homeClinicId, 'Sansa', 'Stark'), user.id);
+      const user2 = await User.create({
+        email: 'ygritte@beyondthewall.com',
+        userRole,
+        homeClinicId,
+      });
+      await createPatient(createMockPatient(11, homeClinicId, "Jon", "Snow"), user.id);
+      await createPatient(createMockPatient(12, homeClinicId, "Robb", "Stark"), user2.id);
+      await createPatient(createMockPatient(13, homeClinicId, "Arya", "Stark"), user.id);
+      await createPatient(createMockPatient(14, homeClinicId, "Sansa", "Stark"), user.id);
     });
 
     it('searches for a single patients', async () => {
       const query = `{
         patientSearch(query: "jon", pageNumber: 0, pageSize: 10) {
-          edges { node { firstName, lastName } }
+          edges { node { firstName, lastName, userCareTeam } }
+          total
         }
       }`;
       const result = await graphql(schema, query, null, {
         db,
         userRole,
+        userId: user.id,
       });
 
       expect(cloneDeep(result.data!.patientSearch)).toMatchObject({
-        edges: [
-          {
-            node: {
-              firstName: 'Jon',
-              lastName: 'Snow',
-            },
+        edges: [{
+          node: {
+            firstName: 'Jon',
+            lastName: 'Snow',
+            userCareTeam: true,
           },
-        ],
+        }],
+        total: 1,
       });
     });
 
     it('searches for multiple patients', async () => {
       const query = `{
         patientSearch(query: "stark", pageNumber: 0, pageSize: 10) {
-          edges { node { firstName, lastName } }
+          edges { node { firstName, lastName, userCareTeam } }
+          total
         }
       }`;
       const result = await graphql(schema, query, null, {
         db,
         userRole,
+        userId: user.id,
       });
 
       expect(cloneDeep(result.data!.patientSearch)).toMatchObject({
-        edges: [
-          {
-            node: {
-              firstName: 'Arya',
-              lastName: 'Stark',
-            },
+        edges: [{
+          node: {
+            lastName: 'Stark',
+            userCareTeam: true,
           },
-          {
-            node: {
-              firstName: 'Sansa',
-              lastName: 'Stark',
-            },
+        }, {
+          node: {
+            lastName: 'Stark',
+            userCareTeam: true,
           },
-        ],
+        }, {
+          node: {
+            firstName: 'Robb',
+            lastName: 'Stark',
+            userCareTeam: false,
+          },
+        }],
+        total: 3,
       });
     });
 
     it('fuzzy searches for a patient', async () => {
       const query = `{
         patientSearch(query: "john", pageNumber: 0, pageSize: 10) {
-          edges { node { firstName, lastName } }
+          edges { node { firstName, lastName, userCareTeam } }
+          total
         }
       }`;
       const result = await graphql(schema, query, null, {
         db,
         userRole,
+        userId: user.id,
       });
 
       expect(cloneDeep(result.data!.patientSearch)).toMatchObject({
-        edges: [
-          {
-            node: {
-              firstName: 'Jon',
-              lastName: 'Snow',
-            },
+        edges: [{
+          node: {
+            firstName: 'Jon',
+            lastName: 'Snow',
+            userCareTeam: true,
           },
-        ],
+        }],
+        total: 1,
       });
+    });
+
+    it('returns no search results', async () => {
+      const query = `{
+        patientSearch(query: "daenerys", pageNumber: 0, pageSize: 10) {
+          edges { node { firstName, lastName, userCareTeam } }
+          total
+        }
+      }`;
+      const result = await graphql(schema, query, null, {
+        db,
+        userRole,
+        userId: user.id,
+      });
+
+      expect(cloneDeep(result.data!.patientSearch)).toMatchObject({
+        edges: [],
+        total: 0,
+      });
+    });
+
+    it('catches error if not logged in', async () => {
+      const query = `{
+        patientSearch(query: "daenerys", pageNumber: 0, pageSize: 10) {
+          edges { node { firstName, lastName, userCareTeam } }
+          total
+        }
+      }`;
+
+      const result = await graphql(schema, query, null, {
+        db,
+        userRole,
+        userId: '',
+      });
+
+      expect(result.errors![0].message).toBe('Must be logged in to search patients');
+    });
+
+    it('catches error if empty string searched', async () => {
+      const query = `{
+        patientSearch(query: "", pageNumber: 0, pageSize: 10) {
+          edges { node { firstName, lastName, userCareTeam } }
+          total
+        }
+      }`;
+
+      const result = await graphql(schema, query, null, {
+        db,
+        userRole,
+        userId: user.id,
+      });
+
+      expect(result.errors![0].message).toBe('Must provide a search term');
     });
   });
 });

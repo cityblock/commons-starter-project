@@ -39,6 +39,7 @@ TypeScript. Tested using Jest. Hosted on [Aptible][].
   createdb commons_test
   psql -d commons -c "create extension if not exists btree_gist"
   psql -d commons_test -c "create extension if not exists btree_gist"
+  psql -d commons_test -c "create extension pg_trgm"
   ```
 
 * Run migrations with `yarn migrate`
@@ -53,8 +54,8 @@ TypeScript. Tested using Jest. Hosted on [Aptible][].
 
 Our test database uses postgres. Before running tests, ensure that postgres is running and create
 the database `commons_test` and role `root` (`psql -c "create database commons_test"; psql -c
-"create role root with login"; psql -d commons_test -c "create extension btree_gist"; psql -c "alter
-database commons_test owner to root"`)
+"create role root with login"; psql -d commons_test -c "create extension btree_gist"; psql -d commons_test -c "create extension pg_trgm"
+; psql -c "alter database commons_test owner to root"`)
 
 Next run:
 

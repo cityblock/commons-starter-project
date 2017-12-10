@@ -1,6 +1,7 @@
 import * as uuid from 'uuid/v4';
 import Db from '../../db';
 import Answer from '../answer';
+import ComputedField from '../computed-field';
 import ProgressNoteTemplate from '../progress-note-template';
 import Question from '../question';
 import RiskArea from '../risk-area';
@@ -96,6 +97,35 @@ describe('question model', () => {
       progressNoteTemplateId: progressNoteTemplate.id,
       order: 1,
     });
+  });
+
+  it('creates and gets a computed field question and auto-sets answerType', async () => {
+    const computedField = await ComputedField.create({
+      label: 'Computed Field',
+      slug: 'computed-field',
+      dataType: 'boolean',
+    });
+    const question = await Question.create({
+      title: 'testing?',
+      answerType: 'dropdown',
+      riskAreaId: riskArea.id,
+      type: 'riskArea',
+      order: 1,
+      computedFieldId: computedField.id,
+    });
+    expect(question).toMatchObject({
+      title: 'testing?',
+      answerType: 'radio', // answerType gets overwritten with radio for computedField questions
+      riskAreaId: riskArea.id,
+      order: 1,
+    });
+    expect(await Question.get(question.id)).toMatchObject({
+      title: 'testing?',
+      answerType: 'radio',
+      riskAreaId: riskArea.id,
+      order: 1,
+    });
+    expect(question.computedField).toEqual(computedField);
   });
 
   it('should throw an error if a question does not exist for the id', async () => {

@@ -364,6 +364,10 @@ export class Question extends React.Component<allProps, IState> {
                   onBlur={this.onBlur}
                 />
               </div>
+              <div className={styles.smallText}>Computed Field:</div>
+              <div className={styles.largeText}>
+                {question.computedField ? question.computedField.slug : 'Not a computed field'}
+              </div>
               <br />
               <div className={styles.borderTop}>
                 <br />

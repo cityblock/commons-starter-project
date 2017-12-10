@@ -158,6 +158,8 @@ export const question = {
       answerId: 'answer-id',
     },
   ],
+  computedFieldId: null,
+  computedField: null,
 };
 
 export const questionWithAnswerWithConcernAndGoal = {

@@ -4,6 +4,7 @@ import { compose, graphql } from 'react-apollo';
 import { connect, Dispatch } from 'react-redux';
 import { Route } from 'react-router-dom';
 import { push } from 'react-router-redux';
+import * as computedFieldsQuery from '../graphql/queries/get-computed-fields.graphql';
 /* tslint:disable:max-line-length */
 import * as progressNoteTemplatesQuery from '../graphql/queries/get-progress-note-templates.graphql';
 import * as questionsQuery from '../graphql/queries/get-questions.graphql';
@@ -14,6 +15,7 @@ import * as questionDeleteMutationGraphql from '../graphql/queries/question-dele
 import {
   questionDeleteMutation,
   questionDeleteMutationVariables,
+  FullComputedFieldFragment,
   FullProgressNoteTemplateFragment,
   FullQuestionFragment,
   FullRiskAreaFragment,
@@ -41,6 +43,7 @@ interface IGraphqlProps {
   riskAreas?: FullRiskAreaFragment[];
   screeningTools?: FullScreeningToolFragment[];
   progressNoteTemplates?: FullProgressNoteTemplateFragment[];
+  computedFields?: FullComputedFieldFragment[];
   loading?: boolean;
   error?: string;
   deleteQuestion: (
@@ -191,6 +194,7 @@ class BuilderQuestions extends React.Component<allProps, IState> {
       routeBase,
       progressNoteTemplateId,
       progressNoteTemplates,
+      computedFields,
     } = this.props;
     const { showCreateQuestion } = this.state;
     const questionsList = questions || [];
@@ -215,6 +219,7 @@ class BuilderQuestions extends React.Component<allProps, IState> {
         progressNoteTemplateId={progressNoteTemplateId}
         onClose={this.hideCreateQuestion}
         routeBase={routeBase}
+        computedFields={computedFields}
       />
     ) : null;
     const renderedQuestion = (props: any) => (
@@ -388,6 +393,13 @@ export default compose(
       screeningToolsLoading: data ? data.loading : false,
       screeningToolsError: data ? data.error : null,
       screeningTools: data ? (data as any).screeningTools : null,
+    }),
+  }),
+  graphql<IGraphqlProps, IProps, allProps>(computedFieldsQuery as any, {
+    props: ({ data }) => ({
+      computedFieldsLoading: data ? data.loading : false,
+      computedFieldsError: data ? data.error : null,
+      computedFields: data ? (data as any).computedFields : null,
     }),
   }),
 )(BuilderQuestions);

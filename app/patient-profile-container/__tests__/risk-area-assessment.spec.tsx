@@ -33,6 +33,8 @@ const riskAreaQuestions = [
     screeningToolId: null,
     order: 2,
     applicableIfType: 'allTrue' as any,
+    computedFieldId: null,
+    computedField: null,
     answers: [
       {
         id: 'question-2-answer-1',

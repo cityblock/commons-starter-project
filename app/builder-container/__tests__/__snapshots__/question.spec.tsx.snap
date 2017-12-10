@@ -139,6 +139,16 @@ exports[`shallow rendered renders with screening tool 1`] = `
           value={1}
         />
       </div>
+      <div
+        className="smallText"
+      >
+        Computed Field:
+      </div>
+      <div
+        className="largeText"
+      >
+        Not a computed field
+      </div>
       <br />
       <div
         className="borderTop"
@@ -298,6 +308,8 @@ exports[`shallow rendered renders with screening tool 1`] = `
                 },
               ],
               "applicableIfType": "allTrue",
+              "computedField": null,
+              "computedFieldId": null,
               "createdAt": "Thu Jul 13 2017 16:52:56 GMT-0400 (EDT)",
               "deletedAt": null,
               "dueAt": "Thu Jul 13 2017 16:52:56 GMT-0400 (EDT)",

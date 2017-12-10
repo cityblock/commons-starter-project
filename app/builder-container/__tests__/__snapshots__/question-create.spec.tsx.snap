@@ -47,68 +47,91 @@ exports[`renders question 1`] = `
           type="number"
           value={1}
         />
-      </div>
-    </div>
-    <div
-      className="flexInputGroup"
-    >
-      <select
-        className="select inputSmall flexInputItem"
-        name="applicableIfType"
-        onChange={[Function]}
-        value="Select one"
-      >
-        <option
-          disabled={true}
-          value="Select one"
+        <select
+          className="select"
+          name="computedFieldId"
+          onChange={[Function]}
+          required={undefined}
+          value=""
         >
-          Select one (Required!)
-        </option>
-        <option
-          value="oneTrue"
+          <option
+            disabled={true}
+            value=""
+          >
+            Set computed field (optional)
+          </option>
+          <option
+            disabled={undefined}
+            value="not-computed-field"
+          >
+            Not a computed field
+          </option>
+        </select>
+        <select
+          className="select"
+          name="applicableIfType"
+          onChange={[Function]}
+          required={true}
+          value=""
         >
-          one true
-        </option>
-        <option
-          value="allTrue"
-        >
-          all true
-        </option>
-      </select>
-      <select
-        className="select inputSmall flexInputItem"
-        name="answerType"
-        onChange={[Function]}
-        required={true}
-        value="dropdown"
-      >
-        <option
-          disabled={true}
-          value="Select one"
-        >
-          Select one (Required!)
-        </option>
-        <option
+          <option
+            disabled={true}
+            value=""
+          >
+            Select an applicable if type (required!)
+          </option>
+          <option
+            disabled={undefined}
+            value="oneTrue"
+          >
+            One true
+          </option>
+          <option
+            disabled={undefined}
+            value="allTrue"
+          >
+            All true
+          </option>
+        </select>
+        <select
+          className="select"
+          name="answerType"
+          onChange={[Function]}
+          required={true}
           value="dropdown"
         >
-          dropdown
-        </option>
-        <option
-          value="radio"
-        >
-          radio
-        </option>
-        <option
-          value="freetext"
-        >
-          freetext
-        </option>
-        <option
-          value="multiselect"
-        >
-          multiselect
-        </option>
-      </select>
+          <option
+            disabled={true}
+            value=""
+          >
+            Select an answer type (required!)
+          </option>
+          <option
+            disabled={undefined}
+            value="dropdown"
+          >
+            Dropdown
+          </option>
+          <option
+            disabled={undefined}
+            value="radio"
+          >
+            Radio
+          </option>
+          <option
+            disabled={undefined}
+            value="freetext"
+          >
+            Free Text
+          </option>
+          <option
+            disabled={undefined}
+            value="multiselect"
+          >
+            Multiselect
+          </option>
+        </select>
+      </div>
     </div>
     <div
       className="formBottom"

@@ -1,6 +1,7 @@
 import { Model, QueryBuilder, RelationMappings } from 'objection';
 import Answer from './answer';
 import BaseModel from './base-model';
+import ComputedField from './computed-field';
 import ProgressNoteTemplate from './progress-note-template';
 import QuestionCondition from './question-condition';
 import RiskArea from './risk-area';
@@ -14,17 +15,26 @@ interface IQuestionEditableFields {
   applicableIfType?: QuestionConditionType;
 }
 
-interface IRiskAreaQuestion extends IQuestionEditableFields {
+interface IQuestionCreatableFields {
+  title: string;
+  answerType: AnswerType;
+  validatedSource?: string;
+  order: number;
+  applicableIfType?: QuestionConditionType;
+  computedFieldId?: string;
+}
+
+interface IRiskAreaQuestion extends IQuestionCreatableFields {
   riskAreaId: string;
   type: 'riskArea';
 }
 
-interface IScreeningToolQuestion extends IQuestionEditableFields {
+interface IScreeningToolQuestion extends IQuestionCreatableFields {
   screeningToolId: string;
   type: 'screeningTool';
 }
 
-interface IProgressNoteTemplateQuestion extends IQuestionEditableFields {
+interface IProgressNoteTemplateQuestion extends IQuestionCreatableFields {
   progressNoteTemplateId: string;
   type: 'progressNoteTemplate';
 }
@@ -39,7 +49,7 @@ type QuestionConditionType = 'allTrue' | 'oneTrue';
 
 /* tslint:disable:max-line-length */
 const EAGER_QUERY =
-  '[progressNoteTemplate, applicableIfQuestionConditions, answers(orderByOrder).[concernSuggestions, goalSuggestions.[taskTemplates]]]';
+  '[computedField, progressNoteTemplate, applicableIfQuestionConditions, answers(orderByOrder).[concernSuggestions, goalSuggestions.[taskTemplates]]]';
 /* tslint:enable:max-line-length */
 
 /* tslint:disable:member-ordering */
@@ -57,6 +67,7 @@ export default class Question extends BaseModel {
   applicableIfType: QuestionConditionType;
   validatedSource: string;
   order: number;
+  computedField: ComputedField;
 
   static tableName = 'question';
 
@@ -73,6 +84,7 @@ export default class Question extends BaseModel {
       order: { type: 'integer' },
       deletedAt: { type: 'string' },
       validatedSource: { type: 'string' },
+      computedFieldId: { type: 'string' },
     },
   };
 
@@ -121,6 +133,15 @@ export default class Question extends BaseModel {
         to: 'screening_tool.id',
       },
     },
+
+    computedField: {
+      relation: Model.BelongsToOneRelation,
+      modelClass: 'computed-field',
+      join: {
+        from: 'question.computedFieldId',
+        to: 'computed_field.id',
+      },
+    },
   };
 
   static modifyEager(query: QueryBuilder<Question>): QueryBuilder<Question> {
@@ -160,6 +181,12 @@ export default class Question extends BaseModel {
   }
 
   static async create(input: IQuestionCreateFields) {
+    const { computedFieldId } = input;
+
+    if (computedFieldId) {
+      input.answerType = 'radio';
+    }
+
     return this.modifyEager(this.query()).insertAndFetch(input);
   }
 

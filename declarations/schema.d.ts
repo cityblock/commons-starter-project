@@ -310,7 +310,7 @@ declare module 'schema' {
   /**
     description: An object with a Globally Unique ID
   */
-  type uniqueId = IUser | IPatient | IPatientSearchResult | IClinic | ITask | IPatientGoal | IPatientConcern | IConcern | IGoalSuggestionTemplate | ITaskTemplate | ITaskComment | IRiskArea | IQuestion | IAnswer | IScreeningTool | IScreeningToolScoreRange | IQuestionCondition | IPatientAnswer | IPatientScreeningToolSubmission | ICarePlanSuggestion | IEventNotification | ITaskEvent | IProgressNote | IProgressNoteTemplate | IPatientTaskSuggestion | IPatientAnswerEvent | ICarePlanUpdateEvent | IQuickCall | IComputedField;
+  type uniqueId = IUser | IPatient | IPatientSearchResult | IClinic | ITask | IPatientGoal | IPatientConcern | IConcern | IGoalSuggestionTemplate | ITaskTemplate | ITaskComment | IRiskArea | IQuestion | IAnswer | IScreeningTool | IScreeningToolScoreRange | IQuestionCondition | IComputedField | IPatientAnswer | IPatientScreeningToolSubmission | ICarePlanSuggestion | IEventNotification | ITaskEvent | IProgressNote | IProgressNoteTemplate | IPatientTaskSuggestion | IPatientAnswerEvent | ICarePlanUpdateEvent | IQuickCall;
 
   /**
     description: An object with a Globally Unique ID
@@ -673,6 +673,8 @@ declare module 'schema' {
     applicableIfQuestionConditions: Array<IQuestionCondition>;
     applicableIfType: IQuestionConditionTypeOptionsEnum | null;
     order: number;
+    computedFieldId: string | null;
+    computedField: IComputedField | null;
   }
 
   /**
@@ -747,6 +749,20 @@ declare module 'schema' {
 
 
   type IQuestionConditionTypeOptionsEnum = 'allTrue' | 'oneTrue';
+
+
+  interface IComputedField {
+    id: string;
+    slug: string;
+    label: string;
+    dataType: IComputedFieldDataTypesEnum;
+    createdAt: string;
+    updatedAt: string;
+    deletedAt: string | null;
+  }
+
+
+  type IComputedFieldDataTypesEnum = 'boolean' | 'string' | 'number';
 
 
   type IQuestionFilterTypeEnum = 'progressNoteTemplate' | 'riskArea' | 'screeningTool';
@@ -1021,20 +1037,6 @@ declare module 'schema' {
 
 
   type IQuickCallDirectionEnum = 'Inbound' | 'Outbound';
-
-
-  interface IComputedField {
-    id: string;
-    slug: string;
-    label: string;
-    dataType: IComputedFieldDataTypesEnum;
-    createdAt: string;
-    updatedAt: string;
-    deletedAt: string | null;
-  }
-
-
-  type IComputedFieldDataTypesEnum = 'boolean' | 'string' | 'number';
 
 
   type IComputedFieldOrderOptionsEnum = 'labelDesc' | 'labelAsc' | 'slugDesc' | 'slugAsc';
@@ -1669,6 +1671,7 @@ declare module 'schema' {
     progressNoteTemplateId?: string | null;
     order: number;
     applicableIfType?: IQuestionConditionTypeOptionsEnum | null;
+    computedFieldId?: string | null;
   }
 
 

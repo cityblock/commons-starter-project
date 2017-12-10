@@ -1,4 +1,3 @@
-import * as classNames from 'classnames';
 import * as React from 'react';
 import { compose, graphql } from 'react-apollo';
 import { connect, Dispatch } from 'react-redux';
@@ -10,12 +9,18 @@ import {
   questionCreateMutation,
   questionCreateMutationVariables,
   AnswerTypeOptions,
+  FullComputedFieldFragment,
 } from '../graphql/types';
 import * as formStyles from '../shared/css/forms.css';
 import * as loadingStyles from '../shared/css/loading-spinner.css';
 import * as questionStyles from '../shared/css/two-panel-right.css';
+import * as builderStyles from '../shared/css/two-panel-right.css';
+import Option from '../shared/library/option/option';
+import Select from '../shared/library/select/select';
 import { IUpdatedField } from '../shared/util/updated-fields';
 import * as styles from './css/risk-area-create.css';
+
+const NOT_COMPUTED_FIELD_ID = 'not-computed-field';
 
 export interface IOptions {
   variables: questionCreateMutationVariables;
@@ -28,6 +33,7 @@ interface IProps {
   routeBase: string;
   onClose: () => any;
   redirectToQuestion?: (questionId: string) => any;
+  computedFields?: FullComputedFieldFragment[];
 }
 
 interface IGraphqlProps {
@@ -60,6 +66,7 @@ class QuestionCreate extends React.Component<allProps, IState> {
         screeningToolId: props.screeningToolId,
         progressNoteTemplateId: props.progressNoteTemplateId,
         applicableIfType: undefined,
+        computedFieldId: undefined,
       },
     };
   }
@@ -68,7 +75,17 @@ class QuestionCreate extends React.Component<allProps, IState> {
     const { question } = this.state;
     const { fieldName, fieldValue } = updatedField;
 
-    (question as any)[fieldName] = fieldValue;
+    if (fieldName === 'computedFieldId') {
+      if (fieldValue === NOT_COMPUTED_FIELD_ID) {
+        question.computedFieldId = undefined;
+        question.answerType = 'dropdown' as AnswerTypeOptions;
+      } else {
+        question.computedFieldId = fieldValue;
+        question.answerType = 'radio' as AnswerTypeOptions;
+      }
+    } else {
+      (question as any)[fieldName] = fieldValue;
+    }
 
     this.setState({ question });
   }
@@ -76,8 +93,6 @@ class QuestionCreate extends React.Component<allProps, IState> {
   onChange(event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) {
     const fieldName = event.target.name;
     const fieldValue = event.target.value;
-
-    this.setState({ [fieldName as any]: fieldValue });
 
     this.onFieldUpdate({ fieldName, fieldValue });
   }
@@ -104,9 +119,42 @@ class QuestionCreate extends React.Component<allProps, IState> {
     return false;
   }
 
+  renderAnswerType() {
+    const { question } = this.state;
+    const { computedFieldId } = question;
+
+    if (!!computedFieldId && computedFieldId !== NOT_COMPUTED_FIELD_ID) {
+      return (
+        <div>
+          <div className={builderStyles.smallText}>Answer Type:</div>
+          <div className={builderStyles.largeText}>{question.answerType}</div>
+        </div>
+      );
+    } else {
+      return (
+        <Select
+          required
+          name="answerType"
+          value={question.answerType || ''}
+          onChange={this.onChange}
+        >
+          <Option value="" disabled={true} messageId="question.selectAnswerType" />
+          <Option value="dropdown" messageId="question.answerTypeDropdown" />
+          <Option value="radio" messageId="question.answerTypeRadio" />
+          <Option value="freetext" messageId="question.answerTypeFreeText" />
+          <Option value="multiselect" messageId="question.answerTypeMultiselect" />
+        </Select>
+      );
+    }
+  }
+
   render() {
     const { loading, question } = this.state;
+    const { computedFields } = this.props;
     const loadingClass = loading ? styles.loading : styles.loadingHidden;
+    const computedFieldOptions = (computedFields || []).map(computedField => (
+      <Option key={computedField.id} value={computedField.id} label={computedField.label} />
+    ));
 
     return (
       <div className={questionStyles.container}>
@@ -136,36 +184,27 @@ class QuestionCreate extends React.Component<allProps, IState> {
                 className={formStyles.input}
                 onChange={this.onChange}
               />
+              <Select
+                name="computedFieldId"
+                value={question.computedFieldId || ''}
+                onChange={this.onChange}
+              >
+                <Option value="" disabled={true} messageId="question.selectComputedField" />
+                <Option value={NOT_COMPUTED_FIELD_ID} messageId="question.notComputedField" />
+                {computedFieldOptions}
+              </Select>
+              <Select
+                required
+                name="applicableIfType"
+                value={question.applicableIfType || ''}
+                onChange={this.onChange}
+              >
+                <Option value="" disabled={true} messageId="question.selectApplicable" />
+                <Option value="oneTrue" messageId="question.applicableOneTrue" />
+                <Option value="allTrue" messageId="question.applicableAllTrue" />
+              </Select>
+              {this.renderAnswerType()}
             </div>
-          </div>
-          <div className={styles.flexInputGroup}>
-            <select
-              name="applicableIfType"
-              value={question.applicableIfType || 'Select one'}
-              onChange={this.onChange}
-              className={classNames(formStyles.select, formStyles.inputSmall, styles.flexInputItem)}
-            >
-              <option value={'Select one'} disabled={true}>
-                Select one (Required!)
-              </option>
-              <option value="oneTrue">one true</option>
-              <option value="allTrue">all true</option>
-            </select>
-            <select
-              required
-              name="answerType"
-              value={question.answerType || 'Select one'}
-              onChange={this.onChange}
-              className={classNames(formStyles.select, formStyles.inputSmall, styles.flexInputItem)}
-            >
-              <option value={'Select one'} disabled={true}>
-                Select one (Required!)
-              </option>
-              <option value="dropdown">dropdown</option>
-              <option value="radio">radio</option>
-              <option value="freetext">freetext</option>
-              <option value="multiselect">multiselect</option>
-            </select>
           </div>
           <div className={styles.formBottom}>
             <div className={styles.formBottomContent}>

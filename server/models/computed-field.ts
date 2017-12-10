@@ -1,3 +1,4 @@
+import { Model, RelationMappings } from 'objection';
 import BaseModel from './base-model';
 
 export type ComputedFieldOrderOptions = 'createdAt' | 'slug' | 'label';
@@ -31,6 +32,17 @@ export default class ComputedField extends BaseModel {
       label: { type: 'string' },
       dataType: { type: 'string' },
       deletedAt: { type: 'string' },
+    },
+  };
+
+  static relationMappings: RelationMappings = {
+    question: {
+      relation: Model.HasOneRelation,
+      modelClass: 'question',
+      join: {
+        from: 'computed_field.id',
+        to: 'question.computedFieldId',
+      },
     },
   };
 

@@ -3014,6 +3014,16 @@ export type getQuestionQuery = {
       questionId: string,
       answerId: string,
     } >,
+    computedFieldId: string | null,
+    computedField:  {
+      id: string,
+      label: string,
+      slug: string,
+      dataType: ComputedFieldDataTypes,
+      createdAt: string,
+      updatedAt: string,
+      deletedAt: string | null,
+    } | null,
   } | null,
 };
 
@@ -3139,6 +3149,16 @@ export type getQuestionsQuery = {
       questionId: string,
       answerId: string,
     } >,
+    computedFieldId: string | null,
+    computedField:  {
+      id: string,
+      label: string,
+      slug: string,
+      dataType: ComputedFieldDataTypes,
+      createdAt: string,
+      updatedAt: string,
+      deletedAt: string | null,
+    } | null,
   } >,
 };
 
@@ -4674,6 +4694,7 @@ export type questionCreateMutationVariables = {
   progressNoteTemplateId?: string | null,
   order: number,
   applicableIfType?: QuestionConditionTypeOptions | null,
+  computedFieldId?: string | null,
 };
 
 export type questionCreateMutation = {
@@ -4793,6 +4814,16 @@ export type questionCreateMutation = {
       questionId: string,
       answerId: string,
     } >,
+    computedFieldId: string | null,
+    computedField:  {
+      id: string,
+      label: string,
+      slug: string,
+      dataType: ComputedFieldDataTypes,
+      createdAt: string,
+      updatedAt: string,
+      deletedAt: string | null,
+    } | null,
   } | null,
 };
 
@@ -4917,6 +4948,16 @@ export type questionDeleteMutation = {
       questionId: string,
       answerId: string,
     } >,
+    computedFieldId: string | null,
+    computedField:  {
+      id: string,
+      label: string,
+      slug: string,
+      dataType: ComputedFieldDataTypes,
+      createdAt: string,
+      updatedAt: string,
+      deletedAt: string | null,
+    } | null,
   } | null,
 };
 
@@ -5046,6 +5087,16 @@ export type questionEditMutation = {
       questionId: string,
       answerId: string,
     } >,
+    computedFieldId: string | null,
+    computedField:  {
+      id: string,
+      label: string,
+      slug: string,
+      dataType: ComputedFieldDataTypes,
+      createdAt: string,
+      updatedAt: string,
+      deletedAt: string | null,
+    } | null,
   } | null,
 };
 
@@ -7931,6 +7982,16 @@ export type FullQuestionFragment = {
     questionId: string,
     answerId: string,
   } >,
+  computedFieldId: string | null,
+  computedField:  {
+    id: string,
+    label: string,
+    slug: string,
+    dataType: ComputedFieldDataTypes,
+    createdAt: string,
+    updatedAt: string,
+    deletedAt: string | null,
+  } | null,
 };
 
 export type FullQuickCallFragment = {

@@ -9,6 +9,7 @@ mutation questionCreate(
   $progressNoteTemplateId: String
   $order: Int!
   $applicableIfType: QuestionConditionTypeOptions
+  $computedFieldId: String
 ) {
   questionCreate(
     input: {
@@ -20,6 +21,7 @@ mutation questionCreate(
       progressNoteTemplateId: $progressNoteTemplateId
       order: $order
       applicableIfType: $applicableIfType
+      computedFieldId: $computedFieldId
     }
   ) {
     ...FullQuestion

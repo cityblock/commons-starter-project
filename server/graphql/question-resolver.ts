@@ -36,6 +36,7 @@ export async function questionCreate(root: any, { input }: IQuestionCreateArgs, 
     answerType: input.answerType,
     validatedSource: input.validatedSource || undefined,
     applicableIfType: input.applicableIfType || undefined,
+    computedFieldId: input.computedFieldId || undefined,
   };
 
   // A bit verbose to handle the typings

@@ -453,6 +453,8 @@ type Question implements uniqueId {
   applicableIfQuestionConditions: [QuestionCondition!]!
   applicableIfType: QuestionConditionTypeOptions
   order: Int!
+  computedFieldId: String
+  computedField: ComputedField
 }
 
 # QuestionCondition
@@ -986,6 +988,7 @@ input QuestionCreateInput {
   progressNoteTemplateId: String
   order: Int!
   applicableIfType: QuestionConditionTypeOptions
+  computedFieldId: String
 }
 
 input QuestionEditInput {

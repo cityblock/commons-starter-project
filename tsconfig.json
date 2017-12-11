@@ -13,8 +13,7 @@
     "typeRoots": ["node_modules/@types"],
     "sourceMap": true,
     "lib": ["es2016", "es2017", "dom", "esnext.asynciterable"],
-    "strict": true,
-    "skipLibCheck": true // NOTE: Remove once apollo fixes https://github.com/apollographql/react-apollo/issues/1286
+    "strict": true
   },
   "include": ["./server/**/*.ts", "./app/**/*.ts", "./app/**/*.tsx", "./declarations/*"],
   "exclude": [

@@ -10,6 +10,8 @@ import ExpandLessIcon = require('react-icons/lib/md/expand-less');
 import ExpandMoreIcon = require('react-icons/lib/md/expand-more');
 import HighlightOffIcon = require('react-icons/lib/md/highlight-off');
 import ExpandArrowIcon = require('react-icons/lib/md/keyboard-arrow-down');
+import KeyboardArrowLeftIcon = require('react-icons/lib/md/keyboard-arrow-left');
+import KeyboardArrowRightIcon = require('react-icons/lib/md/keyboard-arrow-right');
 import MoreVertIcon = require('react-icons/lib/md/more-vert');
 import PhoneIcon = require('react-icons/lib/md/phone');
 import SearchIcon = require('react-icons/lib/md/search');
@@ -28,6 +30,8 @@ const components = {
   expandLess: ExpandLessIcon,
   expandMore: ExpandMoreIcon,
   highlightOff: HighlightOffIcon,
+  keyboardArrowLeft: KeyboardArrowLeftIcon,
+  keyboardArrowRight: KeyboardArrowRightIcon,
   moreVert: MoreVertIcon,
   phone: PhoneIcon,
   search: SearchIcon,

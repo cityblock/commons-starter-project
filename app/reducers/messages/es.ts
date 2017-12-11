@@ -166,12 +166,25 @@ export const SPANISH_TRANSLATION = {
     'patientMap.emptyNextUpDetail':
       'Agregue preocupaciones aquí que el paciente y el equipo de atención no quieren enfocarse en este momento, pero le gustaría hacer un seguimiento de',
     /* tslint:enable:max-line-length */
+    'patientSearch.address': 'Direccion de casa',
+    'patientSearch.dateOfBirth': 'Fecha de nacimiento',
+    'patientSearch.memberId': 'Identificación de miembro',
+    'patientSearch.name': 'Nombre del paciente',
+    'patientSearch.noResults': 'No hay resultados para esta búsqueda',
+    /* tslint:disable:max-line-length */
+    'patientSearch.noResultsDetail':
+      'No hay pacientes coincidentes para esta búsqueda. Verifique su ortografía o intente una nueva búsqueda.',
+    /* tslint:enable:max-line-length */
+    'patientSearch.of': 'de',
     'patientSearch.placeholder': 'Buscar miembro...',
     'patientSearch.resultsDescription': 'miembros encontrados',
+    'patientSearch.resultsDescriptionSingle': 'miembro encontrado',
     'patientSearch.resultsTitle': 'Resultados de la búsqueda:',
+    'patientSearch.resultsPlaceholder': 'Busque pacientes en su equipo de atención',
     'patientSearch.search': 'Buscar',
     'patientSearch.searchDescription': 'Buscar por nombre o apellido',
     'patientSearch.searchTitle': 'Buscar miembro',
+    'patientSearch.status': 'Estado',
     'header.settings': 'Ajustes',
     'header.search': 'Buscar',
     'header.patients': 'Pacientes',

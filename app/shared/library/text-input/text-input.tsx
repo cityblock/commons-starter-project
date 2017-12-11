@@ -12,10 +12,21 @@ interface IProps {
   id?: string; // optional id field for input, likely use with label
   onBlur?: () => void;
   onFocus?: () => void;
+  onKeyDown?: (e: React.KeyboardEvent<HTMLInputElement>) => void;
 }
 
 const TextInput: React.StatelessComponent<IProps> = (props: IProps) => {
-  const { value, onChange, placeholderMessageId, onBlur, onFocus, className, name, id } = props;
+  const {
+    value,
+    onChange,
+    placeholderMessageId,
+    onBlur,
+    onFocus,
+    onKeyDown,
+    className,
+    name,
+    id,
+  } = props;
   const inputStyles = classNames(styles.input, className);
 
   if (placeholderMessageId) {
@@ -29,6 +40,7 @@ const TextInput: React.StatelessComponent<IProps> = (props: IProps) => {
             className={inputStyles}
             onBlur={onBlur}
             onFocus={onFocus}
+            onKeyDown={onKeyDown}
             onChange={onChange}
             name={name || ''}
             id={id || ''}

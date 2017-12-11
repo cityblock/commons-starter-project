@@ -10,6 +10,8 @@ export type IconName =
   | 'expandLess'
   | 'expandMore'
   | 'highlightOff'
+  | 'keyboardArrowLeft'
+  | 'keyboardArrowRight'
   | 'moreVert'
   | 'phone'
   | 'search';

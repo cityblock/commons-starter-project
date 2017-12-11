@@ -1,5 +1,7 @@
+import * as classNames from 'classnames';
 import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
+import Icon from '../shared/library/icon/icon';
 import * as styles from './css/helpers.css';
 
 interface ITitleProps {
@@ -34,9 +36,14 @@ interface IDescriptionProps {
 export const PatientSearchDescription: React.StatelessComponent<IDescriptionProps> = ({
   totalResults,
 }) => {
-  if (totalResults) {
+  if (totalResults !== null) {
+    const messageId =
+      totalResults === 1
+        ? 'patientSearch.resultsDescriptionSingle'
+        : 'patientSearch.resultsDescription';
+
     return (
-      <FormattedMessage id="patientSearch.resultsDescription">
+      <FormattedMessage id={messageId}>
         {(message: string) => (
           <p className={styles.description}>
             {totalResults} {message}
@@ -52,3 +59,57 @@ export const PatientSearchDescription: React.StatelessComponent<IDescriptionProp
     </FormattedMessage>
   );
 };
+
+interface IResultsColumnHeaderProps {
+  messageId: string;
+  className?: string;
+}
+
+export const PatientSearchResultsColumnHeader: React.StatelessComponent<
+  IResultsColumnHeaderProps
+> = ({ messageId, className }) => {
+  const columnHeaderStyles = classNames(styles.columnHeader, className);
+  return (
+    <FormattedMessage id={messageId}>
+      {(message: string) => <h3 className={columnHeaderStyles}>{message}</h3>}
+    </FormattedMessage>
+  );
+};
+
+export const PatientSearchResultsPlaceholder: React.StatelessComponent<{}> = () => (
+  <div className={styles.placeholder}>
+    <Icon name="search" className={styles.searchIcon} />
+    <FormattedMessage id="patientSearch.resultsPlaceholder">
+      {(message: string) => <h4 className={styles.searchText}>{message}</h4>}
+    </FormattedMessage>
+  </div>
+);
+
+export const PatientSearchNoResults: React.StatelessComponent<{}> = () => (
+  <div className={styles.placeholder}>
+    <Icon name="errorOutline" className={styles.noResultsIcon} />
+    <FormattedMessage id="patientSearch.noResults">
+      {(message: string) => <h4 className={styles.noResults}>{message}</h4>}
+    </FormattedMessage>
+    <FormattedMessage id="patientSearch.noResultsDetail">
+      {(message: string) => <p className={styles.noResultsDetail}>{message}</p>}
+    </FormattedMessage>
+  </div>
+);
+
+interface IPatientSearchPaginationInfoProps {
+  currentPage: number;
+  totalPages: number;
+}
+
+export const PatientSearchPaginationInfo: React.StatelessComponent<
+  IPatientSearchPaginationInfoProps
+> = ({ currentPage, totalPages }) => (
+  <div className={styles.paginationInfo}>
+    <h3 className={styles.currentPage}>{currentPage}</h3>
+    <FormattedMessage id="patientSearch.of">
+      {(message: string) => <h3>{message}</h3>}
+    </FormattedMessage>
+    <h3>{totalPages}</h3>
+  </div>
+);

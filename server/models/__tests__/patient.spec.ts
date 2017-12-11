@@ -202,10 +202,12 @@ describe('patient model', () => {
 
   describe('search', () => {
     let user: User;
+    let jonSnow: Patient;
+
     beforeEach(async () => {
       user = await User.create(createMockUser(11, clinic.id, userRole));
       await Patient.setup(createMockPatient(14, clinic.id, 'Robb', 'Stark'), user.id);
-      await createPatient(createMockPatient(11, clinic.id, 'Jon', 'Snow'), user.id);
+      jonSnow = await createPatient(createMockPatient(11, clinic.id, 'Jon', 'Snow'), user.id);
       await createPatient(createMockPatient(12, clinic.id, 'Arya', 'Stark'), user.id);
       await createPatient(createMockPatient(13, clinic.id, 'Sansa', 'Stark'), user.id);
     });
@@ -247,7 +249,7 @@ describe('patient model', () => {
     });
 
     it('returns a close matching result', async () => {
-      const query = 'john';
+      const query = 'john snow';
       expect(await Patient.search(query, { pageNumber: 0, pageSize: 1 }, user.id)).toMatchObject({
         results: [
           {
@@ -278,6 +280,19 @@ describe('patient model', () => {
       await expect(Patient.search('', { pageNumber: 0, pageSize: 1 }, user.id)).rejects.toMatch(
         'Must provide a search term',
       );
+    });
+
+    it('does not explode if SQL injection attack attempted', async () => {
+      const query = 'DROP TABLE patient;';
+      await Patient.search(query, { pageNumber: 0, pageSize: 1 }, user.id);
+
+      const princeWhoWasPromised = await Patient.get(jonSnow.id);
+
+      expect(princeWhoWasPromised).toMatchObject({
+        id: jonSnow.id,
+        firstName: 'Jon',
+        lastName: 'Snow',
+      });
     });
   });
 });

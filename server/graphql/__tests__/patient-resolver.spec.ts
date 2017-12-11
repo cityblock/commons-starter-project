@@ -281,7 +281,7 @@ describe('patient', () => {
 
     it('fuzzy searches for a patient', async () => {
       const query = `{
-        patientSearch(query: "john", pageNumber: 0, pageSize: 10) {
+        patientSearch(query: "john snow", pageNumber: 0, pageSize: 10) {
           edges { node { firstName, lastName, userCareTeam } }
           total
         }

@@ -11,15 +11,15 @@ describe('Library Search Helpers', () => {
   it('returns span around highlighted text if match found', () => {
     const searchTerm = 'Direwolf';
     const result = formatSearchText(fullText, searchTerm);
-    expect(result.length).toBe(fullText.length);
+    expect(result!.length).toBe(fullText.length);
 
-    expect(result[0]).toBe('N');
-    expect(result[20]).toBe('!');
-    expect(result[12]).toMatchObject({
+    expect(result![0]).toBe('N');
+    expect(result![20]).toBe('!');
+    expect(result![12]).toMatchObject({
       type: 'span',
       props: { children: 'D' },
     });
-    expect(result[19]).toMatchObject({
+    expect(result![19]).toMatchObject({
       type: 'span',
       props: { children: 'f' },
     });

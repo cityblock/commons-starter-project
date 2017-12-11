@@ -1,0 +1,87 @@
+@import '../../shared/css/sizes';
+
+.headerContainer,
+.result {
+  display: flex;
+  justify-content: space-between;
+  padding: 15px 50px;
+}
+
+.headerContainer {
+  background: var(--gray-background-color);
+  border-bottom: 1px solid var(--border-color);
+  position: -webkit-sticky;
+  position: sticky;
+  top: 188px;
+  z-index: 1;
+}
+
+.name {
+  min-width: 200px;
+}
+
+.status,
+.dateOfBirth {
+  min-width: 125px;
+}
+
+.memberId {
+  min-width: 105px;
+}
+
+.address {
+  min-width: 250px;
+}
+
+.result {
+  position: relative;
+  border-bottom: 1px solid var(--gray-background-color);
+}
+
+.result:nth-child(odd) {
+  background: var(--highlight-background-color);
+}
+
+.result h4 {
+  margin: 0;
+  margin-right: var(--medium-gutter);
+  color: var(--black-color);
+  font-weight: var(--default-font-weight);
+}
+
+.result span {
+  font-weight: var(--roboto-medium-weight);
+}
+
+.result p {
+  margin: 0;
+  color: var(--black-color);
+  font-size: var(--small-font-size);
+  line-height: var(--small-font-line-height);
+}
+
+.headerContainer h3,
+.result p {
+  margin-right: var(--medium-gutter);
+}
+
+.headerContainer h3:last-child,
+.result p:last-child {
+  margin-right: 0;
+}
+
+.ageDetail {
+  margin-left: 4px;
+  color: var(--gray-font-color);
+  font-weight: var(--default-font-weight);
+}
+
+.userCareTeam {
+  position: absolute;
+  top: 19px;
+  left: var(--medium-gutter);
+  background: var(--blue-color);
+  height: 8px;
+  width: 8px;
+  border-radius: 50%;
+}

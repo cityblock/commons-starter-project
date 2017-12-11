@@ -1,6 +1,7 @@
 import * as React from 'react';
 
 export const formatSearchText = (fullText: string, searchTerm: string) => {
+  if (!fullText) return null;
   const startIdx = fullText.toLowerCase().indexOf(searchTerm.toLowerCase());
   if (!searchTerm || startIdx < 0) return fullText;
 

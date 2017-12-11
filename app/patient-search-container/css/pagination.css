@@ -1,0 +1,34 @@
+@import '../../shared/css/sizes';
+
+.container {
+  border-top: 1px solid var(--gray-background-color);
+  border-bottom: 1px solid var(--gray-background-color);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: var(--extra-small-gutter) var(--medium-gutter);
+  position: fixed;
+  bottom: 0;
+  z-index: 1;
+  width: 100%;
+  background: var(--white-color);
+}
+
+.icon {
+  fill: var(--gray-font-color);
+  height: var(--medium-gutter);
+  width: var(--medium-gutter);
+  border: 1px solid var(--gray-background-color);
+  border-radius: var(--border-radius);
+  cursor: pointer;
+  transition: background-color 0.2s;
+  margin: 0 50px;
+
+  &:hover {
+    background: var(--gray-background-color);
+  }
+}
+
+.empty {
+  width: 130px;
+}

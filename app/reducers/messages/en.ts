@@ -157,12 +157,25 @@ export const ENGLISH_TRANSLATION = {
     'patientMap.emptyNextUpDetail':
       'Add concerns here that the patient and the care team do not want to focus on right now but would like to keep track of',
     /* tslint:enable:max-line-length */
+    'patientSearch.address': 'Home address',
+    'patientSearch.dateOfBirth': 'Date of birth',
+    'patientSearch.memberId': 'Member ID',
+    'patientSearch.name': 'Patient name',
+    'patientSearch.noResults': 'No results for this search',
+    /* tslint:disable:max-line-length */
+    'patientSearch.noResultsDetail':
+      'No matching patients for this search. Please check your spelling or try a new search.',
+    /* tslint:enable:max-line-length */
+    'patientSearch.of': 'of',
     'patientSearch.placeholder': 'Search for member...',
     'patientSearch.resultsDescription': 'members found',
+    'patientSearch.resultsDescriptionSingle': 'member found',
     'patientSearch.resultsTitle': 'Search results:',
+    'patientSearch.resultsPlaceholder': 'Search for patients on your care team',
     'patientSearch.search': 'Search',
     'patientSearch.searchDescription': 'Search by first name or last name',
     'patientSearch.searchTitle': 'Search for member',
+    'patientSearch.status': 'Status',
     'header.settings': 'Settings',
     'header.search': 'Search',
     'header.patients': 'Patients',

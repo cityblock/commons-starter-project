@@ -1,4 +1,7 @@
 import {
+  formatAge,
+  formatAgeDetails,
+  formatDateOfBirth,
   formatDueDate,
   formatDueDateDefault,
   formatFullName,
@@ -11,6 +14,7 @@ const oldDate = Date.now;
 
 describe('Shared Component Helpers', () => {
   const dueDate = '2017-12-01 12:00:00+00:00';
+  const dateOfBirth = '2000-12-01 12:00:00+00:00';
 
   beforeAll(() => {
     const dateInMs = new Date('2017-11-11T12:00:00.992Z').valueOf();
@@ -100,6 +104,44 @@ describe('Shared Component Helpers', () => {
 
     it('returns false if not past due', () => {
       expect(isPastDue('2017-11-20 12:00:00+00:00')).toBeFalsy();
+    });
+  });
+
+  describe('formatAge', () => {
+    it('returns empty string if date of birth unknown', () => {
+      expect(formatAge(null)).toBeFalsy();
+    });
+
+    it('returns formatted age if date of birth known', () => {
+      expect(formatAge(dateOfBirth)).toBe('16');
+    });
+  });
+
+  describe('formatDateOfBirth', () => {
+    it('returns unknown if no date of birth given', () => {
+      expect(formatDateOfBirth(null)).toBe('Unknown');
+    });
+
+    it('returns formatted date of birth if known', () => {
+      expect(formatDateOfBirth(dateOfBirth)).toBe('12/01/2000');
+    });
+  });
+
+  describe('formatAgeDetails', () => {
+    it('returns empty string if no birthday or gender', () => {
+      expect(formatAgeDetails(null, null)).toBeFalsy();
+    });
+
+    it('returns just formatted age if no gender', () => {
+      expect(formatAgeDetails(dateOfBirth, null)).toBe('(16)');
+    });
+
+    it('returns just gender if no birthday', () => {
+      expect(formatAgeDetails(null, 'f')).toBe('(F)');
+    });
+
+    it('returns both age and gender if known', () => {
+      expect(formatAgeDetails(dateOfBirth, 'f')).toBe('(16 F)');
     });
   });
 });

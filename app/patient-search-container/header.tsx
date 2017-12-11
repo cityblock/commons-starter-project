@@ -2,7 +2,7 @@ import * as React from 'react';
 import { PatientSearchDescription, PatientSearchTitle } from './helpers';
 
 interface IProps {
-  query: string | null;
+  query: string;
   totalResults: number | null;
 }
 

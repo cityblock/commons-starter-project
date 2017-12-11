@@ -10,25 +10,34 @@ interface IProps {
   onSearch: () => void;
 }
 
-const PatientSearchInput: React.StatelessComponent<IProps> = (props: IProps) => {
-  const { searchTerm, onChange, onSearch } = props;
+class PatientSearchInput extends React.Component<IProps, {}> {
+  onEnterPress = (e: React.KeyboardEvent<HTMLInputElement>): void => {
+    if (e.key === 'Enter') {
+      this.props.onSearch();
+    }
+  };
 
-  return (
-    <div className={styles.container}>
-      <div className={styles.input}>
-        <TextInput
-          value={searchTerm}
-          onChange={onChange}
-          className={styles.textInput}
-          placeholderMessageId="patientSearch.placeholder"
-        />
-        <div className={styles.iconContainer}>
-          <Icon name="search" className={styles.icon} />
+  render(): JSX.Element {
+    const { searchTerm, onChange, onSearch } = this.props;
+
+    return (
+      <div className={styles.container}>
+        <div className={styles.input}>
+          <TextInput
+            value={searchTerm}
+            onChange={onChange}
+            onKeyDown={this.onEnterPress}
+            className={styles.textInput}
+            placeholderMessageId="patientSearch.placeholder"
+          />
+          <div className={styles.iconContainer}>
+            <Icon name="search" className={styles.icon} />
+          </div>
         </div>
+        <Button onClick={onSearch} className={styles.button} messageId="patientSearch.search" />
       </div>
-      <Button onClick={onSearch} className={styles.button} messageId="patientSearch.search" />
-    </div>
-  );
-};
+    );
+  }
+}
 
 export default PatientSearchInput;

@@ -7,7 +7,7 @@ import Concern from './concern';
 import PatientConcern from './patient-concern';
 
 // how fuzzy is patient name search (0 (match everything) to 1 (exact match))
-const SIMILARITY_THRESHOLD = 0.15;
+const SIMILARITY_THRESHOLD = 0.2;
 
 export interface IPatientEditableFields {
   firstName: string;

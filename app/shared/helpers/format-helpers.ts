@@ -1,4 +1,4 @@
-import { format } from 'date-fns';
+import { differenceInYears, format } from 'date-fns';
 
 const ONE_DAY_IN_MILLISECONDS = 24 * 60 * 60 * 1000;
 
@@ -61,4 +61,23 @@ const formatPastDue = (dueDate?: string): string => {
   const suffix = differenceInDays === 1 ? 'day' : 'days';
 
   return `${differenceInDays} ${suffix}`;
+};
+
+export const formatAge = (dateOfBirth?: string | null): string => {
+  if (!dateOfBirth) return '';
+  return `${differenceInYears(Date.now(), dateOfBirth)}`;
+};
+
+export const formatDateOfBirth = (dateOfBirth?: string | null): string => {
+  if (!dateOfBirth) return 'Unknown';
+  return format(dateOfBirth, 'MM/DD/YYYY');
+};
+
+export const formatAgeDetails = (dateOfBirth: string | null, gender: string | null): string => {
+  if (!dateOfBirth && !gender) return '';
+
+  const formattedGender = gender ? `${gender.toUpperCase()}` : '';
+  const space = dateOfBirth && gender ? ' ' : '';
+
+  return `(${formatAge(dateOfBirth)}${space}${formattedGender})`;
 };

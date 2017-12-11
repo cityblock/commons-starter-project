@@ -34,8 +34,8 @@ interface IConditionState {
 
 export function setupQuestionsState(
   questionsState: IQuestionsState,
-  currentQuestions?: FullQuestionFragment[],
-  nextQuestions?: FullQuestionFragment[],
+  currentQuestions?: FullQuestionFragment[] | null,
+  nextQuestions?: FullQuestionFragment[] | null,
 ) {
   // Questions just loaded
   if (nextQuestions && !currentQuestions) {
@@ -61,8 +61,8 @@ export function setupQuestionsState(
 
 export function updateQuestionAnswersState(
   questionsState: IQuestionsState,
-  nextPatientAnswers: FullPatientAnswerFragment[],
-  currentPatientAnswers?: FullPatientAnswerFragment[],
+  nextPatientAnswers: FullPatientAnswerFragment[] | null,
+  currentPatientAnswers?: FullPatientAnswerFragment[] | null,
 ) {
   // Existing PatientAnswers have loaded, update to include those answers
   if (nextPatientAnswers && !currentPatientAnswers) {
@@ -100,8 +100,8 @@ export function updateQuestionAnswersState(
 
 export function getLastUpdated(
   patientAnswers: FullPatientAnswerFragment[],
+  patientAnswersError: string | null,
   patientAnswersLoading?: boolean,
-  patientAnswersError?: string,
 ) {
   if (patientAnswersLoading) {
     return 'Loading...';

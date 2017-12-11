@@ -24,7 +24,7 @@ export interface IDispatchProps {
 }
 
 interface IProps {
-  error?: string;
+  error?: string | null;
   loading?: boolean;
   currentUser?: FullUserFragment;
   children: any;

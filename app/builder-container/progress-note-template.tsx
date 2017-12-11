@@ -17,15 +17,15 @@ interface IProps {
   routeBase: string;
   match?: {
     params: {
-      progressNoteTemplateId?: string;
+      progressNoteTemplateId: string | null;
     };
   };
 }
 
 interface IGraphqlProps {
-  progressNoteTemplate?: FullProgressNoteTemplateFragment;
+  progressNoteTemplate: FullProgressNoteTemplateFragment | null;
   progressNoteTemplateLoading?: boolean;
-  progressNoteTemplateError?: string;
+  progressNoteTemplateError?: string | null;
   refetchProgressNoteTemplate: () => any;
   editProgressNoteTemplate: (
     options: { variables: progressNoteTemplateEditMutationVariables },
@@ -35,10 +35,10 @@ interface IGraphqlProps {
 
 interface IState {
   deleteConfirmationInProgress: boolean;
-  deleteError?: string;
+  deleteError: string | null;
   editedTitle: string;
   editingTitle: boolean;
-  editTitleError?: string;
+  editTitleError: string | null;
 }
 
 type allProps = IProps & IGraphqlProps;
@@ -65,9 +65,10 @@ export class ProgressNoteTemplate extends React.Component<allProps, IState> {
 
     this.state = {
       deleteConfirmationInProgress: false,
-      deleteError: undefined,
+      deleteError: null,
       editedTitle: '',
       editingTitle: false,
+      editTitleError: null,
     };
   }
 
@@ -107,7 +108,7 @@ export class ProgressNoteTemplate extends React.Component<allProps, IState> {
     const progressNoteTemplateId = getProgressNoteTemplateId(this.props);
     if (progressNoteTemplateId) {
       try {
-        this.setState({ deleteError: undefined });
+        this.setState({ deleteError: null });
         await onDelete(progressNoteTemplateId);
         this.setState({ deleteConfirmationInProgress: false });
       } catch (err) {
@@ -117,7 +118,7 @@ export class ProgressNoteTemplate extends React.Component<allProps, IState> {
   }
 
   onCancelDelete() {
-    this.setState({ deleteError: undefined, deleteConfirmationInProgress: false });
+    this.setState({ deleteError: null, deleteConfirmationInProgress: false });
   }
 
   onChange(event: React.ChangeEvent<HTMLInputElement>) {
@@ -139,11 +140,11 @@ export class ProgressNoteTemplate extends React.Component<allProps, IState> {
 
       if (name === 'editedTitle') {
         try {
-          this.setState({ editTitleError: undefined });
+          this.setState({ editTitleError: null });
           await editProgressNoteTemplate({
             variables: { progressNoteTemplateId, title: editedTitle },
           });
-          this.setState({ editTitleError: undefined, editingTitle: false });
+          this.setState({ editTitleError: null, editingTitle: false });
         } catch (err) {
           this.setState({ editTitleError: err.message });
         }
@@ -303,8 +304,8 @@ export class ProgressNoteTemplate extends React.Component<allProps, IState> {
   }
 }
 
-function getProgressNoteTemplateId(ownProps: IProps): string | undefined {
-  return ownProps.match ? ownProps.match.params.progressNoteTemplateId : undefined;
+function getProgressNoteTemplateId(ownProps: IProps): string | null {
+  return ownProps.match ? ownProps.match.params.progressNoteTemplateId : null;
 }
 
 export default compose(

@@ -101,7 +101,7 @@ it('handles onclick', async () => {
   expect(instance.state).toEqual({
     open: false,
     loading: false,
-    addFollowerError: undefined,
-    lastCareTeamMemberId: undefined,
+    addFollowerError: null,
+    lastCareTeamMemberId: null,
   });
 });

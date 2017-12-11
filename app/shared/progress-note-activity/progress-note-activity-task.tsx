@@ -11,8 +11,8 @@ interface IProps {
 }
 
 interface IGraphqlProps {
-  task?: FullTaskFragment;
-  taskLoading?: boolean;
+  task: FullTaskFragment | null;
+  taskLoading: boolean;
   taskError?: string;
 }
 
@@ -52,8 +52,8 @@ class ProgressNoteActivityTask extends React.Component<allProps> {
 }
 
 export default graphql<IGraphqlProps, IProps, allProps>(taskQuery as any, {
-  skip: (props: allProps) => !props.taskEvents[0].taskId,
-  options: (props: allProps) => ({ variables: { taskId: props.taskEvents[0].taskId } }),
+  skip: (props: IProps) => !props.taskEvents[0].taskId,
+  options: (props: IProps) => ({ variables: { taskId: props.taskEvents[0].taskId } }),
   props: ({ data }) => ({
     taskLoading: data ? data.loading : false,
     taskError: data ? data.error : null,

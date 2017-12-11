@@ -13,7 +13,7 @@ import { EventNotificationsLoadingError } from './event-notifications-loading-er
 interface IProps {
   eventNotifications?: FullEventNotificationFragment[];
   loading?: boolean;
-  error?: string;
+  error: string | null;
   fetchMoreEventNotifications: () => any;
   hasNextPage?: boolean;
   hasPreviousPage?: boolean;

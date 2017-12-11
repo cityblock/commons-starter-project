@@ -109,13 +109,14 @@ describe('method tests', () => {
     const component = shallow(
       <Component
         riskAreaId={'risk-area-id'}
-        riskAreaQuestions={undefined}
+        riskAreaQuestions={[]}
         patientId={'patient-id'}
         patientRoute={'/patients/patient-1'}
         routeBase={'/patients/patient-id/360'}
         refetchRiskArea={() => true}
         refetchRiskAreaQuestions={() => true}
         refetchPatientAnswers={() => true}
+        patientAnswersLoading={false}
       />,
     );
     const instance = component.instance() as Component;
@@ -125,11 +126,12 @@ describe('method tests', () => {
       patientId: 'patient-id',
       patientRoute: '/patients/patient-1',
       routeBase: '/patients/patient-id/360',
-      riskAreaQuestions: undefined,
+      riskAreaQuestions: null,
       patientAnswers: [patientAnswer],
       refetchRiskArea: () => true,
       refetchRiskAreaQuestions: () => true,
       refetchPatientAnswers: () => true,
+      patientAnswersLoading: false,
     });
     expect(instance.state.questions[question.id]).toEqual({
       answers: [
@@ -152,13 +154,14 @@ describe('method tests', () => {
     const component = shallow(
       <Component
         riskAreaId={'risk-area-id'}
-        riskAreaQuestions={undefined}
+        riskAreaQuestions={null}
         patientId={'patient-id'}
         patientRoute={'/patients/patient-id'}
         routeBase={'/patients/patient-id/360'}
         refetchRiskArea={() => true}
         refetchRiskAreaQuestions={() => true}
         refetchPatientAnswers={() => true}
+        patientAnswersLoading={false}
       />,
     );
     const instance = component.instance() as Component;
@@ -172,6 +175,7 @@ describe('method tests', () => {
       refetchRiskArea: () => true,
       refetchRiskAreaQuestions: () => true,
       refetchPatientAnswers: () => true,
+      patientAnswersLoading: false,
     });
     expect(instance.state.questions[question.id]).toEqual({
       answers: [],

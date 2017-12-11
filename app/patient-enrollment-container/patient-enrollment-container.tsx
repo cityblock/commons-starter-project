@@ -36,13 +36,13 @@ interface IGraphqlProps {
   ) => { data: patientSetupMutation };
   clinic: FullClinicFragment;
   clinicsLoading: boolean;
-  clinicsError?: string;
+  clinicsError: string | null;
 }
 
 interface IState {
   displayErrorPopup: boolean;
   loading: boolean;
-  error?: string;
+  error: string | null;
   createdPatient?: ShortPatientFragment;
   patient: {
     homeClinicId: string;
@@ -89,6 +89,7 @@ class PatientEnrollmentContainer extends React.Component<allProps, IState> {
     this.state = {
       displayErrorPopup: false,
       loading: false,
+      error: null,
       patient: {
         homeClinicId: '',
         firstName: '',
@@ -299,7 +300,7 @@ function formatClinic(clinics: any) {
 }
 
 export default compose(
-  connect<{}, IDispatchProps, IProps>(undefined, mapDispatchToProps),
+  connect<{}, IDispatchProps, IProps>(null, mapDispatchToProps),
   graphql<IGraphqlProps, IProps, allProps>(setupPatientMutationGraphql as any, {
     name: 'createPatient',
   }),

@@ -21,14 +21,14 @@ interface IProps {
   visible: boolean;
   carePlanSuggestions?: getPatientCarePlanSuggestionsQuery['carePlanSuggestionsForPatient'];
   suggestion?: FullCarePlanSuggestionFragment;
-  taskTemplateIds?: string[];
+  taskTemplateIds: string | null[];
   patientId: string;
   onDismiss: () => any;
 }
 
 interface IGraphqlProps {
   carePlanLoading?: boolean;
-  carePlanError?: string;
+  carePlanError: string | null;
   carePlan?: getPatientCarePlanQuery['carePlanForPatient'];
   concerns?: getConcernsQuery['concerns'];
   acceptCarePlanSuggestion: (
@@ -40,7 +40,7 @@ interface IState {
   concernType: '' | 'inactive' | 'active';
   concernId: string;
   loading: boolean;
-  error?: string;
+  error: string | null;
 }
 
 type allProps = IProps & IGraphqlProps;
@@ -53,7 +53,7 @@ class PopupPatientCarePlanSuggestionAccepted extends React.Component<allProps, I
     this.onSubmit = this.onSubmit.bind(this);
     this.onChange = this.onChange.bind(this);
 
-    this.state = { concernType: '', concernId: '', loading: false };
+    this.state = { concernType: '', concernId: '', loading: false, error: null };
   }
 
   async onSubmit() {
@@ -65,7 +65,7 @@ class PopupPatientCarePlanSuggestionAccepted extends React.Component<allProps, I
       concerns,
     } = this.props;
     const { concernType, concernId } = this.state;
-    const startedAt = concernType === 'active' ? new Date().toISOString() : undefined;
+    const startedAt = concernType === 'active' ? new Date().toISOString() : null;
     const acceptCarePlanSuggestionVariables: Partial<
       carePlanSuggestionAcceptMutationVariables
     > = {};
@@ -90,10 +90,10 @@ class PopupPatientCarePlanSuggestionAccepted extends React.Component<allProps, I
 
       if (addingToSuggestedConcern || addingToNewConcern) {
         acceptCarePlanSuggestionVariables.concernId = concernId;
-        acceptCarePlanSuggestionVariables.taskTemplateIds = taskTemplateIds;
+        acceptCarePlanSuggestionVariables.taskTemplateIds = taskTemplateIds as Array<string | null>;
       } else {
         acceptCarePlanSuggestionVariables.patientConcernId = concernId;
-        acceptCarePlanSuggestionVariables.taskTemplateIds = taskTemplateIds;
+        acceptCarePlanSuggestionVariables.taskTemplateIds = taskTemplateIds as Array<string | null>;
       }
     }
 
@@ -101,7 +101,7 @@ class PopupPatientCarePlanSuggestionAccepted extends React.Component<allProps, I
       await acceptCarePlanSuggestion({
         variables: acceptCarePlanSuggestionVariables as carePlanSuggestionAcceptMutationVariables,
       });
-      this.setState({ loading: false, error: undefined });
+      this.setState({ loading: false, error: null });
       this.onDismiss();
     } catch (err) {
       this.setState({ loading: false, error: err.message });
@@ -115,7 +115,7 @@ class PopupPatientCarePlanSuggestionAccepted extends React.Component<allProps, I
       concernType: '',
       concernId: '',
       loading: false,
-      error: undefined,
+      error: null,
     });
 
     onDismiss();

@@ -34,7 +34,7 @@ interface IProps {
   patientGoals?: FullPatientGoalFragment[];
   tasks?: FullTaskFragment[];
   loading?: boolean;
-  error?: string;
+  error: string | null;
   updatePageParams: (params: IPageParams) => any;
   fetchMoreTasks: () => any;
   hasNextPage?: boolean;
@@ -55,7 +55,7 @@ interface IState {
   orderBy: OrderByOptions;
   showCreateTask: boolean;
   loading?: boolean;
-  error?: string;
+  error: string | null;
 }
 
 type allProps = IProps & IDispatchProps & IGraphqlProps;
@@ -85,6 +85,7 @@ class Tasks extends React.Component<allProps, IState> {
     this.state = {
       showCreateTask: false,
       orderBy: (pageParams.orderBy as any) || 'createdAtDesc',
+      error: null,
     };
   }
 

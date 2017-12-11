@@ -23,19 +23,19 @@ interface IProps {
   mutate?: any;
   match: {
     params: {
-      riskAreaId?: string;
+      riskAreaId: string | null;
     };
   };
 }
 
 interface IStateProps {
-  riskAreaId?: string;
+  riskAreaId: string | null;
 }
 
 interface IGraphqlProps {
   riskAreas?: FullRiskAreaFragment[];
   loading?: boolean;
-  error?: string;
+  error: string | null;
   deleteRiskArea: (
     options: { variables: riskAreaDeleteMutationVariables },
   ) => { data: riskAreaDeleteMutation };
@@ -50,7 +50,7 @@ type allProps = IProps & IGraphqlProps & IDispatchProps & IStateProps;
 interface IState {
   showCreateRiskArea: boolean;
   loading?: boolean;
-  error?: string;
+  error: string | null;
 }
 
 const ROUTE_BASE = '/builder/domains';
@@ -67,6 +67,7 @@ class AdminRiskAreas extends React.Component<allProps, IState> {
 
     this.state = {
       showCreateRiskArea: false,
+      error: null,
     };
   }
 

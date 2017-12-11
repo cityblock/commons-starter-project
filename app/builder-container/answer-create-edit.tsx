@@ -48,7 +48,7 @@ interface IGraphqlProps {
 
 interface IState {
   loading: boolean;
-  error?: string;
+  error: string | null;
   answer: answerCreateMutationVariables;
 }
 
@@ -68,6 +68,7 @@ class AnswerCreateEdit extends React.Component<allProps, IState> {
 
     this.state = {
       loading: false,
+      error: null,
       answer: props.answer
         ? props.answer
         : {

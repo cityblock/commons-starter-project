@@ -23,13 +23,13 @@ interface IProps {
   mutate?: any;
   match: {
     params: {
-      goalId?: string;
+      goalId: string | null;
     };
   };
 }
 
 interface IStateProps {
-  goalId?: string;
+  goalId: string | null;
   routeBase: string;
 }
 
@@ -40,8 +40,8 @@ interface IDispatchProps {
 interface IGraphqlProps {
   refetchGoals: () => any;
   goals?: FullGoalSuggestionTemplateFragment[];
-  loading?: boolean;
-  error?: string;
+  loading: boolean;
+  error: string | null;
   deleteGoal?: (
     options: { variables: goalSuggestionTemplateDeleteMutationVariables },
   ) => { data: goalSuggestionTemplateDeleteMutation };
@@ -51,8 +51,8 @@ type allProps = IProps & IDispatchProps & IGraphqlProps & IStateProps;
 
 interface IState {
   showCreateGoal: boolean;
-  loading?: boolean;
-  error?: string;
+  loading: boolean;
+  error: string | null;
 }
 
 export class BuilderGoals extends React.Component<allProps, IState> {
@@ -61,6 +61,7 @@ export class BuilderGoals extends React.Component<allProps, IState> {
     this.state = {
       showCreateGoal: false,
       loading: false,
+      error: null,
     };
   }
 

@@ -24,6 +24,7 @@ describe('Task Component', () => {
       taskId={taskId}
       task={taskWithComment as any}
       redirectToMap={placeholderFn}
+      taskError={null}
     />,
   );
 
@@ -96,6 +97,7 @@ describe('Task Component', () => {
         task={taskWithComment as any}
         taskLoading={true}
         redirectToMap={placeholderFn}
+        taskError={null}
       />,
     );
 

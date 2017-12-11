@@ -32,7 +32,7 @@ interface IGraphqlProps {
 
 interface IState {
   loading: boolean;
-  error?: string;
+  error: string | null;
   questionCondition: {
     answerId: string;
   };
@@ -50,10 +50,11 @@ class QuestionConditionCreate extends React.Component<allProps, IState> {
       ? {
           answerId: props.questionCondition.answerId,
         }
-      : { answerId: 'undefined' };
+      : { answerId: 'null' };
 
     this.state = {
       loading: false,
+      error: null,
       questionCondition,
     };
   }

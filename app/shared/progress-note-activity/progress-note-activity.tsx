@@ -15,7 +15,7 @@ interface IProps {
 interface IGraphqlProps {
   progressNoteActivity?: FullProgressNoteActivityFragment;
   progressNoteActivityLoading?: boolean;
-  progressNoteActivityError?: string;
+  progressNoteActivityError: string | null;
 }
 
 type allProps = IProps & IGraphqlProps;

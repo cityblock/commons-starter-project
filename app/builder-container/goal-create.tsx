@@ -35,7 +35,7 @@ interface IGraphqlProps {
 
 interface IState {
   loading: boolean;
-  error?: string;
+  error: string | null;
   goal: goalSuggestionTemplateCreateMutationVariables;
 }
 
@@ -51,6 +51,7 @@ export class GoalCreate extends React.Component<allProps, IState> {
 
     this.state = {
       loading: false,
+      error: null,
       goal: { title: '' },
     };
   }
@@ -144,7 +145,7 @@ function mapDispatchToProps(dispatch: Dispatch<() => void>, ownProps: allProps):
 }
 
 export default compose(
-  connect(undefined, mapDispatchToProps),
+  connect(null, mapDispatchToProps),
   graphql<IGraphqlProps, IProps, allProps>(goalCreateMutationGraphql as any, {
     name: 'createGoal',
     options: {

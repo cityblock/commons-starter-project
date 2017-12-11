@@ -32,7 +32,7 @@ export interface IPatientPanel {
 interface IGraphqlProps {
   refetchPatientPanel: (variables: { pageNumber: number; pageSize: number }) => any;
   loading: boolean;
-  error?: string;
+  error: string | null;
   patientPanel?: IPatientPanel;
 }
 
@@ -176,7 +176,7 @@ function mapDispatchToProps(dispatch: Dispatch<() => void>): IDispatchProps {
 }
 
 export default compose(
-  connect<{}, IDispatchProps>(undefined, mapDispatchToProps),
+  connect<{}, IDispatchProps>(null, mapDispatchToProps),
   graphql<IGraphqlProps, IProps, allProps>(patientPanelQuery as any, {
     options: () => ({
       variables: getPageParams(),

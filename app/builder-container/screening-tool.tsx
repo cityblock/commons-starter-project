@@ -17,7 +17,7 @@ interface IProps {
   refetchScreeningTool: () => any;
   match?: {
     params: {
-      screeningToolId?: string;
+      screeningToolId: string | null;
     };
   };
   onDelete: (screeningToolId: string) => any;
@@ -26,22 +26,22 @@ interface IProps {
 interface IGraphqlProps {
   screeningTool?: FullScreeningToolFragment;
   screeningToolLoading?: boolean;
-  screeningToolError?: string;
+  screeningToolError?: string | null;
   editScreeningTool: (
     options: { variables: screeningToolEditMutationVariables },
   ) => { data: { screeningToolEdit: FullScreeningToolFragment } };
 }
 
 interface IStateProps {
-  screeningToolId?: string;
+  screeningToolId: string | null;
 }
 
 interface IState {
   deleteConfirmationInProgress: boolean;
-  deleteError?: string;
+  deleteError: string | null;
   editedTitle: string;
   editingTitle: boolean;
-  editTitleError?: string;
+  editTitleError: string | null;
 }
 
 type allProps = IGraphqlProps & IStateProps & IProps;
@@ -69,9 +69,10 @@ export class ScreeningTool extends React.Component<allProps, IState> {
 
     this.state = {
       deleteConfirmationInProgress: false,
-      deleteError: undefined,
+      deleteError: null,
       editedTitle: '',
       editingTitle: false,
+      editTitleError: null,
     };
   }
 
@@ -108,7 +109,7 @@ export class ScreeningTool extends React.Component<allProps, IState> {
 
     if (screeningToolId) {
       try {
-        this.setState({ deleteError: undefined });
+        this.setState({ deleteError: null });
         await onDelete(screeningToolId);
         this.setState({ deleteConfirmationInProgress: false });
       } catch (err) {
@@ -118,7 +119,7 @@ export class ScreeningTool extends React.Component<allProps, IState> {
   }
 
   onCancelDelete() {
-    this.setState({ deleteError: undefined, deleteConfirmationInProgress: false });
+    this.setState({ deleteError: null, deleteConfirmationInProgress: false });
   }
 
   onChange(event: React.ChangeEvent<HTMLInputElement>) {
@@ -139,9 +140,9 @@ export class ScreeningTool extends React.Component<allProps, IState> {
 
       if (name === 'editedTitle') {
         try {
-          this.setState({ editTitleError: undefined });
+          this.setState({ editTitleError: null });
           await editScreeningTool({ variables: { screeningToolId, title: editedTitle } });
-          this.setState({ editTitleError: undefined, editingTitle: false });
+          this.setState({ editTitleError: null, editingTitle: false });
         } catch (err) {
           this.setState({ editTitleError: err.message });
         }
@@ -322,7 +323,7 @@ export class ScreeningTool extends React.Component<allProps, IState> {
 
 function mapStateToProps(state: IAppState, ownProps: IProps): IStateProps {
   return {
-    screeningToolId: ownProps.match ? ownProps.match.params.screeningToolId : undefined,
+    screeningToolId: ownProps.match ? ownProps.match.params.screeningToolId : null,
   };
 }
 
@@ -331,7 +332,7 @@ export default compose(
   graphql<IGraphqlProps, IProps, allProps>(screeningToolEditMutation as any, {
     name: 'editScreeningTool',
   }),
-  graphql<IGraphqlProps, IProps, allProps>(screeningToolQuery as any, {
+  graphql<IGraphqlProps, IProps & IStateProps, allProps>(screeningToolQuery as any, {
     skip: (props: IProps & IStateProps) => !props.screeningToolId,
     options: (props: IProps & IStateProps) => ({
       variables: { screeningToolId: props.screeningToolId },

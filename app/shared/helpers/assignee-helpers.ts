@@ -8,7 +8,7 @@ interface IAssigneeInfo {
 }
 export const DEFAULT_AVATAR_URL = 'https://bit.ly/2weRwJm';
 
-export const getAssigneeInfo = (assignee?: ShortUserFragment): IAssigneeInfo => {
+export const getAssigneeInfo = (assignee: ShortUserFragment | null): IAssigneeInfo => {
   if (assignee) {
     return {
       avatar: assignee.googleProfileImageUrl || DEFAULT_AVATAR_URL,

@@ -14,7 +14,7 @@ interface IProps {
   activeConcerns: FullPatientConcernFragment[];
   inactiveConcerns: FullPatientConcernFragment[];
   isDragging?: boolean;
-  error?: string;
+  error?: string | null;
 }
 
 interface IState {

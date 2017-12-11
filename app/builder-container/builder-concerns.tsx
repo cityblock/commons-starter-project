@@ -35,7 +35,7 @@ interface IGraphqlProps {
 
 interface IStateProps {
   routeBase: string;
-  concernId?: string;
+  concernId: string | null;
 }
 
 interface IDispatchProps {

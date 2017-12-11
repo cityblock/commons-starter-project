@@ -30,7 +30,7 @@ interface IGraphqlProps {
     options: { variables: taskCommentCreateMutationVariables },
   ) => { data: taskCommentCreateMutation };
   taskCommentsLoading: boolean;
-  taskCommentsError?: string;
+  taskCommentsError: string | null;
   taskCommentsResponse?: ITaskCommentsResponse;
   refetchTaskComments: () => any;
   updateTaskComments: (
@@ -46,7 +46,7 @@ interface IGraphqlProps {
 
 interface IState {
   commentBody: string;
-  createCommentError?: string;
+  createCommentError: string | null;
   comments: FullTaskCommentFragment[];
 }
 
@@ -65,7 +65,7 @@ export class TaskComments extends React.Component<allProps, IState> {
     this.onCommentBodyKeyDown = this.onCommentBodyKeyDown.bind(this);
     this.onCommentEdit = this.onCommentEdit.bind(this);
 
-    this.state = { comments: [], commentBody: '', createCommentError: undefined };
+    this.state = { comments: [], commentBody: '', createCommentError: null };
   }
 
   componentWillReceiveProps(nextProps: allProps) {
@@ -134,7 +134,7 @@ export class TaskComments extends React.Component<allProps, IState> {
 
       if (taskId && commentBody) {
         try {
-          this.setState({ createCommentError: undefined });
+          this.setState({ createCommentError: null });
           await createComment({ variables: { taskId, body: commentBody } });
           this.setState({ commentBody: '' });
 

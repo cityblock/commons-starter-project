@@ -14,7 +14,7 @@ interface IProps {
 
 interface IGraphqlProps {
   loading?: boolean;
-  error?: string;
+  error: string | null;
   submission?: FullPatientScreeningToolSubmissionFragment;
 }
 

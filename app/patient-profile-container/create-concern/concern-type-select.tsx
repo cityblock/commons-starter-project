@@ -6,7 +6,7 @@ import Select from '../../shared/library/select/select';
 import * as styles from './css/concern-select.css';
 
 interface IProps {
-  value?: string;
+  value: string | null;
   onChange: (e: React.ChangeEvent<HTMLSelectElement>) => void;
 }
 

@@ -39,14 +39,14 @@ interface IGraphqlProps {
   updatePatientInfo: (options: IOptions) => { data: patientEditMutation };
   patient?: getPatientQuery['patient'];
   loading?: boolean;
-  error?: string;
+  error: string | null;
 }
 
 type IState = IPatientDemographicsState &
   IPatientContactState &
   IPatientInsuranceState & {
     saveLoading?: boolean;
-    saveError?: boolean;
+    saveError: boolean;
     saveSuccess?: boolean;
     clearSaveSuccessTimeout?: any; // Should be Timer
   };
@@ -82,6 +82,7 @@ export class PatientInfo extends React.Component<allProps, IState> {
       consentToCall: '',
       consentToText: '',
       displayConsentToPhoneTextPopup: false,
+      saveError: false,
     };
 
     this.onFieldUpdate = this.onFieldUpdate.bind(this);
@@ -156,7 +157,7 @@ export class PatientInfo extends React.Component<allProps, IState> {
     } = this.state;
     const patientId = match.params.patientId;
     if (!loading && !error && !saveLoading) {
-      this.setState({ saveSuccess: false, saveLoading: true, saveError: undefined });
+      this.setState({ saveSuccess: false, saveLoading: true, saveError: false });
       try {
         // TODO: Make this less annoying
         await updatePatientInfo({

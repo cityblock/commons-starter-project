@@ -9,9 +9,9 @@ interface IProps {
   onClick: () => void;
   messageId?: string; // prefer using translate message ids
   label?: string; // use this if not translating
-  color?: Color; // if not provided, defaults to blue
-  small?: boolean;
-  className?: string;
+  color?: Color | null; // if not provided, defaults to blue
+  small?: boolean | null;
+  className?: string | null;
 }
 
 const Button: React.StatelessComponent<IProps> = (props: IProps) => {

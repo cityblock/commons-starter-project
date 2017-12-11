@@ -23,10 +23,10 @@ import * as carePlanSuggestionStyles from '../shared/css/two-panel-right.css';
 import * as styles from './css/risk-area-create.css';
 
 interface IProps {
-  goals?: FullGoalSuggestionTemplateFragment[];
-  concerns?: FullConcernFragment[];
-  answer?: FullAnswerFragment;
-  screeningToolScoreRange?: FullScreeningToolScoreRangeFragment;
+  goals: FullGoalSuggestionTemplateFragment[] | null;
+  concerns: FullConcernFragment[] | null;
+  answer: FullAnswerFragment | null;
+  screeningToolScoreRange: FullScreeningToolScoreRangeFragment | null;
 }
 
 interface IGraphqlProps {
@@ -40,10 +40,10 @@ interface IGraphqlProps {
 
 type SuggestionType = 'concern' | 'goal';
 interface IState {
-  suggestionType?: SuggestionType;
-  suggestionId?: string;
+  suggestionType: SuggestionType | null;
+  suggestionId: string | null;
   loading: boolean;
-  error?: string;
+  error: string | null;
 }
 
 type allProps = IProps & IGraphqlProps;
@@ -59,7 +59,7 @@ export class CarePlanSuggestionCreate extends React.Component<allProps, IState> 
     this.getGoalOptions = this.getGoalOptions.bind(this);
     this.getConcernOptions = this.getConcernOptions.bind(this);
 
-    this.state = { loading: false };
+    this.state = { loading: false, suggestionType: null, suggestionId: null, error: null };
   }
 
   onUpdateSuggestionType(event: React.ChangeEvent<HTMLSelectElement>) {
@@ -83,35 +83,31 @@ export class CarePlanSuggestionCreate extends React.Component<allProps, IState> 
       screeningToolScoreRange,
     } = this.props;
 
-    this.setState({ loading: true, error: undefined });
+    this.setState({ loading: true, error: null });
 
     try {
       if (suggestionType === 'concern' && suggestionId && createConcernSuggestion) {
         await createConcernSuggestion({
           variables: {
-            answerId: answer ? answer.id : undefined,
-            screeningToolScoreRangeId: screeningToolScoreRange
-              ? screeningToolScoreRange.id
-              : undefined,
+            answerId: answer ? answer.id : null,
+            screeningToolScoreRangeId: screeningToolScoreRange ? screeningToolScoreRange.id : null,
             concernId: suggestionId,
           },
         });
       } else if (suggestionType === 'goal' && suggestionId && createGoalSuggestion) {
         await createGoalSuggestion({
           variables: {
-            answerId: answer ? answer.id : undefined,
-            screeningToolScoreRangeId: screeningToolScoreRange
-              ? screeningToolScoreRange.id
-              : undefined,
+            answerId: answer ? answer.id : null,
+            screeningToolScoreRangeId: screeningToolScoreRange ? screeningToolScoreRange.id : null,
             goalSuggestionTemplateId: suggestionId,
           },
         });
       }
       this.setState({
         loading: false,
-        error: undefined,
-        suggestionType: undefined,
-        suggestionId: undefined,
+        error: null,
+        suggestionType: null,
+        suggestionId: null,
       });
     } catch (err) {
       this.setState({ loading: false, error: err.message });

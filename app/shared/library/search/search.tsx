@@ -18,8 +18,8 @@ interface IProps {
   onOptionClick: (optionId: string, optionTitle: string) => void;
   hideResults?: boolean; // hide dropdown menu
   showAll?: boolean; // simply render all search options
-  placeholderMessageId?: string; // optional placeholderMessageId text for empty field
-  emptyPlaceholderMessageId?: string; // optional placeholder message id if no results found
+  placeholderMessageId: string | null; // optional placeholderMessageId text for empty field
+  emptyPlaceholderMessageId: string | null; // optional placeholder message id if no results found
   fuseOptions?: any; // optional fuse options to be applied on top of default
 }
 

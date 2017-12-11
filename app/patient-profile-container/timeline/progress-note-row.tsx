@@ -15,14 +15,14 @@ interface IProps {
 type Tab = 'context' | 'activity';
 
 interface IState {
-  tab?: Tab;
+  tab: Tab | null;
 }
 
 export default class ProgressNoteRow extends React.Component<IProps, IState> {
   constructor(props: IProps) {
     super(props);
     this.state = {
-      tab: undefined,
+      tab: null,
     };
   }
 

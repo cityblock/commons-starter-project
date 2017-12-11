@@ -6,7 +6,7 @@ import * as styles from './css/lightbox.css';
 interface IProps {
   images: string[];
   isOpen: boolean;
-  openingImage?: string;
+  openingImage: string | null;
   onDismiss: () => any;
 }
 
@@ -48,7 +48,7 @@ export default class Lightbox extends React.Component<IProps, IState> {
     }
   }
 
-  getOpeningImageIndex(openingImage: string | undefined, imagesList: string[]) {
+  getOpeningImageIndex(openingImage: string | null, imagesList: string[]) {
     let foundIndex: number = 0;
 
     if (openingImage) {

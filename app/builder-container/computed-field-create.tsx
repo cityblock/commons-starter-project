@@ -37,7 +37,7 @@ interface IGraphqlProps {
 
 interface IState {
   loading: boolean;
-  error?: string;
+  error: string | null;
   computedField: computedFieldCreateMutationVariables;
 }
 
@@ -49,6 +49,7 @@ export class ComputedFieldCreate extends React.Component<allProps, IState> {
 
     this.state = {
       loading: false,
+      error: null,
       computedField: { label: '', dataType: 'boolean' as ComputedFieldDataTypes },
     };
   }
@@ -160,7 +161,7 @@ function mapDispatchToProps(dispatch: Dispatch<() => void>, ownProps: allProps):
 }
 
 export default compose(
-  connect(undefined, mapDispatchToProps),
+  connect(null, mapDispatchToProps),
   graphql<IGraphqlProps, IProps, allProps>(computedFieldCreateMutationGraphql as any, {
     name: 'createComputedField',
     options: {

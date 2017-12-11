@@ -13,7 +13,7 @@ interface IProps {
 
 interface IGraphqlProps {
   loading?: boolean;
-  error?: string;
+  error: string | null;
   patientMedications?: FullPatientMedicationFragment[];
   refetchPatientMedications?: (variables: { patientId: string }) => any;
 }
@@ -21,7 +21,7 @@ interface IGraphqlProps {
 interface IState {
   selectedMedicationId: string | null;
   loading?: boolean;
-  error?: string;
+  error: string | null;
 }
 
 type allProps = IProps & IGraphqlProps;
@@ -99,7 +99,7 @@ class PatientMedications extends React.Component<allProps, IState> {
 
     if (refetchPatientMedications) {
       try {
-        this.setState({ loading: true, error: undefined });
+        this.setState({ loading: true, error: null });
         await refetchPatientMedications({ patientId });
       } catch (err) {
         // TODO: This is redundant. Props will get set by the result of the refetch.

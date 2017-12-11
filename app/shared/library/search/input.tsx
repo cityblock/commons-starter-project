@@ -6,7 +6,7 @@ import * as styles from './css/input.css';
 interface IProps {
   value: string;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  placeholderMessageId?: string; // optional placeholderMessageId text for empty field
+  placeholderMessageId: string | null; // optional placeholderMessageId text for empty field
 }
 
 const SearchInput: React.StatelessComponent<IProps> = (props: IProps) => {

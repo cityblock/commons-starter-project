@@ -21,7 +21,7 @@ afterAll(() => {
 
 const match = {
   params: {
-    goalId: undefined,
+    goalId: null,
   },
 };
 
@@ -51,7 +51,13 @@ it('renders builder goals', () => {
 
 it('renders goal create', () => {
   const component = shallow(
-    <Component match={match} refetchGoals={jest.fn()} routeBase={'/builder/goals'} />,
+    <Component
+      match={match}
+      refetchGoals={jest.fn()}
+      routeBase={'/builder/goals'}
+      goalId={null}
+      loading={false}
+      error={null} />,
   );
   const instance = component.instance() as Component;
   instance.showCreateGoal();

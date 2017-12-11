@@ -39,7 +39,7 @@ interface IState {
   dueAt: string;
   priority: Priority | null;
   loading: boolean;
-  error?: string;
+  error: string | null;
 }
 
 export class CreateTaskModal extends React.Component<allProps, IState> {
@@ -57,6 +57,7 @@ export class CreateTaskModal extends React.Component<allProps, IState> {
       priority: null,
       dueAt: new Date().toISOString(),
       loading: false,
+      error: null,
     };
   }
 
@@ -88,7 +89,7 @@ export class CreateTaskModal extends React.Component<allProps, IState> {
     if (!title) return;
     if (!loading) {
       try {
-        this.setState({ loading: true, error: undefined });
+        this.setState({ loading: true, error: null });
 
         await createTask({
           variables: {

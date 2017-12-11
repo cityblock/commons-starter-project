@@ -15,8 +15,8 @@ import createConcernFuseOptions from './fuse-options';
 
 export interface IProps {
   patientId: string;
-  concernId?: string;
-  concernType?: 'active' | 'inactive';
+  concernId: string | null;
+  concernType: 'active' | 'inactive' | null;
   hideSearchResults: boolean;
   onSelectChange: (e: React.ChangeEvent<HTMLSelectElement>) => void;
   onSearchTermChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
@@ -28,11 +28,11 @@ export interface IProps {
 
 interface IGraphqlProps {
   loading: boolean;
-  error?: string;
+  error?: string | null;
   concerns?: getConcernsQuery['concerns'];
   patientCarePlan?: getPatientCarePlanQuery['carePlanForPatient'];
   patientCarePlanLoading: boolean;
-  patientCarePlanError?: string;
+  patientCarePlanError?: string | null;
 }
 
 type allProps = IProps & IGraphqlProps;

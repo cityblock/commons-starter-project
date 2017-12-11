@@ -14,14 +14,14 @@ import * as styles from '../shared/css/two-panel-right.css';
 import { IState as IAppState } from '../store';
 
 interface IStateProps {
-  concernId?: string;
+  concernId: string | null;
 }
 
 interface IProps {
   routeBase: string;
   match?: {
     params: {
-      objectId?: string;
+      objectId: string | null;
     };
   };
   mutate?: any;
@@ -30,7 +30,7 @@ interface IProps {
 interface IGraphqlProps {
   concern?: FullConcernFragment;
   concernLoading?: boolean;
-  concernError?: string;
+  concernError: string | null;
   refetchConcern: () => any;
   editConcern: (
     options: { variables: concernEditMutationVariables },
@@ -40,10 +40,10 @@ interface IGraphqlProps {
 
 interface IState {
   deleteConfirmationInProgress: boolean;
-  deleteError?: string;
+  deleteError: string | null;
   editedTitle: string;
   editingTitle: boolean;
-  editTitleError?: string;
+  editTitleError: string | null;
 }
 
 type allProps = IProps & IStateProps & IGraphqlProps;
@@ -70,9 +70,10 @@ export class Concern extends React.Component<allProps, IState> {
 
     this.state = {
       deleteConfirmationInProgress: false,
-      deleteError: undefined,
+      deleteError: null,
       editedTitle: '',
       editingTitle: false,
+      editTitleError: null,
     };
   }
 
@@ -109,7 +110,7 @@ export class Concern extends React.Component<allProps, IState> {
 
     if (concernId) {
       try {
-        this.setState({ deleteError: undefined });
+        this.setState({ deleteError: null });
         await onDelete(concernId);
         this.setState({ deleteConfirmationInProgress: false });
       } catch (err) {
@@ -119,7 +120,7 @@ export class Concern extends React.Component<allProps, IState> {
   }
 
   onCancelDelete() {
-    this.setState({ deleteError: undefined, deleteConfirmationInProgress: false });
+    this.setState({ deleteError: null, deleteConfirmationInProgress: false });
   }
 
   onChange(event: React.ChangeEvent<HTMLInputElement>) {
@@ -140,9 +141,9 @@ export class Concern extends React.Component<allProps, IState> {
 
       if (name === 'editedTitle') {
         try {
-          this.setState({ editTitleError: undefined });
+          this.setState({ editTitleError: null });
           await editConcern({ variables: { concernId, title: editedTitle } });
-          this.setState({ editTitleError: undefined, editingTitle: false });
+          this.setState({ editTitleError: null, editingTitle: false });
         } catch (err) {
           this.setState({ editTitleError: err.message });
         }
@@ -303,7 +304,7 @@ export class Concern extends React.Component<allProps, IState> {
 
 function mapStateToProps(state: IAppState, ownProps: IProps): IStateProps {
   return {
-    concernId: ownProps.match ? ownProps.match.params.objectId : undefined,
+    concernId: ownProps.match ? ownProps.match.params.objectId : null,
   };
 }
 
@@ -312,9 +313,9 @@ export default compose(
   graphql<IGraphqlProps, IProps, allProps>(concernEditMutationGraphql as any, {
     name: 'editConcern',
   }),
-  graphql(concernQuery as any, {
-    skip: (props: IStateProps) => !props.concernId,
-    options: (props: IStateProps) => ({ variables: { concernId: props.concernId } }),
+  graphql<IGraphqlProps, IProps & IStateProps, allProps>(concernQuery as any, {
+    skip: (props: IProps & IStateProps) => !props.concernId,
+    options: (props: IProps & IStateProps) => ({ variables: { concernId: props.concernId } }),
     props: ({ data }) => ({
       concernLoading: data ? data.loading : false,
       concernError: data ? data.error : null,

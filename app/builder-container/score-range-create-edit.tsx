@@ -47,7 +47,7 @@ interface IGraphqlProps {
 
 interface IState {
   loading: boolean;
-  error?: string;
+  error: string | null;
   scoreRange: screeningToolScoreRangeCreateMutationVariables;
 }
 
@@ -64,6 +64,7 @@ export class ScoreRangeCreateEdit extends React.Component<allProps, IState> {
 
     this.state = {
       loading: false,
+      error: null,
       scoreRange: props.scoreRange
         ? props.scoreRange
         : {

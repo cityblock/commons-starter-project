@@ -38,7 +38,7 @@ export interface IProps {
 interface IGraphqlProps {
   task: FullTaskFragment;
   taskLoading?: boolean;
-  taskError?: string;
+  taskError: string | null;
   editTask: (options: { variables: taskEditMutationVariables }) => { data: taskEditMutation };
 }
 
@@ -138,7 +138,7 @@ export class Task extends React.Component<allProps, IState> {
           />
           <TaskAssignee
             patientId={patientId}
-            assignee={(task && task.assignedTo) || undefined}
+            assignee={(task && task.assignedTo) || null}
             onAssigneeClick={this.onAssigneeClick}
           />
           <TaskTracking

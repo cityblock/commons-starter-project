@@ -19,14 +19,14 @@ interface IProps {
   mutate?: any;
   match?: {
     params: {
-      taskId?: string;
+      taskId: string | null;
     };
   };
 }
 
 interface IGraphqlProps {
   tasksLoading: boolean;
-  tasksError?: string;
+  tasksError: string | null;
   tasksResponse?: getTasksForCurrentUserQuery['tasksForCurrentUser'];
   fetchMoreTasks: () => any;
 }

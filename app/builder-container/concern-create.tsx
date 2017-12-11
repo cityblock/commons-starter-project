@@ -26,7 +26,7 @@ interface IGraphqlProps {
 
 interface IState {
   loading: boolean;
-  error?: string;
+  error: string | null;
   concern: concernCreateMutationVariables;
 }
 
@@ -42,6 +42,7 @@ export class ConcernCreate extends React.Component<allProps, IState> {
 
     this.state = {
       loading: false,
+      error: null,
       concern: { title: '' },
     };
   }
@@ -135,7 +136,7 @@ function mapDispatchToProps(dispatch: Dispatch<() => void>, ownProps: allProps):
 }
 
 export default compose(
-  connect(undefined, mapDispatchToProps),
+  connect(null, mapDispatchToProps),
   graphql<IGraphqlProps, IProps, allProps>(concernCreateMutationGraphql as any, {
     name: 'createConcern',
     options: {

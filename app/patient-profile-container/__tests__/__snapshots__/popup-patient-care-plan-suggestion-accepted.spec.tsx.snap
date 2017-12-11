@@ -7,7 +7,7 @@ exports[`renders popup for concern suggestion 1`] = `
 >
   <div
     className="content smallContentPadding"
-    onClick={undefined}
+    onClick={[Function]}
   >
     <div
       className="acceptModalContent"
@@ -85,7 +85,7 @@ exports[`renders popup for goal suggestion 1`] = `
 >
   <div
     className="content smallContentPadding"
-    onClick={undefined}
+    onClick={[Function]}
   >
     <div
       className="acceptModalContent"

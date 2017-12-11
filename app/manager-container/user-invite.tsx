@@ -11,8 +11,8 @@ interface IProps {
 
 interface IState {
   loading: boolean;
-  error?: string;
-  localEmail?: string;
+  error: string | null;
+  localEmail: string | null;
 }
 
 class UserInvite extends React.Component<IProps, IState> {
@@ -24,7 +24,8 @@ class UserInvite extends React.Component<IProps, IState> {
 
     this.state = {
       loading: false,
-      localEmail: undefined,
+      error: null,
+      localEmail: null,
     };
   }
 
@@ -76,7 +77,7 @@ class UserInvite extends React.Component<IProps, IState> {
             <div className={styles.inputGroup}>
               <input
                 name="email"
-                value={localEmail}
+                value={localEmail || ''}
                 placeholder={'Enter text before @cityblock in email'}
                 className={formStyles.input}
                 onChange={this.onChangeEmail}

@@ -10,14 +10,14 @@ import Button from '../shared/library/button/button';
 import { IState as IAppState } from '../store';
 
 interface IStateProps {
-  computedFieldId?: string;
+  computedFieldId: string | null;
 }
 
 interface IProps {
   routeBase: string;
   match?: {
     params: {
-      objectId?: string;
+      objectId: string | null;
     };
   };
   mutate?: any;
@@ -26,14 +26,14 @@ interface IProps {
 interface IGraphqlProps {
   computedField?: FullComputedFieldFragment;
   computedFieldLoading?: boolean;
-  computedFieldError?: string;
+  computedFieldError: string | null;
   refetchComputedField: () => any;
   onDelete: (computedFieldId: string) => any;
 }
 
 interface IState {
   deleteConfirmationInProgress: boolean;
-  deleteError?: string;
+  deleteError: string | null;
 }
 
 export type allProps = IProps & IStateProps & IGraphqlProps;
@@ -42,7 +42,7 @@ export class ComputedField extends React.Component<allProps, IState> {
   constructor(props: allProps) {
     super(props);
 
-    this.state = { deleteConfirmationInProgress: false, deleteError: undefined };
+    this.state = { deleteConfirmationInProgress: false, deleteError: null };
   }
 
   reloadComputedField = () => {
@@ -66,7 +66,7 @@ export class ComputedField extends React.Component<allProps, IState> {
 
     if (computedFieldId) {
       try {
-        this.setState({ deleteError: undefined });
+        this.setState({ deleteError: null });
         await onDelete(computedFieldId);
         this.setState({ deleteConfirmationInProgress: false });
       } catch (err) {
@@ -76,7 +76,7 @@ export class ComputedField extends React.Component<allProps, IState> {
   };
 
   onCancelDelete = () => {
-    this.setState({ deleteError: undefined, deleteConfirmationInProgress: false });
+    this.setState({ deleteError: null, deleteConfirmationInProgress: false });
   };
 
   render() {
@@ -188,15 +188,16 @@ export class ComputedField extends React.Component<allProps, IState> {
 
 function mapStateToProps(state: IAppState, ownProps: IProps): IStateProps {
   return {
-    computedFieldId: ownProps.match ? ownProps.match.params.objectId : undefined,
+    computedFieldId: ownProps.match ? ownProps.match.params.objectId : null,
   };
 }
 
 export default compose(
   connect<IStateProps, {}, IProps>(mapStateToProps as (args?: any) => IStateProps),
-  graphql(computedFieldQuery as any, {
-    skip: (props: IStateProps) => !props.computedFieldId,
-    options: (props: IStateProps) => ({ variables: { computedFieldId: props.computedFieldId } }),
+  graphql<IGraphqlProps, IProps & IStateProps, allProps>(computedFieldQuery as any, {
+    skip: (props: IProps & IStateProps) => !props.computedFieldId,
+    options: (props: IProps & IStateProps) =>
+      ({ variables: { computedFieldId: props.computedFieldId } }),
     props: ({ data }) => ({
       computedFieldLoading: data ? data.loading : false,
       computedFieldError: data ? data.error : null,

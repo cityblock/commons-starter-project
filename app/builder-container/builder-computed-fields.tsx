@@ -38,7 +38,7 @@ interface IGraphqlProps {
 
 interface IStateProps {
   routeBase: string;
-  computedFieldId?: string;
+  computedFieldId: string | null;
 }
 
 interface IDispatchProps {

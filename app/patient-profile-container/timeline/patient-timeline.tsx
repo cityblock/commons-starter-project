@@ -29,13 +29,13 @@ interface IDispatchProps {
 
 interface IGraphqlProps {
   loading?: boolean;
-  error?: string;
+  error: string | null;
   progressNotes?: getProgressNotesForPatientQuery['progressNotesForPatient'];
 }
 
 interface IState {
   loading?: boolean;
-  error?: string;
+  error: string | null;
   isQuickCallPopupVisible: boolean;
 }
 
@@ -175,7 +175,7 @@ function mapDispatchToProps(dispatch: Dispatch<() => void>): IDispatchProps {
 }
 
 export default compose(
-  connect<{}, IDispatchProps, allProps>(undefined, mapDispatchToProps),
+  connect<{}, IDispatchProps, allProps>(null, mapDispatchToProps),
   graphql<IGraphqlProps, IProps, allProps>(progressNotesQuery as any, {
     options: (props: IProps) => ({
       variables: {

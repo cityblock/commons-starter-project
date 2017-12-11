@@ -28,7 +28,7 @@ interface IGraphqlProps {
     options: { variables: quickCallCreateMutationVariables },
   ) => { data: quickCallCreateMutation };
   patientLoading?: boolean;
-  patientError?: string;
+  patientError?: string | null;
   patient?: ShortPatientFragment;
 }
 
@@ -42,9 +42,7 @@ export class QuickCallPopup extends React.Component<allProps, IState> {
     quickCall: {
       reason: '',
       summary: '',
-      direction: undefined,
       callRecipient: '',
-      wasSuccessful: undefined,
       startTime: '',
       patientId,
     },

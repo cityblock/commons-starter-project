@@ -47,7 +47,7 @@ it('renders comments', () => {
     <Component
       taskId={taskWithComment.id}
       taskCommentsLoading={false}
-      taskCommentsError={undefined}
+      taskCommentsError={null}
       taskCommentsResponse={tasksResponse}
       createComment={jest.fn() as any}
       refetchTaskComments={jest.fn() as any}
@@ -59,7 +59,7 @@ it('renders comments', () => {
   instance.setState({
     comments: [comment],
     commentBody: '',
-    createCommentError: undefined,
+    createCommentError: null,
   });
   expect(instance.renderComments()).toMatchSnapshot();
 });

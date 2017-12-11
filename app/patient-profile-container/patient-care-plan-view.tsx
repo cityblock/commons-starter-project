@@ -32,7 +32,7 @@ interface IGraphqlProps {
   patientCarePlan?: getPatientCarePlanQuery['carePlanForPatient'];
   refetchPatientCarePlan?: () => any;
   loading?: boolean;
-  error?: string;
+  error?: string | null;
 }
 
 interface IStateProps {
@@ -70,7 +70,7 @@ export class PatientCarePlanView extends React.Component<allProps> {
         carePlan={patientCarePlan}
         routeBase={`${routeBase}/active`}
         patientId={patientId}
-        taskId={taskId}
+        taskId={taskId || null}
       />
     ) : null;
 

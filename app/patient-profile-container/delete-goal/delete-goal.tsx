@@ -30,20 +30,20 @@ type allProps = IStateProps & IDispatchProps & IGraphqlProps;
 
 interface IState {
   loading: boolean;
-  error?: string;
+  error: string | null;
 }
 
 export class DeleteGoalModal extends React.Component<allProps, IState> {
   constructor(props: allProps) {
     super(props);
-    this.state = { loading: false };
+    this.state = { loading: false, error: null };
   }
 
   onDelete = async () => {
     const { patientGoalId, deletePatientGoal, closePopup } = this.props;
 
     if (!this.state.loading) {
-      this.setState({ loading: true, error: undefined });
+      this.setState({ loading: true, error: null });
 
       try {
         await deletePatientGoal({ variables: { patientGoalId } });

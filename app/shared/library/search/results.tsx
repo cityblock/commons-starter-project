@@ -9,7 +9,7 @@ interface IProps {
   hideResults: boolean;
   onOptionClick: (optionId: string, optionTitle: string) => void;
   showAll?: boolean;
-  emptyPlaceholderMessageId?: string; // translated text to display if no results found
+  emptyPlaceholderMessageId: string | null; // translated text to display if no results found
 }
 
 const SearchResults: React.StatelessComponent<IProps> = (props: IProps) => {
@@ -32,7 +32,7 @@ const SearchResults: React.StatelessComponent<IProps> = (props: IProps) => {
     <SearchResult
       searchResult={null}
       value={value}
-      emptyPlaceholderMessageId={emptyPlaceholderMessageId}
+      emptyPlaceholderMessageId={emptyPlaceholderMessageId || ''}
       onOptionClick={onOptionClick}
     />
   );

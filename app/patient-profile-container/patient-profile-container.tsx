@@ -36,7 +36,7 @@ interface IStateProps {
 
 interface IGraphqlProps {
   loading: boolean;
-  error?: string;
+  error?: string | null;
   patient?: getPatientQuery['patient'];
 }
 

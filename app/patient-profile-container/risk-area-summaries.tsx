@@ -16,8 +16,10 @@ interface IProps {
 interface IGraphqlProps {
   riskAreas?: getRiskAreasQuery['riskAreas'];
   loading?: boolean;
-  error?: string;
+  error: string | null;
 }
+
+type allProps = IGraphqlProps & IProps;
 
 class RiskAreas extends React.Component<IProps & IGraphqlProps, {}> {
   renderRiskAreaSummary = (riskArea: FullRiskAreaFragment | null, index: number) => {
@@ -92,7 +94,7 @@ class RiskAreas extends React.Component<IProps & IGraphqlProps, {}> {
   }
 }
 
-export default graphql<IGraphqlProps, IProps>(riskAreasQuery as any, {
+export default graphql<IGraphqlProps, IProps, allProps>(riskAreasQuery as any, {
   options: (props: IProps) => ({ variables: {} }),
   props: ({ data }) => ({
     loading: data ? data.loading : false,

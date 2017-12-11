@@ -45,22 +45,26 @@ interface IGraphqlProps {
   progressNoteTemplates?: FullProgressNoteTemplateFragment[];
   computedFields?: FullComputedFieldFragment[];
   loading?: boolean;
-  error?: string;
+  error: string | null;
   deleteQuestion: (
     options: { variables: questionDeleteMutationVariables },
   ) => { data: questionDeleteMutation };
   questions?: FullQuestionFragment[];
   questionsRefetch?: (
-    variables: { riskAreaId?: string; progressNoteTemplateId?: string; screeningToolId?: string },
+    variables: {
+      riskAreaId?: string;
+      progressNoteTemplateId?: string;
+      screeningToolId?: string;
+    },
   ) => any;
 }
 
 interface IStateProps {
-  questionId?: string;
+  questionId: string | null;
   routeBase: string;
-  riskAreaId?: string;
-  progressNoteTemplateId?: string;
-  toolId?: string;
+  riskAreaId: string | null;
+  progressNoteTemplateId: string | null;
+  toolId: string | null;
 }
 
 interface IDispatchProps {
@@ -75,7 +79,7 @@ type allProps = IProps & IGraphqlProps & IDispatchProps & IStateProps;
 interface IState {
   showCreateQuestion: boolean;
   loading?: boolean;
-  error?: string;
+  error: string | null;
 }
 
 class BuilderQuestions extends React.Component<allProps, IState> {
@@ -91,6 +95,7 @@ class BuilderQuestions extends React.Component<allProps, IState> {
 
     this.state = {
       showCreateQuestion: false,
+      error: null,
     };
   }
 
@@ -266,7 +271,7 @@ class BuilderQuestions extends React.Component<allProps, IState> {
               Questions for domain/tool/progress note template:
             </div>
             <div className={sortSearchStyles.sortDropdown}>
-              <select value={selectedValue} onChange={this.onSortChange}>
+              <select value={selectedValue || ''} onChange={this.onSortChange}>
                 {sortOptions}
               </select>
             </div>
@@ -304,7 +309,7 @@ function getPageParams(props: IProps) {
     };
   }
   return {
-    filterId: undefined,
+    filterId: null,
   };
 }
 
@@ -322,13 +327,13 @@ function mapStateToProps(state: IAppState, ownProps: IProps): IStateProps {
     routeBase = `/builder/progress-note-templates/${selectedValue}/questions`;
   }
   return {
-    questionId: ownProps.match.params.questionId,
-    toolId: ownProps.match.params.toolId,
-    progressNoteTemplateId: ownProps.match.params.progressNoteTemplateId,
+    questionId: ownProps.match.params.questionId || null,
+    toolId: ownProps.match.params.toolId || null,
+    progressNoteTemplateId: ownProps.match.params.progressNoteTemplateId || null,
     riskAreaId:
-      ownProps.match.params.riskAreaId !== 'redirect'
-        ? ownProps.match.params.riskAreaId
-        : undefined, // Hack to allow us to link to this page w/o knowing about risk areas
+      // Hack to allow us to link to this page w/o knowing about risk areas
+      ownProps.match.params.riskAreaId !== 'redirect' ?
+        ownProps.match.params.riskAreaId || null : null,
     routeBase,
   };
 }

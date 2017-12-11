@@ -29,7 +29,7 @@ import ProgressNoteTasks from './progress-note-tasks';
 
 interface IProps {
   close: () => void;
-  patientId?: string;
+  patientId: string | null;
   visible: boolean;
   mutate?: any;
 }
@@ -45,9 +45,9 @@ interface IGraphqlProps {
     options: { variables: progressNoteCreateMutationVariables },
   ) => { data: progressNoteCreateMutation };
   progressNoteTemplatesLoading?: boolean;
-  progressNoteTemplatesError?: string;
+  progressNoteTemplatesError?: string | null;
   progressNoteTemplates: FullProgressNoteTemplateFragment[];
-  progressNoteError?: string;
+  progressNoteError?: string | null;
   progressNoteLoading?: boolean;
   progressNote?: FullProgressNoteFragment;
 }
@@ -78,9 +78,9 @@ export class ProgressNotePopup extends React.Component<allProps, IState> {
 
   updateProgressNote = async (options: {
     progressNoteTemplateId: string;
-    startedAt?: string;
-    location?: string;
-    summary?: string;
+    startedAt: string | null;
+    location: string | null;
+    summary: string | null;
   }) => {
     const { progressNote } = this.props;
 
@@ -181,7 +181,7 @@ export class ProgressNotePopup extends React.Component<allProps, IState> {
           </div>
           <Button
             onClick={this.submit}
-            className={readyToSubmit ? undefined : styles.buttonInactive}
+            className={readyToSubmit ? null : styles.buttonInactive}
             messageId="patient.submitProgressNote"
             color="blue"
           />

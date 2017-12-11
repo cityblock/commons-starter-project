@@ -22,9 +22,9 @@ describe('task missing', () => {
           <ReduxConnectedIntlProvider>
             <ConnectedRouter history={history}>
               <div>
-                <TaskMissing taskLoading={true} reloadTask={reloadTask} />
+                <TaskMissing taskError={null} taskLoading={true} reloadTask={reloadTask} />
                 <TaskMissing taskLoading={false} taskError={'error'} reloadTask={reloadTask} />
-                <TaskMissing taskLoading={false} taskError={undefined} reloadTask={reloadTask} />
+                <TaskMissing taskLoading={false} taskError={null} reloadTask={reloadTask} />
               </div>
             </ConnectedRouter>
           </ReduxConnectedIntlProvider>

@@ -25,12 +25,12 @@ interface IProps {
 interface IGraphqlProps {
   progressNotes: getProgressNotesForCurrentUserQuery['progressNotesForCurrentUser'];
   progressNotesLoading?: boolean;
-  progressNotesError?: string;
+  progressNotesError: string | null;
 }
 
 export interface IStateProps {
   popupIsOpen: boolean;
-  popupPatientId?: string;
+  popupPatientId: string | null;
 }
 
 interface IDispatchProps {
@@ -118,7 +118,7 @@ function mapStateToProps(state: IAppState, ownProps: IProps): IStateProps {
     popupIsOpen,
     popupPatientId: popupIsOpen
       ? (state.popup.options as IProgressNotePopupOptions).patientId
-      : undefined, // :(
+      : null, // :(
   };
 }
 

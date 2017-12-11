@@ -13,7 +13,7 @@ interface IProps {
   onNextClick: () => any;
   onPreviousClick: () => any;
   isLoading: boolean;
-  error?: string;
+  error: string | null;
   onRetryClick: () => any;
 }
 

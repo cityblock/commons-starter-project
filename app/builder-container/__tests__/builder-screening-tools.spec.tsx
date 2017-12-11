@@ -21,7 +21,7 @@ describe('builder screening tools', () => {
 
   const match = {
     params: {
-      goalId: undefined,
+      goalId: null,
     },
   };
 

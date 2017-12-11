@@ -13,7 +13,7 @@ import BuilderConcerns from '../builder-concerns';
 const oldDate = Date.now;
 const match = {
   params: {
-    goalId: undefined,
+    goalId: null,
   },
 };
 

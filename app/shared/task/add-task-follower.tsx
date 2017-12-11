@@ -33,8 +33,8 @@ interface IGraphqlProps {
 interface IState {
   open: boolean;
   loading: boolean;
-  lastCareTeamMemberId?: string;
-  addFollowerError?: string;
+  lastCareTeamMemberId: string | null;
+  addFollowerError: string | null;
 }
 
 type allProps = IProps & IGraphqlProps;
@@ -52,8 +52,8 @@ export class AddTaskFollower extends React.Component<allProps, IState> {
     this.state = {
       open: false,
       loading: false,
-      addFollowerError: undefined,
-      lastCareTeamMemberId: undefined,
+      addFollowerError: null,
+      lastCareTeamMemberId: null,
     };
   }
 
@@ -107,8 +107,8 @@ export class AddTaskFollower extends React.Component<allProps, IState> {
     if (!loading) {
       this.setState({
         loading: true,
-        addFollowerError: undefined,
-        lastCareTeamMemberId: undefined,
+        addFollowerError: null,
+        lastCareTeamMemberId: null,
       });
 
       try {
@@ -122,8 +122,8 @@ export class AddTaskFollower extends React.Component<allProps, IState> {
         this.setState({
           open: false,
           loading: false,
-          addFollowerError: undefined,
-          lastCareTeamMemberId: undefined,
+          addFollowerError: null,
+          lastCareTeamMemberId: null,
         });
       } catch (err) {
         this.setState({

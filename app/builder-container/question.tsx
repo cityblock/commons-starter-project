@@ -17,14 +17,14 @@ import AnswerCreateEdit from './answer-create-edit';
 import QuestionConditions from './question-conditions';
 
 interface IStateProps {
-  questionId?: string;
+  questionId: string | null;
 }
 
 interface IProps {
   routeBase: string;
   match?: {
     params: {
-      questionId?: string;
+      questionId: string | null;
     };
   };
 }
@@ -33,7 +33,7 @@ interface IGraphqlProps {
   questions: FullQuestionFragment[];
   question?: FullQuestionFragment;
   questionLoading?: boolean;
-  questionError?: string;
+  questionError: string | null;
   refetchQuestion: () => any;
   editQuestion: (
     options: { variables: questionEditMutationVariables },
@@ -43,12 +43,12 @@ interface IGraphqlProps {
 
 interface IState {
   deleteConfirmationInProgress: boolean;
-  deleteError?: string;
+  deleteError: string | null;
   editedTitle: string;
   editingTitle: boolean;
-  editTitleError?: string;
+  editTitleError: string | null;
   editedOrder: number;
-  editOrderError?: string;
+  editOrderError: string | null;
   editingOrder: boolean;
 }
 
@@ -82,11 +82,13 @@ export class Question extends React.Component<allProps, IState> {
 
     this.state = {
       deleteConfirmationInProgress: false,
-      deleteError: undefined,
+      deleteError: null,
       editedTitle: '',
       editingTitle: false,
       editedOrder: 1,
       editingOrder: false,
+      editTitleError: null,
+      editOrderError: null,
     };
   }
 
@@ -129,7 +131,7 @@ export class Question extends React.Component<allProps, IState> {
 
     if (questionId) {
       try {
-        this.setState({ deleteError: undefined });
+        this.setState({ deleteError: null });
         await onDelete(questionId);
         this.setState({ deleteConfirmationInProgress: false });
       } catch (err) {
@@ -139,7 +141,7 @@ export class Question extends React.Component<allProps, IState> {
   }
 
   onCancelDelete() {
-    this.setState({ deleteError: undefined, deleteConfirmationInProgress: false });
+    this.setState({ deleteError: null, deleteConfirmationInProgress: false });
   }
 
   onChange(event: React.ChangeEvent<HTMLInputElement>) {
@@ -177,17 +179,17 @@ export class Question extends React.Component<allProps, IState> {
 
       if (name === 'editedTitle') {
         try {
-          this.setState({ editTitleError: undefined });
+          this.setState({ editTitleError: null });
           await editQuestion({ variables: { questionId, title: editedTitle } });
-          this.setState({ editTitleError: undefined, editingTitle: false });
+          this.setState({ editTitleError: null, editingTitle: false });
         } catch (err) {
           this.setState({ editTitleError: err.message });
         }
       } else if (name === 'editedOrder') {
         try {
-          this.setState({ editOrderError: undefined });
+          this.setState({ editOrderError: null });
           await editQuestion({ variables: { questionId, order: editedOrder } });
-          this.setState({ editOrderError: undefined, editingOrder: false });
+          this.setState({ editOrderError: null, editingOrder: false });
         } catch (err) {
           this.setState({ editOrderError: err.message });
         }
@@ -467,7 +469,7 @@ export class Question extends React.Component<allProps, IState> {
 
 function mapStateToProps(state: IAppState, ownProps: allProps): IStateProps {
   return {
-    questionId: ownProps.match ? ownProps.match.params.questionId : undefined,
+    questionId: ownProps.match ? ownProps.match.params.questionId : null,
   };
 }
 
@@ -476,7 +478,7 @@ export default compose(
   graphql<IGraphqlProps, IProps, allProps>(questionEditMutationGraphql as any, {
     name: 'editQuestion',
   }),
-  graphql<IGraphqlProps, IProps, allProps>(questionQuery as any, {
+  graphql<IGraphqlProps, IProps & IStateProps, allProps>(questionQuery as any, {
     skip: (props: IProps & IStateProps) => !props.questionId,
     options: (props: IProps & IStateProps) => ({ variables: { questionId: props.questionId } }),
     props: ({ data }) => ({

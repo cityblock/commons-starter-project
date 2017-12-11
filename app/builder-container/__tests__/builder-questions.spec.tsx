@@ -13,9 +13,9 @@ import BuilderQuestions from '../builder-questions';
 const match = {
   params: {
     riskAreaId: riskArea.id,
-    progressNoteTemplateId: undefined,
-    toolId: undefined,
-    questionId: undefined,
+    progressNoteTemplateId: null,
+    toolId: null,
+    questionId: null,
   },
 };
 

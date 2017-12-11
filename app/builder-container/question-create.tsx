@@ -27,9 +27,9 @@ export interface IOptions {
 }
 
 interface IProps {
-  riskAreaId?: string;
-  screeningToolId?: string;
-  progressNoteTemplateId?: string;
+  riskAreaId: string | null;
+  screeningToolId: string | null;
+  progressNoteTemplateId: string | null;
   routeBase: string;
   onClose: () => any;
   redirectToQuestion?: (questionId: string) => any;
@@ -42,7 +42,7 @@ interface IGraphqlProps {
 
 interface IState {
   loading: boolean;
-  error?: string;
+  error: string | null;
   question: questionCreateMutationVariables;
 }
 
@@ -58,6 +58,7 @@ class QuestionCreate extends React.Component<allProps, IState> {
 
     this.state = {
       loading: false,
+      error: null,
       question: {
         title: '',
         order: 1,
@@ -65,8 +66,8 @@ class QuestionCreate extends React.Component<allProps, IState> {
         riskAreaId: props.riskAreaId,
         screeningToolId: props.screeningToolId,
         progressNoteTemplateId: props.progressNoteTemplateId,
-        applicableIfType: undefined,
-        computedFieldId: undefined,
+        applicableIfType: null,
+        computedFieldId: null,
       },
     };
   }
@@ -77,7 +78,7 @@ class QuestionCreate extends React.Component<allProps, IState> {
 
     if (fieldName === 'computedFieldId') {
       if (fieldValue === NOT_COMPUTED_FIELD_ID) {
-        question.computedFieldId = undefined;
+        question.computedFieldId = null;
         question.answerType = 'dropdown' as AnswerTypeOptions;
       } else {
         question.computedFieldId = fieldValue;
@@ -229,7 +230,7 @@ function mapDispatchToProps(dispatch: Dispatch<() => void>, ownProps: allProps):
 }
 
 export default compose(
-  connect(undefined, mapDispatchToProps),
+  connect(null, mapDispatchToProps),
   graphql<IGraphqlProps, IProps, allProps>(questionCreateMutationGraphql as any, {
     name: 'createQuestion',
     options: {

@@ -33,7 +33,7 @@ interface IProps {
   match: {
     params: {
       tab?: Tab;
-      objectId?: string;
+      objectId: string | null;
       subTab?: 'questions';
     };
   };
@@ -41,20 +41,20 @@ interface IProps {
 
 interface IStateProps {
   tab: Tab;
-  objectId?: string;
-  subTab?: string;
+  objectId: string | null;
+  subTab: string | null;
 }
 
 interface IGraphqlProps {
-  screeningToolId?: string;
+  screeningToolId: string | null;
   riskAreasLoading: boolean;
-  riskAreasError?: string;
+  riskAreasError: string | null;
   screeningToolsLoading: boolean;
-  screeningToolsError?: string;
+  screeningToolsError: string | null;
   concernsLoading: boolean;
-  concernsError?: string;
+  concernsError: string | null;
   goalsLoading: boolean;
-  goalsError?: string;
+  goalsError: string | null;
   refetchGoals: () => any;
   riskAreas: FullRiskAreaFragment[];
   concerns: FullConcernFragment[];
@@ -174,7 +174,7 @@ function mapStateToProps(state: IAppState, ownProps: IProps): IStateProps {
   return {
     tab: ownProps.match.params.tab || 'domains',
     objectId: ownProps.match.params.objectId,
-    subTab: ownProps.match.params.subTab,
+    subTab: ownProps.match.params.subTab || null,
   };
 }
 

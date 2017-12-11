@@ -10,7 +10,7 @@ describe('Task Header Component', () => {
   const confirmDelete = () => true;
   const routeBase = '/tasks';
 
-  it('renders nothing if task id or base route undefined', () => {
+  it('renders nothing if task id or base route null', () => {
     const taskId = '';
 
     const wrapper = shallow(

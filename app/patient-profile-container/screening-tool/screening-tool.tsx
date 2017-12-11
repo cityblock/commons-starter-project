@@ -48,10 +48,10 @@ interface IProps {
 interface IGraphqlProps {
   screeningTool?: FullScreeningToolFragment;
   loading?: boolean;
-  error?: string;
+  error: string | null;
   screeningToolQuestions?: FullQuestionFragment[];
   screeningToolQuestionsLoading?: boolean;
-  screeningToolQuestionsError?: string;
+  screeningToolQuestionsError: string | null;
   createPatientAnswers?: (
     options: { variables: patientAnswersCreateMutationVariables },
   ) => { data: patientAnswersCreateMutation };
@@ -62,11 +62,11 @@ interface IGraphqlProps {
     options: { variables: patientScreeningToolSubmissionScoreMutationVariables },
   ) => { data: patientScreeningToolSubmissionScoreMutation };
   patientScreeningToolSubmissionLoading?: boolean;
-  patientScreeningToolSubmissionError?: string;
+  patientScreeningToolSubmissionError: string | null;
   patientScreeningToolSubmission?: FullPatientScreeningToolSubmissionFragment;
   patientAnswers?: getPatientAnswersQuery['patientAnswers'];
   patientAnswersLoading?: boolean;
-  patientAnswersError?: string;
+  patientAnswersError: string | null;
 }
 
 type allProps = IGraphqlProps & IProps;
@@ -235,7 +235,7 @@ export class ScreeningTool extends React.Component<allProps> {
     const { patientScreeningToolSubmission } = this.props;
     const patientScreeningToolSubmissionId = patientScreeningToolSubmission
       ? patientScreeningToolSubmission.id
-      : undefined;
+      : null;
 
     const submitButtonStyles = classNames(styles.button, styles.saveButton, {
       [styles.disabled]: !this.allQuestionsAnswered(),
@@ -324,10 +324,10 @@ export default compose(
   }),
   graphql<IGraphqlProps, IProps, allProps>(patientAnswersQuery as any, {
     skip: (props: allProps) => !getPatientScreeningToolSubmissionId(props),
-    options: (props: allProps) => ({
+    options: (props: IProps) => ({
       variables: {
         filterType: 'patientScreeningToolSubmission',
-        filterId: getPatientScreeningToolSubmissionId(props),
+        filterId: getPatientScreeningToolSubmissionId(props as allProps),
         patientId: props.match.params.patientId,
       },
     }),

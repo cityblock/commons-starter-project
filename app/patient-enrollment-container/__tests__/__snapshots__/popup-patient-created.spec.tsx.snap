@@ -7,7 +7,7 @@ exports[`renders popup 1`] = `
 >
   <div
     className="content"
-    onClick={undefined}
+    onClick={[Function]}
   >
     <div
       className="content"

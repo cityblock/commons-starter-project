@@ -22,7 +22,7 @@ interface IGraphqlProps {
     text: string;
   };
   loading?: boolean;
-  error?: string;
+  error: string | null;
   saveScratchPad: (
     options: { variables: patientScratchPadEditMutationVariables },
   ) => { data: patientScratchPadEditMutation };
@@ -31,8 +31,8 @@ interface IGraphqlProps {
 
 interface IState {
   loading?: boolean;
-  error?: string;
-  scratchPad?: string;
+  error: string | null;
+  scratchPad: string | null;
   saveSuccess: boolean;
   saveError: boolean;
 }
@@ -58,6 +58,7 @@ class PatientScratchPad extends React.Component<allProps, IState> {
       saveError: false,
       loading,
       error,
+      scratchPad: null,
     };
   }
 
@@ -118,7 +119,7 @@ class PatientScratchPad extends React.Component<allProps, IState> {
     const { refetchScratchPad, patientId } = this.props;
 
     try {
-      this.setState({ loading: true, error: undefined });
+      this.setState({ loading: true, error: null });
       await refetchScratchPad({ patientId });
     } catch (err) {
       this.setState({ loading: false, error: err.message });
@@ -138,7 +139,7 @@ class PatientScratchPad extends React.Component<allProps, IState> {
         <textarea
           disabled={disabled}
           className={styles.textArea}
-          value={this.state.scratchPad}
+          value={this.state.scratchPad || ''}
           placeholder={placeholderText}
           onChange={this.onChange}
         />

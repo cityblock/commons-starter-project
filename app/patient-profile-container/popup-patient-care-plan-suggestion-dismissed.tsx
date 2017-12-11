@@ -28,7 +28,7 @@ interface IGraphqlProps {
 interface IState {
   dismissedReason: string;
   loading: boolean;
-  error?: string;
+  error: string | null;
 }
 
 type allProps = IProps & IGraphqlProps;
@@ -41,7 +41,7 @@ class PopupPatientCarePlanSuggestionDismissed extends React.Component<allProps, 
     this.onSubmit = this.onSubmit.bind(this);
     this.onChange = this.onChange.bind(this);
 
-    this.state = { dismissedReason: '', loading: false };
+    this.state = { dismissedReason: '', loading: false, error: null };
   }
 
   async onSubmit() {
@@ -60,7 +60,7 @@ class PopupPatientCarePlanSuggestionDismissed extends React.Component<allProps, 
           },
         });
 
-        this.setState({ loading: false, error: undefined });
+        this.setState({ loading: false, error: null });
 
         this.onDismiss();
       } catch (err) {
@@ -74,7 +74,7 @@ class PopupPatientCarePlanSuggestionDismissed extends React.Component<allProps, 
 
     this.setState({
       loading: false,
-      error: undefined,
+      error: null,
       dismissedReason: '',
     });
 

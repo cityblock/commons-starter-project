@@ -55,10 +55,10 @@ it('renders the correct concern suggestion options', () => {
   answer.concernSuggestions = [concern] as any;
   const component = shallow(
     <Component
-      goals={undefined}
+      goals={null}
       concerns={[concern, newConcern]}
       answer={answer}
-      screeningToolScoreRange={undefined}
+      screeningToolScoreRange={null}
     />,
   );
   const instance = component.instance() as Component;
@@ -81,8 +81,8 @@ it('renders the correct goal suggestion options', () => {
   const component = shallow(
     <Component
       goals={[goalSuggestionTemplate, newGoalSuggestionTemplate]}
-      concerns={undefined}
-      answer={undefined}
+      concerns={null}
+      answer={null}
       screeningToolScoreRange={screeningToolScoreRange}
     />,
   );

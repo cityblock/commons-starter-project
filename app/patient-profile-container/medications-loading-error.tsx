@@ -4,7 +4,7 @@ import * as styles from './css/patient-medications.css';
 interface IProps {
   onRetryClick: () => any;
   loading?: boolean;
-  error?: string;
+  error: string | null;
 }
 
 export const MedicationsLoadingError: React.StatelessComponent<IProps> = props => {

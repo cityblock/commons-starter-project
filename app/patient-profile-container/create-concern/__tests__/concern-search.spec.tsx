@@ -31,7 +31,7 @@ describe('Create Concern Modal Concern Select Component', () => {
   const wrapper = shallow(
     <ConcernSearch
       concernId=""
-      concernType={undefined}
+      concernType={null}
       concerns={concerns}
       onSelectChange={placeholderFn}
       loading={false}

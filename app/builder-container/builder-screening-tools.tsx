@@ -24,14 +24,14 @@ import { ScreeningToolRow } from './screening-tool-row';
 interface IProps {
   match: {
     params: {
-      toolId?: string;
+      toolId: string | null;
     };
   };
   mutate?: any;
 }
 
 interface IStateProps {
-  screeningToolId?: string;
+  screeningToolId: string | null;
   routeBase: string;
 }
 
@@ -41,7 +41,7 @@ interface IDispatchProps {
 
 interface IGraphqlProps {
   loading?: boolean;
-  error?: string;
+  error: string | null;
   riskAreas?: FullRiskAreaFragment[];
   screeningTools?: FullScreeningToolFragment[];
   deleteScreeningTool: (
@@ -52,7 +52,7 @@ interface IGraphqlProps {
 interface IState {
   showCreateScreeningTool: boolean;
   loading?: boolean;
-  error?: string;
+  error: string | null;
 }
 
 type allProps = IProps & IDispatchProps & IGraphqlProps & IStateProps;
@@ -69,6 +69,7 @@ class BuilderScreeningTools extends React.Component<allProps, IState> {
 
     this.state = {
       showCreateScreeningTool: false,
+      error: null,
     };
   }
 

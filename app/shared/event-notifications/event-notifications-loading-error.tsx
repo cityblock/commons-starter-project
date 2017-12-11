@@ -4,7 +4,7 @@ import * as styles from './css/event-notifications.css';
 interface IProps {
   onRetryClick: () => any;
   loading?: boolean;
-  error?: string;
+  error: string | null;
 }
 
 export const EventNotificationsLoadingError: React.StatelessComponent<IProps> = props => {

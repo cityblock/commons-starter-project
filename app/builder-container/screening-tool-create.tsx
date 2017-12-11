@@ -33,7 +33,7 @@ interface IGraphqlProps {
 
 interface IState {
   loading: boolean;
-  error?: string;
+  error: string | null;
   screeningTool: screeningToolCreateMutationVariables;
 }
 
@@ -50,6 +50,7 @@ class ScreeningToolCreate extends React.Component<allProps, IState> {
 
     this.state = {
       loading: false,
+      error: null,
       screeningTool: {
         title: '',
         riskAreaId: '',
@@ -170,7 +171,7 @@ function mapDispatchToProps(dispatch: Dispatch<() => void>, ownProps: allProps):
 }
 
 export default compose(
-  connect(undefined, mapDispatchToProps),
+  connect(null, mapDispatchToProps),
   graphql<IGraphqlProps, IProps, allProps>(screeningToolCreateMutationGraphql as any, {
     name: 'createScreeningTool',
     options: {

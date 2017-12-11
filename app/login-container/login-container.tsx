@@ -18,7 +18,7 @@ interface IGraphqlProps {
   logIn: (options: { variables: logInUserMutationVariables }) => any;
   currentUser?: getCurrentUserQuery['currentUser'];
   loading: boolean;
-  error?: string;
+  error: string | null;
 }
 
 interface IDispatchProps {
@@ -34,13 +34,13 @@ type allProps = IDispatchProps & IGraphqlProps & IProps;
 
 const SCOPE = 'https://www.googleapis.com/auth/calendar';
 
-class LoginContainer extends React.Component<allProps, { error?: string }> {
+class LoginContainer extends React.Component<allProps, { error: string | null }> {
   constructor(props: allProps) {
     super(props);
     this.onSuccess = this.onSuccess.bind(this);
     this.onError = this.onError.bind(this);
     this.state = {
-      error: undefined,
+      error: null,
     };
   }
 
@@ -121,7 +121,7 @@ function mapDispatchToProps(dispatch: Dispatch<() => void>): IDispatchProps {
 }
 
 export default compose(
-  connect<{}, IDispatchProps, IProps>(undefined, mapDispatchToProps),
+  connect<{}, IDispatchProps, IProps>(null, mapDispatchToProps),
   graphql<IGraphqlProps, IProps, allProps>(currentUserQuery as any, {
     props: ({ data }) => ({
       loading: data ? data.loading : false,

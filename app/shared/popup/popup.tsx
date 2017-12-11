@@ -27,12 +27,11 @@ export const Popup: React.StatelessComponent<IProps> = props => {
   const stopPropagation = (e: React.MouseEvent<HTMLDivElement>) => {
     e.stopPropagation();
   };
-  const onContentClick = closePopup ? stopPropagation : undefined;
 
   if (props.visible) {
     return (
       <div className={styles.background} onClick={closePopup}>
-        <div className={contentStyles} onClick={onContentClick}>
+        <div className={contentStyles} onClick={stopPropagation}>
           {props.children}
         </div>
       </div>

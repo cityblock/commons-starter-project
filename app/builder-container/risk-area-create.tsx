@@ -28,7 +28,7 @@ interface IGraphqlProps {
 
 interface IState {
   loading: boolean;
-  error?: string;
+  error: string | null;
   riskArea: riskAreaCreateMutationVariables;
 }
 
@@ -44,6 +44,7 @@ export class RiskAreaCreate extends React.Component<allProps, IState> {
 
     this.state = {
       loading: false,
+      error: null,
       riskArea: {
         title: '',
         order: 1,
@@ -148,7 +149,7 @@ function mapDispatchToProps(dispatch: Dispatch<() => void>, ownProps: allProps):
 }
 
 export default compose(
-  connect(undefined, mapDispatchToProps),
+  connect(null, mapDispatchToProps),
   graphql<IGraphqlProps, IProps, allProps>(riskAreaCreateMutationGraphql as any, {
     name: 'createRiskArea',
     options: {

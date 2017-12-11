@@ -10,7 +10,7 @@ import { getPatientScreeningToolSubmissionQuery } from '../../graphql/types';
 import * as styles from './css/screening-tools-popup.css';
 
 interface IProps {
-  patientScreeningToolSubmissionId?: string;
+  patientScreeningToolSubmissionId: string | null;
   patientRoute: string;
 }
 
@@ -20,7 +20,7 @@ interface IDispatchProps {
 
 interface IGraphqlProps {
   loading?: boolean;
-  error?: string;
+  error: string | null;
   patientScreeningToolSubmission?: getPatientScreeningToolSubmissionQuery['patientScreeningToolSubmission'];
   refetchPatientScreeningToolSubmission?: () => any;
 }
@@ -133,7 +133,7 @@ function mapDispatchToProps(dispatch: Dispatch<() => void>, ownProps: IProps): I
 }
 
 export default compose(
-  connect<{}, IDispatchProps, IProps>(undefined, mapDispatchToProps),
+  connect<{}, IDispatchProps, IProps>(null, mapDispatchToProps),
   graphql<IGraphqlProps, IProps, allProps>(patientScreeningToolSubmissionQuery as any, {
     skip: (props: IProps) => !props.patientScreeningToolSubmissionId,
     options: (props: IProps) => ({

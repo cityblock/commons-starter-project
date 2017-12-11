@@ -52,10 +52,10 @@ interface IDispatchProps {
 interface IGraphqlProps {
   riskArea?: FullRiskAreaFragment;
   loading?: boolean;
-  error?: string;
-  riskAreaQuestions?: FullQuestionFragment[];
+  error?: string | null;
+  riskAreaQuestions: FullQuestionFragment[] | null;
   riskAreaQuestionsLoading?: boolean;
-  riskAreaQuestionsError?: string;
+  riskAreaQuestionsError?: string | null;
   createPatientAnswers?: (
     options: { variables: patientAnswersCreateMutationVariables },
   ) => { data: patientAnswersCreateMutation };
@@ -64,13 +64,13 @@ interface IGraphqlProps {
   ) => { data: patientAnswersUpdateApplicableMutation };
   patientAnswers?: [FullPatientAnswerFragment];
   patientAnswersLoading?: boolean;
-  patientAnswersError?: string;
+  patientAnswersError?: string | null;
   refetchRiskArea?: () => any;
   refetchRiskAreaQuestions?: () => any;
   refetchPatientAnswers?: () => any;
   screeningTools?: FullScreeningToolFragment[];
   screeningToolsLoading?: boolean;
-  screeningToolsError?: string;
+  screeningToolsError?: string | null;
 }
 
 type allProps = IGraphqlProps & IProps & IDispatchProps;
@@ -79,9 +79,9 @@ interface IState {
   inProgress: boolean;
   questions: IQuestionsState;
   assessmentLoading: boolean;
-  assessmentError?: string;
+  assessmentError: string | null;
   updateAnswersApplicabilityLoading: boolean;
-  updateAnswersApplicabilityError?: string;
+  updateAnswersApplicabilityError: string | null;
   selectingScreeningTool: boolean;
   currentlyAdministeringScreeningTool?: FullScreeningToolFragment;
 }
@@ -101,7 +101,8 @@ export class RiskAreaAssessment extends React.Component<allProps, IState> {
       assessmentLoading: false,
       updateAnswersApplicabilityLoading: false,
       selectingScreeningTool: false,
-      currentlyAdministeringScreeningTool: undefined,
+      assessmentError: null,
+      updateAnswersApplicabilityError: null,
     };
   }
 
@@ -179,7 +180,7 @@ export class RiskAreaAssessment extends React.Component<allProps, IState> {
       try {
         this.setState({
           updateAnswersApplicabilityLoading: true,
-          updateAnswersApplicabilityError: undefined,
+          updateAnswersApplicabilityError: null,
         });
 
         const result = await updateAnswersApplicability({ variables: { patientId, riskAreaId } });
@@ -188,7 +189,7 @@ export class RiskAreaAssessment extends React.Component<allProps, IState> {
 
         this.setState({
           updateAnswersApplicabilityLoading: false,
-          updateAnswersApplicabilityError: undefined,
+          updateAnswersApplicabilityError: null,
         });
       } catch (err) {
         this.setState({
@@ -215,7 +216,7 @@ export class RiskAreaAssessment extends React.Component<allProps, IState> {
     const changedQuestionIds = this.getChangedQuestionIds();
 
     if (createPatientAnswers && changedQuestionIds.length) {
-      this.setState({ assessmentLoading: true, assessmentError: undefined });
+      this.setState({ assessmentLoading: true, assessmentError: null });
 
       const newPatientAnswers = getNewPatientAnswers(patientId, questions, riskAreaQuestions || []);
 
@@ -245,7 +246,7 @@ export class RiskAreaAssessment extends React.Component<allProps, IState> {
 
         this.setState({
           assessmentLoading: false,
-          assessmentError: undefined,
+          assessmentError: null,
           inProgress: false,
           questions: resetQuestions,
         });
@@ -341,8 +342,8 @@ export class RiskAreaAssessment extends React.Component<allProps, IState> {
 
     const lastUpdated = getLastUpdated(
       patientAnswers || [],
+      patientAnswersError || null,
       patientAnswersLoading,
-      patientAnswersError,
     );
     const title = riskArea ? riskArea.title : 'Loading...';
 
@@ -442,7 +443,7 @@ function mapDispatchToProps(dispatch: Dispatch<() => void>, ownProps: IProps): I
 }
 
 export default compose(
-  connect<{}, IDispatchProps, IProps>(undefined, mapDispatchToProps),
+  connect<{}, IDispatchProps, IProps>(null, mapDispatchToProps),
   graphql<IGraphqlProps, IProps, allProps>(riskAreaQuery as any, {
     options: (props: IProps) => ({
       variables: {

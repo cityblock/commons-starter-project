@@ -39,8 +39,8 @@ class CarePlanSuggestions extends React.Component<IProps> {
       const concernSuggestionsHtml = concernSuggestions.map((concernSuggestion, index) => (
         <CarePlanSuggestion
           key={concernSuggestion ? concernSuggestion.id : index}
-          answerId={answer ? answer.id : undefined}
-          screeningToolScoreRangeId={scoreRange ? scoreRange.id : undefined}
+          answerId={answer ? answer.id : null}
+          screeningToolScoreRangeId={scoreRange ? scoreRange.id : null}
           suggestionType="concern"
           suggestion={concernSuggestion}
         />
@@ -67,8 +67,8 @@ class CarePlanSuggestions extends React.Component<IProps> {
       const goalSuggestionsHtml = goalSuggestions.map((goalSuggestion, index) => (
         <CarePlanSuggestion
           key={goalSuggestion ? goalSuggestion.id : index}
-          answerId={answer ? answer.id : undefined}
-          screeningToolScoreRangeId={scoreRange ? scoreRange.id : undefined}
+          answerId={answer ? answer.id : null}
+          screeningToolScoreRangeId={scoreRange ? scoreRange.id : null}
           suggestionType="goal"
           suggestion={goalSuggestion}
         />

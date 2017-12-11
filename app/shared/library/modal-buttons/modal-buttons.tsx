@@ -3,8 +3,8 @@ import Button from '../button/button';
 import * as styles from './css/modal-buttons.css';
 
 interface IProps {
-  cancelMessageId?: string; // translate id for cancel (white left) button, default is 'Cancel'
-  submitMessageId?: string; // translate id for submit (blue right) button, default is 'Submit'
+  cancelMessageId?: string; // translate id for cancel (white left) button, default = 'Cancel'
+  submitMessageId?: string; // translate id for submit (blue right) button, default = 'Submit'
   cancel: () => void; // click handler for cancel button
   submit: () => void; // click handler for submit button
   redSubmit?: boolean; // if true, makes submit button red

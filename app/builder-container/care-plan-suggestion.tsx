@@ -16,8 +16,8 @@ import {
 import * as styles from '../shared/css/two-panel-right.css';
 
 interface IProps {
-  answerId?: string;
-  screeningToolScoreRangeId?: string;
+  answerId: string | null;
+  screeningToolScoreRangeId: string | null;
   suggestionType: 'concern' | 'goal';
   suggestion: FullGoalSuggestionTemplateFragment | FullConcernFragment;
   mutate?: any;
@@ -34,7 +34,7 @@ interface IGraphqlProps {
 
 interface IState {
   loading: boolean;
-  error?: string;
+  error: string | null;
 }
 
 type allProps = IProps & IGraphqlProps;
@@ -48,7 +48,7 @@ class CarePlanSuggestion extends React.Component<allProps, IState> {
     this.renderConcernSuggestion = this.renderConcernSuggestion.bind(this);
     this.renderGoalTaskTemplates = this.renderGoalTaskTemplates.bind(this);
 
-    this.state = { loading: false };
+    this.state = { loading: false, error: null };
   }
 
   async onClickDelete() {
@@ -61,7 +61,7 @@ class CarePlanSuggestion extends React.Component<allProps, IState> {
       deleteGoalSuggestion,
     } = this.props;
 
-    this.setState({ loading: true, error: undefined });
+    this.setState({ loading: true, error: null });
 
     try {
       if (suggestionType === 'concern') {
@@ -78,7 +78,7 @@ class CarePlanSuggestion extends React.Component<allProps, IState> {
         });
       }
 
-      this.setState({ loading: false, error: undefined });
+      this.setState({ loading: false, error: null });
     } catch (err) {
       this.setState({ loading: false, error: err.message });
     }

@@ -14,14 +14,14 @@ import * as styles from '../shared/css/two-panel-right.css';
 import { IState as IAppState } from '../store';
 
 interface IStateProps {
-  riskAreaId?: string;
+  riskAreaId: string | null;
 }
 
 interface IProps {
   routeBase: string;
   match?: {
     params: {
-      riskAreaId?: string;
+      riskAreaId: string | null;
     };
   };
 }
@@ -29,7 +29,7 @@ interface IProps {
 interface IGraphqlProps {
   riskArea?: FullRiskAreaFragment;
   riskAreaLoading?: boolean;
-  riskAreaError?: string;
+  riskAreaError: string | null;
   refetchRiskArea: () => any;
   editRiskArea: (
     options: { variables: riskAreaEditMutationVariables },
@@ -39,12 +39,12 @@ interface IGraphqlProps {
 
 interface IState {
   deleteConfirmationInProgress: boolean;
-  deleteError?: string;
+  deleteError: string | null;
   editedTitle: string;
   editingTitle: boolean;
-  editTitleError?: string;
+  editTitleError: string | null;
   editedOrder: number;
-  editOrderError?: string;
+  editOrderError: string | null;
   editingOrder: boolean;
 }
 
@@ -77,11 +77,13 @@ export class RiskArea extends React.Component<allProps, IState> {
 
     this.state = {
       deleteConfirmationInProgress: false,
-      deleteError: undefined,
+      deleteError: null,
       editedTitle: '',
       editingTitle: false,
       editedOrder: 1,
       editingOrder: false,
+      editTitleError: null,
+      editOrderError: null,
     };
   }
 
@@ -124,7 +126,7 @@ export class RiskArea extends React.Component<allProps, IState> {
 
     if (riskAreaId) {
       try {
-        this.setState({ deleteError: undefined });
+        this.setState({ deleteError: null });
         await onDelete(riskAreaId);
         this.setState({ deleteConfirmationInProgress: false });
       } catch (err) {
@@ -134,7 +136,7 @@ export class RiskArea extends React.Component<allProps, IState> {
   }
 
   onCancelDelete() {
-    this.setState({ deleteError: undefined, deleteConfirmationInProgress: false });
+    this.setState({ deleteError: null, deleteConfirmationInProgress: false });
   }
 
   onChange(event: React.ChangeEvent<HTMLInputElement>) {
@@ -155,17 +157,17 @@ export class RiskArea extends React.Component<allProps, IState> {
 
       if (name === 'editedTitle') {
         try {
-          this.setState({ editTitleError: undefined });
+          this.setState({ editTitleError: null });
           await editRiskArea({ variables: { riskAreaId, title: editedTitle } });
-          this.setState({ editTitleError: undefined, editingTitle: false });
+          this.setState({ editTitleError: null, editingTitle: false });
         } catch (err) {
           this.setState({ editTitleError: err.message });
         }
       } else if (name === 'editedOrder') {
         try {
-          this.setState({ editOrderError: undefined });
+          this.setState({ editOrderError: null });
           await editRiskArea({ variables: { riskAreaId, order: editedOrder } });
-          this.setState({ editOrderError: undefined, editingOrder: false });
+          this.setState({ editOrderError: null, editingOrder: false });
         } catch (err) {
           this.setState({ editOrderError: err.message });
         }
@@ -366,7 +368,7 @@ export class RiskArea extends React.Component<allProps, IState> {
 
 function mapStateToProps(state: IAppState, ownProps: IProps): IStateProps {
   return {
-    riskAreaId: ownProps.match ? ownProps.match.params.riskAreaId : undefined,
+    riskAreaId: ownProps.match ? ownProps.match.params.riskAreaId : null,
   };
 }
 

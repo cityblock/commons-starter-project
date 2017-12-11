@@ -43,7 +43,7 @@ type allProps = IProps & IGraphqlProps & IDispatchProps;
 
 interface IState {
   loading: boolean;
-  error?: string;
+  error: string | null;
   task: taskCreateMutationVariables;
 }
 
@@ -61,6 +61,7 @@ class TaskCreate extends React.Component<allProps, IState> {
 
     this.state = {
       loading: false,
+      error: null,
       task: {
         title: '',
         description: '',
@@ -256,7 +257,7 @@ function mapDispatchToProps(dispatch: Dispatch<() => void>, ownProps: IProps): I
 }
 
 export default compose(
-  connect<{}, IDispatchProps, IProps>(undefined, mapDispatchToProps),
+  connect<{}, IDispatchProps, IProps>(null, mapDispatchToProps),
   graphql<IGraphqlProps, IProps, allProps>(careTeamQuery as any, {
     options: (props: IProps) => ({
       variables: {

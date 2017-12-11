@@ -4,7 +4,7 @@ import * as Waypoint from 'react-waypoint';
 import * as styles from './css/infinite-scroll.css';
 
 interface IProps {
-  error?: string;
+  error: string | null;
   loading?: boolean;
   children: any;
   fetchMore: () => void;

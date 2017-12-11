@@ -6,8 +6,8 @@ import * as styles from './css/text-input.css';
 interface IProps {
   value: string;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  placeholderMessageId?: string; // optional placeholderMessageId text for empty field
-  className?: string; // optional styles to apply over defaults
+  placeholderMessageId?: string | null; // optional placeholderMessageId text for empty field
+  className?: string | null; // optional styles to apply over defaults
   name?: string; // optional name field for input
   id?: string; // optional id field for input, likely use with label
   onBlur?: () => void;

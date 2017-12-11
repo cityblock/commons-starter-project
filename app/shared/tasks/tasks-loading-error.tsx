@@ -4,7 +4,7 @@ import * as styles from './css/tasks.css';
 interface IProps {
   onRetryClick: () => any;
   loading?: boolean;
-  error?: string;
+  error: string | null;
 }
 
 export const TasksLoadingError: React.StatelessComponent<IProps> = props => {

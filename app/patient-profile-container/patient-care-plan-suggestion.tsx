@@ -62,7 +62,7 @@ export default class PatientCarePlanSuggestion extends React.Component<IProps, I
     if (suggestionType === 'goal') {
       onAccept(suggestion, selectedTaskTemplateIds);
     } else {
-      onAccept(suggestion);
+      onAccept(suggestion, []);
     }
   }
 

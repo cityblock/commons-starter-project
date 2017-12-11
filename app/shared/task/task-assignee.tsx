@@ -93,7 +93,7 @@ export class TaskAssignee extends React.Component<allProps, IState> {
     const assignee =
       this.props.assignee ||
       (selectedAssigneeId && careTeam.find(a => a.id === selectedAssigneeId)) ||
-      undefined;
+      null;
 
     const assigneeInfo = getAssigneeInfo(assignee);
 

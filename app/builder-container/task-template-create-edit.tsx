@@ -57,7 +57,7 @@ interface IGraphqlProps {
 
 interface IState {
   loading: boolean;
-  error?: string;
+  error: string | null;
   taskTemplate: taskTemplateCreateMutationVariables;
 }
 
@@ -74,6 +74,7 @@ class TaskTemplateCreateEdit extends React.Component<allProps, IState> {
 
     this.state = {
       loading: false,
+      error: null,
       taskTemplate: props.taskTemplate
         ? props.taskTemplate
         : {

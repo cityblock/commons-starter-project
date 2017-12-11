@@ -47,7 +47,7 @@ interface IStateProps {
 interface IGraphqlProps {
   fetchMoreEventNotifications: () => any;
   eventNotificationsLoading: boolean;
-  eventNotificationsError?: string;
+  eventNotificationsError?: string | null;
   /* tslint:disable:max-line-length */
   eventNotificationsResponse?: getEventNotificationsForCurrentUserQuery['eventNotificationsForCurrentUser'];
   /* tslint:disable:max-line-length */
@@ -126,7 +126,7 @@ export class EventNotificationsContainer extends React.Component<allProps> {
             <EventNotifications
               fetchMoreEventNotifications={this.props.fetchMoreEventNotifications}
               loading={eventNotificationsLoading}
-              error={eventNotificationsError}
+              error={eventNotificationsError || null}
               hasNextPage={hasNextPage}
               hasPreviousPage={hasPreviousPage}
               dismissEventNotification={dismissEventNotification}

@@ -24,7 +24,7 @@ interface IState {
   editedCommentBody: string;
   editing: boolean;
   textHeight: string;
-  editError?: string;
+  editError: string | null;
 }
 
 type allProps = IProps & IGraphqlProps;
@@ -58,7 +58,7 @@ export class TaskComment extends React.Component<allProps, IState> {
       editedCommentBody: comment.body,
       editing: false,
       textHeight: '100%',
-      editError: undefined,
+      editError: null,
     };
   }
 
@@ -118,11 +118,11 @@ export class TaskComment extends React.Component<allProps, IState> {
       const { editedCommentBody } = this.state;
 
       try {
-        this.setState({ editError: undefined });
+        this.setState({ editError: null });
 
         await onEdit({ taskCommentId: comment.id, body: editedCommentBody });
 
-        this.setState({ editError: undefined, editing: false });
+        this.setState({ editError: null, editing: false });
       } catch (err) {
         this.setState({ editError: err.message });
       }

@@ -39,12 +39,12 @@ interface IGraphqlProps {
 type ConcernType = 'active' | 'inactive';
 
 interface IState {
-  concernId?: string;
-  concernType?: ConcernType;
+  concernId: string | null;
+  concernType: ConcernType | null;
   searchTerm: string;
   hideSearchResults: boolean;
   showAllConcerns: boolean;
-  concernCreateError?: string;
+  concernCreateError: string | null;
 }
 
 type allProps = IStateProps & IDispatchProps & IGraphqlProps;
@@ -58,12 +58,12 @@ export class CreateConcernModal extends React.Component<allProps, IState> {
 
   getInitialState(): IState {
     return {
-      concernId: undefined,
-      concernType: undefined,
+      concernId: null,
+      concernType: null,
       searchTerm: '',
       hideSearchResults: false,
       showAllConcerns: false,
-      concernCreateError: undefined,
+      concernCreateError: null,
     };
   }
 
@@ -78,7 +78,7 @@ export class CreateConcernModal extends React.Component<allProps, IState> {
 
     if (createPatientConcern && concernId) {
       try {
-        this.setState({ concernCreateError: undefined });
+        this.setState({ concernCreateError: null });
         const startedAt = concernType === 'active' ? new Date().toISOString() : null;
         await createPatientConcern({ variables: { patientId, concernId, startedAt } });
         this.onClose();
@@ -96,7 +96,7 @@ export class CreateConcernModal extends React.Component<allProps, IState> {
   onSearchTermChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
     this.setState({
       searchTerm: e.currentTarget.value,
-      concernId: undefined,
+      concernId: null,
       hideSearchResults: false,
     });
   };

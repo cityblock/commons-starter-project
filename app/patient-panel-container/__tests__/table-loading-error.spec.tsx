@@ -15,7 +15,7 @@ it('renders empty div', () => {
     <MockedProvider mocks={[]}>
       <Provider store={mockStore({ locale })}>
         <ReduxConnectedIntlProvider>
-          <TableLoadingError isLoading={false} error={undefined} onRetryClick={() => false} />
+          <TableLoadingError isLoading={false} error={null} onRetryClick={() => false} />
         </ReduxConnectedIntlProvider>
       </Provider>
     </MockedProvider>,
@@ -41,7 +41,7 @@ it('renders loading', () => {
     <MockedProvider mocks={[]}>
       <Provider store={mockStore({ locale })}>
         <ReduxConnectedIntlProvider>
-          <TableLoadingError isLoading={true} error={undefined} onRetryClick={() => false} />
+          <TableLoadingError isLoading={true} error={null} onRetryClick={() => false} />
         </ReduxConnectedIntlProvider>
       </Provider>
     </MockedProvider>,

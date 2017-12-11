@@ -33,7 +33,7 @@ it('renders error without progress note template', () => {
   const component = shallow(
     <Component
       routeBase="/route/base"
-      progressNoteTemplate={undefined}
+      progressNoteTemplate={null}
       refetchProgressNoteTemplate={() => false}
       progressNoteTemplateError={'error!'}
       editProgressNoteTemplate={editProgressNoteTemplate}
@@ -50,7 +50,7 @@ it('renders loading', () => {
   const component = shallow(
     <Component
       routeBase="/route/base"
-      progressNoteTemplate={undefined}
+      progressNoteTemplate={null}
       refetchProgressNoteTemplate={() => false}
       progressNoteTemplateLoading={true}
       editProgressNoteTemplate={editProgressNoteTemplate}

@@ -23,11 +23,11 @@ interface IProps {
 interface IGraphqlProps {
   riskAreaScore?: getPatientRiskScoreForRiskAreaQuery['patientRiskAreaRiskScore'];
   scoreLoading?: boolean;
-  scoreError?: string;
+  scoreError: string | null;
   reloadScore?: (variables: { patientId: string; riskAreaId: string }) => any;
   riskAreaSummary?: getPatientRiskSummaryForRiskAreaQuery['patientRiskAreaSummary'];
   summaryLoading?: boolean;
-  summaryError?: string;
+  summaryError: string | null;
   reloadSummary?: (variables: { patientId: string; riskAreaId: string }) => any;
 }
 
@@ -111,11 +111,11 @@ class RiskAreaSummary extends React.Component<IProps & IGraphqlProps, {}> {
     const { scoreError, reloadScore, patientId, riskArea } = this.props;
 
     if (!!scoreError && reloadScore) {
-      this.setState({ scoreLoading: true, scoreError: undefined });
+      this.setState({ scoreLoading: true, scoreError: null });
 
       try {
         await reloadScore({ patientId, riskAreaId: riskArea.id });
-        this.setState({ scoreLoading: false, scoreError: undefined });
+        this.setState({ scoreLoading: false, scoreError: null });
       } catch (err) {
         this.setState({ scoreLoading: false, scoreError: err.message });
       }
@@ -126,11 +126,11 @@ class RiskAreaSummary extends React.Component<IProps & IGraphqlProps, {}> {
     const { summaryError, reloadSummary, patientId, riskArea } = this.props;
 
     if (!!summaryError && reloadSummary) {
-      this.setState({ summaryLoading: true, summaryError: undefined });
+      this.setState({ summaryLoading: true, summaryError: null });
 
       try {
         await reloadSummary({ patientId, riskAreaId: riskArea.id });
-        this.setState({ summaryLoading: false, summaryError: undefined });
+        this.setState({ summaryLoading: false, summaryError: null });
       } catch (err) {
         this.setState({ summaryLoading: false, summaryError: err.message });
       }

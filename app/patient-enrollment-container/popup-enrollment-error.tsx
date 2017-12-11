@@ -4,7 +4,7 @@ import * as styles from './css/popup-enrollment-error.css';
 
 interface IProps {
   visible: boolean;
-  error?: string;
+  error: string | null;
   onClose: () => void;
 }
 

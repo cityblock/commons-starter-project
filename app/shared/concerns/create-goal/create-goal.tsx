@@ -45,11 +45,11 @@ type allProps = IStateProps & IDispatchProps & IGraphqlProps;
 
 interface IState {
   title: string;
-  goalSuggestionTemplateId?: string;
+  goalSuggestionTemplateId: string | null;
   showAllGoals: boolean;
   hideSearchResults: boolean;
   loading: boolean;
-  error?: string;
+  error: string | null;
   suggestedTaskView: boolean;
   rejectedTaskTemplateIds: string[];
 }
@@ -66,9 +66,10 @@ export class CreateGoalModal extends React.Component<allProps, IState> {
       loading: false,
       suggestedTaskView: false,
       rejectedTaskTemplateIds: [],
-      goalSuggestionTemplateId: undefined,
+      goalSuggestionTemplateId: null,
       showAllGoals: false,
       hideSearchResults: false,
+      error: null,
     };
   }
 
@@ -93,7 +94,7 @@ export class CreateGoalModal extends React.Component<allProps, IState> {
 
     if (!loading) {
       try {
-        this.setState({ loading: true, error: undefined });
+        this.setState({ loading: true, error: null });
 
         if (custom) {
           await createPatientGoal({
@@ -101,7 +102,7 @@ export class CreateGoalModal extends React.Component<allProps, IState> {
               patientId,
               patientConcernId,
               title,
-              goalSuggestionTemplateId: undefined,
+              goalSuggestionTemplateId: null,
             },
           });
         } else {
@@ -148,10 +149,10 @@ export class CreateGoalModal extends React.Component<allProps, IState> {
   };
 
   onTitleChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
-    // ensure goal suggestion template id undefined if they keep typing
+    // ensure goal suggestion template id null if they keep typing
     this.setState({
       title: e.currentTarget.value,
-      goalSuggestionTemplateId: undefined,
+      goalSuggestionTemplateId: null,
       hideSearchResults: false,
     });
   };

@@ -40,9 +40,9 @@ interface IProps {
   onChange: (
     options: {
       progressNoteTemplateId: string;
-      startedAt?: string;
-      location?: string;
-      summary?: string;
+      startedAt: string | null;
+      location: string | null;
+      summary: string | null;
     },
   ) => void;
 }
@@ -50,14 +50,14 @@ interface IProps {
 interface IGraphqlProps {
   clinics: getClinicsQuery['clinics'];
   clinicsLoading?: boolean;
-  clinicsError?: string;
+  clinicsError?: string | null;
   questionsLoading?: boolean;
-  questionsError?: string;
+  questionsError?: string | null;
   questions: getQuestionsQuery['questions'];
   refetchPatientAnswers?: () => any;
   patientAnswers?: getPatientAnswersQuery['patientAnswers'];
   patientAnswersLoading?: boolean;
-  patientAnswersError?: string;
+  patientAnswersError?: string | null;
   createPatientAnswers?: (
     options: { variables: patientAnswersCreateMutationVariables },
   ) => { data: patientAnswersCreateMutation };
@@ -66,22 +66,22 @@ interface IGraphqlProps {
 type allProps = IGraphqlProps & IProps;
 
 interface IState {
-  progressNoteTime?: string;
-  progressNoteLocation?: string;
-  progressNoteTemplateId?: string;
-  progressNoteSummary?: string;
+  progressNoteTime: string | null;
+  progressNoteLocation: string | null;
+  progressNoteTemplateId: string | null;
+  progressNoteSummary: string | null;
   loading?: boolean;
-  error?: string;
+  error: string | null;
 }
 
 function getProgressNoteId(props: IProps) {
-  return props.progressNote ? props.progressNote.id : undefined;
+  return props.progressNote ? props.progressNote.id : null;
 }
 
 function getProgressNoteTemplateId(props: IProps) {
   return props.progressNote && props.progressNote.progressNoteTemplate
     ? props.progressNote.progressNoteTemplate.id
-    : undefined;
+    : null;
 }
 
 const SAVE_TIMEOUT_MILLISECONDS = 500;
@@ -96,12 +96,12 @@ export class ProgressNoteContext extends React.Component<allProps, IState> {
     this.deferredSaveProgressNote = debounce(this.saveProgressNote, SAVE_TIMEOUT_MILLISECONDS);
     this.state = {
       loading: false,
+      error: null,
       progressNoteTime:
         progressNote && progressNote.startedAt
           ? new Date(progressNote.startedAt).toISOString()
           : defaultDate.toISOString(),
-      progressNoteLocation:
-        progressNote && progressNote.location ? progressNote.location : undefined,
+      progressNoteLocation: progressNote && progressNote.location ? progressNote.location : null,
       progressNoteTemplateId: getProgressNoteTemplateId(props),
       progressNoteSummary: progressNote && progressNote.summary ? progressNote.summary : '',
     };
@@ -127,8 +127,7 @@ export class ProgressNoteContext extends React.Component<allProps, IState> {
         progressNote && progressNote.startedAt
           ? new Date(progressNote.startedAt).toISOString()
           : defaultDate.toISOString(),
-      progressNoteLocation:
-        progressNote && progressNote.location ? progressNote.location : undefined,
+      progressNoteLocation: progressNote && progressNote.location ? progressNote.location : null,
       progressNoteTemplateId: getProgressNoteTemplateId(props),
       progressNoteSummary: progressNote && progressNote.summary ? progressNote.summary : '',
     });

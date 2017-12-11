@@ -23,14 +23,14 @@ interface IProps {
   mutate?: any;
   match: {
     params: {
-      progressNoteTemplateId?: string;
+      progressNoteTemplateId: string | null;
     };
   };
 }
 
 interface IStateProps {
   routeBase: string;
-  progressNoteTemplateId?: string;
+  progressNoteTemplateId: string | null;
 }
 
 interface IDispatchProps {
@@ -39,7 +39,7 @@ interface IDispatchProps {
 
 interface IGraphqlProps {
   loading?: boolean;
-  error?: string;
+  error: string | null;
   deleteProgressNoteTemplate: (
     options: { variables: progressNoteTemplateDeleteMutationVariables },
   ) => { data: progressNoteTemplateDeleteMutation };
@@ -50,7 +50,7 @@ interface IGraphqlProps {
 interface IState {
   showCreateProgressNoteTemplate: boolean;
   loading?: boolean;
-  error?: string;
+  error: string | null;
 }
 
 type allProps = IProps & IStateProps & IDispatchProps & IGraphqlProps;
@@ -68,6 +68,7 @@ class BuilderProgressNoteTemplates extends React.Component<allProps, IState> {
     this.state = {
       showCreateProgressNoteTemplate: false,
       loading: false,
+      error: null,
     };
   }
 

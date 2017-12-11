@@ -59,7 +59,7 @@ interface IState {
 export interface IGraphqlProps {
   currentUser?: FullUserFragment;
   loading?: boolean;
-  error?: string;
+  error: string | null;
   deleteUser?: (
     options: { variables: userDeleteMutationVariables },
   ) => { data: userDeleteMutation };
@@ -250,7 +250,7 @@ function mapDispatchToProps(dispatch: Dispatch<() => void>, ownProps: IProps): I
 }
 
 export default compose(
-  connect<{}, IDispatchProps, IProps>(undefined, mapDispatchToProps),
+  connect<{}, IDispatchProps, IProps>(null, mapDispatchToProps),
   graphql<IGraphqlProps, IProps>(userDeleteMutationGraphql as any, {
     name: 'deleteUser',
     options: {

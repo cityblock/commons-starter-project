@@ -5,7 +5,7 @@ import * as styles from './css/risk-areas.css';
 interface IProps {
   onRetryClick: () => any;
   loading?: boolean;
-  error?: string;
+  error?: string | null;
 }
 
 const buttonStyles = classNames(styles.invertedButton, styles.riskAreasErrorButton);

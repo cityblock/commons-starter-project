@@ -8,7 +8,7 @@ import * as styles from './css/create-goal.css';
 
 interface IProps {
   title: string;
-  goalSuggestionTemplateId?: string;
+  goalSuggestionTemplateId: string | null;
   goalSuggestionTemplates: SearchOptions;
   onSubmit: () => void;
   closePopup: () => void;

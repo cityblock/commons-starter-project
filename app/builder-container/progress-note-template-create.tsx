@@ -19,7 +19,7 @@ export interface IOptions {
 }
 
 interface IProps {
-  progressNoteTemplateId?: string;
+  progressNoteTemplateId: string | null;
   routeBase: string;
   onClose: () => any;
   redirectToProgressNoteTemplate?: (progressNoteTemplateId: string) => any;
@@ -31,7 +31,7 @@ interface IGraphqlProps {
 
 interface IState {
   loading: boolean;
-  error?: string;
+  error: string | null;
   progressNoteTemplate: progressNoteTemplateCreateMutationVariables;
 }
 
@@ -46,6 +46,7 @@ export class ProgressNoteTemplateCreate extends React.Component<allProps, IState
 
     this.state = {
       loading: false,
+      error: null,
       progressNoteTemplate: {
         title: '',
       },
@@ -141,7 +142,7 @@ function mapDispatchToProps(dispatch: Dispatch<() => void>, ownProps: allProps):
 }
 
 export default compose(
-  connect(undefined, mapDispatchToProps),
+  connect(null, mapDispatchToProps),
   graphql<IGraphqlProps, IProps, allProps>(progressNoteTemplateCreateMutationGraphql as any, {
     name: 'createProgressNoteTemplate',
     options: {

@@ -14,9 +14,11 @@ interface IProps {
 
 interface IGraphqlProps {
   loading?: boolean;
-  error?: string;
+  error: string | null;
   careTeam?: getPatientCareTeamQuery['patientCareTeam'];
 }
+
+type allProps = IGraphqlProps & IProps;
 
 interface IState {
   open: boolean;
@@ -143,7 +145,7 @@ class CareTeamWidget extends React.Component<IProps & IGraphqlProps, IState> {
   }
 }
 
-export default graphql<IGraphqlProps, IProps>(careTeamQuery as any, {
+export default graphql<IGraphqlProps, IProps, allProps>(careTeamQuery as any, {
   options: (props: IProps) => ({
     variables: {
       patientId: props.patientId,

@@ -17,7 +17,7 @@ export interface IProps {
   loading?: boolean;
   routeBase: string;
   carePlan?: getPatientCarePlanQuery['carePlanForPatient'];
-  taskId?: string;
+  taskId: string | null;
 }
 
 export type allProps = IDispatchProps & IProps;

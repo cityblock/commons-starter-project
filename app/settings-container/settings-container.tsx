@@ -15,17 +15,17 @@ interface IGraphqlProps {
   updateUser: (options: { variables: currentUserEditMutationVariables }) => any;
   currentUser?: FullUserFragment;
   loading: boolean;
-  error?: string;
+  error: string | null;
 }
 
 type allProps = IProps & IGraphqlProps;
 
-class SettingsContainer extends React.Component<allProps, { error?: string }> {
+class SettingsContainer extends React.Component<allProps, { error: string | null }> {
   constructor(props: allProps) {
     super(props);
     this.updateUser = this.updateUser.bind(this);
     this.state = {
-      error: undefined,
+      error: null,
     };
   }
 

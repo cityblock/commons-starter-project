@@ -3,7 +3,7 @@ import * as styles from './css/patient-timeline.css';
 
 interface IProps {
   loading?: boolean;
-  error?: string;
+  error?: string | null;
 }
 
 export const ProgressNoteLoadingError: React.StatelessComponent<IProps> = props => {

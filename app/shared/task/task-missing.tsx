@@ -4,7 +4,7 @@ import * as styles from './css/task.css';
 
 interface IProps {
   taskLoading?: boolean;
-  taskError?: string;
+  taskError: string | null;
   reloadTask: () => void;
 }
 

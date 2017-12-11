@@ -42,7 +42,7 @@ it('renders the correct results', async () => {
       redirectToCarePlanSuggestions={() => true}
       patientRoute={`/patients/${patient.id}`}
       loading={false}
-      error={undefined}
+      error={null}
       patientScreeningToolSubmission={patientScreeningToolSubmission}
     />,
   );

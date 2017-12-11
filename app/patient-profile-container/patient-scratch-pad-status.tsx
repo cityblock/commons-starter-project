@@ -5,7 +5,7 @@ import * as styles from './css/patient-scratch-pad.css';
 interface IProps {
   saveSuccess: boolean;
   saveError: boolean;
-  loadingError?: string;
+  loadingError: string | null;
   reloadScratchPad: () => any;
   resaveScratchPad: () => any;
 }

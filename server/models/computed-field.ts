@@ -87,6 +87,17 @@ export default class ComputedField extends BaseModel {
       .orderBy(orderBy, order);
   }
 
+  static async getAllAvailable({
+    orderBy,
+    order,
+  }: IComputedFieldOrderOptions): Promise<ComputedField[]> {
+    return (await this.query()
+      .joinRaw('LEFT OUTER JOIN question ON question."computedFieldId" = computed_field.id')
+      .where('computed_field.deletedAt', null)
+      .andWhere('question.id', null)
+      .orderBy(orderBy, order)) as any;
+  }
+
   static async delete(computedFieldId: string): Promise<ComputedField> {
     await this.query()
       .where({ id: computedFieldId, deletedAt: null })

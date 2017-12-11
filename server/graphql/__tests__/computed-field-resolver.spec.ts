@@ -2,6 +2,8 @@ import { graphql } from 'graphql';
 import { cloneDeep } from 'lodash';
 import Db from '../../db';
 import ComputedField from '../../models/computed-field';
+import Question from '../../models/question';
+import RiskArea from '../../models/risk-area';
 import schema from '../make-executable-schema';
 
 describe('computed field resolver', () => {
@@ -90,6 +92,40 @@ describe('computed field resolver', () => {
         {
           label: computedField2.label,
         },
+      ]);
+    });
+
+    it('returns only computed fields that are not associated with a question', async () => {
+      const computedField1 = await ComputedField.create({
+        label: 'def',
+        slug: 'computed-field-1',
+        dataType: 'boolean',
+      });
+      const computedField2 = await ComputedField.create({
+        label: 'abc',
+        slug: 'computed-field-2',
+        dataType: 'boolean',
+      });
+      const riskArea = await RiskArea.create({ title: 'Housing', order: 1 });
+      await Question.create({
+        riskAreaId: riskArea.id,
+        type: 'riskArea',
+        order: 1,
+        title: 'Question',
+        answerType: 'boolean' as any,
+        computedFieldId: computedField1.id,
+      });
+
+      const query = `{
+        computedFields(availableOnly: true) { label }
+      }`;
+
+      const result = await graphql(schema, query, null, {
+        db,
+        userRole: 'admin',
+      });
+      expect(cloneDeep(result.data!.computedFields)).toMatchObject([
+        { label: computedField2.label },
       ]);
     });
   });

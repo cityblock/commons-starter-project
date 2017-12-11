@@ -233,7 +233,7 @@ export default compose(
   graphql<IGraphqlProps, IProps, allProps>(questionCreateMutationGraphql as any, {
     name: 'createQuestion',
     options: {
-      refetchQueries: ['getQuestions'],
+      refetchQueries: ['getQuestions', 'getComputedFields'],
     },
   }),
 )(QuestionCreate);

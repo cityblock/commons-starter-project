@@ -1055,6 +1055,7 @@ export type getComputedFieldQuery = {
 
 export type getComputedFieldsQueryVariables = {
   orderBy?: ComputedFieldOrderOptions | null,
+  availableOnly?: boolean | null,
 };
 
 export type getComputedFieldsQuery = {

@@ -1,6 +1,8 @@
 import * as uuid from 'uuid/v4';
 import Db from '../../db';
 import ComputedField from '../computed-field';
+import Question from '../question';
+import RiskArea from '../risk-area';
 
 const order = 'asc';
 const orderBy = 'createdAt';
@@ -156,6 +158,32 @@ describe('computed field model', () => {
         computedField2,
         computedField1,
       ]);
+    });
+
+    it('gets all computed fields not associated with a question', async () => {
+      const computedField1 = await ComputedField.create({
+        label: 'def',
+        slug: 'computed-field-1',
+        dataType: 'boolean',
+      });
+      const computedField2 = await ComputedField.create({
+        label: 'abc',
+        slug: 'computed-field-2',
+        dataType: 'number',
+      });
+      const riskArea = await RiskArea.create({ title: 'Housing', order: 1 });
+      await Question.create({
+        riskAreaId: riskArea.id,
+        type: 'riskArea',
+        title: 'Question',
+        answerType: 'boolean' as any,
+        order: 1,
+        computedFieldId: computedField1.id,
+      });
+
+      expect(await ComputedField.getAllAvailable({ orderBy: 'label', order: 'asc' })).toMatchObject(
+        [computedField2],
+      );
     });
 
     it('deletes a computed field', async () => {

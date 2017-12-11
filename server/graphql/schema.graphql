@@ -1666,7 +1666,7 @@ type RootQueryType {
   # computed field
   computedField(computedFieldId: String!): ComputedField
   # computed fields
-  computedFields(orderBy: ComputedFieldOrderOptions): [ComputedField]
+  computedFields(orderBy: ComputedFieldOrderOptions, availableOnly: Boolean): [ComputedField]
 }
 
 schema {

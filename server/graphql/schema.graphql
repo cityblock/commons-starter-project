@@ -94,6 +94,7 @@ enum AnswerFilterType {
   progressNote
   riskArea
   screeningTool
+  patientScreeningToolSubmission
 }
 
 enum TaskEventTypes {
@@ -415,7 +416,7 @@ type Answer implements uniqueId {
   summaryText: String
   questionId: String!
   order: Int!
-  concernSuggestions: [Concern!]!
+  concernSuggestions: [Concern!]
   goalSuggestions: [GoalSuggestionTemplate]
   riskArea: RiskArea
   screeningTool: ScreeningTool
@@ -611,7 +612,7 @@ type PatientConcern implements uniqueId {
   order: Int!
   concernId: String!
   concern: Concern!
-  patientGoals: [PatientGoal!]!
+  patientGoals: [PatientGoal!]
   patientId: String!
   patient: Patient!
   startedAt: String
@@ -721,11 +722,12 @@ type PatientScreeningToolSubmission implements uniqueId {
   patient: Patient!
   userId: String!
   user: User!
-  score: Int!
+  score: Int
   riskArea: RiskArea!
   createdAt: String!
   updatedAt: String!
   deletedAt: String
+  scoredAt: String
   carePlanSuggestions: [CarePlanSuggestion!]!
   screeningToolScoreRangeId: String
   screeningToolScoreRange: ScreeningToolScoreRange
@@ -1042,7 +1044,7 @@ input PatientAnswersCreateInput {
   patientId: String!
   patientAnswers: [PatientAnswerInput]!
   questionIds: [String]!
-  screeningToolId: String
+  patientScreeningToolSubmissionId: String
   progressNoteId: String
 }
 
@@ -1263,16 +1265,10 @@ input ScreeningToolScoreRangeDeleteInput {
 input PatientScreeningToolSubmissionCreateInput {
   screeningToolId: String!
   patientId: String!
-  userId: String!
-  score: Int!
 }
 
-input PatientScreeningToolSubmissionEditInput {
+input PatientScreeningToolSubmissionScoreInput {
   patientScreeningToolSubmissionId: String!
-  screeningToolId: String
-  patientId: String
-  userId: String
-  score: Int
 }
 
 input PatientScreeningToolSubmissionDeleteInput {
@@ -1478,9 +1474,9 @@ type RootMutationType {
   patientScreeningToolSubmissionCreate(
     input: PatientScreeningToolSubmissionCreateInput
   ): PatientScreeningToolSubmission
-  # patient screening tool submission edit
-  patientScreeningToolSubmissionEdit(
-    input: PatientScreeningToolSubmissionEditInput
+  # patient screening tool submission score
+  patientScreeningToolSubmissionScore(
+    input: PatientScreeningToolSubmissionScoreInput
   ): PatientScreeningToolSubmission
   # patient screening tool submission delete
   patientScreeningToolSubmissionDelete(
@@ -1565,7 +1561,7 @@ type RootQueryType {
     filterId: String!
     filterType: AnswerFilterType!
     patientId: String!
-  ): [PatientAnswer]
+  ): [PatientAnswer!]
   # PatientPreviousAnswersForQuestion
   patientPreviousAnswersForQuestion(questionId: String!, patientId: String!): [PatientAnswer]
   # PatientRiskAreaSummary
@@ -1641,11 +1637,13 @@ type RootQueryType {
   patientScreeningToolSubmissionForPatientAndScreeningTool(
     screeningToolId: String!
     patientId: String!
+    scored: Boolean!
   ): PatientScreeningToolSubmission
   # patient screening tool submissions for patient and screening tool (optioanlly)
   patientScreeningToolSubmissionsForPatient(
     patientId: String!
     screeningToolId: String
+    scored: Boolean!
   ): [PatientScreeningToolSubmission]
   # patient screening tool submissions
   patientScreeningToolSubmissions: [PatientScreeningToolSubmission]

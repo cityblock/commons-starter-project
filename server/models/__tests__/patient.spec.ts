@@ -204,20 +204,22 @@ describe('patient model', () => {
     let user: User;
     beforeEach(async () => {
       user = await User.create(createMockUser(11, clinic.id, userRole));
-      await Patient.setup(createMockPatient(14, clinic.id, "Robb", "Stark"), user.id);
-      await createPatient(createMockPatient(11, clinic.id, "Jon", "Snow"), user.id);
-      await createPatient(createMockPatient(12, clinic.id, "Arya", "Stark"), user.id);
-      await createPatient(createMockPatient(13, clinic.id, "Sansa", "Stark"), user.id);
+      await Patient.setup(createMockPatient(14, clinic.id, 'Robb', 'Stark'), user.id);
+      await createPatient(createMockPatient(11, clinic.id, 'Jon', 'Snow'), user.id);
+      await createPatient(createMockPatient(12, clinic.id, 'Arya', 'Stark'), user.id);
+      await createPatient(createMockPatient(13, clinic.id, 'Sansa', 'Stark'), user.id);
     });
 
     it('returns single result', async () => {
       const query = 'jon';
       expect(await Patient.search(query, { pageNumber: 0, pageSize: 1 }, user.id)).toMatchObject({
-        results: [{
-          firstName: 'Jon',
-          lastName: 'Snow',
-          userCareTeam: true,
-        }],
+        results: [
+          {
+            firstName: 'Jon',
+            lastName: 'Snow',
+            userCareTeam: true,
+          },
+        ],
         total: 1,
       });
     });
@@ -225,18 +227,21 @@ describe('patient model', () => {
     it('returns multiple matching results', async () => {
       const query = 'stark';
       expect(await Patient.search(query, { pageNumber: 0, pageSize: 3 }, user.id)).toMatchObject({
-        results: [{
-          lastName: 'Stark',
-          userCareTeam: true,
-        },
-        {
-          lastName: 'Stark',
-          userCareTeam: true,
-        }, {
-          firstName: 'Robb',
-          lastName: 'Stark',
-          userCareTeam: false,
-        }],
+        results: [
+          {
+            lastName: 'Stark',
+            userCareTeam: true,
+          },
+          {
+            lastName: 'Stark',
+            userCareTeam: true,
+          },
+          {
+            firstName: 'Robb',
+            lastName: 'Stark',
+            userCareTeam: false,
+          },
+        ],
         total: 3,
       });
     });
@@ -244,11 +249,13 @@ describe('patient model', () => {
     it('returns a close matching result', async () => {
       const query = 'john';
       expect(await Patient.search(query, { pageNumber: 0, pageSize: 1 }, user.id)).toMatchObject({
-        results: [{
-          firstName: 'Jon',
-          lastName: 'Snow',
-          userCareTeam: true,
-        }],
+        results: [
+          {
+            firstName: 'Jon',
+            lastName: 'Snow',
+            userCareTeam: true,
+          },
+        ],
         total: 1,
       });
     });
@@ -264,15 +271,11 @@ describe('patient model', () => {
     it('does not search if not logged in', async () => {
       await expect(
         Patient.search('cersei', { pageNumber: 0, pageSize: 1 }, undefined),
-      ).rejects.toMatch(
-        'Must be logged in to search patients',
-      );
+      ).rejects.toMatch('Must be logged in to search patients');
     });
 
     it('does not search for empty string', async () => {
-      await expect(
-        Patient.search('', { pageNumber: 0, pageSize: 1 }, user.id),
-      ).rejects.toMatch(
+      await expect(Patient.search('', { pageNumber: 0, pageSize: 1 }, user.id)).rejects.toMatch(
         'Must provide a search term',
       );
     });

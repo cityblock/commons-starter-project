@@ -1,6 +1,6 @@
 import * as classNames from 'classnames';
 import * as React from 'react';
-import { FullScreeningToolFragment } from '../graphql/types';
+import { FullScreeningToolFragment } from '../../graphql/types';
 import * as styles from './css/screening-tools-popup.css';
 
 interface IProps {

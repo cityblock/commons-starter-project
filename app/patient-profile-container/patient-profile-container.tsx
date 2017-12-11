@@ -14,7 +14,7 @@ import PatientCarePlanView from './patient-care-plan-view';
 import PatientInfo from './patient-info';
 import PatientProfileLeftNav from './patient-profile-left-nav';
 import PatientThreeSixtyView from './patient-three-sixty-view';
-import ScreeningTool from './screening-tool';
+import ScreeningTool from './screening-tool/screening-tool';
 import PatientTimeline from './timeline/patient-timeline';
 
 export type SelectableTabs = 'timeline' | 'patientInfo' | '360' | 'map' | 'tasks' | 'tools';

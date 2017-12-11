@@ -1,4 +1,3 @@
-import { IAnswersReset, IAnswerAdd, IAnswerRemove } from './answer-action';
 import { IBrowserChanged } from './browser-action';
 import { IEventNotificationsCountUpdated } from './event-notifications-action';
 import { IIdleEnd, IIdleStart } from './idle-action';
@@ -12,8 +11,5 @@ export type Action =
   | IIdleStart
   | IIdleEnd
   | IPopupOpen
-  | IPopupClose
-  | IAnswersReset
-  | IAnswerAdd
-  | IAnswerRemove;
+  | IPopupClose;
 export type ActionType = Action['type'];

@@ -1,4 +1,4 @@
-@import '../../shared/css/sizes';
+@import '../../../shared/css/sizes';
 
 .screeningToolsPopupContent {
   display: flex;
@@ -15,7 +15,7 @@
 .screeningToolsPopupDismissButton {
   height: 16px;
   width: 16px;
-  background-image: url('../../assets/close-grey.svg');
+  background-image: url('../../../assets/close-grey.svg');
   background-position: center center;
   background-size: contain;
   background-repeat: no-repeat;

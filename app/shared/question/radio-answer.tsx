@@ -8,21 +8,17 @@ interface IProps {
   editable: boolean;
   currentAnswer: { id: string; value: string };
   question: FullQuestionFragment;
-  onChange: (questionId: string, answerId: string, value: string | number) => any;
+  onChange: (
+    questionId: string,
+    answers: Array<{ answerId: string; value: string | number }>,
+  ) => any;
 }
 
 export default class RadioAnswer extends React.Component<IProps, {}> {
-  constructor(props: IProps) {
-    super(props);
-
-    this.renderRadioItem = this.renderRadioItem.bind(this);
-  }
-
-  renderRadioItem(answer: FullAnswerFragment, index: number) {
+  renderRadioItem = (answer: FullAnswerFragment, index: number) => {
     const { question, currentAnswer, onChange, editable } = this.props;
 
     const labelStyles = classNames(formStyles.radioLabel, styles.radioLabel);
-
     return (
       <div key={`${answer.id}-${index}`} className={styles.radioGroupItem}>
         <div className={formStyles.radioGroupContainer}>
@@ -30,7 +26,9 @@ export default class RadioAnswer extends React.Component<IProps, {}> {
             disabled={!editable}
             className={formStyles.radio}
             type="radio"
-            onClick={event => onChange(question.id, answer.id, answer.value)}
+            onChange={event =>
+              onChange(question.id, [{ answerId: answer.id, value: answer.value }])
+            }
             checked={!!currentAnswer && currentAnswer.id === answer.id}
             value={answer.id}
           />
@@ -38,13 +36,13 @@ export default class RadioAnswer extends React.Component<IProps, {}> {
         </div>
         <span
           className={labelStyles}
-          onClick={() => onChange(question.id, answer.id, answer.value)}
+          onClick={() => onChange(question.id, [{ answerId: answer.id, value: answer.value }])}
         >
           {answer.displayValue}
         </span>
       </div>
     );
-  }
+  };
 
   render() {
     const { question } = this.props;

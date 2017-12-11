@@ -5,7 +5,10 @@ import * as styles from './patient-question.css';
 import QuestionAnswers from './question-answers';
 
 interface IProps {
-  onChange: (questionId: string, answerId: string, value: string | number) => any;
+  onChange: (
+    questionId: string,
+    answers: Array<{ answerId: string; value: string | number }>,
+  ) => any;
   visible: boolean;
   question: FullQuestionFragment;
   editable: boolean;
@@ -24,14 +27,6 @@ interface IProps {
 }
 
 export default class PatientQuestion extends React.Component<IProps, {}> {
-  updateValue = (value: string | number, answerId: string) => {
-    const { question, onChange, editable } = this.props;
-
-    if (editable) {
-      onChange(question.id, answerId, value);
-    }
-  };
-
   renderAnswers = () => {
     const { question, answerData, onChange, editable } = this.props;
 

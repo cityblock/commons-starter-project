@@ -1,7 +1,11 @@
 import { clone, isEqual, keys, values } from 'lodash';
 import * as React from 'react';
 import { FormattedRelative } from 'react-intl';
-import { FullPatientAnswerFragment, FullQuestionFragment } from '../../graphql/types';
+import {
+  getQuestionsQuery,
+  FullPatientAnswerFragment,
+  FullQuestionFragment,
+} from '../../graphql/types';
 
 export interface IQuestionsState {
   [questionId: string]: {
@@ -244,10 +248,12 @@ export function evaluateQuestionConditions(
   return conditionsStatus;
 }
 
-export function getQuestionVisibility(
+// New question helpers
+// TODO: remove above helpers
+export const getQuestionVisibility = (
   question: FullQuestionFragment,
   questions: IQuestionsState,
-): boolean {
+): boolean => {
   let visible: boolean = true;
 
   const questionConditions = question.applicableIfQuestionConditions;
@@ -279,4 +285,35 @@ export function getQuestionVisibility(
   }
 
   return visible;
-}
+};
+
+export const getAnswerDataForQuestion = (
+  question: FullQuestionFragment,
+  patientAnswers: FullPatientAnswerFragment[],
+) => {
+  const answerData = { answers: [] as any, oldAnswers: [] as any, changed: false };
+  patientAnswers.forEach(answer => {
+    if (answer && answer.question && answer.question.id === question.id) {
+      const data = { id: answer.answerId, value: answer.answerValue };
+      answerData.oldAnswers.push(data);
+      answerData.answers.push(data);
+    }
+  });
+  return answerData;
+};
+
+export const allQuestionsAnswered = (
+  questions: getQuestionsQuery['questions'],
+  answerData: IQuestionsState,
+) => {
+  for (const question of questions || []) {
+    const isVisible = getQuestionVisibility(question, answerData);
+
+    if (isVisible) {
+      if (!answerData[question.id] || answerData[question.id].answers.length < 1) {
+        return false;
+      }
+    }
+  }
+  return true;
+};

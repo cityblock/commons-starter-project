@@ -94,7 +94,7 @@ import {
 import {
   patientScreeningToolSubmissionCreate,
   patientScreeningToolSubmissionDelete,
-  patientScreeningToolSubmissionEdit,
+  patientScreeningToolSubmissionScore,
   resolvePatientScreeningToolSubmission,
   resolvePatientScreeningToolSubmissions,
   resolvePatientScreeningToolSubmissionsForPatient,
@@ -356,7 +356,7 @@ const resolveFunctions = {
     screeningToolScoreRangeEdit,
     screeningToolScoreRangeDelete,
     patientScreeningToolSubmissionCreate,
-    patientScreeningToolSubmissionEdit,
+    patientScreeningToolSubmissionScore,
     patientScreeningToolSubmissionDelete,
     progressNoteTemplateCreate,
     progressNoteTemplateDelete,

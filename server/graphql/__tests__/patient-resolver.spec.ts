@@ -207,10 +207,10 @@ describe('patient', () => {
         userRole,
         homeClinicId,
       });
-      await createPatient(createMockPatient(11, homeClinicId, "Jon", "Snow"), user.id);
-      await createPatient(createMockPatient(12, homeClinicId, "Robb", "Stark"), user2.id);
-      await createPatient(createMockPatient(13, homeClinicId, "Arya", "Stark"), user.id);
-      await createPatient(createMockPatient(14, homeClinicId, "Sansa", "Stark"), user.id);
+      await createPatient(createMockPatient(11, homeClinicId, 'Jon', 'Snow'), user.id);
+      await createPatient(createMockPatient(12, homeClinicId, 'Robb', 'Stark'), user2.id);
+      await createPatient(createMockPatient(13, homeClinicId, 'Arya', 'Stark'), user.id);
+      await createPatient(createMockPatient(14, homeClinicId, 'Sansa', 'Stark'), user.id);
     });
 
     it('searches for a single patients', async () => {
@@ -227,13 +227,15 @@ describe('patient', () => {
       });
 
       expect(cloneDeep(result.data!.patientSearch)).toMatchObject({
-        edges: [{
-          node: {
-            firstName: 'Jon',
-            lastName: 'Snow',
-            userCareTeam: true,
+        edges: [
+          {
+            node: {
+              firstName: 'Jon',
+              lastName: 'Snow',
+              userCareTeam: true,
+            },
           },
-        }],
+        ],
         total: 1,
       });
     });
@@ -252,23 +254,27 @@ describe('patient', () => {
       });
 
       expect(cloneDeep(result.data!.patientSearch)).toMatchObject({
-        edges: [{
-          node: {
-            lastName: 'Stark',
-            userCareTeam: true,
+        edges: [
+          {
+            node: {
+              lastName: 'Stark',
+              userCareTeam: true,
+            },
           },
-        }, {
-          node: {
-            lastName: 'Stark',
-            userCareTeam: true,
+          {
+            node: {
+              lastName: 'Stark',
+              userCareTeam: true,
+            },
           },
-        }, {
-          node: {
-            firstName: 'Robb',
-            lastName: 'Stark',
-            userCareTeam: false,
+          {
+            node: {
+              firstName: 'Robb',
+              lastName: 'Stark',
+              userCareTeam: false,
+            },
           },
-        }],
+        ],
         total: 3,
       });
     });
@@ -287,13 +293,15 @@ describe('patient', () => {
       });
 
       expect(cloneDeep(result.data!.patientSearch)).toMatchObject({
-        edges: [{
-          node: {
-            firstName: 'Jon',
-            lastName: 'Snow',
-            userCareTeam: true,
+        edges: [
+          {
+            node: {
+              firstName: 'Jon',
+              lastName: 'Snow',
+              userCareTeam: true,
+            },
           },
-        }],
+        ],
         total: 1,
       });
     });

@@ -1,4 +1,3 @@
-import { unionBy } from 'lodash';
 import { transaction, Model, RelationMappings, Transaction } from 'objection';
 import Answer from './answer';
 import BaseModel from './base-model';
@@ -94,6 +93,7 @@ export default class GoalSuggestion extends BaseModel {
     );
   }
 
+  // TODO: Retire this function
   static async getNewForPatient(
     patientId: string,
     txn?: Transaction,
@@ -105,7 +105,7 @@ export default class GoalSuggestion extends BaseModel {
       .andWhere('suggestionType', 'goal')
       .select('goalSuggestionTemplateId');
 
-    const answerGoalSuggestions = await this.query(txn)
+    const goalSuggestions = (await this.query(txn)
       .eager('goalSuggestionTemplate.[taskTemplates]')
       .joinRelation('answer')
       .join('patient_answer', 'answer.id', 'patient_answer.answerId')
@@ -122,10 +122,27 @@ export default class GoalSuggestion extends BaseModel {
       )
       .andWhere('patient_answer.patientId', patientId)
       .andWhere('patient_answer.applicable', true)
-      .andWhere('patient_goal.id', null);
+      .andWhere('patient_goal.id', null)) as GoalSuggestion[];
+
+    return goalSuggestions.map(
+      (goalSuggestion: GoalSuggestion) => goalSuggestion.goalSuggestionTemplate,
+    );
+  }
+
+  static async getNewSuggestionsForPatientScreeningToolSubmission(
+    patientId: string,
+    patientScreeningToolSubmissionId: string,
+    txn?: Transaction,
+  ): Promise<GoalSuggestionTemplate[]> {
+    const existingPatientCarePlanSuggestionsQuery = CarePlanSuggestion.query(txn)
+      .where('patientId', patientId)
+      .andWhere('dismissedAt', null)
+      .andWhere('acceptedAt', null)
+      .andWhere('suggestionType', 'goal')
+      .select('goalSuggestionTemplateId');
 
     // TODO: make this work in a 'union' query. Can't get it to act properly right now though.
-    const screeningToolGoalSuggestions = await this.query(txn)
+    const goalSuggestions = (await this.query(txn)
       .eager('goalSuggestionTemplate.[taskTemplates]')
       .joinRelation('screeningToolScoreRange')
       .join(
@@ -138,20 +155,13 @@ export default class GoalSuggestion extends BaseModel {
         'goal_suggestion.goalSuggestionTemplateId',
         'patient_goal.goalSuggestionTemplateId',
       )
-      .where('patient_screening_tool_submission.deletedAt', null)
+      .where('patient_screening_tool_submission.id', patientScreeningToolSubmissionId)
       .andWhere(
         'goal_suggestion.goalSuggestionTemplateId',
         'not in',
         existingPatientCarePlanSuggestionsQuery,
       )
-      .andWhere('patient_screening_tool_submission.patientId', patientId)
-      .andWhere('patient_goal.id', null);
-
-    const goalSuggestions = unionBy(
-      answerGoalSuggestions,
-      screeningToolGoalSuggestions,
-      'goalSuggestionTemplateId',
-    ) as GoalSuggestion[];
+      .andWhere('patient_goal.id', null)) as GoalSuggestion[];
 
     return goalSuggestions.map(
       (goalSuggestion: GoalSuggestion) => goalSuggestion.goalSuggestionTemplate,

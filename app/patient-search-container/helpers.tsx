@@ -10,9 +10,9 @@ export const PatientSearchTitle: React.StatelessComponent<ITitleProps> = ({ quer
   if (query) {
     return (
       <div className={styles.title}>
-        <FormattedMessage id="patientSearch.resultsTitle">{
-          (message: string) => <h2>{message}</h2>
-        }</FormattedMessage>
+        <FormattedMessage id="patientSearch.resultsTitle">
+          {(message: string) => <h2>{message}</h2>}
+        </FormattedMessage>
         <h2 className={styles.lightBlue}>{query}</h2>
       </div>
     );
@@ -20,9 +20,9 @@ export const PatientSearchTitle: React.StatelessComponent<ITitleProps> = ({ quer
 
   return (
     <div className={styles.title}>
-      <FormattedMessage id="patientSearch.searchTitle">{
-        (message: string) => <h2>{message}</h2>
-      }</FormattedMessage>
+      <FormattedMessage id="patientSearch.searchTitle">
+        {(message: string) => <h2>{message}</h2>}
+      </FormattedMessage>
     </div>
   );
 };
@@ -31,20 +31,24 @@ interface IDescriptionProps {
   totalResults: number | null;
 }
 
-export const PatientSearchDescription: React.StatelessComponent<IDescriptionProps> =
-  ({ totalResults }) => {
-
+export const PatientSearchDescription: React.StatelessComponent<IDescriptionProps> = ({
+  totalResults,
+}) => {
   if (totalResults) {
     return (
-      <FormattedMessage id="patientSearch.resultsDescription">{
-        (message: string) => <p className={styles.description}>{totalResults} {message}</p>
-      }</FormattedMessage>
+      <FormattedMessage id="patientSearch.resultsDescription">
+        {(message: string) => (
+          <p className={styles.description}>
+            {totalResults} {message}
+          </p>
+        )}
+      </FormattedMessage>
     );
   }
 
   return (
-    <FormattedMessage id="patientSearch.searchDescription">{
-      (message: string) => <p className={styles.description}>{message}</p>
-    }</FormattedMessage>
+    <FormattedMessage id="patientSearch.searchDescription">
+      {(message: string) => <p className={styles.description}>{message}</p>}
+    </FormattedMessage>
   );
 };

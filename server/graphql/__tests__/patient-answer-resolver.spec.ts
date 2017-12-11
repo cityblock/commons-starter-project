@@ -500,12 +500,17 @@ describe('patient answer tests', () => {
         title: 'Screening Tool',
         riskAreaId: riskArea.id,
       });
+      const patientScreeningToolSubmission = await PatientScreeningToolSubmission.create({
+        patientId: patient.id,
+        userId: user.id,
+        screeningToolId: screeningTool.id,
+      });
 
       const mutation = `mutation {
         patientAnswersCreate(input: {
           patientId: "${patient.id}",
           questionIds: ["${answer.questionId}", "${answer2.questionId}"],
-          screeningToolId: "${screeningTool.id}",
+          patientScreeningToolSubmissionId: "${patientScreeningToolSubmission.id}",
           patientAnswers: [{
             questionId: "${answer.questionId}"
             answerValue: "3"
@@ -549,14 +554,13 @@ describe('patient answer tests', () => {
         applicable: false,
       });
 
-      const patientScreeningToolSubmissions = await PatientScreeningToolSubmission.getForPatient(
-        patient.id,
-        screeningTool.id,
+      const updatedPatientScreeningToolSubmission = await PatientScreeningToolSubmission.get(
+        patientScreeningToolSubmission.id,
       );
 
-      expect(patientScreeningToolSubmissions.length).toEqual(1);
-      expect(patientScreeningToolSubmissions[0].screeningToolId).toEqual(screeningTool.id);
-      expect(patientScreeningToolSubmissions[0].score).toEqual(7);
+      expect(updatedPatientScreeningToolSubmission.screeningToolId).toEqual(screeningTool.id);
+      // Has not been scored yet
+      expect(updatedPatientScreeningToolSubmission.score).toBeFalsy();
     });
 
     it('generates the correct care plan suggestions for a submitted screening tool', async () => {
@@ -581,6 +585,11 @@ describe('patient answer tests', () => {
         maximumScore: 10,
         screeningToolId: screeningTool.id,
       });
+      const patientScreeningToolSubmission = await PatientScreeningToolSubmission.create({
+        patientId: patient.id,
+        userId: user.id,
+        screeningToolId: screeningTool.id,
+      });
       await ConcernSuggestion.create({
         concernId: concern.id,
         screeningToolScoreRangeId: screeningToolScoreRange.id,
@@ -594,7 +603,7 @@ describe('patient answer tests', () => {
         patientAnswersCreate(input: {
           patientId: "${patient.id}",
           questionIds: ["${answer.questionId}", "${answer2.questionId}"],
-          screeningToolId: "${screeningTool.id}",
+          patientScreeningToolSubmissionId: "${patientScreeningToolSubmission.id}",
           patientAnswers: [{
             questionId: "${answer.questionId}"
             answerValue: "3"
@@ -616,29 +625,22 @@ describe('patient answer tests', () => {
         }
       }`;
 
-      const result = await graphql(schema, mutation, null, {
+      await graphql(schema, mutation, null, {
         db,
         userRole,
         userId: user.id,
       });
 
-      const clonedResult = cloneDeep(result.data!.patientAnswersCreate);
-      const patientAnswer = clonedResult.find((r: any) => r.answerValue === '3');
-      const patientAnswer2 = clonedResult.find((r: any) => r.answerValue === '4');
-
-      expect(patientAnswer).toMatchObject({
-        answerValue: '3',
-        answerId: answer.id,
-        patientId: patient.id,
-        applicable: false,
-      });
-
-      expect(patientAnswer2).toMatchObject({
-        answerValue: '4',
-        answerId: answer2.id,
-        patientId: patient.id,
-        applicable: false,
-      });
+      // submit score
+      const submission = await PatientScreeningToolSubmission.submitScore(
+        patientScreeningToolSubmission.id,
+        {
+          patientAnswers: await PatientAnswer.getForScreeningToolSubmission(
+            patientScreeningToolSubmission.id,
+          ),
+        },
+      );
+      expect(submission.score).toEqual(7);
 
       const carePlanSuggestions = await CarePlanSuggestion.getForPatient(patient.id);
       expect(carePlanSuggestions.length).toEqual(2);

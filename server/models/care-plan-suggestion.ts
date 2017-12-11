@@ -158,7 +158,6 @@ export default class CarePlanSuggestion extends BaseModel {
     txn?: Transaction,
   ): Promise<CarePlanSuggestion[]> {
     const { suggestions } = input;
-
     return await this.query(txn).insertGraphAndFetch(suggestions);
   }
 
@@ -186,6 +185,8 @@ export default class CarePlanSuggestion extends BaseModel {
       )
       .orderBy('createdAt', 'asc');
   }
+
+  // TODO: Get for screening tool submission
 
   static async accept(
     carePlanSuggestionId: string,

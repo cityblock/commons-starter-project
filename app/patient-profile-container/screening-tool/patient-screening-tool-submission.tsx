@@ -1,15 +1,26 @@
 import * as React from 'react';
+import { graphql } from 'react-apollo';
 import { FormattedDate } from 'react-intl';
-import { FullPatientScreeningToolSubmissionFragment } from '../graphql/types';
+/* tslint:disable:max-line-length */
+import * as patientScreeningToolSubmissionQuery from '../../graphql/queries/get-patient-screening-tool-submission-for-patient-and-screening-tool.graphql';
+/* tsline:enable:max-line-length */
+import { FullPatientScreeningToolSubmissionFragment } from '../../graphql/types';
 import * as styles from './css/screening-tools.css';
 
 interface IProps {
-  submission?: FullPatientScreeningToolSubmissionFragment;
-  loading?: boolean;
-  error?: string;
+  screeningToolId: string;
+  patientId: string;
 }
 
-export const PatientScreeningToolSubmission: React.StatelessComponent<IProps> = props => {
+interface IGraphqlProps {
+  loading?: boolean;
+  error?: string;
+  submission?: FullPatientScreeningToolSubmissionFragment;
+}
+
+type allProps = IGraphqlProps & IProps;
+
+const PatientScreeningToolSubmission: React.StatelessComponent<allProps> = props => {
   const { submission, loading, error } = props;
 
   if (!loading && !error && !!submission) {
@@ -57,3 +68,24 @@ export const PatientScreeningToolSubmission: React.StatelessComponent<IProps> = 
     return null;
   }
 };
+
+export default graphql<IGraphqlProps, IProps, allProps>(
+  patientScreeningToolSubmissionQuery as any,
+  {
+    skip: (props: IProps) => !props.screeningToolId,
+    options: (props: IProps) => ({
+      variables: {
+        screeningToolId: props.screeningToolId,
+        patientId: props.patientId,
+        scored: true,
+      },
+    }),
+    props: ({ data }) => ({
+      loading: data ? data.loading : false,
+      error: data ? data.error : null,
+      submission: data
+        ? (data as any).patientScreeningToolSubmissionForPatientAndScreeningTool
+        : null,
+    }),
+  },
+)(PatientScreeningToolSubmission);

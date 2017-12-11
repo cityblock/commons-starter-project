@@ -53,7 +53,7 @@ export class PatientSearchContainer extends React.Component<allProps, IState> {
       pageNumber: INITIAL_PAGE_NUMBER,
       pageSize,
     });
-  }
+  };
 
   render(): JSX.Element {
     const { searchTerm } = this.state;
@@ -65,7 +65,8 @@ export class PatientSearchContainer extends React.Component<allProps, IState> {
         <PatientSearchInput
           searchTerm={searchTerm}
           onChange={this.onSearchTermChange}
-          onSearch={this.onSearchClick} />
+          onSearch={this.onSearchClick}
+        />
       </div>
     );
   }

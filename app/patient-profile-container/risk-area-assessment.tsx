@@ -35,7 +35,7 @@ import {
   IQuestionsState,
 } from '../shared/question/question-helpers';
 import * as styles from './css/risk-areas.css';
-import ScreeningToolsPopup from './screening-tools-popup';
+import ScreeningToolsPopup from './screening-tool/screening-tools-popup';
 
 interface IProps {
   riskAreaId: string;
@@ -257,19 +257,21 @@ export class RiskAreaAssessment extends React.Component<allProps, IState> {
     }
   };
 
-  onChange = (questionId: string, answerId: string, value: string | number) => {
+  onChange = (questionId: string, answers: Array<{ answerId: string; value: string | number }>) => {
     const { riskAreaQuestions } = this.props;
 
-    const update = getUpdateForAnswer(
-      questionId,
-      answerId,
-      value,
-      riskAreaQuestions || [],
-      this.state.questions,
-    );
-    if (update) {
-      this.setState({ questions: update });
-    }
+    answers.map(answer => {
+      const update = getUpdateForAnswer(
+        questionId,
+        answer.answerId,
+        answer.value,
+        riskAreaQuestions || [],
+        this.state.questions,
+      );
+      if (update) {
+        this.setState({ questions: update });
+      }
+    });
   };
 
   renderRiskAreaQuestion = (question: FullQuestionFragment, index: number) => {

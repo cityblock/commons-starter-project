@@ -493,7 +493,6 @@ describe('answer model', () => {
       screeningToolId: screeningTool.id,
       patientId: patient.id,
       userId: user.id,
-      patientAnswers: [{ answer, ...answerParams } as any],
     });
     const patientAnswers = await PatientAnswer.create({
       patientId: patient.id,
@@ -506,6 +505,53 @@ describe('answer model', () => {
     expect(await PatientAnswer.getForScreeningTool(screeningTool.id, patient.id)).toEqual([
       patientAnswers[0],
     ]);
+  });
+
+  it('gets all for screening tool submission', async () => {
+    const screeningTool = await ScreeningTool.create({
+      title: 'Screening Tool',
+      riskAreaId: riskArea.id,
+    });
+    const screeningToolQuestion = await Question.create({
+      title: 'like writing tests again?',
+      answerType: 'dropdown',
+      screeningToolId: screeningTool.id,
+      type: 'screeningTool',
+      order: 1,
+    });
+    const screeningToolAnswer = await Answer.create({
+      displayValue: 'loves writing more tests!',
+      value: '3',
+      valueType: 'number',
+      riskAdjustmentType: 'forceHighRisk',
+      inSummary: false,
+      questionId: screeningToolQuestion.id,
+      order: 1,
+    });
+    const answerParams = {
+      questionId: screeningToolAnswer.questionId,
+      answerId: screeningToolAnswer.id,
+      answerValue: '3',
+      patientId: patient.id,
+      applicable: true,
+      userId: user.id,
+    };
+    const patientScreeningToolSubmission = await PatientScreeningToolSubmission.create({
+      screeningToolId: screeningTool.id,
+      patientId: patient.id,
+      userId: user.id,
+    });
+    const patientAnswers = await PatientAnswer.create({
+      patientId: patient.id,
+      patientScreeningToolSubmissionId: patientScreeningToolSubmission.id,
+      answers: [answerParams],
+    });
+    expect(patientAnswers[0].patientScreeningToolSubmissionId).toEqual(
+      patientScreeningToolSubmission.id,
+    );
+    expect(
+      await PatientAnswer.getForScreeningToolSubmission(patientScreeningToolSubmission.id),
+    ).toEqual([patientAnswers[0]]);
   });
 
   it('creates patient answer events for a list of answers', async () => {

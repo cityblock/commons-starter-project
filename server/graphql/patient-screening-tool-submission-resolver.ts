@@ -1,15 +1,19 @@
-import { pickBy } from 'lodash';
 import {
   IPatientScreeningToolSubmissionCreateInput,
   IPatientScreeningToolSubmissionDeleteInput,
-  IPatientScreeningToolSubmissionEditInput,
+  IPatientScreeningToolSubmissionScoreInput,
 } from 'schema';
+import PatientAnswer from '../models/patient-answer';
 import PatientScreeningToolSubmission from '../models/patient-screening-tool-submission';
 import accessControls from './shared/access-controls';
 import { checkUserLoggedIn, IContext } from './shared/utils';
 
 export interface IPatientScreeningToolSubmissionCreateArgs {
   input: IPatientScreeningToolSubmissionCreateInput;
+}
+
+export interface IPatientScreeningToolSubmissionScoreArgs {
+  input: IPatientScreeningToolSubmissionScoreInput;
 }
 
 export interface IResolvePatientScreeningToolSubmissionOptions {
@@ -19,10 +23,6 @@ export interface IResolvePatientScreeningToolSubmissionOptions {
 export interface IResolvePatientScreeningToolSubmissionsOptions {
   patientId: string;
   screeningToolId?: string;
-}
-
-export interface IEditPatientScreeningToolSubmissionOptions {
-  input: IPatientScreeningToolSubmissionEditInput;
 }
 
 export interface IDeletePatientScreeningToolSubmissionOptions {
@@ -38,22 +38,28 @@ export async function patientScreeningToolSubmissionCreate(
   await accessControls.isAllowed(userRole, 'create', 'patientScreeningToolSubmission');
   checkUserLoggedIn(userId);
 
-  return await PatientScreeningToolSubmission.create(input as any);
+  return await PatientScreeningToolSubmission.autoOpenIfRequired({
+    ...input,
+    userId: userId!,
+  });
 }
 
-export async function patientScreeningToolSubmissionEdit(
-  rot: any,
-  args: IEditPatientScreeningToolSubmissionOptions,
-  { db, userId, userRole }: IContext,
+export async function patientScreeningToolSubmissionScore(
+  root: any,
+  { input }: IPatientScreeningToolSubmissionScoreArgs,
+  context: IContext,
 ) {
-  await accessControls.isAllowedForUser(userRole, 'edit', 'patientScreeningToolSubmission');
+  const { userRole, userId } = context;
+  await accessControls.isAllowed(userRole, 'create', 'patientScreeningToolSubmission');
   checkUserLoggedIn(userId);
 
-  const cleanedParams = pickBy<IPatientScreeningToolSubmissionEditInput>(args.input) as any;
-  return await PatientScreeningToolSubmission.edit(
-    args.input.patientScreeningToolSubmissionId,
-    cleanedParams,
+  const patientAnswers = await PatientAnswer.getForScreeningToolSubmission(
+    input.patientScreeningToolSubmissionId,
   );
+
+  return await PatientScreeningToolSubmission.submitScore(input.patientScreeningToolSubmissionId, {
+    patientAnswers,
+  });
 }
 
 export async function resolvePatientScreeningToolSubmission(
@@ -68,7 +74,7 @@ export async function resolvePatientScreeningToolSubmission(
 
 export async function resolvePatientScreeningToolSubmissionForPatientAndScreeningTool(
   root: any,
-  args: { screeningToolId: string; patientId: string },
+  args: { screeningToolId: string; patientId: string; scored: boolean },
   { db, userRole }: IContext,
 ) {
   await accessControls.isAllowed(userRole, 'view', 'patientScreeningToolSubmission');
@@ -76,6 +82,7 @@ export async function resolvePatientScreeningToolSubmissionForPatientAndScreenin
   return await PatientScreeningToolSubmission.getLatestForPatientAndScreeningTool(
     args.screeningToolId,
     args.patientId,
+    args.scored,
   );
 }
 

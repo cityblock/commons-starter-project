@@ -116,7 +116,7 @@ declare module 'schema' {
     /**
     description: PatientAnswersForQuestion
   */
-    patientAnswers: Array<IPatientAnswer> | null;
+    patientAnswers: Array<IPatientAnswer>;
     /**
     description: PatientPreviousAnswersForQuestion
   */
@@ -794,11 +794,12 @@ declare module 'schema' {
     patient: IPatient;
     userId: string;
     user: IUser;
-    score: number;
+    score: number | null;
     riskArea: IRiskArea;
     createdAt: string;
     updatedAt: string;
     deletedAt: string | null;
+    scoredAt: string | null;
     carePlanSuggestions: Array<ICarePlanSuggestion>;
     screeningToolScoreRangeId: string | null;
     screeningToolScoreRange: IScreeningToolScoreRange | null;
@@ -831,7 +832,7 @@ declare module 'schema' {
   type ICarePlanSuggestionTypeEnum = 'concern' | 'goal';
 
 
-  type IAnswerFilterTypeEnum = 'question' | 'progressNote' | 'riskArea' | 'screeningTool';
+  type IAnswerFilterTypeEnum = 'question' | 'progressNote' | 'riskArea' | 'screeningTool' | 'patientScreeningToolSubmission';
 
 
   interface IRiskAreaSummary {
@@ -1340,9 +1341,9 @@ declare module 'schema' {
   */
     patientScreeningToolSubmissionCreate: IPatientScreeningToolSubmission | null;
     /**
-    description: patient screening tool submission edit
+    description: patient screening tool submission score
   */
-    patientScreeningToolSubmissionEdit: IPatientScreeningToolSubmission | null;
+    patientScreeningToolSubmissionScore: IPatientScreeningToolSubmission | null;
     /**
     description: patient screening tool submission delete
   */
@@ -1723,7 +1724,7 @@ declare module 'schema' {
     patientId: string;
     patientAnswers: Array<IPatientAnswerInput>;
     questionIds: Array<string>;
-    screeningToolId?: string | null;
+    patientScreeningToolSubmissionId?: string | null;
     progressNoteId?: string | null;
   }
 
@@ -1993,17 +1994,11 @@ declare module 'schema' {
   interface IPatientScreeningToolSubmissionCreateInput {
     screeningToolId: string;
     patientId: string;
-    userId: string;
-    score: number;
   }
 
 
-  interface IPatientScreeningToolSubmissionEditInput {
+  interface IPatientScreeningToolSubmissionScoreInput {
     patientScreeningToolSubmissionId: string;
-    screeningToolId?: string | null;
-    patientId?: string | null;
-    userId?: string | null;
-    score?: number | null;
   }
 
 

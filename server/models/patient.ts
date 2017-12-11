@@ -173,12 +173,10 @@ export default class Patient extends BaseModel {
   }
 
   static async search(
-    query: string, {
-    pageNumber,
-    pageSize,
-    }: IPaginationOptions,
-    userId?: string): Promise<IPaginatedResults<Patient & IPatientSearchResult>> {
-
+    query: string,
+    { pageNumber, pageSize }: IPaginationOptions,
+    userId?: string,
+  ): Promise<IPaginatedResults<Patient & IPatientSearchResult>> {
     if (!userId) {
       return Promise.reject('Must be logged in to search patients');
     } else if (!query) {
@@ -203,7 +201,7 @@ export default class Patient extends BaseModel {
       .groupBy('patient.id', 'care_team.userId')
       .orderBy('userCareTeam', 'DESC')
       .orderByRaw('"firstName" || \' \' || "lastName" <-> ?', query)
-      .page(pageNumber, pageSize) as IPaginatedResults<Patient & IPatientSearchResult>);
+      .page(pageNumber, pageSize)) as IPaginatedResults<Patient & IPatientSearchResult>;
 
     return {
       results: patientsResult.results,

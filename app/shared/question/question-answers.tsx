@@ -10,7 +10,10 @@ import RadioAnswer from './radio-answer';
 interface IProps {
   question: FullQuestionFragment;
   editable: boolean;
-  onChange: (questionId: string, answerId: string, value: string | number) => any;
+  onChange: (
+    questionId: string,
+    answers: Array<{ answerId: string; value: string | number }>,
+  ) => any;
   answerData: {
     answers: Array<{
       id: string;
@@ -27,10 +30,25 @@ export class QuestionAnswers extends React.Component<IProps, {}> {
     this.renderMultiSelectItem = this.renderMultiSelectItem.bind(this);
   }
 
-  onClickMultiSelect(value: string | number, answerId: string) {
-    const { question, onChange } = this.props;
+  onClickMultiSelect(value: string | number, answerId: string, isRemove: boolean) {
+    const { question, onChange, answerData } = this.props;
+    let newAnswerData: Array<{ answerId: string; value: string | number }> = [];
+    if (answerData) {
+      if (isRemove) {
+        newAnswerData = answerData.answers.filter(answer => answer.id !== answerId).map(answer => ({
+          answerId: answer.id,
+          value: answer.value,
+        }));
+      } else {
+        const formattedAnswerData = answerData.answers.map(answer => ({
+          answerId: answer.id,
+          value: answer.value,
+        }));
+        newAnswerData = [...formattedAnswerData, { answerId, value }];
+      }
 
-    onChange(question.id, answerId, value);
+      onChange(question.id, newAnswerData);
+    }
   }
 
   renderMultiSelectItem(multiSelectAnswer: FullAnswerFragment, index: number) {

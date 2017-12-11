@@ -150,6 +150,7 @@ export enum AnswerFilterType {
   progressNote = "progressNote",
   riskArea = "riskArea",
   screeningTool = "screeningTool",
+  patientScreeningToolSubmission = "patientScreeningToolSubmission",
 }
 
 
@@ -224,7 +225,7 @@ export type answerCreateMutation = {
       createdAt: string,
       updatedAt: string,
       deletedAt: string | null,
-    } >,
+    } > | null,
     goalSuggestions:  Array< {
       id: string,
       title: string,
@@ -331,7 +332,7 @@ export type answerDeleteMutation = {
       createdAt: string,
       updatedAt: string,
       deletedAt: string | null,
-    } >,
+    } > | null,
     goalSuggestions:  Array< {
       id: string,
       title: string,
@@ -445,7 +446,7 @@ export type answerEditMutation = {
       createdAt: string,
       updatedAt: string,
       deletedAt: string | null,
-    } >,
+    } > | null,
     goalSuggestions:  Array< {
       id: string,
       title: string,
@@ -950,7 +951,7 @@ export type getAnswerQuery = {
       createdAt: string,
       updatedAt: string,
       deletedAt: string | null,
-    } >,
+    } > | null,
     goalSuggestions:  Array< {
       id: string,
       title: string,
@@ -1339,7 +1340,7 @@ export type getPatientAnswersQuery = {
         createdAt: string,
         updatedAt: string,
         deletedAt: string | null,
-      } >,
+      } > | null,
       goalSuggestions:  Array< {
         id: string,
         title: string,
@@ -1430,7 +1431,7 @@ export type getPatientAnswersQuery = {
       title: string,
     } | null,
     patientScreeningToolSubmissionId: string | null,
-  } | null > | null,
+  } > | null,
 };
 
 export type getPatientCarePlanSuggestionsQueryVariables = {
@@ -1597,7 +1598,7 @@ export type getPatientCarePlanQuery = {
         createdAt: string,
         updatedAt: string,
         deletedAt: string | null,
-      } >,
+      } > | null,
       startedAt: string | null,
       completedAt: string | null,
       createdAt: string,
@@ -1774,6 +1775,7 @@ export type getPatientScratchPadQuery = {
 export type getPatientScreeningToolSubmissionForPatientAndScreeningToolQueryVariables = {
   screeningToolId: string,
   patientId: string,
+  scored: boolean,
 };
 
 export type getPatientScreeningToolSubmissionForPatientAndScreeningToolQuery = {
@@ -1803,7 +1805,7 @@ export type getPatientScreeningToolSubmissionForPatientAndScreeningToolQuery = {
       userRole: UserRole,
       googleProfileImageUrl: string | null,
     },
-    score: number,
+    score: number | null,
     riskArea:  {
       id: string,
       createdAt: string,
@@ -1815,6 +1817,7 @@ export type getPatientScreeningToolSubmissionForPatientAndScreeningToolQuery = {
     createdAt: string,
     updatedAt: string,
     deletedAt: string | null,
+    scoredAt: string | null,
     carePlanSuggestions:  Array< {
       id: string,
       patientId: string,
@@ -1922,7 +1925,7 @@ export type getPatientScreeningToolSubmissionQuery = {
       userRole: UserRole,
       googleProfileImageUrl: string | null,
     },
-    score: number,
+    score: number | null,
     riskArea:  {
       id: string,
       createdAt: string,
@@ -1934,6 +1937,7 @@ export type getPatientScreeningToolSubmissionQuery = {
     createdAt: string,
     updatedAt: string,
     deletedAt: string | null,
+    scoredAt: string | null,
     carePlanSuggestions:  Array< {
       id: string,
       patientId: string,
@@ -2239,7 +2243,7 @@ export type getProgressNoteActivityForProgressNoteQuery = {
             createdAt: string,
             updatedAt: string,
             deletedAt: string | null,
-          } >,
+          } > | null,
           goalSuggestions:  Array< {
             id: string,
             title: string,
@@ -2354,7 +2358,7 @@ export type getProgressNoteActivityForProgressNoteQuery = {
             createdAt: string,
             updatedAt: string,
             deletedAt: string | null,
-          } >,
+          } > | null,
           goalSuggestions:  Array< {
             id: string,
             title: string,
@@ -2562,7 +2566,7 @@ export type getProgressNoteActivityForProgressNoteQuery = {
           createdAt: string,
           updatedAt: string,
           deletedAt: string | null,
-        } >,
+        } > | null,
         startedAt: string | null,
         completedAt: string | null,
         createdAt: string,
@@ -2808,7 +2812,7 @@ export type getQuestionAnswersQuery = {
       createdAt: string,
       updatedAt: string,
       deletedAt: string | null,
-    } >,
+    } > | null,
     goalSuggestions:  Array< {
       id: string,
       title: string,
@@ -2926,7 +2930,7 @@ export type getQuestionQuery = {
         createdAt: string,
         updatedAt: string,
         deletedAt: string | null,
-      } >,
+      } > | null,
       goalSuggestions:  Array< {
         id: string,
         title: string,
@@ -3061,7 +3065,7 @@ export type getQuestionsQuery = {
         createdAt: string,
         updatedAt: string,
         deletedAt: string | null,
-      } >,
+      } > | null,
       goalSuggestions:  Array< {
         id: string,
         title: string,
@@ -3694,7 +3698,7 @@ export type patientAnswersCreateMutationVariables = {
   patientId: string,
   patientAnswers: Array< PatientAnswerInput | null >,
   questionIds: Array< string | null >,
-  screeningToolId?: string | null,
+  patientScreeningToolSubmissionId?: string | null,
   progressNoteId?: string | null,
 };
 
@@ -3722,7 +3726,7 @@ export type patientAnswersCreateMutation = {
         createdAt: string,
         updatedAt: string,
         deletedAt: string | null,
-      } >,
+      } > | null,
       goalSuggestions:  Array< {
         id: string,
         title: string,
@@ -3845,7 +3849,7 @@ export type patientAnswersUpdateApplicableMutation = {
         createdAt: string,
         updatedAt: string,
         deletedAt: string | null,
-      } >,
+      } > | null,
       goalSuggestions:  Array< {
         id: string,
         title: string,
@@ -4026,7 +4030,7 @@ export type patientConcernBulkEditMutation = {
       createdAt: string,
       updatedAt: string,
       deletedAt: string | null,
-    } >,
+    } > | null,
     startedAt: string | null,
     completedAt: string | null,
     createdAt: string,
@@ -4123,7 +4127,7 @@ export type patientConcernCreateMutation = {
       createdAt: string,
       updatedAt: string,
       deletedAt: string | null,
-    } >,
+    } > | null,
     startedAt: string | null,
     completedAt: string | null,
     createdAt: string,
@@ -4218,7 +4222,7 @@ export type patientConcernDeleteMutation = {
       createdAt: string,
       updatedAt: string,
       deletedAt: string | null,
-    } >,
+    } > | null,
     startedAt: string | null,
     completedAt: string | null,
     createdAt: string,
@@ -4401,6 +4405,247 @@ export type patientScratchPadEditMutation = {
   // Edit a patient scratch pad
   patientScratchPadEdit:  {
     text: string | null,
+  } | null,
+};
+
+export type patientScreeningToolSubmissionCreateMutationVariables = {
+  patientId: string,
+  screeningToolId: string,
+};
+
+export type patientScreeningToolSubmissionCreateMutation = {
+  // patient screening tool submission create
+  patientScreeningToolSubmissionCreate:  {
+    id: string,
+    screeningToolId: string,
+    patientId: string,
+    patient:  {
+      id: string,
+      firstName: string | null,
+      middleName: string | null,
+      lastName: string | null,
+      language: string | null,
+      gender: string | null,
+      dateOfBirth: string | null,
+      zip: string | null,
+      createdAt: string,
+      consentToText: boolean | null,
+      consentToCall: boolean | null,
+    },
+    userId: string,
+    user:  {
+      id: string,
+      firstName: string | null,
+      lastName: string | null,
+      userRole: UserRole,
+      googleProfileImageUrl: string | null,
+    },
+    score: number | null,
+    riskArea:  {
+      id: string,
+      createdAt: string,
+      updatedAt: string,
+      deletedAt: string | null,
+      title: string,
+      order: number,
+    },
+    createdAt: string,
+    updatedAt: string,
+    deletedAt: string | null,
+    scoredAt: string | null,
+    carePlanSuggestions:  Array< {
+      id: string,
+      patientId: string,
+      patient:  {
+        id: string,
+        firstName: string | null,
+        middleName: string | null,
+        lastName: string | null,
+        language: string | null,
+        gender: string | null,
+        dateOfBirth: string | null,
+        zip: string | null,
+        createdAt: string,
+        consentToText: boolean | null,
+        consentToCall: boolean | null,
+      },
+      suggestionType: CarePlanSuggestionType,
+      concernId: string | null,
+      concern:  {
+        id: string,
+        title: string,
+        createdAt: string,
+        updatedAt: string,
+        deletedAt: string | null,
+      } | null,
+      goalSuggestionTemplateId: string | null,
+      goalSuggestionTemplate:  {
+        id: string,
+        title: string,
+        taskTemplates:  Array< {
+          id: string,
+          title: string,
+          completedWithinNumber: number | null,
+          completedWithinInterval: CompletedWithinInterval | null,
+          repeating: boolean | null,
+          goalSuggestionTemplateId: string,
+          priority: Priority | null,
+          careTeamAssigneeRole: UserRole | null,
+          createdAt: string,
+          updatedAt: string,
+          deletedAt: string | null,
+        } >,
+        createdAt: string,
+        updatedAt: string,
+        deletedAt: string | null,
+      } | null,
+      acceptedById: string | null,
+      acceptedBy:  {
+        id: string,
+        firstName: string | null,
+        lastName: string | null,
+        userRole: UserRole,
+        googleProfileImageUrl: string | null,
+      } | null,
+      dismissedById: string | null,
+      dismissedBy:  {
+        id: string,
+        firstName: string | null,
+        lastName: string | null,
+        userRole: UserRole,
+        googleProfileImageUrl: string | null,
+      } | null,
+      dismissedReason: string | null,
+      createdAt: string,
+      updatedAt: string,
+      dismissedAt: string | null,
+      acceptedAt: string | null,
+      patientScreeningToolSubmissionId: string | null,
+    } >,
+    screeningToolScoreRangeId: string | null,
+    screeningToolScoreRange:  {
+      description: string,
+    } | null,
+  } | null,
+};
+
+export type patientScreeningToolSubmissionScoreMutationVariables = {
+  patientScreeningToolSubmissionId: string,
+};
+
+export type patientScreeningToolSubmissionScoreMutation = {
+  // patient screening tool submission score
+  patientScreeningToolSubmissionScore:  {
+    id: string,
+    screeningToolId: string,
+    patientId: string,
+    patient:  {
+      id: string,
+      firstName: string | null,
+      middleName: string | null,
+      lastName: string | null,
+      language: string | null,
+      gender: string | null,
+      dateOfBirth: string | null,
+      zip: string | null,
+      createdAt: string,
+      consentToText: boolean | null,
+      consentToCall: boolean | null,
+    },
+    userId: string,
+    user:  {
+      id: string,
+      firstName: string | null,
+      lastName: string | null,
+      userRole: UserRole,
+      googleProfileImageUrl: string | null,
+    },
+    score: number | null,
+    riskArea:  {
+      id: string,
+      createdAt: string,
+      updatedAt: string,
+      deletedAt: string | null,
+      title: string,
+      order: number,
+    },
+    createdAt: string,
+    updatedAt: string,
+    deletedAt: string | null,
+    scoredAt: string | null,
+    carePlanSuggestions:  Array< {
+      id: string,
+      patientId: string,
+      patient:  {
+        id: string,
+        firstName: string | null,
+        middleName: string | null,
+        lastName: string | null,
+        language: string | null,
+        gender: string | null,
+        dateOfBirth: string | null,
+        zip: string | null,
+        createdAt: string,
+        consentToText: boolean | null,
+        consentToCall: boolean | null,
+      },
+      suggestionType: CarePlanSuggestionType,
+      concernId: string | null,
+      concern:  {
+        id: string,
+        title: string,
+        createdAt: string,
+        updatedAt: string,
+        deletedAt: string | null,
+      } | null,
+      goalSuggestionTemplateId: string | null,
+      goalSuggestionTemplate:  {
+        id: string,
+        title: string,
+        taskTemplates:  Array< {
+          id: string,
+          title: string,
+          completedWithinNumber: number | null,
+          completedWithinInterval: CompletedWithinInterval | null,
+          repeating: boolean | null,
+          goalSuggestionTemplateId: string,
+          priority: Priority | null,
+          careTeamAssigneeRole: UserRole | null,
+          createdAt: string,
+          updatedAt: string,
+          deletedAt: string | null,
+        } >,
+        createdAt: string,
+        updatedAt: string,
+        deletedAt: string | null,
+      } | null,
+      acceptedById: string | null,
+      acceptedBy:  {
+        id: string,
+        firstName: string | null,
+        lastName: string | null,
+        userRole: UserRole,
+        googleProfileImageUrl: string | null,
+      } | null,
+      dismissedById: string | null,
+      dismissedBy:  {
+        id: string,
+        firstName: string | null,
+        lastName: string | null,
+        userRole: UserRole,
+        googleProfileImageUrl: string | null,
+      } | null,
+      dismissedReason: string | null,
+      createdAt: string,
+      updatedAt: string,
+      dismissedAt: string | null,
+      acceptedAt: string | null,
+      patientScreeningToolSubmissionId: string | null,
+    } >,
+    screeningToolScoreRangeId: string | null,
+    screeningToolScoreRange:  {
+      description: string,
+    } | null,
   } | null,
 };
 
@@ -4726,7 +4971,7 @@ export type questionCreateMutation = {
         createdAt: string,
         updatedAt: string,
         deletedAt: string | null,
-      } >,
+      } > | null,
       goalSuggestions:  Array< {
         id: string,
         title: string,
@@ -4860,7 +5105,7 @@ export type questionDeleteMutation = {
         createdAt: string,
         updatedAt: string,
         deletedAt: string | null,
-      } >,
+      } > | null,
       goalSuggestions:  Array< {
         id: string,
         title: string,
@@ -4999,7 +5244,7 @@ export type questionEditMutation = {
         createdAt: string,
         updatedAt: string,
         deletedAt: string | null,
-      } >,
+      } > | null,
       goalSuggestions:  Array< {
         id: string,
         title: string,
@@ -6151,7 +6396,7 @@ export type FullAnswerFragment = {
     createdAt: string,
     updatedAt: string,
     deletedAt: string | null,
-  } >,
+  } > | null,
   goalSuggestions:  Array< {
     id: string,
     title: string,
@@ -6430,7 +6675,7 @@ export type FullCarePlanUpdateEventFragment = {
       createdAt: string,
       updatedAt: string,
       deletedAt: string | null,
-    } >,
+    } > | null,
     startedAt: string | null,
     completedAt: string | null,
     createdAt: string,
@@ -6675,7 +6920,7 @@ export type FullPatientAnswerEventFragment = {
         createdAt: string,
         updatedAt: string,
         deletedAt: string | null,
-      } >,
+      } > | null,
       goalSuggestions:  Array< {
         id: string,
         title: string,
@@ -6790,7 +7035,7 @@ export type FullPatientAnswerEventFragment = {
         createdAt: string,
         updatedAt: string,
         deletedAt: string | null,
-      } >,
+      } > | null,
       goalSuggestions:  Array< {
         id: string,
         title: string,
@@ -6911,7 +7156,7 @@ export type FullPatientAnswerFragment = {
       createdAt: string,
       updatedAt: string,
       deletedAt: string | null,
-    } >,
+    } > | null,
     goalSuggestions:  Array< {
       id: string,
       title: string,
@@ -7084,7 +7329,7 @@ export type FullPatientConcernFragment = {
     createdAt: string,
     updatedAt: string,
     deletedAt: string | null,
-  } >,
+  } > | null,
   startedAt: string | null,
   completedAt: string | null,
   createdAt: string,
@@ -7187,7 +7432,7 @@ export type FullPatientScreeningToolSubmissionFragment = {
     userRole: UserRole,
     googleProfileImageUrl: string | null,
   },
-  score: number,
+  score: number | null,
   riskArea:  {
     id: string,
     createdAt: string,
@@ -7199,6 +7444,7 @@ export type FullPatientScreeningToolSubmissionFragment = {
   createdAt: string,
   updatedAt: string,
   deletedAt: string | null,
+  scoredAt: string | null,
   carePlanSuggestions:  Array< {
     id: string,
     patientId: string,
@@ -7390,7 +7636,7 @@ export type FullProgressNoteActivityFragment = {
           createdAt: string,
           updatedAt: string,
           deletedAt: string | null,
-        } >,
+        } > | null,
         goalSuggestions:  Array< {
           id: string,
           title: string,
@@ -7505,7 +7751,7 @@ export type FullProgressNoteActivityFragment = {
           createdAt: string,
           updatedAt: string,
           deletedAt: string | null,
-        } >,
+        } > | null,
         goalSuggestions:  Array< {
           id: string,
           title: string,
@@ -7713,7 +7959,7 @@ export type FullProgressNoteActivityFragment = {
         createdAt: string,
         updatedAt: string,
         deletedAt: string | null,
-      } >,
+      } > | null,
       startedAt: string | null,
       completedAt: string | null,
       createdAt: string,
@@ -7894,7 +8140,7 @@ export type FullQuestionFragment = {
       createdAt: string,
       updatedAt: string,
       deletedAt: string | null,
-    } >,
+    } > | null,
     goalSuggestions:  Array< {
       id: string,
       title: string,

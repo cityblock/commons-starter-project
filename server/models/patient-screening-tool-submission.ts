@@ -1,5 +1,6 @@
-import { isInteger, omit, reduce } from 'lodash';
+import { isInteger, reduce } from 'lodash';
 import { Model, RelationMappings, Transaction } from 'objection';
+import { createSuggestionsForPatientScreeningToolSubmission } from '../lib/suggestions';
 import BaseModel from './base-model';
 import Patient from './patient';
 import PatientAnswer from './patient-answer';
@@ -12,16 +13,17 @@ interface IPatientScreeningToolSubmissionCreateFields {
   screeningToolId: string;
   patientId: string;
   userId: string;
-  score?: number;
-  patientAnswers: PatientAnswer[];
-  screeningToolScoreRangeId?: string;
 }
 
 interface IPatientScreeningToolSubmissionEditableFields {
-  screeningToolId?: string;
   patientId?: string;
   userId?: string;
   score?: number;
+}
+
+interface IPatientScreeningToolSubmissionScoreFields {
+  score?: number;
+  patientAnswers?: PatientAnswer[];
 }
 
 /* tslint:disable:max-line-length */
@@ -43,6 +45,7 @@ export default class PatientScreeningToolSubmission extends BaseModel {
   patientScreeningToolId: string;
   screeningToolScoreRangeId: string;
   screeningToolScoreRange: ScreeningToolScoreRange;
+  scoredAt: string;
 
   static tableName = 'patient_screening_tool_submission';
 
@@ -56,6 +59,7 @@ export default class PatientScreeningToolSubmission extends BaseModel {
       userId: { type: 'string' },
       score: { type: 'integer' },
       deletedAt: { type: 'string' },
+      scoredAt: { type: 'string' },
     },
   };
 
@@ -149,33 +153,86 @@ export default class PatientScreeningToolSubmission extends BaseModel {
     input: IPatientScreeningToolSubmissionCreateFields,
     txn?: Transaction,
   ): Promise<PatientScreeningToolSubmission> {
-    const { patientAnswers, screeningToolId } = input;
+    return await this.query(txn)
+      .eager(EAGER_QUERY)
+      .insertAndFetch(input);
+  }
+
+  static async autoOpenIfRequired(
+    input: IPatientScreeningToolSubmissionCreateFields,
+    txn?: Transaction,
+  ): Promise<PatientScreeningToolSubmission> {
+    const { patientId, userId } = input;
+
+    const existingScreeningToolSubmission = await this.query(txn)
+      .eager(EAGER_QUERY)
+      .findOne({
+        deletedAt: null,
+        scoredAt: null,
+        score: null,
+        patientId,
+        userId,
+      });
+
+    if (!existingScreeningToolSubmission) {
+      return await this.create(input, txn);
+    }
+
+    return existingScreeningToolSubmission;
+  }
+
+  static async submitScore(
+    patientScreeningToolSubmissionId: string,
+    input: IPatientScreeningToolSubmissionScoreFields,
+    txn?: Transaction,
+  ): Promise<PatientScreeningToolSubmission> {
     let score: number = 0;
+    const { patientAnswers } = input;
+
+    const patientScreeningToolSubmission = await this.query(txn).findOne({
+      id: patientScreeningToolSubmissionId,
+      deletedAt: null,
+    });
+
+    if (!patientScreeningToolSubmission) {
+      return Promise.reject('Invalid screening tool submission id');
+    }
+    if (patientScreeningToolSubmission.score) {
+      return Promise.reject('Screening tool has already been scored, create a new submission');
+    }
 
     if (!!input.score) {
       score = input.score;
-    } else {
+    } else if (patientAnswers) {
       score = this.calculateScore(patientAnswers);
+    } else {
+      return Promise.reject('Either a score or patient answers are required');
     }
 
     const screeningToolScoreRange = await ScreeningToolScoreRange.getByScoreForScreeningTool(
       score,
-      screeningToolId,
+      patientScreeningToolSubmission.screeningToolId,
       txn,
     );
 
-    input.screeningToolScoreRangeId = screeningToolScoreRange
+    const screeningToolScoreRangeId = screeningToolScoreRange
       ? screeningToolScoreRange.id
       : undefined;
 
-    input.score = score;
-    const filteredInput = omit<IPatientScreeningToolSubmissionCreateFields>(input, [
-      'patientAnswers',
-    ]);
-
-    return await this.query(txn)
+    const submission = await this.query(txn)
       .eager(EAGER_QUERY)
-      .insertAndFetch(filteredInput);
+      .updateAndFetchById(patientScreeningToolSubmissionId, {
+        score,
+        screeningToolScoreRangeId,
+        scoredAt: new Date().toISOString(),
+      });
+
+    await createSuggestionsForPatientScreeningToolSubmission(
+      submission.patientId,
+      submission.id,
+      txn,
+    );
+    return submission;
   }
 
   static async edit(
@@ -224,12 +281,18 @@ export default class PatientScreeningToolSubmission extends BaseModel {
   static async getLatestForPatientAndScreeningTool(
     screeningToolId: string,
     patientId: string,
+    scored: boolean,
   ): Promise<PatientScreeningToolSubmission | null> {
-    const latestPatientScreeningToolSubmission = await this.query()
+    const query = this.query()
       .eager(EAGER_QUERY)
-      .where({ patientId, screeningToolId })
-      .orderBy('createdAt', 'desc')
-      .first();
+      .where({ patientId, screeningToolId });
+
+    if (scored) {
+      query.whereNotNull('scoredAt');
+    } else {
+      query.andWhere({ scoredAt: null, score: null });
+    }
+    const latestPatientScreeningToolSubmission = await query.orderBy('createdAt', 'desc').first();
 
     if (!latestPatientScreeningToolSubmission) {
       return null;

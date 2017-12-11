@@ -20,15 +20,13 @@ const PatientSearchInput: React.StatelessComponent<IProps> = (props: IProps) => 
           value={searchTerm}
           onChange={onChange}
           className={styles.textInput}
-          placeholderMessageId="patientSearch.placeholder" />
-          <div className={styles.iconContainer}>
-          <Icon name='search' className={styles.icon} />
+          placeholderMessageId="patientSearch.placeholder"
+        />
+        <div className={styles.iconContainer}>
+          <Icon name="search" className={styles.icon} />
         </div>
       </div>
-      <Button
-        onClick={onSearch}
-        className={styles.button}
-        messageId="patientSearch.search" />
+      <Button onClick={onSearch} className={styles.button} messageId="patientSearch.search" />
     </div>
   );
 };

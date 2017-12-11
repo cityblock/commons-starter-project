@@ -4,9 +4,9 @@ import { compose, graphql } from 'react-apollo';
 import { connect, Dispatch } from 'react-redux';
 import { push } from 'react-router-redux';
 /* tslint:disable:max-line-length */
-import * as patientScreeningToolSubmissionQuery from '../graphql/queries/get-patient-screening-tool-submission.graphql';
+import * as patientScreeningToolSubmissionQuery from '../../graphql/queries/get-patient-screening-tool-submission.graphql';
 /* tsline:enable:max-line-length */
-import { getPatientScreeningToolSubmissionQuery } from '../graphql/types';
+import { getPatientScreeningToolSubmissionQuery } from '../../graphql/types';
 import * as styles from './css/screening-tools-popup.css';
 
 interface IProps {

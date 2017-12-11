@@ -13,7 +13,8 @@ describe('Patient Search Input Component', () => {
     <PatientSearchInput
       searchTerm={searchTerm}
       onChange={placeholderFn}
-      onSearch={placeholderFn} />,
+      onSearch={placeholderFn}
+    />,
   );
 
   it('renders container', () => {

@@ -21,6 +21,7 @@ fragment FullPatientScreeningToolSubmission on PatientScreeningToolSubmission {
   createdAt
   updatedAt
   deletedAt
+  scoredAt
   carePlanSuggestions {
     ...FullCarePlanSuggestion
   }

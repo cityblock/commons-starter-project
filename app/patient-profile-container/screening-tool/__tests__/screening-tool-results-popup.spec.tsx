@@ -6,9 +6,9 @@ import { Provider } from 'react-redux';
 import { ConnectedRouter } from 'react-router-redux';
 import { create } from 'react-test-renderer';
 import configureMockStore from 'redux-mock-store';
-import { ENGLISH_TRANSLATION } from '../../reducers/messages/en';
-import ReduxConnectedIntlProvider from '../../redux-connected-intl-provider';
-import { patient, patientScreeningToolSubmission } from '../../shared/util/test-data';
+import { ENGLISH_TRANSLATION } from '../../../reducers/messages/en';
+import ReduxConnectedIntlProvider from '../../../redux-connected-intl-provider';
+import { patient, patientScreeningToolSubmission } from '../../../shared/util/test-data';
 import ScreeningToolResultsPopup, {
   ScreeningToolResultsPopup as Component,
 } from '../screening-tool-results-popup';
@@ -44,7 +44,6 @@ it('renders the correct results', async () => {
       loading={false}
       error={undefined}
       patientScreeningToolSubmission={patientScreeningToolSubmission}
-      refetchPatientScreeningToolSubmission={() => true}
     />,
   );
   const instance = component.instance() as Component;

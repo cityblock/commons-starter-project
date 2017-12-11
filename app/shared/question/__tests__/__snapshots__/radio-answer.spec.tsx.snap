@@ -20,7 +20,7 @@ exports[`renders radio answer 1`] = `
             checked={true}
             className="radio"
             disabled={false}
-            onClick={[Function]}
+            onChange={[Function]}
             type="radio"
             value="answer-id"
           />

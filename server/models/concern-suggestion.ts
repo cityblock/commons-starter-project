@@ -94,6 +94,7 @@ export default class ConcernSuggestion extends BaseModel {
     );
   }
 
+  // TODO: retire this function
   static async getNewForPatient(patientId: string, txn?: Transaction): Promise<Concern[]> {
     const existingPatientCarePlanSuggestionsQuery = CarePlanSuggestion.query(txn)
       .where('patientId', patientId)
@@ -113,8 +114,28 @@ export default class ConcernSuggestion extends BaseModel {
       .andWhere('patient_answer.applicable', true)
       .andWhere('patient_concern.id', null);
 
+    const concernSuggestions = unionBy(
+      answerConcernSuggestions,
+      'concernId',
+    ) as ConcernSuggestion[];
+
+    return concernSuggestions.map((suggestion: ConcernSuggestion) => suggestion.concern);
+  }
+
+  static async getNewSuggestionsForPatientScreeningToolSubmission(
+    patientId: string,
+    patientScreeningToolSubmissionId: string,
+    txn?: Transaction,
+  ): Promise<Concern[]> {
+    const existingPatientCarePlanSuggestionsQuery = CarePlanSuggestion.query(txn)
+      .where('patientId', patientId)
+      .andWhere('dismissedAt', null)
+      .andWhere('acceptedAt', null)
+      .andWhere('suggestionType', 'concern')
+      .select('concernId');
+
     // TODO: make this work in a 'union' query. Can't get it to act properly right now though.
-    const screeningToolConcernSuggestions = await this.query(txn)
+    const concernSuggestions = (await this.query(txn)
       .eager('concern')
       .joinRelation('screeningToolScoreRange')
       .join(
@@ -123,16 +144,9 @@ export default class ConcernSuggestion extends BaseModel {
         'patient_screening_tool_submission.screeningToolScoreRangeId',
       )
       .leftOuterJoin('patient_concern', 'concern_suggestion.concernId', 'patient_concern.concernId')
-      .where('patient_screening_tool_submission.deletedAt', null)
-      .andWhere('patient_screening_tool_submission.patientId', patientId)
+      .where('patient_screening_tool_submission.id', patientScreeningToolSubmissionId)
       .andWhere('concern_suggestion.concernId', 'not in', existingPatientCarePlanSuggestionsQuery)
-      .andWhere('patient_concern.id', null);
-
-    const concernSuggestions = unionBy(
-      answerConcernSuggestions,
-      screeningToolConcernSuggestions,
-      'concernId',
-    ) as ConcernSuggestion[];
+      .andWhere('patient_concern.id', null)) as ConcernSuggestion[];
 
     return concernSuggestions.map((suggestion: ConcernSuggestion) => suggestion.concern);
   }

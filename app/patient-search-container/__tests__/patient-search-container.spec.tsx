@@ -15,7 +15,8 @@ describe('Patient Search Container', () => {
       query={query}
       pageNumber={pageNumber}
       pageSize={pageSize}
-      updateSearchParams={placeholderFn} />,
+      updateSearchParams={placeholderFn}
+    />,
   );
 
   it('renders a container', () => {

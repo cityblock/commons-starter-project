@@ -2,9 +2,12 @@ import { graphql } from 'graphql';
 import { cloneDeep } from 'lodash';
 import * as uuid from 'uuid/v4';
 import Db from '../../db';
+import Answer from '../../models/answer';
 import Clinic from '../../models/clinic';
 import Patient from '../../models/patient';
+import PatientAnswer from '../../models/patient-answer';
 import PatientScreeningToolSubmission from '../../models/patient-screening-tool-submission';
+import Question from '../../models/question';
 import RiskArea from '../../models/risk-area';
 import ScreeningTool from '../../models/screening-tool';
 import User from '../../models/user';
@@ -44,8 +47,6 @@ describe('patient screening tool submission resolver tests', () => {
       patientId: patient.id,
       userId: user.id,
       screeningToolId: screeningTool.id,
-      score: 10,
-      patientAnswers: [],
     });
   });
 
@@ -90,8 +91,6 @@ describe('patient screening tool submission resolver tests', () => {
         patientId: patient.id,
         userId: user.id,
         screeningToolId: screeningTool2.id,
-        score: 20,
-        patientAnswers: [],
       });
 
       const query = `{
@@ -123,19 +122,15 @@ describe('patient screening tool submission resolver tests', () => {
         patientId: patient.id,
         userId: user.id,
         screeningToolId: screeningTool2.id,
-        score: 20,
-        patientAnswers: [],
       });
       const submission3 = await PatientScreeningToolSubmission.create({
         patientId: patient2.id,
         userId: user.id,
         screeningToolId: screeningTool2.id,
-        score: 20,
-        patientAnswers: [],
       });
 
       const query = `{
-        patientScreeningToolSubmissionsForPatient(patientId: "${patient.id}") {
+        patientScreeningToolSubmissionsForPatient(patientId: "${patient.id}", scored: false) {
           id
           score
         }
@@ -166,21 +161,18 @@ describe('patient screening tool submission resolver tests', () => {
         patientId: patient.id,
         userId: user.id,
         screeningToolId: screeningTool2.id,
-        score: 20,
-        patientAnswers: [],
       });
       const submission3 = await PatientScreeningToolSubmission.create({
         patientId: patient.id,
         userId: user.id,
         screeningToolId: screeningTool2.id,
-        score: 20,
-        patientAnswers: [],
       });
 
       const query = `{
         patientScreeningToolSubmissionsForPatient(
           patientId: "${patient.id}"
           screeningToolId: "${screeningTool2.id}"
+          scored: false
         ) {
           id
           score
@@ -212,21 +204,18 @@ describe('patient screening tool submission resolver tests', () => {
         patientId: patient.id,
         userId: user.id,
         screeningToolId: screeningTool2.id,
-        score: 20,
-        patientAnswers: [],
       });
       const submission2 = await PatientScreeningToolSubmission.create({
         patientId: patient.id,
         userId: user.id,
         screeningToolId: screeningTool2.id,
-        score: 20,
-        patientAnswers: [],
       });
 
       const query = `{
         patientScreeningToolSubmissionForPatientAndScreeningTool(
           screeningToolId: "${screeningTool2.id}"
           patientId: "${patient.id}"
+          scored: false
         ) {
           id
           score
@@ -249,14 +238,13 @@ describe('patient screening tool submission resolver tests', () => {
         patientId: patient.id,
         userId: user.id,
         screeningToolId: screeningTool.id,
-        score: 20,
-        patientAnswers: [],
       });
 
       const query = `{
         patientScreeningToolSubmissionForPatientAndScreeningTool(
           screeningToolId: "${screeningTool2.id}"
           patientId: "${patient.id}"
+          scored: false
         ) {
           id
           score
@@ -270,12 +258,62 @@ describe('patient screening tool submission resolver tests', () => {
     });
   });
 
-  describe('patientScreeningToolSubmission edit', () => {
-    it('edits a patientScreeningToolSubmission', async () => {
+  describe('patientScreeningToolSubmission submit score', () => {
+    it('submits score', async () => {
+      const question = await Question.create({
+        title: 'Question Title',
+        answerType: 'dropdown',
+        riskAreaId: riskArea.id,
+        type: 'riskArea',
+        order: 1,
+      });
+      const question2 = await Question.create({
+        title: 'Question 2 Title',
+        answerType: 'dropdown',
+        riskAreaId: riskArea.id,
+        type: 'riskArea',
+        order: 2,
+      });
+      const answer = await Answer.create({
+        questionId: question.id,
+        displayValue: '1',
+        value: '1',
+        valueType: 'number',
+        order: 1,
+      });
+      const answer2 = await Answer.create({
+        questionId: question2.id,
+        displayValue: '4',
+        value: '4',
+        valueType: 'number',
+        order: 1,
+      });
+      await PatientAnswer.create({
+        patientId: patient.id,
+        patientScreeningToolSubmissionId: submission.id,
+        answers: [
+          {
+            answerId: answer.id,
+            questionId: question.id,
+            answerValue: '1',
+            patientId: patient.id,
+            applicable: true,
+            userId: user.id,
+          },
+          {
+            answerId: answer2.id,
+            questionId: question2.id,
+            answerValue: '4',
+            patientId: patient.id,
+            applicable: true,
+            userId: user.id,
+          },
+        ],
+      });
+
       const query = `mutation {
-        patientScreeningToolSubmissionEdit(input: {
+        patientScreeningToolSubmissionScore(input: {
           patientScreeningToolSubmissionId: "${submission.id}"
-          score: 100,
         }) {
           score
         }
@@ -285,8 +323,8 @@ describe('patient screening tool submission resolver tests', () => {
         userRole,
         userId: user.id,
       });
-      expect(cloneDeep(result.data!.patientScreeningToolSubmissionEdit)).toMatchObject({
-        score: 100,
+      expect(cloneDeep(result.data!.patientScreeningToolSubmissionScore)).toMatchObject({
+        score: 5,
       });
     });
   });
@@ -297,10 +335,9 @@ describe('patient screening tool submission resolver tests', () => {
         patientScreeningToolSubmissionCreate(input: {
           screeningToolId: "${screeningTool.id}"
           patientId: "${patient.id}"
-          userId: "${user.id}"
-          score: 2
         }) {
-          score
+          userId
+          patientId
         }
       }`;
       const result = await graphql(schema, mutation, null, {
@@ -309,7 +346,8 @@ describe('patient screening tool submission resolver tests', () => {
         userId: user.id,
       });
       expect(cloneDeep(result.data!.patientScreeningToolSubmissionCreate)).toMatchObject({
-        score: 2,
+        userId: user.id,
+        patientId: patient.id,
       });
     });
   });

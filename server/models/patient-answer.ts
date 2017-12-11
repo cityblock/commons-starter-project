@@ -198,6 +198,20 @@ export default class PatientAnswer extends BaseModel {
     return patientAnswers as PatientAnswer[];
   }
 
+  static async getForScreeningToolSubmission(
+    patientScreeningToolSubmissionId: string,
+    eager = 'answer',
+  ): Promise<PatientAnswer[]> {
+    const patientAnswers = await this.query()
+      .joinRelation('answer.question')
+      .eager(eager)
+      .where('patient_answer.deletedAt', null)
+      .andWhere('patientScreeningToolSubmissionId', patientScreeningToolSubmissionId)
+      .orderBy('patient_answer.updatedAt', 'asc');
+
+    return patientAnswers as PatientAnswer[];
+  }
+
   static async getForProgressNote(
     progressNoteId: string,
     patientId: string,

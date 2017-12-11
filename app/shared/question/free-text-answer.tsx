@@ -7,7 +7,10 @@ interface IProps {
   editable: boolean;
   currentAnswer: { id: string; value: string };
   question: FullQuestionFragment;
-  onChange: (questionId: string, answerId: string, value: string | number) => any;
+  onChange: (
+    questionId: string,
+    answers: Array<{ answerId: string; value: string | number }>,
+  ) => any;
 }
 
 export default class FreeTextAnswer extends React.Component<IProps, {}> {
@@ -26,7 +29,8 @@ export default class FreeTextAnswer extends React.Component<IProps, {}> {
             <textarea
               disabled={!editable}
               value={currentAnswer ? currentAnswer.value : ''}
-              onChange={event => onChange(question.id, answerId, event.target.value)}
+              // TODO: debounce onchange or do onunfocus
+              onChange={event => onChange(question.id, [{ answerId, value: event.target.value }])}
               className={formStyles.textarea}
             />
           </div>

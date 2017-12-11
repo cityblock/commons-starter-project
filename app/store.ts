@@ -5,7 +5,6 @@ import { routerReducer } from 'react-router-redux';
 import { applyMiddleware, compose, createStore } from 'redux';
 import { combineReducers } from 'redux';
 import { createLogger } from 'redux-logger';
-import { answerReducer, IState as AnswerReducerState } from './reducers/answer-reducer';
 import { browserReducer, Size } from './reducers/browser-reducer';
 import { eventNotificationsReducer } from './reducers/event-notifications-reducer';
 import { idleReducer } from './reducers/idle-reducer';
@@ -31,7 +30,6 @@ export interface IState {
     isIdle: boolean;
   };
   popup: PopupReducerState;
-  answer: AnswerReducerState;
 }
 
 async function setLastAction() {
@@ -55,7 +53,6 @@ export default (history: History) => {
     idle: idleReducer,
     eventNotifications: eventNotificationsReducer,
     popup: popupReducer,
-    answer: answerReducer,
   });
 
   const store = createStore(reducers, composeEnhancers(applyMiddleware(...middleware)));

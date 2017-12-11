@@ -7,13 +7,19 @@ import {
   createPatient,
 } from '../../spec-helpers';
 import Answer from '../answer';
+import CarePlanSuggestion from '../care-plan-suggestion';
 import Clinic from '../clinic';
+import Concern from '../concern';
+import ConcernSuggestion from '../concern-suggestion';
+import GoalSuggestion from '../goal-suggestion';
+import GoalSuggestionTemplate from '../goal-suggestion-template';
 import Patient from '../patient';
 import PatientAnswer from '../patient-answer';
 import PatientScreeningToolSubmission from '../patient-screening-tool-submission';
 import Question from '../question';
 import RiskArea from '../risk-area';
 import ScreeningTool from '../screening-tool';
+import ScreeningToolScoreRange from '../screening-tool-score-range';
 import User from '../user';
 
 const userRole = 'physician';
@@ -55,18 +61,29 @@ describe('patient screening tool submission model', () => {
       screeningToolId: screeningTool1.id,
       patientId: patient1.id,
       userId: user.id,
-      score: 10,
-      patientAnswers: [],
     });
 
-    expect(submission.score).toEqual(10);
-    expect(submission.patient.id).toEqual(patient1.id);
-    expect(submission.user.id).toEqual(user.id);
-    expect(submission.riskArea.id).toEqual(riskArea.id);
-    expect(await PatientScreeningToolSubmission.get(submission.id)).toMatchObject(submission);
+    const finalSubmission = await PatientScreeningToolSubmission.submitScore(submission.id, {
+      score: 10,
+    });
+
+    expect(finalSubmission.score).toEqual(10);
+    expect(finalSubmission.patient.id).toEqual(patient1.id);
+    expect(finalSubmission.user.id).toEqual(user.id);
+    expect(finalSubmission.riskArea.id).toEqual(riskArea.id);
+    expect(await PatientScreeningToolSubmission.get(finalSubmission.id)).toMatchObject(
+      finalSubmission,
+    );
   });
 
   it('creates a patient screening tool submission with the correct score', async () => {
+    const initialSuggestions = await CarePlanSuggestion.getForPatient(patient1.id);
+    expect(initialSuggestions.length).toEqual(0);
+
+    const concern = await Concern.create({ title: 'Screening Tool Concern' });
+    const goalSuggestionTemplate = await GoalSuggestionTemplate.create({
+      title: 'Fix housing',
+    });
     const question = await Question.create({
       title: 'Question Title',
       answerType: 'dropdown',
@@ -95,8 +112,16 @@ describe('patient screening tool submission model', () => {
       valueType: 'number',
       order: 1,
     });
+
+    const submission = await PatientScreeningToolSubmission.autoOpenIfRequired({
+      screeningToolId: screeningTool1.id,
+      patientId: patient1.id,
+      userId: user.id,
+    });
+
     const patientAnswers = await PatientAnswer.create({
       patientId: patient1.id,
+      patientScreeningToolSubmissionId: submission.id,
       answers: [
         {
           answerId: answer.id,
@@ -117,18 +142,49 @@ describe('patient screening tool submission model', () => {
       ],
     });
 
-    const submission = await PatientScreeningToolSubmission.create({
-      screeningToolId: screeningTool1.id,
-      patientId: patient1.id,
-      userId: user.id,
-      patientAnswers: [patientAnswers[0], patientAnswers[1]],
-    });
-
-    expect(submission.score).toEqual(5);
+    expect(submission.score).toBeFalsy();
     expect(submission.patient.id).toEqual(patient1.id);
     expect(submission.user.id).toEqual(user.id);
     expect(submission.riskArea.id).toEqual(riskArea.id);
-    expect(await PatientScreeningToolSubmission.get(submission.id)).toMatchObject(submission);
+
+    const screeningToolScoreRange = await ScreeningToolScoreRange.create({
+      description: 'Range',
+      screeningToolId: screeningTool1.id,
+      minimumScore: 0,
+      maximumScore: 10,
+    });
+    await ConcernSuggestion.create({
+      concernId: concern.id,
+      screeningToolScoreRangeId: screeningToolScoreRange.id,
+    });
+    await GoalSuggestion.create({
+      goalSuggestionTemplateId: goalSuggestionTemplate.id,
+      screeningToolScoreRangeId: screeningToolScoreRange.id,
+    });
+
+    // score the submission
+    expect(
+      (await PatientScreeningToolSubmission.submitScore(submission.id, {
+        patientAnswers: [patientAnswers[0], patientAnswers[1]],
+      })).score,
+    ).toEqual(5);
+
+    const suggestions = await CarePlanSuggestion.getForPatient(patient1.id);
+    expect(suggestions.length).toEqual(2);
+  });
+
+  it('returns already open and not yet submitted progress note', async () => {
+    const initialSubmission = await PatientScreeningToolSubmission.autoOpenIfRequired({
+      screeningToolId: screeningTool1.id,
+      patientId: patient1.id,
+      userId: user.id,
+    });
+    const secondSubmission = await PatientScreeningToolSubmission.autoOpenIfRequired({
+      screeningToolId: screeningTool1.id,
+      patientId: patient1.id,
+      userId: user.id,
+    });
+    expect(initialSubmission.id).toEqual(secondSubmission.id);
   });
 
   it('throws an error if a patient submission does not exist for a given id', async () => {
@@ -138,21 +194,21 @@ describe('patient screening tool submission model', () => {
     );
   });
 
-  it('edits a patient screening tool submission', async () => {
+  it('cannot edit a patient screening tool submission that has been scored', async () => {
     const submission = await PatientScreeningToolSubmission.create({
       screeningToolId: screeningTool1.id,
       patientId: patient1.id,
       userId: user.id,
-      score: 10,
-      patientAnswers: [],
     });
 
-    const fetchedSubmission = await PatientScreeningToolSubmission.get(submission.id);
+    const fetchedSubmission = await PatientScreeningToolSubmission.submitScore(submission.id, {
+      score: 10,
+    });
     expect(fetchedSubmission.score).toEqual(10);
 
-    await PatientScreeningToolSubmission.edit(submission.id, { score: 5 });
-    const fetchedEditedSubmission = await PatientScreeningToolSubmission.get(submission.id);
-    expect(fetchedEditedSubmission.score).toEqual(5);
+    await expect(
+      PatientScreeningToolSubmission.submitScore(submission.id, { score: 5 }),
+    ).rejects.toMatch('Screening tool has already been scored, create a new submission');
   });
 
   it('gets all screening tool submissions for a patient', async () => {
@@ -160,22 +216,16 @@ describe('patient screening tool submission model', () => {
       screeningToolId: screeningTool1.id,
       patientId: patient1.id,
       userId: user.id,
-      score: 10,
-      patientAnswers: [],
     });
     const submission2 = await PatientScreeningToolSubmission.create({
       screeningToolId: screeningTool2.id,
       patientId: patient1.id,
       userId: user.id,
-      score: 10,
-      patientAnswers: [],
     });
     const submission3 = await PatientScreeningToolSubmission.create({
       screeningToolId: screeningTool1.id,
       patientId: patient2.id,
       userId: user.id,
-      score: 10,
-      patientAnswers: [],
     });
 
     const submissions = await PatientScreeningToolSubmission.getForPatient(patient1.id);
@@ -186,34 +236,40 @@ describe('patient screening tool submission model', () => {
   });
 
   it('gets the latest screening tool submission for a patient and tool', async () => {
-    await PatientScreeningToolSubmission.create({
+    const firstSubmission = await PatientScreeningToolSubmission.create({
       screeningToolId: screeningTool1.id,
       patientId: patient1.id,
       userId: user.id,
-      score: 10,
-      patientAnswers: [],
     });
     const secondSubmission = await PatientScreeningToolSubmission.create({
       screeningToolId: screeningTool1.id,
       patientId: patient1.id,
       userId: user.id,
-      score: 11,
-      patientAnswers: [],
     });
     await PatientScreeningToolSubmission.create({
       screeningToolId: screeningTool2.id,
       patientId: patient1.id,
       userId: user.id,
-      score: 10,
-      patientAnswers: [],
     });
 
+    // gets unscored submission
     const submission = await PatientScreeningToolSubmission.getLatestForPatientAndScreeningTool(
       screeningTool1.id,
       patient1.id,
+      false,
     );
     expect(submission!.id).toEqual(secondSubmission.id);
-    expect(submission!.score).toEqual(secondSubmission.score);
+
+    // gets scored submission
+    await PatientScreeningToolSubmission.submitScore(firstSubmission.id, {
+      score: 10,
+    });
+    const secondSub = await PatientScreeningToolSubmission.getLatestForPatientAndScreeningTool(
+      screeningTool1.id,
+      patient1.id,
+      true,
+    );
+    expect(secondSub!.id).toEqual(firstSubmission.id);
   });
 
   it('returns null when there is no latest submission for a patient and tool', async () => {
@@ -221,20 +277,17 @@ describe('patient screening tool submission model', () => {
       screeningToolId: screeningTool1.id,
       patientId: patient1.id,
       userId: user.id,
-      score: 10,
-      patientAnswers: [],
     });
     await PatientScreeningToolSubmission.create({
       screeningToolId: screeningTool1.id,
       patientId: patient1.id,
       userId: user.id,
-      score: 11,
-      patientAnswers: [],
     });
 
     const submission = await PatientScreeningToolSubmission.getLatestForPatientAndScreeningTool(
       screeningTool2.id,
       patient1.id,
+      false,
     );
     expect(submission).toBeFalsy();
   });
@@ -244,22 +297,16 @@ describe('patient screening tool submission model', () => {
       screeningToolId: screeningTool1.id,
       patientId: patient1.id,
       userId: user.id,
-      score: 10,
-      patientAnswers: [],
     });
     const submission2 = await PatientScreeningToolSubmission.create({
       screeningToolId: screeningTool2.id,
       patientId: patient1.id,
       userId: user.id,
-      score: 10,
-      patientAnswers: [],
     });
     const submission3 = await PatientScreeningToolSubmission.create({
       screeningToolId: screeningTool1.id,
       patientId: patient1.id,
       userId: user.id,
-      score: 10,
-      patientAnswers: [],
     });
 
     const submissions = await PatientScreeningToolSubmission.getForPatient(
@@ -277,22 +324,16 @@ describe('patient screening tool submission model', () => {
       screeningToolId: screeningTool1.id,
       patientId: patient1.id,
       userId: user.id,
-      score: 10,
-      patientAnswers: [],
     });
     const submission2 = await PatientScreeningToolSubmission.create({
       screeningToolId: screeningTool2.id,
       patientId: patient1.id,
       userId: user.id,
-      score: 10,
-      patientAnswers: [],
     });
     const submission3 = await PatientScreeningToolSubmission.create({
       screeningToolId: screeningTool1.id,
       patientId: patient2.id,
       userId: user.id,
-      score: 10,
-      patientAnswers: [],
     });
 
     const submissions = await PatientScreeningToolSubmission.getAll();
@@ -305,8 +346,6 @@ describe('patient screening tool submission model', () => {
       screeningToolId: screeningTool1.id,
       patientId: patient1.id,
       userId: user.id,
-      score: 10,
-      patientAnswers: [],
     });
 
     const fetchedSubmission = await PatientScreeningToolSubmission.get(submission.id);

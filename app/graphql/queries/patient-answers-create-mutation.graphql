@@ -4,7 +4,7 @@ mutation patientAnswersCreate(
   $patientId: String!
   $patientAnswers: [PatientAnswerInput]!
   $questionIds: [String]!
-  $screeningToolId: String
+  $patientScreeningToolSubmissionId: String
   $progressNoteId: String
 ) {
   patientAnswersCreate(
@@ -12,7 +12,7 @@ mutation patientAnswersCreate(
       patientId: $patientId
       patientAnswers: $patientAnswers
       questionIds: $questionIds
-      screeningToolId: $screeningToolId
+      patientScreeningToolSubmissionId: $patientScreeningToolSubmissionId
       progressNoteId: $progressNoteId
     }
   ) {

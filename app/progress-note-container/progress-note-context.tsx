@@ -11,10 +11,10 @@ import * as patientAnswersCreateMutationGraphql from '../graphql/queries/patient
 /* tsline:enable:max-line-length */
 import {
   getClinicsQuery,
+  getPatientAnswersQuery,
   getQuestionsQuery,
   patientAnswersCreateMutation,
   patientAnswersCreateMutationVariables,
-  FullPatientAnswerFragment,
   FullProgressNoteFragment,
   FullProgressNoteTemplateFragment,
   FullQuestionFragment,
@@ -22,9 +22,10 @@ import {
 import Textarea from '../shared/library/textarea/textarea';
 import PatientQuestion from '../shared/question/patient-question';
 import {
+  allQuestionsAnswered,
   getQuestionVisibility,
-  getUpdateForAnswer,
   setupQuestionsState,
+  updateQuestionAnswersState,
   IQuestionsState,
 } from '../shared/question/question-helpers';
 import * as styles from './css/progress-note-context.css';
@@ -54,7 +55,7 @@ interface IGraphqlProps {
   questionsError?: string;
   questions: getQuestionsQuery['questions'];
   refetchPatientAnswers?: () => any;
-  patientAnswers?: [FullPatientAnswerFragment];
+  patientAnswers?: getPatientAnswersQuery['patientAnswers'];
   patientAnswersLoading?: boolean;
   patientAnswersError?: string;
   createPatientAnswers?: (
@@ -65,7 +66,6 @@ interface IGraphqlProps {
 type allProps = IGraphqlProps & IProps;
 
 interface IState {
-  questions: IQuestionsState;
   progressNoteTime?: string;
   progressNoteLocation?: string;
   progressNoteTemplateId?: string;
@@ -95,7 +95,6 @@ export class ProgressNoteContext extends React.Component<allProps, IState> {
     const { progressNote } = props;
     this.deferredSaveProgressNote = debounce(this.saveProgressNote, SAVE_TIMEOUT_MILLISECONDS);
     this.state = {
-      questions: {},
       loading: false,
       progressNoteTime:
         progressNote && progressNote.startedAt
@@ -108,30 +107,15 @@ export class ProgressNoteContext extends React.Component<allProps, IState> {
     };
   }
 
-  componentWillReceiveProps(nextProps: allProps) {
-    let questionsState = this.state.questions;
-    const currentProgressNoteTemplateId = getProgressNoteTemplateId(this.props);
-    const nextProgressNoteTemplateId = getProgressNoteTemplateId(nextProps);
-
-    if (
-      nextProgressNoteTemplateId &&
-      nextProgressNoteTemplateId !== currentProgressNoteTemplateId
-    ) {
-      questionsState = {};
-    }
-    if (nextProps.questions) {
-      // Should happen every time
-      const questions = setupQuestionsState(
-        questionsState,
-        this.props.questions || [],
-        nextProps.questions,
-      );
-      this.setState({ questions });
-    }
-
+  componentWillReceiveProps(newProps: allProps) {
     // setup default state
-    if (nextProps.progressNote && !this.props.progressNote) {
-      this.setDefaultProgressNoteFields(nextProps);
+    if (newProps.progressNote && !this.props.progressNote) {
+      this.setDefaultProgressNoteFields(newProps);
+    }
+    if (newProps.patientAnswers !== this.props.patientAnswers) {
+      const answerData = setupQuestionsState({}, newProps.questions);
+      updateQuestionAnswersState(answerData, newProps.patientAnswers || []);
+      this.props.updateReadyToSubmit(allQuestionsAnswered(newProps.questions, answerData));
     }
   }
 
@@ -150,64 +134,44 @@ export class ProgressNoteContext extends React.Component<allProps, IState> {
     });
   }
 
-  allQuestionsAnswered = () => {
-    const { questions } = this.state;
+  onChange = async (
+    questionId: string,
+    answers: Array<{ answerId: string; value: string | number }>,
+  ) => {
+    const { progressNote, createPatientAnswers, patientId } = this.props;
+    if (progressNote && createPatientAnswers) {
+      const patientAnswers = answers.map(answer => ({
+        questionId,
+        answerId: answer.answerId,
+        answerValue: String(answer.value),
+        patientId,
+        applicable: true,
+      }));
 
-    if (!this.props.questions) {
-      return false;
-    }
-
-    return this.props.questions.every(question => {
-      const questionData = questions[question.id];
-
-      return !!questionData && !!questionData.answers.length;
-    });
-  };
-
-  onChange = async (questionId: string, answerId: string, value: string | number) => {
-    const { questions, createPatientAnswers, progressNote, patientId } = this.props;
-
-    const update = getUpdateForAnswer(
-      questionId,
-      answerId,
-      value,
-      questions || [],
-      this.state.questions,
-    );
-    if (update && progressNote) {
-      this.setState({ questions: update });
-      if (createPatientAnswers) {
-        await createPatientAnswers({
-          variables: {
-            patientId,
-            patientAnswers: [
-              {
-                answerId,
-                answerValue: value.toString(),
-                patientId,
-                questionId,
-                applicable: true,
-              },
-            ],
-            questionIds: [questionId],
-            progressNoteId: progressNote.id,
-          },
-        });
-        this.props.updateReadyToSubmit(this.allQuestionsAnswered());
-      }
+      await createPatientAnswers({
+        variables: {
+          progressNoteId: progressNote.id,
+          patientId,
+          patientAnswers,
+          questionIds: [questionId],
+        },
+      });
     }
   };
 
-  renderQuestion = (question: FullQuestionFragment, index: number) => {
-    const { questions } = this.state;
-
-    const visible = getQuestionVisibility(question, questions);
+  renderQuestion = (question: FullQuestionFragment, index: number, answerData: IQuestionsState) => {
+    const visible = getQuestionVisibility(question, answerData);
+    const dataForQuestion = answerData[question.id] || {
+      answers: [] as any,
+      oldAnswers: [] as any,
+      changed: false,
+    };
     return (
       <PatientQuestion
         editable={true}
         displayHamburger={false}
         visible={visible}
-        answerData={questions[question.id]}
+        answerData={dataForQuestion}
         onChange={this.onChange}
         key={question.id}
         question={question}
@@ -216,9 +180,14 @@ export class ProgressNoteContext extends React.Component<allProps, IState> {
   };
 
   renderQuestions() {
-    const { questions } = this.props;
+    const { questions, patientAnswers } = this.props;
 
-    return (questions || []).map(this.renderQuestion);
+    const answerData = setupQuestionsState({}, questions);
+    updateQuestionAnswersState(answerData, patientAnswers || []);
+
+    return (questions || []).map((question, index) =>
+      this.renderQuestion(question, index, answerData),
+    );
   }
 
   onLocationChange = async (event: React.ChangeEvent<HTMLSelectElement>) => {
@@ -323,6 +292,7 @@ export class ProgressNoteContext extends React.Component<allProps, IState> {
 export default compose(
   graphql<IGraphqlProps, IProps, allProps>(patientAnswersCreateMutationGraphql as any, {
     name: 'createPatientAnswers',
+    options: { refetchQueries: ['getPatientAnswers'] },
   }),
   graphql<IGraphqlProps, IProps, allProps>(clinicsQuery as any, {
     options: {

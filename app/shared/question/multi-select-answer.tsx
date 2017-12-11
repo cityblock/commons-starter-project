@@ -4,7 +4,7 @@ import { FullAnswerFragment } from '../../graphql/types';
 import * as styles from './multi-select-answer.css';
 
 interface IProps {
-  onClick: (value: string | number, answerId: string) => any;
+  onClick: (value: string | number, answerId: string, isRemove: boolean) => any;
   answer: FullAnswerFragment;
   editable: boolean;
   selected: boolean;
@@ -26,10 +26,10 @@ export default class MultiSelectAnswer extends React.Component<IProps, {}> {
   }
 
   onClick() {
-    const { editable, answer, onClick } = this.props;
+    const { editable, answer, onClick, selected } = this.props;
 
     if (editable) {
-      onClick(answer.value, answer.id);
+      onClick(answer.value, answer.id, selected);
     }
   }
 

@@ -225,7 +225,7 @@ export default class Question extends BaseModel {
       .where({ id: questionId, deletedAt: null })
       .update({ deletedAt: new Date().toISOString() });
 
-    const question = await this.query().findById(questionId);
+    const question = await this.modifyEager(this.query()).findById(questionId);
     if (!question) {
       return Promise.reject(`No such question: ${questionId}`);
     }

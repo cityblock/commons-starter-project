@@ -222,6 +222,7 @@ exports[`shallow rendered renders with screening tool 1`] = `
               "valueType": "boolean",
             }
           }
+          dataType={null}
           questionId="cool-question-id"
           screeningToolAnswer={false}
         />
@@ -232,6 +233,7 @@ exports[`shallow rendered renders with screening tool 1`] = `
         Create answer:
       </div>
       <Apollo(Apollo(Apollo(AnswerCreateEdit)))
+        dataType={null}
         questionId="cool-question-id"
         screeningToolAnswer={false}
       />

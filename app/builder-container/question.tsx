@@ -221,6 +221,16 @@ export class Question extends React.Component<allProps, IState> {
     }
   }
 
+  getAnswerDataType() {
+    const { question } = this.props;
+
+    if (!question) {
+      return null;
+    }
+
+    return question.computedField ? question.computedField.dataType : null;
+  }
+
   renderAnswers() {
     const { question } = this.props;
     if (question && question.answers) {
@@ -230,6 +240,7 @@ export class Question extends React.Component<allProps, IState> {
           screeningToolAnswer={!!question.screeningToolId}
           answer={answer}
           questionId={question.id}
+          dataType={this.getAnswerDataType()}
         />
       ));
     }
@@ -395,6 +406,7 @@ export class Question extends React.Component<allProps, IState> {
               <AnswerCreateEdit
                 questionId={question.id}
                 screeningToolAnswer={!!question.screeningToolId}
+                dataType={this.getAnswerDataType()}
               />
               <div className={styles.smallText}>Applicable if type:</div>
               <br />

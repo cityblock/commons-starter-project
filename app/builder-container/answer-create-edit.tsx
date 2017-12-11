@@ -13,6 +13,7 @@ import {
   answerEditMutation,
   answerEditMutationVariables,
   AnswerValueTypeOptions,
+  ComputedFieldDataTypes,
   FullAnswerFragment,
 } from '../graphql/types';
 import * as formStyles from '../shared/css/forms.css';
@@ -36,6 +37,7 @@ interface IProps {
   answer?: FullAnswerFragment;
   questionId: string;
   screeningToolAnswer?: boolean;
+  dataType?: ComputedFieldDataTypes;
 }
 
 interface IGraphqlProps {
@@ -71,7 +73,7 @@ class AnswerCreateEdit extends React.Component<allProps, IState> {
         : {
             displayValue: 'edit me!',
             value: screeningToolAnswer ? '0' : 'true',
-            valueType: (screeningToolAnswer ? 'number' : 'boolean') as AnswerValueTypeOptions,
+            valueType: this.getInitialValueType() as AnswerValueTypeOptions,
             riskAdjustmentType: null,
             inSummary: false,
             summaryText: null,
@@ -88,6 +90,18 @@ class AnswerCreateEdit extends React.Component<allProps, IState> {
       const { answer } = this.state;
       answer.questionId = questionId;
       this.setState({ answer });
+    }
+  }
+
+  getInitialValueType() {
+    const { screeningToolAnswer, dataType } = this.props;
+
+    if (screeningToolAnswer) {
+      return 'number';
+    } else if (dataType) {
+      return dataType;
+    } else {
+      return 'boolean';
     }
   }
 
@@ -149,10 +163,12 @@ class AnswerCreateEdit extends React.Component<allProps, IState> {
   }
 
   getValueTypeOptions() {
-    const { screeningToolAnswer } = this.props;
+    const { screeningToolAnswer, dataType } = this.props;
 
     if (screeningToolAnswer) {
       return <option value="number">number</option>;
+    } else if (dataType) {
+      return <option value={dataType}>{dataType}</option>;
     } else {
       return [
         <option key={'default-option'} value="" disabled hidden>

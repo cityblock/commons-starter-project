@@ -3,6 +3,7 @@
 [![Coverage Status](https://coveralls.io/repos/github/cityblock/commons/badge.svg?branch=master&t=WGaPTr)](https://coveralls.io/github/cityblock/commons?branch=master)
 [![CircleCI](https://circleci.com/gh/cityblock/commons.svg?style=svg&circle-token=ff9336cd2c27998733f1abe9a3c3bcbba62a045f)](https://circleci.com/gh/cityblock/commons)
 [![NSP Status](https://nodesecurity.io/orgs/cityblock/projects/c914cd48-0065-4791-8267-b5b15f6b7e80/badge)](https://nodesecurity.io/orgs/cityblock/projects/c914cd48-0065-4791-8267-b5b15f6b7e80)
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fcityblock%2Fcommons.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2Fcityblock%2Fcommons?ref=badge_shield)
 
 Tech wise, this app is an Express server running GraphQL and PostgreSQL (Objection.js) written in
 TypeScript. Tested using Jest. Hosted on [Aptible][].

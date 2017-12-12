@@ -57,7 +57,8 @@ it('renders goal create', () => {
       routeBase={'/builder/goals'}
       goalId={null}
       loading={false}
-      error={null} />,
+      error={null}
+    />,
   );
   const instance = component.instance() as Component;
   instance.showCreateGoal();

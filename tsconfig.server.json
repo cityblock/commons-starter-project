@@ -3,13 +3,8 @@
   "compilerOptions": {
     "outDir": "./server-compiled"
   },
-  "include": [
-    "./declarations/*"
-  ],
-  "files": [
-    "./server/index",
-    "./server/lib/capture-output"
-  ],
+  "include": ["./declarations/*"],
+  "files": ["./server/index", "./server/lib/capture-output"],
   "exclude": [
     "node_modules",
     "app",

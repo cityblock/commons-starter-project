@@ -196,8 +196,9 @@ export default compose(
   connect<IStateProps, {}, IProps>(mapStateToProps as (args?: any) => IStateProps),
   graphql<IGraphqlProps, IProps & IStateProps, allProps>(computedFieldQuery as any, {
     skip: (props: IProps & IStateProps) => !props.computedFieldId,
-    options: (props: IProps & IStateProps) =>
-      ({ variables: { computedFieldId: props.computedFieldId } }),
+    options: (props: IProps & IStateProps) => ({
+      variables: { computedFieldId: props.computedFieldId },
+    }),
     props: ({ data }) => ({
       computedFieldLoading: data ? data.loading : false,
       computedFieldError: data ? data.error : null,

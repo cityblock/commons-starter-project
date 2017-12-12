@@ -332,8 +332,9 @@ function mapStateToProps(state: IAppState, ownProps: IProps): IStateProps {
     progressNoteTemplateId: ownProps.match.params.progressNoteTemplateId || null,
     riskAreaId:
       // Hack to allow us to link to this page w/o knowing about risk areas
-      ownProps.match.params.riskAreaId !== 'redirect' ?
-        ownProps.match.params.riskAreaId || null : null,
+      ownProps.match.params.riskAreaId !== 'redirect'
+        ? ownProps.match.params.riskAreaId || null
+        : null,
     routeBase,
   };
 }

@@ -40,12 +40,14 @@ export default async (app: express.Application, logger: Console) => {
   // X-Powered-By header has no functional value.
   app.disable('x-powered-by');
 
-  app.set('views', path.join(__dirname, '..', 'views'));
-  app.set('view cache', false);
+  if (config.NODE_ENV === 'development') {
+    app.set('views', path.join(__dirname, '..', 'views'));
+    app.set('view cache', false);
+  }
 
   app.use(
     '/assets',
-    express.static(path.join(__dirname, '..', 'public'), {
+    express.static(path.join(__dirname, '..', '..', 'public'), {
       maxAge: '24h',
     }),
   );

@@ -248,8 +248,23 @@ export class Question extends React.Component<allProps, IState> {
     }
   }
 
+  getQuestionsForConditions() {
+    const { question, questions } = this.props;
+    const filterableQuestions = questions || [];
+
+    if (!question) {
+      return [];
+    }
+
+    if (question.computedField) {
+      return filterableQuestions.filter(q => !!q.computedField);
+    } else {
+      return filterableQuestions.filter(q => !q.computedField);
+    }
+  }
+
   render() {
-    const { question, questions, routeBase } = this.props;
+    const { question, routeBase } = this.props;
     const {
       deleteConfirmationInProgress,
       deleteError,
@@ -292,6 +307,25 @@ export class Question extends React.Component<allProps, IState> {
     const closeRoute = routeBase || '/builder/questions';
 
     if (question) {
+      const answerDisplayHtml = question.computedField ? (
+        <div className={styles.largeText}>{question.answerType}</div>
+      ) : (
+        <select
+          required
+          name="answerType"
+          value={question.answerType || 'Select one'}
+          onChange={this.onSelectChange}
+          className={classNames(formStyles.select, formStyles.inputSmall)}
+        >
+          <option value={'Select one'} disabled={true}>
+            Select one (Required!)
+          </option>
+          <option value="dropdown">dropdown</option>
+          <option value="radio">radio</option>
+          <option value="freetext">freetext</option>
+          <option value="multiselect">multiselect</option>
+        </select>
+      );
       return (
         <div className={outerContainerStyles}>
           <div className={deleteConfirmationStyles}>
@@ -386,21 +420,7 @@ export class Question extends React.Component<allProps, IState> {
                 <br />
                 <div className={styles.smallText}>Answer display:</div>
               </div>
-              <select
-                required
-                name="answerType"
-                value={question.answerType || 'Select one'}
-                onChange={this.onSelectChange}
-                className={classNames(formStyles.select, formStyles.inputSmall)}
-              >
-                <option value={'Select one'} disabled={true}>
-                  Select one (Required!)
-                </option>
-                <option value="dropdown">dropdown</option>
-                <option value="radio">radio</option>
-                <option value="freetext">freetext</option>
-                <option value="multiselect">multiselect</option>
-              </select>
+              {answerDisplayHtml}
               <br />
               <div className={styles.smallText}>Answers:</div>
               <div>{answers}</div>
@@ -426,7 +446,7 @@ export class Question extends React.Component<allProps, IState> {
               </select>
               <br />
               <QuestionConditions
-                questions={questions}
+                questions={this.getQuestionsForConditions()}
                 questionConditions={question.applicableIfQuestionConditions}
                 questionId={question.id}
               />

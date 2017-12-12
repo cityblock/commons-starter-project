@@ -165,11 +165,14 @@ class AnswerCreateEdit extends React.Component<allProps, IState> {
 
   getValueTypeOptions() {
     const { screeningToolAnswer, dataType } = this.props;
+    const { answer } = this.state;
 
     if (screeningToolAnswer) {
       return <option value="number">number</option>;
     } else if (dataType) {
       return <option value={dataType}>{dataType}</option>;
+    } else if (this.props.answer) {
+      return <option value={answer.valueType}>{answer.valueType}</option>;
     } else {
       return [
         <option key={'default-option'} value="" disabled hidden>
@@ -208,6 +211,18 @@ class AnswerCreateEdit extends React.Component<allProps, IState> {
       <CarePlanSuggestions answer={this.props.answer} />
     ) : null;
     const valueType = screeningToolAnswer ? 'number' : answer.valueType || '';
+    const backendValueHtml = this.props.answer ? (
+      <div className={answerStyles.largeText}>{answer.value}</div>
+    ) : (
+      <input
+        name="value"
+        value={answer.value}
+        placeholder={'Enter answer value'}
+        className={classNames(formStyles.input, formStyles.inputSmall)}
+        onChange={this.onChange}
+      />
+    );
+
     return (
       <form onSubmit={this.onSubmit} className={answerStyles.borderContainer}>
         <div className={loadingClass}>
@@ -244,13 +259,7 @@ class AnswerCreateEdit extends React.Component<allProps, IState> {
           </div>
           <div className={styles.inlineInputGroup}>
             <div className={answerStyles.smallText}>Backend Value:</div>
-            <input
-              name="value"
-              value={answer.value}
-              placeholder={'Enter answer value'}
-              className={classNames(formStyles.input, formStyles.inputSmall)}
-              onChange={this.onChange}
-            />
+            {backendValueHtml}
           </div>
           <div className={styles.inlineInputGroup}>
             <div className={answerStyles.smallText}>Backend value type:</div>

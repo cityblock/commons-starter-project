@@ -218,13 +218,11 @@ exports[`renders answer create-edit 1`] = `
       >
         Backend Value:
       </div>
-      <input
-        className="input inputSmall"
-        name="value"
-        onChange={[Function]}
-        placeholder="Enter answer value"
-        value="true"
-      />
+      <div
+        className="largeText"
+      >
+        true
+      </div>
     </div>
     <div
       className="inlineInputGroup"
@@ -241,26 +239,9 @@ exports[`renders answer create-edit 1`] = `
         value="boolean"
       >
         <option
-          disabled={true}
-          hidden={true}
-          value=""
-        >
-          Select Answer value type
-        </option>
-        <option
-          value="string"
-        >
-          text
-        </option>
-        <option
           value="boolean"
         >
-          true / false
-        </option>
-        <option
-          value="number"
-        >
-          number
+          boolean
         </option>
       </select>
     </div>

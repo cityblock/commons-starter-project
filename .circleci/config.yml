@@ -1,6 +1,29 @@
 version: 2
 jobs:
-  build:
+  lint:
+    working_directory: ~/repo
+    docker:
+      - image: circleci/node:8.9
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - v1-dependencies-{{ arch }}-{{ checksum "package.json" }}
+            # fallback to using the latest cache if no exact match is found
+            - v1-dependencies-
+      - run: yarn install
+      - save_cache:
+          key: v1-dependencies-{{ arch }}-{{ checksum "package.json" }}
+          paths:
+            - ./node_modules
+      - run: yarn lint
+      - run: yarn stylelint
+      - run:
+          name: check-schema
+          command: './scripts/check-schema-in-sync.sh'
+      - run: yarn codegen
+
+  test:
     working_directory: ~/repo
     docker:
       - image: circleci/node:8.9
@@ -21,11 +44,6 @@ jobs:
           key: v1-dependencies-{{ arch }}-{{ checksum "package.json" }}
           paths:
             - ./node_modules
-      - run: yarn lint
-      - run: yarn stylelint
-      - run:
-          name: check-schema
-          command: './scripts/check-schema-in-sync.sh'
       - run:
           name: Wait for DB
           command: dockerize -wait tcp://localhost:5432 -timeout 1m
@@ -36,7 +54,6 @@ jobs:
       - store_artifacts:
           path: coverage
           prefix: coverage
-      - run: yarn codegen
 
   deploy:
     working_directory: ~/repo
@@ -58,10 +75,12 @@ workflows:
   version: 2
   build_and_deploy:
     jobs:
-      - build
+      - lint
+      - test
       - deploy:
           requires:
-            - build
+            - lint
+            - test
           filters:
             branches:
               only: master

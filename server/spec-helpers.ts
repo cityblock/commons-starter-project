@@ -64,6 +64,18 @@ export function createMockClinic(name = 'The Dan Plant Center', departmentId = 1
   };
 }
 
+export function createMockRiskAreaGroup(
+  title = 'Night King Breach of the Wall',
+  mediumRiskThreshold = 50,
+  highRiskThreshold = 80,
+) {
+  return {
+    title,
+    mediumRiskThreshold,
+    highRiskThreshold,
+  };
+}
+
 // Google Auth
 export function mockGoogleOauthAuthorize(idToken: string) {
   nock('https://www.googleapis.com/oauth2/v4/token')

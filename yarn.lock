@@ -1477,9 +1477,9 @@ caniuse-lite@^1.0.0, caniuse-lite@^1.0.30000748, caniuse-lite@^1.0.30000770:
   version "1.0.30000772"
   resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30000772.tgz#78129622cabfed7af1ff38b64ab680a6a0865420"
 
-caniuse-lite@^1.0.30000780:
-  version "1.0.30000782"
-  resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30000782.tgz#5b82b8c385f25348745c471ca51320afb1b7f254"
+caniuse-lite@^1.0.30000783:
+  version "1.0.30000783"
+  resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30000783.tgz#9b5499fb1b503d2345d12aa6b8612852f4276ffd"
 
 capture-stack-trace@^1.0.0:
   version "1.0.0"
@@ -3464,9 +3464,9 @@ graphql-tag@^2.6.0:
   version "2.6.0"
   resolved "https://registry.yarnpkg.com/graphql-tag/-/graphql-tag-2.6.0.tgz#0fb1b9f6d6651263c47a3420e827910e6fed3952"
 
-graphql-tools@2.12.0:
-  version "2.12.0"
-  resolved "https://registry.yarnpkg.com/graphql-tools/-/graphql-tools-2.12.0.tgz#6286902650537bf7f20ac87159ab5c8b2e9741f8"
+graphql-tools@2.13.0:
+  version "2.13.0"
+  resolved "https://registry.yarnpkg.com/graphql-tools/-/graphql-tools-2.13.0.tgz#3c7aad3bb1284a651dd80b385e06b3d13ac2a6f2"
   dependencies:
     apollo-utilities "^1.0.1"
     deprecated-decorator "^0.1.6"
@@ -5561,9 +5561,9 @@ node-pre-gyp@^0.6.39:
     tar "^2.2.1"
     tar-pack "^3.4.0"
 
-nodemon@^1.12.5:
-  version "1.12.5"
-  resolved "https://registry.yarnpkg.com/nodemon/-/nodemon-1.12.5.tgz#bd34afa1aa855f1996b561147848519f136de620"
+nodemon@^1.12.6:
+  version "1.12.6"
+  resolved "https://registry.yarnpkg.com/nodemon/-/nodemon-1.12.6.tgz#aa0ca0f3b9ea0f09e970e8135b2c9c9aa84eb711"
   dependencies:
     chokidar "^1.7.0"
     debug "^2.6.8"

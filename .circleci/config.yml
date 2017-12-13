@@ -23,7 +23,25 @@ jobs:
           command: './scripts/check-schema-in-sync.sh'
       - run: yarn codegen
 
-  test:
+  test_frontend:
+    working_directory: ~/repo
+    docker:
+      - image: circleci/node:8.9
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - v1-dependencies-{{ arch }}-{{ checksum "package.json" }}
+            # fallback to using the latest cache if no exact match is found
+            - v1-dependencies-
+      - run: yarn install
+      - save_cache:
+          key: v1-dependencies-{{ arch }}-{{ checksum "package.json" }}
+          paths:
+            - ./node_modules
+      - run: yarn coverage:frontend
+
+  test_api:
     working_directory: ~/repo
     docker:
       - image: circleci/node:8.9
@@ -47,13 +65,33 @@ jobs:
       - run:
           name: Wait for DB
           command: dockerize -wait tcp://localhost:5432 -timeout 1m
-      - run: yarn coverage
+      - run: yarn coverage:api
+
+  test_models:
+    working_directory: ~/repo
+    docker:
+      - image: circleci/node:8.9
+      - image: postgres:10
+        environment:
+          POSTGRES_DB: commons_test
+          POSTGRES_USER: root
+          POSTGRES_PASSWORD: ""
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - v1-dependencies-{{ arch }}-{{ checksum "package.json" }}
+            # fallback to using the latest cache if no exact match is found
+            - v1-dependencies-
+      - run: yarn install
+      - save_cache:
+          key: v1-dependencies-{{ arch }}-{{ checksum "package.json" }}
+          paths:
+            - ./node_modules
       - run:
-          name: code-coverage
-          command: './scripts/post-coverage.sh || true'
-      - store_artifacts:
-          path: coverage
-          prefix: coverage
+          name: Wait for DB
+          command: dockerize -wait tcp://localhost:5432 -timeout 1m
+      - run: yarn coverage:models
 
   deploy:
     working_directory: ~/repo
@@ -76,11 +114,15 @@ workflows:
   build_and_deploy:
     jobs:
       - lint
-      - test
+      - test_frontend
+      - test_api
+      - test_models
       - deploy:
           requires:
             - lint
-            - test
+            - test_frontend
+            - test_api
+            - test_models
           filters:
             branches:
               only: master

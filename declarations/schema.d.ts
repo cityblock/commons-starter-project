@@ -86,6 +86,14 @@ declare module 'schema' {
   */
     taskComment: ITaskComment | null;
     /**
+    description: RiskAreaGroup
+  */
+    riskAreaGroup: IRiskAreaGroup | null;
+    /**
+    description: RiskAreaGroups
+  */
+    riskAreaGroups: Array<IRiskAreaGroup>;
+    /**
     description: RiskArea
   */
     riskArea: IRiskArea | null;
@@ -318,7 +326,7 @@ declare module 'schema' {
   /**
     description: An object with a Globally Unique ID
   */
-  type uniqueId = IUser | IPatient | IPatientSearchResult | IClinic | ITask | IPatientGoal | IPatientConcern | IConcern | IGoalSuggestionTemplate | ITaskTemplate | ITaskComment | IRiskArea | IQuestion | IAnswer | IScreeningTool | IScreeningToolScoreRange | IQuestionCondition | IComputedField | IPatientAnswer | IPatientScreeningToolSubmission | ICarePlanSuggestion | IRiskAreaAssessmentSubmission | IEventNotification | ITaskEvent | IProgressNote | IProgressNoteTemplate | IPatientTaskSuggestion | IPatientAnswerEvent | ICarePlanUpdateEvent | IQuickCall;
+  type uniqueId = IUser | IPatient | IPatientSearchResult | IClinic | ITask | IPatientGoal | IPatientConcern | IConcern | IGoalSuggestionTemplate | ITaskTemplate | ITaskComment | IRiskAreaGroup | IRiskArea | IQuestion | IAnswer | IScreeningTool | IScreeningToolScoreRange | IQuestionCondition | IComputedField | IPatientAnswer | IPatientScreeningToolSubmission | ICarePlanSuggestion | IRiskAreaAssessmentSubmission | IEventNotification | ITaskEvent | IProgressNote | IProgressNoteTemplate | IPatientTaskSuggestion | IPatientAnswerEvent | ICarePlanUpdateEvent | IQuickCall;
 
   /**
     description: An object with a Globally Unique ID
@@ -649,6 +657,19 @@ declare module 'schema' {
     taskId: string;
     createdAt: string;
     updatedAt: string | null;
+  }
+
+  /**
+    description: Risk Area Group
+  */
+  interface IRiskAreaGroup {
+    id: string;
+    createdAt: string;
+    updatedAt: string;
+    deletedAt: string | null;
+    title: string;
+    mediumRiskThreshold: number;
+    highRiskThreshold: number;
   }
 
   /**
@@ -1169,6 +1190,18 @@ declare module 'schema' {
   */
     taskCommentDelete: ITaskComment | null;
     /**
+    description: Create a RiskAreaGroup
+  */
+    riskAreaGroupCreate: IRiskAreaGroup | null;
+    /**
+    description: Edit a RiskAreaGroup
+  */
+    riskAreaGroupEdit: IRiskAreaGroup | null;
+    /**
+    description: Delete a RiskAreaGroup
+  */
+    riskAreaGroupDelete: IRiskAreaGroup | null;
+    /**
     description: Create a RiskArea
   */
     riskAreaCreate: IRiskArea | null;
@@ -1674,6 +1707,32 @@ declare module 'schema' {
   */
   interface ITaskCommentDeleteInput {
     taskCommentId: string;
+  }
+
+  /**
+    description: params for creating a risk area group
+  */
+  interface IRiskAreaGroupCreateInput {
+    title: string;
+    mediumRiskThreshold: number;
+    highRiskThreshold: number;
+  }
+
+  /**
+    description: params for editing a risk area group
+  */
+  interface IRiskAreaGroupEditInput {
+    riskAreaGroupId: string;
+    title?: string | null;
+    mediumRiskThreshold?: number | null;
+    highRiskThreshold?: number | null;
+  }
+
+  /**
+    description: params for deleting a risk area group
+  */
+  interface IRiskAreaGroupDeleteInput {
+    riskAreaGroupId: string;
   }
 
 

@@ -145,6 +145,13 @@ import {
   riskAreaAssessmentSubmissionCreate,
 } from './risk-area-assessment-submission-resolver';
 import {
+  resolveRiskAreaGroup,
+  resolveRiskAreaGroups,
+  riskAreaGroupCreate,
+  riskAreaGroupDelete,
+  riskAreaGroupEdit,
+} from './risk-area-group-resolver';
+import {
   resolvePatientRiskAreaRiskScore,
   resolvePatientRiskAreaSummary,
   resolveRiskArea,
@@ -236,6 +243,8 @@ const resolveFunctions = {
     tasksForCurrentUser: resolveCurrentUserTasks,
     taskComments: resolveTaskComments,
     taskComment: resolveTaskComment,
+    riskAreaGroups: resolveRiskAreaGroups,
+    riskAreaGroup: resolveRiskAreaGroup,
     riskArea: resolveRiskArea,
     riskAreas: resolveRiskAreas,
     patientRiskAreaRiskScore: resolvePatientRiskAreaRiskScore,
@@ -322,6 +331,9 @@ const resolveFunctions = {
     questionConditionEdit,
     questionConditionCreate,
     questionConditionDelete,
+    riskAreaGroupCreate,
+    riskAreaGroupEdit,
+    riskAreaGroupDelete,
     riskAreaEdit,
     riskAreaCreate,
     riskAreaDelete,

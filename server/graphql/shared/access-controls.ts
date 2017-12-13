@@ -16,6 +16,7 @@ export type Resource =
   | 'answer'
   | 'questionCondition'
   | 'patientAnswer'
+  | 'riskAreaGroup'
   | 'riskArea'
   | 'question'
   | 'concern'

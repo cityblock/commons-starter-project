@@ -68,7 +68,7 @@ export async function riskAreaDelete(
   args: IDeleteRiskAreaOptions,
   { db, userId, userRole }: IContext,
 ) {
-  await accessControls.isAllowedForUser(userRole, 'edit', 'riskArea');
+  await accessControls.isAllowedForUser(userRole, 'delete', 'riskArea');
   checkUserLoggedIn(userId);
 
   return await RiskArea.delete(args.input.riskAreaId);

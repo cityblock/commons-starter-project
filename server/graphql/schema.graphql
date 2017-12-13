@@ -471,6 +471,17 @@ type QuestionCondition implements uniqueId {
   questionId: String!
 }
 
+# Risk Area Group
+type RiskAreaGroup implements uniqueId {
+  id: ID!
+  createdAt: String!
+  updatedAt: String!
+  deletedAt: String
+  title: String!
+  mediumRiskThreshold: Int!
+  highRiskThreshold: Int!
+}
+
 # Risk Area
 type RiskArea implements uniqueId {
   id: ID!
@@ -987,6 +998,26 @@ input TaskCommentDeleteInput {
   taskCommentId: String!
 }
 
+# params for creating a risk area group
+input RiskAreaGroupCreateInput {
+  title: String!
+  mediumRiskThreshold: Int!
+  highRiskThreshold: Int!
+}
+
+# params for editing a risk area group
+input RiskAreaGroupEditInput {
+  riskAreaGroupId: String!
+  title: String
+  mediumRiskThreshold: Int
+  highRiskThreshold: Int
+}
+
+# params for deleting a risk area group
+input RiskAreaGroupDeleteInput {
+  riskAreaGroupId: String!
+}
+
 input RiskAreaCreateInput {
   title: String!
   order: Int!
@@ -1399,6 +1430,12 @@ type RootMutationType {
   taskCommentEdit(input: TaskCommentEditInput): TaskComment
   # Delete a task
   taskCommentDelete(input: TaskCommentDeleteInput): TaskComment
+  # Create a RiskAreaGroup
+  riskAreaGroupCreate(input: RiskAreaGroupCreateInput): RiskAreaGroup
+  # Edit a RiskAreaGroup
+  riskAreaGroupEdit(input: RiskAreaGroupEditInput): RiskAreaGroup
+  # Delete a RiskAreaGroup
+  riskAreaGroupDelete(input: RiskAreaGroupDeleteInput): RiskAreaGroup
   # Create a RiskArea
   riskAreaCreate(input: RiskAreaCreateInput): RiskArea
   # Edit a RiskArea
@@ -1573,6 +1610,10 @@ type RootQueryType {
   taskComments(pageNumber: Int, pageSize: Int, taskId: String!): TaskCommentEdges
   # Single task comment
   taskComment(taskCommentId: String!): TaskComment
+  # RiskAreaGroup
+  riskAreaGroup(riskAreaGroupId: String!): RiskAreaGroup
+  # RiskAreaGroups
+  riskAreaGroups: [RiskAreaGroup]!
   # RiskArea
   riskArea(riskAreaId: String!): RiskArea
   # RiskAreas

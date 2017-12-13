@@ -12,14 +12,14 @@ exports[`renders builder container 1`] = `
     >
       <a
         className="tab selectedTab"
-        href="/builder/domains"
+        href="/builder/assessments"
         onClick={[Function]}
       >
-        Domains
+        Assessments
       </a>
       <a
         className="tab"
-        href="/builder/domains/redirect/questions"
+        href="/builder/assessments/redirect/questions"
         onClick={[Function]}
       >
         Questions
@@ -73,7 +73,7 @@ exports[`renders builder container 1`] = `
             className="createButton"
             onClick={[Function]}
           >
-            Create Domain
+            Create Assessment
           </div>
         </div>
       </div>

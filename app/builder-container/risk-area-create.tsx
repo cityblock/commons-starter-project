@@ -112,14 +112,14 @@ export class RiskAreaCreate extends React.Component<allProps, IState> {
               <input
                 name="title"
                 value={riskArea.title}
-                placeholder={'Enter domain title'}
+                placeholder={'Enter assessment title'}
                 className={formStyles.input}
                 onChange={this.onChange}
               />
               <input
                 type="number"
                 name="order"
-                placeholder={'Enter domain order'}
+                placeholder={'Enter assessment order'}
                 value={riskArea.order}
                 className={formStyles.input}
                 onChange={this.onChange}
@@ -131,7 +131,7 @@ export class RiskAreaCreate extends React.Component<allProps, IState> {
               <div className={styles.cancelButton} onClick={this.props.onClose}>
                 Cancel
               </div>
-              <input type="submit" className={styles.submitButton} value="Add domain" />
+              <input type="submit" className={styles.submitButton} value="Add assessment" />
             </div>
           </div>
         </form>

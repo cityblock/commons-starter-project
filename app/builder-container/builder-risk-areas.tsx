@@ -53,7 +53,7 @@ interface IState {
   error: string | null;
 }
 
-const ROUTE_BASE = '/builder/domains';
+const ROUTE_BASE = '/builder/assessments';
 
 class AdminRiskAreas extends React.Component<allProps, IState> {
   constructor(props: allProps) {
@@ -134,7 +134,7 @@ class AdminRiskAreas extends React.Component<allProps, IState> {
     const createRiskAreaButton = (
       <div className={styles.createContainer}>
         <div onClick={this.showCreateRiskArea} className={styles.createButton}>
-          Create Domain
+          Create Assessment
         </div>
       </div>
     );

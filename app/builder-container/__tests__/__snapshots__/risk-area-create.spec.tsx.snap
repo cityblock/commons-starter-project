@@ -36,14 +36,14 @@ exports[`renders risk area 1`] = `
           className="input"
           name="title"
           onChange={[Function]}
-          placeholder="Enter domain title"
+          placeholder="Enter assessment title"
           value=""
         />
         <input
           className="input"
           name="order"
           onChange={[Function]}
-          placeholder="Enter domain order"
+          placeholder="Enter assessment order"
           type="number"
           value={1}
         />
@@ -64,7 +64,7 @@ exports[`renders risk area 1`] = `
         <input
           className="submitButton"
           type="submit"
-          value="Add domain"
+          value="Add assessment"
         />
       </div>
     </div>

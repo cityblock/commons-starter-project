@@ -13,7 +13,7 @@ exports[`builder concerns renders builder questions 1`] = `
       <div
         className="sortLabel"
       >
-        Questions for domain/tool/progress note template:
+        Questions for assessment/tool/progress note template:
       </div>
       <div
         className="sortDropdown"

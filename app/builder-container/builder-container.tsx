@@ -22,6 +22,7 @@ import * as styles from './css/builder.css';
 
 type Tab =
   | 'domains'
+  | 'assessments'
   | 'concerns'
   | 'goals'
   | 'tools'
@@ -47,8 +48,8 @@ interface IStateProps {
 
 interface IGraphqlProps {
   screeningToolId: string | null;
-  riskAreasLoading: boolean;
-  riskAreasError: string | null;
+  assessmentsLoading: boolean;
+  assessmentsError: string | null;
   screeningToolsLoading: boolean;
   screeningToolsError: string | null;
   concernsLoading: boolean;
@@ -56,7 +57,7 @@ interface IGraphqlProps {
   goalsLoading: boolean;
   goalsError: string | null;
   refetchGoals: () => any;
-  riskAreas: FullRiskAreaFragment[];
+  assessments: FullRiskAreaFragment[];
   concerns: FullConcernFragment[];
   goals: FullGoalSuggestionTemplateFragment[];
   screeningTools: FullScreeningToolFragment[];
@@ -75,15 +76,15 @@ class BuilderContainer extends React.Component<allProps, {}> {
     const progressNoteTemplatesTabSelected =
       tab === 'progress-note-templates' && subTab !== 'questions';
     const toolsTabSelected = tab === 'tools' && subTab !== 'questions';
-    const riskAreasTabSelected =
+    const assessmentsTabSelected =
       !questionsTabSelected &&
       !concernsTabSelected &&
       !goalsTabSelected &&
       !toolsTabSelected &&
       !progressNoteTemplatesTabSelected &&
       !computedFieldsTabSelected;
-    const riskAreaTabStyles = classNames(tabStyles.tab, {
-      [tabStyles.selectedTab]: riskAreasTabSelected,
+    const assessmentTabStyles = classNames(tabStyles.tab, {
+      [tabStyles.selectedTab]: assessmentsTabSelected,
     });
     const questionTabStyles = classNames(tabStyles.tab, {
       [tabStyles.selectedTab]: questionsTabSelected,
@@ -107,10 +108,10 @@ class BuilderContainer extends React.Component<allProps, {}> {
       <div className={styles.container}>
         <div className={styles.mainBody}>
           <div className={tabStyles.tabs}>
-            <Link to={'/builder/domains'} className={riskAreaTabStyles}>
-              Domains
+            <Link to={'/builder/assessments'} className={assessmentTabStyles}>
+              Assessments
             </Link>
-            <Link to={`/builder/domains/redirect/questions`} className={questionTabStyles}>
+            <Link to={`/builder/assessments/redirect/questions`} className={questionTabStyles}>
               Questions
             </Link>
             <Link to={'/builder/concerns'} className={concernTabStyles}>
@@ -135,7 +136,7 @@ class BuilderContainer extends React.Component<allProps, {}> {
           <Switch>
             <Route
               exact
-              path="/builder/domains/:riskAreaId/questions/:questionId?"
+              path="/builder/assessments/:riskAreaId/questions/:questionId?"
               component={BuilderQuestions}
             />
             <Route
@@ -148,7 +149,7 @@ class BuilderContainer extends React.Component<allProps, {}> {
               path="/builder/progress-note-templates/:progressNoteTemplateId/questions/:questionId?"
               component={BuilderQuestions}
             />
-            <Route exact path="/builder/domains/:riskAreaId?" component={BuilderRiskAreas} />
+            <Route exact path="/builder/assessments/:riskAreaId?" component={BuilderRiskAreas} />
             <Route exact path="/builder/tools/:toolId?" component={BuilderScreeningTools} />
             <Route exact path="/builder/concerns/:concernId?" component={BuilderConcerns} />
             <Route exact path="/builder/goals/:goalId?" component={BuilderGoals} />
@@ -162,7 +163,7 @@ class BuilderContainer extends React.Component<allProps, {}> {
               path="/builder/computed-fields/:computedFieldId?"
               component={BuilderComputedFields}
             />
-            <Redirect to="/builder/domains" />
+            <Redirect to="/builder/assessments" />
           </Switch>
         </div>
       </div>
@@ -172,7 +173,7 @@ class BuilderContainer extends React.Component<allProps, {}> {
 
 function mapStateToProps(state: IAppState, ownProps: IProps): IStateProps {
   return {
-    tab: ownProps.match.params.tab || 'domains',
+    tab: ownProps.match.params.tab || 'assessments',
     objectId: ownProps.match.params.objectId,
     subTab: ownProps.match.params.subTab || null,
   };

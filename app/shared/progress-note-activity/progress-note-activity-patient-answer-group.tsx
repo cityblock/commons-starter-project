@@ -25,7 +25,7 @@ class ProgressNoteActivityPatientAnswerGroup extends React.Component<IProps, ISt
   getDisplayTitle = () => {
     const { title } = this.props;
 
-    return `${title} Domain Updates`;
+    return `${title} Assessment Updates`;
   };
 
   getDisplayCount = () => {

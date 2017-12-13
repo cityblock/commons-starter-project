@@ -249,7 +249,7 @@ export class RiskArea extends React.Component<allProps, IState> {
           <div className={deleteConfirmationStyles}>
             <div className={styles.deleteConfirmationIcon} />
             <div className={styles.deleteConfirmationText}>
-              Are you sure you want to delete this domain?
+              Are you sure you want to delete this assessment?
             </div>
             <div className={styles.deleteConfirmationButtons}>
               <div
@@ -264,7 +264,7 @@ export class RiskArea extends React.Component<allProps, IState> {
             </div>
             <div className={deleteErrorStyles}>
               <div className={classNames(styles.redText, styles.smallText)}>
-                Error deleting domain.
+                Error deleting assessment.
               </div>
               <div className={styles.smallText}>Please try again.</div>
             </div>
@@ -278,7 +278,7 @@ export class RiskArea extends React.Component<allProps, IState> {
                   </Link>
                   <div className={styles.menuItem} onClick={this.onClickDelete}>
                     <div className={styles.trashIcon} />
-                    <div className={styles.menuLabel}>Delete domain</div>
+                    <div className={styles.menuLabel}>Delete assessment</div>
                   </div>
                 </div>
               </div>
@@ -346,7 +346,7 @@ export class RiskArea extends React.Component<allProps, IState> {
           <div className={styles.container}>
             <div className={styles.loadingError}>
               <div className={styles.loadingErrorIcon} />
-              <div className={styles.loadingErrorLabel}>Unable to load domain</div>
+              <div className={styles.loadingErrorLabel}>Unable to load assessment</div>
               <div className={styles.loadingErrorSubheading}>
                 Sorry, something went wrong. Please try again.
               </div>

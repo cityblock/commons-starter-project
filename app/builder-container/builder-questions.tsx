@@ -112,6 +112,8 @@ class BuilderQuestions extends React.Component<allProps, IState> {
     } = nextProps;
 
     if (!riskAreaId && !toolId && !progressNoteTemplateId && riskAreas) {
+      // safeguard explosion if no risk areas
+      if (!riskAreas.length) return;
       return directToRiskAreaQuestions(riskAreas[0].id);
     }
 
@@ -268,7 +270,7 @@ class BuilderQuestions extends React.Component<allProps, IState> {
         <div className={styles.sortSearchBar}>
           <div className={sortSearchStyles.sort}>
             <div className={sortSearchStyles.sortLabel}>
-              Questions for domain/tool/progress note template:
+              Questions for assessment/tool/progress note template:
             </div>
             <div className={sortSearchStyles.sortDropdown}>
               <select value={selectedValue || ''} onChange={this.onSortChange}>
@@ -321,7 +323,7 @@ function mapStateToProps(state: IAppState, ownProps: IProps): IStateProps {
     routeBase = `/builder/tools/${selectedValue}/questions`;
   } else if (ownProps.match.params.riskAreaId && ownProps.match.params.riskAreaId !== 'redirect') {
     selectedValue = ownProps.match.params.riskAreaId;
-    routeBase = `/builder/domains/${selectedValue}/questions`;
+    routeBase = `/builder/assessments/${selectedValue}/questions`;
   } else if (ownProps.match.params.progressNoteTemplateId) {
     selectedValue = ownProps.match.params.progressNoteTemplateId;
     routeBase = `/builder/progress-note-templates/${selectedValue}/questions`;
@@ -349,7 +351,7 @@ function mapDispatchToProps(
       dispatch(push(routeBase));
     },
     directToRiskAreaQuestions: (riskAreaId: string) => {
-      dispatch(push(`/builder/domains/${riskAreaId}/questions`));
+      dispatch(push(`/builder/assessments/${riskAreaId}/questions`));
     },
     directToScreeningToolQuestions: (screeningToolId: string) => {
       dispatch(push(`/builder/tools/${screeningToolId}/questions`));

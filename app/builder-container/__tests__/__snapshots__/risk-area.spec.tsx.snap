@@ -25,7 +25,7 @@ exports[`shallow rendered renders with screening tool 1`] = `
     <div
       className="deleteConfirmationText"
     >
-      Are you sure you want to delete this domain?
+      Are you sure you want to delete this assessment?
     </div>
     <div
       className="deleteConfirmationButtons"
@@ -49,7 +49,7 @@ exports[`shallow rendered renders with screening tool 1`] = `
       <div
         className="redText smallText"
       >
-        Error deleting domain.
+        Error deleting assessment.
       </div>
       <div
         className="smallText"
@@ -85,7 +85,7 @@ exports[`shallow rendered renders with screening tool 1`] = `
             <div
               className="menuLabel"
             >
-              Delete domain
+              Delete assessment
             </div>
           </div>
         </div>

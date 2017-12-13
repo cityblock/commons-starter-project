@@ -21,7 +21,7 @@ it('renders question', () => {
           <ConnectedRouter history={history}>
             <QuestionCreate
               riskAreaId="risk-area-id"
-              routeBase="/builder/domain"
+              routeBase="/builder/assessment"
               onClose={() => false}
             />
           </ConnectedRouter>

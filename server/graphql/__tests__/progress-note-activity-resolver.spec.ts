@@ -12,6 +12,7 @@ import PatientConcern from '../../models/patient-concern';
 import ProgressNote from '../../models/progress-note';
 import Question from '../../models/question';
 import RiskArea from '../../models/risk-area';
+import RiskAreaAssessmentSubmission from '../../models/risk-area-assessment-submission';
 import Task from '../../models/task';
 import TaskEvent from '../../models/task-event';
 import User from '../../models/user';
@@ -29,6 +30,7 @@ describe('progress note resolver', () => {
   const userRole = 'admin';
   let user: User;
   let patient: Patient;
+  let riskAreaAssessmentSubmission: RiskAreaAssessmentSubmission;
 
   beforeEach(async () => {
     await Db.get();
@@ -37,6 +39,12 @@ describe('progress note resolver', () => {
     const clinic = await Clinic.create(createMockClinic());
     user = await User.create(createMockUser(11, clinic.id, userRole));
     patient = await createPatient(createMockPatient(123, clinic.id), user.id);
+    const riskArea = await RiskArea.create({ title: 'Risk Area', order: 1 });
+    riskAreaAssessmentSubmission = await RiskAreaAssessmentSubmission.create({
+      patientId: patient.id,
+      userId: user.id,
+      riskAreaId: riskArea.id,
+    });
   });
 
   afterAll(async () => {
@@ -94,6 +102,9 @@ describe('progress note resolver', () => {
     });
     const patientAnswer = (await PatientAnswer.create({
       patientId: patient.id,
+      type: 'riskAreaAssessmentSubmission',
+      riskAreaAssessmentSubmissionId: riskAreaAssessmentSubmission.id,
+      questionIds: [answer.questionId],
       answers: [
         {
           answerId: answer.id,

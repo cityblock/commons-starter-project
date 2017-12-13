@@ -6,6 +6,7 @@ import Patient from '../../models/patient';
 import PatientAnswer from '../../models/patient-answer';
 import Question from '../../models/question';
 import RiskArea from '../../models/risk-area';
+import RiskAreaAssessmentSubmission from '../../models/risk-area-assessment-submission';
 import User from '../../models/user';
 import {
   createMockClinic,
@@ -80,6 +81,7 @@ describe('risk area model', () => {
     let riskArea: RiskArea;
     let user: User;
     let clinic: Clinic;
+    let riskAreaAssessmentSubmission: RiskAreaAssessmentSubmission;
 
     beforeEach(async () => {
       riskArea = await RiskArea.create({
@@ -96,6 +98,11 @@ describe('risk area model', () => {
       clinic = await Clinic.create(createMockClinic());
       user = await User.create(createMockUser(11, clinic.id));
       patient = await createPatient(createMockPatient(123, clinic.id), user.id);
+      riskAreaAssessmentSubmission = await RiskAreaAssessmentSubmission.create({
+        patientId: patient.id,
+        userId: user.id,
+        riskAreaId: riskArea.id,
+      });
     });
 
     it('gets summary for patient', async () => {
@@ -111,6 +118,9 @@ describe('risk area model', () => {
       });
       await PatientAnswer.create({
         patientId: patient.id,
+        type: 'riskAreaAssessmentSubmission',
+        riskAreaAssessmentSubmissionId: riskAreaAssessmentSubmission.id,
+        questionIds: [answer.questionId],
         answers: [
           {
             questionId: answer.questionId,
@@ -158,6 +168,9 @@ describe('risk area model', () => {
       });
       await PatientAnswer.create({
         patientId: patient.id,
+        type: 'riskAreaAssessmentSubmission',
+        riskAreaAssessmentSubmissionId: riskAreaAssessmentSubmission.id,
+        questionIds: [answer.questionId],
         answers: [
           {
             questionId: answer.questionId,
@@ -171,6 +184,9 @@ describe('risk area model', () => {
       });
       await PatientAnswer.create({
         patientId: patient.id,
+        type: 'riskAreaAssessmentSubmission',
+        riskAreaAssessmentSubmissionId: riskAreaAssessmentSubmission.id,
+        questionIds: [highRiskAnswer.questionId],
         answers: [
           {
             questionId: highRiskAnswer.questionId,
@@ -239,6 +255,9 @@ describe('risk area model', () => {
       });
       await PatientAnswer.create({
         patientId: patient.id,
+        type: 'riskAreaAssessmentSubmission',
+        riskAreaAssessmentSubmissionId: riskAreaAssessmentSubmission.id,
+        questionIds: [answer1.questionId, answer2.id, answer3.id],
         answers: [
           {
             questionId: answer1.questionId,

@@ -93,7 +93,6 @@ import {
 } from './patient-resolver';
 import {
   patientScreeningToolSubmissionCreate,
-  patientScreeningToolSubmissionDelete,
   patientScreeningToolSubmissionScore,
   resolvePatientScreeningToolSubmission,
   resolvePatientScreeningToolSubmissions,
@@ -139,6 +138,12 @@ import {
   resolveQuickCall,
   resolveQuickCallsForProgressNote,
 } from './quick-call-resolver';
+import {
+  resolveRiskAreaAssessmentSubmission,
+  resolveRiskAreaAssessmentSubmissionForPatient,
+  riskAreaAssessmentSubmissionComplete,
+  riskAreaAssessmentSubmissionCreate,
+} from './risk-area-assessment-submission-resolver';
 import {
   resolvePatientRiskAreaRiskScore,
   resolvePatientRiskAreaSummary,
@@ -272,6 +277,8 @@ const resolveFunctions = {
     patientScreeningToolSubmissionForPatientAndScreeningTool: resolvePatientScreeningToolSubmissionForPatientAndScreeningTool,
     patientScreeningToolSubmissionsForPatient: resolvePatientScreeningToolSubmissionsForPatient,
     patientScreeningToolSubmissions: resolvePatientScreeningToolSubmissions,
+    riskAreaAssessmentSubmission: resolveRiskAreaAssessmentSubmission,
+    riskAreaAssessmentSubmissionForPatient: resolveRiskAreaAssessmentSubmissionForPatient,
     progressNoteTemplate: resolveProgressNoteTemplate,
     progressNoteTemplates: resolveProgressNoteTemplates,
     progressNote: resolveProgressNote,
@@ -357,7 +364,6 @@ const resolveFunctions = {
     screeningToolScoreRangeDelete,
     patientScreeningToolSubmissionCreate,
     patientScreeningToolSubmissionScore,
-    patientScreeningToolSubmissionDelete,
     progressNoteTemplateCreate,
     progressNoteTemplateDelete,
     progressNoteTemplateEdit,
@@ -367,6 +373,8 @@ const resolveFunctions = {
     quickCallCreate,
     computedFieldCreate,
     computedFieldDelete,
+    riskAreaAssessmentSubmissionComplete,
+    riskAreaAssessmentSubmissionCreate,
   },
 };
 

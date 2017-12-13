@@ -151,6 +151,7 @@ export enum AnswerFilterType {
   riskArea = "riskArea",
   screeningTool = "screeningTool",
   patientScreeningToolSubmission = "patientScreeningToolSubmission",
+  riskAreaAssessmentSubmission = "riskAreaAssessmentSubmission",
 }
 
 

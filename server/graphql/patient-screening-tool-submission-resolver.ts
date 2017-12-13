@@ -1,6 +1,5 @@
 import {
   IPatientScreeningToolSubmissionCreateInput,
-  IPatientScreeningToolSubmissionDeleteInput,
   IPatientScreeningToolSubmissionScoreInput,
 } from 'schema';
 import PatientAnswer from '../models/patient-answer';
@@ -23,10 +22,6 @@ export interface IResolvePatientScreeningToolSubmissionOptions {
 export interface IResolvePatientScreeningToolSubmissionsOptions {
   patientId: string;
   screeningToolId?: string;
-}
-
-export interface IDeletePatientScreeningToolSubmissionOptions {
-  input: IPatientScreeningToolSubmissionDeleteInput;
 }
 
 export async function patientScreeningToolSubmissionCreate(
@@ -104,15 +99,4 @@ export async function resolvePatientScreeningToolSubmissions(
   await accessControls.isAllowed(userRole, 'view', 'patientScreeningToolSubmission');
 
   return await PatientScreeningToolSubmission.getAll();
-}
-
-export async function patientScreeningToolSubmissionDelete(
-  root: any,
-  args: IDeletePatientScreeningToolSubmissionOptions,
-  { db, userId, userRole }: IContext,
-) {
-  await accessControls.isAllowedForUser(userRole, 'delete', 'patientScreeningToolSubmission');
-  checkUserLoggedIn(userId);
-
-  return await PatientScreeningToolSubmission.delete(args.input.patientScreeningToolSubmissionId);
 }

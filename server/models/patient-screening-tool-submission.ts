@@ -15,12 +15,6 @@ interface IPatientScreeningToolSubmissionCreateFields {
   userId: string;
 }
 
-interface IPatientScreeningToolSubmissionEditableFields {
-  patientId?: string;
-  userId?: string;
-  score?: number;
-}
-
 interface IPatientScreeningToolSubmissionScoreFields {
   score?: number;
   patientAnswers?: PatientAnswer[];
@@ -233,15 +227,6 @@ export default class PatientScreeningToolSubmission extends BaseModel {
       txn,
     );
     return submission;
-  }
-
-  static async edit(
-    patientScreeningToolSubmissionId: string,
-    patientScreeningToolSubmission: IPatientScreeningToolSubmissionEditableFields,
-  ): Promise<PatientScreeningToolSubmission> {
-    return await this.query()
-      .eager(EAGER_QUERY)
-      .updateAndFetchById(patientScreeningToolSubmissionId, patientScreeningToolSubmission);
   }
 
   static async get(

@@ -5,26 +5,50 @@ import Answer from './answer';
 import BaseModel from './base-model';
 import PatientAnswerEvent, { IPatientAnswerEventOptions } from './patient-answer-event';
 import PatientScreeningToolSubmission from './patient-screening-tool-submission';
-import ProgressNote from './progress-note';
 import Question from './question';
+import RiskAreaAssessmentSubmission from './risk-area-assessment-submission';
 import ScreeningTool from './screening-tool';
 
-interface IPatientAnswerCreateFields {
+type IAnswers = Array<{
+  answerId: string;
+  questionId: string;
+  answerValue: string;
   patientId: string;
-  questionIds?: string[];
+  applicable: boolean;
+  userId: string;
   patientScreeningToolSubmissionId?: string;
+  riskAreaAssessmentSubmissionId?: string;
   progressNoteId?: string;
-  answers: Array<{
-    answerId: string;
-    questionId: string;
-    answerValue: string;
-    patientId: string;
-    applicable: boolean;
-    userId: string;
-    progressNoteId?: string;
-    patientScreeningToolSubmissionId?: string;
-  }>;
+}>;
+
+interface IPatientAnswerCreateForRiskAreaAssessmentSubmission {
+  patientId: string;
+  questionIds: string[];
+  riskAreaAssessmentSubmissionId: string;
+  answers: IAnswers;
+  type: 'riskAreaAssessmentSubmission';
 }
+
+interface IPatientAnswerCreateForProgressNote {
+  patientId: string;
+  questionIds: string[];
+  progressNoteId: string;
+  answers: IAnswers;
+  type: 'progressNote';
+}
+
+interface IPatientAnswerCreateForScreeningToolSubmission {
+  patientId: string;
+  questionIds: string[];
+  patientScreeningToolSubmissionId: string;
+  answers: IAnswers;
+  type: 'patientScreeningToolSubmission';
+}
+
+type IPatientAnswerCreateFields =
+  | IPatientAnswerCreateForProgressNote
+  | IPatientAnswerCreateForRiskAreaAssessmentSubmission
+  | IPatientAnswerCreateForScreeningToolSubmission;
 
 /* tslint:disable:member-ordering */
 export default class PatientAnswer extends BaseModel {
@@ -37,6 +61,8 @@ export default class PatientAnswer extends BaseModel {
   question: Question;
   patientScreeningToolSubmissionId: string;
   patientScreeningToolSubmission: PatientScreeningToolSubmission;
+  riskAreaAssessmentSubmissionId?: string;
+  riskAreaAssessmentSubmission: RiskAreaAssessmentSubmission;
   screeningTool: ScreeningTool;
   progressNoteId: string;
 
@@ -54,6 +80,7 @@ export default class PatientAnswer extends BaseModel {
       deletedAt: { type: 'string' },
       patientScreeningToolSubmissionId: { type: 'string' },
       progressNoteId: { type: 'string' },
+      riskAreaAssessmentSubmissionId: { type: 'string' },
     },
   };
 
@@ -105,6 +132,15 @@ export default class PatientAnswer extends BaseModel {
       join: {
         from: 'patient_answer.patientScreeningToolSubmissionId',
         to: 'patient_screening_tool_submission.id',
+      },
+    },
+
+    riskAreaAssessmentSubmission: {
+      relation: Model.HasOneRelation,
+      modelClass: 'risk-area-assessment-submission',
+      join: {
+        from: 'patient_answer.riskAreaAssessmentSubmission',
+        to: 'risk_area_assessment_submission.id',
       },
     },
 
@@ -212,6 +248,20 @@ export default class PatientAnswer extends BaseModel {
     return patientAnswers as PatientAnswer[];
   }
 
+  static async getForRiskAreaAssessmentSubmission(
+    riskAreaAssessmentSubmissionId: string,
+    eager = 'answer',
+  ): Promise<PatientAnswer[]> {
+    const patientAnswers = await this.query()
+      .joinRelation('answer.question')
+      .eager(eager)
+      .where('patient_answer.deletedAt', null)
+      .andWhere('riskAreaAssessmentSubmissionId', riskAreaAssessmentSubmissionId)
+      .orderBy('patient_answer.updatedAt', 'asc');
+
+    return patientAnswers as PatientAnswer[];
+  }
+
   static async getForProgressNote(
     progressNoteId: string,
     patientId: string,
@@ -236,36 +286,6 @@ export default class PatientAnswer extends BaseModel {
       .orderBy('patient_answer.updatedAt', 'asc');
 
     return patientAnswers as PatientAnswer[];
-  }
-
-  /**
-   * Ensure questions are part of the progress note template associated with the progress note
-   * The test:
-   * patientAnswer.progressNote.progressNoteTemplateId
-   * ===
-   * patientAnswer.answer.question.progressNoteTemplateId
-   *
-   * TODO: take a second pass to see if this is doable with a big 'ol join
-   */
-  static async validateQuestionsForProgressNote(
-    questionIds: string[],
-    progressNoteId: string,
-    txn: Transaction,
-  ) {
-    const progressNoteTemplateId = (await ProgressNote.get(progressNoteId, txn))
-      .progressNoteTemplateId;
-    const questions = await Question.query(txn).where('id', 'in', questionIds);
-    questions.forEach(question => {
-      if (question.progressNoteTemplateId !== progressNoteTemplateId) {
-        /* tslint:disable:max-line-length */
-        throw new Error(
-          `progress note ${progressNoteId} is not associated with the same progress note template as the question ${
-            question.id
-          }`,
-        );
-        /* tslint:enable:max-line-length */
-      }
-    });
   }
 
   static async createPatientAnswerEvents(
@@ -301,28 +321,34 @@ export default class PatientAnswer extends BaseModel {
     }
   }
 
+  static getAnswersForInput(input: IPatientAnswerCreateFields): IAnswers {
+    switch (input.type) {
+      case 'progressNote':
+        return input.answers.map(answer => {
+          answer.progressNoteId = input.progressNoteId;
+          return answer;
+        });
+      case 'patientScreeningToolSubmission':
+        return input.answers.map(answer => {
+          answer.patientScreeningToolSubmissionId = input.patientScreeningToolSubmissionId;
+          return answer;
+        });
+      case 'riskAreaAssessmentSubmission':
+        return input.answers.map(answer => {
+          answer.riskAreaAssessmentSubmissionId = input.riskAreaAssessmentSubmissionId;
+          return answer;
+        });
+    }
+  }
+
   static async create(
     input: IPatientAnswerCreateFields,
     existingTxn?: Transaction,
   ): Promise<PatientAnswer[]> {
     return await transaction(PatientAnswer.knex(), async txn => {
-      const { answers, progressNoteId, patientId, patientScreeningToolSubmissionId } = input;
-      const questionIds = input.questionIds || answers.map(answer => answer.questionId);
-      if (progressNoteId) {
-        await this.validateQuestionsForProgressNote(
-          questionIds,
-          progressNoteId,
-          existingTxn || txn,
-        );
-        // add progressNoteId to patient answers
-        answers.map(answer => (answer.progressNoteId = progressNoteId));
-      } else if (patientScreeningToolSubmissionId) {
-        // add patientScreeningToolSubmissionId to patient answers
-        answers.map(
-          answer => (answer.patientScreeningToolSubmissionId = patientScreeningToolSubmissionId),
-        );
-      }
-
+      const { patientId } = input;
+      const questionIds = input.questionIds;
+      const answers = this.getAnswersForInput(input);
       // NOTE: This needs to be done as a subquery as knex doesn't support FROM clauses for updates
       const patientAnswerIdsToDeleteQuery = PatientAnswer.query(existingTxn || txn)
         .joinRelation('answer')

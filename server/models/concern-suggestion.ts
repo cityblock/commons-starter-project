@@ -1,4 +1,3 @@
-import { unionBy } from 'lodash';
 import { transaction, Model, RelationMappings, Transaction } from 'objection';
 import Answer from './answer';
 import BaseModel from './base-model';
@@ -94,8 +93,11 @@ export default class ConcernSuggestion extends BaseModel {
     );
   }
 
-  // TODO: retire this function
-  static async getNewForPatient(patientId: string, txn?: Transaction): Promise<Concern[]> {
+  static async getNewSuggestionsForRiskAreaAssessmentSubmission(
+    patientId: string,
+    riskAreaAssessmentSubmissionId: string,
+    txn?: Transaction,
+  ): Promise<Concern[]> {
     const existingPatientCarePlanSuggestionsQuery = CarePlanSuggestion.query(txn)
       .where('patientId', patientId)
       .andWhere('dismissedAt', null)
@@ -103,21 +105,17 @@ export default class ConcernSuggestion extends BaseModel {
       .andWhere('suggestionType', 'concern')
       .select('concernId');
 
-    const answerConcernSuggestions = await this.query(txn)
+    const concernSuggestions = (await this.query(txn)
       .eager('concern')
       .joinRelation('answer')
       .join('patient_answer', 'answer.id', 'patient_answer.answerId')
       .leftOuterJoin('patient_concern', 'concern_suggestion.concernId', 'patient_concern.concernId')
-      .where('patient_answer.deletedAt', null)
+      .where('patient_answer.riskAreaAssessmentSubmissionId', riskAreaAssessmentSubmissionId)
+      .andWhere('patient_answer.deletedAt', null)
       .andWhere('concern_suggestion.concernId', 'not in', existingPatientCarePlanSuggestionsQuery)
       .andWhere('patient_answer.patientId', patientId)
       .andWhere('patient_answer.applicable', true)
-      .andWhere('patient_concern.id', null);
-
-    const concernSuggestions = unionBy(
-      answerConcernSuggestions,
-      'concernId',
-    ) as ConcernSuggestion[];
+      .andWhere('patient_concern.id', null)) as ConcernSuggestion[];
 
     return concernSuggestions.map((suggestion: ConcernSuggestion) => suggestion.concern);
   }

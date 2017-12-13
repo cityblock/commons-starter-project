@@ -16,6 +16,7 @@ import PatientAnswerEvent from '../patient-answer-event';
 import ProgressNote from '../progress-note';
 import Question from '../question';
 import RiskArea from '../risk-area';
+import RiskAreaAssessmentSubmission from '../risk-area-assessment-submission';
 import User from '../user';
 
 const userRole = 'physician';
@@ -28,6 +29,7 @@ describe('patient answer event model', () => {
   let answer: Answer;
   let patientAnswer: PatientAnswer;
   let clinic: Clinic;
+  let riskAreaAssessmentSubmission: RiskAreaAssessmentSubmission;
 
   beforeEach(async () => {
     await Db.get();
@@ -51,8 +53,16 @@ describe('patient answer event model', () => {
       valueType: 'number',
       order: 1,
     });
+    riskAreaAssessmentSubmission = await RiskAreaAssessmentSubmission.create({
+      patientId: patient.id,
+      userId: user.id,
+      riskAreaId: riskArea.id,
+    });
     patientAnswer = (await PatientAnswer.create({
       patientId: patient.id,
+      type: 'riskAreaAssessmentSubmission',
+      riskAreaAssessmentSubmissionId: riskAreaAssessmentSubmission.id,
+      questionIds: [answer.questionId],
       answers: [
         {
           answerId: answer.id,
@@ -106,6 +116,9 @@ describe('patient answer event model', () => {
   it('creates multiple patientAnswerEvents', async () => {
     const patientAnswer2 = (await PatientAnswer.create({
       patientId: patient.id,
+      type: 'riskAreaAssessmentSubmission',
+      riskAreaAssessmentSubmissionId: riskAreaAssessmentSubmission.id,
+      questionIds: [answer.questionId],
       answers: [
         {
           answerId: answer.id,
@@ -166,6 +179,9 @@ describe('patient answer event model', () => {
   it('automatically opens a progress note on createMultiple', async () => {
     const patientAnswer2 = (await PatientAnswer.create({
       patientId: patient.id,
+      type: 'riskAreaAssessmentSubmission',
+      riskAreaAssessmentSubmissionId: riskAreaAssessmentSubmission.id,
+      questionIds: [question.id],
       answers: [
         {
           answerId: answer.id,

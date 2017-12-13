@@ -6,6 +6,7 @@ import PatientAnswer from '../../../models/patient-answer';
 import Question from '../../../models/question';
 import QuestionCondition from '../../../models/question-condition';
 import RiskArea from '../../../models/risk-area';
+import RiskAreaAssessmentSubmission from '../../../models/risk-area-assessment-submission';
 import User from '../../../models/user';
 import {
   createMockClinic,
@@ -28,6 +29,7 @@ describe('answer applicable tests', () => {
   let user: User;
   let patient: Patient;
   let clinic: Clinic;
+  let riskAreaAssessmentSubmission: RiskAreaAssessmentSubmission;
 
   beforeEach(async () => {
     await Db.get();
@@ -56,6 +58,11 @@ describe('answer applicable tests', () => {
       order: 1,
     });
     patient = await createPatient(createMockPatient(123, clinic.id), user.id);
+    riskAreaAssessmentSubmission = await RiskAreaAssessmentSubmission.create({
+      patientId: patient.id,
+      userId: user.id,
+      riskAreaId: riskArea.id,
+    });
   });
 
   afterAll(async () => {
@@ -98,6 +105,9 @@ describe('answer applicable tests', () => {
     it('works if no applicable question conditions', async () => {
       const patientAnswers = await PatientAnswer.create({
         patientId: patient.id,
+        type: 'riskAreaAssessmentSubmission',
+        riskAreaAssessmentSubmissionId: riskAreaAssessmentSubmission.id,
+        questionIds: [answer2.questionId],
         answers: [
           {
             questionId: answer2.questionId,
@@ -127,6 +137,9 @@ describe('answer applicable tests', () => {
       });
       const patientAnswers = await PatientAnswer.create({
         patientId: patient.id,
+        type: 'riskAreaAssessmentSubmission',
+        riskAreaAssessmentSubmissionId: riskAreaAssessmentSubmission.id,
+        questionIds: [answer2.questionId],
         answers: [
           {
             questionId: answer2.questionId,
@@ -157,6 +170,9 @@ describe('answer applicable tests', () => {
       });
       const patientAnswers = await PatientAnswer.create({
         patientId: patient.id,
+        type: 'riskAreaAssessmentSubmission',
+        riskAreaAssessmentSubmissionId: riskAreaAssessmentSubmission.id,
+        questionIds: [answer2.questionId],
         answers: [
           {
             questionId: answer2.questionId,
@@ -193,6 +209,9 @@ describe('answer applicable tests', () => {
     it('gets patient answers by question id', async () => {
       const patientAnswers = await PatientAnswer.create({
         patientId: patient.id,
+        type: 'riskAreaAssessmentSubmission',
+        riskAreaAssessmentSubmissionId: riskAreaAssessmentSubmission.id,
+        questionIds: [answer.questionId],
         answers: [
           {
             questionId: answer.questionId,
@@ -215,6 +234,9 @@ describe('answer applicable tests', () => {
     it('errors if patient answers do not match question', async () => {
       const patientAnswers = await PatientAnswer.create({
         patientId: patient.id,
+        type: 'riskAreaAssessmentSubmission',
+        riskAreaAssessmentSubmissionId: riskAreaAssessmentSubmission.id,
+        questionIds: [answer.questionId],
         answers: [
           {
             questionId: answer.questionId,
@@ -274,6 +296,9 @@ describe('answer applicable tests', () => {
 
       const patientAnswers = await PatientAnswer.create({
         patientId: patient.id,
+        type: 'riskAreaAssessmentSubmission',
+        riskAreaAssessmentSubmissionId: riskAreaAssessmentSubmission.id,
+        questionIds: [answer2.questionId],
         answers: [
           {
             questionId: answer2.questionId,

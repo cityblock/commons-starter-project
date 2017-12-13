@@ -289,6 +289,14 @@ declare module 'schema' {
     description: computed fields
   */
     computedFields: Array<IComputedField> | null;
+    /**
+    description: risk area assessment submission
+  */
+    riskAreaAssessmentSubmission: IRiskAreaAssessmentSubmission | null;
+    /**
+    description: latest risk area assessment submission for a screening tool
+  */
+    riskAreaAssessmentSubmissionForPatient: IRiskAreaAssessmentSubmission | null;
   }
 
   /**
@@ -310,7 +318,7 @@ declare module 'schema' {
   /**
     description: An object with a Globally Unique ID
   */
-  type uniqueId = IUser | IPatient | IPatientSearchResult | IClinic | ITask | IPatientGoal | IPatientConcern | IConcern | IGoalSuggestionTemplate | ITaskTemplate | ITaskComment | IRiskArea | IQuestion | IAnswer | IScreeningTool | IScreeningToolScoreRange | IQuestionCondition | IComputedField | IPatientAnswer | IPatientScreeningToolSubmission | ICarePlanSuggestion | IEventNotification | ITaskEvent | IProgressNote | IProgressNoteTemplate | IPatientTaskSuggestion | IPatientAnswerEvent | ICarePlanUpdateEvent | IQuickCall;
+  type uniqueId = IUser | IPatient | IPatientSearchResult | IClinic | ITask | IPatientGoal | IPatientConcern | IConcern | IGoalSuggestionTemplate | ITaskTemplate | ITaskComment | IRiskArea | IQuestion | IAnswer | IScreeningTool | IScreeningToolScoreRange | IQuestionCondition | IComputedField | IPatientAnswer | IPatientScreeningToolSubmission | ICarePlanSuggestion | IRiskAreaAssessmentSubmission | IEventNotification | ITaskEvent | IProgressNote | IProgressNoteTemplate | IPatientTaskSuggestion | IPatientAnswerEvent | ICarePlanUpdateEvent | IQuickCall;
 
   /**
     description: An object with a Globally Unique ID
@@ -783,6 +791,8 @@ declare module 'schema' {
     question: IQuestion | null;
     patientScreeningToolSubmissionId: string | null;
     patientScreeningToolSubmission: IPatientScreeningToolSubmission | null;
+    riskAreaAssessmentSubmissionId: string | null;
+    riskAreaAssessmentSubmission: IRiskAreaAssessmentSubmission | null;
   }
 
 
@@ -826,13 +836,31 @@ declare module 'schema' {
     acceptedAt: string | null;
     patientScreeningToolSubmissionId: string | null;
     patientScreeningToolSubmission: IPatientScreeningToolSubmission | null;
+    riskAreaAssessmentSubmissionId: string | null;
+    riskAreaAssessmentSubmission: IRiskAreaAssessmentSubmission | null;
   }
 
 
   type ICarePlanSuggestionTypeEnum = 'concern' | 'goal';
 
 
-  type IAnswerFilterTypeEnum = 'question' | 'progressNote' | 'riskArea' | 'screeningTool' | 'patientScreeningToolSubmission';
+  interface IRiskAreaAssessmentSubmission {
+    id: string;
+    riskAreaId: string;
+    riskArea: IRiskArea;
+    patientId: string;
+    patient: IPatient;
+    userId: string;
+    user: IUser;
+    createdAt: string;
+    updatedAt: string;
+    deletedAt: string | null;
+    completedAt: string | null;
+    carePlanSuggestions: Array<ICarePlanSuggestion>;
+  }
+
+
+  type IAnswerFilterTypeEnum = 'question' | 'progressNote' | 'riskArea' | 'screeningTool' | 'patientScreeningToolSubmission' | 'riskAreaAssessmentSubmission';
 
 
   interface IRiskAreaSummary {
@@ -1345,10 +1373,6 @@ declare module 'schema' {
   */
     patientScreeningToolSubmissionScore: IPatientScreeningToolSubmission | null;
     /**
-    description: patient screening tool submission delete
-  */
-    patientScreeningToolSubmissionDelete: IPatientScreeningToolSubmission | null;
-    /**
     description: create a progress note template
   */
     progressNoteTemplateCreate: IProgressNoteTemplate | null;
@@ -1384,6 +1408,14 @@ declare module 'schema' {
     description: Delete a computed field
   */
     computedFieldDelete: IComputedField | null;
+    /**
+    description: risk area assessment submission create
+  */
+    riskAreaAssessmentSubmissionCreate: IRiskAreaAssessmentSubmission | null;
+    /**
+    description: risk area assessment submission complete
+  */
+    riskAreaAssessmentSubmissionComplete: IRiskAreaAssessmentSubmission | null;
   }
 
   /**
@@ -1725,6 +1757,7 @@ declare module 'schema' {
     patientAnswers: Array<IPatientAnswerInput>;
     questionIds: Array<string>;
     patientScreeningToolSubmissionId?: string | null;
+    riskAreaAssessmentSubmissionId?: string | null;
     progressNoteId?: string | null;
   }
 
@@ -2002,11 +2035,6 @@ declare module 'schema' {
   }
 
 
-  interface IPatientScreeningToolSubmissionDeleteInput {
-    patientScreeningToolSubmissionId: string;
-  }
-
-
   interface IProgressNoteTemplateCreateInput {
     title: string;
   }
@@ -2061,6 +2089,17 @@ declare module 'schema' {
 
   interface IComputedFieldDeleteInput {
     computedFieldId: string;
+  }
+
+
+  interface IRiskAreaAssessmentSubmissionCreateInput {
+    riskAreaId: string;
+    patientId: string;
+  }
+
+
+  interface IRiskAreaAssessmentSubmissionCompleteInput {
+    riskAreaAssessmentSubmissionId: string;
   }
 
 

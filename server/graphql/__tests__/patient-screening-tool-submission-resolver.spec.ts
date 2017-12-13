@@ -291,6 +291,8 @@ describe('patient screening tool submission resolver tests', () => {
       await PatientAnswer.create({
         patientId: patient.id,
         patientScreeningToolSubmissionId: submission.id,
+        type: 'patientScreeningToolSubmission',
+        questionIds: [question.id, question2.id],
         answers: [
           {
             answerId: answer.id,
@@ -349,30 +351,6 @@ describe('patient screening tool submission resolver tests', () => {
         userId: user.id,
         patientId: patient.id,
       });
-    });
-  });
-
-  describe('patientScreeningToolSubmission delete', () => {
-    it('marks a patientScreeningToolSubmission as deleted', async () => {
-      const mutation = `mutation {
-        patientScreeningToolSubmissionDelete(input: {
-          patientScreeningToolSubmissionId: "${submission.id}"
-        }) {
-          id
-          deletedAt
-        }
-      }`;
-      const result = await graphql(schema, mutation, null, {
-        db,
-        userRole,
-        userId: user.id,
-      });
-      const deletedSubmission = cloneDeep(result.data!.patientScreeningToolSubmissionDelete);
-      expect(deletedSubmission).toMatchObject({
-        id: submission.id,
-      });
-      expect(deletedSubmission.deletedAt).not.toBeFalsy();
-      expect(deletedSubmission.deletedAt).not.toBeFalsy();
     });
   });
 });

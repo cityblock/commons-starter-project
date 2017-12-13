@@ -15,6 +15,7 @@ import PatientScreeningToolSubmission from '../../models/patient-screening-tool-
 import Question from '../../models/question';
 import QuestionCondition from '../../models/question-condition';
 import RiskArea from '../../models/risk-area';
+import RiskAreaAssessmentSubmission from '../../models/risk-area-assessment-submission';
 import ScreeningTool from '../../models/screening-tool';
 import ScreeningToolScoreRange from '../../models/screening-tool-score-range';
 import TaskTemplate from '../../models/task-template';
@@ -37,6 +38,7 @@ describe('patient answer tests', () => {
   let user: User;
   let patient: Patient;
   let clinic: Clinic;
+  let riskAreaAssessmentSubmission: RiskAreaAssessmentSubmission;
 
   beforeEach(async () => {
     db = await Db.get();
@@ -74,6 +76,11 @@ describe('patient answer tests', () => {
       order: 2,
     });
     patient = await createPatient(createMockPatient(123, clinic.id), user.id);
+    riskAreaAssessmentSubmission = await RiskAreaAssessmentSubmission.create({
+      patientId: patient.id,
+      userId: user.id,
+      riskAreaId: riskArea.id,
+    });
   });
 
   afterAll(async () => {
@@ -84,6 +91,9 @@ describe('patient answer tests', () => {
     it('can fetch patient answer', async () => {
       const patientAnswers = await PatientAnswer.create({
         patientId: patient.id,
+        type: 'riskAreaAssessmentSubmission',
+        riskAreaAssessmentSubmissionId: riskAreaAssessmentSubmission.id,
+        questionIds: [answer.questionId],
         answers: [
           {
             questionId: answer.questionId,
@@ -126,6 +136,9 @@ describe('patient answer tests', () => {
     it('resolves patient answer for question', async () => {
       const patientAnswers = await PatientAnswer.create({
         patientId: patient.id,
+        type: 'riskAreaAssessmentSubmission',
+        riskAreaAssessmentSubmissionId: riskAreaAssessmentSubmission.id,
+        questionIds: [answer.questionId],
         answers: [
           {
             questionId: answer.questionId,
@@ -158,6 +171,9 @@ describe('patient answer tests', () => {
     it('resolves patient answer for question', async () => {
       const patientAnswers = await PatientAnswer.create({
         patientId: patient.id,
+        type: 'riskAreaAssessmentSubmission',
+        riskAreaAssessmentSubmissionId: riskAreaAssessmentSubmission.id,
+        questionIds: [answer.questionId],
         answers: [
           {
             questionId: answer.questionId,
@@ -172,6 +188,9 @@ describe('patient answer tests', () => {
 
       await PatientAnswer.create({
         patientId: patient.id,
+        type: 'riskAreaAssessmentSubmission',
+        riskAreaAssessmentSubmissionId: riskAreaAssessmentSubmission.id,
+        questionIds: [answer.questionId],
         answers: [
           {
             questionId: answer.questionId,
@@ -225,6 +244,9 @@ describe('patient answer tests', () => {
       });
       const patientAnswers1 = await PatientAnswer.create({
         patientId: patient.id,
+        type: 'riskAreaAssessmentSubmission',
+        riskAreaAssessmentSubmissionId: riskAreaAssessmentSubmission.id,
+        questionIds: [answer.questionId],
         answers: [
           {
             questionId: answer.questionId,
@@ -238,6 +260,9 @@ describe('patient answer tests', () => {
       });
       const patientAnswers2 = await PatientAnswer.create({
         patientId: patient.id,
+        type: 'riskAreaAssessmentSubmission',
+        riskAreaAssessmentSubmissionId: riskAreaAssessmentSubmission.id,
+        questionIds: [differentAnswer.questionId],
         answers: [
           {
             questionId: differentAnswer.questionId,
@@ -283,6 +308,11 @@ describe('patient answer tests', () => {
         title: 'Screening Tool',
         riskAreaId: riskArea.id,
       });
+      const patientScreeningToolSubmission = await PatientScreeningToolSubmission.create({
+        patientId: patient.id,
+        userId: user.id,
+        screeningToolId: screeningTool.id,
+      });
       const screeningToolQuestion = await Question.create({
         title: 'like writing tests again?',
         answerType: 'dropdown',
@@ -301,6 +331,9 @@ describe('patient answer tests', () => {
       });
       const patientAnswers = await PatientAnswer.create({
         patientId: patient.id,
+        type: 'patientScreeningToolSubmission',
+        patientScreeningToolSubmissionId: patientScreeningToolSubmission.id,
+        questionIds: [screeningToolAnswer.questionId],
         answers: [
           {
             questionId: screeningToolAnswer.questionId,
@@ -343,6 +376,9 @@ describe('patient answer tests', () => {
     it('edits answer', async () => {
       const patientAnswers = await PatientAnswer.create({
         patientId: patient.id,
+        type: 'riskAreaAssessmentSubmission',
+        riskAreaAssessmentSubmissionId: riskAreaAssessmentSubmission.id,
+        questionIds: [answer.questionId],
         answers: [
           {
             questionId: answer.questionId,
@@ -379,6 +415,7 @@ describe('patient answer tests', () => {
         patientAnswersCreate(input: {
           patientId: "${patient.id}",
           questionIds: ["${answer.questionId}"],
+          riskAreaAssessmentSubmissionId: "${riskAreaAssessmentSubmission.id}",
           patientAnswers: [{
             questionId: "${answer.questionId}"
             answerValue: "loves writing tests too!"
@@ -411,6 +448,7 @@ describe('patient answer tests', () => {
         patientAnswersCreate(input: {
           patientId: "${patient.id}",
           questionIds: ["${answer.questionId}", "${answer2.questionId}"],
+          riskAreaAssessmentSubmissionId: "${riskAreaAssessmentSubmission.id}",
           patientAnswers: [{
             questionId: "${answer.questionId}"
             answerValue: "loves writing tests too!"
@@ -462,6 +500,9 @@ describe('patient answer tests', () => {
     it('properly marks previous answers as deleted when only questionIds are given', async () => {
       const createdAnswers = await PatientAnswer.create({
         patientId: patient.id,
+        type: 'riskAreaAssessmentSubmission',
+        riskAreaAssessmentSubmissionId: riskAreaAssessmentSubmission.id,
+        questionIds: [answer.questionId],
         answers: [
           {
             questionId: answer.questionId,
@@ -481,6 +522,7 @@ describe('patient answer tests', () => {
         patientAnswersCreate(input: {
           patientId: "${patient.id}",
           questionIds: ["${answer.questionId}"],
+          riskAreaAssessmentSubmissionId: "${riskAreaAssessmentSubmission.id}",
           patientAnswers: []
         }) {
           answerId,
@@ -657,6 +699,9 @@ describe('patient answer tests', () => {
     it('marks a patient answer as deleted', async () => {
       const patientAnswers = await PatientAnswer.create({
         patientId: patient.id,
+        type: 'riskAreaAssessmentSubmission',
+        riskAreaAssessmentSubmissionId: riskAreaAssessmentSubmission.id,
+        questionIds: [answer.questionId],
         answers: [
           {
             questionId: answer.questionId,
@@ -725,6 +770,9 @@ describe('patient answer tests', () => {
 
       const patientAnswers = await PatientAnswer.create({
         patientId: patient.id,
+        type: 'riskAreaAssessmentSubmission',
+        riskAreaAssessmentSubmissionId: riskAreaAssessmentSubmission.id,
+        questionIds: [answer3.questionId],
         answers: [
           {
             questionId: answer3.questionId,
@@ -774,6 +822,9 @@ describe('patient answer tests', () => {
 
       await PatientAnswer.create({
         patientId: patient.id,
+        type: 'riskAreaAssessmentSubmission',
+        riskAreaAssessmentSubmissionId: riskAreaAssessmentSubmission.id,
+        questionIds: [answer3.questionId],
         answers: [
           {
             questionId: answer3.questionId,

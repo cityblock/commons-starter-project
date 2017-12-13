@@ -1,24 +1,50 @@
 import { Transaction } from 'objection';
-import CarePlanSuggestion from '../models/care-plan-suggestion';
+import CarePlanSuggestion, {
+  ICarePlanSuggestionCreateArgsForPatientScreeningToolSubmission,
+  ICarePlanSuggestionCreateArgsForRiskAreaAssessmentSubmission,
+} from '../models/care-plan-suggestion';
 import ConcernSuggestion from '../models/concern-suggestion';
 import GoalSuggestion from '../models/goal-suggestion';
 
-export const createSuggestions = async (patientId: string, txn: Transaction) => {
-  const newConcernSuggestions = await ConcernSuggestion.getNewForPatient(patientId, txn);
-  const newGoalSuggestions = await GoalSuggestion.getNewForPatient(patientId, txn);
-  const formattedConcernSuggestions = newConcernSuggestions.map(concernSuggestion => ({
+export const createSuggestionsForRiskAreaAssessmentSubmission = async (
+  patientId: string,
+  riskAreaAssessmentSubmissionId: string,
+  txn?: Transaction,
+) => {
+  /* tslint:disable:max-line-length */
+  const newConcernSuggestions = await ConcernSuggestion.getNewSuggestionsForRiskAreaAssessmentSubmission(
     patientId,
-    suggestionType: 'concern' as any,
-    concernId: concernSuggestion.id,
-  }));
-  const formattedGoalSuggestions = newGoalSuggestions.map(goalSuggestion => ({
+    riskAreaAssessmentSubmissionId,
+    txn,
+  );
+  const newGoalSuggestions = await GoalSuggestion.getNewSuggestionsForRiskAreaAssessmentSubmission(
     patientId,
-    suggestionType: 'goal' as any,
-    goalSuggestionTemplateId: goalSuggestion.id,
-  }));
+    riskAreaAssessmentSubmissionId,
+    txn,
+  );
+  /* tslint:enable:max-line-length */
+  const formattedConcernSuggestions = newConcernSuggestions.map(
+    concernSuggestion =>
+      ({
+        patientId,
+        suggestionType: 'concern' as any,
+        concernId: concernSuggestion.id,
+        riskAreaAssessmentSubmissionId,
+        type: 'riskAreaAssessmentSubmission',
+      } as ICarePlanSuggestionCreateArgsForRiskAreaAssessmentSubmission),
+  );
+  const formattedGoalSuggestions = newGoalSuggestions.map(
+    goalSuggestion =>
+      ({
+        patientId,
+        suggestionType: 'goal' as any,
+        goalSuggestionTemplateId: goalSuggestion.id,
+        riskAreaAssessmentSubmissionId,
+        type: 'riskAreaAssessmentSubmission',
+      } as ICarePlanSuggestionCreateArgsForRiskAreaAssessmentSubmission),
+  );
 
-  const suggestions = formattedConcernSuggestions.concat(formattedGoalSuggestions as any);
-
+  const suggestions = formattedConcernSuggestions.concat(formattedGoalSuggestions);
   if (suggestions.length) {
     await CarePlanSuggestion.createMultiple({ suggestions }, txn);
   }
@@ -41,21 +67,30 @@ export const createSuggestionsForPatientScreeningToolSubmission = async (
     patientScreeningToolSubmissionId,
     txn,
   );
+  const type = 'patientScreeningToolSubmission';
   /* tslint:enable:max-line-length */
-  const formattedConcernSuggestions = newConcernSuggestions.map(concernSuggestion => ({
-    patientId,
-    suggestionType: 'concern' as any,
-    concernId: concernSuggestion.id,
-    patientScreeningToolSubmissionId,
-  }));
-  const formattedGoalSuggestions = newGoalSuggestions.map(goalSuggestion => ({
-    patientId,
-    suggestionType: 'goal' as any,
-    goalSuggestionTemplateId: goalSuggestion.id,
-    patientScreeningToolSubmissionId,
-  }));
+  const formattedConcernSuggestions = newConcernSuggestions.map(
+    concernSuggestion =>
+      ({
+        patientId,
+        suggestionType: 'concern' as any,
+        concernId: concernSuggestion.id,
+        patientScreeningToolSubmissionId,
+        type,
+      } as ICarePlanSuggestionCreateArgsForPatientScreeningToolSubmission),
+  );
+  const formattedGoalSuggestions = newGoalSuggestions.map(
+    goalSuggestion =>
+      ({
+        patientId,
+        suggestionType: 'goal' as any,
+        goalSuggestionTemplateId: goalSuggestion.id,
+        patientScreeningToolSubmissionId,
+        type,
+      } as ICarePlanSuggestionCreateArgsForPatientScreeningToolSubmission),
+  );
 
-  const suggestions = formattedConcernSuggestions.concat(formattedGoalSuggestions as any);
+  const suggestions = formattedConcernSuggestions.concat(formattedGoalSuggestions);
   if (suggestions.length) {
     await CarePlanSuggestion.createMultiple({ suggestions }, txn);
   }

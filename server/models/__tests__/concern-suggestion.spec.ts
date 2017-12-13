@@ -15,6 +15,7 @@ import PatientAnswer from '../patient-answer';
 import PatientConcern from '../patient-concern';
 import Question from '../question';
 import RiskArea from '../risk-area';
+import RiskAreaAssessmentSubmission from '../risk-area-assessment-submission';
 import User from '../user';
 
 describe('concern suggestion model', () => {
@@ -145,9 +146,16 @@ describe('concern suggestion model', () => {
         concernId: concern2.id,
         answerId: answer2.id,
       });
-
+      const riskAreaAssessmentSubmission = await RiskAreaAssessmentSubmission.create({
+        patientId: patient.id,
+        userId: user.id,
+        riskAreaId: riskArea.id,
+      });
       await PatientAnswer.create({
         patientId: patient.id,
+        type: 'riskAreaAssessmentSubmission',
+        riskAreaAssessmentSubmissionId: riskAreaAssessmentSubmission.id,
+        questionIds: [question.id],
         answers: [
           {
             patientId: patient.id,
@@ -161,12 +169,20 @@ describe('concern suggestion model', () => {
       });
 
       // At this point, only first concern should be suggested
-      const concernSuggestions = await ConcernSuggestion.getNewForPatient(patient.id);
+      /* tslint:disable:max-line-length */
+      const concernSuggestions = await ConcernSuggestion.getNewSuggestionsForRiskAreaAssessmentSubmission(
+        patient.id,
+        riskAreaAssessmentSubmission.id,
+      );
+      /* tslint:enable:max-line-length */
       expect(concernSuggestions[0]).toMatchObject(concern1);
       expect(concernSuggestions.length).toEqual(1);
 
       await PatientAnswer.create({
         patientId: patient.id,
+        type: 'riskAreaAssessmentSubmission',
+        riskAreaAssessmentSubmissionId: riskAreaAssessmentSubmission.id,
+        questionIds: [question2.id],
         answers: [
           {
             patientId: patient.id,
@@ -180,7 +196,13 @@ describe('concern suggestion model', () => {
       });
 
       // Now both concerns should be suggested
-      const secondConcernSuggestions = await ConcernSuggestion.getNewForPatient(patient.id);
+      /* tslint:disable:max-line-length */
+      const secondConcernSuggestions = await ConcernSuggestion.getNewSuggestionsForRiskAreaAssessmentSubmission(
+        patient.id,
+        riskAreaAssessmentSubmission.id,
+      );
+      /* tslint:enable:max-line-length */
+
       expect(secondConcernSuggestions[0]).toMatchObject(concern1);
       expect(secondConcernSuggestions[1]).toMatchObject(concern2);
       expect(secondConcernSuggestions.length).toEqual(2);
@@ -208,6 +230,11 @@ describe('concern suggestion model', () => {
         questionId: question2.id,
         order: 1,
       });
+      const riskAreaAssessmentSubmission = await RiskAreaAssessmentSubmission.create({
+        patientId: patient.id,
+        userId: user.id,
+        riskAreaId: riskArea.id,
+      });
 
       await ConcernSuggestion.create({
         concernId: concern1.id,
@@ -220,6 +247,9 @@ describe('concern suggestion model', () => {
 
       await PatientAnswer.create({
         patientId: patient.id,
+        type: 'riskAreaAssessmentSubmission',
+        riskAreaAssessmentSubmissionId: riskAreaAssessmentSubmission.id,
+        questionIds: [question.id, question2.id],
         answers: [
           {
             patientId: patient.id,
@@ -244,9 +274,17 @@ describe('concern suggestion model', () => {
         patientId: patient.id,
         suggestionType: 'concern',
         concernId: concern1.id,
+        type: 'riskAreaAssessmentSubmission',
+        riskAreaAssessmentSubmissionId: riskAreaAssessmentSubmission.id,
       });
 
-      const concernSuggestions = await ConcernSuggestion.getNewForPatient(patient.id);
+      /* tslint:disable:max-line-length */
+      const concernSuggestions = await ConcernSuggestion.getNewSuggestionsForRiskAreaAssessmentSubmission(
+        patient.id,
+        riskAreaAssessmentSubmission.id,
+      );
+      /* tslint:enable:max-line-length */
+
       expect(concernSuggestions.length).toEqual(1);
       expect(concernSuggestions[0]).toMatchObject(concern2);
     });
@@ -282,9 +320,17 @@ describe('concern suggestion model', () => {
         concernId: concern2.id,
         answerId: answer2.id,
       });
+      const riskAreaAssessmentSubmission = await RiskAreaAssessmentSubmission.create({
+        patientId: patient.id,
+        userId: user.id,
+        riskAreaId: riskArea.id,
+      });
 
       await PatientAnswer.create({
         patientId: patient.id,
+        type: 'riskAreaAssessmentSubmission',
+        riskAreaAssessmentSubmissionId: riskAreaAssessmentSubmission.id,
+        questionIds: [question.id, question2.id],
         answers: [
           {
             patientId: patient.id,
@@ -312,7 +358,12 @@ describe('concern suggestion model', () => {
         userId: user.id,
       });
 
-      const secondConcernSuggestions = await ConcernSuggestion.getNewForPatient(patient.id);
+      /* tslint:disable:max-line-length */
+      const secondConcernSuggestions = await ConcernSuggestion.getNewSuggestionsForRiskAreaAssessmentSubmission(
+        patient.id,
+        riskAreaAssessmentSubmission.id,
+      );
+      /* tslint:enable:max-line-length */
       expect(secondConcernSuggestions[0]).toMatchObject(concern2);
       expect(secondConcernSuggestions.length).toEqual(1);
 
@@ -324,7 +375,12 @@ describe('concern suggestion model', () => {
       });
 
       // Now it should not be returned
-      const fourthConcernSuggestions = await ConcernSuggestion.getNewForPatient(patient.id);
+      /* tslint:disable:max-line-length */
+      const fourthConcernSuggestions = await ConcernSuggestion.getNewSuggestionsForRiskAreaAssessmentSubmission(
+        patient.id,
+        riskAreaAssessmentSubmission.id,
+      );
+      /* tslint:enable:max-line-length */
       expect(fourthConcernSuggestions.length).toEqual(0);
     });
   });

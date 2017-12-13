@@ -59,23 +59,59 @@ export async function patientAnswersCreate(
     patientId,
     questionIds,
     patientScreeningToolSubmissionId,
+    riskAreaAssessmentSubmissionId,
     progressNoteId,
   } = input;
 
   return await transaction(PatientAnswer.knex(), async txn => {
-    return await PatientAnswer.create(
-      {
-        patientId,
-        questionIds,
-        progressNoteId: progressNoteId || undefined,
-        patientScreeningToolSubmissionId: patientScreeningToolSubmissionId || undefined,
-        answers: patientAnswers.map(patientAnswer => ({
-          ...patientAnswer,
-          userId: userId!,
-        })),
-      },
-      txn,
-    );
+    if (progressNoteId) {
+      return await PatientAnswer.create(
+        {
+          patientId,
+          questionIds,
+          progressNoteId,
+          type: 'progressNote',
+          answers: patientAnswers.map(patientAnswer => ({
+            ...patientAnswer,
+            userId: userId!,
+          })),
+        },
+        txn,
+      );
+    } else if (patientScreeningToolSubmissionId) {
+      return await PatientAnswer.create(
+        {
+          patientId,
+          questionIds,
+          type: 'patientScreeningToolSubmission',
+          patientScreeningToolSubmissionId,
+          answers: patientAnswers.map(patientAnswer => ({
+            ...patientAnswer,
+            userId: userId!,
+          })),
+        },
+        txn,
+      );
+    } else if (riskAreaAssessmentSubmissionId) {
+      return await PatientAnswer.create(
+        {
+          patientId,
+          questionIds,
+          type: 'riskAreaAssessmentSubmission',
+          riskAreaAssessmentSubmissionId,
+          answers: patientAnswers.map(patientAnswer => ({
+            ...patientAnswer,
+            userId: userId!,
+          })),
+        },
+        txn,
+      );
+    } else {
+      throw new Error(
+        'either riskAreaAssessmentSubmissionId, patientScreeningToolSubmissionId or' +
+          ' progressNoteId are required',
+      );
+    }
   });
 }
 

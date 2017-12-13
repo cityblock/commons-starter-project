@@ -15,6 +15,7 @@ import PatientAnswer from '../patient-answer';
 import PatientGoal from '../patient-goal';
 import Question from '../question';
 import RiskArea from '../risk-area';
+import RiskAreaAssessmentSubmission from '../risk-area-assessment-submission';
 import User from '../user';
 
 const userRole = 'physician';
@@ -146,8 +147,16 @@ describe('goal suggestion model', () => {
         goalSuggestionTemplateId: goalSuggestionTemplate2.id,
         answerId: answer2.id,
       });
+      const riskAreaAssessmentSubmission = await RiskAreaAssessmentSubmission.create({
+        patientId: patient.id,
+        userId: user.id,
+        riskAreaId: riskArea.id,
+      });
       await PatientAnswer.create({
         patientId: patient.id,
+        type: 'riskAreaAssessmentSubmission',
+        riskAreaAssessmentSubmissionId: riskAreaAssessmentSubmission.id,
+        questionIds: [question.id],
         answers: [
           {
             patientId: patient.id,
@@ -161,11 +170,17 @@ describe('goal suggestion model', () => {
       });
 
       // At this point, only first goal should be suggested
-      const goalSuggestions = await GoalSuggestion.getNewForPatient(patient.id);
+      const goalSuggestions = await GoalSuggestion.getNewSuggestionsForRiskAreaAssessmentSubmission(
+        patient.id,
+        riskAreaAssessmentSubmission.id,
+      );
       expect(goalSuggestions[0]).toMatchObject(goalSuggestionTemplate);
       expect(goalSuggestions.length).toEqual(1);
       await PatientAnswer.create({
         patientId: patient.id,
+        type: 'riskAreaAssessmentSubmission',
+        riskAreaAssessmentSubmissionId: riskAreaAssessmentSubmission.id,
+        questionIds: [question2.id],
         answers: [
           {
             patientId: patient.id,
@@ -179,7 +194,12 @@ describe('goal suggestion model', () => {
       });
 
       // Now both goals should be suggested
-      const secondGoalSuggestions = await GoalSuggestion.getNewForPatient(patient.id);
+      /* tslint:disable:max-line-length */
+      const secondGoalSuggestions = await GoalSuggestion.getNewSuggestionsForRiskAreaAssessmentSubmission(
+        patient.id,
+        riskAreaAssessmentSubmission.id,
+      );
+      /* tslint:enable:max-line-length */
       expect(secondGoalSuggestions).toEqual(
         expect.arrayContaining([goalSuggestionTemplate, goalSuggestionTemplate2]),
       );
@@ -218,8 +238,17 @@ describe('goal suggestion model', () => {
         answerId: answer2.id,
       });
 
+      const riskAreaAssessmentSubmission = await RiskAreaAssessmentSubmission.create({
+        patientId: patient.id,
+        userId: user.id,
+        riskAreaId: riskArea.id,
+      });
+
       await PatientAnswer.create({
         patientId: patient.id,
+        type: 'riskAreaAssessmentSubmission',
+        riskAreaAssessmentSubmissionId: riskAreaAssessmentSubmission.id,
+        questionIds: [question.id, question2.id],
         answers: [
           {
             patientId: patient.id,
@@ -244,9 +273,14 @@ describe('goal suggestion model', () => {
         patientId: patient.id,
         suggestionType: 'goal',
         goalSuggestionTemplateId: goalSuggestionTemplate.id,
+        riskAreaAssessmentSubmissionId: riskAreaAssessmentSubmission.id,
+        type: 'riskAreaAssessmentSubmission',
       });
 
-      const goalSuggestions = await GoalSuggestion.getNewForPatient(patient.id);
+      const goalSuggestions = await GoalSuggestion.getNewSuggestionsForRiskAreaAssessmentSubmission(
+        patient.id,
+        riskAreaAssessmentSubmission.id,
+      );
       expect(goalSuggestions.length).toEqual(1);
       expect(goalSuggestions[0]).toMatchObject(goalSuggestionTemplate2);
       expect(goalSuggestions.length).toEqual(1);
@@ -282,8 +316,17 @@ describe('goal suggestion model', () => {
         answerId: answer2.id,
       });
 
+      const riskAreaAssessmentSubmission = await RiskAreaAssessmentSubmission.create({
+        patientId: patient.id,
+        userId: user.id,
+        riskAreaId: riskArea.id,
+      });
+
       await PatientAnswer.create({
         patientId: patient.id,
+        type: 'riskAreaAssessmentSubmission',
+        riskAreaAssessmentSubmissionId: riskAreaAssessmentSubmission.id,
+        questionIds: [question.id, question2.id],
         answers: [
           {
             patientId: patient.id,
@@ -311,7 +354,13 @@ describe('goal suggestion model', () => {
         userId: user.id,
       });
 
-      const secondGoalSuggestions = await GoalSuggestion.getNewForPatient(patient.id);
+      /* tslint:disable:max-line-length */
+      const secondGoalSuggestions = await GoalSuggestion.getNewSuggestionsForRiskAreaAssessmentSubmission(
+        patient.id,
+        riskAreaAssessmentSubmission.id,
+      );
+      /* tslint:enable:max-line-length */
+
       expect(secondGoalSuggestions[0]).toMatchObject(goalSuggestionTemplate2);
       expect(secondGoalSuggestions.length).toEqual(1);
     });

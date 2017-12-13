@@ -95,6 +95,7 @@ enum AnswerFilterType {
   riskArea
   screeningTool
   patientScreeningToolSubmission
+  riskAreaAssessmentSubmission
 }
 
 enum TaskEventTypes {
@@ -436,6 +437,8 @@ type PatientAnswer implements uniqueId {
   question: Question
   patientScreeningToolSubmissionId: String
   patientScreeningToolSubmission: PatientScreeningToolSubmission
+  riskAreaAssessmentSubmissionId: String
+  riskAreaAssessmentSubmission: RiskAreaAssessmentSubmission
 }
 
 # Question
@@ -682,6 +685,8 @@ type CarePlanSuggestion implements uniqueId {
   acceptedAt: String
   patientScreeningToolSubmissionId: String
   patientScreeningToolSubmission: PatientScreeningToolSubmission
+  riskAreaAssessmentSubmissionId: String
+  riskAreaAssessmentSubmission: RiskAreaAssessmentSubmission
 }
 
 type CarePlan {
@@ -731,6 +736,22 @@ type PatientScreeningToolSubmission implements uniqueId {
   carePlanSuggestions: [CarePlanSuggestion!]!
   screeningToolScoreRangeId: String
   screeningToolScoreRange: ScreeningToolScoreRange
+}
+
+type RiskAreaAssessmentSubmission implements uniqueId {
+  id: ID!
+  riskAreaId: String!
+  riskArea: RiskArea!
+  patientId: String!
+  patient: Patient!
+  userId: String!
+  user: User!
+  riskArea: RiskArea!
+  createdAt: String!
+  updatedAt: String!
+  deletedAt: String
+  completedAt: String
+  carePlanSuggestions: [CarePlanSuggestion!]!
 }
 
 type ProgressNoteTemplate implements uniqueId {
@@ -1045,6 +1066,7 @@ input PatientAnswersCreateInput {
   patientAnswers: [PatientAnswerInput]!
   questionIds: [String]!
   patientScreeningToolSubmissionId: String
+  riskAreaAssessmentSubmissionId: String
   progressNoteId: String
 }
 
@@ -1271,8 +1293,13 @@ input PatientScreeningToolSubmissionScoreInput {
   patientScreeningToolSubmissionId: String!
 }
 
-input PatientScreeningToolSubmissionDeleteInput {
-  patientScreeningToolSubmissionId: String!
+input RiskAreaAssessmentSubmissionCreateInput {
+  riskAreaId: String!
+  patientId: String!
+}
+
+input RiskAreaAssessmentSubmissionCompleteInput {
+  riskAreaAssessmentSubmissionId: String!
 }
 
 input ProgressNoteTemplateCreateInput {
@@ -1478,10 +1505,6 @@ type RootMutationType {
   patientScreeningToolSubmissionScore(
     input: PatientScreeningToolSubmissionScoreInput
   ): PatientScreeningToolSubmission
-  # patient screening tool submission delete
-  patientScreeningToolSubmissionDelete(
-    input: PatientScreeningToolSubmissionDeleteInput
-  ): PatientScreeningToolSubmission
   # create a progress note template
   progressNoteTemplateCreate(input: ProgressNoteTemplateCreateInput): ProgressNoteTemplate
   # edits a progress note template
@@ -1500,6 +1523,14 @@ type RootMutationType {
   computedFieldCreate(input: ComputedFieldCreateInput): ComputedField
   # Delete a computed field
   computedFieldDelete(input: ComputedFieldDeleteInput): ComputedField
+  # risk area assessment submission create
+  riskAreaAssessmentSubmissionCreate(
+    input: RiskAreaAssessmentSubmissionCreateInput
+  ): RiskAreaAssessmentSubmission
+  # risk area assessment submission complete
+  riskAreaAssessmentSubmissionComplete(
+    input: RiskAreaAssessmentSubmissionCompleteInput
+  ): RiskAreaAssessmentSubmission
 }
 
 type RootQueryType {
@@ -1667,6 +1698,16 @@ type RootQueryType {
   computedField(computedFieldId: String!): ComputedField
   # computed fields
   computedFields(orderBy: ComputedFieldOrderOptions, availableOnly: Boolean): [ComputedField]
+  # risk area assessment submission
+  riskAreaAssessmentSubmission(
+    riskAreaAssessmentSubmissionId: String!
+  ): RiskAreaAssessmentSubmission
+  # latest risk area assessment submission for a screening tool
+  riskAreaAssessmentSubmissionForPatient(
+    riskAreaId: String!
+    patientId: String!
+    completed: Boolean!
+  ): RiskAreaAssessmentSubmission
 }
 
 schema {

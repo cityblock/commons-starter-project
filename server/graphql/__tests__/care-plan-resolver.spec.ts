@@ -11,6 +11,7 @@ import PatientConcern from '../../models/patient-concern';
 import PatientGoal from '../../models/patient-goal';
 import Question from '../../models/question';
 import RiskArea from '../../models/risk-area';
+import RiskAreaAssessmentSubmission from '../../models/risk-area-assessment-submission';
 import User from '../../models/user';
 import {
   createMockClinic,
@@ -35,6 +36,7 @@ describe('care plan resolver tests', () => {
   let patient: Patient;
   let concern: Concern;
   let goalSuggestionTemplate: GoalSuggestionTemplate;
+  let riskAreaAssessmentSubmission: RiskAreaAssessmentSubmission;
 
   beforeEach(async () => {
     db = await Db.get();
@@ -85,6 +87,11 @@ describe('care plan resolver tests', () => {
       order: 2,
     });
     patient = await createPatient(createMockPatient(123, clinic.id), user.id);
+    riskAreaAssessmentSubmission = await RiskAreaAssessmentSubmission.create({
+      patientId: patient.id,
+      userId: user.id,
+      riskAreaId: riskArea.id,
+    });
   });
 
   afterAll(async () => {
@@ -105,7 +112,6 @@ describe('care plan resolver tests', () => {
         goalSuggestionTemplateId: goalSuggestionTemplate.id,
         userId: user.id,
       });
-
       const query = `{
         carePlanForPatient(patientId: "${patient.id}") {
           concerns {
@@ -134,11 +140,15 @@ describe('care plan resolver tests', () => {
         patientId: patient.id,
         suggestionType: 'concern',
         concernId: concern.id,
+        type: 'riskAreaAssessmentSubmission',
+        riskAreaAssessmentSubmissionId: riskAreaAssessmentSubmission.id,
       });
       const suggestion2 = await CarePlanSuggestion.create({
         patientId: patient.id,
         suggestionType: 'goal',
         goalSuggestionTemplateId: goalSuggestionTemplate.id,
+        type: 'riskAreaAssessmentSubmission',
+        riskAreaAssessmentSubmissionId: riskAreaAssessmentSubmission.id,
       });
 
       const query = `{
@@ -178,6 +188,8 @@ describe('care plan resolver tests', () => {
         patientId: patient.id,
         suggestionType: 'concern',
         concernId: concern.id,
+        type: 'riskAreaAssessmentSubmission',
+        riskAreaAssessmentSubmissionId: riskAreaAssessmentSubmission.id,
       });
 
       const mutation = `mutation {
@@ -203,11 +215,15 @@ describe('care plan resolver tests', () => {
         patientId: patient.id,
         suggestionType: 'concern',
         concernId: concern.id,
+        type: 'riskAreaAssessmentSubmission',
+        riskAreaAssessmentSubmissionId: riskAreaAssessmentSubmission.id,
       });
       const suggestion2 = await CarePlanSuggestion.create({
         patientId: patient.id,
         suggestionType: 'concern',
         concernId: concern2.id,
+        type: 'riskAreaAssessmentSubmission',
+        riskAreaAssessmentSubmissionId: riskAreaAssessmentSubmission.id,
       });
 
       const mutation = `mutation {
@@ -247,6 +263,8 @@ describe('care plan resolver tests', () => {
         patientId: patient.id,
         suggestionType: 'goal',
         goalSuggestionTemplateId: goalSuggestionTemplate.id,
+        type: 'riskAreaAssessmentSubmission',
+        riskAreaAssessmentSubmissionId: riskAreaAssessmentSubmission.id,
       });
       const concern2 = await Concern.create({ title: 'Concern 2' });
 
@@ -276,11 +294,15 @@ describe('care plan resolver tests', () => {
         patientId: patient.id,
         suggestionType: 'concern',
         concernId: concern.id,
+        type: 'riskAreaAssessmentSubmission',
+        riskAreaAssessmentSubmissionId: riskAreaAssessmentSubmission.id,
       });
       const goalSuggestion = await CarePlanSuggestion.create({
         patientId: patient.id,
         suggestionType: 'goal',
         goalSuggestionTemplateId: goalSuggestionTemplate.id,
+        type: 'riskAreaAssessmentSubmission',
+        riskAreaAssessmentSubmissionId: riskAreaAssessmentSubmission.id,
       });
 
       const mutation = `mutation {
@@ -310,6 +332,8 @@ describe('care plan resolver tests', () => {
         patientId: patient.id,
         suggestionType: 'goal',
         goalSuggestionTemplateId: goalSuggestionTemplate.id,
+        type: 'riskAreaAssessmentSubmission',
+        riskAreaAssessmentSubmissionId: riskAreaAssessmentSubmission.id,
       });
       const patientConcern = await PatientConcern.create({
         patientId: patient.id,

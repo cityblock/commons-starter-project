@@ -1,4 +1,3 @@
-import { omit } from 'lodash';
 import { transaction } from 'objection';
 import { ICarePlan, ICarePlanSuggestionAcceptInput, ICarePlanSuggestionDismissInput } from 'schema';
 import CarePlanSuggestion from '../models/care-plan-suggestion';
@@ -87,6 +86,7 @@ export async function carePlanSuggestionAccept(
     if (carePlanSuggestion) {
       const { patientId, goalSuggestionTemplateId } = carePlanSuggestion;
       const { startedAt, concernId } = input;
+      let { patientConcernId } = input;
 
       if (!!carePlanSuggestion.concern && carePlanSuggestion.concernId) {
         await PatientConcern.create({
@@ -96,16 +96,6 @@ export async function carePlanSuggestionAccept(
           userId: userId!,
         });
       } else if (!!carePlanSuggestion.goalSuggestionTemplate) {
-        const patientGoalCreateInput: any = Object.assign(
-          omit(input, ['concernId', 'startedAt', 'carePlanSuggestionId']),
-          {
-            userId,
-            goalSuggestionTemplateId,
-            patientId: carePlanSuggestion.patientId,
-            title: carePlanSuggestion.goalSuggestionTemplate.title,
-          },
-        );
-
         if (concernId) {
           const patientConcern = await PatientConcern.create(
             {
@@ -117,7 +107,7 @@ export async function carePlanSuggestionAccept(
             txn,
           );
 
-          patientGoalCreateInput.patientConcernId = patientConcern.id;
+          patientConcernId = patientConcern.id;
 
           secondaryCarePlanSuggestion = await CarePlanSuggestion.findForPatientAndConcern(
             patientId,
@@ -125,7 +115,16 @@ export async function carePlanSuggestionAccept(
           );
         }
 
-        await PatientGoal.create(patientGoalCreateInput, txn);
+        await PatientGoal.create(
+          {
+            userId: userId!,
+            goalSuggestionTemplateId,
+            patientId: carePlanSuggestion.patientId,
+            title: carePlanSuggestion.goalSuggestionTemplate.title,
+            patientConcernId: patientConcernId || undefined,
+          },
+          txn,
+        );
       }
 
       await CarePlanSuggestion.accept(carePlanSuggestion.id, userId!, txn);

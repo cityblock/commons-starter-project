@@ -122,6 +122,8 @@ describe('patient screening tool submission model', () => {
     const patientAnswers = await PatientAnswer.create({
       patientId: patient1.id,
       patientScreeningToolSubmissionId: submission.id,
+      type: 'patientScreeningToolSubmission',
+      questionIds: [question.id, question2.id],
       answers: [
         {
           answerId: answer.id,

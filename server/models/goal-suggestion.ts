@@ -93,9 +93,9 @@ export default class GoalSuggestion extends BaseModel {
     );
   }
 
-  // TODO: Retire this function
-  static async getNewForPatient(
+  static async getNewSuggestionsForRiskAreaAssessmentSubmission(
     patientId: string,
+    riskAreaAssessmentSubmissionId: string,
     txn?: Transaction,
   ): Promise<GoalSuggestionTemplate[]> {
     const existingPatientCarePlanSuggestionsQuery = CarePlanSuggestion.query(txn)
@@ -114,7 +114,8 @@ export default class GoalSuggestion extends BaseModel {
         'goal_suggestion.goalSuggestionTemplateId',
         'patient_goal.goalSuggestionTemplateId',
       )
-      .where('patient_answer.deletedAt', null)
+      .where('patient_answer.riskAreaAssessmentSubmissionId', riskAreaAssessmentSubmissionId)
+      .andWhere('patient_answer.deletedAt', null)
       .andWhere(
         'goal_suggestion.goalSuggestionTemplateId',
         'not in',

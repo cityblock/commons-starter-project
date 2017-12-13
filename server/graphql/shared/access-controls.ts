@@ -30,6 +30,7 @@ export type Resource =
   | 'patientTaskSuggestion'
   | 'taskSuggestion'
   | 'patientScreeningToolSubmission'
+  | 'riskAreaAssessmentSubmission'
   | 'progressNote'
   | 'progressNoteTemplate'
   | 'quickCall'

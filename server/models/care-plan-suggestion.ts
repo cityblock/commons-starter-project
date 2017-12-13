@@ -9,16 +9,32 @@ import User from './user';
 
 type SuggestionType = 'concern' | 'goal';
 
-interface ICarePlanSuggestionCreateArgs {
+export interface ICarePlanSuggestionCreateArgsForPatientScreeningToolSubmission {
   patientId: string;
   suggestionType: SuggestionType;
   concernId?: string;
   goalSuggestionTemplateId?: string;
-  patientScreeningToolSubmissionId?: string;
+  patientScreeningToolSubmissionId: string;
+  type: 'patientScreeningToolSubmission';
 }
 
+export interface ICarePlanSuggestionCreateArgsForRiskAreaAssessmentSubmission {
+  patientId: string;
+  suggestionType: SuggestionType;
+  concernId?: string;
+  goalSuggestionTemplateId?: string;
+  riskAreaAssessmentSubmissionId: string;
+  type: 'riskAreaAssessmentSubmission';
+}
+
+type ICarePlanSuggestionCreateArgs =
+  | ICarePlanSuggestionCreateArgsForRiskAreaAssessmentSubmission
+  | ICarePlanSuggestionCreateArgsForPatientScreeningToolSubmission;
+
 interface ICarePlanSuggestionCreateMultipleArgs {
-  suggestions: ICarePlanSuggestionCreateArgs[];
+  suggestions:
+    | ICarePlanSuggestionCreateArgsForRiskAreaAssessmentSubmission[]
+    | ICarePlanSuggestionCreateArgsForPatientScreeningToolSubmission[];
 }
 
 interface ICarePlanSuggestionDismissArgs {
@@ -66,6 +82,7 @@ export default class CarePlanSuggestion extends BaseModel {
       acceptedAt: { type: 'string' },
       acceptedById: { type: 'string' },
       patientScreeningToolSubmissionId: { type: 'string' },
+      riskAreaAssessmentSubmissionId: { type: 'string' },
     },
   };
 
@@ -185,8 +202,6 @@ export default class CarePlanSuggestion extends BaseModel {
       )
       .orderBy('createdAt', 'asc');
   }
-
-  // TODO: Get for screening tool submission
 
   static async accept(
     carePlanSuggestionId: string,

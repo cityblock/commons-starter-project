@@ -1,0 +1,6 @@
+{
+  "watch": ["server/graphql/schema.graphql", "server/**/*.ts"],
+  "env": {
+    "NODE_ENV": "development"
+  }
+}

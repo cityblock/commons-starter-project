@@ -4,6 +4,8 @@ import Icon from '../icon/icon';
 import { IconName } from '../icon/icon-types';
 import * as styles from './css/empty-placeholder.css';
 
+const DEFAULT_ICON = 'pauseCircleOutline'; // pause button
+
 interface IProps {
   headerMessageId?: string; // prefer using message ids to plain text
   detailMessageId?: string; // prefer using message ids to plain text
@@ -33,7 +35,7 @@ const EmptyPlaceholder: React.StatelessComponent<IProps> = (props: IProps) => {
 
   return (
     <div className={styles.container}>
-      <Icon name={icon || 'pauseCircleOutline'} className={styles.icon} />
+      <Icon name={icon || DEFAULT_ICON} className={styles.icon} />
       {header}
       {detail}
     </div>

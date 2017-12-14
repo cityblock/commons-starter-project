@@ -1,0 +1,27 @@
+@import '../../../shared/css/sizes';
+
+.buttons {
+  border-bottom: 1px solid var(--gray-background-color);
+  padding-bottom: var(--extra-small-gutter);
+  display: flex;
+  justify-content: space-between;
+}
+
+.button {
+  border: none;
+  color: var(--default-font-color);
+}
+
+.fields {
+  margin-top: var(--extra-small-gutter);
+}
+
+.fields h4 {
+  margin-top: 0;
+  margin-bottom: var(--extra-small-gutter);
+  margin-left: 3px;
+  font-size: var(--extra-small-font-size);
+  font-weight: var(--default-font-weight);
+  line-height: var(--extra-small-font-line-height);
+  color: var(--gray-font-color);
+}

@@ -1,20 +1,33 @@
 @import '../../../css/sizes';
 
-.button {
+.button,
+.iconButton {
   font-size: var(--default-font-size);
-  line-height: var(--medium-font-line-height);
   font-family: var(--basetica-medium);
+  line-height: var(--medium-font-line-height);
   color: var(--white-color);
   background: var(--blue-color);
   border-radius: 2px;
   height: 32px;
-  padding: 8px 36px;
   border: none;
 
   &:hover {
     cursor: pointer;
     background: var(--light-blue-color);
   }
+}
+
+.button {
+  padding: 8px 36px;
+}
+
+.icon {
+  height: 18px;
+  width: 18px;
+  fill: var(--default-font-color);
+
+  /* fudge to get icon to align with text */
+  margin-bottom: 2px;
 }
 
 .red {

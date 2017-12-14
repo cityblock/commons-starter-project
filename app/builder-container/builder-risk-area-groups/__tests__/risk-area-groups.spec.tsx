@@ -1,29 +1,15 @@
 import { shallow } from 'enzyme';
 import * as React from 'react';
 import EmptyPlaceholder from '../../../shared/library/empty-placeholder/empty-placeholder';
-import Spinner from '../../../shared/library/spinner/spinner';
 import { ROUTE_BASE } from '../builder-risk-area-groups';
 import RiskAreaGroup from '../risk-area-group';
-import { RiskAreaGroups } from '../risk-area-groups';
+import RiskAreaGroups from '../risk-area-groups';
 
 describe('Builder Risk Area Groups List Component', () => {
   const riskAreaGroupId = 'drogon';
-  const wrapper = shallow(
-    <RiskAreaGroups
-      loading={true}
-      error={null}
-      riskAreaGroupId={riskAreaGroupId}
-      riskAreaGroups={[]}
-    />,
-  );
-
-  it('renders loading spinner if loading', () => {
-    expect(wrapper.find(Spinner).length).toBe(1);
-    expect(wrapper.find(RiskAreaGroup).length).toBe(0);
-  });
+  const wrapper = shallow(<RiskAreaGroups riskAreaGroupId={riskAreaGroupId} riskAreaGroups={[]} />);
 
   it('returns empty placeholder if no risk area groups', () => {
-    wrapper.setProps({ loading: false });
     expect(wrapper.find(EmptyPlaceholder).length).toBe(1);
     expect(wrapper.find(EmptyPlaceholder).props().icon).toBe('addBox');
     expect(wrapper.find(EmptyPlaceholder).props().headerMessageId).toBe('riskAreaGroup.empty');

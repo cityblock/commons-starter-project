@@ -54,6 +54,16 @@ export const concern = {
   title: 'Concern Title',
 };
 
+export const riskAreaGroup = {
+  id: 'ghost',
+  title: "Jon Snow's Direwolf",
+  createdAt: 'Thu Jul 13 2017 16:52:56 GMT-0400 (EDT)',
+  updatedAt: 'Thu Jul 13 2017 16:52:56 GMT-0400 (EDT)',
+  deletedAt: null,
+  mediumRiskThreshold: 30,
+  highRiskThreshold: 9000,
+};
+
 export const riskArea = {
   id: 'cool-task-id',
   createdAt: 'Thu Jul 13 2017 16:52:56 GMT-0400 (EDT)',

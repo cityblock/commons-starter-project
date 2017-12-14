@@ -71,26 +71,8 @@ exports[`renders builder container 1`] = `
       className="container"
     >
       <div
-        className="sortSearchBar"
-      >
-        <button
-          className="button"
-          onClick={[Function]}
-        >
-          Create Domain
-        </button>
-      </div>
-      <div
-        className="bottomContainer"
-      >
-        <div
-          className="container"
-        >
-          <div
-            className="loadingSpinner"
-          />
-        </div>
-      </div>
+        className="loadingSpinner"
+      />
     </div>
   </div>
 </div>

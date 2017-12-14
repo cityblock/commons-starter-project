@@ -1,6 +1,8 @@
 import * as classNames from 'classnames';
 import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
+import Icon from '../icon/icon';
+import { IconName } from '../icon/icon-types';
 import * as styles from './css/button.css';
 
 type Color = 'blue' | 'white' | 'red';
@@ -12,14 +14,16 @@ interface IProps {
   color?: Color | null; // if not provided, defaults to blue
   small?: boolean | null;
   className?: string | null;
+  icon?: IconName | null; // WIP, use at own risk
 }
 
 const Button: React.StatelessComponent<IProps> = (props: IProps) => {
-  const { messageId, label, onClick, color, small, className } = props;
+  const { messageId, label, onClick, color, small, icon, className } = props;
 
   const buttonStyles = classNames(
-    styles.button,
     {
+      [styles.button]: !icon,
+      [styles.iconButton]: !!icon,
       [styles.white]: color === 'white',
       [styles.red]: color === 'red',
       [styles.small]: small,
@@ -32,6 +36,7 @@ const Button: React.StatelessComponent<IProps> = (props: IProps) => {
       <FormattedMessage id={messageId}>
         {(message: string) => (
           <button onClick={onClick} className={buttonStyles}>
+            {icon && <Icon name={icon} className={styles.icon} />}
             {message}
           </button>
         )}
@@ -41,6 +46,7 @@ const Button: React.StatelessComponent<IProps> = (props: IProps) => {
 
   return (
     <button onClick={onClick} className={buttonStyles}>
+      {icon && <Icon name={icon} className={styles.icon} />}
       {label}
     </button>
   );

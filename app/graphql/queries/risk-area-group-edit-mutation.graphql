@@ -1,0 +1,19 @@
+#import "../fragments/full-risk-area-group.graphql"
+
+mutation riskAreaGroupEdit(
+  $riskAreaGroupId: String!
+  $title: String
+  $mediumRiskThreshold: Int
+  $highRiskThreshold: Int
+) {
+  riskAreaGroupEdit(
+    input: {
+      riskAreaGroupId: $riskAreaGroupId
+      title: $title
+      mediumRiskThreshold: $mediumRiskThreshold
+      highRiskThreshold: $highRiskThreshold
+    }
+  ) {
+    ...FullRiskAreaGroup
+  }
+}

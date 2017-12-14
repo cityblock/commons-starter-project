@@ -1,6 +1,7 @@
 import { shallow } from 'enzyme';
 import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
+import Icon from '../../icon/icon';
 import Button from '../button';
 
 describe('Library Button Component', () => {
@@ -53,5 +54,17 @@ describe('Library Button Component', () => {
     expect(button.length).toBe(1);
     expect(button.text()).toBe(label);
     expect(button.props().className).toBe(`button ${className}`);
+  });
+
+  it('renders a button with an icon', () => {
+    const label = 'Fake Out';
+    const icon = 'close';
+
+    const wrapper = shallow(<Button onClick={onClick} label={label} icon={icon} />);
+
+    expect(wrapper.find(Icon).length).toBe(1);
+    expect(wrapper.find(Icon).props().name).toBe(icon);
+    expect(wrapper.find(Icon).props().className).toBe('icon');
+    expect(wrapper.find('button').props().className).toBe('iconButton');
   });
 });

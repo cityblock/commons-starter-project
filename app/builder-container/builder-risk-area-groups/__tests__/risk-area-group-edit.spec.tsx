@@ -13,6 +13,7 @@ describe('Builder Risk Area Group Edit Component', () => {
   const wrapper = shallow(
     <RiskAreaGroupEdit
       close={placeholderFn}
+      deleteRiskAreaGroup={placeholderFn}
       editRiskAreaGroup={placeholderFn}
       riskAreaGroup={riskAreaGroup}
     />,

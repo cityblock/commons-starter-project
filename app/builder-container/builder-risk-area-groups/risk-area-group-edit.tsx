@@ -17,6 +17,7 @@ import * as styles from './css/risk-area-group-edit.css';
 interface IProps {
   riskAreaGroup: FullRiskAreaGroupFragment;
   close: () => void;
+  deleteRiskAreaGroup: () => void;
 }
 
 interface IGraphqlProps {
@@ -42,7 +43,7 @@ export class RiskAreaGroupEdit extends React.Component<allProps, {}> {
   }
 
   render(): JSX.Element {
-    const { riskAreaGroup, close } = this.props;
+    const { riskAreaGroup, close, deleteRiskAreaGroup } = this.props;
 
     return (
       <div>
@@ -59,7 +60,7 @@ export class RiskAreaGroupEdit extends React.Component<allProps, {}> {
             icon="delete"
             color="white"
             className={styles.button}
-            onClick={() => true}
+            onClick={deleteRiskAreaGroup}
           />
         </div>
         <div className={styles.fields}>

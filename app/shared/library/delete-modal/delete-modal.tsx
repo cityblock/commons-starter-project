@@ -1,8 +1,7 @@
 import * as React from 'react';
-import { FormattedMessage } from 'react-intl';
-import Icon from '../../library/icon/icon';
 import { Popup } from '../../popup/popup';
-import ModalButtons from '../modal-buttons/modal-buttons';
+import DeleteWarning from '../delete-warning/delete-warning';
+import Icon from '../icon/icon';
 import * as styles from './css/delete-modal.css';
 
 interface IProps {
@@ -30,33 +29,15 @@ const DeleteModal: React.StatelessComponent<IProps> = (props: IProps) => {
     <Popup visible={visible} closePopup={closePopup} style="no-padding" className={styles.popup}>
       <div className={styles.container}>
         <Icon name="close" onClick={closePopup} className={styles.close} />
-        <div className={styles.body}>
-          <Icon name="errorOutline" className={styles.warning} />
-          <FormattedMessage id={titleMessageId}>
-            {(message: string) => <h2>{message}</h2>}
-          </FormattedMessage>
-          <FormattedMessage id={descriptionMessageId}>
-            {(message: string) => <p>{message}</p>}
-          </FormattedMessage>
-          {deletedItemName && (
-            <div className={styles.deletedItemDetail}>
-              {deletedItemHeaderMessageId && (
-                <FormattedMessage id={deletedItemHeaderMessageId}>
-                  {(message: string) => <h3>{message}</h3>}
-                </FormattedMessage>
-              )}
-              <h4>{deletedItemName}</h4>
-            </div>
-          )}
-          <div className={styles.buttons}>
-            <ModalButtons
-              cancel={closePopup}
-              submit={deleteItem}
-              submitMessageId="modalButtons.delete"
-              redSubmit={true}
-            />
-          </div>
-        </div>
+        <DeleteWarning
+          cancel={closePopup}
+          deleteItem={deleteItem}
+          titleMessageId={titleMessageId}
+          descriptionMessageId={descriptionMessageId}
+          deletedItemName={deletedItemName}
+          deletedItemHeaderMessageId={deletedItemHeaderMessageId}
+          modal={true}
+        />
       </div>
     </Popup>
   );

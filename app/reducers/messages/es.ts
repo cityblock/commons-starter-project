@@ -195,6 +195,8 @@ export const SPANISH_TRANSLATION = {
     'riskAreaGroup.close': 'Cerrar',
     'riskAreaGroup.create': 'Crear Dominio',
     'riskAreaGroup.delete': 'Eliminar Dominio',
+    'riskAreaGroup.deleteDetail': 'Dominio a eliminar:',
+    'riskAreaGroup.deleteWarning': '¿Seguro que quieres eliminar este dominio?',
     'riskAreaGroup.empty': 'Sin Dominios',
     'settings.heading': 'Ajustes',
     'tasks.assignedToPlaceholder': 'Asignar a',

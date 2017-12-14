@@ -186,6 +186,8 @@ export const ENGLISH_TRANSLATION = {
     'riskAreaGroup.close': 'Close',
     'riskAreaGroup.create': 'Create Domain',
     'riskAreaGroup.delete': 'Delete Domain',
+    'riskAreaGroup.deleteDetail': 'Domain to be deleted:',
+    'riskAreaGroup.deleteWarning': 'Are you sure you want to delete this domain?',
     'riskAreaGroup.empty': 'No Domains',
     'settings.heading': 'Settings',
     'tasks.assignedToPlaceholder': 'Assign to',

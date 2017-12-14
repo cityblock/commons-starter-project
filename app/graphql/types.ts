@@ -5451,6 +5451,23 @@ export type riskAreaEditMutation = {
   } | null,
 };
 
+export type riskAreaGroupDeleteMutationVariables = {
+  riskAreaGroupId: string,
+};
+
+export type riskAreaGroupDeleteMutation = {
+  // Delete a RiskAreaGroup
+  riskAreaGroupDelete:  {
+    id: string,
+    createdAt: string,
+    updatedAt: string,
+    deletedAt: string | null,
+    title: string,
+    mediumRiskThreshold: number,
+    highRiskThreshold: number,
+  } | null,
+};
+
 export type riskAreaGroupEditMutationVariables = {
   riskAreaGroupId: string,
   title?: string | null,

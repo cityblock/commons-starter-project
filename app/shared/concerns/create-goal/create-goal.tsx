@@ -102,7 +102,6 @@ export class CreateGoalModal extends React.Component<allProps, IState> {
               patientId,
               patientConcernId,
               title,
-              goalSuggestionTemplateId: null,
             },
           });
         } else {

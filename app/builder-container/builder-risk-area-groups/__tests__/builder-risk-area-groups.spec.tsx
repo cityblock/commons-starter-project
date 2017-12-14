@@ -54,6 +54,7 @@ describe('Builder Risk Area Groups Component', () => {
   it('renders risk area group detail if risk area group selected', () => {
     expect(wrapper.find(RiskAreaGroupDetail).length).toBe(1);
     expect(wrapper.find(RiskAreaGroupDetail).props().riskAreaGroup).toBe(riskAreaGroup);
+    expect(wrapper.find(RiskAreaGroupDetail).props().createMode).toBeFalsy();
   });
 
   it('passes null to risk area group detail if no risk area group selected', () => {

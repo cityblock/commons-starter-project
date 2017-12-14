@@ -21,8 +21,8 @@ export default class RiskAreaGroup extends BaseModel {
     properties: {
       id: { type: 'string' },
       title: { type: 'string', minLength: 1 }, // cannot be blank
-      mediumRiskThreshold: { type: 'integer' },
-      highRiskThreshold: { type: 'integer' },
+      mediumRiskThreshold: { type: 'integer', minimum: 1 },
+      highRiskThreshold: { type: 'integer', minimum: 1 },
       deletedAt: { type: 'string' },
     },
   };

@@ -38,41 +38,64 @@ interface IGraphqlProps {
 
 type allProps = IStateProps & IDispatchProps & IGraphqlProps & IProps;
 
-export const AdminRiskAreaGroups: React.StatelessComponent<allProps> = (props: allProps) => {
-  const { riskAreaGroupId, riskAreaGroups, redirectToRiskAreaGroups, loading, error } = props;
+interface IState {
+  createMode: boolean;
+}
 
-  if (loading || error) return <Spinner />;
+export class AdminRiskAreaGroups extends React.Component<allProps, IState> {
+  constructor(props: allProps) {
+    super(props);
+    this.state = { createMode: false };
+  }
 
-  const containerStyles = classNames(styles.itemContainer, {
-    [styles.visible]: !!riskAreaGroupId,
-  });
-  const listStyles = classNames(styles.itemsList, {
-    [styles.compressed]: !!riskAreaGroupId,
-  });
+  render(): JSX.Element {
+    const {
+      riskAreaGroupId,
+      riskAreaGroups,
+      redirectToRiskAreaGroups,
+      loading,
+      error,
+    } = this.props;
+    const { createMode } = this.state;
 
-  const selectedRiskAreaGroup = riskAreaGroupId
-    ? riskAreaGroups.find(group => group.id === riskAreaGroupId) || null
-    : null;
+    if (loading || error) return <Spinner />;
 
-  return (
-    <div className={styles.container}>
-      <div className={styles.sortSearchBar}>
-        <Button messageId="riskAreaGroup.create" onClick={() => true as any} />
-      </div>
-      <div className={styles.bottomContainer}>
-        <div className={listStyles}>
-          <RiskAreaGroups riskAreaGroupId={riskAreaGroupId} riskAreaGroups={riskAreaGroups} />
-        </div>
-        <div className={containerStyles}>
-          <RiskAreaGroupDetail
-            riskAreaGroup={selectedRiskAreaGroup}
-            close={redirectToRiskAreaGroups}
+    const containerStyles = classNames(styles.itemContainer, {
+      [styles.visible]: !!riskAreaGroupId || createMode,
+    });
+    const listStyles = classNames(styles.itemsList, {
+      [styles.compressed]: !!riskAreaGroupId || createMode,
+    });
+
+    const selectedRiskAreaGroup = riskAreaGroupId
+      ? riskAreaGroups.find(group => group.id === riskAreaGroupId) || null
+      : null;
+
+    return (
+      <div className={styles.container}>
+        <div className={styles.sortSearchBar}>
+          <Button
+            messageId="riskAreaGroup.create"
+            onClick={() => this.setState({ createMode: true })}
           />
         </div>
+        <div className={styles.bottomContainer}>
+          <div className={listStyles}>
+            <RiskAreaGroups riskAreaGroupId={riskAreaGroupId} riskAreaGroups={riskAreaGroups} />
+          </div>
+          <div className={containerStyles}>
+            <RiskAreaGroupDetail
+              riskAreaGroup={selectedRiskAreaGroup}
+              close={redirectToRiskAreaGroups}
+              createMode={createMode}
+              cancelCreateRiskAreaGroup={() => this.setState({ createMode: false })}
+            />
+          </div>
+        </div>
       </div>
-    </div>
-  );
-};
+    );
+  }
+}
 
 const mapStateToProps = (state: IAppState, ownProps: IProps): IStateProps => {
   return {

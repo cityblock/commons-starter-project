@@ -85,8 +85,7 @@ export class CreateTaskModal extends React.Component<allProps, IState> {
   onSubmit = async () => {
     const { patientId, patientGoalId, createTask } = this.props;
     const { title, description, dueAt, assignedToId, priority, loading } = this.state;
-    // stop gap to prevent creating tasks with blank title, ticketed issue
-    if (!title) return;
+
     if (!loading) {
       try {
         this.setState({ loading: true, error: null });

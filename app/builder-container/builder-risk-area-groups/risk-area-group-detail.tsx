@@ -11,11 +11,14 @@ import {
 } from '../../graphql/types';
 import DeleteWarning from '../../shared/library/delete-warning/delete-warning';
 import * as styles from './css/risk-area-group-detail.css';
+import RiskAreaGroupCreate from './risk-area-group-create';
 import RiskAreaGroupEdit from './risk-area-group-edit';
 
 interface IProps {
   riskAreaGroup: FullRiskAreaGroupFragment | null;
   close: () => void;
+  createMode: boolean;
+  cancelCreateRiskAreaGroup: () => void;
 }
 
 interface IGraphqlProps {
@@ -68,26 +71,29 @@ export class RiskAreaGroupDetail extends React.Component<allProps, IState> {
   };
 
   render(): JSX.Element | null {
-    const { riskAreaGroup, close } = this.props;
+    const { riskAreaGroup, close, createMode, cancelCreateRiskAreaGroup } = this.props;
     const { deleteMode } = this.state;
 
-    if (!riskAreaGroup) return null;
+    if (!riskAreaGroup && !createMode) return null;
 
-    const detailBody = deleteMode ? (
-      <DeleteWarning
-        titleMessageId="riskAreaGroup.deleteWarning"
-        deleteItem={this.onDelete}
-        cancel={() => this.setState({ deleteMode: false })}
-        deletedItemHeaderMessageId="riskAreaGroup.deleteDetail"
-        deletedItemName={riskAreaGroup.title}
-      />
-    ) : (
-      <RiskAreaGroupEdit
-        riskAreaGroup={riskAreaGroup}
-        close={close}
-        deleteRiskAreaGroup={() => this.setState({ deleteMode: true })}
-      />
-    );
+    const detailBody =
+      createMode || !riskAreaGroup ? (
+        <RiskAreaGroupCreate cancelCreateRiskAreaGroup={cancelCreateRiskAreaGroup} />
+      ) : deleteMode ? (
+        <DeleteWarning
+          titleMessageId="riskAreaGroup.deleteWarning"
+          deleteItem={this.onDelete}
+          cancel={() => this.setState({ deleteMode: false })}
+          deletedItemHeaderMessageId="riskAreaGroup.deleteDetail"
+          deletedItemName={riskAreaGroup.title}
+        />
+      ) : (
+        <RiskAreaGroupEdit
+          riskAreaGroup={riskAreaGroup}
+          close={close}
+          deleteRiskAreaGroup={() => this.setState({ deleteMode: true })}
+        />
+      );
 
     return <div className={styles.container}>{detailBody}</div>;
   }

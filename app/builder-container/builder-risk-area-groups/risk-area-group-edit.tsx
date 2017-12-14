@@ -12,7 +12,7 @@ import Button from '../../shared/library/button/button';
 /* tslint:disable:max-line-length */
 import EditableMultilineText from '../../shared/library/editable-multiline-text/editable-multiline-text';
 /* tslint:enable:max-line-length */
-import * as styles from './css/risk-area-group-edit.css';
+import * as styles from './css/risk-area-group-shared.css';
 
 interface IProps {
   riskAreaGroup: FullRiskAreaGroupFragment;

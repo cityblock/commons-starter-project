@@ -62,7 +62,7 @@ export default class Task extends BaseModel {
     type: 'object',
     properties: {
       id: { type: 'string' },
-      title: { type: 'string' },
+      title: { type: 'string', minLength: 1 },
       description: { type: 'string' },
       completedAt: { type: ['string', 'null'] },
       completedById: { type: ['string', 'null'] },

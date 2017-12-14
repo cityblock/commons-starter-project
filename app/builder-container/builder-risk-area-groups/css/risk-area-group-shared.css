@@ -25,3 +25,7 @@
   line-height: var(--extra-small-font-line-height);
   color: var(--gray-font-color);
 }
+
+.fields input {
+  margin-bottom: var(--small-gutter);
+}

@@ -11,6 +11,13 @@ exports[`renders builder container 1`] = `
       className="tabs"
     >
       <a
+        className="tab"
+        href="/builder/domains"
+        onClick={[Function]}
+      >
+        Domains
+      </a>
+      <a
         className="tab selectedTab"
         href="/builder/assessments"
         onClick={[Function]}
@@ -66,39 +73,23 @@ exports[`renders builder container 1`] = `
       <div
         className="sortSearchBar"
       >
-        <div
-          className="createContainer"
+        <button
+          className="button"
+          onClick={[Function]}
         >
-          <div
-            className="createButton"
-            onClick={[Function]}
-          >
-            Create Assessment
-          </div>
-        </div>
+          Create Domain
+        </button>
       </div>
       <div
         className="bottomContainer"
       >
         <div
-          className="itemsList"
+          className="container"
         >
           <div
-            className="emptyMessage"
-          >
-            <div
-              className="emptyLogo"
-            />
-            <div
-              className="emptyLabel"
-            >
-              No RiskAreas
-            </div>
-          </div>
+            className="loadingSpinner"
+          />
         </div>
-        <div
-          className="itemContainer"
-        />
       </div>
     </div>
   </div>

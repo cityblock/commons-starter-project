@@ -183,6 +183,8 @@ export const ENGLISH_TRANSLATION = {
     'header.logOut': 'Logout',
     'header.builder': 'Builder',
     'header.manager': 'Manager',
+    'riskAreaGroup.create': 'Create Domain',
+    'riskAreaGroup.empty': 'No Domains',
     'settings.heading': 'Settings',
     'tasks.assignedToPlaceholder': 'Assign to',
     'tasks.patientGoalPlaceholder': 'Patient goal',

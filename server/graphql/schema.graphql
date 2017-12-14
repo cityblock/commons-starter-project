@@ -1613,7 +1613,7 @@ type RootQueryType {
   # RiskAreaGroup
   riskAreaGroup(riskAreaGroupId: String!): RiskAreaGroup
   # RiskAreaGroups
-  riskAreaGroups: [RiskAreaGroup]!
+  riskAreaGroups: [RiskAreaGroup!]!
   # RiskArea
   riskArea(riskAreaId: String!): RiskArea
   # RiskAreas

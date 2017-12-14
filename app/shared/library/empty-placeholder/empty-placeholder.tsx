@@ -1,5 +1,7 @@
 import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
+import Icon from '../icon/icon';
+import { IconName } from '../icon/icon-types';
 import * as styles from './css/empty-placeholder.css';
 
 interface IProps {
@@ -7,10 +9,11 @@ interface IProps {
   detailMessageId?: string; // prefer using message ids to plain text
   headerText?: string;
   detailText?: string;
+  icon?: IconName;
 }
 
 const EmptyPlaceholder: React.StatelessComponent<IProps> = (props: IProps) => {
-  const { headerMessageId, detailMessageId, headerText, detailText } = props;
+  const { headerMessageId, detailMessageId, headerText, detailText, icon } = props;
 
   const header = headerMessageId ? (
     <FormattedMessage id={headerMessageId}>
@@ -30,7 +33,7 @@ const EmptyPlaceholder: React.StatelessComponent<IProps> = (props: IProps) => {
 
   return (
     <div className={styles.container}>
-      <div className={styles.icon} />
+      <Icon name={icon || 'pauseCircleOutline'} className={styles.icon} />
       {header}
       {detail}
     </div>

@@ -1,5 +1,6 @@
 export type IconName =
   | 'addAlert'
+  | 'addBox'
   | 'addCircle'
   | 'addCircleOutline'
   | 'close'
@@ -13,5 +14,6 @@ export type IconName =
   | 'keyboardArrowLeft'
   | 'keyboardArrowRight'
   | 'moreVert'
+  | 'pauseCircleOutline'
   | 'phone'
   | 'search';

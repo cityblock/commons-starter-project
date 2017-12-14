@@ -23,7 +23,7 @@ interface IProps {
   mutate?: any;
   match: {
     params: {
-      riskAreaId: string | null;
+      riskAreaId?: string;
     };
   };
 }
@@ -95,7 +95,7 @@ class AdminRiskAreas extends React.Component<allProps, IState> {
       return (
         <div className={styles.emptyMessage}>
           <div className={styles.emptyLogo} />
-          <div className={styles.emptyLabel}>No RiskAreas</div>
+          <div className={styles.emptyLabel}>No Assessments</div>
         </div>
       );
     }
@@ -164,7 +164,7 @@ class AdminRiskAreas extends React.Component<allProps, IState> {
 
 function mapStateToProps(state: IAppState, ownProps: IProps): IStateProps {
   return {
-    riskAreaId: ownProps.match.params.riskAreaId,
+    riskAreaId: ownProps.match.params.riskAreaId || null,
   };
 }
 

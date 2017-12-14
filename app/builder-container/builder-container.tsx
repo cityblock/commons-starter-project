@@ -16,6 +16,7 @@ import BuilderConcerns from './builder-concerns';
 import BuilderGoals from './builder-goals';
 import BuilderProgressNoteTemplates from './builder-progress-note-templates';
 import BuilderQuestions from './builder-questions';
+import BuilderRiskAreaGroups from './builder-risk-area-groups/builder-risk-area-groups';
 import BuilderRiskAreas from './builder-risk-areas';
 import BuilderScreeningTools from './builder-screening-tools';
 import * as styles from './css/builder.css';
@@ -69,6 +70,7 @@ type allProps = IProps & IGraphqlProps & IStateProps;
 class BuilderContainer extends React.Component<allProps, {}> {
   render() {
     const { subTab, tab } = this.props;
+    const riskAreaGroupsTabSelected = tab === 'domains';
     const questionsTabSelected = subTab === 'questions';
     const concernsTabSelected = tab === 'concerns';
     const computedFieldsTabSelected = tab === 'computed-fields';
@@ -77,12 +79,16 @@ class BuilderContainer extends React.Component<allProps, {}> {
       tab === 'progress-note-templates' && subTab !== 'questions';
     const toolsTabSelected = tab === 'tools' && subTab !== 'questions';
     const assessmentsTabSelected =
+      !riskAreaGroupsTabSelected &&
       !questionsTabSelected &&
       !concernsTabSelected &&
       !goalsTabSelected &&
       !toolsTabSelected &&
       !progressNoteTemplatesTabSelected &&
       !computedFieldsTabSelected;
+    const riskAreaGroupTabStyles = classNames(tabStyles.tab, {
+      [tabStyles.selectedTab]: riskAreaGroupsTabSelected,
+    });
     const assessmentTabStyles = classNames(tabStyles.tab, {
       [tabStyles.selectedTab]: assessmentsTabSelected,
     });
@@ -108,6 +114,9 @@ class BuilderContainer extends React.Component<allProps, {}> {
       <div className={styles.container}>
         <div className={styles.mainBody}>
           <div className={tabStyles.tabs}>
+            <Link to={'/builder/domains'} className={riskAreaGroupTabStyles}>
+              Domains
+            </Link>
             <Link to={'/builder/assessments'} className={assessmentTabStyles}>
               Assessments
             </Link>
@@ -149,6 +158,11 @@ class BuilderContainer extends React.Component<allProps, {}> {
               path="/builder/progress-note-templates/:progressNoteTemplateId/questions/:questionId?"
               component={BuilderQuestions}
             />
+            <Route
+              exact
+              path="/builder/domains/:riskAreaGroupId?"
+              component={BuilderRiskAreaGroups}
+            />
             <Route exact path="/builder/assessments/:riskAreaId?" component={BuilderRiskAreas} />
             <Route exact path="/builder/tools/:toolId?" component={BuilderScreeningTools} />
             <Route exact path="/builder/concerns/:concernId?" component={BuilderConcerns} />
@@ -163,7 +177,7 @@ class BuilderContainer extends React.Component<allProps, {}> {
               path="/builder/computed-fields/:computedFieldId?"
               component={BuilderComputedFields}
             />
-            <Redirect to="/builder/assessments" />
+            <Redirect to="/builder/domains" />
           </Switch>
         </div>
       </div>

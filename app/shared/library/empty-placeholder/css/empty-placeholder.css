@@ -13,13 +13,9 @@
 }
 
 .icon {
-  height: 30px;
-  width: 30px;
-  background-image: url('../../../../assets/pause-light-grey.svg');
-  background-position: center center;
-  background-size: contain;
-  background-repeat: no-repeat;
-  margin-bottom: 30px;
+  height: var(--gutter);
+  width: var(--gutter);
+  margin-bottom: var(--small-gutter);
 }
 
 .container h3 {
@@ -28,6 +24,7 @@
   font-weight: var(--roboto-medium-weight);
   line-height: var(--medium-font-line-height);
   color: var(--light-gray-font-color);
+  margin: 0;
   margin-bottom: 10px;
 }
 

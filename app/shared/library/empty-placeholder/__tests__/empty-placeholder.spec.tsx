@@ -1,13 +1,14 @@
 import { shallow } from 'enzyme';
 import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
+import Icon from '../../icon/icon';
 import EmptyPlaceholder from '../empty-placeholder';
 
 describe('Empty Placeholder Library Component', () => {
-  it('renders formatted messages for header and detail when present', () => {
-    const headerMessageId = 'jolteon';
-    const detailMessageId = 'flareon';
+  const headerMessageId = 'jolteon';
+  const detailMessageId = 'flareon';
 
+  it('renders formatted messages for header and detail when present', () => {
     const wrapper = shallow(
       <EmptyPlaceholder headerMessageId={headerMessageId} detailMessageId={detailMessageId} />,
     );
@@ -42,5 +43,28 @@ describe('Empty Placeholder Library Component', () => {
     expect(wrapper.find('p').text()).toBe(detailText);
 
     expect(wrapper.find(FormattedMessage).length).toBe(0);
+  });
+
+  it('renders default icon', () => {
+    const wrapper = shallow(
+      <EmptyPlaceholder headerMessageId={headerMessageId} detailMessageId={detailMessageId} />,
+    );
+
+    expect(wrapper.find(Icon).length).toBe(1);
+    expect(wrapper.find(Icon).props().name).toBe('pauseCircleOutline');
+    expect(wrapper.find(Icon).props().className).toBe('icon');
+  });
+
+  it('renders icon if passed', () => {
+    const icon = 'addBox';
+    const wrapper = shallow(
+      <EmptyPlaceholder
+        headerMessageId={headerMessageId}
+        detailMessageId={detailMessageId}
+        icon={icon}
+      />,
+    );
+
+    expect(wrapper.find(Icon).props().name).toBe(icon);
   });
 });

@@ -3168,6 +3168,19 @@ export type getQuestionsQuery = {
   } >,
 };
 
+export type getRiskAreaGroupsQuery = {
+  // RiskAreaGroups
+  riskAreaGroups:  Array< {
+    id: string,
+    createdAt: string,
+    updatedAt: string,
+    deletedAt: string | null,
+    title: string,
+    mediumRiskThreshold: number,
+    highRiskThreshold: number,
+  } >,
+};
+
 export type getRiskAreaQueryVariables = {
   riskAreaId: string,
 };
@@ -8267,6 +8280,16 @@ export type FullQuickCallFragment = {
   createdAt: string,
   updatedAt: string,
   deletedAt: string | null,
+};
+
+export type FullRiskAreaGroupFragment = {
+  id: string,
+  createdAt: string,
+  updatedAt: string,
+  deletedAt: string | null,
+  title: string,
+  mediumRiskThreshold: number,
+  highRiskThreshold: number,
 };
 
 export type FullRiskAreaSummaryFragment = {

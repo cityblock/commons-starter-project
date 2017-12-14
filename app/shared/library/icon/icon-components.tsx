@@ -1,5 +1,6 @@
 // Use this import syntax to avoid TS error
 import AddAlertIcon = require('react-icons/lib/md/add-alert');
+import AddBoxIcon = require('react-icons/lib/md/add-box');
 import AddCircleIcon = require('react-icons/lib/md/add-circle');
 import AddCircleOutlineIcon = require('react-icons/lib/md/add-circle-outline');
 import CloseIcon = require('react-icons/lib/md/close');
@@ -13,6 +14,7 @@ import ExpandArrowIcon = require('react-icons/lib/md/keyboard-arrow-down');
 import KeyboardArrowLeftIcon = require('react-icons/lib/md/keyboard-arrow-left');
 import KeyboardArrowRightIcon = require('react-icons/lib/md/keyboard-arrow-right');
 import MoreVertIcon = require('react-icons/lib/md/more-vert');
+import PauseCircleOutlineIcon = require('react-icons/lib/md/pause-circle-outline');
 import PhoneIcon = require('react-icons/lib/md/phone');
 import SearchIcon = require('react-icons/lib/md/search');
 
@@ -20,6 +22,7 @@ import SearchIcon = require('react-icons/lib/md/search');
 // Then add icon name to icon-types file to ensure only accepted icon names passed as icon props
 const components = {
   addAlert: AddAlertIcon,
+  addBox: AddBoxIcon,
   addCircle: AddCircleIcon,
   addCircleOutline: AddCircleOutlineIcon,
   close: CloseIcon,
@@ -33,6 +36,7 @@ const components = {
   keyboardArrowLeft: KeyboardArrowLeftIcon,
   keyboardArrowRight: KeyboardArrowRightIcon,
   moreVert: MoreVertIcon,
+  pauseCircleOutline: PauseCircleOutlineIcon,
   phone: PhoneIcon,
   search: SearchIcon,
 };

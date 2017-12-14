@@ -192,6 +192,8 @@ export const SPANISH_TRANSLATION = {
     'header.logOut': 'Cerrar sesión',
     'header.builder': 'Builder',
     'header.manager': 'Manager',
+    'riskAreaGroup.create': 'Crear Dominio',
+    'riskAreaGroup.empty': 'Sin Dominios',
     'settings.heading': 'Ajustes',
     'tasks.assignedToPlaceholder': 'Asignar a',
     'tasks.patientGoalPlaceholder': 'Objetivo del paciente',

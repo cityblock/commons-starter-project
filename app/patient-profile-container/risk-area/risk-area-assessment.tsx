@@ -22,6 +22,7 @@ import ScreeningToolsPopup from '../screening-tool/screening-tools-popup';
 import * as styles from './css/risk-area-assessment.css';
 
 import RiskAreaAssessmentQuestions from './risk-area-assessment-questions';
+import RiskAreaAssessmentResultsPopup from './risk-area-assessment-results-popup';
 
 interface IProps {
   riskAreaId: string;
@@ -142,6 +143,12 @@ export class RiskAreaAssessment extends React.Component<allProps, IState> {
         riskAreaAssessmentSubmission={riskAreaAssessmentSubmission}
       />
     ) : null;
+
+    const patientScreeningToolSubmissionId = riskAreaAssessmentSubmission
+      ? riskAreaAssessmentSubmission.id
+      : null;
+    const popupVisible =
+      riskAreaAssessmentSubmission && riskAreaAssessmentSubmission.completedAt ? true : false;
     return (
       <div>
         <div className={classNames(sortSearchStyles.sortSearchBar, styles.buttonBar)}>
@@ -169,6 +176,12 @@ export class RiskAreaAssessment extends React.Component<allProps, IState> {
           />
         </div>
         <div className={styles.riskAreasPanel}>{assessmentHtml}</div>
+        <Popup visible={popupVisible} style={'small-padding'}>
+          <RiskAreaAssessmentResultsPopup
+            patientRoute={patientRoute}
+            riskAreaAssessmentSubmissionId={patientScreeningToolSubmissionId}
+          />
+        </Popup>
         <Popup visible={selectingScreeningTool} style={'small-padding'}>
           <ScreeningToolsPopup
             riskAreaId={riskAreaId}

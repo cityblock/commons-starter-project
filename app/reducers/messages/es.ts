@@ -106,6 +106,11 @@ export const SPANISH_TRANSLATION = {
     'contactForm.consentToPhone': '¿El paciente acepta ser contactado por teléfono?',
     'contactForm.readConsentStatement': 'Leer declaración de consentimiento al paciente:',
     'screeningTool.submit': 'Submit',
+    'screeningTool.resultsTitle': 'New Care Plan Suggestions',
+    /* tslint:disable:max-line-length */
+    'screeningTool.resultsBody':
+      "Based on the results of this tool, the following have been recommended as additions to the patient's care plan.",
+    /* tslint:disable:max-line-length */
     'goalCreate.addGoal': 'Agrega un objetivo',
     'goalCreate.back': 'Regresa',
     'goalCreate.cancel': 'Cancelar',
@@ -206,6 +211,11 @@ export const SPANISH_TRANSLATION = {
     'riskAreaAssessment.administer': 'Administer tools',
     'riskAreaAssessment.save': 'Save updates',
     'riskAreaAssessment.start': 'Start assessment',
+    'riskAreaAssessment.resultsTitle': 'New Care Plan Suggestions',
+    /* tslint:disable:max-line-length */
+    'riskAreaAssessment.resultsBody':
+      "Based on the results of this assessment, the following have been recommended as additions to the patient's care plan.",
+    /* tslint:disable:max-line-length */
     'settings.heading': 'Ajustes',
     'tasks.assignedToPlaceholder': 'Asignar a',
     'tasks.patientGoalPlaceholder': 'Objetivo del paciente',
@@ -282,5 +292,6 @@ export const SPANISH_TRANSLATION = {
     'question.answerTypeRadio': 'Radio',
     'question.answerTypeFreeText': 'Texto libre',
     'question.answerTypeMultiselect': 'Selección múltiple',
+    'carePlanSuggestions.seeSuggestions': 'See Suggestions',
   },
 };

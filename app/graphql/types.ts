@@ -3417,6 +3417,93 @@ export type getRiskAreaAssessmentSubmissionForPatientQuery = {
   } | null,
 };
 
+export type getRiskAreaAssessmentSubmissionQueryVariables = {
+  riskAreaAssessmentSubmissionId: string,
+};
+
+export type getRiskAreaAssessmentSubmissionQuery = {
+  // risk area assessment submission
+  riskAreaAssessmentSubmission:  {
+    id: string,
+    riskAreaId: string,
+    patientId: string,
+    userId: string,
+    createdAt: string,
+    updatedAt: string,
+    deletedAt: string | null,
+    completedAt: string | null,
+    carePlanSuggestions:  Array< {
+      id: string,
+      patientId: string,
+      patient:  {
+        id: string,
+        firstName: string | null,
+        middleName: string | null,
+        lastName: string | null,
+        language: string | null,
+        gender: string | null,
+        dateOfBirth: string | null,
+        zip: string | null,
+        createdAt: string,
+        consentToText: boolean | null,
+        consentToCall: boolean | null,
+      },
+      suggestionType: CarePlanSuggestionType,
+      concernId: string | null,
+      concern:  {
+        id: string,
+        title: string,
+        createdAt: string,
+        updatedAt: string,
+        deletedAt: string | null,
+      } | null,
+      goalSuggestionTemplateId: string | null,
+      goalSuggestionTemplate:  {
+        id: string,
+        title: string,
+        taskTemplates:  Array< {
+          id: string,
+          title: string,
+          completedWithinNumber: number | null,
+          completedWithinInterval: CompletedWithinInterval | null,
+          repeating: boolean | null,
+          goalSuggestionTemplateId: string,
+          priority: Priority | null,
+          careTeamAssigneeRole: UserRole | null,
+          createdAt: string,
+          updatedAt: string,
+          deletedAt: string | null,
+        } >,
+        createdAt: string,
+        updatedAt: string,
+        deletedAt: string | null,
+      } | null,
+      acceptedById: string | null,
+      acceptedBy:  {
+        id: string,
+        firstName: string | null,
+        lastName: string | null,
+        userRole: UserRole,
+        googleProfileImageUrl: string | null,
+      } | null,
+      dismissedById: string | null,
+      dismissedBy:  {
+        id: string,
+        firstName: string | null,
+        lastName: string | null,
+        userRole: UserRole,
+        googleProfileImageUrl: string | null,
+      } | null,
+      dismissedReason: string | null,
+      createdAt: string,
+      updatedAt: string,
+      dismissedAt: string | null,
+      acceptedAt: string | null,
+      patientScreeningToolSubmissionId: string | null,
+    } >,
+  } | null,
+};
+
 export type getRiskAreaGroupsQuery = {
   // RiskAreaGroups
   riskAreaGroups:  Array< {

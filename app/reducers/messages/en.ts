@@ -104,6 +104,11 @@ export const ENGLISH_TRANSLATION = {
     'contactForm.consentToPhone': 'Does the patient consent to being contacted via phone?',
     'contactForm.readConsentStatement': 'Read consent statement to patient:',
     'screeningTool.submit': 'Submit',
+    'screeningTool.resultsTitle': 'New Care Plan Suggestions',
+    /* tslint:disable:max-line-length */
+    'screeningTool.resultsBody':
+      "Based on the results of this tool, the following have been recommended as additions to the patient's care plan.",
+    /* tslint:disable:max-line-length */
     'goalCreate.addGoal': 'Add a goal',
     'goalCreate.back': 'Back',
     'goalCreate.cancel': 'Cancel',
@@ -197,6 +202,11 @@ export const ENGLISH_TRANSLATION = {
     'riskAreaAssessment.administer': 'Administer tools',
     'riskAreaAssessment.save': 'Save updates',
     'riskAreaAssessment.start': 'Start assessment',
+    'riskAreaAssessment.resultsTitle': 'New Care Plan Suggestions',
+    /* tslint:disable:max-line-length */
+    'riskAreaAssessment.resultsBody':
+      "Based on the results of this assessment, the following have been recommended as additions to the patient's care plan.",
+    /* tslint:disable:max-line-length */
     'settings.heading': 'Settings',
     'tasks.assignedToPlaceholder': 'Assign to',
     'tasks.patientGoalPlaceholder': 'Patient goal',
@@ -275,5 +285,6 @@ export const ENGLISH_TRANSLATION = {
     'question.answerTypeRadio': 'Radio',
     'question.answerTypeFreeText': 'Free Text',
     'question.answerTypeMultiselect': 'Multiselect',
+    'carePlanSuggestions.seeSuggestions': 'See Suggestions',
   },
 };

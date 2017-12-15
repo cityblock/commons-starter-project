@@ -1,18 +1,18 @@
-@import '../../../shared/css/sizes';
+@import '../css/sizes.css';
 
-.screeningToolsPopupContent {
+.content {
   display: flex;
   flex-direction: column;
 }
 
-.screeningToolsPopupHeader {
+.header {
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: flex-end;
 }
 
-.screeningToolsPopupBody {
+.body {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -20,7 +20,7 @@
   margin-top: 10px;
 }
 
-.screeningToolsPopupTitle {
+.title {
   font-family: var(--basetica-black);
   font-size: var(--medium-font-size);
   line-height: var(--medium-font-line-height);
@@ -28,16 +28,29 @@
   margin-bottom: var(--gutter);
 }
 
-.screeningToolsPopupTitle.noMargin {
+.title.noMargin {
   margin-bottom: 0;
 }
 
-.screeningToolOptions {
+.subtitle {
+  font-family: var(--roboto);
+  font-size: var(--default-font-size);
+  line-height: var(--body-copy-line-height);
+  color: var(--gray-font-color);
+  margin-bottom: var(--gutter);
+  text-align: center;
+}
+
+.subtitle.noMargin {
+  margin-bottom: 0;
+}
+
+.options {
   margin: var(--medium-gutter) 0 var(--small-gutter);
   width: 100%;
 }
 
-.screeningToolOption {
+.option {
   height: 50px;
   width: 100%;
   padding: 16px var(--small-gutter);
@@ -47,16 +60,16 @@
   transition: background-color 0.2s linear;
 }
 
-.screeningToolOption:hover {
+.option:hover {
   cursor: pointer;
   background-color: var(--gray-background-color);
 }
 
-.screeningToolOption:last-child {
+.option:last-child {
   margin-bottom: 0;
 }
 
-.screeningToolOptionText {
+.optionText {
   color: var(--black-color);
   font-family: var(--roboto);
   font-weight: var(--roboto-medium-weight);
@@ -64,8 +77,8 @@
   line-height: var(--medium-font-line-height);
 }
 
-.screeningToolOptionsLoading,
-.emptyScreeningToolOptions {
+.optionsLoading,
+.emptyOptions {
   display: flex;
   flex-direction: row;
   justify-content: center;
@@ -75,4 +88,53 @@
   font-weight: var(--roboto-medium-weight);
   font-size: var(--default-font-size);
   line-height: var(--medium-font-line-height);
+}
+
+.results {
+  margin: var(--medium-gutter) 0 var(--small-gutter);
+  width: 30%;
+}
+
+.resultRow {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.resultLabel,
+.resultCount {
+  font-family: var(--roboto);
+  font-size: var(--default-font-size);
+  line-height: var(--default-line-height);
+}
+
+.resultLabel {
+  color: var(--light-gray-font-color);
+  margin-right: var(--gutter);
+}
+
+.resultCount {
+  color: var(--black-color);
+  font-weight: var(--roboto-medium-weight);
+  text-align: right;
+}
+
+.buttons {
+  display: flex;
+  flex-direction: row;
+  margin: 0 auto var(--medium-gutter);
+}
+
+.button {
+  @apply --button;
+}
+
+.smallButton {
+  height: 32px;
+  width: 148px;
+  font-size: var(--small-font-size);
+  line-height: var(--small-font-line-height);
+  padding: 10px var(--small-gutter);
 }

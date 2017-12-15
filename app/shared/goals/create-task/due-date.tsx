@@ -14,7 +14,7 @@ const CreateTaskDescription: React.StatelessComponent<IProps> = (props: IProps) 
 
   return (
     <div className={styles.flexItem}>
-      <FormLabel messageId="taskCreate.dueAt" htmlFor="due-date" gray={!!value} />
+      <FormLabel messageId="taskCreate.dueAt" htmlFor="due-date" gray={!!value} topPadding={true} />
       <DateInput
         value={value}
         onChange={onChange}

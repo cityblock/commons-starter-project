@@ -23,7 +23,12 @@ class CreateTaskTitle extends React.Component<IProps, IState> {
 
     return (
       <div>
-        <FormLabel messageId="taskCreate.title" htmlFor="title" gray={!!value && complete} />
+        <FormLabel
+          messageId="taskCreate.title"
+          htmlFor="title"
+          gray={!!value && complete}
+          topPadding={true}
+        />
         <TextInput
           value={value}
           onChange={onChange}

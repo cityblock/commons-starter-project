@@ -69,7 +69,7 @@ export const ConcernSearch: React.StatelessComponent<allProps> = (props: allProp
 
   return (
     <div>
-      <FormLabel messageId="concernCreate.selectLabel" />
+      <FormLabel messageId="concernCreate.selectLabel" topPadding={true} />
       <Search
         value={searchTerm}
         onChange={onSearchTermChange}

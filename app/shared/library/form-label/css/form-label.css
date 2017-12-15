@@ -14,3 +14,7 @@
 .completed {
   color: var(--light-gray-font-color);
 }
+
+.topPadding {
+  padding-top: var(--medium-gutter);
+}

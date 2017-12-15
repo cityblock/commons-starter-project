@@ -6,14 +6,21 @@ import * as styles from './css/form-label.css';
 interface IProps {
   messageId: string;
   htmlFor?: string;
+  topPadding?: boolean; // give extra padding on top
+  className?: string;
   gray?: boolean; // optional flag that makes text gray
 }
 
 const FormLabel: React.StatelessComponent<IProps> = (props: IProps) => {
-  const { messageId, htmlFor, gray } = props;
-  const labelStyles = classNames(styles.label, {
-    [styles.completed]: !!gray,
-  });
+  const { messageId, htmlFor, topPadding, className, gray } = props;
+  const labelStyles = classNames(
+    styles.label,
+    {
+      [styles.completed]: !!gray,
+      [styles.topPadding]: !!topPadding,
+    },
+    className,
+  );
 
   return (
     <FormattedMessage id={messageId}>

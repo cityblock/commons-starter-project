@@ -43,7 +43,7 @@ const DefineGoal: React.StatelessComponent<IProps> = (props: IProps) => {
         closePopup={closePopup}
       />
       <div className={styles.fields}>
-        <FormLabel messageId="goalCreate.selectLabel" />
+        <FormLabel messageId="goalCreate.selectLabel" topPadding={true} />
         <Search
           value={title}
           onChange={onTitleChange}

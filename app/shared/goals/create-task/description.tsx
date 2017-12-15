@@ -27,6 +27,7 @@ class CreateTaskDescription extends React.Component<IProps, IState> {
           messageId="taskCreate.description"
           htmlFor="description"
           gray={!!value && complete}
+          topPadding={true}
         />
         <TextArea
           value={value}

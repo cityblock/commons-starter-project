@@ -19,7 +19,12 @@ const CreateTaskPriority: React.StatelessComponent<IProps> = (props: IProps) => 
 
   return (
     <div className={styles.flexItem}>
-      <FormLabel messageId="taskCreate.priority" htmlFor="priority" gray={!!value} />
+      <FormLabel
+        messageId="taskCreate.priority"
+        htmlFor="priority"
+        gray={!!value}
+        topPadding={true}
+      />
       <PrioritySelect priority={value} onPriorityClick={onChange} className={className} />
     </div>
   );

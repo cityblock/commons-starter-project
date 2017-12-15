@@ -51,9 +51,9 @@ const SuggestedTasks: React.StatelessComponent<IProps> = (props: IProps) => {
         closePopup={closePopup}
       />
       <div className={styles.fields}>
-        <FormLabel messageId="goalCreate.goalAdded" gray={true} />
+        <FormLabel messageId="goalCreate.goalAdded" gray={true} topPadding={true} />
         {goalSuggestionTemplate && <p className={styles.text}>{goalSuggestionTemplate.title}</p>}
-        <FormLabel messageId="goalCreate.suggestedTasks" gray={true} />
+        <FormLabel messageId="goalCreate.suggestedTasks" gray={true} topPadding={true} />
         {suggestedTasks}
         <ModalButtons
           cancelMessageId="goalCreate.back"

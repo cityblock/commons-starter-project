@@ -1,21 +1,23 @@
 #import "../fragments/full-risk-area.graphql"
 
 mutation riskAreaCreate(
-  $title: String!,
-  $assessmentType: AssessmentType!,
-  $riskAreaGroupId: ID!,
-  $order: Int!,
-  $mediumRiskThreshold: Int!,
+  $title: String!
+  $assessmentType: AssessmentType!
+  $riskAreaGroupId: ID!
+  $order: Int!
+  $mediumRiskThreshold: Int!
   $highRiskThreshold: Int!
 ) {
-  riskAreaCreate(input: {
-    title: $title,
-    assessmentType: $assessmentType,
-    riskAreaGroupId: $riskAreaGroupId,
-    order: $order,
-    mediumRiskThreshold: $mediumRiskThreshold,
-    highRiskThreshold: $highRiskThreshold
-    }) {
+  riskAreaCreate(
+    input: {
+      title: $title
+      assessmentType: $assessmentType
+      riskAreaGroupId: $riskAreaGroupId
+      order: $order
+      mediumRiskThreshold: $mediumRiskThreshold
+      highRiskThreshold: $highRiskThreshold
+    }
+  ) {
     ...FullRiskArea
   }
 }

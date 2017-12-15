@@ -2,18 +2,21 @@ import * as React from 'react';
 import { compose, graphql } from 'react-apollo';
 import { connect, Dispatch } from 'react-redux';
 import { push } from 'react-router-redux';
+/* tslint:enable:max-line-length */
+import * as riskAreaGroupsQuery from '../graphql/queries/get-risk-area-groups.graphql';
 /* tslint:disable:max-line-length */
 import * as riskAreaCreateMutationGraphql from '../graphql/queries/risk-area-create-mutation.graphql';
-/* tslint:enable:max-line-length */
 import {
   riskAreaCreateMutation,
   riskAreaCreateMutationVariables,
   AssessmentType,
+  FullRiskAreaGroupFragment,
 } from '../graphql/types';
-import * as formStyles from '../shared/css/forms.css';
-import * as loadingStyles from '../shared/css/loading-spinner.css';
 import * as riskAreaStyles from '../shared/css/two-panel-right.css';
-import { IUpdatedField } from '../shared/util/updated-fields';
+import Option from '../shared/library/option/option';
+import Select from '../shared/library/select/select';
+import Spinner from '../shared/library/spinner/spinner';
+import TextInput from '../shared/library/text-input/text-input';
 import * as styles from './css/risk-area-create.css';
 
 interface IOptions {
@@ -27,65 +30,89 @@ interface IProps {
 }
 
 interface IGraphqlProps {
+  riskAreaGroupsLoading?: boolean;
+  error?: string | null;
+  riskAreaGroups: FullRiskAreaGroupFragment[];
   createRiskArea?: (options: IOptions) => { data: riskAreaCreateMutation };
 }
 
 interface IState {
+  title: string;
+  assessmentType: AssessmentType | null;
+  riskAreaGroupId: string | null;
+  order: string;
+  mediumRiskThreshold: string;
+  highRiskThreshold: string;
   loading: boolean;
   error: string | null;
-  riskArea: riskAreaCreateMutationVariables;
 }
 
 type allProps = IProps & IGraphqlProps;
+
+type Field =
+  | 'title'
+  | 'assessmentType'
+  | 'riskAreaGroupId'
+  | 'mediumRiskThreshold'
+  | 'highRiskThreshold'
+  | 'order';
 
 export class RiskAreaCreate extends React.Component<allProps, IState> {
   constructor(props: allProps) {
     super(props);
 
-    this.onSubmit = this.onSubmit.bind(this);
-    this.onFieldUpdate = this.onFieldUpdate.bind(this);
-    this.onChange = this.onChange.bind(this);
-
     this.state = {
+      title: '',
+      order: '',
+      assessmentType: null,
+      riskAreaGroupId: null,
+      mediumRiskThreshold: '',
+      highRiskThreshold: '',
       loading: false,
       error: null,
-      riskArea: {
-        title: '',
-        order: 1,
-        assessmentType: 'manual' as AssessmentType,
-        mediumRiskThreshold: 5,
-        highRiskThreshold: 8,
-        riskAreaGroupId: '',
-      },
     };
   }
 
-  onFieldUpdate(updatedField: IUpdatedField) {
-    const { riskArea } = this.state;
-    const { fieldName, fieldValue } = updatedField;
+  onChange = (
+    field: Field,
+  ): ((e: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLSelectElement>) => void) => {
+    return (
+      e: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLSelectElement>,
+    ): void => {
+      this.setState({ [field as any]: e.currentTarget.value });
+    };
+  };
 
-    (riskArea as any)[fieldName] = fieldValue;
-
-    this.setState({ riskArea });
-  }
-
-  onChange(event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) {
-    const fieldName = event.target.name;
-    const fieldValue = event.target.value;
-
-    this.setState({ [fieldName as any]: fieldValue });
-
-    this.onFieldUpdate({ fieldName, fieldValue });
-  }
-
-  async onSubmit(event: React.FormEvent<HTMLFormElement>) {
+  onSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    if (this.props.createRiskArea) {
+    const {
+      title,
+      order,
+      mediumRiskThreshold,
+      highRiskThreshold,
+      riskAreaGroupId,
+      assessmentType,
+      loading,
+    } = this.state;
+
+    if (
+      !loading &&
+      this.props.createRiskArea &&
+      assessmentType &&
+      riskAreaGroupId &&
+      mediumRiskThreshold &&
+      highRiskThreshold
+    ) {
       try {
-        this.setState({ loading: true });
+        this.setState({ loading: true, error: null });
         const riskArea = await this.props.createRiskArea({
           variables: {
-            ...this.state.riskArea,
+            title,
+            order: Number(order),
+            mediumRiskThreshold: Number(mediumRiskThreshold),
+            highRiskThreshold: Number(highRiskThreshold),
+            riskAreaGroupId,
+            assessmentType,
           },
         });
         this.setState({ loading: false });
@@ -97,12 +124,33 @@ export class RiskAreaCreate extends React.Component<allProps, IState> {
         this.setState({ error: e.message, loading: false });
       }
     }
-    return false;
+  };
+
+  renderRiskAreaGroupSelect() {
+    const { riskAreaGroups } = this.props;
+    const riskAreaGroupOptions = riskAreaGroups.map(group => (
+      <Option key={group.id} value={group.id} label={group.title} />
+    ));
+
+    return (
+      <Select value={this.state.riskAreaGroupId || ''} onChange={this.onChange('riskAreaGroupId')}>
+        <Option value="" messageId="riskArea.riskAreaGroupId" disabled={true} />
+        {riskAreaGroupOptions}
+      </Select>
+    );
   }
 
   render() {
-    const { loading, riskArea } = this.state;
-    const loadingClass = loading ? styles.loading : styles.loadingHidden;
+    const {
+      title,
+      order,
+      assessmentType,
+      mediumRiskThreshold,
+      highRiskThreshold,
+      loading,
+    } = this.state;
+
+    if (loading || this.props.riskAreaGroupsLoading) return <Spinner />;
 
     return (
       <div className={riskAreaStyles.container}>
@@ -111,26 +159,32 @@ export class RiskAreaCreate extends React.Component<allProps, IState> {
             <div className={styles.close} onClick={this.props.onClose} />
           </div>
           <div className={styles.formCenter}>
-            <div className={loadingClass}>
-              <div className={styles.loadingContainer}>
-                <div className={loadingStyles.loadingSpinner} />
-              </div>
-            </div>
             <div className={styles.inputGroup}>
-              <input
-                name="title"
-                value={riskArea.title}
-                placeholder={'Enter assessment title'}
-                className={formStyles.input}
-                onChange={this.onChange}
+              <TextInput
+                value={title}
+                onChange={this.onChange('title')}
+                placeholderMessageId="riskArea.title"
               />
-              <input
-                type="number"
-                name="order"
-                placeholder={'Enter assessment order'}
-                value={riskArea.order}
-                className={formStyles.input}
-                onChange={this.onChange}
+              {this.renderRiskAreaGroupSelect()}
+              <Select value={assessmentType || ''} onChange={this.onChange('assessmentType')}>
+                <Option value="" messageId="riskArea.assessmentType" disabled={true} />
+                <Option value="automated" messageId="riskArea.automated" />
+                <Option value="manual" messageId="riskArea.manual" />
+              </Select>
+              <TextInput
+                value={order}
+                onChange={this.onChange('order')}
+                placeholderMessageId="riskArea.order"
+              />
+              <TextInput
+                value={mediumRiskThreshold}
+                onChange={this.onChange('mediumRiskThreshold')}
+                placeholderMessageId="riskArea.mediumRiskThreshold"
+              />
+              <TextInput
+                value={highRiskThreshold}
+                onChange={this.onChange('highRiskThreshold')}
+                placeholderMessageId="riskArea.highRiskThreshold"
               />
             </div>
           </div>
@@ -158,6 +212,13 @@ function mapDispatchToProps(dispatch: Dispatch<() => void>, ownProps: allProps):
 
 export default compose(
   connect(null, mapDispatchToProps),
+  graphql<IGraphqlProps, IProps, allProps>(riskAreaGroupsQuery as any, {
+    props: ({ data }) => ({
+      riskAreaGroupsLoading: data ? data.loading : false,
+      eror: data ? data.error : null,
+      riskAreaGroups: data ? (data as any).riskAreaGroups : null,
+    }),
+  }),
   graphql<IGraphqlProps, IProps, allProps>(riskAreaCreateMutationGraphql as any, {
     name: 'createRiskArea',
     options: {

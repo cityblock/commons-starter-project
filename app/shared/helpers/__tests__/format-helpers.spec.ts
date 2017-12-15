@@ -2,8 +2,6 @@ import {
   formatAge,
   formatAgeDetails,
   formatDateOfBirth,
-  formatDueDate,
-  formatDueDateDefault,
   formatFullName,
   formatInputDate,
   isDueSoon,
@@ -34,46 +32,6 @@ describe('Shared Component Helpers', () => {
 
     it('renders unknown if full name not present', () => {
       expect(formatFullName('', lastName)).toBe('Unknown Stark');
-    });
-  });
-
-  describe('formatDueDate', () => {
-    it('formats due date if not complete', () => {
-      expect(formatDueDate(dueDate)).toBe('Due Dec 1, 2017');
-    });
-
-    it('formats completion date if complete', () => {
-      expect(formatDueDate(dueDate, true)).toBe('Completed Dec 1, 2017');
-    });
-
-    it('returns unknown if due date not defined', () => {
-      expect(formatDueDate('')).toBe('Unknown Due Date');
-    });
-
-    it('returns due today if due today', () => {
-      expect(formatDueDate('2017-11-11 12:00:00+00:00')).toBe('Due today');
-    });
-
-    it('returns due tomorrow if due tomorrow', () => {
-      expect(formatDueDate('2017-11-12 12:00:00+00:00')).toBe('Due tomorrow');
-    });
-
-    it('returns past due if due 1 day ago', () => {
-      expect(formatDueDate('2017-11-10 12:00:00+00:00')).toBe('Past due 1 day');
-    });
-
-    it('returns past due if due 2 days ago', () => {
-      expect(formatDueDate('2017-11-09 12:00:00+00:00')).toBe('Past due 2 days');
-    });
-  });
-
-  describe('formatDueDateDefault', () => {
-    it('formats due date if one given', () => {
-      expect(formatDueDateDefault('')).toBe('11/11/2017');
-    });
-
-    it('formats invalid dates', () => {
-      expect(formatDueDateDefault('invalid')).toBe('Invalid Date');
     });
   });
 

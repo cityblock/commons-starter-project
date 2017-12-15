@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { formatDueDateDefault } from '../../helpers/format-helpers';
 import DateInput from '../../library/date-input/date-input';
 import FormLabel from '../../library/form-label/form-label';
 import * as styles from './css/shared.css';
@@ -18,8 +17,7 @@ const CreateTaskDescription: React.StatelessComponent<IProps> = (props: IProps) 
       <DateInput
         value={value}
         onChange={onChange}
-        className={styles.select}
-        displayText={formatDueDateDefault(value)}
+        className={styles.dueDate}
         id="due-date"
         name="due-date"
       />

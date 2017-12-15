@@ -21,7 +21,6 @@ describe('Create Task Modal Due Date Component', () => {
     expect(wrapper.find(DateInput).length).toBe(1);
     expect(wrapper.find(DateInput).props().value).toBe(value);
     expect(wrapper.find(DateInput).props().onChange).toBe(onChange);
-    expect(wrapper.find(DateInput).props().displayText).toBe('Invalid Date');
     expect(wrapper.find(DateInput).props().id).toBe('due-date');
     expect(wrapper.find(DateInput).props().name).toBe('due-date');
   });

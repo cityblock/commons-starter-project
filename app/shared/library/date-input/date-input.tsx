@@ -6,14 +6,13 @@ import * as styles from './css/date-input.css';
 interface IProps {
   value: string; // use timestamp
   onChange: (e?: any) => void;
-  displayText?: string;
   className?: string;
   id?: string;
   name?: string;
 }
 
 const DateInput: React.StatelessComponent<IProps> = (props: IProps) => {
-  const { value, onChange, displayText, className, id, name } = props;
+  const { value, onChange, className, id, name } = props;
   const dateInputStyles = classNames(styles.dateInput, className);
   const formattedValue = formatInputDate(value);
 
@@ -23,7 +22,7 @@ const DateInput: React.StatelessComponent<IProps> = (props: IProps) => {
       value={formattedValue}
       onChange={onChange}
       className={dateInputStyles}
-      data-date={displayText || value}
+      data-date={value}
       id={id || ''}
       name={name || ''}
     />

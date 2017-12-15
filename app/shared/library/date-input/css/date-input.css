@@ -18,25 +18,11 @@
   }
 }
 
-.dateInput::before {
-  content: attr(data-date);
-  display: inline-block;
-  color: var(--black-color);
-}
-
 .dateInput::before::-webkit-calendar-picker-indicator {
   position: absolute;
   top: 9px;
   right: 2px;
   color: var(--black-color);
-}
-
-/* Removes placeholder text for date input */
-::-webkit-datetime-edit-month-field,
-::-webkit-datetime-edit-day-field,
-::-webkit-datetime-edit-year-field,
-::-webkit-datetime-edit-text {
-  display: none;
 }
 
 /* Remove x button and up and down arrows */
@@ -49,4 +35,5 @@
 /* Give some padding around picker indicator to enlarge click area */
 ::-webkit-calendar-picker-indicator {
   padding: 10px;
+  padding-left: var(--medium-gutter);
 }

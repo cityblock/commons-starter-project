@@ -20,7 +20,8 @@
   width: calc(50% - 10px);
 }
 
-.select {
+.select,
+.dueDate {
   height: 52px;
   padding-left: var(--small-gutter);
   font-size: var(--medium-font-size);
@@ -28,4 +29,8 @@
   font-weight: var(--default-font-weight);
   width: 100%;
   border: 1px solid var(--border-color);
+}
+
+.dueDate {
+  width: 260px;
 }

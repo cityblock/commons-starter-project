@@ -6,11 +6,10 @@ import DateInput from '../date-input';
 describe('Library Date Input Component', () => {
   const value = '2017-11-15 09:21:49.726-05';
   const onChange = () => true as any;
-  const displayText = 'Due today';
   const custom = 'custom';
 
   const wrapper = shallow(
-    <DateInput value={value} onChange={onChange} displayText={displayText} />,
+    <DateInput value={value} onChange={onChange} />,
   );
 
   it('returns an input element of type date', () => {

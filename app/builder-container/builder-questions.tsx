@@ -218,10 +218,12 @@ class BuilderQuestions extends React.Component<allProps, IState> {
         </div>
       </div>
     );
+    const selectedRiskArea = riskAreas ? riskAreas.find(area => area.id === riskAreaId) : null;
 
     const createQuestionHtml = showCreateQuestion ? (
       <QuestionCreate
         riskAreaId={riskAreaId}
+        assessmentType={selectedRiskArea ? selectedRiskArea.assessmentType : null}
         screeningToolId={toolId}
         progressNoteTemplateId={progressNoteTemplateId}
         onClose={this.hideCreateQuestion}

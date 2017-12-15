@@ -49,26 +49,6 @@ exports[`renders question 1`] = `
         />
         <select
           className="select"
-          name="computedFieldId"
-          onChange={[Function]}
-          required={undefined}
-          value=""
-        >
-          <option
-            disabled={true}
-            value=""
-          >
-            Set computed field (optional)
-          </option>
-          <option
-            disabled={undefined}
-            value="not-computed-field"
-          >
-            Not a computed field
-          </option>
-        </select>
-        <select
-          className="select"
           name="applicableIfType"
           onChange={[Function]}
           required={true}

@@ -283,7 +283,7 @@ export const ENGLISH_TRANSLATION = {
     'computedFieldCreate.createDataTypeLabel': 'Select a data type',
     'computedFieldCreate.cancel': 'Cancel',
     'computedField.confirmDelete': 'Yes, delete',
-    'question.selectComputedField': 'Set computed field (optional)',
+    'question.selectComputedField': 'Set computed field',
     'question.notComputedField': 'Not a computed field',
     'question.selectApplicable': 'Select an applicable if type (required!)',
     'question.applicableOneTrue': 'One true',

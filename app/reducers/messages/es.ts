@@ -290,7 +290,7 @@ export const SPANISH_TRANSLATION = {
     'computedFieldCreate.createDataTypeLabel': 'Seleccione un tipo de datos',
     'computedFieldCreate.cancel': 'Cancelar',
     'computedField.confirmDelete': 'Sí, borrar',
-    'question.selectComputedField': 'Establecer el campo calculado (opcional)',
+    'question.selectComputedField': 'Establecer el campo calculado',
     'question.notComputedField': 'No es un campo computado',
     'question.selectApplicable': 'Seleccione un tipo aplicable si (¡requerido!)',
     'question.applicableOneTrue': 'Una verdad',

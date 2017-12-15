@@ -9,6 +9,7 @@ import {
   questionCreateMutation,
   questionCreateMutationVariables,
   AnswerTypeOptions,
+  AssessmentType,
   FullComputedFieldFragment,
 } from '../graphql/types';
 import * as formStyles from '../shared/css/forms.css';
@@ -28,6 +29,7 @@ export interface IOptions {
 
 interface IProps {
   riskAreaId: string | null;
+  assessmentType: AssessmentType | null;
   screeningToolId: string | null;
   progressNoteTemplateId: string | null;
   routeBase: string;
@@ -100,10 +102,15 @@ class QuestionCreate extends React.Component<allProps, IState> {
 
   async onSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    if (this.props.createQuestion) {
+
+    const { createQuestion, assessmentType } = this.props;
+    if (createQuestion) {
+      // don't allow submitting automated assessment without computed field
+      if (assessmentType === 'automated' && !this.state.question.computedFieldId) return;
+
       try {
         this.setState({ loading: true });
-        const question = await this.props.createQuestion({
+        const question = await createQuestion({
           variables: {
             ...this.state.question,
           },
@@ -151,7 +158,7 @@ class QuestionCreate extends React.Component<allProps, IState> {
 
   render() {
     const { loading, question } = this.state;
-    const { computedFields } = this.props;
+    const { computedFields, assessmentType } = this.props;
     const loadingClass = loading ? styles.loading : styles.loadingHidden;
     const computedFieldOptions = (computedFields || []).map(computedField => (
       <Option key={computedField.id} value={computedField.id} label={computedField.label} />
@@ -185,15 +192,16 @@ class QuestionCreate extends React.Component<allProps, IState> {
                 className={formStyles.input}
                 onChange={this.onChange}
               />
-              <Select
-                name="computedFieldId"
-                value={question.computedFieldId || ''}
-                onChange={this.onChange}
-              >
-                <Option value="" disabled={true} messageId="question.selectComputedField" />
-                <Option value={NOT_COMPUTED_FIELD_ID} messageId="question.notComputedField" />
-                {computedFieldOptions}
-              </Select>
+              {assessmentType === 'automated' && (
+                <Select
+                  name="computedFieldId"
+                  value={question.computedFieldId || ''}
+                  onChange={this.onChange}
+                >
+                  <Option value="" disabled={true} messageId="question.selectComputedField" />
+                  {computedFieldOptions}
+                </Select>
+              )}
               <Select
                 required
                 name="applicableIfType"

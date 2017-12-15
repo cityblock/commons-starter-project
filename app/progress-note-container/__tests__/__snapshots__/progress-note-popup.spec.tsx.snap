@@ -70,17 +70,11 @@ exports[`builder concerns renders progress note popup with templates renders pro
     >
       [Function]
     </FormattedMessage>
-    <FormattedMessage
-      id="patient.tasks"
-      values={Object {}}
-    >
-      [Function]
-    </FormattedMessage>
   </div>
   <div
     className="bottomSection"
   >
-    <Apollo(Apollo(Apollo(Apollo(ProgressNoteContext))))
+    <Connect(Apollo(Apollo(Apollo(Apollo(ProgressNoteContext)))))
       onChange={[Function]}
       patientId="patient-id"
       progressNote={
@@ -211,17 +205,11 @@ exports[`builder concerns renders progress note popup with templates renders pro
     >
       [Function]
     </FormattedMessage>
-    <FormattedMessage
-      id="patient.tasks"
-      values={Object {}}
-    >
-      [Function]
-    </FormattedMessage>
   </div>
   <div
     className="bottomSection"
   >
-    <Apollo(Apollo(Apollo(Apollo(ProgressNoteContext))))
+    <Connect(Apollo(Apollo(Apollo(Apollo(ProgressNoteContext)))))
       onChange={[Function]}
       patientId="patient-id"
       progressNote={undefined}

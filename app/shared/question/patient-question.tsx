@@ -13,17 +13,10 @@ interface IProps {
   question: FullQuestionFragment;
   editable: boolean;
   displayHamburger: boolean;
-  answerData: {
-    answers: Array<{
-      id: string;
-      value: string;
-    }>;
-    oldAnswers: Array<{
-      id: string;
-      value: string;
-    }>;
-    changed: boolean;
-  };
+  answerData: Array<{
+    id: string;
+    value: string;
+  }>;
 }
 
 export default class PatientQuestion extends React.Component<IProps, {}> {
@@ -45,8 +38,8 @@ export default class PatientQuestion extends React.Component<IProps, {}> {
 
     let highRiskAnswer: boolean = false;
 
-    if (question.answers && answerData && answerData.answers) {
-      const answerIds = answerData.answers.map(answer => answer.id);
+    if (question.answers && answerData) {
+      const answerIds = answerData.map(answer => answer.id);
       const riskTypes = question.answers
         .filter(answer => answerIds.indexOf(answer.id) > -1)
         .map(answer => answer.riskAdjustmentType);

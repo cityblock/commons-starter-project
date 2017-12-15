@@ -1,0 +1,15 @@
+#import "./full-care-plan-suggestion.graphql"
+
+fragment FullRiskAreaAssessmentSubmission on RiskAreaAssessmentSubmission {
+  id
+  riskAreaId
+  patientId
+  userId
+  createdAt
+  updatedAt
+  deletedAt
+  completedAt
+  carePlanSuggestions {
+    ...FullCarePlanSuggestion
+  }
+}

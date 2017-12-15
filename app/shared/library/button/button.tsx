@@ -13,12 +13,13 @@ interface IProps {
   label?: string; // use this if not translating
   color?: Color | null; // if not provided, defaults to blue
   small?: boolean | null;
+  fullWidth?: boolean | null;
   className?: string | null;
   icon?: IconName | null; // WIP, use at own risk
 }
 
 const Button: React.StatelessComponent<IProps> = (props: IProps) => {
-  const { messageId, label, onClick, color, small, icon, className } = props;
+  const { messageId, label, onClick, color, small, icon, className, fullWidth } = props;
 
   const buttonStyles = classNames(
     {
@@ -27,6 +28,7 @@ const Button: React.StatelessComponent<IProps> = (props: IProps) => {
       [styles.white]: color === 'white',
       [styles.red]: color === 'red',
       [styles.small]: small,
+      [styles.fullWidth]: fullWidth,
     },
     className,
   );

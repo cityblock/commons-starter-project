@@ -13,7 +13,6 @@ import Patient from '../../models/patient';
 import PatientAnswer from '../../models/patient-answer';
 import PatientScreeningToolSubmission from '../../models/patient-screening-tool-submission';
 import Question from '../../models/question';
-import QuestionCondition from '../../models/question-condition';
 import RiskArea from '../../models/risk-area';
 import RiskAreaAssessmentSubmission from '../../models/risk-area-assessment-submission';
 import ScreeningTool from '../../models/screening-tool';
@@ -726,126 +725,6 @@ describe('patient answer tests', () => {
       expect(cloneDeep(result.data!.patientAnswerDelete)).toMatchObject({
         id: patientAnswers[0].id,
       });
-    });
-  });
-
-  describe('update applicable for patient answers', () => {
-    it('works with no patient answers', async () => {
-      const mutation = `mutation {
-        patientAnswersUpdateApplicable(
-          input: { patientId: "${patient.id}", riskAreaId: "${riskArea.id}" }
-        ) {
-          id
-        }
-      }`;
-      const result = await graphql(schema, mutation, null, {
-        db,
-        userRole,
-        userId: user.id,
-      });
-      expect(cloneDeep(result.data!.patientAnswersUpdateApplicable)).toMatchObject([]);
-    });
-
-    it('works for questions going from not applicable to applicable', async () => {
-      const question2 = await Question.create({
-        title: 'really really like writing tests?',
-        answerType: 'dropdown',
-        riskAreaId: riskArea.id,
-        type: 'riskArea',
-        order: 1,
-      });
-      const answer3 = await Answer.create({
-        displayValue: 'loves writing tests!',
-        value: '3',
-        valueType: 'number',
-        riskAdjustmentType: 'forceHighRisk',
-        inSummary: false,
-        questionId: question2.id,
-        order: 1,
-      });
-      await QuestionCondition.create({
-        questionId: question.id,
-        answerId: answer3.id,
-      });
-
-      const patientAnswers = await PatientAnswer.create({
-        patientId: patient.id,
-        type: 'riskAreaAssessmentSubmission',
-        riskAreaAssessmentSubmissionId: riskAreaAssessmentSubmission.id,
-        questionIds: [answer3.questionId],
-        answers: [
-          {
-            questionId: answer3.questionId,
-            answerId: answer3.id,
-            answerValue: '3',
-            patientId: patient.id,
-            applicable: false,
-            userId: user.id,
-          },
-        ],
-      });
-
-      const mutation = `mutation {
-        patientAnswersUpdateApplicable(
-          input: { patientId: "${patient.id}", riskAreaId: "${riskArea.id}" }
-        ) {
-          id
-        }
-      }`;
-      const result = await graphql(schema, mutation, null, { db, userRole, userId: user.id });
-      expect(cloneDeep(result.data!.patientAnswersUpdateApplicable)).toMatchObject([
-        { id: patientAnswers[0].id },
-      ]);
-    });
-
-    it('works for answers if nothing changes', async () => {
-      const question2 = await Question.create({
-        title: 'really really like writing tests?',
-        answerType: 'dropdown',
-        riskAreaId: riskArea.id,
-        type: 'riskArea',
-        order: 1,
-      });
-      const answer3 = await Answer.create({
-        displayValue: 'loves writing tests!',
-        value: '3',
-        valueType: 'number',
-        riskAdjustmentType: 'forceHighRisk',
-        inSummary: false,
-        questionId: question2.id,
-        order: 1,
-      });
-      await QuestionCondition.create({
-        questionId: question.id,
-        answerId: answer3.id,
-      });
-
-      await PatientAnswer.create({
-        patientId: patient.id,
-        type: 'riskAreaAssessmentSubmission',
-        riskAreaAssessmentSubmissionId: riskAreaAssessmentSubmission.id,
-        questionIds: [answer3.questionId],
-        answers: [
-          {
-            questionId: answer3.questionId,
-            answerId: answer3.id,
-            answerValue: '3',
-            patientId: patient.id,
-            applicable: true, // << important part
-            userId: user.id,
-          },
-        ],
-      });
-
-      const mutation = `mutation {
-        patientAnswersUpdateApplicable(
-          input: { patientId: "${patient.id}", riskAreaId: "${riskArea.id}" }
-        ) {
-          id
-        }
-      }`;
-      const result = await graphql(schema, mutation, null, { db, userRole, userId: user.id });
-      expect(cloneDeep(result.data!.patientAnswersUpdateApplicable)).toMatchObject([]);
     });
   });
 });

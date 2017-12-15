@@ -4,3 +4,4 @@ export const icon: string;
 export const red: string;
 export const white: string;
 export const small: string;
+export const fullWidth: string;

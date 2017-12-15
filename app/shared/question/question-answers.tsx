@@ -14,12 +14,10 @@ interface IProps {
     questionId: string,
     answers: Array<{ answerId: string; value: string | number }>,
   ) => any;
-  answerData: {
-    answers: Array<{
-      id: string;
-      value: string;
-    }>;
-  };
+  answerData: Array<{
+    id: string;
+    value: string;
+  }>;
 }
 
 export class QuestionAnswers extends React.Component<IProps, {}> {
@@ -35,12 +33,12 @@ export class QuestionAnswers extends React.Component<IProps, {}> {
     let newAnswerData: Array<{ answerId: string; value: string | number }> = [];
     if (answerData) {
       if (isRemove) {
-        newAnswerData = answerData.answers.filter(answer => answer.id !== answerId).map(answer => ({
+        newAnswerData = answerData.filter(answer => answer.id !== answerId).map(answer => ({
           answerId: answer.id,
           value: answer.value,
         }));
       } else {
-        const formattedAnswerData = answerData.answers.map(answer => ({
+        const formattedAnswerData = answerData.map(answer => ({
           answerId: answer.id,
           value: answer.value,
         }));
@@ -53,7 +51,7 @@ export class QuestionAnswers extends React.Component<IProps, {}> {
 
   renderMultiSelectItem(multiSelectAnswer: FullAnswerFragment, index: number) {
     const { answerData, editable } = this.props;
-    const answers = (answerData || {}).answers || [];
+    const answers = answerData || [];
     const selected = !!answers.find(answer => answer.id === multiSelectAnswer.id);
 
     return (
@@ -76,8 +74,7 @@ export class QuestionAnswers extends React.Component<IProps, {}> {
         question.answerType === 'radio' || question.answerType === 'multiselect',
     });
 
-    const defaultAnswerData = { answers: [] };
-    const currentAnswer = (answerData || defaultAnswerData).answers[0];
+    const currentAnswer = (answerData || [])[0];
 
     switch (question.answerType) {
       case 'dropdown':

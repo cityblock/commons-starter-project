@@ -1,4 +1,4 @@
-@import '../../shared/css/sizes';
+@import '../../../shared/css/sizes';
 
 .marginLeft {
   margin-left: 10px;
@@ -83,7 +83,7 @@
 }
 
 .emptyRiskAreasLogo {
-  background-image: url('../../assets/calendar-event-grey.svg');
+  background-image: url('../../../assets/calendar-event-grey.svg');
   background-position: center center;
   height: 30px;
   width: 30px;
@@ -106,59 +106,6 @@
   font-family: var(--roboto);
   font-size: var(--default-font-size);
   line-height: var(--default-line-height);
-}
-
-.riskAreasLoading {
-  margin: 0 auto;
-  text-align: center;
-  color: var(--light-gray-font-color);
-  font-family: var(--basetica-medium);
-  font-size: var(--medium-font-size);
-  line-height: var(--medium-font-line-height);
-  padding-top: 50px;
-}
-
-.riskAreasError {
-  margin: var(--gutter) var(--gutter) 0;
-}
-
-.riskAreasErrorIcon {
-  background-image: url('../../assets/error-circle.svg');
-  background-position: center center;
-  background-repeat: no-repeat;
-  background-size: contain;
-  height: 30px;
-  width: 30px;
-  margin: 0 auto var(--small-gutter);
-}
-
-.riskAreasErrorLabel {
-  color: var(--default-font-color);
-  font-family: var(--basetica-black);
-  font-size: var(--medium-font-size);
-  line-height: var(--medium-font-line-height);
-  text-align: center;
-  margin: 0 auto 10px;
-}
-
-.riskAreasErrorSubheading {
-  color: var(--gray-font-color);
-  font-family: var(--roboto);
-  font-size: var(--default-font-size);
-  line-height: var(--default-line-height);
-  text-align: center;
-  margin: 0 auto var(--medium-gutter);
-  padding: 0 var(--small-gutter);
-}
-
-.riskAreasErrorButton {
-  width: 94px;
-  height: 32px;
-  margin: 0 auto;
-  padding: 9px 0 0 0;
-  text-align: center;
-  font-size: var(--small-font-size);
-  line-height: var(--small-font-line-height);
 }
 
 .riskAreasList {
@@ -310,7 +257,7 @@
 .summaryErrorIcon {
   height: 12px;
   width: 12px;
-  background-image: url('../../assets/refresh-icon-grey.svg');
+  background-image: url('../../../assets/refresh-icon-grey.svg');
   background-size: contain;
   background-position: center center;
   background-repeat: no-repeat;
@@ -360,7 +307,7 @@
 .titleIcon {
   height: 18px;
   width: 18px;
-  background-image: url('../../assets/house-icon-grey.svg');
+  background-image: url('../../../assets/house-icon-grey.svg');
   background-size: contain;
   background-position: center center;
   background-repeat: no-repeat;
@@ -388,62 +335,4 @@
   font-size: var(--extra-small-font-size);
   line-height: var(--extra-small-font-line-height);
   color: var(--black-color);
-}
-
-.riskAssessmentErrorMessage {
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  border: 1px dashed var(--border-color);
-  border-radius: 4px;
-  padding: 50px;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.riskAssessmentErrorIcon {
-  width: 20px;
-  height: 20px;
-  background-image: url('../../assets/error-circle.svg');
-  background-position: center center;
-  background-size: contain;
-  background-repeat: no-repeat;
-  margin-bottom: 10px;
-}
-
-.riskAssessmentErrorMessageText {
-  display: flex;
-  flex-direction: row;
-  width: 100%;
-  align-items: center;
-  justify-content: center;
-}
-
-.riskAssessmentErrorMessageLabel {
-  margin-right: 5px;
-}
-
-.riskAssessmentErrorMessageCta {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: flex-start;
-
-  &:hover {
-    cursor: pointer;
-  }
-}
-
-.riskAssessmentErrorMessageLink {
-  color: var(--light-blue-color);
-  margin-right: 2px;
-}
-
-.riskAssessmentErrorMessageIcon {
-  width: 16px;
-  height: 16px;
-  background-image: url('../../assets/refresh-icon-grey.svg');
-  background-position: center center;
-  background-repeat: no-repeat;
-  background-size: contain;
 }

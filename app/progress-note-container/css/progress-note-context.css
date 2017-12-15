@@ -5,15 +5,6 @@
   padding: var(--small-gutter);
 }
 
-.encounterTypeLabel {
-  font-family: var(--basetica-medium);
-  font-size: var(--default-font-size);
-}
-
-.encounterTypeSelect {
-  @apply --select;
-}
-
 .locationTimeRow {
   padding-top: var(--small-gutter);
   display: flex;
@@ -35,19 +26,4 @@
 .summaryContainer {
   display: block;
   padding: var(--small-gutter);
-}
-
-.questionTitle {
-  font-family: var(--basetica-medium);
-  font-size: var(--default-font-size);
-  margin-bottom: var(--small-gutter);
-  color: var(--black-color);
-}
-
-.mapLink {
-  @apply --button;
-
-  width: 100%;
-  margin-bottom: var(--small-gutter);
-  display: block;
 }

@@ -1110,11 +1110,6 @@ input PatientAnswerDeleteInput {
   patientAnswerId: String!
 }
 
-input PatientAnswersUpdateApplicableInput {
-  patientId: String!
-  riskAreaId: String!
-}
-
 input QuestionConditionCreateInput {
   questionId: String!
   answerId: String!
@@ -1460,8 +1455,6 @@ type RootMutationType {
   patientAnswerEdit(input: PatientAnswerEditInput): PatientAnswer
   # Deletes a patient Answer
   patientAnswerDelete(input: PatientAnswerDeleteInput): PatientAnswer
-  # Updates applicable for Patient Answers in risk area
-  patientAnswersUpdateApplicable(input: PatientAnswersUpdateApplicableInput): [PatientAnswer]
   # Create a QuestionCondition
   questionConditionCreate(input: QuestionConditionCreateInput): QuestionCondition
   # Edit a QuestionCondition

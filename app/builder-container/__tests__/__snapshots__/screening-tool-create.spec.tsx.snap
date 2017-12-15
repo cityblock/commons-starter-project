@@ -54,7 +54,7 @@ exports[`renders screening tool screate 1`] = `
             Select Assessment
           </option>
           <option
-            value="cool-task-id"
+            value="cool-risk-area-id"
           >
             Risk Area Title
           </option>

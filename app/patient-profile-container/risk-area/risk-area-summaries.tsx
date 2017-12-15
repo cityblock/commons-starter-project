@@ -1,9 +1,9 @@
 import * as classNames from 'classnames';
 import * as React from 'react';
 import { graphql } from 'react-apollo';
-import * as riskAreasQuery from '../graphql/queries/get-risk-areas.graphql';
-import { getRiskAreasQuery, FullRiskAreaFragment } from '../graphql/types';
-import * as sortSearchStyles from '../shared/css/sort-search.css';
+import * as riskAreasQuery from '../../graphql/queries/get-risk-areas.graphql';
+import { getRiskAreasQuery, FullRiskAreaFragment } from '../../graphql/types';
+import * as sortSearchStyles from '../../shared/css/sort-search.css';
 import * as styles from './css/risk-areas.css';
 import RiskAreaSummary from './risk-area-summary';
 import { RiskAreasLoadingError } from './risk-areas-loading-error';
@@ -21,7 +21,7 @@ interface IGraphqlProps {
 
 type allProps = IGraphqlProps & IProps;
 
-class RiskAreas extends React.Component<IProps & IGraphqlProps, {}> {
+class RiskAreaSummaries extends React.Component<IProps & IGraphqlProps, {}> {
   renderRiskAreaSummary = (riskArea: FullRiskAreaFragment | null, index: number) => {
     if (!riskArea) {
       return null;
@@ -61,7 +61,7 @@ class RiskAreas extends React.Component<IProps & IGraphqlProps, {}> {
         </div>
       );
     } else {
-      return <RiskAreasLoadingError error={error} loading={loading} onRetryClick={() => true} />;
+      return <RiskAreasLoadingError error={error} loading={loading} />;
     }
   }
 
@@ -101,4 +101,4 @@ export default graphql<IGraphqlProps, IProps, allProps>(riskAreasQuery as any, {
     error: data ? data.error : null,
     riskAreas: data ? (data as any).riskAreas : null,
   }),
-})(RiskAreas);
+})(RiskAreaSummaries);

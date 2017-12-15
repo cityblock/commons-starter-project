@@ -3,7 +3,7 @@
 exports[`renders a risk area summary 1`] = `
 <a
   className="riskAreaLink inactive"
-  href="/patients/patient-1/360/cool-task-id"
+  href="/patients/patient-1/360/cool-risk-area-id"
   onClick={[Function]}
 >
   <div

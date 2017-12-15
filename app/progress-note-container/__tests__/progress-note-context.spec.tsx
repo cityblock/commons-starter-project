@@ -28,6 +28,7 @@ describe('progress note context', () => {
         updateReadyToSubmit={jest.fn()}
         clinics={clinics}
         questions={[question]}
+        redirectToMap={jest.fn()}
       />,
     );
   });

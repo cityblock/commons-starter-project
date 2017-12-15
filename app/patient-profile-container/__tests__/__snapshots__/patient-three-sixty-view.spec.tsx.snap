@@ -46,7 +46,7 @@ exports[`renders patient 360 view 1`] = `
         className="riskAreas"
       >
         <div
-          className="riskAreasLoading"
+          className="loading"
         >
           Loading...
         </div>

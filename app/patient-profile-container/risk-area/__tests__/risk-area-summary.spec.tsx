@@ -5,9 +5,9 @@ import { Provider } from 'react-redux';
 import { ConnectedRouter } from 'react-router-redux';
 import { create } from 'react-test-renderer';
 import configureMockStore from 'redux-mock-store';
-import { ENGLISH_TRANSLATION } from '../../reducers/messages/en';
-import ReduxConnectedIntlProvider from '../../redux-connected-intl-provider';
-import { riskArea } from '../../shared/util/test-data';
+import { ENGLISH_TRANSLATION } from '../../../reducers/messages/en';
+import ReduxConnectedIntlProvider from '../../../redux-connected-intl-provider';
+import { riskArea } from '../../../shared/util/test-data';
 import RiskAreaSummary from '../risk-area-summary';
 
 const locale = { messages: ENGLISH_TRANSLATION.messages };

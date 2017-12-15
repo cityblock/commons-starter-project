@@ -1,6 +1,7 @@
 import { addMinutes, format } from 'date-fns';
 import * as React from 'react';
-import { FormattedMessage } from 'react-intl';
+import FormLabel from '../shared/library/form-label/form-label';
+import Select from '../shared/library/select/select';
 import * as styles from './css/progress-note-context.css';
 
 interface IProps {
@@ -41,19 +42,13 @@ export const ProgressNoteTime: React.StatelessComponent<IProps> = props => {
   ));
   return (
     <div className={styles.time}>
-      <FormattedMessage id="progressNote.selectTime">
-        {(message: string) => <div className={styles.encounterTypeLabel}>{message}</div>}
-      </FormattedMessage>
-      <select
-        value={progressNoteTime}
-        onChange={onTimeChange}
-        className={styles.encounterTypeSelect}
-      >
+      <FormLabel messageId="progressNote.selectTime" />
+      <Select value={progressNoteTime} onChange={onTimeChange}>
         <option value={''} disabled hidden>
           Select a time
         </option>
         {progressNoteTimes}
-      </select>
+      </Select>
     </div>
   );
 };

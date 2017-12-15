@@ -3,15 +3,15 @@ import * as React from 'react';
 import { compose, graphql } from 'react-apollo';
 import { FormattedDate } from 'react-intl';
 import { Link } from 'react-router-dom';
-import * as riskScoreQuery from '../graphql/queries/get-patient-risk-score-for-risk-area.graphql';
 /* tslint:disable:max-line-length */
-import * as riskSummaryQuery from '../graphql/queries/get-patient-risk-summary-for-risk-area.graphql';
+import * as riskScoreQuery from '../../graphql/queries/get-patient-risk-score-for-risk-area.graphql';
+import * as riskSummaryQuery from '../../graphql/queries/get-patient-risk-summary-for-risk-area.graphql';
 /* tslint:enable:max-line-length */
 import {
   getPatientRiskScoreForRiskAreaQuery,
   getPatientRiskSummaryForRiskAreaQuery,
   FullRiskAreaFragment,
-} from '../graphql/types';
+} from '../../graphql/types';
 import * as styles from './css/risk-areas.css';
 
 interface IProps {

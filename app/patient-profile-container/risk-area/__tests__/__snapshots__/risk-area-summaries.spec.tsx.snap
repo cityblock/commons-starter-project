@@ -45,7 +45,7 @@ exports[`renders risk area summaries 1`] = `
       className="riskAreas"
     >
       <div
-        className="riskAreasLoading"
+        className="loading"
       >
         Loading...
       </div>

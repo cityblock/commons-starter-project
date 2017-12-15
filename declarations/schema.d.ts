@@ -1250,10 +1250,6 @@ declare module 'schema' {
   */
     patientAnswerDelete: IPatientAnswer | null;
     /**
-    description: Updates applicable for Patient Answers in risk area
-  */
-    patientAnswersUpdateApplicable: Array<IPatientAnswer> | null;
-    /**
     description: Create a QuestionCondition
   */
     questionConditionCreate: IQuestionCondition | null;
@@ -1838,12 +1834,6 @@ declare module 'schema' {
 
   interface IPatientAnswerDeleteInput {
     patientAnswerId: string;
-  }
-
-
-  interface IPatientAnswersUpdateApplicableInput {
-    patientId: string;
-    riskAreaId: string;
   }
 
 

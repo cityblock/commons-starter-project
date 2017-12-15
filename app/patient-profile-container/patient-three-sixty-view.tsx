@@ -1,6 +1,6 @@
 import * as React from 'react';
-import RiskAreaAssessment from './risk-area-assessment';
-import RiskAreaSummaries from './risk-area-summaries';
+import RiskAreaAssessment from './risk-area/risk-area-assessment';
+import RiskAreaSummaries from './risk-area/risk-area-summaries';
 
 interface IProps {
   match: {

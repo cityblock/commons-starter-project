@@ -5,6 +5,7 @@ import { FormattedDate } from 'react-intl';
 import * as patientScreeningToolSubmissionQuery from '../../graphql/queries/get-patient-screening-tool-submission-for-patient-and-screening-tool.graphql';
 /* tsline:enable:max-line-length */
 import { FullPatientScreeningToolSubmissionFragment } from '../../graphql/types';
+import Icon from '../../shared/library/icon/icon';
 import * as styles from './css/screening-tools.css';
 
 interface IProps {
@@ -37,30 +38,30 @@ const PatientScreeningToolSubmission: React.StatelessComponent<allProps> = props
     }
 
     return (
-      <div className={styles.screeningToolSubmissionSection}>
-        <div className={styles.screeningToolSubmission}>
-          <div className={styles.screeningToolSubmissionTitleRow}>
-            <div className={styles.screeningToolSubmissionTitle}>
-              <div className={styles.screeningToolSubmissionTitleLabel}>Tool results:</div>
-              <div className={styles.screeningToolSubmissionTitleScore}>
+      <div className={styles.section}>
+        <div className={styles.container}>
+          <div className={styles.titleRow}>
+            <div className={styles.title}>
+              <div className={styles.titleLabel}>Tool results:</div>
+              <div className={styles.titleScore}>
                 <div>{scoreDescription}</div>
-                <div className={styles.screeningToolSubmissionTitleScoreDivider}>-</div>
+                <div className={styles.titleScoreDivider}>-</div>
                 <div>{score}</div>
-                <div className={styles.screeningToolSubmissionTitleInfoButton} />
+                <Icon name="highlightOff" />
               </div>
             </div>
-            <div className={styles.screeningToolSubmissionMeta}>
-              <div className={styles.screeningToolSubmissionMetaGroup}>
-                <div className={styles.screeningToolSubmissionMetaLabel}>Conducted by:</div>
-                <div className={styles.screeningToolSubmissionMetaData}>{conductedByName}</div>
+            <div className={styles.meta}>
+              <div className={styles.metaGroup}>
+                <div className={styles.metaLabel}>Conducted by:</div>
+                <div className={styles.metaData}>{conductedByName}</div>
               </div>
-              <div className={styles.screeningToolSubmissionMetaGroup}>
-                <div className={styles.screeningToolSubmissionMetaLabel}>Date conducted:</div>
-                <div className={styles.screeningToolSubmissionMetaData}>{conductedAt}</div>
+              <div className={styles.metaGroup}>
+                <div className={styles.metaLabel}>Date conducted:</div>
+                <div className={styles.metaData}>{conductedAt}</div>
               </div>
             </div>
           </div>
-          <div className={styles.screeningToolSubmissionSummaryRow}>TBD</div>
+          <div className={styles.summaryRow}>TBD</div>
         </div>
       </div>
     );

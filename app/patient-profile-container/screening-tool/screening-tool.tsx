@@ -23,16 +23,18 @@ import {
   FullScreeningToolFragment,
 } from '../../graphql/types';
 import * as sortSearchStyles from '../../shared/css/sort-search.css';
+import Button from '../../shared/library/button/button';
+import Icon from '../../shared/library/icon/icon';
 import { Popup } from '../../shared/popup/popup';
 import PatientQuestion from '../../shared/question/patient-question';
 import {
   allQuestionsAnswered,
   getQuestionVisibility,
-  setupQuestionsState,
-  updateQuestionAnswersState,
-  IQuestionsState,
+  setupQuestionAnswerHash,
+  updateQuestionAnswerHash,
+  IQuestionAnswerHash,
 } from '../../shared/question/question-helpers';
-import * as styles from '../css/risk-areas.css';
+import * as styles from './css/screening-tool.css';
 import PatientScreeningToolSubmission from './patient-screening-tool-submission';
 import ScreeningToolResultsPopup from './screening-tool-results-popup';
 
@@ -123,7 +125,6 @@ export class ScreeningTool extends React.Component<allProps> {
     }
   };
 
-  // TODO: pass in debounced onchange
   onChange = (questionId: string, answers: Array<{ answerId: string; value: string | number }>) => {
     const { patientScreeningToolSubmission, createPatientAnswers } = this.props;
     if (patientScreeningToolSubmission && createPatientAnswers) {
@@ -150,14 +151,10 @@ export class ScreeningTool extends React.Component<allProps> {
   renderScreeningToolQuestion = (
     question: FullQuestionFragment,
     index: number,
-    answerData: IQuestionsState,
+    answerData: IQuestionAnswerHash,
   ) => {
     const visible = getQuestionVisibility(question, answerData);
-    const dataForQuestion = answerData[question.id] || {
-      answers: [] as any,
-      oldAnswers: [] as any,
-      changed: false,
-    };
+    const dataForQuestion = answerData[question.id] || [];
     return (
       <PatientQuestion
         editable={true}
@@ -174,8 +171,8 @@ export class ScreeningTool extends React.Component<allProps> {
   renderScreeningToolQuestions = () => {
     const { screeningToolQuestions, patientAnswers } = this.props;
 
-    const answerData = setupQuestionsState({}, screeningToolQuestions);
-    updateQuestionAnswersState(answerData, patientAnswers || []);
+    const answerData = setupQuestionAnswerHash({}, screeningToolQuestions);
+    updateQuestionAnswerHash(answerData, patientAnswers || []);
 
     return (screeningToolQuestions || []).map((question, index) =>
       this.renderScreeningToolQuestion(question, index, answerData),
@@ -185,35 +182,35 @@ export class ScreeningTool extends React.Component<allProps> {
   getAssessmentHtml() {
     const { screeningTool } = this.props;
     const title = screeningTool ? screeningTool.title : 'Loading...';
-    const titleStyles = classNames(styles.riskAssessmentTitle, {
+    const titleStyles = classNames(styles.assessmentTitle, {
       [styles.lowRisk]: false,
       [styles.mediumRisk]: true,
       [styles.highRisk]: false,
     });
 
     return this.isError() ? (
-      <div className={styles.riskAssessmentError}>
-        <div className={styles.riskAssessmentErrorMessage}>
-          <div className={styles.riskAssessmentErrorIcon} />
-          <div className={styles.riskAssessmentErrorMessageText}>
-            <div className={styles.riskAssessmentErrorMessageLabel}>Error loading tool.</div>
+      <div className={styles.error}>
+        <div className={styles.errorMessage}>
+          <Icon name="addAlert" />
+          <div className={styles.errorMessageText}>
+            <div className={styles.errorMessageLabel}>Error loading tool.</div>
           </div>
         </div>
       </div>
     ) : (
-      <div className={styles.riskAssessment}>
+      <div className={styles.assessment}>
         <PatientScreeningToolSubmission
           patientId={this.props.match.params.patientId}
           screeningToolId={this.props.match.params.screeningToolId}
         />
         <div className={titleStyles}>
           <div className={styles.title}>
-            <div className={styles.titleIcon} />
+            <Icon name="event" />
             <div className={styles.titleText}>{title}</div>
           </div>
           <div className={styles.meta}>
             <div className={styles.lastUpdatedLabel}>Last updated:</div>
-            <div className={styles.lastUpdatedValue}>TBD!</div>
+            <div className={styles.lastUpdatedValue}>TODO</div>
           </div>
         </div>
         {this.renderScreeningToolQuestions()}
@@ -224,8 +221,8 @@ export class ScreeningTool extends React.Component<allProps> {
   allQuestionsAnswered() {
     const { screeningToolQuestions, patientAnswers } = this.props;
 
-    const answerData = setupQuestionsState({}, screeningToolQuestions);
-    updateQuestionAnswersState(answerData, patientAnswers || []);
+    const answerData = setupQuestionAnswerHash({}, screeningToolQuestions);
+    updateQuestionAnswerHash(answerData, patientAnswers || []);
     return allQuestionsAnswered(screeningToolQuestions || [], answerData);
   }
 
@@ -237,7 +234,7 @@ export class ScreeningTool extends React.Component<allProps> {
       ? patientScreeningToolSubmission.id
       : null;
 
-    const submitButtonStyles = classNames(styles.button, styles.saveButton, {
+    const submitButtonStyles = classNames({
       [styles.disabled]: !this.allQuestionsAnswered(),
     });
 
@@ -247,11 +244,13 @@ export class ScreeningTool extends React.Component<allProps> {
     return (
       <div>
         <div className={classNames(sortSearchStyles.sortSearchBar, styles.buttonBar)}>
-          <div className={submitButtonStyles} onClick={this.onSubmit}>
-            Submit
-          </div>
+          <Button
+            messageId="screeningTool.submit"
+            className={submitButtonStyles}
+            onClick={this.onSubmit}
+          />
         </div>
-        <div className={styles.riskAreasPanel}>{assessmentHtml}</div>
+        <div className={styles.panel}>{assessmentHtml}</div>
         <Popup visible={popupVisible} style={'small-padding'}>
           <ScreeningToolResultsPopup
             patientRoute={patientRoute}

@@ -3,7 +3,7 @@
 exports[`risk area row renders risk area row 1`] = `
 <a
   className="container selected"
-  href="/foo/bar/cool-task-id"
+  href="/foo/bar/cool-risk-area-id"
   onClick={[Function]}
 >
   <div

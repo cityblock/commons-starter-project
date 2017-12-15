@@ -65,13 +65,25 @@ export const riskAreaGroup = {
 };
 
 export const riskArea = {
-  id: 'cool-task-id',
+  id: 'cool-risk-area-id',
   createdAt: 'Thu Jul 13 2017 16:52:56 GMT-0400 (EDT)',
   updatedAt: 'Thu Jul 13 2017 16:52:56 GMT-0400 (EDT)',
   dueAt: 'Thu Jul 13 2017 16:52:56 GMT-0400 (EDT)',
   deletedAt: null,
   title: 'Risk Area Title',
   order: 1,
+};
+
+export const riskAreaAssessmentSubmission = {
+  carePlanSuggestions: [],
+  completedAt: null,
+  createdAt: 'Thu Dec 14 2017 13:06:41 GMT-0500 (EST)',
+  deletedAt: null,
+  id: 'risk-area-id',
+  patientId: patient.id,
+  riskAreaId: riskArea.id,
+  updatedAt: 'Thu Dec 14 2017 13:06:41 GMT-0500 (EST)',
+  userId: user.id,
 };
 
 export const answer = {

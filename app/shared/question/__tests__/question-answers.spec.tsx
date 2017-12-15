@@ -14,9 +14,7 @@ import QuestionAnswers, { QuestionAnswers as Component } from '../question-answe
 
 const locale = { messages: ENGLISH_TRANSLATION.messages };
 const mockStore = configureMockStore([]);
-const answerData = {
-  answers: [{ id: 'answser-id', value: '1' }],
-};
+const answerData = [{ id: 'answser-id', value: '1' }];
 
 it('renders question answers', () => {
   const history = createMemoryHistory();

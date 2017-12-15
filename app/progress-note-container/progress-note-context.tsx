@@ -1,8 +1,8 @@
 import { debounce } from 'lodash';
 import * as React from 'react';
 import { compose, graphql } from 'react-apollo';
-import { FormattedMessage } from 'react-intl';
-import { Link } from 'react-router-dom';
+import { connect, Dispatch } from 'react-redux';
+import { push } from 'react-router-redux';
 import * as clinicsQuery from '../graphql/queries/clinics-get.graphql';
 import * as patientAnswersQuery from '../graphql/queries/get-patient-answers.graphql';
 import * as questionsQuery from '../graphql/queries/get-questions.graphql';
@@ -19,14 +19,17 @@ import {
   FullProgressNoteTemplateFragment,
   FullQuestionFragment,
 } from '../graphql/types';
+import Button from '../shared/library/button/button';
+import FormLabel from '../shared/library/form-label/form-label';
+import Select from '../shared/library/select/select';
 import Textarea from '../shared/library/textarea/textarea';
 import PatientQuestion from '../shared/question/patient-question';
 import {
   allQuestionsAnswered,
   getQuestionVisibility,
-  setupQuestionsState,
-  updateQuestionAnswersState,
-  IQuestionsState,
+  setupQuestionAnswerHash,
+  updateQuestionAnswerHash,
+  IQuestionAnswerHash,
 } from '../shared/question/question-helpers';
 import * as styles from './css/progress-note-context.css';
 import { ProgressNoteLocation } from './progress-note-location';
@@ -63,7 +66,11 @@ interface IGraphqlProps {
   ) => { data: patientAnswersCreateMutation };
 }
 
-type allProps = IGraphqlProps & IProps;
+interface IDispatchProps {
+  redirectToMap: () => any;
+}
+
+type allProps = IGraphqlProps & IProps & IDispatchProps;
 
 interface IState {
   progressNoteTime: string | null;
@@ -113,8 +120,8 @@ export class ProgressNoteContext extends React.Component<allProps, IState> {
       this.setDefaultProgressNoteFields(newProps);
     }
     if (newProps.patientAnswers !== this.props.patientAnswers) {
-      const answerData = setupQuestionsState({}, newProps.questions);
-      updateQuestionAnswersState(answerData, newProps.patientAnswers || []);
+      const answerData = setupQuestionAnswerHash({}, newProps.questions);
+      updateQuestionAnswerHash(answerData, newProps.patientAnswers || []);
       this.props.updateReadyToSubmit(allQuestionsAnswered(newProps.questions, answerData));
     }
   }
@@ -158,13 +165,13 @@ export class ProgressNoteContext extends React.Component<allProps, IState> {
     }
   };
 
-  renderQuestion = (question: FullQuestionFragment, index: number, answerData: IQuestionsState) => {
+  renderQuestion = (
+    question: FullQuestionFragment,
+    index: number,
+    answerData: IQuestionAnswerHash,
+  ) => {
     const visible = getQuestionVisibility(question, answerData);
-    const dataForQuestion = answerData[question.id] || {
-      answers: [] as any,
-      oldAnswers: [] as any,
-      changed: false,
-    };
+    const dataForQuestion = answerData[question.id] || [];
     return (
       <PatientQuestion
         editable={true}
@@ -181,8 +188,8 @@ export class ProgressNoteContext extends React.Component<allProps, IState> {
   renderQuestions() {
     const { questions, patientAnswers } = this.props;
 
-    const answerData = setupQuestionsState({}, questions);
-    updateQuestionAnswersState(answerData, patientAnswers || []);
+    const answerData = setupQuestionAnswerHash({}, questions);
+    updateQuestionAnswerHash(answerData, patientAnswers || []);
 
     return (questions || []).map((question, index) =>
       this.renderQuestion(question, index, answerData),
@@ -233,7 +240,7 @@ export class ProgressNoteContext extends React.Component<allProps, IState> {
   };
 
   render() {
-    const { progressNoteTemplates, clinics, patientId } = this.props;
+    const { progressNoteTemplates, clinics } = this.props;
     const {
       progressNoteTime,
       progressNoteLocation,
@@ -249,19 +256,13 @@ export class ProgressNoteContext extends React.Component<allProps, IState> {
     return (
       <div>
         <div className={styles.encounterTypeContainer}>
-          <FormattedMessage id="progressNote.selectType">
-            {(message: string) => <div className={styles.encounterTypeLabel}>{message}</div>}
-          </FormattedMessage>
-          <select
-            value={progressNoteTemplateId || ''}
-            onChange={this.onProgressNoteTemplateType}
-            className={styles.encounterTypeSelect}
-          >
+          <FormLabel messageId="progressNote.selectType" htmlFor="contextAndPlan" />
+          <Select value={progressNoteTemplateId || ''} onChange={this.onProgressNoteTemplateType}>
             <option value={''} disabled hidden>
               Select an encounter type template
             </option>
             {encounterTypes}
-          </select>
+          </Select>
           <div className={styles.locationTimeRow}>
             <ProgressNoteLocation
               clinics={clinics}
@@ -277,18 +278,28 @@ export class ProgressNoteContext extends React.Component<allProps, IState> {
         <div className={styles.error}>{error}</div>
         {this.renderQuestions()}
         <div className={styles.summaryContainer}>
-          <div className={styles.questionTitle}>Context and plan</div>
-          <Link className={styles.mapLink} to={`/patients/${patientId}/map/active`}>
-            Update MAP
-          </Link>
+          <FormLabel messageId="progressNote.contextAndPlan" htmlFor="contextAndPlan" />
+          <Button
+            fullWidth={true}
+            messageId="progressNote.updateMap"
+            onClick={this.props.redirectToMap}
+          />
+          <br />
+          <br />
           <Textarea value={progressNoteSummary || ''} onChange={this.onProgressNoteSummaryChange} />
         </div>
       </div>
     );
   }
 }
+function mapDispatchToProps(dispatch: Dispatch<() => void>, props: IProps): IDispatchProps {
+  return {
+    redirectToMap: () => dispatch(push(`/patients/${props.patientId}/map/active`)),
+  };
+}
 
 export default compose(
+  connect<{}, IDispatchProps, allProps>(null, mapDispatchToProps),
   graphql<IGraphqlProps, IProps, allProps>(patientAnswersCreateMutationGraphql as any, {
     name: 'createPatientAnswers',
     options: { refetchQueries: ['getPatientAnswers'] },

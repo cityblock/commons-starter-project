@@ -25,7 +25,6 @@ import ProgressNoteActivity from '../shared/progress-note-activity/progress-note
 import { getPatientFullName } from '../shared/util/patient-name';
 import * as styles from './css/progress-note-popup.css';
 import ProgressNoteContext from './progress-note-context';
-import ProgressNoteTasks from './progress-note-tasks';
 
 interface IProps {
   close: () => void;
@@ -57,7 +56,7 @@ interface IState {
   readyToSubmit: boolean;
 }
 
-type Tab = 'context' | 'activity' | 'tasks';
+type Tab = 'context' | 'activity';
 
 type allProps = IProps & IGraphqlProps;
 
@@ -132,9 +131,6 @@ export class ProgressNotePopup extends React.Component<allProps, IState> {
     const activityTabStyles = classNames(tabStyles.tab, {
       [tabStyles.selectedTab]: tab === 'activity',
     });
-    const tasksTabStyles = classNames(tabStyles.tab, {
-      [tabStyles.selectedTab]: tab === 'tasks',
-    });
     const context =
       tab === 'context' ? (
         <ProgressNoteContext
@@ -149,7 +145,6 @@ export class ProgressNotePopup extends React.Component<allProps, IState> {
       tab === 'activity' ? (
         <ProgressNoteActivity progressNote={progressNote} patientId={patientId} />
       ) : null;
-    const tasks = tab === 'tasks' && patientId ? <ProgressNoteTasks patientId={patientId} /> : null;
 
     let progressNoteName = null;
     if (progressNote && progressNote.progressNoteTemplate) {
@@ -201,18 +196,10 @@ export class ProgressNotePopup extends React.Component<allProps, IState> {
               </a>
             )}
           </FormattedMessage>
-          <FormattedMessage id="patient.tasks">
-            {(message: string) => (
-              <a onClick={() => this.selectTab('tasks')} className={tasksTabStyles}>
-                {message}
-              </a>
-            )}
-          </FormattedMessage>
         </div>
         <div className={styles.bottomSection}>
           {context}
           {activity}
-          {tasks}
         </div>
       </div>
     );

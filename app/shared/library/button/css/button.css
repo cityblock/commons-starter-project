@@ -54,3 +54,7 @@
   line-height: var(--small-font-line-height);
   padding: 9px 16px;
 }
+
+.fullWidth {
+  width: 100%;
+}

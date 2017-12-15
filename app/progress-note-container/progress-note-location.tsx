@@ -1,6 +1,7 @@
 import * as React from 'react';
-import { FormattedMessage } from 'react-intl';
 import { getClinicsQuery } from '../graphql/types';
+import FormLabel from '../shared/library/form-label/form-label';
+import Select from '../shared/library/select/select';
 import * as styles from './css/progress-note-context.css';
 
 interface IProps {
@@ -28,19 +29,13 @@ export const ProgressNoteLocation: React.StatelessComponent<IProps> = props => {
   ));
   return (
     <div className={styles.location}>
-      <FormattedMessage id="progressNote.selectLocation">
-        {(message: string) => <div className={styles.encounterTypeLabel}>{message}</div>}
-      </FormattedMessage>
-      <select
-        value={progressNoteLocation || ''}
-        onChange={onLocationChange}
-        className={styles.encounterTypeSelect}
-      >
+      <FormLabel messageId="progressNote.selectLocation" />
+      <Select value={progressNoteLocation || ''} onChange={onLocationChange}>
         <option value={''} disabled hidden>
           Select a location
         </option>
         {progressNoteLocations}
-      </select>
+      </Select>
     </div>
   );
 };

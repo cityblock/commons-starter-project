@@ -59,7 +59,6 @@ import {
 } from './goal-suggestion-template-resolver';
 import {
   patientAnswersCreate,
-  patientAnswersUpdateApplicable,
   patientAnswerDelete,
   patientAnswerEdit,
   resolvePatientAnswer,
@@ -341,7 +340,6 @@ const resolveFunctions = {
     patientAnswersCreate,
     patientAnswerDelete,
     patientAnswerEdit,
-    patientAnswersUpdateApplicable,
     concernSuggestionCreate,
     concernSuggestionDelete,
     concernCreate,

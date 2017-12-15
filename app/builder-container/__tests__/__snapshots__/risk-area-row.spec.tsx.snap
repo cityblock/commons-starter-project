@@ -20,6 +20,62 @@ exports[`risk area row renders risk area row 1`] = `
       <span
         className="dateLabel"
       >
+        Domain:
+      </span>
+      <span
+        className="dateValue"
+      >
+        Jon Snow's Direwolf
+      </span>
+    </div>
+    <div
+      className="dateSection orderSection"
+    >
+      <span
+        className="dateLabel"
+      >
+        Type:
+      </span>
+      <span
+        className="dateValue"
+      >
+        manual
+      </span>
+    </div>
+    <div
+      className="dateSection orderSection"
+    >
+      <span
+        className="dateLabel"
+      >
+        Medium Risk Threshold:
+      </span>
+      <span
+        className="dateValue"
+      >
+        5
+      </span>
+    </div>
+    <div
+      className="dateSection orderSection"
+    >
+      <span
+        className="dateLabel"
+      >
+        High Risk Threshold:
+      </span>
+      <span
+        className="dateValue"
+      >
+        8
+      </span>
+    </div>
+    <div
+      className="dateSection orderSection"
+    >
+      <span
+        className="dateLabel"
+      >
         Order:
       </span>
       <span

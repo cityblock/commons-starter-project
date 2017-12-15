@@ -681,8 +681,16 @@ declare module 'schema' {
     updatedAt: string;
     deletedAt: string | null;
     title: string;
+    assessmentType: IAssessmentTypeEnum;
+    riskAreaGroupId: string | null;
+    riskAreaGroup: IRiskAreaGroup | null;
     order: number;
+    mediumRiskThreshold: number;
+    highRiskThreshold: number;
   }
+
+
+  type IAssessmentTypeEnum = 'automated' | 'manual';
 
   /**
     description: Question
@@ -1734,7 +1742,11 @@ declare module 'schema' {
 
   interface IRiskAreaCreateInput {
     title: string;
+    assessmentType: IAssessmentTypeEnum;
+    riskAreaGroupId: string;
     order: number;
+    mediumRiskThreshold: number;
+    highRiskThreshold: number;
   }
 
 
@@ -1742,6 +1754,8 @@ declare module 'schema' {
     riskAreaId: string;
     title?: string | null;
     order?: number | null;
+    mediumRiskThreshold?: number | null;
+    highRiskThreshold?: number | null;
   }
 
 

@@ -5,7 +5,11 @@ import { push } from 'react-router-redux';
 /* tslint:disable:max-line-length */
 import * as riskAreaCreateMutationGraphql from '../graphql/queries/risk-area-create-mutation.graphql';
 /* tslint:enable:max-line-length */
-import { riskAreaCreateMutation, riskAreaCreateMutationVariables } from '../graphql/types';
+import {
+  riskAreaCreateMutation,
+  riskAreaCreateMutationVariables,
+  AssessmentType,
+} from '../graphql/types';
 import * as formStyles from '../shared/css/forms.css';
 import * as loadingStyles from '../shared/css/loading-spinner.css';
 import * as riskAreaStyles from '../shared/css/two-panel-right.css';
@@ -48,6 +52,10 @@ export class RiskAreaCreate extends React.Component<allProps, IState> {
       riskArea: {
         title: '',
         order: 1,
+        assessmentType: 'manual' as AssessmentType,
+        mediumRiskThreshold: 5,
+        highRiskThreshold: 8,
+        riskAreaGroupId: '',
       },
     };
   }

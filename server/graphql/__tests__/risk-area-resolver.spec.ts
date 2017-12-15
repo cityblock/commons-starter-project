@@ -9,10 +9,12 @@ import PatientAnswer from '../../models/patient-answer';
 import Question from '../../models/question';
 import RiskArea from '../../models/risk-area';
 import RiskAreaAssessmentSubmission from '../../models/risk-area-assessment-submission';
+import RiskAreaGroup from '../../models/risk-area-group';
 import User from '../../models/user';
 import {
   createMockClinic,
   createMockPatient,
+  createMockRiskAreaGroup,
   createMockUser,
   createPatient,
   createRiskArea,
@@ -89,7 +91,10 @@ describe('answer tests', () => {
   describe('riskArea edit', () => {
     it('edits riskArea', async () => {
       const query = `mutation {
-        riskAreaEdit(input: { title: "new value", riskAreaId: "${riskArea.id}" }) {
+        riskAreaEdit(input: {
+          title: "new value",
+          riskAreaId: "${riskArea.id}"
+        }) {
           title
         }
       }`;
@@ -106,12 +111,21 @@ describe('answer tests', () => {
 
   describe('riskArea Create', () => {
     it('creates a new riskArea', async () => {
+      const riskAreaGroup = await RiskAreaGroup.create(createMockRiskAreaGroup());
       const mutation = `mutation {
         riskAreaCreate(input: {
           title: "new risk area"
           order: 1
+          assessmentType: manual
+          mediumRiskThreshold: 5
+          highRiskThreshold: 8
+          riskAreaGroupId: "${riskAreaGroup.id}"
         }) {
           title
+          assessmentType
+          mediumRiskThreshold
+          highRiskThreshold
+          riskAreaGroupId
         }
       }`;
       const result = await graphql(schema, mutation, null, {
@@ -121,6 +135,10 @@ describe('answer tests', () => {
       });
       expect(cloneDeep(result.data!.riskAreaCreate)).toMatchObject({
         title: 'new risk area',
+        assessmentType: 'manual',
+        mediumRiskThreshold: 5,
+        highRiskThreshold: 8,
+        riskAreaGroupId: riskAreaGroup.id,
       });
     });
   });

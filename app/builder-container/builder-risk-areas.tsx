@@ -103,6 +103,7 @@ class AdminRiskAreas extends React.Component<allProps, IState> {
 
   renderRiskArea(riskArea: FullRiskAreaFragment) {
     const selected = riskArea.id === this.props.riskAreaId;
+
     return (
       <RiskAreaRow
         key={riskArea.id}

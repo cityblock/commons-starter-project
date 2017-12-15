@@ -27,6 +27,24 @@ export const RiskAreaRow: React.StatelessComponent<IProps> = props => {
       <div className={styles.title}>{riskArea.title}</div>
       <div className={styles.meta}>
         <div className={classNames(riskAreasStyles.dateSection, riskAreasStyles.orderSection)}>
+          <span className={styles.dateLabel}>Domain:</span>
+          <span className={styles.dateValue}>
+            {riskArea.riskAreaGroup && riskArea.riskAreaGroup.title}
+          </span>
+        </div>
+        <div className={classNames(riskAreasStyles.dateSection, riskAreasStyles.orderSection)}>
+          <span className={styles.dateLabel}>Type:</span>
+          <span className={styles.dateValue}>{riskArea.assessmentType}</span>
+        </div>
+        <div className={classNames(riskAreasStyles.dateSection, riskAreasStyles.orderSection)}>
+          <span className={styles.dateLabel}>Medium Risk Threshold:</span>
+          <span className={styles.dateValue}>{riskArea.mediumRiskThreshold}</span>
+        </div>
+        <div className={classNames(riskAreasStyles.dateSection, riskAreasStyles.orderSection)}>
+          <span className={styles.dateLabel}>High Risk Threshold:</span>
+          <span className={styles.dateValue}>{riskArea.highRiskThreshold}</span>
+        </div>
+        <div className={classNames(riskAreasStyles.dateSection, riskAreasStyles.orderSection)}>
           <span className={styles.dateLabel}>Order:</span>
           <span className={styles.dateValue}>{riskArea.order}</span>
         </div>

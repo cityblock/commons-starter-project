@@ -4,5 +4,12 @@ fragment FullRiskArea on RiskArea {
   updatedAt
   deletedAt
   title
+  assessmentType
   order
+  mediumRiskThreshold
+  highRiskThreshold
+  riskAreaGroup {
+    id
+    title
+  }
 }

@@ -73,6 +73,12 @@ export enum QuickCallDirection {
 }
 
 
+export enum AssessmentType {
+  automated = "automated",
+  manual = "manual",
+}
+
+
 export enum TaskEventTypes {
   create_task = "create_task",
   add_follower = "add_follower",
@@ -253,7 +259,14 @@ export type answerCreateMutation = {
       updatedAt: string,
       deletedAt: string | null,
       title: string,
+      assessmentType: AssessmentType,
       order: number,
+      mediumRiskThreshold: number,
+      highRiskThreshold: number,
+      riskAreaGroup:  {
+        id: string,
+        title: string,
+      } | null,
     } | null,
     screeningTool:  {
       id: string,
@@ -265,7 +278,14 @@ export type answerCreateMutation = {
         updatedAt: string,
         deletedAt: string | null,
         title: string,
+        assessmentType: AssessmentType,
         order: number,
+        mediumRiskThreshold: number,
+        highRiskThreshold: number,
+        riskAreaGroup:  {
+          id: string,
+          title: string,
+        } | null,
       },
       screeningToolScoreRanges:  Array< {
         id: string,
@@ -360,7 +380,14 @@ export type answerDeleteMutation = {
       updatedAt: string,
       deletedAt: string | null,
       title: string,
+      assessmentType: AssessmentType,
       order: number,
+      mediumRiskThreshold: number,
+      highRiskThreshold: number,
+      riskAreaGroup:  {
+        id: string,
+        title: string,
+      } | null,
     } | null,
     screeningTool:  {
       id: string,
@@ -372,7 +399,14 @@ export type answerDeleteMutation = {
         updatedAt: string,
         deletedAt: string | null,
         title: string,
+        assessmentType: AssessmentType,
         order: number,
+        mediumRiskThreshold: number,
+        highRiskThreshold: number,
+        riskAreaGroup:  {
+          id: string,
+          title: string,
+        } | null,
       },
       screeningToolScoreRanges:  Array< {
         id: string,
@@ -474,7 +508,14 @@ export type answerEditMutation = {
       updatedAt: string,
       deletedAt: string | null,
       title: string,
+      assessmentType: AssessmentType,
       order: number,
+      mediumRiskThreshold: number,
+      highRiskThreshold: number,
+      riskAreaGroup:  {
+        id: string,
+        title: string,
+      } | null,
     } | null,
     screeningTool:  {
       id: string,
@@ -486,7 +527,14 @@ export type answerEditMutation = {
         updatedAt: string,
         deletedAt: string | null,
         title: string,
+        assessmentType: AssessmentType,
         order: number,
+        mediumRiskThreshold: number,
+        highRiskThreshold: number,
+        riskAreaGroup:  {
+          id: string,
+          title: string,
+        } | null,
       },
       screeningToolScoreRanges:  Array< {
         id: string,
@@ -979,7 +1027,14 @@ export type getAnswerQuery = {
       updatedAt: string,
       deletedAt: string | null,
       title: string,
+      assessmentType: AssessmentType,
       order: number,
+      mediumRiskThreshold: number,
+      highRiskThreshold: number,
+      riskAreaGroup:  {
+        id: string,
+        title: string,
+      } | null,
     } | null,
     screeningTool:  {
       id: string,
@@ -991,7 +1046,14 @@ export type getAnswerQuery = {
         updatedAt: string,
         deletedAt: string | null,
         title: string,
+        assessmentType: AssessmentType,
         order: number,
+        mediumRiskThreshold: number,
+        highRiskThreshold: number,
+        riskAreaGroup:  {
+          id: string,
+          title: string,
+        } | null,
       },
       screeningToolScoreRanges:  Array< {
         id: string,
@@ -1369,7 +1431,14 @@ export type getPatientAnswersQuery = {
         updatedAt: string,
         deletedAt: string | null,
         title: string,
+        assessmentType: AssessmentType,
         order: number,
+        mediumRiskThreshold: number,
+        highRiskThreshold: number,
+        riskAreaGroup:  {
+          id: string,
+          title: string,
+        } | null,
       } | null,
       screeningTool:  {
         id: string,
@@ -1381,7 +1450,14 @@ export type getPatientAnswersQuery = {
           updatedAt: string,
           deletedAt: string | null,
           title: string,
+          assessmentType: AssessmentType,
           order: number,
+          mediumRiskThreshold: number,
+          highRiskThreshold: number,
+          riskAreaGroup:  {
+            id: string,
+            title: string,
+          } | null,
         },
         screeningToolScoreRanges:  Array< {
           id: string,
@@ -1814,7 +1890,14 @@ export type getPatientScreeningToolSubmissionForPatientAndScreeningToolQuery = {
       updatedAt: string,
       deletedAt: string | null,
       title: string,
+      assessmentType: AssessmentType,
       order: number,
+      mediumRiskThreshold: number,
+      highRiskThreshold: number,
+      riskAreaGroup:  {
+        id: string,
+        title: string,
+      } | null,
     },
     createdAt: string,
     updatedAt: string,
@@ -1934,7 +2017,14 @@ export type getPatientScreeningToolSubmissionQuery = {
       updatedAt: string,
       deletedAt: string | null,
       title: string,
+      assessmentType: AssessmentType,
       order: number,
+      mediumRiskThreshold: number,
+      highRiskThreshold: number,
+      riskAreaGroup:  {
+        id: string,
+        title: string,
+      } | null,
     },
     createdAt: string,
     updatedAt: string,
@@ -2272,7 +2362,14 @@ export type getProgressNoteActivityForProgressNoteQuery = {
             updatedAt: string,
             deletedAt: string | null,
             title: string,
+            assessmentType: AssessmentType,
             order: number,
+            mediumRiskThreshold: number,
+            highRiskThreshold: number,
+            riskAreaGroup:  {
+              id: string,
+              title: string,
+            } | null,
           } | null,
           screeningTool:  {
             id: string,
@@ -2284,7 +2381,14 @@ export type getProgressNoteActivityForProgressNoteQuery = {
               updatedAt: string,
               deletedAt: string | null,
               title: string,
+              assessmentType: AssessmentType,
               order: number,
+              mediumRiskThreshold: number,
+              highRiskThreshold: number,
+              riskAreaGroup:  {
+                id: string,
+                title: string,
+              } | null,
             },
             screeningToolScoreRanges:  Array< {
               id: string,
@@ -2387,7 +2491,14 @@ export type getProgressNoteActivityForProgressNoteQuery = {
             updatedAt: string,
             deletedAt: string | null,
             title: string,
+            assessmentType: AssessmentType,
             order: number,
+            mediumRiskThreshold: number,
+            highRiskThreshold: number,
+            riskAreaGroup:  {
+              id: string,
+              title: string,
+            } | null,
           } | null,
           screeningTool:  {
             id: string,
@@ -2399,7 +2510,14 @@ export type getProgressNoteActivityForProgressNoteQuery = {
               updatedAt: string,
               deletedAt: string | null,
               title: string,
+              assessmentType: AssessmentType,
               order: number,
+              mediumRiskThreshold: number,
+              highRiskThreshold: number,
+              riskAreaGroup:  {
+                id: string,
+                title: string,
+              } | null,
             },
             screeningToolScoreRanges:  Array< {
               id: string,
@@ -2841,7 +2959,14 @@ export type getQuestionAnswersQuery = {
       updatedAt: string,
       deletedAt: string | null,
       title: string,
+      assessmentType: AssessmentType,
       order: number,
+      mediumRiskThreshold: number,
+      highRiskThreshold: number,
+      riskAreaGroup:  {
+        id: string,
+        title: string,
+      } | null,
     } | null,
     screeningTool:  {
       id: string,
@@ -2853,7 +2978,14 @@ export type getQuestionAnswersQuery = {
         updatedAt: string,
         deletedAt: string | null,
         title: string,
+        assessmentType: AssessmentType,
         order: number,
+        mediumRiskThreshold: number,
+        highRiskThreshold: number,
+        riskAreaGroup:  {
+          id: string,
+          title: string,
+        } | null,
       },
       screeningToolScoreRanges:  Array< {
         id: string,
@@ -2959,7 +3091,14 @@ export type getQuestionQuery = {
         updatedAt: string,
         deletedAt: string | null,
         title: string,
+        assessmentType: AssessmentType,
         order: number,
+        mediumRiskThreshold: number,
+        highRiskThreshold: number,
+        riskAreaGroup:  {
+          id: string,
+          title: string,
+        } | null,
       } | null,
       screeningTool:  {
         id: string,
@@ -2971,7 +3110,14 @@ export type getQuestionQuery = {
           updatedAt: string,
           deletedAt: string | null,
           title: string,
+          assessmentType: AssessmentType,
           order: number,
+          mediumRiskThreshold: number,
+          highRiskThreshold: number,
+          riskAreaGroup:  {
+            id: string,
+            title: string,
+          } | null,
         },
         screeningToolScoreRanges:  Array< {
           id: string,
@@ -3094,7 +3240,14 @@ export type getQuestionsQuery = {
         updatedAt: string,
         deletedAt: string | null,
         title: string,
+        assessmentType: AssessmentType,
         order: number,
+        mediumRiskThreshold: number,
+        highRiskThreshold: number,
+        riskAreaGroup:  {
+          id: string,
+          title: string,
+        } | null,
       } | null,
       screeningTool:  {
         id: string,
@@ -3106,7 +3259,14 @@ export type getQuestionsQuery = {
           updatedAt: string,
           deletedAt: string | null,
           title: string,
+          assessmentType: AssessmentType,
           order: number,
+          mediumRiskThreshold: number,
+          highRiskThreshold: number,
+          riskAreaGroup:  {
+            id: string,
+            title: string,
+          } | null,
         },
         screeningToolScoreRanges:  Array< {
           id: string,
@@ -3282,7 +3442,14 @@ export type getRiskAreaQuery = {
     updatedAt: string,
     deletedAt: string | null,
     title: string,
+    assessmentType: AssessmentType,
     order: number,
+    mediumRiskThreshold: number,
+    highRiskThreshold: number,
+    riskAreaGroup:  {
+      id: string,
+      title: string,
+    } | null,
   } | null,
 };
 
@@ -3294,7 +3461,14 @@ export type getRiskAreasQuery = {
     updatedAt: string,
     deletedAt: string | null,
     title: string,
+    assessmentType: AssessmentType,
     order: number,
+    mediumRiskThreshold: number,
+    highRiskThreshold: number,
+    riskAreaGroup:  {
+      id: string,
+      title: string,
+    } | null,
   } | null > | null,
 };
 
@@ -3314,7 +3488,14 @@ export type getScreeningToolQuery = {
       updatedAt: string,
       deletedAt: string | null,
       title: string,
+      assessmentType: AssessmentType,
       order: number,
+      mediumRiskThreshold: number,
+      highRiskThreshold: number,
+      riskAreaGroup:  {
+        id: string,
+        title: string,
+      } | null,
     },
     screeningToolScoreRanges:  Array< {
       id: string,
@@ -3375,7 +3556,14 @@ export type getScreeningToolsForRiskAreaQuery = {
       updatedAt: string,
       deletedAt: string | null,
       title: string,
+      assessmentType: AssessmentType,
       order: number,
+      mediumRiskThreshold: number,
+      highRiskThreshold: number,
+      riskAreaGroup:  {
+        id: string,
+        title: string,
+      } | null,
     },
     screeningToolScoreRanges:  Array< {
       id: string,
@@ -3432,7 +3620,14 @@ export type getScreeningToolsQuery = {
       updatedAt: string,
       deletedAt: string | null,
       title: string,
+      assessmentType: AssessmentType,
       order: number,
+      mediumRiskThreshold: number,
+      highRiskThreshold: number,
+      riskAreaGroup:  {
+        id: string,
+        title: string,
+      } | null,
     },
     screeningToolScoreRanges:  Array< {
       id: string,
@@ -3858,7 +4053,14 @@ export type patientAnswersCreateMutation = {
         updatedAt: string,
         deletedAt: string | null,
         title: string,
+        assessmentType: AssessmentType,
         order: number,
+        mediumRiskThreshold: number,
+        highRiskThreshold: number,
+        riskAreaGroup:  {
+          id: string,
+          title: string,
+        } | null,
       } | null,
       screeningTool:  {
         id: string,
@@ -3870,7 +4072,14 @@ export type patientAnswersCreateMutation = {
           updatedAt: string,
           deletedAt: string | null,
           title: string,
+          assessmentType: AssessmentType,
           order: number,
+          mediumRiskThreshold: number,
+          highRiskThreshold: number,
+          riskAreaGroup:  {
+            id: string,
+            title: string,
+          } | null,
         },
         screeningToolScoreRanges:  Array< {
           id: string,
@@ -4429,7 +4638,14 @@ export type patientScreeningToolSubmissionCreateMutation = {
       updatedAt: string,
       deletedAt: string | null,
       title: string,
+      assessmentType: AssessmentType,
       order: number,
+      mediumRiskThreshold: number,
+      highRiskThreshold: number,
+      riskAreaGroup:  {
+        id: string,
+        title: string,
+      } | null,
     },
     createdAt: string,
     updatedAt: string,
@@ -4549,7 +4765,14 @@ export type patientScreeningToolSubmissionScoreMutation = {
       updatedAt: string,
       deletedAt: string | null,
       title: string,
+      assessmentType: AssessmentType,
       order: number,
+      mediumRiskThreshold: number,
+      highRiskThreshold: number,
+      riskAreaGroup:  {
+        id: string,
+        title: string,
+      } | null,
     },
     createdAt: string,
     updatedAt: string,
@@ -4980,7 +5203,14 @@ export type questionCreateMutation = {
         updatedAt: string,
         deletedAt: string | null,
         title: string,
+        assessmentType: AssessmentType,
         order: number,
+        mediumRiskThreshold: number,
+        highRiskThreshold: number,
+        riskAreaGroup:  {
+          id: string,
+          title: string,
+        } | null,
       } | null,
       screeningTool:  {
         id: string,
@@ -4992,7 +5222,14 @@ export type questionCreateMutation = {
           updatedAt: string,
           deletedAt: string | null,
           title: string,
+          assessmentType: AssessmentType,
           order: number,
+          mediumRiskThreshold: number,
+          highRiskThreshold: number,
+          riskAreaGroup:  {
+            id: string,
+            title: string,
+          } | null,
         },
         screeningToolScoreRanges:  Array< {
           id: string,
@@ -5114,7 +5351,14 @@ export type questionDeleteMutation = {
         updatedAt: string,
         deletedAt: string | null,
         title: string,
+        assessmentType: AssessmentType,
         order: number,
+        mediumRiskThreshold: number,
+        highRiskThreshold: number,
+        riskAreaGroup:  {
+          id: string,
+          title: string,
+        } | null,
       } | null,
       screeningTool:  {
         id: string,
@@ -5126,7 +5370,14 @@ export type questionDeleteMutation = {
           updatedAt: string,
           deletedAt: string | null,
           title: string,
+          assessmentType: AssessmentType,
           order: number,
+          mediumRiskThreshold: number,
+          highRiskThreshold: number,
+          riskAreaGroup:  {
+            id: string,
+            title: string,
+          } | null,
         },
         screeningToolScoreRanges:  Array< {
           id: string,
@@ -5253,7 +5504,14 @@ export type questionEditMutation = {
         updatedAt: string,
         deletedAt: string | null,
         title: string,
+        assessmentType: AssessmentType,
         order: number,
+        mediumRiskThreshold: number,
+        highRiskThreshold: number,
+        riskAreaGroup:  {
+          id: string,
+          title: string,
+        } | null,
       } | null,
       screeningTool:  {
         id: string,
@@ -5265,7 +5523,14 @@ export type questionEditMutation = {
           updatedAt: string,
           deletedAt: string | null,
           title: string,
+          assessmentType: AssessmentType,
           order: number,
+          mediumRiskThreshold: number,
+          highRiskThreshold: number,
+          riskAreaGroup:  {
+            id: string,
+            title: string,
+          } | null,
         },
         screeningToolScoreRanges:  Array< {
           id: string,
@@ -5544,7 +5809,11 @@ export type riskAreaAssessmentSubmissionCreateMutation = {
 
 export type riskAreaCreateMutationVariables = {
   title: string,
+  assessmentType: AssessmentType,
+  riskAreaGroupId: string,
   order: number,
+  mediumRiskThreshold: number,
+  highRiskThreshold: number,
 };
 
 export type riskAreaCreateMutation = {
@@ -5555,7 +5824,14 @@ export type riskAreaCreateMutation = {
     updatedAt: string,
     deletedAt: string | null,
     title: string,
+    assessmentType: AssessmentType,
     order: number,
+    mediumRiskThreshold: number,
+    highRiskThreshold: number,
+    riskAreaGroup:  {
+      id: string,
+      title: string,
+    } | null,
   } | null,
 };
 
@@ -5571,7 +5847,14 @@ export type riskAreaDeleteMutation = {
     updatedAt: string,
     deletedAt: string | null,
     title: string,
+    assessmentType: AssessmentType,
     order: number,
+    mediumRiskThreshold: number,
+    highRiskThreshold: number,
+    riskAreaGroup:  {
+      id: string,
+      title: string,
+    } | null,
   } | null,
 };
 
@@ -5579,6 +5862,8 @@ export type riskAreaEditMutationVariables = {
   riskAreaId: string,
   title?: string | null,
   order?: number | null,
+  mediumRiskThreshold?: number | null,
+  highRiskThreshold?: number | null,
 };
 
 export type riskAreaEditMutation = {
@@ -5589,7 +5874,14 @@ export type riskAreaEditMutation = {
     updatedAt: string,
     deletedAt: string | null,
     title: string,
+    assessmentType: AssessmentType,
     order: number,
+    mediumRiskThreshold: number,
+    highRiskThreshold: number,
+    riskAreaGroup:  {
+      id: string,
+      title: string,
+    } | null,
   } | null,
 };
 
@@ -5666,7 +5958,14 @@ export type screeningToolCreateMutation = {
       updatedAt: string,
       deletedAt: string | null,
       title: string,
+      assessmentType: AssessmentType,
       order: number,
+      mediumRiskThreshold: number,
+      highRiskThreshold: number,
+      riskAreaGroup:  {
+        id: string,
+        title: string,
+      } | null,
     },
     screeningToolScoreRanges:  Array< {
       id: string,
@@ -5727,7 +6026,14 @@ export type screeningToolDeleteMutation = {
       updatedAt: string,
       deletedAt: string | null,
       title: string,
+      assessmentType: AssessmentType,
       order: number,
+      mediumRiskThreshold: number,
+      highRiskThreshold: number,
+      riskAreaGroup:  {
+        id: string,
+        title: string,
+      } | null,
     },
     screeningToolScoreRanges:  Array< {
       id: string,
@@ -5790,7 +6096,14 @@ export type screeningToolEditMutation = {
       updatedAt: string,
       deletedAt: string | null,
       title: string,
+      assessmentType: AssessmentType,
       order: number,
+      mediumRiskThreshold: number,
+      highRiskThreshold: number,
+      riskAreaGroup:  {
+        id: string,
+        title: string,
+      } | null,
     },
     screeningToolScoreRanges:  Array< {
       id: string,
@@ -6636,7 +6949,14 @@ export type FullAnswerFragment = {
     updatedAt: string,
     deletedAt: string | null,
     title: string,
+    assessmentType: AssessmentType,
     order: number,
+    mediumRiskThreshold: number,
+    highRiskThreshold: number,
+    riskAreaGroup:  {
+      id: string,
+      title: string,
+    } | null,
   } | null,
   screeningTool:  {
     id: string,
@@ -6648,7 +6968,14 @@ export type FullAnswerFragment = {
       updatedAt: string,
       deletedAt: string | null,
       title: string,
+      assessmentType: AssessmentType,
       order: number,
+      mediumRiskThreshold: number,
+      highRiskThreshold: number,
+      riskAreaGroup:  {
+        id: string,
+        title: string,
+      } | null,
     },
     screeningToolScoreRanges:  Array< {
       id: string,
@@ -7160,7 +7487,14 @@ export type FullPatientAnswerEventFragment = {
         updatedAt: string,
         deletedAt: string | null,
         title: string,
+        assessmentType: AssessmentType,
         order: number,
+        mediumRiskThreshold: number,
+        highRiskThreshold: number,
+        riskAreaGroup:  {
+          id: string,
+          title: string,
+        } | null,
       } | null,
       screeningTool:  {
         id: string,
@@ -7172,7 +7506,14 @@ export type FullPatientAnswerEventFragment = {
           updatedAt: string,
           deletedAt: string | null,
           title: string,
+          assessmentType: AssessmentType,
           order: number,
+          mediumRiskThreshold: number,
+          highRiskThreshold: number,
+          riskAreaGroup:  {
+            id: string,
+            title: string,
+          } | null,
         },
         screeningToolScoreRanges:  Array< {
           id: string,
@@ -7275,7 +7616,14 @@ export type FullPatientAnswerEventFragment = {
         updatedAt: string,
         deletedAt: string | null,
         title: string,
+        assessmentType: AssessmentType,
         order: number,
+        mediumRiskThreshold: number,
+        highRiskThreshold: number,
+        riskAreaGroup:  {
+          id: string,
+          title: string,
+        } | null,
       } | null,
       screeningTool:  {
         id: string,
@@ -7287,7 +7635,14 @@ export type FullPatientAnswerEventFragment = {
           updatedAt: string,
           deletedAt: string | null,
           title: string,
+          assessmentType: AssessmentType,
           order: number,
+          mediumRiskThreshold: number,
+          highRiskThreshold: number,
+          riskAreaGroup:  {
+            id: string,
+            title: string,
+          } | null,
         },
         screeningToolScoreRanges:  Array< {
           id: string,
@@ -7396,7 +7751,14 @@ export type FullPatientAnswerFragment = {
       updatedAt: string,
       deletedAt: string | null,
       title: string,
+      assessmentType: AssessmentType,
       order: number,
+      mediumRiskThreshold: number,
+      highRiskThreshold: number,
+      riskAreaGroup:  {
+        id: string,
+        title: string,
+      } | null,
     } | null,
     screeningTool:  {
       id: string,
@@ -7408,7 +7770,14 @@ export type FullPatientAnswerFragment = {
         updatedAt: string,
         deletedAt: string | null,
         title: string,
+        assessmentType: AssessmentType,
         order: number,
+        mediumRiskThreshold: number,
+        highRiskThreshold: number,
+        riskAreaGroup:  {
+          id: string,
+          title: string,
+        } | null,
       },
       screeningToolScoreRanges:  Array< {
         id: string,
@@ -7652,7 +8021,14 @@ export type FullPatientScreeningToolSubmissionFragment = {
     updatedAt: string,
     deletedAt: string | null,
     title: string,
+    assessmentType: AssessmentType,
     order: number,
+    mediumRiskThreshold: number,
+    highRiskThreshold: number,
+    riskAreaGroup:  {
+      id: string,
+      title: string,
+    } | null,
   },
   createdAt: string,
   updatedAt: string,
@@ -7876,7 +8252,14 @@ export type FullProgressNoteActivityFragment = {
           updatedAt: string,
           deletedAt: string | null,
           title: string,
+          assessmentType: AssessmentType,
           order: number,
+          mediumRiskThreshold: number,
+          highRiskThreshold: number,
+          riskAreaGroup:  {
+            id: string,
+            title: string,
+          } | null,
         } | null,
         screeningTool:  {
           id: string,
@@ -7888,7 +8271,14 @@ export type FullProgressNoteActivityFragment = {
             updatedAt: string,
             deletedAt: string | null,
             title: string,
+            assessmentType: AssessmentType,
             order: number,
+            mediumRiskThreshold: number,
+            highRiskThreshold: number,
+            riskAreaGroup:  {
+              id: string,
+              title: string,
+            } | null,
           },
           screeningToolScoreRanges:  Array< {
             id: string,
@@ -7991,7 +8381,14 @@ export type FullProgressNoteActivityFragment = {
           updatedAt: string,
           deletedAt: string | null,
           title: string,
+          assessmentType: AssessmentType,
           order: number,
+          mediumRiskThreshold: number,
+          highRiskThreshold: number,
+          riskAreaGroup:  {
+            id: string,
+            title: string,
+          } | null,
         } | null,
         screeningTool:  {
           id: string,
@@ -8003,7 +8400,14 @@ export type FullProgressNoteActivityFragment = {
             updatedAt: string,
             deletedAt: string | null,
             title: string,
+            assessmentType: AssessmentType,
             order: number,
+            mediumRiskThreshold: number,
+            highRiskThreshold: number,
+            riskAreaGroup:  {
+              id: string,
+              title: string,
+            } | null,
           },
           screeningToolScoreRanges:  Array< {
             id: string,
@@ -8380,7 +8784,14 @@ export type FullQuestionFragment = {
       updatedAt: string,
       deletedAt: string | null,
       title: string,
+      assessmentType: AssessmentType,
       order: number,
+      mediumRiskThreshold: number,
+      highRiskThreshold: number,
+      riskAreaGroup:  {
+        id: string,
+        title: string,
+      } | null,
     } | null,
     screeningTool:  {
       id: string,
@@ -8392,7 +8803,14 @@ export type FullQuestionFragment = {
         updatedAt: string,
         deletedAt: string | null,
         title: string,
+        assessmentType: AssessmentType,
         order: number,
+        mediumRiskThreshold: number,
+        highRiskThreshold: number,
+        riskAreaGroup:  {
+          id: string,
+          title: string,
+        } | null,
       },
       screeningToolScoreRanges:  Array< {
         id: string,
@@ -8582,7 +9000,14 @@ export type FullRiskAreaFragment = {
   updatedAt: string,
   deletedAt: string | null,
   title: string,
+  assessmentType: AssessmentType,
   order: number,
+  mediumRiskThreshold: number,
+  highRiskThreshold: number,
+  riskAreaGroup:  {
+    id: string,
+    title: string,
+  } | null,
 };
 
 export type FullRiskScoreFragment = {
@@ -8638,7 +9063,14 @@ export type FullScreeningToolFragment = {
     updatedAt: string,
     deletedAt: string | null,
     title: string,
+    assessmentType: AssessmentType,
     order: number,
+    mediumRiskThreshold: number,
+    highRiskThreshold: number,
+    riskAreaGroup:  {
+      id: string,
+      title: string,
+    } | null,
   },
   screeningToolScoreRanges:  Array< {
     id: string,

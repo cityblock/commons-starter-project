@@ -158,6 +158,11 @@ enum ComputedFieldDataTypes {
   number
 }
 
+enum AssessmentType {
+  automated
+  manual
+}
+
 # User account model
 type User implements uniqueId {
   id: ID!
@@ -489,7 +494,12 @@ type RiskArea implements uniqueId {
   updatedAt: String!
   deletedAt: String
   title: String!
+  assessmentType: AssessmentType!
+  riskAreaGroupId: ID
+  riskAreaGroup: RiskAreaGroup
   order: Int!
+  mediumRiskThreshold: Int!
+  highRiskThreshold: Int!
 }
 
 type RiskScore {
@@ -1020,13 +1030,19 @@ input RiskAreaGroupDeleteInput {
 
 input RiskAreaCreateInput {
   title: String!
+  assessmentType: AssessmentType!
+  riskAreaGroupId: ID!
   order: Int!
+  mediumRiskThreshold: Int!
+  highRiskThreshold: Int!
 }
 
 input RiskAreaEditInput {
   riskAreaId: String!
   title: String
   order: Int
+  mediumRiskThreshold: Int
+  highRiskThreshold: Int
 }
 
 input RiskAreaDeleteInput {

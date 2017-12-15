@@ -72,6 +72,10 @@ export const riskArea = {
   deletedAt: null,
   title: 'Risk Area Title',
   order: 1,
+  mediumRiskThreshold: 5,
+  highRiskThreshold: 8,
+  assessmentType: 'manual' as any,
+  riskAreaGroup,
 };
 
 export const riskAreaAssessmentSubmission = {

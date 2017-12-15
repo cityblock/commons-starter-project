@@ -7,6 +7,7 @@ import {
   createMockPatient,
   createMockUser,
   createPatient,
+  createRiskArea,
 } from '../../spec-helpers';
 import Answer from '../answer';
 import Clinic from '../clinic';
@@ -38,7 +39,7 @@ describe('patient answer event model', () => {
     clinic = await Clinic.create(createMockClinic());
     user = await User.create(createMockUser(11, clinic.id, userRole));
     patient = await createPatient(createMockPatient(123, clinic.id), user.id);
-    riskArea = await RiskArea.create({ title: 'Risk Area', order: 1 });
+    riskArea = await createRiskArea('Risk Area');
     question = await Question.create({
       riskAreaId: riskArea.id,
       title: 'Question Title',

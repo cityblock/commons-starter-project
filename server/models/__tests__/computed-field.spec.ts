@@ -1,8 +1,8 @@
 import * as uuid from 'uuid/v4';
 import Db from '../../db';
+import { createRiskArea } from '../../spec-helpers';
 import ComputedField from '../computed-field';
 import Question from '../question';
-import RiskArea from '../risk-area';
 
 const order = 'asc';
 const orderBy = 'createdAt';
@@ -171,7 +171,7 @@ describe('computed field model', () => {
         slug: 'computed-field-2',
         dataType: 'number',
       });
-      const riskArea = await RiskArea.create({ title: 'Housing', order: 1 });
+      const riskArea = await createRiskArea('Housing');
       await Question.create({
         riskAreaId: riskArea.id,
         type: 'riskArea',

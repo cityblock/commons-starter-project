@@ -24,6 +24,7 @@ import {
   createMockPatient,
   createMockUser,
   createPatient,
+  createRiskArea,
 } from '../../spec-helpers';
 import schema from '../make-executable-schema';
 
@@ -45,10 +46,7 @@ describe('patient answer tests', () => {
     clinic = await Clinic.create(createMockClinic());
     user = await User.create(createMockUser(11, clinic.id, userRole));
 
-    riskArea = await RiskArea.create({
-      title: 'testing',
-      order: 1,
-    });
+    riskArea = await createRiskArea();
     question = await Question.create({
       title: 'like writing tests?',
       answerType: 'dropdown',
@@ -221,10 +219,7 @@ describe('patient answer tests', () => {
 
   describe('resolve patient answers for risk area', () => {
     it('resolves patient answers for a risk area', async () => {
-      const riskArea2 = await RiskArea.create({
-        title: 'testing2',
-        order: 2,
-      });
+      const riskArea2 = await createRiskArea('testing2', 2);
       const differentQuestion = await Question.create({
         title: 'like writing tests again?',
         answerType: 'dropdown',

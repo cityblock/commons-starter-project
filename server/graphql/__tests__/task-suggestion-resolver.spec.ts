@@ -3,9 +3,9 @@ import { cloneDeep } from 'lodash';
 import Db from '../../db';
 import Answer from '../../models/answer';
 import Question from '../../models/question';
-import RiskArea from '../../models/risk-area';
 import TaskSuggestion from '../../models/task-suggestion';
 import TaskTemplate from '../../models/task-template';
+import { createRiskArea } from '../../spec-helpers';
 import schema from '../make-executable-schema';
 
 describe('task suggestion resolver', () => {
@@ -17,11 +17,7 @@ describe('task suggestion resolver', () => {
     await Db.get();
     await Db.clear();
 
-    const riskArea = await RiskArea.create({
-      title: 'test',
-      order: 1,
-    });
-
+    const riskArea = await createRiskArea();
     const question = await Question.create({
       title: 'like writing tests?',
       answerType: 'dropdown',

@@ -5,6 +5,7 @@ import {
   createMockPatient,
   createMockUser,
   createPatient,
+  createRiskArea,
 } from '../../spec-helpers';
 import Answer from '../answer';
 import CarePlanSuggestion from '../care-plan-suggestion';
@@ -32,10 +33,7 @@ describe('goal suggestion model', () => {
     await Db.clear();
 
     clinic = await Clinic.create(createMockClinic());
-    riskArea = await RiskArea.create({
-      title: 'testing',
-      order: 1,
-    });
+    riskArea = await createRiskArea('testing');
     question = await Question.create({
       title: 'like writing tests?',
       answerType: 'dropdown',

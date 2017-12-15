@@ -5,9 +5,9 @@ import Answer from '../../models/answer';
 import Concern from '../../models/concern';
 import ConcernSuggestion from '../../models/concern-suggestion';
 import Question from '../../models/question';
-import RiskArea from '../../models/risk-area';
 import ScreeningTool from '../../models/screening-tool';
 import ScreeningToolScoreRange from '../../models/screening-tool-score-range';
+import { createRiskArea } from '../../spec-helpers';
 import schema from '../make-executable-schema';
 
 describe('concern suggestion resolver', () => {
@@ -19,10 +19,7 @@ describe('concern suggestion resolver', () => {
     await Db.get();
     await Db.clear();
 
-    const riskArea = await RiskArea.create({
-      title: 'testing',
-      order: 1,
-    });
+    const riskArea = await createRiskArea();
     question = await Question.create({
       title: 'like writing tests?',
       answerType: 'dropdown',
@@ -82,7 +79,7 @@ describe('concern suggestion resolver', () => {
     });
 
     it('suggests a concern for a screening tool score range', async () => {
-      const riskArea = await RiskArea.create({ title: 'Housing', order: 1 });
+      const riskArea = await createRiskArea();
       const concern = await Concern.create({ title: 'No Housing' });
       const screeningTool = await ScreeningTool.create({
         title: 'Screening Tool',

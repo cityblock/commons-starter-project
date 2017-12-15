@@ -8,7 +8,7 @@ import Question from '../../models/question';
 import QuestionCondition from '../../models/question-condition';
 import RiskArea from '../../models/risk-area';
 import User from '../../models/user';
-import { createMockClinic, createMockUser } from '../../spec-helpers';
+import { createMockClinic, createMockUser, createRiskArea } from '../../spec-helpers';
 import schema from '../make-executable-schema';
 
 describe('questionCondition tests', () => {
@@ -28,10 +28,7 @@ describe('questionCondition tests', () => {
     clinic = await Clinic.create(createMockClinic());
     user = await User.create(createMockUser(11, clinic.id, userRole, 'a@b.com'));
 
-    riskArea = await RiskArea.create({
-      title: 'testing',
-      order: 1,
-    });
+    riskArea = await createRiskArea();
     question = await Question.create({
       title: 'like writing tests?',
       answerType: 'dropdown',

@@ -3,7 +3,7 @@ import { cloneDeep } from 'lodash';
 import Db from '../../db';
 import ComputedField from '../../models/computed-field';
 import Question from '../../models/question';
-import RiskArea from '../../models/risk-area';
+import { createRiskArea } from '../../spec-helpers';
 import schema from '../make-executable-schema';
 
 describe('computed field resolver', () => {
@@ -106,7 +106,8 @@ describe('computed field resolver', () => {
         slug: 'computed-field-2',
         dataType: 'boolean',
       });
-      const riskArea = await RiskArea.create({ title: 'Housing', order: 1 });
+
+      const riskArea = await createRiskArea();
       await Question.create({
         riskAreaId: riskArea.id,
         type: 'riskArea',

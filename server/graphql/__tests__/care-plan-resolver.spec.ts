@@ -18,6 +18,7 @@ import {
   createMockPatient,
   createMockUser,
   createPatient,
+  createRiskArea,
 } from '../../spec-helpers';
 import schema from '../make-executable-schema';
 
@@ -43,17 +44,10 @@ describe('care plan resolver tests', () => {
     await Db.clear();
     clinic = await Clinic.create(createMockClinic());
     user = await User.create(createMockUser(11, clinic.id));
-
     concern = await Concern.create({ title: 'Concern' });
     goalSuggestionTemplate = await GoalSuggestionTemplate.create({ title: 'Goal' });
-    riskArea = await RiskArea.create({
-      title: 'testing',
-      order: 1,
-    });
-    riskArea2 = await RiskArea.create({
-      title: 'testing second area',
-      order: 2,
-    });
+    riskArea = await createRiskArea('testing');
+    riskArea2 = await createRiskArea('testing second area', 2);
     question = await Question.create({
       title: 'like writing tests?',
       answerType: 'dropdown',

@@ -16,8 +16,9 @@ interface IProps {
 }
 
 interface IGraphqlProps {
-  createRiskAreaGroup: (options: { variables: riskAreaGroupCreateMutationVariables }) =>
-    { data: riskAreaGroupCreateMutation };
+  createRiskAreaGroup: (
+    options: { variables: riskAreaGroupCreateMutationVariables },
+  ) => { data: riskAreaGroupCreateMutation };
 }
 
 type allProps = IProps & IGraphqlProps;
@@ -45,11 +46,11 @@ export class RiskAreaGroupCreate extends React.Component<allProps, IState> {
     };
   }
 
-  onChange = (field: Field): (e: React.ChangeEvent<HTMLInputElement>) => void => {
+  onChange = (field: Field): ((e: React.ChangeEvent<HTMLInputElement>) => void) => {
     return (e: React.ChangeEvent<HTMLInputElement>): void => {
       this.setState({ [field as any]: e.currentTarget.value });
     };
-  }
+  };
 
   onSubmit = async () => {
     const { createRiskAreaGroup, cancelCreateRiskAreaGroup } = this.props;
@@ -68,11 +69,11 @@ export class RiskAreaGroupCreate extends React.Component<allProps, IState> {
         });
         cancelCreateRiskAreaGroup();
       } catch (err) {
-        this.setState({ error: err. message});
+        this.setState({ error: err.message });
       }
     }
     this.setState({ loading: false });
-  }
+  };
 
   render(): JSX.Element {
     const { cancelCreateRiskAreaGroup } = this.props;
@@ -82,47 +83,47 @@ export class RiskAreaGroupCreate extends React.Component<allProps, IState> {
       <div>
         <div className={styles.buttons}>
           <Button
-            messageId='riskAreaGroup.close'
-            icon='close'
-            color='white'
+            messageId="riskAreaGroup.close"
+            icon="close"
+            color="white"
             className={styles.button}
-            onClick={cancelCreateRiskAreaGroup} />
+            onClick={cancelCreateRiskAreaGroup}
+          />
         </div>
         <div className={styles.fields}>
           <TextInput
             value={title}
             onChange={this.onChange('title')}
-            placeholderMessageId="riskAreaGroup.title" />
+            placeholderMessageId="riskAreaGroup.title"
+          />
           <TextInput
             value={mediumRiskThreshold}
             onChange={this.onChange('mediumRiskThreshold')}
-            placeholderMessageId="riskAreaGroup.mediumRiskThreshold" />
+            placeholderMessageId="riskAreaGroup.mediumRiskThreshold"
+          />
           <TextInput
             value={highRiskThreshold}
             onChange={this.onChange('highRiskThreshold')}
-            placeholderMessageId="riskAreaGroup.highRiskThreshold" />
+            placeholderMessageId="riskAreaGroup.highRiskThreshold"
+          />
         </div>
         <div className={styles.buttons}>
           <Button
-            messageId='modalButtons.cancel'
+            messageId="modalButtons.cancel"
             onClick={cancelCreateRiskAreaGroup}
-            color='white'
-            small={true} />
-          <Button
-            messageId='riskAreaGroup.create'
-            onClick={this.onSubmit}
-            small={true} />
+            color="white"
+            small={true}
+          />
+          <Button messageId="riskAreaGroup.create" onClick={this.onSubmit} small={true} />
         </div>
       </div>
     );
   }
 }
 
-export default graphql<IGraphqlProps, IProps, allProps>(
-  createRiskAreaGroupMutationGraphql as any, {
-    name: 'createRiskAreaGroup',
-    options: {
-      refetchQueries: ['getRiskAreaGroups'],
-    },
+export default graphql<IGraphqlProps, IProps, allProps>(createRiskAreaGroupMutationGraphql as any, {
+  name: 'createRiskAreaGroup',
+  options: {
+    refetchQueries: ['getRiskAreaGroups'],
   },
-)(RiskAreaGroupCreate);
+})(RiskAreaGroupCreate);

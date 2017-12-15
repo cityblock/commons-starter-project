@@ -37,12 +37,14 @@ it('renders builder container', () => {
   const locale = { messages: ENGLISH_TRANSLATION.messages };
   const task = { taskId: 'foo' };
   const tree = create(
-    <MockedProvider mocks={[
-      {
-        request: { query },
-        result: { data: { riskAreaGroups: [] }},
-      },
-    ]}>
+    <MockedProvider
+      mocks={[
+        {
+          request: { query },
+          result: { data: { riskAreaGroups: [] } },
+        },
+      ]}
+    >
       <Provider store={mockStore({ locale, task })}>
         <ReduxConnectedIntlProvider>
           <ConnectedRouter history={history}>

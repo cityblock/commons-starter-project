@@ -7,31 +7,49 @@ import PatientAnswer from '../../models/patient-answer';
 import Question from '../../models/question';
 import RiskArea from '../../models/risk-area';
 import RiskAreaAssessmentSubmission from '../../models/risk-area-assessment-submission';
+import RiskAreaGroup from '../../models/risk-area-group';
 import User from '../../models/user';
 import {
   createMockClinic,
   createMockPatient,
+  createMockRiskAreaGroup,
   createMockUser,
   createPatient,
 } from '../../spec-helpers';
 
 describe('risk area model', () => {
+  let riskAreaGroup: RiskAreaGroup;
+
   beforeEach(async () => {
     await Db.get();
     await Db.clear();
+
+    riskAreaGroup = await RiskAreaGroup.create(createMockRiskAreaGroup());
   });
 
   afterAll(async () => {
     await Db.release();
   });
 
+  const mediumRiskThreshold = 5;
+  const highRiskThreshold = 8;
+  const assessmentType = 'manual';
+
   it('should creates and get a risk area', async () => {
     const riskArea = await RiskArea.create({
       title: 'Housing',
       order: 1,
+      mediumRiskThreshold,
+      highRiskThreshold,
+      assessmentType,
+      riskAreaGroupId: riskAreaGroup.id,
     });
     expect(riskArea.title).toEqual('Housing');
-    expect(await RiskArea.get(riskArea.id)).toEqual(riskArea);
+    expect(riskArea.mediumRiskThreshold).toBe(mediumRiskThreshold);
+    expect(riskArea.highRiskThreshold).toBe(highRiskThreshold);
+    const fetchedRiskArea = await RiskArea.get(riskArea.id);
+    expect(fetchedRiskArea).toMatchObject(riskArea);
+    expect(fetchedRiskArea.riskAreaGroup).toMatchObject(riskAreaGroup);
   });
 
   it('should throw an error if a risk area does not exist for the id', async () => {
@@ -43,21 +61,39 @@ describe('risk area model', () => {
     const riskArea = await RiskArea.create({
       title: 'Housing',
       order: 1,
+      mediumRiskThreshold,
+      highRiskThreshold,
+      assessmentType,
+      riskAreaGroupId: riskAreaGroup.id,
     });
     expect(riskArea.title).toEqual('Housing');
-    const editedRiskArea = await RiskArea.edit({ title: 'Mental Health' }, riskArea.id);
+    const editedRiskArea = await RiskArea.edit(
+      { title: 'Mental Health', mediumRiskThreshold: 6, assessmentType: 'automated' },
+      riskArea.id,
+    );
     expect(editedRiskArea.title).toEqual('Mental Health');
+    expect(editedRiskArea.mediumRiskThreshold).toBe(6);
+    expect(editedRiskArea.assessmentType).toBe('automated');
   });
 
   it('get all risk areas', async () => {
     const riskArea = await RiskArea.create({
       title: 'Housing',
       order: 1,
+      mediumRiskThreshold,
+      highRiskThreshold,
+      assessmentType,
+      riskAreaGroupId: riskAreaGroup.id,
     });
     const riskArea2 = await RiskArea.create({
       title: 'Housing 2',
       order: 2,
+      mediumRiskThreshold,
+      highRiskThreshold,
+      assessmentType,
+      riskAreaGroupId: riskAreaGroup.id,
     });
+
     expect(riskArea.deletedAt).toBeFalsy();
     const deleted = await RiskArea.delete(riskArea.id);
     expect(deleted.deletedAt).not.toBeFalsy();
@@ -69,6 +105,10 @@ describe('risk area model', () => {
     const riskArea = await RiskArea.create({
       title: 'Housing',
       order: 1,
+      mediumRiskThreshold,
+      highRiskThreshold,
+      assessmentType,
+      riskAreaGroupId: riskAreaGroup.id,
     });
     expect(riskArea.deletedAt).toBeFalsy();
     const deleted = await RiskArea.delete(riskArea.id);
@@ -87,6 +127,10 @@ describe('risk area model', () => {
       riskArea = await RiskArea.create({
         title: 'testing',
         order: 1,
+        mediumRiskThreshold,
+        highRiskThreshold,
+        assessmentType,
+        riskAreaGroupId: riskAreaGroup.id,
       });
       question = await Question.create({
         title: 'like writing tests?',
@@ -208,6 +252,10 @@ describe('risk area model', () => {
       const riskArea2 = await RiskArea.create({
         title: 'risk area 2',
         order: 2,
+        mediumRiskThreshold,
+        highRiskThreshold,
+        assessmentType,
+        riskAreaGroupId: riskAreaGroup.id,
       });
       const question2 = await Question.create({
         title: 'hate writing tests?',

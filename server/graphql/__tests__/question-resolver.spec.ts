@@ -9,7 +9,7 @@ import Question from '../../models/question';
 import RiskArea from '../../models/risk-area';
 import ScreeningTool from '../../models/screening-tool';
 import User from '../../models/user';
-import { createMockClinic, createMockUser } from '../../spec-helpers';
+import { createMockClinic, createMockUser, createRiskArea } from '../../spec-helpers';
 import schema from '../make-executable-schema';
 
 describe('question tests', () => {
@@ -26,10 +26,7 @@ describe('question tests', () => {
     await Db.clear();
     clinic = await Clinic.create(createMockClinic());
     user = await User.create(createMockUser(11, clinic.id, userRole));
-    riskArea = await RiskArea.create({
-      title: 'testing',
-      order: 1,
-    });
+    riskArea = await createRiskArea();
     question = await Question.create({
       title: 'like writing tests?',
       answerType: 'dropdown',

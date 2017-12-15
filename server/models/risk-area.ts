@@ -4,10 +4,15 @@ import { IRiskAreaStatistic, IRiskAreaSummary, IThreeSixtySummary } from 'schema
 import BaseModel from './base-model';
 import PatientAnswer from './patient-answer';
 import Question from './question';
+import RiskAreaGroup from './risk-area-group';
 
 interface IRiskAreaEditableFields {
   title: string;
+  riskAreaGroupId: string;
+  assessmentType: AssessmentType;
   order: number;
+  mediumRiskThreshold: number;
+  highRiskThreshold: number;
 }
 
 export interface IRiskScore {
@@ -15,13 +20,22 @@ export interface IRiskScore {
   forceHighRisk: boolean;
 }
 
+export type AssessmentType = 'manual' | 'automated';
+
+const EAGER_QUERY = '[riskAreaGroup]';
+
 /* tslint:disable:member-ordering */
 // 360 Domain
 export default class RiskArea extends BaseModel {
   id: string;
   title: string;
+  riskAreaGroupId: string;
+  assessmentType: AssessmentType;
+  riskAreaGroup: RiskAreaGroup;
   questions: Question[];
   order: number;
+  mediumRiskThreshold: number;
+  highRiskThreshold: number;
 
   static tableName = 'risk_area';
 
@@ -30,8 +44,12 @@ export default class RiskArea extends BaseModel {
     properties: {
       id: { type: 'string' },
       title: { type: 'string' },
+      assessmentType: { type: 'string', enum: ['manual', 'automated'] },
+      riskAreaGroupId: { type: 'string', minLength: 1 }, // cannot be blank
       deletedAt: { type: 'string' },
       order: { type: 'integer' },
+      mediumRiskThreshold: { type: 'integer', minimum: 1 },
+      highRiskThreshold: { type: 'integer', minimum: 1 },
     },
   };
 
@@ -44,10 +62,20 @@ export default class RiskArea extends BaseModel {
         to: 'question.riskAreaId',
       },
     },
+    riskAreaGroup: {
+      relation: Model.BelongsToOneRelation,
+      modelClass: 'risk-area-group',
+      join: {
+        from: 'risk_area.riskAreaGroupId',
+        to: 'risk_area_group.id',
+      },
+    },
   };
 
   static async get(riskAreaId: string): Promise<RiskArea> {
-    const riskArea = await this.query().findOne({ id: riskAreaId, deletedAt: null });
+    const riskArea = await this.query()
+      .eager(EAGER_QUERY)
+      .findOne({ id: riskAreaId, deletedAt: null });
 
     if (!riskArea) {
       return Promise.reject(`No such risk area: ${riskAreaId}`);
@@ -57,6 +85,7 @@ export default class RiskArea extends BaseModel {
 
   static async getAll(): Promise<RiskArea[]> {
     return this.query()
+      .eager(EAGER_QUERY)
       .orderBy('order')
       .where({ deletedAt: null });
   }
@@ -69,7 +98,9 @@ export default class RiskArea extends BaseModel {
     riskArea: Partial<IRiskAreaEditableFields>,
     riskAreaId: string,
   ): Promise<RiskArea> {
-    return await this.query().updateAndFetchById(riskAreaId, riskArea);
+    return await this.query()
+      .eager(EAGER_QUERY)
+      .updateAndFetchById(riskAreaId, riskArea);
   }
 
   static async delete(riskAreaId: string): Promise<RiskArea> {
@@ -77,7 +108,9 @@ export default class RiskArea extends BaseModel {
       .where({ id: riskAreaId, deletedAt: null })
       .update({ deletedAt: new Date().toISOString() });
 
-    const riskArea = await this.query().findById(riskAreaId);
+    const riskArea = await this.query()
+      .eager(EAGER_QUERY)
+      .findById(riskAreaId);
     if (!riskArea) {
       return Promise.reject(`No such riskArea: ${riskAreaId}`);
     }

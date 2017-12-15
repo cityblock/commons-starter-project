@@ -71,7 +71,7 @@ export default class Task extends BaseModel {
       patientId: { type: 'string' },
       patientGoalId: { type: 'string' },
       dueAt: { type: 'string' },
-      priority: { type: 'string' },
+      priority: { type: 'string', enum: ['low', 'medium', 'high'] },
       deletedAt: { type: 'string' },
     },
   };

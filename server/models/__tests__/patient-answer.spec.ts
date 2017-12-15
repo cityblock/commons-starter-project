@@ -7,6 +7,7 @@ import {
   createMockPatient,
   createMockUser,
   createPatient,
+  createRiskArea,
 } from '../../spec-helpers';
 import Answer from '../answer';
 import Clinic from '../clinic';
@@ -38,10 +39,7 @@ describe('answer model', () => {
     await Db.clear();
 
     clinic = await Clinic.create(createMockClinic());
-    riskArea = await RiskArea.create({
-      title: 'testing',
-      order: 1,
-    });
+    riskArea = await createRiskArea('testing');
     question = await Question.create({
       title: 'like writing tests?',
       answerType: 'dropdown',

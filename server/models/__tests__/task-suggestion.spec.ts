@@ -1,8 +1,8 @@
 import * as uuid from 'uuid/v4';
 import Db from '../../db';
+import { createRiskArea } from '../../spec-helpers';
 import Answer from '../answer';
 import Question from '../question';
-import RiskArea from '../risk-area';
 import TaskSuggestion from '../task-suggestion';
 import TaskTemplate from '../task-template';
 
@@ -15,10 +15,7 @@ describe('task suggestion model', () => {
     await Db.get();
     await Db.clear();
 
-    const riskArea = await RiskArea.create({
-      title: 'test',
-      order: 1,
-    });
+    const riskArea = await createRiskArea('test');
 
     question = await Question.create({
       title: 'like writing tests?',

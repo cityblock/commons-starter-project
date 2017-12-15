@@ -5,6 +5,7 @@ import {
   createMockPatient,
   createMockUser,
   createPatient,
+  createRiskArea,
 } from '../../spec-helpers';
 import Answer from '../answer';
 import CarePlanSuggestion from '../care-plan-suggestion';
@@ -37,7 +38,7 @@ describe('patient screening tool submission model', () => {
     await Db.get();
     await Db.clear();
 
-    riskArea = await RiskArea.create({ title: 'Housing', order: 1 });
+    riskArea = await createRiskArea('Housing');
     screeningTool1 = await ScreeningTool.create({
       title: 'Screening Tool',
       riskAreaId: riskArea.id,

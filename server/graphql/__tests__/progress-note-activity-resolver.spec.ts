@@ -11,7 +11,6 @@ import PatientAnswerEvent from '../../models/patient-answer-event';
 import PatientConcern from '../../models/patient-concern';
 import ProgressNote from '../../models/progress-note';
 import Question from '../../models/question';
-import RiskArea from '../../models/risk-area';
 import RiskAreaAssessmentSubmission from '../../models/risk-area-assessment-submission';
 import Task from '../../models/task';
 import TaskEvent from '../../models/task-event';
@@ -23,6 +22,7 @@ import {
   createMockPatient,
   createMockUser,
   createPatient,
+  createRiskArea,
 } from '../../spec-helpers';
 import schema from '../make-executable-schema';
 
@@ -39,7 +39,7 @@ describe('progress note resolver', () => {
     const clinic = await Clinic.create(createMockClinic());
     user = await User.create(createMockUser(11, clinic.id, userRole));
     patient = await createPatient(createMockPatient(123, clinic.id), user.id);
-    const riskArea = await RiskArea.create({ title: 'Risk Area', order: 1 });
+    const riskArea = await createRiskArea();
     riskAreaAssessmentSubmission = await RiskAreaAssessmentSubmission.create({
       patientId: patient.id,
       userId: user.id,
@@ -85,7 +85,7 @@ describe('progress note resolver', () => {
       eventType: 'create_patient_concern',
       progressNoteId: progressNote.id,
     });
-    const riskArea = await RiskArea.create({ title: 'Risk Area Title', order: 1 });
+    const riskArea = await createRiskArea('Risk Area Title', 2);
     const question = await Question.create({
       riskAreaId: riskArea.id,
       title: 'Question Title',

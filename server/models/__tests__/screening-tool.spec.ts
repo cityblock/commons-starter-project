@@ -1,5 +1,6 @@
 import * as uuid from 'uuid/v4';
 import Db from '../../db';
+import { createRiskArea } from '../../spec-helpers';
 import RiskArea from '../risk-area';
 import ScreeningTool from '../screening-tool';
 
@@ -10,7 +11,7 @@ describe('screening tool model', () => {
     await Db.get();
     await Db.clear();
 
-    riskArea = await RiskArea.create({ title: 'Housing', order: 1 });
+    riskArea = await createRiskArea('Housing');
   });
 
   afterAll(async () => {
@@ -47,7 +48,7 @@ describe('screening tool model', () => {
   });
 
   it('gets all screening tools for a risk area', async () => {
-    const riskArea2 = await RiskArea.create({ title: 'Food', order: 2 });
+    const riskArea2 = await createRiskArea('Food', 2);
     const screeningTool1 = await ScreeningTool.create({
       title: 'Screening Tool 1',
       riskAreaId: riskArea.id,
@@ -69,7 +70,7 @@ describe('screening tool model', () => {
   });
 
   it('gets all screening tools', async () => {
-    const riskArea2 = await RiskArea.create({ title: 'Food', order: 2 });
+    const riskArea2 = await createRiskArea('Food', 2);
     const screeningTool1 = await ScreeningTool.create({
       title: 'Screening Tool 1',
       riskAreaId: riskArea.id,

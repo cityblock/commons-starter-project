@@ -1,3 +1,4 @@
+import { Model, RelationMappings } from 'objection';
 import BaseModel from './base-model';
 
 interface IRiskAreaGroupEditableFields {
@@ -24,6 +25,17 @@ export default class RiskAreaGroup extends BaseModel {
       mediumRiskThreshold: { type: 'integer', minimum: 1 },
       highRiskThreshold: { type: 'integer', minimum: 1 },
       deletedAt: { type: 'string' },
+    },
+  };
+
+  static relationMappings: RelationMappings = {
+    riskAreas: {
+      relation: Model.HasManyRelation,
+      modelClass: 'risk-area',
+      join: {
+        from: 'risk_area_group.id',
+        to: 'risk_area.riskAreaGroupId',
+      },
     },
   };
 

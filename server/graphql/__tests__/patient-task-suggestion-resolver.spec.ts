@@ -7,7 +7,6 @@ import Concern from '../../models/concern';
 import Patient from '../../models/patient';
 import PatientTaskSuggestion from '../../models/patient-task-suggestion';
 import Question from '../../models/question';
-import RiskArea from '../../models/risk-area';
 import Task from '../../models/task';
 import TaskSuggestion from '../../models/task-suggestion';
 import TaskTemplate from '../../models/task-template';
@@ -17,6 +16,7 @@ import {
   createMockPatient,
   createMockUser,
   createPatient,
+  createRiskArea,
 } from '../../spec-helpers';
 import schema from '../make-executable-schema';
 
@@ -36,11 +36,7 @@ describe('patient task suggestion resolver tests', () => {
 
     clinic = await Clinic.create(createMockClinic());
     user = await User.create(createMockUser(11, clinic.id, userRole, 'a@b.com'));
-
-    const riskArea = await RiskArea.create({
-      title: 'test',
-      order: 1,
-    });
+    const riskArea = await createRiskArea();
 
     await Concern.create({ title: 'Concern' });
     taskTemplate = await TaskTemplate.create({

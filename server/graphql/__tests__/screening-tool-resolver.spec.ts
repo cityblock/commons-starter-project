@@ -6,7 +6,7 @@ import Clinic from '../../models/clinic';
 import RiskArea from '../../models/risk-area';
 import ScreeningTool from '../../models/screening-tool';
 import User from '../../models/user';
-import { createMockClinic, createMockUser } from '../../spec-helpers';
+import { createMockClinic, createMockUser, createRiskArea } from '../../spec-helpers';
 import schema from '../make-executable-schema';
 
 describe('screening tool resolver tests', () => {
@@ -22,10 +22,7 @@ describe('screening tool resolver tests', () => {
     await Db.clear();
     clinic = await Clinic.create(createMockClinic());
     user = await User.create(createMockUser(11, clinic.id, userRole));
-    riskArea = await RiskArea.create({
-      title: 'Risk Area',
-      order: 1,
-    });
+    riskArea = await createRiskArea();
     screeningTool = await ScreeningTool.create({
       title: 'Screening Tool',
       riskAreaId: riskArea.id,
@@ -84,10 +81,7 @@ describe('screening tool resolver tests', () => {
     });
 
     it('gets all screeningTools for a riskArea', async () => {
-      const riskArea2 = await RiskArea.create({
-        title: 'Risk Area 2',
-        order: 2,
-      });
+      const riskArea2 = await createRiskArea('Risk Area 2', 2);
       const screeningTool2 = await ScreeningTool.create({
         title: 'Screening Tool 2',
         riskAreaId: riskArea.id,

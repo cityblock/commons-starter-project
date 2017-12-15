@@ -7,7 +7,7 @@ import RiskArea from '../../models/risk-area';
 import ScreeningTool from '../../models/screening-tool';
 import ScreeningToolScoreRange from '../../models/screening-tool-score-range';
 import User from '../../models/user';
-import { createMockClinic, createMockUser } from '../../spec-helpers';
+import { createMockClinic, createMockUser, createRiskArea } from '../../spec-helpers';
 import schema from '../make-executable-schema';
 
 describe('screening tool score range resolver tests', () => {
@@ -25,10 +25,7 @@ describe('screening tool score range resolver tests', () => {
     await Db.clear();
     clinic = await Clinic.create(createMockClinic());
     user = await User.create(createMockUser(11, clinic.id, userRole));
-    riskArea = await RiskArea.create({
-      title: 'Risk Area',
-      order: 1,
-    });
+    riskArea = await createRiskArea();
     screeningTool = await ScreeningTool.create({
       title: 'Screening Tool',
       riskAreaId: riskArea.id,

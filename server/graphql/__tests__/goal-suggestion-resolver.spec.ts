@@ -5,9 +5,9 @@ import Answer from '../../models/answer';
 import GoalSuggestion from '../../models/goal-suggestion';
 import GoalSuggestionTemplate from '../../models/goal-suggestion-template';
 import Question from '../../models/question';
-import RiskArea from '../../models/risk-area';
 import ScreeningTool from '../../models/screening-tool';
 import ScreeningToolScoreRange from '../../models/screening-tool-score-range';
+import { createRiskArea } from '../../spec-helpers';
 import schema from '../make-executable-schema';
 
 describe('goal suggestion resolver', () => {
@@ -19,10 +19,7 @@ describe('goal suggestion resolver', () => {
     await Db.get();
     await Db.clear();
 
-    const riskArea = await RiskArea.create({
-      title: 'testing',
-      order: 1,
-    });
+    const riskArea = await createRiskArea();
     const question = await Question.create({
       title: 'like writing tests?',
       answerType: 'dropdown',
@@ -87,7 +84,7 @@ describe('goal suggestion resolver', () => {
     });
 
     it('suggests a goal for a screening tool score range', async () => {
-      const riskArea = await RiskArea.create({ title: 'Housing', order: 1 });
+      const riskArea = await createRiskArea();
       const screeningTool = await ScreeningTool.create({
         title: 'Screening Tool',
         riskAreaId: riskArea.id,

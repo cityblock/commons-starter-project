@@ -1,5 +1,6 @@
 import * as uuid from 'uuid/v4';
 import Db from '../../db';
+import { createRiskArea } from '../../spec-helpers';
 import Answer from '../answer';
 import Question from '../question';
 import QuestionCondition from '../question-condition';
@@ -15,10 +16,7 @@ describe('answer model', () => {
     await Db.get();
     await Db.clear();
 
-    riskArea = await RiskArea.create({
-      title: 'testing',
-      order: 1,
-    });
+    riskArea = await createRiskArea('testing');
     question = await Question.create({
       title: 'like writing tests?',
       answerType: 'dropdown',

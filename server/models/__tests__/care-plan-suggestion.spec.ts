@@ -5,6 +5,7 @@ import {
   createMockPatient,
   createMockUser,
   createPatient,
+  createRiskArea,
 } from '../../spec-helpers';
 import CarePlanSuggestion from '../care-plan-suggestion';
 import Clinic from '../clinic';
@@ -34,10 +35,7 @@ describe('care plan suggestion', () => {
     user = await User.create(createMockUser(11, clinic.id, 'physician'));
     patient = await createPatient(createMockPatient(123, clinic.id), user.id);
     concern = await Concern.create({ title: 'Concern' });
-    riskArea = await RiskArea.create({
-      title: 'testing',
-      order: 1,
-    });
+    riskArea = await createRiskArea('testing');
     goalSuggestionTemplate = await GoalSuggestionTemplate.create({ title: 'Goal Template' });
     riskAreaAssessmentSubmission = await RiskAreaAssessmentSubmission.create({
       patientId: patient.id,

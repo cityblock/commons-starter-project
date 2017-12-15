@@ -1,5 +1,6 @@
 import * as uuid from 'uuid/v4';
 import Db from '../../db';
+import { createRiskArea } from '../../spec-helpers';
 import Answer from '../answer';
 import GoalSuggestion from '../goal-suggestion';
 import GoalSuggestionTemplate from '../goal-suggestion-template';
@@ -7,9 +8,12 @@ import Question from '../question';
 import RiskArea from '../risk-area';
 
 describe('anser model', () => {
+  let riskArea: RiskArea;
+
   beforeEach(async () => {
     await Db.get();
     await Db.clear();
+    riskArea = await createRiskArea('testing');
   });
 
   afterAll(async () => {
@@ -17,10 +21,6 @@ describe('anser model', () => {
   });
 
   it('should create and get an answer', async () => {
-    const riskArea = await RiskArea.create({
-      title: 'testing',
-      order: 1,
-    });
     const question = await Question.create({
       title: 'like writing tests?',
       answerType: 'dropdown',
@@ -42,10 +42,6 @@ describe('anser model', () => {
   });
 
   it('should handle relations', async () => {
-    const riskArea = await RiskArea.create({
-      title: 'testing',
-      order: 1,
-    });
     const question = await Question.create({
       title: 'like writing tests?',
       answerType: 'dropdown',
@@ -95,10 +91,6 @@ describe('anser model', () => {
   });
 
   it('should get multiple answers', async () => {
-    const riskArea = await RiskArea.create({
-      title: 'testing',
-      order: 1,
-    });
     const question = await Question.create({
       title: 'like writing tests?',
       answerType: 'dropdown',
@@ -139,10 +131,6 @@ describe('anser model', () => {
   });
 
   it('sets default riskAdjustmentType to inactive', async () => {
-    const riskArea = await RiskArea.create({
-      title: 'testing',
-      order: 1,
-    });
     const question = await Question.create({
       title: 'like writing tests?',
       answerType: 'dropdown',
@@ -167,10 +155,6 @@ describe('anser model', () => {
   });
 
   it('edits answer', async () => {
-    const riskArea = await RiskArea.create({
-      title: 'testing',
-      order: 1,
-    });
     const question = await Question.create({
       title: 'like writing tests?',
       answerType: 'dropdown',
@@ -193,10 +177,6 @@ describe('anser model', () => {
   });
 
   it('gets answers for question', async () => {
-    const riskArea = await RiskArea.create({
-      title: 'testing',
-      order: 1,
-    });
     const question = await Question.create({
       title: 'like writing tests?',
       answerType: 'dropdown',

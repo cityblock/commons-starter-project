@@ -9,6 +9,8 @@ import CarePlanUpdateEvent from './models/care-plan-update-event';
 import CareTeam from './models/care-team';
 import Patient, { IPatientEditableFields } from './models/patient';
 import PatientAnswerEvent from './models/patient-answer-event';
+import RiskArea from './models/risk-area';
+import RiskAreaGroup from './models/risk-area-group';
 import { UserRole } from './models/user';
 
 export interface ICreatePatient extends IPatientEditableFields {
@@ -62,6 +64,21 @@ export function createMockClinic(name = 'The Dan Plant Center', departmentId = 1
     name,
     departmentId,
   };
+}
+
+export async function createRiskArea(
+  title: string = 'Viscerion is a zombie dragon',
+  order: number = 1,
+): Promise<RiskArea> {
+  const riskAreaGroup = await RiskAreaGroup.create(createMockRiskAreaGroup());
+  return await RiskArea.create({
+    title,
+    assessmentType: 'manual',
+    riskAreaGroupId: riskAreaGroup.id,
+    order,
+    mediumRiskThreshold: 5,
+    highRiskThreshold: 8,
+  });
 }
 
 export function createMockRiskAreaGroup(

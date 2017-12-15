@@ -4890,6 +4890,10 @@ lodash-es@^4.2.0, lodash-es@^4.2.1:
   version "4.17.4"
   resolved "https://registry.yarnpkg.com/lodash-es/-/lodash-es-4.17.4.tgz#dcc1d7552e150a0640073ba9cb31d70f032950e7"
 
+lodash-ts-imports-loader@^1.1.2:
+  version "1.1.2"
+  resolved "https://registry.yarnpkg.com/lodash-ts-imports-loader/-/lodash-ts-imports-loader-1.1.2.tgz#ac38fdc983bdd4c7788a3316e9be275b18978efb"
+
 lodash._baseassign@^3.0.0:
   version "3.2.0"
   resolved "https://registry.yarnpkg.com/lodash._baseassign/-/lodash._baseassign-3.2.0.tgz#8c38a099500f215ad09e59f1722fd0c52bfe0a4e"

@@ -67,7 +67,6 @@ export class PatientInfo extends React.Component<allProps, IState> {
       gender: '',
       maritalStatus: '',
       language: '',
-      race: '',
       ssn: '',
       email: '',
       homePhone: '',

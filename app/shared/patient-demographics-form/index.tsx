@@ -3,7 +3,6 @@ import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
 import * as formStyles from '../css/forms.css';
 import maritalStatusCodes from '../util/marital-status-codes';
-import races from '../util/race-codes';
 import { FormField, IUpdatedField } from '../util/updated-fields';
 
 interface IProps {
@@ -19,7 +18,6 @@ export interface IState {
   gender: FormField;
   maritalStatus: FormField;
   language: FormField;
-  race: FormField;
   ssn: FormField;
   zip: FormField;
 }
@@ -27,12 +25,6 @@ export interface IState {
 const languagesHtml = langs.all().map((language: langs.Language) => (
   <option key={language['1']} value={language['1']}>
     {language.name}
-  </option>
-));
-
-const racesHtml = races.map((race: any) => (
-  <option key={race['Concept Code']} value={race['Preferred Concept Name']}>
-    {race['Preferred Concept Name']}
   </option>
 ));
 
@@ -58,7 +50,6 @@ export default class PatientDemographicsForm extends React.Component<IProps, ISt
       gender: fields.gender,
       maritalStatus: fields.maritalStatus,
       language: fields.language,
-      race: fields.race,
       ssn: fields.ssn,
       zip: fields.zip,
     };
@@ -75,7 +66,6 @@ export default class PatientDemographicsForm extends React.Component<IProps, ISt
       gender: fields.gender,
       maritalStatus: fields.maritalStatus,
       language: fields.language,
-      race: fields.race,
       ssn: fields.ssn,
       zip: fields.zip,
     });
@@ -101,7 +91,6 @@ export default class PatientDemographicsForm extends React.Component<IProps, ISt
       gender,
       maritalStatus,
       language,
-      race,
       ssn,
       zip,
     } = this.state;
@@ -231,30 +220,6 @@ export default class PatientDemographicsForm extends React.Component<IProps, ISt
                 {(message: string) => <option value="declined">{message}</option>}
               </FormattedMessage>
               {languagesHtml}
-            </select>
-          </div>
-          <div className={formStyles.inputGroup}>
-            <FormattedMessage id="demographicsForm.race">
-              {(message: string) => <div className={formStyles.inputLabel}>{message}</div>}
-            </FormattedMessage>
-            <select
-              required
-              name="race"
-              value={race}
-              onChange={this.onChange}
-              className={formStyles.select}
-            >
-              <FormattedMessage id="demographicsForm.racePlaceholder">
-                {(message: string) => (
-                  <option value="" disabled hidden>
-                    {message}
-                  </option>
-                )}
-              </FormattedMessage>
-              <FormattedMessage id="forms.declined">
-                {(message: string) => <option value="declined">{message}</option>}
-              </FormattedMessage>
-              {racesHtml}
             </select>
           </div>
         </div>

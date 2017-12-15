@@ -44,11 +44,6 @@ module.exports = ({ production = false } = {}) => {
           ecma: 8,
           warnings: false,
           mangle: true,
-          compress: {
-            warnings: false,
-            ecma: 8,
-            dead_code: true,
-          },
         },
       }),
     );

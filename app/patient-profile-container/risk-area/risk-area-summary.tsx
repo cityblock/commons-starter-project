@@ -12,7 +12,8 @@ import {
   getPatientRiskSummaryForRiskAreaQuery,
   FullRiskAreaFragment,
 } from '../../graphql/types';
-import * as styles from './css/risk-areas.css';
+import Icon from '../../shared/library/icon/icon';
+import * as styles from './css/risk-area-summary.css';
 
 interface IProps {
   patientId: string;
@@ -62,10 +63,6 @@ class RiskAreaSummary extends React.Component<IProps & IGraphqlProps, {}> {
       summaryListHtml = (
         <div className={styles.errorLoadingSummary}>
           <div className={styles.summaryErrorLabel}>Error loading.</div>
-          <div className={styles.summaryErrorRetry} onClick={this.onRetryClick}>
-            <div className={styles.summaryErrorRetryText}>Try again.</div>
-            <div className={styles.summaryErrorIcon} />
-          </div>
         </div>
       );
     }
@@ -167,7 +164,7 @@ class RiskAreaSummary extends React.Component<IProps & IGraphqlProps, {}> {
         <div className={riskAreaStyles}>
           <div className={styles.riskAreaTitleRow}>
             <div className={styles.riskAreaTitle}>
-              <div className={styles.titleIcon} />
+              <Icon name="phone" />
               <div className={styles.titleText}>{riskArea.title}</div>
             </div>
             <div className={styles.riskAreaLastUpdated}>

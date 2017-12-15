@@ -16,6 +16,7 @@ import {
   FullRiskAreaAssessmentSubmissionFragment,
   FullRiskAreaFragment,
 } from '../../graphql/types';
+import Icon from '../../shared/library/icon/icon';
 import PatientQuestion from '../../shared/question/patient-question';
 import {
   getQuestionVisibility,
@@ -23,7 +24,7 @@ import {
   updateQuestionAnswerHash,
   IQuestionAnswerHash,
 } from '../../shared/question/question-helpers';
-import * as styles from './css/risk-areas.css';
+import * as styles from './css/risk-area-assessment-questions.css';
 
 interface IProps {
   patientId: string;
@@ -54,11 +55,7 @@ type allProps = IGraphqlProps & IProps & IDispatchProps;
 
 export class RiskAreaAssessmentQuestions extends React.Component<allProps> {
   onChange = (questionId: string, answers: Array<{ answerId: string; value: string | number }>) => {
-    const {
-      riskAreaAssessmentSubmission,
-      createPatientAnswers,
-      patientId,
-    } = this.props;
+    const { riskAreaAssessmentSubmission, createPatientAnswers, patientId } = this.props;
     if (riskAreaAssessmentSubmission && createPatientAnswers) {
       const patientAnswers = answers.map(answer => ({
         questionId,
@@ -127,7 +124,7 @@ export class RiskAreaAssessmentQuestions extends React.Component<allProps> {
       <div className={styles.riskAssessment}>
         <div className={titleStyles}>
           <div className={styles.title}>
-            <div className={styles.titleIcon} />
+            <Icon name="phone" />
             <div className={styles.titleText}>{title}</div>
           </div>
           <div className={styles.meta}>

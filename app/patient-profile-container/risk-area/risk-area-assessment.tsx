@@ -16,9 +16,11 @@ import {
   FullRiskAreaFragment,
 } from '../../graphql/types';
 import * as sortSearchStyles from '../../shared/css/sort-search.css';
+import Button from '../../shared/library/button/button';
 import { Popup } from '../../shared/popup/popup';
 import ScreeningToolsPopup from '../screening-tool/screening-tools-popup';
-import * as styles from './css/risk-areas.css';
+import * as styles from './css/risk-area-assessment.css';
+
 import RiskAreaAssessmentQuestions from './risk-area-assessment-questions';
 
 interface IProps {
@@ -117,16 +119,16 @@ export class RiskAreaAssessment extends React.Component<allProps, IState> {
     } = this.props;
     const { inProgress, selectingScreeningTool } = this.state;
 
-    const toolsButtonStyles = classNames(styles.invertedButton, styles.toolsButton, {
+    const toolsButtonStyles = classNames(styles.toolsButton, {
       [styles.hidden]: inProgress,
     });
-    const cancelButtonStyles = classNames(styles.invertedButton, styles.cancelButton, {
+    const cancelButtonStyles = classNames(styles.cancelButton, {
       [styles.hidden]: !inProgress,
     });
-    const saveButtonStyles = classNames(styles.button, styles.saveButton, {
+    const saveButtonStyles = classNames(styles.saveButton, {
       [styles.hidden]: !inProgress,
     });
-    const startButtonStyles = classNames(styles.button, styles.startButton, {
+    const startButtonStyles = classNames(styles.startButton, {
       [styles.hidden]: inProgress,
       [styles.disabled]: loading || error ? true : false,
     });
@@ -143,18 +145,28 @@ export class RiskAreaAssessment extends React.Component<allProps, IState> {
     return (
       <div>
         <div className={classNames(sortSearchStyles.sortSearchBar, styles.buttonBar)}>
-          <div className={cancelButtonStyles} onClick={this.onCancel}>
-            Cancel
-          </div>
-          <div className={toolsButtonStyles} onClick={this.onClickToSelectScreeningTool}>
-            Administer tool
-          </div>
-          <div className={saveButtonStyles} onClick={this.onSubmit}>
-            Save updates
-          </div>
-          <div className={startButtonStyles} onClick={this.onStart}>
-            Start assessment
-          </div>
+          <Button
+            color="white"
+            messageId="riskAreaAssessment.cancel"
+            className={cancelButtonStyles}
+            onClick={this.onCancel}
+          />
+          <Button
+            color="white"
+            messageId="riskAreaAssessment.administer"
+            className={toolsButtonStyles}
+            onClick={this.onClickToSelectScreeningTool}
+          />
+          <Button
+            messageId="riskAreaAssessment.save"
+            className={saveButtonStyles}
+            onClick={this.onSubmit}
+          />
+          <Button
+            messageId="riskAreaAssessment.start"
+            className={startButtonStyles}
+            onClick={this.onStart}
+          />
         </div>
         <div className={styles.riskAreasPanel}>{assessmentHtml}</div>
         <Popup visible={selectingScreeningTool} style={'small-padding'}>

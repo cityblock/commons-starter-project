@@ -4,7 +4,8 @@ import { graphql } from 'react-apollo';
 import * as riskAreasQuery from '../../graphql/queries/get-risk-areas.graphql';
 import { getRiskAreasQuery, FullRiskAreaFragment } from '../../graphql/types';
 import * as sortSearchStyles from '../../shared/css/sort-search.css';
-import * as styles from './css/risk-areas.css';
+import Icon from '../../shared/library/icon/icon';
+import * as styles from './css/risk-area-summaries.css';
 import RiskAreaSummary from './risk-area-summary';
 import { RiskAreasLoadingError } from './risk-areas-loading-error';
 
@@ -53,7 +54,7 @@ class RiskAreaSummaries extends React.Component<IProps & IGraphqlProps, {}> {
     } else if (!loading && !error) {
       return (
         <div className={styles.emptyRiskAreasMessage}>
-          <div className={styles.emptyRiskAreasLogo} />
+          <Icon name="phone" />
           <div className={styles.emptyRiskAreasLabel}>No risk areas available</div>
           <div className={styles.emptyRiskAreasSubtext}>
             Risk areas will be shown here once they are created.

@@ -1753,6 +1753,8 @@ declare module 'schema' {
   interface IRiskAreaEditInput {
     riskAreaId: string;
     title?: string | null;
+    assessmentType?: IAssessmentTypeEnum | null;
+    riskAreaGroupId?: string | null;
     order?: number | null;
     mediumRiskThreshold?: number | null;
     highRiskThreshold?: number | null;

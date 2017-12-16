@@ -94,51 +94,50 @@ exports[`shallow rendered renders with screening tool 1`] = `
     <div
       className="itemBody"
     >
-      <div
-        className="smallText"
-      >
+      <p>
         Title:
-      </div>
-      <div
-        className="largeText title"
-        onClick={[Function]}
+      </p>
+      <EditableMultilineText
+        onEnterPress={[Function]}
+        text="Risk Area Title"
+      />
+      <p>
+        Domain:
+      </p>
+      <p
+        className="uneditable"
       >
-        Risk Area Title
-      </div>
-      <div
-        className="largeTextEditor hidden"
+        Jon Snow's Direwolf
+      </p>
+      <p>
+        Assessment Type:
+      </p>
+      <p
+        className="uneditable"
       >
-        <input
-          name="editedTitle"
-          onBlur={[Function]}
-          onChange={[Function]}
-          onKeyDown={[Function]}
-          value=""
-        />
-      </div>
-      <div
-        className="smallText"
-      >
+        manual
+      </p>
+      <p>
         Order:
-      </div>
-      <div
-        className="largeText"
-        onClick={[Function]}
-      >
-        1
-      </div>
-      <div
-        className="largeTextEditor hidden"
-      >
-        <input
-          name="editedOrder"
-          onBlur={[Function]}
-          onChange={[Function]}
-          onKeyDown={[Function]}
-          type="number"
-          value={1}
-        />
-      </div>
+      </p>
+      <EditableMultilineText
+        onEnterPress={[Function]}
+        text="1"
+      />
+      <p>
+        Medium Risk Threshold:
+      </p>
+      <EditableMultilineText
+        onEnterPress={[Function]}
+        text="5"
+      />
+      <p>
+        High Risk Threshold:
+      </p>
+      <EditableMultilineText
+        onEnterPress={[Function]}
+        text="8"
+      />
     </div>
   </div>
 </div>

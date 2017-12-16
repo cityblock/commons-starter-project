@@ -1,3 +1,4 @@
+export const container: string;
 export const text: string;
 export const edit: string;
 export const description: string;

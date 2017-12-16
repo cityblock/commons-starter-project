@@ -39,3 +39,4 @@ export const smallMargin: string;
 export const indented: string;
 export const flexRow: string;
 export const deleteSuggestionButton: string;
+export const uneditable: string;

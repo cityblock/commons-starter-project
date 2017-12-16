@@ -78,21 +78,4 @@ describe('shallow rendered', () => {
     await instance.onCancelDelete();
     expect(instance.state.deleteConfirmationInProgress).toBeFalsy();
   });
-
-  it('handles editing', async () => {
-    await instance.setState({ editedTitle: 'new title' });
-    await instance.onKeyDown({
-      keyCode: 13,
-      currentTarget: {
-        name: 'editedTitle',
-      },
-      preventDefault: jest.fn(),
-    });
-    expect(editRiskArea).toBeCalledWith({
-      variables: {
-        riskAreaId: riskArea.id,
-        title: 'new title',
-      },
-    });
-  });
 });

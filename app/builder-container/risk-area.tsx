@@ -11,6 +11,9 @@ import {
   FullRiskAreaFragment,
 } from '../graphql/types';
 import * as styles from '../shared/css/two-panel-right.css';
+/* tslint:disable:max-line-length */
+import EditableMultilineText from '../shared/library/editable-multiline-text/editable-multiline-text';
+/* tslint:enable:max-line-length */
 import { IState as IAppState } from '../store';
 
 interface IStateProps {
@@ -40,12 +43,6 @@ interface IGraphqlProps {
 interface IState {
   deleteConfirmationInProgress: boolean;
   deleteError: string | null;
-  editedTitle: string;
-  editingTitle: boolean;
-  editTitleError: string | null;
-  editedOrder: number;
-  editOrderError: string | null;
-  editingOrder: boolean;
 }
 
 type allProps = IProps & IStateProps & IGraphqlProps;
@@ -59,69 +56,29 @@ export class RiskArea extends React.Component<allProps, IState> {
   constructor(props: allProps) {
     super(props);
 
-    this.reloadRiskArea = this.reloadRiskArea.bind(this);
-    this.onClickDelete = this.onClickDelete.bind(this);
-    this.onConfirmDelete = this.onConfirmDelete.bind(this);
-    this.onCancelDelete = this.onCancelDelete.bind(this);
-    this.onChange = this.onChange.bind(this);
-    this.onKeyDown = this.onKeyDown.bind(this);
-    this.onBlur = this.onBlur.bind(this);
-    this.onClickToEditTitle = this.onClickToEditTitle.bind(this);
-    this.onClickToEditOrder = this.onClickToEditOrder.bind(this);
-    this.focusInput = this.focusInput.bind(this);
-
-    this.editTitleInput = null;
-    this.editOrderInput = null;
-    this.titleBody = null;
-    this.orderBody = null;
-
     this.state = {
       deleteConfirmationInProgress: false,
       deleteError: null,
-      editedTitle: '',
-      editingTitle: false,
-      editedOrder: 1,
-      editingOrder: false,
-      editTitleError: null,
-      editOrderError: null,
     };
   }
 
-  componentWillReceiveProps(nextProps: allProps) {
-    const { riskArea } = nextProps;
-
-    if (riskArea) {
-      if (!this.props.riskArea) {
-        this.setState({
-          editedTitle: riskArea.title,
-          editedOrder: riskArea.order,
-        });
-      } else if (this.props.riskArea.id !== riskArea.id) {
-        this.setState({
-          editedTitle: riskArea.title,
-          editedOrder: riskArea.order,
-        });
-      }
-    }
-  }
-
-  reloadRiskArea() {
+  reloadRiskArea = () => {
     const { refetchRiskArea } = this.props;
 
     if (refetchRiskArea) {
       refetchRiskArea();
     }
-  }
+  };
 
-  onClickDelete() {
+  onClickDelete = () => {
     const { riskAreaId } = this.props;
 
     if (riskAreaId) {
       this.setState({ deleteConfirmationInProgress: true });
     }
-  }
+  };
 
-  async onConfirmDelete() {
+  onConfirmDelete = async () => {
     const { onDelete, riskAreaId } = this.props;
 
     if (riskAreaId) {
@@ -133,86 +90,37 @@ export class RiskArea extends React.Component<allProps, IState> {
         this.setState({ deleteError: err.message });
       }
     }
-  }
+  };
 
-  onCancelDelete() {
+  onCancelDelete = () => {
     this.setState({ deleteError: null, deleteConfirmationInProgress: false });
-  }
+  };
 
-  onChange(event: React.ChangeEvent<HTMLInputElement>) {
+  onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = event.currentTarget.value;
     const name = event.currentTarget.name;
 
     this.setState({ [name as any]: value || '' });
-  }
+  };
 
-  async onKeyDown(event: React.KeyboardEvent<HTMLInputElement>) {
+  onEnterPress = (field: string) => {
     const { riskAreaId, editRiskArea } = this.props;
-    const { editedTitle, editedOrder } = this.state;
-    const enterPressed = event.keyCode === 13;
-    const name = event.currentTarget.name;
 
-    if (enterPressed && riskAreaId) {
-      event.preventDefault();
+    return async (newText: string) => {
+      if (!riskAreaId) return;
 
-      if (name === 'editedTitle') {
-        try {
-          this.setState({ editTitleError: null });
-          await editRiskArea({ variables: { riskAreaId, title: editedTitle } });
-          this.setState({ editTitleError: null, editingTitle: false });
-        } catch (err) {
-          this.setState({ editTitleError: err.message });
-        }
-      } else if (name === 'editedOrder') {
-        try {
-          this.setState({ editOrderError: null });
-          await editRiskArea({ variables: { riskAreaId, order: editedOrder } });
-          this.setState({ editOrderError: null, editingOrder: false });
-        } catch (err) {
-          this.setState({ editOrderError: err.message });
-        }
-      }
-    }
-  }
-
-  onBlur(event: React.FocusEvent<HTMLInputElement>) {
-    const name = event.currentTarget.name;
-
-    if (name === 'editedTitle') {
-      this.setState({ editingTitle: false });
-    } else if (name === 'editedOrder') {
-      this.setState({ editingOrder: false });
-    }
-  }
-
-  onClickToEditTitle() {
-    this.setState({ editingTitle: true });
-    setTimeout(() => (this.focusInput(this.editTitleInput), 100));
-  }
-
-  onClickToEditOrder() {
-    this.setState({ editingOrder: true });
-    setTimeout(() => (this.focusInput(this.editOrderInput), 100));
-  }
-
-  focusInput(input: HTMLInputElement | null) {
-    if (input) {
-      input.focus();
-    }
-  }
+      await editRiskArea({
+        variables: {
+          riskAreaId,
+          [field]: newText,
+        },
+      });
+    };
+  };
 
   render() {
     const { riskArea, routeBase } = this.props;
-    const {
-      deleteConfirmationInProgress,
-      deleteError,
-      editedTitle,
-      editingTitle,
-      editTitleError,
-      editedOrder,
-      editingOrder,
-      editOrderError,
-    } = this.state;
+    const { deleteConfirmationInProgress, deleteError } = this.state;
 
     const outerContainerStyles = classNames(styles.container, {
       [styles.deleteConfirmationContainer]: deleteConfirmationInProgress,
@@ -226,23 +134,8 @@ export class RiskArea extends React.Component<allProps, IState> {
     const deleteErrorStyles = classNames(styles.deleteError, {
       [styles.hidden]: !deleteConfirmationInProgress || !deleteError,
     });
-    const titleTextStyles = classNames(styles.largeText, styles.title, {
-      [styles.hidden]: editingTitle,
-    });
-    const titleEditStyles = classNames(styles.largeTextEditor, {
-      [styles.hidden]: !editingTitle,
-      [styles.error]: !!editTitleError,
-    });
-    const orderTextStyles = classNames(styles.largeText, {
-      [styles.hidden]: editingOrder,
-    });
-    const orderEditStyles = classNames(styles.largeTextEditor, {
-      [styles.hidden]: !editingOrder,
-      [styles.error]: !!editOrderError,
-    });
 
     const closeRoute = routeBase || '/builder/riskAreas';
-
     if (riskArea) {
       return (
         <div className={outerContainerStyles}>
@@ -284,51 +177,32 @@ export class RiskArea extends React.Component<allProps, IState> {
               </div>
             </div>
             <div className={styles.itemBody}>
-              <div className={styles.smallText}>Title:</div>
-              <div
-                ref={div => {
-                  this.titleBody = div;
-                }}
-                className={titleTextStyles}
-                onClick={this.onClickToEditTitle}
-              >
-                {riskArea.title}
-              </div>
-              <div className={titleEditStyles}>
-                <input
-                  name="editedTitle"
-                  ref={area => {
-                    this.editTitleInput = area;
-                  }}
-                  value={editedTitle}
-                  onChange={this.onChange}
-                  onKeyDown={this.onKeyDown}
-                  onBlur={this.onBlur}
-                />
-              </div>
-              <div className={styles.smallText}>Order:</div>
-              <div
-                ref={div => {
-                  this.orderBody = div;
-                }}
-                onClick={this.onClickToEditOrder}
-                className={orderTextStyles}
-              >
-                {riskArea.order}
-              </div>
-              <div className={orderEditStyles}>
-                <input
-                  type="number"
-                  name="editedOrder"
-                  ref={area => {
-                    this.editOrderInput = area;
-                  }}
-                  value={editedOrder}
-                  onChange={this.onChange}
-                  onKeyDown={this.onKeyDown}
-                  onBlur={this.onBlur}
-                />
-              </div>
+              <p>Title:</p>
+              <EditableMultilineText
+                text={riskArea.title}
+                onEnterPress={this.onEnterPress('title')}
+              />
+              <p>Domain:</p>
+              {riskArea.riskAreaGroup && (
+                <p className={styles.uneditable}>{riskArea.riskAreaGroup.title}</p>
+              )}
+              <p>Assessment Type:</p>
+              <p className={styles.uneditable}>{riskArea.assessmentType}</p>
+              <p>Order:</p>
+              <EditableMultilineText
+                text={`${riskArea.order}`}
+                onEnterPress={this.onEnterPress('order')}
+              />
+              <p>Medium Risk Threshold:</p>
+              <EditableMultilineText
+                text={`${riskArea.mediumRiskThreshold}`}
+                onEnterPress={this.onEnterPress('mediumRiskThreshold')}
+              />
+              <p>High Risk Threshold:</p>
+              <EditableMultilineText
+                text={`${riskArea.highRiskThreshold}`}
+                onEnterPress={this.onEnterPress('highRiskThreshold')}
+              />
             </div>
           </div>
         </div>

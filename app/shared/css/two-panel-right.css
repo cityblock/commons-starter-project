@@ -351,3 +351,7 @@ ul.extraSmallMarginPadding {
     cursor: pointer;
   }
 }
+
+.uneditable {
+  color: var(--red-color);
+}

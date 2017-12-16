@@ -124,7 +124,7 @@ class EditableMultilineText extends React.Component<IProps, IState> {
       );
 
     return (
-      <div>
+      <div className={styles.container}>
         {displayText}
         <textarea
           ref={area => (this.editText = area)}

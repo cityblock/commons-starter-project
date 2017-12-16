@@ -1,5 +1,9 @@
 @import '../../../css/sizes';
 
+.container {
+  cursor: text;
+}
+
 .text {
   font-family: var(--basetica-medium);
   font-weight: var(--roboto-medium-weight);

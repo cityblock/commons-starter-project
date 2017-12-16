@@ -14,12 +14,13 @@ interface IProps {
   color?: Color | null; // if not provided, defaults to blue
   small?: boolean | null;
   fullWidth?: boolean | null;
+  disabled?: boolean; // optional flag to disable button
   className?: string | null;
   icon?: IconName | null; // WIP, use at own risk
 }
 
 const Button: React.StatelessComponent<IProps> = (props: IProps) => {
-  const { messageId, label, onClick, color, small, icon, className, fullWidth } = props;
+  const { messageId, label, onClick, color, small, icon, className, fullWidth, disabled } = props;
 
   const buttonStyles = classNames(
     {
@@ -29,6 +30,7 @@ const Button: React.StatelessComponent<IProps> = (props: IProps) => {
       [styles.red]: color === 'red',
       [styles.small]: small,
       [styles.fullWidth]: fullWidth,
+      [styles.disabled]: !!disabled,
     },
     className,
   );
@@ -37,7 +39,7 @@ const Button: React.StatelessComponent<IProps> = (props: IProps) => {
     return (
       <FormattedMessage id={messageId}>
         {(message: string) => (
-          <button onClick={onClick} className={buttonStyles}>
+          <button onClick={onClick} className={buttonStyles} disabled={disabled || false}>
             {icon && <Icon name={icon} className={styles.icon} />}
             {message}
           </button>
@@ -47,7 +49,7 @@ const Button: React.StatelessComponent<IProps> = (props: IProps) => {
   }
 
   return (
-    <button onClick={onClick} className={buttonStyles}>
+    <button onClick={onClick} className={buttonStyles} disabled={disabled || false}>
       {icon && <Icon name={icon} className={styles.icon} />}
       {label}
     </button>

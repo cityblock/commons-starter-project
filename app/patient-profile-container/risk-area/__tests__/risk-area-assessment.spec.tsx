@@ -1,5 +1,6 @@
 import { shallow } from 'enzyme';
 import * as React from 'react';
+import Button from '../../../shared/library/button/button';
 import { riskArea, riskAreaAssessmentSubmission } from '../../../shared/util/test-data';
 import { RiskAreaAssessment } from '../risk-area-assessment';
 
@@ -24,7 +25,7 @@ describe('risk area assessment questions component', () => {
 
   it('renders top buttons', () => {
     expect(wrapper.find('.saveButton').length).toBe(1);
-    expect(wrapper.find('.startButton').length).toBe(1);
+    expect(wrapper.find(Button).at(3).props().messageId).toBe("riskAreaAssessment.start");
   });
 
   it('renders questions container', () => {

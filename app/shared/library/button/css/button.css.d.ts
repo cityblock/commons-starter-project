@@ -5,3 +5,4 @@ export const red: string;
 export const white: string;
 export const small: string;
 export const fullWidth: string;
+export const disabled: string;

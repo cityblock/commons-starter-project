@@ -28,6 +28,7 @@ describe('Library Button Component', () => {
     expect(button.length).toBe(1);
     expect(button.text()).toBe(label);
     expect(button.props().className).toBe('button');
+    expect(button.props().disabled).toBeFalsy();
   });
 
   it('returns button with color and small options', () => {
@@ -66,5 +67,18 @@ describe('Library Button Component', () => {
     expect(wrapper.find(Icon).props().name).toBe(icon);
     expect(wrapper.find(Icon).props().className).toBe('icon');
     expect(wrapper.find('button').props().className).toBe('iconButton');
+  });
+
+  it('returns a disabled button', () => {
+    const label = 'Razor Leaf';
+
+    const wrapper = shallow(<Button onClick={onClick} label={label} disabled={true} />);
+
+    const button = wrapper.find('button');
+
+    expect(button.length).toBe(1);
+    expect(button.text()).toBe(label);
+    expect(button.props().disabled).toBeTruthy();
+    expect(button.props().className).toBe('button disabled');
   });
 });

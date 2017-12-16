@@ -129,9 +129,8 @@ export class RiskAreaAssessment extends React.Component<allProps, IState> {
     const saveButtonStyles = classNames(styles.saveButton, {
       [styles.hidden]: !inProgress,
     });
-    const startButtonStyles = classNames(styles.startButton, {
+    const startButtonStyles = classNames({
       [styles.hidden]: inProgress,
-      [styles.disabled]: loading || error ? true : false,
     });
     const assessmentHtml = riskArea ? (
       <RiskAreaAssessmentQuestions
@@ -168,11 +167,13 @@ export class RiskAreaAssessment extends React.Component<allProps, IState> {
             messageId="riskAreaAssessment.save"
             className={saveButtonStyles}
             onClick={this.onSubmit}
+            disabled={loading || !!error}
           />
           <Button
             messageId="riskAreaAssessment.start"
             className={startButtonStyles}
             onClick={this.onStart}
+            disabled={loading || !!error}
           />
         </div>
         <div className={styles.riskAreasPanel}>{assessmentHtml}</div>

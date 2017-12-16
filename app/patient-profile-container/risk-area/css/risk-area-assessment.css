@@ -10,15 +10,6 @@
   margin-left: 10px;
 }
 
-.saveButton.disabled,
-.startButton.disabled {
-  opacity: 0.4;
-
-  &:hover {
-    cursor: not-allowed;
-  }
-}
-
 .cancelButton {
   padding-top: 8px;
 }

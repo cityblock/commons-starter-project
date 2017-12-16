@@ -27,6 +27,7 @@ export default function app(req: any, res: any) {
       <body>
         <div id='app'></div>
         <script src='https://unpkg.com/react-intl@latest/locale-data/es.js'></script>
+        <script type="text/javascript" charset='utf-8' src="/assets/common.js"></script>
         <script type='text/javascript' charset='utf-8' src='/assets/app.js'></script>
       </body>
     </html>`;

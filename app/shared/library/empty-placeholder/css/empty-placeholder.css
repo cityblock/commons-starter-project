@@ -12,7 +12,7 @@
   text-align: center;
 }
 
-.icon {
+svg.icon {
   height: var(--gutter);
   width: var(--gutter);
   margin-bottom: var(--small-gutter);

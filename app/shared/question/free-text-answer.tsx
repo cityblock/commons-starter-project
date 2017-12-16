@@ -1,4 +1,4 @@
-import { debounce } from 'lodash';
+import { debounce } from 'lodash-es';
 import * as React from 'react';
 import { FullQuestionFragment } from '../../graphql/types';
 import * as formStyles from '../css/forms.css';

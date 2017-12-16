@@ -1,5 +1,5 @@
 import { History } from 'history';
-import { debounce } from 'lodash';
+import { debounce } from 'lodash-es';
 import { routerMiddleware } from 'react-router-redux';
 import { routerReducer } from 'react-router-redux';
 import { applyMiddleware, compose, createStore } from 'redux';

@@ -58,31 +58,25 @@ class CareTeamWidget extends React.Component<IProps & IGraphqlProps, IState> {
   }
 
   onCareTeamMemberClick(careTeamMemberId: string) {
-    this.setState((prevState: IState) => {
-      const { selectedCareTeamMemberId } = prevState;
-
-      if (careTeamMemberId === selectedCareTeamMemberId) {
-        return { selectedCareTeamMemberId: null };
-      } else {
-        return { selectedCareTeamMemberId: careTeamMemberId };
-      }
+    const { selectedCareTeamMemberId } = this.state;
+    this.setState({
+      selectedCareTeamMemberId:
+        careTeamMemberId === selectedCareTeamMemberId ? null : careTeamMemberId,
     });
   }
 
   onClick() {
     const { condensedWidget } = this.props;
-
+    const { open } = this.state;
     if (!condensedWidget) {
-      this.setState((prevState: IState) => {
-        if (prevState.open) {
-          return {
-            open: false,
-            selectedCareTeamMemberId: null,
-          };
-        } else {
-          return { open: !prevState.open };
-        }
-      });
+      if (open) {
+        this.setState({
+          open: false,
+          selectedCareTeamMemberId: null,
+        });
+      } else {
+        this.setState({ open: !open });
+      }
     }
   }
 

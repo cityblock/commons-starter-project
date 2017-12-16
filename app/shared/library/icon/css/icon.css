@@ -1,6 +1,6 @@
 @import '../../../css/sizes';
 
-.icon {
+svg.icon {
   width: 22px;
   height: 22px;
   fill: var(--border-color);

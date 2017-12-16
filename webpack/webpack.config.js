@@ -24,17 +24,17 @@ module.exports = (env = '') => {
   };
 
   const devtool = isProduction ? 'source-map' : 'cheap-module-eval-source-map';
-  const app = ['./client'];
   const clientRender = {
     context: PATHS.app,
     devtool,
     entry: {
-      app,
+      app: './client.tsx',
     },
     module: { rules: rules({ production: isProduction }) },
     node,
     output: {
       filename: '[name].js',
+      chunkFilename: '[name].bundle.js',
       path: PATHS.assets,
       publicPath: PATHS.public,
     },

@@ -21,7 +21,7 @@
   width: calc(100% - 42px);
 }
 
-.icon {
+svg.icon {
   fill: var(--gray-font-color);
 }
 

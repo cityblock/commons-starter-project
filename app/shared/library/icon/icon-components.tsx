@@ -1,22 +1,22 @@
 // Use this import syntax to avoid TS error
-import AddAlertIcon = require('react-icons/lib/md/add-alert');
-import AddBoxIcon = require('react-icons/lib/md/add-box');
-import AddCircleIcon = require('react-icons/lib/md/add-circle');
-import AddCircleOutlineIcon = require('react-icons/lib/md/add-circle-outline');
-import CloseIcon = require('react-icons/lib/md/close');
-import DeleteIcon = require('react-icons/lib/md/delete');
-import ErrorOutlineIcon = require('react-icons/lib/md/error-outline');
-import EventIcon = require('react-icons/lib/md/event');
-import ExpandLessIcon = require('react-icons/lib/md/expand-less');
-import ExpandMoreIcon = require('react-icons/lib/md/expand-more');
-import HighlightOffIcon = require('react-icons/lib/md/highlight-off');
-import ExpandArrowIcon = require('react-icons/lib/md/keyboard-arrow-down');
-import KeyboardArrowLeftIcon = require('react-icons/lib/md/keyboard-arrow-left');
-import KeyboardArrowRightIcon = require('react-icons/lib/md/keyboard-arrow-right');
-import MoreVertIcon = require('react-icons/lib/md/more-vert');
-import PauseCircleOutlineIcon = require('react-icons/lib/md/pause-circle-outline');
-import PhoneIcon = require('react-icons/lib/md/phone');
-import SearchIcon = require('react-icons/lib/md/search');
+import AddAlertIcon from 'material-ui-icons/AddAlert';
+import AddBoxIcon from 'material-ui-icons/AddBox';
+import AddCircleIcon from 'material-ui-icons/AddCircle';
+import AddCircleOutlineIcon from 'material-ui-icons/AddCircleOutline';
+import CloseIcon from 'material-ui-icons/Close';
+import DeleteIcon from 'material-ui-icons/Delete';
+import ErrorOutlineIcon from 'material-ui-icons/ErrorOutline';
+import EventIcon from 'material-ui-icons/Event';
+import ExpandLessIcon from 'material-ui-icons/ExpandLess';
+import ExpandMoreIcon from 'material-ui-icons/ExpandMore';
+import HighlightOffIcon from 'material-ui-icons/HighlightOff';
+import ExpandArrowIcon from 'material-ui-icons/KeyboardArrowDown';
+import KeyboardArrowLeftIcon from 'material-ui-icons/KeyboardArrowLeft';
+import KeyboardArrowRightIcon from 'material-ui-icons/KeyboardArrowRight';
+import MoreVertIcon from 'material-ui-icons/MoreVert';
+import PauseCircleOutlineIcon from 'material-ui-icons/PauseCircleOutline';
+import PhoneIcon from 'material-ui-icons/Phone';
+import SearchIcon from 'material-ui-icons/Search';
 
 // Add other components as needed from here, preserving name used in material icon
 // Then add icon name to icon-types file to ensure only accepted icon names passed as icon props

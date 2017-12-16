@@ -8,9 +8,7 @@ describe('Library Date Input Component', () => {
   const onChange = () => true as any;
   const custom = 'custom';
 
-  const wrapper = shallow(
-    <DateInput value={value} onChange={onChange} />,
-  );
+  const wrapper = shallow(<DateInput value={value} onChange={onChange} />);
 
   it('returns an input element of type date', () => {
     expect(wrapper.find('input').length).toBe(1);

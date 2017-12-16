@@ -1,5 +1,5 @@
 import * as classNames from 'classnames';
-import { clone, isNil, omit, omitBy } from 'lodash';
+import { clone, isNil, omit, omitBy } from 'lodash-es';
 import * as React from 'react';
 import { compose, graphql } from 'react-apollo';
 /* tslint:disable:max-line-length */

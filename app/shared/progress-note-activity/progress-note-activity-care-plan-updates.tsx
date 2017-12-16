@@ -1,5 +1,5 @@
 import * as classNames from 'classnames';
-import { groupBy, keys } from 'lodash';
+import { groupBy, keys } from 'lodash-es';
 import * as React from 'react';
 import { FullCarePlanUpdateEventFragment } from '../../graphql/types';
 import * as styles from './css/progress-note-activity.css';

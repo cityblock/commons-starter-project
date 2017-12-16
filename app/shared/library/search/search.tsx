@@ -1,4 +1,4 @@
-import Fuse = require('fuse.js');
+import * as Fuse from 'fuse.js';
 import * as React from 'react';
 import defaultFuseOptions, { MAX_PATTERN_LENGTH } from './fuse-options';
 import SearchInput from './input';

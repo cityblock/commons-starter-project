@@ -29,7 +29,7 @@
   cursor: text;
 }
 
-.icon {
+svg.icon {
   fill: var(--blue-color);
   height: 25px;
   width: 25px;

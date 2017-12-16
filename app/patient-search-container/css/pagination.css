@@ -14,7 +14,7 @@
   background: var(--white-color);
 }
 
-.icon {
+svg.icon {
   fill: var(--gray-font-color);
   height: var(--medium-gutter);
   width: var(--medium-gutter);

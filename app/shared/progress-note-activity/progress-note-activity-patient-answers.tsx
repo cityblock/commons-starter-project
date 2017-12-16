@@ -1,5 +1,5 @@
 import * as classNames from 'classnames';
-import { filter, groupBy, keys } from 'lodash';
+import { filter, groupBy, keys } from 'lodash-es';
 import * as React from 'react';
 import { FullPatientAnswerEventFragment } from '../../graphql/types';
 import * as styles from './css/progress-note-activity.css';

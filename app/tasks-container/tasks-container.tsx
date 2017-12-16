@@ -1,5 +1,5 @@
 import * as classNames from 'classnames';
-import { pickBy } from 'lodash';
+import { pickBy } from 'lodash-es';
 import * as querystring from 'querystring';
 import * as React from 'react';
 import { compose, graphql } from 'react-apollo';

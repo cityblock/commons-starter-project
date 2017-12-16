@@ -21,7 +21,7 @@
   padding: 8px 36px;
 }
 
-.icon {
+svg.icon {
   height: 18px;
   width: 18px;
   fill: var(--default-font-color);

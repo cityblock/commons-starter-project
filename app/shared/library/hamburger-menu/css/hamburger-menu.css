@@ -27,7 +27,7 @@
   background: var(--gray-background-color);
 }
 
-.icon {
+svg.icon {
   fill: var(--black-color);
   cursor: pointer;
   transition: fill 0.2s;

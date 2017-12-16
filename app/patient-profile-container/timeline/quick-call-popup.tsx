@@ -1,4 +1,4 @@
-import { every } from 'lodash';
+import { every } from 'lodash-es';
 import * as React from 'react';
 import { compose, graphql } from 'react-apollo';
 import { FormattedMessage } from 'react-intl';

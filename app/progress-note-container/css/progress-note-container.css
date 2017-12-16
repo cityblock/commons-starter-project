@@ -24,7 +24,7 @@
   margin-right: var(--gutter);
 }
 
-.icon {
+svg.icon {
   fill: var(--white-color);
   height: 27px;
   width: 27px;

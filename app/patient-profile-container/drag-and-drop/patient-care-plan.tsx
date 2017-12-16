@@ -1,4 +1,4 @@
-import { isEqual } from 'lodash';
+import { isEqual } from 'lodash-es';
 import * as React from 'react';
 import { graphql } from 'react-apollo';
 import { DragDropContext, DropResult } from 'react-beautiful-dnd';
@@ -130,8 +130,7 @@ export class DnDPatientCarePlan extends React.Component<allProps, IState> {
     );
 
     this.updateConcernOrder(orderDiffs);
-    // TODO: Remove functional set state here
-    this.setState(() => ({ [endList]: updatedConcerns }));
+    this.setState({ [endList]: updatedConcerns } as any);
   }
 
   moveBetweenConcernLists(result: DropResult): void {
@@ -164,10 +163,10 @@ export class DnDPatientCarePlan extends React.Component<allProps, IState> {
     this.updateConcernOrder(orderDiffs);
 
     // TODO: Remove functional set state here
-    this.setState(() => ({
+    this.setState({
       [startList]: updatedStartList,
       [endList]: updatedEndList,
-    }));
+    } as any);
   }
 
   async updateConcernOrder(orderDiffs: PatientConcernBulkEditFields[]) {

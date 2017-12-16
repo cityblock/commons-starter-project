@@ -1,5 +1,5 @@
 import * as classNames from 'classnames';
-import { clone, isNil, omit, omitBy, range } from 'lodash';
+import { clone, isNil, omit, omitBy, range } from 'lodash-es';
 import * as React from 'react';
 import { compose, graphql } from 'react-apollo';
 import * as answerCreateMutationGraphql from '../graphql/queries/answer-create-mutation.graphql';

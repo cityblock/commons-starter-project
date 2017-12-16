@@ -38,14 +38,14 @@
   justify-content: center;
 }
 
-.searchIcon,
-.noResultsIcon {
+svg.searchIcon,
+svg.noResultsIcon {
   height: var(--gutter);
   width: var(--gutter);
   margin-bottom: var(--small-gutter);
 }
 
-.searchIcon {
+svg.searchIcon {
   fill: var(--light-gray-font-color);
 }
 

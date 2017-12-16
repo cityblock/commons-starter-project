@@ -1,5 +1,5 @@
 import * as classNames from 'classnames';
-import { includes } from 'lodash';
+import { includes } from 'lodash-es';
 import * as React from 'react';
 import {
   getConcernsQuery,

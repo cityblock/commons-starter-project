@@ -25,7 +25,12 @@ describe('risk area assessment questions component', () => {
 
   it('renders top buttons', () => {
     expect(wrapper.find('.saveButton').length).toBe(1);
-    expect(wrapper.find(Button).at(3).props().messageId).toBe("riskAreaAssessment.start");
+    expect(
+      wrapper
+        .find(Button)
+        .at(3)
+        .props().messageId,
+    ).toBe('riskAreaAssessment.start');
   });
 
   it('renders questions container', () => {

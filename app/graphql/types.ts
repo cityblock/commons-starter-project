@@ -266,7 +266,7 @@ export type answerCreateMutation = {
       riskAreaGroup:  {
         id: string,
         title: string,
-      } | null,
+      },
     } | null,
     screeningTool:  {
       id: string,
@@ -285,7 +285,7 @@ export type answerCreateMutation = {
         riskAreaGroup:  {
           id: string,
           title: string,
-        } | null,
+        },
       },
       screeningToolScoreRanges:  Array< {
         id: string,
@@ -387,7 +387,7 @@ export type answerDeleteMutation = {
       riskAreaGroup:  {
         id: string,
         title: string,
-      } | null,
+      },
     } | null,
     screeningTool:  {
       id: string,
@@ -406,7 +406,7 @@ export type answerDeleteMutation = {
         riskAreaGroup:  {
           id: string,
           title: string,
-        } | null,
+        },
       },
       screeningToolScoreRanges:  Array< {
         id: string,
@@ -515,7 +515,7 @@ export type answerEditMutation = {
       riskAreaGroup:  {
         id: string,
         title: string,
-      } | null,
+      },
     } | null,
     screeningTool:  {
       id: string,
@@ -534,7 +534,7 @@ export type answerEditMutation = {
         riskAreaGroup:  {
           id: string,
           title: string,
-        } | null,
+        },
       },
       screeningToolScoreRanges:  Array< {
         id: string,
@@ -1034,7 +1034,7 @@ export type getAnswerQuery = {
       riskAreaGroup:  {
         id: string,
         title: string,
-      } | null,
+      },
     } | null,
     screeningTool:  {
       id: string,
@@ -1053,7 +1053,7 @@ export type getAnswerQuery = {
         riskAreaGroup:  {
           id: string,
           title: string,
-        } | null,
+        },
       },
       screeningToolScoreRanges:  Array< {
         id: string,
@@ -1438,7 +1438,7 @@ export type getPatientAnswersQuery = {
         riskAreaGroup:  {
           id: string,
           title: string,
-        } | null,
+        },
       } | null,
       screeningTool:  {
         id: string,
@@ -1457,7 +1457,7 @@ export type getPatientAnswersQuery = {
           riskAreaGroup:  {
             id: string,
             title: string,
-          } | null,
+          },
         },
         screeningToolScoreRanges:  Array< {
           id: string,
@@ -1897,7 +1897,7 @@ export type getPatientScreeningToolSubmissionForPatientAndScreeningToolQuery = {
       riskAreaGroup:  {
         id: string,
         title: string,
-      } | null,
+      },
     },
     createdAt: string,
     updatedAt: string,
@@ -2024,7 +2024,7 @@ export type getPatientScreeningToolSubmissionQuery = {
       riskAreaGroup:  {
         id: string,
         title: string,
-      } | null,
+      },
     },
     createdAt: string,
     updatedAt: string,
@@ -2369,7 +2369,7 @@ export type getProgressNoteActivityForProgressNoteQuery = {
             riskAreaGroup:  {
               id: string,
               title: string,
-            } | null,
+            },
           } | null,
           screeningTool:  {
             id: string,
@@ -2388,7 +2388,7 @@ export type getProgressNoteActivityForProgressNoteQuery = {
               riskAreaGroup:  {
                 id: string,
                 title: string,
-              } | null,
+              },
             },
             screeningToolScoreRanges:  Array< {
               id: string,
@@ -2498,7 +2498,7 @@ export type getProgressNoteActivityForProgressNoteQuery = {
             riskAreaGroup:  {
               id: string,
               title: string,
-            } | null,
+            },
           } | null,
           screeningTool:  {
             id: string,
@@ -2517,7 +2517,7 @@ export type getProgressNoteActivityForProgressNoteQuery = {
               riskAreaGroup:  {
                 id: string,
                 title: string,
-              } | null,
+              },
             },
             screeningToolScoreRanges:  Array< {
               id: string,
@@ -2966,7 +2966,7 @@ export type getQuestionAnswersQuery = {
       riskAreaGroup:  {
         id: string,
         title: string,
-      } | null,
+      },
     } | null,
     screeningTool:  {
       id: string,
@@ -2985,7 +2985,7 @@ export type getQuestionAnswersQuery = {
         riskAreaGroup:  {
           id: string,
           title: string,
-        } | null,
+        },
       },
       screeningToolScoreRanges:  Array< {
         id: string,
@@ -3098,7 +3098,7 @@ export type getQuestionQuery = {
         riskAreaGroup:  {
           id: string,
           title: string,
-        } | null,
+        },
       } | null,
       screeningTool:  {
         id: string,
@@ -3117,7 +3117,7 @@ export type getQuestionQuery = {
           riskAreaGroup:  {
             id: string,
             title: string,
-          } | null,
+          },
         },
         screeningToolScoreRanges:  Array< {
           id: string,
@@ -3247,7 +3247,7 @@ export type getQuestionsQuery = {
         riskAreaGroup:  {
           id: string,
           title: string,
-        } | null,
+        },
       } | null,
       screeningTool:  {
         id: string,
@@ -3266,7 +3266,7 @@ export type getQuestionsQuery = {
           riskAreaGroup:  {
             id: string,
             title: string,
-          } | null,
+          },
         },
         screeningToolScoreRanges:  Array< {
           id: string,
@@ -3536,7 +3536,7 @@ export type getRiskAreaQuery = {
     riskAreaGroup:  {
       id: string,
       title: string,
-    } | null,
+    },
   } | null,
 };
 
@@ -3555,7 +3555,7 @@ export type getRiskAreasQuery = {
     riskAreaGroup:  {
       id: string,
       title: string,
-    } | null,
+    },
   } | null > | null,
 };
 
@@ -3582,7 +3582,7 @@ export type getScreeningToolQuery = {
       riskAreaGroup:  {
         id: string,
         title: string,
-      } | null,
+      },
     },
     screeningToolScoreRanges:  Array< {
       id: string,
@@ -3650,7 +3650,7 @@ export type getScreeningToolsForRiskAreaQuery = {
       riskAreaGroup:  {
         id: string,
         title: string,
-      } | null,
+      },
     },
     screeningToolScoreRanges:  Array< {
       id: string,
@@ -3714,7 +3714,7 @@ export type getScreeningToolsQuery = {
       riskAreaGroup:  {
         id: string,
         title: string,
-      } | null,
+      },
     },
     screeningToolScoreRanges:  Array< {
       id: string,
@@ -4147,7 +4147,7 @@ export type patientAnswersCreateMutation = {
         riskAreaGroup:  {
           id: string,
           title: string,
-        } | null,
+        },
       } | null,
       screeningTool:  {
         id: string,
@@ -4166,7 +4166,7 @@ export type patientAnswersCreateMutation = {
           riskAreaGroup:  {
             id: string,
             title: string,
-          } | null,
+          },
         },
         screeningToolScoreRanges:  Array< {
           id: string,
@@ -4732,7 +4732,7 @@ export type patientScreeningToolSubmissionCreateMutation = {
       riskAreaGroup:  {
         id: string,
         title: string,
-      } | null,
+      },
     },
     createdAt: string,
     updatedAt: string,
@@ -4859,7 +4859,7 @@ export type patientScreeningToolSubmissionScoreMutation = {
       riskAreaGroup:  {
         id: string,
         title: string,
-      } | null,
+      },
     },
     createdAt: string,
     updatedAt: string,
@@ -5297,7 +5297,7 @@ export type questionCreateMutation = {
         riskAreaGroup:  {
           id: string,
           title: string,
-        } | null,
+        },
       } | null,
       screeningTool:  {
         id: string,
@@ -5316,7 +5316,7 @@ export type questionCreateMutation = {
           riskAreaGroup:  {
             id: string,
             title: string,
-          } | null,
+          },
         },
         screeningToolScoreRanges:  Array< {
           id: string,
@@ -5445,7 +5445,7 @@ export type questionDeleteMutation = {
         riskAreaGroup:  {
           id: string,
           title: string,
-        } | null,
+        },
       } | null,
       screeningTool:  {
         id: string,
@@ -5464,7 +5464,7 @@ export type questionDeleteMutation = {
           riskAreaGroup:  {
             id: string,
             title: string,
-          } | null,
+          },
         },
         screeningToolScoreRanges:  Array< {
           id: string,
@@ -5598,7 +5598,7 @@ export type questionEditMutation = {
         riskAreaGroup:  {
           id: string,
           title: string,
-        } | null,
+        },
       } | null,
       screeningTool:  {
         id: string,
@@ -5617,7 +5617,7 @@ export type questionEditMutation = {
           riskAreaGroup:  {
             id: string,
             title: string,
-          } | null,
+          },
         },
         screeningToolScoreRanges:  Array< {
           id: string,
@@ -5918,7 +5918,7 @@ export type riskAreaCreateMutation = {
     riskAreaGroup:  {
       id: string,
       title: string,
-    } | null,
+    },
   } | null,
 };
 
@@ -5941,7 +5941,7 @@ export type riskAreaDeleteMutation = {
     riskAreaGroup:  {
       id: string,
       title: string,
-    } | null,
+    },
   } | null,
 };
 
@@ -5968,7 +5968,7 @@ export type riskAreaEditMutation = {
     riskAreaGroup:  {
       id: string,
       title: string,
-    } | null,
+    },
   } | null,
 };
 
@@ -6052,7 +6052,7 @@ export type screeningToolCreateMutation = {
       riskAreaGroup:  {
         id: string,
         title: string,
-      } | null,
+      },
     },
     screeningToolScoreRanges:  Array< {
       id: string,
@@ -6120,7 +6120,7 @@ export type screeningToolDeleteMutation = {
       riskAreaGroup:  {
         id: string,
         title: string,
-      } | null,
+      },
     },
     screeningToolScoreRanges:  Array< {
       id: string,
@@ -6190,7 +6190,7 @@ export type screeningToolEditMutation = {
       riskAreaGroup:  {
         id: string,
         title: string,
-      } | null,
+      },
     },
     screeningToolScoreRanges:  Array< {
       id: string,
@@ -7043,7 +7043,7 @@ export type FullAnswerFragment = {
     riskAreaGroup:  {
       id: string,
       title: string,
-    } | null,
+    },
   } | null,
   screeningTool:  {
     id: string,
@@ -7062,7 +7062,7 @@ export type FullAnswerFragment = {
       riskAreaGroup:  {
         id: string,
         title: string,
-      } | null,
+      },
     },
     screeningToolScoreRanges:  Array< {
       id: string,
@@ -7581,7 +7581,7 @@ export type FullPatientAnswerEventFragment = {
         riskAreaGroup:  {
           id: string,
           title: string,
-        } | null,
+        },
       } | null,
       screeningTool:  {
         id: string,
@@ -7600,7 +7600,7 @@ export type FullPatientAnswerEventFragment = {
           riskAreaGroup:  {
             id: string,
             title: string,
-          } | null,
+          },
         },
         screeningToolScoreRanges:  Array< {
           id: string,
@@ -7710,7 +7710,7 @@ export type FullPatientAnswerEventFragment = {
         riskAreaGroup:  {
           id: string,
           title: string,
-        } | null,
+        },
       } | null,
       screeningTool:  {
         id: string,
@@ -7729,7 +7729,7 @@ export type FullPatientAnswerEventFragment = {
           riskAreaGroup:  {
             id: string,
             title: string,
-          } | null,
+          },
         },
         screeningToolScoreRanges:  Array< {
           id: string,
@@ -7845,7 +7845,7 @@ export type FullPatientAnswerFragment = {
       riskAreaGroup:  {
         id: string,
         title: string,
-      } | null,
+      },
     } | null,
     screeningTool:  {
       id: string,
@@ -7864,7 +7864,7 @@ export type FullPatientAnswerFragment = {
         riskAreaGroup:  {
           id: string,
           title: string,
-        } | null,
+        },
       },
       screeningToolScoreRanges:  Array< {
         id: string,
@@ -8115,7 +8115,7 @@ export type FullPatientScreeningToolSubmissionFragment = {
     riskAreaGroup:  {
       id: string,
       title: string,
-    } | null,
+    },
   },
   createdAt: string,
   updatedAt: string,
@@ -8346,7 +8346,7 @@ export type FullProgressNoteActivityFragment = {
           riskAreaGroup:  {
             id: string,
             title: string,
-          } | null,
+          },
         } | null,
         screeningTool:  {
           id: string,
@@ -8365,7 +8365,7 @@ export type FullProgressNoteActivityFragment = {
             riskAreaGroup:  {
               id: string,
               title: string,
-            } | null,
+            },
           },
           screeningToolScoreRanges:  Array< {
             id: string,
@@ -8475,7 +8475,7 @@ export type FullProgressNoteActivityFragment = {
           riskAreaGroup:  {
             id: string,
             title: string,
-          } | null,
+          },
         } | null,
         screeningTool:  {
           id: string,
@@ -8494,7 +8494,7 @@ export type FullProgressNoteActivityFragment = {
             riskAreaGroup:  {
               id: string,
               title: string,
-            } | null,
+            },
           },
           screeningToolScoreRanges:  Array< {
             id: string,
@@ -8878,7 +8878,7 @@ export type FullQuestionFragment = {
       riskAreaGroup:  {
         id: string,
         title: string,
-      } | null,
+      },
     } | null,
     screeningTool:  {
       id: string,
@@ -8897,7 +8897,7 @@ export type FullQuestionFragment = {
         riskAreaGroup:  {
           id: string,
           title: string,
-        } | null,
+        },
       },
       screeningToolScoreRanges:  Array< {
         id: string,
@@ -9094,7 +9094,7 @@ export type FullRiskAreaFragment = {
   riskAreaGroup:  {
     id: string,
     title: string,
-  } | null,
+  },
 };
 
 export type FullRiskScoreFragment = {
@@ -9157,7 +9157,7 @@ export type FullScreeningToolFragment = {
     riskAreaGroup:  {
       id: string,
       title: string,
-    } | null,
+    },
   },
   screeningToolScoreRanges:  Array< {
     id: string,

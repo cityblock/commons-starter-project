@@ -495,8 +495,8 @@ type RiskArea implements uniqueId {
   deletedAt: String
   title: String!
   assessmentType: AssessmentType!
-  riskAreaGroupId: ID
-  riskAreaGroup: RiskAreaGroup
+  riskAreaGroupId: ID!
+  riskAreaGroup: RiskAreaGroup!
   order: Int!
   mediumRiskThreshold: Int!
   highRiskThreshold: Int!
@@ -1040,8 +1040,6 @@ input RiskAreaCreateInput {
 input RiskAreaEditInput {
   riskAreaId: String!
   title: String
-  assessmentType: AssessmentType
-  riskAreaGroupId: ID
   order: Int
   mediumRiskThreshold: Int
   highRiskThreshold: Int

@@ -1,30 +1,26 @@
 # Commons
 
-[![Coverage Status](https://coveralls.io/repos/github/cityblock/commons/badge.svg?branch=master&t=WGaPTr)](https://coveralls.io/github/cityblock/commons?branch=master)
 [![CircleCI](https://circleci.com/gh/cityblock/commons.svg?style=svg&circle-token=ff9336cd2c27998733f1abe9a3c3bcbba62a045f)](https://circleci.com/gh/cityblock/commons)
 [![NSP Status](https://nodesecurity.io/orgs/cityblock/projects/c914cd48-0065-4791-8267-b5b15f6b7e80/badge)](https://nodesecurity.io/orgs/cityblock/projects/c914cd48-0065-4791-8267-b5b15f6b7e80)
 [![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fcityblock%2Fcommons.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2Fcityblock%2Fcommons?ref=badge_shield)
 
-Tech wise, this app is an Express server running GraphQL and PostgreSQL (Objection.js) written in
+This app is an Express server running GraphQL and PostgreSQL (Objection.js) written in
 TypeScript. Tested using Jest. Hosted on [Aptible][].
 
 ## Meta
 
 * **State:** development
-* **Production:** https://app-6170.on-aptible.com |
+* **Staging:** https://commons.cityblock.com |
   [Aptible](https://dashboard.aptible.com/apps/6170)
-* **Github:** https://github.com/sidewalklabs/commons
-* **CI:** [CircleCi](https://circleci.com/gh/sidewalklabs/commons); merged PRs to
-  `sidewalklabs/commons#master` are automatically deployed
+* **Github:** https://github.com/cityblock/commons
+* **CI:** [CircleCi](https://circleci.com/gh/cityblock/commons); merged PRs to
+  `cityblock/commons#master` are automatically deployed
 * **Point People:** @zamiang, @loganhasson
 * **Pingdom:** http://stats.pingdom.com/8uqm3ndqqgmh
-* **Trace:** https://trace.risingstack.com/app/#/infrastructure/5915e849e665183589dd7506/dashboard
 * **AppCanary:** https://appcanary.com/monitors/2283
 * **Logentries:** https://logentries.com/app/87be99c5#/sets
-* **Model Documentation:**
-  https://docs.google.com/document/d/1L1MX7QPJl2Mn3DC1icvPGIkufepJORtJA4SxdKqbIAg/edit
-* **Tools Documentation:**:
-  https://docs.google.com/document/d/1LZPlWvR3O8bpP86bQRHnuYWxKlWG9ADfIPsuh3RyjIA/edit
+* **Model Documentation:** https://docs.google.com/document/d/1L1MX7QPJl2Mn3DC1icvPGIkufepJORtJA4SxdKqbIAg/edit
+* **Tools Documentation:** https://docs.google.com/document/d/1LZPlWvR3O8bpP86bQRHnuYWxKlWG9ADfIPsuh3RyjIA/edit
 
 ### Installation
 
@@ -32,45 +28,34 @@ TypeScript. Tested using Jest. Hosted on [Aptible][].
 * Install [yarn][]
 * Create a `.env` file in the project root (see: [.env][])
 * Install [Zenhub][]
-* Create a Postgres database:
+* [Setup your local database](#create-local-postgres-database)
+* Ask a Point Person to add you as a user in staging and change your user role to Admin.
+* [Copy staging database to your local database](#copying-staging-database-to-local-database)
 
-  ```
-  brew install postgres  # if necessary
-  createdb commons
-  createdb commons_test
-  psql -d commons -c "create extension if not exists btree_gist"
-  psql -d commons_test -c "create extension if not exists btree_gist"
-  psql -d commons_test -c "create extension pg_trgm"
-  ```
+### Create test postgres database
 
-* Run migrations with `yarn migrate`
-* Seed development database with `yarn seed`
-* [Add your user account](#add-a-new-user)
+Setup your database. First install postgres 10 from brew or postgresapp.
+
+    createdb commons_test
+    psql -d commons_test -c "create extension if not exists btree_gist"
+    psql -d commons_test -c "create extension pg_trgm"
+
 
 ### Development
+
+Ensure you have copied from staging to local. Then run:
 
     yarn run dev
 
 ### Testing locally
 
-Our test database uses postgres. Before running tests, ensure that postgres is running and create
-the database `commons_test` and role `root` (`psql -c "create database commons_test"; psql -c
-"create role root with login"; psql -d commons_test -c "create extension btree_gist"; psql -d commons_test -c "create extension pg_trgm"
-; psql -c "alter database commons_test owner to root"`)
-
-Next run:
-
-    NODE_ENV=test yarn migrate
-
-This will setup the test database and you should be good to go.
-
-To actually run the tests, use:
+Our test database uses postgres. Before running tests, ensure that postgres is running and use:
 
     yarn test
 
 ### Making changes
 
-Important: Never commit directly to the master branch. Ensure changes are small and incremental.
+Important: Never commit directly to the master branch. Commit to branches and ensure changes are small and incremental.
 
 To make a change:
 
@@ -165,7 +150,7 @@ except login require you to be authenticated. In order to pass auth information 
    mutation resolver.)
 
        mutation {
-         createUser(input: {email: "your-name@sidewalklabs.com", password: "password"}) {
+         createUser(input: {email: "your-name@cityblock.com", password: "password"}) {
            user { id }
          }
        }
@@ -173,7 +158,7 @@ except login require you to be authenticated. In order to pass auth information 
 2. log in and get `authToken`
 
        mutation {
-         login(input: {email: "brennan@sidewalklabs.com", password: "password"}) {
+         login(input: {email: "your-name@cityblock.com", password: "password"}) {
            authToken
          }
        }
@@ -195,16 +180,12 @@ except login require you to be authenticated. In order to pass auth information 
 ### To automatically fix linter errors, run:
 
     yarn lint --fix
+    # for style changes
+    yarn stylelint --fix
 
 Once you've added the aptible git remote, you can use Aptible toolbelt to interface with the app:
 
     aptible config  # prints environment variables from aptible
-
-### To update the TypeScript types to reflect GraphQL schema changes (`schema.graphql`), run:
-
-    yarn update-schema
-
-CircleCI will complain if you forget to do this.
 
 ### To connect to the Aptible database from your machine, run:
 
@@ -291,7 +272,7 @@ Spotlight's privacy list.
 ### Running in Production Mode Locally Using Docker
 
 We are able to run the application locally using Docker and Docker Compose. For now, this means
-running the web application with a postgres database, but no RabbitMQ. To get started, download and
+running the web application with a postgres database. To get started, download and
 install [Docker][]. After you have Docker installed and running, follow these steps:
 
 1. Start the application and database by running `yarn run docker-prod:start`. The first time you do
@@ -315,6 +296,22 @@ Note: this will eventually become untenable but for now it is convenient.
   psql commons < commons.dump
   rm commons.dump
 
+### Create a database schema explorer 
+
+To get started with [Schemaspy][] which creates an interactive website to explore the schema, first, download and install [Docker][]. After you have Docker installed and running, follow these steps:
+
+  cd some-new-directoy  
+  docker run -v "$PWD:/output" schemaspy/schemaspy:snapshot -t pgsql -db commons -u insertYourDbUsernameHere -host docker.for.mac.localhost -hq
+  open some-new-directoy/index.html
+
+To get started with [Schemacrawler][], which creates a somewhat nicer image of the schema but is not interactive, first, setup docker and then follow these steps:
+
+  docker run -v $(pwd):/share --rm -i -t --entrypoint=/bin/bash sualeh/schemacrawler
+  ./schemacrawler.sh -server=pgsql -user= insertYourDbUsernameHere -database=commons -host=docker.for.mac.localhost -infolevel=maximum -routines= -command=schema -outputfile=/share/sc_db.png
+  exit
+  open sc_db.png
+
+
 
 [nvm]: https://github.com/creationix/nvm
 [zenhub]: https://www.zenhub.com/
@@ -337,3 +334,5 @@ Note: this will eventually become untenable but for now it is convenient.
 [AppCanary]: https://appcanary.com/monitors/2283 
 [NSP]: https://nodesecurity.io 
 [Secure Development Lifecycle]: https://github.com/Microsoft/tslint-microsoft-contrib/wiki/TSLint-and-the-Microsoft-Security-Development-Lifecycle
+[Schemaspy]: https://github.com/schemaspy/schemaspy
+[Schemacrawler]: https://github.com/sualeh/SchemaCrawler

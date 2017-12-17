@@ -7,7 +7,7 @@ set -o errexit
 
 # Start the tunnel. Poll for the connection string.
 tempfile=$(mktemp);
-aptible db:tunnel commons | tee $tempfile &
+aptible db:tunnel commons --type postgresql | tee $tempfile &
 
 # kill any remaining background processes
 function cleanup() {
@@ -18,9 +18,9 @@ function cleanup() {
 }
 trap cleanup EXIT
 
-# Wait 10 seconds for "aptible db:tunnel" to report a connection string.
+# Wait 20 seconds for "aptible db:tunnel" to report a connection string.
 conn=''
-for i in $(seq 1 10); do
+for i in $(seq 1 20); do
   sleep 1;
 
   if [ -e $tempfile ]; then

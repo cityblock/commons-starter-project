@@ -229,28 +229,6 @@ master.
 
     yarn test -u
 
-### Recreate Production DB
-
-1. Connect to Aptible database using
-
-   yarn prod-db
-
-2. Create a temporary database and connect to it
-
-   create database temp; \connect temp
-
-3. Drop, recreate, and connect to the production database
-
-   drop database db; create database db; \connect db
-
-4. Run any mutation against production
-
-5. Get and aptible console
-
-   aptible ssh --app=commons NODE_ENV=production yarn ts-node var Db =
-   require('./server/db').default var User = require('./server/models/user').default var db =
-   Db.get() db.then(() => User.create({email: 'some@email.com', password: 'password', userRole:
-   'physician'}))
 
 ### Add a new user
 

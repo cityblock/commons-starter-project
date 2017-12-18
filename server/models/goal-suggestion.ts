@@ -169,6 +169,42 @@ export default class GoalSuggestion extends BaseModel {
     );
   }
 
+  static async getNewSuggestionsForPatientAnswer(
+    patientId: string,
+    patientAnswerId: string,
+    txn?: Transaction,
+  ): Promise<GoalSuggestionTemplate[]> {
+    const existingPatientCarePlanSuggestionsQuery = CarePlanSuggestion.query(txn)
+      .where('patientId', patientId)
+      .andWhere('dismissedAt', null)
+      .andWhere('acceptedAt', null)
+      .andWhere('suggestionType', 'goal')
+      .select('goalSuggestionTemplateId');
+
+    const goalSuggestions = (await this.query(txn)
+      .eager('goalSuggestionTemplate.[taskTemplates]')
+      .joinRelation('answer')
+      .join('patient_answer', 'answer.id', 'patient_answer.answerId')
+      .leftOuterJoin(
+        'patient_goal',
+        'goal_suggestion.goalSuggestionTemplateId',
+        'patient_goal.goalSuggestionTemplateId',
+      )
+      .where('patient_answer.id', patientAnswerId)
+      .andWhere('patient_answer.deletedAt', null)
+      .andWhere(
+        'goal_suggestion.goalSuggestionTemplateId',
+        'not in',
+        existingPatientCarePlanSuggestionsQuery,
+      )
+      .andWhere('patient_answer.applicable', true)
+      .andWhere('patient_goal.id', null)) as GoalSuggestion[];
+
+    return goalSuggestions.map(
+      (goalSuggestion: GoalSuggestion) => goalSuggestion.goalSuggestionTemplate,
+    );
+  }
+
   static async create({
     goalSuggestionTemplateId,
     answerId,

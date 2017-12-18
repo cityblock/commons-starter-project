@@ -2,6 +2,7 @@ import * as uuid from 'uuid/v4';
 import Db from '../../db';
 import { createRiskArea } from '../../spec-helpers';
 import Answer from '../answer';
+import ComputedField from '../computed-field';
 import GoalSuggestion from '../goal-suggestion';
 import GoalSuggestionTemplate from '../goal-suggestion-template';
 import Question from '../question';
@@ -214,5 +215,86 @@ describe('anser model', () => {
     await Answer.delete(deletedAnswer.id);
 
     expect(await Answer.getAllForQuestion(question.id)).toMatchObject([answer1, answer2]);
+  });
+
+  it('gets an answer for a computed field slug and value', async () => {
+    const computedField = await ComputedField.create({
+      label: 'Computed Field',
+      slug: 'computed-field',
+      dataType: 'number',
+    });
+    const question = await Question.create({
+      title: 'like writing tests?',
+      answerType: 'dropdown',
+      riskAreaId: riskArea.id,
+      type: 'riskArea',
+      order: 1,
+      computedFieldId: computedField.id,
+    });
+    const answer1 = await Answer.create({
+      displayValue: 'loves writing tests!',
+      value: '3',
+      valueType: 'number',
+      riskAdjustmentType: 'forceHighRisk',
+      inSummary: false,
+      questionId: question.id,
+      order: 1,
+    });
+    await Answer.create({
+      displayValue: 'loves writing more tests!',
+      value: '2',
+      valueType: 'number',
+      riskAdjustmentType: 'forceHighRisk',
+      inSummary: false,
+      questionId: question.id,
+      order: 2,
+    });
+    const fetchedAnswer = await Answer.getByComputedFieldSlugAndValue({
+      slug: 'computed-field',
+      value: answer1.value,
+    });
+
+    expect(fetchedAnswer!.id).toEqual(answer1.id);
+    expect(fetchedAnswer!.value).toEqual(answer1.value);
+  });
+
+  it('returns null when getting an answer for an invalid computed field slug/value', async () => {
+    const computedField = await ComputedField.create({
+      label: 'Computed Field',
+      slug: 'computed-field',
+      dataType: 'number',
+    });
+    const question = await Question.create({
+      title: 'like writing tests?',
+      answerType: 'dropdown',
+      riskAreaId: riskArea.id,
+      type: 'riskArea',
+      order: 1,
+      computedFieldId: computedField.id,
+    });
+    await Answer.create({
+      displayValue: 'loves writing tests!',
+      value: '3',
+      valueType: 'number',
+      riskAdjustmentType: 'forceHighRisk',
+      inSummary: false,
+      questionId: question.id,
+      order: 1,
+    });
+    await Answer.create({
+      displayValue: 'loves writing more tests!',
+      value: '2',
+      valueType: 'number',
+      riskAdjustmentType: 'forceHighRisk',
+      inSummary: false,
+      questionId: question.id,
+      order: 2,
+    });
+    const fetchedAnswer = await Answer.getByComputedFieldSlugAndValue({
+      slug: 'computed-field',
+      value: 'random value',
+    });
+
+    expect(fetchedAnswer).toBeNull();
   });
 });

@@ -10,11 +10,12 @@ type EventTypes = 'create_patient_answer';
 
 export interface IPatientAnswerEventOptions {
   patientId: string;
-  userId: string;
+  userId?: string;
   patientAnswerId: string;
   previousPatientAnswerId?: string;
   eventType: EventTypes;
   progressNoteId?: string;
+  computedFieldId?: string;
 }
 
 interface IMultiplePatientAnswerEventOptions {
@@ -125,10 +126,13 @@ export default class PatientAnswerEvent extends BaseModel {
     input: IPatientAnswerEventOptions,
     txn?: Transaction,
   ): Promise<PatientAnswerEvent> {
-    const { patientId, userId } = input;
+    const { patientId, userId, computedFieldId } = input;
 
-    const progressNote = await ProgressNote.autoOpenIfRequired({ patientId, userId }, txn);
-    input.progressNoteId = progressNote.id;
+    // Only auto-open a ProgressNote if this is not a ComputedField answer
+    if (patientId && userId && !computedFieldId) {
+      const progressNote = await ProgressNote.autoOpenIfRequired({ patientId, userId }, txn);
+      input.progressNoteId = progressNote.id;
+    }
 
     const patientAnswerEvent = await this.query(txn)
       .eager(EAGER_QUERY)
@@ -142,17 +146,24 @@ export default class PatientAnswerEvent extends BaseModel {
     txn: Transaction,
   ): Promise<PatientAnswerEvent[]> {
     const { patientAnswerEvents } = input;
-    const { patientId, userId } = patientAnswerEvents[0];
+    const { patientId, userId, computedFieldId } = patientAnswerEvents[0];
 
-    const progressNote = await ProgressNote.autoOpenIfRequired({ patientId, userId }, txn);
-    const patientAnswerEventsWithProgressNoteId = patientAnswerEvents.map(patientAnswerEvent => ({
-      progressNoteId: progressNote.id,
-      ...patientAnswerEvent,
-    }));
+    let patientAnswerEventsToInsert: IPatientAnswerEventOptions[] = patientAnswerEvents;
+
+    // Only auto-open a ProgressNote if this is not for ComputedField answers
+    if (patientId && userId && !computedFieldId) {
+      const progressNote = await ProgressNote.autoOpenIfRequired({ patientId, userId }, txn);
+      patientAnswerEventsToInsert = patientAnswerEvents.map(patientAnswerEvent => ({
+        progressNoteId: progressNote.id,
+        ...patientAnswerEvent,
+      }));
+    } else {
+      patientAnswerEventsToInsert = patientAnswerEvents;
+    }
 
     const createdPatientAnswerEvents = await this.query(txn)
       .eager(EAGER_QUERY)
-      .insertGraphAndFetch(patientAnswerEventsWithProgressNoteId);
+      .insertGraphAndFetch(patientAnswerEventsToInsert);
 
     return createdPatientAnswerEvents;
   }

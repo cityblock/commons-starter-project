@@ -1,5 +1,6 @@
 import { Model, RelationMappings } from 'objection';
 import BaseModel from './base-model';
+import Question from './question';
 
 export type ComputedFieldOrderOptions = 'createdAt' | 'slug' | 'label';
 type ComputedFieldDataTypes = 'boolean' | 'number' | 'string';
@@ -21,6 +22,7 @@ export default class ComputedField extends BaseModel {
   slug: string;
   label: string;
   dataType: ComputedFieldDataTypes;
+  question: Question;
 
   static tableName = 'computed_field';
 
@@ -95,6 +97,19 @@ export default class ComputedField extends BaseModel {
       .joinRaw('LEFT OUTER JOIN question ON question."computedFieldId" = computed_field.id')
       .where('computed_field.deletedAt', null)
       .andWhere('question.id', null)
+      .orderBy(orderBy, order)) as any;
+  }
+
+  static async getForSchema({
+    orderBy,
+    order,
+  }: IComputedFieldOrderOptions): Promise<ComputedField[]> {
+    return (await this.query()
+      .eager('question.answers')
+      .modifyEager('question.answers', builder => builder.where('answer.deletedAt', null))
+      .modifyEager('question', builder => builder.where('question.deletedAt', null))
+      .joinRelation('question')
+      .where('computed_field.deletedAt', null)
       .orderBy(orderBy, order)) as any;
   }
 

@@ -27,14 +27,25 @@ export interface ICarePlanSuggestionCreateArgsForRiskAreaAssessmentSubmission {
   type: 'riskAreaAssessmentSubmission';
 }
 
+export interface ICarePlanSuggestionCreateArgsForComputedFieldAnswer {
+  patientId: string;
+  suggestionType: SuggestionType;
+  concernId?: string;
+  goalSuggestionTemplateId?: string;
+  computedFieldId: string;
+  type: 'computedFieldAnswer';
+}
+
 type ICarePlanSuggestionCreateArgs =
   | ICarePlanSuggestionCreateArgsForRiskAreaAssessmentSubmission
-  | ICarePlanSuggestionCreateArgsForPatientScreeningToolSubmission;
+  | ICarePlanSuggestionCreateArgsForPatientScreeningToolSubmission
+  | ICarePlanSuggestionCreateArgsForComputedFieldAnswer;
 
 interface ICarePlanSuggestionCreateMultipleArgs {
   suggestions:
     | ICarePlanSuggestionCreateArgsForRiskAreaAssessmentSubmission[]
-    | ICarePlanSuggestionCreateArgsForPatientScreeningToolSubmission[];
+    | ICarePlanSuggestionCreateArgsForPatientScreeningToolSubmission[]
+    | ICarePlanSuggestionCreateArgsForComputedFieldAnswer[];
 }
 
 interface ICarePlanSuggestionDismissArgs {
@@ -65,6 +76,7 @@ export default class CarePlanSuggestion extends BaseModel {
   dismissedReason?: string;
   dismissedAt?: string;
   patientScreeningToolSubmissionId?: string;
+  computedFieldId?: string;
 
   static tableName = 'care_plan_suggestion';
 
@@ -83,6 +95,7 @@ export default class CarePlanSuggestion extends BaseModel {
       acceptedById: { type: 'string' },
       patientScreeningToolSubmissionId: { type: 'string' },
       riskAreaAssessmentSubmissionId: { type: 'string' },
+      computedFieldId: { type: 'string' },
     },
   };
 

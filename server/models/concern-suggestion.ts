@@ -149,6 +149,31 @@ export default class ConcernSuggestion extends BaseModel {
     return concernSuggestions.map((suggestion: ConcernSuggestion) => suggestion.concern);
   }
 
+  static async getNewSuggestionsForPatientAnswer(
+    patientId: string,
+    patientAnswerId: string,
+    txn?: Transaction,
+  ): Promise<Concern[]> {
+    const existingPatientCarePlanSuggestionsQuery = CarePlanSuggestion.query(txn)
+      .where('patientId', patientId)
+      .andWhere('dismissedAt', null)
+      .andWhere('acceptedAt', null)
+      .andWhere('suggestionType', 'concern')
+      .select('concernId');
+
+    const concernSuggestions = (await this.query(txn)
+      .eager('concern')
+      .joinRelation('answer')
+      .join('patient_answer', 'answer.id', 'patient_answer.answerId')
+      .leftOuterJoin('patient_concern', 'concern_suggestion.concernId', 'patient_concern.concernId')
+      .where('patient_answer.id', patientAnswerId)
+      .andWhere('concern_suggestion.concernId', 'not in', existingPatientCarePlanSuggestionsQuery)
+      .andWhere('patient_answer.applicable', true)
+      .andWhere('patient_concern.id', null)) as ConcernSuggestion[];
+
+    return concernSuggestions.map((suggestion: ConcernSuggestion) => suggestion.concern);
+  }
+
   static async create({
     concernId,
     answerId,

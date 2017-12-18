@@ -1,6 +1,7 @@
 import * as uuid from 'uuid/v4';
 import Db from '../../db';
 import { createRiskArea } from '../../spec-helpers';
+import Answer from '../answer';
 import ComputedField from '../computed-field';
 import Question from '../question';
 
@@ -184,6 +185,46 @@ describe('computed field model', () => {
       expect(await ComputedField.getAllAvailable({ orderBy: 'label', order: 'asc' })).toMatchObject(
         [computedField2],
       );
+    });
+
+    it('gets the computed fields for schema', async () => {
+      const computedField1 = await ComputedField.create({
+        label: 'def',
+        slug: 'computed-field-1',
+        dataType: 'boolean',
+      });
+      await ComputedField.create({
+        label: 'abc',
+        slug: 'computed-field-2',
+        dataType: 'number',
+      });
+      const riskArea = await createRiskArea('Housing');
+      const question = await Question.create({
+        riskAreaId: riskArea.id,
+        type: 'riskArea',
+        title: 'Question',
+        answerType: 'boolean' as any,
+        order: 1,
+        computedFieldId: computedField1.id,
+      });
+      const answer = await Answer.create({
+        questionId: question.id,
+        displayValue: 'Answer Display Value',
+        value: 'true',
+        valueType: 'boolean',
+        order: 1,
+      });
+      const fetchedComputedFields = await ComputedField.getForSchema({
+        orderBy: 'slug',
+        order: 'asc',
+      });
+      const fetchedComputedField = fetchedComputedFields[0];
+
+      expect(fetchedComputedFields.length).toEqual(1);
+      expect(fetchedComputedField.slug).toEqual(computedField1.slug);
+      expect(fetchedComputedField.question.id).toEqual(question.id);
+      expect(fetchedComputedField.question.answers.length).toEqual(1);
+      expect(fetchedComputedField.question.answers[0].id).toEqual(answer.id);
     });
 
     it('deletes a computed field', async () => {

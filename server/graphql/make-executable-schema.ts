@@ -28,6 +28,7 @@ import {
   resolveComputedField,
   resolveComputedFields,
 } from './computed-field-resolver';
+import { resolveComputedFieldsSchema } from './computed-field-schema-resolver';
 import {
   concernCreate,
   concernDelete,
@@ -297,6 +298,7 @@ const resolveFunctions = {
     quickCallsForProgressNote: resolveQuickCallsForProgressNote,
     computedField: resolveComputedField,
     computedFields: resolveComputedFields,
+    computedFieldsSchema: resolveComputedFieldsSchema,
   },
   /* tslint:enable:max-line-length */
   RootMutationType: {

@@ -15,7 +15,8 @@ type IAnswers = Array<{
   answerValue: string;
   patientId: string;
   applicable: boolean;
-  userId: string;
+  userId?: string;
+  mixerJobId?: string;
   patientScreeningToolSubmissionId?: string;
   riskAreaAssessmentSubmissionId?: string;
   progressNoteId?: string;
@@ -45,10 +46,19 @@ interface IPatientAnswerCreateForScreeningToolSubmission {
   type: 'patientScreeningToolSubmission';
 }
 
+interface IPatientAnswerCreateForComputedField {
+  patientId: string;
+  questionIds: string[];
+  mixerJobId: string;
+  answers: IAnswers;
+  type: 'computedFieldAnswer';
+}
+
 type IPatientAnswerCreateFields =
   | IPatientAnswerCreateForProgressNote
   | IPatientAnswerCreateForRiskAreaAssessmentSubmission
-  | IPatientAnswerCreateForScreeningToolSubmission;
+  | IPatientAnswerCreateForScreeningToolSubmission
+  | IPatientAnswerCreateForComputedField;
 
 /* tslint:disable:member-ordering */
 export default class PatientAnswer extends BaseModel {
@@ -65,6 +75,7 @@ export default class PatientAnswer extends BaseModel {
   riskAreaAssessmentSubmission: RiskAreaAssessmentSubmission;
   screeningTool: ScreeningTool;
   progressNoteId: string;
+  mixerJobId: string;
 
   static tableName = 'patient_answer';
 
@@ -81,6 +92,7 @@ export default class PatientAnswer extends BaseModel {
       patientScreeningToolSubmissionId: { type: 'string' },
       progressNoteId: { type: 'string' },
       riskAreaAssessmentSubmissionId: { type: 'string' },
+      mixerJobId: { type: 'string' },
     },
   };
 
@@ -296,10 +308,13 @@ export default class PatientAnswer extends BaseModel {
     const patientAnswerEventsToCreate = patientAnswers.map(patientAnswer => {
       const patientAnswerEvent: IPatientAnswerEventOptions = {
         patientId: patientAnswer.patientId,
-        userId: patientAnswer.userId,
         patientAnswerId: patientAnswer.id,
         eventType: 'create_patient_answer',
       };
+
+      if (patientAnswer.userId) {
+        patientAnswerEvent.userId = patientAnswer.userId;
+      }
       const previousPatientAnswer = deletedPatientAnswers.find(
         deletedAnswer => deletedAnswer.answer.questionId === patientAnswer.answer.questionId,
       );
@@ -336,6 +351,11 @@ export default class PatientAnswer extends BaseModel {
       case 'riskAreaAssessmentSubmission':
         return input.answers.map(answer => {
           answer.riskAreaAssessmentSubmissionId = input.riskAreaAssessmentSubmissionId;
+          return answer;
+        });
+      case 'computedFieldAnswer':
+        return input.answers.map(answer => {
+          answer.mixerJobId = input.mixerJobId;
           return answer;
         });
     }

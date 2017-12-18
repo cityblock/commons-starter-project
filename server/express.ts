@@ -9,6 +9,8 @@ import config from './config';
 import schema from './graphql/make-executable-schema';
 import { getGraphQLContext } from './graphql/shared/utils';
 import { checkPostgresHandler } from './handlers/pingdom/check-postgres-handler';
+import { pubsubPushHandler } from './handlers/pubsub/push-handler';
+import { pubsubValidator } from './handlers/pubsub/validator';
 
 export const checkAuth = (username: string, password: string) => (
   req: any,
@@ -69,6 +71,9 @@ export default async (app: express.Application, logger: Console) => {
     checkAuth('pingdom', process.env.PINGDOM_CHECK_PASSWORD || 'fake'),
     checkPostgresHandler,
   );
+
+  // Google PubSub
+  app.post('/pubsub/push', bodyParser.json(), pubsubValidator, pubsubPushHandler);
 
   app.get('*', renderApp);
 

@@ -835,6 +835,16 @@ type ComputedField implements uniqueId {
   deletedAt: String
 }
 
+type ComputedFieldSchema {
+  slug: String!
+  dataType: ComputedFieldDataTypes!
+  values: [String!]!
+}
+
+type ComputedFieldsSchema {
+  computedFields: [ComputedFieldSchema!]!
+}
+
 #
 # BEGIN INPUT FIELDS
 #
@@ -1748,6 +1758,8 @@ type RootQueryType {
   computedField(computedFieldId: String!): ComputedField
   # computed fields
   computedFields(orderBy: ComputedFieldOrderOptions, availableOnly: Boolean): [ComputedField]
+  # computed fields schema
+  computedFieldsSchema: ComputedFieldsSchema
   # risk area assessment submission
   riskAreaAssessmentSubmission(
     riskAreaAssessmentSubmissionId: String!

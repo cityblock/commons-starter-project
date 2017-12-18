@@ -298,6 +298,10 @@ declare module 'schema' {
   */
     computedFields: Array<IComputedField> | null;
     /**
+    description: computed fields schema
+  */
+    computedFieldsSchema: IComputedFieldsSchema | null;
+    /**
     description: risk area assessment submission
   */
     riskAreaAssessmentSubmission: IRiskAreaAssessmentSubmission | null;
@@ -1098,6 +1102,18 @@ declare module 'schema' {
 
 
   type IComputedFieldOrderOptionsEnum = 'labelDesc' | 'labelAsc' | 'slugDesc' | 'slugAsc';
+
+
+  interface IComputedFieldsSchema {
+    computedFields: Array<IComputedFieldSchema>;
+  }
+
+
+  interface IComputedFieldSchema {
+    slug: string;
+    dataType: IComputedFieldDataTypesEnum;
+    values: Array<string>;
+  }
 
 
   interface IRootMutationType {

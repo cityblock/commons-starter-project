@@ -20,6 +20,11 @@ interface IAnswerCreateFields extends IAnswerEditableFields {
   questionId: string;
 }
 
+interface IGetByComputedFieldSlugAndValueOptions {
+  slug: string;
+  value: string | boolean | number;
+}
+
 type ValueTypeOptions = 'string' | 'boolean' | 'number';
 type RiskAdjustmentType = 'inactive' | 'increment' | 'forceHighRisk';
 
@@ -137,6 +142,20 @@ export default class Answer extends BaseModel {
     return this.getQuery()
       .where({ questionId, deletedAt: null })
       .orderBy('order');
+  }
+
+  static async getByComputedFieldSlugAndValue(
+    args: IGetByComputedFieldSlugAndValueOptions,
+  ): Promise<Answer | null> {
+    const answer = (await this.query()
+      .eager('question.[computedField]')
+      .joinRelation('question.computedField')
+      .where('question:computedField.slug', args.slug)
+      .andWhere('answer.value', args.value)
+      .andWhere('answer.deletedAt', null)
+      .first()) as any;
+
+    return answer || null;
   }
 
   static async create(input: IAnswerCreateFields) {

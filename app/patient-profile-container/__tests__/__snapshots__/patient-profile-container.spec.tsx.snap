@@ -54,7 +54,7 @@ exports[`patient profile container renders patient profile container 1`] = `
       <Route
         component={[Function]}
         exact={true}
-        path="/patients/:patientId/360/:riskAreaId?"
+        path="/patients/:patientId/360/:riskAreaGroupId?(/assessment/:riskAreaId)?"
       />
       <Route
         component={[Function]}

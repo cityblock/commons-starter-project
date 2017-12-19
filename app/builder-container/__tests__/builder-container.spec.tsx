@@ -25,6 +25,7 @@ const query = gql(`
     updatedAt
     deletedAt
     title
+    order
     mediumRiskThreshold
     highRiskThreshold
     __typename

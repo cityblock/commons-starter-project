@@ -1,11 +1,12 @@
 import * as React from 'react';
-import RiskAreaAssessment from './risk-area/risk-area-assessment';
-import RiskAreaSummaries from './risk-area/risk-area-summaries';
+import RiskAreaAssessment from '../risk-area/risk-area-assessment';
+import PatientThreeSixtyDomains from './patient-three-sixty-domains';
 
 interface IProps {
   match: {
     params: {
       patientId: string;
+      riskAreaGroupId?: string;
       riskAreaId?: string;
     };
   };
@@ -19,7 +20,7 @@ const PatientThreeSixtyView: React.StatelessComponent<IProps> = props => {
   const patientRoute = `/patients/${match.params.patientId}`;
 
   const riskAreas = !riskAreaId ? (
-    <RiskAreaSummaries patientId={patientId} routeBase={routeBase} />
+    <PatientThreeSixtyDomains patientId={patientId} routeBase={routeBase} />
   ) : null;
 
   const riskAreaAssessment = riskAreaId ? (

@@ -1,0 +1,9 @@
+@import '../../../shared/css/sizes';
+
+.container {
+  background: var(--gray-background-color);
+}
+
+.spinner {
+  margin-top: var(--gutter);
+}

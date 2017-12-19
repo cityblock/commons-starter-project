@@ -51,6 +51,7 @@
   --roboto: 'Roboto', Helvetica, sans-serif;
   --roboto-medium-weight: 500;
   --default-font-weight: 400;
+  --box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.1);
   --drop-shadow: 0 6px 8px 0 rgba(0, 0, 0, 0.15);
   --light-blue-hover: rgba(143, 173, 255, 0.1);
   --white-opaque: rgba(255, 255, 255, 0.4);

@@ -215,7 +215,7 @@ export default compose(
   graphql<IGraphqlProps, IProps, allProps>(riskAreaGroupsQuery as any, {
     props: ({ data }) => ({
       riskAreaGroupsLoading: data ? data.loading : false,
-      eror: data ? data.error : null,
+      error: data ? data.error : null,
       riskAreaGroups: data ? (data as any).riskAreaGroups : null,
     }),
   }),

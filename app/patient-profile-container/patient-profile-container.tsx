@@ -13,7 +13,7 @@ import * as styles from './css/patient-profile.css';
 import PatientCarePlanView from './patient-care-plan-view';
 import PatientInfo from './patient-info';
 import PatientProfileLeftNav from './patient-profile-left-nav';
-import PatientThreeSixtyView from './patient-three-sixty-view';
+import PatientThreeSixtyView from './patient-three-sixty/patient-three-sixty-view';
 import ScreeningTool from './screening-tool/screening-tool';
 import PatientTimeline from './timeline/patient-timeline';
 
@@ -118,7 +118,7 @@ export class PatientProfileContainer extends React.Component<allProps> {
             />
             <Route
               exact
-              path="/patients/:patientId/360/:riskAreaId?"
+              path="/patients/:patientId/360/:riskAreaGroupId?(/assessment/:riskAreaId)?"
               component={PatientThreeSixtyView as any}
             />
             <Route

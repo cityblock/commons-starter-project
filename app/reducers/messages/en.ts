@@ -256,6 +256,8 @@ export const ENGLISH_TRANSLATION = {
     'taskPriority.medium': 'Medium priority',
     'taskPriority.high': 'High priority',
     'taskPriority.select': 'Select priority',
+    'threeSixty.history': 'History',
+    'threeSixty.summary': 'Patient Summary',
     'notifications.leftPane': 'Left Pane',
     'notifications.noNotifications': 'No Notifications',
     'notification.time': 'Time',

@@ -267,6 +267,8 @@ export const SPANISH_TRANSLATION = {
     'taskComment.activity': 'Actividad y comentarios',
     'taskComment.error': 'Error al agregar comentario',
     'notifications.leftPane': 'Panel izquierdo',
+    'threeSixty.history': 'Historia',
+    'threeSixty.summary': 'Resumen del paciente',
     'notifications.noNotifications': 'Sin Notificaciones',
     'notification.time': 'Hora',
     'progressNote.new': 'Nueva nota de progreso',

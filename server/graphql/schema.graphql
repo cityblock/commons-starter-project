@@ -426,6 +426,7 @@ type Answer implements uniqueId {
   goalSuggestions: [GoalSuggestionTemplate]
   riskArea: RiskArea
   screeningTool: ScreeningTool
+  patientAnswers: [PatientAnswer!]
 }
 
 # PatientAnswer
@@ -486,6 +487,7 @@ type RiskAreaGroup implements uniqueId {
   order: Int!
   mediumRiskThreshold: Int!
   highRiskThreshold: Int!
+  riskAreas: [RiskArea!]
 }
 
 # Risk Area
@@ -501,6 +503,7 @@ type RiskArea implements uniqueId {
   order: Int!
   mediumRiskThreshold: Int!
   highRiskThreshold: Int!
+  questions: [Question!]
 }
 
 type RiskScore {
@@ -1634,6 +1637,8 @@ type RootQueryType {
   taskComment(taskCommentId: String!): TaskComment
   # RiskAreaGroup
   riskAreaGroup(riskAreaGroupId: String!): RiskAreaGroup
+  # Risk Area Group with associated patient answers
+  riskAreaGroupForPatient(riskAreaGroupId: String!, patientId: String!): RiskAreaGroup
   # RiskAreaGroups
   riskAreaGroups: [RiskAreaGroup!]!
   # RiskArea

@@ -90,6 +90,10 @@ declare module 'schema' {
   */
     riskAreaGroup: IRiskAreaGroup | null;
     /**
+    description: Risk Area Group with associated patient answers
+  */
+    riskAreaGroupForPatient: IRiskAreaGroup | null;
+    /**
     description: RiskAreaGroups
   */
     riskAreaGroups: Array<IRiskAreaGroup>;
@@ -330,7 +334,7 @@ declare module 'schema' {
   /**
     description: An object with a Globally Unique ID
   */
-  type uniqueId = IUser | IPatient | IPatientSearchResult | IClinic | ITask | IPatientGoal | IPatientConcern | IConcern | IGoalSuggestionTemplate | ITaskTemplate | ITaskComment | IRiskAreaGroup | IRiskArea | IQuestion | IAnswer | IScreeningTool | IScreeningToolScoreRange | IQuestionCondition | IComputedField | IPatientAnswer | IPatientScreeningToolSubmission | ICarePlanSuggestion | IRiskAreaAssessmentSubmission | IEventNotification | ITaskEvent | IProgressNote | IProgressNoteTemplate | IPatientTaskSuggestion | IPatientAnswerEvent | ICarePlanUpdateEvent | IQuickCall;
+  type uniqueId = IUser | IPatient | IPatientSearchResult | IClinic | ITask | IPatientGoal | IPatientConcern | IConcern | IGoalSuggestionTemplate | ITaskTemplate | ITaskComment | IRiskAreaGroup | IRiskArea | IQuestion | IAnswer | IScreeningTool | IScreeningToolScoreRange | IPatientAnswer | IPatientScreeningToolSubmission | ICarePlanSuggestion | IRiskAreaAssessmentSubmission | IQuestionCondition | IComputedField | IEventNotification | ITaskEvent | IProgressNote | IProgressNoteTemplate | IPatientTaskSuggestion | IPatientAnswerEvent | ICarePlanUpdateEvent | IQuickCall;
 
   /**
     description: An object with a Globally Unique ID
@@ -675,6 +679,7 @@ declare module 'schema' {
     order: number;
     mediumRiskThreshold: number;
     highRiskThreshold: number;
+    riskAreas: Array<IRiskArea>;
   }
 
   /**
@@ -692,6 +697,7 @@ declare module 'schema' {
     order: number;
     mediumRiskThreshold: number;
     highRiskThreshold: number;
+    questions: Array<IQuestion>;
   }
 
 
@@ -739,6 +745,7 @@ declare module 'schema' {
     goalSuggestions: Array<IGoalSuggestionTemplate> | null;
     riskArea: IRiskArea | null;
     screeningTool: IScreeningTool | null;
+    patientAnswers: Array<IPatientAnswer>;
   }
 
 
@@ -773,41 +780,6 @@ declare module 'schema' {
     concernSuggestions: Array<IConcern>;
     goalSuggestions: Array<IGoalSuggestionTemplate> | null;
   }
-
-
-  type IAnswerTypeOptionsEnum = 'dropdown' | 'radio' | 'freetext' | 'multiselect';
-
-  /**
-    description: QuestionCondition
-  */
-  interface IQuestionCondition {
-    id: string;
-    createdAt: string;
-    updatedAt: string;
-    deletedAt: string | null;
-    answerId: string;
-    questionId: string;
-  }
-
-
-  type IQuestionConditionTypeOptionsEnum = 'allTrue' | 'oneTrue';
-
-
-  interface IComputedField {
-    id: string;
-    slug: string;
-    label: string;
-    dataType: IComputedFieldDataTypesEnum;
-    createdAt: string;
-    updatedAt: string;
-    deletedAt: string | null;
-  }
-
-
-  type IComputedFieldDataTypesEnum = 'boolean' | 'string' | 'number';
-
-
-  type IQuestionFilterTypeEnum = 'progressNoteTemplate' | 'riskArea' | 'screeningTool';
 
   /**
     description: PatientAnswer
@@ -892,6 +864,41 @@ declare module 'schema' {
     completedAt: string | null;
     carePlanSuggestions: Array<ICarePlanSuggestion>;
   }
+
+
+  type IAnswerTypeOptionsEnum = 'dropdown' | 'radio' | 'freetext' | 'multiselect';
+
+  /**
+    description: QuestionCondition
+  */
+  interface IQuestionCondition {
+    id: string;
+    createdAt: string;
+    updatedAt: string;
+    deletedAt: string | null;
+    answerId: string;
+    questionId: string;
+  }
+
+
+  type IQuestionConditionTypeOptionsEnum = 'allTrue' | 'oneTrue';
+
+
+  interface IComputedField {
+    id: string;
+    slug: string;
+    label: string;
+    dataType: IComputedFieldDataTypesEnum;
+    createdAt: string;
+    updatedAt: string;
+    deletedAt: string | null;
+  }
+
+
+  type IComputedFieldDataTypesEnum = 'boolean' | 'string' | 'number';
+
+
+  type IQuestionFilterTypeEnum = 'progressNoteTemplate' | 'riskArea' | 'screeningTool';
 
 
   type IAnswerFilterTypeEnum = 'question' | 'progressNote' | 'riskArea' | 'screeningTool' | 'patientScreeningToolSubmission' | 'riskAreaAssessmentSubmission';

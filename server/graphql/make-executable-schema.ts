@@ -147,6 +147,7 @@ import {
 import {
   resolveRiskAreaGroup,
   resolveRiskAreaGroups,
+  resolveRiskAreaGroupForPatient,
   riskAreaGroupCreate,
   riskAreaGroupDelete,
   riskAreaGroupEdit,
@@ -245,6 +246,7 @@ const resolveFunctions = {
     taskComment: resolveTaskComment,
     riskAreaGroups: resolveRiskAreaGroups,
     riskAreaGroup: resolveRiskAreaGroup,
+    riskAreaGroupForPatient: resolveRiskAreaGroupForPatient,
     riskArea: resolveRiskArea,
     riskAreas: resolveRiskAreas,
     patientRiskAreaRiskScore: resolvePatientRiskAreaRiskScore,

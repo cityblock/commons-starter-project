@@ -194,7 +194,7 @@ export const ENGLISH_TRANSLATION = {
     'riskArea.highRiskThreshold': 'Enter assessment high risk threshold',
     'riskArea.manual': 'Manual Assessment',
     'riskArea.mediumRiskThreshold': 'Enter assessment medium risk threshold',
-    'riskArea.order': 'Enter risk area order',
+    'riskArea.order': 'Enter assessment order',
     'riskArea.title': 'Enter assessment title',
     'riskAreaGroup.close': 'Close',
     'riskAreaGroup.create': 'Create Domain',

@@ -203,7 +203,7 @@ export const SPANISH_TRANSLATION = {
     'riskArea.highRiskThreshold': 'Ingrese el umbral de alto riesgo de la evaluación',
     'riskArea.manual': 'Evaluación manual',
     'riskArea.mediumRiskThreshold': 'Ingrese el umbral de riesgo medio de evaluación',
-    'riskArea.order': 'Ingresar orden de área de riesgo',
+    'riskArea.order': 'Ingresar orden de evaluación',
     'riskArea.title': 'Ingrese el título de evaluación',
     'riskAreaGroup.close': 'Cerrar',
     'riskAreaGroup.create': 'Crear Dominio',

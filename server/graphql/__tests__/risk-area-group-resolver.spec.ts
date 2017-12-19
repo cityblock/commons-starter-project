@@ -1,11 +1,19 @@
 import { graphql } from 'graphql';
 import { cloneDeep } from 'lodash';
+import { transaction } from 'objection';
 import * as uuid from 'uuid/v4';
 import Db from '../../db';
 import Clinic from '../../models/clinic';
 import RiskAreaGroup from '../../models/risk-area-group';
 import User from '../../models/user';
-import { createMockClinic, createMockRiskAreaGroup, createMockUser } from '../../spec-helpers';
+import {
+  createFullRiskAreaGroupAssociations,
+  createMockClinic,
+  createMockPatient,
+  createMockRiskAreaGroup,
+  createMockUser,
+  createPatient,
+} from '../../spec-helpers';
 import schema from '../make-executable-schema';
 
 describe('risk area group resolver', () => {
@@ -18,6 +26,7 @@ describe('risk area group resolver', () => {
   const mockTitle = "Littlefinger's treachery";
   const mediumRiskThreshold = 50;
   const highRiskThreshold = 80;
+  const order = 11;
 
   beforeEach(async () => {
     db = await Db.get();
@@ -75,6 +84,53 @@ describe('risk area group resolver', () => {
       const result = await graphql(schema, query, null, { db, userRole });
       expect(result.errors![0].message).toMatch(`No such risk area group: ${fakeId}`);
     });
+
+    it('fetches a risk area group for a patient', async () => {
+      await transaction(RiskAreaGroup.knex(), async txn => {
+        const patient = await createPatient(createMockPatient(11, clinic.id), user.id, txn);
+        const title2 = 'Night King Breach of Wall';
+        const riskAreaTitle = 'Zombie Viscerion';
+        const riskAreaGroup2 = await RiskAreaGroup.create(createMockRiskAreaGroup(title2), txn);
+        await createFullRiskAreaGroupAssociations(
+          riskAreaGroup2.id,
+          patient.id,
+          user.id,
+          riskAreaTitle,
+          txn,
+        );
+        const query = `{
+          riskAreaGroupForPatient(
+            riskAreaGroupId: "${riskAreaGroup2.id}",
+            patientId: "${patient.id}"
+          ) {
+            id
+            title
+            riskAreas {
+              title
+              questions {
+                answers {
+                  patientAnswers {
+                    patientId
+                  }
+                }
+              }
+            }
+          }
+        }`;
+        const result = await graphql(schema, query, null, { userRole, userId: user.id, txn });
+        const clonedResult = cloneDeep(result.data!.riskAreaGroupForPatient);
+
+        expect(clonedResult).toMatchObject({
+          id: riskAreaGroup2.id,
+          title: riskAreaGroup2.title,
+        });
+        expect(clonedResult.riskAreas.length).toBe(2);
+        expect(clonedResult.riskAreas[0].title).toBe(riskAreaTitle);
+        expect(clonedResult.riskAreas[0].questions.length).toBe(3);
+        expect(clonedResult.riskAreas[0].questions[0].answers.length).toBe(1);
+        expect(clonedResult.riskAreas[0].questions[0].answers[0].patientAnswers.length).toBe(1);
+      });
+    });
   });
 
   describe('risk area group create', () => {
@@ -84,7 +140,7 @@ describe('risk area group resolver', () => {
           title: "${title}",
           mediumRiskThreshold: ${mediumRiskThreshold},
           highRiskThreshold: ${highRiskThreshold},
-          order: 1
+          order: ${order},
         }) {
           title
           mediumRiskThreshold
@@ -103,7 +159,7 @@ describe('risk area group resolver', () => {
         title,
         mediumRiskThreshold,
         highRiskThreshold,
-        order: 1,
+        order,
       });
     });
   });

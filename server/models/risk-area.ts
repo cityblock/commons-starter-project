@@ -1,5 +1,5 @@
 import { last, values } from 'lodash';
-import { Model, RelationMappings } from 'objection';
+import { Model, RelationMappings, Transaction } from 'objection';
 import { IRiskAreaStatistic, IRiskAreaSummary, IThreeSixtySummary } from 'schema';
 import BaseModel from './base-model';
 import PatientAnswer from './patient-answer';
@@ -90,8 +90,8 @@ export default class RiskArea extends BaseModel {
       .where({ deletedAt: null });
   }
 
-  static async create(input: IRiskAreaEditableFields) {
-    return this.query().insertAndFetch(input);
+  static async create(input: IRiskAreaEditableFields, txn?: Transaction) {
+    return this.query(txn).insertAndFetch(input);
   }
 
   static async edit(

@@ -1,4 +1,4 @@
-import { Model, RelationMappings } from 'objection';
+import { Model, RelationMappings, Transaction } from 'objection';
 import Answer from './answer';
 import BaseModel from './base-model';
 
@@ -56,9 +56,9 @@ export default class QuestionCondition extends BaseModel {
     return questionCondition;
   }
 
-  static async create(input: IQuestionConditionEditableFields) {
+  static async create(input: IQuestionConditionEditableFields, txn?: Transaction) {
     await this.validate(input);
-    return this.query().insertAndFetch(input);
+    return this.query(txn).insertAndFetch(input);
   }
 
   static async edit(

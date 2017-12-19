@@ -1,4 +1,4 @@
-import { Model, RelationMappings, ValidationError } from 'objection';
+import { Model, RelationMappings, Transaction, ValidationError } from 'objection';
 import * as uuid from 'uuid/v4';
 import { isEmail } from 'validator';
 import { IPaginatedResults, IPaginationOptions } from '../db';
@@ -157,8 +157,8 @@ export default class User extends Model {
     return user ? user.lastLoginAt : undefined;
   }
 
-  static async create(user: ICreateUser): Promise<User> {
-    return await this.query().insertAndFetch(user);
+  static async create(user: ICreateUser, txn?: Transaction): Promise<User> {
+    return await this.query(txn).insertAndFetch(user);
   }
 
   static async update(userId: string, user: Partial<IUpdateUser>): Promise<User> {

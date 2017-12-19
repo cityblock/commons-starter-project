@@ -1,7 +1,17 @@
+import { transaction } from 'objection';
 import * as uuid from 'uuid/v4';
 import Db from '../../db';
+import Clinic from '../../models/clinic';
 import RiskAreaGroup from '../../models/risk-area-group';
-import { createMockRiskAreaGroup } from '../../spec-helpers';
+import User from '../../models/user';
+import {
+  createFullRiskAreaGroupAssociations,
+  createMockClinic,
+  createMockPatient,
+  createMockRiskAreaGroup,
+  createMockUser,
+  createPatient,
+} from '../../spec-helpers';
 
 describe('risk area group model', () => {
   beforeEach(async () => {
@@ -75,5 +85,29 @@ describe('risk area group model', () => {
     await expect(RiskAreaGroup.delete(fakeId)).rejects.toMatch(
       `No such risk area group: ${fakeId}`,
     );
+  });
+
+  it('gets the 360 summary for a given patient risk area group', async () => {
+    await transaction(RiskAreaGroup.knex(), async txn => {
+      const clinic = await Clinic.create(createMockClinic(), txn);
+      const user = await User.create(createMockUser(11, clinic.id), txn);
+      const patient = await createPatient(createMockPatient(11, clinic.id), user.id, txn);
+      const title = 'Night King Breach of Wall';
+      const riskAreaTitle = 'Zombie Viscerion';
+      const riskAreaGroup = await RiskAreaGroup.create(createMockRiskAreaGroup(title), txn);
+      await createFullRiskAreaGroupAssociations(
+        riskAreaGroup.id,
+        patient.id,
+        user.id,
+        riskAreaTitle,
+        txn,
+      );
+
+      const response = await RiskAreaGroup.getForPatient(riskAreaGroup.id, patient.id, txn);
+      expect(response.riskAreas.length).toBe(2);
+      expect(response.riskAreas[0].title).toBe(riskAreaTitle);
+      expect(response.riskAreas[0].assessmentType).toBe('manual');
+      expect(response.riskAreas[0].questions.length).toBe(3);
+    });
   });
 });

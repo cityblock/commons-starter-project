@@ -49,8 +49,8 @@ export default class Clinic extends BaseModel {
     },
   };
 
-  static async create(clinic: IClinicEditableFields): Promise<Clinic> {
-    return await this.query().insertAndFetch(clinic);
+  static async create(clinic: IClinicEditableFields, txn?: Transaction): Promise<Clinic> {
+    return await this.query(txn).insertAndFetch(clinic);
   }
 
   static async get(clinicId: string, txn?: Transaction): Promise<Clinic> {

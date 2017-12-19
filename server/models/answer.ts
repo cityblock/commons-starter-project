@@ -2,6 +2,7 @@ import { Model, RelationMappings, Transaction } from 'objection';
 import BaseModel from './base-model';
 import ConcernSuggestion from './concern-suggestion';
 import GoalSuggestion from './goal-suggestion';
+import PatientAnswer from './patient-answer';
 import Question from './question';
 import RiskArea from './risk-area';
 import ScreeningTool from './screening-tool';
@@ -45,6 +46,7 @@ export default class Answer extends BaseModel {
   order: number;
   goalSuggestions: GoalSuggestion[];
   concernSuggestions: ConcernSuggestion[];
+  patientAnswers: PatientAnswer[];
 
   static tableName = 'answer';
 
@@ -95,6 +97,14 @@ export default class Answer extends BaseModel {
           to: 'goal_suggestion.goalSuggestionTemplateId',
         },
         to: 'goal_suggestion_template.id',
+      },
+    },
+    patientAnswers: {
+      relation: Model.HasManyRelation,
+      modelClass: 'patient-answer',
+      join: {
+        from: 'answer.id',
+        to: 'patient_answer.answerId',
       },
     },
     riskArea: {
@@ -158,8 +168,8 @@ export default class Answer extends BaseModel {
     return answer || null;
   }
 
-  static async create(input: IAnswerCreateFields) {
-    return this.getQuery().insertAndFetch(input);
+  static async create(input: IAnswerCreateFields, txn?: Transaction) {
+    return this.getQuery(txn).insertAndFetch(input);
   }
 
   static async edit(answer: Partial<IAnswerEditableFields>, answerId: string): Promise<Answer> {
@@ -178,8 +188,8 @@ export default class Answer extends BaseModel {
     return answer;
   }
 
-  static getQuery() {
-    return this.query()
+  static getQuery(txn?: Transaction) {
+    return this.query(txn)
       .eager(EAGER_QUERY)
       .modifyEager('concernSuggestions', builder =>
         builder.where('concern_suggestion.deletedAt', null),

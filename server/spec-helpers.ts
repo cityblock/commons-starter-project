@@ -1,15 +1,20 @@
 import * as nock from 'nock';
+import { Transaction } from 'objection';
 import {
   IRedoxClinicalSummaryEncounter,
   IRedoxClinicalSummaryMedication,
   IRedoxPatientCreateResponse,
 } from './apis/redox/types';
 import config from './config';
+import Answer from './models/answer';
 import CarePlanUpdateEvent from './models/care-plan-update-event';
 import CareTeam from './models/care-team';
 import Patient, { IPatientEditableFields } from './models/patient';
+import PatientAnswer from './models/patient-answer';
 import PatientAnswerEvent from './models/patient-answer-event';
+import Question from './models/question';
 import RiskArea from './models/risk-area';
+import RiskAreaAssessmentSubmission from './models/risk-area-assessment-submission';
 import RiskAreaGroup from './models/risk-area-group';
 import { UserRole } from './models/user';
 
@@ -17,9 +22,13 @@ export interface ICreatePatient extends IPatientEditableFields {
   athenaPatientId: number;
 }
 
-export async function createPatient(patient: ICreatePatient, userId: string): Promise<Patient> {
-  const instance = await Patient.query().insertAndFetch(patient);
-  await CareTeam.create({ userId, patientId: instance.id });
+export async function createPatient(
+  patient: ICreatePatient,
+  userId: string,
+  txn?: Transaction,
+): Promise<Patient> {
+  const instance = await Patient.query(txn).insertAndFetch(patient);
+  await CareTeam.create({ userId, patientId: instance.id }, txn);
   return instance;
 }
 
@@ -235,5 +244,150 @@ export async function cleanCarePlanUpdateEvents(patientId: string) {
 
   carePlanUpdateEvents.results.map(
     async carePlanUpdateEvent => await CarePlanUpdateEvent.delete(carePlanUpdateEvent.id),
+  );
+}
+
+export async function createFullRiskAreaGroupAssociations(
+  riskAreaGroupId: string,
+  patientId: string,
+  userId: string,
+  riskAreaTitle: string,
+  txn: Transaction,
+) {
+  const riskAreaTitle2 = 'Zombie Drogon';
+  const riskArea = await RiskArea.create(
+    {
+      title: riskAreaTitle,
+      riskAreaGroupId,
+      assessmentType: 'manual',
+      order: 1,
+      mediumRiskThreshold: 4,
+      highRiskThreshold: 8,
+    },
+    txn,
+  );
+  await RiskArea.create(
+    {
+      title: riskAreaTitle2,
+      riskAreaGroupId,
+      assessmentType: 'automated',
+      order: 2,
+      mediumRiskThreshold: 4,
+      highRiskThreshold: 8,
+    },
+    txn,
+  );
+  const question = await Question.create(
+    {
+      title: 'like writing tests?',
+      answerType: 'dropdown',
+      riskAreaId: riskArea.id,
+      type: 'riskArea',
+      order: 1,
+    },
+    txn,
+  );
+  const question2 = await Question.create(
+    {
+      title: 'hate writing tests?',
+      answerType: 'dropdown',
+      riskAreaId: riskArea.id,
+      type: 'riskArea',
+      order: 2,
+    },
+    txn,
+  );
+  const question3 = await Question.create(
+    {
+      title: 'really hate writing tests?',
+      answerType: 'dropdown',
+      riskAreaId: riskArea.id,
+      type: 'riskArea',
+      order: 1,
+    },
+    txn,
+  );
+  const answer1 = await Answer.create(
+    {
+      displayValue: 'loves writing tests!',
+      value: '3',
+      valueType: 'number',
+      riskAdjustmentType: 'increment',
+      inSummary: true,
+      summaryText: 'Dragon has blue eyes',
+      questionId: question.id,
+      order: 1,
+    },
+    txn,
+  );
+  const answer2 = await Answer.create(
+    {
+      displayValue: 'hates writing tests!',
+      value: '4',
+      valueType: 'number',
+      riskAdjustmentType: 'increment',
+      inSummary: true,
+      summaryText: 'Dragon breathes blue fire',
+      questionId: question2.id,
+      order: 1,
+    },
+    txn,
+  );
+  const answer3 = await Answer.create(
+    {
+      displayValue: 'really hates writing tests!',
+      value: '5',
+      valueType: 'number',
+      riskAdjustmentType: 'forceHighRisk',
+      inSummary: true,
+      summaryText: 'Dragon is ridden by Night King',
+      questionId: question3.id,
+      order: 1,
+    },
+    txn,
+  );
+  const riskAreaAssessmentSubmission = await RiskAreaAssessmentSubmission.create(
+    {
+      patientId,
+      userId,
+      riskAreaId: riskArea.id,
+    },
+    txn,
+  );
+
+  await PatientAnswer.create(
+    {
+      patientId,
+      type: 'riskAreaAssessmentSubmission',
+      riskAreaAssessmentSubmissionId: riskAreaAssessmentSubmission.id,
+      questionIds: [answer1.questionId, answer2.id, answer3.id],
+      answers: [
+        {
+          questionId: answer1.questionId,
+          answerId: answer1.id,
+          answerValue: '3',
+          patientId,
+          applicable: true,
+          userId,
+        },
+        {
+          questionId: answer2.questionId,
+          answerId: answer2.id,
+          answerValue: '4',
+          patientId,
+          applicable: false,
+          userId,
+        },
+        {
+          questionId: answer3.questionId,
+          answerId: answer3.id,
+          answerValue: '5',
+          patientId,
+          applicable: true,
+          userId,
+        },
+      ],
+    },
+    txn,
   );
 }

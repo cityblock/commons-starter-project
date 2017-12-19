@@ -1,4 +1,4 @@
-import { Model, QueryBuilder, RelationMappings } from 'objection';
+import { Model, QueryBuilder, RelationMappings, Transaction } from 'objection';
 import Answer from './answer';
 import BaseModel from './base-model';
 import ComputedField from './computed-field';
@@ -180,14 +180,14 @@ export default class Question extends BaseModel {
     return question;
   }
 
-  static async create(input: IQuestionCreateFields) {
+  static async create(input: IQuestionCreateFields, txn?: Transaction) {
     const { computedFieldId } = input;
 
     if (computedFieldId) {
       input.answerType = 'radio';
     }
 
-    return this.modifyEager(this.query()).insertAndFetch(input);
+    return this.modifyEager(this.query(txn)).insertAndFetch(input);
   }
 
   static async getAllForRiskArea(riskAreaId: string): Promise<Question[]> {

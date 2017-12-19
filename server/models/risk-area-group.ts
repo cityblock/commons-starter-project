@@ -1,5 +1,6 @@
-import { Model, RelationMappings } from 'objection';
+import { Model, RelationMappings, Transaction } from 'objection';
 import BaseModel from './base-model';
+import RiskArea from './risk-area';
 
 interface IRiskAreaGroupEditableFields {
   title: string;
@@ -14,6 +15,7 @@ export default class RiskAreaGroup extends BaseModel {
   title: string;
   mediumRiskThreshold: number;
   highRiskThreshold: number;
+  riskAreas: RiskArea[];
 
   static tableName = 'risk_area_group';
 
@@ -54,8 +56,11 @@ export default class RiskAreaGroup extends BaseModel {
       .where({ deletedAt: null });
   }
 
-  static async create(input: IRiskAreaGroupEditableFields): Promise<RiskAreaGroup> {
-    return this.query().insertAndFetch(input);
+  static async create(
+    input: IRiskAreaGroupEditableFields,
+    txn?: Transaction,
+  ): Promise<RiskAreaGroup> {
+    return this.query(txn).insertAndFetch(input);
   }
 
   static async edit(
@@ -81,6 +86,29 @@ export default class RiskAreaGroup extends BaseModel {
       return Promise.reject(`No such risk area group: ${riskAreaGroupId}`);
     }
     return deleted;
+  }
+
+  static async getForPatient(
+    riskAreaGroupId: string,
+    patientId: string,
+    txn?: Transaction,
+  ): Promise<RiskAreaGroup> {
+    const EAGER_QUERY = '[riskAreas.questions.answers.patientAnswers]';
+    const riskAreaGroup = await this.query(txn)
+      .eager(EAGER_QUERY)
+      .modifyEager('answers.patientAnswers', builder => {
+        builder.where({
+          'patientAnswers.patientId': patientId,
+          'patientAnswers.deletedAt': null,
+          'patientAnswers.applicable': true,
+        });
+      })
+      .findById(riskAreaGroupId);
+
+    if (!riskAreaGroup) {
+      return Promise.reject(`No such risk area group: ${riskAreaGroupId}`);
+    }
+    return riskAreaGroup;
   }
 }
 /* tslint:enable:member-ordering */

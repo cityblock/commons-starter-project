@@ -1,4 +1,4 @@
-import { transaction, Model, RelationMappings } from 'objection';
+import { transaction, Model, RelationMappings, Transaction } from 'objection';
 import { IPaginatedResults, IPaginationOptions } from '../db';
 import BaseModel from './base-model';
 import Patient from './patient';
@@ -72,16 +72,16 @@ export default class CareTeam extends BaseModel {
     };
   }
 
-  static async create({ userId, patientId }: ICareTeamOptions): Promise<User[]> {
+  static async create({ userId, patientId }: ICareTeamOptions, txn?: Transaction): Promise<User[]> {
     // TODO: use postgres UPCERT here to add relation if it doesn't exist instead of a transaction
     await transaction(CareTeam, async CareTeamWithTransaction => {
-      const relations = await CareTeamWithTransaction.query()
+      const relations = await CareTeamWithTransaction.query(txn)
         .where('patientId', patientId)
         .andWhere('userId', userId)
         .andWhere('deletedAt', null);
 
       if (relations.length < 1) {
-        await CareTeamWithTransaction.query().insert({ patientId, userId });
+        await CareTeamWithTransaction.query(txn).insert({ patientId, userId });
       }
     });
 

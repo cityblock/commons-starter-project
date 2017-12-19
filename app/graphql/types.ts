@@ -3512,6 +3512,7 @@ export type getRiskAreaGroupsQuery = {
     updatedAt: string,
     deletedAt: string | null,
     title: string,
+    order: number,
     mediumRiskThreshold: number,
     highRiskThreshold: number,
   } >,
@@ -5974,6 +5975,7 @@ export type riskAreaEditMutation = {
 
 export type riskAreaGroupCreateMutationVariables = {
   title: string,
+  order: number,
   mediumRiskThreshold: number,
   highRiskThreshold: number,
 };
@@ -5986,6 +5988,7 @@ export type riskAreaGroupCreateMutation = {
     updatedAt: string,
     deletedAt: string | null,
     title: string,
+    order: number,
     mediumRiskThreshold: number,
     highRiskThreshold: number,
   } | null,
@@ -6003,6 +6006,7 @@ export type riskAreaGroupDeleteMutation = {
     updatedAt: string,
     deletedAt: string | null,
     title: string,
+    order: number,
     mediumRiskThreshold: number,
     highRiskThreshold: number,
   } | null,
@@ -6011,6 +6015,7 @@ export type riskAreaGroupDeleteMutation = {
 export type riskAreaGroupEditMutationVariables = {
   riskAreaGroupId: string,
   title?: string | null,
+  order?: number | null,
   mediumRiskThreshold?: number | null,
   highRiskThreshold?: number | null,
 };
@@ -6023,6 +6028,7 @@ export type riskAreaGroupEditMutation = {
     updatedAt: string,
     deletedAt: string | null,
     title: string,
+    order: number,
     mediumRiskThreshold: number,
     highRiskThreshold: number,
   } | null,
@@ -9071,6 +9077,7 @@ export type FullRiskAreaGroupFragment = {
   updatedAt: string,
   deletedAt: string | null,
   title: string,
+  order: number,
   mediumRiskThreshold: number,
   highRiskThreshold: number,
 };

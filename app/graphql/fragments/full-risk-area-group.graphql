@@ -4,6 +4,7 @@ fragment FullRiskAreaGroup on RiskAreaGroup {
   updatedAt
   deletedAt
   title
+  order
   mediumRiskThreshold
   highRiskThreshold
 }

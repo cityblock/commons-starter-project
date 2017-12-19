@@ -8,6 +8,7 @@ describe('Builder Risk Area Group Row Component', () => {
   const id = 'viscerion';
   const title = 'Viscerion is an ice dragon :(';
   const createdAt = 'nightKingJavelin';
+  const order = 2;
   const mediumRiskThreshold = 50;
   const highRiskThreshold = 80;
   const routeBase = '/destroy/wall';
@@ -15,6 +16,7 @@ describe('Builder Risk Area Group Row Component', () => {
   const riskAreaGroup = {
     id,
     title,
+    order,
     createdAt,
     mediumRiskThreshold,
     highRiskThreshold,
@@ -35,12 +37,21 @@ describe('Builder Risk Area Group Row Component', () => {
     expect(wrapper.find('.title').text()).toBe(title);
   });
 
-  it('renders medium risk threshold', () => {
-    expect(wrapper.find('.dateValue').length).toBe(2);
+  it('renders order', () => {
+    expect(wrapper.find('.dateValue').length).toBe(3);
     expect(
       wrapper
         .find('.dateValue')
         .at(0)
+        .text(),
+    ).toBe(`${order}`);
+  });
+
+  it('renders medium risk threshold', () => {
+    expect(
+      wrapper
+        .find('.dateValue')
+        .at(1)
         .text(),
     ).toBe(`${mediumRiskThreshold}`);
   });
@@ -49,7 +60,7 @@ describe('Builder Risk Area Group Row Component', () => {
     expect(
       wrapper
         .find('.dateValue')
-        .at(1)
+        .at(2)
         .text(),
     ).toBe(`${highRiskThreshold}`);
   });

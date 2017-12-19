@@ -28,6 +28,10 @@ const RiskAreaGroup: React.StatelessComponent<IProps> = (props: IProps) => {
       <div className={styles.title}>{riskAreaGroup.title}</div>
       <div className={styles.meta}>
         <div className={classNames(sharedStyles.dateSection, sharedStyles.orderSection)}>
+          <span className={styles.dateLabel}>Order:</span>
+          <span className={styles.dateValue}>{riskAreaGroup.order}</span>
+        </div>
+        <div className={classNames(sharedStyles.dateSection, sharedStyles.orderSection)}>
           <span className={styles.dateLabel}>Medium Risk Threshold:</span>
           <span className={styles.dateValue}>{riskAreaGroup.mediumRiskThreshold}</span>
         </div>

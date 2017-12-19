@@ -63,11 +63,11 @@ describe('Builder Risk Area Group Edit Component', () => {
   });
 
   it('renders labels for fields', () => {
-    expect(wrapper.find('h4').length).toBe(3);
+    expect(wrapper.find('h4').length).toBe(4);
   });
 
   it('renders editable text field for title', () => {
-    expect(wrapper.find(EditableMultilineText).length).toBe(3);
+    expect(wrapper.find(EditableMultilineText).length).toBe(4);
     expect(
       wrapper
         .find(EditableMultilineText)
@@ -76,11 +76,20 @@ describe('Builder Risk Area Group Edit Component', () => {
     ).toBe(riskAreaGroup.title);
   });
 
-  it('renders editable text field for medium risk threshold', () => {
+  it('renders editable text field for order', () => {
     expect(
       wrapper
         .find(EditableMultilineText)
         .at(1)
+        .props().text,
+    ).toBe(`${riskAreaGroup.order}`);
+  });
+
+  it('renders editable text field for medium risk threshold', () => {
+    expect(
+      wrapper
+        .find(EditableMultilineText)
+        .at(2)
         .props().text,
     ).toBe(`${riskAreaGroup.mediumRiskThreshold}`);
   });
@@ -89,7 +98,7 @@ describe('Builder Risk Area Group Edit Component', () => {
     expect(
       wrapper
         .find(EditableMultilineText)
-        .at(2)
+        .at(3)
         .props().text,
     ).toBe(`${riskAreaGroup.highRiskThreshold}`);
   });

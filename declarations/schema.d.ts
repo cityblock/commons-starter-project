@@ -672,6 +672,7 @@ declare module 'schema' {
     updatedAt: string;
     deletedAt: string | null;
     title: string;
+    order: number;
     mediumRiskThreshold: number;
     highRiskThreshold: number;
   }
@@ -1734,6 +1735,7 @@ declare module 'schema' {
   */
   interface IRiskAreaGroupCreateInput {
     title: string;
+    order: number;
     mediumRiskThreshold: number;
     highRiskThreshold: number;
   }
@@ -1744,6 +1746,7 @@ declare module 'schema' {
   interface IRiskAreaGroupEditInput {
     riskAreaGroupId: string;
     title?: string | null;
+    order?: number | null;
     mediumRiskThreshold?: number | null;
     highRiskThreshold?: number | null;
   }

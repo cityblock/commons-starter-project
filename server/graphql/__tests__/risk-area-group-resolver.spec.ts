@@ -34,7 +34,7 @@ describe('risk area group resolver', () => {
   describe('resolve risk area group', () => {
     it('gets all risk area groups', async () => {
       const title2 = 'Cersei not on bandwagon';
-      const riskAreaGroup2 = await RiskAreaGroup.create(createMockRiskAreaGroup(title2));
+      const riskAreaGroup2 = await RiskAreaGroup.create(createMockRiskAreaGroup(title2, 2));
       const query = `{
         riskAreaGroups {
           id
@@ -45,12 +45,12 @@ describe('risk area group resolver', () => {
       const result = await graphql(schema, query, null, { db, userRole, userId: user.id });
       expect(cloneDeep(result.data!.riskAreaGroups)).toMatchObject([
         {
-          id: riskAreaGroup2.id,
-          title: title2,
-        },
-        {
           id: riskAreaGroup.id,
           title: mockTitle,
+        },
+        {
+          id: riskAreaGroup2.id,
+          title: title2,
         },
       ]);
     });
@@ -84,10 +84,12 @@ describe('risk area group resolver', () => {
           title: "${title}",
           mediumRiskThreshold: ${mediumRiskThreshold},
           highRiskThreshold: ${highRiskThreshold},
+          order: 1
         }) {
           title
           mediumRiskThreshold
           highRiskThreshold
+          order
         }
       }`;
 
@@ -101,6 +103,7 @@ describe('risk area group resolver', () => {
         title,
         mediumRiskThreshold,
         highRiskThreshold,
+        order: 1,
       });
     });
   });

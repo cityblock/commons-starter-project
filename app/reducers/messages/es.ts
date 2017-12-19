@@ -214,6 +214,7 @@ export const SPANISH_TRANSLATION = {
     'riskAreaGroup.highRiskThreshold': 'Ingrese el umbral de alto riesgo del dominio',
     'riskAreaGroup.mediumRiskThreshold': 'Ingrese el umbral de riesgo medio del dominio',
     'riskArea.riskAreaGroupId': 'Seleccionar dominio',
+    'riskAreaGroup.order': 'Ingresar orden de dominio',
     'riskAreaGroup.title': 'Ingrese el título del dominio',
     'riskAreaAssessment.cancel': 'Cancel',
     'riskAreaAssessment.administer': 'Administer tools',

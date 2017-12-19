@@ -39,7 +39,7 @@ describe('risk area group model', () => {
   it('gets all risk area groups', async () => {
     const title = 'Family feud at Winterfell';
     const title2 = 'Viscerion is a zombie dragon';
-    const riskAreaGroup = await RiskAreaGroup.create(createMockRiskAreaGroup(title));
+    const riskAreaGroup = await RiskAreaGroup.create(createMockRiskAreaGroup(title, 2));
     const riskAreaGroup2 = await RiskAreaGroup.create(createMockRiskAreaGroup(title2));
 
     expect(await RiskAreaGroup.getAll()).toMatchObject([riskAreaGroup2, riskAreaGroup]);

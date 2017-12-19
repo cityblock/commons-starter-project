@@ -4,6 +4,7 @@ import RiskArea from './risk-area';
 
 interface IRiskAreaGroupEditableFields {
   title: string;
+  order: number;
   mediumRiskThreshold: number;
   highRiskThreshold: number;
 }
@@ -13,6 +14,7 @@ interface IRiskAreaGroupEditableFields {
 export default class RiskAreaGroup extends BaseModel {
   id: string;
   title: string;
+  order: number;
   mediumRiskThreshold: number;
   highRiskThreshold: number;
   riskAreas: RiskArea[];
@@ -24,6 +26,7 @@ export default class RiskAreaGroup extends BaseModel {
     properties: {
       id: { type: 'string' },
       title: { type: 'string', minLength: 1 }, // cannot be blank
+      order: { type: 'integer', minimum: 1 },
       mediumRiskThreshold: { type: 'integer', minimum: 1 },
       highRiskThreshold: { type: 'integer', minimum: 1 },
       deletedAt: { type: 'string' },
@@ -52,7 +55,7 @@ export default class RiskAreaGroup extends BaseModel {
 
   static async getAll(): Promise<RiskAreaGroup[]> {
     return this.query()
-      .orderBy('createdAt', 'DESC')
+      .orderBy('order')
       .where({ deletedAt: null });
   }
 

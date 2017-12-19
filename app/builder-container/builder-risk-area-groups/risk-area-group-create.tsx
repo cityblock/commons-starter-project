@@ -25,13 +25,14 @@ type allProps = IProps & IGraphqlProps;
 
 interface IState {
   title: string;
+  order: string;
   mediumRiskThreshold: string;
   highRiskThreshold: string;
   loading: boolean;
   error: string | null;
 }
 
-type Field = 'title' | 'mediumRiskThreshold' | 'highRiskThreshold';
+type Field = 'title' | 'order' | 'mediumRiskThreshold' | 'highRiskThreshold';
 
 export class RiskAreaGroupCreate extends React.Component<allProps, IState> {
   constructor(props: allProps) {
@@ -39,6 +40,7 @@ export class RiskAreaGroupCreate extends React.Component<allProps, IState> {
 
     this.state = {
       title: '',
+      order: '',
       mediumRiskThreshold: '',
       highRiskThreshold: '',
       loading: false,
@@ -54,15 +56,16 @@ export class RiskAreaGroupCreate extends React.Component<allProps, IState> {
 
   onSubmit = async () => {
     const { createRiskAreaGroup, cancelCreateRiskAreaGroup } = this.props;
-    const { title, mediumRiskThreshold, highRiskThreshold, loading } = this.state;
+    const { title, order, mediumRiskThreshold, highRiskThreshold, loading } = this.state;
     // prevent submitting with no risk threshold
-    if (!loading && mediumRiskThreshold && highRiskThreshold) {
+    if (!loading && order && mediumRiskThreshold && highRiskThreshold) {
       try {
         this.setState({ loading: true, error: null });
 
         await createRiskAreaGroup({
           variables: {
             title,
+            order: Number(order),
             mediumRiskThreshold: Number(mediumRiskThreshold),
             highRiskThreshold: Number(highRiskThreshold),
           },
@@ -77,7 +80,7 @@ export class RiskAreaGroupCreate extends React.Component<allProps, IState> {
 
   render(): JSX.Element {
     const { cancelCreateRiskAreaGroup } = this.props;
-    const { title, mediumRiskThreshold, highRiskThreshold } = this.state;
+    const { title, order, mediumRiskThreshold, highRiskThreshold } = this.state;
 
     return (
       <div>
@@ -95,6 +98,11 @@ export class RiskAreaGroupCreate extends React.Component<allProps, IState> {
             value={title}
             onChange={this.onChange('title')}
             placeholderMessageId="riskAreaGroup.title"
+          />
+          <TextInput
+            value={order}
+            onChange={this.onChange('order')}
+            placeholderMessageId="riskAreaGroup.order"
           />
           <TextInput
             value={mediumRiskThreshold}

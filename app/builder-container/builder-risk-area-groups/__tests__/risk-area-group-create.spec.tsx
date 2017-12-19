@@ -36,7 +36,7 @@ describe('Builder Risk Area Group Create', () => {
   });
 
   it('renders text input for title', () => {
-    expect(wrapper.find(TextInput).length).toBe(3);
+    expect(wrapper.find(TextInput).length).toBe(4);
     expect(
       wrapper
         .find(TextInput)
@@ -45,11 +45,20 @@ describe('Builder Risk Area Group Create', () => {
     ).toBe('riskAreaGroup.title');
   });
 
-  it('renders text input for medium risk threshold', () => {
+  it('renders text input for order', () => {
     expect(
       wrapper
         .find(TextInput)
         .at(1)
+        .props().placeholderMessageId,
+    ).toBe('riskAreaGroup.order');
+  });
+
+  it('renders text input for medium risk threshold', () => {
+    expect(
+      wrapper
+        .find(TextInput)
+        .at(2)
         .props().placeholderMessageId,
     ).toBe('riskAreaGroup.mediumRiskThreshold');
   });
@@ -58,7 +67,7 @@ describe('Builder Risk Area Group Create', () => {
     expect(
       wrapper
         .find(TextInput)
-        .at(2)
+        .at(3)
         .props().placeholderMessageId,
     ).toBe('riskAreaGroup.highRiskThreshold');
   });

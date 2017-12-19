@@ -2,12 +2,14 @@
 
 mutation riskAreaGroupCreate(
   $title: String!
+  $order: Int!
   $mediumRiskThreshold: Int!
   $highRiskThreshold: Int!
 ) {
   riskAreaGroupCreate(
     input: {
       title: $title
+      order: $order
       mediumRiskThreshold: $mediumRiskThreshold
       highRiskThreshold: $highRiskThreshold
     }

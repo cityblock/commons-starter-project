@@ -60,6 +60,7 @@ export const riskAreaGroup = {
   createdAt: 'Thu Jul 13 2017 16:52:56 GMT-0400 (EDT)',
   updatedAt: 'Thu Jul 13 2017 16:52:56 GMT-0400 (EDT)',
   deletedAt: null,
+  order: 1,
   mediumRiskThreshold: 30,
   highRiskThreshold: 9000,
 };

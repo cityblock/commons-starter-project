@@ -92,11 +92,13 @@ export async function createRiskArea(
 
 export function createMockRiskAreaGroup(
   title = 'Night King Breach of the Wall',
+  order = 1,
   mediumRiskThreshold = 50,
   highRiskThreshold = 80,
 ) {
   return {
     title,
+    order,
     mediumRiskThreshold,
     highRiskThreshold,
   };

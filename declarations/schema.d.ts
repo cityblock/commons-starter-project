@@ -92,7 +92,7 @@ declare module 'schema' {
     /**
     description: Risk Area Group with associated patient answers
   */
-    riskAreaGroupForPatient: IRiskAreaGroup | null;
+    riskAreaGroupForPatient: IRiskAreaGroup;
     /**
     description: RiskAreaGroups
   */

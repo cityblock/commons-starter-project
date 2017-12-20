@@ -53,7 +53,12 @@ export class DomainSummary extends React.Component<allProps, IState> {
   }
   componentWillReceiveProps(nextProps: allProps) {
     // once our risk area group is loaded, calculate associated risk scores
-    if (!this.props.riskAreaGroup && nextProps.riskAreaGroup) {
+    if (
+      (!this.props.riskAreaGroup && nextProps.riskAreaGroup) ||
+      (nextProps.riskAreaGroup &&
+        !this.state.automatedSummaryText.length &&
+        !this.state.manualSummaryText.length)
+    ) {
       this.updateRiskAreaGroupScore(nextProps.riskAreaGroup);
     }
   }
@@ -62,6 +67,7 @@ export class DomainSummary extends React.Component<allProps, IState> {
     const { updateRiskAreaGroupScore } = this.props;
     let totalScore = 0;
     let forceHighRisk = false;
+    let answered = false;
     const automatedSummaryText: string[] = [];
     const manualSummaryText: string[] = [];
     let lastUpdated = '';
@@ -72,8 +78,8 @@ export class DomainSummary extends React.Component<allProps, IState> {
       area.questions!.forEach(question => {
         question.answers!.forEach(answer => {
           if (answer.patientAnswers && answer.patientAnswers.length) {
+            answered = true;
             const updatedAt = answer.patientAnswers[0].updatedAt;
-
             if (!lastUpdated || isAfter(updatedAt, lastUpdated)) {
               lastUpdated = updatedAt;
             }
@@ -94,7 +100,7 @@ export class DomainSummary extends React.Component<allProps, IState> {
       });
     });
 
-    updateRiskAreaGroupScore(riskAreaGroup.id, { totalScore, forceHighRisk });
+    if (answered) updateRiskAreaGroupScore(riskAreaGroup.id, { totalScore, forceHighRisk });
     this.setState({ automatedSummaryText, manualSummaryText, lastUpdated });
   }
 

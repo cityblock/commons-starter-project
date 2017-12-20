@@ -3,6 +3,7 @@ import AddAlertIcon from 'material-ui-icons/AddAlert';
 import AddBoxIcon from 'material-ui-icons/AddBox';
 import AddCircleIcon from 'material-ui-icons/AddCircle';
 import AddCircleOutlineIcon from 'material-ui-icons/AddCircleOutline';
+import ArrowBackIcon from 'material-ui-icons/ArrowBack';
 import CloseIcon from 'material-ui-icons/Close';
 import DeleteIcon from 'material-ui-icons/Delete';
 import ErrorOutlineIcon from 'material-ui-icons/ErrorOutline';
@@ -11,6 +12,7 @@ import ExpandLessIcon from 'material-ui-icons/ExpandLess';
 import ExpandMoreIcon from 'material-ui-icons/ExpandMore';
 import HighlightOffIcon from 'material-ui-icons/HighlightOff';
 import HomeIcon from 'material-ui-icons/Home';
+import InboxIcon from 'material-ui-icons/Inbox';
 import ExpandArrowIcon from 'material-ui-icons/KeyboardArrowDown';
 import KeyboardArrowLeftIcon from 'material-ui-icons/KeyboardArrowLeft';
 import KeyboardArrowRightIcon from 'material-ui-icons/KeyboardArrowRight';
@@ -26,6 +28,7 @@ const components = {
   addBox: AddBoxIcon,
   addCircle: AddCircleIcon,
   addCircleOutline: AddCircleOutlineIcon,
+  arrowBack: ArrowBackIcon,
   close: CloseIcon,
   delete: DeleteIcon,
   errorOutline: ErrorOutlineIcon,
@@ -35,6 +38,7 @@ const components = {
   expandMore: ExpandMoreIcon,
   highlightOff: HighlightOffIcon,
   home: HomeIcon,
+  inbox: InboxIcon,
   keyboardArrowLeft: KeyboardArrowLeftIcon,
   keyboardArrowRight: KeyboardArrowRightIcon,
   moreVert: MoreVertIcon,

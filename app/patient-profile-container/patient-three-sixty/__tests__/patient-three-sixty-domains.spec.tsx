@@ -38,7 +38,7 @@ describe('Patient 360 Domains Component', () => {
   });
 
   it('renders body container', () => {
-    expect(wrapper.find('.body').length).toBe(1);
+    expect(wrapper.find('.bodyFlex').length).toBe(1);
   });
 
   it('renders domain summaries', () => {

@@ -1,0 +1,10 @@
+@import '../../../css/sizes';
+
+.text {
+  display: inline-block;
+  margin: 0;
+  font-size: var(--extra-small-font-size);
+  line-height: var(--extra-small-font-line-height);
+  color: var(--light-gray-font-color);
+  font-weight: var(--default-font-weight);
+}

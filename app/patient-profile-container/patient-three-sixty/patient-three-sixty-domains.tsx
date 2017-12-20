@@ -7,7 +7,7 @@ import { getRiskAreaGroupsQuery } from '../../graphql/types';
 import Spinner from '../../shared/library/spinner/spinner';
 import UnderlineTab from '../../shared/library/underline-tab/underline-tab';
 import UnderlineTabs from '../../shared/library/underline-tabs/underline-tabs';
-import * as styles from './css/patient-three-sixty-domains.css';
+import * as styles from './css/shared.css';
 import DomainSummaries from './domain-summaries';
 
 interface IProps {
@@ -50,12 +50,12 @@ export class PatientThreeSixtyDomains extends React.Component<allProps, IState> 
     if (riskAreaGroupsLoading) return <Spinner className={styles.spinner} />;
 
     return (
-      <div className={styles.container}>
+      <div>
         <UnderlineTabs>
           <UnderlineTab messageId="threeSixty.summary" selected={true} href={routeBase} />
           <UnderlineTab messageId="threeSixty.history" selected={false} href={routeBase} />
         </UnderlineTabs>
-        <div className={styles.body}>
+        <div className={styles.bodyFlex}>
           <div className={styles.domains}>
             <DomainSummaries
               patientId={patientId}

@@ -1,0 +1,20 @@
+fragment FullRiskAreaForPatient on RiskArea {
+  id
+  title
+  assessmentType
+  mediumRiskThreshold
+  highRiskThreshold
+  questions {
+    answers {
+      inSummary
+      riskAdjustmentType
+      summaryText
+      patientAnswers {
+        patientId
+        createdAt
+        updatedAt
+        answerValue
+      }
+    }
+  }
+}

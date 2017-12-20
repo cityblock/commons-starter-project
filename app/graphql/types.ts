@@ -3520,6 +3520,8 @@ export interface getRiskAreaGroupForPatientQuery {
       id: string,
       title: string,
       assessmentType: AssessmentType,
+      mediumRiskThreshold: number,
+      highRiskThreshold: number,
       questions:  Array< {
         answers:  Array< {
           inSummary: boolean | null,
@@ -3534,7 +3536,7 @@ export interface getRiskAreaGroupForPatientQuery {
         } > | null,
       } > | null,
     } > | null,
-  } | null,
+  },
 };
 
 export interface getRiskAreaGroupsQuery {
@@ -9107,6 +9109,27 @@ export interface FullRiskAreaAssessmentSubmissionFragment {
     acceptedAt: string | null,
     patientScreeningToolSubmissionId: string | null,
   } >,
+};
+
+export interface FullRiskAreaForPatientFragment {
+  id: string,
+  title: string,
+  assessmentType: AssessmentType,
+  mediumRiskThreshold: number,
+  highRiskThreshold: number,
+  questions:  Array< {
+    answers:  Array< {
+      inSummary: boolean | null,
+      riskAdjustmentType: RiskAdjustmentTypeOptions | null,
+      summaryText: string | null,
+      patientAnswers:  Array< {
+        patientId: string,
+        createdAt: string,
+        updatedAt: string,
+        answerValue: string,
+      } > | null,
+    } > | null,
+  } > | null,
 };
 
 export interface FullRiskAreaGroupFragment {

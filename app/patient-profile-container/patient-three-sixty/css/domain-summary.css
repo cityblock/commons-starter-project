@@ -8,6 +8,10 @@
   margin-bottom: var(--extra-small-gutter);
 }
 
+.domain:first-child {
+  margin-top: var(--small-gutter);
+}
+
 .domain h3 {
   color: var(--black-color);
   font-size: var(--default-font-size);

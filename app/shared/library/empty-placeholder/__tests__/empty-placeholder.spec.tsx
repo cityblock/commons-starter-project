@@ -2,7 +2,7 @@ import { shallow } from 'enzyme';
 import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
 import Icon from '../../icon/icon';
-import EmptyPlaceholder from '../empty-placeholder';
+import EmptyPlaceholder, { DEFAULT_ICON } from '../empty-placeholder';
 
 describe('Empty Placeholder Library Component', () => {
   const headerMessageId = 'jolteon';
@@ -51,7 +51,7 @@ describe('Empty Placeholder Library Component', () => {
     );
 
     expect(wrapper.find(Icon).length).toBe(1);
-    expect(wrapper.find(Icon).props().name).toBe('pauseCircleOutline');
+    expect(wrapper.find(Icon).props().name).toBe(DEFAULT_ICON);
     expect(wrapper.find(Icon).props().className).toBe('icon');
   });
 

@@ -107,6 +107,9 @@ export default class RiskAreaGroup extends BaseModel {
           applicable: true,
         });
       })
+      .modifyEager('riskAreas.questions', builder => {
+        builder.orderBy('order');
+      })
       .findById(riskAreaGroupId);
 
     if (!riskAreaGroup) {

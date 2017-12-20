@@ -4,7 +4,7 @@ import Icon from '../icon/icon';
 import { IconName } from '../icon/icon-types';
 import * as styles from './css/empty-placeholder.css';
 
-const DEFAULT_ICON = 'pauseCircleOutline'; // pause button
+export const DEFAULT_ICON = 'inbox'; // empty box icon
 
 interface IProps {
   headerMessageId?: string; // prefer using message ids to plain text

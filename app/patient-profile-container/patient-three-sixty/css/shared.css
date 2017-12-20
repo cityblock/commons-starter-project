@@ -1,23 +1,26 @@
 @import '../../../shared/css/sizes';
 
-.container {
-  background: var(--gray-background-color);
-  height: calc(100vh);
-  overflow-y: scroll;
-  -webkit-overflow-scrolling: touch;
-}
-
 .spinner {
   margin-top: var(--gutter);
 }
 
-.body {
-  display: flex;
-  padding: var(--small-gutter) var(--medium-gutter);
-  justify-content: space-between;
+.scroll,
+.body,
+.bodyFlex {
+  height: calc(100vh);
+  overflow-y: scroll;
+  -webkit-overflow-scrolling: touch;
+  background: var(--gray-background-color);
+}
 
-  /* give room for fixed tabs */
-  margin-top: 50px;
+.body,
+.bodyFlex {
+  padding: 0 var(--medium-gutter);
+}
+
+.bodyFlex {
+  display: flex;
+  justify-content: space-between;
 }
 
 .domains {

@@ -23,7 +23,7 @@ import * as styles from './css/risk-area-assessment.css';
 import RiskAreaAssessmentQuestions from './risk-area-assessment-questions';
 import RiskAreaAssessmentResultsPopup from './risk-area-assessment-results-popup';
 
-interface IProps {
+export interface IProps {
   riskAreaId: string;
   patientId: string;
   routeBase: string;

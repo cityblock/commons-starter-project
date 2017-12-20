@@ -78,6 +78,7 @@ export const riskArea = {
   highRiskThreshold: 8,
   assessmentType: 'manual' as any,
   riskAreaGroup,
+  questions: [],
 };
 
 export const riskAreaAssessmentSubmission = {

@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { getRiskAreaGroupsQuery } from '../../graphql/types';
+import * as styles from './css/shared.css';
 import DomainSummary from './domain-summary';
 import { IRiskAreaGroupScore } from './patient-three-sixty-domains';
 
@@ -30,7 +31,7 @@ const DomainSummaries: React.StatelessComponent<IProps> = (props: IProps) => {
 
     const riskScore = riskAreaGroupScores[group.id];
     const risk =
-      riskScore && riskScore.totalScore !== null
+      riskScore && (riskScore.totalScore || riskScore.totalScore === 0)
         ? riskScore.forceHighRisk || riskScore.totalScore >= highRiskThreshold
           ? 'high'
           : riskScore.totalScore >= mediumRiskThreshold ? 'medium' : 'low'
@@ -48,7 +49,7 @@ const DomainSummaries: React.StatelessComponent<IProps> = (props: IProps) => {
     );
   });
 
-  return <div>{domainSummaries}</div>;
+  return <div className={styles.scroll}>{domainSummaries}</div>;
 };
 
 export default DomainSummaries;

@@ -1638,7 +1638,7 @@ type RootQueryType {
   # RiskAreaGroup
   riskAreaGroup(riskAreaGroupId: String!): RiskAreaGroup
   # Risk Area Group with associated patient answers
-  riskAreaGroupForPatient(riskAreaGroupId: String!, patientId: String!): RiskAreaGroup
+  riskAreaGroupForPatient(riskAreaGroupId: String!, patientId: String!): RiskAreaGroup!
   # RiskAreaGroups
   riskAreaGroups: [RiskAreaGroup!]!
   # RiskArea

@@ -18,6 +18,16 @@ describe('Text Divider Component', () => {
     it('renders divider', () => {
       expect(wrapper.find('div').length).toBe(2);
     });
+
+    it('styles text as gray if specified', () => {
+      wrapper.setProps({ gray: true });
+      expect(
+        wrapper
+          .find('div')
+          .at(0)
+          .props().className,
+      ).toBe('container gray');
+    });
   });
 
   describe('No message id for translate given', () => {
@@ -27,6 +37,12 @@ describe('Text Divider Component', () => {
     it('renders label', () => {
       expect(wrapper.find('p').length).toBe(1);
       expect(wrapper.find('p').text()).toBe(label);
+      expect(
+        wrapper
+          .find('div')
+          .at(0)
+          .props().className,
+      ).toBe('container');
 
       expect(wrapper.find(FormattedMessage).length).toBe(0);
     });

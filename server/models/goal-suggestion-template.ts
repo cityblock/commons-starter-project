@@ -55,8 +55,8 @@ export default class GoalSuggestionTemplate extends BaseModel {
     return goalSuggestionTemplate;
   }
 
-  static async create(input: IGoalSuggestionTemplateEditableFields) {
-    return await this.query()
+  static async create(input: IGoalSuggestionTemplateEditableFields, txn?: Transaction) {
+    return await this.query(txn)
       .eager('taskTemplates')
       .modifyEager('taskTemplates', builder => builder.where('deletedAt', null))
       .insertAndFetch(input);

@@ -33,7 +33,7 @@ describe('goal suggestion model', () => {
     await Db.clear();
 
     clinic = await Clinic.create(createMockClinic());
-    riskArea = await createRiskArea('testing');
+    riskArea = await createRiskArea({ title: 'testing' });
     question = await Question.create({
       title: 'like writing tests?',
       answerType: 'dropdown',

@@ -72,8 +72,11 @@ export default class Concern extends BaseModel {
     return await this.query().updateAndFetchById(concernId, concern);
   }
 
-  static async getAll({ orderBy, order }: IConcernOrderOptions): Promise<Concern[]> {
-    return await this.query()
+  static async getAll(
+    { orderBy, order }: IConcernOrderOptions,
+    txn?: Transaction,
+  ): Promise<Concern[]> {
+    return await this.query(txn)
       .where('deletedAt', null)
       .orderBy(orderBy, order);
   }

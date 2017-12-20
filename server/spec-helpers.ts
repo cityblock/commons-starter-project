@@ -22,6 +22,11 @@ export interface ICreatePatient extends IPatientEditableFields {
   athenaPatientId: number;
 }
 
+export interface ICreateRiskArea {
+  title?: string;
+  order?: number;
+}
+
 export async function createPatient(
   patient: ICreatePatient,
   userId: string,
@@ -75,19 +80,21 @@ export function createMockClinic(name = 'The Dan Plant Center', departmentId = 1
   };
 }
 
-export async function createRiskArea(
-  title: string = 'Viscerion is a zombie dragon',
-  order: number = 1,
-): Promise<RiskArea> {
-  const riskAreaGroup = await RiskAreaGroup.create(createMockRiskAreaGroup());
-  return await RiskArea.create({
-    title,
-    assessmentType: 'manual',
-    riskAreaGroupId: riskAreaGroup.id,
-    order,
-    mediumRiskThreshold: 5,
-    highRiskThreshold: 8,
-  });
+export async function createRiskArea(input: ICreateRiskArea, txn?: Transaction): Promise<RiskArea> {
+  const title = input.title || 'Viscerion is a zombie dragon';
+  const order = input.order || 1;
+  const riskAreaGroup = await RiskAreaGroup.create(createMockRiskAreaGroup(), txn);
+  return await RiskArea.create(
+    {
+      title,
+      assessmentType: 'manual',
+      riskAreaGroupId: riskAreaGroup.id,
+      order,
+      mediumRiskThreshold: 5,
+      highRiskThreshold: 8,
+    },
+    txn,
+  );
 }
 
 export function createMockRiskAreaGroup(
@@ -228,25 +235,37 @@ export function mockRedoxGetPatientMedications(
   mockRedoxPost(fullResponseBody);
 }
 
-export async function cleanPatientAnswerEvents(patientId: string) {
-  const patientAnswerEvents = await PatientAnswerEvent.getAllForPatient(patientId, {
-    pageNumber: 0,
-    pageSize: 10,
-  });
-  patientAnswerEvents.results.map(
-    async patientAnswerEvent => await PatientAnswerEvent.delete(patientAnswerEvent.id),
+export async function cleanPatientAnswerEvents(patientId: string, txn?: Transaction) {
+  const patientAnswerEvents = await PatientAnswerEvent.getAllForPatient(
+    patientId,
+    {
+      pageNumber: 0,
+      pageSize: 10,
+    },
+    txn,
   );
+  const patientAnswerEventDeletions = patientAnswerEvents.results.map(async patientAnswerEvent =>
+    PatientAnswerEvent.delete(patientAnswerEvent.id, txn),
+  );
+
+  await Promise.all(patientAnswerEventDeletions);
 }
 
-export async function cleanCarePlanUpdateEvents(patientId: string) {
-  const carePlanUpdateEvents = await CarePlanUpdateEvent.getAllForPatient(patientId, {
-    pageNumber: 0,
-    pageSize: 10,
-  });
-
-  carePlanUpdateEvents.results.map(
-    async carePlanUpdateEvent => await CarePlanUpdateEvent.delete(carePlanUpdateEvent.id),
+export async function cleanCarePlanUpdateEvents(patientId: string, txn?: Transaction) {
+  const carePlanUpdateEvents = await CarePlanUpdateEvent.getAllForPatient(
+    patientId,
+    {
+      pageNumber: 0,
+      pageSize: 10,
+    },
+    txn,
   );
+
+  const carePlanUpdateEventDeletions = carePlanUpdateEvents.results.map(async carePlanUpdateEvent =>
+    CarePlanUpdateEvent.delete(carePlanUpdateEvent.id, txn),
+  );
+
+  await Promise.all(carePlanUpdateEventDeletions);
 }
 
 export async function createFullRiskAreaGroupAssociations(

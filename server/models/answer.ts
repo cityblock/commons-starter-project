@@ -135,8 +135,8 @@ export default class Answer extends BaseModel {
     },
   };
 
-  static async get(answerId: string): Promise<Answer> {
-    const answer = await this.getQuery().findOne({ id: answerId, deletedAt: null });
+  static async get(answerId: string, txn?: Transaction): Promise<Answer> {
+    const answer = await this.getQuery(txn).findOne({ id: answerId, deletedAt: null });
 
     if (!answer) {
       return Promise.reject(`No such answer: ${answerId}`);

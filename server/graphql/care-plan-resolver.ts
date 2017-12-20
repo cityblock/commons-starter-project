@@ -33,22 +33,22 @@ export interface ICarePlanSuggestionDismissArgs {
 export async function resolveCarePlanSuggestionsForPatient(
   root: any,
   args: IResolveCarePlanSuggestionsOptions,
-  { db, userRole }: IContext,
+  { db, userRole, txn }: IContext,
 ): Promise<CarePlanSuggestion[]> {
   await accessControls.isAllowed(userRole, 'view', 'carePlanSuggestion');
 
-  return await CarePlanSuggestion.getForPatient(args.patientId);
+  return await CarePlanSuggestion.getForPatient(args.patientId, txn);
 }
 
 export async function resolveCarePlanForPatient(
   root: any,
   args: IResolveCarePlanOptions,
-  { db, userRole }: IContext,
+  { db, userRole, txn }: IContext,
 ): Promise<ICarePlan> {
   await accessControls.isAllowed(userRole, 'view', 'carePlanSuggestion');
 
-  const concerns = await PatientConcern.getForPatient(args.patientId);
-  const goals = await PatientGoal.getForPatient(args.patientId);
+  const concerns = await PatientConcern.getForPatient(args.patientId, txn);
+  const goals = await PatientGoal.getForPatient(args.patientId, txn);
 
   return {
     concerns,
@@ -59,28 +59,36 @@ export async function resolveCarePlanForPatient(
 export async function carePlanSuggestionDismiss(
   root: any,
   { input }: ICarePlanSuggestionDismissArgs,
-  { db, userRole, userId }: IContext,
+  { db, userRole, userId, txn }: IContext,
 ): Promise<CarePlanSuggestion | undefined> {
   await accessControls.isAllowed(userRole, 'edit', 'carePlanSuggestion');
   checkUserLoggedIn(userId);
 
-  return await CarePlanSuggestion.dismiss({
-    carePlanSuggestionId: input.carePlanSuggestionId,
-    dismissedById: userId!,
-    dismissedReason: input.dismissedReason,
-  });
+  return await CarePlanSuggestion.dismiss(
+    {
+      carePlanSuggestionId: input.carePlanSuggestionId,
+      dismissedById: userId!,
+      dismissedReason: input.dismissedReason,
+    },
+    txn,
+  );
 }
 
 export async function carePlanSuggestionAccept(
   root: any,
   { input }: ICarePlanSuggestionAcceptArgs,
-  { db, userRole, userId }: IContext,
+  context: IContext,
 ): Promise<CarePlanSuggestion | undefined> {
+  const { userRole, userId } = context;
+  const existingTxn = context.txn;
   await accessControls.isAllowed(userRole, 'edit', 'patient');
   checkUserLoggedIn(userId);
 
   return await transaction(CarePlanSuggestion.knex(), async txn => {
-    const carePlanSuggestion = await CarePlanSuggestion.get(input.carePlanSuggestionId, txn);
+    const carePlanSuggestion = await CarePlanSuggestion.get(
+      input.carePlanSuggestionId,
+      existingTxn || txn,
+    );
     let secondaryCarePlanSuggestion: CarePlanSuggestion | undefined;
 
     if (carePlanSuggestion) {
@@ -89,12 +97,15 @@ export async function carePlanSuggestionAccept(
       let { patientConcernId } = input;
 
       if (!!carePlanSuggestion.concern && carePlanSuggestion.concernId) {
-        await PatientConcern.create({
-          concernId: carePlanSuggestion.concernId,
-          patientId,
-          startedAt: startedAt || undefined,
-          userId: userId!,
-        });
+        await PatientConcern.create(
+          {
+            concernId: carePlanSuggestion.concernId,
+            patientId,
+            startedAt: startedAt || undefined,
+            userId: userId!,
+          },
+          existingTxn || txn,
+        );
       } else if (!!carePlanSuggestion.goalSuggestionTemplate) {
         if (concernId) {
           const patientConcern = await PatientConcern.create(
@@ -104,7 +115,7 @@ export async function carePlanSuggestionAccept(
               startedAt: startedAt || undefined,
               userId: userId!,
             },
-            txn,
+            existingTxn || txn,
           );
 
           patientConcernId = patientConcern.id;
@@ -112,6 +123,7 @@ export async function carePlanSuggestionAccept(
           secondaryCarePlanSuggestion = await CarePlanSuggestion.findForPatientAndConcern(
             patientId,
             concernId,
+            existingTxn || txn,
           );
         }
 
@@ -123,14 +135,18 @@ export async function carePlanSuggestionAccept(
             title: carePlanSuggestion.goalSuggestionTemplate.title,
             patientConcernId: patientConcernId || undefined,
           },
-          txn,
+          existingTxn || txn,
         );
       }
 
-      await CarePlanSuggestion.accept(carePlanSuggestion.id, userId!, txn);
+      await CarePlanSuggestion.accept(carePlanSuggestion.id, userId!, existingTxn || txn);
 
       if (secondaryCarePlanSuggestion) {
-        await CarePlanSuggestion.accept(secondaryCarePlanSuggestion.id, userId!, txn);
+        await CarePlanSuggestion.accept(
+          secondaryCarePlanSuggestion.id,
+          userId!,
+          existingTxn || txn,
+        );
       }
     }
 

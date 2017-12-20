@@ -19,7 +19,7 @@ describe('concern suggestion resolver', () => {
     await Db.get();
     await Db.clear();
 
-    const riskArea = await createRiskArea();
+    const riskArea = await createRiskArea({ title: 'Risk Area' });
     question = await Question.create({
       title: 'like writing tests?',
       answerType: 'dropdown',
@@ -79,7 +79,7 @@ describe('concern suggestion resolver', () => {
     });
 
     it('suggests a concern for a screening tool score range', async () => {
-      const riskArea = await createRiskArea();
+      const riskArea = await createRiskArea({ title: 'Risk Area Also' });
       const concern = await Concern.create({ title: 'No Housing' });
       const screeningTool = await ScreeningTool.create({
         title: 'Screening Tool',

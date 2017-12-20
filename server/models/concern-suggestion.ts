@@ -69,8 +69,8 @@ export default class ConcernSuggestion extends BaseModel {
     );
   }
 
-  static async getForAnswer(answerId: string): Promise<Concern[]> {
-    const concernSuggestions = (await this.query()
+  static async getForAnswer(answerId: string, txn?: Transaction): Promise<Concern[]> {
+    const concernSuggestions = (await this.query(txn)
       .where('answerId', answerId)
       .andWhere('deletedAt', null)
       .orderBy('createdAt')
@@ -82,8 +82,9 @@ export default class ConcernSuggestion extends BaseModel {
 
   static async getForScreeningToolScoreRange(
     screeningToolScoreRangeId: string,
+    txn?: Transaction,
   ): Promise<Concern[]> {
-    const concernSuggestions = (await this.query()
+    const concernSuggestions = (await this.query(txn)
       .where('screeningToolScoreRangeId', screeningToolScoreRangeId)
       .andWhere('deletedAt', null)
       .orderBy('createdAt')
@@ -174,14 +175,14 @@ export default class ConcernSuggestion extends BaseModel {
     return concernSuggestions.map((suggestion: ConcernSuggestion) => suggestion.concern);
   }
 
-  static async create({
-    concernId,
-    answerId,
-    screeningToolScoreRangeId,
-  }: IConcernSuggestionEditableFields): Promise<Concern[]> {
+  static async create(
+    input: IConcernSuggestionEditableFields,
+    existingTxn?: Transaction,
+  ): Promise<Concern[]> {
     // TODO: use postgres UPCERT here to add relation if it doesn't exist instead of a transaction
-    await transaction(ConcernSuggestion, async ConcernSuggestionWithTransaction => {
-      const relations = await ConcernSuggestionWithTransaction.query().where({
+    const { concernId, answerId, screeningToolScoreRangeId } = input;
+    return await transaction(ConcernSuggestion.knex(), async txn => {
+      const relations = await ConcernSuggestion.query(existingTxn || txn).where({
         concernId,
         answerId: answerId || null,
         screeningToolScoreRangeId: screeningToolScoreRangeId || null,
@@ -189,21 +190,24 @@ export default class ConcernSuggestion extends BaseModel {
       });
 
       if (relations.length < 1) {
-        await ConcernSuggestionWithTransaction.query().insert({
+        await ConcernSuggestion.query(existingTxn || txn).insert({
           concernId,
           answerId,
           screeningToolScoreRangeId,
         });
       }
-    });
 
-    if (answerId) {
-      return await this.getForAnswer(answerId);
-    } else if (screeningToolScoreRangeId) {
-      return await this.getForScreeningToolScoreRange(screeningToolScoreRangeId);
-    } else {
-      return [];
-    }
+      if (answerId) {
+        return await this.getForAnswer(answerId, existingTxn || txn);
+      } else if (screeningToolScoreRangeId) {
+        return await this.getForScreeningToolScoreRange(
+          screeningToolScoreRangeId,
+          existingTxn || txn,
+        );
+      } else {
+        return [];
+      }
+    });
   }
 
   static async delete({

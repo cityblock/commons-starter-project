@@ -231,8 +231,9 @@ export default class PatientScreeningToolSubmission extends BaseModel {
 
   static async get(
     patientScreeningToolSubmissionId: string,
+    txn?: Transaction,
   ): Promise<PatientScreeningToolSubmission> {
-    const patientScreeningToolSubmission = await this.query()
+    const patientScreeningToolSubmission = await this.query(txn)
       .eager(EAGER_QUERY)
       .findOne({ id: patientScreeningToolSubmissionId, deletedAt: null });
 
@@ -247,19 +248,24 @@ export default class PatientScreeningToolSubmission extends BaseModel {
 
   static async getForPatient(
     patientId: string,
-    screeningToolId?: string,
+    txn?: Transaction,
   ): Promise<PatientScreeningToolSubmission[]> {
     // Note that this returns *all* submissions (including deleted ones)
-    if (screeningToolId) {
-      return await this.query()
-        .eager(EAGER_QUERY)
-        .where({ patientId, screeningToolId })
-        .orderBy('createdAt', 'asc');
-    }
-
-    return await this.query()
+    return await this.query(txn)
       .eager(EAGER_QUERY)
       .where({ patientId })
+      .orderBy('createdAt', 'asc');
+  }
+
+  static async getForPatientAndScreeningTool(
+    patientId: string,
+    screeningToolId: string,
+    txn?: Transaction,
+  ): Promise<PatientScreeningToolSubmission[]> {
+    // Note that this returns *all* submissions (including deleted ones)
+    return await this.query(txn)
+      .eager(EAGER_QUERY)
+      .where({ patientId, screeningToolId })
       .orderBy('createdAt', 'asc');
   }
 
@@ -267,8 +273,9 @@ export default class PatientScreeningToolSubmission extends BaseModel {
     screeningToolId: string,
     patientId: string,
     scored: boolean,
+    txn?: Transaction,
   ): Promise<PatientScreeningToolSubmission | null> {
-    const query = this.query()
+    const query = this.query(txn)
       .eager(EAGER_QUERY)
       .where({ patientId, screeningToolId });
 
@@ -286,9 +293,9 @@ export default class PatientScreeningToolSubmission extends BaseModel {
     return latestPatientScreeningToolSubmission;
   }
 
-  static async getAll(): Promise<PatientScreeningToolSubmission[]> {
+  static async getAll(txn?: Transaction): Promise<PatientScreeningToolSubmission[]> {
     // Note that this returns only current submissions (not deleted ones)
-    return await this.query()
+    return await this.query(txn)
       .eager(EAGER_QUERY)
       .where({ deletedAt: null })
       .orderBy('createdAt', 'asc');
@@ -296,12 +303,13 @@ export default class PatientScreeningToolSubmission extends BaseModel {
 
   static async delete(
     patientScreeningToolSubmissionId: string,
+    txn?: Transaction,
   ): Promise<PatientScreeningToolSubmission> {
-    await this.query()
+    await this.query(txn)
       .where({ id: patientScreeningToolSubmissionId, deletedAt: null })
       .update({ deletedAt: new Date().toISOString() });
 
-    const patientScreeningToolSubmission = await this.query().findById(
+    const patientScreeningToolSubmission = await this.query(txn).findById(
       patientScreeningToolSubmissionId,
     );
     if (!patientScreeningToolSubmission) {

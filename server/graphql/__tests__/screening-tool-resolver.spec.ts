@@ -22,7 +22,7 @@ describe('screening tool resolver tests', () => {
     await Db.clear();
     clinic = await Clinic.create(createMockClinic());
     user = await User.create(createMockUser(11, clinic.id, userRole));
-    riskArea = await createRiskArea();
+    riskArea = await createRiskArea({ title: 'Risk Area' });
     screeningTool = await ScreeningTool.create({
       title: 'Screening Tool',
       riskAreaId: riskArea.id,
@@ -81,7 +81,7 @@ describe('screening tool resolver tests', () => {
     });
 
     it('gets all screeningTools for a riskArea', async () => {
-      const riskArea2 = await createRiskArea('Risk Area 2', 2);
+      const riskArea2 = await createRiskArea({ title: 'Risk Area 2', order: 2 });
       const screeningTool2 = await ScreeningTool.create({
         title: 'Screening Tool 2',
         riskAreaId: riskArea.id,

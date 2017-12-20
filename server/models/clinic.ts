@@ -9,7 +9,12 @@ interface IClinicEditableFields {
   departmentId: number;
 }
 
-type GetByOptions = 'name' | 'departmentId';
+interface IGetByOptions {
+  fieldName: GetByFields;
+  field?: string | number;
+}
+
+type GetByFields = 'name' | 'departmentId';
 
 /* tslint:disable:member-ordering */
 export default class Clinic extends BaseModel {
@@ -63,26 +68,30 @@ export default class Clinic extends BaseModel {
     return clinic;
   }
 
-  static async update(clinicId: string, clinic: IClinicEditableFields): Promise<Clinic> {
-    return await this.query().updateAndFetchById(clinicId, clinic);
+  static async update(
+    clinicId: string,
+    clinic: IClinicEditableFields,
+    txn?: Transaction,
+  ): Promise<Clinic> {
+    return await this.query(txn).updateAndFetchById(clinicId, clinic);
   }
 
-  static async getAll({
-    pageNumber,
-    pageSize,
-  }: IPaginationOptions): Promise<IPaginatedResults<Clinic>> {
-    const clinics = (await this.query().page(pageNumber, pageSize)) as any;
+  static async getAll(
+    { pageNumber, pageSize }: IPaginationOptions,
+    txn?: Transaction,
+  ): Promise<IPaginatedResults<Clinic>> {
+    const clinics = (await this.query(txn).page(pageNumber, pageSize)) as any;
 
     return clinics;
   }
 
-  static async getBy(fieldName: GetByOptions, field?: string | number): Promise<Clinic | null> {
-    if (!field) {
+  static async getBy(input: IGetByOptions, txn?: Transaction): Promise<Clinic | null> {
+    if (!input.field) {
       return null;
     }
 
-    const clinic = await this.query()
-      .where(fieldName, field)
+    const clinic = await this.query(txn)
+      .where(input.fieldName, input.field)
       .first();
 
     if (!clinic) {

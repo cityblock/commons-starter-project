@@ -29,11 +29,11 @@ export async function screeningToolScoreRangeCreate(
   { input }: IScreeningToolScoreRangeCreateArgs,
   context: IContext,
 ) {
-  const { userRole, userId } = context;
+  const { userRole, userId, txn } = context;
   await accessControls.isAllowed(userRole, 'create', 'screeningTool');
   checkUserLoggedIn(userId);
 
-  const screeningToolScoreRange = await ScreeningToolScoreRange.create(input as any);
+  const screeningToolScoreRange = await ScreeningToolScoreRange.create(input as any, txn);
 
   return ScreeningToolScoreRange.withMinimumAndMaximumScore(screeningToolScoreRange);
 }
@@ -41,11 +41,11 @@ export async function screeningToolScoreRangeCreate(
 export async function resolveScreeningToolScoreRanges(
   root: any,
   args: any,
-  { db, userRole }: IContext,
+  { db, userRole, txn }: IContext,
 ) {
   await accessControls.isAllowed(userRole, 'view', 'screeningTool');
 
-  const screeningToolScoreRanges = await ScreeningToolScoreRange.getAll();
+  const screeningToolScoreRanges = await ScreeningToolScoreRange.getAll(txn);
 
   return screeningToolScoreRanges.map(screeningToolScoreRange =>
     ScreeningToolScoreRange.withMinimumAndMaximumScore(screeningToolScoreRange),
@@ -55,12 +55,13 @@ export async function resolveScreeningToolScoreRanges(
 export async function resolveScreeningToolScoreRangesForScreeningTool(
   root: any,
   args: { screeningToolId: string },
-  { db, userRole }: IContext,
+  { db, userRole, txn }: IContext,
 ) {
   await accessControls.isAllowed(userRole, 'view', 'screeningTool');
 
   const screeningToolScoreRanges = await ScreeningToolScoreRange.getForScreeningTool(
     args.screeningToolId,
+    txn,
   );
 
   return screeningToolScoreRanges.map(screeningToolScoreRange =>
@@ -71,11 +72,14 @@ export async function resolveScreeningToolScoreRangesForScreeningTool(
 export async function resolveScreeningToolScoreRange(
   root: any,
   args: { screeningToolScoreRangeId: string },
-  { db, userRole }: IContext,
+  { db, userRole, txn }: IContext,
 ) {
   await accessControls.isAllowed(userRole, 'view', 'screeningTool');
 
-  const screeningToolScoreRange = await ScreeningToolScoreRange.get(args.screeningToolScoreRangeId);
+  const screeningToolScoreRange = await ScreeningToolScoreRange.get(
+    args.screeningToolScoreRangeId,
+    txn,
+  );
 
   return ScreeningToolScoreRange.withMinimumAndMaximumScore(screeningToolScoreRange);
 }
@@ -83,13 +87,14 @@ export async function resolveScreeningToolScoreRange(
 export async function resolveScreeningToolScoreRangeForScoreAndScreeningTool(
   root: any,
   args: { screeningToolId: string; score: number },
-  { db, userRole }: IContext,
+  { db, userRole, txn }: IContext,
 ) {
   await accessControls.isAllowed(userRole, 'view', 'screeningTool');
 
   const screeningToolScoreRange = await ScreeningToolScoreRange.getByScoreForScreeningTool(
     args.score,
     args.screeningToolId,
+    txn,
   );
 
   if (!screeningToolScoreRange) {
@@ -102,7 +107,7 @@ export async function resolveScreeningToolScoreRangeForScoreAndScreeningTool(
 export async function screeningToolScoreRangeEdit(
   rot: any,
   args: IEditScreeningToolScoreRangeOptions,
-  { db, userId, userRole }: IContext,
+  { db, userId, userRole, txn }: IContext,
 ) {
   await accessControls.isAllowedForUser(userRole, 'edit', 'screeningTool');
   checkUserLoggedIn(userId);
@@ -111,6 +116,7 @@ export async function screeningToolScoreRangeEdit(
   const screeningToolScoreRange = await ScreeningToolScoreRange.edit(
     args.input.screeningToolScoreRangeId,
     cleanedParams,
+    txn,
   );
 
   return ScreeningToolScoreRange.withMinimumAndMaximumScore(screeningToolScoreRange);
@@ -119,13 +125,14 @@ export async function screeningToolScoreRangeEdit(
 export async function screeningToolScoreRangeDelete(
   root: any,
   args: IDeleteScreeningToolScoreRangeOptions,
-  { db, userId, userRole }: IContext,
+  { db, userId, userRole, txn }: IContext,
 ) {
   await accessControls.isAllowedForUser(userRole, 'edit', 'screeningTool');
   checkUserLoggedIn(userId);
 
   const screeningToolScoreRange = await ScreeningToolScoreRange.delete(
     args.input.screeningToolScoreRangeId,
+    txn,
   );
 
   return ScreeningToolScoreRange.withMinimumAndMaximumScore(screeningToolScoreRange);

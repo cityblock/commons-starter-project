@@ -44,8 +44,8 @@ export default class QuestionCondition extends BaseModel {
     },
   };
 
-  static async get(questionConditionId: string): Promise<QuestionCondition> {
-    const questionCondition = await this.query().findOne({
+  static async get(questionConditionId: string, txn?: Transaction): Promise<QuestionCondition> {
+    const questionCondition = await this.query(txn).findOne({
       id: questionConditionId,
       deletedAt: null,
     });
@@ -57,20 +57,21 @@ export default class QuestionCondition extends BaseModel {
   }
 
   static async create(input: IQuestionConditionEditableFields, txn?: Transaction) {
-    await this.validate(input);
+    await this.validate(input, txn);
     return this.query(txn).insertAndFetch(input);
   }
 
   static async edit(
     questionCondition: IQuestionConditionEditableFields,
     questionConditionId: string,
+    txn?: Transaction,
   ): Promise<QuestionCondition> {
-    await this.validate(questionCondition);
-    return await this.query().updateAndFetchById(questionConditionId, questionCondition);
+    await this.validate(questionCondition, txn);
+    return await this.query(txn).updateAndFetchById(questionConditionId, questionCondition);
   }
 
-  static async validate(input: IQuestionConditionEditableFields) {
-    const answer = await Answer.get(input.answerId);
+  static async validate(input: IQuestionConditionEditableFields, txn?: Transaction) {
+    const answer = await Answer.get(input.answerId, txn);
     if (answer.questionId === input.questionId) {
       return Promise.reject(
         `Error: Answer ${input.answerId} is an answer to question ${input.questionId}`,
@@ -78,12 +79,12 @@ export default class QuestionCondition extends BaseModel {
     }
   }
 
-  static async delete(questionConditionId: string): Promise<QuestionCondition> {
-    await this.query()
+  static async delete(questionConditionId: string, txn?: Transaction): Promise<QuestionCondition> {
+    await this.query(txn)
       .where({ id: questionConditionId, deletedAt: null })
       .update({ deletedAt: new Date().toISOString() });
 
-    const questionCondition = await this.query().findById(questionConditionId);
+    const questionCondition = await this.query(txn).findById(questionConditionId);
     if (!questionCondition) {
       return Promise.reject(`No such questionCondition: ${questionConditionId}`);
     }

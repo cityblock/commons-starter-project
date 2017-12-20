@@ -1,4 +1,4 @@
-import { Model, RelationMappings } from 'objection';
+import { Model, RelationMappings, Transaction } from 'objection';
 import BaseModel from './base-model';
 import RiskArea from './risk-area';
 import ScreeningToolScoreRange from './screening-tool-score-range';
@@ -66,8 +66,11 @@ export default class ScreeningTool extends BaseModel {
     };
   }
 
-  static async create(input: IScreeningToolCreateFields): Promise<ScreeningTool> {
-    return await this.query()
+  static async create(
+    input: IScreeningToolCreateFields,
+    txn?: Transaction,
+  ): Promise<ScreeningTool> {
+    return await this.query(txn)
       .eager(EAGER_QUERY)
       .insertAndFetch(input);
   }

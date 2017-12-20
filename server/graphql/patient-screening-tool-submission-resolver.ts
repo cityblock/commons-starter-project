@@ -29,14 +29,17 @@ export async function patientScreeningToolSubmissionCreate(
   { input }: IPatientScreeningToolSubmissionCreateArgs,
   context: IContext,
 ) {
-  const { userRole, userId } = context;
+  const { userRole, userId, txn } = context;
   await accessControls.isAllowed(userRole, 'create', 'patientScreeningToolSubmission');
   checkUserLoggedIn(userId);
 
-  return await PatientScreeningToolSubmission.autoOpenIfRequired({
-    ...input,
-    userId: userId!,
-  });
+  return await PatientScreeningToolSubmission.autoOpenIfRequired(
+    {
+      ...input,
+      userId: userId!,
+    },
+    txn,
+  );
 }
 
 export async function patientScreeningToolSubmissionScore(
@@ -44,33 +47,38 @@ export async function patientScreeningToolSubmissionScore(
   { input }: IPatientScreeningToolSubmissionScoreArgs,
   context: IContext,
 ) {
-  const { userRole, userId } = context;
+  const { userRole, userId, txn } = context;
   await accessControls.isAllowed(userRole, 'create', 'patientScreeningToolSubmission');
   checkUserLoggedIn(userId);
 
   const patientAnswers = await PatientAnswer.getForScreeningToolSubmission(
     input.patientScreeningToolSubmissionId,
+    txn,
   );
 
-  return await PatientScreeningToolSubmission.submitScore(input.patientScreeningToolSubmissionId, {
-    patientAnswers,
-  });
+  return await PatientScreeningToolSubmission.submitScore(
+    input.patientScreeningToolSubmissionId,
+    {
+      patientAnswers,
+    },
+    txn,
+  );
 }
 
 export async function resolvePatientScreeningToolSubmission(
   root: any,
   args: { patientScreeningToolSubmissionId: string },
-  { db, userRole }: IContext,
+  { db, userRole, txn }: IContext,
 ) {
   await accessControls.isAllowed(userRole, 'view', 'patientScreeningToolSubmission');
 
-  return await PatientScreeningToolSubmission.get(args.patientScreeningToolSubmissionId);
+  return await PatientScreeningToolSubmission.get(args.patientScreeningToolSubmissionId, txn);
 }
 
 export async function resolvePatientScreeningToolSubmissionForPatientAndScreeningTool(
   root: any,
   args: { screeningToolId: string; patientId: string; scored: boolean },
-  { db, userRole }: IContext,
+  { db, userRole, txn }: IContext,
 ) {
   await accessControls.isAllowed(userRole, 'view', 'patientScreeningToolSubmission');
 
@@ -78,25 +86,34 @@ export async function resolvePatientScreeningToolSubmissionForPatientAndScreenin
     args.screeningToolId,
     args.patientId,
     args.scored,
+    txn,
   );
 }
 
 export async function resolvePatientScreeningToolSubmissionsForPatient(
   root: any,
   args: IResolvePatientScreeningToolSubmissionsOptions,
-  { db, userRole }: IContext,
+  { db, userRole, txn }: IContext,
 ) {
   await accessControls.isAllowed(userRole, 'view', 'patientScreeningToolSubmission');
 
-  return await PatientScreeningToolSubmission.getForPatient(args.patientId, args.screeningToolId);
+  if (args.screeningToolId) {
+    return await PatientScreeningToolSubmission.getForPatientAndScreeningTool(
+      args.patientId,
+      args.screeningToolId,
+      txn,
+    );
+  } else {
+    return await PatientScreeningToolSubmission.getForPatient(args.patientId, txn);
+  }
 }
 
 export async function resolvePatientScreeningToolSubmissions(
   root: any,
   args: any,
-  { db, userRole }: IContext,
+  { db, userRole, txn }: IContext,
 ) {
   await accessControls.isAllowed(userRole, 'view', 'patientScreeningToolSubmission');
 
-  return await PatientScreeningToolSubmission.getAll();
+  return await PatientScreeningToolSubmission.getAll(txn);
 }

@@ -62,8 +62,8 @@ export default class TaskTemplate extends BaseModel {
     return taskTemplate;
   }
 
-  static async create(input: ITaskTemplateEditableFields) {
-    return await this.query().insertAndFetch(input);
+  static async create(input: ITaskTemplateEditableFields, txn?: Transaction) {
+    return await this.query(txn).insertAndFetch(input);
   }
 
   static async edit(

@@ -14,7 +14,7 @@ describe('anser model', () => {
   beforeEach(async () => {
     await Db.get();
     await Db.clear();
-    riskArea = await createRiskArea('testing');
+    riskArea = await createRiskArea({ title: 'testing' });
   });
 
   afterAll(async () => {

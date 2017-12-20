@@ -15,38 +15,38 @@ export interface IResolveClinicOptions {
 export async function clinicCreate(
   root: any,
   { input }: IClinicCreateArgs,
-  { userRole }: IContext,
+  { userRole, txn }: IContext,
 ) {
   const { departmentId } = input;
   await accessControls.isAllowed(userRole, 'create', 'clinic');
 
-  const clinic = await Clinic.getBy('departmentId', departmentId);
+  const clinic = await Clinic.getBy({ fieldName: 'departmentId', field: departmentId }, txn);
 
   if (clinic) {
     throw new Error(`Cannot create clinic: departmentId already exists for ${departmentId}`);
   } else {
-    return await Clinic.create(input);
+    return await Clinic.create(input, txn);
   }
 }
 
 export async function resolveClinic(
   root: any,
   { clinicId }: IResolveClinicOptions,
-  { userRole }: IContext,
+  { userRole, txn }: IContext,
 ) {
   await accessControls.isAllowed(userRole, 'view', 'clinic');
 
-  return await Clinic.get(clinicId);
+  return await Clinic.get(clinicId, txn);
 }
 
 export async function resolveClinics(
   root: any,
   { pageNumber, pageSize }: IPaginationOptions,
-  { userRole }: IContext,
+  { userRole, txn }: IContext,
 ) {
   await accessControls.isAllowed(userRole, 'view', 'clinic');
 
-  const clinics = await Clinic.getAll({ pageNumber, pageSize });
+  const clinics = await Clinic.getAll({ pageNumber, pageSize }, txn);
   const clinicEdges = clinics.results.map(
     (clinic, i) => formatRelayEdge(clinic, clinic.id) as IClinicNode,
   );

@@ -31,6 +31,7 @@ export async function patientAnswersCreate(
   context: IContext,
 ) {
   const { userRole, userId } = context;
+  const existingTxn = context.txn;
   await accessControls.isAllowed(userRole, 'create', 'patientAnswer');
   checkUserLoggedIn(userId);
 
@@ -56,7 +57,7 @@ export async function patientAnswersCreate(
             userId: userId!,
           })),
         },
-        txn,
+        existingTxn || txn,
       );
     } else if (patientScreeningToolSubmissionId) {
       return await PatientAnswer.create(
@@ -70,7 +71,7 @@ export async function patientAnswersCreate(
             userId: userId!,
           })),
         },
-        txn,
+        existingTxn || txn,
       );
     } else if (riskAreaAssessmentSubmissionId) {
       return await PatientAnswer.create(
@@ -84,7 +85,7 @@ export async function patientAnswersCreate(
             userId: userId!,
           })),
         },
-        txn,
+        existingTxn || txn,
       );
     } else {
       throw new Error(
@@ -98,22 +99,20 @@ export async function patientAnswersCreate(
 export async function resolvePatientAnswers(
   root: any,
   args: { filterId: string; filterType: IAnswerFilterTypeEnum; patientId: string },
-  { db, userRole }: IContext,
+  { db, userRole, txn }: IContext,
 ) {
   await accessControls.isAllowed(userRole, 'view', 'patientAnswer');
 
-  const eagerQuery = '[answer, question]';
-
   if (args.filterType === 'question') {
-    return await PatientAnswer.getForQuestion(args.filterId, args.patientId, eagerQuery);
+    return await PatientAnswer.getForQuestion(args.filterId, args.patientId, txn);
   } else if (args.filterType === 'riskArea') {
-    return await PatientAnswer.getForRiskArea(args.filterId, args.patientId, eagerQuery);
+    return await PatientAnswer.getForRiskArea(args.filterId, args.patientId, txn);
   } else if (args.filterType === 'screeningTool') {
-    return await PatientAnswer.getForScreeningTool(args.filterId, args.patientId, eagerQuery);
+    return await PatientAnswer.getForScreeningTool(args.filterId, args.patientId, txn);
   } else if (args.filterType === 'patientScreeningToolSubmission') {
-    return await PatientAnswer.getForScreeningToolSubmission(args.filterId, eagerQuery);
+    return await PatientAnswer.getForScreeningToolSubmission(args.filterId, txn);
   } else if (args.filterType === 'progressNote') {
-    return await PatientAnswer.getForProgressNote(args.filterId, args.patientId, eagerQuery);
+    return await PatientAnswer.getForProgressNote(args.filterId, args.patientId, txn);
   } else {
     throw new Error('wrong filter type');
   }
@@ -122,41 +121,41 @@ export async function resolvePatientAnswers(
 export async function resolvePreviousPatientAnswersForQuestion(
   root: any,
   args: { questionId: string; patientId: string },
-  { db, userRole, userId }: IContext,
+  { db, userRole, userId, txn }: IContext,
 ) {
   await accessControls.isAllowed(userRole, 'view', 'patientAnswer');
 
-  return await PatientAnswer.getPreviousAnswersForQuestion(args.questionId, args.patientId);
+  return await PatientAnswer.getPreviousAnswersForQuestion(args.questionId, args.patientId, txn);
 }
 
 export async function resolvePatientAnswer(
   root: any,
   args: { patientAnswerId: string },
-  { db, userRole }: IContext,
+  { db, userRole, txn }: IContext,
 ) {
   await accessControls.isAllowed(userRole, 'view', 'patientAnswer');
 
-  return await PatientAnswer.get(args.patientAnswerId);
+  return await PatientAnswer.get(args.patientAnswerId, txn);
 }
 
 export async function patientAnswerEdit(
   root: any,
   args: IEditPatientAnswerOptions,
-  { db, userId, userRole }: IContext,
+  { db, userId, userRole, txn }: IContext,
 ) {
   await accessControls.isAllowedForUser(userRole, 'edit', 'patientAnswer');
   checkUserLoggedIn(userId);
 
-  return PatientAnswer.editApplicable(args.input.applicable, args.input.patientAnswerId);
+  return PatientAnswer.editApplicable(args.input.applicable, args.input.patientAnswerId, txn);
 }
 
 export async function patientAnswerDelete(
   root: any,
   args: IDeletePatientAnswerOptions,
-  { db, userId, userRole }: IContext,
+  { db, userId, userRole, txn }: IContext,
 ) {
   await accessControls.isAllowedForUser(userRole, 'edit', 'patientAnswer');
   checkUserLoggedIn(userId);
 
-  return PatientAnswer.delete(args.input.patientAnswerId);
+  return PatientAnswer.delete(args.input.patientAnswerId, txn);
 }

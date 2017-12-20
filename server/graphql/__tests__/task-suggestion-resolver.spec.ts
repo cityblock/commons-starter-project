@@ -17,7 +17,7 @@ describe('task suggestion resolver', () => {
     await Db.get();
     await Db.clear();
 
-    const riskArea = await createRiskArea();
+    const riskArea = await createRiskArea({ title: 'Risk Area' });
     const question = await Question.create({
       title: 'like writing tests?',
       answerType: 'dropdown',

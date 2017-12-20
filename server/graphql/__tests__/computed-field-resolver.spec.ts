@@ -107,7 +107,7 @@ describe('computed field resolver', () => {
         dataType: 'boolean',
       });
 
-      const riskArea = await createRiskArea();
+      const riskArea = await createRiskArea({ title: 'Risk Area' });
       await Question.create({
         riskAreaId: riskArea.id,
         type: 'riskArea',

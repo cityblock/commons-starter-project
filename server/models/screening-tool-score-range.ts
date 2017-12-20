@@ -90,6 +90,7 @@ export default class ScreeningToolScoreRange extends BaseModel {
 
   static async create(
     input: IScreeningToolScoreRangeCreateFields,
+    txn?: Transaction,
   ): Promise<ScreeningToolScoreRange> {
     const { minimumScore, maximumScore } = input;
 
@@ -100,7 +101,7 @@ export default class ScreeningToolScoreRange extends BaseModel {
       ...omit<IScreeningToolScoreRangeCreateFields>(input, ['minimumScore', 'maximumScore']),
     };
 
-    return await this.query()
+    return await this.query(txn)
       .eager(EAGER_QUERY)
       .insertAndFetch(filtered);
   }
@@ -108,11 +109,12 @@ export default class ScreeningToolScoreRange extends BaseModel {
   static async edit(
     screeningToolScoreRangeId: string,
     screeningToolScoreRange: IScreeningToolScoreRangeEditableFields,
+    txn?: Transaction,
   ): Promise<ScreeningToolScoreRange> {
     const { minimumScore, maximumScore } = screeningToolScoreRange;
     const editedMinimumScore = isNumber(minimumScore);
     const editedMaximumScore = isNumber(maximumScore);
-    const fetchedScoreRange = await this.get(screeningToolScoreRangeId);
+    const fetchedScoreRange = await this.get(screeningToolScoreRangeId, txn);
     let filtered: any = screeningToolScoreRange;
     let range: string = '';
 
@@ -143,13 +145,16 @@ export default class ScreeningToolScoreRange extends BaseModel {
       };
     }
 
-    return await this.query()
+    return await this.query(txn)
       .eager(EAGER_QUERY)
       .updateAndFetchById(screeningToolScoreRangeId, filtered);
   }
 
-  static async get(screeningToolScoreRangeId: string): Promise<ScreeningToolScoreRange> {
-    const screeningToolScoreRange = await this.query()
+  static async get(
+    screeningToolScoreRangeId: string,
+    txn?: Transaction,
+  ): Promise<ScreeningToolScoreRange> {
+    const screeningToolScoreRange = await this.query(txn)
       .eager(EAGER_QUERY)
       .findOne({ id: screeningToolScoreRangeId, deletedAt: null });
 
@@ -160,8 +165,11 @@ export default class ScreeningToolScoreRange extends BaseModel {
     return screeningToolScoreRange;
   }
 
-  static async getForScreeningTool(screeningToolId: string): Promise<ScreeningToolScoreRange[]> {
-    return await this.query()
+  static async getForScreeningTool(
+    screeningToolId: string,
+    txn?: Transaction,
+  ): Promise<ScreeningToolScoreRange[]> {
+    return await this.query(txn)
       .eager(EAGER_QUERY)
       .where({ deletedAt: null, screeningToolId });
   }
@@ -184,18 +192,21 @@ export default class ScreeningToolScoreRange extends BaseModel {
     return screeningToolScoreRange;
   }
 
-  static async getAll(): Promise<ScreeningToolScoreRange[]> {
-    return await this.query()
+  static async getAll(txn?: Transaction): Promise<ScreeningToolScoreRange[]> {
+    return await this.query(txn)
       .eager(EAGER_QUERY)
       .where({ deletedAt: null });
   }
 
-  static async delete(screeningToolScoreRangeId: string): Promise<ScreeningToolScoreRange> {
-    await this.query()
+  static async delete(
+    screeningToolScoreRangeId: string,
+    txn?: Transaction,
+  ): Promise<ScreeningToolScoreRange> {
+    await this.query(txn)
       .where({ id: screeningToolScoreRangeId, deletedAt: null })
       .update({ deletedAt: new Date().toISOString() });
 
-    const screeningToolScoreRange = await this.query().findById(screeningToolScoreRangeId);
+    const screeningToolScoreRange = await this.query(txn).findById(screeningToolScoreRangeId);
     if (!screeningToolScoreRange) {
       return Promise.reject(`No such screeningToolScoreRange: ${screeningToolScoreRangeId}`);
     }

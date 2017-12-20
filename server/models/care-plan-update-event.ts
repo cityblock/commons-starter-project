@@ -106,8 +106,8 @@ export default class CarePlanUpdateEvent extends BaseModel {
     },
   };
 
-  static async get(carePlanUpdateEventId: string): Promise<CarePlanUpdateEvent> {
-    const carePlanUpdateEvent = await this.query()
+  static async get(carePlanUpdateEventId: string, txn?: Transaction): Promise<CarePlanUpdateEvent> {
+    const carePlanUpdateEvent = await this.query(txn)
       .eager(EAGER_QUERY)
       .findOne({ id: carePlanUpdateEventId, deletedAt: null });
 
@@ -118,8 +118,11 @@ export default class CarePlanUpdateEvent extends BaseModel {
     return carePlanUpdateEvent;
   }
 
-  static async getAllForProgressNote(progressNoteId: string): Promise<CarePlanUpdateEvent[]> {
-    return await this.query()
+  static async getAllForProgressNote(
+    progressNoteId: string,
+    txn?: Transaction,
+  ): Promise<CarePlanUpdateEvent[]> {
+    return await this.query(txn)
       .eager(EAGER_QUERY)
       .where({ progressNoteId, deletedAt: null });
   }
@@ -140,12 +143,15 @@ export default class CarePlanUpdateEvent extends BaseModel {
     return carePlanUpdateEvent;
   }
 
-  static async delete(carePlanUpdateEventId: string): Promise<CarePlanUpdateEvent> {
-    await this.query()
+  static async delete(
+    carePlanUpdateEventId: string,
+    txn?: Transaction,
+  ): Promise<CarePlanUpdateEvent> {
+    await this.query(txn)
       .where({ id: carePlanUpdateEventId, deletedAt: null })
       .update({ deletedAt: new Date().toISOString() });
 
-    const carePlanUpdateEvent = await this.query()
+    const carePlanUpdateEvent = await this.query(txn)
       .eager(EAGER_QUERY)
       .findById(carePlanUpdateEventId);
 
@@ -159,8 +165,9 @@ export default class CarePlanUpdateEvent extends BaseModel {
   static async getAllForPatientConcern(
     patientConcernId: string,
     { pageNumber, pageSize }: IPaginationOptions,
+    txn?: Transaction,
   ): Promise<IPaginatedResults<CarePlanUpdateEvent>> {
-    const carePlanUpdateEvents = (await this.query()
+    const carePlanUpdateEvents = (await this.query(txn)
       .eager(EAGER_QUERY)
       .where({ patientConcernId, deletedAt: null })
       .orderBy('createdAt', 'desc')
@@ -175,8 +182,9 @@ export default class CarePlanUpdateEvent extends BaseModel {
   static async getAllForPatientGoal(
     patientGoalId: string,
     { pageNumber, pageSize }: IPaginationOptions,
+    txn?: Transaction,
   ): Promise<IPaginatedResults<CarePlanUpdateEvent>> {
-    const carePlanUpdateEvents = (await this.query()
+    const carePlanUpdateEvents = (await this.query(txn)
       .eager(EAGER_QUERY)
       .where({ patientGoalId, deletedAt: null })
       .orderBy('createdAt', 'desc')
@@ -191,8 +199,9 @@ export default class CarePlanUpdateEvent extends BaseModel {
   static async getAllForPatient(
     patientId: string,
     { pageNumber, pageSize }: IPaginationOptions,
+    txn?: Transaction,
   ): Promise<IPaginatedResults<CarePlanUpdateEvent>> {
-    const carePlanUpdateEvents = (await this.query()
+    const carePlanUpdateEvents = (await this.query(txn)
       .eager(EAGER_QUERY)
       .where({ patientId, deletedAt: null })
       .orderBy('createdAt', 'desc')
@@ -207,8 +216,9 @@ export default class CarePlanUpdateEvent extends BaseModel {
   static async getAllForUser(
     userId: string,
     { pageNumber, pageSize }: IPaginationOptions,
+    txn?: Transaction,
   ): Promise<IPaginatedResults<CarePlanUpdateEvent>> {
-    const carePlanUpdateEvents = (await this.query()
+    const carePlanUpdateEvents = (await this.query(txn)
       .eager(EAGER_QUERY)
       .where({ userId, deletedAt: null })
       .orderBy('createdAt', 'desc')

@@ -19,7 +19,7 @@ describe('goal suggestion resolver', () => {
     await Db.get();
     await Db.clear();
 
-    const riskArea = await createRiskArea();
+    const riskArea = await createRiskArea({ title: 'Risk Area' });
     const question = await Question.create({
       title: 'like writing tests?',
       answerType: 'dropdown',
@@ -84,7 +84,7 @@ describe('goal suggestion resolver', () => {
     });
 
     it('suggests a goal for a screening tool score range', async () => {
-      const riskArea = await createRiskArea();
+      const riskArea = await createRiskArea({ title: 'Also Risk Area' });
       const screeningTool = await ScreeningTool.create({
         title: 'Screening Tool',
         riskAreaId: riskArea.id,

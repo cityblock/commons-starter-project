@@ -36,7 +36,7 @@ describe('patient task suggestion resolver tests', () => {
 
     clinic = await Clinic.create(createMockClinic());
     user = await User.create(createMockUser(11, clinic.id, userRole, 'a@b.com'));
-    const riskArea = await createRiskArea();
+    const riskArea = await createRiskArea({ title: 'Risk Area' });
 
     await Concern.create({ title: 'Concern' });
     taskTemplate = await TaskTemplate.create({

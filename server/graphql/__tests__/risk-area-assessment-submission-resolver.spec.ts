@@ -34,7 +34,7 @@ describe('risk area assessment resolver tests', () => {
     clinic = await Clinic.create(createMockClinic());
     user = await User.create(createMockUser(11, clinic.id, userRole));
     patient = await createPatient(createMockPatient(123, clinic.id), user.id);
-    riskArea = await createRiskArea();
+    riskArea = await createRiskArea({ title: 'Risk Area' });
     submission = await RiskAreaAssessmentSubmission.create({
       patientId: patient.id,
       userId: user.id,

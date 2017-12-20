@@ -229,10 +229,13 @@ export default class CarePlanSuggestion extends BaseModel {
       });
   }
 
-  static async dismiss(input: ICarePlanSuggestionDismissArgs): Promise<CarePlanSuggestion> {
+  static async dismiss(
+    input: ICarePlanSuggestionDismissArgs,
+    txn?: Transaction,
+  ): Promise<CarePlanSuggestion> {
     const { carePlanSuggestionId, dismissedById, dismissedReason } = input;
 
-    return await this.query()
+    return await this.query(txn)
       .eager(EAGER_QUERY)
       .updateAndFetchById(carePlanSuggestionId, {
         dismissedById,

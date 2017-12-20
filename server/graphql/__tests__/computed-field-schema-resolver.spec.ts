@@ -31,7 +31,7 @@ describe('computed field schema resolver', () => {
         slug: 'computed-field-2',
         dataType: 'boolean',
       });
-      const riskArea = await createRiskArea('Housing');
+      const riskArea = await createRiskArea({ title: 'Housing' });
       const question = await Question.create({
         riskAreaId: riskArea.id,
         type: 'riskArea',

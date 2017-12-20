@@ -11,7 +11,7 @@ describe('screening tool model', () => {
     await Db.get();
     await Db.clear();
 
-    riskArea = await createRiskArea('Housing');
+    riskArea = await createRiskArea({ title: 'Housing' });
   });
 
   afterAll(async () => {
@@ -48,7 +48,7 @@ describe('screening tool model', () => {
   });
 
   it('gets all screening tools for a risk area', async () => {
-    const riskArea2 = await createRiskArea('Food', 2);
+    const riskArea2 = await createRiskArea({ title: 'Food', order: 2 });
     const screeningTool1 = await ScreeningTool.create({
       title: 'Screening Tool 1',
       riskAreaId: riskArea.id,
@@ -70,7 +70,7 @@ describe('screening tool model', () => {
   });
 
   it('gets all screening tools', async () => {
-    const riskArea2 = await createRiskArea('Food', 2);
+    const riskArea2 = await createRiskArea({ title: 'Food', order: 2 });
     const screeningTool1 = await ScreeningTool.create({
       title: 'Screening Tool 1',
       riskAreaId: riskArea.id,

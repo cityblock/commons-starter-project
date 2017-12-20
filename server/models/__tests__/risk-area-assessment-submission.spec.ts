@@ -33,7 +33,7 @@ describe('patient risk area assessment submission model', () => {
     await Db.get();
     await Db.clear();
 
-    riskArea = await createRiskArea('Housing');
+    riskArea = await createRiskArea({ title: 'Housing' });
     clinic = await Clinic.create(createMockClinic());
     user = await User.create(createMockUser(11, clinic.id, userRole));
     patient = await createPatient(createMockPatient(123, clinic.id), user.id);

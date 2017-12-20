@@ -1,3 +1,4 @@
+import { transaction, Transaction } from 'objection';
 import * as uuid from 'uuid/v4';
 import Db from '../../db';
 import {
@@ -15,28 +16,46 @@ import PatientGoal from '../patient-goal';
 import Task from '../task';
 import User from '../user';
 
+interface ISetup {
+  concern: Concern;
+  concern2: Concern;
+  patient: Patient;
+  user: User;
+  clinic: Clinic;
+}
+
 const userRole = 'physician';
 
-describe('patient concern model', () => {
-  let concern: Concern;
-  let concern2: Concern;
-  let patient: Patient;
-  let user: User;
-  let clinic: Clinic;
+async function setup(txn: Transaction): Promise<ISetup> {
+  const concern = await Concern.create(
+    {
+      title: 'Housing',
+    },
+    txn,
+  );
+  const concern2 = await Concern.create(
+    {
+      title: 'Food',
+    },
+    txn,
+  );
+  const clinic = await Clinic.create(createMockClinic(), txn);
+  const user = await User.create(createMockUser(11, clinic.id, userRole), txn);
+  const patient = await createPatient(createMockPatient(123, clinic.id), user.id, txn);
 
+  return {
+    concern,
+    concern2,
+    clinic,
+    user,
+    patient,
+  };
+}
+
+describe('patient concern model', () => {
   beforeEach(async () => {
     await Db.get();
     await Db.clear();
-
-    concern = await Concern.create({
-      title: 'Housing',
-    });
-    concern2 = await Concern.create({
-      title: 'Food',
-    });
-    clinic = await Clinic.create(createMockClinic());
-    user = await User.create(createMockUser(11, clinic.id, userRole));
-    patient = await createPatient(createMockPatient(123, clinic.id), user.id);
   });
 
   afterAll(async () => {
@@ -44,326 +63,465 @@ describe('patient concern model', () => {
   });
 
   it('should create and get a patient concern', async () => {
-    const patientConcern = await PatientConcern.create({
-      concernId: concern.id,
-      patientId: patient.id,
-      userId: user.id,
+    await transaction(PatientConcern.knex(), async txn => {
+      const { concern, patient, user } = await setup(txn);
+      const patientConcern = await PatientConcern.create(
+        {
+          concernId: concern.id,
+          patientId: patient.id,
+          userId: user.id,
+        },
+        txn,
+      );
+      expect(patientConcern.order).toEqual(1);
+      expect(await PatientConcern.get(patientConcern.id, txn)).toEqual(patientConcern);
+      expect(await PatientConcern.getForPatient(patient.id, txn)).toEqual([patientConcern]);
     });
-    expect(patientConcern.order).toEqual(1);
-    expect(await PatientConcern.get(patientConcern.id)).toEqual(patientConcern);
-    expect(await PatientConcern.getForPatient(patient.id)).toEqual([patientConcern]);
   });
 
   it('creates the correct CarePlanUpdateEvent when creating a patient concern', async () => {
-    const patientConcern = await PatientConcern.create({
-      concernId: concern.id,
-      patientId: patient.id,
-      userId: user.id,
-    });
-    const fetchedCarePlanUpdateEvents = await CarePlanUpdateEvent.getAllForPatient(patient.id, {
-      pageNumber: 0,
-      pageSize: 10,
-    });
+    await transaction(PatientConcern.knex(), async txn => {
+      const { concern, patient, user } = await setup(txn);
+      const patientConcern = await PatientConcern.create(
+        {
+          concernId: concern.id,
+          patientId: patient.id,
+          userId: user.id,
+        },
+        txn,
+      );
+      const fetchedCarePlanUpdateEvents = await CarePlanUpdateEvent.getAllForPatient(
+        patient.id,
+        {
+          pageNumber: 0,
+          pageSize: 10,
+        },
+        txn,
+      );
 
-    expect(fetchedCarePlanUpdateEvents.total).toEqual(1);
-    expect(fetchedCarePlanUpdateEvents.results[0].patientConcernId).toEqual(patientConcern.id);
-    expect(fetchedCarePlanUpdateEvents.results[0].eventType).toEqual('create_patient_concern');
+      expect(fetchedCarePlanUpdateEvents.total).toEqual(1);
+      expect(fetchedCarePlanUpdateEvents.results[0].patientConcernId).toEqual(patientConcern.id);
+      expect(fetchedCarePlanUpdateEvents.results[0].eventType).toEqual('create_patient_concern');
+    });
   });
 
   it('gets a concern and associated goals/tasks', async () => {
-    const patientConcern = await PatientConcern.create({
-      concernId: concern.id,
-      patientId: patient.id,
-      userId: user.id,
-    });
-    const patientGoal = await PatientGoal.create({
-      title: 'Goal Title',
-      patientConcernId: patientConcern.id,
-      patientId: patient.id,
-      userId: user.id,
-    });
-    const incompleteTask = await Task.create({
-      title: 'Incomplete Task',
-      patientId: patient.id,
-      patientGoalId: patientGoal.id,
-      createdById: user.id,
-    });
-    const completeTask = await Task.create({
-      title: 'Complete Task',
-      patientId: patient.id,
-      patientGoalId: patientGoal.id,
-      createdById: user.id,
-    });
+    await transaction(PatientConcern.knex(), async txn => {
+      const { concern, patient, user } = await setup(txn);
+      const patientConcern = await PatientConcern.create(
+        {
+          concernId: concern.id,
+          patientId: patient.id,
+          userId: user.id,
+        },
+        txn,
+      );
+      const patientGoal = await PatientGoal.create(
+        {
+          title: 'Goal Title',
+          patientConcernId: patientConcern.id,
+          patientId: patient.id,
+          userId: user.id,
+        },
+        txn,
+      );
+      const incompleteTask = await Task.create(
+        {
+          title: 'Incomplete Task',
+          patientId: patient.id,
+          patientGoalId: patientGoal.id,
+          createdById: user.id,
+        },
+        txn,
+      );
+      const completeTask = await Task.create(
+        {
+          title: 'Complete Task',
+          patientId: patient.id,
+          patientGoalId: patientGoal.id,
+          createdById: user.id,
+        },
+        txn,
+      );
 
-    await Task.complete(completeTask.id, user.id);
+      await Task.complete(completeTask.id, user.id, txn);
 
-    const fetchedConcern = await PatientConcern.get(patientConcern.id);
-    const fetchedPatientGoal = fetchedConcern!.patientGoals[0];
-    const { tasks } = fetchedPatientGoal;
-    const taskIds = tasks.map(task => task.id);
-    expect(fetchedPatientGoal.id).toEqual(patientGoal.id);
-    expect(taskIds).toContain(incompleteTask.id);
-    expect(taskIds).not.toContain(completeTask.id);
+      const fetchedConcern = await PatientConcern.get(patientConcern.id, txn);
+      const fetchedPatientGoal = fetchedConcern!.patientGoals[0];
+      const { tasks } = fetchedPatientGoal;
+      const taskIds = tasks.map(task => task.id);
+      expect(fetchedPatientGoal.id).toEqual(patientGoal.id);
+      expect(taskIds).toContain(incompleteTask.id);
+      expect(taskIds).not.toContain(completeTask.id);
+    });
   });
 
   it('gets concerns associated with a patient ', async () => {
-    const patientConcern = await PatientConcern.create({
-      concernId: concern.id,
-      patientId: patient.id,
-      userId: user.id,
+    await transaction(PatientConcern.knex(), async txn => {
+      const { concern, patient, user } = await setup(txn);
+      const patientConcern = await PatientConcern.create(
+        {
+          concernId: concern.id,
+          patientId: patient.id,
+          userId: user.id,
+        },
+        txn,
+      );
+      expect(await PatientConcern.getForPatient(patient.id, txn)).toEqual([patientConcern]);
     });
-    expect(await PatientConcern.getForPatient(patient.id)).toEqual([patientConcern]);
   });
 
   it('gets concerns associated with a patient and loads correct goals/tasks', async () => {
-    const patientConcern = await PatientConcern.create({
-      concernId: concern.id,
-      patientId: patient.id,
-      userId: user.id,
-    });
-    const patientGoal = await PatientGoal.create({
-      title: 'Goal Title',
-      patientConcernId: patientConcern.id,
-      patientId: patient.id,
-      userId: user.id,
-    });
-    const incompleteTask = await Task.create({
-      title: 'Incomplete Task',
-      patientId: patient.id,
-      patientGoalId: patientGoal.id,
-      createdById: user.id,
-    });
-    const completeTask = await Task.create({
-      title: 'Complete Task',
-      patientId: patient.id,
-      patientGoalId: patientGoal.id,
-      createdById: user.id,
-    });
+    await transaction(PatientConcern.knex(), async txn => {
+      const { concern, patient, user } = await setup(txn);
+      const patientConcern = await PatientConcern.create(
+        {
+          concernId: concern.id,
+          patientId: patient.id,
+          userId: user.id,
+        },
+        txn,
+      );
+      const patientGoal = await PatientGoal.create(
+        {
+          title: 'Goal Title',
+          patientConcernId: patientConcern.id,
+          patientId: patient.id,
+          userId: user.id,
+        },
+        txn,
+      );
+      const incompleteTask = await Task.create(
+        {
+          title: 'Incomplete Task',
+          patientId: patient.id,
+          patientGoalId: patientGoal.id,
+          createdById: user.id,
+        },
+        txn,
+      );
+      const completeTask = await Task.create(
+        {
+          title: 'Complete Task',
+          patientId: patient.id,
+          patientGoalId: patientGoal.id,
+          createdById: user.id,
+        },
+        txn,
+      );
 
-    await Task.complete(completeTask.id, user.id);
+      await Task.complete(completeTask.id, user.id, txn);
 
-    const fetchedConcerns = await PatientConcern.getForPatient(patient.id);
-    const fetchedPatientGoal = fetchedConcerns[0].patientGoals[0];
-    const { tasks } = fetchedPatientGoal;
-    const taskIds = tasks.map(task => task.id);
-    expect(fetchedPatientGoal.id).toEqual(patientGoal.id);
-    expect(taskIds).toContain(incompleteTask.id);
-    expect(taskIds).not.toContain(completeTask.id);
+      const fetchedConcerns = await PatientConcern.getForPatient(patient.id, txn);
+      const fetchedPatientGoal = fetchedConcerns[0].patientGoals[0];
+      const { tasks } = fetchedPatientGoal;
+      const taskIds = tasks.map(task => task.id);
+      expect(fetchedPatientGoal.id).toEqual(patientGoal.id);
+      expect(taskIds).toContain(incompleteTask.id);
+      expect(taskIds).not.toContain(completeTask.id);
+    });
   });
 
   it('auto increments "order" on create', async () => {
-    const patient2 = await createPatient(createMockPatient(456, clinic.id), user.id);
-    await PatientConcern.create({
-      concernId: concern.id,
-      patientId: patient.id,
-      userId: user.id,
-    });
-    await PatientConcern.create({
-      concernId: concern2.id,
-      patientId: patient.id,
-      userId: user.id,
-    });
-    await PatientConcern.create({
-      concernId: concern.id,
-      patientId: patient2.id,
-      userId: user.id,
-    });
+    await transaction(PatientConcern.knex(), async txn => {
+      const { clinic, user, concern, concern2, patient } = await setup(txn);
+      const patient2 = await createPatient(createMockPatient(456, clinic.id), user.id, txn);
+      await PatientConcern.create(
+        {
+          concernId: concern.id,
+          patientId: patient.id,
+          userId: user.id,
+        },
+        txn,
+      );
+      await PatientConcern.create(
+        {
+          concernId: concern2.id,
+          patientId: patient.id,
+          userId: user.id,
+        },
+        txn,
+      );
+      await PatientConcern.create(
+        {
+          concernId: concern.id,
+          patientId: patient2.id,
+          userId: user.id,
+        },
+        txn,
+      );
 
-    const patient1Concerns = await PatientConcern.getForPatient(patient.id);
-    const patient2Concerns = await PatientConcern.getForPatient(patient2.id);
+      const patient1Concerns = await PatientConcern.getForPatient(patient.id, txn);
+      const patient2Concerns = await PatientConcern.getForPatient(patient2.id, txn);
 
-    expect(patient1Concerns.length).toEqual(2);
-    expect(patient1Concerns[0].order).toEqual(1);
-    expect(patient1Concerns[1].order).toEqual(2);
+      expect(patient1Concerns.length).toEqual(2);
+      expect(patient1Concerns[0].order).toEqual(1);
+      expect(patient1Concerns[1].order).toEqual(2);
 
-    expect(patient2Concerns.length).toEqual(1);
-    expect(patient2Concerns[0].order).toEqual(1);
+      expect(patient2Concerns.length).toEqual(1);
+      expect(patient2Concerns[0].order).toEqual(1);
+    });
   });
 
   it('should throw an error if a patient concern does not exist for the id', async () => {
-    const fakeId = uuid();
-    await expect(PatientConcern.get(fakeId)).rejects.toMatch(`No such patient concern: ${fakeId}`);
+    await transaction(PatientConcern.knex(), async txn => {
+      const fakeId = uuid();
+      await expect(PatientConcern.get(fakeId, txn)).rejects.toMatch(
+        `No such patient concern: ${fakeId}`,
+      );
+    });
   });
 
   it('edits patient concern', async () => {
-    const patientConcern = await PatientConcern.create({
-      concernId: concern.id,
-      patientId: patient.id,
-      userId: user.id,
+    await transaction(PatientConcern.knex(), async txn => {
+      const { concern, patient, user } = await setup(txn);
+      const patientConcern = await PatientConcern.create(
+        {
+          concernId: concern.id,
+          patientId: patient.id,
+          userId: user.id,
+        },
+        txn,
+      );
+      const completedAt = new Date().toISOString();
+      const patientConcernUpdated = await PatientConcern.update(
+        patientConcern.id,
+        {
+          completedAt,
+        },
+        user.id,
+        txn,
+      );
+      expect(patientConcernUpdated.completedAt).not.toBeFalsy();
     });
-    const completedAt = new Date().toISOString();
-    const patientConcernUpdated = await PatientConcern.update(
-      patientConcern.id,
-      {
-        completedAt,
-      },
-      user.id,
-    );
-    expect(patientConcernUpdated.completedAt).not.toBeFalsy();
   });
 
   it('creates the correct CarePlanUpdateEvent when editing a patient concern', async () => {
-    const patientConcern = await PatientConcern.create({
-      concernId: concern.id,
-      patientId: patient.id,
-      userId: user.id,
-    });
-    const completedAt = new Date().toISOString();
-    await PatientConcern.update(
-      patientConcern.id,
-      {
-        completedAt,
-      },
-      user.id,
-    );
-    const fetchedCarePlanUpdateEvents = await CarePlanUpdateEvent.getAllForPatient(patient.id, {
-      pageNumber: 0,
-      pageSize: 10,
-    });
+    await transaction(PatientConcern.knex(), async txn => {
+      const { concern, patient, user } = await setup(txn);
+      const patientConcern = await PatientConcern.create(
+        {
+          concernId: concern.id,
+          patientId: patient.id,
+          userId: user.id,
+        },
+        txn,
+      );
+      const completedAt = new Date().toISOString();
+      await PatientConcern.update(
+        patientConcern.id,
+        {
+          completedAt,
+        },
+        user.id,
+        txn,
+      );
+      const fetchedCarePlanUpdateEvents = await CarePlanUpdateEvent.getAllForPatient(
+        patient.id,
+        {
+          pageNumber: 0,
+          pageSize: 10,
+        },
+        txn,
+      );
 
-    expect(fetchedCarePlanUpdateEvents.total).toEqual(2); // One for create and one for edit
-    expect(fetchedCarePlanUpdateEvents.results[0].patientConcernId).toEqual(patientConcern.id);
-    expect(fetchedCarePlanUpdateEvents.results[0].eventType).toEqual('edit_patient_concern');
+      expect(fetchedCarePlanUpdateEvents.total).toEqual(2); // One for create and one for edit
+      const eventTypes = fetchedCarePlanUpdateEvents.results.map(event => event.eventType);
+      expect(eventTypes).toContain('create_patient_concern');
+      expect(eventTypes).toContain('edit_patient_concern');
+    });
   });
 
   it('bulk updates patient concerns order', async () => {
-    const patientConcern = await PatientConcern.create({
-      concernId: concern.id,
-      patientId: patient.id,
-      userId: user.id,
-    });
+    await transaction(PatientConcern.knex(), async txn => {
+      const { concern, patient, user, concern2 } = await setup(txn);
+      const patientConcern = await PatientConcern.create(
+        {
+          concernId: concern.id,
+          patientId: patient.id,
+          userId: user.id,
+        },
+        txn,
+      );
 
-    const patientConcern2 = await PatientConcern.create({
-      concernId: concern2.id,
-      patientId: patient.id,
-      userId: user.id,
-    });
+      const patientConcern2 = await PatientConcern.create(
+        {
+          concernId: concern2.id,
+          patientId: patient.id,
+          userId: user.id,
+        },
+        txn,
+      );
 
-    const patientConcernUpdateData = [
-      {
-        id: patientConcern.id,
-        order: 2,
-      },
-      {
+      const patientConcernUpdateData = [
+        {
+          id: patientConcern.id,
+          order: 2,
+        },
+        {
+          id: patientConcern2.id,
+          order: 1,
+        },
+      ];
+
+      const patientConcerns = await PatientConcern.bulkUpdate(
+        patientConcernUpdateData,
+        patient.id,
+        txn,
+      );
+
+      expect(patientConcerns.length).toBe(2);
+
+      expect(patientConcerns[0]).toMatchObject({
         id: patientConcern2.id,
         order: 1,
-      },
-    ];
-
-    const patientConcerns = await PatientConcern.bulkUpdate(patientConcernUpdateData, patient.id);
-
-    expect(patientConcerns.length).toBe(2);
-
-    expect(patientConcerns[0]).toMatchObject({
-      id: patientConcern2.id,
-      order: 1,
-      concernId: concern2.id,
-    });
-    expect(patientConcerns[1]).toMatchObject({
-      id: patientConcern.id,
-      order: 2,
-      concernId: concern.id,
+        concernId: concern2.id,
+      });
+      expect(patientConcerns[1]).toMatchObject({
+        id: patientConcern.id,
+        order: 2,
+        concernId: concern.id,
+      });
     });
   });
 
   it('bulk updates patient concerns started and completed at', async () => {
-    const patientConcern = await PatientConcern.create({
-      concernId: concern.id,
-      patientId: patient.id,
-      userId: user.id,
-      startedAt: new Date().toISOString(),
-      order: 1,
-    });
+    await transaction(PatientConcern.knex(), async txn => {
+      const { concern, patient, user, concern2 } = await setup(txn);
+      const patientConcern = await PatientConcern.create(
+        {
+          concernId: concern.id,
+          patientId: patient.id,
+          userId: user.id,
+          startedAt: new Date().toISOString(),
+          order: 1,
+        },
+        txn,
+      );
 
-    const patientConcern2 = await PatientConcern.create({
-      concernId: concern2.id,
-      patientId: patient.id,
-      userId: user.id,
-      order: 2,
-    });
+      const patientConcern2 = await PatientConcern.create(
+        {
+          concernId: concern2.id,
+          patientId: patient.id,
+          userId: user.id,
+          order: 2,
+        },
+        txn,
+      );
 
-    const completedAt = new Date().toISOString();
-    const patientConcernUpdateData = [
-      {
-        id: patientConcern.id,
-        startedAt: null,
-        order: 2,
-      },
-      {
+      const completedAt = new Date().toISOString();
+      const patientConcernUpdateData = [
+        {
+          id: patientConcern.id,
+          startedAt: null,
+          order: 2,
+        },
+        {
+          id: patientConcern2.id,
+          completedAt,
+          order: 1,
+        },
+      ];
+
+      const patientConcerns = await PatientConcern.bulkUpdate(
+        patientConcernUpdateData,
+        patient.id,
+        txn,
+      );
+
+      expect(patientConcerns.length).toBe(2);
+      expect(patientConcerns[0]).toMatchObject({
         id: patientConcern2.id,
-        completedAt,
         order: 1,
-      },
-    ];
-
-    const patientConcerns = await PatientConcern.bulkUpdate(patientConcernUpdateData, patient.id);
-
-    expect(patientConcerns.length).toBe(2);
-    expect(patientConcerns[0]).toMatchObject({
-      id: patientConcern2.id,
-      order: 1,
-      concernId: concern2.id,
-    });
-    expect(patientConcerns[0].completedAt).toBeTruthy();
-    expect(patientConcerns[1]).toMatchObject({
-      id: patientConcern.id,
-      order: 2,
-      concernId: concern.id,
-      startedAt: null,
-      completedAt: null,
+        concernId: concern2.id,
+      });
+      expect(patientConcerns[0].completedAt).toBeTruthy();
+      expect(patientConcerns[1]).toMatchObject({
+        id: patientConcern.id,
+        order: 2,
+        concernId: concern.id,
+        startedAt: null,
+        completedAt: null,
+      });
     });
   });
 
   it('bulk updates without changing unaffected concerns', async () => {
-    const patientConcern1 = await PatientConcern.create({
-      concernId: concern.id,
-      patientId: patient.id,
-      userId: user.id,
+    await transaction(PatientConcern.knex(), async txn => {
+      const { concern, patient, user, concern2 } = await setup(txn);
+      const patientConcern1 = await PatientConcern.create(
+        {
+          concernId: concern.id,
+          patientId: patient.id,
+          userId: user.id,
+        },
+        txn,
+      );
+
+      const patientConcern2 = await PatientConcern.create(
+        {
+          concernId: concern2.id,
+          patientId: patient.id,
+          userId: user.id,
+        },
+        txn,
+      );
+
+      const patientConcernUpdateData = [
+        {
+          id: patientConcern1.id,
+          order: 2,
+        },
+      ];
+
+      await PatientConcern.bulkUpdate(patientConcernUpdateData, patient.id, txn);
+
+      const fetchedPatientConcern2 = await PatientConcern.get(patientConcern2.id, txn);
+      expect(fetchedPatientConcern2).toEqual(patientConcern2);
     });
-
-    const patientConcern2 = await PatientConcern.create({
-      concernId: concern2.id,
-      patientId: patient.id,
-      userId: user.id,
-    });
-
-    const patientConcernUpdateData = [
-      {
-        id: patientConcern1.id,
-        order: 2,
-      },
-    ];
-
-    await PatientConcern.bulkUpdate(patientConcernUpdateData, patient.id);
-
-    const fetchedPatientConcern2 = await PatientConcern.get(patientConcern2.id);
-    expect(fetchedPatientConcern2).toEqual(patientConcern2);
   });
 
   it('deletes patient concern', async () => {
-    const patientConcern = await PatientConcern.create({
-      concernId: concern.id,
-      patientId: patient.id,
-      userId: user.id,
+    await transaction(PatientConcern.knex(), async txn => {
+      const { concern, patient, user } = await setup(txn);
+      const patientConcern = await PatientConcern.create(
+        {
+          concernId: concern.id,
+          patientId: patient.id,
+          userId: user.id,
+        },
+        txn,
+      );
+      const deletedPatientConcern = await PatientConcern.delete(patientConcern.id, user.id, txn);
+      expect(deletedPatientConcern).not.toBeFalsy();
     });
-    const deletedPatientConcern = await PatientConcern.delete(patientConcern.id, user.id);
-    expect(deletedPatientConcern).not.toBeFalsy();
   });
 
   it('creates the correct CarePlanUpdateEvent when deleting a patient concern', async () => {
-    const patientConcern = await PatientConcern.create({
-      concernId: concern.id,
-      patientId: patient.id,
-      userId: user.id,
-    });
-    await PatientConcern.delete(patientConcern.id, user.id);
-    const fetchedCarePlanUpdateEvents = await CarePlanUpdateEvent.getAllForPatient(patient.id, {
-      pageNumber: 0,
-      pageSize: 10,
-    });
+    await transaction(PatientConcern.knex(), async txn => {
+      const { concern, patient, user } = await setup(txn);
+      const patientConcern = await PatientConcern.create(
+        {
+          concernId: concern.id,
+          patientId: patient.id,
+          userId: user.id,
+        },
+        txn,
+      );
+      await PatientConcern.delete(patientConcern.id, user.id, txn);
+      const fetchedCarePlanUpdateEvents = await CarePlanUpdateEvent.getAllForPatient(
+        patient.id,
+        {
+          pageNumber: 0,
+          pageSize: 10,
+        },
+        txn,
+      );
 
-    expect(fetchedCarePlanUpdateEvents.total).toEqual(2); // One for create and one for delete
-    expect(fetchedCarePlanUpdateEvents.results[0].patientConcernId).toEqual(patientConcern.id);
-    expect(fetchedCarePlanUpdateEvents.results[0].eventType).toEqual('delete_patient_concern');
+      const eventTypes = fetchedCarePlanUpdateEvents.results.map(event => event.eventType);
+      expect(eventTypes).toContain('create_patient_concern');
+      expect(eventTypes).toContain('delete_patient_concern');
+      expect(fetchedCarePlanUpdateEvents.total).toEqual(2); // One for create and one for delete
+    });
   });
 });

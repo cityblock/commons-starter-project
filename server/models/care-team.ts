@@ -47,8 +47,8 @@ export default class CareTeam extends BaseModel {
     },
   };
 
-  static async getForPatient(patientId: string): Promise<User[]> {
-    const careTeam = await CareTeam.query()
+  static async getForPatient(patientId: string, txn?: Transaction): Promise<User[]> {
+    const careTeam = await CareTeam.query(txn)
       .where('patientId', patientId)
       .andWhere('deletedAt', null)
       .eager('user')
@@ -59,8 +59,9 @@ export default class CareTeam extends BaseModel {
   static async getForUser(
     userId: string,
     { pageNumber, pageSize }: IPaginationOptions,
+    txn?: Transaction,
   ): Promise<IPaginatedResults<Patient>> {
-    const careTeam = (await CareTeam.query()
+    const careTeam = (await CareTeam.query(txn)
       .where('userId', userId)
       .andWhere('deletedAt', null)
       .orderBy('createdAt')
@@ -72,29 +73,32 @@ export default class CareTeam extends BaseModel {
     };
   }
 
-  static async create({ userId, patientId }: ICareTeamOptions, txn?: Transaction): Promise<User[]> {
+  static async create(
+    { userId, patientId }: ICareTeamOptions,
+    existingTxn?: Transaction,
+  ): Promise<User[]> {
     // TODO: use postgres UPCERT here to add relation if it doesn't exist instead of a transaction
-    await transaction(CareTeam, async CareTeamWithTransaction => {
-      const relations = await CareTeamWithTransaction.query(txn)
+    return await transaction(CareTeam.knex(), async txn => {
+      const relations = await CareTeam.query(existingTxn || txn)
         .where('patientId', patientId)
         .andWhere('userId', userId)
         .andWhere('deletedAt', null);
 
       if (relations.length < 1) {
-        await CareTeamWithTransaction.query(txn).insert({ patientId, userId });
+        await CareTeam.query(existingTxn || txn).insert({ patientId, userId });
       }
-    });
 
-    return await this.getForPatient(patientId);
+      return await this.getForPatient(patientId, existingTxn || txn);
+    });
   }
 
-  static async delete({ userId, patientId }: ICareTeamOptions): Promise<User[]> {
-    await this.query()
+  static async delete({ userId, patientId }: ICareTeamOptions, txn?: Transaction): Promise<User[]> {
+    await this.query(txn)
       .where('userId', userId)
       .andWhere('patientId', patientId)
       .andWhere('deletedAt', null)
       .update({ deletedAt: new Date().toISOString() });
-    return await this.getForPatient(patientId);
+    return await this.getForPatient(patientId, txn);
   }
 }
 /* tslint:enable:member-ordering */

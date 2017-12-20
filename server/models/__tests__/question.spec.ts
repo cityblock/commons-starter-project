@@ -17,7 +17,7 @@ describe('question model', () => {
     await Db.get();
     await Db.clear();
 
-    riskArea = await createRiskArea('testing');
+    riskArea = await createRiskArea({ title: 'testing' });
     screeningTool = await ScreeningTool.create({
       title: 'screening tool',
       riskAreaId: riskArea.id,

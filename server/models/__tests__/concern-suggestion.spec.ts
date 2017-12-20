@@ -29,7 +29,7 @@ describe('concern suggestion model', () => {
     await Db.get();
     await Db.clear();
 
-    riskArea = await createRiskArea('testing');
+    riskArea = await createRiskArea({ title: 'testing' });
     question = await Question.create({
       title: 'like writing tests?',
       answerType: 'dropdown',

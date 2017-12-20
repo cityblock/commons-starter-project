@@ -1,4 +1,4 @@
-import { Model, RelationMappings } from 'objection';
+import { Model, RelationMappings, Transaction } from 'objection';
 import BaseModel from './base-model';
 
 interface ICreateGoogleAuth {
@@ -36,14 +36,14 @@ export default class GoogleAuth extends BaseModel {
     },
   };
 
-  static async updateOrCreate(options: ICreateGoogleAuth): Promise<GoogleAuth> {
-    const existingGoogleAuth = await this.query()
+  static async updateOrCreate(options: ICreateGoogleAuth, txn?: Transaction): Promise<GoogleAuth> {
+    const existingGoogleAuth = await this.query(txn)
       .where({ userId: options.userId })
       .first();
     if (existingGoogleAuth) {
-      return await this.query().updateAndFetchById(existingGoogleAuth.id, options);
+      return await this.query(txn).updateAndFetchById(existingGoogleAuth.id, options);
     }
-    return await this.query().insertAndFetch(options);
+    return await this.query(txn).insertAndFetch(options);
   }
 }
 /* tslint:enable:member-ordering */

@@ -35,7 +35,7 @@ describe('answer tests', () => {
     await Db.clear();
     clinic = await Clinic.create(createMockClinic());
     user = await User.create(createMockUser(11, clinic.id, userRole));
-    riskArea = await createRiskArea('testing');
+    riskArea = await createRiskArea({ title: 'testing' });
     question = await Question.create({
       title: 'like writing tests?',
       answerType: 'dropdown',
@@ -165,7 +165,7 @@ describe('answer tests', () => {
     let patient: Patient;
 
     beforeEach(async () => {
-      riskArea = await createRiskArea('testing');
+      riskArea = await createRiskArea({ title: 'testing' });
       question = await Question.create({
         title: 'like writing tests?',
         answerType: 'dropdown',

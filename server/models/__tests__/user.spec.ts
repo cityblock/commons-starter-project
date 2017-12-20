@@ -1,3 +1,4 @@
+import { transaction } from 'objection';
 import * as uuid from 'uuid/v4';
 import Db from '../../db';
 import { createMockClinic, createMockUser } from '../../spec-helpers';
@@ -18,237 +19,286 @@ describe('user model', () => {
   });
 
   it('should create and retrieve a user', async () => {
-    const clinic = await Clinic.create(createMockClinic());
-    const user = await User.create(createMockUser(11, clinic.id, userRole));
-    expect(user).toMatchObject({
-      id: user.id,
-      firstName: 'dan',
-      lastName: 'plant',
-    });
+    await transaction(User.knex(), async txn => {
+      const clinic = await Clinic.create(createMockClinic(), txn);
+      const user = await User.create(createMockUser(11, clinic.id, userRole), txn);
+      expect(user).toMatchObject({
+        id: user.id,
+        firstName: 'dan',
+        lastName: 'plant',
+      });
 
-    const userById = await User.get(user.id);
-    expect(userById).toMatchObject({
-      id: user.id,
-      firstName: 'dan',
-      lastName: 'plant',
-      homeClinicId: clinic.id,
+      const userById = await User.get(user.id, txn);
+      expect(userById).toMatchObject({
+        id: user.id,
+        firstName: 'dan',
+        lastName: 'plant',
+        homeClinicId: clinic.id,
+      });
     });
   });
 
   it('throws an error when getting an invalid id', async () => {
-    const fakeId = uuid();
-    await expect(User.get(fakeId)).rejects.toMatch(`No such user: ${fakeId}`);
+    await transaction(User.knex(), async txn => {
+      const fakeId = uuid();
+      await expect(User.get(fakeId, txn)).rejects.toMatch(`No such user: ${fakeId}`);
+    });
   });
 
   it('returns null if getBy is called without a search parameter', async () => {
-    const result = await User.getBy('email');
+    await transaction(User.knex(), async txn => {
+      const result = await User.getBy({ fieldName: 'email' }, txn);
 
-    expect(result).toBeFalsy();
+      expect(result).toBeFalsy();
+    });
   });
 
   it('returns null if getBy does not return a user', async () => {
-    const result = await User.getBy('email', 'fake@email.nowhere');
+    await transaction(User.knex(), async txn => {
+      const result = await User.getBy({ fieldName: 'email', field: 'fake@email.nowhere' }, txn);
 
-    expect(result).toBeFalsy();
+      expect(result).toBeFalsy();
+    });
   });
 
   it('should not create a user when given an invalid email address', async () => {
-    const email = 'nonEmail';
-    const message = 'email is not valid';
-    const clinic = await Clinic.create(createMockClinic());
+    await transaction(User.knex(), async txn => {
+      const email = 'nonEmail';
+      const message = 'email is not valid';
+      const clinic = await Clinic.create(createMockClinic(), txn);
 
-    await expect(User.create({ email, userRole, homeClinicId: clinic.id })).rejects.toMatchObject(
-      new Error(JSON.stringify({ email: [{ message }] }, null, '  ')),
-    );
+      await expect(
+        User.create({ email, userRole, homeClinicId: clinic.id }, txn),
+      ).rejects.toMatchObject(new Error(JSON.stringify({ email: [{ message }] }, null, '  ')));
+    });
   });
 
   it('should not create a user with an invalid clinic id', async () => {
-    const fakeClinicId = uuid();
-    const message = `Key (homeClinicId)=(${fakeClinicId}) is not present in table "clinic".`;
+    await transaction(User.knex(), async txn => {
+      const fakeClinicId = uuid();
+      const message = `Key (homeClinicId)=(${fakeClinicId}) is not present in table "clinic".`;
 
-    await User.create(createMockUser(11, fakeClinicId, userRole)).catch(e => {
-      expect(e.detail).toEqual(message);
+      await User.create(createMockUser(11, fakeClinicId, userRole), txn).catch(e => {
+        expect(e.detail).toEqual(message);
+      });
     });
   });
 
   it('gets last login', async () => {
-    const clinic = await Clinic.create(createMockClinic());
-    const user = await User.create(createMockUser(11, clinic.id, userRole));
-    const lastLoginAt = new Date().toISOString();
+    await transaction(User.knex(), async txn => {
+      const clinic = await Clinic.create(createMockClinic(), txn);
+      const user = await User.create(createMockUser(11, clinic.id, userRole), txn);
+      const lastLoginAt = new Date().toISOString();
 
-    await user.$query().patch({ lastLoginAt });
+      await user.$query(txn).patch({ lastLoginAt });
 
-    const lastLoginQuery = await User.getLastLoggedIn(user.id);
-    expect(lastLoginQuery).toMatch(lastLoginAt);
+      const lastLoginQuery = await User.getLastLoggedIn(user.id, txn);
+      expect(lastLoginQuery).toMatch(lastLoginAt);
+    });
   });
 
   it('retrieve user by email', async () => {
-    const clinic = await Clinic.create(createMockClinic());
-    const user = await User.create(createMockUser(11, clinic.id, userRole, 'danplant@b.com'));
-    expect(user).toMatchObject({
-      id: user.id,
-      firstName: 'dan',
-      lastName: 'plant',
-    });
+    await transaction(User.knex(), async txn => {
+      const clinic = await Clinic.create(createMockClinic(), txn);
+      const user = await User.create(
+        createMockUser(11, clinic.id, userRole, 'danplant@b.com'),
+        txn,
+      );
+      expect(user).toMatchObject({
+        id: user.id,
+        firstName: 'dan',
+        lastName: 'plant',
+      });
 
-    const userByEmail = await User.getBy('email', 'danplant@b.com');
-    expect(userByEmail).toMatchObject({
-      id: user.id,
-      firstName: 'dan',
-      lastName: 'plant',
+      const userByEmail = await User.getBy({ fieldName: 'email', field: 'danplant@b.com' }, txn);
+      expect(userByEmail).toMatchObject({
+        id: user.id,
+        firstName: 'dan',
+        lastName: 'plant',
+      });
     });
   });
 
   it('should update user', async () => {
-    const clinic = await Clinic.create(createMockClinic());
-    const user = await User.create(createMockUser(11, clinic.id, userRole, 'a@b.com'));
-    const googleAuth = await GoogleAuth.updateOrCreate({
-      accessToken: 'accessToken',
-      expiresAt: 'expires!',
-      userId: user.id,
-    });
-    const clinic2 = await Clinic.create(createMockClinic('The Bertrand Russell Center', 1));
-    expect(
-      await User.update(user.id, {
+    await transaction(User.knex(), async txn => {
+      const clinic = await Clinic.create(createMockClinic(), txn);
+      const user = await User.create(createMockUser(11, clinic.id, userRole, 'a@b.com'), txn);
+      const googleAuth = await GoogleAuth.updateOrCreate(
+        {
+          accessToken: 'accessToken',
+          expiresAt: 'expires!',
+          userId: user.id,
+        },
+        txn,
+      );
+      const clinic2 = await Clinic.create(createMockClinic('The Bertrand Russell Center', 1), txn);
+      expect(
+        await User.update(
+          user.id,
+          {
+            firstName: 'first',
+            lastName: 'last',
+            googleProfileImageUrl: 'http://google.com',
+            homeClinicId: clinic2.id,
+            googleAuthId: googleAuth.id,
+          },
+          txn,
+        ),
+      ).toMatchObject({
+        email: 'a@b.com',
         firstName: 'first',
         lastName: 'last',
         googleProfileImageUrl: 'http://google.com',
         homeClinicId: clinic2.id,
         googleAuthId: googleAuth.id,
-      }),
-    ).toMatchObject({
-      email: 'a@b.com',
-      firstName: 'first',
-      lastName: 'last',
-      googleProfileImageUrl: 'http://google.com',
-      homeClinicId: clinic2.id,
-      googleAuthId: googleAuth.id,
+      });
     });
   });
 
   it('fetches all users', async () => {
-    const clinic = await Clinic.create(createMockClinic());
-    await User.create(createMockUser(11, clinic.id, userRole, 'a@b.com'));
-    await User.create(createMockUser(11, clinic.id, userRole, 'b@c.com'));
+    await transaction(User.knex(), async txn => {
+      const clinic = await Clinic.create(createMockClinic(), txn);
+      await User.create(createMockUser(11, clinic.id, userRole, 'a@b.com'), txn);
+      await User.create(createMockUser(11, clinic.id, userRole, 'b@c.com'), txn);
 
-    expect(
-      await User.getAll({
-        pageNumber: 0,
-        pageSize: 10,
-        hasLoggedIn: false,
-        orderBy: 'createdAt',
-        order: 'desc',
-      }),
-    ).toMatchObject({
-      results: [
+      const allUsers = await User.getAll(
         {
-          email: 'b@c.com',
-          userRole,
+          pageNumber: 0,
+          pageSize: 10,
+          hasLoggedIn: false,
+          orderBy: 'createdAt',
+          order: 'desc',
         },
-        {
-          email: 'a@b.com',
-          userRole,
-        },
-      ],
-      total: 2,
+        txn,
+      );
+      const allUserEmails = allUsers.results.map(user => user.email);
+      expect(allUserEmails).toContain('a@b.com');
+      expect(allUserEmails).toContain('b@c.com');
+      expect(allUsers.total).toEqual(2);
     });
   });
 
   it('fetches a limited set of users', async () => {
-    const clinic = await Clinic.create(createMockClinic());
-    await User.create(createMockUser(11, clinic.id, userRole, 'a@b.com'));
-    await User.create(createMockUser(11, clinic.id, userRole, 'b@c.com'));
+    await transaction(User.knex(), async txn => {
+      const clinic = await Clinic.create(createMockClinic(), txn);
+      await User.create(createMockUser(11, clinic.id, userRole, 'a@b.com'), txn);
+      await User.create(createMockUser(11, clinic.id, userRole, 'b@c.com'), txn);
 
-    expect(
-      await User.getAll({
-        pageNumber: 0,
-        pageSize: 1,
-        hasLoggedIn: false,
-        orderBy: 'createdAt',
-        order: 'desc',
-      }),
-    ).toMatchObject({
-      results: [
-        {
-          email: 'b@c.com',
-          userRole,
-        },
-      ],
-      total: 2,
-    });
-    expect(
-      await User.getAll({
-        pageNumber: 1,
-        pageSize: 1,
-        hasLoggedIn: false,
-        orderBy: 'createdAt',
-        order: 'desc',
-      }),
-    ).toMatchObject({
-      results: [
-        {
-          email: 'a@b.com',
-          userRole,
-        },
-      ],
-      total: 2,
+      expect(
+        await User.getAll(
+          {
+            pageNumber: 0,
+            pageSize: 1,
+            hasLoggedIn: false,
+            orderBy: 'createdAt',
+            order: 'desc',
+          },
+          txn,
+        ),
+      ).toMatchObject({
+        results: [
+          {
+            email: 'b@c.com',
+            userRole,
+          },
+        ],
+        total: 2,
+      });
+      expect(
+        await User.getAll(
+          {
+            pageNumber: 1,
+            pageSize: 1,
+            hasLoggedIn: false,
+            orderBy: 'createdAt',
+            order: 'desc',
+          },
+          txn,
+        ),
+      ).toMatchObject({
+        results: [
+          {
+            email: 'a@b.com',
+            userRole,
+          },
+        ],
+        total: 2,
+      });
     });
   });
 
   it('filter by logged in', async () => {
-    const clinic = await Clinic.create(createMockClinic());
-    // not logged in user
-    await User.create(createMockUser(11, clinic.id, userRole, 'b@c.com'));
+    await transaction(User.knex(), async txn => {
+      const clinic = await Clinic.create(createMockClinic(), txn);
+      // not logged in user
+      await User.create(createMockUser(11, clinic.id, userRole, 'b@c.com'), txn);
 
-    // logged in user
-    const user = await User.create(createMockUser(11, clinic.id, userRole, 'care@care.com'));
-    const lastLoginAt = new Date().toISOString();
-    await user.$query().patch({ lastLoginAt });
+      // logged in user
+      const user = await User.create(createMockUser(11, clinic.id, userRole, 'care@care.com'), txn);
+      const lastLoginAt = new Date().toISOString();
+      await user.$query(txn).patch({ lastLoginAt });
 
-    expect(
-      await User.getAll({
-        pageNumber: 0,
-        pageSize: 2,
-        hasLoggedIn: true,
-        orderBy: 'createdAt',
-        order: 'desc',
-      }),
-    ).toMatchObject({
-      results: [
-        {
-          email: 'care@care.com',
-          userRole,
-        },
-      ],
-      total: 1,
+      expect(
+        await User.getAll(
+          {
+            pageNumber: 0,
+            pageSize: 2,
+            hasLoggedIn: true,
+            orderBy: 'createdAt',
+            order: 'desc',
+          },
+          txn,
+        ),
+      ).toMatchObject({
+        results: [
+          {
+            email: 'care@care.com',
+            userRole,
+          },
+        ],
+        total: 1,
+      });
     });
   });
 
   it('updates user role', async () => {
-    const clinic = await Clinic.create(createMockClinic());
-    const user1 = await User.create(createMockUser(1, clinic.id, userRole, 'user@place.com'));
-    expect(user1.userRole).toEqual(userRole);
-    await User.updateUserRole(user1.id, 'nurseCareManager');
-    const fetchedUser1 = await User.getBy('email', 'user@place.com');
-    expect(fetchedUser1!.userRole).toEqual('nurseCareManager');
+    await transaction(User.knex(), async txn => {
+      const clinic = await Clinic.create(createMockClinic(), txn);
+      const user1 = await User.create(
+        createMockUser(1, clinic.id, userRole, 'user@place.com'),
+        txn,
+      );
+      expect(user1.userRole).toEqual(userRole);
+      await User.updateUserRole(user1.id, 'nurseCareManager', txn);
+      const fetchedUser1 = await User.getBy({ fieldName: 'email', field: 'user@place.com' }, txn);
+      expect(fetchedUser1!.userRole).toEqual('nurseCareManager');
+    });
   });
 
   it('marks a user as deleted', async () => {
-    const clinic = await Clinic.create(createMockClinic());
-    const user1 = await User.create(createMockUser(1, clinic.id, userRole, 'user@place.com'));
-    const fetchedUser1 = await User.getBy('email', 'user@place.com');
+    await transaction(User.knex(), async txn => {
+      const clinic = await Clinic.create(createMockClinic(), txn);
+      const user1 = await User.create(
+        createMockUser(1, clinic.id, userRole, 'user@place.com'),
+        txn,
+      );
+      const fetchedUser1 = await User.getBy({ fieldName: 'email', field: 'user@place.com' }, txn);
 
-    // Just to make sure we're fetching the original user first
-    expect(fetchedUser1).toMatchObject(user1);
+      // Just to make sure we're fetching the original user first
+      expect(fetchedUser1).toMatchObject(user1);
 
-    await User.delete(user1.id);
+      await User.delete(user1.id, txn);
 
-    const clinic2 = await Clinic.create(createMockClinic('The Bertrand Russell Clinic', 1));
-    // Different clinic id to confirm we're actually fetching a new user
-    const user2 = await User.create(createMockUser(1, clinic2.id, userRole, 'user@place.com'));
-    const fetchedUser2 = await User.getBy('email', 'user@place.com');
+      const clinic2 = await Clinic.create(createMockClinic('The Bertrand Russell Clinic', 1), txn);
+      // Different clinic id to confirm we're actually fetching a new user
+      const user2 = await User.create(
+        createMockUser(1, clinic2.id, userRole, 'user@place.com'),
+        txn,
+      );
+      const fetchedUser2 = await User.getBy({ fieldName: 'email', field: 'user@place.com' }, txn);
 
-    // We should have now fetched the re-created user
-    expect(fetchedUser2).toMatchObject(user2);
+      // We should have now fetched the re-created user
+      expect(fetchedUser2).toMatchObject(user2);
+    });
   });
 });

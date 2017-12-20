@@ -122,7 +122,7 @@ export default class RiskArea extends BaseModel {
     riskAreaId: string,
     patientId: string,
   ): Promise<IRiskAreaSummary> {
-    const patientAnswers = await PatientAnswer.getForRiskArea(riskAreaId, patientId, 'answer');
+    const patientAnswers = await PatientAnswer.getForRiskArea(riskAreaId, patientId);
     const summary: string[] = [];
     patientAnswers.forEach(patientAnswer => {
       if (patientAnswer.applicable) {
@@ -150,7 +150,7 @@ export default class RiskArea extends BaseModel {
   }
 
   static async getRiskScoreForPatient(riskAreaId: string, patientId: string): Promise<IRiskScore> {
-    const patientAnswers = await PatientAnswer.getForRiskArea(riskAreaId, patientId, 'answer');
+    const patientAnswers = await PatientAnswer.getForRiskArea(riskAreaId, patientId);
     let score: number = 0;
     let forceHighRisk: boolean = false;
     patientAnswers.forEach(patientAnswer => {

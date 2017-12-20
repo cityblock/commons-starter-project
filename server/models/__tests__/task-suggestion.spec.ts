@@ -15,7 +15,7 @@ describe('task suggestion model', () => {
     await Db.get();
     await Db.clear();
 
-    const riskArea = await createRiskArea('test');
+    const riskArea = await createRiskArea({ title: 'test' });
 
     question = await Question.create({
       title: 'like writing tests?',

@@ -35,7 +35,7 @@ describe('createSuggestionsForComputedFieldAnswer', () => {
     clinic = await Clinic.create(createMockClinic());
     user = await User.create(createMockUser(11, clinic.id, 'physician'));
     patient = await createPatient(createMockPatient(123, clinic.id), user.id);
-    riskArea = await createRiskArea('testing');
+    riskArea = await createRiskArea({ title: 'testing' });
   });
 
   afterAll(async () => {

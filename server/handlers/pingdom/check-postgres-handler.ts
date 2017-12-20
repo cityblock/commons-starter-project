@@ -6,7 +6,7 @@ export async function checkPostgresHandler(req: express.Request, res: express.Re
   try {
     await Db.get();
     // NOTE: This test succeeds if the email is incorrect
-    await User.getBy('email', 'fake@does-not-exist.com');
+    await User.getBy({ fieldName: 'email', field: 'fake@does-not-exist.com' });
     res.sendStatus(200);
   } catch (err) {
     console.error('PostgreSQL check failed!');

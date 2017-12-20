@@ -24,11 +24,11 @@ export async function careTeamAddUser(
   { input }: ICareTeamOptions,
   context: IContext,
 ): Promise<User[]> {
-  const { userRole } = context;
+  const { userRole, txn } = context;
   const { userId, patientId } = input;
   await accessControls.isAllowed(userRole, 'edit', 'careTeam');
 
-  return await CareTeam.create({ userId, patientId });
+  return await CareTeam.create({ userId, patientId }, txn);
 }
 
 export async function careTeamRemoveUser(
@@ -36,41 +36,45 @@ export async function careTeamRemoveUser(
   { input }: ICareTeamOptions,
   context: IContext,
 ) {
-  const { userRole } = context;
+  const { userRole, txn } = context;
   const { userId, patientId } = input;
   await accessControls.isAllowed(userRole, 'edit', 'careTeam');
 
-  return await CareTeam.delete({ userId, patientId });
+  return await CareTeam.delete({ userId, patientId }, txn);
 }
 
 export async function resolvePatientCareTeam(
   root: any,
   { patientId }: IQuery,
-  { userRole, userId }: IContext,
+  { userRole, userId, txn }: IContext,
 ): Promise<IUser[]> {
   await accessControls.isAllowedForUser(userRole, 'view', 'patient', patientId, userId);
 
-  const users = await CareTeam.getForPatient(patientId);
+  const users = await CareTeam.getForPatient(patientId, txn);
   return users.map(convertUser);
 }
 
 export async function resolveUserPatientPanel(
   root: any,
   { userId, pageNumber, pageSize }: IUserPatientPanelOptions,
-  { userRole, userId: currentUserId }: IContext,
+  { userRole, userId: currentUserId, txn }: IContext,
 ): Promise<IPatientEdges> {
   let patients: IPaginatedResults<Patient>;
 
   if (userId) {
     // If a userId was passed in, fetch patient panel for that user
     await accessControls.isAllowedForUser(userRole, 'view', 'user', userId, currentUserId);
-    patients = await CareTeam.getForUser(userId, { pageNumber, pageSize });
+    patients = await CareTeam.getForUser(userId, { pageNumber, pageSize }, txn);
   } else if (currentUserId) {
     // Otherwise, fetch patient panel for the current user
-    patients = await CareTeam.getForUser(currentUserId, {
-      pageNumber,
-      pageSize,
-    });
+    patients = await CareTeam.getForUser(
+      currentUserId,
+      {
+        pageNumber,
+        pageSize,
+      },
+      txn,
+    );
   } else {
     throw new Error(`Could not get userPatientPanel. User not logged in.`);
   }

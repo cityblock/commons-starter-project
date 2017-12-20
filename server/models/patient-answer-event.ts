@@ -104,8 +104,8 @@ export default class PatientAnswerEvent extends BaseModel {
     },
   };
 
-  static async get(patientAnswerEventId: string): Promise<PatientAnswerEvent> {
-    const patientAnswerEvent = await this.query()
+  static async get(patientAnswerEventId: string, txn?: Transaction): Promise<PatientAnswerEvent> {
+    const patientAnswerEvent = await this.query(txn)
       .eager(EAGER_QUERY)
       .findOne({ id: patientAnswerEventId, deletedAt: null });
 
@@ -116,8 +116,11 @@ export default class PatientAnswerEvent extends BaseModel {
     return patientAnswerEvent;
   }
 
-  static async getAllForProgressNote(progressNoteId: string): Promise<PatientAnswerEvent[]> {
-    return await this.query()
+  static async getAllForProgressNote(
+    progressNoteId: string,
+    txn?: Transaction,
+  ): Promise<PatientAnswerEvent[]> {
+    return await this.query(txn)
       .eager(EAGER_QUERY)
       .where({ progressNoteId, deletedAt: null });
   }
@@ -168,12 +171,15 @@ export default class PatientAnswerEvent extends BaseModel {
     return createdPatientAnswerEvents;
   }
 
-  static async delete(patientAnswerEventId: string): Promise<PatientAnswerEvent> {
-    await this.query()
+  static async delete(
+    patientAnswerEventId: string,
+    txn?: Transaction,
+  ): Promise<PatientAnswerEvent> {
+    await this.query(txn)
       .where({ id: patientAnswerEventId, deletedAt: null })
       .update({ deletedAt: new Date().toISOString() });
 
-    const patientAnswerEvent = await this.query()
+    const patientAnswerEvent = await this.query(txn)
       .eager(EAGER_QUERY)
       .findById(patientAnswerEventId);
 
@@ -187,8 +193,9 @@ export default class PatientAnswerEvent extends BaseModel {
   static async getAllForAnswer(
     answerId: string,
     { pageNumber, pageSize }: IPaginationOptions,
+    txn?: Transaction,
   ): Promise<IPaginatedResults<PatientAnswerEvent>> {
-    const patientAnswerEvents = (await this.query()
+    const patientAnswerEvents = (await this.query(txn)
       .eager(EAGER_QUERY)
       .joinRelation('patientAnswer')
       .where('patientAnswer.answerId', answerId)
@@ -205,8 +212,9 @@ export default class PatientAnswerEvent extends BaseModel {
   static async getAllForPatient(
     patientId: string,
     { pageNumber, pageSize }: IPaginationOptions,
+    txn?: Transaction,
   ): Promise<IPaginatedResults<PatientAnswerEvent>> {
-    const patientAnswerEvents = (await this.query()
+    const patientAnswerEvents = (await this.query(txn)
       .eager(EAGER_QUERY)
       .where({ patientId, deletedAt: null })
       .orderBy('createdAt', 'desc')
@@ -221,8 +229,9 @@ export default class PatientAnswerEvent extends BaseModel {
   static async getAllForUser(
     userId: string,
     { pageNumber, pageSize }: IPaginationOptions,
+    txn?: Transaction,
   ): Promise<IPaginatedResults<PatientAnswerEvent>> {
-    const patientAnswerEvents = (await this.query()
+    const patientAnswerEvents = (await this.query(txn)
       .eager(EAGER_QUERY)
       .where({ userId, deletedAt: null })
       .orderBy('createdAt', 'desc')

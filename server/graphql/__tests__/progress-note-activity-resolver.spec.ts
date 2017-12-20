@@ -39,7 +39,7 @@ describe('progress note resolver', () => {
     const clinic = await Clinic.create(createMockClinic());
     user = await User.create(createMockUser(11, clinic.id, userRole));
     patient = await createPatient(createMockPatient(123, clinic.id), user.id);
-    const riskArea = await createRiskArea();
+    const riskArea = await createRiskArea({ title: 'Risk Area' });
     riskAreaAssessmentSubmission = await RiskAreaAssessmentSubmission.create({
       patientId: patient.id,
       userId: user.id,
@@ -85,7 +85,7 @@ describe('progress note resolver', () => {
       eventType: 'create_patient_concern',
       progressNoteId: progressNote.id,
     });
-    const riskArea = await createRiskArea('Risk Area Title', 2);
+    const riskArea = await createRiskArea({ title: 'Risk Area Title', order: 2 });
     const question = await Question.create({
       riskAreaId: riskArea.id,
       title: 'Question Title',

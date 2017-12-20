@@ -60,6 +60,8 @@ type IPatientAnswerCreateFields =
   | IPatientAnswerCreateForScreeningToolSubmission
   | IPatientAnswerCreateForComputedField;
 
+export const EAGER_QUERY = '[answer, question]';
+
 /* tslint:disable:member-ordering */
 export default class PatientAnswer extends BaseModel {
   answerId: string;
@@ -171,9 +173,9 @@ export default class PatientAnswer extends BaseModel {
     },
   };
 
-  static async get(patientAnswerId: string): Promise<PatientAnswer> {
-    const patientAnswer = await this.query()
-      .eager('answer')
+  static async get(patientAnswerId: string, txn?: Transaction): Promise<PatientAnswer> {
+    const patientAnswer = await this.query(txn)
+      .eager(EAGER_QUERY)
       .findOne({ id: patientAnswerId, deletedAt: null });
 
     if (!patientAnswer) {
@@ -185,15 +187,16 @@ export default class PatientAnswer extends BaseModel {
   static async getPreviousAnswersForQuestion(
     questionId: string,
     patientId: string,
-    limit = 5,
+    txn?: Transaction,
   ): Promise<PatientAnswer[]> {
-    const patientAnswers: IPaginatedResults<PatientAnswer> = (await this.query()
+    const patientAnswers: IPaginatedResults<PatientAnswer> = (await this.query(txn)
       .joinRelation('answer')
       .where('answer.questionId', questionId)
       .andWhere('patientId', patientId)
       .whereNotNull('patient_answer.deletedAt')
       .orderBy('patient_answer.createdAt')
-      .page(0, limit)) as any;
+      // TODO: Make the limit an arg again.
+      .page(0, 5)) as any;
 
     return patientAnswers.results;
   }
@@ -201,10 +204,10 @@ export default class PatientAnswer extends BaseModel {
   static async getForQuestion(
     questionId: string,
     patientId: string,
-    eager = 'answer',
+    txn?: Transaction,
   ): Promise<PatientAnswer[]> {
-    const patientAnswers = await this.query()
-      .eager(eager)
+    const patientAnswers = await this.query(txn)
+      .eager(EAGER_QUERY)
       .joinRelation('answer')
       .where('patient_answer.deletedAt', null)
       .andWhere('patientId', patientId)
@@ -217,11 +220,11 @@ export default class PatientAnswer extends BaseModel {
   static async getForRiskArea(
     riskAreaId: string,
     patientId: string,
-    eager = 'answer',
+    txn?: Transaction,
   ): Promise<PatientAnswer[]> {
-    const patientAnswers = await this.query()
+    const patientAnswers = await this.query(txn)
       .joinRelation('answer.question')
-      .eager(eager)
+      .eager(EAGER_QUERY)
       .where('patient_answer.deletedAt', null)
       .andWhere('patientId', patientId)
       .andWhere('answer:question.riskAreaId', riskAreaId)
@@ -233,11 +236,11 @@ export default class PatientAnswer extends BaseModel {
   static async getForScreeningTool(
     screeningToolId: string,
     patientId: string,
-    eager = 'answer',
+    txn?: Transaction,
   ): Promise<PatientAnswer[]> {
-    const patientAnswers = await this.query()
+    const patientAnswers = await this.query(txn)
       .joinRelation('answer.question')
-      .eager(eager)
+      .eager(EAGER_QUERY)
       .where('patient_answer.deletedAt', null)
       .andWhere('patientId', patientId)
       .andWhere('answer:question.screeningToolId', screeningToolId)
@@ -248,11 +251,11 @@ export default class PatientAnswer extends BaseModel {
 
   static async getForScreeningToolSubmission(
     patientScreeningToolSubmissionId: string,
-    eager = 'answer',
+    txn?: Transaction,
   ): Promise<PatientAnswer[]> {
-    const patientAnswers = await this.query()
+    const patientAnswers = await this.query(txn)
       .joinRelation('answer.question')
-      .eager(eager)
+      .eager(EAGER_QUERY)
       .where('patient_answer.deletedAt', null)
       .andWhere('patientScreeningToolSubmissionId', patientScreeningToolSubmissionId)
       .orderBy('patient_answer.updatedAt', 'asc');
@@ -262,11 +265,11 @@ export default class PatientAnswer extends BaseModel {
 
   static async getForRiskAreaAssessmentSubmission(
     riskAreaAssessmentSubmissionId: string,
-    eager = 'answer',
+    txn?: Transaction,
   ): Promise<PatientAnswer[]> {
-    const patientAnswers = await this.query()
+    const patientAnswers = await this.query(txn)
       .joinRelation('answer.question')
-      .eager(eager)
+      .eager(EAGER_QUERY)
       .where('patient_answer.deletedAt', null)
       .andWhere('riskAreaAssessmentSubmissionId', riskAreaAssessmentSubmissionId)
       .orderBy('patient_answer.updatedAt', 'asc');
@@ -277,10 +280,10 @@ export default class PatientAnswer extends BaseModel {
   static async getForProgressNote(
     progressNoteId: string,
     patientId: string,
-    eager = 'answer',
+    txn?: Transaction,
   ): Promise<PatientAnswer[]> {
-    const patientAnswers = await this.query()
-      .eager(eager)
+    const patientAnswers = await this.query(txn)
+      .eager(EAGER_QUERY)
       .where('patient_answer.deletedAt', null)
       .andWhere('patientId', patientId)
       .andWhere('patient_answer.progressNoteId', progressNoteId)
@@ -289,8 +292,8 @@ export default class PatientAnswer extends BaseModel {
     return patientAnswers as PatientAnswer[];
   }
 
-  static async getAllForPatient(patientId: string): Promise<PatientAnswer[]> {
-    const patientAnswers = await this.query()
+  static async getAllForPatient(patientId: string, txn?: Transaction): Promise<PatientAnswer[]> {
+    const patientAnswers = await this.query(txn)
       .joinRelation('answer.question')
       .eager('[answer.[question.[riskArea]]]')
       .where('patient_answer.deletedAt', null)
@@ -391,7 +394,7 @@ export default class PatientAnswer extends BaseModel {
 
       if (answers.length) {
         results = await PatientAnswer.query(existingTxn || txn)
-          .eager('answer')
+          .eager(EAGER_QUERY)
           .insertGraphAndFetch(answers);
       }
 
@@ -408,18 +411,19 @@ export default class PatientAnswer extends BaseModel {
   static async editApplicable(
     applicable: boolean,
     patientAnswerId: string,
+    txn?: Transaction,
   ): Promise<PatientAnswer> {
-    return await this.query()
-      .eager('[question, answer]')
+    return await this.query(txn)
+      .eager(EAGER_QUERY)
       .updateAndFetchById(patientAnswerId, { applicable });
   }
 
-  static async delete(patientAnswerId: string): Promise<PatientAnswer> {
-    await this.query()
+  static async delete(patientAnswerId: string, txn?: Transaction): Promise<PatientAnswer> {
+    await this.query(txn)
       .where({ id: patientAnswerId, deletedAt: null })
       .update({ deletedAt: new Date().toISOString() });
 
-    const patientAnswer = await this.query().findById(patientAnswerId);
+    const patientAnswer = await this.query(txn).findById(patientAnswerId);
     if (!patientAnswer) {
       return Promise.reject(`No such patientAnswer: ${patientAnswerId}`);
     }

@@ -69,8 +69,11 @@ export default class GoalSuggestion extends BaseModel {
     return goalSuggestionAnswers.map((goalSuggestion: GoalSuggestion) => goalSuggestion.answer);
   }
 
-  static async getForAnswer(answerId: string): Promise<GoalSuggestionTemplate[]> {
-    const goalSuggestionAnswers = (await GoalSuggestion.query()
+  static async getForAnswer(
+    answerId: string,
+    txn?: Transaction,
+  ): Promise<GoalSuggestionTemplate[]> {
+    const goalSuggestionAnswers = (await GoalSuggestion.query(txn)
       .where('answerId', answerId)
       .andWhere('deletedAt', null)
       .orderBy('createdAt')
@@ -82,8 +85,9 @@ export default class GoalSuggestion extends BaseModel {
 
   static async getForScreeningToolScoreRange(
     screeningToolScoreRangeId: string,
+    txn?: Transaction,
   ): Promise<GoalSuggestionTemplate[]> {
-    const goalSuggestionAnswers = (await GoalSuggestion.query()
+    const goalSuggestionAnswers = (await GoalSuggestion.query(txn)
       .where('screeningToolScoreRangeId', screeningToolScoreRangeId)
       .andWhere('deletedAt', null)
       .orderBy('createdAt')
@@ -205,14 +209,15 @@ export default class GoalSuggestion extends BaseModel {
     );
   }
 
-  static async create({
-    goalSuggestionTemplateId,
-    answerId,
-    screeningToolScoreRangeId,
-  }: IGoalSuggestionEditableFields): Promise<GoalSuggestionTemplate[]> {
+  static async create(
+    input: IGoalSuggestionEditableFields,
+    existingTxn?: Transaction,
+  ): Promise<GoalSuggestionTemplate[]> {
     // TODO: use postgres UPCERT here to add relation if it doesn't exist instead of a transaction
-    await transaction(GoalSuggestion, async GoalSuggestionWithTransaction => {
-      const relations = await GoalSuggestionWithTransaction.query().where({
+    const { goalSuggestionTemplateId, answerId, screeningToolScoreRangeId } = input;
+
+    return await transaction(GoalSuggestion.knex(), async txn => {
+      const relations = await GoalSuggestion.query(existingTxn || txn).where({
         goalSuggestionTemplateId,
         answerId: answerId || null,
         screeningToolScoreRangeId: screeningToolScoreRangeId || null,
@@ -220,21 +225,24 @@ export default class GoalSuggestion extends BaseModel {
       });
 
       if (relations.length < 1) {
-        await GoalSuggestionWithTransaction.query().insert({
+        await GoalSuggestion.query(existingTxn || txn).insert({
           goalSuggestionTemplateId,
           answerId,
           screeningToolScoreRangeId,
         });
       }
-    });
 
-    if (answerId) {
-      return await this.getForAnswer(answerId);
-    } else if (screeningToolScoreRangeId) {
-      return await this.getForScreeningToolScoreRange(screeningToolScoreRangeId);
-    } else {
-      return [];
-    }
+      if (answerId) {
+        return await this.getForAnswer(answerId, existingTxn || txn);
+      } else if (screeningToolScoreRangeId) {
+        return await this.getForScreeningToolScoreRange(
+          screeningToolScoreRangeId,
+          existingTxn || txn,
+        );
+      } else {
+        return [];
+      }
+    });
   }
 
   static async delete({

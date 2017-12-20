@@ -46,24 +46,28 @@ export interface IEditCurrentUserOptions {
 }
 
 export async function userCreate(root: any, { input }: IUserCreateArgs, context: IContext) {
-  const { userRole } = context;
+  const { userRole, txn } = context;
   const { email, homeClinicId } = input;
   await accessControls.isAllowed(userRole, 'create', 'user');
 
-  const user = await User.getBy('email', email);
+  const user = await User.getBy({ fieldName: 'email', field: email }, txn);
 
   if (user) {
     throw new Error(`Cannot create account: Email already exists for ${email}`);
   } else {
-    return await User.create({
-      email,
-      userRole: 'healthCoach',
-      homeClinicId,
-    });
+    return await User.create(
+      {
+        email,
+        userRole: 'healthCoach',
+        homeClinicId,
+      },
+      txn,
+    );
   }
 }
 
 export async function userEditRole(root: any, { input }: IUserEditRoleOptions, context: IContext) {
+  const { txn } = context;
   const { userRole, email } = input;
   await accessControls.isAllowed(context.userRole, 'edit', 'user');
 
@@ -72,68 +76,76 @@ export async function userEditRole(root: any, { input }: IUserEditRoleOptions, c
     throw new Error(`${context.userRole} not able to edit user role`);
   }
 
-  const user = await User.getBy('email', email);
+  const user = await User.getBy({ fieldName: 'email', field: email }, txn);
   if (!user) {
     throw new Error('User not found');
   }
 
-  return await User.updateUserRole(user.id, userRole as UserRole);
+  return await User.updateUserRole(user.id, userRole as UserRole, txn);
 }
 
 export async function userDelete(
   root: any,
   { input }: IUserDeleteOptions,
-  { db, userRole }: IContext,
+  { db, userRole, txn }: IContext,
 ) {
   const { email } = input;
   await accessControls.isAllowed(userRole, 'delete', 'user');
 
-  const user = await User.getBy('email', email);
+  const user = await User.getBy({ fieldName: 'email', field: email }, txn);
   if (!user) {
     throw new Error('User not found');
   }
 
-  await User.delete(user.id);
+  await User.delete(user.id, txn);
   return user;
 }
 
 export async function resolveUser(
   root: any,
   args: IResolveUserOptions,
-  { db, userRole }: IContext,
+  { db, userRole, txn }: IContext,
 ) {
   await accessControls.isAllowed(userRole, 'view', 'user');
 
-  return await User.get(args.userId);
+  return await User.get(args.userId, txn);
 }
 
-export async function resolveCurrentUser(root: any, args: any, { db, userId, userRole }: IContext) {
+export async function resolveCurrentUser(
+  root: any,
+  args: any,
+  { db, userId, userRole, txn }: IContext,
+) {
   await accessControls.isAllowed(userRole, 'view', 'user');
   checkUserLoggedIn(userId);
 
-  return await User.get(userId!);
+  return await User.get(userId!, txn);
 }
 
 export async function currentUserEdit(
   root: any,
   args: IEditCurrentUserOptions,
-  { db, userId, userRole }: IContext,
+  { db, userId, userRole, txn }: IContext,
 ) {
   await accessControls.isAllowedForUser(userRole, 'edit', 'user', userId, userId);
   checkUserLoggedIn(userId);
 
   const cleanedParams = pickBy<ICurrentUserEditInput>(args.input);
-  return await User.update(userId!, {
-    locale: (cleanedParams.locale as Locale) || undefined,
-    firstName: cleanedParams.firstName || undefined,
-    lastName: cleanedParams.lastName || undefined,
-  });
+  return await User.update(
+    userId!,
+    {
+      locale: (cleanedParams.locale as Locale) || undefined,
+      firstName: cleanedParams.firstName || undefined,
+      lastName: cleanedParams.lastName || undefined,
+    },
+    txn,
+  );
 }
 
 export async function resolveUsers(
   root: any,
   args: Partial<IUserFilterOptions>,
-  { db, userRole }: IContext,
+  { db, userRole, txn }: IContext,
 ): Promise<IUserEdges> {
   await accessControls.isAllowed(userRole, 'view', 'allUsers');
 
@@ -145,13 +157,16 @@ export async function resolveUsers(
     orderBy: 'createdAt',
   });
 
-  const users = await User.getAll({
-    pageNumber,
-    pageSize,
-    hasLoggedIn: !!args.hasLoggedIn,
-    orderBy,
-    order,
-  });
+  const users = await User.getAll(
+    {
+      pageNumber,
+      pageSize,
+      hasLoggedIn: !!args.hasLoggedIn,
+      orderBy,
+      order,
+    },
+    txn,
+  );
   const userEdges = users.results.map((user, i) => formatRelayEdge(user, user.id) as IUserNode);
 
   const hasPreviousPage = pageNumber !== 0;
@@ -168,7 +183,11 @@ export async function resolveUsers(
 
 // disabling isAllowed check for login endpoint so users can log in
 /* tslint:disable check-is-allowed */
-export async function userLogin(root: any, { input }: IUserLoginOptions, { db, logger }: IContext) {
+export async function userLogin(
+  root: any,
+  { input }: IUserLoginOptions,
+  { db, logger, txn }: IContext,
+) {
   const { googleAuthCode } = input;
 
   const oauth = await OauthAuthorize(googleAuthCode);
@@ -181,24 +200,31 @@ export async function userLogin(root: any, { input }: IUserLoginOptions, { db, l
     throw new Error(`Email must have a ${config.GOOGLE_OAUTH_VALID_EMAIL_DOMAIN} domain`);
   }
 
-  const user = await User.getBy('email', googleResult.email);
+  const user = await User.getBy({ fieldName: 'email', field: googleResult.email }, txn);
   if (!user) {
     throw new Error(`User not found for ${googleResult.email}`);
   }
 
   const lastLoginAt = new Date().toISOString();
-  const googleAuth = await GoogleAuth.updateOrCreate({
-    accessToken: oauth.access_token,
-    expiresAt: new Date(new Date().valueOf() + oauth.expires_in).toISOString(),
-    userId: user.id,
-  });
-  const updatedUser = await User.update(user.id, {
-    lastLoginAt,
-    googleProfileImageUrl: googleResult.picture,
-    googleAuthId: googleAuth.id,
-    firstName: googleResult.given_name,
-    lastName: googleResult.family_name,
-  });
+  const googleAuth = await GoogleAuth.updateOrCreate(
+    {
+      accessToken: oauth.access_token,
+      expiresAt: new Date(new Date().valueOf() + oauth.expires_in).toISOString(),
+      userId: user.id,
+    },
+    txn,
+  );
+  const updatedUser = await User.update(
+    user.id,
+    {
+      lastLoginAt,
+      googleProfileImageUrl: googleResult.picture,
+      googleAuthId: googleAuth.id,
+      firstName: googleResult.given_name,
+      lastName: googleResult.family_name,
+    },
+    txn,
+  );
 
   const authToken = signJwt({
     userId: user.id,

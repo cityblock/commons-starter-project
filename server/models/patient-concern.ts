@@ -75,8 +75,8 @@ export default class PatientConcern extends BaseModel {
     },
   };
 
-  static async get(patientConcernId: string): Promise<PatientConcern> {
-    const patientConcern = await this.query()
+  static async get(patientConcernId: string, txn?: Transaction): Promise<PatientConcern> {
+    const patientConcern = await this.query(txn)
       .eager(EAGER_QUERY)
       .modifyEager('patientGoals.tasks', builder => {
         builder.where('task.completedAt', null);
@@ -122,9 +122,10 @@ export default class PatientConcern extends BaseModel {
     patientConcernId: string,
     concern: Partial<IPatientConcernEditableFields>,
     userId: string,
+    existingTxn?: Transaction,
   ): Promise<PatientConcern> {
     return await transaction(PatientConcern.knex(), async txn => {
-      const updatedPatientConcern = await this.query(txn)
+      const updatedPatientConcern = await this.query(existingTxn || txn)
         .eager(EAGER_QUERY)
         .updateAndFetchById(patientConcernId, concern);
 
@@ -135,7 +136,7 @@ export default class PatientConcern extends BaseModel {
           patientConcernId: updatedPatientConcern.id,
           eventType: 'edit_patient_concern',
         },
-        txn,
+        existingTxn || txn,
       );
 
       return updatedPatientConcern;
@@ -147,14 +148,14 @@ export default class PatientConcern extends BaseModel {
     patientId: string,
     existingTxn?: Transaction,
   ): Promise<PatientConcern[]> {
-    return await transaction(existingTxn || PatientConcern.knex(), async txn => {
+    return await transaction(PatientConcern.knex(), async txn => {
       if (patientConcerns.length) {
-        await (PatientConcern.query(txn) as any).upsertGraph(patientConcerns, {
+        await (PatientConcern.query(existingTxn || txn) as any).upsertGraph(patientConcerns, {
           noDelete: true,
         });
       }
 
-      return await this.getForPatient(patientId, txn);
+      return await this.getForPatient(patientId, existingTxn || txn);
     });
   }
 
@@ -172,13 +173,17 @@ export default class PatientConcern extends BaseModel {
       .orderBy('order');
   }
 
-  static async delete(patientConcernId: string, userId: string): Promise<PatientConcern> {
+  static async delete(
+    patientConcernId: string,
+    userId: string,
+    existingTxn?: Transaction,
+  ): Promise<PatientConcern> {
     return await transaction(PatientConcern.knex(), async txn => {
-      await this.query(txn)
+      await this.query(existingTxn || txn)
         .where({ id: patientConcernId, deletedAt: null })
         .update({ deletedAt: new Date().toISOString() });
 
-      const patientConcern = await this.query(txn)
+      const patientConcern = await this.query(existingTxn || txn)
         .eager(EAGER_QUERY)
         .findById(patientConcernId);
 
@@ -193,7 +198,7 @@ export default class PatientConcern extends BaseModel {
           patientConcernId: patientConcern.id,
           eventType: 'delete_patient_concern',
         },
-        txn,
+        existingTxn || txn,
       );
 
       return patientConcern;

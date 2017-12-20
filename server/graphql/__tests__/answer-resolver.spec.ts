@@ -25,7 +25,7 @@ describe('answer tests', () => {
 
     clinic = await Clinic.create(createMockClinic());
     user = await User.create(createMockUser(11, clinic.id, userRole, 'a@b.com'));
-    riskArea = await createRiskArea();
+    riskArea = await createRiskArea({ title: 'Risk Area' });
     question = await Question.create({
       title: 'like writing tests?',
       answerType: 'dropdown',

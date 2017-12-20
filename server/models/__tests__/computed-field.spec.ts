@@ -172,7 +172,7 @@ describe('computed field model', () => {
         slug: 'computed-field-2',
         dataType: 'number',
       });
-      const riskArea = await createRiskArea('Housing');
+      const riskArea = await createRiskArea({ title: 'Housing' });
       await Question.create({
         riskAreaId: riskArea.id,
         type: 'riskArea',
@@ -198,7 +198,7 @@ describe('computed field model', () => {
         slug: 'computed-field-2',
         dataType: 'number',
       });
-      const riskArea = await createRiskArea('Housing');
+      const riskArea = await createRiskArea({ title: 'Housing' });
       const question = await Question.create({
         riskAreaId: riskArea.id,
         type: 'riskArea',

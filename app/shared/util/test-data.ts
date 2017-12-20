@@ -63,6 +63,7 @@ export const riskAreaGroup = {
   order: 1,
   mediumRiskThreshold: 30,
   highRiskThreshold: 9000,
+  riskAreas: [],
 };
 
 export const riskArea = {

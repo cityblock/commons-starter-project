@@ -11,6 +11,7 @@ export type IconName =
   | 'expandLess'
   | 'expandMore'
   | 'highlightOff'
+  | 'home'
   | 'keyboardArrowLeft'
   | 'keyboardArrowRight'
   | 'moreVert'

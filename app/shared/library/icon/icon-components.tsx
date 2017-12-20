@@ -10,6 +10,7 @@ import EventIcon from 'material-ui-icons/Event';
 import ExpandLessIcon from 'material-ui-icons/ExpandLess';
 import ExpandMoreIcon from 'material-ui-icons/ExpandMore';
 import HighlightOffIcon from 'material-ui-icons/HighlightOff';
+import HomeIcon from 'material-ui-icons/Home';
 import ExpandArrowIcon from 'material-ui-icons/KeyboardArrowDown';
 import KeyboardArrowLeftIcon from 'material-ui-icons/KeyboardArrowLeft';
 import KeyboardArrowRightIcon from 'material-ui-icons/KeyboardArrowRight';
@@ -33,6 +34,7 @@ const components = {
   expandLess: ExpandLessIcon,
   expandMore: ExpandMoreIcon,
   highlightOff: HighlightOffIcon,
+  home: HomeIcon,
   keyboardArrowLeft: KeyboardArrowLeftIcon,
   keyboardArrowRight: KeyboardArrowRightIcon,
   moreVert: MoreVertIcon,

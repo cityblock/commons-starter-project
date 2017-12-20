@@ -3504,6 +3504,37 @@ export type getRiskAreaAssessmentSubmissionQuery = {
   } | null,
 };
 
+export type getRiskAreaGroupForPatientQueryVariables = {
+  riskAreaGroupId: string,
+  patientId: string,
+};
+
+export type getRiskAreaGroupForPatientQuery = {
+  // Risk Area Group with associated patient answers
+  riskAreaGroupForPatient:  {
+    id: string,
+    title: string,
+    riskAreas:  Array< {
+      id: string,
+      title: string,
+      assessmentType: AssessmentType,
+      questions:  Array< {
+        answers:  Array< {
+          inSummary: boolean | null,
+          riskAdjustmentType: RiskAdjustmentTypeOptions | null,
+          summaryText: string | null,
+          patientAnswers:  Array< {
+            patientId: string,
+            createdAt: string,
+            updatedAt: string,
+            answerValue: string,
+          } > | null,
+        } > | null,
+      } > | null,
+    } > | null,
+  } | null,
+};
+
 export type getRiskAreaGroupsQuery = {
   // RiskAreaGroups
   riskAreaGroups:  Array< {

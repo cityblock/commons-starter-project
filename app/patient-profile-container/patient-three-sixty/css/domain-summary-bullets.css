@@ -1,0 +1,30 @@
+@import '../../../shared/css/sizes';
+
+.container h4 {
+  margin: var(--extra-small-gutter) 0;
+  color: var(--light-gray-font-color);
+  font-size: var(--small-font-size);
+  font-weight: var(--roboto-medium-weight);
+  line-height: var(--medium-font-line-height);
+}
+
+.container ul {
+  color: var(--black-color);
+  font-size: var(--extra-small-font-size);
+  line-height: var(--medium-font-line-height);
+  font-weight: var(--default-font-weight);
+  padding-left: var(--medium-gutter);
+  margin: 0;
+}
+
+.container ul span {
+  font-size: var(--small-font-size);
+  margin-left: var(--small-gutter);
+}
+
+.noAssessments {
+  color: var(--gray-font-color);
+  font-style: italic;
+  text-align: center;
+  margin: var(--medium-gutter);
+}

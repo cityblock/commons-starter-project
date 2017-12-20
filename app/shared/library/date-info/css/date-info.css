@@ -1,0 +1,19 @@
+@import '../../../css/sizes';
+
+.container h5 {
+  display: inline-block;
+  margin: 0;
+  font-size: var(--extra-small-font-size);
+  line-height: var(--extra-small-font-line-height);
+  color: var(--light-gray-font-color);
+  font-weight: var(--default-font-weight);
+}
+
+.container h5.date {
+  margin-left: 8px;
+  color: var(--black-color);
+}
+
+.container h5.highlight {
+  color: var(--blue-color);
+}

@@ -1,17 +1,17 @@
 import { shallow } from 'enzyme';
 import * as React from 'react';
-import UnderlineTab from '../../underline-tab/underline-tab';
-import UnderlineTabs from '../underline-tabs';
+import Tab from '../../tab/tab';
+import Tabs from '../tabs';
 
-describe('Library Underline Tabs Component', () => {
+describe('Library Tabs Component', () => {
   const messageId = 'chaosIsALatter';
   const messageId2 = 'bendTheKnee';
 
   const wrapper = shallow(
-    <UnderlineTabs>
-      <UnderlineTab messageId={messageId} selected={false} />
-      <UnderlineTab messageId={messageId2} selected={true} />
-    </UnderlineTabs>,
+    <Tabs>
+      <Tab messageId={messageId} selected={false} />
+      <Tab messageId={messageId2} selected={true} />
+    </Tabs>,
   );
 
   it('renders container for tabs', () => {
@@ -19,28 +19,28 @@ describe('Library Underline Tabs Component', () => {
   });
 
   it('renders nested individual tabs', () => {
-    expect(wrapper.find(UnderlineTab).length).toBe(2);
+    expect(wrapper.find(Tab).length).toBe(2);
     expect(
       wrapper
-        .find(UnderlineTab)
+        .find(Tab)
         .at(0)
         .props().messageId,
     ).toBe(messageId);
     expect(
       wrapper
-        .find(UnderlineTab)
+        .find(Tab)
         .at(0)
         .props().selected,
     ).toBeFalsy();
     expect(
       wrapper
-        .find(UnderlineTab)
+        .find(Tab)
         .at(1)
         .props().messageId,
     ).toBe(messageId2);
     expect(
       wrapper
-        .find(UnderlineTab)
+        .find(Tab)
         .at(1)
         .props().selected,
     ).toBeTruthy();

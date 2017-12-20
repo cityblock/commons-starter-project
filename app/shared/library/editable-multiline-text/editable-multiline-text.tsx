@@ -35,6 +35,13 @@ class EditableMultilineText extends React.Component<IProps, IState> {
     };
   }
 
+  componentWillReceiveProps(nextProps: IProps): void {
+    // ensure that state reflects latest text, especially if multiple instances of component
+    if (nextProps.text !== this.props.text) {
+      this.setState({ editedText: nextProps.text });
+    }
+  }
+
   componentWillUpdate(): void {
     const height = this.getTextHeight();
 

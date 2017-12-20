@@ -2,7 +2,7 @@ import * as classNames from 'classnames';
 import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
 import { Link } from 'react-router-dom';
-import * as styles from './css/underline-tab.css';
+import * as styles from './css/tab.css';
 
 interface IProps {
   messageId: string; // message id for translation
@@ -11,7 +11,7 @@ interface IProps {
   onClick?: () => void; // click handler, use if not using href
 }
 
-const UnderlineTab: React.StatelessComponent<IProps> = (props: IProps) => {
+const Tab: React.StatelessComponent<IProps> = (props: IProps) => {
   const { messageId, selected, href, onClick } = props;
   const tabStyles = classNames(styles.tab, {
     [styles.selected]: selected,
@@ -40,4 +40,4 @@ const UnderlineTab: React.StatelessComponent<IProps> = (props: IProps) => {
   );
 };
 
-export default UnderlineTab;
+export default Tab;

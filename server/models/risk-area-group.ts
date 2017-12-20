@@ -97,13 +97,14 @@ export default class RiskAreaGroup extends BaseModel {
     txn?: Transaction,
   ): Promise<RiskAreaGroup> {
     const EAGER_QUERY = '[riskAreas.questions.answers.patientAnswers]';
+
     const riskAreaGroup = await this.query(txn)
       .eager(EAGER_QUERY)
-      .modifyEager('answers.patientAnswers', builder => {
+      .modifyEager('riskAreas.questions.answers.patientAnswers', builder => {
         builder.where({
-          'patientAnswers.patientId': patientId,
-          'patientAnswers.deletedAt': null,
-          'patientAnswers.applicable': true,
+          patientId,
+          deletedAt: null,
+          applicable: true,
         });
       })
       .findById(riskAreaGroupId);

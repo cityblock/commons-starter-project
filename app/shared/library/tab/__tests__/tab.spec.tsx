@@ -1,11 +1,11 @@
 import { shallow } from 'enzyme';
 import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
-import UnderlineTab from '../underline-tab';
+import Tab from '../tab';
 
-describe('Library Underline Tab Component', () => {
+describe('Library Tab Component', () => {
   const messageId = 'valarMorghulis';
-  const wrapper = shallow(<UnderlineTab messageId={messageId} selected={true} href="/braavos" />);
+  const wrapper = shallow(<Tab messageId={messageId} selected={true} href="/braavos" />);
 
   it('renders a formatted message with correct id', () => {
     expect(wrapper.find(FormattedMessage).length).toBe(1);

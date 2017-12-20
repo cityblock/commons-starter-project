@@ -188,7 +188,7 @@ export enum UserOrderOptions {
 }
 
 
-export type PatientAnswerInput = {
+export interface PatientAnswerInput {
   answerId: string,
   answerValue: string,
   patientId: string,
@@ -196,14 +196,14 @@ export type PatientAnswerInput = {
   questionId: string,
 };
 
-export type PatientConcernBulkEditFields = {
+export interface PatientConcernBulkEditFields {
   id: string,
   order?: number | null,
   startedAt?: string | null,
   completedAt?: string | null,
 };
 
-export type answerCreateMutationVariables = {
+export interface answerCreateMutationVariables {
   displayValue: string,
   value: string,
   valueType: AnswerValueTypeOptions,
@@ -214,7 +214,7 @@ export type answerCreateMutationVariables = {
   order: number,
 };
 
-export type answerCreateMutation = {
+export interface answerCreateMutation {
   // Create an Answer
   answerCreate:  {
     id: string,
@@ -331,11 +331,11 @@ export type answerCreateMutation = {
   } | null,
 };
 
-export type answerDeleteMutationVariables = {
+export interface answerDeleteMutationVariables {
   answerId: string,
 };
 
-export type answerDeleteMutation = {
+export interface answerDeleteMutation {
   // Deletes an Answer
   answerDelete:  {
     id: string,
@@ -452,7 +452,7 @@ export type answerDeleteMutation = {
   } | null,
 };
 
-export type answerEditMutationVariables = {
+export interface answerEditMutationVariables {
   answerId: string,
   displayValue?: string | null,
   value?: string | null,
@@ -463,7 +463,7 @@ export type answerEditMutationVariables = {
   order?: number | null,
 };
 
-export type answerEditMutation = {
+export interface answerEditMutation {
   // Edit an Answer
   answerEdit:  {
     id: string,
@@ -580,7 +580,7 @@ export type answerEditMutation = {
   } | null,
 };
 
-export type carePlanSuggestionAcceptMutationVariables = {
+export interface carePlanSuggestionAcceptMutationVariables {
   carePlanSuggestionId: string,
   patientConcernId?: string | null,
   concernId?: string | null,
@@ -588,7 +588,7 @@ export type carePlanSuggestionAcceptMutationVariables = {
   taskTemplateIds?: Array< string | null > | null,
 };
 
-export type carePlanSuggestionAcceptMutation = {
+export interface carePlanSuggestionAcceptMutation {
   // care plan suggestion accept
   carePlanSuggestionAccept:  {
     id: string,
@@ -661,12 +661,12 @@ export type carePlanSuggestionAcceptMutation = {
   } | null,
 };
 
-export type carePlanSuggestionDismissMutationVariables = {
+export interface carePlanSuggestionDismissMutationVariables {
   carePlanSuggestionId: string,
   dismissedReason: string,
 };
 
-export type carePlanSuggestionDismissMutation = {
+export interface carePlanSuggestionDismissMutation {
   // care plan suggestion dismiss
   carePlanSuggestionDismiss:  {
     id: string,
@@ -739,12 +739,12 @@ export type carePlanSuggestionDismissMutation = {
   } | null,
 };
 
-export type getClinicsQueryVariables = {
+export interface getClinicsQueryVariables {
   pageNumber?: number | null,
   pageSize?: number | null,
 };
 
-export type getClinicsQuery = {
+export interface getClinicsQuery {
   // Clinics
   clinics:  {
     edges:  Array< {
@@ -756,12 +756,12 @@ export type getClinicsQuery = {
   } | null,
 };
 
-export type computedFieldCreateMutationVariables = {
+export interface computedFieldCreateMutationVariables {
   label: string,
   dataType: ComputedFieldDataTypes,
 };
 
-export type computedFieldCreateMutation = {
+export interface computedFieldCreateMutation {
   // Create a computed field
   computedFieldCreate:  {
     id: string,
@@ -774,11 +774,11 @@ export type computedFieldCreateMutation = {
   } | null,
 };
 
-export type computedFieldDeleteMutationVariables = {
+export interface computedFieldDeleteMutationVariables {
   computedFieldId: string,
 };
 
-export type computedFieldDeleteMutation = {
+export interface computedFieldDeleteMutation {
   // Delete a computed field
   computedFieldDelete:  {
     id: string,
@@ -791,11 +791,11 @@ export type computedFieldDeleteMutation = {
   } | null,
 };
 
-export type concernCreateMutationVariables = {
+export interface concernCreateMutationVariables {
   title: string,
 };
 
-export type concernCreateMutation = {
+export interface concernCreateMutation {
   // Create a concern
   concernCreate:  {
     id: string,
@@ -806,11 +806,11 @@ export type concernCreateMutation = {
   } | null,
 };
 
-export type concernDeleteMutationVariables = {
+export interface concernDeleteMutationVariables {
   concernId: string,
 };
 
-export type concernDeleteMutation = {
+export interface concernDeleteMutation {
   // Deletes a concern
   concernDelete:  {
     id: string,
@@ -821,12 +821,12 @@ export type concernDeleteMutation = {
   } | null,
 };
 
-export type concernEditMutationVariables = {
+export interface concernEditMutationVariables {
   concernId: string,
   title: string,
 };
 
-export type concernEditMutation = {
+export interface concernEditMutation {
   // Edit a concern
   concernEdit:  {
     id: string,
@@ -837,13 +837,13 @@ export type concernEditMutation = {
   } | null,
 };
 
-export type concernSuggestionCreateMutationVariables = {
+export interface concernSuggestionCreateMutationVariables {
   answerId?: string | null,
   screeningToolScoreRangeId?: string | null,
   concernId: string,
 };
 
-export type concernSuggestionCreateMutation = {
+export interface concernSuggestionCreateMutation {
   // suggest a concern for an answer
   concernSuggestionCreate:  Array< {
     id: string,
@@ -854,13 +854,13 @@ export type concernSuggestionCreateMutation = {
   } | null > | null,
 };
 
-export type concernSuggestionDeleteMutationVariables = {
+export interface concernSuggestionDeleteMutationVariables {
   answerId?: string | null,
   screeningToolScoreRangeId?: string | null,
   concernId: string,
 };
 
-export type concernSuggestionDeleteMutation = {
+export interface concernSuggestionDeleteMutation {
   // delete suggestion a concern for an answer
   concernSuggestionDelete:  Array< {
     id: string,
@@ -871,13 +871,13 @@ export type concernSuggestionDeleteMutation = {
   } | null > | null,
 };
 
-export type currentUserEditMutationVariables = {
+export interface currentUserEditMutationVariables {
   firstName?: string | null,
   lastName?: string | null,
   locale?: string | null,
 };
 
-export type currentUserEditMutation = {
+export interface currentUserEditMutation {
   // Edit current user
   currentUserEdit:  {
     id: string,
@@ -893,11 +893,11 @@ export type currentUserEditMutation = {
   } | null,
 };
 
-export type eventNotificationDismissMutationVariables = {
+export interface eventNotificationDismissMutationVariables {
   eventNotificationId: string,
 };
 
-export type eventNotificationDismissMutation = {
+export interface eventNotificationDismissMutation {
   // Dismisses (marks as seen) an EventNotification
   eventNotificationDismiss:  {
     id: string,
@@ -978,11 +978,11 @@ export type eventNotificationDismissMutation = {
   } | null,
 };
 
-export type getAnswerQueryVariables = {
+export interface getAnswerQueryVariables {
   answerId: string,
 };
 
-export type getAnswerQuery = {
+export interface getAnswerQuery {
   // Answer
   answer:  {
     id: string,
@@ -1099,11 +1099,11 @@ export type getAnswerQuery = {
   } | null,
 };
 
-export type getComputedFieldQueryVariables = {
+export interface getComputedFieldQueryVariables {
   computedFieldId: string,
 };
 
-export type getComputedFieldQuery = {
+export interface getComputedFieldQuery {
   // computed field
   computedField:  {
     id: string,
@@ -1116,12 +1116,12 @@ export type getComputedFieldQuery = {
   } | null,
 };
 
-export type getComputedFieldsQueryVariables = {
+export interface getComputedFieldsQueryVariables {
   orderBy?: ComputedFieldOrderOptions | null,
   availableOnly?: boolean | null,
 };
 
-export type getComputedFieldsQuery = {
+export interface getComputedFieldsQuery {
   // computed fields
   computedFields:  Array< {
     id: string,
@@ -1134,11 +1134,11 @@ export type getComputedFieldsQuery = {
   } | null > | null,
 };
 
-export type getConcernSuggestionsForAnswerQueryVariables = {
+export interface getConcernSuggestionsForAnswerQueryVariables {
   answerId: string,
 };
 
-export type getConcernSuggestionsForAnswerQuery = {
+export interface getConcernSuggestionsForAnswerQuery {
   // Concerns for answer
   concernsForAnswer:  Array< {
     id: string,
@@ -1149,11 +1149,11 @@ export type getConcernSuggestionsForAnswerQuery = {
   } | null > | null,
 };
 
-export type getConcernQueryVariables = {
+export interface getConcernQueryVariables {
   concernId: string,
 };
 
-export type getConcernQuery = {
+export interface getConcernQuery {
   // Concern
   concern:  {
     id: string,
@@ -1164,11 +1164,11 @@ export type getConcernQuery = {
   } | null,
 };
 
-export type getConcernsQueryVariables = {
+export interface getConcernsQueryVariables {
   orderBy?: ConcernOrderOptions | null,
 };
 
-export type getConcernsQuery = {
+export interface getConcernsQuery {
   // Concerns
   concerns:  Array< {
     id: string,
@@ -1179,7 +1179,7 @@ export type getConcernsQuery = {
   } | null > | null,
 };
 
-export type getCurrentUserQuery = {
+export interface getCurrentUserQuery {
   // The current User
   currentUser:  {
     id: string,
@@ -1195,13 +1195,13 @@ export type getCurrentUserQuery = {
   } | null,
 };
 
-export type getEventNotificationsForCurrentUserQueryVariables = {
+export interface getEventNotificationsForCurrentUserQueryVariables {
   pageNumber?: number | null,
   pageSize?: number | null,
   taskEventNotificationsOnly?: boolean | null,
 };
 
-export type getEventNotificationsForCurrentUserQuery = {
+export interface getEventNotificationsForCurrentUserQuery {
   // Event notifications for a user
   eventNotificationsForCurrentUser:  {
     edges:  Array< {
@@ -1290,11 +1290,11 @@ export type getEventNotificationsForCurrentUserQuery = {
   } | null,
 };
 
-export type getGoalSuggestionTemplateQueryVariables = {
+export interface getGoalSuggestionTemplateQueryVariables {
   goalSuggestionTemplateId: string,
 };
 
-export type getGoalSuggestionTemplateQuery = {
+export interface getGoalSuggestionTemplateQuery {
   // Goal suggestion templates
   goalSuggestionTemplate:  {
     id: string,
@@ -1318,11 +1318,11 @@ export type getGoalSuggestionTemplateQuery = {
   } | null,
 };
 
-export type getGoalSuggestionTemplatesQueryVariables = {
+export interface getGoalSuggestionTemplatesQueryVariables {
   orderBy?: GoalSuggestionOrderOptions | null,
 };
 
-export type getGoalSuggestionTemplatesQuery = {
+export interface getGoalSuggestionTemplatesQuery {
   // Goal suggestion templates
   goalSuggestionTemplates:  Array< {
     id: string,
@@ -1346,11 +1346,11 @@ export type getGoalSuggestionTemplatesQuery = {
   } | null > | null,
 };
 
-export type getGoalSuggestionsForAnswerQueryVariables = {
+export interface getGoalSuggestionsForAnswerQueryVariables {
   answerId: string,
 };
 
-export type getGoalSuggestionsForAnswerQuery = {
+export interface getGoalSuggestionsForAnswerQuery {
   // Goal suggestion for template for answer
   goalSuggestionTemplatesForAnswer:  Array< {
     id: string,
@@ -1374,13 +1374,13 @@ export type getGoalSuggestionsForAnswerQuery = {
   } | null > | null,
 };
 
-export type getPatientAnswersQueryVariables = {
+export interface getPatientAnswersQueryVariables {
   filterType: AnswerFilterType,
   filterId: string,
   patientId: string,
 };
 
-export type getPatientAnswersQuery = {
+export interface getPatientAnswersQuery {
   // PatientAnswersForQuestion
   patientAnswers:  Array< {
     id: string,
@@ -1512,11 +1512,11 @@ export type getPatientAnswersQuery = {
   } > | null,
 };
 
-export type getPatientCarePlanSuggestionsQueryVariables = {
+export interface getPatientCarePlanSuggestionsQueryVariables {
   patientId: string,
 };
 
-export type getPatientCarePlanSuggestionsQuery = {
+export interface getPatientCarePlanSuggestionsQuery {
   // Care Plan Suggestions
   carePlanSuggestionsForPatient:  Array< {
     id: string,
@@ -1589,11 +1589,11 @@ export type getPatientCarePlanSuggestionsQuery = {
   } | null > | null,
 };
 
-export type getPatientCarePlanQueryVariables = {
+export interface getPatientCarePlanQueryVariables {
   patientId: string,
 };
 
-export type getPatientCarePlanQuery = {
+export interface getPatientCarePlanQuery {
   // Care Plan
   carePlanForPatient:  {
     concerns:  Array< {
@@ -1742,11 +1742,11 @@ export type getPatientCarePlanQuery = {
   } | null,
 };
 
-export type getPatientCareTeamQueryVariables = {
+export interface getPatientCareTeamQueryVariables {
   patientId: string,
 };
 
-export type getPatientCareTeamQuery = {
+export interface getPatientCareTeamQuery {
   // Users on a care team
   patientCareTeam:  Array< {
     id: string,
@@ -1762,11 +1762,11 @@ export type getPatientCareTeamQuery = {
   } | null > | null,
 };
 
-export type getPatientMedicationsQueryVariables = {
+export interface getPatientMedicationsQueryVariables {
   patientId: string,
 };
 
-export type getPatientMedicationsQuery = {
+export interface getPatientMedicationsQuery {
   // Patient medications
   patientMedications:  {
     medications:  {
@@ -1782,12 +1782,12 @@ export type getPatientMedicationsQuery = {
   } | null,
 };
 
-export type getPatientPanelQueryVariables = {
+export interface getPatientPanelQueryVariables {
   pageNumber?: number | null,
   pageSize?: number | null,
 };
 
-export type getPatientPanelQuery = {
+export interface getPatientPanelQuery {
   // List of patients the user is on the care team for (their 'patient panel')
   userPatientPanel:  {
     edges:  Array< {
@@ -1812,12 +1812,12 @@ export type getPatientPanelQuery = {
   } | null,
 };
 
-export type getPatientRiskScoreForRiskAreaQueryVariables = {
+export interface getPatientRiskScoreForRiskAreaQueryVariables {
   riskAreaId: string,
   patientId: string,
 };
 
-export type getPatientRiskScoreForRiskAreaQuery = {
+export interface getPatientRiskScoreForRiskAreaQuery {
   // PatientRiskAreaRiskScore
   patientRiskAreaRiskScore:  {
     score: number,
@@ -1825,12 +1825,12 @@ export type getPatientRiskScoreForRiskAreaQuery = {
   } | null,
 };
 
-export type getPatientRiskSummaryForRiskAreaQueryVariables = {
+export interface getPatientRiskSummaryForRiskAreaQueryVariables {
   riskAreaId: string,
   patientId: string,
 };
 
-export type getPatientRiskSummaryForRiskAreaQuery = {
+export interface getPatientRiskSummaryForRiskAreaQuery {
   // PatientRiskAreaSummary
   patientRiskAreaSummary:  {
     summary: Array< string >,
@@ -1839,24 +1839,24 @@ export type getPatientRiskSummaryForRiskAreaQuery = {
   } | null,
 };
 
-export type getPatientScratchPadQueryVariables = {
+export interface getPatientScratchPadQueryVariables {
   patientId: string,
 };
 
-export type getPatientScratchPadQuery = {
+export interface getPatientScratchPadQuery {
   // Patient scratch pad
   patientScratchPad:  {
     text: string | null,
   } | null,
 };
 
-export type getPatientScreeningToolSubmissionForPatientAndScreeningToolQueryVariables = {
+export interface getPatientScreeningToolSubmissionForPatientAndScreeningToolQueryVariables {
   screeningToolId: string,
   patientId: string,
   scored: boolean,
 };
 
-export type getPatientScreeningToolSubmissionForPatientAndScreeningToolQuery = {
+export interface getPatientScreeningToolSubmissionForPatientAndScreeningToolQuery {
   // latest patient sreening tool submission for a screening tool
   patientScreeningToolSubmissionForPatientAndScreeningTool:  {
     id: string,
@@ -1979,11 +1979,11 @@ export type getPatientScreeningToolSubmissionForPatientAndScreeningToolQuery = {
   } | null,
 };
 
-export type getPatientScreeningToolSubmissionQueryVariables = {
+export interface getPatientScreeningToolSubmissionQueryVariables {
   patientScreeningToolSubmissionId: string,
 };
 
-export type getPatientScreeningToolSubmissionQuery = {
+export interface getPatientScreeningToolSubmissionQuery {
   // patient screening tool submission
   patientScreeningToolSubmission:  {
     id: string,
@@ -2106,13 +2106,13 @@ export type getPatientScreeningToolSubmissionQuery = {
   } | null,
 };
 
-export type getPatientSearchQueryVariables = {
+export interface getPatientSearchQueryVariables {
   query: string,
   pageNumber: number,
   pageSize: number,
 };
 
-export type getPatientSearchQuery = {
+export interface getPatientSearchQuery {
   // Patient search
   patientSearch:  {
     edges:  Array< {
@@ -2133,14 +2133,14 @@ export type getPatientSearchQuery = {
   } | null,
 };
 
-export type getPatientTasksQueryVariables = {
+export interface getPatientTasksQueryVariables {
   patientId: string,
   pageNumber?: number | null,
   pageSize?: number | null,
   orderBy?: TaskOrderOptions | null,
 };
 
-export type getPatientTasksQuery = {
+export interface getPatientTasksQuery {
   // Patient's Tasks
   tasksForPatient:  {
     edges:  Array< {
@@ -2201,11 +2201,11 @@ export type getPatientTasksQuery = {
   } | null,
 };
 
-export type getPatientQueryVariables = {
+export interface getPatientQueryVariables {
   patientId: string,
 };
 
-export type getPatientQuery = {
+export interface getPatientQuery {
   // A single Patient
   patient:  {
     id: string,
@@ -2222,11 +2222,11 @@ export type getPatientQuery = {
   } | null,
 };
 
-export type getProgressNoteActivityForProgressNoteQueryVariables = {
+export interface getProgressNoteActivityForProgressNoteQueryVariables {
   progressNoteId: string,
 };
 
-export type getProgressNoteActivityForProgressNoteQuery = {
+export interface getProgressNoteActivityForProgressNoteQuery {
   // progress note activities for progress note
   progressNoteActivityForProgressNote:  {
     taskEvents:  Array< {
@@ -2785,11 +2785,11 @@ export type getProgressNoteActivityForProgressNoteQuery = {
   } | null,
 };
 
-export type getProgressNoteTemplateQueryVariables = {
+export interface getProgressNoteTemplateQueryVariables {
   progressNoteTemplateId: string,
 };
 
-export type getProgressNoteTemplateQuery = {
+export interface getProgressNoteTemplateQuery {
   // progress note template
   progressNoteTemplate:  {
     id: string,
@@ -2799,7 +2799,7 @@ export type getProgressNoteTemplateQuery = {
   } | null,
 };
 
-export type getProgressNoteTemplatesQuery = {
+export interface getProgressNoteTemplatesQuery {
   // progress note templates
   progressNoteTemplates:  Array< {
     id: string,
@@ -2809,11 +2809,11 @@ export type getProgressNoteTemplatesQuery = {
   } | null > | null,
 };
 
-export type getProgressNotesForCurrentUserQueryVariables = {
+export interface getProgressNotesForCurrentUserQueryVariables {
   completed: boolean,
 };
 
-export type getProgressNotesForCurrentUserQuery = {
+export interface getProgressNotesForCurrentUserQuery {
   // progress notes for current user
   progressNotesForCurrentUser:  Array< {
     id: string,
@@ -2859,12 +2859,12 @@ export type getProgressNotesForCurrentUserQuery = {
   } | null > | null,
 };
 
-export type getProgressNotesForPatientQueryVariables = {
+export interface getProgressNotesForPatientQueryVariables {
   patientId: string,
   completed: boolean,
 };
 
-export type getProgressNotesForPatientQuery = {
+export interface getProgressNotesForPatientQuery {
   // progress notes for patient
   progressNotesForPatient:  Array< {
     id: string,
@@ -2910,11 +2910,11 @@ export type getProgressNotesForPatientQuery = {
   } | null > | null,
 };
 
-export type getQuestionAnswersQueryVariables = {
+export interface getQuestionAnswersQueryVariables {
   questionId: string,
 };
 
-export type getQuestionAnswersQuery = {
+export interface getQuestionAnswersQuery {
   // Answers
   answersForQuestion:  Array< {
     id: string,
@@ -3031,11 +3031,11 @@ export type getQuestionAnswersQuery = {
   } | null >,
 };
 
-export type getQuestionQueryVariables = {
+export interface getQuestionQueryVariables {
   questionId: string,
 };
 
-export type getQuestionQuery = {
+export interface getQuestionQuery {
   // Question
   question:  {
     id: string,
@@ -3179,12 +3179,12 @@ export type getQuestionQuery = {
   } | null,
 };
 
-export type getQuestionsQueryVariables = {
+export interface getQuestionsQueryVariables {
   filterId: string,
   filterType: QuestionFilterType,
 };
 
-export type getQuestionsQuery = {
+export interface getQuestionsQuery {
   // Questions for risk area, progress note template or screening tool
   questions:  Array< {
     id: string,
@@ -3328,13 +3328,13 @@ export type getQuestionsQuery = {
   } >,
 };
 
-export type getRiskAreaAssessmentSubmissionForPatientQueryVariables = {
+export interface getRiskAreaAssessmentSubmissionForPatientQueryVariables {
   riskAreaId: string,
   patientId: string,
   completed: boolean,
 };
 
-export type getRiskAreaAssessmentSubmissionForPatientQuery = {
+export interface getRiskAreaAssessmentSubmissionForPatientQuery {
   // latest risk area assessment submission for a screening tool
   riskAreaAssessmentSubmissionForPatient:  {
     id: string,
@@ -3417,11 +3417,11 @@ export type getRiskAreaAssessmentSubmissionForPatientQuery = {
   } | null,
 };
 
-export type getRiskAreaAssessmentSubmissionQueryVariables = {
+export interface getRiskAreaAssessmentSubmissionQueryVariables {
   riskAreaAssessmentSubmissionId: string,
 };
 
-export type getRiskAreaAssessmentSubmissionQuery = {
+export interface getRiskAreaAssessmentSubmissionQuery {
   // risk area assessment submission
   riskAreaAssessmentSubmission:  {
     id: string,
@@ -3504,12 +3504,12 @@ export type getRiskAreaAssessmentSubmissionQuery = {
   } | null,
 };
 
-export type getRiskAreaGroupForPatientQueryVariables = {
+export interface getRiskAreaGroupForPatientQueryVariables {
   riskAreaGroupId: string,
   patientId: string,
 };
 
-export type getRiskAreaGroupForPatientQuery = {
+export interface getRiskAreaGroupForPatientQuery {
   // Risk Area Group with associated patient answers
   riskAreaGroupForPatient:  {
     id: string,
@@ -3535,7 +3535,7 @@ export type getRiskAreaGroupForPatientQuery = {
   } | null,
 };
 
-export type getRiskAreaGroupsQuery = {
+export interface getRiskAreaGroupsQuery {
   // RiskAreaGroups
   riskAreaGroups:  Array< {
     id: string,
@@ -3549,11 +3549,11 @@ export type getRiskAreaGroupsQuery = {
   } >,
 };
 
-export type getRiskAreaQueryVariables = {
+export interface getRiskAreaQueryVariables {
   riskAreaId: string,
 };
 
-export type getRiskAreaQuery = {
+export interface getRiskAreaQuery {
   // RiskArea
   riskArea:  {
     id: string,
@@ -3572,7 +3572,7 @@ export type getRiskAreaQuery = {
   } | null,
 };
 
-export type getRiskAreasQuery = {
+export interface getRiskAreasQuery {
   // RiskAreas
   riskAreas:  Array< {
     id: string,
@@ -3591,11 +3591,11 @@ export type getRiskAreasQuery = {
   } | null > | null,
 };
 
-export type getScreeningToolQueryVariables = {
+export interface getScreeningToolQueryVariables {
   screeningToolId: string,
 };
 
-export type getScreeningToolQuery = {
+export interface getScreeningToolQuery {
   // screening tool
   screeningTool:  {
     id: string,
@@ -3659,11 +3659,11 @@ export type getScreeningToolQuery = {
   } | null,
 };
 
-export type getScreeningToolsForRiskAreaQueryVariables = {
+export interface getScreeningToolsForRiskAreaQueryVariables {
   riskAreaId: string,
 };
 
-export type getScreeningToolsForRiskAreaQuery = {
+export interface getScreeningToolsForRiskAreaQuery {
   // screening tools for risk area
   screeningToolsForRiskArea:  Array< {
     id: string,
@@ -3727,7 +3727,7 @@ export type getScreeningToolsForRiskAreaQuery = {
   } | null > | null,
 };
 
-export type getScreeningToolsQuery = {
+export interface getScreeningToolsQuery {
   // screening tools
   screeningTools:  Array< {
     id: string,
@@ -3791,11 +3791,11 @@ export type getScreeningToolsQuery = {
   } | null > | null,
 };
 
-export type getTaskCommentQueryVariables = {
+export interface getTaskCommentQueryVariables {
   taskCommentId: string,
 };
 
-export type getTaskCommentQuery = {
+export interface getTaskCommentQuery {
   // Single task comment
   taskComment:  {
     id: string,
@@ -3818,13 +3818,13 @@ export type getTaskCommentQuery = {
   } | null,
 };
 
-export type getTaskCommentsQueryVariables = {
+export interface getTaskCommentsQueryVariables {
   taskId: string,
   pageNumber?: number | null,
   pageSize?: number | null,
 };
 
-export type getTaskCommentsQuery = {
+export interface getTaskCommentsQuery {
   // List of task comments
   taskComments:  {
     edges:  Array< {
@@ -3855,11 +3855,11 @@ export type getTaskCommentsQuery = {
   } | null,
 };
 
-export type getTaskQueryVariables = {
+export interface getTaskQueryVariables {
   taskId: string,
 };
 
-export type getTaskQuery = {
+export interface getTaskQuery {
   // Task
   task:  {
     id: string,
@@ -3912,14 +3912,14 @@ export type getTaskQuery = {
   } | null,
 };
 
-export type getUsersQueryVariables = {
+export interface getUsersQueryVariables {
   pageNumber?: number | null,
   pageSize?: number | null,
   orderBy?: UserOrderOptions | null,
   hasLoggedIn?: boolean | null,
 };
 
-export type getUsersQuery = {
+export interface getUsersQuery {
   // All Users (admin only)
   users:  {
     edges:  Array< {
@@ -3943,13 +3943,13 @@ export type getUsersQuery = {
   } | null,
 };
 
-export type goalSuggestionCreateMutationVariables = {
+export interface goalSuggestionCreateMutationVariables {
   answerId?: string | null,
   screeningToolScoreRangeId?: string | null,
   goalSuggestionTemplateId: string,
 };
 
-export type goalSuggestionCreateMutation = {
+export interface goalSuggestionCreateMutation {
   // Suggest a goal suggestion template for an answer
   goalSuggestionCreate:  Array< {
     id: string,
@@ -3973,13 +3973,13 @@ export type goalSuggestionCreateMutation = {
   } | null > | null,
 };
 
-export type goalSuggestionDeleteMutationVariables = {
+export interface goalSuggestionDeleteMutationVariables {
   answerId?: string | null,
   screeningToolScoreRangeId?: string | null,
   goalSuggestionTemplateId: string,
 };
 
-export type goalSuggestionDeleteMutation = {
+export interface goalSuggestionDeleteMutation {
   // unsuggest a goal suggestion template for an answer
   goalSuggestionDelete:  Array< {
     id: string,
@@ -4003,11 +4003,11 @@ export type goalSuggestionDeleteMutation = {
   } | null > | null,
 };
 
-export type goalSuggestionTemplateCreateMutationVariables = {
+export interface goalSuggestionTemplateCreateMutationVariables {
   title: string,
 };
 
-export type goalSuggestionTemplateCreateMutation = {
+export interface goalSuggestionTemplateCreateMutation {
   // goal suggestion template create
   goalSuggestionTemplateCreate:  {
     id: string,
@@ -4031,11 +4031,11 @@ export type goalSuggestionTemplateCreateMutation = {
   } | null,
 };
 
-export type goalSuggestionTemplateDeleteMutationVariables = {
+export interface goalSuggestionTemplateDeleteMutationVariables {
   goalSuggestionTemplateId: string,
 };
 
-export type goalSuggestionTemplateDeleteMutation = {
+export interface goalSuggestionTemplateDeleteMutation {
   // Deletes a goal suggestion template
   goalSuggestionTemplateDelete:  {
     id: string,
@@ -4059,12 +4059,12 @@ export type goalSuggestionTemplateDeleteMutation = {
   } | null,
 };
 
-export type goalSuggestionTemplateEditMutationVariables = {
+export interface goalSuggestionTemplateEditMutationVariables {
   goalSuggestionTemplateId: string,
   title: string,
 };
 
-export type goalSuggestionTemplateEditMutation = {
+export interface goalSuggestionTemplateEditMutation {
   // Edit a goal suggestion template
   goalSuggestionTemplateEdit:  {
     id: string,
@@ -4088,11 +4088,11 @@ export type goalSuggestionTemplateEditMutation = {
   } | null,
 };
 
-export type logInUserMutationVariables = {
+export interface logInUserMutationVariables {
   googleAuthCode: string,
 };
 
-export type logInUserMutation = {
+export interface logInUserMutation {
   // Login user
   userLogin:  {
     // The auth token to allow for quick login. JWT passed back in via headers for further requests
@@ -4112,7 +4112,7 @@ export type logInUserMutation = {
   } | null,
 };
 
-export type patientAnswersCreateMutationVariables = {
+export interface patientAnswersCreateMutationVariables {
   patientId: string,
   patientAnswers: Array< PatientAnswerInput | null >,
   questionIds: Array< string | null >,
@@ -4121,7 +4121,7 @@ export type patientAnswersCreateMutationVariables = {
   progressNoteId?: string | null,
 };
 
-export type patientAnswersCreateMutation = {
+export interface patientAnswersCreateMutation {
   // Create a patient answer
   patientAnswersCreate:  Array< {
     id: string,
@@ -4253,12 +4253,12 @@ export type patientAnswersCreateMutation = {
   } | null > | null,
 };
 
-export type patientConcernBulkEditMutationVariables = {
+export interface patientConcernBulkEditMutationVariables {
   patientConcerns: Array< PatientConcernBulkEditFields | null >,
   patientId: string,
 };
 
-export type patientConcernBulkEditMutation = {
+export interface patientConcernBulkEditMutation {
   // patient concern bulk edit
   patientConcernBulkEdit:  Array< {
     id: string,
@@ -4349,13 +4349,13 @@ export type patientConcernBulkEditMutation = {
   } | null > | null,
 };
 
-export type patientConcernCreateMutationVariables = {
+export interface patientConcernCreateMutationVariables {
   patientId: string,
   concernId: string,
   startedAt?: string | null,
 };
 
-export type patientConcernCreateMutation = {
+export interface patientConcernCreateMutation {
   // patient concern create
   patientConcernCreate:  {
     id: string,
@@ -4446,11 +4446,11 @@ export type patientConcernCreateMutation = {
   } | null,
 };
 
-export type patientConcernDeleteMutationVariables = {
+export interface patientConcernDeleteMutationVariables {
   patientConcernId: string,
 };
 
-export type patientConcernDeleteMutation = {
+export interface patientConcernDeleteMutation {
   // patient concern delete
   patientConcernDelete:  {
     id: string,
@@ -4541,7 +4541,7 @@ export type patientConcernDeleteMutation = {
   } | null,
 };
 
-export type patientEditMutationVariables = {
+export interface patientEditMutationVariables {
   patientId: string,
   firstName?: string | null,
   middleName?: string | null,
@@ -4554,7 +4554,7 @@ export type patientEditMutationVariables = {
   consentToText?: boolean | null,
 };
 
-export type patientEditMutation = {
+export interface patientEditMutation {
   // Edit fields on patient stored in the db
   patientEdit:  {
     id: string,
@@ -4571,7 +4571,7 @@ export type patientEditMutation = {
   } | null,
 };
 
-export type patientGoalCreateMutationVariables = {
+export interface patientGoalCreateMutationVariables {
   title?: string | null,
   patientId: string,
   patientConcernId?: string | null,
@@ -4582,7 +4582,7 @@ export type patientGoalCreateMutationVariables = {
   startedAt?: string | null,
 };
 
-export type patientGoalCreateMutation = {
+export interface patientGoalCreateMutation {
   // patient goal create
   patientGoalCreate:  {
     id: string,
@@ -4642,11 +4642,11 @@ export type patientGoalCreateMutation = {
   } | null,
 };
 
-export type patientGoalDeleteMutationVariables = {
+export interface patientGoalDeleteMutationVariables {
   patientGoalId: string,
 };
 
-export type patientGoalDeleteMutation = {
+export interface patientGoalDeleteMutation {
   // patient goal delete
   patientGoalDelete:  {
     id: string,
@@ -4706,24 +4706,24 @@ export type patientGoalDeleteMutation = {
   } | null,
 };
 
-export type patientScratchPadEditMutationVariables = {
+export interface patientScratchPadEditMutationVariables {
   patientId: string,
   text: string,
 };
 
-export type patientScratchPadEditMutation = {
+export interface patientScratchPadEditMutation {
   // Edit a patient scratch pad
   patientScratchPadEdit:  {
     text: string | null,
   } | null,
 };
 
-export type patientScreeningToolSubmissionCreateMutationVariables = {
+export interface patientScreeningToolSubmissionCreateMutationVariables {
   patientId: string,
   screeningToolId: string,
 };
 
-export type patientScreeningToolSubmissionCreateMutation = {
+export interface patientScreeningToolSubmissionCreateMutation {
   // patient screening tool submission create
   patientScreeningToolSubmissionCreate:  {
     id: string,
@@ -4846,11 +4846,11 @@ export type patientScreeningToolSubmissionCreateMutation = {
   } | null,
 };
 
-export type patientScreeningToolSubmissionScoreMutationVariables = {
+export interface patientScreeningToolSubmissionScoreMutationVariables {
   patientScreeningToolSubmissionId: string,
 };
 
-export type patientScreeningToolSubmissionScoreMutation = {
+export interface patientScreeningToolSubmissionScoreMutation {
   // patient screening tool submission score
   patientScreeningToolSubmissionScore:  {
     id: string,
@@ -4973,7 +4973,7 @@ export type patientScreeningToolSubmissionScoreMutation = {
   } | null,
 };
 
-export type patientSetupMutationVariables = {
+export interface patientSetupMutationVariables {
   homeClinicId: string,
   firstName: string,
   middleName?: string | null,
@@ -4998,7 +4998,7 @@ export type patientSetupMutationVariables = {
   policyGroupNumber?: string | null,
 };
 
-export type patientSetupMutation = {
+export interface patientSetupMutation {
   // Setup patient creates the patient in the db AND in athena
   patientSetup:  {
     id: string,
@@ -5015,11 +5015,11 @@ export type patientSetupMutation = {
   } | null,
 };
 
-export type progressNoteCompleteMutationVariables = {
+export interface progressNoteCompleteMutationVariables {
   progressNoteId: string,
 };
 
-export type progressNoteCompleteMutation = {
+export interface progressNoteCompleteMutation {
   // completes a progress note
   progressNoteComplete:  {
     id: string,
@@ -5065,11 +5065,11 @@ export type progressNoteCompleteMutation = {
   } | null,
 };
 
-export type progressNoteCreateMutationVariables = {
+export interface progressNoteCreateMutationVariables {
   patientId: string,
 };
 
-export type progressNoteCreateMutation = {
+export interface progressNoteCreateMutation {
   // creates a progress note
   progressNoteCreate:  {
     id: string,
@@ -5115,7 +5115,7 @@ export type progressNoteCreateMutation = {
   } | null,
 };
 
-export type progressNoteEditMutationVariables = {
+export interface progressNoteEditMutationVariables {
   progressNoteId: string,
   progressNoteTemplateId: string,
   startedAt?: string | null,
@@ -5123,7 +5123,7 @@ export type progressNoteEditMutationVariables = {
   summary?: string | null,
 };
 
-export type progressNoteEditMutation = {
+export interface progressNoteEditMutation {
   // edits a progress note
   progressNoteEdit:  {
     id: string,
@@ -5169,11 +5169,11 @@ export type progressNoteEditMutation = {
   } | null,
 };
 
-export type progressNoteTemplateCreateMutationVariables = {
+export interface progressNoteTemplateCreateMutationVariables {
   title: string,
 };
 
-export type progressNoteTemplateCreateMutation = {
+export interface progressNoteTemplateCreateMutation {
   // create a progress note template
   progressNoteTemplateCreate:  {
     id: string,
@@ -5183,11 +5183,11 @@ export type progressNoteTemplateCreateMutation = {
   } | null,
 };
 
-export type progressNoteTemplateDeleteMutationVariables = {
+export interface progressNoteTemplateDeleteMutationVariables {
   progressNoteTemplateId: string,
 };
 
-export type progressNoteTemplateDeleteMutation = {
+export interface progressNoteTemplateDeleteMutation {
   // deletes a progress note template
   progressNoteTemplateDelete:  {
     id: string,
@@ -5197,12 +5197,12 @@ export type progressNoteTemplateDeleteMutation = {
   } | null,
 };
 
-export type progressNoteTemplateEditMutationVariables = {
+export interface progressNoteTemplateEditMutationVariables {
   title: string,
   progressNoteTemplateId: string,
 };
 
-export type progressNoteTemplateEditMutation = {
+export interface progressNoteTemplateEditMutation {
   // edits a progress note template
   progressNoteTemplateEdit:  {
     id: string,
@@ -5212,12 +5212,12 @@ export type progressNoteTemplateEditMutation = {
   } | null,
 };
 
-export type questionConditionCreateMutationVariables = {
+export interface questionConditionCreateMutationVariables {
   answerId: string,
   questionId: string,
 };
 
-export type questionConditionCreateMutation = {
+export interface questionConditionCreateMutation {
   // Create a QuestionCondition
   questionConditionCreate:  {
     id: string,
@@ -5226,11 +5226,11 @@ export type questionConditionCreateMutation = {
   } | null,
 };
 
-export type questionConditionDeleteMutationVariables = {
+export interface questionConditionDeleteMutationVariables {
   questionConditionId: string,
 };
 
-export type questionConditionDeleteMutation = {
+export interface questionConditionDeleteMutation {
   // Deletes a QuestionCondition
   questionConditionDelete:  {
     id: string,
@@ -5239,13 +5239,13 @@ export type questionConditionDeleteMutation = {
   } | null,
 };
 
-export type questionConditionEditMutationVariables = {
+export interface questionConditionEditMutationVariables {
   questionConditionId: string,
   answerId: string,
   questionId: string,
 };
 
-export type questionConditionEditMutation = {
+export interface questionConditionEditMutation {
   // Edit a QuestionCondition
   questionConditionEdit:  {
     id: string,
@@ -5254,7 +5254,7 @@ export type questionConditionEditMutation = {
   } | null,
 };
 
-export type questionCreateMutationVariables = {
+export interface questionCreateMutationVariables {
   title: string,
   answerType: AnswerTypeOptions,
   validatedSource?: string | null,
@@ -5266,7 +5266,7 @@ export type questionCreateMutationVariables = {
   computedFieldId?: string | null,
 };
 
-export type questionCreateMutation = {
+export interface questionCreateMutation {
   // Create a Question
   questionCreate:  {
     id: string,
@@ -5410,11 +5410,11 @@ export type questionCreateMutation = {
   } | null,
 };
 
-export type questionDeleteMutationVariables = {
+export interface questionDeleteMutationVariables {
   questionId: string,
 };
 
-export type questionDeleteMutation = {
+export interface questionDeleteMutation {
   // Delete a question
   questionDelete:  {
     id: string,
@@ -5558,7 +5558,7 @@ export type questionDeleteMutation = {
   } | null,
 };
 
-export type questionEditMutationVariables = {
+export interface questionEditMutationVariables {
   questionId: string,
   title?: string | null,
   answerType?: AnswerTypeOptions | null,
@@ -5567,7 +5567,7 @@ export type questionEditMutationVariables = {
   applicableIfType?: QuestionConditionTypeOptions | null,
 };
 
-export type questionEditMutation = {
+export interface questionEditMutation {
   // Edit a Question
   questionEdit:  {
     id: string,
@@ -5711,7 +5711,7 @@ export type questionEditMutation = {
   } | null,
 };
 
-export type quickCallCreateMutationVariables = {
+export interface quickCallCreateMutationVariables {
   patientId: string,
   reason: string,
   summary: string,
@@ -5721,7 +5721,7 @@ export type quickCallCreateMutationVariables = {
   startTime: string,
 };
 
-export type quickCallCreateMutation = {
+export interface quickCallCreateMutation {
   // creates a quick call
   quickCallCreate:  {
     id: string,
@@ -5751,11 +5751,11 @@ export type quickCallCreateMutation = {
   } | null,
 };
 
-export type riskAreaAssessmentSubmissionCompleteMutationVariables = {
+export interface riskAreaAssessmentSubmissionCompleteMutationVariables {
   riskAreaAssessmentSubmissionId: string,
 };
 
-export type riskAreaAssessmentSubmissionCompleteMutation = {
+export interface riskAreaAssessmentSubmissionCompleteMutation {
   // risk area assessment submission complete
   riskAreaAssessmentSubmissionComplete:  {
     id: string,
@@ -5838,12 +5838,12 @@ export type riskAreaAssessmentSubmissionCompleteMutation = {
   } | null,
 };
 
-export type riskAreaAssessmentSubmissionCreateMutationVariables = {
+export interface riskAreaAssessmentSubmissionCreateMutationVariables {
   riskAreaId: string,
   patientId: string,
 };
 
-export type riskAreaAssessmentSubmissionCreateMutation = {
+export interface riskAreaAssessmentSubmissionCreateMutation {
   // risk area assessment submission create
   riskAreaAssessmentSubmissionCreate:  {
     id: string,
@@ -5926,7 +5926,7 @@ export type riskAreaAssessmentSubmissionCreateMutation = {
   } | null,
 };
 
-export type riskAreaCreateMutationVariables = {
+export interface riskAreaCreateMutationVariables {
   title: string,
   assessmentType: AssessmentType,
   riskAreaGroupId: string,
@@ -5935,7 +5935,7 @@ export type riskAreaCreateMutationVariables = {
   highRiskThreshold: number,
 };
 
-export type riskAreaCreateMutation = {
+export interface riskAreaCreateMutation {
   // Create a RiskArea
   riskAreaCreate:  {
     id: string,
@@ -5954,11 +5954,11 @@ export type riskAreaCreateMutation = {
   } | null,
 };
 
-export type riskAreaDeleteMutationVariables = {
+export interface riskAreaDeleteMutationVariables {
   riskAreaId: string,
 };
 
-export type riskAreaDeleteMutation = {
+export interface riskAreaDeleteMutation {
   // Deletes a RiskArea
   riskAreaDelete:  {
     id: string,
@@ -5977,7 +5977,7 @@ export type riskAreaDeleteMutation = {
   } | null,
 };
 
-export type riskAreaEditMutationVariables = {
+export interface riskAreaEditMutationVariables {
   riskAreaId: string,
   title?: string | null,
   order?: number | null,
@@ -5985,7 +5985,7 @@ export type riskAreaEditMutationVariables = {
   highRiskThreshold?: number | null,
 };
 
-export type riskAreaEditMutation = {
+export interface riskAreaEditMutation {
   // Edit a RiskArea
   riskAreaEdit:  {
     id: string,
@@ -6004,14 +6004,14 @@ export type riskAreaEditMutation = {
   } | null,
 };
 
-export type riskAreaGroupCreateMutationVariables = {
+export interface riskAreaGroupCreateMutationVariables {
   title: string,
   order: number,
   mediumRiskThreshold: number,
   highRiskThreshold: number,
 };
 
-export type riskAreaGroupCreateMutation = {
+export interface riskAreaGroupCreateMutation {
   // Create a RiskAreaGroup
   riskAreaGroupCreate:  {
     id: string,
@@ -6025,11 +6025,11 @@ export type riskAreaGroupCreateMutation = {
   } | null,
 };
 
-export type riskAreaGroupDeleteMutationVariables = {
+export interface riskAreaGroupDeleteMutationVariables {
   riskAreaGroupId: string,
 };
 
-export type riskAreaGroupDeleteMutation = {
+export interface riskAreaGroupDeleteMutation {
   // Delete a RiskAreaGroup
   riskAreaGroupDelete:  {
     id: string,
@@ -6043,7 +6043,7 @@ export type riskAreaGroupDeleteMutation = {
   } | null,
 };
 
-export type riskAreaGroupEditMutationVariables = {
+export interface riskAreaGroupEditMutationVariables {
   riskAreaGroupId: string,
   title?: string | null,
   order?: number | null,
@@ -6051,7 +6051,7 @@ export type riskAreaGroupEditMutationVariables = {
   highRiskThreshold?: number | null,
 };
 
-export type riskAreaGroupEditMutation = {
+export interface riskAreaGroupEditMutation {
   // Edit a RiskAreaGroup
   riskAreaGroupEdit:  {
     id: string,
@@ -6065,12 +6065,12 @@ export type riskAreaGroupEditMutation = {
   } | null,
 };
 
-export type screeningToolCreateMutationVariables = {
+export interface screeningToolCreateMutationVariables {
   title: string,
   riskAreaId: string,
 };
 
-export type screeningToolCreateMutation = {
+export interface screeningToolCreateMutation {
   // screening tool create
   screeningToolCreate:  {
     id: string,
@@ -6134,11 +6134,11 @@ export type screeningToolCreateMutation = {
   } | null,
 };
 
-export type screeningToolDeleteMutationVariables = {
+export interface screeningToolDeleteMutationVariables {
   screeningToolId: string,
 };
 
-export type screeningToolDeleteMutation = {
+export interface screeningToolDeleteMutation {
   // screening tool delete
   screeningToolDelete:  {
     id: string,
@@ -6202,13 +6202,13 @@ export type screeningToolDeleteMutation = {
   } | null,
 };
 
-export type screeningToolEditMutationVariables = {
+export interface screeningToolEditMutationVariables {
   screeningToolId: string,
   title?: string | null,
   riskAreaId?: string | null,
 };
 
-export type screeningToolEditMutation = {
+export interface screeningToolEditMutation {
   // screening tool edit
   screeningToolEdit:  {
     id: string,
@@ -6272,14 +6272,14 @@ export type screeningToolEditMutation = {
   } | null,
 };
 
-export type screeningToolScoreRangeCreateMutationVariables = {
+export interface screeningToolScoreRangeCreateMutationVariables {
   description: string,
   screeningToolId: string,
   minimumScore: number,
   maximumScore: number,
 };
 
-export type screeningToolScoreRangeCreateMutation = {
+export interface screeningToolScoreRangeCreateMutation {
   // screening tool score range create
   screeningToolScoreRangeCreate:  {
     id: string,
@@ -6320,11 +6320,11 @@ export type screeningToolScoreRangeCreateMutation = {
   } | null,
 };
 
-export type screeningToolScoreRangeDeleteMutationVariables = {
+export interface screeningToolScoreRangeDeleteMutationVariables {
   screeningToolScoreRangeId: string,
 };
 
-export type screeningToolScoreRangeDeleteMutation = {
+export interface screeningToolScoreRangeDeleteMutation {
   // screening tool score range delete
   screeningToolScoreRangeDelete:  {
     id: string,
@@ -6365,7 +6365,7 @@ export type screeningToolScoreRangeDeleteMutation = {
   } | null,
 };
 
-export type screeningToolScoreRangeEditMutationVariables = {
+export interface screeningToolScoreRangeEditMutationVariables {
   screeningToolScoreRangeId: string,
   description?: string | null,
   screeningToolId?: string | null,
@@ -6373,7 +6373,7 @@ export type screeningToolScoreRangeEditMutationVariables = {
   maximumScore?: number | null,
 };
 
-export type screeningToolScoreRangeEditMutation = {
+export interface screeningToolScoreRangeEditMutation {
   // screening tool score range edit
   screeningToolScoreRangeEdit:  {
     id: string,
@@ -6414,12 +6414,12 @@ export type screeningToolScoreRangeEditMutation = {
   } | null,
 };
 
-export type taskCommentCreateMutationVariables = {
+export interface taskCommentCreateMutationVariables {
   taskId: string,
   body: string,
 };
 
-export type taskCommentCreateMutation = {
+export interface taskCommentCreateMutation {
   // Create a task
   taskCommentCreate:  {
     id: string,
@@ -6442,12 +6442,12 @@ export type taskCommentCreateMutation = {
   } | null,
 };
 
-export type taskCommentEditMutationVariables = {
+export interface taskCommentEditMutationVariables {
   taskCommentId: string,
   body: string,
 };
 
-export type taskCommentEditMutation = {
+export interface taskCommentEditMutation {
   // Edit a task
   taskCommentEdit:  {
     id: string,
@@ -6470,11 +6470,11 @@ export type taskCommentEditMutation = {
   } | null,
 };
 
-export type taskCompleteMutationVariables = {
+export interface taskCompleteMutationVariables {
   taskId: string,
 };
 
-export type taskCompleteMutation = {
+export interface taskCompleteMutation {
   // Complete a task
   taskComplete:  {
     id: string,
@@ -6527,7 +6527,7 @@ export type taskCompleteMutation = {
   } | null,
 };
 
-export type taskCreateMutationVariables = {
+export interface taskCreateMutationVariables {
   title: string,
   description: string,
   dueAt: string,
@@ -6537,7 +6537,7 @@ export type taskCreateMutationVariables = {
   patientGoalId?: string | null,
 };
 
-export type taskCreateMutation = {
+export interface taskCreateMutation {
   // Create a task
   taskCreate:  {
     id: string,
@@ -6590,11 +6590,11 @@ export type taskCreateMutation = {
   } | null,
 };
 
-export type taskDeleteMutationVariables = {
+export interface taskDeleteMutationVariables {
   taskId: string,
 };
 
-export type taskDeleteMutation = {
+export interface taskDeleteMutation {
   // Delete a task
   taskDelete:  {
     id: string,
@@ -6647,7 +6647,7 @@ export type taskDeleteMutation = {
   } | null,
 };
 
-export type taskEditMutationVariables = {
+export interface taskEditMutationVariables {
   taskId: string,
   assignedToId?: string | null,
   title?: string | null,
@@ -6657,7 +6657,7 @@ export type taskEditMutationVariables = {
   patientGoalId?: string | null,
 };
 
-export type taskEditMutation = {
+export interface taskEditMutation {
   // Edit a task
   taskEdit:  {
     id: string,
@@ -6710,7 +6710,7 @@ export type taskEditMutation = {
   } | null,
 };
 
-export type taskTemplateCreateMutationVariables = {
+export interface taskTemplateCreateMutationVariables {
   title: string,
   goalSuggestionTemplateId: string,
   completedWithinNumber?: number | null,
@@ -6720,7 +6720,7 @@ export type taskTemplateCreateMutationVariables = {
   careTeamAssigneeRole?: string | null,
 };
 
-export type taskTemplateCreateMutation = {
+export interface taskTemplateCreateMutation {
   // task template create
   taskTemplateCreate:  {
     id: string,
@@ -6737,11 +6737,11 @@ export type taskTemplateCreateMutation = {
   } | null,
 };
 
-export type taskTemplateDeleteMutationVariables = {
+export interface taskTemplateDeleteMutationVariables {
   taskTemplateId: string,
 };
 
-export type taskTemplateDeleteMutation = {
+export interface taskTemplateDeleteMutation {
   // Deletes a task template
   taskTemplateDelete:  {
     id: string,
@@ -6758,7 +6758,7 @@ export type taskTemplateDeleteMutation = {
   } | null,
 };
 
-export type taskTemplateEditMutationVariables = {
+export interface taskTemplateEditMutationVariables {
   title: string,
   taskTemplateId: string,
   goalSuggestionTemplateId?: string | null,
@@ -6769,7 +6769,7 @@ export type taskTemplateEditMutationVariables = {
   careTeamAssigneeRole?: string | null,
 };
 
-export type taskTemplateEditMutation = {
+export interface taskTemplateEditMutation {
   // Edit a task template
   taskTemplateEdit:  {
     id: string,
@@ -6786,11 +6786,11 @@ export type taskTemplateEditMutation = {
   } | null,
 };
 
-export type taskUncompleteMutationVariables = {
+export interface taskUncompleteMutationVariables {
   taskId: string,
 };
 
-export type taskUncompleteMutation = {
+export interface taskUncompleteMutation {
   // Uncomplete a task
   taskUncomplete:  {
     id: string,
@@ -6843,12 +6843,12 @@ export type taskUncompleteMutation = {
   } | null,
 };
 
-export type taskUserFollowMutationVariables = {
+export interface taskUserFollowMutationVariables {
   taskId: string,
   userId: string,
 };
 
-export type taskUserFollowMutation = {
+export interface taskUserFollowMutation {
   // Add user to task followers
   taskUserFollow:  {
     id: string,
@@ -6901,13 +6901,13 @@ export type taskUserFollowMutation = {
   } | null,
 };
 
-export type getTasksForCurrentUserQueryVariables = {
+export interface getTasksForCurrentUserQueryVariables {
   pageNumber?: number | null,
   pageSize?: number | null,
   orderBy?: TaskOrderOptions | null,
 };
 
-export type getTasksForCurrentUserQuery = {
+export interface getTasksForCurrentUserQuery {
   // Current user's Tasks
   tasksForCurrentUser:  {
     edges:  Array< {
@@ -6968,12 +6968,12 @@ export type getTasksForCurrentUserQuery = {
   } | null,
 };
 
-export type userCreateMutationVariables = {
+export interface userCreateMutationVariables {
   email: string,
   homeClinicId: string,
 };
 
-export type userCreateMutation = {
+export interface userCreateMutation {
   // Create a new user
   userCreate:  {
     id: string,
@@ -6989,11 +6989,11 @@ export type userCreateMutation = {
   } | null,
 };
 
-export type userDeleteMutationVariables = {
+export interface userDeleteMutationVariables {
   email: string,
 };
 
-export type userDeleteMutation = {
+export interface userDeleteMutation {
   // Delete user
   userDelete:  {
     id: string,
@@ -7009,12 +7009,12 @@ export type userDeleteMutation = {
   } | null,
 };
 
-export type userEditRoleMutationVariables = {
+export interface userEditRoleMutationVariables {
   email: string,
   userRole: string,
 };
 
-export type userEditRoleMutation = {
+export interface userEditRoleMutation {
   // Edit user
   userEditRole:  {
     id: string,
@@ -7030,7 +7030,7 @@ export type userEditRoleMutation = {
   } | null,
 };
 
-export type FullAnswerFragment = {
+export interface FullAnswerFragment {
   id: string,
   displayValue: string,
   value: string,
@@ -7144,7 +7144,7 @@ export type FullAnswerFragment = {
   } | null,
 };
 
-export type FullAppointmentFragment = {
+export interface FullAppointmentFragment {
   athenaAppointmentId: string,
   dateTime: string,
   athenaDepartmentId: number,
@@ -7159,7 +7159,7 @@ export type FullAppointmentFragment = {
   clinicId: string,
 };
 
-export type FullCarePlanSuggestionFragment = {
+export interface FullCarePlanSuggestionFragment {
   id: string,
   patientId: string,
   patient:  {
@@ -7229,7 +7229,7 @@ export type FullCarePlanSuggestionFragment = {
   patientScreeningToolSubmissionId: string | null,
 };
 
-export type FullCarePlanUpdateEventFragment = {
+export interface FullCarePlanUpdateEventFragment {
   id: string,
   patientId: string,
   patient:  {
@@ -7410,12 +7410,12 @@ export type FullCarePlanUpdateEventFragment = {
   deletedAt: string | null,
 };
 
-export type FullClinicFragment = {
+export interface FullClinicFragment {
   id: string,
   name: string,
 };
 
-export type FullComputedFieldFragment = {
+export interface FullComputedFieldFragment {
   id: string,
   label: string,
   slug: string,
@@ -7425,7 +7425,7 @@ export type FullComputedFieldFragment = {
   deletedAt: string | null,
 };
 
-export type FullConcernFragment = {
+export interface FullConcernFragment {
   id: string,
   title: string,
   createdAt: string,
@@ -7433,7 +7433,7 @@ export type FullConcernFragment = {
   deletedAt: string | null,
 };
 
-export type FullEventNotificationFragment = {
+export interface FullEventNotificationFragment {
   id: string,
   title: string | null,
   userId: string,
@@ -7511,7 +7511,7 @@ export type FullEventNotificationFragment = {
   deletedAt: string | null,
 };
 
-export type FullGoalSuggestionTemplateFragment = {
+export interface FullGoalSuggestionTemplateFragment {
   id: string,
   title: string,
   taskTemplates:  Array< {
@@ -7532,7 +7532,7 @@ export type FullGoalSuggestionTemplateFragment = {
   deletedAt: string | null,
 };
 
-export type FullPatientAnswerEventFragment = {
+export interface FullPatientAnswerEventFragment {
   id: string,
   patientId: string,
   patient:  {
@@ -7826,7 +7826,7 @@ export type FullPatientAnswerEventFragment = {
   deletedAt: string | null,
 };
 
-export type FullPatientAnswerFragment = {
+export interface FullPatientAnswerFragment {
   id: string,
   createdAt: string,
   updatedAt: string,
@@ -7955,7 +7955,7 @@ export type FullPatientAnswerFragment = {
   patientScreeningToolSubmissionId: string | null,
 };
 
-export type FullPatientConcernFragment = {
+export interface FullPatientConcernFragment {
   id: string,
   order: number,
   concernId: string,
@@ -8043,7 +8043,7 @@ export type FullPatientConcernFragment = {
   deletedAt: string | null,
 };
 
-export type FullPatientGoalFragment = {
+export interface FullPatientGoalFragment {
   id: string,
   title: string,
   patientId: string,
@@ -8100,7 +8100,7 @@ export type FullPatientGoalFragment = {
   deletedAt: string | null,
 };
 
-export type FullPatientMedicationFragment = {
+export interface FullPatientMedicationFragment {
   medicationId: string,
   name: string,
   quantity: string | null,
@@ -8109,11 +8109,11 @@ export type FullPatientMedicationFragment = {
   startDate: string | null,
 };
 
-export type FullPatientScratchPadFragment = {
+export interface FullPatientScratchPadFragment {
   text: string | null,
 };
 
-export type FullPatientScreeningToolSubmissionFragment = {
+export interface FullPatientScreeningToolSubmissionFragment {
   id: string,
   screeningToolId: string,
   patientId: string,
@@ -8233,7 +8233,7 @@ export type FullPatientScreeningToolSubmissionFragment = {
   } | null,
 };
 
-export type FullPatientSearchResultFragment = {
+export interface FullPatientSearchResultFragment {
   id: string,
   firstName: string,
   lastName: string,
@@ -8242,7 +8242,7 @@ export type FullPatientSearchResultFragment = {
   userCareTeam: boolean,
 };
 
-export type FullProgressNoteActivityFragment = {
+export interface FullProgressNoteActivityFragment {
   taskEvents:  Array< {
     id: string,
     taskId: string,
@@ -8798,14 +8798,14 @@ export type FullProgressNoteActivityFragment = {
   } >,
 };
 
-export type FullProgressNoteTemplateFragment = {
+export interface FullProgressNoteTemplateFragment {
   id: string,
   title: string,
   createdAt: string,
   deletedAt: string | null,
 };
 
-export type FullProgressNoteFragment = {
+export interface FullProgressNoteFragment {
   id: string,
   patientId: string,
   user:  {
@@ -8848,13 +8848,13 @@ export type FullProgressNoteFragment = {
   } | null,
 };
 
-export type FullQuestionConditionFragment = {
+export interface FullQuestionConditionFragment {
   id: string,
   questionId: string,
   answerId: string,
 };
 
-export type FullQuestionFragment = {
+export interface FullQuestionFragment {
   id: string,
   createdAt: string,
   deletedAt: string | null,
@@ -8995,7 +8995,7 @@ export type FullQuestionFragment = {
   } | null,
 };
 
-export type FullQuickCallFragment = {
+export interface FullQuickCallFragment {
   id: string,
   userId: string,
   user:  {
@@ -9022,7 +9022,7 @@ export type FullQuickCallFragment = {
   deletedAt: string | null,
 };
 
-export type FullRiskAreaAssessmentSubmissionFragment = {
+export interface FullRiskAreaAssessmentSubmissionFragment {
   id: string,
   riskAreaId: string,
   patientId: string,
@@ -9102,7 +9102,7 @@ export type FullRiskAreaAssessmentSubmissionFragment = {
   } >,
 };
 
-export type FullRiskAreaGroupFragment = {
+export interface FullRiskAreaGroupFragment {
   id: string,
   createdAt: string,
   updatedAt: string,
@@ -9113,13 +9113,13 @@ export type FullRiskAreaGroupFragment = {
   highRiskThreshold: number,
 };
 
-export type FullRiskAreaSummaryFragment = {
+export interface FullRiskAreaSummaryFragment {
   summary: Array< string >,
   started: boolean,
   lastUpdated: string | null,
 };
 
-export type FullRiskAreaFragment = {
+export interface FullRiskAreaFragment {
   id: string,
   createdAt: string,
   updatedAt: string,
@@ -9135,12 +9135,12 @@ export type FullRiskAreaFragment = {
   },
 };
 
-export type FullRiskScoreFragment = {
+export interface FullRiskScoreFragment {
   score: number,
   forceHighRisk: boolean,
 };
 
-export type FullScreeningToolScoreRangeFragment = {
+export interface FullScreeningToolScoreRangeFragment {
   id: string,
   description: string,
   minimumScore: number,
@@ -9178,7 +9178,7 @@ export type FullScreeningToolScoreRangeFragment = {
   } | null > | null,
 };
 
-export type FullScreeningToolFragment = {
+export interface FullScreeningToolFragment {
   id: string,
   title: string,
   riskAreaId: string,
@@ -9239,7 +9239,7 @@ export type FullScreeningToolFragment = {
   deletedAt: string | null,
 };
 
-export type FullTaskCommentFragment = {
+export interface FullTaskCommentFragment {
   id: string,
   body: string,
   user:  {
@@ -9259,7 +9259,7 @@ export type FullTaskCommentFragment = {
   updatedAt: string | null,
 };
 
-export type FullTaskEventFragment = {
+export interface FullTaskEventFragment {
   id: string,
   taskId: string,
   userId: string,
@@ -9314,7 +9314,7 @@ export type FullTaskEventFragment = {
   deletedAt: string | null,
 };
 
-export type FullTaskTemplateFragment = {
+export interface FullTaskTemplateFragment {
   id: string,
   title: string,
   completedWithinNumber: number | null,
@@ -9328,7 +9328,7 @@ export type FullTaskTemplateFragment = {
   deletedAt: string | null,
 };
 
-export type FullTaskFragment = {
+export interface FullTaskFragment {
   id: string,
   title: string,
   description: string | null,
@@ -9378,7 +9378,7 @@ export type FullTaskFragment = {
   },
 };
 
-export type FullUserFragment = {
+export interface FullUserFragment {
   id: string,
   locale: string | null,
   firstName: string | null,
@@ -9391,7 +9391,7 @@ export type FullUserFragment = {
   updatedAt: string,
 };
 
-export type ShortPatientFragment = {
+export interface ShortPatientFragment {
   id: string,
   firstName: string | null,
   middleName: string | null,
@@ -9405,7 +9405,7 @@ export type ShortPatientFragment = {
   consentToCall: boolean | null,
 };
 
-export type ShortTaskFragment = {
+export interface ShortTaskFragment {
   id: string,
   title: string,
   description: string | null,
@@ -9439,7 +9439,7 @@ export type ShortTaskFragment = {
   },
 };
 
-export type ShortUserFragment = {
+export interface ShortUserFragment {
   id: string,
   firstName: string | null,
   lastName: string | null,

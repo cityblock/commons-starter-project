@@ -154,10 +154,6 @@ declare module 'schema' {
   */
     eventNotificationsForTask: IEventNotificationEdges | null;
     /**
-    description: Task template
-  */
-    taskTemplate: ITaskTemplate | null;
-    /**
     description: Concern
   */
     concern: IConcern | null;
@@ -197,6 +193,10 @@ declare module 'schema' {
     description: Goal suggestion for template for answer
   */
     goalSuggestionTemplatesForAnswer: Array<IGoalSuggestionTemplate> | null;
+    /**
+    description: Task template
+  */
+    taskTemplate: ITaskTemplate | null;
     /**
     description: Task templates
   */
@@ -325,9 +325,9 @@ declare module 'schema' {
     lastName: string | null;
     email: string | null;
     userRole: IUserRoleEnum;
-    createdAt: string;
     homeClinicId: string;
     googleProfileImageUrl: string | null;
+    createdAt: string;
     updatedAt: string;
   }
 

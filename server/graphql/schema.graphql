@@ -171,7 +171,6 @@ type User implements uniqueId {
   lastName: String
   email: String
   userRole: UserRole!
-  createdAt: String!
   homeClinicId: String!
   googleProfileImageUrl: String
   createdAt: String!
@@ -771,7 +770,6 @@ type RiskAreaAssessmentSubmission implements uniqueId {
   patient: Patient!
   userId: String!
   user: User!
-  riskArea: RiskArea!
   createdAt: String!
   updatedAt: String!
   deletedAt: String
@@ -1677,8 +1675,6 @@ type RootQueryType {
   ): EventNotificationEdges
   # Event notifications for a task
   eventNotificationsForTask(taskId: String!, pageNumber: Int, pageSize: Int): EventNotificationEdges
-  # Task template
-  taskTemplate(taskTemplateId: String!): TaskTemplate
   # Concern
   concern(concernId: String!): Concern
   # Concerns

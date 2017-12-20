@@ -39,6 +39,7 @@ Setup your database. First install postgres 10 from brew or postgresapp.
     createdb commons_test
     psql -d commons_test -c "create extension if not exists btree_gist"
     psql -d commons_test -c "create extension pg_trgm"
+    psql -c "alter database commons_test owner to root"
 
 
 ### Development
@@ -300,16 +301,15 @@ Note: this will eventually become untenable but for now it is convenient.
 
 To get started with [Schemaspy][] which creates an interactive website to explore the schema, first, download and install [Docker][]. After you have Docker installed and running, follow these steps:
 
-  cd some-new-directoy  
-  docker run -v "$PWD:/output" schemaspy/schemaspy:snapshot -t pgsql -db commons -u insertYourDbUsernameHere -host docker.for.mac.localhost -hq
-  open some-new-directoy/index.html
+    cd some-new-directoy  
+    docker run -v "$PWD:/output" schemaspy/schemaspy:snapshot -t pgsql -db commons -u insertYourDbUsernameHere -host docker.for.mac.localhost -hq
+    open some-new-directoy/index.html
 
 To get started with [Schemacrawler][], which creates a somewhat nicer image of the schema but is not interactive, first, setup docker and then follow these steps:
 
-  docker run -v $(pwd):/share --rm -i -t --entrypoint=/bin/bash sualeh/schemacrawler
-  ./schemacrawler.sh -server=pgsql -user= insertYourDbUsernameHere -database=commons -host=docker.for.mac.localhost -infolevel=maximum -routines= -command=schema -outputfile=/share/sc_db.png
-  exit
-  open sc_db.png
+    docker run -v $(pwd):/share --rm -i -t --entrypoint=/bin/bash sualeh/schemacrawler ./schemacrawler.sh -server=pgsql -user= insertYourDbUsernameHere -database=commons -host=docker.for.mac.localhost -infolevel=maximum -routines= -command=schema -outputfile=/share/sc_db.png
+    exit
+    open sc_db.png
 
 
 

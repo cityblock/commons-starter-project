@@ -70,6 +70,7 @@ export async function progressNoteEdit(
     startedAt: input.startedAt || undefined,
     location: input.location || undefined,
     summary: input.summary || undefined,
+    memberConcern: input.memberConcern || undefined,
   });
 }
 

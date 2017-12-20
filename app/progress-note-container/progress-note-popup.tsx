@@ -80,6 +80,7 @@ export class ProgressNotePopup extends React.Component<allProps, IState> {
     startedAt: string | null;
     location: string | null;
     summary: string | null;
+    memberConcern: string | null;
   }) => {
     const { progressNote } = this.props;
 
@@ -91,6 +92,7 @@ export class ProgressNotePopup extends React.Component<allProps, IState> {
           startedAt: options.startedAt,
           location: options.location,
           summary: options.summary,
+          memberConcern: options.memberConcern,
         },
       });
     }

@@ -493,6 +493,7 @@ export const progressNote = {
   completedAt: null,
   patientId: patient.id,
   summary: 'summary!',
+  memberConcern: 'member concern',
   patient,
   user: currentUser,
   progressNoteTemplateId: progressNoteTemplate.id,

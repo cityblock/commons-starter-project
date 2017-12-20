@@ -22,7 +22,7 @@ interface IPatientScreeningToolSubmissionScoreFields {
 
 /* tslint:disable:max-line-length */
 export const EAGER_QUERY =
-  '[screeningTool, screeningToolScoreRange, patient, user, riskArea, patientAnswers, carePlanSuggestions.[patient, concern, goalSuggestionTemplate.[taskTemplates]]]';
+  '[screeningTool, screeningToolScoreRange, patient, user, riskArea.[riskAreaGroup], patientAnswers, carePlanSuggestions.[patient, concern, goalSuggestionTemplate.[taskTemplates]]]';
 /* tslint:enable:max-line-length */
 
 /* tslint:disable:member-ordering */

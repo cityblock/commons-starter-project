@@ -10,6 +10,7 @@ interface IProgressNoteEditableFields {
   location?: string;
   userId: string;
   summary?: string;
+  memberConcern?: string;
   progressNoteTemplateId: string;
 }
 
@@ -30,6 +31,7 @@ export default class ProgressNote extends BaseModel {
   startedAt: string;
   completedAt: string;
   summary: string;
+  memberConcern: string;
   user: User;
   patient: Patient;
 
@@ -46,6 +48,7 @@ export default class ProgressNote extends BaseModel {
       location: { type: 'string' },
       completedAt: { type: 'string' },
       summary: { type: 'string' },
+      memberConcern: { type: 'string' },
       deletedAt: { type: 'string ' },
     },
   };

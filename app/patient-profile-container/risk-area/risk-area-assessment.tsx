@@ -20,7 +20,6 @@ import Button from '../../shared/library/button/button';
 import { Popup } from '../../shared/popup/popup';
 import ScreeningToolsPopup from '../screening-tool/screening-tools-popup';
 import * as styles from './css/risk-area-assessment.css';
-
 import RiskAreaAssessmentQuestions from './risk-area-assessment-questions';
 import RiskAreaAssessmentResultsPopup from './risk-area-assessment-results-popup';
 

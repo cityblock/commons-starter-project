@@ -84,6 +84,7 @@ exports[`builder concerns renders progress note popup with templates renders pro
           "deletedAt": null,
           "id": "progress-note-id",
           "location": null,
+          "memberConcern": "member concern",
           "patient": Object {
             "consentToCall": true,
             "consentToText": true,

@@ -34,6 +34,7 @@ import {
 import * as styles from './css/progress-note-context.css';
 import { ProgressNoteLocation } from './progress-note-location';
 import { getCurrentTime, ProgressNoteTime } from './progress-note-time';
+import ScreeningToolDropdown from './screening-tool-dropdown';
 
 interface IProps {
   patientId: string;
@@ -46,6 +47,7 @@ interface IProps {
       startedAt: string | null;
       location: string | null;
       summary: string | null;
+      memberConcern: string | null;
     },
   ) => void;
 }
@@ -68,6 +70,7 @@ interface IGraphqlProps {
 
 interface IDispatchProps {
   redirectToMap: () => any;
+  redirectTo360: () => any;
 }
 
 type allProps = IGraphqlProps & IProps & IDispatchProps;
@@ -77,6 +80,7 @@ interface IState {
   progressNoteLocation: string | null;
   progressNoteTemplateId: string | null;
   progressNoteSummary: string | null;
+  progressNoteMemberConcern: string | null;
   loading?: boolean;
   error: string | null;
 }
@@ -111,6 +115,8 @@ export class ProgressNoteContext extends React.Component<allProps, IState> {
       progressNoteLocation: progressNote && progressNote.location ? progressNote.location : null,
       progressNoteTemplateId: getProgressNoteTemplateId(props),
       progressNoteSummary: progressNote && progressNote.summary ? progressNote.summary : '',
+      progressNoteMemberConcern:
+        progressNote && progressNote.memberConcern ? progressNote.memberConcern : '',
     };
   }
 
@@ -137,6 +143,8 @@ export class ProgressNoteContext extends React.Component<allProps, IState> {
       progressNoteLocation: progressNote && progressNote.location ? progressNote.location : null,
       progressNoteTemplateId: getProgressNoteTemplateId(props),
       progressNoteSummary: progressNote && progressNote.summary ? progressNote.summary : '',
+      progressNoteMemberConcern:
+        progressNote && progressNote.memberConcern ? progressNote.memberConcern : '',
     });
   }
 
@@ -222,12 +230,20 @@ export class ProgressNoteContext extends React.Component<allProps, IState> {
     this.deferredSaveProgressNote();
   };
 
+  onProgressNoteMemberConcernChange = async (event: React.ChangeEvent<HTMLTextAreaElement>) => {
+    await this.setState({
+      progressNoteMemberConcern: event.currentTarget.value,
+    });
+    this.deferredSaveProgressNote();
+  };
+
   saveProgressNote = () => {
     const {
       progressNoteTime,
       progressNoteLocation,
       progressNoteTemplateId,
       progressNoteSummary,
+      progressNoteMemberConcern,
     } = this.state;
     if (progressNoteTemplateId) {
       this.props.onChange({
@@ -235,18 +251,20 @@ export class ProgressNoteContext extends React.Component<allProps, IState> {
         startedAt: progressNoteTime,
         location: progressNoteLocation,
         summary: progressNoteSummary,
+        memberConcern: progressNoteMemberConcern,
       });
     }
   };
 
   render() {
-    const { progressNoteTemplates, clinics } = this.props;
+    const { progressNoteTemplates, clinics, patientId } = this.props;
     const {
       progressNoteTime,
       progressNoteLocation,
       error,
       progressNoteTemplateId,
       progressNoteSummary,
+      progressNoteMemberConcern,
     } = this.state;
     const encounterTypes = (progressNoteTemplates || []).map(template => (
       <option key={template.id} value={template.id}>
@@ -278,6 +296,26 @@ export class ProgressNoteContext extends React.Component<allProps, IState> {
         <div className={styles.error}>{error}</div>
         {this.renderQuestions()}
         <div className={styles.summaryContainer}>
+          <FormLabel
+            messageId="progressNote.memberConcernAndObservation"
+            htmlFor="memberConcernAndObservation"
+          />
+          <ScreeningToolDropdown patientId={patientId} />
+          <br />
+          <br />
+          <Button
+            fullWidth={true}
+            messageId="progressNote.update360"
+            onClick={this.props.redirectTo360}
+          />
+          <br />
+          <br />
+          <Textarea
+            value={progressNoteMemberConcern || ''}
+            onChange={this.onProgressNoteMemberConcernChange}
+          />
+        </div>
+        <div className={styles.summaryContainer}>
           <FormLabel messageId="progressNote.contextAndPlan" htmlFor="contextAndPlan" />
           <Button
             fullWidth={true}
@@ -295,6 +333,7 @@ export class ProgressNoteContext extends React.Component<allProps, IState> {
 function mapDispatchToProps(dispatch: Dispatch<() => void>, props: IProps): IDispatchProps {
   return {
     redirectToMap: () => dispatch(push(`/patients/${props.patientId}/map/active`)),
+    redirectTo360: () => dispatch(push(`/patients/${props.patientId}/360`)),
   };
 }
 

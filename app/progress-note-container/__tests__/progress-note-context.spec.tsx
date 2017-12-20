@@ -25,6 +25,7 @@ describe('progress note context', () => {
         progressNote={progressNote}
         progressNoteTemplates={[progressNoteTemplate]}
         onChange={jest.fn()}
+        redirectTo360={jest.fn()}
         updateReadyToSubmit={jest.fn()}
         clinics={clinics}
         questions={[question]}

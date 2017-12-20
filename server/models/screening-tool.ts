@@ -16,7 +16,7 @@ interface IScreeningToolEditableFields {
 
 /* tslint:disable:max-line-length */
 export const EAGER_QUERY =
-  '[riskArea, screeningToolScoreRanges.[concernSuggestions, goalSuggestions.[taskTemplates]]]';
+  '[riskArea.[riskAreaGroup], screeningToolScoreRanges.[concernSuggestions, goalSuggestions.[taskTemplates]]]';
 /* tslint:enable:max-line-length */
 
 /* tslint:disable:member-ordering */

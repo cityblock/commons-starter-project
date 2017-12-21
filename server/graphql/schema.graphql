@@ -849,6 +849,13 @@ type ComputedFieldsSchema {
   computedFields: [ComputedFieldSchema!]!
 }
 
+type ComputedFieldFlag {
+  id: ID!
+  patientAnswerId: ID!
+  userId: ID!
+  reason: String
+}
+
 #
 # BEGIN INPUT FIELDS
 #
@@ -1411,6 +1418,12 @@ input ComputedFieldDeleteInput {
   computedFieldId: String!
 }
 
+# params for creating a computed field flag
+input ComputedFieldFlagCreateInput {
+  patientAnswerId: ID!
+  reason: String
+}
+
 type RootMutationType {
   # Create a new user
   userCreate(input: UserCreateInput): User
@@ -1596,6 +1609,7 @@ type RootMutationType {
   riskAreaAssessmentSubmissionComplete(
     input: RiskAreaAssessmentSubmissionCompleteInput
   ): RiskAreaAssessmentSubmission
+  computedFieldFlagCreate(input: ComputedFieldFlagCreateInput): ComputedFieldFlag
 }
 
 type RootQueryType {

@@ -794,6 +794,17 @@ export interface computedFieldDeleteMutation {
   } | null,
 };
 
+export interface computedFieldFlagCreateMutationVariables {
+  patientAnswerId: string,
+  reason?: string | null,
+};
+
+export interface computedFieldFlagCreateMutation {
+  computedFieldFlagCreate:  {
+    id: string,
+  } | null,
+};
+
 export interface concernCreateMutationVariables {
   title: string,
 };

@@ -35,7 +35,8 @@ export type Resource =
   | 'progressNote'
   | 'progressNoteTemplate'
   | 'quickCall'
-  | 'computedField';
+  | 'computedField'
+  | 'computedFieldFlag';
 
 /*
 ACL SPEC:

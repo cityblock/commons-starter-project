@@ -6,7 +6,7 @@ import User from './user';
 interface IComputedFieldFlagCreateFields {
   patientAnswerId: string;
   userId: string;
-  reason: string;
+  reason: string | null;
 }
 
 /* tslint:disable:member-ordering */
@@ -14,7 +14,7 @@ interface IComputedFieldFlagCreateFields {
 export default class ComputedFieldFlag extends BaseModel {
   patientAnswerId: string;
   userId: string;
-  reason: string;
+  reason: string | null;
   patientAnswer: PatientAnswer;
   user: User;
 
@@ -51,10 +51,10 @@ export default class ComputedFieldFlag extends BaseModel {
   };
 
   static async create(
-    input: IComputedFieldFlagCreateFields,
+    { patientAnswerId, userId, reason }: IComputedFieldFlagCreateFields,
     txn?: Transaction,
   ): Promise<ComputedFieldFlag> {
-    return this.query(txn).insertAndFetch(input);
+    return this.query(txn).insertAndFetch({ patientAnswerId, userId, reason });
   }
 
   static async get(computedFieldFlagId: string, txn?: Transaction): Promise<ComputedFieldFlag> {

@@ -22,6 +22,7 @@ import {
   resolveUserPatientPanel,
 } from './care-team-resolver';
 import { clinicCreate, resolveClinic, resolveClinics } from './clinic-resolver';
+import { computedFieldFlagCreate } from './computed-field-flag-resolver';
 import {
   computedFieldCreate,
   computedFieldDelete,
@@ -389,6 +390,7 @@ const resolveFunctions = {
     computedFieldDelete,
     riskAreaAssessmentSubmissionComplete,
     riskAreaAssessmentSubmissionCreate,
+    computedFieldFlagCreate,
   },
 };
 

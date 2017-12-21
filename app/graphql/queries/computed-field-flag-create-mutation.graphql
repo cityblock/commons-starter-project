@@ -1,0 +1,5 @@
+mutation computedFieldFlagCreate($patientAnswerId: ID!, $reason: String) {
+  computedFieldFlagCreate(input: { patientAnswerId: $patientAnswerId, reason: $reason }) {
+    id
+  }
+}

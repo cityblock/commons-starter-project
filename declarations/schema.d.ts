@@ -1479,6 +1479,7 @@ declare module 'schema' {
     description: risk area assessment submission complete
   */
     riskAreaAssessmentSubmissionComplete: IRiskAreaAssessmentSubmission | null;
+    computedFieldFlagCreate: IComputedFieldFlag | null;
   }
 
   /**
@@ -2194,6 +2195,22 @@ declare module 'schema' {
 
   interface IRiskAreaAssessmentSubmissionCompleteInput {
     riskAreaAssessmentSubmissionId: string;
+  }
+
+  /**
+    description: params for creating a computed field flag
+  */
+  interface IComputedFieldFlagCreateInput {
+    patientAnswerId: string;
+    reason?: string | null;
+  }
+
+
+  interface IComputedFieldFlag {
+    id: string;
+    patientAnswerId: string;
+    userId: string;
+    reason: string | null;
   }
 
 

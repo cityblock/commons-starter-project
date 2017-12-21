@@ -1,7 +1,5 @@
 #import "./full-concern.graphql"
 #import "./full-goal-suggestion-template.graphql"
-#import "./full-risk-area.graphql"
-#import "./full-screening-tool.graphql"
 
 fragment FullAnswer on Answer {
   id
@@ -20,9 +18,11 @@ fragment FullAnswer on Answer {
     ...FullGoalSuggestionTemplate
   }
   riskArea {
-    ...FullRiskArea
+    id
+    title
   }
   screeningTool {
-    ...FullScreeningTool
+    id
+    title
   }
 }

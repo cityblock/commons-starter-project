@@ -1,6 +1,6 @@
 import * as classNames from 'classnames';
 import * as React from 'react';
-import { FullProgressNoteActivityFragment } from '../../graphql/types';
+import { getProgressNoteActivityForProgressNoteQuery } from '../../graphql/types';
 import Icon from '../../shared/library/icon/icon';
 import * as styles from './css/progress-note-activity.css';
 import ProgressNoteActivityCarePlanUpdates from './progress-note-activity-care-plan-updates';
@@ -16,7 +16,9 @@ type ActivityType =
 
 interface IProps {
   activityType: ActivityType;
-  progressNoteActivity?: FullProgressNoteActivityFragment;
+  /* tslint:disable:max-line-length */
+  progressNoteActivity?: getProgressNoteActivityForProgressNoteQuery['progressNoteActivityForProgressNote'];
+  /* tslint:enable:max-line-length */
 }
 
 interface IState {

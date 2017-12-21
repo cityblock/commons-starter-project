@@ -1,9 +1,7 @@
 @import '../../css/sizes';
 
 .activity {
-  min-height: 325px;
-  max-height: 325px;
-  overflow-y: scroll;
+  overflow-y: auto;
   -webkit-overflow-scrolling: touch;
 }
 

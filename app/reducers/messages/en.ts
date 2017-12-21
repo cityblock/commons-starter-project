@@ -55,6 +55,12 @@ export const ENGLISH_TRANSLATION = {
     'careTeam.email': 'Send an email',
     'careTeam.profile': 'Go to profile',
     'computedField.flag': 'Flag for review',
+    /* tslint:disable:max-line-length */
+    'computedField.flagDetail':
+      'Provide the following information for this question to be reviewed',
+    /* tslint:enable:max-line-length */
+    'computedField.reason': 'Reason for review:',
+    'computedField.reasonDetail': 'Enter the reason for review...',
     'concernCreate.addConcern': 'Add concern',
     'concernCreate.cancel': 'Cancel',
     'concernCreate.detail': "Complete this form to add a concern to this member's MAP",

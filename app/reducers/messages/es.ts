@@ -54,6 +54,12 @@ export const SPANISH_TRANSLATION = {
     'careTeam.email': 'Enviar un correo electrónico',
     'careTeam.profile': 'Ir al perfil',
     'computedField.flag': 'Bandera para revisión',
+    /* tslint:disable:max-line-length */
+    'computedField.flagDetail':
+      'Proporcione la siguiente información para que esta pregunta sea revisada',
+    /* tslint:enable:max-line-length */
+    'computedField.reason': 'Motivo de la revisión:',
+    'computedField.reasonDetail': 'Ingrese el motivo de la revisión...',
     'concernCreate.addConcern': 'Añadir preocupación',
     'concernCreate.cancel': 'Cancelar',
     /* tslint:disable:max-line-length */

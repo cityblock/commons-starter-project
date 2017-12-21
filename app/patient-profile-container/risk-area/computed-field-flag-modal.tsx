@@ -10,8 +10,14 @@ import {
   computedFieldFlagCreateMutationVariables,
 } from '../../graphql/types';
 import { IComputedFieldFlagPopupOptions } from '../../reducers/popup-reducer';
+import FormLabel from '../../shared/library/form-label/form-label';
+import ModalButtons from '../../shared/library/modal-buttons/modal-buttons';
+import ModalHeader from '../../shared/library/modal-header/modal-header';
+import Spinner from '../../shared/library/spinner/spinner';
+import TextArea from '../../shared/library/textarea/textarea';
 import { Popup } from '../../shared/popup/popup';
 import { IState as IAppState } from '../../store';
+import * as styles from './css/computed-field-flag-modal.css';
 
 interface IStateProps {
   visible: boolean;
@@ -31,6 +37,8 @@ interface IGraphqlProps {
 type allProps = IStateProps & IDispatchProps & IGraphqlProps;
 
 interface IState {
+  reason: string;
+  complete: boolean;
   loading: boolean;
   error: string | null;
 }
@@ -38,15 +46,69 @@ interface IState {
 export class ComputedFieldFlagModal extends React.Component<allProps, IState> {
   constructor(props: allProps) {
     super(props);
-    this.state = { loading: false, error: null };
+    this.state = { reason: '', complete: false, loading: false, error: null };
   }
+
+  onReasonChange = (e: React.ChangeEvent<HTMLTextAreaElement>): void => {
+    this.setState({ reason: e.currentTarget.value });
+  };
+
+  submitFlag = async (patientAnswerId: string) => {
+    const { flagComputedField } = this.props;
+    const { reason } = this.state;
+    await flagComputedField({ variables: { patientAnswerId, reason } });
+  }
+
+  onSubmit = async () => {
+    const { patientAnswerIds, closePopup } = this.props;
+    const { loading } = this.state;
+
+    if (!loading) {
+      this.setState({ loading: true, error: null });
+
+      try {
+        const promises = patientAnswerIds.map(this.submitFlag);
+        await Promise.all(promises);
+        this.setState({ reason: '' });
+        closePopup();
+      } catch (err) {
+        this.setState({ error: err.message });
+      }
+    }
+
+    this.setState({ loading: false });
+  };
 
   render(): JSX.Element {
     const { visible, closePopup } = this.props;
+    const { reason, complete, loading } = this.state;
+
+    if (loading) return <Spinner />;
+
+    const fields = loading ? (
+      <Spinner />
+    ) : (
+      <div>
+        <FormLabel messageId="computedField.reason" gray={!!reason && complete} />
+        <TextArea
+          value={reason}
+          onChange={this.onReasonChange}
+          placeholderMessageId="computedField.reasonDetail"
+          onBlur={() => this.setState({ complete: true })}
+          onFocus={() => this.setState({ complete: false })}
+        />
+        <ModalButtons cancel={closePopup} submit={this.onSubmit} />
+      </div>
+    );
 
     return (
-      <Popup visible={visible} closePopup={closePopup}>
-        <h1>Compueted field flag yo</h1>
+      <Popup visible={visible} closePopup={closePopup} style="no-padding" className={styles.popup}>
+        <ModalHeader
+          titleMessageId="computedField.flag"
+          bodyMessageId="computedField.flagDetail"
+          closePopup={closePopup}
+        />
+        <div className={styles.fields}>{fields}</div>
       </Popup>
     );
   }

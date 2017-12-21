@@ -19,6 +19,7 @@ import * as sortSearchStyles from '../../shared/css/sort-search.css';
 import Button from '../../shared/library/button/button';
 import { Popup } from '../../shared/popup/popup';
 import ScreeningToolsPopup from '../screening-tool/screening-tools-popup';
+import ComputedFieldFlagModal from './computed-field-flag-modal';
 import * as styles from './css/risk-area-assessment.css';
 import RiskAreaAssessmentQuestions from './risk-area-assessment-questions';
 import RiskAreaAssessmentResultsPopup from './risk-area-assessment-results-popup';
@@ -149,6 +150,7 @@ export class RiskAreaAssessment extends React.Component<allProps, IState> {
       riskAreaAssessmentSubmission && riskAreaAssessmentSubmission.completedAt ? true : false;
     return (
       <div>
+        {riskArea && riskArea.assessmentType === 'automated' && <ComputedFieldFlagModal />}
         <div className={classNames(sortSearchStyles.sortSearchBar, styles.buttonBar)}>
           <Button
             color="white"

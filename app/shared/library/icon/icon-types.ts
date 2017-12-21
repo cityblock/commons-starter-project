@@ -19,4 +19,5 @@ export type IconName =
   | 'moreVert'
   | 'pauseCircleOutline'
   | 'phone'
-  | 'search';
+  | 'search'
+  | 'warning';

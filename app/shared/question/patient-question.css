@@ -49,25 +49,6 @@
   color: var(--light-gray-font-color);
 }
 
-.questionHamburger {
-  background-image: url('../../assets/dot-hamburger-grey.svg');
-  background-size: contain;
-  background-position: center center;
-  background-repeat: no-repeat;
-  height: 12px;
-  width: 5px;
-
-  &:hover {
-    cursor: pointer;
-  }
-}
-
-.question.disabled .questionHeader .questionHamburger {
-  &:hover {
-    cursor: default;
-  }
-}
-
 .questionBody {
   width: 100%;
   padding: var(--small-gutter) 0;

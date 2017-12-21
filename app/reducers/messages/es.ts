@@ -53,6 +53,7 @@ export const SPANISH_TRANSLATION = {
     'careTeam.text': 'Envía un mensaje de texto',
     'careTeam.email': 'Enviar un correo electrónico',
     'careTeam.profile': 'Ir al perfil',
+    'computedField.flag': 'Bandera para revisión',
     'concernCreate.addConcern': 'Añadir preocupación',
     'concernCreate.cancel': 'Cancelar',
     /* tslint:disable:max-line-length */

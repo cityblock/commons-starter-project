@@ -81,6 +81,21 @@ export const riskArea = {
   questions: [],
 };
 
+export const automatedRiskArea = {
+  id: 'ghost',
+  createdAt: 'Thu Jul 13 2017 16:52:56 GMT-0400 (EDT)',
+  updatedAt: 'Thu Jul 13 2017 16:52:56 GMT-0400 (EDT)',
+  dueAt: 'Thu Jul 13 2017 16:52:56 GMT-0400 (EDT)',
+  deletedAt: null,
+  title: "Jon Snow's Direwolf",
+  order: 1,
+  mediumRiskThreshold: 5,
+  highRiskThreshold: 8,
+  assessmentType: 'automated' as any,
+  riskAreaGroup,
+  questions: [],
+};
+
 export const riskAreaAssessmentSubmission = {
   carePlanSuggestions: [],
   completedAt: null,

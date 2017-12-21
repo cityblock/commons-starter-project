@@ -3,6 +3,7 @@ import * as React from 'react';
 import { FullQuestionFragment } from '../../graphql/types';
 import * as styles from './patient-question.css';
 import QuestionAnswers from './question-answers';
+import QuestionMenu from './question-menu';
 
 interface IProps {
   onChange: (
@@ -17,6 +18,7 @@ interface IProps {
     id: string;
     value: string;
   }>;
+  patientAnswerIds?: string[];
 }
 
 export default class PatientQuestion extends React.Component<IProps, {}> {
@@ -34,7 +36,14 @@ export default class PatientQuestion extends React.Component<IProps, {}> {
   };
 
   render() {
-    const { question, editable, answerData, visible, displayHamburger } = this.props;
+    const {
+      question,
+      editable,
+      answerData,
+      visible,
+      displayHamburger,
+      patientAnswerIds,
+    } = this.props;
 
     let highRiskAnswer: boolean = false;
 
@@ -55,7 +64,10 @@ export default class PatientQuestion extends React.Component<IProps, {}> {
       [styles.hidden]: !visible,
     });
 
-    const hamburger = displayHamburger ? <div className={styles.questionHamburger} /> : null;
+    const hamburger = displayHamburger ? (
+      <QuestionMenu patientAnswerIds={patientAnswerIds || []} questionId={question.id} />
+    ) : null;
+
     return (
       <div className={questionStyles}>
         <div className={styles.questionHeader}>

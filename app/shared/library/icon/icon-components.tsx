@@ -20,6 +20,7 @@ import MoreVertIcon from 'material-ui-icons/MoreVert';
 import PauseCircleOutlineIcon from 'material-ui-icons/PauseCircleOutline';
 import PhoneIcon from 'material-ui-icons/Phone';
 import SearchIcon from 'material-ui-icons/Search';
+import WarningIcon from 'material-ui-icons/Warning';
 
 // Add other components as needed from here, preserving name used in material icon
 // Then add icon name to icon-types file to ensure only accepted icon names passed as icon props
@@ -45,6 +46,7 @@ const components = {
   pauseCircleOutline: PauseCircleOutlineIcon,
   phone: PhoneIcon,
   search: SearchIcon,
+  warning: WarningIcon,
 };
 
 export default components;

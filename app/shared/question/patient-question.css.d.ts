@@ -4,7 +4,6 @@ export const highRiskAnswer: string;
 export const questionHeader: string;
 export const questionTitle: string;
 export const disabled: string;
-export const questionHamburger: string;
 export const questionBody: string;
 export const noBottomPadding: string;
 export const questionHistory: string;

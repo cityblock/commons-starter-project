@@ -54,6 +54,7 @@ export const ENGLISH_TRANSLATION = {
     'careTeam.text': 'Send text message',
     'careTeam.email': 'Send an email',
     'careTeam.profile': 'Go to profile',
+    'computedField.flag': 'Flag for review',
     'concernCreate.addConcern': 'Add concern',
     'concernCreate.cancel': 'Cancel',
     'concernCreate.detail': "Complete this form to add a concern to this member's MAP",

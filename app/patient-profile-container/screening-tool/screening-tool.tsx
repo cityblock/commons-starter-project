@@ -159,7 +159,7 @@ export class ScreeningTool extends React.Component<allProps> {
       <PatientQuestion
         editable={true}
         visible={visible}
-        displayHamburger={true}
+        displayHamburger={false}
         answerData={dataForQuestion}
         onChange={this.onChange}
         key={`${question.id}-${index}`}

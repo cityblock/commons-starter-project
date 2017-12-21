@@ -1,7 +1,12 @@
 import { shallow } from 'enzyme';
 import * as React from 'react';
 import Button from '../../../shared/library/button/button';
-import { riskArea, riskAreaAssessmentSubmission } from '../../../shared/util/test-data';
+import {
+  automatedRiskArea,
+  riskArea,
+  riskAreaAssessmentSubmission,
+} from '../../../shared/util/test-data';
+import ComputedFieldFlagModal from '../computed-field-flag-modal';
 import { RiskAreaAssessment } from '../risk-area-assessment';
 
 describe('risk area assessment questions component', () => {
@@ -39,5 +44,14 @@ describe('risk area assessment questions component', () => {
         .find('.riskAreasPanel')
         .find('Connect(Apollo(Apollo(Apollo(RiskAreaAssessmentQuestions))))').length,
     ).toBe(1);
+  });
+
+  it('does not render computed field flag modal by for manual assessment', () => {
+    expect(wrapper.find(ComputedFieldFlagModal).length).toBe(0);
+  });
+
+  it('renders computed field flag modal for automated assessments', () => {
+    wrapper.setProps({ riskArea: automatedRiskArea });
+    expect(wrapper.find(ComputedFieldFlagModal).length).toBe(1);
   });
 });

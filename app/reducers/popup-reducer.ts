@@ -67,6 +67,25 @@ export interface IPatientConcernDeletePopup {
   options: IPatientConcernDeletePopupOptions;
 }
 
+export interface IPatientQuestionHamburgerMenu {
+  name: 'PATIENT_QUESTION_OPTIONS';
+  options: IPatientQuestionHamburgerMenuOptions;
+}
+
+export interface IPatientQuestionHamburgerMenuOptions {
+  questionId: string;
+  patientAnswerIds: string[];
+}
+
+export interface IComputedFieldFlagPopup {
+  name: 'COMPUTED_FIELD_FLAG';
+  options: IComputedFieldFlagPopupOptions;
+}
+
+export interface IComputedFieldFlagPopupOptions {
+  patientAnswerIds: string[];
+}
+
 export interface IDefaultState {
   name: '';
   options: {};
@@ -80,6 +99,8 @@ export type IState =
   | IPatientGoalHamburgerMenu
   | IPatientGoalDeletePopup
   | IPatientConcernDeletePopup
+  | IPatientQuestionHamburgerMenu
+  | IComputedFieldFlagPopup
   | IDefaultState;
 
 export const initialState: IDefaultState = {

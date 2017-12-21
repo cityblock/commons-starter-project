@@ -80,20 +80,22 @@ export class RiskAreaAssessmentQuestions extends React.Component<allProps> {
     question: FullQuestionFragment,
     index: number,
     answerData: IQuestionAnswerHash,
+    patientAnswerIds: string[],
   ) => {
-    const { inProgress } = this.props;
+    const { inProgress, riskArea } = this.props;
     const visible = getQuestionVisibility(question, answerData);
     const dataForQuestion = answerData[question.id] || [];
 
     return (
       <PatientQuestion
         visible={visible}
-        displayHamburger={true}
         answerData={dataForQuestion}
         onChange={this.onChange}
         key={`${question.id}-${index}`}
         question={question}
         editable={inProgress}
+        patientAnswerIds={patientAnswerIds}
+        displayHamburger={!!riskArea && riskArea.assessmentType === 'automated'}
       />
     );
   };
@@ -104,9 +106,14 @@ export class RiskAreaAssessmentQuestions extends React.Component<allProps> {
     const answerData = setupQuestionAnswerHash({}, riskAreaQuestions);
     updateQuestionAnswerHash(answerData, patientAnswers || []);
 
-    return (riskAreaQuestions || []).map((question, index) =>
-      this.renderQuestion(question, index, answerData),
-    );
+    return (riskAreaQuestions || []).map((question, index) => {
+      const filteredPatientAnswers = patientAnswers
+        ? patientAnswers
+            .filter(answer => answer.question && answer.question.id === question.id)
+            .map(answer => answer.id)
+        : [];
+      return this.renderQuestion(question, index, answerData, filteredPatientAnswers);
+    });
   };
 
   render() {

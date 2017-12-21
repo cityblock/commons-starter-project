@@ -5,6 +5,7 @@ mutation screeningToolScoreRangeCreate(
   $screeningToolId: String!
   $minimumScore: Int!
   $maximumScore: Int!
+  $riskAdjustmentType: RiskAdjustmentTypeOptions!
 ) {
   screeningToolScoreRangeCreate(
     input: {
@@ -12,6 +13,7 @@ mutation screeningToolScoreRangeCreate(
       screeningToolId: $screeningToolId
       minimumScore: $minimumScore
       maximumScore: $maximumScore
+      riskAdjustmentType: $riskAdjustmentType
     }
   ) {
     ...FullScreeningToolScoreRange

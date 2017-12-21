@@ -8,6 +8,7 @@ interface IScreeningToolScoreRangeCreateFields {
   description: string;
   minimumScore: number;
   maximumScore: number;
+  riskAdjustmentType?: RiskAdjustmentType;
 }
 
 interface IScreeningToolScoreRangeEditableFields {
@@ -16,9 +17,12 @@ interface IScreeningToolScoreRangeEditableFields {
   minimumScore?: number;
   maximumScore?: number;
   deletedAt?: string;
+  riskAdjustmentType?: RiskAdjustmentType;
 }
 
-export const EAGER_QUERY = '[screeningTool]';
+type RiskAdjustmentType = 'inactive' | 'increment' | 'forceHighRisk';
+
+export const EAGER_QUERY = '[screeningTool, concernSuggestions]';
 export const RANGE_REGEX = /\[(\d+),(\d+)\)/;
 
 /* tslint:disable:member-ordering */
@@ -27,6 +31,7 @@ export default class ScreeningToolScoreRange extends BaseModel {
   screeningTool: ScreeningTool;
   description: string;
   range: string;
+  riskAdjustmentType: RiskAdjustmentType;
 
   static tableName = 'screening_tool_score_range';
 
@@ -37,6 +42,7 @@ export default class ScreeningToolScoreRange extends BaseModel {
       screeningToolId: { type: 'string' },
       description: { type: 'string' },
       range: { type: 'int4range' },
+      riskAdjustmentType: { type: 'string' },
       deletedAt: { type: 'string' },
     },
   };

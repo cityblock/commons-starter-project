@@ -254,7 +254,7 @@ exports[`renders answer create-edit 1`] = `
         Risk adjustment type:
       </div>
       <select
-        className="select inputSmall"
+        className="select select inputSmall"
         name="riskAdjustmentType"
         onChange={[Function]}
         required={true}
@@ -262,25 +262,27 @@ exports[`renders answer create-edit 1`] = `
       >
         <option
           disabled={true}
-          hidden={true}
           value=""
         >
           Select risk adjustment type
         </option>
         <option
+          disabled={undefined}
           value="inactive"
         >
           inactive
         </option>
         <option
+          disabled={undefined}
           value="increment"
         >
           increment
         </option>
         <option
+          disabled={undefined}
           value="forceHighRisk"
         >
-          forceHighRisk
+          force high risk
         </option>
       </select>
     </div>

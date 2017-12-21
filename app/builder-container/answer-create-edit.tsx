@@ -19,6 +19,8 @@ import {
 import * as formStyles from '../shared/css/forms.css';
 import * as loadingStyles from '../shared/css/loading-spinner.css';
 import * as answerStyles from '../shared/css/two-panel-right.css';
+import Option from '../shared/library/option/option';
+import Select from '../shared/library/select/select';
 import { IUpdatedField } from '../shared/util/updated-fields';
 import CarePlanSuggestions from './care-plan-suggestions';
 import * as styles from './css/risk-area-create.css';
@@ -274,20 +276,22 @@ class AnswerCreateEdit extends React.Component<allProps, IState> {
           </div>
           <div className={styles.inlineInputGroup}>
             <div className={answerStyles.smallText}>Risk adjustment type:</div>
-            <select
+            <Select
               required
               name="riskAdjustmentType"
               value={answer.riskAdjustmentType || ''}
               onChange={this.onChange}
               className={classNames(formStyles.select, formStyles.inputSmall)}
             >
-              <option value="" disabled hidden>
-                Select risk adjustment type
-              </option>
-              <option value="inactive">inactive</option>
-              <option value="increment">increment</option>
-              <option value="forceHighRisk">forceHighRisk</option>
-            </select>
+              <Option
+                value=""
+                disabled={true}
+                messageId="riskAdjustmentType.selectRiskAdjustmentType"
+              />
+              <Option value="inactive" messageId="riskAdjustmentType.inactive" />
+              <Option value="increment" messageId="riskAdjustmentType.increment" />
+              <Option value="forceHighRisk" messageId="riskAdjustmentType.forceHighRisk" />
+            </Select>
           </div>
           <div className={styles.inlineInputGroup}>
             <div className={answerStyles.smallText}>Summary Text:</div>

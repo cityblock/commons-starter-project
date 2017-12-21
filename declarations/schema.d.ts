@@ -772,6 +772,7 @@ declare module 'schema' {
     description: string;
     screeningToolId: string;
     screeningTool: IScreeningTool;
+    riskAdjustmentType: IRiskAdjustmentTypeOptionsEnum;
     minimumScore: number;
     maximumScore: number;
     createdAt: string;
@@ -2096,6 +2097,7 @@ declare module 'schema' {
     description: string;
     minimumScore: number;
     maximumScore: number;
+    riskAdjustmentType: IRiskAdjustmentTypeOptionsEnum;
   }
 
 
@@ -2106,6 +2108,7 @@ declare module 'schema' {
     minimumScore?: number | null;
     maximumScore?: number | null;
     deletedAt?: string | null;
+    riskAdjustmentType?: IRiskAdjustmentTypeOptionsEnum | null;
   }
 
 

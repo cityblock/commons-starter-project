@@ -15,10 +15,13 @@ import {
   screeningToolScoreRangeEditMutation,
   screeningToolScoreRangeEditMutationVariables,
   FullScreeningToolScoreRangeFragment,
+  RiskAdjustmentTypeOptions,
 } from '../graphql/types';
 import * as formStyles from '../shared/css/forms.css';
 import * as loadingStyles from '../shared/css/loading-spinner.css';
 import * as scoreRangeStyles from '../shared/css/two-panel-right.css';
+import Option from '../shared/library/option/option';
+import Select from '../shared/library/select/select';
 import { IUpdatedField } from '../shared/util/updated-fields';
 import CarePlanSuggestions from './care-plan-suggestions';
 import * as styles from './css/risk-area-create.css';
@@ -72,6 +75,7 @@ export class ScoreRangeCreateEdit extends React.Component<allProps, IState> {
             minimumScore: 0,
             maximumScore: 1,
             screeningToolId: props.screeningToolId,
+            riskAdjustmentType: 'inactive' as RiskAdjustmentTypeOptions,
           },
     };
   }
@@ -194,6 +198,20 @@ export class ScoreRangeCreateEdit extends React.Component<allProps, IState> {
               className={classNames(formStyles.input, formStyles.inputSmall)}
               onChange={this.onChange}
             />
+          </div>
+          <div className={styles.inlineInputGroup}>
+            <div className={scoreRangeStyles.smallText}>Risk adjustment type:</div>
+            <Select
+              required
+              name="riskAdjustmentType"
+              value={scoreRange.riskAdjustmentType}
+              onChange={this.onChange}
+              className={classNames(formStyles.select, formStyles.inputSmall)}
+            >
+              <Option value="inactive" messageId="riskAdjustmentType.inactive" />
+              <Option value="increment" messageId="riskAdjustmentType.increment" />
+              <Option value="forceHighRisk" messageId="riskAdjustmentType.forceHighRisk" />
+            </Select>
           </div>
         </div>
         {carePlanSuggestionsHtml}

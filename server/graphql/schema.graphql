@@ -734,6 +734,7 @@ type ScreeningToolScoreRange implements uniqueId {
   description: String!
   screeningToolId: String!
   screeningTool: ScreeningTool!
+  riskAdjustmentType: RiskAdjustmentTypeOptions!
   minimumScore: Int!
   maximumScore: Int!
   createdAt: String!
@@ -1326,6 +1327,7 @@ input ScreeningToolScoreRangeCreateInput {
   description: String!
   minimumScore: Int!
   maximumScore: Int!
+  riskAdjustmentType: RiskAdjustmentTypeOptions!
 }
 
 input ScreeningToolScoreRangeEditInput {
@@ -1335,6 +1337,7 @@ input ScreeningToolScoreRangeEditInput {
   minimumScore: Int
   maximumScore: Int
   deletedAt: String
+  riskAdjustmentType: RiskAdjustmentTypeOptions
 }
 
 input ScreeningToolScoreRangeDeleteInput {

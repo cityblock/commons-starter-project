@@ -313,5 +313,9 @@ export const ENGLISH_TRANSLATION = {
     'question.answerTypeFreeText': 'Free Text',
     'question.answerTypeMultiselect': 'Multiselect',
     'carePlanSuggestions.seeSuggestions': 'See Suggestions',
+    'riskAdjustmentType.inactive': 'inactive',
+    'riskAdjustmentType.increment': 'increment',
+    'riskAdjustmentType.forceHighRisk': 'force high risk',
+    'riskAdjustmentType.selectRiskAdjustmentType': 'Select risk adjustment type',
   },
 };

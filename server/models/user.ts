@@ -47,7 +47,8 @@ export type UserOrderOptions =
   | 'lastLoginAt'
   | 'lastLoginAt'
   | 'updatedAt'
-  | 'updatedAt';
+  | 'updatedAt'
+  | 'email';
 
 export interface IUserFilterOptions extends IPaginationOptions {
   hasLoggedIn: boolean;

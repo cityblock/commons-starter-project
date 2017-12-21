@@ -6,6 +6,7 @@ mutation screeningToolScoreRangeEdit(
   $screeningToolId: String
   $minimumScore: Int
   $maximumScore: Int
+  $riskAdjustmentType: RiskAdjustmentTypeOptions
 ) {
   screeningToolScoreRangeEdit(
     input: {
@@ -14,6 +15,7 @@ mutation screeningToolScoreRangeEdit(
       screeningToolId: $screeningToolId
       minimumScore: $minimumScore
       maximumScore: $maximumScore
+      riskAdjustmentType: $riskAdjustmentType
     }
   ) {
     ...FullScreeningToolScoreRange

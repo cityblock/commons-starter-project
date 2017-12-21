@@ -456,6 +456,7 @@ export const screeningToolScoreRange = {
   deletedAt: null,
   concernSuggestions: [],
   goalSuggestions: [],
+  riskAdjustmentType: 'increment' as any,
 };
 
 export const patientScreeningToolSubmission = {

@@ -265,10 +265,12 @@ describe('screening tool score range resolver tests', () => {
             description: "A Description"
             minimumScore: 50
             maximumScore: 100
+            riskAdjustmentType: increment
           }) {
             description
             minimumScore
             maximumScore
+            riskAdjustmentType
           }
         }`;
         const result = await graphql(schema, mutation, null, {
@@ -281,6 +283,7 @@ describe('screening tool score range resolver tests', () => {
           description: 'A Description',
           minimumScore: 50,
           maximumScore: 100,
+          riskAdjustmentType: 'increment',
         });
       });
     });

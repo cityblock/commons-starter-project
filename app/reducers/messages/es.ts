@@ -320,5 +320,9 @@ export const SPANISH_TRANSLATION = {
     'question.answerTypeFreeText': 'Texto libre',
     'question.answerTypeMultiselect': 'Selección múltiple',
     'carePlanSuggestions.seeSuggestions': 'See Suggestions',
+    'riskAdjustmentType.inactive': 'inactivo',
+    'riskAdjustmentType.increment': 'incremento',
+    'riskAdjustmentType.forceHighRisk': 'forzar alto riesgo',
+    'riskAdjustmentType.selectRiskAdjustmentType': 'Seleccione el tipo de ajuste de riesgo',
   },
 };

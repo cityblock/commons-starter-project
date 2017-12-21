@@ -53,8 +53,8 @@ export default class RiskAreaGroup extends BaseModel {
     return riskAreaGroup;
   }
 
-  static async getAll(): Promise<RiskAreaGroup[]> {
-    return this.query()
+  static async getAll(txn?: Transaction): Promise<RiskAreaGroup[]> {
+    return this.query(txn)
       .orderBy('order')
       .where({ deletedAt: null });
   }

@@ -24,7 +24,7 @@ interface IQuestionCreatableFields {
   computedFieldId?: string;
 }
 
-interface IRiskAreaQuestion extends IQuestionCreatableFields {
+export interface IRiskAreaQuestion extends IQuestionCreatableFields {
   riskAreaId: string;
   type: 'riskArea';
 }

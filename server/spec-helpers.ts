@@ -1,5 +1,6 @@
 import * as nock from 'nock';
 import { Transaction } from 'objection';
+import { AnswerValueTypeOptions, RiskAdjustmentTypeOptions } from '../app/graphql/types';
 import {
   IRedoxClinicalSummaryEncounter,
   IRedoxClinicalSummaryMedication,
@@ -108,6 +109,28 @@ export function createMockRiskAreaGroup(
     order,
     mediumRiskThreshold,
     highRiskThreshold,
+  };
+}
+
+export function createMockQuestion(riskAreaId: string) {
+  return {
+    title: 'Who will win the War for the Dawn?',
+    answerType: 'dropdown',
+    riskAreaId,
+    type: 'riskArea',
+    order: 1,
+  };
+}
+
+export function createMockAnswer(questionId: string) {
+  return {
+    displayValue: 'Jon Snow <3',
+    value: '3',
+    valueType: 'number' as AnswerValueTypeOptions,
+    riskAdjustmentType: 'forceHighRisk' as RiskAdjustmentTypeOptions,
+    inSummary: false,
+    questionId,
+    order: 1,
   };
 }
 

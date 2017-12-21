@@ -2,6 +2,7 @@ import * as classNames from 'classnames';
 import * as React from 'react';
 import { compose, graphql } from 'react-apollo';
 import { FormattedMessage, FormattedRelative } from 'react-intl';
+import { Link } from 'react-router-dom';
 /* tslint:disable:max-line-length */
 import * as progressNoteTemplatesQuery from '../graphql/queries/get-progress-note-templates.graphql';
 import * as progressNotesQuery from '../graphql/queries/get-progress-notes-for-patient.graphql';
@@ -166,7 +167,7 @@ export class ProgressNotePopup extends React.Component<allProps, IState> {
           <div className={styles.closeButton} onClick={close} />
         </div>
         <div className={styles.middleBar}>
-          <div className={styles.patientContainer}>
+          <Link className={styles.patientContainer} to={`/patients/${patientId}`}>
             <div
               className={styles.patientPhoto}
               style={{ backgroundImage: `url('http://bit.ly/2vaOMQJ')` }}
@@ -175,10 +176,10 @@ export class ProgressNotePopup extends React.Component<allProps, IState> {
               <div className={styles.patientName}>{patientName}</div>
               {openedAt}
             </div>
-          </div>
+          </Link>
           <Button
             onClick={this.submit}
-            className={readyToSubmit ? null : styles.buttonInactive}
+            disabled={!readyToSubmit}
             messageId="patient.submitProgressNote"
             color="blue"
           />

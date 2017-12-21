@@ -128,7 +128,16 @@ export class ProgressNoteContext extends React.Component<allProps, IState> {
     if (newProps.patientAnswers !== this.props.patientAnswers) {
       const answerData = setupQuestionAnswerHash({}, newProps.questions);
       updateQuestionAnswerHash(answerData, newProps.patientAnswers || []);
-      this.props.updateReadyToSubmit(allQuestionsAnswered(newProps.questions, answerData));
+
+      // update ready to submit
+      const hasProgressNoteTemplate = this.state.progressNoteTemplateId ? true : false;
+      const hasSummaryAndConcern =
+        this.state.progressNoteMemberConcern && this.state.progressNoteSummary ? true : false;
+      this.props.updateReadyToSubmit(
+        hasProgressNoteTemplate &&
+          hasSummaryAndConcern &&
+          allQuestionsAnswered(newProps.questions, answerData),
+      );
     }
   }
 

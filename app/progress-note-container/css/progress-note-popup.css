@@ -101,8 +101,10 @@
 .patientName {
   font-weight: var(--roboto-medium-weight);
   font-size: var(--medium-font-size);
+  color: var(--default-font-color);
 }
 
 .openedAt {
   display: block;
+  color: var(--default-font-color);
 }

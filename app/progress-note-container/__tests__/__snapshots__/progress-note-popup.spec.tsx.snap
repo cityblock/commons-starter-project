@@ -21,8 +21,10 @@ exports[`builder concerns renders progress note popup with templates renders pro
   <div
     className="middleBar"
   >
-    <div
+    <Link
       className="patientContainer"
+      replace={false}
+      to="/patients/patient-id"
     >
       <div
         className="patientPhoto"
@@ -47,10 +49,10 @@ exports[`builder concerns renders progress note popup with templates renders pro
           [Function]
         </FormattedRelative>
       </div>
-    </div>
+    </Link>
     <Button
-      className="buttonInactive"
       color="blue"
+      disabled={true}
       messageId="patient.submitProgressNote"
       onClick={[Function]}
     />
@@ -163,8 +165,10 @@ exports[`builder concerns renders progress note popup with templates renders pro
   <div
     className="middleBar"
   >
-    <div
+    <Link
       className="patientContainer"
+      replace={false}
+      to="/patients/patient-id"
     >
       <div
         className="patientPhoto"
@@ -183,10 +187,10 @@ exports[`builder concerns renders progress note popup with templates renders pro
           Unknown
         </div>
       </div>
-    </div>
+    </Link>
     <Button
-      className="buttonInactive"
       color="blue"
+      disabled={true}
       messageId="patient.submitProgressNote"
       onClick={[Function]}
     />

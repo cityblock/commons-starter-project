@@ -100,6 +100,9 @@ export default class RiskAreaGroup extends BaseModel {
 
     const riskAreaGroup = await this.query(txn)
       .eager(EAGER_QUERY)
+      .modifyEager('riskAreas', builder => {
+        builder.where({ deletedAt: null });
+      })
       .modifyEager('riskAreas.questions.answers.patientAnswers', builder => {
         builder.where({
           patientId,

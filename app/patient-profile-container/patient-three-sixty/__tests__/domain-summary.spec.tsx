@@ -1,4 +1,5 @@
 import { shallow } from 'enzyme';
+import { cloneDeep } from 'lodash';
 import * as React from 'react';
 import { Link } from 'react-router-dom';
 import DateInfo from '../../../shared/library/date-info/date-info';
@@ -10,7 +11,6 @@ import DomainSummaryBullets from '../domain-summary-bullets';
 describe('Patient 360 Domain Summary', () => {
   const routeBase = '/needle';
   const patientId = 'aryaStark';
-  const riskAreaGroupId = 'facelessMen';
   const risk = 'high';
   const placeholderFn = () => true as any;
 
@@ -19,7 +19,7 @@ describe('Patient 360 Domain Summary', () => {
       routeBase={routeBase}
       patientId={patientId}
       riskAreaGroup={riskAreaGroup}
-      riskAreaGroupId={riskAreaGroupId}
+      riskAreaGroupId={riskAreaGroup.id}
       risk={risk}
       updateRiskAreaGroupScore={placeholderFn}
     />,
@@ -27,7 +27,7 @@ describe('Patient 360 Domain Summary', () => {
 
   it('renders link to domain detail view', () => {
     expect(wrapper.find(Link).length).toBe(1);
-    expect(wrapper.find(Link).props().to).toBe(`${routeBase}/${riskAreaGroupId}`);
+    expect(wrapper.find(Link).props().to).toBe(`${routeBase}/${riskAreaGroup.id}`);
     expect(wrapper.find(Link).props().className).toBe('domain redBorder');
   });
 
@@ -58,5 +58,20 @@ describe('Patient 360 Domain Summary', () => {
     expect(wrapper.find(DateInfo).length).toBe(1);
     expect(wrapper.find(DateInfo).props().label).toBe('updated');
     expect(wrapper.find(DateInfo).props().date).toBe(lastUpdated);
+  });
+
+  it('links directly to assessment if no automated assessments', () => {
+    const id = 'lady';
+    const riskAreaGroup2 = cloneDeep(riskAreaGroup);
+    riskAreaGroup2.riskAreas = [
+      {
+        id,
+        questions: [],
+      },
+    ] as any;
+    wrapper.setProps({ riskAreaGroup: riskAreaGroup2 });
+    expect(wrapper.find(Link).props().to).toBe(
+      `${routeBase}/${riskAreaGroup2.id}/assessment/${id}`,
+    );
   });
 });

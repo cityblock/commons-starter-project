@@ -113,9 +113,19 @@ export class DomainSummary extends React.Component<allProps, IState> {
       [styles.greenBorder]: risk && risk === 'low',
     });
     const { lastUpdated, automatedSummaryText, manualSummaryText } = this.state;
+    const noAutomated =
+      !!riskAreaGroup.riskAreas &&
+      !!riskAreaGroup.riskAreas.length &&
+      !riskAreaGroup.riskAreas.some(area => {
+        return area.assessmentType === 'automated';
+      });
+    // if no automated assessments, link directly to manual assessment (1 per domain)
+    const href = noAutomated
+      ? `${routeBase}/${riskAreaGroupId}/assessment/${riskAreaGroup.riskAreas![0].id}`
+      : `${routeBase}/${riskAreaGroupId}`;
 
     return (
-      <Link to={`${routeBase}/${riskAreaGroupId}`} className={domainStyles}>
+      <Link to={href} className={domainStyles}>
         <div className={classNames(styles.flex, styles.header)}>
           <div className={styles.flex}>
             <Icon name="home" className={styles.icon} />

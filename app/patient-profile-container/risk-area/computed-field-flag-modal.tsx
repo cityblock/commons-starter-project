@@ -57,7 +57,7 @@ export class ComputedFieldFlagModal extends React.Component<allProps, IState> {
     const { flagComputedField } = this.props;
     const { reason } = this.state;
     await flagComputedField({ variables: { patientAnswerId, reason } });
-  }
+  };
 
   onSubmit = async () => {
     const { patientAnswerIds, closePopup } = this.props;

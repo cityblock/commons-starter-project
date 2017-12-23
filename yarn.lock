@@ -326,6 +326,12 @@
   dependencies:
     "@types/react" "*"
 
+"@types/react-onclickoutside@^6.0.2":
+  version "6.0.2"
+  resolved "https://registry.yarnpkg.com/@types/react-onclickoutside/-/react-onclickoutside-6.0.2.tgz#9ca1646d6c05b578edf52f878dd2d53daba61e2a"
+  dependencies:
+    "@types/react" "*"
+
 "@types/react-redux@^5.0.13":
   version "5.0.14"
   resolved "https://registry.yarnpkg.com/@types/react-redux/-/react-redux-5.0.14.tgz#f3fc30dcbb2d20455a714f591cc27f77b4df09bb"
@@ -7282,6 +7288,10 @@ react-motion@^0.5.2:
     performance-now "^0.2.0"
     prop-types "^15.5.8"
     raf "^3.1.0"
+
+react-onclickoutside@^6.7.0:
+  version "6.7.0"
+  resolved "https://registry.yarnpkg.com/react-onclickoutside/-/react-onclickoutside-6.7.0.tgz#997a4d533114c9a0a104913638aa26afc084f75c"
 
 react-popper@^0.7.4:
   version "0.7.4"

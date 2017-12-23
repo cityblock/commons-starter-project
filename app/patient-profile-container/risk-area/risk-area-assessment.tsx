@@ -16,6 +16,7 @@ import {
   FullRiskAreaFragment,
 } from '../../graphql/types';
 import * as sortSearchStyles from '../../shared/css/sort-search.css';
+import BackLink from '../../shared/library/back-link/back-link';
 import Button from '../../shared/library/button/button';
 import { Popup } from '../../shared/popup/popup';
 import ScreeningToolsPopup from '../screening-tool/screening-tools-popup';
@@ -118,20 +119,26 @@ export class RiskAreaAssessment extends React.Component<allProps, IState> {
       error,
       riskAreaAssessmentSubmission,
     } = this.props;
+
     const { inProgress, selectingScreeningTool } = this.state;
+    const automatedAssessment = riskArea && riskArea.assessmentType === 'automated';
 
     const toolsButtonStyles = classNames(styles.toolsButton, {
-      [styles.hidden]: inProgress,
+      [styles.hidden]: inProgress || automatedAssessment,
     });
     const cancelButtonStyles = classNames(styles.cancelButton, {
-      [styles.hidden]: !inProgress,
+      [styles.hidden]: !inProgress || automatedAssessment,
     });
     const saveButtonStyles = classNames(styles.saveButton, {
-      [styles.hidden]: !inProgress,
+      [styles.hidden]: !inProgress || automatedAssessment,
     });
     const startButtonStyles = classNames({
-      [styles.hidden]: inProgress,
+      [styles.hidden]: inProgress || automatedAssessment,
     });
+    const navigationStyles = classNames(sortSearchStyles.sortSearchBar, styles.buttonBar, {
+      [styles.flexEnd]: !automatedAssessment,
+    });
+
     const assessmentHtml = riskArea ? (
       <RiskAreaAssessmentQuestions
         riskArea={riskArea}
@@ -148,10 +155,15 @@ export class RiskAreaAssessment extends React.Component<allProps, IState> {
       : null;
     const popupVisible =
       riskAreaAssessmentSubmission && riskAreaAssessmentSubmission.completedAt ? true : false;
+    const backLink = automatedAssessment ? (<BackLink
+      href={`${routeBase}/${riskArea!.riskAreaGroup.id}`}
+    />) : null;
+
     return (
       <div>
-        {riskArea && riskArea.assessmentType === 'automated' && <ComputedFieldFlagModal />}
-        <div className={classNames(sortSearchStyles.sortSearchBar, styles.buttonBar)}>
+        {automatedAssessment && <ComputedFieldFlagModal />}
+        <div className={navigationStyles}>
+          {backLink}
           <Button
             color="white"
             messageId="riskAreaAssessment.cancel"

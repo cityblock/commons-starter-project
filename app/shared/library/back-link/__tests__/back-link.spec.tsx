@@ -7,10 +7,15 @@ describe('Library Back Link Component', () => {
   const messageId = 'cerseiLannister';
   const href = '/kings/landing';
 
-  const wrapper = shallow(<BackLink messageId={messageId} href={href} />);
+  const wrapper = shallow(<BackLink href={href} />);
 
-  it('renders formatted message with correct id', () => {
+  it('renders default formatted message if none given', () => {
     expect(wrapper.find(FormattedMessage).length).toBe(1);
+    expect(wrapper.find(FormattedMessage).props().id).toBe('backLink.back');
+  });
+
+  it('renders formatted message with correct id if one given', () => {
+    wrapper.setProps({ messageId });
     expect(wrapper.find(FormattedMessage).props().id).toBe(messageId);
   });
 });

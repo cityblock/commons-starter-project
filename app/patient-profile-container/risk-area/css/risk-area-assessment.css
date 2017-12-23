@@ -3,6 +3,9 @@
 .buttonBar {
   display: flex;
   flex-direction: row;
+}
+
+.flexEnd {
   justify-content: flex-end;
 }
 
@@ -25,4 +28,8 @@
 .riskAreasPanel {
   background-color: var(--gray-background-color);
   padding: 20px var(--medium-gutter);
+}
+
+svg.icon {
+  margin-left: 0;
 }

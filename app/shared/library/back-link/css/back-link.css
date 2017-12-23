@@ -6,6 +6,7 @@
   color: var(--gray-font-color);
   cursor: pointer;
   transition: color 0.2s;
+  padding: var(--extra-small-gutter) 0;
 
   &:hover {
     color: var(--blue-color);
@@ -26,7 +27,6 @@
 
 .link svg {
   fill: var(--gray-font-color);
-  margin-left: var(--medium-gutter);
 }
 
 .link:hover svg {

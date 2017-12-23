@@ -48,6 +48,7 @@ export const SPANISH_TRANSLATION = {
       'Perdón, algo salió mal. Intente volver a cargar la página de nuevo.',
     'error.tableLoadingButton': 'Inténtalo de nuevo',
     'error.tableLoading': 'Cargando',
+    'backLink.back': 'Regreso',
     'careTeam.slack': 'Mensaje de Slack',
     'careTeam.call': 'Llamar al teléfono',
     'careTeam.text': 'Envía un mensaje de texto',

@@ -5,7 +5,7 @@ import Icon from '../icon/icon';
 import * as styles from './css/back-link.css';
 
 interface IProps {
-  messageId: string;
+  messageId?: string; // optional translate message, default is "Back"
   href: string;
 }
 
@@ -13,7 +13,7 @@ const BackLink: React.StatelessComponent<IProps> = (props: IProps) => {
   const { messageId, href } = props;
 
   return (
-    <FormattedMessage id={messageId}>
+    <FormattedMessage id={messageId || 'backLink.back'}>
       {(message: string) => (
         <Link to={href}>
           <div className={styles.link}>

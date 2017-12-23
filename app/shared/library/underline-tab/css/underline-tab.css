@@ -6,7 +6,7 @@
   font-size: var(--default-font-size);
   line-height: var(--medium-font-line-height);
   font-weight: var(--roboto-medium-weight);
-  margin: 16px 0 0 var(--medium-gutter);
+  margin: 16px var(--medium-gutter) 0 0;
   padding-bottom: 12px;
   cursor: pointer;
   transition: background 0.2s;

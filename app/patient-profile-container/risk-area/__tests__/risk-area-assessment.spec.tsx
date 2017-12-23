@@ -1,5 +1,6 @@
 import { shallow } from 'enzyme';
 import * as React from 'react';
+import BackLink from '../../../shared/library/back-link/back-link';
 import Button from '../../../shared/library/button/button';
 import {
   automatedRiskArea,
@@ -53,5 +54,13 @@ describe('risk area assessment questions component', () => {
   it('renders computed field flag modal for automated assessments', () => {
     wrapper.setProps({ riskArea: automatedRiskArea });
     expect(wrapper.find(ComputedFieldFlagModal).length).toBe(1);
+  });
+
+  it('renders back link for automated assessments', () => {
+    expect(wrapper.find(BackLink).length).toBe(1);
+  });
+
+  it('hides buttons for automated assessments', () => {
+    expect(wrapper.find('.hidden').length).toBe(4);
   });
 });

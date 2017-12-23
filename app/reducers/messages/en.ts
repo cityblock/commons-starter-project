@@ -49,6 +49,7 @@ export const ENGLISH_TRANSLATION = {
       'Sorry, something went wrong. Please try reloading the page again.',
     'error.tableLoadingButton': 'Try Again',
     'error.tableLoading': 'Loading',
+    'backLink.back': 'Back',
     'careTeam.slack': 'Message on Slack',
     'careTeam.call': 'Call on phone',
     'careTeam.text': 'Send text message',

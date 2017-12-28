@@ -191,26 +191,31 @@ export default class CarePlanSuggestion extends BaseModel {
 
   static async getForPatient(patientId: string, txn?: Transaction): Promise<CarePlanSuggestion[]> {
     const existingPatientConcernIdsQuery = PatientConcern.query(txn)
-      .where('patientId', patientId)
-      .andWhere('deletedAt', null)
+      .where({ patientId, deletedAt: null })
       .select('concernId')
       .orderBy('createdAt', 'asc');
 
     const existingPatientGoalIdsQuery = PatientGoal.query(txn)
-      .where('patientId', patientId)
-      .andWhere('deletedAt', null)
+      .where({ patientId, deletedAt: null })
       .select('goalSuggestionTemplateId')
       .orderBy('createdAt', 'asc');
 
     return await this.query(txn)
       .eager(EAGER_QUERY)
-      .whereRaw(
-        `
-        "dismissedAt" is null and "acceptedAt" is null and "patientId" = ? and
-        (("goalSuggestionTemplateId" is null and "concernId" not in (?)) or
-        ("concernId" is null and "goalSuggestionTemplateId" not in (?)))`,
-        [patientId, existingPatientConcernIdsQuery as any, existingPatientGoalIdsQuery as any],
-      )
+      .where({
+        dismissedAt: null,
+        acceptedAt: null,
+        patientId,
+        goalSuggestionTemplateId: null, // ensure goalSuggestionTemplateId is null
+      })
+      .whereNotIn('concernId', existingPatientConcernIdsQuery)
+      .orWhere({
+        dismissedAt: null,
+        acceptedAt: null,
+        patientId,
+        concernId: null, // ensure concernId is null
+      })
+      .whereNotIn('goalSuggestionTemplateId', existingPatientGoalIdsQuery)
       .orderBy('createdAt', 'asc');
   }
 

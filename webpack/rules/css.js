@@ -27,7 +27,7 @@ module.exports = ({ production = false } = {}) => {
         plugins: [
           lost(),
           postcssImport({ path: path.resolve(PATHS.app, './css') }),
-          postcssCssnext({ browsers: ['last 2 versions'] }),
+          postcssCssnext({ browsers: ['last 2 versions'], warnForDuplicates: false }),
           // cssnano in prod and reporter (for errors) in dev
           production
             ? require('cssnano')({ discardUnused: { fontFace: false } })

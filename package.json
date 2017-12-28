@@ -16,6 +16,7 @@
     "dev": "yarn check --verify-tree && NODE_ENV=development nodemon --exec 'ts-node -P tsconfig.server.json ./server/index.ts'",
     "build:dev": "cross-env NODE_ENV=development webpack --colors --display-error-details --config ./webpack/webpack.config.js",
     "build": "yarn run clean && yarn run build-server && cross-env NODE_ENV=production GOOGLE_OAUTH_TOKEN=640963223283-n944uqosb4kae9cj99d35v6ut6n5bvlc.apps.googleusercontent.com webpack --colors --config ./webpack/webpack.config.js",
+    "build-stats": "cross-env NODE_ENV=production webpack --config ./webpack/webpack.config.js --profile --json > stats.json",
     "build-server": "./node_modules/typescript/bin/tsc --project tsconfig.server.json",
     "prettier": "prettier --write \"{app,server,webpack,scripts}/**/*.{ts,tsx,js,css,graphql}\"",
     "test": "NODE_ENV=test node initialize-test-db.js && jest --runInBand",

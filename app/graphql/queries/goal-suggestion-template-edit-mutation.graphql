@@ -1,6 +1,6 @@
 #import "../fragments/full-goal-suggestion-template.graphql"
 
-mutation goalSuggestionTemplateEdit($goalSuggestionTemplateId: String!, $title: String!) {
+mutation goalSuggestionTemplateEdit($goalSuggestionTemplateId: ID!, $title: String!) {
   goalSuggestionTemplateEdit(
     input: { goalSuggestionTemplateId: $goalSuggestionTemplateId, title: $title }
   ) {

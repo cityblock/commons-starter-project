@@ -2,7 +2,7 @@
 
 mutation taskTemplateCreate(
   $title: String!
-  $goalSuggestionTemplateId: String!
+  $goalSuggestionTemplateId: ID!
   $completedWithinNumber: Int
   $completedWithinInterval: String
   $repeating: Boolean

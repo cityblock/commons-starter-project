@@ -1,9 +1,9 @@
 #import "../fragments/full-care-plan-suggestion.graphql"
 
 mutation carePlanSuggestionAccept(
-  $carePlanSuggestionId: String!
-  $patientConcernId: String
-  $concernId: String
+  $carePlanSuggestionId: ID!
+  $patientConcernId: ID
+  $concernId: ID
   $startedAt: String
   $taskTemplateIds: [String]
 ) {

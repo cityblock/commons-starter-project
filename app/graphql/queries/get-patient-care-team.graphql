@@ -1,6 +1,6 @@
 #import "../fragments/full-user.graphql"
 
-query getPatientCareTeam($patientId: String!) {
+query getPatientCareTeam($patientId: ID!) {
   patientCareTeam(patientId: $patientId) {
     ...FullUser
   }

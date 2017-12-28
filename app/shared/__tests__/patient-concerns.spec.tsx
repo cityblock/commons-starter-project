@@ -1,6 +1,6 @@
 import { shallow } from 'enzyme';
 import * as React from 'react';
-import DnDPatientConcern from '../../patient-profile-container/drag-and-drop/patient-concern';
+import DnDPatientConcern from '../../patient-profile-container/drag-and-drop/drag-and-drop-patient-concern';
 import PatientConcerns from '../concerns/patient-concerns';
 import EmptyPlaceholder from '../library/empty-placeholder/empty-placeholder';
 

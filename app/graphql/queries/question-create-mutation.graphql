@@ -4,12 +4,12 @@ mutation questionCreate(
   $title: String!
   $answerType: AnswerTypeOptions!
   $validatedSource: String
-  $riskAreaId: String
-  $screeningToolId: String
-  $progressNoteTemplateId: String
+  $riskAreaId: ID
+  $screeningToolId: ID
+  $progressNoteTemplateId: ID
   $order: Int!
   $applicableIfType: QuestionConditionTypeOptions
-  $computedFieldId: String
+  $computedFieldId: ID
 ) {
   questionCreate(
     input: {

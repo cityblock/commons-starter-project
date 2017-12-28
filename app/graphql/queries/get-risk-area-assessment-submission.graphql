@@ -1,6 +1,6 @@
 #import "../fragments/full-risk-area-assessment-submission.graphql"
 
-query getRiskAreaAssessmentSubmission($riskAreaAssessmentSubmissionId: String!) {
+query getRiskAreaAssessmentSubmission($riskAreaAssessmentSubmissionId: ID!) {
   riskAreaAssessmentSubmission(riskAreaAssessmentSubmissionId: $riskAreaAssessmentSubmissionId) {
     ...FullRiskAreaAssessmentSubmission
   }

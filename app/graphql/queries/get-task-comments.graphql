@@ -1,6 +1,6 @@
 #import "../fragments/full-task-comment.graphql"
 
-query getTaskComments($taskId: String!, $pageNumber: Int, $pageSize: Int) {
+query getTaskComments($taskId: ID!, $pageNumber: Int, $pageSize: Int) {
   taskComments(taskId: $taskId, pageNumber: $pageNumber, pageSize: $pageSize) {
     edges {
       node {

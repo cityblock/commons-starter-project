@@ -3,7 +3,7 @@ import * as React from 'react';
 import { DragDropContext } from 'react-beautiful-dnd';
 import { adminTasksConcernTitle } from '../../../../server/lib/consts';
 import PatientCarePlan from '../../patient-care-plan';
-import { DnDPatientCarePlan as Component } from '../patient-care-plan';
+import { DnDPatientCarePlan as Component } from '../drag-and-drop-patient-care-plan';
 
 describe('Drag and Drop Patient Care Plan Wrapper Component', () => {
   const routeBase = '/charmander';

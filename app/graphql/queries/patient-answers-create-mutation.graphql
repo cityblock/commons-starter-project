@@ -1,12 +1,12 @@
 #import "../fragments/full-patient-answer.graphql"
 
 mutation patientAnswersCreate(
-  $patientId: String!
+  $patientId: ID!
   $patientAnswers: [PatientAnswerInput]!
   $questionIds: [String]!
-  $patientScreeningToolSubmissionId: String
-  $riskAreaAssessmentSubmissionId: String
-  $progressNoteId: String
+  $patientScreeningToolSubmissionId: ID
+  $riskAreaAssessmentSubmissionId: ID
+  $progressNoteId: ID
 ) {
   patientAnswersCreate(
     input: {

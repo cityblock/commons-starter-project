@@ -1,6 +1,6 @@
 #import "../fragments/full-patient-medication.graphql"
 
-query getPatientMedications($patientId: String!) {
+query getPatientMedications($patientId: ID!) {
   patientMedications(patientId: $patientId) {
     medications {
       active {

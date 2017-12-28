@@ -1,7 +1,7 @@
 #import "../fragments/short-patient.graphql"
 
 mutation patientEdit(
-  $patientId: String!
+  $patientId: ID!
   $firstName: String
   $middleName: String
   $lastName: String

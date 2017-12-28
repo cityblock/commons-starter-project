@@ -1,8 +1,8 @@
 #import "../fragments/full-patient-screening-tool-submission.graphql"
 
 query getPatientScreeningToolSubmissionForPatientAndScreeningTool(
-  $screeningToolId: String!
-  $patientId: String!
+  $screeningToolId: ID!
+  $patientId: ID!
   $scored: Boolean!
 ) {
   patientScreeningToolSubmissionForPatientAndScreeningTool(

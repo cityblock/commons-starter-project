@@ -1,6 +1,6 @@
 #import "../fragments/full-care-plan-suggestion.graphql"
 
-mutation carePlanSuggestionDismiss($carePlanSuggestionId: String!, $dismissedReason: String!) {
+mutation carePlanSuggestionDismiss($carePlanSuggestionId: ID!, $dismissedReason: String!) {
   carePlanSuggestionDismiss(
     input: { carePlanSuggestionId: $carePlanSuggestionId, dismissedReason: $dismissedReason }
   ) {

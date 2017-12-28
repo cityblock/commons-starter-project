@@ -1,6 +1,6 @@
 #import "../fragments/full-concern.graphql"
 
-query getConcern($concernId: String!) {
+query getConcern($concernId: ID!) {
   concern(concernId: $concernId) {
     ...FullConcern
   }

@@ -1,6 +1,6 @@
 #import "../fragments/full-progress-note-activity.graphql"
 
-query getProgressNoteActivityForProgressNote($progressNoteId: String!) {
+query getProgressNoteActivityForProgressNote($progressNoteId: ID!) {
   progressNoteActivityForProgressNote(progressNoteId: $progressNoteId) {
     ...FullProgressNoteActivity
   }

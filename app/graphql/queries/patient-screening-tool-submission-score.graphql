@@ -1,6 +1,6 @@
 #import "../fragments/full-patient-screening-tool-submission.graphql"
 
-mutation patientScreeningToolSubmissionScore($patientScreeningToolSubmissionId: String!) {
+mutation patientScreeningToolSubmissionScore($patientScreeningToolSubmissionId: ID!) {
   patientScreeningToolSubmissionScore(
     input: { patientScreeningToolSubmissionId: $patientScreeningToolSubmissionId }
   ) {

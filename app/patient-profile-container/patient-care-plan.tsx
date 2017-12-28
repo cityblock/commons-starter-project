@@ -4,7 +4,7 @@ import { FullPatientConcernFragment } from '../graphql/types';
 import Spinner from '../shared/library/spinner/spinner';
 import TextDivider from '../shared/library/text-divider/text-divider';
 import * as styles from './css/patient-care-plan.css';
-import DnDPatientConcerns from './drag-and-drop/patient-concerns';
+import DnDPatientConcerns from './drag-and-drop/drag-and-drop-patient-concerns';
 
 interface IProps {
   loading?: boolean;

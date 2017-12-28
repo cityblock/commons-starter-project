@@ -1,9 +1,9 @@
 #import "../fragments/full-goal-suggestion-template.graphql"
 
 mutation goalSuggestionDelete(
-  $answerId: String
-  $screeningToolScoreRangeId: String
-  $goalSuggestionTemplateId: String!
+  $answerId: ID
+  $screeningToolScoreRangeId: ID
+  $goalSuggestionTemplateId: ID!
 ) {
   goalSuggestionDelete(
     input: {

@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { FullPatientConcernFragment } from '../../graphql/types';
-import DnDPatientConcern from '../../patient-profile-container/drag-and-drop/patient-concern';
+import DnDPatientConcern from '../../patient-profile-container/drag-and-drop/drag-and-drop-patient-concern';
 import EmptyPlaceholder from '../library/empty-placeholder/empty-placeholder';
 
 interface IProps {

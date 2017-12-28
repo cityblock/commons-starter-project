@@ -2,7 +2,7 @@
 
 mutation screeningToolScoreRangeCreate(
   $description: String!
-  $screeningToolId: String!
+  $screeningToolId: ID!
   $minimumScore: Int!
   $maximumScore: Int!
   $riskAdjustmentType: RiskAdjustmentTypeOptions!

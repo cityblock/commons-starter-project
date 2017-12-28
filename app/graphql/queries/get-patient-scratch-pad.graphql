@@ -1,6 +1,6 @@
 #import "../fragments/full-patient-scratch-pad.graphql"
 
-query getPatientScratchPad($patientId: String!) {
+query getPatientScratchPad($patientId: ID!) {
   patientScratchPad(patientId: $patientId) {
     ...FullPatientScratchPad
   }

@@ -1,7 +1,7 @@
 #import "../fragments/full-quick-call.graphql"
 
 mutation quickCallCreate(
-  $patientId: String! # Needed to lookup or create progressNoteId
+  $patientId: ID! # Needed to lookup or create progressNoteId
   $reason: String!
   $summary: String!
   $direction: QuickCallDirection!

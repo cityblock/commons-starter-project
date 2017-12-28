@@ -1,13 +1,13 @@
 #import "../fragments/full-task.graphql"
 
 mutation taskEdit(
-  $taskId: String!
-  $assignedToId: String
+  $taskId: ID!
+  $assignedToId: ID
   $title: String
   $description: String
   $priority: Priority
   $dueAt: String
-  $patientGoalId: String
+  $patientGoalId: ID
 ) {
   taskEdit(
     input: {

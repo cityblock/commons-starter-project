@@ -1,6 +1,6 @@
 #import "../fragments/full-care-plan-suggestion.graphql"
 
-query getPatientCarePlanSuggestions($patientId: String!) {
+query getPatientCarePlanSuggestions($patientId: ID!) {
   carePlanSuggestionsForPatient(patientId: $patientId) {
     ...FullCarePlanSuggestion
   }

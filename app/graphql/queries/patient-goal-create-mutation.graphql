@@ -2,11 +2,11 @@
 
 mutation patientGoalCreate(
   $title: String
-  $patientId: String!
-  $patientConcernId: String
-  $goalSuggestionTemplateId: String
+  $patientId: ID!
+  $patientConcernId: ID
+  $goalSuggestionTemplateId: ID
   $taskTemplateIds: [String]
-  $concernId: String
+  $concernId: ID
   $concernTitle: String
   $startedAt: String
 ) {

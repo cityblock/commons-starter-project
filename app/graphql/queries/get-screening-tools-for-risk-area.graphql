@@ -1,6 +1,6 @@
 #import "../fragments/full-screening-tool.graphql"
 
-query getScreeningToolsForRiskArea($riskAreaId: String!) {
+query getScreeningToolsForRiskArea($riskAreaId: ID!) {
   screeningToolsForRiskArea(riskAreaId: $riskAreaId) {
     ...FullScreeningTool
   }

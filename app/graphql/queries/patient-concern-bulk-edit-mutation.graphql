@@ -2,7 +2,7 @@
 
 mutation patientConcernBulkEdit(
   $patientConcerns: [PatientConcernBulkEditFields]!
-  $patientId: String!
+  $patientId: ID!
 ) {
   patientConcernBulkEdit(input: { patientConcerns: $patientConcerns, patientId: $patientId }) {
     ...FullPatientConcern

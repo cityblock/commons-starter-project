@@ -1,6 +1,6 @@
 #import "../fragments/full-risk-area.graphql"
 
-mutation riskAreaDelete($riskAreaId: String!) {
+mutation riskAreaDelete($riskAreaId: ID!) {
   riskAreaDelete(input: { riskAreaId: $riskAreaId }) {
     ...FullRiskArea
   }

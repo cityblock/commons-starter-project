@@ -1,7 +1,7 @@
 import { shallow, ShallowWrapper } from 'enzyme';
 import * as React from 'react';
 import Task from '../../shared/task/task';
-import PatientCarePlanDnD, { allProps } from '../drag-and-drop/patient-care-plan';
+import PatientCarePlanDnD, { allProps } from '../drag-and-drop/drag-and-drop-patient-care-plan';
 import MapModals from '../modals/modals';
 import { PatientMap } from '../patient-map';
 

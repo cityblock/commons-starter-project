@@ -1,7 +1,7 @@
 #import "../fragments/short-patient.graphql"
 
 mutation patientSetup(
-  $homeClinicId: String!
+  $homeClinicId: ID!
   $firstName: String!
   $middleName: String
   $lastName: String!
@@ -21,7 +21,7 @@ mutation patientSetup(
   $expirationDate: String
   $insuranceType: String
   $patientRelationshipToPolicyHolder: String
-  $memberId: String
+  $memberId: ID
   $policyGroupNumber: String
 ) {
   patientSetup(

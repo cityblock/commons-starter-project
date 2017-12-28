@@ -1,7 +1,7 @@
 #import "../fragments/full-task.graphql"
 
 query getPatientTasks(
-  $patientId: String!
+  $patientId: ID!
   $pageNumber: Int
   $pageSize: Int
   $orderBy: TaskOrderOptions

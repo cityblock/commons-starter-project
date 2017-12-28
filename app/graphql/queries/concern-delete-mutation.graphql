@@ -1,6 +1,6 @@
 #import "../fragments/full-concern.graphql"
 
-mutation concernDelete($concernId: String!) {
+mutation concernDelete($concernId: ID!) {
   concernDelete(input: { concernId: $concernId }) {
     ...FullConcern
   }

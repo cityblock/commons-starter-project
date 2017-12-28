@@ -1,6 +1,6 @@
 #import "../fragments/full-user.graphql"
 
-mutation userCreate($email: String!, $homeClinicId: String!) {
+mutation userCreate($email: String!, $homeClinicId: ID!) {
   userCreate(input: { email: $email, homeClinicId: $homeClinicId }) {
     ...FullUser
   }

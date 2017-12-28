@@ -1,6 +1,6 @@
 #import "../fragments/full-task-comment.graphql"
 
-mutation taskCommentCreate($taskId: String!, $body: String!) {
+mutation taskCommentCreate($taskId: ID!, $body: String!) {
   taskCommentCreate(input: { taskId: $taskId, body: $body }) {
     ...FullTaskComment
   }

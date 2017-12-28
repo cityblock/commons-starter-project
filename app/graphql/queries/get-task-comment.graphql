@@ -1,6 +1,6 @@
 #import "../fragments/full-task-comment.graphql"
 
-query getTaskComment($taskCommentId: String!) {
+query getTaskComment($taskCommentId: ID!) {
   taskComment(taskCommentId: $taskCommentId) {
     ...FullTaskComment
   }

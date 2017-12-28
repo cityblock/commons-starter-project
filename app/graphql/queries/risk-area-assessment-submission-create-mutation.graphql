@@ -1,6 +1,6 @@
 #import "../fragments/full-risk-area-assessment-submission.graphql"
 
-mutation riskAreaAssessmentSubmissionCreate($riskAreaId: String!, $patientId: String!) {
+mutation riskAreaAssessmentSubmissionCreate($riskAreaId: ID!, $patientId: ID!) {
   riskAreaAssessmentSubmissionCreate(input: { riskAreaId: $riskAreaId, patientId: $patientId }) {
     ...FullRiskAreaAssessmentSubmission
   }

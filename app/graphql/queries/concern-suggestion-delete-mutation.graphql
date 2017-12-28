@@ -1,9 +1,9 @@
 #import "../fragments/full-concern.graphql"
 
 mutation concernSuggestionDelete(
-  $answerId: String
-  $screeningToolScoreRangeId: String
-  $concernId: String!
+  $answerId: ID
+  $screeningToolScoreRangeId: ID
+  $concernId: ID!
 ) {
   concernSuggestionDelete(
     input: {

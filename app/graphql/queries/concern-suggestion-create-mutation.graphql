@@ -1,9 +1,9 @@
 #import "../fragments/full-concern.graphql"
 
 mutation concernSuggestionCreate(
-  $answerId: String
-  $screeningToolScoreRangeId: String
-  $concernId: String!
+  $answerId: ID
+  $screeningToolScoreRangeId: ID
+  $concernId: ID!
 ) {
   concernSuggestionCreate(
     input: {

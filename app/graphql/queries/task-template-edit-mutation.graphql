@@ -2,8 +2,8 @@
 
 mutation taskTemplateEdit(
   $title: String!
-  $taskTemplateId: String!
-  $goalSuggestionTemplateId: String
+  $taskTemplateId: ID!
+  $goalSuggestionTemplateId: ID
   $completedWithinNumber: Int
   $completedWithinInterval: String
   $repeating: Boolean

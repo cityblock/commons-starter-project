@@ -1,9 +1,9 @@
 #import "../fragments/full-question-condition.graphql"
 
 mutation questionConditionEdit(
-  $questionConditionId: String!
-  $answerId: String!
-  $questionId: String!
+  $questionConditionId: ID!
+  $answerId: ID!
+  $questionId: ID!
 ) {
   questionConditionEdit(
     input: {

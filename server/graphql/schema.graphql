@@ -171,7 +171,7 @@ type User implements uniqueId {
   lastName: String
   email: String
   userRole: UserRole!
-  homeClinicId: String!
+  homeClinicId: ID!
   googleProfileImageUrl: String
   createdAt: String!
   updatedAt: String!
@@ -218,7 +218,7 @@ type Patient implements uniqueId {
   dateOfBirth: String
   gender: String
   zip: String
-  homeClinicId: String
+  homeClinicId: ID
   createdAt: String!
   scratchPad: String
   consentToCall: Boolean
@@ -284,7 +284,7 @@ type Clinic implements uniqueId {
 # PatientMedication
 type PatientMedication {
   name: String!
-  medicationId: String!
+  medicationId: ID!
   quantity: String
   quantityUnit: String
   dosageInstructions: String
@@ -322,7 +322,7 @@ type PatientEncounter {
 
 # Appointment
 type Appointment {
-  athenaAppointmentId: String!
+  athenaAppointmentId: ID!
   dateTime: String!
   athenaDepartmentId: Int!
   status: AppointmentStatus!
@@ -331,9 +331,9 @@ type Appointment {
   appointmentTypeId: Int!
   appointmentType: String!
   athenaProviderId: Int!
-  userId: String!
-  patientId: String!
-  clinicId: String!
+  userId: ID!
+  patientId: ID!
+  clinicId: ID!
 }
 
 # Appointment End Result
@@ -358,7 +358,7 @@ type Task implements uniqueId {
   title: String!
   description: String
   patient: Patient!
-  patientId: String!
+  patientId: ID!
   dueAt: String
   priority: Priority
   createdBy: User!
@@ -369,7 +369,7 @@ type Task implements uniqueId {
   completedAt: String
   assignedTo: User
   followers: [User!]!
-  patientGoalId: String!
+  patientGoalId: ID!
   patientGoal: PatientGoal!
 }
 
@@ -390,7 +390,7 @@ type TaskComment implements uniqueId {
   id: ID!
   body: String!
   user: User!
-  taskId: String!
+  taskId: ID!
   createdAt: String!
   updatedAt: String
 }
@@ -419,7 +419,7 @@ type Answer implements uniqueId {
   riskAdjustmentType: RiskAdjustmentTypeOptions
   inSummary: Boolean
   summaryText: String
-  questionId: String!
+  questionId: ID!
   order: Int!
   concernSuggestions: [Concern!]
   goalSuggestions: [GoalSuggestionTemplate]
@@ -434,15 +434,15 @@ type PatientAnswer implements uniqueId {
   createdAt: String!
   updatedAt: String!
   deletedAt: String
-  answerId: String!
+  answerId: ID!
   answer: Answer!
   answerValue: String!
-  patientId: String!
+  patientId: ID!
   applicable: Boolean
   question: Question
-  patientScreeningToolSubmissionId: String
+  patientScreeningToolSubmissionId: ID
   patientScreeningToolSubmission: PatientScreeningToolSubmission
-  riskAreaAssessmentSubmissionId: String
+  riskAreaAssessmentSubmissionId: ID
   riskAreaAssessmentSubmission: RiskAreaAssessmentSubmission
 }
 
@@ -456,13 +456,13 @@ type Question implements uniqueId {
   validatedSource: String
   answers: [Answer!]
   answerType: AnswerTypeOptions!
-  riskAreaId: String
-  screeningToolId: String
-  progressNoteTemplateId: String
+  riskAreaId: ID
+  screeningToolId: ID
+  progressNoteTemplateId: ID
   applicableIfQuestionConditions: [QuestionCondition!]!
   applicableIfType: QuestionConditionTypeOptions
   order: Int!
-  computedFieldId: String
+  computedFieldId: ID
   computedField: ComputedField
 }
 
@@ -472,8 +472,8 @@ type QuestionCondition implements uniqueId {
   createdAt: String!
   updatedAt: String!
   deletedAt: String
-  answerId: String!
-  questionId: String!
+  answerId: ID!
+  questionId: ID!
 }
 
 # Risk Area Group
@@ -529,15 +529,15 @@ type ThreeSixtySummary {
 # Task Event
 type TaskEvent implements uniqueId {
   id: ID!
-  taskId: String!
-  userId: String!
+  taskId: ID!
+  userId: ID!
   user: User!
   eventType: TaskEventTypes
-  eventCommentId: String
+  eventCommentId: ID
   eventComment: TaskComment
-  eventUserId: String
+  eventUserId: ID
   eventUser: User
-  progressNoteId: String
+  progressNoteId: ID
   progressNote: ProgressNote
   createdAt: String!
   updatedAt: String!
@@ -547,16 +547,16 @@ type TaskEvent implements uniqueId {
 # Care Plan Update Event
 type CarePlanUpdateEvent implements uniqueId {
   id: ID!
-  patientId: String!
+  patientId: ID!
   patient: Patient!
-  userId: String!
+  userId: ID!
   user: User!
-  patientConcernId: String
-  patientGoalId: String
+  patientConcernId: ID
+  patientGoalId: ID
   patientConcern: PatientConcern
   patientGoal: PatientGoal
   eventType: CarePlanUpdateEventTypes!
-  progressNoteId: String
+  progressNoteId: ID
   progressNote: ProgressNote
   createdAt: String!
   updatedAt: String!
@@ -566,16 +566,16 @@ type CarePlanUpdateEvent implements uniqueId {
 # Patient Answer Event
 type PatientAnswerEvent implements uniqueId {
   id: ID!
-  patientId: String!
+  patientId: ID!
   patient: Patient!
-  userId: String!
+  userId: ID!
   user: User!
-  patientAnswerId: String!
+  patientAnswerId: ID!
   patientAnswer: PatientAnswer!
-  previousPatientAnswerId: String
+  previousPatientAnswerId: ID
   previousPatientAnswer: PatientAnswer
   eventType: PatientAnswerEventTypes!
-  progressNoteId: String
+  progressNoteId: ID
   progressNote: ProgressNote
   createdAt: String!
   updatedAt: String!
@@ -586,9 +586,9 @@ type PatientAnswerEvent implements uniqueId {
 type EventNotification implements uniqueId {
   id: ID!
   title: String
-  userId: String!
+  userId: ID!
   user: User!
-  taskEventId: String
+  taskEventId: ID
   taskEvent: TaskEvent
   seenAt: String
   emailSentAt: String
@@ -622,11 +622,11 @@ type Concern implements uniqueId {
 type PatientGoal implements uniqueId {
   id: ID!
   title: String!
-  patientId: String!
+  patientId: ID!
   patient: Patient!
-  patientConcernId: String
+  patientConcernId: ID
   patientConcern: PatientConcern
-  goalSuggestionTemplateId: String
+  goalSuggestionTemplateId: ID
   goalSuggestionTemplate: GoalSuggestionTemplate
   tasks: [Task!]!
   createdAt: String!
@@ -637,10 +637,10 @@ type PatientGoal implements uniqueId {
 type PatientConcern implements uniqueId {
   id: ID!
   order: Int!
-  concernId: String!
+  concernId: ID!
   concern: Concern!
   patientGoals: [PatientGoal!]
-  patientId: String!
+  patientId: ID!
   patient: Patient!
   startedAt: String
   completedAt: String
@@ -664,7 +664,7 @@ type TaskTemplate implements uniqueId {
   completedWithinNumber: Int
   completedWithinInterval: CompletedWithinInterval
   repeating: Boolean
-  goalSuggestionTemplateId: String!
+  goalSuggestionTemplateId: ID!
   priority: Priority
   careTeamAssigneeRole: UserRole
   createdAt: String!
@@ -674,13 +674,13 @@ type TaskTemplate implements uniqueId {
 
 type PatientTaskSuggestion implements uniqueId {
   id: ID!
-  patientId: String!
+  patientId: ID!
   patient: Patient!
-  taskTemplateId: String
+  taskTemplateId: ID
   taskTemplate: TaskTemplate
-  acceptedById: String
+  acceptedById: ID
   acceptedBy: User
-  dismissedById: String
+  dismissedById: ID
   dismissedBy: User
   dismissedReason: String
   createdAt: String!
@@ -691,25 +691,25 @@ type PatientTaskSuggestion implements uniqueId {
 
 type CarePlanSuggestion implements uniqueId {
   id: ID!
-  patientId: String!
+  patientId: ID!
   patient: Patient!
   suggestionType: CarePlanSuggestionType!
-  concernId: String
+  concernId: ID
   concern: Concern
-  goalSuggestionTemplateId: String
+  goalSuggestionTemplateId: ID
   goalSuggestionTemplate: GoalSuggestionTemplate
-  acceptedById: String
+  acceptedById: ID
   acceptedBy: User
-  dismissedById: String
+  dismissedById: ID
   dismissedBy: User
   dismissedReason: String
   createdAt: String!
   updatedAt: String!
   dismissedAt: String
   acceptedAt: String
-  patientScreeningToolSubmissionId: String
+  patientScreeningToolSubmissionId: ID
   patientScreeningToolSubmission: PatientScreeningToolSubmission
-  riskAreaAssessmentSubmissionId: String
+  riskAreaAssessmentSubmissionId: ID
   riskAreaAssessmentSubmission: RiskAreaAssessmentSubmission
 }
 
@@ -721,7 +721,7 @@ type CarePlan {
 type ScreeningTool implements uniqueId {
   id: ID!
   title: String!
-  riskAreaId: String!
+  riskAreaId: ID!
   riskArea: RiskArea!
   screeningToolScoreRanges: [ScreeningToolScoreRange!]!
   createdAt: String!
@@ -732,7 +732,7 @@ type ScreeningTool implements uniqueId {
 type ScreeningToolScoreRange implements uniqueId {
   id: ID!
   description: String!
-  screeningToolId: String!
+  screeningToolId: ID!
   screeningTool: ScreeningTool!
   riskAdjustmentType: RiskAdjustmentTypeOptions!
   minimumScore: Int!
@@ -746,11 +746,11 @@ type ScreeningToolScoreRange implements uniqueId {
 
 type PatientScreeningToolSubmission implements uniqueId {
   id: ID!
-  screeningToolId: String!
+  screeningToolId: ID!
   screeningTool: ScreeningTool!
-  patientId: String!
+  patientId: ID!
   patient: Patient!
-  userId: String!
+  userId: ID!
   user: User!
   score: Int
   riskArea: RiskArea!
@@ -759,17 +759,17 @@ type PatientScreeningToolSubmission implements uniqueId {
   deletedAt: String
   scoredAt: String
   carePlanSuggestions: [CarePlanSuggestion!]!
-  screeningToolScoreRangeId: String
+  screeningToolScoreRangeId: ID
   screeningToolScoreRange: ScreeningToolScoreRange
 }
 
 type RiskAreaAssessmentSubmission implements uniqueId {
   id: ID!
-  riskAreaId: String!
+  riskAreaId: ID!
   riskArea: RiskArea!
-  patientId: String!
+  patientId: ID!
   patient: Patient!
-  userId: String!
+  userId: ID!
   user: User!
   createdAt: String!
   updatedAt: String!
@@ -789,11 +789,11 @@ type ProgressNoteTemplate implements uniqueId {
 
 type ProgressNote implements uniqueId {
   id: ID!
-  patientId: String!
+  patientId: ID!
   patient: Patient!
-  userId: String!
+  userId: ID!
   user: User!
-  progressNoteTemplateId: String
+  progressNoteTemplateId: ID
   progressNoteTemplate: ProgressNoteTemplate
   location: String
   summary: String
@@ -807,9 +807,9 @@ type ProgressNote implements uniqueId {
 
 type QuickCall implements uniqueId {
   id: ID!
-  progressNoteId: String!
+  progressNoteId: ID!
   progressNote: ProgressNote!
-  userId: String!
+  userId: ID!
   user: User!
   reason: String!
   summary: String!
@@ -863,7 +863,7 @@ type ComputedFieldFlag {
 # params for creating a user
 input UserCreateInput {
   email: String!
-  homeClinicId: String!
+  homeClinicId: ID!
 }
 
 # params for logging in a user
@@ -890,33 +890,33 @@ input ClinicCreateInput {
 
 # params for adding or removing patient from care team
 input CareTeamInput {
-  userId: String!
-  patientId: String!
+  userId: ID!
+  patientId: ID!
 }
 
 # params for starting an appointment
 input AppointmentStartInput {
-  patientId: String!
+  patientId: ID!
   appointmentTypeId: Int
 }
 
 # params for ending an appointment
 input AppointmentEndInput {
-  patientId: String!
-  appointmentId: String!
+  patientId: ID!
+  appointmentId: ID!
   appointmentNote: String
 }
 
 # params for adding a note to an appointment
 input AppointmentAddNoteInput {
-  patientId: String!
-  appointmentId: String!
+  patientId: ID!
+  appointmentId: ID!
   appointmentNote: String!
 }
 
 # params for editing a patient in the db
 input PatientEditInput {
-  patientId: String!
+  patientId: ID!
   firstName: String
   middleName: String
   lastName: String
@@ -936,7 +936,7 @@ input PatientSetupInput {
   dateOfBirth: String!
   gender: String!
   zip: String!
-  homeClinicId: String!
+  homeClinicId: ID!
   suffix: String
   preferredName: String
   race: String!
@@ -955,7 +955,7 @@ input PatientSetupInput {
   state: String
   insuranceType: String
   patientRelationshipToPolicyHolder: String
-  memberId: String
+  memberId: ID
   policyGroupNumber: String
   issueDate: String
   expirationDate: String
@@ -963,7 +963,7 @@ input PatientSetupInput {
 
 # params for editing a patient scratch pad
 input PatientScratchPadEditInput {
-  patientId: String!
+  patientId: ID!
   text: String!
 }
 
@@ -979,54 +979,54 @@ input TaskCreateInput {
   title: String!
   description: String
   dueAt: String
-  patientId: String!
-  assignedToId: String
-  patientGoalId: String
+  patientId: ID!
+  assignedToId: ID
+  patientGoalId: ID
   priority: Priority
 }
 
 # params for deleting a task
 input TaskDeleteInput {
-  taskId: String!
+  taskId: ID!
 }
 
 # params for creating a task
 input TaskEditInput {
-  taskId: String!
+  taskId: ID!
   title: String
   description: String
   dueAt: String
-  assignedToId: String
+  assignedToId: ID
   priority: Priority
-  patientGoalId: String
+  patientGoalId: ID
 }
 
 # params for completing a task
 input TaskCompleteInput {
-  taskId: String!
+  taskId: ID!
 }
 
 # params for adding user to a task's followers
 input TaskFollowInput {
-  userId: String!
-  taskId: String!
+  userId: ID!
+  taskId: ID!
 }
 
 # params for creating a task comment
 input TaskCommentCreateInput {
-  taskId: String!
+  taskId: ID!
   body: String!
 }
 
 # params for editing a task comment
 input TaskCommentEditInput {
-  taskCommentId: String!
+  taskCommentId: ID!
   body: String!
 }
 
 # params for deleting a task comment
 input TaskCommentDeleteInput {
-  taskCommentId: String!
+  taskCommentId: ID!
 }
 
 # params for creating a risk area group
@@ -1039,7 +1039,7 @@ input RiskAreaGroupCreateInput {
 
 # params for editing a risk area group
 input RiskAreaGroupEditInput {
-  riskAreaGroupId: String!
+  riskAreaGroupId: ID!
   title: String
   order: Int
   mediumRiskThreshold: Int
@@ -1048,7 +1048,7 @@ input RiskAreaGroupEditInput {
 
 # params for deleting a risk area group
 input RiskAreaGroupDeleteInput {
-  riskAreaGroupId: String!
+  riskAreaGroupId: ID!
 }
 
 input RiskAreaCreateInput {
@@ -1061,7 +1061,7 @@ input RiskAreaCreateInput {
 }
 
 input RiskAreaEditInput {
-  riskAreaId: String!
+  riskAreaId: ID!
   title: String
   order: Int
   mediumRiskThreshold: Int
@@ -1069,23 +1069,23 @@ input RiskAreaEditInput {
 }
 
 input RiskAreaDeleteInput {
-  riskAreaId: String!
+  riskAreaId: ID!
 }
 
 input QuestionCreateInput {
   title: String!
   answerType: AnswerTypeOptions!
   validatedSource: String
-  riskAreaId: String
-  screeningToolId: String
-  progressNoteTemplateId: String
+  riskAreaId: ID
+  screeningToolId: ID
+  progressNoteTemplateId: ID
   order: Int!
   applicableIfType: QuestionConditionTypeOptions
-  computedFieldId: String
+  computedFieldId: ID
 }
 
 input QuestionEditInput {
-  questionId: String!
+  questionId: ID!
   title: String
   answerType: AnswerTypeOptions
   validatedSource: String
@@ -1094,7 +1094,7 @@ input QuestionEditInput {
 }
 
 input QuestionDeleteInput {
-  questionId: String!
+  questionId: ID!
 }
 
 input AnswerCreateInput {
@@ -1104,7 +1104,7 @@ input AnswerCreateInput {
   riskAdjustmentType: RiskAdjustmentTypeOptions
   inSummary: Boolean
   summaryText: String
-  questionId: String!
+  questionId: ID!
   order: Int!
 }
 
@@ -1116,58 +1116,58 @@ input AnswerEditInput {
   inSummary: Boolean
   summaryText: String
   order: Int
-  answerId: String!
+  answerId: ID!
 }
 
 input AnswerDeleteInput {
-  answerId: String!
+  answerId: ID!
 }
 
 input PatientAnswerInput {
-  answerId: String!
+  answerId: ID!
   answerValue: String!
-  patientId: String!
+  patientId: ID!
   applicable: Boolean!
-  questionId: String!
+  questionId: ID!
 }
 
 input PatientAnswersCreateInput {
-  patientId: String!
+  patientId: ID!
   patientAnswers: [PatientAnswerInput]!
   questionIds: [String]!
-  patientScreeningToolSubmissionId: String
-  riskAreaAssessmentSubmissionId: String
-  progressNoteId: String
+  patientScreeningToolSubmissionId: ID
+  riskAreaAssessmentSubmissionId: ID
+  progressNoteId: ID
 }
 
 input PatientAnswerEditInput {
   applicable: Boolean!
-  patientAnswerId: String!
+  patientAnswerId: ID!
 }
 
 input PatientAnswerDeleteInput {
-  patientAnswerId: String!
+  patientAnswerId: ID!
 }
 
 input QuestionConditionCreateInput {
-  questionId: String!
-  answerId: String!
+  questionId: ID!
+  answerId: ID!
 }
 
 # QuestionCondition edit input - for validation, need to edit question and answer at the same time
 input QuestionConditionEditInput {
-  questionConditionId: String!
-  questionId: String!
-  answerId: String!
+  questionConditionId: ID!
+  questionId: ID!
+  answerId: ID!
 }
 
 input QuestionConditionDeleteInput {
-  questionConditionId: String!
+  questionConditionId: ID!
 }
 
 # EventNotification edit input
 input EventNotificationEditInput {
-  eventNotificationId: String!
+  eventNotificationId: ID!
 }
 
 input ConcernCreateInput {
@@ -1176,37 +1176,37 @@ input ConcernCreateInput {
 
 input ConcernEditInput {
   title: String!
-  concernId: String!
+  concernId: ID!
 }
 
 input ConcernDeleteInput {
-  concernId: String!
+  concernId: ID!
 }
 
 input ConcernSuggestInput {
-  concernId: String!
-  answerId: String
-  screeningToolScoreRangeId: String
+  concernId: ID!
+  answerId: ID
+  screeningToolScoreRangeId: ID
 }
 
 input PatientConcernCreateInput {
-  concernId: String!
-  patientId: String!
+  concernId: ID!
+  patientId: ID!
   startedAt: String
   completedAt: String
 }
 
 input PatientConcernEditInput {
   order: Int
-  concernId: String
-  patientId: String
+  concernId: ID
+  patientId: ID
   startedAt: String
   completedAt: String
-  patientConcernId: String!
+  patientConcernId: ID!
 }
 
 input PatientConcernBulkEditFields {
-  id: String!
+  id: ID!
   order: Int
   startedAt: String
   completedAt: String
@@ -1214,11 +1214,11 @@ input PatientConcernBulkEditFields {
 
 input PatientConcernBulkEditInput {
   patientConcerns: [PatientConcernBulkEditFields]!
-  patientId: String!
+  patientId: ID!
 }
 
 input PatientConcernDeleteInput {
-  patientConcernId: String!
+  patientConcernId: ID!
 }
 
 input GoalSuggestionTemplateCreateInput {
@@ -1227,39 +1227,39 @@ input GoalSuggestionTemplateCreateInput {
 
 input GoalSuggestionTemplateEditInput {
   title: String!
-  goalSuggestionTemplateId: String!
+  goalSuggestionTemplateId: ID!
 }
 
 input GoalSuggestionTemplateDeleteInput {
-  goalSuggestionTemplateId: String!
+  goalSuggestionTemplateId: ID!
 }
 
 input GoalSuggestInput {
-  answerId: String
-  screeningToolScoreRangeId: String
-  goalSuggestionTemplateId: String!
+  answerId: ID
+  screeningToolScoreRangeId: ID
+  goalSuggestionTemplateId: ID!
 }
 
 input PatientGoalCreateInput {
   title: String
-  patientId: String!
-  patientConcernId: String
-  goalSuggestionTemplateId: String
+  patientId: ID!
+  patientConcernId: ID
+  goalSuggestionTemplateId: ID
   taskTemplateIds: [String]
-  concernId: String
+  concernId: ID
   concernTitle: String
   startedAt: String
 }
 
 input PatientGoalEditInput {
-  patientGoalId: String!
+  patientGoalId: ID!
   title: String!
-  patientConcernId: String
-  goalSuggestionTemplateId: String
+  patientConcernId: ID
+  goalSuggestionTemplateId: ID
 }
 
 input PatientGoalDeleteInput {
-  patientGoalId: String!
+  patientGoalId: ID!
 }
 
 input TaskTemplateCreateInput {
@@ -1267,7 +1267,7 @@ input TaskTemplateCreateInput {
   completedWithinNumber: Int
   completedWithinInterval: String
   repeating: Boolean
-  goalSuggestionTemplateId: String!
+  goalSuggestionTemplateId: ID!
   priority: Priority
   careTeamAssigneeRole: String
 }
@@ -1277,60 +1277,60 @@ input TaskTemplateEditInput {
   completedWithinNumber: Int
   completedWithinInterval: String
   repeating: Boolean
-  goalSuggestionTemplateId: String
+  goalSuggestionTemplateId: ID
   priority: Priority
   careTeamAssigneeRole: String
-  taskTemplateId: String!
+  taskTemplateId: ID!
 }
 
 input TaskTemplateDeleteInput {
-  taskTemplateId: String!
+  taskTemplateId: ID!
 }
 
 input TaskSuggestInput {
-  answerId: String!
-  taskTemplateId: String!
+  answerId: ID!
+  taskTemplateId: ID!
 }
 
 input PatientTaskSuggestionAcceptInput {
-  patientTaskSuggestionId: String!
+  patientTaskSuggestionId: ID!
 }
 
 input PatientTaskSuggestionDismissInput {
-  patientTaskSuggestionId: String!
+  patientTaskSuggestionId: ID!
   dismissedReason: String!
 }
 
 input CarePlanSuggestionAcceptInput {
-  carePlanSuggestionId: String!
-  patientConcernId: String
-  concernId: String
+  carePlanSuggestionId: ID!
+  patientConcernId: ID
+  concernId: ID
   startedAt: String
   taskTemplateIds: [String]
 }
 
 input CarePlanSuggestionDismissInput {
-  carePlanSuggestionId: String!
+  carePlanSuggestionId: ID!
   dismissedReason: String!
 }
 
 input ScreeningToolCreateInput {
   title: String!
-  riskAreaId: String!
+  riskAreaId: ID!
 }
 
 input ScreeningToolEditInput {
-  screeningToolId: String!
+  screeningToolId: ID!
   title: String
-  riskAreaId: String
+  riskAreaId: ID
 }
 
 input ScreeningToolDeleteInput {
-  screeningToolId: String!
+  screeningToolId: ID!
 }
 
 input ScreeningToolScoreRangeCreateInput {
-  screeningToolId: String!
+  screeningToolId: ID!
   description: String!
   minimumScore: Int!
   maximumScore: Int!
@@ -1338,9 +1338,9 @@ input ScreeningToolScoreRangeCreateInput {
 }
 
 input ScreeningToolScoreRangeEditInput {
-  screeningToolScoreRangeId: String!
+  screeningToolScoreRangeId: ID!
   description: String
-  screeningToolId: String
+  screeningToolId: ID
   minimumScore: Int
   maximumScore: Int
   deletedAt: String
@@ -1348,25 +1348,25 @@ input ScreeningToolScoreRangeEditInput {
 }
 
 input ScreeningToolScoreRangeDeleteInput {
-  screeningToolScoreRangeId: String!
+  screeningToolScoreRangeId: ID!
 }
 
 input PatientScreeningToolSubmissionCreateInput {
-  screeningToolId: String!
-  patientId: String!
+  screeningToolId: ID!
+  patientId: ID!
 }
 
 input PatientScreeningToolSubmissionScoreInput {
-  patientScreeningToolSubmissionId: String!
+  patientScreeningToolSubmissionId: ID!
 }
 
 input RiskAreaAssessmentSubmissionCreateInput {
-  riskAreaId: String!
-  patientId: String!
+  riskAreaId: ID!
+  patientId: ID!
 }
 
 input RiskAreaAssessmentSubmissionCompleteInput {
-  riskAreaAssessmentSubmissionId: String!
+  riskAreaAssessmentSubmissionId: ID!
 }
 
 input ProgressNoteTemplateCreateInput {
@@ -1374,25 +1374,25 @@ input ProgressNoteTemplateCreateInput {
 }
 
 input ProgressNoteTemplateDeleteInput {
-  progressNoteTemplateId: String!
+  progressNoteTemplateId: ID!
 }
 
 input ProgressNoteTemplateEditInput {
-  progressNoteTemplateId: String!
+  progressNoteTemplateId: ID!
   title: String!
 }
 
 input ProgressNoteCreateInput {
-  patientId: String!
+  patientId: ID!
 }
 
 input ProgressNoteCompleteInput {
-  progressNoteId: String!
+  progressNoteId: ID!
 }
 
 input ProgressNoteEditInput {
-  progressNoteId: String!
-  progressNoteTemplateId: String!
+  progressNoteId: ID!
+  progressNoteTemplateId: ID!
   startedAt: String
   location: String
   summary: String
@@ -1400,7 +1400,7 @@ input ProgressNoteEditInput {
 }
 
 input QuickCallCreateInput {
-  patientId: String! # Needed to lookup or create progressNoteId
+  patientId: ID! # Needed to lookup or create progressNoteId
   reason: String!
   summary: String!
   direction: QuickCallDirection!
@@ -1415,7 +1415,7 @@ input ComputedFieldCreateInput {
 }
 
 input ComputedFieldDeleteInput {
-  computedFieldId: String!
+  computedFieldId: ID!
 }
 
 # params for creating a computed field flag
@@ -1614,34 +1614,34 @@ type RootMutationType {
 
 type RootQueryType {
   # A single User
-  user(userId: String!): User
+  user(userId: ID!): User
   # All Users (admin only)
   users(pageNumber: Int, pageSize: Int, hasLoggedIn: Boolean, orderBy: UserOrderOptions): UserEdges
   # List of patients the user is on the care team for (their 'patient panel')
-  userPatientPanel(pageNumber: Int, pageSize: Int, userId: String): PatientEdges
+  userPatientPanel(pageNumber: Int, pageSize: Int, userId: ID): PatientEdges
   # The current User
   currentUser: User
   # A single Patient
-  patient(patientId: String!): Patient
+  patient(patientId: ID!): Patient
   # Users on a care team
-  patientCareTeam(patientId: String!): [User]
+  patientCareTeam(patientId: ID!): [User]
   # Patient scratch pad
-  patientScratchPad(patientId: String!): PatientScratchPad
+  patientScratchPad(patientId: ID!): PatientScratchPad
   # Patient search
   patientSearch(query: String!, pageNumber: Int!, pageSize: Int!): PatientSearchResultEdges
   # A single clinic
-  clinic(clinicId: String!): Clinic
+  clinic(clinicId: ID!): Clinic
   # Clinics
   clinics(pageNumber: Int, pageSize: Int): ClinicEdges
   # Patient encounters
-  patientEncounters(patientId: String!): [PatientEncounter]
+  patientEncounters(patientId: ID!): [PatientEncounter]
   # Patient medications
-  patientMedications(patientId: String!): PatientMedications
+  patientMedications(patientId: ID!): PatientMedications
   # Task
-  task(taskId: String!): Task
+  task(taskId: ID!): Task
   # Patient's Tasks
   tasksForPatient(
-    patientId: String!
+    patientId: ID!
     pageNumber: Int
     pageSize: Int
     orderBy: TaskOrderOptions
@@ -1649,43 +1649,39 @@ type RootQueryType {
   # Current user's Tasks
   tasksForCurrentUser(pageNumber: Int, pageSize: Int, orderBy: TaskOrderOptions): TaskEdges
   # List of task comments
-  taskComments(pageNumber: Int, pageSize: Int, taskId: String!): TaskCommentEdges
+  taskComments(pageNumber: Int, pageSize: Int, taskId: ID!): TaskCommentEdges
   # Single task comment
-  taskComment(taskCommentId: String!): TaskComment
+  taskComment(taskCommentId: ID!): TaskComment
   # RiskAreaGroup
-  riskAreaGroup(riskAreaGroupId: String!): RiskAreaGroup
+  riskAreaGroup(riskAreaGroupId: ID!): RiskAreaGroup
   # Risk Area Group with associated patient answers
-  riskAreaGroupForPatient(riskAreaGroupId: String!, patientId: String!): RiskAreaGroup!
+  riskAreaGroupForPatient(riskAreaGroupId: ID!, patientId: ID!): RiskAreaGroup!
   # RiskAreaGroups
   riskAreaGroups: [RiskAreaGroup!]!
   # RiskArea
-  riskArea(riskAreaId: String!): RiskArea
+  riskArea(riskAreaId: ID!): RiskArea
   # RiskAreas
   riskAreas: [RiskArea]
   # Question
-  question(questionId: String!): Question
+  question(questionId: ID!): Question
   # Questions for risk area, progress note template or screening tool
-  questions(filterId: String!, filterType: QuestionFilterType!): [Question!]!
+  questions(filterId: ID!, filterType: QuestionFilterType!): [Question!]!
   # Answer
-  answer(answerId: String!): Answer
+  answer(answerId: ID!): Answer
   # Answers
-  answersForQuestion(questionId: String!): [Answer]!
+  answersForQuestion(questionId: ID!): [Answer]!
   # PatientAnswer
-  patientAnswer(patientAnswerId: String!): PatientAnswer
+  patientAnswer(patientAnswerId: ID!): PatientAnswer
   # PatientAnswersForQuestion
-  patientAnswers(
-    filterId: String!
-    filterType: AnswerFilterType!
-    patientId: String!
-  ): [PatientAnswer!]
+  patientAnswers(filterId: ID!, filterType: AnswerFilterType!, patientId: ID!): [PatientAnswer!]
   # PatientPreviousAnswersForQuestion
-  patientPreviousAnswersForQuestion(questionId: String!, patientId: String!): [PatientAnswer]
+  patientPreviousAnswersForQuestion(questionId: ID!, patientId: ID!): [PatientAnswer]
   # PatientRiskAreaSummary
-  patientRiskAreaSummary(riskAreaId: String!, patientId: String!): RiskAreaSummary
+  patientRiskAreaSummary(riskAreaId: ID!, patientId: ID!): RiskAreaSummary
   # PatientRiskAreaRiskScore
-  patientRiskAreaRiskScore(riskAreaId: String!, patientId: String!): RiskScore
+  patientRiskAreaRiskScore(riskAreaId: ID!, patientId: ID!): RiskScore
   # QuestionCondition
-  questionCondition(questionConditionId: String!): QuestionCondition
+  questionCondition(questionConditionId: ID!): QuestionCondition
   # Event notifications for a user
   eventNotificationsForCurrentUser(
     pageNumber: Int
@@ -1693,104 +1689,102 @@ type RootQueryType {
     taskEventNotificationsOnly: Boolean
   ): EventNotificationEdges
   # Event notifications for a task
-  eventNotificationsForTask(taskId: String!, pageNumber: Int, pageSize: Int): EventNotificationEdges
+  eventNotificationsForTask(taskId: ID!, pageNumber: Int, pageSize: Int): EventNotificationEdges
   # Concern
-  concern(concernId: String!): Concern
+  concern(concernId: ID!): Concern
   # Concerns
   concerns(orderBy: ConcernOrderOptions): [Concern]
   # Concerns for answer
-  concernsForAnswer(answerId: String!): [Concern]
+  concernsForAnswer(answerId: ID!): [Concern]
   # patient concern
-  patientConcern(patientConcernId: String!): PatientConcern
+  patientConcern(patientConcernId: ID!): PatientConcern
   # patient concerns for patient
-  patientConcerns(patientId: String!): [PatientConcern]
+  patientConcerns(patientId: ID!): [PatientConcern]
   # Patient goal
-  patientGoal(patientGoalId: String!): PatientGoal
+  patientGoal(patientGoalId: ID!): PatientGoal
   # Patient goals for patient
-  patientGoals(patientId: String!): [PatientGoal]
+  patientGoals(patientId: ID!): [PatientGoal]
   # Goal suggestion templates
-  goalSuggestionTemplate(goalSuggestionTemplateId: String!): GoalSuggestionTemplate
+  goalSuggestionTemplate(goalSuggestionTemplateId: ID!): GoalSuggestionTemplate
   # Goal suggestion templates
   goalSuggestionTemplates(orderBy: GoalSuggestionOrderOptions): [GoalSuggestionTemplate]
   # Goal suggestion for template for answer
-  goalSuggestionTemplatesForAnswer(answerId: String!): [GoalSuggestionTemplate]
+  goalSuggestionTemplatesForAnswer(answerId: ID!): [GoalSuggestionTemplate]
   # Task template
-  taskTemplate(taskTemplateId: String!): TaskTemplate
+  taskTemplate(taskTemplateId: ID!): TaskTemplate
   # Task templates
   taskTemplates: [TaskTemplate]
   # Task templates suggested for answer
-  taskTemplatesForAnswer(answerId: String!): [TaskTemplate]
+  taskTemplatesForAnswer(answerId: ID!): [TaskTemplate]
   # patient task suggestions
-  patientTaskSuggestions(patientId: String!): [PatientTaskSuggestion]
+  patientTaskSuggestions(patientId: ID!): [PatientTaskSuggestion]
   # Care Plan Suggestions
-  carePlanSuggestionsForPatient(patientId: String!): [CarePlanSuggestion]
+  carePlanSuggestionsForPatient(patientId: ID!): [CarePlanSuggestion]
   # Care Plan
-  carePlanForPatient(patientId: String!): CarePlan
+  carePlanForPatient(patientId: ID!): CarePlan
   # screening tool
-  screeningTool(screeningToolId: String!): ScreeningTool
+  screeningTool(screeningToolId: ID!): ScreeningTool
   # screening tools
   screeningTools: [ScreeningTool]
   # screening tools for risk area
-  screeningToolsForRiskArea(riskAreaId: String!): [ScreeningTool]
+  screeningToolsForRiskArea(riskAreaId: ID!): [ScreeningTool]
   # screening tool score range
-  screeningToolScoreRange(screeningToolScoreRangeId: String!): ScreeningToolScoreRange
+  screeningToolScoreRange(screeningToolScoreRangeId: ID!): ScreeningToolScoreRange
   # screening tool score range for screening tool and score
   screeningToolScoreRangeForScoreAndScreeningTool(
-    screeningToolId: String!
+    screeningToolId: ID!
     score: Int!
   ): ScreeningToolScoreRange
   # screening tool score ranges
   screeningToolScoreRanges: [ScreeningToolScoreRange]
   # screening tool score ranges for screening tool
-  screeningToolScoreRangesForScreeningTool(screeningToolId: String!): [ScreeningToolScoreRange]
+  screeningToolScoreRangesForScreeningTool(screeningToolId: ID!): [ScreeningToolScoreRange]
   # patient screening tool submission
   patientScreeningToolSubmission(
-    patientScreeningToolSubmissionId: String!
+    patientScreeningToolSubmissionId: ID!
   ): PatientScreeningToolSubmission
   # latest patient sreening tool submission for a screening tool
   patientScreeningToolSubmissionForPatientAndScreeningTool(
-    screeningToolId: String!
-    patientId: String!
+    screeningToolId: ID!
+    patientId: ID!
     scored: Boolean!
   ): PatientScreeningToolSubmission
   # patient screening tool submissions for patient and screening tool (optioanlly)
   patientScreeningToolSubmissionsForPatient(
-    patientId: String!
-    screeningToolId: String
+    patientId: ID!
+    screeningToolId: ID
     scored: Boolean!
   ): [PatientScreeningToolSubmission]
   # patient screening tool submissions
   patientScreeningToolSubmissions: [PatientScreeningToolSubmission]
   # progress note template
-  progressNoteTemplate(progressNoteTemplateId: String!): ProgressNoteTemplate
+  progressNoteTemplate(progressNoteTemplateId: ID!): ProgressNoteTemplate
   # progress note templates
   progressNoteTemplates: [ProgressNoteTemplate]
   # progress note
-  progressNote(progressNoteId: String!): ProgressNote
+  progressNote(progressNoteId: ID!): ProgressNote
   # progress notes for patient
-  progressNotesForPatient(patientId: String!, completed: Boolean!): [ProgressNote]
+  progressNotesForPatient(patientId: ID!, completed: Boolean!): [ProgressNote]
   # progress notes for current user
   progressNotesForCurrentUser(completed: Boolean!): [ProgressNote]
   # progress note activities for progress note
-  progressNoteActivityForProgressNote(progressNoteId: String!): ProgressNoteActivity
+  progressNoteActivityForProgressNote(progressNoteId: ID!): ProgressNoteActivity
   # quick call
-  quickCall(quickCallId: String!): QuickCall
+  quickCall(quickCallId: ID!): QuickCall
   # quick calls for progress note
-  quickCallsForProgressNote(progressNoteId: String!): [QuickCall]
+  quickCallsForProgressNote(progressNoteId: ID!): [QuickCall]
   # computed field
-  computedField(computedFieldId: String!): ComputedField
+  computedField(computedFieldId: ID!): ComputedField
   # computed fields
   computedFields(orderBy: ComputedFieldOrderOptions, availableOnly: Boolean): [ComputedField]
   # computed fields schema
   computedFieldsSchema: ComputedFieldsSchema
   # risk area assessment submission
-  riskAreaAssessmentSubmission(
-    riskAreaAssessmentSubmissionId: String!
-  ): RiskAreaAssessmentSubmission
+  riskAreaAssessmentSubmission(riskAreaAssessmentSubmissionId: ID!): RiskAreaAssessmentSubmission
   # latest risk area assessment submission for a screening tool
   riskAreaAssessmentSubmissionForPatient(
-    riskAreaId: String!
-    patientId: String!
+    riskAreaId: ID!
+    patientId: ID!
     completed: Boolean!
   ): RiskAreaAssessmentSubmission
 }

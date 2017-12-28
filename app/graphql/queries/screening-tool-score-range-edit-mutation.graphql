@@ -1,9 +1,9 @@
 #import "../fragments/full-screening-tool-score-range.graphql"
 
 mutation screeningToolScoreRangeEdit(
-  $screeningToolScoreRangeId: String!
+  $screeningToolScoreRangeId: ID!
   $description: String
-  $screeningToolId: String
+  $screeningToolId: ID
   $minimumScore: Int
   $maximumScore: Int
   $riskAdjustmentType: RiskAdjustmentTypeOptions

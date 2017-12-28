@@ -1,8 +1,8 @@
 #import "../fragments/full-risk-area-assessment-submission.graphql"
 
 query getRiskAreaAssessmentSubmissionForPatient(
-  $riskAreaId: String!
-  $patientId: String!
+  $riskAreaId: ID!
+  $patientId: ID!
   $completed: Boolean!
 ) {
   riskAreaAssessmentSubmissionForPatient(

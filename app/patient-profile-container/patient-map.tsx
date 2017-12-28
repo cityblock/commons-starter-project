@@ -7,7 +7,7 @@ import * as patientCarePlanQuery from '../graphql/queries/get-patient-care-plan.
 import { getPatientCarePlanQuery } from '../graphql/types';
 import Task from '../shared/task/task';
 import * as styles from './css/patient-map.css';
-import DnDPatientCarePlan from './drag-and-drop/patient-care-plan';
+import DnDPatientCarePlan from './drag-and-drop/drag-and-drop-patient-care-plan';
 import MapModals from './modals/modals';
 
 interface IDispatchProps {

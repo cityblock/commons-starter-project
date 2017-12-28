@@ -1,8 +1,8 @@
 #import "../fragments/full-progress-note.graphql"
 
 mutation progressNoteEdit(
-  $progressNoteId: String!
-  $progressNoteTemplateId: String!
+  $progressNoteId: ID!
+  $progressNoteTemplateId: ID!
   $startedAt: String
   $location: String
   $summary: String

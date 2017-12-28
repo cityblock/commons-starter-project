@@ -4,10 +4,10 @@ mutation taskCreate(
   $title: String!
   $description: String!
   $dueAt: String!
-  $patientId: String!
+  $patientId: ID!
   $priority: Priority
-  $assignedToId: String
-  $patientGoalId: String
+  $assignedToId: ID
+  $patientGoalId: ID
 ) {
   taskCreate(
     input: {

@@ -1,6 +1,6 @@
 #import "../fragments/full-goal-suggestion-template.graphql"
 
-query getGoalSuggestionTemplate($goalSuggestionTemplateId: String!) {
+query getGoalSuggestionTemplate($goalSuggestionTemplateId: ID!) {
   goalSuggestionTemplate(goalSuggestionTemplateId: $goalSuggestionTemplateId) {
     ...FullGoalSuggestionTemplate
   }

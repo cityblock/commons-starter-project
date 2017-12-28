@@ -1,6 +1,6 @@
 #import "../fragments/full-answer.graphql"
 
-query getAnswer($answerId: String!) {
+query getAnswer($answerId: ID!) {
   answer(answerId: $answerId) {
     ...FullAnswer
   }

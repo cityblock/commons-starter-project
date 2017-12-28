@@ -1,6 +1,6 @@
 #import "../fragments/full-screening-tool.graphql"
 
-query getScreeningTool($screeningToolId: String!) {
+query getScreeningTool($screeningToolId: ID!) {
   screeningTool(screeningToolId: $screeningToolId) {
     ...FullScreeningTool
   }

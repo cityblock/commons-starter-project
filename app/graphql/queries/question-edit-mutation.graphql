@@ -1,7 +1,7 @@
 #import "../fragments/full-question.graphql"
 
 mutation questionEdit(
-  $questionId: String!
+  $questionId: ID!
   $title: String
   $answerType: AnswerTypeOptions
   $validatedSource: String

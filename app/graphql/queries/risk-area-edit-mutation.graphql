@@ -1,7 +1,7 @@
 #import "../fragments/full-risk-area.graphql"
 
 mutation riskAreaEdit(
-  $riskAreaId: String!
+  $riskAreaId: ID!
   $title: String
   $order: Int
   $mediumRiskThreshold: Int

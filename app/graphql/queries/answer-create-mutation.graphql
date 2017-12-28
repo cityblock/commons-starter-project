@@ -7,7 +7,7 @@ mutation answerCreate(
   $riskAdjustmentType: RiskAdjustmentTypeOptions
   $inSummary: Boolean
   $summaryText: String
-  $questionId: String!
+  $questionId: ID!
   $order: Int!
 ) {
   answerCreate(

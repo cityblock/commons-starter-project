@@ -1,7 +1,7 @@
 import { shallow } from 'enzyme';
 import * as React from 'react';
 import { Draggable } from 'react-beautiful-dnd';
-import DnDPatientConcern from '../patient-concern';
+import DnDPatientConcern from '../drag-and-drop-patient-concern';
 
 describe('Drag and Drop Patient Concern', () => {
   const placeholderFn = () => true as any;

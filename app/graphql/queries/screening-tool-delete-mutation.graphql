@@ -1,6 +1,6 @@
 #import "../fragments/full-screening-tool.graphql"
 
-mutation screeningToolDelete($screeningToolId: String!) {
+mutation screeningToolDelete($screeningToolId: ID!) {
   screeningToolDelete(input: { screeningToolId: $screeningToolId }) {
     ...FullScreeningTool
   }

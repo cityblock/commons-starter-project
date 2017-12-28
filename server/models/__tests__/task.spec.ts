@@ -152,7 +152,7 @@ describe('task model', () => {
       patientGoalId: patientGoal.id,
     });
 
-    // should not include the deleted comment
+    // should not include the deleted task
     const deletedTask = await Task.create({
       title: 'deleted',
       description: 'deleted',
@@ -163,6 +163,19 @@ describe('task model', () => {
       patientGoalId: patientGoal.id,
     });
     await Task.delete(deletedTask.id);
+
+    // should not include the deleted task that the user is following
+    const deletedFollowedTask = await Task.create({
+      title: 'deleted',
+      description: 'deleted',
+      dueAt,
+      patientId: patient.id,
+      createdById: user.id,
+      assignedToId: user.id,
+      patientGoalId: patientGoal.id,
+    });
+    await TaskFollower.followTask({ userId: user.id, taskId: deletedFollowedTask.id });
+    await Task.delete(deletedFollowedTask.id);
 
     expect(
       await Task.getPatientTasks(patient.id, {

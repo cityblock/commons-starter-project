@@ -195,6 +195,7 @@ export default class Task extends BaseModel {
       .where({ userId, deletedAt: null }) as any; // TODO: resolve typing issue
     const userTasks = (await this.query()
       .where('id', 'in', subquery)
+      .andWhere({ deletedAt: null })
       .orWhere({ createdById: userId, deletedAt: null })
       .eager(EAGER_QUERY)
       .modifyEager('followers', builder => builder.where('task_follower.deletedAt', null))

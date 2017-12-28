@@ -78,6 +78,7 @@ export class DomainSummary extends React.Component<allProps, IState> {
       area.questions!.forEach(question => {
         question.answers!.forEach(answer => {
           if (answer.patientAnswers && answer.patientAnswers.length) {
+            // TODO: Change to a loop once radar merged in
             answered = true;
             const updatedAt = answer.patientAnswers[0].updatedAt;
             if (!lastUpdated || isAfter(updatedAt, lastUpdated)) {

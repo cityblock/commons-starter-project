@@ -15,37 +15,63 @@ interface IProps {
   markAsSuppressed: (riskAreaId: string) => void;
 }
 
-class DomainAssessment extends React.Component<IProps, {}> {
-  calculateSummaryStats() {
+interface IState {
+  started: string;
+  lastUpdated: string;
+  totalScore: number | null;
+  forceHighRisk: boolean;
+  summaryText: string[];
+  calculated: boolean;
+}
+
+class DomainAssessment extends React.Component<IProps, IState> {
+  constructor(props: IProps) {
+    super(props);
+
+    this.state = {
+      started: '',
+      lastUpdated: '',
+      totalScore: null,
+      forceHighRisk: false,
+      summaryText: [],
+      calculated: false,
+    };
+  }
+
+  componentDidMount(): void {
+    if (!this.state.calculated) {
+      this.calculateSummaryStats();
+    }
+  }
+
+  calculateSummaryStats(): void {
     const { riskArea, markAsSuppressed } = this.props;
-    let started = '';
-    let lastUpdated = '';
-    let totalScore: number | null = null;
-    let forceHighRisk = false;
-    const summaryText: string[] = [];
+    let { started, lastUpdated, totalScore, forceHighRisk } = this.state;
+    const { summaryText } = this.state;
 
     riskArea.questions!.forEach(question => {
       question.answers!.forEach(answer => {
         if (answer.patientAnswers && answer.patientAnswers.length) {
-          if (totalScore === null) totalScore = 0;
+          answer.patientAnswers.forEach(patientAnswer => {
+            if (totalScore === null) totalScore = 0;
 
-          const patientAnswer = answer.patientAnswers[0];
-          if (!started || isAfter(started, patientAnswer.createdAt)) {
-            started = patientAnswer.createdAt;
-          }
-          if (!lastUpdated || isAfter(patientAnswer.updatedAt, lastUpdated)) {
-            lastUpdated = patientAnswer.updatedAt;
-          }
+            if (!started || isAfter(started, patientAnswer.createdAt)) {
+              started = patientAnswer.createdAt;
+            }
+            if (!lastUpdated || isAfter(patientAnswer.updatedAt, lastUpdated)) {
+              lastUpdated = patientAnswer.updatedAt;
+            }
 
-          if (answer.riskAdjustmentType === 'forceHighRisk') {
-            forceHighRisk = true;
-          } else if (answer.riskAdjustmentType === 'increment') {
-            totalScore++;
-          }
+            if (answer.riskAdjustmentType === 'forceHighRisk') {
+              forceHighRisk = true;
+            } else if (answer.riskAdjustmentType === 'increment') {
+              totalScore++;
+            }
 
-          if (answer.inSummary && answer.summaryText) {
-            summaryText.push(answer.summaryText);
-          }
+            if (answer.inSummary && answer.summaryText) {
+              summaryText.push(answer.summaryText);
+            }
+          });
         }
       });
     });
@@ -55,26 +81,21 @@ class DomainAssessment extends React.Component<IProps, {}> {
       markAsSuppressed(riskArea.id);
     }
 
-    return {
+    this.setState({
       started,
       lastUpdated,
       totalScore,
       forceHighRisk,
       summaryText,
-    };
+      calculated: true,
+    });
   }
 
   render(): JSX.Element | null {
     const { routeBase, riskArea, suppressed } = this.props;
     if (suppressed) return null;
 
-    const {
-      started,
-      lastUpdated,
-      totalScore,
-      forceHighRisk,
-      summaryText,
-    } = this.calculateSummaryStats();
+    const { started, lastUpdated, totalScore, forceHighRisk, summaryText } = this.state;
 
     const risk =
       totalScore !== null

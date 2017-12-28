@@ -1,7 +1,11 @@
 import * as classNames from 'classnames';
 import * as React from 'react';
+import { compose, graphql } from 'react-apollo';
 import { connect, Dispatch } from 'react-redux';
 import { push } from 'react-router-redux';
+/* tslint:disable:max-line-length */
+import * as patientCarePlanQuery from '../graphql/queries/get-patient-care-plan.graphql';
+/* tslint:enable:max-line-length */
 import { getPatientCarePlanQuery } from '../graphql/types';
 import Task from '../shared/task/task';
 import * as styles from './css/patient-map.css';
@@ -20,7 +24,13 @@ export interface IProps {
   taskId: string | null;
 }
 
-export type allProps = IDispatchProps & IProps;
+interface IGraphqlProps {
+  carePlan?: getPatientCarePlanQuery['carePlanForPatient'];
+  loading?: boolean;
+  error?: string | null;
+}
+
+export type allProps = IDispatchProps & IGraphqlProps & IProps;
 
 export class PatientMap extends React.Component<allProps, {}> {
   closeTask = (e: React.MouseEvent<HTMLDivElement>): void => {
@@ -74,4 +84,19 @@ const mapDispatchToProps = (dispatch: Dispatch<() => void>, ownProps: IProps): I
   closeTask: () => dispatch(push(ownProps.routeBase)),
 });
 
-export default connect<{}, IDispatchProps, IProps>(null, mapDispatchToProps)(PatientMap);
+export default compose(
+  connect<{}, IDispatchProps, IProps>(null, mapDispatchToProps),
+  graphql<IGraphqlProps, IProps, allProps>(patientCarePlanQuery as any, {
+    options: (props: IProps) => ({
+      variables: {
+        patientId: props.patientId,
+      },
+      fetchPolicy: 'cache-and-network', // Always get the latest care plan
+    }),
+    props: ({ data }) => ({
+      loading: data ? data.loading : false,
+      error: data ? data.error : null,
+      carePlan: data ? (data as any).carePlanForPatient : null,
+    }),
+  }),
+)(PatientMap);

@@ -155,9 +155,9 @@ export class RiskAreaAssessment extends React.Component<allProps, IState> {
       : null;
     const popupVisible =
       riskAreaAssessmentSubmission && riskAreaAssessmentSubmission.completedAt ? true : false;
-    const backLink = automatedAssessment ? (<BackLink
-      href={`${routeBase}/${riskArea!.riskAreaGroup.id}`}
-    />) : null;
+    const backLink = automatedAssessment ? (
+      <BackLink href={`${routeBase}/${riskArea!.riskAreaGroup.id}`} />
+    ) : null;
 
     return (
       <div>

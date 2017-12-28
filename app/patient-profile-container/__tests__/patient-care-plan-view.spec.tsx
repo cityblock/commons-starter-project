@@ -1,11 +1,11 @@
 import { shallow } from 'enzyme';
 import * as React from 'react';
-import { FormattedMessage } from 'react-intl';
 import Button from '../../shared/library/button/button';
+import UnderlineTab from '../../shared/library/underline-tab/underline-tab';
 import { patient } from '../../shared/util/test-data';
 import PatientCarePlanSuggestions from '../patient-care-plan-suggestions';
 import { PatientCarePlanView } from '../patient-care-plan-view';
-import PatientMap from '../patient-map';
+import PatientMap, { IProps } from '../patient-map';
 
 describe('Patient Care Plan View Component', () => {
   const patientId = patient.id;
@@ -22,7 +22,7 @@ describe('Patient Care Plan View Component', () => {
   );
 
   it('renders patient MAP when on active tab', () => {
-    const map = wrapper.find(PatientMap);
+    const map = wrapper.find<IProps>(PatientMap);
 
     expect(map.length).toBe(1);
     expect(map.props().routeBase).toBe(`${routeBase}/${patient.id}/map/active`);
@@ -32,7 +32,7 @@ describe('Patient Care Plan View Component', () => {
   });
 
   it('renders two tabs', () => {
-    const tabs = wrapper.find(FormattedMessage);
+    const tabs = wrapper.find(UnderlineTab);
     expect(tabs.length).toBe(2);
   });
 

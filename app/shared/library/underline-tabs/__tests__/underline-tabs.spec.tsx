@@ -51,4 +51,24 @@ describe('Library Underline Tabs Component', () => {
     expect(wrapper.find('div').length).toBe(1);
     expect(wrapper.find('div').props().className).toBe('tabs white');
   });
+
+  it('applies space between styles if left and right content', () => {
+    const wrapper2 = shallow(
+      <UnderlineTabs>
+        <div>
+          <UnderlineTab messageId={messageId} selected={false} />
+        </div>
+        <div>
+          <UnderlineTab messageId={messageId2} selected={true} />
+        </div>
+      </UnderlineTabs>,
+    );
+
+    expect(
+      wrapper2
+        .find('div')
+        .at(0)
+        .props().className,
+    ).toBe('tabs spaceBetween');
+  });
 });

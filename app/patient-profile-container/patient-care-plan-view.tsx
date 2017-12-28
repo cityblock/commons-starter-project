@@ -1,16 +1,10 @@
-import * as classNames from 'classnames';
 import * as React from 'react';
-import { compose, graphql } from 'react-apollo';
-import { FormattedMessage } from 'react-intl';
 import { connect, Dispatch } from 'react-redux';
-import { Link } from 'react-router-dom';
 import { closePopup as closePopupAction, openPopup } from '../actions/popup-action';
-/* tslint:disable:max-line-length */
-import * as patientCarePlanQuery from '../graphql/queries/get-patient-care-plan.graphql';
-/* tslint:enable:max-line-length */
 import { getPatientCarePlanQuery } from '../graphql/types';
-import * as tabStyles from '../shared/css/tabs.css';
 import Button from '../shared/library/button/button';
+import UnderlineTab from '../shared/library/underline-tab/underline-tab';
+import UnderlineTabs from '../shared/library/underline-tabs/underline-tabs';
 import { IState as IAppState } from '../store';
 import * as styles from './css/patient-care-plan.css';
 import PatientCarePlanSuggestions from './patient-care-plan-suggestions';
@@ -53,7 +47,7 @@ export class PatientCarePlanView extends React.Component<allProps> {
   };
 
   render(): JSX.Element {
-    const { patientCarePlan, loading, match, addConcern } = this.props;
+    const { match, addConcern } = this.props;
     const patientId = match.params.patientId;
     const subTab = match.params.subTab;
     const routeBase = `/patients/${match.params.patientId}/map`;
@@ -65,44 +59,30 @@ export class PatientCarePlanView extends React.Component<allProps> {
       <PatientCarePlanSuggestions routeBase={routeBase} patientId={patientId} />
     ) : null;
     const carePlan = !isSuggestions ? (
-      <PatientMap
-        loading={loading}
-        carePlan={patientCarePlan}
-        routeBase={`${routeBase}/active`}
-        patientId={patientId}
-        taskId={taskId || null}
-      />
+      <PatientMap routeBase={`${routeBase}/active`} patientId={patientId} taskId={taskId || null} />
     ) : null;
-
-    const activeCarePlanTabStyles = classNames(tabStyles.tab, {
-      [tabStyles.selectedTab]: !isSuggestions,
-    });
-    const suggestionsTabStyles = classNames(tabStyles.tab, {
-      [tabStyles.selectedTab]: isSuggestions,
-    });
-    const tabRowStyles = classNames(tabStyles.tabs, tabStyles.darkTabs, styles.tabRow);
 
     return (
       <div onClick={this.onContainerClick}>
-        <div className={styles.tabContainer}>
-          <div className={tabRowStyles}>
-            <FormattedMessage id="patient.activeCarePlan">
-              {(message: string) => (
-                <Link to={`${routeBase}/active`} className={activeCarePlanTabStyles}>
-                  {message}
-                </Link>
-              )}
-            </FormattedMessage>
-            <FormattedMessage id="patient.carePlanSuggestions">
-              {(message: string) => (
-                <Link to={`${routeBase}/suggestions`} className={suggestionsTabStyles}>
-                  {message}
-                </Link>
-              )}
-            </FormattedMessage>
+        <UnderlineTabs>
+          <div>
+            <UnderlineTab
+              messageId="patient.activeCarePlan"
+              href={`${routeBase}/active`}
+              selected={!isSuggestions}
+            />
+            <UnderlineTab
+              messageId="patient.carePlanSuggestions"
+              href={`${routeBase}/suggestions`}
+              selected={isSuggestions}
+            />
           </div>
-          <Button messageId="concernCreate.addConcern" onClick={addConcern} />
-        </div>
+          {!isSuggestions && (
+            <div>
+              <Button messageId="concernCreate.addConcern" onClick={addConcern} />
+            </div>
+          )}
+        </UnderlineTabs>
         <div className={styles.carePlanPanel}>
           {carePlanSuggestions}
           {carePlan}
@@ -134,23 +114,7 @@ const mapDispatchToProps = (dispatch: Dispatch<() => void>, ownProps: IProps): I
   };
 };
 
-export default compose(
-  connect<IStateProps, IDispatchProps, IProps>(
-    mapStateToProps as (args?: any) => IStateProps,
-    mapDispatchToProps,
-  ),
-  graphql<IGraphqlProps, IProps, allProps>(patientCarePlanQuery as any, {
-    options: (props: IProps) => ({
-      variables: {
-        patientId: getPatientId(props),
-      },
-      fetchPolicy: 'cache-and-network', // Always get the latest care plan
-    }),
-    props: ({ data }) => ({
-      loading: data ? data.loading : false,
-      error: data ? data.error : null,
-      patientCarePlan: data ? (data as any).carePlanForPatient : null,
-      refetchPatientCarePlan: data ? data.refetch : null,
-    }),
-  }),
+export default connect<IStateProps, IDispatchProps, IProps>(
+  mapStateToProps as (args?: any) => IStateProps,
+  mapDispatchToProps,
 )(PatientCarePlanView);

@@ -48,29 +48,15 @@ describe('Patient 360 Domain Assessment List Item', () => {
   const updatedAt = 'updatedAt';
   const summaryText = 'Lady of Winterfell';
 
-  const riskAreaFull = {
-    assessmentType: 'manual',
-    questions: [
-      {
-        answers: [
-          {
-            inSummary: true,
-            riskAdjustmentType: 'forceHighRisk',
-            summaryText,
-            patientAnswers: [
-              {
-                createdAt,
-                updatedAt,
-              },
-            ],
-          },
-        ],
-      },
-    ],
-  };
-
   it('applies border styles if answered', () => {
-    wrapper.setProps({ riskArea: riskAreaFull });
+    wrapper.setState({
+      forceHighRisk: true,
+      summaryText: [summaryText],
+      started: createdAt,
+      lastUpdated: updatedAt,
+      totalScore: 0,
+    });
+
     expect(
       wrapper
         .find('div')

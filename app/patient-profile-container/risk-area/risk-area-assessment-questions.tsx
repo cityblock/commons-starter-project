@@ -4,10 +4,8 @@ import { compose, graphql } from 'react-apollo';
 import { connect, Dispatch } from 'react-redux';
 import { push } from 'react-router-redux';
 import * as patientAnswersQuery from '../../graphql/queries/get-patient-answers.graphql';
-/* tslint:disable:max-line-length */
 import * as riskAreaQuestionsQuery from '../../graphql/queries/get-questions.graphql';
 import * as patientAnswersCreateMutationGraphql from '../../graphql/queries/patient-answers-create-mutation.graphql';
-/* tsline:enable:max-line-length */
 import {
   patientAnswersCreateMutation,
   patientAnswersCreateMutationVariables,

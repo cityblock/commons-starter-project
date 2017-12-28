@@ -47,10 +47,8 @@ type IQuestionCreateFields =
 type AnswerType = 'dropdown' | 'radio' | 'freetext' | 'multiselect';
 type QuestionConditionType = 'allTrue' | 'oneTrue';
 
-/* tslint:disable:max-line-length */
 const EAGER_QUERY =
   '[computedField, progressNoteTemplate, applicableIfQuestionConditions, answers(orderByOrder).[concernSuggestions, goalSuggestions.[taskTemplates]]]';
-/* tslint:enable:max-line-length */
 
 /* tslint:disable:member-ordering */
 export default class Question extends BaseModel {

@@ -2,9 +2,7 @@ import * as React from 'react';
 import { compose, graphql } from 'react-apollo';
 import { connect, Dispatch } from 'react-redux';
 import { push } from 'react-router-redux';
-/* tslint:enable:max-line-length */
 import * as riskAreaGroupsQuery from '../graphql/queries/get-risk-area-groups.graphql';
-/* tslint:disable:max-line-length */
 import * as riskAreaCreateMutationGraphql from '../graphql/queries/risk-area-create-mutation.graphql';
 import {
   riskAreaCreateMutation,

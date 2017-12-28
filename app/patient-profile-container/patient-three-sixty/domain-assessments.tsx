@@ -1,9 +1,7 @@
 import * as classNames from 'classnames';
 import * as React from 'react';
 import { graphql } from 'react-apollo';
-/* tslint:disable:max-line-length */
 import * as getRiskAreaGroupForPatientGraphql from '../../graphql/queries/get-risk-area-group-for-patient.graphql';
-/* tsline:enable:max-line-length */
 import { getRiskAreaGroupForPatientQuery } from '../../graphql/types';
 import BackLink from '../../shared/library/back-link/back-link';
 import Spinner from '../../shared/library/spinner/spinner';

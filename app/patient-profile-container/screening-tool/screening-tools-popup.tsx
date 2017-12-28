@@ -3,9 +3,7 @@ import * as React from 'react';
 import { compose, graphql } from 'react-apollo';
 import { connect, Dispatch } from 'react-redux';
 import { push } from 'react-router-redux';
-/* tslint:disable:max-line-length */
 import * as screeningToolsQuery from '../../graphql/queries/get-screening-tools-for-risk-area.graphql';
-/* tslint:enable:max-line-length */
 import { getScreeningToolsQuery, FullScreeningToolFragment } from '../../graphql/types';
 import Button from '../../shared/library/button/button';
 import * as styles from './css/screening-tools-popup.css';

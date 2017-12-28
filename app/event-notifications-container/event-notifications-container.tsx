@@ -5,10 +5,8 @@ import { FormattedMessage } from 'react-intl';
 import { connect, Dispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { updateEventNotificationsCount } from '../actions/event-notifications-action';
-/* tslint:disable:max-line-length */
 import * as eventNotificationDismissMutation from '../graphql/queries/event-notification-dismiss-mutation.graphql';
 import * as eventNotificationsQuery from '../graphql/queries/get-event-notifications-for-current-user.graphql';
-/* tslint:enable:max-line-length */
 import {
   eventNotificationDismissMutationVariables,
   getEventNotificationsForCurrentUserQuery,
@@ -48,9 +46,7 @@ interface IGraphqlProps {
   fetchMoreEventNotifications: () => any;
   eventNotificationsLoading: boolean;
   eventNotificationsError?: string | null;
-  /* tslint:disable:max-line-length */
   eventNotificationsResponse?: getEventNotificationsForCurrentUserQuery['eventNotificationsForCurrentUser'];
-  /* tslint:disable:max-line-length */
   eventNotifications?: FullEventNotificationFragment[];
 }
 

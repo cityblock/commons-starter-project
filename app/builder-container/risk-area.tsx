@@ -11,9 +11,7 @@ import {
   FullRiskAreaFragment,
 } from '../graphql/types';
 import * as styles from '../shared/css/two-panel-right.css';
-/* tslint:disable:max-line-length */
 import EditableMultilineText from '../shared/library/editable-multiline-text/editable-multiline-text';
-/* tslint:enable:max-line-length */
 import { IState as IAppState } from '../store';
 
 interface IStateProps {

@@ -6,9 +6,7 @@ import { Route } from 'react-router-dom';
 import { push } from 'react-router-redux';
 import * as riskAreasQuery from '../graphql/queries/get-risk-areas.graphql';
 import * as screeningToolsQuery from '../graphql/queries/get-screening-tools.graphql';
-/* tslint:disable:max-line-length */
 import * as screeningToolDeleteMutationGraphql from '../graphql/queries/screening-tool-delete-mutation.graphql';
-/* tslint:enable:max-line-length */
 import {
   screeningToolDeleteMutation,
   screeningToolDeleteMutationVariables,

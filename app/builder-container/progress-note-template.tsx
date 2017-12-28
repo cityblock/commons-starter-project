@@ -3,9 +3,7 @@ import * as React from 'react';
 import { compose, graphql } from 'react-apollo';
 import { Link } from 'react-router-dom';
 import * as progressNoteTemplateQuery from '../graphql/queries/get-progress-note-template.graphql';
-/* tslint:disable:max-line-length */
 import * as progressNoteTemplateEditMutationGraphql from '../graphql/queries/progress-note-template-edit-mutation.graphql';
-/* tslint:enable:max-line-length */
 import {
   progressNoteTemplateEditMutation,
   progressNoteTemplateEditMutationVariables,

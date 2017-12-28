@@ -2,9 +2,7 @@ import * as classNames from 'classnames';
 import * as React from 'react';
 import { compose, graphql } from 'react-apollo';
 import * as careTeamQuery from '../../graphql/queries/get-patient-care-team.graphql';
-/* tslint:disable:max-line-length */
 import * as taskUserFollowMutationGraphql from '../../graphql/queries/task-user-follow-mutation.graphql';
-/* tslint:enable:max-line-length */
 import {
   taskUserFollowMutation,
   taskUserFollowMutationVariables,

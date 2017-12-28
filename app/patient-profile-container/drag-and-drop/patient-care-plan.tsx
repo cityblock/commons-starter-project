@@ -3,14 +3,12 @@ import * as React from 'react';
 import { graphql } from 'react-apollo';
 import { DragDropContext, DropResult } from 'react-beautiful-dnd';
 import { adminTasksConcernTitle } from '../../../server/lib/consts';
-/* tslint:disable:max-line-length */
 import * as patientConcernBulkEditMutationGraphql from '../../graphql/queries/patient-concern-bulk-edit-mutation.graphql';
 import {
   getPatientCarePlanQuery,
   FullPatientConcernFragment,
   PatientConcernBulkEditFields,
 } from '../../graphql/types';
-/* tslint:enable:max-line-length */
 import {
   patientConcernBulkEditMutation,
   patientConcernBulkEditMutationVariables,

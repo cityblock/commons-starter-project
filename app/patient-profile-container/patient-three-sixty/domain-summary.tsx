@@ -3,9 +3,7 @@ import { isAfter } from 'date-fns';
 import * as React from 'react';
 import { graphql } from 'react-apollo';
 import { Link } from 'react-router-dom';
-/* tslint:disable:max-line-length */
 import * as getRiskAreaGroupForPatientGraphql from '../../graphql/queries/get-risk-area-group-for-patient.graphql';
-/* tsline:enable:max-line-length */
 import { getRiskAreaGroupForPatientQuery } from '../../graphql/types';
 import DateInfo from '../../shared/library/date-info/date-info';
 import Icon from '../../shared/library/icon/icon';

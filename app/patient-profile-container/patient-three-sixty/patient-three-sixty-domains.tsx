@@ -1,8 +1,6 @@
 import * as React from 'react';
 import { graphql } from 'react-apollo';
-/* tslint:enable:max-line-length */
 import * as riskAreaGroupsQuery from '../../graphql/queries/get-risk-area-groups.graphql';
-/* tslint:disable:max-line-length */
 import { getRiskAreaGroupsQuery } from '../../graphql/types';
 import Spinner from '../../shared/library/spinner/spinner';
 import UnderlineTab from '../../shared/library/underline-tab/underline-tab';

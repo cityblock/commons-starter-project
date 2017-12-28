@@ -4,9 +4,7 @@ import { compose, graphql } from 'react-apollo';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import * as screeningToolQuery from '../graphql/queries/get-screening-tool.graphql';
-/* tslint:disable:max-line-length */
 import * as screeningToolEditMutation from '../graphql/queries/screening-tool-edit-mutation.graphql';
-/* tslint:enable:max-line-length */
 import { screeningToolEditMutationVariables, FullScreeningToolFragment } from '../graphql/types';
 import * as styles from '../shared/css/two-panel-right.css';
 import { IState as IAppState } from '../store';

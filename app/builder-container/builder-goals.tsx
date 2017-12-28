@@ -5,9 +5,7 @@ import { connect, Dispatch } from 'react-redux';
 import { Route } from 'react-router-dom';
 import { push } from 'react-router-redux';
 import * as goalsQuery from '../graphql/queries/get-goal-suggestion-templates.graphql';
-/* tslint:disable:max-line-length */
 import * as goalDeleteMutation from '../graphql/queries/goal-suggestion-template-delete-mutation.graphql';
-/* tslint:enable:max-line-length */
 import {
   goalSuggestionTemplateDeleteMutation,
   goalSuggestionTemplateDeleteMutationVariables,

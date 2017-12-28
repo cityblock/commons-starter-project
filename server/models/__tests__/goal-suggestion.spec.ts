@@ -192,12 +192,10 @@ describe('goal suggestion model', () => {
       });
 
       // Now both goals should be suggested
-      /* tslint:disable:max-line-length */
       const secondGoalSuggestions = await GoalSuggestion.getNewSuggestionsForRiskAreaAssessmentSubmission(
         patient.id,
         riskAreaAssessmentSubmission.id,
       );
-      /* tslint:enable:max-line-length */
       expect(secondGoalSuggestions).toEqual(
         expect.arrayContaining([goalSuggestionTemplate, goalSuggestionTemplate2]),
       );
@@ -352,12 +350,10 @@ describe('goal suggestion model', () => {
         userId: user.id,
       });
 
-      /* tslint:disable:max-line-length */
       const secondGoalSuggestions = await GoalSuggestion.getNewSuggestionsForRiskAreaAssessmentSubmission(
         patient.id,
         riskAreaAssessmentSubmission.id,
       );
-      /* tslint:enable:max-line-length */
 
       expect(secondGoalSuggestions[0]).toMatchObject(goalSuggestionTemplate2);
       expect(secondGoalSuggestions.length).toEqual(1);

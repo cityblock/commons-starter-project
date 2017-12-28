@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { compose, graphql } from 'react-apollo';
-/* tslint:disable:max-line-length */
 import * as carePlanSuggestionDismissMutationGraphql from '../graphql/queries/care-plan-suggestion-dismiss-mutation.graphql';
 import {
   carePlanSuggestionDismissMutation,
@@ -10,7 +9,6 @@ import {
 import { Popup } from '../shared/popup/popup';
 import * as styles from './css/patient-care-plan.css';
 import PopupPatientCarePlanSuggestionDismissedModalBody from './popup-patient-care-plan-suggestion-dismissed-modal-body';
-/* tslint:enable:max-line-length */
 
 interface IProps {
   visible: boolean;

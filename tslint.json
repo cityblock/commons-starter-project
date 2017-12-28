@@ -8,7 +8,7 @@
     "indent": [true, "spaces"],
     "check-is-allowed": true, // our custom rule to check if we run isAllowed in GraphQL resolvers
     "triple-equals": true,
-    "max-line-length": [true, 100],
+    "max-line-length": false, // handeled by prettier
     "ordered-imports": [
       true,
       {

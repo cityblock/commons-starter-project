@@ -2,19 +2,15 @@ import * as React from 'react';
 import { compose, graphql } from 'react-apollo';
 import { connect, Dispatch } from 'react-redux';
 import { closePopup } from '../../../actions/popup-action';
-/* tslint:disable:max-line-length */
 import * as goalSuggestionTemplatesQuery from '../../../graphql/queries/get-goal-suggestion-templates.graphql';
 import * as patientGoalCreateMutationGraphql from '../../../graphql/queries/patient-goal-create-mutation.graphql';
-/* tslint:enable:max-line-length */
 import {
   patientGoalCreateMutation,
   patientGoalCreateMutationVariables,
   FullGoalSuggestionTemplateFragment,
 } from '../../../graphql/types';
-/* tslint:disable:max-line-length */
 import { ICreatePatientGoalPopupOptions } from '../../../reducers/popup-reducer';
 import { SearchOptions } from '../../../shared/library/search/search';
-/* tslint:enable:max-line-length */
 import { IState as IAppState } from '../../../store';
 import { Popup } from '../../popup/popup';
 import * as styles from './css/create-goal.css';

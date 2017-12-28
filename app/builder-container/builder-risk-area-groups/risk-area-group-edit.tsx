@@ -1,17 +1,13 @@
 import * as React from 'react';
 import { graphql } from 'react-apollo';
-/* tslint:disable:max-line-length */
 import * as riskAreaGroupEditMutationGraphql from '../../graphql/queries/risk-area-group-edit-mutation.graphql';
-/* tslint:enable:max-line-length */
 import {
   riskAreaGroupEditMutation,
   riskAreaGroupEditMutationVariables,
   FullRiskAreaGroupFragment,
 } from '../../graphql/types';
 import Button from '../../shared/library/button/button';
-/* tslint:disable:max-line-length */
 import EditableMultilineText from '../../shared/library/editable-multiline-text/editable-multiline-text';
-/* tslint:enable:max-line-length */
 import * as styles from './css/risk-area-group-shared.css';
 
 interface IProps {

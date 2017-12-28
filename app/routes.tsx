@@ -24,7 +24,7 @@ export default (
           path="/notifications/:eventNotificationType?"
           component={(Loadable as any)({
             loader: async () =>
-              import(/* webpackChunkName: "notifications" */
+              await import(/* webpackChunkName: "notifications" */
               './event-notifications-container/event-notifications-container'),
             loading: () => null,
           })}
@@ -34,8 +34,7 @@ export default (
           path="/tasks/:taskId?"
           component={(Loadable as any)({
             loader: async () =>
-              import(/* webpackChunkName: "tasks" */
-              './tasks-container/tasks-container'),
+              await import(/* webpackChunkName: "tasks" */ './tasks-container/tasks-container'),
             loading: () => null,
           })}
         />
@@ -44,8 +43,7 @@ export default (
           path="/settings"
           component={(Loadable as any)({
             loader: async () =>
-              import(/* webpackChunkName: "settings" */
-              './settings-container/settings-container'),
+              await import(/* webpackChunkName: "settings" */ './settings-container/settings-container'),
             loading: () => null,
           })}
         />
@@ -54,7 +52,7 @@ export default (
           path="/search"
           component={(Loadable as any)({
             loader: async () =>
-              import(/* webpackChunkName: "search" */
+              await import(/* webpackChunkName: "patient-search" */
               './patient-search-container/patient-search-container'),
             loading: () => null,
           })}
@@ -64,7 +62,7 @@ export default (
           path="/patient-intake"
           component={(Loadable as any)({
             loader: async () =>
-              import(/* webpackChunkName: "search" */
+              await import(/* webpackChunkName: "patient-enrollment" */
               './patient-enrollment-container/patient-enrollment-container'),
             loading: () => null,
           })}
@@ -74,7 +72,7 @@ export default (
           path="/patients"
           component={(Loadable as any)({
             loader: async () =>
-              import(/* webpackChunkName: "search" */
+              await import(/* webpackChunkName: "patient-panel" */
               './patient-panel-container/patient-panel-container'),
             loading: () => null,
           })}
@@ -84,7 +82,7 @@ export default (
           path="/patients/:patientId/:tab"
           component={(Loadable as any)({
             loader: async () =>
-              import(/* webpackChunkName: "patient profile" */
+              await import(/* webpackChunkName: "patient-profile" */
               './patient-profile-container/patient-profile-container'),
             loading: () => null,
           })}
@@ -94,8 +92,7 @@ export default (
           path="/builder/:tab?/:objectId?/:subTab?/:subTabId?"
           component={(Loadable as any)({
             loader: async () =>
-              import(/* webpackChunkName: "builder" */
-              './builder-container/builder-container'),
+              await import(/* webpackChunkName: "builder" */ './builder-container/builder-container'),
             loading: () => null,
           })}
         />
@@ -104,8 +101,7 @@ export default (
           path="/manager/:tabId?/:objectId?"
           component={(Loadable as any)({
             loader: async () =>
-              import(/* webpackChunkName: "manager" */
-              './manager-container/manager-container'),
+              await import(/* webpackChunkName: "manager" */ './manager-container/manager-container'),
             loading: () => null,
           })}
         />

@@ -3,10 +3,8 @@ import * as React from 'react';
 import { compose, graphql } from 'react-apollo';
 import { FormattedMessage } from 'react-intl';
 import * as taskCommentsQuery from '../../graphql/queries/get-task-comments.graphql';
-/* tslint:disable:max-line-length */
 import * as commentCreateMutationGraphql from '../../graphql/queries/task-comment-create-mutation.graphql';
 import * as commentEditMutationGraphql from '../../graphql/queries/task-comment-edit-mutation.graphql';
-/* tslint:enable:max-line-length */
 import {
   getTaskCommentsQuery,
   getTaskCommentsQueryVariables,

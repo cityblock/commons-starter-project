@@ -1,8 +1,6 @@
 import * as React from 'react';
 import { graphql } from 'react-apollo';
-/* tslint:disable:max-line-length */
 import * as patientScreeningToolSubmissionQuery from '../../graphql/queries/get-patient-screening-tool-submission.graphql';
-/* tsline:enable:max-line-length */
 import { getPatientScreeningToolSubmissionQuery } from '../../graphql/types';
 import CarePlanSuggestions from '../../shared/care-plan-suggestions/care-plan-suggestions';
 

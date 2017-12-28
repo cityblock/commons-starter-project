@@ -56,10 +56,8 @@ export const ENGLISH_TRANSLATION = {
     'careTeam.email': 'Send an email',
     'careTeam.profile': 'Go to profile',
     'computedField.flag': 'Flag for review',
-    /* tslint:disable:max-line-length */
     'computedField.flagDetail':
       'Provide the following information for this question to be reviewed',
-    /* tslint:enable:max-line-length */
     'computedField.reason': 'Reason for review:',
     'computedField.reasonDetail': 'Enter the reason for review...',
     'concernCreate.addConcern': 'Add concern',
@@ -75,10 +73,8 @@ export const ENGLISH_TRANSLATION = {
     'concernCreate.title': 'Add a concern',
     'concernCreate.selectConcernType': 'Select a concern type',
     'concernCreate.selectConcernTypeLabel': 'Concern type',
-    /* tslint:disable:max-line-length */
     'concernDelete.description':
       'Deleting it will completely remove it from this patient’s record.',
-    /* tslint:enable:max-line-length */
     'concernDelete.menu': 'Delete Concern',
     'concernDelete.name': 'Concern to be deleted:',
     'concernDelete.title': 'Are you sure you want to delete this concern?',
@@ -115,17 +111,13 @@ export const ENGLISH_TRANSLATION = {
     'contactForm.readConsentStatement': 'Read consent statement to patient:',
     'screeningTool.submit': 'Submit',
     'screeningTool.resultsTitle': 'New Care Plan Suggestions',
-    /* tslint:disable:max-line-length */
     'screeningTool.resultsBody':
       "Based on the results of this tool, the following have been recommended as additions to the patient's care plan.",
-    /* tslint:disable:max-line-length */
     'goalCreate.addGoal': 'Add a goal',
     'goalCreate.back': 'Back',
     'goalCreate.cancel': 'Cancel',
     'goalCreate.custom': 'Write a new goal',
-    /* tslint:disable:max-line-length */
     'goalCreate.detail': "Choose from a list of goals or write a custom goal for this member's MAP",
-    /* tslint:enable:max-line-length */
     'goalCreate.goalAdded': 'Goal added:',
     'goalCreate.hideAll': 'Hide list of goals',
     'goalCreate.loading': 'Loading...',
@@ -137,10 +129,8 @@ export const ENGLISH_TRANSLATION = {
     'goalCreate.submit': 'Add goal',
     'goalCreate.submitWithTasks': 'Done',
     'goalCreate.suggestedTasks': 'Suggested tasks:',
-    /* tslint:disable:max-line-length */
     'goalCreate.suggestionsDetail':
       'Based on this goal addition, the following suggestions have been recommended to this Member Action Plan. You must accept or dismiss these suggestions before continuing.',
-    /* tslint:enable:max-line-length */
     'goalCreate.suggestionsTitle': 'New MAP suggestions',
     'goalCreate.templates': 'All other goals',
     'goalCreate.title': 'Enter goal title:',
@@ -169,19 +159,15 @@ export const ENGLISH_TRANSLATION = {
     'patientMap.addTask': 'Add a task',
     'patientMap.nextUp': 'Next Up',
     'patientMap.emptyNextUpHeader': 'There are no Next Up concerns for this patient',
-    /* tslint:disable:max-line-length */
     'patientMap.emptyNextUpDetail':
       'Add concerns here that the patient and the care team do not want to focus on right now but would like to keep track of',
-    /* tslint:enable:max-line-length */
     'patientSearch.address': 'Home address',
     'patientSearch.dateOfBirth': 'Date of birth',
     'patientSearch.memberId': 'Member ID',
     'patientSearch.name': 'Patient name',
     'patientSearch.noResults': 'No results for this search',
-    /* tslint:disable:max-line-length */
     'patientSearch.noResultsDetail':
       'No matching patients for this search. Please check your spelling or try a new search.',
-    /* tslint:enable:max-line-length */
     'patientSearch.of': 'of',
     'patientSearch.placeholder': 'Search for member...',
     'patientSearch.resultsDescription': 'members found',
@@ -222,10 +208,8 @@ export const ENGLISH_TRANSLATION = {
     'riskAreaAssessment.save': 'Save updates',
     'riskAreaAssessment.start': 'Start assessment',
     'riskAreaAssessment.resultsTitle': 'New Care Plan Suggestions',
-    /* tslint:disable:max-line-length */
     'riskAreaAssessment.resultsBody':
       "Based on the results of this assessment, the following have been recommended as additions to the patient's care plan.",
-    /* tslint:disable:max-line-length */
     'settings.heading': 'Settings',
     'tasks.assignedToPlaceholder': 'Assign to',
     'tasks.patientGoalPlaceholder': 'Patient goal',

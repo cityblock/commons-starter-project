@@ -2,11 +2,9 @@ import * as classNames from 'classnames';
 import { clone, isNil, omit, omitBy } from 'lodash-es';
 import * as React from 'react';
 import { compose, graphql } from 'react-apollo';
-/* tslint:disable:max-line-length */
 import * as scoreRangeCreateMutationGraphql from '../graphql/queries/screening-tool-score-range-create-mutation.graphql';
 import * as scoreRangeDeleteMutationGraphql from '../graphql/queries/screening-tool-score-range-delete-mutation.graphql';
 import * as scoreRangeEditMutationGraphql from '../graphql/queries/screening-tool-score-range-edit-mutation.graphql';
-/* tslint:enable:max-line-length */
 import {
   screeningToolScoreRangeCreateMutation,
   screeningToolScoreRangeCreateMutationVariables,

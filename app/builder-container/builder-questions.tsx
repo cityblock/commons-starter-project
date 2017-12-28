@@ -5,13 +5,11 @@ import { connect, Dispatch } from 'react-redux';
 import { Route } from 'react-router-dom';
 import { push } from 'react-router-redux';
 import * as computedFieldsQuery from '../graphql/queries/get-computed-fields.graphql';
-/* tslint:disable:max-line-length */
 import * as progressNoteTemplatesQuery from '../graphql/queries/get-progress-note-templates.graphql';
 import * as questionsQuery from '../graphql/queries/get-questions.graphql';
 import * as riskAreasQuery from '../graphql/queries/get-risk-areas.graphql';
 import * as screeningToolsQuery from '../graphql/queries/get-screening-tools.graphql';
 import * as questionDeleteMutationGraphql from '../graphql/queries/question-delete-mutation.graphql';
-/* tslint:enable:max-line-length */
 import {
   questionDeleteMutation,
   questionDeleteMutationVariables,

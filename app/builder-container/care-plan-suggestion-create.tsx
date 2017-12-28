@@ -1,12 +1,10 @@
 import * as classNames from 'classnames';
 import * as React from 'react';
 import { compose, graphql } from 'react-apollo';
-/* tslint:disable:max-line-length */
 import * as concernSuggestionCreateMutationGraphql from '../graphql/queries/concern-suggestion-create-mutation.graphql';
 import * as concernsQuery from '../graphql/queries/get-concerns.graphql';
 import * as goalsQuery from '../graphql/queries/get-goal-suggestion-templates.graphql';
 import * as goalSuggestionCreateMutationGraphql from '../graphql/queries/goal-suggestion-create-mutation.graphql';
-/* tslint:enable:max-line-length */
 import {
   concernSuggestionCreateMutation,
   concernSuggestionCreateMutationVariables,

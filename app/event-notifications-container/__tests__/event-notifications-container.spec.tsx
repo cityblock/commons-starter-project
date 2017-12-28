@@ -6,11 +6,9 @@ import { Provider } from 'react-redux';
 import { ConnectedRouter } from 'react-router-redux';
 import { create } from 'react-test-renderer';
 import configureMockStore from 'redux-mock-store';
-/* tslint:enable:max-line-length */
 import { ENGLISH_TRANSLATION } from '../../reducers/messages/en';
 import ReduxConnectedIntlProvider from '../../redux-connected-intl-provider';
 import { eventNotification, patient } from '../../shared/util/test-data';
-/* tslint:disable:max-line-length */
 import EventNotificationsContainer, {
   EventNotificationsContainer as Component,
 } from '../event-notifications-container';

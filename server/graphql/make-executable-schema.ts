@@ -225,7 +225,6 @@ import {
 
 const schemaGql = fs.readFileSync(path.join(__dirname, 'schema.graphql'), 'utf-8');
 
-/* tslint:disable:max-line-length */
 const resolveFunctions = {
   RootQueryType: {
     clinic: resolveClinic,
@@ -303,7 +302,7 @@ const resolveFunctions = {
     computedFields: resolveComputedFields,
     computedFieldsSchema: resolveComputedFieldsSchema,
   },
-  /* tslint:enable:max-line-length */
+
   RootMutationType: {
     careTeamAddUser,
     careTeamRemoveUser,

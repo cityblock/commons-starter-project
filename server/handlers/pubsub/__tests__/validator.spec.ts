@@ -30,9 +30,9 @@ describe('validates requests actually come from google', () => {
 
   it('allows the request to proceed when the hmac is valid', async () => {
     const now = Date.now();
-    /* tslint:disable:max-line-length */
+
     const data = `{"patientId":"patient-id","slug":"slug","value":"value","jobId":"job-id","timestamp":"${now}"}`;
-    /* tslint:enable:max-line-length */
+
     const base64Data = new Buffer(data).toString('base64');
     const hmac = createHmac(base64Data);
     const request = httpMocks.createRequest({

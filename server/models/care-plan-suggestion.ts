@@ -54,10 +54,8 @@ interface ICarePlanSuggestionDismissArgs {
   dismissedReason: string;
 }
 
-/* tslint:disable:max-line-length */
 export const EAGER_QUERY =
   '[patient, concern, goalSuggestionTemplate.[taskTemplates], acceptedBy, dismissedBy]';
-/* tslint:enable:max-line-length */
 
 /* tslint:disable:member-ordering */
 export default class CarePlanSuggestion extends BaseModel {

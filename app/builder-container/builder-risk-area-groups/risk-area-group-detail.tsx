@@ -1,9 +1,7 @@
 import { isEqual } from 'lodash-es';
 import * as React from 'react';
 import { graphql } from 'react-apollo';
-/* tslint:disable:max-line-length */
 import * as riskAreaGroupDeleteMutationGraphql from '../../graphql/queries/risk-area-group-delete-mutation.graphql';
-/* tslint:enable:max-line-length */
 import {
   riskAreaGroupDeleteMutation,
   riskAreaGroupDeleteMutationVariables,

@@ -1,8 +1,6 @@
 import { shallow } from 'enzyme';
 import * as React from 'react';
-/* tslint:disable:max-line-length */
 import HamburgerMenuOption from '../../../shared/library/hamburger-menu-option/hamburger-menu-option';
-/* tslint:enable:max-line-length */
 import HamburgerMenu from '../../../shared/library/hamburger-menu/hamburger-menu';
 import { PatientQuestionMenu } from '../question-menu';
 

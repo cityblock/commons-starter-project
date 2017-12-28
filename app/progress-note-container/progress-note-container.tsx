@@ -3,9 +3,7 @@ import { compose, graphql } from 'react-apollo';
 import { FormattedMessage } from 'react-intl';
 import { connect, Dispatch } from 'react-redux';
 import { closePopup, openPopup } from '../actions/popup-action';
-/* tslint:disable:max-line-length */
 import * as progressNotesForCurrentUserQuery from '../graphql/queries/get-progress-notes-for-current-user.graphql';
-/* tsline:enable:max-line-length */
 import { getProgressNotesForCurrentUserQuery } from '../graphql/types';
 import { IProgressNotePopupOptions } from '../reducers/popup-reducer';
 import Icon from '../shared/library/icon/icon';

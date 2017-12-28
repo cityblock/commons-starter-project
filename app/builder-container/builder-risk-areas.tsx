@@ -5,9 +5,7 @@ import { connect, Dispatch } from 'react-redux';
 import { Route } from 'react-router-dom';
 import { push } from 'react-router-redux';
 import * as riskAreasQuery from '../graphql/queries/get-risk-areas.graphql';
-/* tslint:disable:max-line-length */
 import * as riskAreaDeleteMutationGraphql from '../graphql/queries/risk-area-delete-mutation.graphql';
-/* tslint:enable:max-line-length */
 import {
   riskAreaDeleteMutation,
   riskAreaDeleteMutationVariables,

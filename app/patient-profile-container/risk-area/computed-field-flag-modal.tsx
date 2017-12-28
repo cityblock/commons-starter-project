@@ -2,9 +2,7 @@ import * as React from 'react';
 import { compose, graphql } from 'react-apollo';
 import { connect, Dispatch } from 'react-redux';
 import { closePopup as closePopupAction } from '../../actions/popup-action';
-/* tslint:disable:max-line-length */
 import * as computedFieldFlagCreateMutationGraphql from '../../graphql/queries/computed-field-flag-create-mutation.graphql';
-/* tslint:enable:max-line-length */
 import {
   computedFieldFlagCreateMutation,
   computedFieldFlagCreateMutationVariables,

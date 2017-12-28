@@ -6,9 +6,7 @@ import { push } from 'react-router-redux';
 import * as clinicsQuery from '../graphql/queries/clinics-get.graphql';
 import * as patientAnswersQuery from '../graphql/queries/get-patient-answers.graphql';
 import * as questionsQuery from '../graphql/queries/get-questions.graphql';
-/* tslint:disable:max-line-length */
 import * as patientAnswersCreateMutationGraphql from '../graphql/queries/patient-answers-create-mutation.graphql';
-/* tsline:enable:max-line-length */
 import {
   getClinicsQuery,
   getPatientAnswersQuery,

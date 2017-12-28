@@ -1,8 +1,6 @@
 import * as React from 'react';
 import { graphql } from 'react-apollo';
-/* tslint:disable:max-line-length */
 import * as riskAreaAssessmentSubmissionQuery from '../../graphql/queries/get-risk-area-assessment-submission.graphql';
-/* tsline:enable:max-line-length */
 import { getRiskAreaAssessmentSubmissionQuery } from '../../graphql/types';
 import CarePlanSuggestions from '../../shared/care-plan-suggestions/care-plan-suggestions';
 

@@ -14,10 +14,8 @@ interface IScreeningToolEditableFields {
   deletedAt?: string;
 }
 
-/* tslint:disable:max-line-length */
 export const EAGER_QUERY =
   '[riskArea.[riskAreaGroup], screeningToolScoreRanges.[concernSuggestions, goalSuggestions.[taskTemplates]]]';
-/* tslint:enable:max-line-length */
 
 /* tslint:disable:member-ordering */
 export default class ScreeningTool extends BaseModel {

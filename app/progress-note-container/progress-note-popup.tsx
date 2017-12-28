@@ -3,13 +3,11 @@ import * as React from 'react';
 import { compose, graphql } from 'react-apollo';
 import { FormattedMessage, FormattedRelative } from 'react-intl';
 import { Link } from 'react-router-dom';
-/* tslint:disable:max-line-length */
 import * as progressNoteTemplatesQuery from '../graphql/queries/get-progress-note-templates.graphql';
 import * as progressNotesQuery from '../graphql/queries/get-progress-notes-for-patient.graphql';
 import * as progressNoteCompleteMutationGraphql from '../graphql/queries/progress-note-complete-mutation.graphql';
 import * as progressNoteCreateMutationGraphql from '../graphql/queries/progress-note-create.graphql';
 import * as progressNoteEditMutationGraphql from '../graphql/queries/progress-note-edit-mutation.graphql';
-/* tslint:enable:max-line-length */
 import {
   progressNoteCompleteMutation,
   progressNoteCompleteMutationVariables,

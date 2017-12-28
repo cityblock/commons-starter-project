@@ -1,9 +1,7 @@
 import { shallow } from 'enzyme';
 import * as React from 'react';
 import Button from '../../../shared/library/button/button';
-/* tslint:disable:max-line-length */
 import EditableMultilineText from '../../../shared/library/editable-multiline-text/editable-multiline-text';
-/* tslint:enable:max-line-length */
 import { riskAreaGroup } from '../../../shared/util/test-data';
 import { RiskAreaGroupEdit } from '../risk-area-group-edit';
 

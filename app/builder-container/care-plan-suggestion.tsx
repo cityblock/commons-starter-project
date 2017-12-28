@@ -1,10 +1,8 @@
 import * as classNames from 'classnames';
 import * as React from 'react';
 import { compose, graphql } from 'react-apollo';
-/* tslint:disable:max-line-length */
 import * as concernSuggestionDeleteMutationGraphql from '../graphql/queries/concern-suggestion-delete-mutation.graphql';
 import * as goalSuggestionDeleteMutationGraphql from '../graphql/queries/goal-suggestion-delete-mutation.graphql';
-/* tslint:enable:max-line-length */
 import {
   concernSuggestionCreateMutation,
   concernSuggestionDeleteMutationVariables,

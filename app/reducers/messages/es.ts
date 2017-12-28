@@ -55,18 +55,14 @@ export const SPANISH_TRANSLATION = {
     'careTeam.email': 'Enviar un correo electrónico',
     'careTeam.profile': 'Ir al perfil',
     'computedField.flag': 'Bandera para revisión',
-    /* tslint:disable:max-line-length */
     'computedField.flagDetail':
       'Proporcione la siguiente información para que esta pregunta sea revisada',
-    /* tslint:enable:max-line-length */
     'computedField.reason': 'Motivo de la revisión:',
     'computedField.reasonDetail': 'Ingrese el motivo de la revisión...',
     'concernCreate.addConcern': 'Añadir preocupación',
     'concernCreate.cancel': 'Cancelar',
-    /* tslint:disable:max-line-length */
     'concernCreate.detail':
       'Completar este formulario para agregar una preocupación al MAP de este miembro',
-    /* tslint:enable:max-line-length */
     'concernCreate.hideAll': 'Ocultar todas las preocupaciones',
     'concernCreate.loading': 'Cargando...',
     'concernCreate.noResults': 'No se encontraron preocupaciones coincidentes.',
@@ -77,10 +73,8 @@ export const SPANISH_TRANSLATION = {
     'concernCreate.title': 'Agregue una preocupación',
     'concernCreate.selectConcernType': 'Seleccione un tipo de preocupación',
     'concernCreate.selectConcernTypeLabel': 'Tipo de preocupación',
-    /* tslint:disable:max-line-length */
     'concernDelete.description':
       'Eliminarlo lo eliminará completamente del registro de este paciente.',
-    /* tslint:enable:max-line-length */
     'concernDelete.menu': 'Eliminar la preocupación',
     'concernDelete.name': 'Preocupación por eliminar:',
     'concernDelete.title': '¿Estás seguro de que deseas eliminar esta preocupación?',
@@ -117,25 +111,19 @@ export const SPANISH_TRANSLATION = {
     'contactForm.readConsentStatement': 'Leer declaración de consentimiento al paciente:',
     'screeningTool.submit': 'Submit',
     'screeningTool.resultsTitle': 'New Care Plan Suggestions',
-    /* tslint:disable:max-line-length */
     'screeningTool.resultsBody':
       "Based on the results of this tool, the following have been recommended as additions to the patient's care plan.",
-    /* tslint:disable:max-line-length */
     'goalCreate.addGoal': 'Agrega un objetivo',
     'goalCreate.back': 'Regresa',
     'goalCreate.cancel': 'Cancelar',
     'goalCreate.custom': 'Escribe un nuevo objetivo',
-    /* tslint:disable:max-line-length */
     'goalCreate.detail':
       'Elija de una lista de objetivos o escriba un objetivo personalizado para el MAP de este miembro',
-    /* tslint:enable:max-line-length */
     'goalCreate.goalAdded': 'Objetivo agregado:',
     'goalCreate.hideAll': 'Ocultar lista de objetivos',
     'goalCreate.loading': 'Cargando...',
-    /* tslint:disable:max-line-length */
     'goalCreate.noResults':
       'No se encontraron objetivos coincidentes. Agregar como un objetivo personalizado.',
-    /* tslint:enable:max-line-length */
     'goalCreate.search': 'Busque un objetivo o escriba un objetivo personalizado...',
     'goalCreate.selectGoal': 'Seleccionar objetivo',
     'goalCreate.selectLabel': 'Agrega un objetivo:',
@@ -143,18 +131,14 @@ export const SPANISH_TRANSLATION = {
     'goalCreate.submit': 'Agregar objetivo',
     'goalCreate.submitWithTasks': 'Hecho',
     'goalCreate.suggestedTasks': 'Tareas sugeridas:',
-    /* tslint:disable:max-line-length */
     'goalCreate.suggestionsDetail':
       'Con base en esta adición al objetivo, se han recomendado las siguientes sugerencias para este Plan de acción para miembros. Debe aceptar o rechazar estas sugerencias antes de continuar.',
-    /* tslint:enable:max-line-length */
     'goalCreate.suggestionsTitle': 'Nuevas sugerencias MAP',
     'goalCreate.templates': 'Todos los demás objetivos',
     'goalCreate.title': 'Ingresa el título del objetivo:',
     'goalCreate.titlePlaceholder': 'Ingresa el título del objetivo...',
-    /* tslint:disable:max-line-length */
     'goalDelete.description':
       'Eliminarlo lo eliminará completamente del registro de este paciente.',
-    /* tslint:enable:max-line-length */
     'goalDelete.menu': 'Eliminar Objetivo',
     'goalDelete.name': 'Objetivo para ser eliminado:',
     'goalDelete.title': '¿Estás seguro de que deseas eliminar este objetivo?',
@@ -178,19 +162,15 @@ export const SPANISH_TRANSLATION = {
     'patientMap.addTask': 'Agregar tarea',
     'patientMap.nextUp': 'El Siguiente',
     'patientMap.emptyNextUpHeader': 'No hay preocupaciones Siguientes para este paciente',
-    /* tslint:disable:max-line-length */
     'patientMap.emptyNextUpDetail':
       'Agregue preocupaciones aquí que el paciente y el equipo de atención no quieren enfocarse en este momento, pero le gustaría hacer un seguimiento de',
-    /* tslint:enable:max-line-length */
     'patientSearch.address': 'Direccion de casa',
     'patientSearch.dateOfBirth': 'Fecha de nacimiento',
     'patientSearch.memberId': 'Identificación de miembro',
     'patientSearch.name': 'Nombre del paciente',
     'patientSearch.noResults': 'No hay resultados para esta búsqueda',
-    /* tslint:disable:max-line-length */
     'patientSearch.noResultsDetail':
       'No hay pacientes coincidentes para esta búsqueda. Verifique su ortografía o intente una nueva búsqueda.',
-    /* tslint:enable:max-line-length */
     'patientSearch.of': 'de',
     'patientSearch.placeholder': 'Buscar miembro...',
     'patientSearch.resultsDescription': 'miembros encontrados',
@@ -231,10 +211,8 @@ export const SPANISH_TRANSLATION = {
     'riskAreaAssessment.save': 'Save updates',
     'riskAreaAssessment.start': 'Start assessment',
     'riskAreaAssessment.resultsTitle': 'New Care Plan Suggestions',
-    /* tslint:disable:max-line-length */
     'riskAreaAssessment.resultsBody':
       "Based on the results of this assessment, the following have been recommended as additions to the patient's care plan.",
-    /* tslint:disable:max-line-length */
     'settings.heading': 'Ajustes',
     'tasks.assignedToPlaceholder': 'Asignar a',
     'tasks.patientGoalPlaceholder': 'Objetivo del paciente',

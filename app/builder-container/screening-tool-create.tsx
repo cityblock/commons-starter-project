@@ -2,9 +2,7 @@ import * as React from 'react';
 import { compose, graphql } from 'react-apollo';
 import { connect, Dispatch } from 'react-redux';
 import { push } from 'react-router-redux';
-/* tslint:disable:max-line-length */
 import * as screeningToolCreateMutationGraphql from '../graphql/queries/screening-tool-create-mutation.graphql';
-/* tslint:enable:max-line-length */
 import {
   screeningToolCreateMutation,
   screeningToolCreateMutationVariables,

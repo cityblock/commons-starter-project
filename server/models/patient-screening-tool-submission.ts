@@ -20,10 +20,8 @@ interface IPatientScreeningToolSubmissionScoreFields {
   patientAnswers?: PatientAnswer[];
 }
 
-/* tslint:disable:max-line-length */
 export const EAGER_QUERY =
   '[screeningTool, screeningToolScoreRange, patient, user, riskArea.[riskAreaGroup], patientAnswers, carePlanSuggestions.[patient, concern, goalSuggestionTemplate.[taskTemplates]]]';
-/* tslint:enable:max-line-length */
 
 /* tslint:disable:member-ordering */
 export default class PatientScreeningToolSubmission extends BaseModel {

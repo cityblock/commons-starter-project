@@ -3,10 +3,8 @@ import * as React from 'react';
 import { compose, graphql } from 'react-apollo';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
-/* tslint:disable:max-line-length */
 import * as goalSuggestionTemplateQuery from '../graphql/queries/get-goal-suggestion-template.graphql';
 import * as goalSuggestionTemplateEditMutationGraphql from '../graphql/queries/goal-suggestion-template-edit-mutation.graphql';
-/* tslint:enable:max-line-length */
 import {
   goalSuggestionTemplateEditMutation,
   goalSuggestionTemplateEditMutationVariables,

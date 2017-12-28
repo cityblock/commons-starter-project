@@ -4,9 +4,7 @@ import { compose, graphql } from 'react-apollo';
 import { connect, Dispatch } from 'react-redux';
 import { Route } from 'react-router-dom';
 import { push } from 'react-router-redux';
-/* tslint:disable:max-line-length */
 import * as computedFieldDeleteMutationGraphql from '../graphql/queries/computed-field-delete-mutation.graphql';
-/* tslint:enable:max-line-length */
 import * as computedFieldsQuery from '../graphql/queries/get-computed-fields.graphql';
 import {
   computedFieldDeleteMutation,

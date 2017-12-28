@@ -2,14 +2,12 @@ import * as classNames from 'classnames';
 import * as React from 'react';
 import { compose, graphql } from 'react-apollo';
 import * as patientAnswersQuery from '../../graphql/queries/get-patient-answers.graphql';
-/* tslint:disable:max-line-length */
 import * as patientScreeningToolSubmissionQuery from '../../graphql/queries/get-patient-screening-tool-submission-for-patient-and-screening-tool.graphql';
 import * as screeningToolQuestionsQuery from '../../graphql/queries/get-questions.graphql';
 import * as screeningToolQuery from '../../graphql/queries/get-screening-tool.graphql';
 import * as patientAnswersCreate from '../../graphql/queries/patient-answers-create-mutation.graphql';
 import * as patientScreeningToolSubmissionCreate from '../../graphql/queries/patient-screening-tool-submission-create.graphql';
 import * as patientScreeningToolSubmissionScore from '../../graphql/queries/patient-screening-tool-submission-score.graphql';
-/* tsline:enable:max-line-length */
 import {
   getPatientAnswersQuery,
   patientAnswersCreateMutation,

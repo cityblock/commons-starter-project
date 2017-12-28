@@ -12,7 +12,6 @@ export const createSuggestionsForRiskAreaAssessmentSubmission = async (
   riskAreaAssessmentSubmissionId: string,
   txn?: Transaction,
 ) => {
-  /* tslint:disable:max-line-length */
   const newConcernSuggestions = await ConcernSuggestion.getNewSuggestionsForRiskAreaAssessmentSubmission(
     patientId,
     riskAreaAssessmentSubmissionId,
@@ -23,7 +22,7 @@ export const createSuggestionsForRiskAreaAssessmentSubmission = async (
     riskAreaAssessmentSubmissionId,
     txn,
   );
-  /* tslint:enable:max-line-length */
+
   const formattedConcernSuggestions = newConcernSuggestions.map(
     concernSuggestion =>
       ({
@@ -57,7 +56,6 @@ export const createSuggestionsForPatientScreeningToolSubmission = async (
   patientScreeningToolSubmissionId: string,
   txn?: Transaction,
 ) => {
-  /* tslint:disable:max-line-length */
   const newConcernSuggestions = await ConcernSuggestion.getNewSuggestionsForPatientScreeningToolSubmission(
     patientId,
     patientScreeningToolSubmissionId,
@@ -69,7 +67,7 @@ export const createSuggestionsForPatientScreeningToolSubmission = async (
     txn,
   );
   const type = 'patientScreeningToolSubmission';
-  /* tslint:enable:max-line-length */
+
   const formattedConcernSuggestions = newConcernSuggestions.map(
     concernSuggestion =>
       ({

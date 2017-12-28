@@ -12,10 +12,7 @@ import {
   carePlanSuggestionWithGoal,
   concern,
 } from '../../shared/util/test-data';
-
-/* tslint:disable:max-line-length */
 import PopupPatientCarePlanSuggestionAcceptedModalBody from '../popup-patient-care-plan-suggestion-accepted-modal-body';
-/* tslint:enable:max-line-length */
 
 const locale = { messages: ENGLISH_TRANSLATION.messages };
 const mockStore = configureMockStore([]);

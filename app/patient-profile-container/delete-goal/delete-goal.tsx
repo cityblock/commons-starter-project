@@ -2,9 +2,7 @@ import * as React from 'react';
 import { compose, graphql } from 'react-apollo';
 import { connect, Dispatch } from 'react-redux';
 import { closePopup as closePopupAction } from '../../actions/popup-action';
-/* tslint:disable:max-line-length */
 import * as patientGoalDeleteMutationGraphql from '../../graphql/queries/patient-goal-delete-mutation.graphql';
-/* tslint:enable:max-line-length */
 import { patientGoalDeleteMutation, patientGoalDeleteMutationVariables } from '../../graphql/types';
 import { IPatientGoalDeletePopupOptions } from '../../reducers/popup-reducer';
 import DeleteModal from '../../shared/library/delete-modal/delete-modal';

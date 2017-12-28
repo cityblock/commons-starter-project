@@ -16,9 +16,7 @@ type ActivityType =
 
 interface IProps {
   activityType: ActivityType;
-  /* tslint:disable:max-line-length */
   progressNoteActivity?: getProgressNoteActivityForProgressNoteQuery['progressNoteActivityForProgressNote'];
-  /* tslint:enable:max-line-length */
 }
 
 interface IState {

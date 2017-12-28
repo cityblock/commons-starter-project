@@ -2,11 +2,9 @@ import * as classNames from 'classnames';
 import { clone, isNil, omit, omitBy } from 'lodash-es';
 import * as React from 'react';
 import { compose, graphql } from 'react-apollo';
-/* tslint:disable:max-line-length */
 import * as taskTemplateCreateMutationGraphql from '../graphql/queries/task-template-create-mutation.graphql';
 import * as taskTemplateDeleteMutationGraphql from '../graphql/queries/task-template-delete-mutation.graphql';
 import * as taskTemplateEditMutationGraphql from '../graphql/queries/task-template-edit-mutation.graphql';
-/* tslint:enable:max-line-length */
 import {
   taskTemplateCreateMutation,
   taskTemplateCreateMutationVariables,

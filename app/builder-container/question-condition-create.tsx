@@ -1,9 +1,7 @@
 import * as classNames from 'classnames';
 import * as React from 'react';
 import { compose, graphql } from 'react-apollo';
-/* tslint:disable:max-line-length */
 import * as questionConditionCreateMutationGraphql from '../graphql/queries/question-condition-create-mutation.graphql';
-/* tslint:enable:max-line-length */
 import {
   questionConditionCreateMutation,
   questionConditionCreateMutationVariables,

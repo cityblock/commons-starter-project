@@ -1,8 +1,6 @@
 import * as React from 'react';
 import { compose, graphql } from 'react-apollo';
-/* tslint:disable:max-line-length */
 import * as progressNoteActivityQuery from '../../graphql/queries/get-progress-note-activity-for-progress-note.graphql';
-/* tslint:enable:max-line-length */
 import {
   getProgressNoteActivityForProgressNoteQuery,
   FullProgressNoteFragment,
@@ -16,9 +14,7 @@ interface IProps {
 }
 
 interface IGraphqlProps {
-  /* tslint:disable:max-line-length */
   progressNoteActivity?: getProgressNoteActivityForProgressNoteQuery['progressNoteActivityForProgressNote'];
-  /* tslint:enable:max-line-length */
   progressNoteActivityLoading?: boolean;
   progressNoteActivityError: string | null;
 }

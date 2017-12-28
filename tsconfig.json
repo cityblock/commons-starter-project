@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "removeComments": true,
+    "removeComments": false, // comments are required for bundle splitting using webpackChunkName
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "module": "esnext",

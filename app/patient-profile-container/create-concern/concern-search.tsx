@@ -1,10 +1,8 @@
 import * as React from 'react';
 import { compose, graphql } from 'react-apollo';
 import { FormattedMessage } from 'react-intl';
-/* tslint:disable:max-line-length */
 import * as concernsQuery from '../../graphql/queries/get-concerns.graphql';
 import * as patientCarePlanQuery from '../../graphql/queries/get-patient-care-plan.graphql';
-/* tslint:enaable:max-line-length */
 import { getConcernsQuery, getPatientCarePlanQuery } from '../../graphql/types';
 import FormLabel from '../../shared/library/form-label/form-label';
 import Search, { SearchOptions } from '../../shared/library/search/search';

@@ -13,10 +13,8 @@ interface IRiskAreaAssessmentSubmissionCreateFields {
   userId: string;
 }
 
-/* tslint:disable:max-line-length */
 export const EAGER_QUERY =
   '[patient, user, riskArea, patientAnswers, carePlanSuggestions.[patient, concern, goalSuggestionTemplate.[taskTemplates]]]';
-/* tslint:enable:max-line-length */
 
 /* tslint:disable:member-ordering */
 export default class RiskAreaAssessmentSubmission extends BaseModel {

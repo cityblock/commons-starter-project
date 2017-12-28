@@ -87,11 +87,9 @@ function getEventNotificationTitle(eventNotification: EventNotification) {
         const { priority } = task;
         const formattedPriority = capitalize(priority || '');
 
-        /* tslint:disable:max-line-length */
         return `${userName} changed the priority of task: '${
           task.title
         }' to '${formattedPriority}'`;
-        /* tslint:enable:max-line-length */
       }
       case 'edit_due_date': {
         const { dueAt } = task;
@@ -99,11 +97,9 @@ function getEventNotificationTitle(eventNotification: EventNotification) {
         if (dueAt) {
           const formattedDueDate = format(dueAt, 'MMM D, YYYY');
 
-          /* tslint:disable:max-line-length */
           return `${userName} changed the due date of task: '${
             task.title
           }' to '${formattedDueDate}'`;
-          /* tslint:enable:max-line-length */
         } else {
           return `${userName} changed the due date of task: '${task.title}'`;
         }
@@ -124,11 +120,10 @@ function getEventNotificationTitle(eventNotification: EventNotification) {
           return `${userName} assigned you the task: '${task.title}'`;
         } else if (eventUser) {
           // A different user became the assignee
-          /* tslint:disable:max-line-length */
+
           return `${eventUser.firstName} ${eventUser.lastName} was assigned the task: '${
             task.title
           }'`;
-          /* tslint:enable:max-line-length */
         } else {
           // Something messed up
           return `The assignee of task: '${task.title}' was changed`;

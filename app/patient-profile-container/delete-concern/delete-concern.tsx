@@ -2,9 +2,7 @@ import * as React from 'react';
 import { compose, graphql } from 'react-apollo';
 import { connect, Dispatch } from 'react-redux';
 import { closePopup as closePopupAction } from '../../actions/popup-action';
-/* tslint:disable:max-line-length */
 import * as patientConcernDeleteMutationGraphql from '../../graphql/queries/patient-concern-delete-mutation.graphql';
-/* tslint:enable:max-line-length */
 import {
   patientConcernDeleteMutation,
   patientConcernDeleteMutationVariables,

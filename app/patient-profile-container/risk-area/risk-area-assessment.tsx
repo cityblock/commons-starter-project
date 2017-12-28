@@ -1,12 +1,10 @@
 import * as classNames from 'classnames';
 import * as React from 'react';
 import { compose, graphql } from 'react-apollo';
-/* tslint:disable:max-line-length */
 import * as riskAreaAssessmentSubmissionForPatientQuery from '../../graphql/queries/get-risk-area-assessment-submission-for-patient.graphql';
 import * as riskAreaQuery from '../../graphql/queries/get-risk-area.graphql';
 import * as riskAreaAssessmentSubmissionCompleteMutationGraphql from '../../graphql/queries/risk-area-assessment-submission-complete-mutation.graphql';
 import * as riskAreaAssessmentSubmissionCreateMutationGraphql from '../../graphql/queries/risk-area-assessment-submission-create-mutation.graphql';
-/* tsline:enable:max-line-length */
 import {
   riskAreaAssessmentSubmissionCompleteMutation,
   riskAreaAssessmentSubmissionCompleteMutationVariables,

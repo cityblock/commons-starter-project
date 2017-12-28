@@ -1,9 +1,7 @@
 import * as React from 'react';
 import { compose, graphql } from 'react-apollo';
 import * as answerQuery from '../graphql/queries/get-answer.graphql';
-/* tslint:disable:max-line-length */
 import * as questionConditionDeleteMutationGraphql from '../graphql/queries/question-condition-delete-mutation.graphql';
-/* tslint:enable:max-line-length */
 import {
   getAnswerQuery,
   questionConditionDeleteMutation,

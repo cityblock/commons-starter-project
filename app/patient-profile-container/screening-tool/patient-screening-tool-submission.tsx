@@ -1,9 +1,7 @@
 import * as React from 'react';
 import { graphql } from 'react-apollo';
 import { FormattedDate } from 'react-intl';
-/* tslint:disable:max-line-length */
 import * as patientScreeningToolSubmissionQuery from '../../graphql/queries/get-patient-screening-tool-submission-for-patient-and-screening-tool.graphql';
-/* tsline:enable:max-line-length */
 import { FullPatientScreeningToolSubmissionFragment } from '../../graphql/types';
 import Icon from '../../shared/library/icon/icon';
 import * as styles from './css/screening-tools.css';

@@ -22,10 +22,8 @@ interface IMultiplePatientAnswerEventOptions {
   patientAnswerEvents: IPatientAnswerEventOptions[];
 }
 
-/* tslint:disable:max-line-length */
 const EAGER_QUERY =
   '[patientAnswer.[answer.[riskArea, screeningTool.[riskArea]], question], previousPatientAnswer.[answer.[riskArea, screeningTool.[riskArea]]], patient, user]';
-/* tslint:enable:max-line-length */
 
 /* tslint:disable:member-ordering */
 export default class PatientAnswerEvent extends BaseModel {

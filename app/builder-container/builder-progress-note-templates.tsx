@@ -4,10 +4,8 @@ import { compose, graphql } from 'react-apollo';
 import { connect, Dispatch } from 'react-redux';
 import { Route } from 'react-router-dom';
 import { push } from 'react-router-redux';
-/* tslint:disable:max-line-length */
 import * as progressNoteTemplatesQuery from '../graphql/queries/get-progress-note-templates.graphql';
 import * as progressNoteTemplateDeleteMutationGraphql from '../graphql/queries/progress-note-template-delete-mutation.graphql';
-/* tslint:enable:max-line-length */
 import {
   progressNoteTemplateDeleteMutation,
   progressNoteTemplateDeleteMutationVariables,

@@ -1,8 +1,6 @@
 import * as React from 'react';
 import { graphql } from 'react-apollo';
-/* tslint:disable:max-line-length */
 import * as createRiskAreaGroupMutationGraphql from '../../graphql/queries/risk-area-group-create-mutation.graphql';
-/* tslint:enable:max-line-length */
 import {
   riskAreaGroupCreateMutation,
   riskAreaGroupCreateMutationVariables,

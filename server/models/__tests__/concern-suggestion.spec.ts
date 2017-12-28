@@ -167,12 +167,12 @@ describe('concern suggestion model', () => {
       });
 
       // At this point, only first concern should be suggested
-      /* tslint:disable:max-line-length */
+
       const concernSuggestions = await ConcernSuggestion.getNewSuggestionsForRiskAreaAssessmentSubmission(
         patient.id,
         riskAreaAssessmentSubmission.id,
       );
-      /* tslint:enable:max-line-length */
+
       expect(concernSuggestions[0]).toMatchObject(concern1);
       expect(concernSuggestions.length).toEqual(1);
 
@@ -194,12 +194,11 @@ describe('concern suggestion model', () => {
       });
 
       // Now both concerns should be suggested
-      /* tslint:disable:max-line-length */
+
       const secondConcernSuggestions = await ConcernSuggestion.getNewSuggestionsForRiskAreaAssessmentSubmission(
         patient.id,
         riskAreaAssessmentSubmission.id,
       );
-      /* tslint:enable:max-line-length */
 
       expect(secondConcernSuggestions[0]).toMatchObject(concern1);
       expect(secondConcernSuggestions[1]).toMatchObject(concern2);
@@ -276,12 +275,10 @@ describe('concern suggestion model', () => {
         riskAreaAssessmentSubmissionId: riskAreaAssessmentSubmission.id,
       });
 
-      /* tslint:disable:max-line-length */
       const concernSuggestions = await ConcernSuggestion.getNewSuggestionsForRiskAreaAssessmentSubmission(
         patient.id,
         riskAreaAssessmentSubmission.id,
       );
-      /* tslint:enable:max-line-length */
 
       expect(concernSuggestions.length).toEqual(1);
       expect(concernSuggestions[0]).toMatchObject(concern2);
@@ -356,12 +353,11 @@ describe('concern suggestion model', () => {
         userId: user.id,
       });
 
-      /* tslint:disable:max-line-length */
       const secondConcernSuggestions = await ConcernSuggestion.getNewSuggestionsForRiskAreaAssessmentSubmission(
         patient.id,
         riskAreaAssessmentSubmission.id,
       );
-      /* tslint:enable:max-line-length */
+
       expect(secondConcernSuggestions[0]).toMatchObject(concern2);
       expect(secondConcernSuggestions.length).toEqual(1);
 
@@ -373,12 +369,12 @@ describe('concern suggestion model', () => {
       });
 
       // Now it should not be returned
-      /* tslint:disable:max-line-length */
+
       const fourthConcernSuggestions = await ConcernSuggestion.getNewSuggestionsForRiskAreaAssessmentSubmission(
         patient.id,
         riskAreaAssessmentSubmission.id,
       );
-      /* tslint:enable:max-line-length */
+
       expect(fourthConcernSuggestions.length).toEqual(0);
     });
   });

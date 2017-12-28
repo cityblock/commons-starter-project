@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { compose, graphql } from 'react-apollo';
-/* tslint:disable:max-line-length */
 import * as patientCarePlanSuggestionsQuery from '../graphql/queries/get-patient-care-plan-suggestions.graphql';
 import * as patientCareTeamQuery from '../graphql/queries/get-patient-care-team.graphql';
 import {
@@ -13,7 +12,6 @@ import * as styles from './css/patient-care-plan.css';
 import PatientCarePlanSuggestion from './patient-care-plan-suggestion';
 import PopupPatientCarePlanSuggestionAccepted from './popup-patient-care-plan-suggestion-accepted';
 import PopupPatientCarePlanSuggestionDismissed from './popup-patient-care-plan-suggestion-dismissed';
-/* tslint:enable:max-line-length */
 
 export interface IAcceptedGoalSuggestion {
   goalSuggestionTemplate: FullGoalSuggestionTemplateFragment;

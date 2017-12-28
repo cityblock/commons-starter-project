@@ -3,9 +3,7 @@ import * as React from 'react';
 import { compose, graphql } from 'react-apollo';
 import { FormattedMessage } from 'react-intl';
 import * as patientQuery from '../../graphql/queries/get-patient.graphql';
-/* tslint:disable:max-line-length */
 import * as quickCallCreateMutationGraphql from '../../graphql/queries/quick-call-create-mutation.graphql';
-/* tslint:enable:max-line-length */
 import {
   quickCallCreateMutation,
   quickCallCreateMutationVariables,

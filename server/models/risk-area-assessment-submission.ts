@@ -103,7 +103,7 @@ export default class RiskAreaAssessmentSubmission extends BaseModel {
     input: IRiskAreaAssessmentSubmissionCreateFields,
     txn?: Transaction,
   ): Promise<RiskAreaAssessmentSubmission> {
-    const { patientId, userId } = input;
+    const { patientId, userId, riskAreaId } = input;
 
     const existingRiskAreaAssessmentSubmission = await this.query(txn)
       .eager(EAGER_QUERY)
@@ -112,6 +112,7 @@ export default class RiskAreaAssessmentSubmission extends BaseModel {
         completedAt: null,
         patientId,
         userId,
+        riskAreaId,
       });
 
     if (!existingRiskAreaAssessmentSubmission) {

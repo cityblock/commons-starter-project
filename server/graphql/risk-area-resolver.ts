@@ -30,8 +30,7 @@ export async function riskAreaCreate(root: any, { input }: IRiskAreaCreateArgs, 
   await accessControls.isAllowed(userRole, 'create', 'riskArea');
   checkUserLoggedIn(userId);
 
-  // TODO: fix typings here
-  return await RiskArea.create(input as any);
+  return await RiskArea.create(input);
 }
 
 export async function resolveRiskAreas(root: any, args: any, { db, userRole }: IContext) {

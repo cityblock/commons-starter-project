@@ -61,6 +61,35 @@ describe('patient risk area assessment submission model', () => {
     );
   });
 
+  it('autoOpenIfRequired works for multiple risk area ids', async () => {
+    await RiskAreaAssessmentSubmission.autoOpenIfRequired({
+      riskAreaId: riskArea.id,
+      patientId: patient.id,
+      userId: user.id,
+    });
+    // call it a 2nd time
+    const submission = await RiskAreaAssessmentSubmission.autoOpenIfRequired({
+      riskAreaId: riskArea.id,
+      patientId: patient.id,
+      userId: user.id,
+    });
+    const riskArea2 = await createRiskArea({ title: 'Food' });
+    // call it a 2nd time
+    await RiskAreaAssessmentSubmission.autoOpenIfRequired({
+      riskAreaId: riskArea2.id,
+      patientId: patient.id,
+      userId: user.id,
+    });
+    const submission2 = await RiskAreaAssessmentSubmission.autoOpenIfRequired({
+      riskAreaId: riskArea2.id,
+      patientId: patient.id,
+      userId: user.id,
+    });
+
+    expect(submission.riskAreaId).toEqual(riskArea.id);
+    expect(submission2.riskAreaId).toEqual(riskArea2.id);
+  });
+
   it('creates a patient risk area assessment submission with the correct suggestions', async () => {
     const initialSuggestions = await CarePlanSuggestion.getForPatient(patient.id);
     expect(initialSuggestions.length).toEqual(0);

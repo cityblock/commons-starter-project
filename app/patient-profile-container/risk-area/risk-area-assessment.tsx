@@ -67,16 +67,21 @@ export class RiskAreaAssessment extends React.Component<allProps, IState> {
     };
   }
 
-  onStart = () => {
+  onStart = async () => {
     const { riskAreaAssessmentSubmissionCreate, riskAreaId, patientId } = this.props;
     if (riskAreaAssessmentSubmissionCreate) {
-      riskAreaAssessmentSubmissionCreate({
+      const result = await riskAreaAssessmentSubmissionCreate({
         variables: {
           riskAreaId,
           patientId,
         },
       });
-      this.setState({ inProgress: true });
+      if (result.data.riskAreaAssessmentSubmissionCreate) {
+        this.setState({ inProgress: true });
+      } else {
+        // TODO handle error
+        throw new Error('risk area assessment not created');
+      }
     }
   };
 

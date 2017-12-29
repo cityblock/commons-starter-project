@@ -93,6 +93,24 @@ export class ScreeningTool extends React.Component<allProps> {
     }
   }
 
+  componentWillMount() {
+    const { createScreeningToolSubmission, patientScreeningToolSubmission } = this.props;
+    // Handle completing a submission and then returning to the same submission
+    // We create and refetch the submission to get one that has not been completed/created
+    if (
+      createScreeningToolSubmission &&
+      patientScreeningToolSubmission &&
+      patientScreeningToolSubmission.createdAt
+    ) {
+      createScreeningToolSubmission({
+        variables: {
+          screeningToolId: this.props.match.params.screeningToolId,
+          patientId: this.props.match.params.patientId,
+        },
+      });
+    }
+  }
+
   isLoading = () => {
     const { loading, screeningToolQuestionsLoading } = this.props;
 

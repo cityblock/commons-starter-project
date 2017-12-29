@@ -67,6 +67,31 @@ export class RiskAreaAssessment extends React.Component<allProps, IState> {
     };
   }
 
+  async componentWillMount() {
+    const {
+      riskAreaAssessmentSubmissionCreate,
+      riskAreaId,
+      patientId,
+      riskAreaAssessmentSubmission,
+    } = this.props;
+
+    // Handle returning to a risk area after completing the risk area
+    // We set in progress to false, forcing the popup to close and the use to re-start the
+    // submission by creating / fetching a new submission
+    if (
+      riskAreaAssessmentSubmissionCreate &&
+      riskAreaAssessmentSubmission &&
+      riskAreaAssessmentSubmission.createdAt
+    ) {
+      await riskAreaAssessmentSubmissionCreate({
+        variables: {
+          riskAreaId,
+          patientId,
+        },
+      });
+    }
+  }
+
   onStart = async () => {
     const { riskAreaAssessmentSubmissionCreate, riskAreaId, patientId } = this.props;
     if (riskAreaAssessmentSubmissionCreate) {
@@ -122,8 +147,8 @@ export class RiskAreaAssessment extends React.Component<allProps, IState> {
       error,
       riskAreaAssessmentSubmission,
     } = this.props;
-
     const { inProgress, selectingScreeningTool } = this.state;
+
     const automatedAssessment = riskArea && riskArea.assessmentType === 'automated';
 
     const toolsButtonStyles = classNames(styles.toolsButton, {

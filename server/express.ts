@@ -1,4 +1,5 @@
 import * as stackDriver from '@google-cloud/error-reporting';
+import { Engine } from 'apollo-engine';
 import * as basicAuth from 'basic-auth';
 import * as bodyParser from 'body-parser';
 import * as express from 'express';
@@ -42,6 +43,29 @@ export default async (app: express.Application, logger: Console) => {
     );
   }
 
+  // Setup apollo engine
+  const engine = new Engine({
+    graphqlPort: Number(process.env.PORT) || 3000,
+    endpoint: '/graphql',
+    engineConfig: {
+      apiKey: config.ENGINE_API_KEY,
+      stores: [
+        {
+          name: 'pq',
+          inMemory: {
+            cacheSize: 5000000,
+          },
+        },
+      ],
+      persistedQueries: {
+        store: 'pq',
+      },
+    },
+  });
+
+  engine.start();
+  app.use(engine.expressMiddleware());
+
   // This adds request logging using some decent defaults.
   /* istanbul ignore next */
   if (config.NODE_ENV === 'development') {
@@ -61,12 +85,9 @@ export default async (app: express.Application, logger: Console) => {
     app.set('view cache', false);
   }
 
-  app.use(
-    '/assets',
-    express.static(path.join(__dirname, '..', '..', 'public'), {
-      maxAge: '24h',
-    }),
-  );
+  app.use('/assets', express.static(path.join(__dirname, '..', '..', 'public')));
+  // Note: eventually we should add an asset hash, and cache our assets but currently causes problems
+  // ie: add { maxAge: '24h', },
 
   app.get('/graphiql', graphiqlExpress({ endpointURL: '/graphql' }));
   app.use(
@@ -76,6 +97,9 @@ export default async (app: express.Application, logger: Console) => {
       schema: schema as any,
       context: await getGraphQLContext(request!, logger),
       debug: false,
+      // for apollo-engine
+      tracing: true,
+      cacheControl: true,
     })),
   );
 

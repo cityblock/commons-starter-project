@@ -1,9 +1,10 @@
 import { ApolloLink } from 'apollo-link';
 import { setContext } from 'apollo-link-context';
 import { HttpLink } from 'apollo-link-http';
+import { createPersistedQueryLink } from 'apollo-link-persisted-queries';
 
 export const getMiddlewareLink = () => {
-  const httpLink = new HttpLink({ uri: '/graphql' });
+  const httpLink = createPersistedQueryLink().concat(new HttpLink({ uri: '/graphql' }));
 
   let middlewareLink = setContext(() => ({
     headers: {
@@ -16,7 +17,7 @@ export const getMiddlewareLink = () => {
       forward
         ? forward(operation).map(data => {
             /* tslint:disable no-console */
-            console.log(operation);
+            console.log(operation, data);
             /* tslint:enable no-console */
             return data;
           })

@@ -15,6 +15,7 @@ export default {
   REDOX_API_URL: 'https://api.redoxengine.com/endpoint',
   REDOX_KEY: null,
   REDOX_SECRET: null,
+  ENGINE_API_KEY: 'service:cityblock-test:-VV7OoEuEAuZNP_yyBY8bg',
   GCLOUD_PROJECT: null,
   GCLOUD_API_KEY: null,
   ...process.env,

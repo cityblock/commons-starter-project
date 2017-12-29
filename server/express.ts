@@ -1,9 +1,11 @@
+import * as stackDriver from '@google-cloud/error-reporting';
 import * as basicAuth from 'basic-auth';
 import * as bodyParser from 'body-parser';
 import * as express from 'express';
 import { graphiqlExpress, graphqlExpress } from 'graphql-server-express';
 import * as morgan from 'morgan';
 import * as path from 'path';
+import * as webpack from 'webpack';
 import renderApp from './app';
 import config from './config';
 import schema from './graphql/make-executable-schema';
@@ -28,6 +30,18 @@ export const checkAuth = (username: string, password: string) => (
 };
 
 export default async (app: express.Application, logger: Console) => {
+  /* istanbul ignore next */
+  if (config.NODE_ENV === 'development') {
+    // enable webpack dev middleware
+    const webpackDevMiddleware = require('webpack-dev-middleware');
+    const webpackConfig = require('../webpack/webpack.config');
+    const devConfig = webpackConfig()[0];
+    const compiler = webpack(devConfig);
+    app.use(
+      webpackDevMiddleware(compiler, { noInfo: true, publicPath: devConfig.output.publicPath }),
+    );
+  }
+
   // This adds request logging using some decent defaults.
   /* istanbul ignore next */
   if (config.NODE_ENV === 'development') {
@@ -85,5 +99,23 @@ export default async (app: express.Application, logger: Console) => {
     console.log(`  Environment: ${config.NODE_ENV}`);
     console.log('--------------------------');
     /* tslint:enable no-console */
+  }
+
+  /* istanbul ignore next */
+  if (config.GCLOUD_PROJECT && config.GCLOUD_API_KEY) {
+    const errors = stackDriver({
+      projectId: config.GCLOUD_PROJECT,
+      key: config.GCLOUD_API_KEY,
+    });
+    process.on('uncaughtException', e => {
+      // Write the error to stderr.
+      console.error(e);
+      // Report that same error the Stackdriver Error Service
+      errors.report(e);
+    });
+
+    // Note that express error handling middleware should be attached after all
+    // the other routes and use() calls.
+    app.use(errors.express);
   }
 };

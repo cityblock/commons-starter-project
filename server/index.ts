@@ -1,11 +1,7 @@
 import * as dotenv from 'dotenv';
 dotenv.config();
-/* tslint:disable no-var-requires */
-require('@risingstack/trace');
-/* tslint:enable no-var-requires */
 import * as compression from 'compression';
 import * as express from 'express';
-import * as webpack from 'webpack';
 import expressConfig from './express';
 
 let logger = console;
@@ -36,18 +32,6 @@ export interface IMainOptions {
 }
 
 export async function main(options: IMainOptions) {
-  /* istanbul ignore next */
-  if (options.env === 'development') {
-    // enable webpack dev middleware
-    const webpackDevMiddleware = require('webpack-dev-middleware');
-    const webpackConfig = require('../webpack/webpack.config');
-    const devConfig = webpackConfig()[0];
-    const compiler = webpack(devConfig);
-    app.use(
-      webpackDevMiddleware(compiler, { noInfo: true, publicPath: devConfig.output.publicPath }),
-    );
-  }
-
   await expressConfig(app, logger);
   return (app as any).listen(app.get('port'));
 }

@@ -128,6 +128,7 @@
     "node": "8.9"
   },
   "dependencies": {
+    "@google-cloud/error-reporting": "^0.2.2",
     "@risingstack/trace": "^3.16.0",
     "@types/acl": "^0.4.33",
     "@types/base-64": "^0.1.2",

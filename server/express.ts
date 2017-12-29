@@ -130,6 +130,7 @@ export default async (app: express.Application, logger: Console) => {
     const errors = stackDriver({
       projectId: config.GCLOUD_PROJECT,
       key: config.GCLOUD_API_KEY,
+      serviceContext: { service: 'commons' },
     });
     process.on('uncaughtException', e => {
       // Write the error to stderr.
@@ -138,6 +139,8 @@ export default async (app: express.Application, logger: Console) => {
       errors.report(e);
     });
 
+    // Ensure stackdriver is working
+    errors.report('Server Restarting');
     // Note that express error handling middleware should be attached after all
     // the other routes and use() calls.
     app.use(errors.express);

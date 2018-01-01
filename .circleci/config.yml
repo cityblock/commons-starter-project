@@ -128,12 +128,24 @@ jobs:
 workflows:
   version: 2
 
-  build_and_deploy_staging:
+  test_and_deploy:
     jobs:
-      - lint
-      - test_frontend
-      - test_api
-      - test_models
+      - lint:
+          filters:
+            tags:
+              only: /.*/
+      - test_frontend:
+          filters:
+            tags:
+              only: /.*/
+      - test_api:
+          filters:
+            tags:
+              only: /.*/
+      - test_models:
+          filters:
+            tags:
+              only: /.*/
       - deploy_staging:
           requires:
             - lint
@@ -143,13 +155,6 @@ workflows:
           filters:
             branches:
               only: master
-
-  build_and_deploy_production:
-    jobs:
-      - lint
-      - test_frontend
-      - test_api
-      - test_models
       - deploy_production:
           requires:
             - lint

@@ -48,40 +48,20 @@ describe('handling pubusub push events from mixer', () => {
     await Db.release();
   });
 
-  it('ends the request if data cannot be parsed', async () => {
-    const badData = 'this is not json';
-    const encodedBadData = new Buffer(badData).toString('base64');
-    const request = httpMocks.createRequest({
-      method: 'POST',
-      url: '/pubsub/push',
-      body: {
-        message: {
-          data: encodedBadData,
-          attributes: {
-            hmac: createHmac(encodedBadData),
-          },
-        },
-      },
-    });
-    await pubsubPushHandler(request, response);
-    expect(response.send).toBeCalledWith('Problem parsing message data');
-  });
-
   it('ends the request if data is missing from the request', async () => {
-    const badData = JSON.stringify({
+    const badData = {
       patientId: patient.id,
       slug: 'slug',
       value: 'value',
-    });
-    const encodedBadData = new Buffer(badData).toString('base64');
+    };
     const request = httpMocks.createRequest({
       method: 'POST',
       url: '/pubsub/push',
       body: {
         message: {
-          data: encodedBadData,
+          data: badData,
           attributes: {
-            hmac: createHmac(encodedBadData),
+            hmac: createHmac(JSON.stringify(badData)),
           },
         },
       },
@@ -91,21 +71,20 @@ describe('handling pubusub push events from mixer', () => {
   });
 
   it('ends the request if a patient cannot be found', async () => {
-    const badData = JSON.stringify({
+    const badData = {
       patientId: 'fake patient id',
       slug: 'slug',
       value: 'value',
       jobId: 'jobId',
-    });
-    const encodedBadData = new Buffer(badData).toString('base64');
+    };
     const request = httpMocks.createRequest({
       method: 'POST',
       url: '/pubsub/push',
       body: {
         message: {
-          data: encodedBadData,
+          data: badData,
           attributes: {
-            hmac: createHmac(encodedBadData),
+            hmac: createHmac(JSON.stringify(badData)),
           },
         },
       },
@@ -135,21 +114,20 @@ describe('handling pubusub push events from mixer', () => {
       valueType: 'string',
       order: 1,
     });
-    const badData = JSON.stringify({
+    const badData = {
       patientId: patient.id,
       slug: computedField.slug,
       value: 'fake',
       jobId: 'jobId',
-    });
-    const encodedBadData = new Buffer(badData).toString('base64');
+    };
     const request = httpMocks.createRequest({
       method: 'POST',
       url: '/pubsub/push',
       body: {
         message: {
-          data: encodedBadData,
+          data: badData,
           attributes: {
-            hmac: createHmac(encodedBadData),
+            hmac: createHmac(JSON.stringify(badData)),
           },
         },
       },
@@ -202,21 +180,20 @@ describe('handling pubusub push events from mixer', () => {
       userId: user.id,
       goalSuggestionTemplateId: goalSuggestionTemplate.id,
     });
-    const badData = JSON.stringify({
+    const goodData = {
       patientId: patient.id,
       slug: computedField.slug,
       value: answer.value,
       jobId: 'jobId',
-    });
-    const encodedBadData = new Buffer(badData).toString('base64');
+    };
     const request = httpMocks.createRequest({
       method: 'POST',
       url: '/pubsub/push',
       body: {
         message: {
-          data: encodedBadData,
+          data: goodData,
           attributes: {
-            hmac: createHmac(encodedBadData),
+            hmac: createHmac(JSON.stringify(goodData)),
           },
         },
       },

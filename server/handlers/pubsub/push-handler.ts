@@ -6,7 +6,7 @@ import Answer from '../../models/answer';
 import Patient from '../../models/patient';
 import PatientAnswer from '../../models/patient-answer';
 
-interface IPubsubMessageData {
+export interface IPubsubMessageData {
   patientId?: string;
   slug?: string;
   value?: string | number | boolean;
@@ -14,16 +14,7 @@ interface IPubsubMessageData {
 }
 
 export async function pubsubPushHandler(req: express.Request, res: express.Response) {
-  let data: IPubsubMessageData = {};
-
-  try {
-    data = JSON.parse(Buffer.from(req.body.message.data, 'base64').toString('utf-8'));
-  } catch (err) {
-    res.status(400).send('Problem parsing message data');
-    return;
-  }
-
-  const { patientId, slug, value, jobId } = data;
+  const { patientId, slug, value, jobId } = req.body.message.data;
 
   if (!patientId || !slug || !value || !jobId) {
     res.status(400).send('Must provide a patientId, slug, value, and jobId');

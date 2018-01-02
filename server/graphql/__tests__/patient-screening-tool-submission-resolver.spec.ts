@@ -202,6 +202,59 @@ describe('patient screening tool submission resolver tests', () => {
       });
     });
 
+    it('gets all patientScreeningToolSubmissions for patient 360', async () => {
+      await transaction(PatientScreeningToolSubmission.knex(), async txn => {
+        const { clinic, user, riskArea, patient, submission } = await setup(txn);
+        const patient2 = await createPatient(createMockPatient(456, clinic.id), user.id, txn);
+        const screeningTool2 = await ScreeningTool.create(
+          {
+            riskAreaId: riskArea.id,
+            title: 'Another Screening Tool',
+          },
+          txn,
+        );
+        const submission2 = await PatientScreeningToolSubmission.create(
+          {
+            patientId: patient.id,
+            userId: user.id,
+            screeningToolId: screeningTool2.id,
+          },
+          txn,
+        );
+        const submission3 = await PatientScreeningToolSubmission.create(
+          {
+            patientId: patient2.id,
+            userId: user.id,
+            screeningToolId: screeningTool2.id,
+          },
+          txn,
+        );
+
+        const query = `{
+          patientScreeningToolSubmissionsFor360(patientId: "${patient.id}") {
+            id
+            score
+          }
+        }`;
+        const result = await graphql(schema, query, null, { db, userRole, txn });
+        const submissions = cloneDeep(result.data!.patientScreeningToolSubmissionsFor360);
+        const submissionIds = submissions.map((sub: PatientScreeningToolSubmission) => sub.id);
+        const mappedResults = submissions.map((sub: any) => ({ id: sub.id, score: sub.score }));
+        expect(submissions.length).toEqual(2);
+        expect(submissionIds).not.toContain(submission3.id);
+        expect(
+          mappedResults.some(
+            (res: any) => res.id === submission.id && res.score === submission.score,
+          ),
+        ).toEqual(true);
+        expect(
+          mappedResults.some(
+            (res: any) => res.id === submission2.id && res.score === submission2.score,
+          ),
+        ).toEqual(true);
+      });
+    });
+
     it('gets all patientScreeningToolSubmissions for a patient for a screeningTool', async () => {
       await transaction(PatientScreeningToolSubmission.knex(), async txn => {
         const { riskArea, patient, user, submission } = await setup(txn);

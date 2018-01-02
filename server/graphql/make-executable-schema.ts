@@ -97,6 +97,7 @@ import {
   patientScreeningToolSubmissionScore,
   resolvePatientScreeningToolSubmission,
   resolvePatientScreeningToolSubmissions,
+  resolvePatientScreeningToolSubmissionsFor360,
   resolvePatientScreeningToolSubmissionsForPatient,
   resolvePatientScreeningToolSubmissionForPatientAndScreeningTool,
 } from './patient-screening-tool-submission-resolver';
@@ -287,6 +288,7 @@ const resolveFunctions = {
     patientScreeningToolSubmission: resolvePatientScreeningToolSubmission,
     patientScreeningToolSubmissionForPatientAndScreeningTool: resolvePatientScreeningToolSubmissionForPatientAndScreeningTool,
     patientScreeningToolSubmissionsForPatient: resolvePatientScreeningToolSubmissionsForPatient,
+    patientScreeningToolSubmissionsFor360: resolvePatientScreeningToolSubmissionsFor360,
     patientScreeningToolSubmissions: resolvePatientScreeningToolSubmissions,
     riskAreaAssessmentSubmission: resolveRiskAreaAssessmentSubmission,
     riskAreaAssessmentSubmissionForPatient: resolveRiskAreaAssessmentSubmissionForPatient,

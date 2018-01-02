@@ -108,6 +108,15 @@ export async function resolvePatientScreeningToolSubmissionsForPatient(
   }
 }
 
+export async function resolvePatientScreeningToolSubmissionsFor360(
+  root: any,
+  args: { patientId: string },
+  { db, userRole, txn }: IContext,
+) {
+  await accessControls.isAllowed(userRole, 'view', 'patientScreeningToolSubmission');
+  return await PatientScreeningToolSubmission.getFor360(args.patientId, txn);
+}
+
 export async function resolvePatientScreeningToolSubmissions(
   root: any,
   args: any,

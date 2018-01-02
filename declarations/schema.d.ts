@@ -258,6 +258,10 @@ declare module 'schema' {
   */
     patientScreeningToolSubmissionsForPatient: Array<IPatientScreeningToolSubmission> | null;
     /**
+    description: patient screening tool submissions for patient 360 (history tab)
+  */
+    patientScreeningToolSubmissionsFor360: Array<IPatientScreeningToolSubmission> | null;
+    /**
     description: patient screening tool submissions
   */
     patientScreeningToolSubmissions: Array<IPatientScreeningToolSubmission> | null;

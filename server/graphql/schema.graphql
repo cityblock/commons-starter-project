@@ -1755,6 +1755,8 @@ type RootQueryType {
     screeningToolId: ID
     scored: Boolean!
   ): [PatientScreeningToolSubmission]
+  # patient screening tool submissions for patient 360 (history tab)
+  patientScreeningToolSubmissionsFor360(patientId: ID!): [PatientScreeningToolSubmission]
   # patient screening tool submissions
   patientScreeningToolSubmissions: [PatientScreeningToolSubmission]
   # progress note template

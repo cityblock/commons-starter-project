@@ -13,6 +13,8 @@ RUN yarn install --production
 
 ADD . /app
 # We do not want this step to be cached
-RUN yarn build
+# import our aptible.env to get the google oauth token
+# see https://www.aptible.com/documentation/enclave/reference/apps/image/dockerfile-deploy/aptible-env.html
+RUN set -a && . /app/.aptible.env && yarn build
 
 EXPOSE 3000

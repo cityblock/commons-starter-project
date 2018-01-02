@@ -12,8 +12,6 @@ services:
      - LOGENTRIES_TOKEN=fb9d5b25-f335-4863-84f6-1bafb3412d37
     command: yarn run start
   postgres:
-    build: ./docker/postgres/9.6
+    build: ./docker/postgres/10.1
     environment:
      - POSTGRES_DB=db
-  rabbit:
-    image: 'rabbitmq'

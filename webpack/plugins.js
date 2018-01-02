@@ -21,7 +21,6 @@ module.exports = ({ production = false } = {}) => {
     );
   } else {
     plugins.push(
-      new webpack.EnvironmentPlugin(['NODE_ENV', 'GOOGLE_OAUTH_TOKEN']),
       new webpack.optimize.ModuleConcatenationPlugin(),
       new ExtractTextPlugin({
         allChunks: true,

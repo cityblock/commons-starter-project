@@ -338,6 +338,46 @@ describe('patient screening tool submission model', () => {
     });
   });
 
+  it('gets all screening tool submissions for patient 360', async () => {
+    await transaction(PatientScreeningToolSubmission.knex(), async txn => {
+      const { screeningTool1, patient1, user, patient2, screeningTool2, riskArea } = await setup(
+        txn,
+      );
+      const submission1 = await PatientScreeningToolSubmission.create(
+        {
+          screeningToolId: screeningTool1.id,
+          patientId: patient1.id,
+          userId: user.id,
+        },
+        txn,
+      );
+      const submission2 = await PatientScreeningToolSubmission.create(
+        {
+          screeningToolId: screeningTool2.id,
+          patientId: patient1.id,
+          userId: user.id,
+        },
+        txn,
+      );
+      const submission3 = await PatientScreeningToolSubmission.create(
+        {
+          screeningToolId: screeningTool1.id,
+          patientId: patient2.id,
+          userId: user.id,
+        },
+        txn,
+      );
+
+      const submissions = await PatientScreeningToolSubmission.getFor360(patient1.id, txn);
+      const submissionIds = submissions.map(submission => submission.id);
+      expect(submissions.length).toEqual(2);
+      expect(submissionIds).toContain(submission1.id);
+      expect(submissionIds).toContain(submission2.id);
+      expect(submissionIds).not.toContain(submission3.id);
+      expect(submissions[0].riskArea.id).toBe(riskArea.id);
+    });
+  });
+
   it('gets the latest screening tool submission for a patient and tool', async () => {
     await transaction(PatientScreeningToolSubmission.knex(), async txn => {
       const { screeningTool1, patient1, user, screeningTool2 } = await setup(txn);

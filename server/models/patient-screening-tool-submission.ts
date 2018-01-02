@@ -255,6 +255,29 @@ export default class PatientScreeningToolSubmission extends BaseModel {
       .orderBy('createdAt', 'asc');
   }
 
+  static async getFor360(
+    patientId: string,
+    txn?: Transaction,
+  ): Promise<PatientScreeningToolSubmission[]> {
+    const PATIENT_QUERY = '[screeningTool, screeningToolScoreRange, user, riskArea]';
+
+    const submissions = await this.query(txn)
+      .eager(PATIENT_QUERY)
+      .modifyEager('riskArea', builder => {
+        builder.where({ 'risk_area.deletedAt': null });
+      })
+      .modifyEager('screeningTool', builder => {
+        builder.where({ 'screening_tool.deletedAt': null });
+      })
+      .modifyEager('screeningToolScoreRanges', builder => {
+        builder.where({ 'screening_tool_score_range.deletedAt': null });
+      })
+      .where({ patientId, 'patient_screening_tool_submission.deletedAt': null })
+      .orderBy('createdAt', 'desc');
+
+    return submissions;
+  }
+
   static async getForPatientAndScreeningTool(
     patientId: string,
     screeningToolId: string,

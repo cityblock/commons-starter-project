@@ -11,7 +11,10 @@ const email = process.env.EMAIL || 'brennan@cityblock.com';
 export async function createAdminTasksConcernForPatients() {
   await Db.get();
 
-  const user = await User.getBy('email', email);
+  const user = await User.getBy({
+    fieldName: 'email',
+    field: email,
+  });
 
   if (!user) {
     console.log(`No user found with email: ${email}`);

@@ -7,7 +7,8 @@ set -o errexit
 
 # Start the tunnel. Poll for the connection string.
 tempfile=$(mktemp);
-aptible db:tunnel commons --type postgresql | tee $tempfile &
+db=$1;
+aptible db:tunnel $db --type postgresql | tee $tempfile &
 
 # kill any remaining background processes
 function cleanup() {

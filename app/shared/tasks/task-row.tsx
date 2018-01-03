@@ -76,7 +76,7 @@ export const TaskRow: React.StatelessComponent<IProps> = (props: IProps) => {
   );
 
   return (
-    <Link className={taskClass} to={`${routeBase}/${task.id}`}>
+    <Link className={taskClass} to={`${routeBase}/${task.id}`} onClick={e => e.stopPropagation()}>
       <div className={styles.title}>{task.title}</div>
       <div className={styles.meta}>
         <div className={styles.followers}>

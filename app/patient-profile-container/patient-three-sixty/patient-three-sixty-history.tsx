@@ -3,6 +3,7 @@ import { graphql } from 'react-apollo';
 import * as patientScreeningToolSubmissionsFor360Query from '../../graphql/queries/get-patient-screening-tool-submission-for-three-sixty.graphql';
 import { ShortPatientScreeningToolSubmission360Fragment } from '../../graphql/types';
 import Spinner from '../../shared/library/spinner/spinner';
+import * as styles from './css/patient-three-sixty-history.css';
 import ScreeningToolHistory from './screening-tool-history';
 
 interface IProps {
@@ -22,13 +23,27 @@ export const PatientThreeSixtyHistory: React.StatelessComponent<allProps> = (pro
   if (loading || error) return <Spinner />;
 
   const routeBase = `/patients/${patientId}`;
-  const renderedSubmissions = submissions.map(submission => {
+  const renderedSubmissions = submissions.map((submission, i) => {
+    let prevSubmission = null;
+    // find the previous submission for that screening tool if it exists
+    for (let j = i + 1; j < submissions.length; j++) {
+      if (submissions[j].screeningTool.id === submission.screeningTool.id) {
+        prevSubmission = submissions[j];
+        break;
+      }
+    }
+
     return (
-      <ScreeningToolHistory key={submission.id} submission={submission} routeBase={routeBase} />
+      <ScreeningToolHistory
+        key={submission.id}
+        submission={submission}
+        prevSubmission={prevSubmission}
+        routeBase={routeBase}
+      />
     );
   });
 
-  return <div>{renderedSubmissions}</div>;
+  return <div className={styles.container}>{renderedSubmissions}</div>;
 };
 
 export default graphql<IGraphqlProps, IProps, allProps>(

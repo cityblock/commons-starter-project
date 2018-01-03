@@ -494,7 +494,7 @@ export const patientScreeningToolSubmission = {
 
 export const shortPatientScreeningToolSubmission = {
   id: 'nymeria',
-  updatedAt: 'Thu Jul 13 2017 16:52:56 GMT-0400 (EDT)',
+  createdAt: 'Thu Jul 13 2017 16:52:56 GMT-0400 (EDT)',
   score: 5,
   screeningTool: {
     id: screeningTool.id,
@@ -505,10 +505,36 @@ export const shortPatientScreeningToolSubmission = {
     title: riskArea.title,
   },
   user: {
+    id: user.id,
     firstName: user.firstName,
     lastName: user.lastName,
   },
   screeningToolScoreRange: {
+    id: screeningToolScoreRange.id,
+    description: screeningToolScoreRange.description,
+    riskAdjustmentType: screeningToolScoreRange.riskAdjustmentType,
+  },
+};
+
+export const shortPatientScreeningToolSubmission2 = {
+  id: 'ghost',
+  createdAt: 'Thu Jul 11 2017 16:52:56 GMT-0400 (EDT)',
+  score: 11,
+  screeningTool: {
+    id: screeningTool.id,
+    title: screeningTool.title,
+  },
+  riskArea: {
+    id: riskArea.id,
+    title: riskArea.title,
+  },
+  user: {
+    id: user.id,
+    firstName: user.firstName,
+    lastName: user.lastName,
+  },
+  screeningToolScoreRange: {
+    id: screeningToolScoreRange.id,
     description: screeningToolScoreRange.description,
     riskAdjustmentType: screeningToolScoreRange.riskAdjustmentType,
   },

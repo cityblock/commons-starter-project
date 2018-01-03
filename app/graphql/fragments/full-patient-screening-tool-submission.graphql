@@ -27,6 +27,7 @@ fragment FullPatientScreeningToolSubmission on PatientScreeningToolSubmission {
   }
   screeningToolScoreRangeId
   screeningToolScoreRange {
+    id
     description
   }
 }

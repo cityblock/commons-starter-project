@@ -8,3 +8,7 @@
   color: var(--light-gray-font-color);
   font-weight: var(--default-font-weight);
 }
+
+.black {
+  color: var(--black-color);
+}

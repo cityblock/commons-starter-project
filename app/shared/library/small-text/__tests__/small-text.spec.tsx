@@ -22,6 +22,11 @@ describe('Library Date Info Component', () => {
     expect(wrapper.find('p').props().className).toBe(`text ${className}`);
   });
 
+  it('renders black text', () => {
+    wrapper.setProps({ className: '', color: 'black' });
+    expect(wrapper.find('p').props().className).toBe(`text black`);
+  });
+
   it('renders formatted message with specified id if passed', () => {
     wrapper.setProps({ messageId });
     expect(wrapper.find(FormattedMessage).length).toBe(1);

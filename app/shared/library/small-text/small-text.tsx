@@ -3,15 +3,24 @@ import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
 import * as styles from './css/small-text.css';
 
-interface IProps {
+export type Color = 'gray' | 'black'; // default is gray
+
+export interface IProps {
   messageId?: string; // provide either raw text or message id
   text?: string;
+  color?: Color; // optional color flag
   className?: string;
 }
 
 const SmallText: React.StatelessComponent<IProps> = (props: IProps) => {
-  const { messageId, text, className } = props;
-  const textStyles = classNames(styles.text, className);
+  const { messageId, text, color, className } = props;
+  const textStyles = classNames(
+    styles.text,
+    {
+      [styles.black]: color && color === 'black',
+    },
+    className,
+  );
 
   if (messageId) {
     return (

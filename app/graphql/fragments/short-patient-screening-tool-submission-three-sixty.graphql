@@ -1,12 +1,13 @@
 fragment ShortPatientScreeningToolSubmission360 on PatientScreeningToolSubmission {
   id
   score
-  updatedAt
+  createdAt
   riskArea {
     id
     title
   }
   user {
+    id
     firstName
     lastName
   }
@@ -15,6 +16,7 @@ fragment ShortPatientScreeningToolSubmission360 on PatientScreeningToolSubmissio
     title
   }
   screeningToolScoreRange {
+    id
     description
     riskAdjustmentType
   }

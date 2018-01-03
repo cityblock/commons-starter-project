@@ -1650,6 +1650,7 @@ export interface getPatientScreeningToolSubmissionForPatientAndScreeningToolQuer
     } >,
     screeningToolScoreRangeId: string | null,
     screeningToolScoreRange:  {
+      id: string,
       description: string,
     } | null,
   } | null,
@@ -1664,12 +1665,13 @@ export interface getPatientScreeningToolSubmissionsFor360Query {
   patientScreeningToolSubmissionsFor360:  Array< {
     id: string,
     score: number | null,
-    updatedAt: string,
+    createdAt: string,
     riskArea:  {
       id: string,
       title: string,
     },
     user:  {
+      id: string,
       firstName: string | null,
       lastName: string | null,
     },
@@ -1678,6 +1680,7 @@ export interface getPatientScreeningToolSubmissionsFor360Query {
       title: string,
     },
     screeningToolScoreRange:  {
+      id: string,
       description: string,
       riskAdjustmentType: RiskAdjustmentTypeOptions,
     } | null,
@@ -1806,6 +1809,7 @@ export interface getPatientScreeningToolSubmissionQuery {
     } >,
     screeningToolScoreRangeId: string | null,
     screeningToolScoreRange:  {
+      id: string,
       description: string,
     } | null,
   } | null,
@@ -4151,6 +4155,7 @@ export interface patientScreeningToolSubmissionCreateMutation {
     } >,
     screeningToolScoreRangeId: string | null,
     screeningToolScoreRange:  {
+      id: string,
       description: string,
     } | null,
   } | null,
@@ -4278,6 +4283,7 @@ export interface patientScreeningToolSubmissionScoreMutation {
     } >,
     screeningToolScoreRangeId: string | null,
     screeningToolScoreRange:  {
+      id: string,
       description: string,
     } | null,
   } | null,
@@ -7082,6 +7088,7 @@ export interface FullPatientScreeningToolSubmissionFragment {
   } >,
   screeningToolScoreRangeId: string | null,
   screeningToolScoreRange:  {
+    id: string,
     description: string,
   } | null,
 };
@@ -8070,12 +8077,13 @@ export interface FullUserFragment {
 export interface ShortPatientScreeningToolSubmission360Fragment {
   id: string,
   score: number | null,
-  updatedAt: string,
+  createdAt: string,
   riskArea:  {
     id: string,
     title: string,
   },
   user:  {
+    id: string,
     firstName: string | null,
     lastName: string | null,
   },
@@ -8084,6 +8092,7 @@ export interface ShortPatientScreeningToolSubmission360Fragment {
     title: string,
   },
   screeningToolScoreRange:  {
+    id: string,
     description: string,
     riskAdjustmentType: RiskAdjustmentTypeOptions,
   } | null,

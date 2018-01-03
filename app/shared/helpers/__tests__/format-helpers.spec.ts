@@ -1,9 +1,11 @@
+import { shortPatientScreeningToolSubmission } from '../../util/test-data';
 import {
   formatAge,
   formatAgeDetails,
   formatDateOfBirth,
   formatFullName,
   formatInputDate,
+  formatScreeningToolScore,
   isDueSoon,
   isPastDue,
 } from '../format-helpers';
@@ -100,6 +102,25 @@ describe('Shared Component Helpers', () => {
 
     it('returns both age and gender if known', () => {
       expect(formatAgeDetails(dateOfBirth, 'f')).toBe('(16 F)');
+    });
+  });
+
+  describe('formatScreeningToolScore', () => {
+    it('returns empty string if submisison has no score', () => {
+      expect(formatScreeningToolScore({ score: null } as any)).toBeFalsy();
+    });
+
+    it('formats score properly', () => {
+      expect(formatScreeningToolScore(shortPatientScreeningToolSubmission)).toBe(
+        `${shortPatientScreeningToolSubmission.score} - ${
+          shortPatientScreeningToolSubmission.screeningToolScoreRange.description
+        }`,
+      );
+    });
+
+    it('returns just score if no score range', () => {
+      const score = 11;
+      expect(formatScreeningToolScore({ score } as any)).toBe(`${score}`);
     });
   });
 });

@@ -1,7 +1,7 @@
 import * as classNames from 'classnames';
 import * as React from 'react';
 import { FormattedRelative } from 'react-intl';
-import SmallText from '../small-text/small-text';
+import TextInfo from '../text-info/text-info';
 import * as styles from './css/date-info.css';
 
 type Label = 'created' | 'updated'; // displays text for created and updated
@@ -16,16 +16,17 @@ interface IProps {
 
 const DateInfo: React.StatelessComponent<IProps> = (props: IProps) => {
   const { date, label, messageId, className, highlight } = props;
-  const dateStyles = classNames(styles.date, {
+  const dateStyles = classNames({
     [styles.highlight]: !!highlight,
   });
-  const formattedMessageId = label ? `dateInfo.${label}` : messageId;
+  const formattedMessageId: string = label ? `dateInfo.${label}` : messageId || '';
 
   return (
     <div className={className}>
-      <SmallText messageId={formattedMessageId} />
       <FormattedRelative value={date}>
-        {(formattedDate: string) => <SmallText text={formattedDate} className={dateStyles} />}
+        {(formattedDate: string) => (
+          <TextInfo messageId={formattedMessageId} text={formattedDate} textStyles={dateStyles} />
+        )}
       </FormattedRelative>
     </div>
   );

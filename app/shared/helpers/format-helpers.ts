@@ -1,8 +1,9 @@
 import { differenceInYears, format } from 'date-fns';
+import { ShortPatientScreeningToolSubmission360Fragment } from '../../graphql/types';
 
 const ONE_DAY_IN_MILLISECONDS = 24 * 60 * 60 * 1000;
 
-export const formatFullName = (firstName?: string, lastName?: string): string =>
+export const formatFullName = (firstName?: string | null, lastName?: string | null): string =>
   `${firstName || 'Unknown'} ${lastName || 'Unknown'}`;
 
 export const formatInputDate = (dueDate?: string): string =>
@@ -53,4 +54,13 @@ export const formatAgeDetails = (dateOfBirth: string | null, gender: string | nu
   const space = dateOfBirth && gender ? ' ' : '';
 
   return `(${formatAge(dateOfBirth)}${space}${formattedGender})`;
+};
+
+export const formatScreeningToolScore = (
+  submission: ShortPatientScreeningToolSubmission360Fragment,
+): string => {
+  if (submission.score === null) return '';
+  return submission.screeningToolScoreRange
+    ? `${submission.score} - ${submission.screeningToolScoreRange.description}`
+    : `${submission.score}`;
 };

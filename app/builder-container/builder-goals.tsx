@@ -7,6 +7,7 @@ import { push } from 'react-router-redux';
 import * as goalsQuery from '../graphql/queries/get-goal-suggestion-templates.graphql';
 import * as goalDeleteMutation from '../graphql/queries/goal-suggestion-template-delete-mutation.graphql';
 import {
+  getGoalSuggestionTemplatesQuery,
   goalSuggestionTemplateDeleteMutation,
   goalSuggestionTemplateDeleteMutationVariables,
   FullGoalSuggestionTemplateFragment,
@@ -37,7 +38,7 @@ interface IDispatchProps {
 
 interface IGraphqlProps {
   refetchGoals: () => any;
-  goals?: FullGoalSuggestionTemplateFragment[];
+  goals?: getGoalSuggestionTemplatesQuery['goalSuggestionTemplates'];
   loading: boolean;
   error: string | null;
   deleteGoal?: (
@@ -79,9 +80,11 @@ export class BuilderGoals extends React.Component<allProps, IState> {
     this.setState({ showCreateGoal: false });
   };
 
-  renderGoals = (goals: FullGoalSuggestionTemplateFragment[]) => {
+  renderGoals = (goals: getGoalSuggestionTemplatesQuery['goalSuggestionTemplates']) => {
     const { loading, error } = this.props;
-    const validGoals = goals.filter(goal => !goal.deletedAt);
+    const validGoals = (goals || []).filter(
+      goal => goal && !goal.deletedAt,
+    ) as FullGoalSuggestionTemplateFragment[];
 
     if (validGoals.length > 0) {
       return validGoals.map(this.renderGoal);

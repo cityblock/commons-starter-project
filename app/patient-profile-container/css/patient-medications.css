@@ -20,20 +20,6 @@
   color: var(--black-color);
 }
 
-.medicationsHamburger {
-  height: 22px;
-  width: 4px;
-  padding-right: 10px;
-  background-position: center center;
-  background-repeat: no-repeat;
-  background-size: cover;
-  background-image: url('../../assets/dot-hamburger-black.svg');
-
-  &:hover {
-    cursor: pointer;
-  }
-}
-
 .medicationsList {
   padding: 15px 0;
   overflow: scroll;
@@ -44,10 +30,8 @@
   }
 }
 
-.medicationsList.emptyMedicationsList {
-  &:hover {
-    cursor: default;
-  }
+.medicationsList.emptyMedicationsList:hover {
+  cursor: default;
 }
 
 .emptyMedicationsMessage {

@@ -12,3 +12,4 @@ export const errorIcon: string;
 export const errorLabel: string;
 export const errorSubheading: string;
 export const errorButton: string;
+export const topBar: string;

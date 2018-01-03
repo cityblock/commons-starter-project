@@ -54,19 +54,7 @@ exports[`renders care team widget 1`] = `
       <div
         className="careTeamContactLabel"
       >
-        Call on phone
-      </div>
-    </div>
-    <div
-      className="careTeamMemberContactRow"
-    >
-      <div
-        className="careTeamContactIcon careTeamSmsIcon"
-      />
-      <div
-        className="careTeamContactLabel"
-      >
-        Send text message
+        (252) 258-8922
       </div>
     </div>
     <div
@@ -79,18 +67,6 @@ exports[`renders care team widget 1`] = `
         className="careTeamContactLabel"
       >
         Send an email
-      </div>
-    </div>
-    <div
-      className="careTeamMemberContactRow"
-    >
-      <div
-        className="careTeamContactIcon careTeamProfileIcon"
-      />
-      <div
-        className="careTeamContactLabel"
-      >
-        Go to profile
       </div>
     </div>
   </div>

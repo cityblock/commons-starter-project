@@ -108,3 +108,7 @@
   font-size: var(--small-font-size);
   line-height: var(--small-font-line-height);
 }
+
+.topBar {
+  justify-content: flex-end;
+}

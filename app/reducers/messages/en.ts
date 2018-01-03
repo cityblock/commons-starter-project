@@ -29,7 +29,7 @@ export const ENGLISH_TRANSLATION = {
     'patient.activeCarePlan': 'Active',
     'patient.inactiveCarePlan': 'Inactive',
     'patient.carePlanSuggestions': 'Suggestions',
-    'patient.medicareId': 'Medicare ID',
+    'patient.cbhNumber': 'CBH MRN#',
     'patient.patientInfo': 'Patient Info',
     'patient.createdPopupHeading': 'successfully enrolled',
     'patient.createdPopupBody':
@@ -51,10 +51,7 @@ export const ENGLISH_TRANSLATION = {
     'error.tableLoading': 'Loading',
     'backLink.back': 'Back',
     'careTeam.slack': 'Message on Slack',
-    'careTeam.call': 'Call on phone',
-    'careTeam.text': 'Send text message',
     'careTeam.email': 'Send an email',
-    'careTeam.profile': 'Go to profile',
     'computedField.flag': 'Flag for review',
     'computedField.flagDetail':
       'Provide the following information for this question to be reviewed',

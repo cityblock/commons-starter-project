@@ -34,11 +34,6 @@
   width: 100%;
 }
 
-.smallPatientRiskColor {
-  background-color: var(--red-color);
-  height: 10px;
-}
-
 .smallPatientPhoto {
   height: 80px;
   background-size: contain;
@@ -114,11 +109,6 @@
   border-bottom: none;
 }
 
-.patientRisk {
-  height: 10px;
-  background-color: var(--red-color);
-}
-
 .patientHeader {
   padding: 30px 0;
   display: flex;
@@ -137,14 +127,6 @@
 .patientTitle {
   justify-content: space-between;
   lost-flex-container: column;
-}
-
-.patientRiskText {
-  color: var(--red-color);
-  font-family: var(--roboto);
-  font-size: var(--small-font-size);
-  font-weight: var(--roboto-medium-weight);
-  text-transform: uppercase;
 }
 
 .patientName,
@@ -194,39 +176,6 @@
   padding-bottom: 30px;
   justify-content: space-between;
   lost-flex-container: row;
-}
-
-.patientCommItem {
-  width: 58px;
-  height: 58px;
-  border: 1px solid var(--gray-background-color);
-  background-position: center center;
-  background-repeat: no-repeat;
-  cursor: pointer;
-
-  &:hover {
-    background-color: var(--gray-background-color);
-  }
-}
-
-.patientCommPhone {
-  background-image: url('../../assets/phone-black.svg');
-  background-size: 25px;
-}
-
-.patientCommText {
-  background-image: url('../../assets/sms-black.svg');
-  background-size: 26px;
-}
-
-.patientCommEmail {
-  background-image: url('../../assets/email-black.svg');
-  background-size: 28px;
-}
-
-.patientCommVideo {
-  background-image: url('../../assets/videocam-black.svg');
-  background-size: 30px;
 }
 
 .smallDisplayPane,

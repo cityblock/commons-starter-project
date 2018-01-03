@@ -97,16 +97,8 @@
   background-image: url('../../assets/phone-grey.svg');
 }
 
-.careTeamSmsIcon {
-  background-image: url('../../assets/sms-grey.svg');
-}
-
 .careTeamEmailIcon {
   background-image: url('../../assets/email-grey.svg');
-}
-
-.careTeamProfileIcon {
-  background-image: url('../../assets/profile-icon-grey.svg');
 }
 
 .careTeamContactLabel {

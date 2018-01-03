@@ -3,39 +3,8 @@
 exports[`renders timeline 1`] = `
 <div>
   <div
-    className="sortSearchBar"
+    className="sortSearchBar topBar"
   >
-    <div
-      className="sort"
-    >
-      <div
-        className="sortLabel"
-      >
-        Sort by:
-      </div>
-      <div
-        className="sortDropdown"
-      >
-        <select
-          defaultValue="Newest first"
-        >
-          <option
-            value="Newest first"
-          >
-            Newest first
-          </option>
-        </select>
-      </div>
-      <div
-        className="search searchLeftPad"
-      >
-        <input
-          defaultValue=""
-          placeholder="Search by user or keywords"
-          type="text"
-        />
-      </div>
-    </div>
     <div
       className="saveButtonGroup"
     >

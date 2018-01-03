@@ -10,7 +10,5 @@ export const careTeamMemberContactRow: string;
 export const careTeamContactIcon: string;
 export const careTeamSlackIcon: string;
 export const careTeamPhoneIcon: string;
-export const careTeamSmsIcon: string;
 export const careTeamEmailIcon: string;
-export const careTeamProfileIcon: string;
 export const careTeamContactLabel: string;

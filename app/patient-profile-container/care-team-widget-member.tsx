@@ -15,9 +15,7 @@ const generateIconStyles = (iconStyle: string): string =>
 
 const slackIconStyles = generateIconStyles(styles.careTeamSlackIcon);
 const phoneIconStyles = generateIconStyles(styles.careTeamPhoneIcon);
-const smsIconStyles = generateIconStyles(styles.careTeamSmsIcon);
 const emailIconStyles = generateIconStyles(styles.careTeamEmailIcon);
-const profileIconStyles = generateIconStyles(styles.careTeamProfileIcon);
 
 export default class CareTeamWidgetMember extends React.Component<IProps, {}> {
   formatCareTeamMemberRole(role: string): string {
@@ -53,25 +51,11 @@ export default class CareTeamWidgetMember extends React.Component<IProps, {}> {
           </div>
           <div className={styles.careTeamMemberContactRow}>
             <div className={phoneIconStyles} />
-            <FormattedMessage id="careTeam.call">
-              {(message: string) => <div className={styles.careTeamContactLabel}>{message}</div>}
-            </FormattedMessage>
-          </div>
-          <div className={styles.careTeamMemberContactRow}>
-            <div className={smsIconStyles} />
-            <FormattedMessage id="careTeam.text">
-              {(message: string) => <div className={styles.careTeamContactLabel}>{message}</div>}
-            </FormattedMessage>
+            <div className={styles.careTeamContactLabel}>(252) 258-8922</div>
           </div>
           <div className={styles.careTeamMemberContactRow}>
             <div className={emailIconStyles} />
             <FormattedMessage id="careTeam.email">
-              {(message: string) => <div className={styles.careTeamContactLabel}>{message}</div>}
-            </FormattedMessage>
-          </div>
-          <div className={styles.careTeamMemberContactRow}>
-            <div className={profileIconStyles} />
-            <FormattedMessage id="careTeam.profile">
               {(message: string) => <div className={styles.careTeamContactLabel}>{message}</div>}
             </FormattedMessage>
           </div>

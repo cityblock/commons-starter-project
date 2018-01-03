@@ -120,18 +120,7 @@ export class PatientTimeline extends React.Component<allProps, IState> {
 
     return (
       <div>
-        <div className={sortSearchStyles.sortSearchBar}>
-          <div className={sortSearchStyles.sort}>
-            <div className={sortSearchStyles.sortLabel}>Sort by:</div>
-            <div className={sortSearchStyles.sortDropdown}>
-              <select defaultValue="Newest first">
-                <option value="Newest first">Newest first</option>
-              </select>
-            </div>
-            <div className={classNames(sortSearchStyles.search, sortSearchStyles.searchLeftPad)}>
-              <input defaultValue="" type="text" placeholder="Search by user or keywords" />
-            </div>
-          </div>
+        <div className={classNames(sortSearchStyles.sortSearchBar, styles.topBar)}>
           <div className={patientInfoStyles.saveButtonGroup}>
             <div className={saveQuickCallButtonStyles} onClick={this.showNewQuickCallPopup}>
               <FormattedMessage id="quickCallNote.new">

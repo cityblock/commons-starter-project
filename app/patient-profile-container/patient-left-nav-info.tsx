@@ -1,7 +1,7 @@
 import * as classNames from 'classnames';
 import * as langs from 'langs';
 import * as React from 'react';
-import { FormattedDate, FormattedMessage, FormattedRelative } from 'react-intl';
+import { FormattedMessage, FormattedRelative } from 'react-intl';
 import { ShortPatientFragment } from '../graphql/types';
 import { getPatientFirstAndMiddleName } from '../shared/util/patient-name';
 import * as styles from './css/patient-profile-left-nav.css';
@@ -43,7 +43,6 @@ export default class PatientLeftNavInfo extends React.Component<IProps, {}> {
       return (
         <div className={styles.patientHeader}>
           <div className={styles.patientTitle}>
-            <div className={styles.patientRiskText}>High Risk Patient</div>
             <div className={styles.patientSingleLineName}>{`${firstName} ${lastName}`}</div>
             <div className={styles.patientSubheading}>
               {patientAge} • {gender}
@@ -59,7 +58,6 @@ export default class PatientLeftNavInfo extends React.Component<IProps, {}> {
             style={{ backgroundImage: `url('http://bit.ly/2vaOMQJ')` }}
           />
           <div className={styles.patientTitle}>
-            <div className={styles.patientRiskText}>High Risk Patient</div>
             <div className={styles.patientName}>
               <div className={styles.patientFirstName}>{firstName}</div>
               <div>{lastName}</div>
@@ -76,15 +74,6 @@ export default class PatientLeftNavInfo extends React.Component<IProps, {}> {
   render() {
     const { patient, patientId, condensedPatientInfo } = this.props;
 
-    // TODO: This is a bad fallback
-    const dateOfBirth =
-      patient && patient.dateOfBirth ? (
-        <FormattedDate value={patient.dateOfBirth}>
-          {(date: string) => <span>{date}</span>}{' '}
-        </FormattedDate>
-      ) : (
-        '2/16/1977'
-      );
     const patientJoined =
       patient && patient.createdAt ? (
         <FormattedRelative value={patient.createdAt}>
@@ -111,16 +100,9 @@ export default class PatientLeftNavInfo extends React.Component<IProps, {}> {
 
     return (
       <div>
-        <div className={styles.patientRisk} />
         <div className={patientMainClasses}>
           {this.renderPatientHeader()}
           <div className={styles.patientBasicInfo}>
-            <div className={styles.patientBasicInfoRow}>
-              <FormattedMessage id="patient.dateOfBirth">
-                {(message: string) => <div>{message}:</div>}
-              </FormattedMessage>
-              <div className={styles.patientBasicInfoRowData}>{dateOfBirth}</div>
-            </div>
             <div className={styles.patientBasicInfoRow}>
               <FormattedMessage id="patient.language">
                 {(message: string) => <div>{message}:</div>}
@@ -140,17 +122,11 @@ export default class PatientLeftNavInfo extends React.Component<IProps, {}> {
               <div className={styles.patientBasicInfoRowData}>{patientJoined}</div>
             </div>
             <div className={styles.patientBasicInfoRow}>
-              <FormattedMessage id="patient.medicareId">
+              <FormattedMessage id="patient.cbhNumber">
                 {(message: string) => <div>{message}:</div>}
               </FormattedMessage>
               <div className={styles.patientBasicInfoRowData}>123456789</div>
             </div>
-          </div>
-          <div className={styles.patientCommunication}>
-            <div className={classNames(styles.patientCommItem, styles.patientCommPhone)} />
-            <div className={classNames(styles.patientCommItem, styles.patientCommText)} />
-            <div className={classNames(styles.patientCommItem, styles.patientCommEmail)} />
-            <div className={classNames(styles.patientCommItem, styles.patientCommVideo)} />
           </div>
           <PatientScratchPad patientId={patientId} />
         </div>

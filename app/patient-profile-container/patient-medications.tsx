@@ -119,7 +119,6 @@ class PatientMedications extends React.Component<allProps, IState> {
       <div className={styles.patientMedications}>
         <div className={styles.medicationsHeader}>
           <div className={styles.medicationsTitle}>Active medications</div>
-          <div className={styles.medicationsHamburger} />
         </div>
         <div className={medicationsListStyles}>
           {this.renderPatientMedications(medicationsList)}

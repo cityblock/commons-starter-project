@@ -82,7 +82,6 @@ export class EventNotificationsContainer extends React.Component<allProps> {
       : false;
 
     const tasksTabStyles = tabStyles.tab;
-    const calendarTabStyles = tabStyles.tab;
     const notificationsTabStyles = classNames(
       tabStyles.tab,
       tabStyles.relativeTab,
@@ -100,13 +99,6 @@ export class EventNotificationsContainer extends React.Component<allProps> {
             <FormattedMessage id="tasks.listView">
               {(message: string) => (
                 <Link className={tasksTabStyles} to={'/tasks'}>
-                  {message}
-                </Link>
-              )}
-            </FormattedMessage>
-            <FormattedMessage id="tasks.calendar">
-              {(message: string) => (
-                <Link className={calendarTabStyles} to={'/calendar'}>
                   {message}
                 </Link>
               )}

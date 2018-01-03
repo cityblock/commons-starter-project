@@ -219,7 +219,6 @@ export const ENGLISH_TRANSLATION = {
     'tasks.patientGoalPlaceholder': 'Patient goal',
     'tasks.listView': 'Tasks',
     'tasks.createTask': 'Create a new task',
-    'tasks.calendar': 'Calendar',
     'tasks.notifications': 'Notifications',
     'tasks.noTasks': 'No Tasks',
     'taskCreate.addTask': 'Add a task',

@@ -58,9 +58,6 @@ class TasksContainer extends React.Component<allProps> {
     const tasksTabStyles = classNames(tabStyles.tab, tabStyles.selectedTab);
     const tasksPaneStyles = classNames(tabStyles.pane, tabStyles.selectedPane);
 
-    const calendarTabStyles = tabStyles.tab;
-    const calendarPaneStyles = tabStyles.pane;
-
     const notificationsTabStyles = classNames(tabStyles.tab, tabStyles.relativeTab);
     const notificationsBadgeStyles = classNames(tabStyles.notificationBadge, {
       [tabStyles.visible]: notificationsCount > 0,
@@ -73,13 +70,6 @@ class TasksContainer extends React.Component<allProps> {
             <FormattedMessage id="tasks.listView">
               {(message: string) => (
                 <Link className={tasksTabStyles} to={'/tasks'}>
-                  {message}
-                </Link>
-              )}
-            </FormattedMessage>
-            <FormattedMessage id="tasks.calendar">
-              {(message: string) => (
-                <Link className={calendarTabStyles} to={'/calendar'}>
                   {message}
                 </Link>
               )}
@@ -104,7 +94,6 @@ class TasksContainer extends React.Component<allProps> {
               taskId={taskId || ''}
             />
           </div>
-          <div className={calendarPaneStyles}>calendar!</div>
         </div>
       </div>
     );

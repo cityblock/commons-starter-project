@@ -18,13 +18,6 @@ exports[`renders tasks container 1`] = `
         Tasks
       </a>
       <a
-        className="tab"
-        href="/calendar"
-        onClick={[Function]}
-      >
-        Calendar
-      </a>
-      <a
         className="tab relativeTab"
         href="/notifications/tasks"
         onClick={[Function]}
@@ -128,11 +121,6 @@ exports[`renders tasks container 1`] = `
           />
         </div>
       </div>
-    </div>
-    <div
-      className="pane"
-    >
-      calendar!
     </div>
   </div>
 </div>

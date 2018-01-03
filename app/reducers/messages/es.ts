@@ -221,7 +221,6 @@ export const SPANISH_TRANSLATION = {
     'tasks.assignedToPlaceholder': 'Asignar a',
     'tasks.patientGoalPlaceholder': 'Objetivo del paciente',
     'tasks.listView': 'Tareas',
-    'tasks.calendar': 'Calendario',
     'tasks.notifications': 'Notificaciones',
     'tasks.createTask': 'Crear Tarea',
     'tasks.noTasks': 'Sin Tareas',

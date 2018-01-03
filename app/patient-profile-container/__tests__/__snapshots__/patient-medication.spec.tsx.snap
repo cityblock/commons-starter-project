@@ -3,7 +3,6 @@
 exports[`renders empty div 1`] = `
 <div
   className="medication"
-  onClick={[Function]}
 >
   <div
     className="medicationRow"
@@ -15,89 +14,6 @@ exports[`renders empty div 1`] = `
     </div>
     <div>
       1 10m
-    </div>
-  </div>
-  <div
-    className="medicationDetails"
-  >
-    <div
-      className="medicationDetailsRow"
-    >
-      <div
-        className="medicationInstructions"
-      >
-        once daily
-      </div>
-    </div>
-    <div
-      className="medicationDetailsRow"
-    >
-      <div
-        className="medicationDetailsTitle"
-      >
-        Prescribed by
-      </div>
-      <div
-        className="medicationDetailsInfo"
-      >
-        TBD
-      </div>
-    </div>
-    <div
-      className="medicationDetailsRow"
-    >
-      <div
-        className="medicationDetailsTitle"
-      >
-        Prescribed on
-      </div>
-      <div
-        className="medicationDetailsInfo"
-      >
-        10/10/2010
-      </div>
-    </div>
-    <div
-      className="medicationDetailsRow"
-    >
-      <div
-        className="medicationDetailsTitle"
-      >
-        Refills allowed
-      </div>
-      <div
-        className="medicationDetailsInfo"
-      >
-        TBD
-      </div>
-    </div>
-    <div
-      className="medicationDetailsRow"
-    >
-      <div
-        className="medicationDetailsTitle"
-      >
-        Renewable
-      </div>
-      <div
-        className="medicationDetailsInfo"
-      >
-        TBD
-      </div>
-    </div>
-    <div
-      className="medicationDetailsRow"
-    >
-      <div
-        className="medicationDetailsTitle"
-      >
-        Status
-      </div>
-      <div
-        className="medicationDetailsInfo"
-      >
-        TBD
-      </div>
     </div>
   </div>
 </div>

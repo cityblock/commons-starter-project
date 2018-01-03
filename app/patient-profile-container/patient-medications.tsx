@@ -19,7 +19,6 @@ interface IGraphqlProps {
 }
 
 interface IState {
-  selectedMedicationId: string | null;
   loading?: boolean;
   error: string | null;
 }
@@ -32,30 +31,17 @@ class PatientMedications extends React.Component<allProps, IState> {
 
     const { loading, error } = props;
 
-    this.onClickMedication = this.onClickMedication.bind(this);
     this.renderPatientMedications = this.renderPatientMedications.bind(this);
     this.renderPatientMedication = this.renderPatientMedication.bind(this);
     this.reloadPatientMedications = this.reloadPatientMedications.bind(this);
 
-    this.state = { selectedMedicationId: null, loading, error };
+    this.state = { loading, error };
   }
 
   componentWillReceiveProps(nextProps: allProps) {
     const { loading, error } = nextProps;
 
     this.setState({ loading, error });
-  }
-
-  onClickMedication(medicationId: string) {
-    this.setState((prevState: IState) => {
-      const { selectedMedicationId } = prevState;
-
-      if (medicationId === selectedMedicationId) {
-        return { selectedMedicationId: null };
-      } else {
-        return { selectedMedicationId: medicationId };
-      }
-    });
   }
 
   renderPatientMedications(medications: FullPatientMedicationFragment[]) {
@@ -82,16 +68,7 @@ class PatientMedications extends React.Component<allProps, IState> {
   }
 
   renderPatientMedication(medication: FullPatientMedicationFragment) {
-    const selected = medication.name === this.state.selectedMedicationId;
-
-    return (
-      <PatientMedication
-        key={medication.name}
-        medication={medication}
-        selected={selected}
-        onClick={this.onClickMedication}
-      />
-    );
+    return <PatientMedication key={medication.name} medication={medication} />;
   }
 
   async reloadPatientMedications() {

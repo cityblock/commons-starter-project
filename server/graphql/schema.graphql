@@ -1778,7 +1778,7 @@ type RootQueryType {
   # computed field
   computedField(computedFieldId: ID!): ComputedField
   # computed fields
-  computedFields(orderBy: ComputedFieldOrderOptions, availableOnly: Boolean): [ComputedField]
+  computedFields(orderBy: ComputedFieldOrderOptions): [ComputedField]
   # computed fields schema
   computedFieldsSchema: ComputedFieldsSchema
   # risk area assessment submission

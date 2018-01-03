@@ -29,9 +29,9 @@ describe('Patient 360 Domain Summaries', () => {
     [id3]: score3,
   };
 
-  const title1 = 'Robb Stark\'s Direwolf';
-  const title2 = 'Sansa Stark\'s Direwolf';
-  const title3 = 'Arya Stark\'s Direwolf';
+  const title1 = "Robb Stark's Direwolf";
+  const title2 = "Sansa Stark's Direwolf";
+  const title3 = "Arya Stark's Direwolf";
   const riskThresholds = {
     mediumRiskThreshold: 4,
     highRiskThreshold: 8,

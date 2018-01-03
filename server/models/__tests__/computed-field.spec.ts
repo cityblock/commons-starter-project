@@ -161,32 +161,6 @@ describe('computed field model', () => {
       ]);
     });
 
-    it('gets all computed fields not associated with a question', async () => {
-      const computedField1 = await ComputedField.create({
-        label: 'def',
-        slug: 'computed-field-1',
-        dataType: 'boolean',
-      });
-      const computedField2 = await ComputedField.create({
-        label: 'abc',
-        slug: 'computed-field-2',
-        dataType: 'number',
-      });
-      const riskArea = await createRiskArea({ title: 'Housing' });
-      await Question.create({
-        riskAreaId: riskArea.id,
-        type: 'riskArea',
-        title: 'Question',
-        answerType: 'boolean' as any,
-        order: 1,
-        computedFieldId: computedField1.id,
-      });
-
-      expect(await ComputedField.getAllAvailable({ orderBy: 'label', order: 'asc' })).toMatchObject(
-        [computedField2],
-      );
-    });
-
     it('gets the computed fields for schema', async () => {
       const computedField1 = await ComputedField.create({
         label: 'def',

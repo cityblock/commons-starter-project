@@ -404,9 +404,6 @@ export default compose(
     }),
   }),
   graphql<IGraphqlProps, IProps, allProps>(computedFieldsQuery as any, {
-    options: (props: IProps) => ({
-      variables: { availableOnly: true },
-    }),
     props: ({ data }) => ({
       computedFieldsLoading: data ? data.loading : false,
       computedFieldsError: data ? data.error : null,

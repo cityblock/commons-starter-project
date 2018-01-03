@@ -15,7 +15,6 @@ export interface IResolveComputedFieldOptions {
 export interface IResolveComputedFieldsOptions {
   orderBy?: ComputedFieldOrderOptions;
   order: 'asc' | 'desc';
-  availableOnly?: boolean;
 }
 
 export interface IDeleteComputedFieldOptions {
@@ -57,11 +56,7 @@ export async function resolveComputedFields(
     order: 'desc',
   });
 
-  if (args.availableOnly) {
-    return await ComputedField.getAllAvailable({ orderBy, order });
-  } else {
-    return await ComputedField.getAll({ orderBy, order });
-  }
+  return await ComputedField.getAll({ orderBy, order });
 }
 
 export async function computedFieldDelete(

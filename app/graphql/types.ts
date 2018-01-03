@@ -861,7 +861,6 @@ export interface getComputedFieldQuery {
 
 export interface getComputedFieldsQueryVariables {
   orderBy?: ComputedFieldOrderOptions | null,
-  availableOnly?: boolean | null,
 };
 
 export interface getComputedFieldsQuery {

@@ -1,0 +1,21 @@
+fragment ShortPatientScreeningToolSubmission360 on PatientScreeningToolSubmission {
+  id
+  score
+  updatedAt
+  riskArea {
+    id
+    title
+  }
+  user {
+    firstName
+    lastName
+  }
+  screeningTool {
+    id
+    title
+  }
+  screeningToolScoreRange {
+    description
+    riskAdjustmentType
+  }
+}

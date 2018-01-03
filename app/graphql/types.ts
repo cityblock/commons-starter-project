@@ -1655,6 +1655,35 @@ export interface getPatientScreeningToolSubmissionForPatientAndScreeningToolQuer
   } | null,
 };
 
+export interface getPatientScreeningToolSubmissionsFor360QueryVariables {
+  patientId: string,
+};
+
+export interface getPatientScreeningToolSubmissionsFor360Query {
+  // patient screening tool submissions for patient 360 (history tab)
+  patientScreeningToolSubmissionsFor360:  Array< {
+    id: string,
+    score: number | null,
+    updatedAt: string,
+    riskArea:  {
+      id: string,
+      title: string,
+    },
+    user:  {
+      firstName: string | null,
+      lastName: string | null,
+    },
+    screeningTool:  {
+      id: string,
+      title: string,
+    },
+    screeningToolScoreRange:  {
+      description: string,
+      riskAdjustmentType: RiskAdjustmentTypeOptions,
+    } | null,
+  } > | null,
+};
+
 export interface getPatientScreeningToolSubmissionQueryVariables {
   patientScreeningToolSubmissionId: string,
 };
@@ -8036,6 +8065,28 @@ export interface FullUserFragment {
   googleProfileImageUrl: string | null,
   createdAt: string,
   updatedAt: string,
+};
+
+export interface ShortPatientScreeningToolSubmission360Fragment {
+  id: string,
+  score: number | null,
+  updatedAt: string,
+  riskArea:  {
+    id: string,
+    title: string,
+  },
+  user:  {
+    firstName: string | null,
+    lastName: string | null,
+  },
+  screeningTool:  {
+    id: string,
+    title: string,
+  },
+  screeningToolScoreRange:  {
+    description: string,
+    riskAdjustmentType: RiskAdjustmentTypeOptions,
+  } | null,
 };
 
 export interface ShortPatientFragment {

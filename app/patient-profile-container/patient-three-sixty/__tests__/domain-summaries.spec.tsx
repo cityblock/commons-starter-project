@@ -9,7 +9,6 @@ describe('Patient 360 Domain Summaries', () => {
   const id1 = 'nymeria';
   const id2 = 'ghost';
   const id3 = 'greyWind';
-  const placeholderFn = () => true as any;
 
   const riskAreaGroupScores = {
     [id1]: {
@@ -45,14 +44,10 @@ describe('Patient 360 Domain Summaries', () => {
   ] as any;
 
   const wrapper = shallow(
-    <DomainSummaries
-      patientId={patientId}
-      routeBase={routeBase}
-      riskAreaGroups={riskAreaGroups}
-      updateRiskAreaGroupScore={placeholderFn}
-      riskAreaGroupScores={riskAreaGroupScores}
-    />,
+    <DomainSummaries patientId={patientId} routeBase={routeBase} riskAreaGroups={riskAreaGroups} />,
   );
+
+  wrapper.setState(riskAreaGroupScores);
 
   it('renders domain summaries', () => {
     expect(wrapper.find(DomainSummary).length).toBe(3);

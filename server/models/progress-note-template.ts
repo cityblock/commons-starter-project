@@ -1,4 +1,4 @@
-import { Model, RelationMappings } from 'objection';
+import { Model, RelationMappings, Transaction } from 'objection';
 import BaseModel from './base-model';
 import Question from './question';
 
@@ -50,8 +50,8 @@ export default class ProgressNoteTemplate extends BaseModel {
       .where({ deletedAt: null });
   }
 
-  static async create(input: IProgressNoteTemplateEditableFields) {
-    return this.query().insertAndFetch(input);
+  static async create(input: IProgressNoteTemplateEditableFields, txn?: Transaction) {
+    return this.query(txn).insertAndFetch(input);
   }
 
   static async edit(

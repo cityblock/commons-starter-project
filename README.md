@@ -304,6 +304,40 @@ To get started with [Schemacrawler][], which creates a somewhat nicer image of t
     exit
     open sc_db.png
 
+### Test PubSub locally
+
+To get started, install the [Google Cloud SDK][] along with the [JDK][] (verision 7 or 8).
+
+Next, install the Google PubSub Emulator by running the following commands:
+
+    gcloud components install pubsub-emulator
+    gcloud components update
+
+The following instructions assume you have a recent version of Ruby installed:
+
+First, ensure that you have the google-cloud gem installed:
+
+    gem install google-cloud
+
+Then, run:
+
+    gcloud beta emulators pubsub start
+
+In a fresh Terminal tab, run:
+
+    $(gcloud beta emulators pubsub env-init)
+
+In the same tab, open an IRB session, and execute the following commands, substituting data where required:
+
+    require 'google/cloud/pubsub'
+    pubsub = Google::Cloud::Pubsub.new(project_id: 'whatever_you_want')
+    topic = pubsub.create_topic('this_does_not_matter')
+    subscription = topic.create_subscription('this_also_does_not_matter')
+    subscription.endpoint = 'http://localhost:3000/pubsub/push'
+    data = '{"patientId":"VALID_PATIENT_ID_HERE","slug":"VALID_COMPUTED_FIELD_SLUG_HERE","value":"VALID_ANSWER_VALUE_HERE","jobId":"this_does_not_matter"}'
+    hmac = OpenSSL::HMAC.hexdigest('SHA256', 'supertopsecret', data)
+    topic.publish(data, hmac: hmac)
+
 [nvm]: https://github.com/creationix/nvm
 [zenhub]: https://www.zenhub.com/
 [add]: http://osxdaily.com/2011/12/30/exclude-drives-or-folders-from-spotlight-index-mac-os-x/
@@ -327,3 +361,5 @@ To get started with [Schemacrawler][], which creates a somewhat nicer image of t
 [secure development lifecycle]: https://github.com/Microsoft/tslint-microsoft-contrib/wiki/TSLint-and-the-Microsoft-Security-Development-Lifecycle
 [schemaspy]: https://github.com/schemaspy/schemaspy
 [schemacrawler]: https://github.com/sualeh/SchemaCrawler
+[Google Cloud SDK]: https://cloud.google.com/sdk/downloads
+[JDK]: http://www.oracle.com/technetwork/java/javase/downloads/index.html

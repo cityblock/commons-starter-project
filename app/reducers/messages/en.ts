@@ -309,5 +309,12 @@ export const ENGLISH_TRANSLATION = {
     'riskAdjustmentType.increment': 'increment',
     'riskAdjustmentType.forceHighRisk': 'force high risk',
     'riskAdjustmentType.selectRiskAdjustmentType': 'Select risk adjustment type',
+    'builder.createConcern': 'Create Concern',
+    'builder.createAssessment': 'Create Assessment',
+    'builder.createQuestion': 'Create Question',
+    'builder.createGoal': 'Create Goal',
+    'builder.createProgressNoteTemplate': 'Create Progress Note Template',
+    'builder.createScreeningTool': 'Create Screening Tool',
+    'manager.inviteUser': 'Invite User',
   },
 };

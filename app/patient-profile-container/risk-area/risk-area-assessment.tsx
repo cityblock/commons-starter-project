@@ -16,6 +16,7 @@ import {
 import * as sortSearchStyles from '../../shared/css/sort-search.css';
 import BackLink from '../../shared/library/back-link/back-link';
 import Button from '../../shared/library/button/button';
+import Spinner from '../../shared/library/spinner/spinner';
 import { Popup } from '../../shared/popup/popup';
 import ScreeningToolsPopup from '../screening-tool/screening-tools-popup';
 import ComputedFieldFlagModal from './computed-field-flag-modal';
@@ -146,6 +147,7 @@ export class RiskAreaAssessment extends React.Component<allProps, IState> {
       loading,
       error,
       riskAreaAssessmentSubmission,
+      riskAreaAssessmentSubmissionLoading,
     } = this.props;
     const { inProgress, selectingScreeningTool } = this.state;
 
@@ -187,6 +189,9 @@ export class RiskAreaAssessment extends React.Component<allProps, IState> {
       <BackLink href={`${routeBase}/${riskArea!.riskAreaGroup.id}`} />
     ) : null;
 
+    if (riskAreaAssessmentSubmissionLoading || loading) {
+      return <Spinner />;
+    }
     return (
       <div>
         {automatedAssessment && <ComputedFieldFlagModal />}

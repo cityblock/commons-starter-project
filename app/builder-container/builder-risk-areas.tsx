@@ -12,6 +12,7 @@ import {
   FullRiskAreaFragment,
 } from '../graphql/types';
 import * as styles from '../shared/css/two-panel.css';
+import Button from '../shared/library/button/button';
 import { IState as IAppState } from '../store';
 import RiskArea from './risk-area';
 import RiskAreaCreate from './risk-area-create';
@@ -132,9 +133,7 @@ class AdminRiskAreas extends React.Component<allProps, IState> {
     });
     const createRiskAreaButton = (
       <div className={styles.createContainer}>
-        <div onClick={this.showCreateRiskArea} className={styles.createButton}>
-          Create Assessment
-        </div>
+        <Button onClick={this.showCreateRiskArea} messageId="builder.createAssessment" />
       </div>
     );
     const createRiskAreaHtml = showCreateRiskArea ? (

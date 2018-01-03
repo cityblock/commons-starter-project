@@ -99,11 +99,6 @@
   align-self: center;
 }
 
-.createButton {
-  @apply --button;
-  @apply --small-button;
-}
-
 .dateSection {
   padding: 0 15px;
   border-left: 1px solid var(--gray-background-color);

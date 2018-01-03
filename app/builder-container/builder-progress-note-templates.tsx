@@ -12,6 +12,7 @@ import {
   FullProgressNoteTemplateFragment,
 } from '../graphql/types';
 import * as styles from '../shared/css/two-panel.css';
+import Button from '../shared/library/button/button';
 import { IState as IAppState } from '../store';
 import ProgressNoteTemplate from './progress-note-template';
 import ProgressNoteTemplateCreate from './progress-note-template-create';
@@ -129,9 +130,10 @@ class BuilderProgressNoteTemplates extends React.Component<allProps, IState> {
     });
     const createProgressNoteTemplateButton = (
       <div className={styles.createContainer}>
-        <div onClick={this.showCreateProgressNoteTemplate} className={styles.createButton}>
-          Create Progress Note Template
-        </div>
+        <Button
+          onClick={this.showCreateProgressNoteTemplate}
+          messageId="builder.createProgressNoteTemplate"
+        />
       </div>
     );
 

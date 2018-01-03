@@ -10,12 +10,13 @@ exports[`builder concerns renders builder concerns 1`] = `
     <div
       className="createContainer"
     >
-      <div
-        className="createButton"
+      <button
+        className="button"
+        disabled={false}
         onClick={[Function]}
       >
         Create Concern
-      </div>
+      </button>
     </div>
   </div>
   <div

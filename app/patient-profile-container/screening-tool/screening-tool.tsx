@@ -1,6 +1,7 @@
 import * as classNames from 'classnames';
 import * as React from 'react';
 import { compose, graphql } from 'react-apollo';
+import { FormattedDate } from 'react-intl';
 import * as patientAnswersQuery from '../../graphql/queries/get-patient-answers.graphql';
 import * as patientScreeningToolSubmissionQuery from '../../graphql/queries/get-patient-screening-tool-submission-for-patient-and-screening-tool.graphql';
 import * as screeningToolQuestionsQuery from '../../graphql/queries/get-questions.graphql';
@@ -23,6 +24,7 @@ import {
 import * as sortSearchStyles from '../../shared/css/sort-search.css';
 import Button from '../../shared/library/button/button';
 import Icon from '../../shared/library/icon/icon';
+import Spinner from '../../shared/library/spinner/spinner';
 import { Popup } from '../../shared/popup/popup';
 import PatientQuestion from '../../shared/question/patient-question';
 import {
@@ -198,6 +200,11 @@ export class ScreeningTool extends React.Component<allProps> {
   getAssessmentHtml() {
     const { screeningTool } = this.props;
     const title = screeningTool ? screeningTool.title : 'Loading...';
+    const lastUpdated = screeningTool ? (
+      <FormattedDate value={screeningTool.updatedAt} year="numeric" month="short" day="numeric">
+        {(date: string) => <div className={styles.lastUpdatedValue}>{date}</div>}
+      </FormattedDate>
+    ) : null;
     const titleStyles = classNames(styles.assessmentTitle, {
       [styles.lowRisk]: false,
       [styles.mediumRisk]: true,
@@ -226,7 +233,7 @@ export class ScreeningTool extends React.Component<allProps> {
           </div>
           <div className={styles.meta}>
             <div className={styles.lastUpdatedLabel}>Last updated:</div>
-            <div className={styles.lastUpdatedValue}>TODO</div>
+            {lastUpdated}
           </div>
         </div>
         {this.renderScreeningToolQuestions()}
@@ -243,7 +250,7 @@ export class ScreeningTool extends React.Component<allProps> {
   }
 
   render() {
-    const { match } = this.props;
+    const { match, loading, patientAnswersLoading } = this.props;
     const patientRoute = `/patients/${match.params.patientId}`;
     const { patientScreeningToolSubmission } = this.props;
     const patientScreeningToolSubmissionId = patientScreeningToolSubmission
@@ -257,6 +264,9 @@ export class ScreeningTool extends React.Component<allProps> {
     const assessmentHtml = this.getAssessmentHtml();
     const popupVisible =
       patientScreeningToolSubmission && patientScreeningToolSubmission.scoredAt ? true : false;
+    if (loading || patientAnswersLoading) {
+      return <Spinner />;
+    }
     return (
       <div>
         <div className={classNames(sortSearchStyles.sortSearchBar, styles.buttonBar)}>

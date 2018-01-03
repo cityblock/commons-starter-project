@@ -12,6 +12,7 @@ import {
   FullConcernFragment,
 } from '../graphql/types';
 import * as styles from '../shared/css/two-panel.css';
+import Button from '../shared/library/button/button';
 import { IState as IAppState } from '../store';
 import Concern from './concern';
 import ConcernCreate from './concern-create';
@@ -109,9 +110,7 @@ class BuilderConcerns extends React.Component<allProps, IState> {
     });
     const createConcernButton = (
       <div className={styles.createContainer}>
-        <div onClick={this.showCreateConcern} className={styles.createButton}>
-          Create Concern
-        </div>
+        <Button onClick={this.showCreateConcern} messageId="builder.createConcern" />
       </div>
     );
     const createConcernHtml = showCreateConcern ? (

@@ -12,7 +12,6 @@ export const itemsError: string;
 export const itemsLoading: string;
 export const search: string;
 export const createContainer: string;
-export const createButton: string;
 export const dateSection: string;
 export const orderSection: string;
 export const createdAtSection: string;

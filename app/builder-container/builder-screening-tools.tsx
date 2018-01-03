@@ -14,6 +14,7 @@ import {
   FullScreeningToolFragment,
 } from '../graphql/types';
 import * as styles from '../shared/css/two-panel.css';
+import Button from '../shared/library/button/button';
 import { IState as IAppState } from '../store';
 import ScreeningTool from './screening-tool';
 import ScreeningToolCreate from './screening-tool-create';
@@ -133,9 +134,7 @@ class BuilderScreeningTools extends React.Component<allProps, IState> {
     });
     const createScreeningToolButton = (
       <div className={styles.createContainer}>
-        <div onClick={this.showCreateScreeningTool} className={styles.createButton}>
-          Create Screening Tool
-        </div>
+        <Button onClick={this.showCreateScreeningTool} messageId="builder.createScreeningTool" />
       </div>
     );
     const createScreeningToolHtml = showCreateScreeningTool ? (

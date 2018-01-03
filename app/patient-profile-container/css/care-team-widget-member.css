@@ -59,7 +59,7 @@
 
 .careTeamMemberContact.open {
   margin: 0;
-  height: 192px;
+  height: 127px;
   border-top: 1px solid var(--border-color);
   border-bottom: 1px solid var(--border-color);
   background-color: var(--gray-background-color);

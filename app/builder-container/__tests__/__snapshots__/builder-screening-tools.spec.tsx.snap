@@ -10,12 +10,13 @@ exports[`builder screening tools renders builder screening tools 1`] = `
     <div
       className="createContainer"
     >
-      <div
-        className="createButton"
+      <button
+        className="button"
+        disabled={false}
         onClick={[Function]}
       >
         Create Screening Tool
-      </div>
+      </button>
     </div>
   </div>
   <div

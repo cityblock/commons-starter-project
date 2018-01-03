@@ -10,12 +10,13 @@ exports[`renders builder goals 1`] = `
     <div
       className="createContainer"
     >
-      <div
-        className="createButton"
+      <button
+        className="button"
+        disabled={false}
         onClick={[Function]}
       >
         Create Goal
-      </div>
+      </button>
     </div>
   </div>
   <div
@@ -54,12 +55,10 @@ exports[`renders goal create 1`] = `
     <div
       className="createContainer"
     >
-      <div
-        className="createButton"
+      <Button
+        messageId="builder.createGoal"
         onClick={[Function]}
-      >
-        Create Goal
-      </div>
+      />
     </div>
   </div>
   <div

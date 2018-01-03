@@ -13,6 +13,7 @@ import {
   FullGoalSuggestionTemplateFragment,
 } from '../graphql/types';
 import * as styles from '../shared/css/two-panel.css';
+import Button from '../shared/library/button/button';
 import { IState as IAppState } from '../store';
 import Goal from './goal';
 import GoalCreate from './goal-create';
@@ -129,9 +130,7 @@ export class BuilderGoals extends React.Component<allProps, IState> {
     });
     const createGoalButton = (
       <div className={styles.createContainer}>
-        <div onClick={this.showCreateGoal} className={styles.createButton}>
-          Create Goal
-        </div>
+        <Button onClick={this.showCreateGoal} messageId="builder.createGoal" />
       </div>
     );
     const createGoalHtml = showCreateGoal ? (

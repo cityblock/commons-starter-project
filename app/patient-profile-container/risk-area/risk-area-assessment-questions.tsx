@@ -15,6 +15,7 @@ import {
   FullRiskAreaFragment,
 } from '../../graphql/types';
 import Icon from '../../shared/library/icon/icon';
+import Spinner from '../../shared/library/spinner/spinner';
 import PatientQuestion from '../../shared/question/patient-question';
 import {
   getQuestionVisibility,
@@ -115,7 +116,7 @@ export class RiskAreaAssessmentQuestions extends React.Component<allProps> {
   };
 
   render() {
-    const { riskArea } = this.props;
+    const { riskArea, patientAnswersLoading, riskAreaQuestionsLoading } = this.props;
 
     const title = riskArea ? riskArea.title : 'Loading...';
 
@@ -125,6 +126,9 @@ export class RiskAreaAssessmentQuestions extends React.Component<allProps> {
       [styles.highRisk]: false,
     });
 
+    if (patientAnswersLoading || riskAreaQuestionsLoading) {
+      return <Spinner />;
+    }
     return (
       <div className={styles.riskAssessment}>
         <div className={titleStyles}>

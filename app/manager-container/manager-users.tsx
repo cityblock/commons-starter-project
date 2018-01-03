@@ -25,6 +25,7 @@ import {
 import * as sortSearchStyles from '../shared/css/sort-search.css';
 import * as styles from '../shared/css/two-panel.css';
 import InfiniteScroll from '../shared/infinite-scroll/infinite-scroll';
+import Button from '../shared/library/button/button';
 import { fetchMore } from '../shared/util/fetch-more';
 import UserInvite from './user-invite';
 import UserRow from './user-row';
@@ -173,9 +174,7 @@ export class ManagerUsers extends React.Component<IProps & IDispatchProps & IGra
     if (!hasLoggedIn) {
       createButton = (
         <div className={styles.createContainer}>
-          <div onClick={this.showInviteUser} className={styles.createButton}>
-            Invite User
-          </div>
+          <Button onClick={this.showInviteUser} messageId="manager.inviteUser" />
         </div>
       );
     }

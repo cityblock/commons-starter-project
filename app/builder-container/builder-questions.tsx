@@ -21,6 +21,7 @@ import {
 } from '../graphql/types';
 import * as sortSearchStyles from '../shared/css/sort-search.css';
 import * as styles from '../shared/css/two-panel.css';
+import Button from '../shared/library/button/button';
 import { IState as IAppState } from '../store';
 import Question from './question';
 import QuestionCreate from './question-create';
@@ -211,9 +212,7 @@ class BuilderQuestions extends React.Component<allProps, IState> {
     });
     const createQuestionButton = (
       <div className={styles.createContainer}>
-        <div onClick={this.showCreateQuestion} className={styles.createButton}>
-          Create Question
-        </div>
+        <Button onClick={this.showCreateQuestion} messageId="builder.createQuestion" />
       </div>
     );
     const selectedRiskArea = riskAreas ? riskAreas.find(area => area.id === riskAreaId) : null;

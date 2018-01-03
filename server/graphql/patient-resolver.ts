@@ -152,10 +152,10 @@ export async function resolvePatientSearch(
   { userRole, userId }: IContext,
 ): Promise<IPatientSearchResultEdges> {
   let patients: IPaginatedResults<IPatientSearchResult>;
-
   await accessControls.isAllowedForUser(userRole, 'view', 'patient');
+  checkUserLoggedIn(userId);
 
-  patients = await Patient.search(query, { pageNumber, pageSize }, userId);
+  patients = await Patient.search(query, { pageNumber, pageSize }, userId!);
 
   const patientEdges = patients.results.map(
     (patient, i) => formatRelayEdge(patient, patient.id) as IPatientSearchResultNode,

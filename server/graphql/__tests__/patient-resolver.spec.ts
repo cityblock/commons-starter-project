@@ -339,7 +339,7 @@ describe('patient', () => {
         userId: '',
       });
 
-      expect(result.errors![0].message).toBe('Must be logged in to search patients');
+      expect(result.errors![0].message).toBe('not logged in');
     });
 
     it('catches error if empty string searched', async () => {

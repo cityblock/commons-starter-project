@@ -201,6 +201,7 @@ export default class User extends Model {
       .where(input.fieldName, input.field)
       .andWhere('deletedAt', null)
       .first();
+
     if (!user || !!user.deletedAt) {
       return null;
     }

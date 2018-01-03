@@ -31,7 +31,12 @@ interface IPatientSearchResult {
   userCareTeam: boolean;
 }
 
-type GetByOptions = 'athenaPatientId';
+interface IGetByOptions {
+  fieldName: GetByFields;
+  field?: string;
+}
+
+type GetByFields = 'athenaPatientId';
 
 /* tslint:disable:member-ordering */
 export default class Patient extends BaseModel {
@@ -94,8 +99,8 @@ export default class Patient extends BaseModel {
     },
   };
 
-  static async get(patientId: string): Promise<Patient> {
-    const patient = await this.query().findById(patientId);
+  static async get(patientId: string, txn?: Transaction): Promise<Patient> {
+    const patient = await this.query(txn).findById(patientId);
 
     if (!patient) {
       return Promise.reject(`No such patient: ${patientId}`);
@@ -103,11 +108,11 @@ export default class Patient extends BaseModel {
     return patient;
   }
 
-  static async getAll({
-    pageNumber,
-    pageSize,
-  }: IPaginationOptions): Promise<IPaginatedResults<Patient>> {
-    const patientsResult = (await this.query().page(pageNumber, pageSize)) as any;
+  static async getAll(
+    { pageNumber, pageSize }: IPaginationOptions,
+    txn?: Transaction,
+  ): Promise<IPaginatedResults<Patient>> {
+    const patientsResult = (await this.query(txn).page(pageNumber, pageSize)) as any;
 
     return {
       results: patientsResult.results,
@@ -115,18 +120,19 @@ export default class Patient extends BaseModel {
     };
   }
 
-  static async getBy(fieldName: GetByOptions, field?: string): Promise<Patient | null> {
-    if (!field) {
+  static async getBy(input: IGetByOptions, txn?: Transaction): Promise<Patient | null> {
+    if (!input.field) {
       return null;
     }
 
-    const patient = await this.query()
-      .where(fieldName, field)
+    const patient = await this.query(txn)
+      .where(input.fieldName, input.field)
       .first();
 
     if (!patient) {
       return null;
     }
+
     return patient;
   }
 
@@ -153,8 +159,8 @@ export default class Patient extends BaseModel {
     });
   }
 
-  static async edit(patient: IEditPatient, patientId: string): Promise<Patient> {
-    return await this.query().updateAndFetchById(patientId, patient);
+  static async edit(patient: IEditPatient, patientId: string, txn?: Transaction): Promise<Patient> {
+    return await this.query(txn).updateAndFetchById(patientId, patient);
   }
 
   // limit accidentally editing the athenaPatientId by only allowing it explicitly here
@@ -175,15 +181,14 @@ export default class Patient extends BaseModel {
   static async search(
     query: string,
     { pageNumber, pageSize }: IPaginationOptions,
-    userId?: string,
+    userId: string,
+    txn?: Transaction,
   ): Promise<IPaginatedResults<Patient & IPatientSearchResult>> {
-    if (!userId) {
-      return Promise.reject('Must be logged in to search patients');
-    } else if (!query) {
+    if (!query) {
       return Promise.reject('Must provide a search term');
     }
 
-    const patientsResult = (await this.query()
+    const patientsResult = (await this.query(txn)
       .select(
         'patient.*',
         this.raw(

@@ -2,6 +2,7 @@ import * as httpMocks from 'node-mocks-http';
 import { createHmac, pubsubValidator } from '../validator';
 
 describe('validates requests actually come from google', () => {
+  const originalConsoleError = console.error;
   const response = httpMocks.createResponse();
   const next = jest.fn();
   let data: string = '';
@@ -13,12 +14,14 @@ describe('validates requests actually come from google', () => {
     data = `{"patientId":"patient-id","slug":"slug","value":"value","jobId":"job-id","timestamp":"${now}"}`;
     base64Data = new Buffer(data).toString('base64');
     response.sendStatus = jest.fn();
-    response.end = jest.fn();
+    console.error = jest.fn();
+  });
+
+  afterAll(async () => {
+    console.error = originalConsoleError;
   });
 
   it('ends the request if data cannot be parsed', async () => {
-    response.send = jest.fn();
-
     const badData = 'this is not json';
     const encodedBadData = new Buffer(badData).toString('base64');
     const request = httpMocks.createRequest({
@@ -34,7 +37,9 @@ describe('validates requests actually come from google', () => {
       },
     });
     await pubsubValidator(request, response, next);
-    expect(response.send).toBeCalledWith('Problem parsing message data');
+    expect(console.error).toBeCalledWith('Problem parsing message data');
+    expect(response.sendStatus).toBeCalledWith(200);
+    expect(next).not.toBeCalled();
   });
 
   it('ends the request when the hmac is invalid', async () => {
@@ -51,7 +56,8 @@ describe('validates requests actually come from google', () => {
       },
     });
     pubsubValidator(request, response, next);
-    expect(response.end).toBeCalled();
+    expect(console.error).toBeCalledWith('Unauthorized');
+    expect(response.sendStatus).toBeCalledWith(200);
     expect(next).not.toBeCalled();
   });
 
@@ -70,7 +76,7 @@ describe('validates requests actually come from google', () => {
       },
     });
     pubsubValidator(request, response, next);
-    expect(response.end).not.toBeCalled();
+    expect(console.error).not.toBeCalled();
     expect(next).toBeCalled();
   });
 
@@ -89,7 +95,7 @@ describe('validates requests actually come from google', () => {
       },
     });
     pubsubValidator(request, response, next);
-    expect(response.end).not.toBeCalled();
+    expect(console.error).not.toBeCalled();
     expect(request.body.message.data).toMatchObject({
       patientId: 'patient-id',
       slug: 'slug',

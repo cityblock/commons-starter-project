@@ -24,6 +24,7 @@ import { pubsubPushHandler } from '../push-handler';
 import { createHmac } from '../validator';
 
 describe('handling pubusub push events from mixer', () => {
+  const originalConsoleError = console.error;
   const response = httpMocks.createResponse();
   let patient: Patient;
   let user: User;
@@ -40,12 +41,12 @@ describe('handling pubusub push events from mixer', () => {
     riskArea = await createRiskArea({ title: 'testing' });
 
     response.sendStatus = jest.fn();
-    response.end = jest.fn();
-    response.send = jest.fn();
+    console.error = jest.fn();
   });
 
   afterAll(async () => {
     await Db.release();
+    console.error = originalConsoleError;
   });
 
   it('ends the request if data is missing from the request', async () => {
@@ -67,7 +68,8 @@ describe('handling pubusub push events from mixer', () => {
       },
     });
     await pubsubPushHandler(request, response);
-    expect(response.send).toBeCalledWith('Must provide a patientId, slug, value, and jobId');
+    expect(console.error).toBeCalledWith('Must provide a patientId, slug, value, and jobId');
+    expect(response.sendStatus).toBeCalledWith(200);
   });
 
   it('ends the request if a patient cannot be found', async () => {
@@ -90,7 +92,8 @@ describe('handling pubusub push events from mixer', () => {
       },
     });
     await pubsubPushHandler(request, response);
-    expect(response.send).toBeCalledWith('Cannot find patient for id: fake patient id');
+    expect(console.error).toBeCalledWith('Cannot find patient for id: fake patient id');
+    expect(response.sendStatus).toBeCalledWith(200);
   });
 
   it('ends the request if an answer cannot be found for the provided data', async () => {
@@ -133,9 +136,10 @@ describe('handling pubusub push events from mixer', () => {
       },
     });
     await pubsubPushHandler(request, response);
-    expect(response.send).toBeCalledWith(
+    expect(console.error).toBeCalledWith(
       'Cannot find answer for slug: computed-field and value: fake',
     );
+    expect(response.sendStatus).toBeCalledWith(200);
   });
 
   it('records care plan suggestions', async () => {
@@ -202,7 +206,8 @@ describe('handling pubusub push events from mixer', () => {
     const beforeCarePlanSuggestions = await CarePlanSuggestion.getForPatient(patient.id);
     expect(beforeCarePlanSuggestions.length).toEqual(0);
     await pubsubPushHandler(request, response);
-    expect(response.end).toBeCalled();
+    expect(response.sendStatus).toBeCalledWith(200);
+    expect(console.error).not.toBeCalled();
     const carePlanSuggestions = await CarePlanSuggestion.getForPatient(patient.id);
     expect(carePlanSuggestions.length).toEqual(2);
     expect(carePlanSuggestions[0].concern).toMatchObject(concern);

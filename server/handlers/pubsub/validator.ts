@@ -12,6 +12,7 @@ export function createHmac(data: string) {
     .digest('hex');
 }
 
+/* tslint:disable no-console */
 export function pubsubValidator(
   req: express.Request,
   res: express.Response,
@@ -24,7 +25,8 @@ export function pubsubValidator(
   try {
     data = JSON.parse(Buffer.from(req.body.message.data, 'base64').toString('utf-8'));
   } catch (err) {
-    res.status(400).send('Problem parsing message data');
+    console.error('Problem parsing message data');
+    res.sendStatus(200);
     return;
   }
 
@@ -32,17 +34,24 @@ export function pubsubValidator(
     reqHmac = req.body.message.attributes.hmac;
     computedHmac = createHmac(JSON.stringify(data));
   } catch (err) {
-    res.status(401).end();
+    console.error('Unauthorized');
+    res.sendStatus(200);
+    return;
   }
 
   if (!computedHmac || !reqHmac) {
-    res.status(401).end();
+    console.error('Unauthorized');
+    res.sendStatus(200);
+    return;
   }
 
   if (reqHmac === computedHmac) {
     req.body.message.data = data;
     next();
   } else {
-    res.status(401).end();
+    console.error('Unauthorized');
+    res.sendStatus(200);
+    return;
   }
 }
+/* tslint:enable no-console */

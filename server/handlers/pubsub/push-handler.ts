@@ -13,11 +13,13 @@ export interface IPubsubMessageData {
   jobId?: string;
 }
 
+/* tslint:disable no-console */
 export async function pubsubPushHandler(req: express.Request, res: express.Response) {
   const { patientId, slug, value, jobId } = req.body.message.data;
 
   if (!patientId || !slug || !value || !jobId) {
-    res.status(400).send('Must provide a patientId, slug, value, and jobId');
+    console.error('Must provide a patientId, slug, value, and jobId');
+    res.sendStatus(200);
     return;
   }
 
@@ -26,14 +28,16 @@ export async function pubsubPushHandler(req: express.Request, res: express.Respo
   try {
     await Patient.get(patientId);
   } catch (err) {
-    res.status(400).send(`Cannot find patient for id: ${patientId}`);
+    console.error(`Cannot find patient for id: ${patientId}`);
+    res.sendStatus(200);
     return;
   }
 
   const answer = await Answer.getByComputedFieldSlugAndValue({ slug, value });
 
   if (!answer) {
-    res.status(400).send(`Cannot find answer for slug: ${slug} and value: ${value}`);
+    console.error(`Cannot find answer for slug: ${slug} and value: ${value}`);
+    res.sendStatus(200);
     return;
   }
 
@@ -69,9 +73,11 @@ export async function pubsubPushHandler(req: express.Request, res: express.Respo
       );
     });
   } catch (err) {
-    res.status(400).send('Problem recording answer');
+    console.error('Problem recording answer');
+    res.sendStatus(200);
     return;
   }
 
-  res.status(200).end();
+  res.sendStatus(200);
 }
+/* tslint:enable no-console */

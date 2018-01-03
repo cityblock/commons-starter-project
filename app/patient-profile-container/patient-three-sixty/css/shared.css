@@ -7,10 +7,15 @@
 .scroll,
 .body,
 .bodyFlex {
+  background: var(--gray-background-color);
+}
+
+.scroll,
+.body,
+.domains {
   height: calc(100vh);
   overflow-y: scroll;
   -webkit-overflow-scrolling: touch;
-  background: var(--gray-background-color);
 }
 
 .body,
@@ -18,7 +23,8 @@
   padding: 0 var(--medium-gutter);
 }
 
-.bodyFlex {
+.bodyFlex,
+.flex {
   display: flex;
   justify-content: space-between;
 }

@@ -1,7 +1,8 @@
 import { shallow } from 'enzyme';
 import * as React from 'react';
-import DomainSummaries from '../domain-summaries';
+import DomainSummaries, { LoadableThreeSixtyRadar } from '../domain-summaries';
 import DomainSummary from '../domain-summary';
+import { IProps } from '../three-sixty-radar/three-sixty-radar';
 
 describe('Patient 360 Domain Summaries', () => {
   const patientId = 'sansaStark';
@@ -9,37 +10,48 @@ describe('Patient 360 Domain Summaries', () => {
   const id1 = 'nymeria';
   const id2 = 'ghost';
   const id3 = 'greyWind';
+  const score1 = {
+    forceHighRisk: true,
+    totalScore: 0,
+  };
+  const score2 = {
+    forceHighRisk: false,
+    totalScore: 9000,
+  };
+  const score3 = {
+    forceHighRisk: false,
+    totalScore: 3,
+  };
 
   const riskAreaGroupScores = {
-    [id1]: {
-      forceHighRisk: true,
-      totalScore: 0,
-    },
-    [id2]: {
-      forceHighRisk: false,
-      totalScore: 9000,
-    },
-    [id3]: {
-      forceHighRisk: false,
-      totalScore: 3,
-    },
+    [id1]: score1,
+    [id2]: score2,
+    [id3]: score3,
+  };
+
+  const title1 = 'Robb Stark\'s Direwolf';
+  const title2 = 'Sansa Stark\'s Direwolf';
+  const title3 = 'Arya Stark\'s Direwolf';
+  const riskThresholds = {
+    mediumRiskThreshold: 4,
+    highRiskThreshold: 8,
   };
 
   const riskAreaGroups = [
     {
       id: id1,
-      mediumRiskThreshold: 4,
-      highRiskThreshold: 8,
+      title: title1,
+      ...riskThresholds,
     },
     {
       id: id2,
-      mediumRiskThreshold: 4,
-      highRiskThreshold: 8,
+      title: title2,
+      ...riskThresholds,
     },
     {
       id: id3,
-      mediumRiskThreshold: 4,
-      highRiskThreshold: 8,
+      title: title3,
+      ...riskThresholds,
     },
   ] as any;
 
@@ -132,5 +144,29 @@ describe('Patient 360 Domain Summaries', () => {
         .at(2)
         .props().risk,
     ).toBe('low');
+  });
+
+  it('renders three sixty radar chart', () => {
+    wrapper.setState({ ...riskAreaGroupScores });
+
+    const radar = wrapper.find<IProps>(LoadableThreeSixtyRadar);
+    expect(radar.length).toBe(1);
+    expect(radar.props().riskAreaGroups).toEqual([
+      {
+        ...score1,
+        ...riskThresholds,
+        title: title1,
+      },
+      {
+        ...score2,
+        ...riskThresholds,
+        title: title2,
+      },
+      {
+        ...score3,
+        ...riskThresholds,
+        title: title3,
+      },
+    ]);
   });
 });

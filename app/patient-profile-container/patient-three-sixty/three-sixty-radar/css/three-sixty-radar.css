@@ -1,0 +1,10 @@
+@import '../../../../shared/css/sizes';
+
+.container {
+  background: var(--white-color);
+  border-radius: var(--big-border-radius);
+  width: calc(50% - 10px);
+  margin-top: var(--small-gutter);
+  padding: var(--small-gutter);
+  height: 100%;
+}

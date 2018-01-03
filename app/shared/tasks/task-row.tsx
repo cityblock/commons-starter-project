@@ -75,6 +75,7 @@ export const TaskRow: React.StatelessComponent<IProps> = (props: IProps) => {
     </FormattedMessage>
   );
 
+  // Note: onClick to stop propagation because otherwise would close task pane
   return (
     <Link className={taskClass} to={`${routeBase}/${task.id}`} onClick={e => e.stopPropagation()}>
       <div className={styles.title}>{task.title}</div>

@@ -3,6 +3,7 @@ import * as React from 'react';
 import Spinner from '../../../shared/library/spinner/spinner';
 import UnderlineTab from '../../../shared/library/underline-tab/underline-tab';
 import UnderlineTabs from '../../../shared/library/underline-tabs/underline-tabs';
+import { riskAreaGroup } from '../../../shared/util/test-data';
 import DomainSummaries from '../domain-summaries';
 import { PatientThreeSixtyDomains } from '../patient-three-sixty-domains';
 import PatientThreeSixtyHistory from '../patient-three-sixty-history';
@@ -15,7 +16,7 @@ describe('Patient 360 Domains Component', () => {
     <PatientThreeSixtyDomains
       patientId={patientId}
       routeBase={routeBase}
-      riskAreaGroups={[]}
+      riskAreaGroups={[riskAreaGroup]}
       history={false}
     />,
   );
@@ -44,14 +45,13 @@ describe('Patient 360 Domains Component', () => {
   });
 
   it('renders body container', () => {
-    expect(wrapper.find('.bodyFlex').length).toBe(1);
+    expect(wrapper.find('.body').length).toBe(1);
   });
 
   it('renders domain summaries', () => {
     expect(wrapper.find(DomainSummaries).length).toBe(1);
     expect(wrapper.find(DomainSummaries).props().patientId).toBe(patientId);
     expect(wrapper.find(DomainSummaries).props().routeBase).toBe(routeBase);
-    expect(wrapper.find(DomainSummaries).props().riskAreaGroups).toEqual([]);
   });
 
   it('renders history tab if on history route', () => {

@@ -63,9 +63,8 @@ export class DomainSummary extends React.Component<allProps, IState> {
 
   updateRiskAreaGroupScore(riskAreaGroup: RiskAreaGroup): void {
     const { updateRiskAreaGroupScore } = this.props;
-    let totalScore = 0;
+    let totalScore: number | null = null;
     let forceHighRisk = false;
-    let answered = false;
     const automatedSummaryText: string[] = [];
     const manualSummaryText: string[] = [];
     let lastUpdated = '';
@@ -76,30 +75,36 @@ export class DomainSummary extends React.Component<allProps, IState> {
       area.questions!.forEach(question => {
         question.answers!.forEach(answer => {
           if (answer.patientAnswers && answer.patientAnswers.length) {
-            // TODO: Change to a loop once radar merged in
-            answered = true;
-            const updatedAt = answer.patientAnswers[0].updatedAt;
-            if (!lastUpdated || isAfter(updatedAt, lastUpdated)) {
-              lastUpdated = updatedAt;
-            }
+            answer.patientAnswers.forEach(patientAnswer => {
+              if (totalScore === null) totalScore = 0;
 
-            if (answer.riskAdjustmentType === 'forceHighRisk') {
-              forceHighRisk = true;
-            } else if (answer.riskAdjustmentType === 'increment') {
-              totalScore++;
-            }
+              const updatedAt = patientAnswer.updatedAt;
+              if (!lastUpdated || isAfter(updatedAt, lastUpdated)) {
+                lastUpdated = updatedAt;
+              }
 
-            if (answer.inSummary && answer.summaryText && area.assessmentType === 'automated') {
-              automatedSummaryText.push(answer.summaryText);
-            } else if (answer.inSummary && answer.summaryText && area.assessmentType === 'manual') {
-              manualSummaryText.push(answer.summaryText);
-            }
+              if (answer.riskAdjustmentType === 'forceHighRisk') {
+                forceHighRisk = true;
+              } else if (answer.riskAdjustmentType === 'increment') {
+                totalScore++;
+              }
+
+              if (answer.inSummary && answer.summaryText && area.assessmentType === 'automated') {
+                automatedSummaryText.push(answer.summaryText);
+              } else if (
+                answer.inSummary &&
+                answer.summaryText &&
+                area.assessmentType === 'manual'
+              ) {
+                manualSummaryText.push(answer.summaryText);
+              }
+            });
           }
         });
       });
     });
 
-    if (answered) updateRiskAreaGroupScore(riskAreaGroup.id, { totalScore, forceHighRisk });
+    updateRiskAreaGroupScore(riskAreaGroup.id, { totalScore, forceHighRisk });
     this.setState({ automatedSummaryText, manualSummaryText, lastUpdated });
   }
 

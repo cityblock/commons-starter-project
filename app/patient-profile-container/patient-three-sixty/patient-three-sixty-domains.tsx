@@ -26,18 +26,18 @@ interface IGraphqlProps {
 type allProps = IGraphqlProps & IProps;
 
 export interface IRiskAreaGroupScore {
-  totalScore: number;
+  totalScore: number | null;
   forceHighRisk: boolean;
 }
 
 export const PatientThreeSixtyDomains: React.StatelessComponent<allProps> = (props: allProps) => {
   const { patientId, routeBase, riskAreaGroups, riskAreaGroupsLoading, history } = props;
-  if (riskAreaGroupsLoading) return <Spinner className={styles.spinner} />;
+  if (riskAreaGroupsLoading) return <Spinner />;
 
   const body = history ? (
     <PatientThreeSixtyHistory patientId={patientId} />
   ) : (
-    <div className={styles.domains}>
+    <div>
       <DomainSummaries
         patientId={patientId}
         routeBase={routeBase}
@@ -56,7 +56,7 @@ export const PatientThreeSixtyDomains: React.StatelessComponent<allProps> = (pro
           href={`${routeBase}/${HISTORY_ROUTE}`}
         />
       </UnderlineTabs>
-      <div className={styles.bodyFlex}>{body}</div>
+      <div className={styles.body}>{body}</div>
     </div>
   );
 };

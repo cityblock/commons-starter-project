@@ -53,4 +53,16 @@ describe('Library TextArea Component', () => {
     expect(wrapper.find('textarea').props().onBlur).toBe(onBlur);
     expect(wrapper.find('textarea').props().onFocus).toBe(onFocus);
   });
+
+  it('disables textarea if specified', () => {
+    const wrapper = shallow(<TextArea value={value} onChange={onChange} disabled={true} />);
+
+    expect(wrapper.find('textarea').props().disabled).toBeTruthy();
+    expect(wrapper.find('textarea').props().className).toBe('textarea disabled');
+  });
+
+  it('applies small styles if specified', () => {
+    const wrapper = shallow(<TextArea value={value} onChange={onChange} small={true} />);
+    expect(wrapper.find('textarea').props().className).toBe('textarea small');
+  });
 });

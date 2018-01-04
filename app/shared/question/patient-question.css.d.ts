@@ -8,6 +8,3 @@ export const noBottomPadding: string;
 export const questionHistory: string;
 export const questionHistoryLabel: string;
 export const questionHistoryText: string;
-export const select: string;
-export const disabled: string;
-export const textArea: string;

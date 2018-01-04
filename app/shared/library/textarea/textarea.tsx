@@ -8,14 +8,34 @@ interface IProps {
   onChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
   placeholderMessageId?: string; // optional placeholderMessageId text for empty field
   className?: string; // optional styles to apply over defaults
+  disabled?: boolean;
+  small?: boolean; // if specified will start height at 50px
   id?: string; // optional id field for input, likely use with label
   onBlur?: () => void;
   onFocus?: () => void;
 }
 
 const TextArea: React.StatelessComponent<IProps> = (props: IProps) => {
-  const { value, onChange, className, placeholderMessageId, onBlur, onFocus, id } = props;
-  const textareaStyles = classNames(styles.textarea, className);
+  const {
+    value,
+    onChange,
+    className,
+    disabled,
+    small,
+    placeholderMessageId,
+    onBlur,
+    onFocus,
+    id,
+  } = props;
+
+  const textareaStyles = classNames(
+    styles.textarea,
+    {
+      [styles.small]: !!small,
+      [styles.disabled]: !!disabled,
+    },
+    className,
+  );
 
   if (placeholderMessageId) {
     return (
@@ -26,6 +46,7 @@ const TextArea: React.StatelessComponent<IProps> = (props: IProps) => {
             onChange={onChange}
             placeholder={message}
             className={textareaStyles}
+            disabled={disabled}
             onBlur={onBlur}
             onFocus={onFocus}
             id={id || ''}
@@ -40,6 +61,7 @@ const TextArea: React.StatelessComponent<IProps> = (props: IProps) => {
       value={value}
       onChange={onChange}
       className={textareaStyles}
+      disabled={disabled}
       onBlur={onBlur}
       onFocus={onFocus}
       id={id || ''}

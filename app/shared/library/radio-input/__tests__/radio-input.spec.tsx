@@ -41,5 +41,6 @@ describe('Library Radio Input Component', () => {
   it('removes enabled styles if disabled', () => {
     wrapper.setProps({ disabled: true, checked: false });
     expect(wrapper.find('div').props().className).toBe('container');
+    expect(wrapper.find('input').props().disabled).toBeTruthy();
   });
 });

@@ -1,8 +1,7 @@
 import { debounce } from 'lodash-es';
 import * as React from 'react';
 import { FullQuestionFragment } from '../../graphql/types';
-import * as formStyles from '../css/forms.css';
-import * as styles from './patient-question.css';
+import TextArea from '../../shared/library/textarea/textarea';
 
 interface IProps {
   editable: boolean;
@@ -58,16 +57,13 @@ export default class FreeTextAnswer extends React.Component<IProps, IState> {
     const answer = answers[0];
     if (answer) {
       return (
-        <div className={styles.questionBody}>
-          <div className={styles.textArea}>
-            <textarea
-              disabled={!editable}
-              value={this.state.text}
-              onChange={this.onChange}
-              className={formStyles.textarea}
-            />
-          </div>
-        </div>
+        <TextArea
+          value={this.state.text}
+          onChange={this.onChange}
+          disabled={!editable}
+          placeholderMessageId="textarea.default"
+          small={true}
+        />
       );
     } else {
       return null;

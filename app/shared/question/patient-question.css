@@ -70,33 +70,3 @@
 .questionHistoryLabel {
   margin-right: 5px;
 }
-
-select.select {
-  width: 50%;
-  border-radius: 4px;
-  transition: color 0.2s linear;
-}
-
-.question.disabled select.select {
-  background-size: 12px;
-  background-image: url('../../assets/down-arrow-grey.svg');
-}
-
-.textArea {
-  height: 50px;
-}
-
-.textArea textarea {
-  resize: none;
-  border: 1px solid var(--border-color);
-  border-radius: 4px;
-  padding: 15px var(--small-gutter);
-  height: 50px;
-  font-family: var(--roboto);
-  font-size: var(--default-font-size);
-  line-height: var(--medium-font-line-height);
-}
-
-.question.disabled .textArea textarea {
-  color: var(--light-gray-font-color);
-}

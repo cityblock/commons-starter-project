@@ -251,6 +251,7 @@ export const ENGLISH_TRANSLATION = {
     'taskPriority.medium': 'Medium priority',
     'taskPriority.high': 'High priority',
     'taskPriority.select': 'Select priority',
+    'textarea.default': 'Enter response...',
     'threeSixty.automated': 'Automated Assessments:',
     'threeSixty.automatedDetail': 'Automated Assessments',
     'threeSixty.automatedEmpty': 'There are no automated assessments on record',

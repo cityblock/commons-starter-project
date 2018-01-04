@@ -39,7 +39,6 @@ export default class PatientQuestion extends React.Component<IProps, {}> {
   render() {
     const {
       question,
-      editable,
       answerData,
       visible,
       displayHamburger,
@@ -60,7 +59,6 @@ export default class PatientQuestion extends React.Component<IProps, {}> {
     }
 
     const questionStyles = classNames(styles.question, {
-      [styles.disabled]: !editable,
       [styles.highRiskAnswer]: highRiskAnswer,
       [styles.hidden]: !visible,
     });

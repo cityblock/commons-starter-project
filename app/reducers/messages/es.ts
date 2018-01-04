@@ -258,6 +258,7 @@ export const SPANISH_TRANSLATION = {
     'taskCreate.titlePlaceholder': 'Introduzca el título de la tarea...',
     'taskComment.activity': 'Actividad y comentarios',
     'taskComment.error': 'Error al agregar comentario',
+    'textarea.default': 'Ingrese respuesta...',
     'notifications.leftPane': 'Panel izquierdo',
     'threeSixty.automated': 'Evaluaciones automatizadas:',
     'threeSixty.automatedDetail': 'Evaluaciones automatizadas',

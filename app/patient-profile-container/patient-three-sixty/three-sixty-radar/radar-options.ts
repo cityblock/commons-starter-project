@@ -5,7 +5,7 @@ const lightGray = '#f2f2f2';
 const gray = '#e6e6e6';
 const radarColor = 'rgba(204, 204, 204, 0.5)';
 const fontFamily = "'Roboto', Helvetica, sans-serif";
-const fontSize = 11;
+const fontSize = 10;
 const pointRadius = 5;
 
 // for point styling - chart values range from 0 to 6, with 1, 3, and 5 corresponding to

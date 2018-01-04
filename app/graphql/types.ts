@@ -2908,6 +2908,10 @@ export interface getRiskAreaGroupForPatientQuery {
           } > | null,
         } > | null,
       } >,
+      riskAreaAssessmentSubmissions:  Array< {
+        id: string,
+        createdAt: string,
+      } >,
       screeningTools:  Array< {
         id: string,
         title: string,
@@ -7870,6 +7874,10 @@ export interface FullRiskAreaForPatientFragment {
         answerValue: string,
       } > | null,
     } > | null,
+  } >,
+  riskAreaAssessmentSubmissions:  Array< {
+    id: string,
+    createdAt: string,
   } >,
   screeningTools:  Array< {
     id: string,

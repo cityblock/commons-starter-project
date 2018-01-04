@@ -104,10 +104,13 @@ describe('risk area group model', () => {
       );
 
       const response = await RiskAreaGroup.getForPatient(riskAreaGroup.id, patient.id, txn);
+
       expect(response.riskAreas.length).toBe(2);
       expect(response.riskAreas[0].title).toBe(riskAreaTitle);
       expect(response.riskAreas[0].assessmentType).toBe('manual');
       expect(response.riskAreas[0].questions.length).toBe(3);
+      expect(response.riskAreas[0].riskAreaAssessmentSubmissions.length).toBe(1);
+      expect(response.riskAreas[0].riskAreaAssessmentSubmissions[0].patientId).toBe(patient.id);
       expect(response.riskAreas[0].screeningTools.length).toBe(1);
       expect(response.riskAreas[0].screeningTools[0].patientScreeningToolSubmissions.length).toBe(
         1,

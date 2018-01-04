@@ -37,13 +37,7 @@ export default class PatientQuestion extends React.Component<IProps, {}> {
   };
 
   render() {
-    const {
-      question,
-      answerData,
-      visible,
-      displayHamburger,
-      patientAnswerIds,
-    } = this.props;
+    const { question, answerData, visible, displayHamburger, patientAnswerIds } = this.props;
 
     let highRiskAnswer: boolean = false;
 

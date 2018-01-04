@@ -4,6 +4,7 @@ import { IRiskAreaStatistic, IRiskAreaSummary, IThreeSixtySummary } from 'schema
 import BaseModel from './base-model';
 import PatientAnswer from './patient-answer';
 import Question from './question';
+import RiskAreaAssessmentSubmission from './risk-area-assessment-submission';
 import RiskAreaGroup from './risk-area-group';
 import ScreeningTool from './screening-tool';
 
@@ -37,6 +38,7 @@ export default class RiskArea extends BaseModel {
   order: number;
   mediumRiskThreshold: number;
   highRiskThreshold: number;
+  riskAreaAssessmentSubmissions: RiskAreaAssessmentSubmission[];
   screeningTools: ScreeningTool[];
 
   static tableName = 'risk_area';
@@ -70,6 +72,14 @@ export default class RiskArea extends BaseModel {
       join: {
         from: 'risk_area.riskAreaGroupId',
         to: 'risk_area_group.id',
+      },
+    },
+    riskAreaAssessmentSubmissions: {
+      relation: Model.HasManyRelation,
+      modelClass: 'risk-area-assessment-submission',
+      join: {
+        from: 'risk_area.id',
+        to: 'risk_area_assessment_submission.riskAreaId',
       },
     },
     screeningTools: {

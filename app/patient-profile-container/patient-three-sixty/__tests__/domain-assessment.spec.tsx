@@ -1,14 +1,33 @@
 import { shallow } from 'enzyme';
 import * as React from 'react';
-import { FormattedMessage } from 'react-intl';
 import { Link } from 'react-router-dom';
 import DateInfo from '../../../shared/library/date-info/date-info';
-import SmallText from '../../../shared/library/small-text/small-text';
-import { riskArea } from '../../../shared/util/test-data';
+import {
+  answer,
+  patientAnswer,
+  question,
+  riskArea as rawRiskArea,
+  riskAreaAssessmentSubmission,
+} from '../../../shared/util/test-data';
 import DomainAssessment from '../domain-assessment';
 
 describe('Patient 360 Domain Assessment List Item', () => {
   const routeBase = '/winterfell';
+  const riskArea = {
+    ...rawRiskArea,
+    questions: [
+      {
+        ...question,
+        answers: [
+          {
+            ...answer,
+            patientAnswers: [patientAnswer],
+          },
+        ],
+      },
+    ],
+    riskAreaAssessmentSubmissions: [riskAreaAssessmentSubmission],
+  };
 
   const wrapper = shallow(
     <DomainAssessment
@@ -34,35 +53,13 @@ describe('Patient 360 Domain Assessment List Item', () => {
     expect(wrapper.find('h2').text()).toBe(riskArea.title);
   });
 
-  it('renders not completed summary if not completed', () => {
-    expect(wrapper.find(FormattedMessage).length).toBe(1);
-    expect(wrapper.find(FormattedMessage).props().id).toBe('threeSixty.notCompleted');
-  });
-
-  it('renders not completed date text', () => {
-    expect(wrapper.find(SmallText).length).toBe(1);
-    expect(wrapper.find(SmallText).props().messageId).toBe('threeSixty.notCompletedShort');
-  });
-
-  const createdAt = 'createdAt';
-  const updatedAt = 'updatedAt';
-  const summaryText = 'Lady of Winterfell';
-
   it('applies border styles if answered', () => {
-    wrapper.setState({
-      forceHighRisk: true,
-      summaryText: [summaryText],
-      started: createdAt,
-      lastUpdated: updatedAt,
-      totalScore: 0,
-    });
-
     expect(
       wrapper
         .find('div')
         .at(0)
         .props().className,
-    ).toBe('container redBorder');
+    ).toBe('container greenBorder');
   });
 
   it('renders dates for creation and update', () => {
@@ -78,7 +75,7 @@ describe('Patient 360 Domain Assessment List Item', () => {
         .find(DateInfo)
         .at(0)
         .props().date,
-    ).toBe(createdAt);
+    ).toBe(riskAreaAssessmentSubmission.createdAt);
     expect(
       wrapper
         .find(DateInfo)
@@ -90,12 +87,12 @@ describe('Patient 360 Domain Assessment List Item', () => {
         .find(DateInfo)
         .at(1)
         .props().date,
-    ).toBe(updatedAt);
+    ).toBe(patientAnswer.updatedAt);
   });
 
   it('renders summary text', () => {
     expect(wrapper.find('.detail').length).toBe(1);
-    expect(wrapper.find('.detail').text()).toBe(summaryText);
+    expect(wrapper.find('.detail').text()).toBe(answer.summaryText);
   });
 
   it('renders nothing if suppressed', () => {

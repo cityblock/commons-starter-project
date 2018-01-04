@@ -6,6 +6,7 @@ import { Link } from 'react-router-dom';
 import { FullRiskAreaForPatientFragment } from '../../graphql/types';
 import DateInfo from '../../shared/library/date-info/date-info';
 import SmallText from '../../shared/library/small-text/small-text';
+import TextInfo from '../../shared/library/text-info/text-info';
 import * as styles from './css/domain-assessment.css';
 
 interface IProps {
@@ -15,39 +16,13 @@ interface IProps {
   markAsSuppressed: (riskAreaId: string) => void;
 }
 
-interface IState {
-  started: string;
-  lastUpdated: string;
-  totalScore: number | null;
-  forceHighRisk: boolean;
-  summaryText: string[];
-  calculated: boolean;
-}
-
-class DomainAssessment extends React.Component<IProps, IState> {
-  constructor(props: IProps) {
-    super(props);
-
-    this.state = {
-      started: '',
-      lastUpdated: '',
-      totalScore: null,
-      forceHighRisk: false,
-      summaryText: [],
-      calculated: false,
-    };
-  }
-
-  componentDidMount(): void {
-    if (!this.state.calculated) {
-      this.calculateSummaryStats();
-    }
-  }
-
-  calculateSummaryStats(): void {
+class DomainAssessment extends React.Component<IProps> {
+  calculateSummaryStats() {
     const { riskArea, markAsSuppressed } = this.props;
-    let { started, lastUpdated, totalScore, forceHighRisk } = this.state;
-    const { summaryText } = this.state;
+    let lastUpdated = '';
+    let totalScore: number | null = null;
+    let forceHighRisk = false;
+    const summaryText: string[] = [];
 
     riskArea.questions!.forEach(question => {
       question.answers!.forEach(answer => {
@@ -55,9 +30,6 @@ class DomainAssessment extends React.Component<IProps, IState> {
           answer.patientAnswers.forEach(patientAnswer => {
             if (totalScore === null) totalScore = 0;
 
-            if (!started || isAfter(started, patientAnswer.createdAt)) {
-              started = patientAnswer.createdAt;
-            }
             if (!lastUpdated || isAfter(patientAnswer.updatedAt, lastUpdated)) {
               lastUpdated = patientAnswer.updatedAt;
             }
@@ -97,21 +69,18 @@ class DomainAssessment extends React.Component<IProps, IState> {
       markAsSuppressed(riskArea.id);
     }
 
-    this.setState({
-      started,
-      lastUpdated,
-      totalScore,
-      forceHighRisk,
-      summaryText,
-      calculated: true,
-    });
+    return { lastUpdated, totalScore, forceHighRisk, summaryText };
   }
 
   render(): JSX.Element | null {
     const { routeBase, riskArea, suppressed } = this.props;
     if (suppressed) return null;
 
-    const { started, lastUpdated, totalScore, forceHighRisk, summaryText } = this.state;
+    const { lastUpdated, totalScore, forceHighRisk, summaryText } = this.calculateSummaryStats();
+    const started =
+      riskArea.riskAreaAssessmentSubmissions && riskArea.riskAreaAssessmentSubmissions.length
+        ? riskArea.riskAreaAssessmentSubmissions[0].createdAt
+        : null;
 
     const risk =
       totalScore !== null
@@ -139,9 +108,12 @@ class DomainAssessment extends React.Component<IProps, IState> {
       <SmallText messageId="threeSixty.notCompletedShort" />
     ) : (
       <div className={styles.dates}>
-        {riskArea.assessmentType === 'manual' && (
-          <DateInfo messageId="threeSixty.initialAssessment" date={started} />
-        )}
+        {riskArea.assessmentType === 'manual' &&
+          (started ? (
+            <DateInfo messageId="threeSixty.initialAssessment" date={started} />
+          ) : (
+            <TextInfo messageId="threeSixty.initialAssessment" textMessageId="threeSixty.never" />
+          ))}
         <DateInfo label="updated" date={lastUpdated} className={styles.date} />
       </div>
     );

@@ -28,16 +28,17 @@
 .flex,
 .dates {
   display: flex;
-  align-items: center;
 }
 
 .flex {
   margin-top: var(--extra-small-gutter);
   justify-content: space-between;
+  align-items: flex-end;
 }
 
 .dates {
   justify-content: flex-end;
+  align-items: center;
   min-width: 300px;
 }
 

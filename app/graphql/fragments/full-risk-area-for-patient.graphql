@@ -19,6 +19,10 @@ fragment FullRiskAreaForPatient on RiskAreaForPatient {
       }
     }
   }
+  riskAreaAssessmentSubmissions {
+    id
+    createdAt
+  }
   screeningTools {
     ...FullScreeningToolForPatient
   }

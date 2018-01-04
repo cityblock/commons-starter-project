@@ -268,6 +268,7 @@ export const SPANISH_TRANSLATION = {
     'threeSixty.initialAssessment': 'Evaluación inicial:',
     'threeSixty.manual': 'Evaluaciones manuales:',
     'threeSixty.manualDetail': 'Evaluaciones manuales',
+    'threeSixty.never': 'No presentado',
     'threeSixty.manualEmpty': 'No hay evaluaciones manuales en el registro',
     'threeSixty.noAssessments': 'No hay evaluaciones registradas',
     'threeSixty.notCompleted': 'El miembro no ha completado esta evaluación.',

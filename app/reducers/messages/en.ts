@@ -261,6 +261,7 @@ export const ENGLISH_TRANSLATION = {
     'threeSixty.manual': 'Manual Assessments:',
     'threeSixty.manualDetail': 'Manual Assessments',
     'threeSixty.manualEmpty': 'There are no manual assessments on record',
+    'threeSixty.never': 'Not submitted',
     'threeSixty.noAssessments': 'No assessments on record',
     'threeSixty.notCompleted': 'Member has not completed this assessment.',
     'threeSixty.notCompletedShort': 'Not completed',

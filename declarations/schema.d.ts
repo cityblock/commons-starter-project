@@ -941,6 +941,7 @@ declare module 'schema' {
     mediumRiskThreshold: number;
     highRiskThreshold: number;
     questions: Array<IQuestion>;
+    riskAreaAssessmentSubmissions: Array<IRiskAreaAssessmentSubmission>;
     screeningTools: Array<IScreeningToolForPatient>;
   }
 

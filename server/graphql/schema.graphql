@@ -531,6 +531,7 @@ type RiskAreaForPatient implements uniqueId {
   mediumRiskThreshold: Int!
   highRiskThreshold: Int!
   questions: [Question!]!
+  riskAreaAssessmentSubmissions: [RiskAreaAssessmentSubmission!]!
   screeningTools: [ScreeningToolForPatient!]!
 }
 

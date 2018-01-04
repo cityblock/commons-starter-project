@@ -98,7 +98,7 @@ export default class RiskAreaGroup extends BaseModel {
   ): Promise<RiskAreaGroup> {
     /* tslint:disable:max-line-length */
     const EAGER_QUERY =
-      '[riskAreas.[questions.answers.patientAnswers, screeningTools.[patientScreeningToolSubmissions.[screeningToolScoreRange]]]]';
+      '[riskAreas.[questions.answers.patientAnswers, riskAreaAssessmentSubmissions, screeningTools.[patientScreeningToolSubmissions.[screeningToolScoreRange]]]]';
     /* tslint:enable:max-line-length */
 
     const riskAreaGroup = await this.query(txn)
@@ -115,6 +115,11 @@ export default class RiskAreaGroup extends BaseModel {
       })
       .modifyEager('riskAreas.questions', builder => {
         builder.orderBy('order');
+      })
+      .modifyEager('riskAreas.riskAreaAssessmentSubmissions', builder => {
+        builder
+          .where({ patientId, deletedAt: null })
+          .orderBy('createdAt', 'asc');
       })
       .modifyEager('riskAreas.screeningTools.patientScreeningToolSubmissions', builder => {
         builder

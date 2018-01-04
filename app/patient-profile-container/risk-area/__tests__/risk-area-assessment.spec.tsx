@@ -29,14 +29,50 @@ describe('risk area assessment questions component', () => {
     />,
   );
 
-  it('renders top buttons', () => {
-    expect(wrapper.find('.saveButton').length).toBe(1);
+  it('renders buttons to edit answers and administer tools', () => {
+    expect(wrapper.find(Button).length).toBe(2);
     expect(
       wrapper
         .find(Button)
-        .at(3)
+        .at(0)
+        .props().messageId,
+    ).toBe('riskAreaAssessment.administer');
+    expect(
+      wrapper
+        .find(Button)
+        .at(0)
+        .props().color,
+    ).toBe('white');
+    expect(
+      wrapper
+        .find(Button)
+        .at(1)
         .props().messageId,
     ).toBe('riskAreaAssessment.start');
+  });
+
+  it('renders buttons to save and cancel edits', () => {
+    wrapper.setState({ inProgress: true });
+
+    expect(wrapper.find(Button).length).toBe(2);
+    expect(
+      wrapper
+        .find(Button)
+        .at(0)
+        .props().messageId,
+    ).toBe('riskAreaAssessment.cancel');
+    expect(
+      wrapper
+        .find(Button)
+        .at(0)
+        .props().color,
+    ).toBe('white');
+    expect(
+      wrapper
+        .find(Button)
+        .at(1)
+        .props().messageId,
+    ).toBe('riskAreaAssessment.save');
   });
 
   it('renders questions container', () => {
@@ -45,6 +81,11 @@ describe('risk area assessment questions component', () => {
         .find('.riskAreasPanel')
         .find('Connect(Apollo(Apollo(Apollo(RiskAreaAssessmentQuestions))))').length,
     ).toBe(1);
+  });
+
+  it('renders back link', () => {
+    expect(wrapper.find(BackLink).length).toBe(1);
+    expect(wrapper.find(BackLink).props().href).toBe(`${routeBase}/${riskArea.riskAreaGroup.id}`);
   });
 
   it('does not render computed field flag modal by for manual assessment', () => {
@@ -61,6 +102,6 @@ describe('risk area assessment questions component', () => {
   });
 
   it('hides buttons for automated assessments', () => {
-    expect(wrapper.find('.hidden').length).toBe(4);
+    expect(wrapper.find(Button).length).toBe(0);
   });
 });

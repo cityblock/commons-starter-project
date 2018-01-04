@@ -13,10 +13,10 @@ import {
   FullRiskAreaAssessmentSubmissionFragment,
   FullRiskAreaFragment,
 } from '../../graphql/types';
-import * as sortSearchStyles from '../../shared/css/sort-search.css';
 import BackLink from '../../shared/library/back-link/back-link';
 import Button from '../../shared/library/button/button';
 import Spinner from '../../shared/library/spinner/spinner';
+import UnderlineTabs from '../../shared/library/underline-tabs/underline-tabs';
 import { Popup } from '../../shared/popup/popup';
 import ScreeningToolsPopup from '../screening-tool/screening-tools-popup';
 import ComputedFieldFlagModal from './computed-field-flag-modal';
@@ -153,22 +153,6 @@ export class RiskAreaAssessment extends React.Component<allProps, IState> {
 
     const automatedAssessment = riskArea && riskArea.assessmentType === 'automated';
 
-    const toolsButtonStyles = classNames(styles.toolsButton, {
-      [styles.hidden]: inProgress || automatedAssessment,
-    });
-    const cancelButtonStyles = classNames(styles.cancelButton, {
-      [styles.hidden]: !inProgress || automatedAssessment,
-    });
-    const saveButtonStyles = classNames(styles.saveButton, {
-      [styles.hidden]: !inProgress || automatedAssessment,
-    });
-    const startButtonStyles = classNames({
-      [styles.hidden]: inProgress || automatedAssessment,
-    });
-    const navigationStyles = classNames(sortSearchStyles.sortSearchBar, styles.buttonBar, {
-      [styles.flexEnd]: !automatedAssessment,
-    });
-
     const assessmentHtml = riskArea ? (
       <RiskAreaAssessmentQuestions
         riskArea={riskArea}
@@ -185,43 +169,54 @@ export class RiskAreaAssessment extends React.Component<allProps, IState> {
       : null;
     const popupVisible =
       riskAreaAssessmentSubmission && riskAreaAssessmentSubmission.completedAt ? true : false;
-    const backLink = automatedAssessment ? (
-      <BackLink href={`${routeBase}/${riskArea!.riskAreaGroup.id}`} />
-    ) : null;
 
     if (riskAreaAssessmentSubmissionLoading || loading) {
       return <Spinner />;
     }
-    return (
-      <div>
-        {automatedAssessment && <ComputedFieldFlagModal />}
-        <div className={navigationStyles}>
-          {backLink}
+
+    const navButtons = !automatedAssessment ? (
+      inProgress ? (
+        <div>
           <Button
             color="white"
             messageId="riskAreaAssessment.cancel"
-            className={cancelButtonStyles}
             onClick={this.onCancel}
-          />
-          <Button
-            color="white"
-            messageId="riskAreaAssessment.administer"
-            className={toolsButtonStyles}
-            onClick={this.onClickToSelectScreeningTool}
+            className={classNames(styles.button, styles.marginRight)}
           />
           <Button
             messageId="riskAreaAssessment.save"
-            className={saveButtonStyles}
             onClick={this.onSubmit}
             disabled={loading || !!error}
+            className={styles.button}
+          />
+        </div>
+      ) : (
+        <div>
+          <Button
+            color="white"
+            messageId="riskAreaAssessment.administer"
+            onClick={this.onClickToSelectScreeningTool}
+            className={classNames(styles.button, styles.marginRight)}
           />
           <Button
             messageId="riskAreaAssessment.start"
-            className={startButtonStyles}
             onClick={this.onStart}
             disabled={loading || !!error}
+            className={styles.button}
           />
         </div>
+      )
+    ) : null;
+
+    return (
+      <div>
+        {automatedAssessment && <ComputedFieldFlagModal />}
+        <UnderlineTabs>
+          <div>
+            <BackLink href={`${routeBase}/${riskArea!.riskAreaGroup.id}`} />
+          </div>
+          {navButtons}
+        </UnderlineTabs>
         <div className={styles.riskAreasPanel}>{assessmentHtml}</div>
         <Popup visible={popupVisible} style={'small-padding'}>
           <RiskAreaAssessmentResultsPopup

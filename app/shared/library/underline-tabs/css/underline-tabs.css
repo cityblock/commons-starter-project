@@ -9,6 +9,11 @@
   padding: 0 var(--medium-gutter);
 }
 
+.tabs div {
+  display: flex;
+  align-items: center;
+}
+
 .spaceBetween {
   justify-content: space-between;
 }

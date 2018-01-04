@@ -206,8 +206,8 @@ export const ENGLISH_TRANSLATION = {
     'riskAreaGroup.title': 'Enter domain title',
     'riskAreaAssessment.cancel': 'Cancel',
     'riskAreaAssessment.administer': 'Administer tools',
-    'riskAreaAssessment.save': 'Save updates',
-    'riskAreaAssessment.start': 'Start assessment',
+    'riskAreaAssessment.save': 'Save',
+    'riskAreaAssessment.start': 'Edit answers',
     'riskAreaAssessment.resultsTitle': 'New Care Plan Suggestions',
     'riskAreaAssessment.resultsBody':
       "Based on the results of this assessment, the following have been recommended as additions to the patient's care plan.",

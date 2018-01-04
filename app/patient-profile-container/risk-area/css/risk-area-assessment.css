@@ -1,35 +1,14 @@
 @import '../../../shared/css/sizes';
 
-.buttonBar {
-  display: flex;
-  flex-direction: row;
+.button {
+  width: 185px;
 }
 
-.flexEnd {
-  justify-content: flex-end;
-}
-
-.saveButton {
-  margin-left: 10px;
-}
-
-.cancelButton {
-  padding-top: 8px;
-}
-
-.toolsButton {
-  margin-right: 10px;
-}
-
-.hidden {
-  display: none;
+.marginRight {
+  margin-right: var(--extra-small-gutter);
 }
 
 .riskAreasPanel {
   background-color: var(--gray-background-color);
   padding: 20px var(--medium-gutter);
-}
-
-svg.icon {
-  margin-left: 0;
 }

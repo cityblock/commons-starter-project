@@ -4,7 +4,8 @@ import { FormattedMessage } from 'react-intl';
 import * as styles from './css/form-label.css';
 
 interface IProps {
-  messageId: string;
+  messageId?: string; // use either message id (strongly preferred) or text
+  text?: string;
   htmlFor?: string;
   topPadding?: boolean; // give extra padding on top
   className?: string;
@@ -12,7 +13,7 @@ interface IProps {
 }
 
 const FormLabel: React.StatelessComponent<IProps> = (props: IProps) => {
-  const { messageId, htmlFor, topPadding, className, gray } = props;
+  const { messageId, text, htmlFor, topPadding, className, gray } = props;
   const labelStyles = classNames(
     styles.label,
     {
@@ -22,14 +23,22 @@ const FormLabel: React.StatelessComponent<IProps> = (props: IProps) => {
     className,
   );
 
+  if (messageId) {
+    return (
+      <FormattedMessage id={messageId}>
+        {(message: string) => (
+          <label htmlFor={htmlFor} className={labelStyles}>
+            {message}
+          </label>
+        )}
+      </FormattedMessage>
+    );
+  }
+
   return (
-    <FormattedMessage id={messageId}>
-      {(message: string) => (
-        <label htmlFor={htmlFor} className={labelStyles}>
-          {message}
-        </label>
-      )}
-    </FormattedMessage>
+    <label htmlFor={htmlFor} className={labelStyles}>
+      {text || ''}
+    </label>
   );
 };
 

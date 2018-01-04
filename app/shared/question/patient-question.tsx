@@ -1,6 +1,7 @@
 import * as classNames from 'classnames';
 import * as React from 'react';
 import { FullQuestionFragment } from '../../graphql/types';
+import FormLabel from '../../shared/library/form-label/form-label';
 import * as styles from './patient-question.css';
 import QuestionAnswers from './question-answers';
 import QuestionMenu from './question-menu';
@@ -71,7 +72,7 @@ export default class PatientQuestion extends React.Component<IProps, {}> {
     return (
       <div className={questionStyles}>
         <div className={styles.questionHeader}>
-          <div className={styles.questionTitle}>{question.title}</div>
+          <FormLabel text={question.title} className={styles.questionTitle} />
           {hamburger}
         </div>
         {this.renderAnswers()}

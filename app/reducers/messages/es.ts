@@ -217,6 +217,7 @@ export const SPANISH_TRANSLATION = {
     'riskAreaAssessment.resultsTitle': 'New Care Plan Suggestions',
     'riskAreaAssessment.resultsBody':
       "Based on the results of this assessment, the following have been recommended as additions to the patient's care plan.",
+    'select.default': 'Seleccione uno',
     'settings.heading': 'Ajustes',
     'tasks.assignedToPlaceholder': 'Asignar a',
     'tasks.patientGoalPlaceholder': 'Objetivo del paciente',

@@ -7,13 +7,23 @@ interface IProps {
   onChange: (e?: any) => void;
   children?: any;
   className?: string;
+  disabled?: boolean;
   name?: string;
   required?: boolean;
+  large?: boolean; // makes select 50px tall
 }
 
 const Select: React.StatelessComponent<IProps> = (props: IProps) => {
-  const { value, onChange, className, children, name, required } = props;
-  const selectStyles = classNames(styles.select, className);
+  const { value, onChange, className, children, disabled, name, required, large } = props;
+
+  const selectStyles = classNames(
+    styles.select,
+    {
+      [styles.large]: !!large,
+      [styles.disabled]: !!disabled,
+    },
+    className,
+  );
 
   return (
     <select
@@ -22,6 +32,7 @@ const Select: React.StatelessComponent<IProps> = (props: IProps) => {
       value={value || ''}
       className={selectStyles}
       onChange={onChange}
+      disabled={disabled}
     >
       {children}
     </select>

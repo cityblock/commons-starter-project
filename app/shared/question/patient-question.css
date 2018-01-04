@@ -27,27 +27,17 @@
   margin-bottom: 0;
 }
 
-.questionHeader,
-.questionTitle {
+.questionHeader {
   width: 100%;
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
-}
-
-.questionHeader {
-  align-items: normal;
   margin-bottom: var(--small-gutter);
 }
 
 .questionTitle {
-  color: var(--black-color);
-  font-family: var(--basetica-medium);
-  font-size: var(--default-font-size);
-  line-height: var(--medium-font-line-height);
-  font-weight: var(--roboto-medium-weight);
-  margin-right: var(--gutter);
+  margin-bottom: 0;
 }
 
 .questionBody {
@@ -109,8 +99,4 @@ select.select {
 
 .question.disabled .textArea textarea {
   color: var(--light-gray-font-color);
-}
-
-input[type='radio']:hover {
-  cursor: pointer;
 }

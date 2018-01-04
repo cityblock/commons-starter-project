@@ -255,6 +255,7 @@ exports[`renders answer create-edit 1`] = `
       </div>
       <select
         className="select select inputSmall"
+        disabled={undefined}
         name="riskAdjustmentType"
         onChange={[Function]}
         required={true}

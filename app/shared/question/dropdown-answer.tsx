@@ -1,8 +1,7 @@
-import * as classNames from 'classnames';
 import * as React from 'react';
 import { FullAnswerFragment, FullQuestionFragment } from '../../graphql/types';
-import * as formStyles from '../css/forms.css';
-import * as styles from './patient-question.css';
+import Option from '../../shared/library/option/option';
+import Select from '../../shared/library/select/select';
 
 interface IProps {
   currentAnswer: { id: string; value: string };
@@ -15,22 +14,11 @@ interface IProps {
 }
 
 export default class DropdownAnswer extends React.Component<IProps, {}> {
-  constructor(props: IProps) {
-    super(props);
+  renderDropdownOption = (answer: FullAnswerFragment, index: number) => {
+    return <Option key={`${answer.id}-${index}`} value={answer.id} label={answer.displayValue} />;
+  };
 
-    this.renderDropdownOption = this.renderDropdownOption.bind(this);
-    this.onDropdownChange = this.onDropdownChange.bind(this);
-  }
-
-  renderDropdownOption(answer: FullAnswerFragment, index: number) {
-    return (
-      <option key={`${answer.id}-${index}`} value={answer.id}>
-        {answer.displayValue}
-      </option>
-    );
-  }
-
-  onDropdownChange(id: string) {
+  onDropdownChange = (id: string) => {
     const { question, onChange } = this.props;
 
     const chosenAnswer = (question.answers || []).find(answer => answer.id === id);
@@ -38,26 +26,22 @@ export default class DropdownAnswer extends React.Component<IProps, {}> {
     if (chosenAnswer) {
       onChange(question.id, [{ answerId: chosenAnswer.id, value: chosenAnswer.value }]);
     }
-  }
+  };
 
   render() {
     const { question, currentAnswer, editable } = this.props;
     const answers = question.answers || [];
 
     return (
-      <div className={styles.questionBody}>
-        <select
-          disabled={!editable}
-          value={currentAnswer ? currentAnswer.id : 'Select one'}
-          onChange={event => this.onDropdownChange(event.currentTarget.value)}
-          className={classNames(formStyles.select, styles.select)}
-        >
-          <option value={'Select one'} disabled={true}>
-            Select one
-          </option>
-          {answers.map(this.renderDropdownOption)}
-        </select>
-      </div>
+      <Select
+        value={currentAnswer ? currentAnswer.id : 'Select one'}
+        onChange={event => this.onDropdownChange(event.currentTarget.value)}
+        disabled={!editable}
+        large={true}
+      >
+        <Option messageId="select.default" value="" disabled={true} />
+        {answers.map(this.renderDropdownOption)}
+      </Select>
     );
   }
 }

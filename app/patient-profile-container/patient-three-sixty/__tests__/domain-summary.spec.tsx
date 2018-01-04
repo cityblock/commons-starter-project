@@ -67,6 +67,7 @@ describe('Patient 360 Domain Summary', () => {
       {
         id,
         questions: [],
+        screeningTools: [],
       },
     ] as any;
     wrapper.setProps({ riskAreaGroup: riskAreaGroup2 });

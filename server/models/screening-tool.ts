@@ -1,5 +1,6 @@
 import { Model, RelationMappings, Transaction } from 'objection';
 import BaseModel from './base-model';
+import PatientScreeningToolSubmission from './patient-screening-tool-submission';
 import RiskArea from './risk-area';
 import ScreeningToolScoreRange from './screening-tool-score-range';
 
@@ -23,6 +24,7 @@ export default class ScreeningTool extends BaseModel {
   riskAreaId: string;
   riskArea: RiskArea;
   screeningToolScoreRanges: ScreeningToolScoreRange[];
+  patientScreeningToolSubmissions: PatientScreeningToolSubmission[];
 
   static tableName = 'screening_tool';
 
@@ -50,6 +52,14 @@ export default class ScreeningTool extends BaseModel {
       modelClass: 'screening-tool-score-range',
       join: {
         from: 'screening_tool_score_range.screeningToolId',
+        to: 'screening_tool.id',
+      },
+    },
+    patientScreeningToolSubmissions: {
+      relation: Model.HasManyRelation,
+      modelClass: 'patient-screening-tool-submission',
+      join: {
+        from: 'patient_screening_tool_submission.screeningToolId',
         to: 'screening_tool.id',
       },
     },

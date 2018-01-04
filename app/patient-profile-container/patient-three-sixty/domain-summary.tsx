@@ -102,6 +102,22 @@ export class DomainSummary extends React.Component<allProps, IState> {
           }
         });
       });
+      area.screeningTools.forEach(screeningTool => {
+        screeningTool.patientScreeningToolSubmissions.forEach(submission => {
+          const { screeningToolScoreRange } = submission;
+
+          if (screeningToolScoreRange) {
+            const { riskAdjustmentType } = screeningToolScoreRange;
+
+            if (riskAdjustmentType === 'forceHighRisk') {
+              forceHighRisk = true;
+            } else if (riskAdjustmentType === 'increment') {
+              if (totalScore === null) totalScore = 0;
+              totalScore++;
+            }
+          }
+        });
+      });
     });
 
     updateRiskAreaGroupScore(riskAreaGroup.id, { totalScore, forceHighRisk });

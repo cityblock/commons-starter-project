@@ -2907,8 +2907,27 @@ export interface getRiskAreaGroupForPatientQuery {
             answerValue: string,
           } > | null,
         } > | null,
-      } > | null,
-    } > | null,
+      } >,
+      screeningTools:  Array< {
+        id: string,
+        title: string,
+        patientScreeningToolSubmissions:  Array< {
+          id: string,
+          screeningToolId: string,
+          patientId: string,
+          userId: string,
+          score: number | null,
+          screeningToolScoreRangeId: string | null,
+          screeningToolScoreRange:  {
+            riskAdjustmentType: RiskAdjustmentTypeOptions,
+            description: string,
+          } | null,
+        } >,
+        createdAt: string,
+        updatedAt: string,
+        deletedAt: string | null,
+      } >,
+    } >,
   },
 };
 
@@ -3031,6 +3050,18 @@ export interface getScreeningToolQuery {
         deletedAt: string | null,
       } | null > | null,
     } >,
+    patientScreeningToolSubmissions:  Array< {
+      id: string,
+      screeningToolId: string,
+      patientId: string,
+      userId: string,
+      score: number | null,
+      screeningToolScoreRangeId: string | null,
+      screeningToolScoreRange:  {
+        riskAdjustmentType: RiskAdjustmentTypeOptions,
+        description: string,
+      } | null,
+    } > | null,
     createdAt: string,
     updatedAt: string,
     deletedAt: string | null,
@@ -3100,6 +3131,18 @@ export interface getScreeningToolsForRiskAreaQuery {
         deletedAt: string | null,
       } | null > | null,
     } >,
+    patientScreeningToolSubmissions:  Array< {
+      id: string,
+      screeningToolId: string,
+      patientId: string,
+      userId: string,
+      score: number | null,
+      screeningToolScoreRangeId: string | null,
+      screeningToolScoreRange:  {
+        riskAdjustmentType: RiskAdjustmentTypeOptions,
+        description: string,
+      } | null,
+    } > | null,
     createdAt: string,
     updatedAt: string,
     deletedAt: string | null,
@@ -3165,6 +3208,18 @@ export interface getScreeningToolsQuery {
         deletedAt: string | null,
       } | null > | null,
     } >,
+    patientScreeningToolSubmissions:  Array< {
+      id: string,
+      screeningToolId: string,
+      patientId: string,
+      userId: string,
+      score: number | null,
+      screeningToolScoreRangeId: string | null,
+      screeningToolScoreRange:  {
+        riskAdjustmentType: RiskAdjustmentTypeOptions,
+        description: string,
+      } | null,
+    } > | null,
     createdAt: string,
     updatedAt: string,
     deletedAt: string | null,
@@ -5247,6 +5302,18 @@ export interface screeningToolCreateMutation {
         deletedAt: string | null,
       } | null > | null,
     } >,
+    patientScreeningToolSubmissions:  Array< {
+      id: string,
+      screeningToolId: string,
+      patientId: string,
+      userId: string,
+      score: number | null,
+      screeningToolScoreRangeId: string | null,
+      screeningToolScoreRange:  {
+        riskAdjustmentType: RiskAdjustmentTypeOptions,
+        description: string,
+      } | null,
+    } > | null,
     createdAt: string,
     updatedAt: string,
     deletedAt: string | null,
@@ -5316,6 +5383,18 @@ export interface screeningToolDeleteMutation {
         deletedAt: string | null,
       } | null > | null,
     } >,
+    patientScreeningToolSubmissions:  Array< {
+      id: string,
+      screeningToolId: string,
+      patientId: string,
+      userId: string,
+      score: number | null,
+      screeningToolScoreRangeId: string | null,
+      screeningToolScoreRange:  {
+        riskAdjustmentType: RiskAdjustmentTypeOptions,
+        description: string,
+      } | null,
+    } > | null,
     createdAt: string,
     updatedAt: string,
     deletedAt: string | null,
@@ -5387,6 +5466,18 @@ export interface screeningToolEditMutation {
         deletedAt: string | null,
       } | null > | null,
     } >,
+    patientScreeningToolSubmissions:  Array< {
+      id: string,
+      screeningToolId: string,
+      patientId: string,
+      userId: string,
+      score: number | null,
+      screeningToolScoreRangeId: string | null,
+      screeningToolScoreRange:  {
+        riskAdjustmentType: RiskAdjustmentTypeOptions,
+        description: string,
+      } | null,
+    } > | null,
     createdAt: string,
     updatedAt: string,
     deletedAt: string | null,
@@ -7779,7 +7870,26 @@ export interface FullRiskAreaForPatientFragment {
         answerValue: string,
       } > | null,
     } > | null,
-  } > | null,
+  } >,
+  screeningTools:  Array< {
+    id: string,
+    title: string,
+    patientScreeningToolSubmissions:  Array< {
+      id: string,
+      screeningToolId: string,
+      patientId: string,
+      userId: string,
+      score: number | null,
+      screeningToolScoreRangeId: string | null,
+      screeningToolScoreRange:  {
+        riskAdjustmentType: RiskAdjustmentTypeOptions,
+        description: string,
+      } | null,
+    } >,
+    createdAt: string,
+    updatedAt: string,
+    deletedAt: string | null,
+  } >,
 };
 
 export interface FullRiskAreaGroupFragment {
@@ -7818,6 +7928,26 @@ export interface FullRiskAreaFragment {
 export interface FullRiskScoreFragment {
   score: number,
   forceHighRisk: boolean,
+};
+
+export interface FullScreeningToolForPatientFragment {
+  id: string,
+  title: string,
+  patientScreeningToolSubmissions:  Array< {
+    id: string,
+    screeningToolId: string,
+    patientId: string,
+    userId: string,
+    score: number | null,
+    screeningToolScoreRangeId: string | null,
+    screeningToolScoreRange:  {
+      riskAdjustmentType: RiskAdjustmentTypeOptions,
+      description: string,
+    } | null,
+  } >,
+  createdAt: string,
+  updatedAt: string,
+  deletedAt: string | null,
 };
 
 export interface FullScreeningToolScoreRangeFragment {
@@ -7916,6 +8046,18 @@ export interface FullScreeningToolFragment {
       deletedAt: string | null,
     } | null > | null,
   } >,
+  patientScreeningToolSubmissions:  Array< {
+    id: string,
+    screeningToolId: string,
+    patientId: string,
+    userId: string,
+    score: number | null,
+    screeningToolScoreRangeId: string | null,
+    screeningToolScoreRange:  {
+      riskAdjustmentType: RiskAdjustmentTypeOptions,
+      description: string,
+    } | null,
+  } > | null,
   createdAt: string,
   updatedAt: string,
   deletedAt: string | null,
@@ -8094,6 +8236,19 @@ export interface ShortPatientScreeningToolSubmission360Fragment {
     id: string,
     description: string,
     riskAdjustmentType: RiskAdjustmentTypeOptions,
+  } | null,
+};
+
+export interface ShortPatientScreeningToolSubmissionFragment {
+  id: string,
+  screeningToolId: string,
+  patientId: string,
+  userId: string,
+  score: number | null,
+  screeningToolScoreRangeId: string | null,
+  screeningToolScoreRange:  {
+    riskAdjustmentType: RiskAdjustmentTypeOptions,
+    description: string,
   } | null,
 };
 

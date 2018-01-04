@@ -1,0 +1,12 @@
+fragment ShortPatientScreeningToolSubmission on PatientScreeningToolSubmission {
+  id
+  screeningToolId
+  patientId
+  userId
+  score
+  screeningToolScoreRangeId
+  screeningToolScoreRange {
+    riskAdjustmentType
+    description
+  }
+}

@@ -1,4 +1,6 @@
-fragment FullRiskAreaForPatient on RiskArea {
+#import "./full-screening-tool-for-patient.graphql"
+
+fragment FullRiskAreaForPatient on RiskAreaForPatient {
   id
   title
   assessmentType
@@ -16,5 +18,8 @@ fragment FullRiskAreaForPatient on RiskArea {
         answerValue
       }
     }
+  }
+  screeningTools {
+    ...FullScreeningToolForPatient
   }
 }

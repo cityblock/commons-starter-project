@@ -5,6 +5,7 @@ import BaseModel from './base-model';
 import PatientAnswer from './patient-answer';
 import Question from './question';
 import RiskAreaGroup from './risk-area-group';
+import ScreeningTool from './screening-tool';
 
 interface IRiskAreaEditableFields {
   title: string;
@@ -36,6 +37,7 @@ export default class RiskArea extends BaseModel {
   order: number;
   mediumRiskThreshold: number;
   highRiskThreshold: number;
+  screeningTools: ScreeningTool[];
 
   static tableName = 'risk_area';
 
@@ -68,6 +70,14 @@ export default class RiskArea extends BaseModel {
       join: {
         from: 'risk_area.riskAreaGroupId',
         to: 'risk_area_group.id',
+      },
+    },
+    screeningTools: {
+      relation: Model.HasManyRelation,
+      modelClass: 'screening-tool',
+      join: {
+        from: 'screening_tool.riskAreaId',
+        to: 'risk_area.id',
       },
     },
   };

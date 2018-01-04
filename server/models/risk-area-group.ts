@@ -96,7 +96,10 @@ export default class RiskAreaGroup extends BaseModel {
     patientId: string,
     txn?: Transaction,
   ): Promise<RiskAreaGroup> {
-    const EAGER_QUERY = '[riskAreas.questions.answers.patientAnswers]';
+    /* tslint:disable:max-line-length */
+    const EAGER_QUERY =
+      '[riskAreas.[questions.answers.patientAnswers, screeningTools.[patientScreeningToolSubmissions.[screeningToolScoreRange]]]]';
+    /* tslint:enable:max-line-length */
 
     const riskAreaGroup = await this.query(txn)
       .eager(EAGER_QUERY)
@@ -113,11 +116,19 @@ export default class RiskAreaGroup extends BaseModel {
       .modifyEager('riskAreas.questions', builder => {
         builder.orderBy('order');
       })
+      .modifyEager('riskAreas.screeningTools.patientScreeningToolSubmissions', builder => {
+        builder
+          .where({ patientId, deletedAt: null })
+          .whereNot({ scoredAt: null, score: null })
+          .orderBy('scoredAt', 'desc')
+          .limit(1);
+      })
       .findById(riskAreaGroupId);
 
     if (!riskAreaGroup) {
       return Promise.reject(`No such risk area group: ${riskAreaGroupId}`);
     }
+
     return riskAreaGroup;
   }
 }

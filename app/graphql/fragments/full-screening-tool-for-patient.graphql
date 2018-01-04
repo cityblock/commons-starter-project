@@ -1,0 +1,12 @@
+#import "./short-patient-screening-tool-submission.graphql"
+
+fragment FullScreeningToolForPatient on ScreeningToolForPatient {
+  id
+  title
+  patientScreeningToolSubmissions {
+    ...ShortPatientScreeningToolSubmission
+  }
+  createdAt
+  updatedAt
+  deletedAt
+}

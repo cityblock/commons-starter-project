@@ -13,10 +13,13 @@ import CareTeam from './models/care-team';
 import Patient, { IPatientEditableFields } from './models/patient';
 import PatientAnswer from './models/patient-answer';
 import PatientAnswerEvent from './models/patient-answer-event';
+import PatientScreeningToolSubmission from './models/patient-screening-tool-submission';
 import Question from './models/question';
 import RiskArea from './models/risk-area';
 import RiskAreaAssessmentSubmission from './models/risk-area-assessment-submission';
 import RiskAreaGroup from './models/risk-area-group';
+import ScreeningTool from './models/screening-tool';
+import ScreeningToolScoreRange from './models/screening-tool-score-range';
 import { UserRole } from './models/user';
 
 export interface ICreatePatient extends IPatientEditableFields {
@@ -396,6 +399,89 @@ export async function createFullRiskAreaGroupAssociations(
       userId,
       riskAreaId: riskArea.id,
     },
+    txn,
+  );
+  const screeningTool = await ScreeningTool.create(
+    {
+      title: 'Screening Tool Title',
+      riskAreaId: riskArea.id,
+    },
+    txn,
+  );
+  await ScreeningToolScoreRange.create(
+    {
+      screeningToolId: screeningTool.id,
+      description: 'Score Range Description',
+      minimumScore: 1,
+      maximumScore: 5,
+      riskAdjustmentType: 'increment',
+    },
+    txn,
+  );
+  const screeningToolQuestion = await Question.create(
+    {
+      title: 'screening tool says what?',
+      answerType: 'dropdown',
+      screeningToolId: screeningTool.id,
+      type: 'screeningTool',
+      order: 1,
+    },
+    txn,
+  );
+  await Answer.create(
+    {
+      displayValue: 'screening tool says answer 1',
+      value: '0',
+      valueType: 'number',
+      riskAdjustmentType: 'inactive',
+      inSummary: false,
+      questionId: screeningToolQuestion.id,
+      order: 1,
+    },
+    txn,
+  );
+  const screeningToolAnswer2 = await Answer.create(
+    {
+      displayValue: 'screening tool says answer 2',
+      value: '1',
+      valueType: 'number',
+      riskAdjustmentType: 'inactive',
+      inSummary: false,
+      questionId: screeningToolQuestion.id,
+      order: 2,
+    },
+    txn,
+  );
+  const patientScreeningToolSubmission = await PatientScreeningToolSubmission.create(
+    {
+      screeningToolId: screeningTool.id,
+      patientId,
+      userId,
+    },
+    txn,
+  );
+  const screeningToolPatientAnswers = await PatientAnswer.create(
+    {
+      patientId,
+      type: 'patientScreeningToolSubmission',
+      patientScreeningToolSubmissionId: patientScreeningToolSubmission.id,
+      questionIds: [screeningToolAnswer2.questionId],
+      answers: [
+        {
+          questionId: screeningToolAnswer2.questionId,
+          answerId: screeningToolAnswer2.id,
+          answerValue: screeningToolAnswer2.value,
+          patientId,
+          applicable: true,
+          userId,
+        },
+      ],
+    },
+    txn,
+  );
+  await PatientScreeningToolSubmission.submitScore(
+    patientScreeningToolSubmission.id,
+    { patientAnswers: screeningToolPatientAnswers },
     txn,
   );
 

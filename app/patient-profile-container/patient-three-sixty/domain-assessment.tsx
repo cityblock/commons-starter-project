@@ -75,6 +75,22 @@ class DomainAssessment extends React.Component<IProps, IState> {
         }
       });
     });
+    riskArea.screeningTools.forEach(screeningTool => {
+      screeningTool.patientScreeningToolSubmissions.forEach(submission => {
+        const { screeningToolScoreRange } = submission;
+
+        if (screeningToolScoreRange) {
+          const { riskAdjustmentType } = screeningToolScoreRange;
+
+          if (riskAdjustmentType === 'forceHighRisk') {
+            forceHighRisk = true;
+          } else if (riskAdjustmentType === 'increment') {
+            if (totalScore === null) totalScore = 0;
+            totalScore++;
+          }
+        }
+      });
+    });
 
     // do not show this card if automated with zero or null risk score
     if (riskArea.assessmentType === 'automated' && !totalScore && !forceHighRisk) {

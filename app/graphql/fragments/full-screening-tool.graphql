@@ -1,5 +1,6 @@
 #import "./full-risk-area.graphql"
 #import "./full-screening-tool-score-range.graphql"
+#import "./short-patient-screening-tool-submission.graphql"
 
 fragment FullScreeningTool on ScreeningTool {
   id
@@ -10,6 +11,9 @@ fragment FullScreeningTool on ScreeningTool {
   }
   screeningToolScoreRanges {
     ...FullScreeningToolScoreRange
+  }
+  patientScreeningToolSubmissions {
+    ...ShortPatientScreeningToolSubmission
   }
   createdAt
   updatedAt

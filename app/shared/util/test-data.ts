@@ -79,6 +79,7 @@ export const riskArea = {
   assessmentType: 'manual' as any,
   riskAreaGroup,
   questions: [],
+  screeningTools: [],
 };
 
 export const automatedRiskArea = {
@@ -458,6 +459,7 @@ export const screeningTool = {
   createdAt: 'Thu Jul 13 2017 16:52:56 GMT-0400 (EDT)',
   updatedAt: 'Thu Jul 13 2017 16:52:56 GMT-0400 (EDT)',
   deletedAt: null,
+  patientScreeningToolSubmissions: [],
 };
 
 export const screeningToolScoreRange = {

@@ -489,6 +489,18 @@ type RiskAreaGroup implements uniqueId {
   riskAreas: [RiskArea!]
 }
 
+type RiskAreaGroupForPatient implements uniqueId {
+  id: ID!
+  createdAt: String!
+  updatedAt: String!
+  deletedAt: String
+  title: String!
+  order: Int!
+  mediumRiskThreshold: Int!
+  highRiskThreshold: Int!
+  riskAreas: [RiskAreaForPatient!]!
+}
+
 # Risk Area
 type RiskArea implements uniqueId {
   id: ID!
@@ -503,6 +515,23 @@ type RiskArea implements uniqueId {
   mediumRiskThreshold: Int!
   highRiskThreshold: Int!
   questions: [Question!]
+  screeningTools: [ScreeningTool!]
+}
+
+type RiskAreaForPatient implements uniqueId {
+  id: ID!
+  createdAt: String!
+  updatedAt: String!
+  deletedAt: String
+  title: String!
+  assessmentType: AssessmentType!
+  riskAreaGroupId: ID!
+  riskAreaGroup: RiskAreaGroup!
+  order: Int!
+  mediumRiskThreshold: Int!
+  highRiskThreshold: Int!
+  questions: [Question!]!
+  screeningTools: [ScreeningToolForPatient!]!
 }
 
 type RiskScore {
@@ -724,6 +753,16 @@ type ScreeningTool implements uniqueId {
   riskAreaId: ID!
   riskArea: RiskArea!
   screeningToolScoreRanges: [ScreeningToolScoreRange!]!
+  patientScreeningToolSubmissions: [PatientScreeningToolSubmission!]
+  createdAt: String!
+  updatedAt: String!
+  deletedAt: String
+}
+
+type ScreeningToolForPatient implements uniqueId {
+  id: ID!
+  title: String!
+  patientScreeningToolSubmissions: [PatientScreeningToolSubmission!]!
   createdAt: String!
   updatedAt: String!
   deletedAt: String
@@ -744,6 +783,15 @@ type ScreeningToolScoreRange implements uniqueId {
   goalSuggestions: [GoalSuggestionTemplate]
 }
 
+type ScreeningToolScoreRangeForPatientScreeningToolSubmission implements uniqueId {
+  id: ID!
+  description: String!
+  riskAdjustmentType: RiskAdjustmentTypeOptions!
+  createdAt: String!
+  updatedAt: String!
+  deletedAt: String
+}
+
 type PatientScreeningToolSubmission implements uniqueId {
   id: ID!
   screeningToolId: ID!
@@ -760,7 +808,7 @@ type PatientScreeningToolSubmission implements uniqueId {
   scoredAt: String
   carePlanSuggestions: [CarePlanSuggestion!]!
   screeningToolScoreRangeId: ID
-  screeningToolScoreRange: ScreeningToolScoreRange
+  screeningToolScoreRange: ScreeningToolScoreRangeForPatientScreeningToolSubmission
 }
 
 type RiskAreaAssessmentSubmission implements uniqueId {
@@ -1655,7 +1703,7 @@ type RootQueryType {
   # RiskAreaGroup
   riskAreaGroup(riskAreaGroupId: ID!): RiskAreaGroup
   # Risk Area Group with associated patient answers
-  riskAreaGroupForPatient(riskAreaGroupId: ID!, patientId: ID!): RiskAreaGroup!
+  riskAreaGroupForPatient(riskAreaGroupId: ID!, patientId: ID!): RiskAreaGroupForPatient!
   # RiskAreaGroups
   riskAreaGroups: [RiskAreaGroup!]!
   # RiskArea

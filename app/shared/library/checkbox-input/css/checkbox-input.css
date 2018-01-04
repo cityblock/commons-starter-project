@@ -1,0 +1,35 @@
+@import '../../../css/sizes';
+
+.container input[type='checkbox'] {
+  display: none;
+}
+
+.container label {
+  color: var(--gray-font-color);
+  text-align: center;
+  padding: 0 var(--medium-gutter);
+  display: inline-block;
+  box-sizing: border-box;
+  height: 50px;
+  line-height: 48px;
+  min-width: 100px;
+  border: 1px solid var(--border-color);
+  border-radius: var(--big-border-radius);
+  cursor: pointer;
+  margin-right: var(--extra-small-gutter);
+}
+
+.checked label {
+  color: var(--blue-color);
+  border-color: var(--black-color);
+}
+
+.checked.disabled label {
+  color: var(--black-color);
+  background: var(--gray-background-color);
+  border-color: var(--black-color);
+}
+
+.disabled label {
+  cursor: default;
+}

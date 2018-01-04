@@ -12,7 +12,7 @@
   box-sizing: border-box;
   height: 50px;
   line-height: 48px;
-  min-width: 128px;
+  min-width: 100px;
   border: 1px solid var(--border-color);
   border-right-width: 0;
   cursor: pointer;

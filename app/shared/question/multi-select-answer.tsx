@@ -1,7 +1,6 @@
-import * as classNames from 'classnames';
 import * as React from 'react';
 import { FullAnswerFragment } from '../../graphql/types';
-import * as styles from './multi-select-answer.css';
+import CheckboxInput from '../../shared/library/checkbox-input/checkbox-input';
 
 interface IProps {
   onClick: (value: string | number, answerId: string, isRemove: boolean) => any;
@@ -11,40 +10,25 @@ interface IProps {
 }
 
 export default class MultiSelectAnswer extends React.Component<IProps, {}> {
-  constructor(props: IProps) {
-    super(props);
-
-    this.onClick = this.onClick.bind(this);
-  }
-
-  componentWillReceiveProps(nextProps: IProps) {
-    const { editable } = nextProps;
-
-    if (!editable) {
-      this.setState({ selected: false });
-    }
-  }
-
-  onClick() {
+  onChange = (): void => {
     const { editable, answer, onClick, selected } = this.props;
 
     if (editable) {
       onClick(answer.value, answer.id, selected);
     }
-  }
+  };
 
   render() {
     const { answer, editable, selected } = this.props;
 
-    const itemStyles = classNames(styles.multiSelectAnswer, {
-      [styles.disabled]: !editable,
-      [styles.selected]: selected,
-    });
-
     return (
-      <div className={itemStyles} onClick={this.onClick}>
-        {answer.displayValue}
-      </div>
+      <CheckboxInput
+        value={answer.value}
+        checked={selected}
+        onChange={this.onChange}
+        label={answer.displayValue}
+        disabled={!editable}
+      />
     );
   }
 }

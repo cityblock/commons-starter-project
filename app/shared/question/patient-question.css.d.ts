@@ -11,4 +11,3 @@ export const questionHistoryText: string;
 export const select: string;
 export const disabled: string;
 export const textArea: string;
-export const multiSelectRow: string;

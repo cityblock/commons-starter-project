@@ -1,6 +1,6 @@
 import * as classNames from 'classnames';
 import * as React from 'react';
-import * as styles from './css/radio-input.css';
+import * as styles from './css/checkbox-input.css';
 
 interface IProps {
   value: string;
@@ -10,17 +10,17 @@ interface IProps {
   disabled?: boolean;
 }
 
-const RadioInput: React.StatelessComponent<IProps> = (props: IProps) => {
+const CheckboxInput: React.StatelessComponent<IProps> = (props: IProps) => {
   const { value, checked, onChange, label, disabled } = props;
   const containerStyles = classNames(styles.container, {
     [styles.checked]: checked,
-    [styles.enabled]: !disabled,
+    [styles.disabled]: !!disabled,
   });
 
   return (
     <div className={containerStyles}>
       <input
-        type="radio"
+        type="checkbox"
         id={value}
         value={value}
         checked={checked}
@@ -32,4 +32,4 @@ const RadioInput: React.StatelessComponent<IProps> = (props: IProps) => {
   );
 };
 
-export default RadioInput;
+export default CheckboxInput;

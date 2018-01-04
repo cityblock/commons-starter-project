@@ -22,7 +22,7 @@ export default class RadioAnswer extends React.Component<IProps, {}> {
         key={`${answer.id}-${index}`}
         value={answer.id}
         checked={!!currentAnswer && currentAnswer.id === answer.id}
-        onChange={e => onChange(question.id, [{ answerId: answer.id, value: answer.value }])}
+        onChange={() => onChange(question.id, [{ answerId: answer.id, value: answer.value }])}
         label={answer.displayValue}
         disabled={!editable}
       />

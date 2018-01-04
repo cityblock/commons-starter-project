@@ -2,9 +2,20 @@
 
 exports[`renders a multi-select answer 1`] = `
 <div
-  className="multiSelectAnswer"
-  onClick={[Function]}
+  className="container"
 >
-  Answer
+  <input
+    checked={false}
+    disabled={false}
+    id="answer"
+    onChange={[Function]}
+    type="checkbox"
+    value="answer"
+  />
+  <label
+    htmlFor="answer"
+  >
+    Answer
+  </label>
 </div>
 `;

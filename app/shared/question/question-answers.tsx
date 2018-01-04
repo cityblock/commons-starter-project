@@ -1,10 +1,9 @@
-import * as classNames from 'classnames';
 import * as React from 'react';
 import { FullAnswerFragment, FullQuestionFragment } from '../../graphql/types';
+import CheckboxGroup from '../../shared/library/checkbox-group/checkbox-group';
 import DropdownAnswer from './dropdown-answer';
 import FreeTextAnswer from './free-text-answer';
 import MultiSelectAnswer from './multi-select-answer';
-import * as styles from './patient-question.css';
 import RadioAnswer from './radio-answer';
 
 interface IProps {
@@ -69,11 +68,6 @@ export class QuestionAnswers extends React.Component<IProps, {}> {
     const { question, answerData, onChange, editable } = this.props;
     const answers = question.answers || [];
 
-    const questionBodyStyles = classNames(styles.questionBody, {
-      [styles.noBottomPadding]:
-        question.answerType === 'radio' || question.answerType === 'multiselect',
-    });
-
     const currentAnswer = (answerData || [])[0];
 
     switch (question.answerType) {
@@ -105,11 +99,7 @@ export class QuestionAnswers extends React.Component<IProps, {}> {
           />
         );
       case 'multiselect':
-        return (
-          <div className={questionBodyStyles}>
-            <div className={styles.multiSelectRow}>{answers.map(this.renderMultiSelectItem)}</div>
-          </div>
-        );
+        return <CheckboxGroup>{answers.map(this.renderMultiSelectItem)}</CheckboxGroup>;
       default:
         return <div>Invalid answer type</div>;
     }

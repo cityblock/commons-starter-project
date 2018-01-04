@@ -114,10 +114,3 @@ select.select {
 input[type='radio']:hover {
   cursor: pointer;
 }
-
-.multiSelectRow {
-  display: flex;
-  flex-flow: row wrap;
-  align-items: center;
-  justify-content: flex-start;
-}

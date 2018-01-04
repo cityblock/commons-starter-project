@@ -1,41 +1,25 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`renders question answers 1`] = `
-<div
-  className="questionBody noBottomPadding"
+<form
+  className="container"
 >
   <div
-    className="radioGroup"
+    className="container enabled"
   >
-    <div
-      className="radioGroupOptions radioGroup"
+    <input
+      checked={false}
+      disabled={false}
+      id="answer-id"
+      onChange={[Function]}
+      type="radio"
+      value="answer-id"
+    />
+    <label
+      htmlFor="answer-id"
     >
-      <div
-        className="radioGroupItem"
-      >
-        <div
-          className="radioGroupContainer"
-        >
-          <input
-            checked={false}
-            className="radio"
-            disabled={false}
-            onChange={[Function]}
-            type="radio"
-            value="answer-id"
-          />
-          <label
-            className="radioFill"
-          />
-        </div>
-        <span
-          className="radioLabel radioLabel"
-          onClick={[Function]}
-        >
-          answer value
-        </span>
-      </div>
-    </div>
+      answer value
+    </label>
   </div>
-</div>
+</form>
 `;

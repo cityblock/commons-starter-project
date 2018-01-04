@@ -5,11 +5,11 @@
   flex-direction: column;
   align-items: center;
   justify-content: space-between;
-  padding: var(--small-gutter) var(--small-gutter) 0 16px;
+  border: 1px solid var(--border-color);
   border-radius: 4px;
   background-color: var(--white-color);
   margin-bottom: 10px;
-  border-left: 4px solid transparent;
+  padding: var(--small-gutter);
 }
 
 .question.hidden {
@@ -18,6 +18,9 @@
 
 .question.highRiskAnswer {
   border-left: 4px solid var(--red-color);
+
+  /* Remove 3px of padding on left to account for wider border */
+  padding-left: 17px;
 }
 
 .question:last-child {
@@ -35,18 +38,16 @@
 
 .questionHeader {
   align-items: normal;
+  margin-bottom: var(--small-gutter);
 }
 
 .questionTitle {
   color: var(--black-color);
   font-family: var(--basetica-medium);
   font-size: var(--default-font-size);
-  line-height: var(--default-line-height);
+  line-height: var(--medium-font-line-height);
+  font-weight: var(--roboto-medium-weight);
   margin-right: var(--gutter);
-}
-
-.question.disabled .questionTitle {
-  color: var(--light-gray-font-color);
 }
 
 .questionBody {
@@ -89,43 +90,6 @@ select.select {
 .question.disabled select.select {
   background-size: 12px;
   background-image: url('../../assets/down-arrow-grey.svg');
-}
-
-.radioGroup {
-  width: 100%;
-  max-width: 100%;
-  flex-basis: 100%;
-  flex-wrap: wrap;
-}
-
-.radioGroupItem {
-  display: inline-block;
-  margin: 0 15px var(--small-gutter) 0;
-  min-width: 55px;
-}
-
-.radioLabel {
-  user-select: none;
-
-  &:hover {
-    cursor: pointer;
-  }
-}
-
-.question.disabled .radioFill::after {
-  background: var(--border-color);
-}
-
-.question.disabled .radioLabel {
-  color: var(--light-gray-font-color);
-}
-
-.question.disabled .radioLabel:hover {
-  cursor: default;
-}
-
-.question.disabled input[type='radio']:hover {
-  cursor: default;
 }
 
 .textArea {

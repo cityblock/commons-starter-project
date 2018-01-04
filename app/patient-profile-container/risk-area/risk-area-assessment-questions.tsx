@@ -86,16 +86,17 @@ export class RiskAreaAssessmentQuestions extends React.Component<allProps> {
     const dataForQuestion = answerData[question.id] || [];
 
     return (
-      <PatientQuestion
-        visible={visible}
-        answerData={dataForQuestion}
-        onChange={this.onChange}
-        key={`${question.id}-${index}`}
-        question={question}
-        editable={inProgress}
-        patientAnswerIds={patientAnswerIds}
-        displayHamburger={!!riskArea && riskArea.assessmentType === 'automated'}
-      />
+      <div className={styles.border} key={`${question.id}-${index}`}>
+        <PatientQuestion
+          visible={visible}
+          answerData={dataForQuestion}
+          onChange={this.onChange}
+          question={question}
+          editable={inProgress}
+          patientAnswerIds={patientAnswerIds}
+          displayHamburger={!!riskArea && riskArea.assessmentType === 'automated'}
+        />
+      </div>
     );
   };
 
@@ -130,7 +131,7 @@ export class RiskAreaAssessmentQuestions extends React.Component<allProps> {
       return <Spinner />;
     }
     return (
-      <div className={styles.riskAssessment}>
+      <div className={styles.container}>
         <div className={titleStyles}>
           <div className={styles.title}>
             <Icon name="phone" />

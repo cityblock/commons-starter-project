@@ -5,11 +5,13 @@
   flex-direction: column;
   align-items: center;
   justify-content: space-between;
-  border: 1px solid var(--border-color);
-  border-radius: 4px;
   background-color: var(--white-color);
-  margin-bottom: 10px;
+  border-radius: var(--big-border-radius);
   padding: var(--small-gutter);
+}
+
+.multiSelect {
+  padding-bottom: var(--extra-small-gutter);
 }
 
 .question.hidden {
@@ -19,8 +21,8 @@
 .question.highRiskAnswer {
   border-left: 4px solid var(--red-color);
 
-  /* Remove 3px of padding on left to account for wider border */
-  padding-left: 17px;
+  /* Remove 4px of padding on left to account for wider border */
+  padding-left: 16px;
 }
 
 .question:last-child {

@@ -16,7 +16,7 @@
   border: 1px solid var(--border-color);
   border-radius: var(--big-border-radius);
   cursor: pointer;
-  margin-right: var(--extra-small-gutter);
+  margin: 0 var(--extra-small-gutter) var(--extra-small-gutter) 0;
 }
 
 .checked label {

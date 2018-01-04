@@ -61,6 +61,7 @@ export default class PatientQuestion extends React.Component<IProps, {}> {
     const questionStyles = classNames(styles.question, {
       [styles.highRiskAnswer]: highRiskAnswer,
       [styles.hidden]: !visible,
+      [styles.multiSelect]: question.answerType === 'multiselect',
     });
 
     const hamburger = displayHamburger ? (

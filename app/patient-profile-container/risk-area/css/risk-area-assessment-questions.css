@@ -24,12 +24,6 @@
   border-left: 4px solid var(--red-color);
 }
 
-.riskAssessment {
-  height: calc(100vh - 200px);
-  overflow-y: scroll;
-  -webkit-overflow-scrolling: touch;
-}
-
 .title,
 .meta {
   display: flex;
@@ -68,4 +62,18 @@
   font-weight: var(--roboto-medium-weight);
   font-size: var(--default-font-size);
   line-height: var(--default-line-height);
+}
+
+.border {
+  border: 1px solid var(--border-color);
+  border-radius: var(--big-border-radius);
+  margin-bottom: var(--extra-small-gutter);
+}
+
+.border:last-child {
+  margin-bottom: 80px;
+}
+
+.container {
+  height: calc(100vh - 200px);
 }

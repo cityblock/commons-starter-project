@@ -1,4 +1,5 @@
 export const question: string;
+export const multiSelect: string;
 export const hidden: string;
 export const highRiskAnswer: string;
 export const questionHeader: string;

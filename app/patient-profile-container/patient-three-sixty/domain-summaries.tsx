@@ -50,7 +50,8 @@ class DomainSummaries extends React.Component<IProps, IState> {
 
     return riskAreaGroups.map(group => {
       return {
-        title: group.title,
+        id: group.id,
+        title: group.shortTitle,
         mediumRiskThreshold: group.mediumRiskThreshold,
         highRiskThreshold: group.highRiskThreshold,
         ...this.state[group.id],

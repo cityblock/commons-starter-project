@@ -11,6 +11,7 @@ describe('Patient 360 Radar Chart', () => {
     {
       totalScore: 60,
       forceHighRisk: false,
+      id: riskAreaGroup.id,
       title: riskAreaGroup.title,
       mediumRiskThreshold: riskAreaGroup.mediumRiskThreshold,
       highRiskThreshold: riskAreaGroup.highRiskThreshold,

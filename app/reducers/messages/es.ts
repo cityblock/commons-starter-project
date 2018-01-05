@@ -209,6 +209,7 @@ export const SPANISH_TRANSLATION = {
     'riskAreaGroup.mediumRiskThreshold': 'Ingrese el umbral de riesgo medio del dominio',
     'riskArea.riskAreaGroupId': 'Seleccionar dominio',
     'riskAreaGroup.order': 'Ingresar orden de dominio',
+    'riskAreaGroup.shortTitle': 'Ingrese el título corto del dominio (tabla de radar)',
     'riskAreaGroup.title': 'Ingrese el título del dominio',
     'riskAreaAssessment.administer': 'Administer tools',
     'riskAreaAssessment.save': 'Terminado',

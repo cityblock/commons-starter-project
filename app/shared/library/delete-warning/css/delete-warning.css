@@ -61,7 +61,7 @@
   width: 94px;
 }
 
-.warning {
+svg.warning {
   fill: var(--red-color);
   height: var(--gutter);
   width: var(--gutter);

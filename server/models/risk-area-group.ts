@@ -27,8 +27,8 @@ export default class RiskAreaGroup extends BaseModel {
     type: 'object',
     properties: {
       id: { type: 'string' },
-      title: { type: 'string' },
-      shortTitle: { type: 'string', maxLength: 14 }, // at most 14 characters long
+      title: { type: 'string', minLength: 1 }, // cannot be blank
+      shortTitle: { type: 'string', minLength: 1, maxLength: 14 }, // at most 14 characters long
       order: { type: 'integer', minimum: 1 }, // cannot be zero or negative
       mediumRiskThreshold: { type: 'integer', minimum: 1 }, // cannot be zero or negative
       highRiskThreshold: { type: 'integer', minimum: 1 }, // cannot be zero or negative

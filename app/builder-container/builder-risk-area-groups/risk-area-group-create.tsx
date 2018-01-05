@@ -31,7 +31,7 @@ interface IState {
   error: string | null;
 }
 
-type Field = 'title' | 'order' | 'mediumRiskThreshold' | 'highRiskThreshold';
+type Field = 'title' | 'shortTitle' | 'order' | 'mediumRiskThreshold' | 'highRiskThreshold';
 
 export class RiskAreaGroupCreate extends React.Component<allProps, IState> {
   constructor(props: allProps) {
@@ -56,7 +56,14 @@ export class RiskAreaGroupCreate extends React.Component<allProps, IState> {
 
   onSubmit = async () => {
     const { createRiskAreaGroup, cancelCreateRiskAreaGroup } = this.props;
-    const { title, shortTitle, order, mediumRiskThreshold, highRiskThreshold, loading } = this.state;
+    const {
+      title,
+      shortTitle,
+      order,
+      mediumRiskThreshold,
+      highRiskThreshold,
+      loading,
+    } = this.state;
     // prevent submitting with no risk threshold
     if (!loading && order && mediumRiskThreshold && highRiskThreshold) {
       try {
@@ -81,7 +88,7 @@ export class RiskAreaGroupCreate extends React.Component<allProps, IState> {
 
   render(): JSX.Element {
     const { cancelCreateRiskAreaGroup } = this.props;
-    const { title, order, mediumRiskThreshold, highRiskThreshold } = this.state;
+    const { title, shortTitle, order, mediumRiskThreshold, highRiskThreshold } = this.state;
 
     return (
       <div>
@@ -99,6 +106,11 @@ export class RiskAreaGroupCreate extends React.Component<allProps, IState> {
             value={title}
             onChange={this.onChange('title')}
             placeholderMessageId="riskAreaGroup.title"
+          />
+          <TextInput
+            value={shortTitle}
+            onChange={this.onChange('shortTitle')}
+            placeholderMessageId="riskAreaGroup.shortTitle"
           />
           <TextInput
             value={order}

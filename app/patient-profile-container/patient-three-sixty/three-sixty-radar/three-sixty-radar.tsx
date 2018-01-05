@@ -7,6 +7,7 @@ import * as styles from './css/three-sixty-radar.css';
 import { chartOptions, dataOptions, pointColors, pointData } from './radar-options';
 
 interface IRiskAreaGroupRadar extends IRiskAreaGroupScore {
+  id: string;
   title: string;
   mediumRiskThreshold: number;
   highRiskThreshold: number;

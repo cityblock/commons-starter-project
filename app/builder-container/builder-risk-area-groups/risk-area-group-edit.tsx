@@ -65,6 +65,11 @@ export class RiskAreaGroupEdit extends React.Component<allProps, {}> {
             text={riskAreaGroup.title}
             onEnterPress={this.onEnterPress('title')}
           />
+          <h4>Short Title:</h4>
+          <EditableMultilineText
+            text={riskAreaGroup.shortTitle}
+            onEnterPress={this.onEnterPress('shortTitle')}
+          />
           <h4>Order:</h4>
           <EditableMultilineText
             text={`${riskAreaGroup.order}`}

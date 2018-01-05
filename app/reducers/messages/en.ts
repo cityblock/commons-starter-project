@@ -203,6 +203,7 @@ export const ENGLISH_TRANSLATION = {
     'riskAreaGroup.mediumRiskThreshold': 'Enter domain medium risk threshold',
     'riskArea.riskAreaGroupId': 'Select Domain',
     'riskAreaGroup.order': 'Enter domain order',
+    'riskAreaGroup.shortTitle': 'Enter short domain title (radar chart)',
     'riskAreaGroup.title': 'Enter domain title',
     'riskAreaAssessment.administer': 'Administer tools',
     'riskAreaAssessment.save': 'Done',

@@ -29,7 +29,9 @@ describe('risk area assessment questions component', () => {
   it('renders risk area assessment header', () => {
     expect(wrapper.find(RiskAreaAssessmentHeader).length).toBe(1);
     expect(wrapper.find(RiskAreaAssessmentHeader).props().riskAreaId).toBe(riskArea.id);
-    expect(wrapper.find(RiskAreaAssessmentHeader).props().riskAreaGroupId).toBe(riskArea.riskAreaGroup.id);
+    expect(wrapper.find(RiskAreaAssessmentHeader).props().riskAreaGroupId).toBe(
+      riskArea.riskAreaGroup.id,
+    );
     expect(wrapper.find(RiskAreaAssessmentHeader).props().patientId).toBe(patientId);
   });
 });

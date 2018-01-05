@@ -40,17 +40,17 @@ describe('Patient 360 Domain Summaries', () => {
   const riskAreaGroups = [
     {
       id: id1,
-      title: title1,
+      shortTitle: title1,
       ...riskThresholds,
     },
     {
       id: id2,
-      title: title2,
+      shortTitle: title2,
       ...riskThresholds,
     },
     {
       id: id3,
-      title: title3,
+      shortTitle: title3,
       ...riskThresholds,
     },
   ] as any;
@@ -156,16 +156,19 @@ describe('Patient 360 Domain Summaries', () => {
         ...score1,
         ...riskThresholds,
         title: title1,
+        id: id1,
       },
       {
         ...score2,
         ...riskThresholds,
         title: title2,
+        id: id2,
       },
       {
         ...score3,
         ...riskThresholds,
         title: title3,
+        id: id3,
       },
     ]);
   });

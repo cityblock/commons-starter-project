@@ -20,6 +20,7 @@ interface IProps {
     value: string;
   }>;
   patientAnswerIds?: string[];
+  assessment?: boolean; // indicates viewing an assessment
 }
 
 export default class PatientQuestion extends React.Component<IProps, {}> {
@@ -37,7 +38,14 @@ export default class PatientQuestion extends React.Component<IProps, {}> {
   };
 
   render() {
-    const { question, answerData, visible, displayHamburger, patientAnswerIds } = this.props;
+    const {
+      question,
+      answerData,
+      visible,
+      displayHamburger,
+      patientAnswerIds,
+      assessment,
+    } = this.props;
 
     let highRiskAnswer: boolean = false;
 
@@ -56,6 +64,7 @@ export default class PatientQuestion extends React.Component<IProps, {}> {
       [styles.highRiskAnswer]: highRiskAnswer,
       [styles.hidden]: !visible,
       [styles.multiSelect]: question.answerType === 'multiselect',
+      [styles.border]: !!assessment,
     });
 
     const hamburger = displayHamburger ? (

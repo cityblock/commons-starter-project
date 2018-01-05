@@ -2,6 +2,7 @@ import { shallow } from 'enzyme';
 import * as React from 'react';
 import PatientQuestion from '../../../shared/question/patient-question';
 import { question, riskArea, riskAreaAssessmentSubmission } from '../../../shared/util/test-data';
+import RiskAreaAssessmentHeader from '../risk-area-assessment-header';
 import { RiskAreaAssessmentQuestions } from '../risk-area-assessment-questions';
 
 describe('risk area assessment questions component', () => {
@@ -21,11 +22,14 @@ describe('risk area assessment questions component', () => {
     />,
   );
 
-  it('renders risk area', () => {
-    expect(wrapper.find('.titleText').length).toBe(1);
-  });
-
   it('renders question', () => {
     expect(wrapper.find(PatientQuestion).length).toBe(1);
+  });
+
+  it('renders risk area assessment header', () => {
+    expect(wrapper.find(RiskAreaAssessmentHeader).length).toBe(1);
+    expect(wrapper.find(RiskAreaAssessmentHeader).props().riskAreaId).toBe(riskArea.id);
+    expect(wrapper.find(RiskAreaAssessmentHeader).props().riskAreaGroupId).toBe(riskArea.riskAreaGroup.id);
+    expect(wrapper.find(RiskAreaAssessmentHeader).props().patientId).toBe(patientId);
   });
 });

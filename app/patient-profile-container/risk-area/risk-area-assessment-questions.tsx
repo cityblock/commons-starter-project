@@ -1,4 +1,3 @@
-import * as classNames from 'classnames';
 import * as React from 'react';
 import { compose, graphql } from 'react-apollo';
 import { connect, Dispatch } from 'react-redux';
@@ -14,7 +13,6 @@ import {
   FullRiskAreaAssessmentSubmissionFragment,
   FullRiskAreaFragment,
 } from '../../graphql/types';
-import Icon from '../../shared/library/icon/icon';
 import Spinner from '../../shared/library/spinner/spinner';
 import PatientQuestion from '../../shared/question/patient-question';
 import {
@@ -24,6 +22,7 @@ import {
   IQuestionAnswerHash,
 } from '../../shared/question/question-helpers';
 import * as styles from './css/risk-area-assessment-questions.css';
+import RiskAreaAssessmentHeader from './risk-area-assessment-header';
 
 interface IProps {
   patientId: string;
@@ -86,17 +85,17 @@ export class RiskAreaAssessmentQuestions extends React.Component<allProps> {
     const dataForQuestion = answerData[question.id] || [];
 
     return (
-      <div className={styles.border} key={`${question.id}-${index}`}>
-        <PatientQuestion
-          visible={visible}
-          answerData={dataForQuestion}
-          onChange={this.onChange}
-          question={question}
-          editable={inProgress}
-          patientAnswerIds={patientAnswerIds}
-          displayHamburger={!!riskArea && riskArea.assessmentType === 'automated'}
-        />
-      </div>
+      <PatientQuestion
+        key={`${question.id}-${index}`}
+        visible={visible}
+        answerData={dataForQuestion}
+        onChange={this.onChange}
+        question={question}
+        editable={inProgress}
+        patientAnswerIds={patientAnswerIds}
+        displayHamburger={!!riskArea && riskArea.assessmentType === 'automated'}
+        assessment={true}
+      />
     );
   };
 
@@ -117,31 +116,18 @@ export class RiskAreaAssessmentQuestions extends React.Component<allProps> {
   };
 
   render() {
-    const { riskArea, patientAnswersLoading, riskAreaQuestionsLoading } = this.props;
-
-    const title = riskArea ? riskArea.title : 'Loading...';
-
-    const titleStyles = classNames(styles.riskAssessmentTitle, {
-      [styles.lowRisk]: false,
-      [styles.mediumRisk]: true,
-      [styles.highRisk]: false,
-    });
+    const { riskArea, patientAnswersLoading, riskAreaQuestionsLoading, patientId } = this.props;
 
     if (patientAnswersLoading || riskAreaQuestionsLoading) {
       return <Spinner />;
     }
     return (
       <div className={styles.container}>
-        <div className={titleStyles}>
-          <div className={styles.title}>
-            <Icon name="phone" />
-            <div className={styles.titleText}>{title}</div>
-          </div>
-          <div className={styles.meta}>
-            <div className={styles.lastUpdatedLabel}>Last updated:</div>
-            <div className={styles.lastUpdatedValue}>TODO</div>
-          </div>
-        </div>
+        <RiskAreaAssessmentHeader
+          riskAreaId={riskArea.id}
+          riskAreaGroupId={riskArea.riskAreaGroup.id}
+          patientId={patientId}
+        />
         {this.renderQuestions()}
       </div>
     );

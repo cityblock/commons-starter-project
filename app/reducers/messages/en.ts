@@ -204,9 +204,8 @@ export const ENGLISH_TRANSLATION = {
     'riskArea.riskAreaGroupId': 'Select Domain',
     'riskAreaGroup.order': 'Enter domain order',
     'riskAreaGroup.title': 'Enter domain title',
-    'riskAreaAssessment.cancel': 'Cancel',
     'riskAreaAssessment.administer': 'Administer tools',
-    'riskAreaAssessment.save': 'Save',
+    'riskAreaAssessment.save': 'Done',
     'riskAreaAssessment.start': 'Edit answers',
     'riskAreaAssessment.resultsTitle': 'New Care Plan Suggestions',
     'riskAreaAssessment.resultsBody':

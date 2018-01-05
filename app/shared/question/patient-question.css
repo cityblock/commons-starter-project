@@ -10,6 +10,16 @@
   padding: var(--small-gutter);
 }
 
+.border {
+  border: 1px solid var(--border-color);
+  border-radius: var(--big-border-radius);
+  margin-bottom: var(--extra-small-gutter);
+}
+
+.border:last-child {
+  margin-bottom: 80px;
+}
+
 .multiSelect {
   padding-bottom: var(--extra-small-gutter);
 }
@@ -21,8 +31,8 @@
 .question.highRiskAnswer {
   border-left: 4px solid var(--red-color);
 
-  /* Remove 4px of padding on left to account for wider border */
-  padding-left: 16px;
+  /* Remove 3px of padding on left to account for wider border */
+  padding-left: 17px;
 }
 
 .question:last-child {

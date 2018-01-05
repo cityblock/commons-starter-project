@@ -178,12 +178,6 @@ export class RiskAreaAssessment extends React.Component<allProps, IState> {
       inProgress ? (
         <div>
           <Button
-            color="white"
-            messageId="riskAreaAssessment.cancel"
-            onClick={this.onCancel}
-            className={classNames(styles.button, styles.marginRight)}
-          />
-          <Button
             messageId="riskAreaAssessment.save"
             onClick={this.onSubmit}
             disabled={loading || !!error}

@@ -51,26 +51,14 @@ describe('risk area assessment questions component', () => {
     ).toBe('riskAreaAssessment.start');
   });
 
-  it('renders buttons to save and cancel edits', () => {
+  it('renders buttons to save edits', () => {
     wrapper.setState({ inProgress: true });
 
-    expect(wrapper.find(Button).length).toBe(2);
+    expect(wrapper.find(Button).length).toBe(1);
     expect(
       wrapper
         .find(Button)
         .at(0)
-        .props().messageId,
-    ).toBe('riskAreaAssessment.cancel');
-    expect(
-      wrapper
-        .find(Button)
-        .at(0)
-        .props().color,
-    ).toBe('white');
-    expect(
-      wrapper
-        .find(Button)
-        .at(1)
         .props().messageId,
     ).toBe('riskAreaAssessment.save');
   });

@@ -5,7 +5,7 @@
 }
 
 .container label {
-  color: var(--gray-font-color);
+  color: var(--gray-background-color);
   text-align: center;
   padding: 0 var(--medium-gutter);
   display: inline-block;
@@ -42,6 +42,11 @@
 
 .container input[type='radio']:disabled + label {
   cursor: default;
+}
+
+.enabled input[type='radio'] + label {
+  color: var(--gray-font-color);
+  border-color: var(--border-color);
 }
 
 .enabled input[type='radio']:checked + label {

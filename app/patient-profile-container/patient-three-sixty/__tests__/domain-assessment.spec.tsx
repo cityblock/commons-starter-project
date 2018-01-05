@@ -95,6 +95,17 @@ describe('Patient 360 Domain Assessment List Item', () => {
     expect(wrapper.find('.detail').text()).toBe(answer.summaryText);
   });
 
+  it('handles assessment detail view properly', () => {
+    wrapper.setProps({ assessmentDetailView: true });
+    expect(wrapper.find('.detail').length).toBe(0);
+    expect(
+      wrapper
+        .find('div')
+        .at(0)
+        .props().className,
+    ).toBe('container noLink');
+  });
+
   it('renders nothing if suppressed', () => {
     wrapper.setProps({ suppressed: true });
     expect(wrapper.find('div').length).toBe(0);

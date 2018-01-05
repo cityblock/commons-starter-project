@@ -37,13 +37,16 @@
 }
 
 .dates {
-  justify-content: flex-end;
   align-items: center;
+}
+
+.alignEnd {
+  justify-content: flex-end;
   min-width: 300px;
 }
 
 .date {
-  margin-left: var(--small-gutter);
+  margin-right: var(--small-gutter);
 }
 
 .detail {
@@ -63,4 +66,8 @@
 
 .redBorder {
   border-left: 4px solid var(--red-color);
+}
+
+.noLink a {
+  cursor: default;
 }

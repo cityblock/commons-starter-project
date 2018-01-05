@@ -24,12 +24,14 @@
   border-color: var(--black-color);
 }
 
+.disabled label {
+  cursor: default;
+  color: var(--gray-background-color);
+  border-color: var(--border-color);
+}
+
 .checked.disabled label {
   color: var(--black-color);
   background: var(--gray-background-color);
   border-color: var(--black-color);
-}
-
-.disabled label {
-  cursor: default;
 }

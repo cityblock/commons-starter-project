@@ -210,9 +210,8 @@ export const SPANISH_TRANSLATION = {
     'riskArea.riskAreaGroupId': 'Seleccionar dominio',
     'riskAreaGroup.order': 'Ingresar orden de dominio',
     'riskAreaGroup.title': 'Ingrese el título del dominio',
-    'riskAreaAssessment.cancel': 'Cancel',
     'riskAreaAssessment.administer': 'Administer tools',
-    'riskAreaAssessment.save': 'Save updates',
+    'riskAreaAssessment.save': 'Terminado',
     'riskAreaAssessment.start': 'Start assessment',
     'riskAreaAssessment.resultsTitle': 'New Care Plan Suggestions',
     'riskAreaAssessment.resultsBody':

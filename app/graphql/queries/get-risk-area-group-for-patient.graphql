@@ -4,6 +4,7 @@ query getRiskAreaGroupForPatient($riskAreaGroupId: ID!, $patientId: ID!) {
   riskAreaGroupForPatient(riskAreaGroupId: $riskAreaGroupId, patientId: $patientId) {
     id
     title
+    shortTitle
     riskAreas {
       ...FullRiskAreaForPatient
     }

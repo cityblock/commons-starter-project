@@ -3,6 +3,7 @@
 mutation riskAreaGroupEdit(
   $riskAreaGroupId: ID!
   $title: String
+  $shortTitle: String
   $order: Int
   $mediumRiskThreshold: Int
   $highRiskThreshold: Int
@@ -11,6 +12,7 @@ mutation riskAreaGroupEdit(
     input: {
       riskAreaGroupId: $riskAreaGroupId
       title: $title
+      shortTitle: $shortTitle
       order: $order
       mediumRiskThreshold: $mediumRiskThreshold
       highRiskThreshold: $highRiskThreshold

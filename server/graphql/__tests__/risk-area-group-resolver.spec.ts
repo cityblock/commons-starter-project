@@ -23,6 +23,7 @@ describe('risk area group resolver', () => {
   let riskAreaGroup: RiskAreaGroup;
   const userRole = 'admin';
   const title = 'Night King Breached the Wall!';
+  const shortTitle = 'FML';
   const mockTitle = "Littlefinger's treachery";
   const mediumRiskThreshold = 50;
   const highRiskThreshold = 80;
@@ -138,11 +139,13 @@ describe('risk area group resolver', () => {
       const mutation = `mutation {
         riskAreaGroupCreate(input: {
           title: "${title}",
+          shortTitle: "${shortTitle}"
           mediumRiskThreshold: ${mediumRiskThreshold},
           highRiskThreshold: ${highRiskThreshold},
           order: ${order},
         }) {
           title
+          shortTitle
           mediumRiskThreshold
           highRiskThreshold
           order
@@ -157,6 +160,7 @@ describe('risk area group resolver', () => {
 
       expect(cloneDeep(result.data!.riskAreaGroupCreate)).toMatchObject({
         title,
+        shortTitle,
         mediumRiskThreshold,
         highRiskThreshold,
         order,

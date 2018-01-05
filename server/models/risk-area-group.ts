@@ -4,6 +4,7 @@ import RiskArea from './risk-area';
 
 interface IRiskAreaGroupEditableFields {
   title: string;
+  shortTitle: string;
   order: number;
   mediumRiskThreshold: number;
   highRiskThreshold: number;
@@ -14,6 +15,7 @@ interface IRiskAreaGroupEditableFields {
 export default class RiskAreaGroup extends BaseModel {
   id: string;
   title: string;
+  shortTitle: string;
   order: number;
   mediumRiskThreshold: number;
   highRiskThreshold: number;
@@ -25,12 +27,14 @@ export default class RiskAreaGroup extends BaseModel {
     type: 'object',
     properties: {
       id: { type: 'string' },
-      title: { type: 'string', minLength: 1 }, // cannot be blank
-      order: { type: 'integer', minimum: 1 },
-      mediumRiskThreshold: { type: 'integer', minimum: 1 },
-      highRiskThreshold: { type: 'integer', minimum: 1 },
+      title: { type: 'string' },
+      shortTitle: { type: 'string', maxLength: 14 }, // at most 14 characters long
+      order: { type: 'integer', minimum: 1 }, // cannot be zero or negative
+      mediumRiskThreshold: { type: 'integer', minimum: 1 }, // cannot be zero or negative
+      highRiskThreshold: { type: 'integer', minimum: 1 }, // cannot be zero or negative
       deletedAt: { type: 'string' },
     },
+    required: ['title', 'shortTitle', 'order', 'mediumRiskThreshold', 'highRiskThreshold'],
   };
 
   static relationMappings: RelationMappings = {
@@ -70,7 +74,7 @@ export default class RiskAreaGroup extends BaseModel {
     riskAreaGroup: Partial<IRiskAreaGroupEditableFields>,
     riskAreaGroupId: string,
   ): Promise<RiskAreaGroup> {
-    const edited = await this.query().updateAndFetchById(riskAreaGroupId, riskAreaGroup);
+    const edited = await this.query().patchAndFetchById(riskAreaGroupId, riskAreaGroup);
 
     if (!edited) {
       return Promise.reject(`No such risk area group: ${riskAreaGroupId}`);
@@ -81,7 +85,7 @@ export default class RiskAreaGroup extends BaseModel {
   static async delete(riskAreaGroupId: string): Promise<RiskAreaGroup> {
     await this.query()
       .where({ id: riskAreaGroupId, deletedAt: null })
-      .update({ deletedAt: new Date().toISOString() });
+      .patch({ deletedAt: new Date().toISOString() });
 
     const deleted = await this.query().findById(riskAreaGroupId);
 

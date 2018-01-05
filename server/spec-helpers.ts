@@ -109,6 +109,7 @@ export function createMockRiskAreaGroup(
 ) {
   return {
     title,
+    shortTitle: 'ripViscerion',
     order,
     mediumRiskThreshold,
     highRiskThreshold,

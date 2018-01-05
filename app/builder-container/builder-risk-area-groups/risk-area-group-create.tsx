@@ -23,6 +23,7 @@ type allProps = IProps & IGraphqlProps;
 
 interface IState {
   title: string;
+  shortTitle: string;
   order: string;
   mediumRiskThreshold: string;
   highRiskThreshold: string;
@@ -38,6 +39,7 @@ export class RiskAreaGroupCreate extends React.Component<allProps, IState> {
 
     this.state = {
       title: '',
+      shortTitle: '',
       order: '',
       mediumRiskThreshold: '',
       highRiskThreshold: '',
@@ -54,7 +56,7 @@ export class RiskAreaGroupCreate extends React.Component<allProps, IState> {
 
   onSubmit = async () => {
     const { createRiskAreaGroup, cancelCreateRiskAreaGroup } = this.props;
-    const { title, order, mediumRiskThreshold, highRiskThreshold, loading } = this.state;
+    const { title, shortTitle, order, mediumRiskThreshold, highRiskThreshold, loading } = this.state;
     // prevent submitting with no risk threshold
     if (!loading && order && mediumRiskThreshold && highRiskThreshold) {
       try {
@@ -63,6 +65,7 @@ export class RiskAreaGroupCreate extends React.Component<allProps, IState> {
         await createRiskAreaGroup({
           variables: {
             title,
+            shortTitle,
             order: Number(order),
             mediumRiskThreshold: Number(mediumRiskThreshold),
             highRiskThreshold: Number(highRiskThreshold),

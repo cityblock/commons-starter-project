@@ -483,6 +483,7 @@ type RiskAreaGroup implements uniqueId {
   updatedAt: String!
   deletedAt: String
   title: String!
+  shortTitle: String!
   order: Int!
   mediumRiskThreshold: Int!
   highRiskThreshold: Int!
@@ -495,6 +496,7 @@ type RiskAreaGroupForPatient implements uniqueId {
   updatedAt: String!
   deletedAt: String
   title: String!
+  shortTitle: String!
   order: Int!
   mediumRiskThreshold: Int!
   highRiskThreshold: Int!
@@ -1081,6 +1083,7 @@ input TaskCommentDeleteInput {
 # params for creating a risk area group
 input RiskAreaGroupCreateInput {
   title: String!
+  shortTitle: String!
   order: Int!
   mediumRiskThreshold: Int!
   highRiskThreshold: Int!
@@ -1090,6 +1093,7 @@ input RiskAreaGroupCreateInput {
 input RiskAreaGroupEditInput {
   riskAreaGroupId: ID!
   title: String
+  shortTitle: String
   order: Int
   mediumRiskThreshold: Int
   highRiskThreshold: Int

@@ -2889,6 +2889,7 @@ export interface getRiskAreaGroupForPatientQuery {
   riskAreaGroupForPatient:  {
     id: string,
     title: string,
+    shortTitle: string,
     riskAreas:  Array< {
       id: string,
       title: string,
@@ -2943,6 +2944,7 @@ export interface getRiskAreaGroupsQuery {
     updatedAt: string,
     deletedAt: string | null,
     title: string,
+    shortTitle: string,
     order: number,
     mediumRiskThreshold: number,
     highRiskThreshold: number,
@@ -5183,6 +5185,7 @@ export interface riskAreaEditMutation {
 
 export interface riskAreaGroupCreateMutationVariables {
   title: string,
+  shortTitle: string,
   order: number,
   mediumRiskThreshold: number,
   highRiskThreshold: number,
@@ -5196,6 +5199,7 @@ export interface riskAreaGroupCreateMutation {
     updatedAt: string,
     deletedAt: string | null,
     title: string,
+    shortTitle: string,
     order: number,
     mediumRiskThreshold: number,
     highRiskThreshold: number,
@@ -5214,6 +5218,7 @@ export interface riskAreaGroupDeleteMutation {
     updatedAt: string,
     deletedAt: string | null,
     title: string,
+    shortTitle: string,
     order: number,
     mediumRiskThreshold: number,
     highRiskThreshold: number,
@@ -5223,6 +5228,7 @@ export interface riskAreaGroupDeleteMutation {
 export interface riskAreaGroupEditMutationVariables {
   riskAreaGroupId: string,
   title?: string | null,
+  shortTitle?: string | null,
   order?: number | null,
   mediumRiskThreshold?: number | null,
   highRiskThreshold?: number | null,
@@ -5236,6 +5242,7 @@ export interface riskAreaGroupEditMutation {
     updatedAt: string,
     deletedAt: string | null,
     title: string,
+    shortTitle: string,
     order: number,
     mediumRiskThreshold: number,
     highRiskThreshold: number,
@@ -7906,6 +7913,7 @@ export interface FullRiskAreaGroupFragment {
   updatedAt: string,
   deletedAt: string | null,
   title: string,
+  shortTitle: string,
   order: number,
   mediumRiskThreshold: number,
   highRiskThreshold: number,

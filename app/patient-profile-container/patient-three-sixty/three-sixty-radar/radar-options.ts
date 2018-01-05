@@ -47,6 +47,7 @@ export const chartOptions = {
   tooltips: {
     enabled: false,
   },
+  events: [], // currently don't do anything on events
 };
 
 export const dataOptions = {

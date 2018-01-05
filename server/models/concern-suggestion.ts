@@ -26,9 +26,11 @@ export default class ConcernSuggestion extends BaseModel {
       id: { type: 'string' },
       answerId: { type: 'string' },
       screeningToolScoreRangeId: { type: 'string' },
-      concernId: { type: 'string' },
+      concernId: { type: 'string', minLength: 1 }, // cannot be blank
       deletedAt: { type: 'string' },
     },
+    required: ['concernId'],
+    oneOf: [{ required: ['answerId'] }, { required: ['screeningToolScoreRangeId'] }],
   };
 
   static relationMappings: RelationMappings = {
@@ -222,7 +224,7 @@ export default class ConcernSuggestion extends BaseModel {
         screeningToolScoreRangeId: screeningToolScoreRangeId || null,
         deletedAt: null,
       })
-      .update({ deletedAt: new Date().toISOString() });
+      .patch({ deletedAt: new Date().toISOString() });
 
     if (answerId) {
       return await this.getForAnswer(answerId);

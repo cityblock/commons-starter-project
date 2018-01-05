@@ -27,12 +27,12 @@ export default class Clinic extends BaseModel {
 
   static jsonSchema = {
     type: 'object',
-    required: ['name', 'departmentId'],
     properties: {
       id: { type: 'string' },
-      name: { type: 'string' },
-      departmentId: { type: 'integer' },
+      name: { type: 'string', minLength: 1 }, // cannot be blank
+      departmentId: { type: 'integer', minLength: 1 }, // cannot be blank
     },
+    required: ['name', 'departmentId'],
   };
 
   static relationMappings: RelationMappings = {
@@ -73,7 +73,7 @@ export default class Clinic extends BaseModel {
     clinic: IClinicEditableFields,
     txn?: Transaction,
   ): Promise<Clinic> {
-    return await this.query(txn).updateAndFetchById(clinicId, clinic);
+    return await this.query(txn).patchAndFetchById(clinicId, clinic);
   }
 
   static async getAll(

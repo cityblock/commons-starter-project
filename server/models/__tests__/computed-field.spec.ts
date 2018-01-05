@@ -186,6 +186,7 @@ describe('computed field model', () => {
         displayValue: 'Answer Display Value',
         value: 'true',
         valueType: 'boolean',
+        inSummary: false,
         order: 1,
       });
       const fetchedComputedFields = await ComputedField.getForSchema({

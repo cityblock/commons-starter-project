@@ -30,11 +30,12 @@ export default class ComputedField extends BaseModel {
     type: 'object',
     properties: {
       id: { type: 'string' },
-      slug: { type: 'string' },
-      label: { type: 'string' },
-      dataType: { type: 'string' },
+      slug: { type: 'string', minLength: 1 }, // cannot be blank
+      label: { type: 'string', minLength: 1 }, // cannot be blank
+      dataType: { type: 'string', minLength: 1 }, // cannot be blank
       deletedAt: { type: 'string' },
     },
+    required: ['slug', 'label', 'dataType'],
   };
 
   static relationMappings: RelationMappings = {
@@ -105,7 +106,7 @@ export default class ComputedField extends BaseModel {
   static async delete(computedFieldId: string): Promise<ComputedField> {
     await this.query()
       .where({ id: computedFieldId, deletedAt: null })
-      .update({ deletedAt: new Date().toISOString() });
+      .patch({ deletedAt: new Date().toISOString() });
 
     const computedField = await this.query().findById(computedFieldId);
     if (!computedField) {

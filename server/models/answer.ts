@@ -54,16 +54,17 @@ export default class Answer extends BaseModel {
     type: 'object',
     properties: {
       id: { type: 'string' },
-      displayValue: { type: 'string' },
-      value: { type: 'string' },
-      valueType: { type: 'string' },
+      displayValue: { type: 'string', minLength: 1 }, // cannot be blank
+      value: { type: 'string', minLength: 1 }, // cannot be blank
+      valueType: { type: 'string', minLength: 1 }, // cannot be blank
       riskAdjustmentType: { type: 'string' },
       inSummary: { type: 'boolean' },
       summaryText: { type: 'string' },
-      questionId: { type: 'string' },
-      order: { type: 'integer' },
+      questionId: { type: 'string', minLength: 1 }, // cannot be blank
+      order: { type: 'integer', minimum: 1 }, // cannot be zero or negative
       deletedAt: { type: 'string' },
     },
+    required: ['displayValue', 'value', 'valueType', 'questionId', 'order'],
   };
 
   static relationMappings: RelationMappings = {
@@ -173,13 +174,13 @@ export default class Answer extends BaseModel {
   }
 
   static async edit(answer: Partial<IAnswerEditableFields>, answerId: string): Promise<Answer> {
-    return await this.getQuery().updateAndFetchById(answerId, answer);
+    return await this.getQuery().patchAndFetchById(answerId, answer);
   }
 
   static async delete(answerId: string): Promise<Answer> {
     await this.getQuery()
       .where({ id: answerId, deletedAt: null })
-      .update({ deletedAt: new Date().toISOString() });
+      .patch({ deletedAt: new Date().toISOString() });
 
     const answer = await this.query().findById(answerId);
     if (!answer) {

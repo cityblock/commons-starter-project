@@ -22,9 +22,10 @@ export default class Concern extends BaseModel {
     type: 'object',
     properties: {
       id: { type: 'string' },
-      title: { type: 'string' },
+      title: { type: 'string', minLength: 1 }, // cannot be blank
       deletedAt: { type: 'string' },
     },
+    required: ['title'],
   };
 
   static relationMappings: RelationMappings = {
@@ -69,7 +70,7 @@ export default class Concern extends BaseModel {
   }
 
   static async edit(concernId: string, concern: Partial<IConcernEditableFields>): Promise<Concern> {
-    return await this.query().updateAndFetchById(concernId, concern);
+    return await this.query().patchAndFetchById(concernId, concern);
   }
 
   static async getAll(
@@ -84,7 +85,7 @@ export default class Concern extends BaseModel {
   static async delete(concernId: string): Promise<Concern> {
     await this.query()
       .where({ id: concernId, deletedAt: null })
-      .update({ deletedAt: new Date().toISOString() });
+      .patch({ deletedAt: new Date().toISOString() });
 
     const concern = await this.query().findById(concernId);
     if (!concern) {

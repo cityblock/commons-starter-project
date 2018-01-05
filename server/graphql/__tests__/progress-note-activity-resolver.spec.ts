@@ -99,6 +99,7 @@ describe('progress note resolver', () => {
       value: '1',
       valueType: 'number',
       order: 1,
+      inSummary: false,
     });
     const patientAnswer = (await PatientAnswer.create({
       patientId: patient.id,

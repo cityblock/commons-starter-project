@@ -8,7 +8,7 @@ import GoalSuggestionTemplate from '../goal-suggestion-template';
 import Question from '../question';
 import RiskArea from '../risk-area';
 
-describe('anser model', () => {
+describe('answer model', () => {
   let riskArea: RiskArea;
 
   beforeEach(async () => {

@@ -50,14 +50,15 @@ export default class CarePlanUpdateEvent extends BaseModel {
     type: 'object',
     properties: {
       id: { type: 'string' },
-      patientId: { type: 'string' },
-      userId: { type: 'string' },
+      patientId: { type: 'string', minLength: 1 }, // cannot be blank
+      userId: { type: 'string', minLength: 1 }, // cannot be blank
       patientConcernId: { type: 'string' },
       patientGoalId: { type: 'string' },
       progressNoteId: { type: 'string' },
-      eventType: { type: 'string' },
+      eventType: { type: 'string', minLength: 1 }, // cannot be blank
       deletedAt: { type: 'string' },
     },
+    required: ['patientId', 'userId', 'eventType'],
   };
 
   static relationMappings: RelationMappings = {
@@ -150,7 +151,7 @@ export default class CarePlanUpdateEvent extends BaseModel {
   ): Promise<CarePlanUpdateEvent> {
     await this.query(txn)
       .where({ id: carePlanUpdateEventId, deletedAt: null })
-      .update({ deletedAt: new Date().toISOString() });
+      .patch({ deletedAt: new Date().toISOString() });
 
     const carePlanUpdateEvent = await this.query(txn)
       .eager(EAGER_QUERY)

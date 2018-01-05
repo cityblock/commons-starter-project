@@ -55,6 +55,7 @@ async function setup(txn: Transaction): Promise<ISetup> {
       value: '1',
       valueType: 'number',
       order: 1,
+      inSummary: false,
     },
     txn,
   );

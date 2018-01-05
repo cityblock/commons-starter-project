@@ -46,6 +46,7 @@ describe('computed field schema resolver', () => {
         value: 'true',
         valueType: 'boolean',
         order: 1,
+        inSummary: false,
       });
       await Answer.create({
         questionId: question.id,
@@ -53,6 +54,7 @@ describe('computed field schema resolver', () => {
         value: 'false',
         valueType: 'boolean',
         order: 2,
+        inSummary: false,
       });
 
       const query = `{

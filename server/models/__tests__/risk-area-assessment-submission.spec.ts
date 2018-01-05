@@ -118,6 +118,7 @@ describe('patient risk area assessment submission model', () => {
       value: '1',
       valueType: 'number',
       order: 1,
+      inSummary: false,
     });
     const answer2 = await Answer.create({
       questionId: question2.id,
@@ -125,6 +126,7 @@ describe('patient risk area assessment submission model', () => {
       value: '4',
       valueType: 'number',
       order: 1,
+      inSummary: false,
     });
 
     const submission = await RiskAreaAssessmentSubmission.autoOpenIfRequired({

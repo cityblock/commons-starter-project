@@ -425,6 +425,7 @@ describe('patient screening tool submission resolver tests', () => {
             value: '1',
             valueType: 'number',
             order: 1,
+            inSummary: false,
           },
           txn,
         );
@@ -435,6 +436,7 @@ describe('patient screening tool submission resolver tests', () => {
             value: '4',
             valueType: 'number',
             order: 1,
+            inSummary: false,
           },
           txn,
         );

@@ -29,6 +29,7 @@ export default class ComputedFieldFlag extends BaseModel {
       reason: { type: 'string' },
       deletedAt: { type: 'string' },
     },
+    required: ['patientAnswerId', 'userId'],
   };
 
   static relationMappings: RelationMappings = {
@@ -79,7 +80,7 @@ export default class ComputedFieldFlag extends BaseModel {
   static async delete(computedFieldFlagId: string, txn?: Transaction): Promise<ComputedFieldFlag> {
     await this.query(txn)
       .where({ id: computedFieldFlagId, deletedAt: null })
-      .update({ deletedAt: new Date().toISOString() });
+      .patch({ deletedAt: new Date().toISOString() });
 
     const deleted = await this.query(txn).findById(computedFieldFlagId);
 

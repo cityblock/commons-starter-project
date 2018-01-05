@@ -116,6 +116,7 @@ describe('handling pubusub push events from mixer', () => {
       value: 'answer',
       valueType: 'string',
       order: 1,
+      inSummary: false,
     });
     const badData = {
       patientId: patient.id,
@@ -165,6 +166,7 @@ describe('handling pubusub push events from mixer', () => {
       value: 'answer',
       valueType: 'string',
       order: 1,
+      inSummary: false,
     });
     await ConcernSuggestion.create({
       concernId: concern.id,
@@ -209,8 +211,12 @@ describe('handling pubusub push events from mixer', () => {
     expect(response.sendStatus).toBeCalledWith(200);
     expect(console.error).not.toBeCalled();
     const carePlanSuggestions = await CarePlanSuggestion.getForPatient(patient.id);
-    expect(carePlanSuggestions.length).toEqual(2);
-    expect(carePlanSuggestions[0].concern).toMatchObject(concern);
-    expect(carePlanSuggestions[1].goalSuggestionTemplate).toMatchObject(goalSuggestionTemplate2);
+    const sortedSuggestions = carePlanSuggestions.sort((a, b) => {
+      return a.suggestionType < b.suggestionType ? -1 : 1;
+    });
+
+    expect(sortedSuggestions.length).toEqual(2);
+    expect(sortedSuggestions[0].concern).toMatchObject(concern);
+    expect(sortedSuggestions[1].goalSuggestionTemplate).toMatchObject(goalSuggestionTemplate2);
   });
 });

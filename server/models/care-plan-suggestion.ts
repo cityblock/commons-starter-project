@@ -95,6 +95,12 @@ export default class CarePlanSuggestion extends BaseModel {
       riskAreaAssessmentSubmissionId: { type: 'string' },
       computedFieldId: { type: 'string' },
     },
+    required: ['patientId', 'suggestionType'],
+    oneOf: [
+      { required: ['patientScreeningToolSubmissionId'] },
+      { required: ['riskAreaAssessmentSubmissionId'] },
+      { required: ['computedFieldId'] },
+    ],
   };
 
   static relationMappings: RelationMappings = {
@@ -226,7 +232,7 @@ export default class CarePlanSuggestion extends BaseModel {
   ): Promise<CarePlanSuggestion> {
     return await this.query(txn)
       .eager(EAGER_QUERY)
-      .updateAndFetchById(carePlanSuggestionId, {
+      .patchAndFetchById(carePlanSuggestionId, {
         acceptedAt: new Date().toISOString(),
         acceptedById,
       });
@@ -240,7 +246,7 @@ export default class CarePlanSuggestion extends BaseModel {
 
     return await this.query(txn)
       .eager(EAGER_QUERY)
-      .updateAndFetchById(carePlanSuggestionId, {
+      .patchAndFetchById(carePlanSuggestionId, {
         dismissedById,
         dismissedReason,
         dismissedAt: new Date().toISOString(),

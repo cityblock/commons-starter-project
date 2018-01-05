@@ -138,6 +138,7 @@ describe('risk area assessment resolver tests', () => {
         value: '1',
         valueType: 'number',
         order: 1,
+        inSummary: false,
       });
       const answer2 = await Answer.create({
         questionId: question2.id,
@@ -145,6 +146,7 @@ describe('risk area assessment resolver tests', () => {
         value: '4',
         valueType: 'number',
         order: 1,
+        inSummary: false,
       });
       await PatientAnswer.create({
         patientId: patient.id,

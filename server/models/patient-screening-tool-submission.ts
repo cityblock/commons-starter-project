@@ -45,14 +45,15 @@ export default class PatientScreeningToolSubmission extends BaseModel {
     type: 'object',
     properties: {
       id: { type: 'string' },
-      screeningToolId: { type: 'string' },
-      screeningToolScoreRangeId: { type: 'string' },
-      patientId: { type: 'string' },
-      userId: { type: 'string' },
-      score: { type: 'integer' },
+      screeningToolId: { type: 'string', minLength: 1 }, // cannot be blank
+      screeningToolScoreRangeId: { type: 'string', minLength: 1 }, // cannot be blank
+      patientId: { type: 'string', minLength: 1 }, // cannot be blank
+      userId: { type: 'string', minLength: 1 }, // cannot be blank
+      score: { type: 'integer', minimum: 0 }, // cannot be negative
       deletedAt: { type: 'string' },
       scoredAt: { type: 'string' },
     },
+    required: ['screeningToolId', 'patientId', 'userId'],
   };
 
   static relationMappings: RelationMappings = {
@@ -213,7 +214,7 @@ export default class PatientScreeningToolSubmission extends BaseModel {
 
     const submission = await this.query(txn)
       .eager(EAGER_QUERY)
-      .updateAndFetchById(patientScreeningToolSubmissionId, {
+      .patchAndFetchById(patientScreeningToolSubmissionId, {
         score,
         screeningToolScoreRangeId,
         scoredAt: new Date().toISOString(),
@@ -328,7 +329,7 @@ export default class PatientScreeningToolSubmission extends BaseModel {
   ): Promise<PatientScreeningToolSubmission> {
     await this.query(txn)
       .where({ id: patientScreeningToolSubmissionId, deletedAt: null })
-      .update({ deletedAt: new Date().toISOString() });
+      .patch({ deletedAt: new Date().toISOString() });
 
     const patientScreeningToolSubmission = await this.query(txn).findById(
       patientScreeningToolSubmissionId,

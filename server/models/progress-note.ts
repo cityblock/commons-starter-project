@@ -41,9 +41,9 @@ export default class ProgressNote extends BaseModel {
     type: 'object',
     properties: {
       id: { type: 'string' },
-      patientId: { type: 'string' },
-      userId: { type: 'string' },
-      progressNoteTemplateId: { type: 'string' },
+      patientId: { type: 'string', minLength: 1 }, // cannot be blank
+      userId: { type: 'string', minLength: 1 }, // cannot be blank
+      progressNoteTemplateId: { type: 'string', minLength: 1 }, // cannot be blank
       startedAt: { type: 'string' },
       location: { type: 'string' },
       completedAt: { type: 'string' },
@@ -51,6 +51,7 @@ export default class ProgressNote extends BaseModel {
       memberConcern: { type: 'string' },
       deletedAt: { type: 'string ' },
     },
+    required: ['patientId', 'userId'],
   };
 
   static relationMappings: RelationMappings = {
@@ -147,7 +148,7 @@ export default class ProgressNote extends BaseModel {
   static async update(progressNoteId: string, progressNote: Partial<IProgressNoteEditableFields>) {
     return this.query()
       .eager(EAGER_QUERY)
-      .updateAndFetchById(progressNoteId, progressNote);
+      .patchAndFetchById(progressNoteId, progressNote);
   }
 
   static async autoOpenIfRequired(input: IProgressNoteAutoOpenFields, txn?: Transaction) {
@@ -174,7 +175,7 @@ export default class ProgressNote extends BaseModel {
   static async complete(progressNoteId: string): Promise<ProgressNote> {
     return await this.query()
       .eager(EAGER_QUERY)
-      .updateAndFetchById(progressNoteId, {
+      .patchAndFetchById(progressNoteId, {
         completedAt: new Date().toISOString(),
       });
   }
@@ -183,7 +184,7 @@ export default class ProgressNote extends BaseModel {
     await this.query()
       .eager(EAGER_QUERY)
       .where({ id: progressNoteId, deletedAt: null })
-      .update({ deletedAt: new Date().toISOString() });
+      .patch({ deletedAt: new Date().toISOString() });
 
     const progressNote = await this.query().findById(progressNoteId);
 

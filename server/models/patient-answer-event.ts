@@ -45,14 +45,15 @@ export default class PatientAnswerEvent extends BaseModel {
     type: 'object',
     properties: {
       id: { type: 'string' },
-      patientId: { type: 'string' },
-      userId: { type: 'string' },
-      patientAnswerId: { type: 'string' },
+      patientId: { type: 'string', minLength: 1 }, // cannot be blank
+      userId: { type: 'string', minLength: 1 }, // cannot be blank
+      patientAnswerId: { type: 'string', minLength: 1 }, // cannot be blank
       previousPatientAnswerId: { type: 'string' },
       progressNoteId: { type: 'string' },
-      eventType: { type: 'string' },
+      eventType: { type: 'string', minLength: 1 }, // cannot be blank
       deletedAt: { type: 'string' },
     },
+    required: ['patientId', 'patientAnswerId', 'eventType'],
   };
 
   static relationMappings: RelationMappings = {
@@ -180,7 +181,7 @@ export default class PatientAnswerEvent extends BaseModel {
   ): Promise<PatientAnswerEvent> {
     await this.query(txn)
       .where({ id: patientAnswerEventId, deletedAt: null })
-      .update({ deletedAt: new Date().toISOString() });
+      .patch({ deletedAt: new Date().toISOString() });
 
     const patientAnswerEvent = await this.query(txn)
       .eager(EAGER_QUERY)

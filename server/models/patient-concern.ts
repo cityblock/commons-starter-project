@@ -39,13 +39,14 @@ export default class PatientConcern extends BaseModel {
     type: 'object',
     properties: {
       id: { type: 'string' },
-      order: { type: 'integer' },
-      patientId: { type: 'string' },
-      concernId: { type: 'string' },
+      order: { type: 'integer', minimum: 1 }, // cannot be zero or negative
+      patientId: { type: 'string', minLength: 1 }, // cannot be blank
+      concernId: { type: 'string', minLength: 1 }, // cannot be blank
       deletedAt: { type: 'string' },
       startedAt: { type: 'string | null' },
       completedAt: { type: 'string | null' },
     },
+    required: ['patientId', 'concernId'],
   };
 
   static relationMappings: RelationMappings = {
@@ -127,7 +128,7 @@ export default class PatientConcern extends BaseModel {
     return await transaction(PatientConcern.knex(), async txn => {
       const updatedPatientConcern = await this.query(existingTxn || txn)
         .eager(EAGER_QUERY)
-        .updateAndFetchById(patientConcernId, concern);
+        .patchAndFetchById(patientConcernId, concern);
 
       await CarePlanUpdateEvent.create(
         {
@@ -181,7 +182,7 @@ export default class PatientConcern extends BaseModel {
     return await transaction(PatientConcern.knex(), async txn => {
       await this.query(existingTxn || txn)
         .where({ id: patientConcernId, deletedAt: null })
-        .update({ deletedAt: new Date().toISOString() });
+        .patch({ deletedAt: new Date().toISOString() });
 
       const patientConcern = await this.query(existingTxn || txn)
         .eager(EAGER_QUERY)

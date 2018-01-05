@@ -28,9 +28,11 @@ export default class GoalSuggestion extends BaseModel {
       id: { type: 'string' },
       answerId: { type: 'string' },
       screeningToolScoreRangeId: { type: 'string' },
-      goalSuggestionTemplateId: { type: 'string' },
+      goalSuggestionTemplateId: { type: 'string', minLength: 1 }, // cannot be blank
       deletedAt: { type: 'string' },
     },
+    required: ['goalSuggestionTemplateId'],
+    oneOf: [{ required: ['answerId'] }, { required: ['screeningToolScoreRangeId'] }],
   };
 
   static relationMappings: RelationMappings = {
@@ -257,7 +259,7 @@ export default class GoalSuggestion extends BaseModel {
         screeningToolScoreRangeId: screeningToolScoreRangeId || null,
         deletedAt: null,
       })
-      .update({ deletedAt: new Date().toISOString() });
+      .patch({ deletedAt: new Date().toISOString() });
 
     if (answerId) {
       return await this.getForAnswer(answerId);

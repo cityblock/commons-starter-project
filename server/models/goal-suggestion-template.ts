@@ -24,9 +24,10 @@ export default class GoalSuggestionTemplate extends BaseModel {
     type: 'object',
     properties: {
       id: { type: 'string' },
-      title: { type: 'string' },
+      title: { type: 'string', minLength: 1 }, // cannot be blank
       deletedAt: { type: 'string' },
     },
+    required: ['title'],
   };
 
   static relationMappings: RelationMappings = {
@@ -69,7 +70,7 @@ export default class GoalSuggestionTemplate extends BaseModel {
     return await this.query()
       .eager('taskTemplates')
       .modifyEager('taskTemplates', builder => builder.where('deletedAt', null))
-      .updateAndFetchById(goalSuggestionTemplateId, goalSuggestionTemplate);
+      .patchAndFetchById(goalSuggestionTemplateId, goalSuggestionTemplate);
   }
 
   static async getAll({
@@ -86,7 +87,7 @@ export default class GoalSuggestionTemplate extends BaseModel {
   static async delete(goalSuggestionTemplateId: string): Promise<GoalSuggestionTemplate> {
     await this.query()
       .where({ id: goalSuggestionTemplateId, deletedAt: null })
-      .update({ deletedAt: new Date().toISOString() });
+      .patch({ deletedAt: new Date().toISOString() });
 
     const goalSuggestion = await this.query().findById(goalSuggestionTemplateId);
     if (!goalSuggestion) {

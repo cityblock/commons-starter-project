@@ -73,6 +73,7 @@ export default class Patient extends BaseModel {
       consentToCall: { type: 'boolean' },
       consentToText: { type: 'boolean' },
     },
+    required: ['firstName', 'lastName'],
   };
 
   static relationMappings: RelationMappings = {
@@ -160,7 +161,7 @@ export default class Patient extends BaseModel {
   }
 
   static async edit(patient: IEditPatient, patientId: string, txn?: Transaction): Promise<Patient> {
-    return await this.query(txn).updateAndFetchById(patientId, patient);
+    return await this.query(txn).patchAndFetchById(patientId, patient);
   }
 
   // limit accidentally editing the athenaPatientId by only allowing it explicitly here
@@ -169,7 +170,7 @@ export default class Patient extends BaseModel {
     patientId: string,
     txn?: Transaction,
   ): Promise<Patient> {
-    return this.query(txn).updateAndFetchById(patientId, { athenaPatientId });
+    return this.query(txn).patchAndFetchById(patientId, { athenaPatientId });
   }
 
   static async execWithTransaction(

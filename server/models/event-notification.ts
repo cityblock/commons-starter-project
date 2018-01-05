@@ -39,13 +39,14 @@ export default class EventNotification extends BaseModel {
     type: 'object',
     properties: {
       id: { type: 'string' },
-      userId: { type: 'string' },
+      userId: { type: 'string', minLength: 1 }, // cannot be blank
       taskEventId: { type: 'string' },
       seenAt: { type: 'string' },
       emailSentAt: { type: 'string' },
       deliveredAt: { type: 'string' },
       deletedAt: { type: 'string' },
     },
+    required: ['userId'],
   };
 
   static relationMappings: RelationMappings = {
@@ -114,7 +115,7 @@ export default class EventNotification extends BaseModel {
   static async delete(eventNotificationId: string): Promise<EventNotification> {
     await this.query()
       .where({ id: eventNotificationId, deletedAt: null })
-      .update({ deletedAt: new Date().toISOString() });
+      .patch({ deletedAt: new Date().toISOString() });
 
     const eventNotification = await this.query().findById(eventNotificationId);
     if (!eventNotification) {
@@ -130,7 +131,7 @@ export default class EventNotification extends BaseModel {
     return await this.query()
       .eager(EAGER_QUERY)
       .modifyEager('taskEvent', builder => builder.where('deletedAt', null))
-      .updateAndFetchById(eventNotificationId, eventNotification);
+      .patchAndFetchById(eventNotificationId, eventNotification);
   }
 
   // Fetch all event notifications for a user

@@ -85,9 +85,9 @@ export default class PatientAnswer extends BaseModel {
     type: 'object',
     properties: {
       id: { type: 'string' },
-      patientId: { type: 'string' },
-      userId: { type: 'string' },
-      answerId: { type: 'string' },
+      patientId: { type: 'string', minLength: 1 }, // cannot be blank
+      userId: { type: 'string', minLength: 1 }, // cannot be blank
+      answerId: { type: 'string', minLength: 1 }, // cannot be blank
       answerValue: { type: 'string' },
       applicable: { type: 'boolean' },
       deletedAt: { type: 'string' },
@@ -96,6 +96,13 @@ export default class PatientAnswer extends BaseModel {
       riskAreaAssessmentSubmissionId: { type: 'string' },
       mixerJobId: { type: 'string' },
     },
+    required: ['patientId', 'answerId'],
+    oneOf: [
+      { required: ['patientScreeningToolSubmissionId'] },
+      { required: ['progressNoteId'] },
+      { required: ['riskAreaAssessmentSubmissionId'] },
+      { required: ['mixerJobId'] },
+    ],
   };
 
   static relationMappings: RelationMappings = {
@@ -415,13 +422,13 @@ export default class PatientAnswer extends BaseModel {
   ): Promise<PatientAnswer> {
     return await this.query(txn)
       .eager(EAGER_QUERY)
-      .updateAndFetchById(patientAnswerId, { applicable });
+      .patchAndFetchById(patientAnswerId, { applicable });
   }
 
   static async delete(patientAnswerId: string, txn?: Transaction): Promise<PatientAnswer> {
     await this.query(txn)
       .where({ id: patientAnswerId, deletedAt: null })
-      .update({ deletedAt: new Date().toISOString() });
+      .patch({ deletedAt: new Date().toISOString() });
 
     const patientAnswer = await this.query(txn).findById(patientAnswerId);
     if (!patientAnswer) {

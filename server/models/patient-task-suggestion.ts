@@ -41,14 +41,15 @@ export default class PatientTaskSuggestion extends BaseModel {
     type: 'object',
     properties: {
       id: { type: 'string' },
-      patientId: { type: 'string' },
-      taskTemplateId: { type: 'string' },
+      patientId: { type: 'string', minLength: 1 }, // cannot be blank
+      taskTemplateId: { type: 'string', minLength: 1 }, // cannot be blank
       dismissedById: { type: 'string' },
       dismissedReason: { type: 'string' },
       dismissedAt: { type: 'string' },
       acceptedAt: { type: 'string' },
       acceptedById: { type: 'string' },
     },
+    required: ['patientId', 'taskTemplateId'],
   };
 
   static relationMappings: RelationMappings = {
@@ -139,7 +140,7 @@ export default class PatientTaskSuggestion extends BaseModel {
   ): Promise<PatientTaskSuggestion> {
     return await this.query(txn)
       .eager(EAGER_QUERY)
-      .updateAndFetchById(patientTaskSuggestionId, {
+      .patchAndFetchById(patientTaskSuggestionId, {
         acceptedAt: new Date().toISOString(),
         acceptedById,
       });
@@ -149,7 +150,7 @@ export default class PatientTaskSuggestion extends BaseModel {
     const { patientTaskSuggestionId, dismissedById, dismissedReason } = input;
     return await this.query()
       .eager(EAGER_QUERY)
-      .updateAndFetchById(patientTaskSuggestionId, {
+      .patchAndFetchById(patientTaskSuggestionId, {
         dismissedById,
         dismissedReason,
         dismissedAt: new Date().toISOString(),

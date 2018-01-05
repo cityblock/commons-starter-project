@@ -17,9 +17,10 @@ export default class ProgressNoteTemplate extends BaseModel {
     type: 'object',
     properties: {
       id: { type: 'string' },
-      title: { type: 'string' },
+      title: { type: 'string', minLength: 1 },
       deletedAt: { type: 'string' },
     },
+    required: ['title'],
   };
 
   static relationalMappings: RelationMappings = {
@@ -58,13 +59,13 @@ export default class ProgressNoteTemplate extends BaseModel {
     progressNoteTemplate: Partial<IProgressNoteTemplateEditableFields>,
     progressNoteTemplateId: string,
   ): Promise<ProgressNoteTemplate> {
-    return await this.query().updateAndFetchById(progressNoteTemplateId, progressNoteTemplate);
+    return await this.query().patchAndFetchById(progressNoteTemplateId, progressNoteTemplate);
   }
 
   static async delete(progressNoteTemplateId: string) {
     await this.query()
       .where({ id: progressNoteTemplateId, deletedAt: null })
-      .update({ deletedAt: new Date().toISOString() });
+      .patch({ deletedAt: new Date().toISOString() });
 
     const progressNoteTemplate = await this.query().findById(progressNoteTemplateId);
     if (!progressNoteTemplate) {

@@ -214,7 +214,6 @@ describe('handling pubusub push events from mixer', () => {
     const sortedSuggestions = carePlanSuggestions.sort((a, b) => {
       return a.suggestionType < b.suggestionType ? -1 : 1;
     });
-
     expect(sortedSuggestions.length).toEqual(2);
     expect(sortedSuggestions[0].concern).toMatchObject(concern);
     expect(sortedSuggestions[1].goalSuggestionTemplate).toMatchObject(goalSuggestionTemplate2);

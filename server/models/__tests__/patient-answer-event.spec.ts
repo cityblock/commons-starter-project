@@ -527,4 +527,82 @@ describe('patient answer event model', () => {
       expect(secondFetchedPatientAnswerEvents).toMatchObject([{ id: patientAnswerEvent.id }]);
     });
   });
+  it('filters out patient answers that are deleted when patient answer event is not deleted', async () => {
+    // happens when changing answers to the same question
+    await transaction(PatientAnswerEvent.knex(), async txn => {
+      const { patient, user, patientAnswer, question, riskAreaAssessmentSubmission } = await setup(
+        txn,
+      );
+
+      // second answer
+      const answer = await Answer.create(
+        {
+          questionId: question.id,
+          displayValue: '2',
+          value: '2',
+          valueType: 'number',
+          order: 2,
+        },
+        txn,
+      );
+
+      const progressNote = await ProgressNote.autoOpenIfRequired(
+        {
+          patientId: patient.id,
+          userId: user.id,
+        },
+        txn,
+      );
+      const patientAnswerEvent = await PatientAnswerEvent.create(
+        {
+          patientId: patient.id,
+          userId: user.id,
+          patientAnswerId: patientAnswer.id,
+          eventType: 'create_patient_answer',
+          progressNoteId: progressNote.id,
+        },
+        txn,
+      );
+
+      const secondPatientAnswer = (await PatientAnswer.create(
+        {
+          patientId: patient.id,
+          type: 'riskAreaAssessmentSubmission',
+          riskAreaAssessmentSubmissionId: riskAreaAssessmentSubmission.id,
+          questionIds: [answer.questionId],
+          answers: [
+            {
+              answerId: answer.id,
+              questionId: question.id,
+              answerValue: answer.value,
+              patientId: patient.id,
+              applicable: true,
+              userId: user.id,
+            },
+          ],
+        },
+        txn,
+      ))[0];
+
+      const secondPatientAnswerEvent = await PatientAnswerEvent.create(
+        {
+          patientId: patient.id,
+          userId: user.id,
+          patientAnswerId: secondPatientAnswer.id,
+          eventType: 'create_patient_answer',
+          progressNoteId: progressNote.id,
+        },
+        txn,
+      );
+
+      // Make sure all patientAnswerEvents are returned
+      const fetchedPatientAnswerEvents = await PatientAnswerEvent.getAllForProgressNote(
+        progressNote.id,
+        txn,
+      );
+      const fetchedPatientAnswerEventIds = fetchedPatientAnswerEvents.map(event => event.id);
+      expect(fetchedPatientAnswerEventIds).toContain(secondPatientAnswerEvent.id);
+      expect(fetchedPatientAnswerEventIds).not.toContain(patientAnswerEvent.id);
+    });
+  });
 });

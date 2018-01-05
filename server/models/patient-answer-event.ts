@@ -118,9 +118,14 @@ export default class PatientAnswerEvent extends BaseModel {
     progressNoteId: string,
     txn?: Transaction,
   ): Promise<PatientAnswerEvent[]> {
-    return await this.query(txn)
+    return (await this.query(txn)
       .eager(EAGER_QUERY)
-      .where({ progressNoteId, deletedAt: null });
+      .joinRelation('patientAnswer')
+      .where('patient_answer_event.progressNoteId', progressNoteId)
+      .andWhere('patientAnswer.deletedAt', null)
+      .andWhere('patientAnswer.progressNoteId', null) // filter out answers on the progress note
+      .andWhere('patientAnswer.patientScreeningToolSubmissionId', null) // filter out answers on screening tool
+      .andWhere('patient_answer_event.deletedAt', null)) as any;
   }
 
   static async create(

@@ -55,7 +55,6 @@ class ProgressNoteActivitySection extends React.Component<IProps, IState> {
     }
 
     const events = progressNoteActivity[activityType];
-
     if (!events) {
       return 0;
     }

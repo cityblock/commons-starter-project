@@ -1,5 +1,6 @@
 import { shallow } from 'enzyme';
 import * as React from 'react';
+import EmptyPlaceholder from '../../../shared/library/empty-placeholder/empty-placeholder';
 import Spinner from '../../../shared/library/spinner/spinner';
 import {
   shortPatientScreeningToolSubmission,
@@ -63,6 +64,14 @@ describe('Patient 360 History Component', () => {
         .at(1)
         .props().prevSubmission,
     ).toBeNull();
+  });
+
+  it('renders empty placeholder if no prior submissions', () => {
+    wrapper.setProps({ submissions: [] });
+
+    expect(wrapper.find(ScreeningToolHistory).length).toBe(0);
+    expect(wrapper.find(EmptyPlaceholder).length).toBe(1);
+    expect(wrapper.find(EmptyPlaceholder).props().headerMessageId).toBe('threeSixty.historyEmpty');
   });
 
   it('renders loading spinner if loading', () => {

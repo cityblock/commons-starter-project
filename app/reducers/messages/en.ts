@@ -257,6 +257,7 @@ export const ENGLISH_TRANSLATION = {
     'threeSixty.automatedEmpty': 'There are no automated assessments on record',
     'threeSixty.back': 'Back to 360',
     'threeSixty.history': 'History',
+    'threeSixty.historyEmpty': 'No screening tools have been administered to this patient',
     'threeSixty.initialAssessment': 'Initial Assessment:',
     'threeSixty.manual': 'Manual Assessments:',
     'threeSixty.manualDetail': 'Manual Assessments',

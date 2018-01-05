@@ -265,6 +265,7 @@ export const SPANISH_TRANSLATION = {
     'threeSixty.automatedEmpty': 'No hay evaluaciones automatizadas en el registro',
     'threeSixty.back': 'Volver a 360',
     'threeSixty.history': 'Historia',
+    'threeSixty.historyEmpty': 'No se han administrado herramientas de detección a este paciente',
     'threeSixty.initialAssessment': 'Evaluación inicial:',
     'threeSixty.manual': 'Evaluaciones manuales:',
     'threeSixty.manualDetail': 'Evaluaciones manuales',

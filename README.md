@@ -43,7 +43,7 @@ Setup your database. First install postgres 10 from brew or postgresapp.
 
 ### Development
 
-Ensure you have copied from staging to local. Then run:
+Ensure you have copied from staging to local and have your user created in staging by another employee via Manager. Then run:
 
     yarn run dev
 
@@ -207,25 +207,6 @@ master.
 
     yarn test -u
 
-### Add a new user
-
-Before a new user can log in, they need to be added to the database. To do so, run the following
-command:
-
-`EMAIL=email@email.com FIRST_NAME=firstName LAST_NAME=lastName PROVIDER_ID=[some integer] yarn user:add:dev`
-
-When running on production, replace `user:add:dev` with `user:add:production`. You may also provide
-a `USER_ROLE` environment variable in front of the command if you would like the user to be anything
-other than a physician.
-
-### Remove a user
-
-To remove a user, run the following command:
-
-`EMAIL=email@email.com yarn user:remove:dev`
-
-When running on production, replace `user:remove:dev` with `user:remove:production`.
-
 ### Create a new migration
 
 Create a migration (using [knex][]) with:
@@ -284,11 +265,11 @@ install [Docker][]. After you have Docker installed and running, follow these st
 Note: this will eventually become untenable but for now it is convenient.
 
 aptible login
-aptible db:dump commons
+aptible db:dump commons-staging
 dropdb commons
 createdb commons
-psql commons < commons.dump
-rm commons.dump
+psql commons < commons-staging.dump
+rm commons-staging.dump
 
 ### Create a database schema explorer
 
@@ -361,5 +342,5 @@ In the same tab, open an IRB session, and execute the following commands, substi
 [secure development lifecycle]: https://github.com/Microsoft/tslint-microsoft-contrib/wiki/TSLint-and-the-Microsoft-Security-Development-Lifecycle
 [schemaspy]: https://github.com/schemaspy/schemaspy
 [schemacrawler]: https://github.com/sualeh/SchemaCrawler
-[Google Cloud SDK]: https://cloud.google.com/sdk/downloads
-[JDK]: http://www.oracle.com/technetwork/java/javase/downloads/index.html
+[google cloud sdk]: https://cloud.google.com/sdk/downloads
+[jdk]: http://www.oracle.com/technetwork/java/javase/downloads/index.html

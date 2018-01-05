@@ -24,7 +24,6 @@ type allProps = IProps & IGraphqlProps;
 class ProgressNoteActivity extends React.Component<allProps> {
   render() {
     const { progressNoteActivity } = this.props;
-
     return (
       <div className={styles.activity}>
         <ProgressNoteActivitySection

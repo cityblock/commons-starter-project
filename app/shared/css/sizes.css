@@ -134,12 +134,6 @@
     line-height: var(--large-font-line-height);
   }
 
-  --label: {
-    font-family: var(--basetica-medium);
-    font-size: var(--default-font-size);
-    line-height: var(--medium-font-line-height);
-  }
-
   --select: {
     -webkit-appearance: none;
     border-radius: 0;

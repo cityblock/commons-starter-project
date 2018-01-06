@@ -73,17 +73,18 @@ export default class Question extends BaseModel {
     type: 'object',
     properties: {
       id: { type: 'string' },
-      title: { type: 'string' },
-      answerType: { type: 'string' },
+      title: { type: 'string', minLength: 1 }, // cannot be blank
+      answerType: { type: 'string', minLength: 1 }, // cannot be blank
       applicableIfType: { type: 'string' },
       riskAreaId: { type: 'string' },
       screeningToolId: { type: 'string' },
       progressNoteTemplateId: { type: 'string' },
-      order: { type: 'integer' },
+      order: { type: 'integer', minimum: 1 }, // cannot be zero ore negative
       deletedAt: { type: 'string' },
       validatedSource: { type: 'string' },
       computedFieldId: { type: 'string' },
     },
+    required: ['title', 'answerType', 'order'],
   };
 
   static relationMappings: RelationMappings = {
@@ -215,13 +216,13 @@ export default class Question extends BaseModel {
     question: Partial<IQuestionEditableFields>,
     questionId: string,
   ): Promise<Question> {
-    return await this.modifyEager(this.query()).updateAndFetchById(questionId, question);
+    return await this.modifyEager(this.query()).patchAndFetchById(questionId, question);
   }
 
   static async delete(questionId: string): Promise<Question> {
     await this.query()
       .where({ id: questionId, deletedAt: null })
-      .update({ deletedAt: new Date().toISOString() });
+      .patch({ deletedAt: new Date().toISOString() });
 
     const question = await this.modifyEager(this.query()).findById(questionId);
     if (!question) {

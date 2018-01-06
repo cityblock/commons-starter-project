@@ -31,11 +31,12 @@ export default class TaskComment extends BaseModel {
     type: 'object',
     properties: {
       id: { type: 'string' },
-      taskId: { type: 'string' },
-      userId: { type: 'string' },
-      body: { type: 'string' },
+      taskId: { type: 'string', minLength: 1 },
+      userId: { type: 'string', minLength: 1 },
+      body: { type: 'string', minLength: 1 },
       deletedAt: { type: 'string' },
     },
+    required: ['taskId', 'userId', 'body'],
   };
 
   static relationMappings: RelationMappings = {
@@ -84,13 +85,13 @@ export default class TaskComment extends BaseModel {
   ): Promise<TaskComment> {
     return await this.query(txn)
       .eager(EAGER_QUERY)
-      .updateAndFetchById(taskCommentId, { body });
+      .patchAndFetchById(taskCommentId, { body });
   }
 
   static async delete(taskCommentId: string, txn?: Transaction): Promise<TaskComment> {
     await this.query(txn)
       .where({ id: taskCommentId, deletedAt: null })
-      .update({ deletedAt: new Date().toISOString() });
+      .patch({ deletedAt: new Date().toISOString() });
 
     const taskComment = await this.query(txn)
       .eager(EAGER_QUERY)

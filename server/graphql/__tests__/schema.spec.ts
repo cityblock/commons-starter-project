@@ -2,7 +2,7 @@ import * as uuid from 'uuid/v4';
 import Db from '../../db';
 import Clinic from '../../models/clinic';
 import User from '../../models/user';
-import { createMockClinic } from '../../spec-helpers';
+import { createMockClinic, createMockUser } from '../../spec-helpers';
 
 import {
   getGraphQLContext,
@@ -71,11 +71,7 @@ describe('util tests', () => {
       const now = new Date();
       const clinic = await Clinic.create(createMockClinic());
       // user with newer loginTime
-      const user = await User.create({
-        email: 'a@b.com',
-        userRole: 'physician',
-        homeClinicId: clinic.id,
-      });
+      const user = await User.create(createMockUser(11, clinic.id));
       await User.update(user.id, { lastLoginAt: now.toISOString() });
 
       const authToken = signJwt({

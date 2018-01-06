@@ -185,6 +185,7 @@ export enum UserOrderOptions {
   lastLoginAtAsc = "lastLoginAtAsc",
   updatedAtDesc = "updatedAtDesc",
   updatedAtAsc = "updatedAtAsc",
+  emailAsc = "emailAsc",
 }
 
 

@@ -68,7 +68,10 @@ describe('user model', () => {
       const clinic = await Clinic.create(createMockClinic(), txn);
 
       await expect(
-        User.create({ email, userRole, homeClinicId: clinic.id }, txn),
+        User.create(
+          { firstName: 'Jon', lastName: 'Snow', email, userRole, homeClinicId: clinic.id },
+          txn,
+        ),
       ).rejects.toMatchObject(new Error(JSON.stringify({ email: [{ message }] }, null, '  ')));
     });
   });

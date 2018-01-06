@@ -37,18 +37,28 @@ export default class QuickCall extends BaseModel {
     type: 'object',
     properties: {
       id: { type: 'string' },
-      progressNoteId: { type: 'string' },
-      userId: { type: 'string' },
-      reason: { type: 'string' },
-      summary: { type: 'string' },
-      direction: { type: 'string' },
-      callRecipient: { type: 'string' },
+      progressNoteId: { type: 'string', minLength: 1 }, // cannot be blank
+      userId: { type: 'string', minLength: 1 }, // cannot be blank
+      reason: { type: 'string', minLength: 1 }, // cannot be blank
+      summary: { type: 'string', minLength: 1 }, // cannot be blank
+      direction: { type: 'string', enum: ['Inbound', 'Outbound'] },
+      callRecipient: { type: 'string', minLength: 1 }, // cannot be blank
       wasSuccessful: { type: 'boolean' },
-      startTime: { type: 'string' },
+      startTime: { type: 'string', minLength: 1 }, // cannot be blank
       createdAt: { type: 'string' },
       updatedAt: { type: 'string' },
       deletedAt: { type: 'string' },
     },
+    required: [
+      'userId',
+      'progressNoteId',
+      'reason',
+      'summary',
+      'direction',
+      'callRecipient',
+      'wasSuccessful',
+      'startTime',
+    ],
   };
 
   static relationMappings: RelationMappings = {

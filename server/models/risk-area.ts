@@ -47,14 +47,22 @@ export default class RiskArea extends BaseModel {
     type: 'object',
     properties: {
       id: { type: 'string' },
-      title: { type: 'string' },
+      title: { type: 'string', minLength: 1 },
       assessmentType: { type: 'string', enum: ['manual', 'automated'] },
       riskAreaGroupId: { type: 'string', minLength: 1 }, // cannot be blank
       deletedAt: { type: 'string' },
-      order: { type: 'integer' },
-      mediumRiskThreshold: { type: 'integer', minimum: 1 },
-      highRiskThreshold: { type: 'integer', minimum: 1 },
+      order: { type: 'integer', minimum: 1 }, // cannot be zero or negative
+      mediumRiskThreshold: { type: 'integer', minimum: 1 }, // cannot be zero or negative
+      highRiskThreshold: { type: 'integer', minimum: 1 }, // cannot be zero or negative
     },
+    required: [
+      'title',
+      'assessmentType',
+      'riskAreaGroupId',
+      'order',
+      'mediumRiskThreshold',
+      'highRiskThreshold',
+    ],
   };
 
   static relationMappings: RelationMappings = {
@@ -120,13 +128,13 @@ export default class RiskArea extends BaseModel {
   ): Promise<RiskArea> {
     return await this.query()
       .eager(EAGER_QUERY)
-      .updateAndFetchById(riskAreaId, riskArea);
+      .patchAndFetchById(riskAreaId, riskArea);
   }
 
   static async delete(riskAreaId: string): Promise<RiskArea> {
     await this.query()
       .where({ id: riskAreaId, deletedAt: null })
-      .update({ deletedAt: new Date().toISOString() });
+      .patch({ deletedAt: new Date().toISOString() });
 
     const riskArea = await this.query()
       .eager(EAGER_QUERY)

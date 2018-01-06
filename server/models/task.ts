@@ -26,6 +26,7 @@ interface ITaskPaginationOptions extends IPaginationOptions {
 }
 
 export type Priority = 'low' | 'medium' | 'high';
+export const PRIORITY: Priority[] = ['low', 'medium', 'high'];
 
 // TODO: Only fetch needed eager models
 const EAGER_QUERY = `[
@@ -62,18 +63,19 @@ export default class Task extends BaseModel {
     type: 'object',
     properties: {
       id: { type: 'string' },
-      title: { type: 'string', minLength: 1 },
+      title: { type: 'string', minLength: 1 }, // cannot be blank
       description: { type: 'string' },
       completedAt: { type: ['string', 'null'] },
       completedById: { type: ['string', 'null'] },
-      assignedToId: { type: 'string' },
+      assignedToId: { type: 'string', minLength: 1 }, // cannot be blank
       createdById: { type: 'string' },
-      patientId: { type: 'string' },
-      patientGoalId: { type: 'string' },
+      patientId: { type: 'string', minLength: 1 }, // cannot be blank
+      patientGoalId: { type: 'string', minLength: 1 }, // cannot be blank
       dueAt: { type: 'string' },
-      priority: { type: 'string', enum: ['low', 'medium', 'high'] },
+      priority: { type: 'string', enum: PRIORITY },
       deletedAt: { type: 'string' },
     },
+    required: ['title', 'patientId'],
   };
 
   static relationMappings: RelationMappings = {
@@ -225,13 +227,13 @@ export default class Task extends BaseModel {
       .modifyEager('followers', builder => {
         builder.where('task_follower.deletedAt', null);
       })
-      .updateAndFetchById(taskId, task);
+      .patchAndFetchById(taskId, task);
   }
 
   static async delete(taskId: string, txn?: Transaction): Promise<Task | undefined> {
     await this.query(txn)
       .where({ id: taskId, deletedAt: null })
-      .update({ deletedAt: new Date().toISOString() });
+      .patch({ deletedAt: new Date().toISOString() });
 
     const task = await this.query(txn)
       .eager(EAGER_QUERY)
@@ -248,7 +250,7 @@ export default class Task extends BaseModel {
     return this.query(txn)
       .eager(EAGER_QUERY)
       .modifyEager('followers', builder => builder.where('task_follower.deletedAt', null))
-      .updateAndFetchById(taskId, {
+      .patchAndFetchById(taskId, {
         completedAt: new Date().toISOString(),
         completedById: userId,
       });
@@ -258,7 +260,7 @@ export default class Task extends BaseModel {
     return this.query(txn)
       .eager(EAGER_QUERY)
       .modifyEager('followers', builder => builder.where('task_follower.deletedAt', null))
-      .updateAndFetchById(taskId, {
+      .patchAndFetchById(taskId, {
         completedAt: null,
         completedById: null,
       });

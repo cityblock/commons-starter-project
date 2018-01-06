@@ -33,6 +33,23 @@ type EventTypes =
   | 'edit_title'
   | 'edit_description';
 
+const EVENT_TYPES: EventTypes[] = [
+  'create_task',
+  'add_follower',
+  'remove_follower',
+  'complete_task',
+  'uncomplete_task',
+  'delete_task',
+  'add_comment',
+  'edit_comment',
+  'delete_comment',
+  'edit_priority',
+  'edit_due_date',
+  'edit_assignee',
+  'edit_title',
+  'edit_description',
+];
+
 const EAGER_QUERY =
   '[task.[createdBy, followers, assignedTo, patient, completedBy], user, eventComment.[user], eventUser]';
 
@@ -56,14 +73,15 @@ export default class TaskEvent extends BaseModel {
     type: 'object',
     properties: {
       id: { type: 'string' },
-      taskId: { type: 'string' },
-      userId: { type: 'string' },
-      eventType: { type: 'string' },
+      taskId: { type: 'string', minLength: 1 }, // cannot be blank
+      userId: { type: 'string', minLength: 1 }, // cannot be blank
+      eventType: { type: 'string', enum: EVENT_TYPES }, // cannot be blank
       eventCommentId: { type: 'string' },
       eventUserId: { type: 'string' },
       progressNoteId: { type: 'string' },
       deletedAt: { type: 'string' },
     },
+    required: ['taskId', 'userId', 'eventType'],
   };
 
   static relationMappings: RelationMappings = {
@@ -166,7 +184,7 @@ export default class TaskEvent extends BaseModel {
   static async delete(taskEventId: string): Promise<TaskEvent> {
     await this.query()
       .where({ id: taskEventId, deletedAt: null })
-      .update({ deletedAt: new Date().toISOString() });
+      .patch({ deletedAt: new Date().toISOString() });
 
     const taskEvent = await this.query()
       .eager(EAGER_QUERY)

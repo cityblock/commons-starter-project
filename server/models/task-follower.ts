@@ -21,10 +21,11 @@ export default class TaskFollower extends BaseModel {
     type: 'object',
     properties: {
       id: { type: 'string' },
-      taskId: { type: 'string' },
-      userId: { type: 'string' },
+      taskId: { type: 'string', minLength: 1 }, // cannot be blank
+      userId: { type: 'string', minLength: 1 }, // cannot be blank
       deletedAt: { type: 'string' },
     },
+    required: ['taskId', 'userId'],
   };
 
   static relationMappings: RelationMappings = {
@@ -71,7 +72,7 @@ export default class TaskFollower extends BaseModel {
       .where('userId', userId)
       .andWhere('taskId', taskId)
       .andWhere('deletedAt', null)
-      .update({ deletedAt: new Date().toISOString() });
+      .patch({ deletedAt: new Date().toISOString() });
   }
 }
 /* tslint:enable:member-ordering */

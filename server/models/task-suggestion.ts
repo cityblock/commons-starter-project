@@ -22,10 +22,11 @@ export default class TaskSuggestion extends BaseModel {
     type: 'object',
     properties: {
       id: { type: 'string' },
-      answerId: { type: 'string' },
-      taskTemplateId: { type: 'string' },
+      answerId: { type: 'string', minLength: 1 },
+      taskTemplateId: { type: 'string', minLength: 1 },
       deletedAt: { type: 'string' },
     },
+    required: ['answerId', 'taskTemplateId'],
   };
 
   static relationMappings: RelationMappings = {
@@ -99,7 +100,7 @@ export default class TaskSuggestion extends BaseModel {
         answerId,
         deletedAt: null,
       })
-      .update({ deletedAt: new Date().toISOString() });
+      .patch({ deletedAt: new Date().toISOString() });
 
     return await this.getForAnswer(answerId);
   }

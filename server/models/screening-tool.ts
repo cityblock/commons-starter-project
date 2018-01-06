@@ -32,10 +32,11 @@ export default class ScreeningTool extends BaseModel {
     type: 'object',
     properties: {
       id: { type: 'string' },
-      title: { type: 'string' },
-      riskAreaId: { type: 'string' },
+      title: { type: 'string', minLength: 1 }, // cannot be blank
+      riskAreaId: { type: 'string', minLength: 1 }, // cannot be blank
       deletedAt: { type: 'string' },
     },
+    required: ['title', 'riskAreaId'],
   };
 
   static relationMappings: RelationMappings = {
@@ -89,7 +90,7 @@ export default class ScreeningTool extends BaseModel {
   ): Promise<ScreeningTool> {
     return await this.query()
       .eager(EAGER_QUERY)
-      .updateAndFetchById(screeningToolId, screeningTool);
+      .patchAndFetchById(screeningToolId, screeningTool);
   }
 
   static async get(screeningToolId: string): Promise<ScreeningTool> {
@@ -139,7 +140,7 @@ export default class ScreeningTool extends BaseModel {
   static async delete(screeningToolId: string): Promise<ScreeningTool> {
     await this.query()
       .where({ id: screeningToolId, deletedAt: null })
-      .update({ deletedAt: new Date().toISOString() });
+      .patch({ deletedAt: new Date().toISOString() });
     const screeningTool = await this.query()
       .eager(EAGER_QUERY)
       .findById(screeningToolId);

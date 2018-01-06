@@ -12,8 +12,17 @@ export type UserRole =
   | 'familyMember'
   | 'anonymousUser'
   | 'admin';
+export const USER_ROLE: UserRole[] = [
+  'physician',
+  'nurseCareManager',
+  'healthCoach',
+  'familyMember',
+  'anonymousUser',
+  'admin',
+];
 
 export type Locale = 'en' | 'es';
+const LOCALE: Locale[] = ['en', 'es'];
 
 interface ICreateUser {
   email: string;
@@ -86,20 +95,21 @@ export default class User extends Model {
     properties: {
       id: { type: 'string' },
       lastLoginAt: { type: 'string' },
-      firstName: { type: 'string' },
-      lastName: { type: 'string' },
-      email: { type: 'string' },
-      locale: { type: 'string' },
+      firstName: { type: 'string', minLength: 1 }, // cannot be blank
+      lastName: { type: 'string', minLength: 1 }, // cannot be blank
+      email: { type: 'string', minLength: 1 },
+      locale: { type: 'string', enum: LOCALE },
       userRole: {
         type: 'string',
-        enum: ['familyMember', 'healthCoach', 'physician', 'nurseCareManager', 'admin'],
+        enum: USER_ROLE,
       },
-      homeClinicId: { type: 'string' },
-      athenaProviderId: { type: 'number' },
-      googleAuthId: { type: 'string' },
-      googleProfileImageUrl: { type: 'string' },
+      homeClinicId: { type: 'string', minLength: 1 }, // cannot be blank
+      athenaProviderId: { type: 'number', minLength: 1 }, // cannot be blank
+      googleAuthId: { type: 'string', minLength: 1 }, // cannot be blank
+      googleProfileImageUrl: { type: 'string', minLength: 1 }, // cannot be blank
       deletedAt: { type: 'string' },
     },
+    required: ['email', 'userRole', 'homeClinicId'],
   };
 
   static relationMappings: RelationMappings = {
@@ -172,7 +182,7 @@ export default class User extends Model {
     user: Partial<IUpdateUser>,
     txn?: Transaction,
   ): Promise<User> {
-    return await this.query(txn).updateAndFetchById(userId, user);
+    return await this.query(txn).patchAndFetchById(userId, user);
   }
 
   // NOTE: Separated because it is admin only - a user should not be able to change their own role
@@ -181,7 +191,7 @@ export default class User extends Model {
     userRole: UserRole,
     txn?: Transaction,
   ): Promise<User> {
-    return await this.query(txn).updateAndFetchById(userId, { userRole });
+    return await this.query(txn).patchAndFetchById(userId, { userRole });
   }
 
   static async get(userId: string, txn?: Transaction): Promise<User> {
@@ -231,7 +241,7 @@ export default class User extends Model {
   static async delete(userId: string, txn?: Transaction): Promise<User> {
     await this.query(txn)
       .where({ id: userId, deletedAt: null })
-      .update({ deletedAt: new Date().toISOString() });
+      .patch({ deletedAt: new Date().toISOString() });
     const user = await this.query(txn).findById(userId);
     if (!user) {
       return Promise.reject(`No such user: ${userId}`);

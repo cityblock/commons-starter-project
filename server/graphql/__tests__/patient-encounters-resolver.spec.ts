@@ -7,6 +7,7 @@ import Patient from '../../models/patient';
 import User from '../../models/user';
 import {
   createMockPatient,
+  createMockUser,
   createPatient,
   mockRedoxGetPatientEncounters,
   mockRedoxTokenFetch,
@@ -32,11 +33,7 @@ describe('patient encounters', () => {
       departmentId: 1,
       name: 'Center Zero',
     });
-    user = await User.create({
-      email: 'a@b.com',
-      userRole,
-      homeClinicId: clinic.id,
-    });
+    user = await User.create(createMockUser(1, clinic.id, userRole));
     patient = await createPatient(createMockPatient(1, clinic.id), user.id);
   });
 

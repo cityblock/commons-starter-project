@@ -34,13 +34,14 @@ export default class RiskAreaAssessmentSubmission extends BaseModel {
     type: 'object',
     properties: {
       id: { type: 'string' },
-      riskAreaId: { type: 'string' },
-      patientId: { type: 'string' },
-      userId: { type: 'string' },
+      riskAreaId: { type: 'string', minLength: 1 }, // cannot be blank
+      patientId: { type: 'string', minLength: 1 }, // cannot be blank
+      userId: { type: 'string', minLength: 1 }, // cannot be blank
       deletedAt: { type: 'string' },
       completedAt: { type: 'string' },
       createdAt: { type: 'string' },
     },
+    required: ['riskAreaId', 'patientId', 'userId'],
   };
 
   static relationMappings: RelationMappings = {
@@ -142,7 +143,7 @@ export default class RiskAreaAssessmentSubmission extends BaseModel {
 
     const submission = await this.query(txn)
       .eager(EAGER_QUERY)
-      .updateAndFetchById(riskAreaAssessmentSubmissionId, {
+      .patchAndFetchById(riskAreaAssessmentSubmissionId, {
         completedAt: new Date().toISOString(),
       });
 
@@ -196,7 +197,7 @@ export default class RiskAreaAssessmentSubmission extends BaseModel {
   ): Promise<RiskAreaAssessmentSubmission> {
     await this.query()
       .where({ id: riskAreaAssessmentSubmissionId, deletedAt: null })
-      .update({ deletedAt: new Date().toISOString() });
+      .patch({ deletedAt: new Date().toISOString() });
 
     const riskAreaAssessmentSubmission = await this.query().findById(
       riskAreaAssessmentSubmissionId,

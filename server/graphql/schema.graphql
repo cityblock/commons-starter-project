@@ -50,6 +50,7 @@ enum UserOrderOptions {
   lastLoginAtAsc
   updatedAtDesc
   updatedAtAsc
+  emailAsc
 }
 
 enum ComputedFieldOrderOptions {

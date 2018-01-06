@@ -36,6 +36,8 @@ describe('patient', () => {
     });
     homeClinicId = homeClinic.id;
     user = await User.create({
+      firstName: 'Daenerys',
+      lastName: 'Targaryen',
       email: 'a@b.com',
       userRole,
       homeClinicId,
@@ -203,6 +205,8 @@ describe('patient', () => {
   describe('patient search', () => {
     beforeEach(async () => {
       const user2 = await User.create({
+        firstName: 'Ygritte',
+        lastName: 'of the  North',
         email: 'ygritte@beyondthewall.com',
         userRole,
         homeClinicId,

@@ -1,7 +1,7 @@
 import { Model, RelationMappings, Transaction } from 'objection';
 import BaseModel from './base-model';
-import { Priority } from './task';
-import { UserRole } from './user';
+import { Priority, PRIORITY } from './task';
+import { UserRole, USER_ROLE } from './user';
 
 export type CompletedWithinInterval = 'hour' | 'day' | 'week' | 'month' | 'year';
 
@@ -31,15 +31,16 @@ export default class TaskTemplate extends BaseModel {
     type: 'object',
     properties: {
       id: { type: 'string' },
-      title: { type: 'string' },
+      title: { type: 'string', minLength: 1 }, // cannot be blank
       deletedAt: { type: 'string' },
-      completedWithinNumber: { type: 'number' },
-      completedWithinInterval: { type: 'string' },
+      completedWithinNumber: { type: 'number', minimum: 1 }, // cannot be zero or negative
+      completedWithinInterval: { type: 'string', enum: ['hour', 'day', 'week', 'month', 'year'] },
       repeating: { type: 'boolean' },
-      goalSuggestionTemplateId: { type: 'string' },
-      priority: { type: 'string' },
-      careTeamAssigneeRole: { type: 'string' },
+      goalSuggestionTemplateId: { type: 'string', minLength: 1 }, // cannot be blank
+      priority: { type: 'string', enum: PRIORITY },
+      careTeamAssigneeRole: { type: 'string', enum: USER_ROLE },
     },
+    required: ['title', 'priority', 'careTeamAssigneeRole'],
   };
 
   static relationMappings: RelationMappings = {
@@ -70,7 +71,7 @@ export default class TaskTemplate extends BaseModel {
     taskTemplateId: string,
     taskTemplate: Partial<ITaskTemplateEditableFields>,
   ): Promise<TaskTemplate> {
-    return await this.query().updateAndFetchById(taskTemplateId, taskTemplate);
+    return await this.query().patchAndFetchById(taskTemplateId, taskTemplate);
   }
 
   // TODO: paginate?
@@ -81,7 +82,7 @@ export default class TaskTemplate extends BaseModel {
   static async delete(taskTemplateId: string): Promise<TaskTemplate> {
     await this.query()
       .where({ id: taskTemplateId, deletedAt: null })
-      .update({ deletedAt: new Date().toISOString() });
+      .patch({ deletedAt: new Date().toISOString() });
 
     const taskTemplate = await this.query().findById(taskTemplateId);
     if (!taskTemplate) {

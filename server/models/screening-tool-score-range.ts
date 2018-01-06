@@ -39,12 +39,13 @@ export default class ScreeningToolScoreRange extends BaseModel {
     type: 'object',
     properties: {
       id: { type: 'string' },
-      screeningToolId: { type: 'string' },
-      description: { type: 'string' },
+      screeningToolId: { type: 'string', minLength: 1 }, // cannot be blank
+      description: { type: 'string', minLength: 1 }, // cannot be blank
       range: { type: 'int4range' },
-      riskAdjustmentType: { type: 'string' },
+      riskAdjustmentType: { type: 'string', enum: ['inactive', 'increment', 'forceHighRisk'] },
       deletedAt: { type: 'string' },
     },
+    required: ['screeningToolId', 'description', 'range'],
   };
 
   static relationMappings: RelationMappings = {
@@ -153,7 +154,7 @@ export default class ScreeningToolScoreRange extends BaseModel {
 
     return await this.query(txn)
       .eager(EAGER_QUERY)
-      .updateAndFetchById(screeningToolScoreRangeId, filtered);
+      .patchAndFetchById(screeningToolScoreRangeId, filtered);
   }
 
   static async get(
@@ -210,7 +211,7 @@ export default class ScreeningToolScoreRange extends BaseModel {
   ): Promise<ScreeningToolScoreRange> {
     await this.query(txn)
       .where({ id: screeningToolScoreRangeId, deletedAt: null })
-      .update({ deletedAt: new Date().toISOString() });
+      .patch({ deletedAt: new Date().toISOString() });
 
     const screeningToolScoreRange = await this.query(txn).findById(screeningToolScoreRangeId);
     if (!screeningToolScoreRange) {

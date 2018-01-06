@@ -100,18 +100,19 @@ describe('user tests', () => {
     it('returns correct page information', async () => {
       await transaction(User.knex(), async txn => {
         const { clinic } = await setup(txn);
-        await User.create(createMockUser(11, clinic.id, userRole), txn);
+        const user1 = await User.create(createMockUser(11, clinic.id, userRole, 'a@b.com'), txn);
         const user2 = await User.create(createMockUser(11, clinic.id, userRole, 'b@c.com'), txn);
         const user3 = await User.create(createMockUser(11, clinic.id, userRole, 'c@d.com'), txn);
         const user4 = await User.create(createMockUser(11, clinic.id, userRole, 'd@e.com'), txn);
-        const user5 = await User.create(createMockUser(11, clinic.id, userRole, 'e@f.com'), txn);
+        await User.create(createMockUser(11, clinic.id, userRole, 'e@f.com'), txn);
 
         const query = `{
-          users(pageNumber: 0, pageSize: 4, orderBy: createdAtDesc) {
+          users(pageNumber: 0, pageSize: 4, orderBy: emailAsc) {
             edges {
               node {
                 email
                 userRole
+                createdAt
               }
             }
             pageInfo {
@@ -131,14 +132,14 @@ describe('user tests', () => {
           edges: [
             {
               node: {
-                email: user5.email,
-                userRole: user5.userRole,
+                email: user1.email,
+                userRole: user1.userRole,
               },
             },
             {
               node: {
-                email: user4.email,
-                userRole: user4.userRole,
+                email: user2.email,
+                userRole: user2.userRole,
               },
             },
             {
@@ -149,8 +150,8 @@ describe('user tests', () => {
             },
             {
               node: {
-                email: user2.email,
-                userRole: user2.userRole,
+                email: user4.email,
+                userRole: user4.userRole,
               },
             },
           ],
@@ -275,6 +276,8 @@ describe('user tests', () => {
         const { clinic } = await setup(txn);
         const user = await User.create(
           {
+            firstName: 'Sansa',
+            lastName: 'Stark',
             email: 'logan@cityblock.com',
             userRole,
             homeClinicId: clinic.id,
@@ -349,6 +352,7 @@ describe('user tests', () => {
           }
         }`;
         const result = await graphql(schema, mutation, null, { db, userRole, txn });
+
         expect(cloneDeep(result.data!.userCreate)).toMatchObject({
           email: 'a@b.com',
         });

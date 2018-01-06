@@ -354,7 +354,7 @@ declare module 'schema' {
   type IUserRoleEnum = 'physician' | 'nurseCareManager' | 'healthCoach' | 'familyMember' | 'anonymousUser' | 'admin';
 
 
-  type IUserOrderOptionsEnum = 'createdAtDesc' | 'createdAtAsc' | 'lastLoginAtDesc' | 'lastLoginAtAsc' | 'updatedAtDesc' | 'updatedAtAsc';
+  type IUserOrderOptionsEnum = 'createdAtDesc' | 'createdAtAsc' | 'lastLoginAtDesc' | 'lastLoginAtAsc' | 'updatedAtDesc' | 'updatedAtAsc' | 'emailAsc';
 
   /**
     description: User edges

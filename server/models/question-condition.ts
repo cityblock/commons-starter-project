@@ -18,10 +18,11 @@ export default class QuestionCondition extends BaseModel {
     type: 'object',
     properties: {
       id: { type: 'string' },
-      questionId: { type: 'string' },
-      answerId: { type: 'string' },
+      questionId: { type: 'string', minLength: 1 }, // cannot be blank
+      answerId: { type: 'string', minLength: 1 }, // cannot be blank
       deletedAt: { type: 'string' },
     },
+    required: ['questionId', 'answerId'],
   };
 
   static relationMappings: RelationMappings = {
@@ -67,7 +68,7 @@ export default class QuestionCondition extends BaseModel {
     txn?: Transaction,
   ): Promise<QuestionCondition> {
     await this.validate(questionCondition, txn);
-    return await this.query(txn).updateAndFetchById(questionConditionId, questionCondition);
+    return await this.query(txn).patchAndFetchById(questionConditionId, questionCondition);
   }
 
   static async validate(input: IQuestionConditionEditableFields, txn?: Transaction) {
@@ -82,7 +83,7 @@ export default class QuestionCondition extends BaseModel {
   static async delete(questionConditionId: string, txn?: Transaction): Promise<QuestionCondition> {
     await this.query(txn)
       .where({ id: questionConditionId, deletedAt: null })
-      .update({ deletedAt: new Date().toISOString() });
+      .patch({ deletedAt: new Date().toISOString() });
 
     const questionCondition = await this.query(txn).findById(questionConditionId);
     if (!questionCondition) {

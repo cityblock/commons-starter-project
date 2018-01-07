@@ -855,6 +855,11 @@ type ProgressNote implements uniqueId {
   createdAt: String!
   updatedAt: String!
   deletedAt: String
+  supervisorId: ID
+  supervisor: User
+  needsSupervisorReview: Boolean
+  reviewedBySupervisorAt: String
+  supervisorNotes: String
 }
 
 type QuickCall implements uniqueId {
@@ -1451,6 +1456,13 @@ input ProgressNoteEditInput {
   location: String
   summary: String
   memberConcern: String
+  supervisorId: ID
+  needsSupervisorReview: Boolean
+}
+
+input ProgressNoteAddSupervisorNotesInput {
+  progressNoteId: ID!
+  supervisorNotes: String!
 }
 
 input QuickCallCreateInput {
@@ -1649,6 +1661,8 @@ type RootMutationType {
   progressNoteComplete(input: ProgressNoteCompleteInput): ProgressNote
   # edits a progress note
   progressNoteEdit(input: ProgressNoteEditInput): ProgressNote
+  # edits a progress note
+  progressNoteAddSupervisorNotes(input: ProgressNoteAddSupervisorNotesInput): ProgressNote
   # creates a quick call
   quickCallCreate(input: QuickCallCreateInput): QuickCall
   # Create a computed field

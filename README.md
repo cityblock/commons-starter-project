@@ -80,11 +80,11 @@ We use a ‘pipeline’ deployment process which means we have well defined step
 The pipeline steps are:
 
 1. submit a pull request
-1. run the automated tests [circleci]
+1. run the automated tests [automatic via circleci]
 1. merge the pull request
-1. release on test/qa/staging environment [circleci]
+1. release on test/qa/staging environment [automatic via circleci]
 1. create a release using github releases
-1. release on production [circleci]
+1. release on production [automatic via circleci]
 
 ### Performing code review
 
@@ -127,21 +127,9 @@ Creek code review][] docs. You should respond within ~2 business hours to reques
 * Do unit tests actually test that the code is performing the intended functionality?
 * Could any test code be replaced with the use of an existing API?
 
-### Production
-
-The app is hosted on [Aptible][]. If you do not have an account please ask Point People. Once you
-have an account, add your SSH Keys, install the [Aptible toolbelt][] and log in via the toolbelt.
-
-Deploy manually via:
-
-    git remote add aptible git@beta.aptible.com:sidewalk-labs/commons.git
-    git push aptible master
-
-You should see the changes at our [staging][] endpoint.
-
 ## Security Practices
 
-* In production, we scan software installed on our servers using [AppCanary][]
+* We scan software installed on our servers using [AppCanary][]
 * In development, we use [NSP][] to scan external dependencies of our Node app for vulnerabilities
   daily and check dependency changes for vulnerabilities We follow the Microsoft [Secure Development
   Lifecycle][] through security focused ts-lint rules- We maintain 80% test coverage to reduce the
@@ -211,7 +199,7 @@ master.
 
 Create a migration (using [knex][]) with:
 
-    yarn knex migrate:make initial-migration --knexfile=server/models/knexfile.js
+    yarn knex migrate:make migration-name-here --knexfile=server/models/knexfile.js
 
 Run a migration with:
 
@@ -264,12 +252,13 @@ install [Docker][]. After you have Docker installed and running, follow these st
 
 Note: this will eventually become untenable but for now it is convenient.
 
-aptible login
-aptible db:dump commons-staging
-dropdb commons
-createdb commons
-psql commons < commons-staging.dump
-rm commons-staging.dump
+First, login with `aptible login`, then:
+
+    aptible db:dump commons-staging
+    dropdb commons
+    createdb commons
+    psql commons < commons-staging.dump
+    rm commons-staging.dump
 
 ### Create a database schema explorer
 
@@ -324,7 +313,7 @@ In the same tab, open an IRB session, and execute the following commands, substi
 [add]: http://osxdaily.com/2011/12/30/exclude-drives-or-folders-from-spotlight-index-mac-os-x/
 [aptible]: https://aptible.com
 [aptible toolbelt]: https://www.aptible.com/support/toolbelt/
-[staging]: https://app-5428.on-aptible.com
+[staging]: https://commons-staging.cityblock.com
 [yarn]: https://yarnpkg.com/lang/en/docs/install/
 [.env]: https://drive.google.com/open?id=0ByoS7xhzfIR0b296cS1jSW9nNzA
 [prd]: https://docs.google.com/document/d/1yfcbwghOUcJ2PlK_J5JxBIUcXaYuArZuR6VN8-NcZ6g/edit?usp=sharing

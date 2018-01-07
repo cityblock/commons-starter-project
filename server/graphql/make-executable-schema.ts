@@ -108,6 +108,7 @@ import {
 } from './patient-task-suggestion-resolver';
 import { resolveProgressNoteActivityForProgressNote } from './progress-note-activity-resolver';
 import {
+  progressNoteAddSupervisorNotes,
   progressNoteComplete,
   progressNoteCreate,
   progressNoteEdit,
@@ -386,6 +387,7 @@ const resolveFunctions = {
     progressNoteComplete,
     progressNoteCreate,
     progressNoteEdit,
+    progressNoteAddSupervisorNotes,
     quickCallCreate,
     computedFieldCreate,
     computedFieldDelete,

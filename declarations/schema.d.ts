@@ -1050,6 +1050,11 @@ declare module 'schema' {
     createdAt: string;
     updatedAt: string;
     deletedAt: string | null;
+    supervisorId: string | null;
+    supervisor: IUser | null;
+    needsSupervisorReview: boolean | null;
+    reviewedBySupervisorAt: string | null;
+    supervisorNotes: string | null;
   }
 
 
@@ -1518,6 +1523,10 @@ declare module 'schema' {
     description: edits a progress note
   */
     progressNoteEdit: IProgressNote | null;
+    /**
+    description: edits a progress note
+  */
+    progressNoteAddSupervisorNotes: IProgressNote | null;
     /**
     description: creates a quick call
   */
@@ -2223,6 +2232,14 @@ declare module 'schema' {
     location?: string | null;
     summary?: string | null;
     memberConcern?: string | null;
+    supervisorId?: string | null;
+    needsSupervisorReview?: boolean | null;
+  }
+
+
+  interface IProgressNoteAddSupervisorNotesInput {
+    progressNoteId: string;
+    supervisorNotes: string;
   }
 
 

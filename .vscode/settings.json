@@ -17,7 +17,6 @@
     ".awcache/**": true
   },
   "tslint.autoFixOnSave": true,
-  "search.useIgnoreFilesByDefault": true,
   "stylelint.enable": true,
   "typescript.tsdk": "./node_modules/typescript/lib"
 }

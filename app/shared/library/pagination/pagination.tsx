@@ -1,24 +1,23 @@
 import * as React from 'react';
-import Icon from '../shared/library/icon/icon';
+import Icon from '../icon/icon';
 import * as styles from './css/pagination.css';
-import { PatientSearchPaginationInfo } from './helpers';
+import PaginationInfo from './pagination-info';
 
-interface IPatientSearchPageInfo {
+interface ISearchPageInfo {
   hasPreviousPage: boolean;
   hasNextPage: boolean;
 }
 
 interface IProps {
-  pageInfo: IPatientSearchPageInfo | null;
-  totalPages: number | null;
-  currentPage: number | null;
+  pageInfo: ISearchPageInfo;
+  total: number; // total number of results
+  pageNumber: number; // do NOT add 1
+  pageSize: number;
   onPaginate: (pageBack: boolean) => void;
 }
 
-const PatientSearchPagination: React.StatelessComponent<IProps> = (props: IProps) => {
-  const { pageInfo, totalPages, currentPage, onPaginate } = props;
-
-  if (currentPage === null || pageInfo === null || !totalPages) return null;
+const Pagination: React.StatelessComponent<IProps> = (props: IProps) => {
+  const { pageInfo, total, pageNumber, pageSize, onPaginate } = props;
 
   return (
     <div className={styles.container}>
@@ -27,7 +26,7 @@ const PatientSearchPagination: React.StatelessComponent<IProps> = (props: IProps
       ) : (
         <div className={styles.empty} />
       )}
-      <PatientSearchPaginationInfo currentPage={currentPage} totalPages={totalPages} />
+      <PaginationInfo currentPage={pageNumber + 1} totalPages={Math.ceil(total / pageSize)} />
       {pageInfo.hasNextPage ? (
         <Icon name="keyboardArrowRight" onClick={() => onPaginate(false)} className={styles.icon} />
       ) : (
@@ -37,4 +36,4 @@ const PatientSearchPagination: React.StatelessComponent<IProps> = (props: IProps
   );
 };
 
-export default PatientSearchPagination;
+export default Pagination;

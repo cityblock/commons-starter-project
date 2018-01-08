@@ -8,5 +8,3 @@ export const noResultsIcon: string;
 export const searchText: string;
 export const noResults: string;
 export const noResultsDetail: string;
-export const paginationInfo: string;
-export const currentPage: string;

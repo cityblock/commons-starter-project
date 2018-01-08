@@ -1,23 +1,25 @@
 import { shallow } from 'enzyme';
 import * as React from 'react';
-import Icon from '../../shared/library/icon/icon';
-import { PatientSearchPaginationInfo } from '../helpers';
-import PatientSearchPagination from '../pagination';
+import Icon from '../../icon/icon';
+import Pagination from '../pagination';
+import PaginationInfo from '../pagination-info';
 
 describe('Patient Search Pagination Component', () => {
   const pageInfo = {
     hasPreviousPage: true,
     hasNextPage: true,
   };
-  const totalPages = 11;
-  const currentPage = 2;
+  const total = 44;
+  const pageNumber = 2;
+  const pageSize = 10;
   const placeholderFn = () => true as any;
 
   const wrapper = shallow(
-    <PatientSearchPagination
+    <Pagination
       pageInfo={pageInfo}
-      totalPages={totalPages}
-      currentPage={currentPage}
+      total={total}
+      pageNumber={pageNumber}
+      pageSize={pageSize}
       onPaginate={placeholderFn}
     />,
   );
@@ -62,9 +64,9 @@ describe('Patient Search Pagination Component', () => {
   });
 
   it('renders pagination info', () => {
-    expect(wrapper.find(PatientSearchPaginationInfo).length).toBe(1);
-    expect(wrapper.find(PatientSearchPaginationInfo).props().currentPage).toBe(currentPage);
-    expect(wrapper.find(PatientSearchPaginationInfo).props().totalPages).toBe(totalPages);
+    expect(wrapper.find(PaginationInfo).length).toBe(1);
+    expect(wrapper.find(PaginationInfo).props().currentPage).toBe(pageNumber + 1);
+    expect(wrapper.find(PaginationInfo).props().totalPages).toBe(5);
   });
 
   it('renders empty icons if no other pages', () => {
@@ -76,10 +78,5 @@ describe('Patient Search Pagination Component', () => {
 
     expect(wrapper.find(Icon).length).toBe(0);
     expect(wrapper.find('.empty').length).toBe(2);
-  });
-
-  it('returns null if relevant props are null', () => {
-    wrapper.setProps({ pageInfo: null });
-    expect(wrapper.instance()).toBeNull();
   });
 });

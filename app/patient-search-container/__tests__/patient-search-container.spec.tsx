@@ -1,8 +1,8 @@
 import { shallow } from 'enzyme';
 import * as React from 'react';
+import Pagination from '../../shared/library/pagination/pagination';
 import PatientSearchHeader from '../header';
 import PatientSearchInput from '../input';
-import PatientSearchPagination from '../pagination';
 import { PatientSearchContainer } from '../patient-search-container';
 import PatientSearchResults from '../results';
 
@@ -10,6 +10,7 @@ describe('Patient Search Container', () => {
   const query = 'stark';
   const pageNumber = 0;
   const pageSize = 10;
+  const total = 33;
   const placeholderFn = () => true as any;
   const result1 = { firstName: 'Arya', lastName: 'Stark' };
   const result2 = { firstName: 'Sansa', lastName: 'Stark' };
@@ -26,7 +27,7 @@ describe('Patient Search Container', () => {
       hasNextPage: true,
       hasPreviousPage: true,
     },
-    total: 33,
+    total,
   };
 
   const wrapper = shallow(
@@ -68,9 +69,9 @@ describe('Patient Search Container', () => {
   });
 
   it('renders patient search pagination', () => {
-    expect(wrapper.find(PatientSearchPagination).length).toBe(1);
-    expect(wrapper.find(PatientSearchPagination).props().pageInfo).toEqual(searchResults.pageInfo);
-    expect(wrapper.find(PatientSearchPagination).props().totalPages).toBe(4);
-    expect(wrapper.find(PatientSearchPagination).props().currentPage).toBe(1);
+    expect(wrapper.find(Pagination).length).toBe(1);
+    expect(wrapper.find(Pagination).props().pageInfo).toEqual(searchResults.pageInfo);
+    expect(wrapper.find(Pagination).props().total).toBe(total);
+    expect(wrapper.find(Pagination).props().pageNumber).toBe(pageNumber);
   });
 });

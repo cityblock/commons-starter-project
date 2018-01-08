@@ -5,11 +5,11 @@ import { connect, Dispatch } from 'react-redux';
 import { push } from 'react-router-redux';
 import * as patientSearchQuery from '../graphql/queries/get-patient-search.graphql';
 import { getPatientSearchQuery, FullPatientSearchResultFragment } from '../graphql/types';
+import Pagination from '../shared/library/pagination/pagination';
 import { IState as IAppState } from '../store';
 import * as styles from './css/patient-search-container.css';
 import PatientSearchHeader from './header';
 import PatientSearchInput from './input';
-import PatientSearchPagination from './pagination';
 import PatientSearchResults from './results';
 
 const INITIAL_PAGE_NUMBER = 0;
@@ -106,12 +106,16 @@ export class PatientSearchContainer extends React.Component<allProps, IState> {
           searchResults={formattedSearchResults as FullPatientSearchResultFragment[]}
           loading={loading}
         />
-        <PatientSearchPagination
-          pageInfo={searchResults ? searchResults.pageInfo : null}
-          totalPages={searchResults ? Math.ceil(searchResults.total / pageSize) : null}
-          currentPage={pageNumber + 1}
-          onPaginate={this.onPaginate}
-        />
+        {!!searchResults &&
+          searchResults.total && (
+            <Pagination
+              pageInfo={searchResults.pageInfo}
+              total={searchResults.total}
+              pageNumber={pageNumber}
+              pageSize={pageSize}
+              onPaginate={this.onPaginate}
+            />
+          )}
       </div>
     );
   }

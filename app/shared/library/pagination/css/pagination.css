@@ -1,4 +1,4 @@
-@import '../../shared/css/sizes';
+@import '../../../css/sizes';
 
 .container {
   border-top: 1px solid var(--gray-background-color);
@@ -21,11 +21,12 @@ svg.icon {
   border: 1px solid var(--gray-background-color);
   border-radius: var(--border-radius);
   cursor: pointer;
-  transition: background-color 0.2s;
+  transition: background-color 0.2s, fill 0.2s;
   margin: 0 50px;
 
   &:hover {
     background: var(--gray-background-color);
+    fill: var(--blue-color);
   }
 }
 

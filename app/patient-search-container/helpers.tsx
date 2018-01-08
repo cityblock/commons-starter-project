@@ -96,20 +96,3 @@ export const PatientSearchNoResults: React.StatelessComponent<{}> = () => (
     </FormattedMessage>
   </div>
 );
-
-interface IPatientSearchPaginationInfoProps {
-  currentPage: number;
-  totalPages: number;
-}
-
-export const PatientSearchPaginationInfo: React.StatelessComponent<
-  IPatientSearchPaginationInfoProps
-> = ({ currentPage, totalPages }) => (
-  <div className={styles.paginationInfo}>
-    <h3 className={styles.currentPage}>{currentPage}</h3>
-    <FormattedMessage id="patientSearch.of">
-      {(message: string) => <h3>{message}</h3>}
-    </FormattedMessage>
-    <h3>{totalPages}</h3>
-  </div>
-);

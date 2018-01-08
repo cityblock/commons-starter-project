@@ -57,22 +57,18 @@ exports[`builder concerns renders progress note popup with templates renders pro
       onClick={[Function]}
     />
   </div>
-  <div
-    className="tabs"
-  >
-    <FormattedMessage
-      id="patient.context"
-      values={Object {}}
-    >
-      [Function]
-    </FormattedMessage>
-    <FormattedMessage
-      id="patient.activity"
-      values={Object {}}
-    >
-      [Function]
-    </FormattedMessage>
-  </div>
+  <UnderlineTabs>
+    <UnderlineTab
+      messageId="patient.context"
+      onClick={[Function]}
+      selected={true}
+    />
+    <UnderlineTab
+      messageId="patient.activity"
+      onClick={[Function]}
+      selected={false}
+    />
+  </UnderlineTabs>
   <div
     className="bottomSection"
   >
@@ -87,6 +83,7 @@ exports[`builder concerns renders progress note popup with templates renders pro
           "id": "progress-note-id",
           "location": null,
           "memberConcern": "member concern",
+          "needsSupervisorReview": null,
           "patient": Object {
             "consentToCall": true,
             "consentToText": true,
@@ -111,8 +108,12 @@ exports[`builder concerns renders progress note popup with templates renders pro
             "updatedAt": "2017-09-07T13:45:14.532Z",
           },
           "progressNoteTemplateId": "progress-note-template-id",
+          "reviewedBySupervisorAt": null,
           "startedAt": null,
           "summary": "summary!",
+          "supervisor": null,
+          "supervisorId": null,
+          "supervisorNotes": null,
           "updatedAt": "2017-09-07T13:45:14.532Z",
           "user": Object {
             "createdAt": "2017-09-07T13:45:14.532Z",
@@ -140,6 +141,64 @@ exports[`builder concerns renders progress note popup with templates renders pro
         ]
       }
       updateReadyToSubmit={[Function]}
+    />
+    <Apollo(ProgressNoteCosigniture)
+      patientId="patient-id"
+      progressNote={
+        Object {
+          "completedAt": null,
+          "createdAt": "2017-09-07T13:45:14.532Z",
+          "deletedAt": null,
+          "id": "progress-note-id",
+          "location": null,
+          "memberConcern": "member concern",
+          "needsSupervisorReview": null,
+          "patient": Object {
+            "consentToCall": true,
+            "consentToText": true,
+            "createdAt": "2017-09-07T13:45:14.532Z",
+            "dateOfBirth": "01/01/1999",
+            "firstName": "Bob",
+            "gender": "male",
+            "homeClinicId": "clinic-id",
+            "id": "patient-id",
+            "language": "en",
+            "lastName": "Smith",
+            "middleName": null,
+            "scratchPad": "Note",
+            "zip": "05431",
+          },
+          "patientId": "patient-id",
+          "progressNoteTemplate": Object {
+            "createdAt": "2017-09-07T13:45:14.532Z",
+            "deletedAt": null,
+            "id": "progress-note-template-id",
+            "title": "Progress Note Template Title",
+            "updatedAt": "2017-09-07T13:45:14.532Z",
+          },
+          "progressNoteTemplateId": "progress-note-template-id",
+          "reviewedBySupervisorAt": null,
+          "startedAt": null,
+          "summary": "summary!",
+          "supervisor": null,
+          "supervisorId": null,
+          "supervisorNotes": null,
+          "updatedAt": "2017-09-07T13:45:14.532Z",
+          "user": Object {
+            "createdAt": "2017-09-07T13:45:14.532Z",
+            "email": "a@b.com",
+            "firstName": "first",
+            "googleProfileImageUrl": null,
+            "homeClinicId": "clinic-id",
+            "id": "id",
+            "lastName": "last",
+            "locale": "en",
+            "updatedAt": "2017-09-07T13:45:14.532Z",
+            "userRole": "physician",
+          },
+        }
+      }
+      updateProgressNote={[Function]}
     />
   </div>
 </div>
@@ -195,22 +254,18 @@ exports[`builder concerns renders progress note popup with templates renders pro
       onClick={[Function]}
     />
   </div>
-  <div
-    className="tabs"
-  >
-    <FormattedMessage
-      id="patient.context"
-      values={Object {}}
-    >
-      [Function]
-    </FormattedMessage>
-    <FormattedMessage
-      id="patient.activity"
-      values={Object {}}
-    >
-      [Function]
-    </FormattedMessage>
-  </div>
+  <UnderlineTabs>
+    <UnderlineTab
+      messageId="patient.context"
+      onClick={[Function]}
+      selected={true}
+    />
+    <UnderlineTab
+      messageId="patient.activity"
+      onClick={[Function]}
+      selected={false}
+    />
+  </UnderlineTabs>
   <div
     className="bottomSection"
   >

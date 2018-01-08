@@ -1,15 +1,13 @@
-import * as classNames from 'classnames';
 import { pickBy } from 'lodash-es';
 import * as querystring from 'querystring';
 import * as React from 'react';
 import { compose, graphql } from 'react-apollo';
-import { FormattedMessage } from 'react-intl';
 import { connect, Dispatch } from 'react-redux';
-import { Link } from 'react-router-dom';
 import { push } from 'react-router-redux';
 import * as tasksQuery from '../graphql/queries/tasks-for-current-user.graphql';
 import { getTasksForCurrentUserQuery, FullTaskFragment } from '../graphql/types';
-import * as tabStyles from '../shared/css/tabs.css';
+import UnderlineTab from '../shared/library/underline-tab/underline-tab';
+import UnderlineTabs from '../shared/library/underline-tabs/underline-tabs';
 import Tasks, { IPageParams } from '../shared/tasks/tasks';
 import { fetchMore } from '../shared/util/fetch-more';
 import { IState as IAppState } from '../store';
@@ -55,33 +53,19 @@ class TasksContainer extends React.Component<allProps> {
     const hasNextPage = tasksResponse ? tasksResponse.pageInfo.hasNextPage : false;
     const hasPreviousPage = tasksResponse ? tasksResponse.pageInfo.hasPreviousPage : false;
 
-    const tasksTabStyles = classNames(tabStyles.tab, tabStyles.selectedTab);
-    const tasksPaneStyles = classNames(tabStyles.pane, tabStyles.selectedPane);
-
-    const notificationsTabStyles = classNames(tabStyles.tab, tabStyles.relativeTab);
-    const notificationsBadgeStyles = classNames(tabStyles.notificationBadge, {
-      [tabStyles.visible]: notificationsCount > 0,
-    });
-
     return (
       <div className={styles.container}>
         <div className={styles.mainBody}>
-          <div className={tabStyles.tabs}>
-            <FormattedMessage id="tasks.listView">
-              {(message: string) => (
-                <Link className={tasksTabStyles} to={'/tasks'}>
-                  {message}
-                </Link>
-              )}
-            </FormattedMessage>
-            <Link className={notificationsTabStyles} to={'/notifications/tasks'}>
-              <FormattedMessage id="tasks.notifications">
-                {(message: string) => <span>{message}</span>}
-              </FormattedMessage>
-              <div className={notificationsBadgeStyles} />
-            </Link>
-          </div>
-          <div className={tasksPaneStyles}>
+          <UnderlineTabs color="white">
+            <UnderlineTab messageId="tasks.listView" href={'/tasks'} selected={true} />
+            <UnderlineTab
+              messageId="tasks.notifications"
+              href={'/notifications/tasks'}
+              selected={false}
+              displayNotificationBadge={notificationsCount > 0}
+            />
+          </UnderlineTabs>
+          <div>
             <Tasks
               fetchMoreTasks={this.props.fetchMoreTasks}
               updatePageParams={this.props.updatePageParams}

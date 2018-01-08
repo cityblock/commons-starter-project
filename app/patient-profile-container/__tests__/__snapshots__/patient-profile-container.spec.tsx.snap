@@ -12,34 +12,30 @@ exports[`patient profile container renders patient profile container 1`] = `
   <div
     className="mainBody"
   >
-    <div
-      className="tabs"
+    <UnderlineTabs
+      color="white"
     >
-      <FormattedMessage
-        id="patient.threeSixty"
-        values={Object {}}
-      >
-        [Function]
-      </FormattedMessage>
-      <FormattedMessage
-        id="patient.map"
-        values={Object {}}
-      >
-        [Function]
-      </FormattedMessage>
-      <FormattedMessage
-        id="patient.timeline"
-        values={Object {}}
-      >
-        [Function]
-      </FormattedMessage>
-      <FormattedMessage
-        id="patient.patientInfo"
-        values={Object {}}
-      >
-        [Function]
-      </FormattedMessage>
-    </div>
+      <UnderlineTab
+        href="/patients/patient-1/360"
+        messageId="patient.threeSixty"
+        selected={false}
+      />
+      <UnderlineTab
+        href="/patients/patient-1/map/active"
+        messageId="patient.map"
+        selected={true}
+      />
+      <UnderlineTab
+        href="/patients/patient-1/timeline"
+        messageId="patient.timeline"
+        selected={false}
+      />
+      <UnderlineTab
+        href="/patients/patient-1/patientInfo"
+        messageId="patient.patientInfo"
+        selected={false}
+      />
+    </UnderlineTabs>
     <Switch>
       <Route
         component={[Function]}

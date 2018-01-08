@@ -566,6 +566,11 @@ export const progressNote = {
   user: currentUser,
   progressNoteTemplateId: progressNoteTemplate.id,
   progressNoteTemplate,
+  supervisorId: null,
+  supervisor: null,
+  needsSupervisorReview: null,
+  reviewedBySupervisorAt: null,
+  supervisorNotes: null,
 };
 
 export const quickCall = {

@@ -1,9 +1,6 @@
-import * as classNames from 'classnames';
 import * as React from 'react';
 import { compose, graphql } from 'react-apollo';
-import { FormattedMessage } from 'react-intl';
 import { connect, Dispatch } from 'react-redux';
-import { Link } from 'react-router-dom';
 import { updateEventNotificationsCount } from '../actions/event-notifications-action';
 import * as eventNotificationDismissMutation from '../graphql/queries/event-notification-dismiss-mutation.graphql';
 import * as eventNotificationsQuery from '../graphql/queries/get-event-notifications-for-current-user.graphql';
@@ -12,8 +9,9 @@ import {
   getEventNotificationsForCurrentUserQuery,
   FullEventNotificationFragment,
 } from '../graphql/types';
-import * as tabStyles from '../shared/css/tabs.css';
 import EventNotifications from '../shared/event-notifications/event-notifications';
+import UnderlineTab from '../shared/library/underline-tab/underline-tab';
+import UnderlineTabs from '../shared/library/underline-tabs/underline-tabs';
 import { fetchMore } from '../shared/util/fetch-more';
 import { IState as IAppState } from '../store';
 import * as styles from './css/event-notifications-container.css';
@@ -81,36 +79,19 @@ export class EventNotificationsContainer extends React.Component<allProps> {
       ? eventNotificationsResponse.pageInfo.hasPreviousPage
       : false;
 
-    const tasksTabStyles = tabStyles.tab;
-    const notificationsTabStyles = classNames(
-      tabStyles.tab,
-      tabStyles.relativeTab,
-      tabStyles.selectedTab,
-    );
-    const notificationsPaneStyles = classNames(tabStyles.pane, tabStyles.selectedPane);
-    const notificationsBadgeStyles = classNames(tabStyles.notificationBadge, {
-      [tabStyles.visible]: notificationsCount > 0,
-    });
-
     return (
       <div className={styles.container}>
         <div className={styles.mainBody}>
-          <div className={tabStyles.tabs}>
-            <FormattedMessage id="tasks.listView">
-              {(message: string) => (
-                <Link className={tasksTabStyles} to={'/tasks'}>
-                  {message}
-                </Link>
-              )}
-            </FormattedMessage>
-            <Link className={notificationsTabStyles} to={'/notifications/tasks'}>
-              <FormattedMessage id="tasks.notifications">
-                {(message: string) => <span>{message}</span>}
-              </FormattedMessage>
-              <div className={notificationsBadgeStyles} />
-            </Link>
-          </div>
-          <div className={notificationsPaneStyles}>
+          <UnderlineTabs color="white">
+            <UnderlineTab messageId="tasks.listView" selected={false} href={'/tasks'} />
+            <UnderlineTab
+              messageId="tasks.notifications"
+              href={'/notifications/tasks'}
+              selected={true}
+              displayNotificationBadge={notificationsCount > 0}
+            />
+          </UnderlineTabs>
+          <div>
             <EventNotifications
               fetchMoreEventNotifications={this.props.fetchMoreEventNotifications}
               loading={eventNotificationsLoading}

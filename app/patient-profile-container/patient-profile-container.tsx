@@ -1,13 +1,13 @@
 import * as classNames from 'classnames';
 import * as React from 'react';
 import { compose, graphql } from 'react-apollo';
-import { FormattedMessage } from 'react-intl';
 import { connect } from 'react-redux';
-import { Link, Route, Switch } from 'react-router-dom';
+import { Route, Switch } from 'react-router-dom';
 import * as patientQuery from '../graphql/queries/get-patient.graphql';
 import { getPatientQuery, ShortPatientFragment } from '../graphql/types';
 import { Size } from '../reducers/browser-reducer';
-import * as tabStyles from '../shared/css/tabs.css';
+import UnderlineTab from '../shared/library/underline-tab/underline-tab';
+import UnderlineTabs from '../shared/library/underline-tabs/underline-tabs';
 import { IState as IAppState } from '../store';
 import * as styles from './css/patient-profile.css';
 import PatientCarePlanView from './patient-care-plan-view';
@@ -54,19 +54,6 @@ export class PatientProfileContainer extends React.Component<allProps> {
 
   render() {
     const { patientId, patient, tab, browserSize } = this.props;
-
-    const threeSixtyViewTabStyles = classNames(tabStyles.tab, {
-      [tabStyles.selectedTab]: tab === '360',
-    });
-    const mapTabStyles = classNames(tabStyles.tab, {
-      [tabStyles.selectedTab]: tab === 'map',
-    });
-    const timelineTabStyles = classNames(tabStyles.tab, {
-      [tabStyles.selectedTab]: tab === 'timeline',
-    });
-    const patientInfoTabStyles = classNames(tabStyles.tab, {
-      [tabStyles.selectedTab]: tab === 'patientInfo',
-    });
     const mainBodyStyle = classNames({
       [styles.mainBody]: browserSize === 'large',
       [styles.mainBodySmall]: browserSize === 'small',
@@ -75,36 +62,28 @@ export class PatientProfileContainer extends React.Component<allProps> {
       <div className={styles.container}>
         <PatientProfileLeftNav browserSize={browserSize} patientId={patientId} patient={patient} />
         <div className={mainBodyStyle}>
-          <div className={tabStyles.tabs}>
-            <FormattedMessage id="patient.threeSixty">
-              {(message: string) => (
-                <Link to={`/patients/${patientId}/360`} className={threeSixtyViewTabStyles}>
-                  {message}
-                </Link>
-              )}
-            </FormattedMessage>
-            <FormattedMessage id="patient.map">
-              {(message: string) => (
-                <Link to={`/patients/${patientId}/map/active`} className={mapTabStyles}>
-                  {message}
-                </Link>
-              )}
-            </FormattedMessage>
-            <FormattedMessage id="patient.timeline">
-              {(message: string) => (
-                <Link to={`/patients/${patientId}/timeline`} className={timelineTabStyles}>
-                  {message}
-                </Link>
-              )}
-            </FormattedMessage>
-            <FormattedMessage id="patient.patientInfo">
-              {(message: string) => (
-                <Link to={`/patients/${patientId}/patientInfo`} className={patientInfoTabStyles}>
-                  {message}
-                </Link>
-              )}
-            </FormattedMessage>
-          </div>
+          <UnderlineTabs color="white">
+            <UnderlineTab
+              messageId="patient.threeSixty"
+              href={`/patients/${patientId}/360`}
+              selected={tab === '360'}
+            />
+            <UnderlineTab
+              messageId="patient.map"
+              selected={tab === 'map'}
+              href={`/patients/${patientId}/map/active`}
+            />
+            <UnderlineTab
+              messageId="patient.timeline"
+              selected={tab === 'timeline'}
+              href={`/patients/${patientId}/timeline`}
+            />
+            <UnderlineTab
+              messageId="patient.patientInfo"
+              href={`/patients/${patientId}/patientInfo`}
+              selected={tab === 'patientInfo'}
+            />
+          </UnderlineTabs>
           <Switch>
             <Route
               exact

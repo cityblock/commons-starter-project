@@ -1,8 +1,9 @@
 import * as classNames from 'classnames';
 import * as React from 'react';
-import { FormattedDate, FormattedMessage, FormattedTime } from 'react-intl';
+import { FormattedDate, FormattedTime } from 'react-intl';
 import { FullProgressNoteFragment } from '../../graphql/types';
-import * as tabStyles from '../../shared/css/tabs.css';
+import UnderlineTab from '../../shared/library/underline-tab/underline-tab';
+import UnderlineTabs from '../../shared/library/underline-tabs/underline-tabs';
 import ProgressNoteActivity from '../../shared/progress-note-activity/progress-note-activity';
 import * as styles from './css/progress-note-row.css';
 import ProgressNoteRowQuestions from './progress-note-row-questions';
@@ -37,13 +38,7 @@ export default class ProgressNoteRow extends React.Component<IProps, IState> {
     const { tab } = this.state;
     const title = progressNote.progressNoteTemplate ? progressNote.progressNoteTemplate.title : '';
 
-    const contextTabStyles = classNames(tabStyles.tab, {
-      [tabStyles.selectedTab]: tab === 'context',
-    });
-    const activityTabStyles = classNames(tabStyles.tab, {
-      [tabStyles.selectedTab]: tab === 'activity',
-    });
-    const tabContainerStyles = classNames(tabStyles.tabs, styles.tabs, {
+    const tabContainerStyles = classNames(styles.tabs, {
       [styles.tabsNoBorder]: !tab,
     });
     // hide summary when on the context tab
@@ -78,22 +73,18 @@ export default class ProgressNoteRow extends React.Component<IProps, IState> {
           <div className={styles.dotHamburger} />
         </div>
         {summary}
-        <div className={tabContainerStyles}>
-          <FormattedMessage id="patient.context">
-            {(message: string) => (
-              <div className={contextTabStyles} onClick={onContextClick}>
-                {message}
-              </div>
-            )}
-          </FormattedMessage>
-          <FormattedMessage id="patient.activity">
-            {(message: string) => (
-              <div onClick={onActivityClick} className={activityTabStyles}>
-                {message}
-              </div>
-            )}
-          </FormattedMessage>
-        </div>
+        <UnderlineTabs color="white" className={tabContainerStyles}>
+          <UnderlineTab
+            messageId="patient.context"
+            onClick={onContextClick}
+            selected={tab === 'context'}
+          />
+          <UnderlineTab
+            messageId="patient.activity"
+            onClick={onActivityClick}
+            selected={tab === 'activity'}
+          />
+        </UnderlineTabs>
         {questionsHtml}
         {activityHtml}
       </div>

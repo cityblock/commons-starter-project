@@ -1,0 +1,14 @@
+@import '../../shared/css/sizes';
+
+.container {
+  background: var(--white-font-color);
+  padding: var(--small-gutter);
+}
+
+.inputGroup {
+  padding-bottom: var(--small-gutter);
+}
+
+.inputGroup:last-child {
+  padding-bottom: 0;
+}

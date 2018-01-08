@@ -1,7 +1,7 @@
 import * as classNames from 'classnames';
 import * as React from 'react';
 import { compose, graphql } from 'react-apollo';
-import { FormattedMessage, FormattedRelative } from 'react-intl';
+import { FormattedRelative } from 'react-intl';
 import { Link } from 'react-router-dom';
 import * as progressNoteTemplatesQuery from '../graphql/queries/get-progress-note-templates.graphql';
 import * as progressNotesQuery from '../graphql/queries/get-progress-notes-for-patient.graphql';
@@ -18,12 +18,24 @@ import {
   FullProgressNoteFragment,
   FullProgressNoteTemplateFragment,
 } from '../graphql/types';
-import * as tabStyles from '../shared/css/tabs.css';
 import Button from '../shared/library/button/button';
+import UnderlineTab from '../shared/library/underline-tab/underline-tab';
+import UnderlineTabs from '../shared/library/underline-tabs/underline-tabs';
 import ProgressNoteActivity from '../shared/progress-note-activity/progress-note-activity';
 import { getPatientFullName } from '../shared/util/patient-name';
 import * as styles from './css/progress-note-popup.css';
 import ProgressNoteContext from './progress-note-context';
+import ProgressNoteCosigniture from './progress-note-cosigniture';
+
+export interface IUpdateProgressNoteOptions {
+  progressNoteTemplateId: string | null;
+  startedAt: string | null;
+  location: string | null;
+  summary: string | null;
+  memberConcern: string | null;
+  needsSupervisorReview: boolean | null;
+  supervisorId: string | null;
+}
 
 interface IProps {
   close: () => void;
@@ -74,13 +86,7 @@ export class ProgressNotePopup extends React.Component<allProps, IState> {
     }
   }
 
-  updateProgressNote = async (options: {
-    progressNoteTemplateId: string;
-    startedAt: string | null;
-    location: string | null;
-    summary: string | null;
-    memberConcern: string | null;
-  }) => {
+  updateProgressNote = async (options: IUpdateProgressNoteOptions) => {
     const { progressNote } = this.props;
 
     if (progressNote) {
@@ -88,10 +94,11 @@ export class ProgressNotePopup extends React.Component<allProps, IState> {
         variables: {
           progressNoteId: progressNote.id,
           progressNoteTemplateId: options.progressNoteTemplateId,
-          startedAt: options.startedAt,
           location: options.location,
           summary: options.summary,
           memberConcern: options.memberConcern,
+          needsSupervisorReview: options.needsSupervisorReview,
+          supervisorId: options.supervisorId,
         },
       });
     }
@@ -123,15 +130,10 @@ export class ProgressNotePopup extends React.Component<allProps, IState> {
     const { close, visible, patientId, progressNoteTemplates, progressNote } = this.props;
     const { tab, readyToSubmit } = this.state;
 
-    const contextStyles = classNames(tabStyles.tab, {
-      [tabStyles.selectedTab]: tab === 'context',
-    });
     const containerStyles = classNames(styles.container, {
       [styles.visible]: visible,
     });
-    const activityTabStyles = classNames(tabStyles.tab, {
-      [tabStyles.selectedTab]: tab === 'activity',
-    });
+
     const context =
       tab === 'context' ? (
         <ProgressNoteContext
@@ -158,6 +160,14 @@ export class ProgressNotePopup extends React.Component<allProps, IState> {
         {(date: string) => <div className={styles.openedAt}>Opened: {date}</div>}
       </FormattedRelative>
     ) : null;
+    // only render cosigniture if progress note template has been selected
+    const cosigniture = progressNoteName ? (
+      <ProgressNoteCosigniture
+        patientId={patientId}
+        progressNote={progressNote}
+        updateProgressNote={this.updateProgressNote}
+      />
+    ) : null;
     return (
       <div className={containerStyles}>
         <div className={styles.topBar}>
@@ -182,25 +192,22 @@ export class ProgressNotePopup extends React.Component<allProps, IState> {
             color="blue"
           />
         </div>
-        <div className={tabStyles.tabs}>
-          <FormattedMessage id="patient.context">
-            {(message: string) => (
-              <a onClick={() => this.selectTab('context')} className={contextStyles}>
-                {message}
-              </a>
-            )}
-          </FormattedMessage>
-          <FormattedMessage id="patient.activity">
-            {(message: string) => (
-              <a onClick={() => this.selectTab('activity')} className={activityTabStyles}>
-                {message}
-              </a>
-            )}
-          </FormattedMessage>
-        </div>
+        <UnderlineTabs>
+          <UnderlineTab
+            onClick={() => this.selectTab('context')}
+            messageId="patient.context"
+            selected={tab === 'context'}
+          />
+          <UnderlineTab
+            onClick={() => this.selectTab('activity')}
+            messageId="patient.activity"
+            selected={tab === 'activity'}
+          />
+        </UnderlineTabs>
         <div className={styles.bottomSection}>
           {context}
           {activity}
+          {cosigniture}
         </div>
       </div>
     );

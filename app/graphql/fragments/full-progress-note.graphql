@@ -19,6 +19,10 @@ fragment FullProgressNote on ProgressNote {
   startedAt
   location
   deletedAt
+  needsSupervisorReview
+  supervisor {
+    id
+  }
   progressNoteTemplate {
     ...FullProgressNoteTemplate
   }

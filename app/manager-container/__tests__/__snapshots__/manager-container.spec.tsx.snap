@@ -8,10 +8,10 @@ exports[`renders manager container 1`] = `
     className="mainBody"
   >
     <div
-      className="tabs"
+      className="tabs white"
     >
       <a
-        className="tab selectedTab"
+        className="tab selected"
         href="/manager/users"
         onClick={[Function]}
       >

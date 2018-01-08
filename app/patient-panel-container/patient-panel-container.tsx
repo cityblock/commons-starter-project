@@ -3,10 +3,10 @@ import * as React from 'react';
 import { compose, graphql } from 'react-apollo';
 import { FormattedMessage } from 'react-intl';
 import { connect, Dispatch } from 'react-redux';
-import { Link } from 'react-router-dom';
 import { push } from 'react-router-redux';
 import * as patientPanelQuery from '../graphql/queries/get-patient-panel.graphql';
 import { ShortPatientFragment } from '../graphql/types';
+import Button from '../shared/library/button/button';
 import * as styles from './css/patient-panel.css';
 import { PatientRoster } from './patient-roster';
 
@@ -30,7 +30,7 @@ export interface IPatientPanel {
 }
 
 interface IGraphqlProps {
-  refetchPatientPanel: (variables: { pageNumber: number; pageSize: number }) => any;
+  refetchPatientPanel: (variables: { pageNumber: number; pageSize: number }) => void;
   loading: boolean;
   error: string | null;
   patientPanel?: IPatientPanel;
@@ -41,7 +41,8 @@ interface IProps {
 }
 
 interface IDispatchProps {
-  updatePageParams: (pageNumber: number) => any;
+  updatePageParams: (pageNumber: number) => void;
+  goToIntake: () => void;
 }
 
 type allProps = IDispatchProps & IGraphqlProps & IProps;
@@ -121,7 +122,7 @@ class PatientPanelContainer extends React.Component<allProps, IState> {
   }
 
   render() {
-    const { error, loading } = this.props;
+    const { error, loading, goToIntake } = this.props;
     return (
       <div className={styles.container}>
         <div className={styles.header}>
@@ -129,13 +130,7 @@ class PatientPanelContainer extends React.Component<allProps, IState> {
             <FormattedMessage id="patientPanel.header">
               {(message: string) => <div className={styles.headerText}>{message}</div>}
             </FormattedMessage>
-            <FormattedMessage id="patientPanel.addPatient">
-              {(message: string) => (
-                <Link to="/patient-intake" className={styles.button}>
-                  {message}
-                </Link>
-              )}
-            </FormattedMessage>
+            <Button messageId="patientPanel.addPatient" onClick={goToIntake} />
           </div>
         </div>
         <div className={styles.patientPanelBody}>
@@ -172,6 +167,7 @@ function mapDispatchToProps(dispatch: Dispatch<() => void>): IDispatchProps {
 
       dispatch(push({ search: querystring.stringify(pageParams) }));
     },
+    goToIntake: () => dispatch(push('/patient-intake')),
   };
 }
 

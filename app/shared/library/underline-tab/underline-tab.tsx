@@ -9,15 +9,27 @@ interface IProps {
   selected: boolean;
   href?: string; // where to link to on tab click
   onClick?: () => void; // click handler, use if not using href
+  displayNotificationBadge?: boolean;
 }
 
 const UnderlineTab: React.StatelessComponent<IProps> = (props: IProps) => {
-  const { messageId, selected, href, onClick } = props;
+  const { messageId, selected, href, onClick, displayNotificationBadge } = props;
   const tabStyles = classNames(styles.tab, {
     [styles.selected]: selected,
   });
 
-  if (href) {
+  if (displayNotificationBadge && href) {
+    return (
+      <FormattedMessage id={messageId}>
+        {(message: string) => (
+          <Link className={tabStyles} to={href}>
+            <span>{message}</span>
+            <div className={styles.notificationBadge} />
+          </Link>
+        )}
+      </FormattedMessage>
+    );
+  } else if (href) {
     return (
       <FormattedMessage id={messageId}>
         {(message: string) => (
@@ -27,17 +39,17 @@ const UnderlineTab: React.StatelessComponent<IProps> = (props: IProps) => {
         )}
       </FormattedMessage>
     );
+  } else {
+    return (
+      <FormattedMessage id={messageId}>
+        {(message: string) => (
+          <h2 onClick={onClick} className={tabStyles}>
+            {message}
+          </h2>
+        )}
+      </FormattedMessage>
+    );
   }
-
-  return (
-    <FormattedMessage id={messageId}>
-      {(message: string) => (
-        <h2 onClick={onClick} className={tabStyles}>
-          {message}
-        </h2>
-      )}
-    </FormattedMessage>
-  );
 };
 
 export default UnderlineTab;

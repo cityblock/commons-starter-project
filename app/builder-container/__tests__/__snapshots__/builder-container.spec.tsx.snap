@@ -8,7 +8,7 @@ exports[`renders builder container 1`] = `
     className="mainBody"
   >
     <div
-      className="tabs"
+      className="tabs white"
     >
       <a
         className="tab"
@@ -18,7 +18,7 @@ exports[`renders builder container 1`] = `
         Domains
       </a>
       <a
-        className="tab selectedTab"
+        className="tab selected"
         href="/builder/assessments"
         onClick={[Function]}
       >

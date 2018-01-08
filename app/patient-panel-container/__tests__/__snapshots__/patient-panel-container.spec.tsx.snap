@@ -15,13 +15,13 @@ exports[`renders patient panel container correctly 1`] = `
       >
         Patient Panel
       </div>
-      <a
+      <button
         className="button"
-        href="/patient-intake"
+        disabled={false}
         onClick={[Function]}
       >
         Add Patient
-      </a>
+      </button>
     </div>
   </div>
   <div

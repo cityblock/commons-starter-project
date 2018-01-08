@@ -1,8 +1,8 @@
-import * as classNames from 'classnames';
 import * as React from 'react';
 import { connect } from 'react-redux';
-import { Link, Redirect, Route, Switch } from 'react-router-dom';
-import * as tabStyles from '../shared/css/tabs.css';
+import { Redirect, Route, Switch } from 'react-router-dom';
+import UnderlineTab from '../shared/library/underline-tab/underline-tab';
+import UnderlineTabs from '../shared/library/underline-tabs/underline-tabs';
 import { IState as IAppState } from '../store';
 import * as styles from './css/manager.css';
 import ManagerUsers from './manager-users';
@@ -21,23 +21,21 @@ class ManagerContainer extends React.Component<IProps, {}> {
     const { tabId } = this.props;
     const usersTabSelected = tabId === 'users';
     const invitesTabSelected = tabId === 'invites';
-    const usersTabStyles = classNames(tabStyles.tab, {
-      [tabStyles.selectedTab]: usersTabSelected,
-    });
-    const invitesTabStyles = classNames(tabStyles.tab, {
-      [tabStyles.selectedTab]: invitesTabSelected,
-    });
     return (
       <div className={styles.container}>
         <div className={styles.mainBody}>
-          <div className={tabStyles.tabs}>
-            <Link to={`/manager/users`} className={usersTabStyles}>
-              Users
-            </Link>
-            <Link to={`/manager/invites`} className={invitesTabStyles}>
-              Invites
-            </Link>
-          </div>
+          <UnderlineTabs color="white">
+            <UnderlineTab
+              href={`/manager/users`}
+              selected={usersTabSelected}
+              messageId="manager.users"
+            />
+            <UnderlineTab
+              href={`/manager/invites`}
+              selected={invitesTabSelected}
+              messageId="manager.invites"
+            />
+          </UnderlineTabs>
           <Switch>
             <Route
               exact

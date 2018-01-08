@@ -8,7 +8,7 @@ exports[`renders event notifications containers 1`] = `
     className="mainBody"
   >
     <div
-      className="tabs"
+      className="tabs white"
     >
       <a
         className="tab"
@@ -18,7 +18,7 @@ exports[`renders event notifications containers 1`] = `
         Tasks
       </a>
       <a
-        className="tab relativeTab selectedTab"
+        className="tab selected"
         href="/notifications/tasks"
         onClick={[Function]}
       >
@@ -26,13 +26,11 @@ exports[`renders event notifications containers 1`] = `
           Notifications
         </span>
         <div
-          className="notificationBadge visible"
+          className="notificationBadge"
         />
       </a>
     </div>
-    <div
-      className="pane selectedPane"
-    >
+    <div>
       <div
         className="container"
       >

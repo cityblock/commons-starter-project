@@ -287,6 +287,8 @@ export const SPANISH_TRANSLATION = {
     'progressNote.updateMap': 'Update MAP',
     'progressNote.update360': 'Update 360',
     'progressNote.administerTool': 'Administer tool',
+    'progressNote.doesRequireCosigniture': 'Does this progress note require supervisor review?',
+    'progressNote.selectSupervisor': 'Select supervisor:',
     'quickCallNote.new': '+ Nota de llamada rápida',
     'quickCallForm.title': 'Nota de llamada rápida',
     'quickCallForm.submit': 'Guardar llamada',

@@ -3,7 +3,8 @@
 .container {
   flex: 1;
   justify-content: center;
-  lost-center: var(--max-width);
+  max-width: var(--max-width);
+  margin: 0 auto;
 }
 
 .header {
@@ -14,7 +15,7 @@
   padding: 50px var(--gutter);
   justify-content: space-between;
   align-items: center;
-  lost-flex-container: row;
+  display: flex;
 }
 
 .headerText {
@@ -25,13 +26,9 @@
   user-select: none;
 }
 
-a.button {
-  @apply --button;
-}
-
 .patientPanelBody {
   width: 100%;
   height: calc(100vh - 213px);
-  overflow: scroll;
+  overflow: auto;
   position: relative;
 }

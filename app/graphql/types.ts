@@ -2426,6 +2426,10 @@ export interface getProgressNotesForCurrentUserQuery {
     startedAt: string | null,
     location: string | null,
     deletedAt: string | null,
+    needsSupervisorReview: boolean | null,
+    supervisor:  {
+      id: string,
+    } | null,
     progressNoteTemplate:  {
       id: string,
       title: string,
@@ -2478,6 +2482,10 @@ export interface getProgressNotesForPatientQuery {
     startedAt: string | null,
     location: string | null,
     deletedAt: string | null,
+    needsSupervisorReview: boolean | null,
+    supervisor:  {
+      id: string,
+    } | null,
     progressNoteTemplate:  {
       id: string,
       title: string,
@@ -4434,6 +4442,10 @@ export interface progressNoteCompleteMutation {
     startedAt: string | null,
     location: string | null,
     deletedAt: string | null,
+    needsSupervisorReview: boolean | null,
+    supervisor:  {
+      id: string,
+    } | null,
     progressNoteTemplate:  {
       id: string,
       title: string,
@@ -4485,6 +4497,10 @@ export interface progressNoteCreateMutation {
     startedAt: string | null,
     location: string | null,
     deletedAt: string | null,
+    needsSupervisorReview: boolean | null,
+    supervisor:  {
+      id: string,
+    } | null,
     progressNoteTemplate:  {
       id: string,
       title: string,
@@ -4496,11 +4512,13 @@ export interface progressNoteCreateMutation {
 
 export interface progressNoteEditMutationVariables {
   progressNoteId: string,
-  progressNoteTemplateId: string,
+  progressNoteTemplateId?: string | null,
   startedAt?: string | null,
   location?: string | null,
   summary?: string | null,
   memberConcern?: string | null,
+  needsSupervisorReview?: boolean | null,
+  supervisorId?: string | null,
 };
 
 export interface progressNoteEditMutation {
@@ -4541,6 +4559,10 @@ export interface progressNoteEditMutation {
     startedAt: string | null,
     location: string | null,
     deletedAt: string | null,
+    needsSupervisorReview: boolean | null,
+    supervisor:  {
+      id: string,
+    } | null,
     progressNoteTemplate:  {
       id: string,
       title: string,
@@ -7669,6 +7691,10 @@ export interface FullProgressNoteFragment {
   startedAt: string | null,
   location: string | null,
   deletedAt: string | null,
+  needsSupervisorReview: boolean | null,
+  supervisor:  {
+    id: string,
+  } | null,
   progressNoteTemplate:  {
     id: string,
     title: string,

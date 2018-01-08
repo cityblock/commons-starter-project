@@ -9,15 +9,26 @@
   margin: 16px var(--medium-gutter) 0 0;
   padding-bottom: 12px;
   cursor: pointer;
-  transition: background 0.2s;
   border-bottom: 4px solid transparent;
-
-  &:hover {
-    color: var(--blue-color);
-  }
+  position: relative;
+  transition: color 0.2s, border-color 0.2s;
 }
 
-.selected {
+.tab:hover {
   color: var(--blue-color);
-  border-bottom: 4px solid var(--blue-color);
+}
+
+.tab.selected {
+  color: var(--blue-color);
+  border-color: var(--blue-color);
+}
+
+.notificationBadge {
+  position: absolute;
+  top: -6px;
+  left: -8px;
+  height: 10px;
+  width: 10px;
+  border-radius: 50%;
+  background-color: var(--red-color);
 }

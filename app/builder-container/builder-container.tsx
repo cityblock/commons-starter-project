@@ -1,7 +1,6 @@
-import * as classNames from 'classnames';
 import * as React from 'react';
 import { connect } from 'react-redux';
-import { Link, Redirect, Route, Switch } from 'react-router-dom';
+import { Redirect, Route, Switch } from 'react-router-dom';
 import {
   FullConcernFragment,
   FullGoalSuggestionTemplateFragment,
@@ -9,7 +8,8 @@ import {
   FullRiskAreaFragment,
   FullScreeningToolFragment,
 } from '../graphql/types';
-import * as tabStyles from '../shared/css/tabs.css';
+import UnderlineTab from '../shared/library/underline-tab/underline-tab';
+import UnderlineTabs from '../shared/library/underline-tabs/underline-tabs';
 import { IState as IAppState } from '../store';
 import BuilderComputedFields from './builder-computed-fields';
 import BuilderConcerns from './builder-concerns';
@@ -86,62 +86,51 @@ class BuilderContainer extends React.Component<allProps, {}> {
       !toolsTabSelected &&
       !progressNoteTemplatesTabSelected &&
       !computedFieldsTabSelected;
-    const riskAreaGroupTabStyles = classNames(tabStyles.tab, {
-      [tabStyles.selectedTab]: riskAreaGroupsTabSelected,
-    });
-    const assessmentTabStyles = classNames(tabStyles.tab, {
-      [tabStyles.selectedTab]: assessmentsTabSelected,
-    });
-    const questionTabStyles = classNames(tabStyles.tab, {
-      [tabStyles.selectedTab]: questionsTabSelected,
-    });
-    const concernTabStyles = classNames(tabStyles.tab, {
-      [tabStyles.selectedTab]: concernsTabSelected,
-    });
-    const goalTabStyles = classNames(tabStyles.tab, {
-      [tabStyles.selectedTab]: goalsTabSelected,
-    });
-    const progressNoteTemplatesTabStyles = classNames(tabStyles.tab, {
-      [tabStyles.selectedTab]: progressNoteTemplatesTabSelected,
-    });
-    const toolTabStyles = classNames(tabStyles.tab, {
-      [tabStyles.selectedTab]: toolsTabSelected,
-    });
-    const computedFieldsTabStyles = classNames(tabStyles.tab, {
-      [tabStyles.selectedTab]: computedFieldsTabSelected,
-    });
     return (
       <div className={styles.container}>
         <div className={styles.mainBody}>
-          <div className={tabStyles.tabs}>
-            <Link to={'/builder/domains'} className={riskAreaGroupTabStyles}>
-              Domains
-            </Link>
-            <Link to={'/builder/assessments'} className={assessmentTabStyles}>
-              Assessments
-            </Link>
-            <Link to={`/builder/assessments/redirect/questions`} className={questionTabStyles}>
-              Questions
-            </Link>
-            <Link to={'/builder/concerns'} className={concernTabStyles}>
-              Concerns
-            </Link>
-            <Link to={'/builder/goals'} className={goalTabStyles}>
-              Goals
-            </Link>
-            <Link to={'/builder/tools'} className={toolTabStyles}>
-              Tools
-            </Link>
-            <Link
-              to={'/builder/progress-note-templates'}
-              className={progressNoteTemplatesTabStyles}
-            >
-              Progress Note Templates
-            </Link>
-            <Link to={'/builder/computed-fields'} className={computedFieldsTabStyles}>
-              Computed Fields
-            </Link>
-          </div>
+          <UnderlineTabs color="white">
+            <UnderlineTab
+              href={'/builder/domains'}
+              selected={riskAreaGroupsTabSelected}
+              messageId="builder.domains"
+            />
+            <UnderlineTab
+              href={'/builder/assessments'}
+              selected={assessmentsTabSelected}
+              messageId="builder.assessments"
+            />
+            <UnderlineTab
+              href={`/builder/assessments/redirect/questions`}
+              selected={questionsTabSelected}
+              messageId="builder.questions"
+            />
+            <UnderlineTab
+              href={'/builder/concerns'}
+              messageId="builder.concerns"
+              selected={concernsTabSelected}
+            />
+            <UnderlineTab
+              href={'/builder/goals'}
+              messageId="builder.goals"
+              selected={goalsTabSelected}
+            />
+            <UnderlineTab
+              href={'/builder/tools'}
+              messageId="builder.tools"
+              selected={toolsTabSelected}
+            />
+            <UnderlineTab
+              href={'/builder/progress-note-templates'}
+              messageId="builder.progressNoteTemplates"
+              selected={progressNoteTemplatesTabSelected}
+            />
+            <UnderlineTab
+              href={'/builder/computed-fields'}
+              messageId="builder.computedFields"
+              selected={computedFieldsTabSelected}
+            />
+          </UnderlineTabs>
           <Switch>
             <Route
               exact

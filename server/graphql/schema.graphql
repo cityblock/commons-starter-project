@@ -1451,7 +1451,7 @@ input ProgressNoteCompleteInput {
 
 input ProgressNoteEditInput {
   progressNoteId: ID!
-  progressNoteTemplateId: ID!
+  progressNoteTemplateId: ID
   startedAt: String
   location: String
   summary: String

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { compose, graphql } from 'react-apollo';
+import { graphql } from 'react-apollo';
 import * as progressNoteActivityQuery from '../../graphql/queries/get-progress-note-activity-for-progress-note.graphql';
 import {
   getProgressNoteActivityForProgressNoteQuery,
@@ -47,18 +47,16 @@ class ProgressNoteActivity extends React.Component<allProps> {
   }
 }
 
-export default compose(
-  graphql<IGraphqlProps, IProps, allProps>(progressNoteActivityQuery as any, {
-    skip: (props: IProps) => !props.progressNote,
-    options: (props: IProps) => ({
-      variables: {
-        progressNoteId: props.progressNote!.id,
-      },
-    }),
-    props: ({ data }) => ({
-      progressNoteActivityLoading: data ? data.loading : false,
-      progressNoteActivityError: data ? data.error : null,
-      progressNoteActivity: data ? (data as any).progressNoteActivityForProgressNote : null,
-    }),
+export default graphql<IGraphqlProps, IProps, allProps>(progressNoteActivityQuery as any, {
+  skip: (props: IProps) => !props.progressNote,
+  options: (props: IProps) => ({
+    variables: {
+      progressNoteId: props.progressNote!.id,
+    },
   }),
-)(ProgressNoteActivity);
+  props: ({ data }) => ({
+    progressNoteActivityLoading: data ? data.loading : false,
+    progressNoteActivityError: data ? data.error : null,
+    progressNoteActivity: data ? (data as any).progressNoteActivityForProgressNote : null,
+  }),
+})(ProgressNoteActivity);

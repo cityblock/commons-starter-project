@@ -527,6 +527,7 @@ describe('patient answer event model', () => {
       expect(secondFetchedPatientAnswerEvents).toMatchObject([{ id: patientAnswerEvent.id }]);
     });
   });
+
   it('filters out patient answers that are deleted when patient answer event is not deleted', async () => {
     // happens when changing answers to the same question
     await transaction(PatientAnswerEvent.knex(), async txn => {

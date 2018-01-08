@@ -41,14 +41,17 @@ export default class ProgressNoteRow extends React.Component<IProps, IState> {
     const tabContainerStyles = classNames(styles.tabs, {
       [styles.tabsNoBorder]: !tab,
     });
-    // hide summary when on the context tab
-    const summary =
-      tab === 'context' ? null : <div className={styles.summary}>{progressNote.summary}</div>;
+    // hide summary when on a tab
+    const summary = tab ? null : <div className={styles.summary}>{progressNote.summary}</div>;
     const onContextClick = () => this.onTabClick('context');
     const onActivityClick = () => this.onTabClick('activity');
     const questionsHtml =
       tab === 'context' ? (
-        <ProgressNoteRowQuestions progressNoteId={progressNote.id} patientId={patientId} />
+        <ProgressNoteRowQuestions
+          goToActivityTab={onActivityClick}
+          patientId={patientId}
+          progressNote={progressNote}
+        />
       ) : null;
     const activityHtml =
       tab === 'activity' ? (

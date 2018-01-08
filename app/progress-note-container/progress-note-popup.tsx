@@ -145,7 +145,7 @@ export class ProgressNotePopup extends React.Component<allProps, IState> {
         />
       ) : null;
     const activity =
-      tab === 'activity' ? (
+      tab === 'activity' && patientId ? (
         <ProgressNoteActivity progressNote={progressNote} patientId={patientId} />
       ) : null;
 

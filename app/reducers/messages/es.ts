@@ -284,6 +284,8 @@ export const SPANISH_TRANSLATION = {
     'progressNote.selectLocation': 'Seleccione la ubicación de la nota de progreso:',
     'progressNote.contextAndPlan': 'Context and plan',
     'progressNote.memberConcernAndObservation': 'Member concern and observation',
+    'progressNote.numberMapUpdates': 'MAP updates',
+    'progressNote.goToActivity': 'go to activity',
     'progressNote.updateMap': 'Update MAP',
     'progressNote.update360': 'Update 360',
     'progressNote.administerTool': 'Administer tool',

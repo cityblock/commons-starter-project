@@ -2,13 +2,17 @@
 
 .container {
   font-size: var(--small-font-size);
+  margin-bottom: 30px;
+  flex: 1;
 }
 
 .title {
-  font-size: var(--small-font-size);
+  font-family: var(--basetica-medium);
+  color: var(--border-color);
 }
 
 .answer {
-  font-family: var(--roboto);
-  font-size: var(--small-font-size);
+  margin-top: 10px;
+  font-size: var(--medium-font-size);
+  line-height: 22px;
 }

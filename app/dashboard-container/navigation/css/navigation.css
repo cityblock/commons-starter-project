@@ -1,0 +1,52 @@
+@import '../../../shared/css/sizes';
+
+.container {
+  min-width: 320px;
+  width: 30%;
+  border-right: 1px solid var(--border-color);
+  height: calc(100vh - 60px);
+  overflow-y: scroll;
+  -webkit-overflow-scrolling: touch;
+}
+
+.header {
+  height: 60px;
+  background: var(--gray-background-color);
+  padding-left: var(--small-gutter);
+}
+
+.header h2 {
+  margin: 0;
+  color: var(--black-color);
+  font-family: var(--basetica-black);
+  font-size: var(--medium-large-font-size);
+
+  /* Give a little extra padding because of Basetica font issues */
+  padding-top: 24px;
+}
+
+.widenHeader {
+  /* Widen a bit to account for removing top border so blue border shows up */
+  height: 62px;
+}
+
+.list {
+  border-top: 2px solid var(--border-color);
+  border-bottom: 2px solid var(--border-color);
+}
+
+.transparentBorder {
+  border-top: none;
+}
+
+svg.grayIcon {
+  fill: var(--gray-font-color);
+}
+
+svg.redIcon {
+  fill: var(--red-color);
+}
+
+svg.greenIcon {
+  fill: var(--green-color);
+}

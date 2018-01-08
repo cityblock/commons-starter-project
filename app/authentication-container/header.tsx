@@ -87,7 +87,7 @@ class Header extends React.Component<allProps> {
       <div className={styles.header}>
         <div className={styles.container}>
           <div className={styles.left}>
-            <Link className={styles.link} to="/">
+            <Link className={styles.link} to="/dashboard/tasks">
               <div className={styles.mark} />
             </Link>
             <Link to={'/search'} className={styles.navItem}>

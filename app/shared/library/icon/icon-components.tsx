@@ -17,9 +17,12 @@ import InboxIcon from 'material-ui-icons/Inbox';
 import ExpandArrowIcon from 'material-ui-icons/KeyboardArrowDown';
 import KeyboardArrowLeftIcon from 'material-ui-icons/KeyboardArrowLeft';
 import KeyboardArrowRightIcon from 'material-ui-icons/KeyboardArrowRight';
+import LabelOutlineIcon from 'material-ui-icons/LabelOutline';
 import MoreVertIcon from 'material-ui-icons/MoreVert';
+import NotificationsIcon from 'material-ui-icons/Notifications';
 import PauseCircleOutlineIcon from 'material-ui-icons/PauseCircleOutline';
 import PhoneIcon from 'material-ui-icons/Phone';
+import PlaylistAddIcon from 'material-ui-icons/PlaylistAdd';
 import SearchIcon from 'material-ui-icons/Search';
 import WarningIcon from 'material-ui-icons/Warning';
 
@@ -43,9 +46,12 @@ const components = {
   inbox: InboxIcon,
   keyboardArrowLeft: KeyboardArrowLeftIcon,
   keyboardArrowRight: KeyboardArrowRightIcon,
+  labelOutline: LabelOutlineIcon,
   moreVert: MoreVertIcon,
+  notifications: NotificationsIcon,
   pauseCircleOutline: PauseCircleOutlineIcon,
   phone: PhoneIcon,
+  playlistAdd: PlaylistAddIcon,
   search: SearchIcon,
   warning: WarningIcon,
   assignmentTurnedIn: AssignmentTurnedIn,

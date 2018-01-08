@@ -21,6 +21,15 @@ export default (
       <Authentication>
         <Route
           exact
+          path="/dashboard/:tab/:tagId?"
+          component={(Loadable as any)({
+            loader: async () =>
+              await import(/* webpackChunkName: "dashboard" */ './dashboard-container/dashboard-container'),
+            loading: () => null,
+          })}
+        />
+        <Route
+          exact
           path="/notifications/:eventNotificationType?"
           component={(Loadable as any)({
             loader: async () =>

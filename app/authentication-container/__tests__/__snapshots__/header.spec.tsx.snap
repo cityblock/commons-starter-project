@@ -12,7 +12,7 @@ exports[`renders header 1`] = `
     >
       <a
         className="link"
-        href="/"
+        href="/dashboard/tasks"
         onClick={[Function]}
       >
         <div

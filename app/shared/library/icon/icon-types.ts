@@ -16,9 +16,12 @@ export type IconName =
   | 'inbox'
   | 'keyboardArrowLeft'
   | 'keyboardArrowRight'
+  | 'labelOutline'
   | 'moreVert'
+  | 'notifications'
   | 'pauseCircleOutline'
   | 'phone'
+  | 'playlistAdd'
   | 'search'
   | 'assignmentTurnedIn'
   | 'warning';

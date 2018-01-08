@@ -58,7 +58,7 @@ svg.searchIcon {
   line-height: var(--medium-font-line-height);
 }
 
-.noResultsIcon {
+svg.noResultsIcon {
   fill: var(--red-color);
 }
 

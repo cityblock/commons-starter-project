@@ -3,6 +3,9 @@
 .container {
   background-color: var(--white-color);
   margin: var(--small-gutter) 0;
+}
+
+.answers {
   display: flex;
   align-items: center;
   flex-wrap: wrap;

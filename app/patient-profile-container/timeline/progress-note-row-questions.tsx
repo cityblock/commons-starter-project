@@ -42,35 +42,37 @@ export class ProgressNoteRowQuestions extends React.Component<allProps> {
       : 0;
     return (
       <div className={styles.container}>
-        {patientAnswersHtml}
-        <div className={styles.largeSection}>
-          <FormattedMessage id="progressNote.memberConcernAndObservation">
-            {(message: string) => <div className={styles.heading}>{message}</div>}
-          </FormattedMessage>
-          <div className={styles.body}>{progressNote.memberConcern}</div>
-        </div>
-        <div className={styles.largeSection}>
-          <FormattedMessage id="progressNote.contextAndPlan">
-            {(message: string) => <div className={styles.heading}>{message}</div>}
-          </FormattedMessage>
-          <div className={styles.body}>{progressNote.summary}</div>
-          <div className={styles.linkToActivity} onClick={goToActivityTab}>
-            <FormattedMessage id="progressNote.numberMapUpdates">
-              {(message: string) => (
-                <div className={styles.activityLeft}>
-                  <b>{numberCarePlanUpdates} </b>
-                  <span>{message}</span>
-                </div>
-              )}
+        <div className={styles.answers}>{patientAnswersHtml}</div>
+        <div>
+          <div className={styles.largeSection}>
+            <FormattedMessage id="progressNote.memberConcernAndObservation">
+              {(message: string) => <div className={styles.heading}>{message}</div>}
             </FormattedMessage>
-            <FormattedMessage id="progressNote.goToActivity">
-              {(message: string) => (
-                <div className={styles.activityRight}>
-                  <span>{message}</span>
-                  <Icon name={'keyboardArrowRight'} />
-                </div>
-              )}
+            <div className={styles.body}>{progressNote.memberConcern}</div>
+          </div>
+          <div className={styles.largeSection}>
+            <FormattedMessage id="progressNote.contextAndPlan">
+              {(message: string) => <div className={styles.heading}>{message}</div>}
             </FormattedMessage>
+            <div className={styles.body}>{progressNote.summary}</div>
+            <div className={styles.linkToActivity} onClick={goToActivityTab}>
+              <FormattedMessage id="progressNote.numberMapUpdates">
+                {(message: string) => (
+                  <div className={styles.activityLeft}>
+                    <b>{numberCarePlanUpdates} </b>
+                    <span>{message}</span>
+                  </div>
+                )}
+              </FormattedMessage>
+              <FormattedMessage id="progressNote.goToActivity">
+                {(message: string) => (
+                  <div className={styles.activityRight}>
+                    <span>{message}</span>
+                    <Icon name={'keyboardArrowRight'} />
+                  </div>
+                )}
+              </FormattedMessage>
+            </div>
           </div>
         </div>
       </div>

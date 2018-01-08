@@ -7,13 +7,15 @@ import UnderlineTabs from '../../shared/library/underline-tabs/underline-tabs';
 import ProgressNoteActivity from '../../shared/progress-note-activity/progress-note-activity';
 import * as styles from './css/progress-note-row.css';
 import ProgressNoteRowQuestions from './progress-note-row-questions';
+import ProgressNoteSupervisorBadge from './progress-note-supervisor-badge';
+import ProgressNoteSupervisorNotes from './progress-note-supervisor-notes';
 
 interface IProps {
   progressNote: FullProgressNoteFragment;
   patientId: string;
 }
 
-type Tab = 'context' | 'activity';
+type Tab = 'context' | 'activity' | 'supervisor-review';
 
 interface IState {
   tab: Tab | null;
@@ -45,6 +47,7 @@ export default class ProgressNoteRow extends React.Component<IProps, IState> {
     const summary = tab ? null : <div className={styles.summary}>{progressNote.summary}</div>;
     const onContextClick = () => this.onTabClick('context');
     const onActivityClick = () => this.onTabClick('activity');
+    const onSupervisorReviewClick = () => this.onTabClick('supervisor-review');
     const questionsHtml =
       tab === 'context' ? (
         <ProgressNoteRowQuestions
@@ -57,8 +60,26 @@ export default class ProgressNoteRow extends React.Component<IProps, IState> {
       tab === 'activity' ? (
         <ProgressNoteActivity progressNote={progressNote} patientId={patientId} />
       ) : null;
+    const supervisorTab = progressNote.supervisorNotes ? (
+      <UnderlineTab
+        messageId="progressNote.supervisorReview"
+        onClick={onSupervisorReviewClick}
+        selected={tab === 'supervisor-review'}
+      />
+    ) : null;
+    const supervisorTabHtml =
+      progressNote.supervisorNotes && progressNote.reviewedBySupervisorAt ? (
+        <ProgressNoteSupervisorNotes
+          supervisor={progressNote.supervisor}
+          reviewedBySupervisorAt={progressNote.reviewedBySupervisorAt}
+          supervisorNotes={progressNote.supervisorNotes}
+        />
+      ) : null;
+    const containerStyles = classNames(styles.container, {
+      [styles.dashed]: progressNote.needsSupervisorReview,
+    });
     return (
-      <div className={styles.container}>
+      <div className={containerStyles}>
         <div className={styles.topBar}>
           <div className={styles.userSection}>
             <div className={styles.userName}>{progressNote.user.firstName}</div>
@@ -72,7 +93,10 @@ export default class ProgressNoteRow extends React.Component<IProps, IState> {
           </div>
         </div>
         <div className={styles.titleSection}>
-          <div className={styles.title}>{title}</div>
+          <div className={styles.title}>
+            {title}
+            <ProgressNoteSupervisorBadge progressNote={progressNote} />
+          </div>
           <div className={styles.dotHamburger} />
         </div>
         {summary}
@@ -87,9 +111,11 @@ export default class ProgressNoteRow extends React.Component<IProps, IState> {
             onClick={onActivityClick}
             selected={tab === 'activity'}
           />
+          {supervisorTab}
         </UnderlineTabs>
         {questionsHtml}
         {activityHtml}
+        {supervisorTabHtml}
       </div>
     );
   }

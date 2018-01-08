@@ -11,5 +11,5 @@ it('renders the progress note row', () => {
       .find('.title')
       .at(0)
       .text(),
-  ).toBe(progressNote.progressNoteTemplate.title);
+  ).toContain(progressNote.progressNoteTemplate.title);
 });

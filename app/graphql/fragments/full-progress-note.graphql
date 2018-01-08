@@ -1,6 +1,7 @@
 #import "../fragments/full-progress-note-template.graphql"
 #import "../fragments/full-user.graphql"
 #import "../fragments/short-patient.graphql"
+#import "../fragments/short-user.graphql"
 
 fragment FullProgressNote on ProgressNote {
   id
@@ -20,8 +21,10 @@ fragment FullProgressNote on ProgressNote {
   location
   deletedAt
   needsSupervisorReview
+  reviewedBySupervisorAt
+  supervisorNotes
   supervisor {
-    id
+    ...ShortUser
   }
   progressNoteTemplate {
     ...FullProgressNoteTemplate

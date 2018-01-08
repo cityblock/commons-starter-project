@@ -25,7 +25,7 @@ import ProgressNoteActivity from '../shared/progress-note-activity/progress-note
 import { getPatientFullName } from '../shared/util/patient-name';
 import * as styles from './css/progress-note-popup.css';
 import ProgressNoteContext from './progress-note-context';
-import ProgressNoteCosigniture from './progress-note-cosigniture';
+import ProgressNoteCosignature from './progress-note-cosignature';
 
 export interface IUpdateProgressNoteOptions {
   progressNoteTemplateId: string | null;
@@ -160,14 +160,15 @@ export class ProgressNotePopup extends React.Component<allProps, IState> {
         {(date: string) => <div className={styles.openedAt}>Opened: {date}</div>}
       </FormattedRelative>
     ) : null;
-    // only render cosigniture if progress note template has been selected
-    const cosigniture = progressNoteName ? (
-      <ProgressNoteCosigniture
-        patientId={patientId}
-        progressNote={progressNote}
-        updateProgressNote={this.updateProgressNote}
-      />
-    ) : null;
+    // only render cosignature if progress note template has been selected
+    const cosignature =
+      progressNoteName && tab === 'context' ? (
+        <ProgressNoteCosignature
+          patientId={patientId}
+          progressNote={progressNote}
+          updateProgressNote={this.updateProgressNote}
+        />
+      ) : null;
     return (
       <div className={containerStyles}>
         <div className={styles.topBar}>
@@ -207,7 +208,7 @@ export class ProgressNotePopup extends React.Component<allProps, IState> {
         <div className={styles.bottomSection}>
           {context}
           {activity}
-          {cosigniture}
+          {cosignature}
         </div>
       </div>
     );

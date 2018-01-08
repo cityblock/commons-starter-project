@@ -8,6 +8,10 @@
   padding: var(--small-gutter);
 }
 
+.dashed {
+  border-style: dashed;
+}
+
 .topBar {
   display: flex;
   justify-content: space-between;
@@ -70,6 +74,7 @@
 
 .tabs {
   padding-left: 0;
+  border-bottom: 1px solid var(--border-color);
 }
 
 .tabsNoBorder {

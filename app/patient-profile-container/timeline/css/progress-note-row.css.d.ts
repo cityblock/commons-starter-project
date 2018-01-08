@@ -1,4 +1,5 @@
 export const container: string;
+export const dashed: string;
 export const topBar: string;
 export const userSection: string;
 export const userName: string;

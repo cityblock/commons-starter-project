@@ -4,7 +4,7 @@ import { connect, Dispatch } from 'react-redux';
 import { idleEnd, idleStart } from '../actions/idle-action';
 import { selectLocale } from '../actions/locale-action';
 import * as currentUserQuery from '../graphql/queries/get-current-user.graphql';
-import { FullUserFragment } from '../graphql/types';
+import { getCurrentUserQuery } from '../graphql/types';
 import { IGraphqlProps } from '../manager-container/manager-users';
 import ProgressNoteContainer from '../progress-note-container/progress-note-container';
 import { Lang } from '../reducers/locale-reducer';
@@ -26,7 +26,7 @@ export interface IDispatchProps {
 interface IProps {
   error?: string | null;
   loading?: boolean;
-  currentUser?: FullUserFragment;
+  currentUser?: getCurrentUserQuery['currentUser'];
   children: any;
   data?: any;
 }

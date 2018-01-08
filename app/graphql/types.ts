@@ -2427,8 +2427,14 @@ export interface getProgressNotesForCurrentUserQuery {
     location: string | null,
     deletedAt: string | null,
     needsSupervisorReview: boolean | null,
+    reviewedBySupervisorAt: string | null,
+    supervisorNotes: string | null,
     supervisor:  {
       id: string,
+      firstName: string | null,
+      lastName: string | null,
+      userRole: UserRole,
+      googleProfileImageUrl: string | null,
     } | null,
     progressNoteTemplate:  {
       id: string,
@@ -2483,8 +2489,14 @@ export interface getProgressNotesForPatientQuery {
     location: string | null,
     deletedAt: string | null,
     needsSupervisorReview: boolean | null,
+    reviewedBySupervisorAt: string | null,
+    supervisorNotes: string | null,
     supervisor:  {
       id: string,
+      firstName: string | null,
+      lastName: string | null,
+      userRole: UserRole,
+      googleProfileImageUrl: string | null,
     } | null,
     progressNoteTemplate:  {
       id: string,
@@ -4443,8 +4455,14 @@ export interface progressNoteCompleteMutation {
     location: string | null,
     deletedAt: string | null,
     needsSupervisorReview: boolean | null,
+    reviewedBySupervisorAt: string | null,
+    supervisorNotes: string | null,
     supervisor:  {
       id: string,
+      firstName: string | null,
+      lastName: string | null,
+      userRole: UserRole,
+      googleProfileImageUrl: string | null,
     } | null,
     progressNoteTemplate:  {
       id: string,
@@ -4498,8 +4516,14 @@ export interface progressNoteCreateMutation {
     location: string | null,
     deletedAt: string | null,
     needsSupervisorReview: boolean | null,
+    reviewedBySupervisorAt: string | null,
+    supervisorNotes: string | null,
     supervisor:  {
       id: string,
+      firstName: string | null,
+      lastName: string | null,
+      userRole: UserRole,
+      googleProfileImageUrl: string | null,
     } | null,
     progressNoteTemplate:  {
       id: string,
@@ -4560,8 +4584,14 @@ export interface progressNoteEditMutation {
     location: string | null,
     deletedAt: string | null,
     needsSupervisorReview: boolean | null,
+    reviewedBySupervisorAt: string | null,
+    supervisorNotes: string | null,
     supervisor:  {
       id: string,
+      firstName: string | null,
+      lastName: string | null,
+      userRole: UserRole,
+      googleProfileImageUrl: string | null,
     } | null,
     progressNoteTemplate:  {
       id: string,
@@ -7692,8 +7722,14 @@ export interface FullProgressNoteFragment {
   location: string | null,
   deletedAt: string | null,
   needsSupervisorReview: boolean | null,
+  reviewedBySupervisorAt: string | null,
+  supervisorNotes: string | null,
   supervisor:  {
     id: string,
+    firstName: string | null,
+    lastName: string | null,
+    userRole: UserRole,
+    googleProfileImageUrl: string | null,
   } | null,
   progressNoteTemplate:  {
     id: string,

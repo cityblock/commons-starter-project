@@ -1,13 +1,18 @@
 import * as React from 'react';
-import { graphql } from 'react-apollo';
+import { compose, graphql } from 'react-apollo';
+import * as currentUserQuery from '../graphql/queries/get-current-user.graphql';
 import * as patientCareTeamQuery from '../graphql/queries/get-patient-care-team.graphql';
-import { getPatientCareTeamQuery, FullProgressNoteFragment } from '../graphql/types';
+import {
+  getCurrentUserQuery,
+  getPatientCareTeamQuery,
+  FullProgressNoteFragment,
+} from '../graphql/types';
 import FormLabel from '../shared/library/form-label/form-label';
 import Option from '../shared/library/option/option';
 import RadioGroup from '../shared/library/radio-group/radio-group';
 import RadioInput from '../shared/library/radio-input/radio-input';
 import Select from '../shared/library/select/select';
-import * as styles from './css/progress-note-cosigniture.css';
+import * as styles from './css/progress-note-cosignature.css';
 import { IUpdateProgressNoteOptions } from './progress-note-popup';
 
 interface IProps {
@@ -20,11 +25,14 @@ interface IGraphqlProps {
   patientCareTeam?: getPatientCareTeamQuery['patientCareTeam'];
   patientCareTeamLoading?: boolean;
   patientCareTeamError?: string | null;
+  currentUser?: getCurrentUserQuery['currentUser'];
+  error?: string | null;
+  loading?: boolean;
 }
 
 type allProps = IGraphqlProps & IProps;
 
-export class ProgressNoteCosigniture extends React.Component<allProps> {
+export class ProgressNoteCosignature extends React.Component<allProps> {
   onSelectChange = async (event: React.ChangeEvent<HTMLSelectElement>) => {
     const { progressNote } = this.props;
     if (progressNote) {
@@ -62,17 +70,17 @@ export class ProgressNoteCosigniture extends React.Component<allProps> {
   };
 
   render() {
-    const { patientCareTeam, progressNote } = this.props;
+    const { patientCareTeam, progressNote, currentUser } = this.props;
     const supervisorId = progressNote && progressNote.supervisor ? progressNote.supervisor.id : '';
     const supervisors = (patientCareTeam || [])
       .map(
         user =>
-          user ? (
+          user && currentUser && user.id !== currentUser.id && user.firstName ? (
             <Option value={user.id} key={user.id} label={`${user.firstName} ${user.lastName}`} />
           ) : null,
       )
       .filter(Boolean);
-    const requiresCosigniture = progressNote ? progressNote.needsSupervisorReview : false;
+    const requiresCosignature = progressNote ? progressNote.needsSupervisorReview : false;
     const supervisor =
       progressNote && progressNote.needsSupervisorReview ? (
         <div className={styles.inputGroup}>
@@ -86,17 +94,17 @@ export class ProgressNoteCosigniture extends React.Component<allProps> {
     return (
       <div className={styles.container}>
         <div className={styles.inputGroup}>
-          <FormLabel messageId="progressNote.doesRequireCosigniture" />
+          <FormLabel messageId="progressNote.doesRequireCosignature" />
           <RadioGroup>
             <RadioInput
               value="true"
-              checked={!!requiresCosigniture}
+              checked={!!requiresCosignature}
               label="Yes"
               onChange={this.onRadioChange}
             />
             <RadioInput
               value="false"
-              checked={!requiresCosigniture}
+              checked={!requiresCosignature}
               label="No"
               onChange={this.onRadioChange}
             />
@@ -108,16 +116,25 @@ export class ProgressNoteCosigniture extends React.Component<allProps> {
   }
 }
 
-export default graphql<IGraphqlProps, IProps, allProps>(patientCareTeamQuery as any, {
-  skip: (props: IProps) => !props.patientId,
-  options: (props: IProps) => ({
-    variables: {
-      patientId: props.patientId,
-    },
+export default compose(
+  graphql<IGraphqlProps, IProps, allProps>(patientCareTeamQuery as any, {
+    skip: (props: IProps) => !props.patientId,
+    options: (props: IProps) => ({
+      variables: {
+        patientId: props.patientId,
+      },
+    }),
+    props: ({ data }) => ({
+      patientCareTeamLoading: data ? data.loading : false,
+      patientCareTeamError: data ? data.error : null,
+      patientCareTeam: data ? (data as any).patientCareTeam : null,
+    }),
   }),
-  props: ({ data }) => ({
-    patientCareTeamLoading: data ? data.loading : false,
-    patientCareTeamError: data ? data.error : null,
-    patientCareTeam: data ? (data as any).patientCareTeam : null,
+  graphql<IGraphqlProps, IProps, allProps>(currentUserQuery as any, {
+    props: ({ data }) => ({
+      loading: data ? data.loading : false,
+      error: data ? data.error : null,
+      currentUser: data ? (data as any).currentUser : null,
+    }),
   }),
-})(ProgressNoteCosigniture);
+)(ProgressNoteCosignature);

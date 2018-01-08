@@ -1,4 +1,5 @@
 export const container: string;
+export const answers: string;
 export const largeSection: string;
 export const heading: string;
 export const activityBold: string;

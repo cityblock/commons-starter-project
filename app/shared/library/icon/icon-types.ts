@@ -20,4 +20,5 @@ export type IconName =
   | 'pauseCircleOutline'
   | 'phone'
   | 'search'
+  | 'assignmentTurnedIn'
   | 'warning';

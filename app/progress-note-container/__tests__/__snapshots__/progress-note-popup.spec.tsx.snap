@@ -142,7 +142,7 @@ exports[`builder concerns renders progress note popup with templates renders pro
       }
       updateReadyToSubmit={[Function]}
     />
-    <Apollo(ProgressNoteCosigniture)
+    <Apollo(Apollo(ProgressNoteCosignature))
       patientId="patient-id"
       progressNote={
         Object {

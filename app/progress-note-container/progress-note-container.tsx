@@ -84,6 +84,10 @@ export class ProgressNoteContainer extends React.Component<allProps, IState> {
     ) : (
       <Icon name="expandLess" onClick={this.showHideList} className={styles.icon} />
     );
+    // Hide the popup if no open progress notes
+    if (progressNotesCount < 1) {
+      return null;
+    }
     return (
       <div>
         <div className={styles.container}>

@@ -4,6 +4,7 @@ import AddBoxIcon from 'material-ui-icons/AddBox';
 import AddCircleIcon from 'material-ui-icons/AddCircle';
 import AddCircleOutlineIcon from 'material-ui-icons/AddCircleOutline';
 import ArrowBackIcon from 'material-ui-icons/ArrowBack';
+import AssignmentTurnedIn from 'material-ui-icons/AssignmentTurnedIn';
 import CloseIcon from 'material-ui-icons/Close';
 import DeleteIcon from 'material-ui-icons/Delete';
 import ErrorOutlineIcon from 'material-ui-icons/ErrorOutline';
@@ -47,6 +48,7 @@ const components = {
   phone: PhoneIcon,
   search: SearchIcon,
   warning: WarningIcon,
+  assignmentTurnedIn: AssignmentTurnedIn,
 };
 
 export default components;

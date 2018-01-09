@@ -70,7 +70,7 @@ export async function progressNoteEdit(
   return await ProgressNote.update(
     input.progressNoteId,
     {
-      progressNoteTemplateId: input.progressNoteTemplateId,
+      progressNoteTemplateId: input.progressNoteTemplateId || undefined,
       startedAt: input.startedAt || undefined,
       location: input.location || undefined,
       summary: input.summary || undefined,

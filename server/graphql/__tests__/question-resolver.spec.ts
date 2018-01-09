@@ -1,5 +1,6 @@
 import { graphql } from 'graphql';
 import { cloneDeep } from 'lodash';
+import { transaction } from 'objection';
 import * as uuid from 'uuid/v4';
 import Db from '../../db';
 import Answer from '../../models/answer';
@@ -92,6 +93,71 @@ describe('question tests', () => {
         title: 'new title',
         answerType: 'multiselect',
         order: 4,
+      });
+    });
+
+    it('adds an "other" answer to a question', async () => {
+      await transaction(Question.knex(), async txn => {
+        const newQuestion = await Question.create(
+          {
+            title: 'hate writing tests?',
+            answerType: 'dropdown',
+            riskAreaId: riskArea.id,
+            type: 'riskArea',
+            order: 1,
+          },
+          txn,
+        );
+        const fetchedQuestion = await Question.get(newQuestion.id, txn);
+        expect(fetchedQuestion.otherTextAnswerId).toBeNull();
+        const query = `mutation {
+          questionEdit(input: {
+            hasOtherTextAnswer: true
+            questionId: "${newQuestion.id}"
+          }) {
+            otherTextAnswerId
+          }
+        }`;
+        const result = await graphql(schema, query, null, {
+          db,
+          userRole,
+          userId: user.id,
+          txn,
+        });
+        expect(cloneDeep(result.data!.questionEdit).otherTextAnswerId).not.toBeNull();
+      });
+    });
+
+    it('removes an "other" answer from a question', async () => {
+      await transaction(Question.knex(), async txn => {
+        const newQuestion = await Question.create(
+          {
+            title: 'hate writing tests?',
+            answerType: 'dropdown',
+            riskAreaId: riskArea.id,
+            type: 'riskArea',
+            order: 1,
+            hasOtherTextAnswer: true,
+          },
+          txn,
+        );
+        const fetchedQuestion = await Question.get(newQuestion.id, txn);
+        expect(fetchedQuestion.otherTextAnswerId).not.toBeNull();
+        const query = `mutation {
+          questionEdit(input: {
+            hasOtherTextAnswer: false
+            questionId: "${newQuestion.id}"
+          }) {
+            otherTextAnswerId
+          }
+        }`;
+        const result = await graphql(schema, query, null, {
+          db,
+          userRole,
+          userId: user.id,
+          txn,
+        });
+        expect(cloneDeep(result.data!.questionEdit).otherTextAnswerId).toBeNull();
       });
     });
   });
@@ -269,6 +335,35 @@ describe('question tests', () => {
         progressNoteTemplateId: progressNoteTemplate.id,
         order: 2,
       });
+    });
+
+    it('creates a new question with an "other" answer', async () => {
+      const mutation = `mutation {
+        questionCreate(input: {
+          title: "new title"
+          answerType: dropdown
+          validatedSource: "logan"
+          riskAreaId: "${riskArea.id}"
+          order: 2,
+          hasOtherTextAnswer: true
+        }) {
+          title, answerType, validatedSource, riskAreaId, order, otherTextAnswerId
+        }
+      }`;
+      const result = await graphql(schema, mutation, null, {
+        db,
+        userRole,
+        userId: user.id,
+      });
+      const clonedResult = cloneDeep(result.data!.questionCreate);
+      expect(clonedResult).toMatchObject({
+        title: 'new title',
+        answerType: 'dropdown',
+        validatedSource: 'logan',
+        riskAreaId: riskArea.id,
+        order: 2,
+      });
+      expect(clonedResult.otherTextAnswerId).not.toBeNull();
     });
   });
 

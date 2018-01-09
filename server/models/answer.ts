@@ -61,7 +61,7 @@ export default class Answer extends BaseModel {
       inSummary: { type: 'boolean' },
       summaryText: { type: 'string' },
       questionId: { type: 'string', minLength: 1 }, // cannot be blank
-      order: { type: 'integer', minimum: 1 }, // cannot be zero or negative
+      order: { type: 'integer', minimum: 0 }, // cannot be negative
       deletedAt: { type: 'string' },
     },
     required: ['displayValue', 'value', 'valueType', 'questionId', 'order'],
@@ -149,8 +149,8 @@ export default class Answer extends BaseModel {
     return await this.query(txn).where('id', 'in', answerIds);
   }
 
-  static async getAllForQuestion(questionId: string): Promise<Answer[]> {
-    return this.getQuery()
+  static async getAllForQuestion(questionId: string, txn?: Transaction): Promise<Answer[]> {
+    return this.getQuery(txn)
       .where({ questionId, deletedAt: null })
       .orderBy('order');
   }
@@ -177,12 +177,12 @@ export default class Answer extends BaseModel {
     return await this.getQuery().patchAndFetchById(answerId, answer);
   }
 
-  static async delete(answerId: string): Promise<Answer> {
-    await this.getQuery()
+  static async delete(answerId: string, txn?: Transaction): Promise<Answer> {
+    await this.getQuery(txn)
       .where({ id: answerId, deletedAt: null })
       .patch({ deletedAt: new Date().toISOString() });
 
-    const answer = await this.query().findById(answerId);
+    const answer = await this.query(txn).findById(answerId);
     if (!answer) {
       return Promise.reject(`No such answer: ${answerId}`);
     }

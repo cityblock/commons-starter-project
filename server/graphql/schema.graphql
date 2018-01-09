@@ -465,6 +465,7 @@ type Question implements uniqueId {
   order: Int!
   computedFieldId: ID
   computedField: ComputedField
+  otherTextAnswerId: String
 }
 
 # QuestionCondition
@@ -1141,6 +1142,7 @@ input QuestionCreateInput {
   order: Int!
   applicableIfType: QuestionConditionTypeOptions
   computedFieldId: ID
+  hasOtherTextAnswer: Boolean
 }
 
 input QuestionEditInput {
@@ -1150,6 +1152,7 @@ input QuestionEditInput {
   validatedSource: String
   order: Int
   applicableIfType: QuestionConditionTypeOptions
+  hasOtherTextAnswer: Boolean
 }
 
 input QuestionDeleteInput {

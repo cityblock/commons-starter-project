@@ -729,6 +729,7 @@ declare module 'schema' {
     order: number;
     computedFieldId: string | null;
     computedField: IComputedField | null;
+    otherTextAnswerId: string | null;
   }
 
   /**
@@ -1873,6 +1874,7 @@ declare module 'schema' {
     order: number;
     applicableIfType?: IQuestionConditionTypeOptionsEnum | null;
     computedFieldId?: string | null;
+    hasOtherTextAnswer?: boolean | null;
   }
 
 
@@ -1883,6 +1885,7 @@ declare module 'schema' {
     validatedSource?: string | null;
     order?: number | null;
     applicableIfType?: IQuestionConditionTypeOptionsEnum | null;
+    hasOtherTextAnswer?: boolean | null;
   }
 
 
@@ -2227,7 +2230,7 @@ declare module 'schema' {
 
   interface IProgressNoteEditInput {
     progressNoteId: string;
-    progressNoteTemplateId: string;
+    progressNoteTemplateId?: string | null;
     startedAt?: string | null;
     location?: string | null;
     summary?: string | null;

@@ -1,4 +1,4 @@
-import { Model, RelationMappings } from 'objection';
+import { Model, RelationMappings, Transaction } from 'objection';
 import BaseModel from './base-model';
 import Question from './question';
 
@@ -49,8 +49,11 @@ export default class ComputedField extends BaseModel {
     },
   };
 
-  static async create(input: IComputedFieldCreateFields): Promise<ComputedField> {
-    return await this.query().insertAndFetch(input);
+  static async create(
+    input: IComputedFieldCreateFields,
+    txn?: Transaction,
+  ): Promise<ComputedField> {
+    return await this.query(txn).insertAndFetch(input);
   }
 
   static async get(computedFieldId: string): Promise<ComputedField> {

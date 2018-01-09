@@ -26,7 +26,7 @@ export interface IDeleteQuestionOptions {
 }
 
 export async function questionCreate(root: any, { input }: IQuestionCreateArgs, context: IContext) {
-  const { userRole, userId } = context;
+  const { userRole, userId, txn } = context;
   await accessControls.isAllowed(userRole, 'create', 'question');
   checkUserLoggedIn(userId);
 
@@ -37,27 +37,37 @@ export async function questionCreate(root: any, { input }: IQuestionCreateArgs, 
     validatedSource: input.validatedSource || undefined,
     applicableIfType: input.applicableIfType || undefined,
     computedFieldId: input.computedFieldId || undefined,
+    hasOtherTextAnswer: input.hasOtherTextAnswer || false,
   };
 
   // A bit verbose to handle the typings
   if (input.riskAreaId) {
-    return Question.create({
-      type: 'riskArea',
-      riskAreaId: input.riskAreaId,
-      ...question,
-    });
+    return Question.create(
+      {
+        type: 'riskArea',
+        riskAreaId: input.riskAreaId,
+        ...question,
+      },
+      txn,
+    );
   } else if (input.screeningToolId) {
-    return Question.create({
-      type: 'screeningTool',
-      screeningToolId: input.screeningToolId,
-      ...question,
-    });
+    return Question.create(
+      {
+        type: 'screeningTool',
+        screeningToolId: input.screeningToolId,
+        ...question,
+      },
+      txn,
+    );
   } else if (input.progressNoteTemplateId) {
-    return Question.create({
-      type: 'progressNoteTemplate',
-      progressNoteTemplateId: input.progressNoteTemplateId,
-      ...question,
-    });
+    return Question.create(
+      {
+        type: 'progressNoteTemplate',
+        progressNoteTemplateId: input.progressNoteTemplateId,
+        ...question,
+      },
+      txn,
+    );
   }
 }
 
@@ -92,14 +102,20 @@ export async function resolveQuestion(
 export async function questionEdit(
   root: any,
   args: IEditQuestionOptions,
-  { db, userId, userRole }: IContext,
+  { db, userId, userRole, txn }: IContext,
 ) {
   await accessControls.isAllowedForUser(userRole, 'edit', 'question');
   checkUserLoggedIn(userId);
 
   // TODO: fix typings here
   const cleanedParams = pickBy<IQuestionEditInput>(args.input) as any;
-  return Question.edit(cleanedParams, args.input.questionId);
+
+  // pickBy looks for truthiness. We need explicit 'false' passed through here.
+  if (args.input.hasOtherTextAnswer === false) {
+    cleanedParams.hasOtherTextAnswer = false;
+  }
+
+  return Question.edit(cleanedParams, args.input.questionId, txn);
 }
 
 export async function questionDelete(

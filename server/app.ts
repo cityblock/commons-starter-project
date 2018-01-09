@@ -13,7 +13,7 @@ export default function app(req: any, res: any) {
     <!doctype html>
     <html>
       <head>
-        <title>Commons | A Sidewalk Labs Urban Health Initiative</title>
+        <title>Commons | A Cityblock Health product</title>
         <meta charset='utf-8'>
         <meta http-equiv='X-UA-Compatible' content='IE=edge'>
         <meta name='viewport' content='width=device-width, initial-scale=1'>

@@ -354,7 +354,7 @@ initialize {
           },
           "children": Array [
             Object {
-              "data": "A Sidewalk Labs urban health initiative",
+              "data": "A Cityblock Health product",
               "next": null,
               "parent": [Circular],
               "prev": null,
@@ -390,7 +390,7 @@ initialize {
         },
         "children": Array [
           Object {
-            "data": "A Sidewalk Labs urban health initiative",
+            "data": "A Cityblock Health product",
             "next": null,
             "parent": [Circular],
             "prev": null,

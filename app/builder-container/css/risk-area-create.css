@@ -104,3 +104,7 @@
   flex-basis: 53%;
   margin-bottom: 20px;
 }
+
+.error {
+  color: var(--red-color);
+}

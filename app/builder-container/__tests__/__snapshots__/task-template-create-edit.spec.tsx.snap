@@ -6,6 +6,9 @@ exports[`renders task template create-edit 1`] = `
   onSubmit={[Function]}
 >
   <div
+    className="error"
+  />
+  <div
     className="loadingHidden"
   >
     <div

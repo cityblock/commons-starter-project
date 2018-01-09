@@ -40,11 +40,13 @@ interface IGraphqlProps {
     options: ICreateOptions,
   ) => {
     data: taskTemplateCreateMutation;
+    errors: Array<{ message: string }>;
   };
   editTaskTemplate: (
     options: IEditOptions,
   ) => {
     data: taskTemplateEditMutation;
+    errors: Array<{ message: string }>;
   };
   deleteTaskTemplate: (
     options: IDeleteOptions,
@@ -135,20 +137,27 @@ class TaskTemplateCreateEdit extends React.Component<allProps, IState> {
         isNil,
       ) as any;
 
+      let result: {
+        data: taskTemplateCreateMutation | taskTemplateEditMutation;
+        errors?: Array<{ message: string }>;
+      } | null = null;
+
       if (taskTemplate) {
-        await editTaskTemplate({
+        result = await editTaskTemplate({
           variables: {
             taskTemplateId: taskTemplate.id,
             ...(omit(filtered, ['goalSuggestionTemplateId']) as any),
           },
         });
       } else {
-        await createTaskTemplate({
+        result = await createTaskTemplate({
           variables: filtered,
         });
       }
+      const error = result.errors ? result.errors[0].message : null;
       this.setState({
         loading: false,
+        error,
         taskTemplate: {
           title: 'edit me!',
           priority: null,
@@ -178,7 +187,7 @@ class TaskTemplateCreateEdit extends React.Component<allProps, IState> {
   }
 
   render() {
-    const { loading, taskTemplate } = this.state;
+    const { loading, taskTemplate, error } = this.state;
     const loadingClass = loading ? styles.loading : styles.loadingHidden;
     const createEditText = this.props.taskTemplate ? 'Save' : 'Add task';
     const deleteHtml = this.props.taskTemplate ? (
@@ -193,6 +202,7 @@ class TaskTemplateCreateEdit extends React.Component<allProps, IState> {
     );
     return (
       <form onSubmit={this.onSubmit} className={taskTemplateStyles.borderContainer}>
+        <div className={styles.error}>{error}</div>
         <div className={loadingClass}>
           <div className={styles.loadingContainer}>
             <div className={loadingStyles.loadingSpinner} />

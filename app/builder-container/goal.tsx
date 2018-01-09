@@ -34,7 +34,7 @@ interface IGraphqlProps {
   refetchGoal: () => any;
   editGoal: (
     options: { variables: goalSuggestionTemplateEditMutationVariables },
-  ) => { data: goalSuggestionTemplateEditMutation };
+  ) => { data: goalSuggestionTemplateEditMutation; errors: Array<{ message: string }> };
   onDelete: (goalId: string) => any;
 }
 

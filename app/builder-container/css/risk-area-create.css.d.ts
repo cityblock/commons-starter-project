@@ -13,3 +13,4 @@ export const cancelButton: string;
 export const close: string;
 export const formCenter: string;
 export const radioGroup: string;
+export const error: string;

@@ -43,8 +43,12 @@ interface IProps {
 }
 
 interface IGraphqlProps {
-  createAnswer: (options: ICreateOptions) => { data: answerCreateMutation };
-  editAnswer: (options: IEditOptions) => { data: answerEditMutation };
+  createAnswer: (
+    options: ICreateOptions,
+  ) => { data: answerCreateMutation; errors: Array<{ message: string }> };
+  editAnswer: (
+    options: IEditOptions,
+  ) => { data: answerEditMutation; errors: Array<{ message: string }> };
   deleteAnswer: (options: IDeleteOptions) => { data: { answerDelete: answerDeleteMutation } };
 }
 
@@ -133,22 +137,29 @@ class AnswerCreateEdit extends React.Component<allProps, IState> {
   async onSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     try {
-      this.setState({ loading: true });
+      this.setState({ loading: true, error: null });
       const filtered = omitBy<answerCreateMutationVariables>(this.state.answer, isNil);
-
+      let result: {
+        data: answerCreateMutation | answerEditMutation;
+        errors?: Array<{ message: string }>;
+      } | null = null;
       if (this.props.answer) {
-        await this.props.editAnswer({
+        result = await this.props.editAnswer({
           variables: {
             answerId: this.props.answer.id,
             ...omit(filtered, ['questionId']),
           },
         });
       } else {
-        await this.props.createAnswer({
+        result = await this.props.createAnswer({
           variables: filtered as any,
         });
       }
-      this.setState({ loading: false });
+      if (result.errors) {
+        this.setState({ loading: false, error: result.errors[0].message });
+      } else {
+        this.setState({ loading: false });
+      }
     } catch (e) {
       this.setState({ error: e.message, loading: false });
     }
@@ -194,7 +205,7 @@ class AnswerCreateEdit extends React.Component<allProps, IState> {
   }
 
   render() {
-    const { loading, answer } = this.state;
+    const { loading, answer, error } = this.state;
     const { screeningToolAnswer } = this.props;
     const loadingClass = loading ? styles.loading : styles.loadingHidden;
     const createEditText = this.props.answer ? 'Save' : 'Add answer';
@@ -224,9 +235,9 @@ class AnswerCreateEdit extends React.Component<allProps, IState> {
         onChange={this.onChange}
       />
     );
-
     return (
       <form onSubmit={this.onSubmit} className={answerStyles.borderContainer}>
+        <div className={styles.error}>{error}</div>
         <div className={loadingClass}>
           <div className={styles.loadingContainer}>
             <div className={loadingStyles.loadingSpinner} />

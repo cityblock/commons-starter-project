@@ -18,12 +18,12 @@ interface ITaskTemplateEditableFields {
 /* tslint:disable:member-ordering */
 export default class TaskTemplate extends BaseModel {
   title: string;
-  completedWithinNumber: number;
-  completedWithinInterval: CompletedWithinInterval;
-  repeating: boolean;
-  goalSuggestionTemplateId?: string;
-  priority: Priority;
-  careTeamAssigneeRole: UserRole;
+  completedWithinNumber?: number;
+  completedWithinInterval?: CompletedWithinInterval;
+  repeating?: boolean;
+  goalSuggestionTemplateId: string;
+  priority?: Priority;
+  careTeamAssigneeRole?: UserRole;
 
   static tableName = 'task_template';
 
@@ -40,7 +40,8 @@ export default class TaskTemplate extends BaseModel {
       priority: { type: 'string', enum: PRIORITY },
       careTeamAssigneeRole: { type: 'string', enum: USER_ROLE },
     },
-    required: ['title', 'priority', 'careTeamAssigneeRole'],
+    // TODO: make goalSuggestionTemplateId required?
+    required: ['title'],
   };
 
   static relationMappings: RelationMappings = {

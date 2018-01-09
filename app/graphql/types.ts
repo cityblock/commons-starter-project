@@ -1850,7 +1850,7 @@ export interface getPatientSearchQuery {
       hasPreviousPage: boolean,
       hasNextPage: boolean,
     },
-    total: number,
+    totalCount: number,
   } | null,
 };
 
@@ -1940,6 +1940,31 @@ export interface getPatientQuery {
     createdAt: string,
     consentToText: boolean | null,
     consentToCall: boolean | null,
+  } | null,
+};
+
+export interface getPatientsWithUrgentTasksQueryVariables {
+  pageNumber: number,
+  pageSize: number,
+};
+
+export interface getPatientsWithUrgentTasksQuery {
+  // Patient dashboard - tasks due and notifications
+  patientsWithUrgentTasks:  {
+    edges:  Array< {
+      node:  {
+        id: string,
+        firstName: string,
+        lastName: string,
+        dateOfBirth: string | null,
+        gender: string | null,
+      } | null,
+    } >,
+    pageInfo:  {
+      hasPreviousPage: boolean,
+      hasNextPage: boolean,
+    },
+    totalCount: number,
   } | null,
 };
 
@@ -7099,6 +7124,14 @@ export interface FullPatientConcernFragment {
   createdAt: string,
   updatedAt: string,
   deletedAt: string | null,
+};
+
+export interface FullPatientForDashboardFragment {
+  id: string,
+  firstName: string,
+  lastName: string,
+  dateOfBirth: string | null,
+  gender: string | null,
 };
 
 export interface FullPatientGoalFragment {

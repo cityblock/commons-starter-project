@@ -10,7 +10,7 @@ describe('Patient Search Container', () => {
   const query = 'stark';
   const pageNumber = 0;
   const pageSize = 10;
-  const total = 33;
+  const totalCount = 33;
   const placeholderFn = () => true as any;
   const result1 = { firstName: 'Arya', lastName: 'Stark' };
   const result2 = { firstName: 'Sansa', lastName: 'Stark' };
@@ -27,7 +27,7 @@ describe('Patient Search Container', () => {
       hasNextPage: true,
       hasPreviousPage: true,
     },
-    total,
+    totalCount,
   };
 
   const wrapper = shallow(
@@ -71,7 +71,7 @@ describe('Patient Search Container', () => {
   it('renders patient search pagination', () => {
     expect(wrapper.find(Pagination).length).toBe(1);
     expect(wrapper.find(Pagination).props().pageInfo).toEqual(searchResults.pageInfo);
-    expect(wrapper.find(Pagination).props().total).toBe(total);
+    expect(wrapper.find(Pagination).props().totalCount).toBe(totalCount);
     expect(wrapper.find(Pagination).props().pageNumber).toBe(pageNumber);
   });
 });

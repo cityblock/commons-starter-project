@@ -17,7 +17,7 @@ describe('Patient Search Pagination Component', () => {
   const wrapper = shallow(
     <Pagination
       pageInfo={pageInfo}
-      total={total}
+      totalCount={total}
       pageNumber={pageNumber}
       pageSize={pageSize}
       onPaginate={placeholderFn}

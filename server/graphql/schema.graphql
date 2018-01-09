@@ -259,7 +259,29 @@ type PatientSearchResultNode {
 type PatientSearchResultEdges {
   edges: [PatientSearchResultNode!]!
   pageInfo: PageInfo!
-  total: Int!
+  totalCount: Int!
+}
+
+# Patient dashboard item
+type PatientForDashboard implements uniqueId {
+  id: ID!
+  firstName: String!
+  lastName: String!
+  dateOfBirth: String
+  gender: String
+}
+
+# Patient dashboard item node
+type PatientForDashboardNode {
+  node: PatientForDashboard
+  cursor: String!
+}
+
+# Patient dashboard item edges
+type PatientForDashboardEdges {
+  edges: [PatientForDashboardNode!]!
+  pageInfo: PageInfo!
+  totalCount: Int!
 }
 
 # Clinic node
@@ -1702,6 +1724,8 @@ type RootQueryType {
   patientScratchPad(patientId: ID!): PatientScratchPad
   # Patient search
   patientSearch(query: String!, pageNumber: Int!, pageSize: Int!): PatientSearchResultEdges
+  # Patient dashboard - tasks due and notifications
+  patientsWithUrgentTasks(pageNumber: Int!, pageSize: Int!): PatientForDashboardEdges
   # A single clinic
   clinic(clinicId: ID!): Clinic
   # Clinics

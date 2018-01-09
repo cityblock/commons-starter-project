@@ -50,6 +50,10 @@ declare module 'schema' {
   */
     patientSearch: IPatientSearchResultEdges | null;
     /**
+    description: Patient dashboard - tasks due and notifications
+  */
+    patientsWithUrgentTasks: IPatientForDashboardEdges | null;
+    /**
     description: A single clinic
   */
     clinic: IClinic | null;
@@ -343,7 +347,7 @@ declare module 'schema' {
   /**
     description: An object with a Globally Unique ID
   */
-  type uniqueId = IUser | IPatient | IPatientSearchResult | IClinic | ITask | IPatientGoal | IPatientConcern | IConcern | IGoalSuggestionTemplate | ITaskTemplate | ITaskComment | IRiskAreaGroup | IRiskArea | IQuestion | IAnswer | IScreeningTool | IScreeningToolScoreRange | IPatientScreeningToolSubmission | ICarePlanSuggestion | IRiskAreaAssessmentSubmission | IScreeningToolScoreRangeForPatientScreeningToolSubmission | IPatientAnswer | IQuestionCondition | IComputedField | IRiskAreaGroupForPatient | IRiskAreaForPatient | IScreeningToolForPatient | IEventNotification | ITaskEvent | IProgressNote | IProgressNoteTemplate | IPatientTaskSuggestion | IPatientAnswerEvent | ICarePlanUpdateEvent | IQuickCall;
+  type uniqueId = IUser | IPatient | IPatientSearchResult | IPatientForDashboard | IClinic | ITask | IPatientGoal | IPatientConcern | IConcern | IGoalSuggestionTemplate | ITaskTemplate | ITaskComment | IRiskAreaGroup | IRiskArea | IQuestion | IAnswer | IScreeningTool | IScreeningToolScoreRange | IPatientScreeningToolSubmission | ICarePlanSuggestion | IRiskAreaAssessmentSubmission | IScreeningToolScoreRangeForPatientScreeningToolSubmission | IPatientAnswer | IQuestionCondition | IComputedField | IRiskAreaGroupForPatient | IRiskAreaForPatient | IScreeningToolForPatient | IEventNotification | ITaskEvent | IProgressNote | IProgressNoteTemplate | IPatientTaskSuggestion | IPatientAnswerEvent | ICarePlanUpdateEvent | IQuickCall;
 
   /**
     description: An object with a Globally Unique ID
@@ -433,7 +437,7 @@ declare module 'schema' {
   interface IPatientSearchResultEdges {
     edges: Array<IPatientSearchResultNode>;
     pageInfo: IPageInfo;
-    total: number;
+    totalCount: number;
   }
 
   /**
@@ -454,6 +458,34 @@ declare module 'schema' {
     dateOfBirth: string | null;
     gender: string | null;
     userCareTeam: boolean;
+  }
+
+  /**
+    description: Patient dashboard item edges
+  */
+  interface IPatientForDashboardEdges {
+    edges: Array<IPatientForDashboardNode>;
+    pageInfo: IPageInfo;
+    totalCount: number;
+  }
+
+  /**
+    description: Patient dashboard item node
+  */
+  interface IPatientForDashboardNode {
+    node: IPatientForDashboard | null;
+    cursor: string;
+  }
+
+  /**
+    description: Patient dashboard item
+  */
+  interface IPatientForDashboard {
+    id: string;
+    firstName: string;
+    lastName: string;
+    dateOfBirth: string | null;
+    gender: string | null;
   }
 
   /**

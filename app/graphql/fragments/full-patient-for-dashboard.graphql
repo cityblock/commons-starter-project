@@ -1,0 +1,7 @@
+fragment FullPatientForDashboard on PatientForDashboard {
+  id
+  firstName
+  lastName
+  dateOfBirth
+  gender
+}

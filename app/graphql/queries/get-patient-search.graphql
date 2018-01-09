@@ -11,6 +11,6 @@ query getPatientSearch($query: String!, $pageNumber: Int!, $pageSize: Int!) {
       hasPreviousPage
       hasNextPage
     }
-    total
+    totalCount
   }
 }

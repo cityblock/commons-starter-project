@@ -1,5 +1,6 @@
 import { graphql } from 'graphql';
 import { cloneDeep } from 'lodash';
+import { transaction } from 'objection';
 import RedoxApi from '../../apis/redox';
 import Db from '../../db';
 import HomeClinic from '../../models/clinic';
@@ -11,6 +12,7 @@ import {
   mockRedoxCreatePatient,
   mockRedoxCreatePatientError,
   mockRedoxTokenFetch,
+  setupUrgentTasks,
 } from '../../spec-helpers';
 import schema from '../make-executable-schema';
 
@@ -221,7 +223,7 @@ describe('patient', () => {
       const query = `{
         patientSearch(query: "jon", pageNumber: 0, pageSize: 10) {
           edges { node { firstName, lastName, userCareTeam } }
-          total
+          totalCount
         }
       }`;
       const result = await graphql(schema, query, null, {
@@ -240,7 +242,7 @@ describe('patient', () => {
             },
           },
         ],
-        total: 1,
+        totalCount: 1,
       });
     });
 
@@ -248,7 +250,7 @@ describe('patient', () => {
       const query = `{
         patientSearch(query: "stark", pageNumber: 0, pageSize: 10) {
           edges { node { firstName, lastName, userCareTeam } }
-          total
+          totalCount
         }
       }`;
       const result = await graphql(schema, query, null, {
@@ -279,7 +281,7 @@ describe('patient', () => {
             },
           },
         ],
-        total: 3,
+        totalCount: 3,
       });
     });
 
@@ -287,7 +289,7 @@ describe('patient', () => {
       const query = `{
         patientSearch(query: "john snow", pageNumber: 0, pageSize: 10) {
           edges { node { firstName, lastName, userCareTeam } }
-          total
+          totalCount
         }
       }`;
       const result = await graphql(schema, query, null, {
@@ -306,7 +308,7 @@ describe('patient', () => {
             },
           },
         ],
-        total: 1,
+        totalCount: 1,
       });
     });
 
@@ -314,7 +316,7 @@ describe('patient', () => {
       const query = `{
         patientSearch(query: "daenerys", pageNumber: 0, pageSize: 10) {
           edges { node { firstName, lastName, userCareTeam } }
-          total
+          totalCount
         }
       }`;
       const result = await graphql(schema, query, null, {
@@ -325,7 +327,7 @@ describe('patient', () => {
 
       expect(cloneDeep(result.data!.patientSearch)).toMatchObject({
         edges: [],
-        total: 0,
+        totalCount: 0,
       });
     });
 
@@ -333,7 +335,7 @@ describe('patient', () => {
       const query = `{
         patientSearch(query: "daenerys", pageNumber: 0, pageSize: 10) {
           edges { node { firstName, lastName, userCareTeam } }
-          total
+          totalCount
         }
       }`;
 
@@ -350,7 +352,7 @@ describe('patient', () => {
       const query = `{
         patientSearch(query: "", pageNumber: 0, pageSize: 10) {
           edges { node { firstName, lastName, userCareTeam } }
-          total
+          totalCount
         }
       }`;
 
@@ -361,6 +363,37 @@ describe('patient', () => {
       });
 
       expect(result.errors![0].message).toBe('Must provide a search term');
+    });
+  });
+
+  describe('patient dashboard', () => {
+    it('gets patients with tasks due soon or that have notifications', async () => {
+      await transaction(Patient.knex(), async txn => {
+        const setup = await setupUrgentTasks(txn);
+
+        const query = `{
+          patientsWithUrgentTasks(pageNumber: 0, pageSize: 10) {
+            edges { node { id, firstName }}
+            totalCount
+          }
+        }`;
+
+        const result = await graphql(schema, query, null, {
+          userRole,
+          userId: setup.user.id,
+          txn,
+        });
+
+        expect(result.data!.patientsWithUrgentTasks.totalCount).toBe(2);
+        expect(result.data!.patientsWithUrgentTasks.edges[0].node).toMatchObject({
+          id: setup.patient1.id,
+          firstName: setup.patient1.firstName,
+        });
+        expect(result.data!.patientsWithUrgentTasks.edges[1].node).toMatchObject({
+          id: setup.patient5.id,
+          firstName: setup.patient5.firstName,
+        });
+      });
     });
   });
 });

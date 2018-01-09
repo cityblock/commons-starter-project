@@ -3,6 +3,7 @@ import { transaction } from 'objection';
 import {
   IPatient,
   IPatientEditInput,
+  IPatientForDashboardEdges,
   IPatientScratchPad,
   IPatientSearchResult,
   IPatientSearchResultEdges,
@@ -170,6 +171,31 @@ export async function resolvePatientSearch(
       hasPreviousPage,
       hasNextPage,
     },
-    total: patients.total,
+    totalCount: patients.total,
+  };
+}
+
+export async function resolvePatientsWithUrgentTasks(
+  root: any,
+  { pageNumber, pageSize }: IPaginationOptions,
+  { userRole, userId, txn }: IContext,
+): Promise<IPatientForDashboardEdges> {
+  await accessControls.isAllowedForUser(userRole, 'view', 'patient');
+  checkUserLoggedIn(userId);
+
+  const patients = await Patient.getPatientsWithUrgentTasks({ pageNumber, pageSize }, userId!, txn);
+
+  const patientEdges = patients.results.map((patient, i) => formatRelayEdge(patient, patient.id));
+
+  const hasPreviousPage = pageNumber !== 0;
+  const hasNextPage = (pageNumber + 1) * pageSize < patients.total;
+
+  return {
+    edges: patientEdges,
+    pageInfo: {
+      hasPreviousPage,
+      hasNextPage,
+    },
+    totalCount: patients.total,
   };
 }

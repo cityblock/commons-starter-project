@@ -89,6 +89,7 @@ import {
   patientScratchPadEdit,
   patientSetup,
   resolvePatient,
+  resolvePatientsWithUrgentTasks,
   resolvePatientScratchPad,
   resolvePatientSearch,
 } from './patient-resolver';
@@ -239,6 +240,7 @@ const resolveFunctions = {
     patientMedications: resolvePatientMedications,
     patientScratchPad: resolvePatientScratchPad,
     patientSearch: resolvePatientSearch,
+    patientsWithUrgentTasks: resolvePatientsWithUrgentTasks,
     user: resolveUser,
     users: resolveUsers,
     userPatientPanel: resolveUserPatientPanel,

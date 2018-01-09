@@ -10,6 +10,8 @@ import config from './config';
 import Answer from './models/answer';
 import CarePlanUpdateEvent from './models/care-plan-update-event';
 import CareTeam from './models/care-team';
+import Clinic from './models/clinic';
+import EventNotification from './models/event-notification';
 import Patient, { IPatientEditableFields } from './models/patient';
 import PatientAnswer from './models/patient-answer';
 import PatientAnswerEvent from './models/patient-answer-event';
@@ -21,6 +23,8 @@ import RiskAreaGroup from './models/risk-area-group';
 import ScreeningTool from './models/screening-tool';
 import ScreeningToolScoreRange from './models/screening-tool-score-range';
 import Task from './models/task';
+import TaskEvent from './models/task-event';
+import User from './models/user';
 import { UserRole } from './models/user';
 
 export interface ICreatePatient extends IPatientEditableFields {
@@ -312,6 +316,84 @@ export async function createTask(
     },
     txn,
   );
+}
+
+export async function setupUrgentTasks(txn: Transaction) {
+  const patient1Name = 'Arya';
+  const patient2Name = 'Rickon';
+  const patient3Name = 'Robb';
+  const patient4Name = 'Bran';
+  const patient5Name = 'Sansa';
+
+  const clinic = await Clinic.create(createMockClinic(), txn);
+  const user = await User.create(createMockUser(11, clinic.id), txn);
+  const user2 = await User.create(createMockUser(12, clinic.id), txn);
+
+  const patient1 = await createPatient(
+    createMockPatient(123, clinic.id, patient1Name),
+    user.id,
+    txn,
+  );
+  const patient2 = await createPatient(
+    createMockPatient(234, clinic.id, patient2Name),
+    user.id,
+    txn,
+  );
+  await createPatient(createMockPatient(456, clinic.id, patient3Name), user2.id, txn);
+  await createPatient(createMockPatient(345, clinic.id, patient4Name), user.id, txn);
+  const patient5 = await createPatient(
+    createMockPatient(567, clinic.id, patient5Name),
+    user.id,
+    txn,
+  );
+
+  const soonDueDate = '2017-09-07T13:45:14.532Z';
+  const laterDueDate = '2050-11-07T13:45:14.532Z';
+
+  await createTask(patient1.id, user.id, soonDueDate, txn);
+  await createTask(patient1.id, user.id, laterDueDate, txn);
+  await createTask(patient2.id, user.id, laterDueDate, txn);
+  const task4 = await createTask(patient5.id, user.id, laterDueDate, txn);
+
+  const taskEvent = await TaskEvent.create(
+    {
+      taskId: task4.id,
+      userId: user.id,
+      eventType: 'edit_description',
+    },
+    txn,
+  );
+  await EventNotification.create(
+    {
+      userId: user.id,
+      taskEventId: taskEvent.id,
+    },
+    txn,
+  );
+  const taskEvent2 = await TaskEvent.create(
+    {
+      taskId: task4.id,
+      userId: user.id,
+      eventType: 'edit_description',
+    },
+    txn,
+  );
+  const eventNotification2 = await EventNotification.create(
+    {
+      userId: user.id,
+      taskEventId: taskEvent2.id,
+    },
+    txn,
+  );
+  await EventNotification.update(
+    eventNotification2.id,
+    {
+      seenAt: '2017-09-07T13:45:14.532Z',
+    },
+    txn,
+  );
+
+  return { user, patient1, patient5 };
 }
 
 export async function createFullRiskAreaGroupAssociations(

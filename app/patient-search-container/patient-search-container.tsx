@@ -71,8 +71,8 @@ export class PatientSearchContainer extends React.Component<allProps, IState> {
     let newPageNumber = pageBack ? pageNumber - 1 : pageNumber + 1;
     // extra security, though UI should not allow this
     if (newPageNumber < 0) newPageNumber = 0;
-    if (searchResults && newPageNumber > Math.ceil(searchResults.total / pageSize)) {
-      newPageNumber = Math.ceil(searchResults.total / pageSize);
+    if (searchResults && newPageNumber > Math.ceil(searchResults.totalCount / pageSize)) {
+      newPageNumber = Math.ceil(searchResults.totalCount / pageSize);
     }
 
     updateSearchParams({
@@ -93,7 +93,7 @@ export class PatientSearchContainer extends React.Component<allProps, IState> {
         <div className={styles.header}>
           <PatientSearchHeader
             query={query}
-            totalResults={searchResults ? searchResults.total : null}
+            totalResults={searchResults ? searchResults.totalCount : null}
           />
           <PatientSearchInput
             searchTerm={searchTerm}
@@ -107,10 +107,10 @@ export class PatientSearchContainer extends React.Component<allProps, IState> {
           loading={loading}
         />
         {!!searchResults &&
-          searchResults.total && (
+          searchResults.totalCount && (
             <Pagination
               pageInfo={searchResults.pageInfo}
-              total={searchResults.total}
+              totalCount={searchResults.totalCount}
               pageNumber={pageNumber}
               pageSize={pageSize}
               onPaginate={this.onPaginate}

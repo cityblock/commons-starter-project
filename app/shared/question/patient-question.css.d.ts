@@ -1,4 +1,6 @@
 export const question: string;
+export const otherTextAnswer: string;
+export const fullWidth: string;
 export const border: string;
 export const multiSelect: string;
 export const hidden: string;

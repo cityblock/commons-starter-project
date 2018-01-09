@@ -246,8 +246,7 @@ export class Question extends React.Component<allProps, IState> {
             questionId={question.id}
             dataType={this.getAnswerDataType()}
           />
-        ),
-     );
+        ));
     }
   }
 

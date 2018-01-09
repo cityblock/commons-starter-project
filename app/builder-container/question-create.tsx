@@ -178,11 +178,7 @@ class QuestionCreate extends React.Component<allProps, IState> {
       }
 
       return (
-        <Select
-          name="hasOtherTextAnswer"
-          value={selectValue}
-          onChange={this.onChange}
-        >
+        <Select name="hasOtherTextAnswer" value={selectValue} onChange={this.onChange}>
           <Option value="" disabled={true} messageId="question.selectHasOtherTextAnswer" />
           <Option value="true" messageId="question.hasOtherTextAnswerTrue" />
           <Option value="false" messageId="question.hasOtherTextAnswerFalse" />

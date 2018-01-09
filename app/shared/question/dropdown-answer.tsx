@@ -1,7 +1,11 @@
+import * as classNames from 'classnames';
+import { slice } from 'lodash';
 import * as React from 'react';
 import { FullAnswerFragment, FullQuestionFragment } from '../../graphql/types';
 import Option from '../../shared/library/option/option';
 import Select from '../../shared/library/select/select';
+import FreeTextAnswer from './free-text-answer';
+import * as styles from './patient-question.css';
 
 interface IProps {
   currentAnswer: { id: string; value: string };
@@ -18,6 +22,18 @@ export default class DropdownAnswer extends React.Component<IProps, {}> {
     return <Option key={`${answer.id}-${index}`} value={answer.id} label={answer.displayValue} />;
   };
 
+  renderDropdownOptions = () => {
+    const { question } = this.props;
+    let answers = question.answers || [];
+
+    // When created, the 'other' answer is order 0, so we need to move it to the end of the list
+    if (question.otherTextAnswerId && answers.length) {
+      answers = [...slice(answers, 1), answers[0]];
+    }
+
+    return answers.map(this.renderDropdownOption);
+  };
+
   onDropdownChange = (id: string) => {
     const { question, onChange } = this.props;
 
@@ -28,20 +44,43 @@ export default class DropdownAnswer extends React.Component<IProps, {}> {
     }
   };
 
-  render() {
+  renderFreeText = () => {
     const { question, currentAnswer, editable } = this.props;
-    const answers = question.answers || [];
+    const { otherTextAnswerId } = question;
+    const freeTextVisible =
+      !!otherTextAnswerId && currentAnswer && currentAnswer.id === otherTextAnswerId;
+
+    if (freeTextVisible) {
+      return (
+        <div className={classNames(styles.question, styles.otherTextAnswer)}>
+          <FreeTextAnswer
+            currentAnswer={currentAnswer}
+            question={question}
+            onChange={this.props.onChange}
+            editable={editable}
+            otherTextAnswer={true}
+          />
+        </div>
+      );
+    }
+  };
+
+  render() {
+    const { currentAnswer, editable } = this.props;
 
     return (
-      <Select
-        value={currentAnswer ? currentAnswer.id : 'Select one'}
-        onChange={event => this.onDropdownChange(event.currentTarget.value)}
-        disabled={!editable}
-        large={true}
-      >
-        <Option messageId="select.default" value="" disabled={true} />
-        {answers.map(this.renderDropdownOption)}
-      </Select>
+      <div className={styles.fullWidth}>
+        <Select
+          value={currentAnswer ? currentAnswer.id : 'Select one'}
+          onChange={event => this.onDropdownChange(event.currentTarget.value)}
+          disabled={!editable}
+          large={true}
+        >
+          <Option messageId="select.default" value="" disabled={true} />
+          {this.renderDropdownOptions()}
+        </Select>
+        {this.renderFreeText()}
+      </div>
     );
   }
 }

@@ -1,25 +1,29 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`renders dropdown answer 1`] = `
-<select
-  className="select large"
-  disabled={false}
-  name={undefined}
-  onChange={[Function]}
-  required={undefined}
-  value="answer-id"
+<div
+  className="fullWidth"
 >
-  <option
-    disabled={true}
-    value=""
-  >
-    Select one
-  </option>
-  <option
-    disabled={undefined}
+  <select
+    className="select large"
+    disabled={false}
+    name={undefined}
+    onChange={[Function]}
+    required={undefined}
     value="answer-id"
   >
-    answer value
-  </option>
-</select>
+    <option
+      disabled={true}
+      value=""
+    >
+      Select one
+    </option>
+    <option
+      disabled={undefined}
+      value="answer-id"
+    >
+      answer value
+    </option>
+  </select>
+</div>
 `;

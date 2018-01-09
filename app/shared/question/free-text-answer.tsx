@@ -7,6 +7,7 @@ interface IProps {
   editable: boolean;
   currentAnswer?: { id: string; value: string };
   question: FullQuestionFragment;
+  otherTextAnswer?: boolean;
   onChange: (
     questionId: string,
     answers: Array<{ answerId: string; value: string | number }>,
@@ -25,7 +26,13 @@ export default class FreeTextAnswer extends React.Component<IProps, IState> {
   constructor(props: IProps) {
     super(props);
     this.save = debounce(props.onChange, SAVE_TIMEOUT_MILLISECONDS);
-    this.state = { text: props.currentAnswer ? props.currentAnswer.value : '' };
+
+    // This is rendering for 'other' text without an answer having been entered yet
+    if (props.otherTextAnswer && props.currentAnswer && props.currentAnswer.value === 'other') {
+      this.state = { text: '' };
+    } else {
+      this.state = { text: props.currentAnswer ? props.currentAnswer.value : '' };
+    }
   }
 
   componentWillReceiveProps(nextProps: IProps) {

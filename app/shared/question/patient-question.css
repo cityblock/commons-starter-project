@@ -10,6 +10,14 @@
   padding: var(--small-gutter);
 }
 
+.otherTextAnswer {
+  padding: var(--small-gutter) 0 0 0;
+}
+
+.fullWidth {
+  width: 100%;
+}
+
 .border {
   border: 1px solid var(--border-color);
   border-radius: var(--big-border-radius);

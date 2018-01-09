@@ -15,3 +15,4 @@ export const dateLabel: string;
 export const dateValue: string;
 export const openedAtSection: string;
 export const inactive: string;
+export const compressed: string;

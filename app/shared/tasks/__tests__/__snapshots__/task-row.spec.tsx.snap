@@ -2,7 +2,7 @@
 
 exports[`task row renders task row 1`] = `
 <a
-  className="container selected highPriority"
+  className="container selected highPriority compressed"
   href="/foo/bar/task-id"
   onClick={[Function]}
 >
@@ -62,7 +62,7 @@ exports[`task row renders task row 1`] = `
 
 exports[`task row renders task row with multiple followers 1`] = `
 <a
-  className="container selected highPriority"
+  className="container selected highPriority compressed"
   href="/foo/bar/task-id"
   onClick={[Function]}
 >

@@ -51,7 +51,9 @@ export const TaskRow: React.StatelessComponent<IProps> = (props: IProps) => {
     [styles.lowPriority]: task.priority === 'low' || task.priority === null,
     [styles.condensed]: !!condensed,
     [styles.inactive]: !!selectedTaskId && selectedTaskId !== task.id,
+    [styles.compressed]: !!selectedTaskId,
   });
+
   const openedAtStyles = classNames(
     tasksStyles.dateSection,
     tasksStyles.openedAt,

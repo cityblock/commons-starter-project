@@ -125,3 +125,7 @@
 .inactive {
   opacity: 0.4;
 }
+
+.compressed .meta {
+  display: none;
+}

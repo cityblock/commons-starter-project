@@ -20,6 +20,7 @@ import RiskAreaAssessmentSubmission from './models/risk-area-assessment-submissi
 import RiskAreaGroup from './models/risk-area-group';
 import ScreeningTool from './models/screening-tool';
 import ScreeningToolScoreRange from './models/screening-tool-score-range';
+import Task from './models/task';
 import { UserRole } from './models/user';
 
 export interface ICreatePatient extends IPatientEditableFields {
@@ -293,6 +294,24 @@ export async function cleanCarePlanUpdateEvents(patientId: string, txn?: Transac
   );
 
   await Promise.all(carePlanUpdateEventDeletions);
+}
+
+export async function createTask(
+  patientId: string,
+  userId: string,
+  dueAt: string,
+  txn?: Transaction,
+) {
+  return await Task.create(
+    {
+      title: 'Defeat Night King',
+      dueAt,
+      patientId,
+      createdById: userId,
+      priority: 'high',
+    },
+    txn,
+  );
 }
 
 export async function createFullRiskAreaGroupAssociations(

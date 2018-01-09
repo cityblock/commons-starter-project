@@ -5,6 +5,7 @@ import BaseModel from './base-model';
 import Clinic from './clinic';
 import Concern from './concern';
 import PatientConcern from './patient-concern';
+import Task from './task';
 
 // how fuzzy is patient name search (0 (match everything) to 1 (exact match))
 const SIMILARITY_THRESHOLD = 0.2;
@@ -53,6 +54,7 @@ export default class Patient extends BaseModel {
   consentToCall: boolean;
   consentToText: boolean;
   language: string;
+  tasks: Task[];
 
   static tableName = 'patient';
 
@@ -96,6 +98,15 @@ export default class Patient extends BaseModel {
           to: 'care_team.userId',
         },
         to: 'user.id',
+      },
+    },
+
+    tasks: {
+      relation: Model.HasManyRelation,
+      modelClass: 'task',
+      join: {
+        from: 'task.patientId',
+        to: 'patient.id',
       },
     },
   };
@@ -213,6 +224,36 @@ export default class Patient extends BaseModel {
       results: patientsResult.results,
       total: patientsResult.total,
     };
+  }
+
+  // Returns a list of patients on care team that have tasks due soon or task notifications
+  static async getPatientsWithUrgentTasks(
+    { pageNumber, pageSize }: IPaginationOptions,
+    userId: string,
+    txn?: Transaction,
+  ): Promise<IPaginatedResults<Patient>> {
+    const patientsResult = await this.query(txn)
+      .whereRaw(
+        `patient.id IN
+        (
+          SELECT care_team."patientId"
+          FROM care_team
+          INNER JOIN task ON task."patientId" = care_team."patientId" AND task."deletedAt" IS NULL
+          LEFT JOIN task_event ON task_event."taskId" = task.id AND task_event."deletedAt" IS NULL
+          LEFT JOIN event_notification ON event_notification."taskEventId" = task_event.id
+            AND event_notification."userId" = ? AND event_notification."deletedAt" IS NULL
+          WHERE care_team."userId" = ?
+          AND care_team."deletedAt" IS NULL
+          AND (task."dueAt" < now() + interval \'1 day\' OR
+            (event_notification.id IS NOT NULL AND event_notification."seenAt" IS NULL))
+        )`,
+        [userId, userId],
+      ) // grab all patient ids for patients on care team that have relevant tasks
+      .orderBy('lastName', 'ASC')
+      .orderBy('firstName', 'ASC')
+      .page(pageNumber, pageSize);
+
+    return patientsResult;
   }
 }
 /* tslint:enable:member-ordering */

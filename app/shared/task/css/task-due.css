@@ -5,18 +5,18 @@
   align-items: center;
 }
 
-.icon {
+svg.icon {
   margin-right: 8px;
 }
 
-.dueSoonIcon {
+svg.dueSoonIcon {
   fill: var(--yellow-color);
 }
 
-.pastDueIcon {
+svg.pastDueIcon {
   fill: var(--red-color);
 }
 
-.completeIcon {
+svg.completeIcon {
   fill: var(--green-color);
 }

@@ -66,6 +66,7 @@ export default class TaskEvent extends BaseModel {
   eventUser: User;
   progressNote: ProgressNote;
   progressNoteId: string;
+  eventNotifications: EventNotification[];
 
   static tableName = 'task_event';
 
@@ -127,6 +128,15 @@ export default class TaskEvent extends BaseModel {
       join: {
         from: 'task_event.progressNoteId',
         to: 'progress_note.id',
+      },
+    },
+
+    eventNotifications: {
+      relation: Model.HasManyRelation,
+      modelClass: 'event-notification',
+      join: {
+        from: 'event_notification.taskEventId',
+        to: 'task_event.id',
       },
     },
   };

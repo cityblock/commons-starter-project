@@ -3,6 +3,7 @@ import { IPaginatedResults, IPaginationOptions } from '../db';
 import BaseModel from './base-model';
 import Patient from './patient';
 import PatientGoal from './patient-goal';
+import TaskEvent from './task-event';
 import TaskFollower from './task-follower';
 import User from './user';
 
@@ -56,6 +57,7 @@ export default class Task extends BaseModel {
   completedAt: string | null;
   followers: User[];
   priority: Priority;
+  taskEvents: TaskEvent[];
 
   static tableName = 'task';
 
@@ -143,6 +145,15 @@ export default class Task extends BaseModel {
       join: {
         from: 'task.id',
         to: 'task_comment.id',
+      },
+    },
+
+    taskEvents: {
+      relation: Model.HasManyRelation,
+      modelClass: 'task-event',
+      join: {
+        from: 'task_event.taskId',
+        to: 'task.id',
       },
     },
   };

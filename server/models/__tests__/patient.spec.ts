@@ -7,13 +7,21 @@ import {
   createMockPatient,
   createMockUser,
   createPatient,
+  createTask,
 } from '../../spec-helpers';
 import Clinic from '../clinic';
+import EventNotification from '../event-notification';
 import Patient from '../patient';
 import PatientConcern from '../patient-concern';
+import TaskEvent from '../task-event';
 import User from '../user';
 
 const userRole = 'physician';
+const patient1Name = 'Arya';
+const patient2Name = 'Sansa';
+const patient3Name = 'Robb';
+const patient4Name = 'Bran';
+const patient5Name = 'Rickon';
 
 interface ISetup {
   clinic: Clinic;
@@ -23,6 +31,78 @@ async function setup(txn: Transaction): Promise<ISetup> {
   const clinic = await Clinic.create(createMockClinic(), txn);
 
   return { clinic };
+}
+
+async function setupUrgentTasks(txn: Transaction) {
+  const { clinic } = await setup(txn);
+  const user = await User.create(createMockUser(11, clinic.id, userRole), txn);
+  const user2 = await User.create(createMockUser(12, clinic.id, userRole), txn);
+
+  const patient1 = await createPatient(
+    createMockPatient(123, clinic.id, patient1Name),
+    user.id,
+    txn,
+  );
+  const patient2 = await createPatient(
+    createMockPatient(234, clinic.id, patient2Name),
+    user.id,
+    txn,
+  );
+  await createPatient(createMockPatient(456, clinic.id, patient3Name), user2.id, txn);
+  await createPatient(createMockPatient(345, clinic.id, patient4Name), user.id, txn);
+  const patient5 = await createPatient(
+    createMockPatient(567, clinic.id, patient5Name),
+    user.id,
+    txn,
+  );
+
+  const soonDueDate = '2017-09-07T13:45:14.532Z';
+  const laterDueDate = '2050-11-07T13:45:14.532Z';
+
+  await createTask(patient1.id, user.id, soonDueDate, txn);
+  await createTask(patient1.id, user.id, laterDueDate, txn);
+  await createTask(patient2.id, user.id, laterDueDate, txn);
+  const task4 = await createTask(patient5.id, user.id, laterDueDate, txn);
+
+  const taskEvent = await TaskEvent.create(
+    {
+      taskId: task4.id,
+      userId: user.id,
+      eventType: 'edit_description',
+    },
+    txn,
+  );
+  await EventNotification.create(
+    {
+      userId: user.id,
+      taskEventId: taskEvent.id,
+    },
+    txn,
+  );
+  const taskEvent2 = await TaskEvent.create(
+    {
+      taskId: task4.id,
+      userId: user.id,
+      eventType: 'edit_description',
+    },
+    txn,
+  );
+  const eventNotification2 = await EventNotification.create(
+    {
+      userId: user.id,
+      taskEventId: taskEvent2.id,
+    },
+    txn,
+  );
+  await EventNotification.update(
+    eventNotification2.id,
+    {
+      seenAt: '2017-09-07T13:45:14.532Z',
+    },
+    txn,
+  );
+
+  return { user };
 }
 
 describe('patient model', () => {
@@ -376,6 +456,28 @@ describe('patient model', () => {
           firstName: 'Jon',
           lastName: 'Snow',
         });
+      });
+    });
+  });
+
+  describe('dashboard task notifications', () => {
+    it('returns relevant patients on care team', async () => {
+      await transaction(Patient.knex(), async txn => {
+        const { user } = await setupUrgentTasks(txn);
+
+        const { total, results } = await Patient.getPatientsWithUrgentTasks(
+          {
+            pageNumber: 0,
+            pageSize: 10,
+          },
+          user.id,
+          txn,
+        );
+
+        const resultNames = results.map(r => r.firstName);
+
+        expect(total).toBe(2);
+        expect(resultNames).toEqual([patient1Name, patient5Name]);
       });
     });
   });

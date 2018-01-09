@@ -127,8 +127,9 @@ export default class EventNotification extends BaseModel {
   static async update(
     eventNotificationId: string,
     eventNotification: Partial<IEventNotificationEditableFields>,
+    txn?: Transaction,
   ): Promise<EventNotification> {
-    return await this.query()
+    return await this.query(txn)
       .eager(EAGER_QUERY)
       .modifyEager('taskEvent', builder => builder.where('deletedAt', null))
       .patchAndFetchById(eventNotificationId, eventNotification);

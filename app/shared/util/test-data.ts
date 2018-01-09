@@ -129,6 +129,25 @@ export const answer = {
   screeningTool: null,
 };
 
+export const otherTextAnswer = {
+  id: 'other-text-answer-id',
+  displayValue: 'other',
+  value: 'other',
+  valueType: 'string' as any,
+  riskAdjustmentType: 'inactive' as any,
+  inSummary: false,
+  summaryText: null,
+  questionId: 'cool-task-id',
+  order: 1,
+  createdAt: 'Thu Jul 13 2017 16:52:56 GMT-0400 (EDT)',
+  updatedAt: 'Thu Jul 13 2017 16:52:56 GMT-0400 (EDT)',
+  deletedAt: null,
+  concernSuggestions: [],
+  goalSuggestions: [],
+  riskArea: null,
+  screeningTool: null,
+};
+
 export const answerMutiSelect = {
   id: '456',
   displayValue: 'Answer',
@@ -206,6 +225,33 @@ export const question = {
   ],
   computedFieldId: null,
   computedField: null,
+  otherTextAnswerId: null,
+};
+
+export const questionWithOtherTextAnswer = {
+  id: 'cool-question-id',
+  createdAt: 'Thu Jul 13 2017 16:52:56 GMT-0400 (EDT)',
+  updatedAt: 'Thu Jul 13 2017 16:52:56 GMT-0400 (EDT)',
+  dueAt: 'Thu Jul 13 2017 16:52:56 GMT-0400 (EDT)',
+  deletedAt: null,
+  title: 'Question Title',
+  order: 1,
+  validatedSource: 'validated source',
+  answerType: 'radio' as any,
+  answers: [otherTextAnswer, answer],
+  riskAreaId: 'risk-area-id',
+  screeningToolId: null,
+  applicableIfType: 'allTrue' as any,
+  applicableIfQuestionConditions: [
+    {
+      id: 'question-condition',
+      questionId: 'cool-question-id',
+      answerId: 'answer-id',
+    },
+  ],
+  computedFieldId: null,
+  computedField: null,
+  otherTextAnswerId: otherTextAnswer.id,
 };
 
 export const questionWithAnswerWithConcernAndGoal = {

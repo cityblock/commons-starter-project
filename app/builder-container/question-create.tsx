@@ -68,6 +68,7 @@ class QuestionCreate extends React.Component<allProps, IState> {
         progressNoteTemplateId: props.progressNoteTemplateId,
         applicableIfType: null,
         computedFieldId: null,
+        hasOtherTextAnswer: null,
       },
     };
   }
@@ -85,6 +86,9 @@ class QuestionCreate extends React.Component<allProps, IState> {
         question.answerType = 'radio' as AnswerTypeOptions;
       }
     } else {
+      if (fieldName === 'answerType' && fieldValue !== 'dropdown') {
+        question.hasOtherTextAnswer = null;
+      }
       (question as any)[fieldName] = fieldValue;
     }
 
@@ -93,7 +97,13 @@ class QuestionCreate extends React.Component<allProps, IState> {
 
   onChange(event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) {
     const fieldName = event.target.name;
-    const fieldValue = event.target.value;
+    let fieldValue: any = event.target.value;
+
+    if (fieldValue === 'true') {
+      fieldValue = true;
+    } else if (fieldValue === 'false') {
+      fieldValue = false;
+    }
 
     this.onFieldUpdate({ fieldName, fieldValue });
   }
@@ -149,6 +159,33 @@ class QuestionCreate extends React.Component<allProps, IState> {
           <Option value="radio" messageId="question.answerTypeRadio" />
           <Option value="freetext" messageId="question.answerTypeFreeText" />
           <Option value="multiselect" messageId="question.answerTypeMultiselect" />
+        </Select>
+      );
+    }
+  }
+
+  renderOtherTextAnswerOption() {
+    const { question } = this.state;
+    const { computedFieldId, screeningToolId, answerType } = question;
+
+    if (!computedFieldId && !screeningToolId && answerType === 'dropdown') {
+      let selectValue = '';
+
+      if (question.hasOtherTextAnswer === true) {
+        selectValue = 'true';
+      } else if (question.hasOtherTextAnswer === false) {
+        selectValue = 'false';
+      }
+
+      return (
+        <Select
+          name="hasOtherTextAnswer"
+          value={selectValue}
+          onChange={this.onChange}
+        >
+          <Option value="" disabled={true} messageId="question.selectHasOtherTextAnswer" />
+          <Option value="true" messageId="question.hasOtherTextAnswerTrue" />
+          <Option value="false" messageId="question.hasOtherTextAnswerFalse" />
         </Select>
       );
     }
@@ -211,6 +248,7 @@ class QuestionCreate extends React.Component<allProps, IState> {
                 <Option value="allTrue" messageId="question.applicableAllTrue" />
               </Select>
               {this.renderAnswerType()}
+              {this.renderOtherTextAnswerOption()}
             </div>
           </div>
           <div className={styles.formBottom}>

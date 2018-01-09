@@ -236,15 +236,18 @@ export class Question extends React.Component<allProps, IState> {
   renderAnswers() {
     const { question } = this.props;
     if (question && question.answers) {
-      return question.answers.map(answer => (
-        <AnswerCreateEdit
-          key={answer ? answer.id : ''}
-          screeningToolAnswer={!!question.screeningToolId}
-          answer={answer}
-          questionId={question.id}
-          dataType={this.getAnswerDataType()}
-        />
-      ));
+      return question.answers
+        .filter(answer => answer.id !== question.otherTextAnswerId)
+        .map(answer => (
+          <AnswerCreateEdit
+            key={answer ? answer.id : ''}
+            screeningToolAnswer={!!question.screeningToolId}
+            answer={answer}
+            questionId={question.id}
+            dataType={this.getAnswerDataType()}
+          />
+        ),
+     );
     }
   }
 

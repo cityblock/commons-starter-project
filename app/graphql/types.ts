@@ -2578,6 +2578,7 @@ export interface getQuestionQuery {
     screeningToolId: string | null,
     order: number,
     applicableIfType: QuestionConditionTypeOptions | null,
+    otherTextAnswerId: string | null,
     answers:  Array< {
       id: string,
       displayValue: string,
@@ -2660,6 +2661,7 @@ export interface getQuestionsQuery {
     screeningToolId: string | null,
     order: number,
     applicableIfType: QuestionConditionTypeOptions | null,
+    otherTextAnswerId: string | null,
     answers:  Array< {
       id: string,
       displayValue: string,
@@ -4697,6 +4699,7 @@ export interface questionCreateMutationVariables {
   order: number,
   applicableIfType?: QuestionConditionTypeOptions | null,
   computedFieldId?: string | null,
+  hasOtherTextAnswer?: boolean | null,
 };
 
 export interface questionCreateMutation {
@@ -4712,6 +4715,7 @@ export interface questionCreateMutation {
     screeningToolId: string | null,
     order: number,
     applicableIfType: QuestionConditionTypeOptions | null,
+    otherTextAnswerId: string | null,
     answers:  Array< {
       id: string,
       displayValue: string,
@@ -4793,6 +4797,7 @@ export interface questionDeleteMutation {
     screeningToolId: string | null,
     order: number,
     applicableIfType: QuestionConditionTypeOptions | null,
+    otherTextAnswerId: string | null,
     answers:  Array< {
       id: string,
       displayValue: string,
@@ -4879,6 +4884,7 @@ export interface questionEditMutation {
     screeningToolId: string | null,
     order: number,
     applicableIfType: QuestionConditionTypeOptions | null,
+    otherTextAnswerId: string | null,
     answers:  Array< {
       id: string,
       displayValue: string,
@@ -7756,6 +7762,7 @@ export interface FullQuestionFragment {
   screeningToolId: string | null,
   order: number,
   applicableIfType: QuestionConditionTypeOptions | null,
+  otherTextAnswerId: string | null,
   answers:  Array< {
     id: string,
     displayValue: string,

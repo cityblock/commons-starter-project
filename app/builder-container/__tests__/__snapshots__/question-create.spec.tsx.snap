@@ -113,6 +113,33 @@ exports[`renders question 1`] = `
             Multiselect
           </option>
         </select>
+        <select
+          className="select"
+          disabled={undefined}
+          name="hasOtherTextAnswer"
+          onChange={[Function]}
+          required={undefined}
+          value=""
+        >
+          <option
+            disabled={true}
+            value=""
+          >
+            Should this question have an "other" answer?
+          </option>
+          <option
+            disabled={undefined}
+            value="true"
+          >
+            Yes
+          </option>
+          <option
+            disabled={undefined}
+            value="false"
+          >
+            No
+          </option>
+        </select>
       </div>
     </div>
     <div

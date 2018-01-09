@@ -10,6 +10,7 @@ mutation questionCreate(
   $order: Int!
   $applicableIfType: QuestionConditionTypeOptions
   $computedFieldId: ID
+  $hasOtherTextAnswer: Boolean
 ) {
   questionCreate(
     input: {
@@ -22,6 +23,7 @@ mutation questionCreate(
       order: $order
       applicableIfType: $applicableIfType
       computedFieldId: $computedFieldId
+      hasOtherTextAnswer: $hasOtherTextAnswer
     }
   ) {
     ...FullQuestion

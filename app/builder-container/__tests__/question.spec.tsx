@@ -8,7 +8,8 @@ import { create } from 'react-test-renderer';
 import configureMockStore from 'redux-mock-store';
 import { ENGLISH_TRANSLATION } from '../../reducers/messages/en';
 import ReduxConnectedIntlProvider from '../../redux-connected-intl-provider';
-import { question } from '../../shared/util/test-data';
+import { question, questionWithOtherTextAnswer } from '../../shared/util/test-data';
+import AnswerCreateEdit from '../answer-create-edit';
 import Question, { Question as Component } from '../question';
 
 const locale = { messages: ENGLISH_TRANSLATION.messages };
@@ -96,5 +97,30 @@ describe('shallow rendered', () => {
         title: 'new title',
       },
     });
+  });
+});
+
+describe('shallow rendered with other text answer', () => {
+  const refetchQuestion = jest.fn();
+  const editQuestion = jest.fn();
+  const onDelete = jest.fn();
+
+  it('does not render the other text answer', async () => {
+    const wrapper = shallow(
+      <Component
+        match={match}
+        routeBase={'/route/base'}
+        question={questionWithOtherTextAnswer}
+        questions={[questionWithOtherTextAnswer]}
+        questionId={questionWithOtherTextAnswer.id}
+        questionLoading={false}
+        questionError={null}
+        onDelete={onDelete}
+        refetchQuestion={refetchQuestion}
+        editQuestion={editQuestion}
+      />,
+    );
+    // 1 for the non-otherTextAnswer + 1 empty one
+    expect(wrapper.find(AnswerCreateEdit).length).toBe(2);
   });
 });

@@ -15,7 +15,7 @@
     "prod-db": "./scripts/aptible-psql.sh commons-production",
     "copy-prod-to-staging": "aptible db:execute commons-staging ./scripts/aptible-copy-production-to-staging.sql",
     "start": "NODE_ENV=production nodemon ./server-compiled/server/index.js",
-    "dev": "yarn check --verify-tree && NODE_ENV=development nodemon --exec 'ts-node -P tsconfig.server.json ./server/index.ts'",
+    "dev": "yarn check --verify-tree && yarn migrate && NODE_ENV=development nodemon --exec 'ts-node -P tsconfig.server.json ./server/index.ts'",
     "build:dev": "cross-env NODE_ENV=development webpack --colors --display-error-details --config ./webpack/webpack.config.js",
     "build": "yarn run clean && yarn run build-server && cross-env NODE_ENV=production webpack --colors --config ./webpack/webpack.config.js",
     "build-stats": "cross-env NODE_ENV=production webpack --config ./webpack/webpack.config.js --profile --json > stats.json",

@@ -286,6 +286,10 @@ declare module 'schema' {
   */
     progressNotesForCurrentUser: Array<IProgressNote> | null;
     /**
+    description: progress notes for supervisor review
+  */
+    progressNotesForSupervisorReview: Array<IProgressNote> | null;
+    /**
     description: progress note activities for progress note
   */
     progressNoteActivityForProgressNote: IProgressNoteActivity | null;
@@ -325,6 +329,7 @@ declare module 'schema' {
   interface IUser {
     id: string;
     locale: string | null;
+    phone: string | null;
     firstName: string | null;
     lastName: string | null;
     email: string | null;
@@ -1597,6 +1602,7 @@ declare module 'schema' {
   */
   interface ICurrentUserEditInput {
     locale?: string | null;
+    phone?: string | null;
     firstName?: string | null;
     lastName?: string | null;
   }

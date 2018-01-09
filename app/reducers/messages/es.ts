@@ -223,6 +223,7 @@ export const SPANISH_TRANSLATION = {
       "Based on the results of this assessment, the following have been recommended as additions to the patient's care plan.",
     'select.default': 'Seleccione uno',
     'settings.heading': 'Ajustes',
+    'settings.save': 'Guardar',
     'tasks.assignedToPlaceholder': 'Asignar a',
     'tasks.patientGoalPlaceholder': 'Objetivo del paciente',
     'tasks.listView': 'Tareas',

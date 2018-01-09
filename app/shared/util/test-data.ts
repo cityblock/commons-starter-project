@@ -6,6 +6,7 @@ export const clinic = {
 export const currentUser = {
   id: 'id',
   locale: 'en',
+  phone: '(212) 555-8394',
   firstName: 'first',
   lastName: 'last',
   userRole: 'physician' as any,
@@ -19,6 +20,7 @@ export const currentUser = {
 export const user = {
   id: 'id2',
   locale: 'en',
+  phone: '(212) 555-2828',
   firstName: 'first',
   lastName: 'last',
   userRole: 'physician' as any,

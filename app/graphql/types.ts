@@ -686,6 +686,7 @@ export interface currentUserEditMutationVariables {
   firstName?: string | null,
   lastName?: string | null,
   locale?: string | null,
+  phone?: string | null,
 };
 
 export interface currentUserEditMutation {
@@ -693,6 +694,7 @@ export interface currentUserEditMutation {
   currentUserEdit:  {
     id: string,
     locale: string | null,
+    phone: string | null,
     firstName: string | null,
     lastName: string | null,
     userRole: UserRole,
@@ -717,6 +719,7 @@ export interface eventNotificationDismissMutation {
     user:  {
       id: string,
       locale: string | null,
+      phone: string | null,
       firstName: string | null,
       lastName: string | null,
       userRole: UserRole,
@@ -733,6 +736,7 @@ export interface eventNotificationDismissMutation {
       user:  {
         id: string,
         locale: string | null,
+        phone: string | null,
         firstName: string | null,
         lastName: string | null,
         userRole: UserRole,
@@ -750,6 +754,7 @@ export interface eventNotificationDismissMutation {
         user:  {
           id: string,
           locale: string | null,
+          phone: string | null,
           firstName: string | null,
           lastName: string | null,
           userRole: UserRole,
@@ -767,6 +772,7 @@ export interface eventNotificationDismissMutation {
       eventUser:  {
         id: string,
         locale: string | null,
+        phone: string | null,
         firstName: string | null,
         lastName: string | null,
         userRole: UserRole,
@@ -927,6 +933,7 @@ export interface getCurrentUserQuery {
   currentUser:  {
     id: string,
     locale: string | null,
+    phone: string | null,
     firstName: string | null,
     lastName: string | null,
     userRole: UserRole,
@@ -955,6 +962,7 @@ export interface getEventNotificationsForCurrentUserQuery {
         user:  {
           id: string,
           locale: string | null,
+          phone: string | null,
           firstName: string | null,
           lastName: string | null,
           userRole: UserRole,
@@ -971,6 +979,7 @@ export interface getEventNotificationsForCurrentUserQuery {
           user:  {
             id: string,
             locale: string | null,
+            phone: string | null,
             firstName: string | null,
             lastName: string | null,
             userRole: UserRole,
@@ -988,6 +997,7 @@ export interface getEventNotificationsForCurrentUserQuery {
             user:  {
               id: string,
               locale: string | null,
+              phone: string | null,
               firstName: string | null,
               lastName: string | null,
               userRole: UserRole,
@@ -1005,6 +1015,7 @@ export interface getEventNotificationsForCurrentUserQuery {
           eventUser:  {
             id: string,
             locale: string | null,
+            phone: string | null,
             firstName: string | null,
             lastName: string | null,
             userRole: UserRole,
@@ -1427,6 +1438,7 @@ export interface getPatientCareTeamQuery {
   patientCareTeam:  Array< {
     id: string,
     locale: string | null,
+    phone: string | null,
     firstName: string | null,
     lastName: string | null,
     userRole: UserRole,
@@ -1945,6 +1957,7 @@ export interface getProgressNoteActivityForProgressNoteQuery {
       user:  {
         id: string,
         locale: string | null,
+        phone: string | null,
         firstName: string | null,
         lastName: string | null,
         userRole: UserRole,
@@ -1962,6 +1975,7 @@ export interface getProgressNoteActivityForProgressNoteQuery {
         user:  {
           id: string,
           locale: string | null,
+          phone: string | null,
           firstName: string | null,
           lastName: string | null,
           userRole: UserRole,
@@ -1979,6 +1993,7 @@ export interface getProgressNoteActivityForProgressNoteQuery {
       eventUser:  {
         id: string,
         locale: string | null,
+        phone: string | null,
         firstName: string | null,
         lastName: string | null,
         userRole: UserRole,
@@ -2012,6 +2027,7 @@ export interface getProgressNoteActivityForProgressNoteQuery {
       user:  {
         id: string,
         locale: string | null,
+        phone: string | null,
         firstName: string | null,
         lastName: string | null,
         userRole: UserRole,
@@ -2171,6 +2187,7 @@ export interface getProgressNoteActivityForProgressNoteQuery {
       user:  {
         id: string,
         locale: string | null,
+        phone: string | null,
         firstName: string | null,
         lastName: string | null,
         userRole: UserRole,
@@ -2337,6 +2354,7 @@ export interface getProgressNoteActivityForProgressNoteQuery {
       user:  {
         id: string,
         locale: string | null,
+        phone: string | null,
         firstName: string | null,
         lastName: string | null,
         userRole: UserRole,
@@ -2396,6 +2414,7 @@ export interface getProgressNotesForCurrentUserQuery {
     user:  {
       id: string,
       locale: string | null,
+      phone: string | null,
       firstName: string | null,
       lastName: string | null,
       userRole: UserRole,
@@ -2458,6 +2477,7 @@ export interface getProgressNotesForPatientQuery {
     user:  {
       id: string,
       locale: string | null,
+      phone: string | null,
       firstName: string | null,
       lastName: string | null,
       userRole: UserRole,
@@ -3267,6 +3287,7 @@ export interface getTaskCommentQuery {
     user:  {
       id: string,
       locale: string | null,
+      phone: string | null,
       firstName: string | null,
       lastName: string | null,
       userRole: UserRole,
@@ -3298,6 +3319,7 @@ export interface getTaskCommentsQuery {
         user:  {
           id: string,
           locale: string | null,
+          phone: string | null,
           firstName: string | null,
           lastName: string | null,
           userRole: UserRole,
@@ -3390,6 +3412,7 @@ export interface getUsersQuery {
       node:  {
         id: string,
         locale: string | null,
+        phone: string | null,
         firstName: string | null,
         lastName: string | null,
         userRole: UserRole,
@@ -3564,6 +3587,7 @@ export interface logInUserMutation {
     user:  {
       id: string,
       locale: string | null,
+      phone: string | null,
       firstName: string | null,
       lastName: string | null,
       userRole: UserRole,
@@ -4426,6 +4450,7 @@ export interface progressNoteCompleteMutation {
     user:  {
       id: string,
       locale: string | null,
+      phone: string | null,
       firstName: string | null,
       lastName: string | null,
       userRole: UserRole,
@@ -4487,6 +4512,7 @@ export interface progressNoteCreateMutation {
     user:  {
       id: string,
       locale: string | null,
+      phone: string | null,
       firstName: string | null,
       lastName: string | null,
       userRole: UserRole,
@@ -4555,6 +4581,7 @@ export interface progressNoteEditMutation {
     user:  {
       id: string,
       locale: string | null,
+      phone: string | null,
       firstName: string | null,
       lastName: string | null,
       userRole: UserRole,
@@ -4967,6 +4994,7 @@ export interface quickCallCreateMutation {
     user:  {
       id: string,
       locale: string | null,
+      phone: string | null,
       firstName: string | null,
       lastName: string | null,
       userRole: UserRole,
@@ -5714,6 +5742,7 @@ export interface taskCommentCreateMutation {
     user:  {
       id: string,
       locale: string | null,
+      phone: string | null,
       firstName: string | null,
       lastName: string | null,
       userRole: UserRole,
@@ -5742,6 +5771,7 @@ export interface taskCommentEditMutation {
     user:  {
       id: string,
       locale: string | null,
+      phone: string | null,
       firstName: string | null,
       lastName: string | null,
       userRole: UserRole,
@@ -6265,6 +6295,7 @@ export interface userCreateMutation {
   userCreate:  {
     id: string,
     locale: string | null,
+    phone: string | null,
     firstName: string | null,
     lastName: string | null,
     userRole: UserRole,
@@ -6285,6 +6316,7 @@ export interface userDeleteMutation {
   userDelete:  {
     id: string,
     locale: string | null,
+    phone: string | null,
     firstName: string | null,
     lastName: string | null,
     userRole: UserRole,
@@ -6306,6 +6338,7 @@ export interface userEditRoleMutation {
   userEditRole:  {
     id: string,
     locale: string | null,
+    phone: string | null,
     firstName: string | null,
     lastName: string | null,
     userRole: UserRole,
@@ -6469,6 +6502,7 @@ export interface FullCarePlanUpdateEventFragment {
   user:  {
     id: string,
     locale: string | null,
+    phone: string | null,
     firstName: string | null,
     lastName: string | null,
     userRole: UserRole,
@@ -6660,6 +6694,7 @@ export interface FullEventNotificationFragment {
   user:  {
     id: string,
     locale: string | null,
+    phone: string | null,
     firstName: string | null,
     lastName: string | null,
     userRole: UserRole,
@@ -6676,6 +6711,7 @@ export interface FullEventNotificationFragment {
     user:  {
       id: string,
       locale: string | null,
+      phone: string | null,
       firstName: string | null,
       lastName: string | null,
       userRole: UserRole,
@@ -6693,6 +6729,7 @@ export interface FullEventNotificationFragment {
       user:  {
         id: string,
         locale: string | null,
+        phone: string | null,
         firstName: string | null,
         lastName: string | null,
         userRole: UserRole,
@@ -6710,6 +6747,7 @@ export interface FullEventNotificationFragment {
     eventUser:  {
       id: string,
       locale: string | null,
+      phone: string | null,
       firstName: string | null,
       lastName: string | null,
       userRole: UserRole,
@@ -6772,6 +6810,7 @@ export interface FullPatientAnswerEventFragment {
   user:  {
     id: string,
     locale: string | null,
+    phone: string | null,
     firstName: string | null,
     lastName: string | null,
     userRole: UserRole,
@@ -7270,6 +7309,7 @@ export interface FullProgressNoteActivityFragment {
     user:  {
       id: string,
       locale: string | null,
+      phone: string | null,
       firstName: string | null,
       lastName: string | null,
       userRole: UserRole,
@@ -7287,6 +7327,7 @@ export interface FullProgressNoteActivityFragment {
       user:  {
         id: string,
         locale: string | null,
+        phone: string | null,
         firstName: string | null,
         lastName: string | null,
         userRole: UserRole,
@@ -7304,6 +7345,7 @@ export interface FullProgressNoteActivityFragment {
     eventUser:  {
       id: string,
       locale: string | null,
+      phone: string | null,
       firstName: string | null,
       lastName: string | null,
       userRole: UserRole,
@@ -7337,6 +7379,7 @@ export interface FullProgressNoteActivityFragment {
     user:  {
       id: string,
       locale: string | null,
+      phone: string | null,
       firstName: string | null,
       lastName: string | null,
       userRole: UserRole,
@@ -7496,6 +7539,7 @@ export interface FullProgressNoteActivityFragment {
     user:  {
       id: string,
       locale: string | null,
+      phone: string | null,
       firstName: string | null,
       lastName: string | null,
       userRole: UserRole,
@@ -7662,6 +7706,7 @@ export interface FullProgressNoteActivityFragment {
     user:  {
       id: string,
       locale: string | null,
+      phone: string | null,
       firstName: string | null,
       lastName: string | null,
       userRole: UserRole,
@@ -7697,6 +7742,7 @@ export interface FullProgressNoteFragment {
   user:  {
     id: string,
     locale: string | null,
+    phone: string | null,
     firstName: string | null,
     lastName: string | null,
     userRole: UserRole,
@@ -7832,6 +7878,7 @@ export interface FullQuickCallFragment {
   user:  {
     id: string,
     locale: string | null,
+    phone: string | null,
     firstName: string | null,
     lastName: string | null,
     userRole: UserRole,
@@ -8155,6 +8202,7 @@ export interface FullTaskCommentFragment {
   user:  {
     id: string,
     locale: string | null,
+    phone: string | null,
     firstName: string | null,
     lastName: string | null,
     userRole: UserRole,
@@ -8176,6 +8224,7 @@ export interface FullTaskEventFragment {
   user:  {
     id: string,
     locale: string | null,
+    phone: string | null,
     firstName: string | null,
     lastName: string | null,
     userRole: UserRole,
@@ -8193,6 +8242,7 @@ export interface FullTaskEventFragment {
     user:  {
       id: string,
       locale: string | null,
+      phone: string | null,
       firstName: string | null,
       lastName: string | null,
       userRole: UserRole,
@@ -8210,6 +8260,7 @@ export interface FullTaskEventFragment {
   eventUser:  {
     id: string,
     locale: string | null,
+    phone: string | null,
     firstName: string | null,
     lastName: string | null,
     userRole: UserRole,
@@ -8291,6 +8342,7 @@ export interface FullTaskFragment {
 export interface FullUserFragment {
   id: string,
   locale: string | null,
+  phone: string | null,
   firstName: string | null,
   lastName: string | null,
   userRole: UserRole,

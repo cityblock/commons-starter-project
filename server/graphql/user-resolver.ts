@@ -135,6 +135,7 @@ export async function currentUserEdit(
     userId!,
     {
       locale: (cleanedParams.locale as Locale) || undefined,
+      phone: cleanedParams.phone || undefined,
       firstName: cleanedParams.firstName || undefined,
       lastName: cleanedParams.lastName || undefined,
     },

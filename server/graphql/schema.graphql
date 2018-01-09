@@ -168,6 +168,7 @@ enum AssessmentType {
 type User implements uniqueId {
   id: ID!
   locale: String
+  phone: String
   firstName: String
   lastName: String
   email: String
@@ -1028,6 +1029,7 @@ input PatientScratchPadEditInput {
 # params for editing a current user
 input CurrentUserEditInput {
   locale: String
+  phone: String
   firstName: String
   lastName: String
 }

@@ -6,6 +6,7 @@ export const careTeamMemberName: string;
 export const careTeamMemberRole: string;
 export const careTeamMemberContact: string;
 export const open: string;
+export const phone: string;
 export const careTeamMemberContactRow: string;
 export const careTeamContactIcon: string;
 export const careTeamSlackIcon: string;

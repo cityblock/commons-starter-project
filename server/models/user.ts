@@ -31,6 +31,7 @@ interface ICreateUser {
   lastName?: string;
   userRole?: UserRole;
   athenaProviderId?: number;
+  phone?: string;
 }
 
 interface IUpdateUser {
@@ -41,6 +42,7 @@ interface IUpdateUser {
   firstName: string;
   lastName: string;
   lastLoginAt: string;
+  phone: string;
 }
 
 interface IGetByOptions {
@@ -83,6 +85,7 @@ export default class User extends Model {
   locale: 'en' | 'es';
   athenaProviderId: number;
   googleProfileImageUrl: string;
+  phone: string;
 
   static tableName = 'user';
 
@@ -108,6 +111,7 @@ export default class User extends Model {
       googleAuthId: { type: 'string', minLength: 1 }, // cannot be blank
       googleProfileImageUrl: { type: 'string', minLength: 1 }, // cannot be blank
       deletedAt: { type: 'string' },
+      phone: { type: 'string' },
     },
     required: ['email', 'userRole', 'homeClinicId'],
   };

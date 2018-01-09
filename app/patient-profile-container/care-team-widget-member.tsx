@@ -25,11 +25,15 @@ export default class CareTeamWidgetMember extends React.Component<IProps, {}> {
   render() {
     const { careTeamMember, onClick, selected } = this.props;
 
-    const contactStyles = classNames(styles.careTeamMemberContact, { [styles.open]: selected });
-
     const careTeamMemberPhotoUrl = careTeamMember.googleProfileImageUrl || '';
     const careTeamMemberFullName = `${careTeamMember.firstName} ${careTeamMember.lastName}`;
     const careTeamMemberRole = this.formatCareTeamMemberRole(careTeamMember.userRole);
+    const careTeamPhoneNumber = careTeamMember.phone;
+
+    const contactStyles = classNames(styles.careTeamMemberContact, {
+      [styles.open]: selected,
+      [styles.phone]: !!careTeamPhoneNumber,
+    });
 
     return (
       <div className={styles.careTeamMemberRow}>
@@ -49,10 +53,12 @@ export default class CareTeamWidgetMember extends React.Component<IProps, {}> {
               {(message: string) => <div className={styles.careTeamContactLabel}>{message}</div>}
             </FormattedMessage>
           </div>
-          <div className={styles.careTeamMemberContactRow}>
-            <div className={phoneIconStyles} />
-            <div className={styles.careTeamContactLabel}>(252) 258-8922</div>
-          </div>
+          {careTeamPhoneNumber &&
+            <div className={styles.careTeamMemberContactRow}>
+              <div className={phoneIconStyles} />
+              <div className={styles.careTeamContactLabel}>{careTeamPhoneNumber}</div>
+            </div>
+          }
           <div className={styles.careTeamMemberContactRow}>
             <div className={emailIconStyles} />
             <FormattedMessage id="careTeam.email">

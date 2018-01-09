@@ -1,6 +1,7 @@
 fragment FullUser on User {
   id
   locale
+  phone
   firstName
   lastName
   userRole

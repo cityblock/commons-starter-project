@@ -31,7 +31,7 @@ exports[`renders care team widget 1`] = `
     </div>
   </div>
   <div
-    className="careTeamMemberContact"
+    className="careTeamMemberContact phone"
   >
     <div
       className="careTeamMemberContactRow"
@@ -54,7 +54,7 @@ exports[`renders care team widget 1`] = `
       <div
         className="careTeamContactLabel"
       >
-        (252) 258-8922
+        (212) 555-8394
       </div>
     </div>
     <div

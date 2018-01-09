@@ -30,6 +30,7 @@ export function convertUser(user: User): IUser {
     updatedAt: user.updatedAt,
     homeClinicId: user.homeClinicId,
     locale: user.locale,
+    phone: user.phone,
     googleProfileImageUrl: user.googleProfileImageUrl,
     ...convertGenerated(user),
   };

@@ -59,11 +59,15 @@
 
 .careTeamMemberContact.open {
   margin: 0;
-  height: 127px;
+  height: 93px;
   border-top: 1px solid var(--border-color);
   border-bottom: 1px solid var(--border-color);
   background-color: var(--gray-background-color);
   padding: 10px var(--gutter) 0;
+}
+
+.careTeamMemberContact.open.phone {
+  height: 127px;
 }
 
 .careTeamMemberContact.open .careTeamMemberContactRow {

@@ -79,4 +79,16 @@ describe('Patient Search Pagination Component', () => {
     expect(wrapper.find(Icon).length).toBe(0);
     expect(wrapper.find('.empty').length).toBe(2);
   });
+
+  it('applies custom styles if specified', () => {
+    const className = 'custom';
+    wrapper.setProps({ className });
+
+    expect(
+      wrapper
+        .find('div')
+        .at(0)
+        .props().className,
+    ).toBe(`container ${className}`);
+  });
 });

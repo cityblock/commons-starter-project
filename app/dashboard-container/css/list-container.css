@@ -1,0 +1,10 @@
+@import '../../shared/css/sizes';
+
+.container {
+  width: 100%;
+}
+
+.pages {
+  /* For some reason was too large if I didn't shrink width */
+  max-width: calc(100% - 320px);
+}

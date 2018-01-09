@@ -1,6 +1,7 @@
 @import '../../../shared/css/sizes';
 
 .container {
+  background: var(--white-color);
   min-width: 320px;
   width: 30%;
   border-right: 1px solid var(--border-color);

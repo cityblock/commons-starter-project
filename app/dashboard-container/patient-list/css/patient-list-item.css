@@ -1,0 +1,78 @@
+@import '../../../shared/css/sizes';
+
+.container {
+  background: var(--white-color);
+  width: 100%;
+  border-bottom: 1px solid var(--border-color);
+  height: 55px;
+  cursor: pointer;
+}
+
+.container,
+.patient,
+.info,
+.profileLink {
+  display: flex;
+  align-items: center;
+}
+
+.container,
+.profileLink {
+  transition: background 0.2s;
+
+  &:hover {
+    background: var(--gray-background-color);
+  }
+}
+
+.info {
+  justify-content: space-between;
+  width: 100%;
+  padding: 0 var(--small-gutter);
+}
+
+.container h4,
+.container p {
+  margin: 0;
+  color: var(--black-color);
+}
+
+.container h4 {
+  font-size: var(--default-font-size);
+  font-weight: var(--roboto-medium-weight);
+  line-height: var(--default-line-height);
+  min-width: 200px;
+}
+
+.container p {
+  font-size: var(--small-font-size);
+  line-height: var(--small-font-line-height);
+}
+
+.avatar {
+  height: 25px;
+  width: 25px;
+  margin: 0 var(--small-gutter);
+  border-radius: 50%;
+  border: 1px solid var(--gray-background-color);
+}
+
+.profileLink {
+  border: 1px solid var(--blue-color);
+  border-radius: var(--border-radius);
+}
+
+svg.arrow {
+  height: 24px;
+  width: 24px;
+  margin: 5px;
+  fill: var(--blue-color);
+}
+
+.noCursor {
+  cursor: default;
+
+  &:hover {
+    background: var(--white-color);
+  }
+}

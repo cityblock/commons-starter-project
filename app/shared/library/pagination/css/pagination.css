@@ -1,7 +1,7 @@
 @import '../../../css/sizes';
 
 .container {
-  border-top: 1px solid var(--gray-background-color);
+  border-top: 1px solid var(--border-color);
   border-bottom: 1px solid var(--gray-background-color);
   display: flex;
   justify-content: center;
@@ -22,7 +22,7 @@ svg.icon {
   border-radius: var(--border-radius);
   cursor: pointer;
   transition: background-color 0.2s, fill 0.2s;
-  margin: 0 50px;
+  margin: 0 var(--gutter);
 
   &:hover {
     background: var(--gray-background-color);
@@ -31,5 +31,5 @@ svg.icon {
 }
 
 .empty {
-  width: 130px;
+  width: 110px;
 }

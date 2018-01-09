@@ -53,12 +53,12 @@ export default class CareTeamWidgetMember extends React.Component<IProps, {}> {
               {(message: string) => <div className={styles.careTeamContactLabel}>{message}</div>}
             </FormattedMessage>
           </div>
-          {careTeamPhoneNumber &&
+          {careTeamPhoneNumber && (
             <div className={styles.careTeamMemberContactRow}>
               <div className={phoneIconStyles} />
               <div className={styles.careTeamContactLabel}>{careTeamPhoneNumber}</div>
             </div>
-          }
+          )}
           <div className={styles.careTeamMemberContactRow}>
             <div className={emailIconStyles} />
             <FormattedMessage id="careTeam.email">

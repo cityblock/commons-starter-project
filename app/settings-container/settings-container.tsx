@@ -74,7 +74,7 @@ class SettingsContainer extends React.Component<allProps, IState> {
         },
       });
     }
-  }
+  };
 
   onChange(event: React.ChangeEvent<HTMLInputElement>) {
     const value = event.currentTarget.value;

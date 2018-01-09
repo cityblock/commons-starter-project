@@ -1,3 +1,4 @@
+import * as classNames from 'classnames';
 import * as React from 'react';
 import Icon from '../icon/icon';
 import * as styles from './css/pagination.css';
@@ -14,13 +15,14 @@ interface IProps {
   pageNumber: number; // do NOT add 1
   pageSize: number;
   onPaginate: (pageBack: boolean) => void;
+  className?: string; // optional styles
 }
 
 const Pagination: React.StatelessComponent<IProps> = (props: IProps) => {
-  const { pageInfo, totalCount, pageNumber, pageSize, onPaginate } = props;
+  const { pageInfo, totalCount, pageNumber, pageSize, onPaginate, className } = props;
 
   return (
-    <div className={styles.container}>
+    <div className={classNames(styles.container, className)}>
       {pageInfo.hasPreviousPage ? (
         <Icon name="keyboardArrowLeft" onClick={() => onPaginate(true)} className={styles.icon} />
       ) : (

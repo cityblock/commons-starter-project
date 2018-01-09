@@ -1,4 +1,7 @@
+@import '../../shared/css/sizes';
+
 .container {
   display: flex;
+  background: var(--gray-background-color);
   width: 100%;
 }

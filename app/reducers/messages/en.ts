@@ -80,6 +80,7 @@ export const ENGLISH_TRANSLATION = {
     'concernStats.lastUpdated': 'Last update:',
     'concernStats.tasks': 'Tasks:',
     'dashboard.lists': 'Member lists',
+    'dashboard.noUrgentTasks': 'There are no patients with tasks due or notifications',
     'dashboard.suggestions': 'Pending MAP suggestions',
     'dashboard.tasks': 'Tasks due and notifications',
     'dashboard.team': 'New to your care team',

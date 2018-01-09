@@ -4,10 +4,12 @@ import { compose, graphql } from 'react-apollo';
 import { connect, Dispatch } from 'react-redux';
 import { push } from 'react-router-redux';
 import * as patientsWithUrgentTasksQuery from '../graphql/queries/get-patients-with-urgent-tasks.graphql';
-import { getPatientsWithUrgentTasksQuery } from '../graphql/types';
+import { getPatientsWithUrgentTasksQuery, FullPatientForDashboardFragment } from '../graphql/types';
+import Pagination from '../shared/library/pagination/pagination';
 import Spinner from '../shared/library/spinner/spinner';
 import { IState as IAppState } from '../store';
-import * as styles from './css/dashboard-tasks-container.css';
+import * as styles from './css/list-container.css';
+import PatientWithTasksList from './patient-list/patient-with-tasks-list';
 
 const INITIAL_PAGE_NUMBER = 0;
 const INITAL_PAGE_SIZE = 10;
@@ -24,19 +26,48 @@ interface IDispatchProps {
 interface IGraphqlProps {
   loading: boolean;
   error?: string | null;
-  patientList: getPatientsWithUrgentTasksQuery['patientsWithUrgentTasks'];
+  patientResults: getPatientsWithUrgentTasksQuery['patientsWithUrgentTasks'];
 }
 
 type allProps = IStateProps & IDispatchProps & IGraphqlProps;
 
 export class DashboardTasksContainer extends React.Component<allProps> {
+  onPaginate = (pageBack: boolean): void => {
+    const { pageNumber, pageSize, patientResults, updatePageParams } = this.props;
+    let newPageNumber = pageBack ? pageNumber - 1 : pageNumber + 1;
+
+    if (newPageNumber < 0) newPageNumber = 0;
+    if (patientResults && newPageNumber > Math.ceil(patientResults.totalCount / pageSize)) {
+      newPageNumber = Math.ceil(patientResults.totalCount / pageSize);
+    }
+
+    updatePageParams({
+      pageNumber: newPageNumber,
+      pageSize,
+    });
+  };
+
   render(): JSX.Element {
-    const { loading, error } = this.props;
+    const { loading, error, patientResults, pageNumber, pageSize } = this.props;
     if (loading || error) return <Spinner />;
+
+    const patients =
+      patientResults && patientResults.edges ? patientResults.edges.map(result => result.node) : [];
 
     return (
       <div className={styles.container}>
-        <h1>Patient List yo</h1>
+        <PatientWithTasksList patients={patients as FullPatientForDashboardFragment[]} />
+        {!!patientResults &&
+          patientResults.totalCount && (
+            <Pagination
+              pageInfo={patientResults.pageInfo}
+              totalCount={patientResults.totalCount}
+              pageNumber={pageNumber}
+              pageSize={pageSize}
+              onPaginate={this.onPaginate}
+              className={styles.pages}
+            />
+          )}
       </div>
     );
   }
@@ -73,7 +104,7 @@ export default compose(
       props: ({ data }) => ({
         loading: data ? data.loading : false,
         error: data ? data.error : null,
-        patientList: data ? (data as any).patientsWithUrgentTasks : null,
+        patientResults: data ? (data as any).patientsWithUrgentTasks : null,
       }),
     },
   ),

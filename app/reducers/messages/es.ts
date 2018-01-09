@@ -83,6 +83,7 @@ export const SPANISH_TRANSLATION = {
     'concernStats.lastUpdated': 'Última actualización:',
     'concernStats.tasks': 'Tareas:',
     'dashboard.lists': 'Listas de miembros',
+    'dashboard.noUrgentTasks': 'No hay pacientes con tareas pendientes o notificaciones',
     'dashboard.suggestions': 'Sugerencias pendientes de MAP',
     'dashboard.tasks': 'Tareas pendientes y notificaciones',
     'dashboard.team': 'Nuevo para su equipo de cuidado',

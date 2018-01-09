@@ -290,5 +290,42 @@ describe('progress note resolver', () => {
         ]);
       });
     });
+
+    it('returns progress notes for supervisor', async () => {
+      await transaction(ProgressNote.knex(), async txn => {
+        const { patient, user, clinic, progressNoteTemplate } = await setup(txn);
+        const user2 = await User.create(
+          createMockUser(12, clinic.id, userRole, 'supervisor@b.com'),
+          txn,
+        );
+
+        const progressNote1 = await ProgressNote.create(
+          {
+            patientId: patient.id,
+            userId: user.id,
+            progressNoteTemplateId: progressNoteTemplate.id,
+            supervisorId: user2.id,
+            needsSupervisorReview: true,
+          },
+          txn,
+        );
+
+        const query = `{
+          progressNotesForSupervisorReview { id }
+        }`;
+
+        const result = await graphql(schema, query, null, {
+          db,
+          userRole: 'admin',
+          userId: user2.id,
+          txn,
+        });
+        expect(cloneDeep(result.data!.progressNotesForSupervisorReview)).toMatchObject([
+          {
+            id: progressNote1.id,
+          },
+        ]);
+      });
+    });
   });
 });

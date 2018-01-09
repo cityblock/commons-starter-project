@@ -131,3 +131,14 @@ export async function resolveProgressNotesForCurrentUser(
 
   return await ProgressNote.getAllForUser(userId!, args.completed, txn);
 }
+
+export async function resolveProgressNotesForSupervisorReview(
+  root: any,
+  args: any,
+  { db, userRole, userId, txn }: IContext,
+) {
+  await accessControls.isAllowed(userRole, 'view', 'progressNote');
+  checkUserLoggedIn(userId);
+
+  return await ProgressNote.getProgressNotesForSupervisorReview(userId!, txn);
+}

@@ -111,6 +111,31 @@ describe('progress note model', () => {
     });
   });
 
+  it('gets progress for supervisor review', async () => {
+    await transaction(ProgressNote.knex(), async txn => {
+      const { patient, user, progressNoteTemplate, clinic } = await setup(txn);
+      const supervisor = await User.create(
+        createMockUser(12, clinic.id, userRole, 'supervisor@b.com'),
+        txn,
+      );
+      const createdNote = await ProgressNote.create(
+        {
+          patientId: patient.id,
+          userId: user.id,
+          progressNoteTemplateId: progressNoteTemplate.id,
+          supervisorId: supervisor.id,
+          needsSupervisorReview: true,
+        },
+        txn,
+      );
+      const progressNotes = await ProgressNote.getProgressNotesForSupervisorReview(
+        supervisor.id,
+        txn,
+      );
+      expect(progressNotes).toEqual([createdNote]);
+    });
+  });
+
   it('updates a progress note', async () => {
     await transaction(ProgressNote.knex(), async txn => {
       const { patient, user, progressNoteTemplate } = await setup(txn);

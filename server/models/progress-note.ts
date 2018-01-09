@@ -166,6 +166,16 @@ export default class ProgressNote extends BaseModel {
     return await query;
   }
 
+  static async getProgressNotesForSupervisorReview(
+    supervisorId: string,
+    txn?: Transaction,
+  ): Promise<ProgressNote[]> {
+    return await this.query(txn)
+      .eager(EAGER_QUERY)
+      .orderBy('createdAt', 'desc')
+      .where({ deletedAt: null, reviewedBySupervisorAt: null, supervisorId });
+  }
+
   static async create(input: IProgressNoteEditableFields, txn?: Transaction) {
     return this.query(txn)
       .eager(EAGER_QUERY)

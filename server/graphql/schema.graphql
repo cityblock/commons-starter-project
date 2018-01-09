@@ -1840,6 +1840,8 @@ type RootQueryType {
   progressNotesForPatient(patientId: ID!, completed: Boolean!): [ProgressNote]
   # progress notes for current user
   progressNotesForCurrentUser(completed: Boolean!): [ProgressNote]
+  # progress notes for supervisor review
+  progressNotesForSupervisorReview: [ProgressNote]
   # progress note activities for progress note
   progressNoteActivityForProgressNote(progressNoteId: ID!): ProgressNoteActivity
   # quick call

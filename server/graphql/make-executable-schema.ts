@@ -83,7 +83,6 @@ import {
   resolvePatientGoal,
   resolvePatientGoalsForPatient,
 } from './patient-goal-resolver';
-import { resolvePatientMedications } from './patient-medications-resolver';
 import {
   patientEdit,
   patientScratchPadEdit,
@@ -237,7 +236,6 @@ const resolveFunctions = {
     patient: resolvePatient,
     patientCareTeam: resolvePatientCareTeam,
     patientEncounters: resolvePatientEncounters,
-    patientMedications: resolvePatientMedications,
     patientScratchPad: resolvePatientScratchPad,
     patientSearch: resolvePatientSearch,
     patientsWithUrgentTasks: resolvePatientsWithUrgentTasks,

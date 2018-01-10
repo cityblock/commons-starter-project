@@ -253,20 +253,6 @@ export function mockRedoxGetPatientEncounters(encountersBody: MockRedoxClinicalS
   mockRedoxPost(fullResponseBody);
 }
 
-export function mockRedoxGetPatientMedications(
-  medicationsBody: MockRedoxClinicalSummaryMedication[],
-) {
-  const fullResponseBody = {
-    Meta: {
-      DatModel: 'Clinical Summary',
-      EventType: 'PatientQuery',
-    },
-    Medications: medicationsBody,
-  };
-
-  mockRedoxPost(fullResponseBody);
-}
-
 export async function cleanPatientAnswerEvents(patientId: string, txn?: Transaction) {
   const patientAnswerEvents = await PatientAnswerEvent.getAllForPatient(
     patientId,

@@ -461,12 +461,9 @@ export const encounter = {
 };
 
 export const medication = {
-  medicationId: 'med id',
+  id: 'med id',
   name: 'name',
-  quantity: '1',
-  quantityUnit: '10m',
   dosageInstructions: 'once daily',
-  startDate: '10/10/2010',
 };
 
 export const eventNotification = {

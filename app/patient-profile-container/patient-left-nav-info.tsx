@@ -32,7 +32,7 @@ export default class PatientLeftNavInfo extends React.Component<IProps, {}> {
     const patientAge =
       patient && patient.dateOfBirth ? (
         <FormattedRelative value={patient.dateOfBirth}>
-          {(date: string) => <span>{date.replace('years', '')}</span>}
+          {(date: string) => <span>{date.replace('years ago', '')}</span>}
         </FormattedRelative>
       ) : (
         '40'
@@ -82,8 +82,7 @@ export default class PatientLeftNavInfo extends React.Component<IProps, {}> {
       ) : (
         'Unknown'
       );
-    // TODO: Replace 'Brooklyn, NY' and 'English' with better defaults
-    const zip = patient && patient.zip ? patient.zip : 'Brooklyn, NY';
+
     let languageName = 'Declined';
 
     if (patient && patient.language) {
@@ -113,7 +112,9 @@ export default class PatientLeftNavInfo extends React.Component<IProps, {}> {
               <FormattedMessage id="patient.location">
                 {(message: string) => <div>{message}:</div>}
               </FormattedMessage>
-              <div className={styles.patientBasicInfoRowData}>{zip}</div>
+              <div className={styles.patientBasicInfoRowData}>
+                1234 Main St. Apt 2A<br />Brooklyn, NY 11201
+              </div>
             </div>
             <div className={styles.patientBasicInfoRow}>
               <FormattedMessage id="patient.joinedAt">
@@ -126,6 +127,12 @@ export default class PatientLeftNavInfo extends React.Component<IProps, {}> {
                 {(message: string) => <div>{message}:</div>}
               </FormattedMessage>
               <div className={styles.patientBasicInfoRowData}>123456789</div>
+            </div>
+            <div className={styles.patientBasicInfoRow}>
+              <FormattedMessage id="patient.medicaid">
+                {(message: string) => <div>{message}:</div>}
+              </FormattedMessage>
+              <div className={styles.patientBasicInfoRowData}>AB12345A</div>
             </div>
           </div>
           <PatientScratchPad patientId={patientId} />

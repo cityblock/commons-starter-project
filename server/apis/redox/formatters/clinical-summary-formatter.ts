@@ -1,9 +1,5 @@
-import { IPatientEncounter, IPatientMedication, IPatientMedications } from 'schema';
-import {
-  IRedoxClinicalSummaryEncounter,
-  IRedoxClinicalSummaryMedication,
-  IRedoxClinicalSummaryQueryOptions,
-} from '../types';
+import { IPatientEncounter } from 'schema';
+import { IRedoxClinicalSummaryEncounter, IRedoxClinicalSummaryQueryOptions } from '../types';
 import { formatRequestMeta } from './meta-formatter';
 
 export function formatClinicalSummaryQueryOptions(
@@ -52,43 +48,4 @@ export function formatPatientEncounters(
       dateTime: encounter.DateTime,
     };
   });
-}
-
-export function formatPatientMedications(
-  medications: IRedoxClinicalSummaryMedication[],
-): IPatientMedications {
-  const emptyMeds = !medications.length;
-  const noMedsMessage = medications.length && medications[0].Product.Name === 'None recorded.';
-
-  if (emptyMeds || noMedsMessage) {
-    return { medications: { active: [], inactive: [] } };
-  } else {
-    const now = new Date();
-    const active: IPatientMedication[] = [];
-    const inactive: IPatientMedication[] = [];
-
-    medications.forEach((medication: IRedoxClinicalSummaryMedication) => {
-      const { Period, Unit } = medication.Frequency;
-      const route = medication.Route ? medication.Route.Name : 'Unknown route';
-      const dosageInstructions = `Via ${route} every ${Period} ${Unit}`;
-      const endDate = medication.EndDate;
-
-      const formattedMedication = {
-        name: medication.Product.Name,
-        medicationId: medication.Product.Code,
-        quantity: medication.Dose.Quantity,
-        quantityUnit: medication.Dose.Units,
-        startDate: medication.StartDate,
-        dosageInstructions,
-      };
-
-      if (!endDate || new Date(endDate) > now) {
-        active.push(formattedMedication);
-      } else {
-        inactive.push(formattedMedication);
-      }
-    });
-
-    return { medications: { active, inactive } };
-  }
 }

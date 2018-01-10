@@ -44,7 +44,7 @@ exports[`renders header 1`] = `
         <div
           className="navText"
         >
-          Patients
+          Members
         </div>
       </a>
       <a

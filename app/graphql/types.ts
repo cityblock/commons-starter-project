@@ -1450,26 +1450,6 @@ export interface getPatientCareTeamQuery {
   } | null > | null,
 };
 
-export interface getPatientMedicationsQueryVariables {
-  patientId: string,
-};
-
-export interface getPatientMedicationsQuery {
-  // Patient medications
-  patientMedications:  {
-    medications:  {
-      active:  Array< {
-        medicationId: string,
-        name: string,
-        quantity: string | null,
-        quantityUnit: string | null,
-        dosageInstructions: string | null,
-        startDate: string | null,
-      } >,
-    },
-  } | null,
-};
-
 export interface getPatientPanelQueryVariables {
   pageNumber?: number | null,
   pageSize?: number | null,
@@ -7189,15 +7169,6 @@ export interface FullPatientGoalFragment {
   createdAt: string,
   updatedAt: string,
   deletedAt: string | null,
-};
-
-export interface FullPatientMedicationFragment {
-  medicationId: string,
-  name: string,
-  quantity: string | null,
-  quantityUnit: string | null,
-  dosageInstructions: string | null,
-  startDate: string | null,
 };
 
 export interface FullPatientScratchPadFragment {

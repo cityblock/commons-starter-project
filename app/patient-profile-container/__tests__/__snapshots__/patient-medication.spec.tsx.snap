@@ -13,7 +13,7 @@ exports[`renders empty div 1`] = `
       name
     </div>
     <div>
-      1 10m
+      once daily
     </div>
   </div>
 </div>

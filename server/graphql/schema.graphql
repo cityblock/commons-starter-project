@@ -305,27 +305,6 @@ type Clinic implements uniqueId {
   updatedAt: String!
 }
 
-# PatientMedication
-type PatientMedication {
-  name: String!
-  medicationId: ID!
-  quantity: String
-  quantityUnit: String
-  dosageInstructions: String
-  startDate: String
-}
-
-# PatientMedicationsDetails
-type PatientMedicationsDetails {
-  active: [PatientMedication!]!
-  inactive: [PatientMedication!]!
-}
-
-# PatientMedications
-type PatientMedications {
-  medications: PatientMedicationsDetails!
-}
-
 # PatientDiagnosis
 type PatientDiagnosis {
   code: String!
@@ -1732,8 +1711,6 @@ type RootQueryType {
   clinics(pageNumber: Int, pageSize: Int): ClinicEdges
   # Patient encounters
   patientEncounters(patientId: ID!): [PatientEncounter]
-  # Patient medications
-  patientMedications(patientId: ID!): PatientMedications
   # Task
   task(taskId: ID!): Task
   # Patient's Tasks

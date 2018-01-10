@@ -1,8 +1,0 @@
-fragment FullPatientMedication on PatientMedication {
-  medicationId
-  name
-  quantity
-  quantityUnit
-  dosageInstructions
-  startDate
-}

@@ -29,6 +29,7 @@ export const SPANISH_TRANSLATION = {
     'patient.inactiveCarePlan': 'Inactivo',
     'patient.carePlanSuggestions': 'Sugerencias',
     'patient.cbhNumber': 'CBH MRN#',
+    'patient.medicaid': 'Medicaid',
     'patient.patientInfo': 'Información del Paciente',
     'patient.createdPopupHeading': 'Inscrito con éxito',
     'patient.createdPopupBody':

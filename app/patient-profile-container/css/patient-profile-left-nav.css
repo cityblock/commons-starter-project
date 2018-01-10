@@ -170,6 +170,7 @@
 .patientBasicInfoRowData {
   font-weight: var(--roboto-medium-weight);
   color: var(--black-color);
+  text-align: right;
 }
 
 .patientCommunication {

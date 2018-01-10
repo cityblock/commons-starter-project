@@ -1,9 +1,11 @@
 import { shallow } from 'enzyme';
 import * as React from 'react';
 import { formatFullName } from '../../../shared/helpers/format-helpers';
+import Avatar from '../../../shared/library/avatar/avatar';
 import Icon from '../../../shared/library/icon/icon';
 import { patient } from '../../../shared/util/test-data';
-import { DEFAULT_AVATAR_URL, PatientListItem } from '../patient-list-item';
+import PatientTaskCount from '../../tasks/patient-task-count';
+import { PatientListItem } from '../patient-list-item';
 
 describe('Dashboard Patient List Item', () => {
   const placeholderFn = () => true as any;
@@ -14,9 +16,8 @@ describe('Dashboard Patient List Item', () => {
   });
 
   it('renders image of patient avatar', () => {
-    expect(wrapper.find('img').length).toBe(1);
-    expect(wrapper.find('img').props().className).toBe('avatar');
-    expect(wrapper.find('img').props().src).toBe(DEFAULT_AVATAR_URL);
+    expect(wrapper.find(Avatar).length).toBe(1);
+    expect(wrapper.find(Avatar).props().borderColor).toBe('lightGray');
   });
 
   it('renders patient full name', () => {
@@ -39,13 +40,17 @@ describe('Dashboard Patient List Item', () => {
     expect(wrapper.find(Icon).props().className).toBe('arrow');
   });
 
-  it('does not link to patient profile if viewing urgent tasks patient list', () => {
-    wrapper.setProps({ taskView: true });
-    expect(
-      wrapper
-        .find('div')
-        .at(0)
-        .props().className,
-    ).toBe('container noCursor');
+  it('does not render task count if not on patient task view', () => {
+    expect(wrapper.find(PatientTaskCount).length).toBe(0);
+  });
+
+  it('renders patient task count if on patient task view', () => {
+    const tasksDueCount = 11;
+    const notificationsCount = 12;
+    wrapper.setProps({ taskView: true, tasksDueCount, notificationsCount });
+
+    expect(wrapper.find(PatientTaskCount).length).toBe(1);
+    expect(wrapper.find(PatientTaskCount).props().tasksDueCount).toBe(tasksDueCount);
+    expect(wrapper.find(PatientTaskCount).props().notificationsCount).toBe(notificationsCount);
   });
 });

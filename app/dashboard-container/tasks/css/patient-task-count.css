@@ -1,0 +1,8 @@
+@import '../../../shared/css/sizes';
+
+.container {
+  display: flex;
+  justify-content: space-between;
+  width: 40%;
+  min-width: 250px;
+}

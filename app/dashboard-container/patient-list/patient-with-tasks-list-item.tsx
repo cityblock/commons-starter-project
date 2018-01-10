@@ -26,9 +26,29 @@ type allProps = IGraphqlProps & IProps;
 
 export class PatientWithTasksListItem extends React.Component<allProps> {
   render(): JSX.Element {
-    const { patient } = this.props;
+    const {
+      patient,
+      tasksDueSoonLoading,
+      tasksDueSoonError,
+      tasksDueSoon,
+      tasksWithNotificationsLoading,
+      tasksWithNotificationsError,
+      tasksWithNotifications,
+    } = this.props;
+    const tasksDueCount = !tasksDueSoonLoading && !tasksDueSoonError ? tasksDueSoon.length : null;
+    const notificationsCount =
+      !tasksWithNotificationsLoading && !tasksWithNotificationsError
+        ? tasksWithNotifications.length
+        : null;
 
-    return <PatientListItem patient={patient} taskView={true} />;
+    return (
+      <PatientListItem
+        patient={patient}
+        taskView={true}
+        tasksDueCount={tasksDueCount}
+        notificationsCount={notificationsCount}
+      />
+    );
   }
 }
 

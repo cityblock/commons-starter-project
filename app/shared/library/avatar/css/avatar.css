@@ -1,0 +1,26 @@
+@import '../../../css/sizes';
+
+.avatar {
+  height: 30px;
+  width: 30px;
+  border-radius: 50%;
+  border: 1px solid var(--border-color);
+}
+
+.small {
+  height: 20px;
+  width: 20px;
+}
+
+.large {
+  height: 40px;
+  width: 40px;
+}
+
+.lightGrayBorder {
+  border-color: var(--gray-background-color);
+}
+
+.whiteBorder {
+  border-color: var(--white-border);
+}

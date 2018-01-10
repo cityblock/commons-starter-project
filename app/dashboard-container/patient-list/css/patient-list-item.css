@@ -2,6 +2,7 @@
 
 .container {
   background: var(--white-color);
+  padding: 0 var(--small-gutter);
   width: 100%;
   border-bottom: 1px solid var(--border-color);
   height: 55px;
@@ -28,7 +29,7 @@
 .info {
   justify-content: space-between;
   width: 100%;
-  padding: 0 var(--small-gutter);
+  padding-left: var(--small-gutter);
 }
 
 .container h4,
@@ -42,19 +43,12 @@
   font-weight: var(--roboto-medium-weight);
   line-height: var(--default-line-height);
   min-width: 200px;
+  margin-left: var(--small-gutter);
 }
 
 .container p {
   font-size: var(--small-font-size);
   line-height: var(--small-font-line-height);
-}
-
-.avatar {
-  height: 25px;
-  width: 25px;
-  margin: 0 var(--small-gutter);
-  border-radius: 50%;
-  border: 1px solid var(--gray-background-color);
 }
 
 .profileLink {
@@ -67,12 +61,4 @@ svg.arrow {
   width: 24px;
   margin: 5px;
   fill: var(--blue-color);
-}
-
-.noCursor {
-  cursor: default;
-
-  &:hover {
-    background: var(--white-color);
-  }
 }

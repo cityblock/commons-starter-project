@@ -74,15 +74,6 @@ export default class PatientLeftNavInfo extends React.Component<IProps, {}> {
   render() {
     const { patient, patientId, condensedPatientInfo } = this.props;
 
-    const patientJoined =
-      patient && patient.createdAt ? (
-        <FormattedRelative value={patient.createdAt}>
-          {(date: string) => <span>{date}</span>}
-        </FormattedRelative>
-      ) : (
-        'Unknown'
-      );
-
     let languageName = 'Declined';
 
     if (patient && patient.language) {
@@ -115,12 +106,6 @@ export default class PatientLeftNavInfo extends React.Component<IProps, {}> {
               <div className={styles.patientBasicInfoRowData}>
                 1234 Main St. Apt 2A<br />Brooklyn, NY 11201
               </div>
-            </div>
-            <div className={styles.patientBasicInfoRow}>
-              <FormattedMessage id="patient.joinedAt">
-                {(message: string) => <div>{message}:</div>}
-              </FormattedMessage>
-              <div className={styles.patientBasicInfoRowData}>{patientJoined}</div>
             </div>
             <div className={styles.patientBasicInfoRow}>
               <FormattedMessage id="patient.cbhNumber">

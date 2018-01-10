@@ -21,10 +21,6 @@ export interface IProblem {
 
 const problems: IProblem[] = [
   {
-    id: 'Trazodone',
-    name: 'Trazodone',
-  },
-  {
     id: 'Tietze Syndrome',
     name: 'Tietze Syndrome',
   },

@@ -325,6 +325,7 @@ export const ENGLISH_TRANSLATION = {
     'question.selectHasOtherTextAnswer': 'Should this question have an "other" answer?',
     'question.hasOtherTextAnswerTrue': 'Yes',
     'question.hasOtherTextAnswerFalse': 'No',
+    'questionConditionCreate.selectAnswer': 'Select Answer',
     'carePlanSuggestions.seeSuggestions': 'See Suggestions',
     'riskAdjustmentType.inactive': 'inactive',
     'riskAdjustmentType.increment': 'increment',

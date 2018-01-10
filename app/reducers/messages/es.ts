@@ -329,6 +329,7 @@ export const SPANISH_TRANSLATION = {
     'question.selectHasOtherTextAnswer': '¿Debería esta pregunta tener una "otra" respuesta?',
     'question.hasOtherTextAnswerTrue': 'Sí',
     'question.hasOtherTextAnswerFalse': 'No',
+    'questionConditionCreate.selectAnswer': 'Seleccionar respuesta',
     'carePlanSuggestions.seeSuggestions': 'See Suggestions',
     'riskAdjustmentType.inactive': 'inactivo',
     'riskAdjustmentType.increment': 'incremento',

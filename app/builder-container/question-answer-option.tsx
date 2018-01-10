@@ -6,6 +6,7 @@ import {
   FullAnswerFragment,
   FullQuestionFragment,
 } from '../graphql/types';
+import Option from '../shared/library/option/option';
 import formatQuestionCondition from './helpers/format-question-condition';
 
 export interface IDeleteOptions {
@@ -25,7 +26,7 @@ class QuestionAnswerOption extends React.Component<IProps & IGraphqlProps> {
     const { question, answer } = this.props;
     const conditionText =
       question && answer ? formatQuestionCondition(question, answer) : 'loading';
-    return <option value={answer.id}>{conditionText}</option>;
+    return <Option value={answer.id} label={conditionText} />;
   }
 }
 

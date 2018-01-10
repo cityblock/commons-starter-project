@@ -11,6 +11,8 @@ import {
 import * as formStyles from '../shared/css/forms.css';
 import * as loadingStyles from '../shared/css/loading-spinner.css';
 import * as questionConditionStyles from '../shared/css/two-panel-right.css';
+import Option from '../shared/library/option/option';
+import Select from '../shared/library/select/select';
 import * as styles from './css/risk-area-create.css';
 import QuestionAnswerOption from './question-answer-option';
 
@@ -48,7 +50,7 @@ class QuestionConditionCreate extends React.Component<allProps, IState> {
       ? {
           answerId: props.questionCondition.answerId,
         }
-      : { answerId: 'null' };
+      : { answerId: '' };
 
     this.state = {
       loading: false,
@@ -95,17 +97,14 @@ class QuestionConditionCreate extends React.Component<allProps, IState> {
           </div>
         </div>
         <div className={styles.flexInputGroup}>
-          <select
+          <Select
             name="answerId"
             value={selectedAnswer}
             onChange={this.onAnswerChange}
-            className={classNames(formStyles.select, formStyles.inputSmall, styles.flexInputItem)}
-          >
-            <option value="" disabled hidden>
-              Select Answer
-            </option>
+            className={classNames(formStyles.select, formStyles.inputSmall, styles.flexInputItem)}>
+            <Option value="" messageId="questionConditionCreate.selectAnswer" disabled={true} />
             {answerOptions}
-          </select>
+          </Select>
         </div>
         <div className={styles.formBottom}>
           <div className={styles.formBottomContent}>

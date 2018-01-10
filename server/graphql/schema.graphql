@@ -1722,6 +1722,10 @@ type RootQueryType {
   ): TaskEdges
   # Current user's Tasks
   tasksForCurrentUser(pageNumber: Int, pageSize: Int, orderBy: TaskOrderOptions): TaskEdges
+  # Tasks due soon for patient - in dashboard
+  tasksDueSoonForPatient(patientId: ID!): [Task!]!
+  # Tasks with notifications for patient - in dashboard
+  tasksWithNotificationsForPatient(patientId: ID!): [Task!]!
   # List of task comments
   taskComments(pageNumber: Int, pageSize: Int, taskId: ID!): TaskCommentEdges
   # Single task comment

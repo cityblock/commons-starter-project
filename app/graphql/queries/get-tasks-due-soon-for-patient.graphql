@@ -1,0 +1,13 @@
+#import "../fragments/short-user.graphql"
+
+query getTasksDueSoonForPatient($patientId: ID!) {
+  tasksDueSoonForPatient(patientId: $patientId) {
+    id
+    title
+    dueAt
+    priority
+    followers {
+      ...ShortUser
+    }
+  }
+}

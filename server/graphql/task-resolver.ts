@@ -36,6 +36,10 @@ export interface IUserTasksFilterOptions extends IPaginationOptions {
   userId: string;
 }
 
+export interface IResolveUrgentTasksForPatientOptions {
+  patientId: string;
+}
+
 export async function taskCreate(root: any, { input }: ITaskCreateArgs, context: IContext) {
   const { userRole, userId } = context;
   const { title, description, dueAt, patientId, assignedToId, patientGoalId, priority } = input;
@@ -266,4 +270,26 @@ export async function resolvePatientTasks(
       hasNextPage,
     },
   };
+}
+
+export async function resolveTasksDueSoonForPatient(
+  root: any,
+  { patientId }: IResolveUrgentTasksForPatientOptions,
+  { userRole, userId, txn }: IContext,
+) {
+  await accessControls.isAllowedForUser(userRole, 'view', 'task');
+  checkUserLoggedIn(userId);
+
+  return await Task.getTasksDueSoonForPatient(patientId, userId!, txn);
+}
+
+export async function resolveTasksWithNotificationsForPatient(
+  root: any,
+  { patientId }: IResolveUrgentTasksForPatientOptions,
+  { userRole, userId, txn }: IContext,
+) {
+  await accessControls.isAllowedForUser(userRole, 'view', 'task');
+  checkUserLoggedIn(userId);
+
+  return await Task.getTasksWithNotificationsForPatient(patientId, userId!, txn);
 }

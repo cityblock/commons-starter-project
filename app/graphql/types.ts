@@ -1866,22 +1866,22 @@ export interface getPatientTasksQuery {
           id: string,
           firstName: string | null,
           lastName: string | null,
-          googleProfileImageUrl: string | null,
           userRole: UserRole,
+          googleProfileImageUrl: string | null,
         } | null,
         followers:  Array< {
           id: string,
           firstName: string | null,
           lastName: string | null,
-          googleProfileImageUrl: string | null,
           userRole: UserRole,
+          googleProfileImageUrl: string | null,
         } >,
         createdBy:  {
           id: string,
           firstName: string | null,
           lastName: string | null,
-          googleProfileImageUrl: string | null,
           userRole: UserRole,
+          googleProfileImageUrl: string | null,
         },
         patientGoal:  {
           id: string,
@@ -3373,22 +3373,22 @@ export interface getTaskQuery {
       id: string,
       firstName: string | null,
       lastName: string | null,
-      googleProfileImageUrl: string | null,
       userRole: UserRole,
+      googleProfileImageUrl: string | null,
     } | null,
     followers:  Array< {
       id: string,
       firstName: string | null,
       lastName: string | null,
-      googleProfileImageUrl: string | null,
       userRole: UserRole,
+      googleProfileImageUrl: string | null,
     } >,
     createdBy:  {
       id: string,
       firstName: string | null,
       lastName: string | null,
-      googleProfileImageUrl: string | null,
       userRole: UserRole,
+      googleProfileImageUrl: string | null,
     },
     patientGoal:  {
       id: string,
@@ -3401,6 +3401,48 @@ export interface getTaskQuery {
       } | null,
     },
   } | null,
+};
+
+export interface getTasksDueSoonForPatientQueryVariables {
+  patientId: string,
+};
+
+export interface getTasksDueSoonForPatientQuery {
+  // Tasks due soon for patient - in dashboard
+  tasksDueSoonForPatient:  Array< {
+    id: string,
+    title: string,
+    dueAt: string | null,
+    priority: Priority | null,
+    followers:  Array< {
+      id: string,
+      firstName: string | null,
+      lastName: string | null,
+      userRole: UserRole,
+      googleProfileImageUrl: string | null,
+    } >,
+  } >,
+};
+
+export interface getTasksWithNotificationsForPatientQueryVariables {
+  patientId: string,
+};
+
+export interface getTasksWithNotificationsForPatientQuery {
+  // Tasks with notifications for patient - in dashboard
+  tasksWithNotificationsForPatient:  Array< {
+    id: string,
+    title: string,
+    dueAt: string | null,
+    priority: Priority | null,
+    followers:  Array< {
+      id: string,
+      firstName: string | null,
+      lastName: string | null,
+      userRole: UserRole,
+      googleProfileImageUrl: string | null,
+    } >,
+  } >,
 };
 
 export interface getUsersQueryVariables {
@@ -5819,22 +5861,22 @@ export interface taskCompleteMutation {
       id: string,
       firstName: string | null,
       lastName: string | null,
-      googleProfileImageUrl: string | null,
       userRole: UserRole,
+      googleProfileImageUrl: string | null,
     } | null,
     followers:  Array< {
       id: string,
       firstName: string | null,
       lastName: string | null,
-      googleProfileImageUrl: string | null,
       userRole: UserRole,
+      googleProfileImageUrl: string | null,
     } >,
     createdBy:  {
       id: string,
       firstName: string | null,
       lastName: string | null,
-      googleProfileImageUrl: string | null,
       userRole: UserRole,
+      googleProfileImageUrl: string | null,
     },
     patientGoal:  {
       id: string,
@@ -5882,22 +5924,22 @@ export interface taskCreateMutation {
       id: string,
       firstName: string | null,
       lastName: string | null,
-      googleProfileImageUrl: string | null,
       userRole: UserRole,
+      googleProfileImageUrl: string | null,
     } | null,
     followers:  Array< {
       id: string,
       firstName: string | null,
       lastName: string | null,
-      googleProfileImageUrl: string | null,
       userRole: UserRole,
+      googleProfileImageUrl: string | null,
     } >,
     createdBy:  {
       id: string,
       firstName: string | null,
       lastName: string | null,
-      googleProfileImageUrl: string | null,
       userRole: UserRole,
+      googleProfileImageUrl: string | null,
     },
     patientGoal:  {
       id: string,
@@ -5939,22 +5981,22 @@ export interface taskDeleteMutation {
       id: string,
       firstName: string | null,
       lastName: string | null,
-      googleProfileImageUrl: string | null,
       userRole: UserRole,
+      googleProfileImageUrl: string | null,
     } | null,
     followers:  Array< {
       id: string,
       firstName: string | null,
       lastName: string | null,
-      googleProfileImageUrl: string | null,
       userRole: UserRole,
+      googleProfileImageUrl: string | null,
     } >,
     createdBy:  {
       id: string,
       firstName: string | null,
       lastName: string | null,
-      googleProfileImageUrl: string | null,
       userRole: UserRole,
+      googleProfileImageUrl: string | null,
     },
     patientGoal:  {
       id: string,
@@ -6002,22 +6044,22 @@ export interface taskEditMutation {
       id: string,
       firstName: string | null,
       lastName: string | null,
-      googleProfileImageUrl: string | null,
       userRole: UserRole,
+      googleProfileImageUrl: string | null,
     } | null,
     followers:  Array< {
       id: string,
       firstName: string | null,
       lastName: string | null,
-      googleProfileImageUrl: string | null,
       userRole: UserRole,
+      googleProfileImageUrl: string | null,
     } >,
     createdBy:  {
       id: string,
       firstName: string | null,
       lastName: string | null,
-      googleProfileImageUrl: string | null,
       userRole: UserRole,
+      googleProfileImageUrl: string | null,
     },
     patientGoal:  {
       id: string,
@@ -6135,22 +6177,22 @@ export interface taskUncompleteMutation {
       id: string,
       firstName: string | null,
       lastName: string | null,
-      googleProfileImageUrl: string | null,
       userRole: UserRole,
+      googleProfileImageUrl: string | null,
     } | null,
     followers:  Array< {
       id: string,
       firstName: string | null,
       lastName: string | null,
-      googleProfileImageUrl: string | null,
       userRole: UserRole,
+      googleProfileImageUrl: string | null,
     } >,
     createdBy:  {
       id: string,
       firstName: string | null,
       lastName: string | null,
-      googleProfileImageUrl: string | null,
       userRole: UserRole,
+      googleProfileImageUrl: string | null,
     },
     patientGoal:  {
       id: string,
@@ -6193,22 +6235,22 @@ export interface taskUserFollowMutation {
       id: string,
       firstName: string | null,
       lastName: string | null,
-      googleProfileImageUrl: string | null,
       userRole: UserRole,
+      googleProfileImageUrl: string | null,
     } | null,
     followers:  Array< {
       id: string,
       firstName: string | null,
       lastName: string | null,
-      googleProfileImageUrl: string | null,
       userRole: UserRole,
+      googleProfileImageUrl: string | null,
     } >,
     createdBy:  {
       id: string,
       firstName: string | null,
       lastName: string | null,
-      googleProfileImageUrl: string | null,
       userRole: UserRole,
+      googleProfileImageUrl: string | null,
     },
     patientGoal:  {
       id: string,
@@ -6254,22 +6296,22 @@ export interface getTasksForCurrentUserQuery {
           id: string,
           firstName: string | null,
           lastName: string | null,
-          googleProfileImageUrl: string | null,
           userRole: UserRole,
+          googleProfileImageUrl: string | null,
         } | null,
         followers:  Array< {
           id: string,
           firstName: string | null,
           lastName: string | null,
-          googleProfileImageUrl: string | null,
           userRole: UserRole,
+          googleProfileImageUrl: string | null,
         } >,
         createdBy:  {
           id: string,
           firstName: string | null,
           lastName: string | null,
-          googleProfileImageUrl: string | null,
           userRole: UserRole,
+          googleProfileImageUrl: string | null,
         },
         patientGoal:  {
           id: string,
@@ -8314,22 +8356,22 @@ export interface FullTaskFragment {
     id: string,
     firstName: string | null,
     lastName: string | null,
-    googleProfileImageUrl: string | null,
     userRole: UserRole,
+    googleProfileImageUrl: string | null,
   } | null,
   followers:  Array< {
     id: string,
     firstName: string | null,
     lastName: string | null,
-    googleProfileImageUrl: string | null,
     userRole: UserRole,
+    googleProfileImageUrl: string | null,
   } >,
   createdBy:  {
     id: string,
     firstName: string | null,
     lastName: string | null,
-    googleProfileImageUrl: string | null,
     userRole: UserRole,
+    googleProfileImageUrl: string | null,
   },
   patientGoal:  {
     id: string,

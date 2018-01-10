@@ -82,6 +82,14 @@ declare module 'schema' {
   */
     tasksForCurrentUser: ITaskEdges | null;
     /**
+    description: Tasks due soon for patient - in dashboard
+  */
+    tasksDueSoonForPatient: Array<ITask>;
+    /**
+    description: Tasks with notifications for patient - in dashboard
+  */
+    tasksWithNotificationsForPatient: Array<ITask>;
+    /**
     description: List of task comments
   */
     taskComments: ITaskCommentEdges | null;

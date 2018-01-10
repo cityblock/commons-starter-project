@@ -337,7 +337,7 @@ export async function setupUrgentTasks(txn: Transaction) {
   const soonDueDate = '2017-09-07T13:45:14.532Z';
   const laterDueDate = '2050-11-07T13:45:14.532Z';
 
-  await createTask(patient1.id, user.id, soonDueDate, txn);
+  const task1 = await createTask(patient1.id, user.id, soonDueDate, txn);
   await createTask(patient1.id, user.id, laterDueDate, txn);
   await createTask(patient2.id, user.id, laterDueDate, txn);
   const task = await createTask(patient5.id, user.id, laterDueDate, txn);
@@ -381,7 +381,7 @@ export async function setupUrgentTasks(txn: Transaction) {
     txn,
   );
 
-  return { user, patient1, patient5, taskWithNotification: task };
+  return { user, patient1, patient5, task, task1 };
 }
 
 export async function createFullRiskAreaGroupAssociations(

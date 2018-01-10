@@ -361,7 +361,7 @@ describe('task model', () => {
           txn,
         );
         expect(result2.length).toBe(1);
-        expect(result2[0].id).toBe(setup.taskWithNotification.id);
+        expect(result2[0].id).toBe(setup.task.id);
       });
     });
   });

@@ -1,5 +1,6 @@
 import { graphql } from 'graphql';
 import { cloneDeep } from 'lodash';
+import { transaction } from 'objection';
 import * as uuid from 'uuid/v4';
 import Db from '../../db';
 import Clinic from '../../models/clinic';
@@ -12,6 +13,7 @@ import {
   createMockPatient,
   createMockUser,
   createPatient,
+  setupUrgentTasks,
 } from '../../spec-helpers';
 import schema from '../make-executable-schema';
 
@@ -504,6 +506,52 @@ describe('task tests', () => {
       });
       expect(taskEvents.total).toEqual(1);
       expect(taskEvents.results[0].eventType).toEqual('delete_task');
+    });
+  });
+
+  describe('tasksDueSoonForPatient', () => {
+    it('retrieves a list of tasks due soon for a patient and user', async () => {
+      await transaction(Task.knex(), async txn => {
+        const setup = await setupUrgentTasks(txn);
+
+        const query = `{
+          tasksDueSoonForPatient(patientId: "${setup.patient1.id}") {
+            id
+          }
+        }`;
+
+        const result = await graphql(schema, query, null, {
+          userRole,
+          userId: setup.user.id,
+          txn,
+        });
+
+        expect(result.data!.tasksDueSoonForPatient.length).toBe(1);
+        expect(result.data!.tasksDueSoonForPatient[0].id).toBe(setup.task1.id);
+      });
+    });
+  });
+
+  describe('tasksWithNotificationsForPatient', () => {
+    it('retrieves a list of tasks due soon for a patient and user', async () => {
+      await transaction(Task.knex(), async txn => {
+        const setup = await setupUrgentTasks(txn);
+
+        const query = `{
+          tasksWithNotificationsForPatient(patientId: "${setup.patient5.id}") {
+            id
+          }
+        }`;
+
+        const result = await graphql(schema, query, null, {
+          userRole,
+          userId: setup.user.id,
+          txn,
+        });
+
+        expect(result.data!.tasksWithNotificationsForPatient.length).toBe(1);
+        expect(result.data!.tasksWithNotificationsForPatient[0].id).toBe(setup.task.id);
+      });
     });
   });
 });

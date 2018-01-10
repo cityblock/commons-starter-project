@@ -197,6 +197,8 @@ import {
 import {
   resolvePatientTasks,
   resolveTask,
+  resolveTasksDueSoonForPatient,
+  resolveTasksWithNotificationsForPatient,
   taskComplete,
   taskCreate,
   taskDelete,
@@ -245,6 +247,8 @@ const resolveFunctions = {
     task: resolveTask,
     tasksForPatient: resolvePatientTasks,
     tasksForCurrentUser: resolveCurrentUserTasks,
+    tasksDueSoonForPatient: resolveTasksDueSoonForPatient,
+    tasksWithNotificationsForPatient: resolveTasksWithNotificationsForPatient,
     taskComments: resolveTaskComments,
     taskComment: resolveTaskComment,
     riskAreaGroups: resolveRiskAreaGroups,

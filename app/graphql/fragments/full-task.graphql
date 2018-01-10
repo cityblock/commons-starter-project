@@ -1,3 +1,5 @@
+#import "../fragments/short-user.graphql"
+
 fragment FullTask on Task {
   id
   title
@@ -16,25 +18,13 @@ fragment FullTask on Task {
     lastName
   }
   assignedTo {
-    id
-    firstName
-    lastName
-    googleProfileImageUrl
-    userRole
+    ...ShortUser
   }
   followers {
-    id
-    firstName
-    lastName
-    googleProfileImageUrl
-    userRole
+    ...ShortUser
   }
   createdBy {
-    id
-    firstName
-    lastName
-    googleProfileImageUrl
-    userRole
+    ...ShortUser
   }
   patientGoal {
     id

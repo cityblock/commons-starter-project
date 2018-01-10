@@ -6,6 +6,7 @@ import {
   automatedRiskArea,
   riskArea,
   riskAreaAssessmentSubmission,
+  riskAreaGroup,
 } from '../../../shared/util/test-data';
 import ComputedFieldFlagModal from '../computed-field-flag-modal';
 import { RiskAreaAssessment } from '../risk-area-assessment';
@@ -21,7 +22,9 @@ describe('risk area assessment questions component', () => {
       routeBase={routeBase}
       patientRoute={patientRoute}
       riskArea={riskArea}
+      riskAreaGroup={riskAreaGroup}
       riskAreaId={riskArea.id}
+      riskAreaGroupId={riskAreaGroup.id}
       riskAreaAssessmentSubmissionCreate={jest.fn() as any}
       riskAreaAssessmentSubmissionComplete={jest.fn() as any}
       riskAreaAssessmentSubmission={riskAreaAssessmentSubmission}
@@ -85,11 +88,18 @@ describe('risk area assessment questions component', () => {
     expect(wrapper.find(ComputedFieldFlagModal).length).toBe(1);
   });
 
-  it('renders back link for automated assessments', () => {
-    expect(wrapper.find(BackLink).length).toBe(1);
-  });
-
   it('hides buttons for automated assessments', () => {
     expect(wrapper.find(Button).length).toBe(0);
+  });
+
+  it('renders back link for no automated assessments case', () => {
+    const newRiskAreaGroup = {
+      ...riskAreaGroup,
+      riskAreas: [riskArea],
+    };
+    wrapper.setProps({ riskAreaGroup: newRiskAreaGroup });
+
+    expect(wrapper.find(BackLink).length).toBe(1);
+    expect(wrapper.find(BackLink).props().href).toBe(routeBase);
   });
 });

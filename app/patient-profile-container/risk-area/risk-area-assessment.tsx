@@ -2,10 +2,12 @@ import * as classNames from 'classnames';
 import * as React from 'react';
 import { compose, graphql } from 'react-apollo';
 import * as riskAreaAssessmentSubmissionForPatientQuery from '../../graphql/queries/get-risk-area-assessment-submission-for-patient.graphql';
+import * as getRiskAreaGroupForPatientGraphql from '../../graphql/queries/get-risk-area-group-for-patient.graphql';
 import * as riskAreaQuery from '../../graphql/queries/get-risk-area.graphql';
 import * as riskAreaAssessmentSubmissionCompleteMutationGraphql from '../../graphql/queries/risk-area-assessment-submission-complete-mutation.graphql';
 import * as riskAreaAssessmentSubmissionCreateMutationGraphql from '../../graphql/queries/risk-area-assessment-submission-create-mutation.graphql';
 import {
+  getRiskAreaGroupForPatientQuery,
   riskAreaAssessmentSubmissionCompleteMutation,
   riskAreaAssessmentSubmissionCompleteMutationVariables,
   riskAreaAssessmentSubmissionCreateMutation,
@@ -26,6 +28,7 @@ import RiskAreaAssessmentResultsPopup from './risk-area-assessment-results-popup
 
 export interface IProps {
   riskAreaId: string;
+  riskAreaGroupId: string;
   patientId: string;
   routeBase: string;
   patientRoute: string;
@@ -44,6 +47,7 @@ interface IGraphqlProps {
   riskAreaAssessmentSubmissionLoading?: boolean;
   riskAreaAssessmentSubmissionError: string | null;
   riskAreaAssessmentSubmission?: FullRiskAreaAssessmentSubmissionFragment;
+  riskAreaGroup: getRiskAreaGroupForPatientQuery['riskAreaGroupForPatient'];
 }
 
 type allProps = IGraphqlProps & IProps;
@@ -140,6 +144,7 @@ export class RiskAreaAssessment extends React.Component<allProps, IState> {
   render() {
     const {
       riskArea,
+      riskAreaGroup,
       riskAreaId,
       patientId,
       routeBase,
@@ -170,7 +175,7 @@ export class RiskAreaAssessment extends React.Component<allProps, IState> {
     const popupVisible =
       riskAreaAssessmentSubmission && riskAreaAssessmentSubmission.completedAt ? true : false;
 
-    if (riskAreaAssessmentSubmissionLoading || loading) {
+    if (riskAreaAssessmentSubmissionLoading || loading || !riskArea) {
       return <Spinner />;
     }
 
@@ -202,12 +207,21 @@ export class RiskAreaAssessment extends React.Component<allProps, IState> {
       )
     ) : null;
 
+    const noAutomated =
+      !!riskAreaGroup.riskAreas &&
+      !!riskAreaGroup.riskAreas.length &&
+      !riskAreaGroup.riskAreas.some(area => {
+        return area.assessmentType === 'automated';
+      });
+
+    const href = noAutomated ? routeBase : `${routeBase}/${riskArea!.riskAreaGroup.id}`;
+
     return (
       <div>
         {automatedAssessment && <ComputedFieldFlagModal />}
         <UnderlineTabs>
           <div>
-            <BackLink href={`${routeBase}/${riskArea!.riskAreaGroup.id}`} />
+            <BackLink href={href} />
           </div>
           {navButtons}
         </UnderlineTabs>
@@ -271,6 +285,17 @@ export default compose(
       riskAreaAssessmentSubmission: data
         ? (data as any).riskAreaAssessmentSubmissionForPatient
         : null,
+    }),
+  }),
+  graphql<IGraphqlProps, IProps, allProps>(getRiskAreaGroupForPatientGraphql as any, {
+    options: (props: IProps) => {
+      const { riskAreaGroupId, patientId } = props;
+      return { variables: { riskAreaGroupId, patientId } };
+    },
+    props: ({ data }) => ({
+      loading: data ? data.loading : false,
+      error: data ? data.error : null,
+      riskAreaGroup: data ? (data as any).riskAreaGroupForPatient : null,
     }),
   }),
 )(RiskAreaAssessment);

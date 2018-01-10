@@ -49,6 +49,7 @@ export class DomainSummary extends React.Component<allProps, IState> {
       lastUpdated: null,
     };
   }
+
   componentWillReceiveProps(nextProps: allProps) {
     // once our risk area group is loaded, calculate associated risk scores
     if (

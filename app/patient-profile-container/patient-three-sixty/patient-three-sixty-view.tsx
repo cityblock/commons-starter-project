@@ -45,6 +45,7 @@ const PatientThreeSixtyView: React.StatelessComponent<IProps> = props => {
       patientRoute={patientRoute}
       riskAreaId={riskAreaId}
       patientId={patientId}
+      riskAreaGroupId={riskAreaGroupId}
     />
   );
 };

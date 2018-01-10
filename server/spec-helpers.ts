@@ -312,6 +312,7 @@ export async function createTask(
       dueAt,
       patientId,
       createdById: userId,
+      assignedToId: userId,
       priority: 'high',
     },
     txn,
@@ -325,12 +326,12 @@ export async function setupUrgentTasks(txn: Transaction) {
   const patient4Name = 'Bran';
   const patient5Name = 'Sansa';
 
-  const clinic = await Clinic.create(createMockClinic(), txn);
-  const user = await User.create(createMockUser(11, clinic.id), txn);
-  const user2 = await User.create(createMockUser(12, clinic.id), txn);
+  const clinic = await Clinic.create(createMockClinic('Winterfell', 12), txn);
+  const user = await User.create(createMockUser(111, clinic.id), txn);
+  const user2 = await User.create(createMockUser(121, clinic.id), txn);
 
   const patient1 = await createPatient(
-    createMockPatient(123, clinic.id, patient1Name),
+    createMockPatient(1234, clinic.id, patient1Name),
     user.id,
     txn,
   );
@@ -353,11 +354,12 @@ export async function setupUrgentTasks(txn: Transaction) {
   await createTask(patient1.id, user.id, soonDueDate, txn);
   await createTask(patient1.id, user.id, laterDueDate, txn);
   await createTask(patient2.id, user.id, laterDueDate, txn);
-  const task4 = await createTask(patient5.id, user.id, laterDueDate, txn);
+  const task = await createTask(patient5.id, user.id, laterDueDate, txn);
+  await createTask(patient5.id, user2.id, soonDueDate, txn);
 
   const taskEvent = await TaskEvent.create(
     {
-      taskId: task4.id,
+      taskId: task.id,
       userId: user.id,
       eventType: 'edit_description',
     },
@@ -372,7 +374,7 @@ export async function setupUrgentTasks(txn: Transaction) {
   );
   const taskEvent2 = await TaskEvent.create(
     {
-      taskId: task4.id,
+      taskId: task.id,
       userId: user.id,
       eventType: 'edit_description',
     },
@@ -393,7 +395,7 @@ export async function setupUrgentTasks(txn: Transaction) {
     txn,
   );
 
-  return { user, patient1, patient5 };
+  return { user, patient1, patient5, taskWithNotification: task };
 }
 
 export async function createFullRiskAreaGroupAssociations(

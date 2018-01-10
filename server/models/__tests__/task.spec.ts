@@ -1,3 +1,4 @@
+import { transaction } from 'objection';
 import * as uuid from 'uuid/v4';
 import Db from '../../db';
 import {
@@ -5,6 +6,7 @@ import {
   createMockPatient,
   createMockUser,
   createPatient,
+  setupUrgentTasks,
 } from '../../spec-helpers';
 import Clinic from '../clinic';
 import Concern from '../concern';
@@ -322,6 +324,45 @@ describe('task model', () => {
 
     expect(await Task.uncomplete(task.id, user.id)).toMatchObject({
       completedAt: null,
+    });
+  });
+
+  describe('urgent tasks for patient dashboard', () => {
+    it('returns tasks that are due soon', async () => {
+      await transaction(Task.knex(), async txn => {
+        const setup = await setupUrgentTasks(txn);
+        const result = await Task.getTasksDueSoonForPatient(setup.patient1.id, setup.user.id, txn);
+
+        expect(result.length).toBe(1);
+        expect(result[0]).toMatchObject({
+          patientId: setup.patient1.id,
+          assignedToId: setup.user.id,
+        });
+
+        const result2 = await Task.getTasksDueSoonForPatient(setup.patient5.id, setup.user.id, txn);
+        expect(result2.length).toBe(0);
+      });
+    });
+
+    it('returns tasks that have notifications', async () => {
+      await transaction(Task.knex(), async txn => {
+        const setup = await setupUrgentTasks(txn);
+        const result = await Task.getTasksWithNotificationsForPatient(
+          setup.patient1.id,
+          setup.user.id,
+          txn,
+        );
+
+        expect(result.length).toBe(0);
+
+        const result2 = await Task.getTasksWithNotificationsForPatient(
+          setup.patient5.id,
+          setup.user.id,
+          txn,
+        );
+        expect(result2.length).toBe(1);
+        expect(result2[0].id).toBe(setup.taskWithNotification.id);
+      });
     });
   });
 });

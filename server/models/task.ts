@@ -276,5 +276,42 @@ export default class Task extends BaseModel {
         completedById: null,
       });
   }
+
+  static async getTasksDueSoonForPatient(patientId: string, userId: string, txn?: Transaction) {
+    return await this.query(txn)
+      .whereRaw('task."dueAt" < now() + interval \'1 day\'')
+      .andWhere({ patientId, assignedToId: userId, deletedAt: null })
+      .eager('followers')
+      .modifyEager('followers', builder => {
+        builder.where('task_follower.deletedAt', null);
+      })
+      .orderBy('dueAt', 'ASC');
+  }
+
+  static async getTasksWithNotificationsForPatient(
+    patientId: string,
+    userId: string,
+    txn?: Transaction,
+  ) {
+    return await this.query(txn)
+      .whereRaw(
+        `task.id IN (
+        SELECT task.id
+        FROM task
+        INNER JOIN task_event ON task_event."taskId" = task.id AND task_event."deletedAt" IS NULL
+        INNER JOIN event_notification ON event_notification."taskEventId" = task_event.id
+          AND event_notification."userId" = ?
+          AND event_notification."seenAt" IS NULL
+          AND event_notification."deletedAt" IS NULL
+        WHERE task."patientId" = ?
+      )`,
+        [userId, patientId],
+      )
+      .eager('followers')
+      .modifyEager('followers', builder => {
+        builder.where('task_follower.deletedAt', null);
+      })
+      .orderBy('dueAt', 'ASC');
+  }
 }
 /* tslint:enable:member-ordering */

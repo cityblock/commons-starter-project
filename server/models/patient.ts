@@ -244,10 +244,10 @@ export default class Patient extends BaseModel {
             AND event_notification."userId" = ? AND event_notification."deletedAt" IS NULL
           WHERE care_team."userId" = ?
           AND care_team."deletedAt" IS NULL
-          AND (task."dueAt" < now() + interval \'1 day\' OR
-            (event_notification.id IS NOT NULL AND event_notification."seenAt" IS NULL))
+          AND ((task."assignedToId" = ? AND task."dueAt" < now() + interval \'1 day\')
+            OR (event_notification.id IS NOT NULL AND event_notification."seenAt" IS NULL))
         )`,
-        [userId, userId],
+        [userId, userId, userId],
       ) // grab all patient ids for patients on care team that have relevant tasks
       .orderBy('lastName', 'ASC')
       .orderBy('firstName', 'ASC')

@@ -49,17 +49,6 @@ export default async (app: express.Application, logger: Console) => {
     endpoint: '/graphql',
     engineConfig: {
       apiKey: config.ENGINE_API_KEY,
-      stores: [
-        {
-          name: 'pq',
-          inMemory: {
-            cacheSize: 5000000,
-          },
-        },
-      ],
-      persistedQueries: {
-        store: 'pq',
-      },
     },
   });
 

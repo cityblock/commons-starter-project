@@ -13,6 +13,8 @@ import PatientGoal from '../../models/patient-goal';
 import Question from '../../models/question';
 import RiskArea from '../../models/risk-area';
 import RiskAreaAssessmentSubmission from '../../models/risk-area-assessment-submission';
+import Task from '../../models/task';
+import TaskTemplate from '../../models/task-template';
 import User from '../../models/user';
 import {
   createMockClinic,
@@ -37,6 +39,7 @@ interface ISetup {
   concern: Concern;
   goalSuggestionTemplate: GoalSuggestionTemplate;
   riskAreaAssessmentSubmission: RiskAreaAssessmentSubmission;
+  taskTemplate: TaskTemplate;
 }
 
 async function setup(txn: Transaction): Promise<ISetup> {
@@ -44,6 +47,13 @@ async function setup(txn: Transaction): Promise<ISetup> {
   const user = await User.create(createMockUser(11, clinic.id), txn);
   const concern = await Concern.create({ title: 'Concern' }, txn);
   const goalSuggestionTemplate = await GoalSuggestionTemplate.create({ title: 'Goal' }, txn);
+  const taskTemplate = await TaskTemplate.create({
+    title: 'Housing Task',
+    repeating: false,
+    goalSuggestionTemplateId: goalSuggestionTemplate.id,
+    priority: 'low',
+    careTeamAssigneeRole: 'physician',
+  }, txn);
   const riskArea = await createRiskArea({ title: 'testing' }, txn);
   const riskArea2 = await createRiskArea({ title: 'testing second area', order: 2 }, txn);
   const question = await Question.create(
@@ -111,6 +121,7 @@ async function setup(txn: Transaction): Promise<ISetup> {
     question2,
     patient,
     riskAreaAssessmentSubmission,
+    taskTemplate,
   };
 }
 
@@ -485,6 +496,60 @@ describe('care plan resolver tests', () => {
 
         const fetchedSuggestion = await CarePlanSuggestion.get(suggestion.id, txn);
         expect(fetchedSuggestion!.acceptedAt).not.toBeFalsy();
+      });
+    });
+
+    it('accepts a goal suggestion and some task templates', async () => {
+      await transaction(CarePlanSuggestion.knex(), async txn => {
+        const {
+          patient,
+          goalSuggestionTemplate,
+          riskAreaAssessmentSubmission,
+          concern,
+          user,
+          taskTemplate,
+        } = await setup(txn);
+
+        const suggestion = await CarePlanSuggestion.create(
+          {
+            patientId: patient.id,
+            suggestionType: 'goal',
+            goalSuggestionTemplateId: goalSuggestionTemplate.id,
+            type: 'riskAreaAssessmentSubmission',
+            riskAreaAssessmentSubmissionId: riskAreaAssessmentSubmission.id,
+          },
+          txn,
+        );
+        const patientConcern = await PatientConcern.create(
+          {
+            patientId: patient.id,
+            concernId: concern.id,
+            userId: user.id,
+          },
+          txn,
+        );
+
+        const mutation = `mutation {
+          carePlanSuggestionAccept(
+            input: {
+              carePlanSuggestionId: "${suggestion.id}",
+              patientConcernId: "${patientConcern.id}",
+              taskTemplateIds: ["${taskTemplate.id}"]
+            }
+          ) {
+            id
+          }
+        }`;
+        await graphql(schema, mutation, null, { db, userRole, userId: user.id, txn });
+
+        const patientTasks = await Task.getPatientTasks(patient.id, {
+          pageNumber: 0,
+          pageSize: 10,
+          orderBy: 'createdAt',
+          order: 'asc',
+        }, txn);
+        expect(patientTasks.total).toEqual(1);
+        expect(patientTasks.results[0].title).toEqual(taskTemplate.title);
       });
     });
   });

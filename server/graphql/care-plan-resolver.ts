@@ -93,7 +93,7 @@ export async function carePlanSuggestionAccept(
 
     if (carePlanSuggestion) {
       const { patientId, goalSuggestionTemplateId } = carePlanSuggestion;
-      const { startedAt, concernId } = input;
+      const { startedAt, concernId, taskTemplateIds } = input;
       let { patientConcernId } = input;
 
       if (!!carePlanSuggestion.concern && carePlanSuggestion.concernId) {
@@ -134,6 +134,7 @@ export async function carePlanSuggestionAccept(
             patientId: carePlanSuggestion.patientId,
             title: carePlanSuggestion.goalSuggestionTemplate.title,
             patientConcernId: patientConcernId || undefined,
+            taskTemplateIds: taskTemplateIds || [],
           },
           existingTxn || txn,
         );

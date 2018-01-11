@@ -185,8 +185,9 @@ export default class Task extends BaseModel {
   static async getPatientTasks(
     patientId: string,
     { pageNumber, pageSize, orderBy, order }: ITaskPaginationOptions,
+    txn?: Transaction,
   ): Promise<IPaginatedResults<Task>> {
-    const patientsResult = (await this.query()
+    const patientsResult = (await this.query(txn)
       .where({ patientId, deletedAt: null })
       .eager(EAGER_QUERY)
       .modifyEager('followers', builder => builder.where('task_follower.deletedAt', null))

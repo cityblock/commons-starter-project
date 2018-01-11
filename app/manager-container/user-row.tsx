@@ -93,6 +93,9 @@ class UserRow extends React.Component<IProps, IState> {
               <option value="nurseCareManager">Nurse Care Manager</option>
               <option value="healthCoach">Health Coach</option>
               <option value="familyMember">Family Memeber</option>
+              <option value="primaryCarePhysician">Primary Care Physician</option>
+              <option value="communityHealthPartner">Community Health Partner</option>
+              <option value="psychiatrist">Psychiatrist</option>
               <option value="admin">Admin</option>
             </select>
           </div>

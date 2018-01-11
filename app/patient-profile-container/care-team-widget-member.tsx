@@ -1,7 +1,7 @@
 import * as classNames from 'classnames';
 import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
-import { FullUserFragment } from '../graphql/types';
+import { FullUserFragment, UserRole } from '../graphql/types';
 import * as styles from './css/care-team-widget-member.css';
 
 interface IProps {
@@ -18,8 +18,18 @@ const phoneIconStyles = generateIconStyles(styles.careTeamPhoneIcon);
 const emailIconStyles = generateIconStyles(styles.careTeamEmailIcon);
 
 export default class CareTeamWidgetMember extends React.Component<IProps, {}> {
-  formatCareTeamMemberRole(role: string): string {
-    return role.charAt(0).toUpperCase() + role.slice(1);
+  formatCareTeamMemberRole(role: UserRole): string {
+    const roleToStringHash: { [key: string]: string } = {
+      admin: 'Behavioral Health Specialist', // TODO: remove
+      physician: 'Physician',
+      nurseCareManager: 'Nurse Care Manager',
+      healthCoach: 'Health Coach',
+      familyMember: 'Family Member',
+      primaryCarePhysician: 'Primary Care Physician',
+      communityHealthPartner: 'Community Health Partner',
+      psychiatrist: 'Psychiatrist',
+    };
+    return roleToStringHash[role] || '';
   }
 
   render() {

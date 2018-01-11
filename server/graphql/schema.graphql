@@ -1,6 +1,9 @@
 enum UserRole {
   physician
   nurseCareManager
+  primaryCarePhysician
+  communityHealthPartner
+  psychiatrist
   healthCoach
   familyMember
   anonymousUser

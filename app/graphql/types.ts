@@ -116,6 +116,9 @@ export enum Priority {
 export enum UserRole {
   physician = "physician",
   nurseCareManager = "nurseCareManager",
+  primaryCarePhysician = "primaryCarePhysician",
+  communityHealthPartner = "communityHealthPartner",
+  psychiatrist = "psychiatrist",
   healthCoach = "healthCoach",
   familyMember = "familyMember",
   anonymousUser = "anonymousUser",

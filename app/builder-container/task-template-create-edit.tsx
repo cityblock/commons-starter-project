@@ -310,6 +310,9 @@ class TaskTemplateCreateEdit extends React.Component<allProps, IState> {
               <option value="nurseCareManager">Nurse Care Manager</option>
               <option value="healthCoach">Health Coach</option>
               <option value="familyMember">Family Member</option>
+              <option value="primaryCarePhysician">Primary Care Physician</option>
+              <option value="communityHealthPartner">Community Health Partner</option>
+              <option value="psychiatrist">Psychiatrist</option>
             </select>
           </div>
         </div>

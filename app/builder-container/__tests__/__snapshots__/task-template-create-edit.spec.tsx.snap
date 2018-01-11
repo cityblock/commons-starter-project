@@ -272,6 +272,21 @@ exports[`renders task template create-edit 1`] = `
         >
           Family Member
         </option>
+        <option
+          value="primaryCarePhysician"
+        >
+          Primary Care Physician
+        </option>
+        <option
+          value="communityHealthPartner"
+        >
+          Community Health Partner
+        </option>
+        <option
+          value="psychiatrist"
+        >
+          Psychiatrist
+        </option>
       </select>
     </div>
   </div>

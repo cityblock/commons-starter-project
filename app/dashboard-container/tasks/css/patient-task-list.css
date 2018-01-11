@@ -1,0 +1,10 @@
+@import '../../../shared/css/sizes';
+
+.container h5 {
+  margin: 5px 0;
+  text-align: center;
+  color: var(--gray-font-color);
+  font-size: var(--extra-small-font-size);
+  line-height: var(--extra-small-font-line-height);
+  font-weight: var(--roboto-medium-weight);
+}

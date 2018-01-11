@@ -1,4 +1,5 @@
 import { graphql } from 'graphql';
+import { transaction } from 'objection';
 import { IEventNotificationNode } from 'schema';
 import Db from '../../db';
 import Clinic from '../../models/clinic';
@@ -11,6 +12,7 @@ import {
   createMockPatient,
   createMockUser,
   createPatient,
+  setupUrgentTasks,
 } from '../../spec-helpers';
 import schema from '../make-executable-schema';
 
@@ -298,6 +300,30 @@ describe('event notification tests', () => {
       });
       expect(result.data!.eventNotificationDismiss.seenAt).not.toBeFalsy();
       expect(result.data!.eventNotificationDismiss.seenAt).not.toBeFalsy();
+    });
+  });
+
+  describe('dashboard notifications for a given task and user', () => {
+    it('fetches the relevant notifications for a user and task', async () => {
+      await transaction(EventNotification.knex(), async txn => {
+        const setup = await setupUrgentTasks(txn);
+
+        const query = `{
+          eventNotificationsForUserTask(taskId: "${setup.task.id}") {
+            id
+            userId
+          }
+        }`;
+
+        const result = await graphql(schema, query, null, {
+          userRole,
+          userId: setup.user.id,
+          txn,
+        });
+
+        expect(result.data!.eventNotificationsForUserTask[0].id).toBe(setup.eventNotification.id);
+        expect(result.data!.eventNotificationsForUserTask[0].userId).toBe(setup.user.id);
+      });
     });
   });
 });

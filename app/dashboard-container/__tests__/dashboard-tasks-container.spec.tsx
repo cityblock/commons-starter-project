@@ -35,13 +35,17 @@ describe('Dashboard Urgent Tasks Page Container', () => {
     />,
   );
 
-  it('renders container', () => {
-    expect(wrapper.find('.container').length).toBe(1);
-  });
-
   it('renders patient with tasks list', () => {
     expect(wrapper.find(PatientWithTasksList).length).toBe(1);
     expect(wrapper.find(PatientWithTasksList).props().patients).toEqual([patient]);
+    expect(wrapper.find(PatientWithTasksList).props().selectedPatientId).toBeNull();
+  });
+
+  it('passes selected patient id to patient list', () => {
+    const selectedPatientId = 'khalDrogo';
+    wrapper.setState({ selectedPatientId });
+
+    expect(wrapper.find(PatientWithTasksList).props().selectedPatientId).toBe(selectedPatientId);
   });
 
   it('renders pagination', () => {

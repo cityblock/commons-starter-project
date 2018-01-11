@@ -1,13 +1,7 @@
-#import "../fragments/short-user.graphql"
+#import "../fragments/short-urgent-task-for-patient.graphql"
 
 query getTasksWithNotificationsForPatient($patientId: ID!) {
   tasksWithNotificationsForPatient(patientId: $patientId) {
-    id
-    title
-    dueAt
-    priority
-    followers {
-      ...ShortUser
-    }
+    ...ShortUrgentTaskForPatient
   }
 }

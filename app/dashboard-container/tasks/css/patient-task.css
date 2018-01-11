@@ -1,0 +1,51 @@
+@import '../../../shared/css/sizes';
+
+.link {
+  display: block;
+  border-left: 4px solid transparent;
+  border-bottom: 1px solid var(--gray-background-color);
+  background: var(--white-color);
+  padding: 0 var(--small-gutter);
+}
+
+.container,
+.info,
+.followers {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.container {
+  height: 52px;
+}
+
+.container h2 {
+  color: var(--black-color);
+  font-size: var(--default-font-size);
+  line-height: var(--default-line-height);
+  font-weight: var(--roboto-medium-weight);
+  margin: 0;
+}
+
+.followers {
+  padding-right: var(--extra-small-gutter);
+  margin-right: var(--extra-small-gutter);
+  border-right: 1px solid var(--gray-background-color);
+}
+
+.avatar {
+  margin-left: 5px;
+}
+
+.redBorder {
+  border-left-color: var(--red-color);
+}
+
+.yellowBorder {
+  border-left-color: var(--yellow-color);
+}
+
+.grayBorder {
+  border-left-color: var(--border-color);
+}

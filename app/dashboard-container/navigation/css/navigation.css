@@ -2,7 +2,6 @@
 
 .container {
   background: var(--white-color);
-  width: 320px;
   border-right: 1px solid var(--border-color);
   height: calc(100vh - 60px);
   overflow-y: scroll;

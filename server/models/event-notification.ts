@@ -191,5 +191,25 @@ export default class EventNotification extends BaseModel {
       total: eventNotifications.total,
     };
   }
+
+  // Fetch notifications for a given user and task
+  static async getForUserTask(
+    taskId: string,
+    userId: string,
+    txn?: Transaction,
+  ): Promise<EventNotification[]> {
+    const eventNotifications = await this.query(txn)
+      .whereNot({ taskEventId: null })
+      .andWhere('event_notification.userId', userId)
+      .andWhere('event_notification.deletedAt', null)
+      .andWhere({ seenAt: null })
+      .joinRelation('taskEvent')
+      .where('taskEvent.taskId', taskId)
+      .eager(EAGER_QUERY)
+      .modifyEager('taskEvent', builder => builder.where({ deletedAt: null }))
+      .orderBy('event_notification.createdAt', 'desc');
+
+    return eventNotifications as EventNotification[];
+  }
 }
 /* tslint:enable:member-ordering */

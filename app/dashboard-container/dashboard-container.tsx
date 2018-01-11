@@ -24,8 +24,10 @@ const DashboardContainer: React.StatelessComponent<IProps> = (props: IProps) => 
 
   return (
     <div className={styles.container}>
-      <DashboardNavigation selected={tab} tagId={tagId} />
-      {rightPane}
+      <div className={styles.leftPane}>
+        <DashboardNavigation selected={tab} tagId={tagId} />
+      </div>
+      <div className={styles.rightPane}>{rightPane}</div>
     </div>
   );
 };

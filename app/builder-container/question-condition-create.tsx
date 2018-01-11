@@ -101,7 +101,8 @@ class QuestionConditionCreate extends React.Component<allProps, IState> {
             name="answerId"
             value={selectedAnswer}
             onChange={this.onAnswerChange}
-            className={classNames(formStyles.select, formStyles.inputSmall, styles.flexInputItem)}>
+            className={classNames(formStyles.select, formStyles.inputSmall, styles.flexInputItem)}
+          >
             <Option value="" messageId="questionConditionCreate.selectAnswer" disabled={true} />
             {answerOptions}
           </Select>

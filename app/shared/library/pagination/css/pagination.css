@@ -22,7 +22,7 @@ svg.icon {
   border-radius: var(--border-radius);
   cursor: pointer;
   transition: background-color 0.2s, fill 0.2s;
-  margin: 0 var(--gutter);
+  margin: 0 var(--medium-gutter);
 
   &:hover {
     background: var(--gray-background-color);
@@ -31,5 +31,5 @@ svg.icon {
 }
 
 .empty {
-  width: 110px;
+  width: 90px;
 }

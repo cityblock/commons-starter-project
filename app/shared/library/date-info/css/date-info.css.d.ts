@@ -1,1 +1,2 @@
-export const highlight: string;
+export const highlightBlue: string;
+export const highlightRed: string;

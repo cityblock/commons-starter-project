@@ -1,6 +1,5 @@
 @import '../../shared/css/sizes';
 
-.container,
 .pages {
   width: calc(100% - 320px);
 }

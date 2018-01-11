@@ -1,5 +1,9 @@
 @import '../../../css/sizes';
 
-.highlight {
+.highlightBlue {
   color: var(--blue-color);
+}
+
+.highlightRed {
+  color: var(--red-color);
 }

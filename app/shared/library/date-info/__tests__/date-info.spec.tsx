@@ -1,6 +1,7 @@
 import { shallow } from 'enzyme';
 import * as React from 'react';
 import { FormattedRelative } from 'react-intl';
+import TextInfo from '../../text-info/text-info';
 import DateInfo from '../date-info';
 
 describe('Library Date Info Component', () => {
@@ -22,5 +23,20 @@ describe('Library Date Info Component', () => {
   it('renders formatted date', () => {
     expect(wrapper.find(FormattedRelative).length).toBe(1);
     expect(wrapper.find(FormattedRelative).props().value).toBe(date);
+  });
+
+  it('passes custom units if specified to formatted relative', () => {
+    const units = 'day';
+    wrapper.setProps({ units });
+
+    expect(wrapper.find(FormattedRelative).props().units).toBe(units);
+  });
+
+  it('renders unknown date if date is null', () => {
+    wrapper.setProps({ date: null, label: 'due' });
+
+    expect(wrapper.find(TextInfo).length).toBe(1);
+    expect(wrapper.find(TextInfo).props().messageId).toBe('dateInfo.due');
+    expect(wrapper.find(TextInfo).props().textMessageId).toBe('dateInfo.nullDate');
   });
 });

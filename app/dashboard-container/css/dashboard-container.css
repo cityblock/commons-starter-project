@@ -5,3 +5,11 @@
   background: var(--gray-background-color);
   width: 100%;
 }
+
+.leftPane {
+  width: 320px;
+}
+
+.rightPane {
+  width: calc(100% - 320px);
+}

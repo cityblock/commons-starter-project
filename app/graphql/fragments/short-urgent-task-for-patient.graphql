@@ -1,0 +1,12 @@
+#import "./short-user.graphql"
+
+fragment ShortUrgentTaskForPatient on Task {
+  id
+  title
+  dueAt
+  priority
+  patientId
+  followers {
+    ...ShortUser
+  }
+}

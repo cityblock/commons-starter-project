@@ -1,3 +1,4 @@
+import * as classNames from 'classnames';
 import * as React from 'react';
 import { connect, Dispatch } from 'react-redux';
 import { push } from 'react-router-redux';
@@ -19,6 +20,7 @@ interface IProps {
   taskView?: boolean; // optional flag if viewing patient with urgent tasks
   tasksDueCount?: number | null; // number of tasks due, only for task view
   notificationsCount?: number | null; // number of tasks with notifications, only for task view
+  selected?: boolean; // flag if patient is selected, applies sticky scroll styles
 }
 
 interface IDispatchProps {
@@ -28,10 +30,20 @@ interface IDispatchProps {
 type allProps = IDispatchProps & IProps;
 
 export const PatientListItem: React.StatelessComponent<allProps> = (props: allProps) => {
-  const { patient, taskView, redirectToPatient, tasksDueCount, notificationsCount } = props;
+  const {
+    patient,
+    taskView,
+    redirectToPatient,
+    tasksDueCount,
+    notificationsCount,
+    selected,
+  } = props;
+  const containerStyles = classNames(styles.container, {
+    [styles.sticky]: !!selected,
+  });
 
   const containerProps: IContainerProps = {
-    className: styles.container,
+    className: containerStyles,
   };
 
   if (!taskView) {

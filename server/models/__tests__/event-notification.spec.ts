@@ -1,3 +1,4 @@
+import { transaction } from 'objection';
 import * as uuid from 'uuid/v4';
 import Db from '../../db';
 import {
@@ -5,6 +6,7 @@ import {
   createMockPatient,
   createMockUser,
   createPatient,
+  setupUrgentTasks,
 } from '../../spec-helpers';
 import Clinic from '../clinic';
 import EventNotification from '../event-notification';
@@ -249,5 +251,18 @@ describe('task event model', () => {
 
     expect(fetchedNotification.seenAt).not.toBeFalsy();
     expect(fetchedNotification.seenAt).not.toBeFalsy();
+  });
+
+  describe('notifications for user and task in dashboard', () => {
+    it('returns notifications for a given user and task', async () => {
+      await transaction(EventNotification.knex(), async txn => {
+        const setup = await setupUrgentTasks(txn);
+        const result = await EventNotification.getForUserTask(setup.task.id, setup.user.id, txn);
+
+        expect(result.length).toBe(1);
+        expect(result[0].id).toBe(setup.eventNotification.id);
+        expect(result[0].taskEvent.taskId).toBe(setup.task.id);
+      });
+    });
   });
 });

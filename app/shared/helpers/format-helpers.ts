@@ -9,7 +9,7 @@ export const formatFullName = (firstName?: string | null, lastName?: string | nu
 export const formatInputDate = (dueDate?: string): string =>
   format(dueDate || Date.now(), 'YYYY-MM-DD');
 
-export const isDueSoon = (dueDate?: string): boolean => {
+export const isDueSoon = (dueDate?: string | null): boolean => {
   if (!dueDate) return false;
 
   const dueDateAsDate = new Date(dueDate) as any;

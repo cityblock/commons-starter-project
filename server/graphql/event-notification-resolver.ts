@@ -14,6 +14,10 @@ export interface ITaskEventNotificationOptions extends IPaginationOptions {
   taskId: string;
 }
 
+export interface IEventNotificationsForUserTaskOptions {
+  taskId: string;
+}
+
 export interface IEditEventNotificationInput {
   eventNotificationId: string;
 }
@@ -31,7 +35,7 @@ function getEventNotificationTitle(eventNotification: EventNotification) {
 
     switch (eventType) {
       case 'create_task': {
-        return `${taskEvent.user.firstName} created task: ${task.title}`;
+        return `${taskEvent.user.firstName} created this task`;
       }
       case 'add_follower':
       case 'remove_follower': {
@@ -40,56 +44,54 @@ function getEventNotificationTitle(eventNotification: EventNotification) {
 
         if (eventUser && eventUser.id === eventNotification.userId) {
           // The user receiving the notification was added as a follower
-          return `${userName} ${action} you as a follower to task: '${task.title}'`;
+          return `${userName} ${action} you as a follower to this task`;
         } else if (eventUser) {
           // A different user was added as a follower
-          return `${eventUser.firstName} ${eventUser.lastName} ${longAction} task: '${task.title}'`;
+          return `${eventUser.firstName} ${eventUser.lastName} ${longAction} to this task`;
         } else {
           // Something messed up
-          return `Somebody ${longAction} task: '${task.title}'`;
+          return `Somebody ${longAction} to this task'`;
         }
       }
       case 'complete_task':
       case 'uncomplete_task': {
         const action = eventType === 'complete_task' ? 'complete' : 'incomplete';
 
-        return `${userName} marked task: '${task.title}' as ${action}`;
+        return `${userName} marked this task as ${action}`;
       }
       case 'delete_task': {
-        return `${userName} deleted task: '${task.title}'`;
+        return `${userName} deleted this task`;
       }
       case 'add_comment': {
         if (eventComment) {
-          return `${userName} commented: '${eventComment.body}' on task: '${task.title}'`;
+          return `${userName} commented: '${eventComment.body}'`;
         } else {
-          return `${userName} added a comment to task: '${task.title}'`;
+          return `${userName} added a comment to this task`;
         }
       }
       case 'edit_comment': {
         if (eventComment) {
           const { body } = eventComment;
 
-          return `${userName} edited their comment: '${body}' on task: '${task.title}'`;
+          return `${userName} edited their comment: '${body}'`;
         } else {
-          return `${userName} edited a comment on task: '${task.title}'`;
+          return `${userName} edited a comment on this task`;
         }
       }
       case 'delete_comment': {
         if (eventComment) {
           const { body } = eventComment;
 
-          return `${userName} deleted their comment: '${body}' from task: '${task.title}'`;
+          return `${userName} deleted their comment: '${body}'`;
         } else {
-          return `${userName} deleted a comment from task: '${task.title}'`;
+          return `${userName} deleted a comment from this task`;
         }
       }
       case 'edit_priority': {
         const { priority } = task;
         const formattedPriority = capitalize(priority || '');
 
-        return `${userName} changed the priority of task: '${
-          task.title
-        }' to '${formattedPriority}'`;
+        return `${userName} changed the priority to '${formattedPriority}'`;
       }
       case 'edit_due_date': {
         const { dueAt } = task;
@@ -97,36 +99,32 @@ function getEventNotificationTitle(eventNotification: EventNotification) {
         if (dueAt) {
           const formattedDueDate = format(dueAt, 'MMM D, YYYY');
 
-          return `${userName} changed the due date of task: '${
-            task.title
-          }' to '${formattedDueDate}'`;
+          return `${userName} changed the due date to ${formattedDueDate}`;
         } else {
-          return `${userName} changed the due date of task: '${task.title}'`;
+          return `${userName} changed the due date of this task`;
         }
       }
       case 'edit_title': {
         const { title } = task;
 
-        return `${userName} changed the title of a task to '${title}'`;
+        return `${userName} changed the title to '${title}'`;
       }
       case 'edit_description': {
-        const { description, title } = task;
+        const { description } = task;
 
-        return `${userName} changed the description of task: '${title}' to '${description}'`;
+        return `${userName} changed the description to '${description}'`;
       }
       case 'edit_assignee': {
         if (eventUser && eventUser.id === eventNotification.userId) {
           // The user receiving the notification became the assignee
-          return `${userName} assigned you the task: '${task.title}'`;
+          return `${userName} assigned you to this task`;
         } else if (eventUser) {
           // A different user became the assignee
 
-          return `${eventUser.firstName} ${eventUser.lastName} was assigned the task: '${
-            task.title
-          }'`;
+          return `${eventUser.firstName} ${eventUser.lastName} was assigned to this task`;
         } else {
           // Something messed up
-          return `The assignee of task: '${task.title}' was changed`;
+          return `The assignee of this task was changed`;
         }
       }
       default: {
@@ -232,4 +230,22 @@ export async function eventNotificationDismiss(
   return await EventNotification.update(input.eventNotificationId, {
     seenAt: new Date().toISOString(),
   });
+}
+
+export async function resolveEventNotificationsForUserTask(
+  root: any,
+  { taskId }: IEventNotificationsForUserTaskOptions,
+  { userId, userRole, txn }: IContext,
+) {
+  await accessControls.isAllowedForUser(userRole, 'view', 'task');
+  checkUserLoggedIn(userId);
+
+  const notifications = await EventNotification.getForUserTask(taskId, userId!, txn);
+
+  const formattedNotifications = notifications.map(notification => ({
+    ...notification,
+    title: getEventNotificationTitle(notification),
+  }));
+
+  return formattedNotifications;
 }

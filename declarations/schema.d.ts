@@ -66,10 +66,6 @@ declare module 'schema' {
   */
     patientEncounters: Array<IPatientEncounter> | null;
     /**
-    description: Patient medications
-  */
-    patientMedications: IPatientMedications | null;
-    /**
     description: Task
   */
     task: ITask | null;
@@ -165,6 +161,10 @@ declare module 'schema' {
     description: Event notifications for a task
   */
     eventNotificationsForTask: IEventNotificationEdges | null;
+    /**
+    description: Event notifications for a user's task - on dashboard
+  */
+    eventNotificationsForUserTask: Array<IEventNotification>;
     /**
     description: Concern
   */
@@ -543,33 +543,6 @@ declare module 'schema' {
     code: string;
     codeSystem: string;
     description: string;
-  }
-
-  /**
-    description: PatientMedications
-  */
-  interface IPatientMedications {
-    medications: IPatientMedicationsDetails;
-  }
-
-  /**
-    description: PatientMedicationsDetails
-  */
-  interface IPatientMedicationsDetails {
-    active: Array<IPatientMedication>;
-    inactive: Array<IPatientMedication>;
-  }
-
-  /**
-    description: PatientMedication
-  */
-  interface IPatientMedication {
-    name: string;
-    medicationId: string;
-    quantity: string | null;
-    quantityUnit: string | null;
-    dosageInstructions: string | null;
-    startDate: string | null;
   }
 
   /**

@@ -19,7 +19,9 @@ const TaskCountItem: React.StatelessComponent<IProps> = ({ count, messageId }) =
 
   return (
     <div className={styles.container}>
-      <FormattedMessage id={messageId}>{(message: string) => <h5>{message}</h5>}</FormattedMessage>
+      <FormattedMessage id={messageId}>
+        {(message: string) => <h5>{`${message}:`}</h5>}
+      </FormattedMessage>
       {renderedCount}
     </div>
   );

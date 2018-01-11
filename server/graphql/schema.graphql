@@ -1771,6 +1771,8 @@ type RootQueryType {
   ): EventNotificationEdges
   # Event notifications for a task
   eventNotificationsForTask(taskId: ID!, pageNumber: Int, pageSize: Int): EventNotificationEdges
+  # Event notifications for a user's task - on dashboard
+  eventNotificationsForUserTask(taskId: ID!): [EventNotification!]!
   # Concern
   concern(concernId: ID!): Concern
   # Concerns

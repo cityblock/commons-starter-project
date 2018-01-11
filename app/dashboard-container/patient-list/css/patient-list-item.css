@@ -17,13 +17,11 @@
   align-items: center;
 }
 
-.container,
-.profileLink {
-  transition: background 0.2s;
-
-  &:hover {
-    background: var(--gray-background-color);
-  }
+.sticky {
+  position: -webkit-sticky;
+  position: sticky;
+  top: 0;
+  z-index: 1;
 }
 
 .info {
@@ -54,6 +52,11 @@
 .profileLink {
   border: 1px solid var(--blue-color);
   border-radius: var(--border-radius);
+  transition: background 0.2s;
+
+  &:hover {
+    background: var(--gray-background-color);
+  }
 }
 
 svg.arrow {

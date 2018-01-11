@@ -2,32 +2,56 @@ import * as React from 'react';
 import { compose, graphql } from 'react-apollo';
 import * as tasksDueSoonForPatientQuery from '../../graphql/queries/get-tasks-due-soon-for-patient.graphql';
 import * as tasksWithNotificationsForPatientQuery from '../../graphql/queries/get-tasks-with-notifications-for-patient.graphql';
-import {
-  getTasksDueSoonForPatientQuery,
-  getTasksWithNotificationsForPatientQuery,
-} from '../../graphql/types';
+import { ShortUrgentTaskForPatientFragment } from '../../graphql/types';
 import { FullPatientForDashboardFragment } from '../../graphql/types';
+import PatientTasks from '../tasks/patient-tasks';
+import * as styles from './css/patient-with-tasks-list-item.css';
 import PatientListItem from './patient-list-item';
 
 export interface IProps {
   patient: FullPatientForDashboardFragment;
+  selectedPatientId: string | null;
+  toggleSelectedPatient: (patientId: string) => void;
 }
 
 interface IGraphqlProps {
   tasksDueSoonLoading?: boolean;
   tasksDueSoonError?: string | null;
-  tasksDueSoon: getTasksDueSoonForPatientQuery['tasksDueSoonForPatient'];
+  tasksDueSoon: ShortUrgentTaskForPatientFragment[];
   tasksWithNotificationsLoading?: boolean;
   tasksWithNotificationsError?: string | null;
-  tasksWithNotifications: getTasksWithNotificationsForPatientQuery['tasksWithNotificationsForPatient'];
+  tasksWithNotifications: ShortUrgentTaskForPatientFragment[];
 }
 
 type allProps = IGraphqlProps & IProps;
 
 export class PatientWithTasksListItem extends React.Component<allProps> {
+  onPatientClick = (): void => {
+    const {
+      patient,
+      toggleSelectedPatient,
+      tasksDueSoonLoading,
+      tasksDueSoonError,
+      tasksWithNotificationsLoading,
+      tasksWithNotificationsError,
+    } = this.props;
+    // do not open the task list if still loading or error
+    if (
+      tasksDueSoonLoading ||
+      tasksDueSoonError ||
+      tasksWithNotificationsLoading ||
+      tasksWithNotificationsError
+    ) {
+      return;
+    }
+
+    toggleSelectedPatient(patient.id);
+  };
+
   render(): JSX.Element {
     const {
       patient,
+      selectedPatientId,
       tasksDueSoonLoading,
       tasksDueSoonError,
       tasksDueSoon,
@@ -35,19 +59,31 @@ export class PatientWithTasksListItem extends React.Component<allProps> {
       tasksWithNotificationsError,
       tasksWithNotifications,
     } = this.props;
-    const tasksDueCount = !tasksDueSoonLoading && !tasksDueSoonError ? tasksDueSoon.length : null;
-    const notificationsCount =
-      !tasksWithNotificationsLoading && !tasksWithNotificationsError
-        ? tasksWithNotifications.length
-        : null;
+    const tasksDueLoaded = !tasksDueSoonLoading && !tasksDueSoonError;
+    const tasksWithNotificationsLoaded =
+      !tasksWithNotificationsLoading && !tasksWithNotificationsError;
+    const currentPatientSelected = patient.id === selectedPatientId;
+    const otherPatientSelected = !currentPatientSelected && selectedPatientId !== null;
+    const tasksDueCount = tasksDueLoaded ? tasksDueSoon.length : null;
+    const notificationsCount = tasksWithNotificationsLoaded ? tasksWithNotifications.length : null;
+    const tasksVisible = tasksDueLoaded && tasksWithNotificationsLoaded && currentPatientSelected;
 
     return (
-      <PatientListItem
-        patient={patient}
-        taskView={true}
-        tasksDueCount={tasksDueCount}
-        notificationsCount={notificationsCount}
-      />
+      <div onClick={this.onPatientClick} className={otherPatientSelected ? styles.opaque : ''}>
+        <PatientListItem
+          patient={patient}
+          taskView={true}
+          tasksDueCount={tasksDueCount}
+          notificationsCount={notificationsCount}
+          selected={tasksVisible}
+        />
+        {tasksVisible && (
+          <PatientTasks
+            tasksDueSoon={tasksDueSoon}
+            tasksWithNotifications={tasksWithNotifications}
+          />
+        )}
+      </div>
     );
   }
 }

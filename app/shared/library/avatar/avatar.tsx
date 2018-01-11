@@ -8,7 +8,7 @@ type Size = 'small' | 'medium' | 'large'; // 20x20, 30x30, 40x40, default is med
 type BorderColor = 'gray' | 'lightGray' | 'white'; // default is gray
 
 interface IProps {
-  src?: string; // image url, uses default avatar if not provided
+  src?: string | null; // image url, uses default avatar if not provided
   size?: Size;
   borderColor?: BorderColor;
   className?: string; // optional other styles, use largely for margin/padding

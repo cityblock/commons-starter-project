@@ -12,7 +12,12 @@ describe('Dashboard Patient List Item', () => {
   const wrapper = shallow(<PatientListItem patient={patient} redirectToPatient={placeholderFn} />);
 
   it('wraps item in link to patient profile', () => {
-    expect(wrapper.find('.container').length).toBe(1);
+    expect(
+      wrapper
+        .find('div')
+        .at(0)
+        .props().className,
+    ).toBe('container');
   });
 
   it('renders image of patient avatar', () => {
@@ -52,5 +57,16 @@ describe('Dashboard Patient List Item', () => {
     expect(wrapper.find(PatientTaskCount).length).toBe(1);
     expect(wrapper.find(PatientTaskCount).props().tasksDueCount).toBe(tasksDueCount);
     expect(wrapper.find(PatientTaskCount).props().notificationsCount).toBe(notificationsCount);
+  });
+
+  it('applies sticky scroll styles if patient selected', () => {
+    wrapper.setProps({ selected: true });
+
+    expect(
+      wrapper
+        .find('div')
+        .at(0)
+        .props().className,
+    ).toBe('container sticky');
   });
 });

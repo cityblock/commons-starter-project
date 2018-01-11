@@ -351,7 +351,7 @@ export async function setupUrgentTasks(txn: Transaction) {
     },
     txn,
   );
-  await EventNotification.create(
+  const eventNotification = await EventNotification.create(
     {
       userId: user.id,
       taskEventId: taskEvent.id,
@@ -373,6 +373,13 @@ export async function setupUrgentTasks(txn: Transaction) {
     },
     txn,
   );
+  await EventNotification.create(
+    {
+      userId: user2.id,
+      taskEventId: taskEvent2.id,
+    },
+    txn,
+  );
   await EventNotification.update(
     eventNotification2.id,
     {
@@ -381,7 +388,7 @@ export async function setupUrgentTasks(txn: Transaction) {
     txn,
   );
 
-  return { user, patient1, patient5, task, task1 };
+  return { user, patient1, patient5, task, task1, eventNotification };
 }
 
 export async function createFullRiskAreaGroupAssociations(

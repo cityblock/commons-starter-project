@@ -1047,6 +1047,19 @@ export interface getEventNotificationsForCurrentUserQuery {
   } | null,
 };
 
+export interface getEventNotificationsForUserTaskQueryVariables {
+  taskId: string,
+};
+
+export interface getEventNotificationsForUserTaskQuery {
+  // Event notifications for a user's task - on dashboard
+  eventNotificationsForUserTask:  Array< {
+    id: string,
+    title: string | null,
+    createdAt: string,
+  } >,
+};
+
 export interface getGoalSuggestionTemplateQueryVariables {
   goalSuggestionTemplateId: string,
 };
@@ -3417,6 +3430,7 @@ export interface getTasksDueSoonForPatientQuery {
     title: string,
     dueAt: string | null,
     priority: Priority | null,
+    patientId: string,
     followers:  Array< {
       id: string,
       firstName: string | null,
@@ -3438,6 +3452,7 @@ export interface getTasksWithNotificationsForPatientQuery {
     title: string,
     dueAt: string | null,
     priority: Priority | null,
+    patientId: string,
     followers:  Array< {
       id: string,
       firstName: string | null,
@@ -8402,6 +8417,12 @@ export interface FullUserFragment {
   updatedAt: string,
 };
 
+export interface ShortEventNotificationsForUserTaskFragment {
+  id: string,
+  title: string | null,
+  createdAt: string,
+};
+
 export interface ShortPatientScreeningToolSubmission360Fragment {
   id: string,
   score: number | null,
@@ -8485,6 +8506,21 @@ export interface ShortTaskFragment {
     googleProfileImageUrl: string | null,
     userRole: UserRole,
   },
+};
+
+export interface ShortUrgentTaskForPatientFragment {
+  id: string,
+  title: string,
+  dueAt: string | null,
+  priority: Priority | null,
+  patientId: string,
+  followers:  Array< {
+    id: string,
+    firstName: string | null,
+    lastName: string | null,
+    userRole: UserRole,
+    googleProfileImageUrl: string | null,
+  } >,
 };
 
 export interface ShortUserFragment {

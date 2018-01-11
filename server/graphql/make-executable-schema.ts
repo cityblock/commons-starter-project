@@ -46,6 +46,7 @@ import {
   eventNotificationDismiss,
   resolveEventNotificationsForCurrentUser,
   resolveEventNotificationsForTask,
+  resolveEventNotificationsForUserTask,
 } from './event-notification-resolver';
 import {
   goalSuggestionCreate,
@@ -265,6 +266,7 @@ const resolveFunctions = {
     questionCondition: resolveQuestionCondition,
     eventNotificationsForCurrentUser: resolveEventNotificationsForCurrentUser,
     eventNotificationsForTask: resolveEventNotificationsForTask,
+    eventNotificationsForUserTask: resolveEventNotificationsForUserTask,
     patientAnswer: resolvePatientAnswer,
     patientAnswers: resolvePatientAnswers,
     patientPreviousAnswersForQuestion: resolvePreviousPatientAnswersForQuestion,

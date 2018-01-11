@@ -15,6 +15,8 @@ interface IProps {
 
 const GENDER: any = { F: 'Female', M: 'Male' };
 
+export const DEFAULT_PATIENT_AVATAR_URL = 'https://bit.ly/2Exqf9z';
+
 export default class PatientLeftNavInfo extends React.Component<IProps, {}> {
   props: IProps;
 
@@ -55,7 +57,7 @@ export default class PatientLeftNavInfo extends React.Component<IProps, {}> {
         <div className={styles.patientHeader}>
           <div
             className={styles.patientPhoto}
-            style={{ backgroundImage: `url('http://bit.ly/2vaOMQJ')` }}
+            style={{ backgroundImage: `url('${DEFAULT_PATIENT_AVATAR_URL}')` }}
           />
           <div className={styles.patientTitle}>
             <div className={styles.patientName}>

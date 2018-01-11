@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { FormattedTime } from 'react-intl';
 import { FullProgressNoteFragment } from '../graphql/types';
+import { DEFAULT_PATIENT_AVATAR_URL } from '../patient-profile-container/patient-left-nav-info';
 import * as styles from './css/progress-note-small-row.css';
 
 interface IProps {
@@ -24,7 +25,7 @@ export const ProgressNoteSmallRow: React.StatelessComponent<IProps> = props => {
     >
       <div
         className={styles.patientPhoto}
-        style={{ backgroundImage: `url('http://bit.ly/2vaOMQJ')` }}
+        style={{ backgroundImage: `url('${DEFAULT_PATIENT_AVATAR_URL}')` }}
       />
       <div className={styles.progressNoteRight}>
         <div className={styles.patientName}>{name}</div>

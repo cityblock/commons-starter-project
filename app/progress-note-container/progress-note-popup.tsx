@@ -18,6 +18,7 @@ import {
   FullProgressNoteFragment,
   FullProgressNoteTemplateFragment,
 } from '../graphql/types';
+import { DEFAULT_PATIENT_AVATAR_URL } from '../patient-profile-container/patient-left-nav-info';
 import Button from '../shared/library/button/button';
 import UnderlineTab from '../shared/library/underline-tab/underline-tab';
 import UnderlineTabs from '../shared/library/underline-tabs/underline-tabs';
@@ -179,7 +180,7 @@ export class ProgressNotePopup extends React.Component<allProps, IState> {
           <Link className={styles.patientContainer} to={`/patients/${patientId}`}>
             <div
               className={styles.patientPhoto}
-              style={{ backgroundImage: `url('http://bit.ly/2vaOMQJ')` }}
+              style={{ backgroundImage: `url('${DEFAULT_PATIENT_AVATAR_URL}')` }}
             />
             <div className={styles.patientContainerRight}>
               <div className={styles.patientName}>{patientName}</div>

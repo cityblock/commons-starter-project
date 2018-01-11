@@ -11,7 +11,7 @@ import {
 } from '../../graphql/types';
 import { Popup } from '../../shared/popup/popup';
 import { getPatientFullName } from '../../shared/util/patient-name';
-
+import { DEFAULT_PATIENT_AVATAR_URL } from '../patient-left-nav-info';
 import * as styles from './css/quick-call-popup.css';
 
 interface IProps {
@@ -100,7 +100,7 @@ export class QuickCallPopup extends React.Component<allProps, IState> {
             <div className={styles.patientContainer}>
               <div
                 className={styles.patientPhoto}
-                style={{ backgroundImage: `url('http://bit.ly/2vaOMQJ')` }}
+                style={{ backgroundImage: `url('${DEFAULT_PATIENT_AVATAR_URL}')` }}
               />
               <div className={styles.patientContainerRight}>
                 <div className={styles.patientName}>{patientName}</div>

@@ -4,6 +4,7 @@ import { ShortPatientFragment } from '../graphql/types';
 import CareTeamWidget from './care-team-widget';
 import * as styles from './css/patient-profile-left-nav.css';
 import PatientLeftNavInfo from './patient-left-nav-info';
+import { DEFAULT_PATIENT_AVATAR_URL } from './patient-left-nav-info';
 import PatientMedications from './patient-medications';
 
 interface IProps {
@@ -69,7 +70,7 @@ export default class PatientProfileIpadNav extends React.Component<IProps, IStat
           <div className={styles.smallLeftPaneTop}>
             <div
               className={styles.smallPatientPhoto}
-              style={{ backgroundImage: `url('http://bit.ly/2vaOMQJ')` }}
+              style={{ backgroundImage: `url('${DEFAULT_PATIENT_AVATAR_URL}')` }}
             />
             <div className={styles.smallPatientName}>{shortName}</div>
             <div className={profileButtonStyles} onClick={() => this.onClick('profile')} />

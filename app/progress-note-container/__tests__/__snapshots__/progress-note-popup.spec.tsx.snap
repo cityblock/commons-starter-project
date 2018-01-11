@@ -30,7 +30,7 @@ exports[`builder concerns renders progress note popup with templates renders pro
         className="patientPhoto"
         style={
           Object {
-            "backgroundImage": "url('http://bit.ly/2vaOMQJ')",
+            "backgroundImage": "url('https://bit.ly/2Exqf9z')",
           }
         }
       />
@@ -235,7 +235,7 @@ exports[`builder concerns renders progress note popup with templates renders pro
         className="patientPhoto"
         style={
           Object {
-            "backgroundImage": "url('http://bit.ly/2vaOMQJ')",
+            "backgroundImage": "url('https://bit.ly/2Exqf9z')",
           }
         }
       />

@@ -12,6 +12,8 @@ import {
   mockRedoxCreatePatient,
   mockRedoxCreatePatientError,
   mockRedoxTokenFetch,
+  setupPatientsNewToCareTeam,
+  setupPatientsWithPendingSuggestions,
   setupUrgentTasks,
 } from '../../spec-helpers';
 import schema from '../make-executable-schema';
@@ -393,6 +395,56 @@ describe('patient', () => {
           id: setup.patient5.id,
           firstName: setup.patient5.firstName,
         });
+      });
+    });
+  });
+
+  it('gets patients that are new to user\'s care team', async () => {
+    await transaction(Patient.knex(), async txn => {
+      const setup = await setupPatientsNewToCareTeam(txn);
+
+      const query = `{
+        patientsNewToCareTeam(pageNumber: 0, pageSize: 10) {
+          edges { node { id, firstName }}
+          totalCount
+        }
+      }`;
+
+      const result = await graphql(schema, query, null, {
+        userRole,
+        userId: setup.user.id,
+        txn,
+      });
+
+      expect(result.data!.patientsNewToCareTeam.totalCount).toBe(1);
+      expect(result.data!.patientsNewToCareTeam.edges[0].node).toMatchObject({
+        id: setup.patient1.id,
+        firstName: setup.patient1.firstName,
+      });
+    });
+  });
+
+  it('gets patients that have pending MAP suggestions', async () => {
+    await transaction(Patient.knex(), async txn => {
+      const setup = await setupPatientsWithPendingSuggestions(txn);
+
+      const query = `{
+        patientsWithPendingSuggestions(pageNumber: 0, pageSize: 10) {
+          edges { node { id, firstName }}
+          totalCount
+        }
+      }`;
+
+      const result = await graphql(schema, query, null, {
+        userRole,
+        userId: setup.user.id,
+        txn,
+      });
+
+      expect(result.data!.patientsWithPendingSuggestions.totalCount).toBe(1);
+      expect(result.data!.patientsWithPendingSuggestions.edges[0].node).toMatchObject({
+        id: setup.patient1.id,
+        firstName: setup.patient1.firstName,
       });
     });
   });

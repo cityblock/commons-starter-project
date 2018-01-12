@@ -1708,6 +1708,10 @@ type RootQueryType {
   patientSearch(query: String!, pageNumber: Int!, pageSize: Int!): PatientSearchResultEdges
   # Patient dashboard - tasks due and notifications
   patientsWithUrgentTasks(pageNumber: Int!, pageSize: Int!): PatientForDashboardEdges
+  # Patient dashboard - new to user care team
+  patientsNewToCareTeam(pageNumber: Int!, pageSize: Int!): PatientForDashboardEdges
+  # Patient dashboard - pending MAP suggestions
+  patientsWithPendingSuggestions(pageNumber: Int!, pageSize: Int!): PatientForDashboardEdges
   # A single clinic
   clinic(clinicId: ID!): Clinic
   # Clinics

@@ -54,6 +54,14 @@ declare module 'schema' {
   */
     patientsWithUrgentTasks: IPatientForDashboardEdges | null;
     /**
+    description: Patient dashboard - new to user care team
+  */
+    patientsNewToCareTeam: IPatientForDashboardEdges | null;
+    /**
+    description: Patient dashboard - pending MAP suggestions
+  */
+    patientsWithPendingSuggestions: IPatientForDashboardEdges | null;
+    /**
     description: A single clinic
   */
     clinic: IClinic | null;
@@ -368,7 +376,7 @@ declare module 'schema' {
   }
 
 
-  type IUserRoleEnum = 'physician' | 'nurseCareManager' | 'healthCoach' | 'familyMember' | 'anonymousUser' | 'admin';
+  type IUserRoleEnum = 'physician' | 'nurseCareManager' | 'primaryCarePhysician' | 'communityHealthPartner' | 'psychiatrist' | 'healthCoach' | 'familyMember' | 'anonymousUser' | 'admin';
 
 
   type IUserOrderOptionsEnum = 'createdAtDesc' | 'createdAtAsc' | 'lastLoginAtDesc' | 'lastLoginAtAsc' | 'updatedAtDesc' | 'updatedAtAsc' | 'emailAsc';

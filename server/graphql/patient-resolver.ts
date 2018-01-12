@@ -199,3 +199,53 @@ export async function resolvePatientsWithUrgentTasks(
     totalCount: patients.total,
   };
 }
+
+export async function resolvePatientsNewToCareTeam(
+  root: any,
+  { pageNumber, pageSize }: IPaginationOptions,
+  { userRole, userId, txn }: IContext,
+): Promise<IPatientForDashboardEdges> {
+  await accessControls.isAllowedForUser(userRole, 'view', 'patient');
+  checkUserLoggedIn(userId);
+
+  const patients = await Patient.getPatientsNewToCareTeam({ pageNumber, pageSize }, userId!, txn);
+
+  const patientEdges = patients.results.map((patient, i) => formatRelayEdge(patient, patient.id));
+
+  const hasPreviousPage = pageNumber !== 0;
+  const hasNextPage = (pageNumber + 1) * pageSize < patients.total;
+
+  return {
+    edges: patientEdges,
+    pageInfo: {
+      hasPreviousPage,
+      hasNextPage,
+    },
+    totalCount: patients.total,
+  };
+}
+
+export async function resolvePatientsWithPendingSuggestions(
+  root: any,
+  { pageNumber, pageSize }: IPaginationOptions,
+  { userRole, userId, txn }: IContext,
+): Promise<IPatientForDashboardEdges> {
+  await accessControls.isAllowedForUser(userRole, 'view', 'patient');
+  checkUserLoggedIn(userId);
+
+  const patients = await Patient.getPatientsWithPendingSuggestions({ pageNumber, pageSize }, userId!, txn);
+
+  const patientEdges = patients.results.map((patient, i) => formatRelayEdge(patient, patient.id));
+
+  const hasPreviousPage = pageNumber !== 0;
+  const hasNextPage = (pageNumber + 1) * pageSize < patients.total;
+
+  return {
+    edges: patientEdges,
+    pageInfo: {
+      hasPreviousPage,
+      hasNextPage,
+    },
+    totalCount: patients.total,
+  };
+}

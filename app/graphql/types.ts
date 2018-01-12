@@ -1939,6 +1939,56 @@ export interface getPatientQuery {
   } | null,
 };
 
+export interface getPatientsNewToCareTeamQueryVariables {
+  pageNumber: number,
+  pageSize: number,
+};
+
+export interface getPatientsNewToCareTeamQuery {
+  // Patient dashboard - new to user care team
+  patientsNewToCareTeam:  {
+    edges:  Array< {
+      node:  {
+        id: string,
+        firstName: string,
+        lastName: string,
+        dateOfBirth: string | null,
+        gender: string | null,
+      } | null,
+    } >,
+    pageInfo:  {
+      hasPreviousPage: boolean,
+      hasNextPage: boolean,
+    },
+    totalCount: number,
+  } | null,
+};
+
+export interface getPatientsWithPendingSuggestionsQueryVariables {
+  pageNumber: number,
+  pageSize: number,
+};
+
+export interface getPatientsWithPendingSuggestionsQuery {
+  // Patient dashboard - pending MAP suggestions
+  patientsWithPendingSuggestions:  {
+    edges:  Array< {
+      node:  {
+        id: string,
+        firstName: string,
+        lastName: string,
+        dateOfBirth: string | null,
+        gender: string | null,
+      } | null,
+    } >,
+    pageInfo:  {
+      hasPreviousPage: boolean,
+      hasNextPage: boolean,
+    },
+    totalCount: number,
+  } | null,
+};
+
 export interface getPatientsWithUrgentTasksQueryVariables {
   pageNumber: number,
   pageSize: number,

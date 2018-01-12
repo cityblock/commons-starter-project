@@ -1961,7 +1961,7 @@ export interface getPatientsNewToCareTeamQuery {
       hasNextPage: boolean,
     },
     totalCount: number,
-  } | null,
+  },
 };
 
 export interface getPatientsWithPendingSuggestionsQueryVariables {
@@ -1986,7 +1986,7 @@ export interface getPatientsWithPendingSuggestionsQuery {
       hasNextPage: boolean,
     },
     totalCount: number,
-  } | null,
+  },
 };
 
 export interface getPatientsWithUrgentTasksQueryVariables {
@@ -2011,7 +2011,7 @@ export interface getPatientsWithUrgentTasksQuery {
       hasNextPage: boolean,
     },
     totalCount: number,
-  } | null,
+  },
 };
 
 export interface getProgressNoteActivityForProgressNoteQueryVariables {

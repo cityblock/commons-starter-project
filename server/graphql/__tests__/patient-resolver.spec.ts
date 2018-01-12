@@ -399,7 +399,7 @@ describe('patient', () => {
     });
   });
 
-  it('gets patients that are new to user\'s care team', async () => {
+  it("gets patients that are new to user's care team", async () => {
     await transaction(Patient.knex(), async txn => {
       const setup = await setupPatientsNewToCareTeam(txn);
 

@@ -1,6 +1,7 @@
 import { shallow } from 'enzyme';
 import * as React from 'react';
 import { Link } from 'react-router-dom';
+import PatientAge from '../../shared/library/patient-age/patient-age';
 import PatientSearchResult from '../result';
 
 describe('Patient Search Result Component', () => {
@@ -48,10 +49,10 @@ describe('Patient Search Result Component', () => {
     expect(wrapper.find('.memberId').length).toBe(1);
   });
 
-  it('renders patient date of birth', () => {
-    expect(wrapper.find('.dateOfBirth').length).toBe(1);
-    expect(wrapper.find('.dateOfBirth').text()).toBe('12/01/2000(17 F)');
-    expect(wrapper.find('.ageDetail').text()).toBe('(17 F)');
+  it('renders patient age information', () => {
+    expect(wrapper.find(PatientAge).length).toBe(1);
+    expect(wrapper.find(PatientAge).props().dateOfBirth).toBe(dateOfBirth);
+    expect(wrapper.find(PatientAge).props().gender).toBe(gender);
   });
 
   it('renders patient address', () => {

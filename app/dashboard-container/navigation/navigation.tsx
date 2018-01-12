@@ -39,10 +39,10 @@ const DashboardNavigation: React.StatelessComponent<IProps> = (props: IProps) =>
           routeBase={ROUTE_BASE}
           icon="notifications"
           iconStyles={styles.redIcon}
-          noDivider={selected === 'team'}
+          noDivider={selected === 'new'}
         />
         <NavigationItem
-          name="team"
+          name="new"
           selected={selected}
           routeBase={ROUTE_BASE}
           icon="addCircle"

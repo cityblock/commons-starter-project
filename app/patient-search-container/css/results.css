@@ -20,8 +20,7 @@
   min-width: 200px;
 }
 
-.status,
-.dateOfBirth {
+.status {
   min-width: 125px;
 }
 
@@ -31,6 +30,10 @@
 
 .address {
   min-width: 250px;
+}
+
+.dateOfBirth {
+  min-width: 125px;
 }
 
 .result {
@@ -49,10 +52,6 @@
   font-weight: var(--default-font-weight);
 }
 
-.result span {
-  font-weight: var(--roboto-medium-weight);
-}
-
 .result p {
   margin: 0;
   color: var(--black-color);
@@ -68,12 +67,6 @@
 .headerContainer h3:last-child,
 .result p:last-child {
   margin-right: 0;
-}
-
-.ageDetail {
-  margin-left: 4px;
-  color: var(--gray-font-color);
-  font-weight: var(--default-font-weight);
 }
 
 .userCareTeam {

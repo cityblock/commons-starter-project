@@ -1,8 +1,8 @@
 import * as React from 'react';
 import { Link } from 'react-router-dom';
 import { FullPatientSearchResultFragment } from '../graphql/types';
-import { formatAgeDetails, formatDateOfBirth } from '../shared/helpers/format-helpers';
 import { formatFullName } from '../shared/helpers/format-helpers';
+import PatientAge from '../shared/library/patient-age/patient-age';
 import { formatSearchText } from '../shared/library/search/helpers';
 import * as styles from './css/results.css';
 
@@ -22,10 +22,7 @@ const PatientSearchResult: React.StatelessComponent<IProps> = ({ searchResult, q
       </h4>
       <p className={styles.status}>Enrolled</p>
       <p className={styles.memberId}>CBH-1234567</p>
-      <p className={styles.dateOfBirth}>
-        {formatDateOfBirth(dateOfBirth)}
-        <span className={styles.ageDetail}>{formatAgeDetails(dateOfBirth, gender)}</span>
-      </p>
+      <PatientAge dateOfBirth={dateOfBirth} gender={gender} />
       <p className={styles.address}>830 Gaston Crescent, Apt 5A, Queens, NY</p>
     </Link>
   );

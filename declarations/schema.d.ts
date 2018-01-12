@@ -52,15 +52,15 @@ declare module 'schema' {
     /**
     description: Patient dashboard - tasks due and notifications
   */
-    patientsWithUrgentTasks: IPatientForDashboardEdges | null;
+    patientsWithUrgentTasks: IPatientForDashboardEdges;
     /**
     description: Patient dashboard - new to user care team
   */
-    patientsNewToCareTeam: IPatientForDashboardEdges | null;
+    patientsNewToCareTeam: IPatientForDashboardEdges;
     /**
     description: Patient dashboard - pending MAP suggestions
   */
-    patientsWithPendingSuggestions: IPatientForDashboardEdges | null;
+    patientsWithPendingSuggestions: IPatientForDashboardEdges;
     /**
     description: A single clinic
   */

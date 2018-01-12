@@ -5,7 +5,3 @@
   overflow-y: scroll;
   -webkit-overflow-scrolling: touch;
 }
-
-.empty {
-  margin: var(--medium-gutter);
-}

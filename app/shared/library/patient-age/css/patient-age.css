@@ -1,0 +1,19 @@
+@import '../../../css/sizes';
+
+.dateOfBirth {
+  margin: 0;
+  color: var(--black-color);
+  font-size: var(--small-font-size);
+  line-height: var(--small-font-line-height);
+  min-width: 125px;
+}
+
+.dateOfBirth span {
+  font-weight: var(--roboto-medium-weight);
+}
+
+.ageDetail {
+  margin-left: 4px;
+  color: var(--gray-font-color);
+  font-weight: var(--default-font-weight);
+}

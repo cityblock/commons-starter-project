@@ -233,7 +233,11 @@ export async function resolvePatientsWithPendingSuggestions(
   await accessControls.isAllowedForUser(userRole, 'view', 'patient');
   checkUserLoggedIn(userId);
 
-  const patients = await Patient.getPatientsWithPendingSuggestions({ pageNumber, pageSize }, userId!, txn);
+  const patients = await Patient.getPatientsWithPendingSuggestions(
+    { pageNumber, pageSize },
+    userId!,
+    txn,
+  );
 
   const patientEdges = patients.results.map((patient, i) => formatRelayEdge(patient, patient.id));
 

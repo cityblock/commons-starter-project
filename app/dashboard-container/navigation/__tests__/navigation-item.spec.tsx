@@ -7,7 +7,7 @@ import NavigationItem, { Divider } from '../navigation-item';
 
 describe('Dashboard Navigation Item', () => {
   const name = 'tasks';
-  const selected = 'team';
+  const selected = 'new';
   const icon = 'notifications';
   const iconStyles = 'houseStark';
   const routeBase = '/nymeria';

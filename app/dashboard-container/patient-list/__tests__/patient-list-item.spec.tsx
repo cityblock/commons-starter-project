@@ -3,6 +3,7 @@ import * as React from 'react';
 import { formatFullName } from '../../../shared/helpers/format-helpers';
 import Avatar from '../../../shared/library/avatar/avatar';
 import Icon from '../../../shared/library/icon/icon';
+import PatientAge from '../../../shared/library/patient-age/patient-age';
 import { patient } from '../../../shared/util/test-data';
 import PatientTaskCount from '../../tasks/patient-task-count';
 import { PatientListItem } from '../patient-list-item';
@@ -45,6 +46,12 @@ describe('Dashboard Patient List Item', () => {
     expect(wrapper.find(Icon).props().className).toBe('arrow');
   });
 
+  it('renders patient age information', () => {
+    expect(wrapper.find(PatientAge).length).toBe(1);
+    expect(wrapper.find(PatientAge).props().dateOfBirth).toBe(patient.dateOfBirth);
+    expect(wrapper.find(PatientAge).props().gender).toBe(patient.gender);
+  });
+
   it('does not render task count if not on patient task view', () => {
     expect(wrapper.find(PatientTaskCount).length).toBe(0);
   });
@@ -57,6 +64,8 @@ describe('Dashboard Patient List Item', () => {
     expect(wrapper.find(PatientTaskCount).length).toBe(1);
     expect(wrapper.find(PatientTaskCount).props().tasksDueCount).toBe(tasksDueCount);
     expect(wrapper.find(PatientTaskCount).props().notificationsCount).toBe(notificationsCount);
+
+    expect(wrapper.find(PatientAge).length).toBe(0);
   });
 
   it('applies sticky scroll styles if patient selected', () => {

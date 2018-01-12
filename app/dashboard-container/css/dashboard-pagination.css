@@ -3,3 +3,7 @@
 .pages {
   width: calc(100% - 320px);
 }
+
+.empty {
+  margin: var(--medium-gutter);
+}

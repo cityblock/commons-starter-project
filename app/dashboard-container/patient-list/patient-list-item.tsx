@@ -7,6 +7,7 @@ import { formatFullName } from '../../shared/helpers/format-helpers';
 import { getActiveMapRoute } from '../../shared/helpers/route-helpers';
 import Avatar from '../../shared/library/avatar/avatar';
 import Icon from '../../shared/library/icon/icon';
+import PatientAge from '../../shared/library/patient-age/patient-age';
 import PatientTaskCount from '../tasks/patient-task-count';
 import * as styles from './css/patient-list-item.css';
 
@@ -50,12 +51,14 @@ export const PatientListItem: React.StatelessComponent<allProps> = (props: allPr
     containerProps.onClick = redirectToPatient;
   }
 
-  const taskCount = !!taskView ? (
+  const itemBody = !!taskView ? (
     <PatientTaskCount
       tasksDueCount={tasksDueCount as number | null}
       notificationsCount={notificationsCount as number | null}
     />
-  ) : null;
+  ) : (
+    <PatientAge dateOfBirth={patient.dateOfBirth} gender={patient.gender} />
+  );
 
   return (
     <div {...containerProps}>
@@ -65,7 +68,7 @@ export const PatientListItem: React.StatelessComponent<allProps> = (props: allPr
       </div>
       <div className={styles.info}>
         <p>CBH-1234567</p>
-        {taskCount}
+        {itemBody}
         <div onClick={redirectToPatient} className={styles.profileLink}>
           <Icon name="keyboardArrowRight" className={styles.arrow} />
         </div>

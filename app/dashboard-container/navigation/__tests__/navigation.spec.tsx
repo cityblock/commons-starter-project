@@ -5,7 +5,7 @@ import DashboardNavigation, { ROUTE_BASE } from '../navigation';
 import NavigationItem from '../navigation-item';
 
 describe('Dashboard Navigation', () => {
-  const selected = 'team';
+  const selected = 'new';
   const wrapper = shallow(<DashboardNavigation selected={selected} />);
 
   it('renders container', () => {
@@ -61,7 +61,7 @@ describe('Dashboard Navigation', () => {
         .find(NavigationItem)
         .at(1)
         .props().name,
-    ).toBe('team');
+    ).toBe('new');
     expect(
       wrapper
         .find(NavigationItem)

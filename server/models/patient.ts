@@ -269,10 +269,14 @@ export default class Patient extends BaseModel {
           WHERE care_team."userId" = ?
             AND care_team."createdAt" > now() - interval \'30 days\'
             AND care_team."deletedAt" IS NULL
-          ORDER BY care_team."createdAt" DESC
         )`,
         userId,
       )
+      .joinRaw(
+        'INNER JOIN care_team ON care_team."patientId" = patient.id AND care_team."userId" = ?',
+        userId,
+      )
+      .orderBy('care_team.createdAt', 'DESC')
       .page(pageNumber, pageSize);
 
     return patientsResult;

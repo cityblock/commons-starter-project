@@ -152,11 +152,14 @@ export default class RiskAreaAssessmentSubmission extends BaseModel {
       submission.id,
       txn,
     );
-    return await this.get(riskAreaAssessmentSubmissionId);
+    return await this.get(riskAreaAssessmentSubmissionId, txn);
   }
 
-  static async get(riskAreaAssessmentSubmissionId: string): Promise<RiskAreaAssessmentSubmission> {
-    const riskAreaAssessmentSubmission = await this.query()
+  static async get(
+    riskAreaAssessmentSubmissionId: string,
+    txn?: Transaction,
+  ): Promise<RiskAreaAssessmentSubmission> {
+    const riskAreaAssessmentSubmission = await this.query(txn)
       .eager(EAGER_QUERY)
       .findOne({ id: riskAreaAssessmentSubmissionId, deletedAt: null });
 
@@ -173,8 +176,9 @@ export default class RiskAreaAssessmentSubmission extends BaseModel {
     riskAreaId: string,
     patientId: string,
     completed: boolean,
+    txn?: Transaction,
   ): Promise<RiskAreaAssessmentSubmission | null> {
-    const query = this.query()
+    const query = this.query(txn)
       .eager(EAGER_QUERY)
       .where({ patientId, riskAreaId });
 
@@ -194,12 +198,13 @@ export default class RiskAreaAssessmentSubmission extends BaseModel {
 
   static async delete(
     riskAreaAssessmentSubmissionId: string,
+    txn?: Transaction,
   ): Promise<RiskAreaAssessmentSubmission> {
-    await this.query()
+    await this.query(txn)
       .where({ id: riskAreaAssessmentSubmissionId, deletedAt: null })
       .patch({ deletedAt: new Date().toISOString() });
 
-    const riskAreaAssessmentSubmission = await this.query().findById(
+    const riskAreaAssessmentSubmission = await this.query(txn).findById(
       riskAreaAssessmentSubmissionId,
     );
     if (!riskAreaAssessmentSubmission) {

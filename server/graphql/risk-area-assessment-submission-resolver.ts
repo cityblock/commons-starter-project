@@ -1,3 +1,4 @@
+import { transaction } from 'objection';
 import {
   IRiskAreaAssessmentSubmissionCompleteInput,
   IRiskAreaAssessmentSubmissionCreateInput,
@@ -28,14 +29,17 @@ export async function riskAreaAssessmentSubmissionCreate(
   { input }: IRiskAreaAssessmentSubmissionCreateArgs,
   context: IContext,
 ) {
-  const { userRole, userId } = context;
+  const { userRole, userId, txn } = context;
   await accessControls.isAllowed(userRole, 'create', 'riskAreaAssessmentSubmission');
   checkUserLoggedIn(userId);
 
-  return await RiskAreaAssessmentSubmission.autoOpenIfRequired({
-    ...input,
-    userId: userId!,
-  });
+  return await RiskAreaAssessmentSubmission.autoOpenIfRequired(
+    {
+      ...input,
+      userId: userId!,
+    },
+    txn,
+  );
 }
 
 export async function riskAreaAssessmentSubmissionComplete(
@@ -43,27 +47,33 @@ export async function riskAreaAssessmentSubmissionComplete(
   { input }: IRiskAreaAssessmentSubmissionCompleteArgs,
   context: IContext,
 ) {
-  const { userRole, userId } = context;
-  await accessControls.isAllowed(userRole, 'create', 'riskAreaAssessmentSubmission');
-  checkUserLoggedIn(userId);
+  return transaction(context.txn || RiskAreaAssessmentSubmission.knex(), async newTxn => {
+    const { userRole, userId } = context;
 
-  return await RiskAreaAssessmentSubmission.complete(input.riskAreaAssessmentSubmissionId);
+    await accessControls.isAllowed(userRole, 'create', 'riskAreaAssessmentSubmission');
+    checkUserLoggedIn(userId);
+
+    return await RiskAreaAssessmentSubmission.complete(
+      input.riskAreaAssessmentSubmissionId,
+      newTxn,
+    );
+  });
 }
 
 export async function resolveRiskAreaAssessmentSubmission(
   root: any,
   args: { riskAreaAssessmentSubmissionId: string },
-  { db, userRole }: IContext,
+  { db, userRole, txn }: IContext,
 ) {
   await accessControls.isAllowed(userRole, 'view', 'riskAreaAssessmentSubmission');
 
-  return await RiskAreaAssessmentSubmission.get(args.riskAreaAssessmentSubmissionId);
+  return await RiskAreaAssessmentSubmission.get(args.riskAreaAssessmentSubmissionId, txn);
 }
 
 export async function resolveRiskAreaAssessmentSubmissionForPatient(
   root: any,
   args: { riskAreaId: string; patientId: string; completed: boolean },
-  { db, userRole }: IContext,
+  { db, userRole, txn }: IContext,
 ) {
   await accessControls.isAllowed(userRole, 'view', 'riskAreaAssessmentSubmission');
 
@@ -71,5 +81,6 @@ export async function resolveRiskAreaAssessmentSubmissionForPatient(
     args.riskAreaId,
     args.patientId,
     args.completed,
+    txn,
   );
 }

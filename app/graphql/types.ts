@@ -556,7 +556,7 @@ export interface getClinicsQuery {
         name: string,
       },
     } >,
-  } | null,
+  },
 };
 
 export interface computedFieldCreateMutationVariables {
@@ -866,7 +866,7 @@ export interface getComputedFieldQuery {
     createdAt: string,
     updatedAt: string,
     deletedAt: string | null,
-  } | null,
+  },
 };
 
 export interface getComputedFieldsQueryVariables {
@@ -883,7 +883,7 @@ export interface getComputedFieldsQuery {
     createdAt: string,
     updatedAt: string,
     deletedAt: string | null,
-  } | null > | null,
+  } | null >,
 };
 
 export interface getConcernSuggestionsForAnswerQueryVariables {
@@ -898,7 +898,7 @@ export interface getConcernSuggestionsForAnswerQuery {
     createdAt: string,
     updatedAt: string,
     deletedAt: string | null,
-  } | null > | null,
+  } | null >,
 };
 
 export interface getConcernQueryVariables {
@@ -913,7 +913,7 @@ export interface getConcernQuery {
     createdAt: string,
     updatedAt: string,
     deletedAt: string | null,
-  } | null,
+  },
 };
 
 export interface getConcernsQueryVariables {
@@ -928,7 +928,7 @@ export interface getConcernsQuery {
     createdAt: string,
     updatedAt: string,
     deletedAt: string | null,
-  } | null > | null,
+  } | null >,
 };
 
 export interface getCurrentUserQuery {
@@ -1044,7 +1044,7 @@ export interface getEventNotificationsForCurrentUserQuery {
       hasPreviousPage: boolean,
       hasNextPage: boolean,
     },
-  } | null,
+  },
 };
 
 export interface getEventNotificationsForUserTaskQueryVariables {
@@ -1085,7 +1085,7 @@ export interface getGoalSuggestionTemplateQuery {
     createdAt: string,
     updatedAt: string,
     deletedAt: string | null,
-  } | null,
+  },
 };
 
 export interface getGoalSuggestionTemplatesQueryVariables {
@@ -1113,7 +1113,7 @@ export interface getGoalSuggestionTemplatesQuery {
     createdAt: string,
     updatedAt: string,
     deletedAt: string | null,
-  } | null > | null,
+  } | null >,
 };
 
 export interface getGoalSuggestionsForAnswerQueryVariables {
@@ -1141,7 +1141,7 @@ export interface getGoalSuggestionsForAnswerQuery {
     createdAt: string,
     updatedAt: string,
     deletedAt: string | null,
-  } | null > | null,
+  } | null >,
 };
 
 export interface getPatientAnswersQueryVariables {
@@ -1212,7 +1212,7 @@ export interface getPatientAnswersQuery {
       title: string,
     } | null,
     patientScreeningToolSubmissionId: string | null,
-  } > | null,
+  } >,
 };
 
 export interface getPatientCarePlanSuggestionsQueryVariables {
@@ -1289,7 +1289,7 @@ export interface getPatientCarePlanSuggestionsQuery {
     dismissedAt: string | null,
     acceptedAt: string | null,
     patientScreeningToolSubmissionId: string | null,
-  } | null > | null,
+  } | null >,
 };
 
 export interface getPatientCarePlanQueryVariables {
@@ -1442,7 +1442,7 @@ export interface getPatientCarePlanQuery {
       updatedAt: string,
       deletedAt: string | null,
     } >,
-  } | null,
+  },
 };
 
 export interface getPatientCareTeamQueryVariables {
@@ -1463,7 +1463,7 @@ export interface getPatientCareTeamQuery {
     googleProfileImageUrl: string | null,
     createdAt: string,
     updatedAt: string,
-  } | null > | null,
+  } | null >,
 };
 
 export interface getPatientPanelQueryVariables {
@@ -1493,7 +1493,7 @@ export interface getPatientPanelQuery {
       hasPreviousPage: boolean,
       hasNextPage: boolean,
     },
-  } | null,
+  },
 };
 
 export interface getPatientRiskScoreForRiskAreaQueryVariables {
@@ -1506,7 +1506,7 @@ export interface getPatientRiskScoreForRiskAreaQuery {
   patientRiskAreaRiskScore:  {
     score: number,
     forceHighRisk: boolean,
-  } | null,
+  },
 };
 
 export interface getPatientRiskSummaryForRiskAreaQueryVariables {
@@ -1520,7 +1520,7 @@ export interface getPatientRiskSummaryForRiskAreaQuery {
     summary: Array< string >,
     started: boolean,
     lastUpdated: string | null,
-  } | null,
+  },
 };
 
 export interface getPatientScratchPadQueryVariables {
@@ -1531,7 +1531,7 @@ export interface getPatientScratchPadQuery {
   // Patient scratch pad
   patientScratchPad:  {
     text: string | null,
-  } | null,
+  },
 };
 
 export interface getPatientScreeningToolSubmissionForPatientAndScreeningToolQueryVariables {
@@ -1692,7 +1692,7 @@ export interface getPatientScreeningToolSubmissionsFor360Query {
       description: string,
       riskAdjustmentType: RiskAdjustmentTypeOptions,
     } | null,
-  } > | null,
+  } >,
 };
 
 export interface getPatientScreeningToolSubmissionQueryVariables {
@@ -1820,7 +1820,7 @@ export interface getPatientScreeningToolSubmissionQuery {
       id: string,
       description: string,
     } | null,
-  } | null,
+  },
 };
 
 export interface getPatientSearchQueryVariables {
@@ -1847,7 +1847,7 @@ export interface getPatientSearchQuery {
       hasNextPage: boolean,
     },
     totalCount: number,
-  } | null,
+  },
 };
 
 export interface getPatientTasksQueryVariables {
@@ -1915,7 +1915,7 @@ export interface getPatientTasksQuery {
       hasPreviousPage: boolean,
       hasNextPage: boolean,
     },
-  } | null,
+  },
 };
 
 export interface getPatientQueryVariables {
@@ -1936,7 +1936,7 @@ export interface getPatientQuery {
     createdAt: string,
     consentToText: boolean | null,
     consentToCall: boolean | null,
-  } | null,
+  },
 };
 
 export interface getPatientsNewToCareTeamQueryVariables {
@@ -2446,7 +2446,7 @@ export interface getProgressNoteActivityForProgressNoteQuery {
       updatedAt: string,
       deletedAt: string | null,
     } >,
-  } | null,
+  },
 };
 
 export interface getProgressNoteTemplateQueryVariables {
@@ -2460,7 +2460,7 @@ export interface getProgressNoteTemplateQuery {
     title: string,
     createdAt: string,
     deletedAt: string | null,
-  } | null,
+  },
 };
 
 export interface getProgressNoteTemplatesQuery {
@@ -2470,7 +2470,7 @@ export interface getProgressNoteTemplatesQuery {
     title: string,
     createdAt: string,
     deletedAt: string | null,
-  } | null > | null,
+  } | null >,
 };
 
 export interface getProgressNotesForCurrentUserQueryVariables {
@@ -2532,7 +2532,7 @@ export interface getProgressNotesForCurrentUserQuery {
       createdAt: string,
       deletedAt: string | null,
     } | null,
-  } | null > | null,
+  } | null >,
 };
 
 export interface getProgressNotesForPatientQueryVariables {
@@ -2595,7 +2595,7 @@ export interface getProgressNotesForPatientQuery {
       createdAt: string,
       deletedAt: string | null,
     } | null,
-  } | null > | null,
+  } | null >,
 };
 
 export interface getQuestionAnswersQueryVariables {
@@ -2731,7 +2731,7 @@ export interface getQuestionQuery {
       updatedAt: string,
       deletedAt: string | null,
     } | null,
-  } | null,
+  },
 };
 
 export interface getQuestionsQueryVariables {
@@ -2990,7 +2990,7 @@ export interface getRiskAreaAssessmentSubmissionQuery {
       acceptedAt: string | null,
       patientScreeningToolSubmissionId: string | null,
     } >,
-  } | null,
+  },
 };
 
 export interface getRiskAreaGroupForPatientQueryVariables {
@@ -3085,7 +3085,7 @@ export interface getRiskAreaQuery {
       id: string,
       title: string,
     },
-  } | null,
+  },
 };
 
 export interface getRiskAreasQuery {
@@ -3104,7 +3104,7 @@ export interface getRiskAreasQuery {
       id: string,
       title: string,
     },
-  } | null > | null,
+  } | null >,
 };
 
 export interface getScreeningToolQueryVariables {
@@ -3185,7 +3185,7 @@ export interface getScreeningToolQuery {
     createdAt: string,
     updatedAt: string,
     deletedAt: string | null,
-  } | null,
+  },
 };
 
 export interface getScreeningToolsForRiskAreaQueryVariables {
@@ -3266,7 +3266,7 @@ export interface getScreeningToolsForRiskAreaQuery {
     createdAt: string,
     updatedAt: string,
     deletedAt: string | null,
-  } | null > | null,
+  } | null >,
 };
 
 export interface getScreeningToolsQuery {
@@ -3343,7 +3343,7 @@ export interface getScreeningToolsQuery {
     createdAt: string,
     updatedAt: string,
     deletedAt: string | null,
-  } | null > | null,
+  } | null >,
 };
 
 export interface getTaskCommentQueryVariables {
@@ -3371,7 +3371,7 @@ export interface getTaskCommentQuery {
     taskId: string,
     createdAt: string,
     updatedAt: string | null,
-  } | null,
+  },
 };
 
 export interface getTaskCommentsQueryVariables {
@@ -3409,7 +3409,7 @@ export interface getTaskCommentsQuery {
       hasPreviousPage: boolean,
       hasNextPage: boolean,
     },
-  } | null,
+  },
 };
 
 export interface getTaskQueryVariables {
@@ -3466,7 +3466,7 @@ export interface getTaskQuery {
         },
       } | null,
     },
-  } | null,
+  },
 };
 
 export interface getTasksDueSoonForPatientQueryVariables {
@@ -3542,7 +3542,7 @@ export interface getUsersQuery {
       hasPreviousPage: boolean,
       hasNextPage: boolean,
     },
-  } | null,
+  },
 };
 
 export interface goalSuggestionCreateMutationVariables {
@@ -6397,7 +6397,7 @@ export interface getTasksForCurrentUserQuery {
       hasPreviousPage: boolean,
       hasNextPage: boolean,
     },
-  } | null,
+  },
 };
 
 export interface userCreateMutationVariables {

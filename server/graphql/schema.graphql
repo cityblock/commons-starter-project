@@ -1691,21 +1691,21 @@ type RootMutationType {
 
 type RootQueryType {
   # A single User
-  user(userId: ID!): User
+  user(userId: ID!): User!
   # All Users (admin only)
-  users(pageNumber: Int, pageSize: Int, hasLoggedIn: Boolean, orderBy: UserOrderOptions): UserEdges
+  users(pageNumber: Int, pageSize: Int, hasLoggedIn: Boolean, orderBy: UserOrderOptions): UserEdges!
   # List of patients the user is on the care team for (their 'patient panel')
-  userPatientPanel(pageNumber: Int, pageSize: Int, userId: ID): PatientEdges
+  userPatientPanel(pageNumber: Int, pageSize: Int, userId: ID): PatientEdges!
   # The current User
   currentUser: User
   # A single Patient
-  patient(patientId: ID!): Patient
+  patient(patientId: ID!): Patient!
   # Users on a care team
-  patientCareTeam(patientId: ID!): [User]
+  patientCareTeam(patientId: ID!): [User]!
   # Patient scratch pad
-  patientScratchPad(patientId: ID!): PatientScratchPad
+  patientScratchPad(patientId: ID!): PatientScratchPad!
   # Patient search
-  patientSearch(query: String!, pageNumber: Int!, pageSize: Int!): PatientSearchResultEdges
+  patientSearch(query: String!, pageNumber: Int!, pageSize: Int!): PatientSearchResultEdges!
   # Patient dashboard - tasks due and notifications
   patientsWithUrgentTasks(pageNumber: Int!, pageSize: Int!): PatientForDashboardEdges!
   # Patient dashboard - new to user care team
@@ -1713,42 +1713,42 @@ type RootQueryType {
   # Patient dashboard - pending MAP suggestions
   patientsWithPendingSuggestions(pageNumber: Int!, pageSize: Int!): PatientForDashboardEdges!
   # A single clinic
-  clinic(clinicId: ID!): Clinic
+  clinic(clinicId: ID!): Clinic!
   # Clinics
-  clinics(pageNumber: Int, pageSize: Int): ClinicEdges
+  clinics(pageNumber: Int, pageSize: Int): ClinicEdges!
   # Patient encounters
-  patientEncounters(patientId: ID!): [PatientEncounter]
+  patientEncounters(patientId: ID!): [PatientEncounter]!
   # Task
-  task(taskId: ID!): Task
+  task(taskId: ID!): Task!
   # Patient's Tasks
   tasksForPatient(
     patientId: ID!
     pageNumber: Int
     pageSize: Int
     orderBy: TaskOrderOptions
-  ): TaskEdges
+  ): TaskEdges!
   # Current user's Tasks
-  tasksForCurrentUser(pageNumber: Int, pageSize: Int, orderBy: TaskOrderOptions): TaskEdges
+  tasksForCurrentUser(pageNumber: Int, pageSize: Int, orderBy: TaskOrderOptions): TaskEdges!
   # Tasks due soon for patient - in dashboard
   tasksDueSoonForPatient(patientId: ID!): [Task!]!
   # Tasks with notifications for patient - in dashboard
   tasksWithNotificationsForPatient(patientId: ID!): [Task!]!
   # List of task comments
-  taskComments(pageNumber: Int, pageSize: Int, taskId: ID!): TaskCommentEdges
+  taskComments(pageNumber: Int, pageSize: Int, taskId: ID!): TaskCommentEdges!
   # Single task comment
-  taskComment(taskCommentId: ID!): TaskComment
+  taskComment(taskCommentId: ID!): TaskComment!
   # RiskAreaGroup
-  riskAreaGroup(riskAreaGroupId: ID!): RiskAreaGroup
+  riskAreaGroup(riskAreaGroupId: ID!): RiskAreaGroup!
   # Risk Area Group with associated patient answers
   riskAreaGroupForPatient(riskAreaGroupId: ID!, patientId: ID!): RiskAreaGroupForPatient!
   # RiskAreaGroups
   riskAreaGroups: [RiskAreaGroup!]!
   # RiskArea
-  riskArea(riskAreaId: ID!): RiskArea
+  riskArea(riskAreaId: ID!): RiskArea!
   # RiskAreas
-  riskAreas: [RiskArea]
+  riskAreas: [RiskArea]!
   # Question
-  question(questionId: ID!): Question
+  question(questionId: ID!): Question!
   # Questions for risk area, progress note template or screening tool
   questions(filterId: ID!, filterType: QuestionFilterType!): [Question!]!
   # Answer
@@ -1756,80 +1756,80 @@ type RootQueryType {
   # Answers
   answersForQuestion(questionId: ID!): [Answer]!
   # PatientAnswer
-  patientAnswer(patientAnswerId: ID!): PatientAnswer
+  patientAnswer(patientAnswerId: ID!): PatientAnswer!
   # PatientAnswersForQuestion
-  patientAnswers(filterId: ID!, filterType: AnswerFilterType!, patientId: ID!): [PatientAnswer!]
+  patientAnswers(filterId: ID!, filterType: AnswerFilterType!, patientId: ID!): [PatientAnswer!]!
   # PatientPreviousAnswersForQuestion
-  patientPreviousAnswersForQuestion(questionId: ID!, patientId: ID!): [PatientAnswer]
+  patientPreviousAnswersForQuestion(questionId: ID!, patientId: ID!): [PatientAnswer]!
   # PatientRiskAreaSummary
-  patientRiskAreaSummary(riskAreaId: ID!, patientId: ID!): RiskAreaSummary
+  patientRiskAreaSummary(riskAreaId: ID!, patientId: ID!): RiskAreaSummary!
   # PatientRiskAreaRiskScore
-  patientRiskAreaRiskScore(riskAreaId: ID!, patientId: ID!): RiskScore
+  patientRiskAreaRiskScore(riskAreaId: ID!, patientId: ID!): RiskScore!
   # QuestionCondition
-  questionCondition(questionConditionId: ID!): QuestionCondition
+  questionCondition(questionConditionId: ID!): QuestionCondition!
   # Event notifications for a user
   eventNotificationsForCurrentUser(
     pageNumber: Int
     pageSize: Int
     taskEventNotificationsOnly: Boolean
-  ): EventNotificationEdges
+  ): EventNotificationEdges!
   # Event notifications for a task
-  eventNotificationsForTask(taskId: ID!, pageNumber: Int, pageSize: Int): EventNotificationEdges
+  eventNotificationsForTask(taskId: ID!, pageNumber: Int, pageSize: Int): EventNotificationEdges!
   # Event notifications for a user's task - on dashboard
   eventNotificationsForUserTask(taskId: ID!): [EventNotification!]!
   # Concern
-  concern(concernId: ID!): Concern
+  concern(concernId: ID!): Concern!
   # Concerns
-  concerns(orderBy: ConcernOrderOptions): [Concern]
+  concerns(orderBy: ConcernOrderOptions): [Concern]!
   # Concerns for answer
-  concernsForAnswer(answerId: ID!): [Concern]
+  concernsForAnswer(answerId: ID!): [Concern]!
   # patient concern
-  patientConcern(patientConcernId: ID!): PatientConcern
+  patientConcern(patientConcernId: ID!): PatientConcern!
   # patient concerns for patient
-  patientConcerns(patientId: ID!): [PatientConcern]
+  patientConcerns(patientId: ID!): [PatientConcern]!
   # Patient goal
-  patientGoal(patientGoalId: ID!): PatientGoal
+  patientGoal(patientGoalId: ID!): PatientGoal!
   # Patient goals for patient
-  patientGoals(patientId: ID!): [PatientGoal]
+  patientGoals(patientId: ID!): [PatientGoal]!
   # Goal suggestion templates
-  goalSuggestionTemplate(goalSuggestionTemplateId: ID!): GoalSuggestionTemplate
+  goalSuggestionTemplate(goalSuggestionTemplateId: ID!): GoalSuggestionTemplate!
   # Goal suggestion templates
-  goalSuggestionTemplates(orderBy: GoalSuggestionOrderOptions): [GoalSuggestionTemplate]
+  goalSuggestionTemplates(orderBy: GoalSuggestionOrderOptions): [GoalSuggestionTemplate]!
   # Goal suggestion for template for answer
-  goalSuggestionTemplatesForAnswer(answerId: ID!): [GoalSuggestionTemplate]
+  goalSuggestionTemplatesForAnswer(answerId: ID!): [GoalSuggestionTemplate]!
   # Task template
-  taskTemplate(taskTemplateId: ID!): TaskTemplate
+  taskTemplate(taskTemplateId: ID!): TaskTemplate!
   # Task templates
-  taskTemplates: [TaskTemplate]
+  taskTemplates: [TaskTemplate]!
   # Task templates suggested for answer
-  taskTemplatesForAnswer(answerId: ID!): [TaskTemplate]
+  taskTemplatesForAnswer(answerId: ID!): [TaskTemplate]!
   # patient task suggestions
-  patientTaskSuggestions(patientId: ID!): [PatientTaskSuggestion]
+  patientTaskSuggestions(patientId: ID!): [PatientTaskSuggestion]!
   # Care Plan Suggestions
-  carePlanSuggestionsForPatient(patientId: ID!): [CarePlanSuggestion]
+  carePlanSuggestionsForPatient(patientId: ID!): [CarePlanSuggestion]!
   # Care Plan
-  carePlanForPatient(patientId: ID!): CarePlan
+  carePlanForPatient(patientId: ID!): CarePlan!
   # screening tool
-  screeningTool(screeningToolId: ID!): ScreeningTool
+  screeningTool(screeningToolId: ID!): ScreeningTool!
   # screening tools
-  screeningTools: [ScreeningTool]
+  screeningTools: [ScreeningTool]!
   # screening tools for risk area
-  screeningToolsForRiskArea(riskAreaId: ID!): [ScreeningTool]
+  screeningToolsForRiskArea(riskAreaId: ID!): [ScreeningTool]!
   # screening tool score range
-  screeningToolScoreRange(screeningToolScoreRangeId: ID!): ScreeningToolScoreRange
+  screeningToolScoreRange(screeningToolScoreRangeId: ID!): ScreeningToolScoreRange!
   # screening tool score range for screening tool and score
   screeningToolScoreRangeForScoreAndScreeningTool(
     screeningToolId: ID!
     score: Int!
-  ): ScreeningToolScoreRange
+  ): ScreeningToolScoreRange!
   # screening tool score ranges
-  screeningToolScoreRanges: [ScreeningToolScoreRange]
+  screeningToolScoreRanges: [ScreeningToolScoreRange]!
   # screening tool score ranges for screening tool
-  screeningToolScoreRangesForScreeningTool(screeningToolId: ID!): [ScreeningToolScoreRange]
+  screeningToolScoreRangesForScreeningTool(screeningToolId: ID!): [ScreeningToolScoreRange]!
   # patient screening tool submission
   patientScreeningToolSubmission(
     patientScreeningToolSubmissionId: ID!
-  ): PatientScreeningToolSubmission
+  ): PatientScreeningToolSubmission!
   # latest patient sreening tool submission for a screening tool
   patientScreeningToolSubmissionForPatientAndScreeningTool(
     screeningToolId: ID!
@@ -1841,37 +1841,37 @@ type RootQueryType {
     patientId: ID!
     screeningToolId: ID
     scored: Boolean!
-  ): [PatientScreeningToolSubmission]
+  ): [PatientScreeningToolSubmission]!
   # patient screening tool submissions for patient 360 (history tab)
-  patientScreeningToolSubmissionsFor360(patientId: ID!): [PatientScreeningToolSubmission!]
+  patientScreeningToolSubmissionsFor360(patientId: ID!): [PatientScreeningToolSubmission!]!
   # patient screening tool submissions
-  patientScreeningToolSubmissions: [PatientScreeningToolSubmission]
+  patientScreeningToolSubmissions: [PatientScreeningToolSubmission]!
   # progress note template
-  progressNoteTemplate(progressNoteTemplateId: ID!): ProgressNoteTemplate
+  progressNoteTemplate(progressNoteTemplateId: ID!): ProgressNoteTemplate!
   # progress note templates
-  progressNoteTemplates: [ProgressNoteTemplate]
+  progressNoteTemplates: [ProgressNoteTemplate]!
   # progress note
-  progressNote(progressNoteId: ID!): ProgressNote
+  progressNote(progressNoteId: ID!): ProgressNote!
   # progress notes for patient
-  progressNotesForPatient(patientId: ID!, completed: Boolean!): [ProgressNote]
+  progressNotesForPatient(patientId: ID!, completed: Boolean!): [ProgressNote]!
   # progress notes for current user
-  progressNotesForCurrentUser(completed: Boolean!): [ProgressNote]
+  progressNotesForCurrentUser(completed: Boolean!): [ProgressNote]!
   # progress notes for supervisor review
-  progressNotesForSupervisorReview: [ProgressNote]
+  progressNotesForSupervisorReview: [ProgressNote]!
   # progress note activities for progress note
-  progressNoteActivityForProgressNote(progressNoteId: ID!): ProgressNoteActivity
+  progressNoteActivityForProgressNote(progressNoteId: ID!): ProgressNoteActivity!
   # quick call
-  quickCall(quickCallId: ID!): QuickCall
+  quickCall(quickCallId: ID!): QuickCall!
   # quick calls for progress note
-  quickCallsForProgressNote(progressNoteId: ID!): [QuickCall]
+  quickCallsForProgressNote(progressNoteId: ID!): [QuickCall]!
   # computed field
-  computedField(computedFieldId: ID!): ComputedField
+  computedField(computedFieldId: ID!): ComputedField!
   # computed fields
-  computedFields(orderBy: ComputedFieldOrderOptions): [ComputedField]
+  computedFields(orderBy: ComputedFieldOrderOptions): [ComputedField]!
   # computed fields schema
-  computedFieldsSchema: ComputedFieldsSchema
+  computedFieldsSchema: ComputedFieldsSchema!
   # risk area assessment submission
-  riskAreaAssessmentSubmission(riskAreaAssessmentSubmissionId: ID!): RiskAreaAssessmentSubmission
+  riskAreaAssessmentSubmission(riskAreaAssessmentSubmissionId: ID!): RiskAreaAssessmentSubmission!
   # latest risk area assessment submission for a screening tool
   riskAreaAssessmentSubmissionForPatient(
     riskAreaId: ID!

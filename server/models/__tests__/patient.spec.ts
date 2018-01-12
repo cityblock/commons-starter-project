@@ -7,6 +7,8 @@ import {
   createMockPatient,
   createMockUser,
   createPatient,
+  setupPatientsNewToCareTeam,
+  setupPatientsWithPendingSuggestions,
   setupUrgentTasks,
 } from '../../spec-helpers';
 import Clinic from '../clinic';
@@ -399,6 +401,52 @@ describe('patient model', () => {
 
         expect(total).toBe(2);
         expect(resultNames).toEqual([patient1.firstName, patient5.firstName]);
+      });
+    });
+  });
+
+  describe('dashboard patients new to care team', () => {
+    it('returns patients that are new to care team', async () => {
+      await transaction(Patient.knex(), async txn => {
+        const { user, patient1 } = await setupPatientsNewToCareTeam(txn);
+
+        const { total, results } = await Patient.getPatientsNewToCareTeam(
+          {
+            pageNumber: 0,
+            pageSize: 10,
+          },
+          user.id,
+          txn,
+        );
+
+        expect(total).toBe(1);
+        expect(results[0]).toMatchObject({
+          id: patient1.id,
+          firstName: patient1.firstName,
+        });
+      });
+    });
+  });
+
+  describe('dashboard patients with pending MAP suggestions', () => {
+    it('returns patients on care team with pending MAP suggestions', async () => {
+      await transaction(Patient.knex(), async txn => {
+        const { patient1, user } = await setupPatientsWithPendingSuggestions(txn);
+
+        const { total, results } = await Patient.getPatientsWithPendingSuggestions(
+          {
+            pageNumber: 0,
+            pageSize: 10,
+          },
+          user.id,
+          txn,
+        );
+
+        expect(total).toBe(1);
+        expect(results[0]).toMatchObject({
+          id: patient1.id,
+          firstName: patient1.firstName,
+        });
       });
     });
   });

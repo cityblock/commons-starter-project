@@ -255,5 +255,52 @@ export default class Patient extends BaseModel {
 
     return patientsResult;
   }
+
+  static async getPatientsNewToCareTeam(
+    { pageNumber, pageSize }: IPaginationOptions,
+    userId: string,
+    txn?: Transaction,
+  ): Promise<IPaginatedResults<Patient>> {
+    const patientsResult = await this.query(txn)
+      .whereRaw(
+        `patient.id IN (
+          SELECT care_team."patientId"
+          FROM care_team
+          WHERE care_team."userId" = ?
+            AND care_team."createdAt" > now() - interval \'30 days\'
+            AND care_team."deletedAt" IS NULL
+          ORDER BY care_team."createdAt" DESC
+        )`,
+        userId,
+      )
+      .page(pageNumber, pageSize);
+
+    return patientsResult;
+  }
+
+  static async getPatientsWithPendingSuggestions(
+    { pageNumber, pageSize }: IPaginationOptions,
+    userId: string,
+    txn?: Transaction,
+  ): Promise<IPaginatedResults<Patient>> {
+    const patientsResult = await this.query(txn)
+      .whereRaw(
+        `patient.id IN (
+          SELECT care_team."patientId"
+          FROM care_team
+          INNER JOIN care_plan_suggestion ON care_plan_suggestion."patientId" = care_team."patientId"
+            AND care_plan_suggestion."dismissedById" IS NULL
+            AND care_plan_suggestion."acceptedById" IS NULL
+          WHERE care_team."userId" = ?
+            AND care_team."deletedAt" IS NULL
+        )`,
+        userId,
+      )
+      .orderBy('lastName', 'ASC')
+      .orderBy('firstName', 'ASC')
+      .page(pageNumber, pageSize);
+
+    return patientsResult;
+  }
 }
 /* tslint:enable:member-ordering */

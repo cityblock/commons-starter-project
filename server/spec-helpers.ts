@@ -8,9 +8,12 @@ import {
 } from './apis/redox/types';
 import config from './config';
 import Answer from './models/answer';
+import CarePlanSuggestion from './models/care-plan-suggestion';
 import CarePlanUpdateEvent from './models/care-plan-update-event';
 import CareTeam from './models/care-team';
 import Clinic from './models/clinic';
+import ComputedField from './models/computed-field';
+import Concern from './models/concern';
 import EventNotification from './models/event-notification';
 import Patient, { IPatientEditableFields } from './models/patient';
 import PatientAnswer from './models/patient-answer';
@@ -305,13 +308,111 @@ export async function createTask(
   );
 }
 
-export async function setupUrgentTasks(txn: Transaction) {
-  const patient1Name = 'Arya';
-  const patient2Name = 'Rickon';
-  const patient3Name = 'Robb';
-  const patient4Name = 'Bran';
-  const patient5Name = 'Sansa';
+const patient1Name = 'Arya';
+const patient2Name = 'Rickon';
+const patient3Name = 'Robb';
+const patient4Name = 'Bran';
+const patient5Name = 'Sansa';
 
+export async function setupPatientsNewToCareTeam(txn: Transaction) {
+  const clinic = await Clinic.create(createMockClinic("King's Landing", 13), txn);
+  const user = await User.create(createMockUser(211, clinic.id), txn);
+  const user2 = await User.create(createMockUser(212, clinic.id), txn);
+
+  const patient1 = await createPatient(
+    createMockPatient(311, clinic.id, patient1Name),
+    user.id,
+    txn,
+  );
+  await createPatient(createMockPatient(312, clinic.id, patient2Name), user2.id, txn);
+  const patient3 = await createPatient(
+    createMockPatient(313, clinic.id, patient2Name),
+    user.id,
+    txn,
+  );
+
+  await CareTeam.query(txn)
+    .where({ userId: user.id, patientId: patient3.id })
+    .patch({ createdAt: new Date('2017-01-01').toISOString() });
+
+  return { user, patient1 };
+}
+
+export async function setupPatientsWithPendingSuggestions(txn: Transaction) {
+  const clinic = await Clinic.create(createMockClinic('Dragonstone', 3), txn);
+  const user = await User.create(createMockUser(311, clinic.id), txn);
+  const user2 = await User.create(createMockUser(312, clinic.id), txn);
+
+  const patient1 = await createPatient(
+    createMockPatient(411, clinic.id, patient1Name),
+    user.id,
+    txn,
+  );
+  const patient2 = await createPatient(
+    createMockPatient(412, clinic.id, patient2Name),
+    user2.id,
+    txn,
+  );
+  await createPatient(createMockPatient(413, clinic.id, patient3Name), user.id, txn);
+  const patient4 = await createPatient(
+    createMockPatient(414, clinic.id, patient4Name),
+    user.id,
+    txn,
+  );
+
+  const concern = await Concern.create({ title: 'Cersei lied to Jon Snow' }, txn);
+  const computedField = await ComputedField.create(
+    {
+      slug: 'drogon',
+      label: 'Has a massive dragon',
+      dataType: 'boolean',
+    },
+    txn,
+  );
+
+  await CarePlanSuggestion.create(
+    {
+      patientId: patient1.id,
+      concernId: concern.id,
+      suggestionType: 'concern',
+      type: 'computedFieldAnswer',
+      computedFieldId: computedField.id,
+    },
+    txn,
+  );
+  await CarePlanSuggestion.create(
+    {
+      patientId: patient2.id,
+      concernId: concern.id,
+      suggestionType: 'concern',
+      type: 'computedFieldAnswer',
+      computedFieldId: computedField.id,
+    },
+    txn,
+  );
+  const suggestion4 = await CarePlanSuggestion.create(
+    {
+      patientId: patient4.id,
+      concernId: concern.id,
+      suggestionType: 'concern',
+      type: 'computedFieldAnswer',
+      computedFieldId: computedField.id,
+    },
+    txn,
+  );
+  await CarePlanSuggestion.dismiss(
+    {
+      carePlanSuggestionId: suggestion4.id,
+      dismissedById: user.id,
+      dismissedReason: 'Jon Snow got this',
+    },
+    txn,
+  );
+
+  return { patient1, user };
+}
+
+export async function setupUrgentTasks(txn: Transaction) {
   const clinic = await Clinic.create(createMockClinic('Winterfell', 12), txn);
   const user = await User.create(createMockUser(111, clinic.id), txn);
   const user2 = await User.create(createMockUser(121, clinic.id), txn);

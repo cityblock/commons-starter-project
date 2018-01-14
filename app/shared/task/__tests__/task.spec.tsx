@@ -25,6 +25,7 @@ describe('Task Component', () => {
       task={taskWithComment as any}
       redirectToMap={placeholderFn}
       taskError={null}
+      dismissTaskNotifications={() => false as any}
     />,
   );
 
@@ -98,6 +99,7 @@ describe('Task Component', () => {
         taskLoading={true}
         redirectToMap={placeholderFn}
         taskError={null}
+        dismissTaskNotifications={() => false as any}
       />,
     );
 

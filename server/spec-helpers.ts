@@ -481,11 +481,8 @@ export async function setupUrgentTasks(txn: Transaction) {
     },
     txn,
   );
-  await EventNotification.update(
+  await EventNotification.dismiss(
     eventNotification2.id,
-    {
-      seenAt: '2017-09-07T13:45:14.532Z',
-    },
     txn,
   );
 

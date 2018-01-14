@@ -244,9 +244,7 @@ describe('task event model', () => {
 
     expect(eventNotification.seenAt).toBeFalsy();
 
-    await EventNotification.update(eventNotification.id, {
-      seenAt: new Date().toISOString(),
-    });
+    await EventNotification.dismiss(eventNotification.id);
     const fetchedNotification = await EventNotification.get(eventNotification.id);
 
     expect(fetchedNotification.seenAt).not.toBeFalsy();

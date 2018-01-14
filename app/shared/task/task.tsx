@@ -3,11 +3,14 @@ import * as React from 'react';
 import { compose, graphql } from 'react-apollo';
 import { connect, Dispatch } from 'react-redux';
 import { push } from 'react-router-redux';
+import * as eventNotificationsForTaskDismissMutation from '../../graphql/queries/event-notifications-for-task-dismiss-mutation.graphql';
 import * as taskQuery from '../../graphql/queries/get-task.graphql';
 import * as taskEditMutationGraphql from '../../graphql/queries/task-edit-mutation.graphql';
 import {
+  eventNotificationsForTaskDismissMutationVariables,
   taskEditMutation,
   taskEditMutationVariables,
+  FullEventNotificationFragment,
   FullTaskFragment,
   Priority,
 } from '../../graphql/types';
@@ -33,6 +36,9 @@ interface IDispatchProps {
 export interface IProps {
   routeBase: string;
   taskId: string;
+  dismissTaskNotifications: (
+    options: { variables: eventNotificationsForTaskDismissMutationVariables },
+  ) => { data: { eventNotificationsForTaskDismiss: FullEventNotificationFragment } };
 }
 
 interface IGraphqlProps {
@@ -55,6 +61,11 @@ export class Task extends React.Component<allProps, IState> {
     this.state = {
       deleteConfirmation: false,
     };
+  }
+
+  componentDidMount() {
+    const { taskId, dismissTaskNotifications } = this.props;
+    dismissTaskNotifications({ variables: { taskId } });
   }
 
   confirmDelete = (): void => {
@@ -171,5 +182,8 @@ export default compose(
       task: data ? (data as any).task : null,
       refetchTask: data ? data.refetch : null,
     }),
+  }),
+  graphql<IGraphqlProps, IProps, allProps>(eventNotificationsForTaskDismissMutation as any, {
+    name: 'dismissTaskNotifications',
   }),
 )(Task);

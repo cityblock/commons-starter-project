@@ -798,6 +798,95 @@ export interface eventNotificationDismissMutation {
   } | null,
 };
 
+export interface eventNotificationsForTaskDismissMutationVariables {
+  taskId: string,
+};
+
+export interface eventNotificationsForTaskDismissMutation {
+  // Dismisses (marks as seen) all of the EventNotifications on a Task for a the current user
+  eventNotificationsForTaskDismiss:  Array< {
+    id: string,
+    title: string | null,
+    userId: string,
+    user:  {
+      id: string,
+      locale: string | null,
+      phone: string | null,
+      firstName: string | null,
+      lastName: string | null,
+      userRole: UserRole,
+      email: string | null,
+      homeClinicId: string,
+      googleProfileImageUrl: string | null,
+      createdAt: string,
+      updatedAt: string,
+    },
+    taskEvent:  {
+      id: string,
+      taskId: string,
+      userId: string,
+      user:  {
+        id: string,
+        locale: string | null,
+        phone: string | null,
+        firstName: string | null,
+        lastName: string | null,
+        userRole: UserRole,
+        email: string | null,
+        homeClinicId: string,
+        googleProfileImageUrl: string | null,
+        createdAt: string,
+        updatedAt: string,
+      },
+      eventType: TaskEventTypes | null,
+      eventCommentId: string | null,
+      eventComment:  {
+        id: string,
+        body: string,
+        user:  {
+          id: string,
+          locale: string | null,
+          phone: string | null,
+          firstName: string | null,
+          lastName: string | null,
+          userRole: UserRole,
+          email: string | null,
+          homeClinicId: string,
+          googleProfileImageUrl: string | null,
+          createdAt: string,
+          updatedAt: string,
+        },
+        taskId: string,
+        createdAt: string,
+        updatedAt: string | null,
+      } | null,
+      eventUserId: string | null,
+      eventUser:  {
+        id: string,
+        locale: string | null,
+        phone: string | null,
+        firstName: string | null,
+        lastName: string | null,
+        userRole: UserRole,
+        email: string | null,
+        homeClinicId: string,
+        googleProfileImageUrl: string | null,
+        createdAt: string,
+        updatedAt: string,
+      } | null,
+      createdAt: string,
+      updatedAt: string,
+      deletedAt: string | null,
+    } | null,
+    seenAt: string | null,
+    emailSentAt: string | null,
+    deliveredAt: string | null,
+    createdAt: string,
+    updatedAt: string,
+    deletedAt: string | null,
+  } | null > | null,
+};
+
 export interface getAnswerQueryVariables {
   answerId: string,
 };

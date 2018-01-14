@@ -1391,6 +1391,10 @@ declare module 'schema' {
   */
     eventNotificationDismiss: IEventNotification | null;
     /**
+    description: Dismisses (marks as seen) all of the EventNotifications on a Task for a the current user
+  */
+    eventNotificationsForTaskDismiss: Array<IEventNotification> | null;
+    /**
     description: Create a concern
   */
     concernCreate: IConcern | null;
@@ -2004,6 +2008,11 @@ declare module 'schema' {
   */
   interface IEventNotificationEditInput {
     eventNotificationId: string;
+  }
+
+
+  interface IUserTaskNotificationsEditInput {
+    taskId: string;
   }
 
 

@@ -6,10 +6,6 @@ import Task from './task';
 import TaskEvent from './task-event';
 import User from './user';
 
-interface IEventNotificationEditableFields {
-  seenAt?: string;
-}
-
 interface IEventNotificationOptions {
   userId: string;
   taskEventId?: string;
@@ -124,23 +120,43 @@ export default class EventNotification extends BaseModel {
     return eventNotification;
   }
 
-  static async update(
+  static async dismiss(
     eventNotificationId: string,
-    eventNotification: Partial<IEventNotificationEditableFields>,
     txn?: Transaction,
   ): Promise<EventNotification> {
     return await this.query(txn)
       .eager(EAGER_QUERY)
       .modifyEager('taskEvent', builder => builder.where('deletedAt', null))
-      .patchAndFetchById(eventNotificationId, eventNotification);
+      .patchAndFetchById(eventNotificationId, { seenAt: new Date().toISOString() });
+  }
+
+  static async dismissAllForUserTask(
+    taskId: string,
+    userId: string,
+    txn?: Transaction,
+  ): Promise<EventNotification[]> {
+    const taskEventIdsToDismissQuery = this.query(txn)
+      .joinRelation('taskEvent')
+      .where('taskEvent.taskId', taskId)
+      .andWhere('event_notification.userId', userId)
+      .andWhere('event_notification.seenAt', null)
+      .select('event_notification.id');
+
+    return await this.query(txn)
+      .eager(EAGER_QUERY)
+      .modifyEager('taskEvent', builder => builder.where('deletedAt', null))
+      .where('id', 'in', taskEventIdsToDismissQuery as any)
+      .patch({ seenAt: new Date().toISOString() })
+      .returning('*') as any;
   }
 
   // Fetch all event notifications for a user
   static async getUserEventNotifications(
     userId: string,
     { pageNumber, pageSize }: IPaginationOptions,
+    txn?: Transaction,
   ): Promise<IPaginatedResults<EventNotification>> {
-    const eventNotifications = (await this.query()
+    const eventNotifications = (await this.query(txn)
       .where({ userId, deletedAt: null, seenAt: null })
       .eager(EAGER_QUERY)
       .modifyEager('taskEvent', builder => builder.where('deletedAt', null))
@@ -157,8 +173,9 @@ export default class EventNotification extends BaseModel {
   static async getUserTaskEventNotifications(
     userId: string,
     { pageNumber, pageSize }: IPaginationOptions,
+    txn?: Transaction,
   ): Promise<IPaginatedResults<EventNotification>> {
-    const eventNotifications = (await this.query()
+    const eventNotifications = (await this.query(txn)
       .whereNot({ taskEventId: null })
       .andWhere({ userId, deletedAt: null, seenAt: null })
       .eager(EAGER_QUERY)
@@ -175,8 +192,9 @@ export default class EventNotification extends BaseModel {
   static async getTaskEventNotifications(
     taskId: string,
     { pageNumber, pageSize }: IPaginationOptions,
+    txn?: Transaction,
   ): Promise<IPaginatedResults<EventNotification>> {
-    const eventNotifications = (await this.query()
+    const eventNotifications = (await this.query(txn)
       .joinRelation('taskEvent')
       .where('event_notification.deletedAt', null)
       .andWhere('event_notification.seenAt', null)

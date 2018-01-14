@@ -26,6 +26,14 @@ export interface IDismissEventNotificationOptions {
   input: IEditEventNotificationInput;
 }
 
+export interface IEditTaskNotificationsInput {
+  taskId: string;
+}
+
+export interface IDismissTaskNotificationsOptions {
+  input: IEditTaskNotificationsInput;
+}
+
 function getEventNotificationTitle(eventNotification: EventNotification) {
   const { taskEvent } = eventNotification;
 
@@ -139,7 +147,7 @@ function getEventNotificationTitle(eventNotification: EventNotification) {
 export async function resolveEventNotificationsForCurrentUser(
   root: any,
   args: IUserEventNotificationOptions,
-  { db, userRole, userId }: IContext,
+  { db, userRole, userId, txn }: IContext,
 ): Promise<IEventNotificationEdges> {
   const { taskEventNotificationsOnly } = args;
 
@@ -155,12 +163,12 @@ export async function resolveEventNotificationsForCurrentUser(
     notifications = await EventNotification.getUserTaskEventNotifications(userId!, {
       pageNumber,
       pageSize,
-    });
+    }, txn);
   } else {
     notifications = await EventNotification.getUserEventNotifications(userId!, {
       pageNumber,
       pageSize,
-    });
+    }, txn);
   }
 
   const notificationEdges = notifications.results.map(
@@ -186,7 +194,7 @@ export async function resolveEventNotificationsForCurrentUser(
 export async function resolveEventNotificationsForTask(
   root: any,
   args: ITaskEventNotificationOptions,
-  { db, userRole, userId }: IContext,
+  { db, userRole, userId, txn }: IContext,
 ): Promise<IEventNotificationEdges> {
   await accessControls.isAllowed(userRole, 'view', 'task');
   checkUserLoggedIn(userId);
@@ -197,7 +205,7 @@ export async function resolveEventNotificationsForTask(
   const notifications = await EventNotification.getTaskEventNotifications(args.taskId, {
     pageNumber,
     pageSize,
-  });
+  }, txn);
 
   const notificationEdges = notifications.results.map(
     (notification: EventNotification) =>
@@ -222,14 +230,12 @@ export async function resolveEventNotificationsForTask(
 export async function eventNotificationDismiss(
   root: any,
   { input }: IDismissEventNotificationOptions,
-  { db, userId, userRole }: IContext,
+  { db, userId, userRole, txn }: IContext,
 ) {
   await accessControls.isAllowedForUser(userRole, 'edit', 'user', userId, userId);
   checkUserLoggedIn(userId);
 
-  return await EventNotification.update(input.eventNotificationId, {
-    seenAt: new Date().toISOString(),
-  });
+  return await EventNotification.dismiss(input.eventNotificationId, txn);
 }
 
 export async function resolveEventNotificationsForUserTask(
@@ -248,4 +254,15 @@ export async function resolveEventNotificationsForUserTask(
   }));
 
   return formattedNotifications;
+}
+
+export async function eventNotificationsForTaskDismiss(
+  root: any,
+  { input }: IDismissTaskNotificationsOptions,
+  { db, userId, userRole, txn }: IContext,
+) {
+  await accessControls.isAllowedForUser(userRole, 'edit', 'user', userId, userId);
+  checkUserLoggedIn(userId);
+
+  return await EventNotification.dismissAllForUserTask(input.taskId, userId!, txn);
 }

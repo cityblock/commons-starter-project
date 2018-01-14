@@ -43,6 +43,7 @@ import {
   resolveConcernsForAnswer,
 } from './concern-suggestion-resolver';
 import {
+  eventNotificationsForTaskDismiss,
   eventNotificationDismiss,
   resolveEventNotificationsForCurrentUser,
   resolveEventNotificationsForTask,
@@ -356,6 +357,7 @@ const resolveFunctions = {
     riskAreaCreate,
     riskAreaDelete,
     eventNotificationDismiss,
+    eventNotificationsForTaskDismiss,
     patientAnswersCreate,
     patientAnswerDelete,
     patientAnswerEdit,

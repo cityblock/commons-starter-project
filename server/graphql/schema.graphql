@@ -1238,6 +1238,10 @@ input EventNotificationEditInput {
   eventNotificationId: ID!
 }
 
+input UserTaskNotificationsEditInput {
+  taskId: ID!
+}
+
 input ConcernCreateInput {
   title: String!
 }
@@ -1586,6 +1590,8 @@ type RootMutationType {
   questionConditionDelete(input: QuestionConditionDeleteInput): QuestionCondition
   # Dismisses (marks as seen) an EventNotification
   eventNotificationDismiss(input: EventNotificationEditInput): EventNotification
+  # Dismisses (marks as seen) all of the EventNotifications on a Task for a the current user
+  eventNotificationsForTaskDismiss(input: UserTaskNotificationsEditInput): [EventNotification]
   # Create a concern
   concernCreate(input: ConcernCreateInput): Concern
   # Edit a concern

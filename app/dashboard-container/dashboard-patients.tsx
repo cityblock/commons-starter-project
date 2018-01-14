@@ -1,13 +1,15 @@
 import * as querystring from 'querystring';
 import * as React from 'react';
+import { compose } from 'react-apollo';
 import { connect, Dispatch } from 'react-redux';
 import { push } from 'react-router-redux';
 import { FullPatientForDashboardFragment } from '../graphql/types';
 import EmptyPlaceholder from '../shared/library/empty-placeholder/empty-placeholder';
 import Pagination from '../shared/library/pagination/pagination';
-import * as styles from './css/dashboard-pagination.css';
+import Spinner from '../shared/library/spinner/spinner';
+import * as styles from './css/dashboard-patients.css';
 import { Selected } from './dashboard-container';
-import { PatientResults } from './dashboard-patients-container';
+import fetchPatientList, { IInjectedProps, PatientResults } from './fetch-patient-list';
 import PatientList from './patient-list/patient-list';
 import PatientWithTasksList from './patient-list/patient-with-tasks-list';
 
@@ -20,14 +22,14 @@ interface IPageProps {
   pageNumber: number;
 }
 
-interface IProps extends IPageProps {
+export interface IProps extends IPageProps {
   patientResults: PatientResults;
   selected: Selected;
 }
 
-type allProps = IDispatchProps & IProps;
+type allProps = IDispatchProps & IProps & IInjectedProps;
 
-export class DashboardPagination extends React.Component<allProps> {
+export class DashboardPatients extends React.Component<allProps> {
   onPaginate = (pageBack: boolean): void => {
     const { pageNumber, pageSize, patientResults, updatePageParams } = this.props;
     let newPageNumber = pageBack ? pageNumber - 1 : pageNumber + 1;
@@ -44,7 +46,8 @@ export class DashboardPagination extends React.Component<allProps> {
   };
 
   render(): JSX.Element {
-    const { patientResults, selected, pageNumber, pageSize } = this.props;
+    const { patientResults, selected, pageNumber, pageSize, loading, error } = this.props;
+    if (loading || error) return <Spinner />;
 
     if (!patientResults.totalCount) {
       return (
@@ -95,4 +98,7 @@ const mapDispatchToProps = (dispatch: Dispatch<() => void>): IDispatchProps => {
   return { updatePageParams };
 };
 
-export default connect<{}, IDispatchProps, IProps>(null, mapDispatchToProps)(DashboardPagination);
+export default compose(
+  fetchPatientList(),
+  connect<{}, IDispatchProps, IProps>(null, mapDispatchToProps),
+)(DashboardPatients);

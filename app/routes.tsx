@@ -20,7 +20,7 @@ export default (
       <Route exact path="/" component={LogIn} />
       <Authentication>
         <Route
-          path="/dashboard/:tab/:tagId?"
+          path="/dashboard/:list/:tagId?"
           component={(Loadable as any)({
             loader: async () =>
               await import(/* webpackChunkName: "dashboard" */ './dashboard-container/dashboard-container'),

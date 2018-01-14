@@ -2,12 +2,13 @@ import { shallow } from 'enzyme';
 import * as React from 'react';
 import EmptyPlaceholder from '../../shared/library/empty-placeholder/empty-placeholder';
 import Pagination from '../../shared/library/pagination/pagination';
+import Spinner from '../../shared/library/spinner/spinner';
 import { patient } from '../../shared/util/test-data';
-import { DashboardPagination } from '../dashboard-pagination';
+import { DashboardPatients } from '../dashboard-patients';
 import PatientList from '../patient-list/patient-list';
 import PatientWithTasksList from '../patient-list/patient-with-tasks-list';
 
-describe('Dashboard Urgent Tasks Page Container', () => {
+describe('Dashboard Patients List', () => {
   const pageNumber = 1;
   const pageSize = 10;
   const totalCount = 22;
@@ -28,12 +29,13 @@ describe('Dashboard Urgent Tasks Page Container', () => {
   };
 
   const wrapper = shallow(
-    <DashboardPagination
+    <DashboardPatients
       pageNumber={pageNumber}
       pageSize={pageSize}
       updatePageParams={placeholderFn}
       patientResults={patientResults}
       selected={selected}
+      loading={false}
     />,
   );
 
@@ -72,5 +74,11 @@ describe('Dashboard Urgent Tasks Page Container', () => {
 
   it('removes pagination if no results', () => {
     expect(wrapper.find(Pagination).length).toBe(0);
+  });
+
+  it('renders loading spinner if loading', () => {
+    wrapper.setProps({ loading: true });
+
+    expect(wrapper.find(Spinner).length).toBe(1);
   });
 });

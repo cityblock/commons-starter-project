@@ -34,24 +34,24 @@ const DashboardNavigation: React.StatelessComponent<IProps> = (props: IProps) =>
       </FormattedMessage>
       <div className={listStyles}>
         <NavigationItem
-          name="tasks"
-          selected={selected}
+          selected="tasks"
+          isSelected={selected === 'tasks'}
           routeBase={ROUTE_BASE}
           icon="notifications"
           iconStyles={styles.redIcon}
           noDivider={selected === 'new'}
         />
         <NavigationItem
-          name="new"
-          selected={selected}
+          selected="new"
+          isSelected={selected === 'new'}
           routeBase={ROUTE_BASE}
           icon="addCircle"
           iconStyles={styles.greenIcon}
           noDivider={selected === 'suggestions'}
         />
         <NavigationItem
-          name="suggestions"
-          selected={selected}
+          selected="suggestions"
+          isSelected={selected === 'suggestions'}
           routeBase={ROUTE_BASE}
           icon="playlistAdd"
           iconStyles={styles.redIcon}

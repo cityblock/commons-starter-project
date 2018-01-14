@@ -1,7 +1,13 @@
 @import '../../../shared/css/sizes';
 
-.container {
+.container,
+.listName {
   display: flex;
+  align-items: center;
+}
+
+.container {
+  justify-content: space-between;
   padding: var(--small-gutter);
   border-top: 1px solid transparent;
   border-bottom: 1px solid transparent;
@@ -11,12 +17,20 @@
   }
 }
 
-.container h4 {
-  color: var(--black-color);
+.container h4,
+.container p {
   font-size: var(--default-font-size);
   font-weight: var(--default-font-weight);
   line-height: var(--body-copy-line-height);
   margin: 0;
+}
+
+.container h4 {
+  color: var(--black-color);
+}
+
+.container p {
+  color: var(--default-font-color);
 }
 
 .selected {

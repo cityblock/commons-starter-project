@@ -3,22 +3,29 @@ import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
 import { Link } from 'react-router-dom';
 import Icon from '../../../shared/library/icon/icon';
-import NavigationItem, { Divider } from '../navigation-item';
+import { Divider, NavigationItem } from '../navigation-item';
 
 describe('Dashboard Navigation Item', () => {
   const name = 'tasks';
-  const selected = 'new';
   const icon = 'notifications';
   const iconStyles = 'houseStark';
   const routeBase = '/nymeria';
+  const totalCount = 11;
+  const patientResults = {
+    totalCount,
+  } as any;
 
   const wrapper = shallow(
     <NavigationItem
-      name={name}
-      selected={selected}
+      selected={name}
+      isSelected={false}
       icon={icon}
       iconStyles={iconStyles}
       routeBase={routeBase}
+      loading={false}
+      patientResults={patientResults}
+      pageNumber={1}
+      pageSize={11}
     />,
   );
 
@@ -45,7 +52,7 @@ describe('Dashboard Navigation Item', () => {
   });
 
   it('handles styling if selected', () => {
-    wrapper.setProps({ selected: name });
+    wrapper.setProps({ isSelected: true });
     expect(wrapper.find(Link).props().className).toBe('container selected');
     expect(wrapper.find(Divider).props().className).toBe('divider');
   });
@@ -56,6 +63,17 @@ describe('Dashboard Navigation Item', () => {
 
     expect(wrapper.find(FormattedMessage).length).toBe(0);
     expect(wrapper.find('h4').text()).toBe(text);
+  });
+
+  it('renders count of patients in list', () => {
+    expect(wrapper.find('p').length).toBe(1);
+    expect(wrapper.find('p').text()).toBe(`${totalCount}`);
+  });
+
+  it('does not render count of patient list if patient results not defined yet', () => {
+    wrapper.setProps({ patientResults: null });
+
+    expect(wrapper.find('p').length).toBe(0);
   });
 
   describe('Divider', () => {

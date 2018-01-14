@@ -2,7 +2,7 @@ import { shallow } from 'enzyme';
 import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
 import DashboardNavigation, { ROUTE_BASE } from '../navigation';
-import NavigationItem from '../navigation-item';
+import NavigationItem, { IProps } from '../navigation-item';
 
 describe('Dashboard Navigation', () => {
   const selected = 'new';
@@ -25,31 +25,31 @@ describe('Dashboard Navigation', () => {
     expect(wrapper.find(NavigationItem).length).toBe(3);
     expect(
       wrapper
-        .find(NavigationItem)
+        .find<IProps>(NavigationItem)
         .at(0)
-        .props().name,
+        .props().selected,
     ).toBe('tasks');
     expect(
       wrapper
-        .find(NavigationItem)
+        .find<IProps>(NavigationItem)
         .at(0)
-        .props().selected,
-    ).toBe(selected);
+        .props().isSelected,
+    ).toBeFalsy();
     expect(
       wrapper
-        .find(NavigationItem)
+        .find<IProps>(NavigationItem)
         .at(0)
         .props().routeBase,
     ).toBe(ROUTE_BASE);
     expect(
       wrapper
-        .find(NavigationItem)
+        .find<IProps>(NavigationItem)
         .at(0)
         .props().icon,
     ).toBe('notifications');
     expect(
       wrapper
-        .find(NavigationItem)
+        .find<IProps>(NavigationItem)
         .at(0)
         .props().iconStyles,
     ).toBe('redIcon');
@@ -58,31 +58,31 @@ describe('Dashboard Navigation', () => {
   it('renders navigation item for new to care team', () => {
     expect(
       wrapper
-        .find(NavigationItem)
+        .find<IProps>(NavigationItem)
         .at(1)
-        .props().name,
+        .props().selected,
     ).toBe('new');
     expect(
       wrapper
-        .find(NavigationItem)
+        .find<IProps>(NavigationItem)
         .at(1)
-        .props().selected,
-    ).toBe(selected);
+        .props().isSelected,
+    ).toBeTruthy();
     expect(
       wrapper
-        .find(NavigationItem)
+        .find<IProps>(NavigationItem)
         .at(1)
         .props().routeBase,
     ).toBe(ROUTE_BASE);
     expect(
       wrapper
-        .find(NavigationItem)
+        .find<IProps>(NavigationItem)
         .at(1)
         .props().icon,
     ).toBe('addCircle');
     expect(
       wrapper
-        .find(NavigationItem)
+        .find<IProps>(NavigationItem)
         .at(1)
         .props().iconStyles,
     ).toBe('greenIcon');
@@ -91,31 +91,31 @@ describe('Dashboard Navigation', () => {
   it('renders navigation item for pending MAP suggestions', () => {
     expect(
       wrapper
-        .find(NavigationItem)
+        .find<IProps>(NavigationItem)
         .at(2)
-        .props().name,
+        .props().selected,
     ).toBe('suggestions');
     expect(
       wrapper
-        .find(NavigationItem)
+        .find<IProps>(NavigationItem)
         .at(2)
-        .props().selected,
-    ).toBe(selected);
+        .props().isSelected,
+    ).toBeFalsy();
     expect(
       wrapper
-        .find(NavigationItem)
+        .find<IProps>(NavigationItem)
         .at(2)
         .props().routeBase,
     ).toBe(ROUTE_BASE);
     expect(
       wrapper
-        .find(NavigationItem)
+        .find<IProps>(NavigationItem)
         .at(2)
         .props().icon,
     ).toBe('playlistAdd');
     expect(
       wrapper
-        .find(NavigationItem)
+        .find<IProps>(NavigationItem)
         .at(2)
         .props().iconStyles,
     ).toBe('redIcon');

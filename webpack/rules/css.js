@@ -8,14 +8,14 @@ const cssnano = require('cssnano');
 const PATHS = require('../paths');
 
 module.exports = ({ production = false } = {}) => {
-  const localIndentName = 'localIdentName=[name]__[local]___[hash:base64:5]';
+  const localIdentName = '[name]-[local]-[hash:base64:6]';
 
   const createCssLoaders = embedCssInBundle => [
     {
       loader: 'typings-for-css-modules-loader',
       options: {
         importLoaders: 1,
-        localIndentName,
+        localIdentName,
         modules: true,
         namedExport: true,
         sourceMap: true,

@@ -20,7 +20,6 @@ export default (
       <Route exact path="/" component={LogIn} />
       <Authentication>
         <Route
-          exact
           path="/dashboard/:tab/:tagId?"
           component={(Loadable as any)({
             loader: async () =>
@@ -29,7 +28,6 @@ export default (
           })}
         />
         <Route
-          exact
           path="/notifications/:eventNotificationType?"
           component={(Loadable as any)({
             loader: async () =>
@@ -39,7 +37,6 @@ export default (
           })}
         />
         <Route
-          exact
           path="/tasks/:taskId?"
           component={(Loadable as any)({
             loader: async () =>
@@ -48,7 +45,6 @@ export default (
           })}
         />
         <Route
-          exact
           path="/settings"
           component={(Loadable as any)({
             loader: async () =>
@@ -57,7 +53,6 @@ export default (
           })}
         />
         <Route
-          exact
           path="/search"
           component={(Loadable as any)({
             loader: async () =>
@@ -67,7 +62,6 @@ export default (
           })}
         />
         <Route
-          exact
           path="/patient-intake"
           component={(Loadable as any)({
             loader: async () =>
@@ -76,6 +70,7 @@ export default (
             loading: () => null,
           })}
         />
+        <Route exact path="/patients/:patientId" component={PatientRedirect} />
         <Route
           exact
           path="/patients"
@@ -86,7 +81,6 @@ export default (
             loading: () => null,
           })}
         />
-        <Route exact path="/patients/:patientId" component={PatientRedirect} />
         <Route
           path="/patients/:patientId/:tab"
           component={(Loadable as any)({
@@ -97,7 +91,6 @@ export default (
           })}
         />
         <Route
-          exact
           path="/builder/:tab?/:objectId?/:subTab?/:subTabId?"
           component={(Loadable as any)({
             loader: async () =>
@@ -106,7 +99,6 @@ export default (
           })}
         />
         <Route
-          exact
           path="/manager/:tabId?/:objectId?"
           component={(Loadable as any)({
             loader: async () =>

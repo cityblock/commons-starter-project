@@ -3,147 +3,201 @@
 exports[`renders routes correctly 1`] = `
 initialize {
   "0": Object {
-    "attribs": Object {},
+    "attribs": Object {
+      "class": "body",
+    },
     "children": Array [
       Object {
-        "attribs": Object {
-          "class": "body",
-        },
+        "attribs": Object {},
         "children": Array [
           Object {
-            "attribs": Object {},
+            "attribs": Object {
+              "class": "background",
+            },
             "children": Array [
               Object {
                 "attribs": Object {
-                  "class": "background",
+                  "class": "container",
                 },
                 "children": Array [
                   Object {
                     "attribs": Object {
-                      "class": "container",
+                      "class": "formErrorContainer",
                     },
                     "children": Array [
                       Object {
                         "attribs": Object {
-                          "class": "formErrorContainer",
+                          "class": "form",
                         },
                         "children": Array [
                           Object {
                             "attribs": Object {
-                              "class": "form",
+                              "class": "title",
+                            },
+                            "children": Array [
+                              Object {
+                                "data": "Commons",
+                                "next": null,
+                                "parent": [Circular],
+                                "prev": null,
+                                "type": "text",
+                              },
+                            ],
+                            "name": "div",
+                            "namespace": "http://www.w3.org/1999/xhtml",
+                            "next": Object {
+                              "attribs": Object {
+                                "class": "button",
+                                "disabled": "",
+                                "style": "opacity:0.6",
+                                "type": "button",
+                              },
+                              "children": Array [
+                                Object {
+                                  "attribs": Object {
+                                    "class": "googleIcon",
+                                  },
+                                  "children": Array [],
+                                  "name": "span",
+                                  "namespace": "http://www.w3.org/1999/xhtml",
+                                  "next": Object {
+                                    "attribs": Object {
+                                      "class": "buttonText",
+                                    },
+                                    "children": Array [
+                                      Object {
+                                        "data": "Sign in with Google",
+                                        "next": null,
+                                        "parent": [Circular],
+                                        "prev": null,
+                                        "type": "text",
+                                      },
+                                    ],
+                                    "name": "span",
+                                    "namespace": "http://www.w3.org/1999/xhtml",
+                                    "next": null,
+                                    "parent": [Circular],
+                                    "prev": [Circular],
+                                    "type": "tag",
+                                    "x-attribsNamespace": Object {
+                                      "class": undefined,
+                                    },
+                                    "x-attribsPrefix": Object {
+                                      "class": undefined,
+                                    },
+                                  },
+                                  "parent": [Circular],
+                                  "prev": null,
+                                  "type": "tag",
+                                  "x-attribsNamespace": Object {
+                                    "class": undefined,
+                                  },
+                                  "x-attribsPrefix": Object {
+                                    "class": undefined,
+                                  },
+                                },
+                                Object {
+                                  "attribs": Object {
+                                    "class": "buttonText",
+                                  },
+                                  "children": Array [
+                                    Object {
+                                      "data": "Sign in with Google",
+                                      "next": null,
+                                      "parent": [Circular],
+                                      "prev": null,
+                                      "type": "text",
+                                    },
+                                  ],
+                                  "name": "span",
+                                  "namespace": "http://www.w3.org/1999/xhtml",
+                                  "next": null,
+                                  "parent": [Circular],
+                                  "prev": Object {
+                                    "attribs": Object {
+                                      "class": "googleIcon",
+                                    },
+                                    "children": Array [],
+                                    "name": "span",
+                                    "namespace": "http://www.w3.org/1999/xhtml",
+                                    "next": [Circular],
+                                    "parent": [Circular],
+                                    "prev": null,
+                                    "type": "tag",
+                                    "x-attribsNamespace": Object {
+                                      "class": undefined,
+                                    },
+                                    "x-attribsPrefix": Object {
+                                      "class": undefined,
+                                    },
+                                  },
+                                  "type": "tag",
+                                  "x-attribsNamespace": Object {
+                                    "class": undefined,
+                                  },
+                                  "x-attribsPrefix": Object {
+                                    "class": undefined,
+                                  },
+                                },
+                              ],
+                              "name": "button",
+                              "namespace": "http://www.w3.org/1999/xhtml",
+                              "next": null,
+                              "parent": [Circular],
+                              "prev": [Circular],
+                              "type": "tag",
+                              "x-attribsNamespace": Object {
+                                "class": undefined,
+                                "disabled": undefined,
+                                "style": undefined,
+                                "type": undefined,
+                              },
+                              "x-attribsPrefix": Object {
+                                "class": undefined,
+                                "disabled": undefined,
+                                "style": undefined,
+                                "type": undefined,
+                              },
+                            },
+                            "parent": [Circular],
+                            "prev": null,
+                            "type": "tag",
+                            "x-attribsNamespace": Object {
+                              "class": undefined,
+                            },
+                            "x-attribsPrefix": Object {
+                              "class": undefined,
+                            },
+                          },
+                          Object {
+                            "attribs": Object {
+                              "class": "button",
+                              "disabled": "",
+                              "style": "opacity:0.6",
+                              "type": "button",
                             },
                             "children": Array [
                               Object {
                                 "attribs": Object {
-                                  "class": "title",
+                                  "class": "googleIcon",
                                 },
-                                "children": Array [
-                                  Object {
-                                    "data": "Commons",
-                                    "next": null,
-                                    "parent": [Circular],
-                                    "prev": null,
-                                    "type": "text",
-                                  },
-                                ],
-                                "name": "div",
+                                "children": Array [],
+                                "name": "span",
                                 "namespace": "http://www.w3.org/1999/xhtml",
                                 "next": Object {
                                   "attribs": Object {
-                                    "class": "button",
-                                    "disabled": "",
-                                    "style": "opacity:0.6",
-                                    "type": "button",
+                                    "class": "buttonText",
                                   },
                                   "children": Array [
                                     Object {
-                                      "attribs": Object {
-                                        "class": "googleIcon",
-                                      },
-                                      "children": Array [],
-                                      "name": "span",
-                                      "namespace": "http://www.w3.org/1999/xhtml",
-                                      "next": Object {
-                                        "attribs": Object {
-                                          "class": "buttonText",
-                                        },
-                                        "children": Array [
-                                          Object {
-                                            "data": "Sign in with Google",
-                                            "next": null,
-                                            "parent": [Circular],
-                                            "prev": null,
-                                            "type": "text",
-                                          },
-                                        ],
-                                        "name": "span",
-                                        "namespace": "http://www.w3.org/1999/xhtml",
-                                        "next": null,
-                                        "parent": [Circular],
-                                        "prev": [Circular],
-                                        "type": "tag",
-                                        "x-attribsNamespace": Object {
-                                          "class": undefined,
-                                        },
-                                        "x-attribsPrefix": Object {
-                                          "class": undefined,
-                                        },
-                                      },
-                                      "parent": [Circular],
-                                      "prev": null,
-                                      "type": "tag",
-                                      "x-attribsNamespace": Object {
-                                        "class": undefined,
-                                      },
-                                      "x-attribsPrefix": Object {
-                                        "class": undefined,
-                                      },
-                                    },
-                                    Object {
-                                      "attribs": Object {
-                                        "class": "buttonText",
-                                      },
-                                      "children": Array [
-                                        Object {
-                                          "data": "Sign in with Google",
-                                          "next": null,
-                                          "parent": [Circular],
-                                          "prev": null,
-                                          "type": "text",
-                                        },
-                                      ],
-                                      "name": "span",
-                                      "namespace": "http://www.w3.org/1999/xhtml",
+                                      "data": "Sign in with Google",
                                       "next": null,
                                       "parent": [Circular],
-                                      "prev": Object {
-                                        "attribs": Object {
-                                          "class": "googleIcon",
-                                        },
-                                        "children": Array [],
-                                        "name": "span",
-                                        "namespace": "http://www.w3.org/1999/xhtml",
-                                        "next": [Circular],
-                                        "parent": [Circular],
-                                        "prev": null,
-                                        "type": "tag",
-                                        "x-attribsNamespace": Object {
-                                          "class": undefined,
-                                        },
-                                        "x-attribsPrefix": Object {
-                                          "class": undefined,
-                                        },
-                                      },
-                                      "type": "tag",
-                                      "x-attribsNamespace": Object {
-                                        "class": undefined,
-                                      },
-                                      "x-attribsPrefix": Object {
-                                        "class": undefined,
-                                      },
+                                      "prev": null,
+                                      "type": "text",
                                     },
                                   ],
-                                  "name": "button",
+                                  "name": "span",
                                   "namespace": "http://www.w3.org/1999/xhtml",
                                   "next": null,
                                   "parent": [Circular],
@@ -151,15 +205,9 @@ initialize {
                                   "type": "tag",
                                   "x-attribsNamespace": Object {
                                     "class": undefined,
-                                    "disabled": undefined,
-                                    "style": undefined,
-                                    "type": undefined,
                                   },
                                   "x-attribsPrefix": Object {
                                     "class": undefined,
-                                    "disabled": undefined,
-                                    "style": undefined,
-                                    "type": undefined,
                                   },
                                 },
                                 "parent": [Circular],
@@ -173,6 +221,227 @@ initialize {
                                 },
                               },
                               Object {
+                                "attribs": Object {
+                                  "class": "buttonText",
+                                },
+                                "children": Array [
+                                  Object {
+                                    "data": "Sign in with Google",
+                                    "next": null,
+                                    "parent": [Circular],
+                                    "prev": null,
+                                    "type": "text",
+                                  },
+                                ],
+                                "name": "span",
+                                "namespace": "http://www.w3.org/1999/xhtml",
+                                "next": null,
+                                "parent": [Circular],
+                                "prev": Object {
+                                  "attribs": Object {
+                                    "class": "googleIcon",
+                                  },
+                                  "children": Array [],
+                                  "name": "span",
+                                  "namespace": "http://www.w3.org/1999/xhtml",
+                                  "next": [Circular],
+                                  "parent": [Circular],
+                                  "prev": null,
+                                  "type": "tag",
+                                  "x-attribsNamespace": Object {
+                                    "class": undefined,
+                                  },
+                                  "x-attribsPrefix": Object {
+                                    "class": undefined,
+                                  },
+                                },
+                                "type": "tag",
+                                "x-attribsNamespace": Object {
+                                  "class": undefined,
+                                },
+                                "x-attribsPrefix": Object {
+                                  "class": undefined,
+                                },
+                              },
+                            ],
+                            "name": "button",
+                            "namespace": "http://www.w3.org/1999/xhtml",
+                            "next": null,
+                            "parent": [Circular],
+                            "prev": Object {
+                              "attribs": Object {
+                                "class": "title",
+                              },
+                              "children": Array [
+                                Object {
+                                  "data": "Commons",
+                                  "next": null,
+                                  "parent": [Circular],
+                                  "prev": null,
+                                  "type": "text",
+                                },
+                              ],
+                              "name": "div",
+                              "namespace": "http://www.w3.org/1999/xhtml",
+                              "next": [Circular],
+                              "parent": [Circular],
+                              "prev": null,
+                              "type": "tag",
+                              "x-attribsNamespace": Object {
+                                "class": undefined,
+                              },
+                              "x-attribsPrefix": Object {
+                                "class": undefined,
+                              },
+                            },
+                            "type": "tag",
+                            "x-attribsNamespace": Object {
+                              "class": undefined,
+                              "disabled": undefined,
+                              "style": undefined,
+                              "type": undefined,
+                            },
+                            "x-attribsPrefix": Object {
+                              "class": undefined,
+                              "disabled": undefined,
+                              "style": undefined,
+                              "type": undefined,
+                            },
+                          },
+                        ],
+                        "name": "div",
+                        "namespace": "http://www.w3.org/1999/xhtml",
+                        "next": null,
+                        "parent": [Circular],
+                        "prev": null,
+                        "type": "tag",
+                        "x-attribsNamespace": Object {
+                          "class": undefined,
+                        },
+                        "x-attribsPrefix": Object {
+                          "class": undefined,
+                        },
+                      },
+                    ],
+                    "name": "div",
+                    "namespace": "http://www.w3.org/1999/xhtml",
+                    "next": null,
+                    "parent": [Circular],
+                    "prev": null,
+                    "type": "tag",
+                    "x-attribsNamespace": Object {
+                      "class": undefined,
+                    },
+                    "x-attribsPrefix": Object {
+                      "class": undefined,
+                    },
+                  },
+                ],
+                "name": "div",
+                "namespace": "http://www.w3.org/1999/xhtml",
+                "next": null,
+                "parent": [Circular],
+                "prev": null,
+                "type": "tag",
+                "x-attribsNamespace": Object {
+                  "class": undefined,
+                },
+                "x-attribsPrefix": Object {
+                  "class": undefined,
+                },
+              },
+            ],
+            "name": "div",
+            "namespace": "http://www.w3.org/1999/xhtml",
+            "next": Object {
+              "attribs": Object {
+                "class": "footer",
+              },
+              "children": Array [
+                Object {
+                  "data": "A Cityblock Health product",
+                  "next": null,
+                  "parent": [Circular],
+                  "prev": null,
+                  "type": "text",
+                },
+              ],
+              "name": "div",
+              "namespace": "http://www.w3.org/1999/xhtml",
+              "next": null,
+              "parent": [Circular],
+              "prev": [Circular],
+              "type": "tag",
+              "x-attribsNamespace": Object {
+                "class": undefined,
+              },
+              "x-attribsPrefix": Object {
+                "class": undefined,
+              },
+            },
+            "parent": [Circular],
+            "prev": null,
+            "type": "tag",
+            "x-attribsNamespace": Object {
+              "class": undefined,
+            },
+            "x-attribsPrefix": Object {
+              "class": undefined,
+            },
+          },
+          Object {
+            "attribs": Object {
+              "class": "footer",
+            },
+            "children": Array [
+              Object {
+                "data": "A Cityblock Health product",
+                "next": null,
+                "parent": [Circular],
+                "prev": null,
+                "type": "text",
+              },
+            ],
+            "name": "div",
+            "namespace": "http://www.w3.org/1999/xhtml",
+            "next": null,
+            "parent": [Circular],
+            "prev": Object {
+              "attribs": Object {
+                "class": "background",
+              },
+              "children": Array [
+                Object {
+                  "attribs": Object {
+                    "class": "container",
+                  },
+                  "children": Array [
+                    Object {
+                      "attribs": Object {
+                        "class": "formErrorContainer",
+                      },
+                      "children": Array [
+                        Object {
+                          "attribs": Object {
+                            "class": "form",
+                          },
+                          "children": Array [
+                            Object {
+                              "attribs": Object {
+                                "class": "title",
+                              },
+                              "children": Array [
+                                Object {
+                                  "data": "Commons",
+                                  "next": null,
+                                  "parent": [Circular],
+                                  "prev": null,
+                                  "type": "text",
+                                },
+                              ],
+                              "name": "div",
+                              "namespace": "http://www.w3.org/1999/xhtml",
+                              "next": Object {
                                 "attribs": Object {
                                   "class": "button",
                                   "disabled": "",
@@ -271,32 +540,7 @@ initialize {
                                 "namespace": "http://www.w3.org/1999/xhtml",
                                 "next": null,
                                 "parent": [Circular],
-                                "prev": Object {
-                                  "attribs": Object {
-                                    "class": "title",
-                                  },
-                                  "children": Array [
-                                    Object {
-                                      "data": "Commons",
-                                      "next": null,
-                                      "parent": [Circular],
-                                      "prev": null,
-                                      "type": "text",
-                                    },
-                                  ],
-                                  "name": "div",
-                                  "namespace": "http://www.w3.org/1999/xhtml",
-                                  "next": [Circular],
-                                  "parent": [Circular],
-                                  "prev": null,
-                                  "type": "tag",
-                                  "x-attribsNamespace": Object {
-                                    "class": undefined,
-                                  },
-                                  "x-attribsPrefix": Object {
-                                    "class": undefined,
-                                  },
-                                },
+                                "prev": [Circular],
                                 "type": "tag",
                                 "x-attribsNamespace": Object {
                                   "class": undefined,
@@ -311,235 +555,45 @@ initialize {
                                   "type": undefined,
                                 },
                               },
-                            ],
-                            "name": "div",
-                            "namespace": "http://www.w3.org/1999/xhtml",
-                            "next": null,
-                            "parent": [Circular],
-                            "prev": null,
-                            "type": "tag",
-                            "x-attribsNamespace": Object {
-                              "class": undefined,
+                              "parent": [Circular],
+                              "prev": null,
+                              "type": "tag",
+                              "x-attribsNamespace": Object {
+                                "class": undefined,
+                              },
+                              "x-attribsPrefix": Object {
+                                "class": undefined,
+                              },
                             },
-                            "x-attribsPrefix": Object {
-                              "class": undefined,
-                            },
-                          },
-                        ],
-                        "name": "div",
-                        "namespace": "http://www.w3.org/1999/xhtml",
-                        "next": null,
-                        "parent": [Circular],
-                        "prev": null,
-                        "type": "tag",
-                        "x-attribsNamespace": Object {
-                          "class": undefined,
-                        },
-                        "x-attribsPrefix": Object {
-                          "class": undefined,
-                        },
-                      },
-                    ],
-                    "name": "div",
-                    "namespace": "http://www.w3.org/1999/xhtml",
-                    "next": null,
-                    "parent": [Circular],
-                    "prev": null,
-                    "type": "tag",
-                    "x-attribsNamespace": Object {
-                      "class": undefined,
-                    },
-                    "x-attribsPrefix": Object {
-                      "class": undefined,
-                    },
-                  },
-                ],
-                "name": "div",
-                "namespace": "http://www.w3.org/1999/xhtml",
-                "next": Object {
-                  "attribs": Object {
-                    "class": "footer",
-                  },
-                  "children": Array [
-                    Object {
-                      "data": "A Cityblock Health product",
-                      "next": null,
-                      "parent": [Circular],
-                      "prev": null,
-                      "type": "text",
-                    },
-                  ],
-                  "name": "div",
-                  "namespace": "http://www.w3.org/1999/xhtml",
-                  "next": null,
-                  "parent": [Circular],
-                  "prev": [Circular],
-                  "type": "tag",
-                  "x-attribsNamespace": Object {
-                    "class": undefined,
-                  },
-                  "x-attribsPrefix": Object {
-                    "class": undefined,
-                  },
-                },
-                "parent": [Circular],
-                "prev": null,
-                "type": "tag",
-                "x-attribsNamespace": Object {
-                  "class": undefined,
-                },
-                "x-attribsPrefix": Object {
-                  "class": undefined,
-                },
-              },
-              Object {
-                "attribs": Object {
-                  "class": "footer",
-                },
-                "children": Array [
-                  Object {
-                    "data": "A Cityblock Health product",
-                    "next": null,
-                    "parent": [Circular],
-                    "prev": null,
-                    "type": "text",
-                  },
-                ],
-                "name": "div",
-                "namespace": "http://www.w3.org/1999/xhtml",
-                "next": null,
-                "parent": [Circular],
-                "prev": Object {
-                  "attribs": Object {
-                    "class": "background",
-                  },
-                  "children": Array [
-                    Object {
-                      "attribs": Object {
-                        "class": "container",
-                      },
-                      "children": Array [
-                        Object {
-                          "attribs": Object {
-                            "class": "formErrorContainer",
-                          },
-                          "children": Array [
                             Object {
                               "attribs": Object {
-                                "class": "form",
+                                "class": "button",
+                                "disabled": "",
+                                "style": "opacity:0.6",
+                                "type": "button",
                               },
                               "children": Array [
                                 Object {
                                   "attribs": Object {
-                                    "class": "title",
+                                    "class": "googleIcon",
                                   },
-                                  "children": Array [
-                                    Object {
-                                      "data": "Commons",
-                                      "next": null,
-                                      "parent": [Circular],
-                                      "prev": null,
-                                      "type": "text",
-                                    },
-                                  ],
-                                  "name": "div",
+                                  "children": Array [],
+                                  "name": "span",
                                   "namespace": "http://www.w3.org/1999/xhtml",
                                   "next": Object {
                                     "attribs": Object {
-                                      "class": "button",
-                                      "disabled": "",
-                                      "style": "opacity:0.6",
-                                      "type": "button",
+                                      "class": "buttonText",
                                     },
                                     "children": Array [
                                       Object {
-                                        "attribs": Object {
-                                          "class": "googleIcon",
-                                        },
-                                        "children": Array [],
-                                        "name": "span",
-                                        "namespace": "http://www.w3.org/1999/xhtml",
-                                        "next": Object {
-                                          "attribs": Object {
-                                            "class": "buttonText",
-                                          },
-                                          "children": Array [
-                                            Object {
-                                              "data": "Sign in with Google",
-                                              "next": null,
-                                              "parent": [Circular],
-                                              "prev": null,
-                                              "type": "text",
-                                            },
-                                          ],
-                                          "name": "span",
-                                          "namespace": "http://www.w3.org/1999/xhtml",
-                                          "next": null,
-                                          "parent": [Circular],
-                                          "prev": [Circular],
-                                          "type": "tag",
-                                          "x-attribsNamespace": Object {
-                                            "class": undefined,
-                                          },
-                                          "x-attribsPrefix": Object {
-                                            "class": undefined,
-                                          },
-                                        },
-                                        "parent": [Circular],
-                                        "prev": null,
-                                        "type": "tag",
-                                        "x-attribsNamespace": Object {
-                                          "class": undefined,
-                                        },
-                                        "x-attribsPrefix": Object {
-                                          "class": undefined,
-                                        },
-                                      },
-                                      Object {
-                                        "attribs": Object {
-                                          "class": "buttonText",
-                                        },
-                                        "children": Array [
-                                          Object {
-                                            "data": "Sign in with Google",
-                                            "next": null,
-                                            "parent": [Circular],
-                                            "prev": null,
-                                            "type": "text",
-                                          },
-                                        ],
-                                        "name": "span",
-                                        "namespace": "http://www.w3.org/1999/xhtml",
+                                        "data": "Sign in with Google",
                                         "next": null,
                                         "parent": [Circular],
-                                        "prev": Object {
-                                          "attribs": Object {
-                                            "class": "googleIcon",
-                                          },
-                                          "children": Array [],
-                                          "name": "span",
-                                          "namespace": "http://www.w3.org/1999/xhtml",
-                                          "next": [Circular],
-                                          "parent": [Circular],
-                                          "prev": null,
-                                          "type": "tag",
-                                          "x-attribsNamespace": Object {
-                                            "class": undefined,
-                                          },
-                                          "x-attribsPrefix": Object {
-                                            "class": undefined,
-                                          },
-                                        },
-                                        "type": "tag",
-                                        "x-attribsNamespace": Object {
-                                          "class": undefined,
-                                        },
-                                        "x-attribsPrefix": Object {
-                                          "class": undefined,
-                                        },
+                                        "prev": null,
+                                        "type": "text",
                                       },
                                     ],
-                                    "name": "button",
+                                    "name": "span",
                                     "namespace": "http://www.w3.org/1999/xhtml",
                                     "next": null,
                                     "parent": [Circular],
@@ -547,15 +601,9 @@ initialize {
                                     "type": "tag",
                                     "x-attribsNamespace": Object {
                                       "class": undefined,
-                                      "disabled": undefined,
-                                      "style": undefined,
-                                      "type": undefined,
                                     },
                                     "x-attribsPrefix": Object {
                                       "class": undefined,
-                                      "disabled": undefined,
-                                      "style": undefined,
-                                      "type": undefined,
                                     },
                                   },
                                   "parent": [Circular],
@@ -570,117 +618,27 @@ initialize {
                                 },
                                 Object {
                                   "attribs": Object {
-                                    "class": "button",
-                                    "disabled": "",
-                                    "style": "opacity:0.6",
-                                    "type": "button",
+                                    "class": "buttonText",
                                   },
                                   "children": Array [
                                     Object {
-                                      "attribs": Object {
-                                        "class": "googleIcon",
-                                      },
-                                      "children": Array [],
-                                      "name": "span",
-                                      "namespace": "http://www.w3.org/1999/xhtml",
-                                      "next": Object {
-                                        "attribs": Object {
-                                          "class": "buttonText",
-                                        },
-                                        "children": Array [
-                                          Object {
-                                            "data": "Sign in with Google",
-                                            "next": null,
-                                            "parent": [Circular],
-                                            "prev": null,
-                                            "type": "text",
-                                          },
-                                        ],
-                                        "name": "span",
-                                        "namespace": "http://www.w3.org/1999/xhtml",
-                                        "next": null,
-                                        "parent": [Circular],
-                                        "prev": [Circular],
-                                        "type": "tag",
-                                        "x-attribsNamespace": Object {
-                                          "class": undefined,
-                                        },
-                                        "x-attribsPrefix": Object {
-                                          "class": undefined,
-                                        },
-                                      },
-                                      "parent": [Circular],
-                                      "prev": null,
-                                      "type": "tag",
-                                      "x-attribsNamespace": Object {
-                                        "class": undefined,
-                                      },
-                                      "x-attribsPrefix": Object {
-                                        "class": undefined,
-                                      },
-                                    },
-                                    Object {
-                                      "attribs": Object {
-                                        "class": "buttonText",
-                                      },
-                                      "children": Array [
-                                        Object {
-                                          "data": "Sign in with Google",
-                                          "next": null,
-                                          "parent": [Circular],
-                                          "prev": null,
-                                          "type": "text",
-                                        },
-                                      ],
-                                      "name": "span",
-                                      "namespace": "http://www.w3.org/1999/xhtml",
+                                      "data": "Sign in with Google",
                                       "next": null,
                                       "parent": [Circular],
-                                      "prev": Object {
-                                        "attribs": Object {
-                                          "class": "googleIcon",
-                                        },
-                                        "children": Array [],
-                                        "name": "span",
-                                        "namespace": "http://www.w3.org/1999/xhtml",
-                                        "next": [Circular],
-                                        "parent": [Circular],
-                                        "prev": null,
-                                        "type": "tag",
-                                        "x-attribsNamespace": Object {
-                                          "class": undefined,
-                                        },
-                                        "x-attribsPrefix": Object {
-                                          "class": undefined,
-                                        },
-                                      },
-                                      "type": "tag",
-                                      "x-attribsNamespace": Object {
-                                        "class": undefined,
-                                      },
-                                      "x-attribsPrefix": Object {
-                                        "class": undefined,
-                                      },
+                                      "prev": null,
+                                      "type": "text",
                                     },
                                   ],
-                                  "name": "button",
+                                  "name": "span",
                                   "namespace": "http://www.w3.org/1999/xhtml",
                                   "next": null,
                                   "parent": [Circular],
                                   "prev": Object {
                                     "attribs": Object {
-                                      "class": "title",
+                                      "class": "googleIcon",
                                     },
-                                    "children": Array [
-                                      Object {
-                                        "data": "Commons",
-                                        "next": null,
-                                        "parent": [Circular],
-                                        "prev": null,
-                                        "type": "text",
-                                      },
-                                    ],
-                                    "name": "div",
+                                    "children": Array [],
+                                    "name": "span",
                                     "namespace": "http://www.w3.org/1999/xhtml",
                                     "next": [Circular],
                                     "parent": [Circular],
@@ -696,29 +654,54 @@ initialize {
                                   "type": "tag",
                                   "x-attribsNamespace": Object {
                                     "class": undefined,
-                                    "disabled": undefined,
-                                    "style": undefined,
-                                    "type": undefined,
                                   },
                                   "x-attribsPrefix": Object {
                                     "class": undefined,
-                                    "disabled": undefined,
-                                    "style": undefined,
-                                    "type": undefined,
                                   },
                                 },
                               ],
-                              "name": "div",
+                              "name": "button",
                               "namespace": "http://www.w3.org/1999/xhtml",
                               "next": null,
                               "parent": [Circular],
-                              "prev": null,
+                              "prev": Object {
+                                "attribs": Object {
+                                  "class": "title",
+                                },
+                                "children": Array [
+                                  Object {
+                                    "data": "Commons",
+                                    "next": null,
+                                    "parent": [Circular],
+                                    "prev": null,
+                                    "type": "text",
+                                  },
+                                ],
+                                "name": "div",
+                                "namespace": "http://www.w3.org/1999/xhtml",
+                                "next": [Circular],
+                                "parent": [Circular],
+                                "prev": null,
+                                "type": "tag",
+                                "x-attribsNamespace": Object {
+                                  "class": undefined,
+                                },
+                                "x-attribsPrefix": Object {
+                                  "class": undefined,
+                                },
+                              },
                               "type": "tag",
                               "x-attribsNamespace": Object {
                                 "class": undefined,
+                                "disabled": undefined,
+                                "style": undefined,
+                                "type": undefined,
                               },
                               "x-attribsPrefix": Object {
                                 "class": undefined,
+                                "disabled": undefined,
+                                "style": undefined,
+                                "type": undefined,
                               },
                             },
                           ],
@@ -752,7 +735,7 @@ initialize {
                   ],
                   "name": "div",
                   "namespace": "http://www.w3.org/1999/xhtml",
-                  "next": [Circular],
+                  "next": null,
                   "parent": [Circular],
                   "prev": null,
                   "type": "tag",
@@ -763,23 +746,27 @@ initialize {
                     "class": undefined,
                   },
                 },
-                "type": "tag",
-                "x-attribsNamespace": Object {
-                  "class": undefined,
-                },
-                "x-attribsPrefix": Object {
-                  "class": undefined,
-                },
+              ],
+              "name": "div",
+              "namespace": "http://www.w3.org/1999/xhtml",
+              "next": [Circular],
+              "parent": [Circular],
+              "prev": null,
+              "type": "tag",
+              "x-attribsNamespace": Object {
+                "class": undefined,
               },
-            ],
-            "name": "div",
-            "namespace": "http://www.w3.org/1999/xhtml",
-            "next": null,
-            "parent": [Circular],
-            "prev": null,
+              "x-attribsPrefix": Object {
+                "class": undefined,
+              },
+            },
             "type": "tag",
-            "x-attribsNamespace": Object {},
-            "x-attribsPrefix": Object {},
+            "x-attribsNamespace": Object {
+              "class": undefined,
+            },
+            "x-attribsPrefix": Object {
+              "class": undefined,
+            },
           },
         ],
         "name": "div",
@@ -788,12 +775,8 @@ initialize {
         "parent": [Circular],
         "prev": null,
         "type": "tag",
-        "x-attribsNamespace": Object {
-          "class": undefined,
-        },
-        "x-attribsPrefix": Object {
-          "class": undefined,
-        },
+        "x-attribsNamespace": Object {},
+        "x-attribsPrefix": Object {},
       },
     ],
     "name": "div",
@@ -816,8 +799,12 @@ initialize {
       "x-attribsPrefix": Object {},
     },
     "type": "tag",
-    "x-attribsNamespace": Object {},
-    "x-attribsPrefix": Object {},
+    "x-attribsNamespace": Object {
+      "class": undefined,
+    },
+    "x-attribsPrefix": Object {
+      "class": undefined,
+    },
   },
   "_root": [Circular],
   "length": 1,

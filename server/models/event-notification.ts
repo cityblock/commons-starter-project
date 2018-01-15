@@ -120,10 +120,7 @@ export default class EventNotification extends BaseModel {
     return eventNotification;
   }
 
-  static async dismiss(
-    eventNotificationId: string,
-    txn?: Transaction,
-  ): Promise<EventNotification> {
+  static async dismiss(eventNotificationId: string, txn?: Transaction): Promise<EventNotification> {
     return await this.query(txn)
       .eager(EAGER_QUERY)
       .modifyEager('taskEvent', builder => builder.where('deletedAt', null))
@@ -142,12 +139,12 @@ export default class EventNotification extends BaseModel {
       .andWhere('event_notification.seenAt', null)
       .select('event_notification.id');
 
-    return await this.query(txn)
+    return (await this.query(txn)
       .eager(EAGER_QUERY)
       .modifyEager('taskEvent', builder => builder.where('deletedAt', null))
       .where('id', 'in', taskEventIdsToDismissQuery as any)
       .patch({ seenAt: new Date().toISOString() })
-      .returning('*') as any;
+      .returning('*')) as any;
   }
 
   // Fetch all event notifications for a user

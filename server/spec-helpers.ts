@@ -18,7 +18,10 @@ import EventNotification from './models/event-notification';
 import Patient, { IPatientEditableFields } from './models/patient';
 import PatientAnswer from './models/patient-answer';
 import PatientAnswerEvent from './models/patient-answer-event';
+import PatientConcern from './models/patient-concern';
 import PatientScreeningToolSubmission from './models/patient-screening-tool-submission';
+import ProgressNote from './models/progress-note';
+import ProgressNoteTemplate from './models/progress-note-template';
 import Question from './models/question';
 import RiskArea from './models/risk-area';
 import RiskAreaAssessmentSubmission from './models/risk-area-assessment-submission';
@@ -412,6 +415,138 @@ export async function setupPatientsWithPendingSuggestions(txn: Transaction) {
   return { patient1, user };
 }
 
+export async function setupPatientsWithMissingInfo(txn: Transaction) {
+  const clinic = await Clinic.create(createMockClinic('The Wall', 13), txn);
+  const user = await User.create(createMockUser(211, clinic.id), txn);
+  const user2 = await User.create(createMockUser(212, clinic.id), txn);
+
+  await createPatient(createMockPatient(511, clinic.id, patient1Name), user.id, txn);
+  const patient1 = await createPatient(
+    {
+      athenaPatientId: 13,
+      firstName: patient2Name,
+      lastName: 'Stark',
+      homeClinicId: clinic.id,
+      zip: '11238',
+      dateOfBirth: '01/01/1900',
+      consentToCall: false,
+      consentToText: false,
+      language: 'en',
+    } as any,
+    user.id,
+    txn,
+  );
+  await createPatient(
+    {
+      athenaPatientId: 14,
+      firstName: patient3Name,
+      lastName: 'Stark',
+      homeClinicId: clinic.id,
+      zip: '11238',
+      dateOfBirth: '01/01/1900',
+      consentToCall: false,
+      consentToText: false,
+      language: 'en',
+    } as any,
+    user2.id,
+    txn,
+  );
+
+  return { user, patient1 };
+}
+
+export async function setupPatientsWithNoRecentEngagement(txn: Transaction) {
+  const clinic = await Clinic.create(createMockClinic('The Dothraki Sea', 13), txn);
+  const user = await User.create(createMockUser(211, clinic.id), txn);
+  const user2 = await User.create(createMockUser(212, clinic.id), txn);
+
+  const patient1 = await createPatient(
+    createMockPatient(611, clinic.id, patient1Name),
+    user.id,
+    txn,
+  );
+  const patient2 = await createPatient(
+    createMockPatient(612, clinic.id, patient2Name),
+    user2.id,
+    txn,
+  );
+  const patient3 = await createPatient(
+    createMockPatient(613, clinic.id, patient3Name),
+    user.id,
+    txn,
+  );
+
+  const progressNoteTemplate = await ProgressNoteTemplate.create(
+    {
+      title: 'Join forces with Daenerys',
+    },
+    txn,
+  );
+
+  await ProgressNote.create(
+    {
+      patientId: patient2.id,
+      userId: user2.id,
+      progressNoteTemplateId: progressNoteTemplate.id,
+    },
+    txn,
+  );
+  await ProgressNote.create(
+    {
+      patientId: patient3.id,
+      userId: user.id,
+      progressNoteTemplateId: progressNoteTemplate.id,
+    },
+    txn,
+  );
+
+  return { user, patient1 };
+}
+
+export async function setupPatientsWithOutOfDateMAP(txn: Transaction) {
+  const clinic = await Clinic.create(createMockClinic('Pentos', 13), txn);
+  const user = await User.create(createMockUser(311, clinic.id), txn);
+  const user2 = await User.create(createMockUser(213, clinic.id), txn);
+
+  const patient1 = await createPatient(
+    createMockPatient(711, clinic.id, patient1Name),
+    user.id,
+    txn,
+  );
+  const patient2 = await createPatient(
+    createMockPatient(712, clinic.id, patient2Name),
+    user2.id,
+    txn,
+  );
+  const patient3 = await createPatient(
+    createMockPatient(713, clinic.id, patient3Name),
+    user.id,
+    txn,
+  );
+
+  const concern = await Concern.create({ title: 'Night King brought the Wall down' }, txn);
+
+  await PatientConcern.create(
+    {
+      concernId: concern.id,
+      patientId: patient2.id,
+      userId: user2.id,
+    },
+    txn,
+  );
+
+  await PatientConcern.create(
+    {
+      concernId: concern.id,
+      patientId: patient3.id,
+      userId: user.id,
+    },
+    txn,
+  );
+
+  return { patient1, user };
+}
+
 export async function setupUrgentTasks(txn: Transaction) {
   const clinic = await Clinic.create(createMockClinic('Winterfell', 12), txn);
   const user = await User.create(createMockUser(111, clinic.id), txn);
@@ -481,10 +616,7 @@ export async function setupUrgentTasks(txn: Transaction) {
     },
     txn,
   );
-  await EventNotification.dismiss(
-    eventNotification2.id,
-    txn,
-  );
+  await EventNotification.dismiss(eventNotification2.id, txn);
 
   return { user, patient1, patient5, task, task1, eventNotification };
 }

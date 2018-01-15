@@ -1718,6 +1718,12 @@ type RootQueryType {
   patientsNewToCareTeam(pageNumber: Int!, pageSize: Int!): PatientForDashboardEdges!
   # Patient dashboard - pending MAP suggestions
   patientsWithPendingSuggestions(pageNumber: Int!, pageSize: Int!): PatientForDashboardEdges!
+  # Patient dashboard - lacking demographic information
+  patientsWithMissingInfo(pageNumber: Int!, pageSize: Int!): PatientForDashboardEdges!
+  # Patient dashboard - no recent engagement
+  patientsWithNoRecentEngagement(pageNumber: Int!, pageSize: Int!): PatientForDashboardEdges!
+  # Patient dashboard - out of date MAP
+  patientsWithOutOfDateMAP(pageNumber: Int!, pageSize: Int!): PatientForDashboardEdges!
   # A single clinic
   clinic(clinicId: ID!): Clinic!
   # Clinics

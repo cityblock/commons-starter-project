@@ -160,15 +160,23 @@ export async function resolveEventNotificationsForCurrentUser(
   let notifications: IPaginatedResults<EventNotification>;
 
   if (taskEventNotificationsOnly) {
-    notifications = await EventNotification.getUserTaskEventNotifications(userId!, {
-      pageNumber,
-      pageSize,
-    }, txn);
+    notifications = await EventNotification.getUserTaskEventNotifications(
+      userId!,
+      {
+        pageNumber,
+        pageSize,
+      },
+      txn,
+    );
   } else {
-    notifications = await EventNotification.getUserEventNotifications(userId!, {
-      pageNumber,
-      pageSize,
-    }, txn);
+    notifications = await EventNotification.getUserEventNotifications(
+      userId!,
+      {
+        pageNumber,
+        pageSize,
+      },
+      txn,
+    );
   }
 
   const notificationEdges = notifications.results.map(
@@ -202,10 +210,14 @@ export async function resolveEventNotificationsForTask(
   const pageNumber = args.pageNumber || 0;
   const pageSize = args.pageSize || 10;
 
-  const notifications = await EventNotification.getTaskEventNotifications(args.taskId, {
-    pageNumber,
-    pageSize,
-  }, txn);
+  const notifications = await EventNotification.getTaskEventNotifications(
+    args.taskId,
+    {
+      pageNumber,
+      pageSize,
+    },
+    txn,
+  );
 
   const notificationEdges = notifications.results.map(
     (notification: EventNotification) =>

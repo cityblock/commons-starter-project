@@ -35,21 +35,27 @@ async function setup(txn: Transaction, userRole?: UserRole): Promise<ISetup> {
   const patient = await createPatient(createMockPatient(123, clinic.id), user.id, txn);
   const dueAt = new Date().toISOString();
 
-  const task = await Task.create({
-    title: 'title',
-    description: 'description',
-    dueAt,
-    patientId: patient.id,
-    createdById: user.id,
-    assignedToId: user.id,
-    priority: 'low',
-  }, txn);
+  const task = await Task.create(
+    {
+      title: 'title',
+      description: 'description',
+      dueAt,
+      patientId: patient.id,
+      createdById: user.id,
+      assignedToId: user.id,
+      priority: 'low',
+    },
+    txn,
+  );
 
-  const taskEvent = await TaskEvent.create({
-    taskId: task.id,
-    userId: user.id,
-    eventType: 'add_comment',
-  }, txn);
+  const taskEvent = await TaskEvent.create(
+    {
+      taskId: task.id,
+      userId: user.id,
+      eventType: 'add_comment',
+    },
+    txn,
+  );
 
   return {
     clinic,
@@ -80,17 +86,26 @@ describe('event notification tests', () => {
       await transaction(EventNotification.knex(), async txn => {
         const { user, user2, taskEvent } = await setup(txn, userRole);
         const notification1 = await EventNotification.create({ userId: user.id }, txn);
-        const notification2 = await EventNotification.create({
-          taskEventId: taskEvent.id,
-          userId: user.id,
-        }, txn);
-        const notification3 = await EventNotification.create({
-          userId: user2.id,
-        }, txn);
-        const notification4 = await EventNotification.create({
-          taskEventId: taskEvent.id,
-          userId: user2.id,
-        }, txn);
+        const notification2 = await EventNotification.create(
+          {
+            taskEventId: taskEvent.id,
+            userId: user.id,
+          },
+          txn,
+        );
+        const notification3 = await EventNotification.create(
+          {
+            userId: user2.id,
+          },
+          txn,
+        );
+        const notification4 = await EventNotification.create(
+          {
+            taskEventId: taskEvent.id,
+            userId: user2.id,
+          },
+          txn,
+        );
 
         const query = `{
           eventNotificationsForCurrentUser(pageNumber: 0, pageSize: 10) {
@@ -123,17 +138,26 @@ describe('event notification tests', () => {
       await transaction(EventNotification.knex(), async txn => {
         const { user, user2, taskEvent } = await setup(txn, userRole);
         const notification1 = await EventNotification.create({ userId: user.id }, txn);
-        const notification2 = await EventNotification.create({
-          taskEventId: taskEvent.id,
-          userId: user.id,
-        }, txn);
-        const notification3 = await EventNotification.create({
-          userId: user2.id,
-        }, txn);
-        const notification4 = await EventNotification.create({
-          taskEventId: taskEvent.id,
-          userId: user2.id,
-        }, txn);
+        const notification2 = await EventNotification.create(
+          {
+            taskEventId: taskEvent.id,
+            userId: user.id,
+          },
+          txn,
+        );
+        const notification3 = await EventNotification.create(
+          {
+            userId: user2.id,
+          },
+          txn,
+        );
+        const notification4 = await EventNotification.create(
+          {
+            taskEventId: taskEvent.id,
+            userId: user2.id,
+          },
+          txn,
+        );
 
         const query = `{
           eventNotificationsForCurrentUser(
@@ -168,15 +192,21 @@ describe('event notification tests', () => {
       await transaction(EventNotification.knex(), async txn => {
         const { user, taskEvent } = await setup(txn, userRole);
         const notification1 = await EventNotification.create({ userId: user.id }, txn);
-        const notification2 = await EventNotification.create({
-          taskEventId: taskEvent.id,
-          userId: user.id,
-        }, txn);
+        const notification2 = await EventNotification.create(
+          {
+            taskEventId: taskEvent.id,
+            userId: user.id,
+          },
+          txn,
+        );
         const notification3 = await EventNotification.create({ userId: user.id }, txn);
-        const notification4 = await EventNotification.create({
-          taskEventId: taskEvent.id,
-          userId: user.id,
-        }, txn);
+        const notification4 = await EventNotification.create(
+          {
+            taskEventId: taskEvent.id,
+            userId: user.id,
+          },
+          txn,
+        );
 
         await EventNotification.dismiss(notification1.id, txn);
         await EventNotification.dismiss(notification2.id, txn);
@@ -244,10 +274,13 @@ describe('event notification tests', () => {
       await transaction(EventNotification.knex(), async txn => {
         const { user, task, taskEvent } = await setup(txn, userRole);
         const notification1 = await EventNotification.create({ userId: user.id }, txn);
-        const notification2 = await EventNotification.create({
-          taskEventId: taskEvent.id,
-          userId: user.id,
-        }, txn);
+        const notification2 = await EventNotification.create(
+          {
+            taskEventId: taskEvent.id,
+            userId: user.id,
+          },
+          txn,
+        );
 
         const query = `{
           eventNotificationsForTask(taskId: "${task.id}", pageNumber: 0, pageSize: 10) {
@@ -281,14 +314,20 @@ describe('event notification tests', () => {
       await transaction(EventNotification.knex(), async txn => {
         const { user, task, taskEvent } = await setup(txn, userRole);
         const notification1 = await EventNotification.create({ userId: user.id }, txn);
-        const notification2 = await EventNotification.create({
-          taskEventId: taskEvent.id,
-          userId: user.id,
-        }, txn);
-        const notification3 = await EventNotification.create({
-          taskEventId: taskEvent.id,
-          userId: user.id,
-        }, txn);
+        const notification2 = await EventNotification.create(
+          {
+            taskEventId: taskEvent.id,
+            userId: user.id,
+          },
+          txn,
+        );
+        const notification3 = await EventNotification.create(
+          {
+            taskEventId: taskEvent.id,
+            userId: user.id,
+          },
+          txn,
+        );
 
         await EventNotification.dismiss(notification2.id, txn);
 
@@ -347,10 +386,13 @@ describe('event notification tests', () => {
     it('dismisses all event notifications on a task for the current user', async () => {
       await transaction(EventNotification.knex(), async txn => {
         const { user, task, taskEvent } = await setup(txn, userRole);
-        const notification = await EventNotification.create({
-          userId: user.id,
-          taskEventId: taskEvent.id,
-        }, txn);
+        const notification = await EventNotification.create(
+          {
+            userId: user.id,
+            taskEventId: taskEvent.id,
+          },
+          txn,
+        );
         expect(notification.seenAt).toBeFalsy();
 
         const mutation = `mutation {
@@ -367,8 +409,8 @@ describe('event notification tests', () => {
         });
 
         const updatedNotifResults = result.data!.eventNotificationsForTaskDismiss;
-        updatedNotifResults.every(
-          (notif: IEventNotificationNode) => expect(notif).not.toHaveProperty('seenAt', null),
+        updatedNotifResults.every((notif: IEventNotificationNode) =>
+          expect(notif).not.toHaveProperty('seenAt', null),
         );
       });
     });
@@ -376,20 +418,29 @@ describe('event notification tests', () => {
     it('does not dismiss notifications for other users', async () => {
       await transaction(EventNotification.knex(), async txn => {
         const { user, user2, task, taskEvent } = await setup(txn, userRole);
-        const taskEvent2 = await TaskEvent.create({
-          taskId: task.id,
-          userId: user2.id,
-          eventType: 'add_comment',
-        }, txn);
-        const notification = await EventNotification.create({
-          userId: user.id,
-          taskEventId: taskEvent.id,
-        }, txn);
+        const taskEvent2 = await TaskEvent.create(
+          {
+            taskId: task.id,
+            userId: user2.id,
+            eventType: 'add_comment',
+          },
+          txn,
+        );
+        const notification = await EventNotification.create(
+          {
+            userId: user.id,
+            taskEventId: taskEvent.id,
+          },
+          txn,
+        );
         expect(notification.seenAt).toBeFalsy();
-        const notification2 = await EventNotification.create({
-          userId: user2.id,
-          taskEventId: taskEvent2.id,
-        }, txn);
+        const notification2 = await EventNotification.create(
+          {
+            userId: user2.id,
+            taskEventId: taskEvent2.id,
+          },
+          txn,
+        );
         expect(notification2.seenAt).toBeFalsy();
 
         const mutation = `mutation {
@@ -437,38 +488,48 @@ describe('event notification tests', () => {
 
         expect(fetchedUserNotifsResults.edges).toHaveLength(0);
         expect(fetchedUser2Notifs).toHaveLength(1);
-        fetchedUser2Notifs.every(
-          (notif: IEventNotificationNode) => expect(notif).toBeNull(),
-        );
+        fetchedUser2Notifs.every((notif: IEventNotificationNode) => expect(notif).toBeNull());
       });
     });
 
     it('does not dismiss notifications for other tasks', async () => {
       await transaction(EventNotification.knex(), async txn => {
         const { user, task, taskEvent, dueAt, patient } = await setup(txn, userRole);
-        const task2 = await Task.create({
-          title: 'title',
-          description: 'description',
-          dueAt,
-          patientId: patient.id,
-          createdById: user.id,
-          assignedToId: user.id,
-          priority: 'low',
-        }, txn);
-        const taskEvent2 = await TaskEvent.create({
-          taskId: task2.id,
-          userId: user.id,
-          eventType: 'add_comment',
-        }, txn);
-        const notification = await EventNotification.create({
-          userId: user.id,
-          taskEventId: taskEvent.id,
-        }, txn);
+        const task2 = await Task.create(
+          {
+            title: 'title',
+            description: 'description',
+            dueAt,
+            patientId: patient.id,
+            createdById: user.id,
+            assignedToId: user.id,
+            priority: 'low',
+          },
+          txn,
+        );
+        const taskEvent2 = await TaskEvent.create(
+          {
+            taskId: task2.id,
+            userId: user.id,
+            eventType: 'add_comment',
+          },
+          txn,
+        );
+        const notification = await EventNotification.create(
+          {
+            userId: user.id,
+            taskEventId: taskEvent.id,
+          },
+          txn,
+        );
         expect(notification.seenAt).toBeFalsy();
-        const notification2 = await EventNotification.create({
-          userId: user.id,
-          taskEventId: taskEvent2.id,
-        }, txn);
+        const notification2 = await EventNotification.create(
+          {
+            userId: user.id,
+            taskEventId: taskEvent2.id,
+          },
+          txn,
+        );
         expect(notification2.seenAt).toBeFalsy();
 
         const mutation = `mutation {
@@ -524,9 +585,7 @@ describe('event notification tests', () => {
 
         expect(fetchedTaskNotifsResults.edges).toHaveLength(0);
         expect(fetchedTask2Notifs).toHaveLength(1);
-        fetchedTask2Notifs.every(
-          (notif: IEventNotificationNode) => expect(notif).toBeNull(),
-        );
+        fetchedTask2Notifs.every((notif: IEventNotificationNode) => expect(notif).toBeNull());
       });
     });
   });
@@ -549,7 +608,9 @@ describe('event notification tests', () => {
           txn,
         });
 
-        expect(result.data!.eventNotificationsForUserTask[0].id).toBe(taskSetup.eventNotification.id);
+        expect(result.data!.eventNotificationsForUserTask[0].id).toBe(
+          taskSetup.eventNotification.id,
+        );
         expect(result.data!.eventNotificationsForUserTask[0].userId).toBe(taskSetup.user.id);
       });
     });

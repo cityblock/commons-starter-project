@@ -13,6 +13,9 @@ import {
   mockRedoxCreatePatientError,
   mockRedoxTokenFetch,
   setupPatientsNewToCareTeam,
+  setupPatientsWithMissingInfo,
+  setupPatientsWithNoRecentEngagement,
+  setupPatientsWithOutOfDateMAP,
   setupPatientsWithPendingSuggestions,
   setupUrgentTasks,
 } from '../../spec-helpers';
@@ -443,6 +446,81 @@ describe('patient', () => {
 
       expect(result.data!.patientsWithPendingSuggestions.totalCount).toBe(1);
       expect(result.data!.patientsWithPendingSuggestions.edges[0].node).toMatchObject({
+        id: setup.patient1.id,
+        firstName: setup.patient1.firstName,
+      });
+    });
+  });
+
+  it('gets patients that have missing demographic info', async () => {
+    await transaction(Patient.knex(), async txn => {
+      const setup = await setupPatientsWithMissingInfo(txn);
+
+      const query = `{
+        patientsWithMissingInfo(pageNumber: 0, pageSize: 10) {
+          edges { node { id, firstName }}
+          totalCount
+        }
+      }`;
+
+      const result = await graphql(schema, query, null, {
+        userRole,
+        userId: setup.user.id,
+        txn,
+      });
+
+      expect(result.data!.patientsWithMissingInfo.totalCount).toBe(1);
+      expect(result.data!.patientsWithMissingInfo.edges[0].node).toMatchObject({
+        id: setup.patient1.id,
+        firstName: setup.patient1.firstName,
+      });
+    });
+  });
+
+  it('gets patients that have no recent engagement', async () => {
+    await transaction(Patient.knex(), async txn => {
+      const setup = await setupPatientsWithNoRecentEngagement(txn);
+
+      const query = `{
+        patientsWithNoRecentEngagement(pageNumber: 0, pageSize: 10) {
+          edges { node { id, firstName }}
+          totalCount
+        }
+      }`;
+
+      const result = await graphql(schema, query, null, {
+        userRole,
+        userId: setup.user.id,
+        txn,
+      });
+
+      expect(result.data!.patientsWithNoRecentEngagement.totalCount).toBe(1);
+      expect(result.data!.patientsWithNoRecentEngagement.edges[0].node).toMatchObject({
+        id: setup.patient1.id,
+        firstName: setup.patient1.firstName,
+      });
+    });
+  });
+
+  it('gets patients that have an out of date MAP', async () => {
+    await transaction(Patient.knex(), async txn => {
+      const setup = await setupPatientsWithOutOfDateMAP(txn);
+
+      const query = `{
+        patientsWithOutOfDateMAP(pageNumber: 0, pageSize: 10) {
+          edges { node { id, firstName }}
+          totalCount
+        }
+      }`;
+
+      const result = await graphql(schema, query, null, {
+        userRole,
+        userId: setup.user.id,
+        txn,
+      });
+
+      expect(result.data!.patientsWithOutOfDateMAP.totalCount).toBe(1);
+      expect(result.data!.patientsWithOutOfDateMAP.edges[0].node).toMatchObject({
         id: setup.patient1.id,
         firstName: setup.patient1.firstName,
       });

@@ -62,6 +62,18 @@ declare module 'schema' {
   */
     patientsWithPendingSuggestions: IPatientForDashboardEdges;
     /**
+    description: Patient dashboard - lacking demographic information
+  */
+    patientsWithMissingInfo: IPatientForDashboardEdges;
+    /**
+    description: Patient dashboard - no recent engagement
+  */
+    patientsWithNoRecentEngagement: IPatientForDashboardEdges;
+    /**
+    description: Patient dashboard - out of date MAP
+  */
+    patientsWithOutOfDateMAP: IPatientForDashboardEdges;
+    /**
     description: A single clinic
   */
     clinic: IClinic | null;

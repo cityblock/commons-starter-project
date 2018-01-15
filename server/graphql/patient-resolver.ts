@@ -253,3 +253,86 @@ export async function resolvePatientsWithPendingSuggestions(
     totalCount: patients.total,
   };
 }
+
+export async function resolvePatientsWithMissingInfo(
+  root: any,
+  { pageNumber, pageSize }: IPaginationOptions,
+  { userRole, userId, txn }: IContext,
+): Promise<IPatientForDashboardEdges> {
+  await accessControls.isAllowedForUser(userRole, 'view', 'patient');
+  checkUserLoggedIn(userId);
+
+  const patients = await Patient.getPatientsWithMissingInfo({ pageNumber, pageSize }, userId!, txn);
+
+  const patientEdges = patients.results.map((patient, i) => formatRelayEdge(patient, patient.id));
+
+  const hasPreviousPage = pageNumber !== 0;
+  const hasNextPage = (pageNumber + 1) * pageSize < patients.total;
+
+  return {
+    edges: patientEdges,
+    pageInfo: {
+      hasPreviousPage,
+      hasNextPage,
+    },
+    totalCount: patients.total,
+  };
+}
+
+export async function resolvePatientsWithNoRecentEngagement(
+  root: any,
+  { pageNumber, pageSize }: IPaginationOptions,
+  { userRole, userId, txn }: IContext,
+): Promise<IPatientForDashboardEdges> {
+  await accessControls.isAllowedForUser(userRole, 'view', 'patient');
+  checkUserLoggedIn(userId);
+
+  const patients = await Patient.getPatientsWithNoRecentEngagement(
+    { pageNumber, pageSize },
+    userId!,
+    txn,
+  );
+
+  const patientEdges = patients.results.map((patient, i) => formatRelayEdge(patient, patient.id));
+
+  const hasPreviousPage = pageNumber !== 0;
+  const hasNextPage = (pageNumber + 1) * pageSize < patients.total;
+
+  return {
+    edges: patientEdges,
+    pageInfo: {
+      hasPreviousPage,
+      hasNextPage,
+    },
+    totalCount: patients.total,
+  };
+}
+
+export async function resolvePatientsWithOutOfDateMAP(
+  root: any,
+  { pageNumber, pageSize }: IPaginationOptions,
+  { userRole, userId, txn }: IContext,
+): Promise<IPatientForDashboardEdges> {
+  await accessControls.isAllowedForUser(userRole, 'view', 'patient');
+  checkUserLoggedIn(userId);
+
+  const patients = await Patient.getPatientsWithOutOfDateMAP(
+    { pageNumber, pageSize },
+    userId!,
+    txn,
+  );
+
+  const patientEdges = patients.results.map((patient, i) => formatRelayEdge(patient, patient.id));
+
+  const hasPreviousPage = pageNumber !== 0;
+  const hasNextPage = (pageNumber + 1) * pageSize < patients.total;
+
+  return {
+    edges: patientEdges,
+    pageInfo: {
+      hasPreviousPage,
+      hasNextPage,
+    },
+    totalCount: patients.total,
+  };
+}

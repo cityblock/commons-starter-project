@@ -8,6 +8,9 @@ import {
   createMockUser,
   createPatient,
   setupPatientsNewToCareTeam,
+  setupPatientsWithMissingInfo,
+  setupPatientsWithNoRecentEngagement,
+  setupPatientsWithOutOfDateMAP,
   setupPatientsWithPendingSuggestions,
   setupUrgentTasks,
 } from '../../spec-helpers';
@@ -383,7 +386,7 @@ describe('patient model', () => {
     });
   });
 
-  describe('dashboard task notifications', () => {
+  describe('dashboard patient list getters', () => {
     it('returns relevant patients on care team', async () => {
       await transaction(Patient.knex(), async txn => {
         const { user, patient1, patient5 } = await setupUrgentTasks(txn);
@@ -403,9 +406,7 @@ describe('patient model', () => {
         expect(resultNames).toEqual([patient1.firstName, patient5.firstName]);
       });
     });
-  });
 
-  describe('dashboard patients new to care team', () => {
     it('returns patients that are new to care team', async () => {
       await transaction(Patient.knex(), async txn => {
         const { user, patient1 } = await setupPatientsNewToCareTeam(txn);
@@ -426,14 +427,75 @@ describe('patient model', () => {
         });
       });
     });
-  });
 
-  describe('dashboard patients with pending MAP suggestions', () => {
     it('returns patients on care team with pending MAP suggestions', async () => {
       await transaction(Patient.knex(), async txn => {
         const { patient1, user } = await setupPatientsWithPendingSuggestions(txn);
 
         const { total, results } = await Patient.getPatientsWithPendingSuggestions(
+          {
+            pageNumber: 0,
+            pageSize: 10,
+          },
+          user.id,
+          txn,
+        );
+
+        expect(total).toBe(1);
+        expect(results[0]).toMatchObject({
+          id: patient1.id,
+          firstName: patient1.firstName,
+        });
+      });
+    });
+
+    it('returns patients on care team with missing demographic information', async () => {
+      await transaction(Patient.knex(), async txn => {
+        const { patient1, user } = await setupPatientsWithMissingInfo(txn);
+
+        const { total, results } = await Patient.getPatientsWithMissingInfo(
+          {
+            pageNumber: 0,
+            pageSize: 10,
+          },
+          user.id,
+          txn,
+        );
+
+        expect(total).toBe(1);
+        expect(results[0]).toMatchObject({
+          id: patient1.id,
+          firstName: patient1.firstName,
+        });
+      });
+    });
+
+    it('returns patients on care team with no recent engagement', async () => {
+      await transaction(Patient.knex(), async txn => {
+        const { patient1, user } = await setupPatientsWithNoRecentEngagement(txn);
+
+        const { total, results } = await Patient.getPatientsWithNoRecentEngagement(
+          {
+            pageNumber: 0,
+            pageSize: 10,
+          },
+          user.id,
+          txn,
+        );
+
+        expect(total).toBe(1);
+        expect(results[0]).toMatchObject({
+          id: patient1.id,
+          firstName: patient1.firstName,
+        });
+      });
+    });
+
+    it('returns patients on care team with no recent MAP updates', async () => {
+      await transaction(Patient.knex(), async txn => {
+        const { patient1, user } = await setupPatientsWithOutOfDateMAP(txn);
+
+        const { total, results } = await Patient.getPatientsWithOutOfDateMAP(
           {
             pageNumber: 0,
             pageSize: 10,

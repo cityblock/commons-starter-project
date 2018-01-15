@@ -306,5 +306,85 @@ export default class Patient extends BaseModel {
 
     return patientsResult;
   }
+
+  static async getPatientsWithMissingInfo(
+    { pageNumber, pageSize }: IPaginationOptions,
+    userId: string,
+    txn?: Transaction,
+  ): Promise<IPaginatedResults<Patient>> {
+    const patientsResult = await this.query(txn)
+      .where({ dateOfBirth: null })
+      .orWhere({ gender: null })
+      .orWhere({ zip: null })
+      .joinRaw(
+        `INNER JOIN care_team ON care_team."patientId" = patient.id
+          AND care_team."userId" = ?
+          AND care_team."deletedAt" IS NULL`,
+        userId,
+      )
+      .orderBy('lastName', 'ASC')
+      .orderBy('firstName', 'ASC')
+      .page(pageNumber, pageSize);
+
+    return patientsResult;
+  }
+
+  static async getPatientsWithNoRecentEngagement(
+    { pageNumber, pageSize }: IPaginationOptions,
+    userId: string,
+    txn?: Transaction,
+  ): Promise<IPaginatedResults<Patient>> {
+    const patientsResult = await this.query(txn)
+      .whereRaw(
+        `
+        patient.id NOT IN (
+          SELECT progress_note."patientId"
+          FROM progress_note
+          WHERE progress_note."createdAt" > now() - interval \'60 days\'
+            AND progress_note."deletedAt" IS NULL
+        )
+      `,
+      )
+      .joinRaw(
+        `INNER JOIN care_team ON care_team."patientId" = patient.id
+          AND care_team."userId" = ?
+          AND care_team."deletedAt" IS NULL`,
+        userId,
+      )
+      .orderBy('lastName', 'ASC')
+      .orderBy('firstName', 'ASC')
+      .page(pageNumber, pageSize);
+
+    return patientsResult;
+  }
+
+  static async getPatientsWithOutOfDateMAP(
+    { pageNumber, pageSize }: IPaginationOptions,
+    userId: string,
+    txn?: Transaction,
+  ): Promise<IPaginatedResults<Patient>> {
+    const patientsResult = await this.query(txn)
+      .whereRaw(
+        `
+      patient.id NOT IN (
+        SELECT care_plan_update_event."patientId"
+        FROM care_plan_update_event
+        WHERE care_plan_update_event."createdAt" > now() - interval \'30 days\'
+          AND care_plan_update_event."deletedAt" IS NULL
+      )
+    `,
+      )
+      .joinRaw(
+        `INNER JOIN care_team ON care_team."patientId" = patient.id
+        AND care_team."userId" = ?
+        AND care_team."deletedAt" IS NULL`,
+        userId,
+      )
+      .orderBy('lastName', 'ASC')
+      .orderBy('firstName', 'ASC')
+      .page(pageNumber, pageSize);
+
+    return patientsResult;
+  }
 }
 /* tslint:enable:member-ordering */

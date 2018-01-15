@@ -94,7 +94,7 @@ describe('patient risk area assessment submission model', () => {
         },
         txn,
       );
-      const riskArea2 = await createRiskArea({ title: 'Food' });
+      const riskArea2 = await createRiskArea({ title: 'Food' }, txn);
       // call it a 2nd time
       await RiskAreaAssessmentSubmission.autoOpenIfRequired(
         {

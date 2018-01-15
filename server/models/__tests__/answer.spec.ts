@@ -222,8 +222,10 @@ describe('answer model', () => {
   });
 
   it('should throw an error if an answer does not exist for the id', async () => {
-    const fakeId = uuid();
-    await expect(Answer.get(fakeId)).rejects.toMatch(`No such answer: ${fakeId}`);
+    await transaction(Question.knex(), async txn => {
+      const fakeId = uuid();
+      await expect(Answer.get(fakeId, txn)).rejects.toMatch(`No such answer: ${fakeId}`);
+    });
   });
 
   it('edits answer', async () => {

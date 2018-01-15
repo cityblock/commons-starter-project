@@ -27,19 +27,21 @@ interface ISetup {
 }
 
 async function setup(txn: Transaction): Promise<ISetup> {
-  const clinic = await Clinic.create(createMockClinic());
-
-  const user = await User.create(createMockUser(11, clinic.id, userRole));
-  const user2 = await User.create(createMockUser(11, clinic.id, userRole, 'care@care2.com'));
-  const patient = await createPatient(createMockPatient(123, clinic.id), user.id);
-  const task = await Task.create({
-    title: 'title',
-    description: 'description',
-    dueAt: new Date().toISOString(),
-    patientId: patient.id,
-    createdById: user.id,
-    assignedToId: user.id,
-  });
+  const clinic = await Clinic.create(createMockClinic(), txn);
+  const user = await User.create(createMockUser(11, clinic.id, userRole), txn);
+  const user2 = await User.create(createMockUser(11, clinic.id, userRole, 'care@care2.com'), txn);
+  const patient = await createPatient(createMockPatient(123, clinic.id), user.id, txn);
+  const task = await Task.create(
+    {
+      title: 'title',
+      description: 'description',
+      dueAt: new Date().toISOString(),
+      patientId: patient.id,
+      createdById: user.id,
+      assignedToId: user.id,
+    },
+    txn,
+  );
   return { clinic, user, user2, patient, task };
 }
 

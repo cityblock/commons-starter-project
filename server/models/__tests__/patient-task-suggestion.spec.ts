@@ -23,15 +23,18 @@ interface ISetup {
 }
 
 async function setup(txn: Transaction): Promise<ISetup> {
-  const clinic = await Clinic.create(createMockClinic());
-  const user = await User.create(createMockUser(11, clinic.id, userRole));
-  const patient = await createPatient(createMockPatient(123, clinic.id), user.id);
-  const taskTemplate = await TaskTemplate.create({
-    title: 'Housing',
-    repeating: false,
-    priority: 'low',
-    careTeamAssigneeRole: 'physician',
-  });
+  const clinic = await Clinic.create(createMockClinic(), txn);
+  const user = await User.create(createMockUser(11, clinic.id, userRole), txn);
+  const patient = await createPatient(createMockPatient(123, clinic.id), user.id, txn);
+  const taskTemplate = await TaskTemplate.create(
+    {
+      title: 'Housing',
+      repeating: false,
+      priority: 'low',
+      careTeamAssigneeRole: 'physician',
+    },
+    txn,
+  );
   return { clinic, user, patient, taskTemplate };
 }
 

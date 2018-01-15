@@ -87,14 +87,15 @@ export default class ScreeningTool extends BaseModel {
   static async edit(
     screeningToolId: string,
     screeningTool: IScreeningToolEditableFields,
+    txn?: Transaction,
   ): Promise<ScreeningTool> {
-    return await this.query()
+    return await this.query(txn)
       .eager(EAGER_QUERY)
       .patchAndFetchById(screeningToolId, screeningTool);
   }
 
-  static async get(screeningToolId: string): Promise<ScreeningTool> {
-    const screeningTool = await this.query()
+  static async get(screeningToolId: string, txn?: Transaction): Promise<ScreeningTool> {
+    const screeningTool = await this.query(txn)
       .eager(EAGER_QUERY)
       .modifyEager('screeningToolScoreRanges', builder =>
         builder.where('screening_tool_score_range.deletedAt', null),
@@ -114,15 +115,15 @@ export default class ScreeningTool extends BaseModel {
     return screeningTool;
   }
 
-  static async getForRiskArea(riskAreaId: string): Promise<ScreeningTool[]> {
-    return await this.query()
+  static async getForRiskArea(riskAreaId: string, txn?: Transaction): Promise<ScreeningTool[]> {
+    return await this.query(txn)
       .eager(EAGER_QUERY)
       .where({ deletedAt: null, riskAreaId })
       .orderBy('createdAt', 'asc');
   }
 
-  static async getAll(): Promise<ScreeningTool[]> {
-    return await this.query()
+  static async getAll(txn?: Transaction): Promise<ScreeningTool[]> {
+    return await this.query(txn)
       .eager(EAGER_QUERY)
       .modifyEager('screeningToolScoreRanges', builder =>
         builder.where('screening_tool_score_range.deletedAt', null),
@@ -137,11 +138,11 @@ export default class ScreeningTool extends BaseModel {
       .orderBy('createdAt', 'asc');
   }
 
-  static async delete(screeningToolId: string): Promise<ScreeningTool> {
-    await this.query()
+  static async delete(screeningToolId: string, txn?: Transaction): Promise<ScreeningTool> {
+    await this.query(txn)
       .where({ id: screeningToolId, deletedAt: null })
       .patch({ deletedAt: new Date().toISOString() });
-    const screeningTool = await this.query()
+    const screeningTool = await this.query(txn)
       .eager(EAGER_QUERY)
       .findById(screeningToolId);
     if (!screeningTool) {

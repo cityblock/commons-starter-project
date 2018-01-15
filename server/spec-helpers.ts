@@ -317,7 +317,7 @@ const patient3Name = 'Robb';
 const patient4Name = 'Bran';
 const patient5Name = 'Sansa';
 
-export async function setupPatientsNewToCareTeam(txn: Transaction) {
+export async function setupPatientsNewToCareTeam(txn?: Transaction) {
   const clinic = await Clinic.create(createMockClinic("King's Landing", 13), txn);
   const user = await User.create(createMockUser(211, clinic.id), txn);
   const user2 = await User.create(createMockUser(212, clinic.id), txn);
@@ -341,7 +341,7 @@ export async function setupPatientsNewToCareTeam(txn: Transaction) {
   return { user, patient1 };
 }
 
-export async function setupPatientsWithPendingSuggestions(txn: Transaction) {
+export async function setupPatientsWithPendingSuggestions(txn?: Transaction) {
   const clinic = await Clinic.create(createMockClinic('Dragonstone', 3), txn);
   const user = await User.create(createMockUser(311, clinic.id), txn);
   const user2 = await User.create(createMockUser(312, clinic.id), txn);
@@ -415,7 +415,7 @@ export async function setupPatientsWithPendingSuggestions(txn: Transaction) {
   return { patient1, user };
 }
 
-export async function setupPatientsWithMissingInfo(txn: Transaction) {
+export async function setupPatientsWithMissingInfo(txn?: Transaction) {
   const clinic = await Clinic.create(createMockClinic('The Wall', 13), txn);
   const user = await User.create(createMockUser(211, clinic.id), txn);
   const user2 = await User.create(createMockUser(212, clinic.id), txn);
@@ -455,7 +455,7 @@ export async function setupPatientsWithMissingInfo(txn: Transaction) {
   return { user, patient1 };
 }
 
-export async function setupPatientsWithNoRecentEngagement(txn: Transaction) {
+export async function setupPatientsWithNoRecentEngagement(txn?: Transaction) {
   const clinic = await Clinic.create(createMockClinic('The Dothraki Sea', 13), txn);
   const user = await User.create(createMockUser(211, clinic.id), txn);
   const user2 = await User.create(createMockUser(212, clinic.id), txn);
@@ -503,7 +503,7 @@ export async function setupPatientsWithNoRecentEngagement(txn: Transaction) {
   return { user, patient1 };
 }
 
-export async function setupPatientsWithOutOfDateMAP(txn: Transaction) {
+export async function setupPatientsWithOutOfDateMAP(txn?: Transaction) {
   const clinic = await Clinic.create(createMockClinic('Pentos', 13), txn);
   const user = await User.create(createMockUser(311, clinic.id), txn);
   const user2 = await User.create(createMockUser(213, clinic.id), txn);
@@ -547,7 +547,7 @@ export async function setupPatientsWithOutOfDateMAP(txn: Transaction) {
   return { patient1, user };
 }
 
-export async function setupUrgentTasks(txn: Transaction) {
+export async function setupUrgentTasks(txn?: Transaction) {
   const clinic = await Clinic.create(createMockClinic('Winterfell', 12), txn);
   const user = await User.create(createMockUser(111, clinic.id), txn);
   const user2 = await User.create(createMockUser(121, clinic.id), txn);
@@ -626,7 +626,7 @@ export async function createFullRiskAreaGroupAssociations(
   patientId: string,
   userId: string,
   riskAreaTitle: string,
-  txn: Transaction,
+  txn?: Transaction,
 ) {
   const riskAreaTitle2 = 'Zombie Drogon';
   const riskArea = await RiskArea.create(

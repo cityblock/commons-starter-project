@@ -184,12 +184,6 @@ export default class Patient extends BaseModel {
     return this.query(txn).patchAndFetchById(patientId, { athenaPatientId });
   }
 
-  static async execWithTransaction(
-    callback: (boundModelClass: typeof Patient) => Promise<Patient>,
-  ) {
-    return await transaction(this as any, callback);
-  }
-
   static async search(
     query: string,
     { pageNumber, pageSize }: IPaginationOptions,

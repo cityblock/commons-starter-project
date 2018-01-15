@@ -48,8 +48,8 @@ export default class RiskAreaGroup extends BaseModel {
     },
   };
 
-  static async get(riskAreaGroupId: string): Promise<RiskAreaGroup> {
-    const riskAreaGroup = await this.query().findOne({ id: riskAreaGroupId, deletedAt: null });
+  static async get(riskAreaGroupId: string, txn?: Transaction): Promise<RiskAreaGroup> {
+    const riskAreaGroup = await this.query(txn).findOne({ id: riskAreaGroupId, deletedAt: null });
 
     if (!riskAreaGroup) {
       return Promise.reject(`No such risk area group: ${riskAreaGroupId}`);
@@ -73,8 +73,9 @@ export default class RiskAreaGroup extends BaseModel {
   static async edit(
     riskAreaGroup: Partial<IRiskAreaGroupEditableFields>,
     riskAreaGroupId: string,
+    txn?: Transaction,
   ): Promise<RiskAreaGroup> {
-    const edited = await this.query().patchAndFetchById(riskAreaGroupId, riskAreaGroup);
+    const edited = await this.query(txn).patchAndFetchById(riskAreaGroupId, riskAreaGroup);
 
     if (!edited) {
       return Promise.reject(`No such risk area group: ${riskAreaGroupId}`);
@@ -82,12 +83,12 @@ export default class RiskAreaGroup extends BaseModel {
     return edited;
   }
 
-  static async delete(riskAreaGroupId: string): Promise<RiskAreaGroup> {
-    await this.query()
+  static async delete(riskAreaGroupId: string, txn?: Transaction): Promise<RiskAreaGroup> {
+    await this.query(txn)
       .where({ id: riskAreaGroupId, deletedAt: null })
       .patch({ deletedAt: new Date().toISOString() });
 
-    const deleted = await this.query().findById(riskAreaGroupId);
+    const deleted = await this.query(txn).findById(riskAreaGroupId);
 
     if (!deleted) {
       return Promise.reject(`No such risk area group: ${riskAreaGroupId}`);

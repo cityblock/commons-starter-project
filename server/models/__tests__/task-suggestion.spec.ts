@@ -1,3 +1,4 @@
+import { transaction, Transaction } from 'objection';
 import * as uuid from 'uuid/v4';
 import Db from '../../db';
 import { createRiskArea } from '../../spec-helpers';
@@ -6,25 +7,27 @@ import Question from '../question';
 import TaskSuggestion from '../task-suggestion';
 import TaskTemplate from '../task-template';
 
-describe('task suggestion model', () => {
-  let answer: Answer;
-  let taskTemplate: TaskTemplate;
-  let question: Question;
+interface ISetup {
+  answer: Answer;
+  taskTemplate: TaskTemplate;
+  question: Question;
+}
 
-  beforeEach(async () => {
-    await Db.get();
-    await Db.clear();
+async function setup(txn: Transaction): Promise<ISetup> {
+  const riskArea = await createRiskArea({ title: 'test' }, txn);
 
-    const riskArea = await createRiskArea({ title: 'test' });
-
-    question = await Question.create({
+  const question = await Question.create(
+    {
       title: 'like writing tests?',
       answerType: 'dropdown',
       order: 1,
       type: 'riskArea',
       riskAreaId: riskArea.id,
-    });
-    answer = await Answer.create({
+    },
+    txn,
+  );
+  const answer = await Answer.create(
+    {
       displayValue: 'loves writing tests!',
       value: '3',
       valueType: 'number',
@@ -32,13 +35,25 @@ describe('task suggestion model', () => {
       inSummary: false,
       questionId: question.id,
       order: 1,
-    });
-    taskTemplate = await TaskTemplate.create({
+    },
+    txn,
+  );
+  const taskTemplate = await TaskTemplate.create(
+    {
       title: 'Housing',
       repeating: false,
       priority: 'low',
       careTeamAssigneeRole: 'physician',
-    });
+    },
+    txn,
+  );
+  return { question, answer, taskTemplate };
+}
+
+describe('task suggestion model', () => {
+  beforeEach(async () => {
+    await Db.get();
+    await Db.clear();
   });
 
   afterAll(async () => {
@@ -47,58 +62,90 @@ describe('task suggestion model', () => {
 
   describe('task suggestion methods', () => {
     it('should associate multiple task suggestions with an answer', async () => {
-      const taskTemplate2 = await TaskTemplate.create({
-        title: 'Housing',
-        repeating: false,
-        priority: 'low',
-        careTeamAssigneeRole: 'physician',
-      });
+      await transaction(Question.knex(), async txn => {
+        const { taskTemplate, answer } = await setup(txn);
+        const taskTemplate2 = await TaskTemplate.create(
+          {
+            title: 'Housing',
+            repeating: false,
+            priority: 'low',
+            careTeamAssigneeRole: 'physician',
+          },
+          txn,
+        );
 
-      await TaskSuggestion.create({
-        taskTemplateId: taskTemplate.id,
-        answerId: answer.id,
-      });
-      await TaskSuggestion.create({
-        taskTemplateId: taskTemplate2.id,
-        answerId: answer.id,
-      });
+        await TaskSuggestion.create(
+          {
+            taskTemplateId: taskTemplate.id,
+            answerId: answer.id,
+          },
+          txn,
+        );
+        await TaskSuggestion.create(
+          {
+            taskTemplateId: taskTemplate2.id,
+            answerId: answer.id,
+          },
+          txn,
+        );
 
-      const taskTemplatesForAnswer = await TaskSuggestion.getForAnswer(answer.id);
-      const answersForTaskTemplate = await TaskSuggestion.getForTaskTemplate(taskTemplate.id);
+        const taskTemplatesForAnswer = await TaskSuggestion.getForAnswer(answer.id, txn);
+        const answersForTaskTemplate = await TaskSuggestion.getForTaskTemplate(
+          taskTemplate.id,
+          txn,
+        );
 
-      expect(answersForTaskTemplate[0].id).toEqual(answer.id);
-      expect(taskTemplatesForAnswer[0].id).toEqual(taskTemplate.id);
-      expect(taskTemplatesForAnswer[1].id).toEqual(taskTemplate2.id);
+        expect(answersForTaskTemplate[0].id).toEqual(answer.id);
+        expect(taskTemplatesForAnswer[0].id).toEqual(taskTemplate.id);
+        expect(taskTemplatesForAnswer[1].id).toEqual(taskTemplate2.id);
+      });
     });
 
     it('throws an error if adding a non-existant task template to an answer', async () => {
-      const error =
-        'insert into "task_suggestion" ("answerId", "id", "taskTemplateId")' +
-        ' values ($1, $2, $3) returning "id" - insert or update on table "task_suggestion"' +
-        ' violates foreign key constraint "task_suggestion_tasktemplateid_foreign"';
+      await transaction(Question.knex(), async txn => {
+        const { answer } = await setup(txn);
 
-      await expect(
-        TaskSuggestion.create({
-          taskTemplateId: uuid(),
-          answerId: answer.id,
-        }),
-      ).rejects.toMatchObject(new Error(error));
+        const error =
+          'insert into "task_suggestion" ("answerId", "id", "taskTemplateId")' +
+          ' values ($1, $2, $3) returning "id" - insert or update on table "task_suggestion"' +
+          ' violates foreign key constraint "task_suggestion_tasktemplateid_foreign"';
+
+        await expect(
+          TaskSuggestion.create(
+            {
+              taskTemplateId: uuid(),
+              answerId: answer.id,
+            },
+            txn,
+          ),
+        ).rejects.toMatchObject(new Error(error));
+      });
     });
 
     it('can remove an answer from a task suggestion', async () => {
-      await TaskSuggestion.create({
-        taskTemplateId: taskTemplate.id,
-        answerId: answer.id,
-      });
-      const taskSuggestionsForAnswer = await TaskSuggestion.getForAnswer(answer.id);
-      expect(taskSuggestionsForAnswer[0].id).toEqual(taskTemplate.id);
+      await transaction(Question.knex(), async txn => {
+        const { taskTemplate, answer } = await setup(txn);
 
-      const deleteResponse = await TaskSuggestion.delete({
-        taskTemplateId: taskTemplate.id,
-        answerId: answer.id,
+        await TaskSuggestion.create(
+          {
+            taskTemplateId: taskTemplate.id,
+            answerId: answer.id,
+          },
+          txn,
+        );
+        const taskSuggestionsForAnswer = await TaskSuggestion.getForAnswer(answer.id, txn);
+        expect(taskSuggestionsForAnswer[0].id).toEqual(taskTemplate.id);
+
+        const deleteResponse = await TaskSuggestion.delete(
+          {
+            taskTemplateId: taskTemplate.id,
+            answerId: answer.id,
+          },
+          txn,
+        );
+        expect(deleteResponse).toMatchObject([]);
+        expect(await TaskSuggestion.getForAnswer(answer.id, txn)).toEqual([]);
       });
-      expect(deleteResponse).toMatchObject([]);
-      expect(await TaskSuggestion.getForAnswer(answer.id)).toEqual([]);
     });
   });
 });

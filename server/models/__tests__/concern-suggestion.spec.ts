@@ -128,7 +128,7 @@ describe('concern suggestion model', () => {
     it('can remove an answer from a concern', async () => {
       await transaction(Question.knex(), async txn => {
         const { answer } = await setup(txn);
-        const concern = await Concern.create({ title: 'Housing' });
+        const concern = await Concern.create({ title: 'Housing' }, txn);
         await ConcernSuggestion.create(
           {
             concernId: concern.id,

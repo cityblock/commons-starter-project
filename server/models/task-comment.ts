@@ -59,8 +59,8 @@ export default class TaskComment extends BaseModel {
     },
   };
 
-  static async get(taskCommentId: string): Promise<TaskComment> {
-    const taskComment = await this.query()
+  static async get(taskCommentId: string, txn?: Transaction): Promise<TaskComment> {
+    const taskComment = await this.query(txn)
       .eager(EAGER_QUERY)
       .findOne({ id: taskCommentId, deletedAt: null });
     if (!taskComment) {
@@ -87,7 +87,6 @@ export default class TaskComment extends BaseModel {
       .eager(EAGER_QUERY)
       .patchAndFetchById(taskCommentId, { body });
   }
-
   static async delete(taskCommentId: string, txn?: Transaction): Promise<TaskComment> {
     await this.query(txn)
       .where({ id: taskCommentId, deletedAt: null })
@@ -105,8 +104,9 @@ export default class TaskComment extends BaseModel {
   static async getTaskComments(
     taskId: string,
     { pageNumber, pageSize }: IPaginationOptions,
+    txn?: Transaction,
   ): Promise<IPaginatedResults<TaskComment>> {
-    const patientsResult = (await this.query()
+    const patientsResult = (await this.query(txn)
       .where({ taskId, deletedAt: null })
       .eager(EAGER_QUERY)
       .orderBy('createdAt', 'desc')

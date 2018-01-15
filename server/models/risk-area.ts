@@ -100,8 +100,8 @@ export default class RiskArea extends BaseModel {
     },
   };
 
-  static async get(riskAreaId: string): Promise<RiskArea> {
-    const riskArea = await this.query()
+  static async get(riskAreaId: string, txn?: Transaction): Promise<RiskArea> {
+    const riskArea = await this.query(txn)
       .eager(EAGER_QUERY)
       .findOne({ id: riskAreaId, deletedAt: null });
 
@@ -111,8 +111,8 @@ export default class RiskArea extends BaseModel {
     return riskArea;
   }
 
-  static async getAll(): Promise<RiskArea[]> {
-    return this.query()
+  static async getAll(txn?: Transaction): Promise<RiskArea[]> {
+    return this.query(txn)
       .eager(EAGER_QUERY)
       .orderBy('order')
       .where({ deletedAt: null });
@@ -125,18 +125,19 @@ export default class RiskArea extends BaseModel {
   static async edit(
     riskArea: Partial<IRiskAreaEditableFields>,
     riskAreaId: string,
+    txn?: Transaction,
   ): Promise<RiskArea> {
-    return await this.query()
+    return await this.query(txn)
       .eager(EAGER_QUERY)
       .patchAndFetchById(riskAreaId, riskArea);
   }
 
-  static async delete(riskAreaId: string): Promise<RiskArea> {
-    await this.query()
+  static async delete(riskAreaId: string, txn?: Transaction): Promise<RiskArea> {
+    await this.query(txn)
       .where({ id: riskAreaId, deletedAt: null })
       .patch({ deletedAt: new Date().toISOString() });
 
-    const riskArea = await this.query()
+    const riskArea = await this.query(txn)
       .eager(EAGER_QUERY)
       .findById(riskAreaId);
     if (!riskArea) {
@@ -149,8 +150,9 @@ export default class RiskArea extends BaseModel {
   static async getSummaryForPatient(
     riskAreaId: string,
     patientId: string,
+    txn?: Transaction,
   ): Promise<IRiskAreaSummary> {
-    const patientAnswers = await PatientAnswer.getForRiskArea(riskAreaId, patientId);
+    const patientAnswers = await PatientAnswer.getForRiskArea(riskAreaId, patientId, txn);
     const summary: string[] = [];
     patientAnswers.forEach(patientAnswer => {
       if (patientAnswer.applicable) {
@@ -177,8 +179,12 @@ export default class RiskArea extends BaseModel {
     return { summary, started: !!patientAnswers.length, lastUpdated };
   }
 
-  static async getRiskScoreForPatient(riskAreaId: string, patientId: string): Promise<IRiskScore> {
-    const patientAnswers = await PatientAnswer.getForRiskArea(riskAreaId, patientId);
+  static async getRiskScoreForPatient(
+    riskAreaId: string,
+    patientId: string,
+    txn?: Transaction,
+  ): Promise<IRiskScore> {
+    const patientAnswers = await PatientAnswer.getForRiskArea(riskAreaId, patientId, txn);
     let score: number = 0;
     let forceHighRisk: boolean = false;
     patientAnswers.forEach(patientAnswer => {
@@ -197,8 +203,11 @@ export default class RiskArea extends BaseModel {
     };
   }
 
-  static async getThreeSixtySummaryForPatient(patientId: string): Promise<IThreeSixtySummary> {
-    const patientAnswers = await PatientAnswer.getAllForPatient(patientId);
+  static async getThreeSixtySummaryForPatient(
+    patientId: string,
+    txn?: Transaction,
+  ): Promise<IThreeSixtySummary> {
+    const patientAnswers = await PatientAnswer.getAllForPatient(patientId, txn);
     const knownRiskAreas: { [riskAreaId: string]: IRiskAreaStatistic } = {};
 
     patientAnswers.forEach(patientAnswer => {

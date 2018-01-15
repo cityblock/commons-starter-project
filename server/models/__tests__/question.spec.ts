@@ -1,4 +1,4 @@
-import { transaction } from 'objection';
+import { transaction, Transaction } from 'objection';
 import * as uuid from 'uuid/v4';
 import Db from '../../db';
 import { createRiskArea } from '../../spec-helpers';
@@ -9,23 +9,34 @@ import Question from '../question';
 import RiskArea from '../risk-area';
 import ScreeningTool from '../screening-tool';
 
-describe('question model', () => {
-  let riskArea: RiskArea;
-  let screeningTool: ScreeningTool;
-  let progressNoteTemplate: ProgressNoteTemplate;
+interface ISetup {
+  riskArea: RiskArea;
+  screeningTool: ScreeningTool;
+  progressNoteTemplate: ProgressNoteTemplate;
+}
 
+async function setup(txn: Transaction): Promise<ISetup> {
+  const riskArea = await createRiskArea({ title: 'testing' }, txn);
+  const screeningTool = await ScreeningTool.create(
+    {
+      title: 'screening tool',
+      riskAreaId: riskArea.id,
+    },
+    txn,
+  );
+  const progressNoteTemplate = await ProgressNoteTemplate.create(
+    {
+      title: 'progress note template',
+    },
+    txn,
+  );
+  return { riskArea, screeningTool, progressNoteTemplate };
+}
+
+describe('question model', () => {
   beforeEach(async () => {
     await Db.get();
     await Db.clear();
-
-    riskArea = await createRiskArea({ title: 'testing' });
-    screeningTool = await ScreeningTool.create({
-      title: 'screening tool',
-      riskAreaId: riskArea.id,
-    });
-    progressNoteTemplate = await ProgressNoteTemplate.create({
-      title: 'progress note template',
-    });
   });
 
   afterAll(async () => {
@@ -33,102 +44,134 @@ describe('question model', () => {
   });
 
   it('creates and gets a question', async () => {
-    const question = await Question.create({
-      title: 'testing?',
-      answerType: 'dropdown',
-      riskAreaId: riskArea.id,
-      type: 'riskArea',
-      order: 1,
-    });
-    expect(question).toMatchObject({
-      title: 'testing?',
-      answerType: 'dropdown',
-      riskAreaId: riskArea.id,
-      order: 1,
-    });
-    expect(await Question.get(question.id)).toMatchObject({
-      title: 'testing?',
-      answerType: 'dropdown',
-      riskAreaId: riskArea.id,
-      order: 1,
+    await transaction(Question.knex(), async txn => {
+      const { riskArea } = await setup(txn);
+
+      const question = await Question.create(
+        {
+          title: 'testing?',
+          answerType: 'dropdown',
+          riskAreaId: riskArea.id,
+          type: 'riskArea',
+          order: 1,
+        },
+        txn,
+      );
+      expect(question).toMatchObject({
+        title: 'testing?',
+        answerType: 'dropdown',
+        riskAreaId: riskArea.id,
+        order: 1,
+      });
+      expect(await Question.get(question.id, txn)).toMatchObject({
+        title: 'testing?',
+        answerType: 'dropdown',
+        riskAreaId: riskArea.id,
+        order: 1,
+      });
     });
   });
 
   it('creates and gets a question for a screening tool', async () => {
-    const question = await Question.create({
-      title: 'testing?',
-      answerType: 'dropdown',
-      screeningToolId: screeningTool.id,
-      type: 'screeningTool',
-      order: 1,
-    });
-    expect(question).toMatchObject({
-      title: 'testing?',
-      answerType: 'dropdown',
-      screeningToolId: screeningTool.id,
-      order: 1,
-    });
-    expect(await Question.get(question.id)).toMatchObject({
-      title: 'testing?',
-      answerType: 'dropdown',
-      screeningToolId: screeningTool.id,
-      order: 1,
+    await transaction(Question.knex(), async txn => {
+      const { screeningTool } = await setup(txn);
+
+      const question = await Question.create(
+        {
+          title: 'testing?',
+          answerType: 'dropdown',
+          screeningToolId: screeningTool.id,
+          type: 'screeningTool',
+          order: 1,
+        },
+        txn,
+      );
+      expect(question).toMatchObject({
+        title: 'testing?',
+        answerType: 'dropdown',
+        screeningToolId: screeningTool.id,
+        order: 1,
+      });
+      expect(await Question.get(question.id, txn)).toMatchObject({
+        title: 'testing?',
+        answerType: 'dropdown',
+        screeningToolId: screeningTool.id,
+        order: 1,
+      });
     });
   });
 
   it('creates and gets a question for a progress note template', async () => {
-    const question = await Question.create({
-      title: 'testing?',
-      answerType: 'dropdown',
-      progressNoteTemplateId: progressNoteTemplate.id,
-      type: 'progressNoteTemplate',
-      order: 1,
-    });
-    expect(question).toMatchObject({
-      title: 'testing?',
-      answerType: 'dropdown',
-      progressNoteTemplateId: progressNoteTemplate.id,
-      order: 1,
-    });
-    expect(await Question.get(question.id)).toMatchObject({
-      title: 'testing?',
-      answerType: 'dropdown',
-      progressNoteTemplateId: progressNoteTemplate.id,
-      order: 1,
+    await transaction(Question.knex(), async txn => {
+      const { progressNoteTemplate } = await setup(txn);
+
+      const question = await Question.create(
+        {
+          title: 'testing?',
+          answerType: 'dropdown',
+          progressNoteTemplateId: progressNoteTemplate.id,
+          type: 'progressNoteTemplate',
+          order: 1,
+        },
+        txn,
+      );
+      expect(question).toMatchObject({
+        title: 'testing?',
+        answerType: 'dropdown',
+        progressNoteTemplateId: progressNoteTemplate.id,
+        order: 1,
+      });
+      expect(await Question.get(question.id, txn)).toMatchObject({
+        title: 'testing?',
+        answerType: 'dropdown',
+        progressNoteTemplateId: progressNoteTemplate.id,
+        order: 1,
+      });
     });
   });
 
   it('creates and gets a computed field question and auto-sets answerType', async () => {
-    const computedField = await ComputedField.create({
-      label: 'Computed Field',
-      slug: 'computed-field',
-      dataType: 'boolean',
+    await transaction(Question.knex(), async txn => {
+      const { riskArea } = await setup(txn);
+
+      const computedField = await ComputedField.create(
+        {
+          label: 'Computed Field',
+          slug: 'computed-field',
+          dataType: 'boolean',
+        },
+        txn,
+      );
+      const question = await Question.create(
+        {
+          title: 'testing?',
+          answerType: 'dropdown',
+          riskAreaId: riskArea.id,
+          type: 'riskArea',
+          order: 1,
+          computedFieldId: computedField.id,
+        },
+        txn,
+      );
+      expect(question).toMatchObject({
+        title: 'testing?',
+        answerType: 'radio', // answerType gets overwritten with radio for computedField questions
+        riskAreaId: riskArea.id,
+        order: 1,
+      });
+      expect(await Question.get(question.id, txn)).toMatchObject({
+        title: 'testing?',
+        answerType: 'radio',
+        riskAreaId: riskArea.id,
+        order: 1,
+      });
+      expect(question.computedField).toEqual(computedField);
     });
-    const question = await Question.create({
-      title: 'testing?',
-      answerType: 'dropdown',
-      riskAreaId: riskArea.id,
-      type: 'riskArea',
-      order: 1,
-      computedFieldId: computedField.id,
-    });
-    expect(question).toMatchObject({
-      title: 'testing?',
-      answerType: 'radio', // answerType gets overwritten with radio for computedField questions
-      riskAreaId: riskArea.id,
-      order: 1,
-    });
-    expect(await Question.get(question.id)).toMatchObject({
-      title: 'testing?',
-      answerType: 'radio',
-      riskAreaId: riskArea.id,
-      order: 1,
-    });
-    expect(question.computedField).toEqual(computedField);
   });
 
   it('creates a question with an "other" answer', async () => {
     await transaction(Question.knex(), async txn => {
+      const { riskArea } = await setup(txn);
       const question = await Question.create(
         {
           title: 'testing?',
@@ -155,6 +198,7 @@ describe('question model', () => {
 
   it('does not create an "other" answer for a non-dropdown question', async () => {
     await transaction(Question.knex(), async txn => {
+      const { riskArea } = await setup(txn);
       const question = await Question.create(
         {
           title: 'testing?',
@@ -175,6 +219,7 @@ describe('question model', () => {
 
   it('does not create an "other" answer for a computed field question', async () => {
     await transaction(Question.knex(), async txn => {
+      const { riskArea } = await setup(txn);
       const computedField = await ComputedField.create(
         {
           dataType: 'string',
@@ -204,6 +249,7 @@ describe('question model', () => {
 
   it('does not create an "other" answer for a screening tool question', async () => {
     await transaction(Question.knex(), async txn => {
+      const { screeningTool } = await setup(txn);
       const question = await Question.create(
         {
           title: 'testing?',
@@ -223,26 +269,35 @@ describe('question model', () => {
   });
 
   it('should throw an error if a question does not exist for the id', async () => {
-    const fakeId = uuid();
-    await expect(Question.get(fakeId)).rejects.toMatch(`No such question: ${fakeId}`);
+    await transaction(Question.knex(), async txn => {
+      const fakeId = uuid();
+      await expect(Question.get(fakeId, txn)).rejects.toMatch(`No such question: ${fakeId}`);
+    });
   });
 
   it('edits question', async () => {
-    const question = await Question.create({
-      title: 'testing?',
-      answerType: 'dropdown',
-      riskAreaId: riskArea.id,
-      type: 'riskArea',
-      order: 1,
-    });
-    expect(await Question.edit({ title: 'Testing?' }, question.id)).toMatchObject({
-      title: 'Testing?',
+    await transaction(Question.knex(), async txn => {
+      const { riskArea } = await setup(txn);
+      const question = await Question.create(
+        {
+          title: 'testing?',
+          answerType: 'dropdown',
+          riskAreaId: riskArea.id,
+          type: 'riskArea',
+          order: 1,
+        },
+        txn,
+      );
+      expect(await Question.edit({ title: 'Testing?' }, question.id, txn)).toMatchObject({
+        title: 'Testing?',
+      });
     });
   });
 
   describe('editing a question with "other" answer type', () => {
     it('adds an "other" answer to a question that does not already have one', async () => {
       await transaction(Question.knex(), async txn => {
+        const { riskArea } = await setup(txn);
         const question = await Question.create(
           {
             title: 'testing?',
@@ -276,6 +331,7 @@ describe('question model', () => {
 
     it('is a noop if adding an "other" answer to a question that already has one', async () => {
       await transaction(Question.knex(), async txn => {
+        const { riskArea } = await setup(txn);
         const question = await Question.create(
           {
             title: 'testing?',
@@ -311,6 +367,7 @@ describe('question model', () => {
 
     it('removes an "other" answer to a question that has one', async () => {
       await transaction(Question.knex(), async txn => {
+        const { riskArea } = await setup(txn);
         const question = await Question.create(
           {
             title: 'testing?',
@@ -345,6 +402,7 @@ describe('question model', () => {
 
     it('is a noop if removing an "other" answer from a question that lacks one', async () => {
       await transaction(Question.knex(), async txn => {
+        const { riskArea } = await setup(txn);
         const question = await Question.create(
           {
             title: 'testing?',
@@ -378,6 +436,7 @@ describe('question model', () => {
 
     it('is a noop if adding an "other" answer to a computed field question', async () => {
       await transaction(Question.knex(), async txn => {
+        const { riskArea } = await setup(txn);
         const computedField = await ComputedField.create(
           {
             dataType: 'string',
@@ -420,6 +479,7 @@ describe('question model', () => {
 
     it('is a noop if adding an "other" answer to a screening tool question', async () => {
       await transaction(Question.knex(), async txn => {
+        const { screeningTool } = await setup(txn);
         const question = await Question.create(
           {
             title: 'testing?',
@@ -453,6 +513,7 @@ describe('question model', () => {
 
     it('errors when changing answerType to non-dropdown for an "other" question', async () => {
       await transaction(Question.knex(), async txn => {
+        const { riskArea } = await setup(txn);
         const question = await Question.create(
           {
             title: 'testing?',
@@ -477,6 +538,7 @@ describe('question model', () => {
 
     it('errors when adding "other" question to non-dropdown question', async () => {
       await transaction(Question.knex(), async txn => {
+        const { riskArea } = await setup(txn);
         const question = await Question.create(
           {
             title: 'testing?',
@@ -500,6 +562,7 @@ describe('question model', () => {
 
     it('adds "other" answer to non-dropdown question when also changing to dropdown', async () => {
       await transaction(Question.knex(), async txn => {
+        const { riskArea } = await setup(txn);
         const question = await Question.create(
           {
             title: 'testing?',
@@ -526,142 +589,207 @@ describe('question model', () => {
   });
 
   it('gets questions for risk area', async () => {
-    const question1 = await Question.create({
-      title: 'testing?',
-      answerType: 'dropdown',
-      riskAreaId: riskArea.id,
-      type: 'riskArea',
-      order: 1,
+    await transaction(Question.knex(), async txn => {
+      const { riskArea, screeningTool } = await setup(txn);
+
+      const question1 = await Question.create(
+        {
+          title: 'testing?',
+          answerType: 'dropdown',
+          riskAreaId: riskArea.id,
+          type: 'riskArea',
+          order: 1,
+        },
+        txn,
+      );
+      const question2 = await Question.create(
+        {
+          title: 'testing?',
+          answerType: 'dropdown',
+          riskAreaId: riskArea.id,
+          type: 'riskArea',
+          order: 2,
+        },
+        txn,
+      );
+      const question3 = await Question.create(
+        {
+          title: 'testing?',
+          answerType: 'dropdown',
+          screeningToolId: screeningTool.id,
+          type: 'screeningTool',
+          order: 3,
+        },
+        txn,
+      );
+      const fetchedQuestions = await Question.getAllForRiskArea(riskArea.id, txn);
+      const fetchedQuestionIds = fetchedQuestions.map(q => q.id);
+      expect(fetchedQuestions[0].id).toEqual(question1.id);
+      expect(fetchedQuestions[1].id).toEqual(question2.id);
+      expect(fetchedQuestionIds).not.toContain(question3.id);
     });
-    const question2 = await Question.create({
-      title: 'testing?',
-      answerType: 'dropdown',
-      riskAreaId: riskArea.id,
-      type: 'riskArea',
-      order: 2,
-    });
-    const question3 = await Question.create({
-      title: 'testing?',
-      answerType: 'dropdown',
-      screeningToolId: screeningTool.id,
-      type: 'screeningTool',
-      order: 3,
-    });
-    const fetchedQuestions = await Question.getAllForRiskArea(riskArea.id);
-    const fetchedQuestionIds = fetchedQuestions.map(q => q.id);
-    expect(fetchedQuestions[0].id).toEqual(question1.id);
-    expect(fetchedQuestions[1].id).toEqual(question2.id);
-    expect(fetchedQuestionIds).not.toContain(question3.id);
   });
 
   it('gets questions for screening tool', async () => {
-    const question1 = await Question.create({
-      title: 'testing?',
-      answerType: 'dropdown',
-      screeningToolId: screeningTool.id,
-      type: 'screeningTool',
-      order: 1,
+    await transaction(Question.knex(), async txn => {
+      const { riskArea, screeningTool } = await setup(txn);
+
+      const question1 = await Question.create(
+        {
+          title: 'testing?',
+          answerType: 'dropdown',
+          screeningToolId: screeningTool.id,
+          type: 'screeningTool',
+          order: 1,
+        },
+        txn,
+      );
+      const question2 = await Question.create(
+        {
+          title: 'testing?',
+          answerType: 'dropdown',
+          screeningToolId: screeningTool.id,
+          type: 'screeningTool',
+          order: 2,
+        },
+        txn,
+      );
+      const question3 = await Question.create(
+        {
+          title: 'testing?',
+          answerType: 'dropdown',
+          riskAreaId: riskArea.id,
+          type: 'riskArea',
+          order: 3,
+        },
+        txn,
+      );
+      const fetchedQuestions = await Question.getAllForScreeningTool(screeningTool.id, txn);
+      const fetchedQuestionIds = fetchedQuestions.map(q => q.id);
+      expect(fetchedQuestions[0].id).toEqual(question1.id);
+      expect(fetchedQuestions[1].id).toEqual(question2.id);
+      expect(fetchedQuestionIds).not.toContain(question3.id);
     });
-    const question2 = await Question.create({
-      title: 'testing?',
-      answerType: 'dropdown',
-      screeningToolId: screeningTool.id,
-      type: 'screeningTool',
-      order: 2,
-    });
-    const question3 = await Question.create({
-      title: 'testing?',
-      answerType: 'dropdown',
-      riskAreaId: riskArea.id,
-      type: 'riskArea',
-      order: 3,
-    });
-    const fetchedQuestions = await Question.getAllForScreeningTool(screeningTool.id);
-    const fetchedQuestionIds = fetchedQuestions.map(q => q.id);
-    expect(fetchedQuestions[0].id).toEqual(question1.id);
-    expect(fetchedQuestions[1].id).toEqual(question2.id);
-    expect(fetchedQuestionIds).not.toContain(question3.id);
   });
 
   it('gets questions for progress note template', async () => {
-    const question1 = await Question.create({
-      title: 'testing?',
-      answerType: 'dropdown',
-      progressNoteTemplateId: progressNoteTemplate.id,
-      type: 'progressNoteTemplate',
-      order: 1,
+    await transaction(Question.knex(), async txn => {
+      const { riskArea, progressNoteTemplate } = await setup(txn);
+
+      const question1 = await Question.create(
+        {
+          title: 'testing?',
+          answerType: 'dropdown',
+          progressNoteTemplateId: progressNoteTemplate.id,
+          type: 'progressNoteTemplate',
+          order: 1,
+        },
+        txn,
+      );
+      const question2 = await Question.create(
+        {
+          title: 'testing?',
+          answerType: 'dropdown',
+          progressNoteTemplateId: progressNoteTemplate.id,
+          type: 'progressNoteTemplate',
+          order: 2,
+        },
+        txn,
+      );
+      const question3 = await Question.create(
+        {
+          title: 'testing?',
+          answerType: 'dropdown',
+          riskAreaId: riskArea.id,
+          type: 'riskArea',
+          order: 3,
+        },
+        txn,
+      );
+      const fetchedQuestions = await Question.getAllForProgressNoteTemplate(
+        progressNoteTemplate.id,
+        txn,
+      );
+      const fetchedQuestionIds = fetchedQuestions.map(q => q.id);
+      expect(fetchedQuestions[0].id).toEqual(question1.id);
+      expect(fetchedQuestions[1].id).toEqual(question2.id);
+      expect(fetchedQuestionIds).not.toContain(question3.id);
     });
-    const question2 = await Question.create({
-      title: 'testing?',
-      answerType: 'dropdown',
-      progressNoteTemplateId: progressNoteTemplate.id,
-      type: 'progressNoteTemplate',
-      order: 2,
-    });
-    const question3 = await Question.create({
-      title: 'testing?',
-      answerType: 'dropdown',
-      riskAreaId: riskArea.id,
-      type: 'riskArea',
-      order: 3,
-    });
-    const fetchedQuestions = await Question.getAllForProgressNoteTemplate(progressNoteTemplate.id);
-    const fetchedQuestionIds = fetchedQuestions.map(q => q.id);
-    expect(fetchedQuestions[0].id).toEqual(question1.id);
-    expect(fetchedQuestions[1].id).toEqual(question2.id);
-    expect(fetchedQuestionIds).not.toContain(question3.id);
   });
 
   it('eager loads answers ordered by...order', async () => {
-    const question = await Question.create({
-      title: 'testing?',
-      answerType: 'dropdown',
-      riskAreaId: riskArea.id,
-      type: 'riskArea',
-      order: 1,
+    await transaction(Question.knex(), async txn => {
+      const { riskArea } = await setup(txn);
+
+      const question = await Question.create(
+        {
+          title: 'testing?',
+          answerType: 'dropdown',
+          riskAreaId: riskArea.id,
+          type: 'riskArea',
+          order: 1,
+        },
+        txn,
+      );
+      const answer = await Answer.create(
+        {
+          displayValue: 'loves writing tests!',
+          value: '3',
+          valueType: 'number',
+          riskAdjustmentType: 'forceHighRisk',
+          inSummary: false,
+          questionId: question.id,
+          order: 2,
+        },
+        txn,
+      );
+      const answer2 = await Answer.create(
+        {
+          displayValue: 'loves writing tests!',
+          value: '3',
+          valueType: 'number',
+          riskAdjustmentType: 'forceHighRisk',
+          inSummary: false,
+          questionId: question.id,
+          order: 1,
+        },
+        txn,
+      );
+      const deletedAnswer = await Answer.create(
+        {
+          displayValue: 'loves writing tests!',
+          value: '3',
+          valueType: 'number',
+          riskAdjustmentType: 'forceHighRisk',
+          inSummary: false,
+          questionId: question.id,
+          order: 1,
+        },
+        txn,
+      );
+      await Answer.delete(deletedAnswer.id, txn);
+      const fetched = await Question.get(question.id, txn);
+      expect(fetched.answers).toMatchObject([answer2, answer]);
     });
-    const answer = await Answer.create({
-      displayValue: 'loves writing tests!',
-      value: '3',
-      valueType: 'number',
-      riskAdjustmentType: 'forceHighRisk',
-      inSummary: false,
-      questionId: question.id,
-      order: 2,
-    });
-    const answer2 = await Answer.create({
-      displayValue: 'loves writing tests!',
-      value: '3',
-      valueType: 'number',
-      riskAdjustmentType: 'forceHighRisk',
-      inSummary: false,
-      questionId: question.id,
-      order: 1,
-    });
-    const deletedAnswer = await Answer.create({
-      displayValue: 'loves writing tests!',
-      value: '3',
-      valueType: 'number',
-      riskAdjustmentType: 'forceHighRisk',
-      inSummary: false,
-      questionId: question.id,
-      order: 1,
-    });
-    await Answer.delete(deletedAnswer.id);
-    const fetched = await Question.get(question.id);
-    expect(fetched.answers).toMatchObject([answer2, answer]);
   });
 
   it('deletes question', async () => {
-    const question = await Question.create({
-      title: 'testing?',
-      answerType: 'dropdown',
-      riskAreaId: riskArea.id,
-      type: 'riskArea',
-      order: 1,
+    await transaction(Question.knex(), async txn => {
+      const { riskArea } = await setup(txn);
+
+      const question = await Question.create(
+        {
+          title: 'testing?',
+          answerType: 'dropdown',
+          riskAreaId: riskArea.id,
+          type: 'riskArea',
+          order: 1,
+        },
+        txn,
+      );
+      expect(question.deletedAt).toBeFalsy();
+      const deleted = await Question.delete(question.id, txn);
+      expect(deleted.deletedAt).not.toBeFalsy();
     });
-    expect(question.deletedAt).toBeFalsy();
-    const deleted = await Question.delete(question.id);
-    expect(deleted.deletedAt).not.toBeFalsy();
   });
 });

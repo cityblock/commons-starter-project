@@ -1,4 +1,4 @@
-import { transaction } from 'objection';
+import { transaction, Transaction } from 'objection';
 import * as uuid from 'uuid/v4';
 import Db from '../../db';
 import {
@@ -13,18 +13,23 @@ import QuickCall from '../quick-call';
 import User from '../user';
 const userRole = 'physician';
 
-describe('quick call model', () => {
-  let user: User;
-  let patient: Patient;
-  let clinic: Clinic;
+interface ISetup {
+  user: User;
+  patient: Patient;
+  clinic: Clinic;
+}
 
+async function setup(txn: Transaction): Promise<ISetup> {
+  const clinic = await Clinic.create(createMockClinic(), txn);
+  const user = await User.create(createMockUser(11, clinic.id, userRole), txn);
+  const patient = await createPatient(createMockPatient(123, clinic.id), user.id, txn);
+  return { clinic, user, patient };
+}
+
+describe('quick call model', () => {
   beforeEach(async () => {
     await Db.get();
     await Db.clear();
-
-    clinic = await Clinic.create(createMockClinic());
-    user = await User.create(createMockUser(11, clinic.id, userRole));
-    patient = await createPatient(createMockPatient(123, clinic.id), user.id);
   });
 
   afterAll(async () => {
@@ -33,6 +38,7 @@ describe('quick call model', () => {
 
   it('creates and retreives quick call', async () => {
     await transaction(QuickCall.knex(), async txn => {
+      const { user, patient } = await setup(txn);
       const createdCall = await QuickCall.create(
         {
           userId: user.id,
@@ -64,6 +70,7 @@ describe('quick call model', () => {
 
   it('retreives quick calls via progressNoteId', async () => {
     await transaction(QuickCall.knex(), async txn => {
+      const { user, patient } = await setup(txn);
       const createdCall = await QuickCall.create(
         {
           userId: user.id,

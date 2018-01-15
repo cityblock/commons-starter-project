@@ -31,27 +31,36 @@ interface ISetup {
 }
 
 async function setup(txn: Transaction): Promise<ISetup> {
-  const clinic = await Clinic.create(createMockClinic());
-  const riskArea = await createRiskArea({ title: 'testing' });
-  const question = await Question.create({
-    title: 'like writing tests?',
-    answerType: 'dropdown',
-    riskAreaId: riskArea.id,
-    type: 'riskArea',
-    order: 1,
-  });
-  const answer = await Answer.create({
-    displayValue: 'loves writing tests!',
-    value: '3',
-    valueType: 'number',
-    riskAdjustmentType: 'forceHighRisk',
-    inSummary: false,
-    questionId: question.id,
-    order: 1,
-  });
-  const goalSuggestionTemplate = await GoalSuggestionTemplate.create({
-    title: 'Fix housing',
-  });
+  const clinic = await Clinic.create(createMockClinic(), txn);
+  const riskArea = await createRiskArea({ title: 'testing' }, txn);
+  const question = await Question.create(
+    {
+      title: 'like writing tests?',
+      answerType: 'dropdown',
+      riskAreaId: riskArea.id,
+      type: 'riskArea',
+      order: 1,
+    },
+    txn,
+  );
+  const answer = await Answer.create(
+    {
+      displayValue: 'loves writing tests!',
+      value: '3',
+      valueType: 'number',
+      riskAdjustmentType: 'forceHighRisk',
+      inSummary: false,
+      questionId: question.id,
+      order: 1,
+    },
+    txn,
+  );
+  const goalSuggestionTemplate = await GoalSuggestionTemplate.create(
+    {
+      title: 'Fix housing',
+    },
+    txn,
+  );
   return { clinic, riskArea, question, answer, goalSuggestionTemplate };
 }
 

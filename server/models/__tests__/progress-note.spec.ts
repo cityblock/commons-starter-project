@@ -148,9 +148,12 @@ describe('progress note model', () => {
         },
         txn,
       );
-      const progressNoteTemplate2 = await ProgressNoteTemplate.create({
-        title: 'title 2',
-      });
+      const progressNoteTemplate2 = await ProgressNoteTemplate.create(
+        {
+          title: 'title 2',
+        },
+        txn,
+      );
       const startedAt = new Date().toISOString();
       const location = 'cool location';
       const updatedNote = await ProgressNote.update(

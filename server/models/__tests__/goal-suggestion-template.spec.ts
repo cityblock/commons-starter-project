@@ -61,11 +61,14 @@ describe('goal suggestion template model', () => {
 
     it('deleted goal suggestion template', async () => {
       await transaction(GoalSuggestionTemplate.knex(), async txn => {
-        const goalSuggestion = await GoalSuggestionTemplate.create({
-          title: 'fix Housing',
-        });
+        const goalSuggestion = await GoalSuggestionTemplate.create(
+          {
+            title: 'fix Housing',
+          },
+          txn,
+        );
         expect(goalSuggestion.deletedAt).toBeFalsy();
-        const deleted = await GoalSuggestionTemplate.delete(goalSuggestion.id);
+        const deleted = await GoalSuggestionTemplate.delete(goalSuggestion.id, txn);
         expect(deleted.deletedAt).not.toBeFalsy();
       });
     });

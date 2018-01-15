@@ -19,9 +19,9 @@ interface ISetup {
 }
 
 async function setup(txn: Transaction): Promise<ISetup> {
-  const clinic = await Clinic.create(createMockClinic());
-  const user = await User.create(createMockUser(11, clinic.id, userRole, 'a@b.com'));
-  await createPatient(createMockPatient(123, clinic.id), user.id);
+  const clinic = await Clinic.create(createMockClinic(), txn);
+  const user = await User.create(createMockUser(11, clinic.id, userRole, 'a@b.com'), txn);
+  await createPatient(createMockPatient(123, clinic.id), user.id, txn);
   return { clinic, user };
 }
 
@@ -61,7 +61,7 @@ describe('progress note template model', () => {
   it('throws an error when getting an invalid id', async () => {
     await transaction(ProgressNoteTemplate.knex(), async txn => {
       const fakeId = uuid();
-      await expect(ProgressNoteTemplate.get(fakeId)).rejects.toMatch(
+      await expect(ProgressNoteTemplate.get(fakeId, txn)).rejects.toMatch(
         `No such progress note template: ${fakeId}`,
       );
     });

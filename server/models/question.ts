@@ -222,20 +222,26 @@ export default class Question extends BaseModel {
     });
   }
 
-  static async getAllForRiskArea(riskAreaId: string): Promise<Question[]> {
-    return this.modifyEager(this.query())
+  static async getAllForRiskArea(riskAreaId: string, txn?: Transaction): Promise<Question[]> {
+    return this.modifyEager(this.query(txn))
       .where({ riskAreaId, deletedAt: null, screeningToolId: null })
       .orderBy('order');
   }
 
-  static async getAllForScreeningTool(screeningToolId: string): Promise<Question[]> {
-    return this.modifyEager(this.query())
+  static async getAllForScreeningTool(
+    screeningToolId: string,
+    txn?: Transaction,
+  ): Promise<Question[]> {
+    return this.modifyEager(this.query(txn))
       .where({ screeningToolId, deletedAt: null })
       .orderBy('order');
   }
 
-  static async getAllForProgressNoteTemplate(progressNoteTemplateId: string): Promise<Question[]> {
-    return this.modifyEager(this.query())
+  static async getAllForProgressNoteTemplate(
+    progressNoteTemplateId: string,
+    txn?: Transaction,
+  ): Promise<Question[]> {
+    return this.modifyEager(this.query(txn))
       .where({ progressNoteTemplateId, deletedAt: null })
       .orderBy('order');
   }
@@ -309,12 +315,12 @@ export default class Question extends BaseModel {
     });
   }
 
-  static async delete(questionId: string): Promise<Question> {
-    await this.query()
+  static async delete(questionId: string, txn?: Transaction): Promise<Question> {
+    await this.query(txn)
       .where({ id: questionId, deletedAt: null })
       .patch({ deletedAt: new Date().toISOString() });
 
-    const question = await this.modifyEager(this.query()).findById(questionId);
+    const question = await this.modifyEager(this.query(txn)).findById(questionId);
     if (!question) {
       return Promise.reject(`No such question: ${questionId}`);
     }

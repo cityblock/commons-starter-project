@@ -52,13 +52,13 @@ export default class TaskFollower extends BaseModel {
     { userId, taskId }: ITaskFollowerOptions,
     txn?: Transaction,
   ): Promise<TaskFollower> {
-    const relations = await TaskFollower.query()
+    const relations = await TaskFollower.query(txn)
       .where('taskId', taskId)
       .andWhere('userId', userId)
       .andWhere('deletedAt', null);
 
     if (relations.length < 1) {
-      return await TaskFollower.query().insert({ taskId, userId });
+      return await TaskFollower.query(txn).insert({ taskId, userId });
     } else {
       return relations[0];
     }
@@ -68,7 +68,7 @@ export default class TaskFollower extends BaseModel {
     { userId, taskId }: ITaskFollowerOptions,
     txn?: Transaction,
   ): Promise<number> {
-    return await this.query()
+    return await this.query(txn)
       .where('userId', userId)
       .andWhere('taskId', taskId)
       .andWhere('deletedAt', null)

@@ -34,8 +34,11 @@ export default class ProgressNoteTemplate extends BaseModel {
     },
   };
 
-  static async get(progressNoteTemplateId: string): Promise<ProgressNoteTemplate> {
-    const progressNoteTemplate = await this.query().findOne({
+  static async get(
+    progressNoteTemplateId: string,
+    txn?: Transaction,
+  ): Promise<ProgressNoteTemplate> {
+    const progressNoteTemplate = await this.query(txn).findOne({
       id: progressNoteTemplateId,
       deletedAt: null,
     });
@@ -45,8 +48,8 @@ export default class ProgressNoteTemplate extends BaseModel {
     return progressNoteTemplate;
   }
 
-  static async getAll(): Promise<ProgressNoteTemplate[]> {
-    return this.query()
+  static async getAll(txn?: Transaction): Promise<ProgressNoteTemplate[]> {
+    return this.query(txn)
       .orderBy('createdAt', 'asc')
       .where({ deletedAt: null });
   }
@@ -58,16 +61,17 @@ export default class ProgressNoteTemplate extends BaseModel {
   static async edit(
     progressNoteTemplate: Partial<IProgressNoteTemplateEditableFields>,
     progressNoteTemplateId: string,
+    txn?: Transaction,
   ): Promise<ProgressNoteTemplate> {
-    return await this.query().patchAndFetchById(progressNoteTemplateId, progressNoteTemplate);
+    return await this.query(txn).patchAndFetchById(progressNoteTemplateId, progressNoteTemplate);
   }
 
-  static async delete(progressNoteTemplateId: string) {
-    await this.query()
+  static async delete(progressNoteTemplateId: string, txn?: Transaction) {
+    await this.query(txn)
       .where({ id: progressNoteTemplateId, deletedAt: null })
       .patch({ deletedAt: new Date().toISOString() });
 
-    const progressNoteTemplate = await this.query().findById(progressNoteTemplateId);
+    const progressNoteTemplate = await this.query(txn).findById(progressNoteTemplateId);
     if (!progressNoteTemplate) {
       return Promise.reject(`No such progess note template: ${progressNoteTemplateId}`);
     }

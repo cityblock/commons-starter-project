@@ -65,8 +65,8 @@ export default class EventNotification extends BaseModel {
     },
   };
 
-  static async get(eventNotificationId: string): Promise<EventNotification> {
-    const eventNotification = await this.query()
+  static async get(eventNotificationId: string, txn?: Transaction): Promise<EventNotification> {
+    const eventNotification = await this.query(txn)
       .eager(EAGER_QUERY)
       .modifyEager('taskEvent', builder => builder.where('deletedAt', null))
       .findById(eventNotificationId);
@@ -108,12 +108,12 @@ export default class EventNotification extends BaseModel {
     return result.length;
   }
 
-  static async delete(eventNotificationId: string): Promise<EventNotification> {
-    await this.query()
+  static async delete(eventNotificationId: string, txn?: Transaction): Promise<EventNotification> {
+    await this.query(txn)
       .where({ id: eventNotificationId, deletedAt: null })
       .patch({ deletedAt: new Date().toISOString() });
 
-    const eventNotification = await this.query().findById(eventNotificationId);
+    const eventNotification = await this.query(txn).findById(eventNotificationId);
     if (!eventNotification) {
       return Promise.reject(`No such eventNotification: ${eventNotificationId}`);
     }

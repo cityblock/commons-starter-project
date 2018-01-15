@@ -141,8 +141,8 @@ export default class TaskEvent extends BaseModel {
     },
   };
 
-  static async get(taskEventId: string): Promise<TaskEvent> {
-    const taskEvent = await this.query()
+  static async get(taskEventId: string, txn?: Transaction): Promise<TaskEvent> {
+    const taskEvent = await this.query(txn)
       .eager(EAGER_QUERY)
       .findOne({ id: taskEventId, deletedAt: null });
     if (!taskEvent) {
@@ -151,7 +151,10 @@ export default class TaskEvent extends BaseModel {
     return taskEvent;
   }
 
-  static async getAllForProgressNote(progressNoteId: string): Promise<TaskEvent[]> {
+  static async getAllForProgressNote(
+    progressNoteId: string,
+    txn?: Transaction,
+  ): Promise<TaskEvent[]> {
     return await this.query()
       .eager(EAGER_QUERY)
       .where({ progressNoteId, deletedAt: null });
@@ -191,12 +194,12 @@ export default class TaskEvent extends BaseModel {
     return taskEvent;
   }
 
-  static async delete(taskEventId: string): Promise<TaskEvent> {
-    await this.query()
+  static async delete(taskEventId: string, txn?: Transaction): Promise<TaskEvent> {
+    await this.query(txn)
       .where({ id: taskEventId, deletedAt: null })
       .patch({ deletedAt: new Date().toISOString() });
 
-    const taskEvent = await this.query()
+    const taskEvent = await this.query(txn)
       .eager(EAGER_QUERY)
       .findById(taskEventId);
     if (!taskEvent) {
@@ -208,8 +211,9 @@ export default class TaskEvent extends BaseModel {
   static async getTaskEvents(
     taskId: string,
     { pageNumber, pageSize }: IPaginationOptions,
+    txn?: Transaction,
   ): Promise<IPaginatedResults<TaskEvent>> {
-    const taskEvents = (await this.query()
+    const taskEvents = (await this.query(txn)
       .where({ taskId, deletedAt: null })
       .eager(EAGER_QUERY)
       .orderBy('createdAt', 'desc')
@@ -224,8 +228,9 @@ export default class TaskEvent extends BaseModel {
   static async getUserTaskEvents(
     userId: string,
     { pageNumber, pageSize }: IPaginationOptions,
+    txn?: Transaction,
   ): Promise<IPaginatedResults<TaskEvent>> {
-    const taskEvents = (await this.query()
+    const taskEvents = (await this.query(txn)
       .where({ userId, deletedAt: null })
       .eager(EAGER_QUERY)
       .orderBy('createdAt', 'desc')

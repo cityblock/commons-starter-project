@@ -203,11 +203,12 @@ export default class Task extends BaseModel {
   static async getUserTasks(
     userId: string,
     { pageNumber, pageSize, orderBy, order }: ITaskPaginationOptions,
+    txn?: Transaction,
   ): Promise<IPaginatedResults<Task>> {
-    const subquery = TaskFollower.query()
+    const subquery = TaskFollower.query(txn)
       .select('taskId')
       .where({ userId, deletedAt: null }) as any; // TODO: resolve typing issue
-    const userTasks = (await this.query()
+    const userTasks = (await this.query(txn)
       .where('id', 'in', subquery)
       .andWhere({ deletedAt: null })
       .orWhere({ createdById: userId, deletedAt: null })

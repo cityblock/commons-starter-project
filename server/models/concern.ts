@@ -43,8 +43,8 @@ export default class Concern extends BaseModel {
     },
   };
 
-  static async get(concernId: string): Promise<Concern> {
-    const concern = await this.query().findOne({ id: concernId, deletedAt: null });
+  static async get(concernId: string, txn?: Transaction): Promise<Concern> {
+    const concern = await this.query(txn).findOne({ id: concernId, deletedAt: null });
 
     if (!concern) {
       return Promise.reject(`No such concern: ${concernId}`);
@@ -69,8 +69,12 @@ export default class Concern extends BaseModel {
     return await this.create({ title }, txn);
   }
 
-  static async edit(concernId: string, concern: Partial<IConcernEditableFields>): Promise<Concern> {
-    return await this.query().patchAndFetchById(concernId, concern);
+  static async edit(
+    concernId: string,
+    concern: Partial<IConcernEditableFields>,
+    txn?: Transaction,
+  ): Promise<Concern> {
+    return await this.query(txn).patchAndFetchById(concernId, concern);
   }
 
   static async getAll(
@@ -82,12 +86,12 @@ export default class Concern extends BaseModel {
       .orderBy(orderBy, order);
   }
 
-  static async delete(concernId: string): Promise<Concern> {
-    await this.query()
+  static async delete(concernId: string, txn?: Transaction): Promise<Concern> {
+    await this.query(txn)
       .where({ id: concernId, deletedAt: null })
       .patch({ deletedAt: new Date().toISOString() });
 
-    const concern = await this.query().findById(concernId);
+    const concern = await this.query(txn).findById(concernId);
     if (!concern) {
       return Promise.reject(`No such concern: ${concernId}`);
     }

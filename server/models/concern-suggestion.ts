@@ -60,8 +60,8 @@ export default class ConcernSuggestion extends BaseModel {
     },
   };
 
-  static async getForConcern(concernId: string): Promise<Answer[]> {
-    const concernSuggestions = await this.query()
+  static async getForConcern(concernId: string, txn?: Transaction): Promise<Answer[]> {
+    const concernSuggestions = await this.query(txn)
       .where('concernId', concernId)
       .andWhere('deletedAt', null)
       .eager('answer')
@@ -212,12 +212,11 @@ export default class ConcernSuggestion extends BaseModel {
     });
   }
 
-  static async delete({
-    concernId,
-    answerId,
-    screeningToolScoreRangeId,
-  }: IConcernSuggestionEditableFields): Promise<Concern[]> {
-    await this.query()
+  static async delete(
+    { concernId, answerId, screeningToolScoreRangeId }: IConcernSuggestionEditableFields,
+    txn?: Transaction,
+  ): Promise<Concern[]> {
+    await this.query(txn)
       .where({
         concernId,
         answerId: answerId || null,
@@ -227,9 +226,9 @@ export default class ConcernSuggestion extends BaseModel {
       .patch({ deletedAt: new Date().toISOString() });
 
     if (answerId) {
-      return await this.getForAnswer(answerId);
+      return await this.getForAnswer(answerId, txn);
     } else if (screeningToolScoreRangeId) {
-      return await this.getForScreeningToolScoreRange(screeningToolScoreRangeId);
+      return await this.getForScreeningToolScoreRange(screeningToolScoreRangeId, txn);
     } else {
       return [];
     }

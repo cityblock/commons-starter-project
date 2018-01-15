@@ -1,4 +1,4 @@
-import { transaction } from 'objection';
+import { transaction, Transaction } from 'objection';
 import * as uuid from 'uuid/v4';
 import Db from '../../db';
 import {
@@ -23,33 +23,35 @@ import User from '../user';
 const userRole = 'admin';
 const reason = 'Viscerion destroyed the Wall';
 
-describe('computed field flag model', () => {
-  let user: User;
-  let clinic: Clinic;
-  let patient: Patient;
-  let riskArea: RiskArea;
-  let question: Question;
-  let answer: Answer;
-  let patientAnswers: PatientAnswer[];
-  let riskAreaAssessmentSubmission: RiskAreaAssessmentSubmission;
+interface ISetup {
+  user: User;
+  clinic: Clinic;
+  patient: Patient;
+  riskArea: RiskArea;
+  question: Question;
+  answer: Answer;
+  patientAnswers: PatientAnswer[];
+  riskAreaAssessmentSubmission: RiskAreaAssessmentSubmission;
+}
 
-  beforeEach(async () => {
-    await Db.get();
-    await Db.clear();
-
-    clinic = await Clinic.create(createMockClinic());
-    user = await User.create(createMockUser(11, clinic.id, userRole));
-    patient = await createPatient(createMockPatient(12, clinic.id), user.id);
-    riskArea = await createRiskArea({ title: 'The War for the Dawn' });
-    question = await Question.create(createMockQuestion(riskArea.id) as IRiskAreaQuestion);
-    answer = await Answer.create(createMockAnswer(question.id));
-    riskAreaAssessmentSubmission = await RiskAreaAssessmentSubmission.create({
+async function setup(txn: Transaction): Promise<ISetup> {
+  const clinic = await Clinic.create(createMockClinic(), txn);
+  const user = await User.create(createMockUser(11, clinic.id, userRole), txn);
+  const patient = await createPatient(createMockPatient(12, clinic.id), user.id, txn);
+  const riskArea = await createRiskArea({ title: 'The War for the Dawn' }, txn);
+  const question = await Question.create(createMockQuestion(riskArea.id) as IRiskAreaQuestion, txn);
+  const answer = await Answer.create(createMockAnswer(question.id), txn);
+  const riskAreaAssessmentSubmission = await RiskAreaAssessmentSubmission.create(
+    {
       riskAreaId: riskArea.id,
       patientId: patient.id,
       userId: user.id,
-    });
+    },
+    txn,
+  );
 
-    patientAnswers = await PatientAnswer.create({
+  const patientAnswers = await PatientAnswer.create(
+    {
       patientId: patient.id,
       questionIds: [question.id],
       riskAreaAssessmentSubmissionId: riskAreaAssessmentSubmission.id,
@@ -64,7 +66,25 @@ describe('computed field flag model', () => {
         },
       ],
       type: 'riskAreaAssessmentSubmission',
-    });
+    },
+    txn,
+  );
+  return {
+    patientAnswers,
+    clinic,
+    user,
+    patient,
+    riskArea,
+    question,
+    answer,
+    riskAreaAssessmentSubmission,
+  };
+}
+
+describe('computed field flag model', () => {
+  beforeEach(async () => {
+    await Db.get();
+    await Db.clear();
   });
 
   afterAll(async () => {
@@ -73,6 +93,7 @@ describe('computed field flag model', () => {
 
   it('should create and get a computed field flag', async () => {
     await transaction(ComputedFieldFlag.knex(), async txn => {
+      const { patientAnswers, user } = await setup(txn);
       const computedFieldFlag = await ComputedFieldFlag.create(
         {
           patientAnswerId: patientAnswers[0].id,
@@ -106,6 +127,8 @@ describe('computed field flag model', () => {
 
   it('gets all computed field flags', async () => {
     await transaction(ComputedFieldFlag.knex(), async txn => {
+      const { patientAnswers, user, clinic } = await setup(txn);
+
       const user2 = await User.create(createMockUser(12, clinic.id, userRole), txn);
       await ComputedFieldFlag.create(
         {
@@ -136,6 +159,7 @@ describe('computed field flag model', () => {
 
   it('deletes computed field flag', async () => {
     await transaction(ComputedFieldFlag.knex(), async txn => {
+      const { patientAnswers, user } = await setup(txn);
       const computedFieldFlag = await ComputedFieldFlag.create(
         {
           patientAnswerId: patientAnswers[0].id,

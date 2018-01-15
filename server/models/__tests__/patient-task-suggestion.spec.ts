@@ -1,3 +1,4 @@
+import { transaction, Transaction } from 'objection';
 import * as uuid from 'uuid/v4';
 import Db from '../../db';
 import {
@@ -14,25 +15,30 @@ import User from '../user';
 
 const userRole = 'physician';
 
-describe('patient task suggestion', () => {
-  let patient: Patient;
-  let user: User;
-  let taskTemplate: TaskTemplate;
-  let clinic: Clinic;
+interface ISetup {
+  patient: Patient;
+  user: User;
+  taskTemplate: TaskTemplate;
+  clinic: Clinic;
+}
 
+async function setup(txn: Transaction): Promise<ISetup> {
+  const clinic = await Clinic.create(createMockClinic());
+  const user = await User.create(createMockUser(11, clinic.id, userRole));
+  const patient = await createPatient(createMockPatient(123, clinic.id), user.id);
+  const taskTemplate = await TaskTemplate.create({
+    title: 'Housing',
+    repeating: false,
+    priority: 'low',
+    careTeamAssigneeRole: 'physician',
+  });
+  return { clinic, user, patient, taskTemplate };
+}
+
+describe('patient task suggestion', () => {
   beforeEach(async () => {
     await Db.get();
     await Db.clear();
-
-    clinic = await Clinic.create(createMockClinic());
-    user = await User.create(createMockUser(11, clinic.id, userRole));
-    patient = await createPatient(createMockPatient(123, clinic.id), user.id);
-    taskTemplate = await TaskTemplate.create({
-      title: 'Housing',
-      repeating: false,
-      priority: 'low',
-      careTeamAssigneeRole: 'physician',
-    });
   });
 
   afterAll(async () => {
@@ -41,112 +47,181 @@ describe('patient task suggestion', () => {
 
   describe('patient task suggestion methods', () => {
     it('creates and fetches a task template', async () => {
-      const patientTaskSuggestion = await PatientTaskSuggestion.create({
-        patientId: patient.id,
-        taskTemplateId: taskTemplate.id,
-      });
+      await transaction(PatientTaskSuggestion.knex(), async txn => {
+        const { patient, taskTemplate } = await setup(txn);
+        const patientTaskSuggestion = await PatientTaskSuggestion.create(
+          {
+            patientId: patient.id,
+            taskTemplateId: taskTemplate.id,
+          },
+          txn,
+        );
 
-      const fetchPatientTaskSuggestion = await PatientTaskSuggestion.get(patientTaskSuggestion.id);
-      expect(fetchPatientTaskSuggestion!.taskTemplate).toMatchObject(taskTemplate);
+        const fetchPatientTaskSuggestion = await PatientTaskSuggestion.get(
+          patientTaskSuggestion.id,
+          txn,
+        );
+        expect(fetchPatientTaskSuggestion!.taskTemplate).toMatchObject(taskTemplate);
+      });
     });
 
     it('throws an error when getting an invalid id', async () => {
-      const fakeId = uuid();
-      await expect(PatientTaskSuggestion.get(fakeId)).rejects.toMatch(
-        `No such patientTaskSuggestion: ${fakeId}`,
-      );
+      await transaction(PatientTaskSuggestion.knex(), async txn => {
+        const fakeId = uuid();
+        await expect(PatientTaskSuggestion.get(fakeId, txn)).rejects.toMatch(
+          `No such patientTaskSuggestion: ${fakeId}`,
+        );
+      });
     });
 
     it('finds a task suggestion for a patient', async () => {
-      const patientTaskSuggestion = await PatientTaskSuggestion.create({
-        patientId: patient.id,
-        taskTemplateId: taskTemplate.id,
-      });
+      await transaction(PatientTaskSuggestion.knex(), async txn => {
+        const { patient, taskTemplate } = await setup(txn);
 
-      const foundPatientTaskSuggestions = await PatientTaskSuggestion.getForPatient(patient.id);
-      expect(foundPatientTaskSuggestions.length).toEqual(1);
-      expect(foundPatientTaskSuggestions[0].id).toEqual(patientTaskSuggestion.id);
+        const patientTaskSuggestion = await PatientTaskSuggestion.create(
+          {
+            patientId: patient.id,
+            taskTemplateId: taskTemplate.id,
+          },
+          txn,
+        );
+
+        const foundPatientTaskSuggestions = await PatientTaskSuggestion.getForPatient(
+          patient.id,
+          txn,
+        );
+        expect(foundPatientTaskSuggestions.length).toEqual(1);
+        expect(foundPatientTaskSuggestions[0].id).toEqual(patientTaskSuggestion.id);
+      });
     });
 
     it('creates multiple patientTaskSuggestions at once', async () => {
-      await PatientTaskSuggestion.createMultiple({
-        suggestions: [
-          {
-            patientId: patient.id,
-            taskTemplateId: taskTemplate.id,
-          },
-          {
-            patientId: patient.id,
-            taskTemplateId: taskTemplate.id,
-          },
-        ],
-      });
+      await transaction(PatientTaskSuggestion.knex(), async txn => {
+        const { patient, taskTemplate } = await setup(txn);
 
-      const fetchedPatientTaskSuggestions = await PatientTaskSuggestion.getForPatient(patient.id);
-      expect(fetchedPatientTaskSuggestions.length).toEqual(2);
-      expect(fetchedPatientTaskSuggestions[0].taskTemplate).toMatchObject(taskTemplate);
-      expect(fetchedPatientTaskSuggestions[1].taskTemplate).toMatchObject(taskTemplate);
+        await PatientTaskSuggestion.createMultiple(
+          {
+            suggestions: [
+              {
+                patientId: patient.id,
+                taskTemplateId: taskTemplate.id,
+              },
+              {
+                patientId: patient.id,
+                taskTemplateId: taskTemplate.id,
+              },
+            ],
+          },
+          txn,
+        );
+
+        const fetchedPatientTaskSuggestions = await PatientTaskSuggestion.getForPatient(
+          patient.id,
+          txn,
+        );
+        expect(fetchedPatientTaskSuggestions.length).toEqual(2);
+        expect(fetchedPatientTaskSuggestions[0].taskTemplate).toMatchObject(taskTemplate);
+        expect(fetchedPatientTaskSuggestions[1].taskTemplate).toMatchObject(taskTemplate);
+      });
     });
 
     it('accepts a patientTaskSuggestion', async () => {
-      const patientTaskSuggestion = await PatientTaskSuggestion.create({
-        patientId: patient.id,
-        taskTemplateId: taskTemplate.id,
+      await transaction(PatientTaskSuggestion.knex(), async txn => {
+        const { patient, taskTemplate, user } = await setup(txn);
+
+        const patientTaskSuggestion = await PatientTaskSuggestion.create(
+          {
+            patientId: patient.id,
+            taskTemplateId: taskTemplate.id,
+          },
+          txn,
+        );
+
+        await PatientTaskSuggestion.accept(patientTaskSuggestion.id, user.id, txn);
+
+        const fetchedPatientTaskSuggestion = await PatientTaskSuggestion.get(
+          patientTaskSuggestion.id,
+          txn,
+        );
+        expect(fetchedPatientTaskSuggestion!.acceptedAt).not.toBeFalsy();
+        expect(fetchedPatientTaskSuggestion!.acceptedBy).toMatchObject(user);
       });
-
-      await PatientTaskSuggestion.accept(patientTaskSuggestion.id, user.id);
-
-      const fetchedPatientTaskSuggestion = await PatientTaskSuggestion.get(
-        patientTaskSuggestion.id,
-      );
-      expect(fetchedPatientTaskSuggestion!.acceptedAt).not.toBeFalsy();
-      expect(fetchedPatientTaskSuggestion!.acceptedBy).toMatchObject(user);
     });
 
     it('dismisses a patientTaskSuggestion', async () => {
-      const patientTaskSuggestion = await PatientTaskSuggestion.create({
-        patientId: patient.id,
-        taskTemplateId: taskTemplate.id,
-      });
+      await transaction(PatientTaskSuggestion.knex(), async txn => {
+        const { patient, taskTemplate, user } = await setup(txn);
 
-      await PatientTaskSuggestion.dismiss({
-        patientTaskSuggestionId: patientTaskSuggestion.id,
-        dismissedById: user.id,
-        dismissedReason: 'Because',
-      });
+        const patientTaskSuggestion = await PatientTaskSuggestion.create(
+          {
+            patientId: patient.id,
+            taskTemplateId: taskTemplate.id,
+          },
+          txn,
+        );
 
-      const fetchedPatientTaskSuggestion = await PatientTaskSuggestion.get(
-        patientTaskSuggestion.id,
-      );
-      expect(fetchedPatientTaskSuggestion!.dismissedAt).not.toBeFalsy();
-      expect(fetchedPatientTaskSuggestion!.dismissedBy).toMatchObject(user);
-      expect(fetchedPatientTaskSuggestion!.dismissedReason).toEqual('Because');
+        await PatientTaskSuggestion.dismiss(
+          {
+            patientTaskSuggestionId: patientTaskSuggestion.id,
+            dismissedById: user.id,
+            dismissedReason: 'Because',
+          },
+          txn,
+        );
+
+        const fetchedPatientTaskSuggestion = await PatientTaskSuggestion.get(
+          patientTaskSuggestion.id,
+          txn,
+        );
+        expect(fetchedPatientTaskSuggestion!.dismissedAt).not.toBeFalsy();
+        expect(fetchedPatientTaskSuggestion!.dismissedBy).toMatchObject(user);
+        expect(fetchedPatientTaskSuggestion!.dismissedReason).toEqual('Because');
+      });
     });
 
     it('does not return accepted or dismissed patientTaskSuggestions for a patient', async () => {
-      const patientTaskSuggestion1 = await PatientTaskSuggestion.create({
-        patientId: patient.id,
-        taskTemplateId: taskTemplate.id,
-      });
-      const patientTaskSuggestion2 = await PatientTaskSuggestion.create({
-        patientId: patient.id,
-        taskTemplateId: taskTemplate.id,
-      });
-      const patientTaskSuggestion3 = await PatientTaskSuggestion.create({
-        patientId: patient.id,
-        taskTemplateId: taskTemplate.id,
-      });
+      await transaction(PatientTaskSuggestion.knex(), async txn => {
+        const { patient, taskTemplate, user } = await setup(txn);
 
-      await PatientTaskSuggestion.dismiss({
-        patientTaskSuggestionId: patientTaskSuggestion1.id,
-        dismissedById: user.id,
-        dismissedReason: 'Because',
-      });
-      await PatientTaskSuggestion.accept(patientTaskSuggestion2.id, user.id);
+        const patientTaskSuggestion1 = await PatientTaskSuggestion.create(
+          {
+            patientId: patient.id,
+            taskTemplateId: taskTemplate.id,
+          },
+          txn,
+        );
+        const patientTaskSuggestion2 = await PatientTaskSuggestion.create(
+          {
+            patientId: patient.id,
+            taskTemplateId: taskTemplate.id,
+          },
+          txn,
+        );
+        const patientTaskSuggestion3 = await PatientTaskSuggestion.create(
+          {
+            patientId: patient.id,
+            taskTemplateId: taskTemplate.id,
+          },
+          txn,
+        );
 
-      const patientPatientTaskSuggestions = await PatientTaskSuggestion.getForPatient(patient.id);
-      expect(patientPatientTaskSuggestions.length).toEqual(1);
-      expect(patientPatientTaskSuggestions[0].id).toEqual(patientTaskSuggestion3.id);
+        await PatientTaskSuggestion.dismiss(
+          {
+            patientTaskSuggestionId: patientTaskSuggestion1.id,
+            dismissedById: user.id,
+            dismissedReason: 'Because',
+          },
+          txn,
+        );
+        await PatientTaskSuggestion.accept(patientTaskSuggestion2.id, user.id, txn);
+
+        const patientPatientTaskSuggestions = await PatientTaskSuggestion.getForPatient(
+          patient.id,
+          txn,
+        );
+        expect(patientPatientTaskSuggestions.length).toEqual(1);
+        expect(patientPatientTaskSuggestions[0].id).toEqual(patientTaskSuggestion3.id);
+      });
     });
   });
 });

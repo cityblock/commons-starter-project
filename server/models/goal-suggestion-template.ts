@@ -66,30 +66,34 @@ export default class GoalSuggestionTemplate extends BaseModel {
   static async edit(
     goalSuggestionTemplateId: string,
     goalSuggestionTemplate: Partial<IGoalSuggestionTemplateEditableFields>,
+    txn?: Transaction,
   ): Promise<GoalSuggestionTemplate> {
-    return await this.query()
+    return await this.query(txn)
       .eager('taskTemplates')
       .modifyEager('taskTemplates', builder => builder.where('deletedAt', null))
       .patchAndFetchById(goalSuggestionTemplateId, goalSuggestionTemplate);
   }
 
-  static async getAll({
-    orderBy,
-    order,
-  }: IGoalSuggestionTemplateOrderOptions): Promise<GoalSuggestionTemplate[]> {
-    return await this.query()
+  static async getAll(
+    { orderBy, order }: IGoalSuggestionTemplateOrderOptions,
+    txn?: Transaction,
+  ): Promise<GoalSuggestionTemplate[]> {
+    return await this.query(txn)
       .where('deletedAt', null)
       .eager('taskTemplates')
       .modifyEager('taskTemplates', builder => builder.where('deletedAt', null))
       .orderBy(orderBy, order);
   }
 
-  static async delete(goalSuggestionTemplateId: string): Promise<GoalSuggestionTemplate> {
-    await this.query()
+  static async delete(
+    goalSuggestionTemplateId: string,
+    txn?: Transaction,
+  ): Promise<GoalSuggestionTemplate> {
+    await this.query(txn)
       .where({ id: goalSuggestionTemplateId, deletedAt: null })
       .patch({ deletedAt: new Date().toISOString() });
 
-    const goalSuggestion = await this.query().findById(goalSuggestionTemplateId);
+    const goalSuggestion = await this.query(txn).findById(goalSuggestionTemplateId);
     if (!goalSuggestion) {
       return Promise.reject(`No such goalSuggestionTemplate: ${goalSuggestionTemplateId}`);
     }

@@ -71,21 +71,22 @@ export default class TaskTemplate extends BaseModel {
   static async edit(
     taskTemplateId: string,
     taskTemplate: Partial<ITaskTemplateEditableFields>,
+    txn?: Transaction,
   ): Promise<TaskTemplate> {
-    return await this.query().patchAndFetchById(taskTemplateId, taskTemplate);
+    return await this.query(txn).patchAndFetchById(taskTemplateId, taskTemplate);
   }
 
   // TODO: paginate?
-  static async getAll(): Promise<TaskTemplate[]> {
-    return await this.query().where('deletedAt', null);
+  static async getAll(txn?: Transaction): Promise<TaskTemplate[]> {
+    return await this.query(txn).where('deletedAt', null);
   }
 
-  static async delete(taskTemplateId: string): Promise<TaskTemplate> {
-    await this.query()
+  static async delete(taskTemplateId: string, txn?: Transaction): Promise<TaskTemplate> {
+    await this.query(txn)
       .where({ id: taskTemplateId, deletedAt: null })
       .patch({ deletedAt: new Date().toISOString() });
 
-    const taskTemplate = await this.query().findById(taskTemplateId);
+    const taskTemplate = await this.query(txn).findById(taskTemplateId);
     if (!taskTemplate) {
       return Promise.reject(`No such taskTemplate: ${taskTemplateId}`);
     }

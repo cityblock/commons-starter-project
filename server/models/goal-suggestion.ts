@@ -62,8 +62,11 @@ export default class GoalSuggestion extends BaseModel {
     },
   };
 
-  static async getForGoalSuggestion(goalSuggestionTemplateId: string): Promise<Answer[]> {
-    const goalSuggestionAnswers = await GoalSuggestion.query()
+  static async getForGoalSuggestion(
+    goalSuggestionTemplateId: string,
+    txn?: Transaction,
+  ): Promise<Answer[]> {
+    const goalSuggestionAnswers = await GoalSuggestion.query(txn)
       .where('goalSuggestionTemplateId', goalSuggestionTemplateId)
       .andWhere('deletedAt', null)
       .eager('answer')
@@ -247,12 +250,15 @@ export default class GoalSuggestion extends BaseModel {
     });
   }
 
-  static async delete({
-    goalSuggestionTemplateId,
-    answerId,
-    screeningToolScoreRangeId,
-  }: IGoalSuggestionEditableFields): Promise<GoalSuggestionTemplate[]> {
-    await this.query()
+  static async delete(
+    {
+      goalSuggestionTemplateId,
+      answerId,
+      screeningToolScoreRangeId,
+    }: IGoalSuggestionEditableFields,
+    txn?: Transaction,
+  ): Promise<GoalSuggestionTemplate[]> {
+    await this.query(txn)
       .where({
         goalSuggestionTemplateId,
         answerId: answerId || null,
@@ -262,9 +268,9 @@ export default class GoalSuggestion extends BaseModel {
       .patch({ deletedAt: new Date().toISOString() });
 
     if (answerId) {
-      return await this.getForAnswer(answerId);
+      return await this.getForAnswer(answerId, txn);
     } else if (screeningToolScoreRangeId) {
-      return await this.getForScreeningToolScoreRange(screeningToolScoreRangeId);
+      return await this.getForScreeningToolScoreRange(screeningToolScoreRangeId, txn);
     } else {
       return [];
     }

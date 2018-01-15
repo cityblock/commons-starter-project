@@ -1,3 +1,4 @@
+import { transaction, Transaction } from 'objection';
 import * as uuid from 'uuid/v4';
 import Db from '../../db';
 import {
@@ -19,25 +20,26 @@ import RiskArea from '../risk-area';
 import RiskAreaAssessmentSubmission from '../risk-area-assessment-submission';
 import User from '../user';
 
-describe('concern suggestion model', () => {
-  let answer: Answer;
-  let question: Question;
-  let riskArea: RiskArea;
-  let clinic: Clinic;
+interface ISetup {
+  answer: Answer;
+  question: Question;
+  riskArea: RiskArea;
+}
 
-  beforeEach(async () => {
-    await Db.get();
-    await Db.clear();
-
-    riskArea = await createRiskArea({ title: 'testing' });
-    question = await Question.create({
+async function setup(txn: Transaction): Promise<ISetup> {
+  const riskArea = await createRiskArea({ title: 'testing' }, txn);
+  const question = await Question.create(
+    {
       title: 'like writing tests?',
       answerType: 'dropdown',
       riskAreaId: riskArea.id,
       type: 'riskArea',
       order: 1,
-    });
-    answer = await Answer.create({
+    },
+    txn,
+  );
+  const answer = await Answer.create(
+    {
       displayValue: 'loves writing tests!',
       value: '3',
       valueType: 'number',
@@ -45,7 +47,16 @@ describe('concern suggestion model', () => {
       inSummary: false,
       questionId: question.id,
       order: 1,
-    });
+    },
+    txn,
+  );
+  return { riskArea, question, answer };
+}
+
+describe('concern suggestion model', () => {
+  beforeEach(async () => {
+    await Db.get();
+    await Db.clear();
   });
 
   afterAll(async () => {
@@ -54,328 +65,435 @@ describe('concern suggestion model', () => {
 
   describe('concern suggestion methods', () => {
     it('should associate multiple answers with a concern', async () => {
-      const answer2 = await Answer.create({
-        displayValue: 'loves writing more tests!',
-        value: '2',
-        valueType: 'number',
-        riskAdjustmentType: 'forceHighRisk',
-        inSummary: false,
-        questionId: question.id,
-        order: 2,
-      });
-      const concern = await Concern.create({ title: 'Housing' });
+      await transaction(Question.knex(), async txn => {
+        const { question, answer } = await setup(txn);
+        const answer2 = await Answer.create(
+          {
+            displayValue: 'loves writing more tests!',
+            value: '2',
+            valueType: 'number',
+            riskAdjustmentType: 'forceHighRisk',
+            inSummary: false,
+            questionId: question.id,
+            order: 2,
+          },
+          txn,
+        );
+        const concern = await Concern.create({ title: 'Housing' }, txn);
 
-      await ConcernSuggestion.create({
-        concernId: concern.id,
-        answerId: answer.id,
-      });
-      await ConcernSuggestion.create({
-        concernId: concern.id,
-        answerId: answer2.id,
-      });
+        await ConcernSuggestion.create(
+          {
+            concernId: concern.id,
+            answerId: answer.id,
+          },
+          txn,
+        );
+        await ConcernSuggestion.create(
+          {
+            concernId: concern.id,
+            answerId: answer2.id,
+          },
+          txn,
+        );
 
-      const concernsForAnswer = await ConcernSuggestion.getForAnswer(answer.id);
-      const answersForConcern = await ConcernSuggestion.getForConcern(concern.id);
+        const concernsForAnswer = await ConcernSuggestion.getForAnswer(answer.id, txn);
+        const answersForConcern = await ConcernSuggestion.getForConcern(concern.id, txn);
 
-      expect(concernsForAnswer[0].id).toEqual(concern.id);
-      expect(answersForConcern[0].id).toEqual(answer.id);
-      expect(answersForConcern[1].id).toEqual(answer2.id);
+        expect(concernsForAnswer[0].id).toEqual(concern.id);
+        expect(answersForConcern[0].id).toEqual(answer.id);
+        expect(answersForConcern[1].id).toEqual(answer2.id);
+      });
     });
 
     it('throws an error if adding a non-existant concern to an answer', async () => {
-      const error =
-        'insert into "concern_suggestion" ("answerId", "concernId", "id") values ' +
-        '($1, $2, $3) returning "id" - insert or update on table "concern_suggestion" ' +
-        'violates foreign key constraint "concern_suggestion_concernid_foreign"';
+      await transaction(Question.knex(), async txn => {
+        const { answer } = await setup(txn);
+        const error =
+          'insert into "concern_suggestion" ("answerId", "concernId", "id") values ' +
+          '($1, $2, $3) returning "id" - insert or update on table "concern_suggestion" ' +
+          'violates foreign key constraint "concern_suggestion_concernid_foreign"';
 
-      await expect(
-        ConcernSuggestion.create({
-          concernId: uuid(),
-          answerId: answer.id,
-        }),
-      ).rejects.toMatchObject(new Error(error));
+        await expect(
+          ConcernSuggestion.create(
+            {
+              concernId: uuid(),
+              answerId: answer.id,
+            },
+            txn,
+          ),
+        ).rejects.toMatchObject(new Error(error));
+      });
     });
 
     it('can remove an answer from a concern', async () => {
-      const concern = await Concern.create({ title: 'Housing' });
-      await ConcernSuggestion.create({
-        concernId: concern.id,
-        answerId: answer.id,
-      });
-      const concernsForAnswer = await ConcernSuggestion.getForAnswer(answer.id);
-      expect(concernsForAnswer[0].id).toEqual(concern.id);
+      await transaction(Question.knex(), async txn => {
+        const { answer } = await setup(txn);
+        const concern = await Concern.create({ title: 'Housing' });
+        await ConcernSuggestion.create(
+          {
+            concernId: concern.id,
+            answerId: answer.id,
+          },
+          txn,
+        );
+        const concernsForAnswer = await ConcernSuggestion.getForAnswer(answer.id, txn);
+        expect(concernsForAnswer[0].id).toEqual(concern.id);
 
-      const concernAnswerResponse = await ConcernSuggestion.delete({
-        concernId: concern.id,
-        answerId: answer.id,
+        const concernAnswerResponse = await ConcernSuggestion.delete(
+          {
+            concernId: concern.id,
+            answerId: answer.id,
+          },
+          txn,
+        );
+        expect(concernAnswerResponse).toMatchObject([]);
+        expect(await ConcernSuggestion.getForAnswer(answer.id, txn)).toEqual([]);
       });
-      expect(concernAnswerResponse).toMatchObject([]);
-      expect(await ConcernSuggestion.getForAnswer(answer.id)).toEqual([]);
     });
 
     it('returns concern suggestions for a patient', async () => {
-      clinic = await Clinic.create(createMockClinic());
-      const user = await User.create(createMockUser(11, clinic.id, 'physician'));
-      const concern1 = await Concern.create({ title: 'Housing' });
-      const concern2 = await Concern.create({ title: 'Food' });
-      const patient = await createPatient(createMockPatient(123, clinic.id), user.id);
-      const question2 = await Question.create({
-        title: 'hate writing tests?',
-        answerType: 'dropdown',
-        riskAreaId: riskArea.id,
-        type: 'riskArea',
-        order: 1,
-      });
-      const answer2 = await Answer.create({
-        displayValue: 'hates writing tests!',
-        value: '3',
-        valueType: 'number',
-        riskAdjustmentType: 'forceHighRisk',
-        inSummary: false,
-        questionId: question2.id,
-        order: 1,
-      });
-
-      await ConcernSuggestion.create({
-        concernId: concern1.id,
-        answerId: answer.id,
-      });
-      await ConcernSuggestion.create({
-        concernId: concern2.id,
-        answerId: answer2.id,
-      });
-      const riskAreaAssessmentSubmission = await RiskAreaAssessmentSubmission.create({
-        patientId: patient.id,
-        userId: user.id,
-        riskAreaId: riskArea.id,
-      });
-      await PatientAnswer.create({
-        patientId: patient.id,
-        type: 'riskAreaAssessmentSubmission',
-        riskAreaAssessmentSubmissionId: riskAreaAssessmentSubmission.id,
-        questionIds: [question.id],
-        answers: [
+      await transaction(Question.knex(), async txn => {
+        const { question, answer, riskArea } = await setup(txn);
+        const clinic = await Clinic.create(createMockClinic(), txn);
+        const user = await User.create(createMockUser(11, clinic.id, 'physician'), txn);
+        const concern1 = await Concern.create({ title: 'Housing' }, txn);
+        const concern2 = await Concern.create({ title: 'Food' }, txn);
+        const patient = await createPatient(createMockPatient(123, clinic.id), user.id, txn);
+        const question2 = await Question.create(
           {
-            patientId: patient.id,
-            answerId: answer.id,
-            answerValue: answer.value,
-            applicable: true,
-            questionId: question.id,
-            userId: user.id,
+            title: 'hate writing tests?',
+            answerType: 'dropdown',
+            riskAreaId: riskArea.id,
+            type: 'riskArea',
+            order: 1,
           },
-        ],
-      });
-
-      // At this point, only first concern should be suggested
-
-      const concernSuggestions = await ConcernSuggestion.getNewSuggestionsForRiskAreaAssessmentSubmission(
-        patient.id,
-        riskAreaAssessmentSubmission.id,
-      );
-
-      expect(concernSuggestions[0]).toMatchObject(concern1);
-      expect(concernSuggestions.length).toEqual(1);
-
-      await PatientAnswer.create({
-        patientId: patient.id,
-        type: 'riskAreaAssessmentSubmission',
-        riskAreaAssessmentSubmissionId: riskAreaAssessmentSubmission.id,
-        questionIds: [question2.id],
-        answers: [
+          txn,
+        );
+        const answer2 = await Answer.create(
           {
-            patientId: patient.id,
-            answerId: answer2.id,
-            answerValue: answer2.value,
-            applicable: true,
+            displayValue: 'hates writing tests!',
+            value: '3',
+            valueType: 'number',
+            riskAdjustmentType: 'forceHighRisk',
+            inSummary: false,
             questionId: question2.id,
-            userId: user.id,
+            order: 1,
           },
-        ],
+          txn,
+        );
+
+        await ConcernSuggestion.create(
+          {
+            concernId: concern1.id,
+            answerId: answer.id,
+          },
+          txn,
+        );
+        await ConcernSuggestion.create(
+          {
+            concernId: concern2.id,
+            answerId: answer2.id,
+          },
+          txn,
+        );
+        const riskAreaAssessmentSubmission = await RiskAreaAssessmentSubmission.create(
+          {
+            patientId: patient.id,
+            userId: user.id,
+            riskAreaId: riskArea.id,
+          },
+          txn,
+        );
+        await PatientAnswer.create(
+          {
+            patientId: patient.id,
+            type: 'riskAreaAssessmentSubmission',
+            riskAreaAssessmentSubmissionId: riskAreaAssessmentSubmission.id,
+            questionIds: [question.id],
+            answers: [
+              {
+                patientId: patient.id,
+                answerId: answer.id,
+                answerValue: answer.value,
+                applicable: true,
+                questionId: question.id,
+                userId: user.id,
+              },
+            ],
+          },
+          txn,
+        );
+
+        // At this point, only first concern should be suggested
+
+        const concernSuggestions = await ConcernSuggestion.getNewSuggestionsForRiskAreaAssessmentSubmission(
+          patient.id,
+          riskAreaAssessmentSubmission.id,
+          txn,
+        );
+
+        expect(concernSuggestions[0]).toMatchObject(concern1);
+        expect(concernSuggestions.length).toEqual(1);
+
+        await PatientAnswer.create(
+          {
+            patientId: patient.id,
+            type: 'riskAreaAssessmentSubmission',
+            riskAreaAssessmentSubmissionId: riskAreaAssessmentSubmission.id,
+            questionIds: [question2.id],
+            answers: [
+              {
+                patientId: patient.id,
+                answerId: answer2.id,
+                answerValue: answer2.value,
+                applicable: true,
+                questionId: question2.id,
+                userId: user.id,
+              },
+            ],
+          },
+          txn,
+        );
+
+        // Now both concerns should be suggested
+
+        const secondConcernSuggestions = await ConcernSuggestion.getNewSuggestionsForRiskAreaAssessmentSubmission(
+          patient.id,
+          riskAreaAssessmentSubmission.id,
+          txn,
+        );
+
+        expect(secondConcernSuggestions[0]).toMatchObject(concern1);
+        expect(secondConcernSuggestions[1]).toMatchObject(concern2);
+        expect(secondConcernSuggestions.length).toEqual(2);
       });
-
-      // Now both concerns should be suggested
-
-      const secondConcernSuggestions = await ConcernSuggestion.getNewSuggestionsForRiskAreaAssessmentSubmission(
-        patient.id,
-        riskAreaAssessmentSubmission.id,
-      );
-
-      expect(secondConcernSuggestions[0]).toMatchObject(concern1);
-      expect(secondConcernSuggestions[1]).toMatchObject(concern2);
-      expect(secondConcernSuggestions.length).toEqual(2);
     });
 
     it('does not return concern suggestions where one already exists', async () => {
-      clinic = await Clinic.create(createMockClinic());
-      const user = await User.create(createMockUser(11, clinic.id, 'physician'));
-      const concern1 = await Concern.create({ title: 'Housing' });
-      const concern2 = await Concern.create({ title: 'Food' });
-      const patient = await createPatient(createMockPatient(123, clinic.id), user.id);
-      const question2 = await Question.create({
-        title: 'hate writing tests?',
-        answerType: 'dropdown',
-        riskAreaId: riskArea.id,
-        type: 'riskArea',
-        order: 1,
-      });
-      const answer2 = await Answer.create({
-        displayValue: 'hates writing tests!',
-        value: '3',
-        valueType: 'number',
-        riskAdjustmentType: 'forceHighRisk',
-        inSummary: false,
-        questionId: question2.id,
-        order: 1,
-      });
-      const riskAreaAssessmentSubmission = await RiskAreaAssessmentSubmission.create({
-        patientId: patient.id,
-        userId: user.id,
-        riskAreaId: riskArea.id,
-      });
-
-      await ConcernSuggestion.create({
-        concernId: concern1.id,
-        answerId: answer.id,
-      });
-      await ConcernSuggestion.create({
-        concernId: concern2.id,
-        answerId: answer2.id,
-      });
-
-      await PatientAnswer.create({
-        patientId: patient.id,
-        type: 'riskAreaAssessmentSubmission',
-        riskAreaAssessmentSubmissionId: riskAreaAssessmentSubmission.id,
-        questionIds: [question.id, question2.id],
-        answers: [
+      await transaction(Question.knex(), async txn => {
+        const { question, answer, riskArea } = await setup(txn);
+        const clinic = await Clinic.create(createMockClinic(), txn);
+        const user = await User.create(createMockUser(11, clinic.id, 'physician'), txn);
+        const concern1 = await Concern.create({ title: 'Housing' }, txn);
+        const concern2 = await Concern.create({ title: 'Food' }, txn);
+        const patient = await createPatient(createMockPatient(123, clinic.id), user.id, txn);
+        const question2 = await Question.create(
           {
-            patientId: patient.id,
-            answerId: answer.id,
-            answerValue: answer.value,
-            applicable: true,
-            questionId: question.id,
-            userId: user.id,
+            title: 'hate writing tests?',
+            answerType: 'dropdown',
+            riskAreaId: riskArea.id,
+            type: 'riskArea',
+            order: 1,
           },
+          txn,
+        );
+        const answer2 = await Answer.create(
           {
-            patientId: patient.id,
-            answerId: answer2.id,
-            answerValue: answer2.value,
-            applicable: true,
+            displayValue: 'hates writing tests!',
+            value: '3',
+            valueType: 'number',
+            riskAdjustmentType: 'forceHighRisk',
+            inSummary: false,
             questionId: question2.id,
-            userId: user.id,
+            order: 1,
           },
-        ],
+          txn,
+        );
+        const riskAreaAssessmentSubmission = await RiskAreaAssessmentSubmission.create(
+          {
+            patientId: patient.id,
+            userId: user.id,
+            riskAreaId: riskArea.id,
+          },
+          txn,
+        );
+
+        await ConcernSuggestion.create(
+          {
+            concernId: concern1.id,
+            answerId: answer.id,
+          },
+          txn,
+        );
+        await ConcernSuggestion.create(
+          {
+            concernId: concern2.id,
+            answerId: answer2.id,
+          },
+          txn,
+        );
+
+        await PatientAnswer.create(
+          {
+            patientId: patient.id,
+            type: 'riskAreaAssessmentSubmission',
+            riskAreaAssessmentSubmissionId: riskAreaAssessmentSubmission.id,
+            questionIds: [question.id, question2.id],
+            answers: [
+              {
+                patientId: patient.id,
+                answerId: answer.id,
+                answerValue: answer.value,
+                applicable: true,
+                questionId: question.id,
+                userId: user.id,
+              },
+              {
+                patientId: patient.id,
+                answerId: answer2.id,
+                answerValue: answer2.value,
+                applicable: true,
+                questionId: question2.id,
+                userId: user.id,
+              },
+            ],
+          },
+          txn,
+        );
+
+        await CarePlanSuggestion.create(
+          {
+            patientId: patient.id,
+            suggestionType: 'concern',
+            concernId: concern1.id,
+            type: 'riskAreaAssessmentSubmission',
+            riskAreaAssessmentSubmissionId: riskAreaAssessmentSubmission.id,
+          },
+          txn,
+        );
+
+        const concernSuggestions = await ConcernSuggestion.getNewSuggestionsForRiskAreaAssessmentSubmission(
+          patient.id,
+          riskAreaAssessmentSubmission.id,
+          txn,
+        );
+
+        expect(concernSuggestions.length).toEqual(1);
+        expect(concernSuggestions[0]).toMatchObject(concern2);
       });
-
-      await CarePlanSuggestion.create({
-        patientId: patient.id,
-        suggestionType: 'concern',
-        concernId: concern1.id,
-        type: 'riskAreaAssessmentSubmission',
-        riskAreaAssessmentSubmissionId: riskAreaAssessmentSubmission.id,
-      });
-
-      const concernSuggestions = await ConcernSuggestion.getNewSuggestionsForRiskAreaAssessmentSubmission(
-        patient.id,
-        riskAreaAssessmentSubmission.id,
-      );
-
-      expect(concernSuggestions.length).toEqual(1);
-      expect(concernSuggestions[0]).toMatchObject(concern2);
     });
 
     it('does not return suggestions for concerns that are already in the care plan', async () => {
-      clinic = await Clinic.create(createMockClinic());
-      const user = await User.create(createMockUser(11, clinic.id, 'physician'));
-      const concern1 = await Concern.create({ title: 'Housing' });
-      const concern2 = await Concern.create({ title: 'Food' });
-      const patient = await createPatient(createMockPatient(123, clinic.id), user.id);
-      const question2 = await Question.create({
-        title: 'hate writing tests?',
-        answerType: 'dropdown',
-        type: 'riskArea',
-        riskAreaId: riskArea.id,
-        order: 1,
-      });
-      const answer2 = await Answer.create({
-        displayValue: 'hates writing tests!',
-        value: '3',
-        valueType: 'number',
-        riskAdjustmentType: 'forceHighRisk',
-        inSummary: false,
-        questionId: question2.id,
-        order: 1,
-      });
-
-      await ConcernSuggestion.create({
-        concernId: concern1.id,
-        answerId: answer.id,
-      });
-      await ConcernSuggestion.create({
-        concernId: concern2.id,
-        answerId: answer2.id,
-      });
-      const riskAreaAssessmentSubmission = await RiskAreaAssessmentSubmission.create({
-        patientId: patient.id,
-        userId: user.id,
-        riskAreaId: riskArea.id,
-      });
-
-      await PatientAnswer.create({
-        patientId: patient.id,
-        type: 'riskAreaAssessmentSubmission',
-        riskAreaAssessmentSubmissionId: riskAreaAssessmentSubmission.id,
-        questionIds: [question.id, question2.id],
-        answers: [
+      await transaction(Question.knex(), async txn => {
+        const { question, answer, riskArea } = await setup(txn);
+        const clinic = await Clinic.create(createMockClinic(), txn);
+        const user = await User.create(createMockUser(11, clinic.id, 'physician'), txn);
+        const concern1 = await Concern.create({ title: 'Housing' }, txn);
+        const concern2 = await Concern.create({ title: 'Food' }, txn);
+        const patient = await createPatient(createMockPatient(123, clinic.id), user.id, txn);
+        const question2 = await Question.create(
           {
-            patientId: patient.id,
-            answerId: answer.id,
-            answerValue: answer.value,
-            applicable: true,
-            questionId: question.id,
-            userId: user.id,
+            title: 'hate writing tests?',
+            answerType: 'dropdown',
+            type: 'riskArea',
+            riskAreaId: riskArea.id,
+            order: 1,
           },
+          txn,
+        );
+        const answer2 = await Answer.create(
           {
-            patientId: patient.id,
-            answerId: answer2.id,
-            answerValue: answer2.value,
-            applicable: true,
+            displayValue: 'hates writing tests!',
+            value: '3',
+            valueType: 'number',
+            riskAdjustmentType: 'forceHighRisk',
+            inSummary: false,
             questionId: question2.id,
+            order: 1,
+          },
+          txn,
+        );
+
+        await ConcernSuggestion.create(
+          {
+            concernId: concern1.id,
+            answerId: answer.id,
+          },
+          txn,
+        );
+        await ConcernSuggestion.create(
+          {
+            concernId: concern2.id,
+            answerId: answer2.id,
+          },
+          txn,
+        );
+        const riskAreaAssessmentSubmission = await RiskAreaAssessmentSubmission.create(
+          {
+            patientId: patient.id,
+            userId: user.id,
+            riskAreaId: riskArea.id,
+          },
+          txn,
+        );
+
+        await PatientAnswer.create(
+          {
+            patientId: patient.id,
+            type: 'riskAreaAssessmentSubmission',
+            riskAreaAssessmentSubmissionId: riskAreaAssessmentSubmission.id,
+            questionIds: [question.id, question2.id],
+            answers: [
+              {
+                patientId: patient.id,
+                answerId: answer.id,
+                answerValue: answer.value,
+                applicable: true,
+                questionId: question.id,
+                userId: user.id,
+              },
+              {
+                patientId: patient.id,
+                answerId: answer2.id,
+                answerValue: answer2.value,
+                applicable: true,
+                questionId: question2.id,
+                userId: user.id,
+              },
+            ],
+          },
+          txn,
+        );
+
+        await PatientConcern.create(
+          {
+            order: 1,
+            concernId: concern1.id,
+            patientId: patient.id,
             userId: user.id,
           },
-        ],
+          txn,
+        );
+
+        const secondConcernSuggestions = await ConcernSuggestion.getNewSuggestionsForRiskAreaAssessmentSubmission(
+          patient.id,
+          riskAreaAssessmentSubmission.id,
+          txn,
+        );
+
+        expect(secondConcernSuggestions[0]).toMatchObject(concern2);
+        expect(secondConcernSuggestions.length).toEqual(1);
+
+        await PatientConcern.create(
+          {
+            order: 2,
+            concernId: concern2.id,
+            patientId: patient.id,
+            userId: user.id,
+          },
+          txn,
+        );
+
+        // Now it should not be returned
+
+        const fourthConcernSuggestions = await ConcernSuggestion.getNewSuggestionsForRiskAreaAssessmentSubmission(
+          patient.id,
+          riskAreaAssessmentSubmission.id,
+          txn,
+        );
+
+        expect(fourthConcernSuggestions.length).toEqual(0);
       });
-
-      await PatientConcern.create({
-        order: 1,
-        concernId: concern1.id,
-        patientId: patient.id,
-        userId: user.id,
-      });
-
-      const secondConcernSuggestions = await ConcernSuggestion.getNewSuggestionsForRiskAreaAssessmentSubmission(
-        patient.id,
-        riskAreaAssessmentSubmission.id,
-      );
-
-      expect(secondConcernSuggestions[0]).toMatchObject(concern2);
-      expect(secondConcernSuggestions.length).toEqual(1);
-
-      await PatientConcern.create({
-        order: 2,
-        concernId: concern2.id,
-        patientId: patient.id,
-        userId: user.id,
-      });
-
-      // Now it should not be returned
-
-      const fourthConcernSuggestions = await ConcernSuggestion.getNewSuggestionsForRiskAreaAssessmentSubmission(
-        patient.id,
-        riskAreaAssessmentSubmission.id,
-      );
-
-      expect(fourthConcernSuggestions.length).toEqual(0);
     });
   });
 });

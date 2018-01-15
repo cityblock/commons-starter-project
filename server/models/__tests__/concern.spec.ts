@@ -1,3 +1,4 @@
+import { transaction } from 'objection';
 import * as uuid from 'uuid/v4';
 import Db from '../../db';
 import Concern from '../concern';
@@ -17,60 +18,84 @@ describe('concern model', () => {
 
   describe('concern methods', () => {
     it('creates and retrieves a concern', async () => {
-      const concern = await Concern.create({ title: 'Housing' });
-      const concernById = await Concern.get(concern.id);
+      await transaction(Concern.knex(), async txn => {
+        const concern = await Concern.create({ title: 'Housing' }, txn);
+        const concernById = await Concern.get(concern.id, txn);
 
-      expect(concernById).toMatchObject(concern);
+        expect(concernById).toMatchObject(concern);
+      });
     });
 
     it('throws an error when getting a concern by an invalid id', async () => {
-      const fakeId = uuid();
-      await expect(Concern.get(fakeId)).rejects.toMatch(`No such concern: ${fakeId}`);
+      await transaction(Concern.knex(), async txn => {
+        const fakeId = uuid();
+        await expect(Concern.get(fakeId, txn)).rejects.toMatch(`No such concern: ${fakeId}`);
+      });
     });
 
     it('edits concern', async () => {
-      const concern = await Concern.create({
-        title: 'Housing',
+      await transaction(Concern.knex(), async txn => {
+        const concern = await Concern.create(
+          {
+            title: 'Housing',
+          },
+          txn,
+        );
+        const concernUpdated = await Concern.edit(
+          concern.id,
+          {
+            title: 'Medical',
+          },
+          txn,
+        );
+        expect(concernUpdated.title).toEqual('Medical');
       });
-      const concernUpdated = await Concern.edit(concern.id, {
-        title: 'Medical',
-      });
-      expect(concernUpdated.title).toEqual('Medical');
     });
 
     it('deleted concern', async () => {
-      const concern = await Concern.create({
-        title: 'Housing',
+      await transaction(Concern.knex(), async txn => {
+        const concern = await Concern.create(
+          {
+            title: 'Housing',
+          },
+          txn,
+        );
+        expect(concern.deletedAt).toBeFalsy();
+        const deleted = await Concern.delete(concern.id, txn);
+        expect(deleted.deletedAt).not.toBeFalsy();
       });
-      expect(concern.deletedAt).toBeFalsy();
-      const deleted = await Concern.delete(concern.id);
-      expect(deleted.deletedAt).not.toBeFalsy();
     });
 
     it('fetches all concerns', async () => {
-      const concern1 = await Concern.create({ title: 'Housing' });
-      const concern2 = await Concern.create({ title: 'Medical' });
+      await transaction(Concern.knex(), async txn => {
+        const concern1 = await Concern.create({ title: 'Housing' }, txn);
+        const concern2 = await Concern.create({ title: 'Medical' }, txn);
 
-      expect(await Concern.getAll({ orderBy, order })).toMatchObject([concern1, concern2]);
+        expect(await Concern.getAll({ orderBy, order }, txn)).toMatchObject([concern1, concern2]);
+      });
     });
 
     it('fetches all concerns in a custom order', async () => {
-      const concern1 = await Concern.create({ title: 'def' });
-      const concern2 = await Concern.create({ title: 'abc' });
+      await transaction(Concern.knex(), async txn => {
+        const concern1 = await Concern.create({ title: 'def' }, txn);
+        const concern2 = await Concern.create({ title: 'abc' }, txn);
 
-      expect(await Concern.getAll({ orderBy: 'title', order: 'asc' })).toMatchObject([
-        concern2,
-        concern1,
-      ]);
+        expect(await Concern.getAll({ orderBy: 'title', order: 'asc' }, txn)).toMatchObject([
+          concern2,
+          concern1,
+        ]);
+      });
     });
 
     it('finds or creates a concern by title', async () => {
-      const concern = await Concern.create({ title: 'housing' });
-      const foundOrCreatedConcern = await Concern.findOrCreateByTitle('Housing');
-      const fetchedConcerns = await Concern.getAll({ orderBy, order });
+      await transaction(Concern.knex(), async txn => {
+        const concern = await Concern.create({ title: 'housing' }, txn);
+        const foundOrCreatedConcern = await Concern.findOrCreateByTitle('Housing', txn);
+        const fetchedConcerns = await Concern.getAll({ orderBy, order }, txn);
 
-      expect(fetchedConcerns.length).toEqual(1);
-      expect(foundOrCreatedConcern).toMatchObject(concern);
+        expect(fetchedConcerns.length).toEqual(1);
+        expect(foundOrCreatedConcern).toMatchObject(concern);
+      });
     });
   });
 });

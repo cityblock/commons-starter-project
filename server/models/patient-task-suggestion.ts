@@ -146,9 +146,12 @@ export default class PatientTaskSuggestion extends BaseModel {
       });
   }
 
-  static async dismiss(input: IPatientTaskSuggestionDismissArgs): Promise<PatientTaskSuggestion> {
+  static async dismiss(
+    input: IPatientTaskSuggestionDismissArgs,
+    txn?: Transaction,
+  ): Promise<PatientTaskSuggestion> {
     const { patientTaskSuggestionId, dismissedById, dismissedReason } = input;
-    return await this.query()
+    return await this.query(txn)
       .eager(EAGER_QUERY)
       .patchAndFetchById(patientTaskSuggestionId, {
         dismissedById,

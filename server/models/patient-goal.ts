@@ -81,8 +81,8 @@ export default class PatientGoal extends BaseModel {
     },
   };
 
-  static async get(patientGoalId: string): Promise<PatientGoal> {
-    const patientGoal = await this.query()
+  static async get(patientGoalId: string, txn?: Transaction): Promise<PatientGoal> {
+    const patientGoal = await this.query(txn)
       .eager(EAGER_QUERY)
       .modifyEager('tasks', builder => {
         builder.where('task.completedAt', null);
@@ -106,15 +106,16 @@ export default class PatientGoal extends BaseModel {
     return await transaction(PatientGoal.knex(), async txn => {
       let patientGoal: PatientGoal;
       let validTaskTemplates: TaskTemplate[] = [];
+      const correctTxn = existingTxn || txn;
 
       if (!goalSuggestionTemplateId) {
-        patientGoal = await this.query(existingTxn)
+        patientGoal = await this.query(correctTxn)
           .eager(EAGER_QUERY)
           .insertAndFetch(omit(input, ['userId', 'taskTemplates']));
       } else {
         const goalSuggestionTemplate = await GoalSuggestionTemplate.get(
           goalSuggestionTemplateId,
-          existingTxn || txn,
+          correctTxn,
         );
 
         // set title to be same as goal suggestion template title
@@ -126,7 +127,7 @@ export default class PatientGoal extends BaseModel {
               )
             : [];
 
-        patientGoal = await this.query(existingTxn || txn)
+        patientGoal = await this.query(correctTxn)
           .eager(EAGER_QUERY)
           .insertAndFetch(omit(input, ['userId', 'taskTemplates']));
       }
@@ -138,7 +139,7 @@ export default class PatientGoal extends BaseModel {
           patientGoalId: patientGoal.id,
           eventType: 'create_patient_goal',
         },
-        existingTxn || txn,
+        correctTxn,
       );
 
       // TODO: do a graph insert here or use the Task resolver. Also note: must use 'map' instead
@@ -147,13 +148,7 @@ export default class PatientGoal extends BaseModel {
       if (validTaskTemplates.length) {
         await Promise.all(
           validTaskTemplates.map(async taskTemplate =>
-            createTaskForTaskTemplate(
-              taskTemplate,
-              userId,
-              patientId,
-              existingTxn || txn,
-              patientGoal.id,
-            ),
+            createTaskForTaskTemplate(taskTemplate, userId, patientId, correctTxn, patientGoal.id),
           ),
         );
       }
@@ -166,9 +161,12 @@ export default class PatientGoal extends BaseModel {
     patientGoalId: string,
     patientGoal: Partial<IPatientGoalEditableFields>,
     userId: string,
+    existingTxn?: Transaction,
   ): Promise<PatientGoal> {
     return await transaction(PatientGoal.knex(), async txn => {
-      const updatedPatientGoal = await this.query(txn)
+      const correctTxn = existingTxn || txn;
+
+      const updatedPatientGoal = await this.query(correctTxn)
         .eager(EAGER_QUERY)
         .patchAndFetchById(patientGoalId, patientGoal);
 
@@ -179,7 +177,7 @@ export default class PatientGoal extends BaseModel {
           patientGoalId: updatedPatientGoal.id,
           eventType: 'edit_patient_goal',
         },
-        txn,
+        correctTxn,
       );
 
       return updatedPatientGoal;
@@ -201,13 +199,19 @@ export default class PatientGoal extends BaseModel {
       .orderBy('createdAt', 'asc');
   }
 
-  static async delete(patientGoalId: string, userId: string): Promise<PatientGoal> {
+  static async delete(
+    patientGoalId: string,
+    userId: string,
+    existingTxn?: Transaction,
+  ): Promise<PatientGoal> {
     return await transaction(PatientGoal.knex(), async txn => {
-      await this.query(txn)
+      const correctTxn = existingTxn || txn;
+
+      await this.query(correctTxn)
         .where({ id: patientGoalId, deletedAt: null })
         .patch({ deletedAt: new Date().toISOString() });
 
-      const patientGoal = await this.query(txn)
+      const patientGoal = await this.query(correctTxn)
         .eager(EAGER_QUERY)
         .modifyEager('tasks', builder => {
           builder.where('task.completedAt', null);
@@ -224,7 +228,7 @@ export default class PatientGoal extends BaseModel {
           patientGoalId: patientGoal.id,
           eventType: 'delete_patient_goal',
         },
-        txn,
+        correctTxn,
       );
 
       return patientGoal;

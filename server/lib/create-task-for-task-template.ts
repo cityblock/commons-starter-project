@@ -17,7 +17,7 @@ export async function createTaskForTaskTemplate(
   let dueAt: string | undefined;
   let assignedToId: string | undefined;
 
-  const careTeam = await CareTeam.getForPatient(patientId);
+  const careTeam = await CareTeam.getForPatient(patientId, txn);
 
   if (careTeamAssigneeRole) {
     const assignedCareTeamMember = careTeam.find(

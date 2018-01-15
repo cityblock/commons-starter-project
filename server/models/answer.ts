@@ -157,8 +157,9 @@ export default class Answer extends BaseModel {
 
   static async getByComputedFieldSlugAndValue(
     args: IGetByComputedFieldSlugAndValueOptions,
+    txn?: Transaction,
   ): Promise<Answer | null> {
-    const answer = (await this.query()
+    const answer = (await this.query(txn)
       .eager('question.[computedField]')
       .joinRelation('question.computedField')
       .where('question:computedField.slug', args.slug)
@@ -173,8 +174,12 @@ export default class Answer extends BaseModel {
     return this.getQuery(txn).insertAndFetch(input);
   }
 
-  static async edit(answer: Partial<IAnswerEditableFields>, answerId: string): Promise<Answer> {
-    return await this.getQuery().patchAndFetchById(answerId, answer);
+  static async edit(
+    answer: Partial<IAnswerEditableFields>,
+    answerId: string,
+    txn?: Transaction,
+  ): Promise<Answer> {
+    return await this.getQuery(txn).patchAndFetchById(answerId, answer);
   }
 
   static async delete(answerId: string, txn?: Transaction): Promise<Answer> {

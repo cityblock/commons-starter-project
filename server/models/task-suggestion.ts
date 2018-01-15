@@ -1,4 +1,4 @@
-import { transaction, Model, RelationMappings } from 'objection';
+import { transaction, Model, RelationMappings, Transaction } from 'objection';
 import Answer from './answer';
 import BaseModel from './base-model';
 import TaskTemplate from './task-template';
@@ -48,8 +48,8 @@ export default class TaskSuggestion extends BaseModel {
     },
   };
 
-  static async getForTaskTemplate(taskTemplate: string): Promise<Answer[]> {
-    const taskSuggestions = await this.query()
+  static async getForTaskTemplate(taskTemplate: string, txn?: Transaction): Promise<Answer[]> {
+    const taskSuggestions = await this.query(txn)
       .eager('answer')
       .where('taskTemplateId', taskTemplate)
       .andWhere('deletedAt', null)
@@ -57,8 +57,8 @@ export default class TaskSuggestion extends BaseModel {
     return taskSuggestions.map((taskSuggestion: TaskSuggestion) => taskSuggestion.answer);
   }
 
-  static async getForAnswer(answerId: string): Promise<TaskTemplate[]> {
-    const taskSuggestions = await this.query()
+  static async getForAnswer(answerId: string, txn?: Transaction): Promise<TaskTemplate[]> {
+    const taskSuggestions = await this.query(txn)
       .eager('taskTemplate')
       .where('answerId', answerId)
       .andWhere('deletedAt', null)
@@ -67,34 +67,34 @@ export default class TaskSuggestion extends BaseModel {
     return taskSuggestions.map((taskSuggestion: TaskSuggestion) => taskSuggestion.taskTemplate);
   }
 
-  static async create({
-    taskTemplateId,
-    answerId,
-  }: ITaskSuggestionEditableFields): Promise<TaskTemplate[]> {
+  static async create(
+    { taskTemplateId, answerId }: ITaskSuggestionEditableFields,
+    existingTxn?: Transaction,
+  ): Promise<TaskTemplate[]> {
     // TODO: use postgres UPCERT here to add relation if it doesn't exist instead of a transaction
-    await transaction(TaskSuggestion, async TaskSuggestionWithTransaction => {
-      const relations = await TaskSuggestionWithTransaction.query().where({
+    return await transaction(TaskSuggestion.knex(), async txn => {
+      const correctTxn = existingTxn || txn;
+      const relations = await TaskSuggestion.query(correctTxn).where({
         taskTemplateId,
         answerId,
         deletedAt: null,
       });
 
       if (relations.length < 1) {
-        await TaskSuggestionWithTransaction.query().insert({
+        await TaskSuggestion.query(correctTxn).insert({
           taskTemplateId,
           answerId,
         });
       }
+      return await this.getForAnswer(answerId, correctTxn);
     });
-
-    return await this.getForAnswer(answerId);
   }
 
-  static async delete({
-    taskTemplateId,
-    answerId,
-  }: ITaskSuggestionEditableFields): Promise<TaskTemplate[]> {
-    await this.query()
+  static async delete(
+    { taskTemplateId, answerId }: ITaskSuggestionEditableFields,
+    txn?: Transaction,
+  ): Promise<TaskTemplate[]> {
+    await this.query(txn)
       .where({
         taskTemplateId,
         answerId,
@@ -102,7 +102,7 @@ export default class TaskSuggestion extends BaseModel {
       })
       .patch({ deletedAt: new Date().toISOString() });
 
-    return await this.getForAnswer(answerId);
+    return await this.getForAnswer(answerId, txn);
   }
 }
 /* tslint:enable:member-ordering */

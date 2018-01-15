@@ -4,7 +4,8 @@ import AddBoxIcon from 'material-ui-icons/AddBox';
 import AddCircleIcon from 'material-ui-icons/AddCircle';
 import AddCircleOutlineIcon from 'material-ui-icons/AddCircleOutline';
 import ArrowBackIcon from 'material-ui-icons/ArrowBack';
-import AssignmentTurnedIn from 'material-ui-icons/AssignmentTurnedIn';
+import AssignmentIcon from 'material-ui-icons/Assignment';
+import AssignmentTurnedInIcon from 'material-ui-icons/AssignmentTurnedIn';
 import CloseIcon from 'material-ui-icons/Close';
 import DeleteIcon from 'material-ui-icons/Delete';
 import ErrorOutlineIcon from 'material-ui-icons/ErrorOutline';
@@ -21,6 +22,8 @@ import LabelOutlineIcon from 'material-ui-icons/LabelOutline';
 import MoreVertIcon from 'material-ui-icons/MoreVert';
 import NotificationsIcon from 'material-ui-icons/Notifications';
 import PauseCircleOutlineIcon from 'material-ui-icons/PauseCircleOutline';
+import PeopleIcon from 'material-ui-icons/People';
+import PersonIcon from 'material-ui-icons/Person';
 import PhoneIcon from 'material-ui-icons/Phone';
 import PlaylistAddIcon from 'material-ui-icons/PlaylistAdd';
 import SearchIcon from 'material-ui-icons/Search';
@@ -34,6 +37,8 @@ const components = {
   addCircle: AddCircleIcon,
   addCircleOutline: AddCircleOutlineIcon,
   arrowBack: ArrowBackIcon,
+  assignment: AssignmentIcon,
+  assignmentTurnedIn: AssignmentTurnedInIcon,
   close: CloseIcon,
   delete: DeleteIcon,
   errorOutline: ErrorOutlineIcon,
@@ -50,11 +55,12 @@ const components = {
   moreVert: MoreVertIcon,
   notifications: NotificationsIcon,
   pauseCircleOutline: PauseCircleOutlineIcon,
+  people: PeopleIcon,
+  person: PersonIcon,
   phone: PhoneIcon,
   playlistAdd: PlaylistAddIcon,
   search: SearchIcon,
   warning: WarningIcon,
-  assignmentTurnedIn: AssignmentTurnedIn,
 };
 
 export default components;

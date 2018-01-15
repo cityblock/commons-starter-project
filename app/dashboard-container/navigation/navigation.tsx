@@ -55,6 +55,30 @@ const DashboardNavigation: React.StatelessComponent<IProps> = (props: IProps) =>
           routeBase={ROUTE_BASE}
           icon="playlistAdd"
           iconStyles={styles.redIcon}
+          noDivider={selected === 'demographics'}
+        />
+        <NavigationItem
+          selected="demographics"
+          isSelected={selected === 'demographics'}
+          routeBase={ROUTE_BASE}
+          icon="person"
+          iconStyles={styles.redIcon}
+          noDivider={selected === 'engage'}
+        />
+        <NavigationItem
+          selected="engage"
+          isSelected={selected === 'engage'}
+          routeBase={ROUTE_BASE}
+          icon="people"
+          iconStyles={styles.redIcon}
+          noDivider={selected === 'updateMAP'}
+        />
+        <NavigationItem
+          selected="updateMAP"
+          isSelected={selected === 'updateMAP'}
+          routeBase={ROUTE_BASE}
+          icon="assignment"
+          iconStyles={styles.redIcon}
           noDivider={true}
         />
       </div>

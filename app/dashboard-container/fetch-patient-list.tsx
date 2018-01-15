@@ -3,10 +3,16 @@ import * as React from 'react';
 import { compose, graphql } from 'react-apollo';
 import { withRouter, RouteComponentProps } from 'react-router';
 import * as patientsNewToCareTeamQuery from '../graphql/queries/get-patients-new-to-care-team.graphql';
+import * as patientsWithMissingInfoQuery from '../graphql/queries/get-patients-with-missing-info.graphql';
+import * as patientsWithNoRecentEngagementQuery from '../graphql/queries/get-patients-with-no-recent-engagement.graphql';
+import * as patientsWithOutOfDateMAPQuery from '../graphql/queries/get-patients-with-out-of-date-map.graphql';
 import * as patientsWithPendingSuggestionsQuery from '../graphql/queries/get-patients-with-pending-suggestions.graphql';
 import * as patientsWithUrgentTasksQuery from '../graphql/queries/get-patients-with-urgent-tasks.graphql';
 import {
   getPatientsNewToCareTeamQuery,
+  getPatientsWithMissingInfoQuery,
+  getPatientsWithNoRecentEngagementQuery,
+  getPatientsWithOutOfDateMAPQuery,
   getPatientsWithPendingSuggestionsQuery,
   getPatientsWithUrgentTasksQuery,
 } from '../graphql/types';
@@ -29,7 +35,10 @@ const getPageParams = (props: RouteComponentProps<any>) => {
 export type PatientResults =
   | getPatientsNewToCareTeamQuery['patientsNewToCareTeam']
   | getPatientsWithPendingSuggestionsQuery['patientsWithPendingSuggestions']
-  | getPatientsWithUrgentTasksQuery['patientsWithUrgentTasks'];
+  | getPatientsWithUrgentTasksQuery['patientsWithUrgentTasks']
+  | getPatientsWithMissingInfoQuery['patientsWithMissingInfo']
+  | getPatientsWithNoRecentEngagementQuery['patientsWithNoRecentEngagement']
+  | getPatientsWithOutOfDateMAPQuery['patientsWithOutOfDateMAP'];
 
 export interface IInjectedProps {
   loading: boolean;
@@ -92,6 +101,42 @@ const fetchPatientList = () => <P extends {}>(
           loading: data ? data.loading : false,
           error: data ? data.error : null,
           patientResults: data ? (data as any).patientsWithPendingSuggestions : null,
+        }),
+      },
+    ),
+    graphql<IInjectedProps, RouteComponentProps<P>, resultProps>(
+      patientsWithMissingInfoQuery as any,
+      {
+        options: getPageParams,
+        skip: ({ selected }) => selected !== 'demographics',
+        props: ({ data }) => ({
+          loading: data ? data.loading : false,
+          error: data ? data.error : null,
+          patientResults: data ? (data as any).patientsWithMissingInfo : null,
+        }),
+      },
+    ),
+    graphql<IInjectedProps, RouteComponentProps<P>, resultProps>(
+      patientsWithNoRecentEngagementQuery as any,
+      {
+        options: getPageParams,
+        skip: ({ selected }) => selected !== 'engage',
+        props: ({ data }) => ({
+          loading: data ? data.loading : false,
+          error: data ? data.error : null,
+          patientResults: data ? (data as any).patientsWithNoRecentEngagement : null,
+        }),
+      },
+    ),
+    graphql<IInjectedProps, RouteComponentProps<P>, resultProps>(
+      patientsWithOutOfDateMAPQuery as any,
+      {
+        options: getPageParams,
+        skip: ({ selected }) => selected !== 'updateMAP',
+        props: ({ data }) => ({
+          loading: data ? data.loading : false,
+          error: data ? data.error : null,
+          patientResults: data ? (data as any).patientsWithOutOfDateMAP : null,
         }),
       },
     ),

@@ -1,0 +1,16 @@
+#import "../fragments/full-patient-for-dashboard.graphql"
+
+query getPatientsWithNoRecentEngagement($pageNumber: Int!, $pageSize: Int!) {
+  patientsWithNoRecentEngagement(pageNumber: $pageNumber, pageSize: $pageSize) {
+    edges {
+      node {
+        ...FullPatientForDashboard
+      }
+    }
+    pageInfo {
+      hasPreviousPage
+      hasNextPage
+    }
+    totalCount
+  }
+}

@@ -3,7 +3,14 @@ import * as styles from './css/dashboard-container.css';
 import DashboardPatients from './dashboard-patients';
 import DashboardNavigation from './navigation/navigation';
 
-export type Selected = 'tasks' | 'new' | 'suggestions' | 'tag';
+export type Selected =
+  | 'tasks'
+  | 'new'
+  | 'suggestions'
+  | 'demographics'
+  | 'engage'
+  | 'updateMAP'
+  | 'tag';
 
 interface IProps {
   match: {

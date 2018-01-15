@@ -20,15 +20,15 @@ declare module 'schema' {
     /**
     description: A single User
   */
-    user: IUser | null;
+    user: IUser;
     /**
     description: All Users (admin only)
   */
-    users: IUserEdges | null;
+    users: IUserEdges;
     /**
     description: List of patients the user is on the care team for (their 'patient panel')
   */
-    userPatientPanel: IPatientEdges | null;
+    userPatientPanel: IPatientEdges;
     /**
     description: The current User
   */
@@ -36,19 +36,19 @@ declare module 'schema' {
     /**
     description: A single Patient
   */
-    patient: IPatient | null;
+    patient: IPatient;
     /**
     description: Users on a care team
   */
-    patientCareTeam: Array<IUser> | null;
+    patientCareTeam: Array<IUser>;
     /**
     description: Patient scratch pad
   */
-    patientScratchPad: IPatientScratchPad | null;
+    patientScratchPad: IPatientScratchPad;
     /**
     description: Patient search
   */
-    patientSearch: IPatientSearchResultEdges | null;
+    patientSearch: IPatientSearchResultEdges;
     /**
     description: Patient dashboard - tasks due and notifications
   */
@@ -76,27 +76,27 @@ declare module 'schema' {
     /**
     description: A single clinic
   */
-    clinic: IClinic | null;
+    clinic: IClinic;
     /**
     description: Clinics
   */
-    clinics: IClinicEdges | null;
+    clinics: IClinicEdges;
     /**
     description: Patient encounters
   */
-    patientEncounters: Array<IPatientEncounter> | null;
+    patientEncounters: Array<IPatientEncounter>;
     /**
     description: Task
   */
-    task: ITask | null;
+    task: ITask;
     /**
     description: Patient's Tasks
   */
-    tasksForPatient: ITaskEdges | null;
+    tasksForPatient: ITaskEdges;
     /**
     description: Current user's Tasks
   */
-    tasksForCurrentUser: ITaskEdges | null;
+    tasksForCurrentUser: ITaskEdges;
     /**
     description: Tasks due soon for patient - in dashboard
   */
@@ -108,15 +108,15 @@ declare module 'schema' {
     /**
     description: List of task comments
   */
-    taskComments: ITaskCommentEdges | null;
+    taskComments: ITaskCommentEdges;
     /**
     description: Single task comment
   */
-    taskComment: ITaskComment | null;
+    taskComment: ITaskComment;
     /**
     description: RiskAreaGroup
   */
-    riskAreaGroup: IRiskAreaGroup | null;
+    riskAreaGroup: IRiskAreaGroup;
     /**
     description: Risk Area Group with associated patient answers
   */
@@ -128,15 +128,15 @@ declare module 'schema' {
     /**
     description: RiskArea
   */
-    riskArea: IRiskArea | null;
+    riskArea: IRiskArea;
     /**
     description: RiskAreas
   */
-    riskAreas: Array<IRiskArea> | null;
+    riskAreas: Array<IRiskArea>;
     /**
     description: Question
   */
-    question: IQuestion | null;
+    question: IQuestion;
     /**
     description: Questions for risk area, progress note template or screening tool
   */
@@ -152,7 +152,7 @@ declare module 'schema' {
     /**
     description: PatientAnswer
   */
-    patientAnswer: IPatientAnswer | null;
+    patientAnswer: IPatientAnswer;
     /**
     description: PatientAnswersForQuestion
   */
@@ -160,27 +160,27 @@ declare module 'schema' {
     /**
     description: PatientPreviousAnswersForQuestion
   */
-    patientPreviousAnswersForQuestion: Array<IPatientAnswer> | null;
+    patientPreviousAnswersForQuestion: Array<IPatientAnswer>;
     /**
     description: PatientRiskAreaSummary
   */
-    patientRiskAreaSummary: IRiskAreaSummary | null;
+    patientRiskAreaSummary: IRiskAreaSummary;
     /**
     description: PatientRiskAreaRiskScore
   */
-    patientRiskAreaRiskScore: IRiskScore | null;
+    patientRiskAreaRiskScore: IRiskScore;
     /**
     description: QuestionCondition
   */
-    questionCondition: IQuestionCondition | null;
+    questionCondition: IQuestionCondition;
     /**
     description: Event notifications for a user
   */
-    eventNotificationsForCurrentUser: IEventNotificationEdges | null;
+    eventNotificationsForCurrentUser: IEventNotificationEdges;
     /**
     description: Event notifications for a task
   */
-    eventNotificationsForTask: IEventNotificationEdges | null;
+    eventNotificationsForTask: IEventNotificationEdges;
     /**
     description: Event notifications for a user's task - on dashboard
   */
@@ -188,99 +188,99 @@ declare module 'schema' {
     /**
     description: Concern
   */
-    concern: IConcern | null;
+    concern: IConcern;
     /**
     description: Concerns
   */
-    concerns: Array<IConcern> | null;
+    concerns: Array<IConcern>;
     /**
     description: Concerns for answer
   */
-    concernsForAnswer: Array<IConcern> | null;
+    concernsForAnswer: Array<IConcern>;
     /**
     description: patient concern
   */
-    patientConcern: IPatientConcern | null;
+    patientConcern: IPatientConcern;
     /**
     description: patient concerns for patient
   */
-    patientConcerns: Array<IPatientConcern> | null;
+    patientConcerns: Array<IPatientConcern>;
     /**
     description: Patient goal
   */
-    patientGoal: IPatientGoal | null;
+    patientGoal: IPatientGoal;
     /**
     description: Patient goals for patient
   */
-    patientGoals: Array<IPatientGoal> | null;
+    patientGoals: Array<IPatientGoal>;
     /**
     description: Goal suggestion templates
   */
-    goalSuggestionTemplate: IGoalSuggestionTemplate | null;
+    goalSuggestionTemplate: IGoalSuggestionTemplate;
     /**
     description: Goal suggestion templates
   */
-    goalSuggestionTemplates: Array<IGoalSuggestionTemplate> | null;
+    goalSuggestionTemplates: Array<IGoalSuggestionTemplate>;
     /**
     description: Goal suggestion for template for answer
   */
-    goalSuggestionTemplatesForAnswer: Array<IGoalSuggestionTemplate> | null;
+    goalSuggestionTemplatesForAnswer: Array<IGoalSuggestionTemplate>;
     /**
     description: Task template
   */
-    taskTemplate: ITaskTemplate | null;
+    taskTemplate: ITaskTemplate;
     /**
     description: Task templates
   */
-    taskTemplates: Array<ITaskTemplate> | null;
+    taskTemplates: Array<ITaskTemplate>;
     /**
     description: Task templates suggested for answer
   */
-    taskTemplatesForAnswer: Array<ITaskTemplate> | null;
+    taskTemplatesForAnswer: Array<ITaskTemplate>;
     /**
     description: patient task suggestions
   */
-    patientTaskSuggestions: Array<IPatientTaskSuggestion> | null;
+    patientTaskSuggestions: Array<IPatientTaskSuggestion>;
     /**
     description: Care Plan Suggestions
   */
-    carePlanSuggestionsForPatient: Array<ICarePlanSuggestion> | null;
+    carePlanSuggestionsForPatient: Array<ICarePlanSuggestion>;
     /**
     description: Care Plan
   */
-    carePlanForPatient: ICarePlan | null;
+    carePlanForPatient: ICarePlan;
     /**
     description: screening tool
   */
-    screeningTool: IScreeningTool | null;
+    screeningTool: IScreeningTool;
     /**
     description: screening tools
   */
-    screeningTools: Array<IScreeningTool> | null;
+    screeningTools: Array<IScreeningTool>;
     /**
     description: screening tools for risk area
   */
-    screeningToolsForRiskArea: Array<IScreeningTool> | null;
+    screeningToolsForRiskArea: Array<IScreeningTool>;
     /**
     description: screening tool score range
   */
-    screeningToolScoreRange: IScreeningToolScoreRange | null;
+    screeningToolScoreRange: IScreeningToolScoreRange;
     /**
     description: screening tool score range for screening tool and score
   */
-    screeningToolScoreRangeForScoreAndScreeningTool: IScreeningToolScoreRange | null;
+    screeningToolScoreRangeForScoreAndScreeningTool: IScreeningToolScoreRange;
     /**
     description: screening tool score ranges
   */
-    screeningToolScoreRanges: Array<IScreeningToolScoreRange> | null;
+    screeningToolScoreRanges: Array<IScreeningToolScoreRange>;
     /**
     description: screening tool score ranges for screening tool
   */
-    screeningToolScoreRangesForScreeningTool: Array<IScreeningToolScoreRange> | null;
+    screeningToolScoreRangesForScreeningTool: Array<IScreeningToolScoreRange>;
     /**
     description: patient screening tool submission
   */
-    patientScreeningToolSubmission: IPatientScreeningToolSubmission | null;
+    patientScreeningToolSubmission: IPatientScreeningToolSubmission;
     /**
     description: latest patient sreening tool submission for a screening tool
   */
@@ -288,7 +288,7 @@ declare module 'schema' {
     /**
     description: patient screening tool submissions for patient and screening tool (optioanlly)
   */
-    patientScreeningToolSubmissionsForPatient: Array<IPatientScreeningToolSubmission> | null;
+    patientScreeningToolSubmissionsForPatient: Array<IPatientScreeningToolSubmission>;
     /**
     description: patient screening tool submissions for patient 360 (history tab)
   */
@@ -296,59 +296,59 @@ declare module 'schema' {
     /**
     description: patient screening tool submissions
   */
-    patientScreeningToolSubmissions: Array<IPatientScreeningToolSubmission> | null;
+    patientScreeningToolSubmissions: Array<IPatientScreeningToolSubmission>;
     /**
     description: progress note template
   */
-    progressNoteTemplate: IProgressNoteTemplate | null;
+    progressNoteTemplate: IProgressNoteTemplate;
     /**
     description: progress note templates
   */
-    progressNoteTemplates: Array<IProgressNoteTemplate> | null;
+    progressNoteTemplates: Array<IProgressNoteTemplate>;
     /**
     description: progress note
   */
-    progressNote: IProgressNote | null;
+    progressNote: IProgressNote;
     /**
     description: progress notes for patient
   */
-    progressNotesForPatient: Array<IProgressNote> | null;
+    progressNotesForPatient: Array<IProgressNote>;
     /**
     description: progress notes for current user
   */
-    progressNotesForCurrentUser: Array<IProgressNote> | null;
+    progressNotesForCurrentUser: Array<IProgressNote>;
     /**
     description: progress notes for supervisor review
   */
-    progressNotesForSupervisorReview: Array<IProgressNote> | null;
+    progressNotesForSupervisorReview: Array<IProgressNote>;
     /**
     description: progress note activities for progress note
   */
-    progressNoteActivityForProgressNote: IProgressNoteActivity | null;
+    progressNoteActivityForProgressNote: IProgressNoteActivity;
     /**
     description: quick call
   */
-    quickCall: IQuickCall | null;
+    quickCall: IQuickCall;
     /**
     description: quick calls for progress note
   */
-    quickCallsForProgressNote: Array<IQuickCall> | null;
+    quickCallsForProgressNote: Array<IQuickCall>;
     /**
     description: computed field
   */
-    computedField: IComputedField | null;
+    computedField: IComputedField;
     /**
     description: computed fields
   */
-    computedFields: Array<IComputedField> | null;
+    computedFields: Array<IComputedField>;
     /**
     description: computed fields schema
   */
-    computedFieldsSchema: IComputedFieldsSchema | null;
+    computedFieldsSchema: IComputedFieldsSchema;
     /**
     description: risk area assessment submission
   */
-    riskAreaAssessmentSubmission: IRiskAreaAssessmentSubmission | null;
+    riskAreaAssessmentSubmission: IRiskAreaAssessmentSubmission;
     /**
     description: latest risk area assessment submission for a screening tool
   */

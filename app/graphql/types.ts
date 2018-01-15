@@ -2053,6 +2053,81 @@ export interface getPatientsNewToCareTeamQuery {
   },
 };
 
+export interface getPatientsWithMissingInfoQueryVariables {
+  pageNumber: number,
+  pageSize: number,
+};
+
+export interface getPatientsWithMissingInfoQuery {
+  // Patient dashboard - lacking demographic information
+  patientsWithMissingInfo:  {
+    edges:  Array< {
+      node:  {
+        id: string,
+        firstName: string,
+        lastName: string,
+        dateOfBirth: string | null,
+        gender: string | null,
+      } | null,
+    } >,
+    pageInfo:  {
+      hasPreviousPage: boolean,
+      hasNextPage: boolean,
+    },
+    totalCount: number,
+  },
+};
+
+export interface getPatientsWithNoRecentEngagementQueryVariables {
+  pageNumber: number,
+  pageSize: number,
+};
+
+export interface getPatientsWithNoRecentEngagementQuery {
+  // Patient dashboard - no recent engagement
+  patientsWithNoRecentEngagement:  {
+    edges:  Array< {
+      node:  {
+        id: string,
+        firstName: string,
+        lastName: string,
+        dateOfBirth: string | null,
+        gender: string | null,
+      } | null,
+    } >,
+    pageInfo:  {
+      hasPreviousPage: boolean,
+      hasNextPage: boolean,
+    },
+    totalCount: number,
+  },
+};
+
+export interface getPatientsWithOutOfDateMAPQueryVariables {
+  pageNumber: number,
+  pageSize: number,
+};
+
+export interface getPatientsWithOutOfDateMAPQuery {
+  // Patient dashboard - out of date MAP
+  patientsWithOutOfDateMAP:  {
+    edges:  Array< {
+      node:  {
+        id: string,
+        firstName: string,
+        lastName: string,
+        dateOfBirth: string | null,
+        gender: string | null,
+      } | null,
+    } >,
+    pageInfo:  {
+      hasPreviousPage: boolean,
+      hasNextPage: boolean,
+    },
+    totalCount: number,
+  },
+};
+
 export interface getPatientsWithPendingSuggestionsQueryVariables {
   pageNumber: number,
   pageSize: number,

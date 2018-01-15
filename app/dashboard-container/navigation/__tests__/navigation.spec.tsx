@@ -22,7 +22,7 @@ describe('Dashboard Navigation', () => {
   });
 
   it('renders navigation item for task notifications', () => {
-    expect(wrapper.find(NavigationItem).length).toBe(3);
+    expect(wrapper.find(NavigationItem).length).toBe(6);
     expect(
       wrapper
         .find<IProps>(NavigationItem)
@@ -117,6 +117,105 @@ describe('Dashboard Navigation', () => {
       wrapper
         .find<IProps>(NavigationItem)
         .at(2)
+        .props().iconStyles,
+    ).toBe('redIcon');
+  });
+
+  it('renders navigation item for patients with missing info', () => {
+    expect(
+      wrapper
+        .find<IProps>(NavigationItem)
+        .at(3)
+        .props().selected,
+    ).toBe('demographics');
+    expect(
+      wrapper
+        .find<IProps>(NavigationItem)
+        .at(3)
+        .props().isSelected,
+    ).toBeFalsy();
+    expect(
+      wrapper
+        .find<IProps>(NavigationItem)
+        .at(3)
+        .props().routeBase,
+    ).toBe(ROUTE_BASE);
+    expect(
+      wrapper
+        .find<IProps>(NavigationItem)
+        .at(3)
+        .props().icon,
+    ).toBe('person');
+    expect(
+      wrapper
+        .find<IProps>(NavigationItem)
+        .at(3)
+        .props().iconStyles,
+    ).toBe('redIcon');
+  });
+
+  it('renders navigation item for no recent engagement', () => {
+    expect(
+      wrapper
+        .find<IProps>(NavigationItem)
+        .at(4)
+        .props().selected,
+    ).toBe('engage');
+    expect(
+      wrapper
+        .find<IProps>(NavigationItem)
+        .at(4)
+        .props().isSelected,
+    ).toBeFalsy();
+    expect(
+      wrapper
+        .find<IProps>(NavigationItem)
+        .at(4)
+        .props().routeBase,
+    ).toBe(ROUTE_BASE);
+    expect(
+      wrapper
+        .find<IProps>(NavigationItem)
+        .at(4)
+        .props().icon,
+    ).toBe('people');
+    expect(
+      wrapper
+        .find<IProps>(NavigationItem)
+        .at(4)
+        .props().iconStyles,
+    ).toBe('redIcon');
+  });
+
+  it('renders navigation item for out of date MAP', () => {
+    expect(
+      wrapper
+        .find<IProps>(NavigationItem)
+        .at(5)
+        .props().selected,
+    ).toBe('updateMAP');
+    expect(
+      wrapper
+        .find<IProps>(NavigationItem)
+        .at(5)
+        .props().isSelected,
+    ).toBeFalsy();
+    expect(
+      wrapper
+        .find<IProps>(NavigationItem)
+        .at(5)
+        .props().routeBase,
+    ).toBe(ROUTE_BASE);
+    expect(
+      wrapper
+        .find<IProps>(NavigationItem)
+        .at(5)
+        .props().icon,
+    ).toBe('assignment');
+    expect(
+      wrapper
+        .find<IProps>(NavigationItem)
+        .at(5)
         .props().iconStyles,
     ).toBe('redIcon');
   });

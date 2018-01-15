@@ -1,7 +1,7 @@
+import { History } from 'history';
 import * as React from 'react';
 import { compose, graphql } from 'react-apollo';
-import { connect, Dispatch } from 'react-redux';
-import { push } from 'react-router-redux';
+import { withRouter } from 'react-router';
 import * as questionCreateMutationGraphql from '../graphql/queries/question-create-mutation.graphql';
 import {
   questionCreateMutation,
@@ -31,8 +31,8 @@ interface IProps {
   screeningToolId: string | null;
   progressNoteTemplateId: string | null;
   routeBase: string;
+  history: History;
   onClose: () => any;
-  redirectToQuestion?: (questionId: string) => any;
   computedFields?: FullComputedFieldFragment[];
 }
 
@@ -111,7 +111,7 @@ class QuestionCreate extends React.Component<allProps, IState> {
   async onSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
-    const { createQuestion, assessmentType } = this.props;
+    const { createQuestion, assessmentType, routeBase, history } = this.props;
     if (createQuestion) {
       // don't allow submitting automated assessment without computed field
       if (assessmentType === 'automated' && !this.state.question.computedFieldId) return;
@@ -125,8 +125,8 @@ class QuestionCreate extends React.Component<allProps, IState> {
         });
         this.setState({ loading: false });
         this.props.onClose();
-        if (this.props.redirectToQuestion && question.data.questionCreate) {
-          this.props.redirectToQuestion(question.data.questionCreate.id);
+        if (question.data.questionCreate) {
+          history.push(`${routeBase}/${question.data.questionCreate.id}`);
         }
       } catch (e) {
         this.setState({ error: e.message, loading: false });
@@ -261,16 +261,8 @@ class QuestionCreate extends React.Component<allProps, IState> {
   }
 }
 
-function mapDispatchToProps(dispatch: Dispatch<() => void>, ownProps: allProps): Partial<allProps> {
-  return {
-    redirectToQuestion: (questionId: string) => {
-      dispatch(push(`${ownProps.routeBase}/${questionId}`));
-    },
-  };
-}
-
 export default compose(
-  connect(null, mapDispatchToProps),
+  withRouter,
   graphql<IGraphqlProps, IProps, allProps>(questionCreateMutationGraphql as any, {
     name: 'createQuestion',
     options: {

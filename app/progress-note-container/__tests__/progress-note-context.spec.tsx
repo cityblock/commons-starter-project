@@ -17,19 +17,20 @@ const clinics = {
 
 describe('progress note context', () => {
   let component: any;
+  const history = { push: jest.fn } as any;
+
   beforeAll(() => {
     Date.now = jest.fn(() => 1500494779252);
     component = shallow(
       <Component
+        history={history}
         patientId={patient.id}
         progressNote={progressNote}
         progressNoteTemplates={[progressNoteTemplate]}
         onChange={jest.fn()}
-        redirectTo360={jest.fn()}
         updateReadyToSubmit={jest.fn()}
         clinics={clinics}
         questions={[question]}
-        redirectToMap={jest.fn()}
       />,
     );
   });

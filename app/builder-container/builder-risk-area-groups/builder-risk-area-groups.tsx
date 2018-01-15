@@ -1,8 +1,9 @@
 import * as classNames from 'classnames';
+import { History } from 'history';
 import * as React from 'react';
 import { compose, graphql } from 'react-apollo';
-import { connect, Dispatch } from 'react-redux';
-import { push } from 'react-router-redux';
+import { connect } from 'react-redux';
+import { withRouter } from 'react-router';
 import * as riskAreaGroupsQuery from '../../graphql/queries/get-risk-area-groups.graphql';
 import { FullRiskAreaGroupFragment } from '../../graphql/types';
 import * as styles from '../../shared/css/two-panel.css';
@@ -20,14 +21,11 @@ interface IProps {
       riskAreaGroupId?: string;
     };
   };
+  history: History;
 }
 
 interface IStateProps {
   riskAreaGroupId: string | null;
-}
-
-interface IDispatchProps {
-  redirectToRiskAreaGroups: () => void;
 }
 
 interface IGraphqlProps {
@@ -36,7 +34,7 @@ interface IGraphqlProps {
   error: string | null;
 }
 
-type allProps = IStateProps & IDispatchProps & IGraphqlProps & IProps;
+type allProps = IStateProps & IGraphqlProps & IProps;
 
 interface IState {
   createMode: boolean;
@@ -48,14 +46,10 @@ export class AdminRiskAreaGroups extends React.Component<allProps, IState> {
     this.state = { createMode: false };
   }
 
+  redirectToRiskAreaGroups = () => this.props.history.push(ROUTE_BASE);
+
   render(): JSX.Element {
-    const {
-      riskAreaGroupId,
-      riskAreaGroups,
-      redirectToRiskAreaGroups,
-      loading,
-      error,
-    } = this.props;
+    const { riskAreaGroupId, riskAreaGroups, loading, error } = this.props;
     const { createMode } = this.state;
 
     if (loading || error) return <Spinner />;
@@ -86,7 +80,7 @@ export class AdminRiskAreaGroups extends React.Component<allProps, IState> {
           <div className={containerStyles}>
             <RiskAreaGroupDetail
               riskAreaGroup={selectedRiskAreaGroup}
-              close={redirectToRiskAreaGroups}
+              close={this.redirectToRiskAreaGroups}
               createMode={createMode}
               cancelCreateRiskAreaGroup={() => this.setState({ createMode: false })}
             />
@@ -103,17 +97,9 @@ const mapStateToProps = (state: IAppState, ownProps: IProps): IStateProps => {
   };
 };
 
-const mapDispatchToProps = (dispatch: Dispatch<() => void>): IDispatchProps => {
-  return {
-    redirectToRiskAreaGroups: () => dispatch(push(ROUTE_BASE)),
-  };
-};
-
 export default compose(
-  connect<IStateProps, IDispatchProps, IProps>(
-    mapStateToProps as (args?: any) => IStateProps,
-    mapDispatchToProps,
-  ),
+  withRouter,
+  connect<IStateProps, {}, IProps>(mapStateToProps as (args?: any) => IStateProps),
   graphql<IGraphqlProps, IProps, allProps>(riskAreaGroupsQuery as any, {
     props: ({ data }) => ({
       loading: data ? data.loading : false,

@@ -1,7 +1,7 @@
+import { History } from 'history';
 import * as React from 'react';
 import { compose, graphql } from 'react-apollo';
-import { connect, Dispatch } from 'react-redux';
-import { push } from 'react-router-redux';
+import { withRouter } from 'react-router';
 import * as riskAreaGroupsQuery from '../graphql/queries/get-risk-area-groups.graphql';
 import * as riskAreaCreateMutationGraphql from '../graphql/queries/risk-area-create-mutation.graphql';
 import {
@@ -24,7 +24,7 @@ interface IOptions {
 interface IProps {
   routeBase: string;
   onClose: () => any;
-  redirectToRiskArea?: (riskAreaId: string) => any;
+  history: History;
 }
 
 interface IGraphqlProps {
@@ -92,7 +92,7 @@ export class RiskAreaCreate extends React.Component<allProps, IState> {
       assessmentType,
       loading,
     } = this.state;
-
+    const { routeBase, history } = this.props;
     if (
       !loading &&
       this.props.createRiskArea &&
@@ -115,8 +115,8 @@ export class RiskAreaCreate extends React.Component<allProps, IState> {
         });
         this.setState({ loading: false });
         this.props.onClose();
-        if (this.props.redirectToRiskArea && riskArea.data.riskAreaCreate) {
-          this.props.redirectToRiskArea(riskArea.data.riskAreaCreate.id);
+        if (riskArea.data.riskAreaCreate) {
+          history.push(`${routeBase}/${riskArea.data.riskAreaCreate.id}`);
         }
       } catch (e) {
         this.setState({ error: e.message, loading: false });
@@ -200,16 +200,8 @@ export class RiskAreaCreate extends React.Component<allProps, IState> {
   }
 }
 
-function mapDispatchToProps(dispatch: Dispatch<() => void>, ownProps: allProps): Partial<allProps> {
-  return {
-    redirectToRiskArea: (riskAreaId: string) => {
-      dispatch(push(`${ownProps.routeBase}/${riskAreaId}`));
-    },
-  };
-}
-
 export default compose(
-  connect(null, mapDispatchToProps),
+  withRouter,
   graphql<IGraphqlProps, IProps, allProps>(riskAreaGroupsQuery as any, {
     props: ({ data }) => ({
       riskAreaGroupsLoading: data ? data.loading : false,

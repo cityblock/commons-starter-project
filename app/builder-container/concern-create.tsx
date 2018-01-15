@@ -1,7 +1,7 @@
+import { History } from 'history';
 import * as React from 'react';
 import { compose, graphql } from 'react-apollo';
-import { connect, Dispatch } from 'react-redux';
-import { push } from 'react-router-redux';
+import { withRouter } from 'react-router';
 import * as concernCreateMutationGraphql from '../graphql/queries/concern-create-mutation.graphql';
 import { concernCreateMutation, concernCreateMutationVariables } from '../graphql/types';
 import * as formStyles from '../shared/css/forms.css';
@@ -17,7 +17,7 @@ interface IOptions {
 interface IProps {
   routeBase: string;
   onClose: () => any;
-  redirectToConcern?: (concernId: string) => any;
+  history: History;
 }
 
 interface IGraphqlProps {
@@ -67,6 +67,7 @@ export class ConcernCreate extends React.Component<allProps, IState> {
 
   async onSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    const { history, routeBase } = this.props;
     if (this.props.createConcern) {
       try {
         this.setState({ loading: true });
@@ -77,8 +78,8 @@ export class ConcernCreate extends React.Component<allProps, IState> {
         });
         this.setState({ loading: false });
         this.props.onClose();
-        if (this.props.redirectToConcern && concern.data.concernCreate) {
-          this.props.redirectToConcern(concern.data.concernCreate.id);
+        if (concern.data.concernCreate) {
+          history.push(`${routeBase}/${concern.data.concernCreate.id}`);
         }
       } catch (e) {
         this.setState({ error: e.message, loading: false });
@@ -127,16 +128,8 @@ export class ConcernCreate extends React.Component<allProps, IState> {
   }
 }
 
-function mapDispatchToProps(dispatch: Dispatch<() => void>, ownProps: allProps): Partial<allProps> {
-  return {
-    redirectToConcern: (concernId: string) => {
-      dispatch(push(`${ownProps.routeBase}/${concernId}`));
-    },
-  };
-}
-
 export default compose(
-  connect(null, mapDispatchToProps),
+  withRouter,
   graphql<IGraphqlProps, IProps, allProps>(concernCreateMutationGraphql as any, {
     name: 'createConcern',
     options: {

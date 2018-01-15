@@ -11,7 +11,8 @@ describe('Patient Search Container', () => {
   const pageNumber = 0;
   const pageSize = 10;
   const totalCount = 33;
-  const placeholderFn = () => true as any;
+  const history = { push: jest.fn() } as any;
+  const location = {} as any;
   const result1 = { firstName: 'Arya', lastName: 'Stark' };
   const result2 = { firstName: 'Sansa', lastName: 'Stark' };
   const searchResults = {
@@ -32,10 +33,11 @@ describe('Patient Search Container', () => {
 
   const wrapper = shallow(
     <PatientSearchContainer
+      history={history}
+      location={location}
       query={query}
       pageNumber={pageNumber}
       pageSize={pageSize}
-      updateSearchParams={placeholderFn}
       loading={false}
       searchResults={searchResults as any}
     />,

@@ -1,8 +1,8 @@
 import * as classNames from 'classnames';
+import { History } from 'history';
 import * as React from 'react';
 import { compose, graphql } from 'react-apollo';
-import { connect, Dispatch } from 'react-redux';
-import { push } from 'react-router-redux';
+import { withRouter } from 'react-router';
 import * as screeningToolsQuery from '../../graphql/queries/get-screening-tools-for-risk-area.graphql';
 import { getScreeningToolsQuery, FullScreeningToolFragment } from '../../graphql/types';
 import Button from '../../shared/library/button/button';
@@ -13,6 +13,7 @@ interface IProps {
   onDismiss: () => any;
   patientRoute: string;
   riskAreaId: string;
+  history: History;
 }
 
 interface IGraphqlProps {
@@ -21,15 +22,11 @@ interface IGraphqlProps {
   screeningToolsError?: string | null;
 }
 
-interface IDispatchProps {
-  redirectToScreeningTool: (screeningTool: FullScreeningToolFragment) => any;
-}
-
-type allProps = IGraphqlProps & IProps & IDispatchProps;
+type allProps = IGraphqlProps & IProps;
 
 class ScreeningToolsPopup extends React.Component<allProps> {
   renderScreeningTools() {
-    const { screeningTools, screeningToolsLoading, redirectToScreeningTool } = this.props;
+    const { screeningTools, screeningToolsLoading, history, patientRoute } = this.props;
 
     if (screeningToolsLoading) {
       return <div className={styles.screeningToolOptionsLoading}>Loading...</div>;
@@ -42,6 +39,10 @@ class ScreeningToolsPopup extends React.Component<allProps> {
         </div>
       );
     }
+
+    const redirectToScreeningTool = (screeningTool: FullScreeningToolFragment) => {
+      history.push(`${patientRoute}/tools/${screeningTool.id}`);
+    };
 
     return screeningTools.map(screeningTool => {
       if (screeningTool) {
@@ -76,16 +77,8 @@ class ScreeningToolsPopup extends React.Component<allProps> {
   }
 }
 
-function mapDispatchToProps(dispatch: Dispatch<() => void>, ownProps: IProps): IDispatchProps {
-  return {
-    redirectToScreeningTool: (screeningTool: FullScreeningToolFragment) => {
-      dispatch(push(`${ownProps.patientRoute}/tools/${screeningTool.id}`));
-    },
-  };
-}
-
 export default compose(
-  connect<{}, IDispatchProps, allProps>(null, mapDispatchToProps),
+  withRouter,
   graphql<IGraphqlProps, IProps, allProps>(screeningToolsQuery as any, {
     options: (props: IProps) => ({
       variables: {

@@ -1,8 +1,9 @@
+import { History } from 'history';
 import * as querystring from 'querystring';
 import * as React from 'react';
 import { compose, graphql } from 'react-apollo';
-import { connect, Dispatch } from 'react-redux';
-import { push } from 'react-router-redux';
+import { connect } from 'react-redux';
+import { withRouter } from 'react-router';
 import * as patientSearchQuery from '../graphql/queries/get-patient-search.graphql';
 import { getPatientSearchQuery, FullPatientSearchResultFragment } from '../graphql/types';
 import Pagination from '../shared/library/pagination/pagination';
@@ -15,14 +16,15 @@ import PatientSearchResults from './results';
 const INITIAL_PAGE_NUMBER = 0;
 const INITIAL_PAGE_SIZE = 10;
 
+interface IProps {
+  location: Location;
+  history: History;
+}
+
 interface IStateProps {
   query: string;
   pageNumber: number;
   pageSize: number;
-}
-
-interface IDispatchProps {
-  updateSearchParams: (searchParams: IStateProps) => void;
 }
 
 interface IGraphqlProps {
@@ -31,8 +33,7 @@ interface IGraphqlProps {
   searchResults?: getPatientSearchQuery['patientSearch'];
 }
 
-type IProps = IStateProps & IDispatchProps;
-type allProps = IProps & IGraphqlProps;
+type allProps = IProps & IStateProps & IGraphqlProps;
 
 interface IState {
   searchTerm: string;
@@ -56,18 +57,19 @@ export class PatientSearchContainer extends React.Component<allProps, IState> {
   };
 
   onSearch = (): void => {
-    const { updateSearchParams, pageSize } = this.props;
+    const { history, pageSize } = this.props;
     const { searchTerm } = this.state;
 
-    updateSearchParams({
+    const newParams = querystring.stringify({
       query: searchTerm,
       pageNumber: INITIAL_PAGE_NUMBER,
       pageSize,
     });
+    history.push({ search: newParams });
   };
 
   onPaginate = (pageBack: boolean): void => {
-    const { updateSearchParams, query, pageNumber, pageSize, searchResults } = this.props;
+    const { history, query, pageNumber, pageSize, searchResults } = this.props;
     let newPageNumber = pageBack ? pageNumber - 1 : pageNumber + 1;
     // extra security, though UI should not allow this
     if (newPageNumber < 0) newPageNumber = 0;
@@ -75,11 +77,12 @@ export class PatientSearchContainer extends React.Component<allProps, IState> {
       newPageNumber = Math.ceil(searchResults.totalCount / pageSize);
     }
 
-    updateSearchParams({
+    const newParams = querystring.stringify({
       query,
       pageNumber: newPageNumber,
       pageSize,
     });
+    history.push({ search: newParams });
   };
 
   render(): JSX.Element {
@@ -121,8 +124,8 @@ export class PatientSearchContainer extends React.Component<allProps, IState> {
   }
 }
 
-const mapStateToProps = (state: IAppState): IStateProps => {
-  const searchParams = querystring.parse(state.routing.location.search.substring(1));
+const mapStateToProps = (state: IAppState, props: IProps): IStateProps => {
+  const searchParams = querystring.parse(props.location.search.substring(1));
 
   return {
     query: (searchParams.query as string) || '',
@@ -131,21 +134,11 @@ const mapStateToProps = (state: IAppState): IStateProps => {
   };
 };
 
-const mapDispatchToProps = (dispatch: Dispatch<() => void>): IDispatchProps => {
-  const updateSearchParams = (searchParams: IStateProps) => {
-    dispatch(push({ search: querystring.stringify(searchParams) }));
-  };
-
-  return { updateSearchParams };
-};
-
 export default compose(
-  connect<IStateProps, IDispatchProps, {}>(
-    mapStateToProps as (args?: any) => IStateProps,
-    mapDispatchToProps,
-  ),
-  graphql<IGraphqlProps, IProps, allProps>(patientSearchQuery as any, {
-    skip: (props: IProps) => !props.query,
+  withRouter,
+  connect<IStateProps, {}>(mapStateToProps as (args?: any) => IStateProps),
+  graphql<IGraphqlProps, IProps & IStateProps, allProps>(patientSearchQuery as any, {
+    skip: (props: IProps & IStateProps) => !props.query,
     options: ({ query, pageNumber, pageSize }) => ({
       variables: { query, pageNumber, pageSize },
     }),

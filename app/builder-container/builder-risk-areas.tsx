@@ -1,9 +1,10 @@
 import * as classNames from 'classnames';
+import { History } from 'history';
 import * as React from 'react';
 import { compose, graphql } from 'react-apollo';
-import { connect, Dispatch } from 'react-redux';
+import { connect } from 'react-redux';
+import { withRouter } from 'react-router';
 import { Route } from 'react-router-dom';
-import { push } from 'react-router-redux';
 import * as riskAreasQuery from '../graphql/queries/get-risk-areas.graphql';
 import * as riskAreaDeleteMutationGraphql from '../graphql/queries/risk-area-delete-mutation.graphql';
 import {
@@ -25,6 +26,7 @@ interface IProps {
       riskAreaId?: string;
     };
   };
+  history: History;
 }
 
 interface IStateProps {
@@ -40,11 +42,7 @@ interface IGraphqlProps {
   ) => { data: riskAreaDeleteMutation };
 }
 
-interface IDispatchProps {
-  redirectToRiskAreas: () => any;
-}
-
-type allProps = IProps & IGraphqlProps & IDispatchProps & IStateProps;
+type allProps = IProps & IGraphqlProps & IStateProps;
 
 interface IState {
   showCreateRiskArea: boolean;
@@ -114,11 +112,11 @@ class AdminRiskAreas extends React.Component<allProps, IState> {
   }
 
   async onDeleteRiskArea(riskAreaId: string) {
-    const { redirectToRiskAreas, deleteRiskArea } = this.props;
+    const { history, deleteRiskArea } = this.props;
 
     await deleteRiskArea({ variables: { riskAreaId } });
 
-    redirectToRiskAreas();
+    history.push(ROUTE_BASE);
   }
 
   render() {
@@ -166,19 +164,9 @@ function mapStateToProps(state: IAppState, ownProps: IProps): IStateProps {
   };
 }
 
-function mapDispatchToProps(dispatch: Dispatch<() => void>, ownProps: IProps): IDispatchProps {
-  return {
-    redirectToRiskAreas: () => {
-      dispatch(push(ROUTE_BASE));
-    },
-  };
-}
-
 export default compose(
-  connect<IStateProps, IDispatchProps, IProps>(
-    mapStateToProps as (args?: any) => IStateProps,
-    mapDispatchToProps,
-  ),
+  withRouter,
+  connect<IStateProps, {}, IProps>(mapStateToProps as (args?: any) => IStateProps),
   graphql<IGraphqlProps, IProps, allProps>(riskAreasQuery as any, {
     props: ({ data }) => ({
       riskAreasLoading: data ? data.loading : false,

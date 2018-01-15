@@ -72,7 +72,7 @@ exports[`builder concerns renders progress note popup with templates renders pro
   <div
     className="bottomSection"
   >
-    <Connect(Apollo(Apollo(Apollo(Apollo(ProgressNoteContext)))))
+    <withRouter(Apollo(Apollo(Apollo(Apollo(ProgressNoteContext)))))
       onChange={[Function]}
       patientId="patient-id"
       progressNote={
@@ -271,7 +271,7 @@ exports[`builder concerns renders progress note popup with templates renders pro
   <div
     className="bottomSection"
   >
-    <Connect(Apollo(Apollo(Apollo(Apollo(ProgressNoteContext)))))
+    <withRouter(Apollo(Apollo(Apollo(Apollo(ProgressNoteContext)))))
       onChange={[Function]}
       patientId="patient-id"
       progressNote={undefined}

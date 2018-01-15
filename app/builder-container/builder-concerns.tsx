@@ -1,9 +1,10 @@
 import * as classNames from 'classnames';
+import { History } from 'history';
 import * as React from 'react';
 import { compose, graphql } from 'react-apollo';
-import { connect, Dispatch } from 'react-redux';
+import { connect } from 'react-redux';
+import { withRouter } from 'react-router';
 import { Route } from 'react-router-dom';
-import { push } from 'react-router-redux';
 import * as concernDeleteMutationGraphql from '../graphql/queries/concern-delete-mutation.graphql';
 import * as concernsQuery from '../graphql/queries/get-concerns.graphql';
 import {
@@ -25,6 +26,7 @@ interface IProps {
       concernId: string;
     };
   };
+  history: History;
 }
 
 interface IGraphqlProps {
@@ -39,11 +41,7 @@ interface IStateProps {
   concernId: string | null;
 }
 
-interface IDispatchProps {
-  redirectToConcerns: () => any;
-}
-
-type allProps = IGraphqlProps & IDispatchProps & IProps & IStateProps;
+type allProps = IGraphqlProps & IProps & IStateProps;
 
 interface IState {
   showCreateConcern: boolean;
@@ -91,11 +89,11 @@ class BuilderConcerns extends React.Component<allProps, IState> {
   }
 
   async onDeleteConcern(concernId: string) {
-    const { redirectToConcerns, deleteConcern } = this.props;
+    const { history, routeBase, deleteConcern } = this.props;
 
     await deleteConcern({ variables: { concernId } });
 
-    redirectToConcerns();
+    history.push(routeBase);
   }
 
   render() {
@@ -144,23 +142,9 @@ function mapStateToProps(state: IAppState, ownProps: IProps): IStateProps {
   };
 }
 
-function mapDispatchToProps(
-  dispatch: Dispatch<() => void>,
-  ownProps: IProps & IStateProps,
-): IDispatchProps {
-  return {
-    redirectToConcerns: () => {
-      const { routeBase } = ownProps;
-      dispatch(push(routeBase));
-    },
-  };
-}
-
 export default compose(
-  connect<IStateProps, IDispatchProps, allProps>(
-    mapStateToProps as (args?: any) => IStateProps,
-    mapDispatchToProps,
-  ),
+  withRouter,
+  connect<IStateProps, {}, allProps>(mapStateToProps as (args?: any) => IStateProps),
   graphql<IGraphqlProps, IProps, allProps>(concernsQuery as any, {
     props: ({ data }) => ({
       concernsLoading: data ? data.loading : false,

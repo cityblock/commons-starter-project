@@ -1,17 +1,5 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`renders without concern 1`] = `
-<div
-  className="container"
->
-  <div
-    className="loading"
-  >
-    Loading...
-  </div>
-</div>
-`;
-
 exports[`shallow rendered renders with concern 1`] = `
 <div
   className="container"

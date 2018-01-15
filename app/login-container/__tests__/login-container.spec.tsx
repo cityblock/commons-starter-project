@@ -1,25 +1,17 @@
-import { render } from 'enzyme';
+import { shallow } from 'enzyme';
 import * as React from 'react';
-import { MockedProvider } from 'react-apollo/test-utils';
-import { Provider } from 'react-redux';
-import configureMockStore from 'redux-mock-store';
-import { ENGLISH_TRANSLATION } from '../../reducers/messages/en';
-import ReduxConnectedIntlProvider from '../../redux-connected-intl-provider';
-import LoginContainer from '../login-container';
+import { LoginContainer as Component } from '../login-container';
 
 it('renders login form correctly', () => {
-  document.body.innerHTML = '<div id="app"></div>';
-
-  const mockStore = configureMockStore([]);
-  const locale = { messages: ENGLISH_TRANSLATION.messages };
-  const tree = render(
-    <MockedProvider mocks={[]}>
-      <Provider store={mockStore({ locale })}>
-        <ReduxConnectedIntlProvider>
-          <LoginContainer />
-        </ReduxConnectedIntlProvider>
-      </Provider>
-    </MockedProvider>,
+  const history = { push: jest.fn() } as any;
+  const tree = shallow(
+    <Component
+      history={history}
+      logIn={(() => false) as any}
+      currentUser={null}
+      loading={false}
+      error={null}
+    />,
   );
-  expect(tree).toMatchSnapshot();
+  expect(tree.find('.background').length).toEqual(1);
 });

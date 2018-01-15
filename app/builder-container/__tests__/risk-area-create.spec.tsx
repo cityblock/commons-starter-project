@@ -21,9 +21,11 @@ describe('Builder Risk Area Create component', () => {
   };
   const riskAreaGroups = [riskAreaGroup1, riskAreaGroup2, riskAreaGroup3] as any;
   const placeholderFn = () => true as any;
+  const history = { push: jest.fn() } as any;
 
   const wrapper = shallow(
     <RiskAreaCreate
+      history={history}
       onClose={placeholderFn}
       riskAreaGroups={riskAreaGroups}
       routeBase="/direwolves"

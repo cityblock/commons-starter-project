@@ -1,7 +1,7 @@
+import { History } from 'history';
 import * as React from 'react';
 import { compose, graphql } from 'react-apollo';
-import { connect, Dispatch } from 'react-redux';
-import { push } from 'react-router-redux';
+import { withRouter } from 'react-router';
 import * as progressNoteTemplateCreateMutationGraphql from '../graphql/queries/progress-note-template-create-mutation.graphql';
 import {
   progressNoteTemplateCreateMutation,
@@ -20,7 +20,7 @@ interface IProps {
   progressNoteTemplateId: string | null;
   routeBase: string;
   onClose: () => any;
-  redirectToProgressNoteTemplate?: (progressNoteTemplateId: string) => any;
+  history: History;
 }
 
 interface IGraphqlProps {
@@ -62,6 +62,7 @@ export class ProgressNoteTemplateCreate extends React.Component<allProps, IState
 
   async onSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    const { history, routeBase } = this.props;
     if (this.props.createProgressNoteTemplate) {
       try {
         this.setState({ loading: true });
@@ -72,13 +73,8 @@ export class ProgressNoteTemplateCreate extends React.Component<allProps, IState
         });
         this.setState({ loading: false });
         this.props.onClose();
-        if (
-          this.props.redirectToProgressNoteTemplate &&
-          progressNoteTemplate.data.progressNoteTemplateCreate
-        ) {
-          this.props.redirectToProgressNoteTemplate(
-            progressNoteTemplate.data.progressNoteTemplateCreate.id,
-          );
+        if (progressNoteTemplate.data.progressNoteTemplateCreate) {
+          history.push(`${routeBase}/${progressNoteTemplate.data.progressNoteTemplateCreate.id}`);
         }
       } catch (e) {
         this.setState({ error: e.message, loading: false });
@@ -131,16 +127,8 @@ export class ProgressNoteTemplateCreate extends React.Component<allProps, IState
   }
 }
 
-function mapDispatchToProps(dispatch: Dispatch<() => void>, ownProps: allProps): Partial<allProps> {
-  return {
-    redirectToProgressNoteTemplate: (progressNoteTemplateId: string) => {
-      dispatch(push(`${ownProps.routeBase}/${progressNoteTemplateId}`));
-    },
-  };
-}
-
 export default compose(
-  connect(null, mapDispatchToProps),
+  withRouter,
   graphql<IGraphqlProps, IProps, allProps>(progressNoteTemplateCreateMutationGraphql as any, {
     name: 'createProgressNoteTemplate',
     options: {

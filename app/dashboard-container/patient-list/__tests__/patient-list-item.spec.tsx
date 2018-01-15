@@ -9,8 +9,12 @@ import PatientTaskCount from '../../tasks/patient-task-count';
 import { PatientListItem } from '../patient-list-item';
 
 describe('Dashboard Patient List Item', () => {
-  const placeholderFn = () => true as any;
-  const wrapper = shallow(<PatientListItem patient={patient} redirectToPatient={placeholderFn} />);
+  const history = { push: jest.fn() } as any;
+  const location = {} as any;
+  const match = {} as any;
+  const wrapper = shallow(
+    <PatientListItem match={match} location={location} history={history} patient={patient} />,
+  );
 
   it('wraps item in link to patient profile', () => {
     expect(

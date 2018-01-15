@@ -1,8 +1,7 @@
-import { createMemoryHistory } from 'history';
 import * as React from 'react';
 import { MockedProvider } from 'react-apollo/test-utils';
 import { Provider } from 'react-redux';
-import { ConnectedRouter } from 'react-router-redux';
+import { BrowserRouter } from 'react-router-dom';
 import { create } from 'react-test-renderer';
 import configureMockStore from 'redux-mock-store';
 import { ENGLISH_TRANSLATION } from '../../reducers/messages/en';
@@ -27,20 +26,19 @@ describe('builder concerns', () => {
 
   it('renders builder concerns', () => {
     const mockStore = configureMockStore([]);
-    const history = createMemoryHistory();
     const locale = { messages: ENGLISH_TRANSLATION.messages };
     const tree = create(
       <MockedProvider mocks={[]}>
         <Provider store={mockStore({ locale, concern })}>
           <ReduxConnectedIntlProvider>
-            <ConnectedRouter history={history}>
+            <BrowserRouter>
               <BuilderConcerns
                 match={match}
                 routeBase="/route/base"
                 concernId={concern.id}
                 concerns={[concern]}
               />
-            </ConnectedRouter>
+            </BrowserRouter>
           </ReduxConnectedIntlProvider>
         </Provider>
       </MockedProvider>,

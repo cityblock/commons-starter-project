@@ -1,7 +1,7 @@
 import * as classNames from 'classnames';
+import { History } from 'history';
 import * as React from 'react';
-import { connect, Dispatch } from 'react-redux';
-import { push } from 'react-router-redux';
+import { withRouter } from 'react-router';
 import { FullPatientForDashboardFragment } from '../../graphql/types';
 import { formatFullName } from '../../shared/helpers/format-helpers';
 import { getActiveMapRoute } from '../../shared/helpers/route-helpers';
@@ -22,23 +22,23 @@ interface IProps {
   tasksDueCount?: number | null; // number of tasks due, only for task view
   notificationsCount?: number | null; // number of tasks with notifications, only for task view
   selected?: boolean; // flag if patient is selected, applies sticky scroll styles
+  history: History;
+  location: History.LocationState;
+  match: {
+    isExact: boolean;
+    params: null;
+    path: string;
+    url: string;
+  };
 }
 
-interface IDispatchProps {
-  redirectToPatient: () => void;
-}
+export const PatientListItem: React.StatelessComponent<IProps> = (props: IProps) => {
+  const { patient, taskView, tasksDueCount, notificationsCount, selected, history } = props;
 
-type allProps = IDispatchProps & IProps;
+  const redirectToPatient = () => {
+    history.push(getActiveMapRoute(patient.id));
+  };
 
-export const PatientListItem: React.StatelessComponent<allProps> = (props: allProps) => {
-  const {
-    patient,
-    taskView,
-    redirectToPatient,
-    tasksDueCount,
-    notificationsCount,
-    selected,
-  } = props;
   const containerStyles = classNames(styles.container, {
     [styles.sticky]: !!selected,
   });
@@ -77,13 +77,4 @@ export const PatientListItem: React.StatelessComponent<allProps> = (props: allPr
   );
 };
 
-const mapDispatchToProps = (dispatch: Dispatch<() => void>, ownProps: IProps): IDispatchProps => {
-  const redirectToPatient = () => {
-    const { patient } = ownProps;
-    dispatch(push(getActiveMapRoute(patient.id)));
-  };
-
-  return { redirectToPatient };
-};
-
-export default connect<{}, IDispatchProps, IProps>(null, mapDispatchToProps)(PatientListItem);
+export default withRouter<IProps>(PatientListItem);

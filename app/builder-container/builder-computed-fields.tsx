@@ -1,9 +1,10 @@
 import * as classNames from 'classnames';
+import { History } from 'history';
 import * as React from 'react';
 import { compose, graphql } from 'react-apollo';
-import { connect, Dispatch } from 'react-redux';
+import { connect } from 'react-redux';
+import { withRouter } from 'react-router';
 import { Route } from 'react-router-dom';
-import { push } from 'react-router-redux';
 import * as computedFieldDeleteMutationGraphql from '../graphql/queries/computed-field-delete-mutation.graphql';
 import * as computedFieldsQuery from '../graphql/queries/get-computed-fields.graphql';
 import {
@@ -24,7 +25,10 @@ interface IProps {
     params: {
       computedFieldId: string;
     };
+    path: string;
+    url: string;
   };
+  history: History;
 }
 
 interface IGraphqlProps {
@@ -36,14 +40,9 @@ interface IGraphqlProps {
 
 interface IStateProps {
   routeBase: string;
-  computedFieldId: string | null;
 }
 
-interface IDispatchProps {
-  redirectToComputedFields: () => any;
-}
-
-type allProps = IGraphqlProps & IDispatchProps & IProps & IStateProps;
+type allProps = IGraphqlProps & IProps & IStateProps;
 
 interface IState {
   showCreateComputedField: boolean;
@@ -78,8 +77,8 @@ export class BuilderComputedFields extends React.Component<allProps, IState> {
   }
 
   renderComputedField = (computedField: FullComputedFieldFragment) => {
-    const { computedFieldId, routeBase } = this.props;
-    const selected = computedField.id === computedFieldId;
+    const { match, routeBase } = this.props;
+    const selected = computedField.id === match.params.computedFieldId;
 
     return (
       <ComputedFieldRow
@@ -92,21 +91,21 @@ export class BuilderComputedFields extends React.Component<allProps, IState> {
   };
 
   onDeleteComputedField = async (computedFieldId: string) => {
-    const { redirectToComputedFields, deleteComputedField } = this.props;
+    const { deleteComputedField, history, routeBase } = this.props;
 
     await deleteComputedField({ variables: { computedFieldId } });
 
-    redirectToComputedFields();
+    history.push(routeBase);
   };
 
   render() {
-    const { routeBase, computedFieldId } = this.props;
+    const { routeBase, match } = this.props;
     const { showCreateComputedField } = this.state;
     const computedFieldContainerStyles = classNames(styles.itemContainer, {
-      [styles.visible]: !!computedFieldId || showCreateComputedField,
+      [styles.visible]: !!match.params.computedFieldId || showCreateComputedField,
     });
     const computedFieldsListStyles = classNames(styles.itemsList, {
-      [styles.compressed]: !!computedFieldId || showCreateComputedField,
+      [styles.compressed]: !!match.params.computedFieldId || showCreateComputedField,
     });
     const createComputedFieldButton = (
       <div className={styles.createContainer}>
@@ -139,28 +138,13 @@ export class BuilderComputedFields extends React.Component<allProps, IState> {
 
 function mapStateToProps(state: IAppState, ownProps: IProps): IStateProps {
   return {
-    computedFieldId: ownProps.match.params.computedFieldId,
     routeBase: '/builder/computed-fields',
   };
 }
 
-function mapDispatchToProps(
-  dispatch: Dispatch<() => void>,
-  ownProps: IProps & IStateProps,
-): IDispatchProps {
-  return {
-    redirectToComputedFields: () => {
-      const { routeBase } = ownProps;
-      dispatch(push(routeBase));
-    },
-  };
-}
-
 export default compose(
-  connect<IStateProps, IDispatchProps, allProps>(
-    mapStateToProps as (args?: any) => IStateProps,
-    mapDispatchToProps,
-  ),
+  withRouter,
+  connect<IStateProps, {}, allProps>(mapStateToProps as (args?: any) => IStateProps),
   graphql<IGraphqlProps, IProps, allProps>(computedFieldsQuery as any, {
     props: ({ data }) => ({
       computedFieldsLoading: data ? data.loading : false,

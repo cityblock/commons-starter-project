@@ -12,7 +12,6 @@ describe('Dashboard Patients List', () => {
   const pageNumber = 1;
   const pageSize = 10;
   const totalCount = 22;
-  const placeholderFn = () => true as any;
   const selected = 'tasks';
   const pageInfo = {
     hasNextPage: true,
@@ -27,12 +26,17 @@ describe('Dashboard Patients List', () => {
     totalCount,
     pageInfo,
   };
+  const history = { push: jest.fn() } as any;
+  const location = {} as any;
+  const match = {} as any;
 
   const wrapper = shallow(
     <DashboardPatients
+      history={history}
+      match={match}
+      location={location}
       pageNumber={pageNumber}
       pageSize={pageSize}
-      updatePageParams={placeholderFn}
       patientResults={patientResults}
       selected={selected}
       loading={false}

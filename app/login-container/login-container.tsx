@@ -1,9 +1,9 @@
+import { History } from 'history';
 import * as React from 'react';
 import { compose, graphql } from 'react-apollo';
 import GoogleLogin from 'react-google-login';
 import { FormattedMessage } from 'react-intl';
-import { connect, Dispatch } from 'react-redux';
-import { push } from 'react-router-redux';
+import { withRouter } from 'react-router';
 import * as currentUserQuery from '../graphql/queries/get-current-user.graphql';
 import * as loginMutation from '../graphql/queries/log-in-user-mutation.graphql';
 import { getCurrentUserQuery, logInUserMutationVariables } from '../graphql/types';
@@ -12,6 +12,7 @@ import Footer from './footer';
 
 interface IProps {
   mutate?: any;
+  history: History;
 }
 
 interface IGraphqlProps {
@@ -21,20 +22,16 @@ interface IGraphqlProps {
   error: string | null;
 }
 
-interface IDispatchProps {
-  onSuccess: () => any;
-}
-
 interface IGoogleLoginError {
   error: string;
   details: string;
 }
 
-type allProps = IDispatchProps & IGraphqlProps & IProps;
+type allProps = IGraphqlProps & IProps;
 
 const SCOPE = 'https://www.googleapis.com/auth/calendar';
 
-class LoginContainer extends React.Component<allProps, { error: string | null }> {
+export class LoginContainer extends React.Component<allProps, { error: string | null }> {
   constructor(props: allProps) {
     super(props);
     this.onSuccess = this.onSuccess.bind(this);
@@ -47,7 +44,7 @@ class LoginContainer extends React.Component<allProps, { error: string | null }>
   componentWillReceiveProps(newProps: allProps) {
     if (newProps.currentUser) {
       // Log in succeeded. Navigate to the patients list scene.
-      this.props.onSuccess();
+      this.props.history.push('/patients');
     }
   }
 
@@ -59,7 +56,8 @@ class LoginContainer extends React.Component<allProps, { error: string | null }>
     try {
       const res = await this.props.logIn({ variables: { googleAuthCode: response.code } });
       await localStorage.setItem('authToken', res.data.userLogin.authToken);
-      this.props.onSuccess();
+
+      this.props.history.push('/patients');
     } catch (e) {
       await localStorage.removeItem('authToken');
       this.setState({ error: e.message });
@@ -114,14 +112,8 @@ class LoginContainer extends React.Component<allProps, { error: string | null }>
   }
 }
 
-function mapDispatchToProps(dispatch: Dispatch<() => void>): IDispatchProps {
-  return {
-    onSuccess: async () => dispatch(push('/patients')),
-  };
-}
-
 export default compose(
-  connect<{}, IDispatchProps, IProps>(null, mapDispatchToProps),
+  withRouter,
   graphql<IGraphqlProps, IProps, allProps>(currentUserQuery as any, {
     props: ({ data }) => ({
       loading: data ? data.loading : false,

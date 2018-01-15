@@ -1,9 +1,9 @@
 import { shallow } from 'enzyme';
-import { createMemoryHistory } from 'history';
+
 import * as React from 'react';
 import { MockedProvider } from 'react-apollo/test-utils';
 import { Provider } from 'react-redux';
-import { ConnectedRouter } from 'react-router-redux';
+import { BrowserRouter } from 'react-router-dom';
 import { create } from 'react-test-renderer';
 import configureMockStore from 'redux-mock-store';
 import { ENGLISH_TRANSLATION } from '../../reducers/messages/en';
@@ -15,7 +15,6 @@ const locale = { messages: ENGLISH_TRANSLATION.messages };
 const mockStore = configureMockStore([]);
 
 it('renders without goal', () => {
-  const history = createMemoryHistory();
   const match = {
     params: {
       objectId: goal.id,
@@ -25,9 +24,9 @@ it('renders without goal', () => {
     <MockedProvider mocks={[]}>
       <Provider store={mockStore({ locale, goal })}>
         <ReduxConnectedIntlProvider>
-          <ConnectedRouter history={history}>
+          <BrowserRouter>
             <Goal routeBase={'/route/base'} match={match} />
-          </ConnectedRouter>
+          </BrowserRouter>
         </ReduxConnectedIntlProvider>
       </Provider>
     </MockedProvider>,

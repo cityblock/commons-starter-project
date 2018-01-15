@@ -1,9 +1,8 @@
 import { shallow } from 'enzyme';
-import { createMemoryHistory } from 'history';
 import * as React from 'react';
 import { MockedProvider } from 'react-apollo/test-utils';
 import { Provider } from 'react-redux';
-import { ConnectedRouter } from 'react-router-redux';
+import { BrowserRouter } from 'react-router-dom';
 import { create } from 'react-test-renderer';
 import configureMockStore from 'redux-mock-store';
 import { ENGLISH_TRANSLATION } from '../../../reducers/messages/en';
@@ -14,20 +13,18 @@ import AddTaskFollower, { AddTaskFollower as AddFollower } from '../add-task-fol
 const locale = { messages: ENGLISH_TRANSLATION.messages };
 const mockStore = configureMockStore([]);
 
-const history = createMemoryHistory();
-
 it('correctly renders/does not render the add task follower button', () => {
   const tree = create(
     <MockedProvider mocks={[]}>
       <Provider store={mockStore({ locale, task: taskWithComment })}>
         <ReduxConnectedIntlProvider>
-          <ConnectedRouter history={history}>
+          <BrowserRouter>
             <AddTaskFollower
               patientId={patient.id}
               taskId={taskWithComment.id}
               followers={[currentUser, user]}
             />
-          </ConnectedRouter>
+          </BrowserRouter>
         </ReduxConnectedIntlProvider>
       </Provider>
     </MockedProvider>,

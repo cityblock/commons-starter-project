@@ -1,9 +1,10 @@
 import * as classNames from 'classnames';
+import { History } from 'history';
 import * as React from 'react';
 import { compose, graphql } from 'react-apollo';
-import { connect, Dispatch } from 'react-redux';
+import { connect } from 'react-redux';
+import { withRouter } from 'react-router';
 import { Route } from 'react-router-dom';
-import { push } from 'react-router-redux';
 import * as progressNoteTemplatesQuery from '../graphql/queries/get-progress-note-templates.graphql';
 import * as progressNoteTemplateDeleteMutationGraphql from '../graphql/queries/progress-note-template-delete-mutation.graphql';
 import {
@@ -25,15 +26,12 @@ interface IProps {
       progressNoteTemplateId: string | null;
     };
   };
+  history: History;
 }
 
 interface IStateProps {
   routeBase: string;
   progressNoteTemplateId: string | null;
-}
-
-interface IDispatchProps {
-  redirectToProgressNoteTemplates: () => any;
 }
 
 interface IGraphqlProps {
@@ -52,7 +50,7 @@ interface IState {
   error: string | null;
 }
 
-type allProps = IProps & IStateProps & IDispatchProps & IGraphqlProps;
+type allProps = IProps & IStateProps & IGraphqlProps;
 
 class BuilderProgressNoteTemplates extends React.Component<allProps, IState> {
   constructor(props: allProps) {
@@ -111,11 +109,11 @@ class BuilderProgressNoteTemplates extends React.Component<allProps, IState> {
   }
 
   async onDeleteProgressNoteTemplate(progressNoteTemplateId: string) {
-    const { redirectToProgressNoteTemplates, deleteProgressNoteTemplate } = this.props;
+    const { history, routeBase, deleteProgressNoteTemplate } = this.props;
 
     await deleteProgressNoteTemplate({ variables: { progressNoteTemplateId } });
 
-    redirectToProgressNoteTemplates();
+    history.push(routeBase);
   }
 
   render() {
@@ -179,20 +177,9 @@ function mapStateToProps(state: IAppState, ownProps: IProps): IStateProps {
   };
 }
 
-function mapDispatchToProps(dispatch: Dispatch<() => void>, ownProps: allProps): IDispatchProps {
-  return {
-    redirectToProgressNoteTemplates: () => {
-      const { routeBase } = ownProps;
-      dispatch(push(routeBase));
-    },
-  };
-}
-
 export default compose(
-  connect<IStateProps, IDispatchProps, allProps>(
-    mapStateToProps as (args?: any) => IStateProps,
-    mapDispatchToProps,
-  ),
+  withRouter,
+  connect<IStateProps, {}, allProps>(mapStateToProps as (args?: any) => IStateProps),
   graphql<IGraphqlProps, IProps, allProps>(progressNoteTemplateDeleteMutationGraphql as any, {
     name: 'deleteProgressNoteTemplate',
   }),

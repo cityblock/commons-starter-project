@@ -1,8 +1,7 @@
-import { createMemoryHistory } from 'history';
 import * as React from 'react';
 import { MockedProvider } from 'react-apollo/test-utils';
 import { Provider } from 'react-redux';
-import { ConnectedRouter } from 'react-router-redux';
+import { BrowserRouter } from 'react-router-dom';
 import { create } from 'react-test-renderer';
 import configureMockStore from 'redux-mock-store';
 import { ENGLISH_TRANSLATION } from '../../reducers/messages/en';
@@ -17,12 +16,11 @@ const locale = { messages: ENGLISH_TRANSLATION.messages };
 const mockStore = configureMockStore([]);
 
 it('renders popup modal body for concern suggestion', () => {
-  const history = createMemoryHistory();
   const tree = create(
     <MockedProvider mocks={[]}>
       <Provider store={mockStore({ locale })}>
         <ReduxConnectedIntlProvider>
-          <ConnectedRouter history={history}>
+          <BrowserRouter>
             <PopupPatientCarePlanSuggestionDismissedModalBody
               suggestion={carePlanSuggestionWithConcern}
               dismissedReason={'Because'}
@@ -30,7 +28,7 @@ it('renders popup modal body for concern suggestion', () => {
               onSubmit={() => true}
               onChange={(event: any) => true}
             />
-          </ConnectedRouter>
+          </BrowserRouter>
         </ReduxConnectedIntlProvider>
       </Provider>
     </MockedProvider>,
@@ -39,12 +37,11 @@ it('renders popup modal body for concern suggestion', () => {
 });
 
 it('renders popup modal body for goal suggestion', () => {
-  const history = createMemoryHistory();
   const tree = create(
     <MockedProvider mocks={[]}>
       <Provider store={mockStore({ locale })}>
         <ReduxConnectedIntlProvider>
-          <ConnectedRouter history={history}>
+          <BrowserRouter>
             <PopupPatientCarePlanSuggestionDismissedModalBody
               suggestion={carePlanSuggestionWithGoal}
               dismissedReason={'Because'}
@@ -52,7 +49,7 @@ it('renders popup modal body for goal suggestion', () => {
               onSubmit={() => true}
               onChange={(event: any) => true}
             />
-          </ConnectedRouter>
+          </BrowserRouter>
         </ReduxConnectedIntlProvider>
       </Provider>
     </MockedProvider>,

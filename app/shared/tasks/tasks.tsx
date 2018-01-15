@@ -1,11 +1,11 @@
 import * as classNames from 'classnames';
+import { History } from 'history';
 import * as querystring from 'querystring';
 import * as React from 'react';
 import { compose, graphql } from 'react-apollo';
 import { FormattedMessage } from 'react-intl';
-import { connect, Dispatch } from 'react-redux';
+import { withRouter } from 'react-router';
 import { Route } from 'react-router-dom';
-import { push } from 'react-router-redux';
 import * as taskDeleteMutationGraphql from '../../graphql/queries/task-delete-mutation.graphql';
 import {
   taskDeleteMutation,
@@ -41,14 +41,11 @@ interface IProps {
   hasPreviousPage?: boolean;
   mutate?: any;
   taskId: string;
+  history: History;
 }
 
 interface IGraphqlProps {
   deleteTask: (options: { variables: taskDeleteMutationVariables }) => { data: taskDeleteMutation };
-}
-
-interface IDispatchProps {
-  redirectToTasks: () => void;
 }
 
 interface IState {
@@ -58,7 +55,7 @@ interface IState {
   error: string | null;
 }
 
-type allProps = IProps & IDispatchProps & IGraphqlProps;
+type allProps = IProps & IGraphqlProps;
 
 const getPageParams = () => {
   const pageParams = querystring.parse(window.location.search.substring(1));
@@ -143,11 +140,11 @@ class Tasks extends React.Component<allProps, IState> {
   }
 
   async onDeleteTask(taskId: string) {
-    const { redirectToTasks, deleteTask } = this.props;
+    const { history, deleteTask, routeBase } = this.props;
 
     await deleteTask({ variables: { taskId } });
 
-    redirectToTasks();
+    history.push(routeBase);
   }
 
   render() {
@@ -242,16 +239,7 @@ class Tasks extends React.Component<allProps, IState> {
   }
 }
 
-function mapDispatchToProps(dispatch: Dispatch<() => void>, ownProps: IProps): IDispatchProps {
-  return {
-    redirectToTasks: () => {
-      const { routeBase } = ownProps;
-      dispatch(push(routeBase));
-    },
-  };
-}
-
 export default compose(
-  connect<{}, IDispatchProps, IProps>(null, mapDispatchToProps),
+  withRouter,
   graphql<IGraphqlProps>(taskDeleteMutationGraphql as any, { name: 'deleteTask' }),
 )(Tasks);

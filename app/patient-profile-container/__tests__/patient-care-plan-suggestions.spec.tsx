@@ -1,9 +1,9 @@
 import gql from 'graphql-tag';
-import { createMemoryHistory } from 'history';
+
 import * as React from 'react';
 import { MockedProvider } from 'react-apollo/test-utils';
 import { Provider } from 'react-redux';
-import { ConnectedRouter } from 'react-router-redux';
+import { BrowserRouter } from 'react-router-dom';
 import { create } from 'react-test-renderer';
 import configureMockStore from 'redux-mock-store';
 import { ENGLISH_TRANSLATION } from '../../reducers/messages/en';
@@ -120,7 +120,6 @@ fragment ShortUser on User {
 }`);
 
 it('renders patient care plan suggestions', () => {
-  const history = createMemoryHistory();
   const tree = create(
     <MockedProvider
       mocks={[
@@ -135,12 +134,12 @@ it('renders patient care plan suggestions', () => {
     >
       <Provider store={mockStore({ locale })}>
         <ReduxConnectedIntlProvider>
-          <ConnectedRouter history={history}>
+          <BrowserRouter>
             <PatientCarePlanSuggestions
               patientId={'patient-1'}
               routeBase={'/patients/patient-1/map'}
             />
-          </ConnectedRouter>
+          </BrowserRouter>
         </ReduxConnectedIntlProvider>
       </Provider>
     </MockedProvider>,

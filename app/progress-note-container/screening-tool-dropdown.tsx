@@ -1,7 +1,7 @@
+import { History } from 'history';
 import * as React from 'react';
 import { compose, graphql } from 'react-apollo';
-import { connect, Dispatch } from 'react-redux';
-import { push } from 'react-router-redux';
+import { withRouter } from 'react-router';
 import * as screeningToolsQuery from '../graphql/queries/get-screening-tools.graphql';
 import { getScreeningToolsQuery } from '../graphql/types';
 import Option from '../shared/library/option/option';
@@ -9,22 +9,21 @@ import Select from '../shared/library/select/select';
 
 interface IProps {
   patientId: string;
+  history: History;
 }
 
 interface IGraphqlProps {
   screeningTools?: getScreeningToolsQuery['screeningTools'];
 }
 
-interface IDispatchProps {
-  redirectToScreeningTool: (screeningToolId: string) => any;
-}
-
-type allProps = IProps & IGraphqlProps & IDispatchProps;
+type allProps = IProps & IGraphqlProps;
 
 class ScreeningToolDropdown extends React.Component<allProps> {
   onSortChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    const { history, patientId } = this.props;
     const value = event.target.value;
-    this.props.redirectToScreeningTool(value);
+
+    history.push(`/patients/${patientId}/tools/${value}`);
   };
 
   render() {
@@ -46,16 +45,8 @@ class ScreeningToolDropdown extends React.Component<allProps> {
   }
 }
 
-function mapDispatchToProps(dispatch: Dispatch<() => void>, ownProps: IProps): IDispatchProps {
-  return {
-    redirectToScreeningTool: (screeningToolId: string) => {
-      dispatch(push(`/patients/${ownProps.patientId}/tools/${screeningToolId}`));
-    },
-  };
-}
-
 export default compose(
-  connect<{}, IDispatchProps, allProps>(null, mapDispatchToProps),
+  withRouter,
   graphql<IGraphqlProps, IProps, allProps>(screeningToolsQuery as any, {
     props: ({ data }) => ({
       screeningToolsLoading: data ? data.loading : false,

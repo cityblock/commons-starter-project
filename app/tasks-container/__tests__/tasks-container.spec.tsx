@@ -1,9 +1,8 @@
-import { createMemoryHistory } from 'history';
 import * as React from 'react';
 import { MockedProvider } from 'react-apollo/test-utils';
 import { Provider } from 'react-redux';
 import { Route } from 'react-router-dom';
-import { ConnectedRouter } from 'react-router-redux';
+import { BrowserRouter } from 'react-router-dom';
 import { create } from 'react-test-renderer';
 import configureMockStore from 'redux-mock-store';
 import { ENGLISH_TRANSLATION } from '../../reducers/messages/en';
@@ -12,7 +11,7 @@ import TasksContainer from '../tasks-container';
 
 it('renders tasks container', () => {
   const mockStore = configureMockStore([]);
-  const history = createMemoryHistory();
+
   const locale = { messages: ENGLISH_TRANSLATION.messages };
   const task = { taskId: 'foo' };
   const eventNotifications = { count: 0 };
@@ -20,9 +19,9 @@ it('renders tasks container', () => {
     <MockedProvider mocks={[]}>
       <Provider store={mockStore({ locale, task, eventNotifications })}>
         <ReduxConnectedIntlProvider>
-          <ConnectedRouter history={history}>
+          <BrowserRouter>
             <Route component={TasksContainer} />
-          </ConnectedRouter>
+          </BrowserRouter>
         </ReduxConnectedIntlProvider>
       </Provider>
     </MockedProvider>,

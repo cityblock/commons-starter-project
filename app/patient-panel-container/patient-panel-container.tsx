@@ -1,9 +1,9 @@
+import { History } from 'history';
 import * as querystring from 'querystring';
 import * as React from 'react';
 import { compose, graphql } from 'react-apollo';
 import { FormattedMessage } from 'react-intl';
-import { connect, Dispatch } from 'react-redux';
-import { push } from 'react-router-redux';
+import { withRouter } from 'react-router';
 import * as patientPanelQuery from '../graphql/queries/get-patient-panel.graphql';
 import { ShortPatientFragment } from '../graphql/types';
 import Button from '../shared/library/button/button';
@@ -38,14 +38,10 @@ interface IGraphqlProps {
 
 interface IProps {
   mutate?: any;
+  history: History;
 }
 
-interface IDispatchProps {
-  updatePageParams: (pageNumber: number) => void;
-  goToIntake: () => void;
-}
-
-type allProps = IDispatchProps & IGraphqlProps & IProps;
+type allProps = IGraphqlProps & IProps;
 
 interface IState extends IPageParams {
   hasNextPage?: boolean;
@@ -79,7 +75,7 @@ class PatientPanelContainer extends React.Component<allProps, IState> {
         pageSize: this.state.pageSize,
       });
 
-      this.props.updatePageParams(pageNumber);
+      this.updatePageParams(pageNumber);
       this.setState({ pageNumber });
     }
   }
@@ -93,7 +89,7 @@ class PatientPanelContainer extends React.Component<allProps, IState> {
         pageSize: this.state.pageSize,
       });
 
-      this.props.updatePageParams(pageNumber);
+      this.updatePageParams(pageNumber);
       this.setState({ pageNumber });
     }
   }
@@ -121,8 +117,17 @@ class PatientPanelContainer extends React.Component<allProps, IState> {
     document.title = `${this.title} | Commons`;
   }
 
+  goToIntake = () => this.props.history.push('/patient-intake');
+
+  updatePageParams = (pageNumber: number) => {
+    const pageParams = getPageParams();
+    pageParams.pageNumber = pageNumber;
+
+    this.props.history.push({ search: querystring.stringify(pageParams) });
+  };
+
   render() {
-    const { error, loading, goToIntake } = this.props;
+    const { error, loading } = this.props;
     return (
       <div className={styles.container}>
         <div className={styles.header}>
@@ -130,7 +135,7 @@ class PatientPanelContainer extends React.Component<allProps, IState> {
             <FormattedMessage id="patientPanel.header">
               {(message: string) => <div className={styles.headerText}>{message}</div>}
             </FormattedMessage>
-            <Button messageId="patientPanel.addPatient" onClick={goToIntake} />
+            <Button messageId="patientPanel.addPatient" onClick={this.goToIntake} />
           </div>
         </div>
         <div className={styles.patientPanelBody}>
@@ -159,20 +164,8 @@ const getPageParams = (): IPageParams => {
   };
 };
 
-function mapDispatchToProps(dispatch: Dispatch<() => void>): IDispatchProps {
-  return {
-    updatePageParams: (pageNumber: number) => {
-      const pageParams = getPageParams();
-      pageParams.pageNumber = pageNumber;
-
-      dispatch(push({ search: querystring.stringify(pageParams) }));
-    },
-    goToIntake: () => dispatch(push('/patient-intake')),
-  };
-}
-
 export default compose(
-  connect<{}, IDispatchProps>(null, mapDispatchToProps),
+  withRouter,
   graphql<IGraphqlProps, IProps, allProps>(patientPanelQuery as any, {
     options: () => ({
       variables: getPageParams(),

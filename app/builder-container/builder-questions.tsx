@@ -1,9 +1,10 @@
 import * as classNames from 'classnames';
+import { History } from 'history';
 import * as React from 'react';
 import { compose, graphql } from 'react-apollo';
-import { connect, Dispatch } from 'react-redux';
+import { connect } from 'react-redux';
+import { withRouter } from 'react-router';
 import { Route } from 'react-router-dom';
-import { push } from 'react-router-redux';
 import * as computedFieldsQuery from '../graphql/queries/get-computed-fields.graphql';
 import * as progressNoteTemplatesQuery from '../graphql/queries/get-progress-note-templates.graphql';
 import * as questionsQuery from '../graphql/queries/get-questions.graphql';
@@ -36,6 +37,7 @@ interface IProps {
       questionId?: string;
     };
   };
+  history: History;
 }
 
 interface IGraphqlProps {
@@ -66,14 +68,7 @@ interface IStateProps {
   toolId: string | null;
 }
 
-interface IDispatchProps {
-  redirectToQuestions: () => any;
-  directToRiskAreaQuestions: (riskAreaId: string) => any;
-  directToScreeningToolQuestions: (screeningToolId: string) => any;
-  directToProgressNoteTemplateQuestions: (progressNoteTemplateId: string) => any;
-}
-
-type allProps = IProps & IGraphqlProps & IDispatchProps & IStateProps;
+type allProps = IProps & IGraphqlProps & IStateProps;
 
 interface IState {
   showCreateQuestion: boolean;
@@ -98,6 +93,19 @@ class BuilderQuestions extends React.Component<allProps, IState> {
     };
   }
 
+  redirectToQuestions = () => {
+    const { history, routeBase } = this.props;
+    history.push(routeBase);
+  };
+  directToRiskAreaQuestions = (riskAreaId: string) => {
+    this.props.history.push(`/builder/assessments/${riskAreaId}/questions`);
+  };
+  directToScreeningToolQuestions = (screeningToolId: string) => {
+    this.props.history.push(`/builder/tools/${screeningToolId}/questions`);
+  };
+  directToProgressNoteTemplateQuestions = (progressNoteTemplateId: string) => {
+    this.props.history.push(`/builder/progress-note-templates/${progressNoteTemplateId}/questions`);
+  };
   componentWillReceiveProps(nextProps: allProps) {
     const {
       loading,
@@ -105,7 +113,6 @@ class BuilderQuestions extends React.Component<allProps, IState> {
       riskAreaId,
       toolId,
       progressNoteTemplateId,
-      directToRiskAreaQuestions,
       riskAreas,
       questionsRefetch,
     } = nextProps;
@@ -113,7 +120,7 @@ class BuilderQuestions extends React.Component<allProps, IState> {
     if (!riskAreaId && !toolId && !progressNoteTemplateId && riskAreas) {
       // safeguard explosion if no risk areas
       if (!riskAreas.length) return;
-      return directToRiskAreaQuestions(riskAreas[0].id);
+      return this.directToRiskAreaQuestions(riskAreas[0].id);
     }
 
     if (questionsRefetch) {
@@ -137,11 +144,11 @@ class BuilderQuestions extends React.Component<allProps, IState> {
     const optionType = (event.target.options[event.target.selectedIndex].dataset as any).optiontype;
 
     if (optionType === 'riskArea') {
-      this.props.directToRiskAreaQuestions(value);
+      this.directToRiskAreaQuestions(value);
     } else if (optionType === 'screeningTool') {
-      this.props.directToScreeningToolQuestions(value);
+      this.directToScreeningToolQuestions(value);
     } else if (optionType === 'progressNoteTemplate') {
-      this.props.directToProgressNoteTemplateQuestions(value);
+      this.directToProgressNoteTemplateQuestions(value);
     }
   }
 
@@ -182,11 +189,11 @@ class BuilderQuestions extends React.Component<allProps, IState> {
   }
 
   async onDeleteQuestion(questionId: string) {
-    const { redirectToQuestions, deleteQuestion } = this.props;
+    const { deleteQuestion } = this.props;
 
     await deleteQuestion({ variables: { questionId } });
 
-    redirectToQuestions();
+    this.redirectToQuestions();
   }
 
   render() {
@@ -340,32 +347,9 @@ function mapStateToProps(state: IAppState, ownProps: IProps): IStateProps {
   };
 }
 
-function mapDispatchToProps(
-  dispatch: Dispatch<() => void>,
-  ownProps: IProps & IStateProps,
-): IDispatchProps {
-  return {
-    redirectToQuestions: () => {
-      const { routeBase } = ownProps;
-      dispatch(push(routeBase));
-    },
-    directToRiskAreaQuestions: (riskAreaId: string) => {
-      dispatch(push(`/builder/assessments/${riskAreaId}/questions`));
-    },
-    directToScreeningToolQuestions: (screeningToolId: string) => {
-      dispatch(push(`/builder/tools/${screeningToolId}/questions`));
-    },
-    directToProgressNoteTemplateQuestions: (progressNoteTemplateId: string) => {
-      dispatch(push(`/builder/progress-note-templates/${progressNoteTemplateId}/questions`));
-    },
-  };
-}
-
 export default compose(
-  connect<IStateProps, IDispatchProps, allProps>(
-    mapStateToProps as (args?: any) => IStateProps,
-    mapDispatchToProps,
-  ),
+  withRouter,
+  connect<IStateProps, {}, allProps>(mapStateToProps as (args?: any) => IStateProps),
   graphql<IGraphqlProps, IProps, allProps>(questionDeleteMutationGraphql as any, {
     name: 'deleteQuestion',
   }),

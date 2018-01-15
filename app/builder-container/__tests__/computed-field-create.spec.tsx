@@ -7,11 +7,13 @@ describe('shallow rendered', () => {
   let instance: any;
 
   beforeEach(() => {
+    const history = { push: jest.fn } as any;
     const component = shallow(
       <Component
         routeBase="/builder/computed-fields"
         createComputedField={createComputedField}
         onClose={() => false}
+        history={history}
       />,
     );
     instance = component.instance() as Component;

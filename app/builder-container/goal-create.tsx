@@ -1,7 +1,7 @@
+import { History } from 'history';
 import * as React from 'react';
 import { compose, graphql } from 'react-apollo';
-import { connect, Dispatch } from 'react-redux';
-import { push } from 'react-router-redux';
+import { withRouter } from 'react-router';
 import * as goalCreateMutationGraphql from '../graphql/queries/goal-suggestion-template-create-mutation.graphql';
 import {
   goalSuggestionTemplateCreateMutation,
@@ -20,7 +20,7 @@ interface IOptions {
 interface IProps {
   routeBase: string;
   onClose: () => any;
-  redirectToGoal?: (goalId: string) => any;
+  history: History;
 }
 
 interface IGraphqlProps {
@@ -74,6 +74,7 @@ export class GoalCreate extends React.Component<allProps, IState> {
 
   async onSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    const { history, routeBase } = this.props;
     if (this.props.createGoal) {
       try {
         this.setState({ loading: true });
@@ -84,8 +85,8 @@ export class GoalCreate extends React.Component<allProps, IState> {
         });
         this.setState({ loading: false });
         this.props.onClose();
-        if (this.props.redirectToGoal && goalResponse.data.goalSuggestionTemplateCreate) {
-          this.props.redirectToGoal(goalResponse.data.goalSuggestionTemplateCreate.id);
+        if (goalResponse.data.goalSuggestionTemplateCreate) {
+          history.push(`${routeBase}/${goalResponse.data.goalSuggestionTemplateCreate.id}`);
         }
       } catch (e) {
         this.setState({ error: e.message, loading: false });
@@ -134,16 +135,8 @@ export class GoalCreate extends React.Component<allProps, IState> {
   }
 }
 
-function mapDispatchToProps(dispatch: Dispatch<() => void>, ownProps: allProps): Partial<allProps> {
-  return {
-    redirectToGoal: (goalId: string) => {
-      dispatch(push(`${ownProps.routeBase}/${goalId}`));
-    },
-  };
-}
-
 export default compose(
-  connect(null, mapDispatchToProps),
+  withRouter,
   graphql<IGraphqlProps, IProps, allProps>(goalCreateMutationGraphql as any, {
     name: 'createGoal',
     options: {

@@ -20,7 +20,7 @@ exports[`builder concerns renders builder questions 1`] = `
       >
         <select
           onChange={[Function]}
-          value="cool-risk-area-id"
+          value=""
         />
       </div>
     </div>

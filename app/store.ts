@@ -1,7 +1,5 @@
 import { History } from 'history';
 import { debounce } from 'lodash-es';
-import { routerMiddleware } from 'react-router-redux';
-import { routerReducer } from 'react-router-redux';
 import { applyMiddleware, compose, createStore } from 'redux';
 import { combineReducers } from 'redux';
 import { createLogger } from 'redux-logger';
@@ -12,7 +10,6 @@ import { localeReducer, Lang } from './reducers/locale-reducer';
 import { popupReducer, IState as PopupReducerState } from './reducers/popup-reducer';
 
 export interface IState {
-  routing: any;
   locale: {
     lang: Lang;
     messages: any;
@@ -40,7 +37,7 @@ const debouncedSetLastAction = debounce(setLastAction, 500);
 export default (history: History) => {
   const composeEnhancers = (window as any).__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
-  const middleware = [routerMiddleware(history)];
+  const middleware: any = [];
 
   if (process.env.NODE_ENV === 'development') {
     middleware.push(createLogger());
@@ -49,7 +46,6 @@ export default (history: History) => {
   const reducers = combineReducers<IState>({
     browser: browserReducer,
     locale: localeReducer,
-    routing: routerReducer,
     idle: idleReducer,
     eventNotifications: eventNotificationsReducer,
     popup: popupReducer,

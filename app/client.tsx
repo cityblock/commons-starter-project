@@ -5,7 +5,7 @@ import * as React from 'react';
 import { ApolloProvider } from 'react-apollo';
 import { render } from 'react-dom';
 import { Provider } from 'react-redux';
-import { ConnectedRouter } from 'react-router-redux';
+import { BrowserRouter } from 'react-router-dom';
 import { getMiddlewareLink } from './middleware-link';
 import ReduxConnectedIntlProvider from './redux-connected-intl-provider';
 import Routes from './routes';
@@ -23,7 +23,7 @@ render(
   <ApolloProvider client={client}>
     <Provider store={store}>
       <ReduxConnectedIntlProvider>
-        <ConnectedRouter history={history}>{Routes}</ConnectedRouter>
+        <BrowserRouter>{Routes}</BrowserRouter>
       </ReduxConnectedIntlProvider>
     </Provider>
   </ApolloProvider>,

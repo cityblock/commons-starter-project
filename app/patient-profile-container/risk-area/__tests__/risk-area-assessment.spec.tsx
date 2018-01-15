@@ -66,14 +66,6 @@ describe('risk area assessment questions component', () => {
     ).toBe('riskAreaAssessment.save');
   });
 
-  it('renders questions container', () => {
-    expect(
-      wrapper
-        .find('.riskAreasPanel')
-        .find('Connect(Apollo(Apollo(Apollo(RiskAreaAssessmentQuestions))))').length,
-    ).toBe(1);
-  });
-
   it('renders back link', () => {
     expect(wrapper.find(BackLink).length).toBe(1);
     expect(wrapper.find(BackLink).props().href).toBe(`${routeBase}/${riskArea.riskAreaGroup.id}`);

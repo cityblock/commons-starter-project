@@ -1,10 +1,10 @@
 import * as classNames from 'classnames';
 import { format } from 'date-fns';
+import { History } from 'history';
 import * as React from 'react';
 import { compose, graphql } from 'react-apollo';
 import { FormattedMessage } from 'react-intl';
-import { connect, Dispatch } from 'react-redux';
-import { push } from 'react-router-redux';
+import { withRouter } from 'react-router';
 import * as careTeamQuery from '../../graphql/queries/get-patient-care-team.graphql';
 import * as createTaskMutationGraphql from '../../graphql/queries/task-create-mutation.graphql';
 import {
@@ -27,6 +27,7 @@ interface IProps {
   patient: ShortPatientFragment;
   patientGoals?: FullPatientGoalFragment[];
   routeBase: string;
+  history: History;
   onClose: () => any;
 }
 
@@ -35,11 +36,7 @@ interface IGraphqlProps {
   createTask: (options: IOptions) => { data: taskCreateMutation };
 }
 
-interface IDispatchProps {
-  redirectToTask: (taskId: string) => any;
-}
-
-type allProps = IProps & IGraphqlProps & IDispatchProps;
+type allProps = IProps & IGraphqlProps;
 
 interface IState {
   loading: boolean;
@@ -92,6 +89,7 @@ class TaskCreate extends React.Component<allProps, IState> {
   }
 
   async onSubmit(event: React.FormEvent<HTMLFormElement>) {
+    const { history, routeBase } = this.props;
     event.preventDefault();
     try {
       this.setState({ loading: true });
@@ -106,7 +104,7 @@ class TaskCreate extends React.Component<allProps, IState> {
       this.props.onClose();
       // TODO: Handle error
       if (task.data.taskCreate) {
-        this.props.redirectToTask(task.data.taskCreate.id);
+        history.push(`${routeBase}/${task.data.taskCreate.id}`);
       }
     } catch (e) {
       this.setState({ error: e.message, loading: false });
@@ -248,16 +246,8 @@ class TaskCreate extends React.Component<allProps, IState> {
   }
 }
 
-function mapDispatchToProps(dispatch: Dispatch<() => void>, ownProps: IProps): IDispatchProps {
-  return {
-    redirectToTask: (taskId: string) => {
-      dispatch(push(`${ownProps.routeBase}/${taskId}`));
-    },
-  };
-}
-
 export default compose(
-  connect<{}, IDispatchProps, IProps>(null, mapDispatchToProps),
+  withRouter,
   graphql<IGraphqlProps, IProps, allProps>(careTeamQuery as any, {
     options: (props: IProps) => ({
       variables: {

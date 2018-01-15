@@ -16,14 +16,14 @@ describe('Task Component', () => {
   const routeBase = '/tasks';
   const taskId = taskWithComment.id;
   const patientId = taskWithComment.patientId;
-
+  const history = { push: jest.fn } as any;
   const wrapper = shallow(
     <Task
+      history={history}
       editTask={placeholderFn}
       routeBase={routeBase}
       taskId={taskId}
       task={taskWithComment as any}
-      redirectToMap={placeholderFn}
       taskError={null}
       dismissTaskNotifications={() => false as any}
     />,
@@ -97,8 +97,8 @@ describe('Task Component', () => {
         taskId={taskId}
         task={taskWithComment as any}
         taskLoading={true}
-        redirectToMap={placeholderFn}
         taskError={null}
+        history={history}
         dismissTaskNotifications={() => false as any}
       />,
     );

@@ -1,9 +1,10 @@
 import * as classNames from 'classnames';
+import { History } from 'history';
 import * as React from 'react';
 import { compose, graphql } from 'react-apollo';
-import { connect, Dispatch } from 'react-redux';
+import { connect } from 'react-redux';
+import { withRouter } from 'react-router';
 import { Route } from 'react-router-dom';
-import { push } from 'react-router-redux';
 import * as riskAreasQuery from '../graphql/queries/get-risk-areas.graphql';
 import * as screeningToolsQuery from '../graphql/queries/get-screening-tools.graphql';
 import * as screeningToolDeleteMutationGraphql from '../graphql/queries/screening-tool-delete-mutation.graphql';
@@ -27,15 +28,12 @@ interface IProps {
     };
   };
   mutate?: any;
+  history: History;
 }
 
 interface IStateProps {
   screeningToolId: string | null;
   routeBase: string;
-}
-
-interface IDispatchProps {
-  redirectToScreeningTools: () => any;
 }
 
 interface IGraphqlProps {
@@ -54,7 +52,7 @@ interface IState {
   error: string | null;
 }
 
-type allProps = IProps & IDispatchProps & IGraphqlProps & IStateProps;
+type allProps = IProps & IGraphqlProps & IStateProps;
 
 class BuilderScreeningTools extends React.Component<allProps, IState> {
   constructor(props: allProps) {
@@ -115,11 +113,11 @@ class BuilderScreeningTools extends React.Component<allProps, IState> {
   }
 
   async onDeleteScreeningTool(screeningToolId: string) {
-    const { redirectToScreeningTools, deleteScreeningTool } = this.props;
+    const { history, routeBase, deleteScreeningTool } = this.props;
 
     await deleteScreeningTool({ variables: { screeningToolId } });
 
-    redirectToScreeningTools();
+    history.push(routeBase);
   }
 
   render() {
@@ -174,20 +172,9 @@ function mapStateToProps(state: IAppState, ownProps: IProps): IStateProps {
   };
 }
 
-function mapDispatchToProps(dispatch: Dispatch<() => void>, ownProps: allProps): IDispatchProps {
-  return {
-    redirectToScreeningTools: () => {
-      const { routeBase } = ownProps;
-      dispatch(push(routeBase));
-    },
-  };
-}
-
 export default compose(
-  connect<IStateProps, IDispatchProps, allProps>(
-    mapStateToProps as (args?: any) => IStateProps,
-    mapDispatchToProps,
-  ),
+  withRouter,
+  connect<IStateProps, {}, allProps>(mapStateToProps as (args?: any) => IStateProps),
   graphql<IGraphqlProps, IProps, allProps>(screeningToolDeleteMutationGraphql as any, {
     name: 'deleteScreeningTool',
   }),

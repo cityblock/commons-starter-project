@@ -1,8 +1,7 @@
-import { createMemoryHistory } from 'history';
 import * as React from 'react';
 import { MockedProvider } from 'react-apollo/test-utils';
 import { Provider } from 'react-redux';
-import { ConnectedRouter } from 'react-router-redux';
+import { BrowserRouter } from 'react-router-dom';
 import { create } from 'react-test-renderer';
 import configureMockStore from 'redux-mock-store';
 import { ENGLISH_TRANSLATION } from '../../../reducers/messages/en';
@@ -14,19 +13,18 @@ const mockStore = configureMockStore([]);
 
 describe('task missing', () => {
   it('renders various task missing states', () => {
-    const history = createMemoryHistory();
     const reloadTask = () => false;
     const tree = create(
       <MockedProvider mocks={[]}>
         <Provider store={mockStore({ locale })}>
           <ReduxConnectedIntlProvider>
-            <ConnectedRouter history={history}>
+            <BrowserRouter>
               <div>
                 <TaskMissing taskError={null} taskLoading={true} reloadTask={reloadTask} />
                 <TaskMissing taskLoading={false} taskError={'error'} reloadTask={reloadTask} />
                 <TaskMissing taskLoading={false} taskError={null} reloadTask={reloadTask} />
               </div>
-            </ConnectedRouter>
+            </BrowserRouter>
           </ReduxConnectedIntlProvider>
         </Provider>
       </MockedProvider>,

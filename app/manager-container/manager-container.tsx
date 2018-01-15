@@ -11,12 +11,12 @@ interface IProps {
   tabId: 'invites' | 'users';
   match: {
     params: {
-      tabId?: 'invites' | 'users';
+      tabId?: 'invites' | 'users' | null;
     };
   };
 }
 
-class ManagerContainer extends React.Component<IProps, {}> {
+export class ManagerContainer extends React.Component<IProps, {}> {
   render() {
     const { tabId } = this.props;
     const usersTabSelected = tabId === 'users';

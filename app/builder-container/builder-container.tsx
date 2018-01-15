@@ -67,7 +67,7 @@ interface IGraphqlProps {
 
 type allProps = IProps & IGraphqlProps & IStateProps;
 
-class BuilderContainer extends React.Component<allProps, {}> {
+export class BuilderContainer extends React.Component<allProps, {}> {
   render() {
     const { subTab, tab } = this.props;
     const riskAreaGroupsTabSelected = tab === 'domains';

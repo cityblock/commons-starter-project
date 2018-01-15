@@ -1,8 +1,8 @@
 import * as classNames from 'classnames';
+import { History } from 'history';
 import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
-import { connect, Dispatch } from 'react-redux';
-import { push } from 'react-router-redux';
+import { withRouter } from 'react-router';
 import { FullCarePlanSuggestionFragment } from '../../graphql/types';
 import Button from '../library/button/button';
 import * as styles from './care-plan-suggestions.css';
@@ -12,13 +12,12 @@ interface IProps {
   carePlanSuggestions: FullCarePlanSuggestionFragment[];
   titleMessageId: string;
   bodyMessageId: string;
+  history: History;
+  match: any;
+  location: History.LocationState;
 }
 
-interface IDispatchProps {
-  redirectToCarePlanSuggestions?: () => any;
-}
-
-type allProps = IProps & IDispatchProps;
+type allProps = IProps;
 
 export class CarePlanSuggestions extends React.Component<allProps, {}> {
   getConcernCount = () => {
@@ -61,11 +60,8 @@ export class CarePlanSuggestions extends React.Component<allProps, {}> {
   };
 
   onClick = () => {
-    const { redirectToCarePlanSuggestions } = this.props;
-
-    if (redirectToCarePlanSuggestions) {
-      redirectToCarePlanSuggestions();
-    }
+    const { history, patientRoute } = this.props;
+    history.push(`${patientRoute}/map/suggestions`);
   };
 
   render() {
@@ -104,12 +100,4 @@ export class CarePlanSuggestions extends React.Component<allProps, {}> {
   }
 }
 
-function mapDispatchToProps(dispatch: Dispatch<() => void>, ownProps: IProps): IDispatchProps {
-  return {
-    redirectToCarePlanSuggestions: () => {
-      dispatch(push(`${ownProps.patientRoute}/map/suggestions`));
-    },
-  };
-}
-
-export default connect<{}, IDispatchProps, IProps>(null, mapDispatchToProps)(CarePlanSuggestions);
+export default withRouter<IProps>(CarePlanSuggestions);

@@ -1,10 +1,10 @@
 import * as classNames from 'classnames';
+import { History } from 'history';
 import { pickBy } from 'lodash-es';
 import * as querystring from 'querystring';
 import * as React from 'react';
 import { compose, graphql } from 'react-apollo';
-import { connect, Dispatch } from 'react-redux';
-import { push } from 'react-router-redux';
+import { withRouter } from 'react-router';
 import * as currentUserQuery from '../graphql/queries/get-current-user.graphql';
 import * as usersQuery from '../graphql/queries/get-users.graphql';
 import * as userCreateMutationGraphql from '../graphql/queries/user-create-mutation.graphql';
@@ -42,14 +42,10 @@ interface IPageParams {
   orderBy: OrderByOptions;
 }
 
-interface IDispatchProps {
-  updatePageParams: (pageParams: IPageParams) => any;
-  redirectToUsers: () => any;
-}
-
 interface IProps {
   hasLoggedIn: boolean;
   routeBase: string;
+  history: History;
 }
 
 interface IState {
@@ -75,8 +71,8 @@ export interface IGraphqlProps {
   fetchMoreUsers: () => any;
 }
 
-export class ManagerUsers extends React.Component<IProps & IDispatchProps & IGraphqlProps, IState> {
-  constructor(props: IProps & IDispatchProps & IGraphqlProps) {
+export class ManagerUsers extends React.Component<IProps & IGraphqlProps, IState> {
+  constructor(props: IProps & IGraphqlProps) {
     super(props);
 
     this.renderUsers = this.renderUsers.bind(this);
@@ -124,7 +120,9 @@ export class ManagerUsers extends React.Component<IProps & IDispatchProps & IGra
     this.setState({
       orderBy: value,
     });
-    this.props.updatePageParams({ orderBy: value });
+
+    const cleanedPageParams = pickBy<IPageParams>({ orderBy: value });
+    this.props.history.push({ search: querystring.stringify(cleanedPageParams) });
   }
 
   renderUser(user: FullUserFragment) {
@@ -235,21 +233,8 @@ const getPageParams = (props: IProps): getUsersQueryVariables => {
   };
 };
 
-function mapDispatchToProps(dispatch: Dispatch<() => void>, ownProps: IProps): IDispatchProps {
-  return {
-    redirectToUsers: () => {
-      const { routeBase } = ownProps;
-      dispatch(push(routeBase));
-    },
-    updatePageParams: (pageParams: IPageParams) => {
-      const cleanedPageParams = pickBy<IPageParams>(pageParams);
-      dispatch(push({ search: querystring.stringify(cleanedPageParams) }));
-    },
-  };
-}
-
 export default compose(
-  connect<{}, IDispatchProps, IProps>(null, mapDispatchToProps),
+  withRouter,
   graphql<IGraphqlProps, IProps>(userDeleteMutationGraphql as any, {
     name: 'deleteUser',
     options: {

@@ -1,7 +1,7 @@
+import { History } from 'history';
 import * as React from 'react';
 import { compose, graphql } from 'react-apollo';
-import { connect, Dispatch } from 'react-redux';
-import { push } from 'react-router-redux';
+import { withRouter } from 'react-router';
 import * as screeningToolCreateMutationGraphql from '../graphql/queries/screening-tool-create-mutation.graphql';
 import {
   screeningToolCreateMutation,
@@ -22,7 +22,7 @@ interface IProps {
   routeBase: string;
   riskAreas?: FullRiskAreaFragment[];
   onClose: () => any;
-  redirectToScreeningTool?: (screeningToolId: string) => any;
+  history: History;
 }
 
 interface IGraphqlProps {
@@ -76,6 +76,7 @@ class ScreeningToolCreate extends React.Component<allProps, IState> {
 
   async onSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    const { history, routeBase } = this.props;
     if (this.props.createScreeningTool) {
       try {
         this.setState({ loading: true });
@@ -86,8 +87,8 @@ class ScreeningToolCreate extends React.Component<allProps, IState> {
         });
         this.setState({ loading: false });
         this.props.onClose();
-        if (this.props.redirectToScreeningTool && screeningTool.data.screeningToolCreate) {
-          this.props.redirectToScreeningTool(screeningTool.data.screeningToolCreate.id);
+        if (screeningTool.data.screeningToolCreate) {
+          history.push(`${routeBase}/${screeningTool.data.screeningToolCreate.id}`);
         }
       } catch (e) {
         this.setState({ error: e.message, loading: false });
@@ -160,16 +161,8 @@ class ScreeningToolCreate extends React.Component<allProps, IState> {
   }
 }
 
-function mapDispatchToProps(dispatch: Dispatch<() => void>, ownProps: allProps): Partial<allProps> {
-  return {
-    redirectToScreeningTool: (screeningToolId: string) => {
-      dispatch(push(`${ownProps.routeBase}/${screeningToolId}`));
-    },
-  };
-}
-
 export default compose(
-  connect(null, mapDispatchToProps),
+  withRouter,
   graphql<IGraphqlProps, IProps, allProps>(screeningToolCreateMutationGraphql as any, {
     name: 'createScreeningTool',
     options: {

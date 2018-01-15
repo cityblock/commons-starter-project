@@ -1,8 +1,7 @@
-import { createMemoryHistory } from 'history';
 import * as React from 'react';
 import { MockedProvider } from 'react-apollo/test-utils';
 import { Provider } from 'react-redux';
-import { ConnectedRouter } from 'react-router-redux';
+import { BrowserRouter } from 'react-router-dom';
 import { create } from 'react-test-renderer';
 import configureMockStore from 'redux-mock-store';
 import { ENGLISH_TRANSLATION } from '../../reducers/messages/en';
@@ -17,18 +16,17 @@ const locale = { messages: ENGLISH_TRANSLATION.messages };
 const mockStore = configureMockStore([]);
 
 it('renders popup for concern suggestion', () => {
-  const history = createMemoryHistory();
   const tree = create(
     <MockedProvider mocks={[]}>
       <Provider store={mockStore({ locale })}>
         <ReduxConnectedIntlProvider>
-          <ConnectedRouter history={history}>
+          <BrowserRouter>
             <PopupPatientCarePlanSuggestionDismissed
               visible={true}
               suggestion={carePlanSuggestionWithConcern}
               onDismiss={() => true}
             />
-          </ConnectedRouter>
+          </BrowserRouter>
         </ReduxConnectedIntlProvider>
       </Provider>
     </MockedProvider>,
@@ -37,18 +35,17 @@ it('renders popup for concern suggestion', () => {
 });
 
 it('renders popup for goal suggestion', () => {
-  const history = createMemoryHistory();
   const tree = create(
     <MockedProvider mocks={[]}>
       <Provider store={mockStore({ locale })}>
         <ReduxConnectedIntlProvider>
-          <ConnectedRouter history={history}>
+          <BrowserRouter>
             <PopupPatientCarePlanSuggestionDismissed
               visible={true}
               suggestion={carePlanSuggestionWithGoal}
               onDismiss={() => true}
             />
-          </ConnectedRouter>
+          </BrowserRouter>
         </ReduxConnectedIntlProvider>
       </Provider>
     </MockedProvider>,

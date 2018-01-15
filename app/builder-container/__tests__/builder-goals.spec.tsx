@@ -1,9 +1,8 @@
 import { shallow } from 'enzyme';
-import { createMemoryHistory } from 'history';
 import * as React from 'react';
 import { MockedProvider } from 'react-apollo/test-utils';
 import { Provider } from 'react-redux';
-import { ConnectedRouter } from 'react-router-redux';
+import { BrowserRouter } from 'react-router-dom';
 import { create } from 'react-test-renderer';
 import configureMockStore from 'redux-mock-store';
 import { ENGLISH_TRANSLATION } from '../../reducers/messages/en';
@@ -27,21 +26,21 @@ const match = {
 
 it('renders builder goals', () => {
   const mockStore = configureMockStore([]);
-  const history = createMemoryHistory();
+
   const locale = { messages: ENGLISH_TRANSLATION.messages };
   const task = { taskId: 'foo' };
   const tree = create(
     <MockedProvider mocks={[]}>
       <Provider store={mockStore({ locale, task })}>
         <ReduxConnectedIntlProvider>
-          <ConnectedRouter history={history}>
+          <BrowserRouter>
             <BuilderGoals
               match={match}
               refetchGoals={() => false}
               routeBase="/route/base"
               goals={[goal]}
             />
-          </ConnectedRouter>
+          </BrowserRouter>
         </ReduxConnectedIntlProvider>
       </Provider>
     </MockedProvider>,
@@ -50,6 +49,7 @@ it('renders builder goals', () => {
 });
 
 it('renders goal create', () => {
+  const history = { push: jest.fn } as any;
   const component = shallow(
     <Component
       match={match}
@@ -58,6 +58,7 @@ it('renders goal create', () => {
       goalId={null}
       loading={false}
       error={null}
+      history={history}
     />,
   );
   const instance = component.instance() as Component;

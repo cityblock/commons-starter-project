@@ -1,9 +1,10 @@
 import * as classNames from 'classnames';
+import { History } from 'history';
 import * as React from 'react';
 import { compose, graphql } from 'react-apollo';
-import { connect, Dispatch } from 'react-redux';
+import { connect } from 'react-redux';
+import { withRouter } from 'react-router';
 import { Route } from 'react-router-dom';
-import { push } from 'react-router-redux';
 import * as goalsQuery from '../graphql/queries/get-goal-suggestion-templates.graphql';
 import * as goalDeleteMutation from '../graphql/queries/goal-suggestion-template-delete-mutation.graphql';
 import {
@@ -26,15 +27,12 @@ interface IProps {
       goalId: string | null;
     };
   };
+  history: History;
 }
 
 interface IStateProps {
   goalId: string | null;
   routeBase: string;
-}
-
-interface IDispatchProps {
-  redirectToGoals?: () => any;
 }
 
 interface IGraphqlProps {
@@ -47,7 +45,7 @@ interface IGraphqlProps {
   ) => { data: goalSuggestionTemplateDeleteMutation };
 }
 
-type allProps = IProps & IDispatchProps & IGraphqlProps & IStateProps;
+type allProps = IProps & IGraphqlProps & IStateProps;
 
 interface IState {
   showCreateGoal: boolean;
@@ -107,15 +105,13 @@ export class BuilderGoals extends React.Component<allProps, IState> {
   };
 
   async onDeleteGoal(goalId: string) {
-    const { redirectToGoals, deleteGoal } = this.props;
+    const { history, routeBase, deleteGoal } = this.props;
 
     if (deleteGoal) {
       await deleteGoal({ variables: { goalSuggestionTemplateId: goalId } });
     }
 
-    if (redirectToGoals) {
-      redirectToGoals();
-    }
+    history.push(routeBase);
   }
 
   render() {
@@ -164,23 +160,9 @@ function mapStateToProps(state: IAppState, ownProps: IProps): IStateProps {
   };
 }
 
-function mapDispatchToProps(
-  dispatch: Dispatch<() => void>,
-  ownProps: IProps & IStateProps,
-): IDispatchProps {
-  return {
-    redirectToGoals: () => {
-      const { routeBase } = ownProps;
-      dispatch(push(routeBase));
-    },
-  };
-}
-
 export default compose(
-  connect<IStateProps, IDispatchProps, allProps>(
-    mapStateToProps as (args?: any) => IStateProps,
-    mapDispatchToProps,
-  ),
+  withRouter,
+  connect<IStateProps, {}, allProps>(mapStateToProps as (args?: any) => IStateProps),
   graphql<IGraphqlProps, IProps, allProps>(goalDeleteMutation as any, { name: 'deleteGoal' }),
   graphql<IGraphqlProps, IProps, allProps>(goalsQuery as any, {
     props: ({ data }) => ({

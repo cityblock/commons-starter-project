@@ -1,23 +1,23 @@
 import { render } from 'enzyme';
-import { createMemoryHistory } from 'history';
 import * as React from 'react';
 import { MockedProvider } from 'react-apollo/test-utils';
 import { Provider } from 'react-redux';
-import { ConnectedRouter } from 'react-router-redux';
+import { BrowserRouter } from 'react-router-dom';
 import configureMockStore from 'redux-mock-store';
 import ReduxConnectedIntlProvider from '../redux-connected-intl-provider';
 import Routes from '../routes';
 
+// TODO: use shallow instead of snapshot
 it('renders routes correctly', () => {
   const mockStore = configureMockStore([]);
-  const history = createMemoryHistory();
+
   const locale = { messages: { 'login.logInGoogle': 'Sign in with Google' } };
 
   const tree = render(
     <MockedProvider mocks={[]}>
-      <Provider store={mockStore({ locale })}>
+      <Provider store={mockStore({ locale, idle: { isIdle: false } })}>
         <ReduxConnectedIntlProvider>
-          <ConnectedRouter history={history}>{Routes}</ConnectedRouter>
+          <BrowserRouter>{Routes}</BrowserRouter>
         </ReduxConnectedIntlProvider>
       </Provider>
     </MockedProvider>,

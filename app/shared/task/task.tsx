@@ -1,8 +1,8 @@
 import * as classNames from 'classnames';
+import { History } from 'history';
 import * as React from 'react';
 import { compose, graphql } from 'react-apollo';
-import { connect, Dispatch } from 'react-redux';
-import { push } from 'react-router-redux';
+import { withRouter } from 'react-router';
 import * as eventNotificationsForTaskDismissMutation from '../../graphql/queries/event-notifications-for-task-dismiss-mutation.graphql';
 import * as taskQuery from '../../graphql/queries/get-task.graphql';
 import * as taskEditMutationGraphql from '../../graphql/queries/task-edit-mutation.graphql';
@@ -29,16 +29,13 @@ export const DEFAULT_AVATAR_URL = 'https://bit.ly/2weRwJm';
 
 export const Divider: React.StatelessComponent<{}> = () => <div className={styles.divider} />;
 
-interface IDispatchProps {
-  redirectToMap: () => void;
-}
-
 export interface IProps {
   routeBase: string;
   taskId: string;
   dismissTaskNotifications: (
     options: { variables: eventNotificationsForTaskDismissMutationVariables },
   ) => { data: { eventNotificationsForTaskDismiss: FullEventNotificationFragment } };
+  history: History;
 }
 
 interface IGraphqlProps {
@@ -52,7 +49,7 @@ interface IState {
   deleteConfirmation: boolean;
 }
 
-type allProps = IDispatchProps & IProps & IGraphqlProps;
+type allProps = IProps & IGraphqlProps;
 
 export class Task extends React.Component<allProps, IState> {
   constructor(props: allProps) {
@@ -90,8 +87,13 @@ export class Task extends React.Component<allProps, IState> {
     if (taskId) await editTask({ variables: { taskId, priority } });
   };
 
+  redirectToMap = () => {
+    const { history, routeBase } = this.props;
+    history.push(routeBase);
+  };
+
   render(): JSX.Element {
-    const { task, routeBase, editTask, taskLoading, redirectToMap } = this.props;
+    const { task, routeBase, editTask, taskLoading } = this.props;
     const taskId = task && task.id;
 
     if (taskLoading) {
@@ -106,7 +108,7 @@ export class Task extends React.Component<allProps, IState> {
           <TaskDelete
             taskId={taskId}
             cancelDelete={this.cancelDelete}
-            redirectToMap={redirectToMap}
+            redirectToMap={this.redirectToMap}
           />
         </div>
       );
@@ -166,12 +168,8 @@ export class Task extends React.Component<allProps, IState> {
   }
 }
 
-const mapDispatchToProps = (dispatch: Dispatch<() => void>, ownProps: IProps): IDispatchProps => ({
-  redirectToMap: () => dispatch(push(ownProps.routeBase)),
-});
-
 export default compose(
-  connect<{}, IDispatchProps, IProps>(null, mapDispatchToProps),
+  withRouter,
   graphql<IGraphqlProps, IProps, allProps>(taskEditMutationGraphql as any, { name: 'editTask' }),
   graphql<IGraphqlProps, allProps>(taskQuery as any, {
     skip: (props: allProps) => !props.taskId,

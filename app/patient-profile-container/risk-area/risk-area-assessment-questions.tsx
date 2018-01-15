@@ -1,7 +1,5 @@
 import * as React from 'react';
 import { compose, graphql } from 'react-apollo';
-import { connect, Dispatch } from 'react-redux';
-import { push } from 'react-router-redux';
 import * as patientAnswersQuery from '../../graphql/queries/get-patient-answers.graphql';
 import * as riskAreaQuestionsQuery from '../../graphql/queries/get-questions.graphql';
 import * as patientAnswersCreateMutationGraphql from '../../graphql/queries/patient-answers-create-mutation.graphql';
@@ -33,10 +31,6 @@ interface IProps {
   riskAreaAssessmentSubmission?: FullRiskAreaAssessmentSubmissionFragment;
 }
 
-interface IDispatchProps {
-  redirectToThreeSixty?: () => any;
-}
-
 interface IGraphqlProps {
   riskAreaQuestions: FullQuestionFragment[] | null;
   riskAreaQuestionsLoading?: boolean;
@@ -49,7 +43,7 @@ interface IGraphqlProps {
   patientAnswersError?: string | null;
 }
 
-type allProps = IGraphqlProps & IProps & IDispatchProps;
+type allProps = IGraphqlProps & IProps;
 
 export class RiskAreaAssessmentQuestions extends React.Component<allProps> {
   onChange = (questionId: string, answers: Array<{ answerId: string; value: string | number }>) => {
@@ -134,16 +128,7 @@ export class RiskAreaAssessmentQuestions extends React.Component<allProps> {
   }
 }
 
-function mapDispatchToProps(dispatch: Dispatch<() => void>, ownProps: IProps): IDispatchProps {
-  return {
-    redirectToThreeSixty: () => {
-      dispatch(push(ownProps.routeBase));
-    },
-  };
-}
-
 export default compose(
-  connect<{}, IDispatchProps, IProps>(null, mapDispatchToProps),
   graphql<IGraphqlProps, IProps, allProps>(patientAnswersCreateMutationGraphql as any, {
     name: 'createPatientAnswers',
     options: { refetchQueries: ['getPatientAnswers'] },

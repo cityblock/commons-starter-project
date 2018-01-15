@@ -1,8 +1,8 @@
 import * as classNames from 'classnames';
+import { History } from 'history';
 import * as React from 'react';
 import { compose, graphql } from 'react-apollo';
-import { connect, Dispatch } from 'react-redux';
-import { push } from 'react-router-redux';
+import { withRouter } from 'react-router';
 import * as patientCarePlanQuery from '../graphql/queries/get-patient-care-plan.graphql';
 import { getPatientCarePlanQuery } from '../graphql/types';
 import Task from '../shared/task/task';
@@ -10,16 +10,13 @@ import * as styles from './css/patient-map.css';
 import DnDPatientCarePlan from './drag-and-drop/drag-and-drop-patient-care-plan';
 import MapModals from './modals/modals';
 
-interface IDispatchProps {
-  closeTask?: () => void;
-}
-
 export interface IProps {
   patientId: string;
   loading?: boolean;
   routeBase: string;
   carePlan?: getPatientCarePlanQuery['carePlanForPatient'];
   taskId: string | null;
+  history: History;
 }
 
 interface IGraphqlProps {
@@ -28,12 +25,12 @@ interface IGraphqlProps {
   error?: string | null;
 }
 
-export type allProps = IDispatchProps & IGraphqlProps & IProps;
+export type allProps = IGraphqlProps & IProps;
 
 export class PatientMap extends React.Component<allProps, {}> {
   closeTask = (e: React.MouseEvent<HTMLDivElement>): void => {
-    if (this.props.taskId && this.props.closeTask) {
-      this.props.closeTask();
+    if (this.props.taskId) {
+      this.props.history.push(this.props.routeBase);
       this.forceUpdate();
     }
   };
@@ -78,12 +75,8 @@ export class PatientMap extends React.Component<allProps, {}> {
   }
 }
 
-const mapDispatchToProps = (dispatch: Dispatch<() => void>, ownProps: IProps): IDispatchProps => ({
-  closeTask: () => dispatch(push(ownProps.routeBase)),
-});
-
 export default compose(
-  connect<{}, IDispatchProps, IProps>(null, mapDispatchToProps),
+  withRouter,
   graphql<IGraphqlProps, IProps, allProps>(patientCarePlanQuery as any, {
     options: (props: IProps) => ({
       variables: {

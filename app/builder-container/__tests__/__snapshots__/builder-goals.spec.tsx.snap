@@ -83,7 +83,7 @@ exports[`renders goal create 1`] = `
     <div
       className="itemContainer visible"
     >
-      <Connect(Apollo(GoalCreate))
+      <withRouter(Apollo(GoalCreate))
         onClose={[Function]}
         routeBase="/builder/goals"
       />

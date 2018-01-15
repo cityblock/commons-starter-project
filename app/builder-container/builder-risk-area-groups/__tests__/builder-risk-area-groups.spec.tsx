@@ -9,7 +9,6 @@ import RiskAreaGroups from '../risk-area-groups';
 
 describe('Builder Risk Area Groups Component', () => {
   const riskAreaGroupId = 'ghost';
-  const placeholderFn = () => true as any;
 
   const riskAreaGroup1 = {
     id: 'nymeria',
@@ -18,13 +17,14 @@ describe('Builder Risk Area Groups Component', () => {
     id: 'lady',
   };
   const riskAreaGroups = [riskAreaGroup1, riskAreaGroup, riskAreaGroup3] as any;
+  const history = { push: jest.fn() } as any;
 
   const wrapper = shallow(
     <AdminRiskAreaGroups
+      history={history}
       match={{} as any}
       riskAreaGroupId={riskAreaGroupId}
       riskAreaGroups={riskAreaGroups}
-      redirectToRiskAreaGroups={placeholderFn}
       loading={true}
       error={null}
     />,

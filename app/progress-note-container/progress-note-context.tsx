@@ -1,8 +1,8 @@
+import { History } from 'history';
 import { debounce } from 'lodash-es';
 import * as React from 'react';
 import { compose, graphql } from 'react-apollo';
-import { connect, Dispatch } from 'react-redux';
-import { push } from 'react-router-redux';
+import { withRouter } from 'react-router';
 import * as clinicsQuery from '../graphql/queries/clinics-get.graphql';
 import * as patientAnswersQuery from '../graphql/queries/get-patient-answers.graphql';
 import * as questionsQuery from '../graphql/queries/get-questions.graphql';
@@ -48,6 +48,7 @@ interface IProps {
       memberConcern: string | null;
     },
   ) => void;
+  history: History;
 }
 
 interface IGraphqlProps {
@@ -66,12 +67,7 @@ interface IGraphqlProps {
   ) => { data: patientAnswersCreateMutation };
 }
 
-interface IDispatchProps {
-  redirectToMap: () => any;
-  redirectTo360: () => any;
-}
-
-type allProps = IGraphqlProps & IProps & IDispatchProps;
+type allProps = IGraphqlProps & IProps;
 
 interface IState {
   progressNoteTime: string | null;
@@ -263,6 +259,16 @@ export class ProgressNoteContext extends React.Component<allProps, IState> {
     }
   };
 
+  redirectToMap = () => {
+    const { history, patientId } = this.props;
+    return history.push(`/patients/${patientId}/map/active`);
+  };
+
+  redirectTo360 = () => {
+    const { history, patientId } = this.props;
+    history.push(`/patients/${patientId}/360`);
+  };
+
   render() {
     const { progressNoteTemplates, clinics, patientId } = this.props;
     const {
@@ -313,7 +319,7 @@ export class ProgressNoteContext extends React.Component<allProps, IState> {
           <Button
             fullWidth={true}
             messageId="progressNote.update360"
-            onClick={this.props.redirectTo360}
+            onClick={this.redirectTo360}
           />
           <br />
           <br />
@@ -327,7 +333,7 @@ export class ProgressNoteContext extends React.Component<allProps, IState> {
           <Button
             fullWidth={true}
             messageId="progressNote.updateMap"
-            onClick={this.props.redirectToMap}
+            onClick={this.redirectToMap}
           />
           <br />
           <br />
@@ -337,15 +343,9 @@ export class ProgressNoteContext extends React.Component<allProps, IState> {
     );
   }
 }
-function mapDispatchToProps(dispatch: Dispatch<() => void>, props: IProps): IDispatchProps {
-  return {
-    redirectToMap: () => dispatch(push(`/patients/${props.patientId}/map/active`)),
-    redirectTo360: () => dispatch(push(`/patients/${props.patientId}/360`)),
-  };
-}
 
 export default compose(
-  connect<{}, IDispatchProps, allProps>(null, mapDispatchToProps),
+  withRouter,
   graphql<IGraphqlProps, IProps, allProps>(patientAnswersCreateMutationGraphql as any, {
     name: 'createPatientAnswers',
     options: { refetchQueries: ['getPatientAnswers'] },

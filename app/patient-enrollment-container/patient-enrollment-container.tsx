@@ -1,9 +1,7 @@
 import { format } from 'date-fns';
 import * as React from 'react';
 import { compose, graphql } from 'react-apollo';
-import { connect, Dispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { push } from 'react-router-redux';
 import * as getClinicsQuery from '../graphql/queries/clinics-get.graphql';
 import * as setupPatientMutationGraphql from '../graphql/queries/patient-setup-mutation.graphql';
 import {
@@ -21,10 +19,6 @@ import { IUpdatedField } from '../shared/util/updated-fields';
 import * as styles from './css/patient-enrollment.css';
 import PopupEnrollmentError from './popup-enrollment-error';
 import PopupPatientCreated from './popup-patient-created';
-
-interface IDispatchProps {
-  onSuccess: (patientId: string) => any;
-}
 
 interface IProps {
   mutate?: any;
@@ -76,7 +70,7 @@ function formatDate(date: string) {
   return format(new Date(date.replace('-', '/')), 'MM/DD/YYYY');
 }
 
-type allProps = IDispatchProps & IProps & IGraphqlProps;
+type allProps = IProps & IGraphqlProps;
 
 class PatientEnrollmentContainer extends React.Component<allProps, IState> {
   constructor(props: allProps) {
@@ -285,14 +279,6 @@ class PatientEnrollmentContainer extends React.Component<allProps, IState> {
   }
 }
 
-function mapDispatchToProps(dispatch: Dispatch<() => void>): IDispatchProps {
-  return {
-    onSuccess: (patientId: string) => {
-      dispatch(push(`/patient/${patientId}`));
-    },
-  };
-}
-
 function formatClinic(clinics: any) {
   if (clinics) {
     return clinics.edges[0].node;
@@ -300,7 +286,6 @@ function formatClinic(clinics: any) {
 }
 
 export default compose(
-  connect<{}, IDispatchProps, IProps>(null, mapDispatchToProps),
   graphql<IGraphqlProps, IProps, allProps>(setupPatientMutationGraphql as any, {
     name: 'createPatient',
   }),

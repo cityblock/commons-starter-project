@@ -9,10 +9,10 @@ describe('Patient Map Component', () => {
   const patientId = 'sansaStark';
   const routeBase = '/patients/sansaStark/map';
   const taskId = 'sansaStark';
-  const closeTask = () => true as any;
+  const history = { push: jest.fn() } as any;
 
   const wrapper = shallow(
-    <PatientMap patientId={patientId} routeBase={routeBase} closeTask={closeTask} taskId="" />,
+    <PatientMap history={history} patientId={patientId} routeBase={routeBase} taskId="" />,
   );
 
   it('renders patient care plan', () => {
@@ -30,12 +30,7 @@ describe('Patient Map Component', () => {
 
   describe('Expanded Task View', () => {
     const wrapper2 = shallow(
-      <PatientMap
-        patientId={patientId}
-        routeBase={routeBase}
-        taskId={taskId}
-        closeTask={closeTask}
-      />,
+      <PatientMap history={history} patientId={patientId} routeBase={routeBase} taskId={taskId} />,
     );
 
     it('renders associated task', () => {

@@ -1,8 +1,8 @@
+import { History } from 'history';
 import { isEmpty } from 'lodash-es';
 import * as React from 'react';
 import { compose, graphql } from 'react-apollo';
-import { connect, Dispatch } from 'react-redux';
-import { push } from 'react-router-redux';
+import { withRouter } from 'react-router';
 import * as computedFieldCreateMutationGraphql from '../graphql/queries/computed-field-create-mutation.graphql';
 import {
   computedFieldCreateMutation,
@@ -26,7 +26,7 @@ interface IOptions {
 interface IProps {
   routeBase: string;
   onClose: () => any;
-  redirectToComputedField?: (computedFieldId: string) => any;
+  history: History;
 }
 
 interface IGraphqlProps {
@@ -73,7 +73,7 @@ export class ComputedFieldCreate extends React.Component<allProps, IState> {
   onSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    const { createComputedField, onClose, redirectToComputedField } = this.props;
+    const { createComputedField, onClose, history, routeBase } = this.props;
     const { computedField } = this.state;
     const { label, dataType } = computedField;
     const allFieldsComplete = !isEmpty(label) && !isEmpty(dataType);
@@ -92,8 +92,8 @@ export class ComputedFieldCreate extends React.Component<allProps, IState> {
         this.setState({ loading: false });
         onClose();
 
-        if (redirectToComputedField && data.computedFieldCreate) {
-          redirectToComputedField(data.computedFieldCreate.id);
+        if (data.computedFieldCreate) {
+          history.push(`${routeBase}/${data.computedFieldCreate.id}`);
         }
       } catch (e) {
         this.setState({ error: e.message, loading: false });
@@ -150,16 +150,8 @@ export class ComputedFieldCreate extends React.Component<allProps, IState> {
   }
 }
 
-function mapDispatchToProps(dispatch: Dispatch<() => void>, ownProps: allProps): Partial<allProps> {
-  return {
-    redirectToComputedField: (computedFieldId: string) => {
-      dispatch(push(`${ownProps.routeBase}/${computedFieldId}`));
-    },
-  };
-}
-
 export default compose(
-  connect(null, mapDispatchToProps),
+  withRouter,
   graphql<IGraphqlProps, IProps, allProps>(computedFieldCreateMutationGraphql as any, {
     name: 'createComputedField',
     options: {

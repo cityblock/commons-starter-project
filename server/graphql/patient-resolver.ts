@@ -1,5 +1,5 @@
 import { isNil, omitBy } from 'lodash';
-import { transaction } from 'objection';
+import { transaction, Transaction } from 'objection';
 import {
   IPatient,
   IPatientEditInput,
@@ -175,17 +175,24 @@ export async function resolvePatientSearch(
   };
 }
 
-export async function resolvePatientsWithUrgentTasks(
+export async function resolvePatientDashboardBuilder(
   root: any,
   { pageNumber, pageSize }: IPaginationOptions,
   { userRole, userId, txn }: IContext,
+  patientEndpoint: (
+    pageOptions: IPaginationOptions,
+    userId: string,
+    txn?: Transaction,
+  ) => Promise<IPaginatedResults<Patient>>,
 ): Promise<IPatientForDashboardEdges> {
   await accessControls.isAllowedForUser(userRole, 'view', 'patient');
   checkUserLoggedIn(userId);
 
-  const patients = await Patient.getPatientsWithUrgentTasks({ pageNumber, pageSize }, userId!, txn);
+  const patients = await patientEndpoint.bind(Patient)({ pageNumber, pageSize }, userId!, txn);
 
-  const patientEdges = patients.results.map((patient, i) => formatRelayEdge(patient, patient.id));
+  const patientEdges = patients.results.map((patient: Patient) =>
+    formatRelayEdge(patient, patient.id),
+  );
 
   const hasPreviousPage = pageNumber !== 0;
   const hasNextPage = (pageNumber + 1) * pageSize < patients.total;
@@ -198,141 +205,84 @@ export async function resolvePatientsWithUrgentTasks(
     },
     totalCount: patients.total,
   };
+}
+
+/* tslint:disable check-is-allowed */
+export async function resolvePatientsWithUrgentTasks(
+  root: any,
+  pageOptions: IPaginationOptions,
+  context: IContext,
+): Promise<IPatientForDashboardEdges> {
+  return await resolvePatientDashboardBuilder(
+    root,
+    pageOptions,
+    context,
+    Patient.getPatientsWithUrgentTasks,
+  );
 }
 
 export async function resolvePatientsNewToCareTeam(
   root: any,
-  { pageNumber, pageSize }: IPaginationOptions,
-  { userRole, userId, txn }: IContext,
+  pageOptions: IPaginationOptions,
+  context: IContext,
 ): Promise<IPatientForDashboardEdges> {
-  await accessControls.isAllowedForUser(userRole, 'view', 'patient');
-  checkUserLoggedIn(userId);
-
-  const patients = await Patient.getPatientsNewToCareTeam({ pageNumber, pageSize }, userId!, txn);
-
-  const patientEdges = patients.results.map((patient, i) => formatRelayEdge(patient, patient.id));
-
-  const hasPreviousPage = pageNumber !== 0;
-  const hasNextPage = (pageNumber + 1) * pageSize < patients.total;
-
-  return {
-    edges: patientEdges,
-    pageInfo: {
-      hasPreviousPage,
-      hasNextPage,
-    },
-    totalCount: patients.total,
-  };
+  return await resolvePatientDashboardBuilder(
+    root,
+    pageOptions,
+    context,
+    Patient.getPatientsNewToCareTeam,
+  );
 }
 
 export async function resolvePatientsWithPendingSuggestions(
   root: any,
-  { pageNumber, pageSize }: IPaginationOptions,
-  { userRole, userId, txn }: IContext,
+  pageOptions: IPaginationOptions,
+  context: IContext,
 ): Promise<IPatientForDashboardEdges> {
-  await accessControls.isAllowedForUser(userRole, 'view', 'patient');
-  checkUserLoggedIn(userId);
-
-  const patients = await Patient.getPatientsWithPendingSuggestions(
-    { pageNumber, pageSize },
-    userId!,
-    txn,
+  return await resolvePatientDashboardBuilder(
+    root,
+    pageOptions,
+    context,
+    Patient.getPatientsWithPendingSuggestions,
   );
-
-  const patientEdges = patients.results.map((patient, i) => formatRelayEdge(patient, patient.id));
-
-  const hasPreviousPage = pageNumber !== 0;
-  const hasNextPage = (pageNumber + 1) * pageSize < patients.total;
-
-  return {
-    edges: patientEdges,
-    pageInfo: {
-      hasPreviousPage,
-      hasNextPage,
-    },
-    totalCount: patients.total,
-  };
 }
 
 export async function resolvePatientsWithMissingInfo(
   root: any,
-  { pageNumber, pageSize }: IPaginationOptions,
-  { userRole, userId, txn }: IContext,
+  pageOptions: IPaginationOptions,
+  context: IContext,
 ): Promise<IPatientForDashboardEdges> {
-  await accessControls.isAllowedForUser(userRole, 'view', 'patient');
-  checkUserLoggedIn(userId);
-
-  const patients = await Patient.getPatientsWithMissingInfo({ pageNumber, pageSize }, userId!, txn);
-
-  const patientEdges = patients.results.map((patient, i) => formatRelayEdge(patient, patient.id));
-
-  const hasPreviousPage = pageNumber !== 0;
-  const hasNextPage = (pageNumber + 1) * pageSize < patients.total;
-
-  return {
-    edges: patientEdges,
-    pageInfo: {
-      hasPreviousPage,
-      hasNextPage,
-    },
-    totalCount: patients.total,
-  };
+  return await resolvePatientDashboardBuilder(
+    root,
+    pageOptions,
+    context,
+    Patient.getPatientsWithMissingInfo,
+  );
 }
 
 export async function resolvePatientsWithNoRecentEngagement(
   root: any,
-  { pageNumber, pageSize }: IPaginationOptions,
-  { userRole, userId, txn }: IContext,
+  pageOptions: IPaginationOptions,
+  context: IContext,
 ): Promise<IPatientForDashboardEdges> {
-  await accessControls.isAllowedForUser(userRole, 'view', 'patient');
-  checkUserLoggedIn(userId);
-
-  const patients = await Patient.getPatientsWithNoRecentEngagement(
-    { pageNumber, pageSize },
-    userId!,
-    txn,
+  return await resolvePatientDashboardBuilder(
+    root,
+    pageOptions,
+    context,
+    Patient.getPatientsWithNoRecentEngagement,
   );
-
-  const patientEdges = patients.results.map((patient, i) => formatRelayEdge(patient, patient.id));
-
-  const hasPreviousPage = pageNumber !== 0;
-  const hasNextPage = (pageNumber + 1) * pageSize < patients.total;
-
-  return {
-    edges: patientEdges,
-    pageInfo: {
-      hasPreviousPage,
-      hasNextPage,
-    },
-    totalCount: patients.total,
-  };
 }
 
 export async function resolvePatientsWithOutOfDateMAP(
   root: any,
-  { pageNumber, pageSize }: IPaginationOptions,
-  { userRole, userId, txn }: IContext,
+  pageOptions: IPaginationOptions,
+  context: IContext,
 ): Promise<IPatientForDashboardEdges> {
-  await accessControls.isAllowedForUser(userRole, 'view', 'patient');
-  checkUserLoggedIn(userId);
-
-  const patients = await Patient.getPatientsWithOutOfDateMAP(
-    { pageNumber, pageSize },
-    userId!,
-    txn,
+  return await resolvePatientDashboardBuilder(
+    root,
+    pageOptions,
+    context,
+    Patient.getPatientsWithOutOfDateMAP,
   );
-
-  const patientEdges = patients.results.map((patient, i) => formatRelayEdge(patient, patient.id));
-
-  const hasPreviousPage = pageNumber !== 0;
-  const hasNextPage = (pageNumber + 1) * pageSize < patients.total;
-
-  return {
-    edges: patientEdges,
-    pageInfo: {
-      hasPreviousPage,
-      hasNextPage,
-    },
-    totalCount: patients.total,
-  };
 }
+/* tslint:enable check-is-allowed */

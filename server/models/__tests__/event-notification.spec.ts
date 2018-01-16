@@ -388,6 +388,125 @@ describe('task event model', () => {
     });
   });
 
+  it('dismisses all notifications for a user on a task', async () => {
+    await transaction(TaskEvent.knex(), async txn => {
+      const { user, user2, task, patient } = await setup(txn);
+
+      // first notification on user 1's first task
+      const taskEvent111 = await TaskEvent.create(
+        {
+          taskId: task.id,
+          userId: user.id,
+          eventType: 'edit_assignee',
+        },
+        txn,
+      );
+      const eventNotification111 = await EventNotification.create(
+        {
+          userId: user.id,
+          taskEventId: taskEvent111.id,
+        },
+        txn,
+      );
+
+      // second notification on user 1's first task
+      const taskEvent112 = await TaskEvent.create(
+        {
+          taskId: task.id,
+          userId: user.id,
+          eventType: 'edit_assignee',
+        },
+        txn,
+      );
+      const eventNotification112 = await EventNotification.create(
+        {
+          userId: user.id,
+          taskEventId: taskEvent112.id,
+        },
+        txn,
+      );
+
+      // user 1's second task
+      const task12 = await Task.create(
+        {
+          title: 'title',
+          description: 'description',
+          dueAt: new Date().toISOString(),
+          patientId: patient.id,
+          createdById: user2.id,
+          assignedToId: user.id,
+        },
+        txn,
+      );
+      // first notification on user 1's second task
+      const taskEvent121 = await TaskEvent.create(
+        {
+          taskId: task12.id,
+          userId: user.id,
+          eventType: 'edit_assignee',
+        },
+        txn,
+      );
+      const eventNotification121 = await EventNotification.create(
+        {
+          userId: user.id,
+          taskEventId: taskEvent121.id,
+        },
+        txn,
+      );
+
+      // user 2's first task
+      const task21 = await Task.create(
+        {
+          title: 'title',
+          description: 'description',
+          dueAt: new Date().toISOString(),
+          patientId: patient.id,
+          createdById: user2.id,
+          assignedToId: user2.id,
+        },
+        txn,
+      );
+
+      // first notification on user 2's first task
+      const taskEvent211 = await TaskEvent.create(
+        {
+          taskId: task21.id,
+          userId: user2.id,
+          eventType: 'edit_assignee',
+        },
+        txn,
+      );
+      const eventNotification211 = await EventNotification.create(
+        {
+          userId: user2.id,
+          taskEventId: taskEvent211.id,
+        },
+        txn,
+      );
+
+      expect(eventNotification111.seenAt).toBeFalsy();
+      expect(eventNotification112.seenAt).toBeFalsy();
+      expect(eventNotification121.seenAt).toBeFalsy();
+      expect(eventNotification211.seenAt).toBeFalsy();
+
+      // dismiss all notifications for user 1 on their first task
+      // expect both notifications on user 1's first task to be seen
+      await EventNotification.dismissAllForUserTask(task.id, user.id, txn);
+      const fetchedNotification111 = await EventNotification.get(eventNotification111.id, txn);
+      expect(fetchedNotification111.seenAt).not.toBeFalsy();
+
+      const fetchedNotification112 = await EventNotification.get(eventNotification112.id, txn);
+      expect(fetchedNotification112.seenAt).not.toBeFalsy();
+
+      // expect notifications on user 1's second task and on user 2's tasks still not to be seen
+      const fetchedNotification121 = await EventNotification.get(eventNotification121.id, txn);
+      expect(fetchedNotification121.seenAt).toBeFalsy();
+      const fetchedNotification211 = await EventNotification.get(eventNotification211.id, txn);
+      expect(fetchedNotification211.seenAt).toBeFalsy();
+    });
+  });
+
   describe('notifications for user and task in dashboard', () => {
     it('returns notifications for a given user and task', async () => {
       await transaction(EventNotification.knex(), async txn => {

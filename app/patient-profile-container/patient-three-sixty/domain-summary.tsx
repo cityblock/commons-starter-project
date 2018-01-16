@@ -170,7 +170,7 @@ export class DomainSummary extends React.Component<allProps, IState> {
 export default graphql<IGraphqlProps, IProps, allProps>(getRiskAreaGroupForPatientGraphql as any, {
   options: (props: IProps) => {
     const { riskAreaGroupId, patientId } = props;
-    return { variables: { riskAreaGroupId, patientId } };
+    return { variables: { riskAreaGroupId, patientId }, fetchPolicy: 'network-only' };
   },
   props: ({ data }) => ({
     loading: data ? data.loading : false,

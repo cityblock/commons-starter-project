@@ -231,6 +231,7 @@ export const ENGLISH_TRANSLATION = {
     'riskAreaAssessment.resultsBody':
       "Based on the results of this assessment, the following have been recommended as additions to the patient's care plan.",
     'select.default': 'Select one',
+    'select.disabled': 'No previous response',
     'settings.heading': 'Settings',
     'settings.save': 'Save',
     'tasks.assignedToPlaceholder': 'Assign to',
@@ -272,6 +273,7 @@ export const ENGLISH_TRANSLATION = {
     'taskPriority.high': 'High priority',
     'taskPriority.select': 'Select priority',
     'textarea.default': 'Enter response...',
+    'textarea.disabled': 'No previous response',
     'threeSixty.automated': 'Automated Assessments:',
     'threeSixty.automatedDetail': 'Automated Assessments',
     'threeSixty.automatedEmpty': 'There are no automated assessments on record',

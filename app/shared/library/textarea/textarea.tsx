@@ -33,6 +33,7 @@ const TextArea: React.StatelessComponent<IProps> = (props: IProps) => {
     {
       [styles.small]: !!small,
       [styles.disabled]: !!disabled,
+      [styles.empty]: !!disabled && !value,
     },
     className,
   );

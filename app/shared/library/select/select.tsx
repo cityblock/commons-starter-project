@@ -20,7 +20,9 @@ const Select: React.StatelessComponent<IProps> = (props: IProps) => {
     styles.select,
     {
       [styles.large]: !!large,
+      [styles.noValue]: !value,
       [styles.disabled]: !!disabled,
+      [styles.empty]: !!disabled && !value,
     },
     className,
   );

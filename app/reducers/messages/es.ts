@@ -237,6 +237,7 @@ export const SPANISH_TRANSLATION = {
     'riskAreaAssessment.resultsBody':
       "Based on the results of this assessment, the following have been recommended as additions to the patient's care plan.",
     'select.default': 'Seleccione uno',
+    'select.disabled': 'Sin respuesta previa',
     'settings.heading': 'Ajustes',
     'settings.save': 'Guardar',
     'tasks.assignedToPlaceholder': 'Asignar a',
@@ -279,6 +280,7 @@ export const SPANISH_TRANSLATION = {
     'taskComment.activity': 'Actividad y comentarios',
     'taskComment.error': 'Error al agregar comentario',
     'textarea.default': 'Ingrese respuesta...',
+    'textarea.disabled': 'Sin respuesta previa',
     'notifications.leftPane': 'Panel izquierdo',
     'threeSixty.automated': 'Evaluaciones automatizadas:',
     'threeSixty.automatedDetail': 'Evaluaciones automatizadas',

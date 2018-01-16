@@ -48,7 +48,7 @@ exports[`renders question 1`] = `
           value={1}
         />
         <select
-          className="select"
+          className="select noValue"
           disabled={undefined}
           name="applicableIfType"
           onChange={[Function]}
@@ -114,7 +114,7 @@ exports[`renders question 1`] = `
           </option>
         </select>
         <select
-          className="select"
+          className="select noValue"
           disabled={undefined}
           name="hasOtherTextAnswer"
           onChange={[Function]}

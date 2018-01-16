@@ -65,4 +65,10 @@ describe('Library TextArea Component', () => {
     const wrapper = shallow(<TextArea value={value} onChange={onChange} small={true} />);
     expect(wrapper.find('textarea').props().className).toBe('textarea small');
   });
+
+  it('applies empty styles if disabled and empty', () => {
+    const wrapper = shallow(<TextArea value={''} onChange={onChange} disabled={true} />);
+
+    expect(wrapper.find('textarea').props().className).toBe('textarea disabled empty');
+  });
 });

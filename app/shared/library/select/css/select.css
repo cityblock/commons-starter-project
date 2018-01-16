@@ -33,9 +33,19 @@
   cursor: default;
   color: var(--black-color);
   background: var(--gray-background-color);
-  border-color: var(--gray-font-color);
+  border-color: var(--black-color);
 
   &:hover {
     border-color: var(--gray-font-color);
   }
+}
+
+.noValue {
+  color: var(--gray-font-color);
+}
+
+.empty {
+  background: var(--white-color);
+  color: var(--gray-background-color);
+  border-color: var(--border-color);
 }

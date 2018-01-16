@@ -71,12 +71,16 @@ export default class DropdownAnswer extends React.Component<IProps, {}> {
     return (
       <div className={styles.fullWidth}>
         <Select
-          value={currentAnswer ? currentAnswer.id : 'Select one'}
+          value={currentAnswer ? currentAnswer.id : ''}
           onChange={event => this.onDropdownChange(event.currentTarget.value)}
           disabled={!editable}
           large={true}
         >
-          <Option messageId="select.default" value="" disabled={true} />
+          <Option
+            messageId={editable ? 'select.default' : 'select.disabled'}
+            value=""
+            disabled={true}
+          />
           {this.renderDropdownOptions()}
         </Select>
         {this.renderFreeText()}

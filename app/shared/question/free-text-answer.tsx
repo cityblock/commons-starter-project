@@ -68,7 +68,7 @@ export default class FreeTextAnswer extends React.Component<IProps, IState> {
           value={this.state.text}
           onChange={this.onChange}
           disabled={!editable}
-          placeholderMessageId="textarea.default"
+          placeholderMessageId={editable ? 'textarea.default' : 'textarea.disabled'}
           small={true}
         />
       );

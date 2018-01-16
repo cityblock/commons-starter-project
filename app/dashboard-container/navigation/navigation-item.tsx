@@ -22,15 +22,7 @@ export interface IProps extends IInjectedProps {
 }
 
 export const NavigationItem: React.StatelessComponent<IProps> = (props: IProps) => {
-  const {
-    text,
-    icon,
-    routeBase,
-    selected,
-    isSelected,
-    noDivider,
-    patientResults,
-  } = props;
+  const { text, icon, routeBase, selected, isSelected, noDivider, patientResults } = props;
 
   const containerStyles = classNames(styles.container, {
     [styles.selected]: isSelected,

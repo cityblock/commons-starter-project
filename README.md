@@ -308,6 +308,18 @@ In the same tab, open an IRB session, and execute the following commands, substi
     hmac = OpenSSL::HMAC.hexdigest('SHA256', 'supertopsecret', data)
     topic.publish(data, hmac: hmac)
 
+### Import ICD-10 Codes
+
+On development, run:
+
+    yarn import:icd:dev
+
+On production, run:
+
+    yarn import:icd:production
+
+For exact script usage instructions, read the comments at the top of 'scripts/import-icd-ten-codes.ts'
+
 [nvm]: https://github.com/creationix/nvm
 [zenhub]: https://www.zenhub.com/
 [add]: http://osxdaily.com/2011/12/30/exclude-drives-or-folders-from-spotlight-index-mac-os-x/

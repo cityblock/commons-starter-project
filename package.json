@@ -42,7 +42,8 @@
     "seed": "knex seed:run --knexfile=server/models/knexfile.js",
     "patients:add-admin-tasks-concern:dev": "NODE_ENV=development ts-node -P tsconfig.server.json ./scripts/add-admin-task-concern-to-patients.ts",
     "patients:add-admin-tasks-concern:production": "NODE_ENV=production ts-node -P tsconfig.server.json ./scripts/add-admin-task-concern-to-patients.ts",
-    "import:icd": "NODE_ENV=development ts-node -P tsconfig.server.json ./scripts/import-icd-ten-codes.ts"
+    "import:icd:dev": "NODE_ENV=development ts-node -P tsconfig.server.json ./scripts/import-icd-ten-codes.ts",
+    "import:icd:production": "NODE_ENV=production ts-node -P tsconfig.server.json ./scripts/import-icd-ten-codes.ts"
   },
   "author": "Brennan Moore",
   "jest": {

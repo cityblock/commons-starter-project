@@ -653,6 +653,29 @@ type EventNotificationEdges {
 type Concern implements uniqueId {
   id: ID!
   title: String!
+  diagnosisCodes: [DiagnosisCode!]
+  createdAt: String!
+  updatedAt: String!
+  deletedAt: String
+}
+
+# DiagnosisCode
+type DiagnosisCode implements uniqueId {
+  id: ID!
+  codesetName: String!
+  label: String!
+  code: String!
+  version: String!
+  createdAt: String!
+  updatedAt: String!
+  deletedAt: String
+}
+
+# ConcernDiagnosisCode
+type ConcernDiagnosisCode implements uniqueId {
+  id: ID!
+  concernId: String!
+  diagnosisCodeId: String!
   createdAt: String!
   updatedAt: String!
   deletedAt: String
@@ -1255,6 +1278,18 @@ input ConcernDeleteInput {
   concernId: ID!
 }
 
+input ConcernAddDiagnosisCodeInput {
+  concernId: ID!
+  codesetName: String!
+  code: String!
+  version: String!
+}
+
+input ConcernRemoveDiagnosisCodeInput {
+  concernId: ID!
+  diagnosisCodeId: ID!
+}
+
 input ConcernSuggestInput {
   concernId: ID!
   answerId: ID
@@ -1598,6 +1633,10 @@ type RootMutationType {
   concernEdit(input: ConcernEditInput): Concern
   # Deletes a concern
   concernDelete(input: ConcernDeleteInput): Concern
+  # Add a diagnosis code to a concern
+  concernAddDiagnosisCode(input: ConcernAddDiagnosisCodeInput): Concern
+  # Remove a diagnosis code from a concern
+  concernRemoveDiagnosisCode(input: ConcernRemoveDiagnosisCodeInput): Concern
   # suggest a concern for an answer
   concernSuggestionCreate(input: ConcernSuggestInput): [Concern]
   # delete suggestion a concern for an answer

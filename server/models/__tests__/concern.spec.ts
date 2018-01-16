@@ -2,6 +2,7 @@ import { transaction } from 'objection';
 import * as uuid from 'uuid/v4';
 import Db from '../../db';
 import Concern from '../concern';
+import DiagnosisCode from '../diagnosis-code';
 
 const order = 'asc';
 const orderBy = 'createdAt';
@@ -95,6 +96,189 @@ describe('concern model', () => {
 
         expect(fetchedConcerns.length).toEqual(1);
         expect(foundOrCreatedConcern).toMatchObject(concern);
+      });
+    });
+
+    describe('adding a diagnosis code', () => {
+      it('adds a diagnosis code', async () => {
+        await transaction(Concern.knex(), async txn => {
+          const diagnosisCode = await DiagnosisCode.create(
+            {
+              codesetName: 'ICD-10',
+              code: 'A00',
+              label: 'Cholera',
+              version: '2018',
+            },
+            txn,
+          );
+          const concern = await Concern.create({ title: 'Housing' }, txn);
+          const fetchedConcern = await Concern.get(concern.id, txn);
+
+          expect(fetchedConcern.diagnosisCodes.length).toEqual(0);
+
+          await Concern.addDiagnosisCode(
+            concern.id,
+            {
+              codesetName: 'ICD-10',
+              code: 'A00',
+              version: '2018',
+            },
+            txn,
+          );
+
+          const refetchedConcern = await Concern.get(concern.id, txn);
+
+          expect(refetchedConcern.diagnosisCodes.length).toEqual(1);
+          expect(refetchedConcern.diagnosisCodes).toMatchObject([diagnosisCode]);
+        });
+      });
+
+      it('adds a dignosis code when the code has random dots/spaces in it', async () => {
+        await transaction(Concern.knex(), async txn => {
+          const diagnosisCode = await DiagnosisCode.create(
+            {
+              codesetName: 'ICD-10',
+              code: 'A00',
+              label: 'Cholera',
+              version: '2018',
+            },
+            txn,
+          );
+          const concern = await Concern.create({ title: 'Housing' }, txn);
+          await Concern.addDiagnosisCode(
+            concern.id,
+            {
+              codesetName: 'ICD-10',
+              code: ' .A 0.0 ',
+              version: '2018',
+            },
+            txn,
+          );
+          const fetchedConcern = await Concern.get(concern.id, txn);
+
+          expect(fetchedConcern.diagnosisCodes.length).toEqual(1);
+          expect(fetchedConcern.diagnosisCodes).toMatchObject([diagnosisCode]);
+        });
+      });
+
+      it('adds a diagnosis code when the capitalization is off', async () => {
+        await transaction(Concern.knex(), async txn => {
+          const diagnosisCode = await DiagnosisCode.create(
+            {
+              codesetName: 'ICD-10',
+              code: 'A00',
+              label: 'Cholera',
+              version: '2018',
+            },
+            txn,
+          );
+          const concern = await Concern.create({ title: 'Housing' }, txn);
+          await Concern.addDiagnosisCode(
+            concern.id,
+            {
+              codesetName: 'ICD-10',
+              code: ' .a 0.0 ',
+              version: '2018',
+            },
+            txn,
+          );
+          const fetchedConcern = await Concern.get(concern.id, txn);
+
+          expect(fetchedConcern.diagnosisCodes.length).toEqual(1);
+          expect(fetchedConcern.diagnosisCodes).toMatchObject([diagnosisCode]);
+        });
+      });
+
+      it('throws an error when adding an invalid diagnosis code', async () => {
+        await transaction(Concern.knex(), async txn => {
+          const codesetName = 'ICD-10';
+          const code = 'MadeUpCode';
+          const version = '2018';
+          const concern = await Concern.create({ title: 'Housing' }, txn);
+
+          await expect(
+            Concern.addDiagnosisCode(concern.id, { codesetName, code, version }, txn),
+          ).rejects.toMatch(
+            `Cannot find diagnosis code for codeset: ${codesetName} and code: ${code}`,
+          );
+        });
+      });
+    });
+
+    describe('removing a diagnosis code', () => {
+      it('removes a diagnosis code', async () => {
+        await transaction(Concern.knex(), async txn => {
+          const diagnosisCode = await DiagnosisCode.create(
+            {
+              codesetName: 'ICD-10',
+              code: 'A00',
+              label: 'Cholera',
+              version: '2018',
+            },
+            txn,
+          );
+          const concern = await Concern.create({ title: 'Housing' }, txn);
+          await Concern.addDiagnosisCode(
+            concern.id,
+            {
+              codesetName: 'ICD-10',
+              code: 'A00',
+              version: '2018',
+            },
+            txn,
+          );
+
+          const fetchedConcern = await Concern.get(concern.id, txn);
+          expect(fetchedConcern.diagnosisCodes.length).toEqual(1);
+
+          await Concern.removeDiagnosisCode(concern.id, diagnosisCode.id, txn);
+
+          const refetchedConcern = await Concern.get(concern.id, txn);
+          expect(refetchedConcern.diagnosisCodes.length).toEqual(0);
+
+          // Then, just to be safe, we make sure we can re-add a deleted one
+          await Concern.addDiagnosisCode(
+            concern.id,
+            {
+              codesetName: 'ICD-10',
+              code: 'A00',
+              version: '2018',
+            },
+            txn,
+          );
+
+          const againRefetchedConcern = await Concern.get(concern.id, txn);
+          expect(againRefetchedConcern.diagnosisCodes.length).toEqual(1);
+        });
+      });
+
+      it('is a noop when removing a non-existent diagnosis code', async () => {
+        await transaction(Concern.knex(), async txn => {
+          await DiagnosisCode.create(
+            {
+              codesetName: 'ICD-10',
+              code: 'A00',
+              label: 'Cholera',
+              version: '2018',
+            },
+            txn,
+          );
+          const concern = await Concern.create({ title: 'Housing' }, txn);
+          await Concern.addDiagnosisCode(
+            concern.id,
+            {
+              codesetName: 'ICD-10',
+              code: 'A00',
+              version: '2018',
+            },
+            txn,
+          );
+
+          await Concern.removeDiagnosisCode(concern.id, uuid(), txn);
+
+          const refetchedConcern = await Concern.get(concern.id, txn);
+          expect(refetchedConcern.diagnosisCodes.length).toEqual(1);
+        });
       });
     });
   });

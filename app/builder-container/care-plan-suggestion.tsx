@@ -12,6 +12,7 @@ import {
   FullGoalSuggestionTemplateFragment,
 } from '../graphql/types';
 import * as styles from '../shared/css/two-panel-right.css';
+import Icon from '../shared/library/icon/icon';
 
 interface IProps {
   answerId: string | null;
@@ -101,7 +102,7 @@ class CarePlanSuggestion extends React.Component<allProps, IState> {
       return (
         <div className={suggestionStyles}>
           <div className={styles.flexRow}>
-            <div className={styles.deleteSuggestionButton} onClick={this.onClickDelete} />
+            <Icon name="close" onClick={this.onClickDelete} />
             <div>{suggestion.title}</div>
           </div>
           <ul className={styles.smallMarginPadding}>
@@ -121,7 +122,7 @@ class CarePlanSuggestion extends React.Component<allProps, IState> {
       return (
         <div className={suggestionStyles}>
           <div className={styles.flexRow}>
-            <div className={styles.deleteSuggestionButton} onClick={this.onClickDelete} />
+            <Icon name="close" onClick={this.onClickDelete} />
             <div>{suggestion.title}</div>
           </div>
         </div>

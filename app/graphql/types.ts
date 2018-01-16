@@ -236,6 +236,13 @@ export interface answerCreateMutation {
       createdAt: string,
       updatedAt: string,
       deletedAt: string | null,
+      diagnosisCodes:  Array< {
+        id: string,
+        code: string,
+        codesetName: string,
+        label: string,
+        version: string,
+      } > | null,
     } > | null,
     goalSuggestions:  Array< {
       id: string,
@@ -290,6 +297,13 @@ export interface answerDeleteMutation {
       createdAt: string,
       updatedAt: string,
       deletedAt: string | null,
+      diagnosisCodes:  Array< {
+        id: string,
+        code: string,
+        codesetName: string,
+        label: string,
+        version: string,
+      } > | null,
     } > | null,
     goalSuggestions:  Array< {
       id: string,
@@ -351,6 +365,13 @@ export interface answerEditMutation {
       createdAt: string,
       updatedAt: string,
       deletedAt: string | null,
+      diagnosisCodes:  Array< {
+        id: string,
+        code: string,
+        codesetName: string,
+        label: string,
+        version: string,
+      } > | null,
     } > | null,
     goalSuggestions:  Array< {
       id: string,
@@ -417,6 +438,13 @@ export interface carePlanSuggestionAcceptMutation {
       createdAt: string,
       updatedAt: string,
       deletedAt: string | null,
+      diagnosisCodes:  Array< {
+        id: string,
+        code: string,
+        codesetName: string,
+        label: string,
+        version: string,
+      } > | null,
     } | null,
     goalSuggestionTemplateId: string | null,
     goalSuggestionTemplate:  {
@@ -495,6 +523,13 @@ export interface carePlanSuggestionDismissMutation {
       createdAt: string,
       updatedAt: string,
       deletedAt: string | null,
+      diagnosisCodes:  Array< {
+        id: string,
+        code: string,
+        codesetName: string,
+        label: string,
+        version: string,
+      } > | null,
     } | null,
     goalSuggestionTemplateId: string | null,
     goalSuggestionTemplate:  {
@@ -605,6 +640,31 @@ export interface computedFieldFlagCreateMutation {
   } | null,
 };
 
+export interface concernAddDiagnosisCodeMutationVariables {
+  concernId: string,
+  codesetName: string,
+  code: string,
+  version: string,
+};
+
+export interface concernAddDiagnosisCodeMutation {
+  // Add a diagnosis code to a concern
+  concernAddDiagnosisCode:  {
+    id: string,
+    title: string,
+    createdAt: string,
+    updatedAt: string,
+    deletedAt: string | null,
+    diagnosisCodes:  Array< {
+      id: string,
+      code: string,
+      codesetName: string,
+      label: string,
+      version: string,
+    } > | null,
+  } | null,
+};
+
 export interface concernCreateMutationVariables {
   title: string,
 };
@@ -617,6 +677,13 @@ export interface concernCreateMutation {
     createdAt: string,
     updatedAt: string,
     deletedAt: string | null,
+    diagnosisCodes:  Array< {
+      id: string,
+      code: string,
+      codesetName: string,
+      label: string,
+      version: string,
+    } > | null,
   } | null,
 };
 
@@ -632,6 +699,13 @@ export interface concernDeleteMutation {
     createdAt: string,
     updatedAt: string,
     deletedAt: string | null,
+    diagnosisCodes:  Array< {
+      id: string,
+      code: string,
+      codesetName: string,
+      label: string,
+      version: string,
+    } > | null,
   } | null,
 };
 
@@ -648,6 +722,36 @@ export interface concernEditMutation {
     createdAt: string,
     updatedAt: string,
     deletedAt: string | null,
+    diagnosisCodes:  Array< {
+      id: string,
+      code: string,
+      codesetName: string,
+      label: string,
+      version: string,
+    } > | null,
+  } | null,
+};
+
+export interface concernRemoveDiagnosisCodeMutationVariables {
+  concernId: string,
+  diagnosisCodeId: string,
+};
+
+export interface concernRemoveDiagnosisCodeMutation {
+  // Remove a diagnosis code from a concern
+  concernRemoveDiagnosisCode:  {
+    id: string,
+    title: string,
+    createdAt: string,
+    updatedAt: string,
+    deletedAt: string | null,
+    diagnosisCodes:  Array< {
+      id: string,
+      code: string,
+      codesetName: string,
+      label: string,
+      version: string,
+    } > | null,
   } | null,
 };
 
@@ -665,6 +769,13 @@ export interface concernSuggestionCreateMutation {
     createdAt: string,
     updatedAt: string,
     deletedAt: string | null,
+    diagnosisCodes:  Array< {
+      id: string,
+      code: string,
+      codesetName: string,
+      label: string,
+      version: string,
+    } > | null,
   } | null > | null,
 };
 
@@ -682,6 +793,13 @@ export interface concernSuggestionDeleteMutation {
     createdAt: string,
     updatedAt: string,
     deletedAt: string | null,
+    diagnosisCodes:  Array< {
+      id: string,
+      code: string,
+      codesetName: string,
+      label: string,
+      version: string,
+    } > | null,
   } | null > | null,
 };
 
@@ -909,6 +1027,13 @@ export interface getAnswerQuery {
       createdAt: string,
       updatedAt: string,
       deletedAt: string | null,
+      diagnosisCodes:  Array< {
+        id: string,
+        code: string,
+        codesetName: string,
+        label: string,
+        version: string,
+      } > | null,
     } > | null,
     goalSuggestions:  Array< {
       id: string,
@@ -987,6 +1112,13 @@ export interface getConcernSuggestionsForAnswerQuery {
     createdAt: string,
     updatedAt: string,
     deletedAt: string | null,
+    diagnosisCodes:  Array< {
+      id: string,
+      code: string,
+      codesetName: string,
+      label: string,
+      version: string,
+    } > | null,
   } | null >,
 };
 
@@ -1002,6 +1134,13 @@ export interface getConcernQuery {
     createdAt: string,
     updatedAt: string,
     deletedAt: string | null,
+    diagnosisCodes:  Array< {
+      id: string,
+      code: string,
+      codesetName: string,
+      label: string,
+      version: string,
+    } > | null,
   },
 };
 
@@ -1017,6 +1156,13 @@ export interface getConcernsQuery {
     createdAt: string,
     updatedAt: string,
     deletedAt: string | null,
+    diagnosisCodes:  Array< {
+      id: string,
+      code: string,
+      codesetName: string,
+      label: string,
+      version: string,
+    } > | null,
   } | null >,
 };
 
@@ -1263,6 +1409,13 @@ export interface getPatientAnswersQuery {
         createdAt: string,
         updatedAt: string,
         deletedAt: string | null,
+        diagnosisCodes:  Array< {
+          id: string,
+          code: string,
+          codesetName: string,
+          label: string,
+          version: string,
+        } > | null,
       } > | null,
       goalSuggestions:  Array< {
         id: string,
@@ -1334,6 +1487,13 @@ export interface getPatientCarePlanSuggestionsQuery {
       createdAt: string,
       updatedAt: string,
       deletedAt: string | null,
+      diagnosisCodes:  Array< {
+        id: string,
+        code: string,
+        codesetName: string,
+        label: string,
+        version: string,
+      } > | null,
     } | null,
     goalSuggestionTemplateId: string | null,
     goalSuggestionTemplate:  {
@@ -1398,6 +1558,13 @@ export interface getPatientCarePlanQuery {
         createdAt: string,
         updatedAt: string,
         deletedAt: string | null,
+        diagnosisCodes:  Array< {
+          id: string,
+          code: string,
+          codesetName: string,
+          label: string,
+          version: string,
+        } > | null,
       },
       patientId: string,
       patient:  {
@@ -1700,6 +1867,13 @@ export interface getPatientScreeningToolSubmissionForPatientAndScreeningToolQuer
         createdAt: string,
         updatedAt: string,
         deletedAt: string | null,
+        diagnosisCodes:  Array< {
+          id: string,
+          code: string,
+          codesetName: string,
+          label: string,
+          version: string,
+        } > | null,
       } | null,
       goalSuggestionTemplateId: string | null,
       goalSuggestionTemplate:  {
@@ -1859,6 +2033,13 @@ export interface getPatientScreeningToolSubmissionQuery {
         createdAt: string,
         updatedAt: string,
         deletedAt: string | null,
+        diagnosisCodes:  Array< {
+          id: string,
+          code: string,
+          codesetName: string,
+          label: string,
+          version: string,
+        } > | null,
       } | null,
       goalSuggestionTemplateId: string | null,
       goalSuggestionTemplate:  {
@@ -2295,6 +2476,13 @@ export interface getProgressNoteActivityForProgressNoteQuery {
             createdAt: string,
             updatedAt: string,
             deletedAt: string | null,
+            diagnosisCodes:  Array< {
+              id: string,
+              code: string,
+              codesetName: string,
+              label: string,
+              version: string,
+            } > | null,
           } > | null,
           goalSuggestions:  Array< {
             id: string,
@@ -2357,6 +2545,13 @@ export interface getProgressNoteActivityForProgressNoteQuery {
             createdAt: string,
             updatedAt: string,
             deletedAt: string | null,
+            diagnosisCodes:  Array< {
+              id: string,
+              code: string,
+              codesetName: string,
+              label: string,
+              version: string,
+            } > | null,
           } > | null,
           goalSuggestions:  Array< {
             id: string,
@@ -2443,6 +2638,13 @@ export interface getProgressNoteActivityForProgressNoteQuery {
           createdAt: string,
           updatedAt: string,
           deletedAt: string | null,
+          diagnosisCodes:  Array< {
+            id: string,
+            code: string,
+            codesetName: string,
+            label: string,
+            version: string,
+          } > | null,
         },
         patientId: string,
         patient:  {
@@ -2784,6 +2986,13 @@ export interface getQuestionAnswersQuery {
       createdAt: string,
       updatedAt: string,
       deletedAt: string | null,
+      diagnosisCodes:  Array< {
+        id: string,
+        code: string,
+        codesetName: string,
+        label: string,
+        version: string,
+      } > | null,
     } > | null,
     goalSuggestions:  Array< {
       id: string,
@@ -2850,6 +3059,13 @@ export interface getQuestionQuery {
         createdAt: string,
         updatedAt: string,
         deletedAt: string | null,
+        diagnosisCodes:  Array< {
+          id: string,
+          code: string,
+          codesetName: string,
+          label: string,
+          version: string,
+        } > | null,
       } > | null,
       goalSuggestions:  Array< {
         id: string,
@@ -2933,6 +3149,13 @@ export interface getQuestionsQuery {
         createdAt: string,
         updatedAt: string,
         deletedAt: string | null,
+        diagnosisCodes:  Array< {
+          id: string,
+          code: string,
+          codesetName: string,
+          label: string,
+          version: string,
+        } > | null,
       } > | null,
       goalSuggestions:  Array< {
         id: string,
@@ -3022,6 +3245,13 @@ export interface getRiskAreaAssessmentSubmissionForPatientQuery {
         createdAt: string,
         updatedAt: string,
         deletedAt: string | null,
+        diagnosisCodes:  Array< {
+          id: string,
+          code: string,
+          codesetName: string,
+          label: string,
+          version: string,
+        } > | null,
       } | null,
       goalSuggestionTemplateId: string | null,
       goalSuggestionTemplate:  {
@@ -3109,6 +3339,13 @@ export interface getRiskAreaAssessmentSubmissionQuery {
         createdAt: string,
         updatedAt: string,
         deletedAt: string | null,
+        diagnosisCodes:  Array< {
+          id: string,
+          code: string,
+          codesetName: string,
+          label: string,
+          version: string,
+        } > | null,
       } | null,
       goalSuggestionTemplateId: string | null,
       goalSuggestionTemplate:  {
@@ -3312,6 +3549,13 @@ export interface getScreeningToolQuery {
         createdAt: string,
         updatedAt: string,
         deletedAt: string | null,
+        diagnosisCodes:  Array< {
+          id: string,
+          code: string,
+          codesetName: string,
+          label: string,
+          version: string,
+        } > | null,
       } >,
       goalSuggestions:  Array< {
         id: string,
@@ -3393,6 +3637,13 @@ export interface getScreeningToolsForRiskAreaQuery {
         createdAt: string,
         updatedAt: string,
         deletedAt: string | null,
+        diagnosisCodes:  Array< {
+          id: string,
+          code: string,
+          codesetName: string,
+          label: string,
+          version: string,
+        } > | null,
       } >,
       goalSuggestions:  Array< {
         id: string,
@@ -3470,6 +3721,13 @@ export interface getScreeningToolsQuery {
         createdAt: string,
         updatedAt: string,
         deletedAt: string | null,
+        diagnosisCodes:  Array< {
+          id: string,
+          code: string,
+          codesetName: string,
+          label: string,
+          version: string,
+        } > | null,
       } >,
       goalSuggestions:  Array< {
         id: string,
@@ -3912,6 +4170,13 @@ export interface patientAnswersCreateMutation {
         createdAt: string,
         updatedAt: string,
         deletedAt: string | null,
+        diagnosisCodes:  Array< {
+          id: string,
+          code: string,
+          codesetName: string,
+          label: string,
+          version: string,
+        } > | null,
       } > | null,
       goalSuggestions:  Array< {
         id: string,
@@ -3970,6 +4235,13 @@ export interface patientConcernBulkEditMutation {
       createdAt: string,
       updatedAt: string,
       deletedAt: string | null,
+      diagnosisCodes:  Array< {
+        id: string,
+        code: string,
+        codesetName: string,
+        label: string,
+        version: string,
+      } > | null,
     },
     patientId: string,
     patient:  {
@@ -4067,6 +4339,13 @@ export interface patientConcernCreateMutation {
       createdAt: string,
       updatedAt: string,
       deletedAt: string | null,
+      diagnosisCodes:  Array< {
+        id: string,
+        code: string,
+        codesetName: string,
+        label: string,
+        version: string,
+      } > | null,
     },
     patientId: string,
     patient:  {
@@ -4162,6 +4441,13 @@ export interface patientConcernDeleteMutation {
       createdAt: string,
       updatedAt: string,
       deletedAt: string | null,
+      diagnosisCodes:  Array< {
+        id: string,
+        code: string,
+        codesetName: string,
+        label: string,
+        version: string,
+      } > | null,
     },
     patientId: string,
     patient:  {
@@ -4494,6 +4780,13 @@ export interface patientScreeningToolSubmissionCreateMutation {
         createdAt: string,
         updatedAt: string,
         deletedAt: string | null,
+        diagnosisCodes:  Array< {
+          id: string,
+          code: string,
+          codesetName: string,
+          label: string,
+          version: string,
+        } > | null,
       } | null,
       goalSuggestionTemplateId: string | null,
       goalSuggestionTemplate:  {
@@ -4622,6 +4915,13 @@ export interface patientScreeningToolSubmissionScoreMutation {
         createdAt: string,
         updatedAt: string,
         deletedAt: string | null,
+        diagnosisCodes:  Array< {
+          id: string,
+          code: string,
+          codesetName: string,
+          label: string,
+          version: string,
+        } > | null,
       } | null,
       goalSuggestionTemplateId: string | null,
       goalSuggestionTemplate:  {
@@ -5038,6 +5338,13 @@ export interface questionCreateMutation {
         createdAt: string,
         updatedAt: string,
         deletedAt: string | null,
+        diagnosisCodes:  Array< {
+          id: string,
+          code: string,
+          codesetName: string,
+          label: string,
+          version: string,
+        } > | null,
       } > | null,
       goalSuggestions:  Array< {
         id: string,
@@ -5120,6 +5427,13 @@ export interface questionDeleteMutation {
         createdAt: string,
         updatedAt: string,
         deletedAt: string | null,
+        diagnosisCodes:  Array< {
+          id: string,
+          code: string,
+          codesetName: string,
+          label: string,
+          version: string,
+        } > | null,
       } > | null,
       goalSuggestions:  Array< {
         id: string,
@@ -5207,6 +5521,13 @@ export interface questionEditMutation {
         createdAt: string,
         updatedAt: string,
         deletedAt: string | null,
+        diagnosisCodes:  Array< {
+          id: string,
+          code: string,
+          codesetName: string,
+          label: string,
+          version: string,
+        } > | null,
       } > | null,
       goalSuggestions:  Array< {
         id: string,
@@ -5335,6 +5656,13 @@ export interface riskAreaAssessmentSubmissionCompleteMutation {
         createdAt: string,
         updatedAt: string,
         deletedAt: string | null,
+        diagnosisCodes:  Array< {
+          id: string,
+          code: string,
+          codesetName: string,
+          label: string,
+          version: string,
+        } > | null,
       } | null,
       goalSuggestionTemplateId: string | null,
       goalSuggestionTemplate:  {
@@ -5423,6 +5751,13 @@ export interface riskAreaAssessmentSubmissionCreateMutation {
         createdAt: string,
         updatedAt: string,
         deletedAt: string | null,
+        diagnosisCodes:  Array< {
+          id: string,
+          code: string,
+          codesetName: string,
+          label: string,
+          version: string,
+        } > | null,
       } | null,
       goalSuggestionTemplateId: string | null,
       goalSuggestionTemplate:  {
@@ -5657,6 +5992,13 @@ export interface screeningToolCreateMutation {
         createdAt: string,
         updatedAt: string,
         deletedAt: string | null,
+        diagnosisCodes:  Array< {
+          id: string,
+          code: string,
+          codesetName: string,
+          label: string,
+          version: string,
+        } > | null,
       } >,
       goalSuggestions:  Array< {
         id: string,
@@ -5738,6 +6080,13 @@ export interface screeningToolDeleteMutation {
         createdAt: string,
         updatedAt: string,
         deletedAt: string | null,
+        diagnosisCodes:  Array< {
+          id: string,
+          code: string,
+          codesetName: string,
+          label: string,
+          version: string,
+        } > | null,
       } >,
       goalSuggestions:  Array< {
         id: string,
@@ -5821,6 +6170,13 @@ export interface screeningToolEditMutation {
         createdAt: string,
         updatedAt: string,
         deletedAt: string | null,
+        diagnosisCodes:  Array< {
+          id: string,
+          code: string,
+          codesetName: string,
+          label: string,
+          version: string,
+        } > | null,
       } >,
       goalSuggestions:  Array< {
         id: string,
@@ -5887,6 +6243,13 @@ export interface screeningToolScoreRangeCreateMutation {
       createdAt: string,
       updatedAt: string,
       deletedAt: string | null,
+      diagnosisCodes:  Array< {
+        id: string,
+        code: string,
+        codesetName: string,
+        label: string,
+        version: string,
+      } > | null,
     } >,
     goalSuggestions:  Array< {
       id: string,
@@ -5933,6 +6296,13 @@ export interface screeningToolScoreRangeDeleteMutation {
       createdAt: string,
       updatedAt: string,
       deletedAt: string | null,
+      diagnosisCodes:  Array< {
+        id: string,
+        code: string,
+        codesetName: string,
+        label: string,
+        version: string,
+      } > | null,
     } >,
     goalSuggestions:  Array< {
       id: string,
@@ -5984,6 +6354,13 @@ export interface screeningToolScoreRangeEditMutation {
       createdAt: string,
       updatedAt: string,
       deletedAt: string | null,
+      diagnosisCodes:  Array< {
+        id: string,
+        code: string,
+        codesetName: string,
+        label: string,
+        version: string,
+      } > | null,
     } >,
     goalSuggestions:  Array< {
       id: string,
@@ -6645,6 +7022,13 @@ export interface FullAnswerFragment {
     createdAt: string,
     updatedAt: string,
     deletedAt: string | null,
+    diagnosisCodes:  Array< {
+      id: string,
+      code: string,
+      codesetName: string,
+      label: string,
+      version: string,
+    } > | null,
   } > | null,
   goalSuggestions:  Array< {
     id: string,
@@ -6715,6 +7099,13 @@ export interface FullCarePlanSuggestionFragment {
     createdAt: string,
     updatedAt: string,
     deletedAt: string | null,
+    diagnosisCodes:  Array< {
+      id: string,
+      code: string,
+      codesetName: string,
+      label: string,
+      version: string,
+    } > | null,
   } | null,
   goalSuggestionTemplateId: string | null,
   goalSuggestionTemplate:  {
@@ -6802,6 +7193,13 @@ export interface FullCarePlanUpdateEventFragment {
       createdAt: string,
       updatedAt: string,
       deletedAt: string | null,
+      diagnosisCodes:  Array< {
+        id: string,
+        code: string,
+        codesetName: string,
+        label: string,
+        version: string,
+      } > | null,
     },
     patientId: string,
     patient:  {
@@ -6964,6 +7362,21 @@ export interface FullConcernFragment {
   createdAt: string,
   updatedAt: string,
   deletedAt: string | null,
+  diagnosisCodes:  Array< {
+    id: string,
+    code: string,
+    codesetName: string,
+    label: string,
+    version: string,
+  } > | null,
+};
+
+export interface FullDiagnosisCodeFragment {
+  id: string,
+  code: string,
+  codesetName: string,
+  label: string,
+  version: string,
 };
 
 export interface FullEventNotificationFragment {
@@ -7122,6 +7535,13 @@ export interface FullPatientAnswerEventFragment {
         createdAt: string,
         updatedAt: string,
         deletedAt: string | null,
+        diagnosisCodes:  Array< {
+          id: string,
+          code: string,
+          codesetName: string,
+          label: string,
+          version: string,
+        } > | null,
       } > | null,
       goalSuggestions:  Array< {
         id: string,
@@ -7184,6 +7604,13 @@ export interface FullPatientAnswerEventFragment {
         createdAt: string,
         updatedAt: string,
         deletedAt: string | null,
+        diagnosisCodes:  Array< {
+          id: string,
+          code: string,
+          codesetName: string,
+          label: string,
+          version: string,
+        } > | null,
       } > | null,
       goalSuggestions:  Array< {
         id: string,
@@ -7252,6 +7679,13 @@ export interface FullPatientAnswerFragment {
       createdAt: string,
       updatedAt: string,
       deletedAt: string | null,
+      diagnosisCodes:  Array< {
+        id: string,
+        code: string,
+        codesetName: string,
+        label: string,
+        version: string,
+      } > | null,
     } > | null,
     goalSuggestions:  Array< {
       id: string,
@@ -7302,6 +7736,13 @@ export interface FullPatientConcernFragment {
     createdAt: string,
     updatedAt: string,
     deletedAt: string | null,
+    diagnosisCodes:  Array< {
+      id: string,
+      code: string,
+      codesetName: string,
+      label: string,
+      version: string,
+    } > | null,
   },
   patientId: string,
   patient:  {
@@ -7518,6 +7959,13 @@ export interface FullPatientScreeningToolSubmissionFragment {
       createdAt: string,
       updatedAt: string,
       deletedAt: string | null,
+      diagnosisCodes:  Array< {
+        id: string,
+        code: string,
+        codesetName: string,
+        label: string,
+        version: string,
+      } > | null,
     } | null,
     goalSuggestionTemplateId: string | null,
     goalSuggestionTemplate:  {
@@ -7690,6 +8138,13 @@ export interface FullProgressNoteActivityFragment {
           createdAt: string,
           updatedAt: string,
           deletedAt: string | null,
+          diagnosisCodes:  Array< {
+            id: string,
+            code: string,
+            codesetName: string,
+            label: string,
+            version: string,
+          } > | null,
         } > | null,
         goalSuggestions:  Array< {
           id: string,
@@ -7752,6 +8207,13 @@ export interface FullProgressNoteActivityFragment {
           createdAt: string,
           updatedAt: string,
           deletedAt: string | null,
+          diagnosisCodes:  Array< {
+            id: string,
+            code: string,
+            codesetName: string,
+            label: string,
+            version: string,
+          } > | null,
         } > | null,
         goalSuggestions:  Array< {
           id: string,
@@ -7838,6 +8300,13 @@ export interface FullProgressNoteActivityFragment {
         createdAt: string,
         updatedAt: string,
         deletedAt: string | null,
+        diagnosisCodes:  Array< {
+          id: string,
+          code: string,
+          codesetName: string,
+          label: string,
+          version: string,
+        } > | null,
       },
       patientId: string,
       patient:  {
@@ -8103,6 +8572,13 @@ export interface FullQuestionFragment {
       createdAt: string,
       updatedAt: string,
       deletedAt: string | null,
+      diagnosisCodes:  Array< {
+        id: string,
+        code: string,
+        codesetName: string,
+        label: string,
+        version: string,
+      } > | null,
     } > | null,
     goalSuggestions:  Array< {
       id: string,
@@ -8211,6 +8687,13 @@ export interface FullRiskAreaAssessmentSubmissionFragment {
       createdAt: string,
       updatedAt: string,
       deletedAt: string | null,
+      diagnosisCodes:  Array< {
+        id: string,
+        code: string,
+        codesetName: string,
+        label: string,
+        version: string,
+      } > | null,
     } | null,
     goalSuggestionTemplateId: string | null,
     goalSuggestionTemplate:  {
@@ -8377,6 +8860,13 @@ export interface FullScreeningToolScoreRangeFragment {
     createdAt: string,
     updatedAt: string,
     deletedAt: string | null,
+    diagnosisCodes:  Array< {
+      id: string,
+      code: string,
+      codesetName: string,
+      label: string,
+      version: string,
+    } > | null,
   } >,
   goalSuggestions:  Array< {
     id: string,
@@ -8435,6 +8925,13 @@ export interface FullScreeningToolFragment {
       createdAt: string,
       updatedAt: string,
       deletedAt: string | null,
+      diagnosisCodes:  Array< {
+        id: string,
+        code: string,
+        codesetName: string,
+        label: string,
+        version: string,
+      } > | null,
     } >,
     goalSuggestions:  Array< {
       id: string,

@@ -1,5 +1,11 @@
 import { pickBy } from 'lodash';
-import { IConcernCreateInput, IConcernDeleteInput, IConcernEditInput } from 'schema';
+import {
+  IConcernAddDiagnosisCodeInput,
+  IConcernCreateInput,
+  IConcernDeleteInput,
+  IConcernEditInput,
+  IConcernRemoveDiagnosisCodeInput,
+} from 'schema';
 import Concern, { ConcernOrderOptions } from '../models/concern';
 import accessControls from './shared/access-controls';
 import { formatOrderOptions, IContext } from './shared/utils';
@@ -18,6 +24,14 @@ export interface IEditConcernOptions {
 
 export interface IDeleteConcernOptions {
   input: IConcernDeleteInput;
+}
+
+export interface IAddDiagnosisCodeArgs {
+  input: IConcernAddDiagnosisCodeInput;
+}
+
+export interface IRemoveDiagnosisCodeArgs {
+  input: IConcernRemoveDiagnosisCodeInput;
 }
 
 export async function concernCreate(root: any, { input }: IConcernCreateArgs, context: IContext) {
@@ -68,4 +82,26 @@ export async function concernDelete(
   await accessControls.isAllowedForUser(userRole, 'edit', 'concern');
 
   return Concern.delete(args.input.concernId);
+}
+
+export async function concernAddDiagnosisCode(
+  root: any,
+  { input }: IAddDiagnosisCodeArgs,
+  { db, userRole, txn }: IContext,
+) {
+  await accessControls.isAllowedForUser(userRole, 'edit', 'concern');
+  const { concernId, codesetName, code, version } = input;
+
+  return await Concern.addDiagnosisCode(concernId, { codesetName, code, version }, txn);
+}
+
+export async function concernRemoveDiagnosisCode(
+  root: any,
+  { input }: IRemoveDiagnosisCodeArgs,
+  { db, userRole, txn }: IContext,
+) {
+  await accessControls.isAllowedForUser(userRole, 'edit', 'concern');
+  const { concernId, diagnosisCodeId } = input;
+
+  return await Concern.removeDiagnosisCode(concernId, diagnosisCodeId, txn);
 }

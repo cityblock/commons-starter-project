@@ -1,7 +1,12 @@
+#import "./full-diagnosis-code.graphql"
+
 fragment FullConcern on Concern {
   id
   title
   createdAt
   updatedAt
   deletedAt
+  diagnosisCodes {
+    ...FullDiagnosisCode
+  }
 }

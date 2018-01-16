@@ -21,3 +21,9 @@
 .input::-webkit-input-placeholder {
   color: var(--light-gray-font-color);
 }
+
+.input.small {
+  font-size: var(--small-font-size);
+  line-height: var(--small-font-line-height);
+  padding: 5px 20px;
+}

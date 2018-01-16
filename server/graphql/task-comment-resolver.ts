@@ -24,15 +24,20 @@ export interface ITaskCommentCreateOptions {
 export async function taskCommentCreate(
   source: any,
   { input }: ITaskCommentCreateOptions,
-  { userId, userRole }: IContext,
+  context: IContext,
 ): Promise<TaskComment> {
   const { taskId, body } = input;
+  const { userId, userRole } = context;
+  const existingTxn = context.txn;
   // TODO: Improve access controls here. Requirements unclear ATM
   await accessControls.isAllowed(userRole, 'edit', 'task');
   checkUserLoggedIn(userId);
 
   return await transaction(TaskComment.knex() as any, async txn => {
-    const taskComment = await TaskComment.create({ userId: userId!, taskId, body }, txn);
+    const taskComment = await TaskComment.create(
+      { userId: userId!, taskId, body },
+      existingTxn || txn,
+    );
 
     await TaskEvent.create(
       {
@@ -41,7 +46,7 @@ export async function taskCommentCreate(
         eventType: 'add_comment',
         eventCommentId: taskComment.id,
       },
-      txn,
+      existingTxn || txn,
     );
 
     return taskComment;
@@ -58,13 +63,14 @@ export async function taskCommentEdit(
   context: IContext,
 ): Promise<TaskComment> {
   const { userRole, userId } = context;
+  const existingTxn = context.txn;
   const { taskCommentId, body } = input;
   // TODO: Improve access controls here. Requirements unclear ATM
   await accessControls.isAllowed(userRole, 'edit', 'task');
   checkUserLoggedIn(userId);
 
   return await transaction(TaskComment.knex() as any, async txn => {
-    const taskComment = await TaskComment.update(taskCommentId, body, txn);
+    const taskComment = await TaskComment.update(taskCommentId, body, existingTxn || txn);
 
     await TaskEvent.create(
       {
@@ -73,7 +79,7 @@ export async function taskCommentEdit(
         eventType: 'edit_comment',
         eventCommentId: taskComment.id,
       },
-      txn,
+      existingTxn || txn,
     );
 
     return taskComment;
@@ -90,13 +96,14 @@ export async function taskCommentDelete(
   context: IContext,
 ): Promise<TaskComment> {
   const { userRole, userId } = context;
+  const existingTxn = context.txn;
   const { taskCommentId } = input;
   // TODO: Improve access controls here. Requirements unclear ATM
   await accessControls.isAllowed(userRole, 'edit', 'task');
   checkUserLoggedIn(userId);
 
   return await transaction(TaskComment.knex() as any, async txn => {
-    const taskComment = await TaskComment.delete(taskCommentId, txn);
+    const taskComment = await TaskComment.delete(taskCommentId, existingTxn || txn);
 
     await TaskEvent.create(
       {
@@ -105,7 +112,7 @@ export async function taskCommentDelete(
         eventType: 'delete_comment',
         eventCommentId: taskComment.id,
       },
-      txn,
+      existingTxn || txn,
     );
 
     return taskComment;
@@ -115,7 +122,7 @@ export async function taskCommentDelete(
 export async function resolveTaskComments(
   root: any,
   args: IPaginationOptions & { taskId: string },
-  { db, userRole, userId }: IContext,
+  { db, userRole, userId, txn }: IContext,
 ): Promise<ITaskCommentEdges> {
   // TODO: Improve task access controls
   await accessControls.isAllowed(userRole, 'view', 'task');
@@ -124,10 +131,14 @@ export async function resolveTaskComments(
   const pageNumber = args.pageNumber || 0;
   const pageSize = args.pageSize || 10;
 
-  const taskComments = await TaskComment.getTaskComments(args.taskId, {
-    pageNumber,
-    pageSize,
-  });
+  const taskComments = await TaskComment.getTaskComments(
+    args.taskId,
+    {
+      pageNumber,
+      pageSize,
+    },
+    txn,
+  );
   const taskCommentEdges = taskComments.results.map(
     (taskComment: TaskComment) => formatRelayEdge(taskComment, taskComment.id) as ITaskCommentNode,
   );
@@ -147,10 +158,10 @@ export async function resolveTaskComments(
 export async function resolveTaskComment(
   rot: any,
   args: { taskCommentId: string },
-  { db, userRole, userId }: IContext,
+  { db, userRole, userId, txn }: IContext,
 ): Promise<ITaskComment> {
   await accessControls.isAllowed(userRole, 'view', 'task');
   checkUserLoggedIn(userId);
 
-  return await TaskComment.get(args.taskCommentId);
+  return await TaskComment.get(args.taskCommentId, txn);
 }

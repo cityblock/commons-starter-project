@@ -16,6 +16,7 @@ it('renders the correct concern suggestion options', () => {
     dueAt: 'Thu Jul 13 2017 16:52:56 GMT-0400 (EDT)',
     deletedAt: null,
     title: 'New Concern Title',
+    diagnosisCodes: [],
   };
 
   answer.concernSuggestions = [concern] as any;

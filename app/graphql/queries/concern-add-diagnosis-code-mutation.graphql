@@ -1,0 +1,14 @@
+#import "../fragments/full-concern.graphql"
+
+mutation concernAddDiagnosisCode(
+  $concernId: ID!
+  $codesetName: String!
+  $code: String!
+  $version: String!
+) {
+  concernAddDiagnosisCode(
+    input: { concernId: $concernId, codesetName: $codesetName, code: $code, version: $version }
+  ) {
+    ...FullConcern
+  }
+}

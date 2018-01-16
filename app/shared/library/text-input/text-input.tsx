@@ -13,6 +13,7 @@ interface IProps {
   onBlur?: () => void;
   onFocus?: () => void;
   onKeyDown?: (e: React.KeyboardEvent<HTMLInputElement>) => void;
+  smallInput?: boolean;
 }
 
 const TextInput: React.StatelessComponent<IProps> = (props: IProps) => {
@@ -26,8 +27,11 @@ const TextInput: React.StatelessComponent<IProps> = (props: IProps) => {
     className,
     name,
     id,
+    smallInput,
   } = props;
-  const inputStyles = classNames(styles.input, className);
+  const inputStyles = classNames(styles.input, className, {
+    [styles.small]: !!smallInput,
+  });
 
   if (placeholderMessageId) {
     return (

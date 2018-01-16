@@ -104,6 +104,10 @@ exports[`shallow rendered renders with concern 1`] = `
           value=""
         />
       </div>
+      <ConcernDiagnosisCodes
+        concernId="concern-id"
+        diagnosisCodes={Array []}
+      />
     </div>
   </div>
 </div>

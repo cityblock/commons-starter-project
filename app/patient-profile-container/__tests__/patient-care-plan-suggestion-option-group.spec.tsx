@@ -39,6 +39,7 @@ const carePlan = {
         createdAt: '2017-09-07T13:45:14.532Z',
         updatedAt: '2017-09-07T13:45:14.532Z',
         deletedAt: null,
+        diagnosisCodes: [],
       },
       patientGoals: [],
       patientId: 'patient-id',

@@ -375,7 +375,7 @@ declare module 'schema' {
   /**
     description: An object with a Globally Unique ID
   */
-  type uniqueId = IUser | IPatient | IPatientSearchResult | IPatientForDashboard | IClinic | ITask | IPatientGoal | IPatientConcern | IConcern | IGoalSuggestionTemplate | ITaskTemplate | ITaskComment | IRiskAreaGroup | IRiskArea | IQuestion | IAnswer | IScreeningTool | IScreeningToolScoreRange | IPatientScreeningToolSubmission | ICarePlanSuggestion | IRiskAreaAssessmentSubmission | IScreeningToolScoreRangeForPatientScreeningToolSubmission | IPatientAnswer | IQuestionCondition | IComputedField | IRiskAreaGroupForPatient | IRiskAreaForPatient | IScreeningToolForPatient | IEventNotification | ITaskEvent | IProgressNote | IProgressNoteTemplate | IPatientTaskSuggestion | IPatientAnswerEvent | ICarePlanUpdateEvent | IQuickCall;
+  type uniqueId = IUser | IPatient | IPatientSearchResult | IPatientForDashboard | IClinic | ITask | IPatientGoal | IPatientConcern | IConcern | IDiagnosisCode | IGoalSuggestionTemplate | ITaskTemplate | ITaskComment | IRiskAreaGroup | IRiskArea | IQuestion | IAnswer | IScreeningTool | IScreeningToolScoreRange | IPatientScreeningToolSubmission | ICarePlanSuggestion | IRiskAreaAssessmentSubmission | IScreeningToolScoreRangeForPatientScreeningToolSubmission | IPatientAnswer | IQuestionCondition | IComputedField | IRiskAreaGroupForPatient | IRiskAreaForPatient | IScreeningToolForPatient | IEventNotification | ITaskEvent | IProgressNote | IProgressNoteTemplate | IPatientTaskSuggestion | IPatientAnswerEvent | ICarePlanUpdateEvent | IQuickCall | IConcernDiagnosisCode;
 
   /**
     description: An object with a Globally Unique ID
@@ -629,6 +629,21 @@ declare module 'schema' {
   interface IConcern {
     id: string;
     title: string;
+    diagnosisCodes: Array<IDiagnosisCode>;
+    createdAt: string;
+    updatedAt: string;
+    deletedAt: string | null;
+  }
+
+  /**
+    description: DiagnosisCode
+  */
+  interface IDiagnosisCode {
+    id: string;
+    codesetName: string;
+    label: string;
+    code: string;
+    version: string;
     createdAt: string;
     updatedAt: string;
     deletedAt: string | null;
@@ -1419,6 +1434,14 @@ declare module 'schema' {
   */
     concernDelete: IConcern | null;
     /**
+    description: Add a diagnosis code to a concern
+  */
+    concernAddDiagnosisCode: IConcern | null;
+    /**
+    description: Remove a diagnosis code from a concern
+  */
+    concernRemoveDiagnosisCode: IConcern | null;
+    /**
     description: suggest a concern for an answer
   */
     concernSuggestionCreate: Array<IConcern> | null;
@@ -2044,6 +2067,20 @@ declare module 'schema' {
   }
 
 
+  interface IConcernAddDiagnosisCodeInput {
+    concernId: string;
+    codesetName: string;
+    code: string;
+    version: string;
+  }
+
+
+  interface IConcernRemoveDiagnosisCodeInput {
+    concernId: string;
+    diagnosisCodeId: string;
+  }
+
+
   interface IConcernSuggestInput {
     concernId: string;
     answerId?: string | null;
@@ -2352,5 +2389,17 @@ declare module 'schema' {
 
   interface IThreeSixtySummary {
     riskAreas: Array<IRiskAreaStatistic>;
+  }
+
+  /**
+    description: ConcernDiagnosisCode
+  */
+  interface IConcernDiagnosisCode {
+    id: string;
+    concernId: string;
+    diagnosisCodeId: string;
+    createdAt: string;
+    updatedAt: string;
+    deletedAt: string | null;
   }
 }

@@ -84,7 +84,7 @@ describe('care plan suggestion', () => {
         );
 
         const fetchedCarePlanSuggestion = await CarePlanSuggestion.get(carePlanSuggestion.id, txn);
-        expect(fetchedCarePlanSuggestion!.concern).toMatchObject(concern);
+        expect(fetchedCarePlanSuggestion!.concern!.id).toEqual(concern.id);
       });
     });
 
@@ -169,7 +169,7 @@ describe('care plan suggestion', () => {
           s => s.suggestionType === 'concern',
         );
 
-        expect(concernSuggestion!.concern).toMatchObject(concern);
+        expect(concernSuggestion!.concern!.id).toEqual(concern.id);
         expect(goalSuggestion!.goalSuggestionTemplate).toMatchObject(goalSuggestionTemplate);
       });
     });
@@ -192,7 +192,7 @@ describe('care plan suggestion', () => {
         const patientCarePlanSuggestions = await CarePlanSuggestion.getForPatient(patient.id, txn);
 
         expect(patientCarePlanSuggestions.length).toEqual(1);
-        expect(patientCarePlanSuggestions[0].concern).toMatchObject(concern);
+        expect(patientCarePlanSuggestions[0].concern!.id).toEqual(concern.id);
       });
     });
 

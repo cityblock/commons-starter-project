@@ -31,9 +31,11 @@ import {
 } from './computed-field-resolver';
 import { resolveComputedFieldsSchema } from './computed-field-schema-resolver';
 import {
+  concernAddDiagnosisCode,
   concernCreate,
   concernDelete,
   concernEdit,
+  concernRemoveDiagnosisCode,
   resolveConcern,
   resolveConcerns,
 } from './concern-resolver';
@@ -372,6 +374,8 @@ const resolveFunctions = {
     concernCreate,
     concernDelete,
     concernEdit,
+    concernAddDiagnosisCode,
+    concernRemoveDiagnosisCode,
     goalSuggestionTemplateCreate,
     goalSuggestionTemplateEdit,
     goalSuggestionTemplateDelete,

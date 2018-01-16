@@ -232,7 +232,7 @@ describe('concern suggestion model', () => {
           txn,
         );
 
-        expect(concernSuggestions[0]).toMatchObject(concern1);
+        expect(concernSuggestions[0].id).toEqual(concern1.id);
         expect(concernSuggestions.length).toEqual(1);
 
         await PatientAnswer.create(
@@ -263,8 +263,8 @@ describe('concern suggestion model', () => {
           txn,
         );
 
-        expect(secondConcernSuggestions[0]).toMatchObject(concern1);
-        expect(secondConcernSuggestions[1]).toMatchObject(concern2);
+        expect(secondConcernSuggestions[0].id).toEqual(concern1.id);
+        expect(secondConcernSuggestions[1].id).toEqual(concern2.id);
         expect(secondConcernSuggestions.length).toEqual(2);
       });
     });
@@ -369,7 +369,7 @@ describe('concern suggestion model', () => {
         );
 
         expect(concernSuggestions.length).toEqual(1);
-        expect(concernSuggestions[0]).toMatchObject(concern2);
+        expect(concernSuggestions[0].id).toEqual(concern2.id);
       });
     });
 
@@ -471,7 +471,7 @@ describe('concern suggestion model', () => {
           txn,
         );
 
-        expect(secondConcernSuggestions[0]).toMatchObject(concern2);
+        expect(secondConcernSuggestions[0].id).toEqual(concern2.id);
         expect(secondConcernSuggestions.length).toEqual(1);
 
         await PatientConcern.create(

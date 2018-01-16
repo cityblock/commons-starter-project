@@ -1,8 +1,16 @@
-import { Model, RelationMappings, Transaction } from 'objection';
+import { Model, QueryBuilder, RelationMappings, Transaction } from 'objection';
 import BaseModel from './base-model';
+import ConcernDiagnosisCode from './concern-diagnosis-code';
+import DiagnosisCode from './diagnosis-code';
 
 interface IConcernEditableFields {
   title: string;
+}
+
+interface IAddDiagnosisCodeOptions {
+  codesetName: string;
+  code: string;
+  version: string;
 }
 
 export type ConcernOrderOptions = 'createdAt' | 'title' | 'updatedAt';
@@ -12,9 +20,12 @@ interface IConcernOrderOptions {
   order: 'asc' | 'desc';
 }
 
+const EAGER_QUERY = '[diagnosisCodes]';
+
 /* tslint:disable:member-ordering */
 export default class Concern extends BaseModel {
   title: string;
+  diagnosisCodes: DiagnosisCode[];
 
   static tableName = 'concern';
 
@@ -41,10 +52,25 @@ export default class Concern extends BaseModel {
         to: 'answer.id',
       },
     },
+    diagnosisCodes: {
+      relation: Model.ManyToManyRelation,
+      modelClass: 'diagnosis-code',
+      join: {
+        from: 'concern.id',
+        through: {
+          from: 'concern_diagnosis_code.concernId',
+          to: 'concern_diagnosis_code.diagnosisCodeId',
+        },
+        to: 'diagnosis_code.id',
+      },
+    },
   };
 
   static async get(concernId: string, txn?: Transaction): Promise<Concern> {
-    const concern = await this.query(txn).findOne({ id: concernId, deletedAt: null });
+    const concern = await this.modifyEager(this.query(txn)).findOne({
+      id: concernId,
+      deletedAt: null,
+    });
 
     if (!concern) {
       return Promise.reject(`No such concern: ${concernId}`);
@@ -53,11 +79,11 @@ export default class Concern extends BaseModel {
   }
 
   static async create(input: IConcernEditableFields, txn?: Transaction) {
-    return await this.query(txn).insertAndFetch(input);
+    return await this.modifyEager(this.query(txn)).insertAndFetch(input);
   }
 
   static async findOrCreateByTitle(title: string, txn?: Transaction): Promise<Concern> {
-    const fetchedConcern = await this.query(txn)
+    const fetchedConcern = await this.modifyEager(this.query(txn))
       .whereRaw('lower("title") = ?', title.toLowerCase())
       .limit(1)
       .first();
@@ -74,20 +100,20 @@ export default class Concern extends BaseModel {
     concern: Partial<IConcernEditableFields>,
     txn?: Transaction,
   ): Promise<Concern> {
-    return await this.query(txn).patchAndFetchById(concernId, concern);
+    return await this.modifyEager(this.query(txn)).patchAndFetchById(concernId, concern);
   }
 
   static async getAll(
     { orderBy, order }: IConcernOrderOptions,
     txn?: Transaction,
   ): Promise<Concern[]> {
-    return await this.query(txn)
+    return await this.modifyEager(this.query(txn))
       .where('deletedAt', null)
       .orderBy(orderBy, order);
   }
 
   static async delete(concernId: string, txn?: Transaction): Promise<Concern> {
-    await this.query(txn)
+    await this.modifyEager(this.query(txn))
       .where({ id: concernId, deletedAt: null })
       .patch({ deletedAt: new Date().toISOString() });
 
@@ -96,6 +122,56 @@ export default class Concern extends BaseModel {
       return Promise.reject(`No such concern: ${concernId}`);
     }
     return concern;
+  }
+
+  static async addDiagnosisCode(
+    concernId: string,
+    diagnosisCode: IAddDiagnosisCodeOptions,
+    txn?: Transaction,
+  ): Promise<Concern> {
+    const { codesetName, code, version } = diagnosisCode;
+    const fetchedDiagnosisCode = await DiagnosisCode.getByCodesetNameAndCodeAndVersion(
+      codesetName,
+      code,
+      version,
+      txn,
+    );
+
+    if (!fetchedDiagnosisCode) {
+      return Promise.reject(
+        `Cannot find diagnosis code for codeset: ${codesetName} and code: ${code}`,
+      );
+    }
+
+    await ConcernDiagnosisCode.create(
+      {
+        concernId,
+        diagnosisCodeId: fetchedDiagnosisCode.id,
+      },
+      txn,
+    );
+
+    return this.get(concernId, txn);
+  }
+
+  static async removeDiagnosisCode(
+    concernId: string,
+    diagnosisCodeId: string,
+    txn?: Transaction,
+  ): Promise<Concern> {
+    return await ConcernDiagnosisCode.delete(concernId, diagnosisCodeId, txn);
+  }
+
+  static modifyEager(query: QueryBuilder<Concern>): QueryBuilder<Concern> {
+    return query
+      .eager(EAGER_QUERY, {
+        orderByOrder: (builder: any) => {
+          builder.orderBy('createdAt', 'desc');
+        },
+      })
+      .modifyEager('diagnosisCodes', builder => {
+        builder.where('concern_diagnosis_code.deletedAt', null);
+      });
   }
 }
 /* tslint:enable:member-ordering */

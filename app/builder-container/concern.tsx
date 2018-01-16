@@ -12,6 +12,7 @@ import {
 } from '../graphql/types';
 import * as styles from '../shared/css/two-panel-right.css';
 import { IState as IAppState } from '../store';
+import ConcernDiagnosisCodes from './concern-diagnosis-codes';
 
 interface IStateProps {
   concernId: string | null;
@@ -265,6 +266,10 @@ export class Concern extends React.Component<allProps, IState> {
                   onBlur={this.onBlur}
                 />
               </div>
+              <ConcernDiagnosisCodes
+                concernId={concern.id}
+                diagnosisCodes={concern.diagnosisCodes}
+              />
             </div>
           </div>
         </div>

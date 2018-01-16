@@ -54,6 +54,7 @@ export const concern = {
   dueAt: 'Thu Jul 13 2017 16:52:56 GMT-0400 (EDT)',
   deletedAt: null,
   title: 'Concern Title',
+  diagnosisCodes: [],
 };
 
 export const riskAreaGroup = {

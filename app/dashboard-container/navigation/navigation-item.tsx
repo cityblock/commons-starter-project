@@ -18,7 +18,6 @@ export interface IProps extends IInjectedProps {
   selected: Selected; // name of item (used in fetching patient list)
   isSelected: boolean; // is the item selected
   icon: IconName;
-  iconStyles?: string; // specify class to color icon
   noDivider?: boolean; // remove divider
 }
 
@@ -26,7 +25,6 @@ export const NavigationItem: React.StatelessComponent<IProps> = (props: IProps) 
   const {
     text,
     icon,
-    iconStyles,
     routeBase,
     selected,
     isSelected,
@@ -39,6 +37,9 @@ export const NavigationItem: React.StatelessComponent<IProps> = (props: IProps) 
   });
   const dividerStyles = classNames(styles.divider, {
     [styles.grayDivider]: !noDivider && !isSelected,
+  });
+  const iconStyles = classNames(styles.icon, {
+    [styles.selectedIcon]: isSelected,
   });
 
   const formattedText = !text ? (
@@ -53,7 +54,7 @@ export const NavigationItem: React.StatelessComponent<IProps> = (props: IProps) 
     <div>
       <Link to={`${routeBase}/${selected}`} className={containerStyles}>
         <div className={styles.listName}>
-          <Icon name={icon} className={classNames(styles.icon, iconStyles)} />
+          <Icon name={icon} className={iconStyles} />
           {formattedText}
         </div>
         {!!patientResults && <p>{patientResults.totalCount}</p>}

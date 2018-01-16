@@ -8,7 +8,6 @@ import { Divider, NavigationItem } from '../navigation-item';
 describe('Dashboard Navigation Item', () => {
   const name = 'tasks';
   const icon = 'notifications';
-  const iconStyles = 'houseStark';
   const routeBase = '/nymeria';
   const totalCount = 11;
   const patientResults = {
@@ -20,7 +19,6 @@ describe('Dashboard Navigation Item', () => {
       selected={name}
       isSelected={false}
       icon={icon}
-      iconStyles={iconStyles}
       routeBase={routeBase}
       loading={false}
       patientResults={patientResults}
@@ -43,7 +41,7 @@ describe('Dashboard Navigation Item', () => {
   it('renders specified icon', () => {
     expect(wrapper.find(Icon).length).toBe(1);
     expect(wrapper.find(Icon).props().name).toBe(icon);
-    expect(wrapper.find(Icon).props().className).toBe(`icon ${iconStyles}`);
+    expect(wrapper.find(Icon).props().className).toBe('icon');
   });
 
   it('renders divider', () => {
@@ -55,6 +53,7 @@ describe('Dashboard Navigation Item', () => {
     wrapper.setProps({ isSelected: true });
     expect(wrapper.find(Link).props().className).toBe('container selected');
     expect(wrapper.find(Divider).props().className).toBe('divider');
+    expect(wrapper.find(Icon).props().className).toBe('icon selectedIcon');
   });
 
   it('renders text label if one given', () => {

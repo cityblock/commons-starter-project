@@ -38,14 +38,3 @@
   border-top: none;
 }
 
-svg.grayIcon {
-  fill: var(--gray-font-color);
-}
-
-svg.redIcon {
-  fill: var(--red-color);
-}
-
-svg.greenIcon {
-  fill: var(--green-color);
-}

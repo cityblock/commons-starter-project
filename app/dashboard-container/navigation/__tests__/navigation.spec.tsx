@@ -47,12 +47,6 @@ describe('Dashboard Navigation', () => {
         .at(0)
         .props().icon,
     ).toBe('notifications');
-    expect(
-      wrapper
-        .find<IProps>(NavigationItem)
-        .at(0)
-        .props().iconStyles,
-    ).toBe('redIcon');
   });
 
   it('renders navigation item for new to care team', () => {
@@ -80,12 +74,6 @@ describe('Dashboard Navigation', () => {
         .at(1)
         .props().icon,
     ).toBe('addCircle');
-    expect(
-      wrapper
-        .find<IProps>(NavigationItem)
-        .at(1)
-        .props().iconStyles,
-    ).toBe('greenIcon');
   });
 
   it('renders navigation item for pending MAP suggestions', () => {
@@ -113,12 +101,6 @@ describe('Dashboard Navigation', () => {
         .at(2)
         .props().icon,
     ).toBe('playlistAdd');
-    expect(
-      wrapper
-        .find<IProps>(NavigationItem)
-        .at(2)
-        .props().iconStyles,
-    ).toBe('redIcon');
   });
 
   it('renders navigation item for patients with missing info', () => {
@@ -145,13 +127,7 @@ describe('Dashboard Navigation', () => {
         .find<IProps>(NavigationItem)
         .at(3)
         .props().icon,
-    ).toBe('person');
-    expect(
-      wrapper
-        .find<IProps>(NavigationItem)
-        .at(3)
-        .props().iconStyles,
-    ).toBe('redIcon');
+    ).toBe('infoOutline');
   });
 
   it('renders navigation item for no recent engagement', () => {
@@ -178,13 +154,7 @@ describe('Dashboard Navigation', () => {
         .find<IProps>(NavigationItem)
         .at(4)
         .props().icon,
-    ).toBe('people');
-    expect(
-      wrapper
-        .find<IProps>(NavigationItem)
-        .at(4)
-        .props().iconStyles,
-    ).toBe('redIcon');
+    ).toBe('syncProblem');
   });
 
   it('renders navigation item for out of date MAP', () => {
@@ -211,13 +181,7 @@ describe('Dashboard Navigation', () => {
         .find<IProps>(NavigationItem)
         .at(5)
         .props().icon,
-    ).toBe('assignment');
-    expect(
-      wrapper
-        .find<IProps>(NavigationItem)
-        .at(5)
-        .props().iconStyles,
-    ).toBe('redIcon');
+    ).toBe('accessAlarms');
   });
 
   it('removes top border on list if tasks selected', () => {

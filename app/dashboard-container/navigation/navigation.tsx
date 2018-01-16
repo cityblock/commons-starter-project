@@ -38,7 +38,6 @@ const DashboardNavigation: React.StatelessComponent<IProps> = (props: IProps) =>
           isSelected={selected === 'tasks'}
           routeBase={ROUTE_BASE}
           icon="notifications"
-          iconStyles={styles.redIcon}
           noDivider={selected === 'new'}
         />
         <NavigationItem
@@ -46,7 +45,6 @@ const DashboardNavigation: React.StatelessComponent<IProps> = (props: IProps) =>
           isSelected={selected === 'new'}
           routeBase={ROUTE_BASE}
           icon="addCircle"
-          iconStyles={styles.greenIcon}
           noDivider={selected === 'suggestions'}
         />
         <NavigationItem
@@ -54,31 +52,27 @@ const DashboardNavigation: React.StatelessComponent<IProps> = (props: IProps) =>
           isSelected={selected === 'suggestions'}
           routeBase={ROUTE_BASE}
           icon="playlistAdd"
-          iconStyles={styles.redIcon}
           noDivider={selected === 'demographics'}
         />
         <NavigationItem
           selected="demographics"
           isSelected={selected === 'demographics'}
           routeBase={ROUTE_BASE}
-          icon="person"
-          iconStyles={styles.redIcon}
+          icon="infoOutline"
           noDivider={selected === 'engage'}
         />
         <NavigationItem
           selected="engage"
           isSelected={selected === 'engage'}
           routeBase={ROUTE_BASE}
-          icon="people"
-          iconStyles={styles.redIcon}
+          icon="syncProblem"
           noDivider={selected === 'updateMAP'}
         />
         <NavigationItem
           selected="updateMAP"
           isSelected={selected === 'updateMAP'}
           routeBase={ROUTE_BASE}
-          icon="assignment"
-          iconStyles={styles.redIcon}
+          icon="accessAlarms"
           noDivider={true}
         />
       </div>

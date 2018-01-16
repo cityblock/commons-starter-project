@@ -1,6 +1,3 @@
-export const invertedButton: string;
-export const button: string;
-export const select: string;
 export const saveButtonGroup: string;
 export const saveButton: string;
 export const saveQuickCallButton: string;
@@ -21,6 +18,7 @@ export const radioContainer: string;
 export const radioButton: string;
 export const radioButtonLabel: string;
 export const multiInputRow: string;
+export const select: string;
 export const patientInfoLoading: string;
 export const patientInfoError: string;
 export const patientInfoErrorIcon: string;

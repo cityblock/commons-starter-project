@@ -1,7 +1,7 @@
 import { closePopup, openPopup } from '../popup-action';
 
 describe('popup action', () => {
-  const patientId = 'janeIves';
+  const progressNoteId = 'janeIves';
 
   it('correctly changes popup state', () => {
     expect(closePopup().type).toBe('POPUP_CLOSE');
@@ -10,12 +10,12 @@ describe('popup action', () => {
     const openAction = openPopup({
       name: 'PROGRESS_NOTE',
       options: {
-        patientId,
+        progressNoteId,
       },
     });
 
     expect(openAction.type).toBe('POPUP_OPEN');
     expect(openAction.popup.name).toBe('PROGRESS_NOTE');
-    expect((openAction.popup.options as any).patientId).toBe(patientId);
+    expect((openAction.popup.options as any).progressNoteId).toBe(progressNoteId);
   });
 });

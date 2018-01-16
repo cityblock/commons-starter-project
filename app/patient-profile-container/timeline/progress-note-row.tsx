@@ -57,9 +57,7 @@ export default class ProgressNoteRow extends React.Component<IProps, IState> {
         />
       ) : null;
     const activityHtml =
-      tab === 'activity' ? (
-        <ProgressNoteActivity progressNote={progressNote} patientId={patientId} />
-      ) : null;
+      tab === 'activity' ? <ProgressNoteActivity progressNote={progressNote} /> : null;
     const supervisorTab = progressNote.supervisorNotes ? (
       <UnderlineTab
         messageId="progressNote.supervisorReview"

@@ -4,18 +4,6 @@
   display: none;
 }
 
-.invertedButton {
-  @apply --inverted-button;
-}
-
-.button {
-  @apply --button;
-}
-
-.select {
-  @apply --select;
-}
-
 .saveButtonGroup {
   justify-content: space-between;
   align-items: center;

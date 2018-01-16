@@ -1070,6 +1070,7 @@ declare module 'schema' {
   interface ITaskEvent {
     id: string;
     taskId: string;
+    task: ITask;
     userId: string;
     user: IUser;
     eventType: ITaskEventTypesEnum | null;
@@ -1590,9 +1591,13 @@ declare module 'schema' {
   */
     progressNoteEdit: IProgressNote | null;
     /**
-    description: edits a progress note
+    description: add or edit supervisor notes
   */
     progressNoteAddSupervisorNotes: IProgressNote | null;
+    /**
+    description: closes out supervisor review
+  */
+    progressNoteCompleteSupervisorReview: IProgressNote | null;
     /**
     description: creates a quick call
   */
@@ -2328,6 +2333,11 @@ declare module 'schema' {
   interface IProgressNoteAddSupervisorNotesInput {
     progressNoteId: string;
     supervisorNotes: string;
+  }
+
+
+  interface IProgressNoteCompleteSupervisorReviewInput {
+    progressNoteId: string;
   }
 
 

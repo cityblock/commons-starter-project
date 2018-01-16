@@ -9,7 +9,6 @@ import * as styles from './css/progress-note-activity.css';
 import ProgressNoteActivitySection from './progress-note-activity-section';
 
 interface IProps {
-  patientId: string;
   progressNote?: FullProgressNoteFragment | null;
 }
 

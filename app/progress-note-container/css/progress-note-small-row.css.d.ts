@@ -1,5 +1,6 @@
 export const progressNote: string;
-export const progressNoteType: string;
+export const title: string;
+export const highlight: string;
 export const patientPhoto: string;
 export const patientName: string;
 export const progressNoteRight: string;

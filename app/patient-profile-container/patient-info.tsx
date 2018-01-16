@@ -12,6 +12,7 @@ import {
   patientEditMutationVariables,
 } from '../graphql/types';
 import * as sortSearchStyles from '../shared/css/sort-search.css';
+import Button from '../shared/library/button/button';
 import PatientContactForm, { IState as IPatientContactState } from '../shared/patient-contact-form';
 import PatientDemographicsForm, {
   IState as IPatientDemographicsState,
@@ -210,10 +211,6 @@ export class PatientInfo extends React.Component<allProps, IState> {
 
     const { loading, error } = this.props;
 
-    const saveButtonStyles = classNames(styles.button, styles.saveButton, {
-      [styles.inactiveButton]: saveLoading || loading || !!error,
-    });
-
     const saveButtonErrorStyles = classNames(styles.saveButtonError, {
       [styles.hidden]: !saveError,
     });
@@ -243,11 +240,11 @@ export class PatientInfo extends React.Component<allProps, IState> {
               <div className={styles.saveButtonSuccessLabel}>Changes saved.</div>
               <div className={styles.saveButtonSuccessIcon} />
             </div>
-            <div className={saveButtonStyles} onClick={this.onClickSave}>
-              <FormattedMessage id="patientInfo.saveChanges">
-                {(message: string) => <span>{message}</span>}
-              </FormattedMessage>
-            </div>
+            <Button
+              messageId="patientInfo.saveChanges"
+              onClick={this.onClickSave}
+              disabled={saveLoading || loading || !!error}
+            />
           </div>
         </div>
         <div className={styles.infoPanel}>

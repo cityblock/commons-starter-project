@@ -1,13 +1,5 @@
 @import '../../../shared/css/sizes';
 
-.invertedButton {
-  @apply --inverted-button;
-}
-
-.button {
-  @apply --button;
-}
-
 .progressNotesContainer {
   background-color: var(--gray-background-color);
   padding: 0 var(--medium-gutter);
@@ -111,4 +103,8 @@
 
 .topBar {
   justify-content: flex-end;
+}
+
+.buttonSpacing {
+  margin-right: 10px;
 }

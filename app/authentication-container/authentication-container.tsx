@@ -91,7 +91,7 @@ export class AuthenticationContainer extends React.Component<allProps> {
       header = <Header currentUser={currentUser} />;
       app = <div className={styles.app}>{this.props.children}</div>;
       idle = <IdlePopup idleEnd={this.props.idleEnd} isIdle={isIdle} />;
-      progressNote = <ProgressNoteContainer />;
+      progressNote = <ProgressNoteContainer currentUser={currentUser} />;
     }
     return (
       <div>

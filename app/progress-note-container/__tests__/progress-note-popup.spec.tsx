@@ -1,6 +1,6 @@
 import { shallow } from 'enzyme';
 import * as React from 'react';
-import { patient, progressNote, progressNoteTemplate } from '../../shared/util/test-data';
+import { currentUser, progressNote, progressNoteTemplate } from '../../shared/util/test-data';
 import { ProgressNotePopup as Component } from '../progress-note-popup';
 
 const oldDate = Date.now;
@@ -21,8 +21,9 @@ describe('builder concerns', () => {
     it('renders progress note popup with templates', async () => {
       const component = shallow(
         <Component
+          currentUser={currentUser}
           close={jest.fn()}
-          patientId={patient.id}
+          progressNoteId={progressNote.id}
           visible={true}
           editProgressNote={editProgressNote}
           completeProgressNote={completeProgressNote}
@@ -37,8 +38,9 @@ describe('builder concerns', () => {
     it('renders progress note', async () => {
       const component = shallow(
         <Component
+          currentUser={currentUser}
           close={jest.fn()}
-          patientId={patient.id}
+          progressNoteId={progressNote.id}
           visible={true}
           editProgressNote={editProgressNote}
           completeProgressNote={completeProgressNote}

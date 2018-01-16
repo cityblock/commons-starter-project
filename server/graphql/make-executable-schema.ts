@@ -119,6 +119,7 @@ import { resolveProgressNoteActivityForProgressNote } from './progress-note-acti
 import {
   progressNoteAddSupervisorNotes,
   progressNoteComplete,
+  progressNoteCompleteSupervisorReview,
   progressNoteCreate,
   progressNoteEdit,
   resolveProgressNote,
@@ -412,6 +413,7 @@ const resolveFunctions = {
     progressNoteCreate,
     progressNoteEdit,
     progressNoteAddSupervisorNotes,
+    progressNoteCompleteSupervisorReview,
     quickCallCreate,
     computedFieldCreate,
     computedFieldDelete,

@@ -73,8 +73,23 @@ exports[`builder concerns renders progress note popup with templates renders pro
     className="bottomSection"
   >
     <withRouter(Apollo(Apollo(Apollo(Apollo(ProgressNoteContext)))))
+      currentUser={
+        Object {
+          "createdAt": "2017-09-07T13:45:14.532Z",
+          "email": "a@b.com",
+          "firstName": "first",
+          "googleProfileImageUrl": null,
+          "homeClinicId": "clinic-id",
+          "id": "id",
+          "lastName": "last",
+          "locale": "en",
+          "phone": "(212) 555-8394",
+          "updatedAt": "2017-09-07T13:45:14.532Z",
+          "userRole": "physician",
+        }
+      }
+      disabled={false}
       onChange={[Function]}
-      patientId="patient-id"
       progressNote={
         Object {
           "completedAt": null,
@@ -144,7 +159,7 @@ exports[`builder concerns renders progress note popup with templates renders pro
       updateReadyToSubmit={[Function]}
     />
     <Apollo(Apollo(ProgressNoteCosignature))
-      patientId="patient-id"
+      disabled={false}
       progressNote={
         Object {
           "completedAt": null,
@@ -229,7 +244,7 @@ exports[`builder concerns renders progress note popup with templates renders pro
     <Link
       className="patientContainer"
       replace={false}
-      to="/patients/patient-id"
+      to="/patients/null"
     >
       <div
         className="patientPhoto"
@@ -272,8 +287,23 @@ exports[`builder concerns renders progress note popup with templates renders pro
     className="bottomSection"
   >
     <withRouter(Apollo(Apollo(Apollo(Apollo(ProgressNoteContext)))))
+      currentUser={
+        Object {
+          "createdAt": "2017-09-07T13:45:14.532Z",
+          "email": "a@b.com",
+          "firstName": "first",
+          "googleProfileImageUrl": null,
+          "homeClinicId": "clinic-id",
+          "id": "id",
+          "lastName": "last",
+          "locale": "en",
+          "phone": "(212) 555-8394",
+          "updatedAt": "2017-09-07T13:45:14.532Z",
+          "userRole": "physician",
+        }
+      }
+      disabled={false}
       onChange={[Function]}
-      patientId="patient-id"
       progressNote={undefined}
       progressNoteTemplates={
         Array [

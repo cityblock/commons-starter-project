@@ -1,5 +1,3 @@
-export const invertedButton: string;
-export const button: string;
 export const progressNotesContainer: string;
 export const progressNotes: string;
 export const emptyMessage: string;
@@ -13,3 +11,4 @@ export const errorLabel: string;
 export const errorSubheading: string;
 export const errorButton: string;
 export const topBar: string;
+export const buttonSpacing: string;

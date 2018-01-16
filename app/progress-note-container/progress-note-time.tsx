@@ -5,6 +5,7 @@ import Select from '../shared/library/select/select';
 import * as styles from './css/progress-note-context.css';
 
 interface IProps {
+  disabled: boolean;
   progressNoteTime: string;
   onTimeChange: (event: React.ChangeEvent<HTMLSelectElement>) => void;
 }
@@ -34,7 +35,7 @@ export function getCurrentTime() {
 }
 
 export const ProgressNoteTime: React.StatelessComponent<IProps> = props => {
-  const { progressNoteTime, onTimeChange } = props;
+  const { progressNoteTime, onTimeChange, disabled } = props;
   const progressNoteTimes = getTimes().map(time => (
     <option key={time.toISOString()} value={time.toISOString()}>
       {format(time, 'hh:mm A')}
@@ -43,7 +44,7 @@ export const ProgressNoteTime: React.StatelessComponent<IProps> = props => {
   return (
     <div className={styles.time}>
       <FormLabel messageId="progressNote.selectTime" />
-      <Select value={progressNoteTime} onChange={onTimeChange}>
+      <Select value={progressNoteTime} onChange={onTimeChange} disabled={disabled}>
         <option value={''} disabled hidden>
           Select a time
         </option>

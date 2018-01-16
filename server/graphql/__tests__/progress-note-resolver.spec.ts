@@ -200,7 +200,68 @@ describe('progress note resolver', () => {
       expect(cloneDeep(result.data!.progressNoteAddSupervisorNotes.supervisorNotes)).toEqual(
         supervisorNotes,
       );
+      expect(
+        cloneDeep(result.data!.progressNoteAddSupervisorNotes.reviewedBySupervisorAt),
+      ).toBeNull();
       expect(cloneDeep(result.data!.progressNoteAddSupervisorNotes.supervisor.id)).toEqual(
+        supervisor.id,
+      );
+    });
+  });
+
+  it('complete supervisor review', async () => {
+    await transaction(ProgressNote.knex(), async txn => {
+      const { patient, user, progressNoteTemplate, clinic } = await setup(txn);
+      const supervisor = await User.create(
+        createMockUser(12, clinic.id, userRole, 'supervisor@b.com'),
+        txn,
+      );
+
+      const progressNote = await ProgressNote.create(
+        {
+          patientId: patient.id,
+          userId: user.id,
+          progressNoteTemplateId: progressNoteTemplate.id,
+          needsSupervisorReview: true,
+          supervisorId: supervisor.id,
+        },
+        txn,
+      );
+      await ProgressNote.complete(progressNote.id, txn);
+      await ProgressNote.addSupervisorNotes(progressNote.id, 'notes!', txn);
+      const mutation = `mutation {
+        progressNoteCompleteSupervisorReview(input: {
+          progressNoteId: "${progressNote.id}"
+        }) {
+          id
+          supervisorNotes
+          reviewedBySupervisorAt
+          supervisor { id }
+          supervisorId
+        }
+      }`;
+      const resultWithError = await graphql(schema, mutation, null, {
+        userRole,
+        userId: user.id,
+        txn,
+      });
+      expect(cloneDeep(resultWithError.errors![0].message)).toEqual(
+        'you are not the supervisor permitted to review this progress note',
+      );
+
+      const result = await graphql(schema, mutation, null, {
+        userRole,
+        userId: supervisor.id,
+        txn,
+      });
+
+      expect(cloneDeep(result.data!.progressNoteCompleteSupervisorReview.supervisorNotes)).toEqual(
+        'notes!',
+      );
+      expect(
+        cloneDeep(result.data!.progressNoteCompleteSupervisorReview.reviewedBySupervisorAt),
+      ).not.toBeNull();
+      expect(cloneDeep(result.data!.progressNoteCompleteSupervisorReview.supervisor.id)).toEqual(
         supervisor.id,
       );
     });
@@ -309,7 +370,7 @@ describe('progress note resolver', () => {
           },
           txn,
         );
-
+        await ProgressNote.complete(progressNote1.id, txn);
         const query = `{
           progressNotesForSupervisorReview { id }
         }`;

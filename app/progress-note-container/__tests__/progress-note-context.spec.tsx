@@ -1,13 +1,7 @@
 import { shallow } from 'enzyme';
 import * as React from 'react';
 import PatientQuestion from '../../shared/question/patient-question';
-import {
-  clinic,
-  patient,
-  progressNote,
-  progressNoteTemplate,
-  question,
-} from '../../shared/util/test-data';
+import { clinic, progressNote, progressNoteTemplate, question } from '../../shared/util/test-data';
 import { ProgressNoteContext as Component } from '../progress-note-context';
 
 const oldDate = Date.now;
@@ -24,10 +18,10 @@ describe('progress note context', () => {
     component = shallow(
       <Component
         history={history}
-        patientId={patient.id}
         progressNote={progressNote}
         progressNoteTemplates={[progressNoteTemplate]}
         onChange={jest.fn()}
+        disabled={false}
         updateReadyToSubmit={jest.fn()}
         clinics={clinics}
         questions={[question]}

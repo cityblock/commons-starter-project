@@ -35,10 +35,10 @@ import { getCurrentTime, ProgressNoteTime } from './progress-note-time';
 import ScreeningToolDropdown from './screening-tool-dropdown';
 
 interface IProps {
-  patientId: string;
+  disabled: boolean;
   progressNote?: FullProgressNoteFragment;
   progressNoteTemplates?: FullProgressNoteTemplateFragment[];
-  updateReadyToSubmit: (readyToSubmit: boolean) => void;
+  updateReadyToSubmit: (isReadyToSubmit: boolean) => void;
   onChange: (
     options: {
       progressNoteTemplateId: string;
@@ -155,20 +155,20 @@ export class ProgressNoteContext extends React.Component<allProps, IState> {
     questionId: string,
     answers: Array<{ answerId: string; value: string | number }>,
   ) => {
-    const { progressNote, createPatientAnswers, patientId } = this.props;
+    const { progressNote, createPatientAnswers } = this.props;
     if (progressNote && createPatientAnswers) {
       const patientAnswers = answers.map(answer => ({
         questionId,
         answerId: answer.answerId,
         answerValue: String(answer.value),
-        patientId,
+        patientId: progressNote.patientId,
         applicable: true,
       }));
 
       await createPatientAnswers({
         variables: {
           progressNoteId: progressNote.id,
-          patientId,
+          patientId: progressNote.patientId,
           patientAnswers,
           questionIds: [questionId],
         },
@@ -180,12 +180,13 @@ export class ProgressNoteContext extends React.Component<allProps, IState> {
     question: FullQuestionFragment,
     index: number,
     answerData: IQuestionAnswerHash,
+    editable: boolean,
   ) => {
     const visible = getQuestionVisibility(question, answerData);
     const dataForQuestion = answerData[question.id] || [];
     return (
       <PatientQuestion
-        editable={true}
+        editable={editable}
         displayHamburger={false}
         visible={visible}
         answerData={dataForQuestion}
@@ -196,14 +197,14 @@ export class ProgressNoteContext extends React.Component<allProps, IState> {
     );
   };
 
-  renderQuestions() {
+  renderQuestions(editable: boolean) {
     const { questions, patientAnswers } = this.props;
 
     const answerData = setupQuestionAnswerHash({}, questions);
     updateQuestionAnswerHash(answerData, patientAnswers || []);
 
     return (questions || []).map((question, index) =>
-      this.renderQuestion(question, index, answerData),
+      this.renderQuestion(question, index, answerData, editable),
     );
   }
 
@@ -260,17 +261,21 @@ export class ProgressNoteContext extends React.Component<allProps, IState> {
   };
 
   redirectToMap = () => {
-    const { history, patientId } = this.props;
-    return history.push(`/patients/${patientId}/map/active`);
+    const { history, progressNote } = this.props;
+    if (progressNote) {
+      return history.push(`/patients/${progressNote.patientId}/map/active`);
+    }
   };
 
   redirectTo360 = () => {
-    const { history, patientId } = this.props;
-    history.push(`/patients/${patientId}/360`);
+    const { history, progressNote } = this.props;
+    if (progressNote) {
+      history.push(`/patients/${progressNote.patientId}/360`);
+    }
   };
 
   render() {
-    const { progressNoteTemplates, clinics, patientId } = this.props;
+    const { progressNoteTemplates, clinics, disabled, progressNote } = this.props;
     const {
       progressNoteTime,
       progressNoteLocation,
@@ -284,11 +289,18 @@ export class ProgressNoteContext extends React.Component<allProps, IState> {
         {template.title}
       </option>
     ));
+    const screeningToolDropdown = progressNote ? (
+      <ScreeningToolDropdown patientId={progressNote.patientId} />
+    ) : null;
     return (
       <div>
         <div className={styles.encounterTypeContainer}>
           <FormLabel messageId="progressNote.selectType" htmlFor="contextAndPlan" />
-          <Select value={progressNoteTemplateId || ''} onChange={this.onProgressNoteTemplateType}>
+          <Select
+            disabled={disabled}
+            value={progressNoteTemplateId || ''}
+            onChange={this.onProgressNoteTemplateType}
+          >
             <option value={''} disabled hidden>
               Select an encounter type template
             </option>
@@ -296,34 +308,38 @@ export class ProgressNoteContext extends React.Component<allProps, IState> {
           </Select>
           <div className={styles.locationTimeRow}>
             <ProgressNoteLocation
+              disabled={disabled}
               clinics={clinics}
               progressNoteLocation={progressNoteLocation || ''}
               onLocationChange={this.onLocationChange}
             />
             <ProgressNoteTime
+              disabled={disabled}
               progressNoteTime={progressNoteTime || ''}
               onTimeChange={this.onTimeChange}
             />
           </div>
         </div>
         <div className={styles.error}>{error}</div>
-        {this.renderQuestions()}
+        {this.renderQuestions(!disabled)}
         <div className={styles.summaryContainer}>
           <FormLabel
             messageId="progressNote.memberConcernAndObservation"
             htmlFor="memberConcernAndObservation"
           />
-          <ScreeningToolDropdown patientId={patientId} />
+          {screeningToolDropdown}
           <br />
           <br />
           <Button
             fullWidth={true}
             messageId="progressNote.update360"
+            disabled={disabled}
             onClick={this.redirectTo360}
           />
           <br />
           <br />
           <Textarea
+            disabled={disabled}
             value={progressNoteMemberConcern || ''}
             onChange={this.onProgressNoteMemberConcernChange}
           />
@@ -332,12 +348,17 @@ export class ProgressNoteContext extends React.Component<allProps, IState> {
           <FormLabel messageId="progressNote.contextAndPlan" htmlFor="contextAndPlan" />
           <Button
             fullWidth={true}
+            disabled={disabled}
             messageId="progressNote.updateMap"
             onClick={this.redirectToMap}
           />
           <br />
           <br />
-          <Textarea value={progressNoteSummary || ''} onChange={this.onProgressNoteSummaryChange} />
+          <Textarea
+            disabled={disabled}
+            value={progressNoteSummary || ''}
+            onChange={this.onProgressNoteSummaryChange}
+          />
         </div>
       </div>
     );
@@ -383,7 +404,7 @@ export default compose(
       variables: {
         filterType: 'progressNote',
         filterId: getProgressNoteId(props),
-        patientId: props.patientId,
+        patientId: props.progressNote!.patientId,
       },
     }),
     props: ({ data }) => ({

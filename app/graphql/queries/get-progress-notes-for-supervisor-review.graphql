@@ -1,0 +1,7 @@
+#import "../fragments/full-progress-note.graphql"
+
+query getProgressNotesForSupervisorReview {
+  progressNotesForSupervisorReview {
+    ...FullProgressNote
+  }
+}

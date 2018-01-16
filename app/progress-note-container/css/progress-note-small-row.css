@@ -19,8 +19,12 @@
   }
 }
 
-.progressNoteType {
+.title {
   color: var(--gray-font-color);
+}
+
+.title.highlight {
+  color: var(--red-color);
 }
 
 .patientPhoto {

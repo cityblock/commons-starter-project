@@ -16,6 +16,7 @@ import * as styles from './css/progress-note-cosignature.css';
 import { IUpdateProgressNoteOptions } from './progress-note-popup';
 
 interface IProps {
+  disabled: boolean;
   patientId: string | null;
   progressNote?: FullProgressNoteFragment;
   updateProgressNote: (options: IUpdateProgressNoteOptions) => void;
@@ -70,7 +71,7 @@ export class ProgressNoteCosignature extends React.Component<allProps> {
   };
 
   render() {
-    const { patientCareTeam, progressNote, currentUser } = this.props;
+    const { patientCareTeam, progressNote, currentUser, disabled } = this.props;
     const supervisorId = progressNote && progressNote.supervisor ? progressNote.supervisor.id : '';
     const supervisors = (patientCareTeam || [])
       .map(
@@ -85,7 +86,7 @@ export class ProgressNoteCosignature extends React.Component<allProps> {
       progressNote && progressNote.needsSupervisorReview ? (
         <div className={styles.inputGroup}>
           <FormLabel messageId="progressNote.selectSupervisor" />
-          <Select value={supervisorId} onChange={this.onSelectChange}>
+          <Select disabled={disabled} value={supervisorId} onChange={this.onSelectChange}>
             <Option value={''} disabled={true} messageId="progressNote.selectSupervisor" />
             {supervisors}
           </Select>
@@ -97,12 +98,14 @@ export class ProgressNoteCosignature extends React.Component<allProps> {
           <FormLabel messageId="progressNote.doesRequireCosignature" />
           <RadioGroup>
             <RadioInput
+              disabled={disabled}
               value="true"
               checked={!!requiresCosignature}
               label="Yes"
               onChange={this.onRadioChange}
             />
             <RadioInput
+              disabled={disabled}
               value="false"
               checked={!requiresCosignature}
               label="No"

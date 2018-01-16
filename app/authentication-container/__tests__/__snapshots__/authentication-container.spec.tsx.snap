@@ -26,7 +26,23 @@ exports[`shallow rendered renders authentication container correctly with curren
   >
     <div />
   </div>
-  <Connect(Apollo(ProgressNoteContainer)) />
+  <Connect(Apollo(Apollo(ProgressNoteContainer)))
+    currentUser={
+      Object {
+        "createdAt": "2017-09-07T13:45:14.532Z",
+        "email": "a@b.com",
+        "firstName": "first",
+        "googleProfileImageUrl": null,
+        "homeClinicId": "clinic-id",
+        "id": "id",
+        "lastName": "last",
+        "locale": "en",
+        "phone": "(212) 555-8394",
+        "updatedAt": "2017-09-07T13:45:14.532Z",
+        "userRole": "physician",
+      }
+    }
+  />
   <Unknown
     idleEnd={[MockFunction]}
     isIdle={false}

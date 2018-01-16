@@ -118,7 +118,8 @@ describe('progress note model', () => {
         createMockUser(12, clinic.id, userRole, 'supervisor@b.com'),
         txn,
       );
-      const createdNote = await ProgressNote.create(
+      // Uncompleted progress note in need of supervisor review
+      await ProgressNote.create(
         {
           patientId: patient.id,
           userId: user.id,
@@ -128,11 +129,26 @@ describe('progress note model', () => {
         },
         txn,
       );
+
+      // Completed progress note in need of supervisor review
+      const completedProgressNote = await ProgressNote.create(
+        {
+          patientId: patient.id,
+          userId: user.id,
+          progressNoteTemplateId: progressNoteTemplate.id,
+          supervisorId: supervisor.id,
+          needsSupervisorReview: true,
+        },
+        txn,
+      );
+      await ProgressNote.complete(completedProgressNote.id, txn);
+
       const progressNotes = await ProgressNote.getProgressNotesForSupervisorReview(
         supervisor.id,
         txn,
       );
-      expect(progressNotes).toEqual([createdNote]);
+      expect(progressNotes.length).toEqual(1);
+      expect(progressNotes[0].id).toEqual(completedProgressNote.id);
     });
   });
 
@@ -171,7 +187,7 @@ describe('progress note model', () => {
     });
   });
 
-  it('adds supervisor review', async () => {
+  it('adds supervisor notes', async () => {
     await transaction(ProgressNote.knex(), async txn => {
       const { patient, user, progressNoteTemplate, clinic } = await setup(txn);
 
@@ -192,13 +208,43 @@ describe('progress note model', () => {
       );
       expect(progressNote.reviewedBySupervisorAt).toBeNull();
       await ProgressNote.complete(progressNote.id, txn);
-      const reviewedNote = await ProgressNote.addSupervisorReview(
+      const reviewedNote = await ProgressNote.addSupervisorNotes(
         progressNote.id,
         supervisorNotes,
         txn,
       );
       expect(reviewedNote.supervisorNotes).toBe(supervisorNotes);
-      expect(reviewedNote.reviewedBySupervisorAt).not.toBeNull();
+      expect(reviewedNote.reviewedBySupervisorAt).toBeNull();
+
+      const completedNote = await ProgressNote.completeSupervisorReview(progressNote.id, txn);
+      expect(completedNote.reviewedBySupervisorAt).not.toBeNull();
+    });
+  });
+
+  it('cannot add review to uncompleted progress note', async () => {
+    await transaction(ProgressNote.knex(), async txn => {
+      const { patient, user, progressNoteTemplate, clinic } = await setup(txn);
+
+      const supervisorNotes = 'looks great';
+      const supervisor = await User.create(
+        createMockUser(12, clinic.id, userRole, 'supervisor@b.com'),
+        txn,
+      );
+      const progressNote = await ProgressNote.create(
+        {
+          patientId: patient.id,
+          userId: user.id,
+          progressNoteTemplateId: progressNoteTemplate.id,
+          needsSupervisorReview: true,
+          supervisorId: supervisor.id,
+        },
+        txn,
+      );
+      expect(progressNote.reviewedBySupervisorAt).toBeNull();
+
+      await expect(
+        ProgressNote.addSupervisorNotes(progressNote.id, supervisorNotes, txn),
+      ).rejects.toMatch(`Progress note not yet completed: ${progressNote.id}`);
     });
   });
 
@@ -234,6 +280,32 @@ describe('progress note model', () => {
       const fetchedProgressNotesForUser = await ProgressNote.getAllForUser(user.id, true, txn);
       expect(fetchedProgressNotesForUser.length).toEqual(1);
       expect(fetchedProgressNotesForUser[0].id).toEqual(completedNote.id);
+    });
+  });
+
+  it('cannot complete progress note without supervisor review', async () => {
+    await transaction(ProgressNote.knex(), async txn => {
+      const { patient, user, progressNoteTemplate, clinic } = await setup(txn);
+
+      const supervisor = await User.create(
+        createMockUser(12, clinic.id, userRole, 'supervisor@b.com'),
+        txn,
+      );
+      const progressNote = await ProgressNote.create(
+        {
+          patientId: patient.id,
+          userId: user.id,
+          progressNoteTemplateId: progressNoteTemplate.id,
+          needsSupervisorReview: true,
+          supervisorId: supervisor.id,
+        },
+        txn,
+      );
+      expect(progressNote.reviewedBySupervisorAt).toBeNull();
+
+      await expect(ProgressNote.completeSupervisorReview(progressNote.id, txn)).rejects.toMatch(
+        `Progress note not yet completed or missing supervisor notes: ${progressNote.id}`,
+      );
     });
   });
 

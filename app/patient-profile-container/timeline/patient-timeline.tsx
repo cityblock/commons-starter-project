@@ -1,12 +1,12 @@
 import * as classNames from 'classnames';
 import * as React from 'react';
 import { compose, graphql } from 'react-apollo';
-import { FormattedMessage } from 'react-intl';
 import { connect, Dispatch } from 'react-redux';
 import { openPopup } from '../../actions/popup-action';
 import * as progressNotesQuery from '../../graphql/queries/get-progress-notes-for-patient.graphql';
 import { getProgressNotesForPatientQuery, FullProgressNoteFragment } from '../../graphql/types';
 import * as sortSearchStyles from '../../shared/css/sort-search.css';
+import Button from '../../shared/library/button/button';
 import * as patientInfoStyles from './../css/patient-info.css';
 import * as styles from './css/patient-timeline.css';
 import { ProgressNoteLoadingError } from './progress-note-loading-error';
@@ -22,7 +22,7 @@ interface IProps {
 }
 
 interface IDispatchProps {
-  openProgressNotePopup: (patientId: string) => any;
+  openProgressNotePopup: (progressNoteId: string) => any;
 }
 
 interface IGraphqlProps {
@@ -91,7 +91,8 @@ export class PatientTimeline extends React.Component<allProps, IState> {
   };
 
   showNewProgressNotePopup = () => {
-    this.props.openProgressNotePopup(this.props.match.params.patientId);
+    // TODO
+    return false;
   };
 
   showNewQuickCallPopup = () => {
@@ -111,27 +112,18 @@ export class PatientTimeline extends React.Component<allProps, IState> {
     const { progressNotes, match } = this.props;
     const patientId = match.params.patientId;
     const progressNotesList = progressNotes || [];
-    const saveButtonStyles = classNames(patientInfoStyles.button, patientInfoStyles.saveButton);
-    const saveQuickCallButtonStyles = classNames(
-      patientInfoStyles.button,
-      patientInfoStyles.saveButton,
-      patientInfoStyles.saveQuickCallButton,
-    );
 
     return (
       <div>
         <div className={classNames(sortSearchStyles.sortSearchBar, styles.topBar)}>
           <div className={patientInfoStyles.saveButtonGroup}>
-            <div className={saveQuickCallButtonStyles} onClick={this.showNewQuickCallPopup}>
-              <FormattedMessage id="quickCallNote.new">
-                {(message: string) => <span>{message}</span>}
-              </FormattedMessage>
-            </div>
-            <div className={saveButtonStyles} onClick={this.showNewProgressNotePopup}>
-              <FormattedMessage id="progressNote.new">
-                {(message: string) => <span>{message}</span>}
-              </FormattedMessage>
-            </div>
+            <Button
+              color="teal"
+              messageId="quickCallNote.new"
+              onClick={this.showNewQuickCallPopup}
+              className={styles.buttonSpacing}
+            />
+            <Button messageId="progressNote.new" onClick={this.showNewProgressNotePopup} />
           </div>
         </div>
         <div className={styles.progressNotesContainer}>
@@ -149,12 +141,12 @@ export class PatientTimeline extends React.Component<allProps, IState> {
 
 function mapDispatchToProps(dispatch: Dispatch<() => void>): IDispatchProps {
   return {
-    openProgressNotePopup: (patientId: string) =>
+    openProgressNotePopup: (progressNoteId: string) =>
       dispatch(
         openPopup({
           name: 'PROGRESS_NOTE',
           options: {
-            patientId,
+            progressNoteId,
           },
         }),
       ),

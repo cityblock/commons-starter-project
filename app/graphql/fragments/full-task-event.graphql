@@ -4,6 +4,11 @@
 fragment FullTaskEvent on TaskEvent {
   id
   taskId
+  task {
+    id
+    title
+    priority
+  }
   userId
   user {
     ...FullUser

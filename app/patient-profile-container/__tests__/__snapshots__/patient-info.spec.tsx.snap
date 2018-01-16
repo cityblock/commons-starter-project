@@ -52,14 +52,13 @@ exports[`renders patient info 1`] = `
           className="saveButtonSuccessIcon"
         />
       </div>
-      <div
-        className="button saveButton inactiveButton"
+      <button
+        className="button disabled"
+        disabled={true}
         onClick={[Function]}
       >
-        <span>
-          Save changes
-        </span>
-      </div>
+        Save changes
+      </button>
     </div>
   </div>
   <div

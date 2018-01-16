@@ -35,6 +35,15 @@ svg.icon {
   }
 }
 
+.teal {
+  background-color: var(--teal-color);
+
+  &:hover {
+    background-color: var(--teal-color);
+    opacity: 0.8;
+  }
+}
+
 .white {
   background: var(--white-color);
   color: var(--blue-color);

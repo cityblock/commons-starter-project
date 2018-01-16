@@ -569,6 +569,7 @@ type ThreeSixtySummary {
 type TaskEvent implements uniqueId {
   id: ID!
   taskId: ID!
+  task: Task!
   userId: ID!
   user: User!
   eventType: TaskEventTypes
@@ -1513,6 +1514,10 @@ input ProgressNoteAddSupervisorNotesInput {
   supervisorNotes: String!
 }
 
+input ProgressNoteCompleteSupervisorReviewInput {
+  progressNoteId: ID!
+}
+
 input QuickCallCreateInput {
   patientId: ID! # Needed to lookup or create progressNoteId
   reason: String!
@@ -1715,8 +1720,12 @@ type RootMutationType {
   progressNoteComplete(input: ProgressNoteCompleteInput): ProgressNote
   # edits a progress note
   progressNoteEdit(input: ProgressNoteEditInput): ProgressNote
-  # edits a progress note
+  # add or edit supervisor notes
   progressNoteAddSupervisorNotes(input: ProgressNoteAddSupervisorNotesInput): ProgressNote
+  # closes out supervisor review
+  progressNoteCompleteSupervisorReview(
+    input: ProgressNoteCompleteSupervisorReviewInput
+  ): ProgressNote
   # creates a quick call
   quickCallCreate(input: QuickCallCreateInput): QuickCall
   # Create a computed field

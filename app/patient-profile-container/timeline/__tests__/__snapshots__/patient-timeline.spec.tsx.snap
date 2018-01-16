@@ -8,28 +8,16 @@ exports[`renders timeline 1`] = `
     <div
       className="saveButtonGroup"
     >
-      <div
-        className="button saveButton saveQuickCallButton"
+      <Button
+        className="buttonSpacing"
+        color="teal"
+        messageId="quickCallNote.new"
         onClick={[Function]}
-      >
-        <FormattedMessage
-          id="quickCallNote.new"
-          values={Object {}}
-        >
-          [Function]
-        </FormattedMessage>
-      </div>
-      <div
-        className="button saveButton"
+      />
+      <Button
+        messageId="progressNote.new"
         onClick={[Function]}
-      >
-        <FormattedMessage
-          id="progressNote.new"
-          values={Object {}}
-        >
-          [Function]
-        </FormattedMessage>
-      </div>
+      />
     </div>
   </div>
   <div

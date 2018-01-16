@@ -5,7 +5,7 @@ import Icon from '../icon/icon';
 import { IconName } from '../icon/icon-types';
 import * as styles from './css/button.css';
 
-type Color = 'blue' | 'white' | 'red';
+type Color = 'blue' | 'white' | 'red' | 'teal';
 
 interface IProps {
   onClick: () => void;
@@ -28,6 +28,7 @@ const Button: React.StatelessComponent<IProps> = (props: IProps) => {
       [styles.iconButton]: !!icon,
       [styles.white]: color === 'white',
       [styles.red]: color === 'red',
+      [styles.teal]: color === 'teal',
       [styles.small]: small,
       [styles.fullWidth]: fullWidth,
       [styles.disabled]: !!disabled,

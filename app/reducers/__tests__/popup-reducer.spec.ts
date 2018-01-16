@@ -2,7 +2,7 @@ import { IPopupClose, IPopupOpen } from '../../actions/popup-action';
 import { initialState, popupReducer } from '../popup-reducer';
 
 describe('popup reducer', () => {
-  const patientId = 'mikeWheeler';
+  const progressNoteId = 'mikeWheeler';
 
   it('correctly changes popup state on open', () => {
     const action: IPopupOpen = {
@@ -10,12 +10,12 @@ describe('popup reducer', () => {
       popup: {
         name: 'PROGRESS_NOTE',
         options: {
-          patientId,
+          progressNoteId,
         },
       },
     };
     expect(popupReducer(undefined, action).name).toBe('PROGRESS_NOTE');
-    expect((popupReducer(undefined, action).options as any).patientId).toBe(patientId);
+    expect((popupReducer(undefined, action).options as any).progressNoteId).toBe(progressNoteId);
   });
 
   it('correctly changes popup state on close', () => {

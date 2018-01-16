@@ -4,7 +4,12 @@ import { FormattedMessage } from 'react-intl';
 import { connect, Dispatch } from 'react-redux';
 import { closePopup, openPopup } from '../actions/popup-action';
 import * as progressNotesForCurrentUserQuery from '../graphql/queries/get-progress-notes-for-current-user.graphql';
-import { getProgressNotesForCurrentUserQuery } from '../graphql/types';
+import * as progressNotesForSupervisorReviewQuery from '../graphql/queries/get-progress-notes-for-supervisor-review.graphql';
+import {
+  getCurrentUserQuery,
+  getProgressNotesForCurrentUserQuery,
+  getProgressNotesForSupervisorReviewQuery,
+} from '../graphql/types';
 import { IProgressNotePopupOptions } from '../reducers/popup-reducer';
 import Icon from '../shared/library/icon/icon';
 import { IState as IAppState } from '../store';
@@ -13,6 +18,7 @@ import ProgressNotesPopup from './progress-note-popup';
 import { ProgressNoteSmallRow } from './progress-note-small-row';
 
 interface IProps {
+  currentUser: getCurrentUserQuery['currentUser'];
   match: {
     params: {
       patientId: string;
@@ -24,16 +30,19 @@ interface IGraphqlProps {
   progressNotes: getProgressNotesForCurrentUserQuery['progressNotesForCurrentUser'];
   progressNotesLoading?: boolean;
   progressNotesError: string | null;
+  progressNotesForSupervisorReview: getProgressNotesForSupervisorReviewQuery['progressNotesForSupervisorReview'];
+  progressNotesForSupervisorReviewLoading?: boolean;
+  progressNotesForSupervisorReviewError: string | null;
 }
 
 export interface IStateProps {
   popupIsOpen: boolean;
-  popupPatientId: string | null;
+  progressNoteId: string | null;
 }
 
 interface IDispatchProps {
   closeProgressNote: () => any;
-  openProgressNote: (patientId: string) => any;
+  openProgressNote: (progressNoteId: string) => any;
 }
 
 type allProps = IProps & IGraphqlProps & IStateProps & IDispatchProps;
@@ -55,15 +64,18 @@ export class ProgressNoteContainer extends React.Component<allProps, IState> {
 
   getProgressNotesHtml() {
     const { drawerIsOpen } = this.state;
-    const { progressNotes } = this.props;
-    const height = drawerIsOpen && progressNotes ? progressNotes.length * 63 : 0;
-    const progressNotesHtml = (progressNotes || []).map(
+    const { progressNotes, progressNotesForSupervisorReview, currentUser } = this.props;
+    const notes = (progressNotesForSupervisorReview || []).concat(progressNotes || []);
+    const height = drawerIsOpen && notes ? notes.length * 63 : 0;
+    const currentUserId = currentUser ? currentUser.id : '';
+    const progressNotesHtml = notes.map(
       progressNote =>
         progressNote ? (
           <ProgressNoteSmallRow
             key={progressNote.id}
             progressNote={progressNote}
             onClick={this.props.openProgressNote}
+            currentUserId={currentUserId}
           />
         ) : null,
     );
@@ -75,9 +87,16 @@ export class ProgressNoteContainer extends React.Component<allProps, IState> {
   }
 
   render() {
-    const { progressNotes, popupIsOpen, popupPatientId } = this.props;
+    const {
+      progressNotes,
+      popupIsOpen,
+      progressNoteId,
+      progressNotesForSupervisorReview,
+      currentUser,
+    } = this.props;
     const { drawerIsOpen } = this.state;
-    const progressNotesCount = (progressNotes || []).length;
+    const progressNotesCount =
+      (progressNotes || []).length + (progressNotesForSupervisorReview || []).length;
     const progressNotesHtml = this.getProgressNotesHtml();
     const icon = drawerIsOpen ? (
       <Icon name="expandMore" onClick={this.showHideList} className={styles.icon} />
@@ -104,8 +123,9 @@ export class ProgressNoteContainer extends React.Component<allProps, IState> {
           {progressNotesHtml}
         </div>
         <ProgressNotesPopup
-          patientId={popupPatientId}
+          progressNoteId={progressNoteId}
           visible={popupIsOpen}
+          currentUser={currentUser}
           close={this.props.closeProgressNote}
         />
       </div>
@@ -118,20 +138,20 @@ function mapStateToProps(state: IAppState, ownProps: IProps): IStateProps {
 
   return {
     popupIsOpen,
-    popupPatientId: popupIsOpen
-      ? (state.popup.options as IProgressNotePopupOptions).patientId
-      : null, // :(
+    progressNoteId: popupIsOpen
+      ? (state.popup.options as IProgressNotePopupOptions).progressNoteId
+      : null,
   };
 }
 
 function mapDispatchToProps(dispatch: Dispatch<() => void>): IDispatchProps {
   return {
-    openProgressNote: (patientId: string) =>
+    openProgressNote: (progressNoteId: string) =>
       dispatch(
         openPopup({
           name: 'PROGRESS_NOTE',
           options: {
-            patientId,
+            progressNoteId,
           },
         }),
       ),
@@ -154,6 +174,16 @@ export default compose(
       progressNotesLoading: data ? data.loading : false,
       progressNotesError: data ? data.error : null,
       progressNotes: data ? (data as any).progressNotesForCurrentUser : null,
+      refetchProgressNotes: data ? data.refetch : null,
+    }),
+  }),
+  graphql<IGraphqlProps, {}, allProps>(progressNotesForSupervisorReviewQuery as any, {
+    props: ({ data }) => ({
+      progressNotesForSupervisorReviewLoading: data ? data.loading : false,
+      progressNotesForSupervisorReviewError: data ? data.error : null,
+      progressNotesForSupervisorReview: data
+        ? (data as any).progressNotesForSupervisorReview
+        : null,
       refetchProgressNotes: data ? data.refetch : null,
     }),
   }),

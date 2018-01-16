@@ -173,7 +173,8 @@ export default class ProgressNote extends BaseModel {
     return await this.query(txn)
       .eager(EAGER_QUERY)
       .orderBy('createdAt', 'desc')
-      .where({ deletedAt: null, reviewedBySupervisorAt: null, supervisorId });
+      .where({ deletedAt: null, reviewedBySupervisorAt: null, supervisorId })
+      .whereNotNull('completedAt');
   }
 
   static async create(input: IProgressNoteEditableFields, txn?: Transaction) {
@@ -192,19 +193,50 @@ export default class ProgressNote extends BaseModel {
       .patchAndFetchById(progressNoteId, progressNote);
   }
 
-  static async addSupervisorReview(
+  static async addSupervisorNotes(
     progressNoteId: string,
     supervisorNotes: string,
     txn?: Transaction,
   ) {
-    await this.query(txn)
+    const updates = await this.query(txn)
       .where({ id: progressNoteId, deletedAt: null, reviewedBySupervisorAt: null })
+      .whereNull('reviewedBySupervisorAt')
       .whereNotNull('completedAt')
       .patch({
         supervisorNotes,
+      });
+
+    if (!updates) {
+      return Promise.reject(`Progress note not yet completed: ${progressNoteId}`);
+    }
+
+    const progressNote = await this.query(txn)
+      .eager(EAGER_QUERY)
+      .where({ id: progressNoteId, deletedAt: null })
+      .whereNotNull('completedAt')
+      .whereNull('reviewedBySupervisorAt')
+      .first();
+
+    if (!progressNote) {
+      return Promise.reject(`Progress note already reviewed: ${progressNoteId}`);
+    }
+    return progressNote;
+  }
+
+  static async completeSupervisorReview(progressNoteId: string, txn?: Transaction) {
+    const updates = await this.query(txn)
+      .where({ id: progressNoteId, deletedAt: null, reviewedBySupervisorAt: null })
+      .whereNotNull('completedAt')
+      .whereNotNull('supervisorNotes')
+      .patch({
         reviewedBySupervisorAt: new Date().toISOString(),
       });
 
+    if (!updates) {
+      return Promise.reject(
+        `Progress note not yet completed or missing supervisor notes: ${progressNoteId}`,
+      );
+    }
     const progressNote = await this.query(txn)
       .eager(EAGER_QUERY)
       .where({ id: progressNoteId, deletedAt: null })

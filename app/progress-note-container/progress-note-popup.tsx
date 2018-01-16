@@ -4,11 +4,11 @@ import { compose, graphql } from 'react-apollo';
 import { FormattedRelative } from 'react-intl';
 import { Link } from 'react-router-dom';
 import * as progressNoteTemplatesQuery from '../graphql/queries/get-progress-note-templates.graphql';
-import * as progressNotesQuery from '../graphql/queries/get-progress-notes-for-patient.graphql';
+import * as progressNoteQuery from '../graphql/queries/get-progress-note.graphql';
 import * as progressNoteCompleteMutationGraphql from '../graphql/queries/progress-note-complete-mutation.graphql';
-import * as progressNoteCreateMutationGraphql from '../graphql/queries/progress-note-create.graphql';
 import * as progressNoteEditMutationGraphql from '../graphql/queries/progress-note-edit-mutation.graphql';
 import {
+  getCurrentUserQuery,
   progressNoteCompleteMutation,
   progressNoteCompleteMutationVariables,
   progressNoteCreateMutation,
@@ -27,6 +27,7 @@ import { getPatientFullName } from '../shared/util/patient-name';
 import * as styles from './css/progress-note-popup.css';
 import ProgressNoteContext from './progress-note-context';
 import ProgressNoteCosignature from './progress-note-cosignature';
+import ProgressNoteSupervisorNotes from './progress-note-supervisor-notes';
 
 export interface IUpdateProgressNoteOptions {
   progressNoteTemplateId: string | null;
@@ -39,8 +40,9 @@ export interface IUpdateProgressNoteOptions {
 }
 
 interface IProps {
+  currentUser: getCurrentUserQuery['currentUser'];
   close: () => void;
-  patientId: string | null;
+  progressNoteId: string;
   visible: boolean;
   mutate?: any;
 }
@@ -65,25 +67,41 @@ interface IGraphqlProps {
 
 interface IState {
   tab: Tab;
-  readyToSubmit: boolean;
+  isReadyToSubmit: boolean;
+  isInSupervisorMode: boolean;
 }
 
-type Tab = 'context' | 'activity';
+type Tab = 'context' | 'activity' | 'supervisor';
 
 type allProps = IProps & IGraphqlProps;
+
+const getIsInSupervisorMode = (
+  currentUser: getCurrentUserQuery['currentUser'],
+  progressNote?: FullProgressNoteFragment,
+) => {
+  return currentUser &&
+    progressNote &&
+    progressNote.supervisor &&
+    currentUser.id === progressNote.supervisor.id
+    ? true
+    : false;
+};
 
 export class ProgressNotePopup extends React.Component<allProps, IState> {
   constructor(props: allProps) {
     super(props);
     this.state = {
       tab: 'context',
-      readyToSubmit: false,
+      isReadyToSubmit: false,
+      isInSupervisorMode: getIsInSupervisorMode(props.currentUser, props.progressNote),
     };
   }
 
   componentWillReceiveProps(newProps: allProps) {
-    if (newProps.patientId && !newProps.progressNote && !newProps.progressNoteLoading) {
-      this.props.createProgressNote({ variables: { patientId: newProps.patientId } });
+    if (newProps.currentUser && newProps.progressNote) {
+      this.setState({
+        isInSupervisorMode: getIsInSupervisorMode(newProps.currentUser, newProps.progressNote),
+      });
     }
   }
 
@@ -111,8 +129,8 @@ export class ProgressNotePopup extends React.Component<allProps, IState> {
 
   submit = async () => {
     const { progressNote } = this.props;
-    const { readyToSubmit } = this.state;
-    if (progressNote && readyToSubmit) {
+    const { isReadyToSubmit } = this.state;
+    if (progressNote && isReadyToSubmit) {
       await this.props.completeProgressNote({
         variables: {
           progressNoteId: progressNote.id,
@@ -123,14 +141,15 @@ export class ProgressNotePopup extends React.Component<allProps, IState> {
     // todo: handle error
   };
 
-  updateReadyToSubmit = (readyToSubmit: boolean) => {
-    this.setState({ readyToSubmit });
+  updateReadyToSubmit = (isReadyToSubmit: boolean) => {
+    this.setState({ isReadyToSubmit });
   };
 
   render() {
-    const { close, visible, patientId, progressNoteTemplates, progressNote } = this.props;
-    const { tab, readyToSubmit } = this.state;
+    const { close, visible, progressNoteTemplates, progressNote, currentUser } = this.props;
+    const { tab, isReadyToSubmit, isInSupervisorMode } = this.state;
 
+    const patientId = progressNote ? progressNote.patientId : null;
     const containerStyles = classNames(styles.container, {
       [styles.visible]: visible,
     });
@@ -139,15 +158,23 @@ export class ProgressNotePopup extends React.Component<allProps, IState> {
       tab === 'context' ? (
         <ProgressNoteContext
           updateReadyToSubmit={this.updateReadyToSubmit}
-          patientId={patientId}
           progressNote={progressNote}
           progressNoteTemplates={progressNoteTemplates}
           onChange={this.updateProgressNote}
+          currentUser={currentUser}
+          disabled={isInSupervisorMode}
         />
       ) : null;
     const activity =
-      tab === 'activity' && patientId ? (
-        <ProgressNoteActivity progressNote={progressNote} patientId={patientId} />
+      tab === 'activity' && progressNote ? (
+        <ProgressNoteActivity progressNote={progressNote} />
+      ) : null;
+    const supervisorHtml =
+      tab === 'supervisor' && progressNote ? (
+        <ProgressNoteSupervisorNotes
+          progressNote={progressNote}
+          updateReadyToSubmit={this.updateReadyToSubmit}
+        />
       ) : null;
 
     let progressNoteName = null;
@@ -165,11 +192,18 @@ export class ProgressNotePopup extends React.Component<allProps, IState> {
     const cosignature =
       progressNoteName && tab === 'context' ? (
         <ProgressNoteCosignature
-          patientId={patientId}
           progressNote={progressNote}
           updateProgressNote={this.updateProgressNote}
+          disabled={isInSupervisorMode}
         />
       ) : null;
+    const supervisorTab = isInSupervisorMode ? (
+      <UnderlineTab
+        onClick={() => this.selectTab('supervisor')}
+        messageId="progressNote.supervisorReview"
+        selected={tab === 'supervisor'}
+      />
+    ) : null;
     return (
       <div className={containerStyles}>
         <div className={styles.topBar}>
@@ -189,7 +223,7 @@ export class ProgressNotePopup extends React.Component<allProps, IState> {
           </Link>
           <Button
             onClick={this.submit}
-            disabled={!readyToSubmit}
+            disabled={!isReadyToSubmit}
             messageId="patient.submitProgressNote"
             color="blue"
           />
@@ -205,20 +239,16 @@ export class ProgressNotePopup extends React.Component<allProps, IState> {
             messageId="patient.activity"
             selected={tab === 'activity'}
           />
+          {supervisorTab}
         </UnderlineTabs>
         <div className={styles.bottomSection}>
           {context}
           {activity}
+          {supervisorHtml}
           {cosignature}
         </div>
       </div>
     );
-  }
-}
-
-function getProgressNote(data: any) {
-  if (data && data.progressNotesForPatient) {
-    return data.progressNotesForPatient[0];
   }
 }
 
@@ -227,26 +257,21 @@ export default compose(
     name: 'completeProgressNote',
     options: { refetchQueries: ['getProgressNotesForPatient', 'getProgressNotesForCurrentUser'] },
   }),
-  graphql<IGraphqlProps, IProps, allProps>(progressNoteCreateMutationGraphql as any, {
-    name: 'createProgressNote',
-    options: { refetchQueries: ['getProgressNotesForPatient', 'getProgressNotesForCurrentUser'] },
-  }),
   graphql<IGraphqlProps, IProps, allProps>(progressNoteEditMutationGraphql as any, {
     name: 'editProgressNote',
     options: { refetchQueries: ['getProgressNotesForPatient', 'getProgressNotesForCurrentUser'] },
   }),
-  graphql<IGraphqlProps, IProps, allProps>(progressNotesQuery as any, {
-    skip: (props: IProps) => !props.patientId,
+  graphql<IGraphqlProps, IProps, allProps>(progressNoteQuery as any, {
+    skip: (props: IProps) => !props.progressNoteId,
     options: (props: IProps) => ({
       variables: {
-        patientId: props.patientId,
-        completed: false,
+        progressNoteId: props.progressNoteId,
       },
     }),
     props: ({ data }) => ({
       progressNoteLoading: data ? data.loading : false,
       progressNoteError: data ? data.error : null,
-      progressNote: data ? getProgressNote(data as any) : null,
+      progressNote: data ? (data as any).progressNote : null,
     }),
   }),
   graphql<IGraphqlProps, IProps, allProps>(progressNoteTemplatesQuery as any, {

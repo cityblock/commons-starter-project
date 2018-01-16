@@ -1,8 +1,6 @@
 import * as classNames from 'classnames';
 import * as React from 'react';
-import { graphql } from 'react-apollo';
-import * as taskQuery from '../../graphql/queries/get-task.graphql';
-import { FullTaskEventFragment, FullTaskFragment } from '../../graphql/types';
+import { FullTaskEventFragment } from '../../graphql/types';
 import * as styles from './css/progress-note-activity.css';
 
 interface IProps {
@@ -10,39 +8,37 @@ interface IProps {
   expanded: boolean;
 }
 
-interface IGraphqlProps {
-  task: FullTaskFragment | null;
-  taskLoading: boolean;
-  taskError?: string;
-}
-
-type allProps = IProps & IGraphqlProps;
-
-class ProgressNoteActivityTask extends React.Component<allProps> {
+class ProgressNoteActivityTask extends React.Component<IProps> {
   getActivityDescription() {
     const { taskEvents } = this.props;
     const updateCount = taskEvents.length;
     const completedTaskEvent = taskEvents.some(event => event.eventType === 'complete_task');
+    const deletedTaskEvent = taskEvents.some(event => event.eventType === 'delete_task');
 
     if (completedTaskEvent) {
       return 'Task completed';
+    }
+    if (deletedTaskEvent) {
+      return 'Task deleted';
     }
 
     return `${updateCount} update${updateCount !== 1 ? 's' : ''}`;
   }
 
   render() {
-    const { expanded, task } = this.props;
+    const { expanded, taskEvents } = this.props;
+    const priority = taskEvents[0] ? taskEvents[0].task.priority : null;
+    const title = taskEvents[0] ? taskEvents[0].task.title : null;
     const taskActivityRowStyles = classNames(styles.taskActivityRow, {
       [styles.expanded]: expanded,
-      [styles.highPriority]: task && task.priority === 'high',
-      [styles.mediumPriority]: task && task.priority === 'medium',
+      [styles.highPriority]: priority === 'high',
+      [styles.mediumPriority]: priority === 'medium',
     });
 
     return (
       <div className={taskActivityRowStyles}>
         <div className={styles.taskActivityInfo}>
-          <div className={styles.taskActivityTitle}>{task ? task.title : ''}</div>
+          <div className={styles.taskActivityTitle}>{title}</div>
           <div className={styles.taskActivityUpdateText}>{this.getActivityDescription()}</div>
         </div>
         <div className={styles.taskActivityFollowers} />
@@ -51,13 +47,4 @@ class ProgressNoteActivityTask extends React.Component<allProps> {
   }
 }
 
-export default graphql<IGraphqlProps, IProps, allProps>(taskQuery as any, {
-  skip: (props: IProps) => !props.taskEvents[0].taskId,
-  options: (props: IProps) => ({ variables: { taskId: props.taskEvents[0].taskId } }),
-  props: ({ data }) => ({
-    taskLoading: data ? data.loading : false,
-    taskError: data ? data.error : null,
-    task: data ? (data as any).task : null,
-    refetchTask: data ? data.refetch : null,
-  }),
-})(ProgressNoteActivityTask);
+export default ProgressNoteActivityTask;

@@ -1,6 +1,7 @@
 import {
   IProgressNoteAddSupervisorNotesInput,
   IProgressNoteCompleteInput,
+  IProgressNoteCompleteSupervisorReviewInput,
   IProgressNoteCreateInput,
   IProgressNoteEditInput,
 } from 'schema';
@@ -35,6 +36,10 @@ interface IEditProgressNoteOptions {
 
 interface IAddSupervisorNotesOptions {
   input: IProgressNoteAddSupervisorNotesInput;
+}
+
+interface IProgressNoteCompleteSupervisorReviewOptions {
+  input: IProgressNoteCompleteSupervisorReviewInput;
 }
 
 export async function progressNoteCreate(
@@ -98,7 +103,26 @@ export async function progressNoteAddSupervisorNotes(
     throw new Error('you are not the supervisor permitted to review this progress note');
   }
 
-  return await ProgressNote.addSupervisorReview(input.progressNoteId, input.supervisorNotes, txn);
+  return await ProgressNote.addSupervisorNotes(input.progressNoteId, input.supervisorNotes, txn);
+}
+
+export async function progressNoteCompleteSupervisorReview(
+  root: any,
+  { input }: IProgressNoteCompleteSupervisorReviewOptions,
+  { userRole, userId, txn }: IContext,
+) {
+  await accessControls.isAllowed(userRole, 'edit', 'progressNote');
+  checkUserLoggedIn(userId);
+
+  const progressNote = await ProgressNote.get(input.progressNoteId, txn);
+  if (!progressNote) {
+    throw new Error('progress note not found');
+  }
+  if (progressNote.supervisorId !== userId) {
+    throw new Error('you are not the supervisor permitted to review this progress note');
+  }
+
+  return await ProgressNote.completeSupervisorReview(input.progressNoteId, txn);
 }
 
 export async function resolveProgressNote(

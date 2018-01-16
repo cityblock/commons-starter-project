@@ -1,7 +1,7 @@
 import { Action } from '../actions';
 
 export interface IProgressNotePopupOptions {
-  patientId: string;
+  progressNoteId: string;
 }
 
 interface IProgressNotePopup {

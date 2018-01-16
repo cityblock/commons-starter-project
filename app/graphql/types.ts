@@ -79,6 +79,13 @@ export enum AssessmentType {
 }
 
 
+export enum Priority {
+  low = "low",
+  medium = "medium",
+  high = "high",
+}
+
+
 export enum TaskEventTypes {
   create_task = "create_task",
   add_follower = "add_follower",
@@ -103,13 +110,6 @@ export enum CompletedWithinInterval {
   week = "week",
   month = "month",
   year = "year",
-}
-
-
-export enum Priority {
-  low = "low",
-  medium = "medium",
-  high = "high",
 }
 
 
@@ -853,6 +853,11 @@ export interface eventNotificationDismissMutation {
     taskEvent:  {
       id: string,
       taskId: string,
+      task:  {
+        id: string,
+        title: string,
+        priority: Priority | null,
+      },
       userId: string,
       user:  {
         id: string,
@@ -942,6 +947,11 @@ export interface eventNotificationsForTaskDismissMutation {
     taskEvent:  {
       id: string,
       taskId: string,
+      task:  {
+        id: string,
+        title: string,
+        priority: Priority | null,
+      },
       userId: string,
       user:  {
         id: string,
@@ -1213,6 +1223,11 @@ export interface getEventNotificationsForCurrentUserQuery {
         taskEvent:  {
           id: string,
           taskId: string,
+          task:  {
+            id: string,
+            title: string,
+            priority: Priority | null,
+          },
           userId: string,
           user:  {
             id: string,
@@ -2369,6 +2384,11 @@ export interface getProgressNoteActivityForProgressNoteQuery {
     taskEvents:  Array< {
       id: string,
       taskId: string,
+      task:  {
+        id: string,
+        title: string,
+        priority: Priority | null,
+      },
       userId: string,
       user:  {
         id: string,
@@ -2839,6 +2859,68 @@ export interface getProgressNoteTemplatesQuery {
   } | null >,
 };
 
+export interface getProgressNoteQueryVariables {
+  progressNoteId: string,
+};
+
+export interface getProgressNoteQuery {
+  // progress note
+  progressNote:  {
+    id: string,
+    patientId: string,
+    user:  {
+      id: string,
+      locale: string | null,
+      phone: string | null,
+      firstName: string | null,
+      lastName: string | null,
+      userRole: UserRole,
+      email: string | null,
+      homeClinicId: string,
+      googleProfileImageUrl: string | null,
+      createdAt: string,
+      updatedAt: string,
+    },
+    patient:  {
+      id: string,
+      firstName: string | null,
+      middleName: string | null,
+      lastName: string | null,
+      language: string | null,
+      gender: string | null,
+      dateOfBirth: string | null,
+      zip: string | null,
+      createdAt: string,
+      consentToText: boolean | null,
+      consentToCall: boolean | null,
+    },
+    completedAt: string | null,
+    createdAt: string,
+    updatedAt: string,
+    summary: string | null,
+    memberConcern: string | null,
+    startedAt: string | null,
+    location: string | null,
+    deletedAt: string | null,
+    needsSupervisorReview: boolean | null,
+    reviewedBySupervisorAt: string | null,
+    supervisorNotes: string | null,
+    supervisor:  {
+      id: string,
+      firstName: string | null,
+      lastName: string | null,
+      userRole: UserRole,
+      googleProfileImageUrl: string | null,
+    } | null,
+    progressNoteTemplate:  {
+      id: string,
+      title: string,
+      createdAt: string,
+      deletedAt: string | null,
+    } | null,
+  },
+};
+
 export interface getProgressNotesForCurrentUserQueryVariables {
   completed: boolean,
 };
@@ -2909,6 +2991,64 @@ export interface getProgressNotesForPatientQueryVariables {
 export interface getProgressNotesForPatientQuery {
   // progress notes for patient
   progressNotesForPatient:  Array< {
+    id: string,
+    patientId: string,
+    user:  {
+      id: string,
+      locale: string | null,
+      phone: string | null,
+      firstName: string | null,
+      lastName: string | null,
+      userRole: UserRole,
+      email: string | null,
+      homeClinicId: string,
+      googleProfileImageUrl: string | null,
+      createdAt: string,
+      updatedAt: string,
+    },
+    patient:  {
+      id: string,
+      firstName: string | null,
+      middleName: string | null,
+      lastName: string | null,
+      language: string | null,
+      gender: string | null,
+      dateOfBirth: string | null,
+      zip: string | null,
+      createdAt: string,
+      consentToText: boolean | null,
+      consentToCall: boolean | null,
+    },
+    completedAt: string | null,
+    createdAt: string,
+    updatedAt: string,
+    summary: string | null,
+    memberConcern: string | null,
+    startedAt: string | null,
+    location: string | null,
+    deletedAt: string | null,
+    needsSupervisorReview: boolean | null,
+    reviewedBySupervisorAt: string | null,
+    supervisorNotes: string | null,
+    supervisor:  {
+      id: string,
+      firstName: string | null,
+      lastName: string | null,
+      userRole: UserRole,
+      googleProfileImageUrl: string | null,
+    } | null,
+    progressNoteTemplate:  {
+      id: string,
+      title: string,
+      createdAt: string,
+      deletedAt: string | null,
+    } | null,
+  } | null >,
+};
+
+export interface getProgressNotesForSupervisorReviewQuery {
+  // progress notes for supervisor review
+  progressNotesForSupervisorReview:  Array< {
     id: string,
     patientId: string,
     user:  {
@@ -5014,6 +5154,69 @@ export interface patientSetupMutation {
     createdAt: string,
     consentToText: boolean | null,
     consentToCall: boolean | null,
+  } | null,
+};
+
+export interface progressNoteAddSupervisorNotesMutationVariables {
+  progressNoteId: string,
+  supervisorNotes: string,
+};
+
+export interface progressNoteAddSupervisorNotesMutation {
+  // add or edit supervisor notes
+  progressNoteAddSupervisorNotes:  {
+    id: string,
+    patientId: string,
+    user:  {
+      id: string,
+      locale: string | null,
+      phone: string | null,
+      firstName: string | null,
+      lastName: string | null,
+      userRole: UserRole,
+      email: string | null,
+      homeClinicId: string,
+      googleProfileImageUrl: string | null,
+      createdAt: string,
+      updatedAt: string,
+    },
+    patient:  {
+      id: string,
+      firstName: string | null,
+      middleName: string | null,
+      lastName: string | null,
+      language: string | null,
+      gender: string | null,
+      dateOfBirth: string | null,
+      zip: string | null,
+      createdAt: string,
+      consentToText: boolean | null,
+      consentToCall: boolean | null,
+    },
+    completedAt: string | null,
+    createdAt: string,
+    updatedAt: string,
+    summary: string | null,
+    memberConcern: string | null,
+    startedAt: string | null,
+    location: string | null,
+    deletedAt: string | null,
+    needsSupervisorReview: boolean | null,
+    reviewedBySupervisorAt: string | null,
+    supervisorNotes: string | null,
+    supervisor:  {
+      id: string,
+      firstName: string | null,
+      lastName: string | null,
+      userRole: UserRole,
+      googleProfileImageUrl: string | null,
+    } | null,
+    progressNoteTemplate:  {
+      id: string,
+      title: string,
+      createdAt: string,
+      deletedAt: string | null,
+    } | null,
   } | null,
 };
 
@@ -7399,6 +7602,11 @@ export interface FullEventNotificationFragment {
   taskEvent:  {
     id: string,
     taskId: string,
+    task:  {
+      id: string,
+      title: string,
+      priority: Priority | null,
+    },
     userId: string,
     user:  {
       id: string,
@@ -8031,6 +8239,11 @@ export interface FullProgressNoteActivityFragment {
   taskEvents:  Array< {
     id: string,
     taskId: string,
+    task:  {
+      id: string,
+      title: string,
+      priority: Priority | null,
+    },
     userId: string,
     user:  {
       id: string,
@@ -8995,6 +9208,11 @@ export interface FullTaskCommentFragment {
 export interface FullTaskEventFragment {
   id: string,
   taskId: string,
+  task:  {
+    id: string,
+    title: string,
+    priority: Priority | null,
+  },
   userId: string,
   user:  {
     id: string,

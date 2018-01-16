@@ -30,6 +30,8 @@ interface IGoogleLoginError {
 type allProps = IGraphqlProps & IProps;
 
 const SCOPE = 'https://www.googleapis.com/auth/calendar';
+const HOME_ROUTE = '/dashboard/tasks';
+const LOGGED_IN_TITLE = 'Commons | A Cityblock Health product';
 
 export class LoginContainer extends React.Component<allProps, { error: string | null }> {
   constructor(props: allProps) {
@@ -44,7 +46,8 @@ export class LoginContainer extends React.Component<allProps, { error: string | 
   componentWillReceiveProps(newProps: allProps) {
     if (newProps.currentUser) {
       // Log in succeeded. Navigate to the patients list scene.
-      this.props.history.push('/patients');
+      this.props.history.push(HOME_ROUTE);
+      document.title = LOGGED_IN_TITLE;
     }
   }
 
@@ -57,7 +60,8 @@ export class LoginContainer extends React.Component<allProps, { error: string | 
       const res = await this.props.logIn({ variables: { googleAuthCode: response.code } });
       await localStorage.setItem('authToken', res.data.userLogin.authToken);
 
-      this.props.history.push('/patients');
+      this.props.history.push(HOME_ROUTE);
+      document.title = LOGGED_IN_TITLE;
     } catch (e) {
       await localStorage.removeItem('authToken');
       this.setState({ error: e.message });

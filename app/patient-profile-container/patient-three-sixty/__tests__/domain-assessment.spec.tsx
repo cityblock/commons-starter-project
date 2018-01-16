@@ -95,6 +95,28 @@ describe('Patient 360 Domain Assessment List Item', () => {
     expect(wrapper.find('.detail').text()).toBe(answer.summaryText);
   });
 
+  it('does not render duplicated summary text', () => {
+    const riskArea2 = {
+      ...rawRiskArea,
+      questions: [
+        {
+          ...question,
+          answers: [
+            {
+              ...answer,
+              patientAnswers: [patientAnswer, patientAnswer],
+            },
+          ],
+        },
+      ],
+      riskAreaAssessmentSubmissions: [riskAreaAssessmentSubmission],
+    };
+
+    wrapper.setProps({ riskArea: riskArea2 });
+
+    expect(wrapper.find('.detail').text()).toBe(answer.summaryText);
+  });
+
   it('handles assessment detail view properly', () => {
     wrapper.setProps({ assessmentDetailView: true });
     expect(wrapper.find('.detail').length).toBe(0);

@@ -41,7 +41,11 @@ class DomainAssessment extends React.Component<IProps> {
               totalScore++;
             }
 
-            if (answer.inSummary && answer.summaryText) {
+            if (
+              answer.inSummary &&
+              answer.summaryText &&
+              !summaryText.includes(answer.summaryText)
+            ) {
               summaryText.push(answer.summaryText);
             }
           });

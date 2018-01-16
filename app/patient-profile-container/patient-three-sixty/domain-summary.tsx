@@ -90,14 +90,18 @@ export class DomainSummary extends React.Component<allProps, IState> {
                 totalScore++;
               }
 
-              if (answer.inSummary && answer.summaryText && area.assessmentType === 'automated') {
-                automatedSummaryText.push(answer.summaryText);
-              } else if (
-                answer.inSummary &&
-                answer.summaryText &&
-                area.assessmentType === 'manual'
-              ) {
-                manualSummaryText.push(answer.summaryText);
+              if (answer.inSummary && answer.summaryText) {
+                if (
+                  area.assessmentType === 'automated' &&
+                  !automatedSummaryText.includes(answer.summaryText)
+                ) {
+                  automatedSummaryText.push(answer.summaryText);
+                } else if (
+                  area.assessmentType === 'manual' &&
+                  !manualSummaryText.includes(answer.summaryText)
+                ) {
+                  manualSummaryText.push(answer.summaryText);
+                }
               }
             });
           }

@@ -18,8 +18,10 @@
 }
 
 .container ul span {
+  display: inline-block;
   font-size: var(--small-font-size);
   margin-left: var(--small-gutter);
+  vertical-align: text-top;
 }
 
 .noAssessments {

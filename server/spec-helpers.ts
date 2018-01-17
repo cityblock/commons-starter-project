@@ -621,6 +621,74 @@ export async function setupUrgentTasks(txn?: Transaction) {
   return { user, patient1, patient5, task, task1, eventNotification };
 }
 
+export async function createAnswerAssociations(txn: Transaction) {
+  const riskAreaGroup = await RiskAreaGroup.create(createMockRiskAreaGroup(), txn);
+  const riskArea = await RiskArea.create(
+    {
+      title: 'Night King Destroyed the Wall',
+      riskAreaGroupId: riskAreaGroup.id,
+      assessmentType: 'manual',
+      order: 1,
+      mediumRiskThreshold: 4,
+      highRiskThreshold: 8,
+    },
+    txn,
+  );
+
+  const question = await Question.create(
+    {
+      title: 'Who will win the war for the dawn?',
+      answerType: 'dropdown',
+      riskAreaId: riskArea.id,
+      type: 'riskArea',
+      order: 1,
+    },
+    txn,
+  );
+
+  const answer1 = await Answer.create(
+    {
+      displayValue: 'zombieViscerion',
+      value: '3',
+      valueType: 'number',
+      riskAdjustmentType: 'increment',
+      inSummary: true,
+      summaryText: 'Dragon has blue eyes',
+      questionId: question.id,
+      order: 1,
+    },
+    txn,
+  );
+  const answer2 = await Answer.create(
+    {
+      displayValue: 'nightKingMagic',
+      value: '4',
+      valueType: 'number',
+      riskAdjustmentType: 'increment',
+      inSummary: true,
+      summaryText: 'Dragon breathes blue fire',
+      questionId: question.id,
+      order: 1,
+    },
+    txn,
+  );
+  const answer3 = await Answer.create(
+    {
+      displayValue: 'theDragonHasThreeHeads',
+      value: '5',
+      valueType: 'number',
+      riskAdjustmentType: 'forceHighRisk',
+      inSummary: true,
+      summaryText: 'Dragon is ridden by Night King',
+      questionId: question.id,
+      order: 1,
+    },
+    txn,
+  );
+
+  return { answer1, answer2, answer3 };
+}
+
 export async function createFullRiskAreaGroupAssociations(
   riskAreaGroupId: string,
   patientId: string,
@@ -847,4 +915,6 @@ export async function createFullRiskAreaGroupAssociations(
     },
     txn,
   );
+
+  return { answer1, answer2, answer3 };
 }

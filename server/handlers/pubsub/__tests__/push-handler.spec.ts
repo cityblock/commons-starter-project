@@ -117,27 +117,36 @@ describe('handling pubusub push events from mixer', () => {
   it('ends the request if an answer cannot be found for the provided data', async () => {
     await transaction(Patient.knex(), async txn => {
       const { riskArea, patient } = await setup(txn);
-      const computedField = await ComputedField.create({
-        label: 'Computed Field',
-        slug: 'computed-field',
-        dataType: 'string',
-      }, txn);
-      const question = await Question.create({
-        title: 'Question',
-        answerType: 'radio',
-        riskAreaId: riskArea.id,
-        type: 'riskArea',
-        order: 1,
-        computedFieldId: computedField.id,
-      }, txn);
-      await Answer.create({
-        questionId: question.id,
-        displayValue: 'Answer',
-        value: 'answer',
-        valueType: 'string',
-        order: 1,
-        inSummary: false,
-      }, txn);
+      const computedField = await ComputedField.create(
+        {
+          label: 'Computed Field',
+          slug: 'computed-field',
+          dataType: 'string',
+        },
+        txn,
+      );
+      const question = await Question.create(
+        {
+          title: 'Question',
+          answerType: 'radio',
+          riskAreaId: riskArea.id,
+          type: 'riskArea',
+          order: 1,
+          computedFieldId: computedField.id,
+        },
+        txn,
+      );
+      await Answer.create(
+        {
+          questionId: question.id,
+          displayValue: 'Answer',
+          value: 'answer',
+          valueType: 'string',
+          order: 1,
+          inSummary: false,
+        },
+        txn,
+      );
       const badData = {
         patientId: patient.id,
         slug: computedField.slug,
@@ -180,45 +189,66 @@ describe('handling pubusub push events from mixer', () => {
         },
         txn,
       );
-      const computedField = await ComputedField.create({
-        label: 'Computed Field',
-        slug: 'computed-field',
-        dataType: 'string',
-      }, txn);
-      const question = await Question.create({
-        title: 'Question',
-        answerType: 'radio',
-        riskAreaId: riskArea.id,
-        type: 'riskArea',
-        order: 1,
-        computedFieldId: computedField.id,
-      }, txn);
-      const answer = await Answer.create({
-        questionId: question.id,
-        displayValue: 'Answer',
-        value: 'answer',
-        valueType: 'string',
-        order: 1,
-        inSummary: false,
-      }, txn);
-      await ConcernSuggestion.create({
-        concernId: concern.id,
-        answerId: answer.id,
-      }, txn);
-      await GoalSuggestion.create({
-        goalSuggestionTemplateId: goalSuggestionTemplate.id,
-        answerId: answer.id,
-      }, txn);
-      await GoalSuggestion.create({
-        goalSuggestionTemplateId: goalSuggestionTemplate2.id,
-        answerId: answer.id,
-      }, txn);
+      const computedField = await ComputedField.create(
+        {
+          label: 'Computed Field',
+          slug: 'computed-field',
+          dataType: 'string',
+        },
+        txn,
+      );
+      const question = await Question.create(
+        {
+          title: 'Question',
+          answerType: 'radio',
+          riskAreaId: riskArea.id,
+          type: 'riskArea',
+          order: 1,
+          computedFieldId: computedField.id,
+        },
+        txn,
+      );
+      const answer = await Answer.create(
+        {
+          questionId: question.id,
+          displayValue: 'Answer',
+          value: 'answer',
+          valueType: 'string',
+          order: 1,
+          inSummary: false,
+        },
+        txn,
+      );
+      await ConcernSuggestion.create(
+        {
+          concernId: concern.id,
+          answerId: answer.id,
+        },
+        txn,
+      );
+      await GoalSuggestion.create(
+        {
+          goalSuggestionTemplateId: goalSuggestionTemplate.id,
+          answerId: answer.id,
+        },
+        txn,
+      );
+      await GoalSuggestion.create(
+        {
+          goalSuggestionTemplateId: goalSuggestionTemplate2.id,
+          answerId: answer.id,
+        },
+        txn,
+      );
       // So that we can check that existing PatientGoals are filtered out
-      await PatientGoal.create({
-        patientId: patient.id,
-        userId: user.id,
-        goalSuggestionTemplateId: goalSuggestionTemplate.id,
-      }, txn);
+      await PatientGoal.create(
+        {
+          patientId: patient.id,
+          userId: user.id,
+          goalSuggestionTemplateId: goalSuggestionTemplate.id,
+        },
+        txn,
+      );
       const goodData = {
         patientId: patient.id,
         slug: computedField.slug,

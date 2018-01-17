@@ -29,13 +29,16 @@ describe('postgres pingdom test', () => {
 
     await transaction(User.knex(), async txn => {
       const clinic = await Clinic.create(createMockClinic(), txn);
-      await User.create({
-        email: 'brennan@cityblock.com',
-        firstName: 'Bertrand',
-        lastName: 'Russell',
-        userRole,
-        homeClinicId: clinic.id,
-      }, txn);
+      await User.create(
+        {
+          email: 'brennan@cityblock.com',
+          firstName: 'Bertrand',
+          lastName: 'Russell',
+          userRole,
+          homeClinicId: clinic.id,
+        },
+        txn,
+      );
 
       await checkPostgresHandler(request, response, txn);
 

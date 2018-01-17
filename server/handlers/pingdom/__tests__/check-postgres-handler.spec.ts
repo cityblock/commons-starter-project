@@ -1,4 +1,5 @@
 import * as httpMocks from 'node-mocks-http';
+import { transaction } from 'objection';
 import Db from '../../../db';
 import Clinic from '../../../models/clinic';
 import User from '../../../models/user';
@@ -26,18 +27,20 @@ describe('postgres pingdom test', () => {
     const response = httpMocks.createResponse();
     response.sendStatus = jest.fn();
 
-    const clinic = await Clinic.create(createMockClinic());
-    await User.create({
-      email: 'brennan@cityblock.com',
-      firstName: 'Bertrand',
-      lastName: 'Russell',
-      userRole,
-      homeClinicId: clinic.id,
+    await transaction(User.knex(), async txn => {
+      const clinic = await Clinic.create(createMockClinic(), txn);
+      await User.create({
+        email: 'brennan@cityblock.com',
+        firstName: 'Bertrand',
+        lastName: 'Russell',
+        userRole,
+        homeClinicId: clinic.id,
+      }, txn);
+
+      await checkPostgresHandler(request, response, txn);
+
+      expect(response.sendStatus).toBeCalledWith(200);
     });
-
-    await checkPostgresHandler(request, response);
-
-    expect(response.sendStatus).toBeCalledWith(200);
   });
 
   it('errors if athena api call fails', async () => {
@@ -50,8 +53,9 @@ describe('postgres pingdom test', () => {
 
     (response.status as any).mockReturnValueOnce({ send: jest.fn() });
 
-    await checkPostgresHandler(request, response);
-
-    expect(response.status).toBeCalledWith(500);
+    await transaction(User.knex(), async txn => {
+      await checkPostgresHandler(request, response, txn);
+      expect(response.status).toBeCalledWith(500);
+    });
   });
 });

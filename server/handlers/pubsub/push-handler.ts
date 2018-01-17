@@ -1,5 +1,5 @@
 import * as express from 'express';
-import { transaction } from 'objection';
+import { transaction, Transaction } from 'objection';
 import Db from '../../db';
 import { createSuggestionsForComputedFieldAnswer } from '../../lib/suggestions';
 import Answer from '../../models/answer';
@@ -14,7 +14,11 @@ export interface IPubsubMessageData {
 }
 
 /* tslint:disable no-console */
-export async function pubsubPushHandler(req: express.Request, res: express.Response) {
+export async function pubsubPushHandler(
+  req: express.Request,
+  res: express.Response,
+  existingTxn?: Transaction,
+) {
   const { patientId, slug, value, jobId } = req.body.message.data;
 
   if (!patientId || !slug || !value || !jobId) {
@@ -25,26 +29,32 @@ export async function pubsubPushHandler(req: express.Request, res: express.Respo
 
   await Db.get();
 
-  try {
-    await Patient.get(patientId);
-  } catch (err) {
-    console.error(`Cannot find patient for id: ${patientId}`);
-    res.sendStatus(200);
-    return;
-  }
+  await transaction(PatientAnswer.knex(), async txn => {
+    try {
+      await Patient.get(patientId, existingTxn || txn);
+    } catch (err) {
+      console.error(`Cannot find patient for id: ${patientId}`);
+      res.sendStatus(200);
+      return;
+    }
 
-  const answer = await Answer.getByComputedFieldSlugAndValue({ slug, value });
+    const answer = await Answer.getByComputedFieldSlugAndValue(
+      {
+        slug,
+        value,
+      },
+      existingTxn || txn,
+    );
 
-  if (!answer) {
-    console.error(`Cannot find answer for slug: ${slug} and value: ${value}`);
-    res.sendStatus(200);
-    return;
-  }
+    if (!answer) {
+      console.error(`Cannot find answer for slug: ${slug} and value: ${value}`);
+      res.sendStatus(200);
+      return;
+    }
 
-  const { computedField } = answer.question;
+    const { computedField } = answer.question;
 
-  try {
-    await transaction(PatientAnswer.knex(), async txn => {
+    try {
       const patientAnswer = (await PatientAnswer.create(
         {
           patientId,
@@ -62,21 +72,21 @@ export async function pubsubPushHandler(req: express.Request, res: express.Respo
           ],
           type: 'computedFieldAnswer',
         },
-        txn,
+        existingTxn || txn,
       ))[0];
 
       await createSuggestionsForComputedFieldAnswer(
         patientId,
         patientAnswer.id,
         computedField.id,
-        txn,
+        existingTxn || txn,
       );
-    });
-  } catch (err) {
-    console.error('Problem recording answer');
-    res.sendStatus(200);
-    return;
-  }
+    } catch (err) {
+      console.error('Problem recording answer');
+      res.sendStatus(200);
+      return;
+    }
+  });
 
   res.sendStatus(200);
 }

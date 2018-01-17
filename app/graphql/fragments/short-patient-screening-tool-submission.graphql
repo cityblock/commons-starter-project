@@ -6,6 +6,7 @@ fragment ShortPatientScreeningToolSubmission on PatientScreeningToolSubmission {
   score
   screeningToolScoreRangeId
   screeningToolScoreRange {
+    id
     riskAdjustmentType
     description
   }

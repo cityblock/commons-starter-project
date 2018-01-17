@@ -7,11 +7,14 @@ fragment FullRiskAreaForPatient on RiskAreaForPatient {
   mediumRiskThreshold
   highRiskThreshold
   questions {
+    id
     answers {
+      id
       inSummary
       riskAdjustmentType
       summaryText
       patientAnswers {
+        id
         patientId
         createdAt
         updatedAt

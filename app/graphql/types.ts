@@ -15,16 +15,6 @@ export enum RiskAdjustmentTypeOptions {
 }
 
 
-export enum AppointmentStatus {
-  cancelled = "cancelled",
-  future = "future",
-  open = "open",
-  checkedIn = "checkedIn",
-  checkedOut = "checkedOut",
-  chargeEntered = "chargeEntered",
-}
-
-
 export enum CarePlanSuggestionType {
   concern = "concern",
   goal = "goal",
@@ -3552,11 +3542,14 @@ export interface getRiskAreaGroupForPatientQuery {
       mediumRiskThreshold: number,
       highRiskThreshold: number,
       questions:  Array< {
+        id: string,
         answers:  Array< {
+          id: string,
           inSummary: boolean | null,
           riskAdjustmentType: RiskAdjustmentTypeOptions | null,
           summaryText: string | null,
           patientAnswers:  Array< {
+            id: string,
             patientId: string,
             createdAt: string,
             updatedAt: string,
@@ -3579,6 +3572,7 @@ export interface getRiskAreaGroupForPatientQuery {
           score: number | null,
           screeningToolScoreRangeId: string | null,
           screeningToolScoreRange:  {
+            id: string,
             riskAdjustmentType: RiskAdjustmentTypeOptions,
             description: string,
           } | null,
@@ -3726,6 +3720,7 @@ export interface getScreeningToolQuery {
       score: number | null,
       screeningToolScoreRangeId: string | null,
       screeningToolScoreRange:  {
+        id: string,
         riskAdjustmentType: RiskAdjustmentTypeOptions,
         description: string,
       } | null,
@@ -3814,6 +3809,7 @@ export interface getScreeningToolsForRiskAreaQuery {
       score: number | null,
       screeningToolScoreRangeId: string | null,
       screeningToolScoreRange:  {
+        id: string,
         riskAdjustmentType: RiskAdjustmentTypeOptions,
         description: string,
       } | null,
@@ -3898,6 +3894,7 @@ export interface getScreeningToolsQuery {
       score: number | null,
       screeningToolScoreRangeId: string | null,
       screeningToolScoreRange:  {
+        id: string,
         riskAdjustmentType: RiskAdjustmentTypeOptions,
         description: string,
       } | null,
@@ -6232,6 +6229,7 @@ export interface screeningToolCreateMutation {
       score: number | null,
       screeningToolScoreRangeId: string | null,
       screeningToolScoreRange:  {
+        id: string,
         riskAdjustmentType: RiskAdjustmentTypeOptions,
         description: string,
       } | null,
@@ -6320,6 +6318,7 @@ export interface screeningToolDeleteMutation {
       score: number | null,
       screeningToolScoreRangeId: string | null,
       screeningToolScoreRange:  {
+        id: string,
         riskAdjustmentType: RiskAdjustmentTypeOptions,
         description: string,
       } | null,
@@ -6410,6 +6409,7 @@ export interface screeningToolEditMutation {
       score: number | null,
       screeningToolScoreRangeId: string | null,
       screeningToolScoreRange:  {
+        id: string,
         riskAdjustmentType: RiskAdjustmentTypeOptions,
         description: string,
       } | null,
@@ -7261,21 +7261,6 @@ export interface FullAnswerFragment {
     id: string,
     title: string,
   } | null,
-};
-
-export interface FullAppointmentFragment {
-  athenaAppointmentId: string,
-  dateTime: string,
-  athenaDepartmentId: number,
-  status: AppointmentStatus,
-  athenaPatientId: number,
-  duration: number,
-  appointmentTypeId: number,
-  appointmentType: string,
-  athenaProviderId: number,
-  userId: string,
-  patientId: string,
-  clinicId: string,
 };
 
 export interface FullCarePlanSuggestionFragment {
@@ -8961,11 +8946,14 @@ export interface FullRiskAreaForPatientFragment {
   mediumRiskThreshold: number,
   highRiskThreshold: number,
   questions:  Array< {
+    id: string,
     answers:  Array< {
+      id: string,
       inSummary: boolean | null,
       riskAdjustmentType: RiskAdjustmentTypeOptions | null,
       summaryText: string | null,
       patientAnswers:  Array< {
+        id: string,
         patientId: string,
         createdAt: string,
         updatedAt: string,
@@ -8988,6 +8976,7 @@ export interface FullRiskAreaForPatientFragment {
       score: number | null,
       screeningToolScoreRangeId: string | null,
       screeningToolScoreRange:  {
+        id: string,
         riskAdjustmentType: RiskAdjustmentTypeOptions,
         description: string,
       } | null,
@@ -9048,6 +9037,7 @@ export interface FullScreeningToolForPatientFragment {
     score: number | null,
     screeningToolScoreRangeId: string | null,
     screeningToolScoreRange:  {
+      id: string,
       riskAdjustmentType: RiskAdjustmentTypeOptions,
       description: string,
     } | null,
@@ -9175,6 +9165,7 @@ export interface FullScreeningToolFragment {
     score: number | null,
     screeningToolScoreRangeId: string | null,
     screeningToolScoreRange:  {
+      id: string,
       riskAdjustmentType: RiskAdjustmentTypeOptions,
       description: string,
     } | null,
@@ -9384,6 +9375,7 @@ export interface ShortPatientScreeningToolSubmissionFragment {
   score: number | null,
   screeningToolScoreRangeId: string | null,
   screeningToolScoreRange:  {
+    id: string,
     riskAdjustmentType: RiskAdjustmentTypeOptions,
     description: string,
   } | null,

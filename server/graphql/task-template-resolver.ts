@@ -1,4 +1,3 @@
-import { pickBy } from 'lodash';
 import { ITaskTemplateCreateInput, ITaskTemplateDeleteInput, ITaskTemplateEditInput } from 'schema';
 import TaskTemplate from '../models/task-template';
 import accessControls from './shared/access-controls';
@@ -54,8 +53,7 @@ export async function taskTemplateEdit(
   await accessControls.isAllowedForUser(userRole, 'edit', 'taskTemplate');
 
   // TODO: fix typings here
-  const cleanedParams = pickBy<ITaskTemplateEditInput>(args.input) as any;
-  return TaskTemplate.edit(args.input.taskTemplateId, cleanedParams);
+  return TaskTemplate.edit(args.input.taskTemplateId, args.input as any);
 }
 
 export async function taskTemplateDelete(

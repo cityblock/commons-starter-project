@@ -1,5 +1,4 @@
 import { omit } from 'lodash';
-import { pickBy } from 'lodash';
 import { transaction } from 'objection';
 import { IPatientGoalCreateInput, IPatientGoalDeleteInput, IPatientGoalEditInput } from 'schema';
 import Concern from '../models/concern';
@@ -98,8 +97,7 @@ export async function patientGoalEdit(
   checkUserLoggedIn(userId);
 
   // TODO: fix typings here
-  const cleanedParams = pickBy<IPatientGoalEditInput>(args.input) as any;
-  return PatientGoal.update(args.input.patientGoalId, cleanedParams, userId!);
+  return PatientGoal.update(args.input.patientGoalId, args.input as any, userId!);
 }
 
 export async function patientGoalDelete(

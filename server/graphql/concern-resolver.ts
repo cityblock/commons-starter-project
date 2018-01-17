@@ -1,4 +1,3 @@
-import { pickBy } from 'lodash';
 import {
   IConcernAddDiagnosisCodeInput,
   IConcernCreateInput,
@@ -69,9 +68,7 @@ export async function concernEdit(
 ) {
   await accessControls.isAllowedForUser(userRole, 'edit', 'concern');
 
-  // TODO: fix typings here
-  const cleanedParams = pickBy<IConcernEditInput>(args.input) as any;
-  return Concern.edit(args.input.concernId, cleanedParams);
+  return Concern.edit(args.input.concernId, args.input);
 }
 
 export async function concernDelete(

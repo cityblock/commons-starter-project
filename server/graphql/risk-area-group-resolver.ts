@@ -1,4 +1,3 @@
-import { pickBy } from 'lodash';
 import { transaction } from 'objection';
 import {
   IRiskAreaGroupCreateInput,
@@ -73,8 +72,8 @@ export async function riskAreaGroupEdit(
   await accessControls.isAllowedForUser(userRole, 'edit', 'riskAreaGroup');
   checkUserLoggedIn(userId);
 
-  const cleanedParams = pickBy<IRiskAreaGroupEditInput>(args.input) as any;
-  return await RiskAreaGroup.edit(cleanedParams, args.input.riskAreaGroupId);
+  // TODO: fix typings here
+  return await RiskAreaGroup.edit(args.input as any, args.input.riskAreaGroupId);
 }
 
 export async function riskAreaGroupDelete(

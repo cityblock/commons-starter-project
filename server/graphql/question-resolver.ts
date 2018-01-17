@@ -1,4 +1,3 @@
-import { pickBy } from 'lodash';
 import {
   IQuestionCreateInput,
   IQuestionDeleteInput,
@@ -108,14 +107,7 @@ export async function questionEdit(
   checkUserLoggedIn(userId);
 
   // TODO: fix typings here
-  const cleanedParams = pickBy<IQuestionEditInput>(args.input) as any;
-
-  // pickBy looks for truthiness. We need explicit 'false' passed through here.
-  if (args.input.hasOtherTextAnswer === false) {
-    cleanedParams.hasOtherTextAnswer = false;
-  }
-
-  return Question.edit(cleanedParams, args.input.questionId, txn);
+  return Question.edit(args.input as any, args.input.questionId, txn);
 }
 
 export async function questionDelete(

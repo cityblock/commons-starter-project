@@ -1,4 +1,3 @@
-import { pickBy } from 'lodash';
 import {
   IProgressNoteTemplateCreateInput,
   IProgressNoteTemplateDeleteInput,
@@ -62,9 +61,7 @@ export async function progressNoteTemplateEdit(
 ) {
   await accessControls.isAllowedForUser(userRole, 'edit', 'progressNoteTemplate');
 
-  // TODO: fix typings here
-  const cleanedParams = pickBy<IProgressNoteTemplateEditInput>(args.input) as any;
-  return ProgressNoteTemplate.edit(cleanedParams, args.input.progressNoteTemplateId);
+  return ProgressNoteTemplate.edit(args.input, args.input.progressNoteTemplateId);
 }
 
 export async function progressNoteTemplateDelete(

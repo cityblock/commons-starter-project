@@ -1,4 +1,3 @@
-import { pickBy } from 'lodash';
 import {
   ICurrentUserEditInput,
   IUserCreateInput,
@@ -130,14 +129,13 @@ export async function currentUserEdit(
   await accessControls.isAllowedForUser(userRole, 'edit', 'user', userId, userId);
   checkUserLoggedIn(userId);
 
-  const cleanedParams = pickBy<ICurrentUserEditInput>(args.input);
   return await User.update(
     userId!,
     {
-      locale: (cleanedParams.locale as Locale) || undefined,
-      phone: cleanedParams.phone || undefined,
-      firstName: cleanedParams.firstName || undefined,
-      lastName: cleanedParams.lastName || undefined,
+      locale: (args.input.locale as Locale) || undefined,
+      phone: args.input.phone || undefined,
+      firstName: args.input.firstName || undefined,
+      lastName: args.input.lastName || undefined,
     },
     txn,
   );

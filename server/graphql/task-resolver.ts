@@ -1,4 +1,3 @@
-import { pickBy } from 'lodash';
 import { transaction } from 'objection';
 import { ITaskCreateInput, ITaskEdges, ITaskEditInput, ITaskNode } from 'schema';
 import { IPaginationOptions } from '../db';
@@ -108,8 +107,8 @@ export async function taskEdit(
 
   return await transaction(Task.knex(), async txn => {
     const { priority, dueAt, assignedToId, title, description } = task;
-    const cleanedParams = pickBy<ITaskEditInput>(args.input) as any;
-    const updatedTask = await Task.update(args.input.taskId, cleanedParams, txn);
+    // TODO: fix typings here
+    const updatedTask = await Task.update(args.input.taskId, args.input as any, txn);
 
     if (args.input.priority && args.input.priority !== priority) {
       await TaskEvent.create(

@@ -1,4 +1,3 @@
-import { pickBy } from 'lodash';
 import {
   IRiskAreaCreateInput,
   IRiskAreaDeleteInput,
@@ -58,8 +57,7 @@ export async function riskAreaEdit(
   checkUserLoggedIn(userId);
 
   // TODO: fix typings here
-  const cleanedParams = pickBy<IRiskAreaEditInput>(args.input) as any;
-  return await RiskArea.edit(cleanedParams, args.input.riskAreaId);
+  return await RiskArea.edit(args.input as any, args.input.riskAreaId);
 }
 
 export async function riskAreaDelete(

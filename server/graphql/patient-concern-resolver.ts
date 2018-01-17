@@ -1,4 +1,3 @@
-import { pickBy } from 'lodash';
 import {
   IPatientConcernBulkEditInput,
   IPatientConcernCreateInput,
@@ -70,8 +69,7 @@ export async function patientConcernEdit(
   checkUserLoggedIn(userId);
 
   // TODO: fix typings here
-  const cleanedParams = pickBy<IPatientConcernEditInput>(args.input) as any;
-  return PatientConcern.update(args.input.patientConcernId, cleanedParams, userId!, txn);
+  return PatientConcern.update(args.input.patientConcernId, args.input as any, userId!, txn);
 }
 
 export async function patientConcernBulkEdit(

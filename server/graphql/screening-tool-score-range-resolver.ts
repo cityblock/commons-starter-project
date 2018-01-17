@@ -1,4 +1,3 @@
-import { pickBy } from 'lodash';
 import {
   IScreeningToolScoreRangeCreateInput,
   IScreeningToolScoreRangeDeleteInput,
@@ -112,10 +111,10 @@ export async function screeningToolScoreRangeEdit(
   await accessControls.isAllowedForUser(userRole, 'edit', 'screeningTool');
   checkUserLoggedIn(userId);
 
-  const cleanedParams = pickBy<IScreeningToolScoreRangeEditInput>(args.input) as any;
+  // TODO: fix typings here
   const screeningToolScoreRange = await ScreeningToolScoreRange.edit(
     args.input.screeningToolScoreRangeId,
-    cleanedParams,
+    args.input as any,
     txn,
   );
 

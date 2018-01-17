@@ -54,6 +54,7 @@ describe('handling pubusub push events from mixer', () => {
     await Db.clear();
 
     response.sendStatus = jest.fn();
+    response.locals = {}; // response.locals is something Express provides
     console.error = jest.fn();
   });
 
@@ -64,6 +65,7 @@ describe('handling pubusub push events from mixer', () => {
 
   it('ends the request if data is missing from the request', async () => {
     await transaction(Patient.knex(), async txn => {
+      response.locals.existingTxn = txn;
       const { patient } = await setup(txn);
       const badData = {
         patientId: patient.id,
@@ -82,7 +84,7 @@ describe('handling pubusub push events from mixer', () => {
           },
         },
       });
-      await pubsubPushHandler(request, response, txn);
+      await pubsubPushHandler(request, response);
       expect(console.error).toBeCalledWith('Must provide a patientId, slug, value, and jobId');
       expect(response.sendStatus).toBeCalledWith(200);
     });
@@ -90,6 +92,7 @@ describe('handling pubusub push events from mixer', () => {
 
   it('ends the request if a patient cannot be found', async () => {
     await transaction(Patient.knex(), async txn => {
+      response.locals.existingTxn = txn;
       const badData = {
         patientId: 'fake patient id',
         slug: 'slug',
@@ -108,7 +111,7 @@ describe('handling pubusub push events from mixer', () => {
           },
         },
       });
-      await pubsubPushHandler(request, response, txn);
+      await pubsubPushHandler(request, response);
       expect(console.error).toBeCalledWith('Cannot find patient for id: fake patient id');
       expect(response.sendStatus).toBeCalledWith(200);
     });
@@ -116,6 +119,7 @@ describe('handling pubusub push events from mixer', () => {
 
   it('ends the request if an answer cannot be found for the provided data', async () => {
     await transaction(Patient.knex(), async txn => {
+      response.locals.existingTxn = txn;
       const { riskArea, patient } = await setup(txn);
       const computedField = await ComputedField.create(
         {
@@ -165,7 +169,7 @@ describe('handling pubusub push events from mixer', () => {
           },
         },
       });
-      await pubsubPushHandler(request, response, txn);
+      await pubsubPushHandler(request, response);
       expect(console.error).toBeCalledWith(
         'Cannot find answer for slug: computed-field and value: fake',
       );
@@ -176,6 +180,7 @@ describe('handling pubusub push events from mixer', () => {
   it('records care plan suggestions', async () => {
     await transaction(Patient.knex(), async txn => {
       const { riskArea, patient, user } = await setup(txn);
+      response.locals.existingTxn = txn;
       const concern = await Concern.create({ title: 'Concern' }, txn);
       const goalSuggestionTemplate = await GoalSuggestionTemplate.create(
         {
@@ -270,7 +275,7 @@ describe('handling pubusub push events from mixer', () => {
 
       const beforeCarePlanSuggestions = await CarePlanSuggestion.getForPatient(patient.id, txn);
       expect(beforeCarePlanSuggestions.length).toEqual(0);
-      await pubsubPushHandler(request, response, txn);
+      await pubsubPushHandler(request, response);
       expect(response.sendStatus).toBeCalledWith(200);
       expect(console.error).not.toBeCalled();
       const carePlanSuggestions = await CarePlanSuggestion.getForPatient(patient.id, txn);

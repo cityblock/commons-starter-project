@@ -26,8 +26,10 @@ describe('postgres pingdom test', () => {
     const request = httpMocks.createRequest();
     const response = httpMocks.createResponse();
     response.sendStatus = jest.fn();
+    response.locals = {}; // response.locals is something Express.Response provides
 
     await transaction(User.knex(), async txn => {
+      response.locals.existingTxn = txn;
       const clinic = await Clinic.create(createMockClinic(), txn);
       await User.create(
         {
@@ -40,7 +42,7 @@ describe('postgres pingdom test', () => {
         txn,
       );
 
-      await checkPostgresHandler(request, response, txn);
+      await checkPostgresHandler(request, response);
 
       expect(response.sendStatus).toBeCalledWith(200);
     });
@@ -50,6 +52,8 @@ describe('postgres pingdom test', () => {
     const request = httpMocks.createRequest();
     const response = httpMocks.createResponse();
     response.status = jest.fn();
+    response.locals = {};
+
     Db.get = async () => {
       throw new Error('omg db is borked');
     };
@@ -57,7 +61,8 @@ describe('postgres pingdom test', () => {
     (response.status as any).mockReturnValueOnce({ send: jest.fn() });
 
     await transaction(User.knex(), async txn => {
-      await checkPostgresHandler(request, response, txn);
+      response.locals.existingTxn = txn;
+      await checkPostgresHandler(request, response);
       expect(response.status).toBeCalledWith(500);
     });
   });

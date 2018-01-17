@@ -1,5 +1,5 @@
 import * as express from 'express';
-import { transaction, Transaction } from 'objection';
+import { transaction } from 'objection';
 import Db from '../../db';
 import { createSuggestionsForComputedFieldAnswer } from '../../lib/suggestions';
 import Answer from '../../models/answer';
@@ -14,12 +14,9 @@ export interface IPubsubMessageData {
 }
 
 /* tslint:disable no-console */
-export async function pubsubPushHandler(
-  req: express.Request,
-  res: express.Response,
-  existingTxn?: Transaction,
-) {
+export async function pubsubPushHandler(req: express.Request, res: express.Response) {
   const { patientId, slug, value, jobId } = req.body.message.data;
+  const existingTxn = res.locals.existingTxn;
 
   if (!patientId || !slug || !value || !jobId) {
     console.error('Must provide a patientId, slug, value, and jobId');

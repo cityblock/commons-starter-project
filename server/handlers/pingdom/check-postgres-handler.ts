@@ -1,13 +1,10 @@
 import * as express from 'express';
-import { transaction, Transaction } from 'objection';
+import { transaction } from 'objection';
 import Db from '../../db';
 import User from '../../models/user';
 
-export async function checkPostgresHandler(
-  req: express.Request,
-  res: express.Response,
-  existingTxn?: Transaction,
-) {
+export async function checkPostgresHandler(req: express.Request, res: express.Response) {
+  const existingTxn = res.locals.existingTxn;
   try {
     await Db.get();
     // NOTE: This test succeeds if the email is incorrect

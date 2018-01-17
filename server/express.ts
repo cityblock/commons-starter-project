@@ -96,11 +96,11 @@ export default async (app: express.Application, logger: Console) => {
   app.get(
     '/ping/postgres',
     checkAuth('pingdom', process.env.PINGDOM_CHECK_PASSWORD || 'fake'),
-    checkPostgresHandler as any,
+    checkPostgresHandler,
   );
 
   // Google PubSub
-  app.post('/pubsub/push', bodyParser.json(), pubsubValidator, pubsubPushHandler as any);
+  app.post('/pubsub/push', bodyParser.json(), pubsubValidator, pubsubPushHandler);
 
   app.get('*', renderApp);
 

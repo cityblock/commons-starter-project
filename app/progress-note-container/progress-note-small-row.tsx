@@ -19,9 +19,7 @@ export const ProgressNoteSmallRow: React.StatelessComponent<IProps> = props => {
   const formattedTime = progressNote.createdAt ? (
     <FormattedTime value={progressNote.createdAt} />
   ) : null;
-  let title = progressNote.progressNoteTemplate
-    ? progressNote.progressNoteTemplate.title
-    : 'unknown';
+  let title = progressNote.progressNoteTemplate ? progressNote.progressNoteTemplate.title : null;
   let titleStyles = styles.title;
   if (
     progressNote.needsSupervisorReview &&

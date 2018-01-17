@@ -35,7 +35,7 @@ class ProgressNoteActivitySection extends React.Component<IProps, IState> {
 
     switch (activityType) {
       case 'taskEvents':
-        return 'Tasks Updated';
+        return 'Task Updates';
       case 'patientAnswerEvents':
         return '360 View Updates';
       case 'carePlanUpdateEvents':

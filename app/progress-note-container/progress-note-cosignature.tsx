@@ -121,10 +121,10 @@ export class ProgressNoteCosignature extends React.Component<allProps> {
 
 export default compose(
   graphql<IGraphqlProps, IProps, allProps>(patientCareTeamQuery as any, {
-    skip: (props: IProps) => !props.patientId,
+    skip: (props: IProps) => !props.progressNote,
     options: (props: IProps) => ({
       variables: {
-        patientId: props.patientId,
+        patientId: props.progressNote!.patientId,
       },
     }),
     props: ({ data }) => ({

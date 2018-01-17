@@ -90,7 +90,7 @@ export class PatientConcern extends React.Component<IProps, {}> {
     const { patientConcern } = this.props;
 
     if (patientConcern) {
-      patientConcern.patientGoals!.forEach(goal => {
+      (patientConcern.patientGoals || []).forEach(goal => {
         if (goal.goalSuggestionTemplateId) goalTemplateIds.push(goal.goalSuggestionTemplateId);
       });
     }

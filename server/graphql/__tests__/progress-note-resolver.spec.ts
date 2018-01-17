@@ -125,9 +125,11 @@ describe('progress note resolver', () => {
           patientId: patient.id,
           userId: user.id,
           progressNoteTemplateId: progressNoteTemplate.id,
+          needsSupervisorReview: true,
         },
         txn,
       );
+      expect(progressNote.needsSupervisorReview).toBeTruthy();
       const progressNoteTemplate2 = await ProgressNoteTemplate.create(
         {
           title: 'title 2',
@@ -138,15 +140,18 @@ describe('progress note resolver', () => {
         progressNoteEdit(input: {
           progressNoteId: "${progressNote.id}"
           progressNoteTemplateId: "${progressNoteTemplate2.id}"
+          needsSupervisorReview: false
         }) {
           id
           progressNoteTemplate { id }
+          needsSupervisorReview
         }
       }`;
       const result = await graphql(schema, mutation, null, { userRole, userId: user.id, txn });
       expect(cloneDeep(result.data!.progressNoteEdit.progressNoteTemplate.id)).toEqual(
         progressNoteTemplate2.id,
       );
+      expect(cloneDeep(result.data!.progressNoteEdit.needsSupervisorReview)).toBeFalsy();
     });
   });
 

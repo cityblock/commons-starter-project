@@ -4,8 +4,6 @@ import * as React from 'react';
 import { compose, graphql } from 'react-apollo';
 import { withRouter } from 'react-router';
 import * as clinicsQuery from '../graphql/queries/clinics-get.graphql';
-import * as patientAnswersQuery from '../graphql/queries/get-patient-answers.graphql';
-import * as questionsQuery from '../graphql/queries/get-questions.graphql';
 import * as patientAnswersCreateMutationGraphql from '../graphql/queries/patient-answers-create-mutation.graphql';
 import {
   getClinicsQuery,
@@ -23,7 +21,6 @@ import Select from '../shared/library/select/select';
 import Textarea from '../shared/library/textarea/textarea';
 import PatientQuestion from '../shared/question/patient-question';
 import {
-  allQuestionsAnswered,
   getQuestionVisibility,
   setupQuestionAnswerHash,
   updateQuestionAnswerHash,
@@ -36,9 +33,10 @@ import ScreeningToolDropdown from './screening-tool-dropdown';
 
 interface IProps {
   disabled: boolean;
-  progressNote?: FullProgressNoteFragment;
-  progressNoteTemplates?: FullProgressNoteTemplateFragment[];
-  updateReadyToSubmit: (isReadyToSubmit: boolean) => void;
+  progressNote: FullProgressNoteFragment;
+  progressNoteTemplates: FullProgressNoteTemplateFragment[];
+  patientAnswers?: getPatientAnswersQuery['patientAnswers'];
+  questions: getQuestionsQuery['questions'];
   onChange: (
     options: {
       progressNoteTemplateId: string;
@@ -55,13 +53,6 @@ interface IGraphqlProps {
   clinics: getClinicsQuery['clinics'];
   clinicsLoading?: boolean;
   clinicsError?: string | null;
-  questionsLoading?: boolean;
-  questionsError?: string | null;
-  questions: getQuestionsQuery['questions'];
-  refetchPatientAnswers?: () => any;
-  patientAnswers?: getPatientAnswersQuery['patientAnswers'];
-  patientAnswersLoading?: boolean;
-  patientAnswersError?: string | null;
   createPatientAnswers?: (
     options: { variables: patientAnswersCreateMutationVariables },
   ) => { data: patientAnswersCreateMutation };
@@ -79,16 +70,6 @@ interface IState {
   error: string | null;
 }
 
-function getProgressNoteId(props: IProps) {
-  return props.progressNote ? props.progressNote.id : null;
-}
-
-function getProgressNoteTemplateId(props: IProps) {
-  return props.progressNote && props.progressNote.progressNoteTemplate
-    ? props.progressNote.progressNoteTemplate.id
-    : null;
-}
-
 const SAVE_TIMEOUT_MILLISECONDS = 500;
 
 export class ProgressNoteContext extends React.Component<allProps, IState> {
@@ -102,13 +83,14 @@ export class ProgressNoteContext extends React.Component<allProps, IState> {
     this.state = {
       loading: false,
       error: null,
-      progressNoteTime:
-        progressNote && progressNote.startedAt
-          ? new Date(progressNote.startedAt).toISOString()
-          : defaultDate.toISOString(),
-      progressNoteLocation: progressNote && progressNote.location ? progressNote.location : null,
-      progressNoteTemplateId: getProgressNoteTemplateId(props),
-      progressNoteSummary: progressNote && progressNote.summary ? progressNote.summary : '',
+      progressNoteTime: progressNote.startedAt
+        ? new Date(progressNote.startedAt).toISOString()
+        : defaultDate.toISOString(),
+      progressNoteLocation: progressNote.location ? progressNote.location : null,
+      progressNoteTemplateId: progressNote.progressNoteTemplate
+        ? progressNote.progressNoteTemplate.id
+        : null,
+      progressNoteSummary: progressNote.summary ? progressNote.summary : '',
       progressNoteMemberConcern:
         progressNote && progressNote.memberConcern ? progressNote.memberConcern : '',
     };
@@ -119,33 +101,20 @@ export class ProgressNoteContext extends React.Component<allProps, IState> {
     if (newProps.progressNote && !this.props.progressNote) {
       this.setDefaultProgressNoteFields(newProps);
     }
-    if (newProps.patientAnswers !== this.props.patientAnswers) {
-      const answerData = setupQuestionAnswerHash({}, newProps.questions);
-      updateQuestionAnswerHash(answerData, newProps.patientAnswers || []);
-
-      // update ready to submit
-      const hasProgressNoteTemplate = this.state.progressNoteTemplateId ? true : false;
-      const hasSummaryAndConcern =
-        this.state.progressNoteMemberConcern && this.state.progressNoteSummary ? true : false;
-      this.props.updateReadyToSubmit(
-        hasProgressNoteTemplate &&
-          hasSummaryAndConcern &&
-          allQuestionsAnswered(newProps.questions, answerData),
-      );
-    }
   }
 
   setDefaultProgressNoteFields(props: allProps) {
     const defaultDate = getCurrentTime();
     const { progressNote } = props;
     this.setState({
-      progressNoteTime:
-        progressNote && progressNote.startedAt
-          ? new Date(progressNote.startedAt).toISOString()
-          : defaultDate.toISOString(),
-      progressNoteLocation: progressNote && progressNote.location ? progressNote.location : null,
-      progressNoteTemplateId: getProgressNoteTemplateId(props),
-      progressNoteSummary: progressNote && progressNote.summary ? progressNote.summary : '',
+      progressNoteTime: progressNote.startedAt
+        ? new Date(progressNote.startedAt).toISOString()
+        : defaultDate.toISOString(),
+      progressNoteLocation: progressNote.location ? progressNote.location : null,
+      progressNoteTemplateId: progressNote.progressNoteTemplate
+        ? progressNote.progressNoteTemplate.id
+        : null,
+      progressNoteSummary: progressNote.summary ? progressNote.summary : '',
       progressNoteMemberConcern:
         progressNote && progressNote.memberConcern ? progressNote.memberConcern : '',
     });
@@ -262,16 +231,12 @@ export class ProgressNoteContext extends React.Component<allProps, IState> {
 
   redirectToMap = () => {
     const { history, progressNote } = this.props;
-    if (progressNote) {
-      return history.push(`/patients/${progressNote.patientId}/map/active`);
-    }
+    return history.push(`/patients/${progressNote.patientId}/map/active`);
   };
 
   redirectTo360 = () => {
     const { history, progressNote } = this.props;
-    if (progressNote) {
-      history.push(`/patients/${progressNote.patientId}/360`);
-    }
+    return history.push(`/patients/${progressNote.patientId}/360`);
   };
 
   render() {
@@ -284,14 +249,11 @@ export class ProgressNoteContext extends React.Component<allProps, IState> {
       progressNoteSummary,
       progressNoteMemberConcern,
     } = this.state;
-    const encounterTypes = (progressNoteTemplates || []).map(template => (
+    const encounterTypes = progressNoteTemplates.map(template => (
       <option key={template.id} value={template.id}>
         {template.title}
       </option>
     ));
-    const screeningToolDropdown = progressNote ? (
-      <ScreeningToolDropdown patientId={progressNote.patientId} />
-    ) : null;
     return (
       <div>
         <div className={styles.encounterTypeContainer}>
@@ -327,7 +289,7 @@ export class ProgressNoteContext extends React.Component<allProps, IState> {
             messageId="progressNote.memberConcernAndObservation"
             htmlFor="memberConcernAndObservation"
           />
-          {screeningToolDropdown}
+          <ScreeningToolDropdown patientId={progressNote.patientId} />
           <br />
           <br />
           <Button
@@ -382,36 +344,6 @@ export default compose(
       clinicsLoading: data ? data.loading : false,
       clinicsError: data ? data.error : null,
       clinics: data ? (data as any).clinics : null,
-    }),
-  }),
-  graphql<IGraphqlProps, IProps, allProps>(questionsQuery as any, {
-    skip: (props: IProps) => !getProgressNoteTemplateId(props),
-    options: (props: IProps) => ({
-      variables: {
-        filterType: 'progressNoteTemplate',
-        filterId: getProgressNoteTemplateId(props),
-      },
-    }),
-    props: ({ data }) => ({
-      questionsLoading: data ? data.loading : false,
-      questionsError: data ? data.error : null,
-      questions: data ? (data as any).questions : null,
-    }),
-  }),
-  graphql<IGraphqlProps, IProps, allProps>(patientAnswersQuery as any, {
-    skip: (props: IProps) => !getProgressNoteId(props),
-    options: (props: IProps) => ({
-      variables: {
-        filterType: 'progressNote',
-        filterId: getProgressNoteId(props),
-        patientId: props.progressNote!.patientId,
-      },
-    }),
-    props: ({ data }) => ({
-      patientAnswersLoading: data ? data.loading : false,
-      patientAnswersError: data ? data.error : null,
-      patientAnswers: data ? (data as any).patientAnswers : null,
-      refetchPatientAnswers: data ? data.refetch : null,
     }),
   }),
 )(ProgressNoteContext);

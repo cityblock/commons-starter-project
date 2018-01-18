@@ -1,16 +1,20 @@
-import * as classNames from 'classnames';
 import * as React from 'react';
 import { compose, graphql } from 'react-apollo';
 import { FormattedRelative } from 'react-intl';
 import { Link } from 'react-router-dom';
-import * as progressNoteTemplatesQuery from '../graphql/queries/get-progress-note-templates.graphql';
-import * as progressNoteQuery from '../graphql/queries/get-progress-note.graphql';
+import * as patientAnswersQuery from '../graphql/queries/get-patient-answers.graphql';
+import * as questionsQuery from '../graphql/queries/get-questions.graphql';
 import * as progressNoteCompleteMutationGraphql from '../graphql/queries/progress-note-complete-mutation.graphql';
+import * as progressNoteCompleteSupervisorReviewMutationGraphql from '../graphql/queries/progress-note-complete-supervisor-review-mutation.graphql';
 import * as progressNoteEditMutationGraphql from '../graphql/queries/progress-note-edit-mutation.graphql';
 import {
   getCurrentUserQuery,
+  getPatientAnswersQuery,
+  getQuestionsQuery,
   progressNoteCompleteMutation,
   progressNoteCompleteMutationVariables,
+  progressNoteCompleteSupervisorReviewMutation,
+  progressNoteCompleteSupervisorReviewMutationVariables,
   progressNoteCreateMutation,
   progressNoteCreateMutationVariables,
   progressNoteEditMutation,
@@ -23,6 +27,11 @@ import Button from '../shared/library/button/button';
 import UnderlineTab from '../shared/library/underline-tab/underline-tab';
 import UnderlineTabs from '../shared/library/underline-tabs/underline-tabs';
 import ProgressNoteActivity from '../shared/progress-note-activity/progress-note-activity';
+import {
+  allQuestionsAnswered,
+  setupQuestionAnswerHash,
+  updateQuestionAnswerHash,
+} from '../shared/question/question-helpers';
 import { getPatientFullName } from '../shared/util/patient-name';
 import * as styles from './css/progress-note-popup.css';
 import ProgressNoteContext from './progress-note-context';
@@ -42,8 +51,8 @@ export interface IUpdateProgressNoteOptions {
 interface IProps {
   currentUser: getCurrentUserQuery['currentUser'];
   close: () => void;
-  progressNoteId: string;
-  visible: boolean;
+  progressNote: FullProgressNoteFragment;
+  progressNoteTemplates: FullProgressNoteTemplateFragment[];
   mutate?: any;
 }
 
@@ -57,12 +66,15 @@ interface IGraphqlProps {
   createProgressNote: (
     options: { variables: progressNoteCreateMutationVariables },
   ) => { data: progressNoteCreateMutation };
-  progressNoteTemplatesLoading?: boolean;
-  progressNoteTemplatesError?: string | null;
-  progressNoteTemplates: FullProgressNoteTemplateFragment[];
-  progressNoteError?: string | null;
-  progressNoteLoading?: boolean;
-  progressNote?: FullProgressNoteFragment;
+  completeProgressNoteSupervisorReview: (
+    options: { variables: progressNoteCompleteSupervisorReviewMutationVariables },
+  ) => { data: progressNoteCompleteSupervisorReviewMutation };
+  questionsLoading?: boolean;
+  questionsError?: string | null;
+  questions: getQuestionsQuery['questions'];
+  patientAnswers?: getPatientAnswersQuery['patientAnswers'];
+  patientAnswersLoading?: boolean;
+  patientAnswersError?: string | null;
 }
 
 interface IState {
@@ -97,12 +109,22 @@ export class ProgressNotePopup extends React.Component<allProps, IState> {
     };
   }
 
+  componentDidMount() {
+    this.updateReadyToSubmit(this.props);
+  }
+
   componentWillReceiveProps(newProps: allProps) {
-    if (newProps.currentUser && newProps.progressNote) {
+    const currentProgressNote = this.props.progressNote;
+    const newProgressNote = newProps.progressNote;
+    const progressNoteChanged = currentProgressNote.id !== newProgressNote.id;
+
+    if (progressNoteChanged && newProps.currentUser) {
+      const isInSupervisorMode = getIsInSupervisorMode(newProps.currentUser, newProgressNote);
       this.setState({
-        isInSupervisorMode: getIsInSupervisorMode(newProps.currentUser, newProps.progressNote),
+        isInSupervisorMode,
       });
     }
+    this.updateReadyToSubmit(newProps);
   }
 
   updateProgressNote = async (options: IUpdateProgressNoteOptions) => {
@@ -141,23 +163,62 @@ export class ProgressNotePopup extends React.Component<allProps, IState> {
     // todo: handle error
   };
 
-  updateReadyToSubmit = (isReadyToSubmit: boolean) => {
-    this.setState({ isReadyToSubmit });
+  submitSupervisorReview = async () => {
+    const { progressNote } = this.props;
+    const { isReadyToSubmit } = this.state;
+    if (progressNote && isReadyToSubmit) {
+      await this.props.completeProgressNoteSupervisorReview({
+        variables: {
+          progressNoteId: progressNote.id,
+        },
+      });
+      this.props.close();
+    }
+    // todo: handle error
+  };
+
+  updateReadyToSubmit = (props: allProps) => {
+    const { progressNote, patientAnswers, questions } = props;
+    const { isInSupervisorMode } = this.state;
+
+    if (isInSupervisorMode) {
+      this.setState({ isReadyToSubmit: !!progressNote.supervisorNotes });
+    } else {
+      if (patientAnswers) {
+        const answerData = setupQuestionAnswerHash({}, questions);
+        updateQuestionAnswerHash(answerData, patientAnswers || []);
+
+        // update ready to submit
+        const hasProgressNoteTemplate = progressNote.progressNoteTemplate ? true : false;
+        const hasSummaryAndConcern =
+          progressNote.memberConcern && progressNote.summary ? true : false;
+
+        this.setState({
+          isReadyToSubmit:
+            hasProgressNoteTemplate &&
+            hasSummaryAndConcern &&
+            allQuestionsAnswered(questions, answerData),
+        });
+      }
+    }
   };
 
   render() {
-    const { close, visible, progressNoteTemplates, progressNote, currentUser } = this.props;
+    const {
+      close,
+      progressNoteTemplates,
+      progressNote,
+      currentUser,
+      questions,
+      patientAnswers,
+    } = this.props;
     const { tab, isReadyToSubmit, isInSupervisorMode } = this.state;
-
-    const patientId = progressNote ? progressNote.patientId : null;
-    const containerStyles = classNames(styles.container, {
-      [styles.visible]: visible,
-    });
 
     const context =
       tab === 'context' ? (
         <ProgressNoteContext
-          updateReadyToSubmit={this.updateReadyToSubmit}
+          questions={questions}
+          patientAnswers={patientAnswers}
           progressNote={progressNote}
           progressNoteTemplates={progressNoteTemplates}
           onChange={this.updateProgressNote}
@@ -171,10 +232,7 @@ export class ProgressNotePopup extends React.Component<allProps, IState> {
       ) : null;
     const supervisorHtml =
       tab === 'supervisor' && progressNote ? (
-        <ProgressNoteSupervisorNotes
-          progressNote={progressNote}
-          updateReadyToSubmit={this.updateReadyToSubmit}
-        />
+        <ProgressNoteSupervisorNotes progressNote={progressNote} />
       ) : null;
 
     let progressNoteName = null;
@@ -204,14 +262,30 @@ export class ProgressNotePopup extends React.Component<allProps, IState> {
         selected={tab === 'supervisor'}
       />
     ) : null;
+    const submitButton = isInSupervisorMode ? (
+      <Button
+        onClick={this.submitSupervisorReview}
+        disabled={!isReadyToSubmit}
+        messageId="progressNote.submitSupervisorReview"
+        color="blue"
+      />
+    ) : (
+      <Button
+        onClick={this.submit}
+        disabled={!isReadyToSubmit}
+        messageId="patient.submitProgressNote"
+        color="blue"
+      />
+    );
+
     return (
-      <div className={containerStyles}>
+      <div>
         <div className={styles.topBar}>
           <div className={styles.topBarLabel}>Progress Note: {progressNoteName}</div>
           <div className={styles.closeButton} onClick={close} />
         </div>
         <div className={styles.middleBar}>
-          <Link className={styles.patientContainer} to={`/patients/${patientId}`}>
+          <Link className={styles.patientContainer} to={`/patients/${progressNote.patientId}`}>
             <div
               className={styles.patientPhoto}
               style={{ backgroundImage: `url('${DEFAULT_PATIENT_AVATAR_URL}')` }}
@@ -221,12 +295,7 @@ export class ProgressNotePopup extends React.Component<allProps, IState> {
               {openedAt}
             </div>
           </Link>
-          <Button
-            onClick={this.submit}
-            disabled={!isReadyToSubmit}
-            messageId="patient.submitProgressNote"
-            color="blue"
-          />
+          {submitButton}
         </div>
         <UnderlineTabs>
           <UnderlineTab
@@ -261,24 +330,39 @@ export default compose(
     name: 'editProgressNote',
     options: { refetchQueries: ['getProgressNotesForPatient', 'getProgressNotesForCurrentUser'] },
   }),
-  graphql<IGraphqlProps, IProps, allProps>(progressNoteQuery as any, {
-    skip: (props: IProps) => !props.progressNoteId,
+  graphql<IGraphqlProps, IProps, allProps>(
+    progressNoteCompleteSupervisorReviewMutationGraphql as any,
+    {
+      name: 'completeProgressNoteSupervisorReview',
+      options: { refetchQueries: ['getProgressNotesForPatient', 'getProgressNotesForCurrentUser'] },
+    },
+  ),
+  graphql<IGraphqlProps, IProps, allProps>(questionsQuery as any, {
+    skip: (props: IProps) => !props.progressNote.progressNoteTemplate,
     options: (props: IProps) => ({
       variables: {
-        progressNoteId: props.progressNoteId,
+        filterType: 'progressNoteTemplate',
+        filterId: props.progressNote.progressNoteTemplate!.id,
       },
     }),
     props: ({ data }) => ({
-      progressNoteLoading: data ? data.loading : false,
-      progressNoteError: data ? data.error : null,
-      progressNote: data ? (data as any).progressNote : null,
+      questionsLoading: data ? data.loading : false,
+      questionsError: data ? data.error : null,
+      questions: data ? (data as any).questions : null,
     }),
   }),
-  graphql<IGraphqlProps, IProps, allProps>(progressNoteTemplatesQuery as any, {
+  graphql<IGraphqlProps, IProps, allProps>(patientAnswersQuery as any, {
+    options: (props: IProps) => ({
+      variables: {
+        filterType: 'progressNote',
+        filterId: props.progressNote.id,
+        patientId: props.progressNote.patientId,
+      },
+    }),
     props: ({ data }) => ({
-      progressNoteTemplatesLoading: data ? data.loading : false,
-      progressNoteTemplatesError: data ? data.error : null,
-      progressNoteTemplates: data ? (data as any).progressNoteTemplates : null,
+      patientAnswersLoading: data ? data.loading : false,
+      patientAnswersError: data ? data.error : null,
+      patientAnswers: data ? (data as any).patientAnswers : null,
     }),
   }),
 )(ProgressNotePopup);

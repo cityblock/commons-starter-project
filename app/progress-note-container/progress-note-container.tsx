@@ -14,7 +14,7 @@ import { IProgressNotePopupOptions } from '../reducers/popup-reducer';
 import Icon from '../shared/library/icon/icon';
 import { IState as IAppState } from '../store';
 import * as styles from './css/progress-note-container.css';
-import ProgressNotesPopup from './progress-note-popup';
+import ProgressNotesPopupContainer from './progress-note-popup-container';
 import { ProgressNoteSmallRow } from './progress-note-small-row';
 
 interface IProps {
@@ -122,7 +122,7 @@ export class ProgressNoteContainer extends React.Component<allProps, IState> {
           </div>
           {progressNotesHtml}
         </div>
-        <ProgressNotesPopup
+        <ProgressNotesPopupContainer
           progressNoteId={progressNoteId}
           visible={popupIsOpen}
           currentUser={currentUser}

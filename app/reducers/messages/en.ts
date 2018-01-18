@@ -314,6 +314,7 @@ export const ENGLISH_TRANSLATION = {
     'progressNote.doesRequireCosignature': 'Does this progress note require supervisor review?',
     'progressNote.selectSupervisor': 'Select supervisor:',
     'progressNote.supervisorReview': 'Supervisor Note',
+    'progressNote.submitSupervisorReview': 'Submit Supervisor Review',
     'progressNote.pendingReview': 'Pending review',
     'progressNote.reviewed': 'Reviewed',
     'quickCallNote.new': '+ Quick call note',

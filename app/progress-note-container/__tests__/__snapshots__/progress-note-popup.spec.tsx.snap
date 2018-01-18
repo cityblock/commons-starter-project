@@ -1,9 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`builder concerns renders progress note popup with templates renders progress note 1`] = `
-<div
-  className="container visible"
->
+<div>
   <div
     className="topBar"
   >
@@ -72,7 +70,7 @@ exports[`builder concerns renders progress note popup with templates renders pro
   <div
     className="bottomSection"
   >
-    <withRouter(Apollo(Apollo(Apollo(Apollo(ProgressNoteContext)))))
+    <withRouter(Apollo(Apollo(ProgressNoteContext)))
       currentUser={
         Object {
           "createdAt": "2017-09-07T13:45:14.532Z",
@@ -90,6 +88,7 @@ exports[`builder concerns renders progress note popup with templates renders pro
       }
       disabled={false}
       onChange={[Function]}
+      patientAnswers={undefined}
       progressNote={
         Object {
           "completedAt": null,
@@ -156,7 +155,54 @@ exports[`builder concerns renders progress note popup with templates renders pro
           },
         ]
       }
-      updateReadyToSubmit={[Function]}
+      questions={
+        Array [
+          Object {
+            "answerType": "radio",
+            "answers": Array [
+              Object {
+                "concernSuggestions": Array [],
+                "createdAt": "Thu Jul 13 2017 16:52:56 GMT-0400 (EDT)",
+                "deletedAt": null,
+                "displayValue": "answer value",
+                "goalSuggestions": Array [],
+                "id": "answer-id",
+                "inSummary": true,
+                "order": 1,
+                "questionId": "cool-task-id",
+                "riskAdjustmentType": "increment",
+                "riskArea": null,
+                "screeningTool": null,
+                "summaryText": "summary text",
+                "updatedAt": "Thu Jul 13 2017 16:52:56 GMT-0400 (EDT)",
+                "value": "true",
+                "valueType": "boolean",
+              },
+            ],
+            "applicableIfQuestionConditions": Array [
+              Object {
+                "answerId": "answer-id",
+                "id": "question-condition",
+                "questionId": "cool-question-id",
+              },
+            ],
+            "applicableIfType": "allTrue",
+            "computedField": null,
+            "computedFieldId": null,
+            "createdAt": "Thu Jul 13 2017 16:52:56 GMT-0400 (EDT)",
+            "deletedAt": null,
+            "dueAt": "Thu Jul 13 2017 16:52:56 GMT-0400 (EDT)",
+            "id": "cool-question-id",
+            "order": 1,
+            "otherTextAnswerId": null,
+            "riskAreaId": "risk-area-id",
+            "screeningToolId": null,
+            "title": "Question Title",
+            "updatedAt": "Thu Jul 13 2017 16:52:56 GMT-0400 (EDT)",
+            "validatedSource": "validated source",
+          },
+        ]
+      }
     />
     <Apollo(Apollo(ProgressNoteCosignature))
       disabled={false}
@@ -222,9 +268,7 @@ exports[`builder concerns renders progress note popup with templates renders pro
 `;
 
 exports[`builder concerns renders progress note popup with templates renders progress note popup with templates 1`] = `
-<div
-  className="container visible"
->
+<div>
   <div
     className="topBar"
   >
@@ -232,6 +276,7 @@ exports[`builder concerns renders progress note popup with templates renders pro
       className="topBarLabel"
     >
       Progress Note: 
+      Progress Note Template Title
     </div>
     <div
       className="closeButton"
@@ -244,7 +289,7 @@ exports[`builder concerns renders progress note popup with templates renders pro
     <Link
       className="patientContainer"
       replace={false}
-      to="/patients/null"
+      to="/patients/patient-id"
     >
       <div
         className="patientPhoto"
@@ -260,8 +305,14 @@ exports[`builder concerns renders progress note popup with templates renders pro
         <div
           className="patientName"
         >
-          Unknown
+          Bob Smith
         </div>
+        <FormattedRelative
+          updateInterval={10000}
+          value="2017-09-07T13:45:14.532Z"
+        >
+          [Function]
+        </FormattedRelative>
       </div>
     </Link>
     <Button
@@ -286,7 +337,7 @@ exports[`builder concerns renders progress note popup with templates renders pro
   <div
     className="bottomSection"
   >
-    <withRouter(Apollo(Apollo(Apollo(Apollo(ProgressNoteContext)))))
+    <withRouter(Apollo(Apollo(ProgressNoteContext)))
       currentUser={
         Object {
           "createdAt": "2017-09-07T13:45:14.532Z",
@@ -304,7 +355,62 @@ exports[`builder concerns renders progress note popup with templates renders pro
       }
       disabled={false}
       onChange={[Function]}
-      progressNote={undefined}
+      patientAnswers={undefined}
+      progressNote={
+        Object {
+          "completedAt": null,
+          "createdAt": "2017-09-07T13:45:14.532Z",
+          "deletedAt": null,
+          "id": "progress-note-id",
+          "location": null,
+          "memberConcern": "member concern",
+          "needsSupervisorReview": null,
+          "patient": Object {
+            "consentToCall": true,
+            "consentToText": true,
+            "createdAt": "2017-09-07T13:45:14.532Z",
+            "dateOfBirth": "01/01/1999",
+            "firstName": "Bob",
+            "gender": "male",
+            "homeClinicId": "clinic-id",
+            "id": "patient-id",
+            "language": "en",
+            "lastName": "Smith",
+            "middleName": null,
+            "scratchPad": "Note",
+            "zip": "05431",
+          },
+          "patientId": "patient-id",
+          "progressNoteTemplate": Object {
+            "createdAt": "2017-09-07T13:45:14.532Z",
+            "deletedAt": null,
+            "id": "progress-note-template-id",
+            "title": "Progress Note Template Title",
+            "updatedAt": "2017-09-07T13:45:14.532Z",
+          },
+          "progressNoteTemplateId": "progress-note-template-id",
+          "reviewedBySupervisorAt": null,
+          "startedAt": null,
+          "summary": "summary!",
+          "supervisor": null,
+          "supervisorId": null,
+          "supervisorNotes": null,
+          "updatedAt": "2017-09-07T13:45:14.532Z",
+          "user": Object {
+            "createdAt": "2017-09-07T13:45:14.532Z",
+            "email": "a@b.com",
+            "firstName": "first",
+            "googleProfileImageUrl": null,
+            "homeClinicId": "clinic-id",
+            "id": "id",
+            "lastName": "last",
+            "locale": "en",
+            "phone": "(212) 555-8394",
+            "updatedAt": "2017-09-07T13:45:14.532Z",
+            "userRole": "physician",
+          },
+        }
+      }
       progressNoteTemplates={
         Array [
           Object {
@@ -316,7 +422,113 @@ exports[`builder concerns renders progress note popup with templates renders pro
           },
         ]
       }
-      updateReadyToSubmit={[Function]}
+      questions={
+        Array [
+          Object {
+            "answerType": "radio",
+            "answers": Array [
+              Object {
+                "concernSuggestions": Array [],
+                "createdAt": "Thu Jul 13 2017 16:52:56 GMT-0400 (EDT)",
+                "deletedAt": null,
+                "displayValue": "answer value",
+                "goalSuggestions": Array [],
+                "id": "answer-id",
+                "inSummary": true,
+                "order": 1,
+                "questionId": "cool-task-id",
+                "riskAdjustmentType": "increment",
+                "riskArea": null,
+                "screeningTool": null,
+                "summaryText": "summary text",
+                "updatedAt": "Thu Jul 13 2017 16:52:56 GMT-0400 (EDT)",
+                "value": "true",
+                "valueType": "boolean",
+              },
+            ],
+            "applicableIfQuestionConditions": Array [
+              Object {
+                "answerId": "answer-id",
+                "id": "question-condition",
+                "questionId": "cool-question-id",
+              },
+            ],
+            "applicableIfType": "allTrue",
+            "computedField": null,
+            "computedFieldId": null,
+            "createdAt": "Thu Jul 13 2017 16:52:56 GMT-0400 (EDT)",
+            "deletedAt": null,
+            "dueAt": "Thu Jul 13 2017 16:52:56 GMT-0400 (EDT)",
+            "id": "cool-question-id",
+            "order": 1,
+            "otherTextAnswerId": null,
+            "riskAreaId": "risk-area-id",
+            "screeningToolId": null,
+            "title": "Question Title",
+            "updatedAt": "Thu Jul 13 2017 16:52:56 GMT-0400 (EDT)",
+            "validatedSource": "validated source",
+          },
+        ]
+      }
+    />
+    <Apollo(Apollo(ProgressNoteCosignature))
+      disabled={false}
+      progressNote={
+        Object {
+          "completedAt": null,
+          "createdAt": "2017-09-07T13:45:14.532Z",
+          "deletedAt": null,
+          "id": "progress-note-id",
+          "location": null,
+          "memberConcern": "member concern",
+          "needsSupervisorReview": null,
+          "patient": Object {
+            "consentToCall": true,
+            "consentToText": true,
+            "createdAt": "2017-09-07T13:45:14.532Z",
+            "dateOfBirth": "01/01/1999",
+            "firstName": "Bob",
+            "gender": "male",
+            "homeClinicId": "clinic-id",
+            "id": "patient-id",
+            "language": "en",
+            "lastName": "Smith",
+            "middleName": null,
+            "scratchPad": "Note",
+            "zip": "05431",
+          },
+          "patientId": "patient-id",
+          "progressNoteTemplate": Object {
+            "createdAt": "2017-09-07T13:45:14.532Z",
+            "deletedAt": null,
+            "id": "progress-note-template-id",
+            "title": "Progress Note Template Title",
+            "updatedAt": "2017-09-07T13:45:14.532Z",
+          },
+          "progressNoteTemplateId": "progress-note-template-id",
+          "reviewedBySupervisorAt": null,
+          "startedAt": null,
+          "summary": "summary!",
+          "supervisor": null,
+          "supervisorId": null,
+          "supervisorNotes": null,
+          "updatedAt": "2017-09-07T13:45:14.532Z",
+          "user": Object {
+            "createdAt": "2017-09-07T13:45:14.532Z",
+            "email": "a@b.com",
+            "firstName": "first",
+            "googleProfileImageUrl": null,
+            "homeClinicId": "clinic-id",
+            "id": "id",
+            "lastName": "last",
+            "locale": "en",
+            "phone": "(212) 555-8394",
+            "updatedAt": "2017-09-07T13:45:14.532Z",
+            "userRole": "physician",
+          },
+        }
+      }
+      updateProgressNote={[Function]}
     />
   </div>
 </div>

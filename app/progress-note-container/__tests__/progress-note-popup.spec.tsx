@@ -1,12 +1,18 @@
 import { shallow } from 'enzyme';
 import * as React from 'react';
-import { currentUser, progressNote, progressNoteTemplate } from '../../shared/util/test-data';
+import {
+  currentUser,
+  progressNote,
+  progressNoteTemplate,
+  question,
+} from '../../shared/util/test-data';
 import { ProgressNotePopup as Component } from '../progress-note-popup';
 
 const oldDate = Date.now;
 const editProgressNote = jest.fn();
 const completeProgressNote = jest.fn();
 const getOrCreateProgressNote = jest.fn();
+const completeProgressNoteSupervisorReview = jest.fn();
 const progressNoteTemplates = [progressNoteTemplate];
 
 describe('builder concerns', () => {
@@ -21,12 +27,13 @@ describe('builder concerns', () => {
     it('renders progress note popup with templates', async () => {
       const component = shallow(
         <Component
+          progressNote={progressNote}
+          questions={[question]}
           currentUser={currentUser}
           close={jest.fn()}
-          progressNoteId={progressNote.id}
-          visible={true}
           editProgressNote={editProgressNote}
           completeProgressNote={completeProgressNote}
+          completeProgressNoteSupervisorReview={completeProgressNoteSupervisorReview}
           createProgressNote={getOrCreateProgressNote}
           progressNoteTemplates={progressNoteTemplates}
         />,
@@ -39,9 +46,9 @@ describe('builder concerns', () => {
       const component = shallow(
         <Component
           currentUser={currentUser}
+          questions={[question]}
           close={jest.fn()}
-          progressNoteId={progressNote.id}
-          visible={true}
+          completeProgressNoteSupervisorReview={completeProgressNoteSupervisorReview}
           editProgressNote={editProgressNote}
           completeProgressNote={completeProgressNote}
           createProgressNote={getOrCreateProgressNote}

@@ -5279,6 +5279,68 @@ export interface progressNoteCompleteMutation {
   } | null,
 };
 
+export interface progressNoteCompleteSupervisorReviewMutationVariables {
+  progressNoteId: string,
+};
+
+export interface progressNoteCompleteSupervisorReviewMutation {
+  // closes out supervisor review
+  progressNoteCompleteSupervisorReview:  {
+    id: string,
+    patientId: string,
+    user:  {
+      id: string,
+      locale: string | null,
+      phone: string | null,
+      firstName: string | null,
+      lastName: string | null,
+      userRole: UserRole,
+      email: string | null,
+      homeClinicId: string,
+      googleProfileImageUrl: string | null,
+      createdAt: string,
+      updatedAt: string,
+    },
+    patient:  {
+      id: string,
+      firstName: string | null,
+      middleName: string | null,
+      lastName: string | null,
+      language: string | null,
+      gender: string | null,
+      dateOfBirth: string | null,
+      zip: string | null,
+      createdAt: string,
+      consentToText: boolean | null,
+      consentToCall: boolean | null,
+    },
+    completedAt: string | null,
+    createdAt: string,
+    updatedAt: string,
+    summary: string | null,
+    memberConcern: string | null,
+    startedAt: string | null,
+    location: string | null,
+    deletedAt: string | null,
+    needsSupervisorReview: boolean | null,
+    reviewedBySupervisorAt: string | null,
+    supervisorNotes: string | null,
+    supervisor:  {
+      id: string,
+      firstName: string | null,
+      lastName: string | null,
+      userRole: UserRole,
+      googleProfileImageUrl: string | null,
+    } | null,
+    progressNoteTemplate:  {
+      id: string,
+      title: string,
+      createdAt: string,
+      deletedAt: string | null,
+    } | null,
+  } | null,
+};
+
 export interface progressNoteCreateMutationVariables {
   patientId: string,
 };

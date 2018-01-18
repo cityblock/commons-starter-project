@@ -13,7 +13,6 @@ import * as styles from './css/progress-note-context.css';
 
 interface IProps {
   progressNote?: FullProgressNoteFragment;
-  updateReadyToSubmit: (isReadyToSubmit: boolean) => void;
 }
 
 interface IGraphqlProps {
@@ -55,9 +54,6 @@ export class ProgressNoteSupervisorNotes extends React.Component<allProps, IStat
     // setup default state
     if (newProps.progressNote && !this.props.progressNote) {
       this.setDefaultProgressNoteFields(newProps);
-    }
-    if (newProps.progressNote && newProps.progressNote.supervisorNotes) {
-      this.props.updateReadyToSubmit(true);
     }
   }
 

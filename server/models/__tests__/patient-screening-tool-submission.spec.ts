@@ -115,9 +115,16 @@ describe('patient screening tool submission model', () => {
       expect(initialSuggestions.length).toEqual(0);
 
       const concern = await Concern.create({ title: 'Screening Tool Concern' }, txn);
+      const concern2 = await Concern.create({ title: 'Also a concern' }, txn);
       const goalSuggestionTemplate = await GoalSuggestionTemplate.create(
         {
           title: 'Fix housing',
+        },
+        txn,
+      );
+      const goalSuggestionTemplate2 = await GoalSuggestionTemplate.create(
+        {
+          title: 'Find food',
         },
         txn,
       );
@@ -220,10 +227,24 @@ describe('patient screening tool submission model', () => {
         },
         txn,
       );
+      await ConcernSuggestion.create(
+        {
+          concernId: concern2.id,
+          answerId: answer.id,
+        },
+        txn,
+      );
       await GoalSuggestion.create(
         {
           goalSuggestionTemplateId: goalSuggestionTemplate.id,
           screeningToolScoreRangeId: screeningToolScoreRange.id,
+        },
+        txn,
+      );
+      await GoalSuggestion.create(
+        {
+          goalSuggestionTemplateId: goalSuggestionTemplate2.id,
+          answerId: answer2.id,
         },
         txn,
       );
@@ -240,7 +261,7 @@ describe('patient screening tool submission model', () => {
       ).toEqual(5);
 
       const suggestions = await CarePlanSuggestion.getForPatient(patient1.id, txn);
-      expect(suggestions.length).toEqual(2);
+      expect(suggestions.length).toEqual(4);
     });
   });
 

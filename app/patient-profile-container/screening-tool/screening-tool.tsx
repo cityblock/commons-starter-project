@@ -35,7 +35,6 @@ import {
   IQuestionAnswerHash,
 } from '../../shared/question/question-helpers';
 import * as styles from './css/screening-tool.css';
-import PatientScreeningToolSubmission from './patient-screening-tool-submission';
 import ScreeningToolResultsPopup from './screening-tool-results-popup';
 
 interface IProps {
@@ -222,10 +221,6 @@ export class ScreeningTool extends React.Component<allProps> {
       </div>
     ) : (
       <div className={styles.assessment}>
-        <PatientScreeningToolSubmission
-          patientId={this.props.match.params.patientId}
-          screeningToolId={this.props.match.params.screeningToolId}
-        />
         <div className={titleStyles}>
           <div className={styles.title}>
             <Icon name="event" />

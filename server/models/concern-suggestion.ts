@@ -1,3 +1,4 @@
+import { uniqBy } from 'lodash';
 import { transaction, Model, RelationMappings, Transaction } from 'objection';
 import Answer from './answer';
 import BaseModel from './base-model';
@@ -135,8 +136,21 @@ export default class ConcernSuggestion extends BaseModel {
       .andWhere('suggestionType', 'concern')
       .select('concernId');
 
-    // TODO: make this work in a 'union' query. Can't get it to act properly right now though.
-    const concernSuggestions = (await this.query(txn)
+    // concern suggestions based on answers
+    const answerConcernSuggestions = (await this.query(txn)
+      .eager('concern')
+      .joinRelation('answer')
+      .join('patient_answer', 'answer.id', 'patient_answer.answerId')
+      .leftOuterJoin('patient_concern', 'concern_suggestion.concernId', 'patient_concern.concernId')
+      .where('patient_answer.patientScreeningToolSubmissionId', patientScreeningToolSubmissionId)
+      .andWhere('patient_answer.deletedAt', null)
+      .andWhere('concern_suggestion.concernId', 'not in', existingPatientCarePlanSuggestionsQuery)
+      .andWhere('patient_answer.patientId', patientId)
+      .andWhere('patient_answer.applicable', true)
+      .andWhere('patient_concern.id', null)) as ConcernSuggestion[];
+
+    // concern suggestions based on score ranges
+    const scoreRangeConcernSuggestions = (await this.query(txn)
       .eager('concern')
       .joinRelation('screeningToolScoreRange')
       .join(
@@ -149,7 +163,14 @@ export default class ConcernSuggestion extends BaseModel {
       .andWhere('concern_suggestion.concernId', 'not in', existingPatientCarePlanSuggestionsQuery)
       .andWhere('patient_concern.id', null)) as ConcernSuggestion[];
 
-    return concernSuggestions.map((suggestion: ConcernSuggestion) => suggestion.concern);
+    const uniqueConcernSuggestions = uniqBy(
+      answerConcernSuggestions.concat(scoreRangeConcernSuggestions),
+      'concernId',
+    );
+
+    return uniqueConcernSuggestions.map(
+      (concernSuggestion: ConcernSuggestion) => concernSuggestion.concern,
+    );
   }
 
   static async getNewSuggestionsForPatientAnswer(

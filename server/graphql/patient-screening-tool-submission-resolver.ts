@@ -1,3 +1,4 @@
+import { transaction } from 'objection';
 import {
   IPatientScreeningToolSubmissionCreateInput,
   IPatientScreeningToolSubmissionScoreInput,
@@ -47,22 +48,25 @@ export async function patientScreeningToolSubmissionScore(
   { input }: IPatientScreeningToolSubmissionScoreArgs,
   context: IContext,
 ) {
-  const { userRole, userId, txn } = context;
+  const { userRole, userId } = context;
+  const existingTxn = context.txn;
   await accessControls.isAllowed(userRole, 'create', 'patientScreeningToolSubmission');
   checkUserLoggedIn(userId);
 
-  const patientAnswers = await PatientAnswer.getForScreeningToolSubmission(
-    input.patientScreeningToolSubmissionId,
-    txn,
-  );
+  return await transaction(PatientScreeningToolSubmission.knex(), async txn => {
+    const patientAnswers = await PatientAnswer.getForScreeningToolSubmission(
+      input.patientScreeningToolSubmissionId,
+      existingTxn || txn,
+    );
 
-  return await PatientScreeningToolSubmission.submitScore(
-    input.patientScreeningToolSubmissionId,
-    {
-      patientAnswers,
-    },
-    txn,
-  );
+    return await PatientScreeningToolSubmission.submitScore(
+      input.patientScreeningToolSubmissionId,
+      {
+        patientAnswers,
+      },
+      existingTxn || txn,
+    );
+  });
 }
 
 export async function resolvePatientScreeningToolSubmission(

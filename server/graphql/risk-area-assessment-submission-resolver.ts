@@ -47,7 +47,7 @@ export async function riskAreaAssessmentSubmissionComplete(
   { input }: IRiskAreaAssessmentSubmissionCompleteArgs,
   context: IContext,
 ) {
-  return transaction(context.txn || RiskAreaAssessmentSubmission.knex(), async newTxn => {
+  return await transaction(context.txn || RiskAreaAssessmentSubmission.knex(), async newTxn => {
     const { userRole, userId } = context;
 
     await accessControls.isAllowed(userRole, 'create', 'riskAreaAssessmentSubmission');

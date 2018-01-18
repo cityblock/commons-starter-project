@@ -1,3 +1,4 @@
+import { uniqBy } from 'lodash';
 import { transaction, Model, RelationMappings, Transaction } from 'objection';
 import Answer from './answer';
 import BaseModel from './base-model';
@@ -151,8 +152,29 @@ export default class GoalSuggestion extends BaseModel {
       .andWhere('suggestionType', 'goal')
       .select('goalSuggestionTemplateId');
 
-    // TODO: make this work in a 'union' query. Can't get it to act properly right now though.
-    const goalSuggestions = (await this.query(txn)
+    // goal suggestions based on answers
+    const answerGoalSuggestions = (await this.query(txn)
+      .eager('goalSuggestionTemplate.[taskTemplates]')
+      .joinRelation('answer')
+      .join('patient_answer', 'answer.id', 'patient_answer.answerId')
+      .leftOuterJoin(
+        'patient_goal',
+        'goal_suggestion.goalSuggestionTemplateId',
+        'patient_goal.goalSuggestionTemplateId',
+      )
+      .where('patient_answer.patientScreeningToolSubmissionId', patientScreeningToolSubmissionId)
+      .andWhere('patient_answer.deletedAt', null)
+      .andWhere(
+        'goal_suggestion.goalSuggestionTemplateId',
+        'not in',
+        existingPatientCarePlanSuggestionsQuery,
+      )
+      .andWhere('patient_answer.patientId', patientId)
+      .andWhere('patient_answer.applicable', true)
+      .andWhere('patient_goal.id', null)) as GoalSuggestion[];
+
+    // goal suggestions based on score ranges
+    const scoreRangeGoalSuggestions = (await this.query(txn)
       .eager('goalSuggestionTemplate.[taskTemplates]')
       .joinRelation('screeningToolScoreRange')
       .join(
@@ -173,7 +195,12 @@ export default class GoalSuggestion extends BaseModel {
       )
       .andWhere('patient_goal.id', null)) as GoalSuggestion[];
 
-    return goalSuggestions.map(
+    const uniqueGoalSuggestions = uniqBy(
+      answerGoalSuggestions.concat(scoreRangeGoalSuggestions),
+      'goalSuggestionTemplateId',
+    );
+
+    return uniqueGoalSuggestions.map(
       (goalSuggestion: GoalSuggestion) => goalSuggestion.goalSuggestionTemplate,
     );
   }

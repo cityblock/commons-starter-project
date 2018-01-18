@@ -4,3 +4,7 @@ export const location: string;
 export const time: string;
 export const error: string;
 export const summaryContainer: string;
+export const titleLinkGroup: string;
+export const navTextContainer: string;
+export const navText: string;
+export const icon: string;

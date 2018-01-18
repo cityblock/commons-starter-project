@@ -27,3 +27,28 @@
   display: block;
   padding: var(--small-gutter);
 }
+
+.titleLinkGroup {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.navTextContainer {
+  cursor: pointer;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-top: -3px;
+}
+
+.navText {
+  color: var(--blue-color);
+  padding-top: 4px;
+  cursor: pointer;
+}
+
+.icon {
+  cursor: pointer;
+  vertical-align: middle;
+}

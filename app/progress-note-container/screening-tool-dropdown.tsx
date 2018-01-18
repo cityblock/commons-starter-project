@@ -37,7 +37,7 @@ class ScreeningToolDropdown extends React.Component<allProps> {
         ) : null,
     );
     return (
-      <Select value={''} onChange={this.onSortChange}>
+      <Select value={''} onChange={this.onSortChange} large>
         <Option disabled={true} messageId="progressNote.administerTool" value="" />
         {sortOptions}
       </Select>

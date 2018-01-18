@@ -15,8 +15,8 @@ import {
   FullProgressNoteTemplateFragment,
   FullQuestionFragment,
 } from '../graphql/types';
-import Button from '../shared/library/button/button';
 import FormLabel from '../shared/library/form-label/form-label';
+import Icon from '../shared/library/icon/icon';
 import Select from '../shared/library/select/select';
 import Textarea from '../shared/library/textarea/textarea';
 import PatientQuestion from '../shared/question/patient-question';
@@ -285,19 +285,21 @@ export class ProgressNoteContext extends React.Component<allProps, IState> {
         <div className={styles.error}>{error}</div>
         {this.renderQuestions(!disabled)}
         <div className={styles.summaryContainer}>
-          <FormLabel
-            messageId="progressNote.memberConcernAndObservation"
-            htmlFor="memberConcernAndObservation"
-          />
+          <div className={styles.titleLinkGroup}>
+            <FormLabel
+              messageId="progressNote.memberConcernAndObservation"
+              htmlFor="memberConcernAndObservation"
+            />
+            <div className={styles.navTextContainer} onClick={this.redirectTo360}>
+              <FormLabel
+                className={styles.navText}
+                messageId="progressNote.update360"
+                htmlFor="contextAndPlan"
+              />
+              <Icon name={'keyboardArrowRight'} className={styles.icon} />
+            </div>
+          </div>
           <ScreeningToolDropdown patientId={progressNote.patientId} />
-          <br />
-          <br />
-          <Button
-            fullWidth={true}
-            messageId="progressNote.update360"
-            disabled={disabled}
-            onClick={this.redirectTo360}
-          />
           <br />
           <br />
           <Textarea
@@ -307,15 +309,17 @@ export class ProgressNoteContext extends React.Component<allProps, IState> {
           />
         </div>
         <div className={styles.summaryContainer}>
-          <FormLabel messageId="progressNote.contextAndPlan" htmlFor="contextAndPlan" />
-          <Button
-            fullWidth={true}
-            disabled={disabled}
-            messageId="progressNote.updateMap"
-            onClick={this.redirectToMap}
-          />
-          <br />
-          <br />
+          <div className={styles.titleLinkGroup}>
+            <FormLabel messageId="progressNote.contextAndPlan" htmlFor="contextAndPlan" />
+            <div className={styles.navTextContainer} onClick={this.redirectToMap}>
+              <FormLabel
+                className={styles.navText}
+                messageId="progressNote.updateMap"
+                htmlFor="contextAndPlan"
+              />
+              <Icon name={'keyboardArrowRight'} className={styles.icon} />
+            </div>
+          </div>
           <Textarea
             disabled={disabled}
             value={progressNoteSummary || ''}

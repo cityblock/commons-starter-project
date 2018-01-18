@@ -328,13 +328,21 @@ export default compose(
   }),
   graphql<IGraphqlProps, IProps, allProps>(progressNoteEditMutationGraphql as any, {
     name: 'editProgressNote',
-    options: { refetchQueries: ['getProgressNotesForPatient', 'getProgressNotesForCurrentUser'] },
+    options: {
+      refetchQueries: [
+        'getProgressNotesForPatient',
+        'getProgressNotesForCurrentUser',
+        'getProgressNotesForSupervisorReview',
+      ],
+    },
   }),
   graphql<IGraphqlProps, IProps, allProps>(
     progressNoteCompleteSupervisorReviewMutationGraphql as any,
     {
       name: 'completeProgressNoteSupervisorReview',
-      options: { refetchQueries: ['getProgressNotesForPatient', 'getProgressNotesForCurrentUser'] },
+      options: {
+        refetchQueries: ['getProgressNotesForPatient', 'getProgressNotesForSupervisorReview'],
+      },
     },
   ),
   graphql<IGraphqlProps, IProps, allProps>(questionsQuery as any, {

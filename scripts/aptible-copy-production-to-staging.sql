@@ -15,12 +15,13 @@ insert into goal_suggestion_template (select * from production.goal_suggestion_t
 insert into question (select * from production.question);
 insert into answer (select * from production.answer);
 insert into patient_list (select * from production.patient_list);
+	
+insert into concern (select * from production.concern);
+insert into concern_suggestion (select * from production.concern_suggestion);
+insert into goal_suggestion (select * from production.goal_suggestion);
 
 insert into diagnosis_code (select * from production.diagnosis_code);
 insert into concern_diagnosis_code (select * from production.concern_diagnosis_code);
-
-insert into concern (select * from production.concern);
-insert into concern_suggestion (select * from production.concern_suggestion);
 
 insert into task_template (select * from production.task_template);
 insert into question_condition (select * from production.question_condition);

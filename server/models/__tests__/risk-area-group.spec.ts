@@ -132,6 +132,11 @@ describe('risk area group model', () => {
       expect(response.riskAreas[0].screeningTools[0].patientScreeningToolSubmissions.length).toBe(
         1,
       );
+
+      const submission = response.riskAreas[0].screeningTools[0].patientScreeningToolSubmissions[0];
+
+      // Dig into createFullRiskAreaGroupAssociations to see why this should be 1
+      expect(submission.patientAnswers.length).toBe(1);
     });
   });
 });

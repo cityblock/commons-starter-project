@@ -3576,6 +3576,14 @@ export interface getRiskAreaGroupForPatientQuery {
             riskAdjustmentType: RiskAdjustmentTypeOptions,
             description: string,
           } | null,
+          patientAnswers:  Array< {
+            updatedAt: string,
+            answer:  {
+              riskAdjustmentType: RiskAdjustmentTypeOptions | null,
+              inSummary: boolean | null,
+              summaryText: string | null,
+            },
+          } > | null,
         } >,
         createdAt: string,
         updatedAt: string,
@@ -3724,6 +3732,14 @@ export interface getScreeningToolQuery {
         riskAdjustmentType: RiskAdjustmentTypeOptions,
         description: string,
       } | null,
+      patientAnswers:  Array< {
+        updatedAt: string,
+        answer:  {
+          riskAdjustmentType: RiskAdjustmentTypeOptions | null,
+          inSummary: boolean | null,
+          summaryText: string | null,
+        },
+      } > | null,
     } > | null,
     createdAt: string,
     updatedAt: string,
@@ -3813,6 +3829,14 @@ export interface getScreeningToolsForRiskAreaQuery {
         riskAdjustmentType: RiskAdjustmentTypeOptions,
         description: string,
       } | null,
+      patientAnswers:  Array< {
+        updatedAt: string,
+        answer:  {
+          riskAdjustmentType: RiskAdjustmentTypeOptions | null,
+          inSummary: boolean | null,
+          summaryText: string | null,
+        },
+      } > | null,
     } > | null,
     createdAt: string,
     updatedAt: string,
@@ -3898,6 +3922,14 @@ export interface getScreeningToolsQuery {
         riskAdjustmentType: RiskAdjustmentTypeOptions,
         description: string,
       } | null,
+      patientAnswers:  Array< {
+        updatedAt: string,
+        answer:  {
+          riskAdjustmentType: RiskAdjustmentTypeOptions | null,
+          inSummary: boolean | null,
+          summaryText: string | null,
+        },
+      } > | null,
     } > | null,
     createdAt: string,
     updatedAt: string,
@@ -6306,6 +6338,14 @@ export interface screeningToolCreateMutation {
         riskAdjustmentType: RiskAdjustmentTypeOptions,
         description: string,
       } | null,
+      patientAnswers:  Array< {
+        updatedAt: string,
+        answer:  {
+          riskAdjustmentType: RiskAdjustmentTypeOptions | null,
+          inSummary: boolean | null,
+          summaryText: string | null,
+        },
+      } > | null,
     } > | null,
     createdAt: string,
     updatedAt: string,
@@ -6395,6 +6435,14 @@ export interface screeningToolDeleteMutation {
         riskAdjustmentType: RiskAdjustmentTypeOptions,
         description: string,
       } | null,
+      patientAnswers:  Array< {
+        updatedAt: string,
+        answer:  {
+          riskAdjustmentType: RiskAdjustmentTypeOptions | null,
+          inSummary: boolean | null,
+          summaryText: string | null,
+        },
+      } > | null,
     } > | null,
     createdAt: string,
     updatedAt: string,
@@ -6486,6 +6534,14 @@ export interface screeningToolEditMutation {
         riskAdjustmentType: RiskAdjustmentTypeOptions,
         description: string,
       } | null,
+      patientAnswers:  Array< {
+        updatedAt: string,
+        answer:  {
+          riskAdjustmentType: RiskAdjustmentTypeOptions | null,
+          inSummary: boolean | null,
+          summaryText: string | null,
+        },
+      } > | null,
     } > | null,
     createdAt: string,
     updatedAt: string,
@@ -9053,6 +9109,14 @@ export interface FullRiskAreaForPatientFragment {
         riskAdjustmentType: RiskAdjustmentTypeOptions,
         description: string,
       } | null,
+      patientAnswers:  Array< {
+        updatedAt: string,
+        answer:  {
+          riskAdjustmentType: RiskAdjustmentTypeOptions | null,
+          inSummary: boolean | null,
+          summaryText: string | null,
+        },
+      } > | null,
     } >,
     createdAt: string,
     updatedAt: string,
@@ -9114,6 +9178,14 @@ export interface FullScreeningToolForPatientFragment {
       riskAdjustmentType: RiskAdjustmentTypeOptions,
       description: string,
     } | null,
+    patientAnswers:  Array< {
+      updatedAt: string,
+      answer:  {
+        riskAdjustmentType: RiskAdjustmentTypeOptions | null,
+        inSummary: boolean | null,
+        summaryText: string | null,
+      },
+    } > | null,
   } >,
   createdAt: string,
   updatedAt: string,
@@ -9242,6 +9314,14 @@ export interface FullScreeningToolFragment {
       riskAdjustmentType: RiskAdjustmentTypeOptions,
       description: string,
     } | null,
+    patientAnswers:  Array< {
+      updatedAt: string,
+      answer:  {
+        riskAdjustmentType: RiskAdjustmentTypeOptions | null,
+        inSummary: boolean | null,
+        summaryText: string | null,
+      },
+    } > | null,
   } > | null,
   createdAt: string,
   updatedAt: string,
@@ -9452,6 +9532,14 @@ export interface ShortPatientScreeningToolSubmissionFragment {
     riskAdjustmentType: RiskAdjustmentTypeOptions,
     description: string,
   } | null,
+  patientAnswers:  Array< {
+    updatedAt: string,
+    answer:  {
+      riskAdjustmentType: RiskAdjustmentTypeOptions | null,
+      inSummary: boolean | null,
+      summaryText: string | null,
+    },
+  } > | null,
 };
 
 export interface ShortPatientFragment {

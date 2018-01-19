@@ -155,7 +155,7 @@ export default class PatientScreeningToolSubmission extends BaseModel {
     input: IPatientScreeningToolSubmissionCreateFields,
     txn?: Transaction,
   ): Promise<PatientScreeningToolSubmission> {
-    const { patientId, userId } = input;
+    const { patientId, userId, screeningToolId } = input;
 
     const existingScreeningToolSubmission = await this.query(txn)
       .eager(EAGER_QUERY)
@@ -165,6 +165,7 @@ export default class PatientScreeningToolSubmission extends BaseModel {
         score: null,
         patientId,
         userId,
+        screeningToolId,
       });
 
     if (!existingScreeningToolSubmission) {

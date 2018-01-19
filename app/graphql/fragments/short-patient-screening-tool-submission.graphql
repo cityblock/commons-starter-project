@@ -10,4 +10,12 @@ fragment ShortPatientScreeningToolSubmission on PatientScreeningToolSubmission {
     riskAdjustmentType
     description
   }
+  patientAnswers {
+    updatedAt
+    answer {
+      riskAdjustmentType
+      inSummary
+      summaryText
+    }
+  }
 }

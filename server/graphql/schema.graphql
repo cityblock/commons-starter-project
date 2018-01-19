@@ -848,6 +848,7 @@ type PatientScreeningToolSubmission implements uniqueId {
   carePlanSuggestions: [CarePlanSuggestion!]!
   screeningToolScoreRangeId: ID
   screeningToolScoreRange: ScreeningToolScoreRangeForPatientScreeningToolSubmission
+  patientAnswers: [PatientAnswer!]
 }
 
 type RiskAreaAssessmentSubmission implements uniqueId {

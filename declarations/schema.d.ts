@@ -872,6 +872,7 @@ declare module 'schema' {
     carePlanSuggestions: Array<ICarePlanSuggestion>;
     screeningToolScoreRangeId: string | null;
     screeningToolScoreRange: IScreeningToolScoreRangeForPatientScreeningToolSubmission | null;
+    patientAnswers: Array<IPatientAnswer>;
   }
 
 

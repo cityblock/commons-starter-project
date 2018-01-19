@@ -1,5 +1,4 @@
 import * as classNames from 'classnames';
-import { isAfter } from 'date-fns';
 import * as React from 'react';
 import { graphql } from 'react-apollo';
 import { Link } from 'react-router-dom';
@@ -9,6 +8,7 @@ import DateInfo from '../../shared/library/date-info/date-info';
 import Icon from '../../shared/library/icon/icon';
 import * as styles from './css/domain-summary.css';
 import DomainSummaryBullets from './domain-summary-bullets';
+import { calculateRiskAreaSummaryStats } from './helpers';
 import { IRiskAreaGroupScore } from './patient-three-sixty-domains';
 
 type Risk = 'low' | 'medium' | 'high' | null;
@@ -66,63 +66,31 @@ export class DomainSummary extends React.Component<allProps, IState> {
     const { updateRiskAreaGroupScore } = this.props;
     let totalScore: number | null = null;
     let forceHighRisk = false;
-    const automatedSummaryText: string[] = [];
-    const manualSummaryText: string[] = [];
+    let automatedSummaryText: string[] = [];
+    let manualSummaryText: string[] = [];
     let lastUpdated = '';
 
     if (!riskAreaGroup || !riskAreaGroup.riskAreas) return;
 
-    riskAreaGroup.riskAreas.forEach(area => {
-      area.questions!.forEach(question => {
-        question.answers!.forEach(answer => {
-          if (answer.patientAnswers && answer.patientAnswers.length) {
-            answer.patientAnswers.forEach(patientAnswer => {
-              if (totalScore === null) totalScore = 0;
-
-              const updatedAt = patientAnswer.updatedAt;
-              if (!lastUpdated || isAfter(updatedAt, lastUpdated)) {
-                lastUpdated = updatedAt;
-              }
-
-              if (answer.riskAdjustmentType === 'forceHighRisk') {
-                forceHighRisk = true;
-              } else if (answer.riskAdjustmentType === 'increment') {
-                totalScore++;
-              }
-
-              if (answer.inSummary && answer.summaryText) {
-                if (
-                  area.assessmentType === 'automated' &&
-                  !automatedSummaryText.includes(answer.summaryText)
-                ) {
-                  automatedSummaryText.push(answer.summaryText);
-                } else if (
-                  area.assessmentType === 'manual' &&
-                  !manualSummaryText.includes(answer.summaryText)
-                ) {
-                  manualSummaryText.push(answer.summaryText);
-                }
-              }
-            });
-          }
-        });
+    riskAreaGroup.riskAreas.forEach(riskArea => {
+      const isAutomated = riskArea.assessmentType === 'automated';
+      const summaryText = isAutomated ? automatedSummaryText : manualSummaryText;
+      const riskAreaSummaryStats = calculateRiskAreaSummaryStats(riskArea, {
+        lastUpdated,
+        totalScore,
+        forceHighRisk,
+        summaryText,
       });
-      area.screeningTools.forEach(screeningTool => {
-        screeningTool.patientScreeningToolSubmissions.forEach(submission => {
-          const { screeningToolScoreRange } = submission;
 
-          if (screeningToolScoreRange) {
-            const { riskAdjustmentType } = screeningToolScoreRange;
+      totalScore = riskAreaSummaryStats.totalScore;
+      forceHighRisk = riskAreaSummaryStats.forceHighRisk;
+      lastUpdated = riskAreaSummaryStats.lastUpdated;
 
-            if (riskAdjustmentType === 'forceHighRisk') {
-              forceHighRisk = true;
-            } else if (riskAdjustmentType === 'increment') {
-              if (totalScore === null) totalScore = 0;
-              totalScore++;
-            }
-          }
-        });
-      });
+      if (isAutomated) {
+        automatedSummaryText = riskAreaSummaryStats.summaryText;
+      } else {
+        manualSummaryText = riskAreaSummaryStats.summaryText;
+      }
     });
 
     updateRiskAreaGroupScore(riskAreaGroup.id, { totalScore, forceHighRisk });

@@ -1,5 +1,4 @@
 import * as classNames from 'classnames';
-import { isAfter } from 'date-fns';
 import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
 import { Link, LinkProps } from 'react-router-dom';
@@ -8,6 +7,7 @@ import DateInfo from '../../shared/library/date-info/date-info';
 import SmallText from '../../shared/library/small-text/small-text';
 import TextInfo from '../../shared/library/text-info/text-info';
 import * as styles from './css/domain-assessment.css';
+import { calculateRiskAreaSummaryStats } from './helpers';
 
 interface IProps {
   routeBase: string | null;
@@ -20,54 +20,16 @@ interface IProps {
 class DomainAssessment extends React.Component<IProps> {
   calculateSummaryStats() {
     const { riskArea, markAsSuppressed } = this.props;
-    let lastUpdated = '';
-    let totalScore: number | null = null;
-    let forceHighRisk = false;
-    const summaryText: string[] = [];
 
-    riskArea.questions!.forEach(question => {
-      question.answers!.forEach(answer => {
-        if (answer.patientAnswers && answer.patientAnswers.length) {
-          answer.patientAnswers.forEach(patientAnswer => {
-            if (totalScore === null) totalScore = 0;
-
-            if (!lastUpdated || isAfter(patientAnswer.updatedAt, lastUpdated)) {
-              lastUpdated = patientAnswer.updatedAt;
-            }
-
-            if (answer.riskAdjustmentType === 'forceHighRisk') {
-              forceHighRisk = true;
-            } else if (answer.riskAdjustmentType === 'increment') {
-              totalScore++;
-            }
-
-            if (
-              answer.inSummary &&
-              answer.summaryText &&
-              !summaryText.includes(answer.summaryText)
-            ) {
-              summaryText.push(answer.summaryText);
-            }
-          });
-        }
-      });
-    });
-    riskArea.screeningTools.forEach(screeningTool => {
-      screeningTool.patientScreeningToolSubmissions.forEach(submission => {
-        const { screeningToolScoreRange } = submission;
-
-        if (screeningToolScoreRange) {
-          const { riskAdjustmentType } = screeningToolScoreRange;
-
-          if (riskAdjustmentType === 'forceHighRisk') {
-            forceHighRisk = true;
-          } else if (riskAdjustmentType === 'increment') {
-            if (totalScore === null) totalScore = 0;
-            totalScore++;
-          }
-        }
-      });
-    });
+    const { lastUpdated, totalScore, forceHighRisk, summaryText } = calculateRiskAreaSummaryStats(
+      riskArea,
+      {
+        lastUpdated: '',
+        totalScore: null,
+        forceHighRisk: false,
+        summaryText: [],
+      },
+    );
 
     // do not show this card if automated with zero or null risk score
     if (

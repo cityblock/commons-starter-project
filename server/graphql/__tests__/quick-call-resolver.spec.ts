@@ -1,6 +1,6 @@
 import { graphql } from 'graphql';
 import { cloneDeep } from 'lodash';
-import { transaction } from 'objection';
+import { transaction, Transaction } from 'objection';
 import Db from '../../db';
 import Clinic from '../../models/clinic';
 import Patient from '../../models/patient';
@@ -14,19 +14,28 @@ import {
 } from '../../spec-helpers';
 import schema from '../make-executable-schema';
 
-describe('quick call resolver', () => {
-  const userRole = 'admin';
-  let user: User;
-  let patient: Patient;
-  let clinic: Clinic;
+interface ISetup {
+  user: User;
+  patient: Patient;
+}
 
+const userRole = 'admin';
+
+async function setup(txn: Transaction): Promise<ISetup> {
+  const clinic = await Clinic.create(createMockClinic(), txn);
+  const user = await User.create(createMockUser(11, clinic.id, userRole, 'a@b.com'), txn);
+  const patient = await createPatient(createMockPatient(123, clinic.id), user.id, txn);
+
+  return {
+    user,
+    patient,
+  };
+}
+
+describe('quick call resolver', () => {
   beforeEach(async () => {
     await Db.get();
     await Db.clear();
-
-    clinic = await Clinic.create(createMockClinic());
-    user = await User.create(createMockUser(11, clinic.id, userRole, 'a@b.com'));
-    patient = await createPatient(createMockPatient(123, clinic.id), user.id);
   });
 
   afterAll(async () => {
@@ -35,6 +44,7 @@ describe('quick call resolver', () => {
 
   it('fetches a quick call', async () => {
     await transaction(QuickCall.knex(), async txn => {
+      const { user, patient } = await setup(txn);
       const createdCall = await QuickCall.create(
         {
           userId: user.id,
@@ -63,6 +73,7 @@ describe('quick call resolver', () => {
 
   it('creates a quick call', async () => {
     await transaction(QuickCall.knex(), async txn => {
+      const { user, patient } = await setup(txn);
       const mutation = `mutation {
           quickCallCreate(input:
             {
@@ -87,6 +98,7 @@ describe('quick call resolver', () => {
   describe('quick calls', () => {
     it('returns quick calls for progress note', async () => {
       await transaction(QuickCall.knex(), async txn => {
+        const { user, patient } = await setup(txn);
         const createdCall = await QuickCall.create(
           {
             userId: user.id,

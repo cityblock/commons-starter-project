@@ -12,11 +12,11 @@ export interface IResolvePatientEncountersOptions extends IPaginationOptions {
 export async function resolvePatientEncounters(
   root: any,
   { patientId }: IResolvePatientEncountersOptions,
-  { userRole, redoxApi, userId }: IContext,
+  { userRole, redoxApi, userId, txn }: IContext,
 ): Promise<IPatientEncounter[]> {
   await accessControls.isAllowedForUser(userRole, 'view', 'patient', patientId, userId);
 
-  const patient = await Patient.get(patientId);
+  const patient = await Patient.get(patientId, txn);
 
   const id = String(patient.athenaPatientId);
   const patientClinicalSummaryResponse = await redoxApi.patientEncountersGet(id);

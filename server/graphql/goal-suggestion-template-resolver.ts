@@ -30,16 +30,16 @@ export async function goalSuggestionTemplateCreate(
   { input }: IGoalSuggestionTemplatesCreateArgs,
   context: IContext,
 ) {
-  const { userRole } = context;
+  const { userRole, txn } = context;
   await accessControls.isAllowed(userRole, 'create', 'goalSuggestionTemplate');
 
-  return await GoalSuggestionTemplate.create(input);
+  return await GoalSuggestionTemplate.create(input, txn);
 }
 
 export async function resolveGoalSuggestionTemplates(
   root: any,
   args: any,
-  { db, userRole }: IContext,
+  { db, userRole, txn }: IContext,
 ) {
   await accessControls.isAllowed(userRole, 'view', 'goalSuggestionTemplate');
 
@@ -48,35 +48,35 @@ export async function resolveGoalSuggestionTemplates(
     order: 'desc',
   });
 
-  return await GoalSuggestionTemplate.getAll({ orderBy, order });
+  return await GoalSuggestionTemplate.getAll({ orderBy, order }, txn);
 }
 
 export async function resolveGoalSuggestionTemplate(
   root: any,
   args: { goalSuggestionTemplateId: string },
-  { db, userRole }: IContext,
+  { db, userRole, txn }: IContext,
 ) {
   await accessControls.isAllowed(userRole, 'view', 'goalSuggestionTemplate');
 
-  return await GoalSuggestionTemplate.get(args.goalSuggestionTemplateId);
+  return await GoalSuggestionTemplate.get(args.goalSuggestionTemplateId, txn);
 }
 
 export async function goalSuggestionTemplateEdit(
   root: any,
   args: IEditGoalSuggestionTemplateOptions,
-  { db, userRole }: IContext,
+  { db, userRole, txn }: IContext,
 ) {
   await accessControls.isAllowedForUser(userRole, 'edit', 'goalSuggestionTemplate');
 
-  return GoalSuggestionTemplate.edit(args.input.goalSuggestionTemplateId, args.input);
+  return GoalSuggestionTemplate.edit(args.input.goalSuggestionTemplateId, args.input, txn);
 }
 
 export async function goalSuggestionTemplateDelete(
   root: any,
   args: IDeleteGoalSuggestionTemplateOptions,
-  { db, userRole }: IContext,
+  { db, userRole, txn }: IContext,
 ) {
   await accessControls.isAllowedForUser(userRole, 'edit', 'goalSuggestionTemplate');
 
-  return GoalSuggestionTemplate.delete(args.input.goalSuggestionTemplateId);
+  return GoalSuggestionTemplate.delete(args.input.goalSuggestionTemplateId, txn);
 }

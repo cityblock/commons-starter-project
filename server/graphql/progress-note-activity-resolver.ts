@@ -13,21 +13,26 @@ interface IResolveProgressNoteActivityOptions {
 export async function resolveProgressNoteActivityForProgressNote(
   root: any,
   args: IResolveProgressNoteActivityOptions,
-  { db, userRole, userId }: IContext,
+  { db, userRole, userId, txn }: IContext,
 ): Promise<IProgressNoteActivity> {
   const { progressNoteId } = args;
   await accessControls.isAllowed(userRole, 'view', 'progressNote');
   checkUserLoggedIn(userId);
 
   // TODO: Fix typings
-  const taskEvents = (await TaskEvent.getAllForProgressNote(progressNoteId)) as any;
+  const taskEvents = (await TaskEvent.getAllForProgressNote(progressNoteId, txn)) as any;
   const patientAnswerEvents = (await PatientAnswerEvent.getAllForProgressNote(
     progressNoteId,
+    txn,
   )) as any;
   const carePlanUpdateEvents = (await CarePlanUpdateEvent.getAllForProgressNote(
     progressNoteId,
+    txn,
   )) as any;
-  const quickCallEvents = (await QuickCall.getQuickCallsForProgressNote(progressNoteId)) as any;
+  const quickCallEvents = (await QuickCall.getQuickCallsForProgressNote(
+    progressNoteId,
+    txn,
+  )) as any;
 
   return {
     taskEvents,

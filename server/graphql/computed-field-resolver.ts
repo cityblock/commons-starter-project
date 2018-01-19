@@ -26,28 +26,28 @@ export async function computedFieldCreate(
   { input }: IComputedFieldCreateArgs,
   context: IContext,
 ) {
-  const { userRole } = context;
+  const { userRole, txn } = context;
   await accessControls.isAllowed(userRole, 'create', 'computedField');
 
   const slug = kebabCase(input.label);
 
-  return await ComputedField.create({ slug, ...input });
+  return await ComputedField.create({ slug, ...input }, txn);
 }
 
 export async function resolveComputedField(
   root: any,
   args: IResolveComputedFieldOptions,
-  { db, userRole }: IContext,
+  { db, userRole, txn }: IContext,
 ) {
   await accessControls.isAllowed(userRole, 'view', 'computedField');
 
-  return await ComputedField.get(args.computedFieldId);
+  return await ComputedField.get(args.computedFieldId, txn);
 }
 
 export async function resolveComputedFields(
   root: any,
   args: IResolveComputedFieldsOptions,
-  { db, userRole }: IContext,
+  { db, userRole, txn }: IContext,
 ) {
   await accessControls.isAllowed(userRole, 'view', 'computedField');
 
@@ -56,15 +56,15 @@ export async function resolveComputedFields(
     order: 'desc',
   });
 
-  return await ComputedField.getAll({ orderBy, order });
+  return await ComputedField.getAll({ orderBy, order }, txn);
 }
 
 export async function computedFieldDelete(
   root: any,
   args: IDeleteComputedFieldOptions,
-  { db, userRole }: IContext,
+  { db, userRole, txn }: IContext,
 ) {
   await accessControls.isAllowedForUser(userRole, 'edit', 'computedField');
 
-  return await ComputedField.delete(args.input.computedFieldId);
+  return await ComputedField.delete(args.input.computedFieldId, txn);
 }

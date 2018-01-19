@@ -39,7 +39,7 @@ export interface IJWTData {
 export const signJwt = (jwtData: IJWTData) =>
   sign(jwtData, config.JWT_SECRET, { expiresIn: config.JWT_EXPIRY });
 
-export async function parseAndVerifyJwt(jwt: string) {
+export async function parseAndVerifyJwt(jwt: string, txn?: Transaction) {
   // verify throws an error if jwt is not valid and if expiry passed
   await verify(jwt, config.JWT_SECRET);
 
@@ -47,7 +47,7 @@ export async function parseAndVerifyJwt(jwt: string) {
 
   // goal: allow user to be logged into exactly 1 device at a time
   // solution: invalidate token if user has logged in on a different device since token was issued
-  const lastLoginAt = await User.getLastLoggedIn(decoded.userId);
+  const lastLoginAt = await User.getLastLoggedIn(decoded.userId, txn);
   if (isInvalidLogin(decoded.lastLoginAt, lastLoginAt)) {
     throw new Error('token invalid: login too old');
   }
@@ -67,6 +67,7 @@ const isInvalidLogin = (tokenLastLoginAt: string, userLastLoginAt: string | unde
 export async function getGraphQLContext(
   request: express.Request,
   logger: ILogger,
+  txn?: Transaction,
 ): Promise<IContext> {
   const authToken = request.headers.auth_token as string;
   const db = await Db.get();
@@ -86,6 +87,7 @@ export async function getGraphQLContext(
         redoxApi,
         userRole: 'anonymousUser',
         logger,
+        txn,
       };
     }
   }
@@ -96,6 +98,7 @@ export async function getGraphQLContext(
     db,
     redoxApi,
     logger,
+    txn,
   };
 }
 

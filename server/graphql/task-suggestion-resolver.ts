@@ -11,35 +11,41 @@ export interface ITaskSuggestOptions {
 export async function resolveTaskSuggestionTemplatesForAnswer(
   root: any,
   args: { answerId: string },
-  { db, userRole }: IContext,
+  { db, userRole, txn }: IContext,
 ): Promise<TaskTemplate[]> {
   await accessControls.isAllowed(userRole, 'view', 'taskSuggestion');
 
-  return await TaskSuggestion.getForAnswer(args.answerId);
+  return await TaskSuggestion.getForAnswer(args.answerId, txn);
 }
 
 export async function taskSuggestionCreate(
   root: any,
   args: ITaskSuggestOptions,
-  { db, userRole }: IContext,
+  { db, userRole, txn }: IContext,
 ): Promise<TaskTemplate[]> {
   await accessControls.isAllowed(userRole, 'view', 'taskSuggestion');
 
-  return await TaskSuggestion.create({
-    answerId: args.input.answerId,
-    taskTemplateId: args.input.taskTemplateId,
-  });
+  return await TaskSuggestion.create(
+    {
+      answerId: args.input.answerId,
+      taskTemplateId: args.input.taskTemplateId,
+    },
+    txn,
+  );
 }
 
 export async function taskSuggestionDelete(
   root: any,
   args: ITaskSuggestOptions,
-  { db, userRole }: IContext,
+  { db, userRole, txn }: IContext,
 ): Promise<TaskTemplate[]> {
   await accessControls.isAllowed(userRole, 'view', 'taskSuggestion');
 
-  return await TaskSuggestion.delete({
-    answerId: args.input.answerId,
-    taskTemplateId: args.input.taskTemplateId,
-  });
+  return await TaskSuggestion.delete(
+    {
+      answerId: args.input.answerId,
+      taskTemplateId: args.input.taskTemplateId,
+    },
+    txn,
+  );
 }

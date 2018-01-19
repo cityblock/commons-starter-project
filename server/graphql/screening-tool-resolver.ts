@@ -28,17 +28,17 @@ export async function screeningToolCreate(
   { input }: IScreeningToolCreateArgs,
   context: IContext,
 ) {
-  const { userRole, userId } = context;
+  const { userRole, userId, txn } = context;
   await accessControls.isAllowed(userRole, 'create', 'screeningTool');
   checkUserLoggedIn(userId);
 
-  return await ScreeningTool.create(input as any);
+  return await ScreeningTool.create(input as any, txn);
 }
 
-export async function resolveScreeningTools(root: any, args: any, { db, userRole }: IContext) {
+export async function resolveScreeningTools(root: any, args: any, { db, userRole, txn }: IContext) {
   await accessControls.isAllowed(userRole, 'view', 'screeningTool');
 
-  const screeningTools = await ScreeningTool.getAll();
+  const screeningTools = await ScreeningTool.getAll(txn);
 
   return screeningTools.map(screeningTool =>
     ScreeningTool.withFormattedScreeningToolScoreRanges(screeningTool),
@@ -48,11 +48,11 @@ export async function resolveScreeningTools(root: any, args: any, { db, userRole
 export async function resolveScreeningToolsForRiskArea(
   root: any,
   args: { riskAreaId: string },
-  { db, userRole }: IContext,
+  { db, userRole, txn }: IContext,
 ) {
   await accessControls.isAllowed(userRole, 'view', 'screeningTool');
 
-  const screeningTools = await ScreeningTool.getForRiskArea(args.riskAreaId);
+  const screeningTools = await ScreeningTool.getForRiskArea(args.riskAreaId, txn);
 
   return screeningTools.map(screeningTool =>
     ScreeningTool.withFormattedScreeningToolScoreRanges(screeningTool),
@@ -62,11 +62,11 @@ export async function resolveScreeningToolsForRiskArea(
 export async function resolveScreeningTool(
   root: any,
   args: { screeningToolId: string },
-  { db, userRole }: IContext,
+  { db, userRole, txn }: IContext,
 ) {
   await accessControls.isAllowed(userRole, 'view', 'screeningTool');
 
-  const screeningTool = await ScreeningTool.get(args.screeningToolId);
+  const screeningTool = await ScreeningTool.get(args.screeningToolId, txn);
 
   return ScreeningTool.withFormattedScreeningToolScoreRanges(screeningTool);
 }
@@ -74,13 +74,17 @@ export async function resolveScreeningTool(
 export async function screeningToolEdit(
   rot: any,
   args: IEditScreeningToolOptions,
-  { db, userId, userRole }: IContext,
+  { db, userId, userRole, txn }: IContext,
 ) {
   await accessControls.isAllowedForUser(userRole, 'edit', 'screeningTool');
   checkUserLoggedIn(userId);
 
   // TODO: fix typings here
-  const screeningTool = await ScreeningTool.edit(args.input.screeningToolId, args.input as any);
+  const screeningTool = await ScreeningTool.edit(
+    args.input.screeningToolId,
+    args.input as any,
+    txn,
+  );
 
   return ScreeningTool.withFormattedScreeningToolScoreRanges(screeningTool);
 }
@@ -88,12 +92,12 @@ export async function screeningToolEdit(
 export async function screeningToolDelete(
   root: any,
   args: IDeleteScreeningToolOptions,
-  { db, userId, userRole }: IContext,
+  { db, userId, userRole, txn }: IContext,
 ) {
   await accessControls.isAllowedForUser(userRole, 'edit', 'screeningTool');
   checkUserLoggedIn(userId);
 
-  const screeningTool = await ScreeningTool.delete(args.input.screeningToolId);
+  const screeningTool = await ScreeningTool.delete(args.input.screeningToolId, txn);
 
   return ScreeningTool.withFormattedScreeningToolScoreRanges(screeningTool);
 }

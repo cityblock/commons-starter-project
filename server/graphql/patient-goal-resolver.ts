@@ -26,8 +26,10 @@ export interface IDeletePatientGoalOptions {
 export async function patientGoalCreate(
   root: any,
   { input }: IPatientGoalCreateArgs,
-  { userRole, userId }: IContext,
+  context: IContext,
 ) {
+  const { userRole, userId } = context;
+  const existingTxn = context.txn;
   await accessControls.isAllowed(userRole, 'create', 'patientGoal');
   checkUserLoggedIn(userId);
 
@@ -37,7 +39,7 @@ export async function patientGoalCreate(
   return await transaction(PatientGoal.knex(), async txn => {
     // A new concern is getting created
     if (concernTitle) {
-      const concern = await Concern.create({ title: concernTitle }, txn);
+      const concern = await Concern.create({ title: concernTitle }, existingTxn || txn);
       const patientConcern = await PatientConcern.create(
         {
           concernId: concern.id,
@@ -45,7 +47,7 @@ export async function patientGoalCreate(
           userId: userId!,
           startedAt: startedAt || undefined,
         },
-        txn,
+        existingTxn || txn,
       );
       (validInput as any).patientConcernId = patientConcern.id;
       // This goal is getting associated with an existing concern
@@ -57,56 +59,56 @@ export async function patientGoalCreate(
           userId: userId!,
           startedAt: startedAt || undefined,
         },
-        txn,
+        existingTxn || txn,
       );
       (validInput as any).patientConcernId = patientConcern.id;
     }
 
     (validInput as any).userId = userId;
 
-    return await PatientGoal.create(validInput as any, txn);
+    return await PatientGoal.create(validInput as any, existingTxn || txn);
   });
 }
 
 export async function resolvePatientGoal(
   root: any,
   args: { patientGoalId: string },
-  { db, userRole }: IContext,
+  { db, userRole, txn }: IContext,
 ) {
   await accessControls.isAllowed(userRole, 'view', 'patientGoal');
 
-  return await PatientGoal.get(args.patientGoalId);
+  return await PatientGoal.get(args.patientGoalId, txn);
 }
 
 export async function resolvePatientGoalsForPatient(
   root: any,
   args: { patientId: string },
-  { db, userRole }: IContext,
+  { db, userRole, txn }: IContext,
 ) {
   await accessControls.isAllowed(userRole, 'view', 'patientGoal');
 
-  return await PatientGoal.getForPatient(args.patientId);
+  return await PatientGoal.getForPatient(args.patientId, txn);
 }
 
 export async function patientGoalEdit(
   root: any,
   args: IEditPatientGoalOptions,
-  { db, userRole, userId }: IContext,
+  { db, userRole, userId, txn }: IContext,
 ) {
   await accessControls.isAllowedForUser(userRole, 'edit', 'patientGoal');
   checkUserLoggedIn(userId);
 
   // TODO: fix typings here
-  return PatientGoal.update(args.input.patientGoalId, args.input as any, userId!);
+  return PatientGoal.update(args.input.patientGoalId, args.input as any, userId!, txn);
 }
 
 export async function patientGoalDelete(
   root: any,
   args: IDeletePatientGoalOptions,
-  { db, userRole, userId }: IContext,
+  { db, userRole, userId, txn }: IContext,
 ) {
   await accessControls.isAllowedForUser(userRole, 'edit', 'patientGoal');
   checkUserLoggedIn(userId);
 
-  return PatientGoal.delete(args.input.patientGoalId, userId!);
+  return PatientGoal.delete(args.input.patientGoalId, userId!, txn);
 }

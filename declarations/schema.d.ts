@@ -682,7 +682,7 @@ declare module 'schema' {
   type ICompletedWithinIntervalEnum = 'hour' | 'day' | 'week' | 'month' | 'year';
 
 
-  type ITaskOrderOptionsEnum = 'createdAtDesc' | 'createdAtAsc' | 'dueAtDesc' | 'dueAtAsc' | 'updatedAtDesc' | 'updatedAtAsc';
+  type ITaskOrderOptionsEnum = 'createdAtDesc' | 'createdAtAsc' | 'dueAtDesc' | 'dueAtAsc' | 'updatedAtDesc' | 'updatedAtAsc' | 'titleAsc' | 'titleDesc';
 
   /**
     description: Task edges

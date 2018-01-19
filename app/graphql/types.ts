@@ -161,6 +161,8 @@ export enum TaskOrderOptions {
   dueAtAsc = "dueAtAsc",
   updatedAtDesc = "updatedAtDesc",
   updatedAtAsc = "updatedAtAsc",
+  titleAsc = "titleAsc",
+  titleDesc = "titleDesc",
 }
 
 

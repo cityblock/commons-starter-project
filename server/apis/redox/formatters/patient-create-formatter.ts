@@ -63,6 +63,10 @@ export function formatPatientCreateOptions(
 }
 
 export function getAthenaPatientIdFromCreate(response: IRedoxPatientCreateResponse): number | null {
+  if (!response) {
+    return null;
+  }
+
   let athenaPatientId = null;
   response.Patient.Identifiers.forEach(identifier => {
     if (identifier.IDType === 'AthenaNet Enterprise ID') {

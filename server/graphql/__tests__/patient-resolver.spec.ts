@@ -1,6 +1,6 @@
 import { graphql } from 'graphql';
 import { cloneDeep } from 'lodash';
-import { transaction } from 'objection';
+import { transaction, Transaction } from 'objection';
 import RedoxApi from '../../apis/redox';
 import Db from '../../db';
 import HomeClinic from '../../models/clinic';
@@ -21,35 +21,69 @@ import {
 } from '../../spec-helpers';
 import schema from '../make-executable-schema';
 
+interface ISetup {
+  patient: Patient;
+  user: User;
+  homeClinicId: string;
+}
+
+const userRole = 'physician';
+
+async function setup(txn: Transaction): Promise<ISetup> {
+  const homeClinic = await HomeClinic.create(
+    {
+      name: 'cool clinic',
+      departmentId: 1,
+    },
+    txn,
+  );
+  const homeClinicId = homeClinic.id;
+  const user = await User.create(
+    {
+      firstName: 'Daenerys',
+      lastName: 'Targaryen',
+      email: 'a@b.com',
+      userRole,
+      homeClinicId,
+    },
+    txn,
+  );
+  const patient = await createPatient(createMockPatient(1, homeClinicId), user.id, txn);
+
+  return { patient, user, homeClinicId };
+}
+
+async function additionalSetup(txn: Transaction): Promise<ISetup> {
+  const { user, patient, homeClinicId } = await setup(txn);
+  const user2 = await User.create(
+    {
+      firstName: 'Ygritte',
+      lastName: 'of the  North',
+      email: 'ygritte@beyondthewall.com',
+      userRole,
+      homeClinicId,
+    },
+    txn,
+  );
+  await createPatient(createMockPatient(11, homeClinicId, 'Jon', 'Snow'), user.id, txn);
+  await createPatient(createMockPatient(12, homeClinicId, 'Robb', 'Stark'), user2.id, txn);
+  await createPatient(createMockPatient(13, homeClinicId, 'Arya', 'Stark'), user.id, txn);
+  await createPatient(createMockPatient(14, homeClinicId, 'Sansa', 'Stark'), user.id, txn);
+
+  return { user, patient, homeClinicId };
+}
+
 describe('patient', () => {
   let redoxApi: RedoxApi;
   let db: Db;
-  let patient: Patient;
-  let user: User;
-  let homeClinicId: string;
   const log = jest.fn();
   const logger = { log };
-  const userRole = 'physician';
 
   beforeEach(async () => {
     redoxApi = await RedoxApi.get();
     db = await Db.get();
     await Db.clear();
     mockRedoxTokenFetch();
-
-    const homeClinic = await HomeClinic.create({
-      name: 'cool clinic',
-      departmentId: 1,
-    });
-    homeClinicId = homeClinic.id;
-    user = await User.create({
-      firstName: 'Daenerys',
-      lastName: 'Targaryen',
-      email: 'a@b.com',
-      userRole,
-      homeClinicId,
-    });
-    patient = await createPatient(createMockPatient(1, homeClinicId), user.id);
   });
 
   afterAll(async () => {
@@ -58,80 +92,110 @@ describe('patient', () => {
 
   describe('resolvePatient', () => {
     it('returns patient', async () => {
-      const query = `{
-        patient(patientId: "${patient.id}") {
-          id, firstName, lastName
-        }
-      }`;
+      await transaction(Patient.knex(), async txn => {
+        const { patient, user } = await setup(txn);
+        const query = `{
+          patient(patientId: "${patient.id}") {
+            id, firstName, lastName
+          }
+        }`;
 
-      const result = await graphql(schema, query, null, { db, userId: user.id, userRole, logger });
-      expect(cloneDeep(result.data!.patient)).toMatchObject({
-        id: patient.id,
-        firstName: 'dan',
-        lastName: 'plant',
+        const result = await graphql(schema, query, null, {
+          db,
+          userId: user.id,
+          userRole,
+          logger,
+          txn,
+        });
+        expect(cloneDeep(result.data!.patient)).toMatchObject({
+          id: patient.id,
+          firstName: 'dan',
+          lastName: 'plant',
+        });
+        expect(log).toBeCalled();
       });
-      expect(log).toBeCalled();
     });
   });
 
   describe('patientEdit', () => {
     it('edits patient', async () => {
-      const query = `mutation {
-        patientEdit(input: { patientId: "${patient.id}", firstName: "first" }) {
-          id, firstName
-        }
-      }`;
+      await transaction(Patient.knex(), async txn => {
+        const { patient } = await setup(txn);
+        const query = `mutation {
+          patientEdit(input: { patientId: "${patient.id}", firstName: "first" }) {
+            id, firstName
+          }
+        }`;
 
-      const result = await graphql(schema, query, null, { db, userRole, logger });
-      expect(cloneDeep(result.data!.patientEdit)).toMatchObject({
-        id: patient.id,
-        firstName: 'first',
+        const result = await graphql(schema, query, null, { db, userRole, logger, txn });
+        expect(cloneDeep(result.data!.patientEdit)).toMatchObject({
+          id: patient.id,
+          firstName: 'first',
+        });
+        expect(log).toBeCalled();
       });
-      expect(log).toBeCalled();
     });
   });
 
   describe('patientSetup', () => {
     it('sets up patient', async () => {
-      const query = `mutation {
-        patientSetup(input: {
-          firstName: "first",
-          lastName: "last",
-          gender: "F",
-          zip: "02345",
-          homeClinicId: "${homeClinicId}",
-          dateOfBirth: "02/02/1902",
-          consentToText: true,
-          consentToCall: true,
-          maritalStatus: "Unknown",
-          race: "Other Race",
-          ssn: "123456789",
-          language: "en",
-        }) {
-          id, firstName, lastName, gender, zip, dateOfBirth
-        }
-      }`;
+      await transaction(Patient.knex(), async txn => {
+        const { homeClinicId, user } = await setup(txn);
+        const query = `mutation {
+          patientSetup(input: {
+            firstName: "first",
+            lastName: "last",
+            gender: "F",
+            zip: "02345",
+            homeClinicId: "${homeClinicId}",
+            dateOfBirth: "02/02/1902",
+            consentToText: true,
+            consentToCall: true,
+            maritalStatus: "Unknown",
+            race: "Other Race",
+            ssn: "123456789",
+            language: "en",
+          }) {
+            id, firstName, lastName, gender, zip, dateOfBirth
+          }
+        }`;
 
-      mockRedoxCreatePatient(123);
+        mockRedoxCreatePatient(123);
 
-      const result = await graphql(schema, query, null, {
-        redoxApi,
-        db,
-        userRole,
-        userId: user.id,
-        logger,
+        const result = await graphql(schema, query, null, {
+          redoxApi,
+          db,
+          userRole,
+          userId: user.id,
+          logger,
+          txn,
+        });
+        expect(cloneDeep(result.data!.patientSetup)).toMatchObject({
+          firstName: 'first',
+          lastName: 'last',
+          gender: 'F',
+          zip: '02345',
+          dateOfBirth: '02/02/1902',
+        });
+        expect(log).toBeCalled();
       });
-      expect(cloneDeep(result.data!.patientSetup)).toMatchObject({
-        firstName: 'first',
-        lastName: 'last',
-        gender: 'F',
-        zip: '02345',
-        dateOfBirth: '02/02/1902',
-      });
-      expect(log).toBeCalled();
     });
 
     it('errors and does not create patient when redox fails', async () => {
+      // TODO: FIGURE OUT HOW TO RUN THIS IN A TRANSACTION
+      const homeClinic = await HomeClinic.create({
+        name: 'cool clinic',
+        departmentId: 1,
+      });
+      const homeClinicId = homeClinic.id;
+      const user = await User.create({
+        firstName: 'Daenerys',
+        lastName: 'Targaryen',
+        email: 'a@b.com',
+        userRole,
+        homeClinicId,
+      });
+      await createPatient(createMockPatient(1, homeClinicId), user.id);
       const patientCount = await Patient.query().count();
 
       const query = `mutation {
@@ -171,210 +235,227 @@ describe('patient', () => {
 
   describe('resolvePatientScratchPad', () => {
     it('resolves a patient scratchPad', async () => {
-      await Patient.edit({ scratchPad: 'Test Scratch Pad' }, patient.id);
+      await transaction(Patient.knex(), async txn => {
+        const { patient, user } = await setup(txn);
+        await Patient.edit({ scratchPad: 'Test Scratch Pad' }, patient.id, txn);
 
-      const query = `{
-        patientScratchPad(patientId: "${patient.id}") {
-          text
-        }
-      }`;
+        const query = `{
+          patientScratchPad(patientId: "${patient.id}") {
+            text
+          }
+        }`;
 
-      const result = await graphql(schema, query, null, { db, userRole, userId: user.id });
+        const result = await graphql(schema, query, null, { db, userRole, userId: user.id, txn });
 
-      expect(cloneDeep(result.data!.patientScratchPad)).toMatchObject({
-        text: 'Test Scratch Pad',
+        expect(cloneDeep(result.data!.patientScratchPad)).toMatchObject({
+          text: 'Test Scratch Pad',
+        });
       });
     });
   });
 
   describe('patientScratchPadEdit', () => {
     it('saves a patient scratchPad', async () => {
-      await Patient.edit({ scratchPad: 'Unedited Scratch Pad' }, patient.id);
+      await transaction(Patient.knex(), async txn => {
+        const { patient, user } = await setup(txn);
+        await Patient.edit({ scratchPad: 'Unedited Scratch Pad' }, patient.id, txn);
 
-      const query = `mutation {
-        patientScratchPadEdit(input: { patientId: "${patient.id}", text: "Edited Scratch Pad" }) {
-          text
-        }
-      }`;
+        const query = `mutation {
+          patientScratchPadEdit(input: { patientId: "${patient.id}", text: "Edited Scratch Pad" }) {
+            text
+          }
+        }`;
 
-      const result = await graphql(schema, query, null, {
-        db,
-        userRole,
-        userId: user.id,
-        logger,
-      });
-      expect(cloneDeep(result.data!.patientScratchPadEdit)).toMatchObject({
-        text: 'Edited Scratch Pad',
+        const result = await graphql(schema, query, null, {
+          db,
+          userRole,
+          userId: user.id,
+          logger,
+          txn,
+        });
+        expect(cloneDeep(result.data!.patientScratchPadEdit)).toMatchObject({
+          text: 'Edited Scratch Pad',
+        });
       });
     });
   });
 
   describe('patient search', () => {
-    beforeEach(async () => {
-      const user2 = await User.create({
-        firstName: 'Ygritte',
-        lastName: 'of the  North',
-        email: 'ygritte@beyondthewall.com',
-        userRole,
-        homeClinicId,
-      });
-      await createPatient(createMockPatient(11, homeClinicId, 'Jon', 'Snow'), user.id);
-      await createPatient(createMockPatient(12, homeClinicId, 'Robb', 'Stark'), user2.id);
-      await createPatient(createMockPatient(13, homeClinicId, 'Arya', 'Stark'), user.id);
-      await createPatient(createMockPatient(14, homeClinicId, 'Sansa', 'Stark'), user.id);
-    });
-
     it('searches for a single patients', async () => {
-      const query = `{
-        patientSearch(query: "jon", pageNumber: 0, pageSize: 10) {
-          edges { node { firstName, lastName, userCareTeam } }
-          totalCount
-        }
-      }`;
-      const result = await graphql(schema, query, null, {
-        db,
-        userRole,
-        userId: user.id,
-      });
+      await transaction(Patient.knex(), async txn => {
+        const { user } = await additionalSetup(txn);
+        const query = `{
+          patientSearch(query: "jon", pageNumber: 0, pageSize: 10) {
+            edges { node { firstName, lastName, userCareTeam } }
+            totalCount
+          }
+        }`;
+        const result = await graphql(schema, query, null, {
+          db,
+          userRole,
+          userId: user.id,
+          txn,
+        });
 
-      expect(cloneDeep(result.data!.patientSearch)).toMatchObject({
-        edges: [
-          {
-            node: {
-              firstName: 'Jon',
-              lastName: 'Snow',
-              userCareTeam: true,
+        expect(cloneDeep(result.data!.patientSearch)).toMatchObject({
+          edges: [
+            {
+              node: {
+                firstName: 'Jon',
+                lastName: 'Snow',
+                userCareTeam: true,
+              },
             },
-          },
-        ],
-        totalCount: 1,
+          ],
+          totalCount: 1,
+        });
       });
     });
 
     it('searches for multiple patients', async () => {
-      const query = `{
-        patientSearch(query: "stark", pageNumber: 0, pageSize: 10) {
-          edges { node { firstName, lastName, userCareTeam } }
-          totalCount
-        }
-      }`;
-      const result = await graphql(schema, query, null, {
-        db,
-        userRole,
-        userId: user.id,
-      });
+      await transaction(Patient.knex(), async txn => {
+        const { user } = await additionalSetup(txn);
+        const query = `{
+          patientSearch(query: "stark", pageNumber: 0, pageSize: 10) {
+            edges { node { firstName, lastName, userCareTeam } }
+            totalCount
+          }
+        }`;
+        const result = await graphql(schema, query, null, {
+          db,
+          userRole,
+          userId: user.id,
+          txn,
+        });
 
-      expect(cloneDeep(result.data!.patientSearch)).toMatchObject({
-        edges: [
-          {
-            node: {
-              lastName: 'Stark',
-              userCareTeam: true,
+        expect(cloneDeep(result.data!.patientSearch)).toMatchObject({
+          edges: [
+            {
+              node: {
+                lastName: 'Stark',
+                userCareTeam: true,
+              },
             },
-          },
-          {
-            node: {
-              lastName: 'Stark',
-              userCareTeam: true,
+            {
+              node: {
+                lastName: 'Stark',
+                userCareTeam: true,
+              },
             },
-          },
-          {
-            node: {
-              firstName: 'Robb',
-              lastName: 'Stark',
-              userCareTeam: false,
+            {
+              node: {
+                firstName: 'Robb',
+                lastName: 'Stark',
+                userCareTeam: false,
+              },
             },
-          },
-        ],
-        totalCount: 3,
+          ],
+          totalCount: 3,
+        });
       });
     });
 
     it('fuzzy searches for a patient', async () => {
-      const query = `{
-        patientSearch(query: "john snow", pageNumber: 0, pageSize: 10) {
-          edges { node { firstName, lastName, userCareTeam } }
-          totalCount
-        }
-      }`;
-      const result = await graphql(schema, query, null, {
-        db,
-        userRole,
-        userId: user.id,
-      });
+      await transaction(Patient.knex(), async txn => {
+        const { user } = await additionalSetup(txn);
+        const query = `{
+          patientSearch(query: "john snow", pageNumber: 0, pageSize: 10) {
+            edges { node { firstName, lastName, userCareTeam } }
+            totalCount
+          }
+        }`;
+        const result = await graphql(schema, query, null, {
+          db,
+          userRole,
+          userId: user.id,
+          txn,
+        });
 
-      expect(cloneDeep(result.data!.patientSearch)).toMatchObject({
-        edges: [
-          {
-            node: {
-              firstName: 'Jon',
-              lastName: 'Snow',
-              userCareTeam: true,
+        expect(cloneDeep(result.data!.patientSearch)).toMatchObject({
+          edges: [
+            {
+              node: {
+                firstName: 'Jon',
+                lastName: 'Snow',
+                userCareTeam: true,
+              },
             },
-          },
-        ],
-        totalCount: 1,
+          ],
+          totalCount: 1,
+        });
       });
     });
 
     it('returns no search results', async () => {
-      const query = `{
-        patientSearch(query: "daenerys", pageNumber: 0, pageSize: 10) {
-          edges { node { firstName, lastName, userCareTeam } }
-          totalCount
-        }
-      }`;
-      const result = await graphql(schema, query, null, {
-        db,
-        userRole,
-        userId: user.id,
-      });
+      await transaction(Patient.knex(), async txn => {
+        const { user } = await setup(txn);
+        const query = `{
+          patientSearch(query: "daenerys", pageNumber: 0, pageSize: 10) {
+            edges { node { firstName, lastName, userCareTeam } }
+            totalCount
+          }
+        }`;
+        const result = await graphql(schema, query, null, {
+          db,
+          userRole,
+          userId: user.id,
+          txn,
+        });
 
-      expect(cloneDeep(result.data!.patientSearch)).toMatchObject({
-        edges: [],
-        totalCount: 0,
+        expect(cloneDeep(result.data!.patientSearch)).toMatchObject({
+          edges: [],
+          totalCount: 0,
+        });
       });
     });
 
     it('catches error if not logged in', async () => {
-      const query = `{
-        patientSearch(query: "daenerys", pageNumber: 0, pageSize: 10) {
-          edges { node { firstName, lastName, userCareTeam } }
-          totalCount
-        }
-      }`;
+      await transaction(Patient.knex(), async txn => {
+        await additionalSetup(txn);
+        const query = `{
+          patientSearch(query: "daenerys", pageNumber: 0, pageSize: 10) {
+            edges { node { firstName, lastName, userCareTeam } }
+            totalCount
+          }
+        }`;
 
-      const result = await graphql(schema, query, null, {
-        db,
-        userRole,
-        userId: '',
+        const result = await graphql(schema, query, null, {
+          db,
+          userRole,
+          userId: '',
+          txn,
+        });
+
+        expect(result.errors![0].message).toBe('not logged in');
       });
-
-      expect(result.errors![0].message).toBe('not logged in');
     });
 
     it('catches error if empty string searched', async () => {
-      const query = `{
-        patientSearch(query: "", pageNumber: 0, pageSize: 10) {
-          edges { node { firstName, lastName, userCareTeam } }
-          totalCount
-        }
-      }`;
+      await transaction(Patient.knex(), async txn => {
+        const { user } = await additionalSetup(txn);
+        const query = `{
+          patientSearch(query: "", pageNumber: 0, pageSize: 10) {
+            edges { node { firstName, lastName, userCareTeam } }
+            totalCount
+          }
+        }`;
 
-      const result = await graphql(schema, query, null, {
-        db,
-        userRole,
-        userId: user.id,
+        const result = await graphql(schema, query, null, {
+          db,
+          userRole,
+          userId: user.id,
+          txn,
+        });
+
+        expect(result.errors![0].message).toBe('Must provide a search term');
       });
-
-      expect(result.errors![0].message).toBe('Must provide a search term');
     });
   });
 
   describe('patient dashboard', () => {
     it('gets patients with tasks due soon or that have notifications', async () => {
       await transaction(Patient.knex(), async txn => {
-        const setup = await setupUrgentTasks(txn);
+        const { user, patient1, patient5 } = await setupUrgentTasks(txn);
 
         const query = `{
           patientsWithUrgentTasks(pageNumber: 0, pageSize: 10) {
@@ -385,18 +466,18 @@ describe('patient', () => {
 
         const result = await graphql(schema, query, null, {
           userRole,
-          userId: setup.user.id,
+          userId: user.id,
           txn,
         });
 
         expect(result.data!.patientsWithUrgentTasks.totalCount).toBe(2);
         expect(result.data!.patientsWithUrgentTasks.edges[0].node).toMatchObject({
-          id: setup.patient1.id,
-          firstName: setup.patient1.firstName,
+          id: patient1.id,
+          firstName: patient1.firstName,
         });
         expect(result.data!.patientsWithUrgentTasks.edges[1].node).toMatchObject({
-          id: setup.patient5.id,
-          firstName: setup.patient5.firstName,
+          id: patient5.id,
+          firstName: patient5.firstName,
         });
       });
     });
@@ -404,7 +485,7 @@ describe('patient', () => {
 
   it("gets patients that are new to user's care team", async () => {
     await transaction(Patient.knex(), async txn => {
-      const setup = await setupPatientsNewToCareTeam(txn);
+      const { user, patient1 } = await setupPatientsNewToCareTeam(txn);
 
       const query = `{
         patientsNewToCareTeam(pageNumber: 0, pageSize: 10) {
@@ -415,21 +496,21 @@ describe('patient', () => {
 
       const result = await graphql(schema, query, null, {
         userRole,
-        userId: setup.user.id,
+        userId: user.id,
         txn,
       });
 
       expect(result.data!.patientsNewToCareTeam.totalCount).toBe(1);
       expect(result.data!.patientsNewToCareTeam.edges[0].node).toMatchObject({
-        id: setup.patient1.id,
-        firstName: setup.patient1.firstName,
+        id: patient1.id,
+        firstName: patient1.firstName,
       });
     });
   });
 
   it('gets patients that have pending MAP suggestions', async () => {
     await transaction(Patient.knex(), async txn => {
-      const setup = await setupPatientsWithPendingSuggestions(txn);
+      const { user, patient1 } = await setupPatientsWithPendingSuggestions(txn);
 
       const query = `{
         patientsWithPendingSuggestions(pageNumber: 0, pageSize: 10) {
@@ -440,21 +521,21 @@ describe('patient', () => {
 
       const result = await graphql(schema, query, null, {
         userRole,
-        userId: setup.user.id,
+        userId: user.id,
         txn,
       });
 
       expect(result.data!.patientsWithPendingSuggestions.totalCount).toBe(1);
       expect(result.data!.patientsWithPendingSuggestions.edges[0].node).toMatchObject({
-        id: setup.patient1.id,
-        firstName: setup.patient1.firstName,
+        id: patient1.id,
+        firstName: patient1.firstName,
       });
     });
   });
 
   it('gets patients that have missing demographic info', async () => {
     await transaction(Patient.knex(), async txn => {
-      const setup = await setupPatientsWithMissingInfo(txn);
+      const { user, patient1 } = await setupPatientsWithMissingInfo(txn);
 
       const query = `{
         patientsWithMissingInfo(pageNumber: 0, pageSize: 10) {
@@ -465,21 +546,21 @@ describe('patient', () => {
 
       const result = await graphql(schema, query, null, {
         userRole,
-        userId: setup.user.id,
+        userId: user.id,
         txn,
       });
 
       expect(result.data!.patientsWithMissingInfo.totalCount).toBe(1);
       expect(result.data!.patientsWithMissingInfo.edges[0].node).toMatchObject({
-        id: setup.patient1.id,
-        firstName: setup.patient1.firstName,
+        id: patient1.id,
+        firstName: patient1.firstName,
       });
     });
   });
 
   it('gets patients that have no recent engagement', async () => {
     await transaction(Patient.knex(), async txn => {
-      const setup = await setupPatientsWithNoRecentEngagement(txn);
+      const { user, patient1 } = await setupPatientsWithNoRecentEngagement(txn);
 
       const query = `{
         patientsWithNoRecentEngagement(pageNumber: 0, pageSize: 10) {
@@ -490,21 +571,21 @@ describe('patient', () => {
 
       const result = await graphql(schema, query, null, {
         userRole,
-        userId: setup.user.id,
+        userId: user.id,
         txn,
       });
 
       expect(result.data!.patientsWithNoRecentEngagement.totalCount).toBe(1);
       expect(result.data!.patientsWithNoRecentEngagement.edges[0].node).toMatchObject({
-        id: setup.patient1.id,
-        firstName: setup.patient1.firstName,
+        id: patient1.id,
+        firstName: patient1.firstName,
       });
     });
   });
 
   it('gets patients that have an out of date MAP', async () => {
     await transaction(Patient.knex(), async txn => {
-      const setup = await setupPatientsWithOutOfDateMAP(txn);
+      const { user, patient1 } = await setupPatientsWithOutOfDateMAP(txn);
 
       const query = `{
         patientsWithOutOfDateMAP(pageNumber: 0, pageSize: 10) {
@@ -515,14 +596,14 @@ describe('patient', () => {
 
       const result = await graphql(schema, query, null, {
         userRole,
-        userId: setup.user.id,
+        userId: user.id,
         txn,
       });
 
       expect(result.data!.patientsWithOutOfDateMAP.totalCount).toBe(1);
       expect(result.data!.patientsWithOutOfDateMAP.edges[0].node).toMatchObject({
-        id: setup.patient1.id,
-        firstName: setup.patient1.firstName,
+        id: patient1.id,
+        firstName: patient1.firstName,
       });
     });
   });

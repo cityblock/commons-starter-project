@@ -11,37 +11,43 @@ export interface IGoalSuggestOptions {
 export async function resolveGoalSuggestionTemplatesForAnswer(
   root: any,
   args: { answerId: string },
-  { db, userRole }: IContext,
+  { db, userRole, txn }: IContext,
 ): Promise<GoalSuggestionTemplate[]> {
   await accessControls.isAllowed(userRole, 'view', 'goalSuggestion');
 
-  return await GoalSuggestion.getForAnswer(args.answerId);
+  return await GoalSuggestion.getForAnswer(args.answerId, txn);
 }
 
 export async function goalSuggestionCreate(
   root: any,
   args: IGoalSuggestOptions,
-  { db, userRole }: IContext,
+  { db, userRole, txn }: IContext,
 ): Promise<GoalSuggestionTemplate[]> {
   await accessControls.isAllowed(userRole, 'view', 'goalSuggestion');
 
-  return await GoalSuggestion.create({
-    answerId: args.input.answerId || undefined,
-    screeningToolScoreRangeId: args.input.screeningToolScoreRangeId || undefined,
-    goalSuggestionTemplateId: args.input.goalSuggestionTemplateId,
-  });
+  return await GoalSuggestion.create(
+    {
+      answerId: args.input.answerId || undefined,
+      screeningToolScoreRangeId: args.input.screeningToolScoreRangeId || undefined,
+      goalSuggestionTemplateId: args.input.goalSuggestionTemplateId,
+    },
+    txn,
+  );
 }
 
 export async function goalSuggestionDelete(
   root: any,
   args: IGoalSuggestOptions,
-  { db, userRole }: IContext,
+  { db, userRole, txn }: IContext,
 ): Promise<GoalSuggestionTemplate[]> {
   await accessControls.isAllowed(userRole, 'view', 'goalSuggestion');
 
-  return await GoalSuggestion.delete({
-    answerId: args.input.answerId || undefined,
-    screeningToolScoreRangeId: args.input.screeningToolScoreRangeId || undefined,
-    goalSuggestionTemplateId: args.input.goalSuggestionTemplateId,
-  });
+  return await GoalSuggestion.delete(
+    {
+      answerId: args.input.answerId || undefined,
+      screeningToolScoreRangeId: args.input.screeningToolScoreRangeId || undefined,
+      goalSuggestionTemplateId: args.input.goalSuggestionTemplateId,
+    },
+    txn,
+  );
 }

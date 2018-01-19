@@ -22,45 +22,45 @@ export interface IDeleteTaskTemplateOptions {
 export async function taskTemplateCreate(
   root: any,
   { input }: ITaskTemplateCreateArgs,
-  { userRole }: IContext,
+  { userRole, txn }: IContext,
 ) {
   await accessControls.isAllowed(userRole, 'create', 'taskTemplate');
 
-  return await TaskTemplate.create(input as any);
+  return await TaskTemplate.create(input as any, txn);
 }
 
 export async function resolveTaskTemplate(
   root: any,
   args: { taskTemplateId: string },
-  { db, userRole }: IContext,
+  { db, userRole, txn }: IContext,
 ) {
   await accessControls.isAllowed(userRole, 'view', 'taskTemplate');
 
-  return await TaskTemplate.get(args.taskTemplateId);
+  return await TaskTemplate.get(args.taskTemplateId, txn);
 }
 
-export async function resolveTaskTemplates(root: any, args: any, { db, userRole }: IContext) {
+export async function resolveTaskTemplates(root: any, args: any, { db, userRole, txn }: IContext) {
   await accessControls.isAllowed(userRole, 'view', 'taskTemplate');
 
-  return await TaskTemplate.getAll();
+  return await TaskTemplate.getAll(txn);
 }
 
 export async function taskTemplateEdit(
   root: any,
   args: IEditTaskTemplateOptions,
-  { db, userRole }: IContext,
+  { db, userRole, txn }: IContext,
 ) {
   await accessControls.isAllowedForUser(userRole, 'edit', 'taskTemplate');
 
   // TODO: fix typings here
-  return TaskTemplate.edit(args.input.taskTemplateId, args.input as any);
+  return TaskTemplate.edit(args.input.taskTemplateId, args.input as any, txn);
 }
 
 export async function taskTemplateDelete(
   root: any,
   args: IDeleteTaskTemplateOptions,
-  { db, userRole }: IContext,
+  { db, userRole, txn }: IContext,
 ) {
   await accessControls.isAllowedForUser(userRole, 'edit', 'taskTemplate');
-  return TaskTemplate.delete(args.input.taskTemplateId);
+  return TaskTemplate.delete(args.input.taskTemplateId, txn);
 }

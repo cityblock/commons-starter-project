@@ -25,61 +25,62 @@ export interface IDeleteRiskAreaOptions {
 }
 
 export async function riskAreaCreate(root: any, { input }: IRiskAreaCreateArgs, context: IContext) {
-  const { userRole, userId } = context;
+  const { userRole, userId, txn } = context;
   await accessControls.isAllowed(userRole, 'create', 'riskArea');
   checkUserLoggedIn(userId);
 
-  return await RiskArea.create(input);
+  return await RiskArea.create(input, txn);
 }
 
-export async function resolveRiskAreas(root: any, args: any, { db, userRole }: IContext) {
+export async function resolveRiskAreas(root: any, args: any, { db, userRole, txn }: IContext) {
   await accessControls.isAllowed(userRole, 'view', 'riskArea');
 
-  return await RiskArea.getAll();
+  return await RiskArea.getAll(txn);
 }
 
 export async function resolveRiskArea(
   root: any,
   args: { riskAreaId: string },
-  { db, userRole }: IContext,
+  { db, userRole, txn }: IContext,
 ) {
   await accessControls.isAllowed(userRole, 'view', 'riskArea');
 
-  return await RiskArea.get(args.riskAreaId);
+  return await RiskArea.get(args.riskAreaId, txn);
 }
 
 export async function riskAreaEdit(
   root: any,
   args: IEditRiskAreaOptions,
-  { db, userId, userRole }: IContext,
+  { db, userId, userRole, txn }: IContext,
 ) {
   await accessControls.isAllowedForUser(userRole, 'edit', 'riskArea');
   checkUserLoggedIn(userId);
 
   // TODO: fix typings here
-  return await RiskArea.edit(args.input as any, args.input.riskAreaId);
+  return await RiskArea.edit(args.input as any, args.input.riskAreaId, txn);
 }
 
 export async function riskAreaDelete(
   root: any,
   args: IDeleteRiskAreaOptions,
-  { db, userId, userRole }: IContext,
+  { db, userId, userRole, txn }: IContext,
 ) {
   await accessControls.isAllowedForUser(userRole, 'delete', 'riskArea');
   checkUserLoggedIn(userId);
 
-  return await RiskArea.delete(args.input.riskAreaId);
+  return await RiskArea.delete(args.input.riskAreaId, txn);
 }
 
 export async function resolvePatientRiskAreaSummary(
   root: any,
   args: { riskAreaId: string; patientId: string },
-  { db, userRole }: IContext,
+  { db, userRole, txn }: IContext,
 ): Promise<IRiskAreaSummary> {
   await accessControls.isAllowedForUser(userRole, 'view', 'riskArea');
   const { summary, started, lastUpdated } = await RiskArea.getSummaryForPatient(
     args.riskAreaId,
     args.patientId,
+    txn,
   );
 
   return { summary, started, lastUpdated };
@@ -88,8 +89,8 @@ export async function resolvePatientRiskAreaSummary(
 export async function resolvePatientRiskAreaRiskScore(
   root: any,
   args: { riskAreaId: string; patientId: string },
-  { db, userRole }: IContext,
+  { db, userRole, txn }: IContext,
 ): Promise<IRiskScore> {
   await accessControls.isAllowedForUser(userRole, 'view', 'riskArea');
-  return await RiskArea.getRiskScoreForPatient(args.riskAreaId, args.patientId);
+  return await RiskArea.getRiskScoreForPatient(args.riskAreaId, args.patientId, txn);
 }

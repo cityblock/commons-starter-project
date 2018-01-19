@@ -44,6 +44,8 @@ enum TaskOrderOptions {
   dueAtAsc
   updatedAtDesc
   updatedAtAsc
+  titleAsc
+  titleDesc
 }
 
 enum UserOrderOptions {

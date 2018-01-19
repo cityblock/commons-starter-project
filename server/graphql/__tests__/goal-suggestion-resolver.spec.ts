@@ -1,5 +1,6 @@
 import { graphql } from 'graphql';
 import { cloneDeep } from 'lodash';
+import { transaction, Transaction } from 'objection';
 import Db from '../../db';
 import Answer from '../../models/answer';
 import GoalSuggestion from '../../models/goal-suggestion';
@@ -10,24 +11,27 @@ import ScreeningToolScoreRange from '../../models/screening-tool-score-range';
 import { createRiskArea } from '../../spec-helpers';
 import schema from '../make-executable-schema';
 
-describe('goal suggestion resolver', () => {
-  const userRole = 'admin';
-  let answer: Answer;
-  let goalSuggestionTemplate: GoalSuggestionTemplate;
+interface ISetup {
+  answer: Answer;
+  goalSuggestionTemplate: GoalSuggestionTemplate;
+}
 
-  beforeEach(async () => {
-    await Db.get();
-    await Db.clear();
+const userRole = 'admin';
 
-    const riskArea = await createRiskArea({ title: 'Risk Area' });
-    const question = await Question.create({
+async function setup(txn: Transaction): Promise<ISetup> {
+  const riskArea = await createRiskArea({ title: 'Risk Area' }, txn);
+  const question = await Question.create(
+    {
       title: 'like writing tests?',
       answerType: 'dropdown',
       riskAreaId: riskArea.id,
       type: 'riskArea',
       order: 1,
-    });
-    answer = await Answer.create({
+    },
+    txn,
+  );
+  const answer = await Answer.create(
+    {
       displayValue: 'loves writing tests!',
       value: '3',
       valueType: 'number',
@@ -35,10 +39,23 @@ describe('goal suggestion resolver', () => {
       inSummary: false,
       questionId: question.id,
       order: 1,
-    });
-    goalSuggestionTemplate = await GoalSuggestionTemplate.create({
+    },
+    txn,
+  );
+  const goalSuggestionTemplate = await GoalSuggestionTemplate.create(
+    {
       title: 'Fix housing',
-    });
+    },
+    txn,
+  );
+
+  return { answer, goalSuggestionTemplate };
+}
+
+describe('goal suggestion resolver', () => {
+  beforeEach(async () => {
+    await Db.get();
+    await Db.clear();
   });
 
   afterAll(async () => {
@@ -47,93 +64,117 @@ describe('goal suggestion resolver', () => {
 
   describe('resolve goals for answer', () => {
     it('fetches a goal', async () => {
-      const query = `{ goalSuggestionTemplatesForAnswer(answerId: "${answer.id}") { title } }`;
-      const result = await graphql(schema, query, null, { userRole });
-      // null if no suggested goals
-      expect(cloneDeep(result.data!.goalSuggestionTemplatesForAnswer)).toMatchObject([]);
+      await transaction(GoalSuggestion.knex(), async txn => {
+        const { answer, goalSuggestionTemplate } = await setup(txn);
+        const query = `{ goalSuggestionTemplatesForAnswer(answerId: "${answer.id}") { title } }`;
+        const result = await graphql(schema, query, null, { userRole, txn });
+        // null if no suggested goals
+        expect(cloneDeep(result.data!.goalSuggestionTemplatesForAnswer)).toMatchObject([]);
 
-      await GoalSuggestion.create({
-        goalSuggestionTemplateId: goalSuggestionTemplate.id,
-        answerId: answer.id,
+        await GoalSuggestion.create(
+          {
+            goalSuggestionTemplateId: goalSuggestionTemplate.id,
+            answerId: answer.id,
+          },
+          txn,
+        );
+        // one if suggested goal
+        const result2 = await graphql(schema, query, null, { userRole, txn });
+        expect(cloneDeep(result2.data!.goalSuggestionTemplatesForAnswer)).toMatchObject([
+          { title: 'Fix housing' },
+        ]);
       });
-      // one if suggested goal
-      const result2 = await graphql(schema, query, null, { userRole });
-      expect(cloneDeep(result2.data!.goalSuggestionTemplatesForAnswer)).toMatchObject([
-        { title: 'Fix housing' },
-      ]);
     });
   });
 
   describe('goal suggestion create', () => {
     it('suggests a goal for an answer', async () => {
-      const mutation = `mutation {
-        goalSuggestionCreate(
-          input: {
-            answerId: "${answer.id}", goalSuggestionTemplateId: "${goalSuggestionTemplate.id}"
+      await transaction(GoalSuggestion.knex(), async txn => {
+        const { answer, goalSuggestionTemplate } = await setup(txn);
+        const mutation = `mutation {
+          goalSuggestionCreate(
+            input: {
+              answerId: "${answer.id}", goalSuggestionTemplateId: "${goalSuggestionTemplate.id}"
+            }
+          ) {
+            title
           }
-        ) {
-          title
-        }
-      }`;
-      const result = await graphql(schema, mutation, null, { userRole });
-      expect(cloneDeep(result.data!.goalSuggestionCreate)).toMatchObject([
-        {
-          title: 'Fix housing',
-        },
-      ]);
+        }`;
+        const result = await graphql(schema, mutation, null, { userRole, txn });
+        expect(cloneDeep(result.data!.goalSuggestionCreate)).toMatchObject([
+          {
+            title: 'Fix housing',
+          },
+        ]);
+      });
     });
 
     it('suggests a goal for a screening tool score range', async () => {
-      const riskArea = await createRiskArea({ title: 'Also Risk Area' });
-      const screeningTool = await ScreeningTool.create({
-        title: 'Screening Tool',
-        riskAreaId: riskArea.id,
-      });
-      const screeningToolScoreRange = await ScreeningToolScoreRange.create({
-        description: 'Score Range',
-        screeningToolId: screeningTool.id,
-        minimumScore: 0,
-        maximumScore: 10,
-      });
-      const mutation = `mutation {
-        goalSuggestionCreate(
-          input: {
-            screeningToolScoreRangeId: "${screeningToolScoreRange.id}"
-            goalSuggestionTemplateId: "${goalSuggestionTemplate.id}"
+      await transaction(GoalSuggestion.knex(), async txn => {
+        const { goalSuggestionTemplate } = await setup(txn);
+        const riskArea = await createRiskArea({ title: 'Also Risk Area' }, txn);
+        const screeningTool = await ScreeningTool.create(
+          {
+            title: 'Screening Tool',
+            riskAreaId: riskArea.id,
+          },
+          txn,
+        );
+        const screeningToolScoreRange = await ScreeningToolScoreRange.create(
+          {
+            description: 'Score Range',
+            screeningToolId: screeningTool.id,
+            minimumScore: 0,
+            maximumScore: 10,
+          },
+          txn,
+        );
+        const mutation = `mutation {
+          goalSuggestionCreate(
+            input: {
+              screeningToolScoreRangeId: "${screeningToolScoreRange.id}"
+              goalSuggestionTemplateId: "${goalSuggestionTemplate.id}"
+            }
+          ) {
+            title
           }
-        ) {
-          title
-        }
-      }`;
-      const result = await graphql(schema, mutation, null, { userRole });
-      expect(cloneDeep(result.data!.goalSuggestionCreate)).toMatchObject([
-        {
-          title: 'Fix housing',
-        },
-      ]);
+        }`;
+        const result = await graphql(schema, mutation, null, { userRole, txn });
+        expect(cloneDeep(result.data!.goalSuggestionCreate)).toMatchObject([
+          {
+            title: 'Fix housing',
+          },
+        ]);
+      });
     });
   });
 
   describe('goal suggestion delete', () => {
     it('unsuggests a goal for an answer', async () => {
-      await GoalSuggestion.create({
-        goalSuggestionTemplateId: goalSuggestionTemplate.id,
-        answerId: answer.id,
-      });
-      const mutation = `mutation {
-        goalSuggestionDelete(input: {
-          answerId: "${answer.id}", goalSuggestionTemplateId: "${goalSuggestionTemplate.id}"
-        }) {
-          title
-        }
-      }`;
-      const result = await graphql(schema, mutation, null, { userRole });
-      expect(cloneDeep(result.data!.goalSuggestionDelete)).toMatchObject([]);
+      await transaction(GoalSuggestion.knex(), async txn => {
+        const { answer, goalSuggestionTemplate } = await setup(txn);
+        await GoalSuggestion.create(
+          {
+            goalSuggestionTemplateId: goalSuggestionTemplate.id,
+            answerId: answer.id,
+          },
+          txn,
+        );
+        const mutation = `mutation {
+          goalSuggestionDelete(input: {
+            answerId: "${answer.id}", goalSuggestionTemplateId: "${goalSuggestionTemplate.id}"
+          }) {
+            title
+          }
+        }`;
+        const result = await graphql(schema, mutation, null, { userRole, txn });
+        expect(cloneDeep(result.data!.goalSuggestionDelete)).toMatchObject([]);
 
-      // empty with no suggested goals
-      const query = `{ goalSuggestionTemplatesForAnswer(answerId: "${answer.id}") { title } }`;
-      const result2 = await graphql(schema, query, null, { userRole });
-      expect(cloneDeep(result2.data!.goalSuggestionTemplatesForAnswer)).toMatchObject([]);
+        // empty with no suggested goals
+        const query = `{ goalSuggestionTemplatesForAnswer(answerId: "${answer.id}") { title } }`;
+        const result2 = await graphql(schema, query, null, { userRole, txn });
+        expect(cloneDeep(result2.data!.goalSuggestionTemplatesForAnswer)).toMatchObject([]);
+      });
     });
   });
 });

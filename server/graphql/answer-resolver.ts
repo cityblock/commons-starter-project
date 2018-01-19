@@ -21,54 +21,54 @@ export interface IDeleteAnswerOptions {
 }
 
 export async function answerCreate(root: any, { input }: IAnswerCreateArgs, context: IContext) {
-  const { userRole, userId } = context;
+  const { userRole, userId, txn } = context;
   await accessControls.isAllowed(userRole, 'create', 'answer');
   checkUserLoggedIn(userId);
 
   // TODO: fix typings here
-  return await Answer.create(input as any);
+  return await Answer.create(input as any, txn);
 }
 
 export async function resolveAnswersForQuestion(
   root: any,
   args: { questionId: string },
-  { db, userRole }: IContext,
+  { db, userRole, txn }: IContext,
 ) {
   await accessControls.isAllowed(userRole, 'view', 'answer');
 
-  return await Answer.getAllForQuestion(args.questionId);
+  return await Answer.getAllForQuestion(args.questionId, txn);
 }
 
 export async function resolveAnswer(
   root: any,
   args: { answerId: string },
-  { db, userRole }: IContext,
+  { db, userRole, txn }: IContext,
 ) {
   await accessControls.isAllowed(userRole, 'view', 'answer');
 
-  return await Answer.get(args.answerId);
+  return await Answer.get(args.answerId, txn);
 }
 
 export async function answerEdit(
   root: any,
   args: IEditAnswerOptions,
-  { db, userId, userRole }: IContext,
+  { db, userId, userRole, txn }: IContext,
 ) {
   await accessControls.isAllowedForUser(userRole, 'edit', 'answer');
   checkUserLoggedIn(userId);
 
   // TODO: fix typings here
   const cleanedParams = pickBy<IAnswerEditInput>(args.input) as any;
-  return Answer.edit(cleanedParams, args.input.answerId);
+  return Answer.edit(cleanedParams, args.input.answerId, txn);
 }
 
 export async function answerDelete(
   root: any,
   args: IDeleteAnswerOptions,
-  { db, userId, userRole }: IContext,
+  { db, userId, userRole, txn }: IContext,
 ) {
   await accessControls.isAllowedForUser(userRole, 'edit', 'answer');
   checkUserLoggedIn(userId);
 
-  return Answer.delete(args.input.answerId);
+  return Answer.delete(args.input.answerId, txn);
 }

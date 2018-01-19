@@ -22,12 +22,19 @@ export async function taskUserFollow(
 ): Promise<Task> {
   const { userRole, userId } = context;
   const { taskId } = input;
+  const existingTxn = context.txn;
   // TODO: Improve access controls here. Requirements unclear ATM
   await accessControls.isAllowed(userRole, 'edit', 'task');
   checkUserLoggedIn(userId);
 
-  await transaction(TaskFollower.knex(), async txn => {
-    const follower = await TaskFollower.followTask({ userId: input.userId, taskId }, txn);
+  return await transaction(TaskFollower.knex(), async txn => {
+    await TaskFollower.followTask(
+      {
+        userId: input.userId,
+        taskId,
+      },
+      existingTxn || txn,
+    );
 
     await TaskEvent.create(
       {
@@ -36,13 +43,11 @@ export async function taskUserFollow(
         eventType: 'add_follower',
         eventUserId: input.userId,
       },
-      txn,
+      existingTxn || txn,
     );
 
-    return follower;
+    return await Task.get(taskId, existingTxn || txn);
   });
-
-  return await Task.get(taskId);
 }
 
 export async function taskUserUnfollow(
@@ -52,17 +57,18 @@ export async function taskUserUnfollow(
 ): Promise<Task> {
   const { userRole, userId } = context;
   const { taskId } = input;
+  const existingTxn = context.txn;
   // TODO: Improve access controls here. Requirements unclear ATM
   await accessControls.isAllowed(userRole, 'edit', 'task');
   checkUserLoggedIn(userId);
 
-  await transaction(TaskFollower.knex(), async txn => {
-    const follower = await TaskFollower.unfollowTask(
+  return await transaction(TaskFollower.knex(), async txn => {
+    await TaskFollower.unfollowTask(
       {
         userId: input.userId,
         taskId,
       },
-      txn,
+      existingTxn || txn,
     );
 
     await TaskEvent.create(
@@ -72,13 +78,11 @@ export async function taskUserUnfollow(
         eventType: 'remove_follower',
         eventUserId: input.userId,
       },
-      txn,
+      existingTxn || txn,
     );
 
-    return follower;
+    return await Task.get(taskId, existingTxn || txn);
   });
-
-  return await Task.get(taskId);
 }
 
 export interface ICurrentUserTasksFilterOptions extends IPaginationOptions {
@@ -89,7 +93,7 @@ export interface ICurrentUserTasksFilterOptions extends IPaginationOptions {
 export async function resolveCurrentUserTasks(
   root: any,
   args: ICurrentUserTasksFilterOptions,
-  { db, userRole, userId }: IContext,
+  { db, userRole, userId, txn }: IContext,
 ): Promise<ITaskEdges> {
   // TODO: Improve task access controls
   await accessControls.isAllowed(userRole, 'view', 'task');
@@ -102,12 +106,16 @@ export async function resolveCurrentUserTasks(
     orderBy: 'dueAt',
   });
 
-  const tasks = await Task.getUserTasks(userId!, {
-    pageNumber,
-    pageSize,
-    order,
-    orderBy,
-  });
+  const tasks = await Task.getUserTasks(
+    userId!,
+    {
+      pageNumber,
+      pageSize,
+      order,
+      orderBy,
+    },
+    txn,
+  );
   const taskEdges = tasks.results.map((task: Task) => formatRelayEdge(task, task.id) as ITaskNode);
 
   const hasPreviousPage = pageNumber !== 0;

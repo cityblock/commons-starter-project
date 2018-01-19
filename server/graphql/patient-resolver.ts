@@ -29,11 +29,11 @@ export interface IPatientSearchOptions extends IPaginationOptions {
 export async function resolvePatient(
   root: any,
   { patientId }: IQuery,
-  { userRole, userId, logger }: IContext,
+  { userRole, userId, logger, txn }: IContext,
 ): Promise<IPatient> {
   await accessControls.isAllowedForUser(userRole, 'view', 'patient', patientId, userId);
   logger.log(`GET patient ${patientId} by ${userId}`, 2);
-  return await Patient.get(patientId);
+  return await Patient.get(patientId, txn);
 }
 
 export interface IPatientEditOptions {
@@ -43,13 +43,13 @@ export interface IPatientEditOptions {
 export async function patientEdit(
   source: any,
   { input }: IPatientEditOptions,
-  { userRole, userId, logger }: IContext,
+  { userRole, userId, logger, txn }: IContext,
 ): Promise<IPatient> {
   await accessControls.isAllowedForUser(userRole, 'edit', 'patient', input.patientId, userId);
 
   const filtered = omitBy<IPatientEditInput>(input, isNil);
   logger.log(`EDIT patient ${input.patientId} by ${userId}`, 2);
-  return await Patient.edit(filtered as any, input.patientId);
+  return await Patient.edit(filtered as any, input.patientId, txn);
 }
 
 export interface IPatientSetupOptions {
@@ -59,14 +59,16 @@ export interface IPatientSetupOptions {
 export async function patientSetup(
   source: any,
   { input }: IPatientSetupOptions,
-  { redoxApi, userRole, userId, logger }: IContext,
+  context: IContext,
 ): Promise<IPatient> {
+  const { redoxApi, userRole, userId, logger } = context;
+  const existingTxn = context.txn;
   await accessControls.isAllowedForUser(userRole, 'create', 'patient');
   checkUserLoggedIn(userId);
 
   const result = await transaction(Patient.knex(), async txn => {
-    const patient = await Patient.setup(input, userId!, txn);
-    const department = await Clinic.get(input.homeClinicId, txn);
+    const patient = await Patient.setup(input, userId!, existingTxn || txn);
+    const department = await Clinic.get(input.homeClinicId, existingTxn || txn);
     const redoxPatient = await redoxApi.patientCreate({
       id: patient.id,
       firstName: input.firstName,
@@ -103,10 +105,23 @@ export async function patientSetup(
     if (!athenaPatientId) {
       throw new Error('Athena patient was not correctly created');
     }
-    return await Patient.addAthenaPatientId(athenaPatientId, patient.id, txn);
+    const patientWithAthenaId = await Patient.addAthenaPatientId(
+      athenaPatientId,
+      patient.id,
+      existingTxn || txn,
+    );
+
+    await CareTeam.create(
+      {
+        userId: userId!,
+        patientId: patientWithAthenaId.id,
+      },
+      existingTxn || txn,
+    );
+
+    return patientWithAthenaId;
   });
-  // Need to wait until the transaction is complete to add relations like Care Team
-  await CareTeam.create({ userId: userId!, patientId: result.id });
+
   logger.log(`SETUP patient ${result.id} by ${userId}`, 2);
   return result;
 }
@@ -118,11 +133,11 @@ export interface IEditPatientRequiredFields {
 export async function resolvePatientScratchPad(
   root: any,
   { patientId }: IQuery,
-  { userRole, userId }: IContext,
+  { userRole, userId, txn }: IContext,
 ): Promise<IPatientScratchPad> {
   await accessControls.isAllowedForUser(userRole, 'view', 'patient', patientId, userId);
 
-  const patient = await Patient.get(patientId);
+  const patient = await Patient.get(patientId, txn);
 
   return { text: patient.scratchPad };
 }
@@ -137,12 +152,12 @@ export interface IPatientScratchPadEditOptions {
 export async function patientScratchPadEdit(
   root: any,
   { input }: IPatientScratchPadEditOptions,
-  { userRole, userId }: IContext,
+  { userRole, userId, txn }: IContext,
 ): Promise<IPatientScratchPad> {
   const { patientId, text } = input;
   await accessControls.isAllowedForUser(userRole, 'edit', 'patient', patientId, userId);
 
-  const patient = await Patient.edit({ scratchPad: text }, patientId);
+  const patient = await Patient.edit({ scratchPad: text }, patientId, txn);
 
   return { text: patient.scratchPad };
 }
@@ -150,13 +165,13 @@ export async function patientScratchPadEdit(
 export async function resolvePatientSearch(
   root: any,
   { query, pageNumber, pageSize }: IPatientSearchOptions,
-  { userRole, userId }: IContext,
+  { userRole, userId, txn }: IContext,
 ): Promise<IPatientSearchResultEdges> {
   let patients: IPaginatedResults<IPatientSearchResult>;
   await accessControls.isAllowedForUser(userRole, 'view', 'patient');
   checkUserLoggedIn(userId);
 
-  patients = await Patient.search(query, { pageNumber, pageSize }, userId!);
+  patients = await Patient.search(query, { pageNumber, pageSize }, userId!, txn);
 
   const patientEdges = patients.results.map(
     (patient, i) => formatRelayEdge(patient, patient.id) as IPatientSearchResultNode,

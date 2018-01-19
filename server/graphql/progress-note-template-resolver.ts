@@ -28,48 +28,48 @@ export async function progressNoteTemplateCreate(
   { input }: IProgressNoteTemplateCreateArgs,
   context: IContext,
 ) {
-  const { userRole } = context;
+  const { userRole, txn } = context;
   await accessControls.isAllowed(userRole, 'create', 'progressNoteTemplate');
 
-  return await ProgressNoteTemplate.create(input);
+  return await ProgressNoteTemplate.create(input, txn);
 }
 
 export async function resolveProgressNoteTemplate(
   root: any,
   args: IResolveProgressNoteTemplateOptions,
-  { db, userRole }: IContext,
+  { db, userRole, txn }: IContext,
 ) {
   await accessControls.isAllowed(userRole, 'view', 'progressNoteTemplate');
 
-  return await ProgressNoteTemplate.get(args.progressNoteTemplateId);
+  return await ProgressNoteTemplate.get(args.progressNoteTemplateId, txn);
 }
 
 export async function resolveProgressNoteTemplates(
   root: any,
   args: any,
-  { db, userRole }: IContext,
+  { db, userRole, txn }: IContext,
 ) {
   await accessControls.isAllowed(userRole, 'view', 'progressNoteTemplate');
 
-  return await ProgressNoteTemplate.getAll();
+  return await ProgressNoteTemplate.getAll(txn);
 }
 
 export async function progressNoteTemplateEdit(
   root: any,
   args: IEditProgressNoteTemplateOptions,
-  { db, userId, userRole }: IContext,
+  { db, userId, userRole, txn }: IContext,
 ) {
   await accessControls.isAllowedForUser(userRole, 'edit', 'progressNoteTemplate');
 
-  return ProgressNoteTemplate.edit(args.input, args.input.progressNoteTemplateId);
+  return ProgressNoteTemplate.edit(args.input, args.input.progressNoteTemplateId, txn);
 }
 
 export async function progressNoteTemplateDelete(
   root: any,
   args: IDeleteProgressNoteTemplateOptions,
-  { db, userRole }: IContext,
+  { db, userRole, txn }: IContext,
 ) {
   await accessControls.isAllowedForUser(userRole, 'edit', 'progressNoteTemplate');
 
-  return ProgressNoteTemplate.delete(args.input.progressNoteTemplateId);
+  return ProgressNoteTemplate.delete(args.input.progressNoteTemplateId, txn);
 }

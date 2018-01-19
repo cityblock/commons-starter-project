@@ -1,10 +1,12 @@
 import { graphql } from 'graphql';
 import { cloneDeep } from 'lodash';
+import { transaction, Transaction } from 'objection';
 import Db from '../../db';
 import Clinic from '../../models/clinic';
 import Patient from '../../models/patient';
 import Task from '../../models/task';
 import TaskEvent from '../../models/task-event';
+import TaskFollower from '../../models/task-follower';
 import User from '../../models/user';
 import {
   createMockClinic,
@@ -14,30 +16,46 @@ import {
 } from '../../spec-helpers';
 import schema from '../make-executable-schema';
 
-describe('task follower', () => {
-  let db: Db;
-  let task: Task;
-  let user: User;
-  let clinic: Clinic;
-  let patient: Patient;
-  const userRole = 'physician';
+interface ISetup {
+  task: Task;
+  user: User;
+  clinic: Clinic;
+  patient: Patient;
+}
 
-  beforeEach(async () => {
-    db = await Db.get();
-    await Db.clear();
+const userRole = 'physician';
 
-    clinic = await Clinic.create(createMockClinic());
-    user = await User.create(createMockUser(11, clinic.id, userRole));
-    patient = await createPatient(createMockPatient(11, clinic.id), user.id);
-    const dueAt = new Date().toISOString();
-    task = await Task.create({
-      title: 'title',
+async function setup(txn: Transaction): Promise<ISetup> {
+  const clinic = await Clinic.create(createMockClinic(), txn);
+  const user = await User.create(createMockUser(11, clinic.id, userRole), txn);
+  const patient = await createPatient(createMockPatient(11, clinic.id), user.id, txn);
+  const dueAt = new Date().toISOString();
+  const task = await Task.create(
+    {
+      title: 'Task A Title',
       description: 'description',
       dueAt,
       patientId: patient.id,
       createdById: user.id,
       assignedToId: user.id,
-    });
+    },
+    txn,
+  );
+
+  return {
+    task,
+    user,
+    clinic,
+    patient,
+  };
+}
+
+describe('task follower', () => {
+  let db: Db;
+
+  beforeEach(async () => {
+    db = await Db.get();
+    await Db.clear();
   });
 
   afterAll(async () => {
@@ -46,169 +64,204 @@ describe('task follower', () => {
 
   describe('task followers', () => {
     it('adds and removes user to from task followers and creates TaskEvent models', async () => {
-      const mutation = `mutation {
-        taskUserFollow(input: { userId: "${user.id}", taskId: "${task.id}" }) {
-          id
-          followers { id }
-        }
-      }`;
-      const result = await graphql(schema, mutation, null, {
-        db,
-        userRole,
-        userId: user.id,
-      });
-      const taskFollowers = cloneDeep(result.data!.taskUserFollow.followers).map((u: any) => u.id);
-      expect(taskFollowers).toContain(user.id);
-      const taskEvents1 = await TaskEvent.getTaskEvents(task.id, {
-        pageNumber: 0,
-        pageSize: 10,
-      });
-      expect(taskEvents1.total).toEqual(1);
-      expect(taskEvents1.results[0].eventType).toEqual('add_follower');
+      await transaction(TaskFollower.knex(), async txn => {
+        const { user, task } = await setup(txn);
+        const mutation = `mutation {
+          taskUserFollow(input: { userId: "${user.id}", taskId: "${task.id}" }) {
+            id
+            followers { id }
+          }
+        }`;
+        const result = await graphql(schema, mutation, null, {
+          db,
+          userRole,
+          userId: user.id,
+          txn,
+        });
+        const taskFollowers = cloneDeep(result.data!.taskUserFollow.followers).map(
+          (u: any) => u.id,
+        );
+        expect(taskFollowers).toContain(user.id);
+        const taskEvents1 = await TaskEvent.getTaskEvents(
+          task.id,
+          {
+            pageNumber: 0,
+            pageSize: 10,
+          },
+          txn,
+        );
+        expect(taskEvents1.total).toEqual(1);
+        expect(taskEvents1.results[0].eventType).toEqual('add_follower');
 
-      // unfollow
-      const unfollowMutation = `mutation {
-        taskUserUnfollow(input: { userId: "${user.id}", taskId: "${task.id}" }) {
-          id
-          followers { id }
-        }
-      }`;
-      const unfollowResult = await graphql(schema, unfollowMutation, null, {
-        db,
-        userRole,
-        userId: user.id,
+        // unfollow
+        const unfollowMutation = `mutation {
+          taskUserUnfollow(input: { userId: "${user.id}", taskId: "${task.id}" }) {
+            id
+            followers { id }
+          }
+        }`;
+        const unfollowResult = await graphql(schema, unfollowMutation, null, {
+          db,
+          userRole,
+          userId: user.id,
+          txn,
+        });
+        const taskFollowersUnfollowed = cloneDeep(
+          unfollowResult.data!.taskUserUnfollow.followers,
+        ).map((u: any) => u.id);
+        expect(taskFollowersUnfollowed).not.toContain(user.id);
+        const taskEvents2 = await TaskEvent.getTaskEvents(
+          task.id,
+          {
+            pageNumber: 0,
+            pageSize: 10,
+          },
+          txn,
+        );
+        expect(taskEvents2.total).toEqual(2);
+        const eventTypes = taskEvents2.results.map(event => event.eventType);
+        expect(eventTypes).toContain('add_follower');
+        expect(eventTypes).toContain('remove_follower');
       });
-      const taskFollowersUnfollowed = cloneDeep(
-        unfollowResult.data!.taskUserUnfollow.followers,
-      ).map((u: any) => u.id);
-      expect(taskFollowersUnfollowed).not.toContain(user.id);
-      const taskEvents2 = await TaskEvent.getTaskEvents(task.id, {
-        pageNumber: 0,
-        pageSize: 10,
-      });
-      expect(taskEvents2.total).toEqual(2);
-      expect(taskEvents2.results[0].eventType).toEqual('remove_follower');
     });
   });
 
   describe('current user tasks', () => {
     it('resolves current user tasks', async () => {
-      const query = `{
-        tasksForCurrentUser(pageNumber: 0, pageSize: 1) {
-          edges {
-            node {
-              id, title
+      await transaction(TaskFollower.knex(), async txn => {
+        const { user, task } = await setup(txn);
+        const query = `{
+          tasksForCurrentUser(pageNumber: 0, pageSize: 1) {
+            edges {
+              node {
+                id, title
+              }
             }
           }
-        }
-      }`;
-      const result = await graphql(schema, query, null, {
-        db,
-        userRole,
-        userId: user.id,
-      });
+        }`;
+        const result = await graphql(schema, query, null, {
+          db,
+          userRole,
+          userId: user.id,
+          txn,
+        });
 
-      expect(cloneDeep(result.data!.tasksForCurrentUser)).toMatchObject({
-        edges: [
-          {
-            node: {
-              id: task.id,
-              title: 'title',
+        expect(cloneDeep(result.data!.tasksForCurrentUser)).toMatchObject({
+          edges: [
+            {
+              node: {
+                id: task.id,
+                title: 'Task A Title',
+              },
             },
-          },
-        ],
+          ],
+        });
       });
     });
 
     it('returns correct page information', async () => {
-      const patient2 = await createPatient(createMockPatient(123, clinic.id), user.id);
-      const dueAt = new Date().toISOString();
-      await Task.create({
-        title: 'title',
-        description: 'description',
-        dueAt,
-        patientId: patient2.id,
-        createdById: user.id,
-        assignedToId: user.id,
-      });
+      await transaction(TaskFollower.knex(), async txn => {
+        const { clinic, user, task } = await setup(txn);
+        const patient2 = await createPatient(createMockPatient(123, clinic.id), user.id, txn);
+        const dueAt = new Date().toISOString();
+        await Task.create(
+          {
+            title: 'title',
+            description: 'description',
+            dueAt,
+            patientId: patient2.id,
+            createdById: user.id,
+            assignedToId: user.id,
+          },
+          txn,
+        );
 
-      const query = `{
-        tasksForCurrentUser(pageNumber: 0, pageSize: 1) {
-          edges {
-            node {
-              id
-              title
+        const query = `{
+          tasksForCurrentUser(pageNumber: 0, pageSize: 1) {
+            edges {
+              node {
+                id
+                title
+              }
+            }
+            pageInfo {
+              hasNextPage
+              hasPreviousPage
             }
           }
-          pageInfo {
-            hasNextPage
-            hasPreviousPage
-          }
-        }
-      }`;
+        }`;
 
-      const result = await graphql(schema, query, null, {
-        db,
-        userRole,
-        userId: user.id,
-      });
-      expect(cloneDeep(result.data!.tasksForCurrentUser)).toMatchObject({
-        edges: [
-          {
-            node: {
-              id: task.id,
-              title: task.title,
+        const result = await graphql(schema, query, null, {
+          db,
+          userRole,
+          userId: user.id,
+          txn,
+        });
+        expect(cloneDeep(result.data!.tasksForCurrentUser)).toMatchObject({
+          edges: [
+            {
+              node: {
+                id: task.id,
+                title: task.title,
+              },
             },
+          ],
+          pageInfo: {
+            hasNextPage: true,
+            hasPreviousPage: false,
           },
-        ],
-        pageInfo: {
-          hasNextPage: true,
-          hasPreviousPage: false,
-        },
+        });
       });
     });
 
     it('can alter sort order', async () => {
-      const task2 = await Task.create({
-        title: 'title',
-        description: 'description',
-        patientId: patient.id,
-        createdById: user.id,
-        assignedToId: user.id,
-      });
-      const query = `{
-        tasksForCurrentUser(pageNumber: 0, pageSize: 1, orderBy: createdAtDesc) {
-          edges {
-            node {
-              id
-              title
+      await transaction(TaskFollower.knex(), async txn => {
+        const { patient, user } = await setup(txn);
+        const task2 = await Task.create(
+          {
+            title: 'Task B Title',
+            description: 'description',
+            patientId: patient.id,
+            createdById: user.id,
+            assignedToId: user.id,
+          },
+          txn,
+        );
+        const query = `{
+          tasksForCurrentUser(pageNumber: 0, pageSize: 1, orderBy: titleDesc) {
+            edges {
+              node {
+                id
+                title
+              }
+            }
+            pageInfo {
+              hasNextPage
+              hasPreviousPage
             }
           }
-          pageInfo {
-            hasNextPage
-            hasPreviousPage
-          }
-        }
-      }`;
+        }`;
 
-      const result = await graphql(schema, query, null, {
-        db,
-        userRole,
-        userId: user.id,
-      });
-      expect(cloneDeep(result.data!.tasksForCurrentUser)).toMatchObject({
-        edges: [
-          {
-            node: {
-              id: task2.id,
-              title: task2.title,
+        const result = await graphql(schema, query, null, {
+          db,
+          userRole,
+          userId: user.id,
+          txn,
+        });
+        expect(cloneDeep(result.data!.tasksForCurrentUser)).toMatchObject({
+          edges: [
+            {
+              node: {
+                id: task2.id,
+                title: task2.title,
+              },
             },
+          ],
+          pageInfo: {
+            hasNextPage: true,
+            hasPreviousPage: false,
           },
-        ],
-        pageInfo: {
-          hasNextPage: true,
-          hasPreviousPage: false,
-        },
+        });
       });
     });
   });

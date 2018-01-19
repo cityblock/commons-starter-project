@@ -9,7 +9,8 @@ export async function resolveComputedFieldsSchema(
   args: any,
   context: IContext,
 ): Promise<IComputedFieldsSchema> {
-  const computedFields = await ComputedField.getForSchema({ orderBy: 'slug', order: 'asc' });
+  const { txn } = context;
+  const computedFields = await ComputedField.getForSchema({ orderBy: 'slug', order: 'asc' }, txn);
 
   const formattedComputedFields = computedFields.map(computedField => ({
     slug: computedField.slug,

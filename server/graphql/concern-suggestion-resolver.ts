@@ -11,37 +11,43 @@ export interface IConcernSuggestOptions {
 export async function resolveConcernsForAnswer(
   root: any,
   args: { answerId: string },
-  { db, userRole }: IContext,
+  { db, userRole, txn }: IContext,
 ) {
   await accessControls.isAllowed(userRole, 'view', 'concern');
 
-  return await ConcernSuggestion.getForAnswer(args.answerId);
+  return await ConcernSuggestion.getForAnswer(args.answerId, txn);
 }
 
 export async function concernSuggestionCreate(
   root: any,
   args: IConcernSuggestOptions,
-  { db, userRole }: IContext,
+  { db, userRole, txn }: IContext,
 ): Promise<Concern[]> {
   await accessControls.isAllowed(userRole, 'view', 'concern');
 
-  return await ConcernSuggestion.create({
-    answerId: args.input.answerId || undefined,
-    screeningToolScoreRangeId: args.input.screeningToolScoreRangeId || undefined,
-    concernId: args.input.concernId,
-  });
+  return await ConcernSuggestion.create(
+    {
+      answerId: args.input.answerId || undefined,
+      screeningToolScoreRangeId: args.input.screeningToolScoreRangeId || undefined,
+      concernId: args.input.concernId,
+    },
+    txn,
+  );
 }
 
 export async function concernSuggestionDelete(
   root: any,
   args: IConcernSuggestOptions,
-  { db, userRole }: IContext,
+  { db, userRole, txn }: IContext,
 ): Promise<Concern[]> {
   await accessControls.isAllowed(userRole, 'view', 'concern');
 
-  return await ConcernSuggestion.delete({
-    answerId: args.input.answerId || undefined,
-    screeningToolScoreRangeId: args.input.screeningToolScoreRangeId || undefined,
-    concernId: args.input.concernId,
-  });
+  return await ConcernSuggestion.delete(
+    {
+      answerId: args.input.answerId || undefined,
+      screeningToolScoreRangeId: args.input.screeningToolScoreRangeId || undefined,
+      concernId: args.input.concernId,
+    },
+    txn,
+  );
 }

@@ -19,7 +19,7 @@ interface ITaskEditableFields {
   priority?: Priority;
 }
 
-export type TaskOrderOptions = 'createdAt' | 'dueAt' | 'updatedAt';
+export type TaskOrderOptions = 'createdAt' | 'dueAt' | 'updatedAt' | 'title';
 
 interface ITaskPaginationOptions extends IPaginationOptions {
   orderBy: TaskOrderOptions;

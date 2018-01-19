@@ -4,7 +4,7 @@ exports[`renders authentication container correctly 1`] = `<div />`;
 
 exports[`shallow rendered renders authentication container correctly with current user 1`] = `
 <div>
-  <Connect(Apollo(Header))
+  <withRouter(Connect(Apollo(Header)))
     currentUser={
       Object {
         "createdAt": "2017-09-07T13:45:14.532Z",

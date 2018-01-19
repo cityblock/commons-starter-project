@@ -59,6 +59,10 @@
   background-color: var(--blue-color);
 }
 
+.selected {
+  background: var(--navy-color);
+}
+
 .searchIcon,
 .patientsIcon,
 .tasksIcon {

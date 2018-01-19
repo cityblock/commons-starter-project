@@ -5,6 +5,7 @@ export const mark: string;
 export const navItem: string;
 export const relativeNavItem: string;
 export const navText: string;
+export const selected: string;
 export const searchIcon: string;
 export const patientsIcon: string;
 export const tasksIcon: string;

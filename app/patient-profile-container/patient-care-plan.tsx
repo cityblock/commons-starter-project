@@ -13,6 +13,7 @@ interface IProps {
   selectedTaskId: string;
   activeConcerns: FullPatientConcernFragment[];
   inactiveConcerns: FullPatientConcernFragment[];
+  taskIdsWithNotifications?: string[];
   isDragging?: boolean;
   error?: string | null;
 }
@@ -49,7 +50,15 @@ export default class PatientCarePlan extends React.Component<IProps, IState> {
   };
 
   render(): JSX.Element {
-    const { loading, selectedTaskId, activeConcerns, inactiveConcerns, error } = this.props;
+    const {
+      loading,
+      selectedTaskId,
+      activeConcerns,
+      inactiveConcerns,
+      error,
+      taskIdsWithNotifications,
+    } = this.props;
+
     if (loading) return <Spinner />;
 
     const { selectedPatientConcernId } = this.state;
@@ -65,14 +74,16 @@ export default class PatientCarePlan extends React.Component<IProps, IState> {
           selectedPatientConcernId={selectedPatientConcernId}
           onClick={this.onClickPatientConcern}
           selectedTaskId={selectedTaskId}
+          taskIdsWithNotifications={taskIdsWithNotifications}
         />
-        <TextDivider messageId="patientMap.nextUp" />
+        <TextDivider messageId="patientMap.nextUp" hasPadding={true}/>
         <DnDPatientConcerns
           concerns={inactiveConcerns}
           inactive={true}
           selectedPatientConcernId={selectedPatientConcernId}
           onClick={this.onClickPatientConcern}
           selectedTaskId={selectedTaskId}
+          taskIdsWithNotifications={taskIdsWithNotifications}
         />
       </div>
     );

@@ -554,4 +554,27 @@ describe('task tests', () => {
       });
     });
   });
+
+  describe('taskIdsWithNotificationsForPatient', () => {
+    it('retrieves a list of task ids that have notifications for a patient and user', async () => {
+      await transaction(Task.knex(), async txn => {
+        const setup = await setupUrgentTasks(txn);
+
+        const query = `{
+          taskIdsWithNotificationsForPatient(patientId: "${setup.patient5.id}") {
+            id
+          }
+        }`;
+
+        const result = await graphql(schema, query, null, {
+          userRole,
+          userId: setup.user.id,
+          txn,
+        });
+
+        expect(result.data!.taskIdsWithNotificationsForPatient.length).toBe(1);
+        expect(result.data!.taskIdsWithNotificationsForPatient[0].id).toBe(setup.task.id);
+      });
+    });
+  });
 });

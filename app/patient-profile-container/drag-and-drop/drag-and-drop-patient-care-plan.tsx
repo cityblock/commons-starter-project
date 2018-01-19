@@ -22,6 +22,7 @@ interface IProps {
   routeBase: string;
   patientId: string;
   carePlan?: getPatientCarePlanQuery['carePlanForPatient'];
+  taskIdsWithNotifications?: string[];
   selectedTaskId: string;
 }
 
@@ -183,7 +184,7 @@ export class DnDPatientCarePlan extends React.Component<allProps, IState> {
   }
 
   render(): JSX.Element {
-    const { loading, routeBase, patientId, selectedTaskId } = this.props;
+    const { loading, routeBase, patientId, selectedTaskId, taskIdsWithNotifications } = this.props;
     const { activeConcerns, inactiveConcerns, isDragging, reorderError } = this.state;
 
     return (
@@ -196,6 +197,7 @@ export class DnDPatientCarePlan extends React.Component<allProps, IState> {
             selectedTaskId={selectedTaskId}
             activeConcerns={activeConcerns}
             inactiveConcerns={inactiveConcerns}
+            taskIdsWithNotifications={taskIdsWithNotifications}
             isDragging={isDragging}
             error={reorderError}
           />

@@ -2,6 +2,7 @@ import * as React from 'react';
 import { FullPatientConcernFragment } from '../../graphql/types';
 import DnDPatientConcern from '../../patient-profile-container/drag-and-drop/drag-and-drop-patient-concern';
 import EmptyPlaceholder from '../library/empty-placeholder/empty-placeholder';
+import * as styles from './css/patient-concerns.css';
 
 interface IProps {
   concerns: FullPatientConcernFragment[];
@@ -9,17 +10,27 @@ interface IProps {
   inactive?: boolean;
   onClick: (id: string) => void;
   selectedTaskId: string;
+  taskIdsWithNotifications?: string[];
 }
 
 const PatientConcerns: React.StatelessComponent<IProps> = (props: IProps) => {
-  const { selectedPatientConcernId, concerns, inactive, onClick, selectedTaskId } = props;
+  const {
+    selectedPatientConcernId,
+    concerns,
+    inactive,
+    onClick,
+    selectedTaskId,
+    taskIdsWithNotifications,
+  } = props;
 
   if (inactive && !concerns.length) {
     return (
-      <EmptyPlaceholder
-        headerMessageId="patientMap.emptyNextUpHeader"
-        detailMessageId="patientMap.emptyNextUpDetail"
-      />
+      <div className={styles.container}>
+        <EmptyPlaceholder
+          headerMessageId="patientMap.emptyNextUpHeader"
+          detailMessageId="patientMap.emptyNextUpDetail"
+        />
+      </div>
     );
   }
 
@@ -34,11 +45,12 @@ const PatientConcerns: React.StatelessComponent<IProps> = (props: IProps) => {
         onClick={() => onClick(concern.id)}
         inactive={inactive || false}
         selectedTaskId={selectedTaskId}
+        taskIdsWithNotifications={taskIdsWithNotifications}
       />
     );
   });
 
-  return <div>{renderedConcerns}</div>;
+  return <div className={styles.container}>{renderedConcerns}</div>;
 };
 
 export default PatientConcerns;

@@ -5,7 +5,7 @@
 }
 
 .bottomContainer {
-  padding: var(--medium-gutter) var(--small-gutter);
+  padding: var(--medium-gutter) var(--extra-small-gutter);
   height: calc(100vh - 160px);
   overflow-y: hidden;
 }

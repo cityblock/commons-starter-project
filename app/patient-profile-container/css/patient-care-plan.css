@@ -18,7 +18,7 @@
 
 .carePlanPanel {
   background-color: var(--gray-background-color);
-  padding: 20px var(--medium-gutter);
+  padding: 20px 0;
   min-height: calc(100vh - 160px);
 }
 

@@ -3,6 +3,7 @@ import * as React from 'react';
 import { FormattedDate, FormattedMessage, FormattedRelative } from 'react-intl';
 import { Link } from 'react-router-dom';
 import { ShortTaskFragment, ShortUserFragment } from '../../graphql/types';
+import { checkIfDueSoon } from '../../shared/util/due-date';
 import { DEFAULT_AVATAR_URL } from '../task/task';
 import * as styles from './css/task-row.css';
 import * as tasksStyles from './css/tasks.css';
@@ -12,6 +13,7 @@ interface IProps {
   selectedTaskId: string;
   routeBase: string;
   condensed?: boolean;
+  taskIdsWithNotifications?: string[];
 }
 
 function renderFollowers(followers: ShortUserFragment[]) {
@@ -42,7 +44,9 @@ function renderAssignedTo(user: ShortUserFragment | null) {
 }
 
 export const TaskRow: React.StatelessComponent<IProps> = (props: IProps) => {
-  const { task, selectedTaskId, routeBase, condensed } = props;
+  const { task, selectedTaskId, routeBase, condensed, taskIdsWithNotifications } = props;
+  const dueSoon = checkIfDueSoon(task.dueAt);
+  const hasNotification = !!taskIdsWithNotifications && taskIdsWithNotifications.includes(task.id);
 
   const taskClass = classNames(styles.container, {
     [styles.selected]: !!selectedTaskId && selectedTaskId === task.id,
@@ -52,6 +56,7 @@ export const TaskRow: React.StatelessComponent<IProps> = (props: IProps) => {
     [styles.condensed]: !!condensed,
     [styles.inactive]: !!selectedTaskId && selectedTaskId !== task.id,
     [styles.compressed]: !!selectedTaskId,
+    [styles.notificationBadge]: dueSoon || hasNotification,
   });
 
   const openedAtStyles = classNames(
@@ -59,6 +64,10 @@ export const TaskRow: React.StatelessComponent<IProps> = (props: IProps) => {
     tasksStyles.openedAt,
     styles.openedAtSection,
   );
+
+  const dueDateStyles = classNames(styles.dateValue, {
+    [styles.highlightRed]: dueSoon,
+  });
 
   const followers = renderFollowers(task.followers || []);
   const assignedTo = renderAssignedTo(task.assignedTo);
@@ -69,7 +78,7 @@ export const TaskRow: React.StatelessComponent<IProps> = (props: IProps) => {
   ) : null;
   const formattedDueAt = task.dueAt ? (
     <FormattedDate value={task.dueAt} year="numeric" month="short" day="numeric">
-      {(date: string) => <span className={styles.dateValue}>{date}</span>}
+      {(date: string) => <span className={dueDateStyles}>{date}</span>}
     </FormattedDate>
   ) : (
     <FormattedMessage id="task.noDueDate">

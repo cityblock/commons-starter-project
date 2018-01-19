@@ -8,3 +8,4 @@ export const row: string;
 export const hamburger: string;
 export const hamburgerSelected: string;
 export const goals: string;
+export const notificationBadge: string;

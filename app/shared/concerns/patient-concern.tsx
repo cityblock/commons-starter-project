@@ -2,6 +2,7 @@ import * as classNames from 'classnames';
 import * as React from 'react';
 import { adminTasksConcernTitle } from '../../../server/lib/consts';
 import { FullPatientConcernFragment } from '../../graphql/types';
+import { checkIfDueSoon } from '../../shared/util/due-date';
 import PatientGoal from '../goals/goal';
 import PatientConcernStats from './concern-stats/concern-stats';
 import * as styles from './css/patient-concern.css';
@@ -14,23 +15,26 @@ interface IProps {
   inactive?: boolean;
   selectedTaskId: string;
   isDragging?: boolean;
+  taskIdsWithNotifications?: string[];
 }
 
 export interface IPatientConcernStats {
   goalCount: number;
   taskCount: number;
   lastUpdated: string;
+  hasBadge: boolean;
 }
 
 export class PatientConcern extends React.Component<IProps, {}> {
   getStats() {
-    const { patientConcern } = this.props;
+    const { patientConcern, taskIdsWithNotifications } = this.props;
     const { patientGoals } = patientConcern;
 
     const stats: IPatientConcernStats = {
       goalCount: 0,
       taskCount: 0,
       lastUpdated: patientConcern.updatedAt,
+      hasBadge: false,
     };
 
     if (patientGoals && patientGoals.length) {
@@ -58,6 +62,10 @@ export class PatientConcern extends React.Component<IProps, {}> {
             if (taskMoreRecentlyUpdated) {
               stats.lastUpdated = task.updatedAt;
             }
+
+            const dueSoon = checkIfDueSoon(task.dueAt);
+            const hasNotification = !!taskIdsWithNotifications && taskIdsWithNotifications.includes(task.id);
+            stats.hasBadge = stats.hasBadge || dueSoon || hasNotification;
           });
         }
       });
@@ -67,7 +75,7 @@ export class PatientConcern extends React.Component<IProps, {}> {
   }
 
   renderGoals() {
-    const { patientConcern, selectedTaskId } = this.props;
+    const { patientConcern, selectedTaskId, taskIdsWithNotifications } = this.props;
     const { patientGoals } = patientConcern;
 
     if (!patientGoals) {
@@ -81,6 +89,7 @@ export class PatientConcern extends React.Component<IProps, {}> {
         concernTitle={patientConcern.concern.title}
         goalNumber={index + 1}
         selectedTaskId={selectedTaskId}
+        taskIdsWithNotifications={taskIdsWithNotifications}
       />
     ));
   }
@@ -105,7 +114,7 @@ export class PatientConcern extends React.Component<IProps, {}> {
     const goalsStyles = classNames(styles.goals, {
       [styles.hidden]: !selected || (!patientGoals || !patientGoals.length),
     });
-    const { goalCount, taskCount, lastUpdated } = this.getStats();
+    const { goalCount, taskCount, lastUpdated, hasBadge } = this.getStats();
 
     const isInactive = inactive || !!selectedTaskId;
     const isSelected = isDragging || (!selectedTaskId && selected);
@@ -114,6 +123,7 @@ export class PatientConcern extends React.Component<IProps, {}> {
       [styles.inactive]: isInactive && !isSelected,
       [styles.selected]: isSelected,
       [styles.administrative]: concern.title === adminTasksConcernTitle,
+      [styles.notificationBadge]: hasBadge,
     });
 
     return (

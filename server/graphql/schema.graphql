@@ -379,6 +379,11 @@ type Task implements uniqueId {
   patientGoal: PatientGoal!
 }
 
+# Task ID
+type TaskId implements uniqueId {
+  id: ID!
+}
+
 # Task node
 type TaskNode {
   node: Task
@@ -1793,6 +1798,8 @@ type RootQueryType {
   tasksDueSoonForPatient(patientId: ID!): [Task!]!
   # Tasks with notifications for patient - in dashboard
   tasksWithNotificationsForPatient(patientId: ID!): [Task!]!
+  # Task IDs with notifications for patient - in care plan MAP
+  taskIdsWithNotificationsForPatient(patientId: ID!): [TaskId!]!
   # List of task comments
   taskComments(pageNumber: Int, pageSize: Int, taskId: ID!): TaskCommentEdges!
   # Single task comment

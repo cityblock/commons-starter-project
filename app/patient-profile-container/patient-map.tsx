@@ -4,7 +4,8 @@ import * as React from 'react';
 import { compose, graphql } from 'react-apollo';
 import { withRouter } from 'react-router';
 import * as patientCarePlanQuery from '../graphql/queries/get-patient-care-plan.graphql';
-import { getPatientCarePlanQuery } from '../graphql/types';
+import * as taskIdsWithNotificationsForPatientQuery from '../graphql/queries/get-task-ids-with-notifications-for-patient.graphql';
+import { getPatientCarePlanQuery, getTaskIdsWithNotificationsForPatientQuery } from '../graphql/types';
 import Task from '../shared/task/task';
 import * as styles from './css/patient-map.css';
 import DnDPatientCarePlan from './drag-and-drop/drag-and-drop-patient-care-plan';
@@ -15,12 +16,14 @@ export interface IProps {
   loading?: boolean;
   routeBase: string;
   carePlan?: getPatientCarePlanQuery['carePlanForPatient'];
+  taskIdsWithNotifications?: string[];
   taskId: string | null;
   history: History;
 }
 
 interface IGraphqlProps {
   carePlan?: getPatientCarePlanQuery['carePlanForPatient'];
+  taskIdsWithNotifications?: getTaskIdsWithNotificationsForPatientQuery['taskIdsWithNotificationsForPatient'];
   loading?: boolean;
   error?: string | null;
 }
@@ -43,7 +46,7 @@ export class PatientMap extends React.Component<allProps, {}> {
   };
 
   render(): JSX.Element {
-    const { patientId, loading, routeBase, carePlan, taskId } = this.props;
+    const { patientId, loading, routeBase, carePlan, taskIdsWithNotifications, taskId } = this.props;
 
     const mainStyles = classNames({
       [styles.full]: !taskId,
@@ -62,6 +65,7 @@ export class PatientMap extends React.Component<allProps, {}> {
           <DnDPatientCarePlan
             loading={loading}
             carePlan={carePlan}
+            taskIdsWithNotifications={taskIdsWithNotifications}
             routeBase={routeBase}
             patientId={patientId}
             selectedTaskId={taskId || ''}
@@ -89,5 +93,29 @@ export default compose(
       error: data ? data.error : null,
       carePlan: data ? (data as any).carePlanForPatient : null,
     }),
+  }),
+  graphql<IGraphqlProps, IProps, allProps>(taskIdsWithNotificationsForPatientQuery as any, {
+    options: (props: IProps) => ({
+      variables: {
+        patientId: props.patientId,
+      },
+      fetchPolicy: 'cache-and-network', // Always get the latest care plan
+    }),
+    props: ({ data }) => {
+      let taskIdsWithNotifications: string[] | null = null;
+      if (data) {
+        const response = (data as any).taskIdsWithNotificationsForPatient;
+
+        if (response) {
+          taskIdsWithNotifications = Object.keys(response).map(key => response[key].id);
+        }
+      }
+
+      return {
+        loading: data ? data.loading : false,
+        error: data ? data.error : null,
+        taskIdsWithNotifications,
+      };
+    },
   }),
 )(PatientMap);

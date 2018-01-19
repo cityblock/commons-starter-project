@@ -3971,6 +3971,17 @@ export interface getTaskCommentsQuery {
   },
 };
 
+export interface getTaskIdsWithNotificationsForPatientQueryVariables {
+  patientId: string,
+};
+
+export interface getTaskIdsWithNotificationsForPatientQuery {
+  // Task IDs with notifications for patient - in care plan MAP
+  taskIdsWithNotificationsForPatient:  Array< {
+    id: string,
+  } >,
+};
+
 export interface getTaskQueryVariables {
   taskId: string,
 };

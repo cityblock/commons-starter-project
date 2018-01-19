@@ -9,10 +9,18 @@ interface IProps {
   inactive: boolean;
   onClick: (id: string) => void;
   selectedTaskId: string;
+  taskIdsWithNotifications?: string[];
 }
 
 const DnDPatientConcerns: React.StatelessComponent<IProps> = (props: IProps) => {
-  const { selectedPatientConcernId, concerns, inactive, onClick, selectedTaskId } = props;
+  const {
+    selectedPatientConcernId,
+    concerns,
+    inactive,
+    onClick,
+    selectedTaskId,
+    taskIdsWithNotifications,
+  } = props;
 
   const droppableId = inactive ? 'inactiveConcerns' : 'activeConcerns';
 
@@ -26,6 +34,7 @@ const DnDPatientConcerns: React.StatelessComponent<IProps> = (props: IProps) => 
             onClick={onClick}
             selectedTaskId={selectedTaskId}
             inactive={inactive}
+            taskIdsWithNotifications={taskIdsWithNotifications}
           />
           {provided.placeholder}
         </div>

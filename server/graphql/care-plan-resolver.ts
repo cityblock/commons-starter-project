@@ -1,5 +1,9 @@
 import { transaction } from 'objection';
-import { ICarePlan, ICarePlanSuggestionAcceptInput, ICarePlanSuggestionDismissInput } from 'schema';
+import {
+  ICarePlan,
+  ICarePlanSuggestionAcceptInput,
+  ICarePlanSuggestionDismissInput,
+} from 'schema';
 import CarePlanSuggestion from '../models/care-plan-suggestion';
 import Concern from '../models/concern';
 import GoalSuggestionTemplate from '../models/goal-suggestion-template';

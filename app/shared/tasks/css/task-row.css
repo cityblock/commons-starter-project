@@ -10,7 +10,8 @@
   border-radius: 5px;
   border: 1px solid #fff;
   color: var(--black-color);
-  margin: 0 10px 10px 10px;
+  margin: 0 var(--small-gutter) 10px var(--small-gutter);
+  position: relative;
 }
 
 .container.condensed {
@@ -116,6 +117,10 @@
   color: var(--black-color);
 }
 
+.dateValue.highlightRed {
+  color: var(--red-color);
+}
+
 .openedAtSection {
   padding-right: 10px;
   margin-right: 10px;
@@ -128,4 +133,17 @@
 
 .compressed .meta {
   display: none;
+}
+
+.notificationBadge::before {
+  content: ' ';
+  display: inline-block;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  left: -24px;
+  height: 10px;
+  width: 10px;
+  border-radius: 50%;
+  background-color: var(--red-color);
 }

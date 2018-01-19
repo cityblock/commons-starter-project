@@ -9,10 +9,11 @@ interface IProps {
   onClick: () => void;
   inactive: boolean;
   selectedTaskId: string;
+  taskIdsWithNotifications?: string[];
 }
 
 export const DnDPatientConcern: React.StatelessComponent<IProps> = (props: IProps) => {
-  const { onClick, patientConcern, selected, inactive, selectedTaskId } = props;
+  const { onClick, patientConcern, selected, inactive, selectedTaskId, taskIdsWithNotifications } = props;
 
   return (
     <Draggable
@@ -50,6 +51,7 @@ export const DnDPatientConcern: React.StatelessComponent<IProps> = (props: IProp
                 inactive={inactive}
                 selectedTaskId={selectedTaskId}
                 isDragging={snapshot.isDragging}
+                taskIdsWithNotifications={taskIdsWithNotifications}
               />
             </div>
             {provided.placeholder}

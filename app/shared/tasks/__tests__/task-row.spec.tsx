@@ -1,5 +1,5 @@
 import { shallow } from 'enzyme';
-
+import { cloneDeep } from 'lodash';
 import * as React from 'react';
 import { MockedProvider } from 'react-apollo/test-utils';
 import { Provider } from 'react-redux';
@@ -8,6 +8,7 @@ import { create } from 'react-test-renderer';
 import configureMockStore from 'redux-mock-store';
 import { ENGLISH_TRANSLATION } from '../../../reducers/messages/en';
 import ReduxConnectedIntlProvider from '../../../redux-connected-intl-provider';
+import { checkIfDueSoon } from '../../util/due-date';
 import { task, user } from '../../util/test-data';
 import { TaskRow } from '../task-row';
 
@@ -83,5 +84,35 @@ describe('Task Row Component', () => {
 
     expect(wrapper.find('.inactive').length).toBe(0);
     expect(wrapper.find('.selected').length).toBe(1);
+  });
+
+  it('shows a notification badge when the task has notifications', () => {
+    const wrapper = shallow(
+      <TaskRow task={task} selectedTaskId={task.id} routeBase={'/foo/bar'} />,
+    );
+
+    const task2 = cloneDeep(task);
+    task2.dueAt = new Date(Date.now() + 60 * 60 * 24 * 5 * 1000).toISOString();
+    task2.id = 'task-id-2';
+
+    // The current task is overdue
+    expect(checkIfDueSoon(task.dueAt)).toBe(true);
+    expect(wrapper.find('.notificationBadge').length).toBe(1);
+
+    // Set notification on task and have it be overdue
+    wrapper.setProps({ taskIdsWithNotifications: [task.id] });
+    expect(wrapper.find('.notificationBadge').length).toBe(1);
+
+    // Set task to be due 5 days in the future and have no notifications
+    wrapper.setProps({ task: task2, taskIdsWithNotifications: [] });
+    expect(wrapper.find('.notificationBadge').length).toBe(0);
+
+    // Set notification on task inside of concern
+    wrapper.setProps({ taskIdsWithNotifications: [task2.id] });
+    expect(wrapper.find('.notificationBadge').length).toBe(1);
+
+    wrapper.setProps({ taskIdsWithNotifications: [task.id] });
+    expect(wrapper.find('.notificationBadge').length).toBe(0);
+
   });
 });

@@ -11,6 +11,7 @@ interface IProps {
   patientGoal: FullPatientGoalFragment;
   selectedTaskId: string;
   concernTitle: string;
+  taskIdsWithNotifications?: string[];
 }
 
 interface IState {
@@ -29,7 +30,7 @@ export default class PatientGoal extends React.Component<IProps, IState> {
   };
 
   renderTasks() {
-    const { patientGoal, selectedTaskId } = this.props;
+    const { patientGoal, selectedTaskId, taskIdsWithNotifications } = this.props;
     const { patientId, tasks } = patientGoal;
 
     if (!tasks) {
@@ -46,6 +47,7 @@ export default class PatientGoal extends React.Component<IProps, IState> {
           task={task}
           selectedTaskId={selectedTaskId}
           routeBase={`/patients/${patientId}/map/active/tasks`}
+          taskIdsWithNotifications={taskIdsWithNotifications}
         />
       ));
   }

@@ -26,3 +26,7 @@
 .gray p {
   color: var(--light-gray-font-color);
 }
+
+.padding {
+  padding: 0 var(--medium-gutter);
+}

@@ -1,0 +1,5 @@
+@import '../../css/sizes';
+
+.container {
+  padding: 0 var(--medium-gutter);
+}

@@ -315,5 +315,26 @@ export default class Task extends BaseModel {
       })
       .orderBy('dueAt', 'ASC');
   }
+
+  static async getTaskIdsWithNotificationsForPatient(
+    patientId: string,
+    userId: string,
+    txn?: Transaction,
+  ) {
+    return await this.query(txn)
+      .distinct('task.id')
+      .from('task')
+      .joinRaw(
+        `
+        INNER JOIN task_event ON task_event."taskId" = task.id AND task_event."deletedAt" IS NULL
+        INNER JOIN event_notification ON event_notification."taskEventId" = task_event.id
+          AND event_notification."userId" = ?
+          AND event_notification."seenAt" IS NULL
+          AND event_notification."deletedAt" IS NULL
+        `,
+        userId,
+      )
+      .where('task.patientId', patientId);
+  }
 }
 /* tslint:enable:member-ordering */

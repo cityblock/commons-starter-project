@@ -106,6 +106,10 @@ declare module 'schema' {
   */
     tasksWithNotificationsForPatient: Array<ITask>;
     /**
+    description: Task IDs with notifications for patient - in care plan MAP
+  */
+    taskIdsWithNotificationsForPatient: Array<ITaskId>;
+    /**
     description: List of task comments
   */
     taskComments: ITaskCommentEdges;
@@ -375,7 +379,7 @@ declare module 'schema' {
   /**
     description: An object with a Globally Unique ID
   */
-  type uniqueId = IUser | IPatient | IPatientSearchResult | IPatientForDashboard | IClinic | ITask | IPatientGoal | IPatientConcern | IConcern | IDiagnosisCode | IGoalSuggestionTemplate | ITaskTemplate | ITaskComment | IRiskAreaGroup | IRiskArea | IQuestion | IAnswer | IScreeningTool | IScreeningToolScoreRange | IPatientScreeningToolSubmission | ICarePlanSuggestion | IRiskAreaAssessmentSubmission | IScreeningToolScoreRangeForPatientScreeningToolSubmission | IPatientAnswer | IQuestionCondition | IComputedField | IRiskAreaGroupForPatient | IRiskAreaForPatient | IScreeningToolForPatient | IEventNotification | ITaskEvent | IProgressNote | IProgressNoteTemplate | IPatientTaskSuggestion | IPatientAnswerEvent | ICarePlanUpdateEvent | IQuickCall | IConcernDiagnosisCode;
+  type uniqueId = IUser | IPatient | IPatientSearchResult | IPatientForDashboard | IClinic | ITask | IPatientGoal | IPatientConcern | IConcern | IDiagnosisCode | IGoalSuggestionTemplate | ITaskTemplate | ITaskId | ITaskComment | IRiskAreaGroup | IRiskArea | IQuestion | IAnswer | IScreeningTool | IScreeningToolScoreRange | IPatientScreeningToolSubmission | ICarePlanSuggestion | IRiskAreaAssessmentSubmission | IScreeningToolScoreRangeForPatientScreeningToolSubmission | IPatientAnswer | IQuestionCondition | IComputedField | IRiskAreaGroupForPatient | IRiskAreaForPatient | IScreeningToolForPatient | IEventNotification | ITaskEvent | IProgressNote | IProgressNoteTemplate | IPatientTaskSuggestion | IPatientAnswerEvent | ICarePlanUpdateEvent | IQuickCall | IConcernDiagnosisCode;
 
   /**
     description: An object with a Globally Unique ID
@@ -694,6 +698,13 @@ declare module 'schema' {
   interface ITaskNode {
     node: ITask | null;
     cursor: string;
+  }
+
+  /**
+    description: Task ID
+  */
+  interface ITaskId {
+    id: string;
   }
 
   /**

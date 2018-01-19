@@ -4,7 +4,13 @@ import { compose, graphql } from 'react-apollo';
 import { connect, Dispatch } from 'react-redux';
 import { openPopup } from '../../actions/popup-action';
 import * as progressNotesQuery from '../../graphql/queries/get-progress-notes-for-patient.graphql';
-import { getProgressNotesForPatientQuery, FullProgressNoteFragment } from '../../graphql/types';
+import * as progressNoteCreateMutationGraphql from '../../graphql/queries/progress-note-create.graphql';
+import {
+  getProgressNotesForPatientQuery,
+  progressNoteCreateMutation,
+  progressNoteCreateMutationVariables,
+  FullProgressNoteFragment,
+} from '../../graphql/types';
 import * as sortSearchStyles from '../../shared/css/sort-search.css';
 import Button from '../../shared/library/button/button';
 import * as patientInfoStyles from './../css/patient-info.css';
@@ -29,6 +35,9 @@ interface IGraphqlProps {
   loading?: boolean;
   error: string | null;
   progressNotes?: getProgressNotesForPatientQuery['progressNotesForPatient'];
+  progressNoteCreate?: (
+    options: { variables: progressNoteCreateMutationVariables },
+  ) => { data: progressNoteCreateMutation };
 }
 
 interface IState {
@@ -90,9 +99,19 @@ export class PatientTimeline extends React.Component<allProps, IState> {
     }
   };
 
-  showNewProgressNotePopup = () => {
-    // TODO
-    return false;
+  showNewProgressNotePopup = async () => {
+    const { progressNoteCreate, openProgressNotePopup } = this.props;
+    if (progressNoteCreate) {
+      const progressNote = await progressNoteCreate({
+        variables: {
+          patientId: this.props.match.params.patientId,
+        },
+      });
+      if (progressNote.data.progressNoteCreate) {
+        openProgressNotePopup(progressNote.data.progressNoteCreate.id);
+      }
+      // todo handle error
+    }
   };
 
   showNewQuickCallPopup = () => {
@@ -155,6 +174,10 @@ function mapDispatchToProps(dispatch: Dispatch<() => void>): IDispatchProps {
 
 export default compose(
   connect<{}, IDispatchProps, allProps>(null, mapDispatchToProps),
+  graphql<IGraphqlProps, IProps, allProps>(progressNoteCreateMutationGraphql as any, {
+    name: 'progressNoteCreate',
+    options: { refetchQueries: ['getProgressNotesForCurrentUser'] },
+  }),
   graphql<IGraphqlProps, IProps, allProps>(progressNotesQuery as any, {
     options: (props: IProps) => ({
       variables: {

@@ -1740,6 +1740,7 @@ export interface getPatientListQuery {
     title: string,
     answerId: string,
     order: number,
+    createdAt: string,
   },
 };
 
@@ -1750,6 +1751,7 @@ export interface getPatientListsQuery {
     title: string,
     answerId: string,
     order: number,
+    createdAt: string,
   } >,
 };
 
@@ -4911,6 +4913,7 @@ export interface patientListCreateMutation {
     title: string,
     answerId: string,
     order: number,
+    createdAt: string,
   } | null,
 };
 
@@ -4925,6 +4928,7 @@ export interface patientListDeleteMutation {
     title: string,
     answerId: string,
     order: number,
+    createdAt: string,
   } | null,
 };
 
@@ -4942,6 +4946,7 @@ export interface patientListEditMutation {
     title: string,
     answerId: string,
     order: number,
+    createdAt: string,
   } | null,
 };
 
@@ -8286,6 +8291,7 @@ export interface FullPatientListFragment {
   title: string,
   answerId: string,
   order: number,
+  createdAt: string,
 };
 
 export interface FullPatientScratchPadFragment {

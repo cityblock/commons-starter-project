@@ -14,6 +14,7 @@ import { IState as IAppState } from '../store';
 import BuilderComputedFields from './builder-computed-fields';
 import BuilderConcerns from './builder-concerns';
 import BuilderGoals from './builder-goals';
+import BuilderPatientLists from './builder-patient-lists/builder-patient-lists';
 import BuilderProgressNoteTemplates from './builder-progress-note-templates';
 import BuilderQuestions from './builder-questions';
 import BuilderRiskAreaGroups from './builder-risk-area-groups/builder-risk-area-groups';
@@ -28,7 +29,8 @@ type Tab =
   | 'goals'
   | 'tools'
   | 'progress-note-templates'
-  | 'computed-fields';
+  | 'computed-fields'
+  | 'patient-lists';
 
 interface IProps {
   mutate?: any;
@@ -78,6 +80,7 @@ export class BuilderContainer extends React.Component<allProps, {}> {
     const progressNoteTemplatesTabSelected =
       tab === 'progress-note-templates' && subTab !== 'questions';
     const toolsTabSelected = tab === 'tools' && subTab !== 'questions';
+    const patientListsTabSelected = tab === 'patient-lists';
     const assessmentsTabSelected =
       !riskAreaGroupsTabSelected &&
       !questionsTabSelected &&
@@ -85,7 +88,8 @@ export class BuilderContainer extends React.Component<allProps, {}> {
       !goalsTabSelected &&
       !toolsTabSelected &&
       !progressNoteTemplatesTabSelected &&
-      !computedFieldsTabSelected;
+      !computedFieldsTabSelected &&
+      !patientListsTabSelected;
     return (
       <div className={styles.container}>
         <div className={styles.mainBody}>
@@ -130,6 +134,11 @@ export class BuilderContainer extends React.Component<allProps, {}> {
               messageId="builder.computedFields"
               selected={computedFieldsTabSelected}
             />
+            <UnderlineTab
+              href="/builder/patient-lists"
+              messageId="builder.patientLists"
+              selected={patientListsTabSelected}
+            />
           </UnderlineTabs>
           <Switch>
             <Route
@@ -165,6 +174,11 @@ export class BuilderContainer extends React.Component<allProps, {}> {
               exact
               path="/builder/computed-fields/:computedFieldId?"
               component={BuilderComputedFields}
+            />
+            <Route
+              exact
+              path="/builder/patient-lists/:patientListId?"
+              component={BuilderPatientLists}
             />
             <Redirect to="/builder/domains" />
           </Switch>

@@ -1270,6 +1270,8 @@ declare module 'schema' {
     title: string;
     answerId: string;
     order: number;
+    createdAt: string;
+    updatedAt: string;
     deletedAt: string | null;
   }
 

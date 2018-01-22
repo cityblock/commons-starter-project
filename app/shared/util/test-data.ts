@@ -643,3 +643,11 @@ export const computedField = {
   updatedAt: '2017-11-07T13:45:14.532Z',
   deletedAt: null,
 };
+
+export const patientList = {
+  id: 'whiteWalkers',
+  title: 'White Walkers',
+  answerId: 'has-blue-eyes',
+  order: 1,
+  createdAt: '2017-11-07T13:45:14.532Z',
+};

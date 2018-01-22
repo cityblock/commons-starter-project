@@ -956,6 +956,8 @@ type PatientList implements uniqueId {
   title: String!
   answerId: ID!
   order: Int!
+  createdAt: String!
+  updatedAt: String!
   deletedAt: String
 }
 

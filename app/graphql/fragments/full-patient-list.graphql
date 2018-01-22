@@ -3,4 +3,5 @@ fragment FullPatientList on PatientList {
   title
   answerId
   order
+  createdAt
 }

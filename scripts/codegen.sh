@@ -5,10 +5,11 @@
 #
 # Inputs:
 # - /server/graphql/schema.graphql
-# - /app/queries/*.graphql
+# - /app/graphql/fragments/*.graphql
+# - /app/graphql/queries/*.graphql
 # Outputs:
-# - /app/queries/documents.json
-# - /app/queries/types.ts
+# - /app/documents.json
+# - /app/graphql/types.ts
 #
 # The script will fail if there are any diffs, so it can be used for testing.
 # This clones the Commons repo, so you'll need the ssh keys to do that.
@@ -38,7 +39,6 @@ graphql-document-collector \
 
 $APOLLO_CODEGEN introspect-schema server/graphql/schema.graphql  # generates schema.json
 
-# fragments need to be in their own file. see https://github.com/apollographql/graphql-document-collector/issues/4
 $APOLLO_CODEGEN \
   generate $(ls app/graphql/**/*.graphql | sort) \
   --schema schema.json \

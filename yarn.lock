@@ -3793,9 +3793,9 @@ graphql-config@^1.1.1:
     minimatch "^3.0.4"
     rimraf "^2.6.2"
 
-graphql-document-collector@^0.2.0:
-  version "0.2.0"
-  resolved "https://registry.yarnpkg.com/graphql-document-collector/-/graphql-document-collector-0.2.0.tgz#dc07f7322e6cc8f0ec2baf9f7ea19733fe379750"
+graphql-document-collector@^0.2.1:
+  version "0.2.1"
+  resolved "https://registry.yarnpkg.com/graphql-document-collector/-/graphql-document-collector-0.2.1.tgz#1e206f949fdb3a72e9a86ef4da4b27cc353f6c10"
   dependencies:
     "@types/graphql" "^0.11.7"
     glob "^7.1.0"

@@ -17,6 +17,8 @@ import {
 } from '../../graphql/types';
 import BackLink from '../../shared/library/back-link/back-link';
 import Button from '../../shared/library/button/button';
+import ModalButtons from '../../shared/library/modal-buttons/modal-buttons';
+import ModalHeader from '../../shared/library/modal-header/modal-header';
 import Spinner from '../../shared/library/spinner/spinner';
 import UnderlineTabs from '../../shared/library/underline-tabs/underline-tabs';
 import { Popup } from '../../shared/popup/popup';
@@ -55,6 +57,7 @@ type allProps = IGraphqlProps & IProps;
 interface IState {
   inProgress: boolean;
   selectingScreeningTool: boolean;
+  editPopupVisible: boolean;
 }
 
 export interface IQuestionCondition {
@@ -66,9 +69,11 @@ export interface IQuestionCondition {
 export class RiskAreaAssessment extends React.Component<allProps, IState> {
   constructor(props: allProps) {
     super(props);
+
     this.state = {
       inProgress: false,
       selectingScreeningTool: false,
+      editPopupVisible: false,
     };
   }
 
@@ -141,6 +146,51 @@ export class RiskAreaAssessment extends React.Component<allProps, IState> {
     this.setState({ selectingScreeningTool: false });
   };
 
+  onEditableChangeRequest = () => {
+    this.setState({ editPopupVisible: true });
+  }
+
+  onEditableChangeConfirm = () => {
+    this.setState({ inProgress: true, editPopupVisible: false });
+  }
+
+  onEditPopupClose = () => {
+    this.setState({ editPopupVisible: false });
+  }
+
+  renderSubmissionPopup() {
+    const { patientRoute, riskAreaAssessmentSubmission } = this.props;
+    const patientScreeningToolSubmissionId = riskAreaAssessmentSubmission
+    ? riskAreaAssessmentSubmission.id
+    : null;
+
+    return (
+      <RiskAreaAssessmentResultsPopup
+        patientRoute={patientRoute}
+        riskAreaAssessmentSubmissionId={patientScreeningToolSubmissionId}
+      />
+    );
+  }
+
+  renderEditPopup() {
+    return (
+      <div>
+        <ModalHeader
+          titleMessageId="riskAreaAssessment.editModalTitle"
+          bodyMessageId="riskAreaAssessment.editModalBody"
+          closePopup={this.onEditPopupClose}
+          color="white"
+        />
+        <ModalButtons
+          cancelMessageId="riskAreaAssessment.cancel"
+          submitMessageId="riskAreaAssessment.editAnswer"
+          cancel={this.onEditPopupClose}
+          submit={this.onEditableChangeConfirm}
+        />
+      </div>
+    );
+  }
+
   render() {
     const {
       riskArea,
@@ -154,7 +204,7 @@ export class RiskAreaAssessment extends React.Component<allProps, IState> {
       riskAreaAssessmentSubmission,
       riskAreaAssessmentSubmissionLoading,
     } = this.props;
-    const { inProgress, selectingScreeningTool } = this.state;
+    const { inProgress, selectingScreeningTool, editPopupVisible } = this.state;
 
     const automatedAssessment = riskArea && riskArea.assessmentType === 'automated';
 
@@ -166,14 +216,13 @@ export class RiskAreaAssessment extends React.Component<allProps, IState> {
         patientId={patientId}
         inProgress={inProgress}
         riskAreaAssessmentSubmission={riskAreaAssessmentSubmission}
+        onEditableChange={this.onEditableChangeRequest}
       />
     ) : null;
 
-    const patientScreeningToolSubmissionId = riskAreaAssessmentSubmission
-      ? riskAreaAssessmentSubmission.id
-      : null;
-    const popupVisible =
+    const submissionPopupVisible =
       riskAreaAssessmentSubmission && riskAreaAssessmentSubmission.completedAt ? true : false;
+    const popupVisible = submissionPopupVisible || editPopupVisible;
 
     if (riskAreaAssessmentSubmissionLoading || loading || !riskArea) {
       return <Spinner />;
@@ -227,10 +276,8 @@ export class RiskAreaAssessment extends React.Component<allProps, IState> {
         </UnderlineTabs>
         <div className={styles.riskAreasPanel}>{assessmentHtml}</div>
         <Popup visible={popupVisible} style={'small-padding'}>
-          <RiskAreaAssessmentResultsPopup
-            patientRoute={patientRoute}
-            riskAreaAssessmentSubmissionId={patientScreeningToolSubmissionId}
-          />
+          {submissionPopupVisible && this.renderSubmissionPopup()}
+          {editPopupVisible && this.renderEditPopup()}
         </Popup>
         <Popup visible={selectingScreeningTool} style={'small-padding'}>
           <ScreeningToolsPopup

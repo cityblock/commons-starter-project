@@ -86,3 +86,7 @@
 .questionHistoryLabel {
   margin-right: 5px;
 }
+
+.answerContainer {
+  width: 100%;
+}

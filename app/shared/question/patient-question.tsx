@@ -11,6 +11,7 @@ interface IProps {
     questionId: string,
     answers: Array<{ answerId: string; value: string | number }>,
   ) => any;
+  onEditableChange?: () => any;
   visible: boolean;
   question: FullQuestionFragment;
   editable: boolean;
@@ -24,16 +25,28 @@ interface IProps {
 }
 
 export default class PatientQuestion extends React.Component<IProps, {}> {
+  onClickAnswer = () => {
+    const { onEditableChange } = this.props;
+    if (onEditableChange && !this.props.editable) {
+      onEditableChange();
+    }
+  }
+
   renderAnswers = () => {
     const { question, answerData, onChange, editable } = this.props;
 
     return (
-      <QuestionAnswers
-        question={question}
-        answerData={answerData}
-        onChange={onChange}
-        editable={editable}
-      />
+      <div
+        className = {styles.answerContainer}
+        onClick={this.onClickAnswer}
+      >
+        <QuestionAnswers
+          question={question}
+          answerData={answerData}
+          onChange={onChange}
+          editable={editable}
+        />
+      </div>
     );
   };
 

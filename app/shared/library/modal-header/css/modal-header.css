@@ -12,6 +12,10 @@
   background: var(--navy-color);
 }
 
+.whiteContainer {
+  background: white;
+}
+
 .container h2 {
   margin: 0;
   margin-bottom: var(--extra-small-gutter);

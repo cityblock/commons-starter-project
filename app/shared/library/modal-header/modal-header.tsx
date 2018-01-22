@@ -4,7 +4,7 @@ import { FormattedMessage } from 'react-intl';
 import Icon from '../../library/icon/icon';
 import * as styles from './css/modal-header.css';
 
-type Color = 'gray' | 'navy';
+type Color = 'gray' | 'navy' | 'white';
 
 interface IProps {
   titleMessageId: string; // modal title translate id
@@ -16,8 +16,10 @@ interface IProps {
 const ModalHeader: React.StatelessComponent<IProps> = (props: IProps) => {
   const { titleMessageId, bodyMessageId, color, closePopup } = props;
   const navy = color === 'navy';
+  const white = color === 'white';
   const containerStyles = classNames(styles.container, {
     [styles.navyContainer]: navy,
+    [styles.whiteContainer]: white,
   });
   const iconStyles = classNames(styles.icon, {
     [styles.navyIcon]: navy,

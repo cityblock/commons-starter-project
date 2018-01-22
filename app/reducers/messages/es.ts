@@ -249,6 +249,10 @@ export const SPANISH_TRANSLATION = {
     'riskAreaAssessment.resultsTitle': 'New Care Plan Suggestions',
     'riskAreaAssessment.resultsBody':
       "Based on the results of this assessment, the following have been recommended as additions to the patient's care plan.",
+    'riskAreaAssessment.cancel': 'Cancelar',
+    'riskAreaAssessment.editAnswer': 'Modificar respuesta',
+    'riskAreaAssessment.editModalTitle': '¿Intentando modificar esta respuesta?',
+    'riskAreaAssessment.editModalBody': 'Tiene que cambiar a "modo de edición" para modificar una respuesta',
     'select.default': 'Seleccione uno',
     'select.disabled': 'Sin respuesta previa',
     'settings.heading': 'Ajustes',

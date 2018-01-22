@@ -29,6 +29,7 @@ interface IProps {
   riskArea: FullRiskAreaFragment;
   inProgress: boolean;
   riskAreaAssessmentSubmission?: FullRiskAreaAssessmentSubmissionFragment;
+  onEditableChange?: () => any;
 }
 
 interface IGraphqlProps {
@@ -74,7 +75,7 @@ export class RiskAreaAssessmentQuestions extends React.Component<allProps> {
     answerData: IQuestionAnswerHash,
     patientAnswerIds: string[],
   ) => {
-    const { inProgress, riskArea } = this.props;
+    const { inProgress, onEditableChange, riskArea } = this.props;
     const visible = getQuestionVisibility(question, answerData);
     const dataForQuestion = answerData[question.id] || [];
 
@@ -84,6 +85,7 @@ export class RiskAreaAssessmentQuestions extends React.Component<allProps> {
         visible={visible}
         answerData={dataForQuestion}
         onChange={this.onChange}
+        onEditableChange={onEditableChange}
         question={question}
         editable={inProgress}
         patientAnswerIds={patientAnswerIds}

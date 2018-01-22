@@ -243,6 +243,10 @@ export const ENGLISH_TRANSLATION = {
     'riskAreaAssessment.resultsTitle': 'New Care Plan Suggestions',
     'riskAreaAssessment.resultsBody':
       "Based on the results of this assessment, the following have been recommended as additions to the patient's care plan.",
+    'riskAreaAssessment.cancel': 'Cancel',
+    'riskAreaAssessment.editAnswer': 'Edit answer',
+    'riskAreaAssessment.editModalTitle': 'Trying to update this answer?',
+    'riskAreaAssessment.editModalBody': 'In order to update members answers you need to enter "Edit mode" for this assessment.',
     'select.default': 'Select one',
     'select.disabled': 'No previous response',
     'settings.heading': 'Settings',

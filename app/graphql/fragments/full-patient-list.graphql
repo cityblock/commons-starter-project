@@ -1,0 +1,6 @@
+fragment FullPatientList on PatientList {
+  id
+  title
+  answerId
+  order
+}

@@ -1729,6 +1729,30 @@ export interface getPatientCareTeamQuery {
   } | null >,
 };
 
+export interface getPatientListQueryVariables {
+  patientListId: string,
+};
+
+export interface getPatientListQuery {
+  // patient list
+  patientList:  {
+    id: string,
+    title: string,
+    answerId: string,
+    order: number,
+  },
+};
+
+export interface getPatientListsQuery {
+  // all patient lists
+  patientLists:  Array< {
+    id: string,
+    title: string,
+    answerId: string,
+    order: number,
+  } >,
+};
+
 export interface getPatientPanelQueryVariables {
   pageNumber?: number | null,
   pageSize?: number | null,
@@ -4871,6 +4895,53 @@ export interface patientGoalDeleteMutation {
     createdAt: string,
     updatedAt: string,
     deletedAt: string | null,
+  } | null,
+};
+
+export interface patientListCreateMutationVariables {
+  title: string,
+  answerId: string,
+  order: number,
+};
+
+export interface patientListCreateMutation {
+  // Create a PatientList
+  patientListCreate:  {
+    id: string,
+    title: string,
+    answerId: string,
+    order: number,
+  } | null,
+};
+
+export interface patientListDeleteMutationVariables {
+  patientListId: string,
+};
+
+export interface patientListDeleteMutation {
+  // Delete a PatientList
+  patientListDelete:  {
+    id: string,
+    title: string,
+    answerId: string,
+    order: number,
+  } | null,
+};
+
+export interface patientListEditMutationVariables {
+  patientListId: string,
+  title?: string | null,
+  answerId?: string | null,
+  order?: number | null,
+};
+
+export interface patientListEditMutation {
+  // Edit a PatientList
+  patientListEdit:  {
+    id: string,
+    title: string,
+    answerId: string,
+    order: number,
   } | null,
 };
 
@@ -8208,6 +8279,13 @@ export interface FullPatientGoalFragment {
   createdAt: string,
   updatedAt: string,
   deletedAt: string | null,
+};
+
+export interface FullPatientListFragment {
+  id: string,
+  title: string,
+  answerId: string,
+  order: number,
 };
 
 export interface FullPatientScratchPadFragment {

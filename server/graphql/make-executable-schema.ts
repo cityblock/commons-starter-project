@@ -88,6 +88,13 @@ import {
   resolvePatientGoalsForPatient,
 } from './patient-goal-resolver';
 import {
+  patientListCreate,
+  patientListDelete,
+  patientListEdit,
+  resolvePatientList,
+  resolvePatientLists,
+} from './patient-list-resolver';
+import {
   patientEdit,
   patientScratchPadEdit,
   patientSetup,
@@ -328,6 +335,8 @@ const resolveFunctions = {
     computedField: resolveComputedField,
     computedFields: resolveComputedFields,
     computedFieldsSchema: resolveComputedFieldsSchema,
+    patientLists: resolvePatientLists,
+    patientList: resolvePatientList,
   },
 
   RootMutationType: {
@@ -422,6 +431,9 @@ const resolveFunctions = {
     riskAreaAssessmentSubmissionComplete,
     riskAreaAssessmentSubmissionCreate,
     computedFieldFlagCreate,
+    patientListCreate,
+    patientListEdit,
+    patientListDelete,
   },
 };
 

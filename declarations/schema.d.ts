@@ -357,6 +357,14 @@ declare module 'schema' {
     description: latest risk area assessment submission for a screening tool
   */
     riskAreaAssessmentSubmissionForPatient: IRiskAreaAssessmentSubmission | null;
+    /**
+    description: patient list
+  */
+    patientList: IPatientList;
+    /**
+    description: all patient lists
+  */
+    patientLists: Array<IPatientList>;
   }
 
   /**
@@ -379,7 +387,7 @@ declare module 'schema' {
   /**
     description: An object with a Globally Unique ID
   */
-  type uniqueId = IUser | IPatient | IPatientSearchResult | IPatientForDashboard | IClinic | ITask | IPatientGoal | IPatientConcern | IConcern | IDiagnosisCode | IGoalSuggestionTemplate | ITaskTemplate | ITaskId | ITaskComment | IRiskAreaGroup | IRiskArea | IQuestion | IAnswer | IScreeningTool | IScreeningToolScoreRange | IPatientScreeningToolSubmission | ICarePlanSuggestion | IRiskAreaAssessmentSubmission | IScreeningToolScoreRangeForPatientScreeningToolSubmission | IPatientAnswer | IQuestionCondition | IComputedField | IRiskAreaGroupForPatient | IRiskAreaForPatient | IScreeningToolForPatient | IEventNotification | ITaskEvent | IProgressNote | IProgressNoteTemplate | IPatientTaskSuggestion | IPatientAnswerEvent | ICarePlanUpdateEvent | IQuickCall | IConcernDiagnosisCode;
+  type uniqueId = IUser | IPatient | IPatientSearchResult | IPatientForDashboard | IClinic | ITask | IPatientGoal | IPatientConcern | IConcern | IDiagnosisCode | IGoalSuggestionTemplate | ITaskTemplate | ITaskId | ITaskComment | IRiskAreaGroup | IRiskArea | IQuestion | IAnswer | IScreeningTool | IScreeningToolScoreRange | IPatientScreeningToolSubmission | ICarePlanSuggestion | IRiskAreaAssessmentSubmission | IScreeningToolScoreRangeForPatientScreeningToolSubmission | IPatientAnswer | IQuestionCondition | IComputedField | IRiskAreaGroupForPatient | IRiskAreaForPatient | IScreeningToolForPatient | IEventNotification | ITaskEvent | IProgressNote | IProgressNoteTemplate | IPatientTaskSuggestion | IPatientAnswerEvent | ICarePlanUpdateEvent | IQuickCall | IPatientList | IComputedFieldFlag | IConcernDiagnosisCode;
 
   /**
     description: An object with a Globally Unique ID
@@ -1257,6 +1265,15 @@ declare module 'schema' {
   }
 
 
+  interface IPatientList {
+    id: string;
+    title: string;
+    answerId: string;
+    order: number;
+    deletedAt: string | null;
+  }
+
+
   interface IRootMutationType {
     /**
     description: Create a new user
@@ -1631,6 +1648,18 @@ declare module 'schema' {
   */
     riskAreaAssessmentSubmissionComplete: IRiskAreaAssessmentSubmission | null;
     computedFieldFlagCreate: IComputedFieldFlag | null;
+    /**
+    description: Create a PatientList
+  */
+    patientListCreate: IPatientList | null;
+    /**
+    description: Edit a PatientList
+  */
+    patientListEdit: IPatientList | null;
+    /**
+    description: Delete a PatientList
+  */
+    patientListDelete: IPatientList | null;
   }
 
   /**
@@ -2399,6 +2428,32 @@ declare module 'schema' {
     patientAnswerId: string;
     userId: string;
     reason: string | null;
+  }
+
+  /**
+    description: params for creating a patient list
+  */
+  interface IPatientListCreateInput {
+    title: string;
+    answerId: string;
+    order: number;
+  }
+
+  /**
+    description: params for editing a patient list
+  */
+  interface IPatientListEditInput {
+    patientListId: string;
+    title?: string | null;
+    answerId?: string | null;
+    order?: number | null;
+  }
+
+  /**
+    description: params for deleting a patient list
+  */
+  interface IPatientListDeleteInput {
+    patientListId: string;
   }
 
 

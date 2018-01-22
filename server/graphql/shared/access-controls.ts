@@ -36,7 +36,8 @@ export type Resource =
   | 'progressNoteTemplate'
   | 'quickCall'
   | 'computedField'
-  | 'computedFieldFlag';
+  | 'computedFieldFlag'
+  | 'patientList';
 
 /*
 ACL SPEC:

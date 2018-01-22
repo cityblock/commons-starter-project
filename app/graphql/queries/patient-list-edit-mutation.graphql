@@ -1,0 +1,9 @@
+#import "../fragments/full-patient-list.graphql"
+
+mutation patientListEdit($patientListId: ID!, $title: String, $answerId: ID, $order: Int) {
+  patientListEdit(
+    input: { patientListId: $patientListId, title: $title, answerId: $answerId, order: $order }
+  ) {
+    ...FullPatientList
+  }
+}

@@ -944,11 +944,19 @@ type ComputedFieldsSchema {
   computedFields: [ComputedFieldSchema!]!
 }
 
-type ComputedFieldFlag {
+type ComputedFieldFlag implements uniqueId {
   id: ID!
   patientAnswerId: ID!
   userId: ID!
   reason: String
+}
+
+type PatientList implements uniqueId {
+  id: ID!
+  title: String!
+  answerId: ID!
+  order: Int!
+  deletedAt: String
 }
 
 #
@@ -1551,6 +1559,26 @@ input ComputedFieldFlagCreateInput {
   reason: String
 }
 
+# params for creating a patient list
+input PatientListCreateInput {
+  title: String!
+  answerId: ID!
+  order: Int!
+}
+
+# params for editing a patient list
+input PatientListEditInput {
+  patientListId: ID!
+  title: String
+  answerId: ID
+  order: Int
+}
+
+# params for deleting a patient list
+input PatientListDeleteInput {
+  patientListId: ID!
+}
+
 type RootMutationType {
   # Create a new user
   userCreate(input: UserCreateInput): User
@@ -1749,6 +1777,12 @@ type RootMutationType {
     input: RiskAreaAssessmentSubmissionCompleteInput
   ): RiskAreaAssessmentSubmission
   computedFieldFlagCreate(input: ComputedFieldFlagCreateInput): ComputedFieldFlag
+  # Create a PatientList
+  patientListCreate(input: PatientListCreateInput): PatientList
+  # Edit a PatientList
+  patientListEdit(input: PatientListEditInput): PatientList
+  # Delete a PatientList
+  patientListDelete(input: PatientListDeleteInput): PatientList
 }
 
 type RootQueryType {
@@ -1948,6 +1982,10 @@ type RootQueryType {
     patientId: ID!
     completed: Boolean!
   ): RiskAreaAssessmentSubmission
+  # patient list
+  patientList(patientListId: ID!): PatientList!
+  # all patient lists
+  patientLists: [PatientList!]!
 }
 
 schema {

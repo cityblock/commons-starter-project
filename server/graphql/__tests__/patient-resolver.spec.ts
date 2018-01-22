@@ -12,6 +12,7 @@ import {
   mockRedoxCreatePatient,
   mockRedoxCreatePatientError,
   mockRedoxTokenFetch,
+  setupComputedPatientList,
   setupPatientsNewToCareTeam,
   setupPatientsWithMissingInfo,
   setupPatientsWithNoRecentEngagement,
@@ -614,6 +615,31 @@ describe('patient', () => {
 
       expect(result.data!.patientsWithOutOfDateMAP.totalCount).toBe(1);
       expect(result.data!.patientsWithOutOfDateMAP.edges[0].node).toMatchObject({
+        id: patient1.id,
+        firstName: patient1.firstName,
+      });
+    });
+  });
+
+  it('gets patients for a computed list from answer', async () => {
+    await transaction(Patient.knex(), async txn => {
+      const { user, patient1, answer } = await setupComputedPatientList(txn);
+
+      const query = `{
+        patientsForComputedList(answerId: "${answer.id}", pageNumber: 0, pageSize: 10) {
+          edges { node { id, firstName }}
+          totalCount
+        }
+      }`;
+
+      const result = await graphql(schema, query, null, {
+        userRole,
+        userId: user.id,
+        txn,
+      });
+
+      expect(result.data!.patientsForComputedList.totalCount).toBe(1);
+      expect(result.data!.patientsForComputedList.edges[0].node).toMatchObject({
         id: patient1.id,
         firstName: patient1.firstName,
       });

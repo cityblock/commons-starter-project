@@ -75,6 +75,13 @@ describe('Dashboard Navigation Item', () => {
     expect(wrapper.find('p').length).toBe(0);
   });
 
+  it('links to computed list with correct answer id if one given', () => {
+    const answerId = 'loyalToCersei';
+    wrapper.setProps({ answerId });
+
+    expect(wrapper.find(Link).props().to).toBe(`${routeBase}/${name}/${answerId}`);
+  });
+
   describe('Divider', () => {
     const className = 'kingInTheNorth';
     const wrapper2 = shallow(<Divider className={className} />);

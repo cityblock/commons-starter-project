@@ -15,6 +15,7 @@ export const Divider: React.StatelessComponent<{ className: string }> = ({ class
 export interface IProps extends IInjectedProps {
   text?: string; // free text, use with backend tags
   routeBase: string;
+  answerId?: string;
   selected: Selected; // name of item (used in fetching patient list)
   isSelected: boolean; // is the item selected
   icon: IconName;
@@ -22,7 +23,16 @@ export interface IProps extends IInjectedProps {
 }
 
 export const NavigationItem: React.StatelessComponent<IProps> = (props: IProps) => {
-  const { text, icon, routeBase, selected, isSelected, noDivider, patientResults } = props;
+  const {
+    text,
+    icon,
+    routeBase,
+    selected,
+    answerId,
+    isSelected,
+    noDivider,
+    patientResults,
+  } = props;
 
   const containerStyles = classNames(styles.container, {
     [styles.selected]: isSelected,
@@ -42,9 +52,11 @@ export const NavigationItem: React.StatelessComponent<IProps> = (props: IProps) 
     <h4>{text}</h4>
   );
 
+  const href = !answerId ? `${routeBase}/${selected}` : `${routeBase}/${selected}/${answerId}`;
+
   return (
     <div>
-      <Link to={`${routeBase}/${selected}`} className={containerStyles}>
+      <Link to={href} className={containerStyles}>
         <div className={styles.listName}>
           <Icon name={icon} className={iconStyles} />
           {formattedText}

@@ -1,12 +1,22 @@
 import { shallow } from 'enzyme';
 import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
-import DashboardNavigation, { ROUTE_BASE } from '../navigation';
+import { patientList } from '../../../shared/util/test-data';
+import ComputedLists from '../computed-lists';
+import { DashboardNavigation, ROUTE_BASE } from '../navigation';
 import NavigationItem, { IProps } from '../navigation-item';
 
 describe('Dashboard Navigation', () => {
   const selected = 'new';
-  const wrapper = shallow(<DashboardNavigation selected={selected} />);
+  const wrapper = shallow(
+    <DashboardNavigation
+      selected={selected}
+      answerId={null}
+      loading={false}
+      error={null}
+      patientLists={[patientList]}
+    />,
+  );
 
   it('renders container', () => {
     expect(wrapper.find('.container').length).toBe(1);
@@ -184,9 +194,25 @@ describe('Dashboard Navigation', () => {
     ).toBe('accessAlarms');
   });
 
+  it('renders computed lists component', () => {
+    expect(wrapper.find(ComputedLists).length).toBe(1);
+    expect(wrapper.find(ComputedLists).props().patientLists).toEqual([patientList]);
+    expect(wrapper.find(ComputedLists).props().loading).toBeFalsy();
+    expect(wrapper.find(ComputedLists).props().error).toBeNull();
+    expect(wrapper.find(ComputedLists).props().routeBase).toBe(ROUTE_BASE);
+    expect(wrapper.find(ComputedLists).props().answerId).toBeNull();
+  });
+
   it('removes top border on list if tasks selected', () => {
     wrapper.setProps({ selected: 'tasks' });
 
     expect(wrapper.find('.list').props().className).toBe('list transparentBorder');
+  });
+
+  it('passes selected answer id to computed lists if there is one', () => {
+    const answerId = 'followsKingInTheNorth';
+    wrapper.setProps({ answerId });
+
+    expect(wrapper.find(ComputedLists).props().answerId).toBe(answerId);
   });
 });

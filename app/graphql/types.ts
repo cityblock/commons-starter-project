@@ -2242,6 +2242,32 @@ export interface getPatientQuery {
   },
 };
 
+export interface getPatientsForComputedListQueryVariables {
+  answerId: string,
+  pageNumber: number,
+  pageSize: number,
+};
+
+export interface getPatientsForComputedListQuery {
+  // Patient dashboard - computed list for answer
+  patientsForComputedList:  {
+    edges:  Array< {
+      node:  {
+        id: string,
+        firstName: string,
+        lastName: string,
+        dateOfBirth: string | null,
+        gender: string | null,
+      } | null,
+    } >,
+    pageInfo:  {
+      hasPreviousPage: boolean,
+      hasNextPage: boolean,
+    },
+    totalCount: number,
+  },
+};
+
 export interface getPatientsNewToCareTeamQueryVariables {
   pageNumber: number,
   pageSize: number,

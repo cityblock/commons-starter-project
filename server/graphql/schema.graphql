@@ -1816,6 +1816,12 @@ type RootQueryType {
   patientsWithNoRecentEngagement(pageNumber: Int!, pageSize: Int!): PatientForDashboardEdges!
   # Patient dashboard - out of date MAP
   patientsWithOutOfDateMAP(pageNumber: Int!, pageSize: Int!): PatientForDashboardEdges!
+  # Patient dashboard - computed list for answer
+  patientsForComputedList(
+    answerId: ID!
+    pageNumber: Int!
+    pageSize: Int!
+  ): PatientForDashboardEdges!
   # A single clinic
   clinic(clinicId: ID!): Clinic!
   # Clinics

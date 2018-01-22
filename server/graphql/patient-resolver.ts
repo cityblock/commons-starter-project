@@ -26,6 +26,10 @@ export interface IPatientSearchOptions extends IPaginationOptions {
   query: string;
 }
 
+export interface IPatientComputedListOptions extends IPaginationOptions {
+  answerId: string;
+}
+
 export async function resolvePatient(
   root: any,
   { patientId }: IQuery,
@@ -294,5 +298,37 @@ export async function resolvePatientsWithOutOfDateMAP(
     context,
     Patient.getPatientsWithOutOfDateMAP,
   );
+}
+
+export async function resolvePatientsForComputedList(
+  root: any,
+  { answerId, pageNumber, pageSize }: IPatientComputedListOptions,
+  { userRole, userId, txn }: IContext,
+): Promise<IPatientForDashboardEdges> {
+  await accessControls.isAllowedForUser(userRole, 'view', 'patient');
+  checkUserLoggedIn(userId);
+
+  const patients = await Patient.getPatientsForComputedList(
+    { pageNumber, pageSize },
+    userId!,
+    answerId,
+    txn,
+  );
+
+  const patientEdges = patients.results.map((patient: Patient) =>
+    formatRelayEdge(patient, patient.id),
+  );
+
+  const hasPreviousPage = pageNumber !== 0;
+  const hasNextPage = (pageNumber + 1) * pageSize < patients.total;
+
+  return {
+    edges: patientEdges,
+    pageInfo: {
+      hasPreviousPage,
+      hasNextPage,
+    },
+    totalCount: patients.total,
+  };
 }
 /* tslint:enable check-is-allowed */

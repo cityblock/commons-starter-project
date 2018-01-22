@@ -1,19 +1,31 @@
 import * as classNames from 'classnames';
 import * as React from 'react';
+import { graphql } from 'react-apollo';
 import { FormattedMessage } from 'react-intl';
+import * as patientListsQuery from '../../graphql/queries/get-patient-lists.graphql';
+import { FullPatientListFragment } from '../../graphql/types';
 import { Selected } from '../dashboard-container';
+import ComputedLists from './computed-lists';
 import * as styles from './css/navigation.css';
 import NavigationItem from './navigation-item';
 
 export const ROUTE_BASE = '/dashboard';
 
-interface IProps {
-  selected: Selected;
-  tagId?: string;
+interface IGraphqlProps {
+  patientLists: FullPatientListFragment[];
+  loading: boolean;
+  error: string | null;
 }
 
-const DashboardNavigation: React.StatelessComponent<IProps> = (props: IProps) => {
-  const { selected } = props;
+interface IProps {
+  selected: Selected;
+  answerId: string | null;
+}
+
+type allProps = IGraphqlProps & IProps;
+
+export const DashboardNavigation: React.StatelessComponent<allProps> = (props: allProps) => {
+  const { selected, loading, error, patientLists, answerId } = props;
   const firstSelected = selected === 'tasks';
 
   const headerStyles = classNames(styles.header, {
@@ -22,6 +34,12 @@ const DashboardNavigation: React.StatelessComponent<IProps> = (props: IProps) =>
   const listStyles = classNames(styles.list, {
     [styles.transparentBorder]: firstSelected,
   });
+  const dividerLast =
+    !loading &&
+    !error &&
+    patientLists.length &&
+    selected === 'computed' &&
+    patientLists[0].answerId === answerId;
 
   return (
     <div className={styles.container}>
@@ -73,11 +91,24 @@ const DashboardNavigation: React.StatelessComponent<IProps> = (props: IProps) =>
           isSelected={selected === 'updateMAP'}
           routeBase={ROUTE_BASE}
           icon="accessAlarms"
-          noDivider={true}
+          noDivider={dividerLast}
+        />
+        <ComputedLists
+          patientLists={patientLists}
+          loading={loading}
+          error={error}
+          routeBase={ROUTE_BASE}
+          answerId={answerId}
         />
       </div>
     </div>
   );
 };
 
-export default DashboardNavigation;
+export default graphql<IGraphqlProps, IProps, allProps>(patientListsQuery as any, {
+  props: ({ data }) => ({
+    loading: data ? data.loading : false,
+    error: data ? data.error : null,
+    patientLists: data ? (data as any).patientLists : null,
+  }),
+})(DashboardNavigation);

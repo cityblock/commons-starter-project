@@ -103,7 +103,7 @@ export default compose(
   graphql<IGraphqlProps, IProps, allProps>(patientListsQuery as any, {
     props: ({ data }) => ({
       loading: data ? data.loading : false,
-      eror: data ? data.error : null,
+      error: data ? data.error : null,
       patientLists: data ? (data as any).patientLists : null,
     }),
   }),

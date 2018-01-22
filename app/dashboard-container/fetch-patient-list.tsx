@@ -2,6 +2,7 @@ import * as querystring from 'querystring';
 import * as React from 'react';
 import { compose, graphql } from 'react-apollo';
 import { withRouter, RouteComponentProps } from 'react-router';
+import * as patientsForComputedListQuery from '../graphql/queries/get-patients-for-computed-list.graphql';
 import * as patientsNewToCareTeamQuery from '../graphql/queries/get-patients-new-to-care-team.graphql';
 import * as patientsWithMissingInfoQuery from '../graphql/queries/get-patients-with-missing-info.graphql';
 import * as patientsWithNoRecentEngagementQuery from '../graphql/queries/get-patients-with-no-recent-engagement.graphql';
@@ -9,6 +10,7 @@ import * as patientsWithOutOfDateMAPQuery from '../graphql/queries/get-patients-
 import * as patientsWithPendingSuggestionsQuery from '../graphql/queries/get-patients-with-pending-suggestions.graphql';
 import * as patientsWithUrgentTasksQuery from '../graphql/queries/get-patients-with-urgent-tasks.graphql';
 import {
+  getPatientsForComputedListQuery,
   getPatientsNewToCareTeamQuery,
   getPatientsWithMissingInfoQuery,
   getPatientsWithNoRecentEngagementQuery,
@@ -38,7 +40,8 @@ export type PatientResults =
   | getPatientsWithUrgentTasksQuery['patientsWithUrgentTasks']
   | getPatientsWithMissingInfoQuery['patientsWithMissingInfo']
   | getPatientsWithNoRecentEngagementQuery['patientsWithNoRecentEngagement']
-  | getPatientsWithOutOfDateMAPQuery['patientsWithOutOfDateMAP'];
+  | getPatientsWithOutOfDateMAPQuery['patientsWithOutOfDateMAP']
+  | getPatientsForComputedListQuery['patientsForComputedList'];
 
 export interface IInjectedProps {
   loading: boolean;
@@ -50,7 +53,7 @@ export interface IInjectedProps {
 
 interface IExternalProps {
   selected: Selected;
-  tagId?: string;
+  answerId: string | null;
 }
 
 const fetchPatientList = () => <P extends {}>(
@@ -137,6 +140,28 @@ const fetchPatientList = () => <P extends {}>(
           loading: data ? data.loading : false,
           error: data ? data.error : null,
           patientResults: data ? (data as any).patientsWithOutOfDateMAP : null,
+        }),
+      },
+    ),
+    graphql<IInjectedProps, RouteComponentProps<P> & IExternalProps, resultProps>(
+      patientsForComputedListQuery as any,
+      {
+        options: (props: RouteComponentProps<P> & IExternalProps) => {
+          const { variables: { pageNumber, pageSize } } = getPageParams(props);
+
+          return {
+            variables: {
+              answerId: props.answerId,
+              pageNumber,
+              pageSize,
+            },
+          };
+        },
+        skip: ({ selected }) => selected !== 'computed',
+        props: ({ data }) => ({
+          loading: data ? data.loading : false,
+          error: data ? data.error : null,
+          patientResults: data ? (data as any).patientsForComputedList : null,
         }),
       },
     ),

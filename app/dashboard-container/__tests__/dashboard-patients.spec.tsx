@@ -39,6 +39,7 @@ describe('Dashboard Patients List', () => {
       pageSize={pageSize}
       patientResults={patientResults}
       selected={selected}
+      answerId={null}
       loading={false}
     />,
   );

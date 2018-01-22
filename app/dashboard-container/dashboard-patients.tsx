@@ -21,6 +21,7 @@ interface IPageProps {
 export interface IProps extends IPageProps {
   patientResults: PatientResults;
   selected: Selected;
+  answerId: string | null;
   history: History;
   location: History.LocationState;
   match: {

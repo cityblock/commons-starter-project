@@ -10,27 +10,27 @@ export type Selected =
   | 'demographics'
   | 'engage'
   | 'updateMAP'
-  | 'tag';
+  | 'computed';
 
 interface IProps {
   match: {
     params: {
       list: Selected;
-      tagId?: string;
+      answerId?: string;
     };
   };
 }
 
 const DashboardContainer: React.StatelessComponent<IProps> = (props: IProps) => {
-  const { match: { params: { list, tagId } } } = props;
+  const { match: { params: { list, answerId } } } = props;
 
   return (
     <div className={styles.container}>
       <div className={styles.leftPane}>
-        <DashboardNavigation selected={list} tagId={tagId} />
+        <DashboardNavigation selected={list} answerId={answerId || null} />
       </div>
       <div className={styles.rightPane}>
-        <DashboardPatients selected={list} tagId={tagId} />
+        <DashboardPatients selected={list} answerId={answerId || null} />
       </div>
     </div>
   );

@@ -651,3 +651,11 @@ export const patientList = {
   order: 1,
   createdAt: '2017-11-07T13:45:14.532Z',
 };
+
+export const patientList2 = {
+  id: 'nightsWatch',
+  title: 'Protectors of the Seven Kingdoms',
+  answerId: 'has-taken-vows',
+  order: 2,
+  createdAt: '2017-11-07T13:45:14.532Z',
+};

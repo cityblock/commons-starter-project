@@ -74,6 +74,10 @@ declare module 'schema' {
   */
     patientsWithOutOfDateMAP: IPatientForDashboardEdges;
     /**
+    description: Patient dashboard - computed list for answer
+  */
+    patientsForComputedList: IPatientForDashboardEdges;
+    /**
     description: A single clinic
   */
     clinic: IClinic;

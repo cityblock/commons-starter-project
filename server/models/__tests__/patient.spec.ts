@@ -7,6 +7,7 @@ import {
   createMockPatient,
   createMockUser,
   createPatient,
+  setupComputedPatientList,
   setupPatientsNewToCareTeam,
   setupPatientsWithMissingInfo,
   setupPatientsWithNoRecentEngagement,
@@ -387,7 +388,7 @@ describe('patient model', () => {
   });
 
   describe('dashboard patient list getters', () => {
-    it('returns relevant patients on care team', async () => {
+    it('returns patients on care team with urgent tasks', async () => {
       await transaction(Patient.knex(), async txn => {
         const { user, patient1, patient5 } = await setupUrgentTasks(txn);
 
@@ -501,6 +502,28 @@ describe('patient model', () => {
             pageSize: 10,
           },
           user.id,
+          txn,
+        );
+
+        expect(total).toBe(1);
+        expect(results[0]).toMatchObject({
+          id: patient1.id,
+          firstName: patient1.firstName,
+        });
+      });
+    });
+
+    it('returns computed list of patients for a given answer id', async () => {
+      await transaction(Patient.knex(), async txn => {
+        const { patient1, user, answer } = await setupComputedPatientList(txn);
+
+        const { total, results } = await Patient.getPatientsForComputedList(
+          {
+            pageNumber: 0,
+            pageSize: 10,
+          },
+          user.id,
+          answer.id,
           txn,
         );
 

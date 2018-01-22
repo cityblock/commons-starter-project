@@ -2,8 +2,11 @@ import { Model, RelationMappings, Transaction } from 'objection';
 import { IPaginatedResults, IPaginationOptions } from '../db';
 import { adminTasksConcernTitle } from '../lib/consts';
 import BaseModel from './base-model';
+import CarePlanSuggestion from './care-plan-suggestion';
+import CareTeam from './care-team';
 import Clinic from './clinic';
 import Concern from './concern';
+import PatientAnswer from './patient-answer';
 import PatientConcern from './patient-concern';
 import Task from './task';
 
@@ -225,19 +228,18 @@ export default class Patient extends BaseModel {
       .whereRaw(
         `patient.id IN
         (
-          SELECT care_team."patientId"
-          FROM care_team
-          INNER JOIN task ON task."patientId" = care_team."patientId" AND task."deletedAt" IS NULL
+          SELECT task."patientId"
+          FROM task
           LEFT JOIN task_event ON task_event."taskId" = task.id AND task_event."deletedAt" IS NULL
           LEFT JOIN event_notification ON event_notification."taskEventId" = task_event.id
             AND event_notification."userId" = ? AND event_notification."deletedAt" IS NULL
-          WHERE care_team."userId" = ?
-          AND care_team."deletedAt" IS NULL
+          WHERE task."deletedAt" IS NULL
           AND ((task."assignedToId" = ? AND task."dueAt" < now() + interval \'1 day\')
             OR (event_notification.id IS NOT NULL AND event_notification."seenAt" IS NULL))
         )`,
-        [userId, userId, userId],
+        [userId, userId],
       ) // grab all patient ids for patients on care team that have relevant tasks
+      .whereIn('patient.id', this.userCareTeamPatientIdsQuery(userId, txn))
       .orderBy('lastName', 'ASC')
       .orderBy('firstName', 'ASC')
       .page(pageNumber, pageSize);
@@ -276,19 +278,16 @@ export default class Patient extends BaseModel {
     userId: string,
     txn: Transaction,
   ): Promise<IPaginatedResults<Patient>> {
+    const userPatientsWithPendingSuggestions = CarePlanSuggestion.query(txn)
+      .where({
+        dismissedById: null,
+        acceptedById: null,
+      })
+      .select('patientId');
+
     const patientsResult = await this.query(txn)
-      .whereRaw(
-        `patient.id IN (
-          SELECT care_team."patientId"
-          FROM care_team
-          INNER JOIN care_plan_suggestion ON care_plan_suggestion."patientId" = care_team."patientId"
-            AND care_plan_suggestion."dismissedById" IS NULL
-            AND care_plan_suggestion."acceptedById" IS NULL
-          WHERE care_team."userId" = ?
-            AND care_team."deletedAt" IS NULL
-        )`,
-        userId,
-      )
+      .whereIn('patient.id', userPatientsWithPendingSuggestions)
+      .where('patient.id', 'in', this.userCareTeamPatientIdsQuery(userId, txn))
       .orderBy('lastName', 'ASC')
       .orderBy('firstName', 'ASC')
       .page(pageNumber, pageSize);
@@ -303,14 +302,11 @@ export default class Patient extends BaseModel {
   ): Promise<IPaginatedResults<Patient>> {
     const patientsResult = await this.query(txn)
       .where({ dateOfBirth: null })
+      .andWhere('patient.id', 'in', this.userCareTeamPatientIdsQuery(userId, txn))
       .orWhere({ gender: null })
+      .andWhere('patient.id', 'in', this.userCareTeamPatientIdsQuery(userId, txn))
       .orWhere({ zip: null })
-      .joinRaw(
-        `INNER JOIN care_team ON care_team."patientId" = patient.id
-          AND care_team."userId" = ?
-          AND care_team."deletedAt" IS NULL`,
-        userId,
-      )
+      .andWhere('patient.id', 'in', this.userCareTeamPatientIdsQuery(userId, txn))
       .orderBy('lastName', 'ASC')
       .orderBy('firstName', 'ASC')
       .page(pageNumber, pageSize);
@@ -334,12 +330,7 @@ export default class Patient extends BaseModel {
         )
       `,
       )
-      .joinRaw(
-        `INNER JOIN care_team ON care_team."patientId" = patient.id
-          AND care_team."userId" = ?
-          AND care_team."deletedAt" IS NULL`,
-        userId,
-      )
+      .whereIn('patient.id', this.userCareTeamPatientIdsQuery(userId, txn))
       .orderBy('lastName', 'ASC')
       .orderBy('firstName', 'ASC')
       .page(pageNumber, pageSize);
@@ -363,17 +354,45 @@ export default class Patient extends BaseModel {
       )
     `,
       )
-      .joinRaw(
-        `INNER JOIN care_team ON care_team."patientId" = patient.id
-        AND care_team."userId" = ?
-        AND care_team."deletedAt" IS NULL`,
-        userId,
-      )
+      .whereIn('patient.id', this.userCareTeamPatientIdsQuery(userId, txn))
       .orderBy('lastName', 'ASC')
       .orderBy('firstName', 'ASC')
       .page(pageNumber, pageSize);
 
     return patientsResult;
+  }
+
+  static async getPatientsForComputedList(
+    { pageNumber, pageSize }: IPaginationOptions,
+    userId: string,
+    answerId: string,
+    txn: Transaction,
+  ): Promise<IPaginatedResults<Patient>> {
+    const patientIdsFromAnswer = PatientAnswer.query(txn)
+      .where({
+        answerId,
+        applicable: true,
+        deletedAt: null,
+      })
+      .select('patientId');
+
+    const patientsResult = await this.query(txn)
+      .whereIn('patient.id', patientIdsFromAnswer)
+      .andWhere('patient.id', 'in', this.userCareTeamPatientIdsQuery(userId, txn))
+      .orderBy('lastName', 'ASC')
+      .orderBy('firstName', 'ASC')
+      .page(pageNumber, pageSize);
+
+    return patientsResult;
+  }
+
+  static userCareTeamPatientIdsQuery(userId: string, txn: Transaction) {
+    return CareTeam.query(txn)
+      .where({
+        userId,
+        deletedAt: null,
+      })
+      .select('patientId');
   }
 }
 /* tslint:enable:member-ordering */

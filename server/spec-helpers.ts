@@ -19,6 +19,7 @@ import Patient, { IPatientEditableFields } from './models/patient';
 import PatientAnswer from './models/patient-answer';
 import PatientAnswerEvent from './models/patient-answer-event';
 import PatientConcern from './models/patient-concern';
+import PatientList from './models/patient-list';
 import PatientScreeningToolSubmission from './models/patient-screening-tool-submission';
 import ProgressNote from './models/progress-note';
 import ProgressNoteTemplate from './models/progress-note-template';
@@ -687,6 +688,190 @@ export async function createAnswerAssociations(txn: Transaction) {
   );
 
   return { answer1, answer2, answer3 };
+}
+
+export async function setupComputedPatientList(txn: Transaction) {
+  const clinic = await Clinic.create(createMockClinic('Winterfell', 12), txn);
+  const user = await User.create(createMockUser(111, clinic.id), txn);
+  const user2 = await User.create(createMockUser(121, clinic.id), txn);
+
+  const patient1 = await createPatient(
+    createMockPatient(811, clinic.id, patient1Name),
+    user.id,
+    txn,
+  );
+  const patient2 = await createPatient(
+    createMockPatient(812, clinic.id, patient2Name),
+    user2.id,
+    txn,
+  );
+  const patient3 = await createPatient(
+    createMockPatient(813, clinic.id, patient3Name),
+    user.id,
+    txn,
+  );
+
+  const riskAreaGroup = await RiskAreaGroup.create(createMockRiskAreaGroup(), txn);
+  const riskArea = await RiskArea.create(
+    {
+      title: 'Night King Destroyed the Wall',
+      riskAreaGroupId: riskAreaGroup.id,
+      assessmentType: 'manual',
+      order: 1,
+      mediumRiskThreshold: 4,
+      highRiskThreshold: 8,
+    },
+    txn,
+  );
+
+  const question = await Question.create(
+    {
+      title: 'Who will win the war for the dawn?',
+      answerType: 'dropdown',
+      riskAreaId: riskArea.id,
+      type: 'riskArea',
+      order: 1,
+    },
+    txn,
+  );
+
+  const answer = await Answer.create(
+    {
+      displayValue: 'zombieViscerion',
+      value: '3',
+      valueType: 'number',
+      riskAdjustmentType: 'increment',
+      inSummary: true,
+      summaryText: 'Dragon has blue eyes',
+      questionId: question.id,
+      order: 1,
+    },
+    txn,
+  );
+
+  await PatientList.create(
+    {
+      title: 'White Walkers',
+      order: 1,
+      answerId: answer.id,
+    },
+    txn,
+  );
+
+  const screeningTool = await ScreeningTool.create(
+    {
+      title: 'White Walker Screening Tool',
+      riskAreaId: riskArea.id,
+    },
+    txn,
+  );
+
+  const patientScreeningToolSubmission1 = await PatientScreeningToolSubmission.create(
+    {
+      screeningToolId: screeningTool.id,
+      patientId: patient1.id,
+      userId: user.id,
+    },
+    txn,
+  );
+
+  const screeningToolPatientAnswers1 = await PatientAnswer.create(
+    {
+      patientId: patient1.id,
+      type: 'patientScreeningToolSubmission',
+      patientScreeningToolSubmissionId: patientScreeningToolSubmission1.id,
+      questionIds: [question.id],
+      answers: [
+        {
+          questionId: question.id,
+          answerId: answer.id,
+          answerValue: '',
+          patientId: patient1.id,
+          applicable: true,
+          userId: user.id,
+        },
+      ],
+    },
+    txn,
+  );
+
+  await PatientScreeningToolSubmission.submitScore(
+    patientScreeningToolSubmission1.id,
+    { patientAnswers: screeningToolPatientAnswers1 },
+    txn,
+  );
+
+  const patientScreeningToolSubmission2 = await PatientScreeningToolSubmission.create(
+    {
+      screeningToolId: screeningTool.id,
+      patientId: patient2.id,
+      userId: user.id,
+    },
+    txn,
+  );
+
+  const screeningToolPatientAnswers2 = await PatientAnswer.create(
+    {
+      patientId: patient2.id,
+      type: 'patientScreeningToolSubmission',
+      patientScreeningToolSubmissionId: patientScreeningToolSubmission2.id,
+      questionIds: [question.id],
+      answers: [
+        {
+          questionId: question.id,
+          answerId: answer.id,
+          answerValue: '',
+          patientId: patient2.id,
+          applicable: true,
+          userId: user.id,
+        },
+      ],
+    },
+    txn,
+  );
+
+  await PatientScreeningToolSubmission.submitScore(
+    patientScreeningToolSubmission2.id,
+    { patientAnswers: screeningToolPatientAnswers2 },
+    txn,
+  );
+
+  const patientScreeningToolSubmission3 = await PatientScreeningToolSubmission.create(
+    {
+      screeningToolId: screeningTool.id,
+      patientId: patient3.id,
+      userId: user.id,
+    },
+    txn,
+  );
+
+  const screeningToolPatientAnswers3 = await PatientAnswer.create(
+    {
+      patientId: patient3.id,
+      type: 'patientScreeningToolSubmission',
+      patientScreeningToolSubmissionId: patientScreeningToolSubmission3.id,
+      questionIds: [question.id],
+      answers: [
+        {
+          questionId: question.id,
+          answerId: answer.id,
+          answerValue: '',
+          patientId: patient3.id,
+          applicable: false,
+          userId: user.id,
+        },
+      ],
+    },
+    txn,
+  );
+
+  await PatientScreeningToolSubmission.submitScore(
+    patientScreeningToolSubmission3.id,
+    { patientAnswers: screeningToolPatientAnswers3 },
+    txn,
+  );
+
+  return { patient1, patient2, patient3, answer, user };
 }
 
 export async function createFullRiskAreaGroupAssociations(

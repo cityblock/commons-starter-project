@@ -40,7 +40,7 @@
 .section {
   display: flex;
   flex-direction: column;
-  margin-bottom: var(--small-gutter);
+  margin: 0 var(--medium-gutter) var(--small-gutter) var(--medium-gutter);
 }
 
 .sectionHeading {

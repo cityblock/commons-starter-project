@@ -141,7 +141,7 @@ export default class TaskEvent extends BaseModel {
     },
   };
 
-  static async get(taskEventId: string, txn?: Transaction): Promise<TaskEvent> {
+  static async get(taskEventId: string, txn: Transaction): Promise<TaskEvent> {
     const taskEvent = await this.query(txn)
       .eager(EAGER_QUERY)
       .findOne({ id: taskEventId, deletedAt: null });
@@ -153,7 +153,7 @@ export default class TaskEvent extends BaseModel {
 
   static async getAllForProgressNote(
     progressNoteId: string,
-    txn?: Transaction,
+    txn: Transaction,
   ): Promise<TaskEvent[]> {
     return await this.query(txn)
       .eager(EAGER_QUERY)
@@ -162,7 +162,7 @@ export default class TaskEvent extends BaseModel {
 
   static async create(
     { taskId, userId, eventType, eventCommentId, eventUserId, skipNotifsCreate }: ITaskEventOptions,
-    txn?: Transaction,
+    txn: Transaction,
   ): Promise<TaskEvent> {
     let progressNoteId: string | undefined;
     const task = await Task.getIgnoreDeletedAt(taskId, txn);
@@ -194,7 +194,7 @@ export default class TaskEvent extends BaseModel {
     return taskEvent;
   }
 
-  static async delete(taskEventId: string, txn?: Transaction): Promise<TaskEvent> {
+  static async delete(taskEventId: string, txn: Transaction): Promise<TaskEvent> {
     await this.query(txn)
       .where({ id: taskEventId, deletedAt: null })
       .patch({ deletedAt: new Date().toISOString() });
@@ -211,7 +211,7 @@ export default class TaskEvent extends BaseModel {
   static async getTaskEvents(
     taskId: string,
     { pageNumber, pageSize }: IPaginationOptions,
-    txn?: Transaction,
+    txn: Transaction,
   ): Promise<IPaginatedResults<TaskEvent>> {
     const taskEvents = (await this.query(txn)
       .where({ taskId, deletedAt: null })
@@ -228,7 +228,7 @@ export default class TaskEvent extends BaseModel {
   static async getUserTaskEvents(
     userId: string,
     { pageNumber, pageSize }: IPaginationOptions,
-    txn?: Transaction,
+    txn: Transaction,
   ): Promise<IPaginatedResults<TaskEvent>> {
     const taskEvents = (await this.query(txn)
       .where({ userId, deletedAt: null })

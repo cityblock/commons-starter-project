@@ -117,7 +117,7 @@ export default class ProgressNote extends BaseModel {
     },
   };
 
-  static async get(progressNoteId: string, txn?: Transaction): Promise<ProgressNote> {
+  static async get(progressNoteId: string, txn: Transaction): Promise<ProgressNote> {
     const progressNote = await this.query(txn)
       .eager(EAGER_QUERY)
       .findOne({
@@ -133,7 +133,7 @@ export default class ProgressNote extends BaseModel {
   static async getAllForPatient(
     patientId: string,
     completed: boolean,
-    txn?: Transaction,
+    txn: Transaction,
   ): Promise<ProgressNote[]> {
     const query = this.query(txn)
       .eager(EAGER_QUERY)
@@ -151,7 +151,7 @@ export default class ProgressNote extends BaseModel {
   static async getAllForUser(
     userId: string,
     completed: boolean,
-    txn?: Transaction,
+    txn: Transaction,
   ): Promise<ProgressNote[]> {
     const query = this.query(txn)
       .eager(EAGER_QUERY)
@@ -168,7 +168,7 @@ export default class ProgressNote extends BaseModel {
 
   static async getProgressNotesForSupervisorReview(
     supervisorId: string,
-    txn?: Transaction,
+    txn: Transaction,
   ): Promise<ProgressNote[]> {
     return await this.query(txn)
       .eager(EAGER_QUERY)
@@ -177,7 +177,7 @@ export default class ProgressNote extends BaseModel {
       .whereNotNull('completedAt');
   }
 
-  static async create(input: IProgressNoteEditableFields, txn?: Transaction) {
+  static async create(input: IProgressNoteEditableFields, txn: Transaction) {
     return this.query(txn)
       .eager(EAGER_QUERY)
       .insertAndFetch(input);
@@ -186,7 +186,7 @@ export default class ProgressNote extends BaseModel {
   static async update(
     progressNoteId: string,
     progressNote: Partial<IProgressNoteEditableFields>,
-    txn?: Transaction,
+    txn: Transaction,
   ) {
     return this.query(txn)
       .eager(EAGER_QUERY)
@@ -196,7 +196,7 @@ export default class ProgressNote extends BaseModel {
   static async addSupervisorNotes(
     progressNoteId: string,
     supervisorNotes: string,
-    txn?: Transaction,
+    txn: Transaction,
   ) {
     const updates = await this.query(txn)
       .where({ id: progressNoteId, deletedAt: null, reviewedBySupervisorAt: null })
@@ -223,7 +223,7 @@ export default class ProgressNote extends BaseModel {
     return progressNote;
   }
 
-  static async completeSupervisorReview(progressNoteId: string, txn?: Transaction) {
+  static async completeSupervisorReview(progressNoteId: string, txn: Transaction) {
     const updates = await this.query(txn)
       .where({ id: progressNoteId, deletedAt: null, reviewedBySupervisorAt: null })
       .whereNotNull('completedAt')
@@ -250,7 +250,7 @@ export default class ProgressNote extends BaseModel {
     return progressNote;
   }
 
-  static async autoOpenIfRequired(input: IProgressNoteAutoOpenFields, txn?: Transaction) {
+  static async autoOpenIfRequired(input: IProgressNoteAutoOpenFields, txn: Transaction) {
     const { patientId, userId } = input;
 
     const existingProgressNote = await this.query(txn)
@@ -271,7 +271,7 @@ export default class ProgressNote extends BaseModel {
     return existingProgressNote;
   }
 
-  static async complete(progressNoteId: string, txn?: Transaction): Promise<ProgressNote> {
+  static async complete(progressNoteId: string, txn: Transaction): Promise<ProgressNote> {
     return await this.query(txn)
       .eager(EAGER_QUERY)
       .patchAndFetchById(progressNoteId, {
@@ -279,7 +279,7 @@ export default class ProgressNote extends BaseModel {
       });
   }
 
-  static async delete(progressNoteId: string, txn?: Transaction) {
+  static async delete(progressNoteId: string, txn: Transaction) {
     await this.query(txn)
       .eager(EAGER_QUERY)
       .where({ id: progressNoteId, deletedAt: null })

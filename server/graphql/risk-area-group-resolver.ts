@@ -1,4 +1,3 @@
-import { transaction } from 'objection';
 import {
   IRiskAreaGroupCreateInput,
   IRiskAreaGroupDeleteInput,
@@ -45,12 +44,10 @@ export async function resolveRiskAreaGroupForPatient(
   args: { riskAreaGroupId: string; patientId: string },
   { db, userId, userRole, txn }: IContext,
 ) {
-  return transaction(txn || RiskAreaGroup.knex(), async newTxn => {
-    await accessControls.isAllowed(userRole, 'view', 'riskAreaGroup');
-    checkUserLoggedIn(userId);
+  await accessControls.isAllowed(userRole, 'view', 'riskAreaGroup');
+  checkUserLoggedIn(userId);
 
-    return await RiskAreaGroup.getForPatient(args.riskAreaGroupId, args.patientId, newTxn);
-  });
+  return await RiskAreaGroup.getForPatient(args.riskAreaGroupId, args.patientId, txn);
 }
 
 export async function riskAreaGroupCreate(

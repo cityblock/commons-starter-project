@@ -1,4 +1,3 @@
-import { transaction } from 'objection';
 import { IComputedFieldFlagCreateInput } from 'schema';
 import ComputedFieldFlag from '../models/computed-field-flag';
 import accessControls from './shared/access-controls';
@@ -13,17 +12,15 @@ export async function computedFieldFlagCreate(
   { input }: IComputedFieldFlagCreateArgs,
   { userId, userRole, txn }: IContext,
 ) {
-  return transaction(txn || ComputedFieldFlag.knex(), async newTxn => {
-    await accessControls.isAllowed(userRole, 'create', 'computedFieldFlag');
-    checkUserLoggedIn(userId);
+  await accessControls.isAllowed(userRole, 'create', 'computedFieldFlag');
+  checkUserLoggedIn(userId);
 
-    return await ComputedFieldFlag.create(
-      {
-        patientAnswerId: input.patientAnswerId,
-        reason: input.reason || null,
-        userId: userId!,
-      },
-      newTxn,
-    );
-  });
+  return await ComputedFieldFlag.create(
+    {
+      patientAnswerId: input.patientAnswerId,
+      reason: input.reason || null,
+      userId: userId!,
+    },
+    txn,
+  );
 }

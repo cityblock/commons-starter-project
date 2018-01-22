@@ -64,7 +64,8 @@ export class PatientConcern extends React.Component<IProps, {}> {
             }
 
             const dueSoon = checkIfDueSoon(task.dueAt);
-            const hasNotification = !!taskIdsWithNotifications && taskIdsWithNotifications.includes(task.id);
+            const hasNotification =
+              !!taskIdsWithNotifications && taskIdsWithNotifications.includes(task.id);
             stats.hasBadge = stats.hasBadge || dueSoon || hasNotification;
           });
         }

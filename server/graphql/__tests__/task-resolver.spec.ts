@@ -692,22 +692,22 @@ describe('task tests', () => {
   describe('taskIdsWithNotificationsForPatient', () => {
     it('retrieves a list of task ids that have notifications for a patient and user', async () => {
       await transaction(Task.knex(), async txn => {
-        const setup2 = await setupUrgentTasks(txn);
+        const { patient5, user, task } = await setupUrgentTasks(txn);
 
         const query = `{
-          taskIdsWithNotificationsForPatient(patientId: "${setup2.patient5.id}") {
+          taskIdsWithNotificationsForPatient(patientId: "${patient5.id}") {
             id
           }
         }`;
 
         const result = await graphql(schema, query, null, {
           userRole,
-          userId: setup2.user.id,
+          userId: user.id,
           txn,
         });
 
         expect(result.data!.taskIdsWithNotificationsForPatient.length).toBe(1);
-        expect(result.data!.taskIdsWithNotificationsForPatient[0].id).toBe(setup2.task.id);
+        expect(result.data!.taskIdsWithNotificationsForPatient[0].id).toBe(task.id);
       });
     });
   });

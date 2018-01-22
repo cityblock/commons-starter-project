@@ -76,7 +76,7 @@ export default class PatientCarePlan extends React.Component<IProps, IState> {
           selectedTaskId={selectedTaskId}
           taskIdsWithNotifications={taskIdsWithNotifications}
         />
-        <TextDivider messageId="patientMap.nextUp" hasPadding={true}/>
+        <TextDivider messageId="patientMap.nextUp" hasPadding={true} />
         <DnDPatientConcerns
           concerns={inactiveConcerns}
           inactive={true}

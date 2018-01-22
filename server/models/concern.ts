@@ -66,7 +66,7 @@ export default class Concern extends BaseModel {
     },
   };
 
-  static async get(concernId: string, txn?: Transaction): Promise<Concern> {
+  static async get(concernId: string, txn: Transaction): Promise<Concern> {
     const concern = await this.modifyEager(this.query(txn)).findOne({
       id: concernId,
       deletedAt: null,
@@ -78,11 +78,11 @@ export default class Concern extends BaseModel {
     return concern;
   }
 
-  static async create(input: IConcernEditableFields, txn?: Transaction) {
+  static async create(input: IConcernEditableFields, txn: Transaction) {
     return await this.modifyEager(this.query(txn)).insertAndFetch(input);
   }
 
-  static async findOrCreateByTitle(title: string, txn?: Transaction): Promise<Concern> {
+  static async findOrCreateByTitle(title: string, txn: Transaction): Promise<Concern> {
     const fetchedConcern = await this.modifyEager(this.query(txn))
       .whereRaw('lower("title") = ?', title.toLowerCase())
       .limit(1)
@@ -98,21 +98,21 @@ export default class Concern extends BaseModel {
   static async edit(
     concernId: string,
     concern: Partial<IConcernEditableFields>,
-    txn?: Transaction,
+    txn: Transaction,
   ): Promise<Concern> {
     return await this.modifyEager(this.query(txn)).patchAndFetchById(concernId, concern);
   }
 
   static async getAll(
     { orderBy, order }: IConcernOrderOptions,
-    txn?: Transaction,
+    txn: Transaction,
   ): Promise<Concern[]> {
     return await this.modifyEager(this.query(txn))
       .where('deletedAt', null)
       .orderBy(orderBy, order);
   }
 
-  static async delete(concernId: string, txn?: Transaction): Promise<Concern> {
+  static async delete(concernId: string, txn: Transaction): Promise<Concern> {
     await this.modifyEager(this.query(txn))
       .where({ id: concernId, deletedAt: null })
       .patch({ deletedAt: new Date().toISOString() });
@@ -127,7 +127,7 @@ export default class Concern extends BaseModel {
   static async addDiagnosisCode(
     concernId: string,
     diagnosisCode: IAddDiagnosisCodeOptions,
-    txn?: Transaction,
+    txn: Transaction,
   ): Promise<Concern> {
     const { codesetName, code, version } = diagnosisCode;
     const fetchedDiagnosisCode = await DiagnosisCode.getByCodesetNameAndCodeAndVersion(
@@ -157,7 +157,7 @@ export default class Concern extends BaseModel {
   static async removeDiagnosisCode(
     concernId: string,
     diagnosisCodeId: string,
-    txn?: Transaction,
+    txn: Transaction,
   ): Promise<Concern> {
     return await ConcernDiagnosisCode.delete(concernId, diagnosisCodeId, txn);
   }

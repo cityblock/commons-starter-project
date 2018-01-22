@@ -1,5 +1,5 @@
 import { isEmpty, uniqBy } from 'lodash';
-import { transaction, Model, RelationMappings, Transaction } from 'objection';
+import { Model, RelationMappings, Transaction } from 'objection';
 import { IPaginatedResults } from '../db';
 import Answer from './answer';
 import BaseModel from './base-model';
@@ -180,7 +180,7 @@ export default class PatientAnswer extends BaseModel {
     },
   };
 
-  static async get(patientAnswerId: string, txn?: Transaction): Promise<PatientAnswer> {
+  static async get(patientAnswerId: string, txn: Transaction): Promise<PatientAnswer> {
     const patientAnswer = await this.query(txn)
       .eager(EAGER_QUERY)
       .findOne({ id: patientAnswerId, deletedAt: null });
@@ -194,7 +194,7 @@ export default class PatientAnswer extends BaseModel {
   static async getPreviousAnswersForQuestion(
     questionId: string,
     patientId: string,
-    txn?: Transaction,
+    txn: Transaction,
   ): Promise<PatientAnswer[]> {
     const patientAnswers: IPaginatedResults<PatientAnswer> = (await this.query(txn)
       .joinRelation('answer')
@@ -211,7 +211,7 @@ export default class PatientAnswer extends BaseModel {
   static async getForQuestion(
     questionId: string,
     patientId: string,
-    txn?: Transaction,
+    txn: Transaction,
   ): Promise<PatientAnswer[]> {
     const patientAnswers = await this.query(txn)
       .eager(EAGER_QUERY)
@@ -227,7 +227,7 @@ export default class PatientAnswer extends BaseModel {
   static async getForRiskArea(
     riskAreaId: string,
     patientId: string,
-    txn?: Transaction,
+    txn: Transaction,
   ): Promise<PatientAnswer[]> {
     const patientAnswers = await this.query(txn)
       .joinRelation('answer.question')
@@ -243,7 +243,7 @@ export default class PatientAnswer extends BaseModel {
   static async getForScreeningTool(
     screeningToolId: string,
     patientId: string,
-    txn?: Transaction,
+    txn: Transaction,
   ): Promise<PatientAnswer[]> {
     const patientAnswers = await this.query(txn)
       .joinRelation('answer.question')
@@ -258,7 +258,7 @@ export default class PatientAnswer extends BaseModel {
 
   static async getForScreeningToolSubmission(
     patientScreeningToolSubmissionId: string,
-    txn?: Transaction,
+    txn: Transaction,
   ): Promise<PatientAnswer[]> {
     const patientAnswers = await this.query(txn)
       .joinRelation('answer.question')
@@ -272,7 +272,7 @@ export default class PatientAnswer extends BaseModel {
 
   static async getForRiskAreaAssessmentSubmission(
     riskAreaAssessmentSubmissionId: string,
-    txn?: Transaction,
+    txn: Transaction,
   ): Promise<PatientAnswer[]> {
     const patientAnswers = await this.query(txn)
       .joinRelation('answer.question')
@@ -287,7 +287,7 @@ export default class PatientAnswer extends BaseModel {
   static async getForProgressNote(
     progressNoteId: string,
     patientId: string,
-    txn?: Transaction,
+    txn: Transaction,
   ): Promise<PatientAnswer[]> {
     const patientAnswers = await this.query(txn)
       .eager(EAGER_QUERY)
@@ -299,7 +299,7 @@ export default class PatientAnswer extends BaseModel {
     return patientAnswers as PatientAnswer[];
   }
 
-  static async getAllForPatient(patientId: string, txn?: Transaction): Promise<PatientAnswer[]> {
+  static async getAllForPatient(patientId: string, txn: Transaction): Promise<PatientAnswer[]> {
     const patientAnswers = await this.query(txn)
       .joinRelation('answer.question')
       .eager('[answer.[question.[riskArea]]]')
@@ -373,59 +373,53 @@ export default class PatientAnswer extends BaseModel {
 
   static async create(
     input: IPatientAnswerCreateFields,
-    existingTxn?: Transaction,
+    txn: Transaction,
   ): Promise<PatientAnswer[]> {
-    return await transaction(PatientAnswer.knex(), async txn => {
-      const { patientId } = input;
-      const questionIds = input.questionIds;
-      const answers = this.getAnswersForInput(input);
-      // NOTE: This needs to be done as a subquery as knex doesn't support FROM clauses for updates
-      const patientAnswerIdsToDeleteQuery = PatientAnswer.query(existingTxn || txn)
-        .joinRelation('answer')
-        .where('patient_answer.deletedAt', null)
-        .andWhere('patientId', patientId)
-        .where('answer.questionId', 'in', questionIds)
-        .select('patient_answer.id');
+    const { patientId } = input;
+    const questionIds = input.questionIds;
+    const answers = this.getAnswersForInput(input);
+    // NOTE: This needs to be done as a subquery as knex doesn't support FROM clauses for updates
+    const patientAnswerIdsToDeleteQuery = PatientAnswer.query(txn)
+      .joinRelation('answer')
+      .where('patient_answer.deletedAt', null)
+      .andWhere('patientId', patientId)
+      .where('answer.questionId', 'in', questionIds)
+      .select('patient_answer.id');
 
-      const deletedPatientAnswers: PatientAnswer[] = (await PatientAnswer.query(existingTxn || txn)
-        .eager('answer')
-        .where('id', 'in', patientAnswerIdsToDeleteQuery as any)
-        .patch({ deletedAt: new Date().toISOString() })
-        .returning('*')) as any;
-      const uniqueDeletedPatientAnswers = uniqBy(
-        deletedPatientAnswers,
-        deletedPatientAnswer => deletedPatientAnswer.answer.questionId,
-      );
+    const deletedPatientAnswers: PatientAnswer[] = (await PatientAnswer.query(txn)
+      .eager('answer')
+      .where('id', 'in', patientAnswerIdsToDeleteQuery as any)
+      .patch({ deletedAt: new Date().toISOString() })
+      .returning('*')) as any;
+    const uniqueDeletedPatientAnswers = uniqBy(
+      deletedPatientAnswers,
+      deletedPatientAnswer => deletedPatientAnswer.answer.questionId,
+    );
 
-      let results: PatientAnswer[] = [];
+    let results: PatientAnswer[] = [];
 
-      if (answers.length) {
-        results = await PatientAnswer.query(existingTxn || txn)
-          .eager(EAGER_QUERY)
-          .insertGraphAndFetch(answers);
-      }
+    if (answers.length) {
+      results = await PatientAnswer.query(txn)
+        .eager(EAGER_QUERY)
+        .insertGraphAndFetch(answers);
+    }
 
-      await PatientAnswer.createPatientAnswerEvents(
-        results,
-        uniqueDeletedPatientAnswers,
-        existingTxn || txn,
-      );
+    await PatientAnswer.createPatientAnswerEvents(results, uniqueDeletedPatientAnswers, txn);
 
-      return results;
-    });
+    return results;
   }
 
   static async editApplicable(
     applicable: boolean,
     patientAnswerId: string,
-    txn?: Transaction,
+    txn: Transaction,
   ): Promise<PatientAnswer> {
     return await this.query(txn)
       .eager(EAGER_QUERY)
       .patchAndFetchById(patientAnswerId, { applicable });
   }
 
-  static async delete(patientAnswerId: string, txn?: Transaction): Promise<PatientAnswer> {
+  static async delete(patientAnswerId: string, txn: Transaction): Promise<PatientAnswer> {
     await this.query(txn)
       .where({ id: patientAnswerId, deletedAt: null })
       .patch({ deletedAt: new Date().toISOString() });

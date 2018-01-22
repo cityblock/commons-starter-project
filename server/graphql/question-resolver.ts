@@ -73,16 +73,16 @@ export async function questionCreate(root: any, { input }: IQuestionCreateArgs, 
 export async function resolveQuestions(
   root: any,
   args: { filterId: string; filterType: IQuestionFilterTypeEnum },
-  { db, userRole }: IContext,
+  { db, userRole, txn }: IContext,
 ) {
   await accessControls.isAllowed(userRole, 'view', 'question');
 
   if (args.filterType === 'riskArea') {
-    return await Question.getAllForRiskArea(args.filterId);
+    return await Question.getAllForRiskArea(args.filterId, txn);
   } else if (args.filterType === 'screeningTool') {
-    return await Question.getAllForScreeningTool(args.filterId);
+    return await Question.getAllForScreeningTool(args.filterId, txn);
   } else if (args.filterType === 'progressNoteTemplate') {
-    return await Question.getAllForProgressNoteTemplate(args.filterId);
+    return await Question.getAllForProgressNoteTemplate(args.filterId, txn);
   } else {
     throw new Error('invalid filter type');
   }
@@ -91,11 +91,11 @@ export async function resolveQuestions(
 export async function resolveQuestion(
   root: any,
   args: { questionId: string },
-  { db, userRole }: IContext,
+  { db, userRole, txn }: IContext,
 ) {
   await accessControls.isAllowed(userRole, 'view', 'question');
 
-  return await Question.get(args.questionId);
+  return await Question.get(args.questionId, txn);
 }
 
 export async function questionEdit(
@@ -113,10 +113,10 @@ export async function questionEdit(
 export async function questionDelete(
   root: any,
   args: IDeleteQuestionOptions,
-  { db, userId, userRole }: IContext,
+  { db, userId, userRole, txn }: IContext,
 ) {
   await accessControls.isAllowedForUser(userRole, 'edit', 'question');
   checkUserLoggedIn(userId);
 
-  return Question.delete(args.input.questionId);
+  return Question.delete(args.input.questionId, txn);
 }

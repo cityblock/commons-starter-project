@@ -10,7 +10,7 @@ import * as webpack from 'webpack';
 import renderApp from './app';
 import config from './config';
 import schema from './graphql/make-executable-schema';
-import { getGraphQLContext } from './graphql/shared/utils';
+import { formatResponse, getGraphQLContext } from './graphql/shared/utils';
 import { checkPostgresHandler } from './handlers/pingdom/check-postgres-handler';
 import { pubsubPushHandler } from './handlers/pubsub/push-handler';
 import { pubsubValidator } from './handlers/pubsub/validator';
@@ -85,6 +85,7 @@ export default async (app: express.Application, logger: Console) => {
     graphqlExpress(async (request: express.Request | undefined) => ({
       schema: schema as any,
       context: await getGraphQLContext(request!, logger),
+      formatResponse,
       debug: false,
       // for apollo-engine
       tracing: true,

@@ -97,7 +97,7 @@ export default class ScreeningToolScoreRange extends BaseModel {
 
   static async create(
     input: IScreeningToolScoreRangeCreateFields,
-    txn?: Transaction,
+    txn: Transaction,
   ): Promise<ScreeningToolScoreRange> {
     const { minimumScore, maximumScore } = input;
 
@@ -116,7 +116,7 @@ export default class ScreeningToolScoreRange extends BaseModel {
   static async edit(
     screeningToolScoreRangeId: string,
     screeningToolScoreRange: IScreeningToolScoreRangeEditableFields,
-    txn?: Transaction,
+    txn: Transaction,
   ): Promise<ScreeningToolScoreRange> {
     const { minimumScore, maximumScore } = screeningToolScoreRange;
     const editedMinimumScore = isNumber(minimumScore);
@@ -159,7 +159,7 @@ export default class ScreeningToolScoreRange extends BaseModel {
 
   static async get(
     screeningToolScoreRangeId: string,
-    txn?: Transaction,
+    txn: Transaction,
   ): Promise<ScreeningToolScoreRange> {
     const screeningToolScoreRange = await this.query(txn)
       .eager(EAGER_QUERY)
@@ -174,7 +174,7 @@ export default class ScreeningToolScoreRange extends BaseModel {
 
   static async getForScreeningTool(
     screeningToolId: string,
-    txn?: Transaction,
+    txn: Transaction,
   ): Promise<ScreeningToolScoreRange[]> {
     return await this.query(txn)
       .eager(EAGER_QUERY)
@@ -184,7 +184,7 @@ export default class ScreeningToolScoreRange extends BaseModel {
   static async getByScoreForScreeningTool(
     score: number,
     screeningToolId: string,
-    txn?: Transaction,
+    txn: Transaction,
   ): Promise<ScreeningToolScoreRange | null> {
     const screeningToolScoreRange = await this.query(txn)
       .eager(EAGER_QUERY)
@@ -199,7 +199,7 @@ export default class ScreeningToolScoreRange extends BaseModel {
     return screeningToolScoreRange;
   }
 
-  static async getAll(txn?: Transaction): Promise<ScreeningToolScoreRange[]> {
+  static async getAll(txn: Transaction): Promise<ScreeningToolScoreRange[]> {
     return await this.query(txn)
       .eager(EAGER_QUERY)
       .where({ deletedAt: null });
@@ -207,7 +207,7 @@ export default class ScreeningToolScoreRange extends BaseModel {
 
   static async delete(
     screeningToolScoreRangeId: string,
-    txn?: Transaction,
+    txn: Transaction,
   ): Promise<ScreeningToolScoreRange> {
     await this.query(txn)
       .where({ id: screeningToolScoreRangeId, deletedAt: null })

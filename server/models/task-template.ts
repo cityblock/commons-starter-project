@@ -55,7 +55,7 @@ export default class TaskTemplate extends BaseModel {
     },
   };
 
-  static async get(taskTemplateId: string, txn?: Transaction): Promise<TaskTemplate> {
+  static async get(taskTemplateId: string, txn: Transaction): Promise<TaskTemplate> {
     const taskTemplate = await this.query(txn).findOne({ id: taskTemplateId, deletedAt: null });
 
     if (!taskTemplate) {
@@ -64,24 +64,24 @@ export default class TaskTemplate extends BaseModel {
     return taskTemplate;
   }
 
-  static async create(input: ITaskTemplateEditableFields, txn?: Transaction) {
+  static async create(input: ITaskTemplateEditableFields, txn: Transaction) {
     return await this.query(txn).insertAndFetch(input);
   }
 
   static async edit(
     taskTemplateId: string,
     taskTemplate: Partial<ITaskTemplateEditableFields>,
-    txn?: Transaction,
+    txn: Transaction,
   ): Promise<TaskTemplate> {
     return await this.query(txn).patchAndFetchById(taskTemplateId, taskTemplate);
   }
 
   // TODO: paginate?
-  static async getAll(txn?: Transaction): Promise<TaskTemplate[]> {
+  static async getAll(txn: Transaction): Promise<TaskTemplate[]> {
     return await this.query(txn).where('deletedAt', null);
   }
 
-  static async delete(taskTemplateId: string, txn?: Transaction): Promise<TaskTemplate> {
+  static async delete(taskTemplateId: string, txn: Transaction): Promise<TaskTemplate> {
     await this.query(txn)
       .where({ id: taskTemplateId, deletedAt: null })
       .patch({ deletedAt: new Date().toISOString() });

@@ -59,7 +59,7 @@ export default class TaskComment extends BaseModel {
     },
   };
 
-  static async get(taskCommentId: string, txn?: Transaction): Promise<TaskComment> {
+  static async get(taskCommentId: string, txn: Transaction): Promise<TaskComment> {
     const taskComment = await this.query(txn)
       .eager(EAGER_QUERY)
       .findOne({ id: taskCommentId, deletedAt: null });
@@ -71,23 +71,19 @@ export default class TaskComment extends BaseModel {
 
   static async create(
     { userId, taskId, body }: ITaskCommentOptions,
-    txn?: Transaction,
+    txn: Transaction,
   ): Promise<TaskComment> {
     return await this.query(txn)
       .eager(EAGER_QUERY)
       .insert({ taskId, userId, body });
   }
 
-  static async update(
-    taskCommentId: string,
-    body: string,
-    txn?: Transaction,
-  ): Promise<TaskComment> {
+  static async update(taskCommentId: string, body: string, txn: Transaction): Promise<TaskComment> {
     return await this.query(txn)
       .eager(EAGER_QUERY)
       .patchAndFetchById(taskCommentId, { body });
   }
-  static async delete(taskCommentId: string, txn?: Transaction): Promise<TaskComment> {
+  static async delete(taskCommentId: string, txn: Transaction): Promise<TaskComment> {
     await this.query(txn)
       .where({ id: taskCommentId, deletedAt: null })
       .patch({ deletedAt: new Date().toISOString() });
@@ -104,7 +100,7 @@ export default class TaskComment extends BaseModel {
   static async getTaskComments(
     taskId: string,
     { pageNumber, pageSize }: IPaginationOptions,
-    txn?: Transaction,
+    txn: Transaction,
   ): Promise<IPaginatedResults<TaskComment>> {
     const patientsResult = (await this.query(txn)
       .where({ taskId, deletedAt: null })

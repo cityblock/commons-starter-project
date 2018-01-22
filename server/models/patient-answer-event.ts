@@ -103,7 +103,7 @@ export default class PatientAnswerEvent extends BaseModel {
     },
   };
 
-  static async get(patientAnswerEventId: string, txn?: Transaction): Promise<PatientAnswerEvent> {
+  static async get(patientAnswerEventId: string, txn: Transaction): Promise<PatientAnswerEvent> {
     const patientAnswerEvent = await this.query(txn)
       .eager(EAGER_QUERY)
       .findOne({ id: patientAnswerEventId, deletedAt: null });
@@ -117,7 +117,7 @@ export default class PatientAnswerEvent extends BaseModel {
 
   static async getAllForProgressNote(
     progressNoteId: string,
-    txn?: Transaction,
+    txn: Transaction,
   ): Promise<PatientAnswerEvent[]> {
     return (await this.query(txn)
       .eager(EAGER_QUERY)
@@ -131,7 +131,7 @@ export default class PatientAnswerEvent extends BaseModel {
 
   static async create(
     input: IPatientAnswerEventOptions,
-    txn?: Transaction,
+    txn: Transaction,
   ): Promise<PatientAnswerEvent> {
     const { patientId, userId, computedFieldId } = input;
 
@@ -175,10 +175,7 @@ export default class PatientAnswerEvent extends BaseModel {
     return createdPatientAnswerEvents;
   }
 
-  static async delete(
-    patientAnswerEventId: string,
-    txn?: Transaction,
-  ): Promise<PatientAnswerEvent> {
+  static async delete(patientAnswerEventId: string, txn: Transaction): Promise<PatientAnswerEvent> {
     await this.query(txn)
       .where({ id: patientAnswerEventId, deletedAt: null })
       .patch({ deletedAt: new Date().toISOString() });
@@ -197,7 +194,7 @@ export default class PatientAnswerEvent extends BaseModel {
   static async getAllForAnswer(
     answerId: string,
     { pageNumber, pageSize }: IPaginationOptions,
-    txn?: Transaction,
+    txn: Transaction,
   ): Promise<IPaginatedResults<PatientAnswerEvent>> {
     const patientAnswerEvents = (await this.query(txn)
       .eager(EAGER_QUERY)
@@ -216,7 +213,7 @@ export default class PatientAnswerEvent extends BaseModel {
   static async getAllForPatient(
     patientId: string,
     { pageNumber, pageSize }: IPaginationOptions,
-    txn?: Transaction,
+    txn: Transaction,
   ): Promise<IPaginatedResults<PatientAnswerEvent>> {
     const patientAnswerEvents = (await this.query(txn)
       .eager(EAGER_QUERY)
@@ -233,7 +230,7 @@ export default class PatientAnswerEvent extends BaseModel {
   static async getAllForUser(
     userId: string,
     { pageNumber, pageSize }: IPaginationOptions,
-    txn?: Transaction,
+    txn: Transaction,
   ): Promise<IPaginatedResults<PatientAnswerEvent>> {
     const patientAnswerEvents = (await this.query(txn)
       .eager(EAGER_QUERY)

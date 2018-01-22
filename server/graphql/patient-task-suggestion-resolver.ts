@@ -1,4 +1,3 @@
-import { transaction } from 'objection';
 import { IPatientTaskSuggestionAcceptInput, IPatientTaskSuggestionDismissInput } from 'schema';
 import { createTaskForTaskTemplate } from '../lib/create-task-for-task-template';
 import PatientTaskSuggestion from '../models/patient-task-suggestion';
@@ -52,26 +51,20 @@ export async function patientTaskSuggestionAccept(
   { input }: IPatientTaskSuggestionAcceptArgs,
   context: IContext,
 ): Promise<PatientTaskSuggestion | undefined> {
-  const { userRole, userId } = context;
-  const existingTxn = context.txn;
+  const { userRole, userId, txn } = context;
   await accessControls.isAllowed(userRole, 'edit', 'patientTaskSuggestion');
   checkUserLoggedIn(userId);
 
-  return await transaction(PatientTaskSuggestion.knex(), async txn => {
-    const patientTaskSuggestion = await PatientTaskSuggestion.get(
-      input.patientTaskSuggestionId,
-      existingTxn || txn,
-    );
+  const patientTaskSuggestion = await PatientTaskSuggestion.get(input.patientTaskSuggestionId, txn);
 
-    if (patientTaskSuggestion) {
-      const { patientId, taskTemplateId } = patientTaskSuggestion;
-      if (taskTemplateId) {
-        await PatientTaskSuggestion.accept(patientTaskSuggestion.id, userId!, existingTxn || txn);
-        const taskTemplate = await TaskTemplate.get(taskTemplateId, existingTxn || txn);
-        await createTaskForTaskTemplate(taskTemplate, userId!, patientId, existingTxn || txn);
-      }
+  if (patientTaskSuggestion) {
+    const { patientId, taskTemplateId } = patientTaskSuggestion;
+    if (taskTemplateId) {
+      await PatientTaskSuggestion.accept(patientTaskSuggestion.id, userId!, txn);
+      const taskTemplate = await TaskTemplate.get(taskTemplateId, txn);
+      await createTaskForTaskTemplate(taskTemplate, userId!, patientId, txn);
     }
+  }
 
-    return patientTaskSuggestion;
-  });
+  return patientTaskSuggestion;
 }

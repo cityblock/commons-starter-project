@@ -1,4 +1,3 @@
-import { transaction } from 'objection';
 import { ITaskEdges, ITaskFollowInput, ITaskNode } from 'schema';
 import { IPaginationOptions } from '../db';
 import Task, { TaskOrderOptions } from '../models/task';
@@ -20,34 +19,31 @@ export async function taskUserFollow(
   { input }: ITaskFollowersOptions,
   context: IContext,
 ): Promise<Task> {
-  const { userRole, userId } = context;
+  const { userRole, userId, txn } = context;
   const { taskId } = input;
-  const existingTxn = context.txn;
-  // TODO: Improve access controls here. Requirements unclear ATM
+
   await accessControls.isAllowed(userRole, 'edit', 'task');
   checkUserLoggedIn(userId);
 
-  return await transaction(TaskFollower.knex(), async txn => {
-    await TaskFollower.followTask(
-      {
-        userId: input.userId,
-        taskId,
-      },
-      existingTxn || txn,
-    );
+  await TaskFollower.followTask(
+    {
+      userId: input.userId,
+      taskId,
+    },
+    txn,
+  );
 
-    await TaskEvent.create(
-      {
-        taskId,
-        userId: userId!,
-        eventType: 'add_follower',
-        eventUserId: input.userId,
-      },
-      existingTxn || txn,
-    );
+  await TaskEvent.create(
+    {
+      taskId,
+      userId: userId!,
+      eventType: 'add_follower',
+      eventUserId: input.userId,
+    },
+    txn,
+  );
 
-    return await Task.get(taskId, existingTxn || txn);
-  });
+  return await Task.get(taskId, txn);
 }
 
 export async function taskUserUnfollow(
@@ -55,34 +51,31 @@ export async function taskUserUnfollow(
   { input }: ITaskFollowersOptions,
   context: IContext,
 ): Promise<Task> {
-  const { userRole, userId } = context;
+  const { userRole, userId, txn } = context;
   const { taskId } = input;
-  const existingTxn = context.txn;
   // TODO: Improve access controls here. Requirements unclear ATM
   await accessControls.isAllowed(userRole, 'edit', 'task');
   checkUserLoggedIn(userId);
 
-  return await transaction(TaskFollower.knex(), async txn => {
-    await TaskFollower.unfollowTask(
-      {
-        userId: input.userId,
-        taskId,
-      },
-      existingTxn || txn,
-    );
+  await TaskFollower.unfollowTask(
+    {
+      userId: input.userId,
+      taskId,
+    },
+    txn,
+  );
 
-    await TaskEvent.create(
-      {
-        taskId,
-        userId: userId!,
-        eventType: 'remove_follower',
-        eventUserId: input.userId,
-      },
-      existingTxn || txn,
-    );
+  await TaskEvent.create(
+    {
+      taskId,
+      userId: userId!,
+      eventType: 'remove_follower',
+      eventUserId: input.userId,
+    },
+    txn,
+  );
 
-    return await Task.get(taskId, existingTxn || txn);
-  });
+  return await Task.get(taskId, txn);
 }
 
 export interface ICurrentUserTasksFilterOptions extends IPaginationOptions {
@@ -95,7 +88,6 @@ export async function resolveCurrentUserTasks(
   args: ICurrentUserTasksFilterOptions,
   { db, userRole, userId, txn }: IContext,
 ): Promise<ITaskEdges> {
-  // TODO: Improve task access controls
   await accessControls.isAllowed(userRole, 'view', 'task');
   checkUserLoggedIn(userId);
 

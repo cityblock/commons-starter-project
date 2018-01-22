@@ -482,6 +482,17 @@ describe('goal suggestion model', () => {
           txn,
         );
 
+        // accept the care plan suggestion
+        await CarePlanSuggestion.create(
+          {
+            type: 'riskAreaAssessmentSubmission',
+            riskAreaAssessmentSubmissionId: riskAreaAssessmentSubmission.id,
+            patientId: patient.id,
+            suggestionType: 'goal',
+            goalSuggestionTemplateId: goalSuggestionTemplate.id,
+          },
+          txn,
+        );
         const secondGoalSuggestions = await GoalSuggestion.getNewSuggestionsForRiskAreaAssessmentSubmission(
           patient.id,
           riskAreaAssessmentSubmission.id,
@@ -490,6 +501,103 @@ describe('goal suggestion model', () => {
 
         expect(secondGoalSuggestions[0]).toMatchObject(goalSuggestionTemplate2);
         expect(secondGoalSuggestions.length).toEqual(1);
+      });
+    });
+  });
+  describe('utility methods', async () => {
+    it('gets correct current goal suggestion templates', async () => {
+      await transaction(Question.knex(), async txn => {
+        const { goalSuggestionTemplate, answer, clinic, riskArea, question } = await setup(txn);
+
+        const user = await User.create(createMockUser(11, clinic.id, userRole), txn);
+        const patient = await createPatient(createMockPatient(123, clinic.id), user.id, txn);
+
+        await GoalSuggestion.create(
+          {
+            goalSuggestionTemplateId: goalSuggestionTemplate.id,
+            answerId: answer.id,
+          },
+          txn,
+        );
+
+        const riskAreaAssessmentSubmission = await RiskAreaAssessmentSubmission.create(
+          {
+            patientId: patient.id,
+            userId: user.id,
+            riskAreaId: riskArea.id,
+          },
+          txn,
+        );
+
+        await PatientAnswer.create(
+          {
+            patientId: patient.id,
+            type: 'riskAreaAssessmentSubmission',
+            riskAreaAssessmentSubmissionId: riskAreaAssessmentSubmission.id,
+            questionIds: [question.id],
+            answers: [
+              {
+                patientId: patient.id,
+                answerId: answer.id,
+                answerValue: answer.value,
+                applicable: true,
+                questionId: question.id,
+                userId: user.id,
+              },
+            ],
+          },
+          txn,
+        );
+
+        const carePlanSuggestion = await CarePlanSuggestion.create(
+          {
+            type: 'riskAreaAssessmentSubmission',
+            riskAreaAssessmentSubmissionId: riskAreaAssessmentSubmission.id,
+            patientId: patient.id,
+            suggestionType: 'goal',
+            goalSuggestionTemplateId: goalSuggestionTemplate.id,
+          },
+          txn,
+        );
+
+        // should be 1 item since we have created a goal suggestion
+        expect(await GoalSuggestion.currentGoalSuggestionTemplateIdsQuery(patient.id, txn)).toEqual(
+          [{ goalSuggestionTemplateId: goalSuggestionTemplate.id }],
+        );
+
+        await CarePlanSuggestion.accept(carePlanSuggestion, user.id, txn);
+        const patientGoal = await PatientGoal.create(
+          {
+            title: 'Patient Goal',
+            patientId: patient.id,
+            goalSuggestionTemplateId: goalSuggestionTemplate.id,
+            userId: user.id,
+          },
+          txn,
+        );
+
+        // now should be 0 items after accepting care plan suggestion
+        expect(await GoalSuggestion.currentGoalSuggestionTemplateIdsQuery(patient.id, txn)).toEqual(
+          [],
+        );
+        // dismiss
+        await PatientGoal.delete(patientGoal.id, user.id, txn);
+
+        // suggest the goal again
+        await CarePlanSuggestion.create(
+          {
+            type: 'riskAreaAssessmentSubmission',
+            riskAreaAssessmentSubmissionId: riskAreaAssessmentSubmission.id,
+            patientId: patient.id,
+            suggestionType: 'goal',
+            goalSuggestionTemplateId: goalSuggestionTemplate.id,
+          },
+          txn,
+        );
+        // now should be 1 item again
+        expect(await GoalSuggestion.currentGoalSuggestionTemplateIdsQuery(patient.id, txn)).toEqual(
+          [{ goalSuggestionTemplateId: goalSuggestionTemplate.id }],
+        );
       });
     });
   });

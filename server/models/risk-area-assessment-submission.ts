@@ -93,7 +93,7 @@ export default class RiskAreaAssessmentSubmission extends BaseModel {
 
   static async create(
     input: IRiskAreaAssessmentSubmissionCreateFields,
-    txn?: Transaction,
+    txn: Transaction,
   ): Promise<RiskAreaAssessmentSubmission> {
     return await this.query(txn)
       .eager(EAGER_QUERY)
@@ -102,7 +102,7 @@ export default class RiskAreaAssessmentSubmission extends BaseModel {
 
   static async autoOpenIfRequired(
     input: IRiskAreaAssessmentSubmissionCreateFields,
-    txn?: Transaction,
+    txn: Transaction,
   ): Promise<RiskAreaAssessmentSubmission> {
     const { patientId, userId, riskAreaId } = input;
 
@@ -125,7 +125,7 @@ export default class RiskAreaAssessmentSubmission extends BaseModel {
 
   static async complete(
     riskAreaAssessmentSubmissionId: string,
-    txn?: Transaction,
+    txn: Transaction,
   ): Promise<RiskAreaAssessmentSubmission> {
     const riskAreaAssessmentSubmission = await this.query(txn).findOne({
       id: riskAreaAssessmentSubmissionId,
@@ -157,7 +157,7 @@ export default class RiskAreaAssessmentSubmission extends BaseModel {
 
   static async get(
     riskAreaAssessmentSubmissionId: string,
-    txn?: Transaction,
+    txn: Transaction,
   ): Promise<RiskAreaAssessmentSubmission> {
     const riskAreaAssessmentSubmission = await this.query(txn)
       .eager(EAGER_QUERY)
@@ -176,7 +176,7 @@ export default class RiskAreaAssessmentSubmission extends BaseModel {
     riskAreaId: string,
     patientId: string,
     completed: boolean,
-    txn?: Transaction,
+    txn: Transaction,
   ): Promise<RiskAreaAssessmentSubmission | null> {
     const query = this.query(txn)
       .eager(EAGER_QUERY)
@@ -198,7 +198,7 @@ export default class RiskAreaAssessmentSubmission extends BaseModel {
 
   static async delete(
     riskAreaAssessmentSubmissionId: string,
-    txn?: Transaction,
+    txn: Transaction,
   ): Promise<RiskAreaAssessmentSubmission> {
     await this.query(txn)
       .where({ id: riskAreaAssessmentSubmissionId, deletedAt: null })

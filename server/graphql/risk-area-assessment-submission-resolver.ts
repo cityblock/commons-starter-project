@@ -1,4 +1,3 @@
-import { transaction } from 'objection';
 import {
   IRiskAreaAssessmentSubmissionCompleteInput,
   IRiskAreaAssessmentSubmissionCreateInput,
@@ -47,17 +46,12 @@ export async function riskAreaAssessmentSubmissionComplete(
   { input }: IRiskAreaAssessmentSubmissionCompleteArgs,
   context: IContext,
 ) {
-  return await transaction(context.txn || RiskAreaAssessmentSubmission.knex(), async newTxn => {
-    const { userRole, userId } = context;
+  const { userRole, userId, txn } = context;
 
-    await accessControls.isAllowed(userRole, 'create', 'riskAreaAssessmentSubmission');
-    checkUserLoggedIn(userId);
+  await accessControls.isAllowed(userRole, 'create', 'riskAreaAssessmentSubmission');
+  checkUserLoggedIn(userId);
 
-    return await RiskAreaAssessmentSubmission.complete(
-      input.riskAreaAssessmentSubmissionId,
-      newTxn,
-    );
-  });
+  return await RiskAreaAssessmentSubmission.complete(input.riskAreaAssessmentSubmissionId, txn);
 }
 
 export async function resolveRiskAreaAssessmentSubmission(

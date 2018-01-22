@@ -158,7 +158,7 @@ export default class Task extends BaseModel {
     },
   };
 
-  static async get(taskId: string, txn?: Transaction): Promise<Task> {
+  static async get(taskId: string, txn: Transaction): Promise<Task> {
     const task = await this.query(txn)
       .eager(EAGER_QUERY)
       .modifyEager('followers', builder => builder.where('task_follower.deletedAt', null))
@@ -170,7 +170,7 @@ export default class Task extends BaseModel {
     return task;
   }
 
-  static async getIgnoreDeletedAt(taskId: string, txn?: Transaction): Promise<Task> {
+  static async getIgnoreDeletedAt(taskId: string, txn: Transaction): Promise<Task> {
     const task = await this.query(txn)
       .eager(EAGER_QUERY)
       .modifyEager('followers', builder => builder.where('task_follower.deletedAt', null))
@@ -185,7 +185,7 @@ export default class Task extends BaseModel {
   static async getPatientTasks(
     patientId: string,
     { pageNumber, pageSize, orderBy, order }: ITaskPaginationOptions,
-    txn?: Transaction,
+    txn: Transaction,
   ): Promise<IPaginatedResults<Task>> {
     const patientsResult = (await this.query(txn)
       .where({ patientId, deletedAt: null })
@@ -203,7 +203,7 @@ export default class Task extends BaseModel {
   static async getUserTasks(
     userId: string,
     { pageNumber, pageSize, orderBy, order }: ITaskPaginationOptions,
-    txn?: Transaction,
+    txn: Transaction,
   ): Promise<IPaginatedResults<Task>> {
     const subquery = TaskFollower.query(txn)
       .select('taskId')
@@ -223,7 +223,7 @@ export default class Task extends BaseModel {
     };
   }
 
-  static async create(input: ITaskEditableFields, txn?: Transaction) {
+  static async create(input: ITaskEditableFields, txn: Transaction) {
     return await this.query(txn)
       .eager(EAGER_QUERY)
       .modifyEager('followers', builder => builder.where('task_follower.deletedAt', null))
@@ -233,7 +233,7 @@ export default class Task extends BaseModel {
   static async update(
     taskId: string,
     task: Partial<ITaskEditableFields>,
-    txn?: Transaction,
+    txn: Transaction,
   ): Promise<Task> {
     return await this.query(txn)
       .eager(EAGER_QUERY)
@@ -243,7 +243,7 @@ export default class Task extends BaseModel {
       .patchAndFetchById(taskId, task);
   }
 
-  static async delete(taskId: string, txn?: Transaction): Promise<Task | undefined> {
+  static async delete(taskId: string, txn: Transaction): Promise<Task | undefined> {
     await this.query(txn)
       .where({ id: taskId, deletedAt: null })
       .patch({ deletedAt: new Date().toISOString() });
@@ -259,7 +259,7 @@ export default class Task extends BaseModel {
     return task;
   }
 
-  static async complete(taskId: string, userId: string, txn?: Transaction): Promise<Task> {
+  static async complete(taskId: string, userId: string, txn: Transaction): Promise<Task> {
     return this.query(txn)
       .eager(EAGER_QUERY)
       .modifyEager('followers', builder => builder.where('task_follower.deletedAt', null))
@@ -269,7 +269,7 @@ export default class Task extends BaseModel {
       });
   }
 
-  static async uncomplete(taskId: string, userId: string, txn?: Transaction): Promise<Task> {
+  static async uncomplete(taskId: string, userId: string, txn: Transaction): Promise<Task> {
     return this.query(txn)
       .eager(EAGER_QUERY)
       .modifyEager('followers', builder => builder.where('task_follower.deletedAt', null))
@@ -279,7 +279,7 @@ export default class Task extends BaseModel {
       });
   }
 
-  static async getTasksDueSoonForPatient(patientId: string, userId: string, txn?: Transaction) {
+  static async getTasksDueSoonForPatient(patientId: string, userId: string, txn: Transaction) {
     return await this.query(txn)
       .whereRaw('task."dueAt" < now() + interval \'1 day\'')
       .andWhere({ patientId, assignedToId: userId, deletedAt: null })
@@ -293,7 +293,7 @@ export default class Task extends BaseModel {
   static async getTasksWithNotificationsForPatient(
     patientId: string,
     userId: string,
-    txn?: Transaction,
+    txn: Transaction,
   ) {
     return await this.query(txn)
       .whereRaw(
@@ -319,7 +319,7 @@ export default class Task extends BaseModel {
   static async getTaskIdsWithNotificationsForPatient(
     patientId: string,
     userId: string,
-    txn?: Transaction,
+    txn: Transaction,
   ) {
     return await this.query(txn)
       .distinct('task.id')

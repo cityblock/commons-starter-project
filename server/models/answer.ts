@@ -136,7 +136,7 @@ export default class Answer extends BaseModel {
     },
   };
 
-  static async get(answerId: string, txn?: Transaction): Promise<Answer> {
+  static async get(answerId: string, txn: Transaction): Promise<Answer> {
     const answer = await this.getQuery(txn).findOne({ id: answerId, deletedAt: null });
 
     if (!answer) {
@@ -145,11 +145,11 @@ export default class Answer extends BaseModel {
     return answer;
   }
 
-  static async getMultiple(answerIds: string[], txn?: Transaction): Promise<Answer[]> {
+  static async getMultiple(answerIds: string[], txn: Transaction): Promise<Answer[]> {
     return await this.query(txn).where('id', 'in', answerIds);
   }
 
-  static async getAllForQuestion(questionId: string, txn?: Transaction): Promise<Answer[]> {
+  static async getAllForQuestion(questionId: string, txn: Transaction): Promise<Answer[]> {
     return this.getQuery(txn)
       .where({ questionId, deletedAt: null })
       .orderBy('order');
@@ -157,7 +157,7 @@ export default class Answer extends BaseModel {
 
   static async getByComputedFieldSlugAndValue(
     args: IGetByComputedFieldSlugAndValueOptions,
-    txn?: Transaction,
+    txn: Transaction,
   ): Promise<Answer | null> {
     const answer = (await this.query(txn)
       .eager('question.[computedField]')
@@ -170,19 +170,19 @@ export default class Answer extends BaseModel {
     return answer || null;
   }
 
-  static async create(input: IAnswerCreateFields, txn?: Transaction) {
+  static async create(input: IAnswerCreateFields, txn: Transaction) {
     return this.getQuery(txn).insertAndFetch(input);
   }
 
   static async edit(
     answer: Partial<IAnswerEditableFields>,
     answerId: string,
-    txn?: Transaction,
+    txn: Transaction,
   ): Promise<Answer> {
     return await this.getQuery(txn).patchAndFetchById(answerId, answer);
   }
 
-  static async delete(answerId: string, txn?: Transaction): Promise<Answer> {
+  static async delete(answerId: string, txn: Transaction): Promise<Answer> {
     await this.getQuery(txn)
       .where({ id: answerId, deletedAt: null })
       .patch({ deletedAt: new Date().toISOString() });
@@ -194,7 +194,7 @@ export default class Answer extends BaseModel {
     return answer;
   }
 
-  static getQuery(txn?: Transaction) {
+  static getQuery(txn: Transaction) {
     return this.query(txn)
       .eager(EAGER_QUERY)
       .modifyEager('concernSuggestions', builder =>

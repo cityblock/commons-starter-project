@@ -1,4 +1,3 @@
-import { transaction } from 'objection';
 import { ITaskCreateInput, ITaskEdges, ITaskEditInput, ITaskNode } from 'schema';
 import { IPaginationOptions } from '../db';
 import Task, { TaskOrderOptions } from '../models/task';
@@ -40,51 +39,48 @@ export interface IResolveUrgentTasksForPatientOptions {
 }
 
 export async function taskCreate(root: any, { input }: ITaskCreateArgs, context: IContext) {
-  const { userRole, userId } = context;
-  const existingTxn = context.txn;
+  const { userRole, userId, txn } = context;
   const { title, description, dueAt, patientId, assignedToId, patientGoalId, priority } = input;
   await accessControls.isAllowed(userRole, 'create', 'task');
   checkUserLoggedIn(userId);
 
   // TODO: once we allow adding followers on create, create the associated TaskEvent records
-  return await transaction(Task.knex(), async txn => {
-    const task = await Task.create(
-      {
-        createdById: userId!,
-        title,
-        description: description || undefined,
-        dueAt: dueAt || undefined,
-        patientId,
-        priority: priority || undefined,
-        assignedToId: assignedToId || undefined,
-        patientGoalId: patientGoalId || undefined,
-      },
-      existingTxn || txn,
-    );
+  const task = await Task.create(
+    {
+      createdById: userId!,
+      title,
+      description: description || undefined,
+      dueAt: dueAt || undefined,
+      patientId,
+      priority: priority || undefined,
+      assignedToId: assignedToId || undefined,
+      patientGoalId: patientGoalId || undefined,
+    },
+    txn,
+  );
 
+  await TaskEvent.create(
+    {
+      taskId: task.id,
+      userId: userId!,
+      eventType: 'create_task',
+    },
+    txn,
+  );
+
+  if (assignedToId) {
     await TaskEvent.create(
       {
         taskId: task.id,
         userId: userId!,
-        eventType: 'create_task',
+        eventType: 'edit_assignee',
+        eventUserId: assignedToId,
       },
-      existingTxn || txn,
+      txn,
     );
+  }
 
-    if (assignedToId) {
-      await TaskEvent.create(
-        {
-          taskId: task.id,
-          userId: userId!,
-          eventType: 'edit_assignee',
-          eventUserId: assignedToId,
-        },
-        existingTxn || txn,
-      );
-    }
-
-    return task;
-  });
+  return task;
 }
 
 export async function resolveTask(
@@ -97,141 +93,129 @@ export async function resolveTask(
 }
 
 export async function taskEdit(root: any, args: IEditTaskOptions, context: IContext) {
-  const { userId, userRole } = context;
-  const existingTxn = context.txn;
+  const { userId, userRole, txn } = context;
   await accessControls.isAllowedForUser(userRole, 'edit', 'task', args.input.taskId, userId);
   checkUserLoggedIn(userId);
 
-  return await transaction(Task.knex(), async txn => {
-    const task = await Task.get(args.input.taskId, existingTxn || txn);
-    const { priority, dueAt, assignedToId, title, description } = task;
-    // TODO: fix typings here
-    const updatedTask = await Task.update(args.input.taskId, args.input as any, existingTxn || txn);
+  const task = await Task.get(args.input.taskId, txn);
+  const { priority, dueAt, assignedToId, title, description } = task;
+  // TODO: fix typings here
+  const updatedTask = await Task.update(args.input.taskId, args.input as any, txn);
 
-    if (args.input.priority && args.input.priority !== priority) {
-      await TaskEvent.create(
-        {
-          taskId: args.input.taskId,
-          userId: userId!,
-          eventType: 'edit_priority',
-        },
-        existingTxn || txn,
-      );
-    }
+  if (args.input.priority && args.input.priority !== priority) {
+    await TaskEvent.create(
+      {
+        taskId: args.input.taskId,
+        userId: userId!,
+        eventType: 'edit_priority',
+      },
+      txn,
+    );
+  }
 
-    if (args.input.dueAt && args.input.dueAt !== dueAt) {
-      await TaskEvent.create(
-        {
-          taskId: args.input.taskId,
-          userId: userId!,
-          eventType: 'edit_due_date',
-        },
-        existingTxn || txn,
-      );
-    }
+  if (args.input.dueAt && args.input.dueAt !== dueAt) {
+    await TaskEvent.create(
+      {
+        taskId: args.input.taskId,
+        userId: userId!,
+        eventType: 'edit_due_date',
+      },
+      txn,
+    );
+  }
 
-    if (args.input.assignedToId && args.input.assignedToId !== assignedToId) {
-      await TaskEvent.create(
-        {
-          taskId: args.input.taskId,
-          userId: userId!,
-          eventType: 'edit_assignee',
-          eventUserId: args.input.assignedToId,
-        },
-        existingTxn || txn,
-      );
-    }
+  if (args.input.assignedToId && args.input.assignedToId !== assignedToId) {
+    await TaskEvent.create(
+      {
+        taskId: args.input.taskId,
+        userId: userId!,
+        eventType: 'edit_assignee',
+        eventUserId: args.input.assignedToId,
+      },
+      txn,
+    );
+  }
 
-    if (args.input.title && args.input.title !== title) {
-      await TaskEvent.create(
-        {
-          taskId: args.input.taskId,
-          userId: userId!,
-          eventType: 'edit_title',
-        },
-        existingTxn || txn,
-      );
-    }
+  if (args.input.title && args.input.title !== title) {
+    await TaskEvent.create(
+      {
+        taskId: args.input.taskId,
+        userId: userId!,
+        eventType: 'edit_title',
+      },
+      txn,
+    );
+  }
 
-    if (args.input.description && args.input.description !== description) {
-      await TaskEvent.create(
-        {
-          taskId: args.input.taskId,
-          userId: userId!,
-          eventType: 'edit_description',
-        },
-        existingTxn || txn,
-      );
-    }
+  if (args.input.description && args.input.description !== description) {
+    await TaskEvent.create(
+      {
+        taskId: args.input.taskId,
+        userId: userId!,
+        eventType: 'edit_description',
+      },
+      txn,
+    );
+  }
 
-    return updatedTask;
-  });
+  return updatedTask;
 }
 
 export async function taskDelete(root: any, args: IDeleteTaskOptions, context: IContext) {
-  const { userId, userRole } = context;
-  const existingTxn = context.txn;
+  const { userId, userRole, txn } = context;
   await accessControls.isAllowedForUser(userRole, 'edit', 'task', args.input.taskId, userId);
   checkUserLoggedIn(userId);
 
-  return await transaction(Task.knex(), async txn => {
-    const task = await Task.delete(args.input.taskId, existingTxn || txn);
+  const task = await Task.delete(args.input.taskId, txn);
 
-    await TaskEvent.create(
-      {
-        taskId: args.input.taskId,
-        userId: userId!,
-        eventType: 'delete_task',
-      },
-      existingTxn || txn,
-    );
+  await TaskEvent.create(
+    {
+      taskId: args.input.taskId,
+      userId: userId!,
+      eventType: 'delete_task',
+    },
+    txn,
+  );
 
-    return task;
-  });
+  return task;
 }
 
 export async function taskComplete(root: any, args: IEditTaskOptions, context: IContext) {
-  const { userId, userRole } = context;
-  const existingTxn = context.txn;
+  const { userId, userRole, txn } = context;
   await accessControls.isAllowedForUser(userRole, 'edit', 'task', args.input.taskId, userId);
   checkUserLoggedIn(userId);
 
-  return await transaction(Task.knex(), async txn => {
-    const task = Task.complete(args.input.taskId, userId!, existingTxn || txn);
+  const task = Task.complete(args.input.taskId, userId!, txn);
 
-    await TaskEvent.create(
-      {
-        taskId: args.input.taskId,
-        userId: userId!,
-        eventType: 'complete_task',
-      },
-      existingTxn || txn,
-    );
+  await TaskEvent.create(
+    {
+      taskId: args.input.taskId,
+      userId: userId!,
+      eventType: 'complete_task',
+    },
+    txn,
+  );
 
-    return task;
-  });
+  return task;
 }
 
 export async function taskUncomplete(root: any, args: IEditTaskOptions, context: IContext) {
-  const { userId, userRole } = context;
-  const existingTxn = context.txn;
+  const { userId, userRole, txn } = context;
   await accessControls.isAllowedForUser(userRole, 'edit', 'task', args.input.taskId, userId);
   checkUserLoggedIn(userId);
 
-  return await transaction(Task.knex(), async txn => {
-    const task = Task.uncomplete(args.input.taskId, userId!, existingTxn || txn);
+  const task = Task.uncomplete(args.input.taskId, userId!, txn);
 
-    await TaskEvent.create(
-      {
-        taskId: args.input.taskId,
-        userId: userId!,
-        eventType: 'uncomplete_task',
-      },
-      existingTxn || txn,
-    );
+  await TaskEvent.create(
+    {
+      taskId: args.input.taskId,
+      userId: userId!,
+      eventType: 'uncomplete_task',
+    },
+    txn,
+  );
 
-    return task;
-  });
+  return task;
 }
 
 export async function resolvePatientTasks(

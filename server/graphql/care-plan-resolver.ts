@@ -1,9 +1,4 @@
-import { transaction } from 'objection';
-import {
-  ICarePlan,
-  ICarePlanSuggestionAcceptInput,
-  ICarePlanSuggestionDismissInput,
-} from 'schema';
+import { ICarePlan, ICarePlanSuggestionAcceptInput, ICarePlanSuggestionDismissInput } from 'schema';
 import CarePlanSuggestion from '../models/care-plan-suggestion';
 import Concern from '../models/concern';
 import GoalSuggestionTemplate from '../models/goal-suggestion-template';
@@ -83,78 +78,68 @@ export async function carePlanSuggestionAccept(
   { input }: ICarePlanSuggestionAcceptArgs,
   context: IContext,
 ): Promise<CarePlanSuggestion | undefined> {
-  const { userRole, userId } = context;
-  const existingTxn = context.txn;
+  const { userRole, userId, txn } = context;
   await accessControls.isAllowed(userRole, 'edit', 'patient');
   checkUserLoggedIn(userId);
 
-  return await transaction(CarePlanSuggestion.knex(), async txn => {
-    const carePlanSuggestion = await CarePlanSuggestion.get(
-      input.carePlanSuggestionId,
-      existingTxn || txn,
-    );
-    let secondaryCarePlanSuggestion: CarePlanSuggestion | undefined;
+  const carePlanSuggestion = await CarePlanSuggestion.get(input.carePlanSuggestionId, txn);
+  let secondaryCarePlanSuggestion: CarePlanSuggestion | undefined;
 
-    if (carePlanSuggestion) {
-      const { patientId, goalSuggestionTemplateId } = carePlanSuggestion;
-      const { startedAt, concernId, taskTemplateIds } = input;
-      let { patientConcernId } = input;
+  if (carePlanSuggestion) {
+    const { patientId, goalSuggestionTemplateId } = carePlanSuggestion;
+    const { startedAt, concernId, taskTemplateIds } = input;
+    let { patientConcernId } = input;
 
-      if (!!carePlanSuggestion.concern && carePlanSuggestion.concernId) {
-        await PatientConcern.create(
+    if (!!carePlanSuggestion.concern && carePlanSuggestion.concernId) {
+      await PatientConcern.create(
+        {
+          concernId: carePlanSuggestion.concernId,
+          patientId,
+          startedAt: startedAt || undefined,
+          userId: userId!,
+        },
+        txn,
+      );
+    } else if (!!carePlanSuggestion.goalSuggestionTemplate) {
+      if (concernId) {
+        const patientConcern = await PatientConcern.create(
           {
-            concernId: carePlanSuggestion.concernId,
+            concernId,
             patientId,
             startedAt: startedAt || undefined,
             userId: userId!,
           },
-          existingTxn || txn,
+          txn,
         );
-      } else if (!!carePlanSuggestion.goalSuggestionTemplate) {
-        if (concernId) {
-          const patientConcern = await PatientConcern.create(
-            {
-              concernId,
-              patientId,
-              startedAt: startedAt || undefined,
-              userId: userId!,
-            },
-            existingTxn || txn,
-          );
 
-          patientConcernId = patientConcern.id;
+        patientConcernId = patientConcern.id;
 
-          secondaryCarePlanSuggestion = await CarePlanSuggestion.findForPatientAndConcern(
-            patientId,
-            concernId,
-            existingTxn || txn,
-          );
-        }
-
-        await PatientGoal.create(
-          {
-            userId: userId!,
-            goalSuggestionTemplateId,
-            patientId: carePlanSuggestion.patientId,
-            title: carePlanSuggestion.goalSuggestionTemplate.title,
-            patientConcernId: patientConcernId || undefined,
-            taskTemplateIds: taskTemplateIds || [],
-          },
-          existingTxn || txn,
+        secondaryCarePlanSuggestion = await CarePlanSuggestion.findForPatientAndConcern(
+          patientId,
+          concernId,
+          txn,
         );
       }
 
-      await CarePlanSuggestion.accept(carePlanSuggestion.id, userId!, existingTxn || txn);
-
-      if (secondaryCarePlanSuggestion) {
-        await CarePlanSuggestion.accept(
-          secondaryCarePlanSuggestion.id,
-          userId!,
-          existingTxn || txn,
-        );
-      }
+      await PatientGoal.create(
+        {
+          userId: userId!,
+          goalSuggestionTemplateId,
+          patientId: carePlanSuggestion.patientId,
+          title: carePlanSuggestion.goalSuggestionTemplate.title,
+          patientConcernId: patientConcernId || undefined,
+          taskTemplateIds: taskTemplateIds || [],
+        },
+        txn,
+      );
     }
 
-    return carePlanSuggestion;
-  });
+    await CarePlanSuggestion.accept(carePlanSuggestion, userId!, txn);
+
+    if (secondaryCarePlanSuggestion) {
+      await CarePlanSuggestion.accept(secondaryCarePlanSuggestion, userId!, txn);
+    }
+  }
+
+  return carePlanSuggestion;
 }

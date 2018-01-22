@@ -1,5 +1,4 @@
 import { omit } from 'lodash';
-import { transaction } from 'objection';
 import { IPatientGoalCreateInput, IPatientGoalDeleteInput, IPatientGoalEditInput } from 'schema';
 import Concern from '../models/concern';
 import PatientConcern from '../models/patient-concern';
@@ -28,46 +27,43 @@ export async function patientGoalCreate(
   { input }: IPatientGoalCreateArgs,
   context: IContext,
 ) {
-  const { userRole, userId } = context;
-  const existingTxn = context.txn;
+  const { userRole, userId, txn } = context;
   await accessControls.isAllowed(userRole, 'create', 'patientGoal');
   checkUserLoggedIn(userId);
 
   const { concernTitle, concernId, patientId, startedAt } = input;
   const validInput: any = omit(input, ['concernTitle, concernId, startedAt']);
 
-  return await transaction(PatientGoal.knex(), async txn => {
-    // A new concern is getting created
-    if (concernTitle) {
-      const concern = await Concern.create({ title: concernTitle }, existingTxn || txn);
-      const patientConcern = await PatientConcern.create(
-        {
-          concernId: concern.id,
-          patientId,
-          userId: userId!,
-          startedAt: startedAt || undefined,
-        },
-        existingTxn || txn,
-      );
-      (validInput as any).patientConcernId = patientConcern.id;
-      // This goal is getting associated with an existing concern
-    } else if (concernId) {
-      const patientConcern = await PatientConcern.create(
-        {
-          concernId,
-          patientId,
-          userId: userId!,
-          startedAt: startedAt || undefined,
-        },
-        existingTxn || txn,
-      );
-      (validInput as any).patientConcernId = patientConcern.id;
-    }
+  // A new concern is getting created
+  if (concernTitle) {
+    const concern = await Concern.create({ title: concernTitle }, txn);
+    const patientConcern = await PatientConcern.create(
+      {
+        concernId: concern.id,
+        patientId,
+        userId: userId!,
+        startedAt: startedAt || undefined,
+      },
+      txn,
+    );
+    (validInput as any).patientConcernId = patientConcern.id;
+    // This goal is getting associated with an existing concern
+  } else if (concernId) {
+    const patientConcern = await PatientConcern.create(
+      {
+        concernId,
+        patientId,
+        userId: userId!,
+        startedAt: startedAt || undefined,
+      },
+      txn,
+    );
+    (validInput as any).patientConcernId = patientConcern.id;
+  }
 
-    (validInput as any).userId = userId;
+  (validInput as any).userId = userId;
 
-    return await PatientGoal.create(validInput as any, existingTxn || txn);
-  });
+  return await PatientGoal.create(validInput as any, txn);
 }
 
 export async function resolvePatientGoal(

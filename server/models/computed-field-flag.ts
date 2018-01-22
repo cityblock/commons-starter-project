@@ -53,12 +53,12 @@ export default class ComputedFieldFlag extends BaseModel {
 
   static async create(
     { patientAnswerId, userId, reason }: IComputedFieldFlagCreateFields,
-    txn?: Transaction,
+    txn: Transaction,
   ): Promise<ComputedFieldFlag> {
     return this.query(txn).insertAndFetch({ patientAnswerId, userId, reason });
   }
 
-  static async get(computedFieldFlagId: string, txn?: Transaction): Promise<ComputedFieldFlag> {
+  static async get(computedFieldFlagId: string, txn: Transaction): Promise<ComputedFieldFlag> {
     const computedFieldFlag = await this.query(txn).findOne({
       id: computedFieldFlagId,
       deletedAt: null,
@@ -71,13 +71,13 @@ export default class ComputedFieldFlag extends BaseModel {
     return computedFieldFlag;
   }
 
-  static async getAll(txn?: Transaction): Promise<ComputedFieldFlag[]> {
+  static async getAll(txn: Transaction): Promise<ComputedFieldFlag[]> {
     return this.query(txn)
       .orderBy('createdAt', 'desc')
       .where({ deletedAt: null });
   }
 
-  static async delete(computedFieldFlagId: string, txn?: Transaction): Promise<ComputedFieldFlag> {
+  static async delete(computedFieldFlagId: string, txn: Transaction): Promise<ComputedFieldFlag> {
     await this.query(txn)
       .where({ id: computedFieldFlagId, deletedAt: null })
       .patch({ deletedAt: new Date().toISOString() });

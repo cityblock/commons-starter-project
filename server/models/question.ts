@@ -1,5 +1,5 @@
 import { isEmpty, omit } from 'lodash';
-import { transaction, Model, QueryBuilder, RelationMappings, Transaction } from 'objection';
+import { Model, QueryBuilder, RelationMappings, Transaction } from 'objection';
 import Answer from './answer';
 import BaseModel from './base-model';
 import ComputedField from './computed-field';
@@ -173,7 +173,7 @@ export default class Question extends BaseModel {
       });
   }
 
-  static async get(questionId: string, txn?: Transaction): Promise<Question> {
+  static async get(questionId: string, txn: Transaction): Promise<Question> {
     const question = await this.modifyEager(this.query(txn)).findOne({
       id: questionId,
       deletedAt: null,
@@ -185,44 +185,41 @@ export default class Question extends BaseModel {
     return question;
   }
 
-  static async create(input: IQuestionCreateFields, existingTxn?: Transaction) {
+  static async create(input: IQuestionCreateFields, txn: Transaction) {
     const { computedFieldId } = input;
 
     if (computedFieldId) {
       input.answerType = 'radio';
     }
 
-    return await transaction(Question.knex(), async txn => {
-      let question = await this.modifyEager(this.query(existingTxn || txn)).insertAndFetch(input);
+    let question = await this.modifyEager(this.query(txn)).insertAndFetch(input);
 
-      const isDropdownQuestion = input.answerType === 'dropdown';
-      const supportsOtherAnswerText =
-        !computedFieldId && !(input as any).screeningToolId && isDropdownQuestion;
+    const isDropdownQuestion = input.answerType === 'dropdown';
+    const supportsOtherAnswerText =
+      !computedFieldId && !(input as any).screeningToolId && isDropdownQuestion;
 
-      // Safeguard against creating other answer for computed field/screening tool questions
-      if (input.hasOtherTextAnswer && supportsOtherAnswerText) {
-        const otherAnswer = await Answer.create(
-          {
-            questionId: question.id,
-            displayValue: 'Other',
-            value: 'other',
-            valueType: 'string',
-            order: 0,
-          },
-          existingTxn || txn,
-        );
+    // Safeguard against creating other answer for computed field/screening tool questions
+    if (input.hasOtherTextAnswer && supportsOtherAnswerText) {
+      const otherAnswer = await Answer.create(
+        {
+          questionId: question.id,
+          displayValue: 'Other',
+          value: 'other',
+          valueType: 'string',
+          order: 0,
+        },
+        txn,
+      );
 
-        question = await this.modifyEager(this.query(existingTxn || txn)).patchAndFetchById(
-          question.id,
-          { otherTextAnswerId: otherAnswer.id },
-        );
-      }
+      question = await this.modifyEager(this.query(txn)).patchAndFetchById(question.id, {
+        otherTextAnswerId: otherAnswer.id,
+      });
+    }
 
-      return question;
-    });
+    return question;
   }
 
-  static async getAllForRiskArea(riskAreaId: string, txn?: Transaction): Promise<Question[]> {
+  static async getAllForRiskArea(riskAreaId: string, txn: Transaction): Promise<Question[]> {
     return this.modifyEager(this.query(txn))
       .where({ riskAreaId, deletedAt: null, screeningToolId: null })
       .orderBy('order');
@@ -230,7 +227,7 @@ export default class Question extends BaseModel {
 
   static async getAllForScreeningTool(
     screeningToolId: string,
-    txn?: Transaction,
+    txn: Transaction,
   ): Promise<Question[]> {
     return this.modifyEager(this.query(txn))
       .where({ screeningToolId, deletedAt: null })
@@ -239,7 +236,7 @@ export default class Question extends BaseModel {
 
   static async getAllForProgressNoteTemplate(
     progressNoteTemplateId: string,
-    txn?: Transaction,
+    txn: Transaction,
   ): Promise<Question[]> {
     return this.modifyEager(this.query(txn))
       .where({ progressNoteTemplateId, deletedAt: null })
@@ -254,68 +251,63 @@ export default class Question extends BaseModel {
   static async edit(
     question: Partial<IQuestionEditableFields>,
     questionId: string,
-    existingTxn?: Transaction,
+    txn: Transaction,
   ): Promise<Question> {
-    return await transaction(Question.knex(), async txn => {
-      const fetchedQuestion = await this.get(questionId, existingTxn || txn);
-      const { otherTextAnswerId } = fetchedQuestion;
-      const currentHasOtherAnswer = !!otherTextAnswerId;
-      const isComputedFieldOrScreeningToolQuestion =
-        !!fetchedQuestion.computedFieldId || !!fetchedQuestion.screeningToolId;
-      const changingToNonDropdownAnswerType =
-        !!question.answerType && question.answerType !== 'dropdown';
-      const isNotAndWillNotBeDropdownQuestion =
-        fetchedQuestion.answerType !== 'dropdown' && question.answerType !== 'dropdown';
+    const fetchedQuestion = await this.get(questionId, txn);
+    const { otherTextAnswerId } = fetchedQuestion;
+    const currentHasOtherAnswer = !!otherTextAnswerId;
+    const isComputedFieldOrScreeningToolQuestion =
+      !!fetchedQuestion.computedFieldId || !!fetchedQuestion.screeningToolId;
+    const changingToNonDropdownAnswerType =
+      !!question.answerType && question.answerType !== 'dropdown';
+    const isNotAndWillNotBeDropdownQuestion =
+      fetchedQuestion.answerType !== 'dropdown' && question.answerType !== 'dropdown';
 
-      // Safeguard against breaking computed field/screening tool questions
-      if (!isComputedFieldOrScreeningToolQuestion) {
-        if (currentHasOtherAnswer && changingToNonDropdownAnswerType) {
-          return Promise.reject('Cannot change answerType for a question with an "other" answer');
-        }
-
-        if (question.hasOtherTextAnswer && isNotAndWillNotBeDropdownQuestion) {
-          return Promise.reject('Cannot add an "other" answer to a non-dropdown question');
-        }
-
-        if (question.hasOtherTextAnswer === true) {
-          if (!currentHasOtherAnswer) {
-            const newOtherAnswer = await Answer.create(
-              {
-                questionId,
-                displayValue: 'Other',
-                value: 'other',
-                valueType: 'string',
-                order: 0,
-              },
-              existingTxn || txn,
-            );
-
-            (question as any).otherTextAnswerId = newOtherAnswer.id;
-          }
-        } else if (question.hasOtherTextAnswer === false) {
-          if (currentHasOtherAnswer) {
-            await Answer.delete(otherTextAnswerId!, existingTxn || txn);
-
-            (question as any).otherTextAnswerId = null;
-          }
-        }
+    // Safeguard against breaking computed field/screening tool questions
+    if (!isComputedFieldOrScreeningToolQuestion) {
+      if (currentHasOtherAnswer && changingToNonDropdownAnswerType) {
+        return Promise.reject('Cannot change answerType for a question with an "other" answer');
       }
 
-      const editInput = omit(question, ['hasOtherTextAnswer']);
-
-      // It's possible the editInput contains no keys, so we protect against invalid SQL here
-      if (isEmpty(editInput)) {
-        return await this.get(questionId, existingTxn || txn);
-      } else {
-        return await this.modifyEager(this.query(existingTxn || txn)).patchAndFetchById(
-          questionId,
-          editInput,
-        );
+      if (question.hasOtherTextAnswer && isNotAndWillNotBeDropdownQuestion) {
+        return Promise.reject('Cannot add an "other" answer to a non-dropdown question');
       }
-    });
+
+      if (question.hasOtherTextAnswer === true) {
+        if (!currentHasOtherAnswer) {
+          const newOtherAnswer = await Answer.create(
+            {
+              questionId,
+              displayValue: 'Other',
+              value: 'other',
+              valueType: 'string',
+              order: 0,
+            },
+            txn,
+          );
+
+          (question as any).otherTextAnswerId = newOtherAnswer.id;
+        }
+      } else if (question.hasOtherTextAnswer === false) {
+        if (currentHasOtherAnswer) {
+          await Answer.delete(otherTextAnswerId!, txn);
+
+          (question as any).otherTextAnswerId = null;
+        }
+      }
+    }
+
+    const editInput = omit(question, ['hasOtherTextAnswer']);
+
+    // It's possible the editInput contains no keys, so we protect against invalid SQL here
+    if (isEmpty(editInput)) {
+      return await this.get(questionId, txn);
+    } else {
+      return await this.modifyEager(this.query(txn)).patchAndFetchById(questionId, editInput);
+    }
   }
 
-  static async delete(questionId: string, txn?: Transaction): Promise<Question> {
+  static async delete(questionId: string, txn: Transaction): Promise<Question> {
     await this.query(txn)
       .where({ id: questionId, deletedAt: null })
       .patch({ deletedAt: new Date().toISOString() });

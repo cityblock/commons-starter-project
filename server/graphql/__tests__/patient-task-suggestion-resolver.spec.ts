@@ -34,7 +34,7 @@ async function setup(txn: Transaction): Promise<ISetup> {
   const user = await User.create(createMockUser(11, clinic.id, userRole, 'a@b.com'), txn);
   const riskArea = await createRiskArea({ title: 'Risk Area' }, txn);
 
-  await Concern.create({ title: 'Concern' });
+  await Concern.create({ title: 'Concern' }, txn);
   const taskTemplate = await TaskTemplate.create(
     {
       title: 'Housing',

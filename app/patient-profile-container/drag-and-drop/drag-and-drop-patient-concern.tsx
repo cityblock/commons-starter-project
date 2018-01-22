@@ -13,7 +13,14 @@ interface IProps {
 }
 
 export const DnDPatientConcern: React.StatelessComponent<IProps> = (props: IProps) => {
-  const { onClick, patientConcern, selected, inactive, selectedTaskId, taskIdsWithNotifications } = props;
+  const {
+    onClick,
+    patientConcern,
+    selected,
+    inactive,
+    selectedTaskId,
+    taskIdsWithNotifications,
+  } = props;
 
   return (
     <Draggable

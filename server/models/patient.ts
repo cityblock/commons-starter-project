@@ -1,4 +1,4 @@
-import { transaction, Model, RelationMappings, Transaction } from 'objection';
+import { Model, RelationMappings, Transaction } from 'objection';
 import { IPaginatedResults, IPaginationOptions } from '../db';
 import { adminTasksConcernTitle } from '../lib/consts';
 import BaseModel from './base-model';
@@ -111,7 +111,7 @@ export default class Patient extends BaseModel {
     },
   };
 
-  static async get(patientId: string, txn?: Transaction): Promise<Patient> {
+  static async get(patientId: string, txn: Transaction): Promise<Patient> {
     const patient = await this.query(txn).findById(patientId);
 
     if (!patient) {
@@ -122,7 +122,7 @@ export default class Patient extends BaseModel {
 
   static async getAll(
     { pageNumber, pageSize }: IPaginationOptions,
-    txn?: Transaction,
+    txn: Transaction,
   ): Promise<IPaginatedResults<Patient>> {
     const patientsResult = (await this.query(txn).page(pageNumber, pageSize)) as any;
 
@@ -132,7 +132,7 @@ export default class Patient extends BaseModel {
     };
   }
 
-  static async getBy(input: IGetByOptions, txn?: Transaction): Promise<Patient | null> {
+  static async getBy(input: IGetByOptions, txn: Transaction): Promise<Patient | null> {
     if (!input.field) {
       return null;
     }
@@ -148,30 +148,25 @@ export default class Patient extends BaseModel {
     return patient;
   }
 
-  static async setup(input: IPatientEditableFields, userId: string, existingTxn?: Transaction) {
-    return await transaction(Patient.knex(), async txn => {
-      const adminConcern = await Concern.findOrCreateByTitle(
-        adminTasksConcernTitle,
-        existingTxn || txn,
-      );
-      const patient = await this.query(existingTxn || txn).insertAndFetch(input);
+  static async setup(input: IPatientEditableFields, userId: string, txn: Transaction) {
+    const adminConcern = await Concern.findOrCreateByTitle(adminTasksConcernTitle, txn);
+    const patient = await this.query(txn).insertAndFetch(input);
 
-      // TODO: once we actually figure out our patient onboarding flow, let's move to the resolver
-      await PatientConcern.create(
-        {
-          concernId: adminConcern.id,
-          patientId: patient.id,
-          userId,
-          startedAt: new Date().toISOString(),
-        },
-        existingTxn || txn,
-      );
+    // TODO: once we actually figure out our patient onboarding flow, let's move to the resolver
+    await PatientConcern.create(
+      {
+        concernId: adminConcern.id,
+        patientId: patient.id,
+        userId,
+        startedAt: new Date().toISOString(),
+      },
+      txn,
+    );
 
-      return patient;
-    });
+    return patient;
   }
 
-  static async edit(patient: IEditPatient, patientId: string, txn?: Transaction): Promise<Patient> {
+  static async edit(patient: IEditPatient, patientId: string, txn: Transaction): Promise<Patient> {
     return await this.query(txn).patchAndFetchById(patientId, patient);
   }
 
@@ -179,7 +174,7 @@ export default class Patient extends BaseModel {
   static async addAthenaPatientId(
     athenaPatientId: number,
     patientId: string,
-    txn?: Transaction,
+    txn: Transaction,
   ): Promise<Patient> {
     return this.query(txn).patchAndFetchById(patientId, { athenaPatientId });
   }
@@ -188,7 +183,7 @@ export default class Patient extends BaseModel {
     query: string,
     { pageNumber, pageSize }: IPaginationOptions,
     userId: string,
-    txn?: Transaction,
+    txn: Transaction,
   ): Promise<IPaginatedResults<Patient & IPatientSearchResult>> {
     if (!query) {
       return Promise.reject('Must provide a search term');
@@ -224,7 +219,7 @@ export default class Patient extends BaseModel {
   static async getPatientsWithUrgentTasks(
     { pageNumber, pageSize }: IPaginationOptions,
     userId: string,
-    txn?: Transaction,
+    txn: Transaction,
   ): Promise<IPaginatedResults<Patient>> {
     const patientsResult = await this.query(txn)
       .whereRaw(
@@ -253,7 +248,7 @@ export default class Patient extends BaseModel {
   static async getPatientsNewToCareTeam(
     { pageNumber, pageSize }: IPaginationOptions,
     userId: string,
-    txn?: Transaction,
+    txn: Transaction,
   ): Promise<IPaginatedResults<Patient>> {
     const patientsResult = await this.query(txn)
       .whereRaw(
@@ -279,7 +274,7 @@ export default class Patient extends BaseModel {
   static async getPatientsWithPendingSuggestions(
     { pageNumber, pageSize }: IPaginationOptions,
     userId: string,
-    txn?: Transaction,
+    txn: Transaction,
   ): Promise<IPaginatedResults<Patient>> {
     const patientsResult = await this.query(txn)
       .whereRaw(
@@ -304,7 +299,7 @@ export default class Patient extends BaseModel {
   static async getPatientsWithMissingInfo(
     { pageNumber, pageSize }: IPaginationOptions,
     userId: string,
-    txn?: Transaction,
+    txn: Transaction,
   ): Promise<IPaginatedResults<Patient>> {
     const patientsResult = await this.query(txn)
       .where({ dateOfBirth: null })
@@ -326,7 +321,7 @@ export default class Patient extends BaseModel {
   static async getPatientsWithNoRecentEngagement(
     { pageNumber, pageSize }: IPaginationOptions,
     userId: string,
-    txn?: Transaction,
+    txn: Transaction,
   ): Promise<IPaginatedResults<Patient>> {
     const patientsResult = await this.query(txn)
       .whereRaw(
@@ -355,7 +350,7 @@ export default class Patient extends BaseModel {
   static async getPatientsWithOutOfDateMAP(
     { pageNumber, pageSize }: IPaginationOptions,
     userId: string,
-    txn?: Transaction,
+    txn: Transaction,
   ): Promise<IPaginatedResults<Patient>> {
     const patientsResult = await this.query(txn)
       .whereRaw(

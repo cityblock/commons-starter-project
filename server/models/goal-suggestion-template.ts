@@ -43,7 +43,7 @@ export default class GoalSuggestionTemplate extends BaseModel {
 
   static async get(
     goalSuggestionTemplateId: string,
-    txn?: Transaction,
+    txn: Transaction,
   ): Promise<GoalSuggestionTemplate> {
     const goalSuggestionTemplate = await this.query(txn)
       .eager('taskTemplates')
@@ -56,7 +56,7 @@ export default class GoalSuggestionTemplate extends BaseModel {
     return goalSuggestionTemplate;
   }
 
-  static async create(input: IGoalSuggestionTemplateEditableFields, txn?: Transaction) {
+  static async create(input: IGoalSuggestionTemplateEditableFields, txn: Transaction) {
     return await this.query(txn)
       .eager('taskTemplates')
       .modifyEager('taskTemplates', builder => builder.where('deletedAt', null))
@@ -66,7 +66,7 @@ export default class GoalSuggestionTemplate extends BaseModel {
   static async edit(
     goalSuggestionTemplateId: string,
     goalSuggestionTemplate: Partial<IGoalSuggestionTemplateEditableFields>,
-    txn?: Transaction,
+    txn: Transaction,
   ): Promise<GoalSuggestionTemplate> {
     return await this.query(txn)
       .eager('taskTemplates')
@@ -76,7 +76,7 @@ export default class GoalSuggestionTemplate extends BaseModel {
 
   static async getAll(
     { orderBy, order }: IGoalSuggestionTemplateOrderOptions,
-    txn?: Transaction,
+    txn: Transaction,
   ): Promise<GoalSuggestionTemplate[]> {
     return await this.query(txn)
       .where('deletedAt', null)
@@ -87,7 +87,7 @@ export default class GoalSuggestionTemplate extends BaseModel {
 
   static async delete(
     goalSuggestionTemplateId: string,
-    txn?: Transaction,
+    txn: Transaction,
   ): Promise<GoalSuggestionTemplate> {
     await this.query(txn)
       .where({ id: goalSuggestionTemplateId, deletedAt: null })

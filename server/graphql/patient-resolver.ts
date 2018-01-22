@@ -1,5 +1,5 @@
 import { isNil, omitBy } from 'lodash';
-import { transaction, Transaction } from 'objection';
+import { Transaction } from 'objection';
 import {
   IPatient,
   IPatientEditInput,
@@ -61,15 +61,14 @@ export async function patientSetup(
   { input }: IPatientSetupOptions,
   context: IContext,
 ): Promise<IPatient> {
-  const { redoxApi, userRole, userId, logger } = context;
-  const existingTxn = context.txn;
+  const { redoxApi, userRole, userId, logger, txn } = context;
   await accessControls.isAllowedForUser(userRole, 'create', 'patient');
   checkUserLoggedIn(userId);
 
-  const result = await transaction(Patient.knex(), async txn => {
-    const patient = await Patient.setup(input, userId!, existingTxn || txn);
-    const department = await Clinic.get(input.homeClinicId, existingTxn || txn);
-    const redoxPatient = await redoxApi.patientCreate({
+  const patient = await Patient.setup(input, userId!, txn);
+  const department = await Clinic.get(input.homeClinicId, txn);
+  const redoxPatient = await redoxApi.patientCreate(
+    {
       id: patient.id,
       firstName: input.firstName,
       homeClinicId: String(department.departmentId),
@@ -100,30 +99,26 @@ export async function patientSetup(
       country: null,
       county: null,
       state: null,
-    });
-    const athenaPatientId = getAthenaPatientIdFromCreate(redoxPatient);
-    if (!athenaPatientId) {
-      throw new Error('Athena patient was not correctly created');
-    }
-    const patientWithAthenaId = await Patient.addAthenaPatientId(
-      athenaPatientId,
-      patient.id,
-      existingTxn || txn,
-    );
+    },
+    txn,
+  );
 
-    await CareTeam.create(
-      {
-        userId: userId!,
-        patientId: patientWithAthenaId.id,
-      },
-      existingTxn || txn,
-    );
+  const athenaPatientId = getAthenaPatientIdFromCreate(redoxPatient);
+  if (!athenaPatientId) {
+    throw new Error('Athena patient was not correctly created');
+  }
+  const patientWithAthenaId = await Patient.addAthenaPatientId(athenaPatientId, patient.id, txn);
 
-    return patientWithAthenaId;
-  });
+  await CareTeam.create(
+    {
+      userId: userId!,
+      patientId: patientWithAthenaId.id,
+    },
+    txn,
+  );
 
-  logger.log(`SETUP patient ${result.id} by ${userId}`, 2);
-  return result;
+  logger.log(`SETUP patient ${patientWithAthenaId.id} by ${userId}`, 2);
+  return patientWithAthenaId;
 }
 
 export interface IEditPatientRequiredFields {
@@ -197,7 +192,7 @@ export async function resolvePatientDashboardBuilder(
   patientEndpoint: (
     pageOptions: IPaginationOptions,
     userId: string,
-    txn?: Transaction,
+    txn: Transaction,
   ) => Promise<IPaginatedResults<Patient>>,
 ): Promise<IPatientForDashboardEdges> {
   await accessControls.isAllowedForUser(userRole, 'view', 'patient');

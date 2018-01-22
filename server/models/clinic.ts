@@ -54,11 +54,11 @@ export default class Clinic extends BaseModel {
     },
   };
 
-  static async create(clinic: IClinicEditableFields, txn?: Transaction): Promise<Clinic> {
+  static async create(clinic: IClinicEditableFields, txn: Transaction): Promise<Clinic> {
     return await this.query(txn).insertAndFetch(clinic);
   }
 
-  static async get(clinicId: string, txn?: Transaction): Promise<Clinic> {
+  static async get(clinicId: string, txn: Transaction): Promise<Clinic> {
     const clinic = await this.query(txn).findById(clinicId);
 
     if (!clinic) {
@@ -71,21 +71,21 @@ export default class Clinic extends BaseModel {
   static async update(
     clinicId: string,
     clinic: IClinicEditableFields,
-    txn?: Transaction,
+    txn: Transaction,
   ): Promise<Clinic> {
     return await this.query(txn).patchAndFetchById(clinicId, clinic);
   }
 
   static async getAll(
     { pageNumber, pageSize }: IPaginationOptions,
-    txn?: Transaction,
+    txn: Transaction,
   ): Promise<IPaginatedResults<Clinic>> {
     const clinics = (await this.query(txn).page(pageNumber, pageSize)) as any;
 
     return clinics;
   }
 
-  static async getBy(input: IGetByOptions, txn?: Transaction): Promise<Clinic | null> {
+  static async getBy(input: IGetByOptions, txn: Transaction): Promise<Clinic | null> {
     if (!input.field) {
       return null;
     }

@@ -171,34 +171,26 @@ export default class User extends Model {
     this.updatedAt = new Date().toISOString();
   }
 
-  static async getLastLoggedIn(userId: string, txn?: Transaction): Promise<string | undefined> {
+  static async getLastLoggedIn(userId: string, txn: Transaction): Promise<string | undefined> {
     // TODO: Figure out how to return select fields via knex
     const user = await this.query(txn).findById(userId);
     return user ? user.lastLoginAt : undefined;
   }
 
-  static async create(user: ICreateUser, txn?: Transaction): Promise<User> {
+  static async create(user: ICreateUser, txn: Transaction): Promise<User> {
     return await this.query(txn).insertAndFetch(user);
   }
 
-  static async update(
-    userId: string,
-    user: Partial<IUpdateUser>,
-    txn?: Transaction,
-  ): Promise<User> {
+  static async update(userId: string, user: Partial<IUpdateUser>, txn: Transaction): Promise<User> {
     return await this.query(txn).patchAndFetchById(userId, user);
   }
 
   // NOTE: Separated because it is admin only - a user should not be able to change their own role
-  static async updateUserRole(
-    userId: string,
-    userRole: UserRole,
-    txn?: Transaction,
-  ): Promise<User> {
+  static async updateUserRole(userId: string, userRole: UserRole, txn: Transaction): Promise<User> {
     return await this.query(txn).patchAndFetchById(userId, { userRole });
   }
 
-  static async get(userId: string, txn?: Transaction): Promise<User> {
+  static async get(userId: string, txn: Transaction): Promise<User> {
     const user = await this.query(txn).findOne({ id: userId, deletedAt: null });
     if (!user) {
       return Promise.reject(`No such user: ${userId}`);
@@ -206,7 +198,7 @@ export default class User extends Model {
     return user;
   }
 
-  static async getBy(input: IGetByOptions, txn?: Transaction): Promise<User | null> {
+  static async getBy(input: IGetByOptions, txn: Transaction): Promise<User | null> {
     if (!input.field) {
       return null;
     }
@@ -225,7 +217,7 @@ export default class User extends Model {
 
   static async getAll(
     { pageNumber, pageSize, hasLoggedIn, orderBy, order }: IUserFilterOptions,
-    txn?: Transaction,
+    txn: Transaction,
   ): Promise<IPaginatedResults<User>> {
     const query = this.query(txn).where('deletedAt', null);
 
@@ -242,7 +234,7 @@ export default class User extends Model {
     };
   }
 
-  static async delete(userId: string, txn?: Transaction): Promise<User> {
+  static async delete(userId: string, txn: Transaction): Promise<User> {
     await this.query(txn)
       .where({ id: userId, deletedAt: null })
       .patch({ deletedAt: new Date().toISOString() });

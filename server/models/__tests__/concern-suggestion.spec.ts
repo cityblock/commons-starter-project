@@ -97,11 +97,14 @@ describe('concern suggestion model', () => {
         );
 
         const concernsForAnswer = await ConcernSuggestion.getForAnswer(answer.id, txn);
-        const answersForConcern = await ConcernSuggestion.getForConcern(concern.id, txn);
+        const answersIdsForConcern = (await ConcernSuggestion.getForConcern(concern.id, txn)).map(
+          a => a.id,
+        );
 
         expect(concernsForAnswer[0].id).toEqual(concern.id);
-        expect(answersForConcern[0].id).toEqual(answer.id);
-        expect(answersForConcern[1].id).toEqual(answer2.id);
+
+        expect(answersIdsForConcern).toContain(answer.id);
+        expect(answersIdsForConcern).toContain(answer2.id);
       });
     });
 
@@ -464,6 +467,17 @@ describe('concern suggestion model', () => {
           },
           txn,
         );
+        // accept the care plan suggestion
+        await CarePlanSuggestion.create(
+          {
+            type: 'riskAreaAssessmentSubmission',
+            riskAreaAssessmentSubmissionId: riskAreaAssessmentSubmission.id,
+            patientId: patient.id,
+            suggestionType: 'concern',
+            concernId: concern1.id,
+          },
+          txn,
+        );
 
         const secondConcernSuggestions = await ConcernSuggestion.getNewSuggestionsForRiskAreaAssessmentSubmission(
           patient.id,
@@ -474,6 +488,7 @@ describe('concern suggestion model', () => {
         expect(secondConcernSuggestions[0].id).toEqual(concern2.id);
         expect(secondConcernSuggestions.length).toEqual(1);
 
+        // added, but without a corresponding suggestion accepted
         await PatientConcern.create(
           {
             order: 2,
@@ -485,7 +500,6 @@ describe('concern suggestion model', () => {
         );
 
         // Now it should not be returned
-
         const fourthConcernSuggestions = await ConcernSuggestion.getNewSuggestionsForRiskAreaAssessmentSubmission(
           patient.id,
           riskAreaAssessmentSubmission.id,
@@ -493,6 +507,103 @@ describe('concern suggestion model', () => {
         );
 
         expect(fourthConcernSuggestions.length).toEqual(0);
+      });
+    });
+  });
+  describe('utility methods', async () => {
+    it('gets correct current concern suggestions', async () => {
+      await transaction(Question.knex(), async txn => {
+        const { riskArea, question, answer } = await setup(txn);
+        const clinic = await Clinic.create(createMockClinic(), txn);
+        const user = await User.create(createMockUser(11, clinic.id, 'physician'), txn);
+        const patient = await createPatient(createMockPatient(123, clinic.id), user.id, txn);
+        const concern = await Concern.create({ title: 'Housing' }, txn);
+
+        await ConcernSuggestion.create(
+          {
+            concernId: concern.id,
+            answerId: answer.id,
+          },
+          txn,
+        );
+        const riskAreaAssessmentSubmission = await RiskAreaAssessmentSubmission.create(
+          {
+            patientId: patient.id,
+            userId: user.id,
+            riskAreaId: riskArea.id,
+          },
+          txn,
+        );
+
+        await PatientAnswer.create(
+          {
+            patientId: patient.id,
+            type: 'riskAreaAssessmentSubmission',
+            riskAreaAssessmentSubmissionId: riskAreaAssessmentSubmission.id,
+            questionIds: [question.id],
+            answers: [
+              {
+                patientId: patient.id,
+                answerId: answer.id,
+                answerValue: answer.value,
+                applicable: true,
+                questionId: question.id,
+                userId: user.id,
+              },
+            ],
+          },
+          txn,
+        );
+
+        const carePlanSuggestion = await CarePlanSuggestion.create(
+          {
+            type: 'riskAreaAssessmentSubmission',
+            riskAreaAssessmentSubmissionId: riskAreaAssessmentSubmission.id,
+            patientId: patient.id,
+            suggestionType: 'concern',
+            concernId: concern.id,
+          },
+          txn,
+        );
+
+        // should be 1 item since we have created a concern suggestion
+        expect(await ConcernSuggestion.currentConcernSuggestionIdsQuery(patient.id, txn)).toEqual([
+          { concernId: concern.id },
+        ]);
+
+        await CarePlanSuggestion.accept(carePlanSuggestion, user.id, txn);
+        const patientConcern = await PatientConcern.create(
+          {
+            order: 2,
+            concernId: concern.id,
+            patientId: patient.id,
+            userId: user.id,
+          },
+          txn,
+        );
+
+        // now should be 0 items after accepting care plan suggestion
+        expect(await ConcernSuggestion.currentConcernSuggestionIdsQuery(patient.id, txn)).toEqual(
+          [],
+        );
+        // dismiss
+        await PatientConcern.delete(patientConcern.id, user.id, txn);
+
+        // suggest the concern again
+        await CarePlanSuggestion.create(
+          {
+            type: 'riskAreaAssessmentSubmission',
+            riskAreaAssessmentSubmissionId: riskAreaAssessmentSubmission.id,
+            patientId: patient.id,
+            suggestionType: 'concern',
+            concernId: concern.id,
+          },
+          txn,
+        );
+        // now should be 1 item again
+        expect(await ConcernSuggestion.currentConcernSuggestionIdsQuery(patient.id, txn)).toEqual([
+          { concernId: concern.id },
+        ]);
       });
     });
   });

@@ -65,7 +65,7 @@ export default class EventNotification extends BaseModel {
     },
   };
 
-  static async get(eventNotificationId: string, txn?: Transaction): Promise<EventNotification> {
+  static async get(eventNotificationId: string, txn: Transaction): Promise<EventNotification> {
     const eventNotification = await this.query(txn)
       .eager(EAGER_QUERY)
       .modifyEager('taskEvent', builder => builder.where('deletedAt', null))
@@ -78,7 +78,7 @@ export default class EventNotification extends BaseModel {
 
   static async create(
     { taskEventId, userId }: IEventNotificationOptions,
-    txn?: Transaction,
+    txn: Transaction,
   ): Promise<EventNotification> {
     return await this.query(txn)
       .eager(EAGER_QUERY)
@@ -88,7 +88,7 @@ export default class EventNotification extends BaseModel {
 
   static async createTaskNotifications(
     { initiatingUserId, taskEventId, taskId }: ICreateTaskNotificationsOptions,
-    txn?: Transaction,
+    txn: Transaction,
   ) {
     const task = await Task.getIgnoreDeletedAt(taskId, txn);
 
@@ -108,7 +108,7 @@ export default class EventNotification extends BaseModel {
     return result.length;
   }
 
-  static async delete(eventNotificationId: string, txn?: Transaction): Promise<EventNotification> {
+  static async delete(eventNotificationId: string, txn: Transaction): Promise<EventNotification> {
     await this.query(txn)
       .where({ id: eventNotificationId, deletedAt: null })
       .patch({ deletedAt: new Date().toISOString() });
@@ -120,7 +120,7 @@ export default class EventNotification extends BaseModel {
     return eventNotification;
   }
 
-  static async dismiss(eventNotificationId: string, txn?: Transaction): Promise<EventNotification> {
+  static async dismiss(eventNotificationId: string, txn: Transaction): Promise<EventNotification> {
     return await this.query(txn)
       .eager(EAGER_QUERY)
       .modifyEager('taskEvent', builder => builder.where('deletedAt', null))
@@ -130,7 +130,7 @@ export default class EventNotification extends BaseModel {
   static async dismissAllForUserTask(
     taskId: string,
     userId: string,
-    txn?: Transaction,
+    txn: Transaction,
   ): Promise<EventNotification[]> {
     const taskEventIdsToDismissQuery = this.query(txn)
       .joinRelation('taskEvent')
@@ -151,7 +151,7 @@ export default class EventNotification extends BaseModel {
   static async getUserEventNotifications(
     userId: string,
     { pageNumber, pageSize }: IPaginationOptions,
-    txn?: Transaction,
+    txn: Transaction,
   ): Promise<IPaginatedResults<EventNotification>> {
     const eventNotifications = (await this.query(txn)
       .where({ userId, deletedAt: null, seenAt: null })
@@ -170,7 +170,7 @@ export default class EventNotification extends BaseModel {
   static async getUserTaskEventNotifications(
     userId: string,
     { pageNumber, pageSize }: IPaginationOptions,
-    txn?: Transaction,
+    txn: Transaction,
   ): Promise<IPaginatedResults<EventNotification>> {
     const eventNotifications = (await this.query(txn)
       .whereNot({ taskEventId: null })
@@ -189,7 +189,7 @@ export default class EventNotification extends BaseModel {
   static async getTaskEventNotifications(
     taskId: string,
     { pageNumber, pageSize }: IPaginationOptions,
-    txn?: Transaction,
+    txn: Transaction,
   ): Promise<IPaginatedResults<EventNotification>> {
     const eventNotifications = (await this.query(txn)
       .joinRelation('taskEvent')
@@ -211,7 +211,7 @@ export default class EventNotification extends BaseModel {
   static async getForUserTask(
     taskId: string,
     userId: string,
-    txn?: Transaction,
+    txn: Transaction,
   ): Promise<EventNotification[]> {
     const eventNotifications = await this.query(txn)
       .whereNot({ taskEventId: null })

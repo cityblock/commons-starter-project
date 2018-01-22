@@ -49,7 +49,7 @@ export default class ConcernDiagnosisCode extends BaseModel {
 
   static async create(
     input: IConcernDiagnosisCodeCreateFields,
-    txn?: Transaction,
+    txn: Transaction,
   ): Promise<Concern> {
     const { concernId, diagnosisCodeId } = input;
     const existingConcernDiagnosisCode = await this.query(txn)
@@ -70,7 +70,7 @@ export default class ConcernDiagnosisCode extends BaseModel {
   static async delete(
     concernId: string,
     diagnosisCodeId: string,
-    txn?: Transaction,
+    txn: Transaction,
   ): Promise<Concern> {
     await this.query(txn)
       .where({ concernId, diagnosisCodeId, deletedAt: null })

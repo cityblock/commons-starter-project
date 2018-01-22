@@ -1,4 +1,3 @@
-import { transaction } from 'objection';
 import {
   ITaskComment,
   ITaskCommentCreateInput,
@@ -27,30 +26,25 @@ export async function taskCommentCreate(
   context: IContext,
 ): Promise<TaskComment> {
   const { taskId, body } = input;
-  const { userId, userRole } = context;
-  const existingTxn = context.txn;
+  const { userId, userRole, txn } = context;
+
   // TODO: Improve access controls here. Requirements unclear ATM
   await accessControls.isAllowed(userRole, 'edit', 'task');
   checkUserLoggedIn(userId);
 
-  return await transaction(TaskComment.knex() as any, async txn => {
-    const taskComment = await TaskComment.create(
-      { userId: userId!, taskId, body },
-      existingTxn || txn,
-    );
+  const taskComment = await TaskComment.create({ userId: userId!, taskId, body }, txn);
 
-    await TaskEvent.create(
-      {
-        taskId,
-        userId: userId!,
-        eventType: 'add_comment',
-        eventCommentId: taskComment.id,
-      },
-      existingTxn || txn,
-    );
+  await TaskEvent.create(
+    {
+      taskId,
+      userId: userId!,
+      eventType: 'add_comment',
+      eventCommentId: taskComment.id,
+    },
+    txn,
+  );
 
-    return taskComment;
-  });
+  return taskComment;
 }
 
 export interface ITaskCommentEditOptions {
@@ -62,28 +56,25 @@ export async function taskCommentEdit(
   { input }: ITaskCommentEditOptions,
   context: IContext,
 ): Promise<TaskComment> {
-  const { userRole, userId } = context;
-  const existingTxn = context.txn;
+  const { userRole, userId, txn } = context;
   const { taskCommentId, body } = input;
   // TODO: Improve access controls here. Requirements unclear ATM
   await accessControls.isAllowed(userRole, 'edit', 'task');
   checkUserLoggedIn(userId);
 
-  return await transaction(TaskComment.knex() as any, async txn => {
-    const taskComment = await TaskComment.update(taskCommentId, body, existingTxn || txn);
+  const taskComment = await TaskComment.update(taskCommentId, body, txn);
 
-    await TaskEvent.create(
-      {
-        taskId: taskComment.taskId,
-        userId: userId!,
-        eventType: 'edit_comment',
-        eventCommentId: taskComment.id,
-      },
-      existingTxn || txn,
-    );
+  await TaskEvent.create(
+    {
+      taskId: taskComment.taskId,
+      userId: userId!,
+      eventType: 'edit_comment',
+      eventCommentId: taskComment.id,
+    },
+    txn,
+  );
 
-    return taskComment;
-  });
+  return taskComment;
 }
 
 export interface ITaskCommentDeleteOptions {
@@ -95,28 +86,25 @@ export async function taskCommentDelete(
   { input }: ITaskCommentDeleteOptions,
   context: IContext,
 ): Promise<TaskComment> {
-  const { userRole, userId } = context;
-  const existingTxn = context.txn;
+  const { userRole, userId, txn } = context;
   const { taskCommentId } = input;
   // TODO: Improve access controls here. Requirements unclear ATM
   await accessControls.isAllowed(userRole, 'edit', 'task');
   checkUserLoggedIn(userId);
 
-  return await transaction(TaskComment.knex() as any, async txn => {
-    const taskComment = await TaskComment.delete(taskCommentId, existingTxn || txn);
+  const taskComment = await TaskComment.delete(taskCommentId, txn);
 
-    await TaskEvent.create(
-      {
-        taskId: taskComment.taskId,
-        userId: userId!,
-        eventType: 'delete_comment',
-        eventCommentId: taskComment.id,
-      },
-      existingTxn || txn,
-    );
+  await TaskEvent.create(
+    {
+      taskId: taskComment.taskId,
+      userId: userId!,
+      eventType: 'delete_comment',
+      eventCommentId: taskComment.id,
+    },
+    txn,
+  );
 
-    return taskComment;
-  });
+  return taskComment;
 }
 
 export async function resolveTaskComments(

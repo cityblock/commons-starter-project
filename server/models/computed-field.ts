@@ -49,14 +49,11 @@ export default class ComputedField extends BaseModel {
     },
   };
 
-  static async create(
-    input: IComputedFieldCreateFields,
-    txn?: Transaction,
-  ): Promise<ComputedField> {
+  static async create(input: IComputedFieldCreateFields, txn: Transaction): Promise<ComputedField> {
     return await this.query(txn).insertAndFetch(input);
   }
 
-  static async get(computedFieldId: string, txn?: Transaction): Promise<ComputedField> {
+  static async get(computedFieldId: string, txn: Transaction): Promise<ComputedField> {
     const computedField = await this.query(txn).findOne({ id: computedFieldId, deletedAt: null });
 
     if (!computedField) {
@@ -69,7 +66,7 @@ export default class ComputedField extends BaseModel {
   static async getBy(
     fieldName: GetByOptions,
     fieldValue: string,
-    txn?: Transaction,
+    txn: Transaction,
   ): Promise<ComputedField | null> {
     const computedField = await this.query(txn)
       .where(fieldName, fieldValue)
@@ -83,17 +80,17 @@ export default class ComputedField extends BaseModel {
     return computedField;
   }
 
-  static async getBySlug(slug: string, txn?: Transaction): Promise<ComputedField | null> {
+  static async getBySlug(slug: string, txn: Transaction): Promise<ComputedField | null> {
     return await this.getBy('slug', slug, txn);
   }
 
-  static async getByLabel(label: string, txn?: Transaction): Promise<ComputedField | null> {
+  static async getByLabel(label: string, txn: Transaction): Promise<ComputedField | null> {
     return await this.getBy('label', label, txn);
   }
 
   static async getAll(
     { orderBy, order }: IComputedFieldOrderOptions,
-    txn?: Transaction,
+    txn: Transaction,
   ): Promise<ComputedField[]> {
     return await this.query(txn)
       .where('deletedAt', null)
@@ -102,7 +99,7 @@ export default class ComputedField extends BaseModel {
 
   static async getForSchema(
     { orderBy, order }: IComputedFieldOrderOptions,
-    txn?: Transaction,
+    txn: Transaction,
   ): Promise<ComputedField[]> {
     return (await this.query(txn)
       .eager('question.answers')
@@ -113,7 +110,7 @@ export default class ComputedField extends BaseModel {
       .orderBy(orderBy, order)) as any;
   }
 
-  static async delete(computedFieldId: string, txn?: Transaction): Promise<ComputedField> {
+  static async delete(computedFieldId: string, txn: Transaction): Promise<ComputedField> {
     await this.query(txn)
       .where({ id: computedFieldId, deletedAt: null })
       .patch({ deletedAt: new Date().toISOString() });

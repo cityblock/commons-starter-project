@@ -10,7 +10,7 @@ import GoalSuggestion from '../models/goal-suggestion';
 export const createSuggestionsForRiskAreaAssessmentSubmission = async (
   patientId: string,
   riskAreaAssessmentSubmissionId: string,
-  txn?: Transaction,
+  txn: Transaction,
 ) => {
   const newConcernSuggestions = await ConcernSuggestion.getNewSuggestionsForRiskAreaAssessmentSubmission(
     patientId,
@@ -54,7 +54,7 @@ export const createSuggestionsForRiskAreaAssessmentSubmission = async (
 export const createSuggestionsForPatientScreeningToolSubmission = async (
   patientId: string,
   patientScreeningToolSubmissionId: string,
-  txn?: Transaction,
+  txn: Transaction,
 ) => {
   const newConcernSuggestions = await ConcernSuggestion.getNewSuggestionsForPatientScreeningToolSubmission(
     patientId,
@@ -100,7 +100,7 @@ export const createSuggestionsForComputedFieldAnswer = async (
   patientId: string,
   patientAnswerId: string,
   computedFieldId: string,
-  txn?: Transaction,
+  txn: Transaction,
 ) => {
   const newConcernSuggestions = await ConcernSuggestion.getNewSuggestionsForPatientAnswer(
     patientId,

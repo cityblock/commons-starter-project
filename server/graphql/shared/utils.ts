@@ -2,7 +2,7 @@ import * as base64 from 'base-64';
 import * as express from 'express';
 import { GraphQLBoolean, GraphQLNonNull, GraphQLObjectType } from 'graphql';
 import { decode, sign, verify } from 'jsonwebtoken';
-import { Transaction } from 'objection';
+import { transaction, Transaction } from 'objection';
 import RedoxApi from '../../apis/redox';
 import config from '../../config';
 import Db from '../../db';
@@ -20,7 +20,7 @@ export interface IContext {
   userRole: UserRole;
   userId?: string;
   logger: ILogger;
-  txn?: Transaction;
+  txn: Transaction;
 }
 
 export function formatRelayEdge(node: any, id: string) {
@@ -39,7 +39,7 @@ export interface IJWTData {
 export const signJwt = (jwtData: IJWTData) =>
   sign(jwtData, config.JWT_SECRET, { expiresIn: config.JWT_EXPIRY });
 
-export async function parseAndVerifyJwt(jwt: string, txn?: Transaction) {
+export async function parseAndVerifyJwt(jwt: string, txn: Transaction) {
   // verify throws an error if jwt is not valid and if expiry passed
   await verify(jwt, config.JWT_SECRET);
 
@@ -67,31 +67,31 @@ const isInvalidLogin = (tokenLastLoginAt: string, userLastLoginAt: string | unde
 export async function getGraphQLContext(
   request: express.Request,
   logger: ILogger,
-  txn?: Transaction,
+  existingTxn?: Transaction,
 ): Promise<IContext> {
   const authToken = request.headers.auth_token as string;
   const db = await Db.get();
   const redoxApi = await RedoxApi.get();
 
+  const txn = existingTxn || (await transaction.start(User));
   let userRole: UserRole = 'anonymousUser';
   let userId;
 
   if (authToken) {
     try {
-      const parsedToken = await parseAndVerifyJwt(authToken);
+      const parsedToken = await parseAndVerifyJwt(authToken, txn);
       userId = parsedToken.userId;
-      userRole = parsedToken.userRole;
+      userRole = parsedToken.userRole as UserRole;
     } catch (e) {
       return {
         db,
         redoxApi,
-        userRole: 'anonymousUser',
+        userRole: 'anonymousUser' as UserRole,
         logger,
         txn,
       };
     }
   }
-
   return {
     userId,
     userRole,
@@ -100,6 +100,11 @@ export async function getGraphQLContext(
     logger,
     txn,
   };
+}
+
+export async function formatResponse(response: any, { context }: any): Promise<any> {
+  await context.txn.commit();
+  return response;
 }
 
 export interface IPageInfo {

@@ -89,7 +89,7 @@ export default class PatientTaskSuggestion extends BaseModel {
 
   static async get(
     taskSuggestionId: string,
-    txn?: Transaction,
+    txn: Transaction,
   ): Promise<PatientTaskSuggestion | undefined> {
     const taskSuggestion = await this.query(txn)
       .eager(EAGER_QUERY)
@@ -103,7 +103,7 @@ export default class PatientTaskSuggestion extends BaseModel {
 
   static async create(
     input: IPatientTaskSuggestionCreateArgs,
-    txn?: Transaction,
+    txn: Transaction,
   ): Promise<PatientTaskSuggestion> {
     return await this.query(txn)
       .eager(EAGER_QUERY)
@@ -112,7 +112,7 @@ export default class PatientTaskSuggestion extends BaseModel {
 
   static async createMultiple(
     input: IPatientTaskSuggestionCreateMultipleArgs,
-    txn?: Transaction,
+    txn: Transaction,
   ): Promise<PatientTaskSuggestion[]> {
     const { suggestions } = input;
 
@@ -121,7 +121,7 @@ export default class PatientTaskSuggestion extends BaseModel {
 
   static async getForPatient(
     patientId: string,
-    txn?: Transaction,
+    txn: Transaction,
   ): Promise<PatientTaskSuggestion[]> {
     return await this.query(txn)
       .eager(EAGER_QUERY)
@@ -136,7 +136,7 @@ export default class PatientTaskSuggestion extends BaseModel {
   static async accept(
     patientTaskSuggestionId: string,
     acceptedById: string,
-    txn?: Transaction,
+    txn: Transaction,
   ): Promise<PatientTaskSuggestion> {
     return await this.query(txn)
       .eager(EAGER_QUERY)
@@ -148,7 +148,7 @@ export default class PatientTaskSuggestion extends BaseModel {
 
   static async dismiss(
     input: IPatientTaskSuggestionDismissArgs,
-    txn?: Transaction,
+    txn: Transaction,
   ): Promise<PatientTaskSuggestion> {
     const { patientTaskSuggestionId, dismissedById, dismissedReason } = input;
     return await this.query(txn)

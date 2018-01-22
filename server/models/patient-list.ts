@@ -41,7 +41,7 @@ export default class PatientList extends BaseModel {
     },
   };
 
-  static async get(patientListId: string, txn?: Transaction): Promise<PatientList> {
+  static async get(patientListId: string, txn: Transaction): Promise<PatientList> {
     const patientList = await this.query(txn).findOne({ id: patientListId, deletedAt: null });
 
     if (!patientList) {
@@ -51,20 +51,20 @@ export default class PatientList extends BaseModel {
     return patientList;
   }
 
-  static async getAll(txn?: Transaction): Promise<PatientList[]> {
+  static async getAll(txn: Transaction): Promise<PatientList[]> {
     return this.query(txn)
       .orderBy('order', 'ASC')
       .where({ deletedAt: null });
   }
 
-  static async create(input: IPatientListEditableFields, txn?: Transaction): Promise<PatientList> {
+  static async create(input: IPatientListEditableFields, txn: Transaction): Promise<PatientList> {
     return this.query(txn).insertAndFetch(input);
   }
 
   static async edit(
     input: Partial<IPatientListEditableFields>,
     patientListId: string,
-    txn?: Transaction,
+    txn: Transaction,
   ): Promise<PatientList> {
     const edited = await this.query(txn).patchAndFetchById(patientListId, input);
 
@@ -75,7 +75,7 @@ export default class PatientList extends BaseModel {
     return edited;
   }
 
-  static async delete(patientListId: string, txn?: Transaction): Promise<PatientList> {
+  static async delete(patientListId: string, txn: Transaction): Promise<PatientList> {
     await this.query(txn)
       .where({ id: patientListId, deletedAt: null })
       .patch({ deletedAt: new Date().toISOString() });

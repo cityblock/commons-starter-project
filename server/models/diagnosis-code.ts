@@ -57,7 +57,7 @@ export default class DiagnosisCode extends BaseModel {
     },
   };
 
-  static async get(diagnosisCodeId: string, txn?: Transaction): Promise<DiagnosisCode> {
+  static async get(diagnosisCodeId: string, txn: Transaction): Promise<DiagnosisCode> {
     const diagnosisCode = await this.query(txn).findOne({ id: diagnosisCodeId, deletedAt: null });
 
     if (!diagnosisCode) {
@@ -66,10 +66,7 @@ export default class DiagnosisCode extends BaseModel {
     return diagnosisCode;
   }
 
-  static async create(
-    input: IDiagnosisCodeCreateFields,
-    txn?: Transaction,
-  ): Promise<DiagnosisCode> {
+  static async create(input: IDiagnosisCodeCreateFields, txn: Transaction): Promise<DiagnosisCode> {
     const { codesetName, code, version } = input;
     const cleanedCode = getCleanedCode(code);
     const existingDiagnosisCode = await this.getByCodesetNameAndCodeAndVersion(
@@ -88,7 +85,7 @@ export default class DiagnosisCode extends BaseModel {
 
   static async getAll(
     { orderBy, order }: IDiagnosisCodeOrderOptions,
-    txn?: Transaction,
+    txn: Transaction,
   ): Promise<DiagnosisCode[]> {
     return await this.query(txn)
       .where('deletedAt', null)
@@ -99,7 +96,7 @@ export default class DiagnosisCode extends BaseModel {
     codesetName: string,
     code: string,
     version: string,
-    txn?: Transaction,
+    txn: Transaction,
   ): Promise<DiagnosisCode | null> {
     const diagnosisCode = await this.query(txn).findOne({
       codesetName,
@@ -115,7 +112,7 @@ export default class DiagnosisCode extends BaseModel {
     return diagnosisCode;
   }
 
-  static async delete(diagnosisCodeId: string, txn?: Transaction): Promise<DiagnosisCode> {
+  static async delete(diagnosisCodeId: string, txn: Transaction): Promise<DiagnosisCode> {
     await this.query(txn)
       .where({ id: diagnosisCodeId, deletedAt: null })
       .patch({ deletedAt: new Date().toISOString() });

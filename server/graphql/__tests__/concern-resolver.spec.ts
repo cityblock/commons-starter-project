@@ -21,100 +21,109 @@ describe('concern resolver', () => {
 
   describe('resolve concern', () => {
     it('fetches a concern', async () => {
-      const concern = await Concern.create({ title: 'Housing' });
-      const query = `{ concern(concernId: "${concern.id}") { title } }`;
-      const result = await graphql(schema, query, null, { userRole });
-      expect(cloneDeep(result.data!.concern)).toMatchObject({
-        title: 'Housing',
+      await transaction(Concern.knex(), async txn => {
+        const concern = await Concern.create({ title: 'Housing' }, txn);
+        const query = `{ concern(concernId: "${concern.id}") { title } }`;
+        const result = await graphql(schema, query, null, { userRole, txn });
+        expect(cloneDeep(result.data!.concern)).toMatchObject({
+          title: 'Housing',
+        });
       });
     });
   });
 
   describe('concern create', () => {
     it('creates a concern', async () => {
-      const mutation = `mutation {
-        concernCreate(input: { title: "Housing" }) {
-          title
-        }
-      }`;
-      const result = await graphql(schema, mutation, null, { userRole });
-      expect(cloneDeep(result.data!.concernCreate)).toMatchObject({
-        title: 'Housing',
+      await transaction(Concern.knex(), async txn => {
+        const mutation = `mutation {
+          concernCreate(input: { title: "Housing" }) {
+            title
+          }
+        }`;
+        const result = await graphql(schema, mutation, null, { userRole, txn });
+        expect(cloneDeep(result.data!.concernCreate)).toMatchObject({
+          title: 'Housing',
+        });
       });
     });
   });
 
   describe('concern edit', () => {
     it('edits a concern', async () => {
-      const concern = await Concern.create({ title: 'housing' });
-      const mutation = `mutation {
-        concernEdit(input: { title: "Medical", concernId: "${concern.id}" }) {
-          title
-        }
-      }`;
-      const result = await graphql(schema, mutation, null, { userRole });
-      expect(cloneDeep(result.data!.concernEdit)).toMatchObject({
-        title: 'Medical',
+      await transaction(Concern.knex(), async txn => {
+        const concern = await Concern.create({ title: 'housing' }, txn);
+        const mutation = `mutation {
+          concernEdit(input: { title: "Medical", concernId: "${concern.id}" }) {
+            title
+          }
+        }`;
+        const result = await graphql(schema, mutation, null, { userRole, txn });
+        expect(cloneDeep(result.data!.concernEdit)).toMatchObject({
+          title: 'Medical',
+        });
       });
     });
   });
 
   describe('concern delete', () => {
     it('deletes a concern', async () => {
-      const concern = await Concern.create({ title: 'housing' });
-      const mutation = `mutation {
-        concernDelete(input: { concernId: "${concern.id}" }) {
-          title, deletedAt
-        }
-      }`;
-      const result = await graphql(schema, mutation, null, { userRole });
-      expect(cloneDeep(result.data!.concernDelete).deletedAt).not.toBeFalsy();
+      await transaction(Concern.knex(), async txn => {
+        const concern = await Concern.create({ title: 'housing' }, txn);
+        const mutation = `mutation {
+          concernDelete(input: { concernId: "${concern.id}" }) {
+            title, deletedAt
+          }
+        }`;
+        const result = await graphql(schema, mutation, null, { userRole, txn });
+        expect(cloneDeep(result.data!.concernDelete).deletedAt).not.toBeFalsy();
+      });
     });
   });
 
   describe('concerns', () => {
     it('returns concerns', async () => {
-      const concern1 = await Concern.create({ title: 'housing' });
-      const concern2 = await Concern.create({ title: 'medical' });
+      await transaction(Concern.knex(), async txn => {
+        const concern1 = await Concern.create({ title: 'housing' }, txn);
+        const concern2 = await Concern.create({ title: 'medical' }, txn);
 
-      const query = `{
-        concerns { title }
-      }`;
+        const query = `{
+          concerns { title }
+        }`;
 
-      const result = await graphql(schema, query, null, {
-        db,
-        userRole: 'admin',
+        const result = await graphql(schema, query, null, {
+          db,
+          userRole: 'admin',
+          txn,
+        });
+        const concernTitles = cloneDeep(result.data!.concerns).map((c: Concern) => c.title);
+        expect(concernTitles).toContain(concern2.title);
+        expect(concernTitles).toContain(concern1.title);
       });
-      expect(cloneDeep(result.data!.concerns)).toMatchObject([
-        {
-          title: concern2.title,
-        },
-        {
-          title: concern1.title,
-        },
-      ]);
     });
 
     it('returns concerns in a custom order', async () => {
-      const concern1 = await Concern.create({ title: 'abc' });
-      const concern2 = await Concern.create({ title: 'def' });
+      await transaction(Concern.knex(), async txn => {
+        const concern1 = await Concern.create({ title: 'abc' }, txn);
+        const concern2 = await Concern.create({ title: 'def' }, txn);
 
-      const query = `{
-        concerns(orderBy: titleAsc) { title }
-      }`;
+        const query = `{
+          concerns(orderBy: titleAsc) { title }
+        }`;
 
-      const result = await graphql(schema, query, null, {
-        db,
-        userRole: 'admin',
+        const result = await graphql(schema, query, null, {
+          db,
+          userRole: 'admin',
+          txn,
+        });
+        expect(cloneDeep(result.data!.concerns)).toMatchObject([
+          {
+            title: concern1.title,
+          },
+          {
+            title: concern2.title,
+          },
+        ]);
       });
-      expect(cloneDeep(result.data!.concerns)).toMatchObject([
-        {
-          title: concern1.title,
-        },
-        {
-          title: concern2.title,
-        },
-      ]);
     });
   });
 

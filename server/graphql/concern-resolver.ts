@@ -34,23 +34,23 @@ export interface IRemoveDiagnosisCodeArgs {
 }
 
 export async function concernCreate(root: any, { input }: IConcernCreateArgs, context: IContext) {
-  const { userRole } = context;
+  const { userRole, txn } = context;
   await accessControls.isAllowed(userRole, 'create', 'concern');
 
-  return await Concern.create(input);
+  return await Concern.create(input, txn);
 }
 
 export async function resolveConcern(
   root: any,
   args: { concernId: string },
-  { db, userRole }: IContext,
+  { db, userRole, txn }: IContext,
 ) {
   await accessControls.isAllowed(userRole, 'view', 'concern');
 
-  return await Concern.get(args.concernId);
+  return await Concern.get(args.concernId, txn);
 }
 
-export async function resolveConcerns(root: any, args: any, { db, userRole }: IContext) {
+export async function resolveConcerns(root: any, args: any, { db, userRole, txn }: IContext) {
   await accessControls.isAllowed(userRole, 'view', 'concern');
 
   const { order, orderBy } = formatOrderOptions<ConcernOrderOptions>(args.orderBy, {
@@ -58,27 +58,27 @@ export async function resolveConcerns(root: any, args: any, { db, userRole }: IC
     order: 'desc',
   });
 
-  return await Concern.getAll({ orderBy, order });
+  return await Concern.getAll({ orderBy, order }, txn);
 }
 
 export async function concernEdit(
   root: any,
   args: IEditConcernOptions,
-  { db, userId, userRole }: IContext,
+  { db, userId, userRole, txn }: IContext,
 ) {
   await accessControls.isAllowedForUser(userRole, 'edit', 'concern');
 
-  return Concern.edit(args.input.concernId, args.input);
+  return Concern.edit(args.input.concernId, args.input, txn);
 }
 
 export async function concernDelete(
   root: any,
   args: IDeleteConcernOptions,
-  { db, userRole }: IContext,
+  { db, userRole, txn }: IContext,
 ) {
   await accessControls.isAllowedForUser(userRole, 'edit', 'concern');
 
-  return Concern.delete(args.input.concernId);
+  return Concern.delete(args.input.concernId, txn);
 }
 
 export async function concernAddDiagnosisCode(

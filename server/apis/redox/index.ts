@@ -1,4 +1,5 @@
 import 'fetch-everywhere';
+import { Transaction } from 'objection';
 import { stringify } from 'querystring';
 import { IPatientSetupInput } from 'schema';
 import config from '../../config';
@@ -60,13 +61,17 @@ export default class RedoxApi {
     };
   }
 
-  async patientCreate(patient: IPatientSetupInput & { id: string }) {
+  async patientCreate(patient: IPatientSetupInput & { id: string }, txn: Transaction) {
     const formattedPatientOptions = formatPatientCreateOptions(patient);
-    const result = await this.fetch<IRedoxPatientCreateResponse>(
-      config.REDOX_API_URL,
-      formattedPatientOptions,
-    );
-    return result;
+    try {
+      const result = await this.fetch<IRedoxPatientCreateResponse>(
+        config.REDOX_API_URL,
+        formattedPatientOptions,
+      );
+      return result;
+    } catch {
+      await txn.rollback(new Error('Athena patient was not correctly created'));
+    }
   }
 
   async patientEncountersGet(patientId: string): Promise<IRedoxClinicalSummaryQueryResponse> {

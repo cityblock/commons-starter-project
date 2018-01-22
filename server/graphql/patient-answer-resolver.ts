@@ -1,4 +1,3 @@
-import { transaction } from 'objection';
 import {
   IAnswerFilterTypeEnum,
   IPatientAnswersCreateInput,
@@ -30,8 +29,7 @@ export async function patientAnswersCreate(
   { input }: IPatientAnswersCreateArgs,
   context: IContext,
 ) {
-  const { userRole, userId } = context;
-  const existingTxn = context.txn;
+  const { userRole, userId, txn } = context;
   await accessControls.isAllowed(userRole, 'create', 'patientAnswer');
   checkUserLoggedIn(userId);
 
@@ -44,56 +42,54 @@ export async function patientAnswersCreate(
     progressNoteId,
   } = input;
 
-  return await transaction(PatientAnswer.knex(), async txn => {
-    if (progressNoteId) {
-      return await PatientAnswer.create(
-        {
-          patientId,
-          questionIds,
-          progressNoteId,
-          type: 'progressNote',
-          answers: patientAnswers.map(patientAnswer => ({
-            ...patientAnswer,
-            userId: userId!,
-          })),
-        },
-        existingTxn || txn,
-      );
-    } else if (patientScreeningToolSubmissionId) {
-      return await PatientAnswer.create(
-        {
-          patientId,
-          questionIds,
-          type: 'patientScreeningToolSubmission',
-          patientScreeningToolSubmissionId,
-          answers: patientAnswers.map(patientAnswer => ({
-            ...patientAnswer,
-            userId: userId!,
-          })),
-        },
-        existingTxn || txn,
-      );
-    } else if (riskAreaAssessmentSubmissionId) {
-      return await PatientAnswer.create(
-        {
-          patientId,
-          questionIds,
-          type: 'riskAreaAssessmentSubmission',
-          riskAreaAssessmentSubmissionId,
-          answers: patientAnswers.map(patientAnswer => ({
-            ...patientAnswer,
-            userId: userId!,
-          })),
-        },
-        existingTxn || txn,
-      );
-    } else {
-      throw new Error(
-        'either riskAreaAssessmentSubmissionId, patientScreeningToolSubmissionId or' +
-          ' progressNoteId are required',
-      );
-    }
-  });
+  if (progressNoteId) {
+    return await PatientAnswer.create(
+      {
+        patientId,
+        questionIds,
+        progressNoteId,
+        type: 'progressNote',
+        answers: patientAnswers.map(patientAnswer => ({
+          ...patientAnswer,
+          userId: userId!,
+        })),
+      },
+      txn,
+    );
+  } else if (patientScreeningToolSubmissionId) {
+    return await PatientAnswer.create(
+      {
+        patientId,
+        questionIds,
+        type: 'patientScreeningToolSubmission',
+        patientScreeningToolSubmissionId,
+        answers: patientAnswers.map(patientAnswer => ({
+          ...patientAnswer,
+          userId: userId!,
+        })),
+      },
+      txn,
+    );
+  } else if (riskAreaAssessmentSubmissionId) {
+    return await PatientAnswer.create(
+      {
+        patientId,
+        questionIds,
+        type: 'riskAreaAssessmentSubmission',
+        riskAreaAssessmentSubmissionId,
+        answers: patientAnswers.map(patientAnswer => ({
+          ...patientAnswer,
+          userId: userId!,
+        })),
+      },
+      txn,
+    );
+  } else {
+    throw new Error(
+      'either riskAreaAssessmentSubmissionId, patientScreeningToolSubmissionId or' +
+        ' progressNoteId are required',
+    );
+  }
 }
 
 export async function resolvePatientAnswers(

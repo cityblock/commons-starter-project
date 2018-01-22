@@ -1,5 +1,5 @@
 import { uniqBy } from 'lodash';
-import { transaction, Model, RelationMappings, Transaction } from 'objection';
+import { Model, RelationMappings, Transaction } from 'objection';
 import Answer from './answer';
 import BaseModel from './base-model';
 import CarePlanSuggestion from './care-plan-suggestion';
@@ -61,7 +61,7 @@ export default class ConcernSuggestion extends BaseModel {
     },
   };
 
-  static async getForConcern(concernId: string, txn?: Transaction): Promise<Answer[]> {
+  static async getForConcern(concernId: string, txn: Transaction): Promise<Answer[]> {
     const concernSuggestions = await this.query(txn)
       .where('concernId', concernId)
       .andWhere('deletedAt', null)
@@ -72,7 +72,7 @@ export default class ConcernSuggestion extends BaseModel {
     );
   }
 
-  static async getForAnswer(answerId: string, txn?: Transaction): Promise<Concern[]> {
+  static async getForAnswer(answerId: string, txn: Transaction): Promise<Concern[]> {
     const concernSuggestions = (await this.query(txn)
       .where('answerId', answerId)
       .andWhere('deletedAt', null)
@@ -85,7 +85,7 @@ export default class ConcernSuggestion extends BaseModel {
 
   static async getForScreeningToolScoreRange(
     screeningToolScoreRangeId: string,
-    txn?: Transaction,
+    txn: Transaction,
   ): Promise<Concern[]> {
     const concernSuggestions = (await this.query(txn)
       .where('screeningToolScoreRangeId', screeningToolScoreRangeId)
@@ -100,26 +100,12 @@ export default class ConcernSuggestion extends BaseModel {
   static async getNewSuggestionsForRiskAreaAssessmentSubmission(
     patientId: string,
     riskAreaAssessmentSubmissionId: string,
-    txn?: Transaction,
+    txn: Transaction,
   ): Promise<Concern[]> {
-    const existingPatientCarePlanSuggestionsQuery = CarePlanSuggestion.query(txn)
-      .where('patientId', patientId)
-      .andWhere('dismissedAt', null)
-      .andWhere('acceptedAt', null)
-      .andWhere('suggestionType', 'concern')
-      .select('concernId');
-
-    const concernSuggestions = (await this.query(txn)
-      .eager('concern')
-      .joinRelation('answer')
-      .join('patient_answer', 'answer.id', 'patient_answer.answerId')
-      .leftOuterJoin('patient_concern', 'concern_suggestion.concernId', 'patient_concern.concernId')
-      .where('patient_answer.riskAreaAssessmentSubmissionId', riskAreaAssessmentSubmissionId)
-      .andWhere('patient_answer.deletedAt', null)
-      .andWhere('concern_suggestion.concernId', 'not in', existingPatientCarePlanSuggestionsQuery)
-      .andWhere('patient_answer.patientId', patientId)
-      .andWhere('patient_answer.applicable', true)
-      .andWhere('patient_concern.id', null)) as ConcernSuggestion[];
+    const concernSuggestions = (await this.getAnswerConcernSuggestionsQuery(patientId, txn).where(
+      'patient_answer.riskAreaAssessmentSubmissionId',
+      riskAreaAssessmentSubmissionId,
+    )) as ConcernSuggestion[];
 
     return concernSuggestions.map((suggestion: ConcernSuggestion) => suggestion.concern);
   }
@@ -127,9 +113,9 @@ export default class ConcernSuggestion extends BaseModel {
   static async getNewSuggestionsForPatientScreeningToolSubmission(
     patientId: string,
     patientScreeningToolSubmissionId: string,
-    txn?: Transaction,
+    txn: Transaction,
   ): Promise<Concern[]> {
-    const existingPatientCarePlanSuggestionsQuery = CarePlanSuggestion.query(txn)
+    const currentConcernSuggestionIdsQuery = CarePlanSuggestion.query(txn)
       .where('patientId', patientId)
       .andWhere('dismissedAt', null)
       .andWhere('acceptedAt', null)
@@ -137,17 +123,13 @@ export default class ConcernSuggestion extends BaseModel {
       .select('concernId');
 
     // concern suggestions based on answers
-    const answerConcernSuggestions = (await this.query(txn)
-      .eager('concern')
-      .joinRelation('answer')
-      .join('patient_answer', 'answer.id', 'patient_answer.answerId')
-      .leftOuterJoin('patient_concern', 'concern_suggestion.concernId', 'patient_concern.concernId')
-      .where('patient_answer.patientScreeningToolSubmissionId', patientScreeningToolSubmissionId)
-      .andWhere('patient_answer.deletedAt', null)
-      .andWhere('concern_suggestion.concernId', 'not in', existingPatientCarePlanSuggestionsQuery)
-      .andWhere('patient_answer.patientId', patientId)
-      .andWhere('patient_answer.applicable', true)
-      .andWhere('patient_concern.id', null)) as ConcernSuggestion[];
+    const answerConcernSuggestions = (await this.getAnswerConcernSuggestionsQuery(
+      patientId,
+      txn,
+    ).andWhere(
+      'patient_answer.patientScreeningToolSubmissionId',
+      patientScreeningToolSubmissionId,
+    )) as ConcernSuggestion[];
 
     // concern suggestions based on score ranges
     const scoreRangeConcernSuggestions = (await this.query(txn)
@@ -160,7 +142,7 @@ export default class ConcernSuggestion extends BaseModel {
       )
       .leftOuterJoin('patient_concern', 'concern_suggestion.concernId', 'patient_concern.concernId')
       .where('patient_screening_tool_submission.id', patientScreeningToolSubmissionId)
-      .andWhere('concern_suggestion.concernId', 'not in', existingPatientCarePlanSuggestionsQuery)
+      .andWhere('concern_suggestion.concernId', 'not in', currentConcernSuggestionIdsQuery)
       .andWhere('patient_concern.id', null)) as ConcernSuggestion[];
 
     const uniqueConcernSuggestions = uniqBy(
@@ -176,66 +158,49 @@ export default class ConcernSuggestion extends BaseModel {
   static async getNewSuggestionsForPatientAnswer(
     patientId: string,
     patientAnswerId: string,
-    txn?: Transaction,
+    txn: Transaction,
   ): Promise<Concern[]> {
-    const existingPatientCarePlanSuggestionsQuery = CarePlanSuggestion.query(txn)
-      .where('patientId', patientId)
-      .andWhere('dismissedAt', null)
-      .andWhere('acceptedAt', null)
-      .andWhere('suggestionType', 'concern')
-      .select('concernId');
-
-    const concernSuggestions = (await this.query(txn)
-      .eager('concern')
-      .joinRelation('answer')
-      .join('patient_answer', 'answer.id', 'patient_answer.answerId')
-      .leftOuterJoin('patient_concern', 'concern_suggestion.concernId', 'patient_concern.concernId')
-      .where('patient_answer.id', patientAnswerId)
-      .andWhere('concern_suggestion.concernId', 'not in', existingPatientCarePlanSuggestionsQuery)
-      .andWhere('patient_answer.applicable', true)
-      .andWhere('patient_concern.id', null)) as ConcernSuggestion[];
+    const concernSuggestions = (await this.getAnswerConcernSuggestionsQuery(
+      patientId,
+      txn,
+    ).andWhere('patient_answer.id', patientAnswerId)) as ConcernSuggestion[];
 
     return concernSuggestions.map((suggestion: ConcernSuggestion) => suggestion.concern);
   }
 
   static async create(
     input: IConcernSuggestionEditableFields,
-    existingTxn?: Transaction,
+    txn: Transaction,
   ): Promise<Concern[]> {
     // TODO: use postgres UPCERT here to add relation if it doesn't exist instead of a transaction
     const { concernId, answerId, screeningToolScoreRangeId } = input;
-    return await transaction(ConcernSuggestion.knex(), async txn => {
-      const relations = await ConcernSuggestion.query(existingTxn || txn).where({
-        concernId,
-        answerId: answerId || null,
-        screeningToolScoreRangeId: screeningToolScoreRangeId || null,
-        deletedAt: null,
-      });
-
-      if (relations.length < 1) {
-        await ConcernSuggestion.query(existingTxn || txn).insert({
-          concernId,
-          answerId,
-          screeningToolScoreRangeId,
-        });
-      }
-
-      if (answerId) {
-        return await this.getForAnswer(answerId, existingTxn || txn);
-      } else if (screeningToolScoreRangeId) {
-        return await this.getForScreeningToolScoreRange(
-          screeningToolScoreRangeId,
-          existingTxn || txn,
-        );
-      } else {
-        return [];
-      }
+    const relations = await ConcernSuggestion.query(txn).where({
+      concernId,
+      answerId: answerId || null,
+      screeningToolScoreRangeId: screeningToolScoreRangeId || null,
+      deletedAt: null,
     });
+
+    if (relations.length < 1) {
+      await ConcernSuggestion.query(txn).insert({
+        concernId,
+        answerId,
+        screeningToolScoreRangeId,
+      });
+    }
+
+    if (answerId) {
+      return await this.getForAnswer(answerId, txn);
+    } else if (screeningToolScoreRangeId) {
+      return await this.getForScreeningToolScoreRange(screeningToolScoreRangeId, txn);
+    } else {
+      return [];
+    }
   }
 
   static async delete(
     { concernId, answerId, screeningToolScoreRangeId }: IConcernSuggestionEditableFields,
-    txn?: Transaction,
+    txn: Transaction,
   ): Promise<Concern[]> {
     await this.query(txn)
       .where({
@@ -253,6 +218,28 @@ export default class ConcernSuggestion extends BaseModel {
     } else {
       return [];
     }
+  }
+
+  static getAnswerConcernSuggestionsQuery(patientId: string, txn: Transaction) {
+    const currentConcernSuggestionIdsQuery = this.currentConcernSuggestionIdsQuery(patientId, txn);
+
+    return this.query(txn)
+      .eager('concern')
+      .joinRelation('answer')
+      .join('patient_answer', 'answer.id', 'patient_answer.answerId')
+      .leftOuterJoin('patient_concern', 'concern_suggestion.concernId', 'patient_concern.concernId')
+      .whereNotIn('concern_suggestion.concernId', currentConcernSuggestionIdsQuery)
+      .andWhere('patient_answer.applicable', true)
+      .andWhere('patient_concern.id', null);
+  }
+
+  static currentConcernSuggestionIdsQuery(patientId: string, txn: Transaction) {
+    return CarePlanSuggestion.query(txn)
+      .where('patientId', patientId)
+      .andWhere('dismissedAt', null)
+      .andWhere('acceptedAt', null)
+      .andWhere('suggestionType', 'concern')
+      .select('concernId');
   }
 }
 /* tslint:enable:member-ordering */

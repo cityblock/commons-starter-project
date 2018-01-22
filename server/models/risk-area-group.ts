@@ -48,7 +48,7 @@ export default class RiskAreaGroup extends BaseModel {
     },
   };
 
-  static async get(riskAreaGroupId: string, txn?: Transaction): Promise<RiskAreaGroup> {
+  static async get(riskAreaGroupId: string, txn: Transaction): Promise<RiskAreaGroup> {
     const riskAreaGroup = await this.query(txn).findOne({ id: riskAreaGroupId, deletedAt: null });
 
     if (!riskAreaGroup) {
@@ -57,7 +57,7 @@ export default class RiskAreaGroup extends BaseModel {
     return riskAreaGroup;
   }
 
-  static async getAll(txn?: Transaction): Promise<RiskAreaGroup[]> {
+  static async getAll(txn: Transaction): Promise<RiskAreaGroup[]> {
     return this.query(txn)
       .orderBy('order')
       .where({ deletedAt: null });
@@ -65,7 +65,7 @@ export default class RiskAreaGroup extends BaseModel {
 
   static async create(
     input: IRiskAreaGroupEditableFields,
-    txn?: Transaction,
+    txn: Transaction,
   ): Promise<RiskAreaGroup> {
     return this.query(txn).insertAndFetch(input);
   }
@@ -73,7 +73,7 @@ export default class RiskAreaGroup extends BaseModel {
   static async edit(
     riskAreaGroup: Partial<IRiskAreaGroupEditableFields>,
     riskAreaGroupId: string,
-    txn?: Transaction,
+    txn: Transaction,
   ): Promise<RiskAreaGroup> {
     const edited = await this.query(txn).patchAndFetchById(riskAreaGroupId, riskAreaGroup);
 
@@ -83,7 +83,7 @@ export default class RiskAreaGroup extends BaseModel {
     return edited;
   }
 
-  static async delete(riskAreaGroupId: string, txn?: Transaction): Promise<RiskAreaGroup> {
+  static async delete(riskAreaGroupId: string, txn: Transaction): Promise<RiskAreaGroup> {
     await this.query(txn)
       .where({ id: riskAreaGroupId, deletedAt: null })
       .patch({ deletedAt: new Date().toISOString() });
@@ -99,7 +99,7 @@ export default class RiskAreaGroup extends BaseModel {
   static async getForPatient(
     riskAreaGroupId: string,
     patientId: string,
-    txn?: Transaction,
+    txn: Transaction,
   ): Promise<RiskAreaGroup> {
     /* tslint:disable:max-line-length */
     const EAGER_QUERY =

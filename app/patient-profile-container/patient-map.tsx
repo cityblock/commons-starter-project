@@ -5,7 +5,10 @@ import { compose, graphql } from 'react-apollo';
 import { withRouter } from 'react-router';
 import * as patientCarePlanQuery from '../graphql/queries/get-patient-care-plan.graphql';
 import * as taskIdsWithNotificationsForPatientQuery from '../graphql/queries/get-task-ids-with-notifications-for-patient.graphql';
-import { getPatientCarePlanQuery, getTaskIdsWithNotificationsForPatientQuery } from '../graphql/types';
+import {
+  getPatientCarePlanQuery,
+  getTaskIdsWithNotificationsForPatientQuery,
+} from '../graphql/types';
 import Task from '../shared/task/task';
 import * as styles from './css/patient-map.css';
 import DnDPatientCarePlan from './drag-and-drop/drag-and-drop-patient-care-plan';
@@ -46,7 +49,14 @@ export class PatientMap extends React.Component<allProps, {}> {
   };
 
   render(): JSX.Element {
-    const { patientId, loading, routeBase, carePlan, taskIdsWithNotifications, taskId } = this.props;
+    const {
+      patientId,
+      loading,
+      routeBase,
+      carePlan,
+      taskIdsWithNotifications,
+      taskId,
+    } = this.props;
 
     const mainStyles = classNames({
       [styles.full]: !taskId,

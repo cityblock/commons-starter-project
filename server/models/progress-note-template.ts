@@ -36,7 +36,7 @@ export default class ProgressNoteTemplate extends BaseModel {
 
   static async get(
     progressNoteTemplateId: string,
-    txn?: Transaction,
+    txn: Transaction,
   ): Promise<ProgressNoteTemplate> {
     const progressNoteTemplate = await this.query(txn).findOne({
       id: progressNoteTemplateId,
@@ -48,25 +48,25 @@ export default class ProgressNoteTemplate extends BaseModel {
     return progressNoteTemplate;
   }
 
-  static async getAll(txn?: Transaction): Promise<ProgressNoteTemplate[]> {
+  static async getAll(txn: Transaction): Promise<ProgressNoteTemplate[]> {
     return this.query(txn)
       .orderBy('createdAt', 'asc')
       .where({ deletedAt: null });
   }
 
-  static async create(input: IProgressNoteTemplateEditableFields, txn?: Transaction) {
+  static async create(input: IProgressNoteTemplateEditableFields, txn: Transaction) {
     return this.query(txn).insertAndFetch(input);
   }
 
   static async edit(
     progressNoteTemplate: Partial<IProgressNoteTemplateEditableFields>,
     progressNoteTemplateId: string,
-    txn?: Transaction,
+    txn: Transaction,
   ): Promise<ProgressNoteTemplate> {
     return await this.query(txn).patchAndFetchById(progressNoteTemplateId, progressNoteTemplate);
   }
 
-  static async delete(progressNoteTemplateId: string, txn?: Transaction) {
+  static async delete(progressNoteTemplateId: string, txn: Transaction) {
     await this.query(txn)
       .where({ id: progressNoteTemplateId, deletedAt: null })
       .patch({ deletedAt: new Date().toISOString() });

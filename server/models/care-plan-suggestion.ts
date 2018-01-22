@@ -4,7 +4,6 @@ import Concern from './concern';
 import GoalSuggestionTemplate from './goal-suggestion-template';
 import Patient from './patient';
 import PatientConcern from './patient-concern';
-import PatientGoal from './patient-goal';
 import User from './user';
 
 type SuggestionType = 'concern' | 'goal';
@@ -156,7 +155,7 @@ export default class CarePlanSuggestion extends BaseModel {
 
   static async get(
     carePlanSuggestionId: string,
-    txn?: Transaction,
+    txn: Transaction,
   ): Promise<CarePlanSuggestion | undefined> {
     const carePlanSuggestion = await this.query(txn)
       .eager(EAGER_QUERY)
@@ -171,7 +170,7 @@ export default class CarePlanSuggestion extends BaseModel {
   static async findForPatientAndConcern(
     patientId: string,
     concernId: string,
-    txn?: Transaction,
+    txn: Transaction,
   ): Promise<CarePlanSuggestion | undefined> {
     return await this.query(txn)
       .eager(EAGER_QUERY)
@@ -180,7 +179,7 @@ export default class CarePlanSuggestion extends BaseModel {
 
   static async create(
     input: ICarePlanSuggestionCreateArgs,
-    txn?: Transaction,
+    txn: Transaction,
   ): Promise<CarePlanSuggestion> {
     return await this.query(txn)
       .eager(EAGER_QUERY)
@@ -189,21 +188,18 @@ export default class CarePlanSuggestion extends BaseModel {
 
   static async createMultiple(
     input: ICarePlanSuggestionCreateMultipleArgs,
-    txn?: Transaction,
+    txn: Transaction,
   ): Promise<CarePlanSuggestion[]> {
     const { suggestions } = input;
     return await this.query(txn).insertGraphAndFetch(suggestions);
   }
 
-  static async getForPatient(patientId: string, txn?: Transaction): Promise<CarePlanSuggestion[]> {
+  static async getForPatient(patientId: string, txn: Transaction): Promise<CarePlanSuggestion[]> {
+    // filter out patient concerns
+    // unlike for goals, which come from goal suggesion templates, users can add concerns directly
     const existingPatientConcernIdsQuery = PatientConcern.query(txn)
       .where({ patientId, deletedAt: null })
       .select('concernId')
-      .orderBy('createdAt', 'asc');
-
-    const existingPatientGoalIdsQuery = PatientGoal.query(txn)
-      .where({ patientId, deletedAt: null })
-      .select('goalSuggestionTemplateId')
       .orderBy('createdAt', 'asc');
 
     return await this.query(txn)
@@ -221,26 +217,47 @@ export default class CarePlanSuggestion extends BaseModel {
         patientId,
         concernId: null, // ensure concernId is null
       })
-      .whereNotIn('goalSuggestionTemplateId', existingPatientGoalIdsQuery)
       .orderBy('createdAt', 'asc');
   }
 
+  // For concern suggestions, marks all not-accepted suggestions with that concern as accepted
+  // For goal suggestions, marks all non-accepted suggests for that goal suggestion template as accepted
   static async accept(
-    carePlanSuggestionId: string,
+    carePlanSuggestion: CarePlanSuggestion,
     acceptedById: string,
-    txn?: Transaction,
-  ): Promise<CarePlanSuggestion> {
-    return await this.query(txn)
-      .eager(EAGER_QUERY)
-      .patchAndFetchById(carePlanSuggestionId, {
-        acceptedAt: new Date().toISOString(),
-        acceptedById,
-      });
+    txn: Transaction,
+  ): Promise<CarePlanSuggestion | undefined> {
+    if (carePlanSuggestion.concernId) {
+      await this.query(txn)
+        .where({
+          acceptedAt: null,
+          dismissedAt: null,
+          patientId: carePlanSuggestion.patientId,
+          concernId: carePlanSuggestion.concernId,
+        })
+        .patch({
+          acceptedAt: new Date().toISOString(),
+          acceptedById,
+        });
+    } else if (carePlanSuggestion.goalSuggestionTemplateId) {
+      await this.query(txn)
+        .where({
+          acceptedAt: null,
+          dismissedAt: null,
+          patientId: carePlanSuggestion.patientId,
+          goalSuggestionTemplateId: carePlanSuggestion.goalSuggestionTemplateId,
+        })
+        .patch({
+          acceptedAt: new Date().toISOString(),
+          acceptedById,
+        });
+    }
+    return await this.get(carePlanSuggestion.id, txn);
   }
 
   static async dismiss(
     input: ICarePlanSuggestionDismissArgs,
-    txn?: Transaction,
+    txn: Transaction,
   ): Promise<CarePlanSuggestion> {
     const { carePlanSuggestionId, dismissedById, dismissedReason } = input;
 

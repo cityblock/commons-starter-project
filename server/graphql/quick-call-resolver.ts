@@ -1,4 +1,3 @@
-import { transaction } from 'objection';
 import { IQuickCallCreateInput } from 'schema';
 import QuickCall from '../models/quick-call';
 import accessControls from './shared/access-controls';
@@ -22,12 +21,10 @@ export async function quickCallCreate(
   context: IContext,
 ) {
   const { userRole, userId, txn } = context;
-  return transaction(txn || QuickCall.knex(), async newTxn => {
-    await accessControls.isAllowed(userRole, 'create', 'quickCall');
-    checkUserLoggedIn(userId);
+  await accessControls.isAllowed(userRole, 'create', 'quickCall');
+  checkUserLoggedIn(userId);
 
-    return await QuickCall.create({ ...input, userId: userId! }, newTxn);
-  });
+  return await QuickCall.create({ ...input, userId: userId! }, txn);
 }
 
 export async function resolveQuickCall(
@@ -35,12 +32,10 @@ export async function resolveQuickCall(
   args: IResolveQuickCallArgs,
   { db, userId, userRole, txn }: IContext,
 ) {
-  return transaction(txn || QuickCall.knex(), async newTxn => {
-    await accessControls.isAllowed(userRole, 'view', 'quickCall');
-    checkUserLoggedIn(userId);
+  await accessControls.isAllowed(userRole, 'view', 'quickCall');
+  checkUserLoggedIn(userId);
 
-    return await QuickCall.get(args.quickCallId, newTxn);
-  });
+  return await QuickCall.get(args.quickCallId, txn);
 }
 
 export async function resolveQuickCallsForProgressNote(
@@ -48,10 +43,8 @@ export async function resolveQuickCallsForProgressNote(
   args: IResolveQuickCallsForProgressNoteOptions,
   { db, userId, userRole, txn }: IContext,
 ) {
-  return transaction(txn || QuickCall.knex(), async newTxn => {
-    await accessControls.isAllowed(userRole, 'view', 'quickCall');
-    checkUserLoggedIn(userId);
+  await accessControls.isAllowed(userRole, 'view', 'quickCall');
+  checkUserLoggedIn(userId);
 
-    return await QuickCall.getQuickCallsForProgressNote(args.progressNoteId, newTxn);
-  });
+  return await QuickCall.getQuickCallsForProgressNote(args.progressNoteId, txn);
 }

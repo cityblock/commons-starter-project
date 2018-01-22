@@ -1,5 +1,5 @@
 import { omit } from 'lodash';
-import { transaction, Model, RelationMappings, Transaction } from 'objection';
+import { Model, RelationMappings, Transaction } from 'objection';
 import { createTaskForTaskTemplate } from '../lib/create-task-for-task-template';
 import BaseModel from './base-model';
 import CarePlanUpdateEvent from './care-plan-update-event';
@@ -81,7 +81,7 @@ export default class PatientGoal extends BaseModel {
     },
   };
 
-  static async get(patientGoalId: string, txn?: Transaction): Promise<PatientGoal> {
+  static async get(patientGoalId: string, txn: Transaction): Promise<PatientGoal> {
     const patientGoal = await this.query(txn)
       .eager(EAGER_QUERY)
       .modifyEager('tasks', builder => {
@@ -96,95 +96,88 @@ export default class PatientGoal extends BaseModel {
     return patientGoal;
   }
 
-  static async create(input: IPatientGoalEditableFields, existingTxn?: Transaction) {
+  static async create(input: IPatientGoalEditableFields, txn: Transaction) {
     const { taskTemplateIds, goalSuggestionTemplateId, userId, patientId, title } = input;
 
     if (!goalSuggestionTemplateId && !title) {
       return Promise.reject('Must include either goal suggestion template id or title');
     }
 
-    return await transaction(PatientGoal.knex(), async txn => {
-      let patientGoal: PatientGoal;
-      let validTaskTemplates: TaskTemplate[] = [];
-      const correctTxn = existingTxn || txn;
+    let patientGoal: PatientGoal;
+    let validTaskTemplates: TaskTemplate[] = [];
 
-      if (!goalSuggestionTemplateId) {
-        patientGoal = await this.query(correctTxn)
-          .eager(EAGER_QUERY)
-          .insertAndFetch(omit(input, ['userId', 'taskTemplates']));
-      } else {
-        const goalSuggestionTemplate = await GoalSuggestionTemplate.get(
-          goalSuggestionTemplateId,
-          correctTxn,
-        );
-
-        // set title to be same as goal suggestion template title
-        input.title = goalSuggestionTemplate.title;
-        validTaskTemplates =
-          taskTemplateIds && taskTemplateIds.length
-            ? goalSuggestionTemplate!.taskTemplates.filter(
-                taskTemplate => taskTemplateIds.indexOf(taskTemplate.id) > -1,
-              )
-            : [];
-
-        patientGoal = await this.query(correctTxn)
-          .eager(EAGER_QUERY)
-          .insertAndFetch(omit(input, ['userId', 'taskTemplates']));
-      }
-
-      await CarePlanUpdateEvent.create(
-        {
-          patientId,
-          userId,
-          patientGoalId: patientGoal.id,
-          eventType: 'create_patient_goal',
-        },
-        correctTxn,
+    if (!goalSuggestionTemplateId) {
+      patientGoal = await this.query(txn)
+        .eager(EAGER_QUERY)
+        .insertAndFetch(omit(input, ['userId', 'taskTemplates']));
+    } else {
+      const goalSuggestionTemplate = await GoalSuggestionTemplate.get(
+        goalSuggestionTemplateId,
+        txn,
       );
 
-      // TODO: do a graph insert here or use the Task resolver. Also note: must use 'map' instead
-      //       of 'forEach' as we need to wait for the loop to complete before committing the
-      //       transaction below.
-      if (validTaskTemplates.length) {
-        await Promise.all(
-          validTaskTemplates.map(async taskTemplate =>
-            createTaskForTaskTemplate(taskTemplate, userId, patientId, correctTxn, patientGoal.id),
-          ),
-        );
-      }
+      // set title to be same as goal suggestion template title
+      input.title = goalSuggestionTemplate.title;
+      validTaskTemplates =
+        taskTemplateIds && taskTemplateIds.length
+          ? goalSuggestionTemplate!.taskTemplates.filter(
+              taskTemplate => taskTemplateIds.indexOf(taskTemplate.id) > -1,
+            )
+          : [];
 
-      return patientGoal;
-    });
+      patientGoal = await this.query(txn)
+        .eager(EAGER_QUERY)
+        .insertAndFetch(omit(input, ['userId', 'taskTemplates']));
+    }
+
+    await CarePlanUpdateEvent.create(
+      {
+        patientId,
+        userId,
+        patientGoalId: patientGoal.id,
+        eventType: 'create_patient_goal',
+      },
+      txn,
+    );
+
+    // TODO: do a graph insert here or use the Task resolver. Also note: must use 'map' instead
+    //       of 'forEach' as we need to wait for the loop to complete before committing the
+    //       transaction below.
+    if (validTaskTemplates.length) {
+      await Promise.all(
+        validTaskTemplates.map(async taskTemplate =>
+          createTaskForTaskTemplate(taskTemplate, userId, patientId, txn, patientGoal.id),
+        ),
+      );
+    }
+
+    return patientGoal;
   }
 
   static async update(
     patientGoalId: string,
     patientGoal: Partial<IPatientGoalEditableFields>,
     userId: string,
-    existingTxn?: Transaction,
+    txn: Transaction,
   ): Promise<PatientGoal> {
-    return await transaction(PatientGoal.knex(), async txn => {
-      const correctTxn = existingTxn || txn;
+    const updatedPatientGoal = await this.query(txn)
+      .eager(EAGER_QUERY)
+      .patchAndFetchById(patientGoalId, patientGoal);
 
-      const updatedPatientGoal = await this.query(correctTxn)
-        .eager(EAGER_QUERY)
-        .patchAndFetchById(patientGoalId, patientGoal);
+    await CarePlanUpdateEvent.create(
+      {
+        patientId: updatedPatientGoal.patientId,
+        userId,
+        patientGoalId: updatedPatientGoal.id,
+        eventType: 'edit_patient_goal',
+      },
+      txn,
+    );
 
-      await CarePlanUpdateEvent.create(
-        {
-          patientId: updatedPatientGoal.patientId,
-          userId,
-          patientGoalId: updatedPatientGoal.id,
-          eventType: 'edit_patient_goal',
-        },
-        correctTxn,
-      );
-
-      return updatedPatientGoal;
-    });
+    return updatedPatientGoal;
   }
 
-  static async getForPatient(patientId: string, txn?: Transaction): Promise<PatientGoal[]> {
+  static async getForPatient(patientId: string, txn: Transaction): Promise<PatientGoal[]> {
     return await this.query(txn)
       .eager(EAGER_QUERY)
       .modifyEager('tasks', builder => {
@@ -202,37 +195,33 @@ export default class PatientGoal extends BaseModel {
   static async delete(
     patientGoalId: string,
     userId: string,
-    existingTxn?: Transaction,
+    txn: Transaction,
   ): Promise<PatientGoal> {
-    return await transaction(PatientGoal.knex(), async txn => {
-      const correctTxn = existingTxn || txn;
+    await this.query(txn)
+      .where({ id: patientGoalId, deletedAt: null })
+      .patch({ deletedAt: new Date().toISOString() });
 
-      await this.query(correctTxn)
-        .where({ id: patientGoalId, deletedAt: null })
-        .patch({ deletedAt: new Date().toISOString() });
+    const patientGoal = await this.query(txn)
+      .eager(EAGER_QUERY)
+      .modifyEager('tasks', builder => {
+        builder.where('task.completedAt', null);
+      })
+      .findOne({ id: patientGoalId });
+    if (!patientGoal) {
+      return Promise.reject(`No such patientGoal: ${patientGoalId}`);
+    }
 
-      const patientGoal = await this.query(correctTxn)
-        .eager(EAGER_QUERY)
-        .modifyEager('tasks', builder => {
-          builder.where('task.completedAt', null);
-        })
-        .findOne({ id: patientGoalId });
-      if (!patientGoal) {
-        return Promise.reject(`No such patientGoal: ${patientGoalId}`);
-      }
+    await CarePlanUpdateEvent.create(
+      {
+        patientId: patientGoal.patientId,
+        userId,
+        patientGoalId: patientGoal.id,
+        eventType: 'delete_patient_goal',
+      },
+      txn,
+    );
 
-      await CarePlanUpdateEvent.create(
-        {
-          patientId: patientGoal.patientId,
-          userId,
-          patientGoalId: patientGoal.id,
-          eventType: 'delete_patient_goal',
-        },
-        correctTxn,
-      );
-
-      return patientGoal;
-    });
+    return patientGoal;
   }
 }
 /* tslint:enable:member-ordering */

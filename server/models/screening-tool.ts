@@ -75,10 +75,7 @@ export default class ScreeningTool extends BaseModel {
     };
   }
 
-  static async create(
-    input: IScreeningToolCreateFields,
-    txn?: Transaction,
-  ): Promise<ScreeningTool> {
+  static async create(input: IScreeningToolCreateFields, txn: Transaction): Promise<ScreeningTool> {
     return await this.query(txn)
       .eager(EAGER_QUERY)
       .insertAndFetch(input);
@@ -87,14 +84,14 @@ export default class ScreeningTool extends BaseModel {
   static async edit(
     screeningToolId: string,
     screeningTool: IScreeningToolEditableFields,
-    txn?: Transaction,
+    txn: Transaction,
   ): Promise<ScreeningTool> {
     return await this.query(txn)
       .eager(EAGER_QUERY)
       .patchAndFetchById(screeningToolId, screeningTool);
   }
 
-  static async get(screeningToolId: string, txn?: Transaction): Promise<ScreeningTool> {
+  static async get(screeningToolId: string, txn: Transaction): Promise<ScreeningTool> {
     const screeningTool = await this.query(txn)
       .eager(EAGER_QUERY)
       .modifyEager('screeningToolScoreRanges', builder =>
@@ -115,14 +112,14 @@ export default class ScreeningTool extends BaseModel {
     return screeningTool;
   }
 
-  static async getForRiskArea(riskAreaId: string, txn?: Transaction): Promise<ScreeningTool[]> {
+  static async getForRiskArea(riskAreaId: string, txn: Transaction): Promise<ScreeningTool[]> {
     return await this.query(txn)
       .eager(EAGER_QUERY)
       .where({ deletedAt: null, riskAreaId })
       .orderBy('createdAt', 'asc');
   }
 
-  static async getAll(txn?: Transaction): Promise<ScreeningTool[]> {
+  static async getAll(txn: Transaction): Promise<ScreeningTool[]> {
     return await this.query(txn)
       .eager(EAGER_QUERY)
       .modifyEager('screeningToolScoreRanges', builder =>
@@ -138,7 +135,7 @@ export default class ScreeningTool extends BaseModel {
       .orderBy('createdAt', 'asc');
   }
 
-  static async delete(screeningToolId: string, txn?: Transaction): Promise<ScreeningTool> {
+  static async delete(screeningToolId: string, txn: Transaction): Promise<ScreeningTool> {
     await this.query(txn)
       .where({ id: screeningToolId, deletedAt: null })
       .patch({ deletedAt: new Date().toISOString() });

@@ -86,6 +86,5 @@ describe('Patient Concern Component', () => {
 
     wrapper.setProps({ taskIdsWithNotifications: [task.id] });
     expect(wrapper.find('.notificationBadge').length).toBe(0);
-
   });
 });

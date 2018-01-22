@@ -36,7 +36,7 @@ export default class GoogleAuth extends BaseModel {
     },
   };
 
-  static async updateOrCreate(options: ICreateGoogleAuth, txn?: Transaction): Promise<GoogleAuth> {
+  static async updateOrCreate(options: ICreateGoogleAuth, txn: Transaction): Promise<GoogleAuth> {
     const existingGoogleAuth = await this.query(txn)
       .where({ userId: options.userId })
       .first();

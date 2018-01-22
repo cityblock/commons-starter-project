@@ -114,10 +114,10 @@ class Header extends React.Component<allProps> {
                 {(message: string) => <div className={styles.navText}>{message}</div>}
               </FormattedMessage>
             </Link>
-            <Link to={'/tasks'} className={
-              classNames(this.getNavItemClassnames('/tasks'),
-              styles.relativeNavItem)
-            }>
+            <Link
+              to={'/tasks'}
+              className={classNames(this.getNavItemClassnames('/tasks'), styles.relativeNavItem)}
+            >
               <div className={styles.tasksIcon} />
               <FormattedMessage id="header.tasks">
                 {(message: string) => <div className={styles.navText}>{message}</div>}

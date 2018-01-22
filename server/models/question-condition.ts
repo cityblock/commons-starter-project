@@ -45,7 +45,7 @@ export default class QuestionCondition extends BaseModel {
     },
   };
 
-  static async get(questionConditionId: string, txn?: Transaction): Promise<QuestionCondition> {
+  static async get(questionConditionId: string, txn: Transaction): Promise<QuestionCondition> {
     const questionCondition = await this.query(txn).findOne({
       id: questionConditionId,
       deletedAt: null,
@@ -57,7 +57,7 @@ export default class QuestionCondition extends BaseModel {
     return questionCondition;
   }
 
-  static async create(input: IQuestionConditionEditableFields, txn?: Transaction) {
+  static async create(input: IQuestionConditionEditableFields, txn: Transaction) {
     await this.validate(input, txn);
     return this.query(txn).insertAndFetch(input);
   }
@@ -65,13 +65,13 @@ export default class QuestionCondition extends BaseModel {
   static async edit(
     questionCondition: IQuestionConditionEditableFields,
     questionConditionId: string,
-    txn?: Transaction,
+    txn: Transaction,
   ): Promise<QuestionCondition> {
     await this.validate(questionCondition, txn);
     return await this.query(txn).patchAndFetchById(questionConditionId, questionCondition);
   }
 
-  static async validate(input: IQuestionConditionEditableFields, txn?: Transaction) {
+  static async validate(input: IQuestionConditionEditableFields, txn: Transaction) {
     const answer = await Answer.get(input.answerId, txn);
     if (answer.questionId === input.questionId) {
       return Promise.reject(
@@ -80,7 +80,7 @@ export default class QuestionCondition extends BaseModel {
     }
   }
 
-  static async delete(questionConditionId: string, txn?: Transaction): Promise<QuestionCondition> {
+  static async delete(questionConditionId: string, txn: Transaction): Promise<QuestionCondition> {
     await this.query(txn)
       .where({ id: questionConditionId, deletedAt: null })
       .patch({ deletedAt: new Date().toISOString() });

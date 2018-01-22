@@ -1,9 +1,10 @@
 import { uniqBy } from 'lodash';
-import { transaction, Model, RelationMappings, Transaction } from 'objection';
+import { Model, RelationMappings, Transaction } from 'objection';
 import Answer from './answer';
 import BaseModel from './base-model';
 import CarePlanSuggestion from './care-plan-suggestion';
 import GoalSuggestionTemplate from './goal-suggestion-template';
+import PatientGoal from './patient-goal';
 import ScreeningToolScoreRange from './screening-tool-score-range';
 
 interface IGoalSuggestionEditableFields {
@@ -65,7 +66,7 @@ export default class GoalSuggestion extends BaseModel {
 
   static async getForGoalSuggestion(
     goalSuggestionTemplateId: string,
-    txn?: Transaction,
+    txn: Transaction,
   ): Promise<Answer[]> {
     const goalSuggestionAnswers = await GoalSuggestion.query(txn)
       .where('goalSuggestionTemplateId', goalSuggestionTemplateId)
@@ -75,10 +76,7 @@ export default class GoalSuggestion extends BaseModel {
     return goalSuggestionAnswers.map((goalSuggestion: GoalSuggestion) => goalSuggestion.answer);
   }
 
-  static async getForAnswer(
-    answerId: string,
-    txn?: Transaction,
-  ): Promise<GoalSuggestionTemplate[]> {
+  static async getForAnswer(answerId: string, txn: Transaction): Promise<GoalSuggestionTemplate[]> {
     const goalSuggestionAnswers = (await GoalSuggestion.query(txn)
       .where('answerId', answerId)
       .andWhere('deletedAt', null)
@@ -91,7 +89,7 @@ export default class GoalSuggestion extends BaseModel {
 
   static async getForScreeningToolScoreRange(
     screeningToolScoreRangeId: string,
-    txn?: Transaction,
+    txn: Transaction,
   ): Promise<GoalSuggestionTemplate[]> {
     const goalSuggestionAnswers = (await GoalSuggestion.query(txn)
       .where('screeningToolScoreRangeId', screeningToolScoreRangeId)
@@ -106,34 +104,12 @@ export default class GoalSuggestion extends BaseModel {
   static async getNewSuggestionsForRiskAreaAssessmentSubmission(
     patientId: string,
     riskAreaAssessmentSubmissionId: string,
-    txn?: Transaction,
+    txn: Transaction,
   ): Promise<GoalSuggestionTemplate[]> {
-    const existingPatientCarePlanSuggestionsQuery = CarePlanSuggestion.query(txn)
-      .where('patientId', patientId)
-      .andWhere('dismissedAt', null)
-      .andWhere('acceptedAt', null)
-      .andWhere('suggestionType', 'goal')
-      .select('goalSuggestionTemplateId');
-
-    const goalSuggestions = (await this.query(txn)
-      .eager('goalSuggestionTemplate.[taskTemplates]')
-      .joinRelation('answer')
-      .join('patient_answer', 'answer.id', 'patient_answer.answerId')
-      .leftOuterJoin(
-        'patient_goal',
-        'goal_suggestion.goalSuggestionTemplateId',
-        'patient_goal.goalSuggestionTemplateId',
-      )
-      .where('patient_answer.riskAreaAssessmentSubmissionId', riskAreaAssessmentSubmissionId)
-      .andWhere('patient_answer.deletedAt', null)
-      .andWhere(
-        'goal_suggestion.goalSuggestionTemplateId',
-        'not in',
-        existingPatientCarePlanSuggestionsQuery,
-      )
-      .andWhere('patient_answer.patientId', patientId)
-      .andWhere('patient_answer.applicable', true)
-      .andWhere('patient_goal.id', null)) as GoalSuggestion[];
+    const goalSuggestions = (await this.getAnswerGoalSuggestionsQuery(patientId, txn).andWhere(
+      'patient_answer.riskAreaAssessmentSubmissionId',
+      riskAreaAssessmentSubmissionId,
+    )) as GoalSuggestion[];
 
     return goalSuggestions.map(
       (goalSuggestion: GoalSuggestion) => goalSuggestion.goalSuggestionTemplate,
@@ -143,35 +119,26 @@ export default class GoalSuggestion extends BaseModel {
   static async getNewSuggestionsForPatientScreeningToolSubmission(
     patientId: string,
     patientScreeningToolSubmissionId: string,
-    txn?: Transaction,
+    txn: Transaction,
   ): Promise<GoalSuggestionTemplate[]> {
-    const existingPatientCarePlanSuggestionsQuery = CarePlanSuggestion.query(txn)
-      .where('patientId', patientId)
-      .andWhere('dismissedAt', null)
-      .andWhere('acceptedAt', null)
-      .andWhere('suggestionType', 'goal')
-      .select('goalSuggestionTemplateId');
+    const currentGoalSuggestionTemplateIdsQuery = this.currentGoalSuggestionTemplateIdsQuery(
+      patientId,
+      txn,
+    );
+
+    const currentPatientGoalTemplateIdsQuery = this.currentPatientGoalTemplateIdsQuery(
+      patientId,
+      txn,
+    );
 
     // goal suggestions based on answers
-    const answerGoalSuggestions = (await this.query(txn)
-      .eager('goalSuggestionTemplate.[taskTemplates]')
-      .joinRelation('answer')
-      .join('patient_answer', 'answer.id', 'patient_answer.answerId')
-      .leftOuterJoin(
-        'patient_goal',
-        'goal_suggestion.goalSuggestionTemplateId',
-        'patient_goal.goalSuggestionTemplateId',
-      )
-      .where('patient_answer.patientScreeningToolSubmissionId', patientScreeningToolSubmissionId)
-      .andWhere('patient_answer.deletedAt', null)
-      .andWhere(
-        'goal_suggestion.goalSuggestionTemplateId',
-        'not in',
-        existingPatientCarePlanSuggestionsQuery,
-      )
-      .andWhere('patient_answer.patientId', patientId)
-      .andWhere('patient_answer.applicable', true)
-      .andWhere('patient_goal.id', null)) as GoalSuggestion[];
+    const answerGoalSuggestions = (await this.getAnswerGoalSuggestionsQuery(
+      patientId,
+      txn,
+    ).andWhere(
+      'patient_answer.patientScreeningToolSubmissionId',
+      patientScreeningToolSubmissionId,
+    )) as GoalSuggestion[];
 
     // goal suggestions based on score ranges
     const scoreRangeGoalSuggestions = (await this.query(txn)
@@ -182,18 +149,16 @@ export default class GoalSuggestion extends BaseModel {
         'screeningToolScoreRange.id',
         'patient_screening_tool_submission.screeningToolScoreRangeId',
       )
-      .leftOuterJoin(
-        'patient_goal',
-        'goal_suggestion.goalSuggestionTemplateId',
-        'patient_goal.goalSuggestionTemplateId',
-      )
-      .where('patient_screening_tool_submission.id', patientScreeningToolSubmissionId)
+      .whereNotIn('goal_suggestion.goalSuggestionTemplateId', currentGoalSuggestionTemplateIdsQuery)
       .andWhere(
         'goal_suggestion.goalSuggestionTemplateId',
         'not in',
-        existingPatientCarePlanSuggestionsQuery,
+        currentPatientGoalTemplateIdsQuery,
       )
-      .andWhere('patient_goal.id', null)) as GoalSuggestion[];
+      .andWhere(
+        'patient_screening_tool_submission.id',
+        patientScreeningToolSubmissionId,
+      )) as GoalSuggestion[];
 
     const uniqueGoalSuggestions = uniqBy(
       answerGoalSuggestions.concat(scoreRangeGoalSuggestions),
@@ -208,33 +173,12 @@ export default class GoalSuggestion extends BaseModel {
   static async getNewSuggestionsForPatientAnswer(
     patientId: string,
     patientAnswerId: string,
-    txn?: Transaction,
+    txn: Transaction,
   ): Promise<GoalSuggestionTemplate[]> {
-    const existingPatientCarePlanSuggestionsQuery = CarePlanSuggestion.query(txn)
-      .where('patientId', patientId)
-      .andWhere('dismissedAt', null)
-      .andWhere('acceptedAt', null)
-      .andWhere('suggestionType', 'goal')
-      .select('goalSuggestionTemplateId');
-
-    const goalSuggestions = (await this.query(txn)
-      .eager('goalSuggestionTemplate.[taskTemplates]')
-      .joinRelation('answer')
-      .join('patient_answer', 'answer.id', 'patient_answer.answerId')
-      .leftOuterJoin(
-        'patient_goal',
-        'goal_suggestion.goalSuggestionTemplateId',
-        'patient_goal.goalSuggestionTemplateId',
-      )
-      .where('patient_answer.id', patientAnswerId)
-      .andWhere('patient_answer.deletedAt', null)
-      .andWhere(
-        'goal_suggestion.goalSuggestionTemplateId',
-        'not in',
-        existingPatientCarePlanSuggestionsQuery,
-      )
-      .andWhere('patient_answer.applicable', true)
-      .andWhere('patient_goal.id', null)) as GoalSuggestion[];
+    const goalSuggestions = (await this.getAnswerGoalSuggestionsQuery(patientId, txn).andWhere(
+      'patient_answer.id',
+      patientAnswerId,
+    )) as GoalSuggestion[];
 
     return goalSuggestions.map(
       (goalSuggestion: GoalSuggestion) => goalSuggestion.goalSuggestionTemplate,
@@ -243,38 +187,33 @@ export default class GoalSuggestion extends BaseModel {
 
   static async create(
     input: IGoalSuggestionEditableFields,
-    existingTxn?: Transaction,
+    txn: Transaction,
   ): Promise<GoalSuggestionTemplate[]> {
     // TODO: use postgres UPCERT here to add relation if it doesn't exist instead of a transaction
     const { goalSuggestionTemplateId, answerId, screeningToolScoreRangeId } = input;
 
-    return await transaction(GoalSuggestion.knex(), async txn => {
-      const relations = await GoalSuggestion.query(existingTxn || txn).where({
-        goalSuggestionTemplateId,
-        answerId: answerId || null,
-        screeningToolScoreRangeId: screeningToolScoreRangeId || null,
-        deletedAt: null,
-      });
-
-      if (relations.length < 1) {
-        await GoalSuggestion.query(existingTxn || txn).insert({
-          goalSuggestionTemplateId,
-          answerId,
-          screeningToolScoreRangeId,
-        });
-      }
-
-      if (answerId) {
-        return await this.getForAnswer(answerId, existingTxn || txn);
-      } else if (screeningToolScoreRangeId) {
-        return await this.getForScreeningToolScoreRange(
-          screeningToolScoreRangeId,
-          existingTxn || txn,
-        );
-      } else {
-        return [];
-      }
+    const relations = await GoalSuggestion.query(txn).where({
+      goalSuggestionTemplateId,
+      answerId: answerId || null,
+      screeningToolScoreRangeId: screeningToolScoreRangeId || null,
+      deletedAt: null,
     });
+
+    if (relations.length < 1) {
+      await GoalSuggestion.query(txn).insert({
+        goalSuggestionTemplateId,
+        answerId,
+        screeningToolScoreRangeId,
+      });
+    }
+
+    if (answerId) {
+      return await this.getForAnswer(answerId, txn);
+    } else if (screeningToolScoreRangeId) {
+      return await this.getForScreeningToolScoreRange(screeningToolScoreRangeId, txn);
+    } else {
+      return [];
+    }
   }
 
   static async delete(
@@ -283,7 +222,7 @@ export default class GoalSuggestion extends BaseModel {
       answerId,
       screeningToolScoreRangeId,
     }: IGoalSuggestionEditableFields,
-    txn?: Transaction,
+    txn: Transaction,
   ): Promise<GoalSuggestionTemplate[]> {
     await this.query(txn)
       .where({
@@ -301,6 +240,53 @@ export default class GoalSuggestion extends BaseModel {
     } else {
       return [];
     }
+  }
+
+  static getAnswerGoalSuggestionsQuery(patientId: string, txn: Transaction) {
+    const currentGoalSuggestionTemplateIdsQuery = this.currentGoalSuggestionTemplateIdsQuery(
+      patientId,
+      txn,
+    );
+    const currentPatientGoalTemplateIdsQuery = this.currentPatientGoalTemplateIdsQuery(
+      patientId,
+      txn,
+    );
+
+    return this.query(txn)
+      .eager('goalSuggestionTemplate.[taskTemplates]')
+      .joinRelation('answer')
+      .join('patient_answer', 'answer.id', 'patient_answer.answerId')
+      .whereNotIn('goal_suggestion.goalSuggestionTemplateId', currentGoalSuggestionTemplateIdsQuery)
+      .andWhere(
+        'goal_suggestion.goalSuggestionTemplateId',
+        'not in',
+        currentPatientGoalTemplateIdsQuery,
+      )
+      .andWhere('patient_answer.deletedAt', null)
+      .andWhere('patient_answer.patientId', patientId)
+      .andWhere('patient_answer.applicable', true);
+  }
+
+  /**
+   * Get goal suggestion template ids in care plan suggestions
+   */
+  static currentGoalSuggestionTemplateIdsQuery(patientId: string, txn: Transaction) {
+    return CarePlanSuggestion.query(txn)
+      .andWhere('patientId', patientId)
+      .andWhere('dismissedAt', null)
+      .andWhere('acceptedAt', null)
+      .andWhere('suggestionType', 'goal')
+      .select('goalSuggestionTemplateId');
+  }
+
+  /**
+   * Get goal suggestion template ids in goals in the care plan
+   */
+  static currentPatientGoalTemplateIdsQuery(patientId: string, txn: Transaction) {
+    return PatientGoal.query(txn)
+      .andWhere('patientId', patientId)
+      .andWhere('deletedAt', null)
+      .select('goalSuggestionTemplateId');
   }
 }
 /* tslint:enable:member-ordering */

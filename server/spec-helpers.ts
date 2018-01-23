@@ -11,6 +11,8 @@ import Answer from './models/answer';
 import CarePlanSuggestion from './models/care-plan-suggestion';
 import CarePlanUpdateEvent from './models/care-plan-update-event';
 import CareTeam from './models/care-team';
+import Cbo from './models/cbo';
+import CboCategory from './models/cbo-category';
 import Clinic from './models/clinic';
 import ComputedField from './models/computed-field';
 import Concern from './models/concern';
@@ -1102,4 +1104,33 @@ export async function createFullRiskAreaGroupAssociations(
   );
 
   return { answer1, answer2, answer3 };
+}
+
+export async function createCboCategory(txn: Transaction, title: string = 'Food Services') {
+  return await CboCategory.create(
+    {
+      title,
+    },
+    txn,
+  );
+}
+
+export async function createCbo(txn: Transaction, name: string = "Night's Watch") {
+  const cboCategory = await createCboCategory(txn);
+
+  const cbo = await Cbo.create(
+    {
+      name,
+      categoryId: cboCategory.id,
+      address: '55 Washington Street',
+      city: 'Brooklyn',
+      state: 'NY',
+      zip: '10013',
+      phone: '(212) 555-5555',
+      url: 'www.cityblock.com',
+    },
+    txn,
+  );
+
+  return cbo;
 }

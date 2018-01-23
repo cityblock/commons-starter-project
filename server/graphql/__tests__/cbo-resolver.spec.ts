@@ -2,10 +2,10 @@ import { graphql } from 'graphql';
 import { transaction, Transaction } from 'objection';
 import * as uuid from 'uuid/v4';
 import Db from '../../db';
-import Cbo from '../../models/cbo';
+import CBO from '../../models/cbo';
 import Clinic from '../../models/clinic';
 import User from '../../models/user';
-import { createCbo, createCboCategory, createMockClinic, createMockUser } from '../../spec-helpers';
+import { createCBO, createCBOCategory, createMockClinic, createMockUser } from '../../spec-helpers';
 import schema from '../make-executable-schema';
 
 const name = 'House of Black and White Hospice';
@@ -23,7 +23,7 @@ const userRole = 'admin';
 const setup = async (txn: Transaction) => {
   const clinic = await Clinic.create(createMockClinic(), txn);
   const user = await User.create(createMockUser(11, clinic.id, userRole), txn);
-  const cboCategory = await createCboCategory(txn, 'Animal Services');
+  const cboCategory = await createCBOCategory(txn, 'Animal Services');
 
   return { user, cboCategory };
 };
@@ -40,18 +40,18 @@ describe('CBO resolver', () => {
 
   describe('resolve CBO', () => {
     it('gets all CBOs', async () => {
-      await transaction(Cbo.knex(), async txn => {
+      await transaction(CBO.knex(), async txn => {
         const { user, cboCategory } = await setup(txn);
         const name2 = 'Dothraki Horse Therapy';
 
-        const cbo1 = await Cbo.create(
+        const cbo1 = await CBO.create(
           {
             categoryId: cboCategory.id,
             ...input,
           },
           txn,
         );
-        const cbo2 = await createCbo(txn, name2);
+        const cbo2 = await createCBO(txn, name2);
 
         const query = `{
           CBOs {
@@ -84,10 +84,10 @@ describe('CBO resolver', () => {
     });
 
     it('fetches a single CBO', async () => {
-      await transaction(Cbo.knex(), async txn => {
+      await transaction(CBO.knex(), async txn => {
         const { user, cboCategory } = await setup(txn);
 
-        const cbo = await Cbo.create(
+        const cbo = await CBO.create(
           {
             categoryId: cboCategory.id,
             ...input,
@@ -120,7 +120,7 @@ describe('CBO resolver', () => {
     });
 
     it('throws an error if CBO not found', async () => {
-      await transaction(Cbo.knex(), async txn => {
+      await transaction(CBO.knex(), async txn => {
         const { user } = await setup(txn);
         const fakeId = uuid();
         const query = `{ CBO(CBOId: "${fakeId}") { id } }`;
@@ -138,7 +138,7 @@ describe('CBO resolver', () => {
 
   describe('CBO create', () => {
     it('creates a new CBO', async () => {
-      await transaction(Cbo.knex(), async txn => {
+      await transaction(CBO.knex(), async txn => {
         const { user, cboCategory } = await setup(txn);
 
         const mutation = `mutation {
@@ -175,14 +175,14 @@ describe('CBO resolver', () => {
 
   describe('CBO edit', () => {
     it('edits a CBO', async () => {
-      await transaction(Cbo.knex(), async txn => {
+      await transaction(CBO.knex(), async txn => {
         const { user, cboCategory } = await setup(txn);
 
         const newName = 'Winterfell Hospice Service';
         const newAddress = 'Winterfell';
         const newCity = 'the North';
 
-        const cbo = await Cbo.create(
+        const cbo = await CBO.create(
           {
             categoryId: cboCategory.id,
             ...input,
@@ -224,9 +224,9 @@ describe('CBO resolver', () => {
 
   describe('CBO delete', () => {
     it('deletes a CBO', async () => {
-      await transaction(Cbo.knex(), async txn => {
+      await transaction(CBO.knex(), async txn => {
         const { user } = await setup(txn);
-        const cbo = await createCbo(txn);
+        const cbo = await createCBO(txn);
 
         const mutation = `mutation {
           CBODelete(input: { CBOId: "${cbo.id}"}) {

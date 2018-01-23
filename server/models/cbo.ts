@@ -1,10 +1,10 @@
 import { Model, RelationMappings, Transaction } from 'objection';
 import BaseModel from './base-model';
-import CboCategory from './cbo-category';
+import CBOCategory from './cbo-category';
 
 const EAGER_QUERY = 'category';
 
-interface ICboEditableFields {
+interface ICBOEditableFields {
   name: string;
   categoryId: string;
   address: string;
@@ -17,7 +17,7 @@ interface ICboEditableFields {
 }
 
 /* tslint:disable:member-ordering */
-export default class Cbo extends BaseModel {
+export default class CBO extends BaseModel {
   name: string;
   categoryId: string;
   address: string;
@@ -27,7 +27,7 @@ export default class Cbo extends BaseModel {
   fax: string;
   phone: string;
   url: string;
-  category: CboCategory;
+  category: CBOCategory;
 
   static tableName = 'cbo';
 
@@ -60,56 +60,56 @@ export default class Cbo extends BaseModel {
     },
   };
 
-  static async get(cboId: string, txn: Transaction): Promise<Cbo> {
+  static async get(CBOId: string, txn: Transaction): Promise<CBO> {
     const cbo = await this.query(txn)
       .eager(EAGER_QUERY)
-      .findOne({ id: cboId, deletedAt: null });
+      .findOne({ id: CBOId, deletedAt: null });
 
     if (!cbo) {
-      return Promise.reject(`No such CBO: ${cboId}`);
+      return Promise.reject(`No such CBO: ${CBOId}`);
     }
 
     return cbo;
   }
 
-  static async getAll(txn: Transaction): Promise<Cbo[]> {
+  static async getAll(txn: Transaction): Promise<CBO[]> {
     return this.query(txn)
       .eager(EAGER_QUERY)
       .where({ deletedAt: null })
       .orderBy('name', 'ASC');
   }
 
-  static async create(input: ICboEditableFields, txn: Transaction): Promise<Cbo> {
+  static async create(input: ICBOEditableFields, txn: Transaction): Promise<CBO> {
     return this.query(txn)
       .eager(EAGER_QUERY)
       .insertAndFetch(input);
   }
 
   static async edit(
-    input: Partial<ICboEditableFields>,
-    cboId: string,
+    input: Partial<ICBOEditableFields>,
+    CBOId: string,
     txn: Transaction,
-  ): Promise<Cbo> {
+  ): Promise<CBO> {
     const edited = await this.query(txn)
       .eager(EAGER_QUERY)
-      .patchAndFetchById(cboId, input);
+      .patchAndFetchById(CBOId, input);
 
     if (!edited) {
-      return Promise.reject(`No such CBO: ${cboId}`);
+      return Promise.reject(`No such CBO: ${CBOId}`);
     }
 
     return edited;
   }
 
-  static async delete(cboId: string, txn: Transaction): Promise<Cbo> {
+  static async delete(CBOId: string, txn: Transaction): Promise<CBO> {
     await this.query(txn)
-      .where({ id: cboId, deletedAt: null })
+      .where({ id: CBOId, deletedAt: null })
       .patch({ deletedAt: new Date().toISOString() });
 
-    const deleted = await this.query(txn).findById(cboId);
+    const deleted = await this.query(txn).findById(CBOId);
 
     if (!deleted) {
-      return Promise.reject(`No such CBO: ${cboId}`);
+      return Promise.reject(`No such CBO: ${CBOId}`);
     }
 
     return deleted;

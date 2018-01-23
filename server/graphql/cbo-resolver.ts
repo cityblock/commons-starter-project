@@ -1,5 +1,5 @@
 import { ICBOCreateInput, ICBODeleteInput, ICBOEditInput } from 'schema';
-import Cbo from '../models/cbo';
+import CBO from '../models/cbo';
 import accessControls from './shared/access-controls';
 import { checkUserLoggedIn, IContext } from './shared/utils';
 
@@ -19,55 +19,55 @@ export async function resolveCBOs(
   root: any,
   args: any,
   { db, userRole, userId, txn }: IContext,
-): Promise<Cbo[]> {
+): Promise<CBO[]> {
   await accessControls.isAllowedForUser(userRole, 'view', 'CBO');
   checkUserLoggedIn(userId);
 
-  return await Cbo.getAll(txn);
+  return await CBO.getAll(txn);
 }
 
 export async function resolveCBO(
   root: any,
   args: { CBOId: string },
   { db, userRole, userId, txn }: IContext,
-): Promise<Cbo> {
+): Promise<CBO> {
   await accessControls.isAllowedForUser(userRole, 'view', 'CBO');
   checkUserLoggedIn(userId);
 
-  return await Cbo.get(args.CBOId, txn);
+  return await CBO.get(args.CBOId, txn);
 }
 
 export async function CBOCreate(
   root: any,
   { input }: ICBOCreateArgs,
   { db, userRole, userId, txn }: IContext,
-): Promise<Cbo> {
+): Promise<CBO> {
   await accessControls.isAllowedForUser(userRole, 'create', 'CBO');
   checkUserLoggedIn(userId);
 
   // TODO: Fix typings here
-  return await Cbo.create(input as any, txn);
+  return await CBO.create(input as any, txn);
 }
 
 export async function CBOEdit(
   root: any,
   { input }: IEditCBOOptions,
   { db, userRole, userId, txn }: IContext,
-): Promise<Cbo> {
+): Promise<CBO> {
   await accessControls.isAllowedForUser(userRole, 'edit', 'CBO');
   checkUserLoggedIn(userId);
 
   // TODO: Fix typings here
-  return await Cbo.edit(input as any, input.CBOId, txn);
+  return await CBO.edit(input as any, input.CBOId, txn);
 }
 
 export async function CBODelete(
   root: any,
   { input }: IDeleteCBOOptions,
   { db, userRole, userId, txn }: IContext,
-): Promise<Cbo> {
+): Promise<CBO> {
   await accessControls.isAllowedForUser(userRole, 'delete', 'CBO');
   checkUserLoggedIn(userId);
 
-  return await Cbo.delete(input.CBOId, txn);
+  return await CBO.delete(input.CBOId, txn);
 }

@@ -2,12 +2,12 @@ import { Model, RelationMappings, Transaction } from 'objection';
 import BaseModel from './base-model';
 import Cbo from './cbo';
 
-interface ICboCategoryEditableFields {
+interface ICBOCategoryEditableFields {
   title: string;
 }
 
 /* tslint:disable:member-ordering */
-export default class CboCategory extends BaseModel {
+export default class CBOCategory extends BaseModel {
   title: string;
   cbos: Cbo[];
 
@@ -34,7 +34,13 @@ export default class CboCategory extends BaseModel {
     },
   };
 
-  static async create(input: ICboCategoryEditableFields, txn: Transaction): Promise<CboCategory> {
+  static async getAll(txn: Transaction): Promise<CBOCategory[]> {
+    return this.query(txn)
+      .where({ deletedAt: null })
+      .orderBy('title', 'ASC');
+  }
+
+  static async create(input: ICBOCategoryEditableFields, txn: Transaction): Promise<CBOCategory> {
     return this.query(txn).insertAndFetch(input);
   }
 }

@@ -148,21 +148,21 @@ export class RiskAreaAssessment extends React.Component<allProps, IState> {
 
   onEditableChangeRequest = () => {
     this.setState({ editPopupVisible: true });
-  }
+  };
 
   onEditableChangeConfirm = () => {
     this.setState({ inProgress: true, editPopupVisible: false });
-  }
+  };
 
   onEditPopupClose = () => {
     this.setState({ editPopupVisible: false });
-  }
+  };
 
   renderSubmissionPopup() {
     const { patientRoute, riskAreaAssessmentSubmission } = this.props;
     const patientScreeningToolSubmissionId = riskAreaAssessmentSubmission
-    ? riskAreaAssessmentSubmission.id
-    : null;
+      ? riskAreaAssessmentSubmission.id
+      : null;
 
     return (
       <RiskAreaAssessmentResultsPopup

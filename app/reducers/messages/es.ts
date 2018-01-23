@@ -252,7 +252,8 @@ export const SPANISH_TRANSLATION = {
     'riskAreaAssessment.cancel': 'Cancelar',
     'riskAreaAssessment.editAnswer': 'Modificar respuesta',
     'riskAreaAssessment.editModalTitle': '¿Intentando modificar esta respuesta?',
-    'riskAreaAssessment.editModalBody': 'Tiene que cambiar a "modo de edición" para modificar una respuesta',
+    'riskAreaAssessment.editModalBody':
+      'Tiene que cambiar a "modo de edición" para modificar una respuesta',
     'select.default': 'Seleccione uno',
     'select.disabled': 'Sin respuesta previa',
     'settings.heading': 'Ajustes',

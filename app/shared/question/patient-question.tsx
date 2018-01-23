@@ -30,16 +30,13 @@ export default class PatientQuestion extends React.Component<IProps, {}> {
     if (onEditableChange && !this.props.editable) {
       onEditableChange();
     }
-  }
+  };
 
   renderAnswers = () => {
     const { question, answerData, onChange, editable } = this.props;
 
     return (
-      <div
-        className = {styles.answerContainer}
-        onClick={this.onClickAnswer}
-      >
+      <div className={styles.answerContainer} onClick={this.onClickAnswer}>
         <QuestionAnswers
           question={question}
           answerData={answerData}

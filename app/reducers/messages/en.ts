@@ -246,7 +246,8 @@ export const ENGLISH_TRANSLATION = {
     'riskAreaAssessment.cancel': 'Cancel',
     'riskAreaAssessment.editAnswer': 'Edit answer',
     'riskAreaAssessment.editModalTitle': 'Trying to update this answer?',
-    'riskAreaAssessment.editModalBody': 'In order to update members answers you need to enter "Edit mode" for this assessment.',
+    'riskAreaAssessment.editModalBody':
+      'In order to update members answers you need to enter "Edit mode" for this assessment.',
     'select.default': 'Select one',
     'select.disabled': 'No previous response',
     'settings.heading': 'Settings',

@@ -37,7 +37,8 @@ export type Resource =
   | 'quickCall'
   | 'computedField'
   | 'computedFieldFlag'
-  | 'patientList';
+  | 'patientList'
+  | 'CBO';
 
 /*
 ACL SPEC:

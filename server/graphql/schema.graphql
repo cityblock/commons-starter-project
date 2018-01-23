@@ -963,6 +963,31 @@ type PatientList implements uniqueId {
   deletedAt: String
 }
 
+type CBOCategory implements uniqueId {
+  id: ID!
+  title: String!
+  createdAt: String!
+  updatedAt: String!
+  deletedAt: String
+}
+
+type CBO implements uniqueId {
+  id: ID!
+  name: String!
+  categoryId: ID!
+  category: CBOCategory!
+  address: String!
+  city: String!
+  state: String!
+  zip: String!
+  fax: String
+  phone: String!
+  url: String!
+  createdAt: String!
+  updatedAt: String!
+  deletedAt: String
+}
+
 #
 # BEGIN INPUT FIELDS
 #
@@ -1583,6 +1608,38 @@ input PatientListDeleteInput {
   patientListId: ID!
 }
 
+# params for creating a CBO
+input CBOCreateInput {
+  name: String!
+  categoryId: ID!
+  address: String!
+  city: String!
+  state: String!
+  zip: String!
+  fax: String
+  phone: String!
+  url: String!
+}
+
+# params for editing a CBO
+input CBOEditInput {
+  CBOId: ID!
+  name: String
+  categoryId: ID
+  address: String
+  city: String
+  state: String
+  zip: String
+  fax: String
+  phone: String
+  url: String
+}
+
+# params for deleting a CBO
+input CBODeleteInput {
+  CBOId: ID!
+}
+
 type RootMutationType {
   # Create a new user
   userCreate(input: UserCreateInput): User
@@ -1787,6 +1844,12 @@ type RootMutationType {
   patientListEdit(input: PatientListEditInput): PatientList
   # Delete a PatientList
   patientListDelete(input: PatientListDeleteInput): PatientList
+  # Create a CBO
+  CBOCreate(input: CBOCreateInput): CBO
+  # Edit a CBO
+  CBOEdit(input: CBOEditInput): CBO
+  # Delete a CBO
+  CBODelete(input: CBODeleteInput): CBO
 }
 
 type RootQueryType {
@@ -1996,6 +2059,10 @@ type RootQueryType {
   patientList(patientListId: ID!): PatientList!
   # all patient lists
   patientLists: [PatientList!]!
+  # CBO
+  CBO(CBOId: ID!): CBO!
+  # all CBOs
+  CBOs: [CBO!]!
 }
 
 schema {

@@ -21,6 +21,7 @@ import {
   resolvePatientCareTeam,
   resolveUserPatientPanel,
 } from './care-team-resolver';
+import { resolveCBO, resolveCBOs, CBOCreate, CBODelete, CBOEdit } from './cbo-resolver';
 import { clinicCreate, resolveClinic, resolveClinics } from './clinic-resolver';
 import { computedFieldFlagCreate } from './computed-field-flag-resolver';
 import {
@@ -339,6 +340,8 @@ const resolveFunctions = {
     computedFieldsSchema: resolveComputedFieldsSchema,
     patientLists: resolvePatientLists,
     patientList: resolvePatientList,
+    CBOs: resolveCBOs,
+    CBO: resolveCBO,
   },
 
   RootMutationType: {
@@ -436,6 +439,9 @@ const resolveFunctions = {
     patientListCreate,
     patientListEdit,
     patientListDelete,
+    CBOCreate,
+    CBOEdit,
+    CBODelete,
   },
 };
 

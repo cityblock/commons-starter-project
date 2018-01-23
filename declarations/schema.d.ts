@@ -369,6 +369,14 @@ declare module 'schema' {
     description: all patient lists
   */
     patientLists: Array<IPatientList>;
+    /**
+    description: CBO
+  */
+    CBO: ICBO;
+    /**
+    description: all CBOs
+  */
+    CBOs: Array<ICBO>;
   }
 
   /**
@@ -391,7 +399,7 @@ declare module 'schema' {
   /**
     description: An object with a Globally Unique ID
   */
-  type uniqueId = IUser | IPatient | IPatientSearchResult | IPatientForDashboard | IClinic | ITask | IPatientGoal | IPatientConcern | IConcern | IDiagnosisCode | IGoalSuggestionTemplate | ITaskTemplate | ITaskId | ITaskComment | IRiskAreaGroup | IRiskArea | IQuestion | IAnswer | IScreeningTool | IScreeningToolScoreRange | IPatientScreeningToolSubmission | ICarePlanSuggestion | IRiskAreaAssessmentSubmission | IScreeningToolScoreRangeForPatientScreeningToolSubmission | IPatientAnswer | IQuestionCondition | IComputedField | IRiskAreaGroupForPatient | IRiskAreaForPatient | IScreeningToolForPatient | IEventNotification | ITaskEvent | IProgressNote | IProgressNoteTemplate | IPatientTaskSuggestion | IPatientAnswerEvent | ICarePlanUpdateEvent | IQuickCall | IPatientList | IComputedFieldFlag | IConcernDiagnosisCode;
+  type uniqueId = IUser | IPatient | IPatientSearchResult | IPatientForDashboard | IClinic | ITask | IPatientGoal | IPatientConcern | IConcern | IDiagnosisCode | IGoalSuggestionTemplate | ITaskTemplate | ITaskId | ITaskComment | IRiskAreaGroup | IRiskArea | IQuestion | IAnswer | IScreeningTool | IScreeningToolScoreRange | IPatientScreeningToolSubmission | ICarePlanSuggestion | IRiskAreaAssessmentSubmission | IScreeningToolScoreRangeForPatientScreeningToolSubmission | IPatientAnswer | IQuestionCondition | IComputedField | IRiskAreaGroupForPatient | IRiskAreaForPatient | IScreeningToolForPatient | IEventNotification | ITaskEvent | IProgressNote | IProgressNoteTemplate | IPatientTaskSuggestion | IPatientAnswerEvent | ICarePlanUpdateEvent | IQuickCall | IPatientList | ICBO | ICBOCategory | IComputedFieldFlag | IConcernDiagnosisCode;
 
   /**
     description: An object with a Globally Unique ID
@@ -1282,6 +1290,33 @@ declare module 'schema' {
   }
 
 
+  interface ICBO {
+    id: string;
+    name: string;
+    categoryId: string;
+    category: ICBOCategory;
+    address: string;
+    city: string;
+    state: string;
+    zip: string;
+    fax: string | null;
+    phone: string;
+    url: string;
+    createdAt: string;
+    updatedAt: string;
+    deletedAt: string | null;
+  }
+
+
+  interface ICBOCategory {
+    id: string;
+    title: string;
+    createdAt: string;
+    updatedAt: string;
+    deletedAt: string | null;
+  }
+
+
   interface IRootMutationType {
     /**
     description: Create a new user
@@ -1668,6 +1703,18 @@ declare module 'schema' {
     description: Delete a PatientList
   */
     patientListDelete: IPatientList | null;
+    /**
+    description: Create a CBO
+  */
+    CBOCreate: ICBO | null;
+    /**
+    description: Edit a CBO
+  */
+    CBOEdit: ICBO | null;
+    /**
+    description: Delete a CBO
+  */
+    CBODelete: ICBO | null;
   }
 
   /**
@@ -2462,6 +2509,44 @@ declare module 'schema' {
   */
   interface IPatientListDeleteInput {
     patientListId: string;
+  }
+
+  /**
+    description: params for creating a CBO
+  */
+  interface ICBOCreateInput {
+    name: string;
+    categoryId: string;
+    address: string;
+    city: string;
+    state: string;
+    zip: string;
+    fax?: string | null;
+    phone: string;
+    url: string;
+  }
+
+  /**
+    description: params for editing a CBO
+  */
+  interface ICBOEditInput {
+    CBOId: string;
+    name?: string | null;
+    categoryId?: string | null;
+    address?: string | null;
+    city?: string | null;
+    state?: string | null;
+    zip?: string | null;
+    fax?: string | null;
+    phone?: string | null;
+    url?: string | null;
+  }
+
+  /**
+    description: params for deleting a CBO
+  */
+  interface ICBODeleteInput {
+    CBOId: string;
   }
 
 

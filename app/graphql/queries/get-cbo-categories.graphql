@@ -1,0 +1,7 @@
+#import "../fragments/full-cbo-category.graphql"
+
+query getCBOCategories {
+  CBOCategories {
+    ...FullCBOCategory
+  }
+}

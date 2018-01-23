@@ -1,0 +1,4 @@
+fragment FullCBOCategory on CBOCategory {
+  id
+  title
+}

@@ -1,0 +1,7 @@
+#import "../fragments/full-cbo.graphql"
+
+mutation CBODelete($CBOId: ID!) {
+  CBODelete(input: { CBOId: $CBOId }) {
+    ...FullCBO
+  }
+}

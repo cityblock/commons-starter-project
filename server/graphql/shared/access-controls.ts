@@ -38,6 +38,7 @@ export type Resource =
   | 'computedField'
   | 'computedFieldFlag'
   | 'patientList'
+  | 'CBOCategory'
   | 'CBO';
 
 /*

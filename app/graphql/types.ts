@@ -569,6 +569,98 @@ export interface carePlanSuggestionDismissMutation {
   } | null,
 };
 
+export interface CBOCreateMutationVariables {
+  name: string,
+  categoryId: string,
+  address: string,
+  city: string,
+  state: string,
+  zip: string,
+  fax?: string | null,
+  phone: string,
+  url: string,
+};
+
+export interface CBOCreateMutation {
+  // Create a CBO
+  CBOCreate:  {
+    id: string,
+    name: string,
+    categoryId: string,
+    category:  {
+      id: string,
+      title: string,
+    },
+    address: string,
+    city: string,
+    state: string,
+    zip: string,
+    fax: string | null,
+    phone: string,
+    url: string,
+    createdAt: string,
+  } | null,
+};
+
+export interface CBODeleteMutationVariables {
+  CBOId: string,
+};
+
+export interface CBODeleteMutation {
+  // Delete a CBO
+  CBODelete:  {
+    id: string,
+    name: string,
+    categoryId: string,
+    category:  {
+      id: string,
+      title: string,
+    },
+    address: string,
+    city: string,
+    state: string,
+    zip: string,
+    fax: string | null,
+    phone: string,
+    url: string,
+    createdAt: string,
+  } | null,
+};
+
+export interface CBOEditMutationVariables {
+  CBOId: string,
+  name?: string | null,
+  categoryId?: string | null,
+  address?: string | null,
+  city?: string | null,
+  state?: string | null,
+  zip?: string | null,
+  fax?: string | null,
+  phone?: string | null,
+  url?: string | null,
+};
+
+export interface CBOEditMutation {
+  // Edit a CBO
+  CBOEdit:  {
+    id: string,
+    name: string,
+    categoryId: string,
+    category:  {
+      id: string,
+      title: string,
+    },
+    address: string,
+    city: string,
+    state: string,
+    zip: string,
+    fax: string | null,
+    phone: string,
+    url: string,
+    createdAt: string,
+  } | null,
+};
+
 export interface getClinicsQueryVariables {
   pageNumber?: number | null,
   pageSize?: number | null,
@@ -1066,6 +1158,60 @@ export interface getAnswerQuery {
       title: string,
     } | null,
   } | null,
+};
+
+export interface getCBOCategoriesQuery {
+  // all CBO categories
+  CBOCategories:  Array< {
+    id: string,
+    title: string,
+  } >,
+};
+
+export interface getCBOQueryVariables {
+  CBOId: string,
+};
+
+export interface getCBOQuery {
+  // CBO
+  CBO:  {
+    id: string,
+    name: string,
+    categoryId: string,
+    category:  {
+      id: string,
+      title: string,
+    },
+    address: string,
+    city: string,
+    state: string,
+    zip: string,
+    fax: string | null,
+    phone: string,
+    url: string,
+    createdAt: string,
+  },
+};
+
+export interface getCBOsQuery {
+  // all CBOs
+  CBOs:  Array< {
+    id: string,
+    name: string,
+    categoryId: string,
+    category:  {
+      id: string,
+      title: string,
+    },
+    address: string,
+    city: string,
+    state: string,
+    zip: string,
+    fax: string | null,
+    phone: string,
+    url: string,
+    createdAt: string,
+  } >,
 };
 
 export interface getComputedFieldQueryVariables {
@@ -7902,6 +8048,29 @@ export interface FullCarePlanUpdateEventFragment {
   createdAt: string,
   updatedAt: string,
   deletedAt: string | null,
+};
+
+export interface FullCBOCategoryFragment {
+  id: string,
+  title: string,
+};
+
+export interface FullCBOFragment {
+  id: string,
+  name: string,
+  categoryId: string,
+  category:  {
+    id: string,
+    title: string,
+  },
+  address: string,
+  city: string,
+  state: string,
+  zip: string,
+  fax: string | null,
+  phone: string,
+  url: string,
+  createdAt: string,
 };
 
 export interface FullClinicFragment {

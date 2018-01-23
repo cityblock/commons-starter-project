@@ -17,7 +17,7 @@ export interface IDeleteCBOOptions {
 
 export async function resolveCBOs(
   root: any,
-  args: any,
+  args: {},
   { db, userRole, userId, txn }: IContext,
 ): Promise<CBO[]> {
   await accessControls.isAllowedForUser(userRole, 'view', 'CBO');

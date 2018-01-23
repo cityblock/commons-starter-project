@@ -1,0 +1,18 @@
+#import "./full-cbo-category.graphql"
+
+fragment FullCBO on CBO {
+  id
+  name
+  categoryId
+  category {
+    ...FullCBOCategory
+  }
+  address
+  city
+  state
+  zip
+  fax
+  phone
+  url
+  createdAt
+}

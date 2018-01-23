@@ -21,6 +21,7 @@ import {
   resolvePatientCareTeam,
   resolveUserPatientPanel,
 } from './care-team-resolver';
+import { resolveCBOCategories } from './cbo-category-resolver';
 import { resolveCBO, resolveCBOs, CBOCreate, CBODelete, CBOEdit } from './cbo-resolver';
 import { clinicCreate, resolveClinic, resolveClinics } from './clinic-resolver';
 import { computedFieldFlagCreate } from './computed-field-flag-resolver';
@@ -340,6 +341,7 @@ const resolveFunctions = {
     computedFieldsSchema: resolveComputedFieldsSchema,
     patientLists: resolvePatientLists,
     patientList: resolvePatientList,
+    CBOCategories: resolveCBOCategories,
     CBOs: resolveCBOs,
     CBO: resolveCBO,
   },

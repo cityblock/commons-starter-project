@@ -370,6 +370,10 @@ declare module 'schema' {
   */
     patientLists: Array<IPatientList>;
     /**
+    description: all CBO categories
+  */
+    CBOCategories: Array<ICBOCategory>;
+    /**
     description: CBO
   */
     CBO: ICBO;
@@ -399,7 +403,7 @@ declare module 'schema' {
   /**
     description: An object with a Globally Unique ID
   */
-  type uniqueId = IUser | IPatient | IPatientSearchResult | IPatientForDashboard | IClinic | ITask | IPatientGoal | IPatientConcern | IConcern | IDiagnosisCode | IGoalSuggestionTemplate | ITaskTemplate | ITaskId | ITaskComment | IRiskAreaGroup | IRiskArea | IQuestion | IAnswer | IScreeningTool | IScreeningToolScoreRange | IPatientScreeningToolSubmission | ICarePlanSuggestion | IRiskAreaAssessmentSubmission | IScreeningToolScoreRangeForPatientScreeningToolSubmission | IPatientAnswer | IQuestionCondition | IComputedField | IRiskAreaGroupForPatient | IRiskAreaForPatient | IScreeningToolForPatient | IEventNotification | ITaskEvent | IProgressNote | IProgressNoteTemplate | IPatientTaskSuggestion | IPatientAnswerEvent | ICarePlanUpdateEvent | IQuickCall | IPatientList | ICBO | ICBOCategory | IComputedFieldFlag | IConcernDiagnosisCode;
+  type uniqueId = IUser | IPatient | IPatientSearchResult | IPatientForDashboard | IClinic | ITask | IPatientGoal | IPatientConcern | IConcern | IDiagnosisCode | IGoalSuggestionTemplate | ITaskTemplate | ITaskId | ITaskComment | IRiskAreaGroup | IRiskArea | IQuestion | IAnswer | IScreeningTool | IScreeningToolScoreRange | IPatientScreeningToolSubmission | ICarePlanSuggestion | IRiskAreaAssessmentSubmission | IScreeningToolScoreRangeForPatientScreeningToolSubmission | IPatientAnswer | IQuestionCondition | IComputedField | IRiskAreaGroupForPatient | IRiskAreaForPatient | IScreeningToolForPatient | IEventNotification | ITaskEvent | IProgressNote | IProgressNoteTemplate | IPatientTaskSuggestion | IPatientAnswerEvent | ICarePlanUpdateEvent | IQuickCall | IPatientList | ICBOCategory | ICBO | IComputedFieldFlag | IConcernDiagnosisCode;
 
   /**
     description: An object with a Globally Unique ID
@@ -1290,6 +1294,15 @@ declare module 'schema' {
   }
 
 
+  interface ICBOCategory {
+    id: string;
+    title: string;
+    createdAt: string;
+    updatedAt: string;
+    deletedAt: string | null;
+  }
+
+
   interface ICBO {
     id: string;
     name: string;
@@ -1302,15 +1315,6 @@ declare module 'schema' {
     fax: string | null;
     phone: string;
     url: string;
-    createdAt: string;
-    updatedAt: string;
-    deletedAt: string | null;
-  }
-
-
-  interface ICBOCategory {
-    id: string;
-    title: string;
     createdAt: string;
     updatedAt: string;
     deletedAt: string | null;

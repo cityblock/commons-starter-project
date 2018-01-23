@@ -2059,6 +2059,8 @@ type RootQueryType {
   patientList(patientListId: ID!): PatientList!
   # all patient lists
   patientLists: [PatientList!]!
+  # all CBO categories
+  CBOCategories: [CBOCategory!]!
   # CBO
   CBO(CBOId: ID!): CBO!
   # all CBOs

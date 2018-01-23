@@ -5,6 +5,7 @@ import { FormattedMessage } from 'react-intl';
 import { withRouter } from 'react-router';
 import { FullCarePlanSuggestionFragment } from '../../graphql/types';
 import Button from '../library/button/button';
+import { getConcernCount, getGoalCount, getTaskCount } from '../util/care-plan-count';
 import * as styles from './care-plan-suggestions.css';
 
 interface IProps {
@@ -20,52 +21,13 @@ interface IProps {
 type allProps = IProps;
 
 export class CarePlanSuggestions extends React.Component<allProps, {}> {
-  getConcernCount = () => {
-    const { carePlanSuggestions } = this.props;
-
-    if (!carePlanSuggestions.length) {
-      return 0;
-    }
-
-    const concernSuggestions = carePlanSuggestions.filter(
-      suggestion => suggestion!.suggestionType === 'concern',
-    );
-
-    return concernSuggestions.length;
-  };
-
-  getGoalSuggestions = () => {
-    const { carePlanSuggestions } = this.props;
-    if (!carePlanSuggestions.length) {
-      return [];
-    }
-
-    return carePlanSuggestions.filter(suggestion => suggestion!.suggestionType === 'goal');
-  };
-
-  getGoalCount = () => this.getGoalSuggestions().length;
-
-  getTaskCount = () => {
-    if (this.getGoalCount() === 0) {
-      return 0;
-    }
-
-    const goalSuggestions = this.getGoalSuggestions();
-
-    const taskSuggestions = goalSuggestions
-      .map(goalSuggestion => goalSuggestion!.goalSuggestionTemplate!.taskTemplates)
-      .reduce((taskSuggestions1, taskSuggestions2) => taskSuggestions1!.concat(taskSuggestions2));
-
-    return (taskSuggestions || []).length;
-  };
-
   onClick = () => {
     const { history, patientRoute } = this.props;
     history.push(`${patientRoute}/map/suggestions`);
   };
 
   render() {
-    const { titleMessageId, bodyMessageId } = this.props;
+    const { titleMessageId, bodyMessageId, carePlanSuggestions } = this.props;
     return (
       <div className={styles.content}>
         <div className={styles.body}>
@@ -80,15 +42,15 @@ export class CarePlanSuggestions extends React.Component<allProps, {}> {
           <div className={styles.results}>
             <div className={styles.resultRow}>
               <div className={styles.resultLabel}>New Concerns</div>
-              <div className={styles.resultCount}>{this.getConcernCount()}</div>
+              <div className={styles.resultCount}>{getConcernCount(carePlanSuggestions)}</div>
             </div>
             <div className={styles.resultRow}>
               <div className={styles.resultLabel}>New Goals</div>
-              <div className={styles.resultCount}>{this.getGoalCount()}</div>
+              <div className={styles.resultCount}>{getGoalCount(carePlanSuggestions)}</div>
             </div>
             <div className={styles.resultRow}>
               <div className={styles.resultLabel}>New Tasks</div>
-              <div className={styles.resultCount}>{this.getTaskCount()}</div>
+              <div className={styles.resultCount}>{getTaskCount(carePlanSuggestions)}</div>
             </div>
           </div>
           <div className={styles.buttons}>

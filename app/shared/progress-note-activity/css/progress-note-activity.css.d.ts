@@ -1,4 +1,5 @@
 export const activity: string;
+export const empty: string;
 export const activitySection: string;
 export const hidden: string;
 export const expanded: string;
@@ -50,3 +51,7 @@ export const current: string;
 export const answerLabelText: string;
 export const answerLabelDate: string;
 export const answerText: string;
+export const carePlanSuggestions: string;
+export const carePlanSuggestionsList: string;
+export const carePlanUpdateCountRow: string;
+export const screeningToolTitle: string;

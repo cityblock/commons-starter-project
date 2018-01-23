@@ -5,6 +5,11 @@
   -webkit-overflow-scrolling: touch;
 }
 
+.empty {
+  padding: 20px;
+  text-align: center;
+}
+
 .activitySection {
   display: flex;
   flex-direction: column;
@@ -267,10 +272,9 @@
 .sectionSubLevel.expanded + .quickCallSummary {
   display: flex;
   flex-direction: column;
-  margin: 0 var(--small-gutter);
-  padding: 16px 0;
+  padding: var(--small-gutter) var(--small-gutter) 18px;
   border-top: 1px solid var(--border-color);
-  background-color: var(--gray-background-color);
+  background-color: var(--highlight-background-color);
 }
 
 .patientAnswer {
@@ -383,4 +387,22 @@
 
 .answerText {
   display: flex;
+}
+
+.carePlanSuggestions {
+  margin-top: 10px;
+}
+
+.carePlanSuggestionsList {
+  display: flex;
+  justify-content: space-between;
+}
+
+.carePlanUpdateCountRow {
+  margin-top: 5px;
+}
+
+.screeningToolTitle {
+  font-family: var(--basetica-medium);
+  color: var(--black-color);
 }

@@ -12,3 +12,12 @@
 .black {
   color: var(--black-color);
 }
+
+.gray {
+  color: var(--gray-font-color);
+}
+
+.mediumFontSize {
+  font-size: var(--default-font-size);
+  line-height: var(--default-line-height);
+}

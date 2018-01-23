@@ -24,11 +24,11 @@ module.exports = (env = '') => {
   };
 
   const devtool = isProduction ? 'cheap-source-map' : 'cheap-module-eval-source-map';
+  const app = ['./client'];
   const clientRender = {
     context: PATHS.app,
-    devtool,
     entry: {
-      app: './client.tsx',
+      app,
     },
     module: { rules: rules({ production: isProduction }) },
     node,

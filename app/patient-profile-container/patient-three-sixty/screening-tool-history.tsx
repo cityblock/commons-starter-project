@@ -33,7 +33,7 @@ const ScreeningToolHistory: React.StatelessComponent<IProps> = (props: IProps) =
 
   const prevScoreProps: ITextInfoProps = {
     messageId: 'history360.previous',
-    color: 'gray',
+    textColor: 'lightGray',
   };
 
   if (prevSubmission) {

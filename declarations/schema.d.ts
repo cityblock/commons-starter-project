@@ -871,6 +871,7 @@ declare module 'schema' {
     id: string;
     screeningToolId: string;
     screeningTool: IScreeningTool;
+    progressNoteId: string;
     patientId: string;
     patient: IPatient;
     userId: string;
@@ -1182,6 +1183,7 @@ declare module 'schema' {
     patientAnswerEvents: Array<IPatientAnswerEvent>;
     carePlanUpdateEvents: Array<ICarePlanUpdateEvent>;
     quickCallEvents: Array<IQuickCall>;
+    patientScreeningToolSubmissions: Array<IPatientScreeningToolSubmission>;
   }
 
   /**

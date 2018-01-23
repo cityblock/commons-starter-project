@@ -18,7 +18,6 @@ module.exports = ({ production = false } = {}) => {
   if (!production) {
     plugins.push(
       new ForkTsCheckerWebpackPlugin({ tsconfig: path.resolve('tsconfig.webpack.json') }),
-      new webpack.HotModuleReplacementPlugin(),
     );
   } else {
     plugins.push(

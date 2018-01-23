@@ -6,12 +6,14 @@ import * as styles from './css/progress-note-activity.css';
 import ProgressNoteActivityCarePlanUpdates from './progress-note-activity-care-plan-updates';
 import ProgressNoteActivityPatientAnswers from './progress-note-activity-patient-answers';
 import ProgressNoteActivityQuickCalls from './progress-note-activity-quick-calls';
+import ProgressNoteActivityScreeningToolSubmissions from './progress-note-activity-screening-tool-submissions';
 import ProgressNoteActivityTasks from './progress-note-activity-tasks';
 
 type ActivityType =
   | 'taskEvents'
   | 'patientAnswerEvents'
   | 'carePlanUpdateEvents'
+  | 'patientScreeningToolSubmissions'
   | 'quickCallEvents';
 
 interface IProps {
@@ -42,6 +44,8 @@ class ProgressNoteActivitySection extends React.Component<IProps, IState> {
         return 'MAP Updates';
       case 'quickCallEvents':
         return 'Quick Calls';
+      case 'patientScreeningToolSubmissions':
+        return 'Screening Tool Submissions';
       default:
         return 'Unknown Activity Type';
     }
@@ -103,6 +107,13 @@ class ProgressNoteActivitySection extends React.Component<IProps, IState> {
           <ProgressNoteActivityQuickCalls
             expanded={expanded}
             quickCalls={progressNoteActivity.quickCallEvents}
+          />
+        );
+      case 'patientScreeningToolSubmissions':
+        return (
+          <ProgressNoteActivityScreeningToolSubmissions
+            expanded={expanded}
+            screeningToolSubmissions={progressNoteActivity.patientScreeningToolSubmissions}
           />
         );
       default:

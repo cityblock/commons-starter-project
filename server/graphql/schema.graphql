@@ -837,6 +837,7 @@ type PatientScreeningToolSubmission implements uniqueId {
   id: ID!
   screeningToolId: ID!
   screeningTool: ScreeningTool!
+  progressNoteId: ID!
   patientId: ID!
   patient: Patient!
   userId: ID!
@@ -922,6 +923,7 @@ type ProgressNoteActivity {
   patientAnswerEvents: [PatientAnswerEvent!]!
   carePlanUpdateEvents: [CarePlanUpdateEvent!]!
   quickCallEvents: [QuickCall!]!
+  patientScreeningToolSubmissions: [PatientScreeningToolSubmission!]!
 }
 
 type ComputedField implements uniqueId {

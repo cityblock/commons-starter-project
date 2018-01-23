@@ -1,10 +1,12 @@
 import * as React from 'react';
 import { graphql } from 'react-apollo';
+import { FormattedMessage } from 'react-intl';
 import * as progressNoteActivityQuery from '../../graphql/queries/get-progress-note-activity-for-progress-note.graphql';
 import {
   getProgressNoteActivityForProgressNoteQuery,
   FullProgressNoteFragment,
 } from '../../graphql/types';
+import Spinner from '../../shared/library/spinner/spinner';
 import * as styles from './css/progress-note-activity.css';
 import ProgressNoteActivitySection from './progress-note-activity-section';
 
@@ -22,23 +24,49 @@ type allProps = IProps & IGraphqlProps;
 
 class ProgressNoteActivity extends React.Component<allProps> {
   render() {
-    const { progressNoteActivity } = this.props;
+    const { progressNoteActivity, progressNoteActivityLoading } = this.props;
+    const count = progressNoteActivity
+      ? progressNoteActivity.carePlanUpdateEvents.length +
+        progressNoteActivity.patientAnswerEvents.length +
+        progressNoteActivity.patientScreeningToolSubmissions.length +
+        progressNoteActivity.quickCallEvents.length +
+        progressNoteActivity.taskEvents.length
+      : 0;
+    if (progressNoteActivityLoading) {
+      return (
+        <div className={styles.empty}>
+          <Spinner />
+        </div>
+      );
+    } else if (count < 1) {
+      return (
+        <div className={styles.activity}>
+          <FormattedMessage id="progressNote.emptyEvents">
+            {(message: string) => <div className={styles.empty}>No events</div>}
+          </FormattedMessage>
+        </div>
+      );
+    }
     return (
       <div className={styles.activity}>
         <ProgressNoteActivitySection
-          activityType={'patientAnswerEvents'}
+          activityType="patientAnswerEvents"
           progressNoteActivity={progressNoteActivity}
         />
         <ProgressNoteActivitySection
-          activityType={'taskEvents'}
+          activityType="taskEvents"
           progressNoteActivity={progressNoteActivity}
         />
         <ProgressNoteActivitySection
-          activityType={'carePlanUpdateEvents'}
+          activityType="carePlanUpdateEvents"
           progressNoteActivity={progressNoteActivity}
         />
         <ProgressNoteActivitySection
-          activityType={'quickCallEvents'}
+          activityType="quickCallEvents"
+          progressNoteActivity={progressNoteActivity}
+        />
+        <ProgressNoteActivitySection
+          activityType="patientScreeningToolSubmissions"
           progressNoteActivity={progressNoteActivity}
         />
       </div>

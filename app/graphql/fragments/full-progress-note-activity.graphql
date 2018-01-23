@@ -2,6 +2,7 @@
 #import "./full-patient-answer-event.graphql"
 #import "./full-care-plan-update-event.graphql"
 #import "./full-quick-call.graphql"
+#import "./full-patient-screening-tool-submission.graphql"
 
 fragment FullProgressNoteActivity on ProgressNoteActivity {
   taskEvents {
@@ -15,5 +16,8 @@ fragment FullProgressNoteActivity on ProgressNoteActivity {
   }
   quickCallEvents {
     ...FullQuickCall
+  }
+  patientScreeningToolSubmissions {
+    ...FullPatientScreeningToolSubmission
   }
 }

@@ -6,6 +6,9 @@
 fragment FullPatientScreeningToolSubmission on PatientScreeningToolSubmission {
   id
   screeningToolId
+  screeningTool {
+    title
+  }
   patientId
   patient {
     ...ShortPatient

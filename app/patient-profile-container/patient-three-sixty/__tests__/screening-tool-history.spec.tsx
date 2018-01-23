@@ -80,8 +80,8 @@ describe('Patient 360 Screening Tool History Component', () => {
       wrapper
         .find(TextInfo)
         .at(1)
-        .props().color,
-    ).toBe('gray');
+        .props().textColor,
+    ).toBe('lightGray');
     expect(
       wrapper
         .find(TextInfo)

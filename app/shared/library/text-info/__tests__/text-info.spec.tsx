@@ -60,15 +60,15 @@ describe('Library Text Info Component', () => {
   });
 
   it('optionally sets color of value text', () => {
-    const color = 'gray';
-    wrapper.setProps({ color });
+    const textColor = 'gray';
+    wrapper.setProps({ textColor });
 
     expect(
       wrapper
         .find(SmallText)
         .at(1)
         .props().color,
-    ).toBe(color);
+    ).toBe(textColor);
   });
 
   it('passes message id to value text if specified', () => {

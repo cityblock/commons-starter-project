@@ -4,6 +4,7 @@ import { createSuggestionsForPatientScreeningToolSubmission } from '../lib/sugge
 import BaseModel from './base-model';
 import Patient from './patient';
 import PatientAnswer from './patient-answer';
+import ProgressNote from './progress-note';
 import RiskArea from './risk-area';
 import ScreeningTool from './screening-tool';
 import ScreeningToolScoreRange from './screening-tool-score-range';
@@ -27,6 +28,7 @@ export const EAGER_QUERY =
 export default class PatientScreeningToolSubmission extends BaseModel {
   screeningToolId: string;
   screeningTool: ScreeningTool;
+  progressNoteId: string;
   patientId: string;
   patient: Patient;
   userId: string;
@@ -49,11 +51,12 @@ export default class PatientScreeningToolSubmission extends BaseModel {
       screeningToolScoreRangeId: { type: 'string', minLength: 1 }, // cannot be blank
       patientId: { type: 'string', minLength: 1 }, // cannot be blank
       userId: { type: 'string', minLength: 1 }, // cannot be blank
+      progressNoteId: { type: 'string', minLength: 1 }, // cannot be blank
       score: { type: 'integer', minimum: 0 }, // cannot be negative
       deletedAt: { type: 'string' },
       scoredAt: { type: 'string' },
     },
-    required: ['screeningToolId', 'patientId', 'userId'],
+    required: ['screeningToolId', 'patientId', 'userId', 'progressNoteId'],
   };
 
   static relationMappings: RelationMappings = {
@@ -146,9 +149,14 @@ export default class PatientScreeningToolSubmission extends BaseModel {
     input: IPatientScreeningToolSubmissionCreateFields,
     txn: Transaction,
   ): Promise<PatientScreeningToolSubmission> {
+    const progressNote = await ProgressNote.autoOpenIfRequired(
+      { patientId: input.patientId, userId: input.userId },
+      txn,
+    );
+
     return await this.query(txn)
       .eager(EAGER_QUERY)
-      .insertAndFetch(input);
+      .insertAndFetch({ ...input, progressNoteId: progressNote.id });
   }
 
   static async autoOpenIfRequired(
@@ -341,6 +349,15 @@ export default class PatientScreeningToolSubmission extends BaseModel {
       );
     }
     return patientScreeningToolSubmission;
+  }
+
+  static async getForProgressNote(
+    progressNoteId: string,
+    txn: Transaction,
+  ): Promise<PatientScreeningToolSubmission[]> {
+    return await this.query(txn)
+      .eager(EAGER_QUERY)
+      .where('progressNoteId', progressNoteId);
   }
 }
 /* tslint:enable:member-ordering */

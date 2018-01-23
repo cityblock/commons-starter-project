@@ -1,6 +1,7 @@
 import { IProgressNoteActivity } from 'schema';
 import CarePlanUpdateEvent from '../models/care-plan-update-event';
 import PatientAnswerEvent from '../models/patient-answer-event';
+import PatientScreeningToolSubmission from '../models/patient-screening-tool-submission';
 import QuickCall from '../models/quick-call';
 import TaskEvent from '../models/task-event';
 import accessControls from './shared/access-controls';
@@ -33,11 +34,16 @@ export async function resolveProgressNoteActivityForProgressNote(
     progressNoteId,
     txn,
   )) as any;
+  const patientScreeningToolSubmissions = (await PatientScreeningToolSubmission.getForProgressNote(
+    progressNoteId,
+    txn,
+  )) as any;
 
   return {
     taskEvents,
     patientAnswerEvents,
     carePlanUpdateEvents,
     quickCallEvents,
+    patientScreeningToolSubmissions,
   };
 }

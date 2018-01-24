@@ -4,10 +4,10 @@ import * as React from 'react';
 import { compose, graphql } from 'react-apollo';
 import { withRouter } from 'react-router';
 import * as patientCarePlanQuery from '../graphql/queries/get-patient-care-plan.graphql';
-import * as taskIdsWithNotificationsForPatientQuery from '../graphql/queries/get-task-ids-with-notifications-for-patient.graphql';
+import * as taskIdsWithNotificationsQuery from '../graphql/queries/get-task-ids-with-notifications.graphql';
 import {
   getPatientCarePlanQuery,
-  getTaskIdsWithNotificationsForPatientQuery,
+  getTaskIdsWithNotificationsQuery,
 } from '../graphql/types';
 import Task from '../shared/task/task';
 import * as styles from './css/patient-map.css';
@@ -26,7 +26,7 @@ export interface IProps {
 
 interface IGraphqlProps {
   carePlan?: getPatientCarePlanQuery['carePlanForPatient'];
-  taskIdsWithNotifications?: getTaskIdsWithNotificationsForPatientQuery['taskIdsWithNotificationsForPatient'];
+  taskIdsWithNotifications?: getTaskIdsWithNotificationsQuery['taskIdsWithNotifications'];
   loading?: boolean;
   error?: string | null;
 }
@@ -104,17 +104,11 @@ export default compose(
       carePlan: data ? (data as any).carePlanForPatient : null,
     }),
   }),
-  graphql<IGraphqlProps, IProps, allProps>(taskIdsWithNotificationsForPatientQuery as any, {
-    options: (props: IProps) => ({
-      variables: {
-        patientId: props.patientId,
-      },
-      fetchPolicy: 'cache-and-network', // Always get the latest care plan
-    }),
+  graphql<IGraphqlProps, IProps, allProps>(taskIdsWithNotificationsQuery as any, {
     props: ({ data }) => {
       let taskIdsWithNotifications: string[] | null = null;
       if (data) {
-        const response = (data as any).taskIdsWithNotificationsForPatient;
+        const response = (data as any).taskIdsWithNotifications;
 
         if (response) {
           taskIdsWithNotifications = Object.keys(response).map(key => response[key].id);

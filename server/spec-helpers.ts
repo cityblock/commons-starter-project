@@ -621,7 +621,7 @@ export async function setupUrgentTasks(txn: Transaction) {
   );
   await EventNotification.dismiss(eventNotification2.id, txn);
 
-  return { user, patient1, patient5, task, task1, eventNotification };
+  return { user, user2, patient1, patient5, task, task1, eventNotification };
 }
 
 export async function createAnswerAssociations(txn: Transaction) {

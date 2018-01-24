@@ -413,14 +413,16 @@ describe('task model', () => {
 
   it('returns task ids that have notifications', async () => {
     await transaction(Task.knex(), async txn => {
-      const { patient1, user, patient5, task } = await setupUrgentTasks(txn);
-      const result = await Task.getTaskIdsWithNotificationsForPatient(patient1.id, user.id, txn);
+      const { user, user2, task } = await setupUrgentTasks(txn);
+      const result = await Task.getTaskIdsWithNotifications(user.id, txn);
 
-      expect(result.length).toBe(0);
+      expect(result.length).toBe(1);
+      expect(result[0].id).toBe(task.id);
 
-      const result2 = await Task.getTaskIdsWithNotificationsForPatient(patient5.id, user.id, txn);
+      const result2 = await Task.getTaskIdsWithNotifications(user2.id, txn);
       expect(result2.length).toBe(1);
-      expect(result2[0].id).toBe(task.id);
+      expect(result[0].id).toBe(task.id);
+
     });
   });
 

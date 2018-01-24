@@ -316,8 +316,7 @@ export default class Task extends BaseModel {
       .orderBy('dueAt', 'ASC');
   }
 
-  static async getTaskIdsWithNotificationsForPatient(
-    patientId: string,
+  static async getTaskIdsWithNotifications(
     userId: string,
     txn: Transaction,
   ) {
@@ -333,8 +332,7 @@ export default class Task extends BaseModel {
           AND event_notification."deletedAt" IS NULL
         `,
         userId,
-      )
-      .where('task.patientId', patientId);
+      );
   }
 }
 /* tslint:enable:member-ordering */

@@ -1908,8 +1908,8 @@ type RootQueryType {
   tasksDueSoonForPatient(patientId: ID!): [Task!]!
   # Tasks with notifications for patient - in dashboard
   tasksWithNotificationsForPatient(patientId: ID!): [Task!]!
-  # Task IDs with notifications for patient - in care plan MAP
-  taskIdsWithNotificationsForPatient(patientId: ID!): [TaskId!]!
+  # Task IDs with notifications for current user - in care plan MAP and tasks panel
+  taskIdsWithNotifications: [TaskId!]!
   # List of task comments
   taskComments(pageNumber: Int, pageSize: Int, taskId: ID!): TaskCommentEdges!
   # Single task comment

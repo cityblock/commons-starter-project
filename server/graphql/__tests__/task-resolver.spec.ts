@@ -689,13 +689,13 @@ describe('task tests', () => {
     });
   });
 
-  describe('taskIdsWithNotificationsForPatient', () => {
-    it('retrieves a list of task ids that have notifications for a patient and user', async () => {
+  describe('taskIdsWithNotifications', () => {
+    it('retrieves a list of task ids that have notifications for the current user', async () => {
       await transaction(Task.knex(), async txn => {
-        const { patient5, user, task } = await setupUrgentTasks(txn);
+        const { user, task } = await setupUrgentTasks(txn);
 
         const query = `{
-          taskIdsWithNotificationsForPatient(patientId: "${patient5.id}") {
+          taskIdsWithNotifications {
             id
           }
         }`;
@@ -706,8 +706,8 @@ describe('task tests', () => {
           txn,
         });
 
-        expect(result.data!.taskIdsWithNotificationsForPatient.length).toBe(1);
-        expect(result.data!.taskIdsWithNotificationsForPatient[0].id).toBe(task.id);
+        expect(result.data!.taskIdsWithNotifications.length).toBe(1);
+        expect(result.data!.taskIdsWithNotifications[0].id).toBe(task.id);
       });
     });
   });

@@ -110,9 +110,9 @@ declare module 'schema' {
   */
     tasksWithNotificationsForPatient: Array<ITask>;
     /**
-    description: Task IDs with notifications for patient - in care plan MAP
+    description: Task IDs with notifications for current user - in care plan MAP and tasks panel
   */
-    taskIdsWithNotificationsForPatient: Array<ITaskId>;
+    taskIdsWithNotifications: Array<ITaskId>;
     /**
     description: List of task comments
   */

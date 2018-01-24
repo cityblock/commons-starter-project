@@ -183,5 +183,8 @@ export default compose(
   }),
   graphql<IGraphqlProps, IProps, allProps>(eventNotificationsForTaskDismissMutation as any, {
     name: 'dismissTaskNotifications',
+    options: {
+      refetchQueries: ['getTaskIdsWithNotifications'],
+    },
   }),
 )(Task);

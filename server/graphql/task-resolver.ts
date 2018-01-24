@@ -279,13 +279,13 @@ export async function resolveTasksWithNotificationsForPatient(
   return await Task.getTasksWithNotificationsForPatient(patientId, userId!, txn);
 }
 
-export async function resolveTaskIdsWithNotificationsForPatient(
+export async function resolveTaskIdsWithNotifications(
   root: any,
-  { patientId }: IResolveUrgentTasksForPatientOptions,
+  args: any,
   { db, userRole, userId, txn }: IContext,
 ) {
   await accessControls.isAllowed(userRole, 'view', 'carePlanSuggestion');
   checkUserLoggedIn(userId);
 
-  return await Task.getTaskIdsWithNotificationsForPatient(patientId, userId!, txn);
+  return await Task.getTaskIdsWithNotifications(userId!, txn);
 }

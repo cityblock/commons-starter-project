@@ -1,5 +1,0 @@
-query getTaskIdsWithNotificationsForPatient($patientId: ID!) {
-  taskIdsWithNotificationsForPatient(patientId: $patientId) {
-    id
-  }
-}

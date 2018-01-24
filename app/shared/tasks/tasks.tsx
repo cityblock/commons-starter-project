@@ -6,8 +6,10 @@ import { compose, graphql } from 'react-apollo';
 import { FormattedMessage } from 'react-intl';
 import { withRouter } from 'react-router';
 import { Route } from 'react-router-dom';
+import * as taskIdsWithNotificationsQuery from '../../graphql/queries/get-task-ids-with-notifications.graphql';
 import * as taskDeleteMutationGraphql from '../../graphql/queries/task-delete-mutation.graphql';
 import {
+  getTaskIdsWithNotificationsQuery,
   taskDeleteMutation,
   taskDeleteMutationVariables,
   FullPatientGoalFragment,
@@ -42,10 +44,12 @@ interface IProps {
   mutate?: any;
   taskId: string;
   history: History;
+  taskIdsWithNotifications?: string[];
 }
 
 interface IGraphqlProps {
   deleteTask: (options: { variables: taskDeleteMutationVariables }) => { data: taskDeleteMutation };
+  taskIdsWithNotifications?: getTaskIdsWithNotificationsQuery['taskIdsWithNotifications'];
 }
 
 interface IState {
@@ -121,12 +125,15 @@ class Tasks extends React.Component<allProps, IState> {
   }
 
   renderTask(task: FullTaskFragment) {
+    const { taskIdsWithNotifications } = this.props;
+
     return (
       <TaskRow
         key={task.id}
         task={task}
         selectedTaskId={this.props.taskId}
         routeBase={this.props.routeBase}
+        taskIdsWithNotifications={taskIdsWithNotifications}
       />
     );
   }
@@ -242,4 +249,22 @@ class Tasks extends React.Component<allProps, IState> {
 export default compose(
   withRouter,
   graphql<IGraphqlProps>(taskDeleteMutationGraphql as any, { name: 'deleteTask' }),
+  graphql<IGraphqlProps, IProps, allProps>(taskIdsWithNotificationsQuery as any, {
+    props: ({ data }) => {
+      let taskIdsWithNotifications: string[] | null = null;
+      if (data) {
+        const response = (data as any).taskIdsWithNotifications;
+
+        if (response) {
+          taskIdsWithNotifications = Object.keys(response).map(key => response[key].id);
+        }
+      }
+
+      return {
+        loading: data ? data.loading : false,
+        error: data ? data.error : null,
+        taskIdsWithNotifications,
+      };
+    },
+  }),
 )(Tasks);

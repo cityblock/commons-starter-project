@@ -422,7 +422,6 @@ describe('task model', () => {
       const result2 = await Task.getTaskIdsWithNotifications(user2.id, txn);
       expect(result2.length).toBe(1);
       expect(result[0].id).toBe(task.id);
-
     });
   });
 

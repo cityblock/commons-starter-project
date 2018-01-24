@@ -316,10 +316,7 @@ export default class Task extends BaseModel {
       .orderBy('dueAt', 'ASC');
   }
 
-  static async getTaskIdsWithNotifications(
-    userId: string,
-    txn: Transaction,
-  ) {
+  static async getTaskIdsWithNotifications(userId: string, txn: Transaction) {
     return await this.query(txn)
       .distinct('task.id')
       .from('task')

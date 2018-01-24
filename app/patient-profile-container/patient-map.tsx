@@ -5,10 +5,7 @@ import { compose, graphql } from 'react-apollo';
 import { withRouter } from 'react-router';
 import * as patientCarePlanQuery from '../graphql/queries/get-patient-care-plan.graphql';
 import * as taskIdsWithNotificationsQuery from '../graphql/queries/get-task-ids-with-notifications.graphql';
-import {
-  getPatientCarePlanQuery,
-  getTaskIdsWithNotificationsQuery,
-} from '../graphql/types';
+import { getPatientCarePlanQuery, getTaskIdsWithNotificationsQuery } from '../graphql/types';
 import Task from '../shared/task/task';
 import * as styles from './css/patient-map.css';
 import DnDPatientCarePlan from './drag-and-drop/drag-and-drop-patient-care-plan';

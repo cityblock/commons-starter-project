@@ -340,6 +340,7 @@ export const SPANISH_TRANSLATION = {
     'progressNote.newGoals': 'New Goals: ',
     'progressNote.newTasks': 'New Tasks: ',
     'progressNote.screeningToolResults': 'Results',
+    'progressNote.close': 'Close',
     'quickCallNote.new': '+ Nota de llamada rápida',
     'quickCallForm.title': 'Nota de llamada rápida',
     'quickCallForm.submit': 'Guardar llamada',

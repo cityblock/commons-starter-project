@@ -1,6 +1,6 @@
 import * as classNames from 'classnames';
 import * as React from 'react';
-import { FormattedMessage } from 'react-intl';
+import { FormattedDate, FormattedMessage } from 'react-intl';
 import {
   FullCarePlanSuggestionFragment,
   FullPatientScreeningToolSubmissionFragment,
@@ -92,13 +92,16 @@ class ProgressNoteActivityScreeningToolSubmission extends React.Component<IProps
           <Icon name="expandArrow" className={styles.subSectionArrow} />
         </div>
         <div className={styles.quickCallSummary}>
-          <FormattedMessage id="progressNote.screeningToolResults">
-            {(message: string) => (
-              <div className={styles.sectionTitle}>
-                {message} {screeningToolSubmission.score}
-              </div>
-            )}
-          </FormattedMessage>
+          <div className={styles.carePlanSuggestionsList}>
+            <FormattedMessage id="progressNote.screeningToolResults">
+              {(message: string) => (
+                <div className={styles.sectionTitle}>
+                  {message} {screeningToolSubmission.score}
+                </div>
+              )}
+            </FormattedMessage>
+            <FormattedDate value={screeningToolSubmission.createdAt} />
+          </div>
           <div className={styles.carePlanSuggestions}>
             <SmallText messageId="progressNote.mapSuggestions" />
             {carePlanSuggestions}

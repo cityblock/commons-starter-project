@@ -1,5 +1,6 @@
 import * as classNames from 'classnames';
 import * as React from 'react';
+import { FormattedDate } from 'react-intl';
 import { FullQuickCallFragment } from '../../graphql/types';
 import Icon from '../../shared/library/icon/icon';
 import * as styles from './css/progress-note-activity.css';
@@ -60,7 +61,9 @@ class ProgressNoteActivityQuickCall extends React.Component<IProps, IState> {
         </div>
         <div className={styles.quickCallSummary}>
           <div className={styles.quickCallSummaryText}>{quickCall.summary}</div>
-          <div className={styles.quickCallSummaryDate}>{quickCall.startTime}</div>
+          <FormattedDate value={quickCall.startTime}>
+            {(date: string) => <div className={styles.quickCallSummaryDate}>{date}</div>}
+          </FormattedDate>
         </div>
       </div>
     );

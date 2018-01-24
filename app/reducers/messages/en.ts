@@ -337,6 +337,7 @@ export const ENGLISH_TRANSLATION = {
     'progressNote.newGoals': 'New Goals: ',
     'progressNote.newTasks': 'New Tasks: ',
     'progressNote.screeningToolResults': 'Results:',
+    'progressNote.close': 'Close',
     'quickCallNote.new': '+ Quick call note',
     'quickCallForm.title': 'Quick call note',
     'quickCallForm.submit': 'Save call',

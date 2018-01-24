@@ -2,6 +2,7 @@ import * as classNames from 'classnames';
 import * as React from 'react';
 import { FormattedDate, FormattedTime } from 'react-intl';
 import { FullProgressNoteFragment } from '../../graphql/types';
+import Button from '../../shared/library/button/button';
 import UnderlineTab from '../../shared/library/underline-tab/underline-tab';
 import UnderlineTabs from '../../shared/library/underline-tabs/underline-tabs';
 import ProgressNoteActivity from '../../shared/progress-note-activity/progress-note-activity';
@@ -29,7 +30,7 @@ export default class ProgressNoteRow extends React.Component<IProps, IState> {
     };
   }
 
-  onTabClick = (tab: Tab) => {
+  onTabClick = (tab: Tab | null) => {
     this.setState({
       tab,
     });
@@ -76,6 +77,14 @@ export default class ProgressNoteRow extends React.Component<IProps, IState> {
     const containerStyles = classNames(styles.container, {
       [styles.dashed]: progressNote.needsSupervisorReview,
     });
+    const closeButton =
+      tab !== null ? (
+        <Button
+          color="white"
+          onClick={() => this.onTabClick(null)}
+          messageId="progressNote.close"
+        />
+      ) : null;
     return (
       <div className={containerStyles}>
         <div className={styles.topBar}>
@@ -95,7 +104,7 @@ export default class ProgressNoteRow extends React.Component<IProps, IState> {
             {title}
             <ProgressNoteSupervisorBadge progressNote={progressNote} />
           </div>
-          <div className={styles.dotHamburger} />
+          {closeButton}
         </div>
         {summary}
         <UnderlineTabs color="white" className={tabContainerStyles}>

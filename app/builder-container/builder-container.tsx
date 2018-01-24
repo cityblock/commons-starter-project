@@ -11,6 +11,7 @@ import {
 import UnderlineTab from '../shared/library/underline-tab/underline-tab';
 import UnderlineTabs from '../shared/library/underline-tabs/underline-tabs';
 import { IState as IAppState } from '../store';
+import BuilderCBOs from './builder-cbos/builder-cbos';
 import BuilderComputedFields from './builder-computed-fields';
 import BuilderConcerns from './builder-concerns';
 import BuilderGoals from './builder-goals';
@@ -30,7 +31,8 @@ type Tab =
   | 'tools'
   | 'progress-note-templates'
   | 'computed-fields'
-  | 'patient-lists';
+  | 'patient-lists'
+  | 'CBOs';
 
 interface IProps {
   mutate?: any;
@@ -81,6 +83,7 @@ export class BuilderContainer extends React.Component<allProps, {}> {
       tab === 'progress-note-templates' && subTab !== 'questions';
     const toolsTabSelected = tab === 'tools' && subTab !== 'questions';
     const patientListsTabSelected = tab === 'patient-lists';
+    const CBOsTabSelected = tab === 'CBOs';
     const assessmentsTabSelected =
       !riskAreaGroupsTabSelected &&
       !questionsTabSelected &&
@@ -89,7 +92,8 @@ export class BuilderContainer extends React.Component<allProps, {}> {
       !toolsTabSelected &&
       !progressNoteTemplatesTabSelected &&
       !computedFieldsTabSelected &&
-      !patientListsTabSelected;
+      !patientListsTabSelected &&
+      !CBOsTabSelected;
     return (
       <div className={styles.container}>
         <div className={styles.mainBody}>
@@ -139,6 +143,11 @@ export class BuilderContainer extends React.Component<allProps, {}> {
               messageId="builder.patientLists"
               selected={patientListsTabSelected}
             />
+            <UnderlineTab
+              href="/builder/CBOs"
+              messageId="builder.CBOs"
+              selected={CBOsTabSelected}
+            />
           </UnderlineTabs>
           <Switch>
             <Route
@@ -180,6 +189,7 @@ export class BuilderContainer extends React.Component<allProps, {}> {
               path="/builder/patient-lists/:patientListId?"
               component={BuilderPatientLists}
             />
+            <Route exact path="/builder/CBOs/:CBOId?" component={BuilderCBOs} />
             <Redirect to="/builder/domains" />
           </Switch>
         </div>

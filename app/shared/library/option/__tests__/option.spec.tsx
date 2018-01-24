@@ -31,4 +31,10 @@ describe('Library Option Component', () => {
     const wrapper = shallow(<Option value={value} label={label} indent={true} />);
     expect(wrapper.find('option').text()).toBe('    Water Gun');
   });
+
+  it('renders value if no label or message id given', () => {
+    const wrapper = shallow(<Option value={value} />);
+
+    expect(wrapper.find('option').text()).toBe(value);
+  });
 });

@@ -106,7 +106,9 @@ export default class CBO extends BaseModel {
       .where({ id: CBOId, deletedAt: null })
       .patch({ deletedAt: new Date().toISOString() });
 
-    const deleted = await this.query(txn).findById(CBOId);
+    const deleted = await this.query(txn)
+      .eager(EAGER_QUERY)
+      .findById(CBOId);
 
     if (!deleted) {
       return Promise.reject(`No such CBO: ${CBOId}`);

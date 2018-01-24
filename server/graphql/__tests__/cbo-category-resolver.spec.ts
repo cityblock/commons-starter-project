@@ -29,15 +29,21 @@ describe('CBO Category resolver', () => {
   it('gets all CBO categories', async () => {
     await transaction(CBOCategory.knex(), async txn => {
       const { user } = await setup(txn);
-      const title1 = "Baby Dragon Training";
-      const title2 = "Dragonglass Mining";
+      const title1 = 'Baby Dragon Training';
+      const title2 = 'Dragonglass Mining';
 
-      const cboCategory1 = await CBOCategory.create({
-        title: title1,
-      }, txn);
-      const cboCategory2 = await CBOCategory.create({
-        title: title2,
-      }, txn);
+      const cboCategory1 = await CBOCategory.create(
+        {
+          title: title1,
+        },
+        txn,
+      );
+      const cboCategory2 = await CBOCategory.create(
+        {
+          title: title2,
+        },
+        txn,
+      );
 
       const query = `{
         CBOCategories {

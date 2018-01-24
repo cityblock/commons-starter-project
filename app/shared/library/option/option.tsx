@@ -26,7 +26,7 @@ const Option: React.StatelessComponent<IProps> = (props: IProps) => {
 
   return (
     <option value={value} disabled={disabled}>
-      {indent ? `\u00A0\u00A0\u00A0\u00A0${label}` : `${label}`}
+      {indent ? `\u00A0\u00A0\u00A0\u00A0${label || value}` : `${label || value}`}
     </option>
   );
 };

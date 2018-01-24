@@ -1,29 +1,31 @@
 #import "../fragments/full-cbo.graphql"
 
 mutation CBOEdit(
-  $CBOId: ID!,
-  $name: String,
-  $categoryId: ID,
-  $address: String,
-  $city: String,
-  $state: String,
-  $zip: String,
-  $fax: String,
-  $phone: String,
+  $CBOId: ID!
+  $name: String
+  $categoryId: ID
+  $address: String
+  $city: String
+  $state: String
+  $zip: String
+  $fax: String
+  $phone: String
   $url: String
 ) {
-  CBOEdit(input: {
-    CBOId: $CBOId,
-    name: $name,
-    categoryId: $categoryId,
-    address: $address,
-    city: $city,
-    state: $state,
-    zip: $zip,
-    fax: $fax,
-    phone: $phone,
-    url: $url
-  }) {
+  CBOEdit(
+    input: {
+      CBOId: $CBOId
+      name: $name
+      categoryId: $categoryId
+      address: $address
+      city: $city
+      state: $state
+      zip: $zip
+      fax: $fax
+      phone: $phone
+      url: $url
+    }
+  ) {
     ...FullCBO
   }
 }

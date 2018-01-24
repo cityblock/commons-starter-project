@@ -659,3 +659,43 @@ export const patientList2 = {
   order: 2,
   createdAt: '2017-11-07T13:45:14.532Z',
 };
+
+export const CBOCategory = {
+  id: 'foodServices',
+  title: 'Food Services',
+};
+
+export const CBOCategory2 = {
+  id: 'mentalHealth',
+  title: 'Mental Health',
+};
+
+export const CBO = {
+  id: 'aGirlHasNoPies',
+  name: 'Arya Stark Pie Pantry',
+  categoryId: CBOCategory.id,
+  category: CBOCategory,
+  address: 'The Twins',
+  city: 'Riverlands',
+  state: 'WS',
+  zip: '11111',
+  phone: '(333) 555-5555',
+  fax: '(444) 666-6666',
+  url: 'www.facelessmen.com',
+  createdAt: '2017-11-07T13:45:14.532Z',
+};
+
+export const CBO2 = {
+  id: 'evilLaugh',
+  name: 'Ramsay Bolton Immersive Therapy',
+  categoryId: CBOCategory2.id,
+  category: CBOCategory2,
+  address: 'Winterfell',
+  city: 'The North',
+  state: 'WS',
+  zip: '12211',
+  phone: '(111) 555-5555',
+  fax: '(222) 666-6666',
+  url: 'www.housebolton.com',
+  createdAt: '2017-11-07T13:45:14.532Z',
+};

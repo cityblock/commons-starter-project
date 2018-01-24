@@ -7,7 +7,7 @@
 
 .answers {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   flex-wrap: wrap;
 }
 
@@ -23,6 +23,7 @@
 .heading {
   font-family: var(--basetica-medium);
   color: var(--border-color);
+  font-size: var(--small-font-size);
 }
 
 .activityBold {

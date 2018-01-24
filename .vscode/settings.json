@@ -1,9 +1,7 @@
 // Place your settings in this file to overwrite default and user settings.
 {
   "files.trimTrailingWhitespace": true,
-  "editor.rulers": [
-    100
-  ],
+  "editor.rulers": [100],
   "editor.tabSize": 2,
   "files.exclude": {
     "**/.git": true,
@@ -12,7 +10,7 @@
   },
   "search.exclude": {
     "**/node_modules": true,
-    "**/coverage": true,
+    "**/public": true,
     "**/server-compiled": true,
     ".awcache/**": true
   },

@@ -4,6 +4,8 @@
   font-size: var(--small-font-size);
   margin-bottom: 30px;
   flex: 1;
+  min-width: 33%;
+  max-width: 70%;
 }
 
 .title {

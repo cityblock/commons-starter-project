@@ -42,7 +42,7 @@ class ProgressNoteActivity extends React.Component<allProps> {
       return (
         <div className={styles.activity}>
           <FormattedMessage id="progressNote.emptyEvents">
-            {(message: string) => <div className={styles.empty}>No events</div>}
+            {(message: string) => <div className={styles.empty}>{message}</div>}
           </FormattedMessage>
         </div>
       );

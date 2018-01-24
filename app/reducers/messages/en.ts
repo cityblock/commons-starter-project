@@ -331,6 +331,7 @@ export const ENGLISH_TRANSLATION = {
     'progressNote.submitSupervisorReview': 'Submit Supervisor Review',
     'progressNote.pendingReview': 'Pending review',
     'progressNote.reviewed': 'Reviewed',
+    'progressNote.emptyEvents': 'No Activity',
     'progressNote.mapSuggestions': 'MAP Suggestions',
     'progressNote.newConcerns': 'New Concerns: ',
     'progressNote.newGoals': 'New Goals: ',

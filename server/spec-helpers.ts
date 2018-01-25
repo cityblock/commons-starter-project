@@ -13,6 +13,7 @@ import CarePlanUpdateEvent from './models/care-plan-update-event';
 import CareTeam from './models/care-team';
 import CBO from './models/cbo';
 import CBOCategory from './models/cbo-category';
+import CBOReferral from './models/cbo-referral';
 import Clinic from './models/clinic';
 import ComputedField from './models/computed-field';
 import Concern from './models/concern';
@@ -1133,4 +1134,17 @@ export async function createCBO(txn: Transaction, name: string = "Night's Watch"
   );
 
   return cbo;
+}
+
+export async function createCBOReferral(txn: Transaction) {
+  const cbo = await createCBO(txn);
+
+  return await CBOReferral.create(
+    {
+      categoryId: cbo.categoryId,
+      CBOId: cbo.id,
+      diagnosis: 'Winter is here',
+    },
+    txn,
+  );
 }

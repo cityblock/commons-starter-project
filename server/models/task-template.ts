@@ -33,6 +33,7 @@ export default class TaskTemplate extends BaseModel {
       id: { type: 'string' },
       title: { type: 'string', minLength: 1 }, // cannot be blank
       deletedAt: { type: 'string' },
+      updatedAt: { type: 'string' },
       completedWithinNumber: { type: 'number', minimum: 1 }, // cannot be zero or negative
       completedWithinInterval: { type: 'string', enum: ['hour', 'day', 'week', 'month', 'year'] },
       repeating: { type: 'boolean' },

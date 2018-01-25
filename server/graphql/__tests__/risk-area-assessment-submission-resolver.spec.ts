@@ -89,7 +89,7 @@ describe('risk area assessment resolver tests', () => {
       });
     });
 
-    it('gets the latest riskAreaAssessmentSubmission for a patient for a risk area', async () => {
+    xit('gets the latest riskAreaAssessmentSubmission for a patient for a risk area', async () => {
       await transaction(RiskArea.knex(), async txn => {
         const { patient, user, riskArea } = await setup(txn);
 

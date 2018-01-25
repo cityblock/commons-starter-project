@@ -34,6 +34,7 @@ export default class ComputedField extends BaseModel {
       label: { type: 'string', minLength: 1 }, // cannot be blank
       dataType: { type: 'string', minLength: 1 }, // cannot be blank
       deletedAt: { type: 'string' },
+      updatedAt: { type: 'string' },
     },
     required: ['slug', 'label', 'dataType'],
   };

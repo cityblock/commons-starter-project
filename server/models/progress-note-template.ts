@@ -19,6 +19,7 @@ export default class ProgressNoteTemplate extends BaseModel {
       id: { type: 'string' },
       title: { type: 'string', minLength: 1 },
       deletedAt: { type: 'string' },
+      updatedAt: { type: 'string' },
     },
     required: ['title'],
   };

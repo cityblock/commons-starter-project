@@ -22,6 +22,7 @@ export default class GoogleAuth extends BaseModel {
       accessToken: { type: 'string' },
       expiresAt: { type: 'string' },
       userId: { type: 'string' },
+      updatedAt: { type: 'string' },
     },
   };
 

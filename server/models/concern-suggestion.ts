@@ -1,7 +1,7 @@
 import { uniqBy } from 'lodash';
 import { Model, RelationMappings, Transaction } from 'objection';
+import * as uuid from 'uuid/v4';
 import Answer from './answer';
-import BaseModel from './base-model';
 import CarePlanSuggestion from './care-plan-suggestion';
 import Concern from './concern';
 
@@ -12,7 +12,10 @@ interface IConcernSuggestionEditableFields {
 }
 
 /* tslint:disable:member-ordering */
-export default class ConcernSuggestion extends BaseModel {
+export default class ConcernSuggestion extends Model {
+  id: string;
+  createdAt: string;
+  deletedAt: string;
   concernId: string;
   concern: Concern;
   answerId: string;
@@ -20,6 +23,8 @@ export default class ConcernSuggestion extends BaseModel {
   answer: Answer;
 
   static tableName = 'concern_suggestion';
+  static modelPaths = [__dirname];
+  static pickJsonSchemaProperties = true;
 
   static jsonSchema = {
     type: 'object',
@@ -60,6 +65,11 @@ export default class ConcernSuggestion extends BaseModel {
       },
     },
   };
+
+  $beforeInsert() {
+    this.id = uuid();
+    this.createdAt = new Date().toISOString();
+  }
 
   static async getForConcern(concernId: string, txn: Transaction): Promise<Answer[]> {
     const concernSuggestions = await this.query(txn)

@@ -41,6 +41,7 @@ export default class EventNotification extends BaseModel {
       emailSentAt: { type: 'string' },
       deliveredAt: { type: 'string' },
       deletedAt: { type: 'string' },
+      updatedAt: { type: 'string' },
     },
     required: ['userId'],
   };

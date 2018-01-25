@@ -77,6 +77,8 @@ export default class Patient extends BaseModel {
       scratchPad: { type: 'text' },
       consentToCall: { type: 'boolean' },
       consentToText: { type: 'boolean' },
+      updatedAt: { type: 'string' },
+      deletedAt: { type: 'string' },
     },
     required: ['firstName', 'lastName'],
   };

@@ -19,6 +19,7 @@ export default class CBOCategory extends BaseModel {
       id: { type: 'string' },
       title: { type: 'string', minLength: 1 }, // cannot be blank
       deletedAt: { type: 'string' },
+      updatedAt: { type: 'string' },
     },
     required: ['title'],
   };

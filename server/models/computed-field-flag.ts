@@ -28,6 +28,7 @@ export default class ComputedFieldFlag extends BaseModel {
       userId: { type: 'string', minLength: 1 }, // cannot be blank
       reason: { type: 'string' },
       deletedAt: { type: 'string' },
+      updatedAt: { type: 'string' },
     },
     required: ['patientAnswerId', 'userId'],
   };

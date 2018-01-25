@@ -45,9 +45,9 @@ export default class QuickCall extends BaseModel {
       callRecipient: { type: 'string', minLength: 1 }, // cannot be blank
       wasSuccessful: { type: 'boolean' },
       startTime: { type: 'string', minLength: 1 }, // cannot be blank
-      createdAt: { type: 'string' },
       updatedAt: { type: 'string' },
       deletedAt: { type: 'string' },
+      createdAt: { type: 'string' },
     },
     required: [
       'userId',

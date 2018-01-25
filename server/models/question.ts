@@ -86,6 +86,7 @@ export default class Question extends BaseModel {
       progressNoteTemplateId: { type: 'string' },
       order: { type: 'integer', minimum: 1 }, // cannot be zero ore negative
       deletedAt: { type: 'string' },
+      updatedAt: { type: 'string' },
       validatedSource: { type: 'string' },
       computedFieldId: { type: 'string' },
       otherTextAnswerId: { type: ['string', 'null'] },

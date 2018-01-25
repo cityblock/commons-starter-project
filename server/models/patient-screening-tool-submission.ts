@@ -54,6 +54,7 @@ export default class PatientScreeningToolSubmission extends BaseModel {
       progressNoteId: { type: 'string', minLength: 1 }, // cannot be blank
       score: { type: 'integer', minimum: 0 }, // cannot be negative
       deletedAt: { type: 'string' },
+      updatedAt: { type: 'string' },
       scoredAt: { type: 'string' },
     },
     required: ['screeningToolId', 'patientId', 'userId', 'progressNoteId'],

@@ -93,6 +93,8 @@ export default class CarePlanSuggestion extends BaseModel {
       patientScreeningToolSubmissionId: { type: 'string' },
       riskAreaAssessmentSubmissionId: { type: 'string' },
       computedFieldId: { type: 'string' },
+      deletedAt: { type: 'string' },
+      updatedAt: { type: 'string' },
     },
     required: ['patientId', 'suggestionType'],
     oneOf: [

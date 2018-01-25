@@ -111,6 +111,7 @@ export default class User extends Model {
       googleAuthId: { type: 'string', minLength: 1 }, // cannot be blank
       googleProfileImageUrl: { type: 'string', minLength: 1 }, // cannot be blank
       deletedAt: { type: 'string' },
+      updatedAt: { type: 'string' },
       phone: { type: 'string' },
     },
     required: ['email', 'userRole', 'homeClinicId'],

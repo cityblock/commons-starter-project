@@ -35,6 +35,7 @@ export default class ScreeningTool extends BaseModel {
       title: { type: 'string', minLength: 1 }, // cannot be blank
       riskAreaId: { type: 'string', minLength: 1 }, // cannot be blank
       deletedAt: { type: 'string' },
+      updatedAt: { type: 'string' },
     },
     required: ['title', 'riskAreaId'],
   };

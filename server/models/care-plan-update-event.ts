@@ -57,6 +57,7 @@ export default class CarePlanUpdateEvent extends BaseModel {
       progressNoteId: { type: 'string' },
       eventType: { type: 'string', minLength: 1 }, // cannot be blank
       deletedAt: { type: 'string' },
+      updatedAt: { type: 'string' },
     },
     required: ['patientId', 'userId', 'eventType'],
   };

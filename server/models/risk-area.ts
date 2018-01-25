@@ -51,6 +51,7 @@ export default class RiskArea extends BaseModel {
       assessmentType: { type: 'string', enum: ['manual', 'automated'] },
       riskAreaGroupId: { type: 'string', minLength: 1 }, // cannot be blank
       deletedAt: { type: 'string' },
+      updatedAt: { type: 'string' },
       order: { type: 'integer', minimum: 1 }, // cannot be zero or negative
       mediumRiskThreshold: { type: 'integer', minimum: 1 }, // cannot be zero or negative
       highRiskThreshold: { type: 'integer', minimum: 1 }, // cannot be zero or negative

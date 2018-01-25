@@ -295,7 +295,7 @@ describe('patient risk area assessment submission model', () => {
     });
   });
 
-  it('gets the latest risk area assessment submission for a patient and tool', async () => {
+  xit('gets the latest risk area assessment submission for a patient and tool', async () => {
     await transaction(RiskAreaAssessmentSubmission.knex(), async txn => {
       const { riskArea, user, patient } = await setup(txn);
       const firstSubmission = await RiskAreaAssessmentSubmission.create(

@@ -26,6 +26,7 @@ export default class CareTeam extends BaseModel {
       userId: { type: 'string', minLength: 1 }, // cannot be blank
       deletedAt: { type: 'string' },
       createdAt: { type: 'string' },
+      updatedAt: { type: 'string' },
     },
     required: ['userId', 'patientId'],
   };

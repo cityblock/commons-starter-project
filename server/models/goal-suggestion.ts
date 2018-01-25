@@ -1,7 +1,7 @@
 import { uniqBy } from 'lodash';
 import { Model, RelationMappings, Transaction } from 'objection';
+import * as uuid from 'uuid/v4';
 import Answer from './answer';
-import BaseModel from './base-model';
 import CarePlanSuggestion from './care-plan-suggestion';
 import GoalSuggestionTemplate from './goal-suggestion-template';
 import PatientGoal from './patient-goal';
@@ -13,8 +13,12 @@ interface IGoalSuggestionEditableFields {
   screeningToolScoreRangeId?: string;
 }
 
+// NOTE: Does not extend base model since GoalSuggestions should never be updated
 /* tslint:disable:member-ordering */
-export default class GoalSuggestion extends BaseModel {
+export default class GoalSuggestion extends Model {
+  id: string;
+  createdAt: string;
+  deletedAt: string;
   goalSuggestionTemplateId: string;
   goalSuggestionTemplate: GoalSuggestionTemplate;
   answerId: string;
@@ -23,6 +27,8 @@ export default class GoalSuggestion extends BaseModel {
   screeningToolScoreRange: ScreeningToolScoreRange;
 
   static tableName = 'goal_suggestion';
+  static modelPaths = [__dirname];
+  static pickJsonSchemaProperties = true;
 
   static jsonSchema = {
     type: 'object',
@@ -63,6 +69,11 @@ export default class GoalSuggestion extends BaseModel {
       },
     },
   };
+
+  $beforeInsert() {
+    this.id = uuid();
+    this.createdAt = new Date().toISOString();
+  }
 
   static async getForGoalSuggestion(
     goalSuggestionTemplateId: string,

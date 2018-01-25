@@ -26,6 +26,7 @@ export default class PatientList extends BaseModel {
       answerId: { type: 'string', format: 'uuid' },
       order: { type: 'integer', minimum: 1 }, // cannot be zero or negative
       deletedAt: { type: 'string' },
+      updatedAt: { type: 'string' },
     },
     required: ['title', 'answerId', 'order'],
   };

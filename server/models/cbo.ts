@@ -45,6 +45,7 @@ export default class CBO extends BaseModel {
       phone: { type: 'string', minLength: 10 }, // at least 10 digits
       url: { type: 'string', minLength: 1 }, // cannot be blank
       deletedAt: { type: 'string' },
+      updatedAt: { type: 'string' },
     },
     required: ['name', 'categoryId', 'address', 'city', 'state', 'zip', 'phone', 'url'],
   };

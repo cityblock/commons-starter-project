@@ -43,6 +43,7 @@ export default class PatientConcern extends BaseModel {
       patientId: { type: 'string', minLength: 1 }, // cannot be blank
       concernId: { type: 'string', minLength: 1 }, // cannot be blank
       deletedAt: { type: 'string' },
+      updatedAt: { type: 'string' },
       startedAt: { type: 'string | null' },
       completedAt: { type: 'string | null' },
     },

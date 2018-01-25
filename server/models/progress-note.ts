@@ -57,6 +57,7 @@ export default class ProgressNote extends BaseModel {
       summary: { type: 'string' },
       memberConcern: { type: 'string' },
       deletedAt: { type: 'string' },
+      updatedAt: { type: 'string' },
       supervisorNotes: { type: 'string' },
       supervisorId: { type: 'string' },
       needsSupervisorReview: { type: 'boolean' },

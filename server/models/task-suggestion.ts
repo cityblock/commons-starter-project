@@ -25,6 +25,7 @@ export default class TaskSuggestion extends BaseModel {
       answerId: { type: 'string', minLength: 1 },
       taskTemplateId: { type: 'string', minLength: 1 },
       deletedAt: { type: 'string' },
+      updatedAt: { type: 'string' },
     },
     required: ['answerId', 'taskTemplateId'],
   };

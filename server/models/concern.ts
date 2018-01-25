@@ -35,6 +35,7 @@ export default class Concern extends BaseModel {
       id: { type: 'string' },
       title: { type: 'string', minLength: 1 }, // cannot be blank
       deletedAt: { type: 'string' },
+      updatedAt: { type: 'string' },
     },
     required: ['title'],
   };

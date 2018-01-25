@@ -38,6 +38,7 @@ export default class DiagnosisCode extends BaseModel {
       code: { type: 'string', minLength: 1 },
       version: { type: 'string', minLength: 1 },
       deletedAt: { type: 'string' },
+      updatedAt: { type: 'string' },
     },
     required: ['codesetName', 'label', 'code', 'version'],
   };

@@ -66,7 +66,7 @@ describe('care model', () => {
         );
         const patient = await createPatient(createMockPatient(123, clinic.id), user.id, txn);
         const error =
-          'insert into "care_team" ("createdAt", "id", "patientId", "userId") values ($1, $2, $3, $4) returning "id" - insert or update on table "care_team" violates foreign key constraint "care_team_userid_foreign"';
+          'insert into "care_team" ("createdAt", "id", "patientId", "updatedAt", "userId") values ($1, $2, $3, $4, $5) returning "id" - insert or update on table "care_team" violates foreign key constraint "care_team_userid_foreign"';
 
         await expect(
           CareTeam.create({ userId: uuid(), patientId: patient.id }, txn),

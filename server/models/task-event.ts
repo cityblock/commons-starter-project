@@ -81,6 +81,7 @@ export default class TaskEvent extends BaseModel {
       eventUserId: { type: 'string' },
       progressNoteId: { type: 'string' },
       deletedAt: { type: 'string' },
+      updatedAt: { type: 'string' },
     },
     required: ['taskId', 'userId', 'eventType'],
   };

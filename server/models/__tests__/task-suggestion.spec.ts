@@ -106,9 +106,7 @@ describe('task suggestion model', () => {
         const { answer } = await setup(txn);
 
         const error =
-          'insert into "task_suggestion" ("answerId", "id", "taskTemplateId")' +
-          ' values ($1, $2, $3) returning "id" - insert or update on table "task_suggestion"' +
-          ' violates foreign key constraint "task_suggestion_tasktemplateid_foreign"';
+          'insert into "task_suggestion" ("answerId", "id", "taskTemplateId", "updatedAt") values ($1, $2, $3, $4) returning "id" - insert or update on table "task_suggestion" violates foreign key constraint "task_suggestion_tasktemplateid_foreign"';
 
         await expect(
           TaskSuggestion.create(

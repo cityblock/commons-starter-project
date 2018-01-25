@@ -253,12 +253,15 @@ describe('answer model', () => {
         },
         txn,
       );
+      const updatedAt = answer.updatedAt;
+
       expect(answer.displayValue).toEqual('loves writing tests!');
       const editedRiskArea = await Answer.edit(
         { displayValue: 'luvs writing tests!' },
         answer.id,
         txn,
       );
+      expect(editedRiskArea.updatedAt).not.toEqual(updatedAt);
       expect(editedRiskArea.displayValue).toEqual('luvs writing tests!');
     });
   });

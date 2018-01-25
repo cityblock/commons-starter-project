@@ -91,6 +91,7 @@ export default class PatientAnswer extends BaseModel {
       answerValue: { type: 'string' },
       applicable: { type: 'boolean' },
       deletedAt: { type: 'string' },
+      updatedAt: { type: 'string' },
       patientScreeningToolSubmissionId: { type: 'string' },
       progressNoteId: { type: 'string' },
       riskAreaAssessmentSubmissionId: { type: 'string' },

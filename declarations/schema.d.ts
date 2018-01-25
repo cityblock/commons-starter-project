@@ -403,7 +403,7 @@ declare module 'schema' {
   /**
     description: An object with a Globally Unique ID
   */
-  type uniqueId = IUser | IPatient | IPatientSearchResult | IPatientForDashboard | IClinic | ITask | IPatientGoal | IPatientConcern | IConcern | IDiagnosisCode | IGoalSuggestionTemplate | ITaskTemplate | ITaskId | ITaskComment | IRiskAreaGroup | IRiskArea | IQuestion | IAnswer | IScreeningTool | IScreeningToolScoreRange | IPatientScreeningToolSubmission | ICarePlanSuggestion | IRiskAreaAssessmentSubmission | IScreeningToolScoreRangeForPatientScreeningToolSubmission | IPatientAnswer | IQuestionCondition | IComputedField | IRiskAreaGroupForPatient | IRiskAreaForPatient | IScreeningToolForPatient | IEventNotification | ITaskEvent | IProgressNote | IProgressNoteTemplate | IPatientTaskSuggestion | IPatientAnswerEvent | ICarePlanUpdateEvent | IQuickCall | IPatientList | ICBOCategory | ICBO | IComputedFieldFlag | IConcernDiagnosisCode;
+  type uniqueId = IUser | IPatient | IPatientSearchResult | IPatientForDashboard | IClinic | ITask | IPatientGoal | IPatientConcern | IConcern | IDiagnosisCode | IGoalSuggestionTemplate | ITaskTemplate | ITaskId | ITaskComment | IRiskAreaGroup | IRiskArea | IQuestion | IAnswer | IScreeningTool | IScreeningToolScoreRange | IPatientScreeningToolSubmission | ICarePlanSuggestion | IRiskAreaAssessmentSubmission | IScreeningToolScoreRangeForPatientScreeningToolSubmission | IPatientAnswer | IQuestionCondition | IComputedField | IRiskAreaGroupForPatient | IRiskAreaForPatient | IScreeningToolForPatient | IEventNotification | ITaskEvent | IProgressNote | IProgressNoteTemplate | IPatientTaskSuggestion | IPatientAnswerEvent | ICarePlanUpdateEvent | IQuickCall | IPatientList | ICBOCategory | ICBO | IComputedFieldFlag | ICBOReferral | IConcernDiagnosisCode;
 
   /**
     description: An object with a Globally Unique ID
@@ -1719,6 +1719,14 @@ declare module 'schema' {
     description: Delete a CBO
   */
     CBODelete: ICBO | null;
+    /**
+    description: Create a CBO Referral
+  */
+    CBOReferralCreate: ICBOReferral | null;
+    /**
+    description: Edit a CBO Referral
+  */
+    CBOReferralEdit: ICBOReferral | null;
   }
 
   /**
@@ -2551,6 +2559,43 @@ declare module 'schema' {
   */
   interface ICBODeleteInput {
     CBOId: string;
+  }
+
+  /**
+    description: params for creating a CBO referral
+  */
+  interface ICBOReferralCreateInput {
+    categoryId: string;
+    CBOId?: string | null;
+    name?: string | null;
+    url?: string | null;
+    diagnosis?: string | null;
+  }
+
+
+  interface ICBOReferral {
+    id: string;
+    categoryId: string;
+    category: ICBOCategory;
+    CBOId: string | null;
+    CBO: ICBO | null;
+    name: string | null;
+    url: string | null;
+    diagnosis: string | null;
+    createdAt: string;
+    updatedAt: string;
+    deletedAt: string | null;
+    sentAt: string | null;
+    acknowledgedAt: string | null;
+  }
+
+  /**
+    description: params for editing a CBO referral
+  */
+  interface ICBOReferralEditInput {
+    CBOReferralId: string;
+    sentAt?: string | null;
+    acknowledgedAt?: string | null;
   }
 
 

@@ -661,6 +661,80 @@ export interface CBOEditMutation {
   } | null,
 };
 
+export interface CBOReferralCreateMutationVariables {
+  categoryId: string,
+  CBOId?: string | null,
+  name?: string | null,
+  url?: string | null,
+  diagnosis?: string | null,
+};
+
+export interface CBOReferralCreateMutation {
+  // Create a CBO Referral
+  CBOReferralCreate:  {
+    id: string,
+    categoryId: string,
+    category:  {
+      id: string,
+      title: string,
+    },
+    CBOId: string | null,
+    CBO:  {
+      id: string,
+      name: string,
+      categoryId: string,
+      address: string,
+      city: string,
+      state: string,
+      zip: string,
+      fax: string | null,
+      phone: string,
+      url: string,
+    } | null,
+    name: string | null,
+    url: string | null,
+    diagnosis: string | null,
+    sentAt: string | null,
+    acknowledgedAt: string | null,
+  } | null,
+};
+
+export interface CBOReferralEditMutationVariables {
+  CBOReferralId: string,
+  sentAt?: string | null,
+  acknowledgedAt?: string | null,
+};
+
+export interface CBOReferralEditMutation {
+  // Edit a CBO Referral
+  CBOReferralEdit:  {
+    id: string,
+    categoryId: string,
+    category:  {
+      id: string,
+      title: string,
+    },
+    CBOId: string | null,
+    CBO:  {
+      id: string,
+      name: string,
+      categoryId: string,
+      address: string,
+      city: string,
+      state: string,
+      zip: string,
+      fax: string | null,
+      phone: string,
+      url: string,
+    } | null,
+    name: string | null,
+    url: string | null,
+    diagnosis: string | null,
+    sentAt: string | null,
+    acknowledgedAt: string | null,
+  } | null,
+};
+
 export interface getClinicsQueryVariables {
   pageNumber?: number | null,
   pageSize?: number | null,
@@ -8051,6 +8125,33 @@ export interface FullCBOCategoryFragment {
   title: string,
 };
 
+export interface FullCBOReferralFragment {
+  id: string,
+  categoryId: string,
+  category:  {
+    id: string,
+    title: string,
+  },
+  CBOId: string | null,
+  CBO:  {
+    id: string,
+    name: string,
+    categoryId: string,
+    address: string,
+    city: string,
+    state: string,
+    zip: string,
+    fax: string | null,
+    phone: string,
+    url: string,
+  } | null,
+  name: string | null,
+  url: string | null,
+  diagnosis: string | null,
+  sentAt: string | null,
+  acknowledgedAt: string | null,
+};
+
 export interface FullCBOFragment {
   id: string,
   name: string,
@@ -10040,6 +10141,19 @@ export interface FullUserFragment {
   googleProfileImageUrl: string | null,
   createdAt: string,
   updatedAt: string,
+};
+
+export interface ShortCBOFragment {
+  id: string,
+  name: string,
+  categoryId: string,
+  address: string,
+  city: string,
+  state: string,
+  zip: string,
+  fax: string | null,
+  phone: string,
+  url: string,
 };
 
 export interface ShortEventNotificationsForUserTaskFragment {

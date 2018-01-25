@@ -8,28 +8,28 @@ const EAGER_QUERY = '[category, cbo]';
 
 interface ICBOReferralCreateFields {
   categoryId: string;
-  CBOId?: string;
-  name?: string;
-  url?: string;
-  diagnosis?: string;
+  CBOId?: string | null;
+  name?: string | null;
+  url?: string | null;
+  diagnosis?: string | null;
 }
 
 interface ICBOReferralEditFields {
-  sentAt?: string;
-  acknowledgedAt?: string;
+  sentAt?: string | null;
+  acknowledgedAt?: string | null;
 }
 
 /* tslint:disable:member-ordering */
 export default class CBOReferral extends BaseModel {
   categoryId: string;
   category: CBOCategory;
-  CBOId?: string;
+  CBOId?: string | null;
   CBO?: CBO;
-  name?: string; // provided if referring to "Other" CBO
-  url?: string; // provided if referring to "Other" CBO
-  diagnosis?: string; // allowing to be blank if no diagnoses available from redox
-  sentAt: string;
-  acknowledgedAt: string;
+  name?: string | null; // provided if referring to "Other" CBO
+  url?: string | null; // provided if referring to "Other" CBO
+  diagnosis?: string | null; // allowing to be blank if no diagnoses available from redox
+  sentAt: string | null;
+  acknowledgedAt: string | null;
   task: Task;
 
   static tableName = 'cbo_referral';

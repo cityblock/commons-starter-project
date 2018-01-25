@@ -1,0 +1,9 @@
+#import "../fragments/full-cbo-referral.graphql"
+
+mutation CBOReferralEdit($CBOReferralId: ID!, $sentAt: String, $acknowledgedAt: String) {
+  CBOReferralEdit(
+    input: { CBOReferralId: $CBOReferralId, sentAt: $sentAt, acknowledgedAt: $acknowledgedAt }
+  ) {
+    ...FullCBOReferral
+  }
+}

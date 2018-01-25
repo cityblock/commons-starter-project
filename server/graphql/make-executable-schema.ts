@@ -22,6 +22,7 @@ import {
   resolveUserPatientPanel,
 } from './care-team-resolver';
 import { resolveCBOCategories } from './cbo-category-resolver';
+import { CBOReferralCreate, CBOReferralEdit } from './cbo-referral-resolver';
 import { resolveCBO, resolveCBOs, CBOCreate, CBODelete, CBOEdit } from './cbo-resolver';
 import { clinicCreate, resolveClinic, resolveClinics } from './clinic-resolver';
 import { computedFieldFlagCreate } from './computed-field-flag-resolver';
@@ -444,6 +445,8 @@ const resolveFunctions = {
     CBOCreate,
     CBOEdit,
     CBODelete,
+    CBOReferralCreate,
+    CBOReferralEdit,
   },
 };
 

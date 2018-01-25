@@ -39,7 +39,8 @@ export type Resource =
   | 'computedFieldFlag'
   | 'patientList'
   | 'CBOCategory'
-  | 'CBO';
+  | 'CBO'
+  | 'CBOReferral';
 
 /*
 ACL SPEC:

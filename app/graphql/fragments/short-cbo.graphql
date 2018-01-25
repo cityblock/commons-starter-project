@@ -1,0 +1,12 @@
+fragment ShortCBO on CBO {
+  id
+  name
+  categoryId
+  address
+  city
+  state
+  zip
+  fax
+  phone
+  url
+}

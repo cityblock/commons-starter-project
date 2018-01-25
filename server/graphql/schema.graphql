@@ -988,6 +988,22 @@ type CBO implements uniqueId {
   deletedAt: String
 }
 
+type CBOReferral implements uniqueId {
+  id: ID!
+  categoryId: ID!
+  category: CBOCategory!
+  CBOId: ID
+  CBO: CBO
+  name: String
+  url: String
+  diagnosis: String
+  createdAt: String!
+  updatedAt: String!
+  deletedAt: String
+  sentAt: String
+  acknowledgedAt: String
+}
+
 #
 # BEGIN INPUT FIELDS
 #
@@ -1640,6 +1656,22 @@ input CBODeleteInput {
   CBOId: ID!
 }
 
+# params for creating a CBO referral
+input CBOReferralCreateInput {
+  categoryId: ID!
+  CBOId: ID
+  name: String
+  url: String
+  diagnosis: String
+}
+
+# params for editing a CBO referral
+input CBOReferralEditInput {
+  CBOReferralId: ID!
+  sentAt: String
+  acknowledgedAt: String
+}
+
 type RootMutationType {
   # Create a new user
   userCreate(input: UserCreateInput): User
@@ -1850,6 +1882,10 @@ type RootMutationType {
   CBOEdit(input: CBOEditInput): CBO
   # Delete a CBO
   CBODelete(input: CBODeleteInput): CBO
+  # Create a CBO Referral
+  CBOReferralCreate(input: CBOReferralCreateInput): CBOReferral
+  # Edit a CBO Referral
+  CBOReferralEdit(input: CBOReferralEditInput): CBOReferral
 }
 
 type RootQueryType {

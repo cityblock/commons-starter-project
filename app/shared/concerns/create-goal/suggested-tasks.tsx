@@ -29,14 +29,14 @@ const SuggestedTasks: React.StatelessComponent<IProps> = (props: IProps) => {
     goalSuggestionTemplate && goalSuggestionTemplate.taskTemplates
       ? goalSuggestionTemplate.taskTemplates.map((template, idx) => {
           const className =
-            idx === goalSuggestionTemplate.taskTemplates!.length - 1 ? styles.lessMargin : '';
+            idx === goalSuggestionTemplate.taskTemplates.length - 1 ? styles.lessMargin : '';
 
           return (
             <SuggestedTask
-              key={template!.id}
-              title={template!.title}
-              onClick={() => onTaskTemplateClick(template!.id)}
-              isRejected={rejectedTaskTemplateIds.includes(template!.id)}
+              key={template.id}
+              title={template.title}
+              onClick={() => onTaskTemplateClick(template.id)}
+              isRejected={rejectedTaskTemplateIds.includes(template.id)}
               className={className}
             />
           );

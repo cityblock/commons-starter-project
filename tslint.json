@@ -51,6 +51,8 @@
     "no-console": [true, "log"],
     "object-literal-shorthand": true,
     "no-unnecessary-callback-wrapper": true,
+    "no-unnecessary-type-assertion": true,
+    // "cyclomatic-complexity": true, soon!
     "radix": true,
     "no-invalid-template-strings": true,
     // Secuity rules from tslint-microsoft-contrib

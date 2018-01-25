@@ -123,7 +123,7 @@ export class DnDPatientCarePlan extends React.Component<allProps, IState> {
     );
 
     const orderDiffs = getOrderDiffs(
-      this.state[endList as 'activeConcerns' | 'inactiveConcerns'],
+      this.state[endList],
       updatedConcerns,
       endList === 'inactiveConcerns' ? this.state.activeConcerns.length : 0,
     );
@@ -139,7 +139,7 @@ export class DnDPatientCarePlan extends React.Component<allProps, IState> {
     const updatedStartList = remove(
       this.state[startList],
       this.state[startList].findIndex(concern => concern.id === result.draggableId),
-    ) as FullPatientConcernFragment[];
+    );
 
     const updatedEndList = insert(
       this.state[endList],

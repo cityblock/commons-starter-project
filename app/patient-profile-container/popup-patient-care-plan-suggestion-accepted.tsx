@@ -80,7 +80,7 @@ class PopupPatientCarePlanSuggestionAccepted extends React.Component<allProps, I
     acceptCarePlanSuggestionVariables.startedAt = startedAt;
 
     if (acceptingGoalSuggestion && concernId && carePlanSuggestions && concerns) {
-      const suggestedConcernIds = carePlanSuggestions!
+      const suggestedConcernIds = carePlanSuggestions
         .filter(carePlanSuggestion => carePlanSuggestion && !!carePlanSuggestion.concern)
         .map(concernSuggestion => concernSuggestion!.concernId);
       const addingToSuggestedConcern = suggestedConcernIds.includes(concernId);

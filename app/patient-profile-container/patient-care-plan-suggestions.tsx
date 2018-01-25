@@ -136,7 +136,7 @@ class PatientCarePlanSuggestions extends React.Component<IProps & IGraphqlProps,
               onAccept={this.onAcceptSuggestion}
               onDismiss={this.onDismissSuggestion}
               careTeam={careTeam}
-              suggestion={suggestion!}
+              suggestion={suggestion}
             />
           ) : null,
       );

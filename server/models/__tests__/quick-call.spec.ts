@@ -55,8 +55,8 @@ describe('quick call model', () => {
       const foundCall = await QuickCall.get(createdCall.id, txn);
 
       expect(foundCall).not.toBeFalsy();
-      expect(foundCall!.id).not.toBeFalsy();
-      expect(foundCall!.createdAt).not.toBeFalsy();
+      expect(foundCall.id).not.toBeFalsy();
+      expect(foundCall.createdAt).not.toBeFalsy();
     });
   });
 

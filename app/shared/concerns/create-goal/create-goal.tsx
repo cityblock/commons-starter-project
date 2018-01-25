@@ -105,9 +105,9 @@ export class CreateGoalModal extends React.Component<allProps, IState> {
 
           if (goalSuggestionTemplate) {
             const taskTemplateIds: string[] = [];
-            goalSuggestionTemplate.taskTemplates!.forEach(template => {
-              if (!rejectedTaskTemplateIds.includes(template!.id)) {
-                taskTemplateIds.push(template!.id);
+            goalSuggestionTemplate.taskTemplates.forEach(template => {
+              if (!rejectedTaskTemplateIds.includes(template.id)) {
+                taskTemplateIds.push(template.id);
               }
             });
 

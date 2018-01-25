@@ -46,7 +46,7 @@ export async function patientGoalCreate(
       },
       txn,
     );
-    (validInput as any).patientConcernId = patientConcern.id;
+    (validInput).patientConcernId = patientConcern.id;
     // This goal is getting associated with an existing concern
   } else if (concernId) {
     const patientConcern = await PatientConcern.create(
@@ -58,12 +58,12 @@ export async function patientGoalCreate(
       },
       txn,
     );
-    (validInput as any).patientConcernId = patientConcern.id;
+    (validInput).patientConcernId = patientConcern.id;
   }
 
-  (validInput as any).userId = userId;
+  (validInput).userId = userId;
 
-  return await PatientGoal.create(validInput as any, txn);
+  return await PatientGoal.create(validInput, txn);
 }
 
 export async function resolvePatientGoal(

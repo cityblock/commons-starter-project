@@ -120,7 +120,7 @@ export default class PatientGoal extends BaseModel {
       input.title = goalSuggestionTemplate.title;
       validTaskTemplates =
         taskTemplateIds && taskTemplateIds.length
-          ? goalSuggestionTemplate!.taskTemplates.filter(
+          ? goalSuggestionTemplate.taskTemplates.filter(
               taskTemplate => taskTemplateIds.indexOf(taskTemplate.id) > -1,
             )
           : [];

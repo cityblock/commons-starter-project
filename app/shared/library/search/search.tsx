@@ -58,8 +58,8 @@ class Search extends React.Component<IProps, IState> {
 
   search(value: string): void {
     if (!this.state.fuse || value.length > MAX_PATTERN_LENGTH) return;
-    const searchResults = this.state.fuse.search(value) as SearchOptions;
-    this.setState({ searchResults });
+    const searchResults = this.state.fuse.search(value);
+    this.setState({ searchResults: searchResults as ISearchOption[] });
   }
 
   formatSearchResults(): SearchOptions {

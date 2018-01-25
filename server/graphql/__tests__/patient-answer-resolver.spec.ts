@@ -626,7 +626,7 @@ describe('patient answer tests', () => {
           patient.id,
           txn,
         );
-        expect(fetchedAnswers1!.map(ans => ans.id)).toContain(createdAnswers[0].id);
+        expect(fetchedAnswers1.map(ans => ans.id)).toContain(createdAnswers[0].id);
 
         // Running this mutation should mark previous answer as deleted
         const mutation = `mutation {
@@ -649,7 +649,7 @@ describe('patient answer tests', () => {
           patient.id,
           txn,
         );
-        expect(fetchedAnswers2!.map(ans => ans.id)).not.toContain(createdAnswers[0].id);
+        expect(fetchedAnswers2.map(ans => ans.id)).not.toContain(createdAnswers[0].id);
       });
     });
 

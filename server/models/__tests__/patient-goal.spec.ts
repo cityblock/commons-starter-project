@@ -473,9 +473,9 @@ describe('patient goal model', () => {
       await Task.delete(deletedTask.id, txn);
 
       const fetchedPatientGoal = await PatientGoal.get(patientGoal.id, txn);
-      const taskIds = fetchedPatientGoal!.tasks.map(task => task.id);
+      const taskIds = fetchedPatientGoal.tasks.map(task => task.id);
 
-      expect(fetchedPatientGoal!.id).toEqual(patientGoal.id);
+      expect(fetchedPatientGoal.id).toEqual(patientGoal.id);
       expect(taskIds).toContain(incompleteTask.id);
       expect(taskIds).not.toContain(completeTask.id);
       expect(taskIds).not.toContain(deletedTask.id);

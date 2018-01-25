@@ -29,7 +29,7 @@ export const calculateRiskAreaSummaryStats = (
   let { lastUpdated, totalScore, forceHighRisk } = summaryStats;
   const { summaryText } = summaryStats;
 
-  riskArea.questions!.forEach(question => {
+  riskArea.questions.forEach(question => {
     question.answers!.forEach(answer => {
       if (answer.patientAnswers && answer.patientAnswers.length) {
         answer.patientAnswers.forEach(patientAnswer => {

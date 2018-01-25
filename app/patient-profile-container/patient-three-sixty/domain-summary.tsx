@@ -114,7 +114,7 @@ export class DomainSummary extends React.Component<allProps, IState> {
       });
     // if no automated assessments, link directly to manual assessment (1 per domain)
     const href = noAutomated
-      ? `${routeBase}/${riskAreaGroupId}/assessment/${riskAreaGroup.riskAreas![0].id}`
+      ? `${routeBase}/${riskAreaGroupId}/assessment/${riskAreaGroup.riskAreas[0].id}`
       : `${routeBase}/${riskAreaGroupId}`;
 
     return (

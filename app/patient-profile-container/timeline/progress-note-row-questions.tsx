@@ -85,7 +85,7 @@ export default compose(
     skip: (props: IProps) => !props.progressNote,
     options: (props: IProps) => ({
       variables: {
-        progressNoteId: props.progressNote!.id,
+        progressNoteId: props.progressNote.id,
       },
     }),
     props: ({ data }) => ({

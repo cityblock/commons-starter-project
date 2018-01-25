@@ -180,7 +180,7 @@ describe('patient task suggestion resolver tests', () => {
           },
           txn,
         );
-        expect(suggestion!.acceptedAt).toBeFalsy();
+        expect(suggestion.acceptedAt).toBeFalsy();
         const tasks = await Task.getPatientTasks(
           patient.id,
           {

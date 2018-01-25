@@ -147,7 +147,7 @@ describe('patient concern model', () => {
       await Task.complete(completeTask.id, user.id, txn);
 
       const fetchedConcern = await PatientConcern.get(patientConcern.id, txn);
-      const fetchedPatientGoal = fetchedConcern!.patientGoals[0];
+      const fetchedPatientGoal = fetchedConcern.patientGoals[0];
       const { tasks } = fetchedPatientGoal;
       const taskIds = tasks.map(task => task.id);
       expect(fetchedPatientGoal.id).toEqual(patientGoal.id);

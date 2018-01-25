@@ -81,7 +81,7 @@ export async function getGraphQLContext(
     try {
       const parsedToken = await parseAndVerifyJwt(authToken, txn);
       userId = parsedToken.userId;
-      userRole = parsedToken.userRole as UserRole;
+      userRole = parsedToken.userRole;
     } catch (e) {
       return {
         db,

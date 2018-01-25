@@ -30,7 +30,7 @@ export default class PatientCarePlanSuggestion extends React.Component<IProps, I
 
     if (suggestionType === 'goal' && suggestion.goalSuggestionTemplate) {
       selectedTaskTemplateIds = (suggestion.goalSuggestionTemplate.taskTemplates || []).map(
-        taskTemplate => taskTemplate!.id,
+        taskTemplate => taskTemplate.id,
       );
     }
 
@@ -86,12 +86,12 @@ export default class PatientCarePlanSuggestion extends React.Component<IProps, I
 
     if (goalSuggestionTemplate && goalSuggestionTemplate.taskTemplates) {
       return goalSuggestionTemplate.taskTemplates.map(taskTemplate => {
-        const selected = selectedTaskTemplateIds.indexOf(taskTemplate!.id) > -1;
+        const selected = selectedTaskTemplateIds.indexOf(taskTemplate.id) > -1;
 
         return (
           <TaskTemplate
-            key={taskTemplate!.id}
-            taskTemplate={taskTemplate!}
+            key={taskTemplate.id}
+            taskTemplate={taskTemplate}
             selected={selected}
             careTeam={careTeam}
             onToggleRemoved={this.onToggleTaskTemplateRemoval}

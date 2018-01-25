@@ -6,7 +6,7 @@ export function getConcernCount(carePlanSuggestions: FullCarePlanSuggestionFragm
   }
 
   const concernSuggestions = carePlanSuggestions.filter(
-    suggestion => suggestion!.suggestionType === 'concern',
+    suggestion => suggestion.suggestionType === 'concern',
   );
 
   return concernSuggestions.length;
@@ -17,7 +17,7 @@ export function getGoalSuggestions(carePlanSuggestions: FullCarePlanSuggestionFr
     return [];
   }
 
-  return carePlanSuggestions.filter(suggestion => suggestion!.suggestionType === 'goal');
+  return carePlanSuggestions.filter(suggestion => suggestion.suggestionType === 'goal');
 }
 
 export function getGoalCount(carePlanSuggestions: FullCarePlanSuggestionFragment[]) {
@@ -32,8 +32,8 @@ export function getTaskCount(carePlanSuggestions: FullCarePlanSuggestionFragment
   const goalSuggestions = getGoalSuggestions(carePlanSuggestions);
 
   const taskSuggestions = goalSuggestions
-    .map(goalSuggestion => goalSuggestion!.goalSuggestionTemplate!.taskTemplates)
-    .reduce((taskSuggestions1, taskSuggestions2) => taskSuggestions1!.concat(taskSuggestions2));
+    .map(goalSuggestion => goalSuggestion.goalSuggestionTemplate!.taskTemplates)
+    .reduce((taskSuggestions1, taskSuggestions2) => taskSuggestions1.concat(taskSuggestions2));
 
   return (taskSuggestions || []).length;
 }

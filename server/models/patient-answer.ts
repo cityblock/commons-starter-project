@@ -296,7 +296,7 @@ export default class PatientAnswer extends BaseModel {
       .andWhere('patient_answer.progressNoteId', progressNoteId)
       .orderBy('patient_answer.updatedAt', 'asc');
 
-    return patientAnswers as PatientAnswer[];
+    return patientAnswers;
   }
 
   static async getAllForPatient(patientId: string, txn: Transaction): Promise<PatientAnswer[]> {

@@ -219,7 +219,7 @@ describe('answer model', () => {
           patient.id,
           txn,
         );
-        expect(fetchedAnswers1!.map(ans => ans.id)).toContain(previousAnswers[0].id);
+        expect(fetchedAnswers1.map(ans => ans.id)).toContain(previousAnswers[0].id);
 
         const differentAnswer = await Answer.create(
           {
@@ -258,7 +258,7 @@ describe('answer model', () => {
           patient.id,
           txn,
         );
-        const fetchedAnswers2Ids = fetchedAnswers2!.map(ans => ans.id);
+        const fetchedAnswers2Ids = fetchedAnswers2.map(ans => ans.id);
 
         expect(fetchedAnswers2Ids).toContain(newAnswers[0].id);
         expect(fetchedAnswers2Ids).not.toContain(previousAnswers[0].id);
@@ -412,7 +412,7 @@ describe('answer model', () => {
           `No such patientAnswer: ${patientAnswers[0].id}`,
         );
         expect(
-          (await PatientAnswer.getForQuestion(question.id, patient.id, txn))!.map(ans => ans.id),
+          (await PatientAnswer.getForQuestion(question.id, patient.id, txn)).map(ans => ans.id),
         ).toEqual([patientAnswers2[0].id]);
 
         // Only checking for answer2, since it will replace answer1

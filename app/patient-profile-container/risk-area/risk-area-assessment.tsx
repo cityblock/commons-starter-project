@@ -263,7 +263,7 @@ export class RiskAreaAssessment extends React.Component<allProps, IState> {
         return area.assessmentType === 'automated';
       });
 
-    const href = noAutomated ? routeBase : `${routeBase}/${riskArea!.riskAreaGroup.id}`;
+    const href = noAutomated ? routeBase : `${routeBase}/${riskArea.riskAreaGroup.id}`;
 
     return (
       <div>

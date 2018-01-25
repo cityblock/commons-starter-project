@@ -41,6 +41,7 @@ export default async (app: express.Application, logger: Console) => {
     app.use(
       webpackDevMiddleware(compiler, { noInfo: true, publicPath: devConfig.output.publicPath }),
     );
+    app.use(require('webpack-hot-middleware')(compiler));
   }
 
   // Setup apollo engine

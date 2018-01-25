@@ -21,7 +21,6 @@ module.exports = ({ production = false } = {}) => {
       new webpack.HotModuleReplacementPlugin(),
       new ForkTsCheckerWebpackPlugin({
         tsconfig: path.resolve('tsconfig.webpack.json'),
-        tslint: path.resolve('tslint.json'),
         watch: ['../app'],
       }),
     );

@@ -2,13 +2,10 @@ import { InMemoryCache } from 'apollo-cache-inmemory';
 import { ApolloClient } from 'apollo-client';
 import createHistory from 'history/createBrowserHistory';
 import * as React from 'react';
-import { ApolloProvider } from 'react-apollo';
-import { render } from 'react-dom';
-import { Provider } from 'react-redux';
-import { BrowserRouter } from 'react-router-dom';
+import * as ReactDOM from 'react-dom';
+import { AppContainer } from 'react-hot-loader';
+import App from './app';
 import { getMiddlewareLink } from './middleware-link';
-import ReduxConnectedIntlProvider from './redux-connected-intl-provider';
-import Routes from './routes';
 import createStore from './store';
 
 const client = new ApolloClient<any>({
@@ -19,13 +16,14 @@ const client = new ApolloClient<any>({
 const history = createHistory();
 const store = createStore(history);
 
-render(
-  <ApolloProvider client={client}>
-    <Provider store={store}>
-      <ReduxConnectedIntlProvider>
-        <BrowserRouter>{Routes}</BrowserRouter>
-      </ReduxConnectedIntlProvider>
-    </Provider>
-  </ApolloProvider>,
-  document.getElementById('app'),
-);
+const rootEl = document.getElementById('app');
+const render = (Component: typeof App) =>
+  ReactDOM.render(
+    <AppContainer>
+      <Component store={store} client={client} />
+    </AppContainer>,
+    rootEl,
+  );
+
+render(App);
+if ((module as any).hot) (module as any).hot.accept('./app', () => render(App));

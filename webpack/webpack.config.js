@@ -24,9 +24,12 @@ module.exports = (env = '') => {
   };
 
   const devtool = isProduction ? 'cheap-source-map' : 'inline-source-map';
-  const app = ['./client'];
+  const app = isProduction
+    ? ['./client.tsx']
+    : ['react-hot-loader/patch', 'webpack-hot-middleware/client', './client.tsx'];
   const clientRender = {
     context: PATHS.app,
+    devtool,
     entry: {
       app,
     },

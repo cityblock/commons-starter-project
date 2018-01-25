@@ -360,6 +360,12 @@
     "@types/node" "*"
     "@types/react" "*"
 
+"@types/react-hot-loader@^3.0.5":
+  version "3.0.5"
+  resolved "https://registry.yarnpkg.com/@types/react-hot-loader/-/react-hot-loader-3.0.5.tgz#b80fe14268e2942a6c2d8ecea829cbfa893a0cbb"
+  dependencies:
+    "@types/react" "*"
+
 "@types/react-intl@^2.3.3":
   version "2.3.3"
   resolved "https://registry.yarnpkg.com/@types/react-intl/-/react-intl-2.3.3.tgz#8b8d1a4b13697848dd54d79911effd187a4033e8"
@@ -2867,6 +2873,12 @@ error-ex@^1.2.0, error-ex@^1.3.1:
   dependencies:
     is-arrayish "^0.2.1"
 
+error-stack-parser@^1.3.6:
+  version "1.3.6"
+  resolved "https://registry.yarnpkg.com/error-stack-parser/-/error-stack-parser-1.3.6.tgz#e0e73b93e417138d1cd7c0b746b1a4a14854c292"
+  dependencies:
+    stackframe "^0.3.1"
+
 es-abstract@^1.5.1, es-abstract@^1.6.1, es-abstract@^1.7.0:
   version "1.10.0"
   resolved "https://registry.yarnpkg.com/es-abstract/-/es-abstract-1.10.0.tgz#1ecb36c197842a00d8ee4c2dfd8646bb97d60864"
@@ -3662,7 +3674,7 @@ global-prefix@^0.1.4:
     is-windows "^0.2.0"
     which "^1.2.12"
 
-global@~4.3.0:
+global@^4.3.0, global@~4.3.0:
   version "4.3.2"
   resolved "https://registry.yarnpkg.com/global/-/global-4.3.2.tgz#e76989268a6c74c38908b1305b10fc0e394e9d0f"
   dependencies:
@@ -5794,7 +5806,7 @@ lodash@3.9.3:
   version "3.9.3"
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-3.9.3.tgz#0159e86832feffc6d61d852b12a953b99496bd32"
 
-lodash@^4.0.0, lodash@^4.1.0, lodash@^4.13.1, lodash@^4.14.0, lodash@^4.15.0, lodash@^4.16.4, lodash@^4.17.0, lodash@^4.17.2, lodash@^4.17.3, lodash@^4.17.4, lodash@^4.2.0, lodash@^4.2.1, lodash@^4.3.0, lodash@^4.6.0, lodash@~4.17.2:
+lodash@^4.0.0, lodash@^4.1.0, lodash@^4.13.1, lodash@^4.14.0, lodash@^4.15.0, lodash@^4.16.4, lodash@^4.17.0, lodash@^4.17.2, lodash@^4.17.3, lodash@^4.17.4, lodash@^4.2.0, lodash@^4.2.1, lodash@^4.3.0, lodash@^4.6.0, lodash@^4.6.1, lodash@~4.17.2:
   version "4.17.4"
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.4.tgz#78203a4d1c328ae1d86dca6460e369b57f4055ae"
 
@@ -7856,7 +7868,7 @@ querystring-es3@^0.2.0:
   version "0.2.1"
   resolved "https://registry.yarnpkg.com/querystring-es3/-/querystring-es3-0.2.1.tgz#9ec61f79049875707d69414596fd907a4d711e73"
 
-querystring@0.2.0:
+querystring@0.2.0, querystring@^0.2.0:
   version "0.2.0"
   resolved "https://registry.yarnpkg.com/querystring/-/querystring-0.2.0.tgz#b209849203bb25df820da756e747005878521620"
 
@@ -7985,6 +7997,10 @@ react-copy-to-clipboard@^5.0.0:
     copy-to-clipboard "^3"
     prop-types "^15.5.8"
 
+react-deep-force-update@^2.1.1:
+  version "2.1.1"
+  resolved "https://registry.yarnpkg.com/react-deep-force-update/-/react-deep-force-update-2.1.1.tgz#8ea4263cd6455a050b37445b3f08fd839d86e909"
+
 react-dom@^16.2.0:
   version "16.2.0"
   resolved "https://registry.yarnpkg.com/react-dom/-/react-dom-16.2.0.tgz#69003178601c0ca19b709b33a83369fe6124c044"
@@ -8009,6 +8025,16 @@ react-google-login@3.0.4:
   dependencies:
     "@types/react" "*"
     prop-types "^15.6.0"
+
+react-hot-loader@^3.1.3:
+  version "3.1.3"
+  resolved "https://registry.yarnpkg.com/react-hot-loader/-/react-hot-loader-3.1.3.tgz#6f92877326958c7cb0134b512474517869126082"
+  dependencies:
+    global "^4.3.0"
+    react-deep-force-update "^2.1.1"
+    react-proxy "^3.0.0-alpha.0"
+    redbox-react "^1.3.6"
+    source-map "^0.6.1"
 
 react-intl@^2.4.0:
   version "2.4.0"
@@ -8053,6 +8079,12 @@ react-popper@^0.7.4:
   dependencies:
     popper.js "^1.12.5"
     prop-types "^15.5.10"
+
+react-proxy@^3.0.0-alpha.0:
+  version "3.0.0-alpha.1"
+  resolved "https://registry.yarnpkg.com/react-proxy/-/react-proxy-3.0.0-alpha.1.tgz#4400426bcfa80caa6724c7755695315209fa4b07"
+  dependencies:
+    lodash "^4.6.1"
 
 react-reconciler@^0.7.0:
   version "0.7.0"
@@ -8274,6 +8306,15 @@ reconnect-core@1.3.0:
   resolved "https://registry.yarnpkg.com/reconnect-core/-/reconnect-core-1.3.0.tgz#fbae52919a7877d844e3246d01a2f26701c833c8"
   dependencies:
     backoff "~2.5.0"
+
+redbox-react@^1.3.6:
+  version "1.5.0"
+  resolved "https://registry.yarnpkg.com/redbox-react/-/redbox-react-1.5.0.tgz#04dab11557d26651bf3562a67c22ace56c5d3967"
+  dependencies:
+    error-stack-parser "^1.3.6"
+    object-assign "^4.0.1"
+    prop-types "^15.5.4"
+    sourcemapped-stacktrace "^1.1.6"
 
 redefine@^0.2.0:
   version "0.2.1"
@@ -9019,6 +9060,10 @@ source-map-url@^0.4.0:
   version "0.4.0"
   resolved "https://registry.yarnpkg.com/source-map-url/-/source-map-url-0.4.0.tgz#3e935d7ddd73631b97659956d55128e87b5084a3"
 
+source-map@0.5.6:
+  version "0.5.6"
+  resolved "https://registry.yarnpkg.com/source-map/-/source-map-0.5.6.tgz#75ce38f52bf0733c5a7f0c118d81334a2bb5f412"
+
 source-map@^0.4.2, source-map@^0.4.4:
   version "0.4.4"
   resolved "https://registry.yarnpkg.com/source-map/-/source-map-0.4.4.tgz#eba4f5da9c0dc999de68032d8b4f76173652036b"
@@ -9032,6 +9077,12 @@ source-map@^0.5.0, source-map@^0.5.3, source-map@^0.5.6, source-map@~0.5.1, sour
 source-map@^0.6.0, source-map@^0.6.1, source-map@~0.6.1:
   version "0.6.1"
   resolved "https://registry.yarnpkg.com/source-map/-/source-map-0.6.1.tgz#74722af32e9614e9c287a8d0bbde48b5e2f1a263"
+
+sourcemapped-stacktrace@^1.1.6:
+  version "1.1.8"
+  resolved "https://registry.yarnpkg.com/sourcemapped-stacktrace/-/sourcemapped-stacktrace-1.1.8.tgz#6b7a3f1a6fb15f6d40e701e23ce404553480d688"
+  dependencies:
+    source-map "0.5.6"
 
 spdx-correct@~1.0.0:
   version "1.0.2"
@@ -9132,6 +9183,10 @@ ssri@^5.0.0:
 stack-utils@^1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/stack-utils/-/stack-utils-1.0.1.tgz#d4f33ab54e8e38778b0ca5cfd3b3afb12db68620"
+
+stackframe@^0.3.1:
+  version "0.3.1"
+  resolved "https://registry.yarnpkg.com/stackframe/-/stackframe-0.3.1.tgz#33aa84f1177a5548c8935533cbfeb3420975f5a4"
 
 state-toggle@^1.0.0:
   version "1.0.0"
@@ -10340,6 +10395,15 @@ webpack-dev-server@^2.11.1:
     supports-color "^5.1.0"
     webpack-dev-middleware "1.12.2"
     yargs "6.6.0"
+
+webpack-hot-middleware@^2.21.0:
+  version "2.21.0"
+  resolved "https://registry.yarnpkg.com/webpack-hot-middleware/-/webpack-hot-middleware-2.21.0.tgz#7b3c113a7a4b301c91e0749573c7aab28b414b52"
+  dependencies:
+    ansi-html "0.0.7"
+    html-entities "^1.2.0"
+    querystring "^0.2.0"
+    strip-ansi "^3.0.0"
 
 webpack-sources@^1.0.1, webpack-sources@^1.1.0:
   version "1.1.0"

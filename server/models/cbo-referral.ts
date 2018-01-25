@@ -4,7 +4,7 @@ import CBO from './cbo';
 import CBOCategory from './cbo-category';
 import Task from './task';
 
-const EAGER_QUERY = '[category, cbo]';
+const EAGER_QUERY = '[category, CBO]';
 
 interface ICBOReferralCreateFields {
   categoryId: string;
@@ -64,7 +64,7 @@ export default class CBOReferral extends BaseModel {
         to: 'cbo_category.id',
       },
     },
-    cbo: {
+    CBO: {
       relation: Model.BelongsToOneRelation,
       modelClass: 'cbo',
       join: {

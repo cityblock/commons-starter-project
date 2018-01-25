@@ -379,6 +379,8 @@ type Task implements uniqueId {
   followers: [User!]!
   patientGoalId: ID!
   patientGoal: PatientGoal!
+  CBOReferralId: ID
+  CBOReferral: CBOReferral
 }
 
 # Task ID
@@ -1132,6 +1134,7 @@ input TaskCreateInput {
   assignedToId: ID
   patientGoalId: ID
   priority: Priority
+  CBOReferralId: ID
 }
 
 # params for deleting a task

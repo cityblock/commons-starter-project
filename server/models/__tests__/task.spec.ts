@@ -2,6 +2,7 @@ import { transaction, Transaction } from 'objection';
 import * as uuid from 'uuid/v4';
 import Db from '../../db';
 import {
+  createCBOReferral,
   createMockClinic,
   createMockPatient,
   createMockUser,
@@ -125,6 +126,36 @@ describe('task model', () => {
 
       expect(task.patientGoal.patientConcern!.concern).toBeTruthy();
       expect(task.patientGoal.patientConcern!.concern.title).toBe(title);
+    });
+  });
+
+  it('should create and retrieve a task with an associated CBO referral', async () => {
+    await transaction(Task.knex(), async txn => {
+      const { patient, user, patientGoal } = await setup(txn);
+      const cboReferral = await createCBOReferral(txn);
+
+      const dueAt = new Date().toISOString();
+      const task = await Task.create(
+        {
+          title: 'title',
+          description: 'description',
+          dueAt,
+          patientId: patient.id,
+          createdById: user.id,
+          assignedToId: user.id,
+          patientGoalId: patientGoal.id,
+          CBOReferralId: cboReferral.id,
+        },
+        txn,
+      );
+
+      expect(task.CBOReferral!.id).toBe(cboReferral.id);
+
+      const fetchedTask = await Task.get(task.id, txn);
+
+      expect(fetchedTask.CBOReferral!.id).toBe(cboReferral.id);
+      expect(fetchedTask.CBOReferral!.category.id).toBe(cboReferral.categoryId);
+      expect(fetchedTask.CBOReferral!.CBO!.id).toBe(cboReferral.CBOId);
     });
   });
 

@@ -9,6 +9,7 @@ import Task from '../../models/task';
 import TaskEvent from '../../models/task-event';
 import User from '../../models/user';
 import {
+  createCBOReferral,
   createMockClinic,
   createMockPatient,
   createMockUser,
@@ -520,6 +521,55 @@ describe('task tests', () => {
         });
         expect(cloneDeep(result.data!.taskCreate)).toMatchObject({
           title: 'title',
+        });
+      });
+    });
+
+    it('creates a new task with CBO referral', async () => {
+      await transaction(Task.knex(), async txn => {
+        const title = 'Defeat Night King';
+        const { patient, user } = await setup(txn);
+        const cboReferral = await createCBOReferral(txn);
+
+        const mutation = `mutation {
+          taskCreate(input: {
+            patientId: "${patient.id}"
+            title: "${title}"
+            CBOReferralId: "${cboReferral.id}"
+          }) {
+            title
+            CBOReferralId
+            CBOReferral {
+              id
+              category {
+                id
+              }
+              CBO {
+                id
+              }
+            }
+          }
+        }`;
+
+        const result = await graphql(schema, mutation, null, {
+          db,
+          userRole,
+          userId: user.id,
+          txn,
+        });
+
+        expect(result.data!.taskCreate).toMatchObject({
+          title,
+          CBOReferralId: cboReferral.id,
+          CBOReferral: {
+            id: cboReferral.id,
+            category: {
+              id: cboReferral.categoryId,
+            },
+            CBO: {
+              id: cboReferral.CBOId,
+            },
+          },
         });
       });
     });

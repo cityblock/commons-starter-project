@@ -1,6 +1,7 @@
 import { Model, RelationMappings, Transaction } from 'objection';
 import { IPaginatedResults, IPaginationOptions } from '../db';
 import BaseModel from './base-model';
+import CBOReferral from './cbo-referral';
 import Patient from './patient';
 import PatientGoal from './patient-goal';
 import TaskEvent from './task-event';
@@ -17,6 +18,7 @@ interface ITaskEditableFields {
   completedById?: string;
   assignedToId?: string;
   priority?: Priority;
+  CBOReferralId?: string | null;
 }
 
 export type TaskOrderOptions = 'createdAt' | 'dueAt' | 'updatedAt' | 'title';
@@ -36,7 +38,8 @@ const EAGER_QUERY = `[
   patient,
   completedBy,
   followers,
-  patientGoal.[patientConcern.[concern]]
+  patientGoal.[patientConcern.[concern]],
+  CBOReferral.[category, CBO],
 ]`;
 
 /* tslint:disable:member-ordering */
@@ -58,6 +61,8 @@ export default class Task extends BaseModel {
   followers: User[];
   priority: Priority;
   taskEvents: TaskEvent[];
+  CBOReferralId: string | null;
+  CBOReferral: CBOReferral | null;
 
   static tableName = 'task';
 
@@ -76,6 +81,7 @@ export default class Task extends BaseModel {
       dueAt: { type: 'string' },
       priority: { type: 'string', enum: PRIORITY },
       deletedAt: { type: 'string' },
+      CBOReferralId: { type: 'string', format: 'uuid' },
     },
     required: ['title', 'patientId'],
   };
@@ -154,6 +160,15 @@ export default class Task extends BaseModel {
       join: {
         from: 'task_event.taskId',
         to: 'task.id',
+      },
+    },
+
+    CBOReferral: {
+      relation: Model.BelongsToOneRelation,
+      modelClass: 'cbo-referral',
+      join: {
+        from: 'task.CBOReferralId',
+        to: 'cbo_referral.id',
       },
     },
   };

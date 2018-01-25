@@ -40,7 +40,16 @@ export interface IResolveUrgentTasksForPatientOptions {
 
 export async function taskCreate(root: any, { input }: ITaskCreateArgs, context: IContext) {
   const { userRole, userId, txn } = context;
-  const { title, description, dueAt, patientId, assignedToId, patientGoalId, priority } = input;
+  const {
+    title,
+    description,
+    dueAt,
+    patientId,
+    assignedToId,
+    patientGoalId,
+    priority,
+    CBOReferralId,
+  } = input;
   await accessControls.isAllowed(userRole, 'create', 'task');
   checkUserLoggedIn(userId);
 
@@ -55,6 +64,7 @@ export async function taskCreate(root: any, { input }: ITaskCreateArgs, context:
       priority: priority || undefined,
       assignedToId: assignedToId || undefined,
       patientGoalId: patientGoalId || undefined,
+      CBOReferralId,
     },
     txn,
   );

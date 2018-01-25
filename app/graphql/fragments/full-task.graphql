@@ -1,4 +1,5 @@
 #import "../fragments/short-user.graphql"
+#import "../fragments/full-cbo-referral.graphql"
 
 fragment FullTask on Task {
   id
@@ -35,5 +36,9 @@ fragment FullTask on Task {
         title
       }
     }
+  }
+  CBOReferralId
+  CBOReferral {
+    ...FullCBOReferral
   }
 }

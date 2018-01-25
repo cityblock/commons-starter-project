@@ -403,7 +403,7 @@ declare module 'schema' {
   /**
     description: An object with a Globally Unique ID
   */
-  type uniqueId = IUser | IPatient | IPatientSearchResult | IPatientForDashboard | IClinic | ITask | IPatientGoal | IPatientConcern | IConcern | IDiagnosisCode | IGoalSuggestionTemplate | ITaskTemplate | ITaskId | ITaskComment | IRiskAreaGroup | IRiskArea | IQuestion | IAnswer | IScreeningTool | IScreeningToolScoreRange | IPatientScreeningToolSubmission | ICarePlanSuggestion | IRiskAreaAssessmentSubmission | IScreeningToolScoreRangeForPatientScreeningToolSubmission | IPatientAnswer | IQuestionCondition | IComputedField | IRiskAreaGroupForPatient | IRiskAreaForPatient | IScreeningToolForPatient | IEventNotification | ITaskEvent | IProgressNote | IProgressNoteTemplate | IPatientTaskSuggestion | IPatientAnswerEvent | ICarePlanUpdateEvent | IQuickCall | IPatientList | ICBOCategory | ICBO | IComputedFieldFlag | ICBOReferral | IConcernDiagnosisCode;
+  type uniqueId = IUser | IPatient | IPatientSearchResult | IPatientForDashboard | IClinic | ITask | IPatientGoal | IPatientConcern | IConcern | IDiagnosisCode | IGoalSuggestionTemplate | ITaskTemplate | ICBOReferral | ICBOCategory | ICBO | ITaskId | ITaskComment | IRiskAreaGroup | IRiskArea | IQuestion | IAnswer | IScreeningTool | IScreeningToolScoreRange | IPatientScreeningToolSubmission | ICarePlanSuggestion | IRiskAreaAssessmentSubmission | IScreeningToolScoreRangeForPatientScreeningToolSubmission | IPatientAnswer | IQuestionCondition | IComputedField | IRiskAreaGroupForPatient | IRiskAreaForPatient | IScreeningToolForPatient | IEventNotification | ITaskEvent | IProgressNote | IProgressNoteTemplate | IPatientTaskSuggestion | IPatientAnswerEvent | ICarePlanUpdateEvent | IQuickCall | IPatientList | IComputedFieldFlag | IConcernDiagnosisCode;
 
   /**
     description: An object with a Globally Unique ID
@@ -614,6 +614,8 @@ declare module 'schema' {
     followers: Array<IUser>;
     patientGoalId: string;
     patientGoal: IPatientGoal;
+    CBOReferralId: string | null;
+    CBOReferral: ICBOReferral | null;
   }
 
 
@@ -704,6 +706,50 @@ declare module 'schema' {
 
 
   type ICompletedWithinIntervalEnum = 'hour' | 'day' | 'week' | 'month' | 'year';
+
+
+  interface ICBOReferral {
+    id: string;
+    categoryId: string;
+    category: ICBOCategory;
+    CBOId: string | null;
+    CBO: ICBO | null;
+    name: string | null;
+    url: string | null;
+    diagnosis: string | null;
+    createdAt: string;
+    updatedAt: string;
+    deletedAt: string | null;
+    sentAt: string | null;
+    acknowledgedAt: string | null;
+  }
+
+
+  interface ICBOCategory {
+    id: string;
+    title: string;
+    createdAt: string;
+    updatedAt: string;
+    deletedAt: string | null;
+  }
+
+
+  interface ICBO {
+    id: string;
+    name: string;
+    categoryId: string;
+    category: ICBOCategory;
+    address: string;
+    city: string;
+    state: string;
+    zip: string;
+    fax: string | null;
+    phone: string;
+    url: string;
+    createdAt: string;
+    updatedAt: string;
+    deletedAt: string | null;
+  }
 
 
   type ITaskOrderOptionsEnum = 'createdAtDesc' | 'createdAtAsc' | 'dueAtDesc' | 'dueAtAsc' | 'updatedAtDesc' | 'updatedAtAsc' | 'titleAsc' | 'titleDesc';
@@ -1288,33 +1334,6 @@ declare module 'schema' {
     title: string;
     answerId: string;
     order: number;
-    createdAt: string;
-    updatedAt: string;
-    deletedAt: string | null;
-  }
-
-
-  interface ICBOCategory {
-    id: string;
-    title: string;
-    createdAt: string;
-    updatedAt: string;
-    deletedAt: string | null;
-  }
-
-
-  interface ICBO {
-    id: string;
-    name: string;
-    categoryId: string;
-    category: ICBOCategory;
-    address: string;
-    city: string;
-    state: string;
-    zip: string;
-    fax: string | null;
-    phone: string;
-    url: string;
     createdAt: string;
     updatedAt: string;
     deletedAt: string | null;
@@ -1928,6 +1947,7 @@ declare module 'schema' {
     assignedToId?: string | null;
     patientGoalId?: string | null;
     priority?: IPriorityEnum | null;
+    CBOReferralId?: string | null;
   }
 
   /**
@@ -2570,23 +2590,6 @@ declare module 'schema' {
     name?: string | null;
     url?: string | null;
     diagnosis?: string | null;
-  }
-
-
-  interface ICBOReferral {
-    id: string;
-    categoryId: string;
-    category: ICBOCategory;
-    CBOId: string | null;
-    CBO: ICBO | null;
-    name: string | null;
-    url: string | null;
-    diagnosis: string | null;
-    createdAt: string;
-    updatedAt: string;
-    deletedAt: string | null;
-    sentAt: string | null;
-    acknowledgedAt: string | null;
   }
 
   /**

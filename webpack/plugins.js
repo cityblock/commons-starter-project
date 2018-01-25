@@ -11,13 +11,19 @@ module.exports = ({ production = false } = {}) => {
     new webpack.EnvironmentPlugin(['NODE_ENV', 'GOOGLE_OAUTH_TOKEN']),
     new webpack.NamedModulesPlugin(),
     new webpack.ContextReplacementPlugin(/moment[\/\\]locale$/, /en/),
+    new webpack.NoEmitOnErrorsPlugin(), // do not emit compiled assets that include errors
     new webpack.optimize.CommonsChunkPlugin({
       name: 'common',
     }),
   ];
   if (!production) {
     plugins.push(
-      new ForkTsCheckerWebpackPlugin({ tsconfig: path.resolve('tsconfig.webpack.json') }),
+      new webpack.HotModuleReplacementPlugin(),
+      new ForkTsCheckerWebpackPlugin({
+        tsconfig: path.resolve('tsconfig.webpack.json'),
+        tslint: path.resolve('tslint.json'),
+        watch: ['../app'],
+      }),
     );
   } else {
     plugins.push(

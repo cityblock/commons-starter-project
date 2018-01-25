@@ -6,14 +6,5 @@
   },
   "include": ["./declarations/*"],
   "files": ["./server/index", "./server/lib/capture-output"],
-  "exclude": [
-    "node_modules",
-    "app",
-    "rules",
-    "coverage",
-    "scripts",
-    "**/spec.helpers.ts",
-    "**/*.spec.ts",
-    "**/*.spec.tsx"
-  ]
+  "exclude": ["app", "rules", "scripts", "**/spec.helpers.ts", "**/*.spec.ts", "**/*.spec.tsx"]
 }

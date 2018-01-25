@@ -23,7 +23,7 @@ module.exports = (env = '') => {
     __filename: true,
   };
 
-  const devtool = isProduction ? 'cheap-source-map' : 'cheap-module-eval-source-map';
+  const devtool = isProduction ? 'cheap-source-map' : 'inline-source-map';
   const app = ['./client'];
   const clientRender = {
     context: PATHS.app,

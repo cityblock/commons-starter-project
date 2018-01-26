@@ -10,7 +10,13 @@ describe('Task Info Component', () => {
 
   const editTask = () => true as any;
   const wrapper = shallow(
-    <TaskInfo title={title} description={description} taskId={taskId} editTask={editTask} />,
+    <TaskInfo
+      title={title}
+      description={description}
+      taskId={taskId}
+      editTask={editTask}
+      isCBOReferral={false}
+    />,
   );
 
   it('renders two editable text fields for title and description', () => {
@@ -57,5 +63,16 @@ describe('Task Info Component', () => {
         .at(1)
         .props().placeholderMessageId,
     ).toBe('taskDescription.empty');
+  });
+
+  it('changes description placeholder if viewing CBO Referral', () => {
+    wrapper.setProps({ isCBOReferral: true });
+
+    expect(
+      wrapper
+        .find(EditableMultilineText)
+        .at(1)
+        .props().placeholderMessageId,
+    ).toBe('taskDescription.emptyCBO');
   });
 });

@@ -747,15 +747,3 @@ input[type='date'].dueDateInput::-webkit-calendar-picker-indicator {
 .changeAssigneeError .redText {
   margin-right: 3px;
 }
-
-.prioritySelect {
-  outline: none;
-  border: 1px solid transparent;
-  background: transparent;
-  -webkit-appearance: none;
-  font-family: var(--roboto);
-  font-size: var(--default-font-size);
-  line-height: var(--default-line-height);
-  transition: border 0.2s linear;
-  padding: 4px;
-}

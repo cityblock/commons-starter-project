@@ -1,6 +1,9 @@
 import { shallow } from 'enzyme';
 import * as React from 'react';
+import FormLabel from '../../library/form-label/form-label';
+import { CBOReferral } from '../../util/test-data';
 import TaskBody from '../task-body';
+import TaskCBOReferral from '../task-cbo-referral';
 import TaskInfo from '../task-info';
 
 describe('Task Body Component', () => {
@@ -19,6 +22,7 @@ describe('Task Body Component', () => {
       goal={goal}
       concern={concern}
       editTask={editTask}
+      CBOReferral={null}
     />,
   );
 
@@ -31,36 +35,72 @@ describe('Task Body Component', () => {
   });
 
   it('renders information about the concern', () => {
-    expect(wrapper.find('h3').length).toBe(4);
+    expect(wrapper.find('h3').length).toBe(2);
+    expect(wrapper.find(FormLabel).length).toBe(2);
 
+    expect(
+      wrapper
+        .find(FormLabel)
+        .at(0)
+        .props().messageId,
+    ).toBe('task.concern');
+    expect(
+      wrapper
+        .find(FormLabel)
+        .at(0)
+        .props().gray,
+    ).toBeTruthy();
+    expect(
+      wrapper
+        .find(FormLabel)
+        .at(0)
+        .props().small,
+    ).toBeTruthy();
     expect(
       wrapper
         .find('h3')
         .at(0)
         .text(),
-    ).toBe('Concern:');
+    ).toBe(concern);
+  });
+
+  it('renders information about the goal', () => {
+    expect(
+      wrapper
+        .find(FormLabel)
+        .at(1)
+        .props().messageId,
+    ).toBe('task.goal');
+    expect(
+      wrapper
+        .find(FormLabel)
+        .at(1)
+        .props().gray,
+    ).toBeTruthy();
+    expect(
+      wrapper
+        .find(FormLabel)
+        .at(1)
+        .props().small,
+    ).toBeTruthy();
     expect(
       wrapper
         .find('h3')
         .at(1)
         .text(),
-    ).toBe(concern);
+    ).toBe(goal);
   });
 
-  it('renders information about the goal', () => {
-    expect(wrapper.find('h3').length).toBe(4);
+  it('does not render CBO referral component if general task', () => {
+    expect(wrapper.find(TaskCBOReferral).length).toBe(0);
+    expect(wrapper.find(TaskInfo).props().isCBOReferral).toBeFalsy();
+  });
 
-    expect(
-      wrapper
-        .find('h3')
-        .at(2)
-        .text(),
-    ).toBe('Goal:');
-    expect(
-      wrapper
-        .find('h3')
-        .at(3)
-        .text(),
-    ).toBe(goal);
+  it('renders CBO referral component if relevant', () => {
+    wrapper.setProps({ CBOReferral });
+
+    expect(wrapper.find(TaskCBOReferral).length).toBe(1);
+    expect(wrapper.find(TaskCBOReferral).props().CBOReferral).toEqual(CBOReferral);
+    expect(wrapper.find(TaskInfo).props().isCBOReferral).toBeTruthy();
   });
 });

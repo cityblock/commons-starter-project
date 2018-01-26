@@ -10,15 +10,17 @@ interface IProps {
   topPadding?: boolean; // give extra padding on top
   className?: string;
   gray?: boolean; // optional flag that makes text gray
+  small?: boolean; // optional flag to make text smaller
 }
 
 const FormLabel: React.StatelessComponent<IProps> = (props: IProps) => {
-  const { messageId, text, htmlFor, topPadding, className, gray } = props;
+  const { messageId, text, htmlFor, topPadding, className, gray, small } = props;
   const labelStyles = classNames(
     styles.label,
     {
       [styles.completed]: !!gray,
       [styles.topPadding]: !!topPadding,
+      [styles.small]: !!small,
     },
     className,
   );

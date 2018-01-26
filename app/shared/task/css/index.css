@@ -4,9 +4,11 @@
   background: var(--white-color);
   box-shadow: var(--drop-shadow);
   border-radius: 4px;
-  min-height: 535px;
   margin-bottom: 10px;
   border: 1px solid var(--border-color);
+  max-height: calc(100vh - 200px);
+  overflow-y: scroll;
+  -webkit-overflow-scrolling: touch;
 }
 
 .center {

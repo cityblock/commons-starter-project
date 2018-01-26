@@ -1,7 +1,7 @@
 import { shallow } from 'enzyme';
 import * as React from 'react';
 import Spinner from '../../library/spinner/spinner';
-import { taskWithComment } from '../../util/test-data';
+import { taskWithComment, CBOReferral } from '../../util/test-data';
 import TaskHeader from '../header';
 import { Divider, Task } from '../task';
 import TaskAssignee, { IProps } from '../task-assignee';
@@ -62,6 +62,7 @@ describe('Task Component', () => {
     expect(body.props().taskId).toBe(taskId);
     expect(body.props().title).toBe(taskWithComment.title);
     expect(body.props().description).toBeFalsy();
+    expect(body.props().CBOReferral).toEqual(CBOReferral);
   });
 
   it('renders task assignee with correct props', () => {

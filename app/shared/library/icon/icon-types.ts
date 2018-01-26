@@ -25,6 +25,7 @@ export type IconName =
   | 'pauseCircleOutline'
   | 'people'
   | 'phone'
+  | 'pictureAsPDF'
   | 'playlistAdd'
   | 'search'
   | 'syncProblem'

@@ -7,6 +7,7 @@ interface IProps {
   description: string;
   taskId: string;
   editTask: (options: { variables: taskEditMutationVariables }) => { data: taskEditMutation };
+  isCBOReferral: boolean;
 }
 
 class TaskInfo extends React.Component<IProps, {}> {
@@ -19,7 +20,10 @@ class TaskInfo extends React.Component<IProps, {}> {
   }
 
   render(): JSX.Element {
-    const { title, description } = this.props;
+    const { title, description, isCBOReferral } = this.props;
+    const descriptionPlaceholder = isCBOReferral
+      ? 'taskDescription.emptyCBO'
+      : 'taskDescription.empty';
 
     return (
       <div>
@@ -28,7 +32,7 @@ class TaskInfo extends React.Component<IProps, {}> {
           text={description}
           onEnterPress={this.onEnterPress('description')}
           descriptionField={true}
-          placeholderMessageId="taskDescription.empty"
+          placeholderMessageId={descriptionPlaceholder}
         />
       </div>
     );

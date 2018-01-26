@@ -26,6 +26,11 @@ describe('Task Create Modal Shared Components', () => {
     expect(wrapper.find('label').props().className).toBe('label completed topPadding');
   });
 
+  it('applies small styles if specified', () => {
+    wrapper.setProps({ gray: false, topPadding: false, small: true });
+    expect(wrapper.find('label').props().className).toBe('label small');
+  });
+
   it('returns a formatted message with the correct id', () => {
     const messageId = 'Morse code stuffs';
     const wrapper2 = shallow(<FormLabel messageId={messageId} htmlFor={htmlFor} />);

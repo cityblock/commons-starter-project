@@ -25,6 +25,7 @@
   line-height: var(--small-font-line-height);
   font-weight: var(--roboto-medium-weight);
   margin: 0;
+  font-family: var(--basetica-medium);
 }
 
 .detail h3:first-child,
@@ -36,6 +37,7 @@
   color: var(--black-color);
   line-height: var(--default-line-height);
   font-weight: var(--default-font-weight);
+  font-family: var(--roboto);
 }
 
 .relative {

@@ -17,7 +17,6 @@ describe('Library Link Component', () => {
     expect(wrapper.find(ReactRouterLink).props().to).toBe(to);
     expect(wrapper.find(ReactRouterLink).props().children).toBe(label);
     expect(wrapper.find(ReactRouterLink).props().className).toBe('link');
-    expect(wrapper.find(ReactRouterLink).props().target).toBe('_self');
   });
 
   it('applies custom styles if specified', () => {
@@ -30,6 +29,13 @@ describe('Library Link Component', () => {
     wrapper.setProps({ newTab: true });
 
     expect(wrapper.find(ReactRouterLink).props().target).toBe('_blank');
+    expect(wrapper.find(ReactRouterLink).props().rel).toBe('noopener noreferrer');
+  });
+
+  it('defaults to displaying link path if no label or message id given', () => {
+    wrapper.setProps({ label: null });
+
+    expect(wrapper.find(ReactRouterLink).props().children).toBe(to);
   });
 
   it('renders formatted message if message id given', () => {

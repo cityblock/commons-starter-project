@@ -147,6 +147,7 @@ export class Task extends React.Component<allProps, IState> {
             description={(task && task.description) || ''}
             concern={(concern && concern.title) || ''}
             goal={(goal && goal.title) || ''}
+            CBOReferral={task.CBOReferral}
             editTask={editTask}
           />
           <TaskAssignee

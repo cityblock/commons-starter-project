@@ -25,6 +25,7 @@ import NotificationsIcon from 'material-ui-icons/Notifications';
 import PauseCircleOutlineIcon from 'material-ui-icons/PauseCircleOutline';
 import PeopleIcon from 'material-ui-icons/People';
 import PhoneIcon from 'material-ui-icons/Phone';
+import PictureAsPDFIcon from 'material-ui-icons/PictureAsPdf';
 import PlaylistAddIcon from 'material-ui-icons/PlaylistAdd';
 import SearchIcon from 'material-ui-icons/Search';
 import SyncProblemIcon from 'material-ui-icons/SyncProblem';
@@ -59,6 +60,7 @@ const components = {
   pauseCircleOutline: PauseCircleOutlineIcon,
   people: PeopleIcon,
   phone: PhoneIcon,
+  pictureAsPDF: PictureAsPDFIcon,
   playlistAdd: PlaylistAddIcon,
   search: SearchIcon,
   syncProblem: SyncProblemIcon,

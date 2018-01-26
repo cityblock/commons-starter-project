@@ -385,17 +385,6 @@ export const patientGoal = {
   deletedAt: null,
 };
 
-export const taskWithComment = {
-  ...task,
-  patient,
-  comments: [comment],
-  patientId: patient.id,
-  assignedTo: currentUser,
-  createdBy: currentUser,
-  followers: [currentUser],
-  patientGoal,
-};
-
 export const assignedTask = {
   ...task,
   patient,
@@ -698,4 +687,43 @@ export const CBO2 = {
   fax: '(222) 666-6666',
   url: 'www.housebolton.com',
   createdAt: '2017-11-07T13:45:14.532Z',
+};
+
+export const CBOReferral = {
+  id: 'CBOReferral',
+  categoryId: CBOCategory.id,
+  category: CBOCategory,
+  CBOId: CBO.id,
+  CBO,
+  name: null,
+  url: null,
+  diagnosis: null,
+  sentAt: null,
+  acknowledgedAt: null,
+};
+
+export const CBOReferralOther = {
+  id: 'CBOReferral',
+  categoryId: CBOCategory.id,
+  category: CBOCategory,
+  CBOId: null,
+  CBO: null,
+  name: 'Greyjoy Water Therapy',
+  url: 'www.thesilence.com',
+  diagnosis: null,
+  sentAt: null,
+  acknowledgedAt: null,
+};
+
+export const taskWithComment = {
+  ...task,
+  patient,
+  comments: [comment],
+  patientId: patient.id,
+  assignedTo: currentUser,
+  createdBy: currentUser,
+  followers: [currentUser],
+  patientGoal,
+  CBOReferral,
+  CBOReferralId: CBOReferral.id,
 };

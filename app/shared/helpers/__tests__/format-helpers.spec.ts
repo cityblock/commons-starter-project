@@ -1,7 +1,9 @@
 import { shortPatientScreeningToolSubmission } from '../../util/test-data';
 import {
+  formatAddress,
   formatAge,
   formatAgeDetails,
+  formatCBOReferralTaskTitle,
   formatDateOfBirth,
   formatFullName,
   formatInputDate,
@@ -102,6 +104,24 @@ describe('Shared Component Helpers', () => {
 
     it('returns both age and gender if known', () => {
       expect(formatAgeDetails(dateOfBirth, 'f')).toBe('(16 F)');
+    });
+  });
+
+  describe('formatAddress', () => {
+    it('returns a formatted address', () => {
+      const address = 'The Highest Tower';
+      const city = 'Winterfell';
+      const state = 'WS';
+      const zip = '11111';
+
+      expect(formatAddress(address, city, state, zip)).toBe(`${address}, ${city}, ${state} ${zip}`);
+    });
+  });
+
+  describe('formatCBOReferralTaskTitle', () => {
+    it('returns formatted CBO referral task title', () => {
+      const CBOName = 'Arya Warm Pie Pantry';
+      expect(formatCBOReferralTaskTitle(CBOName)).toBe(`CBO Referral: ${CBOName}`);
     });
   });
 

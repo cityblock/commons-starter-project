@@ -12,6 +12,7 @@ interface IProps {
   children?: any;
   className?: string;
   menuStyles?: string;
+  largeFont?: boolean; // if true
 }
 
 interface IState {
@@ -67,11 +68,13 @@ class SelectDropdown extends React.Component<IProps, IState> {
       className,
       children,
       menuStyles,
+      largeFont,
     } = this.props;
     const isOpen = this.state.open && children;
     const containerStyles = classNames(
       styles.container,
       {
+        [styles.largeFont]: !!largeFont,
         [styles.error]: !!error,
       },
       className,

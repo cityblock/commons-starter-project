@@ -56,6 +56,19 @@ export const formatAgeDetails = (dateOfBirth: string | null, gender: string | nu
   return `(${formatAge(dateOfBirth)}${space}${formattedGender})`;
 };
 
+export const formatAddress = (
+  address: string,
+  city: string,
+  state: string,
+  zip: string,
+): string => {
+  return `${address}, ${city}, ${state} ${zip}`;
+};
+
+export const formatCBOReferralTaskTitle = (CBOName: string): string => {
+  return `CBO Referral: ${CBOName}`;
+};
+
 export const formatScreeningToolScore = (
   submission: ShortPatientScreeningToolSubmission360Fragment,
 ): string => {

@@ -80,6 +80,13 @@ export default class CBO extends BaseModel {
       .orderBy('name', 'ASC');
   }
 
+  static async getForCategory(categoryId: string, txn: Transaction): Promise<CBO[]> {
+    return this.query(txn)
+      .eager(EAGER_QUERY)
+      .where({ categoryId, deletedAt: null })
+      .orderBy('name', 'ASC');
+  }
+
   static async create(input: ICBOEditableFields, txn: Transaction): Promise<CBO> {
     return this.query(txn)
       .eager(EAGER_QUERY)

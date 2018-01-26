@@ -9,6 +9,9 @@ import { createCBO, createCBOCategory, createMockClinic, createMockUser } from '
 import schema from '../make-executable-schema';
 
 const name = 'House of Black and White Hospice';
+const name1 = 'Dragon fire heating';
+const name2 = 'Direwolf surgery';
+const name3 = 'Winter coat provision';
 const input = {
   name,
   address: 'By the sea',
@@ -42,7 +45,6 @@ describe('CBO resolver', () => {
     it('gets all CBOs', async () => {
       await transaction(CBO.knex(), async txn => {
         const { user, cboCategory } = await setup(txn);
-        const name2 = 'Dothraki Horse Therapy';
 
         const cbo1 = await CBO.create(
           {
@@ -80,6 +82,65 @@ describe('CBO resolver', () => {
           categoryId: cboCategory.id,
           address: input.address,
         });
+      });
+    });
+
+    it('gets all CBOs for a given category', async () => {
+      await transaction(CBO.knex(), async txn => {
+        const { user, cboCategory } = await setup(txn);
+        const cboCategory2 = await createCBOCategory(txn);
+
+        const cbo1 = await CBO.create(
+          {
+            categoryId: cboCategory.id,
+            ...input,
+            name: name1,
+          },
+          txn,
+        );
+        await CBO.create(
+          {
+            categoryId: cboCategory2.id,
+            ...input,
+            name: name2,
+          },
+          txn,
+        );
+        const cbo3 = await CBO.create(
+          {
+            categoryId: cboCategory.id,
+            ...input,
+            name: name3,
+          },
+          txn,
+        );
+
+        const query = `{
+          CBOsForCategory(categoryId: "${cboCategory.id}") {
+            id
+            name
+            categoryId
+          }
+        }`;
+
+        const result = await graphql(schema, query, null, {
+          userRole,
+          userId: user.id,
+          txn,
+        });
+
+        expect(result.data!.CBOsForCategory).toMatchObject([
+          {
+            id: cbo1.id,
+            name: name1,
+            categoryId: cboCategory.id,
+          },
+          {
+            id: cbo3.id,
+            name: name3,
+            categoryId: cboCategory.id,
+          },
+        ]);
       });
     });
 

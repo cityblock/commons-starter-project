@@ -1,7 +1,7 @@
 import { shallow } from 'enzyme';
 import * as React from 'react';
 import { patientGoal } from '../../shared/util/test-data';
-import CreateTaskModal from '../goals/create-task/create-task';
+import CreateTaskModal, { IProps } from '../goals/create-task/create-task';
 import PatientGoal from '../goals/goal';
 import GoalOptions from '../goals/goal-options';
 
@@ -31,15 +31,15 @@ describe('Patient Goal Component', () => {
 
   it('renders modal component to create task', () => {
     expect(wrapper.find(CreateTaskModal).length).toBe(1);
-    expect(wrapper.find(CreateTaskModal).props().visible).toBeFalsy();
-    expect(wrapper.find(CreateTaskModal).props().concern).toBe(concernTitle);
-    expect(wrapper.find(CreateTaskModal).props().goal).toBe(patientGoal.title);
-    expect(wrapper.find(CreateTaskModal).props().patientGoalId).toBe(patientGoal.id);
+    expect(wrapper.find<IProps>(CreateTaskModal).props().visible).toBeFalsy();
+    expect(wrapper.find<IProps>(CreateTaskModal).props().concern).toBe(concernTitle);
+    expect(wrapper.find<IProps>(CreateTaskModal).props().goal).toBe(patientGoal.title);
+    expect(wrapper.find<IProps>(CreateTaskModal).props().patientGoalId).toBe(patientGoal.id);
   });
 
   it('opens modal to create task', () => {
     wrapper.setState({ createTaskModal: true });
-    expect(wrapper.find(CreateTaskModal).props().visible).toBeTruthy();
+    expect(wrapper.find<IProps>(CreateTaskModal).props().visible).toBeTruthy();
   });
 
   it('applies inactive styles if a task selected', () => {

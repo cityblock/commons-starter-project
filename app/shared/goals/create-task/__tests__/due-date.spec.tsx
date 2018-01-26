@@ -8,7 +8,9 @@ describe('Create Task Modal Due Date Component', () => {
   const value = 'Eleven';
   const onChange = () => true as any;
 
-  const wrapper = shallow(<CreateTaskDueDate value={value} onChange={onChange} />);
+  const wrapper = shallow(
+    <CreateTaskDueDate value={value} onChange={onChange} taskType="general" />,
+  );
 
   it('renders a form label', () => {
     expect(wrapper.find(FormLabel).length).toBe(1);
@@ -23,5 +25,11 @@ describe('Create Task Modal Due Date Component', () => {
     expect(wrapper.find(DateInput).props().onChange).toBe(onChange);
     expect(wrapper.find(DateInput).props().id).toBe('due-date');
     expect(wrapper.find(DateInput).props().name).toBe('due-date');
+  });
+
+  it('changes field label if CBO referral task', () => {
+    wrapper.setProps({ taskType: 'CBOReferral' });
+
+    expect(wrapper.find(FormLabel).props().messageId).toBe('taskCreate.completeReferral');
   });
 });

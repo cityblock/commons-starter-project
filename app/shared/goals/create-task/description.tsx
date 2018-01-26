@@ -1,10 +1,12 @@
 import * as React from 'react';
 import FormLabel from '../../library/form-label/form-label';
 import TextArea from '../../library/textarea/textarea';
+import { TaskType } from './create-task';
 
 interface IProps {
   value: string;
   onChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
+  taskType: TaskType;
 }
 
 interface IState {
@@ -18,13 +20,18 @@ class CreateTaskDescription extends React.Component<IProps, IState> {
   }
 
   render(): JSX.Element {
-    const { value, onChange } = this.props;
+    const { value, onChange, taskType } = this.props;
     const { complete } = this.state;
+    const CBOReferralTask = taskType === 'CBOReferral';
+    const messageId = CBOReferralTask ? 'taskCreate.referralNote' : 'taskCreate.description';
+    const placeholderMessageId = CBOReferralTask
+      ? 'taskCreate.noteDetail'
+      : 'taskCreate.descriptionPlaceholder';
 
     return (
       <div>
         <FormLabel
-          messageId="taskCreate.description"
+          messageId={messageId}
           htmlFor="description"
           gray={!!value && complete}
           topPadding={true}
@@ -32,7 +39,7 @@ class CreateTaskDescription extends React.Component<IProps, IState> {
         <TextArea
           value={value}
           onChange={onChange}
-          placeholderMessageId="taskCreate.descriptionPlaceholder"
+          placeholderMessageId={placeholderMessageId}
           onBlur={() => this.setState({ complete: true })}
           onFocus={() => this.setState({ complete: false })}
           id="description"

@@ -68,3 +68,9 @@
   overflow-y: scroll;
   -webkit-overflow-scrolling: touch;
 }
+
+.largeFont h4,
+.largeFont p {
+  font-size: var(--medium-font-size);
+  line-height: var(--medium-font-line-height);
+}

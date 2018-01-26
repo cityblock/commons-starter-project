@@ -1,0 +1,7 @@
+#import "../fragments/full-cbo.graphql"
+
+query getCBOsForCategory($categoryId: ID!) {
+  CBOsForCategory(categoryId: $categoryId) {
+    ...FullCBO
+  }
+}

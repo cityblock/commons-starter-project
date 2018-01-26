@@ -34,3 +34,32 @@
 .dueDate {
   width: 260px;
 }
+
+.shared {
+  border-radius: var(--border-radius);
+  font-size: var(--medium-font-size);
+  height: 52px;
+}
+
+.flex {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+a.link {
+  margin: var(--medium-gutter) 0 var(--extra-small-gutter);
+}
+
+.placeholder {
+  min-height: 308px;
+}
+
+.marginTop {
+  margin-top: var(--extra-small-gutter);
+}
+
+.removeBottomRadius {
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+}

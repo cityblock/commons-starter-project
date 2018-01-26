@@ -17,6 +17,7 @@ export interface IProps {
   messageStyles?: string;
   dropdownStyles?: string;
   menuStyles?: string;
+  largeFont?: boolean;
 }
 
 interface IGraphqlProps {
@@ -89,6 +90,7 @@ export class TaskAssignee extends React.Component<allProps, IState> {
       careTeam,
       dropdownStyles,
       menuStyles,
+      largeFont,
     } = this.props;
     const assignee =
       this.props.assignee ||
@@ -110,6 +112,7 @@ export class TaskAssignee extends React.Component<allProps, IState> {
           error={this.state.changeAssigneeError}
           className={dropdownStyles}
           menuStyles={menuStyles}
+          largeFont={!!largeFont}
         >
           {this.renderCareTeamOptions()}
         </SelectDropdown>

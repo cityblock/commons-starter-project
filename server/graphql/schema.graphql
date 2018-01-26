@@ -2104,6 +2104,8 @@ type RootQueryType {
   CBO(CBOId: ID!): CBO!
   # all CBOs
   CBOs: [CBO!]!
+  # all CBOs for given category
+  CBOsForCategory(categoryId: ID!): [CBO!]!
 }
 
 schema {

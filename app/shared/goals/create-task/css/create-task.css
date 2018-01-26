@@ -14,16 +14,3 @@
   overflow-y: scroll;
   -webkit-overflow-scrolling: touch;
 }
-
-.dropdown {
-  height: 52px;
-}
-
-.menu {
-  top: 52px;
-}
-
-.flex {
-  display: flex;
-  justify-content: space-between;
-}

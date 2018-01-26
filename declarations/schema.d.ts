@@ -381,6 +381,10 @@ declare module 'schema' {
     description: all CBOs
   */
     CBOs: Array<ICBO>;
+    /**
+    description: all CBOs for given category
+  */
+    CBOsForCategory: Array<ICBO>;
   }
 
   /**

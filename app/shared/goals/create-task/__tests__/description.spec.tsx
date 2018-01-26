@@ -8,7 +8,9 @@ describe('Create Task Modal Description Component', () => {
   const value = 'Eleven';
   const onChange = () => true as any;
 
-  const wrapper = shallow(<CreateTaskDescription value={value} onChange={onChange} />);
+  const wrapper = shallow(
+    <CreateTaskDescription value={value} onChange={onChange} taskType="general" />,
+  );
 
   it('renders a field label', () => {
     expect(wrapper.find(FormLabel).length).toBe(1);
@@ -21,10 +23,20 @@ describe('Create Task Modal Description Component', () => {
     expect(wrapper.find(TextArea).props().value).toBe(value);
     expect(wrapper.find(TextArea).props().onChange).toBe(onChange);
     expect(wrapper.find(TextArea).props().id).toBe('description');
+    expect(wrapper.find(TextArea).props().placeholderMessageId).toBe(
+      'taskCreate.descriptionPlaceholder',
+    );
   });
 
   it('changes form label to gray on completion', () => {
     wrapper.setState({ complete: true });
     expect(wrapper.find(FormLabel).props().gray).toBeTruthy();
+  });
+
+  it('changes field label if CBO referral task', () => {
+    wrapper.setProps({ taskType: 'CBOReferral' });
+
+    expect(wrapper.find(FormLabel).props().messageId).toBe('taskCreate.referralNote');
+    expect(wrapper.find(TextArea).props().placeholderMessageId).toBe('taskCreate.noteDetail');
   });
 });

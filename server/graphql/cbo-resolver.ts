@@ -26,6 +26,17 @@ export async function resolveCBOs(
   return await CBO.getAll(txn);
 }
 
+export async function resolveCBOsForCategory(
+  root: any,
+  args: { categoryId: string },
+  { db, userRole, userId, txn }: IContext,
+): Promise<CBO[]> {
+  await accessControls.isAllowedForUser(userRole, 'view', 'CBO');
+  checkUserLoggedIn(userId);
+
+  return await CBO.getForCategory(args.categoryId, txn);
+}
+
 export async function resolveCBO(
   root: any,
   args: { CBOId: string },

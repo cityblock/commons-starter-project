@@ -1,0 +1,14 @@
+@import '../../../css/sizes';
+
+.flex {
+  display: flex;
+  justify-content: space-between;
+}
+
+.dropdown {
+  height: 52px;
+}
+
+.menu {
+  top: 52px;
+}

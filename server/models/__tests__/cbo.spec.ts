@@ -5,6 +5,10 @@ import { createCBO, createCBOCategory } from '../../spec-helpers';
 import CBO from '../cbo';
 import CBOCategory from '../cbo-category';
 
+const name1 = 'Dragon fire heating';
+const name2 = 'Direwolf surgery';
+const name3 = 'Winter coat provision';
+
 const input = {
   name: 'Red priestess healing',
   address: '3 Castle Road',
@@ -64,10 +68,6 @@ describe('CBO model', () => {
   it('gets all CBOs', async () => {
     await transaction(CBO.knex(), async txn => {
       const { cboCategory } = await setup(txn);
-
-      const name1 = 'Dragon fire heating';
-      const name2 = 'Direwolf surgery';
-
       const cbo1 = await CBO.create(
         {
           categoryId: cboCategory.id,
@@ -79,6 +79,40 @@ describe('CBO model', () => {
       const cbo2 = await createCBO(txn, name2);
 
       expect(await CBO.getAll(txn)).toMatchObject([cbo2, cbo1]);
+    });
+  });
+
+  it('gets all CBOs for a given category', async () => {
+    await transaction(CBO.knex(), async txn => {
+      const { cboCategory } = await setup(txn);
+      const cboCategory2 = await createCBOCategory(txn);
+
+      const cbo1 = await CBO.create(
+        {
+          categoryId: cboCategory.id,
+          ...input,
+          name: name1,
+        },
+        txn,
+      );
+      await CBO.create(
+        {
+          categoryId: cboCategory2.id,
+          ...input,
+          name: name2,
+        },
+        txn,
+      );
+      const cbo3 = await CBO.create(
+        {
+          categoryId: cboCategory.id,
+          ...input,
+          name: name3,
+        },
+        txn,
+      );
+
+      expect(await CBO.getForCategory(cboCategory.id, txn)).toMatchObject([cbo1, cbo3]);
     });
   });
 
@@ -99,7 +133,6 @@ describe('CBO model', () => {
         ...input,
       });
 
-      const name2 = 'Greyjoy water therapy';
       const address2 = 'Middle of ocean';
 
       const editedCBO = await CBO.edit(

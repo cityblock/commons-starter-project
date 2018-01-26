@@ -17,10 +17,10 @@ describe('CBO Category Select', () => {
     />,
   );
 
-  it('renders large select component', () => {
+  it('renders select component', () => {
     expect(wrapper.find(Select).length).toBe(1);
     expect(wrapper.find(Select).props().value).toBe(categoryId);
-    expect(wrapper.find(Select).props().large).toBeTruthy();
+    expect(wrapper.find(Select).props().className).toBe('categorySelect');
   });
 
   it('renders placeholder category select option', () => {

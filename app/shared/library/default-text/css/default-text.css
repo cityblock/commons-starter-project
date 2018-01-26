@@ -1,0 +1,18 @@
+@import '../../../css/sizes';
+
+.text {
+  margin: 0;
+  font-family: var(--roboto);
+  color: var(--black-color);
+  font-size: var(--default-font-size);
+  line-height: var(--default-line-height);
+  font-weight: var(--default-font-weight);
+}
+
+.inline {
+  display: inline-block;
+}
+
+.lightBlue {
+  color: var(--light-blue-color);
+}

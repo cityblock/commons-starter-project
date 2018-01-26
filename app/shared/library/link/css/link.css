@@ -1,0 +1,10 @@
+@import '../../../css/sizes';
+
+.link {
+  color: var(--light-blue-color);
+  font-family: var(--basetica-medium);
+  font-size: var(--small-font-size);
+  line-height: var(--small-font-line-height);
+  font-weight: var(--roboto-medium-weight);
+  margin: 0;
+}

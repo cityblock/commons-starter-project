@@ -1,0 +1,7 @@
+@import '../../../css/sizes';
+
+.categorySelect {
+  border-radius: var(--border-radius);
+  font-size: var(--medium-font-size);
+  height: 52px;
+}

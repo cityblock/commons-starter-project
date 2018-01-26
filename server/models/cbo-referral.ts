@@ -95,7 +95,9 @@ export default class CBOReferral extends BaseModel {
   }
 
   static async create(input: ICBOReferralCreateFields, txn: Transaction): Promise<CBOReferral> {
-    return this.query(txn).insertAndFetch(input);
+    return this.query(txn)
+      .eager(EAGER_QUERY)
+      .insertAndFetch(input);
   }
 
   static async edit(
@@ -103,7 +105,9 @@ export default class CBOReferral extends BaseModel {
     CBOReferralId: string,
     txn: Transaction,
   ): Promise<CBOReferral> {
-    const edited = await this.query(txn).patchAndFetchById(CBOReferralId, input);
+    const edited = await this.query(txn)
+      .eager(EAGER_QUERY)
+      .patchAndFetchById(CBOReferralId, input);
 
     if (!edited) {
       return Promise.reject(`No such CBO referral: ${CBOReferralId}`);

@@ -23,7 +23,14 @@ import {
 } from './care-team-resolver';
 import { resolveCBOCategories } from './cbo-category-resolver';
 import { CBOReferralCreate, CBOReferralEdit } from './cbo-referral-resolver';
-import { resolveCBO, resolveCBOs, CBOCreate, CBODelete, CBOEdit } from './cbo-resolver';
+import {
+  resolveCBO,
+  resolveCBOs,
+  resolveCBOsForCategory,
+  CBOCreate,
+  CBODelete,
+  CBOEdit,
+} from './cbo-resolver';
 import { clinicCreate, resolveClinic, resolveClinics } from './clinic-resolver';
 import { computedFieldFlagCreate } from './computed-field-flag-resolver';
 import {
@@ -344,6 +351,7 @@ const resolveFunctions = {
     patientList: resolvePatientList,
     CBOCategories: resolveCBOCategories,
     CBOs: resolveCBOs,
+    CBOsForCategory: resolveCBOsForCategory,
     CBO: resolveCBO,
   },
 

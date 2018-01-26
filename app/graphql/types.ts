@@ -1267,6 +1267,31 @@ export interface getCBOQuery {
   },
 };
 
+export interface getCBOsForCategoryQueryVariables {
+  categoryId: string,
+};
+
+export interface getCBOsForCategoryQuery {
+  // all CBOs for given category
+  CBOsForCategory:  Array< {
+    id: string,
+    name: string,
+    categoryId: string,
+    category:  {
+      id: string,
+      title: string,
+    },
+    address: string,
+    city: string,
+    state: string,
+    zip: string,
+    fax: string | null,
+    phone: string,
+    url: string,
+    createdAt: string,
+  } >,
+};
+
 export interface getCBOsQuery {
   // all CBOs
   CBOs:  Array< {

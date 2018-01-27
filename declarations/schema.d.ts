@@ -1173,7 +1173,7 @@ declare module 'schema' {
   }
 
 
-  type ITaskEventTypesEnum = 'create_task' | 'add_follower' | 'remove_follower' | 'complete_task' | 'uncomplete_task' | 'delete_task' | 'add_comment' | 'edit_comment' | 'delete_comment' | 'edit_priority' | 'edit_due_date' | 'edit_assignee' | 'edit_title' | 'edit_description';
+  type ITaskEventTypesEnum = 'create_task' | 'add_follower' | 'remove_follower' | 'complete_task' | 'uncomplete_task' | 'delete_task' | 'add_comment' | 'edit_comment' | 'delete_comment' | 'edit_priority' | 'edit_due_date' | 'edit_assignee' | 'edit_title' | 'edit_description' | 'CBOReferral_edit_sentAt' | 'CBOReferral_edit_acknowledgedAt';
 
 
   interface IProgressNote {
@@ -2601,6 +2601,7 @@ declare module 'schema' {
   */
   interface ICBOReferralEditInput {
     CBOReferralId: string;
+    taskId: string;
     sentAt?: string | null;
     acknowledgedAt?: string | null;
   }

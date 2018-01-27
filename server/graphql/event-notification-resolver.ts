@@ -135,6 +135,26 @@ function getEventNotificationTitle(eventNotification: EventNotification) {
           return `The assignee of this task was changed`;
         }
       }
+      case 'CBOReferral_edit_sentAt': {
+        const { CBOReferral } = task;
+
+        if (CBOReferral && CBOReferral.sentAt) {
+          const formattedSentAt = format(CBOReferral.sentAt, 'MMM D, YYYY');
+          return `${userName} sent the CBO referral form on ${formattedSentAt}`;
+        } else if (CBOReferral) {
+          return `${userName} deleted the send date for the CBO referral form`;
+        }
+      }
+      case 'CBOReferral_edit_acknowledgedAt': {
+        const { CBOReferral } = task;
+
+        if (CBOReferral && CBOReferral.acknowledgedAt) {
+          const formattedAcknowledgedAt = format(CBOReferral.acknowledgedAt, 'MMM D, YYYY');
+          return `${userName} acknowledged that the CBO received the referral on ${formattedAcknowledgedAt}`;
+        } else if (CBOReferral) {
+          return `${userName} deleted the acknowledgment date for the CBO referral form`;
+        }
+      }
       default: {
         return `Not sure why you are seeing this. Unknown event: $;{event.eventType;}`;
       }

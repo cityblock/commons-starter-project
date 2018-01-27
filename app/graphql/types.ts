@@ -91,6 +91,8 @@ export enum TaskEventTypes {
   edit_assignee = "edit_assignee",
   edit_title = "edit_title",
   edit_description = "edit_description",
+  CBOReferral_edit_sentAt = "CBOReferral_edit_sentAt",
+  CBOReferral_edit_acknowledgedAt = "CBOReferral_edit_acknowledgedAt",
 }
 
 
@@ -701,6 +703,7 @@ export interface CBOReferralCreateMutation {
 
 export interface CBOReferralEditMutationVariables {
   CBOReferralId: string,
+  taskId: string,
   sentAt?: string | null,
   acknowledgedAt?: string | null,
 };

@@ -31,7 +31,9 @@ type EventTypes =
   | 'edit_due_date'
   | 'edit_assignee'
   | 'edit_title'
-  | 'edit_description';
+  | 'edit_description'
+  | 'CBOReferral_edit_sentAt'
+  | 'CBOReferral_edit_acknowledgedAt';
 
 const EVENT_TYPES: EventTypes[] = [
   'create_task',
@@ -48,6 +50,8 @@ const EVENT_TYPES: EventTypes[] = [
   'edit_assignee',
   'edit_title',
   'edit_description',
+  'CBOReferral_edit_sentAt',
+  'CBOReferral_edit_acknowledgedAt',
 ];
 
 const EAGER_QUERY =

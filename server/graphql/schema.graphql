@@ -119,6 +119,8 @@ enum TaskEventTypes {
   edit_assignee
   edit_title
   edit_description
+  CBOReferral_edit_sentAt
+  CBOReferral_edit_acknowledgedAt
 }
 
 enum CarePlanUpdateEventTypes {
@@ -1671,6 +1673,7 @@ input CBOReferralCreateInput {
 # params for editing a CBO referral
 input CBOReferralEditInput {
   CBOReferralId: ID!
+  taskId: ID!
   sentAt: String
   acknowledgedAt: String
 }

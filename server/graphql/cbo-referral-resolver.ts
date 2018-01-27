@@ -1,5 +1,6 @@
 import { ICBOReferralCreateInput, ICBOReferralEditInput } from 'schema';
 import CBOReferral from '../models/cbo-referral';
+import TaskEvent from '../models/task-event';
 import accessControls from './shared/access-controls';
 import { checkUserLoggedIn, IContext } from './shared/utils';
 
@@ -30,5 +31,29 @@ export async function CBOReferralEdit(
   await accessControls.isAllowedForUser(userRole, 'edit', 'CBOReferral');
   checkUserLoggedIn(userId);
 
-  return await CBOReferral.edit(input, input.CBOReferralId, txn);
+  const referral = await CBOReferral.edit(input, input.CBOReferralId, txn);
+
+  if (input.sentAt) {
+    await TaskEvent.create(
+      {
+        taskId: input.taskId,
+        userId: userId!,
+        eventType: 'CBOReferral_edit_sentAt',
+      },
+      txn,
+    );
+  }
+
+  if (input.acknowledgedAt) {
+    await TaskEvent.create(
+      {
+        taskId: input.taskId,
+        userId: userId!,
+        eventType: 'CBOReferral_edit_acknowledgedAt',
+      },
+      txn,
+    );
+  }
+
+  return referral;
 }

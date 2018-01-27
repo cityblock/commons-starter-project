@@ -3,8 +3,18 @@ import { transaction, Transaction } from 'objection';
 import Db from '../../db';
 import CBOReferral from '../../models/cbo-referral';
 import Clinic from '../../models/clinic';
+import PatientGoal from '../../models/patient-goal';
+import Task from '../../models/task';
+import TaskEvent from '../../models/task-event';
 import User from '../../models/user';
-import { createCBO, createCBOReferral, createMockClinic, createMockUser } from '../../spec-helpers';
+import {
+  createCBO,
+  createCBOReferral,
+  createMockClinic,
+  createMockPatient,
+  createMockUser,
+  createPatient,
+} from '../../spec-helpers';
 import schema from '../make-executable-schema';
 
 const userRole = 'admin';
@@ -15,7 +25,7 @@ const setup = async (txn: Transaction) => {
   const clinic = await Clinic.create(createMockClinic(), txn);
   const user = await User.create(createMockUser(11, clinic.id, userRole), txn);
 
-  return { user };
+  return { user, clinic };
 };
 
 describe('CBO Referral resolver', () => {
@@ -62,15 +72,39 @@ describe('CBO Referral resolver', () => {
   });
 
   describe('CBO Referral edit', () => {
-    it('edits a CBO referral', async () => {
+    it('edits a CBO referral and creates associated task events', async () => {
       await transaction(CBOReferral.knex(), async txn => {
-        const { user } = await setup(txn);
+        const taskTitle = 'Defeat Night King';
+        const goalTitle = 'Save the world';
+
+        const { user, clinic } = await setup(txn);
         const cboReferral = await createCBOReferral(txn);
         expect(cboReferral.sentAt).toBeFalsy();
+        const patient = await createPatient(createMockPatient(11, clinic.id), user.id, txn);
+        const patientGoal = await PatientGoal.create(
+          {
+            userId: user.id,
+            patientId: patient.id,
+            title: goalTitle,
+          },
+          txn,
+        );
+
+        const task = await Task.create(
+          {
+            title: taskTitle,
+            patientId: patient.id,
+            CBOReferralId: cboReferral.id,
+            patientGoalId: patientGoal.id,
+            createdById: user.id,
+          },
+          txn,
+        );
 
         const mutation = `mutation {
           CBOReferralEdit(input: {
             CBOReferralId: "${cboReferral.id}"
+            taskId: "${task.id}"
             sentAt: "${sentAt}"
           }) {
             id
@@ -88,6 +122,22 @@ describe('CBO Referral resolver', () => {
           id: cboReferral.id,
         });
         expect(result.data!.CBOReferralEdit.sentAt).toBeTruthy();
+
+        const taskEvents = await TaskEvent.getTaskEvents(
+          task.id,
+          {
+            pageNumber: 0,
+            pageSize: 10,
+          },
+          txn,
+        );
+
+        expect(taskEvents.results.length).toBe(1);
+        expect(taskEvents.results[0]).toMatchObject({
+          taskId: task.id,
+          userId: user.id,
+          eventType: 'CBOReferral_edit_sentAt',
+        });
       });
     });
   });

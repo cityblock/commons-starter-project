@@ -23,8 +23,8 @@ const EAGER_QUERY = '[taskEvent.[user, eventComment, eventComment.user, eventUse
 export default class EventNotification extends BaseModel {
   userId: string;
   user: User;
-  taskEventId: string;
-  taskEvent: TaskEvent;
+  taskEventId?: string;
+  taskEvent?: TaskEvent;
   seenAt: string;
   emailSentAt: string;
   deliveredAt: string;

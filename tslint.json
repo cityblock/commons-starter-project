@@ -52,7 +52,7 @@
     "object-literal-shorthand": true,
     "no-unnecessary-callback-wrapper": true,
     "no-unnecessary-type-assertion": true,
-    // "cyclomatic-complexity": true, soon!
+    "cyclomatic-complexity": true,
     "radix": true,
     "no-invalid-template-strings": true,
     // Secuity rules from tslint-microsoft-contrib

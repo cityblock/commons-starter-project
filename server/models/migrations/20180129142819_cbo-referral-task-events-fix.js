@@ -16,10 +16,10 @@ exports.up = function(knex, Promise) {
       'edit_priority',
       'edit_due_date',
       'edit_assignee',
-      'edit_title'
+      'edit_title',
       'edit_description',
-      'CBOReferral_edit_sentAt',
-      'CBOReferral_edit_acknowledgedAt'
+      'cbo_referral_edit_sent_at',
+      'cbo_referral_edit_acknowledged_at'
     ))
   `);
 };
@@ -42,8 +42,10 @@ exports.down = function(knex, Promise) {
     'edit_priority',
     'edit_due_date',
     'edit_assignee',
-    'edit_title',
-    'edit_description'
+    'edit_title'
+    'edit_description',
+    'CBOReferral_edit_sentAt',
+    'CBOReferral_edit_acknowledgedAt'
   ))
   `);
 };

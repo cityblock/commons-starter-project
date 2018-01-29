@@ -117,7 +117,6 @@ describe('CBO Referral resolver', () => {
           userId: user.id,
           txn,
         });
-
         expect(result.data!.CBOReferralEdit).toMatchObject({
           id: cboReferral.id,
         });
@@ -136,7 +135,7 @@ describe('CBO Referral resolver', () => {
         expect(taskEvents.results[0]).toMatchObject({
           taskId: task.id,
           userId: user.id,
-          eventType: 'CBOReferral_edit_sentAt',
+          eventType: 'cbo_referral_edit_sent_at',
         });
       });
     });

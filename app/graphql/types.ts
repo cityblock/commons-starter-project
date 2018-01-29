@@ -91,8 +91,8 @@ export enum TaskEventTypes {
   edit_assignee = "edit_assignee",
   edit_title = "edit_title",
   edit_description = "edit_description",
-  CBOReferral_edit_sentAt = "CBOReferral_edit_sentAt",
-  CBOReferral_edit_acknowledgedAt = "CBOReferral_edit_acknowledgedAt",
+  cbo_referral_edit_sent_at = "cbo_referral_edit_sent_at",
+  cbo_referral_edit_acknowledged_at = "cbo_referral_edit_acknowledged_at",
 }
 
 

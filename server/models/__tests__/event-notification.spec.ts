@@ -119,7 +119,7 @@ describe('task event model', () => {
       const fetchedEventNotification2 = await EventNotification.get(eventNotification2.id, txn);
 
       expect(fetchedEventNotification1.user.id).toEqual(user.id);
-      expect(fetchedEventNotification1.taskEvent.id).toEqual(taskEvent.id);
+      expect(fetchedEventNotification1.taskEvent!.id).toEqual(taskEvent.id);
 
       expect(fetchedEventNotification2.user.id).toEqual(user.id);
       expect(fetchedEventNotification2.taskEvent).toBeFalsy();
@@ -519,7 +519,7 @@ describe('task event model', () => {
 
         expect(result.length).toBe(1);
         expect(result[0].id).toBe(setupResult.eventNotification.id);
-        expect(result[0].taskEvent.taskId).toBe(setupResult.task.id);
+        expect(result[0].taskEvent!.taskId).toBe(setupResult.task.id);
       });
     });
   });

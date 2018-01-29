@@ -38,7 +38,7 @@ export async function CBOReferralEdit(
       {
         taskId: input.taskId,
         userId: userId!,
-        eventType: 'CBOReferral_edit_sentAt',
+        eventType: 'cbo_referral_edit_sent_at',
       },
       txn,
     );
@@ -49,7 +49,7 @@ export async function CBOReferralEdit(
       {
         taskId: input.taskId,
         userId: userId!,
-        eventType: 'CBOReferral_edit_acknowledgedAt',
+        eventType: 'cbo_referral_edit_acknowledged_at',
       },
       txn,
     );

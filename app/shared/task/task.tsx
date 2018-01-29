@@ -92,80 +92,89 @@ export class Task extends React.Component<allProps, IState> {
     history.push(routeBase);
   };
 
-  render(): JSX.Element {
-    const { task, routeBase, editTask, taskLoading } = this.props;
+  renderLoading() {
+    return (
+      <div className={classNames(styles.container, styles.center)}>
+        <Spinner />
+      </div>
+    );
+  }
+
+  renderConfirmDelete() {
+    const { task } = this.props;
     const taskId = task && task.id;
+    return (
+      <div className={classNames(styles.container, styles.center)}>
+        <TaskDelete
+          taskId={taskId}
+          cancelDelete={this.cancelDelete}
+          redirectToMap={this.redirectToMap}
+        />
+      </div>
+    );
+  }
 
-    if (taskLoading) {
-      return (
-        <div className={classNames(styles.container, styles.center)}>
-          <Spinner />
-        </div>
-      );
-    } else if (this.state.deleteConfirmation) {
-      return (
-        <div className={classNames(styles.container, styles.center)}>
-          <TaskDelete
-            taskId={taskId}
-            cancelDelete={this.cancelDelete}
-            redirectToMap={this.redirectToMap}
-          />
-        </div>
-      );
-    }
-
-    const patientId = task && task.patientId;
-    const patientName =
-      task && task.patient
-        ? formatFullName(task.patient.firstName || '', task.patient.lastName || '')
-        : 'No Patient';
-
-    const goal = task && task.patientGoal;
+  renderTask(task: FullTaskFragment) {
+    const { routeBase, editTask } = this.props;
+    const patientName = task.patient
+      ? formatFullName(task.patient.firstName || '', task.patient.lastName || '')
+      : 'No Patient';
+    const goal = task.patientGoal;
     const concern = goal && goal.patientConcern && goal.patientConcern.concern;
-
     return (
       <div className={styles.container}>
         <div className={styles.task}>
           <TaskHeader
-            taskId={taskId}
+            taskId={task.id}
             patientName={patientName}
             confirmDelete={this.confirmDelete}
             routeBase={routeBase}
-            patientId={patientId}
+            patientId={task.patientId}
           />
           <Divider />
           <TaskProgress
-            taskId={taskId}
-            dueAt={(task && task.dueAt) || ''}
-            completedAt={(task && task.completedAt) || ''}
+            taskId={task.id}
+            dueAt={task.dueAt || ''}
+            completedAt={task.completedAt || ''}
             editTask={editTask}
           />
           <Divider />
           <TaskBody
-            taskId={taskId}
-            title={task && task.title}
-            description={(task && task.description) || ''}
+            taskId={task.id}
+            title={task.title}
+            description={task.description || ''}
             concern={(concern && concern.title) || ''}
             goal={(goal && goal.title) || ''}
             CBOReferral={task.CBOReferral}
             editTask={editTask}
           />
           <TaskAssignee
-            patientId={patientId}
-            assignee={(task && task.assignedTo) || null}
+            patientId={task.patientId}
+            assignee={task.assignedTo || null}
             onAssigneeClick={this.onAssigneeClick}
           />
           <TaskTracking
-            taskId={taskId}
-            patientId={patientId}
-            priority={task && (task.priority as Priority)}
-            followers={(task && task.followers) || []}
+            taskId={task.id}
+            patientId={task.patientId}
+            priority={task.priority as Priority}
+            followers={task.followers || []}
             onPriorityClick={this.onPriorityClick}
           />
         </div>
-        <TaskComments taskId={taskId} />
+        <TaskComments taskId={task.id} />
       </div>
     );
+  }
+
+  render() {
+    const { task } = this.props;
+    if (this.props.taskLoading) {
+      return this.renderLoading();
+    } else if (this.state.deleteConfirmation) {
+      return this.renderConfirmDelete();
+    } else if (task) {
+      return this.renderTask(task);
+    }
   }
 }
 

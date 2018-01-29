@@ -235,6 +235,13 @@ export default class User extends Model {
     };
   }
 
+  static async getUserSummaryList(userRoleFilters: UserRole[], txn: Transaction) {
+    return this.query(txn)
+      .whereIn('userRole', userRoleFilters)
+      .select(['userRole', 'id', 'firstName', 'lastName'])
+      .orderBy('lastName');
+  }
+
   static async delete(userId: string, txn: Transaction): Promise<User> {
     await this.query(txn)
       .where({ id: userId, deletedAt: null })

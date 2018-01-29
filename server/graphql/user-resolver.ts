@@ -24,6 +24,10 @@ export interface IUserCreateArgs {
   input: IUserCreateInput;
 }
 
+export interface IUserSummaryOptions {
+  userRoleFilters: UserRole[];
+}
+
 export interface IResolveUserOptions {
   userId: string;
 }
@@ -178,6 +182,15 @@ export async function resolveUsers(
       hasNextPage,
     },
   };
+}
+
+export async function resolveUserSummaryList(
+  root: any,
+  { userRoleFilters }: IUserSummaryOptions,
+  { db, userRole, txn }: IContext,
+) {
+  await accessControls.isAllowed(userRole, 'view', 'allUsers');
+  return await User.getUserSummaryList(userRoleFilters, txn);
 }
 
 // disabling isAllowed check for login endpoint so users can log in

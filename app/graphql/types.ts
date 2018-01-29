@@ -4603,6 +4603,21 @@ export interface getTasksWithNotificationsForPatientQuery {
   } >,
 };
 
+export interface getUserSummaryListQueryVariables {
+  userRoleFilters?: Array< UserRole > | null,
+};
+
+export interface getUserSummaryListQuery {
+  // List of all Users with care roles
+  userSummaryList:  Array< {
+    id: string,
+    firstName: string | null,
+    lastName: string | null,
+    userRole: UserRole,
+    googleProfileImageUrl: string | null,
+  } >,
+};
+
 export interface getUsersQueryVariables {
   pageNumber?: number | null,
   pageSize?: number | null,

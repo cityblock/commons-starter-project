@@ -11,7 +11,9 @@ exports[`renders question answers 1`] = `
       checked={false}
       disabled={false}
       id="answer-id"
+      name={undefined}
       onChange={[Function]}
+      onClick={undefined}
       type="radio"
       value="answer-id"
     />

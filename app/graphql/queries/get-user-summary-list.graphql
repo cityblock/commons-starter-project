@@ -1,0 +1,7 @@
+#import "../fragments/short-user.graphql"
+
+query getUserSummaryList($userRoleFilters: [UserRole!]) {
+  userSummaryList(userRoleFilters: $userRoleFilters) {
+    ...ShortUser
+  }
+}

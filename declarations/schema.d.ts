@@ -26,6 +26,10 @@ declare module 'schema' {
   */
     users: IUserEdges;
     /**
+    description: List of all Users with care roles
+  */
+    userSummaryList: Array<IUser>;
+    /**
     description: List of patients the user is on the care team for (their 'patient panel')
   */
     userPatientPanel: IPatientEdges;

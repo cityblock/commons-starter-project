@@ -4,7 +4,7 @@ import Db from '../../db';
 import { createMockClinic, createMockUser } from '../../spec-helpers';
 import Clinic from '../clinic';
 import GoogleAuth from '../google-auth';
-import User from '../user';
+import User, { UserRole } from '../user';
 
 const userRole = 'physician';
 
@@ -227,6 +227,45 @@ describe('user model', () => {
         ],
         total: 2,
       });
+    });
+  });
+
+  it('fetches a limited set of shortened user objects', async () => {
+    await transaction(User.knex(), async txn => {
+      const clinic = await Clinic.create(createMockClinic(), txn);
+      const userRole2 = 'healthCoach';
+      const userRole3 = 'nurseCareManager';
+      const userRoleFilters: UserRole[] = [userRole, userRole2];
+      const userRoleFilters2: UserRole[] = [userRole3];
+
+      await User.create(createMockUser(11, clinic.id, userRole, 'a@b.com'), txn);
+      await User.create(createMockUser(11, clinic.id, userRole2, 'b@c.com'), txn);
+      await User.create(createMockUser(11, clinic.id, userRole3, 'c@d.com'), txn);
+
+      expect(
+        await User.getUserSummaryList(
+          userRoleFilters,
+          txn,
+        ),
+      ).toMatchObject([
+        {
+          userRole,
+        },
+        {
+          userRole: userRole2,
+        },
+      ]);
+
+      expect(
+        await User.getUserSummaryList(
+          userRoleFilters2,
+          txn,
+        ),
+      ).toMatchObject([
+        {
+          userRole: userRole3,
+        },
+      ]);
     });
   });
 

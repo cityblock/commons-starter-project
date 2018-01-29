@@ -1899,6 +1899,8 @@ type RootQueryType {
   user(userId: ID!): User!
   # All Users (admin only)
   users(pageNumber: Int, pageSize: Int, hasLoggedIn: Boolean, orderBy: UserOrderOptions): UserEdges!
+  # List of all Users with care roles
+  userSummaryList(userRoleFilters: [UserRole!]): [User!]!
   # List of patients the user is on the care team for (their 'patient panel')
   userPatientPanel(pageNumber: Int, pageSize: Int, userId: ID): PatientEdges!
   # The current User

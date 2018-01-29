@@ -16,6 +16,11 @@
   width: 100%;
   cursor: pointer;
   appearance: none;
+  color: var(--light-gray-font-color);
+
+  &:valid {
+    color: black;
+  }
 
   &:hover,
   &:active {
@@ -25,7 +30,7 @@
 
 .large {
   height: 50px;
-  font-size: var(--default-font-size);
+  font-size: var(--medium-font-size);
   border-radius: var(--big-border-radius);
 }
 
@@ -41,7 +46,7 @@
 }
 
 .noValue {
-  color: var(--gray-font-color);
+  color: var(--light-gray-font-color);
 }
 
 .empty {

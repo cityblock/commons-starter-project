@@ -1,0 +1,57 @@
+@import '../../shared/css/sizes';
+
+@keyframes slideIn {
+  0% { transform: translateX(450px); }
+  100% { transform: translateX(0); }
+}
+
+@keyframes slideOut {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(450px); }
+}
+
+.container {
+  z-index: 20;
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 450px;
+  transform: translateX(450px);
+  background-color: var(--highlight-background-color);
+  box-shadow: 0 10px 10px 0 rgba(0, 0, 0, 0.2);
+  overflow: hidden;
+}
+
+.container.visible {
+  transform: translateX(0);
+  animation: slideIn 0.3s forwards;
+}
+
+.container.hidden {
+  transform: translateX(450px);
+  animation: slideOut 0.3s forwards;
+}
+
+.header {
+  background-color: var(--dark-gray-background-color);
+  position: relative;
+  padding: 15px var(--small-gutter);
+}
+
+.buttonContainer {
+  position: absolute;
+  top: 0;
+  right: var(--small-gutter);
+}
+
+.button {
+  margin: 6px 0 6px 10px;
+}
+
+.fields {
+  margin: var(--gutter) var(--small-gutter);
+}
+
+.inputGroup {
+  margin-bottom: var(--gutter);
+}

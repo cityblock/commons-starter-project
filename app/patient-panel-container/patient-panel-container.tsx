@@ -4,10 +4,12 @@ import * as React from 'react';
 import { compose, graphql } from 'react-apollo';
 import { FormattedMessage } from 'react-intl';
 import { withRouter } from 'react-router';
+import * as currentUserQuery from '../graphql/queries/get-current-user.graphql';
 import * as patientPanelQuery from '../graphql/queries/get-patient-panel.graphql';
-import { ShortPatientFragment } from '../graphql/types';
+import { getCurrentUserQuery, ShortPatientFragment } from '../graphql/types';
 import Button from '../shared/library/button/button';
 import * as styles from './css/patient-panel.css';
+import PatientFilterPanel from './patient-filter-panel';
 import { PatientRoster } from './patient-roster';
 
 export interface IPageParams {
@@ -34,6 +36,7 @@ interface IGraphqlProps {
   loading: boolean;
   error: string | null;
   patientPanel?: IPatientPanel;
+  currentUser?: getCurrentUserQuery['currentUser'];
 }
 
 interface IProps {
@@ -46,6 +49,7 @@ type allProps = IGraphqlProps & IProps;
 interface IState extends IPageParams {
   hasNextPage?: boolean;
   hasPreviousPage?: boolean;
+  isPanelOpen: boolean | null;
 }
 
 class PatientPanelContainer extends React.Component<allProps, IState> {
@@ -63,6 +67,7 @@ class PatientPanelContainer extends React.Component<allProps, IState> {
     this.state = {
       pageNumber: pageParams.pageNumber || 0,
       pageSize: pageParams.pageSize || 10,
+      isPanelOpen: null,
     };
   }
 
@@ -119,6 +124,14 @@ class PatientPanelContainer extends React.Component<allProps, IState> {
 
   goToIntake = () => this.props.history.push('/patient-intake');
 
+  handleFilterClick = () => {
+    this.setState({ isPanelOpen: true });
+  }
+
+  handleFilterCancelClick = () => {
+    this.setState({ isPanelOpen: false });
+  }
+
   updatePageParams = (pageNumber: number) => {
     const pageParams = getPageParams();
     pageParams.pageNumber = pageNumber;
@@ -127,15 +140,26 @@ class PatientPanelContainer extends React.Component<allProps, IState> {
   };
 
   render() {
-    const { error, loading } = this.props;
+    const { error, loading, currentUser } = this.props;
+    const { isPanelOpen } = this.state;
+    const isAdmin = currentUser && currentUser.userRole === 'admin';
+
     return (
       <div className={styles.container}>
         <div className={styles.header}>
           <div className={styles.headerRow}>
-            <FormattedMessage id="patientPanel.header">
-              {(message: string) => <div className={styles.headerText}>{message}</div>}
-            </FormattedMessage>
-            <Button messageId="patientPanel.addPatient" onClick={this.goToIntake} />
+            <div className={styles.headerText}>
+              <FormattedMessage id="patientPanel.header">
+                {(message: string) => <div className={styles.headerTitle}>{message}</div>}
+              </FormattedMessage>
+              <FormattedMessage id="patientPanel.description">
+                {(message: string) => <div className={styles.headerDescription}>{message}</div>}
+              </FormattedMessage>
+            </div>
+            <div>
+              <Button messageId="patientPanel.filter" onClick={this.handleFilterClick} className={styles.button} />
+              {isAdmin && <Button messageId="patientPanel.addPatient" onClick={this.goToIntake} className={styles.button} />}
+            </div>
           </div>
         </div>
         <div className={styles.patientPanelBody}>
@@ -150,6 +174,10 @@ class PatientPanelContainer extends React.Component<allProps, IState> {
             onPreviousClick={this.getPreviousPage}
           />
         </div>
+        <PatientFilterPanel
+          onCancelClick={this.handleFilterCancelClick}
+          isVisible={isPanelOpen}
+        />
       </div>
     );
   }
@@ -175,6 +203,16 @@ export default compose(
       loading: data ? data.loading : false,
       error: data ? data.error : null,
       patientPanel: data ? (data as any).userPatientPanel : null,
+    }),
+  }),
+  graphql<IGraphqlProps, IProps, allProps>(currentUserQuery as any, {
+    options: (props: IProps) => ({
+      variables: {},
+    }),
+    props: ({ data }) => ({
+      loading: data ? data.loading : false,
+      error: data ? data.error : null,
+      currentUser: data ? (data as any).currentUser : null,
     }),
   }),
 )(PatientPanelContainer);

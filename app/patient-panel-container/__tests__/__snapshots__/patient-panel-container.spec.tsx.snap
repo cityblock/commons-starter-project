@@ -13,15 +13,26 @@ exports[`renders patient panel container correctly 1`] = `
       <div
         className="headerText"
       >
-        Patient Panel
+        <div
+          className="headerTitle"
+        >
+          Members
+        </div>
+        <div
+          className="headerDescription"
+        >
+          All members on this care team
+        </div>
       </div>
-      <button
-        className="button"
-        disabled={false}
-        onClick={[Function]}
-      >
-        Add Patient
-      </button>
+      <div>
+        <button
+          className="button button"
+          disabled={false}
+          onClick={[Function]}
+        >
+          Filter
+        </button>
+      </div>
     </div>
   </div>
   <div
@@ -99,6 +110,303 @@ exports[`renders patient panel container correctly 1`] = `
             />
           </div>
         </div>
+      </div>
+    </div>
+  </div>
+  <div
+    className="container"
+  >
+    <div
+      className="header"
+    >
+      <label
+        className="label"
+        htmlFor={undefined}
+      >
+        Filter Panel
+      </label>
+      <div
+        className="buttonContainer"
+      >
+        <button
+          className="button white button"
+          disabled={false}
+          onClick={[Function]}
+        >
+          Cancel
+        </button>
+        <button
+          className="button button"
+          disabled={false}
+          onClick={[Function]}
+        >
+          Apply
+        </button>
+      </div>
+    </div>
+    <div
+      className="fields"
+    >
+      <div
+        className="inputGroup"
+      >
+        <label
+          className="label"
+          htmlFor={undefined}
+        >
+          Age Range
+        </label>
+        <select
+          className="select large noValue"
+          disabled={undefined}
+          name="ageRange"
+          onChange={[Function]}
+          required={true}
+          value=""
+        >
+          <option
+            disabled={true}
+            value=""
+          >
+            Select age range...
+          </option>
+          <option
+            disabled={undefined}
+            value=""
+          >
+            Unselect
+          </option>
+          <option
+            disabled={undefined}
+            value="0"
+          >
+            19 and under
+          </option>
+          <option
+            disabled={undefined}
+            value="1"
+          >
+            20 - 24 years old
+          </option>
+          <option
+            disabled={undefined}
+            value="2"
+          >
+            25 - 29 years old
+          </option>
+          <option
+            disabled={undefined}
+            value="3"
+          >
+            30 - 34 years old
+          </option>
+          <option
+            disabled={undefined}
+            value="4"
+          >
+            35 - 39 years old
+          </option>
+          <option
+            disabled={undefined}
+            value="5"
+          >
+            40 - 49 years old
+          </option>
+          <option
+            disabled={undefined}
+            value="6"
+          >
+            50 - 59 years old
+          </option>
+          <option
+            disabled={undefined}
+            value="7"
+          >
+            60 - 69 years old
+          </option>
+          <option
+            disabled={undefined}
+            value="8"
+          >
+            70 - 79 years old
+          </option>
+          <option
+            disabled={undefined}
+            value="9"
+          >
+            80 and older
+          </option>
+        </select>
+      </div>
+      <div
+        className="inputGroup"
+      >
+        <label
+          className="label"
+          htmlFor={undefined}
+        >
+          Gender
+        </label>
+        <select
+          className="select large noValue"
+          disabled={undefined}
+          name="gender"
+          onChange={[Function]}
+          required={true}
+          value=""
+        >
+          <option
+            disabled={true}
+            value=""
+          >
+            Select gender...
+          </option>
+          <option
+            disabled={undefined}
+            value=""
+          >
+            Unselect
+          </option>
+          <option
+            disabled={undefined}
+            value="male"
+          >
+            Male
+          </option>
+          <option
+            disabled={undefined}
+            value="female"
+          >
+            Female
+          </option>
+          <option
+            disabled={undefined}
+            value="transgender"
+          >
+            Transgender
+          </option>
+          <option
+            disabled={undefined}
+            value="nonbinary"
+          >
+            Non-binary
+          </option>
+        </select>
+      </div>
+      <div
+        className="inputGroup"
+      >
+        <label
+          className="label"
+          htmlFor={undefined}
+        >
+          Location
+        </label>
+        <input
+          className="input"
+          id=""
+          name="zipcode"
+          onBlur={undefined}
+          onChange={[Function]}
+          onFocus={undefined}
+          onKeyDown={undefined}
+          placeholder="Search by zip code"
+          type="text"
+          value=""
+        />
+      </div>
+      <div
+        className="inputGroup"
+      >
+        <label
+          className="label"
+          htmlFor={undefined}
+        >
+          Assigned to a care worker
+        </label>
+        <select
+          className="select large noValue"
+          disabled={undefined}
+          name="careWorker"
+          onChange={[Function]}
+          required={true}
+          value=""
+        >
+          <option
+            disabled={true}
+            value=""
+          >
+            Select the care worker...
+          </option>
+          <option
+            disabled={undefined}
+            value=""
+          >
+            Unselect
+          </option>
+        </select>
+      </div>
+      <div
+        className="inputGroup"
+      >
+        <label
+          className="label"
+          htmlFor={undefined}
+        >
+          Insurance type
+        </label>
+      </div>
+      <div
+        className="inputGroup"
+      >
+        <label
+          className="label"
+          htmlFor={undefined}
+        >
+          Is their primary doctor in-network
+        </label>
+        <form
+          className="container"
+        >
+          <div
+            className="container enabled"
+          >
+            <input
+              checked={false}
+              disabled={false}
+              id="false"
+              name="inNetwork"
+              onChange={undefined}
+              onClick={[Function]}
+              type="radio"
+              value="false"
+            />
+            <label
+              htmlFor="false"
+            >
+              No
+            </label>
+          </div>
+          <div
+            className="container enabled"
+          >
+            <input
+              checked={false}
+              disabled={false}
+              id="true"
+              name="inNetwork"
+              onChange={undefined}
+              onClick={[Function]}
+              type="radio"
+              value="true"
+            />
+            <label
+              htmlFor="true"
+            >
+              Yes
+            </label>
+          </div>
+        </form>
       </div>
     </div>
   </div>

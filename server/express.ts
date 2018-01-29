@@ -4,6 +4,7 @@ import * as basicAuth from 'basic-auth';
 import * as bodyParser from 'body-parser';
 import * as express from 'express';
 import { graphiqlExpress, graphqlExpress } from 'graphql-server-express';
+import * as kue from 'kue';
 import * as morgan from 'morgan';
 import * as path from 'path';
 import * as webpack from 'webpack';
@@ -14,6 +15,9 @@ import { formatResponse, getGraphQLContext } from './graphql/shared/utils';
 import { checkPostgresHandler } from './handlers/pingdom/check-postgres-handler';
 import { pubsubPushHandler } from './handlers/pubsub/push-handler';
 import { pubsubValidator } from './handlers/pubsub/validator';
+import { createRedisClient } from './lib/redis';
+
+kue.createQueue({ redis: createRedisClient() });
 
 export const checkAuth = (username: string, password: string) => (
   req: any,
@@ -103,6 +107,13 @@ export default async (app: express.Application, logger: Console) => {
 
   // Google PubSub
   app.post('/pubsub/push', bodyParser.json(), pubsubValidator, pubsubPushHandler);
+
+  // Kue UI
+  app.use(
+    '/kue',
+    checkAuth('jobManager', process.env.KUE_UI_PASSWORD || 'fake'),
+    kue.app,
+  );
 
   app.get('*', renderApp);
 

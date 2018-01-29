@@ -43,7 +43,9 @@
     "patients:add-admin-tasks-concern:dev": "NODE_ENV=development ts-node -P tsconfig.server.json ./scripts/add-admin-task-concern-to-patients.ts",
     "patients:add-admin-tasks-concern:production": "NODE_ENV=production ts-node -P tsconfig.server.json ./scripts/add-admin-task-concern-to-patients.ts",
     "import:icd:dev": "NODE_ENV=development ts-node -P tsconfig.server.json ./scripts/import-icd-ten-codes.ts",
-    "import:icd:production": "NODE_ENV=production ts-node -P tsconfig.server.json ./scripts/import-icd-ten-codes.ts"
+    "import:icd:production": "NODE_ENV=production ts-node -P tsconfig.server.json ./scripts/import-icd-ten-codes.ts",
+    "consume:computed-fields:dev": "NODE_ENV=development nodemon --exec 'ts-node -P tsconfig.server.json ./server/consumers/computed-field-consumer.ts'",
+    "consume:computed-fields:production": "NODE_ENV=production nodemon --exec 'ts-node -P tsconfig.server.json ./server/consumers/computed-field-consumer.ts'"
   },
   "author": "Brennan Moore",
   "jest": {
@@ -144,6 +146,7 @@
     "@types/history": "^4.6.2",
     "@types/jsonwebtoken": "^7.2.5",
     "@types/knex": "^0.14.3",
+    "@types/kue": "^0.11.8",
     "@types/lodash": "^4.14.95",
     "@types/lodash-es": "^4.17.0",
     "@types/morgan": "^1.7.35",
@@ -194,6 +197,7 @@
     "graphql-tools": "2.19.0",
     "jsonwebtoken": "^8.1.1",
     "knex": "^0.14.2",
+    "kue": "^0.11.6",
     "langs": "^2.0.0",
     "le_node": "^1.7.0",
     "lodash": "^4.17.4",

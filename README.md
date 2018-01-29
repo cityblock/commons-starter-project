@@ -29,6 +29,7 @@ TypeScript. Tested using Jest. Hosted on [Aptible][].
 * Create a `.env` file in the project root (see: [.env][])
 * Install [Zenhub][]
 * [Setup your local database](#create-local-postgres-database)
+* [Install Redis](#install-redis)
 * Ask a Point Person to add you as a user in staging and change your user role to Admin.
 * [Copy staging database to your local database](#copying-staging-database-to-local-database)
 
@@ -43,7 +44,11 @@ Setup your database. First install postgres 10 from brew or postgresapp.
 
 ### Development
 
-Ensure you have copied from staging to local and have your user created in staging by another employee via Manager. Then run:
+Ensure you have copied from staging to local and have your user created in staging by another employee via Manager. Ensure you have a redis server running:
+
+    redis-server
+
+Then run:
 
     yarn run dev
 
@@ -320,6 +325,18 @@ On production, run:
 
 For exact script usage instructions, read the comments at the top of 'scripts/import-icd-ten-codes.ts'
 
+### Install Redis
+
+We use [Kue][] as our system for delayed jobs. As a backend, this relies on the open source in-memory store, [Redis][]. In order to run Commons, you will need to install Redis locally. The easiest way to do this is using [Homebrew][]. To install, run the following command:
+
+    brew install redis
+
+Alternatively, you can install following the instructions on the [Redis download page][].
+
+### View status of background jobs
+
+[Kue][] comes with a barebones UI that can be used to see the status of all jobs. To see it visit localhost:3000/kue (substitute correct host depending on environment). It lives behind basic auth, and the username and password can be found either in code or in env variables.
+
 [nvm]: https://github.com/creationix/nvm
 [zenhub]: https://www.zenhub.com/
 [add]: http://osxdaily.com/2011/12/30/exclude-drives-or-folders-from-spotlight-index-mac-os-x/
@@ -345,3 +362,6 @@ For exact script usage instructions, read the comments at the top of 'scripts/im
 [schemacrawler]: https://github.com/sualeh/SchemaCrawler
 [google cloud sdk]: https://cloud.google.com/sdk/downloads
 [jdk]: http://www.oracle.com/technetwork/java/javase/downloads/index.html
+[Kue]: https://github.com/Automattic/kue
+[Redis]: https://redis.io/
+[Redis download page]: https://redis.io/download

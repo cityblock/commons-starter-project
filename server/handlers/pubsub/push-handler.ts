@@ -1,12 +1,10 @@
 import * as express from 'express';
-import { transaction } from 'objection';
-import Db from '../../db';
-import { createSuggestionsForComputedFieldAnswer } from '../../lib/suggestions';
-import Answer from '../../models/answer';
-import Patient from '../../models/patient';
-import PatientAnswer from '../../models/patient-answer';
+import * as kue from 'kue';
+import { createRedisClient } from '../../lib/redis';
 
-export interface IPubsubMessageData {
+const queue = kue.createQueue({ redis: createRedisClient() });
+
+export interface IComputedFieldMessageData {
   patientId?: string;
   slug?: string;
   value?: string | number | boolean;
@@ -16,74 +14,26 @@ export interface IPubsubMessageData {
 /* tslint:disable no-console */
 export async function pubsubPushHandler(req: express.Request, res: express.Response) {
   const { patientId, slug, value, jobId } = req.body.message.data;
-  const existingTxn = res.locals.existingTxn;
 
-  if (!patientId || !slug || !value || !jobId) {
-    console.error('Must provide a patientId, slug, value, and jobId');
-    res.sendStatus(200);
-    return;
-  }
-
-  await Db.get();
-
-  await transaction(PatientAnswer.knex(), async txn => {
-    try {
-      await Patient.get(patientId, existingTxn || txn);
-    } catch (err) {
-      console.error(`Cannot find patient for id: ${patientId}`);
-      res.sendStatus(200);
-      return;
-    }
-
-    const answer = await Answer.getByComputedFieldSlugAndValue(
-      {
-        slug,
-        value,
-      },
-      existingTxn || txn,
-    );
-
-    if (!answer) {
-      console.error(`Cannot find answer for slug: ${slug} and value: ${value}`);
-      res.sendStatus(200);
-      return;
-    }
-
-    const { computedField } = answer.question;
-
-    try {
-      const patientAnswer = (await PatientAnswer.create(
-        {
-          patientId,
-          questionIds: [answer.questionId],
-          mixerJobId: jobId,
-          answers: [
-            {
-              answerId: answer.id,
-              questionId: answer.questionId,
-              answerValue: answer.value,
-              patientId,
-              applicable: true, // TODO: figure this out
-              mixerJobId: jobId,
-            },
-          ],
-          type: 'computedFieldAnswer',
-        },
-        existingTxn || txn,
-      ))[0];
-
-      await createSuggestionsForComputedFieldAnswer(
-        patientId,
-        patientAnswer.id,
-        computedField.id,
-        existingTxn || txn,
-      );
-    } catch (err) {
-      console.error('Problem recording answer');
-      res.sendStatus(200);
-      return;
-    }
-  });
+  queue
+    .create('newComputedFieldValue', {
+      title: `Handling new ComputedField value for patient: ${patientId}`,
+      patientId,
+      slug,
+      value,
+      jobId,
+    })
+    .priority('low')
+    .attempts(3)
+    .backoff({ type: 'exponential' })
+    .save((err: Error) => {
+      if (err) {
+        console.log(
+          `Error enqueuing job. patientId: ${patientId}, slug: ${slug}, value: ${value}, jobId: ${jobId}`,
+          err.message,
+        );
+      }
+    });
 
   res.sendStatus(200);
 }

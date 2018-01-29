@@ -18,5 +18,8 @@ export default {
   ENGINE_API_KEY: 'service:cityblock-test:-VV7OoEuEAuZNP_yyBY8bg',
   GCLOUD_PROJECT: null,
   GCLOUD_API_KEY: null,
+  REDIS_HOST: '127.0.0.1',
+  REDIS_PORT: 6379,
+  REDIS_PASSWORD: undefined, // Null breaks things, unfortunately
   ...process.env,
 };

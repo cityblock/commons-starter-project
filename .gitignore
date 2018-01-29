@@ -22,3 +22,6 @@ public
 
 # build stats
 stats.json
+
+# redis
+dump.rdb

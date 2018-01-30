@@ -1,4 +1,6 @@
-export default function app(req: any, res: any) {
+import * as express from 'express';
+
+export default function app(req: express.Request, res: express.Response) {
   /**
    * Why no stylesheet in dev?
    * Stylesheets are loaded by HMR in development so no need.

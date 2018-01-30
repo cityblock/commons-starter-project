@@ -132,6 +132,8 @@
   },
   "dependencies": {
     "@google-cloud/error-reporting": "^0.2.2",
+    "@react-pdf/core": "^0.6.3",
+    "@react-pdf/node": "^0.6.3",
     "@types/acl": "^0.4.33",
     "@types/base-64": "^0.1.2",
     "@types/basic-auth": "^1.1.2",
@@ -231,6 +233,7 @@
     "react-waypoint": "7.3.4",
     "redux": "^3.7.2",
     "redux-logger": "^3.0.6",
+    "regenerator-runtime": "^0.11.1",
     "rimraf": "^2.6.1",
     "style-loader": "^0.20.1",
     "ts-loader": "^3.3.1",

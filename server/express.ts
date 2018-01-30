@@ -7,11 +7,13 @@ import { graphiqlExpress, graphqlExpress } from 'graphql-server-express';
 import * as kue from 'kue';
 import * as morgan from 'morgan';
 import * as path from 'path';
+import 'regenerator-runtime/runtime';
 import * as webpack from 'webpack';
 import renderApp from './app';
 import config from './config';
 import schema from './graphql/make-executable-schema';
 import { formatResponse, getGraphQLContext } from './graphql/shared/utils';
+import { renderCBOReferralFormPDF } from './handlers/pdf/render-pdf';
 import { checkPostgresHandler } from './handlers/pingdom/check-postgres-handler';
 import { pubsubPushHandler } from './handlers/pubsub/push-handler';
 import { pubsubValidator } from './handlers/pubsub/validator';
@@ -109,11 +111,10 @@ export default async (app: express.Application, logger: Console) => {
   app.post('/pubsub/push', bodyParser.json(), pubsubValidator, pubsubPushHandler);
 
   // Kue UI
-  app.use(
-    '/kue',
-    checkAuth('jobManager', process.env.KUE_UI_PASSWORD || 'fake'),
-    kue.app,
-  );
+  app.use('/kue', checkAuth('jobManager', process.env.KUE_UI_PASSWORD || 'fake'), kue.app);
+
+  // PDF Generation
+  app.get('/pdf/:taskId/referral-form.pdf', renderCBOReferralFormPDF);
 
   app.get('*', renderApp);
 

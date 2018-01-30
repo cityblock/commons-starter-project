@@ -7,6 +7,7 @@ import {
   IUserLoginInput,
   IUserNode,
 } from 'schema';
+import { GENERATE_PDF_JWT_TYPE } from '../../server/handlers/pdf/render-pdf';
 import { parseIdToken, OauthAuthorize } from '../apis/google/oauth-authorize';
 import config from '../config';
 import GoogleAuth from '../models/google-auth';
@@ -20,9 +21,6 @@ import {
   IContext,
 } from './shared/utils';
 
-const GENERATE_PDF_JWT = {
-  type: 'generatePDFJwt',
-};
 const GENERATE_PDF_EXPIRY = '5m'; // 5 minutes
 
 export interface IUserCreateArgs {
@@ -253,11 +251,17 @@ export async function userLogin(
   return { authToken, user: updatedUser };
 }
 
-export async function resolveJWTForPDF(root: {}, input: {}, { db, userRole, userId }: IContext) {
+export async function JWTForPDFCreate(root: {}, input: {}, { db, userRole, userId }: IContext) {
   await accessControls.isAllowed(userRole, 'view', 'task');
   checkUserLoggedIn(userId);
 
-  const authToken = signJwt(GENERATE_PDF_JWT, GENERATE_PDF_EXPIRY);
+  const jwtData = {
+    type: GENERATE_PDF_JWT_TYPE,
+    createdAt: new Date().toISOString(),
+    userId: userId!,
+  };
+
+  const authToken = signJwt(jwtData, GENERATE_PDF_EXPIRY);
   return { authToken };
 }
 /* tslint:enable check-is-allowed */

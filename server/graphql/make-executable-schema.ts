@@ -1,6 +1,7 @@
 import * as fs from 'fs';
 import { makeExecutableSchema } from 'graphql-tools';
 import * as path from 'path';
+import 'regenerator-runtime/runtime';
 import config from '../config';
 import {
   answerCreate,
@@ -249,7 +250,6 @@ import {
 import {
   currentUserEdit,
   resolveCurrentUser,
-  resolveJWTForPDF,
   resolveUser,
   resolveUsers,
   resolveUserSummaryList,
@@ -257,6 +257,7 @@ import {
   userDelete,
   userEditRole,
   userLogin,
+  JWTForPDFCreate,
 } from './user-resolver';
 
 const schemaGql = fs.readFileSync(path.join(__dirname, 'schema.graphql'), 'utf-8');
@@ -356,7 +357,6 @@ const resolveFunctions = {
     CBOs: resolveCBOs,
     CBOsForCategory: resolveCBOsForCategory,
     CBO: resolveCBO,
-    JWTForPDF: resolveJWTForPDF,
   },
 
   RootMutationType: {
@@ -459,6 +459,7 @@ const resolveFunctions = {
     CBODelete,
     CBOReferralCreate,
     CBOReferralEdit,
+    JWTForPDFCreate,
   },
 };
 

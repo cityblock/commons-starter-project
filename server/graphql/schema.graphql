@@ -1897,6 +1897,8 @@ type RootMutationType {
   CBOReferralCreate(input: CBOReferralCreateInput): CBOReferral
   # Edit a CBO Referral
   CBOReferralEdit(input: CBOReferralEditInput): CBOReferral
+  # Jwt token to view a PDF
+  JWTForPDFCreate: JWTForPDF!
 }
 
 type RootQueryType {
@@ -2116,8 +2118,6 @@ type RootQueryType {
   CBOs: [CBO!]!
   # all CBOs for given category
   CBOsForCategory(categoryId: ID!): [CBO!]!
-  # Jwt token to view a PDF
-  JWTForPDF: JWTForPDF!
 }
 
 schema {

@@ -5,12 +5,11 @@ import { TaskCBOReferralView } from '../task-cbo-referral-view';
 
 describe('Task CBO Referral view button', () => {
   const taskId = 'trainRhaegal';
-  const authToken = 'isATargaryen';
-  const JWTForPDF = {
-    authToken,
-  };
+  const placeholderFn = () => true as any;
 
-  const wrapper = shallow(<TaskCBOReferralView JWTForPDF={JWTForPDF} taskId={taskId} />);
+  const wrapper = shallow(
+    <TaskCBOReferralView generateJWTForPDF={placeholderFn} taskId={taskId} />,
+  );
 
   it('renders a button to view CBO referral', () => {
     const button = wrapper.find(Button);

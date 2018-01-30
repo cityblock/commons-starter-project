@@ -1634,13 +1634,6 @@ export interface getGoalSuggestionsForAnswerQuery {
   } | null >,
 };
 
-export interface getJWTForPDFQuery {
-  // Jwt token to view a PDF
-  JWTForPDF:  {
-    authToken: string,
-  },
-};
-
 export interface getPatientAnswersQueryVariables {
   filterType: AnswerFilterType,
   filterId: string,
@@ -4800,6 +4793,13 @@ export interface goalSuggestionTemplateEditMutation {
     updatedAt: string,
     deletedAt: string | null,
   } | null,
+};
+
+export interface JWTForPDFCreateMutation {
+  // Jwt token to view a PDF
+  JWTForPDFCreate:  {
+    authToken: string,
+  },
 };
 
 export interface logInUserMutationVariables {

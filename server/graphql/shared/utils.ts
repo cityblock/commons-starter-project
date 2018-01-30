@@ -36,20 +36,27 @@ export interface IJWTData {
   lastLoginAt: string;
 }
 
-export interface IJWTPDFData {
+export interface IJWTForPDFData {
   type: string;
+  createdAt: string;
+  userId: string;
 }
 
 export const signJwt = (
-  jwtData: IJWTData | IJWTPDFData,
+  jwtData: IJWTData | IJWTForPDFData,
   expiresIn: string | number = config.JWT_EXPIRY,
 ) => sign(jwtData, config.JWT_SECRET, { expiresIn });
 
-export async function parseAndVerifyJwt(jwt: string, txn: Transaction) {
+export async function decodeJwt(jwt: string): Promise<IJWTData | IJWTForPDFData> {
   // verify throws an error if jwt is not valid and if expiry passed
   await verify(jwt, config.JWT_SECRET);
 
-  const decoded = decode(jwt) as IJWTData;
+  return decode(jwt) as IJWTData | IJWTForPDFData;
+}
+
+// only use with non-PDF related tokens
+export async function parseAndVerifyJwt(jwt: string, txn: Transaction) {
+  const decoded = (await decodeJwt(jwt)) as IJWTData;
 
   // goal: allow user to be logged into exactly 1 device at a time
   // solution: invalidate token if user has logged in on a different device since token was issued

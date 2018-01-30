@@ -499,20 +499,20 @@ describe('user tests', () => {
         const { clinic } = await setup(txn);
         const user = await User.create(createMockUser(11, clinic.id, userRole), txn);
 
-        const query = `{
-          JWTForPDF {
+        const mutation = `mutation {
+          JWTForPDFCreate {
             authToken
           }
         }`;
 
-        const result = await graphql(schema, query, null, {
+        const result = await graphql(schema, mutation, null, {
           db,
           userRole,
           txn,
           userId: user.id,
         });
 
-        expect(result.data!.JWTForPDF.authToken).toBeTruthy();
+        expect(result.data!.JWTForPDFCreate.authToken).toBeTruthy();
       });
     });
   });

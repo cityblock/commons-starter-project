@@ -389,10 +389,6 @@ declare module 'schema' {
     description: all CBOs for given category
   */
     CBOsForCategory: Array<ICBO>;
-    /**
-    description: Jwt token to view a PDF
-  */
-    JWTForPDF: IJWTForPDF;
   }
 
   /**
@@ -1351,13 +1347,6 @@ declare module 'schema' {
     deletedAt: string | null;
   }
 
-  /**
-    description: JWT token for PDF viewing
-  */
-  interface IJWTForPDF {
-    authToken: string;
-  }
-
 
   interface IRootMutationType {
     /**
@@ -1765,6 +1754,10 @@ declare module 'schema' {
     description: Edit a CBO Referral
   */
     CBOReferralEdit: ICBOReferral | null;
+    /**
+    description: Jwt token to view a PDF
+  */
+    JWTForPDFCreate: IJWTForPDF;
   }
 
   /**
@@ -2619,6 +2612,13 @@ declare module 'schema' {
     taskId: string;
     sentAt?: string | null;
     acknowledgedAt?: string | null;
+  }
+
+  /**
+    description: JWT token for PDF viewing
+  */
+  interface IJWTForPDF {
+    authToken: string;
   }
 
 

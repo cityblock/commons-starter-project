@@ -20,6 +20,11 @@ import {
   IContext,
 } from './shared/utils';
 
+const GENERATE_PDF_JWT = {
+  type: 'generatePDFJwt',
+};
+const GENERATE_PDF_EXPIRY = '5m'; // 5 minutes
+
 export interface IUserCreateArgs {
   input: IUserCreateInput;
 }
@@ -246,5 +251,13 @@ export async function userLogin(
 
   logger.log(`User login for ${user.id}`, 2);
   return { authToken, user: updatedUser };
+}
+
+export async function resolveJWTForPDF(root: {}, input: {}, { db, userRole, userId }: IContext) {
+  await accessControls.isAllowed(userRole, 'view', 'task');
+  checkUserLoggedIn(userId);
+
+  const authToken = signJwt(GENERATE_PDF_JWT, GENERATE_PDF_EXPIRY);
+  return { authToken };
 }
 /* tslint:enable check-is-allowed */

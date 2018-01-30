@@ -15,7 +15,13 @@ exports[`builder concerns renders builder concerns 1`] = `
         disabled={false}
         onClick={[Function]}
       >
-        Create Concern
+        <span
+          className="flex"
+        >
+          <span>
+            Create Concern
+          </span>
+        </span>
       </button>
     </div>
   </div>

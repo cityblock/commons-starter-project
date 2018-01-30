@@ -1,0 +1,5 @@
+query getJWTForPDF {
+  JWTForPDF {
+    authToken
+  }
+}

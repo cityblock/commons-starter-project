@@ -43,7 +43,9 @@ class CareWorkerSelect extends React.Component<allProps> {
     }
 
     const options = CARE_WORKER_ROLES.reduce((accumulator: any, role) => {
-      accumulator[role] = userSummaryList.filter((user: ShortUserFragment) => user.userRole === role);
+      accumulator[role] = userSummaryList.filter(
+        (user: ShortUserFragment) => user.userRole === role,
+      );
       return accumulator;
     }, {});
 
@@ -52,10 +54,7 @@ class CareWorkerSelect extends React.Component<allProps> {
 
       if (users.length > 0) {
         return (
-          <OptGroup
-            messageId={`careWorker.${key}`}
-            key={`optgroup-${key}`}
-          >
+          <OptGroup messageId={`careWorker.${key}`} key={`optgroup-${key}`}>
             {this.renderOption(users)}
           </OptGroup>
         );
@@ -67,13 +66,7 @@ class CareWorkerSelect extends React.Component<allProps> {
     const { isLarge, value, onChange, isUnselectable } = this.props;
 
     return (
-      <Select
-        required
-        name="careWorker"
-        value={value || ''}
-        onChange={onChange}
-        large={isLarge}
-      >
+      <Select required name="careWorker" value={value || ''} onChange={onChange} large={isLarge}>
         <Option disabled={true} messageId="careWorkerSelect.placeholder" value="" />
         {!!isUnselectable && <Option messageId="select.unselect" value="" />}
         {this.renderOptionGroups()}

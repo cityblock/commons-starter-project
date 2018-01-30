@@ -15,7 +15,13 @@ exports[`renders builder goals 1`] = `
         disabled={false}
         onClick={[Function]}
       >
-        Create Goal
+        <span
+          className="flex"
+        >
+          <span>
+            Create Goal
+          </span>
+        </span>
       </button>
     </div>
   </div>

@@ -249,6 +249,7 @@ import {
 import {
   currentUserEdit,
   resolveCurrentUser,
+  resolveJWTForPDF,
   resolveUser,
   resolveUsers,
   resolveUserSummaryList,
@@ -355,6 +356,7 @@ const resolveFunctions = {
     CBOs: resolveCBOs,
     CBOsForCategory: resolveCBOsForCategory,
     CBO: resolveCBO,
+    JWTForPDF: resolveJWTForPDF,
   },
 
   RootMutationType: {

@@ -1,13 +1,23 @@
 @import '../../shared/css/sizes';
 
 @keyframes slideIn {
-  0% { transform: translateX(450px); }
-  100% { transform: translateX(0); }
+  0% {
+    transform: translateX(450px);
+  }
+
+  100% {
+    transform: translateX(0);
+  }
 }
 
 @keyframes slideOut {
-  0% { transform: translateX(0); }
-  100% { transform: translateX(450px); }
+  0% {
+    transform: translateX(0);
+  }
+
+  100% {
+    transform: translateX(450px);
+  }
 }
 
 .container {

@@ -13,25 +13,15 @@ interface IProps {
 
 export const FilterSelect: React.StatelessComponent<IProps> = props => {
   const { name, isLarge, value, options, isUnselectable, onChange } = props;
-  const selectedValue = (value !== null) ? value.toString() : '';
+  const selectedValue = value !== null ? value.toString() : '';
 
   return (
-    <Select
-      required
-      name={name}
-      large={isLarge}
-      value={selectedValue}
-      onChange={onChange}
-    >
+    <Select required name={name} large={isLarge} value={selectedValue} onChange={onChange}>
       <Option disabled={true} messageId={`${name}Select.placeholder`} value="" />
       {!!isUnselectable && <Option messageId="select.unselect" value="" />}
       {options.map(option => {
         return (
-          <Option
-            value={option}
-            messageId={`${name}.${option}`}
-            key={`${name}-option-${option}`}
-          />
+          <Option value={option} messageId={`${name}.${option}`} key={`${name}-option-${option}`} />
         );
       })}
     </Select>

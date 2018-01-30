@@ -126,11 +126,11 @@ class PatientPanelContainer extends React.Component<allProps, IState> {
 
   handleFilterClick = () => {
     this.setState({ isPanelOpen: true });
-  }
+  };
 
   handleFilterCancelClick = () => {
     this.setState({ isPanelOpen: false });
-  }
+  };
 
   updatePageParams = (pageNumber: number) => {
     const pageParams = getPageParams();
@@ -157,8 +157,18 @@ class PatientPanelContainer extends React.Component<allProps, IState> {
               </FormattedMessage>
             </div>
             <div>
-              <Button messageId="patientPanel.filter" onClick={this.handleFilterClick} className={styles.button} />
-              {isAdmin && <Button messageId="patientPanel.addPatient" onClick={this.goToIntake} className={styles.button} />}
+              <Button
+                messageId="patientPanel.filter"
+                onClick={this.handleFilterClick}
+                className={styles.button}
+              />
+              {isAdmin && (
+                <Button
+                  messageId="patientPanel.addPatient"
+                  onClick={this.goToIntake}
+                  className={styles.button}
+                />
+              )}
             </div>
           </div>
         </div>
@@ -174,10 +184,7 @@ class PatientPanelContainer extends React.Component<allProps, IState> {
             onPreviousClick={this.getPreviousPage}
           />
         </div>
-        <PatientFilterPanel
-          onCancelClick={this.handleFilterCancelClick}
-          isVisible={isPanelOpen}
-        />
+        <PatientFilterPanel onCancelClick={this.handleFilterCancelClick} isVisible={isPanelOpen} />
       </div>
     );
   }

@@ -32,7 +32,13 @@ exports[`builder concerns renders builder questions 1`] = `
         disabled={false}
         onClick={[Function]}
       >
-        Create Question
+        <span
+          className="flex"
+        >
+          <span>
+            Create Question
+          </span>
+        </span>
       </button>
     </div>
   </div>

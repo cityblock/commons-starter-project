@@ -797,11 +797,43 @@ initialize {
                               },
                               "children": Array [
                                 Object {
-                                  "data": "Save",
+                                  "attribs": Object {
+                                    "class": "flex",
+                                  },
+                                  "children": Array [
+                                    Object {
+                                      "attribs": Object {},
+                                      "children": Array [
+                                        Object {
+                                          "data": "Save",
+                                          "next": null,
+                                          "parent": [Circular],
+                                          "prev": null,
+                                          "type": "text",
+                                        },
+                                      ],
+                                      "name": "span",
+                                      "namespace": "http://www.w3.org/1999/xhtml",
+                                      "next": null,
+                                      "parent": [Circular],
+                                      "prev": null,
+                                      "type": "tag",
+                                      "x-attribsNamespace": Object {},
+                                      "x-attribsPrefix": Object {},
+                                    },
+                                  ],
+                                  "name": "span",
+                                  "namespace": "http://www.w3.org/1999/xhtml",
                                   "next": null,
                                   "parent": [Circular],
                                   "prev": null,
-                                  "type": "text",
+                                  "type": "tag",
+                                  "x-attribsNamespace": Object {
+                                    "class": undefined,
+                                  },
+                                  "x-attribsPrefix": Object {
+                                    "class": undefined,
+                                  },
                                 },
                               ],
                               "name": "button",
@@ -852,11 +884,43 @@ initialize {
                             },
                             "children": Array [
                               Object {
-                                "data": "Save",
+                                "attribs": Object {
+                                  "class": "flex",
+                                },
+                                "children": Array [
+                                  Object {
+                                    "attribs": Object {},
+                                    "children": Array [
+                                      Object {
+                                        "data": "Save",
+                                        "next": null,
+                                        "parent": [Circular],
+                                        "prev": null,
+                                        "type": "text",
+                                      },
+                                    ],
+                                    "name": "span",
+                                    "namespace": "http://www.w3.org/1999/xhtml",
+                                    "next": null,
+                                    "parent": [Circular],
+                                    "prev": null,
+                                    "type": "tag",
+                                    "x-attribsNamespace": Object {},
+                                    "x-attribsPrefix": Object {},
+                                  },
+                                ],
+                                "name": "span",
+                                "namespace": "http://www.w3.org/1999/xhtml",
                                 "next": null,
                                 "parent": [Circular],
                                 "prev": null,
-                                "type": "text",
+                                "type": "tag",
+                                "x-attribsNamespace": Object {
+                                  "class": undefined,
+                                },
+                                "x-attribsPrefix": Object {
+                                  "class": undefined,
+                                },
                               },
                             ],
                             "name": "button",
@@ -1160,11 +1224,43 @@ initialize {
                             },
                             "children": Array [
                               Object {
-                                "data": "Save",
+                                "attribs": Object {
+                                  "class": "flex",
+                                },
+                                "children": Array [
+                                  Object {
+                                    "attribs": Object {},
+                                    "children": Array [
+                                      Object {
+                                        "data": "Save",
+                                        "next": null,
+                                        "parent": [Circular],
+                                        "prev": null,
+                                        "type": "text",
+                                      },
+                                    ],
+                                    "name": "span",
+                                    "namespace": "http://www.w3.org/1999/xhtml",
+                                    "next": null,
+                                    "parent": [Circular],
+                                    "prev": null,
+                                    "type": "tag",
+                                    "x-attribsNamespace": Object {},
+                                    "x-attribsPrefix": Object {},
+                                  },
+                                ],
+                                "name": "span",
+                                "namespace": "http://www.w3.org/1999/xhtml",
                                 "next": null,
                                 "parent": [Circular],
                                 "prev": null,
-                                "type": "text",
+                                "type": "tag",
+                                "x-attribsNamespace": Object {
+                                  "class": undefined,
+                                },
+                                "x-attribsPrefix": Object {
+                                  "class": undefined,
+                                },
                               },
                             ],
                             "name": "button",
@@ -1215,11 +1311,43 @@ initialize {
                           },
                           "children": Array [
                             Object {
-                              "data": "Save",
+                              "attribs": Object {
+                                "class": "flex",
+                              },
+                              "children": Array [
+                                Object {
+                                  "attribs": Object {},
+                                  "children": Array [
+                                    Object {
+                                      "data": "Save",
+                                      "next": null,
+                                      "parent": [Circular],
+                                      "prev": null,
+                                      "type": "text",
+                                    },
+                                  ],
+                                  "name": "span",
+                                  "namespace": "http://www.w3.org/1999/xhtml",
+                                  "next": null,
+                                  "parent": [Circular],
+                                  "prev": null,
+                                  "type": "tag",
+                                  "x-attribsNamespace": Object {},
+                                  "x-attribsPrefix": Object {},
+                                },
+                              ],
+                              "name": "span",
+                              "namespace": "http://www.w3.org/1999/xhtml",
                               "next": null,
                               "parent": [Circular],
                               "prev": null,
-                              "type": "text",
+                              "type": "tag",
+                              "x-attribsNamespace": Object {
+                                "class": undefined,
+                              },
+                              "x-attribsPrefix": Object {
+                                "class": undefined,
+                              },
                             },
                           ],
                           "name": "button",
@@ -2826,11 +2954,43 @@ initialize {
                             },
                             "children": Array [
                               Object {
-                                "data": "Save",
+                                "attribs": Object {
+                                  "class": "flex",
+                                },
+                                "children": Array [
+                                  Object {
+                                    "attribs": Object {},
+                                    "children": Array [
+                                      Object {
+                                        "data": "Save",
+                                        "next": null,
+                                        "parent": [Circular],
+                                        "prev": null,
+                                        "type": "text",
+                                      },
+                                    ],
+                                    "name": "span",
+                                    "namespace": "http://www.w3.org/1999/xhtml",
+                                    "next": null,
+                                    "parent": [Circular],
+                                    "prev": null,
+                                    "type": "tag",
+                                    "x-attribsNamespace": Object {},
+                                    "x-attribsPrefix": Object {},
+                                  },
+                                ],
+                                "name": "span",
+                                "namespace": "http://www.w3.org/1999/xhtml",
                                 "next": null,
                                 "parent": [Circular],
                                 "prev": null,
-                                "type": "text",
+                                "type": "tag",
+                                "x-attribsNamespace": Object {
+                                  "class": undefined,
+                                },
+                                "x-attribsPrefix": Object {
+                                  "class": undefined,
+                                },
                               },
                             ],
                             "name": "button",
@@ -2881,11 +3041,43 @@ initialize {
                           },
                           "children": Array [
                             Object {
-                              "data": "Save",
+                              "attribs": Object {
+                                "class": "flex",
+                              },
+                              "children": Array [
+                                Object {
+                                  "attribs": Object {},
+                                  "children": Array [
+                                    Object {
+                                      "data": "Save",
+                                      "next": null,
+                                      "parent": [Circular],
+                                      "prev": null,
+                                      "type": "text",
+                                    },
+                                  ],
+                                  "name": "span",
+                                  "namespace": "http://www.w3.org/1999/xhtml",
+                                  "next": null,
+                                  "parent": [Circular],
+                                  "prev": null,
+                                  "type": "tag",
+                                  "x-attribsNamespace": Object {},
+                                  "x-attribsPrefix": Object {},
+                                },
+                              ],
+                              "name": "span",
+                              "namespace": "http://www.w3.org/1999/xhtml",
                               "next": null,
                               "parent": [Circular],
                               "prev": null,
-                              "type": "text",
+                              "type": "tag",
+                              "x-attribsNamespace": Object {
+                                "class": undefined,
+                              },
+                              "x-attribsPrefix": Object {
+                                "class": undefined,
+                              },
                             },
                           ],
                           "name": "button",
@@ -3189,11 +3381,43 @@ initialize {
                           },
                           "children": Array [
                             Object {
-                              "data": "Save",
+                              "attribs": Object {
+                                "class": "flex",
+                              },
+                              "children": Array [
+                                Object {
+                                  "attribs": Object {},
+                                  "children": Array [
+                                    Object {
+                                      "data": "Save",
+                                      "next": null,
+                                      "parent": [Circular],
+                                      "prev": null,
+                                      "type": "text",
+                                    },
+                                  ],
+                                  "name": "span",
+                                  "namespace": "http://www.w3.org/1999/xhtml",
+                                  "next": null,
+                                  "parent": [Circular],
+                                  "prev": null,
+                                  "type": "tag",
+                                  "x-attribsNamespace": Object {},
+                                  "x-attribsPrefix": Object {},
+                                },
+                              ],
+                              "name": "span",
+                              "namespace": "http://www.w3.org/1999/xhtml",
                               "next": null,
                               "parent": [Circular],
                               "prev": null,
-                              "type": "text",
+                              "type": "tag",
+                              "x-attribsNamespace": Object {
+                                "class": undefined,
+                              },
+                              "x-attribsPrefix": Object {
+                                "class": undefined,
+                              },
                             },
                           ],
                           "name": "button",
@@ -3244,11 +3468,43 @@ initialize {
                         },
                         "children": Array [
                           Object {
-                            "data": "Save",
+                            "attribs": Object {
+                              "class": "flex",
+                            },
+                            "children": Array [
+                              Object {
+                                "attribs": Object {},
+                                "children": Array [
+                                  Object {
+                                    "data": "Save",
+                                    "next": null,
+                                    "parent": [Circular],
+                                    "prev": null,
+                                    "type": "text",
+                                  },
+                                ],
+                                "name": "span",
+                                "namespace": "http://www.w3.org/1999/xhtml",
+                                "next": null,
+                                "parent": [Circular],
+                                "prev": null,
+                                "type": "tag",
+                                "x-attribsNamespace": Object {},
+                                "x-attribsPrefix": Object {},
+                              },
+                            ],
+                            "name": "span",
+                            "namespace": "http://www.w3.org/1999/xhtml",
                             "next": null,
                             "parent": [Circular],
                             "prev": null,
-                            "type": "text",
+                            "type": "tag",
+                            "x-attribsNamespace": Object {
+                              "class": undefined,
+                            },
+                            "x-attribsPrefix": Object {
+                              "class": undefined,
+                            },
                           },
                         ],
                         "name": "button",

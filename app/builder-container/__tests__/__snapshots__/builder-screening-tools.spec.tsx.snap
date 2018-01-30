@@ -15,7 +15,13 @@ exports[`builder screening tools renders builder screening tools 1`] = `
         disabled={false}
         onClick={[Function]}
       >
-        Create Screening Tool
+        <span
+          className="flex"
+        >
+          <span>
+            Create Screening Tool
+          </span>
+        </span>
       </button>
     </div>
   </div>

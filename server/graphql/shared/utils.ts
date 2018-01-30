@@ -36,8 +36,14 @@ export interface IJWTData {
   lastLoginAt: string;
 }
 
-export const signJwt = (jwtData: IJWTData) =>
-  sign(jwtData, config.JWT_SECRET, { expiresIn: config.JWT_EXPIRY });
+export interface IJWTPDFData {
+  type: string;
+}
+
+export const signJwt = (
+  jwtData: IJWTData | IJWTPDFData,
+  expiresIn: string | number = config.JWT_EXPIRY,
+) => sign(jwtData, config.JWT_SECRET, { expiresIn });
 
 export async function parseAndVerifyJwt(jwt: string, txn: Transaction) {
   // verify throws an error if jwt is not valid and if expiry passed

@@ -68,15 +68,19 @@ describe('user tests', () => {
         const user = await User.create(createMockUser(11, clinic.id, userRole, 'a@b.com'), txn);
         await User.create(createMockUser(11, clinic.id, userRole2, 'b@c.com'), txn);
 
-        const query = `{ userSummaryList(userRoleFilters: [${user.userRole}]) { id, userRole, firstName, lastName } }`;
+        const query = `{ userSummaryList(userRoleFilters: [${
+          user.userRole
+        }]) { id, userRole, firstName, lastName } }`;
         const result = await graphql(schema, query, null, { db, userRole: 'admin', txn });
 
-        expect(cloneDeep(result.data!.userSummaryList)).toMatchObject([{
-          id: user.id,
-          userRole,
-          firstName: 'dan',
-          lastName: 'plant',
-        }]);
+        expect(cloneDeep(result.data!.userSummaryList)).toMatchObject([
+          {
+            id: user.id,
+            userRole,
+            firstName: 'dan',
+            lastName: 'plant',
+          },
+        ]);
       });
     });
 
@@ -485,6 +489,30 @@ describe('user tests', () => {
           } }`;
         const result = await graphql(schema, mutation, null, { db, userRole, txn });
         expect(cloneDeep(result.errors![0].message)).toMatch(`${userRole} not able to delete user`);
+      });
+    });
+  });
+
+  describe('resolveJWTForPDF', () => {
+    it('generates a Jwt token for PDF viewing', async () => {
+      await transaction(User.knex(), async txn => {
+        const { clinic } = await setup(txn);
+        const user = await User.create(createMockUser(11, clinic.id, userRole), txn);
+
+        const query = `{
+          JWTForPDF {
+            authToken
+          }
+        }`;
+
+        const result = await graphql(schema, query, null, {
+          db,
+          userRole,
+          txn,
+          userId: user.id,
+        });
+
+        expect(result.data!.JWTForPDF.authToken).toBeTruthy();
       });
     });
   });

@@ -1634,6 +1634,13 @@ export interface getGoalSuggestionsForAnswerQuery {
   } | null >,
 };
 
+export interface getJWTForPDFQuery {
+  // Jwt token to view a PDF
+  JWTForPDF:  {
+    authToken: string,
+  },
+};
+
 export interface getPatientAnswersQueryVariables {
   filterType: AnswerFilterType,
   filterId: string,

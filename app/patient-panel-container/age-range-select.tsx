@@ -40,15 +40,13 @@ export default class AgeRangeSelect extends React.Component<IProps> {
     const selectedOption = index > -1 ? options![index] : {};
 
     onChange(index, selectedOption);
-  }
+  };
 
   renderEndOption(bound: number, index: number, messageId: string) {
     return (
       <FormattedMessage id={messageId} key={`ageRange-option-${index}`}>
         {(message: string) => {
-          return (
-            <Option value={index.toString()} label={`${bound} ${message}`} />
-          );
+          return <Option value={index.toString()} label={`${bound} ${message}`} />;
         }}
       </FormattedMessage>
     );
@@ -58,9 +56,7 @@ export default class AgeRangeSelect extends React.Component<IProps> {
     return (
       <FormattedMessage id="ageRange.years" key={`ageRange-option-${index}`}>
         {(message: string) => {
-          return (
-            <Option value={index.toString()} label={`${lower} - ${upper} ${message}`} />
-          );
+          return <Option value={index.toString()} label={`${lower} - ${upper} ${message}`} />;
         }}
       </FormattedMessage>
     );
@@ -68,7 +64,7 @@ export default class AgeRangeSelect extends React.Component<IProps> {
 
   render() {
     const { isLarge, value, options, isUnselectable } = this.props;
-    const selectedValue = (value !== null) ? value.toString() : '';
+    const selectedValue = value !== null ? value.toString() : '';
 
     return (
       <Select

@@ -17,6 +17,16 @@
   }
 }
 
+.iconButton span span {
+  margin-top: 2px;
+}
+
+.flex {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 .button {
   padding: 8px 36px;
 }
@@ -24,7 +34,8 @@
 svg.icon {
   height: 18px;
   width: 18px;
-  fill: var(--default-font-color);
+  fill: var(--white-color);
+  margin-right: var(--extra-small-gutter);
 }
 
 .red {
@@ -53,6 +64,10 @@ svg.icon {
   &:hover {
     background: var(--gray-background-color);
   }
+}
+
+.white svg.icon {
+  fill: var(--blue-color);
 }
 
 .small {

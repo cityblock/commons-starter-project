@@ -1,15 +1,14 @@
 import { shallow } from 'enzyme';
 import * as React from 'react';
-import { FormattedMessage } from 'react-intl';
-import { Link } from 'react-router-dom';
-import Icon from '../../library/icon/icon';
 import { CBOReferral } from '../../util/test-data';
 import { Divider } from '../task';
 import TaskCBODetail from '../task-cbo-detail';
 import TaskCBOReferral from '../task-cbo-referral';
+import TaskCBOReferralView from '../task-cbo-referral-view';
 
 describe('Task CBO Referral', () => {
-  const wrapper = shallow(<TaskCBOReferral CBOReferral={CBOReferral} />);
+  const taskId = 'defeatNightKing';
+  const wrapper = shallow(<TaskCBOReferral CBOReferral={CBOReferral} taskId={taskId} />);
 
   it('renders task CBO detail', () => {
     expect(wrapper.find(TaskCBODetail).length).toBe(1);
@@ -17,16 +16,8 @@ describe('Task CBO Referral', () => {
   });
 
   it('renders button to view form', () => {
-    expect(wrapper.find(Link).length).toBe(1);
-    expect(wrapper.find(Link).props().className).toBe('viewForm');
-  });
-
-  it('renders icon and formatted message inside link', () => {
-    expect(wrapper.find(Icon).length).toBe(1);
-    expect(wrapper.find(Icon).props().name).toBe('pictureAsPDF');
-
-    expect(wrapper.find(FormattedMessage).length).toBe(1);
-    expect(wrapper.find(FormattedMessage).props().id).toBe('CBO.viewForm');
+    expect(wrapper.find(TaskCBOReferralView).length).toBe(1);
+    expect(wrapper.find(TaskCBOReferralView).props().taskId).toBe(taskId);
   });
 
   it('renders divider', () => {

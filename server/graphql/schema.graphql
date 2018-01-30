@@ -1008,6 +1008,11 @@ type CBOReferral implements uniqueId {
   acknowledgedAt: String
 }
 
+# JWT token for PDF viewing
+type JWTForPDF {
+  authToken: String!
+}
+
 #
 # BEGIN INPUT FIELDS
 #
@@ -2111,6 +2116,8 @@ type RootQueryType {
   CBOs: [CBO!]!
   # all CBOs for given category
   CBOsForCategory(categoryId: ID!): [CBO!]!
+  # Jwt token to view a PDF
+  JWTForPDF: JWTForPDF!
 }
 
 schema {

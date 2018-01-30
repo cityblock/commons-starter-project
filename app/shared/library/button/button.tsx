@@ -5,7 +5,7 @@ import Icon from '../icon/icon';
 import { IconName } from '../icon/icon-types';
 import * as styles from './css/button.css';
 
-type Color = 'blue' | 'white' | 'red' | 'teal';
+export type Color = 'blue' | 'white' | 'red' | 'teal';
 
 interface IProps {
   onClick: () => void;
@@ -41,8 +41,10 @@ const Button: React.StatelessComponent<IProps> = (props: IProps) => {
       <FormattedMessage id={messageId}>
         {(message: string) => (
           <button onClick={onClick} className={buttonStyles} disabled={disabled || false}>
-            {icon && <Icon name={icon} className={styles.icon} />}
-            {message}
+            <span className={styles.flex}>
+              {icon && <Icon name={icon} className={styles.icon} />}
+              <span>{message}</span>
+            </span>
           </button>
         )}
       </FormattedMessage>
@@ -51,8 +53,10 @@ const Button: React.StatelessComponent<IProps> = (props: IProps) => {
 
   return (
     <button onClick={onClick} className={buttonStyles} disabled={disabled || false}>
-      {icon && <Icon name={icon} className={styles.icon} />}
-      {label}
+      <span className={styles.flex}>
+        {icon && <Icon name={icon} className={styles.icon} />}
+        <span>{label}</span>
+      </span>
     </button>
   );
 };

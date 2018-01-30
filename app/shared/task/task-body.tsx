@@ -32,7 +32,7 @@ const TaskBody: React.StatelessComponent<IProps> = (props: IProps) => {
         editTask={editTask}
         isCBOReferral={!!CBOReferral}
       />
-      {!!CBOReferral && <TaskCBOReferral CBOReferral={CBOReferral} />}
+      {!!CBOReferral && <TaskCBOReferral CBOReferral={CBOReferral} taskId={taskId} />}
       <Divider />
       <div className={styles.associations}>
         <div className={styles.detail}>

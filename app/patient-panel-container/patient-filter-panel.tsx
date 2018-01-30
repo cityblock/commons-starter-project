@@ -41,17 +41,13 @@ export default class PatientPanelContainer extends React.Component<IProps, IStat
 
   handleAgeRangeChange = (ageIndex: number | null, ageRange: IOptionType | {}) => {
     this.setState({ ageIndex, ageRange });
-  }
+  };
 
-  handleChange = (
-    event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
-  ) => {
+  handleChange = (event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     this.setState({ [event.target.name as any]: event.target.value });
   };
 
-  handleNetworkToggleChange = (
-    event: React.MouseEvent<HTMLInputElement>,
-  ) => {
+  handleNetworkToggleChange = (event: React.MouseEvent<HTMLInputElement>) => {
     const target = event.target as HTMLInputElement;
     let fieldValue: any = target.value;
 
@@ -67,14 +63,14 @@ export default class PatientPanelContainer extends React.Component<IProps, IStat
     const { ageIndex, gender, zipcode, inNetwork, careWorker } = this.state;
 
     return (
-      <div className={classNames(styles.container, {
-        [styles.visible]: !!isVisible,
-        [styles.hidden]: isVisible === false,
-      })}>
+      <div
+        className={classNames(styles.container, {
+          [styles.visible]: !!isVisible,
+          [styles.hidden]: isVisible === false,
+        })}
+      >
         <div className={styles.header}>
-          <FormLabel
-            messageId="patientFilter.title"
-          />
+          <FormLabel messageId="patientFilter.title" />
           <div className={styles.buttonContainer}>
             <Button
               messageId="patientFilter.cancel"
@@ -84,16 +80,16 @@ export default class PatientPanelContainer extends React.Component<IProps, IStat
             />
             <Button
               messageId="patientFilter.apply"
-              onClick={() => { return; }}
+              onClick={() => {
+                return;
+              }}
               className={styles.button}
             />
           </div>
         </div>
         <div className={styles.fields}>
           <div className={styles.inputGroup}>
-            <FormLabel
-              messageId="patientFilter.age"
-            />
+            <FormLabel messageId="patientFilter.age" />
             <AgeRangeSelect
               isLarge={true}
               isUnselectable={true}
@@ -103,9 +99,7 @@ export default class PatientPanelContainer extends React.Component<IProps, IStat
           </div>
 
           <div className={styles.inputGroup}>
-            <FormLabel
-              messageId="patientFilter.gender"
-            />
+            <FormLabel messageId="patientFilter.gender" />
             <FilterSelect
               name="gender"
               isLarge={true}
@@ -117,9 +111,7 @@ export default class PatientPanelContainer extends React.Component<IProps, IStat
           </div>
 
           <div className={styles.inputGroup}>
-            <FormLabel
-              messageId="patientFilter.location"
-            />
+            <FormLabel messageId="patientFilter.location" />
             <TextInput
               name="zipcode"
               value={zipcode || ''}
@@ -129,9 +121,7 @@ export default class PatientPanelContainer extends React.Component<IProps, IStat
           </div>
 
           <div className={styles.inputGroup}>
-            <FormLabel
-              messageId="patientFilter.careWorker"
-            />
+            <FormLabel messageId="patientFilter.careWorker" />
             <CareWorkerSelect
               isLarge={true}
               isUnselectable={true}
@@ -141,15 +131,11 @@ export default class PatientPanelContainer extends React.Component<IProps, IStat
           </div>
 
           <div className={styles.inputGroup}>
-            <FormLabel
-              messageId="patientFilter.insurance"
-            />
+            <FormLabel messageId="patientFilter.insurance" />
           </div>
 
           <div className={styles.inputGroup}>
-            <FormLabel
-              messageId="patientFilter.inNetwork"
-            />
+            <FormLabel messageId="patientFilter.inNetwork" />
             <RadioGroup>
               <RadioInput
                 name="inNetwork"

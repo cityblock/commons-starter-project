@@ -30,7 +30,13 @@ exports[`renders patient panel container correctly 1`] = `
           disabled={false}
           onClick={[Function]}
         >
-          Filter
+          <span
+            className="flex"
+          >
+            <span>
+              Filter
+            </span>
+          </span>
         </button>
       </div>
     </div>
@@ -133,14 +139,26 @@ exports[`renders patient panel container correctly 1`] = `
           disabled={false}
           onClick={[Function]}
         >
-          Cancel
+          <span
+            className="flex"
+          >
+            <span>
+              Cancel
+            </span>
+          </span>
         </button>
         <button
           className="button button"
           disabled={false}
           onClick={[Function]}
         >
-          Apply
+          <span
+            className="flex"
+          >
+            <span>
+              Apply
+            </span>
+          </span>
         </button>
       </div>
     </div>

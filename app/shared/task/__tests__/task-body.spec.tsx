@@ -101,6 +101,7 @@ describe('Task Body Component', () => {
 
     expect(wrapper.find(TaskCBOReferral).length).toBe(1);
     expect(wrapper.find(TaskCBOReferral).props().CBOReferral).toEqual(CBOReferral);
+    expect(wrapper.find(TaskCBOReferral).props().taskId).toBe(taskId);
     expect(wrapper.find(TaskInfo).props().isCBOReferral).toBeTruthy();
   });
 });

@@ -57,7 +57,13 @@ exports[`renders patient info 1`] = `
         disabled={true}
         onClick={[Function]}
       >
-        Save changes
+        <span
+          className="flex"
+        >
+          <span>
+            Save changes
+          </span>
+        </span>
       </button>
     </div>
   </div>

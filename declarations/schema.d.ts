@@ -389,6 +389,10 @@ declare module 'schema' {
     description: all CBOs for given category
   */
     CBOsForCategory: Array<ICBO>;
+    /**
+    description: Jwt token to view a PDF
+  */
+    JWTForPDF: IJWTForPDF;
   }
 
   /**
@@ -1345,6 +1349,13 @@ declare module 'schema' {
     createdAt: string;
     updatedAt: string;
     deletedAt: string | null;
+  }
+
+  /**
+    description: JWT token for PDF viewing
+  */
+  interface IJWTForPDF {
+    authToken: string;
   }
 
 

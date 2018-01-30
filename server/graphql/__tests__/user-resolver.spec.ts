@@ -59,6 +59,55 @@ describe('user tests', () => {
     });
   });
 
+  describe('resolves a limited set of shortened user objects given some user role filters', () => {
+    it('can a fetch a set of shortened user', async () => {
+      await transaction(User.knex(), async txn => {
+        const { clinic } = await setup(txn);
+        const userRole2 = 'admin';
+
+        const user = await User.create(createMockUser(11, clinic.id, userRole, 'a@b.com'), txn);
+        await User.create(createMockUser(11, clinic.id, userRole2, 'b@c.com'), txn);
+
+        const query = `{ userSummaryList(userRoleFilters: [${user.userRole}]) { id, userRole, firstName, lastName } }`;
+        const result = await graphql(schema, query, null, { db, userRole: 'admin', txn });
+
+        expect(cloneDeep(result.data!.userSummaryList)).toMatchObject([{
+          id: user.id,
+          userRole,
+          firstName: 'dan',
+          lastName: 'plant',
+        }]);
+      });
+    });
+
+    it('gives you nothing if there are no users with that user role', async () => {
+      await transaction(User.knex(), async txn => {
+        const { clinic } = await setup(txn);
+        const userRole2 = 'admin';
+
+        await User.create(createMockUser(11, clinic.id, userRole2, 'a@b.com'), txn);
+        await User.create(createMockUser(11, clinic.id, userRole2, 'b@c.com'), txn);
+
+        const query = `{ userSummaryList(userRoleFilters: [${userRole}]) { id, userRole, firstName, lastName } }`;
+        const result = await graphql(schema, query, null, { db, userRole: 'admin', txn });
+
+        expect(cloneDeep(result.data!.userSummaryList)).toMatchObject([]);
+      });
+    });
+
+    it('does not resolve set of shortened user objects for non-admins', async () => {
+      await transaction(User.knex(), async txn => {
+        const { clinic } = await setup(txn);
+        await User.create(createMockUser(11, clinic.id, userRole), txn);
+
+        const query = `{ userSummaryList(userRoleFilters: [${userRole}]) { id, userRole, firstName, lastName } }`;
+        const result = await graphql(schema, query, null, { db, userRole, txn });
+
+        expect(cloneDeep(result.errors![0].message)).toMatch('physician not able to view allUsers');
+      });
+    });
+  });
+
   describe('resolve all users', () => {
     it('resolves all users', async () => {
       await transaction(User.knex(), async txn => {

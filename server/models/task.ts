@@ -347,5 +347,16 @@ export default class Task extends BaseModel {
         userId,
       );
   }
+
+  static async getForCBOReferralFormPDF(taskId: string, txn: Transaction) {
+    const task = await this.query(txn)
+      .eager('[assignedTo, createdBy, patient.[careTeam], CBOReferral.[category, CBO]]')
+      .findOne({ id: taskId, deletedAt: null });
+
+    if (!task) {
+      return Promise.reject(`No such task: ${taskId}`);
+    }
+    return task;
+  }
 }
 /* tslint:enable:member-ordering */

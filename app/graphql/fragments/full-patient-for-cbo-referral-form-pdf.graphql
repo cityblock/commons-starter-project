@@ -1,0 +1,14 @@
+#import "../fragments/full-user.graphql"
+
+fragment FullPatientForCBOReferralFormPDF on Patient {
+  id
+  createdAt
+  firstName
+  lastName
+  language
+  dateOfBirth
+  gender
+  careTeam {
+    ...FullUser
+  }
+}

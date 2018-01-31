@@ -42,6 +42,12 @@ export const formatAge = (dateOfBirth?: string | null): string => {
   return `${differenceInYears(Date.now(), dateOfBirth)}`;
 };
 
+export const formatGender = (gender: string | null): string => {
+  if (gender === null || (gender !== 'F' && gender !== 'M')) return 'Unknown';
+
+  return gender === 'F' ? 'Female' : 'Male';
+};
+
 export const formatDateOfBirth = (dateOfBirth?: string | null): string => {
   if (!dateOfBirth) return 'Unknown';
   return format(dateOfBirth, 'MM/DD/YYYY');

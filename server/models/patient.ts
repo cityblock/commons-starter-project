@@ -9,6 +9,7 @@ import Concern from './concern';
 import PatientAnswer from './patient-answer';
 import PatientConcern from './patient-concern';
 import Task from './task';
+import User from './user';
 
 // how fuzzy is patient name search (0 (match everything) to 1 (exact match))
 const SIMILARITY_THRESHOLD = 0.2;
@@ -58,6 +59,7 @@ export default class Patient extends BaseModel {
   consentToText: boolean;
   language: string;
   tasks: Task[];
+  careTeam: User[];
 
   static tableName = 'patient';
 

@@ -474,10 +474,10 @@ declare module 'schema' {
   */
   interface IPatient {
     id: string;
-    firstName: string | null;
+    firstName: string;
     middleName: string | null;
     language: string | null;
-    lastName: string | null;
+    lastName: string;
     dateOfBirth: string | null;
     gender: string | null;
     zip: string | null;
@@ -486,6 +486,7 @@ declare module 'schema' {
     scratchPad: string | null;
     consentToCall: boolean | null;
     consentToText: boolean | null;
+    careTeam: Array<IUser>;
   }
 
   /**

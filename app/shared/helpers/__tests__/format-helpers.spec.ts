@@ -6,6 +6,7 @@ import {
   formatCBOReferralTaskTitle,
   formatDateOfBirth,
   formatFullName,
+  formatGender,
   formatInputDate,
   formatScreeningToolScore,
   isDueSoon,
@@ -76,6 +77,24 @@ describe('Shared Component Helpers', () => {
 
     it('returns formatted age if date of birth known', () => {
       expect(formatAge(dateOfBirth)).toBe('16');
+    });
+  });
+
+  describe('formatGender', () => {
+    it('returns unknown if null given', () => {
+      expect(formatGender(null)).toBe('Unknown');
+    });
+
+    it('returns unknown if invalid string given', () => {
+      expect(formatGender('XYZ')).toBe('Unknown');
+    });
+
+    it('returns female if F given', () => {
+      expect(formatGender('F')).toBe('Female');
+    });
+
+    it('returns female if M given', () => {
+      expect(formatGender('M')).toBe('Male');
     });
   });
 

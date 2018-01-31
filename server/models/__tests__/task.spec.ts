@@ -159,6 +159,39 @@ describe('task model', () => {
     });
   });
 
+  it('should create and retrieve a task with an associated CBO referral for PDF', async () => {
+    await transaction(Task.knex(), async txn => {
+      const { patient, user, patientGoal } = await setup(txn);
+      const cboReferral = await createCBOReferral(txn);
+
+      const dueAt = new Date().toISOString();
+      const task = await Task.create(
+        {
+          title: 'title',
+          description: 'description',
+          dueAt,
+          patientId: patient.id,
+          createdById: user.id,
+          assignedToId: user.id,
+          patientGoalId: patientGoal.id,
+          CBOReferralId: cboReferral.id,
+        },
+        txn,
+      );
+
+      expect(task.CBOReferral!.id).toBe(cboReferral.id);
+
+      const fetchedTask = await Task.getForCBOReferralFormPDF(task.id, txn);
+
+      expect(fetchedTask.CBOReferral!.id).toBe(cboReferral.id);
+      expect(fetchedTask.CBOReferral!.category.id).toBe(cboReferral.categoryId);
+      expect(fetchedTask.CBOReferral!.CBO!.id).toBe(cboReferral.CBOId);
+      expect(fetchedTask.assignedTo.id).toBe(user.id);
+      expect(fetchedTask.createdBy.id).toBe(user.id);
+      expect(fetchedTask.patient.id).toBe(patient.id);
+    });
+  });
+
   it('throws an error when getting an invalid id', async () => {
     await transaction(Task.knex(), async txn => {
       const fakeId = uuid();

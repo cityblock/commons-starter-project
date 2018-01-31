@@ -220,10 +220,10 @@ type PageInfo {
 # Patient combining data in athena and our database
 type Patient implements uniqueId {
   id: ID!
-  firstName: String
+  firstName: String!
   middleName: String
   language: String
-  lastName: String
+  lastName: String!
   dateOfBirth: String
   gender: String
   zip: String
@@ -232,6 +232,7 @@ type Patient implements uniqueId {
   scratchPad: String
   consentToCall: Boolean
   consentToText: Boolean
+  careTeam: [User!]
 }
 
 # Patient node

@@ -711,6 +711,7 @@ declare module 'schema' {
     createdAt: string;
     updatedAt: string;
     deletedAt: string | null;
+    CBOCategoryId: string | null;
   }
 
 

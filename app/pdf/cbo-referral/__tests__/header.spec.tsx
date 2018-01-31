@@ -18,7 +18,7 @@ describe('CBO Referral PDF Header', () => {
 
   it('renders Cityblock logo image', () => {
     expect(wrapper.find(Image).length).toBe(1);
-    expect(wrapper.find<{ src: string; }>(Image).props().src).toBe(LOGO_PATH);
+    expect(wrapper.find<{ src: string }>(Image).props().src).toBe(LOGO_PATH);
   });
 
   it('renders referred on header', () => {

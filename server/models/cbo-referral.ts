@@ -48,11 +48,6 @@ export default class CBOReferral extends BaseModel {
       acknowledgedAt: { type: 'string' },
     },
     required: ['categoryId'],
-    oneOf: [
-      // must provide either a CBO id or information about other CBO
-      { required: ['CBOId'] },
-      { required: ['name', 'url'] },
-    ],
   };
 
   static relationMappings: RelationMappings = {

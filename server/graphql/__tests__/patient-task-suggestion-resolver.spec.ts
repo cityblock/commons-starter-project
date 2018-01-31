@@ -13,6 +13,7 @@ import TaskSuggestion from '../../models/task-suggestion';
 import TaskTemplate from '../../models/task-template';
 import User from '../../models/user';
 import {
+  createCBOCategory,
   createMockClinic,
   createMockPatient,
   createMockUser,
@@ -25,6 +26,7 @@ interface ISetup {
   user: User;
   patient: Patient;
   taskTemplate: TaskTemplate;
+  answer: Answer;
 }
 
 const userRole = 'admin';
@@ -79,6 +81,7 @@ async function setup(txn: Transaction): Promise<ISetup> {
     user,
     patient,
     taskTemplate,
+    answer,
   };
 }
 
@@ -215,7 +218,80 @@ describe('patient task suggestion resolver tests', () => {
           },
           txn,
         );
+
         expect(fetchedTasks.total).toBe(1);
+        expect(fetchedTasks.results[0].CBOReferralId).toBeFalsy();
+      });
+    });
+
+    it('accepts a patient CBO task suggestion and creates new task', async () => {
+      await transaction(PatientTaskSuggestion.knex(), async txn => {
+        const { user, patient, answer } = await setup(txn);
+        const CBOCategory = await createCBOCategory(txn);
+        const taskTemplateCBO = await TaskTemplate.create(
+          {
+            title: 'Refer to Dragon Training',
+            repeating: false,
+            priority: 'high',
+            careTeamAssigneeRole: 'physician',
+            CBOCategoryId: CBOCategory.id,
+          },
+          txn,
+        );
+        await TaskSuggestion.create(
+          {
+            answerId: answer.id,
+            taskTemplateId: taskTemplateCBO.id,
+          },
+          txn,
+        );
+
+        const suggestion = await PatientTaskSuggestion.create(
+          {
+            patientId: patient.id,
+            taskTemplateId: taskTemplateCBO.id,
+          },
+          txn,
+        );
+        expect(suggestion.acceptedAt).toBeFalsy();
+        const tasks = await Task.getPatientTasks(
+          patient.id,
+          {
+            pageNumber: 0,
+            pageSize: 10,
+            orderBy: 'createdAt',
+            order: 'asc',
+          },
+          txn,
+        );
+        expect(tasks.total).toBe(0);
+
+        const mutation = `mutation {
+          patientTaskSuggestionAccept(
+            input: { patientTaskSuggestionId: "${suggestion.id}" }
+          ) {
+            id
+          }
+        }`;
+        await graphql(schema, mutation, null, { db, userRole, userId: user.id, txn });
+
+        const fetchedSuggestion = await PatientTaskSuggestion.get(suggestion.id, txn);
+        expect(fetchedSuggestion!.acceptedAt).not.toBeFalsy();
+
+        const fetchedTasks = await Task.getPatientTasks(
+          patient.id,
+          {
+            pageNumber: 0,
+            pageSize: 10,
+            orderBy: 'createdAt',
+            order: 'asc',
+          },
+          txn,
+        );
+
+        expect(fetchedTasks.total).toBe(1);
+        expect(fetchedTasks.results[0].CBOReferralId).toBeTruthy();
+        expect(fetchedTasks.results[0].CBOReferral!.categoryId).toBe(CBOCategory.id);
       });
     });
   });

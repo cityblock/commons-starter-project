@@ -8,7 +8,7 @@ import TaskEvent from './task-event';
 import TaskFollower from './task-follower';
 import User from './user';
 
-interface ITaskEditableFields {
+export interface ITaskEditableFields {
   title: string;
   description?: string;
   dueAt?: string;

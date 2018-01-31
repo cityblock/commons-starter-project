@@ -1,7 +1,8 @@
 import { Transaction } from 'objection';
 import { dateAdd } from '../lib/date';
 import CareTeam from '../models/care-team';
-import Task from '../models/task';
+import CBOReferral from '../models/cbo-referral';
+import Task, { ITaskEditableFields } from '../models/task';
 import TaskEvent from '../models/task-event';
 import TaskTemplate from '../models/task-template';
 
@@ -12,7 +13,12 @@ export async function createTaskForTaskTemplate(
   txn: Transaction,
   patientGoalId?: string,
 ) {
-  const { careTeamAssigneeRole, completedWithinInterval, completedWithinNumber } = taskTemplate;
+  const {
+    careTeamAssigneeRole,
+    completedWithinInterval,
+    completedWithinNumber,
+    CBOCategoryId,
+  } = taskTemplate;
 
   let dueAt: string | undefined;
   let assignedToId: string | undefined;
@@ -37,17 +43,27 @@ export async function createTaskForTaskTemplate(
     ).toISOString();
   }
 
-  const task = await Task.create(
-    {
-      createdById: userId,
-      title: taskTemplate.title,
-      dueAt,
-      patientId,
-      assignedToId,
-      patientGoalId,
-    },
-    txn,
-  );
+  let referral = null;
+  const taskVariables: ITaskEditableFields = {
+    createdById: userId,
+    title: taskTemplate.title,
+    dueAt,
+    patientId,
+    assignedToId,
+    patientGoalId,
+  };
+
+  if (CBOCategoryId) {
+    referral = await CBOReferral.create(
+      {
+        categoryId: CBOCategoryId,
+      },
+      txn,
+    );
+    taskVariables.CBOReferralId = referral.id;
+  }
+
+  const task = await Task.create(taskVariables, txn);
 
   await TaskEvent.create(
     {

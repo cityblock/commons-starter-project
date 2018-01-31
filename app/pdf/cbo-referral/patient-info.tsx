@@ -37,7 +37,10 @@ const PatientInfo: React.StatelessComponent<IProps> = ({ patient, description })
           bodyLabel={formatDateOfBirth(patient.dateOfBirth)}
         />
         <TextGroup headerLabel={copy.patientGender} bodyLabel={formatGender(patient.gender)} />
-        <TextGroup headerLabel={copy.patientLanguage} bodyLabel={patient.language || copy.unknown} />
+        <TextGroup
+          headerLabel={copy.patientLanguage}
+          bodyLabel={patient.language || copy.unknown}
+        />
       </View>
       <View style={styles.body}>
         <TextGroup headerLabel={copy.patientPhone} bodyLabel="123-456-7890" />
@@ -52,7 +55,11 @@ const PatientInfo: React.StatelessComponent<IProps> = ({ patient, description })
         <TextGroup headerLabel={copy.patientInsuranceID} bodyLabel="111-11-1111-A" />
       </View>
       <View style={styles.body}>
-        <TextGroup headerLabel={copy.referralNote} bodyLabel={description || copy.notAvailable} size="large" />
+        <TextGroup
+          headerLabel={copy.referralNote}
+          bodyLabel={description || copy.notAvailable}
+          size="large"
+        />
       </View>
     </View>
   );

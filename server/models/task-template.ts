@@ -13,6 +13,7 @@ interface ITaskTemplateEditableFields {
   goalSuggestionTemplateId?: string;
   priority: Priority;
   careTeamAssigneeRole: UserRole;
+  CBOCategoryId?: string | null;
 }
 
 /* tslint:disable:member-ordering */
@@ -24,6 +25,7 @@ export default class TaskTemplate extends BaseModel {
   goalSuggestionTemplateId: string;
   priority?: Priority;
   careTeamAssigneeRole?: UserRole;
+  CBOCategoryId?: string | null;
 
   static tableName = 'task_template';
 
@@ -40,6 +42,7 @@ export default class TaskTemplate extends BaseModel {
       goalSuggestionTemplateId: { type: 'string', minLength: 1 }, // cannot be blank
       priority: { type: 'string', enum: PRIORITY },
       careTeamAssigneeRole: { type: 'string', enum: USER_ROLE },
+      CBOCategoryId: { type: 'string', format: 'uuid' },
     },
     // TODO: make goalSuggestionTemplateId required?
     required: ['title'],

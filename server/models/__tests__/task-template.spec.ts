@@ -1,6 +1,7 @@
 import { transaction, Transaction } from 'objection';
 import * as uuid from 'uuid/v4';
 import Db from '../../db';
+import { createCBOCategory } from '../../spec-helpers';
 import GoalSuggestionTemplate from '../goal-suggestion-template';
 import TaskTemplate from '../task-template';
 
@@ -40,6 +41,28 @@ describe('task template model', () => {
             goalSuggestionTemplateId: goalSuggestionTemplate.id,
             priority: 'low',
             careTeamAssigneeRole: 'physician',
+          },
+          txn,
+        );
+        const taskTemplateById = await TaskTemplate.get(taskTemplate.id, txn);
+
+        expect(taskTemplateById).toMatchObject(taskTemplate);
+      });
+    });
+
+    it('creates and retrieves a task template with CBO category', async () => {
+      await transaction(TaskTemplate.knex(), async txn => {
+        const { goalSuggestionTemplate } = await setup(txn);
+        const CBOCategory = await createCBOCategory(txn);
+
+        const taskTemplate = await TaskTemplate.create(
+          {
+            title: 'Housing',
+            repeating: false,
+            goalSuggestionTemplateId: goalSuggestionTemplate.id,
+            priority: 'low',
+            careTeamAssigneeRole: 'physician',
+            CBOCategoryId: CBOCategory.id,
           },
           txn,
         );

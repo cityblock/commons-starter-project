@@ -1,3 +1,4 @@
+import { toNumber } from 'lodash';
 import { Model, RelationMappings, Transaction } from 'objection';
 import { IPaginatedResults, IPaginationOptions } from '../db';
 import BaseModel from './base-model';
@@ -57,6 +58,15 @@ export default class CareTeam extends BaseModel {
       .eager('user')
       .orderBy('createdAt', 'asc');
     return careTeam.map((ct: CareTeam) => ct.user);
+  }
+
+  static async getCountForPatient(patientId: string, txn: Transaction): Promise<number> {
+    const careTeamCount = (await CareTeam.query(txn)
+      .where('patientId', patientId)
+      .andWhere('deletedAt', null)
+      .count()) as any;
+
+    return toNumber(careTeamCount[0].count);
   }
 
   static async getForUser(

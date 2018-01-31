@@ -138,4 +138,29 @@ describe('care model', () => {
       });
     });
   });
+
+  describe('get count of users for patient', () => {
+    it('should return a count of care team members', async () => {
+      await transaction(User.knex(), async txn => {
+        const { clinic } = await setup(txn);
+        const user = await User.create(
+          createMockUser(11, clinic.id, userRole, 'care@care.com'),
+          txn,
+        );
+        const user2 = await User.create(
+          createMockUser(12, clinic.id, userRole, 'care2@care.com'),
+          txn,
+        );
+        const patient = await createPatient(createMockPatient(123, clinic.id), user.id, txn);
+
+        const careTeamCount1 = await CareTeam.getCountForPatient(patient.id, txn);
+        expect(careTeamCount1).toEqual(1);
+
+        await CareTeam.create({ userId: user2.id, patientId: patient.id }, txn);
+
+        const careTeamCount2 = await CareTeam.getCountForPatient(patient.id, txn);
+        expect(careTeamCount2).toEqual(2);
+      });
+    });
+  });
 });

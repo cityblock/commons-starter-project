@@ -16,6 +16,7 @@ import {
   setupUrgentTasks,
 } from '../../spec-helpers';
 import Clinic from '../clinic';
+import ComputedPatientStatus from '../computed-patient-status';
 import Patient from '../patient';
 import PatientConcern from '../patient-concern';
 import User from '../user';
@@ -177,20 +178,50 @@ describe('patient model', () => {
         expect(patientConcerns[0].concern.title).toEqual(adminTasksConcernTitle);
       });
     });
+
+    it('should create the initial ComputedPatientStatus', async () => {
+      await transaction(Patient.knex(), async txn => {
+        const { clinic } = await setup(txn);
+        const user = await User.create(createMockUser(11, clinic.id, userRole), txn);
+        const patient = await Patient.setup(
+          {
+            firstName: 'first',
+            middleName: 'middle',
+            lastName: 'last',
+            dateOfBirth: '02/02/1902',
+            zip: '12345',
+            gender: 'F',
+            homeClinicId: clinic.id,
+            consentToCall: false,
+            consentToText: false,
+            language: 'en',
+          },
+          user.id,
+          txn,
+        );
+
+        const computedPatientStatus = await ComputedPatientStatus.getForPatient(patient.id, txn);
+
+        expect(computedPatientStatus).not.toBeNull();
+        expect(computedPatientStatus!.updatedById).toEqual(user.id);
+      });
+    });
   });
 
   describe('patients', () => {
     interface IPatientsSetup {
       user: User;
+      patient1: Patient;
+      patient2: Patient;
     }
 
     async function patientsSetup(txn: Transaction): Promise<IPatientsSetup> {
       const { clinic } = await setup(txn);
       const user = await User.create(createMockUser(11, clinic.id, userRole), txn);
-      await createPatient(createMockPatient(123, clinic.id), user.id, txn);
-      await createPatient(createMockPatient(234, clinic.id), user.id, txn);
+      const patient1 = await createPatient(createMockPatient(123, clinic.id), user.id, txn);
+      const patient2 = await createPatient(createMockPatient(234, clinic.id), user.id, txn);
 
-      return { user };
+      return { user, patient1, patient2 };
     }
 
     it('should fetch patients', async () => {
@@ -208,6 +239,17 @@ describe('patient model', () => {
           ],
           total: 2,
         });
+      });
+    });
+
+    it('should fetch all patient ids', async () => {
+      await transaction(Patient.knex(), async txn => {
+        const { patient1, patient2 } = await patientsSetup(txn);
+        const patientIds = await Patient.getAllIds(txn);
+
+        expect(patientIds.length).toEqual(2);
+        expect(patientIds).toContain(patient1.id);
+        expect(patientIds).toContain(patient2.id);
       });
     });
 

@@ -5,6 +5,7 @@ import BaseModel from './base-model';
 import CarePlanSuggestion from './care-plan-suggestion';
 import CareTeam from './care-team';
 import Clinic from './clinic';
+import ComputedPatientStatus from './computed-patient-status';
 import Concern from './concern';
 import PatientAnswer from './patient-answer';
 import PatientConcern from './patient-concern';
@@ -139,6 +140,12 @@ export default class Patient extends BaseModel {
     };
   }
 
+  static async getAllIds(txn: Transaction): Promise<string[]> {
+    const patientIds = await this.query(txn).select('id');
+
+    return patientIds.map(patientId => patientId.id);
+  }
+
   static async getBy(input: IGetByOptions, txn: Transaction): Promise<Patient | null> {
     if (!input.field) {
       return null;
@@ -158,6 +165,9 @@ export default class Patient extends BaseModel {
   static async setup(input: IPatientEditableFields, userId: string, txn: Transaction) {
     const adminConcern = await Concern.findOrCreateByTitle(adminTasksConcernTitle, txn);
     const patient = await this.query(txn).insertAndFetch(input);
+
+    // Create the initial ComputedPatientStatus
+    await ComputedPatientStatus.updateForPatient(patient.id, userId, txn);
 
     // TODO: once we actually figure out our patient onboarding flow, let's move to the resolver
     await PatientConcern.create(

@@ -111,6 +111,27 @@ describe('progress note model', () => {
     });
   });
 
+  it('gets a count of progress notes for a user', async () => {
+    await transaction(ProgressNote.knex(), async txn => {
+      const { patient, user, progressNoteTemplate } = await setup(txn);
+
+      const progressNoteCount1 = await ProgressNote.getCountForPatient(patient.id, txn);
+      expect(progressNoteCount1).toEqual(0);
+
+      await ProgressNote.create(
+        {
+          patientId: patient.id,
+          userId: user.id,
+          progressNoteTemplateId: progressNoteTemplate.id,
+        },
+        txn,
+      );
+
+      const progressNoteCount2 = await ProgressNote.getCountForPatient(patient.id, txn);
+      expect(progressNoteCount2).toEqual(1);
+    });
+  });
+
   it('gets progress for supervisor review', async () => {
     await transaction(ProgressNote.knex(), async txn => {
       const { patient, user, progressNoteTemplate, clinic } = await setup(txn);

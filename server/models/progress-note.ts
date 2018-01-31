@@ -1,3 +1,4 @@
+import { toNumber } from 'lodash';
 import { Model, RelationMappings, Transaction } from 'objection';
 import BaseModel from './base-model';
 import Patient from './patient';
@@ -147,6 +148,14 @@ export default class ProgressNote extends BaseModel {
       query.whereNull('completedAt');
     }
     return await query;
+  }
+
+  static async getCountForPatient(patientId: string, txn: Transaction): Promise<number> {
+    const progressNoteCount = (await this.query(txn)
+      .where({ patientId, deletedAt: null })
+      .count()) as any;
+
+    return toNumber(progressNoteCount[0].count);
   }
 
   static async getAllForUser(

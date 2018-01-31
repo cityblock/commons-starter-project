@@ -179,6 +179,7 @@ export const taskTemplate = {
   createdAt: 'Thu Jul 13 2017 16:52:56 GMT-0400 (EDT)',
   updatedAt: 'Thu Jul 13 2017 16:52:56 GMT-0400 (EDT)',
   deletedAt: null,
+  CBOCategoryId: null,
 };
 
 export const goalSuggestionTemplate = {
@@ -325,6 +326,7 @@ export const carePlanSuggestionWithGoal = {
         createdAt: '2017-08-16T19:27:36.378Z',
         updatedAt: '2017-08-16T19:27:36.378Z',
         deletedAt: null,
+        CBOCategoryId: null,
       },
     ],
     createdAt: '2017-08-16T19:27:36.378Z',
@@ -360,6 +362,8 @@ export const task = {
   assignedTo: null,
   followers: [],
   patientGoal: null,
+  CBOReferralId: null,
+  CBOReferral: null,
 };
 
 export const comment = {

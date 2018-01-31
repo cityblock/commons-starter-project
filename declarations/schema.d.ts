@@ -2266,6 +2266,7 @@ declare module 'schema' {
     goalSuggestionTemplateId: string;
     priority?: IPriorityEnum | null;
     careTeamAssigneeRole?: string | null;
+    CBOCategoryId?: string | null;
   }
 
 
@@ -2277,6 +2278,7 @@ declare module 'schema' {
     goalSuggestionTemplateId?: string | null;
     priority?: IPriorityEnum | null;
     careTeamAssigneeRole?: string | null;
+    CBOCategoryId?: string | null;
     taskTemplateId: string;
   }
 

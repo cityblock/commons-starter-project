@@ -17,6 +17,7 @@ import {
 import * as formStyles from '../shared/css/forms.css';
 import * as loadingStyles from '../shared/css/loading-spinner.css';
 import * as taskTemplateStyles from '../shared/css/two-panel-right.css';
+import CBOCategorySelect from '../shared/library/cbo-category-select/cbo-category-select';
 import { IUpdatedField } from '../shared/util/updated-fields';
 import * as styles from './css/risk-area-create.css';
 
@@ -67,11 +68,6 @@ class TaskTemplateCreateEdit extends React.Component<allProps, IState> {
   constructor(props: allProps) {
     super(props);
 
-    this.onSubmit = this.onSubmit.bind(this);
-    this.onFieldUpdate = this.onFieldUpdate.bind(this);
-    this.onChange = this.onChange.bind(this);
-    this.onDeleteClick = this.onDeleteClick.bind(this);
-
     this.state = {
       loading: false,
       error: null,
@@ -85,6 +81,7 @@ class TaskTemplateCreateEdit extends React.Component<allProps, IState> {
             completedWithinInterval: null,
             careTeamAssigneeRole: null,
             goalSuggestionTemplateId: props.goalSuggestionTemplateId,
+            CBOCategoryId: null,
           },
     };
   }
@@ -108,7 +105,7 @@ class TaskTemplateCreateEdit extends React.Component<allProps, IState> {
     this.setState({ taskTemplate });
   }
 
-  onChange(event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) {
+  onChange = (event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const fieldName = event.target.name;
     let fieldValue: any = event.target.value;
 
@@ -119,9 +116,16 @@ class TaskTemplateCreateEdit extends React.Component<allProps, IState> {
     }
 
     this.onFieldUpdate({ fieldName, fieldValue });
-  }
+  };
 
-  async onSubmit(event: React.FormEvent<HTMLFormElement>) {
+  onCBOCategoryChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    const fieldValue = event.currentTarget.value;
+    const fieldName = 'CBOCategoryId';
+
+    this.onFieldUpdate({ fieldName, fieldValue });
+  };
+
+  onSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     const {
       goalSuggestionTemplateId,
       editTaskTemplate,
@@ -155,16 +159,23 @@ class TaskTemplateCreateEdit extends React.Component<allProps, IState> {
         });
       }
       const error = result.errors ? result.errors[0].message : null;
+
+      const taskTemplateData = taskTemplate
+        ? (result.data as taskTemplateEditMutation).taskTemplateEdit
+        : {
+            title: 'edit me!',
+            priority: null,
+            repeating: false,
+            completedWithinNumber: null,
+            completedWithinInterval: null,
+            careTeamAssigneeRole: null,
+          };
+
       this.setState({
         loading: false,
         error,
         taskTemplate: {
-          title: 'edit me!',
-          priority: null,
-          repeating: false,
-          completedWithinNumber: null,
-          completedWithinInterval: null,
-          careTeamAssigneeRole: null,
+          ...(taskTemplateData as taskTemplateCreateMutationVariables),
           goalSuggestionTemplateId,
         },
       });
@@ -172,9 +183,9 @@ class TaskTemplateCreateEdit extends React.Component<allProps, IState> {
       this.setState({ error: e.message, loading: false });
     }
     return false;
-  }
+  };
 
-  async onDeleteClick() {
+  onDeleteClick = async () => {
     const { taskTemplate, deleteTaskTemplate } = this.props;
 
     if (taskTemplate) {
@@ -184,7 +195,7 @@ class TaskTemplateCreateEdit extends React.Component<allProps, IState> {
         },
       });
     }
-  }
+  };
 
   render() {
     const { loading, taskTemplate, error } = this.state;
@@ -315,6 +326,13 @@ class TaskTemplateCreateEdit extends React.Component<allProps, IState> {
               <option value="psychiatrist">Psychiatrist</option>
             </select>
           </div>
+          <div className={taskTemplateStyles.smallText}>
+            Select a CBO category to make task template a CBO referral task:
+          </div>
+          <CBOCategorySelect
+            categoryId={taskTemplate.CBOCategoryId || ''}
+            onChange={this.onCBOCategoryChange}
+          />
         </div>
         <div className={styles.formBottom}>
           <div className={styles.formBottomContent}>

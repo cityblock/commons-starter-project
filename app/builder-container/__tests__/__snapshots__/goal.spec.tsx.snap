@@ -127,6 +127,7 @@ exports[`shallow rendered renders with goal 1`] = `
           goalSuggestionTemplateId="goal-id"
           taskTemplate={
             Object {
+              "CBOCategoryId": null,
               "careTeamAssigneeRole": "physician",
               "completedWithinInterval": "hour",
               "completedWithinNumber": 1,

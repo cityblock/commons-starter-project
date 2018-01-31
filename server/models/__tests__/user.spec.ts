@@ -242,7 +242,11 @@ describe('user model', () => {
       await User.create(createMockUser(11, clinic.id, userRole2, 'b@c.com'), txn);
       await User.create(createMockUser(11, clinic.id, userRole3, 'c@d.com'), txn);
 
-      expect(await User.getUserSummaryList(userRoleFilters, txn)).toMatchObject([
+      expect(
+        (await User.getUserSummaryList(userRoleFilters, txn)).sort((a, b) => {
+          return a.userRole < b.userRole ? 1 : -1;
+        }),
+      ).toMatchObject([
         {
           userRole,
         },

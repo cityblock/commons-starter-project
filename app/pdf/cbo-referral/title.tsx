@@ -18,11 +18,16 @@ const styles = StyleSheet.create({
     fontSize: variables.titleFontSize,
     marginTop: variables.mediumGutter,
   },
+  nameContainer: {
+    justifyContent: variables.flexCenter,
+  },
   name: {
+    flexWrap: variables.flexWrap,
     fontFamily: variables.baseticaBold,
     fontSize: variables.CBONameFontSize,
     color: variables.blueColor,
     marginTop: variables.bodyMarginTop,
+    width: variables.full,
   },
   divider: {
     marginTop: variables.mediumGutter,
@@ -35,7 +40,9 @@ const Title: React.StatelessComponent<IProps> = ({ CBOName }) => {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>{copy.communityReferral}</Text>
-      <Text style={styles.name}>{CBOName}</Text>
+      <View style={styles.nameContainer}>
+        <Text style={styles.name}>{CBOName}</Text>
+      </View>
       <View style={styles.divider}>
         <Divider />
       </View>

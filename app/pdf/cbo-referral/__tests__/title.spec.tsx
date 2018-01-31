@@ -11,7 +11,7 @@ describe('CBO Referral PDF Title', () => {
   const wrapper = shallow(<Title CBOName={CBOName} />);
 
   it('renders view containers', () => {
-    expect(wrapper.find(View).length).toBe(2);
+    expect(wrapper.find(View).length).toBe(3);
   });
 
   it('renders referral title text', () => {

@@ -9,6 +9,7 @@ mutation taskTemplateEdit(
   $repeating: Boolean
   $priority: Priority
   $careTeamAssigneeRole: String
+  $CBOCategoryId: ID
 ) {
   taskTemplateEdit(
     input: {
@@ -20,6 +21,7 @@ mutation taskTemplateEdit(
       repeating: $repeating
       priority: $priority
       careTeamAssigneeRole: $careTeamAssigneeRole
+      CBOCategoryId: $CBOCategoryId
     }
   ) {
     ...FullTaskTemplate

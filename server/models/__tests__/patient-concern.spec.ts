@@ -76,6 +76,22 @@ describe('patient concern model', () => {
       expect(patientConcern.order).toEqual(1);
       expect(await PatientConcern.get(patientConcern.id, txn)).toEqual(patientConcern);
       expect(await PatientConcern.getForPatient(patient.id, txn)).toEqual([patientConcern]);
+
+      // cannot add the same concern 2x
+      await expect(
+        PatientConcern.create(
+          {
+            concernId: concern.id,
+            patientId: patient.id,
+            userId: user.id,
+          },
+          txn,
+        ),
+      ).rejects.toMatchObject(
+        new Error(
+          'insert into "patient_concern" ("concernId", "id", "order", "patientId", "updatedAt") values ($1, $2, (select coalesce(max("order"), 0) + 1 from "patient_concern" where "patientId" = $3 and "deletedAt" is null), $4, $5) returning "id" - duplicate key value violates unique constraint "patientconcern_patientid_deletedat"',
+        ),
+      );
     });
   });
 
@@ -494,6 +510,17 @@ describe('patient concern model', () => {
       );
       const deletedPatientConcern = await PatientConcern.delete(patientConcern.id, user.id, txn);
       expect(deletedPatientConcern).not.toBeFalsy();
+
+      // Can re-add patient concern
+      const patientConcern2 = await PatientConcern.create(
+        {
+          concernId: concern.id,
+          patientId: patient.id,
+          userId: user.id,
+        },
+        txn,
+      );
+      expect(patientConcern2).not.toBeNull();
     });
   });
 

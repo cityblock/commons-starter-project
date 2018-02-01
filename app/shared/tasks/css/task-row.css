@@ -8,7 +8,7 @@
   flex-direction: row;
   align-items: center;
   border-radius: 5px;
-  border: 1px solid #fff;
+  border: 1px solid var(--border-color);
   color: var(--black-color);
   margin: 0 var(--small-gutter) 10px var(--small-gutter);
   position: relative;

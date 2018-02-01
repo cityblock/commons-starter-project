@@ -29,9 +29,9 @@
 }
 
 .large {
-  height: 50px;
+  height: var(--input-height);
   font-size: var(--medium-font-size);
-  border-radius: var(--big-border-radius);
+  border-radius: var(--border-radius);
 }
 
 .select.disabled {

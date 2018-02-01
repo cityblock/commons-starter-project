@@ -295,7 +295,7 @@ exports[`renders task template create-edit 1`] = `
       Select a CBO category to make task template a CBO referral task:
     </div>
     <select
-      className="select noValue categorySelect"
+      className="select large noValue"
       disabled={undefined}
       name={undefined}
       onChange={[Function]}

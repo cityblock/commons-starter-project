@@ -10,11 +10,12 @@
   padding: 0 var(--medium-gutter);
   display: inline-block;
   box-sizing: border-box;
-  height: 50px;
-  line-height: 48px;
+  height: var(--input-height);
+  font-size: var(--medium-font-size);
+  line-height: 50px;
   min-width: 100px;
   border: 1px solid var(--border-color);
-  border-radius: var(--big-border-radius);
+  border-radius: var(--border-radius);
   cursor: pointer;
   margin: 0 var(--extra-small-gutter) var(--extra-small-gutter) 0;
 }

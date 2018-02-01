@@ -26,13 +26,9 @@
 }
 
 .small {
-  height: 50px;
-  font-size: var(--default-font-size);
-  border-radius: var(--big-border-radius);
-}
-
-.small::-webkit-input-placeholder {
-  color: var(--gray-font-color);
+  height: var(--input-height);
+  font-size: var(--medium-font-size);
+  border-radius: var(--border-radius);
 }
 
 .disabled {
@@ -53,5 +49,5 @@
 }
 
 .empty::-webkit-input-placeholder {
-  color: var(--gray-background-color);
+  color: var(--white-font-color);
 }

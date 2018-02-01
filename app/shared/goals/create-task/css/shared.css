@@ -35,12 +35,6 @@ input.dueDate {
   width: 260px;
 }
 
-.shared {
-  border-radius: var(--border-radius);
-  font-size: var(--medium-font-size);
-  height: 52px;
-}
-
 .flex {
   display: flex;
   justify-content: space-between;

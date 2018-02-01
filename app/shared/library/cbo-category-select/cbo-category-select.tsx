@@ -4,7 +4,6 @@ import * as CBOCategoriesQuery from '../../../graphql/queries/get-cbo-categories
 import { FullCBOCategoryFragment } from '../../../graphql/types';
 import Option from '../option/option';
 import Select from '../select/select';
-import * as styles from './css/cbo-category-select.css';
 
 interface IProps {
   categoryId: string;
@@ -28,7 +27,7 @@ export const CBOCategorySelect: React.StatelessComponent<allProps> = (props: all
   ));
 
   return (
-    <Select value={categoryId} onChange={onChange} className={styles.categorySelect}>
+    <Select value={categoryId} onChange={onChange} large={true}>
       <Option value="" messageId={messageId} disabled={true} />
       {CBOCategoryOptions}
     </Select>

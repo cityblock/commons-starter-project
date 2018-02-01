@@ -31,7 +31,7 @@ export class TaskCBOAddInformation extends React.Component<allProps, IState> {
 
   setPopupVisibility = (isPopupVisible: boolean): (() => void) => {
     return (): void => {
-        this.setState({ isPopupVisible });
+      this.setState({ isPopupVisible });
     };
   };
 

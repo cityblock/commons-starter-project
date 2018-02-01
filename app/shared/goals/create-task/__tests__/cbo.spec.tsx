@@ -34,7 +34,7 @@ describe('Create Task Modal CBO Component', () => {
   it('renders select tag to choose CBO', () => {
     expect(wrapper.find(Select).length).toBe(1);
     expect(wrapper.find(Select).props().value).toBeFalsy();
-    expect(wrapper.find(Select).props().className).toBe('select');
+    expect(wrapper.find(Select).props().large).toBeTruthy();
   });
 
   it('renders placeholder option to select CBO', () => {

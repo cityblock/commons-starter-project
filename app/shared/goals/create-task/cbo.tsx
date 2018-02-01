@@ -32,7 +32,7 @@ export const CreateTaskCBO: React.StatelessComponent<allProps> = (props: allProp
   const isLoaded = !loading && !error;
   const messageId = isLoaded ? 'taskCreate.selectCBO' : 'select.loading';
   const isDefinedCBOSelected = !!CBOId && CBOId !== OTHER_CBO;
-  const selectStyles = classNames(styles.select, {
+  const selectStyles = classNames({
     [styles.removeBottomRadius]: isDefinedCBOSelected,
   });
 
@@ -49,7 +49,7 @@ export const CreateTaskCBO: React.StatelessComponent<allProps> = (props: allProp
   return (
     <div>
       <FormLabel messageId="taskCreate.CBO" gray={!!CBOId} topPadding={true} />
-      <Select value={CBOId} onChange={onChange('CBOId')} className={selectStyles}>
+      <Select value={CBOId} onChange={onChange('CBOId')} large={true} className={selectStyles}>
         <Option value="" messageId={messageId} disabled={true} />
         {CBOOptions}
         {isLoaded && <Option value={OTHER_CBO} messageId="taskCreate.otherCBO" />}

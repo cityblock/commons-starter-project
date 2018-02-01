@@ -99,16 +99,16 @@ export class ProgressNoteCosignature extends React.Component<allProps> {
           <RadioGroup>
             <RadioInput
               disabled={disabled}
-              value="true"
-              checked={!!requiresCosignature}
-              label="Yes"
+              value="false"
+              checked={!requiresCosignature}
+              label="No"
               onChange={this.onRadioChange}
             />
             <RadioInput
               disabled={disabled}
-              value="false"
-              checked={!requiresCosignature}
-              label="No"
+              value="true"
+              checked={!!requiresCosignature}
+              label="Yes"
               onChange={this.onRadioChange}
             />
           </RadioGroup>

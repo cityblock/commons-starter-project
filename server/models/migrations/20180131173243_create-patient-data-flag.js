@@ -30,10 +30,8 @@ exports.up = function(knex, Promise) {
 };
 
 exports.down = function(knex, Promise) {
-  return knex.schema
-    .dropTableIfExists('patient_data_flag')
-    .table('patient', table => {
-      table.dropColumn('coreIdentityValidatedAt');
-      table.dropColumn('coreIdentityValidatedById');
-    });
+  return knex.schema.dropTableIfExists('patient_data_flag').table('patient', table => {
+    table.dropColumn('coreIdentityValidatedAt');
+    table.dropColumn('coreIdentityValidatedById');
+  });
 };

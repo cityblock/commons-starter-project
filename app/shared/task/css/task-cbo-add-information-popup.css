@@ -1,12 +1,7 @@
-@import '../../../css/sizes';
+@import '../../css/sizes';
 
 .popup {
   border-radius: var(--big-border-radius);
-}
-
-.fields {
-  padding: var(--medium-gutter);
-  padding-top: 0;
 }
 
 .scroll {

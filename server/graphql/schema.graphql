@@ -1683,6 +1683,11 @@ input CBOReferralCreateInput {
 input CBOReferralEditInput {
   CBOReferralId: ID!
   taskId: ID!
+  categoryId: ID
+  CBOId: ID
+  name: String
+  url: String
+  diagnosis: String
   sentAt: String
   acknowledgedAt: String
 }

@@ -82,7 +82,10 @@ describe('Create Task Modal Fields', () => {
 
     expect(wrapper.find(CreateTaskCBOCategory).props().categoryId).toBe(categoryId);
     expect(wrapper.find(CreateTaskCBO).length).toBe(1);
-    expect(wrapper.find(CreateTaskCBO).props().taskFields).toEqual(newTaskFields);
+    expect(wrapper.find(CreateTaskCBO).props().CBOName).toEqual(newTaskFields.CBOName);
+    expect(wrapper.find(CreateTaskCBO).props().CBOId).toEqual(newTaskFields.CBOId);
+    expect(wrapper.find(CreateTaskCBO).props().CBOUrl).toEqual(newTaskFields.CBOUrl);
+    expect(wrapper.find(CreateTaskCBO).props().categoryId).toEqual(newTaskFields.categoryId);
     expect(wrapper.find(CreateTaskShared).length).toBe(1);
   });
 });

@@ -3,6 +3,11 @@
 mutation CBOReferralEdit(
   $CBOReferralId: ID!
   $taskId: ID!
+  $categoryId: ID
+  $CBOId: ID
+  $name: String
+  $url: String
+  $diagnosis: String
   $sentAt: String
   $acknowledgedAt: String
 ) {
@@ -10,6 +15,11 @@ mutation CBOReferralEdit(
     input: {
       CBOReferralId: $CBOReferralId
       taskId: $taskId
+      categoryId: $categoryId
+      CBOId: $CBOId
+      name: $name
+      url: $url
+      diagnosis: $diagnosis
       sentAt: $sentAt
       acknowledgedAt: $acknowledgedAt
     }

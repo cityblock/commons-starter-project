@@ -333,6 +333,9 @@ export const ENGLISH_TRANSLATION = {
     'task.assign': 'Assign Task:',
     'task.CBO': 'Community based organization:',
     'task.CBOAddInfo': 'Add information',
+    'task.CBOAddTitle': 'Add Information to CBO Referral',
+    'task.CBOAddDescription':
+      'Add additional information to generate a CBO referral form for this member',
     'task.concern': 'Concern:',
     'task.due': 'Due',
     'task.followers': 'Followers of this task:',

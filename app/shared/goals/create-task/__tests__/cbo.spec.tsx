@@ -10,15 +10,18 @@ import { OTHER_CBO } from '../create-task';
 import CreateTaskOtherCBO from '../other-cbo';
 
 describe('Create Task Modal CBO Component', () => {
-  const taskFields = {
-    CBOName: '',
-    CBOUrl: '',
-    CBOId: '',
-  } as any;
   const placeholderFn = () => true as any;
+  const categoryId = 'foodServices';
 
   const wrapper = shallow(
-    <CreateTaskCBO CBOs={[CBO, CBO2]} taskFields={taskFields} onChange={placeholderFn} />,
+    <CreateTaskCBO
+      CBOs={[CBO, CBO2]}
+      categoryId={categoryId}
+      CBOName=""
+      CBOUrl=""
+      CBOId=""
+      onChange={placeholderFn}
+    />,
   );
 
   it('renders label to select a CBO', () => {
@@ -106,11 +109,9 @@ describe('Create Task Modal CBO Component', () => {
 
   it('renders CBO detail if one selected', () => {
     wrapper.setProps({
-      taskFields: {
-        CBOName: '',
-        CBOUrl: '',
-        CBOId: CBO.id,
-      },
+      CBOName: '',
+      CBOUrl: '',
+      CBOId: CBO.id,
     });
 
     expect(wrapper.find(Select).props().value).toBe(CBO.id);
@@ -124,11 +125,9 @@ describe('Create Task Modal CBO Component', () => {
     const CBOUrl = 'www.agirlistiredofwritingtests.com';
 
     wrapper.setProps({
-      taskFields: {
-        CBOName,
-        CBOUrl,
-        CBOId: OTHER_CBO,
-      },
+      CBOName,
+      CBOUrl,
+      CBOId: OTHER_CBO,
     });
 
     expect(wrapper.find(CreateTaskOtherCBO).length).toBe(1);

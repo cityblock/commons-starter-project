@@ -375,12 +375,28 @@ export const comment = {
   updatedAt: 'Thu Jul 14 2017 16:52:56 GMT-0400 (EDT)',
 };
 
+export const patientConcernForGoal = {
+  id: 'nightKingMarchingSouth',
+  order: 1,
+  concernId: 'concern-id',
+  concern,
+  patientGoals: [],
+  patientId: 'patient-id',
+  patient,
+  startedAt: null,
+  completedAt: null,
+  createdAt: '2017-09-07T13:45:14.532Z',
+  updatedAt: '2017-09-07T13:45:14.532Z',
+  deletedAt: null,
+};
+
 export const patientGoal = {
   id: 'patient-goal-id',
   title: 'Goal Title',
   patientId: 'patient-id',
   patient,
-  patientConcernId: 'patient-concern-id',
+  patientConcernId: 'nightKingMarchingSouth',
+  patientConcern: patientConcernForGoal,
   goalSuggestionTemplateId: 'goal-suggestion-template-id',
   goalSuggestionTemplate,
   tasks: [task],

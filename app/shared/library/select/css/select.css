@@ -34,7 +34,7 @@
   border-radius: var(--big-border-radius);
 }
 
-.disabled {
+.select.disabled {
   cursor: default;
   color: var(--black-color);
   background: var(--gray-background-color);
@@ -45,11 +45,11 @@
   }
 }
 
-.noValue {
+.select.noValue {
   color: var(--light-gray-font-color);
 }
 
-.empty {
+.select.empty {
   background: var(--white-color);
   color: var(--gray-background-color);
   border-color: var(--border-color);

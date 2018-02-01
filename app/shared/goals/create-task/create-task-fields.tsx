@@ -18,7 +18,7 @@ interface IProps {
 
 const CreateTaskFields: React.StatelessComponent<IProps> = (props: IProps) => {
   const { patientId, onChange, onAssigneeClick, onPriorityClick, taskFields } = props;
-  const { taskType, categoryId, title } = taskFields;
+  const { taskType, categoryId, title, CBOId, CBOName, CBOUrl } = taskFields;
 
   let body = <div className={styles.placeholder} />;
   const sharedFields = (
@@ -44,7 +44,13 @@ const CreateTaskFields: React.StatelessComponent<IProps> = (props: IProps) => {
         <CreateTaskCBOCategory categoryId={categoryId} onChange={onChange('categoryId')} />
         {!!categoryId && (
           <div>
-            <CreateTaskCBO taskFields={taskFields} onChange={onChange} />
+            <CreateTaskCBO
+              categoryId={categoryId}
+              CBOId={CBOId}
+              CBOName={CBOName}
+              CBOUrl={CBOUrl}
+              onChange={onChange}
+            />
             {sharedFields}
           </div>
         )}

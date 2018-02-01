@@ -31,7 +31,7 @@ export async function CBOReferralEdit(
   await accessControls.isAllowedForUser(userRole, 'edit', 'CBOReferral');
   checkUserLoggedIn(userId);
 
-  const referral = await CBOReferral.edit(input, input.CBOReferralId, txn);
+  const referral = await CBOReferral.edit(input as any, input.CBOReferralId, txn);
 
   if (input.sentAt) {
     await TaskEvent.create(

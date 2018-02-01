@@ -15,6 +15,11 @@ interface ICBOReferralCreateFields {
 }
 
 interface ICBOReferralEditFields {
+  categoryId?: string;
+  CBOId?: string;
+  name?: string;
+  url?: string;
+  diagnosis?: string;
   sentAt?: string | null;
   acknowledgedAt?: string | null;
 }
@@ -94,8 +99,8 @@ export default class CBOReferral extends BaseModel {
     txn: Transaction,
     skipValidation: boolean = false,
   ): Promise<CBOReferral> {
-    // do not allow creating CBO referrals with either predefined or other CBO outside of
-    // from template
+    // do not allow creating CBO referrals without either predefined or other CBO unless
+    // creating referral from template
     if (!skipValidation && (!input.CBOId && !(input.name && input.url))) {
       return Promise.reject('Must select CBO from list or provide name and URL of other CBO');
     }

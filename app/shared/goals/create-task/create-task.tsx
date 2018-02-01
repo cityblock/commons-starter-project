@@ -98,8 +98,9 @@ export class CreateTaskModal extends React.Component<allProps, IState> {
 
   onClose = (): void => {
     // ensure that partially filled out fields don't persist
-    this.setState(this.getInitialState());
-    this.props.closePopup();
+    this.setState(this.getInitialState(), () => {
+      this.props.closePopup();
+    });
   };
 
   onAssigneeClick = (assignedToId: string): void => {
@@ -166,7 +167,6 @@ export class CreateTaskModal extends React.Component<allProps, IState> {
         const CBOReferralId = CBOReferral ? CBOReferral.data.CBOReferralCreate!.id : null;
         await this.submitTask(CBOReferralId, finalCBOName);
 
-        this.setState({ loading: false });
         this.onClose();
       } catch (err) {
         this.setState({ error: err.message, loading: false });

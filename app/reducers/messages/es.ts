@@ -311,6 +311,9 @@ export const SPANISH_TRANSLATION = {
     'task.assign': 'Asignar Tarea:',
     'task.CBO': 'Community based organization:',
     'task.CBOAddInfo': 'Add information',
+    'task.CBOAddTitle': 'Add information to CBO Referral',
+    'task.CBOAddDescription':
+      'Add additional information to generate a CBO referral form for this member',
     'task.concern': 'Concern:',
     'task.due': 'Debido',
     'task.followers': 'Seguidores de esta tarea:',

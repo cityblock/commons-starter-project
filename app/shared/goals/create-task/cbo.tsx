@@ -7,7 +7,7 @@ import FormLabel from '../../library/form-label/form-label';
 import Option from '../../library/option/option';
 import Select from '../../library/select/select';
 import CreateTaskCBODetail from './cbo-detail';
-import { ChangeEvent, ITaskFields, OTHER_CBO } from './create-task';
+import { ChangeEvent, OTHER_CBO } from './create-task';
 import * as styles from './css/shared.css';
 import CreateTaskOtherCBO from './other-cbo';
 
@@ -18,15 +18,17 @@ interface IGraphqlProps {
 }
 
 interface IProps {
-  taskFields: ITaskFields;
+  categoryId: string;
+  CBOId: string;
+  CBOName: string;
+  CBOUrl: string;
   onChange: (field: string) => (e: ChangeEvent) => void;
 }
 
 type allProps = IGraphqlProps & IProps;
 
 export const CreateTaskCBO: React.StatelessComponent<allProps> = (props: allProps) => {
-  const { CBOs, loading, error, taskFields, onChange } = props;
-  const { CBOName, CBOUrl, CBOId } = taskFields;
+  const { CBOs, loading, error, onChange, CBOName, CBOUrl, CBOId } = props;
   const isLoaded = !loading && !error;
   const messageId = isLoaded ? 'taskCreate.selectCBO' : 'select.loading';
   const isDefinedCBOSelected = !!CBOId && CBOId !== OTHER_CBO;
@@ -58,9 +60,9 @@ export const CreateTaskCBO: React.StatelessComponent<allProps> = (props: allProp
 };
 
 export default graphql<IGraphqlProps, IProps, allProps>(CBOsForCategoryQuery as any, {
-  skip: ({ taskFields }) => !taskFields.categoryId,
-  options: ({ taskFields }) => ({
-    variables: { categoryId: taskFields.categoryId },
+  skip: ({ categoryId }) => !categoryId,
+  options: ({ categoryId }) => ({
+    variables: { categoryId },
   }),
   props: ({ data }) => ({
     loading: data ? data.loading : false,

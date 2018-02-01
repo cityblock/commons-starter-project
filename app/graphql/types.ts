@@ -709,6 +709,11 @@ export interface CBOReferralCreateMutation {
 export interface CBOReferralEditMutationVariables {
   CBOReferralId: string,
   taskId: string,
+  categoryId?: string | null,
+  CBOId?: string | null,
+  name?: string | null,
+  url?: string | null,
+  diagnosis?: string | null,
   sentAt?: string | null,
   acknowledgedAt?: string | null,
 };

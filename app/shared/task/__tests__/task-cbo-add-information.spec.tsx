@@ -1,17 +1,37 @@
 import { shallow } from 'enzyme';
 import * as React from 'react';
 import Button from '../../library/button/button';
-import TaskCBOAddInformation from '../task-cbo-add-information';
+import { taskWithComment as task } from '../../util/test-data';
+import { TaskCBOAddInformation } from '../task-cbo-add-information';
+import TaskCBOAddInformationPopup, { IProps } from '../task-cbo-add-information-popup';
 
 describe('CBO Referral Task Add Information Button', () => {
   const taskId = 'defeatCersei';
 
-  const wrapper = shallow(<TaskCBOAddInformation taskId={taskId} />);
+  const wrapper = shallow(<TaskCBOAddInformation taskId={taskId} task={task} />);
 
   it('renders button to add information', () => {
     expect(wrapper.find(Button).length).toBe(1);
     expect(wrapper.find(Button).props().messageId).toBe('task.CBOAddInfo');
     expect(wrapper.find(Button).props().color).toBe('white');
     expect(wrapper.find(Button).props().className).toBe('button');
+  });
+
+  it('renders popup to add CBO referral information', () => {
+    expect(wrapper.find(TaskCBOAddInformationPopup).length).toBe(1);
+    expect(wrapper.find<IProps>(TaskCBOAddInformationPopup).props().isVisible).toBeFalsy();
+    expect(wrapper.find<IProps>(TaskCBOAddInformationPopup).props().task).toEqual(task);
+  });
+
+  it('opens popup to add information to CBO referral', () => {
+    wrapper.setState({ isPopupVisible: true });
+    expect(wrapper.find<IProps>(TaskCBOAddInformationPopup).props().isVisible).toBeTruthy();
+  });
+
+  it('renders nothing if loading', () => {
+    wrapper.setProps({ loading: true });
+
+    expect(wrapper.find(Button).length).toBe(0);
+    expect(wrapper.find(TaskCBOAddInformationPopup).length).toBe(0);
   });
 });

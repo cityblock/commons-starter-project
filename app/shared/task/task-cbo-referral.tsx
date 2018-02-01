@@ -1,6 +1,8 @@
 import * as React from 'react';
 import { FullCBOReferralFragment } from '../../graphql/types';
+import { isCBOReferralRequiringAction } from './helpers/helpers';
 import { Divider } from './task';
+import TaskCBOAddInformation from './task-cbo-add-information';
 import TaskCBODetail from './task-cbo-detail';
 import TaskCBOReferralView from './task-cbo-referral-view';
 
@@ -11,6 +13,11 @@ interface IProps {
 
 const TaskCBOReferral: React.StatelessComponent<IProps> = (props: IProps) => {
   const { CBOReferral, taskId } = props;
+  const isActionRequired = isCBOReferralRequiringAction(CBOReferral);
+
+  if (isActionRequired) {
+    return <TaskCBOAddInformation taskId={taskId} />;
+  }
 
   return (
     <div>

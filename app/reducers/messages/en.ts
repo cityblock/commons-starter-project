@@ -328,8 +328,11 @@ export const ENGLISH_TRANSLATION = {
     'taskDelete.bodyError': 'Please try again.',
     'taskDescription.empty': 'Click to add a task description...',
     'taskDescription.emptyCBO': 'Click to add a referral note...',
+    'taskDescription.emptyCBOAction':
+      'Add additional information to complete this form and generate a CBO referral form for this member.',
     'task.assign': 'Assign Task:',
     'task.CBO': 'Community based organization:',
+    'task.CBOAddInfo': 'Add information',
     'task.concern': 'Concern:',
     'task.due': 'Due',
     'task.followers': 'Followers of this task:',

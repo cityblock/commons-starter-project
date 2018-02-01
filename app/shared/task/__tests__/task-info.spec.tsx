@@ -15,7 +15,7 @@ describe('Task Info Component', () => {
       description={description}
       taskId={taskId}
       editTask={editTask}
-      isCBOReferral={false}
+      CBOReferralStatus="notCBOReferral"
     />,
   );
 
@@ -42,6 +42,12 @@ describe('Task Info Component', () => {
         .at(0)
         .props().placeholderMessageId,
     ).toBeFalsy();
+    expect(
+      wrapper
+        .find(EditableMultilineText)
+        .at(0)
+        .props().disabled,
+    ).toBeFalsy();
   });
 
   it('renders editable text for description', () => {
@@ -63,10 +69,16 @@ describe('Task Info Component', () => {
         .at(1)
         .props().placeholderMessageId,
     ).toBe('taskDescription.empty');
+    expect(
+      wrapper
+        .find(EditableMultilineText)
+        .at(1)
+        .props().disabled,
+    ).toBeFalsy();
   });
 
   it('changes description placeholder if viewing CBO Referral', () => {
-    wrapper.setProps({ isCBOReferral: true });
+    wrapper.setProps({ CBOReferralStatus: 'CBOReferral' });
 
     expect(
       wrapper
@@ -74,5 +86,40 @@ describe('Task Info Component', () => {
         .at(1)
         .props().placeholderMessageId,
     ).toBe('taskDescription.emptyCBO');
+    expect(
+      wrapper
+        .find(EditableMultilineText)
+        .at(0)
+        .props().disabled,
+    ).toBeFalsy();
+    expect(
+      wrapper
+        .find(EditableMultilineText)
+        .at(1)
+        .props().disabled,
+    ).toBeFalsy();
+  });
+
+  it('diasables editing and changes placeholder for CBO Referral requiring action', () => {
+    wrapper.setProps({ CBOReferralStatus: 'CBOReferralRequiringAction' });
+
+    expect(
+      wrapper
+        .find(EditableMultilineText)
+        .at(1)
+        .props().placeholderMessageId,
+    ).toBe('taskDescription.emptyCBOAction');
+    expect(
+      wrapper
+        .find(EditableMultilineText)
+        .at(0)
+        .props().disabled,
+    ).toBeTruthy();
+    expect(
+      wrapper
+        .find(EditableMultilineText)
+        .at(1)
+        .props().disabled,
+    ).toBeTruthy();
   });
 });

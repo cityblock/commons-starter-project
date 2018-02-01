@@ -13,6 +13,7 @@ interface IProps {
   textStyles?: string; // optional text styles to be applied on top of defaults
   editStyles?: string; // optional edit styles to be applied on top of defaults
   placeholderMessageId?: string; // optional translate message id for when field is empty
+  disabled?: boolean; // if true, does not allow editing on click
 }
 
 interface IState {
@@ -87,7 +88,14 @@ class EditableMultilineText extends React.Component<IProps, IState> {
   };
 
   render(): JSX.Element {
-    const { text, textStyles, editStyles, descriptionField, placeholderMessageId } = this.props;
+    const {
+      text,
+      textStyles,
+      editStyles,
+      descriptionField,
+      placeholderMessageId,
+      disabled,
+    } = this.props;
     const { editMode, editedText, error } = this.state;
 
     const fullTextStyles = classNames(
@@ -108,12 +116,12 @@ class EditableMultilineText extends React.Component<IProps, IState> {
       },
       editStyles,
     );
-
+    const handleClick = !disabled ? this.onClick : undefined;
     // if empty field and placeholder message id given, translate
     // corresponding placeholder message
     const displayText =
       text || !placeholderMessageId ? (
-        <p ref={p => (this.textBody = p)} className={fullTextStyles} onClick={this.onClick}>
+        <p ref={p => (this.textBody = p)} className={fullTextStyles} onClick={handleClick}>
           {text}
         </p>
       ) : (
@@ -122,7 +130,7 @@ class EditableMultilineText extends React.Component<IProps, IState> {
             <p
               ref={p => (this.textBody = p)}
               className={classNames(fullTextStyles, styles.placeholder)}
-              onClick={this.onClick}
+              onClick={handleClick}
             >
               {message}
             </p>

@@ -1,7 +1,9 @@
-import { FullTaskFragment } from '../../../graphql/types';
+import { FullCBOReferralFragment } from '../../../graphql/types';
 
-export const isCBOReferralRequiringAction = (task: FullTaskFragment): boolean => {
-  if (!task.CBOReferral) return false;
+export const isCBOReferralRequiringAction = (
+  CBOReferral: FullCBOReferralFragment | null,
+): boolean => {
+  if (!CBOReferral) return false;
 
-  return !task.CBOReferral.CBO && !(task.CBOReferral.name && task.CBOReferral.url);
+  return !CBOReferral.CBO && !(CBOReferral.name && CBOReferral.url);
 };

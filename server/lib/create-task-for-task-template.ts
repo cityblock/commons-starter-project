@@ -6,6 +6,8 @@ import Task, { ITaskEditableFields } from '../models/task';
 import TaskEvent from '../models/task-event';
 import TaskTemplate from '../models/task-template';
 
+export const CBO_REFERRAL_TITLE = 'CBO Referral: Action Required';
+
 export async function createTaskForTaskTemplate(
   taskTemplate: TaskTemplate,
   userId: string,
@@ -46,7 +48,7 @@ export async function createTaskForTaskTemplate(
   let referral = null;
   const taskVariables: ITaskEditableFields = {
     createdById: userId,
-    title: taskTemplate.title,
+    title: CBOCategoryId ? CBO_REFERRAL_TITLE : taskTemplate.title,
     dueAt,
     patientId,
     assignedToId,
@@ -59,6 +61,7 @@ export async function createTaskForTaskTemplate(
         categoryId: CBOCategoryId,
       },
       txn,
+      true, // skip validation
     );
     taskVariables.CBOReferralId = referral.id;
   }

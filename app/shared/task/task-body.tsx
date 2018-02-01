@@ -6,9 +6,11 @@ import {
 } from '../../graphql/types';
 import FormLabel from '../../shared/library/form-label/form-label';
 import * as styles from './css/task-body.css';
+import { isCBOReferralRequiringAction } from './helpers/helpers';
 import { Divider } from './task';
 import TaskCBOReferral from './task-cbo-referral';
 import TaskInfo from './task-info';
+import { CBOReferralStatusType } from './task-info';
 
 interface IProps {
   taskId: string;
@@ -22,6 +24,12 @@ interface IProps {
 
 const TaskBody: React.StatelessComponent<IProps> = (props: IProps) => {
   const { title, description, taskId, concern, goal, editTask, CBOReferral } = props;
+  let CBOReferralStatus = 'notCBOReferral';
+  if (!!CBOReferral) {
+    CBOReferralStatus = isCBOReferralRequiringAction(CBOReferral)
+      ? 'CBOReferralRequiringAction'
+      : 'CBOReferral';
+  }
 
   return (
     <div>
@@ -30,7 +38,7 @@ const TaskBody: React.StatelessComponent<IProps> = (props: IProps) => {
         title={title}
         description={description}
         editTask={editTask}
-        isCBOReferral={!!CBOReferral}
+        CBOReferralStatus={CBOReferralStatus as CBOReferralStatusType}
       />
       {!!CBOReferral && <TaskCBOReferral CBOReferral={CBOReferral} taskId={taskId} />}
       <Divider />

@@ -719,6 +719,19 @@ export const CBOReferralOther = {
   acknowledgedAt: null,
 };
 
+export const CBOReferralRequiringAction = {
+  id: 'wallHasComeDown',
+  categoryId: CBOCategory.id,
+  category: CBOCategory,
+  CBOId: null,
+  CBO: null,
+  name: "Night's Watch",
+  url: null,
+  diagnosis: null,
+  sentAt: null,
+  acknowledgedAt: null,
+};
+
 export const taskWithComment = {
   ...task,
   patient,

@@ -1,7 +1,7 @@
 import { shallow } from 'enzyme';
 import * as React from 'react';
 import FormLabel from '../../library/form-label/form-label';
-import { CBOReferral } from '../../util/test-data';
+import { CBOReferral, CBOReferralRequiringAction } from '../../util/test-data';
 import TaskBody from '../task-body';
 import TaskCBOReferral from '../task-cbo-referral';
 import TaskInfo from '../task-info';
@@ -93,7 +93,7 @@ describe('Task Body Component', () => {
 
   it('does not render CBO referral component if general task', () => {
     expect(wrapper.find(TaskCBOReferral).length).toBe(0);
-    expect(wrapper.find(TaskInfo).props().isCBOReferral).toBeFalsy();
+    expect(wrapper.find(TaskInfo).props().CBOReferralStatus).toBe('notCBOReferral');
   });
 
   it('renders CBO referral component if relevant', () => {
@@ -102,6 +102,12 @@ describe('Task Body Component', () => {
     expect(wrapper.find(TaskCBOReferral).length).toBe(1);
     expect(wrapper.find(TaskCBOReferral).props().CBOReferral).toEqual(CBOReferral);
     expect(wrapper.find(TaskCBOReferral).props().taskId).toBe(taskId);
-    expect(wrapper.find(TaskInfo).props().isCBOReferral).toBeTruthy();
+    expect(wrapper.find(TaskInfo).props().CBOReferralStatus).toBe('CBOReferral');
+  });
+
+  it('indicates if task information is for CBO referral requiring action', () => {
+    wrapper.setProps({ CBOReferral: CBOReferralRequiringAction });
+
+    expect(wrapper.find(TaskInfo).props().CBOReferralStatus).toBe('CBOReferralRequiringAction');
   });
 });

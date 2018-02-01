@@ -89,7 +89,17 @@ export default class CBOReferral extends BaseModel {
     return cboReferral;
   }
 
-  static async create(input: ICBOReferralCreateFields, txn: Transaction): Promise<CBOReferral> {
+  static async create(
+    input: ICBOReferralCreateFields,
+    txn: Transaction,
+    skipValidation: boolean = false,
+  ): Promise<CBOReferral> {
+    // do not allow creating CBO referrals with either predefined or other CBO outside of
+    // from template
+    if (!skipValidation && (!input.CBOId && !(input.name && input.url))) {
+      return Promise.reject('Must select CBO from list or provide name and URL of other CBO');
+    }
+
     return this.query(txn)
       .eager(EAGER_QUERY)
       .insertAndFetch(input);

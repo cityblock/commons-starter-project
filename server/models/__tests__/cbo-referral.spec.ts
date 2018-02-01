@@ -49,6 +49,28 @@ describe('CBO referral model', () => {
     });
   });
 
+  it('throws an error if trying to create CBO referral without enough information', async () => {
+    await transaction(CBOReferral.knex(), async txn => {
+      const { cbo } = await setup(txn);
+      const input = { name: CBOReferral.name, categoryId: cbo.categoryId };
+      await expect(CBOReferral.create(input, txn)).rejects.toMatch(
+        'Must select CBO from list or provide name and URL of other CBO',
+      );
+    });
+  });
+
+  it('does not throw an error if skipping validation for CBO referral', async () => {
+    await transaction(CBOReferral.knex(), async txn => {
+      const { cbo } = await setup(txn);
+      const input = { name: CBOReferral.name, categoryId: cbo.categoryId };
+
+      const cboReferral = await CBOReferral.create(input, txn, true);
+      expect(cboReferral.name).toBe(CBOReferral.name);
+      expect(cboReferral.CBOId).toBeNull();
+      expect(cboReferral.url).toBeNull();
+    });
+  });
+
   it('throws an error if CBO referral does not exist for a given id', async () => {
     await transaction(CBOReferral.knex(), async txn => {
       const fakeId = uuid();

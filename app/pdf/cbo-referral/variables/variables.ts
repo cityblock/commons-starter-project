@@ -21,6 +21,7 @@ const flexCenter = 'center';
 const flexEnd = 'flex-end';
 const flexSpaceBetween = 'space-between';
 const flexWrap = 'wrap';
+const flexGrow = 1;
 const headerFontSize = 10.5;
 const headerLineHeight = 14;
 const bodyFontSize = 12;
@@ -29,7 +30,7 @@ const smallFontSize = 8;
 const bodyMarginTop = 8;
 const bodyMarginLeft = 5;
 const titleFontSize = 16;
-const CBONameFontSize = 24;
+const CBONameFontSize = 20;
 const imageHeight = 60;
 
 export default {
@@ -56,6 +57,7 @@ export default {
   flexEnd,
   flexSpaceBetween,
   flexWrap,
+  flexGrow,
   headerFontSize,
   headerLineHeight,
   bodyFontSize,

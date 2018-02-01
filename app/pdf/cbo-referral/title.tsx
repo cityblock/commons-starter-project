@@ -20,14 +20,14 @@ const styles = StyleSheet.create({
   },
   nameContainer: {
     justifyContent: variables.flexCenter,
+    alignItems: variables.flexCenter,
+    flexGrow: variables.flexGrow,
   },
   name: {
-    flexWrap: variables.flexWrap,
     fontFamily: variables.baseticaBold,
     fontSize: variables.CBONameFontSize,
     color: variables.blueColor,
     marginTop: variables.bodyMarginTop,
-    width: variables.full,
   },
   divider: {
     marginTop: variables.mediumGutter,

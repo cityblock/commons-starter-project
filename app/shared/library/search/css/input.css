@@ -18,7 +18,7 @@
 }
 
 .iconContainer {
-  height: 52px;
+  height: var(--input-height);
   border: 1px solid var(--border-color);
   border-left: none;
   border-top-right-radius: var(--border-radius);

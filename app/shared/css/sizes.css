@@ -63,6 +63,7 @@
   --border-opaque: rgba(204, 204, 204, 0.4);
   --big-border-radius: 4px;
   --border-radius: 2px;
+  --input-height: 52px;
   --input: {
     border: 1px solid var(--border-color);
     -webkit-style: none;

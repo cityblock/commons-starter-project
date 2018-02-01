@@ -44,8 +44,8 @@ export default class CaptureOutput {
   }
 
   private captureStream(stream: NodeJS.Socket, callback: (str: string) => any) {
-    return this.hookStream(stream, (string: string) => {
-      callback(`${this.tag}${string}`);
+    return this.hookStream(stream, (s: string) => {
+      callback(`${this.tag}${s}`);
     });
   }
 

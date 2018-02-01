@@ -1,8 +1,8 @@
 import * as stackDriver from '@google-cloud/error-reporting';
-import { Engine } from 'apollo-engine';
 import * as basicAuth from 'basic-auth';
 import * as bodyParser from 'body-parser';
 import * as express from 'express';
+import GraphQLDog from 'graphql-dog';
 import { graphiqlExpress, graphqlExpress } from 'graphql-server-express';
 import * as kue from 'kue';
 import * as morgan from 'morgan';
@@ -50,18 +50,6 @@ export default async (app: express.Application, logger: Console) => {
     app.use(require('webpack-hot-middleware')(compiler));
   }
 
-  // Setup apollo engine
-  const engine = new Engine({
-    graphqlPort: Number(process.env.PORT) || 3000,
-    endpoint: '/graphql',
-    engineConfig: {
-      apiKey: config.ENGINE_API_KEY,
-    },
-  });
-
-  engine.start();
-  app.use(engine.expressMiddleware());
-
   // This adds request logging using some decent defaults.
   /* istanbul ignore next */
   if (config.NODE_ENV === 'development') {
@@ -85,13 +73,24 @@ export default async (app: express.Application, logger: Console) => {
   // Note: eventually we should add an asset hash, and cache our assets but currently causes problems
   // ie: add { maxAge: '24h', },
 
+  // should be near in this list to when we add the graphql middleware
+  if (process.env.DATADOG_API_KEY) {
+    GraphQLDog.instrumentSchema(schema);
+    app.use(GraphQLDog.middleware());
+  }
+
   app.get('/graphiql', graphiqlExpress({ endpointURL: '/graphql' }));
   app.use(
     '/graphql',
     bodyParser.json(),
     graphqlExpress(async (request: express.Request | undefined) => ({
       schema: schema as any,
-      context: await getGraphQLContext(request!, logger),
+      context: await getGraphQLContext(
+        request!,
+        logger,
+        undefined,
+        process.env.DATADOG_API_KEY ? GraphQLDog : null,
+      ),
       formatResponse,
       debug: false,
       // for apollo-engine

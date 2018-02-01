@@ -21,6 +21,7 @@ export interface IContext {
   userId?: string;
   logger: ILogger;
   txn: Transaction;
+  datadogContext: any;
 }
 
 export function formatRelayEdge(node: any, id: string) {
@@ -81,11 +82,13 @@ export async function getGraphQLContext(
   request: express.Request,
   logger: ILogger,
   existingTxn?: Transaction,
+  dataDog?: any,
 ): Promise<IContext> {
   const authToken = request.headers.auth_token as string;
   const db = await Db.get();
   const redoxApi = await RedoxApi.get();
 
+  const datadogContext = dataDog ? dataDog.context(request) : null;
   const txn = existingTxn || (await transaction.start(User));
   let userRole: UserRole = 'anonymousUser';
   let userId;
@@ -102,6 +105,7 @@ export async function getGraphQLContext(
         userRole: 'anonymousUser' as UserRole,
         logger,
         txn,
+        datadogContext,
       };
     }
   }
@@ -112,6 +116,7 @@ export async function getGraphQLContext(
     redoxApi,
     logger,
     txn,
+    datadogContext,
   };
 }
 

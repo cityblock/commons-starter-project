@@ -17,7 +17,7 @@
     ],
     "semicolon": [true, "always", "ignore-bound-class-methods"],
     "object-literal-key-quotes": [true, "as-needed"],
-    "variable-name": ["check-format", "allow-leading-underscore", "allow-pascal-case"],
+    "variable-name": [true, "ban-keywords", "allow-pascal-case"],
     "object-literal-sort-keys": false,
     "member-access": false,
     // no parens required around one param lambdas.

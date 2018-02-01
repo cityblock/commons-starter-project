@@ -20,7 +20,7 @@ export async function CBOReferralCreate(
   await accessControls.isAllowedForUser(userRole, 'create', 'CBOReferral');
   checkUserLoggedIn(userId);
 
-  return await CBOReferral.create(input, txn);
+  return CBOReferral.create(input, txn);
 }
 
 export async function CBOReferralEdit(

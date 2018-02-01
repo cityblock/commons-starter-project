@@ -26,7 +26,7 @@ export interface IDeleteRiskAreaGroupOptions {
 export async function resolveRiskAreaGroups(root: any, args: any, { db, userRole, txn }: IContext) {
   await accessControls.isAllowed(userRole, 'view', 'riskAreaGroup');
 
-  return await RiskAreaGroup.getAll(txn);
+  return RiskAreaGroup.getAll(txn);
 }
 
 export async function resolveRiskAreaGroup(
@@ -36,7 +36,7 @@ export async function resolveRiskAreaGroup(
 ) {
   await accessControls.isAllowed(userRole, 'view', 'riskAreaGroup');
 
-  return await RiskAreaGroup.get(args.riskAreaGroupId, txn);
+  return RiskAreaGroup.get(args.riskAreaGroupId, txn);
 }
 
 export async function resolveRiskAreaGroupForPatient(
@@ -47,7 +47,7 @@ export async function resolveRiskAreaGroupForPatient(
   await accessControls.isAllowed(userRole, 'view', 'riskAreaGroup');
   checkUserLoggedIn(userId);
 
-  return await RiskAreaGroup.getForPatient(args.riskAreaGroupId, args.patientId, txn);
+  return RiskAreaGroup.getForPatient(args.riskAreaGroupId, args.patientId, txn);
 }
 
 export async function riskAreaGroupCreate(
@@ -58,7 +58,7 @@ export async function riskAreaGroupCreate(
   await accessControls.isAllowed(userRole, 'create', 'riskAreaGroup');
   checkUserLoggedIn(userId);
 
-  return await RiskAreaGroup.create(input, txn);
+  return RiskAreaGroup.create(input, txn);
 }
 
 export async function riskAreaGroupEdit(
@@ -70,7 +70,7 @@ export async function riskAreaGroupEdit(
   checkUserLoggedIn(userId);
 
   // TODO: fix typings here
-  return await RiskAreaGroup.edit(args.input as any, args.input.riskAreaGroupId, txn);
+  return RiskAreaGroup.edit(args.input as any, args.input.riskAreaGroupId, txn);
 }
 
 export async function riskAreaGroupDelete(
@@ -81,5 +81,5 @@ export async function riskAreaGroupDelete(
   await accessControls.isAllowedForUser(userRole, 'delete', 'riskAreaGroup');
   checkUserLoggedIn(userId);
 
-  return await RiskAreaGroup.delete(args.input.riskAreaGroupId, txn);
+  return RiskAreaGroup.delete(args.input.riskAreaGroupId, txn);
 }

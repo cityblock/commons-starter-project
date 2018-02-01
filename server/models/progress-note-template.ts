@@ -64,7 +64,7 @@ export default class ProgressNoteTemplate extends BaseModel {
     progressNoteTemplateId: string,
     txn: Transaction,
   ): Promise<ProgressNoteTemplate> {
-    return await this.query(txn).patchAndFetchById(progressNoteTemplateId, progressNoteTemplate);
+    return this.query(txn).patchAndFetchById(progressNoteTemplateId, progressNoteTemplate);
   }
 
   static async delete(progressNoteTemplateId: string, txn: Transaction) {

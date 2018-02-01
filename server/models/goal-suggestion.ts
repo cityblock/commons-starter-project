@@ -219,9 +219,9 @@ export default class GoalSuggestion extends Model {
     }
 
     if (answerId) {
-      return await this.getForAnswer(answerId, txn);
+      return this.getForAnswer(answerId, txn);
     } else if (screeningToolScoreRangeId) {
-      return await this.getForScreeningToolScoreRange(screeningToolScoreRangeId, txn);
+      return this.getForScreeningToolScoreRange(screeningToolScoreRangeId, txn);
     } else {
       return [];
     }
@@ -245,9 +245,9 @@ export default class GoalSuggestion extends Model {
       .patch({ deletedAt: new Date().toISOString() });
 
     if (answerId) {
-      return await this.getForAnswer(answerId, txn);
+      return this.getForAnswer(answerId, txn);
     } else if (screeningToolScoreRangeId) {
-      return await this.getForScreeningToolScoreRange(screeningToolScoreRangeId, txn);
+      return this.getForScreeningToolScoreRange(screeningToolScoreRangeId, txn);
     } else {
       return [];
     }

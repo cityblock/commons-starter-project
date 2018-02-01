@@ -23,7 +23,7 @@ export async function resolvePatientLists(
   await accessControls.isAllowedForUser(userRole, 'view', 'patientList');
   checkUserLoggedIn(userId);
 
-  return await PatientList.getAll(txn);
+  return PatientList.getAll(txn);
 }
 
 export async function resolvePatientList(
@@ -34,7 +34,7 @@ export async function resolvePatientList(
   await accessControls.isAllowedForUser(userRole, 'view', 'patientList');
   checkUserLoggedIn(userId);
 
-  return await PatientList.get(args.patientListId, txn);
+  return PatientList.get(args.patientListId, txn);
 }
 
 export async function patientListCreate(
@@ -45,7 +45,7 @@ export async function patientListCreate(
   await accessControls.isAllowedForUser(userRole, 'create', 'patientList');
   checkUserLoggedIn(userId);
 
-  return await PatientList.create(input, txn);
+  return PatientList.create(input, txn);
 }
 
 export async function patientListEdit(
@@ -57,7 +57,7 @@ export async function patientListEdit(
   checkUserLoggedIn(userId);
 
   // TODO: fix typings here
-  return await PatientList.edit(input as any, input.patientListId, txn);
+  return PatientList.edit(input as any, input.patientListId, txn);
 }
 
 export async function patientListDelete(
@@ -68,5 +68,5 @@ export async function patientListDelete(
   await accessControls.isAllowedForUser(userRole, 'delete', 'patientList');
   checkUserLoggedIn(userId);
 
-  return await PatientList.delete(input.patientListId, txn);
+  return PatientList.delete(input.patientListId, txn);
 }

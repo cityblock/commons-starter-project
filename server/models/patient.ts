@@ -184,7 +184,7 @@ export default class Patient extends BaseModel {
   }
 
   static async edit(patient: IEditPatient, patientId: string, txn: Transaction): Promise<Patient> {
-    return await this.query(txn).patchAndFetchById(patientId, patient);
+    return this.query(txn).patchAndFetchById(patientId, patient);
   }
 
   // limit accidentally editing the athenaPatientId by only allowing it explicitly here

@@ -37,7 +37,7 @@ export async function patientConcernCreate(
   await accessControls.isAllowed(userRole, 'create', 'patientConcern');
   checkUserLoggedIn(userId);
 
-  return await PatientConcern.create({ userId, ...input } as any, txn);
+  return PatientConcern.create({ userId, ...input } as any, txn);
 }
 
 export async function resolvePatientConcern(
@@ -47,7 +47,7 @@ export async function resolvePatientConcern(
 ) {
   await accessControls.isAllowed(userRole, 'view', 'patientConcern');
 
-  return await PatientConcern.get(args.patientConcernId, txn);
+  return PatientConcern.get(args.patientConcernId, txn);
 }
 
 export async function resolvePatientConcernsForPatient(
@@ -57,7 +57,7 @@ export async function resolvePatientConcernsForPatient(
 ) {
   await accessControls.isAllowed(userRole, 'view', 'patientConcern');
 
-  return await PatientConcern.getForPatient(args.patientId, txn);
+  return PatientConcern.getForPatient(args.patientId, txn);
 }
 
 export async function patientConcernEdit(

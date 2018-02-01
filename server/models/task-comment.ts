@@ -74,13 +74,13 @@ export default class TaskComment extends BaseModel {
     { userId, taskId, body }: ITaskCommentOptions,
     txn: Transaction,
   ): Promise<TaskComment> {
-    return await this.query(txn)
+    return this.query(txn)
       .eager(EAGER_QUERY)
       .insert({ taskId, userId, body });
   }
 
   static async update(taskCommentId: string, body: string, txn: Transaction): Promise<TaskComment> {
-    return await this.query(txn)
+    return this.query(txn)
       .eager(EAGER_QUERY)
       .patchAndFetchById(taskCommentId, { body });
   }

@@ -58,7 +58,7 @@ export default class GoalSuggestionTemplate extends BaseModel {
   }
 
   static async create(input: IGoalSuggestionTemplateEditableFields, txn: Transaction) {
-    return await this.query(txn)
+    return this.query(txn)
       .eager('taskTemplates')
       .modifyEager('taskTemplates', builder => builder.where('deletedAt', null))
       .insertAndFetch(input);
@@ -69,7 +69,7 @@ export default class GoalSuggestionTemplate extends BaseModel {
     goalSuggestionTemplate: Partial<IGoalSuggestionTemplateEditableFields>,
     txn: Transaction,
   ): Promise<GoalSuggestionTemplate> {
-    return await this.query(txn)
+    return this.query(txn)
       .eager('taskTemplates')
       .modifyEager('taskTemplates', builder => builder.where('deletedAt', null))
       .patchAndFetchById(goalSuggestionTemplateId, goalSuggestionTemplate);
@@ -79,7 +79,7 @@ export default class GoalSuggestionTemplate extends BaseModel {
     { orderBy, order }: IGoalSuggestionTemplateOrderOptions,
     txn: Transaction,
   ): Promise<GoalSuggestionTemplate[]> {
-    return await this.query(txn)
+    return this.query(txn)
       .where('deletedAt', null)
       .eager('taskTemplates')
       .modifyEager('taskTemplates', builder => builder.where('deletedAt', null))

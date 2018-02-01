@@ -155,7 +155,7 @@ export default class PatientScreeningToolSubmission extends BaseModel {
       txn,
     );
 
-    return await this.query(txn)
+    return this.query(txn)
       .eager(EAGER_QUERY)
       .insertAndFetch({ ...input, progressNoteId: progressNote.id });
   }
@@ -178,7 +178,7 @@ export default class PatientScreeningToolSubmission extends BaseModel {
       });
 
     if (!existingScreeningToolSubmission) {
-      return await this.create(input, txn);
+      return this.create(input, txn);
     }
 
     return existingScreeningToolSubmission;
@@ -260,7 +260,7 @@ export default class PatientScreeningToolSubmission extends BaseModel {
     txn: Transaction,
   ): Promise<PatientScreeningToolSubmission[]> {
     // Note that this returns *all* submissions (including deleted ones)
-    return await this.query(txn)
+    return this.query(txn)
       .eager(EAGER_QUERY)
       .where({ patientId })
       .orderBy('createdAt', 'asc');
@@ -295,7 +295,7 @@ export default class PatientScreeningToolSubmission extends BaseModel {
     txn: Transaction,
   ): Promise<PatientScreeningToolSubmission[]> {
     // Note that this returns *all* submissions (including deleted ones)
-    return await this.query(txn)
+    return this.query(txn)
       .eager(EAGER_QUERY)
       .where({ patientId, screeningToolId })
       .orderBy('createdAt', 'asc');
@@ -327,7 +327,7 @@ export default class PatientScreeningToolSubmission extends BaseModel {
 
   static async getAll(txn: Transaction): Promise<PatientScreeningToolSubmission[]> {
     // Note that this returns only current submissions (not deleted ones)
-    return await this.query(txn)
+    return this.query(txn)
       .eager(EAGER_QUERY)
       .where({ deletedAt: null })
       .orderBy('createdAt', 'asc');
@@ -356,7 +356,7 @@ export default class PatientScreeningToolSubmission extends BaseModel {
     progressNoteId: string,
     txn: Transaction,
   ): Promise<PatientScreeningToolSubmission[]> {
-    return await this.query(txn)
+    return this.query(txn)
       .eager(EAGER_QUERY)
       .where('progressNoteId', progressNoteId);
   }

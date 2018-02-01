@@ -24,7 +24,7 @@ export async function quickCallCreate(
   await accessControls.isAllowed(userRole, 'create', 'quickCall');
   checkUserLoggedIn(userId);
 
-  return await QuickCall.create({ ...input, userId: userId! }, txn);
+  return QuickCall.create({ ...input, userId: userId! }, txn);
 }
 
 export async function resolveQuickCall(
@@ -35,7 +35,7 @@ export async function resolveQuickCall(
   await accessControls.isAllowed(userRole, 'view', 'quickCall');
   checkUserLoggedIn(userId);
 
-  return await QuickCall.get(args.quickCallId, txn);
+  return QuickCall.get(args.quickCallId, txn);
 }
 
 export async function resolveQuickCallsForProgressNote(
@@ -46,5 +46,5 @@ export async function resolveQuickCallsForProgressNote(
   await accessControls.isAllowed(userRole, 'view', 'quickCall');
   checkUserLoggedIn(userId);
 
-  return await QuickCall.getQuickCallsForProgressNote(args.progressNoteId, txn);
+  return QuickCall.getQuickCallsForProgressNote(args.progressNoteId, txn);
 }

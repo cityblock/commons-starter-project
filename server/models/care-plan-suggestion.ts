@@ -174,7 +174,7 @@ export default class CarePlanSuggestion extends BaseModel {
     concernId: string,
     txn: Transaction,
   ): Promise<CarePlanSuggestion | undefined> {
-    return await this.query(txn)
+    return this.query(txn)
       .eager(EAGER_QUERY)
       .findOne({ patientId, concernId, acceptedAt: null, dismissedAt: null });
   }
@@ -183,7 +183,7 @@ export default class CarePlanSuggestion extends BaseModel {
     input: ICarePlanSuggestionCreateArgs,
     txn: Transaction,
   ): Promise<CarePlanSuggestion> {
-    return await this.query(txn)
+    return this.query(txn)
       .eager(EAGER_QUERY)
       .insertAndFetch(input);
   }
@@ -193,7 +193,7 @@ export default class CarePlanSuggestion extends BaseModel {
     txn: Transaction,
   ): Promise<CarePlanSuggestion[]> {
     const { suggestions } = input;
-    return await this.query(txn).insertGraphAndFetch(suggestions);
+    return this.query(txn).insertGraphAndFetch(suggestions);
   }
 
   static async getForPatient(patientId: string, txn: Transaction): Promise<CarePlanSuggestion[]> {
@@ -204,7 +204,7 @@ export default class CarePlanSuggestion extends BaseModel {
       .select('concernId')
       .orderBy('createdAt', 'asc');
 
-    return await this.query(txn)
+    return this.query(txn)
       .eager(EAGER_QUERY)
       .where({
         dismissedAt: null,
@@ -254,7 +254,7 @@ export default class CarePlanSuggestion extends BaseModel {
           acceptedById,
         });
     }
-    return await this.get(carePlanSuggestion.id, txn);
+    return this.get(carePlanSuggestion.id, txn);
   }
 
   static async dismiss(
@@ -263,7 +263,7 @@ export default class CarePlanSuggestion extends BaseModel {
   ): Promise<CarePlanSuggestion> {
     const { carePlanSuggestionId, dismissedById, dismissedReason } = input;
 
-    return await this.query(txn)
+    return this.query(txn)
       .eager(EAGER_QUERY)
       .patchAndFetchById(carePlanSuggestionId, {
         dismissedById,

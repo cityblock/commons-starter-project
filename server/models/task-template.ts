@@ -69,7 +69,7 @@ export default class TaskTemplate extends BaseModel {
   }
 
   static async create(input: ITaskTemplateEditableFields, txn: Transaction) {
-    return await this.query(txn).insertAndFetch(input);
+    return this.query(txn).insertAndFetch(input);
   }
 
   static async edit(
@@ -77,12 +77,12 @@ export default class TaskTemplate extends BaseModel {
     taskTemplate: Partial<ITaskTemplateEditableFields>,
     txn: Transaction,
   ): Promise<TaskTemplate> {
-    return await this.query(txn).patchAndFetchById(taskTemplateId, taskTemplate);
+    return this.query(txn).patchAndFetchById(taskTemplateId, taskTemplate);
   }
 
   // TODO: paginate?
   static async getAll(txn: Transaction): Promise<TaskTemplate[]> {
-    return await this.query(txn).where('deletedAt', null);
+    return this.query(txn).where('deletedAt', null);
   }
 
   static async delete(taskTemplateId: string, txn: Transaction): Promise<TaskTemplate> {

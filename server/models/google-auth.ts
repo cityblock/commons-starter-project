@@ -42,9 +42,9 @@ export default class GoogleAuth extends BaseModel {
       .where({ userId: options.userId })
       .first();
     if (existingGoogleAuth) {
-      return await this.query(txn).updateAndFetchById(existingGoogleAuth.id, options);
+      return this.query(txn).updateAndFetchById(existingGoogleAuth.id, options);
     }
-    return await this.query(txn).insertAndFetch(options);
+    return this.query(txn).insertAndFetch(options);
   }
 }
 /* tslint:enable:member-ordering */

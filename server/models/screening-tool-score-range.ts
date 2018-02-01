@@ -109,7 +109,7 @@ export default class ScreeningToolScoreRange extends BaseModel {
       ...omit<IScreeningToolScoreRangeCreateFields>(input, ['minimumScore', 'maximumScore']),
     };
 
-    return await this.query(txn)
+    return this.query(txn)
       .eager(EAGER_QUERY)
       .insertAndFetch(filtered);
   }
@@ -153,7 +153,7 @@ export default class ScreeningToolScoreRange extends BaseModel {
       };
     }
 
-    return await this.query(txn)
+    return this.query(txn)
       .eager(EAGER_QUERY)
       .patchAndFetchById(screeningToolScoreRangeId, filtered);
   }
@@ -177,7 +177,7 @@ export default class ScreeningToolScoreRange extends BaseModel {
     screeningToolId: string,
     txn: Transaction,
   ): Promise<ScreeningToolScoreRange[]> {
-    return await this.query(txn)
+    return this.query(txn)
       .eager(EAGER_QUERY)
       .where({ deletedAt: null, screeningToolId });
   }
@@ -201,7 +201,7 @@ export default class ScreeningToolScoreRange extends BaseModel {
   }
 
   static async getAll(txn: Transaction): Promise<ScreeningToolScoreRange[]> {
-    return await this.query(txn)
+    return this.query(txn)
       .eager(EAGER_QUERY)
       .where({ deletedAt: null });
   }

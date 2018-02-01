@@ -63,7 +63,7 @@ export async function patientGoalCreate(
 
   validInput.userId = userId;
 
-  return await PatientGoal.create(validInput, txn);
+  return PatientGoal.create(validInput, txn);
 }
 
 export async function resolvePatientGoal(
@@ -73,7 +73,7 @@ export async function resolvePatientGoal(
 ) {
   await accessControls.isAllowed(userRole, 'view', 'patientGoal');
 
-  return await PatientGoal.get(args.patientGoalId, txn);
+  return PatientGoal.get(args.patientGoalId, txn);
 }
 
 export async function resolvePatientGoalsForPatient(
@@ -83,7 +83,7 @@ export async function resolvePatientGoalsForPatient(
 ) {
   await accessControls.isAllowed(userRole, 'view', 'patientGoal');
 
-  return await PatientGoal.getForPatient(args.patientId, txn);
+  return PatientGoal.getForPatient(args.patientId, txn);
 }
 
 export async function patientGoalEdit(

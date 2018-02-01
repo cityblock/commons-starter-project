@@ -160,7 +160,7 @@ export default class TaskEvent extends BaseModel {
     progressNoteId: string,
     txn: Transaction,
   ): Promise<TaskEvent[]> {
-    return await this.query(txn)
+    return this.query(txn)
       .eager(EAGER_QUERY)
       .where({ progressNoteId, deletedAt: null });
   }

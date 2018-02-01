@@ -61,7 +61,7 @@ export async function userCreate(root: any, { input }: IUserCreateArgs, context:
   if (user) {
     throw new Error(`Cannot create account: Email already exists for ${email}`);
   } else {
-    return await User.create(
+    return User.create(
       {
         email,
         userRole: 'healthCoach',
@@ -87,7 +87,7 @@ export async function userEditRole(root: any, { input }: IUserEditRoleOptions, c
     throw new Error('User not found');
   }
 
-  return await User.updateUserRole(user.id, userRole as UserRole, txn);
+  return User.updateUserRole(user.id, userRole as UserRole, txn);
 }
 
 export async function userDelete(
@@ -114,7 +114,7 @@ export async function resolveUser(
 ) {
   await accessControls.isAllowed(userRole, 'view', 'user');
 
-  return await User.get(args.userId, txn);
+  return User.get(args.userId, txn);
 }
 
 export async function resolveCurrentUser(
@@ -125,7 +125,7 @@ export async function resolveCurrentUser(
   await accessControls.isAllowed(userRole, 'view', 'user');
   checkUserLoggedIn(userId);
 
-  return await User.get(userId!, txn);
+  return User.get(userId!, txn);
 }
 
 export async function currentUserEdit(
@@ -136,7 +136,7 @@ export async function currentUserEdit(
   await accessControls.isAllowedForUser(userRole, 'edit', 'user', userId, userId);
   checkUserLoggedIn(userId);
 
-  return await User.update(
+  return User.update(
     userId!,
     {
       locale: (args.input.locale as Locale) || undefined,
@@ -193,7 +193,7 @@ export async function resolveUserSummaryList(
   { db, userRole, txn }: IContext,
 ) {
   await accessControls.isAllowed(userRole, 'view', 'allUsers');
-  return await User.getUserSummaryList(userRoleFilters, txn);
+  return User.getUserSummaryList(userRoleFilters, txn);
 }
 
 // disabling isAllowed check for login endpoint so users can log in

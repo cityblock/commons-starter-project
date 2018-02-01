@@ -415,7 +415,7 @@ export default class PatientAnswer extends BaseModel {
     patientAnswerId: string,
     txn: Transaction,
   ): Promise<PatientAnswer> {
-    return await this.query(txn)
+    return this.query(txn)
       .eager(EAGER_QUERY)
       .patchAndFetchById(patientAnswerId, { applicable });
   }

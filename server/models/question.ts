@@ -302,9 +302,9 @@ export default class Question extends BaseModel {
 
     // It's possible the editInput contains no keys, so we protect against invalid SQL here
     if (isEmpty(editInput)) {
-      return await this.get(questionId, txn);
+      return this.get(questionId, txn);
     } else {
-      return await this.modifyEager(this.query(txn)).patchAndFetchById(questionId, editInput);
+      return this.modifyEager(this.query(txn)).patchAndFetchById(questionId, editInput);
     }
   }
 

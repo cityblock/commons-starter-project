@@ -33,7 +33,7 @@ export async function questionConditionCreate(
   checkUserLoggedIn(userId);
 
   // TODO: fix typings here
-  return await QuestionCondition.create(input as any, txn);
+  return QuestionCondition.create(input as any, txn);
 }
 
 export async function resolveQuestionCondition(
@@ -43,7 +43,7 @@ export async function resolveQuestionCondition(
 ) {
   await accessControls.isAllowed(userRole, 'view', 'questionCondition');
 
-  return await QuestionCondition.get(args.questionConditionId, txn);
+  return QuestionCondition.get(args.questionConditionId, txn);
 }
 
 export async function questionConditionEdit(

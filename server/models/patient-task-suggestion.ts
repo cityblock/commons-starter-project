@@ -106,7 +106,7 @@ export default class PatientTaskSuggestion extends BaseModel {
     input: IPatientTaskSuggestionCreateArgs,
     txn: Transaction,
   ): Promise<PatientTaskSuggestion> {
-    return await this.query(txn)
+    return this.query(txn)
       .eager(EAGER_QUERY)
       .insertAndFetch(input);
   }
@@ -117,14 +117,14 @@ export default class PatientTaskSuggestion extends BaseModel {
   ): Promise<PatientTaskSuggestion[]> {
     const { suggestions } = input;
 
-    return await this.query(txn).insertGraphAndFetch(suggestions);
+    return this.query(txn).insertGraphAndFetch(suggestions);
   }
 
   static async getForPatient(
     patientId: string,
     txn: Transaction,
   ): Promise<PatientTaskSuggestion[]> {
-    return await this.query(txn)
+    return this.query(txn)
       .eager(EAGER_QUERY)
       .where({
         dismissedAt: null,
@@ -139,7 +139,7 @@ export default class PatientTaskSuggestion extends BaseModel {
     acceptedById: string,
     txn: Transaction,
   ): Promise<PatientTaskSuggestion> {
-    return await this.query(txn)
+    return this.query(txn)
       .eager(EAGER_QUERY)
       .patchAndFetchById(patientTaskSuggestionId, {
         acceptedAt: new Date().toISOString(),
@@ -152,7 +152,7 @@ export default class PatientTaskSuggestion extends BaseModel {
     txn: Transaction,
   ): Promise<PatientTaskSuggestion> {
     const { patientTaskSuggestionId, dismissedById, dismissedReason } = input;
-    return await this.query(txn)
+    return this.query(txn)
       .eager(EAGER_QUERY)
       .patchAndFetchById(patientTaskSuggestionId, {
         dismissedById,

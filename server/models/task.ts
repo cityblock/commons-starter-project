@@ -240,7 +240,7 @@ export default class Task extends BaseModel {
   }
 
   static async create(input: ITaskEditableFields, txn: Transaction) {
-    return await this.query(txn)
+    return this.query(txn)
       .eager(EAGER_QUERY)
       .modifyEager('followers', builder => builder.where('task_follower.deletedAt', null))
       .insertAndFetch(input);
@@ -251,7 +251,7 @@ export default class Task extends BaseModel {
     task: Partial<ITaskEditableFields>,
     txn: Transaction,
   ): Promise<Task> {
-    return await this.query(txn)
+    return this.query(txn)
       .eager(EAGER_QUERY)
       .modifyEager('followers', builder => {
         builder.where('task_follower.deletedAt', null);
@@ -296,7 +296,7 @@ export default class Task extends BaseModel {
   }
 
   static async getTasksDueSoonForPatient(patientId: string, userId: string, txn: Transaction) {
-    return await this.query(txn)
+    return this.query(txn)
       .whereRaw('task."dueAt" < now() + interval \'1 day\'')
       .andWhere({ patientId, assignedToId: userId, deletedAt: null })
       .eager('followers')
@@ -311,7 +311,7 @@ export default class Task extends BaseModel {
     userId: string,
     txn: Transaction,
   ) {
-    return await this.query(txn)
+    return this.query(txn)
       .whereRaw(
         `task.id IN (
         SELECT task.id
@@ -333,7 +333,7 @@ export default class Task extends BaseModel {
   }
 
   static async getTaskIdsWithNotifications(userId: string, txn: Transaction) {
-    return await this.query(txn)
+    return this.query(txn)
       .distinct('task.id')
       .from('task')
       .joinRaw(

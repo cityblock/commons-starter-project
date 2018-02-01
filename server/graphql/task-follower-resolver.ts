@@ -43,7 +43,7 @@ export async function taskUserFollow(
     txn,
   );
 
-  return await Task.get(taskId, txn);
+  return Task.get(taskId, txn);
 }
 
 export async function taskUserUnfollow(
@@ -75,7 +75,7 @@ export async function taskUserUnfollow(
     txn,
   );
 
-  return await Task.get(taskId, txn);
+  return Task.get(taskId, txn);
 }
 
 export interface ICurrentUserTasksFilterOptions extends IPaginationOptions {

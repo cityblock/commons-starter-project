@@ -77,7 +77,7 @@ export default class ConcernDiagnosisCode extends BaseModel {
       .where({ concernId, diagnosisCodeId, deletedAt: null })
       .patch({ deletedAt: new Date().toISOString() });
 
-    return await Concern.get(concernId, txn);
+    return Concern.get(concernId, txn);
   }
 }
 /* tslint:enable:member-ordering */

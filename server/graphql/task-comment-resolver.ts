@@ -151,5 +151,5 @@ export async function resolveTaskComment(
   await accessControls.isAllowed(userRole, 'view', 'task');
   checkUserLoggedIn(userId);
 
-  return await TaskComment.get(args.taskCommentId, txn);
+  return TaskComment.get(args.taskCommentId, txn);
 }

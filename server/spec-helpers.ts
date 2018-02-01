@@ -103,7 +103,7 @@ export async function createRiskArea(input: ICreateRiskArea, txn: Transaction): 
   const title = input.title || 'Viscerion is a zombie dragon';
   const order = input.order || 1;
   const riskAreaGroup = await RiskAreaGroup.create(createMockRiskAreaGroup(), txn);
-  return await RiskArea.create(
+  return RiskArea.create(
     {
       title,
       assessmentType: 'manual',
@@ -302,7 +302,7 @@ export async function createTask(
   dueAt: string,
   txn: Transaction,
 ) {
-  return await Task.create(
+  return Task.create(
     {
       title: 'Defeat Night King',
       dueAt,
@@ -1108,7 +1108,7 @@ export async function createFullRiskAreaGroupAssociations(
 }
 
 export async function createCBOCategory(txn: Transaction, title: string = 'Food Services') {
-  return await CBOCategory.create(
+  return CBOCategory.create(
     {
       title,
     },
@@ -1139,7 +1139,7 @@ export async function createCBO(txn: Transaction, name: string = "Night's Watch"
 export async function createCBOReferral(txn: Transaction) {
   const cbo = await createCBO(txn);
 
-  return await CBOReferral.create(
+  return CBOReferral.create(
     {
       categoryId: cbo.categoryId,
       CBOId: cbo.id,

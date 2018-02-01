@@ -152,11 +152,11 @@ export default class PatientConcern extends BaseModel {
       });
     }
 
-    return await this.getForPatient(patientId, txn);
+    return this.getForPatient(patientId, txn);
   }
 
   static async getForPatient(patientId: string, txn: Transaction): Promise<PatientConcern[]> {
-    return await this.query(txn)
+    return this.query(txn)
       .eager(EAGER_QUERY)
       .modifyEager('patientGoals', builder => {
         builder.where('deletedAt', null);

@@ -78,11 +78,11 @@ export async function resolveQuestions(
   await accessControls.isAllowed(userRole, 'view', 'question');
 
   if (args.filterType === 'riskArea') {
-    return await Question.getAllForRiskArea(args.filterId, txn);
+    return Question.getAllForRiskArea(args.filterId, txn);
   } else if (args.filterType === 'screeningTool') {
-    return await Question.getAllForScreeningTool(args.filterId, txn);
+    return Question.getAllForScreeningTool(args.filterId, txn);
   } else if (args.filterType === 'progressNoteTemplate') {
-    return await Question.getAllForProgressNoteTemplate(args.filterId, txn);
+    return Question.getAllForProgressNoteTemplate(args.filterId, txn);
   } else {
     throw new Error('invalid filter type');
   }
@@ -95,7 +95,7 @@ export async function resolveQuestion(
 ) {
   await accessControls.isAllowed(userRole, 'view', 'question');
 
-  return await Question.get(args.questionId, txn);
+  return Question.get(args.questionId, txn);
 }
 
 export async function questionEdit(

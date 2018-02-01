@@ -23,7 +23,7 @@ export async function resolveCBOs(
   await accessControls.isAllowedForUser(userRole, 'view', 'CBO');
   checkUserLoggedIn(userId);
 
-  return await CBO.getAll(txn);
+  return CBO.getAll(txn);
 }
 
 export async function resolveCBOsForCategory(
@@ -34,7 +34,7 @@ export async function resolveCBOsForCategory(
   await accessControls.isAllowedForUser(userRole, 'view', 'CBO');
   checkUserLoggedIn(userId);
 
-  return await CBO.getForCategory(args.categoryId, txn);
+  return CBO.getForCategory(args.categoryId, txn);
 }
 
 export async function resolveCBO(
@@ -45,7 +45,7 @@ export async function resolveCBO(
   await accessControls.isAllowedForUser(userRole, 'view', 'CBO');
   checkUserLoggedIn(userId);
 
-  return await CBO.get(args.CBOId, txn);
+  return CBO.get(args.CBOId, txn);
 }
 
 export async function CBOCreate(
@@ -57,7 +57,7 @@ export async function CBOCreate(
   checkUserLoggedIn(userId);
 
   // TODO: Fix typings here
-  return await CBO.create(input as any, txn);
+  return CBO.create(input as any, txn);
 }
 
 export async function CBOEdit(
@@ -69,7 +69,7 @@ export async function CBOEdit(
   checkUserLoggedIn(userId);
 
   // TODO: Fix typings here
-  return await CBO.edit(input as any, input.CBOId, txn);
+  return CBO.edit(input as any, input.CBOId, txn);
 }
 
 export async function CBODelete(
@@ -80,5 +80,5 @@ export async function CBODelete(
   await accessControls.isAllowedForUser(userRole, 'delete', 'CBO');
   checkUserLoggedIn(userId);
 
-  return await CBO.delete(input.CBOId, txn);
+  return CBO.delete(input.CBOId, txn);
 }

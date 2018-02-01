@@ -15,7 +15,7 @@ export async function computedFieldFlagCreate(
   await accessControls.isAllowed(userRole, 'create', 'computedFieldFlag');
   checkUserLoggedIn(userId);
 
-  return await ComputedFieldFlag.create(
+  return ComputedFieldFlag.create(
     {
       patientAnswerId: input.patientAnswerId,
       reason: input.reason || null,

@@ -80,7 +80,7 @@ export default class Concern extends BaseModel {
   }
 
   static async create(input: IConcernEditableFields, txn: Transaction) {
-    return await this.modifyEager(this.query(txn)).insertAndFetch(input);
+    return this.modifyEager(this.query(txn)).insertAndFetch(input);
   }
 
   static async findOrCreateByTitle(title: string, txn: Transaction): Promise<Concern> {
@@ -93,7 +93,7 @@ export default class Concern extends BaseModel {
       return fetchedConcern;
     }
 
-    return await this.create({ title }, txn);
+    return this.create({ title }, txn);
   }
 
   static async edit(
@@ -101,14 +101,14 @@ export default class Concern extends BaseModel {
     concern: Partial<IConcernEditableFields>,
     txn: Transaction,
   ): Promise<Concern> {
-    return await this.modifyEager(this.query(txn)).patchAndFetchById(concernId, concern);
+    return this.modifyEager(this.query(txn)).patchAndFetchById(concernId, concern);
   }
 
   static async getAll(
     { orderBy, order }: IConcernOrderOptions,
     txn: Transaction,
   ): Promise<Concern[]> {
-    return await this.modifyEager(this.query(txn))
+    return this.modifyEager(this.query(txn))
       .where('deletedAt', null)
       .orderBy(orderBy, order);
   }
@@ -160,7 +160,7 @@ export default class Concern extends BaseModel {
     diagnosisCodeId: string,
     txn: Transaction,
   ): Promise<Concern> {
-    return await ConcernDiagnosisCode.delete(concernId, diagnosisCodeId, txn);
+    return ConcernDiagnosisCode.delete(concernId, diagnosisCodeId, txn);
   }
 
   static modifyEager(query: QueryBuilder<Concern>): QueryBuilder<Concern> {

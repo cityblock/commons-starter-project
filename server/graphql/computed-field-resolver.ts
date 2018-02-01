@@ -31,7 +31,7 @@ export async function computedFieldCreate(
 
   const slug = kebabCase(input.label);
 
-  return await ComputedField.create({ slug, ...input }, txn);
+  return ComputedField.create({ slug, ...input }, txn);
 }
 
 export async function resolveComputedField(
@@ -41,7 +41,7 @@ export async function resolveComputedField(
 ) {
   await accessControls.isAllowed(userRole, 'view', 'computedField');
 
-  return await ComputedField.get(args.computedFieldId, txn);
+  return ComputedField.get(args.computedFieldId, txn);
 }
 
 export async function resolveComputedFields(
@@ -56,7 +56,7 @@ export async function resolveComputedFields(
     order: 'desc',
   });
 
-  return await ComputedField.getAll({ orderBy, order }, txn);
+  return ComputedField.getAll({ orderBy, order }, txn);
 }
 
 export async function computedFieldDelete(
@@ -66,5 +66,5 @@ export async function computedFieldDelete(
 ) {
   await accessControls.isAllowedForUser(userRole, 'edit', 'computedField');
 
-  return await ComputedField.delete(args.input.computedFieldId, txn);
+  return ComputedField.delete(args.input.computedFieldId, txn);
 }

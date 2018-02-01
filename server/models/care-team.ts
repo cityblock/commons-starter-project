@@ -97,7 +97,7 @@ export default class CareTeam extends BaseModel {
       await CareTeam.query(txn).insert({ patientId, userId });
     }
 
-    return await this.getForPatient(patientId, txn);
+    return this.getForPatient(patientId, txn);
   }
 
   static async delete({ userId, patientId }: ICareTeamOptions, txn: Transaction): Promise<User[]> {
@@ -106,7 +106,7 @@ export default class CareTeam extends BaseModel {
       .andWhere('patientId', patientId)
       .andWhere('deletedAt', null)
       .patch({ deletedAt: new Date().toISOString() });
-    return await this.getForPatient(patientId, txn);
+    return this.getForPatient(patientId, txn);
   }
 }
 /* tslint:enable:member-ordering */

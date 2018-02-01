@@ -10,5 +10,5 @@ export async function resolveCBOCategories(
   await accessControls.isAllowedForUser(userRole, 'view', 'CBOCategory');
   checkUserLoggedIn(userId);
 
-  return await CBOCategory.getAll(txn);
+  return CBOCategory.getAll(txn);
 }

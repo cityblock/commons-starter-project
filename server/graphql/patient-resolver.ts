@@ -37,7 +37,7 @@ export async function resolvePatient(
 ): Promise<IPatient> {
   await accessControls.isAllowedForUser(userRole, 'view', 'patient', patientId, userId);
   logger.log(`GET patient ${patientId} by ${userId}`, 2);
-  return await Patient.get(patientId, txn);
+  return Patient.get(patientId, txn);
 }
 
 export interface IPatientEditOptions {
@@ -53,7 +53,7 @@ export async function patientEdit(
 
   const filtered = omitBy<IPatientEditInput>(input, isNil);
   logger.log(`EDIT patient ${input.patientId} by ${userId}`, 2);
-  return await Patient.edit(filtered as any, input.patientId, txn);
+  return Patient.edit(filtered as any, input.patientId, txn);
 }
 
 export interface IPatientSetupOptions {
@@ -227,7 +227,7 @@ export async function resolvePatientsWithUrgentTasks(
   pageOptions: IPaginationOptions,
   context: IContext,
 ): Promise<IPatientForDashboardEdges> {
-  return await resolvePatientDashboardBuilder(
+  return resolvePatientDashboardBuilder(
     root,
     pageOptions,
     context,
@@ -240,7 +240,7 @@ export async function resolvePatientsNewToCareTeam(
   pageOptions: IPaginationOptions,
   context: IContext,
 ): Promise<IPatientForDashboardEdges> {
-  return await resolvePatientDashboardBuilder(
+  return resolvePatientDashboardBuilder(
     root,
     pageOptions,
     context,
@@ -253,7 +253,7 @@ export async function resolvePatientsWithPendingSuggestions(
   pageOptions: IPaginationOptions,
   context: IContext,
 ): Promise<IPatientForDashboardEdges> {
-  return await resolvePatientDashboardBuilder(
+  return resolvePatientDashboardBuilder(
     root,
     pageOptions,
     context,
@@ -266,7 +266,7 @@ export async function resolvePatientsWithMissingInfo(
   pageOptions: IPaginationOptions,
   context: IContext,
 ): Promise<IPatientForDashboardEdges> {
-  return await resolvePatientDashboardBuilder(
+  return resolvePatientDashboardBuilder(
     root,
     pageOptions,
     context,
@@ -279,7 +279,7 @@ export async function resolvePatientsWithNoRecentEngagement(
   pageOptions: IPaginationOptions,
   context: IContext,
 ): Promise<IPatientForDashboardEdges> {
-  return await resolvePatientDashboardBuilder(
+  return resolvePatientDashboardBuilder(
     root,
     pageOptions,
     context,
@@ -292,7 +292,7 @@ export async function resolvePatientsWithOutOfDateMAP(
   pageOptions: IPaginationOptions,
   context: IContext,
 ): Promise<IPatientForDashboardEdges> {
-  return await resolvePatientDashboardBuilder(
+  return resolvePatientDashboardBuilder(
     root,
     pageOptions,
     context,

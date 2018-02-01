@@ -85,7 +85,7 @@ export default class TaskSuggestion extends BaseModel {
         answerId,
       });
     }
-    return await this.getForAnswer(answerId, txn);
+    return this.getForAnswer(answerId, txn);
   }
 
   static async delete(
@@ -100,7 +100,7 @@ export default class TaskSuggestion extends BaseModel {
       })
       .patch({ deletedAt: new Date().toISOString() });
 
-    return await this.getForAnswer(answerId, txn);
+    return this.getForAnswer(answerId, txn);
   }
 }
 /* tslint:enable:member-ordering */

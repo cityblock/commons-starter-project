@@ -99,7 +99,7 @@ export async function resolveTask(
   { db, userRole, txn }: IContext,
 ) {
   await accessControls.isAllowed(userRole, 'view', 'task');
-  return await Task.get(args.taskId, txn);
+  return Task.get(args.taskId, txn);
 }
 
 export async function taskEdit(root: any, args: IEditTaskOptions, context: IContext) {
@@ -275,7 +275,7 @@ export async function resolveTasksDueSoonForPatient(
   await accessControls.isAllowedForUser(userRole, 'view', 'task');
   checkUserLoggedIn(userId);
 
-  return await Task.getTasksDueSoonForPatient(patientId, userId!, txn);
+  return Task.getTasksDueSoonForPatient(patientId, userId!, txn);
 }
 
 export async function resolveTasksWithNotificationsForPatient(
@@ -286,7 +286,7 @@ export async function resolveTasksWithNotificationsForPatient(
   await accessControls.isAllowedForUser(userRole, 'view', 'task');
   checkUserLoggedIn(userId);
 
-  return await Task.getTasksWithNotificationsForPatient(patientId, userId!, txn);
+  return Task.getTasksWithNotificationsForPatient(patientId, userId!, txn);
 }
 
 export async function resolveTaskIdsWithNotifications(
@@ -297,5 +297,5 @@ export async function resolveTaskIdsWithNotifications(
   await accessControls.isAllowed(userRole, 'view', 'carePlanSuggestion');
   checkUserLoggedIn(userId);
 
-  return await Task.getTaskIdsWithNotifications(userId!, txn);
+  return Task.getTaskIdsWithNotifications(userId!, txn);
 }

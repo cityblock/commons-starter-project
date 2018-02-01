@@ -38,7 +38,7 @@ export class ProgressNoteCosignature extends React.Component<allProps> {
     const { progressNote } = this.props;
     if (progressNote) {
       const value = event.currentTarget.value;
-      return await this.props.updateProgressNote({
+      return this.props.updateProgressNote({
         progressNoteTemplateId: progressNote.progressNoteTemplate
           ? progressNote.progressNoteTemplate.id
           : null,

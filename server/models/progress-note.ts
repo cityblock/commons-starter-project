@@ -147,7 +147,7 @@ export default class ProgressNote extends BaseModel {
     } else {
       query.whereNull('completedAt');
     }
-    return await query;
+    return query;
   }
 
   static async getCountForPatient(patientId: string, txn: Transaction): Promise<number> {
@@ -173,14 +173,14 @@ export default class ProgressNote extends BaseModel {
     } else {
       query.whereNull('completedAt');
     }
-    return await query;
+    return query;
   }
 
   static async getProgressNotesForSupervisorReview(
     supervisorId: string,
     txn: Transaction,
   ): Promise<ProgressNote[]> {
-    return await this.query(txn)
+    return this.query(txn)
       .eager(EAGER_QUERY)
       .orderBy('createdAt', 'desc')
       .where({ deletedAt: null, reviewedBySupervisorAt: null, supervisorId })
@@ -273,7 +273,7 @@ export default class ProgressNote extends BaseModel {
       });
 
     if (!existingProgressNote) {
-      return await this.query(txn)
+      return this.query(txn)
         .eager(EAGER_QUERY)
         .insertAndFetch(input);
     }
@@ -282,7 +282,7 @@ export default class ProgressNote extends BaseModel {
   }
 
   static async complete(progressNoteId: string, txn: Transaction): Promise<ProgressNote> {
-    return await this.query(txn)
+    return this.query(txn)
       .eager(EAGER_QUERY)
       .patchAndFetchById(progressNoteId, {
         completedAt: new Date().toISOString(),

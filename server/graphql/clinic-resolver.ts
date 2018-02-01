@@ -25,7 +25,7 @@ export async function clinicCreate(
   if (clinic) {
     throw new Error(`Cannot create clinic: departmentId already exists for ${departmentId}`);
   } else {
-    return await Clinic.create(input, txn);
+    return Clinic.create(input, txn);
   }
 }
 
@@ -36,7 +36,7 @@ export async function resolveClinic(
 ) {
   await accessControls.isAllowed(userRole, 'view', 'clinic');
 
-  return await Clinic.get(clinicId, txn);
+  return Clinic.get(clinicId, txn);
 }
 
 export async function resolveClinics(

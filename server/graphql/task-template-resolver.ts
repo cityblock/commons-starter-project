@@ -26,7 +26,7 @@ export async function taskTemplateCreate(
 ) {
   await accessControls.isAllowed(userRole, 'create', 'taskTemplate');
 
-  return await TaskTemplate.create(input as any, txn);
+  return TaskTemplate.create(input as any, txn);
 }
 
 export async function resolveTaskTemplate(
@@ -36,13 +36,13 @@ export async function resolveTaskTemplate(
 ) {
   await accessControls.isAllowed(userRole, 'view', 'taskTemplate');
 
-  return await TaskTemplate.get(args.taskTemplateId, txn);
+  return TaskTemplate.get(args.taskTemplateId, txn);
 }
 
 export async function resolveTaskTemplates(root: any, args: any, { db, userRole, txn }: IContext) {
   await accessControls.isAllowed(userRole, 'view', 'taskTemplate');
 
-  return await TaskTemplate.getAll(txn);
+  return TaskTemplate.getAll(txn);
 }
 
 export async function taskTemplateEdit(

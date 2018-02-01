@@ -37,7 +37,7 @@ export async function concernCreate(root: any, { input }: IConcernCreateArgs, co
   const { userRole, txn } = context;
   await accessControls.isAllowed(userRole, 'create', 'concern');
 
-  return await Concern.create(input, txn);
+  return Concern.create(input, txn);
 }
 
 export async function resolveConcern(
@@ -47,7 +47,7 @@ export async function resolveConcern(
 ) {
   await accessControls.isAllowed(userRole, 'view', 'concern');
 
-  return await Concern.get(args.concernId, txn);
+  return Concern.get(args.concernId, txn);
 }
 
 export async function resolveConcerns(root: any, args: any, { db, userRole, txn }: IContext) {
@@ -58,7 +58,7 @@ export async function resolveConcerns(root: any, args: any, { db, userRole, txn 
     order: 'desc',
   });
 
-  return await Concern.getAll({ orderBy, order }, txn);
+  return Concern.getAll({ orderBy, order }, txn);
 }
 
 export async function concernEdit(
@@ -89,7 +89,7 @@ export async function concernAddDiagnosisCode(
   await accessControls.isAllowedForUser(userRole, 'edit', 'concern');
   const { concernId, codesetName, code, version } = input;
 
-  return await Concern.addDiagnosisCode(concernId, { codesetName, code, version }, txn);
+  return Concern.addDiagnosisCode(concernId, { codesetName, code, version }, txn);
 }
 
 export async function concernRemoveDiagnosisCode(
@@ -100,5 +100,5 @@ export async function concernRemoveDiagnosisCode(
   await accessControls.isAllowedForUser(userRole, 'edit', 'concern');
   const { concernId, diagnosisCodeId } = input;
 
-  return await Concern.removeDiagnosisCode(concernId, diagnosisCodeId, txn);
+  return Concern.removeDiagnosisCode(concernId, diagnosisCodeId, txn);
 }

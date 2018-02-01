@@ -50,7 +50,7 @@ export async function progressNoteCreate(
   await accessControls.isAllowed(userRole, 'create', 'progressNote');
   checkUserLoggedIn(userId);
 
-  return await ProgressNote.autoOpenIfRequired({ ...input, userId: userId! }, txn);
+  return ProgressNote.autoOpenIfRequired({ ...input, userId: userId! }, txn);
 }
 
 export async function progressNoteComplete(
@@ -61,7 +61,7 @@ export async function progressNoteComplete(
   await accessControls.isAllowed(userRole, 'edit', 'progressNote');
   checkUserLoggedIn(userId);
 
-  return await ProgressNote.complete(input.progressNoteId, txn);
+  return ProgressNote.complete(input.progressNoteId, txn);
 }
 
 export async function progressNoteEdit(
@@ -72,7 +72,7 @@ export async function progressNoteEdit(
   await accessControls.isAllowed(userRole, 'edit', 'progressNote');
   checkUserLoggedIn(userId);
 
-  return await ProgressNote.update(
+  return ProgressNote.update(
     input.progressNoteId,
     {
       progressNoteTemplateId: input.progressNoteTemplateId || undefined,
@@ -104,7 +104,7 @@ export async function progressNoteAddSupervisorNotes(
     throw new Error('you are not the supervisor permitted to review this progress note');
   }
 
-  return await ProgressNote.addSupervisorNotes(input.progressNoteId, input.supervisorNotes, txn);
+  return ProgressNote.addSupervisorNotes(input.progressNoteId, input.supervisorNotes, txn);
 }
 
 export async function progressNoteCompleteSupervisorReview(
@@ -123,7 +123,7 @@ export async function progressNoteCompleteSupervisorReview(
     throw new Error('you are not the supervisor permitted to review this progress note');
   }
 
-  return await ProgressNote.completeSupervisorReview(input.progressNoteId, txn);
+  return ProgressNote.completeSupervisorReview(input.progressNoteId, txn);
 }
 
 export async function resolveProgressNote(
@@ -133,7 +133,7 @@ export async function resolveProgressNote(
 ) {
   await accessControls.isAllowed(userRole, 'view', 'progressNote');
 
-  return await ProgressNote.get(args.progressNoteId, txn);
+  return ProgressNote.get(args.progressNoteId, txn);
 }
 
 export async function resolveProgressNotesForPatient(
@@ -143,7 +143,7 @@ export async function resolveProgressNotesForPatient(
 ) {
   await accessControls.isAllowed(userRole, 'view', 'progressNote');
 
-  return await ProgressNote.getAllForPatient(args.patientId, args.completed, txn);
+  return ProgressNote.getAllForPatient(args.patientId, args.completed, txn);
 }
 
 export async function resolveProgressNotesForCurrentUser(
@@ -154,7 +154,7 @@ export async function resolveProgressNotesForCurrentUser(
   await accessControls.isAllowed(userRole, 'view', 'progressNote');
   checkUserLoggedIn(userId);
 
-  return await ProgressNote.getAllForUser(userId!, args.completed, txn);
+  return ProgressNote.getAllForUser(userId!, args.completed, txn);
 }
 
 export async function resolveProgressNotesForSupervisorReview(
@@ -165,5 +165,5 @@ export async function resolveProgressNotesForSupervisorReview(
   await accessControls.isAllowed(userRole, 'view', 'progressNote');
   checkUserLoggedIn(userId);
 
-  return await ProgressNote.getProgressNotesForSupervisorReview(userId!, txn);
+  return ProgressNote.getProgressNotesForSupervisorReview(userId!, txn);
 }

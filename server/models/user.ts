@@ -179,16 +179,16 @@ export default class User extends Model {
   }
 
   static async create(user: ICreateUser, txn: Transaction): Promise<User> {
-    return await this.query(txn).insertAndFetch(user);
+    return this.query(txn).insertAndFetch(user);
   }
 
   static async update(userId: string, user: Partial<IUpdateUser>, txn: Transaction): Promise<User> {
-    return await this.query(txn).patchAndFetchById(userId, user);
+    return this.query(txn).patchAndFetchById(userId, user);
   }
 
   // NOTE: Separated because it is admin only - a user should not be able to change their own role
   static async updateUserRole(userId: string, userRole: UserRole, txn: Transaction): Promise<User> {
-    return await this.query(txn).patchAndFetchById(userId, { userRole });
+    return this.query(txn).patchAndFetchById(userId, { userRole });
   }
 
   static async get(userId: string, txn: Transaction): Promise<User> {

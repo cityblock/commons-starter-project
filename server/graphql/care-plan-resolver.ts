@@ -36,7 +36,7 @@ export async function resolveCarePlanSuggestionsForPatient(
 ): Promise<CarePlanSuggestion[]> {
   await accessControls.isAllowed(userRole, 'view', 'carePlanSuggestion');
 
-  return await CarePlanSuggestion.getForPatient(args.patientId, txn);
+  return CarePlanSuggestion.getForPatient(args.patientId, txn);
 }
 
 export async function resolveCarePlanForPatient(
@@ -63,7 +63,7 @@ export async function carePlanSuggestionDismiss(
   await accessControls.isAllowed(userRole, 'edit', 'carePlanSuggestion');
   checkUserLoggedIn(userId);
 
-  return await CarePlanSuggestion.dismiss(
+  return CarePlanSuggestion.dismiss(
     {
       carePlanSuggestionId: input.carePlanSuggestionId,
       dismissedById: userId!,

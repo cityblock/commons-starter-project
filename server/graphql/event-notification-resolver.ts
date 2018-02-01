@@ -291,7 +291,7 @@ export async function eventNotificationDismiss(
   await accessControls.isAllowedForUser(userRole, 'edit', 'user', userId, userId);
   checkUserLoggedIn(userId);
 
-  return await EventNotification.dismiss(input.eventNotificationId, txn);
+  return EventNotification.dismiss(input.eventNotificationId, txn);
 }
 
 export async function resolveEventNotificationsForUserTask(
@@ -320,5 +320,5 @@ export async function eventNotificationsForTaskDismiss(
   await accessControls.isAllowedForUser(userRole, 'edit', 'user', userId, userId);
   checkUserLoggedIn(userId);
 
-  return await EventNotification.dismissAllForUserTask(input.taskId, userId!, txn);
+  return EventNotification.dismissAllForUserTask(input.taskId, userId!, txn);
 }

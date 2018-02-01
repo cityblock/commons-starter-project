@@ -77,7 +77,7 @@ export default class ScreeningTool extends BaseModel {
   }
 
   static async create(input: IScreeningToolCreateFields, txn: Transaction): Promise<ScreeningTool> {
-    return await this.query(txn)
+    return this.query(txn)
       .eager(EAGER_QUERY)
       .insertAndFetch(input);
   }
@@ -87,7 +87,7 @@ export default class ScreeningTool extends BaseModel {
     screeningTool: IScreeningToolEditableFields,
     txn: Transaction,
   ): Promise<ScreeningTool> {
-    return await this.query(txn)
+    return this.query(txn)
       .eager(EAGER_QUERY)
       .patchAndFetchById(screeningToolId, screeningTool);
   }
@@ -114,14 +114,14 @@ export default class ScreeningTool extends BaseModel {
   }
 
   static async getForRiskArea(riskAreaId: string, txn: Transaction): Promise<ScreeningTool[]> {
-    return await this.query(txn)
+    return this.query(txn)
       .eager(EAGER_QUERY)
       .where({ deletedAt: null, riskAreaId })
       .orderBy('createdAt', 'asc');
   }
 
   static async getAll(txn: Transaction): Promise<ScreeningTool[]> {
-    return await this.query(txn)
+    return this.query(txn)
       .eager(EAGER_QUERY)
       .modifyEager('screeningToolScoreRanges', builder =>
         builder.where('screening_tool_score_range.deletedAt', null),

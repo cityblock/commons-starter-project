@@ -81,14 +81,14 @@ export default class DiagnosisCode extends BaseModel {
       return existingDiagnosisCode;
     }
 
-    return await this.query(txn).insertAndFetch({ ...input, code: cleanedCode });
+    return this.query(txn).insertAndFetch({ ...input, code: cleanedCode });
   }
 
   static async getAll(
     { orderBy, order }: IDiagnosisCodeOrderOptions,
     txn: Transaction,
   ): Promise<DiagnosisCode[]> {
-    return await this.query(txn)
+    return this.query(txn)
       .where('deletedAt', null)
       .orderBy(orderBy, order);
   }

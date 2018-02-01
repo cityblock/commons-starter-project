@@ -15,7 +15,7 @@ export async function resolveGoalSuggestionTemplatesForAnswer(
 ): Promise<GoalSuggestionTemplate[]> {
   await accessControls.isAllowed(userRole, 'view', 'goalSuggestion');
 
-  return await GoalSuggestion.getForAnswer(args.answerId, txn);
+  return GoalSuggestion.getForAnswer(args.answerId, txn);
 }
 
 export async function goalSuggestionCreate(
@@ -25,7 +25,7 @@ export async function goalSuggestionCreate(
 ): Promise<GoalSuggestionTemplate[]> {
   await accessControls.isAllowed(userRole, 'view', 'goalSuggestion');
 
-  return await GoalSuggestion.create(
+  return GoalSuggestion.create(
     {
       answerId: args.input.answerId || undefined,
       screeningToolScoreRangeId: args.input.screeningToolScoreRangeId || undefined,
@@ -42,7 +42,7 @@ export async function goalSuggestionDelete(
 ): Promise<GoalSuggestionTemplate[]> {
   await accessControls.isAllowed(userRole, 'view', 'goalSuggestion');
 
-  return await GoalSuggestion.delete(
+  return GoalSuggestion.delete(
     {
       answerId: args.input.answerId || undefined,
       screeningToolScoreRangeId: args.input.screeningToolScoreRangeId || undefined,

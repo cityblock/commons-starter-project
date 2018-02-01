@@ -147,7 +147,7 @@ export default class Answer extends BaseModel {
   }
 
   static async getMultiple(answerIds: string[], txn: Transaction): Promise<Answer[]> {
-    return await this.query(txn).where('id', 'in', answerIds);
+    return this.query(txn).where('id', 'in', answerIds);
   }
 
   static async getAllForQuestion(questionId: string, txn: Transaction): Promise<Answer[]> {
@@ -180,7 +180,7 @@ export default class Answer extends BaseModel {
     answerId: string,
     txn: Transaction,
   ): Promise<Answer> {
-    return await this.getQuery(txn).patchAndFetchById(answerId, answer);
+    return this.getQuery(txn).patchAndFetchById(answerId, answer);
   }
 
   static async delete(answerId: string, txn: Transaction): Promise<Answer> {

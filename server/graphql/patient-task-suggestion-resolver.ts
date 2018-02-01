@@ -25,7 +25,7 @@ export async function resolvePatientTaskSuggestions(
   await accessControls.isAllowed(userRole, 'view', 'patientTaskSuggestion');
   checkUserLoggedIn(userId);
 
-  return await PatientTaskSuggestion.getForPatient(args.patientId, txn);
+  return PatientTaskSuggestion.getForPatient(args.patientId, txn);
 }
 
 export async function patientTaskSuggestionDismiss(
@@ -36,7 +36,7 @@ export async function patientTaskSuggestionDismiss(
   await accessControls.isAllowed(userRole, 'edit', 'patientTaskSuggestion');
   checkUserLoggedIn(userId);
 
-  return await PatientTaskSuggestion.dismiss(
+  return PatientTaskSuggestion.dismiss(
     {
       patientTaskSuggestionId: input.patientTaskSuggestionId,
       dismissedById: userId!,

@@ -23,7 +23,7 @@ export default (
           path="/dashboard/:list/:answerId?"
           component={(Loadable as any)({
             loader: async () =>
-              await import(/* webpackChunkName: "dashboard" */ './dashboard-container/dashboard-container'),
+              import(/* webpackChunkName: "dashboard" */ './dashboard-container/dashboard-container'),
             loading: () => null,
           })}
         />
@@ -31,7 +31,7 @@ export default (
           path="/notifications/:eventNotificationType?"
           component={(Loadable as any)({
             loader: async () =>
-              await import(/* webpackChunkName: "notifications" */
+              import(/* webpackChunkName: "notifications" */
               './event-notifications-container/event-notifications-container'),
             loading: () => null,
           })}
@@ -40,7 +40,7 @@ export default (
           path="/tasks/:taskId?"
           component={(Loadable as any)({
             loader: async () =>
-              await import(/* webpackChunkName: "tasks" */ './tasks-container/tasks-container'),
+              import(/* webpackChunkName: "tasks" */ './tasks-container/tasks-container'),
             loading: () => null,
           })}
         />
@@ -48,7 +48,7 @@ export default (
           path="/settings"
           component={(Loadable as any)({
             loader: async () =>
-              await import(/* webpackChunkName: "settings" */ './settings-container/settings-container'),
+              import(/* webpackChunkName: "settings" */ './settings-container/settings-container'),
             loading: () => null,
           })}
         />
@@ -56,7 +56,7 @@ export default (
           path="/search"
           component={(Loadable as any)({
             loader: async () =>
-              await import(/* webpackChunkName: "patient-search" */
+              import(/* webpackChunkName: "patient-search" */
               './patient-search-container/patient-search-container'),
             loading: () => null,
           })}
@@ -65,7 +65,7 @@ export default (
           path="/patient-intake"
           component={(Loadable as any)({
             loader: async () =>
-              await import(/* webpackChunkName: "patient-enrollment" */
+              import(/* webpackChunkName: "patient-enrollment" */
               './patient-enrollment-container/patient-enrollment-container'),
             loading: () => null,
           })}
@@ -76,7 +76,7 @@ export default (
           path="/patients"
           component={(Loadable as any)({
             loader: async () =>
-              await import(/* webpackChunkName: "patient-panel" */
+              import(/* webpackChunkName: "patient-panel" */
               './patient-panel-container/patient-panel-container'),
             loading: () => null,
           })}
@@ -85,7 +85,7 @@ export default (
           path="/patients/:patientId/:tab"
           component={(Loadable as any)({
             loader: async () =>
-              await import(/* webpackChunkName: "patient-profile" */
+              import(/* webpackChunkName: "patient-profile" */
               './patient-profile-container/patient-profile-container'),
             loading: () => null,
           })}
@@ -94,7 +94,7 @@ export default (
           path="/builder/:tab?/:objectId?/:subTab?/:subTabId?"
           component={(Loadable as any)({
             loader: async () =>
-              await import(/* webpackChunkName: "builder" */ './builder-container/builder-container'),
+              import(/* webpackChunkName: "builder" */ './builder-container/builder-container'),
             loading: () => null,
           })}
         />
@@ -102,7 +102,7 @@ export default (
           path="/manager/:tabId?/:objectId?"
           component={(Loadable as any)({
             loader: async () =>
-              await import(/* webpackChunkName: "manager" */ './manager-container/manager-container'),
+              import(/* webpackChunkName: "manager" */ './manager-container/manager-container'),
             loading: () => null,
           })}
         />

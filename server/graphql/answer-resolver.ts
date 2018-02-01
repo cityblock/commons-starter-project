@@ -26,7 +26,7 @@ export async function answerCreate(root: any, { input }: IAnswerCreateArgs, cont
   checkUserLoggedIn(userId);
 
   // TODO: fix typings here
-  return await Answer.create(input as any, txn);
+  return Answer.create(input as any, txn);
 }
 
 export async function resolveAnswersForQuestion(
@@ -36,7 +36,7 @@ export async function resolveAnswersForQuestion(
 ) {
   await accessControls.isAllowed(userRole, 'view', 'answer');
 
-  return await Answer.getAllForQuestion(args.questionId, txn);
+  return Answer.getAllForQuestion(args.questionId, txn);
 }
 
 export async function resolveAnswer(
@@ -46,7 +46,7 @@ export async function resolveAnswer(
 ) {
   await accessControls.isAllowed(userRole, 'view', 'answer');
 
-  return await Answer.get(args.answerId, txn);
+  return Answer.get(args.answerId, txn);
 }
 
 export async function answerEdit(

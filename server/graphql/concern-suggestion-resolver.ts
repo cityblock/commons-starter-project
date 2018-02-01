@@ -15,7 +15,7 @@ export async function resolveConcernsForAnswer(
 ) {
   await accessControls.isAllowed(userRole, 'view', 'concern');
 
-  return await ConcernSuggestion.getForAnswer(args.answerId, txn);
+  return ConcernSuggestion.getForAnswer(args.answerId, txn);
 }
 
 export async function concernSuggestionCreate(
@@ -25,7 +25,7 @@ export async function concernSuggestionCreate(
 ): Promise<Concern[]> {
   await accessControls.isAllowed(userRole, 'view', 'concern');
 
-  return await ConcernSuggestion.create(
+  return ConcernSuggestion.create(
     {
       answerId: args.input.answerId || undefined,
       screeningToolScoreRangeId: args.input.screeningToolScoreRangeId || undefined,
@@ -42,7 +42,7 @@ export async function concernSuggestionDelete(
 ): Promise<Concern[]> {
   await accessControls.isAllowed(userRole, 'view', 'concern');
 
-  return await ConcernSuggestion.delete(
+  return ConcernSuggestion.delete(
     {
       answerId: args.input.answerId || undefined,
       screeningToolScoreRangeId: args.input.screeningToolScoreRangeId || undefined,

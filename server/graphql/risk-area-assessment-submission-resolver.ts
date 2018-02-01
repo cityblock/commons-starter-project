@@ -32,7 +32,7 @@ export async function riskAreaAssessmentSubmissionCreate(
   await accessControls.isAllowed(userRole, 'create', 'riskAreaAssessmentSubmission');
   checkUserLoggedIn(userId);
 
-  return await RiskAreaAssessmentSubmission.autoOpenIfRequired(
+  return RiskAreaAssessmentSubmission.autoOpenIfRequired(
     {
       ...input,
       userId: userId!,
@@ -51,7 +51,7 @@ export async function riskAreaAssessmentSubmissionComplete(
   await accessControls.isAllowed(userRole, 'create', 'riskAreaAssessmentSubmission');
   checkUserLoggedIn(userId);
 
-  return await RiskAreaAssessmentSubmission.complete(input.riskAreaAssessmentSubmissionId, txn);
+  return RiskAreaAssessmentSubmission.complete(input.riskAreaAssessmentSubmissionId, txn);
 }
 
 export async function resolveRiskAreaAssessmentSubmission(
@@ -61,7 +61,7 @@ export async function resolveRiskAreaAssessmentSubmission(
 ) {
   await accessControls.isAllowed(userRole, 'view', 'riskAreaAssessmentSubmission');
 
-  return await RiskAreaAssessmentSubmission.get(args.riskAreaAssessmentSubmissionId, txn);
+  return RiskAreaAssessmentSubmission.get(args.riskAreaAssessmentSubmissionId, txn);
 }
 
 export async function resolveRiskAreaAssessmentSubmissionForPatient(
@@ -71,7 +71,7 @@ export async function resolveRiskAreaAssessmentSubmissionForPatient(
 ) {
   await accessControls.isAllowed(userRole, 'view', 'riskAreaAssessmentSubmission');
 
-  return await RiskAreaAssessmentSubmission.getLatestForPatient(
+  return RiskAreaAssessmentSubmission.getLatestForPatient(
     args.riskAreaId,
     args.patientId,
     args.completed,

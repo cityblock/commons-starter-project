@@ -31,7 +31,7 @@ export async function progressNoteTemplateCreate(
   const { userRole, txn } = context;
   await accessControls.isAllowed(userRole, 'create', 'progressNoteTemplate');
 
-  return await ProgressNoteTemplate.create(input, txn);
+  return ProgressNoteTemplate.create(input, txn);
 }
 
 export async function resolveProgressNoteTemplate(
@@ -41,7 +41,7 @@ export async function resolveProgressNoteTemplate(
 ) {
   await accessControls.isAllowed(userRole, 'view', 'progressNoteTemplate');
 
-  return await ProgressNoteTemplate.get(args.progressNoteTemplateId, txn);
+  return ProgressNoteTemplate.get(args.progressNoteTemplateId, txn);
 }
 
 export async function resolveProgressNoteTemplates(
@@ -51,7 +51,7 @@ export async function resolveProgressNoteTemplates(
 ) {
   await accessControls.isAllowed(userRole, 'view', 'progressNoteTemplate');
 
-  return await ProgressNoteTemplate.getAll(txn);
+  return ProgressNoteTemplate.getAll(txn);
 }
 
 export async function progressNoteTemplateEdit(

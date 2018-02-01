@@ -33,7 +33,7 @@ export async function goalSuggestionTemplateCreate(
   const { userRole, txn } = context;
   await accessControls.isAllowed(userRole, 'create', 'goalSuggestionTemplate');
 
-  return await GoalSuggestionTemplate.create(input, txn);
+  return GoalSuggestionTemplate.create(input, txn);
 }
 
 export async function resolveGoalSuggestionTemplates(
@@ -48,7 +48,7 @@ export async function resolveGoalSuggestionTemplates(
     order: 'desc',
   });
 
-  return await GoalSuggestionTemplate.getAll({ orderBy, order }, txn);
+  return GoalSuggestionTemplate.getAll({ orderBy, order }, txn);
 }
 
 export async function resolveGoalSuggestionTemplate(
@@ -58,7 +58,7 @@ export async function resolveGoalSuggestionTemplate(
 ) {
   await accessControls.isAllowed(userRole, 'view', 'goalSuggestionTemplate');
 
-  return await GoalSuggestionTemplate.get(args.goalSuggestionTemplateId, txn);
+  return GoalSuggestionTemplate.get(args.goalSuggestionTemplateId, txn);
 }
 
 export async function goalSuggestionTemplateEdit(

@@ -125,7 +125,7 @@ export default class CarePlanUpdateEvent extends BaseModel {
     progressNoteId: string,
     txn: Transaction,
   ): Promise<CarePlanUpdateEvent[]> {
-    return await this.query(txn)
+    return this.query(txn)
       .eager(EAGER_QUERY)
       .where({ progressNoteId, deletedAt: null });
   }

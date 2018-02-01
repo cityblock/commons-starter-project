@@ -51,7 +51,7 @@ export default class ComputedField extends BaseModel {
   };
 
   static async create(input: IComputedFieldCreateFields, txn: Transaction): Promise<ComputedField> {
-    return await this.query(txn).insertAndFetch(input);
+    return this.query(txn).insertAndFetch(input);
   }
 
   static async get(computedFieldId: string, txn: Transaction): Promise<ComputedField> {
@@ -82,18 +82,18 @@ export default class ComputedField extends BaseModel {
   }
 
   static async getBySlug(slug: string, txn: Transaction): Promise<ComputedField | null> {
-    return await this.getBy('slug', slug, txn);
+    return this.getBy('slug', slug, txn);
   }
 
   static async getByLabel(label: string, txn: Transaction): Promise<ComputedField | null> {
-    return await this.getBy('label', label, txn);
+    return this.getBy('label', label, txn);
   }
 
   static async getAll(
     { orderBy, order }: IComputedFieldOrderOptions,
     txn: Transaction,
   ): Promise<ComputedField[]> {
-    return await this.query(txn)
+    return this.query(txn)
       .where('deletedAt', null)
       .orderBy(orderBy, order);
   }

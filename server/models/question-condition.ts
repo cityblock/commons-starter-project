@@ -69,7 +69,7 @@ export default class QuestionCondition extends BaseModel {
     txn: Transaction,
   ): Promise<QuestionCondition> {
     await this.validate(questionCondition, txn);
-    return await this.query(txn).patchAndFetchById(questionConditionId, questionCondition);
+    return this.query(txn).patchAndFetchById(questionConditionId, questionCondition);
   }
 
   static async validate(input: IQuestionConditionEditableFields, txn: Transaction) {

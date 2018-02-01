@@ -43,7 +43,7 @@ export async function patientAnswersCreate(
   } = input;
 
   if (progressNoteId) {
-    return await PatientAnswer.create(
+    return PatientAnswer.create(
       {
         patientId,
         questionIds,
@@ -57,7 +57,7 @@ export async function patientAnswersCreate(
       txn,
     );
   } else if (patientScreeningToolSubmissionId) {
-    return await PatientAnswer.create(
+    return PatientAnswer.create(
       {
         patientId,
         questionIds,
@@ -71,7 +71,7 @@ export async function patientAnswersCreate(
       txn,
     );
   } else if (riskAreaAssessmentSubmissionId) {
-    return await PatientAnswer.create(
+    return PatientAnswer.create(
       {
         patientId,
         questionIds,
@@ -100,15 +100,15 @@ export async function resolvePatientAnswers(
   await accessControls.isAllowed(userRole, 'view', 'patientAnswer');
 
   if (args.filterType === 'question') {
-    return await PatientAnswer.getForQuestion(args.filterId, args.patientId, txn);
+    return PatientAnswer.getForQuestion(args.filterId, args.patientId, txn);
   } else if (args.filterType === 'riskArea') {
-    return await PatientAnswer.getForRiskArea(args.filterId, args.patientId, txn);
+    return PatientAnswer.getForRiskArea(args.filterId, args.patientId, txn);
   } else if (args.filterType === 'screeningTool') {
-    return await PatientAnswer.getForScreeningTool(args.filterId, args.patientId, txn);
+    return PatientAnswer.getForScreeningTool(args.filterId, args.patientId, txn);
   } else if (args.filterType === 'patientScreeningToolSubmission') {
-    return await PatientAnswer.getForScreeningToolSubmission(args.filterId, txn);
+    return PatientAnswer.getForScreeningToolSubmission(args.filterId, txn);
   } else if (args.filterType === 'progressNote') {
-    return await PatientAnswer.getForProgressNote(args.filterId, args.patientId, txn);
+    return PatientAnswer.getForProgressNote(args.filterId, args.patientId, txn);
   } else {
     throw new Error('wrong filter type');
   }
@@ -121,7 +121,7 @@ export async function resolvePreviousPatientAnswersForQuestion(
 ) {
   await accessControls.isAllowed(userRole, 'view', 'patientAnswer');
 
-  return await PatientAnswer.getPreviousAnswersForQuestion(args.questionId, args.patientId, txn);
+  return PatientAnswer.getPreviousAnswersForQuestion(args.questionId, args.patientId, txn);
 }
 
 export async function resolvePatientAnswer(
@@ -131,7 +131,7 @@ export async function resolvePatientAnswer(
 ) {
   await accessControls.isAllowed(userRole, 'view', 'patientAnswer');
 
-  return await PatientAnswer.get(args.patientAnswerId, txn);
+  return PatientAnswer.get(args.patientAnswerId, txn);
 }
 
 export async function patientAnswerEdit(

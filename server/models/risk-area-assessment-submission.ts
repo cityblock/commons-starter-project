@@ -95,7 +95,7 @@ export default class RiskAreaAssessmentSubmission extends BaseModel {
     input: IRiskAreaAssessmentSubmissionCreateFields,
     txn: Transaction,
   ): Promise<RiskAreaAssessmentSubmission> {
-    return await this.query(txn)
+    return this.query(txn)
       .eager(EAGER_QUERY)
       .insertAndFetch(input);
   }
@@ -117,7 +117,7 @@ export default class RiskAreaAssessmentSubmission extends BaseModel {
       });
 
     if (!existingRiskAreaAssessmentSubmission) {
-      return await this.create(input, txn);
+      return this.create(input, txn);
     }
 
     return existingRiskAreaAssessmentSubmission;
@@ -152,7 +152,7 @@ export default class RiskAreaAssessmentSubmission extends BaseModel {
       submission.id,
       txn,
     );
-    return await this.get(riskAreaAssessmentSubmissionId, txn);
+    return this.get(riskAreaAssessmentSubmissionId, txn);
   }
 
   static async get(

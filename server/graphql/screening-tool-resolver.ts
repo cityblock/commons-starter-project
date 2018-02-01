@@ -32,7 +32,7 @@ export async function screeningToolCreate(
   await accessControls.isAllowed(userRole, 'create', 'screeningTool');
   checkUserLoggedIn(userId);
 
-  return await ScreeningTool.create(input as any, txn);
+  return ScreeningTool.create(input as any, txn);
 }
 
 export async function resolveScreeningTools(root: any, args: any, { db, userRole, txn }: IContext) {

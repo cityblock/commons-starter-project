@@ -128,7 +128,7 @@ export default class RiskArea extends BaseModel {
     riskAreaId: string,
     txn: Transaction,
   ): Promise<RiskArea> {
-    return await this.query(txn)
+    return this.query(txn)
       .eager(EAGER_QUERY)
       .patchAndFetchById(riskAreaId, riskArea);
   }

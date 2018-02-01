@@ -15,7 +15,7 @@ export async function resolveTaskSuggestionTemplatesForAnswer(
 ): Promise<TaskTemplate[]> {
   await accessControls.isAllowed(userRole, 'view', 'taskSuggestion');
 
-  return await TaskSuggestion.getForAnswer(args.answerId, txn);
+  return TaskSuggestion.getForAnswer(args.answerId, txn);
 }
 
 export async function taskSuggestionCreate(
@@ -25,7 +25,7 @@ export async function taskSuggestionCreate(
 ): Promise<TaskTemplate[]> {
   await accessControls.isAllowed(userRole, 'view', 'taskSuggestion');
 
-  return await TaskSuggestion.create(
+  return TaskSuggestion.create(
     {
       answerId: args.input.answerId,
       taskTemplateId: args.input.taskTemplateId,
@@ -41,7 +41,7 @@ export async function taskSuggestionDelete(
 ): Promise<TaskTemplate[]> {
   await accessControls.isAllowed(userRole, 'view', 'taskSuggestion');
 
-  return await TaskSuggestion.delete(
+  return TaskSuggestion.delete(
     {
       answerId: args.input.answerId,
       taskTemplateId: args.input.taskTemplateId,

@@ -81,7 +81,7 @@ export default class EventNotification extends BaseModel {
     { taskEventId, userId }: IEventNotificationOptions,
     txn: Transaction,
   ): Promise<EventNotification> {
-    return await this.query(txn)
+    return this.query(txn)
       .eager(EAGER_QUERY)
       .modifyEager('taskEvent', builder => builder.where('deletedAt', null))
       .insert({ taskEventId, userId });
@@ -122,7 +122,7 @@ export default class EventNotification extends BaseModel {
   }
 
   static async dismiss(eventNotificationId: string, txn: Transaction): Promise<EventNotification> {
-    return await this.query(txn)
+    return this.query(txn)
       .eager(EAGER_QUERY)
       .modifyEager('taskEvent', builder => builder.where('deletedAt', null))
       .patchAndFetchById(eventNotificationId, { seenAt: new Date().toISOString() });

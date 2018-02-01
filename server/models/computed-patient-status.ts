@@ -105,7 +105,7 @@ export default class ComputedPatientStatus extends BaseModel {
     const isDisenrolled = false;
 
     // Finally, create and return a new record
-    return await this.query(txn).insertAndFetch({
+    return this.query(txn).insertAndFetch({
       patientId,
       updatedById,
       hasCareTeamMember,
@@ -126,9 +126,8 @@ export default class ComputedPatientStatus extends BaseModel {
     const patientIds = await Patient.getAllIds(txn);
 
     await Promise.all(
-      patientIds.map(
-        async patientId =>
-          await ComputedPatientStatus.updateForPatient(patientId, updatedById, txn),
+      patientIds.map(async patientId =>
+        ComputedPatientStatus.updateForPatient(patientId, updatedById, txn),
       ),
     );
 

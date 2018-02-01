@@ -29,13 +29,13 @@ export async function riskAreaCreate(root: any, { input }: IRiskAreaCreateArgs, 
   await accessControls.isAllowed(userRole, 'create', 'riskArea');
   checkUserLoggedIn(userId);
 
-  return await RiskArea.create(input, txn);
+  return RiskArea.create(input, txn);
 }
 
 export async function resolveRiskAreas(root: any, args: any, { db, userRole, txn }: IContext) {
   await accessControls.isAllowed(userRole, 'view', 'riskArea');
 
-  return await RiskArea.getAll(txn);
+  return RiskArea.getAll(txn);
 }
 
 export async function resolveRiskArea(
@@ -45,7 +45,7 @@ export async function resolveRiskArea(
 ) {
   await accessControls.isAllowed(userRole, 'view', 'riskArea');
 
-  return await RiskArea.get(args.riskAreaId, txn);
+  return RiskArea.get(args.riskAreaId, txn);
 }
 
 export async function riskAreaEdit(
@@ -57,7 +57,7 @@ export async function riskAreaEdit(
   checkUserLoggedIn(userId);
 
   // TODO: fix typings here
-  return await RiskArea.edit(args.input as any, args.input.riskAreaId, txn);
+  return RiskArea.edit(args.input as any, args.input.riskAreaId, txn);
 }
 
 export async function riskAreaDelete(
@@ -68,7 +68,7 @@ export async function riskAreaDelete(
   await accessControls.isAllowedForUser(userRole, 'delete', 'riskArea');
   checkUserLoggedIn(userId);
 
-  return await RiskArea.delete(args.input.riskAreaId, txn);
+  return RiskArea.delete(args.input.riskAreaId, txn);
 }
 
 export async function resolvePatientRiskAreaSummary(
@@ -92,5 +92,5 @@ export async function resolvePatientRiskAreaRiskScore(
   { db, userRole, txn }: IContext,
 ): Promise<IRiskScore> {
   await accessControls.isAllowedForUser(userRole, 'view', 'riskArea');
-  return await RiskArea.getRiskScoreForPatient(args.riskAreaId, args.patientId, txn);
+  return RiskArea.getRiskScoreForPatient(args.riskAreaId, args.patientId, txn);
 }

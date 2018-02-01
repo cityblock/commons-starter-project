@@ -179,7 +179,7 @@ export default class PatientGoal extends BaseModel {
   }
 
   static async getForPatient(patientId: string, txn: Transaction): Promise<PatientGoal[]> {
-    return await this.query(txn)
+    return this.query(txn)
       .eager(EAGER_QUERY)
       .modifyEager('tasks', builder => {
         builder.where('task.completedAt', null);

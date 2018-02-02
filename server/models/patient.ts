@@ -9,6 +9,7 @@ import ComputedPatientStatus from './computed-patient-status';
 import Concern from './concern';
 import PatientAnswer from './patient-answer';
 import PatientConcern from './patient-concern';
+import PatientDataFlag from './patient-data-flag';
 import Task from './task';
 import User from './user';
 
@@ -61,6 +62,7 @@ export default class Patient extends BaseModel {
   language: string;
   tasks: Task[];
   careTeam: User[];
+  patientDataFlags: PatientDataFlag[];
 
   static tableName = 'patient';
 
@@ -114,6 +116,15 @@ export default class Patient extends BaseModel {
       modelClass: 'task',
       join: {
         from: 'task.patientId',
+        to: 'patient.id',
+      },
+    },
+
+    patientDataFlags: {
+      relation: Model.HasManyRelation,
+      modelClass: 'patient-data-flag',
+      join: {
+        from: 'patient_data_flag.patientId',
         to: 'patient.id',
       },
     },

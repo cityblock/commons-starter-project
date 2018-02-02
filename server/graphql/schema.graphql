@@ -233,6 +233,7 @@ type Patient implements uniqueId {
   consentToCall: Boolean
   consentToText: Boolean
   careTeam: [User!]
+  patientDataFlags: [PatientDataFlag!]
 }
 
 # Patient node
@@ -1015,6 +1016,17 @@ type JWTForPDF {
   authToken: String!
 }
 
+# Patient Data Flag
+type PatientDataFlag implements uniqueId {
+  id: ID!
+  patientId: ID!
+  patient: Patient!
+  userId: ID!
+  user: User!
+  fieldName: String!
+  suggestedValue: String
+}
+
 #
 # BEGIN INPUT FIELDS
 #
@@ -1692,6 +1704,13 @@ input CBOReferralEditInput {
   acknowledgedAt: String
 }
 
+input PatientDataFlagCreateInput {
+  patientId: ID!
+  userId: ID!
+  fieldName: String!
+  suggestedValue: String
+}
+
 type RootMutationType {
   # Create a new user
   userCreate(input: UserCreateInput): User
@@ -1908,6 +1927,8 @@ type RootMutationType {
   CBOReferralEdit(input: CBOReferralEditInput): CBOReferral
   # Jwt token to view a PDF
   JWTForPDFCreate: JWTForPDF!
+  # creates a patient data flag
+  patientDataFlagCreate(input: PatientDataFlagCreateInput): PatientDataFlag
 }
 
 type RootQueryType {
@@ -2127,6 +2148,8 @@ type RootQueryType {
   CBOs: [CBO!]!
   # all CBOs for given category
   CBOsForCategory(categoryId: ID!): [CBO!]!
+  # patient data flags for a patient
+  patientDataFlagsForPatient(patientId: ID!): [PatientDataFlag!]!
 }
 
 schema {

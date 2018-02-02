@@ -90,6 +90,10 @@ import {
   resolvePatientConcern,
   resolvePatientConcernsForPatient,
 } from './patient-concern-resolver';
+import {
+  patientDataFlagCreate,
+  resolvePatientDataFlagsForPatient,
+} from './patient-data-flag-resolver';
 import { resolvePatientEncounters } from './patient-encounters-resolver';
 import {
   patientGoalCreate,
@@ -357,6 +361,7 @@ const resolveFunctions = {
     CBOs: resolveCBOs,
     CBOsForCategory: resolveCBOsForCategory,
     CBO: resolveCBO,
+    patientDataFlagsForPatient: resolvePatientDataFlagsForPatient,
   },
 
   RootMutationType: {
@@ -460,6 +465,7 @@ const resolveFunctions = {
     CBOReferralCreate,
     CBOReferralEdit,
     JWTForPDFCreate,
+    patientDataFlagCreate,
   },
 };
 

@@ -47,7 +47,6 @@ export interface ITaskCBOInformationFields {
 interface IState extends ITaskCBOInformationFields {
   loading: boolean;
   error: string | null;
-  isMounted: boolean;
 }
 
 export class TaskCBOAddInformationPopup extends React.Component<allProps, IState> {
@@ -67,16 +66,7 @@ export class TaskCBOAddInformationPopup extends React.Component<allProps, IState
       description: '',
       loading: false,
       error: null,
-      isMounted: false,
     };
-  }
-
-  componentDidMount(): void {
-    this.setState({ isMounted: true });
-  }
-
-  componentWillUnmount(): void {
-    this.setState({ isMounted: false });
   }
 
   onChange = (field: string): ((e: ChangeEvent) => void) => {
@@ -102,7 +92,8 @@ export class TaskCBOAddInformationPopup extends React.Component<allProps, IState
       taskId: task.id,
     };
 
-    if (CBOId !== OTHER_CBO) {
+    const definedCBO = CBOId !== OTHER_CBO;
+    if (definedCBO) {
       referralVariables.CBOId = CBOId;
     } else {
       referralVariables.name = CBOName;
@@ -112,7 +103,8 @@ export class TaskCBOAddInformationPopup extends React.Component<allProps, IState
     const referral = await editCBOReferral({
       variables: referralVariables,
     });
-    const taskTitle = CBOId
+
+    const taskTitle = definedCBO
       ? referral.data.CBOReferralEdit!.CBO!.name
       : referral.data.CBOReferralEdit!.name!;
 
@@ -132,7 +124,7 @@ export class TaskCBOAddInformationPopup extends React.Component<allProps, IState
 
     if (!loading && isSufficientInfo) {
       try {
-        if (this.state.isMounted) this.setState({ loading: true, error: null });
+        this.setState({ loading: true, error: null });
 
         await this.editCBOReferralAndTask();
 
@@ -145,11 +137,9 @@ export class TaskCBOAddInformationPopup extends React.Component<allProps, IState
 
   onClose = (): void => {
     // ensure that partially filled out fields don't persist
-    if (this.state.isMounted) {
-      this.setState(this.getInitialState(), () => {
-        this.props.closePopup();
-      });
-    }
+    this.setState(this.getInitialState(), () => {
+      this.props.closePopup();
+    });
   };
 
   render(): JSX.Element | null {

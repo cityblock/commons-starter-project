@@ -90,6 +90,9 @@ export class CreateTaskModal extends React.Component<allProps, IState> {
       if (field === 'categoryId') {
         // unselect CBO if switching categories
         this.setState({ categoryId: newValue, CBOId: '', CBOName: '', CBOUrl: '' });
+      } else if (field === 'taskType' && this.state.taskType) {
+        // clear half filled out form if switching task type, makes validation easier
+        this.setState({ ...this.getInitialState(), taskType: newValue as TaskType });
       } else {
         this.setState({ [field as any]: newValue });
       }
@@ -114,6 +117,7 @@ export class CreateTaskModal extends React.Component<allProps, IState> {
   async submitTask(CBOReferralId: string | null, finalCBOName: string | null) {
     const { patientId, patientGoalId, createTask } = this.props;
     const { title, description, dueAt, assignedToId, priority } = this.state;
+
     const variables: taskCreateMutationVariables = {
       patientId,
       patientGoalId,
@@ -133,40 +137,32 @@ export class CreateTaskModal extends React.Component<allProps, IState> {
   onSubmit = async () => {
     const { createCBOReferral } = this.props;
     const { taskType, categoryId, CBOId, CBOName, CBOUrl, loading } = this.state;
+    let CBOReferralId = null;
+    let finalCBOName = null;
 
     if (!loading) {
       try {
         this.setState({ loading: true, error: null });
-        let CBOReferral = null;
-        let finalCBOName = null;
 
-        if (taskType === 'CBOReferral') {
-          if (!CBOId) return; // don't submit if haven't chosen CBO or other
+        if (taskType === 'CBOReferral' && CBOId) {
           const definedCBO = CBOId !== OTHER_CBO;
+          const variables: CBOReferralCreateMutationVariables = { categoryId };
 
           if (definedCBO) {
-            CBOReferral = await createCBOReferral({
-              variables: {
-                CBOId,
-                categoryId,
-              },
-            });
+            variables.CBOId = CBOId;
           } else {
-            CBOReferral = await createCBOReferral({
-              variables: {
-                name: CBOName,
-                url: CBOUrl,
-                categoryId,
-              },
-            });
+            variables.name = CBOName;
+            variables.url = CBOUrl;
           }
-          finalCBOName = definedCBO
-            ? CBOReferral.data.CBOReferralCreate!.CBO!.name
-            : CBOReferral.data.CBOReferralCreate!.name!;
-        }
-        const CBOReferralId = CBOReferral ? CBOReferral.data.CBOReferralCreate!.id : null;
-        await this.submitTask(CBOReferralId, finalCBOName);
 
+          const referral = await createCBOReferral({ variables });
+
+          CBOReferralId = referral.data.CBOReferralCreate!.id;
+          finalCBOName = definedCBO
+            ? referral.data.CBOReferralCreate!.CBO!.name
+            : referral.data.CBOReferralCreate!.name!;
+        }
+        await this.submitTask(CBOReferralId, finalCBOName);
         this.onClose();
       } catch (err) {
         this.setState({ error: err.message, loading: false });

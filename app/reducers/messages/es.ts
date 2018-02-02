@@ -112,6 +112,7 @@ export const SPANISH_TRANSLATION = {
     'dashboard.emptyupdateMAP': 'No hay pacientes con un MAP desactualizado',
     'dashboard.engage': 'Sin compromiso reciente',
     'dashboard.lists': 'Listas de miembros',
+    'dashboard.loading': 'Loading...',
     'dashboard.new': 'Nuevo para su equipo de cuidado',
     'dashboard.notifications': 'Notificaciones',
     'dashboard.suggestions': 'Sugerencias pendientes de MAP',

@@ -1,6 +1,5 @@
 import { shallow } from 'enzyme';
 import * as React from 'react';
-import Spinner from '../../../shared/library/spinner/spinner';
 import { patientList, patientList2 } from '../../../shared/util/test-data';
 import ComputedLists from '../computed-lists';
 import NavigationItem, { IProps } from '../navigation-item';
@@ -125,10 +124,13 @@ describe('Dashboard Navigation - Computed Lists', () => {
     ).toBeTruthy();
   });
 
-  it('renders loading spinner if loading', () => {
+  it('renders loading placeholder if loading', () => {
     wrapper.setProps({ loading: true });
 
-    expect(wrapper.find(Spinner).length).toBe(1);
-    expect(wrapper.find(NavigationItem).length).toBe(0);
+    expect(wrapper.find(NavigationItem).length).toBe(1);
+    expect(wrapper.find<IProps>(NavigationItem).props().selected).toBe('loading');
+    expect(wrapper.find<IProps>(NavigationItem).props().isSelected).toBeFalsy();
+    expect(wrapper.find<IProps>(NavigationItem).props().icon).toBe('rotateRight');
+    expect(wrapper.find<IProps>(NavigationItem).props().noDivider).toBeTruthy();
   });
 });

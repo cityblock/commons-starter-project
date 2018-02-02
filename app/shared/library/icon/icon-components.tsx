@@ -27,6 +27,7 @@ import PeopleIcon from 'material-ui-icons/People';
 import PhoneIcon from 'material-ui-icons/Phone';
 import PictureAsPDFIcon from 'material-ui-icons/PictureAsPdf';
 import PlaylistAddIcon from 'material-ui-icons/PlaylistAdd';
+import RotateRightIcon from 'material-ui-icons/RotateRight';
 import SearchIcon from 'material-ui-icons/Search';
 import SyncProblemIcon from 'material-ui-icons/SyncProblem';
 import WarningIcon from 'material-ui-icons/Warning';
@@ -62,6 +63,7 @@ const components = {
   phone: PhoneIcon,
   pictureAsPDF: PictureAsPDFIcon,
   playlistAdd: PlaylistAddIcon,
+  rotateRight: RotateRightIcon,
   search: SearchIcon,
   syncProblem: SyncProblemIcon,
   warning: WarningIcon,

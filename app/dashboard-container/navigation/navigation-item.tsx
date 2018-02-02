@@ -1,7 +1,7 @@
 import * as classNames from 'classnames';
 import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
-import { Link } from 'react-router-dom';
+import { Link, LinkProps } from 'react-router-dom';
 import Icon from '../../shared/library/icon/icon';
 import { IconName } from '../../shared/library/icon/icon-types';
 import { Selected } from '../dashboard-container';
@@ -36,6 +36,7 @@ export const NavigationItem: React.StatelessComponent<IProps> = (props: IProps) 
 
   const containerStyles = classNames(styles.container, {
     [styles.selected]: isSelected,
+    [styles.loading]: selected === 'loading',
   });
   const dividerStyles = classNames(styles.divider, {
     [styles.grayDivider]: !noDivider && !isSelected,
@@ -53,10 +54,19 @@ export const NavigationItem: React.StatelessComponent<IProps> = (props: IProps) 
   );
 
   const href = !answerId ? `${routeBase}/${selected}` : `${routeBase}/${selected}/${answerId}`;
+  const linkProps: LinkProps = {
+    to: href,
+    className: containerStyles,
+  };
+
+  // do not link to anything if clicking on loading placehoder
+  if (selected === 'loading') {
+    linkProps.onClick = (e: React.MouseEvent<HTMLAnchorElement>) => e.preventDefault();
+  }
 
   return (
     <div>
-      <Link to={href} className={containerStyles}>
+      <Link {...linkProps}>
         <div className={styles.listName}>
           <Icon name={icon} className={iconStyles} />
           {formattedText}

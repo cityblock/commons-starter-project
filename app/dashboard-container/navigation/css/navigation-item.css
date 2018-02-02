@@ -33,6 +33,10 @@
   color: var(--default-font-color);
 }
 
+.loading h4 {
+  color: var(--light-gray-font-color);
+}
+
 .selected {
   border-color: var(--light-blue-color);
   box-shadow: var(--big-box-shadow);

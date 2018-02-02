@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { FullPatientListFragment } from '../../graphql/types';
-import Spinner from '../../shared/library/spinner/spinner';
 import NavigationItem from './navigation-item';
 
 interface IProps {
@@ -14,7 +13,17 @@ interface IProps {
 const ComputedLists: React.StatelessComponent<IProps> = (props: IProps) => {
   const { patientLists, loading, error, routeBase, answerId } = props;
 
-  if (loading || error) return <Spinner />;
+  if (loading || error) {
+    return (
+      <NavigationItem
+        selected="loading"
+        isSelected={false}
+        routeBase={routeBase}
+        icon="rotateRight"
+        noDivider={true}
+      />
+    );
+  }
 
   const renderedLists = patientLists.map((list, i) => {
     // do not show divider if this is the last computed list or if the

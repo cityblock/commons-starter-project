@@ -27,6 +27,7 @@ export type IconName =
   | 'phone'
   | 'pictureAsPDF'
   | 'playlistAdd'
+  | 'rotateRight'
   | 'search'
   | 'syncProblem'
   | 'warning';

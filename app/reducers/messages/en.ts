@@ -109,6 +109,7 @@ export const ENGLISH_TRANSLATION = {
     'dashboard.emptyupdateMAP': 'There are no patients with an out-of-date MAP',
     'dashboard.engage': 'No recent engagement',
     'dashboard.lists': 'Member lists',
+    'dashboard.loading': 'Loading...',
     'dashboard.new': 'New to your care team',
     'dashboard.notifications': 'Notifications',
     'dashboard.suggestions': 'Pending MAP suggestions',

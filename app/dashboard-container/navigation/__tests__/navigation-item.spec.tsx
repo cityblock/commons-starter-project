@@ -31,6 +31,7 @@ describe('Dashboard Navigation Item', () => {
     expect(wrapper.find(Link).length).toBe(1);
     expect(wrapper.find(Link).props().to).toBe(`${routeBase}/${name}`);
     expect(wrapper.find(Link).props().className).toBe('container');
+    expect(wrapper.find(Link).props().onClick).toBeFalsy();
   });
 
   it('renders formatted text with given name', () => {
@@ -80,6 +81,13 @@ describe('Dashboard Navigation Item', () => {
     wrapper.setProps({ answerId });
 
     expect(wrapper.find(Link).props().to).toBe(`${routeBase}/${name}/${answerId}`);
+  });
+
+  it('disables link if loading placeholder', () => {
+    wrapper.setProps({ selected: 'loading', isSelected: false });
+
+    expect(wrapper.find(Link).props().onClick).toBeTruthy();
+    expect(wrapper.find(Link).props().className).toBe('container loading');
   });
 
   describe('Divider', () => {

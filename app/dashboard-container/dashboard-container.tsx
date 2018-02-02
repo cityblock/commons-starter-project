@@ -10,7 +10,8 @@ export type Selected =
   | 'demographics'
   | 'engage'
   | 'updateMAP'
-  | 'computed';
+  | 'computed'
+  | 'loading';
 
 interface IProps {
   match: {

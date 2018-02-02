@@ -46,7 +46,7 @@ export default class CBOReferral extends BaseModel {
       categoryId: { type: 'string', format: 'uuid' },
       CBOId: { type: 'string', format: 'uuid' },
       name: { type: 'string', minLength: 1 }, // cannot be blank
-      url: { type: 'string', minLength: 1 }, // cannot be blank
+      url: { type: 'string', format: 'url' }, // cannot be blank
       diagnosis: { type: 'string', minLength: 1 }, // cannot be blank
       deletedAt: { type: 'string' },
       sentAt: { type: 'string' },

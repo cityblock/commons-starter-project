@@ -7,6 +7,7 @@ import CBOReferral from '../cbo-referral';
 
 const diagnosis = 'Winter is coming';
 const sentAt = '2018-01-11T05:00:00.000Z';
+const name = 'Arya Stark Pantry';
 
 interface ISetup {
   cbo: CBO;
@@ -43,6 +44,31 @@ describe('CBO referral model', () => {
       expect(cboReferral).toMatchObject({
         categoryId: cbo.categoryId,
         CBOId: cbo.id,
+        diagnosis,
+      });
+      expect(await CBOReferral.get(cboReferral.id, txn)).toMatchObject(cboReferral);
+    });
+  });
+
+  it('creates and gets a CBO referral for other CBO', async () => {
+    await transaction(CBOReferral.knex(), async txn => {
+      const { cbo } = await setup(txn);
+      const url = 'https://www.westeros.com';
+
+      const cboReferral = await CBOReferral.create(
+        {
+          categoryId: cbo.categoryId,
+          name,
+          url,
+          diagnosis,
+        },
+        txn,
+      );
+
+      expect(cboReferral).toMatchObject({
+        categoryId: cbo.categoryId,
+        name,
+        url,
         diagnosis,
       });
       expect(await CBOReferral.get(cboReferral.id, txn)).toMatchObject(cboReferral);

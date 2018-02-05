@@ -36,10 +36,13 @@ const PatientInfo: React.StatelessComponent<IProps> = ({ patient, description })
           headerLabel={copy.patientDoB}
           bodyLabel={formatDateOfBirth(patient.dateOfBirth)}
         />
-        <TextGroup headerLabel={copy.patientGender} bodyLabel={formatGender(patient.gender)} />
+        <TextGroup
+          headerLabel={copy.patientGender}
+          bodyLabel={formatGender(patient.patientInfo.gender)}
+        />
         <TextGroup
           headerLabel={copy.patientLanguage}
-          bodyLabel={patient.language || copy.unknown}
+          bodyLabel={patient.patientInfo.language || copy.unknown}
         />
       </View>
       <View style={styles.body}>

@@ -90,11 +90,11 @@ describe('Shared Component Helpers', () => {
     });
 
     it('returns female if F given', () => {
-      expect(formatGender('F')).toBe('Female');
+      expect(formatGender('female')).toBe('Female');
     });
 
     it('returns female if M given', () => {
-      expect(formatGender('M')).toBe('Male');
+      expect(formatGender('male')).toBe('Male');
     });
   });
 
@@ -118,11 +118,11 @@ describe('Shared Component Helpers', () => {
     });
 
     it('returns just gender if no birthday', () => {
-      expect(formatAgeDetails(null, 'f')).toBe('(F)');
+      expect(formatAgeDetails(null, 'female')).toBe('(F)');
     });
 
     it('returns both age and gender if known', () => {
-      expect(formatAgeDetails(dateOfBirth, 'f')).toBe('(16 F)');
+      expect(formatAgeDetails(dateOfBirth, 'female')).toBe('(16 F)');
     });
   });
 

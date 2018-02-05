@@ -43,9 +43,9 @@ export const formatAge = (dateOfBirth?: string | null): string => {
 };
 
 export const formatGender = (gender: string | null): string => {
-  if (gender === null || (gender !== 'F' && gender !== 'M')) return 'Unknown';
+  if (gender === null || (gender !== 'female' && gender !== 'male')) return 'Unknown';
 
-  return gender === 'F' ? 'Female' : 'Male';
+  return gender === 'female' ? 'Female' : 'Male';
 };
 
 export const formatDateOfBirth = (dateOfBirth?: string | null): string => {
@@ -56,7 +56,7 @@ export const formatDateOfBirth = (dateOfBirth?: string | null): string => {
 export const formatAgeDetails = (dateOfBirth: string | null, gender: string | null): string => {
   if (!dateOfBirth && !gender) return '';
 
-  const formattedGender = gender ? `${gender.toUpperCase()}` : '';
+  const formattedGender = gender ? `${gender[0].toUpperCase()}` : '';
   const space = dateOfBirth && gender ? ' ' : '';
 
   return `(${formatAge(dateOfBirth)}${space}${formattedGender})`;

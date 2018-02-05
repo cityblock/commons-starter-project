@@ -79,7 +79,7 @@ export default class CareTeam extends BaseModel {
       .andWhere('deletedAt', null)
       .orderBy('createdAt')
       .page(pageNumber, pageSize)
-      .eager('patient')) as any;
+      .eager('patient.[patientInfo.[primaryAddress]]')) as any;
     return {
       results: careTeam.results.map((ct: CareTeam) => ct.patient),
       total: careTeam.total,

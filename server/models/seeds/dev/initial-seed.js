@@ -90,18 +90,18 @@ function createPatients(knex, clinicIds) {
     .table('patient')
     .returning('id')
     .insert([
-      buildPatient('Carmen', 'Vasbinder', 1, clinicIds[0], 'F'),
-      buildPatient('Minh', 'Marceau', 2, clinicIds[0], 'M'),
-      buildPatient('Florentino', 'Berge', 3, clinicIds[0], 'M'),
-      buildPatient('Jacquiline', 'Santore', 4, clinicIds[0], 'F'),
-      buildPatient('Lan', 'Overstreet', 5, clinicIds[0], 'F'),
-      buildPatient('Toby', 'Hartshorn', 6, clinicIds[0], 'M'),
-      buildPatient('Birdie', 'Wansley', 7, clinicIds[0], 'F'),
-      buildPatient('Emery', 'Official', 8, clinicIds[0], 'M'),
-      buildPatient('Candace', 'Kimberlin', 9, clinicIds[0], 'F'),
-      buildPatient('Ula', 'Hertel', 10, clinicIds[0], 'F'),
-      buildPatient('Rolland', 'Auman', 11, clinicIds[0], 'M'),
-      buildPatient('Barney', 'Ober', 12, clinicIds[0], 'M'),
+      buildPatient('Carmen', 'Vasbinder', 1, clinicIds[0], 'female'),
+      buildPatient('Minh', 'Marceau', 2, clinicIds[0], 'male'),
+      buildPatient('Florentino', 'Berge', 3, clinicIds[0], 'male'),
+      buildPatient('Jacquiline', 'Santore', 4, clinicIds[0], 'female'),
+      buildPatient('Lan', 'Overstreet', 5, clinicIds[0], 'female'),
+      buildPatient('Toby', 'Hartshorn', 6, clinicIds[0], 'male'),
+      buildPatient('Birdie', 'Wansley', 7, clinicIds[0], 'female'),
+      buildPatient('Emery', 'Official', 8, clinicIds[0], 'male'),
+      buildPatient('Candace', 'Kimberlin', 9, clinicIds[0], 'female'),
+      buildPatient('Ula', 'Hertel', 10, clinicIds[0], 'female'),
+      buildPatient('Rolland', 'Auman', 11, clinicIds[0], 'male'),
+      buildPatient('Barney', 'Ober', 12, clinicIds[0], 'male'),
     ]);
 }
 

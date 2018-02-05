@@ -1,6 +1,10 @@
-import { ShortPatientFragment } from '../../graphql/types';
+interface IPatientOptions {
+  firstName: string;
+  lastName: string;
+  middleName?: string | null;
+}
 
-export const getPatientFirstAndMiddleName = (patient: ShortPatientFragment) => {
+export const getPatientFirstAndMiddleName = (patient: IPatientOptions) => {
   if (patient.middleName) {
     return `${patient.firstName} ${patient.middleName.charAt(0)}.`;
   } else {
@@ -8,7 +12,7 @@ export const getPatientFirstAndMiddleName = (patient: ShortPatientFragment) => {
   }
 };
 
-export const getPatientFullName = (patient: ShortPatientFragment) => {
+export const getPatientFullName = (patient: IPatientOptions) => {
   const firstName = getPatientFirstAndMiddleName(patient);
   const lastName = patient.lastName ? patient.lastName : null;
   return `${firstName} ${lastName}`;

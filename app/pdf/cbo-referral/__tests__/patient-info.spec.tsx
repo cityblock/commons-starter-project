@@ -83,7 +83,7 @@ describe('CBO Referral PDF Patient Info', () => {
         .find(TextGroup)
         .at(4)
         .props().bodyLabel,
-    ).toBe(formatGender(patient.gender));
+    ).toBe(formatGender(patient.patientInfo.gender));
   });
 
   it('renders patient language', () => {
@@ -98,7 +98,7 @@ describe('CBO Referral PDF Patient Info', () => {
         .find(TextGroup)
         .at(5)
         .props().bodyLabel,
-    ).toBe(patient.language);
+    ).toBe(patient.patientInfo.language);
   });
 
   it('renders patient phone number', () => {

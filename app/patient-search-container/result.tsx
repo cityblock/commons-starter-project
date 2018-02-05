@@ -12,7 +12,7 @@ interface IProps {
 }
 
 const PatientSearchResult: React.StatelessComponent<IProps> = ({ searchResult, query }) => {
-  const { id, firstName, lastName, dateOfBirth, gender, userCareTeam } = searchResult;
+  const { id, firstName, lastName, dateOfBirth, patientInfo, userCareTeam } = searchResult;
 
   return (
     <Link to={`/patients/${id}/map/active`} className={styles.result}>
@@ -22,7 +22,7 @@ const PatientSearchResult: React.StatelessComponent<IProps> = ({ searchResult, q
       </h4>
       <p className={styles.status}>Enrolled</p>
       <p className={styles.memberId}>CBH-1234567</p>
-      <PatientAge dateOfBirth={dateOfBirth} gender={gender} />
+      <PatientAge dateOfBirth={dateOfBirth} gender={patientInfo.gender} />
       <p className={styles.address}>830 Gaston Crescent, Apt 5A, Queens, NY</p>
     </Link>
   );

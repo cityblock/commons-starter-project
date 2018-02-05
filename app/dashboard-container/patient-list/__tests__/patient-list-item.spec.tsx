@@ -53,7 +53,7 @@ describe('Dashboard Patient List Item', () => {
   it('renders patient age information', () => {
     expect(wrapper.find(PatientAge).length).toBe(1);
     expect(wrapper.find(PatientAge).props().dateOfBirth).toBe(patient.dateOfBirth);
-    expect(wrapper.find(PatientAge).props().gender).toBe(patient.gender);
+    expect(wrapper.find(PatientAge).props().gender).toBe(patient.patientInfo.gender);
   });
 
   it('does not render task count if not on patient task view', () => {

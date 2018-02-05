@@ -5,10 +5,12 @@ fragment FullPatientForCBOReferralFormPDF on Patient {
   createdAt
   firstName
   lastName
-  language
   dateOfBirth
-  gender
   careTeam {
     ...FullUser
+  }
+  patientInfo {
+    gender
+    language
   }
 }

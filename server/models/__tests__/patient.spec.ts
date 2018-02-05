@@ -89,6 +89,7 @@ describe('patient model', () => {
         const { clinic } = await setup(txn);
         const user = await User.create(createMockUser(11, clinic.id, userRole), txn);
         const patient = await createPatient(createMockPatient(123, clinic.id), user.id, txn);
+        const birthday = new Date('02/02/1902');
         expect(patient).toMatchObject({
           id: patient.id,
           athenaPatientId: 123,
@@ -98,8 +99,6 @@ describe('patient model', () => {
             firstName: 'first',
             lastName: 'last',
             dateOfBirth: '02/02/1902',
-            zip: '12345',
-            gender: 'F',
           },
           patient.id,
           txn,
@@ -108,9 +107,7 @@ describe('patient model', () => {
           id: patient.id,
           firstName: 'first',
           lastName: 'last',
-          dateOfBirth: '02/02/1902',
-          zip: '12345',
-          gender: 'F',
+          dateOfBirth: birthday,
         });
       });
     });
@@ -121,17 +118,19 @@ describe('patient model', () => {
       await transaction(Patient.knex(), async txn => {
         const { clinic } = await setup(txn);
         const user = await User.create(createMockUser(11, clinic.id, userRole), txn);
+        const birthday = new Date('02/02/1902');
         const patient = await Patient.setup(
           {
             firstName: 'first',
             middleName: 'middle',
             lastName: 'last',
             dateOfBirth: '02/02/1902',
-            zip: '12345',
-            gender: 'F',
             homeClinicId: clinic.id,
             consentToCall: false,
             consentToText: false,
+          },
+          {
+            gender: 'female',
             language: 'en',
           },
           user.id,
@@ -142,12 +141,9 @@ describe('patient model', () => {
           firstName: 'first',
           middleName: 'middle',
           lastName: 'last',
-          dateOfBirth: '02/02/1902',
-          zip: '12345',
-          gender: 'F',
+          dateOfBirth: birthday,
           consentToCall: false,
           consentToText: false,
-          language: 'en',
         });
       });
     });
@@ -162,11 +158,12 @@ describe('patient model', () => {
             middleName: 'middle',
             lastName: 'last',
             dateOfBirth: '02/02/1902',
-            zip: '12345',
-            gender: 'F',
             homeClinicId: clinic.id,
             consentToCall: false,
             consentToText: false,
+          },
+          {
+            gender: 'female',
             language: 'en',
           },
           user.id,
@@ -189,11 +186,12 @@ describe('patient model', () => {
             middleName: 'middle',
             lastName: 'last',
             dateOfBirth: '02/02/1902',
-            zip: '12345',
-            gender: 'F',
             homeClinicId: clinic.id,
             consentToCall: false,
             consentToText: false,
+          },
+          {
+            gender: 'female',
             language: 'en',
           },
           user.id,
@@ -313,12 +311,22 @@ describe('patient model', () => {
     async function searchSetup(txn: Transaction): Promise<ISearchSetup> {
       const { clinic } = await setup(txn);
       const user = await User.create(createMockUser(11, clinic.id, userRole), txn);
-      await Patient.setup(createMockPatient(14, clinic.id, 'Robb', 'Stark'), user.id, txn);
+      await Patient.setup(
+        createMockPatient(14, clinic.id, 'Robb', 'Stark'),
+        {
+          gender: 'female',
+          language: 'en',
+        },
+        user.id,
+        txn,
+      );
+
       const jonSnow = await createPatient(
         createMockPatient(11, clinic.id, 'Jon', 'Snow'),
         user.id,
         txn,
       );
+
       await createPatient(createMockPatient(12, clinic.id, 'Arya', 'Stark'), user.id, txn);
       await createPatient(createMockPatient(13, clinic.id, 'Sansa', 'Stark'), user.id, txn);
 
@@ -337,6 +345,10 @@ describe('patient model', () => {
               firstName: 'Jon',
               lastName: 'Snow',
               userCareTeam: true,
+              patientInfo: {
+                gender: 'male',
+                language: 'en',
+              },
             },
           ],
           total: 1,
@@ -494,7 +506,7 @@ describe('patient model', () => {
 
     it('returns patients on care team with missing demographic information', async () => {
       await transaction(Patient.knex(), async txn => {
-        const { patient1, user } = await setupPatientsWithMissingInfo(txn);
+        const { patient, user } = await setupPatientsWithMissingInfo(txn);
 
         const { total, results } = await Patient.getPatientsWithMissingInfo(
           {
@@ -507,8 +519,12 @@ describe('patient model', () => {
 
         expect(total).toBe(1);
         expect(results[0]).toMatchObject({
-          id: patient1.id,
-          firstName: patient1.firstName,
+          id: patient.id,
+          firstName: patient.firstName,
+          patientInfo: {
+            gender: null,
+            language: null,
+          },
         });
       });
     });

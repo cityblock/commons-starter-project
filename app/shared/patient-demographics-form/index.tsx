@@ -171,8 +171,8 @@ export default class PatientDemographicsForm extends React.Component<IProps, ISt
                   </option>
                 )}
               </FormattedMessage>
-              <option value="M">Male</option>
-              <option value="F">Female</option>
+              <option value="male">Male</option>
+              <option value="female">Female</option>
             </select>
           </div>
           <div className={formStyles.inputGroup}>

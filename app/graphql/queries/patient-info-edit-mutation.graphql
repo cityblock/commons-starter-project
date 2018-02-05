@@ -1,0 +1,19 @@
+#import "../fragments/short-patient-info.graphql"
+
+mutation patientInfoEdit(
+  $patientInfoId: ID!
+  $gender: String
+  $language: String
+  $primaryAddressId: ID
+) {
+  patientInfoEdit(
+    input: {
+      patientInfoId: $patientInfoId
+      gender: $gender
+      language: $language
+      primaryAddressId: $primaryAddressId
+    }
+  ) {
+    ...ShortPatientInfo
+  }
+}

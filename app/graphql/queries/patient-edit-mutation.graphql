@@ -6,9 +6,6 @@ mutation patientEdit(
   $middleName: String
   $lastName: String
   $dateOfBirth: String
-  $gender: String
-  $zip: String
-  $language: String
   $consentToCall: Boolean
   $consentToText: Boolean
 ) {
@@ -19,9 +16,6 @@ mutation patientEdit(
       middleName: $middleName
       lastName: $lastName
       dateOfBirth: $dateOfBirth
-      gender: $gender
-      zip: $zip
-      language: $language
       consentToCall: $consentToCall
       consentToText: $consentToText
     }

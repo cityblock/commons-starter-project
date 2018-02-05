@@ -146,10 +146,10 @@ describe('patient', () => {
           patientSetup(input: {
             firstName: "first",
             lastName: "last",
-            gender: "F",
+            gender: "female",
             zip: "02345",
             homeClinicId: "${homeClinicId}",
-            dateOfBirth: "02/02/1902",
+            dateOfBirth: "${new Date('02/02/1902').toISOString()}",
             consentToText: true,
             consentToCall: true,
             maritalStatus: "Unknown",
@@ -157,7 +157,7 @@ describe('patient', () => {
             ssn: "123456789",
             language: "en",
           }) {
-            id, firstName, lastName, gender, zip, dateOfBirth
+            id, firstName, lastName, dateOfBirth
           }
         }`;
 
@@ -171,12 +171,11 @@ describe('patient', () => {
           logger,
           txn,
         });
+
         expect(cloneDeep(result.data!.patientSetup)).toMatchObject({
           firstName: 'first',
           lastName: 'last',
-          gender: 'F',
-          zip: '02345',
-          dateOfBirth: '02/02/1902',
+          dateOfBirth: new Date('02/02/1902').toString(),
         });
         expect(log).toBeCalled();
       });
@@ -215,8 +214,6 @@ describe('patient', () => {
           patientSetup(input: {
             firstName: "first",
             lastName: "last",
-            gender: "F",
-            zip: "02345",
             homeClinicId: "${setupResult.homeClinicId}",
             dateOfBirth: "02/02/1902",
             consentToText: true,
@@ -224,9 +221,8 @@ describe('patient', () => {
             maritalStatus: "Unknown",
             race: "Other Race",
             ssn: "123456789",
-            language: "en",
           }) {
-            id, firstName, lastName, gender, zip, dateOfBirth
+            id, firstName, lastName, dateOfBirth
           }
         }`;
 
@@ -548,11 +544,11 @@ describe('patient', () => {
 
   it('gets patients that have missing demographic info', async () => {
     await transaction(Patient.knex(), async txn => {
-      const { user, patient1 } = await setupPatientsWithMissingInfo(txn);
+      const { user, patient } = await setupPatientsWithMissingInfo(txn);
 
       const query = `{
         patientsWithMissingInfo(pageNumber: 0, pageSize: 10) {
-          edges { node { id, firstName }}
+          edges { node { id, firstName, patientInfo { gender } }}
           totalCount
         }
       }`;
@@ -565,8 +561,11 @@ describe('patient', () => {
 
       expect(result.data!.patientsWithMissingInfo.totalCount).toBe(1);
       expect(result.data!.patientsWithMissingInfo.edges[0].node).toMatchObject({
-        id: patient1.id,
-        firstName: patient1.firstName,
+        id: patient.id,
+        firstName: patient.firstName,
+        patientInfo: {
+          gender: null,
+        },
       });
     });
   });

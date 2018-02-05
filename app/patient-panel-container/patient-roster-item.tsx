@@ -1,3 +1,4 @@
+import { get } from 'lodash';
 import * as React from 'react';
 import { FormattedRelative } from 'react-intl';
 import { Link } from 'react-router-dom';
@@ -26,12 +27,14 @@ const PatientRosterItem: React.StatelessComponent<IProps> = (props: IProps) => {
   ) : (
     'unknown'
   );
+
+  const zip = get(patient, 'patientInfo.primaryAddress.zip', null);
   return (
     <Link className={styles.tableRow} to={`/patients/${patient.id}`}>
       <div className={styles.tableColumn}>{patient.firstName}</div>
       <div className={styles.tableColumn}>{patient.lastName}</div>
       <div className={styles.tableColumn}>{patientAge}</div>
-      <div className={styles.tableColumn}>{patient.zip}</div>
+      <div className={styles.tableColumn}>{zip}</div>
       <div className={styles.tableColumn}>{patientJoined}</div>
       <div className={styles.tableColumn} />
     </Link>

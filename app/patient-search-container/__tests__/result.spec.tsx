@@ -9,14 +9,16 @@ describe('Patient Search Result Component', () => {
   const lastName = 'Stark';
   const id = 'ladyOfWinterfell';
   const dateOfBirth = '2000-12-01 12:00:00+00:00';
-  const gender = 'F';
+  const gender = 'female';
 
   const getSearchResult = (userCareTeam: boolean) => ({
     firstName,
     lastName,
     id,
     dateOfBirth,
-    gender,
+    patientInfo: {
+      gender,
+    },
     userCareTeam,
   });
   const query = 'sansa';

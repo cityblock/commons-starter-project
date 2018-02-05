@@ -3,5 +3,7 @@ fragment FullPatientForDashboard on PatientForDashboard {
   firstName
   lastName
   dateOfBirth
-  gender
+  patientInfo {
+    gender
+  }
 }

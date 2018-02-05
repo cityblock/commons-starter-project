@@ -36,15 +36,21 @@ export const patient = {
   firstName: 'Bob',
   middleName: null,
   lastName: 'Smith',
-  language: 'en',
   dateOfBirth: '01/01/1999',
-  gender: 'male',
-  zip: '05431',
   homeClinicId: clinic.id,
   createdAt: '2017-09-07T13:45:14.532Z',
   scratchPad: 'Note',
   consentToCall: true,
   consentToText: true,
+  patientInfo: {
+    id: 'patient-info-id',
+    gender: 'male',
+    language: 'en',
+    primaryAddress: {
+      id: 'primary-address-id',
+      zip: '11238',
+    },
+  },
 };
 
 export const concern = {

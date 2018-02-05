@@ -4,6 +4,11 @@ import * as path from 'path';
 import 'regenerator-runtime/runtime';
 import config from '../config';
 import {
+  addressCreateForPatient,
+  addressCreatePrimaryForPatient,
+  addressEdit,
+} from './address-resolver';
+import {
   answerCreate,
   answerDelete,
   answerEdit,
@@ -102,6 +107,7 @@ import {
   resolvePatientGoal,
   resolvePatientGoalsForPatient,
 } from './patient-goal-resolver';
+import { patientInfoEdit } from './patient-info-resolver';
 import {
   patientListCreate,
   patientListDelete,
@@ -365,10 +371,14 @@ const resolveFunctions = {
   },
 
   RootMutationType: {
+    addressCreateForPatient,
+    addressCreatePrimaryForPatient,
+    addressEdit,
     careTeamAddUser,
     careTeamRemoveUser,
     clinicCreate,
     patientEdit,
+    patientInfoEdit,
     patientSetup,
     patientScratchPadEdit,
     currentUserEdit,

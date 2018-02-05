@@ -7,6 +7,7 @@ import {
   IRedoxPatientCreateResponse,
 } from './apis/redox/types';
 import config from './config';
+import Address from './models/address';
 import Answer from './models/answer';
 import CarePlanSuggestion from './models/care-plan-suggestion';
 import CarePlanUpdateEvent from './models/care-plan-update-event';
@@ -18,10 +19,12 @@ import Clinic from './models/clinic';
 import ComputedField from './models/computed-field';
 import Concern from './models/concern';
 import EventNotification from './models/event-notification';
-import Patient, { IPatientEditableFields } from './models/patient';
+import Patient, { IPatientEditableFields, IPatientInfoOptions } from './models/patient';
+import PatientAddress from './models/patient-address';
 import PatientAnswer from './models/patient-answer';
 import PatientAnswerEvent from './models/patient-answer-event';
 import PatientConcern from './models/patient-concern';
+import PatientInfo from './models/patient-info';
 import PatientList from './models/patient-list';
 import PatientScreeningToolSubmission from './models/patient-screening-tool-submission';
 import ProgressNote from './models/progress-note';
@@ -50,10 +53,45 @@ export async function createPatient(
   patient: ICreatePatient,
   userId: string,
   txn: Transaction,
+  patientInfo?: IPatientInfoOptions,
 ): Promise<Patient> {
+  if (!patientInfo) {
+    patientInfo = createMockPatientInfo();
+  }
+
   const instance = await Patient.query(txn).insertAndFetch(patient);
+  const patientInfoInput = {
+    ...patientInfo,
+    patientId: instance.id,
+    updatedBy: userId,
+  };
+  await PatientInfo.create(patientInfoInput, txn);
   await CareTeam.create({ userId, patientId: instance.id }, txn);
-  return instance;
+
+  return Patient.get(instance.id, txn);
+}
+
+export async function createAddressForPatient(
+  street: string,
+  zip: string,
+  patientId: string,
+  userId: string,
+  txn: Transaction,
+): Promise<Address> {
+  const address = await Address.create({ zip, street, updatedBy: userId }, txn);
+  await PatientAddress.create({ addressId: address.id, patientId }, txn);
+  return address;
+}
+
+export function createMockAddress(userId: string) {
+  return {
+    street: '55 Washington St',
+    zip: '11201',
+    state: 'NY',
+    city: 'Brooklyn',
+    description: 'Office',
+    updatedBy: userId,
+  };
 }
 
 export function createMockPatient(
@@ -67,12 +105,17 @@ export function createMockPatient(
     firstName: firstName || 'dan',
     lastName: lastName || 'plant',
     homeClinicId,
-    zip: '11238',
-    gender: 'M',
     dateOfBirth: '01/01/1900',
     consentToCall: false,
     consentToText: false,
+  };
+}
+
+export function createMockPatientInfo(primaryAddressId?: string) {
+  return {
+    gender: 'male',
     language: 'en',
+    primaryAddressId,
   };
 }
 
@@ -424,39 +467,60 @@ export async function setupPatientsWithMissingInfo(txn: Transaction) {
   const user = await User.create(createMockUser(211, clinic.id), txn);
   const user2 = await User.create(createMockUser(212, clinic.id), txn);
 
-  await createPatient(createMockPatient(511, clinic.id, patient1Name), user.id, txn);
+  const patient = await createPatient(
+    createMockPatient(511, clinic.id, patient1Name),
+    user.id,
+    txn,
+    {
+      gender: undefined,
+      language: undefined,
+    },
+  );
+
   const patient1 = await createPatient(
     {
       athenaPatientId: 13,
       firstName: patient2Name,
       lastName: 'Stark',
       homeClinicId: clinic.id,
-      zip: '11238',
       dateOfBirth: '01/01/1900',
       consentToCall: false,
       consentToText: false,
-      language: 'en',
     } as any,
     user.id,
     txn,
   );
+
   await createPatient(
     {
       athenaPatientId: 14,
       firstName: patient3Name,
       lastName: 'Stark',
       homeClinicId: clinic.id,
-      zip: '11238',
-      dateOfBirth: '01/01/1900',
+      dateOfBirth: '01/01/1910',
       consentToCall: false,
       consentToText: false,
-      language: 'en',
     } as any,
     user2.id,
     txn,
   );
+  const address = await createAddressForPatient(
+    '55 Washington St',
+    '11238',
+    patient1.id,
+    user.id,
+    txn,
+  );
+  await PatientInfo.edit(
+    {
+      ...createMockPatientInfo(address.id),
+      updatedBy: user.id,
+    },
+    patient1.patientInfo.id,
+    txn,
+  );
 
-  return { user, patient1 };
+  return { user, patient };
 }
 
 export async function setupPatientsWithNoRecentEngagement(txn: Transaction) {

@@ -473,13 +473,11 @@ declare module 'schema' {
   */
   interface IPatient {
     id: string;
+    patientInfo: IPatientInfo;
     firstName: string;
     middleName: string | null;
-    language: string | null;
     lastName: string;
     dateOfBirth: string | null;
-    gender: string | null;
-    zip: string | null;
     homeClinicId: string | null;
     createdAt: string;
     scratchPad: string | null;
@@ -487,6 +485,30 @@ declare module 'schema' {
     consentToText: boolean | null;
     careTeam: Array<IUser>;
     patientDataFlags: Array<IPatientDataFlag>;
+  }
+
+  /**
+    description: Patient info that is editable in Commons
+  */
+  interface IPatientInfo {
+    id: string;
+    patientId: string | null;
+    gender: string | null;
+    language: string | null;
+    primaryAddress: IAddress | null;
+    addresses: Array<IAddress> | null;
+  }
+
+  /**
+    description: Address
+  */
+  interface IAddress {
+    id: string;
+    zip: string | null;
+    street: string | null;
+    state: string | null;
+    city: string | null;
+    description: string | null;
   }
 
   /**
@@ -534,8 +556,8 @@ declare module 'schema' {
     firstName: string;
     lastName: string;
     dateOfBirth: string | null;
-    gender: string | null;
     userCareTeam: boolean;
+    patientInfo: IPatientInfo;
   }
 
   /**
@@ -563,7 +585,7 @@ declare module 'schema' {
     firstName: string;
     lastName: string;
     dateOfBirth: string | null;
-    gender: string | null;
+    patientInfo: IPatientInfo;
   }
 
   /**
@@ -1409,9 +1431,25 @@ declare module 'schema' {
   */
     appointmentEnd: IAppointmentEndResult | null;
     /**
+    description: Create an address for a Patient
+  */
+    addressCreateForPatient: IAddress | null;
+    /**
+    description: Create an primary address for a Patient
+  */
+    addressCreatePrimaryForPatient: IAddress | null;
+    /**
+    description: Edit an address
+  */
+    addressEdit: IAddress | null;
+    /**
     description: Edit fields on patient stored in the db
   */
     patientEdit: IPatient | null;
+    /**
+    description: Edit fields on patient info stored in the db
+  */
+    patientInfoEdit: IPatientInfo | null;
     /**
     description: Setup patient creates the patient in the db AND in athena
   */
@@ -1909,6 +1947,43 @@ declare module 'schema' {
   }
 
   /**
+    description: params for creating and address for a patient in the db
+  */
+  interface IAddressCreateForPatientInput {
+    patientId: string;
+    zip: string | null;
+    street: string | null;
+    state: string | null;
+    city: string | null;
+    description: string | null;
+  }
+
+  /**
+    description: params for creating and address for a patient in the db
+  */
+  interface IAddressCreatePrimaryForPatientInput {
+    patientInfoId: string;
+    zip: string | null;
+    street: string | null;
+    state: string | null;
+    city: string | null;
+    description: string | null;
+  }
+
+  /**
+    description: Editable fields on an address
+  */
+  interface IAddressEditInput {
+    addressId: string;
+    patientId: string;
+    zip: string | null;
+    street: string | null;
+    state: string | null;
+    city: string | null;
+    description: string | null;
+  }
+
+  /**
     description: params for editing a patient in the db
   */
   interface IPatientEditInput {
@@ -1917,11 +1992,18 @@ declare module 'schema' {
     middleName: string | null;
     lastName: string | null;
     dateOfBirth: string | null;
-    gender: string | null;
-    zip: string | null;
-    language: string | null;
     consentToCall: boolean | null;
     consentToText: boolean | null;
+  }
+
+  /**
+    description: params for editing a patient in the db
+  */
+  interface IPatientInfoEditInput {
+    patientInfoId: string;
+    gender: string | null;
+    language: string | null;
+    primaryAddressId: string | null;
   }
 
   /**

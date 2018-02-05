@@ -1,15 +1,27 @@
 import * as classNames from 'classnames';
 import { format } from 'date-fns';
+import { get } from 'lodash';
 import * as React from 'react';
 import { compose, graphql } from 'react-apollo';
 import { FormattedMessage } from 'react-intl';
-import { DOB_FORMAT } from '../config';
+import * as createAddressForPatientMutationGraphql from '../graphql/queries/address-create-for-patient-mutation.graphql';
+import * as createAddressPrimaryForPatientMutationGraphql from '../graphql/queries/address-create-primary-for-patient-mutation.graphql';
+import * as editAddressMutationGraphql from '../graphql/queries/address-edit-mutation.graphql';
 import * as patientQuery from '../graphql/queries/get-patient.graphql';
 import * as editPatientMutationGraphql from '../graphql/queries/patient-edit-mutation.graphql';
+import * as editPatientInfoMutationGraphql from '../graphql/queries/patient-info-edit-mutation.graphql';
 import {
+  addressCreateForPatientMutation,
+  addressCreateForPatientMutationVariables,
+  addressCreatePrimaryForPatientMutation,
+  addressCreatePrimaryForPatientMutationVariables,
+  addressEditMutation,
+  addressEditMutationVariables,
   getPatientQuery,
   patientEditMutation,
   patientEditMutationVariables,
+  patientInfoEditMutation,
+  patientInfoEditMutationVariables,
 } from '../graphql/types';
 import * as sortSearchStyles from '../shared/css/sort-search.css';
 import Button from '../shared/library/button/button';
@@ -23,8 +35,24 @@ import PatientInsuranceForm, {
 import { IUpdatedField } from '../shared/util/updated-fields';
 import * as styles from './css/patient-info.css';
 
-interface IOptions {
+interface IPatientOptions {
   variables: patientEditMutationVariables;
+}
+
+interface IPatientInfoOptions {
+  variables: patientInfoEditMutationVariables;
+}
+
+interface IAddressEditOptions {
+  variables: addressEditMutationVariables;
+}
+
+interface IAddressCreateOptions {
+  variables: addressCreateForPatientMutationVariables;
+}
+
+interface IAddressCreatePrimaryOptions {
+  variables: addressCreatePrimaryForPatientMutationVariables;
 }
 
 interface IProps {
@@ -37,7 +65,13 @@ interface IProps {
 }
 
 interface IGraphqlProps {
-  updatePatientInfo: (options: IOptions) => { data: patientEditMutation };
+  updatePatient: (options: IPatientOptions) => { data: patientEditMutation };
+  updatePatientInfo: (options: IPatientInfoOptions) => { data: patientInfoEditMutation };
+  updateAddress: (options: IAddressEditOptions) => { data: addressEditMutation };
+  createAddress: (options: IAddressCreateOptions) => { data: addressCreateForPatientMutation };
+  createPrimaryAddress: (
+    options: IAddressCreatePrimaryOptions,
+  ) => { data: addressCreatePrimaryForPatientMutation };
   patient?: getPatientQuery['patient'];
   loading?: boolean;
   error: string | null;
@@ -95,18 +129,19 @@ export class PatientInfo extends React.Component<allProps, IState> {
 
     if (patient) {
       const { dateOfBirth } = patient;
+      const zip = get(patient, 'patientInfo.primaryAddress.zip', '');
 
       this.setState({
         firstName: patient.firstName || '',
         middleName: patient.middleName || '',
         lastName: patient.lastName || '',
         dateOfBirth: dateOfBirth ? format(new Date(dateOfBirth), 'YYYY-MM-DD') : '',
-        gender: patient.gender || '',
-        language: patient.language || '',
+        gender: patient.patientInfo.gender || '',
+        language: patient.patientInfo.language || '',
         email: '',
         homePhone: '',
         mobilePhone: '',
-        zip: patient.zip || '',
+        zip,
         insuranceType: '',
         patientRelationshipToPolicyHolder: '',
         memberId: '',
@@ -142,38 +177,84 @@ export class PatientInfo extends React.Component<allProps, IState> {
   }
 
   async onClickSave() {
-    const { match, updatePatientInfo, loading, error } = this.props;
+    const {
+      match,
+      patient,
+      updatePatient,
+      updatePatientInfo,
+      updateAddress,
+      createPrimaryAddress,
+      loading,
+      error,
+    } = this.props;
+
     const {
       firstName,
       middleName,
       lastName,
       gender,
       dateOfBirth,
-      zip,
       language,
+      zip,
       consentToCall,
       consentToText,
       saveLoading,
     } = this.state;
+
     const patientId = match.params.patientId;
     if (!loading && !error && !saveLoading) {
       this.setState({ saveSuccess: false, saveLoading: true, saveError: false });
+
+      let birthday = null;
+      if (dateOfBirth) {
+        const splitDate = dateOfBirth.split('-');
+        const year = parseInt(splitDate[0], 10);
+        const month = parseInt(splitDate[1], 10) - 1;
+        const day = parseInt(splitDate[2], 10);
+        birthday = new Date(Date.UTC(year, month, day)).toISOString();
+      }
+
       try {
         // TODO: Make this less annoying
-        await updatePatientInfo({
+        await updatePatient({
           variables: {
             patientId,
             firstName: firstName ? firstName : null,
             middleName: middleName ? middleName : null,
             lastName: lastName ? lastName : null,
-            gender: gender ? gender : null,
-            dateOfBirth: dateOfBirth ? format(new Date(dateOfBirth), DOB_FORMAT) : null,
-            zip: zip ? zip : null,
-            language: language ? language : null,
+            dateOfBirth: birthday,
             consentToCall: consentToCall === 'true',
             consentToText: consentToText === 'true',
           },
         });
+
+        if (patient) {
+          await updatePatientInfo({
+            variables: {
+              patientInfoId: patient.patientInfo.id,
+              gender: gender ? gender : null,
+              language: language ? language : null,
+            },
+          });
+
+          if (patient.patientInfo.primaryAddress) {
+            await updateAddress({
+              variables: {
+                addressId: patient.patientInfo.primaryAddress.id,
+                patientId: patient.id,
+                zip,
+              },
+            });
+          } else if (!patient.patientInfo.primaryAddress && zip) {
+            await createPrimaryAddress({
+              variables: {
+                patientInfoId: patient.patientInfo.id,
+                zip,
+              },
+            });
+          }
+        }
+
         this.setState({ saveSuccess: true });
         this.clearSaveSuccess();
       } catch (err) {
@@ -300,7 +381,19 @@ export class PatientInfo extends React.Component<allProps, IState> {
 
 export default compose(
   graphql<IGraphqlProps, IProps, allProps>(editPatientMutationGraphql as any, {
+    name: 'updatePatient',
+  }),
+  graphql<IGraphqlProps, IProps, allProps>(editPatientInfoMutationGraphql as any, {
     name: 'updatePatientInfo',
+  }),
+  graphql<IGraphqlProps, IProps, allProps>(editAddressMutationGraphql as any, {
+    name: 'updateAddress',
+  }),
+  graphql<IGraphqlProps, IProps, allProps>(createAddressPrimaryForPatientMutationGraphql as any, {
+    name: 'createPrimaryAddress',
+  }),
+  graphql<IGraphqlProps, IProps, allProps>(createAddressForPatientMutationGraphql as any, {
+    name: 'createAddress',
   }),
   graphql<IGraphqlProps, IProps, allProps>(patientQuery as any, {
     options: (props: IProps) => ({

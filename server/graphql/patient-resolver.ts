@@ -12,9 +12,12 @@ import {
 } from 'schema';
 import { getAthenaPatientIdFromCreate } from '../apis/redox/formatters';
 import { IPaginatedResults, IPaginationOptions } from '../db';
+import Address from '../models/address';
 import CareTeam from '../models/care-team';
 import Clinic from '../models/clinic';
 import Patient from '../models/patient';
+import PatientAddress from '../models/patient-address';
+import PatientInfo from '../models/patient-info';
 import accessControls from './shared/access-controls';
 import { checkUserLoggedIn, formatRelayEdge, IContext } from './shared/utils';
 
@@ -69,7 +72,23 @@ export async function patientSetup(
   await accessControls.isAllowedForUser(userRole, 'create', 'patient');
   checkUserLoggedIn(userId);
 
-  const patient = await Patient.setup(input, userId!, txn);
+  const patientInfoOptions = {
+    gender: input.gender,
+    language: input.language,
+  };
+
+  const patient = await Patient.setup(input, patientInfoOptions, userId!, txn);
+
+  if (input.zip) {
+    const address = await Address.create({ zip: input.zip, updatedBy: userId! }, txn);
+    await PatientAddress.create({ patientId: patient.id, addressId: address.id }, txn);
+    await PatientInfo.edit(
+      { primaryAddressId: address.id, updatedBy: userId! },
+      patient.patientInfo.id,
+      context.txn,
+    );
+  }
+
   const department = await Clinic.get(input.homeClinicId, txn);
   const redoxPatient = await redoxApi.patientCreate(
     {

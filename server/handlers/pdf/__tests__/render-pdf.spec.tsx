@@ -59,7 +59,7 @@ async function setup(txn: Transaction): Promise<Task> {
     txn,
   );
 
-  return task;
+  return Task.getForCBOReferralFormPDF(task.id, txn);
 }
 
 describe('handling PDF requests', () => {

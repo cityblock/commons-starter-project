@@ -350,7 +350,9 @@ export default class Task extends BaseModel {
 
   static async getForCBOReferralFormPDF(taskId: string, txn: Transaction) {
     const task = await this.query(txn)
-      .eager('[assignedTo, createdBy, patient.[careTeam], CBOReferral.[category, CBO]]')
+      .eager(
+        '[assignedTo, createdBy, patient.[careTeam, patientInfo], CBOReferral.[category, CBO]]',
+      )
       .findOne({ id: taskId, deletedAt: null });
 
     if (!task) {

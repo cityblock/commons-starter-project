@@ -1,0 +1,23 @@
+#import "../fragments/full-address.graphql"
+
+mutation addressCreatePrimaryForPatient(
+  $patientInfoId: ID!
+  $zip: String!
+  $street: String
+  $city: String
+  $state: String
+  $description: String
+) {
+  addressCreatePrimaryForPatient(
+    input: {
+      patientInfoId: $patientInfoId
+      zip: $zip
+      street: $street
+      city: $city
+      state: $state
+      description: $description
+    }
+  ) {
+    ...FullAddress
+  }
+}

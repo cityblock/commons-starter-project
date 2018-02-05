@@ -1,0 +1,8 @@
+fragment FullAddress on Address {
+  id
+  city
+  state
+  street
+  zip
+  description
+}

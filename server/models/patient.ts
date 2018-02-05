@@ -10,23 +10,29 @@ import Concern from './concern';
 import PatientAnswer from './patient-answer';
 import PatientConcern from './patient-concern';
 import PatientDataFlag from './patient-data-flag';
+import PatientInfo from './patient-info';
 import Task from './task';
 import User from './user';
 
 // how fuzzy is patient name search (0 (match everything) to 1 (exact match))
 const SIMILARITY_THRESHOLD = 0.2;
 
+const EAGER_QUERY = '[patientInfo.[primaryAddress]]';
+
 export interface IPatientEditableFields {
   firstName: string;
   middleName?: string | undefined | null;
   lastName: string;
-  gender: string;
-  zip: string;
   homeClinicId: string;
   dateOfBirth: string; // mm/dd/yy
   consentToCall: boolean;
   consentToText: boolean;
-  language: string;
+}
+
+export interface IPatientInfoOptions {
+  gender?: string;
+  language?: string;
+  primaryAddressId?: string;
 }
 
 interface IEditPatient extends Partial<IPatientEditableFields> {
@@ -51,16 +57,14 @@ export default class Patient extends BaseModel {
   lastName: string;
   middleName: string | null;
   dateOfBirth: string;
-  gender: string;
-  zip: string;
   athenaPatientId: number;
   homeClinicId: string;
   homeClinic: Clinic;
   scratchPad: string;
   consentToCall: boolean;
   consentToText: boolean;
-  language: string;
   tasks: Task[];
+  patientInfo: PatientInfo;
   careTeam: User[];
   patientDataFlags: PatientDataFlag[];
 
@@ -75,17 +79,14 @@ export default class Patient extends BaseModel {
       firstName: { type: 'string', minLength: 1 }, // cannot be blank
       middleName: { type: 'string' },
       lastName: { type: 'string', minLength: 1 }, // cannot be blank
-      language: { type: 'string' },
-      gender: { type: 'string' },
       dateOfBirth: { type: 'string' },
-      zip: { type: 'string' },
       scratchPad: { type: 'text' },
       consentToCall: { type: 'boolean' },
       consentToText: { type: 'boolean' },
       updatedAt: { type: 'string' },
       deletedAt: { type: 'string' },
     },
-    required: ['firstName', 'lastName'],
+    required: ['firstName', 'lastName', 'dateOfBirth'],
   };
 
   static relationMappings: RelationMappings = {
@@ -120,6 +121,15 @@ export default class Patient extends BaseModel {
       },
     },
 
+    patientInfo: {
+      relation: Model.BelongsToOneRelation,
+      modelClass: 'patient-info',
+      join: {
+        from: 'patient_info.patientId',
+        to: 'patient.id',
+      },
+    },
+
     patientDataFlags: {
       relation: Model.HasManyRelation,
       modelClass: 'patient-data-flag',
@@ -131,7 +141,9 @@ export default class Patient extends BaseModel {
   };
 
   static async get(patientId: string, txn: Transaction): Promise<Patient> {
-    const patient = await this.query(txn).findById(patientId);
+    const patient = await this.query(txn)
+      .eager('[patientInfo.[primaryAddress, addresses]]')
+      .findById(patientId);
 
     if (!patient) {
       return Promise.reject(`No such patient: ${patientId}`);
@@ -173,9 +185,20 @@ export default class Patient extends BaseModel {
     return patient;
   }
 
-  static async setup(input: IPatientEditableFields, userId: string, txn: Transaction) {
+  static async setup(
+    input: IPatientEditableFields,
+    infoInput: IPatientInfoOptions,
+    userId: string,
+    txn: Transaction,
+  ) {
     const adminConcern = await Concern.findOrCreateByTitle(adminTasksConcernTitle, txn);
     const patient = await this.query(txn).insertAndFetch(input);
+    const patientInfoInput = {
+      ...infoInput,
+      patientId: patient.id,
+      updatedBy: userId,
+    };
+    await PatientInfo.create(patientInfoInput, txn);
 
     // Create the initial ComputedPatientStatus
     await ComputedPatientStatus.updateForPatient(patient.id, userId, txn);
@@ -191,7 +214,18 @@ export default class Patient extends BaseModel {
       txn,
     );
 
-    return patient;
+    return this.get(patient.id, txn);
+  }
+
+  static async createAllPatientInfo(userId: string, txn: Transaction) {
+    const patientIds = await this.query(txn).pluck('id');
+    const patientRows = patientIds.map(id => {
+      return {
+        patientId: id,
+        updatedBy: userId,
+      };
+    });
+    return PatientInfo.query(txn).insert(patientRows as any);
   }
 
   static async edit(patient: IEditPatient, patientId: string, txn: Transaction): Promise<Patient> {
@@ -218,6 +252,7 @@ export default class Patient extends BaseModel {
     }
 
     const patientsResult = (await this.query(txn)
+      .eager(EAGER_QUERY)
       .select(
         'patient.*',
         this.raw(
@@ -250,6 +285,7 @@ export default class Patient extends BaseModel {
     txn: Transaction,
   ): Promise<IPaginatedResults<Patient>> {
     const patientsResult = await this.query(txn)
+      .eager(EAGER_QUERY)
       .whereRaw(
         `patient.id IN
         (
@@ -278,6 +314,7 @@ export default class Patient extends BaseModel {
     txn: Transaction,
   ): Promise<IPaginatedResults<Patient>> {
     const patientsResult = await this.query(txn)
+      .eager(EAGER_QUERY)
       .whereRaw(
         `patient.id IN (
           SELECT care_team."patientId"
@@ -311,6 +348,7 @@ export default class Patient extends BaseModel {
       .select('patientId');
 
     const patientsResult = await this.query(txn)
+      .eager(EAGER_QUERY)
       .whereIn('patient.id', userPatientsWithPendingSuggestions)
       .where('patient.id', 'in', this.userCareTeamPatientIdsQuery(userId, txn))
       .orderBy('lastName', 'ASC')
@@ -325,16 +363,18 @@ export default class Patient extends BaseModel {
     userId: string,
     txn: Transaction,
   ): Promise<IPaginatedResults<Patient>> {
-    const patientsResult = await this.query(txn)
-      .where({ dateOfBirth: null })
+    const patientsResult = (await this.query(txn)
+      .eager(EAGER_QUERY)
+      .leftOuterJoinRelation('patientInfo')
+      .where('patientInfo', null)
       .andWhere('patient.id', 'in', this.userCareTeamPatientIdsQuery(userId, txn))
-      .orWhere({ gender: null })
+      .orWhere('patientInfo.gender', null)
       .andWhere('patient.id', 'in', this.userCareTeamPatientIdsQuery(userId, txn))
-      .orWhere({ zip: null })
+      .orWhere('patientInfo.primaryAddressId', null)
       .andWhere('patient.id', 'in', this.userCareTeamPatientIdsQuery(userId, txn))
       .orderBy('lastName', 'ASC')
       .orderBy('firstName', 'ASC')
-      .page(pageNumber, pageSize);
+      .page(pageNumber, pageSize)) as any;
 
     return patientsResult;
   }
@@ -345,6 +385,7 @@ export default class Patient extends BaseModel {
     txn: Transaction,
   ): Promise<IPaginatedResults<Patient>> {
     const patientsResult = await this.query(txn)
+      .eager(EAGER_QUERY)
       .whereRaw(
         `
         patient.id NOT IN (
@@ -369,6 +410,7 @@ export default class Patient extends BaseModel {
     txn: Transaction,
   ): Promise<IPaginatedResults<Patient>> {
     const patientsResult = await this.query(txn)
+      .eager(EAGER_QUERY)
       .whereRaw(
         `
       patient.id NOT IN (
@@ -402,6 +444,7 @@ export default class Patient extends BaseModel {
       .select('patientId');
 
     const patientsResult = await this.query(txn)
+      .eager(EAGER_QUERY)
       .whereIn('patient.id', patientIdsFromAnswer)
       .andWhere('patient.id', 'in', this.userCareTeamPatientIdsQuery(userId, txn))
       .orderBy('lastName', 'ASC')

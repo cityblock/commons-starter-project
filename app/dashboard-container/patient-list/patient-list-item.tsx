@@ -57,7 +57,7 @@ export const PatientListItem: React.StatelessComponent<IProps> = (props: IProps)
       notificationsCount={notificationsCount as number | null}
     />
   ) : (
-    <PatientAge dateOfBirth={patient.dateOfBirth} gender={patient.gender} />
+    <PatientAge dateOfBirth={patient.dateOfBirth} gender={patient.patientInfo.gender} />
   );
 
   return (

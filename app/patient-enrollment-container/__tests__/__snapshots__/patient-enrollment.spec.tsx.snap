@@ -156,12 +156,12 @@ exports[`renders patient enrollment container correctly 1`] = `
                   Select gender
                 </option>
                 <option
-                  value="M"
+                  value="male"
                 >
                   Male
                 </option>
                 <option
-                  value="F"
+                  value="female"
                 >
                   Female
                 </option>

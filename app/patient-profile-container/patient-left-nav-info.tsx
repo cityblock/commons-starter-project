@@ -13,7 +13,7 @@ interface IProps {
   condensedPatientInfo?: boolean;
 }
 
-const GENDER: any = { F: 'Female', M: 'Male' };
+const GENDER: any = { female: 'Female', male: 'Male' };
 
 export const DEFAULT_PATIENT_AVATAR_URL = 'https://bit.ly/2Exqf9z';
 
@@ -39,7 +39,8 @@ export default class PatientLeftNavInfo extends React.Component<IProps, {}> {
       ) : (
         '40'
       );
-    const gender = patient && patient.gender ? GENDER[patient.gender] : null;
+    const gender =
+      patient && patient.patientInfo.gender ? GENDER[patient.patientInfo.gender] : null;
 
     if (condensedPatientInfo) {
       return (
@@ -78,8 +79,8 @@ export default class PatientLeftNavInfo extends React.Component<IProps, {}> {
 
     let languageName = 'Declined';
 
-    if (patient && patient.language) {
-      const language = langs.where('1', patient.language);
+    if (patient && patient.patientInfo.language) {
+      const language = langs.where('1', patient.patientInfo.language);
 
       if (language) {
         languageName = language.name;

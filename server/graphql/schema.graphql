@@ -220,13 +220,11 @@ type PageInfo {
 # Patient combining data in athena and our database
 type Patient implements uniqueId {
   id: ID!
+  patientInfo: PatientInfo!
   firstName: String!
   middleName: String
-  language: String
   lastName: String!
   dateOfBirth: String
-  gender: String
-  zip: String
   homeClinicId: ID
   createdAt: String!
   scratchPad: String
@@ -234,6 +232,57 @@ type Patient implements uniqueId {
   consentToText: Boolean
   careTeam: [User!]
   patientDataFlags: [PatientDataFlag!]
+}
+
+# Patient info that is editable in Commons
+type PatientInfo implements uniqueId {
+  id: ID!
+  patientId: ID
+  gender: String
+  language: String
+  primaryAddress: Address
+  addresses: [Address]
+}
+
+# Address
+type Address implements uniqueId {
+  id: ID!
+  zip: String
+  street: String
+  state: String
+  city: String
+  description: String
+}
+
+# Editable fields on an address
+input AddressEditInput {
+  addressId: ID!
+  patientId: ID!
+  zip: String
+  street: String
+  state: String
+  city: String
+  description: String
+}
+
+# params for creating and address for a patient in the db
+input AddressCreateForPatientInput {
+  patientId: ID!
+  zip: String
+  street: String
+  state: String
+  city: String
+  description: String
+}
+
+# params for creating and address for a patient in the db
+input AddressCreatePrimaryForPatientInput {
+  patientInfoId: ID!
+  zip: String
+  street: String
+  state: String
+  city: String
+  description: String
 }
 
 # Patient node
@@ -254,8 +303,8 @@ type PatientSearchResult implements uniqueId {
   firstName: String!
   lastName: String!
   dateOfBirth: String
-  gender: String
   userCareTeam: Boolean!
+  patientInfo: PatientInfo!
 }
 
 # Patient search result node
@@ -277,7 +326,7 @@ type PatientForDashboard implements uniqueId {
   firstName: String!
   lastName: String!
   dateOfBirth: String
-  gender: String
+  patientInfo: PatientInfo!
 }
 
 # Patient dashboard item node
@@ -1092,11 +1141,16 @@ input PatientEditInput {
   middleName: String
   lastName: String
   dateOfBirth: String
-  gender: String
-  zip: String
-  language: String
   consentToCall: Boolean
   consentToText: Boolean
+}
+
+# params for editing a patient in the db
+input PatientInfoEditInput {
+  patientInfoId: ID!
+  gender: String
+  language: String
+  primaryAddressId: ID
 }
 
 # params for creating a patient in the db and in athena
@@ -1734,8 +1788,16 @@ type RootMutationType {
   appointmentStart(input: AppointmentStartInput): Appointment
   # End an appointment
   appointmentEnd(input: AppointmentEndInput): AppointmentEndResult
+  # Create an address for a Patient
+  addressCreateForPatient(input: AddressCreateForPatientInput): Address
+  # Create an primary address for a Patient
+  addressCreatePrimaryForPatient(input: AddressCreatePrimaryForPatientInput): Address
+  # Edit an address
+  addressEdit(input: AddressEditInput): Address
   # Edit fields on patient stored in the db
   patientEdit(input: PatientEditInput): Patient
+  # Edit fields on patient info stored in the db
+  patientInfoEdit(input: PatientInfoEditInput): PatientInfo
   # Setup patient creates the patient in the db AND in athena
   patientSetup(input: PatientSetupInput): Patient
   # Edit a patient scratch pad

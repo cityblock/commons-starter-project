@@ -55,7 +55,7 @@ describe('validates requests actually come from google', () => {
         },
       },
     });
-    pubsubValidator(request, response, next);
+    await pubsubValidator(request, response, next);
     expect(console.error).toBeCalledWith('Unauthorized');
     expect(response.sendStatus).toBeCalledWith(200);
     expect(next).not.toBeCalled();
@@ -75,7 +75,7 @@ describe('validates requests actually come from google', () => {
         },
       },
     });
-    pubsubValidator(request, response, next);
+    await pubsubValidator(request, response, next);
     expect(console.error).not.toBeCalled();
     expect(next).toBeCalled();
   });
@@ -94,7 +94,7 @@ describe('validates requests actually come from google', () => {
         },
       },
     });
-    pubsubValidator(request, response, next);
+    await pubsubValidator(request, response, next);
     expect(console.error).not.toBeCalled();
     expect(request.body.message.data).toMatchObject({
       patientId: 'patient-id',

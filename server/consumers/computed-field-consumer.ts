@@ -10,7 +10,7 @@ import PatientAnswer from '../models/patient-answer';
 
 const queue = kue.createQueue({ redis: createRedisClient() });
 
-queue.process('newComputedFieldValue', async (job, done) => {
+queue.process('newComputedField', async (job, done) => {
   try {
     await processNewComputedFieldValue(job.data);
     return done();

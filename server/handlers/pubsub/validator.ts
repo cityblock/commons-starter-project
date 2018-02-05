@@ -1,7 +1,7 @@
 import * as crypto from 'crypto';
 import * as express from 'express';
 import config from '../../config';
-import { IComputedFieldMessageData } from './push-handler';
+import { IComputedFieldMessageData, IMemberAttributionMessageData } from './push-handler';
 
 export function createHmac(data: string) {
   const hmacSecret = config.PUBSUB_HMAC_SECRET;
@@ -20,7 +20,7 @@ export function pubsubValidator(
 ) {
   let computedHmac: string | null = null;
   let reqHmac: string | null = null;
-  let data: IComputedFieldMessageData = {};
+  let data: IComputedFieldMessageData | IMemberAttributionMessageData;
 
   try {
     data = JSON.parse(Buffer.from(req.body.message.data, 'base64').toString('utf-8'));

@@ -47,7 +47,7 @@ async function setup(txn: Transaction): Promise<ISetup> {
   };
 }
 
-describe('processing newComputedFieldValue jobs', () => {
+describe('processing newComputedField jobs', () => {
   beforeAll(async () => {
     queue.testMode.enter();
   });
@@ -75,7 +75,8 @@ describe('processing newComputedFieldValue jobs', () => {
         value: 'computed-field-value',
       };
 
-      await expect(processNewComputedFieldValue(data, txn)).rejects.toMatch(
+      // TODO: once typings in push-handler are updated, remove 'as any'
+      await expect(processNewComputedFieldValue(data as any, txn)).rejects.toMatch(
         'Missing either patientId, slug, value, or jobId',
       );
     });

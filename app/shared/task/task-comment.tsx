@@ -8,6 +8,7 @@ import {
   FullTaskCommentFragment,
   FullUserFragment,
 } from '../../graphql/types';
+import Avatar from '../library/avatar/avatar';
 import * as styles from './css/task-comments.css';
 
 interface IProps {
@@ -28,8 +29,6 @@ interface IState {
 }
 
 type allProps = IProps & IGraphqlProps;
-
-export const DEFAULT_AVATAR_URL = 'http://bit.ly/2u9bJDA';
 
 const BASE_TEXT_HEIGHT = '2px';
 
@@ -169,12 +168,7 @@ export class TaskComment extends React.Component<allProps, IState> {
       <div className={commentStyles} onClick={this.onClick}>
         <div className={styles.commentHeader}>
           <div className={styles.commentAuthor}>
-            <div
-              className={styles.avatar}
-              style={{
-                backgroundImage: `url('${user.googleProfileImageUrl || DEFAULT_AVATAR_URL}')`,
-              }}
-            />
+            <Avatar src={user.googleProfileImageUrl} size="small" />
             <div className={styles.name}>{`${user.firstName} ${user.lastName}`}</div>
             <div className={styles.smallText}>{user.userRole}</div>
           </div>

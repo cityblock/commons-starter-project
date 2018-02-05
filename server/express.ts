@@ -22,8 +22,8 @@ import { createRedisClient } from './lib/redis';
 kue.createQueue({ redis: createRedisClient() });
 
 export const checkAuth = (username: string, password: string) => (
-  req: any,
-  res: any,
+  req: express.Request,
+  res: express.Response,
   next: express.NextFunction,
 ) => {
   const user = basicAuth(req);
@@ -33,6 +33,20 @@ export const checkAuth = (username: string, password: string) => (
     return res.sendStatus(401);
   }
 
+  next();
+};
+
+export const addHeadersMiddleware = (
+  req: express.Request,
+  res: express.Response,
+  next: express.NextFunction,
+) => {
+  res.setHeader('Cache-Control', 'no-cache, no-store');
+  res.setHeader(
+    'Content-Security-Policy',
+    "default-src 'self' https://accounts.google.com blob:; script-src 'self' *.google.com unpkg.com; style-src 'self' https://fonts.googleapis.com 'unsafe-inline' blob:; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' *.googleusercontent.com data:;",
+  );
+  res.setHeader('Strict-Transport-Security', 'max-age=31536000; includeSubDomains; preload');
   next();
 };
 
@@ -79,7 +93,9 @@ export default async (app: express.Application, logger: Console) => {
     app.use(GraphQLDog.middleware());
   }
 
-  app.get('/graphiql', graphiqlExpress({ endpointURL: '/graphql' }));
+  if (config.NODE_ENV === 'development') {
+    app.get('/graphiql', graphiqlExpress({ endpointURL: '/graphql' }));
+  }
   app.use(
     '/graphql',
     bodyParser.json(),
@@ -115,7 +131,7 @@ export default async (app: express.Application, logger: Console) => {
   // PDF Generation
   app.get('/pdf/:taskId/referral-form.pdf', renderCBOReferralFormPDF);
 
-  app.get('*', renderApp);
+  app.get('*', addHeadersMiddleware, renderApp);
 
   /* istanbul ignore next */
   if (config.NODE_ENV !== 'test') {

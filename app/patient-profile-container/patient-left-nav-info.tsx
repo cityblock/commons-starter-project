@@ -3,6 +3,7 @@ import * as langs from 'langs';
 import * as React from 'react';
 import { FormattedMessage, FormattedRelative } from 'react-intl';
 import { ShortPatientFragment } from '../graphql/types';
+import Avatar from '../shared/library/avatar/avatar';
 import { getPatientFirstAndMiddleName } from '../shared/util/patient-name';
 import * as styles from './css/patient-profile-left-nav.css';
 import PatientScratchPad from './patient-scratch-pad';
@@ -14,8 +15,6 @@ interface IProps {
 }
 
 const GENDER: any = { female: 'Female', male: 'Male' };
-
-export const DEFAULT_PATIENT_AVATAR_URL = 'https://bit.ly/2Exqf9z';
 
 export default class PatientLeftNavInfo extends React.Component<IProps, {}> {
   props: IProps;
@@ -56,10 +55,7 @@ export default class PatientLeftNavInfo extends React.Component<IProps, {}> {
     } else {
       return (
         <div className={styles.patientHeader}>
-          <div
-            className={styles.patientPhoto}
-            style={{ backgroundImage: `url('${DEFAULT_PATIENT_AVATAR_URL}')` }}
-          />
+          <Avatar avatarType="patient" size="xxLarge" />
           <div className={styles.patientTitle}>
             <div className={styles.patientName}>
               <div className={styles.patientFirstName}>{firstName}</div>

@@ -29,7 +29,6 @@ export const mediumPriority: string;
 export const removedTask: string;
 export const taskTemplateTitle: string;
 export const taskTemplateInfoControls: string;
-export const taskTemplateAssigneeAvatar: string;
 export const taskTemplateDueDate: string;
 export const taskTemplateDueDateLabel: string;
 export const taskTemplateDueDateText: string;

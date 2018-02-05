@@ -5,7 +5,7 @@ interface IProps {
   value: string;
   onClick?: () => void;
   detail?: string;
-  avatarUrl?: string;
+  avatarUrl?: string | null;
 }
 
 const SelectDropdownOption: React.StatelessComponent<IProps> = (props: IProps) => {

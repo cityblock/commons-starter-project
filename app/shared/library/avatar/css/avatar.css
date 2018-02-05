@@ -1,20 +1,39 @@
 @import '../../../css/sizes';
 
-.avatar {
+.avatar,
+svg.avatar {
   height: 30px;
   width: 30px;
   border-radius: 50%;
   border: 1px solid var(--border-color);
 }
 
-.small {
+.small,
+svg.small {
   height: 20px;
   width: 20px;
 }
 
-.large {
+.large,
+svg.large {
   height: 40px;
   width: 40px;
+}
+
+.xLarge,
+svg.xLarge {
+  height: 80px;
+  width: 80px;
+  border-radius: 0;
+  border: 0;
+}
+
+.xxLarge,
+svg.xxLarge {
+  height: 130px;
+  min-width: 112px;
+  border-radius: 0;
+  border: 0;
 }
 
 .lightGrayBorder {

@@ -11,6 +11,7 @@ describe('app', () => {
 
     app(request, response);
 
+    expect(response.getHeader(''));
     expect(response.status).toBeCalledWith(200);
     expect(send).toBeCalled();
   });

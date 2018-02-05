@@ -4,7 +4,6 @@ export const closeButton: string;
 export const middleBar: string;
 export const button: string;
 export const patientContainer: string;
-export const patientPhoto: string;
 export const patientContainerRight: string;
 export const patientName: string;
 export const formBar: string;

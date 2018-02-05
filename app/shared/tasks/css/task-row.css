@@ -79,16 +79,6 @@
   padding-top: 2px;
 }
 
-.assignedTo {
-  background-position: center center;
-  background-size: cover;
-  border-radius: 50%;
-  height: 20px;
-  width: 20px;
-  padding-top: 2px;
-  border: 1px solid var(--border-color);
-}
-
 .dateSection {
   border-left: 1px solid var(--gray-background-color);
 }

@@ -53,16 +53,6 @@
   align-items: center;
 }
 
-.patientPhoto {
-  background-repeat: no-repeat;
-  background-size: cover;
-  background-position: center center;
-  width: 43px;
-  height: 43px;
-  display: inline-block;
-  vertical-align: top;
-}
-
 .patientContainerRight {
   margin-left: 20px;
   display: inline-block;

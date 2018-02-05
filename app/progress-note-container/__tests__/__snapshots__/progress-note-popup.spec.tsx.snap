@@ -24,13 +24,9 @@ exports[`builder concerns renders progress note popup with templates renders pro
       replace={false}
       to="/patients/patient-id"
     >
-      <div
-        className="patientPhoto"
-        style={
-          Object {
-            "backgroundImage": "url('https://bit.ly/2Exqf9z')",
-          }
-        }
+      <Avatar
+        avatarType="patient"
+        size="large"
       />
       <div
         className="patientContainerRight"
@@ -303,13 +299,9 @@ exports[`builder concerns renders progress note popup with templates renders pro
       replace={false}
       to="/patients/patient-id"
     >
-      <div
-        className="patientPhoto"
-        style={
-          Object {
-            "backgroundImage": "url('https://bit.ly/2Exqf9z')",
-          }
-        }
+      <Avatar
+        avatarType="patient"
+        size="large"
       />
       <div
         className="patientContainerRight"

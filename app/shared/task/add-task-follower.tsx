@@ -9,8 +9,8 @@ import {
   FullUserFragment,
   ShortUserFragment,
 } from '../../graphql/types';
+import Avatar from '../../shared/library/avatar/avatar';
 import * as styles from './css/add-task-follower.css';
-import { DEFAULT_AVATAR_URL } from './task';
 
 interface IProps {
   patientId: string;
@@ -58,7 +58,6 @@ export class AddTaskFollower extends React.Component<allProps, IState> {
   renderCareTeamMember(careTeamMember: FullUserFragment) {
     const { addFollowerError, lastCareTeamMemberId } = this.state;
 
-    const avatar = careTeamMember.googleProfileImageUrl || DEFAULT_AVATAR_URL;
     const fullName = `${careTeamMember.firstName} ${careTeamMember.lastName}`;
     const role = careTeamMember.userRole;
     const errorStyles = classNames(styles.addError, {
@@ -71,12 +70,7 @@ export class AddTaskFollower extends React.Component<allProps, IState> {
         onClick={async () => this.onCareTeamMemberClick(careTeamMember.id)}
         className={styles.careTeamMemberDetails}
       >
-        <div
-          className={styles.careTeamAvatar}
-          style={{
-            backgroundImage: `url('${avatar}')`,
-          }}
-        />
+        <Avatar src={careTeamMember.googleProfileImageUrl} size="medium" />
         <div className={styles.careTeamMemberLabel}>
           <div className={styles.careTeamMemberName}>{fullName}</div>
           <div className={styles.careTeamMemberRole}>{role}</div>

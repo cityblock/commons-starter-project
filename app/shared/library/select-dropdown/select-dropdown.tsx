@@ -6,7 +6,7 @@ import * as styles from './css/select-dropdown.css';
 interface IProps {
   value: string;
   detail?: string;
-  avatarUrl?: string;
+  avatarUrl?: string | null;
   loading?: boolean;
   error?: string;
   children?: any;

@@ -25,8 +25,6 @@ import TaskDelete from './task-delete';
 import TaskProgress from './task-progress';
 import TaskTracking from './task-tracking';
 
-export const DEFAULT_AVATAR_URL = 'https://bit.ly/2weRwJm';
-
 export const Divider: React.StatelessComponent<{}> = () => <div className={styles.divider} />;
 
 export interface IProps {

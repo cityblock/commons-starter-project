@@ -34,12 +34,6 @@
   width: 100%;
 }
 
-.smallPatientPhoto {
-  height: 80px;
-  background-size: contain;
-  background-repeat: no-repeat;
-}
-
 .smallPatientName {
   padding: 10px 6px;
   font-family: var(--roboto);
@@ -115,17 +109,9 @@
   flex-direction: row;
 }
 
-.patientPhoto {
-  background-repeat: no-repeat;
-  background-size: cover;
-  background-position: center center;
-  height: 130px;
-  min-width: 112px;
-  margin-right: 15px;
-}
-
 .patientTitle {
   justify-content: space-between;
+  margin-left: 15px;
   lost-flex-container: column;
 }
 

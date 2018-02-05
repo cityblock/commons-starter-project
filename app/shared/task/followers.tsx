@@ -1,9 +1,8 @@
 import * as React from 'react';
 import { ShortUserFragment } from '../../graphql/types';
+import Avatar from '../library/avatar/avatar';
 import AddTaskFollower from './add-task-follower';
 import * as styles from './css/followers.css';
-
-export const DEFAULT_AVATAR_URL = 'https://bit.ly/2weRwJm';
 
 export interface IProps {
   patientId: string;
@@ -16,9 +15,11 @@ interface IFollowerProps {
 }
 
 export const Follower: React.StatelessComponent<IFollowerProps> = ({ follower }) => {
-  const backgroundImage = `url('${follower.googleProfileImageUrl || DEFAULT_AVATAR_URL}')`;
-
-  return <div className={styles.avatar} style={{ backgroundImage }} />;
+  return (
+    <div className={styles.follower}>
+      <Avatar src={follower.googleProfileImageUrl} size="medium" />{' '}
+    </div>
+  );
 };
 
 const TaskFollowers: React.StatelessComponent<IProps> = (props: IProps) => {

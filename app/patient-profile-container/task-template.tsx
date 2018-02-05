@@ -3,7 +3,7 @@ import * as React from 'react';
 import { FormattedDate } from 'react-intl';
 import { dateAdd } from '../../server/lib/date';
 import { getPatientCareTeamQuery, FullTaskTemplateFragment } from '../graphql/types';
-import { DEFAULT_AVATAR_URL } from '../shared/task/task';
+import Avatar from '../shared/library/avatar/avatar';
 import * as styles from './css/patient-care-plan.css';
 
 interface IProps {
@@ -47,8 +47,6 @@ export default class TaskTemplate extends React.Component<IProps, {}> {
         return assignedCareTeamMember.googleProfileImageUrl;
       }
     }
-
-    return DEFAULT_AVATAR_URL;
   }
 
   render() {
@@ -64,10 +62,7 @@ export default class TaskTemplate extends React.Component<IProps, {}> {
       <div className={rowStyles}>
         <div className={styles.taskTemplateTitle}>{taskTemplate.title}</div>
         <div className={styles.taskTemplateInfoControls}>
-          <div
-            className={styles.taskTemplateAssigneeAvatar}
-            style={{ backgroundImage: `url(${this.getAssigneeAvatarUrl()})` }}
-          />
+          <Avatar src={this.getAssigneeAvatarUrl()} size="small" />
           <div className={styles.taskTemplateDueDate}>
             <div className={styles.taskTemplateDueDateLabel}>Due:</div>
             <div className={styles.taskTemplateDueDateText}>{this.getDueDate()}</div>

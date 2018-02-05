@@ -8,7 +8,6 @@ export const title: string;
 export const meta: string;
 export const followers: string;
 export const follower: string;
-export const assignedTo: string;
 export const dateSection: string;
 export const dueAtSection: string;
 export const dateLabel: string;

@@ -1,16 +1,5 @@
 @import '../../css/sizes';
 
-.avatar {
-  width: 20px;
-  height: 20px;
-  border: 1px solid var(--border-color);
-  border-radius: 50%;
-  background-position: center center;
-  background-size: contain;
-  background-repeat: no-repeat;
-  margin-right: 10px;
-}
-
 .smallText,
 .errorText {
   font-family: var(--roboto);

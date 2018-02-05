@@ -27,17 +27,6 @@
   color: var(--red-color);
 }
 
-.patientPhoto {
-  width: 43px;
-  height: 43px;
-  background-image: url('../../assets/missing-profile.svg');
-  background-repeat: no-repeat;
-  background-size: cover;
-  display: inline-block;
-  vertical-align: top;
-  margin-right: 10px;
-}
-
 .patientName {
   font-family: var(--roboto);
   font-weight: var(--roboto-medium-weight);
@@ -50,6 +39,7 @@
   font-size: var(--small-font-size);
   color: var(--light-gray-font-color);
   flex-grow: 1;
+  margin-left: 10px;
 }
 
 .time {

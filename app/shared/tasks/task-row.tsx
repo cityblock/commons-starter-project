@@ -3,8 +3,8 @@ import * as React from 'react';
 import { FormattedDate, FormattedMessage, FormattedRelative } from 'react-intl';
 import { Link } from 'react-router-dom';
 import { ShortTaskFragment, ShortUserFragment } from '../../graphql/types';
+import Avatar from '../../shared/library/avatar/avatar';
 import { checkIfDueSoon } from '../../shared/util/due-date';
-import { DEFAULT_AVATAR_URL } from '../task/task';
 import * as styles from './css/task-row.css';
 import * as tasksStyles from './css/tasks.css';
 
@@ -32,15 +32,7 @@ function renderFollowers(followers: ShortUserFragment[]) {
 }
 
 function renderAssignedTo(user: ShortUserFragment | null) {
-  let displayAvatarUrl: string = DEFAULT_AVATAR_URL;
-
-  if (user) {
-    displayAvatarUrl = user.googleProfileImageUrl || DEFAULT_AVATAR_URL;
-  }
-
-  return (
-    <div className={styles.assignedTo} style={{ backgroundImage: `url(${displayAvatarUrl})` }} />
-  );
+  return <Avatar src={user ? user.googleProfileImageUrl : null} size="small" />;
 }
 
 export const TaskRow: React.StatelessComponent<IProps> = (props: IProps) => {

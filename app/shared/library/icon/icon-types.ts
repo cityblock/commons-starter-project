@@ -32,4 +32,6 @@ export type IconName =
   | 'rotateRight'
   | 'search'
   | 'syncProblem'
-  | 'warning';
+  | 'warning'
+  | 'accountCircle'
+  | 'accountBox';

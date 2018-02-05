@@ -1,4 +1,3 @@
-export const avatar: string;
 export const smallText: string;
 export const errorText: string;
 export const divider: string;

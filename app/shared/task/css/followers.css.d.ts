@@ -1,2 +1,2 @@
 export const container: string;
-export const avatar: string;
+export const follower: string;

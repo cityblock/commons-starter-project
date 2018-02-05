@@ -1,5 +1,7 @@
 // Use this import syntax to avoid TS error
 import AccessAlarmsIcon from 'material-ui-icons/AccessAlarms';
+import AccountBoxIcon from 'material-ui-icons/AccountBox';
+import AccountCircleIcon from 'material-ui-icons/AccountCircle';
 import AddAlertIcon from 'material-ui-icons/AddAlert';
 import AddBoxIcon from 'material-ui-icons/AddBox';
 import AddCircleIcon from 'material-ui-icons/AddCircle';
@@ -71,6 +73,8 @@ const components = {
   search: SearchIcon,
   syncProblem: SyncProblemIcon,
   warning: WarningIcon,
+  accountCircle: AccountCircleIcon,
+  accountBox: AccountBoxIcon,
 };
 
 export default components;

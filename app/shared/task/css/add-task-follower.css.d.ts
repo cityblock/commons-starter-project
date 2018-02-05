@@ -6,7 +6,6 @@ export const visible: string;
 export const careTeam: string;
 export const assigneeCareTeam: string;
 export const careTeamMemberDetails: string;
-export const careTeamAvatar: string;
 export const careTeamMemberLabel: string;
 export const careTeamMemberName: string;
 export const careTeamMemberRole: string;

@@ -9,9 +9,10 @@ import {
   quickCallCreateMutationVariables,
   ShortPatientFragment,
 } from '../../graphql/types';
+import Avatar from '../../shared/library/avatar/avatar';
 import { Popup } from '../../shared/popup/popup';
 import { getPatientFullName } from '../../shared/util/patient-name';
-import { DEFAULT_PATIENT_AVATAR_URL } from '../patient-left-nav-info';
+
 import * as styles from './css/quick-call-popup.css';
 
 interface IProps {
@@ -98,10 +99,7 @@ export class QuickCallPopup extends React.Component<allProps, IState> {
           </div>
           <div className={styles.middleBar}>
             <div className={styles.patientContainer}>
-              <div
-                className={styles.patientPhoto}
-                style={{ backgroundImage: `url('${DEFAULT_PATIENT_AVATAR_URL}')` }}
-              />
+              <Avatar avatarType="patient" size="large" />
               <div className={styles.patientContainerRight}>
                 <div className={styles.patientName}>{patientName}</div>
               </div>

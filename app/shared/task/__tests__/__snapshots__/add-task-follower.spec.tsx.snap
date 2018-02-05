@@ -20,13 +20,9 @@ Array [
     className="careTeamMemberDetails"
     onClick={[Function]}
   >
-    <div
-      className="careTeamAvatar"
-      style={
-        Object {
-          "backgroundImage": "url('https://bit.ly/2weRwJm')",
-        }
-      }
+    <Avatar
+      size="medium"
+      src={null}
     />
     <div
       className="careTeamMemberLabel"
@@ -50,13 +46,9 @@ Array [
     className="careTeamMemberDetails"
     onClick={[Function]}
   >
-    <div
-      className="careTeamAvatar"
-      style={
-        Object {
-          "backgroundImage": "url('https://bit.ly/2weRwJm')",
-        }
-      }
+    <Avatar
+      size="medium"
+      src={null}
     />
     <div
       className="careTeamMemberLabel"

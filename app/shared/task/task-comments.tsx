@@ -50,8 +50,6 @@ interface IState {
 
 type allProps = IProps & IGraphqlProps;
 
-export const DEFAULT_AVATAR_URL = 'http://bit.ly/2u9bJDA';
-
 export class TaskComments extends React.Component<allProps, IState> {
   constructor(props: allProps) {
     super(props);

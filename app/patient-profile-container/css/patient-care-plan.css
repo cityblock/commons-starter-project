@@ -238,17 +238,6 @@
   justify-content: flex-end;
 }
 
-.taskTemplateAssigneeAvatar {
-  height: 24px;
-  width: 24px;
-  border: 1px solid var(--border-color);
-  border-radius: 50%;
-  background-size: contain;
-  background-position: center center;
-  background-repeat: no-repeat;
-  margin-right: 10px;
-}
-
 .taskTemplateDueDate {
   display: flex;
   flex-direction: row;

@@ -11,7 +11,7 @@ import User from './user';
 export interface ITaskEditableFields {
   title: string;
   description?: string;
-  dueAt?: string;
+  dueAt?: string | null;
   patientId: string;
   patientGoalId?: string;
   createdById: string;
@@ -56,7 +56,7 @@ export default class Task extends BaseModel {
   completedById: string | null;
   patientGoalId: string;
   patientGoal: PatientGoal;
-  dueAt: string;
+  dueAt: string | null;
   completedAt: string | null;
   followers: User[];
   priority: Priority;

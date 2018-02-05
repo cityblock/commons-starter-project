@@ -33,6 +33,7 @@ describe('Create Task Modal Fields', () => {
       onChange={placeholderFn}
       onAssigneeClick={placeholderFn}
       onPriorityClick={placeholderFn}
+      onDueAtChange={placeholderFn}
     />,
   );
 

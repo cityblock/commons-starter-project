@@ -20,8 +20,7 @@
   width: calc(50% - 10px);
 }
 
-select.select,
-input.dueDate {
+select.select {
   height: 52px;
   padding-left: var(--small-gutter);
   font-size: var(--medium-font-size);
@@ -29,10 +28,6 @@ input.dueDate {
   font-weight: var(--default-font-weight);
   width: 100%;
   border: 1px solid var(--border-color);
-}
-
-input.dueDate {
-  width: 260px;
 }
 
 .flex {

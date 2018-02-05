@@ -14,10 +14,18 @@ interface IProps {
   onChange: (field: string) => (e: ChangeEvent) => void;
   onAssigneeClick: (assignedToId: string) => void;
   onPriorityClick: (priority: Priority) => void;
+  onDueAtChange: (dueAt: string | null) => void;
 }
 
 const CreateTaskFields: React.StatelessComponent<IProps> = (props: IProps) => {
-  const { patientId, onChange, onAssigneeClick, onPriorityClick, taskFields } = props;
+  const {
+    patientId,
+    onChange,
+    onAssigneeClick,
+    onPriorityClick,
+    onDueAtChange,
+    taskFields,
+  } = props;
   const { taskType, categoryId, title, CBOId, CBOName, CBOUrl } = taskFields;
 
   let body = <div className={styles.placeholder} />;
@@ -28,6 +36,7 @@ const CreateTaskFields: React.StatelessComponent<IProps> = (props: IProps) => {
       onChange={onChange}
       onAssigneeClick={onAssigneeClick}
       onPriorityClick={onPriorityClick}
+      onDueAtChange={onDueAtChange}
     />
   );
 

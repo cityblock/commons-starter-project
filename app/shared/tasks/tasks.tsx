@@ -14,12 +14,10 @@ import {
   taskDeleteMutationVariables,
   FullPatientGoalFragment,
   FullTaskFragment,
-  ShortPatientFragment,
 } from '../../graphql/types';
 import * as sortSearchStyles from '../css/sort-search.css';
 import InfiniteScroll from '../infinite-scroll/infinite-scroll';
 import Task from '../task/task';
-import TaskCreate from '../task/task-create';
 import * as styles from './css/tasks.css';
 import TaskRow from './task-row';
 import { TasksLoadingError } from './tasks-loading-error';
@@ -32,7 +30,6 @@ export interface IPageParams {
 
 interface IProps {
   routeBase: string;
-  patient?: ShortPatientFragment;
   patientGoals?: FullPatientGoalFragment[];
   tasks?: FullTaskFragment[];
   loading?: boolean;
@@ -54,7 +51,6 @@ interface IGraphqlProps {
 
 interface IState {
   orderBy: OrderByOptions;
-  showCreateTask: boolean;
   loading?: boolean;
   error: string | null;
 }
@@ -75,16 +71,8 @@ class Tasks extends React.Component<allProps, IState> {
   constructor(props: allProps) {
     super(props);
 
-    this.renderTasks = this.renderTasks.bind(this);
-    this.renderTask = this.renderTask.bind(this);
-    this.showCreateTask = this.showCreateTask.bind(this);
-    this.hideCreateTask = this.hideCreateTask.bind(this);
-    this.onSortChange = this.onSortChange.bind(this);
-    this.onDeleteTask = this.onDeleteTask.bind(this);
-
     const pageParams = getPageParams();
     this.state = {
-      showCreateTask: false,
       orderBy: (pageParams.orderBy as any) || 'createdAtDesc',
       error: null,
     };
@@ -94,14 +82,6 @@ class Tasks extends React.Component<allProps, IState> {
     const { loading, error } = nextProps;
 
     this.setState({ loading, error });
-  }
-
-  showCreateTask() {
-    this.setState({ showCreateTask: true });
-  }
-
-  hideCreateTask() {
-    this.setState({ showCreateTask: false });
   }
 
   renderTasks(tasks: FullTaskFragment[]) {
@@ -124,7 +104,7 @@ class Tasks extends React.Component<allProps, IState> {
     }
   }
 
-  renderTask(task: FullTaskFragment) {
+  renderTask = (task: FullTaskFragment) => {
     const { taskIdsWithNotifications } = this.props;
 
     return (
@@ -138,7 +118,7 @@ class Tasks extends React.Component<allProps, IState> {
     );
   }
 
-  onSortChange(event: React.ChangeEvent<HTMLSelectElement>) {
+  onSortChange = (event: React.ChangeEvent<HTMLSelectElement>): void => {
     const value = event.target.value as OrderByOptions;
     this.setState({
       orderBy: value,
@@ -146,7 +126,7 @@ class Tasks extends React.Component<allProps, IState> {
     this.props.updatePageParams({ orderBy: value });
   }
 
-  async onDeleteTask(taskId: string) {
+  onDeleteTask = async (taskId: string): Promise<void> => {
     const { history, deleteTask, routeBase } = this.props;
 
     await deleteTask({ variables: { taskId } });
@@ -159,7 +139,6 @@ class Tasks extends React.Component<allProps, IState> {
       tasks,
       routeBase,
       taskId,
-      patient,
       patientGoals,
       error,
       loading,
@@ -167,31 +146,12 @@ class Tasks extends React.Component<allProps, IState> {
       fetchMoreTasks,
     } = this.props;
 
-    const { orderBy, showCreateTask } = this.state;
+    const { orderBy } = this.state;
     const tasksList = tasks || [];
     const taskContainerStyles = classNames(styles.taskContainer, {
-      [styles.visible]: !!taskId || showCreateTask,
+      [styles.visible]: !!taskId,
     });
-    const createTaskButton = patient ? (
-      <div className={styles.createContainer}>
-        <FormattedMessage id="tasks.createTask">
-          {(message: string) => (
-            <div onClick={this.showCreateTask} className={styles.createButton}>
-              {message}
-            </div>
-          )}
-        </FormattedMessage>
-      </div>
-    ) : null;
-    const createTaskHtml =
-      patient && showCreateTask ? (
-        <TaskCreate
-          patient={patient}
-          patientGoals={patientGoals}
-          onClose={this.hideCreateTask}
-          routeBase={this.props.routeBase}
-        />
-      ) : null;
+
     const RenderedTask = (props: any) => (
       <Task
         routeBase={routeBase}
@@ -201,7 +161,7 @@ class Tasks extends React.Component<allProps, IState> {
         {...props}
       />
     );
-    const taskHtml = showCreateTask ? null : (
+    const taskHtml = (
       <Route path={`${routeBase}/:taskId`} render={RenderedTask} />
     );
     return (
@@ -223,7 +183,6 @@ class Tasks extends React.Component<allProps, IState> {
               <input required type="text" placeholder="Search by user or keywords" />
             </div>
           </div>
-          {createTaskButton}
         </div>
         <div className={styles.bottomContainer}>
           <InfiniteScroll
@@ -232,13 +191,12 @@ class Tasks extends React.Component<allProps, IState> {
             fetchMore={fetchMoreTasks}
             hasNextPage={hasNextPage}
             isEmpty={tasks ? tasks.length > 0 : true}
-            compressed={!!taskId || showCreateTask}
+            compressed={!!taskId}
           >
             {this.renderTasks(tasksList)}
           </InfiniteScroll>
           <div className={taskContainerStyles}>
             {taskHtml}
-            {createTaskHtml}
           </div>
         </div>
       </div>

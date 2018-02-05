@@ -1,7 +1,6 @@
 import * as classNames from 'classnames';
 import { format } from 'date-fns';
 import * as React from 'react';
-import { formatDateAsTimestamp } from '../../helpers/format-helpers';
 import * as styles from './css/date-input.css';
 
 export const DEFAULT_FORMAT = 'YYYY-MM-DD';
@@ -29,7 +28,7 @@ export class DateInput extends React.Component<IProps, IState> {
       this.setState({ loading: true, error: null });
 
       try {
-        const newDate = e.currentTarget.value ? formatDateAsTimestamp(e.currentTarget.value) : null;
+        const newDate = e.currentTarget.value ? format(e.currentTarget.value, DEFAULT_FORMAT) : null;
 
         await this.props.onChange(newDate);
         this.setState({ loading: false });

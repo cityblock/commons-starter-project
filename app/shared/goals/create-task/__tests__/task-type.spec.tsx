@@ -21,7 +21,7 @@ describe('Create Task Modal Select Task Type', () => {
   it('renders select to choose task type', () => {
     expect(wrapper.find(Select).length).toBe(1);
     expect(wrapper.find(Select).props().value).toBeFalsy();
-    expect(wrapper.find(Select).props().className).toBe('select');
+    expect(wrapper.find(Select).props().large).toBeTruthy();
   });
 
   it('renders placeholder option to select task type', () => {

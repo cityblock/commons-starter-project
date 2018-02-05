@@ -47,7 +47,7 @@ export interface ITaskFields {
   title: string;
   description: string;
   assignedToId: string;
-  dueAt: string;
+  dueAt: string | null;
   priority: Priority | null;
   CBOId: string; // id of selected CBO if predefined
   CBOName: string; // optional name of CBO
@@ -74,7 +74,7 @@ export class CreateTaskModal extends React.Component<allProps, IState> {
       description: '',
       assignedToId: '',
       priority: null,
-      dueAt: new Date().toISOString(),
+      dueAt: null,
       CBOId: '',
       CBOName: '',
       CBOUrl: '',
@@ -112,6 +112,10 @@ export class CreateTaskModal extends React.Component<allProps, IState> {
 
   onPriorityClick = (priority: Priority): void => {
     this.setState({ priority });
+  };
+
+  onDueAtChange = (dueAt: string | null): void => {
+    this.setState({ dueAt });
   };
 
   async submitTask(CBOReferralId: string | null, finalCBOName: string | null) {
@@ -198,6 +202,7 @@ export class CreateTaskModal extends React.Component<allProps, IState> {
                 onChange={this.onChange}
                 onAssigneeClick={this.onAssigneeClick}
                 onPriorityClick={this.onPriorityClick}
+                onDueAtChange={this.onDueAtChange}
               />
               {isButtonsVisible && (
                 <ModalButtons

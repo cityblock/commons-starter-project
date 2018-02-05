@@ -27,6 +27,11 @@
   padding: var(--extra-small-gutter);
 }
 
+.dateInput::-webkit-clear-button,
+.dateInput::-webkit-calendar-picker-indicator {
+  cursor: pointer;
+}
+
 .empty {
   color: var(--light-gray-font-color);
 }

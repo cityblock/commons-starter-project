@@ -33,6 +33,7 @@ describe('Create Task Share Fields', () => {
       onChange={placeholderFn}
       onAssigneeClick={placeholderFn}
       onPriorityClick={placeholderFn}
+      onDueAtChange={placeholderFn}
     />,
   );
 

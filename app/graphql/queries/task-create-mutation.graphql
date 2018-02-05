@@ -3,7 +3,7 @@
 mutation taskCreate(
   $title: String!
   $description: String!
-  $dueAt: String!
+  $dueAt: String
   $patientId: ID!
   $priority: Priority
   $assignedToId: ID

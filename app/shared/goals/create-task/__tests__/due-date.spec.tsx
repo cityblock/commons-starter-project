@@ -1,6 +1,6 @@
 import { shallow } from 'enzyme';
 import * as React from 'react';
-import DateInput from '../../../library/date-input/date-input';
+import DateInput from '../../../library/date-input-new/date-input';
 import FormLabel from '../../../library/form-label/form-label';
 import CreateTaskDueDate from '../due-date';
 
@@ -23,8 +23,6 @@ describe('Create Task Modal Due Date Component', () => {
     expect(wrapper.find(DateInput).length).toBe(1);
     expect(wrapper.find(DateInput).props().value).toBe(value);
     expect(wrapper.find(DateInput).props().onChange).toBe(onChange);
-    expect(wrapper.find(DateInput).props().id).toBe('due-date');
-    expect(wrapper.find(DateInput).props().name).toBe('due-date');
   });
 
   it('changes field label if CBO referral task', () => {

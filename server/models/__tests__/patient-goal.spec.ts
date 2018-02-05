@@ -319,7 +319,7 @@ describe('patient goal model', () => {
         txn,
       );
 
-      expect(format(fetchedTasks.results[0].dueAt, 'MM/DD/YYYY')).toEqual('08/16/2017');
+      expect(format(fetchedTasks.results[0].dueAt as string, 'MM/DD/YYYY')).toEqual('08/16/2017');
 
       Date.now = oldDate;
     });

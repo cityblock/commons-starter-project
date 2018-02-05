@@ -7849,7 +7849,7 @@ export interface taskCompleteMutation {
 export interface taskCreateMutationVariables {
   title: string,
   description: string,
-  dueAt: string,
+  dueAt?: string | null,
   patientId: string,
   priority?: Priority | null,
   assignedToId?: string | null,

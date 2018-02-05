@@ -15,10 +15,11 @@ interface IProps {
   onChange: (field: string) => (e: ChangeEvent) => void;
   onAssigneeClick: (assignedToId: string) => void;
   onPriorityClick: (priority: Priority) => void;
+  onDueAtChange: (dueAt: string | null) => void;
 }
 
 const CreateTaskShared: React.StatelessComponent<IProps> = (props: IProps) => {
-  const { patientId, onChange, onAssigneeClick, onPriorityClick } = props;
+  const { patientId, onChange, onAssigneeClick, onPriorityClick, onDueAtChange } = props;
   const { taskType, description, assignedToId, dueAt, priority } = props.taskFields;
 
   const assigneeLabelStyles = classNames(labelStyles.label, {
@@ -43,7 +44,7 @@ const CreateTaskShared: React.StatelessComponent<IProps> = (props: IProps) => {
         largeFont={true}
       />
       <div className={styles.flex}>
-        <CreateTaskDueDate value={dueAt} onChange={onChange('dueAt')} taskType={taskType} />
+        <CreateTaskDueDate value={dueAt} onChange={onDueAtChange} taskType={taskType} />
         <CreateTaskPriority value={priority} onChange={onPriorityClick} />
       </div>
     </div>

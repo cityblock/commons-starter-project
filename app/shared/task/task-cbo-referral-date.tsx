@@ -2,7 +2,7 @@ import * as React from 'react';
 import { graphql } from 'react-apollo';
 import * as CBOReferralEditMutationGraphql from '../../graphql/queries/cbo-referral-edit-mutation.graphql';
 import { CBOReferralEditMutation, CBOReferralEditMutationVariables } from '../../graphql/types';
-import DateInput from '../library/date-input-new/date-input';
+import DateInput from '../library/date-input/date-input';
 import FormLabel from '../library/form-label/form-label';
 import Icon from '../library/icon/icon';
 import * as styles from './css/task-cbo-referral-date.css';

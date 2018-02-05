@@ -116,7 +116,7 @@ class Tasks extends React.Component<allProps, IState> {
         taskIdsWithNotifications={taskIdsWithNotifications}
       />
     );
-  }
+  };
 
   onSortChange = (event: React.ChangeEvent<HTMLSelectElement>): void => {
     const value = event.target.value as OrderByOptions;
@@ -124,7 +124,7 @@ class Tasks extends React.Component<allProps, IState> {
       orderBy: value,
     });
     this.props.updatePageParams({ orderBy: value });
-  }
+  };
 
   onDeleteTask = async (taskId: string): Promise<void> => {
     const { history, deleteTask, routeBase } = this.props;
@@ -132,7 +132,7 @@ class Tasks extends React.Component<allProps, IState> {
     await deleteTask({ variables: { taskId } });
 
     history.push(routeBase);
-  }
+  };
 
   render() {
     const {
@@ -161,9 +161,7 @@ class Tasks extends React.Component<allProps, IState> {
         {...props}
       />
     );
-    const taskHtml = (
-      <Route path={`${routeBase}/:taskId`} render={RenderedTask} />
-    );
+    const taskHtml = <Route path={`${routeBase}/:taskId`} render={RenderedTask} />;
     return (
       <div className={styles.container}>
         <div className={sortSearchStyles.sortSearchBar}>
@@ -195,9 +193,7 @@ class Tasks extends React.Component<allProps, IState> {
           >
             {this.renderTasks(tasksList)}
           </InfiniteScroll>
-          <div className={taskContainerStyles}>
-            {taskHtml}
-          </div>
+          <div className={taskContainerStyles}>{taskHtml}</div>
         </div>
       </div>
     );

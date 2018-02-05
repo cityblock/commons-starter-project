@@ -1,6 +1,6 @@
 import { shallow } from 'enzyme';
 import * as React from 'react';
-import DateInput from '../../library/date-input-new/date-input';
+import DateInput from '../../library/date-input/date-input';
 import FormLabel from '../../library/form-label/form-label';
 import Icon from '../../library/icon/icon';
 import { TaskCBOReferralDate } from '../task-cbo-referral-date';

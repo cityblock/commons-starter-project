@@ -13,29 +13,12 @@ export interface IProps {
   editTask: (options: { variables: taskEditMutationVariables }) => { data: taskEditMutation };
 }
 
-interface IState {
-  changeDueDateError: string;
-}
-
-class TaskDue extends React.Component<IProps, IState> {
-  constructor(props: IProps) {
-    super(props);
-
-    this.state = {
-      changeDueDateError: '',
-    };
-  }
-
-  onDueDateChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
+class TaskDue extends React.Component<IProps> {
+  onDueDateChange = async (dueAt: string | null) => {
     const { taskId, editTask } = this.props;
 
     if (taskId) {
-      try {
-        this.setState({ changeDueDateError: '' });
-        await editTask({ variables: { taskId, dueAt: event.target.value } });
-      } catch (err) {
-        this.setState({ changeDueDateError: err.message });
-      }
+      await editTask({ variables: { taskId, dueAt } });
     }
   };
 
@@ -53,7 +36,7 @@ class TaskDue extends React.Component<IProps, IState> {
     return (
       <div className={styles.dueDate}>
         <Icon name="event" className={iconStyles} />
-        <DateInput value={completedAt || dueAt} onChange={this.onDueDateChange} />
+        <DateInput value={completedAt || dueAt} onChange={this.onDueDateChange} small={true} />
       </div>
     );
   }

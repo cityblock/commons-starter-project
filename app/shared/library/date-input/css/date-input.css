@@ -1,39 +1,54 @@
 @import '../../../css/sizes';
 
 .dateInput {
-  width: 180px;
-  height: 32px;
-  outline: none;
-  border: 1px solid transparent;
-  color: var(--black-color);
+  height: var(--input-height);
+  width: 100%;
   font-family: var(--roboto);
-  font-weight: var(--roboto-medium-weight);
-  font-size: var(--small-font-size);
+  font-size: var(--medium-font-size);
+  color: var(--black-color);
+  padding-left: var(--small-gutter);
   border-radius: var(--border-radius);
-  transition: border 0.2s;
+  border: 1px solid var(--border-color);
+  outline: none;
+  transition: border-color 0.2s;
 
+  &:focus,
   &:hover {
     border-color: var(--blue-color);
-    cursor: pointer;
   }
 }
 
-.dateInput::before::-webkit-calendar-picker-indicator {
-  position: absolute;
-  top: 9px;
-  right: 2px;
-  color: var(--black-color);
-}
-
-/* Remove x button and up and down arrows */
-.dateInput::-webkit-clear-button,
 .dateInput::-webkit-inner-spin-button {
-  display: none; /* Hide the button */
-  -webkit-appearance: none; /* turn off default browser styling */
+  display: none;
 }
 
-/* Give some padding around picker indicator to enlarge click area */
 .dateInput::-webkit-calendar-picker-indicator {
-  padding: 10px;
-  padding-left: var(--medium-gutter);
+  color: var(--blue-color);
+  padding: var(--extra-small-gutter);
+}
+
+.dateInput::-webkit-clear-button,
+.dateInput::-webkit-calendar-picker-indicator {
+  cursor: pointer;
+}
+
+.dateInput.empty {
+  color: var(--light-gray-font-color);
+}
+
+.dateInput.error {
+  border-color: var(--red-color);
+
+  &:focus,
+  &:hover {
+    border-color: var(--red-color);
+  }
+}
+
+.dateInput.small {
+  height: 32px;
+  width: 170px;
+  font-size: var(--small-font-size);
+  font-weight: var(--roboto-medium-weight);
+  padding-left: var(--extra-small-gutter);
 }

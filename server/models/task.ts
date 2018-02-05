@@ -78,7 +78,7 @@ export default class Task extends BaseModel {
       createdById: { type: 'string' },
       patientId: { type: 'string', minLength: 1 }, // cannot be blank
       patientGoalId: { type: 'string', minLength: 1 }, // cannot be blank
-      dueAt: { type: 'string' },
+      dueAt: { type: ['string', 'null'] },
       priority: { type: 'string', enum: PRIORITY },
       CBOReferralId: { type: 'string', format: 'uuid' },
       deletedAt: { type: 'string' },

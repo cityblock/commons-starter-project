@@ -1,5 +1,5 @@
 import * as React from 'react';
-import DateInput from '../../library/date-input-new/date-input';
+import DateInput from '../../library/date-input/date-input';
 import FormLabel from '../../library/form-label/form-label';
 import { TaskType } from './create-task';
 import * as styles from './css/shared.css';

@@ -5,6 +5,7 @@ import AddBoxIcon from 'material-ui-icons/AddBox';
 import AddCircleIcon from 'material-ui-icons/AddCircle';
 import AddCircleOutlineIcon from 'material-ui-icons/AddCircleOutline';
 import ArrowBackIcon from 'material-ui-icons/ArrowBack';
+import AssignmentIndIcon from 'material-ui-icons/AssignmentInd';
 import AssignmentTurnedInIcon from 'material-ui-icons/AssignmentTurnedIn';
 import CloseIcon from 'material-ui-icons/Close';
 import DeleteIcon from 'material-ui-icons/Delete';
@@ -42,6 +43,7 @@ const components = {
   addCircle: AddCircleIcon,
   addCircleOutline: AddCircleOutlineIcon,
   arrowBack: ArrowBackIcon,
+  assignmentInd: AssignmentIndIcon,
   assignmentTurnedIn: AssignmentTurnedInIcon,
   close: CloseIcon,
   delete: DeleteIcon,

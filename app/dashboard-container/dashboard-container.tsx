@@ -5,6 +5,7 @@ import DashboardNavigation from './navigation/navigation';
 
 export type Selected =
   | 'tasks'
+  | 'referrals'
   | 'new'
   | 'suggestions'
   | 'demographics'

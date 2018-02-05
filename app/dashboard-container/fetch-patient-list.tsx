@@ -6,6 +6,7 @@ import * as patientsForComputedListQuery from '../graphql/queries/get-patients-f
 import * as patientsNewToCareTeamQuery from '../graphql/queries/get-patients-new-to-care-team.graphql';
 import * as patientsWithMissingInfoQuery from '../graphql/queries/get-patients-with-missing-info.graphql';
 import * as patientsWithNoRecentEngagementQuery from '../graphql/queries/get-patients-with-no-recent-engagement.graphql';
+import * as patientsWithOpenCBOReferralsQuery from '../graphql/queries/get-patients-with-open-cbo-referrals.graphql';
 import * as patientsWithOutOfDateMAPQuery from '../graphql/queries/get-patients-with-out-of-date-map.graphql';
 import * as patientsWithPendingSuggestionsQuery from '../graphql/queries/get-patients-with-pending-suggestions.graphql';
 import * as patientsWithUrgentTasksQuery from '../graphql/queries/get-patients-with-urgent-tasks.graphql';
@@ -14,6 +15,7 @@ import {
   getPatientsNewToCareTeamQuery,
   getPatientsWithMissingInfoQuery,
   getPatientsWithNoRecentEngagementQuery,
+  getPatientsWithOpenCBOReferralsQuery,
   getPatientsWithOutOfDateMAPQuery,
   getPatientsWithPendingSuggestionsQuery,
   getPatientsWithUrgentTasksQuery,
@@ -41,6 +43,7 @@ export type PatientResults =
   | getPatientsWithMissingInfoQuery['patientsWithMissingInfo']
   | getPatientsWithNoRecentEngagementQuery['patientsWithNoRecentEngagement']
   | getPatientsWithOutOfDateMAPQuery['patientsWithOutOfDateMAP']
+  | getPatientsWithOpenCBOReferralsQuery['patientsWithOpenCBOReferrals']
   | getPatientsForComputedListQuery['patientsForComputedList'];
 
 export interface IInjectedProps {
@@ -80,6 +83,18 @@ const fetchPatientList = () => <P extends {}>(
           loading: data ? data.loading : false,
           error: data ? data.error : null,
           patientResults: data ? (data as any).patientsWithUrgentTasks : null,
+        }),
+      },
+    ),
+    graphql<IInjectedProps, RouteComponentProps<P>, resultProps>(
+      patientsWithOpenCBOReferralsQuery as any,
+      {
+        options: getPageParams,
+        skip: ({ selected }) => selected !== 'referrals',
+        props: ({ data }) => ({
+          loading: data ? data.loading : false,
+          error: data ? data.error : null,
+          patientResults: data ? (data as any).patientsWithOpenCBOReferrals : null,
         }),
       },
     ),

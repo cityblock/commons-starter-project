@@ -2788,6 +2788,33 @@ export interface getPatientsWithNoRecentEngagementQuery {
   },
 };
 
+export interface getPatientsWithOpenCBOReferralsQueryVariables {
+  pageNumber: number,
+  pageSize: number,
+};
+
+export interface getPatientsWithOpenCBOReferralsQuery {
+  // Patient dashboard - open CBO referrals
+  patientsWithOpenCBOReferrals:  {
+    edges:  Array< {
+      node:  {
+        id: string,
+        firstName: string,
+        lastName: string,
+        dateOfBirth: string | null,
+        patientInfo:  {
+          gender: string | null,
+        },
+      } | null,
+    } >,
+    pageInfo:  {
+      hasPreviousPage: boolean,
+      hasNextPage: boolean,
+    },
+    totalCount: number,
+  },
+};
+
 export interface getPatientsWithOutOfDateMAPQueryVariables {
   pageNumber: number,
   pageSize: number,

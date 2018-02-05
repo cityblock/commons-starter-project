@@ -5,6 +5,7 @@ export type IconName =
   | 'addCircle'
   | 'addCircleOutline'
   | 'arrowBack'
+  | 'assignmentInd'
   | 'assignmentTurnedIn'
   | 'close'
   | 'delete'

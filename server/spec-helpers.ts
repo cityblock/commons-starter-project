@@ -358,6 +358,26 @@ export async function createTask(
   );
 }
 
+export async function createCBOReferralTask(
+  patientId: string,
+  userId: string,
+  CBOReferralId: string,
+  txn: Transaction,
+) {
+  return Task.create(
+    {
+      title: 'Defeat Cersei and Lannister Army',
+      dueAt: '02/05/2018',
+      patientId,
+      createdById: userId,
+      assignedToId: userId,
+      priority: 'high',
+      CBOReferralId,
+    },
+    txn,
+  );
+}
+
 const patient1Name = 'Arya';
 const patient2Name = 'Rickon';
 const patient3Name = 'Robb';
@@ -613,6 +633,78 @@ export async function setupPatientsWithOutOfDateMAP(txn: Transaction) {
   );
 
   return { patient1, user };
+}
+
+export async function setupPatientsWithOpenCBOReferrals(txn: Transaction) {
+  const clinic = await Clinic.create(createMockClinic('Dorne', 13), txn);
+  const user = await User.create(createMockUser(211, clinic.id), txn);
+  const user2 = await User.create(createMockUser(311, clinic.id), txn);
+  const cbo = await createCBO(txn);
+
+  const patient1 = await createPatient(
+    createMockPatient(432, clinic.id, patient1Name),
+    user.id,
+    txn,
+  );
+  const patient2 = await createPatient(
+    createMockPatient(543, clinic.id, patient2Name),
+    user.id,
+    txn,
+  );
+  await createPatient(createMockPatient(876, clinic.id, patient3Name), user2.id, txn);
+  const patient4 = await createPatient(
+    createMockPatient(256, clinic.id, patient4Name),
+    user.id,
+    txn,
+  );
+  const patient5 = await createPatient(
+    createMockPatient(816, clinic.id, patient5Name),
+    user.id,
+    txn,
+  );
+
+  const cboReferral1 = await CBOReferral.create(
+    {
+      categoryId: cbo.categoryId,
+      CBOId: cbo.id,
+    },
+    txn,
+  );
+  await createCBOReferralTask(patient1.id, user.id, cboReferral1.id, txn);
+  const cboReferral2 = await CBOReferral.create(
+    {
+      categoryId: cbo.categoryId,
+    },
+    txn,
+    true,
+  );
+  await createCBOReferralTask(patient5.id, user.id, cboReferral2.id, txn);
+  const cboReferral3 = await CBOReferral.create(
+    {
+      categoryId: cbo.categoryId,
+      CBOId: cbo.id,
+    },
+    txn,
+  );
+  await createCBOReferralTask(patient4.id, user2.id, cboReferral3.id, txn);
+  const cboReferral4 = await CBOReferral.create(
+    {
+      categoryId: cbo.categoryId,
+      CBOId: cbo.id,
+    },
+    txn,
+  );
+  await CBOReferral.edit(
+    {
+      sentAt: '01/01/2018',
+      acknowledgedAt: '01/01/2018',
+    },
+    cboReferral4.id,
+    txn,
+  );
+  await createCBOReferralTask(patient2.id, user.id, cboReferral4.id, txn);
+
+  return { patient1, patient5, user };
 }
 
 export async function setupUrgentTasks(txn: Transaction) {

@@ -284,7 +284,7 @@ export default class Patient extends BaseModel {
     userId: string,
     txn: Transaction,
   ): Promise<IPaginatedResults<Patient>> {
-    const patientsResult = await this.query(txn)
+    return this.query(txn)
       .eager(EAGER_QUERY)
       .whereRaw(
         `patient.id IN
@@ -304,8 +304,6 @@ export default class Patient extends BaseModel {
       .orderBy('lastName', 'ASC')
       .orderBy('firstName', 'ASC')
       .page(pageNumber, pageSize);
-
-    return patientsResult;
   }
 
   static async getPatientsNewToCareTeam(
@@ -313,7 +311,7 @@ export default class Patient extends BaseModel {
     userId: string,
     txn: Transaction,
   ): Promise<IPaginatedResults<Patient>> {
-    const patientsResult = await this.query(txn)
+    return this.query(txn)
       .eager(EAGER_QUERY)
       .whereRaw(
         `patient.id IN (
@@ -331,8 +329,6 @@ export default class Patient extends BaseModel {
       )
       .orderBy('care_team.createdAt', 'DESC')
       .page(pageNumber, pageSize);
-
-    return patientsResult;
   }
 
   static async getPatientsWithPendingSuggestions(
@@ -347,15 +343,13 @@ export default class Patient extends BaseModel {
       })
       .select('patientId');
 
-    const patientsResult = await this.query(txn)
+    return this.query(txn)
       .eager(EAGER_QUERY)
       .whereIn('patient.id', userPatientsWithPendingSuggestions)
       .where('patient.id', 'in', this.userCareTeamPatientIdsQuery(userId, txn))
       .orderBy('lastName', 'ASC')
       .orderBy('firstName', 'ASC')
       .page(pageNumber, pageSize);
-
-    return patientsResult;
   }
 
   static async getPatientsWithMissingInfo(
@@ -363,7 +357,7 @@ export default class Patient extends BaseModel {
     userId: string,
     txn: Transaction,
   ): Promise<IPaginatedResults<Patient>> {
-    const patientsResult = (await this.query(txn)
+    return this.query(txn)
       .eager(EAGER_QUERY)
       .leftOuterJoinRelation('patientInfo')
       .where('patientInfo', null)
@@ -374,9 +368,7 @@ export default class Patient extends BaseModel {
       .andWhere('patient.id', 'in', this.userCareTeamPatientIdsQuery(userId, txn))
       .orderBy('lastName', 'ASC')
       .orderBy('firstName', 'ASC')
-      .page(pageNumber, pageSize)) as any;
-
-    return patientsResult;
+      .page(pageNumber, pageSize) as any;
   }
 
   static async getPatientsWithNoRecentEngagement(
@@ -384,7 +376,7 @@ export default class Patient extends BaseModel {
     userId: string,
     txn: Transaction,
   ): Promise<IPaginatedResults<Patient>> {
-    const patientsResult = await this.query(txn)
+    return this.query(txn)
       .eager(EAGER_QUERY)
       .whereRaw(
         `
@@ -400,8 +392,6 @@ export default class Patient extends BaseModel {
       .orderBy('lastName', 'ASC')
       .orderBy('firstName', 'ASC')
       .page(pageNumber, pageSize);
-
-    return patientsResult;
   }
 
   static async getPatientsWithOutOfDateMAP(
@@ -409,7 +399,7 @@ export default class Patient extends BaseModel {
     userId: string,
     txn: Transaction,
   ): Promise<IPaginatedResults<Patient>> {
-    const patientsResult = await this.query(txn)
+    return this.query(txn)
       .eager(EAGER_QUERY)
       .whereRaw(
         `
@@ -425,8 +415,32 @@ export default class Patient extends BaseModel {
       .orderBy('lastName', 'ASC')
       .orderBy('firstName', 'ASC')
       .page(pageNumber, pageSize);
+  }
 
-    return patientsResult;
+  static async getPatientsWithOpenCBOReferrals(
+    { pageNumber, pageSize }: IPaginationOptions,
+    userId: string,
+    txn: Transaction,
+  ): Promise<IPaginatedResults<Patient>> {
+    const userPatientsWithOpenCBOReferrals = Task.query(txn)
+      .joinRaw(
+        `INNER JOIN cbo_referral ON task."CBOReferralId" = cbo_referral.id
+          AND task."assignedToId" = ?
+          AND task."deletedAt" IS NULL`,
+        userId,
+      )
+      .whereRaw('cbo_referral."CBOId" IS NULL AND cbo_referral."name" IS NULL')
+      .orWhere({ sentAt: null })
+      .orWhere({ acknowledgedAt: null })
+      .select('patientId');
+
+    return this.query(txn)
+      .eager(EAGER_QUERY)
+      .whereIn('patient.id', userPatientsWithOpenCBOReferrals)
+      .where('patient.id', 'in', this.userCareTeamPatientIdsQuery(userId, txn))
+      .orderBy('lastName', 'ASC')
+      .orderBy('firstName', 'ASC')
+      .page(pageNumber, pageSize);
   }
 
   static async getPatientsForComputedList(
@@ -443,15 +457,13 @@ export default class Patient extends BaseModel {
       })
       .select('patientId');
 
-    const patientsResult = await this.query(txn)
+    return this.query(txn)
       .eager(EAGER_QUERY)
       .whereIn('patient.id', patientIdsFromAnswer)
       .andWhere('patient.id', 'in', this.userCareTeamPatientIdsQuery(userId, txn))
       .orderBy('lastName', 'ASC')
       .orderBy('firstName', 'ASC')
       .page(pageNumber, pageSize);
-
-    return patientsResult;
   }
 
   static userCareTeamPatientIdsQuery(userId: string, txn: Transaction) {

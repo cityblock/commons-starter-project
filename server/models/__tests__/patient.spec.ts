@@ -11,6 +11,7 @@ import {
   setupPatientsNewToCareTeam,
   setupPatientsWithMissingInfo,
   setupPatientsWithNoRecentEngagement,
+  setupPatientsWithOpenCBOReferrals,
   setupPatientsWithOutOfDateMAP,
   setupPatientsWithPendingSuggestions,
   setupUrgentTasks,
@@ -567,6 +568,28 @@ describe('patient model', () => {
         expect(results[0]).toMatchObject({
           id: patient1.id,
           firstName: patient1.firstName,
+        });
+      });
+    });
+
+    it('returns patients on care team with open CBO referrals', async () => {
+      await transaction(Patient.knex(), async txn => {
+        const { patient1, user, patient5 } = await setupPatientsWithOpenCBOReferrals(txn);
+
+        const { total, results } = await Patient.getPatientsWithOpenCBOReferrals(
+          { pageNumber: 0, pageSize: 10 },
+          user.id,
+          txn,
+        );
+
+        expect(total).toBe(2);
+        expect(results[0]).toMatchObject({
+          id: patient1.id,
+          firstName: patient1.firstName,
+        });
+        expect(results[1]).toMatchObject({
+          id: patient5.id,
+          firstName: patient5.firstName,
         });
       });
     });

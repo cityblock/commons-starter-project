@@ -22,7 +22,7 @@ interface IProgressNoteAutoOpenFields {
   userId: string;
 }
 
-const EAGER_QUERY = '[progressNoteTemplate, user, patient, supervisor]';
+const EAGER_QUERY = '[progressNoteTemplate, user, patient.[patientInfo], supervisor]';
 
 /* tslint:disable:member-ordering */
 export default class ProgressNote extends BaseModel {

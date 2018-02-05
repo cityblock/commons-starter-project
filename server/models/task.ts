@@ -35,7 +35,7 @@ export const PRIORITY: Priority[] = ['low', 'medium', 'high'];
 const EAGER_QUERY = `[
   createdBy,
   assignedTo,
-  patient,
+  patient.[patientInfo],
   completedBy,
   followers,
   patientGoal.[patientConcern.[concern]],

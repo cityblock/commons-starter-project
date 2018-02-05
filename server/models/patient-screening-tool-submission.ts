@@ -22,7 +22,7 @@ interface IPatientScreeningToolSubmissionScoreFields {
 }
 
 export const EAGER_QUERY =
-  '[screeningTool, screeningToolScoreRange, patient, user, riskArea.[riskAreaGroup], patientAnswers, carePlanSuggestions.[patient, concern, goalSuggestionTemplate.[taskTemplates]]]';
+  '[screeningTool, screeningToolScoreRange, patient.[patientInfo], user, riskArea.[riskAreaGroup], patientAnswers, carePlanSuggestions.[patient.[patientInfo], concern, goalSuggestionTemplate.[taskTemplates]]]';
 
 /* tslint:disable:member-ordering */
 export default class PatientScreeningToolSubmission extends BaseModel {

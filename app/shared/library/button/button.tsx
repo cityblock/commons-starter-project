@@ -7,7 +7,7 @@ import * as styles from './css/button.css';
 
 export type Color = 'blue' | 'white' | 'red' | 'teal';
 
-interface IProps {
+export interface IProps {
   onClick: () => void;
   messageId?: string; // prefer using translate message ids
   label?: string; // use this if not translating

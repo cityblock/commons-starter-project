@@ -53,6 +53,16 @@ export const formatDateOfBirth = (dateOfBirth?: string | null): string => {
   return format(dateOfBirth, 'MM/DD/YYYY');
 };
 
+export const formatDateAsTimestamp = (date: string | null | undefined): string | null => {
+  if (!date) return null;
+
+  const splitDate = date.split('-');
+  const year = parseInt(splitDate[0], 10);
+  const month = parseInt(splitDate[1], 10) - 1;
+  const day = parseInt(splitDate[2], 10);
+  return new Date(Date.UTC(year, month, day)).toISOString();
+};
+
 export const formatAgeDetails = (dateOfBirth: string | null, gender: string | null): string => {
   if (!dateOfBirth && !gender) return '';
 

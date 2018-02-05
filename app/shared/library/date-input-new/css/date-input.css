@@ -1,0 +1,36 @@
+@import '../../../css/sizes';
+
+.dateInput {
+  height: var(--input-height);
+  width: 100%;
+  font-family: var(--roboto);
+  font-size: var(--medium-font-size);
+  color: var(--black-color);
+  padding-left: var(--small-gutter);
+  border-radius: var(--border-radius);
+  border: 1px solid var(--border-color);
+  outline: none;
+  transition: border-color 0.2s;
+
+  &:focus,
+  &:hover {
+    border-color: var(--blue-color);
+  }
+}
+
+.dateInput::-webkit-inner-spin-button {
+  display: none;
+}
+
+.dateInput::-webkit-calendar-picker-indicator {
+  color: var(--blue-color);
+  padding: var(--extra-small-gutter);
+}
+
+.empty {
+  color: var(--light-gray-font-color);
+}
+
+.error {
+  border-color: var(--red-color);
+}

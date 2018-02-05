@@ -1,0 +1,26 @@
+@import '../../css/sizes';
+
+.topMargin {
+  margin-top: var(--small-gutter);
+}
+
+.flex,
+.alert {
+  display: flex;
+  align-items: center;
+}
+
+.flex {
+  justify-content: space-between;
+  height: var(--small-gutter);
+}
+
+svg.icon {
+  height: 12px;
+  width: 12px;
+  fill: var(--red-color);
+  margin-left: 5px;
+
+  /* Goose a bit bc Basetica */
+  margin-bottom: 8px;
+}

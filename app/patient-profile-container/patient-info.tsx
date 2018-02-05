@@ -24,6 +24,7 @@ import {
   patientInfoEditMutationVariables,
 } from '../graphql/types';
 import * as sortSearchStyles from '../shared/css/sort-search.css';
+import { formatDateAsTimestamp } from '../shared/helpers/format-helpers';
 import Button from '../shared/library/button/button';
 import PatientContactForm, { IState as IPatientContactState } from '../shared/patient-contact-form';
 import PatientDemographicsForm, {
@@ -205,15 +206,6 @@ export class PatientInfo extends React.Component<allProps, IState> {
     if (!loading && !error && !saveLoading) {
       this.setState({ saveSuccess: false, saveLoading: true, saveError: false });
 
-      let birthday = null;
-      if (dateOfBirth) {
-        const splitDate = dateOfBirth.split('-');
-        const year = parseInt(splitDate[0], 10);
-        const month = parseInt(splitDate[1], 10) - 1;
-        const day = parseInt(splitDate[2], 10);
-        birthday = new Date(Date.UTC(year, month, day)).toISOString();
-      }
-
       try {
         // TODO: Make this less annoying
         await updatePatient({
@@ -222,7 +214,7 @@ export class PatientInfo extends React.Component<allProps, IState> {
             firstName: firstName ? firstName : null,
             middleName: middleName ? middleName : null,
             lastName: lastName ? lastName : null,
-            dateOfBirth: birthday,
+            dateOfBirth: formatDateAsTimestamp(dateOfBirth),
             consentToCall: consentToCall === 'true',
             consentToText: consentToText === 'true',
           },

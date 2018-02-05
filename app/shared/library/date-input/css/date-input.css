@@ -26,14 +26,14 @@
 }
 
 /* Remove x button and up and down arrows */
-::-webkit-clear-button,
-::-webkit-inner-spin-button {
+.dateInput::-webkit-clear-button,
+.dateInput::-webkit-inner-spin-button {
   display: none; /* Hide the button */
   -webkit-appearance: none; /* turn off default browser styling */
 }
 
 /* Give some padding around picker indicator to enlarge click area */
-::-webkit-calendar-picker-indicator {
+.dateInput::-webkit-calendar-picker-indicator {
   padding: 10px;
   padding-left: var(--medium-gutter);
 }

@@ -49,8 +49,8 @@ export default class CBOReferral extends BaseModel {
       url: { type: 'string', format: 'url' }, // cannot be blank
       diagnosis: { type: 'string', minLength: 1 }, // cannot be blank
       deletedAt: { type: 'string' },
-      sentAt: { type: 'string' },
-      acknowledgedAt: { type: 'string' },
+      sentAt: { type: ['string', 'null'] },
+      acknowledgedAt: { type: ['string', 'null'] },
     },
     required: ['categoryId'],
   };
@@ -118,7 +118,6 @@ export default class CBOReferral extends BaseModel {
     const edited = await this.query(txn)
       .eager(EAGER_QUERY)
       .patchAndFetchById(CBOReferralId, input);
-
     if (!edited) {
       return Promise.reject(`No such CBO referral: ${CBOReferralId}`);
     }

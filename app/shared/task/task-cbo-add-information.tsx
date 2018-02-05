@@ -3,7 +3,6 @@ import { graphql } from 'react-apollo';
 import * as taskQuery from '../../graphql/queries/get-task.graphql';
 import { FullTaskFragment } from '../../graphql/types';
 import Button from '../library/button/button';
-import * as styles from './css/task-cbo-add-information.css';
 import TaskCBOAddInformationPopup from './task-cbo-add-information-popup';
 
 interface IProps {
@@ -46,12 +45,7 @@ export class TaskCBOAddInformation extends React.Component<allProps, IState> {
           isVisible={this.state.isPopupVisible}
           closePopup={this.setPopupVisibility(false)}
         />
-        <Button
-          messageId="task.CBOAddInfo"
-          color="white"
-          className={styles.button}
-          onClick={this.setPopupVisibility(true)}
-        />
+        <Button messageId="task.CBOAddInfo" color="white" onClick={this.setPopupVisibility(true)} />
       </div>
     );
   }

@@ -4,6 +4,7 @@ import {
   formatAge,
   formatAgeDetails,
   formatCBOReferralTaskTitle,
+  formatDateAsTimestamp,
   formatDateOfBirth,
   formatFullName,
   formatGender,
@@ -105,6 +106,18 @@ describe('Shared Component Helpers', () => {
 
     it('returns formatted date of birth if known', () => {
       expect(formatDateOfBirth(dateOfBirth)).toBe('12/01/2000');
+    });
+  });
+
+  describe('formatDateAsTimestamp', () => {
+    it('returns null if date is null', () => {
+      expect(formatDateAsTimestamp(null)).toBeNull();
+    });
+
+    it('formats a date as timestamp with correct time zone', () => {
+      const date = '2017-11-12';
+
+      expect(formatDateAsTimestamp(date)).toBe('2017-11-12T00:00:00.000Z');
     });
   });
 

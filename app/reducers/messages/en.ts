@@ -337,6 +337,9 @@ export const ENGLISH_TRANSLATION = {
     'task.CBOAddTitle': 'Add Information to CBO Referral',
     'task.CBOAddDescription':
       'Add additional information to generate a CBO referral form for this member',
+    'task.CBOacknowledgedAt': 'Referral acknowledged by CBO on:',
+    'task.CBOsentAt': 'Fax was successfully sent on:',
+    'task.CBODateRequired': 'Date required',
     'task.concern': 'Concern:',
     'task.due': 'Due',
     'task.followers': 'Followers of this task:',

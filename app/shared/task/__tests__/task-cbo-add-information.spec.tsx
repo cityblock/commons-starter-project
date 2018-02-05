@@ -14,7 +14,6 @@ describe('CBO Referral Task Add Information Button', () => {
     expect(wrapper.find(Button).length).toBe(1);
     expect(wrapper.find(Button).props().messageId).toBe('task.CBOAddInfo');
     expect(wrapper.find(Button).props().color).toBe('white');
-    expect(wrapper.find(Button).props().className).toBe('button');
   });
 
   it('renders popup to add CBO referral information', () => {

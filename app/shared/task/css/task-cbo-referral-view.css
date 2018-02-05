@@ -1,6 +1,6 @@
 @import '../../css/sizes';
 
 button.button {
-  margin: var(--small-gutter) 0 var(--extra-small-gutter);
+  margin-top: var(--small-gutter);
   width: 186px;
 }

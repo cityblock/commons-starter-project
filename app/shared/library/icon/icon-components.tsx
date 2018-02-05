@@ -8,6 +8,7 @@ import ArrowBackIcon from 'material-ui-icons/ArrowBack';
 import AssignmentTurnedInIcon from 'material-ui-icons/AssignmentTurnedIn';
 import CloseIcon from 'material-ui-icons/Close';
 import DeleteIcon from 'material-ui-icons/Delete';
+import ErrorIcon from 'material-ui-icons/Error';
 import ErrorOutlineIcon from 'material-ui-icons/ErrorOutline';
 import EventIcon from 'material-ui-icons/Event';
 import ExpandLessIcon from 'material-ui-icons/ExpandLess';
@@ -44,6 +45,7 @@ const components = {
   assignmentTurnedIn: AssignmentTurnedInIcon,
   close: CloseIcon,
   delete: DeleteIcon,
+  error: ErrorIcon,
   errorOutline: ErrorOutlineIcon,
   event: EventIcon,
   expandArrow: ExpandArrowIcon,

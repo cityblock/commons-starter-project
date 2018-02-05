@@ -21,7 +21,7 @@
   height: 1px;
   width: 100%;
   background: var(--gray-background-color);
-  margin: 15px 0;
+  margin: var(--small-gutter) 0;
 }
 
 .task {

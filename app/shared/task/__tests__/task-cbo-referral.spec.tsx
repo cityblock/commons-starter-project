@@ -5,6 +5,7 @@ import { Divider } from '../task';
 import TaskCBOAddInformation from '../task-cbo-add-information';
 import TaskCBODetail from '../task-cbo-detail';
 import TaskCBOReferral from '../task-cbo-referral';
+import TaskCBOReferralDates from '../task-cbo-referral-dates';
 import TaskCBOReferralView from '../task-cbo-referral-view';
 
 describe('Task CBO Referral', () => {
@@ -25,11 +26,18 @@ describe('Task CBO Referral', () => {
     expect(wrapper.find(Divider).length).toBe(1);
   });
 
+  it('renders CBO referral sent at and acknowledged at fields', () => {
+    expect(wrapper.find(TaskCBOReferralDates).length).toBe(1);
+    expect(wrapper.find(TaskCBOReferralDates).props().CBOReferral).toEqual(CBOReferral);
+    expect(wrapper.find(TaskCBOReferralDates).props().taskId).toBe(taskId);
+  });
+
   it('renders button to add information if action required', () => {
     wrapper.setProps({ CBOReferral: CBOReferralRequiringAction });
 
     expect(wrapper.find(TaskCBOAddInformation).length).toBe(1);
     expect(wrapper.find(TaskCBOAddInformation).props().taskId).toBe(taskId);
     expect(wrapper.find(TaskCBODetail).length).toBe(0);
+    expect(wrapper.find(TaskCBOReferralDates).length).toBe(0);
   });
 });

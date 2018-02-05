@@ -8,6 +8,7 @@ export type IconName =
   | 'assignmentTurnedIn'
   | 'close'
   | 'delete'
+  | 'error'
   | 'errorOutline'
   | 'event'
   | 'expandArrow'

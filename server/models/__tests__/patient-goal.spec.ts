@@ -1,3 +1,4 @@
+import { format } from 'date-fns';
 import { transaction, Transaction } from 'objection';
 import * as uuid from 'uuid/v4';
 import Db from '../../db';
@@ -276,8 +277,7 @@ describe('patient goal model', () => {
       const { patient, user } = await setup(txn);
 
       const oldDate = Date.now;
-      Date.now = jest.fn(() => 1500494779252);
-      const twoWeeksFromNow = Date.now() + 12096e5;
+      Date.now = jest.fn(() => 1501632000000);
 
       const goalSuggestionTemplate = await GoalSuggestionTemplate.create(
         { title: 'Fix housing' },
@@ -319,7 +319,7 @@ describe('patient goal model', () => {
         txn,
       );
 
-      expect(fetchedTasks.results[0].dueAt.valueOf()).toEqual(twoWeeksFromNow);
+      expect(format(fetchedTasks.results[0].dueAt, 'MM/DD/YYYY')).toEqual('08/16/2017');
 
       Date.now = oldDate;
     });

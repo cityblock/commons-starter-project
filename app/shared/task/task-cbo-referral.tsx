@@ -4,6 +4,7 @@ import { isCBOReferralRequiringAction } from './helpers/helpers';
 import { Divider } from './task';
 import TaskCBOAddInformation from './task-cbo-add-information';
 import TaskCBODetail from './task-cbo-detail';
+import TaskCBOReferralDates from './task-cbo-referral-dates';
 import TaskCBOReferralView from './task-cbo-referral-view';
 
 interface IProps {
@@ -24,6 +25,7 @@ const TaskCBOReferral: React.StatelessComponent<IProps> = (props: IProps) => {
       <TaskCBODetail CBOReferral={CBOReferral} />
       <TaskCBOReferralView taskId={taskId} />
       <Divider />
+      <TaskCBOReferralDates CBOReferral={CBOReferral} taskId={taskId} />
     </div>
   );
 };

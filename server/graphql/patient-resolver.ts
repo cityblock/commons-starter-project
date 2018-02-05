@@ -319,6 +319,19 @@ export async function resolvePatientsWithOutOfDateMAP(
   );
 }
 
+export async function resolvePatientsWithOpenCBOReferrals(
+  root: any,
+  pageOptions: IPaginationOptions,
+  context: IContext,
+): Promise<IPatientForDashboardEdges> {
+  return resolvePatientDashboardBuilder(
+    root,
+    pageOptions,
+    context,
+    Patient.getPatientsWithOpenCBOReferrals,
+  );
+}
+
 export async function resolvePatientsForComputedList(
   root: any,
   { answerId, pageNumber, pageSize }: IPatientComputedListOptions,

@@ -2024,6 +2024,8 @@ type RootQueryType {
   patientsWithNoRecentEngagement(pageNumber: Int!, pageSize: Int!): PatientForDashboardEdges!
   # Patient dashboard - out of date MAP
   patientsWithOutOfDateMAP(pageNumber: Int!, pageSize: Int!): PatientForDashboardEdges!
+  # Patient dashboard - open CBO referrals
+  patientsWithOpenCBOReferrals(pageNumber: Int!, pageSize: Int!): PatientForDashboardEdges!
   # Patient dashboard - computed list for answer
   patientsForComputedList(
     answerId: ID!

@@ -16,6 +16,7 @@ import {
   setupPatientsNewToCareTeam,
   setupPatientsWithMissingInfo,
   setupPatientsWithNoRecentEngagement,
+  setupPatientsWithOpenCBOReferrals,
   setupPatientsWithOutOfDateMAP,
   setupPatientsWithPendingSuggestions,
   setupUrgentTasks,
@@ -616,6 +617,35 @@ describe('patient', () => {
       expect(result.data!.patientsWithOutOfDateMAP.edges[0].node).toMatchObject({
         id: patient1.id,
         firstName: patient1.firstName,
+      });
+    });
+  });
+
+  it('gets patients with open CBO referrals', async () => {
+    await transaction(Patient.knex(), async txn => {
+      const { user, patient1, patient5 } = await setupPatientsWithOpenCBOReferrals(txn);
+
+      const query = `{
+        patientsWithOpenCBOReferrals(pageNumber: 0, pageSize: 10) {
+          edges { node { id, firstName }}
+          totalCount
+        }
+      }`;
+
+      const result = await graphql(schema, query, null, {
+        userRole,
+        userId: user.id,
+        txn,
+      });
+
+      expect(result.data!.patientsWithOpenCBOReferrals.totalCount).toBe(2);
+      expect(result.data!.patientsWithOpenCBOReferrals.edges[0].node).toMatchObject({
+        id: patient1.id,
+        firstName: patient1.firstName,
+      });
+      expect(result.data!.patientsWithOpenCBOReferrals.edges[1].node).toMatchObject({
+        id: patient5.id,
+        firstName: patient5.firstName,
       });
     });
   });

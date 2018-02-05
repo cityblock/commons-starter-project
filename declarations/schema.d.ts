@@ -78,6 +78,10 @@ declare module 'schema' {
   */
     patientsWithOutOfDateMAP: IPatientForDashboardEdges;
     /**
+    description: Patient dashboard - open CBO referrals
+  */
+    patientsWithOpenCBOReferrals: IPatientForDashboardEdges;
+    /**
     description: Patient dashboard - computed list for answer
   */
     patientsForComputedList: IPatientForDashboardEdges;

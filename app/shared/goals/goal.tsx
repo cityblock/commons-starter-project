@@ -5,6 +5,7 @@ import TaskRow from '../tasks/task-row';
 import CreateTask from './create-task/create-task';
 import * as styles from './css/goal.css';
 import GoalOptions from './goal-options';
+import { isGoalTasksComplete } from './helpers/helpers';
 
 interface IProps {
   goalNumber: number;
@@ -78,7 +79,7 @@ export default class PatientGoal extends React.Component<IProps, IState> {
               patientGoalTitle={patientGoal && patientGoal.title}
               addTask={this.setCreateTaskModal(true)}
               taskOpen={!!selectedTaskId}
-              canDelete={patientGoal.tasks && !patientGoal.tasks.length}
+              canDelete={isGoalTasksComplete(patientGoal)}
             />
           </div>
           <div className={styles.patientGoalTitle}>{patientGoal.title}</div>

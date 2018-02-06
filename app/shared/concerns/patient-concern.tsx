@@ -2,8 +2,8 @@ import * as classNames from 'classnames';
 import * as React from 'react';
 import { adminTasksConcernTitle } from '../../../server/lib/consts';
 import { FullPatientConcernFragment } from '../../graphql/types';
+import { isDueSoon } from '../../shared/helpers/format-helpers';
 import { isCBOReferralRequiringActionForUser } from '../../shared/task/helpers/helpers';
-import { checkIfDueSoon } from '../../shared/util/due-date';
 import PatientGoal from '../goals/goal';
 import PatientConcernStats from './concern-stats/concern-stats';
 import * as styles from './css/patient-concern.css';
@@ -65,7 +65,7 @@ export class PatientConcern extends React.Component<IProps, {}> {
               stats.lastUpdated = task.updatedAt;
             }
 
-            const dueSoon = checkIfDueSoon(task.dueAt);
+            const dueSoonForUser = isDueSoon(task.dueAt) && task.assignedToId === currentUserId;
             const isCBOReferralRequiringAction = isCBOReferralRequiringActionForUser(
               task,
               currentUserId,
@@ -74,7 +74,7 @@ export class PatientConcern extends React.Component<IProps, {}> {
             const hasNotification =
               !!taskIdsWithNotifications && taskIdsWithNotifications.includes(task.id);
             stats.hasBadge =
-              stats.hasBadge || dueSoon || hasNotification || isCBOReferralRequiringAction;
+              stats.hasBadge || dueSoonForUser || hasNotification || isCBOReferralRequiringAction;
           });
         }
       });

@@ -2,11 +2,11 @@ import { shallow } from 'enzyme';
 import { cloneDeep } from 'lodash';
 import * as React from 'react';
 import { CBO_REFERRAL_ACTION_TITLE } from '../../../shared/constants';
+import { isDueSoon } from '../../shared/helpers/format-helpers';
 import PatientConcernStats from '../concerns/concern-stats/concern-stats';
 import PatientConcernOptions from '../concerns/options-menu/options-menu';
 import PatientConcern from '../concerns/patient-concern';
 import PatientGoal from '../goals/goal';
-import { checkIfDueSoon } from '../util/due-date';
 import { patientConcern, task } from '../util/test-data';
 
 describe('Patient Concern Component', () => {
@@ -69,10 +69,10 @@ describe('Patient Concern Component', () => {
 
     const patientConcern2 = cloneDeep(patientConcern);
     patientConcern2.patientGoals[0].tasks = [task2];
-    expect(checkIfDueSoon(patientConcern2.patientGoals[0].tasks[0].dueAt)).toBe(false);
+    expect(isDueSoon(patientConcern2.patientGoals[0].tasks[0].dueAt)).toBe(false);
 
     // The current concern has an overdue task
-    expect(checkIfDueSoon(patientConcern.patientGoals[0].tasks[0].dueAt)).toBe(true);
+    expect(isDueSoon(patientConcern.patientGoals[0].tasks[0].dueAt)).toBe(true);
     expect(wrapper.find('.notificationBadge').length).toBe(1);
 
     // Set notification on task and have it be overdue and unselected

@@ -3,9 +3,9 @@ import * as React from 'react';
 import { FormattedDate, FormattedMessage, FormattedRelative } from 'react-intl';
 import { Link } from 'react-router-dom';
 import { ShortTaskFragment, ShortUserFragment } from '../../graphql/types';
+import { isDueSoon } from '../../shared/helpers/format-helpers';
 import Avatar from '../../shared/library/avatar/avatar';
 import { isCBOReferralRequiringActionForUser } from '../../shared/task/helpers/helpers';
-import { checkIfDueSoon } from '../../shared/util/due-date';
 import * as styles from './css/task-row.css';
 import * as tasksStyles from './css/tasks.css';
 
@@ -46,7 +46,8 @@ export const TaskRow: React.StatelessComponent<IProps> = (props: IProps) => {
     taskIdsWithNotifications,
     currentUserId,
   } = props;
-  const dueSoon = checkIfDueSoon(task.dueAt);
+  const dueSoon = isDueSoon(task.dueAt);
+  const dueSoonForUser = dueSoon && task.assignedToId === currentUserId;
   const isCBOReferralRequiringAction = isCBOReferralRequiringActionForUser(task, currentUserId);
   const hasNotification = !!taskIdsWithNotifications && taskIdsWithNotifications.includes(task.id);
 
@@ -58,7 +59,7 @@ export const TaskRow: React.StatelessComponent<IProps> = (props: IProps) => {
     [styles.condensed]: !!condensed,
     [styles.inactive]: !!selectedTaskId && selectedTaskId !== task.id,
     [styles.compressed]: !!selectedTaskId,
-    [styles.notificationBadge]: dueSoon || hasNotification || isCBOReferralRequiringAction,
+    [styles.notificationBadge]: dueSoonForUser || hasNotification || isCBOReferralRequiringAction,
   });
 
   const openedAtStyles = classNames(

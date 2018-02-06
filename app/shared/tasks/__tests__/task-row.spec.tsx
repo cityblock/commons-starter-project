@@ -9,7 +9,7 @@ import configureMockStore from 'redux-mock-store';
 import { CBO_REFERRAL_ACTION_TITLE } from '../../../../shared/constants';
 import { ENGLISH_TRANSLATION } from '../../../reducers/messages/en';
 import ReduxConnectedIntlProvider from '../../../redux-connected-intl-provider';
-import { checkIfDueSoon } from '../../util/due-date';
+import { isDueSoon } from '../../../shared/helpers/format-helpers';
 import { task, user } from '../../util/test-data';
 import { TaskRow } from '../task-row';
 
@@ -123,7 +123,7 @@ describe('Task Row Component', () => {
     task2.id = 'task-id-2';
 
     // The current task is overdue
-    expect(checkIfDueSoon(task.dueAt)).toBe(true);
+    expect(isDueSoon(task.dueAt)).toBe(true);
     expect(wrapper.find('.notificationBadge').length).toBe(1);
 
     // Set notification on task and have it be overdue

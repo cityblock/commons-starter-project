@@ -61,15 +61,6 @@ exports[`renders tasks container 1`] = `
                 </option>
               </select>
             </div>
-            <div
-              className="search search"
-            >
-              <input
-                placeholder="Search by user or keywords"
-                required={true}
-                type="text"
-              />
-            </div>
           </div>
         </div>
         <div

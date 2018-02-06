@@ -4,7 +4,6 @@ export const divider: string;
 export const commentDate: string;
 export const error: string;
 export const hidden: string;
-export const uploadAttachment: string;
 export const taskComments: string;
 export const addComment: string;
 export const commentsList: string;

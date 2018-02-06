@@ -209,7 +209,6 @@ export class TaskComments extends React.Component<allProps, IState> {
             onChange={this.onCommentBodyChange}
             onKeyDown={this.onCommentBodyKeyDown}
           />
-          <div className={styles.uploadAttachment} />
           <div className={addCommentErrorStyles}>
             <FormattedMessage id="taskComment.error">
               {(message: string) => (

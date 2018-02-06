@@ -177,9 +177,6 @@ class Tasks extends React.Component<allProps, IState> {
                 <option value="updatedAtAsc">Last updated desc</option>
               </select>
             </div>
-            <div className={classNames(sortSearchStyles.search, styles.search)}>
-              <input required type="text" placeholder="Search by user or keywords" />
-            </div>
           </div>
         </div>
         <div className={styles.bottomContainer}>

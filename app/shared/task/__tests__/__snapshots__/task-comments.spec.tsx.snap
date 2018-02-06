@@ -14,9 +14,6 @@ exports[`correctly renders comments component 1`] = `
       value=""
     />
     <div
-      className="uploadAttachment"
-    />
-    <div
       className="addCommentError hiddenError"
     >
       <div

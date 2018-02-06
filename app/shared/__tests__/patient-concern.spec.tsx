@@ -102,4 +102,9 @@ describe('Patient Concern Component', () => {
     wrapper.setProps({ patientConcern: patientConcern2, taskIdsWithNotifications: [] });
     expect(wrapper.find('.notificationBadge').length).toBe(1);
   });
+
+  it('returns null if patient concern was deleted', () => {
+    wrapper.setProps({ patientConcern: { deletedAt: '2018-02-05' } });
+    expect(wrapper.find('div').length).toBe(0);
+  });
 });

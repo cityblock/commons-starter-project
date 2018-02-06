@@ -119,6 +119,8 @@ export class PatientConcern extends React.Component<IProps, {}> {
 
   render() {
     const { onClick, patientConcern, selected, inactive, selectedTaskId, isDragging } = this.props;
+    if (patientConcern.deletedAt) return null;
+
     const { patientGoals, concern } = patientConcern;
 
     const goalsStyles = classNames(styles.goals, {

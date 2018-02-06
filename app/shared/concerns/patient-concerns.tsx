@@ -34,7 +34,7 @@ export const PatientConcerns: React.StatelessComponent<allProps> = (props: allPr
     currentUser,
   } = props;
 
-  if (inactive && !concerns.length) {
+  if (inactive && (!concerns.length || concerns.every(concern => !!concern.deletedAt))) {
     return (
       <div className={styles.container}>
         <EmptyPlaceholder

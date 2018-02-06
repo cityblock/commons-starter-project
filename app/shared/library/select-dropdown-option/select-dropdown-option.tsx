@@ -1,4 +1,5 @@
 import * as React from 'react';
+import Avatar from '../avatar/avatar';
 import * as styles from './css/select-dropdown-option.css';
 
 interface IProps {
@@ -13,7 +14,7 @@ const SelectDropdownOption: React.StatelessComponent<IProps> = (props: IProps) =
 
   return (
     <div className={styles.option} onClick={onClick}>
-      {avatarUrl && <img className={styles.img} src={avatarUrl} alt="avatar photo" />}
+      <Avatar src={avatarUrl} size="medium" className={styles.avatar} />
       <h4>{value}</h4>
       {detail && <p>{`(${detail})`}</p>}
     </div>

@@ -1,5 +1,6 @@
 import * as classNames from 'classnames';
 import * as React from 'react';
+import Avatar from '../avatar/avatar';
 import SelectDropdownOption from '../select-dropdown-option/select-dropdown-option';
 import * as styles from './css/select-dropdown.css';
 
@@ -79,6 +80,9 @@ class SelectDropdown extends React.Component<IProps, IState> {
       },
       className,
     );
+    const avatarStyles = classNames(styles.avatar, {
+      [styles.avatarLargeMargin]: !!largeFont,
+    });
 
     const options = isOpen ? (
       loading ? (
@@ -100,7 +104,7 @@ class SelectDropdown extends React.Component<IProps, IState> {
           onClick={this.onClick}
           tabIndex={0}
         >
-          {avatarUrl && <img src={avatarUrl} alt="avatar photo" />}
+          <Avatar src={avatarUrl} size="medium" className={avatarStyles} />
           <h4>{value}</h4>
           {detail && <p>{`(${detail})`}</p>}
           {options}

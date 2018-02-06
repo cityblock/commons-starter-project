@@ -1,5 +1,6 @@
 import { shallow } from 'enzyme';
 import * as React from 'react';
+import Avatar from '../../avatar/avatar';
 import SelectDropdownOption from '../select-dropdown-option';
 
 describe('Library Select Dropdown Option Component', () => {
@@ -17,7 +18,7 @@ describe('Library Select Dropdown Option Component', () => {
     expect(wrapper.find('p').length).toBe(0);
   });
 
-  it('renders image and detail if provided', () => {
+  it('renders avatar and detail if provided', () => {
     const detail = 'Winterfell';
     const avatarUrl = 'sansa.png';
 
@@ -25,9 +26,10 @@ describe('Library Select Dropdown Option Component', () => {
       <SelectDropdownOption value={value} detail={detail} avatarUrl={avatarUrl} />,
     );
 
-    expect(wrapper.find('img').length).toBe(1);
-    expect(wrapper.find('img').props().src).toBe(avatarUrl);
-    expect(wrapper.find('img').props().className).toBe('img');
+    expect(wrapper.find(Avatar).length).toBe(1);
+    expect(wrapper.find(Avatar).props().src).toBe(avatarUrl);
+    expect(wrapper.find(Avatar).props().size).toBe('medium');
+    expect(wrapper.find(Avatar).props().className).toBe('avatar');
     expect(wrapper.find('p').length).toBe(1);
     expect(wrapper.find('p').text()).toBe(`(${detail})`);
   });

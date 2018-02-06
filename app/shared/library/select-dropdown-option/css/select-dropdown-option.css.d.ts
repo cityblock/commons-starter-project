@@ -1,2 +1,2 @@
 export const option: string;
-export const img: string;
+export const avatar: string;

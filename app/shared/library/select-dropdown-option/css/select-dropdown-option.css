@@ -11,6 +11,6 @@
   }
 }
 
-.option .img {
-  margin-left: 0;
+.avatar {
+  margin-right: var(--extra-small-gutter);
 }

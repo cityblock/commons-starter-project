@@ -3,15 +3,11 @@ import { pickBy } from 'lodash-es';
 import * as querystring from 'querystring';
 import * as React from 'react';
 import { compose, graphql } from 'react-apollo';
-import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
 import * as tasksQuery from '../graphql/queries/tasks-for-current-user.graphql';
 import { getTasksForCurrentUserQuery, FullTaskFragment } from '../graphql/types';
-import UnderlineTab from '../shared/library/underline-tab/underline-tab';
-import UnderlineTabs from '../shared/library/underline-tabs/underline-tabs';
 import Tasks, { IPageParams } from '../shared/tasks/tasks';
 import { fetchMore } from '../shared/util/fetch-more';
-import { IState as IAppState } from '../store';
 import * as styles from './css/tasks-container.css';
 
 interface IProps {
@@ -35,11 +31,7 @@ interface IGraphqlProps {
   fetchMoreTasks: () => any;
 }
 
-interface IStateProps {
-  notificationsCount: number;
-}
-
-type allProps = IProps & IGraphqlProps & IStateProps;
+type allProps = IProps & IGraphqlProps;
 
 class TasksContainer extends React.Component<allProps> {
   componentWillReceiveProps() {
@@ -47,7 +39,7 @@ class TasksContainer extends React.Component<allProps> {
   }
 
   render() {
-    const { tasksResponse, notificationsCount, match, history } = this.props;
+    const { tasksResponse, match, history } = this.props;
     const taskId = match && match.params.taskId;
 
     const tasks =
@@ -63,15 +55,6 @@ class TasksContainer extends React.Component<allProps> {
     return (
       <div className={styles.container}>
         <div className={styles.mainBody}>
-          <UnderlineTabs color="white">
-            <UnderlineTab messageId="tasks.listView" href={'/tasks'} selected={true} />
-            <UnderlineTab
-              messageId="tasks.notifications"
-              href={'/notifications/tasks'}
-              selected={false}
-              displayNotificationBadge={notificationsCount > 0}
-            />
-          </UnderlineTabs>
           <div>
             <Tasks
               fetchMoreTasks={this.props.fetchMoreTasks}
@@ -91,12 +74,6 @@ class TasksContainer extends React.Component<allProps> {
   }
 }
 
-function mapStateToProps(state: IAppState, ownProps: IProps): IStateProps {
-  return {
-    notificationsCount: state.eventNotifications.count,
-  };
-}
-
 const getPageParams = (props: IProps) => {
   const pageParams = querystring.parse(props.location.search.substring(1));
   return {
@@ -108,7 +85,6 @@ const getPageParams = (props: IProps) => {
 
 export default compose(
   withRouter,
-  connect<IStateProps, {}>(mapStateToProps as (args?: any) => IStateProps),
   graphql<IGraphqlProps, IProps, allProps>(tasksQuery as any, {
     options: (props: IProps) => ({ variables: getPageParams(props) }),
     props: ({ data, ownProps }) => ({

@@ -1,16 +1,10 @@
 import * as classNames from 'classnames';
 import { History } from 'history';
 import * as React from 'react';
-import { compose, graphql } from 'react-apollo';
 import { FormattedMessage } from 'react-intl';
-import { connect, Dispatch } from 'react-redux';
-import { matchPath, withRouter } from 'react-router';
+import { matchPath, withRouter, RouteComponentProps } from 'react-router';
 import { Link } from 'react-router-dom';
-import { updateEventNotificationsCount } from '../actions/event-notifications-action';
-import { formatEventNotifications } from '../event-notifications-container/event-notifications-container';
-import * as eventNotificationsQuery from '../graphql/queries/get-event-notifications-for-current-user.graphql';
-import { getEventNotificationsForCurrentUserQuery, FullUserFragment } from '../graphql/types';
-import { IState as IAppState } from '../store';
+import { FullUserFragment } from '../graphql/types';
 import * as styles from './css/header.css';
 
 interface IProps {
@@ -19,42 +13,13 @@ interface IProps {
   location: History.LocationState;
 }
 
-interface IGraphqlProps {
-  eventNotificationsResponse?: getEventNotificationsForCurrentUserQuery['eventNotificationsForCurrentUser'];
-}
-
-interface IDispatchProps {
-  updateNotificationsCount?: (count: number) => any;
-}
-
-interface IStateProps {
-  notificationsCount?: number;
-}
-
-type allProps = IGraphqlProps & IStateProps & IDispatchProps & IProps;
+type allProps = IProps & RouteComponentProps<IProps>;
 
 class Header extends React.Component<allProps> {
-  constructor(props: allProps) {
-    super(props);
-
-    this.logout = this.logout.bind(this);
-  }
-
-  componentWillReceiveProps(nextProps: allProps) {
-    const { updateNotificationsCount } = this.props;
-    const { eventNotificationsResponse } = nextProps;
-
-    const formattedNotifications = formatEventNotifications(eventNotificationsResponse);
-
-    if (updateNotificationsCount) {
-      updateNotificationsCount(formattedNotifications.length);
-    }
-  }
-
-  async logout() {
+  logout = async (): Promise<void> => {
     await localStorage.removeItem('authToken');
     window.location.href = '/';
-  }
+  };
 
   getNavItemClassnames(path: string) {
     const { location } = this.props;
@@ -66,7 +31,7 @@ class Header extends React.Component<allProps> {
   }
 
   render() {
-    const { currentUser, notificationsCount } = this.props;
+    const { currentUser } = this.props;
     const name =
       currentUser.firstName && currentUser.lastName
         ? `${currentUser.firstName} ${currentUser.lastName}`
@@ -91,9 +56,6 @@ class Header extends React.Component<allProps> {
         </Link>
       );
     }
-    const tasksBadgeStyles = classNames(styles.notificationBadge, {
-      [styles.visible]: !!notificationsCount && notificationsCount > 0,
-    });
 
     return (
       <div className={styles.header}>
@@ -122,7 +84,7 @@ class Header extends React.Component<allProps> {
               <FormattedMessage id="header.tasks">
                 {(message: string) => <div className={styles.navText}>{message}</div>}
               </FormattedMessage>
-              <div className={tasksBadgeStyles} />
+              <div className={styles.notificationBadge} />
             </Link>
             {builderLink}
             {managerLink}
@@ -153,28 +115,4 @@ class Header extends React.Component<allProps> {
   }
 }
 
-function mapStateToProps(state: IAppState, ownProps: {}): IStateProps {
-  return {
-    notificationsCount: state.eventNotifications.count,
-  };
-}
-
-function mapDispatchToProps(dispatch: Dispatch<() => void>): IDispatchProps {
-  return {
-    updateNotificationsCount: (count: number) => dispatch(updateEventNotificationsCount(count)),
-  };
-}
-
-export default compose(
-  withRouter,
-  connect<IStateProps, IDispatchProps, IProps>(mapStateToProps as any, mapDispatchToProps),
-  graphql<IGraphqlProps, IProps, allProps>(eventNotificationsQuery as any, {
-    options: (props: allProps) => {
-      const variables: any = { pageNumber: 0, pageSize: 15 };
-      return { variables };
-    },
-    props: ({ data, ownProps }) => ({
-      eventNotificationsResponse: data ? (data as any).eventNotificationsForCurrentUser : null,
-    }),
-  }),
-)(Header);
+export default withRouter(Header);

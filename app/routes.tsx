@@ -28,15 +28,6 @@ export default (
           })}
         />
         <Route
-          path="/notifications/:eventNotificationType?"
-          component={(Loadable as any)({
-            loader: async () =>
-              import(/* webpackChunkName: "notifications" */
-              './event-notifications-container/event-notifications-container'),
-            loading: () => null,
-          })}
-        />
-        <Route
           path="/tasks/:taskId?"
           component={(Loadable as any)({
             loader: async () =>

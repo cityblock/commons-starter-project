@@ -7,24 +7,6 @@ exports[`renders tasks container 1`] = `
   <div
     className="mainBody"
   >
-    <div
-      className="tabs white"
-    >
-      <a
-        className="tab selected"
-        href="/tasks"
-        onClick={[Function]}
-      >
-        Tasks
-      </a>
-      <a
-        className="tab"
-        href="/notifications/tasks"
-        onClick={[Function]}
-      >
-        Notifications
-      </a>
-    </div>
     <div>
       <div
         className="container"

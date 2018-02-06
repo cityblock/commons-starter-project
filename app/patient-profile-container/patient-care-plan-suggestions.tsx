@@ -43,7 +43,7 @@ interface IState {
   dismissedSuggestion: FullCarePlanSuggestionFragment | null;
 }
 
-class PatientCarePlanSuggestions extends React.Component<IProps & IGraphqlProps, IState> {
+export class PatientCarePlanSuggestions extends React.Component<IProps & IGraphqlProps, IState> {
   constructor(props: IProps & IGraphqlProps) {
     super(props);
 

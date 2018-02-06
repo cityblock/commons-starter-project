@@ -1,8 +1,7 @@
-import { History } from 'history';
 import { debounce } from 'lodash-es';
 import * as React from 'react';
 import { compose, graphql } from 'react-apollo';
-import { withRouter } from 'react-router';
+import { Link } from 'react-router-dom';
 import * as clinicsQuery from '../graphql/queries/clinics-get.graphql';
 import * as patientAnswersCreateMutationGraphql from '../graphql/queries/patient-answers-create-mutation.graphql';
 import {
@@ -33,6 +32,7 @@ import ScreeningToolDropdown from './screening-tool-dropdown';
 
 interface IProps {
   disabled: boolean;
+  close: () => void;
   progressNote: FullProgressNoteFragment;
   progressNoteTemplates: FullProgressNoteTemplateFragment[];
   patientAnswers?: getPatientAnswersQuery['patientAnswers'];
@@ -46,7 +46,6 @@ interface IProps {
       memberConcern: string | null;
     },
   ) => void;
-  history: History;
 }
 
 interface IGraphqlProps {
@@ -229,18 +228,8 @@ export class ProgressNoteContext extends React.Component<allProps, IState> {
     }
   };
 
-  redirectToMap = () => {
-    const { history, progressNote } = this.props;
-    return history.push(`/patients/${progressNote.patientId}/map/active`);
-  };
-
-  redirectTo360 = () => {
-    const { history, progressNote } = this.props;
-    return history.push(`/patients/${progressNote.patientId}/360`);
-  };
-
   render() {
-    const { progressNoteTemplates, clinics, disabled, progressNote } = this.props;
+    const { progressNoteTemplates, clinics, disabled, progressNote, close } = this.props;
     const {
       progressNoteTime,
       progressNoteLocation,
@@ -254,6 +243,42 @@ export class ProgressNoteContext extends React.Component<allProps, IState> {
         {template.title}
       </option>
     ));
+    const linkTo360 = disabled ? null : (
+      <Link
+        to={`/patients/${progressNote.patientId}/360`}
+        className={styles.navTextContainer}
+        onClick={close}
+      >
+        <FormLabel
+          className={styles.navText}
+          messageId="progressNote.update360"
+          htmlFor="contextAndPlan"
+        />
+        <Icon name={'keyboardArrowRight'} className={styles.icon} />
+      </Link>
+    );
+    const screeningToolDropdown = disabled ? null : (
+      <React.Fragment>
+        <ScreeningToolDropdown patientId={progressNote.patientId} close={close} />
+        <br />
+        <br />
+      </React.Fragment>
+    );
+    const linkToActivity = disabled ? null : (
+      <Link
+        to={`/patients/${progressNote.patientId}/map/active`}
+        className={styles.navTextContainer}
+        onClick={close}
+      >
+        <FormLabel
+          className={styles.navText}
+          messageId="progressNote.updateMap"
+          htmlFor="contextAndPlan"
+        />
+        <Icon name={'keyboardArrowRight'} className={styles.icon} />
+      </Link>
+    );
+
     return (
       <div>
         <div className={styles.encounterTypeContainer}>
@@ -290,18 +315,9 @@ export class ProgressNoteContext extends React.Component<allProps, IState> {
               messageId="progressNote.memberConcernAndObservation"
               htmlFor="memberConcernAndObservation"
             />
-            <div className={styles.navTextContainer} onClick={this.redirectTo360}>
-              <FormLabel
-                className={styles.navText}
-                messageId="progressNote.update360"
-                htmlFor="contextAndPlan"
-              />
-              <Icon name={'keyboardArrowRight'} className={styles.icon} />
-            </div>
+            {linkTo360}
           </div>
-          <ScreeningToolDropdown patientId={progressNote.patientId} />
-          <br />
-          <br />
+          {screeningToolDropdown}
           <Textarea
             disabled={disabled}
             value={progressNoteMemberConcern || ''}
@@ -311,14 +327,7 @@ export class ProgressNoteContext extends React.Component<allProps, IState> {
         <div className={styles.summaryContainer}>
           <div className={styles.titleLinkGroup}>
             <FormLabel messageId="progressNote.contextAndPlan" htmlFor="contextAndPlan" />
-            <div className={styles.navTextContainer} onClick={this.redirectToMap}>
-              <FormLabel
-                className={styles.navText}
-                messageId="progressNote.updateMap"
-                htmlFor="contextAndPlan"
-              />
-              <Icon name={'keyboardArrowRight'} className={styles.icon} />
-            </div>
+            {linkToActivity}
           </div>
           <Textarea
             disabled={disabled}
@@ -332,7 +341,6 @@ export class ProgressNoteContext extends React.Component<allProps, IState> {
 }
 
 export default compose(
-  withRouter,
   graphql<IGraphqlProps, IProps, allProps>(patientAnswersCreateMutationGraphql as any, {
     name: 'createPatientAnswers',
     options: { refetchQueries: ['getPatientAnswers'] },

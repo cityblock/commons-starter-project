@@ -27,7 +27,7 @@ interface ICarePlanUpdateEventOptions {
 const EAGER_QUERY = `[
     patientConcern.[concern, patient.[patientInfo]],
     patientGoal.[patient.[patientInfo], tasks.[createdBy, assignedTo, patient, completedBy, followers]],
-    patient, user
+    patient.[patientInfo], user
   ]`;
 
 /* tslint:disable:member-ordering */

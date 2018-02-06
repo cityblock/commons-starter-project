@@ -49,6 +49,7 @@ interface IState {
     startTime: string;
   };
   error: string | null;
+  readyToSubmit: boolean;
 }
 
 type allProps = IProps & IGraphqlProps;
@@ -62,6 +63,7 @@ export class QuickCallPopup extends React.Component<allProps, IState> {
       patientId,
     },
     error: null,
+    readyToSubmit: false,
   });
 
   constructor(props: allProps) {
@@ -80,7 +82,8 @@ export class QuickCallPopup extends React.Component<allProps, IState> {
       ...quickCall,
       [fieldName]: fieldValue,
     };
-    this.setState({ quickCall: newQuickCall });
+    const allTruthy = every(newQuickCall, v => v);
+    this.setState({ quickCall: newQuickCall, readyToSubmit: allTruthy });
   };
 
   submit = async () => {
@@ -118,7 +121,7 @@ export class QuickCallPopup extends React.Component<allProps, IState> {
 
   render() {
     const { close, visible, patient } = this.props;
-    const { quickCall, error } = this.state;
+    const { quickCall, error, readyToSubmit } = this.state;
     const patientName = patient ? getPatientFullName(patient) : 'Unknown';
     const errorsHtml = error ? <div className={styles.error}>Error: {error}</div> : null;
     return (
@@ -136,7 +139,11 @@ export class QuickCallPopup extends React.Component<allProps, IState> {
               <div className={styles.patientName}>{patientName}</div>
             </div>
           </div>
-          <Button messageId="quickCallForm.submit" onClick={this.submit} />
+          <Button
+            messageId="quickCallForm.submit"
+            onClick={this.submit}
+            disabled={!readyToSubmit}
+          />
         </div>
         <div>
           <div className={styles.formBar}>

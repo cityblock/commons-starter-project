@@ -222,6 +222,10 @@
   version "2.5.2"
   resolved "https://registry.yarnpkg.com/@types/fuse/-/fuse-2.5.2.tgz#19ebc90b465942448a2c9857cb6b45f501c1e64a"
 
+"@types/graphql@>=0.8.6 <=0.11.7":
+  version "0.11.7"
+  resolved "https://registry.yarnpkg.com/@types/graphql/-/graphql-0.11.7.tgz#da39a2f7c74e793e32e2bb7b3b68da1691532dd5"
+
 "@types/graphql@^0.11.7":
   version "0.11.8"
   resolved "https://registry.yarnpkg.com/@types/graphql/-/graphql-0.11.8.tgz#53ff3604e99db810dd43347f19fcd1c59725a7bb"
@@ -2973,10 +2977,6 @@ es6-promise@3.2.1:
   version "3.2.1"
   resolved "https://registry.yarnpkg.com/es6-promise/-/es6-promise-3.2.1.tgz#ec56233868032909207170c39448e24449dd1fc4"
 
-es6-promise@^4.1.1:
-  version "4.2.4"
-  resolved "https://registry.yarnpkg.com/es6-promise/-/es6-promise-4.2.4.tgz#dc4221c2b16518760bd8c39a52d8f356fc00ed29"
-
 es6-set@~0.1.5:
   version "0.1.5"
   resolved "https://registry.yarnpkg.com/es6-set/-/es6-set-0.1.5.tgz#d2b3ec5d4d800ced818db538d28974db0a73ccb1"
@@ -3971,25 +3971,19 @@ graphql-server-express@^1.3.2:
   dependencies:
     apollo-server-express "^1.3.2"
 
-graphql-subscriptions@^0.5.6:
-  version "0.5.6"
-  resolved "https://registry.yarnpkg.com/graphql-subscriptions/-/graphql-subscriptions-0.5.6.tgz#0d8e960fbaaf9ecbe7900366e86da2fc143fc5b2"
+graphql-tag@^2.7.0:
+  version "2.7.0"
+  resolved "https://registry.yarnpkg.com/graphql-tag/-/graphql-tag-2.7.0.tgz#3d4412b87a894f2c7ccd73b515f887dc67736203"
   dependencies:
-    es6-promise "^4.1.1"
-    iterall "^1.1.3"
+    "@types/graphql" ">=0.8.6 <=0.11.7"
 
-graphql-tag@^2.6.1:
-  version "2.6.1"
-  resolved "https://registry.yarnpkg.com/graphql-tag/-/graphql-tag-2.6.1.tgz#4788d509f6e29607d947fc47a40c4e18f736d34a"
-
-graphql-tools@2.19.0:
-  version "2.19.0"
-  resolved "https://registry.yarnpkg.com/graphql-tools/-/graphql-tools-2.19.0.tgz#04e1065532ab877aff3ad1883530fb56804ce9bf"
+graphql-tools@2.20.0:
+  version "2.20.0"
+  resolved "https://registry.yarnpkg.com/graphql-tools/-/graphql-tools-2.20.0.tgz#4fa7b0c403115a0b636f685263c6faec5f219a24"
   dependencies:
     apollo-link "^1.0.0"
     apollo-utilities "^1.0.1"
     deprecated-decorator "^0.1.6"
-    graphql-subscriptions "^0.5.6"
     uuid "^3.1.0"
 
 graphql-tools@^1:
@@ -4961,10 +4955,6 @@ istanbul-reports@^1.1.3:
 iterall@1.1.3:
   version "1.1.3"
   resolved "https://registry.yarnpkg.com/iterall/-/iterall-1.1.3.tgz#1cbbff96204056dde6656e2ed2e2226d0e6d72c9"
-
-iterall@^1.1.3:
-  version "1.1.4"
-  resolved "https://registry.yarnpkg.com/iterall/-/iterall-1.1.4.tgz#0db40d38fdcf53ae14dc8ec674e62ab190d52cfc"
 
 jest-changed-files@^22.1.4:
   version "22.1.4"

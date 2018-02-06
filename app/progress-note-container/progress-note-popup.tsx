@@ -192,11 +192,15 @@ export class ProgressNotePopup extends React.Component<allProps, IState> {
         const hasProgressNoteTemplate = progressNote.progressNoteTemplate ? true : false;
         const hasSummaryAndConcern =
           progressNote.memberConcern && progressNote.summary ? true : false;
+        const filledOutCosignitureIfRequired = progressNote.needsSupervisorReview
+          ? !!progressNote.supervisor && !!progressNote.supervisor.id
+          : true;
 
         this.setState({
           isReadyToSubmit:
             hasProgressNoteTemplate &&
             hasSummaryAndConcern &&
+            filledOutCosignitureIfRequired &&
             allQuestionsAnswered(questions, answerData),
         });
       }
@@ -224,6 +228,7 @@ export class ProgressNotePopup extends React.Component<allProps, IState> {
           onChange={this.updateProgressNote}
           currentUser={currentUser}
           disabled={isInSupervisorMode}
+          close={close}
         />
       ) : null;
     const activity =

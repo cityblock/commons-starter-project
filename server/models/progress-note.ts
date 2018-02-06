@@ -183,7 +183,12 @@ export default class ProgressNote extends BaseModel {
     return this.query(txn)
       .eager(EAGER_QUERY)
       .orderBy('createdAt', 'desc')
-      .where({ deletedAt: null, reviewedBySupervisorAt: null, supervisorId })
+      .where({
+        deletedAt: null,
+        needsSupervisorReview: true,
+        reviewedBySupervisorAt: null,
+        supervisorId,
+      })
       .whereNotNull('completedAt');
   }
 

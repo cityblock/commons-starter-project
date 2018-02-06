@@ -6,7 +6,8 @@ import User from './user';
 
 type direction = 'Inbound' | 'Outbound';
 
-const EAGER_QUERY = '[user,progressNote]';
+const EAGER_QUERY = '[user, progressNote]';
+
 interface IQuickCallCreateOptions {
   userId: string;
   patientId: string; // Needed to lookup or create progressNoteId

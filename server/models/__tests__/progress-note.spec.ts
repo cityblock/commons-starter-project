@@ -152,7 +152,7 @@ describe('progress note model', () => {
       );
 
       // Completed progress note in need of supervisor review
-      const completedProgressNote = await ProgressNote.create(
+      const completedProgressNoteInNeedOfSupervisorReview = await ProgressNote.create(
         {
           patientId: patient.id,
           userId: user.id,
@@ -162,14 +162,27 @@ describe('progress note model', () => {
         },
         txn,
       );
-      await ProgressNote.complete(completedProgressNote.id, txn);
+      await ProgressNote.complete(completedProgressNoteInNeedOfSupervisorReview.id, txn);
+
+      // Completed progress note with supervisor Id but not in need of supervisor review
+      const completedProgressNoteWithSupervisorId = await ProgressNote.create(
+        {
+          patientId: patient.id,
+          userId: user.id,
+          progressNoteTemplateId: progressNoteTemplate.id,
+          supervisorId: supervisor.id,
+          needsSupervisorReview: false,
+        },
+        txn,
+      );
+      await ProgressNote.complete(completedProgressNoteWithSupervisorId.id, txn);
 
       const progressNotes = await ProgressNote.getProgressNotesForSupervisorReview(
         supervisor.id,
         txn,
       );
       expect(progressNotes.length).toEqual(1);
-      expect(progressNotes[0].id).toEqual(completedProgressNote.id);
+      expect(progressNotes[0].id).toEqual(completedProgressNoteInNeedOfSupervisorReview.id);
     });
   });
 

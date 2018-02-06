@@ -9,6 +9,7 @@ import Select from '../shared/library/select/select';
 
 interface IProps {
   patientId: string;
+  close: () => void;
   history: History;
 }
 
@@ -20,10 +21,11 @@ type allProps = IProps & IGraphqlProps;
 
 class ScreeningToolDropdown extends React.Component<allProps> {
   onSortChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    const { history, patientId } = this.props;
+    const { history, patientId, close } = this.props;
     const value = event.target.value;
 
     history.push(`/patients/${patientId}/tools/${value}`);
+    close();
   };
 
   render() {

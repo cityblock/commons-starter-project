@@ -15,7 +15,7 @@ import { Popup } from '../shared/popup/popup';
 import * as styles from './css/patient-care-plan.css';
 import PopupPatientCarePlanSuggestionAcceptedModalBody from './popup-patient-care-plan-suggestion-accepted-modal-body';
 
-interface IProps {
+export interface IProps {
   visible: boolean;
   carePlanSuggestions?: getPatientCarePlanSuggestionsQuery['carePlanSuggestionsForPatient'];
   suggestion?: FullCarePlanSuggestionFragment;

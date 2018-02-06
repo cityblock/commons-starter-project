@@ -1,148 +1,21 @@
-import gql from 'graphql-tag';
-
+import { shallow } from 'enzyme';
 import * as React from 'react';
-import { MockedProvider } from 'react-apollo/test-utils';
-import { Provider } from 'react-redux';
-import { BrowserRouter } from 'react-router-dom';
-import { create } from 'react-test-renderer';
-import configureMockStore from 'redux-mock-store';
-import { ENGLISH_TRANSLATION } from '../../reducers/messages/en';
-import ReduxConnectedIntlProvider from '../../redux-connected-intl-provider';
-import PatientCarePlanSuggestions from '../patient-care-plan-suggestions';
-
-const locale = { messages: ENGLISH_TRANSLATION.messages };
-const mockStore = configureMockStore([]);
-
-const query = gql(`
-query getPatientCarePlanSuggestions($patientId: String!) {
-  carePlanSuggestionsForPatient(patientId: $patientId) {
-    ...FullCarePlanSuggestion
-    __typename
-  }
-}
-
-fragment FullCarePlanSuggestion on CarePlanSuggestion {
-  id
-  patientId
-  patient {
-    ...ShortPatient
-    __typename
-  }
-  suggestionType
-  concernId
-  concern {
-    ...FullConcern
-    __typename
-  }
-  goalSuggestionTemplateId
-  goalSuggestionTemplate {
-    ...FullGoalSuggestionTemplate
-    __typename
-  }
-  acceptedById
-  acceptedBy {
-    ...ShortUser
-    __typename
-  }
-  dismissedById
-  dismissedBy {
-    ...ShortUser
-    __typename
-  }
-  dismissedReason
-  createdAt
-  updatedAt
-  dismissedAt
-  acceptedAt
-  patientScreeningToolSubmissionId
-  __typename
-}
-
-fragment FullConcern on Concern {
-  id
-  title
-  createdAt
-  updatedAt
-  deletedAt
-  __typename
-}
-
-fragment FullGoalSuggestionTemplate on GoalSuggestionTemplate {
-  id
-  title
-  taskTemplates {
-    ...FullTaskTemplate
-    __typename
-  }
-  createdAt
-  updatedAt
-  deletedAt
-  __typename
-}
-
-fragment FullTaskTemplate on TaskTemplate {
-  id
-  title
-  completedWithinNumber
-  completedWithinInterval
-  repeating
-  goalSuggestionTemplateId
-  priority
-  careTeamAssigneeRole
-  createdAt
-  updatedAt
-  deletedAt
-  __typename
-}
-
-fragment ShortPatient on Patient {
-  id
-  firstName
-  middleName
-  lastName
-  language
-  gender
-  dateOfBirth
-  zip
-  createdAt
-  consentToText
-  consentToCall
-  __typename
-}
-
-fragment ShortUser on User {
-  id
-  firstName
-  lastName
-  userRole
-  googleProfileImageUrl
-  __typename
-}`);
+import { carePlanSuggestionWithConcern } from '../../shared/util/test-data';
+import { PatientCarePlanSuggestions as Component } from '../patient-care-plan-suggestions';
+import PopupPatientCarePlanSuggestionAccepted, {
+  IProps,
+} from '../popup-patient-care-plan-suggestion-accepted';
 
 it('renders patient care plan suggestions', () => {
-  const tree = create(
-    <MockedProvider
-      mocks={[
-        {
-          request: {
-            query,
-            variables: { patientId: 'patient-1' },
-          },
-          result: { data: { carePlanSuggestionsForPatient: [] } },
-        },
-      ]}
-    >
-      <Provider store={mockStore({ locale })}>
-        <ReduxConnectedIntlProvider>
-          <BrowserRouter>
-            <PatientCarePlanSuggestions
-              patientId={'patient-1'}
-              routeBase={'/patients/patient-1/map'}
-            />
-          </BrowserRouter>
-        </ReduxConnectedIntlProvider>
-      </Provider>
-    </MockedProvider>,
-  ).toJSON();
-  expect(tree).toMatchSnapshot();
+  const wrapper = shallow(
+    <Component
+      loading={false}
+      error={null}
+      carePlanSuggestions={[carePlanSuggestionWithConcern]}
+      patientId={carePlanSuggestionWithConcern.patientId}
+      routeBase={'/patients/patient-1/map'}
+    />,
+  );
+  const suggestionAccepted = wrapper.find<IProps>(PopupPatientCarePlanSuggestionAccepted);
+  expect(suggestionAccepted.props().patientId).toBe(carePlanSuggestionWithConcern.patientId);
 });

@@ -11,19 +11,18 @@ const clinics = {
 
 describe('progress note context', () => {
   let component: any;
-  const history = { push: jest.fn } as any;
 
   beforeAll(() => {
     Date.now = jest.fn(() => 1500494779252);
     component = shallow(
       <Component
-        history={history}
         progressNote={progressNote}
         progressNoteTemplates={[progressNoteTemplate]}
         onChange={jest.fn()}
         disabled={false}
         clinics={clinics}
         questions={[question]}
+        close={jest.fn()}
       />,
     );
   });

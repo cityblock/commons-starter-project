@@ -18,389 +18,389 @@ declare module 'schema' {
 
   interface IRootQueryType {
     /**
-    description: A single User
+    A single User
   */
     user: IUser;
     /**
-    description: All Users (admin only)
+    All Users (admin only)
   */
     users: IUserEdges;
     /**
-    description: List of all Users with care roles
+    List of all Users with care roles
   */
     userSummaryList: Array<IUser>;
     /**
-    description: List of patients the user is on the care team for (their 'patient panel')
+    List of patients the user is on the care team for (their 'patient panel')
   */
     userPatientPanel: IPatientEdges;
     /**
-    description: The current User
+    The current User
   */
     currentUser: IUser | null;
     /**
-    description: A single Patient
+    A single Patient
   */
     patient: IPatient;
     /**
-    description: Users on a care team
+    Users on a care team
   */
     patientCareTeam: Array<IUser>;
     /**
-    description: Patient scratch pad
+    Patient scratch pad
   */
     patientScratchPad: IPatientScratchPad;
     /**
-    description: Patient search
+    Patient search
   */
     patientSearch: IPatientSearchResultEdges;
     /**
-    description: Patient dashboard - tasks due and notifications
+    Patient dashboard - tasks due and notifications
   */
     patientsWithUrgentTasks: IPatientForDashboardEdges;
     /**
-    description: Patient dashboard - new to user care team
+    Patient dashboard - new to user care team
   */
     patientsNewToCareTeam: IPatientForDashboardEdges;
     /**
-    description: Patient dashboard - pending MAP suggestions
+    Patient dashboard - pending MAP suggestions
   */
     patientsWithPendingSuggestions: IPatientForDashboardEdges;
     /**
-    description: Patient dashboard - lacking demographic information
+    Patient dashboard - lacking demographic information
   */
     patientsWithMissingInfo: IPatientForDashboardEdges;
     /**
-    description: Patient dashboard - no recent engagement
+    Patient dashboard - no recent engagement
   */
     patientsWithNoRecentEngagement: IPatientForDashboardEdges;
     /**
-    description: Patient dashboard - out of date MAP
+    Patient dashboard - out of date MAP
   */
     patientsWithOutOfDateMAP: IPatientForDashboardEdges;
     /**
-    description: Patient dashboard - open CBO referrals
+    Patient dashboard - open CBO referrals
   */
     patientsWithOpenCBOReferrals: IPatientForDashboardEdges;
     /**
-    description: Patient dashboard - computed list for answer
+    Patient dashboard - computed list for answer
   */
     patientsForComputedList: IPatientForDashboardEdges;
     /**
-    description: A single clinic
+    A single clinic
   */
     clinic: IClinic;
     /**
-    description: Clinics
+    Clinics
   */
     clinics: IClinicEdges;
     /**
-    description: Patient encounters
+    Patient encounters
   */
     patientEncounters: Array<IPatientEncounter>;
     /**
-    description: Task
+    Task
   */
     task: ITask;
     /**
-    description: Patient's Tasks
+    Patient's Tasks
   */
     tasksForPatient: ITaskEdges;
     /**
-    description: Current user's Tasks
+    Current user's Tasks
   */
     tasksForCurrentUser: ITaskEdges;
     /**
-    description: Tasks due soon for patient - in dashboard
+    Tasks due soon for patient - in dashboard
   */
     tasksDueSoonForPatient: Array<ITask>;
     /**
-    description: Tasks with notifications for patient - in dashboard
+    Tasks with notifications for patient - in dashboard
   */
     tasksWithNotificationsForPatient: Array<ITask>;
     /**
-    description: Task IDs with notifications for current user - in care plan MAP and tasks panel
+    Task IDs with notifications for current user - in care plan MAP and tasks panel
   */
     taskIdsWithNotifications: Array<ITaskId>;
     /**
-    description: List of task comments
+    List of task comments
   */
     taskComments: ITaskCommentEdges;
     /**
-    description: Single task comment
+    Single task comment
   */
     taskComment: ITaskComment;
     /**
-    description: RiskAreaGroup
+    RiskAreaGroup
   */
     riskAreaGroup: IRiskAreaGroup;
     /**
-    description: Risk Area Group with associated patient answers
+    Risk Area Group with associated patient answers
   */
     riskAreaGroupForPatient: IRiskAreaGroupForPatient;
     /**
-    description: RiskAreaGroups
+    RiskAreaGroups
   */
     riskAreaGroups: Array<IRiskAreaGroup>;
     /**
-    description: RiskArea
+    RiskArea
   */
     riskArea: IRiskArea;
     /**
-    description: RiskAreas
+    RiskAreas
   */
     riskAreas: Array<IRiskArea>;
     /**
-    description: Question
+    Question
   */
     question: IQuestion;
     /**
-    description: Questions for risk area, progress note template or screening tool
+    Questions for risk area, progress note template or screening tool
   */
     questions: Array<IQuestion>;
     /**
-    description: Answer
+    Answer
   */
     answer: IAnswer | null;
     /**
-    description: Answers
+    Answers
   */
     answersForQuestion: Array<IAnswer>;
     /**
-    description: PatientAnswer
+    PatientAnswer
   */
     patientAnswer: IPatientAnswer;
     /**
-    description: PatientAnswersForQuestion
+    PatientAnswersForQuestion
   */
     patientAnswers: Array<IPatientAnswer>;
     /**
-    description: PatientPreviousAnswersForQuestion
+    PatientPreviousAnswersForQuestion
   */
     patientPreviousAnswersForQuestion: Array<IPatientAnswer>;
     /**
-    description: PatientRiskAreaSummary
+    PatientRiskAreaSummary
   */
     patientRiskAreaSummary: IRiskAreaSummary;
     /**
-    description: PatientRiskAreaRiskScore
+    PatientRiskAreaRiskScore
   */
     patientRiskAreaRiskScore: IRiskScore;
     /**
-    description: QuestionCondition
+    QuestionCondition
   */
     questionCondition: IQuestionCondition;
     /**
-    description: Event notifications for a user
+    Event notifications for a user
   */
     eventNotificationsForCurrentUser: IEventNotificationEdges;
     /**
-    description: Event notifications for a task
+    Event notifications for a task
   */
     eventNotificationsForTask: IEventNotificationEdges;
     /**
-    description: Event notifications for a user's task - on dashboard
+    Event notifications for a user's task - on dashboard
   */
     eventNotificationsForUserTask: Array<IEventNotification>;
     /**
-    description: Concern
+    Concern
   */
     concern: IConcern;
     /**
-    description: Concerns
+    Concerns
   */
     concerns: Array<IConcern>;
     /**
-    description: Concerns for answer
+    Concerns for answer
   */
     concernsForAnswer: Array<IConcern>;
     /**
-    description: patient concern
+    patient concern
   */
     patientConcern: IPatientConcern;
     /**
-    description: patient concerns for patient
+    patient concerns for patient
   */
     patientConcerns: Array<IPatientConcern>;
     /**
-    description: Patient goal
+    Patient goal
   */
     patientGoal: IPatientGoal;
     /**
-    description: Patient goals for patient
+    Patient goals for patient
   */
     patientGoals: Array<IPatientGoal>;
     /**
-    description: Goal suggestion templates
+    Goal suggestion templates
   */
     goalSuggestionTemplate: IGoalSuggestionTemplate;
     /**
-    description: Goal suggestion templates
+    Goal suggestion templates
   */
     goalSuggestionTemplates: Array<IGoalSuggestionTemplate>;
     /**
-    description: Goal suggestion for template for answer
+    Goal suggestion for template for answer
   */
     goalSuggestionTemplatesForAnswer: Array<IGoalSuggestionTemplate>;
     /**
-    description: Task template
+    Task template
   */
     taskTemplate: ITaskTemplate;
     /**
-    description: Task templates
+    Task templates
   */
     taskTemplates: Array<ITaskTemplate>;
     /**
-    description: Task templates suggested for answer
+    Task templates suggested for answer
   */
     taskTemplatesForAnswer: Array<ITaskTemplate>;
     /**
-    description: patient task suggestions
+    patient task suggestions
   */
     patientTaskSuggestions: Array<IPatientTaskSuggestion>;
     /**
-    description: Care Plan Suggestions
+    Care Plan Suggestions
   */
     carePlanSuggestionsForPatient: Array<ICarePlanSuggestion>;
     /**
-    description: Care Plan
+    Care Plan
   */
     carePlanForPatient: ICarePlan;
     /**
-    description: screening tool
+    screening tool
   */
     screeningTool: IScreeningTool;
     /**
-    description: screening tools
+    screening tools
   */
     screeningTools: Array<IScreeningTool>;
     /**
-    description: screening tools for risk area
+    screening tools for risk area
   */
     screeningToolsForRiskArea: Array<IScreeningTool>;
     /**
-    description: screening tool score range
+    screening tool score range
   */
     screeningToolScoreRange: IScreeningToolScoreRange;
     /**
-    description: screening tool score range for screening tool and score
+    screening tool score range for screening tool and score
   */
     screeningToolScoreRangeForScoreAndScreeningTool: IScreeningToolScoreRange;
     /**
-    description: screening tool score ranges
+    screening tool score ranges
   */
     screeningToolScoreRanges: Array<IScreeningToolScoreRange>;
     /**
-    description: screening tool score ranges for screening tool
+    screening tool score ranges for screening tool
   */
     screeningToolScoreRangesForScreeningTool: Array<IScreeningToolScoreRange>;
     /**
-    description: patient screening tool submission
+    patient screening tool submission
   */
     patientScreeningToolSubmission: IPatientScreeningToolSubmission;
     /**
-    description: latest patient sreening tool submission for a screening tool
+    latest patient sreening tool submission for a screening tool
   */
     patientScreeningToolSubmissionForPatientAndScreeningTool: IPatientScreeningToolSubmission | null;
     /**
-    description: patient screening tool submissions for patient and screening tool (optioanlly)
+    patient screening tool submissions for patient and screening tool (optioanlly)
   */
     patientScreeningToolSubmissionsForPatient: Array<IPatientScreeningToolSubmission>;
     /**
-    description: patient screening tool submissions for patient 360 (history tab)
+    patient screening tool submissions for patient 360 (history tab)
   */
     patientScreeningToolSubmissionsFor360: Array<IPatientScreeningToolSubmission>;
     /**
-    description: patient screening tool submissions
+    patient screening tool submissions
   */
     patientScreeningToolSubmissions: Array<IPatientScreeningToolSubmission>;
     /**
-    description: progress note template
+    progress note template
   */
     progressNoteTemplate: IProgressNoteTemplate;
     /**
-    description: progress note templates
+    progress note templates
   */
     progressNoteTemplates: Array<IProgressNoteTemplate>;
     /**
-    description: progress note
+    progress note
   */
     progressNote: IProgressNote;
     /**
-    description: progress notes for patient
+    progress notes for patient
   */
     progressNotesForPatient: Array<IProgressNote>;
     /**
-    description: progress notes for current user
+    progress notes for current user
   */
     progressNotesForCurrentUser: Array<IProgressNote>;
     /**
-    description: progress notes for supervisor review
+    progress notes for supervisor review
   */
     progressNotesForSupervisorReview: Array<IProgressNote>;
     /**
-    description: progress note activities for progress note
+    progress note activities for progress note
   */
     progressNoteActivityForProgressNote: IProgressNoteActivity;
     /**
-    description: quick call
+    quick call
   */
     quickCall: IQuickCall;
     /**
-    description: quick calls for progress note
+    quick calls for progress note
   */
     quickCallsForProgressNote: Array<IQuickCall>;
     /**
-    description: computed field
+    computed field
   */
     computedField: IComputedField;
     /**
-    description: computed fields
+    computed fields
   */
     computedFields: Array<IComputedField>;
     /**
-    description: computed fields schema
+    computed fields schema
   */
     computedFieldsSchema: IComputedFieldsSchema;
     /**
-    description: risk area assessment submission
+    risk area assessment submission
   */
     riskAreaAssessmentSubmission: IRiskAreaAssessmentSubmission;
     /**
-    description: latest risk area assessment submission for a screening tool
+    latest risk area assessment submission for a screening tool
   */
     riskAreaAssessmentSubmissionForPatient: IRiskAreaAssessmentSubmission | null;
     /**
-    description: patient list
+    patient list
   */
     patientList: IPatientList;
     /**
-    description: all patient lists
+    all patient lists
   */
     patientLists: Array<IPatientList>;
     /**
-    description: all CBO categories
+    all CBO categories
   */
     CBOCategories: Array<ICBOCategory>;
     /**
-    description: CBO
+    CBO
   */
     CBO: ICBO;
     /**
-    description: all CBOs
+    all CBOs
   */
     CBOs: Array<ICBO>;
     /**
-    description: all CBOs for given category
+    all CBOs for given category
   */
     CBOsForCategory: Array<ICBO>;
     /**
-    description: patient data flags for a patient
+    patient data flags for a patient
   */
     patientDataFlagsForPatient: Array<IPatientDataFlag>;
   }
 
   /**
-    description: User account model
+    User account model
   */
   interface IUser {
     id: string;
@@ -417,11 +417,11 @@ declare module 'schema' {
   }
 
   /**
-    description: An object with a Globally Unique ID
+    An object with a Globally Unique ID
   */
   interface IUniqueId {
     /**
-    description: The ID of the object.
+    The ID of the object.
   */
     id: string;
   }
@@ -433,7 +433,7 @@ declare module 'schema' {
   type IUserOrderOptionsEnum = 'createdAtDesc' | 'createdAtAsc' | 'lastLoginAtDesc' | 'lastLoginAtAsc' | 'updatedAtDesc' | 'updatedAtAsc' | 'emailAsc';
 
   /**
-    description: User edges
+    User edges
   */
   interface IUserEdges {
     edges: Array<IUserNode> | null;
@@ -441,7 +441,7 @@ declare module 'schema' {
   }
 
   /**
-    description: User node
+    User node
   */
   interface IUserNode {
     node: IUser | null;
@@ -449,7 +449,7 @@ declare module 'schema' {
   }
 
   /**
-    description: Page info for paginated responses
+    Page info for paginated responses
   */
   interface IPageInfo {
     hasNextPage: boolean;
@@ -457,7 +457,7 @@ declare module 'schema' {
   }
 
   /**
-    description: Patient edges
+    Patient edges
   */
   interface IPatientEdges {
     edges: Array<IPatientNode>;
@@ -465,7 +465,7 @@ declare module 'schema' {
   }
 
   /**
-    description: Patient node
+    Patient node
   */
   interface IPatientNode {
     node: IPatient | null;
@@ -473,7 +473,7 @@ declare module 'schema' {
   }
 
   /**
-    description: Patient combining data in athena and our database
+    Patient combining data in athena and our database
   */
   interface IPatient {
     id: string;
@@ -492,7 +492,7 @@ declare module 'schema' {
   }
 
   /**
-    description: Patient info that is editable in Commons
+    Patient info that is editable in Commons
   */
   interface IPatientInfo {
     id: string;
@@ -504,7 +504,7 @@ declare module 'schema' {
   }
 
   /**
-    description: Address
+    Address
   */
   interface IAddress {
     id: string;
@@ -516,7 +516,7 @@ declare module 'schema' {
   }
 
   /**
-    description: Patient Data Flag
+    Patient Data Flag
   */
   interface IPatientDataFlag {
     id: string;
@@ -529,14 +529,14 @@ declare module 'schema' {
   }
 
   /**
-    description: Patient Scratch Pad
+    Patient Scratch Pad
   */
   interface IPatientScratchPad {
     text: string | null;
   }
 
   /**
-    description: Patient search result edges
+    Patient search result edges
   */
   interface IPatientSearchResultEdges {
     edges: Array<IPatientSearchResultNode>;
@@ -545,7 +545,7 @@ declare module 'schema' {
   }
 
   /**
-    description: Patient search result node
+    Patient search result node
   */
   interface IPatientSearchResultNode {
     node: IPatientSearchResult | null;
@@ -553,7 +553,7 @@ declare module 'schema' {
   }
 
   /**
-    description: Patient search result
+    Patient search result
   */
   interface IPatientSearchResult {
     id: string;
@@ -565,7 +565,7 @@ declare module 'schema' {
   }
 
   /**
-    description: Patient dashboard item edges
+    Patient dashboard item edges
   */
   interface IPatientForDashboardEdges {
     edges: Array<IPatientForDashboardNode>;
@@ -574,7 +574,7 @@ declare module 'schema' {
   }
 
   /**
-    description: Patient dashboard item node
+    Patient dashboard item node
   */
   interface IPatientForDashboardNode {
     node: IPatientForDashboard | null;
@@ -582,7 +582,7 @@ declare module 'schema' {
   }
 
   /**
-    description: Patient dashboard item
+    Patient dashboard item
   */
   interface IPatientForDashboard {
     id: string;
@@ -593,7 +593,7 @@ declare module 'schema' {
   }
 
   /**
-    description: Clinic
+    Clinic
   */
   interface IClinic {
     id: string;
@@ -604,7 +604,7 @@ declare module 'schema' {
   }
 
   /**
-    description: Clinic edges
+    Clinic edges
   */
   interface IClinicEdges {
     edges: Array<IClinicNode>;
@@ -612,7 +612,7 @@ declare module 'schema' {
   }
 
   /**
-    description: Clinic node
+    Clinic node
   */
   interface IClinicNode {
     node: IClinic;
@@ -620,7 +620,7 @@ declare module 'schema' {
   }
 
   /**
-    description: PatientEncounter
+    PatientEncounter
   */
   interface IPatientEncounter {
     encounterType: string;
@@ -633,7 +633,7 @@ declare module 'schema' {
   }
 
   /**
-    description: PatientDiagnosis
+    PatientDiagnosis
   */
   interface IPatientDiagnosis {
     code: string;
@@ -642,7 +642,7 @@ declare module 'schema' {
   }
 
   /**
-    description: Task
+    Task
   */
   interface ITask {
     id: string;
@@ -702,7 +702,7 @@ declare module 'schema' {
   }
 
   /**
-    description: Concern
+    Concern
   */
   interface IConcern {
     id: string;
@@ -714,7 +714,7 @@ declare module 'schema' {
   }
 
   /**
-    description: DiagnosisCode
+    DiagnosisCode
   */
   interface IDiagnosisCode {
     id: string;
@@ -804,7 +804,7 @@ declare module 'schema' {
   type ITaskOrderOptionsEnum = 'createdAtDesc' | 'createdAtAsc' | 'dueAtDesc' | 'dueAtAsc' | 'updatedAtDesc' | 'updatedAtAsc' | 'titleAsc' | 'titleDesc';
 
   /**
-    description: Task edges
+    Task edges
   */
   interface ITaskEdges {
     edges: Array<ITaskNode>;
@@ -812,7 +812,7 @@ declare module 'schema' {
   }
 
   /**
-    description: Task node
+    Task node
   */
   interface ITaskNode {
     node: ITask | null;
@@ -820,14 +820,14 @@ declare module 'schema' {
   }
 
   /**
-    description: Task ID
+    Task ID
   */
   interface ITaskId {
     id: string;
   }
 
   /**
-    description: Task comment edges
+    Task comment edges
   */
   interface ITaskCommentEdges {
     edges: Array<ITaskCommentNode>;
@@ -835,7 +835,7 @@ declare module 'schema' {
   }
 
   /**
-    description: Task comment node
+    Task comment node
   */
   interface ITaskCommentNode {
     node: ITaskComment | null;
@@ -843,7 +843,7 @@ declare module 'schema' {
   }
 
   /**
-    description: Task comment
+    Task comment
   */
   interface ITaskComment {
     id: string;
@@ -855,7 +855,7 @@ declare module 'schema' {
   }
 
   /**
-    description: Risk Area Group
+    Risk Area Group
   */
   interface IRiskAreaGroup {
     id: string;
@@ -871,7 +871,7 @@ declare module 'schema' {
   }
 
   /**
-    description: Risk Area
+    Risk Area
   */
   interface IRiskArea {
     id: string;
@@ -893,7 +893,7 @@ declare module 'schema' {
   type IAssessmentTypeEnum = 'automated' | 'manual';
 
   /**
-    description: Question
+    Question
   */
   interface IQuestion {
     id: string;
@@ -916,7 +916,7 @@ declare module 'schema' {
   }
 
   /**
-    description: Answer
+    Answer
   */
   interface IAnswer {
     id: string;
@@ -1050,7 +1050,7 @@ declare module 'schema' {
   }
 
   /**
-    description: PatientAnswer
+    PatientAnswer
   */
   interface IPatientAnswer {
     id: string;
@@ -1073,7 +1073,7 @@ declare module 'schema' {
   type IAnswerTypeOptionsEnum = 'dropdown' | 'radio' | 'freetext' | 'multiselect';
 
   /**
-    description: QuestionCondition
+    QuestionCondition
   */
   interface IQuestionCondition {
     id: string;
@@ -1163,7 +1163,7 @@ declare module 'schema' {
   }
 
   /**
-    description: Event Notification edges
+    Event Notification edges
   */
   interface IEventNotificationEdges {
     edges: Array<IEventNotificationNode>;
@@ -1171,7 +1171,7 @@ declare module 'schema' {
   }
 
   /**
-    description: Event Notification node
+    Event Notification node
   */
   interface IEventNotificationNode {
     node: IEventNotification | null;
@@ -1179,7 +1179,7 @@ declare module 'schema' {
   }
 
   /**
-    description: Event Notification
+    Event Notification
   */
   interface IEventNotification {
     id: string;
@@ -1197,7 +1197,7 @@ declare module 'schema' {
   }
 
   /**
-    description: Task Event
+    Task Event
   */
   interface ITaskEvent {
     id: string;
@@ -1294,7 +1294,7 @@ declare module 'schema' {
   }
 
   /**
-    description: Patient Answer Event
+    Patient Answer Event
   */
   interface IPatientAnswerEvent {
     id: string;
@@ -1318,7 +1318,7 @@ declare module 'schema' {
   type IPatientAnswerEventTypesEnum = 'create_patient_answer';
 
   /**
-    description: Care Plan Update Event
+    Care Plan Update Event
   */
   interface ICarePlanUpdateEvent {
     id: string;
@@ -1391,438 +1391,438 @@ declare module 'schema' {
 
   interface IRootMutationType {
     /**
-    description: Create a new user
+    Create a new user
   */
     userCreate: IUser | null;
     /**
-    description: Login user
+    Login user
   */
     userLogin: IUserWithAuthToken | null;
     /**
-    description: Edit user
+    Edit user
   */
     userEditRole: IUser | null;
     /**
-    description: Delete user
+    Delete user
   */
     userDelete: IUser | null;
     /**
-    description: Edit current user
+    Edit current user
   */
     currentUserEdit: IUser | null;
     /**
-    description: Create a new clinic
+    Create a new clinic
   */
     clinicCreate: IClinic | null;
     /**
-    description: Add user to careTeam
+    Add user to careTeam
   */
     careTeamAddUser: Array<IUser> | null;
     /**
-    description: Remove user from careTeam
+    Remove user from careTeam
   */
     careTeamRemoveUser: Array<IUser> | null;
     /**
-    description: Add a note to an appointment
+    Add a note to an appointment
   */
     appointmentAddNote: IAppointmentAddNoteResult | null;
     /**
-    description: Start an appointment
+    Start an appointment
   */
     appointmentStart: IAppointment | null;
     /**
-    description: End an appointment
+    End an appointment
   */
     appointmentEnd: IAppointmentEndResult | null;
     /**
-    description: Create an address for a Patient
+    Create an address for a Patient
   */
     addressCreateForPatient: IAddress | null;
     /**
-    description: Create an primary address for a Patient
+    Create an primary address for a Patient
   */
     addressCreatePrimaryForPatient: IAddress | null;
     /**
-    description: Edit an address
+    Edit an address
   */
     addressEdit: IAddress | null;
     /**
-    description: Edit fields on patient stored in the db
+    Edit fields on patient stored in the db
   */
     patientEdit: IPatient | null;
     /**
-    description: Edit fields on patient info stored in the db
+    Edit fields on patient info stored in the db
   */
     patientInfoEdit: IPatientInfo | null;
     /**
-    description: Setup patient creates the patient in the db AND in athena
+    Setup patient creates the patient in the db AND in athena
   */
     patientSetup: IPatient | null;
     /**
-    description: Edit a patient scratch pad
+    Edit a patient scratch pad
   */
     patientScratchPadEdit: IPatientScratchPad | null;
     /**
-    description: Create a task
+    Create a task
   */
     taskCreate: ITask | null;
     /**
-    description: Delete a task
+    Delete a task
   */
     taskDelete: ITask | null;
     /**
-    description: Edit a task
+    Edit a task
   */
     taskEdit: ITask | null;
     /**
-    description: Complete a task
+    Complete a task
   */
     taskComplete: ITask | null;
     /**
-    description: Uncomplete a task
+    Uncomplete a task
   */
     taskUncomplete: ITask | null;
     /**
-    description: Add user to task followers
+    Add user to task followers
   */
     taskUserFollow: ITask | null;
     /**
-    description: Remove user from task followers
+    Remove user from task followers
   */
     taskUserUnfollow: ITask | null;
     /**
-    description: Create a task
+    Create a task
   */
     taskCommentCreate: ITaskComment | null;
     /**
-    description: Edit a task
+    Edit a task
   */
     taskCommentEdit: ITaskComment | null;
     /**
-    description: Delete a task
+    Delete a task
   */
     taskCommentDelete: ITaskComment | null;
     /**
-    description: Create a RiskAreaGroup
+    Create a RiskAreaGroup
   */
     riskAreaGroupCreate: IRiskAreaGroup | null;
     /**
-    description: Edit a RiskAreaGroup
+    Edit a RiskAreaGroup
   */
     riskAreaGroupEdit: IRiskAreaGroup | null;
     /**
-    description: Delete a RiskAreaGroup
+    Delete a RiskAreaGroup
   */
     riskAreaGroupDelete: IRiskAreaGroup | null;
     /**
-    description: Create a RiskArea
+    Create a RiskArea
   */
     riskAreaCreate: IRiskArea | null;
     /**
-    description: Edit a RiskArea
+    Edit a RiskArea
   */
     riskAreaEdit: IRiskArea | null;
     /**
-    description: Deletes a RiskArea
+    Deletes a RiskArea
   */
     riskAreaDelete: IRiskArea | null;
     /**
-    description: Create a Question
+    Create a Question
   */
     questionCreate: IQuestion | null;
     /**
-    description: Edit a Question
+    Edit a Question
   */
     questionEdit: IQuestion | null;
     /**
-    description: Delete a question
+    Delete a question
   */
     questionDelete: IQuestion | null;
     /**
-    description: Create an Answer
+    Create an Answer
   */
     answerCreate: IAnswer | null;
     /**
-    description: Edit an Answer
+    Edit an Answer
   */
     answerEdit: IAnswer | null;
     /**
-    description: Deletes an Answer
+    Deletes an Answer
   */
     answerDelete: IAnswer | null;
     /**
-    description: Create a patient answer
+    Create a patient answer
   */
     patientAnswersCreate: Array<IPatientAnswer> | null;
     /**
-    description: Edit a patient answer
+    Edit a patient answer
   */
     patientAnswerEdit: IPatientAnswer | null;
     /**
-    description: Deletes a patient Answer
+    Deletes a patient Answer
   */
     patientAnswerDelete: IPatientAnswer | null;
     /**
-    description: Create a QuestionCondition
+    Create a QuestionCondition
   */
     questionConditionCreate: IQuestionCondition | null;
     /**
-    description: Edit a QuestionCondition
+    Edit a QuestionCondition
   */
     questionConditionEdit: IQuestionCondition | null;
     /**
-    description: Deletes a QuestionCondition
+    Deletes a QuestionCondition
   */
     questionConditionDelete: IQuestionCondition | null;
     /**
-    description: Dismisses (marks as seen) an EventNotification
+    Dismisses (marks as seen) an EventNotification
   */
     eventNotificationDismiss: IEventNotification | null;
     /**
-    description: Dismisses (marks as seen) all of the EventNotifications on a Task for a the current user
+    Dismisses (marks as seen) all of the EventNotifications on a Task for a the current user
   */
     eventNotificationsForTaskDismiss: Array<IEventNotification> | null;
     /**
-    description: Create a concern
+    Create a concern
   */
     concernCreate: IConcern | null;
     /**
-    description: Edit a concern
+    Edit a concern
   */
     concernEdit: IConcern | null;
     /**
-    description: Deletes a concern
+    Deletes a concern
   */
     concernDelete: IConcern | null;
     /**
-    description: Add a diagnosis code to a concern
+    Add a diagnosis code to a concern
   */
     concernAddDiagnosisCode: IConcern | null;
     /**
-    description: Remove a diagnosis code from a concern
+    Remove a diagnosis code from a concern
   */
     concernRemoveDiagnosisCode: IConcern | null;
     /**
-    description: suggest a concern for an answer
+    suggest a concern for an answer
   */
     concernSuggestionCreate: Array<IConcern> | null;
     /**
-    description: delete suggestion a concern for an answer
+    delete suggestion a concern for an answer
   */
     concernSuggestionDelete: Array<IConcern> | null;
     /**
-    description: goal suggestion template create
+    goal suggestion template create
   */
     goalSuggestionTemplateCreate: IGoalSuggestionTemplate | null;
     /**
-    description: Edit a goal suggestion template
+    Edit a goal suggestion template
   */
     goalSuggestionTemplateEdit: IGoalSuggestionTemplate | null;
     /**
-    description: Deletes a goal suggestion template
+    Deletes a goal suggestion template
   */
     goalSuggestionTemplateDelete: IGoalSuggestionTemplate | null;
     /**
-    description: Suggest a goal suggestion template for an answer
+    Suggest a goal suggestion template for an answer
   */
     goalSuggestionCreate: Array<IGoalSuggestionTemplate> | null;
     /**
-    description: unsuggest a goal suggestion template for an answer
+    unsuggest a goal suggestion template for an answer
   */
     goalSuggestionDelete: Array<IGoalSuggestionTemplate> | null;
     /**
-    description: task template create
+    task template create
   */
     taskTemplateCreate: ITaskTemplate | null;
     /**
-    description: Edit a task template
+    Edit a task template
   */
     taskTemplateEdit: ITaskTemplate | null;
     /**
-    description: Deletes a task template
+    Deletes a task template
   */
     taskTemplateDelete: ITaskTemplate | null;
     /**
-    description: Suggest a task template for an answer
+    Suggest a task template for an answer
   */
     taskSuggestionCreate: Array<ITaskTemplate> | null;
     /**
-    description: unsuggest a task template for an answer
+    unsuggest a task template for an answer
   */
     taskSuggestionDelete: Array<ITaskTemplate> | null;
     /**
-    description: patient task suggestion accept
+    patient task suggestion accept
   */
     patientTaskSuggestionAccept: IPatientTaskSuggestion | null;
     /**
-    description: patient task suggestion dismiss
+    patient task suggestion dismiss
   */
     patientTaskSuggestionDismiss: IPatientTaskSuggestion | null;
     /**
-    description: patient goal create
+    patient goal create
   */
     patientGoalCreate: IPatientGoal | null;
     /**
-    description: patient goal edit
+    patient goal edit
   */
     patientGoalEdit: IPatientGoal | null;
     /**
-    description: patient goal delete
+    patient goal delete
   */
     patientGoalDelete: IPatientGoal | null;
     /**
-    description: patient concern create
+    patient concern create
   */
     patientConcernCreate: IPatientConcern | null;
     /**
-    description: patient concern edit
+    patient concern edit
   */
     patientConcernEdit: IPatientConcern | null;
     /**
-    description: patient concern bulk edit
+    patient concern bulk edit
   */
     patientConcernBulkEdit: Array<IPatientConcern> | null;
     /**
-    description: patient concern delete
+    patient concern delete
   */
     patientConcernDelete: IPatientConcern | null;
     /**
-    description: care plan suggestion accept
+    care plan suggestion accept
   */
     carePlanSuggestionAccept: ICarePlanSuggestion | null;
     /**
-    description: care plan suggestion dismiss
+    care plan suggestion dismiss
   */
     carePlanSuggestionDismiss: ICarePlanSuggestion | null;
     /**
-    description: screening tool create
+    screening tool create
   */
     screeningToolCreate: IScreeningTool | null;
     /**
-    description: screening tool edit
+    screening tool edit
   */
     screeningToolEdit: IScreeningTool | null;
     /**
-    description: screening tool delete
+    screening tool delete
   */
     screeningToolDelete: IScreeningTool | null;
     /**
-    description: screening tool score range create
+    screening tool score range create
   */
     screeningToolScoreRangeCreate: IScreeningToolScoreRange | null;
     /**
-    description: screening tool score range edit
+    screening tool score range edit
   */
     screeningToolScoreRangeEdit: IScreeningToolScoreRange | null;
     /**
-    description: screening tool score range delete
+    screening tool score range delete
   */
     screeningToolScoreRangeDelete: IScreeningToolScoreRange | null;
     /**
-    description: patient screening tool submission create
+    patient screening tool submission create
   */
     patientScreeningToolSubmissionCreate: IPatientScreeningToolSubmission | null;
     /**
-    description: patient screening tool submission score
+    patient screening tool submission score
   */
     patientScreeningToolSubmissionScore: IPatientScreeningToolSubmission | null;
     /**
-    description: create a progress note template
+    create a progress note template
   */
     progressNoteTemplateCreate: IProgressNoteTemplate | null;
     /**
-    description: edits a progress note template
+    edits a progress note template
   */
     progressNoteTemplateEdit: IProgressNoteTemplate | null;
     /**
-    description: deletes a progress note template
+    deletes a progress note template
   */
     progressNoteTemplateDelete: IProgressNoteTemplate | null;
     /**
-    description: creates a progress note
+    creates a progress note
   */
     progressNoteCreate: IProgressNote | null;
     /**
-    description: completes a progress note
+    completes a progress note
   */
     progressNoteComplete: IProgressNote | null;
     /**
-    description: edits a progress note
+    edits a progress note
   */
     progressNoteEdit: IProgressNote | null;
     /**
-    description: add or edit supervisor notes
+    add or edit supervisor notes
   */
     progressNoteAddSupervisorNotes: IProgressNote | null;
     /**
-    description: closes out supervisor review
+    closes out supervisor review
   */
     progressNoteCompleteSupervisorReview: IProgressNote | null;
     /**
-    description: creates a quick call
+    creates a quick call
   */
     quickCallCreate: IQuickCall | null;
     /**
-    description: Create a computed field
+    Create a computed field
   */
     computedFieldCreate: IComputedField | null;
     /**
-    description: Delete a computed field
+    Delete a computed field
   */
     computedFieldDelete: IComputedField | null;
     /**
-    description: risk area assessment submission create
+    risk area assessment submission create
   */
     riskAreaAssessmentSubmissionCreate: IRiskAreaAssessmentSubmission | null;
     /**
-    description: risk area assessment submission complete
+    risk area assessment submission complete
   */
     riskAreaAssessmentSubmissionComplete: IRiskAreaAssessmentSubmission | null;
     computedFieldFlagCreate: IComputedFieldFlag | null;
     /**
-    description: Create a PatientList
+    Create a PatientList
   */
     patientListCreate: IPatientList | null;
     /**
-    description: Edit a PatientList
+    Edit a PatientList
   */
     patientListEdit: IPatientList | null;
     /**
-    description: Delete a PatientList
+    Delete a PatientList
   */
     patientListDelete: IPatientList | null;
     /**
-    description: Create a CBO
+    Create a CBO
   */
     CBOCreate: ICBO | null;
     /**
-    description: Edit a CBO
+    Edit a CBO
   */
     CBOEdit: ICBO | null;
     /**
-    description: Delete a CBO
+    Delete a CBO
   */
     CBODelete: ICBO | null;
     /**
-    description: Create a CBO Referral
+    Create a CBO Referral
   */
     CBOReferralCreate: ICBOReferral | null;
     /**
-    description: Edit a CBO Referral
+    Edit a CBO Referral
   */
     CBOReferralEdit: ICBOReferral | null;
     /**
-    description: Jwt token to view a PDF
+    Jwt token to view a PDF
   */
     JWTForPDFCreate: IJWTForPDF;
     /**
-    description: creates a patient data flag
+    creates a patient data flag
   */
     patientDataFlagCreate: IPatientDataFlag | null;
   }
 
   /**
-    description: params for creating a user
+    params for creating a user
   */
   interface IUserCreateInput {
     email: string;
@@ -1830,25 +1830,25 @@ declare module 'schema' {
   }
 
   /**
-    description: params for logging in a user
+    params for logging in a user
   */
   interface IUserLoginInput {
     googleAuthCode: string;
   }
 
   /**
-    description: The user account with an optional auth token
+    The user account with an optional auth token
   */
   interface IUserWithAuthToken {
     user: IUser;
     /**
-    description: The auth token to allow for quick login. JWT passed back in via headers for further requests
+    The auth token to allow for quick login. JWT passed back in via headers for further requests
   */
     authToken: string | null;
   }
 
   /**
-    description: params for editing a user - only supports user role
+    params for editing a user - only supports user role
   */
   interface IUserEditRoleInput {
     userRole: string;
@@ -1856,14 +1856,14 @@ declare module 'schema' {
   }
 
   /**
-    description: params for deleting a user
+    params for deleting a user
   */
   interface IUserDeleteInput {
     email: string;
   }
 
   /**
-    description: params for editing a current user
+    params for editing a current user
   */
   interface ICurrentUserEditInput {
     locale: string | null;
@@ -1873,7 +1873,7 @@ declare module 'schema' {
   }
 
   /**
-    description: params for creating a clinic
+    params for creating a clinic
   */
   interface IClinicCreateInput {
     departmentId: number;
@@ -1881,7 +1881,7 @@ declare module 'schema' {
   }
 
   /**
-    description: params for adding or removing patient from care team
+    params for adding or removing patient from care team
   */
   interface ICareTeamInput {
     userId: string;
@@ -1889,7 +1889,7 @@ declare module 'schema' {
   }
 
   /**
-    description: params for adding a note to an appointment
+    params for adding a note to an appointment
   */
   interface IAppointmentAddNoteInput {
     patientId: string;
@@ -1898,7 +1898,7 @@ declare module 'schema' {
   }
 
   /**
-    description: Appointment Add Note Result
+    Appointment Add Note Result
   */
   interface IAppointmentAddNoteResult {
     success: boolean;
@@ -1906,7 +1906,7 @@ declare module 'schema' {
   }
 
   /**
-    description: params for starting an appointment
+    params for starting an appointment
   */
   interface IAppointmentStartInput {
     patientId: string;
@@ -1914,7 +1914,7 @@ declare module 'schema' {
   }
 
   /**
-    description: Appointment
+    Appointment
   */
   interface IAppointment {
     athenaAppointmentId: string;
@@ -1935,7 +1935,7 @@ declare module 'schema' {
   type IAppointmentStatusEnum = 'cancelled' | 'future' | 'open' | 'checkedIn' | 'checkedOut' | 'chargeEntered';
 
   /**
-    description: params for ending an appointment
+    params for ending an appointment
   */
   interface IAppointmentEndInput {
     patientId: string;
@@ -1944,14 +1944,14 @@ declare module 'schema' {
   }
 
   /**
-    description: Appointment End Result
+    Appointment End Result
   */
   interface IAppointmentEndResult {
     success: boolean;
   }
 
   /**
-    description: params for creating and address for a patient in the db
+    params for creating and address for a patient in the db
   */
   interface IAddressCreateForPatientInput {
     patientId: string;
@@ -1963,7 +1963,7 @@ declare module 'schema' {
   }
 
   /**
-    description: params for creating and address for a patient in the db
+    params for creating and address for a patient in the db
   */
   interface IAddressCreatePrimaryForPatientInput {
     patientInfoId: string;
@@ -1975,7 +1975,7 @@ declare module 'schema' {
   }
 
   /**
-    description: Editable fields on an address
+    Editable fields on an address
   */
   interface IAddressEditInput {
     addressId: string;
@@ -1988,7 +1988,7 @@ declare module 'schema' {
   }
 
   /**
-    description: params for editing a patient in the db
+    params for editing a patient in the db
   */
   interface IPatientEditInput {
     patientId: string;
@@ -2001,7 +2001,7 @@ declare module 'schema' {
   }
 
   /**
-    description: params for editing a patient in the db
+    params for editing a patient in the db
   */
   interface IPatientInfoEditInput {
     patientInfoId: string;
@@ -2011,7 +2011,7 @@ declare module 'schema' {
   }
 
   /**
-    description: params for creating a patient in the db and in athena
+    params for creating a patient in the db and in athena
   */
   interface IPatientSetupInput {
     firstName: string;
@@ -2046,7 +2046,7 @@ declare module 'schema' {
   }
 
   /**
-    description: params for editing a patient scratch pad
+    params for editing a patient scratch pad
   */
   interface IPatientScratchPadEditInput {
     patientId: string;
@@ -2054,7 +2054,7 @@ declare module 'schema' {
   }
 
   /**
-    description: params for creating a task
+    params for creating a task
   */
   interface ITaskCreateInput {
     title: string;
@@ -2068,14 +2068,14 @@ declare module 'schema' {
   }
 
   /**
-    description: params for deleting a task
+    params for deleting a task
   */
   interface ITaskDeleteInput {
     taskId: string;
   }
 
   /**
-    description: params for creating a task
+    params for creating a task
   */
   interface ITaskEditInput {
     taskId: string;
@@ -2088,14 +2088,14 @@ declare module 'schema' {
   }
 
   /**
-    description: params for completing a task
+    params for completing a task
   */
   interface ITaskCompleteInput {
     taskId: string;
   }
 
   /**
-    description: params for adding user to a task's followers
+    params for adding user to a task's followers
   */
   interface ITaskFollowInput {
     userId: string;
@@ -2103,7 +2103,7 @@ declare module 'schema' {
   }
 
   /**
-    description: params for creating a task comment
+    params for creating a task comment
   */
   interface ITaskCommentCreateInput {
     taskId: string;
@@ -2111,7 +2111,7 @@ declare module 'schema' {
   }
 
   /**
-    description: params for editing a task comment
+    params for editing a task comment
   */
   interface ITaskCommentEditInput {
     taskCommentId: string;
@@ -2119,14 +2119,14 @@ declare module 'schema' {
   }
 
   /**
-    description: params for deleting a task comment
+    params for deleting a task comment
   */
   interface ITaskCommentDeleteInput {
     taskCommentId: string;
   }
 
   /**
-    description: params for creating a risk area group
+    params for creating a risk area group
   */
   interface IRiskAreaGroupCreateInput {
     title: string;
@@ -2137,7 +2137,7 @@ declare module 'schema' {
   }
 
   /**
-    description: params for editing a risk area group
+    params for editing a risk area group
   */
   interface IRiskAreaGroupEditInput {
     riskAreaGroupId: string;
@@ -2149,7 +2149,7 @@ declare module 'schema' {
   }
 
   /**
-    description: params for deleting a risk area group
+    params for deleting a risk area group
   */
   interface IRiskAreaGroupDeleteInput {
     riskAreaGroupId: string;
@@ -2275,7 +2275,7 @@ declare module 'schema' {
   }
 
   /**
-    description: QuestionCondition edit input - for validation, need to edit question and answer at the same time
+    QuestionCondition edit input - for validation, need to edit question and answer at the same time
   */
   interface IQuestionConditionEditInput {
     questionConditionId: string;
@@ -2289,7 +2289,7 @@ declare module 'schema' {
   }
 
   /**
-    description: EventNotification edit input
+    EventNotification edit input
   */
   interface IEventNotificationEditInput {
     eventNotificationId: string;
@@ -2621,7 +2621,7 @@ declare module 'schema' {
   }
 
   /**
-    description: params for creating a computed field flag
+    params for creating a computed field flag
   */
   interface IComputedFieldFlagCreateInput {
     patientAnswerId: string;
@@ -2637,7 +2637,7 @@ declare module 'schema' {
   }
 
   /**
-    description: params for creating a patient list
+    params for creating a patient list
   */
   interface IPatientListCreateInput {
     title: string;
@@ -2646,7 +2646,7 @@ declare module 'schema' {
   }
 
   /**
-    description: params for editing a patient list
+    params for editing a patient list
   */
   interface IPatientListEditInput {
     patientListId: string;
@@ -2656,14 +2656,14 @@ declare module 'schema' {
   }
 
   /**
-    description: params for deleting a patient list
+    params for deleting a patient list
   */
   interface IPatientListDeleteInput {
     patientListId: string;
   }
 
   /**
-    description: params for creating a CBO
+    params for creating a CBO
   */
   interface ICBOCreateInput {
     name: string;
@@ -2678,7 +2678,7 @@ declare module 'schema' {
   }
 
   /**
-    description: params for editing a CBO
+    params for editing a CBO
   */
   interface ICBOEditInput {
     CBOId: string;
@@ -2694,14 +2694,14 @@ declare module 'schema' {
   }
 
   /**
-    description: params for deleting a CBO
+    params for deleting a CBO
   */
   interface ICBODeleteInput {
     CBOId: string;
   }
 
   /**
-    description: params for creating a CBO referral
+    params for creating a CBO referral
   */
   interface ICBOReferralCreateInput {
     categoryId: string;
@@ -2712,7 +2712,7 @@ declare module 'schema' {
   }
 
   /**
-    description: params for editing a CBO referral
+    params for editing a CBO referral
   */
   interface ICBOReferralEditInput {
     CBOReferralId: string;
@@ -2727,7 +2727,7 @@ declare module 'schema' {
   }
 
   /**
-    description: JWT token for PDF viewing
+    JWT token for PDF viewing
   */
   interface IJWTForPDF {
     authToken: string;
@@ -2754,7 +2754,7 @@ declare module 'schema' {
   }
 
   /**
-    description: ConcernDiagnosisCode
+    ConcernDiagnosisCode
   */
   interface IConcernDiagnosisCode {
     id: string;

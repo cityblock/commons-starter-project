@@ -60,29 +60,29 @@
     is "^3.2.0"
     lodash.has "^4.5.2"
 
-"@gql2ts/from-query@^1.3.0":
-  version "1.3.0"
-  resolved "https://registry.yarnpkg.com/@gql2ts/from-query/-/from-query-1.3.0.tgz#54a0a240eeeb2782802e60e36153435b62870d61"
+"@gql2ts/from-query@^1.4.1":
+  version "1.4.1"
+  resolved "https://registry.yarnpkg.com/@gql2ts/from-query/-/from-query-1.4.1.tgz#93359b39de3f43731588a3a1d3ced0e0c8c28c3d"
   dependencies:
-    "@gql2ts/language-typescript" "^1.3.0"
+    "@gql2ts/language-typescript" "^1.4.1"
     "@gql2ts/util" "^1.3.0"
     graphql ">= 0.10 <0.12"
 
-"@gql2ts/from-schema@^1.4.0":
-  version "1.4.0"
-  resolved "https://registry.yarnpkg.com/@gql2ts/from-schema/-/from-schema-1.4.0.tgz#e40beefed451000af9148453a085a686c4b5f218"
+"@gql2ts/from-schema@^1.4.1":
+  version "1.4.1"
+  resolved "https://registry.yarnpkg.com/@gql2ts/from-schema/-/from-schema-1.4.1.tgz#c275517dc1207e4ca372f2122d588634582a3bb8"
   dependencies:
-    "@gql2ts/language-typescript" "^1.3.0"
+    "@gql2ts/language-typescript" "^1.4.1"
     "@gql2ts/util" "^1.3.0"
     graphql ">= 0.10 <0.12"
 
-"@gql2ts/language-typescript@^1.3.0":
-  version "1.3.0"
-  resolved "https://registry.yarnpkg.com/@gql2ts/language-typescript/-/language-typescript-1.3.0.tgz#79e9c6a281de0c92cc03e694ec2856a90a413985"
+"@gql2ts/language-typescript@^1.4.1":
+  version "1.4.1"
+  resolved "https://registry.yarnpkg.com/@gql2ts/language-typescript/-/language-typescript-1.4.1.tgz#a493d085d13d643b1802a191edf2b6de8ee3531e"
   dependencies:
     "@gql2ts/util" "^1.3.0"
     humps "^2.0.0"
-    typescript "^2.2.2"
+    typescript "^2.2.2 < 2.7.0"
 
 "@gql2ts/util@^1.3.0":
   version "1.3.0"
@@ -202,9 +202,17 @@
     "@types/events" "*"
     "@types/node" "*"
 
-"@types/express@*", "@types/express@^4.0.39":
+"@types/express@*":
   version "4.11.0"
   resolved "https://registry.yarnpkg.com/@types/express/-/express-4.11.0.tgz#234d65280af917cb290634b7a8d6bcac24aecbad"
+  dependencies:
+    "@types/body-parser" "*"
+    "@types/express-serve-static-core" "*"
+    "@types/serve-static" "*"
+
+"@types/express@^4.11.1":
+  version "4.11.1"
+  resolved "https://registry.yarnpkg.com/@types/express/-/express-4.11.1.tgz#f99663b3ab32d04cb11db612ef5dd7933f75465b"
   dependencies:
     "@types/body-parser" "*"
     "@types/express-serve-static-core" "*"
@@ -266,9 +274,9 @@
   version "4.14.98"
   resolved "https://registry.yarnpkg.com/@types/lodash/-/lodash-4.14.98.tgz#aaf012ae443e657e7885e605a4c1b340db160609"
 
-"@types/lodash@^4.14.100":
-  version "4.14.100"
-  resolved "https://registry.yarnpkg.com/@types/lodash/-/lodash-4.14.100.tgz#f353dd9d3a9785638b6cb8023e6639097bd31969"
+"@types/lodash@^4.14.101":
+  version "4.14.101"
+  resolved "https://registry.yarnpkg.com/@types/lodash/-/lodash-4.14.101.tgz#512f6c9e1749890f4d024e98cb995a63f562d458"
 
 "@types/mime@*":
   version "2.0.0"
@@ -335,9 +343,9 @@
   version "2.3.4"
   resolved "https://registry.yarnpkg.com/@types/react-intl/-/react-intl-2.3.4.tgz#e0384ecb78190f4e4785e313ca31957ab8147fac"
 
-"@types/react-loadable@^5.3.1":
-  version "5.3.1"
-  resolved "https://registry.yarnpkg.com/@types/react-loadable/-/react-loadable-5.3.1.tgz#88b94edb8c418a0b3b85d1b66ebae8490b3bbc47"
+"@types/react-loadable@^5.3.2":
+  version "5.3.2"
+  resolved "https://registry.yarnpkg.com/@types/react-loadable/-/react-loadable-5.3.2.tgz#dd6febf7fa76e15ac0168bdd79b971c4b1b41f93"
   dependencies:
     "@types/react" "*"
 
@@ -433,9 +441,9 @@
   version "6.3.0"
   resolved "https://registry.yarnpkg.com/@types/validator/-/validator-6.3.0.tgz#d7454bd67c6a933a9dbe939ae16edbf0f6894e70"
 
-"@types/webpack@^3.8.4":
-  version "3.8.4"
-  resolved "https://registry.yarnpkg.com/@types/webpack/-/webpack-3.8.4.tgz#82069b43851ac7fdb94f96245758903c2a989107"
+"@types/webpack@^3.8.5":
+  version "3.8.5"
+  resolved "https://registry.yarnpkg.com/@types/webpack/-/@types/webpack-3.8.5.tgz#793a0dc6c49900095313c4f424eda6fb814dd76b"
   dependencies:
     "@types/node" "*"
     "@types/tapable" "*"
@@ -595,29 +603,29 @@ apollo-cache-control@^0.0.x:
   dependencies:
     graphql-extensions "^0.0.x"
 
-apollo-cache-inmemory@^1.1.5:
-  version "1.1.5"
-  resolved "https://registry.yarnpkg.com/apollo-cache-inmemory/-/apollo-cache-inmemory-1.1.5.tgz#74111367fd59caee120197ef663dcb2516971300"
+apollo-cache-inmemory@^1.1.7:
+  version "1.1.7"
+  resolved "https://registry.yarnpkg.com/apollo-cache-inmemory/-/apollo-cache-inmemory-1.1.7.tgz#15e6200f70431414d29bd5f20e86d81739e26430"
   dependencies:
-    apollo-cache "^1.1.0"
-    apollo-utilities "^1.0.4"
-    graphql-anywhere "^4.1.1"
+    apollo-cache "^1.1.2"
+    apollo-utilities "^1.0.6"
+    graphql-anywhere "^4.1.3"
 
-apollo-cache@^1.1.0, apollo-cache@^1.1.1:
-  version "1.1.1"
-  resolved "https://registry.yarnpkg.com/apollo-cache/-/apollo-cache-1.1.1.tgz#bfe9b718ebc94774fbf1981a1ef4f1391bdfc7ae"
+apollo-cache@^1.1.2:
+  version "1.1.2"
+  resolved "https://registry.yarnpkg.com/apollo-cache/-/apollo-cache-1.1.2.tgz#b1843a0e01d3837239e9925cfaa1d786599b77a9"
   dependencies:
-    apollo-utilities "^1.0.5"
+    apollo-utilities "^1.0.6"
 
-apollo-client@^2.2.1:
-  version "2.2.1"
-  resolved "https://registry.yarnpkg.com/apollo-client/-/apollo-client-2.2.1.tgz#9402ea5aa71d49c668c5a8451025001e135b0beb"
+apollo-client@^2.2.2:
+  version "2.2.2"
+  resolved "https://registry.yarnpkg.com/apollo-client/-/apollo-client-2.2.2.tgz#55d7b7a85d28161a6ecddd86cde8180be52193f6"
   dependencies:
     "@types/zen-observable" "^0.5.3"
-    apollo-cache "^1.1.1"
+    apollo-cache "^1.1.2"
     apollo-link "^1.0.0"
     apollo-link-dedup "^1.0.0"
-    apollo-utilities "^1.0.5"
+    apollo-utilities "^1.0.6"
     symbol-observable "^1.0.2"
     zen-observable "^0.7.0"
   optionalDependencies:
@@ -693,9 +701,13 @@ apollo-tracing@^0.1.0:
   dependencies:
     graphql-extensions "^0.0.x"
 
-apollo-utilities@^1.0.0, apollo-utilities@^1.0.1, apollo-utilities@^1.0.4, apollo-utilities@^1.0.5:
+apollo-utilities@^1.0.0, apollo-utilities@^1.0.1:
   version "1.0.5"
   resolved "https://registry.yarnpkg.com/apollo-utilities/-/apollo-utilities-1.0.5.tgz#a5e99507d730ce21e84e07c7a9c7586b2ccdc58e"
+
+apollo-utilities@^1.0.6:
+  version "1.0.6"
+  resolved "https://registry.yarnpkg.com/apollo-utilities/-/apollo-utilities-1.0.6.tgz#7bfd7a702b5225c9a4591fe28c5899d9b5f08889"
 
 "apparatus@>= 0.0.9":
   version "0.0.9"
@@ -1558,6 +1570,10 @@ caniuse-db@^1.0.30000187, caniuse-db@^1.0.30000529, caniuse-db@^1.0.30000634, ca
 caniuse-lite@^1.0.0, caniuse-lite@^1.0.30000791, caniuse-lite@^1.0.30000792:
   version "1.0.30000792"
   resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30000792.tgz#d0cea981f8118f3961471afbb43c9a1e5bbf0332"
+
+caniuse-lite@^1.0.30000803:
+  version "1.0.30000803"
+  resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30000803.tgz#9939c37149d38d5f4540430490d240c03106a0f5"
 
 capture-stack-trace@^1.0.0:
   version "1.0.0"
@@ -3875,12 +3891,12 @@ got@^6.7.1:
     unzip-response "^2.0.1"
     url-parse-lax "^1.0.0"
 
-gql2ts@^1.4.0:
-  version "1.4.0"
-  resolved "https://registry.yarnpkg.com/gql2ts/-/gql2ts-1.4.0.tgz#2c0bc7d022c953e9b2e3f2152264920a83f6b4f5"
+gql2ts@^1.4.1:
+  version "1.4.1"
+  resolved "https://registry.yarnpkg.com/gql2ts/-/gql2ts-1.4.1.tgz#3782dba31eb77447ddc93008628d912bb1175710"
   dependencies:
-    "@gql2ts/from-query" "^1.3.0"
-    "@gql2ts/from-schema" "^1.4.0"
+    "@gql2ts/from-query" "^1.4.1"
+    "@gql2ts/from-schema" "^1.4.1"
     "@gql2ts/util" "^1.3.0"
     commander "^2.9.0"
 
@@ -3896,11 +3912,11 @@ graceful-fs@^4.1.11, graceful-fs@^4.1.2, graceful-fs@^4.1.6:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/graceful-readlink/-/graceful-readlink-1.0.1.tgz#4cafad76bc62f02fa039b2f94e9a3dd3a391a725"
 
-graphql-anywhere@^4.1.1:
-  version "4.1.2"
-  resolved "https://registry.yarnpkg.com/graphql-anywhere/-/graphql-anywhere-4.1.2.tgz#55e58593158f3deb0814def522c55e948c57cabb"
+graphql-anywhere@^4.1.3:
+  version "4.1.3"
+  resolved "https://registry.yarnpkg.com/graphql-anywhere/-/graphql-anywhere-4.1.3.tgz#ddd857d45d1538f55e8364c6c7a9016817a5ea92"
   dependencies:
-    apollo-utilities "^1.0.5"
+    apollo-utilities "^1.0.6"
 
 graphql-config@^1.1.1:
   version "1.2.1"
@@ -5703,7 +5719,11 @@ locate-path@^2.0.0:
     p-locate "^2.0.0"
     path-exists "^3.0.0"
 
-lodash-es@^4.17.4, lodash-es@^4.2.0, lodash-es@^4.2.1:
+lodash-es@^4.17.5:
+  version "4.17.5"
+  resolved "https://registry.yarnpkg.com/lodash-es/-/lodash-es-4.17.5.tgz#9fc6e737b1c4d151d8f9cae2247305d552ce748f"
+
+lodash-es@^4.2.0, lodash-es@^4.2.1:
   version "4.17.4"
   resolved "https://registry.yarnpkg.com/lodash-es/-/lodash-es-4.17.4.tgz#dcc1d7552e150a0640073ba9cb31d70f032950e7"
 
@@ -5827,6 +5847,10 @@ lodash@3.9.3:
 lodash@^4.0.0, lodash@^4.1.0, lodash@^4.13.1, lodash@^4.14.0, lodash@^4.15.0, lodash@^4.16.4, lodash@^4.17.0, lodash@^4.17.2, lodash@^4.17.3, lodash@^4.17.4, lodash@^4.2.0, lodash@^4.2.1, lodash@^4.3.0, lodash@^4.6.0, lodash@^4.6.1, lodash@~4.17.2:
   version "4.17.4"
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.4.tgz#78203a4d1c328ae1d86dca6460e369b57f4055ae"
+
+lodash@^4.17.5:
+  version "4.17.5"
+  resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.5.tgz#99a92d65c0272debe8c96b6057bc8fbfa3bed511"
 
 log-driver@^1.2.5:
   version "1.2.5"
@@ -6499,9 +6523,9 @@ node-redis-warlock@~0.2.0:
     node-redis-scripty "0.0.5"
     uuid "^2.0.1"
 
-nodemon@^1.14.11:
-  version "1.14.11"
-  resolved "https://registry.yarnpkg.com/nodemon/-/nodemon-1.14.11.tgz#cc0009dd8d82f126f3aba50ace7e753827a8cebc"
+nodemon@^1.14.12:
+  version "1.14.12"
+  resolved "https://registry.yarnpkg.com/nodemon/-/nodemon-1.14.12.tgz#fe059424b15ebdb107696287a558d9cf53a63999"
   dependencies:
     chokidar "^2.0.0"
     debug "^3.1.0"
@@ -7462,14 +7486,14 @@ postcss-load-plugins@^2.3.0:
     cosmiconfig "^2.1.1"
     object-assign "^4.1.0"
 
-postcss-loader@^2.0.10:
-  version "2.0.10"
-  resolved "https://registry.yarnpkg.com/postcss-loader/-/postcss-loader-2.0.10.tgz#090db0540140bd56a7a7f717c41bc29aeef4c674"
+postcss-loader@^2.1.0:
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/postcss-loader/-/postcss-loader-2.1.0.tgz#038c2d6d59753fef4667827fd3ae03f5dc5e6a7a"
   dependencies:
     loader-utils "^1.1.0"
     postcss "^6.0.0"
     postcss-load-config "^1.2.0"
-    schema-utils "^0.3.0"
+    schema-utils "^0.4.0"
 
 postcss-media-minmax@^3.0.0:
   version "3.0.0"
@@ -8999,7 +9023,7 @@ schema-utils@^0.3.0:
   dependencies:
     ajv "^5.0.0"
 
-schema-utils@^0.4.2, schema-utils@^0.4.3:
+schema-utils@^0.4.0, schema-utils@^0.4.2, schema-utils@^0.4.3:
   version "0.4.3"
   resolved "https://registry.yarnpkg.com/schema-utils/-/schema-utils-0.4.3.tgz#e2a594d3395834d5e15da22b48be13517859458e"
   dependencies:
@@ -10102,9 +10126,9 @@ trough@^1.0.0:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/trough/-/trough-1.0.1.tgz#a9fd8b0394b0ae8fff82e0633a0a36ccad5b5f86"
 
-ts-jest@^22.0.2:
-  version "22.0.2"
-  resolved "https://registry.yarnpkg.com/ts-jest/-/ts-jest-22.0.2.tgz#d83eb2e3a2a4f3be098afea5a06d38547d528c72"
+ts-jest@^22.0.3:
+  version "22.0.3"
+  resolved "https://registry.yarnpkg.com/ts-jest/-/ts-jest-22.0.3.tgz#4d30f42c1b26a78d438ad908f9b0bcb4b1e6e32b"
   dependencies:
     babel-core "^6.24.1"
     babel-plugin-istanbul "^4.1.4"
@@ -10223,7 +10247,7 @@ typedarray@^0.0.6:
   version "0.0.6"
   resolved "https://registry.yarnpkg.com/typedarray/-/typedarray-0.0.6.tgz#867ac74e3864187b1d3d47d996a78ec5c8830777"
 
-typescript@^2.2.2:
+"typescript@^2.2.2 < 2.7.0":
   version "2.6.2"
   resolved "https://registry.yarnpkg.com/typescript/-/typescript-2.6.2.tgz#3c5b6fd7f6de0914269027f03c0946758f7673a4"
 

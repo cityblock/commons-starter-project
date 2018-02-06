@@ -16,23 +16,6 @@
   font-size: var(--default-font-size);
 }
 
-.closeButton {
-  background: url('../../../assets/chevron-down-white.svg');
-  background-repeat: no-repeat;
-  background-position: center center;
-  padding: 10px;
-  width: 15px;
-  height: 15px;
-  cursor: pointer;
-  opacity: 1;
-  transition: opacity 0.6s ease-in-out;
-}
-
-.closeButton:hover {
-  transition: opacity 0.3s ease-in-out;
-  opacity: 0.8;
-}
-
 .middleBar {
   display: flex;
   justify-content: space-between;
@@ -41,11 +24,9 @@
   background: var(--white-font-color);
 }
 
-.button {
-  @apply --button;
-
-  height: 32px;
-  padding: 8px 33px 7px;
+.error {
+  color: var(--red-color);
+  padding: 12px;
 }
 
 .patientContainer {
@@ -71,7 +52,10 @@
 
 .formBarField > * {
   width: 50%;
-  padding: 12px;
+}
+
+.formBarField > label {
+  padding-left: 12px;
 }
 
 .formBarField {
@@ -80,56 +64,29 @@
   align-items: center;
 }
 
-.formBarField input {
-  text-align: center;
-}
-
-.formBarField label {
-  text-align: left;
-}
-
-.formBarLabel {
-  font-family: var(--basetica-medium);
-  font-size: var(--default-font-size);
-}
-
-.horizontalRadioButtonPanel input[type='radio'] {
-  opacity: 0;
-  position: absolute;
-}
-
-.horizontalRadioButtonPanel label {
-  display: inline-block;
-  text-align: center;
-  border: 1px var(--border-color) solid;
-  width: 50%;
-  padding: 12px;
-}
-
-.horizontalRadioButtonPanel input:checked + label {
-  background: var(--light-blue-color);
-  border: 1px var(--gray-font-color) solid;
-}
-
-.formBar fieldset {
-  border: 0;
-}
-
 .formBar legend {
   display: inline-block;
 }
 
-.formBarField > .quickCallSummary {
-  width: 100%;
-  border: 1px var(--border-color) solid;
-  margin-left: 12px;
+.textAreaContainer {
+  padding: 12px;
 }
 
-.formBarField > .horizontalRadioButtonPanel {
-  padding-left: 0;
-  padding-right: 0;
+.topRadioGroup {
+  padding-left: 12px;
 }
 
-.horizontalRadioButtonPanel > input:focus + label {
-  outline: auto;
+svg.whiteIcon {
+  fill: #fff;
+  opacity: 1;
+  transition: opacity 0.3s;
+  cursor: pointer;
+}
+
+svg.whiteIcon:hover {
+  opacity: 0.7;
+}
+
+.fullRadioGroup {
+  align-items: stretch;
 }

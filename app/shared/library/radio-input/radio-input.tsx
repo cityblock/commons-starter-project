@@ -10,13 +10,15 @@ interface IProps {
   label?: string; // optional label, will default to value if not provided
   disabled?: boolean;
   name?: string;
+  fullWidth?: boolean;
 }
 
 const RadioInput: React.StatelessComponent<IProps> = (props: IProps) => {
-  const { value, checked, onChange, onClick, label, disabled, name } = props;
+  const { value, checked, onChange, onClick, label, disabled, name, fullWidth } = props;
   const containerStyles = classNames(styles.container, {
     [styles.checked]: checked,
     [styles.enabled]: !disabled,
+    [styles.fullWidth]: fullWidth,
   });
 
   return (

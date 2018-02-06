@@ -7,12 +7,19 @@ import * as quickCallCreateMutationGraphql from '../../graphql/queries/quick-cal
 import {
   quickCallCreateMutation,
   quickCallCreateMutationVariables,
+  QuickCallDirection,
   ShortPatientFragment,
 } from '../../graphql/types';
 import Avatar from '../../shared/library/avatar/avatar';
+import Button from '../../shared/library/button/button';
+import FormLabel from '../../shared/library/form-label/form-label';
+import Icon from '../../shared/library/icon/icon';
+import RadioGroup from '../../shared/library/radio-group/radio-group';
+import RadioInput from '../../shared/library/radio-input/radio-input';
+import TextInput from '../../shared/library/text-input/text-input';
+import TextArea from '../../shared/library/textarea/textarea';
 import { Popup } from '../../shared/popup/popup';
 import { getPatientFullName } from '../../shared/util/patient-name';
-
 import * as styles from './css/quick-call-popup.css';
 
 interface IProps {
@@ -25,14 +32,23 @@ interface IProps {
 interface IGraphqlProps {
   createQuickCall: (
     options: { variables: quickCallCreateMutationVariables },
-  ) => { data: quickCallCreateMutation };
+  ) => { data: quickCallCreateMutation; errors?: Array<{ message: string }> };
   patientLoading?: boolean;
   patientError?: string | null;
   patient?: ShortPatientFragment;
 }
 
 interface IState {
-  quickCall: Partial<quickCallCreateMutationVariables>;
+  quickCall: {
+    patientId: string;
+    reason: string;
+    summary: string;
+    direction?: QuickCallDirection;
+    callRecipient: string;
+    wasSuccessful?: 'true' | 'false';
+    startTime: string;
+  };
+  error: string | null;
 }
 
 type allProps = IProps & IGraphqlProps;
@@ -45,6 +61,7 @@ export class QuickCallPopup extends React.Component<allProps, IState> {
       startTime: '',
       patientId,
     },
+    error: null,
   });
 
   constructor(props: allProps) {
@@ -59,7 +76,6 @@ export class QuickCallPopup extends React.Component<allProps, IState> {
     const fieldName = event.target.name;
     const fieldValue = event.target.value;
     const { quickCall } = this.state;
-
     const newQuickCall = {
       ...quickCall,
       [fieldName]: fieldValue,
@@ -67,162 +83,145 @@ export class QuickCallPopup extends React.Component<allProps, IState> {
     this.setState({ quickCall: newQuickCall });
   };
 
-  submit = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    const allTruthy = every(this.state.quickCall, v => v);
+  submit = async () => {
+    const { quickCall } = this.state;
+    const allTruthy = every(quickCall, v => v);
+
+    this.setState({ error: null });
 
     if (allTruthy) {
-      const quickCall: quickCallCreateMutationVariables = this.state
-        .quickCall as quickCallCreateMutationVariables;
-      const quickCallResponse = await this.props.createQuickCall({ variables: quickCall });
+      const quickCallResponse = await this.props.createQuickCall({
+        variables: {
+          patientId: quickCall.patientId,
+          reason: quickCall.reason,
+          summary: quickCall.summary,
+          direction: quickCall.direction!,
+          callRecipient: quickCall.callRecipient,
+          wasSuccessful: quickCall.wasSuccessful === 'true',
+          startTime: quickCall.startTime,
+        },
+      });
       if (quickCallResponse && quickCallResponse.data) {
         this.props.close();
         this.setState(() => QuickCallPopup.getInitialState(this.props.patientId));
+      } else {
+        this.setState({
+          error: `Network error, please try again ${JSON.stringify(quickCallResponse.errors)}`,
+        });
       }
     } else {
-      throw new Error('Invalid internal state');
+      this.setState({
+        error: 'Summary, direction, recipient, was successful, start time are all required',
+      });
     }
   };
 
   render() {
     const { close, visible, patient } = this.props;
+    const { quickCall, error } = this.state;
     const patientName = patient ? getPatientFullName(patient) : 'Unknown';
-
+    const errorsHtml = error ? <div className={styles.error}>Error: {error}</div> : null;
     return (
       <Popup visible={visible} style={'no-padding'}>
-        <form onSubmit={this.submit}>
-          <div className={styles.topBar}>
-            <div className={styles.topBarLabel}>
-              <FormattedMessage id="quickCallForm.title" />
-            </div>
-            <div className={styles.closeButton} onClick={close} />
+        <div className={styles.topBar}>
+          <div className={styles.topBarLabel}>
+            <FormattedMessage id="quickCallForm.title" />
           </div>
-          <div className={styles.middleBar}>
-            <div className={styles.patientContainer}>
-              <Avatar avatarType="patient" size="large" />
-              <div className={styles.patientContainerRight}>
-                <div className={styles.patientName}>{patientName}</div>
-              </div>
+          <Icon name="close" onClick={close} className={styles.whiteIcon} />
+        </div>
+        <div className={styles.middleBar}>
+          <div className={styles.patientContainer}>
+            <Avatar avatarType="patient" size="large" />
+            <div className={styles.patientContainerRight}>
+              <div className={styles.patientName}>{patientName}</div>
             </div>
-            <FormattedMessage id="quickCallForm.submit">
-              {(message: string) => (
-                <input type="submit" value={message} className={styles.button} />
-              )}
-            </FormattedMessage>
           </div>
-          <div>
-            <div className={styles.formBar}>
-              <div className={styles.horizontalRadioButtonPanel}>
-                <input
+          <Button messageId="quickCallForm.submit" onClick={this.submit} />
+        </div>
+        <div>
+          <div className={styles.formBar}>
+            {errorsHtml}
+            <div className={styles.topRadioGroup}>
+              <RadioGroup>
+                <RadioInput
+                  fullWidth={true}
                   onChange={this.onChange}
-                  type="radio"
                   name="direction"
                   value="Inbound"
-                  id="directionRadioInbound"
-                  required
+                  checked={quickCall.direction === 'Inbound' || false}
                 />
-                <label htmlFor="directionRadioInbound">
-                  <FormattedMessage id="quickCallForm.inboundCall" />
-                </label>
-                <input
+                <RadioInput
+                  fullWidth={true}
                   onChange={this.onChange}
-                  type="radio"
                   name="direction"
                   value="Outbound"
-                  id="directionRadioOutbound"
-                  required
+                  checked={quickCall.direction === 'Outbound' || false}
                 />
-                <label htmlFor="directionRadioOutbound">
-                  <FormattedMessage id="quickCallForm.outboundCall" />
-                </label>
-              </div>
-              <div className={styles.formBarField}>
-                <label htmlFor="startTime">
-                  <FormattedMessage id="quickCallForm.startTime" />
-                </label>
-                <input
+              </RadioGroup>
+            </div>
+            <div className={styles.formBarField}>
+              <FormLabel htmlFor="startTime" messageId="quickCallForm.startTime" />
+              <TextInput
+                onChange={this.onChange}
+                value={quickCall.startTime}
+                inputType="datetime-local"
+                id="startTime"
+                name="startTime"
+                required
+              />
+            </div>
+            <div className={styles.formBarField}>
+              <FormLabel htmlFor="callRecipient" messageId="quickCallForm.callRecipient" />
+              <TextInput
+                onChange={this.onChange}
+                value={quickCall.callRecipient || ''}
+                id="callRecipient"
+                name="callRecipient"
+                required
+              />
+            </div>
+            <div className={styles.formBarField}>
+              <FormLabel htmlFor="wasSuccessful" messageId="quickCallForm.wasSuccessful" />
+              <RadioGroup>
+                <RadioInput
+                  fullWidth={true}
                   onChange={this.onChange}
-                  value={this.state.quickCall.startTime}
-                  type="datetime-local"
-                  id="startTime"
-                  name="startTime"
-                  required
+                  name="wasSuccessful"
+                  value="true"
+                  label="Yes"
+                  checked={quickCall.wasSuccessful === 'true'}
                 />
-              </div>
-              <div className={styles.formBarField}>
-                <label htmlFor="callRecipient">
-                  <FormattedMessage id="quickCallForm.callRecipient" />
-                </label>
-                <input
+                <RadioInput
+                  fullWidth={true}
                   onChange={this.onChange}
-                  value={this.state.quickCall.callRecipient}
-                  type="text"
-                  id="callRecipient"
-                  name="callRecipient"
-                  required
+                  name="wasSuccessful"
+                  value="false"
+                  label="No"
+                  checked={quickCall.wasSuccessful === 'false'}
                 />
-              </div>
-              <div className={styles.formBarField}>
-                <label htmlFor="wasSuccessful">
-                  <FormattedMessage id="quickCallForm.wasSuccessful" />
-                </label>
-                {/* TODO: Make these radio button panels a shared component */}
-                <div className={styles.horizontalRadioButtonPanel}>
-                  <input
-                    onChange={this.onChange}
-                    type="radio"
-                    name="wasSuccessful"
-                    value="true"
-                    id="wasSuccessfulRadioTrue"
-                    required
-                  />
-                  <label htmlFor="wasSuccessfulRadioTrue">
-                    <FormattedMessage id="forms.yes" />
-                  </label>
-                  <input
-                    onChange={this.onChange}
-                    type="radio"
-                    name="wasSuccessful"
-                    value="false"
-                    id="wasSuccessfulRadioFalse"
-                    required
-                  />
-                  <label htmlFor="wasSuccessfulRadioFalse">
-                    <FormattedMessage id="forms.no" />
-                  </label>
-                </div>
-              </div>
-              <div className={styles.formBarField}>
-                <label htmlFor="reason">
-                  <FormattedMessage id="quickCallForm.reason" />
-                </label>
-                <input
-                  onChange={this.onChange}
-                  value={this.state.quickCall.reason}
-                  type="text"
-                  id="reason"
-                  name="reason"
-                  required
-                />
-              </div>
-              <div className={styles.formBarField}>
-                <FormattedMessage id="quickCallForm.summary">
-                  {(message: string) => (
-                    <textarea
-                      value={this.state.quickCall.summary}
-                      onChange={this.onChange}
-                      id="summary"
-                      name="summary"
-                      placeholder={message}
-                      className={styles.quickCallSummary}
-                      required
-                    />
-                  )}
-                </FormattedMessage>
-              </div>
+              </RadioGroup>
+            </div>
+            <div className={styles.formBarField}>
+              <FormLabel htmlFor="reason" messageId="quickCallForm.reason" />
+              <TextInput
+                onChange={this.onChange}
+                value={quickCall.reason || ''}
+                id="reason"
+                name="reason"
+                required
+              />
+            </div>
+            <div className={styles.textAreaContainer}>
+              <TextArea
+                value={quickCall.summary || ''}
+                onChange={this.onChange}
+                id="summary"
+                name="summary"
+                placeholderMessageId="quickCallForm.summary"
+              />
             </div>
           </div>
-        </form>
+        </div>
       </Popup>
     );
   }

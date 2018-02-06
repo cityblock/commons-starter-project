@@ -54,3 +54,11 @@
   color: var(--blue-color);
   background: var(--white-color);
 }
+
+.fullWidth {
+  flex: 1;
+}
+
+.fullWidth label {
+  width: 100%;
+}

@@ -9,6 +9,7 @@ interface IProps {
   placeholderMessageId?: string; // optional placeholderMessageId text for empty field
   className?: string; // optional styles to apply over defaults
   disabled?: boolean;
+  name?: string;
   small?: boolean; // if specified will start height at 50px
   id?: string; // optional id field for input, likely use with label
   onBlur?: () => void;
@@ -20,6 +21,7 @@ const TextArea: React.StatelessComponent<IProps> = (props: IProps) => {
     value,
     onChange,
     className,
+    name,
     disabled,
     small,
     placeholderMessageId,
@@ -43,6 +45,7 @@ const TextArea: React.StatelessComponent<IProps> = (props: IProps) => {
       <FormattedMessage id={placeholderMessageId}>
         {(message: string) => (
           <textarea
+            name={name}
             value={value}
             onChange={onChange}
             placeholder={message}
@@ -59,6 +62,7 @@ const TextArea: React.StatelessComponent<IProps> = (props: IProps) => {
 
   return (
     <textarea
+      name={name}
       value={value}
       onChange={onChange}
       className={textareaStyles}

@@ -5,6 +5,7 @@ exports[`renders free text answer 1`] = `
   className="textarea small"
   disabled={false}
   id=""
+  name={undefined}
   onBlur={undefined}
   onChange={[Function]}
   onFocus={undefined}

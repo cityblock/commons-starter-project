@@ -329,6 +329,7 @@ exports[`renders patient panel container correctly 1`] = `
           onFocus={undefined}
           onKeyDown={undefined}
           placeholder="Search by zip code"
+          required={false}
           type="text"
           value=""
         />

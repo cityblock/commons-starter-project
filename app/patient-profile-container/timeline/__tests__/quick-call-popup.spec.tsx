@@ -37,7 +37,7 @@ describe('shallow rendered', () => {
       instance = component.instance() as Component;
     });
 
-    it('raises error when all data is not set', async () => {
+    it('sets error all data is not set', async () => {
       instance.onChange({
         target: {
           name: 'reason',
@@ -45,11 +45,12 @@ describe('shallow rendered', () => {
         },
       });
 
-      await expect(
-        instance.submit({
-          preventDefault: jest.fn(),
-        }),
-      ).rejects.toEqual(new Error('Invalid internal state'));
+      await instance.submit({
+        preventDefault: jest.fn(),
+      });
+      await expect(instance.state.error).toEqual(
+        'Summary, direction, recipient, was successful, start time are all required',
+      );
     });
   });
 
@@ -83,7 +84,11 @@ describe('shallow rendered', () => {
         preventDefault: jest.fn(),
       });
       expect(createQuickCall).toBeCalledWith({
-        variables: { ...exampleInternalQuickCallState, reason: 'my new reason' },
+        variables: {
+          ...exampleInternalQuickCallState,
+          reason: 'my new reason',
+          wasSuccessful: true,
+        },
       });
     });
 
@@ -92,7 +97,7 @@ describe('shallow rendered', () => {
         preventDefault: jest.fn(),
       });
       expect(createQuickCall).toBeCalledWith({
-        variables: exampleInternalQuickCallState,
+        variables: { ...exampleInternalQuickCallState, wasSuccessful: true },
       });
     });
 

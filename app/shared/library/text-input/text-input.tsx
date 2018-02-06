@@ -14,6 +14,8 @@ interface IProps {
   onFocus?: () => void;
   onKeyDown?: (e: React.KeyboardEvent<HTMLInputElement>) => void;
   smallInput?: boolean;
+  inputType?: 'datetime-local'; // default is text
+  required?: boolean;
 }
 
 const TextInput: React.StatelessComponent<IProps> = (props: IProps) => {
@@ -28,17 +30,21 @@ const TextInput: React.StatelessComponent<IProps> = (props: IProps) => {
     name,
     id,
     smallInput,
+    inputType,
+    required,
   } = props;
   const inputStyles = classNames(styles.input, className, {
     [styles.small]: !!smallInput,
   });
+  const type = inputType || 'text';
+  const req = required || false;
 
   if (placeholderMessageId) {
     return (
       <FormattedMessage id={placeholderMessageId}>
         {(message: string) => (
           <input
-            type="text"
+            type={type}
             value={value}
             placeholder={message}
             className={inputStyles}
@@ -47,6 +53,7 @@ const TextInput: React.StatelessComponent<IProps> = (props: IProps) => {
             onKeyDown={onKeyDown}
             onChange={onChange}
             name={name || ''}
+            required={req}
             id={id || ''}
           />
         )}
@@ -56,13 +63,15 @@ const TextInput: React.StatelessComponent<IProps> = (props: IProps) => {
 
   return (
     <input
-      type="text"
+      type={type}
       value={value}
-      onChange={onChange}
       className={inputStyles}
       onFocus={onFocus}
       onBlur={onBlur}
+      onKeyDown={onKeyDown}
+      onChange={onChange}
       name={name || ''}
+      required={req}
       id={id || ''}
     />
   );

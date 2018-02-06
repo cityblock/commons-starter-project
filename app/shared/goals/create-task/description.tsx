@@ -42,6 +42,7 @@ class CreateTaskDescription extends React.Component<IProps, IState> {
           placeholderMessageId={placeholderMessageId}
           onBlur={() => this.setState({ complete: true })}
           onFocus={() => this.setState({ complete: false })}
+          name="description"
           id="description"
         />
       </div>

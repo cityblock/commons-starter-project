@@ -4,7 +4,6 @@ import * as React from 'react';
 import * as styles from './css/date-input.css';
 
 export const DEFAULT_FORMAT = 'YYYY-MM-DD';
-export const LOADING_PLACEHOLDER = 'Loading...';
 
 interface IProps {
   value: string | null; // use timestamp
@@ -56,13 +55,10 @@ export class DateInput extends React.Component<IProps, IState> {
       className,
     );
 
-    const inputType = loading ? 'text' : 'date';
-    const inputValue = loading ? LOADING_PLACEHOLDER : formattedValue;
-
     return (
       <input
-        type={inputType}
-        value={inputValue}
+        type="date"
+        value={formattedValue}
         onChange={this.handleChange}
         className={inputStyles}
       />

@@ -1,7 +1,7 @@
 import { format } from 'date-fns';
 import { shallow } from 'enzyme';
 import * as React from 'react';
-import DateInput, { DEFAULT_FORMAT, LOADING_PLACEHOLDER } from '../date-input';
+import DateInput, { DEFAULT_FORMAT } from '../date-input';
 
 describe('Library Date Input Component', () => {
   const value = '2017-11-07T13:45:14.532Z';
@@ -38,12 +38,5 @@ describe('Library Date Input Component', () => {
     wrapper.setState({ error: 'WALL CAME DOWN!' });
 
     expect(wrapper.find('input').props().className).toBe('dateInput error');
-  });
-
-  it('handles loading state', () => {
-    wrapper.setState({ error: null, loading: true });
-
-    expect(wrapper.find('input').props().type).toBe('text');
-    expect(wrapper.find('input').props().value).toBe(LOADING_PLACEHOLDER);
   });
 });

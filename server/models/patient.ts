@@ -155,7 +155,7 @@ export default class Patient extends BaseModel {
     { pageNumber, pageSize }: IPaginationOptions,
     txn: Transaction,
   ): Promise<IPaginatedResults<Patient>> {
-    const patientsResult = (await this.query(txn).page(pageNumber, pageSize)) as any;
+    const patientsResult = (await this.query(txn).eager(EAGER_QUERY).page(pageNumber, pageSize)) as any;
 
     return {
       results: patientsResult.results,
@@ -174,7 +174,7 @@ export default class Patient extends BaseModel {
       return null;
     }
 
-    const patient = await this.query(txn)
+    const patient = await this.query(txn).eager(EAGER_QUERY)
       .where(input.fieldName, input.field)
       .first();
 
@@ -229,7 +229,7 @@ export default class Patient extends BaseModel {
   }
 
   static async edit(patient: IEditPatient, patientId: string, txn: Transaction): Promise<Patient> {
-    return this.query(txn).patchAndFetchById(patientId, patient);
+    return this.query(txn).eager(EAGER_QUERY).patchAndFetchById(patientId, patient);
   }
 
   // limit accidentally editing the athenaPatientId by only allowing it explicitly here
@@ -238,7 +238,7 @@ export default class Patient extends BaseModel {
     patientId: string,
     txn: Transaction,
   ): Promise<Patient> {
-    return this.query(txn).patchAndFetchById(patientId, { athenaPatientId });
+    return this.query(txn).eager(EAGER_QUERY).patchAndFetchById(patientId, { athenaPatientId });
   }
 
   static async search(

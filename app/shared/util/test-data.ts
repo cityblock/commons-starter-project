@@ -370,6 +370,7 @@ export const task = {
   patientGoal: null,
   CBOReferralId: null,
   CBOReferral: null,
+  assignedToId: 'jonSnow',
 };
 
 export const comment = {

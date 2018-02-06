@@ -4,6 +4,7 @@ import { FormattedDate, FormattedMessage, FormattedRelative } from 'react-intl';
 import { Link } from 'react-router-dom';
 import { ShortTaskFragment, ShortUserFragment } from '../../graphql/types';
 import Avatar from '../../shared/library/avatar/avatar';
+import { isCBOReferralRequiringActionForUser } from '../../shared/task/helpers/helpers';
 import { checkIfDueSoon } from '../../shared/util/due-date';
 import * as styles from './css/task-row.css';
 import * as tasksStyles from './css/tasks.css';
@@ -14,6 +15,7 @@ interface IProps {
   routeBase: string;
   condensed?: boolean;
   taskIdsWithNotifications?: string[];
+  currentUserId: string;
 }
 
 function renderFollowers(followers: ShortUserFragment[]) {
@@ -36,8 +38,16 @@ function renderAssignedTo(user: ShortUserFragment | null) {
 }
 
 export const TaskRow: React.StatelessComponent<IProps> = (props: IProps) => {
-  const { task, selectedTaskId, routeBase, condensed, taskIdsWithNotifications } = props;
+  const {
+    task,
+    selectedTaskId,
+    routeBase,
+    condensed,
+    taskIdsWithNotifications,
+    currentUserId,
+  } = props;
   const dueSoon = checkIfDueSoon(task.dueAt);
+  const isCBOReferralRequiringAction = isCBOReferralRequiringActionForUser(task, currentUserId);
   const hasNotification = !!taskIdsWithNotifications && taskIdsWithNotifications.includes(task.id);
 
   const taskClass = classNames(styles.container, {
@@ -48,7 +58,7 @@ export const TaskRow: React.StatelessComponent<IProps> = (props: IProps) => {
     [styles.condensed]: !!condensed,
     [styles.inactive]: !!selectedTaskId && selectedTaskId !== task.id,
     [styles.compressed]: !!selectedTaskId,
-    [styles.notificationBadge]: dueSoon || hasNotification,
+    [styles.notificationBadge]: dueSoon || hasNotification || isCBOReferralRequiringAction,
   });
 
   const openedAtStyles = classNames(

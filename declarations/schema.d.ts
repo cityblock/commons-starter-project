@@ -658,6 +658,7 @@ declare module 'schema' {
     deletedAt: string | null;
     completedBy: IUser | null;
     completedAt: string | null;
+    assignedToId: string | null;
     assignedTo: IUser | null;
     followers: Array<IUser>;
     patientGoalId: string;

@@ -1,8 +1,8 @@
 import { graphql } from 'graphql';
 import { cloneDeep } from 'lodash';
 import { transaction, Transaction } from 'objection';
+import { CBO_REFERRAL_ACTION_TITLE } from '../../../shared/constants';
 import Db from '../../db';
-import { CBO_REFERRAL_TITLE } from '../../lib/create-task-for-task-template';
 import Answer from '../../models/answer';
 import Clinic from '../../models/clinic';
 import Concern from '../../models/concern';
@@ -291,7 +291,7 @@ describe('patient task suggestion resolver tests', () => {
         );
 
         expect(fetchedTasks.total).toBe(1);
-        expect(fetchedTasks.results[0].title).toBe(CBO_REFERRAL_TITLE);
+        expect(fetchedTasks.results[0].title).toBe(CBO_REFERRAL_ACTION_TITLE);
         expect(fetchedTasks.results[0].CBOReferralId).toBeTruthy();
         expect(fetchedTasks.results[0].CBOReferral!.categoryId).toBe(CBOCategory.id);
       });

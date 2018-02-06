@@ -428,6 +428,7 @@ type Task implements uniqueId {
   deletedAt: String
   completedBy: User
   completedAt: String
+  assignedToId: ID
   assignedTo: User
   followers: [User!]!
   patientGoalId: ID!

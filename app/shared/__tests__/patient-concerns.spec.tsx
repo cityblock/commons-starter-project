@@ -1,7 +1,8 @@
 import { shallow } from 'enzyme';
 import * as React from 'react';
 import DnDPatientConcern from '../../patient-profile-container/drag-and-drop/drag-and-drop-patient-concern';
-import PatientConcerns from '../concerns/patient-concerns';
+import { currentUser } from '../../shared/util/test-data';
+import { PatientConcerns } from '../concerns/patient-concerns';
 import EmptyPlaceholder from '../library/empty-placeholder/empty-placeholder';
 
 describe('Patient Care Plan Concerns Component', () => {
@@ -16,6 +17,7 @@ describe('Patient Care Plan Concerns Component', () => {
         selectedTaskId=""
         selectedPatientConcernId={selectedPatientConcernId}
         inactive={true}
+        currentUser={currentUser}
       />,
     );
 
@@ -46,6 +48,7 @@ describe('Patient Care Plan Concerns Component', () => {
         concerns={concerns}
         selectedTaskId=""
         selectedPatientConcernId={selectedPatientConcernId}
+        currentUser={currentUser}
       />,
     );
 

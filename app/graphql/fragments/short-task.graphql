@@ -16,6 +16,7 @@ fragment ShortTask on Task {
     googleProfileImageUrl
     userRole
   }
+  assignedToId
   followers {
     id
     firstName

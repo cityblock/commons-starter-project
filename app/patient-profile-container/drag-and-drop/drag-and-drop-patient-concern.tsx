@@ -10,6 +10,7 @@ interface IProps {
   inactive: boolean;
   selectedTaskId: string;
   taskIdsWithNotifications?: string[];
+  currentUserId: string;
 }
 
 export const DnDPatientConcern: React.StatelessComponent<IProps> = (props: IProps) => {
@@ -20,6 +21,7 @@ export const DnDPatientConcern: React.StatelessComponent<IProps> = (props: IProp
     inactive,
     selectedTaskId,
     taskIdsWithNotifications,
+    currentUserId,
   } = props;
 
   return (
@@ -59,6 +61,7 @@ export const DnDPatientConcern: React.StatelessComponent<IProps> = (props: IProp
                 selectedTaskId={selectedTaskId}
                 isDragging={snapshot.isDragging}
                 taskIdsWithNotifications={taskIdsWithNotifications}
+                currentUserId={currentUserId}
               />
             </div>
             {provided.placeholder}

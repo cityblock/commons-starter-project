@@ -1,6 +1,7 @@
 import { shallow } from 'enzyme';
 import { cloneDeep } from 'lodash';
 import * as React from 'react';
+import { CBO_REFERRAL_ACTION_TITLE } from '../../../shared/constants';
 import PatientConcernStats from '../concerns/concern-stats/concern-stats';
 import PatientConcernOptions from '../concerns/options-menu/options-menu';
 import PatientConcern from '../concerns/patient-concern';
@@ -11,6 +12,7 @@ import { patientConcern, task } from '../util/test-data';
 describe('Patient Concern Component', () => {
   const onClick = () => true;
   const selectedTaskId = 'aryaStark';
+  const userId = 'jonSnow';
 
   const wrapper = shallow(
     <PatientConcern
@@ -19,6 +21,7 @@ describe('Patient Concern Component', () => {
       onClick={onClick}
       selectedTaskId={selectedTaskId}
       isDragging={true}
+      currentUserId={userId}
     />,
   );
 
@@ -86,5 +89,17 @@ describe('Patient Concern Component', () => {
 
     wrapper.setProps({ taskIdsWithNotifications: [task.id] });
     expect(wrapper.find('.notificationBadge').length).toBe(0);
+  });
+
+  it('shows a notification badge when a CBO referral requires action', () => {
+    const taskAction = {
+      ...task,
+      title: CBO_REFERRAL_ACTION_TITLE,
+    };
+    const patientConcern2 = cloneDeep(patientConcern);
+    patientConcern2.patientGoals[0].tasks = [taskAction];
+
+    wrapper.setProps({ patientConcern: patientConcern2, taskIdsWithNotifications: [] });
+    expect(wrapper.find('.notificationBadge').length).toBe(1);
   });
 });

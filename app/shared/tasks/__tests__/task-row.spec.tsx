@@ -6,6 +6,7 @@ import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
 import { create } from 'react-test-renderer';
 import configureMockStore from 'redux-mock-store';
+import { CBO_REFERRAL_ACTION_TITLE } from '../../../../shared/constants';
 import { ENGLISH_TRANSLATION } from '../../../reducers/messages/en';
 import ReduxConnectedIntlProvider from '../../../redux-connected-intl-provider';
 import { checkIfDueSoon } from '../../util/due-date';
@@ -15,6 +16,7 @@ import { TaskRow } from '../task-row';
 const locale = { messages: ENGLISH_TRANSLATION.messages };
 const mockStore = configureMockStore([]);
 const oldDate = Date.now;
+const userId = 'jonSnow';
 
 describe('task row', () => {
   beforeAll(() => {
@@ -30,7 +32,12 @@ describe('task row', () => {
         <Provider store={mockStore({ locale, task })}>
           <ReduxConnectedIntlProvider>
             <BrowserRouter>
-              <TaskRow task={task} selectedTaskId={task.id} routeBase={'/foo/bar'} />
+              <TaskRow
+                task={task}
+                selectedTaskId={task.id}
+                routeBase={'/foo/bar'}
+                currentUserId={userId}
+              />
             </BrowserRouter>
           </ReduxConnectedIntlProvider>
         </Provider>
@@ -57,7 +64,12 @@ describe('task row', () => {
         <Provider store={mockStore({ locale, task })}>
           <ReduxConnectedIntlProvider>
             <BrowserRouter>
-              <TaskRow task={task} selectedTaskId={task.id} routeBase={'/foo/bar'} />
+              <TaskRow
+                task={task}
+                selectedTaskId={task.id}
+                routeBase={'/foo/bar'}
+                currentUserId={userId}
+              />
             </BrowserRouter>
           </ReduxConnectedIntlProvider>
         </Provider>
@@ -70,7 +82,12 @@ describe('task row', () => {
 describe('Task Row Component', () => {
   it('applies inactive styles if task row not selected', () => {
     const wrapper = shallow(
-      <TaskRow task={task} selectedTaskId="sansaStark" routeBase={'/foo/bar'} />,
+      <TaskRow
+        task={task}
+        selectedTaskId="sansaStark"
+        routeBase={'/foo/bar'}
+        currentUserId={userId}
+      />,
     );
 
     expect(wrapper.find('.inactive').length).toBe(1);
@@ -79,7 +96,12 @@ describe('Task Row Component', () => {
 
   it('applies selected styles if task row selected', () => {
     const wrapper = shallow(
-      <TaskRow task={task} selectedTaskId={task.id} routeBase={'/foo/bar'} />,
+      <TaskRow
+        task={task}
+        selectedTaskId={task.id}
+        routeBase={'/foo/bar'}
+        currentUserId={userId}
+      />,
     );
 
     expect(wrapper.find('.inactive').length).toBe(0);
@@ -88,7 +110,12 @@ describe('Task Row Component', () => {
 
   it('shows a notification badge when the task has notifications', () => {
     const wrapper = shallow(
-      <TaskRow task={task} selectedTaskId={task.id} routeBase={'/foo/bar'} />,
+      <TaskRow
+        task={task}
+        selectedTaskId={task.id}
+        routeBase={'/foo/bar'}
+        currentUserId={userId}
+      />,
     );
 
     const task2 = cloneDeep(task);
@@ -113,5 +140,18 @@ describe('Task Row Component', () => {
 
     wrapper.setProps({ taskIdsWithNotifications: [task.id] });
     expect(wrapper.find('.notificationBadge').length).toBe(0);
+  });
+
+  it('shows a notification badge if a CBO referral task has action required', () => {
+    const taskAction = {
+      ...task,
+      title: CBO_REFERRAL_ACTION_TITLE,
+    };
+
+    const wrapper = shallow(
+      <TaskRow task={taskAction} selectedTaskId="" routeBase={'/foo/bar'} currentUserId={userId} />,
+    );
+
+    expect(wrapper.find('.notificationBadge').length).toBe(1);
   });
 });

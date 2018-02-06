@@ -18,6 +18,7 @@ fragment FullTask on Task {
     middleName
     lastName
   }
+  assignedToId
   assignedTo {
     ...ShortUser
   }

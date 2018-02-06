@@ -2,6 +2,7 @@ import * as classNames from 'classnames';
 import * as React from 'react';
 import { adminTasksConcernTitle } from '../../../server/lib/consts';
 import { FullPatientConcernFragment } from '../../graphql/types';
+import { isCBOReferralRequiringActionForUser } from '../../shared/task/helpers/helpers';
 import { checkIfDueSoon } from '../../shared/util/due-date';
 import PatientGoal from '../goals/goal';
 import PatientConcernStats from './concern-stats/concern-stats';
@@ -16,6 +17,7 @@ interface IProps {
   selectedTaskId: string;
   isDragging?: boolean;
   taskIdsWithNotifications?: string[];
+  currentUserId: string;
 }
 
 export interface IPatientConcernStats {
@@ -27,7 +29,7 @@ export interface IPatientConcernStats {
 
 export class PatientConcern extends React.Component<IProps, {}> {
   getStats() {
-    const { patientConcern, taskIdsWithNotifications } = this.props;
+    const { patientConcern, taskIdsWithNotifications, currentUserId } = this.props;
     const { patientGoals } = patientConcern;
 
     const stats: IPatientConcernStats = {
@@ -64,9 +66,15 @@ export class PatientConcern extends React.Component<IProps, {}> {
             }
 
             const dueSoon = checkIfDueSoon(task.dueAt);
+            const isCBOReferralRequiringAction = isCBOReferralRequiringActionForUser(
+              task,
+              currentUserId,
+            );
+
             const hasNotification =
               !!taskIdsWithNotifications && taskIdsWithNotifications.includes(task.id);
-            stats.hasBadge = stats.hasBadge || dueSoon || hasNotification;
+            stats.hasBadge =
+              stats.hasBadge || dueSoon || hasNotification || isCBOReferralRequiringAction;
           });
         }
       });
@@ -76,7 +84,7 @@ export class PatientConcern extends React.Component<IProps, {}> {
   }
 
   renderGoals() {
-    const { patientConcern, selectedTaskId, taskIdsWithNotifications } = this.props;
+    const { patientConcern, selectedTaskId, taskIdsWithNotifications, currentUserId } = this.props;
     const { patientGoals } = patientConcern;
 
     if (!patientGoals) {
@@ -91,6 +99,7 @@ export class PatientConcern extends React.Component<IProps, {}> {
         goalNumber={index + 1}
         selectedTaskId={selectedTaskId}
         taskIdsWithNotifications={taskIdsWithNotifications}
+        currentUserId={currentUserId}
       />
     ));
   }

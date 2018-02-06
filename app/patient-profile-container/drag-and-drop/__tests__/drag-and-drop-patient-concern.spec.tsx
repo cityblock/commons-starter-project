@@ -6,6 +6,7 @@ import DnDPatientConcern from '../drag-and-drop-patient-concern';
 describe('Drag and Drop Patient Concern', () => {
   const placeholderFn = () => true as any;
   const id = 'vulpix';
+  const userId = 'growlithe';
 
   const wrapper = shallow(
     <DnDPatientConcern
@@ -14,6 +15,7 @@ describe('Drag and Drop Patient Concern', () => {
       onClick={placeholderFn}
       inactive={false}
       selectedTaskId=""
+      currentUserId={userId}
     />,
   );
 
@@ -32,6 +34,7 @@ describe('Drag and Drop Patient Concern', () => {
         onClick={placeholderFn}
         inactive={false}
         selectedTaskId="ninetales"
+        currentUserId={userId}
       />,
     );
 
@@ -46,6 +49,7 @@ describe('Drag and Drop Patient Concern', () => {
         onClick={placeholderFn}
         inactive={false}
         selectedTaskId=""
+        currentUserId={userId}
       />,
     );
 

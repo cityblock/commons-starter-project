@@ -7,6 +7,7 @@ import GoalOptions from '../goals/goal-options';
 
 describe('Patient Goal Component', () => {
   const concernTitle = 'Housing';
+  const userId = "daenerysTargaryen";
 
   const wrapper = shallow(
     <PatientGoal
@@ -14,6 +15,7 @@ describe('Patient Goal Component', () => {
       patientGoal={patientGoal}
       selectedTaskId=""
       concernTitle={concernTitle}
+      currentUserId={userId}
     />,
   );
 
@@ -49,6 +51,7 @@ describe('Patient Goal Component', () => {
         patientGoal={patientGoal}
         selectedTaskId="aryaStark"
         concernTitle={concernTitle}
+        currentUserId={userId}
       />,
     );
 

@@ -6,6 +6,7 @@ import { compose, graphql } from 'react-apollo';
 import { FormattedMessage } from 'react-intl';
 import { withRouter } from 'react-router';
 import { Route } from 'react-router-dom';
+import * as getCurrentUserQuery from '../../graphql/queries/get-current-user.graphql';
 import * as taskIdsWithNotificationsQuery from '../../graphql/queries/get-task-ids-with-notifications.graphql';
 import * as taskDeleteMutationGraphql from '../../graphql/queries/task-delete-mutation.graphql';
 import {
@@ -14,6 +15,7 @@ import {
   taskDeleteMutationVariables,
   FullPatientGoalFragment,
   FullTaskFragment,
+  FullUserFragment,
 } from '../../graphql/types';
 import * as sortSearchStyles from '../css/sort-search.css';
 import InfiniteScroll from '../infinite-scroll/infinite-scroll';
@@ -47,6 +49,9 @@ interface IProps {
 interface IGraphqlProps {
   deleteTask: (options: { variables: taskDeleteMutationVariables }) => { data: taskDeleteMutation };
   taskIdsWithNotifications?: getTaskIdsWithNotificationsQuery['taskIdsWithNotifications'];
+  currentUser: FullUserFragment;
+  currentUserLoading?: boolean;
+  currentUserError?: string | null;
 }
 
 interface IState {
@@ -85,10 +90,10 @@ class Tasks extends React.Component<allProps, IState> {
   }
 
   renderTasks(tasks: FullTaskFragment[]) {
-    const { loading, error } = this.props;
+    const { loading, error, currentUser } = this.props;
     const validTasks = tasks.filter(task => !task.deletedAt);
 
-    if (validTasks.length) {
+    if (validTasks.length && currentUser) {
       return validTasks.map(this.renderTask);
     } else if (!loading && !error) {
       return (
@@ -105,7 +110,7 @@ class Tasks extends React.Component<allProps, IState> {
   }
 
   renderTask = (task: FullTaskFragment) => {
-    const { taskIdsWithNotifications } = this.props;
+    const { taskIdsWithNotifications, currentUser } = this.props;
 
     return (
       <TaskRow
@@ -114,6 +119,7 @@ class Tasks extends React.Component<allProps, IState> {
         selectedTaskId={this.props.taskId}
         routeBase={this.props.routeBase}
         taskIdsWithNotifications={taskIdsWithNotifications}
+        currentUserId={currentUser.id}
       />
     );
   };
@@ -217,5 +223,12 @@ export default compose(
         taskIdsWithNotifications,
       };
     },
+  }),
+  graphql<IGraphqlProps, IProps, allProps>(getCurrentUserQuery as any, {
+    props: ({ data }) => ({
+      currentUserLoading: data ? data.loading : false,
+      currentUserError: data ? data.error : null,
+      currentUser: data ? (data as any).currentUser : null,
+    }),
   }),
 )(Tasks);

@@ -1982,6 +1982,7 @@ export interface getPatientCarePlanQuery {
             googleProfileImageUrl: string | null,
             userRole: UserRole,
           } | null,
+          assignedToId: string | null,
           followers:  Array< {
             id: string,
             firstName: string | null,
@@ -2050,6 +2051,7 @@ export interface getPatientCarePlanQuery {
           googleProfileImageUrl: string | null,
           userRole: UserRole,
         } | null,
+        assignedToId: string | null,
         followers:  Array< {
           id: string,
           firstName: string | null,
@@ -2585,6 +2587,7 @@ export interface getPatientTasksQuery {
           middleName: string | null,
           lastName: string,
         },
+        assignedToId: string | null,
         assignedTo:  {
           id: string,
           firstName: string | null,
@@ -3265,6 +3268,7 @@ export interface getProgressNoteActivityForProgressNoteQuery {
               googleProfileImageUrl: string | null,
               userRole: UserRole,
             } | null,
+            assignedToId: string | null,
             followers:  Array< {
               id: string,
               firstName: string | null,
@@ -3334,6 +3338,7 @@ export interface getProgressNoteActivityForProgressNoteQuery {
             googleProfileImageUrl: string | null,
             userRole: UserRole,
           } | null,
+          assignedToId: string | null,
           followers:  Array< {
             id: string,
             firstName: string | null,
@@ -4784,6 +4789,7 @@ export interface getTaskQuery {
       middleName: string | null,
       lastName: string,
     },
+    assignedToId: string | null,
     assignedTo:  {
       id: string,
       firstName: string | null,
@@ -5288,6 +5294,7 @@ export interface patientConcernBulkEditMutation {
           googleProfileImageUrl: string | null,
           userRole: UserRole,
         } | null,
+        assignedToId: string | null,
         followers:  Array< {
           id: string,
           firstName: string | null,
@@ -5404,6 +5411,7 @@ export interface patientConcernCreateMutation {
           googleProfileImageUrl: string | null,
           userRole: UserRole,
         } | null,
+        assignedToId: string | null,
         followers:  Array< {
           id: string,
           firstName: string | null,
@@ -5518,6 +5526,7 @@ export interface patientConcernDeleteMutation {
           googleProfileImageUrl: string | null,
           userRole: UserRole,
         } | null,
+        assignedToId: string | null,
         followers:  Array< {
           id: string,
           firstName: string | null,
@@ -5634,6 +5643,7 @@ export interface patientGoalCreateMutation {
         googleProfileImageUrl: string | null,
         userRole: UserRole,
       } | null,
+      assignedToId: string | null,
       followers:  Array< {
         id: string,
         firstName: string | null,
@@ -5704,6 +5714,7 @@ export interface patientGoalDeleteMutation {
         googleProfileImageUrl: string | null,
         userRole: UserRole,
       } | null,
+      assignedToId: string | null,
       followers:  Array< {
         id: string,
         firstName: string | null,
@@ -7812,6 +7823,7 @@ export interface taskCompleteMutation {
       middleName: string | null,
       lastName: string,
     },
+    assignedToId: string | null,
     assignedTo:  {
       id: string,
       firstName: string | null,
@@ -7903,6 +7915,7 @@ export interface taskCreateMutation {
       middleName: string | null,
       lastName: string,
     },
+    assignedToId: string | null,
     assignedTo:  {
       id: string,
       firstName: string | null,
@@ -7987,6 +8000,7 @@ export interface taskDeleteMutation {
       middleName: string | null,
       lastName: string,
     },
+    assignedToId: string | null,
     assignedTo:  {
       id: string,
       firstName: string | null,
@@ -8077,6 +8091,7 @@ export interface taskEditMutation {
       middleName: string | null,
       lastName: string,
     },
+    assignedToId: string | null,
     assignedTo:  {
       id: string,
       firstName: string | null,
@@ -8242,6 +8257,7 @@ export interface taskUncompleteMutation {
       middleName: string | null,
       lastName: string,
     },
+    assignedToId: string | null,
     assignedTo:  {
       id: string,
       firstName: string | null,
@@ -8327,6 +8343,7 @@ export interface taskUserFollowMutation {
       middleName: string | null,
       lastName: string,
     },
+    assignedToId: string | null,
     assignedTo:  {
       id: string,
       firstName: string | null,
@@ -8415,6 +8432,7 @@ export interface getTasksForCurrentUserQuery {
           middleName: string | null,
           lastName: string,
         },
+        assignedToId: string | null,
         assignedTo:  {
           id: string,
           firstName: string | null,
@@ -8813,6 +8831,7 @@ export interface FullCarePlanUpdateEventFragment {
           googleProfileImageUrl: string | null,
           userRole: UserRole,
         } | null,
+        assignedToId: string | null,
         followers:  Array< {
           id: string,
           firstName: string | null,
@@ -8882,6 +8901,7 @@ export interface FullCarePlanUpdateEventFragment {
         googleProfileImageUrl: string | null,
         userRole: UserRole,
       } | null,
+      assignedToId: string | null,
       followers:  Array< {
         id: string,
         firstName: string | null,
@@ -9439,6 +9459,7 @@ export interface FullPatientConcernFragment {
         googleProfileImageUrl: string | null,
         userRole: UserRole,
       } | null,
+      assignedToId: string | null,
       followers:  Array< {
         id: string,
         firstName: string | null,
@@ -9543,6 +9564,7 @@ export interface FullPatientGoalFragment {
       googleProfileImageUrl: string | null,
       userRole: UserRole,
     } | null,
+    assignedToId: string | null,
     followers:  Array< {
       id: string,
       firstName: string | null,
@@ -10093,6 +10115,7 @@ export interface FullProgressNoteActivityFragment {
             googleProfileImageUrl: string | null,
             userRole: UserRole,
           } | null,
+          assignedToId: string | null,
           followers:  Array< {
             id: string,
             firstName: string | null,
@@ -10162,6 +10185,7 @@ export interface FullProgressNoteActivityFragment {
           googleProfileImageUrl: string | null,
           userRole: UserRole,
         } | null,
+        assignedToId: string | null,
         followers:  Array< {
           id: string,
           firstName: string | null,
@@ -11106,6 +11130,7 @@ export interface FullTaskFragment {
     middleName: string | null,
     lastName: string,
   },
+  assignedToId: string | null,
   assignedTo:  {
     id: string,
     firstName: string | null,
@@ -11293,6 +11318,7 @@ export interface ShortTaskFragment {
     googleProfileImageUrl: string | null,
     userRole: UserRole,
   } | null,
+  assignedToId: string | null,
   followers:  Array< {
     id: string,
     firstName: string | null,

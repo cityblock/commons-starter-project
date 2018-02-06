@@ -1,12 +1,11 @@
 import { Transaction } from 'objection';
+import { CBO_REFERRAL_ACTION_TITLE } from '../../shared/constants';
 import { dateAdd } from '../lib/date';
 import CareTeam from '../models/care-team';
 import CBOReferral from '../models/cbo-referral';
 import Task, { ITaskEditableFields } from '../models/task';
 import TaskEvent from '../models/task-event';
 import TaskTemplate from '../models/task-template';
-
-export const CBO_REFERRAL_TITLE = 'CBO Referral: Action Required';
 
 export async function createTaskForTaskTemplate(
   taskTemplate: TaskTemplate,
@@ -48,7 +47,7 @@ export async function createTaskForTaskTemplate(
   let referral = null;
   const taskVariables: ITaskEditableFields = {
     createdById: userId,
-    title: CBOCategoryId ? CBO_REFERRAL_TITLE : taskTemplate.title,
+    title: CBOCategoryId ? CBO_REFERRAL_ACTION_TITLE : taskTemplate.title,
     dueAt,
     patientId,
     assignedToId,

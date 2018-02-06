@@ -1,46 +1,52 @@
 import * as classNames from 'classnames';
 import * as React from 'react';
+import { Gender, PatientFilterOptions } from '../graphql/types';
 import Button from '../shared/library/button/button';
 import FormLabel from '../shared/library/form-label/form-label';
 import RadioGroup from '../shared/library/radio-group/radio-group';
 import RadioInput from '../shared/library/radio-input/radio-input';
 import TextInput from '../shared/library/text-input/text-input';
-import AgeRangeSelect, { IOptionType } from './age-range-select';
+import AgeRangeSelect, { IAgeChangeOptions } from './age-range-select';
 import CareWorkerSelect from './care-worker-select';
 import * as styles from './css/patient-filter-panel.css';
 import { FilterSelect } from './filter-select';
 
 interface IProps {
   onCancelClick: () => any;
+  onApplyClick: (filters: PatientFilterOptions) => any;
   isVisible: boolean | null;
 }
 
 interface IState {
   ageIndex: number | null;
-  ageRange: IOptionType | {};
-  gender: string | null;
-  zipcode: string | null;
+  ageMin: number | null;
+  ageMax: number | null;
+  gender: Gender | null;
+  zip: string | null;
   inNetwork: string | null;
-  careWorker: string | null;
+  careWorkerId: string | null;
 }
-
-const GENDER_OPTIONS = ['male', 'female', 'transgender', 'nonbinary'];
 
 export default class PatientPanelContainer extends React.Component<IProps, IState> {
   constructor(props: IProps) {
     super(props);
     this.state = {
       ageIndex: null,
-      ageRange: {},
+      ageMin: null,
+      ageMax: null,
       gender: null,
-      zipcode: null,
+      zip: null,
       inNetwork: null,
-      careWorker: null,
+      careWorkerId: null,
     };
   }
 
-  handleAgeRangeChange = (ageIndex: number | null, ageRange: IOptionType | {}) => {
-    this.setState({ ageIndex, ageRange });
+  handleAgeRangeChange = (options: IAgeChangeOptions) => {
+    this.setState({
+      ageIndex: options.index,
+      ageMin: options.ageMin,
+      ageMax: options.ageMax,
+    });
   };
 
   handleChange = (event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
@@ -58,9 +64,20 @@ export default class PatientPanelContainer extends React.Component<IProps, IStat
     this.setState({ inNetwork: fieldValue });
   };
 
+  handleApplyClick = () => {
+    const { gender, ageMin, ageMax, zip, careWorkerId } = this.state;
+    this.props.onApplyClick({
+      gender,
+      ageMin,
+      ageMax,
+      zip,
+      careWorkerId,
+    });
+  };
+
   render() {
     const { onCancelClick, isVisible } = this.props;
-    const { ageIndex, gender, zipcode, inNetwork, careWorker } = this.state;
+    const { ageIndex, gender, zip, inNetwork, careWorkerId } = this.state;
 
     return (
       <div
@@ -80,9 +97,7 @@ export default class PatientPanelContainer extends React.Component<IProps, IStat
             />
             <Button
               messageId="patientFilter.apply"
-              onClick={() => {
-                return;
-              }}
+              onClick={this.handleApplyClick}
               className={styles.button}
             />
           </div>
@@ -106,27 +121,27 @@ export default class PatientPanelContainer extends React.Component<IProps, IStat
               isUnselectable={true}
               onChange={this.handleChange}
               value={gender}
-              options={GENDER_OPTIONS}
+              options={Object.values(Gender)}
             />
           </div>
 
           <div className={styles.inputGroup}>
             <FormLabel messageId="patientFilter.location" />
             <TextInput
-              name="zipcode"
-              value={zipcode || ''}
+              name="zip"
+              value={zip || ''}
               onChange={this.handleChange}
               placeholderMessageId="patientFiler.zipPlaceholder"
             />
           </div>
 
           <div className={styles.inputGroup}>
-            <FormLabel messageId="patientFilter.careWorker" />
+            <FormLabel messageId="patientFilter.careWorkerId" />
             <CareWorkerSelect
               isLarge={true}
               isUnselectable={true}
               onChange={this.handleChange}
-              value={careWorker}
+              value={careWorkerId}
             />
           </div>
 

@@ -1,4 +1,5 @@
 import { Model, RelationMappings, Transaction } from 'objection';
+import { IPatientFilterOptions } from 'schema';
 import { IPaginatedResults, IPaginationOptions } from '../db';
 import { adminTasksConcernTitle } from '../lib/consts';
 import BaseModel from './base-model';
@@ -282,6 +283,42 @@ export default class Patient extends BaseModel {
     return {
       results: patientsResult.results,
       total: patientsResult.total,
+    };
+  }
+
+  static async filter(
+    userId: string,
+    { pageNumber, pageSize }: IPaginationOptions,
+    { ageMax, ageMin, gender, zip, careWorkerId }: Partial<IPatientFilterOptions>,
+    txn: Transaction,
+  ): Promise<IPaginatedResults<Patient>> {
+    if (!ageMax && !ageMin && !gender && !zip && !careWorkerId) {
+      return CareTeam.getForUser(userId, { pageNumber, pageSize }, txn);
+    }
+
+    const builder = this.query(txn)
+      .eager(EAGER_QUERY)
+      .leftOuterJoinRelation('patientInfo.[primaryAddress]')
+      .where('patient.id', 'in', this.userCareTeamPatientIdsQuery(userId, txn));
+
+    if (gender) {
+      builder.where('patientInfo.gender', gender);
+    }
+    if (zip) {
+      builder.where('patientInfo:primaryAddress.zip', zip);
+    }
+    if (ageMax) {
+      builder.whereRaw(`date_part('year', age(patient."dateOfBirth")) <= ${ageMax}`);
+    }
+    if (ageMin) {
+      builder.whereRaw(`date_part('year', age(patient."dateOfBirth")) >= ${ageMin}`);
+    }
+    builder.orderBy('patient.createdAt');
+    const patientResult = (await builder.page(pageNumber, pageSize)) as any;
+
+    return {
+      results: patientResult.results,
+      total: patientResult.total,
     };
   }
 

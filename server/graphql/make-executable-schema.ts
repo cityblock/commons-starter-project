@@ -21,12 +21,7 @@ import {
   resolveCarePlanForPatient,
   resolveCarePlanSuggestionsForPatient,
 } from './care-plan-resolver';
-import {
-  careTeamAddUser,
-  careTeamRemoveUser,
-  resolvePatientCareTeam,
-  resolveUserPatientPanel,
-} from './care-team-resolver';
+import { careTeamAddUser, careTeamRemoveUser, resolvePatientCareTeam } from './care-team-resolver';
 import { resolveCBOCategories } from './cbo-category-resolver';
 import { CBOReferralCreate, CBOReferralEdit } from './cbo-referral-resolver';
 import {
@@ -128,6 +123,7 @@ import {
   resolvePatientsWithOutOfDateMAP,
   resolvePatientsWithPendingSuggestions,
   resolvePatientsWithUrgentTasks,
+  resolvePatientPanel,
   resolvePatientScratchPad,
   resolvePatientSearch,
 } from './patient-resolver';
@@ -283,6 +279,7 @@ const resolveFunctions = {
     patientEncounters: resolvePatientEncounters,
     patientScratchPad: resolvePatientScratchPad,
     patientSearch: resolvePatientSearch,
+    patientPanel: resolvePatientPanel,
     patientsWithUrgentTasks: resolvePatientsWithUrgentTasks,
     patientsNewToCareTeam: resolvePatientsNewToCareTeam,
     patientsWithPendingSuggestions: resolvePatientsWithPendingSuggestions,
@@ -294,7 +291,6 @@ const resolveFunctions = {
     user: resolveUser,
     users: resolveUsers,
     userSummaryList: resolveUserSummaryList,
-    userPatientPanel: resolveUserPatientPanel,
     task: resolveTask,
     tasksForPatient: resolvePatientTasks,
     tasksForCurrentUser: resolveCurrentUserTasks,

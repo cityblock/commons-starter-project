@@ -323,7 +323,7 @@ exports[`renders patient panel container correctly 1`] = `
         <input
           className="input"
           id=""
-          name="zipcode"
+          name="zip"
           onBlur={undefined}
           onChange={[Function]}
           onFocus={undefined}

@@ -171,6 +171,13 @@ enum AssessmentType {
   manual
 }
 
+enum Gender {
+  male
+  female
+  transgender
+  nonbinary
+}
+
 # User account model
 type User implements uniqueId {
   id: ID!
@@ -244,6 +251,14 @@ type PatientInfo implements uniqueId {
   addresses: [Address]
 }
 
+input PatientFilterOptions {
+  ageMin: Int
+  ageMax: Int
+  gender: Gender
+  zip: String
+  careWorkerId: ID
+}
+
 # Address
 type Address implements uniqueId {
   id: ID!
@@ -295,6 +310,19 @@ type PatientNode {
 type PatientEdges {
   edges: [PatientNode!]!
   pageInfo: PageInfo!
+}
+
+# Patient node
+type PatientPanelNode {
+  node: Patient
+  cursor: String!
+}
+
+# Patient edges
+type PatientPanelEdges {
+  edges: [PatientPanelNode!]!
+  pageInfo: PageInfo!
+  totalCount: Int!
 }
 
 # Patient search result
@@ -2001,8 +2029,6 @@ type RootQueryType {
   users(pageNumber: Int, pageSize: Int, hasLoggedIn: Boolean, orderBy: UserOrderOptions): UserEdges!
   # List of all Users with care roles
   userSummaryList(userRoleFilters: [UserRole!]): [User!]!
-  # List of patients the user is on the care team for (their 'patient panel')
-  userPatientPanel(pageNumber: Int, pageSize: Int, userId: ID): PatientEdges!
   # The current User
   currentUser: User
   # A single Patient
@@ -2013,6 +2039,8 @@ type RootQueryType {
   patientScratchPad(patientId: ID!): PatientScratchPad!
   # Patient search
   patientSearch(query: String!, pageNumber: Int!, pageSize: Int!): PatientSearchResultEdges!
+  # Patients filtered by options
+  patientPanel(pageNumber: Int!, pageSize: Int!, filters: PatientFilterOptions!): PatientPanelEdges!
   # Patient dashboard - tasks due and notifications
   patientsWithUrgentTasks(pageNumber: Int!, pageSize: Int!): PatientForDashboardEdges!
   # Patient dashboard - new to user care team

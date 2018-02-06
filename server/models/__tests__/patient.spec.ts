@@ -8,6 +8,7 @@ import {
   createMockUser,
   createPatient,
   setupComputedPatientList,
+  setupPatientsForPanelFilter,
   setupPatientsNewToCareTeam,
   setupPatientsWithMissingInfo,
   setupPatientsWithNoRecentEngagement,
@@ -299,6 +300,237 @@ describe('patient model', () => {
         expect(
           await Patient.getBy({ fieldName: 'athenaPatientId', field: '99999' }, txn),
         ).toBeFalsy();
+      });
+    });
+  });
+
+  describe('filter', () => {
+    it('returns single result for zip code 10001', async () => {
+      await transaction(Patient.knex(), async txn => {
+        const { user } = await setupPatientsForPanelFilter(txn);
+        expect(
+          await Patient.filter(user.id, { pageNumber: 0, pageSize: 10 }, { zip: '10001' }, txn),
+        ).toMatchObject({
+          results: [
+            {
+              firstName: 'Mark',
+              lastName: 'Man',
+              patientInfo: {
+                gender: 'male',
+                language: 'ch',
+                primaryAddress: {
+                  zip: '10001',
+                },
+              },
+            },
+          ],
+          total: 1,
+        });
+      });
+    });
+
+    it('returns two results for zip code 11211 for first user', async () => {
+      await transaction(Patient.knex(), async txn => {
+        const { user } = await setupPatientsForPanelFilter(txn);
+        const patientResults = await Patient.filter(
+          user.id,
+          { pageNumber: 0, pageSize: 10 },
+          { zip: '11211' },
+          txn,
+        );
+        expect(patientResults.total).toBe(2);
+        expect(patientResults.results).toContainEqual(
+          expect.objectContaining({
+            firstName: 'Robb',
+            lastName: 'Stark',
+          }),
+        );
+        expect(patientResults.results).toContainEqual(
+          expect.objectContaining({
+            firstName: 'Jane',
+            lastName: 'Jacobs',
+          }),
+        );
+      });
+    });
+
+    it('returns single result age range 19 and under', async () => {
+      await transaction(Patient.knex(), async txn => {
+        const { user } = await setupPatientsForPanelFilter(txn);
+        expect(
+          await Patient.filter(user.id, { pageNumber: 0, pageSize: 10 }, { ageMax: 19 }, txn),
+        ).toMatchObject({
+          results: [
+            {
+              firstName: 'Robb',
+              lastName: 'Stark',
+              patientInfo: {
+                gender: 'male',
+                language: 'en',
+                primaryAddress: {
+                  zip: '11211',
+                },
+              },
+            },
+          ],
+          total: 1,
+        });
+      });
+    });
+
+    it('returns two results for age range 20 to 24', async () => {
+      await transaction(Patient.knex(), async txn => {
+        const { user } = await setupPatientsForPanelFilter(txn);
+        const patientResults = await Patient.filter(
+          user.id,
+          { pageNumber: 0, pageSize: 10 },
+          { ageMin: 20, ageMax: 24 },
+          txn,
+        );
+        expect(patientResults.total).toBe(2);
+        expect(patientResults.results).toContainEqual(
+          expect.objectContaining({
+            firstName: 'Maxie',
+            lastName: 'Jacobs',
+          }),
+        );
+        expect(patientResults.results).toContainEqual(
+          expect.objectContaining({
+            firstName: 'Jane',
+            lastName: 'Jacobs',
+          }),
+        );
+      });
+    });
+
+    it('returns single result age range 80 and older', async () => {
+      await transaction(Patient.knex(), async txn => {
+        const { user } = await setupPatientsForPanelFilter(txn);
+        expect(
+          await Patient.filter(user.id, { pageNumber: 0, pageSize: 10 }, { ageMin: 80 }, txn),
+        ).toMatchObject({
+          results: [
+            {
+              firstName: 'Mark',
+              lastName: 'Man',
+              patientInfo: {
+                gender: 'male',
+                language: 'ch',
+                primaryAddress: {
+                  zip: '10001',
+                },
+              },
+            },
+          ],
+          total: 1,
+        });
+      });
+    });
+
+    it('returns single result for second user and no filters', async () => {
+      await transaction(Patient.knex(), async txn => {
+        const { user2 } = await setupPatientsForPanelFilter(txn);
+        expect(
+          await Patient.filter(user2.id, { pageNumber: 0, pageSize: 10 }, {}, txn),
+        ).toMatchObject({
+          results: [
+            {
+              firstName: 'Juanita',
+              lastName: 'Jacobs',
+              patientInfo: {
+                gender: 'female',
+                language: 'en',
+                primaryAddress: {
+                  zip: '11211',
+                },
+              },
+            },
+          ],
+          total: 1,
+        });
+      });
+    });
+
+    it('returns two results for female gender', async () => {
+      await transaction(Patient.knex(), async txn => {
+        const { user } = await setupPatientsForPanelFilter(txn);
+        const patientResults = await Patient.filter(
+          user.id,
+          { pageNumber: 0, pageSize: 10 },
+          { gender: 'female' },
+          txn,
+        );
+        expect(patientResults.total).toBe(2);
+        expect(patientResults.results).toContainEqual(
+          expect.objectContaining({
+            firstName: 'Maxie',
+            lastName: 'Jacobs',
+          }),
+        );
+        expect(patientResults.results).toContainEqual(
+          expect.objectContaining({
+            firstName: 'Jane',
+            lastName: 'Jacobs',
+          }),
+        );
+      });
+    });
+
+    it('returns single result for female in zip code 11211', async () => {
+      await transaction(Patient.knex(), async txn => {
+        const { user } = await setupPatientsForPanelFilter(txn);
+        expect(
+          await Patient.filter(
+            user.id,
+            { pageNumber: 0, pageSize: 10 },
+            { gender: 'female', zip: '11211' },
+            txn,
+          ),
+        ).toMatchObject({
+          results: [
+            {
+              firstName: 'Jane',
+              lastName: 'Jacobs',
+              patientInfo: {
+                gender: 'female',
+                language: 'en',
+                primaryAddress: {
+                  zip: '11211',
+                },
+              },
+            },
+          ],
+          total: 1,
+        });
+      });
+    });
+
+    it('returns single result for female in zip code 11211 and age between 19 and 30', async () => {
+      await transaction(Patient.knex(), async txn => {
+        const { user } = await setupPatientsForPanelFilter(txn);
+        expect(
+          await Patient.filter(
+            user.id,
+            { pageNumber: 0, pageSize: 10 },
+            { gender: 'female', zip: '11211', ageMin: 19, ageMax: 30 },
+            txn,
+          ),
+        ).toMatchObject({
+          results: [
+            {
+              firstName: 'Jane',
+              lastName: 'Jacobs',
+              patientInfo: {
+                gender: 'female',
+                language: 'en',
+                primaryAddress: {
+                  zip: '11211',
+                },
+              },
+            },
+          ],
+          total: 1,
+        });
       });
     });
   });

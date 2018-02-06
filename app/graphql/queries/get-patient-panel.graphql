@@ -1,7 +1,7 @@
 #import "../fragments/short-patient.graphql"
 
-query getPatientPanel($pageNumber: Int, $pageSize: Int) {
-  userPatientPanel(pageNumber: $pageNumber, pageSize: $pageSize) {
+query getPatientPanel($pageNumber: Int!, $pageSize: Int!, $filters: PatientFilterOptions!) {
+  patientPanel(pageNumber: $pageNumber, pageSize: $pageSize, filters: $filters) {
     edges {
       node {
         ...ShortPatient
@@ -11,5 +11,6 @@ query getPatientPanel($pageNumber: Int, $pageSize: Int) {
       hasPreviousPage
       hasNextPage
     }
+    totalCount
   }
 }

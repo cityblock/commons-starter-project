@@ -156,6 +156,22 @@ export enum AnswerFilterType {
 }
 
 
+export interface PatientFilterOptions {
+  ageMin?: number | null,
+  ageMax?: number | null,
+  gender?: Gender | null,
+  zip?: string | null,
+  careWorkerId?: string | null,
+};
+
+export enum Gender {
+  male = "male",
+  female = "female",
+  transgender = "transgender",
+  nonbinary = "nonbinary",
+}
+
+
 export enum TaskOrderOptions {
   createdAtDesc = "createdAtDesc",
   createdAtAsc = "createdAtAsc",
@@ -2122,13 +2138,14 @@ export interface getPatientListsQuery {
 };
 
 export interface getPatientPanelQueryVariables {
-  pageNumber?: number | null,
-  pageSize?: number | null,
+  pageNumber: number,
+  pageSize: number,
+  filters: PatientFilterOptions,
 };
 
 export interface getPatientPanelQuery {
-  // List of patients the user is on the care team for (their 'patient panel')
-  userPatientPanel:  {
+  // Patients filtered by options
+  patientPanel:  {
     edges:  Array< {
       node:  {
         id: string,
@@ -2154,6 +2171,7 @@ export interface getPatientPanelQuery {
       hasPreviousPage: boolean,
       hasNextPage: boolean,
     },
+    totalCount: number,
   },
 };
 

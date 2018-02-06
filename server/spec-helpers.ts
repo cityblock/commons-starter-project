@@ -1,3 +1,4 @@
+import { format } from 'date-fns';
 import * as nock from 'nock';
 import { Transaction } from 'objection';
 import { AnswerValueTypeOptions, RiskAdjustmentTypeOptions } from '../app/graphql/types';
@@ -83,6 +84,19 @@ export async function createAddressForPatient(
   return address;
 }
 
+export async function createPrimaryAddressForPatient(
+  zip: string,
+  patientId: string,
+  patientInfoId: string,
+  userId: string,
+  txn: Transaction,
+): Promise<Address> {
+  const address = await Address.create({ zip, updatedBy: userId }, txn);
+  await PatientAddress.create({ addressId: address.id, patientId }, txn);
+  await PatientInfo.edit({ primaryAddressId: address.id, updatedBy: userId }, patientInfoId, txn);
+  return address;
+}
+
 export function createMockAddress(userId: string) {
   return {
     street: '55 Washington St',
@@ -99,13 +113,14 @@ export function createMockPatient(
   homeClinicId: string,
   firstName?: string,
   lastName?: string,
+  dateOfBirth?: string,
 ) {
   return {
     athenaPatientId,
     firstName: firstName || 'dan',
     lastName: lastName || 'plant',
     homeClinicId,
-    dateOfBirth: '01/01/1900',
+    dateOfBirth: dateOfBirth || '01/01/1900',
     consentToCall: false,
     consentToText: false,
   };
@@ -779,6 +794,75 @@ export async function setupUrgentTasks(txn: Transaction) {
   await EventNotification.dismiss(eventNotification2.id, txn);
 
   return { user, user2, patient1, patient5, task, task1, eventNotification };
+}
+
+function getDateOfBirthForAge(age: number) {
+  const dateOfBirth = new Date();
+  dateOfBirth.setFullYear(dateOfBirth.getFullYear() - age);
+  return format(dateOfBirth, 'MM/DD/YYYY');
+}
+
+export async function setupPatientsForPanelFilter(txn: Transaction) {
+  const clinic = await Clinic.create(createMockClinic(), txn);
+  const user = await User.create(createMockUser(11, clinic.id), txn);
+  const user2 = await User.create(createMockUser(12, clinic.id), txn);
+
+  const patient1 = await createPatient(
+    createMockPatient(14, clinic.id, 'Robb', 'Stark', getDateOfBirthForAge(19)),
+    user.id,
+    txn,
+    {
+      gender: 'male',
+      language: 'en',
+    },
+  );
+  await createPrimaryAddressForPatient('11211', patient1.id, patient1.patientInfo.id, user.id, txn);
+
+  const patient2 = await createPatient(
+    createMockPatient(15, clinic.id, 'Mark', 'Man', getDateOfBirthForAge(80)),
+    user.id,
+    txn,
+    {
+      gender: 'male',
+      language: 'ch',
+    },
+  );
+  await createPrimaryAddressForPatient('10001', patient2.id, patient2.patientInfo.id, user.id, txn);
+
+  const patient3 = await createPatient(
+    createMockPatient(16, clinic.id, 'Jane', 'Jacobs', getDateOfBirthForAge(20)),
+    user.id,
+    txn,
+    {
+      gender: 'female',
+      language: 'en',
+    },
+  );
+  await createPrimaryAddressForPatient('11211', patient3.id, patient3.patientInfo.id, user.id, txn);
+
+  const patient4 = await createPatient(
+    createMockPatient(17, clinic.id, 'Maxie', 'Jacobs', getDateOfBirthForAge(23)),
+    user.id,
+    txn,
+    {
+      gender: 'female',
+      language: 'es',
+    },
+  );
+  await createPrimaryAddressForPatient('10055', patient4.id, patient4.patientInfo.id, user.id, txn);
+
+  const patient5 = await createPatient(
+    createMockPatient(18, clinic.id, 'Juanita', 'Jacobs', getDateOfBirthForAge(73)),
+    user2.id,
+    txn,
+    {
+      gender: 'female',
+      language: 'en',
+    },
+  );
+  await createPrimaryAddressForPatient('11211', patient5.id, patient5.patientInfo.id, user.id, txn);
+
+  return { user, user2 };
 }
 
 export async function createAnswerAssociations(txn: Transaction) {

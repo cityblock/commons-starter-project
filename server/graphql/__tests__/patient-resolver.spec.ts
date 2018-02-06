@@ -13,6 +13,7 @@ import {
   mockRedoxCreatePatientError,
   mockRedoxTokenFetch,
   setupComputedPatientList,
+  setupPatientsForPanelFilter,
   setupPatientsNewToCareTeam,
   setupPatientsWithMissingInfo,
   setupPatientsWithNoRecentEngagement,
@@ -458,6 +459,405 @@ describe('patient', () => {
         });
 
         expect(result.errors![0].message).toBe('Must provide a search term');
+      });
+    });
+  });
+
+  describe('patient filtering', () => {
+    it('catches error if not logged in', async () => {
+      await transaction(Patient.knex(), async txn => {
+        await setupPatientsForPanelFilter(txn);
+        const query = `{
+          patientPanel(pageNumber: 0, pageSize: 10, filters: {}) {
+            edges { node { firstName, lastName } }
+            totalCount
+          }
+        }`;
+
+        const result = await graphql(schema, query, null, {
+          db,
+          userRole,
+          userId: '',
+          txn,
+        });
+
+        expect(result.errors![0].message).toBe('not logged in');
+      });
+    });
+
+    it('works if user has no patients', async () => {
+      await transaction(Patient.knex(), async txn => {
+        const homeClinic = await HomeClinic.create(
+          {
+            name: 'cool clinic',
+            departmentId: 1,
+          },
+          txn,
+        );
+        const homeClinicId = homeClinic.id;
+        const user = await User.create(
+          {
+            firstName: 'Daenerys',
+            lastName: 'Targaryen',
+            email: 'a@b.com',
+            userRole,
+            homeClinicId,
+          },
+          txn,
+        );
+
+        const query = `{
+          patientPanel(pageNumber: 0, pageSize: 10, filters: {}) {
+            edges { node { id, firstName } }
+          }
+        }`;
+        const result = await graphql(schema, query, null, {
+          db,
+          userRole,
+          userId: user.id,
+          txn,
+        });
+        expect(cloneDeep(result.data!.patientPanel)).toMatchObject({
+          edges: [],
+        });
+      });
+    });
+
+    it('works if user has patients', async () => {
+      await transaction(Patient.knex(), async txn => {
+        const { user, patient, homeClinicId } = await setup(txn);
+        const patient1 = await createPatient(createMockPatient(123, homeClinicId), user.id, txn);
+        const patient2 = await createPatient(createMockPatient(321, homeClinicId), user.id, txn);
+
+        const query = `{
+          patientPanel(pageNumber: 0, pageSize: 10, filters: {}) {
+            edges { node { id, firstName } }
+          }
+        }`;
+        const result = await graphql(schema, query, null, {
+          db,
+          userRole,
+          userId: user.id,
+          txn,
+        });
+        const patientPanel = cloneDeep(result.data!.patientPanel);
+        const patientIds = patientPanel.edges.map((edge: any) => edge.node.id);
+        expect(patientIds).toContain(patient.id);
+        expect(patientIds).toContain(patient1.id);
+        expect(patientIds).toContain(patient2.id);
+      });
+    });
+
+    it('finds all patients for user with no filter', async () => {
+      await transaction(Patient.knex(), async txn => {
+        const { user } = await setupPatientsForPanelFilter(txn);
+        const query = `{
+          patientPanel(pageNumber: 0, pageSize: 10, filters: {}) {
+            edges { node { firstName, lastName } }
+            totalCount
+          }
+        }`;
+
+        const result = await graphql(schema, query, null, {
+          db,
+          userRole,
+          userId: user.id,
+          txn,
+        });
+
+        expect(result.data!.patientPanel.totalCount).toBe(4);
+      });
+    });
+
+    it('returns single result for zip code 10001', async () => {
+      await transaction(Patient.knex(), async txn => {
+        const { user } = await setupPatientsForPanelFilter(txn);
+        const query = `{
+          patientPanel(pageNumber: 0, pageSize: 10, filters: { zip: "10001" }) {
+            edges { node { firstName, lastName, patientInfo { gender, language, primaryAddress { zip } } } }
+            totalCount
+          }
+        }`;
+
+        const result = await graphql(schema, query, null, {
+          db,
+          userRole,
+          userId: user.id,
+          txn,
+        });
+
+        expect(cloneDeep(result.data!.patientPanel)).toMatchObject({
+          edges: [
+            {
+              node: {
+                firstName: 'Mark',
+                lastName: 'Man',
+                patientInfo: {
+                  gender: 'male',
+                  language: 'ch',
+                  primaryAddress: {
+                    zip: '10001',
+                  },
+                },
+              },
+            },
+          ],
+          totalCount: 1,
+        });
+      });
+    });
+
+    it('returns two results for zip code 11211 for first user', async () => {
+      await transaction(Patient.knex(), async txn => {
+        const { user } = await setupPatientsForPanelFilter(txn);
+        const query = `{
+          patientPanel(pageNumber: 0, pageSize: 10, filters: { zip: "11211" }) {
+            edges { node { firstName, lastName } }
+            totalCount
+          }
+        }`;
+
+        const result = await graphql(schema, query, null, {
+          db,
+          userRole,
+          userId: user.id,
+          txn,
+        });
+
+        expect(result.data!.patientPanel.totalCount).toBe(2);
+        expect(cloneDeep(result.data!.patientPanel.edges)).toContainEqual(
+          expect.objectContaining({
+            node: {
+              firstName: 'Robb',
+              lastName: 'Stark',
+            },
+          }),
+        );
+        expect(cloneDeep(result.data!.patientPanel.edges)).toContainEqual(
+          expect.objectContaining({
+            node: {
+              firstName: 'Jane',
+              lastName: 'Jacobs',
+            },
+          }),
+        );
+      });
+    });
+
+    it('returns single result age range 19 and under', async () => {
+      await transaction(Patient.knex(), async txn => {
+        const { user } = await setupPatientsForPanelFilter(txn);
+        const query = `{
+          patientPanel(pageNumber: 0, pageSize: 10, filters: { ageMax: 19 }) {
+            edges { node { firstName, lastName, patientInfo { gender, language, primaryAddress { zip } } } }
+            totalCount
+          }
+        }`;
+
+        const result = await graphql(schema, query, null, {
+          db,
+          userRole,
+          userId: user.id,
+          txn,
+        });
+
+        expect(cloneDeep(result.data!.patientPanel)).toMatchObject({
+          edges: [
+            {
+              node: {
+                firstName: 'Robb',
+                lastName: 'Stark',
+                patientInfo: {
+                  gender: 'male',
+                  language: 'en',
+                  primaryAddress: {
+                    zip: '11211',
+                  },
+                },
+              },
+            },
+          ],
+          totalCount: 1,
+        });
+      });
+    });
+
+    it('returns two results for age range 20 to 24', async () => {
+      await transaction(Patient.knex(), async txn => {
+        const { user } = await setupPatientsForPanelFilter(txn);
+        const query = `{
+          patientPanel(pageNumber: 0, pageSize: 10, filters: { ageMin: 20, ageMax: 24 }) {
+            edges { node { firstName, lastName } }
+            totalCount
+          }
+        }`;
+
+        const result = await graphql(schema, query, null, {
+          db,
+          userRole,
+          userId: user.id,
+          txn,
+        });
+
+        expect(result.data!.patientPanel.totalCount).toBe(2);
+        expect(cloneDeep(result.data!.patientPanel.edges)).toContainEqual(
+          expect.objectContaining({
+            node: {
+              firstName: 'Maxie',
+              lastName: 'Jacobs',
+            },
+          }),
+        );
+        expect(cloneDeep(result.data!.patientPanel.edges)).toContainEqual(
+          expect.objectContaining({
+            node: {
+              firstName: 'Jane',
+              lastName: 'Jacobs',
+            },
+          }),
+        );
+      });
+    });
+
+    it('returns single result age range 80 and older', async () => {
+      await transaction(Patient.knex(), async txn => {
+        const { user } = await setupPatientsForPanelFilter(txn);
+        const query = `{
+          patientPanel(pageNumber: 0, pageSize: 10, filters: { ageMin: 80 }) {
+            edges { node { firstName, lastName, patientInfo { gender, language, primaryAddress { zip } } } }
+            totalCount
+          }
+        }`;
+
+        const result = await graphql(schema, query, null, {
+          db,
+          userRole,
+          userId: user.id,
+          txn,
+        });
+
+        expect(cloneDeep(result.data!.patientPanel)).toMatchObject({
+          edges: [
+            {
+              node: {
+                firstName: 'Mark',
+                lastName: 'Man',
+                patientInfo: {
+                  gender: 'male',
+                  language: 'ch',
+                  primaryAddress: {
+                    zip: '10001',
+                  },
+                },
+              },
+            },
+          ],
+          totalCount: 1,
+        });
+      });
+    });
+
+    it('returns single result for second user and no filters', async () => {
+      await transaction(Patient.knex(), async txn => {
+        const { user2 } = await setupPatientsForPanelFilter(txn);
+        const query = `{
+          patientPanel(pageNumber: 0, pageSize: 10, filters: { gender: female }) {
+            edges { node { firstName, lastName, patientInfo { gender, language, primaryAddress { zip } } } }
+            totalCount
+          }
+        }`;
+
+        const result = await graphql(schema, query, null, {
+          db,
+          userRole,
+          userId: user2.id,
+          txn,
+        });
+
+        expect(cloneDeep(result.data!.patientPanel)).toMatchObject({
+          edges: [
+            {
+              node: {
+                firstName: 'Juanita',
+                lastName: 'Jacobs',
+                patientInfo: {
+                  gender: 'female',
+                  language: 'en',
+                  primaryAddress: {
+                    zip: '11211',
+                  },
+                },
+              },
+            },
+          ],
+          totalCount: 1,
+        });
+      });
+    });
+
+    it('returns two results for female gender', async () => {
+      await transaction(Patient.knex(), async txn => {
+        const { user } = await setupPatientsForPanelFilter(txn);
+        const query = `{
+          patientPanel(pageNumber: 0, pageSize: 10, filters: { gender: female }) {
+            edges { node { firstName, lastName } }
+            totalCount
+          }
+        }`;
+
+        const result = await graphql(schema, query, null, {
+          db,
+          userRole,
+          userId: user.id,
+          txn,
+        });
+
+        expect(result.data!.patientPanel.totalCount).toBe(2);
+        expect(cloneDeep(result.data!.patientPanel.edges)).toContainEqual(
+          expect.objectContaining({
+            node: {
+              firstName: 'Maxie',
+              lastName: 'Jacobs',
+            },
+          }),
+        );
+        expect(cloneDeep(result.data!.patientPanel.edges)).toContainEqual(
+          expect.objectContaining({
+            node: {
+              firstName: 'Jane',
+              lastName: 'Jacobs',
+            },
+          }),
+        );
+      });
+    });
+
+    it('returns single result for female in zip code 11211', async () => {
+      await transaction(Patient.knex(), async txn => {
+        const { user } = await setupPatientsForPanelFilter(txn);
+        expect(
+          await Patient.filter(
+            user.id,
+            { pageNumber: 0, pageSize: 10 },
+            { gender: 'female', zip: '11211' },
+            txn,
+          ),
+        ).toMatchObject({
+          results: [
+            {
+              firstName: 'Jane',
+              lastName: 'Jacobs',
+              patientInfo: {
+                gender: 'female',
+                language: 'en',
+                primaryAddress: {
+                  zip: '11211',
+                },
+              },
+            },
+          ],
+          total: 1,
+        });
       });
     });
   });

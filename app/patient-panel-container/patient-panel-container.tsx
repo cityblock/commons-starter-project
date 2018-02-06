@@ -1,16 +1,26 @@
 import { History } from 'history';
+import { isNil, omitBy } from 'lodash-es';
 import * as querystring from 'querystring';
 import * as React from 'react';
 import { compose, graphql } from 'react-apollo';
 import { FormattedMessage } from 'react-intl';
+import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
 import * as currentUserQuery from '../graphql/queries/get-current-user.graphql';
 import * as patientPanelQuery from '../graphql/queries/get-patient-panel.graphql';
-import { getCurrentUserQuery, ShortPatientFragment } from '../graphql/types';
+import {
+  getCurrentUserQuery,
+  Gender,
+  PatientFilterOptions,
+  ShortPatientFragment,
+} from '../graphql/types';
 import Button from '../shared/library/button/button';
 import * as styles from './css/patient-panel.css';
 import PatientFilterPanel from './patient-filter-panel';
 import { PatientRoster } from './patient-roster';
+
+const INITIAL_PAGE_NUMBER = 0;
+const INITIAL_PAGE_SIZE = 10;
 
 export interface IPageParams {
   pageNumber: number;
@@ -39,12 +49,17 @@ interface IGraphqlProps {
   currentUser?: getCurrentUserQuery['currentUser'];
 }
 
+interface IStateProps {
+  filters: PatientFilterOptions;
+}
+
 interface IProps {
   mutate?: any;
   history: History;
+  location: Location;
 }
 
-type allProps = IGraphqlProps & IProps;
+type allProps = IGraphqlProps & IProps & IStateProps;
 
 interface IState extends IPageParams {
   hasNextPage?: boolean;
@@ -65,8 +80,8 @@ class PatientPanelContainer extends React.Component<allProps, IState> {
 
     const pageParams = getPageParams();
     this.state = {
-      pageNumber: pageParams.pageNumber || 0,
-      pageSize: pageParams.pageSize || 10,
+      pageNumber: pageParams.pageNumber || INITIAL_PAGE_NUMBER,
+      pageSize: pageParams.pageSize || INITIAL_PAGE_SIZE,
       isPanelOpen: null,
     };
   }
@@ -132,6 +147,22 @@ class PatientPanelContainer extends React.Component<allProps, IState> {
     this.setState({ isPanelOpen: false });
   };
 
+  handleFilterApplyClick = (filters: PatientFilterOptions) => {
+    const { history } = this.props;
+    const { pageSize } = this.state;
+
+    const activeFilters = omitBy<PatientFilterOptions>(filters, isNil);
+    if (Object.keys(activeFilters).length > 0) {
+      const filterString = querystring.stringify({
+        pageNumber: INITIAL_PAGE_NUMBER,
+        pageSize,
+        ...activeFilters,
+      });
+
+      history.push({ search: filterString });
+    }
+  };
+
   updatePageParams = (pageNumber: number) => {
     const pageParams = getPageParams();
     pageParams.pageNumber = pageNumber;
@@ -184,7 +215,11 @@ class PatientPanelContainer extends React.Component<allProps, IState> {
             onPreviousClick={this.getPreviousPage}
           />
         </div>
-        <PatientFilterPanel onCancelClick={this.handleFilterCancelClick} isVisible={isPanelOpen} />
+        <PatientFilterPanel
+          onCancelClick={this.handleFilterCancelClick}
+          onApplyClick={this.handleFilterApplyClick}
+          isVisible={isPanelOpen}
+        />
       </div>
     );
   }
@@ -194,22 +229,41 @@ const getPageParams = (): IPageParams => {
   const pageParams = querystring.parse(window.location.search.substring(1));
 
   return {
-    pageNumber: Number(pageParams.pageNumber || 0),
-    pageSize: Number(pageParams.pageSize || 10),
+    pageNumber: Number(pageParams.pageNumber || INITIAL_PAGE_NUMBER),
+    pageSize: Number(pageParams.pageSize || INITIAL_PAGE_SIZE),
   };
+};
+
+const mapStateToProps = (state: IState, props: IProps): IStateProps => {
+  const searchParams = querystring.parse(props.location.search.substring(1));
+
+  const filters = {
+    gender: (searchParams.gender as Gender) || null,
+    careWorkerId: (searchParams.careWorkerId as string) || null,
+    zip: (searchParams.zip as string) || null,
+    ageMin: parseInt(searchParams.ageMin as string, 10) || null,
+    ageMax: parseInt(searchParams.ageMax as string, 10) || null,
+  };
+
+  const activeFilters = omitBy<PatientFilterOptions>(filters, isNil);
+  return { filters: activeFilters };
 };
 
 export default compose(
   withRouter,
-  graphql<IGraphqlProps, IProps, allProps>(patientPanelQuery as any, {
-    options: () => ({
-      variables: getPageParams(),
+  connect<IStateProps, {}>(mapStateToProps as (args?: any) => IStateProps),
+  graphql<IGraphqlProps, IProps & IStateProps, allProps>(patientPanelQuery as any, {
+    options: (props: IProps & IStateProps) => ({
+      variables: {
+        ...getPageParams(),
+        filters: props.filters || {},
+      },
     }),
     props: ({ data }) => ({
       refetchPatientPanel: data ? data.refetch : null,
       loading: data ? data.loading : false,
       error: data ? data.error : null,
-      patientPanel: data ? (data as any).userPatientPanel : null,
+      patientPanel: data ? (data as any).patientPanel : null,
     }),
   }),
   graphql<IGraphqlProps, IProps, allProps>(currentUserQuery as any, {

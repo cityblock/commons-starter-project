@@ -1,34 +1,39 @@
+import { isNil } from 'lodash';
 import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
 import Option from '../shared/library/option/option';
 import Select from '../shared/library/select/select';
 
-export interface IOptionType {
-  lower: number | null;
-  upper: number | null;
+export interface IAgeChangeOptions extends IAgeOptions {
+  index: number | null;
+}
+
+interface IAgeOptions {
+  ageMin: number | null;
+  ageMax: number | null;
 }
 
 interface IProps {
-  onChange: (index: number, selectedOption: IOptionType | {}) => any;
+  onChange: (options: IAgeChangeOptions) => any;
   isLarge: boolean;
   value: number | null;
-  options?: IOptionType[];
+  options?: IAgeOptions[];
   isUnselectable?: boolean;
 }
 
 export default class AgeRangeSelect extends React.Component<IProps> {
   static defaultProps: Partial<IProps> = {
     options: [
-      { lower: null, upper: 19 },
-      { lower: 20, upper: 24 },
-      { lower: 25, upper: 29 },
-      { lower: 30, upper: 34 },
-      { lower: 35, upper: 39 },
-      { lower: 40, upper: 49 },
-      { lower: 50, upper: 59 },
-      { lower: 60, upper: 69 },
-      { lower: 70, upper: 79 },
-      { lower: 80, upper: null },
+      { ageMin: null, ageMax: 19 },
+      { ageMin: 20, ageMax: 24 },
+      { ageMin: 25, ageMax: 29 },
+      { ageMin: 30, ageMax: 34 },
+      { ageMin: 35, ageMax: 39 },
+      { ageMin: 40, ageMax: 49 },
+      { ageMin: 50, ageMax: 59 },
+      { ageMin: 60, ageMax: 69 },
+      { ageMin: 70, ageMax: 79 },
+      { ageMin: 80, ageMax: null },
     ],
   };
 
@@ -37,9 +42,12 @@ export default class AgeRangeSelect extends React.Component<IProps> {
 
     let index: any = parseInt(event.target.value, 10);
     index = isNaN(index) ? null : index;
-    const selectedOption = index > -1 ? options![index] : {};
+    const selectedOption = index > -1 ? options![index] : { ageMin: null, ageMax: null };
 
-    onChange(index, selectedOption);
+    onChange({
+      ...selectedOption,
+      index,
+    });
   };
 
   renderEndOption(bound: number, index: number, messageId: string) {
@@ -76,13 +84,13 @@ export default class AgeRangeSelect extends React.Component<IProps> {
       >
         <Option disabled={true} messageId="ageRange.placeholder" value="" />
         {!!isUnselectable && <Option messageId="select.unselect" value="" />}
-        {options!.map(({ lower, upper }, index) => {
-          if (lower !== null && upper !== null) {
-            return this.renderRangeOption(lower, upper, index);
-          } else if (lower !== null) {
-            return this.renderEndOption(lower, index, 'ageRange.over');
-          } else if (upper !== null) {
-            return this.renderEndOption(upper, index, 'ageRange.under');
+        {options!.map(({ ageMin, ageMax }, index) => {
+          if (!isNil(ageMin) && !isNil(ageMax)) {
+            return this.renderRangeOption(ageMin, ageMax, index);
+          } else if (!isNil(ageMin)) {
+            return this.renderEndOption(ageMin, index, 'ageRange.over');
+          } else if (!isNil(ageMax)) {
+            return this.renderEndOption(ageMax, index, 'ageRange.under');
           }
         })}
       </Select>

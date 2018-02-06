@@ -30,10 +30,6 @@ declare module 'schema' {
   */
     userSummaryList: Array<IUser>;
     /**
-    List of patients the user is on the care team for (their 'patient panel')
-  */
-    userPatientPanel: IPatientEdges;
-    /**
     The current User
   */
     currentUser: IUser | null;
@@ -53,6 +49,10 @@ declare module 'schema' {
     Patient search
   */
     patientSearch: IPatientSearchResultEdges;
+    /**
+    Patients filtered by options
+  */
+    patientPanel: IPatientPanelEdges;
     /**
     Patient dashboard - tasks due and notifications
   */
@@ -457,22 +457,6 @@ declare module 'schema' {
   }
 
   /**
-    Patient edges
-  */
-  interface IPatientEdges {
-    edges: Array<IPatientNode>;
-    pageInfo: IPageInfo;
-  }
-
-  /**
-    Patient node
-  */
-  interface IPatientNode {
-    node: IPatient | null;
-    cursor: string;
-  }
-
-  /**
     Patient combining data in athena and our database
   */
   interface IPatient {
@@ -562,6 +546,35 @@ declare module 'schema' {
     dateOfBirth: string | null;
     userCareTeam: boolean;
     patientInfo: IPatientInfo;
+  }
+
+
+  interface IPatientFilterOptions {
+    ageMin: number | null;
+    ageMax: number | null;
+    gender: IGenderEnum | null;
+    zip: string | null;
+    careWorkerId: string | null;
+  }
+
+
+  type IGenderEnum = 'male' | 'female' | 'transgender' | 'nonbinary';
+
+  /**
+    Patient edges
+  */
+  interface IPatientPanelEdges {
+    edges: Array<IPatientPanelNode>;
+    pageInfo: IPageInfo;
+    totalCount: number;
+  }
+
+  /**
+    Patient node
+  */
+  interface IPatientPanelNode {
+    node: IPatient | null;
+    cursor: string;
   }
 
   /**
@@ -2740,6 +2753,22 @@ declare module 'schema' {
     userId: string;
     fieldName: string;
     suggestedValue: string | null;
+  }
+
+  /**
+    Patient node
+  */
+  interface IPatientNode {
+    node: IPatient | null;
+    cursor: string;
+  }
+
+  /**
+    Patient edges
+  */
+  interface IPatientEdges {
+    edges: Array<IPatientNode>;
+    pageInfo: IPageInfo;
   }
 
 

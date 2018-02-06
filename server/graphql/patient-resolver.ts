@@ -3,7 +3,10 @@ import { Transaction } from 'objection';
 import {
   IPatient,
   IPatientEditInput,
+  IPatientFilterOptions,
   IPatientForDashboardEdges,
+  IPatientPanelEdges,
+  IPatientPanelNode,
   IPatientScratchPad,
   IPatientSearchResult,
   IPatientSearchResultEdges,
@@ -193,6 +196,37 @@ export async function resolvePatientSearch(
 
   const patientEdges = patients.results.map(
     (patient, i) => formatRelayEdge(patient, patient.id) as IPatientSearchResultNode,
+  );
+
+  const hasPreviousPage = pageNumber !== 0;
+  const hasNextPage = (pageNumber + 1) * pageSize < patients.total;
+
+  return {
+    edges: patientEdges,
+    pageInfo: {
+      hasPreviousPage,
+      hasNextPage,
+    },
+    totalCount: patients.total,
+  };
+}
+
+interface IPatientFilterInput extends IPaginationOptions {
+  filters: IPatientFilterOptions;
+}
+
+export async function resolvePatientPanel(
+  root: any,
+  { pageNumber, pageSize, filters }: IPatientFilterInput,
+  { userRole, userId, txn }: IContext,
+): Promise<IPatientPanelEdges> {
+  await accessControls.isAllowedForUser(userRole, 'view', 'user', userId);
+  checkUserLoggedIn(userId);
+
+  const patients = await Patient.filter(userId!, { pageNumber, pageSize }, filters, txn);
+
+  const patientEdges = patients.results.map(
+    (patient, i) => formatRelayEdge(patient, patient.id) as IPatientPanelNode,
   );
 
   const hasPreviousPage = pageNumber !== 0;

@@ -25,7 +25,7 @@ export const ENGLISH_TRANSLATION = {
     'patientFilter.language': 'Language',
     'patientFilter.location': 'Location',
     'patientFiler.zipPlaceholder': 'Search by zip code',
-    'patientFilter.careWorker': 'Assigned to a care worker',
+    'patientFilter.careWorkerId': 'Assigned to a care worker',
     'patientFilter.insurance': 'Insurance type',
     'patientFilter.inNetwork': 'Is their primary doctor in-network',
     'patientFilter.yes': 'Yes',

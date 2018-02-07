@@ -67,7 +67,9 @@ export default class ProgressNoteRow extends React.Component<IProps, IState> {
       />
     ) : null;
     const supervisorTabHtml =
-      progressNote.supervisorNotes && progressNote.reviewedBySupervisorAt ? (
+      tab === 'supervisor-review' &&
+      progressNote.supervisorNotes &&
+      progressNote.reviewedBySupervisorAt ? (
         <ProgressNoteSupervisorNotes
           supervisor={progressNote.supervisor}
           reviewedBySupervisorAt={progressNote.reviewedBySupervisorAt}

@@ -4,35 +4,21 @@
   cursor: text;
 }
 
-.text {
-  font-family: var(--basetica-medium);
-  font-weight: var(--roboto-medium-weight);
-  border: 1px solid transparent;
-  font-size: 21px;
-  line-height: 25px;
-  color: var(--black-color);
-  transition: border 0.2s linear;
-  padding: 2px;
-
-  /* Needed because cursor takes up a bit more space */
-  margin-bottom: 13px;
-}
-
 .edit {
   width: 100%;
-  outline: none;
-  border-color: var(--blue-color);
-  border-radius: 2px;
-  resize: vertical;
-  word-wrap: break-word;
+  margin: 0;
+  color: var(--black-color);
   font-family: var(--basetica-medium);
-  font-size: 21px;
   font-weight: var(--roboto-medium-weight);
-  line-height: 25px;
-  margin-bottom: 10px;
+  border: 1px solid var(--blue-color);
+  border-radius: var(--border-radius);
+  font-size: 21px;
+  outline: none;
+  resize: none;
+  word-wrap: break-word;
+  transition: border 0.2s linear;
 }
 
-.description,
 .descriptionEdit {
   font-family: var(--roboto);
   color: var(--gray-font-color);
@@ -41,24 +27,21 @@
   font-weight: var(--default-font-weight);
 }
 
-.description {
-  margin-bottom: 20px;
-}
-
-.descriptionEdit {
-  margin-bottom: 2px;
-}
-
-.placeholder {
+.edit::-webkit-input-placeholder {
   color: var(--light-gray-font-color);
   font-family: var(--basetica-medium);
   font-weight: var(--roboto-medium-weight);
 }
 
-.hide {
-  display: none;
+.error {
+  border-color: var(--red-color);
 }
 
-.error {
-  border: 1px solid var(--red-color);
+.disabled {
+  border-color: transparent;
+  cursor: text;
+}
+
+.edit.limitHeight {
+  height: var(--editable-title-height);
 }

@@ -147,6 +147,7 @@ export const ENGLISH_TRANSLATION = {
     'contactForm.consentToText': 'Does the patient consent to being contacted via text?',
     'contactForm.consentToPhone': 'Does the patient consent to being contacted via phone?',
     'contactForm.readConsentStatement': 'Read consent statement to patient:',
+    'editableText.default': 'Click here to enter text...',
     'screeningTool.submit': 'Submit',
     'screeningTool.resultsTitle': 'New Care Plan Suggestions',
     'screeningTool.resultsBody':
@@ -332,7 +333,7 @@ export const ENGLISH_TRANSLATION = {
     'taskDescription.empty': 'Click to add a task description...',
     'taskDescription.emptyCBO': 'Click to add a referral note...',
     'taskDescription.emptyCBOAction':
-      'Add additional information to complete this form and generate a CBO referral form for this member.',
+      'Add additional information to generate a CBO referral form',
     'task.assign': 'Assign Task:',
     'task.CBO': 'Community based organization:',
     'task.CBOAddInfo': 'Add information',

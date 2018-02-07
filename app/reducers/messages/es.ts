@@ -150,6 +150,7 @@ export const SPANISH_TRANSLATION = {
     'contactForm.consentToText': '¿El paciente acepta ser contactado vía texto?',
     'contactForm.consentToPhone': '¿El paciente acepta ser contactado por teléfono?',
     'contactForm.readConsentStatement': 'Leer declaración de consentimiento al paciente:',
+    'editableText.default': 'Click here to enter text...',
     'screeningTool.submit': 'Submit',
     'screeningTool.resultsTitle': 'New Care Plan Suggestions',
     'screeningTool.resultsBody':
@@ -310,7 +311,7 @@ export const SPANISH_TRANSLATION = {
     'taskDescription.empty': 'Haga clic para agregar una descripción de la tarea...',
     'taskDescription.emptyCBO': 'Click to add a referral note...',
     'taskDescription.emptyCBOAction':
-      'Add additional information to complete this form and generate a CBO referral form for this member.',
+      'Add additional information to generate a CBO referral form',
     'task.assign': 'Asignar Tarea:',
     'task.CBO': 'Community based organization:',
     'task.CBOAddInfo': 'Add information',

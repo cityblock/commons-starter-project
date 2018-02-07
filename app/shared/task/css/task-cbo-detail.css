@@ -34,3 +34,7 @@
 .textMarginRight {
   margin-right: var(--extra-small-gutter);
 }
+
+.marginTop {
+  margin-top: var(--small-gutter);
+}

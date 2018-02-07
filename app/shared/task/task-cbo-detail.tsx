@@ -25,7 +25,7 @@ const TaskCBODetail: React.StatelessComponent<IProps> = (props: IProps) => {
 
   return (
     <div className={styles.container}>
-      <FormLabel messageId="task.CBO" gray={true} small={true} />
+      <FormLabel messageId="task.CBO" gray={true} small={true} className={styles.marginTop} />
       <h3>{name}</h3>
       {isDefinedCBO && <h3>{formatAddress(CBO!.address, CBO!.city, CBO!.state, CBO!.zip)}</h3>}
       {isDefinedCBO && (

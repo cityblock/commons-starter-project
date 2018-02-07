@@ -64,6 +64,7 @@
   --big-border-radius: 4px;
   --border-radius: 2px;
   --input-height: 52px;
+  --editable-title-height: 28px;
   --input: {
     border: 1px solid var(--border-color);
     -webkit-style: none;

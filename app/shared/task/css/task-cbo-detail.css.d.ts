@@ -4,3 +4,4 @@ export const text: string;
 export const label: string;
 export const textMarginRight: string;
 export const flex: string;
+export const marginTop: string;

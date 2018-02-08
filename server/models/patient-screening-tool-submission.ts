@@ -17,8 +17,7 @@ interface IPatientScreeningToolSubmissionCreateFields {
 }
 
 interface IPatientScreeningToolSubmissionScoreFields {
-  score?: number;
-  patientAnswers?: PatientAnswer[];
+  patientAnswers: PatientAnswer[];
 }
 
 export const EAGER_QUERY =
@@ -204,13 +203,13 @@ export default class PatientScreeningToolSubmission extends BaseModel {
       return Promise.reject('Screening tool has already been scored, create a new submission');
     }
 
-    if (!!input.score) {
-      score = input.score;
-    } else if (patientAnswers) {
+    if (patientAnswers && patientAnswers.length > 0) {
       score = this.calculateScore(patientAnswers);
     } else {
-      return Promise.reject('Either a score or patient answers are required');
+      return Promise.reject('Patient answers are required');
     }
+
+    const patientId = patientAnswers[0].patientId;
 
     const screeningToolScoreRange = await ScreeningToolScoreRange.getByScoreForScreeningTool(
       score,
@@ -222,20 +221,21 @@ export default class PatientScreeningToolSubmission extends BaseModel {
       ? screeningToolScoreRange.id
       : undefined;
 
-    const submission = await this.query(txn)
+    await this.query(txn)
       .eager(EAGER_QUERY)
-      .patchAndFetchById(patientScreeningToolSubmissionId, {
+      .findById(patientScreeningToolSubmissionId)
+      .patch({
         score,
         screeningToolScoreRangeId,
         scoredAt: new Date().toISOString(),
       });
 
     await createSuggestionsForPatientScreeningToolSubmission(
-      submission.patientId,
-      submission.id,
+      patientId,
+      patientScreeningToolSubmissionId,
       txn,
     );
-    return submission;
+    return this.get(patientScreeningToolSubmissionId, txn);
   }
 
   static async get(

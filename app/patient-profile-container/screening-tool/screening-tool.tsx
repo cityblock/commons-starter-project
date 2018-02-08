@@ -17,10 +17,12 @@ import {
   patientScreeningToolSubmissionCreateMutationVariables,
   patientScreeningToolSubmissionScoreMutation,
   patientScreeningToolSubmissionScoreMutationVariables,
+  FullCarePlanSuggestionFragment,
   FullPatientScreeningToolSubmissionFragment,
   FullQuestionFragment,
   FullScreeningToolFragment,
 } from '../../graphql/types';
+import CarePlanSuggestions from '../../shared/care-plan-suggestions/care-plan-suggestions';
 import * as sortSearchStyles from '../../shared/css/sort-search.css';
 import Button from '../../shared/library/button/button';
 import Icon from '../../shared/library/icon/icon';
@@ -35,7 +37,6 @@ import {
   IQuestionAnswerHash,
 } from '../../shared/question/question-helpers';
 import * as styles from './css/screening-tool.css';
-import ScreeningToolResultsPopup from './screening-tool-results-popup';
 
 interface IProps {
   match: {
@@ -78,7 +79,20 @@ export interface IQuestionCondition {
   answerId: string;
 }
 
-export class ScreeningTool extends React.Component<allProps> {
+interface IState {
+  carePlanSuggestions: FullCarePlanSuggestionFragment[];
+}
+
+export class ScreeningTool extends React.Component<allProps, IState> {
+  constructor(props: allProps) {
+    super(props);
+    this.state = this.getInitialState();
+  }
+
+  getInitialState(): IState {
+    return { carePlanSuggestions: [] };
+  }
+
   async componentWillReceiveProps(newProps: allProps) {
     if (
       newProps.createScreeningToolSubmission &&
@@ -112,6 +126,10 @@ export class ScreeningTool extends React.Component<allProps> {
     }
   }
 
+  componentWillUnmount() {
+    this.setState(this.getInitialState());
+  }
+
   isLoading = () => {
     const { loading, screeningToolQuestionsLoading } = this.props;
 
@@ -134,11 +152,18 @@ export class ScreeningTool extends React.Component<allProps> {
     const questionsAnswered = this.allQuestionsAnswered();
 
     if (patientScreeningToolSubmission && scoreScreeningToolSubmission && questionsAnswered) {
-      await scoreScreeningToolSubmission({
+      const result = await scoreScreeningToolSubmission({
         variables: {
           patientScreeningToolSubmissionId: patientScreeningToolSubmission.id,
         },
       });
+      if (result.data && result.data.patientScreeningToolSubmissionScore) {
+        this.setState({
+          carePlanSuggestions: result.data.patientScreeningToolSubmissionScore.carePlanSuggestions,
+        });
+      } else {
+        this.setState(this.getInitialState());
+      }
     }
   };
 
@@ -246,20 +271,18 @@ export class ScreeningTool extends React.Component<allProps> {
 
   render() {
     const { match, loading, patientAnswersLoading } = this.props;
+    const { carePlanSuggestions } = this.state;
     const patientRoute = `/patients/${match.params.patientId}`;
-    const { patientScreeningToolSubmission } = this.props;
-    const patientScreeningToolSubmissionId = patientScreeningToolSubmission
-      ? patientScreeningToolSubmission.id
-      : null;
 
     const submitButtonStyles = classNames({
       [styles.disabled]: !this.allQuestionsAnswered(),
     });
 
     const assessmentHtml = this.getAssessmentHtml();
-    const popupVisible =
-      patientScreeningToolSubmission && patientScreeningToolSubmission.scoredAt ? true : false;
-    if (loading || patientAnswersLoading) {
+    const popupVisible = carePlanSuggestions.length > 0 ? true : false;
+
+    // Dont show loading if we have care plan suggestions - it sshows a weird flash
+    if (carePlanSuggestions.length < 1 && (loading || patientAnswersLoading)) {
       return <Spinner />;
     }
     return (
@@ -273,9 +296,11 @@ export class ScreeningTool extends React.Component<allProps> {
         </div>
         <div className={styles.panel}>{assessmentHtml}</div>
         <Popup visible={popupVisible} style={'small-padding'}>
-          <ScreeningToolResultsPopup
+          <CarePlanSuggestions
+            carePlanSuggestions={carePlanSuggestions || []}
             patientRoute={patientRoute}
-            patientScreeningToolSubmissionId={patientScreeningToolSubmissionId}
+            titleMessageId="screeningTool.resultsTitle"
+            bodyMessageId="screeningTool.resultsBody"
           />
         </Popup>
       </div>
@@ -304,6 +329,7 @@ export default compose(
   }),
   graphql<IGraphqlProps, IProps, allProps>(patientScreeningToolSubmissionScore as any, {
     name: 'scoreScreeningToolSubmission',
+    options: { refetchQueries: ['getPatientScreeningToolSubmissionForPatientAndScreeningTool'] },
   }),
   graphql<IGraphqlProps, IProps, allProps>(screeningToolQuery as any, {
     options: (props: IProps) => ({

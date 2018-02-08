@@ -90,15 +90,56 @@ describe('patient screening tool submission model', () => {
         txn,
       );
 
-      const finalSubmission = await PatientScreeningToolSubmission.submitScore(
-        submission.id,
+      const question = await Question.create(
         {
-          score: 10,
+          title: 'Question Title',
+          answerType: 'dropdown',
+          riskAreaId: riskArea.id,
+          type: 'riskArea',
+          order: 1,
+        },
+        txn,
+      );
+      const answer = await Answer.create(
+        {
+          questionId: question.id,
+          displayValue: '1',
+          value: '1',
+          valueType: 'number',
+          order: 1,
+          inSummary: false,
+        },
+        txn,
+      );
+      const patientAnswers = await PatientAnswer.create(
+        {
+          patientId: patient1.id,
+          patientScreeningToolSubmissionId: submission.id,
+          type: 'patientScreeningToolSubmission',
+          questionIds: [question.id],
+          answers: [
+            {
+              answerId: answer.id,
+              questionId: question.id,
+              answerValue: '1',
+              patientId: patient1.id,
+              applicable: true,
+              userId: user.id,
+            },
+          ],
         },
         txn,
       );
 
-      expect(finalSubmission.score).toEqual(10);
+      const finalSubmission = await PatientScreeningToolSubmission.submitScore(
+        submission.id,
+        {
+          patientAnswers,
+        },
+        txn,
+      );
+
+      expect(finalSubmission.score).toEqual(1);
       expect(finalSubmission.patient.id).toEqual(patient1.id);
       expect(finalSubmission.user.id).toEqual(user.id);
       expect(finalSubmission.riskArea.id).toEqual(riskArea.id);
@@ -299,7 +340,7 @@ describe('patient screening tool submission model', () => {
 
   it('cannot edit a patient screening tool submission that has been scored', async () => {
     await transaction(PatientScreeningToolSubmission.knex(), async txn => {
-      const { screeningTool1, patient1, user } = await setup(txn);
+      const { screeningTool1, patient1, user, riskArea } = await setup(txn);
       const submission = await PatientScreeningToolSubmission.create(
         {
           screeningToolId: screeningTool1.id,
@@ -309,17 +350,56 @@ describe('patient screening tool submission model', () => {
         txn,
       );
 
-      const fetchedSubmission = await PatientScreeningToolSubmission.submitScore(
-        submission.id,
+      const question = await Question.create(
         {
-          score: 10,
+          title: 'Question Title',
+          answerType: 'dropdown',
+          riskAreaId: riskArea.id,
+          type: 'riskArea',
+          order: 1,
         },
         txn,
       );
-      expect(fetchedSubmission.score).toEqual(10);
+      const answer = await Answer.create(
+        {
+          questionId: question.id,
+          displayValue: '1',
+          value: '1',
+          valueType: 'number',
+          order: 1,
+          inSummary: false,
+        },
+        txn,
+      );
+      const patientAnswers = await PatientAnswer.create(
+        {
+          patientId: patient1.id,
+          patientScreeningToolSubmissionId: submission.id,
+          type: 'patientScreeningToolSubmission',
+          questionIds: [question.id],
+          answers: [
+            {
+              answerId: answer.id,
+              questionId: question.id,
+              answerValue: '1',
+              patientId: patient1.id,
+              applicable: true,
+              userId: user.id,
+            },
+          ],
+        },
+        txn,
+      );
+
+      const fetchedSubmission = await PatientScreeningToolSubmission.submitScore(
+        submission.id,
+        { patientAnswers },
+        txn,
+      );
+      expect(fetchedSubmission.score).toEqual(1);
 
       await expect(
-        PatientScreeningToolSubmission.submitScore(submission.id, { score: 5 }, txn),
+        PatientScreeningToolSubmission.submitScore(submission.id, { patientAnswers }, txn),
       ).rejects.toMatch('Screening tool has already been scored, create a new submission');
     });
   });
@@ -403,7 +483,7 @@ describe('patient screening tool submission model', () => {
 
   it('gets the latest screening tool submission for a patient and tool', async () => {
     await transaction(PatientScreeningToolSubmission.knex(), async txn => {
-      const { screeningTool1, patient1, user, screeningTool2 } = await setup(txn);
+      const { screeningTool1, patient1, user, screeningTool2, riskArea } = await setup(txn);
       const firstSubmission = await PatientScreeningToolSubmission.create(
         {
           screeningToolId: screeningTool1.id,
@@ -438,11 +518,52 @@ describe('patient screening tool submission model', () => {
       );
       expect(submission!.id).toEqual(secondSubmission.id);
 
+      const question = await Question.create(
+        {
+          title: 'Question Title',
+          answerType: 'dropdown',
+          riskAreaId: riskArea.id,
+          type: 'riskArea',
+          order: 1,
+        },
+        txn,
+      );
+      const answer = await Answer.create(
+        {
+          questionId: question.id,
+          displayValue: '1',
+          value: '1',
+          valueType: 'number',
+          order: 1,
+          inSummary: false,
+        },
+        txn,
+      );
+      const patientAnswers = await PatientAnswer.create(
+        {
+          patientId: patient1.id,
+          patientScreeningToolSubmissionId: firstSubmission.id,
+          type: 'patientScreeningToolSubmission',
+          questionIds: [question.id],
+          answers: [
+            {
+              answerId: answer.id,
+              questionId: question.id,
+              answerValue: '1',
+              patientId: patient1.id,
+              applicable: true,
+              userId: user.id,
+            },
+          ],
+        },
+        txn,
+      );
+
       // gets scored submission
       await PatientScreeningToolSubmission.submitScore(
         firstSubmission.id,
         {
-          score: 10,
+          patientAnswers,
         },
         txn,
       );

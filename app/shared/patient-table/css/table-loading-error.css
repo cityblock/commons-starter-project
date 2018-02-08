@@ -1,4 +1,4 @@
-@import '../../shared/css/sizes';
+@import '../../css/sizes';
 
 .errorRow,
 .loadingRow {
@@ -13,7 +13,7 @@
   width: 30px;
   margin-bottom: 20px;
   background-position: center center;
-  background-image: url('../../assets/alert-triangle.svg');
+  background-image: url('../../../assets/alert-triangle.svg');
 }
 
 .errorHeading {

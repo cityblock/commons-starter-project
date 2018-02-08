@@ -1,7 +1,7 @@
 import { shallow } from 'enzyme';
 import * as React from 'react';
 import PatientSearchHeader from '../header';
-import { PatientSearchDescription, PatientSearchTitle } from '../helpers';
+import { PatientSearchDescription, PatientSearchTitle } from '../helper-components';
 
 describe('Patient Search Header', () => {
   const query = 'lady';

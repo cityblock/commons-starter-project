@@ -11,10 +11,11 @@ interface IProps {
   disabled?: boolean;
   name?: string;
   fullWidth?: boolean;
+  readOnly?: boolean;
 }
 
 const RadioInput: React.StatelessComponent<IProps> = (props: IProps) => {
-  const { value, checked, onChange, onClick, label, disabled, name, fullWidth } = props;
+  const { value, checked, onChange, onClick, label, disabled, name, fullWidth, readOnly } = props;
   const containerStyles = classNames(styles.container, {
     [styles.checked]: checked,
     [styles.enabled]: !disabled,
@@ -32,6 +33,7 @@ const RadioInput: React.StatelessComponent<IProps> = (props: IProps) => {
         onChange={onChange}
         onClick={onClick}
         disabled={!!disabled}
+        readOnly={!!readOnly}
       />
       <label htmlFor={value}>{label || value}</label>
     </div>

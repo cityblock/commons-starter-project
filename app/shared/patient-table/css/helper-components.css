@@ -1,26 +1,4 @@
-@import '../../shared/css/sizes';
-
-.title h2 {
-  font-family: var(--basetica-black);
-  color: var(--black-color);
-  margin: 0;
-  margin-bottom: 5px;
-  font-size: 21px;
-  line-height: 25px;
-  display: inline-block;
-}
-
-.title h2.lightBlue {
-  color: var(--light-blue-color);
-  margin-left: 6px;
-}
-
-.description {
-  font-size: var(--small-font-size);
-  font-family: var(--small-font-line-height);
-  color: var(--gray-font-color);
-  margin: 0;
-}
+@import '../../css/sizes';
 
 .columnHeader {
   font-family: var(--basetica-black);

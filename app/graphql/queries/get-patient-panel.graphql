@@ -1,10 +1,10 @@
-#import "../fragments/short-patient.graphql"
+#import "../fragments/full-patient-table-row.graphql"
 
 query getPatientPanel($pageNumber: Int!, $pageSize: Int!, $filters: PatientFilterOptions!) {
   patientPanel(pageNumber: $pageNumber, pageSize: $pageSize, filters: $filters) {
     edges {
       node {
-        ...ShortPatient
+        ...FullPatientTableRow
       }
     }
     pageInfo {

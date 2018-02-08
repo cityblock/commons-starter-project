@@ -19,23 +19,6 @@
   display: flex;
 }
 
-.headerText {
-  display: inline-block;
-}
-
-.headerTitle {
-  font-family: var(--basetica-black);
-  font-size: var(--large-font-size);
-  color: var(--default-font-color);
-  padding-top: 4px;
-  user-select: none;
-  margin-bottom: 15px;
-}
-
-.headerDescription {
-  color: var(--gray-font-color);
-}
-
 .patientPanelBody {
   width: 100%;
   height: calc(100vh - 213px);

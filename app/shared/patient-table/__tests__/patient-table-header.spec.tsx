@@ -1,29 +1,29 @@
 import { shallow } from 'enzyme';
 import * as React from 'react';
-import { PatientSearchResultsColumnHeader } from '../helpers';
-import PatientSearchResultsHeader from '../results-header';
+import { PatientTableColumnHeader } from '../helper-components';
+import PatientTableHeader from '../patient-table-header';
 
-describe('Patient Search Results Header', () => {
-  const wrapper = shallow(<PatientSearchResultsHeader />);
+describe('Patient Table Header', () => {
+  const wrapper = shallow(<PatientTableHeader />);
 
   it('renders container', () => {
     expect(wrapper.find('.headerContainer').length).toBe(1);
   });
 
   it('renders headers for all columns', () => {
-    expect(wrapper.find(PatientSearchResultsColumnHeader).length).toBe(5);
+    expect(wrapper.find(PatientTableColumnHeader).length).toBe(5);
   });
 
   it('renders header for patient name', () => {
     expect(
       wrapper
-        .find(PatientSearchResultsColumnHeader)
+        .find(PatientTableColumnHeader)
         .at(0)
         .props().messageId,
-    ).toBe('patientSearch.name');
+    ).toBe('patientTable.name');
     expect(
       wrapper
-        .find(PatientSearchResultsColumnHeader)
+        .find(PatientTableColumnHeader)
         .at(0)
         .props().className,
     ).toBe('name');
@@ -32,13 +32,13 @@ describe('Patient Search Results Header', () => {
   it('renders header for patient status', () => {
     expect(
       wrapper
-        .find(PatientSearchResultsColumnHeader)
+        .find(PatientTableColumnHeader)
         .at(1)
         .props().messageId,
-    ).toBe('patientSearch.status');
+    ).toBe('patientTable.status');
     expect(
       wrapper
-        .find(PatientSearchResultsColumnHeader)
+        .find(PatientTableColumnHeader)
         .at(1)
         .props().className,
     ).toBe('status');
@@ -47,13 +47,13 @@ describe('Patient Search Results Header', () => {
   it('renders header for patient member ID', () => {
     expect(
       wrapper
-        .find(PatientSearchResultsColumnHeader)
+        .find(PatientTableColumnHeader)
         .at(2)
         .props().messageId,
-    ).toBe('patientSearch.memberId');
+    ).toBe('patientTable.memberId');
     expect(
       wrapper
-        .find(PatientSearchResultsColumnHeader)
+        .find(PatientTableColumnHeader)
         .at(2)
         .props().className,
     ).toBe('memberId');
@@ -62,13 +62,13 @@ describe('Patient Search Results Header', () => {
   it('renders header for patient date of birth', () => {
     expect(
       wrapper
-        .find(PatientSearchResultsColumnHeader)
+        .find(PatientTableColumnHeader)
         .at(3)
         .props().messageId,
-    ).toBe('patientSearch.dateOfBirth');
+    ).toBe('patientTable.dateOfBirth');
     expect(
       wrapper
-        .find(PatientSearchResultsColumnHeader)
+        .find(PatientTableColumnHeader)
         .at(3)
         .props().className,
     ).toBe('dateOfBirth');
@@ -77,13 +77,13 @@ describe('Patient Search Results Header', () => {
   it('renders header for patient address', () => {
     expect(
       wrapper
-        .find(PatientSearchResultsColumnHeader)
+        .find(PatientTableColumnHeader)
         .at(4)
         .props().messageId,
-    ).toBe('patientSearch.address');
+    ).toBe('patientTable.address');
     expect(
       wrapper
-        .find(PatientSearchResultsColumnHeader)
+        .find(PatientTableColumnHeader)
         .at(4)
         .props().className,
     ).toBe('address');

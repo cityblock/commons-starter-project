@@ -1,10 +1,10 @@
 import { shallow } from 'enzyme';
 import * as React from 'react';
 import { Link } from 'react-router-dom';
-import PatientAge from '../../shared/library/patient-age/patient-age';
-import PatientSearchResult from '../result';
+import PatientAge from '../../library/patient-age/patient-age';
+import PatientTableRow from '../patient-table-row';
 
-describe('Patient Search Result Component', () => {
+describe('Patient Table Row Component', () => {
   const firstName = 'Sansa';
   const lastName = 'Stark';
   const id = 'ladyOfWinterfell';
@@ -23,9 +23,7 @@ describe('Patient Search Result Component', () => {
   });
   const query = 'sansa';
 
-  const wrapper = shallow(
-    <PatientSearchResult query={query} searchResult={getSearchResult(true)} />,
-  );
+  const wrapper = shallow(<PatientTableRow query={query} patient={getSearchResult(true)} />);
 
   it('renders a link to the patient MAP', () => {
     expect(wrapper.find(Link).length).toBe(1);
@@ -62,7 +60,7 @@ describe('Patient Search Result Component', () => {
   });
 
   it("does not return dot if patient not on user's care team", () => {
-    wrapper.setProps({ searchResult: getSearchResult(false) });
+    wrapper.setProps({ patient: getSearchResult(false) });
     expect(wrapper.find('.userCareTeam').length).toBe(0);
   });
 });

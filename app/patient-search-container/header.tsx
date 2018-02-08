@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { PatientSearchDescription, PatientSearchTitle } from './helpers';
+import { PatientSearchDescription, PatientSearchTitle } from './helper-components';
 
 interface IProps {
   query: string;

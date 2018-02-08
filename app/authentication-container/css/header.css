@@ -140,6 +140,7 @@
   box-shadow: var(--login-drop-shadow);
   padding: 20px;
   text-align: left;
+  z-index: 3;
 }
 
 .dropdown a {

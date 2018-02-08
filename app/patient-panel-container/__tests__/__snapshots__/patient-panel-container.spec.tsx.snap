@@ -11,15 +11,22 @@ exports[`renders patient panel container correctly 1`] = `
       className="headerRow"
     >
       <div
-        className="headerText"
+        className="container"
       >
         <div
-          className="headerTitle"
+          className="title"
         >
-          Members
+          <h2>
+            Members:
+          </h2>
+          <h2
+            className="lightBlue"
+          >
+            0
+          </h2>
         </div>
         <div
-          className="headerDescription"
+          className="description"
         >
           All members on this care team
         </div>
@@ -45,78 +52,11 @@ exports[`renders patient panel container correctly 1`] = `
     className="patientPanelBody"
   >
     <div
-      className="table"
+      className="container"
     >
       <div
-        className="tableHead"
-      >
-        <div
-          className="tableRow"
-        >
-          <div
-            className="tableColumn"
-          >
-            First Name
-          </div>
-          <div
-            className="tableColumn"
-          >
-            Last Name
-          </div>
-          <div
-            className="tableColumn"
-          >
-            Age
-          </div>
-          <div
-            className="tableColumn"
-          >
-            Location
-          </div>
-          <div
-            className="tableColumn"
-          >
-            Patient Joined
-          </div>
-          <div
-            className="tableColumn"
-          >
-            Last Update
-          </div>
-        </div>
-      </div>
-      <div
-        className="tableBody"
-      >
-        <div
-          className="loadingRow"
-        >
-          <div
-            className="loadingSpinner"
-          />
-          <div
-            className="loadingText"
-          >
-            Loading
-          </div>
-        </div>
-        <div
-          className="pagination"
-        >
-          <div
-            className="paginationRow"
-          >
-            <div
-              className="paginationButton previousButton hidden"
-              onClick={[Function]}
-            />
-            <div
-              className="paginationButton nextButton hidden"
-              onClick={[Function]}
-            />
-          </div>
-        </div>
-      </div>
+        className="loadingSpinner"
+      />
     </div>
   </div>
   <div
@@ -172,85 +112,79 @@ exports[`renders patient panel container correctly 1`] = `
           className="label"
           htmlFor={undefined}
         >
-          Age Range
+          Age
         </label>
         <select
-          className="select large noValue"
+          className="select large"
           disabled={undefined}
           name="ageRange"
           onChange={[Function]}
           required={true}
-          value=""
+          value="endToEnd"
         >
           <option
-            disabled={true}
+            disabled={false}
             value=""
           >
             Select age range...
           </option>
           <option
             disabled={undefined}
-            value=""
-          >
-            Unselect
-          </option>
-          <option
-            disabled={undefined}
-            value="0"
+            value="endTo19"
           >
             19 and under
           </option>
           <option
             disabled={undefined}
-            value="1"
+            value="20To24"
           >
             20 - 24 years old
           </option>
           <option
             disabled={undefined}
-            value="2"
+            value="25To29"
           >
             25 - 29 years old
           </option>
           <option
             disabled={undefined}
-            value="3"
+            value="30To34"
           >
             30 - 34 years old
           </option>
           <option
             disabled={undefined}
-            value="4"
+            value="35To39"
           >
             35 - 39 years old
           </option>
           <option
             disabled={undefined}
-            value="5"
+            value="40To49"
           >
             40 - 49 years old
           </option>
           <option
             disabled={undefined}
-            value="6"
+            value="50To59"
           >
             50 - 59 years old
           </option>
           <option
             disabled={undefined}
-            value="7"
+            value="60To69"
           >
             60 - 69 years old
           </option>
           <option
             disabled={undefined}
-            value="8"
+            value="70To79"
           >
             70 - 79 years old
           </option>
           <option
             disabled={undefined}
-            value="9"
+            value="80ToEnd"
           >
             80 and older
           </option>
@@ -274,16 +208,10 @@ exports[`renders patient panel container correctly 1`] = `
           value=""
         >
           <option
-            disabled={true}
+            disabled={false}
             value=""
           >
             Select gender...
-          </option>
-          <option
-            disabled={undefined}
-            value=""
-          >
-            Unselect
           </option>
           <option
             disabled={undefined}
@@ -352,16 +280,10 @@ exports[`renders patient panel container correctly 1`] = `
           value=""
         >
           <option
-            disabled={true}
+            disabled={false}
             value=""
           >
             Select the care worker...
-          </option>
-          <option
-            disabled={undefined}
-            value=""
-          >
-            Unselect
           </option>
         </select>
       </div>
@@ -388,15 +310,16 @@ exports[`renders patient panel container correctly 1`] = `
           className="container"
         >
           <div
-            className="container enabled"
+            className="container checked enabled"
           >
             <input
-              checked={false}
+              checked={true}
               disabled={false}
               id="false"
               name="inNetwork"
               onChange={undefined}
               onClick={[Function]}
+              readOnly={true}
               type="radio"
               value="false"
             />
@@ -416,6 +339,7 @@ exports[`renders patient panel container correctly 1`] = `
               name="inNetwork"
               onChange={undefined}
               onClick={[Function]}
+              readOnly={false}
               type="radio"
               value="true"
             />

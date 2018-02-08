@@ -5,13 +5,11 @@ import {
   IPatientEditInput,
   IPatientFilterOptions,
   IPatientForDashboardEdges,
-  IPatientPanelEdges,
-  IPatientPanelNode,
   IPatientScratchPad,
-  IPatientSearchResult,
-  IPatientSearchResultEdges,
-  IPatientSearchResultNode,
   IPatientSetupInput,
+  IPatientTableRow,
+  IPatientTableRowEdges,
+  IPatientTableRowNode,
 } from 'schema';
 import { getAthenaPatientIdFromCreate } from '../apis/redox/formatters';
 import { IPaginatedResults, IPaginationOptions } from '../db';
@@ -187,15 +185,15 @@ export async function resolvePatientSearch(
   root: any,
   { query, pageNumber, pageSize }: IPatientSearchOptions,
   { userRole, userId, txn }: IContext,
-): Promise<IPatientSearchResultEdges> {
-  let patients: IPaginatedResults<IPatientSearchResult>;
+): Promise<IPatientTableRowEdges> {
+  let patients: IPaginatedResults<IPatientTableRow>;
   await accessControls.isAllowedForUser(userRole, 'view', 'patient');
   checkUserLoggedIn(userId);
 
   patients = await Patient.search(query, { pageNumber, pageSize }, userId!, txn);
 
   const patientEdges = patients.results.map(
-    (patient, i) => formatRelayEdge(patient, patient.id) as IPatientSearchResultNode,
+    (patient, i) => formatRelayEdge(patient, patient.id) as IPatientTableRowNode,
   );
 
   const hasPreviousPage = pageNumber !== 0;
@@ -219,14 +217,14 @@ export async function resolvePatientPanel(
   root: any,
   { pageNumber, pageSize, filters }: IPatientFilterInput,
   { userRole, userId, txn }: IContext,
-): Promise<IPatientPanelEdges> {
+): Promise<IPatientTableRowEdges> {
   await accessControls.isAllowedForUser(userRole, 'view', 'user', userId);
   checkUserLoggedIn(userId);
 
   const patients = await Patient.filter(userId!, { pageNumber, pageSize }, filters, txn);
 
   const patientEdges = patients.results.map(
-    (patient, i) => formatRelayEdge(patient, patient.id) as IPatientPanelNode,
+    (patient, i) => formatRelayEdge(patient, patient.id) as IPatientTableRowNode,
   );
 
   const hasPreviousPage = pageNumber !== 0;

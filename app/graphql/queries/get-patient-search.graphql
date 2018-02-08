@@ -1,10 +1,10 @@
-#import "../fragments/full-patient-search-result.graphql"
+#import "../fragments/full-patient-table-row.graphql"
 
 query getPatientSearch($query: String!, $pageNumber: Int!, $pageSize: Int!) {
   patientSearch(query: $query, pageNumber: $pageNumber, pageSize: $pageSize) {
     edges {
       node {
-        ...FullPatientSearchResult
+        ...FullPatientTableRow
       }
     }
     pageInfo {

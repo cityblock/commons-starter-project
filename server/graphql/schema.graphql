@@ -312,38 +312,25 @@ type PatientEdges {
   pageInfo: PageInfo!
 }
 
-# Patient node
-type PatientPanelNode {
-  node: Patient
-  cursor: String!
-}
-
-# Patient edges
-type PatientPanelEdges {
-  edges: [PatientPanelNode!]!
-  pageInfo: PageInfo!
-  totalCount: Int!
-}
-
-# Patient search result
-type PatientSearchResult implements uniqueId {
+# Patient table row
+type PatientTableRow implements uniqueId {
   id: ID!
   firstName: String!
   lastName: String!
   dateOfBirth: String
-  userCareTeam: Boolean!
+  userCareTeam: Boolean
   patientInfo: PatientInfo!
 }
 
-# Patient search result node
-type PatientSearchResultNode {
-  node: PatientSearchResult
+# Patient table row node
+type PatientTableRowNode {
+  node: PatientTableRow
   cursor: String!
 }
 
-# Patient search result edges
-type PatientSearchResultEdges {
-  edges: [PatientSearchResultNode!]!
+# Patient table row edges
+type PatientTableRowEdges {
+  edges: [PatientTableRowNode!]!
   pageInfo: PageInfo!
   totalCount: Int!
 }
@@ -2038,9 +2025,13 @@ type RootQueryType {
   # Patient scratch pad
   patientScratchPad(patientId: ID!): PatientScratchPad!
   # Patient search
-  patientSearch(query: String!, pageNumber: Int!, pageSize: Int!): PatientSearchResultEdges!
+  patientSearch(query: String!, pageNumber: Int!, pageSize: Int!): PatientTableRowEdges!
   # Patients filtered by options
-  patientPanel(pageNumber: Int!, pageSize: Int!, filters: PatientFilterOptions!): PatientPanelEdges!
+  patientPanel(
+    pageNumber: Int!
+    pageSize: Int!
+    filters: PatientFilterOptions!
+  ): PatientTableRowEdges!
   # Patient dashboard - tasks due and notifications
   patientsWithUrgentTasks(pageNumber: Int!, pageSize: Int!): PatientForDashboardEdges!
   # Patient dashboard - new to user care team

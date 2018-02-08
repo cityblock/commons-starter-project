@@ -2150,20 +2150,11 @@ export interface getPatientPanelQuery {
       node:  {
         id: string,
         firstName: string,
-        middleName: string | null,
         lastName: string,
         dateOfBirth: string | null,
-        createdAt: string,
-        consentToText: boolean | null,
-        consentToCall: boolean | null,
+        userCareTeam: boolean | null,
         patientInfo:  {
-          id: string,
           gender: string | null,
-          language: string | null,
-          primaryAddress:  {
-            id: string,
-            zip: string | null,
-          } | null,
         },
       } | null,
     } >,
@@ -2563,7 +2554,7 @@ export interface getPatientSearchQuery {
         firstName: string,
         lastName: string,
         dateOfBirth: string | null,
-        userCareTeam: boolean,
+        userCareTeam: boolean | null,
         patientInfo:  {
           gender: string | null,
         },
@@ -9759,12 +9750,12 @@ export interface FullPatientScreeningToolSubmissionFragment {
   } | null,
 };
 
-export interface FullPatientSearchResultFragment {
+export interface FullPatientTableRowFragment {
   id: string,
   firstName: string,
   lastName: string,
   dateOfBirth: string | null,
-  userCareTeam: boolean,
+  userCareTeam: boolean | null,
   patientInfo:  {
     gender: string | null,
   },

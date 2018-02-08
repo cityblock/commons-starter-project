@@ -3,8 +3,8 @@ import { MockedProvider } from 'react-apollo/test-utils';
 import { Provider } from 'react-redux';
 import { create } from 'react-test-renderer';
 import configureMockStore from 'redux-mock-store';
-import { ENGLISH_TRANSLATION } from '../../reducers/messages/en';
-import ReduxConnectedIntlProvider from '../../redux-connected-intl-provider';
+import { ENGLISH_TRANSLATION } from '../../../reducers/messages/en';
+import ReduxConnectedIntlProvider from '../../../redux-connected-intl-provider';
 import { TableLoadingError } from '../table-loading-error';
 
 const locale = { messages: ENGLISH_TRANSLATION.messages };
@@ -15,7 +15,7 @@ it('renders empty div', () => {
     <MockedProvider mocks={[]}>
       <Provider store={mockStore({ locale })}>
         <ReduxConnectedIntlProvider>
-          <TableLoadingError isLoading={false} error={null} onRetryClick={() => false} />
+          <TableLoadingError onRetryClick={() => false} />
         </ReduxConnectedIntlProvider>
       </Provider>
     </MockedProvider>,
@@ -28,7 +28,7 @@ it('renders error', () => {
     <MockedProvider mocks={[]}>
       <Provider store={mockStore({ locale })}>
         <ReduxConnectedIntlProvider>
-          <TableLoadingError isLoading={false} error={'my error'} onRetryClick={() => false} />
+          <TableLoadingError onRetryClick={() => false} />
         </ReduxConnectedIntlProvider>
       </Provider>
     </MockedProvider>,
@@ -41,7 +41,7 @@ it('renders loading', () => {
     <MockedProvider mocks={[]}>
       <Provider store={mockStore({ locale })}>
         <ReduxConnectedIntlProvider>
-          <TableLoadingError isLoading={true} error={null} onRetryClick={() => false} />
+          <TableLoadingError onRetryClick={() => false} />
         </ReduxConnectedIntlProvider>
       </Provider>
     </MockedProvider>,

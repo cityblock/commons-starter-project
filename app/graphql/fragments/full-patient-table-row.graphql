@@ -1,4 +1,4 @@
-fragment FullPatientSearchResult on PatientSearchResult {
+fragment FullPatientTableRow on PatientTableRow {
   id
   firstName
   lastName

@@ -1,6 +1,3 @@
-export const title: string;
-export const lightBlue: string;
-export const description: string;
 export const columnHeader: string;
 export const placeholder: string;
 export const searchIcon: string;

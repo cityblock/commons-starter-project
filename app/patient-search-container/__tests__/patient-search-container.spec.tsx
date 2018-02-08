@@ -1,10 +1,10 @@
 import { shallow } from 'enzyme';
 import * as React from 'react';
-import Pagination from '../../shared/library/pagination/pagination';
+import PatientTable from '../../shared/patient-table/patient-table';
+import PatientTablePagination from '../../shared/patient-table/patient-table-pagination';
 import PatientSearchHeader from '../header';
 import PatientSearchInput from '../input';
 import { PatientSearchContainer } from '../patient-search-container';
-import PatientSearchResults from '../results';
 
 describe('Patient Search Container', () => {
   const query = 'stark';
@@ -40,6 +40,9 @@ describe('Patient Search Container', () => {
       pageSize={pageSize}
       loading={false}
       searchResults={searchResults as any}
+      refetch={() => {
+        return;
+      }}
     />,
   );
 
@@ -64,16 +67,15 @@ describe('Patient Search Container', () => {
   });
 
   it('renders patient search results', () => {
-    expect(wrapper.find(PatientSearchResults).length).toBe(1);
-    expect(wrapper.find(PatientSearchResults).props().query).toBe(query);
-    expect(wrapper.find(PatientSearchResults).props().searchResults).toEqual([result1, result2]);
-    expect(wrapper.find(PatientSearchResults).props().loading).toBeFalsy();
+    expect(wrapper.find(PatientTable).length).toBe(1);
+    expect(wrapper.find(PatientTable).props().query).toBe(query);
+    expect(wrapper.find(PatientTable).props().isQueried).toBe(!!query);
+    expect(wrapper.find(PatientTable).props().patients).toEqual([result1, result2]);
+    expect(wrapper.find(PatientTable).props().loading).toBeFalsy();
+    expect(wrapper.find(PatientTable).props().messageIdPrefix).toBe('patientSearch');
   });
 
   it('renders patient search pagination', () => {
-    expect(wrapper.find(Pagination).length).toBe(1);
-    expect(wrapper.find(Pagination).props().pageInfo).toEqual(searchResults.pageInfo);
-    expect(wrapper.find(Pagination).props().totalCount).toBe(totalCount);
-    expect(wrapper.find(Pagination).props().pageNumber).toBe(pageNumber);
+    expect(wrapper.find(PatientTablePagination).length).toBe(1);
   });
 });

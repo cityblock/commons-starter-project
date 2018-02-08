@@ -5,13 +5,13 @@ import { compose, graphql } from 'react-apollo';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
 import * as patientSearchQuery from '../graphql/queries/get-patient-search.graphql';
-import { getPatientSearchQuery, FullPatientSearchResultFragment } from '../graphql/types';
-import Pagination from '../shared/library/pagination/pagination';
+import { getPatientSearchQuery, FullPatientTableRowFragment } from '../graphql/types';
+import PatientTable from '../shared/patient-table/patient-table';
+import PatientTablePagination from '../shared/patient-table/patient-table-pagination';
 import { IState as IAppState } from '../store';
 import * as styles from './css/patient-search-container.css';
 import PatientSearchHeader from './header';
 import PatientSearchInput from './input';
-import PatientSearchResults from './results';
 
 const INITIAL_PAGE_NUMBER = 0;
 const INITIAL_PAGE_SIZE = 10;
@@ -28,6 +28,7 @@ interface IStateProps {
 }
 
 interface IGraphqlProps {
+  refetch: (variables: { pageNumber: number; pageSize: number }) => void;
   loading: boolean;
   error?: string;
   searchResults?: getPatientSearchQuery['patientSearch'];
@@ -42,6 +43,8 @@ interface IState {
 export class PatientSearchContainer extends React.Component<allProps, IState> {
   constructor(props: allProps) {
     super(props);
+
+    this.reloadCurrentPage = this.reloadCurrentPage.bind(this);
     this.state = { searchTerm: '' };
   }
 
@@ -50,6 +53,13 @@ export class PatientSearchContainer extends React.Component<allProps, IState> {
     if (this.props.query && !nextProps.query) {
       this.setState({ searchTerm: '' });
     }
+  }
+
+  async reloadCurrentPage() {
+    await this.props.refetch({
+      pageNumber: this.props.pageNumber,
+      pageSize: this.props.pageSize,
+    });
   }
 
   onSearchTermChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
@@ -68,26 +78,17 @@ export class PatientSearchContainer extends React.Component<allProps, IState> {
     history.push({ search: newParams });
   };
 
-  onPaginate = (pageBack: boolean): void => {
-    const { history, query, pageNumber, pageSize, searchResults } = this.props;
-    let newPageNumber = pageBack ? pageNumber - 1 : pageNumber + 1;
-    // extra security, though UI should not allow this
-    if (newPageNumber < 0) newPageNumber = 0;
-    if (searchResults && newPageNumber > Math.ceil(searchResults.totalCount / pageSize)) {
-      newPageNumber = Math.ceil(searchResults.totalCount / pageSize);
-    }
-
-    const newParams = querystring.stringify({
-      query,
-      pageNumber: newPageNumber,
+  createQueryString = (pageNumber: number, pageSize: number) => {
+    return querystring.stringify({
+      query: this.props.query,
+      pageNumber,
       pageSize,
     });
-    history.push({ search: newParams });
   };
 
   render(): JSX.Element {
     const { searchTerm } = this.state;
-    const { query, pageNumber, pageSize, loading, searchResults } = this.props;
+    const { query, pageNumber, pageSize, loading, searchResults, error } = this.props;
     const formattedSearchResults =
       searchResults && searchResults.edges ? searchResults.edges.map(result => result.node) : [];
 
@@ -104,21 +105,24 @@ export class PatientSearchContainer extends React.Component<allProps, IState> {
             onSearch={this.onSearch}
           />
         </div>
-        <PatientSearchResults
+        <PatientTable
+          patients={formattedSearchResults as FullPatientTableRowFragment[]}
+          isLoading={loading}
+          error={error}
+          messageIdPrefix="patientSearch"
+          isQueried={!!query}
+          onRetryClick={this.reloadCurrentPage}
           query={query}
-          searchResults={formattedSearchResults as FullPatientSearchResultFragment[]}
-          loading={loading}
         />
-        {!!searchResults &&
-          searchResults.totalCount && (
-            <Pagination
-              pageInfo={searchResults.pageInfo}
-              totalCount={searchResults.totalCount}
-              pageNumber={pageNumber}
-              pageSize={pageSize}
-              onPaginate={this.onPaginate}
-            />
-          )}
+        {!!searchResults && (
+          <PatientTablePagination
+            pageInfo={searchResults.pageInfo}
+            totalCount={searchResults.totalCount}
+            pageNumber={pageNumber}
+            pageSize={pageSize}
+            getQuery={this.createQueryString}
+          />
+        )}
       </div>
     );
   }
@@ -143,6 +147,7 @@ export default compose(
       variables: { query, pageNumber, pageSize },
     }),
     props: ({ data }) => ({
+      refetch: data ? data.refetch : null,
       loading: data ? data.loading : false,
       error: data ? data.error : null,
       searchResults: data ? (data as any).patientSearch : null,

@@ -6,51 +6,36 @@ import FormLabel from '../shared/library/form-label/form-label';
 import RadioGroup from '../shared/library/radio-group/radio-group';
 import RadioInput from '../shared/library/radio-input/radio-input';
 import TextInput from '../shared/library/text-input/text-input';
-import AgeRangeSelect, { IAgeChangeOptions } from './age-range-select';
+import AgeRangeSelect, { formatAgeValue } from './age-range-select';
 import CareWorkerSelect from './care-worker-select';
 import * as styles from './css/patient-filter-panel.css';
 import { FilterSelect } from './filter-select';
 
 interface IProps {
-  onCancelClick: () => any;
-  onApplyClick: (filters: PatientFilterOptions) => any;
+  onClick: (filters: PatientFilterOptions) => any;
+  onChange: (filter: PatientFilterOptions) => any;
+  filters: PatientFilterOptions;
   isVisible: boolean | null;
 }
 
 interface IState {
-  ageIndex: number | null;
-  ageMin: number | null;
-  ageMax: number | null;
-  gender: Gender | null;
-  zip: string | null;
-  inNetwork: string | null;
-  careWorkerId: string | null;
+  inNetwork: string;
 }
 
-export default class PatientPanelContainer extends React.Component<IProps, IState> {
+export default class PatientFilterPanel extends React.Component<IProps, IState> {
   constructor(props: IProps) {
     super(props);
     this.state = {
-      ageIndex: null,
-      ageMin: null,
-      ageMax: null,
-      gender: null,
-      zip: null,
-      inNetwork: null,
-      careWorkerId: null,
+      inNetwork: 'false',
     };
   }
 
-  handleAgeRangeChange = (options: IAgeChangeOptions) => {
-    this.setState({
-      ageIndex: options.index,
-      ageMin: options.ageMin,
-      ageMax: options.ageMax,
-    });
+  handleAgeRangeChange = (options: PatientFilterOptions) => {
+    this.props.onChange(options);
   };
 
   handleChange = (event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-    this.setState({ [event.target.name as any]: event.target.value });
+    this.props.onChange({ [event.target.name as any]: event.target.value });
   };
 
   handleNetworkToggleChange = (event: React.MouseEvent<HTMLInputElement>) => {
@@ -65,8 +50,8 @@ export default class PatientPanelContainer extends React.Component<IProps, IStat
   };
 
   handleApplyClick = () => {
-    const { gender, ageMin, ageMax, zip, careWorkerId } = this.state;
-    this.props.onApplyClick({
+    const { gender, ageMin, ageMax, zip, careWorkerId } = this.props.filters;
+    this.props.onClick({
       gender,
       ageMin,
       ageMax,
@@ -75,9 +60,14 @@ export default class PatientPanelContainer extends React.Component<IProps, IStat
     });
   };
 
+  handleCancelClick = () => {
+    this.props.onClick({});
+  };
+
   render() {
-    const { onCancelClick, isVisible } = this.props;
-    const { ageIndex, gender, zip, inNetwork, careWorkerId } = this.state;
+    const { isVisible, filters } = this.props;
+    const { gender, zip, careWorkerId, ageMin, ageMax } = filters;
+    const { inNetwork } = this.state;
 
     return (
       <div
@@ -92,7 +82,7 @@ export default class PatientPanelContainer extends React.Component<IProps, IStat
             <Button
               messageId="patientFilter.cancel"
               color="white"
-              onClick={onCancelClick}
+              onClick={this.handleCancelClick}
               className={styles.button}
             />
             <Button
@@ -109,7 +99,7 @@ export default class PatientPanelContainer extends React.Component<IProps, IStat
               isLarge={true}
               isUnselectable={true}
               onChange={this.handleAgeRangeChange}
-              value={ageIndex}
+              value={formatAgeValue(ageMin || null, ageMax || null)}
             />
           </div>
 
@@ -120,13 +110,13 @@ export default class PatientPanelContainer extends React.Component<IProps, IStat
               isLarge={true}
               isUnselectable={true}
               onChange={this.handleChange}
-              value={gender}
+              value={gender || null}
               options={Object.values(Gender)}
             />
           </div>
 
           <div className={styles.inputGroup}>
-            <FormLabel messageId="patientFilter.location" />
+            <FormLabel messageId="patientFilter.zip" />
             <TextInput
               name="zip"
               value={zip || ''}
@@ -158,6 +148,7 @@ export default class PatientPanelContainer extends React.Component<IProps, IStat
                 checked={inNetwork === 'false'}
                 label="No"
                 onClick={this.handleNetworkToggleChange}
+                readOnly={true}
               />
               <RadioInput
                 name="inNetwork"

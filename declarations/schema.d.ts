@@ -48,11 +48,11 @@ declare module 'schema' {
     /**
     Patient search
   */
-    patientSearch: IPatientSearchResultEdges;
+    patientSearch: IPatientTableRowEdges;
     /**
     Patients filtered by options
   */
-    patientPanel: IPatientPanelEdges;
+    patientPanel: IPatientTableRowEdges;
     /**
     Patient dashboard - tasks due and notifications
   */
@@ -520,31 +520,31 @@ declare module 'schema' {
   }
 
   /**
-    Patient search result edges
+    Patient table row edges
   */
-  interface IPatientSearchResultEdges {
-    edges: Array<IPatientSearchResultNode>;
+  interface IPatientTableRowEdges {
+    edges: Array<IPatientTableRowNode>;
     pageInfo: IPageInfo;
     totalCount: number;
   }
 
   /**
-    Patient search result node
+    Patient table row node
   */
-  interface IPatientSearchResultNode {
-    node: IPatientSearchResult | null;
+  interface IPatientTableRowNode {
+    node: IPatientTableRow | null;
     cursor: string;
   }
 
   /**
-    Patient search result
+    Patient table row
   */
-  interface IPatientSearchResult {
+  interface IPatientTableRow {
     id: string;
     firstName: string;
     lastName: string;
     dateOfBirth: string | null;
-    userCareTeam: boolean;
+    userCareTeam: boolean | null;
     patientInfo: IPatientInfo;
   }
 
@@ -559,23 +559,6 @@ declare module 'schema' {
 
 
   type IGenderEnum = 'male' | 'female' | 'transgender' | 'nonbinary';
-
-  /**
-    Patient edges
-  */
-  interface IPatientPanelEdges {
-    edges: Array<IPatientPanelNode>;
-    pageInfo: IPageInfo;
-    totalCount: number;
-  }
-
-  /**
-    Patient node
-  */
-  interface IPatientPanelNode {
-    node: IPatient | null;
-    cursor: string;
-  }
 
   /**
     Patient dashboard item edges

@@ -4,19 +4,15 @@ import { FormattedMessage } from 'react-intl';
 import Option from '../shared/library/option/option';
 import Select from '../shared/library/select/select';
 
-export interface IAgeChangeOptions extends IAgeOptions {
-  index: number | null;
-}
-
 interface IAgeOptions {
   ageMin: number | null;
   ageMax: number | null;
 }
 
 interface IProps {
-  onChange: (options: IAgeChangeOptions) => any;
+  onChange: (options: IAgeOptions) => any;
   isLarge: boolean;
-  value: number | null;
+  value: string | null;
   options?: IAgeOptions[];
   isUnselectable?: boolean;
 }
@@ -38,33 +34,52 @@ export default class AgeRangeSelect extends React.Component<IProps> {
   };
 
   handleChange = (event: HTMLSelectElement) => {
-    const { options, onChange } = this.props;
+    const { onChange } = this.props;
+    const bounds = event.target.value.split('To');
 
-    let index: any = parseInt(event.target.value, 10);
-    index = isNaN(index) ? null : index;
-    const selectedOption = index > -1 ? options![index] : { ageMin: null, ageMax: null };
+    if (bounds.length < 2) {
+      onChange({ ageMin: null, ageMax: null });
+    }
 
-    onChange({
-      ...selectedOption,
-      index,
-    });
+    let ageMin: any = parseInt(bounds[0], 10);
+    ageMin = isNaN(ageMin) ? null : ageMin;
+
+    let ageMax: any = parseInt(bounds[1], 10);
+    ageMax = isNaN(ageMax) ? null : ageMax;
+
+    onChange({ ageMin, ageMax });
   };
 
-  renderEndOption(bound: number, index: number, messageId: string) {
+  renderUpperBoundOption(ageMax: number, index: number) {
     return (
-      <FormattedMessage id={messageId} key={`ageRange-option-${index}`}>
+      <FormattedMessage id="ageRange.under" key={`ageRange-option-${index}`}>
         {(message: string) => {
-          return <Option value={index.toString()} label={`${bound} ${message}`} />;
+          return <Option value={formatAgeValue(null, ageMax)} label={`${ageMax} ${message}`} />;
         }}
       </FormattedMessage>
     );
   }
 
-  renderRangeOption(lower: number, upper: number, index: number) {
+  renderLowerBoundOption(ageMin: number, index: number) {
+    return (
+      <FormattedMessage id="ageRange.over" key={`ageRange-option-${index}`}>
+        {(message: string) => {
+          return <Option value={formatAgeValue(ageMin, null)} label={`${ageMin} ${message}`} />;
+        }}
+      </FormattedMessage>
+    );
+  }
+
+  renderRangeOption(ageMin: number, ageMax: number, index: number) {
     return (
       <FormattedMessage id="ageRange.years" key={`ageRange-option-${index}`}>
         {(message: string) => {
-          return <Option value={index.toString()} label={`${lower} - ${upper} ${message}`} />;
+          return (
+            <Option
+              value={formatAgeValue(ageMin, ageMax)}
+              label={`${ageMin} - ${ageMax} ${message}`}
+            />
+          );
         }}
       </FormattedMessage>
     );
@@ -72,28 +87,30 @@ export default class AgeRangeSelect extends React.Component<IProps> {
 
   render() {
     const { isLarge, value, options, isUnselectable } = this.props;
-    const selectedValue = value !== null ? value.toString() : '';
 
     return (
       <Select
         required
         name="ageRange"
         large={isLarge}
-        value={selectedValue}
+        value={value || ''}
         onChange={this.handleChange}
       >
-        <Option disabled={true} messageId="ageRange.placeholder" value="" />
-        {!!isUnselectable && <Option messageId="select.unselect" value="" />}
+        <Option disabled={!isUnselectable} messageId="ageRange.placeholder" value="" />
         {options!.map(({ ageMin, ageMax }, index) => {
           if (!isNil(ageMin) && !isNil(ageMax)) {
             return this.renderRangeOption(ageMin, ageMax, index);
           } else if (!isNil(ageMin)) {
-            return this.renderEndOption(ageMin, index, 'ageRange.over');
+            return this.renderLowerBoundOption(ageMin, index);
           } else if (!isNil(ageMax)) {
-            return this.renderEndOption(ageMax, index, 'ageRange.under');
+            return this.renderUpperBoundOption(ageMax, index);
           }
         })}
       </Select>
     );
   }
+}
+
+export function formatAgeValue(ageMin: number | null, ageMax: number | null) {
+  return `${ageMin || 'end'}To${ageMax || 'End'}`;
 }

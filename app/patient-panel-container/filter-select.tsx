@@ -17,8 +17,7 @@ export const FilterSelect: React.StatelessComponent<IProps> = props => {
 
   return (
     <Select required name={name} large={isLarge} value={selectedValue} onChange={onChange}>
-      <Option disabled={true} messageId={`${name}Select.placeholder`} value="" />
-      {!!isUnselectable && <Option messageId="select.unselect" value="" />}
+      <Option disabled={!isUnselectable} messageId={`${name}Select.placeholder`} value="" />
       {options.map(option => {
         return (
           <Option value={option} messageId={`${name}.${option}`} key={`${name}-option-${option}`} />

@@ -31,7 +31,7 @@ const Select: React.StatelessComponent<IProps> = (props: IProps) => {
     <select
       name={name}
       required={required}
-      value={value || ''}
+      value={value}
       className={selectStyles}
       onChange={onChange}
       disabled={disabled}

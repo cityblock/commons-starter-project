@@ -1,4 +1,4 @@
-@import '../../shared/css/sizes';
+@import '../../css/sizes';
 
 .headerContainer,
 .result {
@@ -12,7 +12,7 @@
   border-bottom: 1px solid var(--border-color);
   position: -webkit-sticky;
   position: sticky;
-  top: 188px;
+  top: 0;
   z-index: 1;
 }
 

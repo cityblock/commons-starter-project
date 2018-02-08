@@ -10,47 +10,33 @@ import * as currentUserQuery from '../graphql/queries/get-current-user.graphql';
 import * as patientPanelQuery from '../graphql/queries/get-patient-panel.graphql';
 import {
   getCurrentUserQuery,
+  getPatientPanelQuery,
+  FullPatientTableRowFragment,
   Gender,
   PatientFilterOptions,
-  ShortPatientFragment,
 } from '../graphql/types';
 import Button from '../shared/library/button/button';
+import PatientTable from '../shared/patient-table/patient-table';
+import PatientTablePagination from '../shared/patient-table/patient-table-pagination';
 import * as styles from './css/patient-panel.css';
 import PatientFilterPanel from './patient-filter-panel';
-import { PatientRoster } from './patient-roster';
+import PatientPanelHeader from './patient-panel-header';
 
 const INITIAL_PAGE_NUMBER = 0;
 const INITIAL_PAGE_SIZE = 10;
 
-export interface IPageParams {
-  pageNumber: number;
-  pageSize: number;
-}
-
-export interface IPatientPanelPageInfo {
-  hasNextPage: boolean;
-  hasPreviousPage: boolean;
-}
-
-export interface IPatientPanelNode {
-  node: ShortPatientFragment;
-}
-
-export interface IPatientPanel {
-  edges: IPatientPanelNode[];
-  pageInfo: IPatientPanelPageInfo;
-}
-
 interface IGraphqlProps {
   refetchPatientPanel: (variables: { pageNumber: number; pageSize: number }) => void;
   loading: boolean;
-  error: string | null;
-  patientPanel?: IPatientPanel;
+  error?: string;
+  patientPanel?: getPatientPanelQuery['patientPanel'];
   currentUser?: getCurrentUserQuery['currentUser'];
 }
 
 interface IStateProps {
   filters: PatientFilterOptions;
+  pageNumber: number;
+  pageSize: number;
 }
 
 interface IProps {
@@ -61,76 +47,44 @@ interface IProps {
 
 type allProps = IGraphqlProps & IProps & IStateProps;
 
-interface IState extends IPageParams {
+interface IState {
   hasNextPage?: boolean;
   hasPreviousPage?: boolean;
   isPanelOpen: boolean | null;
+  pendingFilters: PatientFilterOptions;
 }
 
 class PatientPanelContainer extends React.Component<allProps, IState> {
-  title = 'Patient roster';
+  title = 'Members';
 
   constructor(props: allProps) {
     super(props);
 
-    this.getNextPage = this.getNextPage.bind(this);
-    this.getPreviousPage = this.getPreviousPage.bind(this);
     this.formattedPatients = this.formattedPatients.bind(this);
-    this.reloadCurrentPage = this.reloadCurrentPage.bind(this);
-
-    const pageParams = getPageParams();
     this.state = {
-      pageNumber: pageParams.pageNumber || INITIAL_PAGE_NUMBER,
-      pageSize: pageParams.pageSize || INITIAL_PAGE_SIZE,
       isPanelOpen: null,
+      pendingFilters: {
+        ageMin: props.filters.ageMin,
+        ageMax: props.filters.ageMax,
+        gender: props.filters.gender,
+        zip: props.filters.zip,
+        careWorkerId: props.filters.careWorkerId,
+      },
     };
-  }
-
-  async getNextPage() {
-    if (this.state.hasNextPage) {
-      const pageNumber = this.state.pageNumber + 1;
-
-      this.props.refetchPatientPanel({
-        pageNumber,
-        pageSize: this.state.pageSize,
-      });
-
-      this.updatePageParams(pageNumber);
-      this.setState({ pageNumber });
-    }
-  }
-
-  async getPreviousPage() {
-    if (this.state.hasPreviousPage) {
-      const pageNumber = this.state.pageNumber - 1;
-
-      await this.props.refetchPatientPanel({
-        pageNumber,
-        pageSize: this.state.pageSize,
-      });
-
-      this.updatePageParams(pageNumber);
-      this.setState({ pageNumber });
-    }
   }
 
   async reloadCurrentPage() {
     await this.props.refetchPatientPanel({
-      pageNumber: this.state.pageNumber,
-      pageSize: this.state.pageSize,
+      pageNumber: this.props.pageNumber,
+      pageSize: this.props.pageSize,
     });
   }
 
   formattedPatients() {
-    return this.props.patientPanel ? this.props.patientPanel.edges.map(edge => edge.node) : [];
-  }
-
-  componentWillReceiveProps(nextProps: allProps) {
-    if (nextProps.patientPanel) {
-      const { hasNextPage, hasPreviousPage } = nextProps.patientPanel.pageInfo;
-
-      this.setState({ hasNextPage, hasPreviousPage });
-    }
+    const patients = this.props.patientPanel
+      ? this.props.patientPanel.edges.map(edge => edge.node)
+      : [];
+    return patients as FullPatientTableRowFragment[];
   }
 
   componentDidMount() {
@@ -143,96 +97,112 @@ class PatientPanelContainer extends React.Component<allProps, IState> {
     this.setState({ isPanelOpen: true });
   };
 
-  handleFilterCancelClick = () => {
-    this.setState({ isPanelOpen: false });
+  handleFilterChange = (filter: PatientFilterOptions) => {
+    this.setState({
+      pendingFilters: {
+        ...this.state.pendingFilters,
+        ...filter,
+      },
+    });
   };
 
-  handleFilterApplyClick = (filters: PatientFilterOptions) => {
-    const { history } = this.props;
-    const { pageSize } = this.state;
+  handleFilterButtonClick = (filters?: PatientFilterOptions) => {
+    const { history, pageSize } = this.props;
+    const { pendingFilters } = this.state;
 
-    const activeFilters = omitBy<PatientFilterOptions>(filters, isNil);
-    if (Object.keys(activeFilters).length > 0) {
-      const filterString = querystring.stringify({
-        pageNumber: INITIAL_PAGE_NUMBER,
-        pageSize,
-        ...activeFilters,
-      });
+    const activeFilters = omitBy<PatientFilterOptions>(filters || pendingFilters, isNil);
+    const filterString = querystring.stringify({
+      pageNumber: INITIAL_PAGE_NUMBER,
+      pageSize,
+      ...activeFilters,
+    });
 
-      history.push({ search: filterString });
-    }
+    history.push({ search: filterString });
+    this.setState({ isPanelOpen: false, pendingFilters: activeFilters });
   };
 
-  updatePageParams = (pageNumber: number) => {
-    const pageParams = getPageParams();
-    pageParams.pageNumber = pageNumber;
-
-    this.props.history.push({ search: querystring.stringify(pageParams) });
+  createQueryString = (pageNumber: number, pageSize: number) => {
+    const activeFilters = omitBy<PatientFilterOptions>(this.props.filters, isNil);
+    return querystring.stringify({
+      pageNumber,
+      pageSize,
+      ...activeFilters,
+    });
   };
 
-  render() {
-    const { error, loading, currentUser } = this.props;
-    const { isPanelOpen } = this.state;
+  renderButtons() {
+    const { currentUser, filters } = this.props;
     const isAdmin = currentUser && currentUser.userRole === 'admin';
+    const filterNames = Object.keys(filters);
+    let numberFilters = filterNames.length;
+    if (filterNames.includes('ageMin') && filterNames.includes('ageMax')) {
+      numberFilters = numberFilters - 1;
+    }
+
+    return (
+      <div>
+        <FormattedMessage id="patientPanel.filter">
+          {(message: string) => {
+            const label = numberFilters ? `${message}s (${numberFilters})` : message;
+            return (
+              <Button label={label} onClick={this.handleFilterClick} className={styles.button} />
+            );
+          }}
+        </FormattedMessage>
+        {isAdmin && (
+          <Button
+            messageId="patientPanel.addPatient"
+            onClick={this.goToIntake}
+            className={styles.button}
+          />
+        )}
+      </div>
+    );
+  }
+
+  render(): JSX.Element {
+    const { loading, filters, patientPanel, pageSize, pageNumber, error } = this.props;
+    const { isPanelOpen, pendingFilters } = this.state;
+    const memberCount = patientPanel ? patientPanel.totalCount : 0;
+    const numberFilters = Object.keys(filters).length;
 
     return (
       <div className={styles.container}>
         <div className={styles.header}>
           <div className={styles.headerRow}>
-            <div className={styles.headerText}>
-              <FormattedMessage id="patientPanel.header">
-                {(message: string) => <div className={styles.headerTitle}>{message}</div>}
-              </FormattedMessage>
-              <FormattedMessage id="patientPanel.description">
-                {(message: string) => <div className={styles.headerDescription}>{message}</div>}
-              </FormattedMessage>
-            </div>
-            <div>
-              <Button
-                messageId="patientPanel.filter"
-                onClick={this.handleFilterClick}
-                className={styles.button}
-              />
-              {isAdmin && (
-                <Button
-                  messageId="patientPanel.addPatient"
-                  onClick={this.goToIntake}
-                  className={styles.button}
-                />
-              )}
-            </div>
+            <PatientPanelHeader filters={filters} totalResults={memberCount} />
+            {this.renderButtons()}
           </div>
         </div>
         <div className={styles.patientPanelBody}>
-          <PatientRoster
+          <PatientTable
+            patients={this.formattedPatients()}
+            messageIdPrefix="patientPanel"
+            isQueried={!!numberFilters}
             isLoading={loading}
             error={error}
-            patients={this.formattedPatients()}
             onRetryClick={this.reloadCurrentPage}
-            hasNextPage={this.state.hasNextPage}
-            hasPreviousPage={this.state.hasPreviousPage}
-            onNextClick={this.getNextPage}
-            onPreviousClick={this.getPreviousPage}
           />
+          {!!patientPanel && (
+            <PatientTablePagination
+              pageInfo={patientPanel.pageInfo}
+              totalCount={patientPanel.totalCount}
+              pageNumber={pageNumber}
+              pageSize={pageSize}
+              getQuery={this.createQueryString}
+            />
+          )}
         </div>
         <PatientFilterPanel
-          onCancelClick={this.handleFilterCancelClick}
-          onApplyClick={this.handleFilterApplyClick}
+          filters={pendingFilters}
+          onClick={this.handleFilterButtonClick}
+          onChange={this.handleFilterChange}
           isVisible={isPanelOpen}
         />
       </div>
     );
   }
 }
-
-const getPageParams = (): IPageParams => {
-  const pageParams = querystring.parse(window.location.search.substring(1));
-
-  return {
-    pageNumber: Number(pageParams.pageNumber || INITIAL_PAGE_NUMBER),
-    pageSize: Number(pageParams.pageSize || INITIAL_PAGE_SIZE),
-  };
-};
 
 const mapStateToProps = (state: IState, props: IProps): IStateProps => {
   const searchParams = querystring.parse(props.location.search.substring(1));
@@ -246,18 +216,19 @@ const mapStateToProps = (state: IState, props: IProps): IStateProps => {
   };
 
   const activeFilters = omitBy<PatientFilterOptions>(filters, isNil);
-  return { filters: activeFilters };
+  return {
+    filters: activeFilters,
+    pageNumber: Number(searchParams.pageNumber || INITIAL_PAGE_NUMBER),
+    pageSize: Number(searchParams.pageSize || INITIAL_PAGE_SIZE),
+  };
 };
 
 export default compose(
   withRouter,
   connect<IStateProps, {}>(mapStateToProps as (args?: any) => IStateProps),
   graphql<IGraphqlProps, IProps & IStateProps, allProps>(patientPanelQuery as any, {
-    options: (props: IProps & IStateProps) => ({
-      variables: {
-        ...getPageParams(),
-        filters: props.filters || {},
-      },
+    options: ({ pageNumber, pageSize, filters }) => ({
+      variables: { pageNumber, pageSize, filters },
     }),
     props: ({ data }) => ({
       refetchPatientPanel: data ? data.refetch : null,

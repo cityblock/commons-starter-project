@@ -52,9 +52,10 @@ export class EditableMultilineText extends React.Component<IProps, IState> {
   }
 
   updateTextHeight(): void {
-    const height = this.editText && this.state.editedText.length >= SHORT_TITLE_CUTOFF
-      ? `${this.editText.scrollHeight + 2}px`
-      : SHORT_TITLE_HEIGHT;
+    const height =
+      this.editText && this.state.editedText.length >= SHORT_TITLE_CUTOFF
+        ? `${this.editText.scrollHeight + 2}px`
+        : SHORT_TITLE_HEIGHT;
 
     if (this.editText && height !== BASE_TEXT_HEIGHT) {
       this.editText.style.height = height;

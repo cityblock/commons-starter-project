@@ -34,28 +34,32 @@ const businessToggles: IBusinessToggles = {
     name: 'canEditCareTeam',
     isCareTeamCheckRequired: false,
   },
-  areAllMembersViewable: {
-    name: 'areAllMembersViewable',
+  canViewAllMembers: {
+    name: 'canViewAllMembers',
     isCareTeamCheckRequired: false,
   },
-  areAllMembersEditable: {
-    name: 'areAllMembersEditable',
+  canEditAllMembers: {
+    name: 'canEditAllMembers',
     isCareTeamCheckRequired: false,
   },
-  areMembersOnCareTeamViewable: {
-    name: 'areMembersOnCareTeamViewable',
+  canViewMembersOnPanel: {
+    name: 'canEditMembersOnPanel',
     isCareTeamCheckRequired: true,
   },
-  areMembersOnCareTeamEditable: {
-    name: 'areMembersOnCareTeamEditable',
+  canEditMembersOnPanel: {
+    name: 'canEditMembersOnPanel',
     isCareTeamCheckRequired: true,
+  },
+  canShowAllMembersInPatientPanel: {
+    name: 'canShowAllMembersInPatientPanel',
+    isCareTeamCheckRequired: false,
   },
   canDisenrollPatient: {
     name: 'canDisenrollPatient',
     isCareTeamCheckRequired: false,
   },
-  isBreakGlassAlwaysEnabled: {
-    name: 'isBreakGlassAlwaysEnabled',
+  canAutoBreakGlass: {
+    name: 'canAutoBreakGlass',
     isCareTeamCheckRequired: false,
   },
 };

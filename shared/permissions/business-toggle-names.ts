@@ -5,9 +5,10 @@ export type BusinessToggleName =
   | 'canDeleteUsers'
   | 'canBulkAssign'
   | 'canEditCareTeam'
-  | 'areAllMembersViewable'
-  | 'areAllMembersEditable'
-  | 'areMembersOnCareTeamViewable'
-  | 'areMembersOnCareTeamEditable'
+  | 'canViewAllMembers'
+  | 'canEditAllMembers'
+  | 'canViewMembersOnPanel'
+  | 'canEditMembersOnPanel'
+  | 'canShowAllMembersInPatientPanel'
   | 'canDisenrollPatient'
-  | 'isBreakGlassAlwaysEnabled';
+  | 'canAutoBreakGlass';

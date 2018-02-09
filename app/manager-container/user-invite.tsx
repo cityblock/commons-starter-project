@@ -39,7 +39,7 @@ class UserInvite extends React.Component<IProps, IState> {
     if (this.state.localEmail) {
       try {
         // only accept alphanumeric characters (ie no @cityblock.com)
-        if (!/^[a-zA-Z0-9.]+$/.test(this.state.localEmail)) {
+        if (/^[a-zA-Z0-9.]+$/.test(this.state.localEmail)) {
           this.setState({ loading: true });
           this.props.inviteUser(this.state.localEmail);
           this.setState({ loading: false, localEmail: '' });

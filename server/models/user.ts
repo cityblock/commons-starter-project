@@ -1,7 +1,7 @@
-import { Model, RelationMappings, Transaction, ValidationError } from 'objection';
-import * as uuid from 'uuid/v4';
-import { isEmail } from 'validator';
+import { Model, RelationMappings, Transaction } from 'objection';
+import { Permissions, PERMISSIONS } from '../../shared/permissions/permissions-mapping';
 import { IPaginatedResults, IPaginationOptions } from '../db';
+import BaseModel from './base-model';
 import Clinic from './clinic';
 import GoogleAuth from './google-auth';
 
@@ -68,7 +68,7 @@ export interface IUserFilterOptions extends IPaginationOptions {
 }
 
 /* tslint:disable:member-ordering */
-export default class User extends Model {
+export default class User extends BaseModel {
   id: string;
   createdAt: string;
   updatedAt: string;
@@ -86,6 +86,7 @@ export default class User extends Model {
   athenaProviderId: number;
   googleProfileImageUrl: string;
   phone: string;
+  permissions: Permissions;
 
   static tableName = 'user';
 
@@ -100,7 +101,7 @@ export default class User extends Model {
       lastLoginAt: { type: 'string' },
       firstName: { type: 'string', minLength: 1 }, // cannot be blank
       lastName: { type: 'string', minLength: 1 }, // cannot be blank
-      email: { type: 'string', minLength: 1 },
+      email: { type: 'string', format: 'email' },
       locale: { type: 'string', enum: LOCALE },
       userRole: {
         type: 'string',
@@ -113,6 +114,7 @@ export default class User extends Model {
       deletedAt: { type: 'string' },
       updatedAt: { type: 'string' },
       phone: { type: 'string' },
+      permissions: { type: 'string', enum: PERMISSIONS },
     },
     required: ['email', 'userRole', 'homeClinicId'],
   };
@@ -148,29 +150,6 @@ export default class User extends Model {
       },
     },
   };
-
-  async $beforeSave(inserting: boolean) {
-    if (this.email && !isEmail(this.email)) {
-      throw new ValidationError({
-        email: [
-          {
-            message: 'email is not valid',
-          },
-        ],
-      });
-    }
-  }
-
-  async $beforeInsert() {
-    await this.$beforeSave(true);
-    this.id = uuid();
-    this.createdAt = new Date().toISOString();
-  }
-
-  async $beforeUpdate() {
-    await this.$beforeSave(false);
-    this.updatedAt = new Date().toISOString();
-  }
 
   static async getLastLoggedIn(userId: string, txn: Transaction): Promise<string | undefined> {
     // TODO: Figure out how to return select fields via knex

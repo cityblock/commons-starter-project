@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { isEmail } from 'validator';
 import * as styles from '../shared/css/create-form.css';
 import * as formStyles from '../shared/css/forms.css';
 import * as loadingStyles from '../shared/css/loading-spinner.css';
@@ -39,7 +38,8 @@ class UserInvite extends React.Component<IProps, IState> {
     event.preventDefault();
     if (this.state.localEmail) {
       try {
-        if (isEmail(`${this.state.localEmail}@cityblock.com`)) {
+        // only accept alphanumeric characters (ie no @cityblock.com)
+        if (!/^[a-zA-Z0-9.]+$/.test(this.state.localEmail)) {
           this.setState({ loading: true });
           this.props.inviteUser(this.state.localEmail);
           this.setState({ loading: false, localEmail: '' });

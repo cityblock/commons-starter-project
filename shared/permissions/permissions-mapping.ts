@@ -1,16 +1,24 @@
 import { BusinessToggleName } from './business-toggle-names';
 
-type Colors = 'green' | 'pink' | 'orange' | 'blue' | 'yellow' | 'red';
+export type Permissions = 'green' | 'pink' | 'orange' | 'blue' | 'yellow' | 'red';
+export const PERMISSIONS: Permissions[] = [
+  'green',
+  'pink',
+  'orange',
+  'blue',
+  'yellow',
+  'red',
+];
 
-type ColorMapping = {
+type PermissionsMapping = {
   [K in BusinessToggleName]: boolean;
 };
 
-type ColorMappings = {
-  [K in Colors]: ColorMapping;
+type PermissionsMappings = {
+  [K in Permissions]: PermissionsMapping;
 };
 
-const colorMappings: ColorMappings = {
+const PermissionsMappings: PermissionsMappings = {
   green: {
     isBuilderEnabled: true,
     isManagerEnabled: true,

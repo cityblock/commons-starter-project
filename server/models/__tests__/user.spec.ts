@@ -22,19 +22,12 @@ describe('user model', () => {
     await transaction(User.knex(), async txn => {
       const clinic = await Clinic.create(createMockClinic(), txn);
       const user = await User.create(createMockUser(11, clinic.id, userRole), txn);
-      expect(user).toMatchObject({
-        id: user.id,
-        firstName: 'dan',
-        lastName: 'plant',
-      });
+      expect(user.firstName).toBe('dan');
+      expect(user.lastName).toBe('plant');
+      expect(user.permissions).toBe('red');
 
       const userById = await User.get(user.id, txn);
-      expect(userById).toMatchObject({
-        id: user.id,
-        firstName: 'dan',
-        lastName: 'plant',
-        homeClinicId: clinic.id,
-      });
+      expect(userById).toEqual(user);
     });
   });
 
@@ -64,7 +57,7 @@ describe('user model', () => {
   it('should not create a user when given an invalid email address', async () => {
     await transaction(User.knex(), async txn => {
       const email = 'nonEmail';
-      const message = 'email is not valid';
+      const message = 'should match format "email"';
       const clinic = await Clinic.create(createMockClinic(), txn);
 
       await expect(
@@ -72,7 +65,15 @@ describe('user model', () => {
           { firstName: 'Jon', lastName: 'Snow', email, userRole, homeClinicId: clinic.id },
           txn,
         ),
-      ).rejects.toMatchObject(new Error(JSON.stringify({ email: [{ message }] }, null, '  ')));
+      ).rejects.toMatchObject(
+        new Error(
+          JSON.stringify(
+            { email: [{ message, keyword: 'format', params: { format: 'email' } }] },
+            null,
+            '  ',
+          ),
+        ),
+      );
     });
   });
 

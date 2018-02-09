@@ -1021,7 +1021,6 @@ type ProgressNoteTemplate implements uniqueId {
   createdAt: String!
   updatedAt: String!
   deletedAt: String
-  carePlanSuggestions: [CarePlanSuggestion!]!
 }
 
 type ProgressNote implements uniqueId {

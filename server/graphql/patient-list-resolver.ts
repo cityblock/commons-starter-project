@@ -1,4 +1,10 @@
-import { IPatientListCreateInput, IPatientListDeleteInput, IPatientListEditInput } from 'schema';
+import {
+  IPatientListCreateInput,
+  IPatientListDeleteInput,
+  IPatientListEditInput,
+  IRootMutationType,
+  IRootQueryType,
+} from 'schema';
 import PatientList from '../models/patient-list';
 import accessControls from './shared/access-controls';
 import { checkUserLoggedIn, IContext } from './shared/utils';
@@ -19,7 +25,7 @@ export async function resolvePatientLists(
   root: any,
   args: any,
   { db, userRole, userId, txn }: IContext,
-): Promise<PatientList[]> {
+): Promise<IRootQueryType['patientLists']> {
   await accessControls.isAllowedForUser(userRole, 'view', 'patientList');
   checkUserLoggedIn(userId);
 
@@ -30,7 +36,7 @@ export async function resolvePatientList(
   root: any,
   args: { patientListId: string },
   { db, userRole, userId, txn }: IContext,
-): Promise<PatientList> {
+): Promise<IRootQueryType['patientList']> {
   await accessControls.isAllowedForUser(userRole, 'view', 'patientList');
   checkUserLoggedIn(userId);
 
@@ -41,7 +47,7 @@ export async function patientListCreate(
   root: any,
   { input }: IPatientListCreateArgs,
   { db, userRole, userId, txn }: IContext,
-): Promise<PatientList> {
+): Promise<IRootMutationType['patientListCreate']> {
   await accessControls.isAllowedForUser(userRole, 'create', 'patientList');
   checkUserLoggedIn(userId);
 
@@ -52,11 +58,10 @@ export async function patientListEdit(
   root: any,
   { input }: IEditPatientListOptions,
   { db, userRole, userId, txn }: IContext,
-): Promise<PatientList> {
+): Promise<IRootMutationType['patientListEdit']> {
   await accessControls.isAllowedForUser(userRole, 'edit', 'patientList');
   checkUserLoggedIn(userId);
 
-  // TODO: fix typings here
   return PatientList.edit(input as any, input.patientListId, txn);
 }
 
@@ -64,7 +69,7 @@ export async function patientListDelete(
   root: any,
   { input }: IDeletePatientListOptions,
   { db, userRole, userId, txn }: IContext,
-): Promise<PatientList> {
+): Promise<IRootMutationType['patientListDelete']> {
   await accessControls.isAllowedForUser(userRole, 'delete', 'patientList');
   checkUserLoggedIn(userId);
 

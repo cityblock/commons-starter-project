@@ -1,4 +1,4 @@
-import { IProgressNoteActivity } from 'schema';
+import { IRootQueryType } from 'schema';
 import CarePlanUpdateEvent from '../models/care-plan-update-event';
 import PatientAnswerEvent from '../models/patient-answer-event';
 import PatientScreeningToolSubmission from '../models/patient-screening-tool-submission';
@@ -15,29 +15,19 @@ export async function resolveProgressNoteActivityForProgressNote(
   root: any,
   args: IResolveProgressNoteActivityOptions,
   { db, userRole, userId, txn }: IContext,
-): Promise<IProgressNoteActivity> {
+): Promise<IRootQueryType['progressNoteActivityForProgressNote']> {
   const { progressNoteId } = args;
   await accessControls.isAllowed(userRole, 'view', 'progressNote');
   checkUserLoggedIn(userId);
 
-  // TODO: Fix typings
-  const taskEvents = (await TaskEvent.getAllForProgressNote(progressNoteId, txn)) as any;
-  const patientAnswerEvents = (await PatientAnswerEvent.getAllForProgressNote(
+  const taskEvents = await TaskEvent.getAllForProgressNote(progressNoteId, txn);
+  const patientAnswerEvents = await PatientAnswerEvent.getAllForProgressNote(progressNoteId, txn);
+  const carePlanUpdateEvents = await CarePlanUpdateEvent.getAllForProgressNote(progressNoteId, txn);
+  const quickCallEvents = await QuickCall.getQuickCallsForProgressNote(progressNoteId, txn);
+  const patientScreeningToolSubmissions = await PatientScreeningToolSubmission.getForProgressNote(
     progressNoteId,
     txn,
-  )) as any;
-  const carePlanUpdateEvents = (await CarePlanUpdateEvent.getAllForProgressNote(
-    progressNoteId,
-    txn,
-  )) as any;
-  const quickCallEvents = (await QuickCall.getQuickCallsForProgressNote(
-    progressNoteId,
-    txn,
-  )) as any;
-  const patientScreeningToolSubmissions = (await PatientScreeningToolSubmission.getForProgressNote(
-    progressNoteId,
-    txn,
-  )) as any;
+  );
 
   return {
     taskEvents,

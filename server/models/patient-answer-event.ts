@@ -34,7 +34,7 @@ export default class PatientAnswerEvent extends BaseModel {
   patientAnswerId: string;
   patientAnswer: PatientAnswer;
   previousPatientAnswerId: string;
-  previousPatientAnswser: PatientAnswer;
+  previousPatientAnswer: PatientAnswer;
   eventType: EventTypes;
   progressNoteId: string;
   progressNote: ProgressNote;

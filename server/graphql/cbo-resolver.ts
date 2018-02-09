@@ -56,8 +56,7 @@ export async function CBOCreate(
   await accessControls.isAllowedForUser(userRole, 'create', 'CBO');
   checkUserLoggedIn(userId);
 
-  // TODO: Fix typings here
-  return CBO.create(input as any, txn);
+  return CBO.create({ ...input, fax: input.fax || undefined }, txn);
 }
 
 export async function CBOEdit(

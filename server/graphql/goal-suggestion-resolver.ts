@@ -1,6 +1,5 @@
-import { IGoalSuggestInput } from 'schema';
+import { IGoalSuggestInput, IRootMutationType, IRootQueryType } from 'schema';
 import GoalSuggestion from '../models/goal-suggestion';
-import GoalSuggestionTemplate from '../models/goal-suggestion-template';
 import accessControls from './shared/access-controls';
 import { IContext } from './shared/utils';
 
@@ -12,7 +11,7 @@ export async function resolveGoalSuggestionTemplatesForAnswer(
   root: any,
   args: { answerId: string },
   { db, userRole, txn }: IContext,
-): Promise<GoalSuggestionTemplate[]> {
+): Promise<IRootQueryType['goalSuggestionTemplatesForAnswer']> {
   await accessControls.isAllowed(userRole, 'view', 'goalSuggestion');
 
   return GoalSuggestion.getForAnswer(args.answerId, txn);
@@ -22,7 +21,7 @@ export async function goalSuggestionCreate(
   root: any,
   args: IGoalSuggestOptions,
   { db, userRole, txn }: IContext,
-): Promise<GoalSuggestionTemplate[]> {
+): Promise<IRootMutationType['goalSuggestionCreate']> {
   await accessControls.isAllowed(userRole, 'view', 'goalSuggestion');
 
   return GoalSuggestion.create(
@@ -39,7 +38,7 @@ export async function goalSuggestionDelete(
   root: any,
   args: IGoalSuggestOptions,
   { db, userRole, txn }: IContext,
-): Promise<GoalSuggestionTemplate[]> {
+): Promise<IRootMutationType['goalSuggestionDelete']> {
   await accessControls.isAllowed(userRole, 'view', 'goalSuggestion');
 
   return GoalSuggestion.delete(

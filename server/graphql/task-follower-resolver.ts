@@ -53,7 +53,6 @@ export async function taskUserUnfollow(
 ): Promise<IRootMutationType['taskUserUnfollow']> {
   const { userRole, userId, txn } = context;
   const { taskId } = input;
-  // TODO: Improve access controls here. Requirements unclear ATM
   await accessControls.isAllowed(userRole, 'edit', 'task');
   checkUserLoggedIn(userId);
 

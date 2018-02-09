@@ -4,6 +4,8 @@ import {
   IProgressNoteCompleteSupervisorReviewInput,
   IProgressNoteCreateInput,
   IProgressNoteEditInput,
+  IRootMutationType,
+  IRootQueryType,
 } from 'schema';
 import ProgressNote from '../models/progress-note';
 import accessControls from './shared/access-controls';
@@ -46,7 +48,7 @@ export async function progressNoteCreate(
   root: any,
   { input }: IProgressNoteCreateArgs,
   { userRole, userId, txn }: IContext,
-) {
+): Promise<IRootMutationType['progressNoteCreate']> {
   await accessControls.isAllowed(userRole, 'create', 'progressNote');
   checkUserLoggedIn(userId);
 
@@ -57,7 +59,7 @@ export async function progressNoteComplete(
   root: any,
   { input }: ICompleteProgressNoteOptions,
   { userRole, userId, txn }: IContext,
-) {
+): Promise<IRootMutationType['progressNoteComplete']> {
   await accessControls.isAllowed(userRole, 'edit', 'progressNote');
   checkUserLoggedIn(userId);
 
@@ -68,7 +70,7 @@ export async function progressNoteEdit(
   root: any,
   { input }: IEditProgressNoteOptions,
   { userRole, userId, txn }: IContext,
-) {
+): Promise<IRootMutationType['progressNoteEdit']> {
   await accessControls.isAllowed(userRole, 'edit', 'progressNote');
   checkUserLoggedIn(userId);
 
@@ -92,7 +94,7 @@ export async function progressNoteAddSupervisorNotes(
   root: any,
   { input }: IAddSupervisorNotesOptions,
   { userRole, userId, txn }: IContext,
-) {
+): Promise<IRootMutationType['progressNoteAddSupervisorNotes']> {
   await accessControls.isAllowed(userRole, 'edit', 'progressNote');
   checkUserLoggedIn(userId);
 
@@ -111,7 +113,7 @@ export async function progressNoteCompleteSupervisorReview(
   root: any,
   { input }: IProgressNoteCompleteSupervisorReviewOptions,
   { userRole, userId, txn }: IContext,
-) {
+): Promise<IRootMutationType['progressNoteCompleteSupervisorReview']> {
   await accessControls.isAllowed(userRole, 'edit', 'progressNote');
   checkUserLoggedIn(userId);
 
@@ -130,7 +132,7 @@ export async function resolveProgressNote(
   root: any,
   args: IResolveProgressNoteOptions,
   { db, userRole, txn }: IContext,
-) {
+): Promise<IRootQueryType['progressNote']> {
   await accessControls.isAllowed(userRole, 'view', 'progressNote');
 
   return ProgressNote.get(args.progressNoteId, txn);
@@ -140,7 +142,7 @@ export async function resolveProgressNotesForPatient(
   root: any,
   args: IResolveProgressNotesForPatientOptions,
   { db, userRole, txn }: IContext,
-) {
+): Promise<IRootQueryType['progressNotesForPatient']> {
   await accessControls.isAllowed(userRole, 'view', 'progressNote');
 
   return ProgressNote.getAllForPatient(args.patientId, args.completed, txn);
@@ -150,7 +152,7 @@ export async function resolveProgressNotesForCurrentUser(
   root: any,
   args: IResolveProgressNotesForCurrentUserOptions,
   { db, userRole, userId, txn }: IContext,
-) {
+): Promise<IRootQueryType['progressNotesForCurrentUser']> {
   await accessControls.isAllowed(userRole, 'view', 'progressNote');
   checkUserLoggedIn(userId);
 
@@ -161,7 +163,7 @@ export async function resolveProgressNotesForSupervisorReview(
   root: any,
   args: any,
   { db, userRole, userId, txn }: IContext,
-) {
+): Promise<IRootQueryType['progressNotesForSupervisorReview']> {
   await accessControls.isAllowed(userRole, 'view', 'progressNote');
   checkUserLoggedIn(userId);
 

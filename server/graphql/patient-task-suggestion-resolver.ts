@@ -1,4 +1,8 @@
-import { IPatientTaskSuggestionAcceptInput, IPatientTaskSuggestionDismissInput } from 'schema';
+import {
+  IPatientTaskSuggestionAcceptInput,
+  IPatientTaskSuggestionDismissInput,
+  IRootMutationType,
+} from 'schema';
 import { createTaskForTaskTemplate } from '../lib/create-task-for-task-template';
 import PatientTaskSuggestion from '../models/patient-task-suggestion';
 import TaskTemplate from '../models/task-template';
@@ -50,7 +54,7 @@ export async function patientTaskSuggestionAccept(
   root: any,
   { input }: IPatientTaskSuggestionAcceptArgs,
   context: IContext,
-): Promise<PatientTaskSuggestion | undefined> {
+): Promise<IRootMutationType['patientTaskSuggestionAccept']> {
   const { userRole, userId, txn } = context;
   await accessControls.isAllowed(userRole, 'edit', 'patientTaskSuggestion');
   checkUserLoggedIn(userId);
@@ -66,5 +70,5 @@ export async function patientTaskSuggestionAccept(
     }
   }
 
-  return patientTaskSuggestion;
+  return patientTaskSuggestion || null;
 }

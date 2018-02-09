@@ -25,15 +25,15 @@ const EAGER_QUERY = '[patient.[patientInfo], taskTemplate, acceptedBy, dismissed
 export default class PatientTaskSuggestion extends BaseModel {
   patientId: string;
   patient: Patient;
-  taskTemplateId?: string;
-  taskTemplate?: TaskTemplate;
-  acceptedById?: string;
-  acceptedBy?: User;
-  acceptedAt?: string;
-  dismissedById?: string;
-  dismissedBy?: User;
-  dismissedReason?: string;
-  dismissedAt?: string;
+  taskTemplateId: string | null;
+  taskTemplate: TaskTemplate | null;
+  acceptedById: string | null;
+  acceptedBy: User | null;
+  acceptedAt: string | null;
+  dismissedById: string | null;
+  dismissedBy: User | null;
+  dismissedReason: string | null;
+  dismissedAt: string | null;
 
   static tableName = 'patient_task_suggestion';
 

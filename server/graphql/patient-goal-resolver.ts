@@ -1,5 +1,11 @@
 import { omit } from 'lodash';
-import { IPatientGoalCreateInput, IPatientGoalDeleteInput, IPatientGoalEditInput } from 'schema';
+import {
+  IPatientGoalCreateInput,
+  IPatientGoalDeleteInput,
+  IPatientGoalEditInput,
+  IRootMutationType,
+  IRootQueryType,
+} from 'schema';
 import Concern from '../models/concern';
 import PatientConcern from '../models/patient-concern';
 import PatientGoal from '../models/patient-goal';
@@ -26,7 +32,7 @@ export async function patientGoalCreate(
   root: any,
   { input }: IPatientGoalCreateArgs,
   context: IContext,
-) {
+): Promise<IRootMutationType['patientGoalCreate']> {
   const { userRole, userId, txn } = context;
   await accessControls.isAllowed(userRole, 'create', 'patientGoal');
   checkUserLoggedIn(userId);
@@ -70,7 +76,7 @@ export async function resolvePatientGoal(
   root: any,
   args: { patientGoalId: string },
   { db, userRole, txn }: IContext,
-) {
+): Promise<IRootQueryType['patientGoal']> {
   await accessControls.isAllowed(userRole, 'view', 'patientGoal');
 
   return PatientGoal.get(args.patientGoalId, txn);
@@ -80,7 +86,7 @@ export async function resolvePatientGoalsForPatient(
   root: any,
   args: { patientId: string },
   { db, userRole, txn }: IContext,
-) {
+): Promise<IRootQueryType['patientGoals']> {
   await accessControls.isAllowed(userRole, 'view', 'patientGoal');
 
   return PatientGoal.getForPatient(args.patientId, txn);
@@ -90,19 +96,18 @@ export async function patientGoalEdit(
   root: any,
   args: IEditPatientGoalOptions,
   { db, userRole, userId, txn }: IContext,
-) {
+): Promise<IRootMutationType['patientGoalEdit']> {
   await accessControls.isAllowedForUser(userRole, 'edit', 'patientGoal');
   checkUserLoggedIn(userId);
 
-  // TODO: fix typings here
-  return PatientGoal.update(args.input.patientGoalId, args.input as any, userId!, txn);
+  return PatientGoal.update(args.input.patientGoalId, args.input, userId!, txn);
 }
 
 export async function patientGoalDelete(
   root: any,
   args: IDeletePatientGoalOptions,
   { db, userRole, userId, txn }: IContext,
-) {
+): Promise<IRootMutationType['patientGoalDelete']> {
   await accessControls.isAllowedForUser(userRole, 'edit', 'patientGoal');
   checkUserLoggedIn(userId);
 

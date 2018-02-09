@@ -28,8 +28,8 @@ const EAGER_QUERY = '[progressNoteTemplate, user, patient.[patientInfo], supervi
 export default class ProgressNote extends BaseModel {
   patientId: string;
   userId: string;
-  progressNoteTemplateId?: string;
-  progressNoteTemplate?: ProgressNoteTemplate;
+  progressNoteTemplateId: string | null;
+  progressNoteTemplate: ProgressNoteTemplate | null;
   location: string;
   startedAt: string;
   completedAt: string;

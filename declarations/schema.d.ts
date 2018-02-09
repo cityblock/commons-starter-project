@@ -1330,7 +1330,6 @@ declare module 'schema' {
     createdAt: string;
     updatedAt: string;
     deletedAt: string | null;
-    carePlanSuggestions: Array<ICarePlanSuggestion>;
   }
 
 

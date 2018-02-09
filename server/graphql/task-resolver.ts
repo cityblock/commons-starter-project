@@ -259,7 +259,6 @@ export async function resolvePatientTasks(
   args: IPatientTasksFilterOptions,
   { db, userRole, txn }: IContext,
 ): Promise<IRootQueryType['tasksForPatient']> {
-  // TODO: Improve task access controls
   await accessControls.isAllowed(userRole, 'view', 'task');
 
   const pageNumber = args.pageNumber || 0;

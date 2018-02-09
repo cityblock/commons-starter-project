@@ -28,7 +28,6 @@ export async function taskCommentCreate(
   const { taskId, body } = input;
   const { userId, userRole, txn } = context;
 
-  // TODO: Improve access controls here. Requirements unclear ATM
   await accessControls.isAllowed(userRole, 'edit', 'task');
   checkUserLoggedIn(userId);
 
@@ -58,7 +57,6 @@ export async function taskCommentEdit(
 ): Promise<IRootMutationType['taskCommentEdit']> {
   const { userRole, userId, txn } = context;
   const { taskCommentId, body } = input;
-  // TODO: Improve access controls here. Requirements unclear ATM
   await accessControls.isAllowed(userRole, 'edit', 'task');
   checkUserLoggedIn(userId);
 
@@ -88,7 +86,7 @@ export async function taskCommentDelete(
 ): Promise<IRootMutationType['taskCommentDelete']> {
   const { userRole, userId, txn } = context;
   const { taskCommentId } = input;
-  // TODO: Improve access controls here. Requirements unclear ATM
+
   await accessControls.isAllowed(userRole, 'edit', 'task');
   checkUserLoggedIn(userId);
 
@@ -112,7 +110,6 @@ export async function resolveTaskComments(
   args: IPaginationOptions & { taskId: string },
   { db, userRole, userId, txn }: IContext,
 ): Promise<IRootQueryType['taskComments']> {
-  // TODO: Improve task access controls
   await accessControls.isAllowed(userRole, 'view', 'task');
   checkUserLoggedIn(userId);
 

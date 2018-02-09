@@ -1,5 +1,5 @@
 import { isNil, omitBy } from 'lodash';
-import { IPatientInfo, IPatientInfoEditInput } from 'schema';
+import { IPatientInfoEditInput, IRootMutationType } from 'schema';
 import PatientInfo from '../models/patient-info';
 import accessControls from './shared/access-controls';
 import { checkUserLoggedIn, IContext } from './shared/utils';
@@ -12,7 +12,7 @@ export async function patientInfoEdit(
   source: any,
   { input }: IPatientInfoEditOptions,
   { userRole, userId, logger, txn }: IContext,
-): Promise<IPatientInfo> {
+): Promise<IRootMutationType['patientInfoEdit']> {
   const patientInfo = await PatientInfo.get(input.patientInfoId, txn);
   await accessControls.isAllowedForUser(userRole, 'edit', 'patient', patientInfo.patientId, userId);
   checkUserLoggedIn(userId);

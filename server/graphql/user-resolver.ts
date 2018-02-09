@@ -1,8 +1,9 @@
 import {
   ICurrentUserEditInput,
+  IRootMutationType,
+  IRootQueryType,
   IUserCreateInput,
   IUserDeleteInput,
-  IUserEdges,
   IUserEditRoleInput,
   IUserLoginInput,
   IUserNode,
@@ -51,7 +52,11 @@ export interface IEditCurrentUserOptions {
   input: ICurrentUserEditInput;
 }
 
-export async function userCreate(root: any, { input }: IUserCreateArgs, context: IContext) {
+export async function userCreate(
+  root: any,
+  { input }: IUserCreateArgs,
+  context: IContext,
+): Promise<IRootMutationType['userCreate']> {
   const { userRole, txn } = context;
   const { email, homeClinicId } = input;
   await accessControls.isAllowed(userRole, 'create', 'user');
@@ -72,7 +77,11 @@ export async function userCreate(root: any, { input }: IUserCreateArgs, context:
   }
 }
 
-export async function userEditRole(root: any, { input }: IUserEditRoleOptions, context: IContext) {
+export async function userEditRole(
+  root: any,
+  { input }: IUserEditRoleOptions,
+  context: IContext,
+): Promise<IRootMutationType['userEditRole']> {
   const { txn } = context;
   const { userRole, email } = input;
   await accessControls.isAllowed(context.userRole, 'edit', 'user');
@@ -94,7 +103,7 @@ export async function userDelete(
   root: any,
   { input }: IUserDeleteOptions,
   { db, userRole, txn }: IContext,
-) {
+): Promise<IRootMutationType['userDelete']> {
   const { email } = input;
   await accessControls.isAllowed(userRole, 'delete', 'user');
 
@@ -111,7 +120,7 @@ export async function resolveUser(
   root: any,
   args: IResolveUserOptions,
   { db, userRole, txn }: IContext,
-) {
+): Promise<IRootQueryType['user']> {
   await accessControls.isAllowed(userRole, 'view', 'user');
 
   return User.get(args.userId, txn);
@@ -121,7 +130,7 @@ export async function resolveCurrentUser(
   root: any,
   args: any,
   { db, userId, userRole, txn }: IContext,
-) {
+): Promise<IRootQueryType['currentUser']> {
   await accessControls.isAllowed(userRole, 'view', 'user');
   checkUserLoggedIn(userId);
 
@@ -132,7 +141,7 @@ export async function currentUserEdit(
   root: any,
   args: IEditCurrentUserOptions,
   { db, userId, userRole, txn }: IContext,
-) {
+): Promise<IRootMutationType['currentUserEdit']> {
   await accessControls.isAllowedForUser(userRole, 'edit', 'user', userId, userId);
   checkUserLoggedIn(userId);
 
@@ -152,7 +161,7 @@ export async function resolveUsers(
   root: any,
   args: Partial<IUserFilterOptions>,
   { db, userRole, txn }: IContext,
-): Promise<IUserEdges> {
+): Promise<IRootQueryType['users']> {
   await accessControls.isAllowed(userRole, 'view', 'allUsers');
 
   const pageNumber = args.pageNumber || 0;
@@ -191,7 +200,7 @@ export async function resolveUserSummaryList(
   root: any,
   { userRoleFilters }: IUserSummaryOptions,
   { db, userRole, txn }: IContext,
-) {
+): Promise<IRootQueryType['userSummaryList']> {
   await accessControls.isAllowed(userRole, 'view', 'allUsers');
   return User.getUserSummaryList(userRoleFilters, txn);
 }
@@ -202,7 +211,7 @@ export async function userLogin(
   root: any,
   { input }: IUserLoginOptions,
   { db, logger, txn }: IContext,
-) {
+): Promise<IRootMutationType['userLogin']> {
   const { googleAuthCode } = input;
 
   const oauth = await OauthAuthorize(googleAuthCode);
@@ -251,7 +260,11 @@ export async function userLogin(
   return { authToken, user: updatedUser };
 }
 
-export async function JWTForPDFCreate(root: {}, input: {}, { db, userRole, userId }: IContext) {
+export async function JWTForPDFCreate(
+  root: {},
+  input: {},
+  { db, userRole, userId }: IContext,
+): Promise<IRootMutationType['JWTForPDFCreate']> {
   await accessControls.isAllowed(userRole, 'view', 'task');
   checkUserLoggedIn(userId);
 

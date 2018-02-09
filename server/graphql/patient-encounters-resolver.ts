@@ -1,4 +1,4 @@
-import { IPatientEncounter } from 'schema';
+import { IRootQueryType } from 'schema';
 import { formatPatientEncounters } from '../apis/redox/formatters';
 import { IPaginationOptions } from '../db';
 import Patient from '../models/patient';
@@ -13,7 +13,7 @@ export async function resolvePatientEncounters(
   root: any,
   { patientId }: IResolvePatientEncountersOptions,
   { userRole, redoxApi, userId, txn }: IContext,
-): Promise<IPatientEncounter[]> {
+): Promise<IRootQueryType['patientEncounters']> {
   await accessControls.isAllowedForUser(userRole, 'view', 'patient', patientId, userId);
 
   const patient = await Patient.get(patientId, txn);

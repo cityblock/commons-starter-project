@@ -3,6 +3,8 @@ import {
   IPatientAnswersCreateInput,
   IPatientAnswerDeleteInput,
   IPatientAnswerEditInput,
+  IRootMutationType,
+  IRootQueryType,
 } from 'schema';
 import PatientAnswer from '../models/patient-answer';
 import accessControls from './shared/access-controls';
@@ -28,7 +30,7 @@ export async function patientAnswersCreate(
   root: any,
   { input }: IPatientAnswersCreateArgs,
   context: IContext,
-) {
+): Promise<IRootMutationType['patientAnswersCreate']> {
   const { userRole, userId, txn } = context;
   await accessControls.isAllowed(userRole, 'create', 'patientAnswer');
   checkUserLoggedIn(userId);
@@ -96,7 +98,7 @@ export async function resolvePatientAnswers(
   root: any,
   args: { filterId: string; filterType: IAnswerFilterTypeEnum; patientId: string },
   { db, userRole, txn }: IContext,
-) {
+): Promise<IRootQueryType['patientAnswers']> {
   await accessControls.isAllowed(userRole, 'view', 'patientAnswer');
 
   if (args.filterType === 'question') {
@@ -118,7 +120,7 @@ export async function resolvePreviousPatientAnswersForQuestion(
   root: any,
   args: { questionId: string; patientId: string },
   { db, userRole, userId, txn }: IContext,
-) {
+): Promise<IRootQueryType['patientPreviousAnswersForQuestion']> {
   await accessControls.isAllowed(userRole, 'view', 'patientAnswer');
 
   return PatientAnswer.getPreviousAnswersForQuestion(args.questionId, args.patientId, txn);
@@ -128,7 +130,7 @@ export async function resolvePatientAnswer(
   root: any,
   args: { patientAnswerId: string },
   { db, userRole, txn }: IContext,
-) {
+): Promise<IRootQueryType['patientAnswer']> {
   await accessControls.isAllowed(userRole, 'view', 'patientAnswer');
 
   return PatientAnswer.get(args.patientAnswerId, txn);
@@ -138,7 +140,7 @@ export async function patientAnswerEdit(
   root: any,
   args: IEditPatientAnswerOptions,
   { db, userId, userRole, txn }: IContext,
-) {
+): Promise<IRootMutationType['patientAnswerEdit']> {
   await accessControls.isAllowedForUser(userRole, 'edit', 'patientAnswer');
   checkUserLoggedIn(userId);
 
@@ -149,7 +151,7 @@ export async function patientAnswerDelete(
   root: any,
   args: IDeletePatientAnswerOptions,
   { db, userId, userRole, txn }: IContext,
-) {
+): Promise<IRootMutationType['patientAnswerDelete']> {
   await accessControls.isAllowedForUser(userRole, 'edit', 'patientAnswer');
   checkUserLoggedIn(userId);
 

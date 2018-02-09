@@ -3,6 +3,8 @@ import {
   IQuestionDeleteInput,
   IQuestionEditInput,
   IQuestionFilterTypeEnum,
+  IRootMutationType,
+  IRootQueryType,
 } from 'schema';
 import Question from '../models/question';
 import accessControls from './shared/access-controls';
@@ -24,7 +26,11 @@ export interface IDeleteQuestionOptions {
   input: IQuestionDeleteInput;
 }
 
-export async function questionCreate(root: any, { input }: IQuestionCreateArgs, context: IContext) {
+export async function questionCreate(
+  root: any,
+  { input }: IQuestionCreateArgs,
+  context: IContext,
+): Promise<IRootMutationType['questionCreate']> {
   const { userRole, userId, txn } = context;
   await accessControls.isAllowed(userRole, 'create', 'question');
   checkUserLoggedIn(userId);
@@ -68,13 +74,14 @@ export async function questionCreate(root: any, { input }: IQuestionCreateArgs, 
       txn,
     );
   }
+  return null;
 }
 
 export async function resolveQuestions(
   root: any,
   args: { filterId: string; filterType: IQuestionFilterTypeEnum },
   { db, userRole, txn }: IContext,
-) {
+): Promise<IRootQueryType['questions']> {
   await accessControls.isAllowed(userRole, 'view', 'question');
 
   if (args.filterType === 'riskArea') {
@@ -92,7 +99,7 @@ export async function resolveQuestion(
   root: any,
   args: { questionId: string },
   { db, userRole, txn }: IContext,
-) {
+): Promise<IRootQueryType['question']> {
   await accessControls.isAllowed(userRole, 'view', 'question');
 
   return Question.get(args.questionId, txn);
@@ -102,7 +109,7 @@ export async function questionEdit(
   root: any,
   args: IEditQuestionOptions,
   { db, userId, userRole, txn }: IContext,
-) {
+): Promise<IRootMutationType['questionEdit']> {
   await accessControls.isAllowedForUser(userRole, 'edit', 'question');
   checkUserLoggedIn(userId);
 
@@ -114,7 +121,7 @@ export async function questionDelete(
   root: any,
   args: IDeleteQuestionOptions,
   { db, userId, userRole, txn }: IContext,
-) {
+): Promise<IRootMutationType['questionEdit']> {
   await accessControls.isAllowedForUser(userRole, 'edit', 'question');
   checkUserLoggedIn(userId);
 

@@ -1,6 +1,7 @@
 import {
   IRiskAreaAssessmentSubmissionCompleteInput,
   IRiskAreaAssessmentSubmissionCreateInput,
+  IRootMutationType,
   IRootQueryType,
 } from 'schema';
 import RiskAreaAssessmentSubmission from '../models/risk-area-assessment-submission';
@@ -28,7 +29,7 @@ export async function riskAreaAssessmentSubmissionCreate(
   root: any,
   { input }: IRiskAreaAssessmentSubmissionCreateArgs,
   context: IContext,
-) {
+): Promise<IRootMutationType['riskAreaAssessmentSubmissionCreate']> {
   const { userRole, userId, txn } = context;
   await accessControls.isAllowed(userRole, 'create', 'riskAreaAssessmentSubmission');
   checkUserLoggedIn(userId);
@@ -46,7 +47,7 @@ export async function riskAreaAssessmentSubmissionComplete(
   root: any,
   { input }: IRiskAreaAssessmentSubmissionCompleteArgs,
   context: IContext,
-) {
+): Promise<IRootMutationType['riskAreaAssessmentSubmissionComplete']> {
   const { userRole, userId, txn } = context;
 
   await accessControls.isAllowed(userRole, 'create', 'riskAreaAssessmentSubmission');
@@ -59,7 +60,7 @@ export async function resolveRiskAreaAssessmentSubmission(
   root: any,
   args: { riskAreaAssessmentSubmissionId: string },
   { db, userRole, txn }: IContext,
-) {
+): Promise<IRootQueryType['riskAreaAssessmentSubmission']> {
   await accessControls.isAllowed(userRole, 'view', 'riskAreaAssessmentSubmission');
 
   return RiskAreaAssessmentSubmission.get(args.riskAreaAssessmentSubmissionId, txn);

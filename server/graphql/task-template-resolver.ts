@@ -1,4 +1,10 @@
-import { ITaskTemplateCreateInput, ITaskTemplateDeleteInput, ITaskTemplateEditInput } from 'schema';
+import {
+  IRootMutationType,
+  IRootQueryType,
+  ITaskTemplateCreateInput,
+  ITaskTemplateDeleteInput,
+  ITaskTemplateEditInput,
+} from 'schema';
 import TaskTemplate from '../models/task-template';
 import accessControls from './shared/access-controls';
 import { IContext } from './shared/utils';
@@ -23,7 +29,7 @@ export async function taskTemplateCreate(
   root: any,
   { input }: ITaskTemplateCreateArgs,
   { userRole, txn }: IContext,
-) {
+): Promise<IRootMutationType['taskTemplateCreate']> {
   await accessControls.isAllowed(userRole, 'create', 'taskTemplate');
 
   return TaskTemplate.create(input as any, txn);
@@ -33,13 +39,17 @@ export async function resolveTaskTemplate(
   root: any,
   args: { taskTemplateId: string },
   { db, userRole, txn }: IContext,
-) {
+): Promise<IRootQueryType['taskTemplate']> {
   await accessControls.isAllowed(userRole, 'view', 'taskTemplate');
 
   return TaskTemplate.get(args.taskTemplateId, txn);
 }
 
-export async function resolveTaskTemplates(root: any, args: any, { db, userRole, txn }: IContext) {
+export async function resolveTaskTemplates(
+  root: any,
+  args: any,
+  { db, userRole, txn }: IContext,
+): Promise<IRootQueryType['taskTemplates']> {
   await accessControls.isAllowed(userRole, 'view', 'taskTemplate');
 
   return TaskTemplate.getAll(txn);
@@ -49,7 +59,7 @@ export async function taskTemplateEdit(
   root: any,
   args: IEditTaskTemplateOptions,
   { db, userRole, txn }: IContext,
-) {
+): Promise<IRootMutationType['taskTemplateEdit']> {
   await accessControls.isAllowedForUser(userRole, 'edit', 'taskTemplate');
 
   // TODO: fix typings here
@@ -60,7 +70,7 @@ export async function taskTemplateDelete(
   root: any,
   args: IDeleteTaskTemplateOptions,
   { db, userRole, txn }: IContext,
-) {
+): Promise<IRootMutationType['taskTemplateDelete']> {
   await accessControls.isAllowedForUser(userRole, 'edit', 'taskTemplate');
   return TaskTemplate.delete(args.input.taskTemplateId, txn);
 }

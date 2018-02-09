@@ -1,8 +1,7 @@
-import { ICareTeamInput, IUser } from 'schema';
+import { ICareTeamInput, IRootMutationType, IRootQueryType } from 'schema';
 import { IPaginationOptions } from '../db';
 import { convertUser } from '../graphql/shared/converter';
 import CareTeam from '../models/care-team';
-import User from '../models/user';
 import accessControls from './shared/access-controls';
 import { IContext } from './shared/utils';
 
@@ -22,7 +21,7 @@ export async function careTeamAddUser(
   source: any,
   { input }: ICareTeamOptions,
   context: IContext,
-): Promise<User[]> {
+): Promise<IRootMutationType['careTeamAddUser']> {
   const { userRole, txn } = context;
   const { userId, patientId } = input;
   await accessControls.isAllowed(userRole, 'edit', 'careTeam');
@@ -34,7 +33,7 @@ export async function careTeamRemoveUser(
   source: any,
   { input }: ICareTeamOptions,
   context: IContext,
-) {
+): Promise<IRootMutationType['careTeamRemoveUser']> {
   const { userRole, txn } = context;
   const { userId, patientId } = input;
   await accessControls.isAllowed(userRole, 'edit', 'careTeam');
@@ -46,7 +45,7 @@ export async function resolvePatientCareTeam(
   root: any,
   { patientId }: IQuery,
   { userRole, userId, txn }: IContext,
-): Promise<IUser[]> {
+): Promise<IRootQueryType['patientCareTeam']> {
   await accessControls.isAllowedForUser(userRole, 'view', 'patient', patientId, userId);
 
   const users = await CareTeam.getForPatient(patientId, txn);

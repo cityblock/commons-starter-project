@@ -26,20 +26,34 @@ export interface IDeleteAnswerOptions {
   input: IAnswerDeleteInput;
 }
 
-export async function answerCreate(root: any, { input }: IAnswerCreateArgs, context: IContext) {
+export async function answerCreate(
+  root: any,
+  { input }: IAnswerCreateArgs,
+  context: IContext,
+): Promise<IRootMutationType['answerCreate']> {
   const { userRole, userId, txn } = context;
   await accessControls.isAllowed(userRole, 'create', 'answer');
   checkUserLoggedIn(userId);
 
-  // TODO: fix typings here
-  return Answer.create(input as any, txn);
+  return Answer.create(
+    {
+      questionId: input.questionId,
+      displayValue: input.displayValue,
+      value: input.value,
+      valueType: input.valueType,
+      riskAdjustmentType: input.riskAdjustmentType,
+      inSummary: input.inSummary ? true : false,
+      order: input.order,
+    },
+    txn,
+  );
 }
 
 export async function resolveAnswersForQuestion(
   root: any,
   args: { questionId: string },
   { db, userRole, txn }: IContext,
-) {
+): Promise<IRootQueryType['answersForQuestion']> {
   await accessControls.isAllowed(userRole, 'view', 'answer');
 
   return Answer.getAllForQuestion(args.questionId, txn);

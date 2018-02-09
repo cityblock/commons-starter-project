@@ -1,4 +1,9 @@
-import { ICarePlan, ICarePlanSuggestionAcceptInput, ICarePlanSuggestionDismissInput } from 'schema';
+import {
+  ICarePlanSuggestionAcceptInput,
+  ICarePlanSuggestionDismissInput,
+  IRootMutationType,
+  IRootQueryType,
+} from 'schema';
 import CarePlanSuggestion from '../models/care-plan-suggestion';
 import Concern from '../models/concern';
 import GoalSuggestionTemplate from '../models/goal-suggestion-template';
@@ -33,7 +38,7 @@ export async function resolveCarePlanSuggestionsForPatient(
   root: any,
   args: IResolveCarePlanSuggestionsOptions,
   { db, userRole, txn }: IContext,
-): Promise<CarePlanSuggestion[]> {
+): Promise<IRootQueryType['carePlanSuggestionsForPatient']> {
   await accessControls.isAllowed(userRole, 'view', 'carePlanSuggestion');
 
   return CarePlanSuggestion.getForPatient(args.patientId, txn);
@@ -43,7 +48,7 @@ export async function resolveCarePlanForPatient(
   root: any,
   args: IResolveCarePlanOptions,
   { db, userRole, txn }: IContext,
-): Promise<ICarePlan> {
+): Promise<IRootQueryType['carePlanForPatient']> {
   await accessControls.isAllowed(userRole, 'view', 'carePlanSuggestion');
 
   const concerns = await PatientConcern.getForPatient(args.patientId, txn);
@@ -52,14 +57,14 @@ export async function resolveCarePlanForPatient(
   return {
     concerns,
     goals,
-  } as ICarePlan;
+  };
 }
 
 export async function carePlanSuggestionDismiss(
   root: any,
   { input }: ICarePlanSuggestionDismissArgs,
   { db, userRole, userId, txn }: IContext,
-): Promise<CarePlanSuggestion | undefined> {
+): Promise<IRootMutationType['carePlanSuggestionDismiss']> {
   await accessControls.isAllowed(userRole, 'edit', 'carePlanSuggestion');
   checkUserLoggedIn(userId);
 
@@ -77,7 +82,7 @@ export async function carePlanSuggestionAccept(
   root: any,
   { input }: ICarePlanSuggestionAcceptArgs,
   context: IContext,
-): Promise<CarePlanSuggestion | undefined> {
+): Promise<IRootMutationType['carePlanSuggestionAccept']> {
   const { userRole, userId, txn } = context;
   await accessControls.isAllowed(userRole, 'edit', 'patient');
   checkUserLoggedIn(userId);
@@ -141,5 +146,5 @@ export async function carePlanSuggestionAccept(
     }
   }
 
-  return carePlanSuggestion;
+  return carePlanSuggestion || null;
 }

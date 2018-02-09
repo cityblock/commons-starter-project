@@ -1,4 +1,4 @@
-import { ICBOReferralCreateInput, ICBOReferralEditInput } from 'schema';
+import { ICBOReferralCreateInput, ICBOReferralEditInput, IRootMutationType } from 'schema';
 import CBOReferral from '../models/cbo-referral';
 import TaskEvent from '../models/task-event';
 import accessControls from './shared/access-controls';
@@ -16,7 +16,7 @@ export async function CBOReferralCreate(
   root: any,
   { input }: ICBOReferralCreateArgs,
   { db, userRole, userId, txn }: IContext,
-): Promise<CBOReferral> {
+): Promise<IRootMutationType['CBOReferralCreate']> {
   await accessControls.isAllowedForUser(userRole, 'create', 'CBOReferral');
   checkUserLoggedIn(userId);
 
@@ -27,7 +27,7 @@ export async function CBOReferralEdit(
   root: any,
   { input }: IEditCBOReferralOptions,
   { db, userRole, userId, txn }: IContext,
-): Promise<CBOReferral> {
+): Promise<IRootMutationType['CBOReferralEdit']> {
   await accessControls.isAllowedForUser(userRole, 'edit', 'CBOReferral');
   checkUserLoggedIn(userId);
 

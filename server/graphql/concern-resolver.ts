@@ -4,6 +4,8 @@ import {
   IConcernDeleteInput,
   IConcernEditInput,
   IConcernRemoveDiagnosisCodeInput,
+  IRootMutationType,
+  IRootQueryType,
 } from 'schema';
 import Concern, { ConcernOrderOptions } from '../models/concern';
 import accessControls from './shared/access-controls';
@@ -33,7 +35,11 @@ export interface IRemoveDiagnosisCodeArgs {
   input: IConcernRemoveDiagnosisCodeInput;
 }
 
-export async function concernCreate(root: any, { input }: IConcernCreateArgs, context: IContext) {
+export async function concernCreate(
+  root: any,
+  { input }: IConcernCreateArgs,
+  context: IContext,
+): Promise<IRootMutationType['concernCreate']> {
   const { userRole, txn } = context;
   await accessControls.isAllowed(userRole, 'create', 'concern');
 
@@ -44,13 +50,17 @@ export async function resolveConcern(
   root: any,
   args: { concernId: string },
   { db, userRole, txn }: IContext,
-) {
+): Promise<IRootQueryType['concern']> {
   await accessControls.isAllowed(userRole, 'view', 'concern');
 
   return Concern.get(args.concernId, txn);
 }
 
-export async function resolveConcerns(root: any, args: any, { db, userRole, txn }: IContext) {
+export async function resolveConcerns(
+  root: any,
+  args: any,
+  { db, userRole, txn }: IContext,
+): Promise<IRootQueryType['concerns']> {
   await accessControls.isAllowed(userRole, 'view', 'concern');
 
   const { order, orderBy } = formatOrderOptions<ConcernOrderOptions>(args.orderBy, {
@@ -65,7 +75,7 @@ export async function concernEdit(
   root: any,
   args: IEditConcernOptions,
   { db, userId, userRole, txn }: IContext,
-) {
+): Promise<IRootMutationType['concernEdit']> {
   await accessControls.isAllowedForUser(userRole, 'edit', 'concern');
 
   return Concern.edit(args.input.concernId, args.input, txn);
@@ -75,7 +85,7 @@ export async function concernDelete(
   root: any,
   args: IDeleteConcernOptions,
   { db, userRole, txn }: IContext,
-) {
+): Promise<IRootMutationType['concernDelete']> {
   await accessControls.isAllowedForUser(userRole, 'edit', 'concern');
 
   return Concern.delete(args.input.concernId, txn);
@@ -85,7 +95,7 @@ export async function concernAddDiagnosisCode(
   root: any,
   { input }: IAddDiagnosisCodeArgs,
   { db, userRole, txn }: IContext,
-) {
+): Promise<IRootMutationType['concernAddDiagnosisCode']> {
   await accessControls.isAllowedForUser(userRole, 'edit', 'concern');
   const { concernId, codesetName, code, version } = input;
 
@@ -96,7 +106,7 @@ export async function concernRemoveDiagnosisCode(
   root: any,
   { input }: IRemoveDiagnosisCodeArgs,
   { db, userRole, txn }: IContext,
-) {
+): Promise<IRootMutationType['concernRemoveDiagnosisCode']> {
   await accessControls.isAllowedForUser(userRole, 'edit', 'concern');
   const { concernId, diagnosisCodeId } = input;
 

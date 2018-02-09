@@ -1,4 +1,4 @@
-import { ICBOCreateInput, ICBODeleteInput, ICBOEditInput } from 'schema';
+import { ICBOCreateInput, ICBODeleteInput, ICBOEditInput, IRootQueryType } from 'schema';
 import CBO from '../models/cbo';
 import accessControls from './shared/access-controls';
 import { checkUserLoggedIn, IContext } from './shared/utils';
@@ -19,7 +19,7 @@ export async function resolveCBOs(
   root: any,
   args: {},
   { db, userRole, userId, txn }: IContext,
-): Promise<CBO[]> {
+): Promise<IRootQueryType['CBOs']> {
   await accessControls.isAllowedForUser(userRole, 'view', 'CBO');
   checkUserLoggedIn(userId);
 
@@ -30,7 +30,7 @@ export async function resolveCBOsForCategory(
   root: any,
   args: { categoryId: string },
   { db, userRole, userId, txn }: IContext,
-): Promise<CBO[]> {
+): Promise<IRootQueryType['CBOsForCategory']> {
   await accessControls.isAllowedForUser(userRole, 'view', 'CBO');
   checkUserLoggedIn(userId);
 
@@ -41,7 +41,7 @@ export async function resolveCBO(
   root: any,
   args: { CBOId: string },
   { db, userRole, userId, txn }: IContext,
-): Promise<CBO> {
+): Promise<IRootQueryType['CBO']> {
   await accessControls.isAllowedForUser(userRole, 'view', 'CBO');
   checkUserLoggedIn(userId);
 

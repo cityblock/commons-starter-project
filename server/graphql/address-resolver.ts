@@ -1,9 +1,9 @@
 import { cloneDeep, isNil, omitBy } from 'lodash';
 import {
-  IAddress,
   IAddressCreateForPatientInput,
   IAddressCreatePrimaryForPatientInput,
   IAddressEditInput,
+  IRootMutationType,
 } from 'schema';
 import Address from '../models/address';
 import PatientAddress from '../models/patient-address';
@@ -23,7 +23,7 @@ export async function addressCreateForPatient(
   source: any,
   { input }: IAddressCreateForPatientOptions,
   { userRole, userId, logger, txn }: IContext,
-): Promise<IAddress> {
+): Promise<IRootMutationType['addressCreateForPatient']> {
   await accessControls.isAllowedForUser(userRole, 'edit', 'patient', input.patientId, userId);
   checkUserLoggedIn(userId);
 
@@ -40,7 +40,7 @@ export async function addressCreatePrimaryForPatient(
   source: any,
   { input }: IAddressCreatePrimaryForPatientOptions,
   context: IContext,
-): Promise<IAddress> {
+): Promise<IRootMutationType['addressCreatePrimaryForPatient']> {
   const patientInfo = await PatientInfo.get(input.patientInfoId, context.txn);
   await accessControls.isAllowedForUser(
     context.userRole,
@@ -62,6 +62,9 @@ export async function addressCreatePrimaryForPatient(
     },
     context,
   );
+  if (!address) {
+    throw new Error('unable to create address');
+  }
   await PatientInfo.edit(
     { primaryAddressId: address.id, updatedBy: context.userId! },
     input.patientInfoId,
@@ -78,7 +81,7 @@ export async function addressEdit(
   source: any,
   { input }: IAddressEditOptions,
   { userRole, userId, logger, txn }: IContext,
-): Promise<IAddress> {
+): Promise<IRootMutationType['addressEdit']> {
   await accessControls.isAllowedForUser(userRole, 'edit', 'patient', input.patientId, userId);
   checkUserLoggedIn(userId);
 
@@ -87,4 +90,3 @@ export async function addressEdit(
 
   return Address.edit(filtered as any, input.addressId, txn);
 }
-/* tslint:enable check-is-allowed */

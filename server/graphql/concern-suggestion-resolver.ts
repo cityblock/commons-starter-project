@@ -1,5 +1,4 @@
-import { IConcernSuggestInput } from 'schema';
-import Concern from '../models/concern';
+import { IConcernSuggestInput, IRootMutationType, IRootQueryType } from 'schema';
 import ConcernSuggestion from '../models/concern-suggestion';
 import accessControls from './shared/access-controls';
 import { IContext } from './shared/utils';
@@ -12,7 +11,7 @@ export async function resolveConcernsForAnswer(
   root: any,
   args: { answerId: string },
   { db, userRole, txn }: IContext,
-) {
+): Promise<IRootQueryType['concernsForAnswer']> {
   await accessControls.isAllowed(userRole, 'view', 'concern');
 
   return ConcernSuggestion.getForAnswer(args.answerId, txn);
@@ -22,7 +21,7 @@ export async function concernSuggestionCreate(
   root: any,
   args: IConcernSuggestOptions,
   { db, userRole, txn }: IContext,
-): Promise<Concern[]> {
+): Promise<IRootMutationType['concernSuggestionCreate']> {
   await accessControls.isAllowed(userRole, 'view', 'concern');
 
   return ConcernSuggestion.create(
@@ -39,7 +38,7 @@ export async function concernSuggestionDelete(
   root: any,
   args: IConcernSuggestOptions,
   { db, userRole, txn }: IContext,
-): Promise<Concern[]> {
+): Promise<IRootMutationType['concernSuggestionDelete']> {
   await accessControls.isAllowed(userRole, 'view', 'concern');
 
   return ConcernSuggestion.delete(

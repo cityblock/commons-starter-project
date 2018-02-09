@@ -11,9 +11,9 @@ interface IAnswerEditableFields {
   displayValue: string;
   value: string;
   valueType: ValueTypeOptions;
-  riskAdjustmentType?: RiskAdjustmentType;
-  inSummary?: boolean;
-  summaryText?: string;
+  riskAdjustmentType?: RiskAdjustmentType | null;
+  inSummary?: boolean | null;
+  summaryText?: string | null;
   order: number;
 }
 
@@ -175,7 +175,7 @@ export default class Answer extends BaseModel {
   }
 
   static async create(input: IAnswerCreateFields, txn: Transaction) {
-    return this.getQuery(txn).insertAndFetch(input);
+    return this.getQuery(txn).insertAndFetch(input as any); // TODO: Fix this. Objection types are really weird
   }
 
   static async edit(
@@ -183,7 +183,7 @@ export default class Answer extends BaseModel {
     answerId: string,
     txn: Transaction,
   ): Promise<Answer> {
-    return this.getQuery(txn).patchAndFetchById(answerId, answer);
+    return this.getQuery(txn).patchAndFetchById(answerId, answer as any); // TODO: Fix this. Objection types are really weird
   }
 
   static async delete(answerId: string, txn: Transaction): Promise<Answer> {

@@ -12,9 +12,11 @@ import {
   riskAreaAssessmentSubmissionCompleteMutationVariables,
   riskAreaAssessmentSubmissionCreateMutation,
   riskAreaAssessmentSubmissionCreateMutationVariables,
+  FullCarePlanSuggestionFragment,
   FullRiskAreaAssessmentSubmissionFragment,
   FullRiskAreaFragment,
 } from '../../graphql/types';
+import CarePlanSuggestions from '../../shared/care-plan-suggestions/care-plan-suggestions';
 import BackLink from '../../shared/library/back-link/back-link';
 import Button from '../../shared/library/button/button';
 import ModalButtons from '../../shared/library/modal-buttons/modal-buttons';
@@ -26,7 +28,6 @@ import ScreeningToolsPopup from '../screening-tool/screening-tools-popup';
 import ComputedFieldFlagModal from './computed-field-flag-modal';
 import * as styles from './css/risk-area-assessment.css';
 import RiskAreaAssessmentQuestions from './risk-area-assessment-questions';
-import RiskAreaAssessmentResultsPopup from './risk-area-assessment-results-popup';
 
 export interface IProps {
   riskAreaId: string;
@@ -58,6 +59,7 @@ interface IState {
   inProgress: boolean;
   selectingScreeningTool: boolean;
   editPopupVisible: boolean;
+  carePlanSuggestions: FullCarePlanSuggestionFragment[];
 }
 
 export interface IQuestionCondition {
@@ -70,11 +72,7 @@ export class RiskAreaAssessment extends React.Component<allProps, IState> {
   constructor(props: allProps) {
     super(props);
 
-    this.state = {
-      inProgress: false,
-      selectingScreeningTool: false,
-      editPopupVisible: false,
-    };
+    this.state = this.getDefaultState();
   }
 
   async componentWillMount() {
@@ -100,6 +98,19 @@ export class RiskAreaAssessment extends React.Component<allProps, IState> {
         },
       });
     }
+  }
+
+  componentWillUnmount() {
+    this.setState(this.getDefaultState());
+  }
+
+  getDefaultState() {
+    return {
+      inProgress: false,
+      selectingScreeningTool: false,
+      editPopupVisible: false,
+      carePlanSuggestions: [],
+    };
   }
 
   onStart = async () => {
@@ -128,13 +139,18 @@ export class RiskAreaAssessment extends React.Component<allProps, IState> {
     const { riskAreaAssessmentSubmissionComplete, riskAreaAssessmentSubmission } = this.props;
 
     if (riskAreaAssessmentSubmission && riskAreaAssessmentSubmissionComplete) {
-      await riskAreaAssessmentSubmissionComplete({
+      const result = await riskAreaAssessmentSubmissionComplete({
         variables: {
           riskAreaAssessmentSubmissionId: riskAreaAssessmentSubmission.id,
         },
       });
-      // TODO: Show care plan suggestions here
-      this.onCancel();
+      if (result.data.riskAreaAssessmentSubmissionComplete) {
+        const carePlanSuggestions =
+          result.data.riskAreaAssessmentSubmissionComplete.carePlanSuggestions;
+        this.setState({ inProgress: false, carePlanSuggestions });
+      } else {
+        this.onCancel();
+      }
     }
   };
 
@@ -159,15 +175,15 @@ export class RiskAreaAssessment extends React.Component<allProps, IState> {
   };
 
   renderSubmissionPopup() {
-    const { patientRoute, riskAreaAssessmentSubmission } = this.props;
-    const patientScreeningToolSubmissionId = riskAreaAssessmentSubmission
-      ? riskAreaAssessmentSubmission.id
-      : null;
+    const { patientRoute } = this.props;
+    const { carePlanSuggestions } = this.state;
 
     return (
-      <RiskAreaAssessmentResultsPopup
+      <CarePlanSuggestions
+        carePlanSuggestions={carePlanSuggestions}
         patientRoute={patientRoute}
-        riskAreaAssessmentSubmissionId={patientScreeningToolSubmissionId}
+        titleMessageId="riskAreaAssessment.resultsTitle"
+        bodyMessageId="riskAreaAssessment.resultsBody"
       />
     );
   }
@@ -204,7 +220,12 @@ export class RiskAreaAssessment extends React.Component<allProps, IState> {
       riskAreaAssessmentSubmission,
       riskAreaAssessmentSubmissionLoading,
     } = this.props;
-    const { inProgress, selectingScreeningTool, editPopupVisible } = this.state;
+    const {
+      inProgress,
+      selectingScreeningTool,
+      editPopupVisible,
+      carePlanSuggestions,
+    } = this.state;
 
     const automatedAssessment = riskArea && riskArea.assessmentType === 'automated';
 
@@ -220,11 +241,14 @@ export class RiskAreaAssessment extends React.Component<allProps, IState> {
       />
     ) : null;
 
-    const submissionPopupVisible =
-      riskAreaAssessmentSubmission && riskAreaAssessmentSubmission.completedAt ? true : false;
+    const submissionPopupVisible = carePlanSuggestions.length > 0 ? true : false;
     const popupVisible = submissionPopupVisible || editPopupVisible;
 
-    if (riskAreaAssessmentSubmissionLoading || loading || !riskArea) {
+    // Dont show loading if we have care plan suggestions - it shows a weird flash
+    if (
+      (carePlanSuggestions.length < 1 && (riskAreaAssessmentSubmissionLoading || loading)) ||
+      !riskArea
+    ) {
       return <Spinner />;
     }
 

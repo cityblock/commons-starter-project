@@ -281,7 +281,7 @@ export class ScreeningTool extends React.Component<allProps, IState> {
     const assessmentHtml = this.getAssessmentHtml();
     const popupVisible = carePlanSuggestions.length > 0 ? true : false;
 
-    // Dont show loading if we have care plan suggestions - it sshows a weird flash
+    // Dont show loading if we have care plan suggestions - it shows a weird flash
     if (carePlanSuggestions.length < 1 && (loading || patientAnswersLoading)) {
       return <Spinner />;
     }

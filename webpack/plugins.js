@@ -3,7 +3,7 @@ const webpack = require('webpack');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
-const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 
 module.exports = ({ production = false } = {}) => {
   const plugins = [
@@ -42,14 +42,13 @@ module.exports = ({ production = false } = {}) => {
           to: '../server-compiled/server/graphql/schema.graphql',
         },
       ]),
-      new UglifyJSPlugin({
+      new UglifyJsPlugin({
         exclude: /node_modules/,
         sourceMap: true,
         parallel: true,
         uglifyOptions: {
-          ie8: false,
           ecma: 8,
-          warnings: false,
+          warnings: true,
           mangle: true,
         },
       }),

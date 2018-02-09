@@ -1,5 +1,5 @@
 export type IconName =
-  | 'accessAlarms'
+    'accessAlarms'
   | 'addAlert'
   | 'addBox'
   | 'addCircle'

@@ -1,4 +1,7 @@
-// Use this import syntax to avoid TS error
+import { IconName } from './icon-types';
+
+type IconComponents = { [K in IconName]: React.ComponentType<SvgIconProps> };
+
 import AccessAlarmsIcon from 'material-ui-icons/AccessAlarms';
 import AccountBoxIcon from 'material-ui-icons/AccountBox';
 import AccountCircleIcon from 'material-ui-icons/AccountCircle';
@@ -35,11 +38,14 @@ import RotateRightIcon from 'material-ui-icons/RotateRight';
 import SearchIcon from 'material-ui-icons/Search';
 import SyncProblemIcon from 'material-ui-icons/SyncProblem';
 import WarningIcon from 'material-ui-icons/Warning';
+import { SvgIconProps } from 'material-ui/SvgIcon';
 
 // Add other components as needed from here, preserving name used in material icon
 // Then add icon name to icon-types file to ensure only accepted icon names passed as icon props
-const components = {
+const components: IconComponents = {
   accessAlarms: AccessAlarmsIcon,
+  accountBox: AccountBoxIcon,
+  accountCircle: AccountCircleIcon,
   addAlert: AddAlertIcon,
   addBox: AddBoxIcon,
   addCircle: AddCircleIcon,
@@ -73,8 +79,6 @@ const components = {
   search: SearchIcon,
   syncProblem: SyncProblemIcon,
   warning: WarningIcon,
-  accountCircle: AccountCircleIcon,
-  accountBox: AccountBoxIcon,
 };
 
 export default components;

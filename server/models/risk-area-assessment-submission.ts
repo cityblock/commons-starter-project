@@ -26,7 +26,7 @@ export default class RiskAreaAssessmentSubmission extends BaseModel {
   user: User;
   patientAnswers: PatientAnswer[];
   completedAt: string;
-  carePlanSuggestions?: CarePlanSuggestion[];
+  carePlanSuggestions: CarePlanSuggestion[];
 
   static tableName = 'risk_area_assessment_submission';
 

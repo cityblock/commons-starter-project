@@ -181,8 +181,8 @@ export class RiskArea extends React.Component<allProps, IState> {
                 onEnterPress={this.onEnterPress('title')}
               />
               <p>Domain:</p>
-              {riskArea.riskAreaGroup && (
-                <p className={styles.uneditable}>{riskArea.riskAreaGroup.title}</p>
+              {riskArea.riskAreaGroupId && (
+                <p className={styles.uneditable}>{riskArea.riskAreaGroupId}</p>
               )}
               <p>Assessment Type:</p>
               <p className={styles.uneditable}>{riskArea.assessmentType}</p>

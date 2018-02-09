@@ -1,5 +1,11 @@
 import { pickBy } from 'lodash';
-import { IAnswerCreateInput, IAnswerDeleteInput, IAnswerEditInput } from 'schema';
+import {
+  IAnswerCreateInput,
+  IAnswerDeleteInput,
+  IAnswerEditInput,
+  IRootMutationType,
+  IRootQueryType,
+} from 'schema';
 import Answer from '../models/answer';
 import accessControls from './shared/access-controls';
 import { checkUserLoggedIn, IContext } from './shared/utils';
@@ -43,7 +49,7 @@ export async function resolveAnswer(
   root: any,
   args: { answerId: string },
   { db, userRole, txn }: IContext,
-) {
+): Promise<IRootQueryType['answer']> {
   await accessControls.isAllowed(userRole, 'view', 'answer');
 
   return Answer.get(args.answerId, txn);
@@ -53,7 +59,7 @@ export async function answerEdit(
   root: any,
   args: IEditAnswerOptions,
   { db, userId, userRole, txn }: IContext,
-) {
+): Promise<IRootMutationType['answerEdit']> {
   await accessControls.isAllowedForUser(userRole, 'edit', 'answer');
   checkUserLoggedIn(userId);
 
@@ -66,7 +72,7 @@ export async function answerDelete(
   root: any,
   args: IDeleteAnswerOptions,
   { db, userId, userRole, txn }: IContext,
-) {
+): Promise<IRootMutationType['answerDelete']> {
   await accessControls.isAllowedForUser(userRole, 'edit', 'answer');
   checkUserLoggedIn(userId);
 

@@ -1,6 +1,7 @@
 import {
   IRiskAreaAssessmentSubmissionCompleteInput,
   IRiskAreaAssessmentSubmissionCreateInput,
+  IRootQueryType,
 } from 'schema';
 import RiskAreaAssessmentSubmission from '../models/risk-area-assessment-submission';
 import accessControls from './shared/access-controls';
@@ -68,7 +69,7 @@ export async function resolveRiskAreaAssessmentSubmissionForPatient(
   root: any,
   args: { riskAreaId: string; patientId: string; completed: boolean },
   { db, userRole, txn }: IContext,
-) {
+): Promise<IRootQueryType['riskAreaAssessmentSubmissionForPatient']> {
   await accessControls.isAllowed(userRole, 'view', 'riskAreaAssessmentSubmission');
 
   return RiskAreaAssessmentSubmission.getLatestForPatient(

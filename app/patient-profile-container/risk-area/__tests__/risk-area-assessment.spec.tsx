@@ -68,7 +68,7 @@ describe('risk area assessment questions component', () => {
 
   it('renders back link', () => {
     expect(wrapper.find(BackLink).length).toBe(1);
-    expect(wrapper.find(BackLink).props().href).toBe(`${routeBase}/${riskArea.riskAreaGroup.id}`);
+    expect(wrapper.find(BackLink).props().href).toBe(`${routeBase}/${riskArea.riskAreaGroupId}`);
   });
 
   it('does not render computed field flag modal by for manual assessment', () => {

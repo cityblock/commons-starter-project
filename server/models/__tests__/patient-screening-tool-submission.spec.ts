@@ -142,7 +142,6 @@ describe('patient screening tool submission model', () => {
       expect(finalSubmission.score).toEqual(1);
       expect(finalSubmission.patient.id).toEqual(patient1.id);
       expect(finalSubmission.user.id).toEqual(user.id);
-      expect(finalSubmission.riskArea.id).toEqual(riskArea.id);
       expect(await PatientScreeningToolSubmission.get(finalSubmission.id, txn)).toMatchObject(
         finalSubmission,
       );
@@ -250,7 +249,6 @@ describe('patient screening tool submission model', () => {
       expect(submission.score).toBeFalsy();
       expect(submission.patient.id).toEqual(patient1.id);
       expect(submission.user.id).toEqual(user.id);
-      expect(submission.riskArea.id).toEqual(riskArea.id);
 
       const screeningToolScoreRange = await ScreeningToolScoreRange.create(
         {
@@ -443,9 +441,7 @@ describe('patient screening tool submission model', () => {
 
   it('gets all screening tool submissions for patient 360', async () => {
     await transaction(PatientScreeningToolSubmission.knex(), async txn => {
-      const { screeningTool1, patient1, user, patient2, screeningTool2, riskArea } = await setup(
-        txn,
-      );
+      const { screeningTool1, patient1, user, patient2, screeningTool2 } = await setup(txn);
       const submission1 = await PatientScreeningToolSubmission.create(
         {
           screeningToolId: screeningTool1.id,
@@ -477,7 +473,6 @@ describe('patient screening tool submission model', () => {
       expect(submissionIds).toContain(submission1.id);
       expect(submissionIds).toContain(submission2.id);
       expect(submissionIds).not.toContain(submission3.id);
-      expect(submissions[0].riskArea.id).toBe(riskArea.id);
     });
   });
 

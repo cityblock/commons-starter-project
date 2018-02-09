@@ -1,0 +1,6 @@
+query getRiskAreaShort($riskAreaId: ID!) {
+  riskArea(riskAreaId: $riskAreaId) {
+    id
+    title
+  }
+}

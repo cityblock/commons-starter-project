@@ -25,7 +25,7 @@ exports[`screening tool row renders screening tool row 1`] = `
       <span
         className="dateValue"
       >
-        Risk Area Title
+        cool-risk-area-id
       </span>
     </div>
     <div

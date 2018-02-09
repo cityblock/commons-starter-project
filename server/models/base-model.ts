@@ -8,7 +8,7 @@ export default class BaseModel extends Model {
   id: string;
   createdAt: string;
   updatedAt: string;
-  deletedAt: string;
+  deletedAt: string | null;
 
   $beforeInsert() {
     this.id = uuid();

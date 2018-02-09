@@ -1,7 +1,7 @@
 import { Model, RelationMappings, Transaction } from 'objection';
 import BaseModel from './base-model';
-import ConcernSuggestion from './concern-suggestion';
-import GoalSuggestion from './goal-suggestion';
+import Concern from './concern';
+import GoalSuggestionTemplate from './goal-suggestion-template';
 import PatientAnswer from './patient-answer';
 import Question from './question';
 import RiskArea from './risk-area';
@@ -33,19 +33,22 @@ const EAGER_QUERY = '[concernSuggestions, goalSuggestions.[taskTemplates]]';
 
 /* tslint:disable:member-ordering */
 export default class Answer extends BaseModel {
+  id: string;
   displayValue: string;
   value: string;
   valueType: ValueTypeOptions;
   riskAdjustmentType: RiskAdjustmentType;
   inSummary: boolean;
-  summaryText?: string;
+  summaryText: string | null;
   question: Question;
   questionId: string;
-  riskArea?: RiskArea;
-  screeningTool?: ScreeningTool;
+  riskArea: RiskArea | null;
+  riskAreaId: string | null;
+  screeningTool: ScreeningTool | null;
+  screeningToolId: string | null;
   order: number;
-  goalSuggestions: GoalSuggestion[];
-  concernSuggestions: ConcernSuggestion[];
+  goalSuggestions: GoalSuggestionTemplate[];
+  concernSuggestions: Concern[];
   patientAnswers: PatientAnswer[];
 
   static tableName = 'answer';

@@ -28,11 +28,11 @@ interface ICBOReferralEditFields {
 export default class CBOReferral extends BaseModel {
   categoryId: string;
   category: CBOCategory;
-  CBOId?: string | null;
-  CBO?: CBO;
-  name?: string | null; // provided if referring to "Other" CBO
-  url?: string | null; // provided if referring to "Other" CBO
-  diagnosis?: string | null; // allowing to be blank if no diagnoses available from redox
+  CBOId: string | null;
+  CBO: CBO | null;
+  name: string | null; // provided if referring to "Other" CBO
+  url: string | null; // provided if referring to "Other" CBO
+  diagnosis: string | null; // allowing to be blank if no diagnoses available from redox
   sentAt: string | null;
   acknowledgedAt: string | null;
   task: Task;

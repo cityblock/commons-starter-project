@@ -1,6 +1,5 @@
 #import "./short-patient.graphql"
 #import "./short-user.graphql"
-#import "./full-risk-area.graphql"
 #import "./full-care-plan-suggestion.graphql"
 
 fragment FullPatientScreeningToolSubmission on PatientScreeningToolSubmission {
@@ -8,6 +7,7 @@ fragment FullPatientScreeningToolSubmission on PatientScreeningToolSubmission {
   screeningToolId
   screeningTool {
     title
+    riskAreaId
   }
   patientId
   patient {
@@ -18,9 +18,6 @@ fragment FullPatientScreeningToolSubmission on PatientScreeningToolSubmission {
     ...ShortUser
   }
   score
-  riskArea {
-    ...FullRiskArea
-  }
   createdAt
   updatedAt
   deletedAt

@@ -24,9 +24,7 @@ exports[`risk area row renders risk area row 1`] = `
       </span>
       <span
         className="dateValue"
-      >
-        Jon Snow's Direwolf
-      </span>
+      />
     </div>
     <div
       className="dateSection orderSection"

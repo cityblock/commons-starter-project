@@ -30,7 +30,7 @@ describe('risk area assessment questions component', () => {
     expect(wrapper.find(RiskAreaAssessmentHeader).length).toBe(1);
     expect(wrapper.find(RiskAreaAssessmentHeader).props().riskAreaId).toBe(riskArea.id);
     expect(wrapper.find(RiskAreaAssessmentHeader).props().riskAreaGroupId).toBe(
-      riskArea.riskAreaGroup.id,
+      riskArea.riskAreaGroupId,
     );
     expect(wrapper.find(RiskAreaAssessmentHeader).props().patientId).toBe(patientId);
   });

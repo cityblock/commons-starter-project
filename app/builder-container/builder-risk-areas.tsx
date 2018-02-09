@@ -17,7 +17,7 @@ import Button from '../shared/library/button/button';
 import { IState as IAppState } from '../store';
 import RiskArea from './risk-area';
 import RiskAreaCreate from './risk-area-create';
-import { RiskAreaRow } from './risk-area-row';
+import RiskAreaRow from './risk-area-row';
 
 interface IProps {
   mutate?: any;

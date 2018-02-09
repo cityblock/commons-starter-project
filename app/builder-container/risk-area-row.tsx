@@ -1,8 +1,10 @@
 import * as classNames from 'classnames';
 import * as React from 'react';
+import { graphql } from 'react-apollo';
 import { FormattedRelative } from 'react-intl';
 import { Link } from 'react-router-dom';
-import { FullRiskAreaFragment } from '../graphql/types';
+import * as riskAreaGroupShortQueryGraphql from '../graphql/queries/get-risk-area-group-short.graphql';
+import { getRiskAreaGroupShortQuery, FullRiskAreaFragment } from '../graphql/types';
 import * as riskAreasStyles from '../shared/css/two-panel.css';
 import * as styles from './css/risk-area-row.css';
 
@@ -12,8 +14,14 @@ interface IProps {
   routeBase: string;
 }
 
-export const RiskAreaRow: React.StatelessComponent<IProps> = props => {
-  const { riskArea, selected, routeBase } = props;
+interface IGraphqlProps {
+  riskAreaGroup: getRiskAreaGroupShortQuery['riskAreaGroup'];
+}
+
+type allProps = IProps & IGraphqlProps;
+
+const RiskAreaRow: React.StatelessComponent<allProps> = (props: allProps) => {
+  const { riskArea, selected, routeBase, riskAreaGroup } = props;
   const riskAreaClass = classNames(styles.container, {
     [styles.selected]: selected,
   });
@@ -28,9 +36,7 @@ export const RiskAreaRow: React.StatelessComponent<IProps> = props => {
       <div className={styles.meta}>
         <div className={classNames(riskAreasStyles.dateSection, riskAreasStyles.orderSection)}>
           <span className={styles.dateLabel}>Domain:</span>
-          <span className={styles.dateValue}>
-            {riskArea.riskAreaGroup && riskArea.riskAreaGroup.title}
-          </span>
+          <span className={styles.dateValue}>{riskAreaGroup && riskAreaGroup.title}</span>
         </div>
         <div className={classNames(riskAreasStyles.dateSection, riskAreasStyles.orderSection)}>
           <span className={styles.dateLabel}>Type:</span>
@@ -56,3 +62,12 @@ export const RiskAreaRow: React.StatelessComponent<IProps> = props => {
     </Link>
   );
 };
+
+export default graphql<IGraphqlProps, IProps, allProps>(riskAreaGroupShortQueryGraphql as any, {
+  options: (props: IProps) => ({
+    variables: { riskAreaGroupId: props.riskArea.riskAreaGroupId },
+  }),
+  props: ({ data }) => ({
+    riskAreaGroup: data ? (data as any).riskAreaGroup : null,
+  }),
+})(RiskAreaRow);

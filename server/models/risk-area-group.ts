@@ -13,7 +13,6 @@ interface IRiskAreaGroupEditableFields {
 /* tslint:disable:member-ordering */
 // 360 Domain
 export default class RiskAreaGroup extends BaseModel {
-  id: string;
   title: string;
   shortTitle: string;
   order: number;

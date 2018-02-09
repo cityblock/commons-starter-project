@@ -1,4 +1,6 @@
 import {
+  IRootMutationType,
+  IRootQueryType,
   IScreeningToolCreateInput,
   IScreeningToolDeleteInput,
   IScreeningToolEditInput,
@@ -27,7 +29,7 @@ export async function screeningToolCreate(
   root: any,
   { input }: IScreeningToolCreateArgs,
   context: IContext,
-) {
+): Promise<IRootMutationType['screeningToolCreate']> {
   const { userRole, userId, txn } = context;
   await accessControls.isAllowed(userRole, 'create', 'screeningTool');
   checkUserLoggedIn(userId);
@@ -35,7 +37,11 @@ export async function screeningToolCreate(
   return ScreeningTool.create(input as any, txn);
 }
 
-export async function resolveScreeningTools(root: any, args: any, { db, userRole, txn }: IContext) {
+export async function resolveScreeningTools(
+  root: any,
+  args: any,
+  { db, userRole, txn }: IContext,
+): Promise<IRootQueryType['screeningTools']> {
   await accessControls.isAllowed(userRole, 'view', 'screeningTool');
 
   const screeningTools = await ScreeningTool.getAll(txn);
@@ -49,7 +55,7 @@ export async function resolveScreeningToolsForRiskArea(
   root: any,
   args: { riskAreaId: string },
   { db, userRole, txn }: IContext,
-) {
+): Promise<IRootQueryType['screeningToolsForRiskArea']> {
   await accessControls.isAllowed(userRole, 'view', 'screeningTool');
 
   const screeningTools = await ScreeningTool.getForRiskArea(args.riskAreaId, txn);
@@ -63,7 +69,7 @@ export async function resolveScreeningTool(
   root: any,
   args: { screeningToolId: string },
   { db, userRole, txn }: IContext,
-) {
+): Promise<IRootQueryType['screeningTool']> {
   await accessControls.isAllowed(userRole, 'view', 'screeningTool');
 
   const screeningTool = await ScreeningTool.get(args.screeningToolId, txn);
@@ -75,7 +81,7 @@ export async function screeningToolEdit(
   rot: any,
   args: IEditScreeningToolOptions,
   { db, userId, userRole, txn }: IContext,
-) {
+): Promise<IRootMutationType['screeningToolEdit']> {
   await accessControls.isAllowedForUser(userRole, 'edit', 'screeningTool');
   checkUserLoggedIn(userId);
 
@@ -93,7 +99,7 @@ export async function screeningToolDelete(
   root: any,
   args: IDeleteScreeningToolOptions,
   { db, userId, userRole, txn }: IContext,
-) {
+): Promise<IRootMutationType['screeningToolDelete']> {
   await accessControls.isAllowedForUser(userRole, 'edit', 'screeningTool');
   checkUserLoggedIn(userId);
 

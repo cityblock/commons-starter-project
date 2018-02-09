@@ -1,7 +1,6 @@
 import { isNil, omitBy } from 'lodash';
 import { Transaction } from 'objection';
 import {
-  IPatient,
   IPatientEditInput,
   IPatientFilterOptions,
   IPatientForDashboardEdges,
@@ -10,6 +9,8 @@ import {
   IPatientTableRow,
   IPatientTableRowEdges,
   IPatientTableRowNode,
+  IRootMutationType,
+  IRootQueryType,
 } from 'schema';
 import { getAthenaPatientIdFromCreate } from '../apis/redox/formatters';
 import { IPaginatedResults, IPaginationOptions } from '../db';
@@ -38,7 +39,7 @@ export async function resolvePatient(
   root: any,
   { patientId }: IQuery,
   { userRole, userId, logger, txn }: IContext,
-): Promise<IPatient> {
+): Promise<IRootQueryType['patient']> {
   await accessControls.isAllowedForUser(userRole, 'view', 'patient', patientId, userId);
   logger.log(`GET patient ${patientId} by ${userId}`, 2);
   return Patient.get(patientId, txn);
@@ -52,7 +53,7 @@ export async function patientEdit(
   source: any,
   { input }: IPatientEditOptions,
   { userRole, userId, logger, txn }: IContext,
-): Promise<IPatient> {
+): Promise<IRootMutationType['patientEdit']> {
   await accessControls.isAllowedForUser(userRole, 'edit', 'patient', input.patientId, userId);
 
   const filtered = omitBy<IPatientEditInput>(input, isNil);
@@ -68,7 +69,7 @@ export async function patientSetup(
   source: any,
   { input }: IPatientSetupOptions,
   context: IContext,
-): Promise<IPatient> {
+): Promise<IRootMutationType['patientSetup']> {
   const { redoxApi, userRole, userId, logger, txn } = context;
   await accessControls.isAllowedForUser(userRole, 'create', 'patient');
   checkUserLoggedIn(userId);
@@ -172,7 +173,7 @@ export async function patientScratchPadEdit(
   root: any,
   { input }: IPatientScratchPadEditOptions,
   { userRole, userId, txn }: IContext,
-): Promise<IPatientScratchPad> {
+): Promise<IRootQueryType['patientScratchPad']> {
   const { patientId, text } = input;
   await accessControls.isAllowedForUser(userRole, 'edit', 'patient', patientId, userId);
 
@@ -185,8 +186,9 @@ export async function resolvePatientSearch(
   root: any,
   { query, pageNumber, pageSize }: IPatientSearchOptions,
   { userRole, userId, txn }: IContext,
-): Promise<IPatientTableRowEdges> {
+): Promise<IRootQueryType['patientSearch']> {
   let patients: IPaginatedResults<IPatientTableRow>;
+
   await accessControls.isAllowedForUser(userRole, 'view', 'patient');
   checkUserLoggedIn(userId);
 
@@ -290,7 +292,7 @@ export async function resolvePatientsNewToCareTeam(
   root: any,
   pageOptions: IPaginationOptions,
   context: IContext,
-): Promise<IPatientForDashboardEdges> {
+): Promise<IRootQueryType['patientsNewToCareTeam']> {
   return resolvePatientDashboardBuilder(
     root,
     pageOptions,
@@ -303,7 +305,7 @@ export async function resolvePatientsWithPendingSuggestions(
   root: any,
   pageOptions: IPaginationOptions,
   context: IContext,
-): Promise<IPatientForDashboardEdges> {
+): Promise<IRootQueryType['patientsWithPendingSuggestions']> {
   return resolvePatientDashboardBuilder(
     root,
     pageOptions,
@@ -316,7 +318,7 @@ export async function resolvePatientsWithMissingInfo(
   root: any,
   pageOptions: IPaginationOptions,
   context: IContext,
-): Promise<IPatientForDashboardEdges> {
+): Promise<IRootQueryType['patientsWithMissingInfo']> {
   return resolvePatientDashboardBuilder(
     root,
     pageOptions,
@@ -329,7 +331,7 @@ export async function resolvePatientsWithNoRecentEngagement(
   root: any,
   pageOptions: IPaginationOptions,
   context: IContext,
-): Promise<IPatientForDashboardEdges> {
+): Promise<IRootQueryType['patientsWithNoRecentEngagement']> {
   return resolvePatientDashboardBuilder(
     root,
     pageOptions,
@@ -342,7 +344,7 @@ export async function resolvePatientsWithOutOfDateMAP(
   root: any,
   pageOptions: IPaginationOptions,
   context: IContext,
-): Promise<IPatientForDashboardEdges> {
+): Promise<IRootQueryType['patientsWithOutOfDateMAP']> {
   return resolvePatientDashboardBuilder(
     root,
     pageOptions,
@@ -368,7 +370,7 @@ export async function resolvePatientsForComputedList(
   root: any,
   { answerId, pageNumber, pageSize }: IPatientComputedListOptions,
   { userRole, userId, txn }: IContext,
-): Promise<IPatientForDashboardEdges> {
+): Promise<IRootQueryType['patientsForComputedList']> {
   await accessControls.isAllowedForUser(userRole, 'view', 'patient');
   checkUserLoggedIn(userId);
 

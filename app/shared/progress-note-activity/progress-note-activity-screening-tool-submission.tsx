@@ -86,7 +86,7 @@ class ProgressNoteActivityScreeningToolSubmission extends React.Component<IProps
         <div className={subLevelStyles} onClick={this.onClick}>
           <div className={styles.sectionTitle}>
             <div className={styles.sectionTitleText}>
-              {screeningToolSubmission.screeningTool.title}
+              {screeningToolSubmission.screeningTool && screeningToolSubmission.screeningTool.title}
             </div>
           </div>
           <Icon name="expandArrow" className={styles.subSectionArrow} />

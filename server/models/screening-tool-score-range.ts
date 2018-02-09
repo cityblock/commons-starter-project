@@ -1,6 +1,8 @@
 import { isNumber, omit } from 'lodash';
 import { Model, RelationMappings, Transaction } from 'objection';
 import BaseModel from './base-model';
+import Concern from './concern';
+import GoalSuggestionTemplate from './goal-suggestion-template';
 import ScreeningTool from './screening-tool';
 
 interface IScreeningToolScoreRangeCreateFields {
@@ -31,7 +33,11 @@ export default class ScreeningToolScoreRange extends BaseModel {
   screeningTool: ScreeningTool;
   description: string;
   range: string;
+  minimumScore: number;
+  maximumScore: number;
   riskAdjustmentType: RiskAdjustmentType;
+  concernSuggestions: Concern[];
+  goalSuggestions: GoalSuggestionTemplate[];
 
   static tableName = 'screening_tool_score_range';
 

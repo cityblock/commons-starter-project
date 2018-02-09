@@ -1,4 +1,10 @@
-import { ITaskCreateInput, ITaskEdges, ITaskEditInput, ITaskNode } from 'schema';
+import {
+  IRootMutationType,
+  IRootQueryType,
+  ITaskCreateInput,
+  ITaskEditInput,
+  ITaskNode,
+} from 'schema';
 import { IPaginationOptions } from '../db';
 import Task, { TaskOrderOptions } from '../models/task';
 import TaskEvent from '../models/task-event';
@@ -38,7 +44,11 @@ export interface IResolveUrgentTasksForPatientOptions {
   patientId: string;
 }
 
-export async function taskCreate(root: any, { input }: ITaskCreateArgs, context: IContext) {
+export async function taskCreate(
+  root: any,
+  { input }: ITaskCreateArgs,
+  context: IContext,
+): Promise<IRootMutationType['taskCreate']> {
   const { userRole, userId, txn } = context;
   const {
     title,
@@ -97,12 +107,16 @@ export async function resolveTask(
   root: any,
   args: IResolveTaskOptions,
   { db, userRole, txn }: IContext,
-) {
+): Promise<IRootQueryType['task']> {
   await accessControls.isAllowed(userRole, 'view', 'task');
   return Task.get(args.taskId, txn);
 }
 
-export async function taskEdit(root: any, args: IEditTaskOptions, context: IContext) {
+export async function taskEdit(
+  root: any,
+  args: IEditTaskOptions,
+  context: IContext,
+): Promise<IRootMutationType['taskEdit']> {
   const { userId, userRole, txn } = context;
   await accessControls.isAllowedForUser(userRole, 'edit', 'task', args.input.taskId, userId);
   checkUserLoggedIn(userId);
@@ -171,7 +185,11 @@ export async function taskEdit(root: any, args: IEditTaskOptions, context: ICont
   return updatedTask;
 }
 
-export async function taskDelete(root: any, args: IDeleteTaskOptions, context: IContext) {
+export async function taskDelete(
+  root: any,
+  args: IDeleteTaskOptions,
+  context: IContext,
+): Promise<IRootMutationType['taskDelete']> {
   const { userId, userRole, txn } = context;
   await accessControls.isAllowedForUser(userRole, 'edit', 'task', args.input.taskId, userId);
   checkUserLoggedIn(userId);
@@ -187,10 +205,14 @@ export async function taskDelete(root: any, args: IDeleteTaskOptions, context: I
     txn,
   );
 
-  return task;
+  return task || null;
 }
 
-export async function taskComplete(root: any, args: IEditTaskOptions, context: IContext) {
+export async function taskComplete(
+  root: any,
+  args: IEditTaskOptions,
+  context: IContext,
+): Promise<IRootMutationType['taskComplete']> {
   const { userId, userRole, txn } = context;
   await accessControls.isAllowedForUser(userRole, 'edit', 'task', args.input.taskId, userId);
   checkUserLoggedIn(userId);
@@ -209,7 +231,11 @@ export async function taskComplete(root: any, args: IEditTaskOptions, context: I
   return task;
 }
 
-export async function taskUncomplete(root: any, args: IEditTaskOptions, context: IContext) {
+export async function taskUncomplete(
+  root: any,
+  args: IEditTaskOptions,
+  context: IContext,
+): Promise<IRootMutationType['taskUncomplete']> {
   const { userId, userRole, txn } = context;
   await accessControls.isAllowedForUser(userRole, 'edit', 'task', args.input.taskId, userId);
   checkUserLoggedIn(userId);
@@ -232,7 +258,7 @@ export async function resolvePatientTasks(
   root: any,
   args: IPatientTasksFilterOptions,
   { db, userRole, txn }: IContext,
-): Promise<ITaskEdges> {
+): Promise<IRootQueryType['tasksForPatient']> {
   // TODO: Improve task access controls
   await accessControls.isAllowed(userRole, 'view', 'task');
 
@@ -271,7 +297,7 @@ export async function resolveTasksDueSoonForPatient(
   root: any,
   { patientId }: IResolveUrgentTasksForPatientOptions,
   { userRole, userId, txn }: IContext,
-) {
+): Promise<IRootQueryType['tasksDueSoonForPatient']> {
   await accessControls.isAllowedForUser(userRole, 'view', 'task');
   checkUserLoggedIn(userId);
 
@@ -282,7 +308,7 @@ export async function resolveTasksWithNotificationsForPatient(
   root: any,
   { patientId }: IResolveUrgentTasksForPatientOptions,
   { userRole, userId, txn }: IContext,
-) {
+): Promise<IRootQueryType['tasksWithNotificationsForPatient']> {
   await accessControls.isAllowedForUser(userRole, 'view', 'task');
   checkUserLoggedIn(userId);
 
@@ -293,7 +319,7 @@ export async function resolveTaskIdsWithNotifications(
   root: any,
   args: any,
   { db, userRole, userId, txn }: IContext,
-) {
+): Promise<IRootQueryType['taskIdsWithNotifications']> {
   await accessControls.isAllowed(userRole, 'view', 'carePlanSuggestion');
   checkUserLoggedIn(userId);
 

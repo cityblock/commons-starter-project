@@ -284,7 +284,7 @@ declare module 'schema' {
     /**
     screening tool score range for screening tool and score
   */
-    screeningToolScoreRangeForScoreAndScreeningTool: IScreeningToolScoreRange;
+    screeningToolScoreRangeForScoreAndScreeningTool: IScreeningToolScoreRange | null;
     /**
     screening tool score ranges
   */
@@ -658,7 +658,7 @@ declare module 'schema' {
     assignedTo: IUser | null;
     followers: Array<IUser>;
     patientGoalId: string;
-    patientGoal: IPatientGoal;
+    patientGoal: IPatientGoalShort;
     CBOReferralId: string | null;
     CBOReferral: ICBOReferral | null;
   }
@@ -667,16 +667,13 @@ declare module 'schema' {
   type IPriorityEnum = 'low' | 'medium' | 'high';
 
 
-  interface IPatientGoal {
+  interface IPatientGoalShort {
     id: string;
     title: string;
     patientId: string;
-    patient: IPatient;
     patientConcernId: string | null;
     patientConcern: IPatientConcern | null;
     goalSuggestionTemplateId: string | null;
-    goalSuggestionTemplate: IGoalSuggestionTemplate | null;
-    tasks: Array<ITask>;
     createdAt: string;
     updatedAt: string;
     deletedAt: string | null;
@@ -719,6 +716,22 @@ declare module 'schema' {
     label: string;
     code: string;
     version: string;
+    createdAt: string;
+    updatedAt: string;
+    deletedAt: string | null;
+  }
+
+
+  interface IPatientGoal {
+    id: string;
+    title: string;
+    patientId: string;
+    patient: IPatient;
+    patientConcernId: string | null;
+    patientConcern: IPatientConcern | null;
+    goalSuggestionTemplateId: string | null;
+    goalSuggestionTemplate: IGoalSuggestionTemplate | null;
+    tasks: Array<ITask>;
     createdAt: string;
     updatedAt: string;
     deletedAt: string | null;
@@ -878,7 +891,6 @@ declare module 'schema' {
     title: string;
     assessmentType: IAssessmentTypeEnum;
     riskAreaGroupId: string;
-    riskAreaGroup: IRiskAreaGroup;
     order: number;
     mediumRiskThreshold: number;
     highRiskThreshold: number;
@@ -930,9 +942,8 @@ declare module 'schema' {
     order: number;
     concernSuggestions: Array<IConcern>;
     goalSuggestions: Array<IGoalSuggestionTemplate> | null;
-    riskArea: IRiskArea | null;
-    screeningTool: IScreeningTool | null;
-    patientAnswers: Array<IPatientAnswer>;
+    riskArea: IRiskAreaShort | null;
+    screeningTool: IScreeningToolShort | null;
   }
 
 
@@ -942,13 +953,56 @@ declare module 'schema' {
   type IRiskAdjustmentTypeOptionsEnum = 'inactive' | 'increment' | 'forceHighRisk';
 
 
+  interface IRiskAreaShort {
+    id: string;
+    title: string;
+  }
+
+
+  interface IScreeningToolShort {
+    id: string;
+    title: string;
+  }
+
+
+  type IAnswerTypeOptionsEnum = 'dropdown' | 'radio' | 'freetext' | 'multiselect';
+
+  /**
+    QuestionCondition
+  */
+  interface IQuestionCondition {
+    id: string;
+    createdAt: string;
+    updatedAt: string;
+    deletedAt: string | null;
+    answerId: string;
+    questionId: string;
+  }
+
+
+  type IQuestionConditionTypeOptionsEnum = 'allTrue' | 'oneTrue';
+
+
+  interface IComputedField {
+    id: string;
+    slug: string;
+    label: string;
+    dataType: IComputedFieldDataTypesEnum;
+    createdAt: string;
+    updatedAt: string;
+    deletedAt: string | null;
+  }
+
+
+  type IComputedFieldDataTypesEnum = 'boolean' | 'string' | 'number';
+
+
   interface IScreeningTool {
     id: string;
     title: string;
     riskAreaId: string;
-    riskArea: IRiskArea;
     screeningToolScoreRanges: Array<IScreeningToolScoreRange>;
-    patientScreeningToolSubmissions: Array<IPatientScreeningToolSubmission>;
+    patientScreeningToolSubmissions: Array<IPatientScreeningToolSubmissionShort>;
     createdAt: string;
     updatedAt: string;
     deletedAt: string | null;
@@ -959,7 +1013,6 @@ declare module 'schema' {
     id: string;
     description: string;
     screeningToolId: string;
-    screeningTool: IScreeningTool;
     riskAdjustmentType: IRiskAdjustmentTypeOptionsEnum;
     minimumScore: number;
     maximumScore: number;
@@ -971,17 +1024,131 @@ declare module 'schema' {
   }
 
 
-  interface IPatientScreeningToolSubmission {
+  interface IPatientScreeningToolSubmissionShort {
     id: string;
-    screeningToolId: string;
-    screeningTool: IScreeningTool;
     progressNoteId: string;
     patientId: string;
     patient: IPatient;
     userId: string;
     user: IUser;
     score: number | null;
-    riskArea: IRiskArea;
+    screeningToolId: string;
+    createdAt: string;
+    updatedAt: string;
+    deletedAt: string | null;
+    scoredAt: string | null;
+    screeningToolScoreRangeId: string | null;
+  }
+
+
+  interface IRiskAreaGroupForPatient {
+    id: string;
+    createdAt: string;
+    updatedAt: string;
+    deletedAt: string | null;
+    title: string;
+    shortTitle: string;
+    order: number;
+    mediumRiskThreshold: number;
+    highRiskThreshold: number;
+    riskAreas: Array<IRiskAreaForPatient>;
+  }
+
+
+  interface IRiskAreaForPatient {
+    id: string;
+    createdAt: string;
+    updatedAt: string;
+    deletedAt: string | null;
+    title: string;
+    assessmentType: IAssessmentTypeEnum;
+    riskAreaGroupId: string;
+    order: number;
+    mediumRiskThreshold: number;
+    highRiskThreshold: number;
+    questions: Array<IQuestionWithPatientAnswer>;
+    riskAreaAssessmentSubmissions: Array<IRiskAreaAssessmentSubmission>;
+    screeningTools: Array<IScreeningToolForPatient>;
+  }
+
+  /**
+    Question with patient answer
+  */
+  interface IQuestionWithPatientAnswer {
+    id: string;
+    createdAt: string;
+    updatedAt: string;
+    deletedAt: string | null;
+    title: string;
+    validatedSource: string | null;
+    answers: Array<IAnswerWithPatientAnswer>;
+    answerType: IAnswerTypeOptionsEnum;
+    riskAreaId: string | null;
+    screeningToolId: string | null;
+    progressNoteTemplateId: string | null;
+    applicableIfQuestionConditions: Array<IQuestionCondition>;
+    applicableIfType: IQuestionConditionTypeOptionsEnum | null;
+    order: number;
+    computedFieldId: string | null;
+    computedField: IComputedField | null;
+    otherTextAnswerId: string | null;
+  }
+
+  /**
+    Answer with Patient answer
+  */
+  interface IAnswerWithPatientAnswer {
+    id: string;
+    createdAt: string;
+    updatedAt: string;
+    deletedAt: string | null;
+    displayValue: string;
+    value: string;
+    valueType: IAnswerValueTypeOptionsEnum;
+    riskAdjustmentType: IRiskAdjustmentTypeOptionsEnum | null;
+    inSummary: boolean | null;
+    summaryText: string | null;
+    questionId: string;
+    order: number;
+    concernSuggestions: Array<IConcern>;
+    goalSuggestions: Array<IGoalSuggestionTemplate> | null;
+    riskAreaId: string | null;
+    screeningToolId: string | null;
+    patientAnswers: Array<IPatientAnswer>;
+  }
+
+  /**
+    PatientAnswer
+  */
+  interface IPatientAnswer {
+    id: string;
+    createdAt: string;
+    updatedAt: string;
+    deletedAt: string | null;
+    answer: IAnswer;
+    answerId: string;
+    answerValue: string;
+    patientId: string;
+    applicable: boolean | null;
+    questionId: string | null;
+    question: IQuestion | null;
+    patientScreeningToolSubmissionId: string | null;
+    patientScreeningToolSubmission: IPatientScreeningToolSubmission | null;
+    riskAreaAssessmentSubmissionId: string | null;
+    riskAreaAssessmentSubmission: IRiskAreaAssessmentSubmission | null;
+  }
+
+
+  interface IPatientScreeningToolSubmission {
+    id: string;
+    progressNoteId: string;
+    patientId: string;
+    patient: IPatient;
+    userId: string;
+    user: IUser;
+    score: number | null;
+    screeningToolId: string;
+    screeningTool: IScreeningTool;
     createdAt: string;
     updatedAt: string;
     deletedAt: string | null;
@@ -1024,7 +1191,6 @@ declare module 'schema' {
   interface IRiskAreaAssessmentSubmission {
     id: string;
     riskAreaId: string;
-    riskArea: IRiskArea;
     patientId: string;
     patient: IPatient;
     userId: string;
@@ -1044,90 +1210,6 @@ declare module 'schema' {
     createdAt: string;
     updatedAt: string;
     deletedAt: string | null;
-  }
-
-  /**
-    PatientAnswer
-  */
-  interface IPatientAnswer {
-    id: string;
-    createdAt: string;
-    updatedAt: string;
-    deletedAt: string | null;
-    answerId: string;
-    answer: IAnswer;
-    answerValue: string;
-    patientId: string;
-    applicable: boolean | null;
-    question: IQuestion | null;
-    patientScreeningToolSubmissionId: string | null;
-    patientScreeningToolSubmission: IPatientScreeningToolSubmission | null;
-    riskAreaAssessmentSubmissionId: string | null;
-    riskAreaAssessmentSubmission: IRiskAreaAssessmentSubmission | null;
-  }
-
-
-  type IAnswerTypeOptionsEnum = 'dropdown' | 'radio' | 'freetext' | 'multiselect';
-
-  /**
-    QuestionCondition
-  */
-  interface IQuestionCondition {
-    id: string;
-    createdAt: string;
-    updatedAt: string;
-    deletedAt: string | null;
-    answerId: string;
-    questionId: string;
-  }
-
-
-  type IQuestionConditionTypeOptionsEnum = 'allTrue' | 'oneTrue';
-
-
-  interface IComputedField {
-    id: string;
-    slug: string;
-    label: string;
-    dataType: IComputedFieldDataTypesEnum;
-    createdAt: string;
-    updatedAt: string;
-    deletedAt: string | null;
-  }
-
-
-  type IComputedFieldDataTypesEnum = 'boolean' | 'string' | 'number';
-
-
-  interface IRiskAreaGroupForPatient {
-    id: string;
-    createdAt: string;
-    updatedAt: string;
-    deletedAt: string | null;
-    title: string;
-    shortTitle: string;
-    order: number;
-    mediumRiskThreshold: number;
-    highRiskThreshold: number;
-    riskAreas: Array<IRiskAreaForPatient>;
-  }
-
-
-  interface IRiskAreaForPatient {
-    id: string;
-    createdAt: string;
-    updatedAt: string;
-    deletedAt: string | null;
-    title: string;
-    assessmentType: IAssessmentTypeEnum;
-    riskAreaGroupId: string;
-    riskAreaGroup: IRiskAreaGroup;
-    order: number;
-    mediumRiskThreshold: number;
-    highRiskThreshold: number;
-    questions: Array<IQuestion>;
-    riskAreaAssessmentSubmissions: Array<IRiskAreaAssessmentSubmission>;
-    screeningTools: Array<IScreeningToolForPatient>;
   }
 
 

@@ -2,10 +2,10 @@ import { isInteger, reduce } from 'lodash';
 import { Model, RelationMappings, Transaction } from 'objection';
 import { createSuggestionsForPatientScreeningToolSubmission } from '../lib/suggestions';
 import BaseModel from './base-model';
+import CarePlanSuggestion from './care-plan-suggestion';
 import Patient from './patient';
 import PatientAnswer from './patient-answer';
 import ProgressNote from './progress-note';
-import RiskArea from './risk-area';
 import ScreeningTool from './screening-tool';
 import ScreeningToolScoreRange from './screening-tool-score-range';
 import User from './user';
@@ -21,7 +21,7 @@ interface IPatientScreeningToolSubmissionScoreFields {
 }
 
 export const EAGER_QUERY =
-  '[screeningTool, screeningToolScoreRange, patient.[patientInfo], user, riskArea.[riskAreaGroup], patientAnswers, carePlanSuggestions.[patient.[patientInfo], concern, goalSuggestionTemplate.[taskTemplates]]]';
+  '[screeningTool, screeningToolScoreRange, patient.[patientInfo], user, patientAnswers, carePlanSuggestions.[patient.[patientInfo], concern, goalSuggestionTemplate.[taskTemplates]]]';
 
 /* tslint:disable:member-ordering */
 export default class PatientScreeningToolSubmission extends BaseModel {
@@ -33,11 +33,11 @@ export default class PatientScreeningToolSubmission extends BaseModel {
   userId: string;
   user: User;
   score: number;
-  riskArea: RiskArea;
   patientAnswers: PatientAnswer[];
   patientScreeningToolId: string;
   screeningToolScoreRangeId: string;
   screeningToolScoreRange: ScreeningToolScoreRange;
+  carePlanSuggestions: CarePlanSuggestion[];
   scoredAt: string;
 
   static tableName = 'patient_screening_tool_submission';
@@ -87,20 +87,6 @@ export default class PatientScreeningToolSubmission extends BaseModel {
       },
     },
 
-    riskArea: {
-      relation: Model.HasOneThroughRelation,
-      modelClass: 'risk-area',
-      join: {
-        from: 'patient_screening_tool_submission.screeningToolId',
-        through: {
-          modelClass: 'screening-tool',
-          from: 'screening_tool.id',
-          to: 'screening_tool.riskAreaId',
-        },
-        to: 'risk_area.id',
-      },
-    },
-
     patientAnswers: {
       relation: Model.HasManyRelation,
       modelClass: 'patient-answer',
@@ -125,6 +111,19 @@ export default class PatientScreeningToolSubmission extends BaseModel {
       join: {
         from: 'patient_screening_tool_submission.screeningToolScoreRangeId',
         to: 'screening_tool_score_range.id',
+      },
+    },
+    riskArea: {
+      relation: Model.HasOneThroughRelation,
+      modelClass: 'risk-area',
+      join: {
+        from: 'patient_screening_tool_submission.screeningToolId',
+        through: {
+          modelClass: 'screening-tool',
+          from: 'screening_tool.id',
+          to: 'screening_tool.riskAreaId',
+        },
+        to: 'risk_area.id',
       },
     },
   };

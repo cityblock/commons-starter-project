@@ -7,10 +7,11 @@ import Icon from '../../../shared/library/icon/icon';
 import SmallText from '../../../shared/library/small-text/small-text';
 import TextInfo from '../../../shared/library/text-info/text-info';
 import {
+  riskArea,
   shortPatientScreeningToolSubmission as submission,
   shortPatientScreeningToolSubmission2 as prevSubmission,
 } from '../../../shared/util/test-data';
-import ScreeningToolHistory from '../screening-tool-history';
+import { ScreeningToolHistory } from '../screening-tool-history';
 
 describe('Patient 360 Screening Tool History Component', () => {
   const routeBase = '/nymeria';
@@ -19,6 +20,7 @@ describe('Patient 360 Screening Tool History Component', () => {
       submission={submission}
       prevSubmission={prevSubmission}
       routeBase={routeBase}
+      riskArea={{ id: 'id', title: riskArea.title }}
     />,
   );
 
@@ -39,7 +41,7 @@ describe('Patient 360 Screening Tool History Component', () => {
 
   it('renders risk area of screening tool', () => {
     expect(wrapper.find(SmallText).length).toBe(1);
-    expect(wrapper.find(SmallText).props().text).toBe(submission.riskArea.title);
+    expect(wrapper.find(SmallText).props().text).toBe(riskArea.title);
   });
 
   it('renders information about when screening tool was administered', () => {

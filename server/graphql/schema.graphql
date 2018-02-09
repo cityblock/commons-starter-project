@@ -447,7 +447,7 @@ type Task implements uniqueId {
   assignedTo: User
   followers: [User!]!
   patientGoalId: ID!
-  patientGoal: PatientGoal!
+  patientGoal: PatientGoalShort!
   CBOReferralId: ID
   CBOReferral: CBOReferral
 }
@@ -507,9 +507,29 @@ type Answer implements uniqueId {
   order: Int!
   concernSuggestions: [Concern!]
   goalSuggestions: [GoalSuggestionTemplate]
-  riskArea: RiskArea
-  screeningTool: ScreeningTool
-  patientAnswers: [PatientAnswer!]
+  riskArea: RiskAreaShort
+  screeningTool: ScreeningToolShort
+}
+
+# Answer with Patient answer
+type AnswerWithPatientAnswer implements uniqueId {
+  id: ID!
+  createdAt: String!
+  updatedAt: String!
+  deletedAt: String
+  displayValue: String!
+  value: String!
+  valueType: AnswerValueTypeOptions!
+  riskAdjustmentType: RiskAdjustmentTypeOptions
+  inSummary: Boolean
+  summaryText: String
+  questionId: ID!
+  order: Int!
+  concernSuggestions: [Concern!]
+  goalSuggestions: [GoalSuggestionTemplate]
+  riskAreaId: String
+  screeningToolId: String
+  patientAnswers: [PatientAnswer!]!
 }
 
 # PatientAnswer
@@ -518,11 +538,12 @@ type PatientAnswer implements uniqueId {
   createdAt: String!
   updatedAt: String!
   deletedAt: String
-  answerId: ID!
   answer: Answer!
+  answerId: ID!
   answerValue: String!
   patientId: ID!
   applicable: Boolean
+  questionId: String
   question: Question
   patientScreeningToolSubmissionId: ID
   patientScreeningToolSubmission: PatientScreeningToolSubmission
@@ -539,6 +560,27 @@ type Question implements uniqueId {
   title: String!
   validatedSource: String
   answers: [Answer!]
+  answerType: AnswerTypeOptions!
+  riskAreaId: ID
+  screeningToolId: ID
+  progressNoteTemplateId: ID
+  applicableIfQuestionConditions: [QuestionCondition!]!
+  applicableIfType: QuestionConditionTypeOptions
+  order: Int!
+  computedFieldId: ID
+  computedField: ComputedField
+  otherTextAnswerId: String
+}
+
+# Question with patient answer
+type QuestionWithPatientAnswer implements uniqueId {
+  id: ID!
+  createdAt: String!
+  updatedAt: String!
+  deletedAt: String
+  title: String!
+  validatedSource: String
+  answers: [AnswerWithPatientAnswer!]
   answerType: AnswerTypeOptions!
   riskAreaId: ID
   screeningToolId: ID
@@ -597,12 +639,16 @@ type RiskArea implements uniqueId {
   title: String!
   assessmentType: AssessmentType!
   riskAreaGroupId: ID!
-  riskAreaGroup: RiskAreaGroup!
   order: Int!
   mediumRiskThreshold: Int!
   highRiskThreshold: Int!
   questions: [Question!]
   screeningTools: [ScreeningTool!]
+}
+
+type RiskAreaShort implements uniqueId {
+  id: ID!
+  title: String!
 }
 
 type RiskAreaForPatient implements uniqueId {
@@ -613,11 +659,10 @@ type RiskAreaForPatient implements uniqueId {
   title: String!
   assessmentType: AssessmentType!
   riskAreaGroupId: ID!
-  riskAreaGroup: RiskAreaGroup!
   order: Int!
   mediumRiskThreshold: Int!
   highRiskThreshold: Int!
-  questions: [Question!]!
+  questions: [QuestionWithPatientAnswer!]!
   riskAreaAssessmentSubmissions: [RiskAreaAssessmentSubmission!]!
   screeningTools: [ScreeningToolForPatient!]!
 }
@@ -775,6 +820,18 @@ type PatientGoal implements uniqueId {
   deletedAt: String
 }
 
+type PatientGoalShort implements uniqueId {
+  id: ID!
+  title: String!
+  patientId: ID!
+  patientConcernId: ID
+  patientConcern: PatientConcern
+  goalSuggestionTemplateId: ID
+  createdAt: String!
+  updatedAt: String!
+  deletedAt: String
+}
+
 type PatientConcern implements uniqueId {
   id: ID!
   order: Int!
@@ -864,12 +921,16 @@ type ScreeningTool implements uniqueId {
   id: ID!
   title: String!
   riskAreaId: ID!
-  riskArea: RiskArea!
   screeningToolScoreRanges: [ScreeningToolScoreRange!]!
-  patientScreeningToolSubmissions: [PatientScreeningToolSubmission!]
+  patientScreeningToolSubmissions: [PatientScreeningToolSubmissionShort!]
   createdAt: String!
   updatedAt: String!
   deletedAt: String
+}
+
+type ScreeningToolShort implements uniqueId {
+  id: ID!
+  title: String!
 }
 
 type ScreeningToolForPatient implements uniqueId {
@@ -885,7 +946,6 @@ type ScreeningToolScoreRange implements uniqueId {
   id: ID!
   description: String!
   screeningToolId: ID!
-  screeningTool: ScreeningTool!
   riskAdjustmentType: RiskAdjustmentTypeOptions!
   minimumScore: Int!
   maximumScore: Int!
@@ -907,15 +967,14 @@ type ScreeningToolScoreRangeForPatientScreeningToolSubmission implements uniqueI
 
 type PatientScreeningToolSubmission implements uniqueId {
   id: ID!
-  screeningToolId: ID!
-  screeningTool: ScreeningTool!
   progressNoteId: ID!
   patientId: ID!
   patient: Patient!
   userId: ID!
   user: User!
   score: Int
-  riskArea: RiskArea!
+  screeningToolId: ID!
+  screeningTool: ScreeningTool!
   createdAt: String!
   updatedAt: String!
   deletedAt: String
@@ -926,10 +985,25 @@ type PatientScreeningToolSubmission implements uniqueId {
   patientAnswers: [PatientAnswer!]
 }
 
+type PatientScreeningToolSubmissionShort implements uniqueId {
+  id: ID!
+  progressNoteId: ID!
+  patientId: ID!
+  patient: Patient!
+  userId: ID!
+  user: User!
+  score: Int
+  screeningToolId: ID!
+  createdAt: String!
+  updatedAt: String!
+  deletedAt: String
+  scoredAt: String
+  screeningToolScoreRangeId: ID
+}
+
 type RiskAreaAssessmentSubmission implements uniqueId {
   id: ID!
   riskAreaId: ID!
-  riskArea: RiskArea!
   patientId: ID!
   patient: Patient!
   userId: ID!
@@ -2163,7 +2237,7 @@ type RootQueryType {
   screeningToolScoreRangeForScoreAndScreeningTool(
     screeningToolId: ID!
     score: Int!
-  ): ScreeningToolScoreRange!
+  ): ScreeningToolScoreRange
   # screening tool score ranges
   screeningToolScoreRanges: [ScreeningToolScoreRange]!
   # screening tool score ranges for screening tool

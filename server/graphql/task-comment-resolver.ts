@@ -1,8 +1,8 @@
 import {
-  ITaskComment,
+  IRootMutationType,
+  IRootQueryType,
   ITaskCommentCreateInput,
   ITaskCommentDeleteInput,
-  ITaskCommentEdges,
   ITaskCommentEditInput,
   ITaskCommentNode,
 } from 'schema';
@@ -24,7 +24,7 @@ export async function taskCommentCreate(
   source: any,
   { input }: ITaskCommentCreateOptions,
   context: IContext,
-): Promise<TaskComment> {
+): Promise<IRootMutationType['taskCommentCreate']> {
   const { taskId, body } = input;
   const { userId, userRole, txn } = context;
 
@@ -55,7 +55,7 @@ export async function taskCommentEdit(
   source: any,
   { input }: ITaskCommentEditOptions,
   context: IContext,
-): Promise<TaskComment> {
+): Promise<IRootMutationType['taskCommentEdit']> {
   const { userRole, userId, txn } = context;
   const { taskCommentId, body } = input;
   // TODO: Improve access controls here. Requirements unclear ATM
@@ -85,7 +85,7 @@ export async function taskCommentDelete(
   source: any,
   { input }: ITaskCommentDeleteOptions,
   context: IContext,
-): Promise<TaskComment> {
+): Promise<IRootMutationType['taskCommentDelete']> {
   const { userRole, userId, txn } = context;
   const { taskCommentId } = input;
   // TODO: Improve access controls here. Requirements unclear ATM
@@ -111,7 +111,7 @@ export async function resolveTaskComments(
   root: any,
   args: IPaginationOptions & { taskId: string },
   { db, userRole, userId, txn }: IContext,
-): Promise<ITaskCommentEdges> {
+): Promise<IRootQueryType['taskComments']> {
   // TODO: Improve task access controls
   await accessControls.isAllowed(userRole, 'view', 'task');
   checkUserLoggedIn(userId);
@@ -147,7 +147,7 @@ export async function resolveTaskComment(
   rot: any,
   args: { taskCommentId: string },
   { db, userRole, userId, txn }: IContext,
-): Promise<ITaskComment> {
+): Promise<IRootQueryType['taskComment']> {
   await accessControls.isAllowed(userRole, 'view', 'task');
   checkUserLoggedIn(userId);
 

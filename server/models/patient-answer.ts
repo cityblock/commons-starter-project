@@ -71,9 +71,10 @@ export default class PatientAnswer extends BaseModel {
   userId: string;
   applicable: boolean;
   question: Question;
+  questionId: string;
   patientScreeningToolSubmissionId: string;
   patientScreeningToolSubmission: PatientScreeningToolSubmission;
-  riskAreaAssessmentSubmissionId?: string;
+  riskAreaAssessmentSubmissionId: string | null;
   riskAreaAssessmentSubmission: RiskAreaAssessmentSubmission;
   screeningTool: ScreeningTool;
   progressNoteId: string;

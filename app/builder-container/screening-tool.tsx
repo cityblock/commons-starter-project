@@ -276,7 +276,7 @@ export class ScreeningTool extends React.Component<allProps, IState> {
                 />
               </div>
               <div className={styles.smallText}>Risk Area:</div>
-              <div className={styles.largeText}>{screeningTool.riskArea.title}</div>
+              <div className={styles.largeText}>{screeningTool.riskAreaId}</div>
               <br />
               <div className={styles.smallText}>Score Ranges:</div>
               <div>{scoreRanges}</div>

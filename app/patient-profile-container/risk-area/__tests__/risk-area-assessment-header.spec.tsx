@@ -25,7 +25,7 @@ describe('Risk Area Assessment Header', () => {
   const wrapper = shallow(
     <RiskAreaAssessmentHeader
       patientId={patientId}
-      riskAreaGroupId={riskArea.riskAreaGroup.id}
+      riskAreaGroupId={riskArea.riskAreaGroupId}
       riskAreaId={riskArea.id}
       riskAreaGroup={riskAreaGroup}
     />,

@@ -7,8 +7,8 @@ import ProgressNoteActivityPatientAnswer from './progress-note-activity-patient-
 
 interface IProps {
   patientAnswerEvents: FullPatientAnswerEventFragment[];
-  title: string;
   expanded: boolean;
+  title: string;
 }
 
 interface IState {

@@ -15,7 +15,6 @@ class ProgressNoteActivityPatientAnswers extends React.Component<IProps> {
     const { expanded, patientAnswerEvents } = this.props;
     const filteredEvents = filter(patientAnswerEvents, patientAnswerEvent => {
       const answer = patientAnswerEvent.patientAnswer.answer;
-
       return !!answer.riskArea;
     });
     const groupedEvents = groupBy(
@@ -30,13 +29,12 @@ class ProgressNoteActivityPatientAnswers extends React.Component<IProps> {
     return keys(groupedEvents).map(patientAnswerEventsGroupId => {
       const events = groupedEvents[patientAnswerEventsGroupId];
       const answer = events[0].patientAnswer.answer;
-      const title = answer.riskArea!.title;
 
       return (
         <ProgressNoteActivityPatientAnswerGroup
           key={events[0].id}
           patientAnswerEvents={events}
-          title={title}
+          title={answer.riskArea!.title}
           expanded={expanded}
         />
       );

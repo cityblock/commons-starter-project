@@ -1,4 +1,4 @@
-import { ITaskEdges, ITaskFollowInput, ITaskNode } from 'schema';
+import { IRootMutationType, IRootQueryType, ITaskFollowInput, ITaskNode } from 'schema';
 import { IPaginationOptions } from '../db';
 import Task, { TaskOrderOptions } from '../models/task';
 import TaskEvent from '../models/task-event';
@@ -18,7 +18,7 @@ export async function taskUserFollow(
   source: any,
   { input }: ITaskFollowersOptions,
   context: IContext,
-): Promise<Task> {
+): Promise<IRootMutationType['taskUserFollow']> {
   const { userRole, userId, txn } = context;
   const { taskId } = input;
 
@@ -50,7 +50,7 @@ export async function taskUserUnfollow(
   source: any,
   { input }: ITaskFollowersOptions,
   context: IContext,
-): Promise<Task> {
+): Promise<IRootMutationType['taskUserUnfollow']> {
   const { userRole, userId, txn } = context;
   const { taskId } = input;
   // TODO: Improve access controls here. Requirements unclear ATM
@@ -87,7 +87,7 @@ export async function resolveCurrentUserTasks(
   root: any,
   args: ICurrentUserTasksFilterOptions,
   { db, userRole, userId, txn }: IContext,
-): Promise<ITaskEdges> {
+): Promise<IRootQueryType['tasksForCurrentUser']> {
   await accessControls.isAllowed(userRole, 'view', 'task');
   checkUserLoggedIn(userId);
 

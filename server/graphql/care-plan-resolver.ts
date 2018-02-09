@@ -124,10 +124,10 @@ export async function carePlanSuggestionAccept(
       await PatientGoal.create(
         {
           userId: userId!,
-          goalSuggestionTemplateId,
+          goalSuggestionTemplateId: goalSuggestionTemplateId || null,
           patientId: carePlanSuggestion.patientId,
           title: carePlanSuggestion.goalSuggestionTemplate.title,
-          patientConcernId: patientConcernId || undefined,
+          patientConcernId: patientConcernId || null,
           taskTemplateIds: taskTemplateIds || [],
         },
         txn,

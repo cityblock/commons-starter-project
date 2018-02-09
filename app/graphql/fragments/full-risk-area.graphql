@@ -8,8 +8,5 @@ fragment FullRiskArea on RiskArea {
   order
   mediumRiskThreshold
   highRiskThreshold
-  riskAreaGroup {
-    id
-    title
-  }
+  riskAreaGroupId
 }

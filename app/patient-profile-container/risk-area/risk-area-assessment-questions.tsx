@@ -121,7 +121,7 @@ export class RiskAreaAssessmentQuestions extends React.Component<allProps> {
       <div className={styles.container}>
         <RiskAreaAssessmentHeader
           riskAreaId={riskArea.id}
-          riskAreaGroupId={riskArea.riskAreaGroup.id}
+          riskAreaGroupId={riskArea.riskAreaGroupId}
           patientId={patientId}
         />
         {this.renderQuestions()}

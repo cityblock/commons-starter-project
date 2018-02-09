@@ -30,7 +30,7 @@ export const ScreeningToolRow: React.StatelessComponent<IProps> = props => {
           className={classNames(screeningToolStyles.dateSection, screeningToolStyles.orderSection)}
         >
           <span className={styles.dateLabel}>Risk Area:</span>
-          <span className={styles.dateValue}>{screeningTool.riskArea.title}</span>
+          <span className={styles.dateValue}>{screeningTool.riskAreaId}</span>
         </div>
         <div
           className={classNames(

@@ -107,7 +107,7 @@ exports[`shallow rendered renders with screening tool 1`] = `
       <p
         className="uneditable"
       >
-        Jon Snow's Direwolf
+        ghost
       </p>
       <p>
         Assessment Type:

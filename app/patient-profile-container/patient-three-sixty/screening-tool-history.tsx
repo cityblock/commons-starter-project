@@ -1,7 +1,12 @@
 import * as classNames from 'classnames';
 import * as React from 'react';
+import { graphql } from 'react-apollo';
 import { Link } from 'react-router-dom';
-import { ShortPatientScreeningToolSubmission360Fragment } from '../../graphql/types';
+import * as riskAreaShortQueryGraphql from '../../graphql/queries/get-risk-area-short.graphql';
+import {
+  getRiskAreaShortQuery,
+  ShortPatientScreeningToolSubmission360Fragment,
+} from '../../graphql/types';
 import { formatFullName, formatScreeningToolScore } from '../../shared/helpers/format-helpers';
 import DateInfo from '../../shared/library/date-info/date-info';
 import Icon from '../../shared/library/icon/icon';
@@ -15,8 +20,14 @@ interface IProps {
   routeBase: string;
 }
 
-const ScreeningToolHistory: React.StatelessComponent<IProps> = (props: IProps) => {
-  const { submission, prevSubmission, routeBase } = props;
+interface IGraphqlProps {
+  riskArea: getRiskAreaShortQuery['riskArea'];
+}
+
+type allProps = IProps & IGraphqlProps;
+
+export const ScreeningToolHistory: React.StatelessComponent<allProps> = (props: allProps) => {
+  const { submission, prevSubmission, routeBase, riskArea } = props;
   if (submission.score === null) return null;
 
   const fullName = formatFullName(submission.user.firstName, submission.user.lastName);
@@ -42,13 +53,15 @@ const ScreeningToolHistory: React.StatelessComponent<IProps> = (props: IProps) =
     prevScoreProps.textMessageId = 'history360.noRecord';
   }
 
+  const riskAreaTitle = riskArea ? <SmallText text={riskArea.title} /> : null;
+
   return (
     <div className={styles.container}>
       <Link to={`${routeBase}/tools/${submission.screeningTool.id}`} className={styles.link}>
         <div className={styles.header}>
           <div className={styles.textGroup}>
             <h2>{submission.screeningTool.title}</h2>
-            <SmallText text={submission.riskArea.title} />
+            {riskAreaTitle}
           </div>
           <div className={styles.textGroup}>
             <TextInfo
@@ -75,4 +88,11 @@ const ScreeningToolHistory: React.StatelessComponent<IProps> = (props: IProps) =
   );
 };
 
-export default ScreeningToolHistory;
+export default graphql<IGraphqlProps, IProps, allProps>(riskAreaShortQueryGraphql as any, {
+  options: (props: IProps) => ({
+    variables: { riskAreaId: props.submission.screeningTool.riskAreaId },
+  }),
+  props: ({ data }) => ({
+    riskArea: data ? (data as any).riskArea : null,
+  }),
+})(ScreeningToolHistory);

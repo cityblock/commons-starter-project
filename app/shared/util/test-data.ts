@@ -87,7 +87,7 @@ export const riskArea = {
   mediumRiskThreshold: 5,
   highRiskThreshold: 8,
   assessmentType: 'manual' as any,
-  riskAreaGroup,
+  riskAreaGroupId: riskAreaGroup.id,
   questions: [],
   screeningTools: [],
 };
@@ -546,7 +546,6 @@ export const patientScreeningToolSubmission = {
   patient,
   userId: user.id,
   user,
-  riskArea,
   score: 5,
   scoredAt: 'Thu Jul 13 2017 16:52:56 GMT-0400 (EDT)',
   deletedAt: null,
@@ -564,10 +563,7 @@ export const shortPatientScreeningToolSubmission = {
   screeningTool: {
     id: screeningTool.id,
     title: screeningTool.title,
-  },
-  riskArea: {
-    id: riskArea.id,
-    title: riskArea.title,
+    riskAreaId: riskArea.id,
   },
   user: {
     id: user.id,
@@ -588,10 +584,7 @@ export const shortPatientScreeningToolSubmission2 = {
   screeningTool: {
     id: screeningTool.id,
     title: screeningTool.title,
-  },
-  riskArea: {
-    id: riskArea.id,
-    title: riskArea.title,
+    riskAreaId: riskArea.id,
   },
   user: {
     id: user.id,

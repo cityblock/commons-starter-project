@@ -163,4 +163,38 @@ describe('care model', () => {
       });
     });
   });
+
+  describe('bulk assign patients to a users care team', () => {
+    it('should assign patients', async () => {
+      await transaction(User.knex(), async txn => {
+        const { clinic } = await setup(txn);
+        const user = await User.create(
+          createMockUser(11, clinic.id, userRole, 'care@care.com'),
+          txn,
+        );
+        const user2 = await User.create(
+          createMockUser(12, clinic.id, userRole, 'care2@care.com'),
+          txn,
+        );
+
+        const patient = await createPatient(createMockPatient(123, clinic.id), user.id, txn);
+        const patient2 = await createPatient(createMockPatient(124, clinic.id), user2.id, txn);
+        const patient3 = await createPatient(createMockPatient(125, clinic.id), user2.id, txn);
+
+        const result = await CareTeam.createAllForUser(
+          {
+            userId: user.id,
+            patientIds: [patient.id, patient2.id, patient3.id, patient.id],
+          },
+          txn,
+        );
+
+        expect(result).toMatchObject({
+          firstName: 'dan',
+          lastName: 'plant',
+          patientCount: '3',
+        });
+      });
+    });
+  });
 });

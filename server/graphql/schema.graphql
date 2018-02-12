@@ -193,6 +193,13 @@ type User implements uniqueId {
   updatedAt: String!
 }
 
+type UserWithCount {
+  id: ID!
+  firstName: String
+  lastName: String
+  patientCount: Int
+}
+
 # The user account with an optional auth token
 type UserWithAuthToken {
   user: User!
@@ -1203,6 +1210,12 @@ input CareTeamInput {
   patientId: ID!
 }
 
+# params for adding multiple patients to a user's care team
+input CareTeamAssignInput {
+  userId: ID!
+  patientIds: [ID!]!
+}
+
 # params for starting an appointment
 input AppointmentStartInput {
   patientId: ID!
@@ -1871,6 +1884,8 @@ type RootMutationType {
   careTeamAddUser(input: CareTeamInput): [User]
   # Remove user from careTeam
   careTeamRemoveUser(input: CareTeamInput): [User]
+  # Add multiple patients to careTeam
+  careTeamAssignPatients(input: CareTeamAssignInput): UserWithCount
   # Add a note to an appointment
   appointmentAddNote(input: AppointmentAddNoteInput): AppointmentAddNoteResult
   # Start an appointment

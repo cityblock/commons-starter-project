@@ -1,0 +1,8 @@
+mutation careTeamAssignPatients($patientIds: [ID!]!, $userId: ID!) {
+  careTeamAssignPatients(input: { patientIds: $patientIds, userId: $userId }) {
+    id
+    firstName
+    lastName
+    patientCount
+  }
+}

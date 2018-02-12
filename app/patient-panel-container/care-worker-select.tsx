@@ -66,7 +66,7 @@ class CareWorkerSelect extends React.Component<allProps> {
     const { isLarge, value, onChange, isUnselectable } = this.props;
 
     return (
-      <Select required name="careWorker" value={value || ''} onChange={onChange} large={isLarge}>
+      <Select required name="careWorkerId" value={value || ''} onChange={onChange} large={isLarge}>
         <Option disabled={!isUnselectable} messageId="careWorkerSelect.placeholder" value="" />
         {this.renderOptionGroups()}
       </Select>

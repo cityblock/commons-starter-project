@@ -11,14 +11,14 @@ import * as patientPanelQuery from '../graphql/queries/get-patient-panel.graphql
 import {
   getCurrentUserQuery,
   getPatientPanelQuery,
-  FullPatientTableRowFragment,
   Gender,
   PatientFilterOptions,
 } from '../graphql/types';
 import Button from '../shared/library/button/button';
-import PatientTable from '../shared/patient-table/patient-table';
+import PatientTable, { IFormattedPatient } from '../shared/patient-table/patient-table';
 import PatientTablePagination from '../shared/patient-table/patient-table-pagination';
 import * as styles from './css/patient-panel.css';
+import PatientAssignModal, { filterPatientState, IPatientState } from './patient-assign-modal';
 import PatientFilterPanel from './patient-filter-panel';
 import PatientPanelHeader from './patient-panel-header';
 
@@ -51,7 +51,10 @@ interface IState {
   hasNextPage?: boolean;
   hasPreviousPage?: boolean;
   isPanelOpen: boolean | null;
+  isPopupVisible: boolean;
   pendingFilters: PatientFilterOptions;
+  patientSelectState: IPatientState;
+  isGloballySelected: boolean;
 }
 
 class PatientPanelContainer extends React.Component<allProps, IState> {
@@ -63,6 +66,7 @@ class PatientPanelContainer extends React.Component<allProps, IState> {
     this.formattedPatients = this.formattedPatients.bind(this);
     this.state = {
       isPanelOpen: null,
+      isPopupVisible: false,
       pendingFilters: {
         ageMin: props.filters.ageMin,
         ageMax: props.filters.ageMax,
@@ -70,6 +74,8 @@ class PatientPanelContainer extends React.Component<allProps, IState> {
         zip: props.filters.zip,
         careWorkerId: props.filters.careWorkerId,
       },
+      patientSelectState: {},
+      isGloballySelected: false,
     };
   }
 
@@ -81,10 +87,18 @@ class PatientPanelContainer extends React.Component<allProps, IState> {
   }
 
   formattedPatients() {
-    const patients = this.props.patientPanel
-      ? this.props.patientPanel.edges.map(edge => edge.node)
+    const { patientPanel } = this.props;
+    const { patientSelectState }: any = this.state;
+
+    const patients = patientPanel
+      ? patientPanel.edges.map(edge => {
+          if (edge.node) {
+            return { ...edge.node, isSelected: !!patientSelectState[edge.node.id] };
+          }
+          return edge.node;
+        })
       : [];
-    return patients as FullPatientTableRowFragment[];
+    return patients as IFormattedPatient[];
   }
 
   componentDidMount() {
@@ -118,7 +132,43 @@ class PatientPanelContainer extends React.Component<allProps, IState> {
     });
 
     history.push({ search: filterString });
-    this.setState({ isPanelOpen: false, pendingFilters: activeFilters });
+    this.setState({
+      isPanelOpen: false,
+      pendingFilters: activeFilters,
+      patientSelectState: {},
+      isGloballySelected: false,
+    });
+  };
+
+  handleModalClose = () => {
+    this.setState({ isPopupVisible: false });
+  };
+
+  handleAssignMembersClick = () => {
+    this.setState({ isPopupVisible: true });
+  };
+
+  handlePatientSelectToggle = (selectState: object) => {
+    const newSelectState = {
+      ...this.state.patientSelectState,
+      ...selectState,
+    };
+    this.setState({ patientSelectState: newSelectState, isGloballySelected: false });
+  };
+
+  handleSelectAllToggle = (isSelected: boolean) => {
+    const { patientPanel } = this.props;
+
+    if (patientPanel) {
+      const selectState = {} as any;
+      patientPanel.edges.forEach(({ node }) => {
+        if (node) {
+          selectState[node.id] = isSelected;
+        }
+      });
+      this.handlePatientSelectToggle(selectState);
+      this.setState({ isGloballySelected: isSelected });
+    }
   };
 
   createQueryString = (pageNumber: number, pageSize: number) => {
@@ -132,8 +182,12 @@ class PatientPanelContainer extends React.Component<allProps, IState> {
 
   renderButtons() {
     const { currentUser, filters } = this.props;
+    const { patientSelectState } = this.state;
+
+    const numberPatientsSelected = filterPatientState(patientSelectState).length;
     const isAdmin = currentUser && currentUser.userRole === 'admin';
     const filterNames = Object.keys(filters);
+
     let numberFilters = filterNames.length;
     if (filterNames.includes('ageMin') && filterNames.includes('ageMax')) {
       numberFilters = numberFilters - 1;
@@ -149,6 +203,12 @@ class PatientPanelContainer extends React.Component<allProps, IState> {
             );
           }}
         </FormattedMessage>
+        <Button
+          messageId="patientPanel.assignMembers"
+          onClick={this.handleAssignMembersClick}
+          className={styles.button}
+          disabled={!numberPatientsSelected}
+        />
         {isAdmin && (
           <Button
             messageId="patientPanel.addPatient"
@@ -162,7 +222,13 @@ class PatientPanelContainer extends React.Component<allProps, IState> {
 
   render(): JSX.Element {
     const { loading, filters, patientPanel, pageSize, pageNumber, error } = this.props;
-    const { isPanelOpen, pendingFilters } = this.state;
+    const {
+      isPanelOpen,
+      isGloballySelected,
+      pendingFilters,
+      isPopupVisible,
+      patientSelectState,
+    } = this.state;
     const memberCount = patientPanel ? patientPanel.totalCount : 0;
     const numberFilters = Object.keys(filters).length;
 
@@ -180,8 +246,11 @@ class PatientPanelContainer extends React.Component<allProps, IState> {
             messageIdPrefix="patientPanel"
             isQueried={!!numberFilters}
             isLoading={loading}
+            isGloballySelected={isGloballySelected}
             error={error}
             onRetryClick={this.reloadCurrentPage}
+            onSelectToggle={this.handlePatientSelectToggle}
+            onSelectAll={this.handleSelectAllToggle}
           />
           {!!patientPanel && (
             <PatientTablePagination
@@ -198,6 +267,11 @@ class PatientPanelContainer extends React.Component<allProps, IState> {
           onClick={this.handleFilterButtonClick}
           onChange={this.handleFilterChange}
           isVisible={isPanelOpen}
+        />
+        <PatientAssignModal
+          isVisible={isPopupVisible}
+          closePopup={this.handleModalClose}
+          patientSelectState={patientSelectState}
         />
       </div>
     );

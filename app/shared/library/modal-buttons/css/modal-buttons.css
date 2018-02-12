@@ -11,3 +11,7 @@
   height: 42px;
   padding-top: 12px;
 }
+
+.flex.single {
+  justify-content: center;
+}

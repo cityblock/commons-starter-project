@@ -6,18 +6,36 @@ import PatientTableHeader from './patient-table-header';
 import PatientTableRow from './patient-table-row';
 import { TableLoadingError } from './table-loading-error';
 
+export interface IFormattedPatient extends FullPatientTableRowFragment {
+  isSelected?: boolean;
+}
+
 interface IProps {
-  patients: FullPatientTableRowFragment[];
+  patients: IFormattedPatient[];
   isLoading: boolean;
   isQueried: boolean;
   messageIdPrefix: string;
   onRetryClick: () => any;
+  onSelectToggle?: (selectState: object) => any;
+  onSelectAll?: (isSelected: boolean) => any;
+  isGloballySelected?: boolean;
   error?: string;
   query?: string;
 }
 
 const PatientTable: React.StatelessComponent<IProps> = (props: IProps) => {
-  const { query, isQueried, patients, isLoading, messageIdPrefix, error, onRetryClick } = props;
+  const {
+    query,
+    isQueried,
+    patients,
+    isLoading,
+    messageIdPrefix,
+    error,
+    onRetryClick,
+    onSelectToggle,
+    onSelectAll,
+    isGloballySelected,
+  } = props;
   const hasNoResults = isQueried && !patients.length;
   const hasPlaceholder = !isQueried && !patients.length;
 
@@ -29,12 +47,17 @@ const PatientTable: React.StatelessComponent<IProps> = (props: IProps) => {
   ) : hasNoResults ? (
     <PatientTableNoResults messageIdPrefix={messageIdPrefix} />
   ) : (
-    patients.map((result, i) => <PatientTableRow key={i} patient={result} query={query} />)
+    patients.map((result, i) => (
+      <PatientTableRow key={i} patient={result} query={query} onSelectToggle={onSelectToggle} />
+    ))
   );
 
   return (
     <div>
-      <PatientTableHeader />
+      {!onSelectToggle && <PatientTableHeader />}
+      {!!onSelectToggle && (
+        <PatientTableHeader onSelectToggle={onSelectAll} isSelected={isGloballySelected} />
+      )}
       {resultsBody}
     </div>
   );

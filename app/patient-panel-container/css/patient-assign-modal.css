@@ -1,0 +1,14 @@
+@import '../../shared/css/sizes';
+
+.body {
+  padding: var(--gutter);
+}
+
+.blueHighlight {
+  color: var(--blue-color);
+}
+
+.box {
+  border: 1px solid var(--border-color);
+  padding: 15px 20px;
+}

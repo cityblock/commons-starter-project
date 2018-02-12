@@ -21,7 +21,12 @@ import {
   resolveCarePlanForPatient,
   resolveCarePlanSuggestionsForPatient,
 } from './care-plan-resolver';
-import { careTeamAddUser, careTeamRemoveUser, resolvePatientCareTeam } from './care-team-resolver';
+import {
+  careTeamAddUser,
+  careTeamAssignPatients,
+  careTeamRemoveUser,
+  resolvePatientCareTeam,
+} from './care-team-resolver';
 import { resolveCBOCategories } from './cbo-category-resolver';
 import { CBOReferralCreate, CBOReferralEdit } from './cbo-referral-resolver';
 import {
@@ -373,6 +378,7 @@ const resolveFunctions = {
     addressCreatePrimaryForPatient,
     addressEdit,
     careTeamAddUser,
+    careTeamAssignPatients,
     careTeamRemoveUser,
     clinicCreate,
     patientEdit,

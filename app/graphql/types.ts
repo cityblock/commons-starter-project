@@ -668,6 +668,21 @@ export interface carePlanSuggestionDismissMutation {
   } | null,
 };
 
+export interface careTeamAssignPatientsMutationVariables {
+  patientIds: Array< string >,
+  userId: string,
+};
+
+export interface careTeamAssignPatientsMutation {
+  // Add multiple patients to careTeam
+  careTeamAssignPatients:  {
+    id: string,
+    firstName: string | null,
+    lastName: string | null,
+    patientCount: number | null,
+  } | null,
+};
+
 export interface CBOCreateMutationVariables {
   name: string,
   categoryId: string,

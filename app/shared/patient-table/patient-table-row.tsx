@@ -1,30 +1,46 @@
+import * as classNames from 'classnames';
 import * as React from 'react';
 import { Link } from 'react-router-dom';
 import { FullPatientTableRowFragment } from '../../graphql/types';
 import { formatFullName } from '../helpers/format-helpers';
+import Checkbox from '../library/checkbox/checkbox';
 import PatientAge from '../library/patient-age/patient-age';
 import { formatSearchText } from '../library/search/helpers';
 import * as styles from './css/patient-table.css';
 
-interface IProps {
-  patient: FullPatientTableRowFragment;
-  query?: string;
+interface IFormattedPatient extends FullPatientTableRowFragment {
+  isSelected?: boolean;
 }
 
-const PatientTableRow: React.StatelessComponent<IProps> = ({ patient, query }) => {
-  const { id, firstName, lastName, dateOfBirth, patientInfo, userCareTeam } = patient;
+interface IProps {
+  patient: IFormattedPatient;
+  query?: string;
+  onSelectToggle?: (selectState: object) => any;
+}
+
+const PatientTableRow: React.StatelessComponent<IProps> = ({ patient, query, onSelectToggle }) => {
+  const { id, firstName, lastName, dateOfBirth, patientInfo, userCareTeam, isSelected } = patient;
   const fullName = formatFullName(firstName, lastName);
   const formattedName = query ? formatSearchText(fullName, query) : fullName;
 
   return (
-    <Link to={`/patients/${id}/map/active`} className={styles.result}>
-      {userCareTeam && <div className={styles.userCareTeam} />}
-      <h4 className={styles.name}>{formattedName}</h4>
-      <p className={styles.status}>Enrolled</p>
-      <p className={styles.memberId}>CBH-1234567</p>
-      <PatientAge dateOfBirth={dateOfBirth} gender={patientInfo.gender} />
-      <p className={styles.address}>830 Gaston Crescent, Apt 5A, Queens, NY</p>
-    </Link>
+    <div className={classNames(styles.rowContainer, { [styles.hasCheck]: !!onSelectToggle })}>
+      {onSelectToggle && (
+        <Checkbox
+          className={styles.check}
+          isChecked={!!isSelected}
+          onChange={e => onSelectToggle({ [id]: e.target.checked })}
+        />
+      )}
+      <Link to={`/patients/${id}/map/active`} className={styles.result}>
+        {query && userCareTeam && <div className={styles.userCareTeam} />}
+        <h4 className={styles.name}>{formattedName}</h4>
+        <p className={styles.status}>Enrolled</p>
+        <p className={styles.memberId}>CBH-1234567</p>
+        <PatientAge dateOfBirth={dateOfBirth} gender={patientInfo.gender} />
+        <p className={styles.address}>830 Gaston Crescent, Apt 5A, Queens, NY</p>
+      </Link>
+    </div>
   );
 };
 

@@ -45,6 +45,19 @@ exports[`renders patient panel container correctly 1`] = `
             </span>
           </span>
         </button>
+        <button
+          className="button disabled button"
+          disabled={true}
+          onClick={[Function]}
+        >
+          <span
+            className="flex"
+          >
+            <span>
+              Assign Members
+            </span>
+          </span>
+        </button>
       </div>
     </div>
   </div>
@@ -274,7 +287,7 @@ exports[`renders patient panel container correctly 1`] = `
         <select
           className="select large noValue"
           disabled={undefined}
-          name="careWorker"
+          name="careWorkerId"
           onChange={[Function]}
           required={true}
           value=""

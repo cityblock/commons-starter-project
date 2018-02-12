@@ -90,5 +90,35 @@ describe('care team', () => {
         expect(careTeamUserIds).toContain(user.id);
       });
     });
+
+    it('bulk assigns patients to have a user on their care team', async () => {
+      await transaction(CareTeam.knex(), async txn => {
+        const { patient, user, clinic } = await setup(txn);
+        const user2 = await User.create(
+          createMockUser(12, clinic.id, userRole, 'care2@care.com'),
+          txn,
+        );
+
+        const patient2 = await createPatient(createMockPatient(124, clinic.id), user2.id, txn);
+        await createPatient(createMockPatient(125, clinic.id), user2.id, txn);
+
+        const mutation = `mutation {
+          careTeamAssignPatients(input: { patientIds: ["${patient.id}", "${patient2.id}"], userId: "${user.id}" }) {
+            id,
+            firstName,
+            lastName,
+            patientCount,
+          }
+        }`;
+
+        const result = await graphql(schema, mutation, null, { db, userRole, txn, userId: user2.id });
+        expect(cloneDeep(result.data!.careTeamAssignPatients)).toMatchObject({
+          id: user.id,
+          firstName: 'dan',
+          lastName: 'plant',
+          patientCount: 2,
+        });
+      });
+    });
   });
 });

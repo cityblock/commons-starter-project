@@ -13,6 +13,7 @@ export const SPANISH_TRANSLATION = {
     'patientPanel.filteredBy': 'Filtered by',
     'patientPanel.addPatient': 'Añadir Paciente',
     'patientPanel.filter': 'Filter',
+    'patientPanel.assignMembers': 'Assign Members',
     'patientPanel.resultsPlaceholder': 'No patients on your care team.',
     'patientPanel.noResults': 'No members found',
     'patientPanel.noResultsDetail':
@@ -30,6 +31,17 @@ export const SPANISH_TRANSLATION = {
     'patientFilter.inNetwork': 'Is their primary doctor in-network',
     'patientFilter.yes': 'Yes',
     'patientFilter.no': 'No',
+    'patientAssignModal.title': 'Assign members to care worker',
+    'patientAssignModal.description': 'Select which care team to assign these members to.',
+    'patientAssignModal.assign': 'Assign members',
+    'patientAssignModal.cancel': 'Cancel',
+    'patientAssignModal.select': 'Select a care worker',
+    'patientAssignModal.done': 'Done',
+    'patientAssignModal.assignSuccessTitle': 'Members successfully assigned',
+    'patientAssignModal.assignSuccessDetailPlural':
+      'members have been successfully assigned to the following care worker',
+    'patientAssignModal.assignSuccessDetailSingular':
+      'member has been successfully assigned to the following care worker',
     'patient.dateOfBirth': 'Fecha de nacimiento',
     'patient.language': 'Idioma',
     'patient.location': 'Ubicación',

@@ -1,5 +1,6 @@
 import { toNumber } from 'lodash';
 import { Model, RelationMappings, Transaction } from 'objection';
+import * as uuid from 'uuid/v4';
 import { IPaginatedResults, IPaginationOptions } from '../db';
 import BaseModel from './base-model';
 import Patient from './patient';
@@ -8,6 +9,15 @@ import User from './user';
 interface ICareTeamOptions {
   userId: string;
   patientId: string;
+}
+
+interface ICareTeamAssignOptions {
+  userId: string;
+  patientIds: string[];
+}
+
+interface IUserPatientCount {
+  patientCount: number;
 }
 
 /* tslint:disable:member-ordering */
@@ -98,6 +108,30 @@ export default class CareTeam extends BaseModel {
     }
 
     return this.getForPatient(patientId, txn);
+  }
+
+  static async createAllForUser(
+    { userId, patientIds }: ICareTeamAssignOptions,
+    txn: Transaction,
+  ): Promise<User & IUserPatientCount> {
+    const rows = patientIds.map(id => {
+      return { id: uuid(), userId, patientId: id };
+    });
+    const insertQuery = txn
+      .table('care_team')
+      .insert(rows)
+      .toString();
+    await txn.raw(`${insertQuery} ON CONFLICT DO NOTHING`);
+
+    const user = (await CareTeam.query(txn)
+      .joinRelation('user')
+      .select(['user.id', 'firstName', 'lastName'])
+      .select(this.raw('COUNT("patientId") as "patientCount"'))
+      .where('care_team.userId', userId)
+      .andWhere('care_team.deletedAt', null)
+      .groupBy('user.id')) as any;
+
+    return user[0];
   }
 
   static async delete({ userId, patientId }: ICareTeamOptions, txn: Transaction): Promise<User[]> {

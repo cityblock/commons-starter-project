@@ -1501,6 +1501,10 @@ declare module 'schema' {
   */
     careTeamRemoveUser: Array<IUser> | null;
     /**
+    Add multiple patients to careTeam
+  */
+    careTeamAssignPatients: IUserWithCount | null;
+    /**
     Add a note to an appointment
   */
     appointmentAddNote: IAppointmentAddNoteResult | null;
@@ -1964,6 +1968,22 @@ declare module 'schema' {
   interface ICareTeamInput {
     userId: string;
     patientId: string;
+  }
+
+  /**
+    params for adding multiple patients to a user's care team
+  */
+  interface ICareTeamAssignInput {
+    userId: string;
+    patientIds: Array<string>;
+  }
+
+
+  interface IUserWithCount {
+    id: string;
+    firstName: string | null;
+    lastName: string | null;
+    patientCount: number | null;
   }
 
   /**

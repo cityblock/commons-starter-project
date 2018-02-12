@@ -1,10 +1,18 @@
 @import '../../css/sizes';
 
-.headerContainer,
+.hasCheck .result {
+  left: 60px;
+  padding: 15px 50px 15px 0;
+}
+
 .result {
+  position: absolute;
   display: flex;
   justify-content: space-between;
   padding: 15px 50px;
+  left: 0;
+  top: 0;
+  right: 0;
 }
 
 .headerContainer {
@@ -12,8 +20,27 @@
   border-bottom: 1px solid var(--border-color);
   position: -webkit-sticky;
   position: sticky;
+  height: 48px;
+  padding: 15px 0;
   top: 0;
   z-index: 1;
+}
+
+.headerContainer .result {
+  background: transparent;
+}
+
+.rowContainer {
+  position: relative;
+  height: 46px;
+  padding: 15px 0;
+  border-bottom: 1px solid var(--gray-background-color);
+}
+
+.check {
+  display: inline-block;
+  margin-left: var(--small-gutter);
+  padding: 15px;
 }
 
 .name {
@@ -36,12 +63,7 @@
   min-width: 125px;
 }
 
-.result {
-  position: relative;
-  border-bottom: 1px solid var(--gray-background-color);
-}
-
-.result:nth-child(odd) {
+.rowContainer:nth-child(odd) {
   background: var(--highlight-background-color);
 }
 

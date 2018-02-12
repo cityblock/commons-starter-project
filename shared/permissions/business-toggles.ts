@@ -43,7 +43,7 @@ const businessToggles: IBusinessToggles = {
     isCareTeamCheckRequired: false,
   },
   canViewMembersOnPanel: {
-    name: 'canEditMembersOnPanel',
+    name: 'canViewMembersOnPanel',
     isCareTeamCheckRequired: true,
   },
   canEditMembersOnPanel: {

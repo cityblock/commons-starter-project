@@ -2,7 +2,7 @@ import * as acl from 'acl';
 import { UserRole } from '../../models/user';
 import aclJson from './acl';
 
-export type Action = 'view' | 'edit' | 'delete' | 'create';
+export type Action = 'view' | 'edit' | 'delete' | 'create' | 'disenroll';
 export type Resource =
   | 'patient'
   | 'note'
@@ -20,6 +20,7 @@ export type Resource =
   | 'riskArea'
   | 'question'
   | 'concern'
+  | 'concernSuggestion'
   | 'patientConcern'
   | 'taskTemplate'
   | 'goalSuggestionTemplate'
@@ -27,6 +28,7 @@ export type Resource =
   | 'screeningTool'
   | 'carePlanSuggestion'
   | 'careTeam'
+  | 'careTeamBulk'
   | 'goalSuggestion'
   | 'patientTaskSuggestion'
   | 'taskSuggestion'

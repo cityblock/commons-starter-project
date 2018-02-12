@@ -1,3 +1,14 @@
+import {
+  builderResources,
+  careTeamMemberResources,
+  patientAllActionsAllowedResources,
+  patientCreatableAndDeletableOnlyResoruces,
+  patientCreatableOnlyResources,
+  patientNotDeletableResources,
+  patientViewOnlyResources,
+  userResources,
+} from './resource-group';
+
 export default [
   {
     roles: ['familyMember'],
@@ -132,5 +143,75 @@ export default [
         permissions: ['edit', 'view', 'delete', 'create'],
       },
     ],
+  },
+  {
+    roles: ['isBuilderEnabled'],
+    allows: builderResources,
+    permissions: ['create', 'view', 'edit', 'delete'],
+  },
+  {
+    roles: ['isManagerEnabled'],
+    allows: userResources,
+    permissions: ['create', 'view'],
+  },
+  {
+    roles: ['canChangeUserPermissions'],
+    allows: userResources,
+    permissions: ['create', 'view', 'edit'],
+  },
+  {
+    roles: ['canDeleteUsers'],
+    allows: userResources,
+    permissions: ['create', 'view', 'edit', 'delete'],
+  },
+  {
+    roles: ['canBulkAssign'],
+    allows: [
+      { resources: ['careTeam', 'careTeamBulk'], permissions: ['create', 'view', 'delete'] },
+      { resources: careTeamMemberResources, permissions: ['view'] },
+    ],
+  },
+  {
+    roles: ['canEditCareTeam'],
+    allows: [
+      { resources: ['careTeam'], permissions: ['create', 'view', 'delete'] },
+      { resources: careTeamMemberResources, permissions: ['view'] },
+    ],
+  },
+  {
+    roles: ['canViewAllMembers', 'canViewMembersOnPanel'],
+    allows: [
+      { resources: patientViewOnlyResources, permissions: ['view'] },
+      { resources: patientAllActionsAllowedResources, permissions: ['view'] },
+      { resources: patientCreatableAndDeletableOnlyResoruces, permissions: ['view'] },
+      { resources: patientCreatableOnlyResources, permissions: ['view'] },
+      { resources: patientNotDeletableResources, permissions: ['view'] },
+    ],
+  },
+  {
+    roles: ['canEditAllMembers', 'canEditMembersOnPanel'],
+    allows: [
+      { resources: patientViewOnlyResources, permissions: ['view'] },
+      {
+        resources: patientAllActionsAllowedResources,
+        permissions: ['create', 'view', 'edit', 'delete'],
+      },
+      {
+        resources: patientCreatableAndDeletableOnlyResoruces,
+        permissions: ['create', 'view', 'delete'],
+      },
+      { resources: patientCreatableOnlyResources, permissions: ['create', 'view'] },
+      { resources: patientNotDeletableResources, permissions: ['create', 'view', 'edit'] },
+    ],
+  },
+  {
+    roles: ['canShowAllMembersInPatientPanel'],
+    allows: ['patient'],
+    permissions: ['view'],
+  },
+  {
+    roles: ['canDisenrollPatient'],
+    allows: ['patient'],
+    permissions: ['view', 'disenroll'],
   },
 ];

@@ -1,7 +1,7 @@
 import { ICBOCreateInput, ICBODeleteInput, ICBOEditInput, IRootQueryType } from 'schema';
 import CBO from '../models/cbo';
-import accessControls from './shared/access-controls';
-import { checkUserLoggedIn, IContext } from './shared/utils';
+import checkUserPermissions from './shared/permissions-check';
+import { IContext } from './shared/utils';
 
 export interface ICBOCreateArgs {
   input: ICBOCreateInput;
@@ -18,10 +18,9 @@ export interface IDeleteCBOOptions {
 export async function resolveCBOs(
   root: any,
   args: {},
-  { db, userRole, userId, txn }: IContext,
+  { db, permissions, userId, txn }: IContext,
 ): Promise<IRootQueryType['CBOs']> {
-  await accessControls.isAllowedForUser(userRole, 'view', 'CBO');
-  checkUserLoggedIn(userId);
+  await checkUserPermissions(userId, permissions, 'view', 'CBO', txn);
 
   return CBO.getAll(txn);
 }
@@ -29,10 +28,9 @@ export async function resolveCBOs(
 export async function resolveCBOsForCategory(
   root: any,
   args: { categoryId: string },
-  { db, userRole, userId, txn }: IContext,
+  { db, permissions, userId, txn }: IContext,
 ): Promise<IRootQueryType['CBOsForCategory']> {
-  await accessControls.isAllowedForUser(userRole, 'view', 'CBO');
-  checkUserLoggedIn(userId);
+  await checkUserPermissions(userId, permissions, 'view', 'CBO', txn);
 
   return CBO.getForCategory(args.categoryId, txn);
 }
@@ -40,10 +38,9 @@ export async function resolveCBOsForCategory(
 export async function resolveCBO(
   root: any,
   args: { CBOId: string },
-  { db, userRole, userId, txn }: IContext,
+  { db, permissions, userId, txn }: IContext,
 ): Promise<IRootQueryType['CBO']> {
-  await accessControls.isAllowedForUser(userRole, 'view', 'CBO');
-  checkUserLoggedIn(userId);
+  await checkUserPermissions(userId, permissions, 'view', 'CBO', txn);
 
   return CBO.get(args.CBOId, txn);
 }
@@ -51,10 +48,9 @@ export async function resolveCBO(
 export async function CBOCreate(
   root: any,
   { input }: ICBOCreateArgs,
-  { db, userRole, userId, txn }: IContext,
+  { db, permissions, userId, txn }: IContext,
 ): Promise<CBO> {
-  await accessControls.isAllowedForUser(userRole, 'create', 'CBO');
-  checkUserLoggedIn(userId);
+  await checkUserPermissions(userId, permissions, 'create', 'CBO', txn);
 
   return CBO.create({ ...input, fax: input.fax || undefined }, txn);
 }
@@ -62,10 +58,9 @@ export async function CBOCreate(
 export async function CBOEdit(
   root: any,
   { input }: IEditCBOOptions,
-  { db, userRole, userId, txn }: IContext,
+  { db, permissions, userId, txn }: IContext,
 ): Promise<CBO> {
-  await accessControls.isAllowedForUser(userRole, 'edit', 'CBO');
-  checkUserLoggedIn(userId);
+  await checkUserPermissions(userId, permissions, 'edit', 'CBO', txn);
 
   // TODO: Fix typings here
   return CBO.edit(input as any, input.CBOId, txn);
@@ -74,10 +69,9 @@ export async function CBOEdit(
 export async function CBODelete(
   root: any,
   { input }: IDeleteCBOOptions,
-  { db, userRole, userId, txn }: IContext,
+  { db, permissions, userId, txn }: IContext,
 ): Promise<CBO> {
-  await accessControls.isAllowedForUser(userRole, 'delete', 'CBO');
-  checkUserLoggedIn(userId);
+  await checkUserPermissions(userId, permissions, 'delete', 'CBO', txn);
 
   return CBO.delete(input.CBOId, txn);
 }

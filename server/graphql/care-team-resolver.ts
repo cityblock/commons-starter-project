@@ -2,7 +2,7 @@ import { ICareTeamAssignInput, ICareTeamInput, IRootMutationType, IRootQueryType
 import { IPaginationOptions } from '../db';
 import { convertUser } from '../graphql/shared/converter';
 import CareTeam from '../models/care-team';
-import accessControls from './shared/access-controls';
+import checkUserPermissions from './shared/permissions-check';
 import { IContext } from './shared/utils';
 
 export interface IQuery {
@@ -24,33 +24,29 @@ export interface IUserPatientPanelOptions extends IPaginationOptions {
 export async function careTeamAddUser(
   source: any,
   { input }: ICareTeamOptions,
-  context: IContext,
+  { txn, userId, permissions }: IContext,
 ): Promise<IRootMutationType['careTeamAddUser']> {
-  const { userRole, txn } = context;
-  const { userId, patientId } = input;
-  await accessControls.isAllowed(userRole, 'edit', 'careTeam');
+  await checkUserPermissions(userId, permissions, 'create', 'careTeam', txn);
 
-  return CareTeam.create({ userId, patientId }, txn);
+  return CareTeam.create({ userId: input.userId, patientId: input.patientId }, txn);
 }
 
 export async function careTeamRemoveUser(
   source: any,
   { input }: ICareTeamOptions,
-  context: IContext,
+  { txn, userId, permissions }: IContext,
 ): Promise<IRootMutationType['careTeamRemoveUser']> {
-  const { userRole, txn } = context;
-  const { userId, patientId } = input;
-  await accessControls.isAllowed(userRole, 'edit', 'careTeam');
+  await checkUserPermissions(userId, permissions, 'delete', 'careTeam', txn);
 
-  return CareTeam.delete({ userId, patientId }, txn);
+  return CareTeam.delete({ userId: input.userId, patientId: input.patientId }, txn);
 }
 
 export async function resolvePatientCareTeam(
   root: any,
   { patientId }: IQuery,
-  { userRole, userId, txn }: IContext,
+  { permissions, userId, txn }: IContext,
 ): Promise<IRootQueryType['patientCareTeam']> {
-  await accessControls.isAllowedForUser(userRole, 'view', 'patient', patientId, userId);
+  await checkUserPermissions(userId, permissions, 'view', 'patient', txn, patientId);
 
   const users = await CareTeam.getForPatient(patientId, txn);
   return users.map(convertUser);
@@ -59,10 +55,10 @@ export async function resolvePatientCareTeam(
 export async function careTeamAssignPatients(
   source: any,
   { input }: ICareTeamAssignOptions,
-  { userRole, txn }: IContext,
+  { permissions, userId, txn }: IContext,
 ): Promise<IRootMutationType['careTeamAssignPatients']> {
   const { patientIds } = input;
-  await accessControls.isAllowed(userRole, 'edit', 'careTeam');
+  await checkUserPermissions(userId, permissions, 'create', 'careTeam', txn);
 
   return CareTeam.createAllForUser({ patientIds, userId: input.userId }, txn);
 }

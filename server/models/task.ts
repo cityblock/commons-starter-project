@@ -360,5 +360,13 @@ export default class Task extends BaseModel {
     }
     return task;
   }
+
+  static async getPatientIdForResource(taskId: string, txn: Transaction): Promise<string> {
+    const result = await this.query(txn)
+      .where({ deletedAt: null })
+      .findById(taskId);
+
+    return result ? result.patientId : '';
+  }
 }
 /* tslint:enable:member-ordering */

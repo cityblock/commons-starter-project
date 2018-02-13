@@ -16,6 +16,7 @@ interface ISetup {
 }
 
 const userRole = 'physician';
+const permissions = 'green';
 
 async function setup(txn: Transaction): Promise<ISetup> {
   const clinic = await Clinic.create(createMockClinic(), txn);
@@ -48,7 +49,12 @@ describe('care team', () => {
             id
           }
         }`;
-        const result = await graphql(schema, mutation, null, { db, userRole, txn });
+        const result = await graphql(schema, mutation, null, {
+          db,
+          permissions,
+          userId: user.id,
+          txn,
+        });
         const careTeamUserIds = cloneDeep(result.data!.careTeamAddUser).map((u: any) => u.id);
 
         expect(careTeamUserIds).toContain(user.id);
@@ -64,7 +70,12 @@ describe('care team', () => {
             id
           }
         }`;
-        const result = await graphql(schema, mutation, null, { db, userRole, txn });
+        const result = await graphql(schema, mutation, null, {
+          db,
+          permissions,
+          userId: user.id,
+          txn,
+        });
         const careTeamUserIds = cloneDeep(result.data!.careTeamRemoveUser).map((u: any) => u.id);
 
         expect(careTeamUserIds).not.toContain(user.id);
@@ -80,7 +91,12 @@ describe('care team', () => {
           }
         }`;
 
-        const result = await graphql(schema, query, null, { db, userRole, txn });
+        const result = await graphql(schema, query, null, {
+          db,
+          permissions,
+          userId: user.id,
+          txn,
+        });
         const careTeamUserIds = cloneDeep(result.data!.patientCareTeam).map((u: any) => u.id);
 
         expect(careTeamUserIds).toContain(user.id);
@@ -113,7 +129,7 @@ describe('care team', () => {
 
         const result = await graphql(schema, mutation, null, {
           db,
-          userRole,
+          permissions,
           txn,
           userId: user2.id,
         });

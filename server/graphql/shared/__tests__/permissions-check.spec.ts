@@ -118,9 +118,24 @@ describe('User Permissions Check', () => {
   });
 
   describe('isUserOnPatientCareTeam', () => {
-    it('returns false if resource name does not map to model', async () => {
+    it('returns true if resource does not have patient id concept', async () => {
       await transaction(User.knex(), async txn => {
-        expect(await isUserOnPatientCareTeam(userId, 'CBOReferral', 'bogusId', txn)).toBe(false);
+        expect(await isUserOnPatientCareTeam(userId, 'CBOReferral', 'CBOReferralId', txn)).toBe(
+          true,
+        );
+      });
+    });
+
+    it('returns false if check required but no resource id provided', async () => {
+      await transaction(User.knex(), async txn => {
+        const { clinic } = await setup(txn);
+        const user = await User.create(
+          createMockUser(11, clinic.id, 'admin', 'care@care.com'),
+          txn,
+        );
+        const result = await isUserOnPatientCareTeam(user.id, 'patient', '', txn);
+
+        expect(result).toBe(false);
       });
     });
 

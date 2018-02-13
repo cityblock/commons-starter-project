@@ -38,7 +38,7 @@ const checkUserPermissions = async (
     resource,
     true,
   );
-  if (!isAllowedWithCareTeamCheck || !resourceId) {
+  if (!isAllowedWithCareTeamCheck) {
     throw new Error(`${permissions} not able to ${action} ${resource}`);
   }
 
@@ -81,11 +81,14 @@ export const isAllowedForPermissions = async (
 export const isUserOnPatientCareTeam = async (
   userId: string,
   resource: Resource,
-  resourceId: string,
+  resourceId: string | undefined,
   txn: Transaction,
 ): Promise<boolean> => {
   const model = resourceToModelMapping[resource as ResourceWithPatientIdMethod];
-  if (!model) return false;
+  // if model does not have a concept of getting a patient id, allow action
+  if (!model) return true;
+
+  if (!resourceId) return false;
   let isOnCareTeam = false;
 
   // call the getPatientIdForResource on the relevant model to get patient id

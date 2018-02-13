@@ -8,6 +8,7 @@ import { createMockClinic, createMockUser } from '../../spec-helpers';
 import schema from '../make-executable-schema';
 
 const userRole = 'admin';
+const permissions = 'green';
 
 const setup = async (txn: Transaction) => {
   const clinic = await Clinic.create(createMockClinic(), txn);
@@ -53,7 +54,7 @@ describe('CBO Category resolver', () => {
       }`;
 
       const result = await graphql(schema, query, null, {
-        userRole,
+        permissions,
         userId: user.id,
         txn,
       });

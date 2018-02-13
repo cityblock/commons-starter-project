@@ -518,4 +518,28 @@ describe('task model', () => {
       });
     });
   });
+
+  it('gets patient id for a given task', async () => {
+    await transaction(Task.knex(), async txn => {
+      const { patient, user, patientGoal } = await setup(txn);
+
+      const dueAt = new Date().toISOString();
+      const task = await Task.create(
+        {
+          title: 'title',
+          description: 'description',
+          dueAt,
+          patientId: patient.id,
+          createdById: user.id,
+          assignedToId: user.id,
+          patientGoalId: patientGoal.id,
+        },
+        txn,
+      );
+
+      const fetchedPatientId = await Task.getPatientIdForResource(task.id, txn);
+
+      expect(fetchedPatientId).toBe(patient.id);
+    });
+  });
 });

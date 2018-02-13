@@ -26,7 +26,7 @@ var Rule = /** @class */ (function (_super) {
     Rule.prototype.apply = function (sourceFile) {
         return this.applyWithWalker(new CheckIsAllowed(sourceFile, this.getOptions()));
     };
-    Rule.FAILURE_STRING = 'must check accessControls.isAllowed in GraphQL resolver function';
+    Rule.FAILURE_STRING = 'must call check user permissions in GraphQL resolver function';
     return Rule;
 }(Lint.Rules.AbstractRule));
 exports.Rule = Rule;
@@ -43,7 +43,7 @@ var CheckIsAllowed = /** @class */ (function (_super) {
             var text = node.getText();
             // TODO: Check for root: specifically in the parameter list
             if (text.indexOf('root:') > -1) {
-                if (text.indexOf('accessControls.isAllowed') < 0) {
+                if (text.indexOf('accessControls.isAllowed') < 0 && text.indexOf('checkUserPermissions') < 0) {
                     this.addFailure(this.createFailure(node.getStart(), node.getWidth(), Rule.FAILURE_STRING));
                 }
             }

@@ -18,6 +18,7 @@ import {
 import schema from '../make-executable-schema';
 
 const userRole = 'admin';
+const permissions = 'green';
 const sentAt = '2018-01-11T05:00:00.000Z';
 const diagnosis = 'Winter is here';
 
@@ -57,7 +58,7 @@ describe('CBO Referral resolver', () => {
         }`;
 
         const result = await graphql(schema, mutation, null, {
-          userRole,
+          permissions,
           userId: user.id,
           txn,
         });
@@ -113,7 +114,7 @@ describe('CBO Referral resolver', () => {
         }`;
 
         const result = await graphql(schema, mutation, null, {
-          userRole,
+          permissions,
           userId: user.id,
           txn,
         });

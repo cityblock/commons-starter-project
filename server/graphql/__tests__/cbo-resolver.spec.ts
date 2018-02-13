@@ -22,6 +22,7 @@ const input = {
   url: 'www.facelessmen.com',
 };
 const userRole = 'admin';
+const permissions = 'green';
 
 const setup = async (txn: Transaction) => {
   const clinic = await Clinic.create(createMockClinic(), txn);
@@ -65,7 +66,7 @@ describe('CBO resolver', () => {
         }`;
 
         const result = await graphql(schema, query, null, {
-          userRole,
+          permissions,
           userId: user.id,
           txn,
         });
@@ -124,7 +125,7 @@ describe('CBO resolver', () => {
         }`;
 
         const result = await graphql(schema, query, null, {
-          userRole,
+          permissions,
           userId: user.id,
           txn,
         });
@@ -166,7 +167,7 @@ describe('CBO resolver', () => {
         }`;
 
         const result = await graphql(schema, query, null, {
-          userRole,
+          permissions,
           userId: user.id,
           txn,
         });
@@ -187,7 +188,7 @@ describe('CBO resolver', () => {
         const query = `{ CBO(CBOId: "${fakeId}") { id } }`;
 
         const result = await graphql(schema, query, null, {
-          userRole,
+          permissions,
           userId: user.id,
           txn,
         });
@@ -220,7 +221,7 @@ describe('CBO resolver', () => {
         }`;
 
         const result = await graphql(schema, mutation, null, {
-          userRole,
+          permissions,
           userId: user.id,
           txn,
         });
@@ -267,7 +268,7 @@ describe('CBO resolver', () => {
         }`;
 
         const result = await graphql(schema, mutation, null, {
-          userRole,
+          permissions,
           userId: user.id,
           txn,
         });
@@ -296,7 +297,7 @@ describe('CBO resolver', () => {
         }`;
 
         const result = await graphql(schema, mutation, null, {
-          userRole,
+          permissions,
           userId: user.id,
           txn,
         });

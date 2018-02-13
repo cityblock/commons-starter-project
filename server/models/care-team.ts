@@ -98,10 +98,7 @@ export default class CareTeam extends BaseModel {
 
   static async create({ userId, patientId }: ICareTeamOptions, txn: Transaction): Promise<User[]> {
     // TODO: use postgres UPCERT here to add relation if it doesn't exist instead of a transaction
-    const relations = await CareTeam.query(txn)
-      .where('patientId', patientId)
-      .andWhere('userId', userId)
-      .andWhere('deletedAt', null);
+    const relations = await CareTeam.query(txn).where({ userId, patientId, deletedAt: null });
 
     if (relations.length < 1) {
       await CareTeam.query(txn).insert({ patientId, userId });
@@ -136,11 +133,18 @@ export default class CareTeam extends BaseModel {
 
   static async delete({ userId, patientId }: ICareTeamOptions, txn: Transaction): Promise<User[]> {
     await this.query(txn)
-      .where('userId', userId)
-      .andWhere('patientId', patientId)
-      .andWhere('deletedAt', null)
+      .where({ userId, patientId, deletedAt: null })
       .patch({ deletedAt: new Date().toISOString() });
     return this.getForPatient(patientId, txn);
+  }
+
+  static async isOnCareTeam(
+    { userId, patientId }: ICareTeamOptions,
+    txn: Transaction,
+  ): Promise<boolean> {
+    const result = await this.query(txn).where({ userId, patientId, deletedAt: null });
+
+    return !!result.length;
   }
 }
 /* tslint:enable:member-ordering */

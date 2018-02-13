@@ -518,5 +518,9 @@ export default class Patient extends BaseModel {
       })
       .select('patientId');
   }
+
+  static getPatientIdForResource(patientId: string, txn?: Transaction) {
+    return patientId;
+  }
 }
 /* tslint:enable:member-ordering */

@@ -1,4 +1,5 @@
 import * as acl from 'acl';
+import { BusinessToggleName } from '../../../shared/permissions/business-toggle-names';
 import { UserRole } from '../../models/user';
 import aclJson from './acl';
 
@@ -99,6 +100,10 @@ export class AccessControls {
     } else {
       throw new Error(`${userRole} not able to ${action} ${resource}`);
     }
+  }
+
+  async isAllowedForToggles(toggles: BusinessToggleName[], action: Action, resource: Resource) {
+    return this.accessControls.areAnyRolesAllowed(toggles, resource, action);
   }
 }
 

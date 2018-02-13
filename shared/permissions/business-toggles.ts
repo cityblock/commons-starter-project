@@ -1,3 +1,4 @@
+import { pickBy } from 'lodash';
 import { BusinessToggleName } from './business-toggle-names';
 
 interface IBusinessToggle {
@@ -63,5 +64,8 @@ const businessToggles: IBusinessToggles = {
     isCareTeamCheckRequired: false,
   },
 };
+
+export const businessTogglesWithCareTeamCheck = Object.keys(pickBy(businessToggles, toggle => toggle.isCareTeamCheckRequired)) as BusinessToggleName[];
+export const businessTogglesWithoutCareTeamCheck = Object.keys(pickBy(businessToggles, toggle => !toggle.isCareTeamCheckRequired)) as BusinessToggleName[];
 
 export default businessToggles;

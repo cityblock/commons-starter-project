@@ -10,7 +10,7 @@ export const PERMISSIONS: Permissions[] = [
   'red',
 ];
 
-type PermissionsMapping = {
+export type PermissionsMapping = {
   [K in BusinessToggleName]: boolean;
 };
 
@@ -18,7 +18,7 @@ type PermissionsMappings = {
   [K in Permissions]: PermissionsMapping;
 };
 
-const PermissionsMappings: PermissionsMappings = {
+export const permissionsMappings: PermissionsMappings = {
   green: {
     isBuilderEnabled: true,
     isManagerEnabled: true,

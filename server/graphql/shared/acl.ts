@@ -146,23 +146,29 @@ export default [
   },
   {
     roles: ['isBuilderEnabled'],
-    allows: builderResources,
-    permissions: ['create', 'view', 'edit', 'delete'],
+    allows: [
+      {
+        resources: builderResources,
+        permissions: ['create', 'view', 'edit', 'delete'],
+      },
+    ],
   },
   {
     roles: ['isManagerEnabled'],
-    allows: userResources,
-    permissions: ['create', 'view'],
+    allows: [
+      {
+        resources: userResources,
+        permissions: ['create', 'view'],
+      },
+    ],
   },
   {
     roles: ['canChangeUserPermissions'],
-    allows: userResources,
-    permissions: ['create', 'view', 'edit'],
+    allows: [{ resources: userResources, permissions: ['create', 'view', 'edit'] }],
   },
   {
     roles: ['canDeleteUsers'],
-    allows: userResources,
-    permissions: ['create', 'view', 'edit', 'delete'],
+    allows: [{ resources: userResources, permissions: ['create', 'view', 'edit', 'delete'] }],
   },
   {
     roles: ['canBulkAssign'],
@@ -206,12 +212,10 @@ export default [
   },
   {
     roles: ['canShowAllMembersInPatientPanel'],
-    allows: ['patient'],
-    permissions: ['view'],
+    allows: [{ resources: ['patient'], permissions: ['view'] }],
   },
   {
     roles: ['canDisenrollPatient'],
-    allows: ['patient'],
-    permissions: ['view', 'disenroll'],
+    allows: [{ resources: ['patient'], permissions: ['view', 'disenroll'] }],
   },
 ];

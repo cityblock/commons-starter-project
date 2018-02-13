@@ -164,6 +164,43 @@ describe('care model', () => {
     });
   });
 
+  describe('isOnCareTeam', () => {
+    it("should return true if user on patient's care team", async () => {
+      await transaction(User.knex(), async txn => {
+        const { clinic } = await setup(txn);
+        const user = await User.create(
+          createMockUser(11, clinic.id, userRole, 'care@care.com'),
+          txn,
+        );
+        const patient = await createPatient(createMockPatient(123, clinic.id), user.id, txn);
+
+        const result = await CareTeam.isOnCareTeam({ userId: user.id, patientId: patient.id }, txn);
+        expect(result).toBe(true);
+      });
+    });
+
+    it("should return false if user not on patient's care team", async () => {
+      await transaction(User.knex(), async txn => {
+        const { clinic } = await setup(txn);
+        const user = await User.create(
+          createMockUser(11, clinic.id, userRole, 'care@care.com'),
+          txn,
+        );
+        const user2 = await User.create(
+          createMockUser(12, clinic.id, userRole, 'care2@care.com'),
+          txn,
+        );
+        const patient = await createPatient(createMockPatient(123, clinic.id), user.id, txn);
+
+        const result = await CareTeam.isOnCareTeam(
+          { userId: user2.id, patientId: patient.id },
+          txn,
+        );
+        expect(result).toBe(false);
+      });
+    });
+  });
+
   describe('bulk assign patients to a users care team', () => {
     it('should assign patients', async () => {
       await transaction(User.knex(), async txn => {

@@ -848,4 +848,12 @@ describe('patient model', () => {
       });
     });
   });
+
+  describe('getPatientIdForResource', async () => {
+    it('returns passed patient id', async () => {
+      const patientId = 'aryaStark';
+
+      expect(Patient.getPatientIdForResource(patientId)).toBe(patientId);
+    });
+  });
 });

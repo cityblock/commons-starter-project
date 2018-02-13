@@ -168,7 +168,8 @@ describe('care model', () => {
           createMockUser(11, clinic.id, userRole, 'care@care.com'),
           txn,
         );
-        const patient = await createPatient(createMockPatient(123, clinic.id), user.id, txn);
+        const patient = await Patient.create(createMockPatient(123, 123, clinic.id), txn);
+        await CareTeam.create({ userId: user.id, patientId: patient.id }, txn);
 
         const result = await CareTeam.isOnCareTeam({ userId: user.id, patientId: patient.id }, txn);
         expect(result).toBe(true);
@@ -182,16 +183,9 @@ describe('care model', () => {
           createMockUser(11, clinic.id, userRole, 'care@care.com'),
           txn,
         );
-        const user2 = await User.create(
-          createMockUser(12, clinic.id, userRole, 'care2@care.com'),
-          txn,
-        );
-        const patient = await createPatient(createMockPatient(123, clinic.id), user.id, txn);
+        const patient = await Patient.create(createMockPatient(123, 123, clinic.id), txn);
 
-        const result = await CareTeam.isOnCareTeam(
-          { userId: user2.id, patientId: patient.id },
-          txn,
-        );
+        const result = await CareTeam.isOnCareTeam({ userId: user.id, patientId: patient.id }, txn);
         expect(result).toBe(false);
       });
     });

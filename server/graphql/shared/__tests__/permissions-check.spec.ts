@@ -1,13 +1,14 @@
 import { transaction, Transaction } from 'objection';
 import { permissionsMappings } from '../../../../shared/permissions/permissions-mapping';
 import Db from '../../../db';
+import CareTeam from '../../../models/care-team';
 import Clinic from '../../../models/clinic';
+import Patient from '../../../models/patient';
 import User from '../../../models/user';
 import {
   createMockClinic,
   createMockPatient,
   createMockUser,
-  createPatient,
 } from '../../../spec-helpers';
 import checkUserPermissions, {
   getBusinessToggles,
@@ -70,7 +71,8 @@ describe('User Permissions Check', () => {
           createMockUser(12, clinic.id, 'admin', 'care2@care.com'),
           txn,
         );
-        const patient = await createPatient(createMockPatient(123, clinic.id), user.id, txn);
+        const patient = await Patient.create(createMockPatient(123, 123, clinic.id), txn);
+        await CareTeam.create({ userId: user.id, patientId: patient.id }, txn);
         await expect(
           checkUserPermissions(user2.id, 'red', 'view', 'patient', txn, patient.id),
         ).rejects.toMatchObject(new Error('red not able to view patient'));
@@ -85,7 +87,8 @@ describe('User Permissions Check', () => {
           txn,
         );
 
-        const patient = await createPatient(createMockPatient(123, clinic.id), user.id, txn);
+        const patient = await Patient.create(createMockPatient(123, 123, clinic.id), txn);
+        await CareTeam.create({ userId: user.id, patientId: patient.id }, txn);
         expect(await checkUserPermissions(user.id, 'red', 'view', 'patient', txn, patient.id)).toBe(
           true,
         );
@@ -128,7 +131,8 @@ describe('User Permissions Check', () => {
           createMockUser(12, clinic.id, 'admin', 'care2@care.com'),
           txn,
         );
-        const patient = await createPatient(createMockPatient(123, clinic.id), user.id, txn);
+        const patient = await Patient.create(createMockPatient(123, 123, clinic.id), txn);
+        await CareTeam.create({ userId: user.id, patientId: patient.id }, txn);
         const result = await isUserOnPatientCareTeam(user2.id, 'patient', patient.id, txn);
 
         expect(result).toBe(false);
@@ -142,7 +146,8 @@ describe('User Permissions Check', () => {
           createMockUser(11, clinic.id, 'admin', 'care@care.com'),
           txn,
         );
-        const patient = await createPatient(createMockPatient(123, clinic.id), user.id, txn);
+        const patient = await Patient.create(createMockPatient(123, 123, clinic.id), txn);
+        await CareTeam.create({ userId: user.id, patientId: patient.id }, txn);
         const result = await isUserOnPatientCareTeam(user.id, 'patient', patient.id, txn);
 
         expect(result).toBe(true);

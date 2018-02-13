@@ -3,6 +3,7 @@ import * as express from 'express';
 import { GraphQLBoolean, GraphQLNonNull, GraphQLObjectType } from 'graphql';
 import { decode, sign, verify } from 'jsonwebtoken';
 import { transaction, Transaction } from 'objection';
+import { Permissions } from '../../../shared/permissions/permissions-mapping';
 import config from '../../config';
 import Db from '../../db';
 import User, { UserRole } from '../../models/user';
@@ -16,6 +17,7 @@ export interface ILogger {
 export interface IContext {
   db: Db;
   userRole: UserRole;
+  permissions: Permissions;
   userId?: string;
   logger: ILogger;
   txn: Transaction;
@@ -32,6 +34,7 @@ export function formatRelayEdge(node: any, id: string) {
 export interface IJWTData {
   userId: string;
   userRole: UserRole;
+  permissions: Permissions;
   lastLoginAt: string;
 }
 
@@ -88,6 +91,7 @@ export async function getGraphQLContext(
   const datadogContext = dataDog ? dataDog.context(request) : null;
   const txn = existingTxn || (await transaction.start(User));
   let userRole: UserRole = 'anonymousUser';
+  let permissions: Permissions = 'black';
   let userId;
 
   if (authToken) {
@@ -95,10 +99,12 @@ export async function getGraphQLContext(
       const parsedToken = await parseAndVerifyJwt(authToken, txn);
       userId = parsedToken.userId;
       userRole = parsedToken.userRole;
+      permissions = parsedToken.permissions;
     } catch (e) {
       return {
         db,
         userRole: 'anonymousUser' as UserRole,
+        permissions: 'black' as Permissions,
         logger,
         txn,
         datadogContext,
@@ -108,6 +114,7 @@ export async function getGraphQLContext(
   return {
     userId,
     userRole,
+    permissions,
     db,
     logger,
     txn,

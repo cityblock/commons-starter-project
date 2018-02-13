@@ -14,7 +14,7 @@ import resourceToModelMapping, { ResourceWithPatientIdMethod } from './resource-
 import { checkUserLoggedIn } from './utils';
 
 const checkUserPermissions = async (
-  userId: string,
+  userId: string | undefined,
   permissions: Permissions,
   action: Action,
   resource: Resource,
@@ -22,6 +22,7 @@ const checkUserPermissions = async (
   resourceId?: string,
 ): Promise<boolean> => {
   checkUserLoggedIn(userId);
+  checkUserPermissionsExists(permissions);
 
   const isAllowedWithoutCareTeamCheck = await isAllowedForPermissions(
     permissions,
@@ -41,10 +42,21 @@ const checkUserPermissions = async (
     throw new Error(`${permissions} not able to ${action} ${resource}`);
   }
 
-  const isPassingCareTeamCheck = await isUserOnPatientCareTeam(userId, resource, resourceId, txn);
+  const isPassingCareTeamCheck = await isUserOnPatientCareTeam(
+    userId as string,
+    resource,
+    resourceId,
+    txn,
+  );
   if (isPassingCareTeamCheck) return true;
 
   throw new Error(`${permissions} not able to ${action} ${resource}`);
+};
+
+const checkUserPermissionsExists = (permissions: Permissions) => {
+  if (!permissions) {
+    throw new Error('No user permissions level provided');
+  }
 };
 
 export const getBusinessToggles = (permissions: Permissions): PermissionsMapping => {

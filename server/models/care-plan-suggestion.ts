@@ -276,5 +276,14 @@ export default class CarePlanSuggestion extends BaseModel {
         dismissedAt: new Date().toISOString(),
       });
   }
+
+  static async getPatientIdForResource(
+    carePlanSuggestionId: string,
+    txn: Transaction,
+  ): Promise<string> {
+    const result = await this.query(txn).findById(carePlanSuggestionId);
+
+    return result ? result.patientId : '';
+  }
 }
 /* tslint:enable:member-ordering */

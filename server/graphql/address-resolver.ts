@@ -8,8 +8,8 @@ import {
 import Address from '../models/address';
 import PatientAddress from '../models/patient-address';
 import PatientInfo from '../models/patient-info';
-import accessControls from './shared/access-controls';
-import { checkUserLoggedIn, IContext } from './shared/utils';
+import checkUserPermissions from './shared/permissions-check';
+import { IContext } from './shared/utils';
 
 export interface IAddressCreateForPatientOptions {
   input: IAddressCreateForPatientInput;
@@ -22,10 +22,9 @@ export interface IAddressCreatePrimaryForPatientOptions {
 export async function addressCreateForPatient(
   source: any,
   { input }: IAddressCreateForPatientOptions,
-  { userRole, userId, logger, txn }: IContext,
+  { permissions, userId, logger, txn }: IContext,
 ): Promise<IRootMutationType['addressCreateForPatient']> {
-  await accessControls.isAllowedForUser(userRole, 'edit', 'patient', input.patientId, userId);
-  checkUserLoggedIn(userId);
+  await checkUserPermissions(userId, permissions, 'edit', 'patient', txn, input.patientId);
 
   const filtered = omitBy<IAddressCreateForPatientInput>(input, isNil) as any;
   filtered.updatedBy = userId;
@@ -42,14 +41,14 @@ export async function addressCreatePrimaryForPatient(
   context: IContext,
 ): Promise<IRootMutationType['addressCreatePrimaryForPatient']> {
   const patientInfo = await PatientInfo.get(input.patientInfoId, context.txn);
-  await accessControls.isAllowedForUser(
-    context.userRole,
+  await checkUserPermissions(
+    context.userId,
+    context.permissions,
     'edit',
     'patient',
+    context.txn,
     patientInfo.patientId,
-    context.userId,
   );
-  checkUserLoggedIn(context.userId);
 
   const addressOptions = cloneDeep(input) as any;
   delete addressOptions.patientInfoId;
@@ -80,10 +79,9 @@ export interface IAddressEditOptions {
 export async function addressEdit(
   source: any,
   { input }: IAddressEditOptions,
-  { userRole, userId, logger, txn }: IContext,
+  { permissions, userId, logger, txn }: IContext,
 ): Promise<IRootMutationType['addressEdit']> {
-  await accessControls.isAllowedForUser(userRole, 'edit', 'patient', input.patientId, userId);
-  checkUserLoggedIn(userId);
+  await checkUserPermissions(userId, permissions, 'edit', 'patient', txn, input.patientId);
 
   const filtered = omitBy<IAddressEditInput>(input, isNil);
   logger.log(`CREATE address for patient ${input.patientId} by ${userId}`, 2);

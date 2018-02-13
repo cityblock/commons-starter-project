@@ -20,6 +20,7 @@ interface ISetup {
 }
 
 const userRole = 'admin';
+const permissions = 'green';
 
 async function setup(txn: Transaction): Promise<ISetup> {
   const clinic = await Clinic.create(createMockClinic(), txn);
@@ -72,7 +73,7 @@ describe('answer tests', () => {
   describe('resolve answer', () => {
     it('can fetch answer', async () => {
       await transaction(Answer.knex(), async txn => {
-        const { answer, question } = await setup(txn);
+        const { answer, question, user } = await setup(txn);
         const query = `{
           answer(answerId: "${answer.id}") {
             id
@@ -86,7 +87,12 @@ describe('answer tests', () => {
             questionId
           }
         }`;
-        const result = await graphql(schema, query, null, { db, userRole, txn });
+        const result = await graphql(schema, query, null, {
+          db,
+          permissions,
+          userId: user.id,
+          txn,
+        });
         expect(cloneDeep(result.data!.answer)).toMatchObject({
           id: answer.id,
           displayValue: 'loves writing tests!',
@@ -102,9 +108,15 @@ describe('answer tests', () => {
 
     it('errors if an answer cannot be found', async () => {
       await transaction(Answer.knex(), async txn => {
+        const { user } = await setup(txn);
         const fakeId = uuid();
         const query = `{ answer(answerId: "${fakeId}") { id } }`;
-        const result = await graphql(schema, query, null, { db, userRole, txn });
+        const result = await graphql(schema, query, null, {
+          db,
+          permissions,
+          userId: user.id,
+          txn,
+        });
         expect(result.errors![0].message).toMatch(`No such answer: ${fakeId}`);
       });
     });
@@ -113,13 +125,18 @@ describe('answer tests', () => {
   describe('resolve question answers', () => {
     it('resolves question answers', async () => {
       await transaction(Answer.knex(), async txn => {
-        const { question, answer } = await setup(txn);
+        const { question, answer, user } = await setup(txn);
         const query = `{
           answersForQuestion(questionId: "${question.id}") {
             id, displayValue
           }
         }`;
-        const result = await graphql(schema, query, null, { db, userRole, txn });
+        const result = await graphql(schema, query, null, {
+          db,
+          permissions,
+          userId: user.id,
+          txn,
+        });
 
         expect(cloneDeep(result.data!.answersForQuestion)).toMatchObject([
           {
@@ -142,7 +159,7 @@ describe('answer tests', () => {
         }`;
         const result = await graphql(schema, query, null, {
           db,
-          userRole,
+          permissions,
           userId: user.id,
           txn,
         });
@@ -172,7 +189,7 @@ describe('answer tests', () => {
         }`;
         const result = await graphql(schema, mutation, null, {
           db,
-          userRole,
+          permissions,
           userId: user.id,
           txn,
         });
@@ -194,7 +211,7 @@ describe('answer tests', () => {
         }`;
         const result = await graphql(schema, mutation, null, {
           db,
-          userRole,
+          permissions,
           userId: user.id,
           txn,
         });

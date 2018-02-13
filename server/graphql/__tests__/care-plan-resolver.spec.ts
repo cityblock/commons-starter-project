@@ -129,7 +129,7 @@ async function setup(txn: Transaction): Promise<ISetup> {
 
 describe('care plan resolver tests', () => {
   let db: Db;
-  const userRole = 'admin';
+  const permissions = 'green';
 
   beforeEach(async () => {
     db = await Db.get();
@@ -177,7 +177,12 @@ describe('care plan resolver tests', () => {
             }
           }
         }`;
-        const result = await graphql(schema, query, null, { db, userRole, txn });
+        const result = await graphql(schema, query, null, {
+          db,
+          userId: user.id,
+          permissions,
+          txn,
+        });
         expect(cloneDeep(result.data!.carePlanForPatient)).toMatchObject({
           concerns: [
             { concern: { title: 'Administrative Tasks' } },
@@ -197,6 +202,7 @@ describe('care plan resolver tests', () => {
           concern,
           riskAreaAssessmentSubmission,
           goalSuggestionTemplate,
+          user,
         } = await setup(txn);
 
         const suggestion1 = await CarePlanSuggestion.create(
@@ -231,7 +237,12 @@ describe('care plan resolver tests', () => {
             }
           }
         }`;
-        const result = await graphql(schema, query, null, { db, userRole, txn });
+        const result = await graphql(schema, query, null, {
+          db,
+          userId: user.id,
+          permissions,
+          txn,
+        });
         const clonedResult = cloneDeep(result.data!.carePlanSuggestionsForPatient);
         const suggestions = clonedResult.map((suggestion: any) => ({
           id: suggestion.id,
@@ -286,7 +297,7 @@ describe('care plan resolver tests', () => {
         }`;
         const result = await graphql(schema, mutation, null, {
           db,
-          userRole,
+          permissions,
           userId: user.id,
           txn,
         });
@@ -332,7 +343,7 @@ describe('care plan resolver tests', () => {
             id
           }
         }`;
-        await graphql(schema, mutation, null, { db, userRole, userId: user.id, txn });
+        await graphql(schema, mutation, null, { db, permissions, userId: user.id, txn });
 
         const mutation2 = `mutation {
           carePlanSuggestionAccept(
@@ -343,7 +354,7 @@ describe('care plan resolver tests', () => {
             id
           }
         }`;
-        await graphql(schema, mutation2, null, { db, userRole, userId: user.id, txn });
+        await graphql(schema, mutation2, null, { db, permissions, userId: user.id, txn });
 
         const patientConcerns = await PatientConcern.getForPatient(patient.id, txn);
         // Note: Index starts at 1 because the first concern is Admin Tasks
@@ -384,7 +395,7 @@ describe('care plan resolver tests', () => {
             id
           }
         }`;
-        await graphql(schema, mutation, null, { db, userRole, userId: user.id, txn });
+        await graphql(schema, mutation, null, { db, permissions, userId: user.id, txn });
 
         const patientConcerns = await PatientConcern.getForPatient(patient.id, txn);
         const patientGoals = await PatientGoal.getForPatient(patient.id, txn);
@@ -438,7 +449,7 @@ describe('care plan resolver tests', () => {
             id
           }
         }`;
-        await graphql(schema, mutation, null, { db, userRole, userId: user.id, txn });
+        await graphql(schema, mutation, null, { db, permissions, userId: user.id, txn });
 
         const patientConcerns = await PatientConcern.getForPatient(patient.id, txn);
         const patientGoals = await PatientGoal.getForPatient(patient.id, txn);
@@ -493,7 +504,7 @@ describe('care plan resolver tests', () => {
             id
           }
         }`;
-        await graphql(schema, mutation, null, { db, userRole, userId: user.id, txn });
+        await graphql(schema, mutation, null, { db, permissions, userId: user.id, txn });
 
         const patientGoals = await PatientGoal.getForPatient(patient.id, txn);
         expect(patientGoals.map(g => g.goalSuggestionTemplateId)).toContain(
@@ -547,7 +558,7 @@ describe('care plan resolver tests', () => {
             id
           }
         }`;
-        await graphql(schema, mutation, null, { db, userRole, userId: user.id, txn });
+        await graphql(schema, mutation, null, { db, permissions, userId: user.id, txn });
 
         const patientTasks = await Task.getPatientTasks(
           patient.id,

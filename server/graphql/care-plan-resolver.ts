@@ -9,8 +9,8 @@ import Concern from '../models/concern';
 import GoalSuggestionTemplate from '../models/goal-suggestion-template';
 import PatientConcern from '../models/patient-concern';
 import PatientGoal from '../models/patient-goal';
-import accessControls from './shared/access-controls';
-import { checkUserLoggedIn, IContext } from './shared/utils';
+import checkUserPermissions from './shared/permissions-check';
+import { IContext } from './shared/utils';
 
 export interface IResolveCarePlanSuggestionsOptions {
   patientId: string;
@@ -37,9 +37,9 @@ export interface ICarePlanSuggestionDismissArgs {
 export async function resolveCarePlanSuggestionsForPatient(
   root: any,
   args: IResolveCarePlanSuggestionsOptions,
-  { db, userRole, txn }: IContext,
+  { db, userId, permissions, txn }: IContext,
 ): Promise<IRootQueryType['carePlanSuggestionsForPatient']> {
-  await accessControls.isAllowed(userRole, 'view', 'carePlanSuggestion');
+  await checkUserPermissions(userId, permissions, 'view', 'patient', txn, args.patientId);
 
   return CarePlanSuggestion.getForPatient(args.patientId, txn);
 }
@@ -47,9 +47,9 @@ export async function resolveCarePlanSuggestionsForPatient(
 export async function resolveCarePlanForPatient(
   root: any,
   args: IResolveCarePlanOptions,
-  { db, userRole, txn }: IContext,
+  { db, userId, permissions, txn }: IContext,
 ): Promise<IRootQueryType['carePlanForPatient']> {
-  await accessControls.isAllowed(userRole, 'view', 'carePlanSuggestion');
+  await checkUserPermissions(userId, permissions, 'view', 'patient', txn, args.patientId);
 
   const concerns = await PatientConcern.getForPatient(args.patientId, txn);
   const goals = await PatientGoal.getForPatient(args.patientId, txn);
@@ -63,10 +63,16 @@ export async function resolveCarePlanForPatient(
 export async function carePlanSuggestionDismiss(
   root: any,
   { input }: ICarePlanSuggestionDismissArgs,
-  { db, userRole, userId, txn }: IContext,
+  { db, permissions, userId, txn }: IContext,
 ): Promise<IRootMutationType['carePlanSuggestionDismiss']> {
-  await accessControls.isAllowed(userRole, 'edit', 'carePlanSuggestion');
-  checkUserLoggedIn(userId);
+  await checkUserPermissions(
+    userId,
+    permissions,
+    'edit',
+    'carePlanSuggestion',
+    txn,
+    input.carePlanSuggestionId,
+  );
 
   return CarePlanSuggestion.dismiss(
     {
@@ -83,9 +89,15 @@ export async function carePlanSuggestionAccept(
   { input }: ICarePlanSuggestionAcceptArgs,
   context: IContext,
 ): Promise<IRootMutationType['carePlanSuggestionAccept']> {
-  const { userRole, userId, txn } = context;
-  await accessControls.isAllowed(userRole, 'edit', 'patient');
-  checkUserLoggedIn(userId);
+  const { permissions, userId, txn } = context;
+  await checkUserPermissions(
+    userId,
+    permissions,
+    'edit',
+    'patient',
+    txn,
+    input.carePlanSuggestionId,
+  );
 
   const carePlanSuggestion = await CarePlanSuggestion.get(input.carePlanSuggestionId, txn);
   let secondaryCarePlanSuggestion: CarePlanSuggestion | undefined;

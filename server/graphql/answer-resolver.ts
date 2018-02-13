@@ -7,8 +7,8 @@ import {
   IRootQueryType,
 } from 'schema';
 import Answer from '../models/answer';
-import accessControls from './shared/access-controls';
-import { checkUserLoggedIn, IContext } from './shared/utils';
+import checkUserPermissions from './shared/permissions-check';
+import { IContext } from './shared/utils';
 
 export interface IAnswerCreateArgs {
   input: IAnswerCreateInput;
@@ -29,11 +29,9 @@ export interface IDeleteAnswerOptions {
 export async function answerCreate(
   root: any,
   { input }: IAnswerCreateArgs,
-  context: IContext,
+  { permissions, userId, txn }: IContext,
 ): Promise<IRootMutationType['answerCreate']> {
-  const { userRole, userId, txn } = context;
-  await accessControls.isAllowed(userRole, 'create', 'answer');
-  checkUserLoggedIn(userId);
+  await checkUserPermissions(userId, permissions, 'create', 'answer', txn);
 
   return Answer.create(
     {
@@ -52,9 +50,9 @@ export async function answerCreate(
 export async function resolveAnswersForQuestion(
   root: any,
   args: { questionId: string },
-  { db, userRole, txn }: IContext,
+  { db, permissions, userId, txn }: IContext,
 ): Promise<IRootQueryType['answersForQuestion']> {
-  await accessControls.isAllowed(userRole, 'view', 'answer');
+  await checkUserPermissions(userId, permissions, 'view', 'answer', txn);
 
   return Answer.getAllForQuestion(args.questionId, txn);
 }
@@ -62,9 +60,9 @@ export async function resolveAnswersForQuestion(
 export async function resolveAnswer(
   root: any,
   args: { answerId: string },
-  { db, userRole, txn }: IContext,
+  { db, permissions, userId, txn }: IContext,
 ): Promise<IRootQueryType['answer']> {
-  await accessControls.isAllowed(userRole, 'view', 'answer');
+  await checkUserPermissions(userId, permissions, 'view', 'answer', txn);
 
   return Answer.get(args.answerId, txn);
 }
@@ -72,10 +70,9 @@ export async function resolveAnswer(
 export async function answerEdit(
   root: any,
   args: IEditAnswerOptions,
-  { db, userId, userRole, txn }: IContext,
+  { db, userId, permissions, txn }: IContext,
 ): Promise<IRootMutationType['answerEdit']> {
-  await accessControls.isAllowedForUser(userRole, 'edit', 'answer');
-  checkUserLoggedIn(userId);
+  await checkUserPermissions(userId, permissions, 'edit', 'answer', txn);
 
   // TODO: fix typings here
   const cleanedParams = pickBy<IAnswerEditInput>(args.input) as any;
@@ -85,10 +82,9 @@ export async function answerEdit(
 export async function answerDelete(
   root: any,
   args: IDeleteAnswerOptions,
-  { db, userId, userRole, txn }: IContext,
+  { db, userId, permissions, txn }: IContext,
 ): Promise<IRootMutationType['answerDelete']> {
-  await accessControls.isAllowedForUser(userRole, 'edit', 'answer');
-  checkUserLoggedIn(userId);
+  await checkUserPermissions(userId, permissions, 'delete', 'answer', txn);
 
   return Answer.delete(args.input.answerId, txn);
 }

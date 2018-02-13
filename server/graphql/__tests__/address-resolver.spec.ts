@@ -17,6 +17,7 @@ interface ISetup {
 }
 
 const userRole = 'physician';
+const permissions = 'green';
 
 async function setup(txn: Transaction): Promise<ISetup> {
   const homeClinic = await HomeClinic.create(
@@ -74,7 +75,7 @@ describe('address resolver', () => {
 
         const result = await graphql(schema, query, null, {
           db,
-          userRole,
+          permissions,
           userId: user.id,
           logger,
           txn,
@@ -112,7 +113,7 @@ describe('address resolver', () => {
 
         const result = await graphql(schema, query, null, {
           db,
-          userRole,
+          permissions,
           userId: user.id,
           logger,
           txn,
@@ -157,7 +158,7 @@ describe('address resolver', () => {
 
         const result = await graphql(schema, query, null, {
           db,
-          userRole,
+          permissions,
           userId: user.id,
           logger,
           txn,

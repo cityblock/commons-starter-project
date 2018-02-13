@@ -252,6 +252,7 @@ export async function userLogin(
 
   const authToken = signJwt({
     userId: user.id,
+    permissions: user.permissions,
     userRole: user.userRole,
     lastLoginAt,
   });

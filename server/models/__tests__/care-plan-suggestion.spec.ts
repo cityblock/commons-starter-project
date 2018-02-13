@@ -478,4 +478,25 @@ describe('care plan suggestion', () => {
       });
     });
   });
+
+  it('gets patient id for a given care plan suggestion', async () => {
+    await transaction(CarePlanSuggestion.knex(), async txn => {
+      const { patient, concern, riskAreaAssessmentSubmission } = await setup(txn);
+
+      const suggestion = await CarePlanSuggestion.create(
+        {
+          type: 'riskAreaAssessmentSubmission',
+          riskAreaAssessmentSubmissionId: riskAreaAssessmentSubmission.id,
+          patientId: patient.id,
+          suggestionType: 'concern',
+          concernId: concern.id,
+        },
+        txn,
+      );
+
+      const fetchedPatientId = await CarePlanSuggestion.getPatientIdForResource(suggestion.id, txn);
+
+      expect(fetchedPatientId).toBe(patient.id);
+    });
+  });
 });

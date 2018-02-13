@@ -5,11 +5,7 @@ import CareTeam from '../../../models/care-team';
 import Clinic from '../../../models/clinic';
 import Patient from '../../../models/patient';
 import User from '../../../models/user';
-import {
-  createMockClinic,
-  createMockPatient,
-  createMockUser,
-} from '../../../spec-helpers';
+import { createMockClinic, createMockPatient, createMockUser } from '../../../spec-helpers';
 import checkUserPermissions, {
   getBusinessToggles,
   isAllowedForPermissions,
@@ -43,6 +39,14 @@ describe('User Permissions Check', () => {
         await expect(checkUserPermissions('', 'green', 'view', 'user', txn)).rejects.toMatchObject(
           new Error('not logged in'),
         );
+      });
+    });
+
+    it('throws an error if no permissions level provided', async () => {
+      await transaction(User.knex(), async txn => {
+        await expect(
+          checkUserPermissions(userId, '' as any, 'view', 'user', txn),
+        ).rejects.toMatchObject(new Error('No user permissions level provided'));
       });
     });
 

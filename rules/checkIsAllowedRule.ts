@@ -9,7 +9,7 @@
 import * as Lint from 'tslint';
 
 export class Rule extends Lint.Rules.AbstractRule {
-  public static FAILURE_STRING = 'must check accessControls.isAllowed in GraphQL resolver function';
+  public static FAILURE_STRING = 'must call check user permissions in GraphQL resolver function';
   public apply(sourceFile: any): Lint.RuleFailure[] {
     return this.applyWithWalker(new CheckIsAllowed(sourceFile, this.getOptions()));
   }

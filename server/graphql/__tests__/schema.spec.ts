@@ -26,6 +26,7 @@ describe('util tests', () => {
     await transaction(User.knex(), async txn => {
       const authToken = signJwt({
         userId: uuid(),
+        permissions: 'green',
         userRole: 'physician',
         lastLoginAt: new Date().toISOString(),
       });
@@ -51,6 +52,7 @@ describe('util tests', () => {
     await transaction(User.knex(), async txn => {
       const authToken = signJwt({
         userId: uuid(),
+        permissions: 'green',
         userRole: 'physician',
         lastLoginAt: new Date('01/01/2010').toISOString(),
       });
@@ -90,6 +92,7 @@ describe('util tests', () => {
 
         const authToken = signJwt({
           userId: user.id,
+          permissions: 'green',
           userRole: 'physician',
           lastLoginAt: new Date(now.valueOf() - 10000).toISOString(),
         });
@@ -105,6 +108,7 @@ describe('util tests', () => {
         const authToken = signJwt({
           userId: uuid(),
           userRole: 'physician',
+          permissions: 'green',
           lastLoginAt: new Date(
             now.valueOf() - (TWENTY_FOUR_HOURS_IN_MILLISECONDS + 1000),
           ).toISOString(),

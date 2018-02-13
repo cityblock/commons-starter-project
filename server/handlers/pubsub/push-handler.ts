@@ -1,6 +1,7 @@
 import * as express from 'express';
 import * as kue from 'kue';
 import { createRedisClient } from '../../lib/redis';
+import { IPatientCreateFields } from '../../models/patient';
 
 const queue = kue.createQueue({ redis: createRedisClient() });
 
@@ -12,10 +13,8 @@ export interface IComputedFieldMessageData {
   jobId: string;
 }
 
-export interface IMemberAttributionMessageData {
-  patientId: string;
-  cityblockId: string;
-  // TBD
+export interface IMemberAttributionMessageData extends IPatientCreateFields {
+  jobId: string;
 }
 
 /* tslint:disable no-console */
@@ -27,8 +26,8 @@ export async function pubsubPushHandler(req: express.Request, res: express.Respo
   switch (topic) {
     case 'computedField':
       queue
-        .create('newComputedField', {
-          title: `Handling newComputedField message for patient: ${patientId}`,
+        .create(topic, {
+          title: `Handling ${topic} message for patient: ${patientId}`,
           ...data,
         })
         .priority('low')
@@ -37,9 +36,9 @@ export async function pubsubPushHandler(req: express.Request, res: express.Respo
         .save((err: Error) => {
           if (err) {
             console.log(
-              `Error enqueuing newComputedField job. patientId: ${patientId}, slug: ${
-                data.slug
-              }, value: ${data.value}, jobId: ${data.jobId}`,
+              `Error enqueuing ${topic} job. patientId: ${patientId}, slug: ${data.slug}, value: ${
+                data.value
+              }, jobId: ${data.jobId}`,
               err.message,
             );
           }
@@ -47,8 +46,8 @@ export async function pubsubPushHandler(req: express.Request, res: express.Respo
       return res.sendStatus(200);
     case 'memberAttribution':
       queue
-        .create('newMemberAttribution', {
-          title: `Handling newMemberAttribution message for patient: ${patientId}`,
+        .create(topic, {
+          title: `Handling ${topic} message for patient: ${patientId}`,
           ...data,
         })
         .priority('low')
@@ -57,7 +56,7 @@ export async function pubsubPushHandler(req: express.Request, res: express.Respo
         .save((err: Error) => {
           if (err) {
             console.log(
-              `Error enqueuing newMemberAttributionJob. patientId: ${patientId}, cityblockId: ${
+              `Error enqueuing ${topic} job. patientId: ${patientId}, cityblockId: ${
                 data.cityblockId
               }`,
               err.message,

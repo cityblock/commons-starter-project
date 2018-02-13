@@ -1,11 +1,6 @@
 import { transaction, Transaction } from 'objection';
 import Db from '../../db';
-import {
-  createMockClinic,
-  createMockPatient,
-  createMockPatientInfo,
-  createMockUser,
-} from '../../spec-helpers';
+import { createMockClinic, createMockPatient, createMockUser } from '../../spec-helpers';
 import Address from '../address';
 import Clinic from '../clinic';
 import Patient from '../patient';
@@ -22,7 +17,7 @@ interface ISetup {
 async function setup(txn: Transaction): Promise<ISetup> {
   const clinic = await Clinic.create(createMockClinic(), txn);
   const user = await User.create(createMockUser(11, clinic.id, userRole), txn);
-  const patient = await Patient.query(txn).insertAndFetch(createMockPatient(123, clinic.id));
+  const patient = await Patient.create(createMockPatient(123, 123, clinic.id), txn);
 
   return { patient, user };
 }
@@ -37,23 +32,28 @@ describe('patient info model', () => {
     await Db.release();
   });
 
-  describe('create', async () => {
-    it('should create patient info', async () => {
+  describe('createInitialPatientInfo', async () => {
+    it('should create an initial patient info', async () => {
       await transaction(PatientInfo.knex(), async txn => {
-        const { patient, user } = await setup(txn);
-        const patientInfo = await PatientInfo.create(
+        const { patient } = await setup(txn);
+        expect(patient.patientInfo).not.toBeNull();
+      });
+    });
+
+    it('does not create a second patient info', async () => {
+      await transaction(PatientInfo.knex(), async txn => {
+        const { user, patient } = await setup(txn);
+        const { patientInfo } = patient;
+
+        const newPatientInfo = await PatientInfo.createInitialPatientInfo(
           {
-            ...createMockPatientInfo(),
             patientId: patient.id,
-            updatedBy: user.id,
+            updatedById: user.id,
           },
           txn,
         );
-        expect(patientInfo).toMatchObject({
-          patientId: patient.id,
-          gender: 'male',
-          language: 'en',
-        });
+
+        expect(newPatientInfo.id).toEqual(patientInfo.id);
       });
     });
   });
@@ -62,27 +62,19 @@ describe('patient info model', () => {
     it('should edit patient info', async () => {
       await transaction(PatientInfo.knex(), async txn => {
         const { patient, user } = await setup(txn);
-        const patientInfo = await PatientInfo.create(
-          {
-            ...createMockPatientInfo(),
-            patientId: patient.id,
-            updatedBy: user.id,
-          },
-          txn,
-        );
         const result = await PatientInfo.edit(
           {
             gender: 'female',
             language: 'ch',
-            updatedBy: user.id,
+            updatedById: user.id,
           },
-          patientInfo.id,
+          patient.patientInfo.id,
           txn,
         );
 
         expect(result).toMatchObject({
           patientId: patient.id,
-          id: patientInfo.id,
+          id: patient.patientInfo.id,
           gender: 'female',
           language: 'ch',
           primaryAddress: null,
@@ -93,14 +85,6 @@ describe('patient info model', () => {
     it('should add address to patient info', async () => {
       await transaction(PatientInfo.knex(), async txn => {
         const { patient, user } = await setup(txn);
-        const patientInfo = await PatientInfo.create(
-          {
-            ...createMockPatientInfo(),
-            patientId: patient.id,
-            updatedBy: user.id,
-          },
-          txn,
-        );
         const address = await Address.create(
           {
             street: '44 Washington St',
@@ -115,15 +99,15 @@ describe('patient info model', () => {
         const result = await PatientInfo.edit(
           {
             primaryAddressId: address.id,
-            updatedBy: user.id,
+            updatedById: user.id,
           },
-          patientInfo.id,
+          patient.patientInfo.id,
           txn,
         );
 
         expect(result).toMatchObject({
           patientId: patient.id,
-          id: patientInfo.id,
+          id: patient.patientInfo.id,
           gender: 'male',
           language: 'en',
           primaryAddress: {

@@ -94,10 +94,6 @@ declare module 'schema' {
   */
     clinics: IClinicEdges;
     /**
-    Patient encounters
-  */
-    patientEncounters: Array<IPatientEncounter>;
-    /**
     Task
   */
     task: ITask;
@@ -613,28 +609,6 @@ declare module 'schema' {
   interface IClinicNode {
     node: IClinic;
     cursor: string;
-  }
-
-  /**
-    PatientEncounter
-  */
-  interface IPatientEncounter {
-    encounterType: string;
-    providerName: string;
-    providerRole: string;
-    location: string;
-    diagnoses: Array<IPatientDiagnosis>;
-    reasons: Array<string>;
-    dateTime: string;
-  }
-
-  /**
-    PatientDiagnosis
-  */
-  interface IPatientDiagnosis {
-    code: string;
-    codeSystem: string;
-    description: string;
   }
 
   /**
@@ -1537,10 +1511,6 @@ declare module 'schema' {
   */
     patientInfoEdit: IPatientInfo | null;
     /**
-    Setup patient creates the patient in the db AND in athena
-  */
-    patientSetup: IPatient | null;
-    /**
     Edit a patient scratch pad
   */
     patientScratchPadEdit: IPatientScratchPad | null;
@@ -2106,41 +2076,6 @@ declare module 'schema' {
     gender: string | null;
     language: string | null;
     primaryAddressId: string | null;
-  }
-
-  /**
-    params for creating a patient in the db and in athena
-  */
-  interface IPatientSetupInput {
-    firstName: string;
-    middleName: string | null;
-    lastName: string;
-    dateOfBirth: string;
-    gender: string;
-    zip: string;
-    homeClinicId: string;
-    suffix: string | null;
-    preferredName: string | null;
-    race: string;
-    ssn: string;
-    language: string;
-    maritalStatus: string;
-    email: string | null;
-    homePhone: string | null;
-    mobilePhone: string | null;
-    consentToCall: boolean;
-    consentToText: boolean;
-    city: string | null;
-    address1: string | null;
-    county: string | null;
-    country: string | null;
-    state: string | null;
-    insuranceType: string | null;
-    patientRelationshipToPolicyHolder: string | null;
-    memberId: string | null;
-    policyGroupNumber: string | null;
-    issueDate: string | null;
-    expirationDate: string | null;
   }
 
   /**
@@ -2853,6 +2788,15 @@ declare module 'schema' {
   interface IPatientEdges {
     edges: Array<IPatientNode>;
     pageInfo: IPageInfo;
+  }
+
+  /**
+    PatientDiagnosis
+  */
+  interface IPatientDiagnosis {
+    code: string;
+    codeSystem: string;
+    description: string;
   }
 
 

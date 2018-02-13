@@ -3,7 +3,6 @@ import * as express from 'express';
 import { GraphQLBoolean, GraphQLNonNull, GraphQLObjectType } from 'graphql';
 import { decode, sign, verify } from 'jsonwebtoken';
 import { transaction, Transaction } from 'objection';
-import RedoxApi from '../../apis/redox';
 import config from '../../config';
 import Db from '../../db';
 import User, { UserRole } from '../../models/user';
@@ -16,7 +15,6 @@ export interface ILogger {
 
 export interface IContext {
   db: Db;
-  redoxApi: RedoxApi;
   userRole: UserRole;
   userId?: string;
   logger: ILogger;
@@ -86,7 +84,6 @@ export async function getGraphQLContext(
 ): Promise<IContext> {
   const authToken = request.headers.auth_token as string;
   const db = await Db.get();
-  const redoxApi = await RedoxApi.get();
 
   const datadogContext = dataDog ? dataDog.context(request) : null;
   const txn = existingTxn || (await transaction.start(User));
@@ -101,7 +98,6 @@ export async function getGraphQLContext(
     } catch (e) {
       return {
         db,
-        redoxApi,
         userRole: 'anonymousUser' as UserRole,
         logger,
         txn,
@@ -113,7 +109,6 @@ export async function getGraphQLContext(
     userId,
     userRole,
     db,
-    redoxApi,
     logger,
     txn,
     datadogContext,

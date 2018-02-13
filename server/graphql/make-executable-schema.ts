@@ -99,7 +99,6 @@ import {
   patientDataFlagCreate,
   resolvePatientDataFlagsForPatient,
 } from './patient-data-flag-resolver';
-import { resolvePatientEncounters } from './patient-encounters-resolver';
 import {
   patientGoalCreate,
   patientGoalDelete,
@@ -118,7 +117,6 @@ import {
 import {
   patientEdit,
   patientScratchPadEdit,
-  patientSetup,
   resolvePatient,
   resolvePatientsForComputedList,
   resolvePatientsNewToCareTeam,
@@ -281,7 +279,6 @@ const resolveFunctions = {
     currentUser: resolveCurrentUser,
     patient: resolvePatient,
     patientCareTeam: resolvePatientCareTeam,
-    patientEncounters: resolvePatientEncounters,
     patientScratchPad: resolvePatientScratchPad,
     patientSearch: resolvePatientSearch,
     patientPanel: resolvePatientPanel,
@@ -383,7 +380,6 @@ const resolveFunctions = {
     clinicCreate,
     patientEdit,
     patientInfoEdit,
-    patientSetup,
     patientScratchPadEdit,
     currentUserEdit,
     userCreate,

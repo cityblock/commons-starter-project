@@ -15,7 +15,6 @@ import {
   createMockClinic,
   createMockPatient,
   createMockUser,
-  createPatient,
   createRiskArea,
 } from '../../spec-helpers';
 import schema from '../make-executable-schema';
@@ -33,7 +32,7 @@ const userRole = 'admin';
 async function setup(txn: Transaction): Promise<ISetup> {
   const clinic = await Clinic.create(createMockClinic(), txn);
   const user = await User.create(createMockUser(11, clinic.id, userRole), txn);
-  const patient = await createPatient(createMockPatient(123, clinic.id), user.id, txn);
+  const patient = await Patient.create(createMockPatient(123, 123, clinic.id), txn);
   const riskArea = await createRiskArea({ title: 'Risk Area' }, txn);
   const submission = await RiskAreaAssessmentSubmission.create(
     {

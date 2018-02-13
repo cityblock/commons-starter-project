@@ -11,7 +11,6 @@ export const SPANISH_TRANSLATION = {
     'patientPanel.filteredTitle': 'Pacientes encontrados:',
     'patientPanel.description': 'Todos los pacientes en este grupo de cuidado',
     'patientPanel.filteredBy': 'Filtered by',
-    'patientPanel.addPatient': 'Añadir Paciente',
     'patientPanel.filter': 'Filter',
     'patientPanel.assignMembers': 'Assign Members',
     'patientPanel.resultsPlaceholder': 'No patients on your care team.',

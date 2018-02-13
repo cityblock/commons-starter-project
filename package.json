@@ -45,7 +45,9 @@
     "import:icd:dev": "NODE_ENV=development ts-node -P tsconfig.server.json ./scripts/import-icd-ten-codes.ts",
     "import:icd:production": "NODE_ENV=production ts-node -P tsconfig.server.json ./scripts/import-icd-ten-codes.ts",
     "consume:computed-fields:dev": "NODE_ENV=development nodemon --exec 'ts-node -P tsconfig.server.json ./server/consumers/computed-field-consumer.ts'",
-    "consume:computed-fields:production": "NODE_ENV=production nodemon --exec 'ts-node -P tsconfig.server.json ./server/consumers/computed-field-consumer.ts'"
+    "consume:computed-fields:production": "NODE_ENV=production nodemon --exec 'ts-node -P tsconfig.server.json ./server/consumers/computed-field-consumer.ts'",
+    "consume:member-attribution:dev": "NODE_ENV=development nodemon --exec 'ts-node -P tsconfig.server.json ./server/consumers/member-attribution-consumer.ts'",
+    "consume:member-attribution:production": "NODE_ENV=production nodemon --exec 'ts-node -P tsconfig.server.json ./server/consumers/member-attribution-consumer.ts'"
   },
   "author": "Brennan Moore",
   "jest": {

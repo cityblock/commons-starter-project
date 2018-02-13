@@ -1,17 +1,13 @@
 import { graphql } from 'graphql';
 import { cloneDeep } from 'lodash';
 import { transaction, Transaction } from 'objection';
-import RedoxApi from '../../apis/redox';
 import Db from '../../db';
+import CareTeam from '../../models/care-team';
 import HomeClinic from '../../models/clinic';
 import Patient from '../../models/patient';
 import User from '../../models/user';
 import {
   createMockPatient,
-  createPatient,
-  mockRedoxCreatePatient,
-  mockRedoxCreatePatientError,
-  mockRedoxTokenFetch,
   setupComputedPatientList,
   setupPatientsForPanelFilter,
   setupPatientsNewToCareTeam,
@@ -51,7 +47,8 @@ async function setup(txn: Transaction): Promise<ISetup> {
     },
     txn,
   );
-  const patient = await createPatient(createMockPatient(1, homeClinicId), user.id, txn);
+  const patient = await Patient.create(createMockPatient(1, 1, homeClinicId), txn);
+  await CareTeam.create({ userId: user.id, patientId: patient.id }, txn);
 
   return { patient, user, homeClinicId };
 }
@@ -68,25 +65,38 @@ async function additionalSetup(txn: Transaction): Promise<ISetup> {
     },
     txn,
   );
-  await createPatient(createMockPatient(11, homeClinicId, 'Jon', 'Snow'), user.id, txn);
-  await createPatient(createMockPatient(12, homeClinicId, 'Robb', 'Stark'), user2.id, txn);
-  await createPatient(createMockPatient(13, homeClinicId, 'Arya', 'Stark'), user.id, txn);
-  await createPatient(createMockPatient(14, homeClinicId, 'Sansa', 'Stark'), user.id, txn);
+  const patient2 = await Patient.create(
+    createMockPatient(11, 12, homeClinicId, 'Jon', 'Snow'),
+    txn,
+  );
+  await CareTeam.create({ userId: user.id, patientId: patient2.id }, txn);
+  const patient3 = await Patient.create(
+    createMockPatient(12, 12, homeClinicId, 'Robb', 'Stark'),
+    txn,
+  );
+  await CareTeam.create({ userId: user2.id, patientId: patient3.id }, txn);
+  const patient4 = await Patient.create(
+    createMockPatient(13, 13, homeClinicId, 'Arya', 'Stark'),
+    txn,
+  );
+  await CareTeam.create({ userId: user.id, patientId: patient4.id }, txn);
+  const patient5 = await Patient.create(
+    createMockPatient(14, 14, homeClinicId, 'Sansa', 'Stark'),
+    txn,
+  );
+  await CareTeam.create({ userId: user.id, patientId: patient5.id }, txn);
 
   return { user, patient, homeClinicId };
 }
 
 describe('patient', () => {
-  let redoxApi: RedoxApi;
   let db: Db;
   const log = jest.fn();
   const logger = { log };
 
   beforeEach(async () => {
-    redoxApi = await RedoxApi.get();
     db = await Db.get();
     await Db.clear();
-    mockRedoxTokenFetch();
   });
 
   afterAll(async () => {
@@ -136,110 +146,6 @@ describe('patient', () => {
           firstName: 'first',
         });
         expect(log).toBeCalled();
-      });
-    });
-  });
-
-  describe('patientSetup', () => {
-    it('sets up patient', async () => {
-      await transaction(Patient.knex(), async txn => {
-        const { homeClinicId, user } = await setup(txn);
-        const query = `mutation {
-          patientSetup(input: {
-            firstName: "first",
-            lastName: "last",
-            gender: "female",
-            zip: "02345",
-            homeClinicId: "${homeClinicId}",
-            dateOfBirth: "${new Date('02/02/1902').toISOString()}",
-            consentToText: true,
-            consentToCall: true,
-            maritalStatus: "Unknown",
-            race: "Other Race",
-            ssn: "123456789",
-            language: "en",
-          }) {
-            id, firstName, lastName, dateOfBirth
-          }
-        }`;
-
-        mockRedoxCreatePatient(123);
-
-        const result = await graphql(schema, query, null, {
-          redoxApi,
-          db,
-          userRole,
-          userId: user.id,
-          logger,
-          txn,
-        });
-
-        expect(cloneDeep(result.data!.patientSetup)).toMatchObject({
-          firstName: 'first',
-          lastName: 'last',
-          dateOfBirth: new Date('02/02/1902').toString(),
-        });
-        expect(log).toBeCalled();
-      });
-    });
-
-    // MARKED AS PENDING
-    xit('errors and does not create patient when redox fails', async () => {
-      // TODO: FIGURE OUT HOW TO RUN THIS IN A TRANSACTION
-      await transaction(Patient.knex(), async txn => {
-        const setupResult = await transaction(Patient.knex(), async innerTransaction => {
-          const homeClinic = await HomeClinic.create(
-            {
-              name: 'cool clinic',
-              departmentId: 1,
-            },
-            innerTransaction,
-          );
-          const homeClinicId = homeClinic.id;
-          const user = await User.create(
-            {
-              firstName: 'Daenerys',
-              lastName: 'Targaryen',
-              email: 'a@b.com',
-              userRole,
-              homeClinicId,
-            },
-            innerTransaction,
-          );
-          await createPatient(createMockPatient(1, homeClinicId), user.id, innerTransaction);
-
-          return { homeClinicId, user };
-        });
-
-        const patientCount = await Patient.query(txn).count();
-        const query = `mutation {
-          patientSetup(input: {
-            firstName: "first",
-            lastName: "last",
-            homeClinicId: "${setupResult.homeClinicId}",
-            dateOfBirth: "02/02/1902",
-            consentToText: true,
-            consentToCall: true,
-            maritalStatus: "Unknown",
-            race: "Other Race",
-            ssn: "123456789",
-          }) {
-            id, firstName, lastName, dateOfBirth
-          }
-        }`;
-
-        mockRedoxCreatePatientError();
-
-        const result = await graphql(schema, query, null, {
-          redoxApi,
-          db,
-          userRole,
-          userId: setupResult.user.id,
-          logger,
-          txn,
-        });
-        expect(result.errors![0].message).toContain('Athena patient was not correctly created');
-        expect(await Patient.query(txn).count()).toEqual(patientCount);
       });
     });
   });
@@ -526,8 +432,10 @@ describe('patient', () => {
     it('works if user has patients', async () => {
       await transaction(Patient.knex(), async txn => {
         const { user, patient, homeClinicId } = await setup(txn);
-        const patient1 = await createPatient(createMockPatient(123, homeClinicId), user.id, txn);
-        const patient2 = await createPatient(createMockPatient(321, homeClinicId), user.id, txn);
+        const patient1 = await Patient.create(createMockPatient(123, 123, homeClinicId), txn);
+        await CareTeam.create({ userId: user.id, patientId: patient1.id }, txn);
+        const patient2 = await Patient.create(createMockPatient(321, 321, homeClinicId), txn);
+        await CareTeam.create({ userId: user.id, patientId: patient2.id }, txn);
 
         const query = `{
           patientPanel(pageNumber: 0, pageSize: 10, filters: {}) {
@@ -594,7 +502,7 @@ describe('patient', () => {
                 lastName: 'Man',
                 patientInfo: {
                   gender: 'male',
-                  language: 'ch',
+                  language: 'en',
                   primaryAddress: {
                     zip: '10001',
                   },
@@ -744,7 +652,7 @@ describe('patient', () => {
                 lastName: 'Man',
                 patientInfo: {
                   gender: 'male',
-                  language: 'ch',
+                  language: 'en',
                   primaryAddress: {
                     zip: '10001',
                   },
@@ -761,7 +669,7 @@ describe('patient', () => {
       await transaction(Patient.knex(), async txn => {
         const { user2 } = await setupPatientsForPanelFilter(txn);
         const query = `{
-          patientPanel(pageNumber: 0, pageSize: 10, filters: { gender: female }) {
+          patientPanel(pageNumber: 0, pageSize: 10, filters: { }) {
             edges { node { firstName, lastName, patientInfo { gender, language, primaryAddress { zip } } } }
             totalCount
           }

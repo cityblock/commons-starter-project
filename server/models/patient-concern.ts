@@ -1,10 +1,12 @@
 import { keys, omit } from 'lodash';
 import { Model, RelationMappings, Transaction } from 'objection';
+import { attributionUserEmail } from '../lib/consts';
 import BaseModel from './base-model';
 import CarePlanUpdateEvent from './care-plan-update-event';
 import Concern from './concern';
 import Patient from './patient';
 import PatientGoal from './patient-goal';
+import User from './user';
 
 interface IPatientConcernEditableFields {
   order?: number;
@@ -105,15 +107,20 @@ export default class PatientConcern extends BaseModel {
       .eager(EAGER_QUERY)
       .insertAndFetch(omit(insertInput, ['userId']));
 
-    await CarePlanUpdateEvent.create(
-      {
-        patientId: input.patientId,
-        userId: input.userId,
-        patientConcernId: patientConcern.id,
-        eventType: 'create_patient_concern',
-      },
-      txn,
-    );
+    // Do not create a CarePlanUpdateEvent if this is the attribution user.
+    // TODO: maybe just pass down a different variable rather than needing to look up the user?
+    const user = await User.get(input.userId, txn);
+    if (user.email !== attributionUserEmail) {
+      await CarePlanUpdateEvent.create(
+        {
+          patientId: input.patientId,
+          userId: input.userId,
+          patientConcernId: patientConcern.id,
+          eventType: 'create_patient_concern',
+        },
+        txn,
+      );
+    }
 
     return patientConcern;
   }

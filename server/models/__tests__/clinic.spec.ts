@@ -1,6 +1,7 @@
 import { transaction } from 'objection';
 import * as uuid from 'uuid/v4';
 import Db from '../../db';
+import { attributionUserClinicName } from '../../lib/consts';
 import Clinic from '../clinic';
 
 describe('clinic model', () => {
@@ -26,6 +27,19 @@ describe('clinic model', () => {
         const clinicById = await Clinic.get(clinic.id, txn);
 
         expect(clinicById).toMatchObject(clinic);
+      });
+    });
+
+    it('should create an attribution clinic', async () => {
+      await transaction(Clinic.knex(), async txn => {
+        const clinic = await Clinic.findOrCreateAttributionClinic(txn);
+        expect(clinic.name).toEqual(attributionUserClinicName);
+
+        // Check to make sure it's an idempotent operation
+        await Clinic.findOrCreateAttributionClinic(txn);
+        const clinics = await Clinic.getAll({ pageNumber: 0, pageSize: 100 }, txn);
+
+        expect(clinics.total).toEqual(1);
       });
     });
 

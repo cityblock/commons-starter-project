@@ -11,7 +11,6 @@ export const ENGLISH_TRANSLATION = {
     'patientPanel.filteredTitle': 'Members found:',
     'patientPanel.description': 'All members on this care team',
     'patientPanel.filteredBy': 'Filtered by',
-    'patientPanel.addPatient': 'Add Patient',
     'patientPanel.filter': 'Filter',
     'patientPanel.assignMembers': 'Assign Members',
     'patientPanel.resultsPlaceholder': 'No patients on your care team.',

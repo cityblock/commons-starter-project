@@ -20,7 +20,6 @@ import {
   createMockClinic,
   createMockPatient,
   createMockUser,
-  createPatient,
   createRiskArea,
 } from '../../spec-helpers';
 import schema from '../make-executable-schema';
@@ -103,7 +102,7 @@ async function setup(txn: Transaction): Promise<ISetup> {
     },
     txn,
   );
-  const patient = await createPatient(createMockPatient(123, clinic.id), user.id, txn);
+  const patient = await Patient.create(createMockPatient(123, 123, clinic.id), txn);
   const riskAreaAssessmentSubmission = await RiskAreaAssessmentSubmission.create(
     {
       patientId: patient.id,
@@ -180,7 +179,10 @@ describe('care plan resolver tests', () => {
         }`;
         const result = await graphql(schema, query, null, { db, userRole, txn });
         expect(cloneDeep(result.data!.carePlanForPatient)).toMatchObject({
-          concerns: [{ id: patientConcern.id, concern: { title: concern.title } }],
+          concerns: [
+            { concern: { title: 'Administrative Tasks' } },
+            { id: patientConcern.id, concern: { title: concern.title } },
+          ],
           goals: [{ id: patientGoal.id, title: patientGoal.title }],
         });
       });
@@ -344,10 +346,11 @@ describe('care plan resolver tests', () => {
         await graphql(schema, mutation2, null, { db, userRole, userId: user.id, txn });
 
         const patientConcerns = await PatientConcern.getForPatient(patient.id, txn);
-        expect(patientConcerns[0].concernId).toEqual(concern.id);
-        expect(patientConcerns[0].startedAt).toBeFalsy();
-        expect(patientConcerns[1].concernId).toEqual(concern2.id);
-        expect(patientConcerns[1].startedAt).not.toBeFalsy();
+        // Note: Index starts at 1 because the first concern is Admin Tasks
+        expect(patientConcerns[1].concernId).toEqual(concern.id);
+        expect(patientConcerns[1].startedAt).toBeFalsy();
+        expect(patientConcerns[2].concernId).toEqual(concern2.id);
+        expect(patientConcerns[2].startedAt).not.toBeFalsy();
 
         const fetchedSuggestion1 = await CarePlanSuggestion.get(suggestion1.id, txn);
         const fetchedSuggestion2 = await CarePlanSuggestion.get(suggestion2.id, txn);
@@ -387,9 +390,10 @@ describe('care plan resolver tests', () => {
         const patientGoals = await PatientGoal.getForPatient(patient.id, txn);
         const concerns = await Concern.getAll({ orderBy, order }, txn);
         expect(concerns.map(c => c.title)).toContain(concern2.title);
-        expect(patientConcerns[0].concern.title).toEqual(concern2.title);
+        // Note: Index starts at 1 because 0 is Admin Tasks
+        expect(patientConcerns[1].concern.title).toEqual(concern2.title);
         expect(patientGoals[0].goalSuggestionTemplateId).toEqual(goalSuggestionTemplate.id);
-        expect(patientGoals[0].patientConcernId).toEqual(patientConcerns[0].id);
+        expect(patientGoals[0].patientConcernId).toEqual(patientConcerns[1].id);
 
         const fetchedSuggestion = await CarePlanSuggestion.get(suggestion.id, txn);
         expect(fetchedSuggestion!.acceptedAt).not.toBeFalsy();

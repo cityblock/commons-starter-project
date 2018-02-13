@@ -7,12 +7,7 @@ import Clinic from '../../models/clinic';
 import Patient from '../../models/patient';
 import PatientDataFlag from '../../models/patient-data-flag';
 import User from '../../models/user';
-import {
-  createMockClinic,
-  createMockPatient,
-  createMockUser,
-  createPatient,
-} from '../../spec-helpers';
+import { createMockClinic, createMockPatient, createMockUser } from '../../spec-helpers';
 import schema from '../make-executable-schema';
 
 const userRole = 'admin';
@@ -25,7 +20,7 @@ interface ISetup {
 async function setup(txn: Transaction): Promise<ISetup> {
   const clinic = await Clinic.create(createMockClinic(), txn);
   const user = await User.create(createMockUser(11, clinic.id, userRole, 'a@b.com'), txn);
-  const patient = await createPatient(createMockPatient(123, clinic.id), user.id, txn);
+  const patient = await Patient.create(createMockPatient(123, 123, clinic.id), txn);
 
   return { user, patient };
 }

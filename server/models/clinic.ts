@@ -1,5 +1,6 @@
 import { Model, RelationMappings, Transaction } from 'objection';
 import { IPaginatedResults, IPaginationOptions } from '../db';
+import { attributionUserClinicDepartmentId, attributionUserClinicName } from '../lib/consts';
 import BaseModel from './base-model';
 import Patient from './patient';
 import User from './user';
@@ -57,6 +58,22 @@ export default class Clinic extends BaseModel {
 
   static async create(clinic: IClinicEditableFields, txn: Transaction): Promise<Clinic> {
     return this.query(txn).insertAndFetch(clinic);
+  }
+
+  static async findOrCreateAttributionClinic(txn: Transaction): Promise<Clinic> {
+    const clinic = await this.query(txn).findOne({
+      name: attributionUserClinicName,
+      departmentId: attributionUserClinicDepartmentId,
+    });
+
+    if (!clinic) {
+      return this.query(txn).insertAndFetch({
+        name: attributionUserClinicName,
+        departmentId: attributionUserClinicDepartmentId,
+      });
+    }
+
+    return clinic;
   }
 
   static async get(clinicId: string, txn: Transaction): Promise<Clinic> {

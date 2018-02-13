@@ -8,12 +8,7 @@ import Task from '../../models/task';
 import TaskEvent from '../../models/task-event';
 import TaskFollower from '../../models/task-follower';
 import User from '../../models/user';
-import {
-  createMockClinic,
-  createMockPatient,
-  createMockUser,
-  createPatient,
-} from '../../spec-helpers';
+import { createMockClinic, createMockPatient, createMockUser } from '../../spec-helpers';
 import schema from '../make-executable-schema';
 
 interface ISetup {
@@ -28,7 +23,7 @@ const userRole = 'physician';
 async function setup(txn: Transaction): Promise<ISetup> {
   const clinic = await Clinic.create(createMockClinic(), txn);
   const user = await User.create(createMockUser(11, clinic.id, userRole), txn);
-  const patient = await createPatient(createMockPatient(11, clinic.id), user.id, txn);
+  const patient = await Patient.create(createMockPatient(11, 11, clinic.id), txn);
   const dueAt = new Date().toISOString();
   const task = await Task.create(
     {
@@ -162,7 +157,7 @@ describe('task follower', () => {
     it('returns correct page information', async () => {
       await transaction(TaskFollower.knex(), async txn => {
         const { clinic, user, task } = await setup(txn);
-        const patient2 = await createPatient(createMockPatient(123, clinic.id), user.id, txn);
+        const patient2 = await Patient.create(createMockPatient(123, 123, clinic.id), txn);
         const dueAt = new Date().toISOString();
         await Task.create(
           {

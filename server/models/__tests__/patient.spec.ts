@@ -6,7 +6,6 @@ import {
   createMockClinic,
   createMockPatient,
   createMockUser,
-  createPatient,
   setupComputedPatientList,
   setupPatientsForPanelFilter,
   setupPatientsNewToCareTeam,
@@ -17,6 +16,7 @@ import {
   setupPatientsWithPendingSuggestions,
   setupUrgentTasks,
 } from '../../spec-helpers';
+import CareTeam from '../care-team';
 import Clinic from '../clinic';
 import ComputedPatientStatus from '../computed-patient-status';
 import Patient from '../patient';
@@ -49,29 +49,23 @@ describe('patient model', () => {
     it('should create and retrieve a patient', async () => {
       await transaction(Patient.knex(), async txn => {
         const { clinic } = await setup(txn);
-        const user = await User.create(createMockUser(11, clinic.id, userRole), txn);
-
-        const patient = await createPatient(createMockPatient(123, clinic.id), user.id, txn);
+        const patient = await Patient.create(createMockPatient(123, 123, clinic.id), txn);
         expect(patient).toMatchObject({
           id: patient.id,
-          athenaPatientId: 123,
         });
         const patientById = await Patient.get(patient.id, txn);
         expect(patientById).toMatchObject({
           id: patient.id,
-          athenaPatientId: 123,
         });
       });
     });
 
     it('should not create a user with an invalid clinic id', async () => {
       await transaction(Patient.knex(), async txn => {
-        const { clinic } = await setup(txn);
         const fakeClinicId = uuid();
         const message = `Key (homeClinicId)=(${fakeClinicId}) is not present in table "clinic".`;
-        const user = await User.create(createMockUser(11, clinic.id, userRole), txn);
 
-        await createPatient(createMockPatient(11, fakeClinicId), user.id, txn).catch(e => {
+        await Patient.create(createMockPatient(11, 123, fakeClinicId), txn).catch(e => {
           expect(e.detail).toEqual(message);
         });
       });
@@ -89,12 +83,10 @@ describe('patient model', () => {
     it('should edit patient', async () => {
       await transaction(Patient.knex(), async txn => {
         const { clinic } = await setup(txn);
-        const user = await User.create(createMockUser(11, clinic.id, userRole), txn);
-        const patient = await createPatient(createMockPatient(123, clinic.id), user.id, txn);
+        const patient = await Patient.create(createMockPatient(123, 123, clinic.id), txn);
         const birthday = new Date('02/02/1902');
         expect(patient).toMatchObject({
           id: patient.id,
-          athenaPatientId: 123,
         });
         const patientEdit = await Patient.edit(
           {
@@ -115,31 +107,29 @@ describe('patient model', () => {
     });
   });
 
-  describe('setup', async () => {
-    it('should setup patient', async () => {
+  describe('create', async () => {
+    it('should create a patient', async () => {
       await transaction(Patient.knex(), async txn => {
         const { clinic } = await setup(txn);
-        const user = await User.create(createMockUser(11, clinic.id, userRole), txn);
         const birthday = new Date('02/02/1902');
-        const patient = await Patient.setup(
+        const patientUuid = uuid();
+        const patient = await Patient.create(
           {
+            patientId: patientUuid,
+            cityblockId: 123456,
             firstName: 'first',
             middleName: 'middle',
             lastName: 'last',
             dateOfBirth: '02/02/1902',
             homeClinicId: clinic.id,
-            consentToCall: false,
-            consentToText: false,
-          },
-          {
             gender: 'female',
-            language: 'en',
+            language: 'english',
           },
-          user.id,
           txn,
         );
 
         expect(patient).toMatchObject({
+          id: patientUuid,
           firstName: 'first',
           middleName: 'middle',
           lastName: 'last',
@@ -153,22 +143,18 @@ describe('patient model', () => {
     it('should give the patient an administrative tasks concern', async () => {
       await transaction(Patient.knex(), async txn => {
         const { clinic } = await setup(txn);
-        const user = await User.create(createMockUser(11, clinic.id, userRole), txn);
-        const patient = await Patient.setup(
+        const patient = await Patient.create(
           {
+            patientId: uuid(),
+            cityblockId: 12345,
             firstName: 'first',
             middleName: 'middle',
             lastName: 'last',
             dateOfBirth: '02/02/1902',
             homeClinicId: clinic.id,
-            consentToCall: false,
-            consentToText: false,
-          },
-          {
             gender: 'female',
-            language: 'en',
+            language: 'english',
           },
-          user.id,
           txn,
         );
         const patientConcerns = await PatientConcern.getForPatient(patient.id, txn);
@@ -181,29 +167,69 @@ describe('patient model', () => {
     it('should create the initial ComputedPatientStatus', async () => {
       await transaction(Patient.knex(), async txn => {
         const { clinic } = await setup(txn);
-        const user = await User.create(createMockUser(11, clinic.id, userRole), txn);
-        const patient = await Patient.setup(
+        const patient = await Patient.create(
           {
+            patientId: uuid(),
+            cityblockId: 123456,
             firstName: 'first',
             middleName: 'middle',
             lastName: 'last',
             dateOfBirth: '02/02/1902',
             homeClinicId: clinic.id,
-            consentToCall: false,
-            consentToText: false,
+            gender: 'male',
+            language: 'english',
           },
-          {
-            gender: 'female',
-            language: 'en',
-          },
-          user.id,
           txn,
         );
 
         const computedPatientStatus = await ComputedPatientStatus.getForPatient(patient.id, txn);
 
         expect(computedPatientStatus).not.toBeNull();
-        expect(computedPatientStatus!.updatedById).toEqual(user.id);
+      });
+    });
+  });
+
+  describe('updateFromAttribution', async () => {
+    it('should update a patient', async () => {
+      await transaction(Patient.knex(), async txn => {
+        const { clinic } = await setup(txn);
+        const birthday = new Date('02/02/1902');
+        const patientUuid = uuid();
+        const patient = await Patient.create(
+          {
+            patientId: patientUuid,
+            cityblockId: 123456,
+            firstName: 'first',
+            middleName: 'middle',
+            lastName: 'last',
+            dateOfBirth: '02/02/1902',
+            homeClinicId: clinic.id,
+            gender: 'female',
+            language: 'english',
+          },
+          txn,
+        );
+
+        expect(patient).toMatchObject({
+          id: patientUuid,
+          firstName: 'first',
+          middleName: 'middle',
+          lastName: 'last',
+          dateOfBirth: birthday,
+          consentToCall: false,
+          consentToText: false,
+        });
+
+        await Patient.updateFromAttribution(
+          {
+            patientId: patientUuid,
+            firstName: 'New First Name',
+          },
+          txn,
+        );
+
+        const fetchedPatient = await Patient.get(patient.id, txn);
+        expect(fetchedPatient.firstName).toEqual('New First Name');
       });
     });
   });
@@ -218,23 +244,23 @@ describe('patient model', () => {
     async function patientsSetup(txn: Transaction): Promise<IPatientsSetup> {
       const { clinic } = await setup(txn);
       const user = await User.create(createMockUser(11, clinic.id, userRole), txn);
-      const patient1 = await createPatient(createMockPatient(123, clinic.id), user.id, txn);
-      const patient2 = await createPatient(createMockPatient(234, clinic.id), user.id, txn);
+      const patient1 = await Patient.create(createMockPatient(123, 123, clinic.id), txn);
+      const patient2 = await Patient.create(createMockPatient(234, 234, clinic.id), txn);
 
       return { user, patient1, patient2 };
     }
 
     it('should fetch patients', async () => {
       await transaction(Patient.knex(), async txn => {
-        await patientsSetup(txn);
+        const { patient1, patient2 } = await patientsSetup(txn);
 
         expect(await Patient.getAll({ pageNumber: 0, pageSize: 10 }, txn)).toMatchObject({
           results: [
             {
-              athenaPatientId: 123,
+              id: patient1.id,
             },
             {
-              athenaPatientId: 234,
+              id: patient2.id,
             },
           ],
           total: 2,
@@ -255,12 +281,12 @@ describe('patient model', () => {
 
     it('should fetch a limited set of patients', async () => {
       await transaction(Patient.knex(), async txn => {
-        await patientsSetup(txn);
+        const { patient1, patient2 } = await patientsSetup(txn);
 
         expect(await Patient.getAll({ pageNumber: 0, pageSize: 1 }, txn)).toMatchObject({
           results: [
             {
-              athenaPatientId: 123,
+              id: patient1.id,
             },
           ],
           total: 2,
@@ -268,21 +294,10 @@ describe('patient model', () => {
         expect(await Patient.getAll({ pageNumber: 1, pageSize: 1 }, txn)).toMatchObject({
           results: [
             {
-              athenaPatientId: 234,
+              id: patient2.id,
             },
           ],
           total: 2,
-        });
-      });
-    });
-
-    it('should fetch by athenaPatientId', async () => {
-      await transaction(Patient.knex(), async txn => {
-        await patientsSetup(txn);
-        expect(
-          await Patient.getBy({ fieldName: 'athenaPatientId', field: '123' }, txn),
-        ).toMatchObject({
-          athenaPatientId: 123,
         });
       });
     });
@@ -317,7 +332,7 @@ describe('patient model', () => {
               lastName: 'Man',
               patientInfo: {
                 gender: 'male',
-                language: 'ch',
+                language: 'en',
                 primaryAddress: {
                   zip: '10001',
                 },
@@ -415,7 +430,7 @@ describe('patient model', () => {
               lastName: 'Man',
               patientInfo: {
                 gender: 'male',
-                language: 'ch',
+                language: 'en',
                 primaryAddress: {
                   zip: '10001',
                 },
@@ -544,24 +559,24 @@ describe('patient model', () => {
     async function searchSetup(txn: Transaction): Promise<ISearchSetup> {
       const { clinic } = await setup(txn);
       const user = await User.create(createMockUser(11, clinic.id, userRole), txn);
-      await Patient.setup(
-        createMockPatient(14, clinic.id, 'Robb', 'Stark'),
-        {
-          gender: 'female',
-          language: 'en',
-        },
-        user.id,
+      await Patient.create(createMockPatient(14, 123, clinic.id, 'Robb', 'Stark'), txn);
+
+      const jonSnow = await Patient.create(
+        createMockPatient(11, 234, clinic.id, 'Jon', 'Snow'),
         txn,
       );
+      await CareTeam.create({ userId: user.id, patientId: jonSnow.id }, txn);
 
-      const jonSnow = await createPatient(
-        createMockPatient(11, clinic.id, 'Jon', 'Snow'),
-        user.id,
+      const aryaStark = await Patient.create(
+        createMockPatient(12, 345, clinic.id, 'Arya', 'Stark'),
         txn,
       );
-
-      await createPatient(createMockPatient(12, clinic.id, 'Arya', 'Stark'), user.id, txn);
-      await createPatient(createMockPatient(13, clinic.id, 'Sansa', 'Stark'), user.id, txn);
+      await CareTeam.create({ userId: user.id, patientId: aryaStark.id }, txn);
+      const sansaStark = await Patient.create(
+        createMockPatient(13, 456, clinic.id, 'Sansa', 'Stark'),
+        txn,
+      );
+      await CareTeam.create({ userId: user.id, patientId: sansaStark.id }, txn);
 
       return { user, jonSnow };
     }

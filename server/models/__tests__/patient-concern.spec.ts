@@ -1,12 +1,7 @@
 import { transaction, Transaction } from 'objection';
 import * as uuid from 'uuid/v4';
 import Db from '../../db';
-import {
-  createMockClinic,
-  createMockPatient,
-  createMockUser,
-  createPatient,
-} from '../../spec-helpers';
+import { createMockClinic, createMockPatient, createMockUser } from '../../spec-helpers';
 import CarePlanUpdateEvent from '../care-plan-update-event';
 import Clinic from '../clinic';
 import Concern from '../concern';
@@ -41,7 +36,7 @@ async function setup(txn: Transaction): Promise<ISetup> {
   );
   const clinic = await Clinic.create(createMockClinic(), txn);
   const user = await User.create(createMockUser(11, clinic.id, userRole), txn);
-  const patient = await createPatient(createMockPatient(123, clinic.id), user.id, txn);
+  const patient = await Patient.create(createMockPatient(123, 123, clinic.id), txn);
 
   return {
     concern,
@@ -73,9 +68,8 @@ describe('patient concern model', () => {
         },
         txn,
       );
-      expect(patientConcern.order).toEqual(1);
+      expect(patientConcern.order).toEqual(2); // Admin Tasks concern already exists
       expect(await PatientConcern.get(patientConcern.id, txn)).toEqual(patientConcern);
-      expect(await PatientConcern.getForPatient(patient.id, txn)).toEqual([patientConcern]);
 
       // cannot add the same concern 2x
       await expect(
@@ -172,7 +166,7 @@ describe('patient concern model', () => {
     });
   });
 
-  it('gets concerns associated with a patient ', async () => {
+  it('gets concerns associated with a patient', async () => {
     await transaction(PatientConcern.knex(), async txn => {
       const { concern, patient, user } = await setup(txn);
       const patientConcern = await PatientConcern.create(
@@ -183,7 +177,9 @@ describe('patient concern model', () => {
         },
         txn,
       );
-      expect(await PatientConcern.getForPatient(patient.id, txn)).toEqual([patientConcern]);
+      const fetchedConcerns = await PatientConcern.getForPatient(patient.id, txn);
+      expect(fetchedConcerns.length).toEqual(2);
+      expect(fetchedConcerns[1]).toMatchObject(patientConcern);
     });
   });
 
@@ -229,7 +225,7 @@ describe('patient concern model', () => {
       await Task.complete(completeTask.id, user.id, txn);
 
       const fetchedConcerns = await PatientConcern.getForPatient(patient.id, txn);
-      const fetchedPatientGoal = fetchedConcerns[0].patientGoals[0];
+      const fetchedPatientGoal = fetchedConcerns[1].patientGoals[0];
       const { tasks } = fetchedPatientGoal;
       const taskIds = tasks.map(task => task.id);
       expect(fetchedPatientGoal.id).toEqual(patientGoal.id);
@@ -241,7 +237,7 @@ describe('patient concern model', () => {
   it('auto increments "order" on create', async () => {
     await transaction(PatientConcern.knex(), async txn => {
       const { clinic, user, concern, concern2, patient } = await setup(txn);
-      const patient2 = await createPatient(createMockPatient(456, clinic.id), user.id, txn);
+      const patient2 = await Patient.create(createMockPatient(456, 456, clinic.id), txn);
       await PatientConcern.create(
         {
           concernId: concern.id,
@@ -270,12 +266,12 @@ describe('patient concern model', () => {
       const patient1Concerns = await PatientConcern.getForPatient(patient.id, txn);
       const patient2Concerns = await PatientConcern.getForPatient(patient2.id, txn);
 
-      expect(patient1Concerns.length).toEqual(2);
-      expect(patient1Concerns[0].order).toEqual(1);
+      expect(patient1Concerns.length).toEqual(3);
       expect(patient1Concerns[1].order).toEqual(2);
+      expect(patient1Concerns[2].order).toEqual(3);
 
-      expect(patient2Concerns.length).toEqual(1);
-      expect(patient2Concerns[0].order).toEqual(1);
+      expect(patient2Concerns.length).toEqual(2);
+      expect(patient2Concerns[1].order).toEqual(2);
     });
   });
 
@@ -372,11 +368,11 @@ describe('patient concern model', () => {
       const patientConcernUpdateData = [
         {
           id: patientConcern.id,
-          order: 2,
+          order: 3,
         },
         {
           id: patientConcern2.id,
-          order: 1,
+          order: 2,
         },
       ];
 
@@ -386,16 +382,16 @@ describe('patient concern model', () => {
         txn,
       );
 
-      expect(patientConcerns.length).toBe(2);
+      expect(patientConcerns.length).toBe(3);
 
-      expect(patientConcerns[0]).toMatchObject({
+      expect(patientConcerns[1]).toMatchObject({
         id: patientConcern2.id,
-        order: 1,
+        order: 2,
         concernId: concern2.id,
       });
-      expect(patientConcerns[1]).toMatchObject({
+      expect(patientConcerns[2]).toMatchObject({
         id: patientConcern.id,
-        order: 2,
+        order: 3,
         concernId: concern.id,
       });
     });
@@ -410,7 +406,7 @@ describe('patient concern model', () => {
           patientId: patient.id,
           userId: user.id,
           startedAt: new Date().toISOString(),
-          order: 1,
+          order: 2,
         },
         txn,
       );
@@ -420,7 +416,7 @@ describe('patient concern model', () => {
           concernId: concern2.id,
           patientId: patient.id,
           userId: user.id,
-          order: 2,
+          order: 3,
         },
         txn,
       );
@@ -430,12 +426,12 @@ describe('patient concern model', () => {
         {
           id: patientConcern.id,
           startedAt: null,
-          order: 2,
+          order: 3,
         },
         {
           id: patientConcern2.id,
           completedAt,
-          order: 1,
+          order: 2,
         },
       ];
 
@@ -445,16 +441,16 @@ describe('patient concern model', () => {
         txn,
       );
 
-      expect(patientConcerns.length).toBe(2);
-      expect(patientConcerns[0]).toMatchObject({
+      expect(patientConcerns.length).toBe(3);
+      expect(patientConcerns[1]).toMatchObject({
         id: patientConcern2.id,
-        order: 1,
+        order: 2,
         concernId: concern2.id,
       });
-      expect(patientConcerns[0].completedAt).toBeTruthy();
-      expect(patientConcerns[1]).toMatchObject({
+      expect(patientConcerns[1].completedAt).toBeTruthy();
+      expect(patientConcerns[2]).toMatchObject({
         id: patientConcern.id,
-        order: 2,
+        order: 3,
         concernId: concern.id,
         startedAt: null,
         completedAt: null,

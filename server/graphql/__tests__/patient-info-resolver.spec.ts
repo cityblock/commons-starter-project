@@ -7,7 +7,7 @@ import HomeClinic from '../../models/clinic';
 import Patient from '../../models/patient';
 import PatientAddress from '../../models/patient-address';
 import User from '../../models/user';
-import { createMockAddress, createMockPatient, createPatient } from '../../spec-helpers';
+import { createMockAddress, createMockPatient } from '../../spec-helpers';
 import schema from '../make-executable-schema';
 
 interface ISetup {
@@ -38,7 +38,7 @@ async function setup(txn: Transaction): Promise<ISetup> {
     },
     txn,
   );
-  const patient = await createPatient(createMockPatient(1, homeClinicId), user.id, txn);
+  const patient = await Patient.create(createMockPatient(1, 1, homeClinicId), txn);
   const address = await Address.create(createMockAddress(user.id), txn);
 
   return { patient, address, user, homeClinicId };

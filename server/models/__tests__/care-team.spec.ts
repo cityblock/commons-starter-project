@@ -1,14 +1,10 @@
 import { transaction, Transaction } from 'objection';
 import * as uuid from 'uuid/v4';
 import Db from '../../db';
-import {
-  createMockClinic,
-  createMockPatient,
-  createMockUser,
-  createPatient,
-} from '../../spec-helpers';
+import { createMockClinic, createMockPatient, createMockUser } from '../../spec-helpers';
 import CareTeam from '../care-team';
 import Clinic from '../clinic';
+import Patient from '../patient';
 import User from '../user';
 
 const userRole = 'physician';
@@ -41,10 +37,9 @@ describe('care model', () => {
           txn,
         );
         const user2 = await User.create(createMockUser(11, clinic.id, userRole, 'b@c.com'), txn);
-        // auto-adds user1
-        const patient1 = await createPatient(createMockPatient(123, clinic.id), user1.id, txn);
+        const patient1 = await Patient.create(createMockPatient(123, 123, clinic.id), txn);
+        await CareTeam.create({ userId: user1.id, patientId: patient1.id }, txn);
 
-        // Add 2nd user to patient 1 care team
         const careTeam = await CareTeam.create(
           {
             userId: user2.id,
@@ -60,11 +55,7 @@ describe('care model', () => {
     it('throws an error if adding a non-existant user to a care team', async () => {
       await transaction(User.knex(), async txn => {
         const { clinic } = await setup(txn);
-        const user = await User.create(
-          createMockUser(11, clinic.id, userRole, 'care@care.com'),
-          txn,
-        );
-        const patient = await createPatient(createMockPatient(123, clinic.id), user.id, txn);
+        const patient = await Patient.create(createMockPatient(123, 123, clinic.id), txn);
         const error =
           'insert into "care_team" ("createdAt", "id", "patientId", "updatedAt", "userId") values ($1, $2, $3, $4, $5) returning "id" - insert or update on table "care_team" violates foreign key constraint "care_team_userid_foreign"';
 
@@ -82,7 +73,8 @@ describe('care model', () => {
           createMockUser(11, clinic.id, userRole, 'care@care.com'),
           txn,
         );
-        const patient1 = await createPatient(createMockPatient(123, clinic.id), user.id, txn);
+        const patient1 = await Patient.create(createMockPatient(123, 123, clinic.id), txn);
+        await CareTeam.create({ userId: user.id, patientId: patient1.id }, txn);
 
         const careTeamResponse = await CareTeam.delete(
           {
@@ -104,20 +96,22 @@ describe('care model', () => {
           createMockUser(11, clinic.id, userRole, 'care@care.com'),
           txn,
         );
-        await createPatient(createMockPatient(123, clinic.id), user.id, txn);
-        await createPatient(createMockPatient(321, clinic.id), user.id, txn);
+        const patient1 = await Patient.create(createMockPatient(123, 123, clinic.id), txn);
+        await CareTeam.create({ userId: user.id, patientId: patient1.id }, txn);
+        const patient2 = await Patient.create(createMockPatient(321, 321, clinic.id), txn);
+        await CareTeam.create({ userId: user.id, patientId: patient2.id }, txn);
 
         expect(
           await CareTeam.getForUser(user.id, { pageNumber: 1, pageSize: 1 }, txn),
         ).toMatchObject({
-          results: [{ athenaPatientId: 321 }],
+          results: [{ id: patient2.id }],
           total: 2,
         });
 
         expect(
           await CareTeam.getForUser(user.id, { pageSize: 1, pageNumber: 0 }, txn),
         ).toMatchObject({
-          results: [{ athenaPatientId: 123 }],
+          results: [{ id: patient1.id }],
           total: 2,
         });
       });
@@ -132,7 +126,8 @@ describe('care model', () => {
           createMockUser(11, clinic.id, userRole, 'care@care.com'),
           txn,
         );
-        const patient = await createPatient(createMockPatient(123, clinic.id), user.id, txn);
+        const patient = await Patient.create(createMockPatient(123, 123, clinic.id), txn);
+        await CareTeam.create({ userId: user.id, patientId: patient.id }, txn);
 
         expect(await CareTeam.getForPatient(patient.id, txn)).toMatchObject([{ id: user.id }]);
       });
@@ -151,7 +146,8 @@ describe('care model', () => {
           createMockUser(12, clinic.id, userRole, 'care2@care.com'),
           txn,
         );
-        const patient = await createPatient(createMockPatient(123, clinic.id), user.id, txn);
+        const patient = await Patient.create(createMockPatient(123, 123, clinic.id), txn);
+        await CareTeam.create({ userId: user.id, patientId: patient.id }, txn);
 
         const careTeamCount1 = await CareTeam.getCountForPatient(patient.id, txn);
         expect(careTeamCount1).toEqual(1);
@@ -214,9 +210,12 @@ describe('care model', () => {
           txn,
         );
 
-        const patient = await createPatient(createMockPatient(123, clinic.id), user.id, txn);
-        const patient2 = await createPatient(createMockPatient(124, clinic.id), user2.id, txn);
-        const patient3 = await createPatient(createMockPatient(125, clinic.id), user2.id, txn);
+        const patient = await Patient.create(createMockPatient(123, 123, clinic.id), txn);
+        await CareTeam.create({ userId: user.id, patientId: patient.id }, txn);
+        const patient2 = await Patient.create(createMockPatient(124, 124, clinic.id), txn);
+        await CareTeam.create({ userId: user2.id, patientId: patient2.id }, txn);
+        const patient3 = await Patient.create(createMockPatient(125, 125, clinic.id), txn);
+        await CareTeam.create({ userId: user2.id, patientId: patient3.id }, txn);
 
         const result = await CareTeam.createAllForUser(
           {

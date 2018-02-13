@@ -1,8 +1,8 @@
+import { omit } from 'lodash';
 import { Model, RelationMappings, Transaction } from 'objection';
 import { IPatientFilterOptions } from 'schema';
 import { IPaginatedResults, IPaginationOptions } from '../db';
 import { adminTasksConcernTitle } from '../lib/consts';
-import BaseModel from './base-model';
 import CarePlanSuggestion from './care-plan-suggestion';
 import CareTeam from './care-team';
 import Clinic from './clinic';
@@ -12,6 +12,7 @@ import PatientAnswer from './patient-answer';
 import PatientConcern from './patient-concern';
 import PatientDataFlag from './patient-data-flag';
 import PatientInfo from './patient-info';
+import { PatientGenderOptions } from './patient-info';
 import Task from './task';
 import User from './user';
 
@@ -19,6 +20,28 @@ import User from './user';
 const SIMILARITY_THRESHOLD = 0.2;
 
 const EAGER_QUERY = '[patientInfo.[primaryAddress]]';
+
+export interface IPatientCreateFields {
+  patientId: string;
+  cityblockId: number;
+  firstName: string;
+  middleName?: string;
+  lastName: string;
+  homeClinicId: string;
+  dateOfBirth: string; // mm/dd/yy
+  gender: PatientGenderOptions;
+  language: string | null;
+}
+
+export interface IPatientUpdateFields {
+  patientId: string;
+  cityblockId?: number;
+  firstName?: string;
+  middleName?: string;
+  lastName?: string;
+  homeClinicId?: string;
+  dateOfBirth?: string; // mm/dd/yy
+}
 
 export interface IPatientEditableFields {
   firstName: string;
@@ -53,7 +76,15 @@ interface IGetByOptions {
 type GetByFields = 'athenaPatientId';
 
 /* tslint:disable:member-ordering */
-export default class Patient extends BaseModel {
+export default class Patient extends Model {
+  static modelPaths = [__dirname];
+  static pickJsonSchemaProperties = true;
+
+  id: string;
+  cityblockId: number;
+  createdAt: string;
+  updatedAt: string;
+  deletedAt: string;
   firstName: string;
   lastName: string;
   middleName: string | null;
@@ -69,12 +100,22 @@ export default class Patient extends BaseModel {
   careTeam: User[];
   patientDataFlags: PatientDataFlag[];
 
+  $beforeInsert() {
+    this.createdAt = new Date().toISOString();
+    this.updatedAt = new Date().toISOString();
+  }
+
+  $beforeUpdate() {
+    this.updatedAt = new Date().toISOString();
+  }
+
   static tableName = 'patient';
 
   static jsonSchema = {
     type: 'object',
     properties: {
       id: { type: 'string' },
+      cityblockId: { type: 'number' },
       athenaPatientId: { type: 'number' },
       homeClinicId: { type: 'string' },
       firstName: { type: 'string', minLength: 1 }, // cannot be blank
@@ -87,7 +128,7 @@ export default class Patient extends BaseModel {
       updatedAt: { type: 'string' },
       deletedAt: { type: 'string' },
     },
-    required: ['firstName', 'lastName', 'dateOfBirth'],
+    required: ['id', 'cityblockId', 'firstName', 'lastName', 'dateOfBirth'],
   };
 
   static relationMappings: RelationMappings = {
@@ -189,36 +230,79 @@ export default class Patient extends BaseModel {
     return patient;
   }
 
-  static async setup(
-    input: IPatientEditableFields,
-    infoInput: IPatientInfoOptions,
-    userId: string,
-    txn: Transaction,
-  ) {
+  static async getById(patientId: string, txn: Transaction): Promise<Patient | null> {
+    const patient = await this.query(txn).findOne({ id: patientId });
+
+    if (!patient) {
+      return null;
+    }
+
+    return patient;
+  }
+
+  static async create(input: IPatientCreateFields, txn: Transaction) {
+    const {
+      patientId,
+      cityblockId,
+      firstName,
+      middleName,
+      lastName,
+      homeClinicId,
+      dateOfBirth,
+      gender,
+      language,
+    } = input;
     const adminConcern = await Concern.findOrCreateByTitle(adminTasksConcernTitle, txn);
-    const patient = await this.query(txn).insertAndFetch(input);
-    const patientInfoInput = {
-      ...infoInput,
-      patientId: patient.id,
-      updatedBy: userId,
-    };
-    await PatientInfo.create(patientInfoInput, txn);
-
-    // Create the initial ComputedPatientStatus
-    await ComputedPatientStatus.updateForPatient(patient.id, userId, txn);
-
-    // TODO: once we actually figure out our patient onboarding flow, let's move to the resolver
+    const attributionUser = await User.findOrCreateAttributionUser(txn);
+    const patient = await this.query(txn).insertAndFetch({
+      id: patientId,
+      cityblockId,
+      firstName,
+      middleName,
+      lastName,
+      homeClinicId,
+      dateOfBirth,
+      consentToCall: false,
+      consentToText: false,
+    });
+    await PatientInfo.createInitialPatientInfo(
+      {
+        patientId,
+        gender,
+        language,
+        updatedById: attributionUser.id,
+      },
+      txn,
+    );
     await PatientConcern.create(
       {
         concernId: adminConcern.id,
-        patientId: patient.id,
-        userId,
+        patientId,
+        userId: attributionUser.id,
         startedAt: new Date().toISOString(),
       },
       txn,
     );
 
+    await ComputedPatientStatus.createInitialComputedStatusForPatient(
+      patientId,
+      attributionUser.id,
+      txn,
+    );
+
     return this.get(patient.id, txn);
+  }
+
+  static async updateFromAttribution(input: IPatientUpdateFields, txn: Transaction) {
+    const { patientId } = input;
+
+    // TODO: Figure out what should *actually* happen here
+    await PatientDataFlag.deleteAllForPatient(patientId, txn);
+
+    return this.query(txn).patchAndFetchById(
+      patientId,
+      omit<IPatientUpdateFields>(input, 'patientId'),
+    );
   }
 
   static async createAllPatientInfo(userId: string, txn: Transaction) {
@@ -447,13 +531,13 @@ export default class Patient extends BaseModel {
       .eager(EAGER_QUERY)
       .whereRaw(
         `
-      patient.id NOT IN (
-        SELECT care_plan_update_event."patientId"
-        FROM care_plan_update_event
-        WHERE care_plan_update_event."createdAt" > now() - interval \'30 days\'
-          AND care_plan_update_event."deletedAt" IS NULL
-      )
-    `,
+        patient.id NOT IN (
+          SELECT care_plan_update_event."patientId"
+          FROM care_plan_update_event
+          WHERE care_plan_update_event."createdAt" > now() - interval \'30 days\'
+            AND care_plan_update_event."deletedAt" IS NULL
+        )
+      `,
       )
       .whereIn('patient.id', this.userCareTeamPatientIdsQuery(userId, txn))
       .orderBy('lastName', 'ASC')

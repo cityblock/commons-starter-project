@@ -1,6 +1,6 @@
 import { BusinessToggleName } from './business-toggle-names';
 
-export type Permissions = 'green' | 'pink' | 'orange' | 'blue' | 'yellow' | 'red';
+export type Permissions = 'green' | 'pink' | 'orange' | 'blue' | 'yellow' | 'red' | 'black';
 export const PERMISSIONS: Permissions[] = [
   'green',
   'pink',
@@ -8,6 +8,7 @@ export const PERMISSIONS: Permissions[] = [
   'blue',
   'yellow',
   'red',
+  'black',
 ];
 
 export type PermissionsMapping = {
@@ -104,6 +105,21 @@ export const permissionsMappings: PermissionsMappings = {
     canViewAllMembers: false,
     canEditAllMembers: false,
     canViewMembersOnPanel: true,
+    canEditMembersOnPanel: false,
+    canShowAllMembersInPatientPanel: false,
+    canDisenrollPatient: false,
+    canAutoBreakGlass: false,
+  },
+  black: {
+    isBuilderEnabled: false,
+    isManagerEnabled: false,
+    canChangeUserPermissions: false,
+    canDeleteUsers: false,
+    canBulkAssign: false,
+    canEditCareTeam: false,
+    canViewAllMembers: false,
+    canEditAllMembers: false,
+    canViewMembersOnPanel: false,
     canEditMembersOnPanel: false,
     canShowAllMembersInPatientPanel: false,
     canDisenrollPatient: false,

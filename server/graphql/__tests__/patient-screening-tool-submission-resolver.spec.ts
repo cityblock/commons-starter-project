@@ -16,7 +16,6 @@ import {
   createMockClinic,
   createMockPatient,
   createMockUser,
-  createPatient,
   createRiskArea,
 } from '../../spec-helpers';
 import schema from '../make-executable-schema';
@@ -35,7 +34,7 @@ const userRole = 'admin';
 async function setup(txn: Transaction): Promise<ISetup> {
   const clinic = await Clinic.create(createMockClinic(), txn);
   const user = await User.create(createMockUser(11, clinic.id, userRole), txn);
-  const patient = await createPatient(createMockPatient(123, clinic.id), user.id, txn);
+  const patient = await Patient.create(createMockPatient(123, 123, clinic.id), txn);
   const riskArea = await createRiskArea({ title: 'Risk Area' }, txn);
   const screeningTool = await ScreeningTool.create(
     {
@@ -152,7 +151,7 @@ describe('patient screening tool submission resolver tests', () => {
     it('gets all patientScreeningToolSubmissions for a patient', async () => {
       await transaction(PatientScreeningToolSubmission.knex(), async txn => {
         const { clinic, user, riskArea, patient, submission } = await setup(txn);
-        const patient2 = await createPatient(createMockPatient(456, clinic.id), user.id, txn);
+        const patient2 = await Patient.create(createMockPatient(456, 456, clinic.id), txn);
         const screeningTool2 = await ScreeningTool.create(
           {
             riskAreaId: riskArea.id,
@@ -205,7 +204,7 @@ describe('patient screening tool submission resolver tests', () => {
     it('gets all patientScreeningToolSubmissions for patient 360', async () => {
       await transaction(PatientScreeningToolSubmission.knex(), async txn => {
         const { clinic, user, riskArea, patient, submission } = await setup(txn);
-        const patient2 = await createPatient(createMockPatient(456, clinic.id), user.id, txn);
+        const patient2 = await Patient.create(createMockPatient(456, 456, clinic.id), txn);
         const screeningTool2 = await ScreeningTool.create(
           {
             riskAreaId: riskArea.id,

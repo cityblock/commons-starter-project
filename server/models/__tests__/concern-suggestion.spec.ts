@@ -5,7 +5,6 @@ import {
   createMockClinic,
   createMockPatient,
   createMockUser,
-  createPatient,
   createRiskArea,
 } from '../../spec-helpers';
 import Answer from '../answer';
@@ -13,6 +12,7 @@ import CarePlanSuggestion from '../care-plan-suggestion';
 import Clinic from '../clinic';
 import Concern from '../concern';
 import ConcernSuggestion from '../concern-suggestion';
+import Patient from '../patient';
 import PatientAnswer from '../patient-answer';
 import PatientConcern from '../patient-concern';
 import Question from '../question';
@@ -161,7 +161,7 @@ describe('concern suggestion model', () => {
         const user = await User.create(createMockUser(11, clinic.id, 'physician'), txn);
         const concern1 = await Concern.create({ title: 'Housing' }, txn);
         const concern2 = await Concern.create({ title: 'Food' }, txn);
-        const patient = await createPatient(createMockPatient(123, clinic.id), user.id, txn);
+        const patient = await Patient.create(createMockPatient(123, 123, clinic.id), txn);
         const question2 = await Question.create(
           {
             title: 'hate writing tests?',
@@ -279,7 +279,7 @@ describe('concern suggestion model', () => {
         const user = await User.create(createMockUser(11, clinic.id, 'physician'), txn);
         const concern1 = await Concern.create({ title: 'Housing' }, txn);
         const concern2 = await Concern.create({ title: 'Food' }, txn);
-        const patient = await createPatient(createMockPatient(123, clinic.id), user.id, txn);
+        const patient = await Patient.create(createMockPatient(123, 123, clinic.id), txn);
         const question2 = await Question.create(
           {
             title: 'hate writing tests?',
@@ -383,7 +383,7 @@ describe('concern suggestion model', () => {
         const user = await User.create(createMockUser(11, clinic.id, 'physician'), txn);
         const concern1 = await Concern.create({ title: 'Housing' }, txn);
         const concern2 = await Concern.create({ title: 'Food' }, txn);
-        const patient = await createPatient(createMockPatient(123, clinic.id), user.id, txn);
+        const patient = await Patient.create(createMockPatient(123, 123, clinic.id), txn);
         const question2 = await Question.create(
           {
             title: 'hate writing tests?',
@@ -516,7 +516,7 @@ describe('concern suggestion model', () => {
         const { riskArea, question, answer } = await setup(txn);
         const clinic = await Clinic.create(createMockClinic(), txn);
         const user = await User.create(createMockUser(11, clinic.id, 'physician'), txn);
-        const patient = await createPatient(createMockPatient(123, clinic.id), user.id, txn);
+        const patient = await Patient.create(createMockPatient(123, 123, clinic.id), txn);
         const concern = await Concern.create({ title: 'Housing' }, txn);
 
         await ConcernSuggestion.create(

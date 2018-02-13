@@ -5,10 +5,10 @@ import {
   createMockClinic,
   createMockPatient,
   createMockUser,
-  createPatient,
   createRiskArea,
 } from '../../spec-helpers';
 import Clinic from '../clinic';
+import Patient from '../patient';
 import RiskArea from '../risk-area';
 import ScreeningTool from '../screening-tool';
 import ScreeningToolScoreRange from '../screening-tool-score-range';
@@ -42,7 +42,7 @@ async function setup(txn: Transaction): Promise<ISetup> {
   );
   const clinic = await Clinic.create(createMockClinic(), txn);
   const user = await User.create(createMockUser(11, clinic.id, userRole), txn);
-  await createPatient(createMockPatient(123, clinic.id), user.id, txn);
+  await Patient.create(createMockPatient(123, 123, clinic.id), txn);
 
   return {
     riskArea,

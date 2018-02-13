@@ -7,12 +7,7 @@ import Concern from '../../models/concern';
 import Patient from '../../models/patient';
 import PatientConcern from '../../models/patient-concern';
 import User from '../../models/user';
-import {
-  createMockClinic,
-  createMockPatient,
-  createMockUser,
-  createPatient,
-} from '../../spec-helpers';
+import { createMockClinic, createMockPatient, createMockUser } from '../../spec-helpers';
 import schema from '../make-executable-schema';
 
 interface ISetup {
@@ -27,7 +22,7 @@ async function setup(txn: Transaction): Promise<ISetup> {
   const clinic = await Clinic.create(createMockClinic(), txn);
   const user = await User.create(createMockUser(11, clinic.id, userRole, 'care@care.com'), txn);
   const concern = await Concern.create({ title: 'Housing' }, txn);
-  const patient = await createPatient(createMockPatient(123, clinic.id), user.id, txn);
+  const patient = await Patient.create(createMockPatient(123, 123, clinic.id), txn);
 
   return {
     user,
@@ -56,7 +51,7 @@ describe('patient concern resolver', () => {
           {
             patientId: patient.id,
             concernId: concern.id,
-            order: 1,
+            order: 2,
             userId: user.id,
           },
           txn,
@@ -68,7 +63,7 @@ describe('patient concern resolver', () => {
         expect(cloneDeep(result.data!.patientConcern)).toMatchObject({
           patientId: patient.id,
           concernId: concern.id,
-          order: 1,
+          order: 2,
         });
       });
     });
@@ -89,7 +84,7 @@ describe('patient concern resolver', () => {
         expect(cloneDeep(result.data!.patientConcernCreate)).toMatchObject({
           patientId: patient.id,
           concernId: concern.id,
-          order: 1,
+          order: 2,
         });
       });
     });
@@ -103,19 +98,19 @@ describe('patient concern resolver', () => {
           {
             patientId: patient.id,
             concernId: concern.id,
-            order: 1,
+            order: 2,
             userId: user.id,
           },
           txn,
         );
         const mutation = `mutation {
-          patientConcernEdit(input: { order: 2, patientConcernId: "${patientConcern.id}" }) {
+          patientConcernEdit(input: { order: 3, patientConcernId: "${patientConcern.id}" }) {
             order
           }
         }`;
         const result = await graphql(schema, mutation, null, { userRole, userId: user.id, txn });
         expect(cloneDeep(result.data!.patientConcernEdit)).toMatchObject({
-          order: 2,
+          order: 3,
         });
       });
     });
@@ -129,7 +124,7 @@ describe('patient concern resolver', () => {
           {
             patientId: patient.id,
             concernId: concern.id,
-            order: 1,
+            order: 2,
             userId: user.id,
           },
           txn,
@@ -139,7 +134,7 @@ describe('patient concern resolver', () => {
           {
             patientId: patient.id,
             concernId: concern2.id,
-            order: 2,
+            order: 3,
             userId: user.id,
           },
           txn,
@@ -149,7 +144,7 @@ describe('patient concern resolver', () => {
           {
             patientId: patient.id,
             concernId: concern3.id,
-            order: 3,
+            order: 4,
             userId: user.id,
           },
           txn,
@@ -158,8 +153,8 @@ describe('patient concern resolver', () => {
         const mutation = `mutation {
           patientConcernBulkEdit(input: {
             patientConcerns: [
-              { id: "${patientConcern.id}", order: 2 },
-              { id: "${patientConcern2.id}", order: 1 }
+              { id: "${patientConcern.id}", order: 3 },
+              { id: "${patientConcern2.id}", order: 2 }
             ],
             patientId: "${patient.id}"
           }) {
@@ -171,20 +166,20 @@ describe('patient concern resolver', () => {
 
         const result = await graphql(schema, mutation, null, { userRole, userId: user.id, txn });
 
-        expect(result.data!.patientConcernBulkEdit.length).toBe(3);
-        expect(result.data!.patientConcernBulkEdit[0]).toMatchObject({
+        expect(result.data!.patientConcernBulkEdit.length).toBe(4);
+        expect(result.data!.patientConcernBulkEdit[1]).toMatchObject({
           id: patientConcern2.id,
-          order: 1,
+          order: 2,
           concernId: concern2.id,
         });
-        expect(result.data!.patientConcernBulkEdit[1]).toMatchObject({
+        expect(result.data!.patientConcernBulkEdit[2]).toMatchObject({
           id: patientConcern.id,
-          order: 2,
+          order: 3,
           concernId: concern.id,
         });
-        expect(result.data!.patientConcernBulkEdit[2]).toMatchObject({
+        expect(result.data!.patientConcernBulkEdit[3]).toMatchObject({
           id: patientConcern3.id,
-          order: 3,
+          order: 4,
           concernId: concern3.id,
         });
       });
@@ -239,8 +234,12 @@ describe('patient concern resolver', () => {
         });
         expect(cloneDeep(result.data!.patientConcerns)).toMatchObject([
           {
-            concernId: concern.id,
+            // This is the Admin Tasks concern...ID is unknown
             order: 1,
+          },
+          {
+            concernId: concern.id,
+            order: 2,
           },
         ]);
       });

@@ -392,17 +392,6 @@ type PatientDiagnosis {
   description: String!
 }
 
-# PatientEncounter
-type PatientEncounter {
-  encounterType: String!
-  providerName: String!
-  providerRole: String!
-  location: String!
-  diagnoses: [PatientDiagnosis!]!
-  reasons: [String]!
-  dateTime: String!
-}
-
 # Appointment
 type Appointment {
   athenaAppointmentId: ID!
@@ -1255,39 +1244,6 @@ input PatientInfoEditInput {
   primaryAddressId: ID
 }
 
-# params for creating a patient in the db and in athena
-input PatientSetupInput {
-  firstName: String!
-  middleName: String
-  lastName: String!
-  dateOfBirth: String!
-  gender: String!
-  zip: String!
-  homeClinicId: ID!
-  suffix: String
-  preferredName: String
-  race: String!
-  ssn: String!
-  language: String!
-  maritalStatus: String!
-  email: String
-  homePhone: String
-  mobilePhone: String
-  consentToCall: Boolean!
-  consentToText: Boolean!
-  city: String
-  address1: String
-  county: String
-  country: String
-  state: String
-  insuranceType: String
-  patientRelationshipToPolicyHolder: String
-  memberId: ID
-  policyGroupNumber: String
-  issueDate: String
-  expirationDate: String
-}
-
 # params for editing a patient scratch pad
 input PatientScratchPadEditInput {
   patientId: ID!
@@ -1902,8 +1858,6 @@ type RootMutationType {
   patientEdit(input: PatientEditInput): Patient
   # Edit fields on patient info stored in the db
   patientInfoEdit(input: PatientInfoEditInput): PatientInfo
-  # Setup patient creates the patient in the db AND in athena
-  patientSetup(input: PatientSetupInput): Patient
   # Edit a patient scratch pad
   patientScratchPadEdit(input: PatientScratchPadEditInput): PatientScratchPad
   # Create a task
@@ -2144,8 +2098,6 @@ type RootQueryType {
   clinic(clinicId: ID!): Clinic!
   # Clinics
   clinics(pageNumber: Int, pageSize: Int): ClinicEdges!
-  # Patient encounters
-  patientEncounters(patientId: ID!): [PatientEncounter]!
   # Task
   task(taskId: ID!): Task!
   # Patient's Tasks

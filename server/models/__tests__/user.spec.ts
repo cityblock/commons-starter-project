@@ -1,6 +1,7 @@
 import { transaction } from 'objection';
 import * as uuid from 'uuid/v4';
 import Db from '../../db';
+import { attributionUserEmail } from '../../lib/consts';
 import { createMockClinic, createMockUser } from '../../spec-helpers';
 import Clinic from '../clinic';
 import GoogleAuth from '../google-auth';
@@ -28,6 +29,28 @@ describe('user model', () => {
 
       const userById = await User.get(user.id, txn);
       expect(userById).toEqual(user);
+    });
+  });
+
+  it('should create an attribution user', async () => {
+    await transaction(User.knex(), async txn => {
+      const user = await User.findOrCreateAttributionUser(txn);
+      expect(user.email).toEqual(attributionUserEmail);
+
+      // Check to make sure it's an idempotent operation
+      await User.findOrCreateAttributionUser(txn);
+      const users = await User.getAll(
+        {
+          pageNumber: 0,
+          pageSize: 100,
+          orderBy: 'email',
+          order: 'desc',
+          hasLoggedIn: false,
+        },
+        txn,
+      );
+
+      expect(users.total).toEqual(1);
     });
   });
 

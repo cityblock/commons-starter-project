@@ -6,12 +6,7 @@ import CareTeam from '../../models/care-team';
 import Clinic from '../../models/clinic';
 import Patient from '../../models/patient';
 import User from '../../models/user';
-import {
-  createMockClinic,
-  createMockPatient,
-  createMockUser,
-  createPatient,
-} from '../../spec-helpers';
+import { createMockClinic, createMockPatient, createMockUser } from '../../spec-helpers';
 import schema from '../make-executable-schema';
 
 interface ISetup {
@@ -25,7 +20,8 @@ const userRole = 'physician';
 async function setup(txn: Transaction): Promise<ISetup> {
   const clinic = await Clinic.create(createMockClinic(), txn);
   const user = await User.create(createMockUser(11, clinic.id, userRole), txn);
-  const patient = await createPatient(createMockPatient(11, clinic.id), user.id, txn);
+  const patient = await Patient.create(createMockPatient(11, 11, clinic.id), txn);
+  await CareTeam.create({ userId: user.id, patientId: patient.id }, txn);
 
   return { clinic, user, patient };
 }
@@ -99,8 +95,10 @@ describe('care team', () => {
           txn,
         );
 
-        const patient2 = await createPatient(createMockPatient(124, clinic.id), user2.id, txn);
-        await createPatient(createMockPatient(125, clinic.id), user2.id, txn);
+        const patient2 = await Patient.create(createMockPatient(124, 124, clinic.id), txn);
+        await CareTeam.create({ userId: user2.id, patientId: patient2.id }, txn);
+        const patient3 = await Patient.create(createMockPatient(125, 125, clinic.id), txn);
+        await CareTeam.create({ userId: user2.id, patientId: patient3.id }, txn);
 
         const mutation = `mutation {
           careTeamAssignPatients(input: { patientIds: ["${patient.id}", "${

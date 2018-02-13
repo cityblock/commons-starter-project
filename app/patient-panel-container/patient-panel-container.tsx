@@ -181,11 +181,10 @@ class PatientPanelContainer extends React.Component<allProps, IState> {
   };
 
   renderButtons() {
-    const { currentUser, filters } = this.props;
+    const { filters } = this.props;
     const { patientSelectState } = this.state;
 
     const numberPatientsSelected = filterPatientState(patientSelectState).length;
-    const isAdmin = currentUser && currentUser.userRole === 'admin';
     const filterNames = Object.keys(filters);
 
     let numberFilters = filterNames.length;
@@ -209,13 +208,6 @@ class PatientPanelContainer extends React.Component<allProps, IState> {
           className={styles.button}
           disabled={!numberPatientsSelected}
         />
-        {isAdmin && (
-          <Button
-            messageId="patientPanel.addPatient"
-            onClick={this.goToIntake}
-            className={styles.button}
-          />
-        )}
       </div>
     );
   }

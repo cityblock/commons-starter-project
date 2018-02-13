@@ -66,7 +66,7 @@ export async function addressCreatePrimaryForPatient(
     throw new Error('unable to create address');
   }
   await PatientInfo.edit(
-    { primaryAddressId: address.id, updatedBy: context.userId! },
+    { primaryAddressId: address.id, updatedById: context.userId! },
     input.patientInfoId,
     context.txn,
   );

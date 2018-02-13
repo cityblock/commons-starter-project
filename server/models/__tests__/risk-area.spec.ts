@@ -15,7 +15,6 @@ import {
   createMockPatient,
   createMockRiskAreaGroup,
   createMockUser,
-  createPatient,
 } from '../../spec-helpers';
 
 interface ISetup {
@@ -64,7 +63,7 @@ async function setup2(riskAreaGroup: RiskAreaGroup, txn: Transaction): Promise<I
   );
   const clinic = await Clinic.create(createMockClinic(), txn);
   const user = await User.create(createMockUser(11, clinic.id), txn);
-  const patient = await createPatient(createMockPatient(123, clinic.id), user.id, txn);
+  const patient = await Patient.create(createMockPatient(123, 123, clinic.id), txn);
   const riskAreaAssessmentSubmission = await RiskAreaAssessmentSubmission.create(
     {
       patientId: patient.id,

@@ -1,18 +1,28 @@
+import { isNil, omitBy } from 'lodash';
 import { Model, RelationMappings, Transaction } from 'objection';
 import Address from './address';
 import BaseModel from './base-model';
 import Patient from './patient';
 
+export type PatientGenderOptions = 'male' | 'female' | 'transgender' | 'nonbinary' | null;
+
+export interface IInitialPatientInfoOptions {
+  patientId: string;
+  updatedById: string;
+  gender?: PatientGenderOptions;
+  language?: string | null;
+}
+
 export interface IPatientInfoOptions {
   patientId: string;
-  updatedBy: string;
+  updatedById: string;
   gender?: string;
   language?: string;
   primaryAddressId?: string;
 }
 
 interface IEditPatientInfo extends Partial<IPatientInfoOptions> {
-  updatedBy: string;
+  updatedById: string;
   gender?: string;
   language?: string;
   primaryAddressId?: string;
@@ -39,9 +49,9 @@ export default class PatientInfo extends BaseModel {
       gender: { type: 'string', enum: ['male', 'female', 'nonbinary', 'transgender'] },
       primaryAddressId: { type: 'string', format: 'uuid' },
       updatedAt: { type: 'string' },
-      updatedBy: { type: 'string', format: 'uuid' },
+      updatedById: { type: 'string', format: 'uuid' },
     },
-    required: ['patientId', 'updatedBy'],
+    required: ['patientId', 'updatedById'],
   };
 
   static relationMappings: RelationMappings = {
@@ -88,6 +98,17 @@ export default class PatientInfo extends BaseModel {
 
   static async create(input: IPatientInfoOptions, txn: Transaction) {
     return this.query(txn).insertAndFetch(input);
+  }
+
+  static async createInitialPatientInfo(input: IInitialPatientInfoOptions, txn: Transaction) {
+    const filteredInput = omitBy<IInitialPatientInfoOptions>(input, isNil);
+    const existingPatientInfo = await this.query(txn).findOne({ patientId: input.patientId });
+
+    if (!existingPatientInfo) {
+      return this.query(txn).insertAndFetch(filteredInput as any); // TODO: Fix type
+    }
+
+    return existingPatientInfo;
   }
 
   static async edit(

@@ -1,6 +1,11 @@
 import { Model, RelationMappings, Transaction } from 'objection';
 import { Permissions, PERMISSIONS } from '../../shared/permissions/permissions-mapping';
 import { IPaginatedResults, IPaginationOptions } from '../db';
+import {
+  attributionUserEmail,
+  attributionUserPermissions,
+  attributionUserUserRole,
+} from '../lib/consts';
 import BaseModel from './base-model';
 import Clinic from './clinic';
 import GoogleAuth from './google-auth';
@@ -116,7 +121,7 @@ export default class User extends BaseModel {
       phone: { type: 'string' },
       permissions: { type: 'string', enum: PERMISSIONS },
     },
-    required: ['email', 'userRole', 'homeClinicId'],
+    required: ['email', 'homeClinicId', 'userRole'],
   };
 
   static relationMappings: RelationMappings = {
@@ -159,6 +164,22 @@ export default class User extends BaseModel {
 
   static async create(user: ICreateUser, txn: Transaction): Promise<User> {
     return this.query(txn).insertAndFetch(user);
+  }
+
+  static async findOrCreateAttributionUser(txn: Transaction): Promise<User> {
+    const user = await this.query(txn).findOne({ email: attributionUserEmail });
+
+    if (!user) {
+      const clinic = await Clinic.findOrCreateAttributionClinic(txn);
+      return this.query(txn).insertAndFetch({
+        email: attributionUserEmail,
+        permissions: attributionUserPermissions,
+        userRole: attributionUserUserRole,
+        homeClinicId: clinic.id,
+      });
+    }
+
+    return user;
   }
 
   static async update(userId: string, user: Partial<IUpdateUser>, txn: Transaction): Promise<User> {

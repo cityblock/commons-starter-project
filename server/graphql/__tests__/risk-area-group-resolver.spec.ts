@@ -4,6 +4,7 @@ import { transaction, Transaction } from 'objection';
 import * as uuid from 'uuid/v4';
 import Db from '../../db';
 import Clinic from '../../models/clinic';
+import Patient from '../../models/patient';
 import RiskAreaGroup from '../../models/risk-area-group';
 import User from '../../models/user';
 import {
@@ -12,7 +13,6 @@ import {
   createMockPatient,
   createMockRiskAreaGroup,
   createMockUser,
-  createPatient,
 } from '../../spec-helpers';
 import schema from '../make-executable-schema';
 
@@ -105,7 +105,7 @@ describe('risk area group resolver', () => {
     it('fetches a risk area group for a patient', async () => {
       await transaction(RiskAreaGroup.knex(), async txn => {
         const { clinic, user } = await setup(txn);
-        const patient = await createPatient(createMockPatient(11, clinic.id), user.id, txn);
+        const patient = await Patient.create(createMockPatient(11, 11, clinic.id), txn);
         const title2 = 'Night King Breach of Wall';
         const riskAreaTitle = 'Zombie Viscerion';
         const riskAreaGroup2 = await RiskAreaGroup.create(createMockRiskAreaGroup(title2), txn);

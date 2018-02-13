@@ -52,15 +52,6 @@ export default (
             loading: () => null,
           })}
         />
-        <Route
-          path="/patient-intake"
-          component={(Loadable as any)({
-            loader: async () =>
-              import(/* webpackChunkName: "patient-enrollment" */
-              './patient-enrollment-container/patient-enrollment-container'),
-            loading: () => null,
-          })}
-        />
         <Route exact path="/patients/:patientId" component={PatientRedirect} />
         <Route
           exact

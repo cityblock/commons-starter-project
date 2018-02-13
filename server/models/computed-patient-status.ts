@@ -5,6 +5,16 @@ import Patient from './patient';
 import ProgressNote from './progress-note';
 import User from './user';
 
+interface IComputedStatus {
+  hasCareTeamMember: boolean;
+  hasProgressNote: boolean;
+  coreIdVerified: boolean;
+  consentsSigned: boolean;
+  hasPcp: boolean;
+  isIneligible: boolean;
+  isDisenrolled: boolean;
+}
+
 /* tslint:disable:member-ordering */
 export default class ComputedPatientStatus extends BaseModel {
   patientId: string;
@@ -39,13 +49,13 @@ export default class ComputedPatientStatus extends BaseModel {
     },
     required: [
       'patientId',
-      'updatedById',
       'hasCareTeamMember',
       'coreIdVerified',
       'consentsSigned',
       'hasPcp',
       'isIneligible',
       'isDisenrolled',
+      'updatedById',
     ],
   };
 
@@ -68,6 +78,27 @@ export default class ComputedPatientStatus extends BaseModel {
       },
     },
   };
+
+  static async computeCurrentStatus(patientId: string, txn: Transaction): Promise<IComputedStatus> {
+    // TODO: When possible, actually calculate all of these values
+    const hasCareTeamMember = (await CareTeam.getCountForPatient(patientId, txn)) > 0;
+    const hasProgressNote = (await ProgressNote.getCountForPatient(patientId, txn)) > 0;
+    const coreIdVerified = false;
+    const consentsSigned = false;
+    const hasPcp = false;
+    const isIneligible = false;
+    const isDisenrolled = false;
+
+    return {
+      hasCareTeamMember,
+      hasProgressNote,
+      coreIdVerified,
+      consentsSigned,
+      hasPcp,
+      isIneligible,
+      isDisenrolled,
+    };
+  }
 
   static async getForPatient(
     patientId: string,
@@ -95,14 +126,15 @@ export default class ComputedPatientStatus extends BaseModel {
       .patch({ deletedAt: new Date().toISOString() });
 
     // Next, calculate all required datapoints
-    // TODO: When possible, actually calculate all of these values
-    const hasCareTeamMember = (await CareTeam.getCountForPatient(patientId, txn)) > 0;
-    const hasProgressNote = (await ProgressNote.getCountForPatient(patientId, txn)) > 0;
-    const coreIdVerified = false;
-    const consentsSigned = false;
-    const hasPcp = false;
-    const isIneligible = false;
-    const isDisenrolled = false;
+    const {
+      hasCareTeamMember,
+      hasProgressNote,
+      coreIdVerified,
+      consentsSigned,
+      hasPcp,
+      isIneligible,
+      isDisenrolled,
+    } = await this.computeCurrentStatus(patientId, txn);
 
     // Finally, create and return a new record
     return this.query(txn).insertAndFetch({
@@ -115,6 +147,42 @@ export default class ComputedPatientStatus extends BaseModel {
       hasPcp,
       isIneligible,
       isDisenrolled,
+    });
+  }
+
+  /* NOTE: only use within Patient.create. This function is just for safety to ensure this is the
+   *       place where we don't pass in an updatedById
+   */
+  static async createInitialComputedStatusForPatient(
+    patientId: string,
+    updatedById: string,
+    txn: Transaction,
+  ): Promise<ComputedPatientStatus> {
+    // Just to be extra safe
+    await this.query(txn)
+      .where({ patientId, deletedAt: null })
+      .patch({ deletedAt: new Date().toISOString() });
+
+    const {
+      hasCareTeamMember,
+      hasProgressNote,
+      coreIdVerified,
+      consentsSigned,
+      hasPcp,
+      isIneligible,
+      isDisenrolled,
+    } = await this.computeCurrentStatus(patientId, txn);
+
+    return this.query(txn).insertAndFetch({
+      patientId,
+      hasCareTeamMember,
+      hasProgressNote,
+      coreIdVerified,
+      consentsSigned,
+      hasPcp,
+      isIneligible,
+      isDisenrolled,
+      updatedById,
     });
   }
 

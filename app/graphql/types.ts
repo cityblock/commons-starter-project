@@ -6007,54 +6007,6 @@ export interface patientScreeningToolSubmissionScoreMutation {
   } | null,
 };
 
-export interface patientSetupMutationVariables {
-  homeClinicId: string,
-  firstName: string,
-  middleName?: string | null,
-  lastName: string,
-  dateOfBirth: string,
-  gender: string,
-  maritalStatus: string,
-  race: string,
-  zip: string,
-  ssn: string,
-  language: string,
-  email?: string | null,
-  homePhone?: string | null,
-  mobilePhone?: string | null,
-  consentToCall: boolean,
-  consentToText: boolean,
-  issueDate?: string | null,
-  expirationDate?: string | null,
-  insuranceType?: string | null,
-  patientRelationshipToPolicyHolder?: string | null,
-  memberId?: string | null,
-  policyGroupNumber?: string | null,
-};
-
-export interface patientSetupMutation {
-  // Setup patient creates the patient in the db AND in athena
-  patientSetup:  {
-    id: string,
-    firstName: string,
-    middleName: string | null,
-    lastName: string,
-    dateOfBirth: string | null,
-    createdAt: string,
-    consentToText: boolean | null,
-    consentToCall: boolean | null,
-    patientInfo:  {
-      id: string,
-      gender: string | null,
-      language: string | null,
-      primaryAddress:  {
-        id: string,
-        zip: string | null,
-      } | null,
-    },
-  } | null,
-};
-
 export interface progressNoteAddSupervisorNotesMutationVariables {
   progressNoteId: string,
   supervisorNotes: string,

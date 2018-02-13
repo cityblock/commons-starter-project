@@ -1,6 +1,6 @@
 import * as kue from 'kue';
 import * as httpMocks from 'node-mocks-http';
-import * as uuid from 'uuid';
+import * as uuid from 'uuid/v4';
 import { pubsubPushHandler } from '../push-handler';
 import { createHmac } from '../validator';
 
@@ -24,7 +24,7 @@ describe('handling pubsub push events from mixer', () => {
     queue.shutdown(0, () => true); // There must be a better way to do this...
   });
 
-  it('adds a newComputedField job to the Kue queue', async () => {
+  it('adds a new computedField job to the Kue queue', async () => {
     const patientId = uuid();
     const slug = 'computed-field-slug';
     const value = 'computed-field-value';
@@ -52,7 +52,7 @@ describe('handling pubsub push events from mixer', () => {
     // Check that a new job with the correct data has been enqueued
     expect(queue.testMode.jobs.length).toEqual(1);
     expect(queue.testMode.jobs[0].data).toMatchObject({
-      title: `Handling newComputedField message for patient: ${patientId}`,
+      title: `Handling computedField message for patient: ${patientId}`,
       patientId,
       slug,
       value,
@@ -60,7 +60,7 @@ describe('handling pubsub push events from mixer', () => {
     });
   });
 
-  it('adds a newMemberAttribution job to the Kue queue', async () => {
+  it('adds a new memberAttribution job to the Kue queue', async () => {
     const patientId = uuid();
     const cityblockId = 12345678;
 
@@ -86,7 +86,7 @@ describe('handling pubsub push events from mixer', () => {
     // Check that a new job with the correct data has been enqueued
     expect(queue.testMode.jobs.length).toEqual(1);
     expect(queue.testMode.jobs[0].data).toMatchObject({
-      title: `Handling newMemberAttribution message for patient: ${patientId}`,
+      title: `Handling memberAttribution message for patient: ${patientId}`,
       patientId,
       cityblockId,
     });

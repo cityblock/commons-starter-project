@@ -1,6 +1,6 @@
 import * as kue from 'kue';
 import { transaction, Transaction } from 'objection';
-import * as uuid from 'uuid';
+import * as uuid from 'uuid/v4';
 import Db from '../../db';
 import Answer from '../../models/answer';
 import CarePlanSuggestion from '../../models/care-plan-suggestion';
@@ -16,12 +16,7 @@ import Question from '../../models/question';
 import RiskArea from '../../models/risk-area';
 import User from '../../models/user';
 import { createRiskArea } from '../../spec-helpers';
-import {
-  createMockClinic,
-  createMockPatient,
-  createMockUser,
-  createPatient,
-} from '../../spec-helpers';
+import { createMockClinic, createMockPatient, createMockUser } from '../../spec-helpers';
 import { processNewComputedFieldValue } from '../computed-field-consumer';
 
 const queue = kue.createQueue();
@@ -36,7 +31,7 @@ interface ISetup {
 async function setup(txn: Transaction): Promise<ISetup> {
   const clinic = await Clinic.create(createMockClinic(), txn);
   const user = await User.create(createMockUser(11, clinic.id, 'physician'), txn);
-  const patient = await createPatient(createMockPatient(123, clinic.id), user.id, txn);
+  const patient = await Patient.create(createMockPatient(123, 123, clinic.id), txn);
   const riskArea = await createRiskArea({ title: 'testing' }, txn);
 
   return {
@@ -47,7 +42,7 @@ async function setup(txn: Transaction): Promise<ISetup> {
   };
 }
 
-describe('processing newComputedField jobs', () => {
+describe('processing computedField jobs', () => {
   beforeAll(async () => {
     queue.testMode.enter();
   });
@@ -75,7 +70,6 @@ describe('processing newComputedField jobs', () => {
         value: 'computed-field-value',
       };
 
-      // TODO: once typings in push-handler are updated, remove 'as any'
       await expect(processNewComputedFieldValue(data as any, txn)).rejects.toMatch(
         'Missing either patientId, slug, value, or jobId',
       );

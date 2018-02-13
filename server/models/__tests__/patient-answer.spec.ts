@@ -6,7 +6,6 @@ import {
   createMockClinic,
   createMockPatient,
   createMockUser,
-  createPatient,
   createRiskArea,
 } from '../../spec-helpers';
 import Answer from '../answer';
@@ -62,7 +61,7 @@ async function setup(txn: Transaction): Promise<ISetup> {
     txn,
   );
   const user = await User.create(createMockUser(11, clinic.id, userRole), txn);
-  const patient = await createPatient(createMockPatient(123, clinic.id), user.id, txn);
+  const patient = await Patient.create(createMockPatient(123, 123, clinic.id), txn);
   const riskAreaAssessmentSubmission = await RiskAreaAssessmentSubmission.create(
     {
       patientId: patient.id,
@@ -540,7 +539,7 @@ describe('answer model', () => {
         expect(patientAnswers2[0].answerValue).toEqual('2');
 
         // should not include answers for another patient
-        const otherPatient = await createPatient(createMockPatient(321, clinic.id), user.id, txn);
+        const otherPatient = await Patient.create(createMockPatient(321, 321, clinic.id), txn);
         await PatientAnswer.create(
           {
             patientId: otherPatient.id,

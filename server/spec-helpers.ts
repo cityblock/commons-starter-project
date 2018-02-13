@@ -1,13 +1,8 @@
 import { format } from 'date-fns';
 import * as nock from 'nock';
 import { Transaction } from 'objection';
+import * as uuid from 'uuid/v4';
 import { AnswerValueTypeOptions, RiskAdjustmentTypeOptions } from '../app/graphql/types';
-import {
-  IRedoxClinicalSummaryEncounter,
-  IRedoxClinicalSummaryMedication,
-  IRedoxPatientCreateResponse,
-} from './apis/redox/types';
-import config from './config';
 import Address from './models/address';
 import Answer from './models/answer';
 import CarePlanSuggestion from './models/care-plan-suggestion';
@@ -20,12 +15,12 @@ import Clinic from './models/clinic';
 import ComputedField from './models/computed-field';
 import Concern from './models/concern';
 import EventNotification from './models/event-notification';
-import Patient, { IPatientEditableFields, IPatientInfoOptions } from './models/patient';
+import Patient from './models/patient';
 import PatientAddress from './models/patient-address';
 import PatientAnswer from './models/patient-answer';
 import PatientAnswerEvent from './models/patient-answer-event';
 import PatientConcern from './models/patient-concern';
-import PatientInfo from './models/patient-info';
+import PatientInfo, { PatientGenderOptions } from './models/patient-info';
 import PatientList from './models/patient-list';
 import PatientScreeningToolSubmission from './models/patient-screening-tool-submission';
 import ProgressNote from './models/progress-note';
@@ -41,35 +36,9 @@ import TaskEvent from './models/task-event';
 import User from './models/user';
 import { UserRole } from './models/user';
 
-export interface ICreatePatient extends IPatientEditableFields {
-  athenaPatientId: number;
-}
-
 export interface ICreateRiskArea {
   title?: string;
   order?: number;
-}
-
-export async function createPatient(
-  patient: ICreatePatient,
-  userId: string,
-  txn: Transaction,
-  patientInfo?: IPatientInfoOptions,
-): Promise<Patient> {
-  if (!patientInfo) {
-    patientInfo = createMockPatientInfo();
-  }
-
-  const instance = await Patient.query(txn).insertAndFetch(patient);
-  const patientInfoInput = {
-    ...patientInfo,
-    patientId: instance.id,
-    updatedBy: userId,
-  };
-  await PatientInfo.create(patientInfoInput, txn);
-  await CareTeam.create({ userId, patientId: instance.id }, txn);
-
-  return Patient.get(instance.id, txn);
 }
 
 export async function createAddressForPatient(
@@ -93,7 +62,7 @@ export async function createPrimaryAddressForPatient(
 ): Promise<Address> {
   const address = await Address.create({ zip, updatedBy: userId }, txn);
   await PatientAddress.create({ addressId: address.id, patientId }, txn);
-  await PatientInfo.edit({ primaryAddressId: address.id, updatedBy: userId }, patientInfoId, txn);
+  await PatientInfo.edit({ primaryAddressId: address.id, updatedById: userId }, patientInfoId, txn);
   return address;
 }
 
@@ -109,20 +78,22 @@ export function createMockAddress(userId: string) {
 }
 
 export function createMockPatient(
-  athenaPatientId = 1,
+  athenaPatientId: number,
+  cityblockId: number,
   homeClinicId: string,
   firstName?: string,
   lastName?: string,
   dateOfBirth?: string,
 ) {
   return {
-    athenaPatientId,
+    patientId: uuid(),
+    cityblockId,
     firstName: firstName || 'dan',
     lastName: lastName || 'plant',
+    gender: 'male' as PatientGenderOptions,
+    language: 'en',
     homeClinicId,
     dateOfBirth: dateOfBirth || '01/01/1900',
-    consentToCall: false,
-    consentToText: false,
   };
 }
 
@@ -223,104 +194,6 @@ export function mockGoogleOauthAuthorize(idToken: string) {
     });
 }
 
-// Redox
-export function mockRedoxPost(body: any) {
-  nock(config.REDOX_API_URL)
-    .post('')
-    .reply(200, body);
-}
-
-export function mockRedoxPostError(body: any, status = 400) {
-  nock(config.REDOX_API_URL)
-    .post('')
-    .reply(status, body);
-}
-
-export function mockRedoxTokenFetch() {
-  nock(config.REDOX_TOKEN_URL)
-    .post('')
-    .reply(200, {
-      expires: new Date('01-01-2020').toISOString(),
-      accessToken: 'cool-token',
-      refreshToken: 'refreshing-token',
-    });
-}
-
-export function mockRedoxCreatePatient(athenaPatientId: number) {
-  const response: IRedoxPatientCreateResponse = {
-    Patient: {
-      Identifiers: [
-        {
-          IDType: 'AthenaNet Enterprise ID',
-          ID: String(athenaPatientId),
-        },
-      ],
-    },
-    Meta: {
-      DataModel: 'PatientAdmin',
-      EventType: 'NewPatient',
-      Message: {
-        ID: 123,
-      },
-      Source: {
-        ID: 'source',
-      },
-      Destinations: [
-        {
-          ID: 'athena-sandbox-id',
-          Name: 'athenahealth sandbox',
-        },
-      ],
-    },
-  };
-  mockRedoxPost(response);
-}
-
-export function mockRedoxCreatePatientError() {
-  mockRedoxPostError({
-    Meta: {
-      DataModel: 'PatientAdmin',
-      EventType: 'NewPatient',
-      Message: {
-        ID: 101141540,
-      },
-      Source: {
-        ID: '87c226a2-9e53-481e-a9e9-68b5fbdb6471',
-        Name: 'Athena Sandbox (s)',
-      },
-      Destinations: [
-        {
-          ID: 'aed98aae-5e94-404f-912d-9ca0b6ebe869',
-          Name: 'athenahealth sandbox',
-        },
-      ],
-      Errors: [
-        {
-          ID: 1505416,
-          Text: 'Post received a 400 response',
-          Type: 'transmission',
-          Module: 'Send',
-        },
-      ],
-    },
-  });
-}
-
-export type MockRedoxClinicalSummaryEncounter = Partial<IRedoxClinicalSummaryEncounter>;
-export type MockRedoxClinicalSummaryMedication = Partial<IRedoxClinicalSummaryMedication>;
-
-export function mockRedoxGetPatientEncounters(encountersBody: MockRedoxClinicalSummaryEncounter[]) {
-  const fullResponseBody = {
-    Meta: {
-      DataModel: 'Clinical Summary',
-      EventType: 'PatientQuery',
-    },
-    Encounters: encountersBody,
-  };
-
-  mockRedoxPost(fullResponseBody);
-}
-
 export async function cleanPatientAnswerEvents(patientId: string, txn: Transaction) {
   const patientAnswerEvents = await PatientAnswerEvent.getAllForPatient(
     patientId,
@@ -402,20 +275,13 @@ const patient5Name = 'Sansa';
 export async function setupPatientsNewToCareTeam(txn: Transaction) {
   const clinic = await Clinic.create(createMockClinic("King's Landing", 13), txn);
   const user = await User.create(createMockUser(211, clinic.id), txn);
-  const user2 = await User.create(createMockUser(212, clinic.id), txn);
 
-  const patient1 = await createPatient(
-    createMockPatient(311, clinic.id, patient1Name),
-    user.id,
-    txn,
-  );
-  await createPatient(createMockPatient(312, clinic.id, patient2Name), user2.id, txn);
-  const patient3 = await createPatient(
-    createMockPatient(313, clinic.id, patient2Name),
-    user.id,
-    txn,
-  );
+  const patient1 = await Patient.create(createMockPatient(311, 123, clinic.id, patient1Name), txn);
+  await CareTeam.create({ userId: user.id, patientId: patient1.id }, txn);
+  await Patient.create(createMockPatient(312, 234, clinic.id, patient2Name), txn);
+  const patient3 = await Patient.create(createMockPatient(313, 345, clinic.id, patient2Name), txn);
 
+  await CareTeam.create({ userId: user.id, patientId: patient3.id }, txn);
   await CareTeam.query(txn)
     .where({ userId: user.id, patientId: patient3.id })
     .patch({ createdAt: new Date('2017-01-01').toISOString() });
@@ -426,24 +292,16 @@ export async function setupPatientsNewToCareTeam(txn: Transaction) {
 export async function setupPatientsWithPendingSuggestions(txn: Transaction) {
   const clinic = await Clinic.create(createMockClinic('Dragonstone', 3), txn);
   const user = await User.create(createMockUser(311, clinic.id), txn);
-  const user2 = await User.create(createMockUser(312, clinic.id), txn);
+  const user2 = await User.create(createMockUser(411, clinic.id), txn);
 
-  const patient1 = await createPatient(
-    createMockPatient(411, clinic.id, patient1Name),
-    user.id,
-    txn,
-  );
-  const patient2 = await createPatient(
-    createMockPatient(412, clinic.id, patient2Name),
-    user2.id,
-    txn,
-  );
-  await createPatient(createMockPatient(413, clinic.id, patient3Name), user.id, txn);
-  const patient4 = await createPatient(
-    createMockPatient(414, clinic.id, patient4Name),
-    user.id,
-    txn,
-  );
+  const patient1 = await Patient.create(createMockPatient(411, 123, clinic.id, patient1Name), txn);
+  await CareTeam.create({ userId: user.id, patientId: patient1.id }, txn);
+  const patient2 = await Patient.create(createMockPatient(412, 234, clinic.id, patient2Name), txn);
+  await CareTeam.create({ userId: user2.id, patientId: patient2.id }, txn);
+  const patient3 = await Patient.create(createMockPatient(413, 345, clinic.id, patient3Name), txn);
+  await CareTeam.create({ userId: user.id, patientId: patient3.id }, txn);
+  const patient4 = await Patient.create(createMockPatient(414, 456, clinic.id, patient4Name), txn);
+  await CareTeam.create({ userId: user.id, patientId: patient4.id }, txn);
 
   const concern = await Concern.create({ title: 'Cersei lied to Jon Snow' }, txn);
   const computedField = await ComputedField.create(
@@ -500,45 +358,52 @@ export async function setupPatientsWithPendingSuggestions(txn: Transaction) {
 export async function setupPatientsWithMissingInfo(txn: Transaction) {
   const clinic = await Clinic.create(createMockClinic('The Wall', 13), txn);
   const user = await User.create(createMockUser(211, clinic.id), txn);
-  const user2 = await User.create(createMockUser(212, clinic.id), txn);
+  const user2 = await User.create(createMockUser(311, clinic.id), txn);
 
-  const patient = await createPatient(
-    createMockPatient(511, clinic.id, patient1Name),
-    user.id,
-    txn,
+  const patient = await Patient.create(
     {
-      gender: undefined,
-      language: undefined,
+      patientId: uuid(),
+      cityblockId: 5678,
+      firstName: patient1Name,
+      lastName: 'Stark',
+      homeClinicId: clinic.id,
+      dateOfBirth: '01/01/1900',
+      gender: null,
+      language: null,
     },
+    txn,
   );
+  await CareTeam.create({ userId: user.id, patientId: patient.id }, txn);
 
-  const patient1 = await createPatient(
+  const patient1 = await Patient.create(
     {
-      athenaPatientId: 13,
+      patientId: uuid(),
+      cityblockId: 5678,
       firstName: patient2Name,
       lastName: 'Stark',
       homeClinicId: clinic.id,
       dateOfBirth: '01/01/1900',
-      consentToCall: false,
-      consentToText: false,
-    } as any,
-    user.id,
+      gender: null,
+      language: null,
+    },
     txn,
   );
+  await CareTeam.create({ userId: user.id, patientId: patient1.id }, txn);
 
-  await createPatient(
+  const patient2 = await Patient.create(
     {
-      athenaPatientId: 14,
+      patientId: uuid(),
+      cityblockId: 6789,
       firstName: patient3Name,
       lastName: 'Stark',
       homeClinicId: clinic.id,
       dateOfBirth: '01/01/1910',
-      consentToCall: false,
-      consentToText: false,
-    } as any,
-    user2.id,
+      gender: null,
+      language: null,
+    },
     txn,
   );
+  await CareTeam.create({ userId: user2.id, patientId: patient2.id }, txn);
   const address = await createAddressForPatient(
     '55 Washington St',
     '11238',
@@ -549,7 +414,7 @@ export async function setupPatientsWithMissingInfo(txn: Transaction) {
   await PatientInfo.edit(
     {
       ...createMockPatientInfo(address.id),
-      updatedBy: user.id,
+      updatedById: user.id,
     },
     patient1.patientInfo.id,
     txn,
@@ -563,21 +428,12 @@ export async function setupPatientsWithNoRecentEngagement(txn: Transaction) {
   const user = await User.create(createMockUser(211, clinic.id), txn);
   const user2 = await User.create(createMockUser(212, clinic.id), txn);
 
-  const patient1 = await createPatient(
-    createMockPatient(611, clinic.id, patient1Name),
-    user.id,
-    txn,
-  );
-  const patient2 = await createPatient(
-    createMockPatient(612, clinic.id, patient2Name),
-    user2.id,
-    txn,
-  );
-  const patient3 = await createPatient(
-    createMockPatient(613, clinic.id, patient3Name),
-    user.id,
-    txn,
-  );
+  const patient1 = await Patient.create(createMockPatient(611, 123, clinic.id, patient1Name), txn);
+  await CareTeam.create({ userId: user.id, patientId: patient1.id }, txn);
+  const patient2 = await Patient.create(createMockPatient(612, 234, clinic.id, patient2Name), txn);
+  await CareTeam.create({ userId: user2.id, patientId: patient2.id }, txn);
+  const patient3 = await Patient.create(createMockPatient(613, 345, clinic.id, patient3Name), txn);
+  await CareTeam.create({ userId: user.id, patientId: patient3.id }, txn);
 
   const progressNoteTemplate = await ProgressNoteTemplate.create(
     {
@@ -611,21 +467,12 @@ export async function setupPatientsWithOutOfDateMAP(txn: Transaction) {
   const user = await User.create(createMockUser(311, clinic.id), txn);
   const user2 = await User.create(createMockUser(213, clinic.id), txn);
 
-  const patient1 = await createPatient(
-    createMockPatient(711, clinic.id, patient1Name),
-    user.id,
-    txn,
-  );
-  const patient2 = await createPatient(
-    createMockPatient(712, clinic.id, patient2Name),
-    user2.id,
-    txn,
-  );
-  const patient3 = await createPatient(
-    createMockPatient(713, clinic.id, patient3Name),
-    user.id,
-    txn,
-  );
+  const patient1 = await Patient.create(createMockPatient(711, 123, clinic.id, patient1Name), txn);
+  await CareTeam.create({ userId: user.id, patientId: patient1.id }, txn);
+  const patient2 = await Patient.create(createMockPatient(712, 234, clinic.id, patient2Name), txn);
+  await CareTeam.create({ userId: user2.id, patientId: patient2.id }, txn);
+  const patient3 = await Patient.create(createMockPatient(713, 345, clinic.id, patient3Name), txn);
+  await CareTeam.create({ userId: user.id, patientId: patient3.id }, txn);
 
   const concern = await Concern.create({ title: 'Night King brought the Wall down' }, txn);
 
@@ -656,27 +503,16 @@ export async function setupPatientsWithOpenCBOReferrals(txn: Transaction) {
   const user2 = await User.create(createMockUser(311, clinic.id), txn);
   const cbo = await createCBO(txn);
 
-  const patient1 = await createPatient(
-    createMockPatient(432, clinic.id, patient1Name),
-    user.id,
-    txn,
-  );
-  const patient2 = await createPatient(
-    createMockPatient(543, clinic.id, patient2Name),
-    user.id,
-    txn,
-  );
-  await createPatient(createMockPatient(876, clinic.id, patient3Name), user2.id, txn);
-  const patient4 = await createPatient(
-    createMockPatient(256, clinic.id, patient4Name),
-    user.id,
-    txn,
-  );
-  const patient5 = await createPatient(
-    createMockPatient(816, clinic.id, patient5Name),
-    user.id,
-    txn,
-  );
+  const patient1 = await Patient.create(createMockPatient(432, 123, clinic.id, patient1Name), txn);
+  await CareTeam.create({ userId: user.id, patientId: patient1.id }, txn);
+  const patient2 = await Patient.create(createMockPatient(543, 234, clinic.id, patient2Name), txn);
+  await CareTeam.create({ userId: user.id, patientId: patient2.id }, txn);
+  const patient3 = await Patient.create(createMockPatient(876, 345, clinic.id, patient3Name), txn);
+  await CareTeam.create({ userId: user2.id, patientId: patient3.id }, txn);
+  const patient4 = await Patient.create(createMockPatient(256, 456, clinic.id, patient4Name), txn);
+  await CareTeam.create({ userId: user.id, patientId: patient4.id }, txn);
+  const patient5 = await Patient.create(createMockPatient(816, 567, clinic.id, patient5Name), txn);
+  await CareTeam.create({ userId: user.id, patientId: patient5.id }, txn);
 
   const cboReferral1 = await CBOReferral.create(
     {
@@ -727,23 +563,16 @@ export async function setupUrgentTasks(txn: Transaction) {
   const user = await User.create(createMockUser(111, clinic.id), txn);
   const user2 = await User.create(createMockUser(121, clinic.id), txn);
 
-  const patient1 = await createPatient(
-    createMockPatient(1234, clinic.id, patient1Name),
-    user.id,
-    txn,
-  );
-  const patient2 = await createPatient(
-    createMockPatient(234, clinic.id, patient2Name),
-    user.id,
-    txn,
-  );
-  await createPatient(createMockPatient(456, clinic.id, patient3Name), user2.id, txn);
-  await createPatient(createMockPatient(345, clinic.id, patient4Name), user.id, txn);
-  const patient5 = await createPatient(
-    createMockPatient(567, clinic.id, patient5Name),
-    user.id,
-    txn,
-  );
+  const patient1 = await Patient.create(createMockPatient(1234, 123, clinic.id, patient1Name), txn);
+  await CareTeam.create({ userId: user.id, patientId: patient1.id }, txn);
+  const patient2 = await Patient.create(createMockPatient(234, 234, clinic.id, patient2Name), txn);
+  await CareTeam.create({ userId: user.id, patientId: patient2.id }, txn);
+  const patient3 = await Patient.create(createMockPatient(456, 345, clinic.id, patient3Name), txn);
+  await CareTeam.create({ userId: user2.id, patientId: patient3.id }, txn);
+  const patient4 = await Patient.create(createMockPatient(345, 456, clinic.id, patient4Name), txn);
+  await CareTeam.create({ userId: user.id, patientId: patient4.id }, txn);
+  const patient5 = await Patient.create(createMockPatient(567, 567, clinic.id, patient5Name), txn);
+  await CareTeam.create({ userId: user.id, patientId: patient5.id }, txn);
 
   const soonDueDate = '2017-09-07T13:45:14.532Z';
   const laterDueDate = '2050-11-07T13:45:14.532Z';
@@ -807,59 +636,48 @@ export async function setupPatientsForPanelFilter(txn: Transaction) {
   const user = await User.create(createMockUser(11, clinic.id), txn);
   const user2 = await User.create(createMockUser(12, clinic.id), txn);
 
-  const patient1 = await createPatient(
-    createMockPatient(14, clinic.id, 'Robb', 'Stark', getDateOfBirthForAge(19)),
-    user.id,
+  const patient1 = await Patient.create(
+    createMockPatient(14, 14, clinic.id, 'Robb', 'Stark', getDateOfBirthForAge(19)),
     txn,
-    {
-      gender: 'male',
-      language: 'en',
-    },
   );
+  await CareTeam.create({ userId: user.id, patientId: patient1.id }, txn);
   await createPrimaryAddressForPatient('11211', patient1.id, patient1.patientInfo.id, user.id, txn);
 
-  const patient2 = await createPatient(
-    createMockPatient(15, clinic.id, 'Mark', 'Man', getDateOfBirthForAge(80)),
-    user.id,
+  const patient2 = await Patient.create(
+    createMockPatient(15, 15, clinic.id, 'Mark', 'Man', getDateOfBirthForAge(80)),
     txn,
-    {
-      gender: 'male',
-      language: 'ch',
-    },
   );
+  await CareTeam.create({ userId: user.id, patientId: patient2.id }, txn);
   await createPrimaryAddressForPatient('10001', patient2.id, patient2.patientInfo.id, user.id, txn);
 
-  const patient3 = await createPatient(
-    createMockPatient(16, clinic.id, 'Jane', 'Jacobs', getDateOfBirthForAge(20)),
-    user.id,
-    txn,
+  const patient3 = await Patient.create(
     {
+      ...createMockPatient(16, 16, clinic.id, 'Jane', 'Jacobs', getDateOfBirthForAge(20)),
       gender: 'female',
-      language: 'en',
     },
+    txn,
   );
+  await CareTeam.create({ userId: user.id, patientId: patient3.id }, txn);
   await createPrimaryAddressForPatient('11211', patient3.id, patient3.patientInfo.id, user.id, txn);
 
-  const patient4 = await createPatient(
-    createMockPatient(17, clinic.id, 'Maxie', 'Jacobs', getDateOfBirthForAge(23)),
-    user.id,
-    txn,
+  const patient4 = await Patient.create(
     {
+      ...createMockPatient(17, 17, clinic.id, 'Maxie', 'Jacobs', getDateOfBirthForAge(23)),
       gender: 'female',
-      language: 'es',
     },
+    txn,
   );
+  await CareTeam.create({ userId: user.id, patientId: patient4.id }, txn);
   await createPrimaryAddressForPatient('10055', patient4.id, patient4.patientInfo.id, user.id, txn);
 
-  const patient5 = await createPatient(
-    createMockPatient(18, clinic.id, 'Juanita', 'Jacobs', getDateOfBirthForAge(73)),
-    user2.id,
-    txn,
+  const patient5 = await Patient.create(
     {
+      ...createMockPatient(18, 18, clinic.id, 'Juanita', 'Jacobs', getDateOfBirthForAge(73)),
       gender: 'female',
-      language: 'en',
     },
+    txn,
   );
+  await CareTeam.create({ userId: user2.id, patientId: patient5.id }, txn);
   await createPrimaryAddressForPatient('11211', patient5.id, patient5.patientInfo.id, user.id, txn);
 
   return { user, user2 };
@@ -936,23 +754,14 @@ export async function createAnswerAssociations(txn: Transaction) {
 export async function setupComputedPatientList(txn: Transaction) {
   const clinic = await Clinic.create(createMockClinic('Winterfell', 12), txn);
   const user = await User.create(createMockUser(111, clinic.id), txn);
-  const user2 = await User.create(createMockUser(121, clinic.id), txn);
+  const user2 = await User.create(createMockUser(211, clinic.id), txn);
 
-  const patient1 = await createPatient(
-    createMockPatient(811, clinic.id, patient1Name),
-    user.id,
-    txn,
-  );
-  const patient2 = await createPatient(
-    createMockPatient(812, clinic.id, patient2Name),
-    user2.id,
-    txn,
-  );
-  const patient3 = await createPatient(
-    createMockPatient(813, clinic.id, patient3Name),
-    user.id,
-    txn,
-  );
+  const patient1 = await Patient.create(createMockPatient(811, 123, clinic.id, patient1Name), txn);
+  await CareTeam.create({ userId: user.id, patientId: patient1.id }, txn);
+  const patient2 = await Patient.create(createMockPatient(812, 234, clinic.id, patient2Name), txn);
+  await CareTeam.create({ userId: user2.id, patientId: patient2.id }, txn);
+  const patient3 = await Patient.create(createMockPatient(813, 345, clinic.id, patient3Name), txn);
+  await CareTeam.create({ userId: user.id, patientId: patient3.id }, txn);
 
   const riskAreaGroup = await RiskAreaGroup.create(createMockRiskAreaGroup(), txn);
   const riskArea = await RiskArea.create(

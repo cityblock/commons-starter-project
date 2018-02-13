@@ -5,7 +5,6 @@ import {
   createMockClinic,
   createMockPatient,
   createMockUser,
-  createPatient,
   createRiskArea,
 } from '../../spec-helpers';
 import Answer from '../answer';
@@ -54,8 +53,8 @@ async function setup(txn: Transaction): Promise<ISetup> {
   );
   const clinic = await Clinic.create(createMockClinic(), txn);
   const user = await User.create(createMockUser(11, clinic.id, userRole), txn);
-  const patient1 = await createPatient(createMockPatient(123, clinic.id), user.id, txn);
-  const patient2 = await createPatient(createMockPatient(45, clinic.id), user.id, txn);
+  const patient1 = await Patient.create(createMockPatient(123, 123, clinic.id), txn);
+  const patient2 = await Patient.create(createMockPatient(45, 45, clinic.id), txn);
 
   return {
     riskArea,

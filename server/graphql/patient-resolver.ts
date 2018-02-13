@@ -5,21 +5,14 @@ import {
   IPatientFilterOptions,
   IPatientForDashboardEdges,
   IPatientScratchPad,
-  IPatientSetupInput,
   IPatientTableRow,
   IPatientTableRowEdges,
   IPatientTableRowNode,
   IRootMutationType,
   IRootQueryType,
 } from 'schema';
-import { getAthenaPatientIdFromCreate } from '../apis/redox/formatters';
 import { IPaginatedResults, IPaginationOptions } from '../db';
-import Address from '../models/address';
-import CareTeam from '../models/care-team';
-import Clinic from '../models/clinic';
 import Patient from '../models/patient';
-import PatientAddress from '../models/patient-address';
-import PatientInfo from '../models/patient-info';
 import accessControls from './shared/access-controls';
 import { checkUserLoggedIn, formatRelayEdge, IContext } from './shared/utils';
 
@@ -59,91 +52,6 @@ export async function patientEdit(
   const filtered = omitBy<IPatientEditInput>(input, isNil);
   logger.log(`EDIT patient ${input.patientId} by ${userId}`, 2);
   return Patient.edit(filtered as any, input.patientId, txn);
-}
-
-export interface IPatientSetupOptions {
-  input: IPatientSetupInput;
-}
-
-export async function patientSetup(
-  source: any,
-  { input }: IPatientSetupOptions,
-  context: IContext,
-): Promise<IRootMutationType['patientSetup']> {
-  const { redoxApi, userRole, userId, logger, txn } = context;
-  await accessControls.isAllowedForUser(userRole, 'create', 'patient');
-  checkUserLoggedIn(userId);
-
-  const patientInfoOptions = {
-    gender: input.gender,
-    language: input.language,
-  };
-
-  const patient = await Patient.setup(input, patientInfoOptions, userId!, txn);
-
-  if (input.zip) {
-    const address = await Address.create({ zip: input.zip, updatedBy: userId! }, txn);
-    await PatientAddress.create({ patientId: patient.id, addressId: address.id }, txn);
-    await PatientInfo.edit(
-      { primaryAddressId: address.id, updatedBy: userId! },
-      patient.patientInfo.id,
-      context.txn,
-    );
-  }
-
-  const department = await Clinic.get(input.homeClinicId, txn);
-  const redoxPatient = await redoxApi.patientCreate(
-    {
-      id: patient.id,
-      firstName: input.firstName,
-      homeClinicId: String(department.departmentId),
-      middleName: input.middleName,
-      lastName: input.lastName,
-      gender: input.gender,
-      zip: input.zip,
-      dateOfBirth: input.dateOfBirth,
-      maritalStatus: input.maritalStatus,
-      race: input.race,
-      ssn: input.ssn,
-      language: input.language,
-      email: input.email,
-      homePhone: input.homePhone,
-      mobilePhone: input.mobilePhone,
-      consentToCall: input.consentToCall,
-      consentToText: input.consentToText,
-      insuranceType: input.insuranceType,
-      patientRelationshipToPolicyHolder: input.patientRelationshipToPolicyHolder,
-      memberId: input.memberId,
-      policyGroupNumber: input.policyGroupNumber,
-      issueDate: input.issueDate,
-      expirationDate: input.expirationDate,
-      suffix: null,
-      preferredName: null,
-      city: null,
-      address1: null,
-      country: null,
-      county: null,
-      state: null,
-    },
-    txn,
-  );
-
-  const athenaPatientId = getAthenaPatientIdFromCreate(redoxPatient);
-  if (!athenaPatientId) {
-    throw new Error('Athena patient was not correctly created');
-  }
-  const patientWithAthenaId = await Patient.addAthenaPatientId(athenaPatientId, patient.id, txn);
-
-  await CareTeam.create(
-    {
-      userId: userId!,
-      patientId: patientWithAthenaId.id,
-    },
-    txn,
-  );
-
-  logger.log(`SETUP patient ${patientWithAthenaId.id} by ${userId}`, 2);
-  return patientWithAthenaId;
 }
 
 export interface IEditPatientRequiredFields {

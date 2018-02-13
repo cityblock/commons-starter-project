@@ -6,6 +6,7 @@ import CBOReferral from '../../../../app/pdf/cbo-referral/cbo-referral';
 import Db from '../../../db';
 import { signJwt, IJWTForPDFData } from '../../../graphql/shared/utils';
 import Clinic from '../../../models/clinic';
+import Patient from '../../../models/patient';
 import Task from '../../../models/task';
 import User from '../../../models/user';
 import {
@@ -13,7 +14,6 @@ import {
   createMockClinic,
   createMockPatient,
   createMockUser,
-  createPatient,
   setupUrgentTasks,
 } from '../../../spec-helpers';
 import { formatCBOReferralTaskPDFFileName } from '../helpers';
@@ -42,7 +42,7 @@ const getAuthToken = (): string => {
 async function setup(txn: Transaction): Promise<Task> {
   const clinic = await Clinic.create(createMockClinic(), txn);
   const user = await User.create(createMockUser(11, clinic.id, userRole), txn);
-  const patient = await createPatient(createMockPatient(123, clinic.id), user.id, txn);
+  const patient = await Patient.create(createMockPatient(123, 123, clinic.id), txn);
   const cboReferral = await createCBOReferral(txn);
   const dueAt = new Date().toISOString();
   const task = await Task.create(

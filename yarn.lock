@@ -320,51 +320,51 @@
   dependencies:
     "@types/react" "*"
 
-"@types/react-copy-to-clipboard@^4.2.4":
-  version "4.2.4"
-  resolved "https://registry.yarnpkg.com/@types/react-copy-to-clipboard/-/react-copy-to-clipboard-4.2.4.tgz#abd5b7c6b30d57f2e22fc34d2c47b1f40d021a20"
+"@types/react-copy-to-clipboard@^4.2.5":
+  version "4.2.5"
+  resolved "https://registry.yarnpkg.com/@types/react-copy-to-clipboard/-/react-copy-to-clipboard-4.2.5.tgz#bda288b4256288676019b75ca86f1714bbd206d4"
   dependencies:
     "@types/react" "*"
 
-"@types/react-dom@16.0.3":
-  version "16.0.3"
-  resolved "https://registry.yarnpkg.com/@types/react-dom/-/react-dom-16.0.3.tgz#8accad7eabdab4cca3e1a56f5ccb57de2da0ff64"
+"@types/react-dom@16.0.4":
+  version "16.0.4"
+  resolved "https://registry.yarnpkg.com/@types/react-dom/-/react-dom-16.0.4.tgz#2e8fd45f5443780ed49bf2cdd9809e6091177a7d"
   dependencies:
     "@types/node" "*"
     "@types/react" "*"
 
-"@types/react-hot-loader@^3.0.5":
-  version "3.0.5"
-  resolved "https://registry.yarnpkg.com/@types/react-hot-loader/-/react-hot-loader-3.0.5.tgz#b80fe14268e2942a6c2d8ecea829cbfa893a0cbb"
+"@types/react-hot-loader@^3.0.6":
+  version "3.0.6"
+  resolved "https://registry.yarnpkg.com/@types/react-hot-loader/-/react-hot-loader-3.0.6.tgz#23b1875a327c32cbab705fbf660d8f207ede4d69"
   dependencies:
     "@types/react" "*"
 
-"@types/react-intl@^2.3.4":
-  version "2.3.4"
-  resolved "https://registry.yarnpkg.com/@types/react-intl/-/react-intl-2.3.4.tgz#e0384ecb78190f4e4785e313ca31957ab8147fac"
+"@types/react-intl@^2.3.5":
+  version "2.3.5"
+  resolved "https://registry.yarnpkg.com/@types/react-intl/-/react-intl-2.3.5.tgz#eafa170d83c06302416075867a6fd219c1cf84d8"
 
-"@types/react-loadable@^5.3.2":
-  version "5.3.2"
-  resolved "https://registry.yarnpkg.com/@types/react-loadable/-/react-loadable-5.3.2.tgz#dd6febf7fa76e15ac0168bdd79b971c4b1b41f93"
+"@types/react-loadable@^5.3.3":
+  version "5.3.3"
+  resolved "https://registry.yarnpkg.com/@types/react-loadable/-/react-loadable-5.3.3.tgz#ca0625ab41fb222083adcf767de36f0be329acec"
   dependencies:
     "@types/react" "*"
 
-"@types/react-onclickoutside@^6.0.2":
-  version "6.0.2"
-  resolved "https://registry.yarnpkg.com/@types/react-onclickoutside/-/react-onclickoutside-6.0.2.tgz#9ca1646d6c05b578edf52f878dd2d53daba61e2a"
+"@types/react-onclickoutside@^6.0.3":
+  version "6.0.3"
+  resolved "https://registry.yarnpkg.com/@types/react-onclickoutside/-/react-onclickoutside-6.0.3.tgz#0939adbfa175d8350150c34db246ff531b266175"
   dependencies:
     "@types/react" "*"
 
-"@types/react-redux@^5.0.13":
-  version "5.0.14"
-  resolved "https://registry.yarnpkg.com/@types/react-redux/-/react-redux-5.0.14.tgz#f3fc30dcbb2d20455a714f591cc27f77b4df09bb"
+"@types/react-redux@^5.0.15":
+  version "5.0.15"
+  resolved "https://registry.yarnpkg.com/@types/react-redux/-/react-redux-5.0.15.tgz#420af2c702ac7aab321cf45bb7d3cb2503dd24d5"
   dependencies:
     "@types/react" "*"
     redux "^3.6.0"
 
-"@types/react-router-dom@^4.2.3":
-  version "4.2.3"
-  resolved "https://registry.yarnpkg.com/@types/react-router-dom/-/react-router-dom-4.2.3.tgz#06e0b67ff536adc0681dffdbe592ae91fb85887d"
+"@types/react-router-dom@^4.2.4":
+  version "4.2.4"
+  resolved "https://registry.yarnpkg.com/@types/react-router-dom/-/react-router-dom-4.2.4.tgz#02c43274129ffe0ac42b348f7c8c4a9a4e127c8a"
   dependencies:
     "@types/history" "*"
     "@types/react" "*"
@@ -377,9 +377,9 @@
     "@types/history" "*"
     "@types/react" "*"
 
-"@types/react-test-renderer@^16.0.0":
-  version "16.0.0"
-  resolved "https://registry.yarnpkg.com/@types/react-test-renderer/-/react-test-renderer-16.0.0.tgz#905a12076d7315eb4a36c4f0e5e760c7b3115420"
+"@types/react-test-renderer@^16.0.1":
+  version "16.0.1"
+  resolved "https://registry.yarnpkg.com/@types/react-test-renderer/-/react-test-renderer-16.0.1.tgz#36ee8c4fe33c61d460ad0e7bc42a2d0ddcc775a1"
   dependencies:
     "@types/react" "*"
 

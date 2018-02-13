@@ -50,13 +50,13 @@ export default class PatientScreeningToolSubmission extends BaseModel {
       screeningToolScoreRangeId: { type: 'string', minLength: 1 }, // cannot be blank
       patientId: { type: 'string', minLength: 1 }, // cannot be blank
       userId: { type: 'string', minLength: 1 }, // cannot be blank
-      progressNoteId: { type: 'string', minLength: 1 }, // cannot be blank
+      progressNoteId: { type: 'string' },
       score: { type: 'integer', minimum: 0 }, // cannot be negative
       deletedAt: { type: 'string' },
       updatedAt: { type: 'string' },
       scoredAt: { type: 'string' },
     },
-    required: ['screeningToolId', 'patientId', 'userId', 'progressNoteId'],
+    required: ['screeningToolId', 'patientId', 'userId'],
   };
 
   static relationMappings: RelationMappings = {
@@ -148,14 +148,9 @@ export default class PatientScreeningToolSubmission extends BaseModel {
     input: IPatientScreeningToolSubmissionCreateFields,
     txn: Transaction,
   ): Promise<PatientScreeningToolSubmission> {
-    const progressNote = await ProgressNote.autoOpenIfRequired(
-      { patientId: input.patientId, userId: input.userId },
-      txn,
-    );
-
     return this.query(txn)
       .eager(EAGER_QUERY)
-      .insertAndFetch({ ...input, progressNoteId: progressNote.id });
+      .insertAndFetch({ ...input });
   }
 
   static async autoOpenIfRequired(
@@ -209,6 +204,7 @@ export default class PatientScreeningToolSubmission extends BaseModel {
     }
 
     const patientId = patientAnswers[0].patientId;
+    const userId = patientAnswers[0].userId;
 
     const screeningToolScoreRange = await ScreeningToolScoreRange.getByScoreForScreeningTool(
       score,
@@ -220,6 +216,8 @@ export default class PatientScreeningToolSubmission extends BaseModel {
       ? screeningToolScoreRange.id
       : undefined;
 
+    const progressNote = await ProgressNote.autoOpenIfRequired({ patientId, userId }, txn);
+
     await this.query(txn)
       .eager(EAGER_QUERY)
       .findById(patientScreeningToolSubmissionId)
@@ -227,6 +225,7 @@ export default class PatientScreeningToolSubmission extends BaseModel {
         score,
         screeningToolScoreRangeId,
         scoredAt: new Date().toISOString(),
+        progressNoteId: progressNote.id,
       });
 
     await createSuggestionsForPatientScreeningToolSubmission(

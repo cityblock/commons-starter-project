@@ -329,7 +329,12 @@ export default compose(
   }),
   graphql<IGraphqlProps, IProps, allProps>(patientScreeningToolSubmissionScore as any, {
     name: 'scoreScreeningToolSubmission',
-    options: { refetchQueries: ['getPatientScreeningToolSubmissionForPatientAndScreeningTool'] },
+    options: {
+      refetchQueries: [
+        'getPatientScreeningToolSubmissionForPatientAndScreeningTool',
+        'getProgressNotesForCurrentUser',
+      ],
+    },
   }),
   graphql<IGraphqlProps, IProps, allProps>(screeningToolQuery as any, {
     options: (props: IProps) => ({

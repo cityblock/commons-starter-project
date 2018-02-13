@@ -320,13 +320,18 @@ export default compose(
     riskAreaAssessmentSubmissionCompleteMutationGraphql as any,
     {
       name: 'riskAreaAssessmentSubmissionComplete',
+      options: {
+        refetchQueries: ['getProgressNotesForCurrentUser'],
+      },
     },
   ),
   graphql<IGraphqlProps, IProps, allProps>(
     riskAreaAssessmentSubmissionCreateMutationGraphql as any,
     {
       name: 'riskAreaAssessmentSubmissionCreate',
-      options: { refetchQueries: ['getRiskAreaAssessmentSubmissionForPatient'] },
+      options: {
+        refetchQueries: ['getRiskAreaAssessmentSubmissionForPatient'],
+      },
     },
   ),
   graphql<IGraphqlProps, IProps, allProps>(riskAreaQuery as any, {

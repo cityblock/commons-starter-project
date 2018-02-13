@@ -217,6 +217,10 @@ describe('patient screening tool submission model', () => {
         },
         txn,
       );
+
+      // expect it not to have a progress note yet
+      expect(submission.progressNoteId).toBeNull();
+
       const patientAnswers = await PatientAnswer.create(
         {
           patientId: patient1.id,
@@ -298,12 +302,16 @@ describe('patient screening tool submission model', () => {
         )).score,
       ).toEqual(5);
 
+      // should now have a progress note
+      const finalSubmission = await PatientScreeningToolSubmission.get(submission.id, txn);
+      expect(finalSubmission.progressNoteId).not.toBeFalsy();
+
       const suggestions = await CarePlanSuggestion.getForPatient(patient1.id, txn);
       expect(suggestions.length).toEqual(4);
     });
   });
 
-  it('returns already open and not yet submitted progress note', async () => {
+  it('returns already open and not yet submitted submission', async () => {
     await transaction(PatientScreeningToolSubmission.knex(), async txn => {
       const { screeningTool1, patient1, user } = await setup(txn);
       const initialSubmission = await PatientScreeningToolSubmission.autoOpenIfRequired(

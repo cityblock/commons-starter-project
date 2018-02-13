@@ -1,4 +1,11 @@
 "use strict";
+/**
+ * Our custom rule to check if `accessControls.isAllowed` is run in graphql resolvers
+ *
+ * NOTE: Recompile this after editing it
+ *      cd rules
+ *      tsc checkIsAllowedRule.ts
+ */
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = Object.setPrototypeOf ||
         ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
@@ -11,7 +18,7 @@ var __extends = (this && this.__extends) || (function () {
 })();
 exports.__esModule = true;
 var Lint = require("tslint");
-var Rule = (function (_super) {
+var Rule = /** @class */ (function (_super) {
     __extends(Rule, _super);
     function Rule() {
         return _super !== null && _super.apply(this, arguments) || this;
@@ -19,27 +26,30 @@ var Rule = (function (_super) {
     Rule.prototype.apply = function (sourceFile) {
         return this.applyWithWalker(new CheckIsAllowed(sourceFile, this.getOptions()));
     };
+    Rule.FAILURE_STRING = 'must check accessControls.isAllowed in GraphQL resolver function';
     return Rule;
 }(Lint.Rules.AbstractRule));
-Rule.FAILURE_STRING = 'must check accessControls.isAllowed';
 exports.Rule = Rule;
 /* tslint:disable */
 // The walker takes care of all the work.
-var CheckIsAllowed = (function (_super) {
+var CheckIsAllowed = /** @class */ (function (_super) {
     __extends(CheckIsAllowed, _super);
     function CheckIsAllowed() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     CheckIsAllowed.prototype.visitFunctionDeclaration = function (node) {
-        var text = node.getText();
         var fileName = node.getSourceFile().fileName;
-        if (fileName.indexOf('resolver') > -1 && text.indexOf('root:') > -1) {
-            if (text.indexOf('accessControls.isAllowed') < 0) {
-                this.addFailure(this.createFailure(node.getStart(), node.getWidth(), Rule.FAILURE_STRING));
+        if (fileName.indexOf('resolver') > -1) {
+            var text = node.getText();
+            // TODO: Check for root: specifically in the parameter list
+            if (text.indexOf('root:') > -1) {
+                if (text.indexOf('accessControls.isAllowed') < 0) {
+                    this.addFailure(this.createFailure(node.getStart(), node.getWidth(), Rule.FAILURE_STRING));
+                }
             }
+            // call the base version of this visitor to actually parse this node
+            _super.prototype.visitFunctionDeclaration.call(this, node);
         }
-        // call the base version of this visitor to actually parse this node
-        _super.prototype.visitFunctionDeclaration.call(this, node);
     };
     return CheckIsAllowed;
 }(Lint.RuleWalker));

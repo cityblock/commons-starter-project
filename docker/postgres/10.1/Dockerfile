@@ -1,4 +1,4 @@
-FROM postgres:9.6
+FROM postgres:10.1
 MAINTAINER https://github.com/muccg/
 
 ENV DEBIAN_FRONTEND noninteractive

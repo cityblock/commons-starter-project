@@ -1,7 +1,9 @@
 version: '2.0'
 services:
   web:
-    build: .
+    build:
+      context: .
+      dockerfile: ./docker/web/Dockerfile
     ports:
      - '3000:3000'
     environment:
@@ -10,8 +12,13 @@ services:
      - DB_HOST=postgres
      - DB_USER=postgres
      - LOGENTRIES_TOKEN=fb9d5b25-f335-4863-84f6-1bafb3412d37
+     - REDIS_HOST=redis
     command: yarn run start
   postgres:
     build: ./docker/postgres/10.1
+    ports:
+      - '5431:5432'
     environment:
      - POSTGRES_DB=db
+  redis:
+    build: ./docker/redis/3.2

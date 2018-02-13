@@ -28,7 +28,7 @@ export class CBOEdit extends React.Component<allProps, {}> {
       await editCBO({
         variables: {
           CBOId: CBO.id,
-          [field]: newText,
+          [field]: newText || null,
         },
       });
     };

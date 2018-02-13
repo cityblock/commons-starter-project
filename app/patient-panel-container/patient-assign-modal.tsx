@@ -75,7 +75,7 @@ class PatientAssignModal extends React.Component<allProps, IState> {
     } catch (err) {
       this.setState({ assignError: err.message });
     }
-  }
+  };
 
   handleChange = (event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     this.setState({ [event.target.name as any]: event.target.value });

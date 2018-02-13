@@ -68,20 +68,19 @@ export class CBOCreate extends React.Component<allProps, IState> {
     if (!loading) {
       try {
         this.setState({ loading: true, error: null });
+        const variables: CBOCreateMutationVariables = {
+          name,
+          categoryId,
+          address,
+          city,
+          state,
+          zip,
+          phone,
+          url,
+        };
+        if (fax) variables.fax = fax;
 
-        await createCBO({
-          variables: {
-            name,
-            categoryId,
-            address,
-            city,
-            state,
-            zip,
-            fax,
-            phone,
-            url,
-          },
-        });
+        await createCBO({ variables });
         cancelCreateCBO();
       } catch (err) {
         this.setState({ error: err.message });

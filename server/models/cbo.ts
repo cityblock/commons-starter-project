@@ -41,7 +41,7 @@ export default class CBO extends BaseModel {
       city: { type: 'string', minLength: 1 }, // cannot be blank
       state: { type: 'string', minLength: 2, maxLength: 2 }, // use state abbreviation
       zip: { type: 'string', minLength: 5 }, // at least 5 digits
-      fax: { type: 'string', minLength: 10 }, // at least 10 digits
+      fax: { type: ['string', 'null'], minLength: 10 }, // at least 10 digits
       phone: { type: 'string', minLength: 10 }, // at least 10 digits
       url: { type: 'string', minLength: 1 }, // cannot be blank
       deletedAt: { type: 'string' },

@@ -103,7 +103,9 @@ describe('care team', () => {
         await createPatient(createMockPatient(125, clinic.id), user2.id, txn);
 
         const mutation = `mutation {
-          careTeamAssignPatients(input: { patientIds: ["${patient.id}", "${patient2.id}"], userId: "${user.id}" }) {
+          careTeamAssignPatients(input: { patientIds: ["${patient.id}", "${
+          patient2.id
+        }"], userId: "${user.id}" }) {
             id,
             firstName,
             lastName,
@@ -111,7 +113,12 @@ describe('care team', () => {
           }
         }`;
 
-        const result = await graphql(schema, mutation, null, { db, userRole, txn, userId: user2.id });
+        const result = await graphql(schema, mutation, null, {
+          db,
+          userRole,
+          txn,
+          userId: user2.id,
+        });
         expect(cloneDeep(result.data!.careTeamAssignPatients)).toMatchObject({
           id: user.id,
           firstName: 'dan',

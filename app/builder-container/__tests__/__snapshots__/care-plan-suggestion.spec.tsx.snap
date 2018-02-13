@@ -11,6 +11,7 @@ exports[`renders a care plan suggestion 1`] = `
       <svg
         aria-hidden="true"
         className="MuiSvgIcon-root-1 icon"
+        color={undefined}
         focusable="false"
         onClick={[Function]}
         viewBox="0 0 24 24"

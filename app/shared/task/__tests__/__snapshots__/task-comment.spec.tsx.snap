@@ -14,6 +14,7 @@ exports[`correctly renders a comment as editable or not 1`] = `
       <svg
         aria-hidden="true"
         className="MuiSvgIcon-root-1 icon avatar small"
+        color={undefined}
         focusable="false"
         onClick={undefined}
         viewBox="0 0 24 24"

@@ -15,6 +15,7 @@ exports[`renders a removed task template 1`] = `
     <svg
       aria-hidden="true"
       className="MuiSvgIcon-root-1 icon avatar small"
+      color={undefined}
       focusable="false"
       onClick={undefined}
       viewBox="0 0 24 24"
@@ -62,6 +63,7 @@ exports[`renders a selected task template 1`] = `
     <svg
       aria-hidden="true"
       className="MuiSvgIcon-root-1 icon avatar small"
+      color={undefined}
       focusable="false"
       onClick={undefined}
       viewBox="0 0 24 24"

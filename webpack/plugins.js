@@ -41,6 +41,10 @@ module.exports = ({ production = false } = {}) => {
           from: '../server/graphql/schema.graphql',
           to: '../server-compiled/server/graphql/schema.graphql',
         },
+        {
+          from: '../server/handlers/pdf/fonts',
+          to: '../server-compiled/server/handlers/pdf/fonts',
+        },
       ]),
       new UglifyJsPlugin({
         exclude: /node_modules/,

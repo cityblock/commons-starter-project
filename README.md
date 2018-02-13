@@ -262,8 +262,45 @@ First, login with `aptible login`, then:
     aptible db:dump commons-staging
     dropdb commons
     createdb commons
+    psql -d commons -c "CREATE ROLE aptible LOGIN"
     psql commons < commons-staging.dump
     rm commons-staging.dump
+
+### Copying from production to staging
+
+We copy a small selection on NON-PHI tables from production to staging to ensure we can reproduce features like care plan suggestions.
+
+To run that, use `yarn copy-prod-to-staging`.
+
+If that errors, it may be because we added a new table. List the current tables by connecting to staging db and running `\dE *.*`. Currently the list is:
+
+                         List of relations
+       Schema   |            Name            |     Type      |  Owner
+    ------------+----------------------------+---------------+---------
+    production | answer                     | foreign table | aptible
+    production | cbo                        | foreign table | aptible
+    production | cbo_category               | foreign table | aptible
+    production | clinic                     | foreign table | aptible
+    production | computed_field             | foreign table | aptible
+    production | concern                    | foreign table | aptible
+    production | concern_diagnosis_code     | foreign table | aptible
+    production | concern_suggestion         | foreign table | aptible
+    production | diagnosis_code             | foreign table | aptible
+    production | goal_suggestion            | foreign table | aptible
+    production | goal_suggestion_template   | foreign table | aptible
+    production | patient_list               | foreign table | aptible
+    production | progress_note_template     | foreign table | aptible
+    production | question                   | foreign table | aptible
+    production | question_condition         | foreign table | aptible
+    production | risk_area                  | foreign table | aptible
+    production | risk_area_group            | foreign table | aptible
+    production | screening_tool             | foreign table | aptible
+    production | screening_tool_score_range | foreign table | aptible
+    production | task_template              | foreign table | aptible
+
+When adding tables, run `yarn staging-db` and then `IMPORT FOREIGN SCHEMA public LIMIT TO (my_new_table) FROM SERVER commons_production INTO production;`.
+
+After that, you should be able to run `yarn copy-prod-to-staging` again.
 
 ### Create a database schema explorer
 
@@ -362,6 +399,6 @@ Alternatively, you can install following the instructions on the [Redis download
 [schemacrawler]: https://github.com/sualeh/SchemaCrawler
 [google cloud sdk]: https://cloud.google.com/sdk/downloads
 [jdk]: http://www.oracle.com/technetwork/java/javase/downloads/index.html
-[Kue]: https://github.com/Automattic/kue
-[Redis]: https://redis.io/
-[Redis download page]: https://redis.io/download
+[kue]: https://github.com/Automattic/kue
+[redis]: https://redis.io/
+[redis download page]: https://redis.io/download
